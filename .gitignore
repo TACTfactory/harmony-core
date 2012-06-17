@@ -1,0 +1,10 @@
+/bin/*
+/gen/*
+/doc/internal/*
+/doc/stats/*
+/doc/API/*
+.classpath
+.project
+local.properties
+.settings/*
+/res/drawable-mdpi/_pre_production/*

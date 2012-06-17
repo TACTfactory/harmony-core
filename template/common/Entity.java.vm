@@ -1,0 +1,9 @@
+package entity;
+
+import Integer;
+
+public class [Model] {
+
+  public Integer Attributs;
+
+}
