@@ -1,23 +1,22 @@
 /**
- * 
+ * This file is part of the Symfodroid package.
+ *
+ * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
  */
 package com.tactfactory.mda.android;
 
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
-import japa.parser.ast.body.ClassOrInterfaceDeclaration;
-import japa.parser.ast.expr.AnnotationExpr;
-import japa.parser.ast.visitor.VoidVisitorAdapter;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.util.ArrayList;
-
-import com.tactfactory.mda.android.annotation.orm.Entity;
 
 /**
  * @author micky
@@ -30,7 +29,7 @@ public class Console extends com.tactfactory.mda.android.command.Console {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		// tact-mdatest:com/tactfactory/mdatest/android:User
+		// sample syntax :  tact-mdatest:com/tactfactory/mdatest/android:User
 		String[] argProject = args[1].split(":");
 		
 		// If no arg

@@ -1,3 +1,11 @@
+/**
+ * This file is part of the Symfodroid package.
+ *
+ * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.tactfactory.mda.android.template;
 
 import java.io.File;
@@ -23,6 +31,7 @@ public class ActivityGenerator {
 
 	private boolean isWritable = true;
 	
+	@SuppressWarnings("unchecked")
 	public ActivityGenerator(HashMap<String, Object> datamodel) {
 		this.datamodel = (HashMap<String, Object>) datamodel.clone();
 		
@@ -179,9 +188,9 @@ public class ActivityGenerator {
 		Template tpl = cfg.getTemplate(TEMPLATE_PATH_FOLDER + "view/" + template);
 		
 		OutputStreamWriter output;
-		if (false) //Console.DEBUG)
+		/*if (false) //Console.DEBUG)
 			output = new OutputStreamWriter(System.out);
-		else 
+		else */
 			output = new FileWriter(file);
 		
 		tpl.process(datamodel, output);
@@ -207,9 +216,9 @@ public class ActivityGenerator {
 		Template tpl = cfg.getTemplate(TEMPLATE_PATH_FOLDER+ "res/layout/"  + template);
 		
 		OutputStreamWriter output;
-		if (false) //Console.DEBUG)
+		/*if (false) //Console.DEBUG)
 			output = new OutputStreamWriter(System.out);
-		else 
+		else*/ 
 			output = new FileWriter(file);
 		
 		tpl.process(datamodel, output);

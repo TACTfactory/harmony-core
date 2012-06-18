@@ -1,3 +1,11 @@
+/**
+ * This file is part of the Symfodroid package.
+ *
+ * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.tactfactory.mda.android.command;
 
 import japa.parser.ast.CompilationUnit;
@@ -12,8 +20,6 @@ import java.util.List;
 
 import com.tactfactory.mda.android.annotation.orm.Entity;
 import com.tactfactory.mda.android.annotation.orm.Column;
-import com.tactfactory.mda.android.annotation.orm.Id;
-import com.tactfactory.mda.android.annotation.orm.GeneratedValue;
 import com.tactfactory.mda.android.template.ActivityGenerator;
 
 public class OrmCommand extends Command {
@@ -25,9 +31,10 @@ public class OrmCommand extends Command {
 	protected ArrayList<CompilationUnit> entities;
 	protected final HashMap<String, Object> datamodel = new HashMap<String, Object>();
 	
-	private static class FieldVisitor extends VoidVisitorAdapter {
+	private static class FieldVisitor extends VoidVisitorAdapter<Object> {
 		@Override
 		public void visit(FieldDeclaration n, Object arg) {
+			@SuppressWarnings("unchecked")
 			ArrayList<String> fields = (ArrayList<String>) arg;
 			List<AnnotationExpr> fieldAnnotations = n.getAnnotations();
 			
@@ -77,7 +84,8 @@ public class OrmCommand extends Command {
 	private static class ClassVisitor extends VoidVisitorAdapter<Object> {
 	    @Override
 	    public void visit(ClassOrInterfaceDeclaration n, Object arg) {
-	    	HashMap<String, Object> datamodel = (HashMap<String, Object>) arg;
+	    	@SuppressWarnings("unchecked")
+			HashMap<String, Object> datamodel = (HashMap<String, Object>) arg;
 			List<AnnotationExpr> classAnnotations = n.getAnnotations();
 			
 			boolean isfind = false;
@@ -95,7 +103,6 @@ public class OrmCommand extends Command {
 	    }
 	}
 	
-	@SuppressWarnings("unchecked")
 	protected void generateEntity(CompilationUnit mclass) {
 		String spackage = PackageUtils.extractNameSpace(mclass.getPackage().getName().toString());
 		datamodel.put("namespace", spackage);
