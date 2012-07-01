@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.android.orm;
+package com.tactfactory.mda.orm;
 
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
@@ -19,9 +19,9 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.google.common.base.Strings;
-import com.tactfactory.mda.android.command.PackageUtils;
-import com.tactfactory.mda.android.orm.annotation.Column;
-import com.tactfactory.mda.android.orm.annotation.Entity;
+import com.tactfactory.mda.command.PackageUtils;
+import com.tactfactory.mda.orm.annotation.Column;
+import com.tactfactory.mda.orm.annotation.Entity;
 
 public class JavaAdapter {
 	private ArrayList<ClassMetadata> metas = new ArrayList<ClassMetadata>();
@@ -63,7 +63,7 @@ public class JavaAdapter {
 					meta.nameClass = PackageUtils.extractNameEntity(n.getName());
 					
 					// Debug Log
-					if (com.tactfactory.mda.android.command.Console.DEBUG)
+					if (com.tactfactory.mda.command.Console.DEBUG)
 						System.out.print("\tEntity: " + meta.nameSpace + "." +  meta.nameClass + "\n");
 				}
 			}
@@ -87,7 +87,7 @@ public class JavaAdapter {
 					fieldMeta.type = n.getType().toString();
 					
 					// Debug Log
-					if (com.tactfactory.mda.android.command.Console.DEBUG)
+					if (com.tactfactory.mda.command.Console.DEBUG)
 						System.out.print("\t    Column: " + fieldMeta.name + 
 								" type of " + fieldMeta.type +"\n");
 					

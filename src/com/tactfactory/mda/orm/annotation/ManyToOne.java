@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.android.orm.annotation;
+package com.tactfactory.mda.orm.annotation;
 
 import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
@@ -20,11 +20,7 @@ import java.lang.annotation.Target;
 @Retention(SOURCE)
 @Target(FIELD)
 @Inherited
-public @interface GeneratedValue {
-	public final static String MODE_AUTO = "AUTO";
-	public final static String MODE_NONE = "NONE";
-	public final static String MODE_SEQUENCE = "SEQUENCE";
-	public final static String MODE_IDENTITY = "IDENTITY";
-	
-	String strategy() default MODE_AUTO;
+public @interface ManyToOne {
+	String targetEntity() default "";
+	String inversedBy() default "";
 }

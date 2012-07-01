@@ -6,15 +6,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.android.command;
+package com.tactfactory.mda.command;
 
 import japa.parser.ast.CompilationUnit;
 
 import java.util.ArrayList;
 
-import com.tactfactory.mda.android.orm.ClassMetadata;
-import com.tactfactory.mda.android.orm.JavaAdapter;
-import com.tactfactory.mda.android.template.ActivityGenerator;
+import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.orm.JavaAdapter;
+import com.tactfactory.mda.template.ActivityGenerator;
 
 public class OrmCommand extends Command {
 	public static String GENERATE_ENTITY 	= "orm:generate:entity";
@@ -39,7 +39,7 @@ public class OrmCommand extends Command {
 		}
 		
 		// Debug Log
-		if (com.tactfactory.mda.android.command.Console.DEBUG)
+		if (com.tactfactory.mda.command.Console.DEBUG)
 			System.out.print("\n");
 		
 		ArrayList<ClassMetadata> metas = adapter.getMetas();

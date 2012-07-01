@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.android.command;
+package com.tactfactory.mda.command;
 
 public class PackageUtils {
 	public static String extractNameSpace(Class<?> mclass) {

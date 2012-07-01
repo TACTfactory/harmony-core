@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.android.template;
+package com.tactfactory.mda.template;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -25,11 +25,11 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-import com.tactfactory.mda.android.command.Console;
-import com.tactfactory.mda.android.command.FileUtils;
-import com.tactfactory.mda.android.command.PackageUtils;
-import com.tactfactory.mda.android.orm.ClassMetadata;
-import com.tactfactory.mda.android.orm.FieldMetadata;
+import com.tactfactory.mda.command.Console;
+import com.tactfactory.mda.command.FileUtils;
+import com.tactfactory.mda.command.PackageUtils;
+import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.orm.FieldMetadata;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -233,7 +233,7 @@ public class ActivityGenerator {
 		File file = FileUtils.makeFile(Console.pathProject + "/src" + PackageUtils.extractPath(this.localNameSpace).toLowerCase() + "/" + this.meta.nameClass + filepostname);
 		
 		// Debug Log
-		if (com.tactfactory.mda.android.command.Console.DEBUG)
+		if (com.tactfactory.mda.command.Console.DEBUG)
 			System.out.print("\tGenerate Source : " + file.getAbsoluteFile() + "\n"); 
 		
 		// Create
@@ -264,7 +264,7 @@ public class ActivityGenerator {
 		File file = FileUtils.makeFile(Console.pathProject + "/res/layout/" + fileprename + this.meta.nameClass.toLowerCase() + filepostname);
 		
 		// Debug Log
-		if (com.tactfactory.mda.android.command.Console.DEBUG)
+		if (com.tactfactory.mda.command.Console.DEBUG)
 			System.out.print("\tGenerate Ressource : " + file.getAbsoluteFile() + "\n"); 
 		
 		// Create
@@ -289,7 +289,7 @@ public class ActivityGenerator {
 		String pathRelatif = String.format(".%s.%s.%s", TEMPLATE_VIEW, this.meta.nameClass.toLowerCase(), classFile );
 		
 		// Debug Log
-		if (com.tactfactory.mda.android.command.Console.DEBUG)
+		if (com.tactfactory.mda.command.Console.DEBUG)
 			System.out.print("\tUpdate Manifest : " + pathRelatif + "\n\n");
 		
 		try {			

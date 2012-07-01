@@ -6,14 +6,15 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.android.command;
+package com.tactfactory.mda.command;
 
 import japa.parser.ast.CompilationUnit;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import com.tactfactory.mda.android.command.Command;
+
+import com.tactfactory.mda.command.Command;
 
 public class Console {
 	public static final boolean DEBUG = true;
@@ -48,7 +49,7 @@ public class Console {
 			pathProject = new java.io.File("..").getCanonicalPath().concat("/" + projectFolder + "/") ;
 			
 			// Debug Log
-			if (com.tactfactory.mda.android.command.Console.DEBUG)
+			if (com.tactfactory.mda.command.Console.DEBUG)
 				System.out.print("Current Path : " + pathProject + "\n\n"); 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

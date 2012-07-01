@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.android;
+package com.tactfactory.mda;
 
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
@@ -22,7 +22,7 @@ import java.io.IOException;
  * @author micky
  *
  */
-public class Console extends com.tactfactory.mda.android.command.Console {
+public class Console extends com.tactfactory.mda.command.Console {
 	/**
 	 * @param args
 	 * @throws Exception 
