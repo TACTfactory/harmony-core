@@ -1,0 +1,1 @@
+All templates for Apple iOS device

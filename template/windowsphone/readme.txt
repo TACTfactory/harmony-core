@@ -1,0 +1,1 @@
+All templates for Microsoft WindowsPhone device

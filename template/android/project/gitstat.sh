@@ -1,8 +1,6 @@
 #!/bin/sh
-
-# Install
-#
-# aptiude install gitstat gource perl
+# Install Dependency :
+# Debian/Ubuntu : aptitude install gitstat gource perl
 
 echo "Stat script generator by TACTfactory 2012\n########################################################"""
 

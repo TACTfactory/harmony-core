@@ -37,7 +37,7 @@ import freemarker.template.TemplateException;
 
 public class ActivityGenerator {
 	private final static String TEMPLATE_VIEW = "view";
-	private final static String TEMPLATE_PATH_FOLDER = "template/";
+	private final static String TEMPLATE_PATH_FOLDER = "template/" + "android/";
 	
 	protected ClassMetadata meta;
 	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
@@ -74,6 +74,8 @@ public class ActivityGenerator {
 		// Info
 		System.out.print(">> Generate CRUD view for " +  meta.nameClass);
 		
+		
+		
 		try {
 			Configuration cfg = new Configuration();
 			
@@ -109,7 +111,7 @@ public class ActivityGenerator {
 			TemplateException {
 		
 		this.generateSource(cfg, 
-				"TemplateListActivity.java", 
+				"view/TemplateListActivity.java", 
 				"ListActivity.java");
 		this.generateResource(cfg, 
 				"activity_template_list.xml", 
@@ -117,7 +119,7 @@ public class ActivityGenerator {
 				"_list.xml");
 		
 		this.generateSource(cfg, 
-				"TemplateListFragment.java", 
+				"view/TemplateListFragment.java", 
 				"ListFragment.java");
 		this.generateResource(cfg, 
 				"fragment_template_list.xml", 
@@ -125,7 +127,7 @@ public class ActivityGenerator {
 				"_list.xml");
 		
 		this.generateSource(cfg, 
-				"TemplateListAdapter.java", 
+				"view/TemplateListAdapter.java", 
 				"ListAdapter.java");
 		this.generateResource(cfg, 
 				"row_template.xml", 
@@ -133,7 +135,7 @@ public class ActivityGenerator {
 				".xml");
 		
 		this.generateSource(cfg, 
-				"TemplateListLoader.java", 
+				"view/TemplateListLoader.java", 
 				"ListLoader.java");
 		
 		this.updateManifest("ListActivity");
@@ -148,7 +150,7 @@ public class ActivityGenerator {
 			TemplateException {
 		
 		this.generateSource(cfg, 
-				"TemplateShowActivity.java", 
+				"view/TemplateShowActivity.java", 
 				"ShowActivity.java");
 		this.generateResource(cfg, 
 				"activity_template_show.xml", 
@@ -156,7 +158,7 @@ public class ActivityGenerator {
 				"_show.xml");
 		
 		this.generateSource(cfg, 
-				"TemplateShowFragment.java", 
+				"view/TemplateShowFragment.java", 
 				"ShowFragment.java");
 		this.generateResource(cfg, 
 				"fragment_template_show.xml", 
@@ -175,7 +177,7 @@ public class ActivityGenerator {
 			TemplateException {
 		
 		this.generateSource(cfg, 
-				"TemplateEditActivity.java", 
+				"view/TemplateEditActivity.java", 
 				"EditActivity.java");
 		this.generateResource(cfg, 
 				"activity_template_edit.xml", 
@@ -183,7 +185,7 @@ public class ActivityGenerator {
 				"_edit.xml");
 		
 		this.generateSource(cfg, 
-				"TemplateEditFragment.java", 
+				"view/TemplateEditFragment.java", 
 				"EditFragment.java");
 		this.generateResource(cfg, 
 				"fragment_template_edit.xml", 
@@ -202,7 +204,7 @@ public class ActivityGenerator {
 			TemplateException {
 		
 		this.generateSource(cfg, 
-				"TemplateCreateActivity.java", 
+				"view/TemplateCreateActivity.java", 
 				"CreateActivity.java"  );
 		this.generateResource(cfg, 
 				"activity_template_create.xml", 
@@ -210,7 +212,7 @@ public class ActivityGenerator {
 				"_create.xml");
 		
 		this.generateSource(cfg, 
-				"TemplateCreateFragment.java", 
+				"view/TemplateCreateFragment.java", 
 				"CreateFragment.java");
 		this.generateResource(cfg, 
 				"fragment_template_create.xml", 
@@ -228,7 +230,7 @@ public class ActivityGenerator {
 	private void generateSource(Configuration cfg, String template, String filepostname) throws IOException,
 			TemplateException {
 		
-		File file = FileUtils.makeFile(Console.pathProject + "/src/" + PackageUtils.extractPath(this.localNameSpace).toLowerCase() + "/" + this.meta.nameClass + filepostname);
+		File file = FileUtils.makeFile(Console.pathProject + "/src" + PackageUtils.extractPath(this.localNameSpace).toLowerCase() + "/" + this.meta.nameClass + filepostname);
 		
 		// Debug Log
 		if (com.tactfactory.mda.android.command.Console.DEBUG)
