@@ -37,7 +37,7 @@ import freemarker.template.TemplateException;
 
 public class ActivityGenerator {
 	private final static String TEMPLATE_VIEW = "view";
-	private final static String TEMPLATE_PATH_FOLDER = "template/" + "android/";
+	private final static String TEMPLATE_PATH_FOLDER = "tpl/" + "android/";
 	
 	protected ClassMetadata meta;
 	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
