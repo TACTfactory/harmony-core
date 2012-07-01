@@ -3,6 +3,9 @@
       package="${namespace}"
       android:versionCode="1"
       android:versionName="@string/app_ver">
+    <uses-sdk 
+    	android:minSdkVersion="7" 
+    	android:targetSdkVersion="16" />
     <application android:label="@string/app_name">
         <activity android:name=".HomeActivity"
                   android:label="@string/app_name">
