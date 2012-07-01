@@ -47,8 +47,9 @@ public class Console {
 		try {	
 			pathProject = new java.io.File("..").getCanonicalPath().concat("/" + projectFolder + "/") ;
 			
-			if (DEBUG)
-				System.out.print("Current Path : " + pathProject + "\n"); 
+			// Debug Log
+			if (com.tactfactory.mda.android.command.Console.DEBUG)
+				System.out.print("Current Path : " + pathProject + "\n\n"); 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

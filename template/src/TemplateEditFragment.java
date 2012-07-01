@@ -13,18 +13,87 @@ import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.widget.*;
+
+import java.util.Date;
 
 import ${namespace}.entity.${name};
 
+/** ${name} edit fragment
+ * 
+ * @see android.app.Fragment
+ */
 public class ${name}EditFragment extends Fragment {
-
-	<#foreach field in fields>
-	private ${field}; 
-	</#foreach>
+	/* Model data */
+	protected ${name} model;
 	
-	/**
-	 * Sets up the UI.
-	 */
+	/* Fields View */
+    <#list fields as field>
+    protected ${field.customEditType} ${field.name}View; 
+    </#list>
+    
+    /** Initialize view of fields 
+     * 
+     * @param view The layout inflating
+     */
+    protected void initializeComponent(View view) {
+		<#foreach field in fields>
+		this.${field.name}View = (${field.customEditType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}); 
+		</#foreach>
+    }
+    
+    /** Load data from model to fields view */
+    public void loadData() {
+    	<#foreach field in fields>
+    		<#if (field.customEditType == "EditText") >
+    			<#if (field.type == "String")>
+		this.${field.name}View.setText(this.model.get${field.name?cap_first}()); 
+				</#if>
+				<#if (field.type == "Date")>
+		this.${field.name}View.setText(this.model.get${field.name?cap_first}().toLocaleString()); 
+				</#if>
+				<#if (field.type == "int")>
+		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}())); 
+				</#if>
+			</#if>
+			<#if (field.customEditType == "CheckBox") >
+		this.${field.name}View.setSelected(this.model.${field.name?uncap_first}()); 
+			</#if>
+		</#foreach>
+    }
+    
+    /** Save data from fields view to model */
+    public void saveData() {
+    	<#foreach field in fields>
+			<#if (field.customEditType == "EditText") >
+				<#if (field.type == "String")>
+		this.model.set${field.name?cap_first}(this.${field.name}View.getEditableText().toString());
+				</#if>
+				<#if (field.type == "Date")>
+		this.model.set${field.name?cap_first}(new Date(this.${field.name}View.getEditableText().toString())); 
+				</#if>
+				<#if (field.type == "int")>
+		this.model.set${field.name?cap_first}(Integer.parseInt(this.${field.name}View.getEditableText().toString()));
+				</#if>
+			</#if>
+			<#if (field.customEditType == "CheckBox") >
+		this.model.${field.name?uncap_first}(this.${field.name}View.isChecked());
+			</#if>
+		</#foreach>
+    }
+    
+    /** Check data is valid
+     * 
+     * @return true if valid
+     */
+    public boolean validateData() {
+    	return true;
+    }
+
+    /** Sets up the UI.
+	 * 
+	 * @see android.support.v4.app.Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)
+     */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {    	
 		// Inflate the layout for this fragment
@@ -33,10 +102,6 @@ public class ${name}EditFragment extends Fragment {
 	    this.initializeComponent(view);
 	    
 	    return view;
-	}
-	
-	protected void initializeComponent(View view) {
-	
 	}
 	
 	public static class EditTask extends AsyncTask<Void, Void, Integer> {

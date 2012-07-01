@@ -12,41 +12,80 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 import com.tactfactory.mda.android.command.Console;
 import com.tactfactory.mda.android.command.FileUtils;
 import com.tactfactory.mda.android.command.PackageUtils;
+import com.tactfactory.mda.android.orm.ClassMetadata;
+import com.tactfactory.mda.android.orm.FieldMetadata;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class ActivityGenerator {
+	private final static String TEMPLATE_VIEW = "view";
 	private final static String TEMPLATE_PATH_FOLDER = "template/";
 	
-	protected HashMap<String, Object> datamodel;
+	protected ClassMetadata meta;
+	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 	protected String localNameSpace;
-	protected String nameEntity;
 
 	private boolean isWritable = true;
 	
-	@SuppressWarnings("unchecked")
-	public ActivityGenerator(HashMap<String, Object> datamodel) {
-		this.datamodel = (HashMap<String, Object>) datamodel.clone();
+	public ActivityGenerator(ClassMetadata meta) {
+		this.meta 		= meta;
+		//this.nameEntity = meta.nameClass;
+		this.localNameSpace = String.format("%s.%s.%s", meta.nameSpace, TEMPLATE_VIEW, this.meta.nameClass.toLowerCase());
 		
-		this.nameEntity = (String) datamodel.get("name");
-		this.localNameSpace = datamodel.get("namespace") + ".view." + this.nameEntity.toLowerCase();
+		// Make fields
+		ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
+		for (FieldMetadata field : this.meta.fields.values()) {
+			Map<String, Object> modelField = new HashMap<String, Object>();
+			field.customize();
+			modelField.put("name", field.name);
+			modelField.put("type", field.type);
+			modelField.put("customEditType", field.customEditType);
+			modelField.put("customShowType", field.customShowType);
+			
+			modelFields.add(modelField);
+		}
+		
+		// Make class
+		this.datamodel.put("namespace", meta.nameSpace);
+		this.datamodel.put("name", 		meta.nameClass);
 		this.datamodel.put("localnamespace", this.localNameSpace);
+		this.datamodel.put("fields", 	modelFields);
 	}
 	
 	public void generate() {
+		// Info
+		System.out.print(">> Generate CRUD view for " +  meta.nameClass);
+		
 		try {
 			Configuration cfg = new Configuration();
 			
 			if (this.isWritable ) {
+				// Info
+				System.out.print(" with write actions \n");
+				
 				this.generateCreateAction(cfg);
 				this.generateEditAction(cfg);
+			} else {
+				// Info
+				System.out.print("\n");
 			}
 
 			this.generateShowAction(cfg);
@@ -96,6 +135,8 @@ public class ActivityGenerator {
 		this.generateSource(cfg, 
 				"TemplateListLoader.java", 
 				"ListLoader.java");
+		
+		this.updateManifest("ListActivity");
 	}
 
 	/** Show Action
@@ -121,6 +162,8 @@ public class ActivityGenerator {
 				"fragment_template_show.xml", 
 				"fragment_", 
 				"_show.xml");
+		
+		this.updateManifest("ShowActivity");
 	}
 
 	/** Edit Action
@@ -146,6 +189,8 @@ public class ActivityGenerator {
 				"fragment_template_edit.xml", 
 				"fragment_", 
 				"_edit.xml");
+		
+		this.updateManifest("EditActivity");
 	}
 
 	/** Create Action
@@ -171,6 +216,8 @@ public class ActivityGenerator {
 				"fragment_template_create.xml", 
 				"fragment_", 
 				"_create.xml");
+		
+		this.updateManifest("CreateActivity");
 	}
 
 	/** Make Java Source Code
@@ -181,11 +228,14 @@ public class ActivityGenerator {
 	private void generateSource(Configuration cfg, String template, String filepostname) throws IOException,
 			TemplateException {
 		
-		File file = FileUtils.makeFile(Console.pathProject + "/src/" + PackageUtils.extractPath(this.localNameSpace).toLowerCase() + "/" + this.nameEntity + filepostname);
-		System.out.print("\n\t Generate : " + file.getAbsoluteFile() + "\n"); 
+		File file = FileUtils.makeFile(Console.pathProject + "/src/" + PackageUtils.extractPath(this.localNameSpace).toLowerCase() + "/" + this.meta.nameClass + filepostname);
+		
+		// Debug Log
+		if (com.tactfactory.mda.android.command.Console.DEBUG)
+			System.out.print("\tGenerate Source : " + file.getAbsoluteFile() + "\n"); 
 		
 		// Create
-		Template tpl = cfg.getTemplate(TEMPLATE_PATH_FOLDER + "view/" + template);
+		Template tpl = cfg.getTemplate(TEMPLATE_PATH_FOLDER + "src/" + template);
 		
 		OutputStreamWriter output;
 		/*if (false) //Console.DEBUG)
@@ -209,8 +259,11 @@ public class ActivityGenerator {
 	private void generateResource(Configuration cfg, String template, String fileprename, String filepostname) throws IOException,
 		TemplateException {
 	
-		File file = FileUtils.makeFile(Console.pathProject + "/res/layout/" + fileprename + this.nameEntity.toLowerCase() + filepostname);
-		System.out.print("\n\t Generate : " + file.getAbsoluteFile() + "\n"); 
+		File file = FileUtils.makeFile(Console.pathProject + "/res/layout/" + fileprename + this.meta.nameClass.toLowerCase() + filepostname);
+		
+		// Debug Log
+		if (com.tactfactory.mda.android.command.Console.DEBUG)
+			System.out.print("\tGenerate Ressource : " + file.getAbsoluteFile() + "\n"); 
 		
 		// Create
 		Template tpl = cfg.getTemplate(TEMPLATE_PATH_FOLDER+ "res/layout/"  + template);
@@ -224,4 +277,60 @@ public class ActivityGenerator {
 		tpl.process(datamodel, output);
 		output.flush();
 	}
+
+	/**  Update Android Manifest
+	 * 
+	 * @param classFile
+	 */
+	private void updateManifest(String classFile) {
+		classFile = this.meta.nameClass + classFile;
+		String pathRelatif = String.format(".%s.%s.%s", TEMPLATE_VIEW, this.meta.nameClass.toLowerCase(), classFile );
+		
+		// Debug Log
+		if (com.tactfactory.mda.android.command.Console.DEBUG)
+			System.out.print("\tUpdate Manifest : " + pathRelatif + "\n\n");
+		
+		try {			
+			SAXBuilder builder = new SAXBuilder();
+			File xmlFile = FileUtils.makeFile(Console.pathProject + "/AndroidManifest.xml");
+	 
+			//TODO if (!xmlFile.exists())
+				
+			Document doc = (Document) builder.build(xmlFile);
+			Element rootNode = doc.getRootElement();
+			Namespace ns = rootNode.getNamespace("android");
+			
+			// get Application Node
+			Element findActivity = null;
+			Element applicationNode = rootNode.getChild("application");
+			if (applicationNode != null) {
+				List<Element> activities = applicationNode.getChildren("activity");
+				for (Element activity : activities) {
+					if (activity.hasAttributes() && activity.getAttributeValue("name",ns).equals(pathRelatif) ) {
+						findActivity = activity;
+						break;
+					}
+				}
+			}
+			
+			if (findActivity == null) {
+				findActivity = new Element("activity");
+				findActivity.setAttribute("name", pathRelatif, ns);
+				applicationNode.addContent(findActivity);
+			}
+			
+			findActivity.setAttribute("label", "@string/app_name", ns);
+	 
+			// Write to File
+			XMLOutputter xmlOutput = new XMLOutputter();
+	 
+			// display nice nice
+			xmlOutput.setFormat(Format.getPrettyFormat());
+			xmlOutput.output(doc, new FileWriter(xmlFile.getAbsoluteFile()));
+		  } catch (IOException io) {
+			io.printStackTrace();
+		  } catch (JDOMException e) {
+			e.printStackTrace();
+		  }
+		}
 }
