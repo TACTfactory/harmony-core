@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:padding="4dp"
+    >
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="You are generate your first Android project with SymMobile."
+    android:paddingBottom="16dp"
+    />
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="Step 1"
+    android:textStyle="bold"
+    android:textColor="@android:color/white"
+    />
+<FrameLayout
+	android:layout_width="fill_parent" 
+    android:layout_height="1dp"
+    android:background="@android:color/darker_gray"
+    />
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="Now create your models into the package entity at root of the project package."
+    android:paddingBottom="4dp"
+    />
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="File : /src/com/compagny/android/entity/Post"
+    android:textSize="12sp"
+    android:textColor="@android:color/darker_gray"
+    />
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="Package com.compagny.android.entity; public class Post { }"
+	android:textSize="12sp"
+    android:textColor="@android:color/darker_gray"
+    android:paddingBottom="8dp"
+    />
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="Step 2"
+    android:textStyle="bold"
+    android:textColor="@android:color/white"
+    />
+<FrameLayout
+	android:layout_width="fill_parent" 
+    android:layout_height="1dp"
+    android:background="@android:color/darker_gray"
+    />
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="After create your models, run SymfoMobile CLI CRUD view generator."
+    android:paddingBottom="4dp"
+    />
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="java -jar symfomobile.jar orm:generate:entities ${app_name}:com/company/android"
+    android:textSize="12sp"
+    android:textColor="@android:color/darker_gray"
+    android:paddingBottom="8dp"
+    />
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="Step 3"
+    android:textStyle="bold"
+    android:textColor="@android:color/white"
+    />
+<FrameLayout
+	android:layout_width="fill_parent" 
+    android:layout_height="1dp"
+    android:background="@android:color/darker_gray"
+    />
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="Refresh and clean your project and run again..."
+    android:paddingBottom="24dp"
+    />
+<TextView  
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content" 
+    android:text="More documentation at http://support.tactfactory.com/SymfoMobile/"
+    />
+</LinearLayout>
+

@@ -230,7 +230,7 @@ public class ActivityGenerator {
 	private void generateSource(Configuration cfg, String template, String filepostname) throws IOException,
 			TemplateException {
 		
-		File file = FileUtils.makeFile(Console.pathProject + "/src" + PackageUtils.extractPath(this.localNameSpace).toLowerCase() + "/" + this.meta.nameClass + filepostname);
+		File file = FileUtils.makeFile(Console.pathProject + "/src/" + PackageUtils.extractPath(this.localNameSpace).toLowerCase() + "/" + this.meta.nameClass + filepostname);
 		
 		// Debug Log
 		if (com.tactfactory.mda.command.Console.DEBUG)
