@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.command;
+package com.tactfactory.mda.utils;
 
 import java.io.File;
 import java.io.IOException;

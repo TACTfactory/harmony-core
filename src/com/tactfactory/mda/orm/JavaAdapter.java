@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.google.common.base.Strings;
+import com.tactfactory.mda.command.Harmony;
 import com.tactfactory.mda.command.PackageUtils;
 import com.tactfactory.mda.orm.annotation.Column;
 import com.tactfactory.mda.orm.annotation.Entity;
@@ -63,7 +64,7 @@ public class JavaAdapter {
 					meta.nameClass = PackageUtils.extractNameEntity(n.getName());
 					
 					// Debug Log
-					if (com.tactfactory.mda.command.Console.DEBUG)
+					if (Harmony.DEBUG)
 						System.out.print("\tEntity: " + meta.nameSpace + ".entity." +  meta.nameClass + "\n");
 				}
 			}
@@ -87,7 +88,7 @@ public class JavaAdapter {
 					fieldMeta.type = n.getType().toString();
 					
 					// Debug Log
-					if (com.tactfactory.mda.command.Console.DEBUG)
+					if (Harmony.DEBUG)
 						System.out.print("\t    Column: " + fieldMeta.name + 
 								" type of " + fieldMeta.type +"\n");
 					

@@ -25,12 +25,12 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-import com.tactfactory.mda.command.Console;
-import com.tactfactory.mda.command.FileUtils;
+import com.tactfactory.mda.command.Harmony;
 import com.tactfactory.mda.command.PackageUtils;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.utils.FileUtils;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -39,10 +39,9 @@ import freemarker.template.TemplateException;
 public class ActivityGenerator {	
 	protected ClassMetadata meta;
 	protected BaseAdapter adapter;
-	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 	protected String localNameSpace;
-
-	private boolean isWritable = true;
+	protected boolean isWritable = true;
+	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 	
 	public ActivityGenerator(ClassMetadata meta, BaseAdapter adapter) throws Exception {
 		if (meta != null && adapter != null)
@@ -239,7 +238,7 @@ public class ActivityGenerator {
 						String.format(filename, this.meta.nameClass)));
 		
 		// Debug Log
-		if (com.tactfactory.mda.command.Console.DEBUG)
+		if (Harmony.DEBUG)
 			System.out.print("\tGenerate Source : " + file.getAbsoluteFile() + "\n"); 
 		
 		// Create
@@ -269,7 +268,7 @@ public class ActivityGenerator {
 						String.format(filename, this.meta.nameClass.toLowerCase())));
 		
 		// Debug Log
-		if (com.tactfactory.mda.command.Console.DEBUG)
+		if (Harmony.DEBUG)
 			System.out.print("\tGenerate Ressource : " + file.getAbsoluteFile() + "\n"); 
 		
 		// Create
@@ -287,17 +286,22 @@ public class ActivityGenerator {
 	/** Make Manifest file
 	 * 
 	 * @param cfg Template engine
+	 * @throws IOException 
+	 * @throws TemplateException 
 	 */
-	private void makeManifest(Configuration cfg) {
-		File file = FileUtils.makeFile(Console.pathProject + this.adapter.getManifest());
+	private void makeManifest(Configuration cfg) throws IOException, TemplateException {
+		File file = FileUtils.makeFile(this.adapter.getManifestPathFile());
 		
 		// Debug Log
-		if (com.tactfactory.mda.command.Console.DEBUG)
-			System.out.print("\tGenerate Ressource : " + file.getAbsoluteFile() + "\n");
+		if (Harmony.DEBUG)
+			System.out.print("\tGenerate Manifest : " + file.getAbsoluteFile() + "\n");
 		
 		// Create
-		//Template tpl = cfg.getTemplate(TEMPLATE_PATH_FOLDER+ "res/layout/"  + template);
-				
+		Template tpl = cfg.getTemplate(this.adapter.getTemplateManifestPathFile());
+		OutputStreamWriter output = new FileWriter(file);
+		tpl.process(datamodel, output);
+		output.flush();
+		output.close();
 	}
 
 	/**  Update Android Manifest
@@ -312,7 +316,7 @@ public class ActivityGenerator {
 				classFile );
 		
 		// Debug Log
-		if (com.tactfactory.mda.command.Console.DEBUG)
+		if (Harmony.DEBUG)
 			System.out.print("\tUpdate Manifest : " + pathRelatif + "\n\n");
 		
 		try {			

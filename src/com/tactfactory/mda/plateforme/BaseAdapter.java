@@ -1,6 +1,6 @@
 package com.tactfactory.mda.plateforme;
 
-import com.tactfactory.mda.command.Console;
+import com.tactfactory.mda.command.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 
 public abstract class BaseAdapter {	
@@ -20,7 +20,7 @@ public abstract class BaseAdapter {
 	public abstract String getNameSpace(ClassMetadata meta);
 	
 	public final String getSourcePath() {
-		return String.format("%s/%s/", Console.pathProject, this.getSource() );
+		return String.format("%s/%s/", Harmony.pathProject, this.getSource() );
 	}
 	
 	public final String getTemplateSourcePath() {
@@ -32,7 +32,7 @@ public abstract class BaseAdapter {
 	}
 	
 	public final String getRessourcePath() {
-		return String.format("%s/%s/", Console.pathProject, this.getResource() );
+		return String.format("%s/%s/", Harmony.pathProject, this.getResource() );
 	}
 	
 	public final String getTemplateRessourcePath() {
@@ -48,7 +48,11 @@ public abstract class BaseAdapter {
 	}
 	
 	public final String getManifestPathFile() {
-		return String.format("%s/%s", Console.pathProject, this.getManifest() );
+		return String.format("%s/%s", Harmony.pathProject, this.getManifest() );
+	}
+	
+	public final String getTemplateManifestPathFile() {
+		return String.format("%s/project/%s", this.getTemplate(), this.getManifest() );
 	}
 
 	/**

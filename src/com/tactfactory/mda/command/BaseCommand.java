@@ -12,7 +12,7 @@ import japa.parser.ast.CompilationUnit;
 
 import java.util.ArrayList;
 
-public abstract class Command {
+public abstract class BaseCommand {
 
 	public abstract void execute(String action, ArrayList<CompilationUnit> entities);
 

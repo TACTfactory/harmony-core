@@ -18,7 +18,7 @@ import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.ActivityGenerator;
 
-public class OrmCommand extends Command {
+public class OrmCommand extends BaseCommand {
 	public static String GENERATE_ENTITY 	= "orm:generate:entity";
 	public static String GENERATE_ENTITIES	= "orm:generate:entities";
 	public static String GENERATE_FORM 		= "orm:generate:form";
@@ -42,7 +42,7 @@ public class OrmCommand extends Command {
 		}
 		
 		// Debug Log
-		if (com.tactfactory.mda.command.Console.DEBUG)
+		if (Harmony.DEBUG)
 			System.out.print("\n");
 		
 		ArrayList<ClassMetadata> metas = adapter.getMetas();

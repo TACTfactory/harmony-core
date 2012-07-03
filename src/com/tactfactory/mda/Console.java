@@ -22,7 +22,7 @@ import java.io.IOException;
  * @author micky
  *
  */
-public class Console extends com.tactfactory.mda.command.Console {
+public class Console extends com.tactfactory.mda.command.Harmony {
 	/**
 	 * @param args
 	 * @throws Exception 

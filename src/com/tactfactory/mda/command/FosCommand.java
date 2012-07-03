@@ -12,7 +12,7 @@ import japa.parser.ast.CompilationUnit;
 
 import java.util.ArrayList;
 
-public class FosCommand extends Command {
+public class FosCommand extends BaseCommand {
 
 	public void fosUserCreate() {
 	}

@@ -12,7 +12,7 @@ import japa.parser.ast.CompilationUnit;
 
 import java.util.ArrayList;
 
-public class GeneralCommand extends Command {
+public class GeneralCommand extends BaseCommand {
 	public static String LIST = "list";
 	public static String HELP = "help";
 
@@ -24,8 +24,8 @@ public class GeneralCommand extends Command {
 	}
 
 	public void list() {
-		for (Command command : Console.instance.bootstrap.values()) {
-			command.summary();
+		for (BaseCommand baseCommand : Harmony.instance.bootstrap.values()) {
+			baseCommand.summary();
 		}
 	}
 

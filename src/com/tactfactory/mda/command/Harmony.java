@@ -14,22 +14,22 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.tactfactory.mda.command.Command;
+import com.tactfactory.mda.command.BaseCommand;
 
-public class Console {
+public class Harmony {
 	/** Debug state*/
 	public static final boolean DEBUG = true;
 	/** Singleton of console */
-	public static Console instance;
+	public static Harmony instance;
 	/** Full path of project ex : /root/project/ */
 	public static String pathProject;
 	/** Project name */
 	public static String projectFolder;
 	
-	protected HashMap<Class<?>, Command> bootstrap = new HashMap<Class<?>, Command>();
+	protected HashMap<Class<?>, BaseCommand> bootstrap = new HashMap<Class<?>, BaseCommand>();
 	protected ArrayList<CompilationUnit> entities = new ArrayList<CompilationUnit>();
 
-	public Console() throws Exception {
+	public Harmony() throws Exception {
 		this.initialize();
 		
 		// Default Commands
@@ -39,7 +39,7 @@ public class Console {
 		this.bootstrap.put(FosCommand.class, 		new FosCommand() );
 	}
 
-	/** Initialize Console 
+	/** Initialize Harmony 
 	 * @throws Exception */
 	private void initialize() throws Exception {
 		instance = this;
@@ -53,7 +53,7 @@ public class Console {
 			pathProject = new java.io.File("..").getCanonicalPath().concat("/" + projectFolder + "/") ;
 			
 			// Debug Log
-			if (com.tactfactory.mda.command.Console.DEBUG)
+			if (Harmony.DEBUG)
 				System.out.print("Current Path : " + pathProject + "\n\n"); 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -61,7 +61,7 @@ public class Console {
 		}
 	}
 	
-	public Command getCommand(Class<?> commandName) {
+	public BaseCommand getCommand(Class<?> commandName) {
 		return this.bootstrap.get(commandName);
 	}
 
@@ -83,9 +83,9 @@ public class Console {
 		
 		// Select Action and launch
 		boolean isfindAction = false;
-		for (Command command : this.bootstrap.values()) {
-			if (command.isAvailableCommand(action)) {
-				command.execute(action, entities);
+		for (BaseCommand baseCommand : this.bootstrap.values()) {
+			if (baseCommand.isAvailableCommand(action)) {
+				baseCommand.execute(action, entities);
 				isfindAction = true;
 			}
 		}

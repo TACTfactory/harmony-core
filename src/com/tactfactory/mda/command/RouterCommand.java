@@ -12,7 +12,7 @@ import japa.parser.ast.CompilationUnit;
 
 import java.util.ArrayList;
 
-public class RouterCommand extends Command {
+public class RouterCommand extends BaseCommand {
 
 	protected void routerDebug() {
 	}
