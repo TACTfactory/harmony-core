@@ -44,7 +44,11 @@ public class ActivityGenerator {
 
 	private boolean isWritable = true;
 	
-	public ActivityGenerator(ClassMetadata meta, BaseAdapter adapter) {
+	public ActivityGenerator(ClassMetadata meta, BaseAdapter adapter) throws Exception {
+		if (meta != null && adapter != null)
+			throw new Exception("No meta or adapter define.");
+		
+		
 		this.meta 		= meta;
 		this.adapter	= adapter;
 		
@@ -70,7 +74,7 @@ public class ActivityGenerator {
 		this.datamodel.put("fields", 	modelFields);
 	}
 	
-	public ActivityGenerator(ClassMetadata meta, BaseAdapter adapter, Boolean isWritable) {
+	public ActivityGenerator(ClassMetadata meta, BaseAdapter adapter, Boolean isWritable) throws Exception {
 		this(meta, adapter);
 		
 		this.isWritable = isWritable;
@@ -242,14 +246,10 @@ public class ActivityGenerator {
 		Template tpl = cfg.getTemplate(
 				this.adapter.getTemplateSourceControlerPath() + template);
 		
-		OutputStreamWriter output;
-		/*if (false) //Console.DEBUG)
-			output = new OutputStreamWriter(System.out);
-		else */
-			output = new FileWriter(file);
-		
+		OutputStreamWriter output = new FileWriter(file);
 		tpl.process(datamodel, output);
 		output.flush();
+		output.close();
 	}
 	
 	/** Make Resource file
@@ -278,14 +278,10 @@ public class ActivityGenerator {
 						this.adapter.getTemplateRessourceLayoutPath(),
 						template));
 		
-		OutputStreamWriter output;
-		/*if (false) //Console.DEBUG)
-			output = new OutputStreamWriter(System.out);
-		else*/ 
-			output = new FileWriter(file);
-		
+		OutputStreamWriter output = new FileWriter(file);
 		tpl.process(datamodel, output);
 		output.flush();
+		output.close();
 	}
 	
 	/** Make Manifest file
@@ -311,7 +307,7 @@ public class ActivityGenerator {
 	private void updateManifest(String classFile) {
 		classFile = this.meta.nameClass + classFile;
 		String pathRelatif = String.format(".%s.%s.%s",
-				this.adapter.getControler(), 
+				this.adapter.getController(), 
 				this.meta.nameClass.toLowerCase(), 
 				classFile );
 		
@@ -322,9 +318,6 @@ public class ActivityGenerator {
 		try {			
 			SAXBuilder builder = new SAXBuilder();
 			File xmlFile = FileUtils.makeFile(this.adapter.getManifestPathFile());
-	 
-			//TODO if (!xmlFile.exists())
-				
 			Document doc = (Document) builder.build(xmlFile);
 			Element rootNode = doc.getRootElement();
 			Namespace ns = rootNode.getNamespace("android");

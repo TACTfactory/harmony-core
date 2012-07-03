@@ -3,21 +3,19 @@ package com.tactfactory.mda.plateforme;
 import com.tactfactory.mda.command.Console;
 import com.tactfactory.mda.orm.ClassMetadata;
 
-public abstract class BaseAdapter {
-	protected String separator = "/";
-	
+public abstract class BaseAdapter {	
 	// Structure
-	protected String ressource 	= "res";
-	protected String source 	= "src";
-	protected String template 	= "tpl/";
+	protected String resource;
+	protected String source;
+	protected String template;
 	
 	// MVC
-	protected String model 		= "entity";
-	protected String view 		= "";
-	protected String controler 	= "";
+	protected String model;
+	protected String view;
+	protected String controller;
 	
 	// File
-	protected String manifest 	= "";
+	protected String manifest;
 	
 	public abstract String getNameSpace(ClassMetadata meta);
 	
@@ -30,15 +28,15 @@ public abstract class BaseAdapter {
 	}
 	
 	public final String getTemplateSourceControlerPath() {
-		return String.format("%s/%s/", this.getTemplateSourcePath(), this.getControler() );
+		return String.format("%s/%s/", this.getTemplateSourcePath(), this.getController() );
 	}
 	
 	public final String getRessourcePath() {
-		return String.format("%s/%s/", Console.pathProject, this.getRessource() );
+		return String.format("%s/%s/", Console.pathProject, this.getResource() );
 	}
 	
 	public final String getTemplateRessourcePath() {
-		return String.format("%s/%s/", this.getTemplate(), this.getRessource() );
+		return String.format("%s/%s/", this.getTemplate(), this.getResource() );
 	}
 	
 	public final String getRessourceLayoutPath() {
@@ -54,10 +52,10 @@ public abstract class BaseAdapter {
 	}
 
 	/**
-	 * @return the ressource
+	 * @return the resource
 	 */
-	public final String getRessource() {
-		return ressource;
+	public final String getResource() {
+		return resource;
 	}
 
 	/**
@@ -89,10 +87,10 @@ public abstract class BaseAdapter {
 	}
 
 	/**
-	 * @return the controler
+	 * @return the controller
 	 */
-	public final String getControler() {
-		return controler;
+	public final String getController() {
+		return controller;
 	}
 
 	/**
@@ -103,10 +101,10 @@ public abstract class BaseAdapter {
 	}
 
 	/**
-	 * @param ressource the ressource to set
+	 * @param ressource the resource to set
 	 */
-	public final void setRessource(String ressource) {
-		this.ressource = ressource;
+	public final void setResource(String ressource) {
+		this.resource = ressource;
 	}
 
 	/**
@@ -138,10 +136,10 @@ public abstract class BaseAdapter {
 	}
 
 	/**
-	 * @param controler the controler to set
+	 * @param controler the controller to set
 	 */
-	public final void setControler(String controler) {
-		this.controler = controler;
+	public final void setController(String controler) {
+		this.controller = controler;
 	}
 
 	/**

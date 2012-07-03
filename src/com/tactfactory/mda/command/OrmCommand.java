@@ -47,7 +47,11 @@ public class OrmCommand extends Command {
 		
 		ArrayList<ClassMetadata> metas = adapter.getMetas();
 		for (ClassMetadata meta : metas) {
-			new ActivityGenerator(meta, this.adapter).generateAllAction();
+			try {
+				new ActivityGenerator(meta, this.adapter).generateAllAction();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -75,7 +79,11 @@ public class OrmCommand extends Command {
 			adapter.parse(entities.get(0));
 						
 			ArrayList<ClassMetadata> metas = adapter.getMetas();
-			new ActivityGenerator(metas.get(0), this.adapter).generateAllAction();
+			try {
+				new ActivityGenerator(metas.get(0), this.adapter).generateAllAction();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 
 			
 		} else
