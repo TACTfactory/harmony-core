@@ -17,9 +17,13 @@ import java.util.HashMap;
 import com.tactfactory.mda.command.Command;
 
 public class Console {
+	/** Debug state*/
 	public static final boolean DEBUG = true;
+	/** Singleton of console */
 	public static Console instance;
+	/** Full path of project ex : /root/project/ */
 	public static String pathProject;
+	/** Project name */
 	public static String projectFolder;
 	
 	protected HashMap<Class<?>, Command> bootstrap = new HashMap<Class<?>, Command>();

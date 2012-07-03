@@ -14,6 +14,8 @@ import java.util.ArrayList;
 
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.JavaAdapter;
+import com.tactfactory.mda.plateforme.AndroidAdapter;
+import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.ActivityGenerator;
 
 public class OrmCommand extends Command {
@@ -23,6 +25,7 @@ public class OrmCommand extends Command {
 	public static String GENERATE_CRUD 		= "orm:generate:crud";
 	
 	protected ArrayList<CompilationUnit> entities;
+	protected BaseAdapter adapter = new AndroidAdapter();
 
 	protected void generateForm() {
 
@@ -44,7 +47,7 @@ public class OrmCommand extends Command {
 		
 		ArrayList<ClassMetadata> metas = adapter.getMetas();
 		for (ClassMetadata meta : metas) {
-			new ActivityGenerator(meta).generate();
+			new ActivityGenerator(meta, this.adapter).generateAllAction();
 		}
 	}
 
@@ -72,7 +75,7 @@ public class OrmCommand extends Command {
 			adapter.parse(entities.get(0));
 						
 			ArrayList<ClassMetadata> metas = adapter.getMetas();
-			new ActivityGenerator(metas.get(0)).generate();
+			new ActivityGenerator(metas.get(0), this.adapter).generateAllAction();
 
 			
 		} else

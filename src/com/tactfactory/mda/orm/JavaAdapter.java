@@ -64,7 +64,7 @@ public class JavaAdapter {
 					
 					// Debug Log
 					if (com.tactfactory.mda.command.Console.DEBUG)
-						System.out.print("\tEntity: " + meta.nameSpace + "." +  meta.nameClass + "\n");
+						System.out.print("\tEntity: " + meta.nameSpace + ".entity." +  meta.nameClass + "\n");
 				}
 			}
 	    }

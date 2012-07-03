@@ -30,25 +30,25 @@ import com.tactfactory.mda.command.FileUtils;
 import com.tactfactory.mda.command.PackageUtils;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
+import com.tactfactory.mda.plateforme.BaseAdapter;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class ActivityGenerator {
-	private final static String TEMPLATE_VIEW = "view";
-	private final static String TEMPLATE_PATH_FOLDER = "tpl/" + "android/";
-	
+public class ActivityGenerator {	
 	protected ClassMetadata meta;
+	protected BaseAdapter adapter;
 	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 	protected String localNameSpace;
 
 	private boolean isWritable = true;
 	
-	public ActivityGenerator(ClassMetadata meta) {
+	public ActivityGenerator(ClassMetadata meta, BaseAdapter adapter) {
 		this.meta 		= meta;
-		//this.nameEntity = meta.nameClass;
-		this.localNameSpace = String.format("%s.%s.%s", meta.nameSpace, TEMPLATE_VIEW, this.meta.nameClass.toLowerCase());
+		this.adapter	= adapter;
+		
+		this.localNameSpace = this.adapter.getNameSpace(this.meta);
 		
 		// Make fields
 		ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
@@ -70,11 +70,127 @@ public class ActivityGenerator {
 		this.datamodel.put("fields", 	modelFields);
 	}
 	
-	public void generate() {
+	public ActivityGenerator(ClassMetadata meta, BaseAdapter adapter, Boolean isWritable) {
+		this(meta, adapter);
+		
+		this.isWritable = isWritable;
+	}
+	
+	/** List Action
+	 * @param cfg
+	 * @throws IOException
+	 * @throws TemplateException
+	 */
+	public void generateListAction(Configuration cfg) throws IOException,
+			TemplateException {
+		
+		this.makeSourceControler(cfg, 
+				"TemplateListActivity.java", 
+				"%sListActivity.java");
+		this.makeResourceLayout(cfg, 
+				"activity_template_list.xml", 
+				"activity_%s_list.xml");
+		
+		this.makeSourceControler(cfg, 
+				"TemplateListFragment.java", 
+				"%sListFragment.java");
+		this.makeResourceLayout(cfg, 
+				"fragment_template_list.xml", 
+				"fragment_%s_list.xml");
+		
+		this.makeSourceControler(cfg, 
+				"TemplateListAdapter.java", 
+				"%sListAdapter.java");
+		this.makeResourceLayout(cfg, 
+				"row_template.xml", 
+				"row_%s.xml");
+		
+		this.makeSourceControler(cfg, 
+				"TemplateListLoader.java", 
+				"%sListLoader.java");
+		
+		this.updateManifest("ListActivity");
+	}
+
+	/** Show Action
+	 * @param cfg
+	 * @throws IOException
+	 * @throws TemplateException
+	 */
+	public void generateShowAction(Configuration cfg) throws IOException,
+			TemplateException {
+		
+		this.makeSourceControler(cfg, 
+				"TemplateShowActivity.java", 
+				"%sShowActivity.java");
+		this.makeResourceLayout(cfg, 
+				"activity_template_show.xml", 
+				"activity_%s_show.xml");
+		
+		this.makeSourceControler(cfg, 
+				"TemplateShowFragment.java", 
+				"%sShowFragment.java");
+		this.makeResourceLayout(cfg, 
+				"fragment_template_show.xml", 
+				"fragment_%s_show.xml");
+		
+		this.updateManifest("ShowActivity");
+	}
+
+	/** Edit Action
+	 * @param cfg
+	 * @throws IOException
+	 * @throws TemplateException
+	 */
+	public void generateEditAction(Configuration cfg) throws IOException,
+			TemplateException {
+		
+		this.makeSourceControler(cfg, 
+				"TemplateEditActivity.java", 
+				"%sEditActivity.java");
+		this.makeResourceLayout(cfg, 
+				"activity_template_edit.xml", 
+				"activity_%s_edit.xml");
+		
+		this.makeSourceControler(cfg, 
+				"TemplateEditFragment.java", 
+				"%sEditFragment.java");
+		this.makeResourceLayout(cfg, 
+				"fragment_template_edit.xml", 
+				"fragment_%s_edit.xml");
+		
+		this.updateManifest("EditActivity");
+	}
+
+	/** Create Action
+	 * @param cfg
+	 * @throws IOException
+	 * @throws TemplateException
+	 */
+	public void generateCreateAction(Configuration cfg) throws IOException,
+			TemplateException {
+		
+		this.makeSourceControler(cfg, 
+				"TemplateCreateActivity.java", 
+				"%sCreateActivity.java"  );
+		this.makeResourceLayout(cfg, 
+				"activity_template_create.xml", 
+				"activity_%s_create.xml");
+		
+		this.makeSourceControler(cfg, 
+				"TemplateCreateFragment.java", 
+				"%sCreateFragment.java");
+		this.makeResourceLayout(cfg, 
+				"fragment_template_create.xml", 
+				"fragment_%s_create.xml");
+		
+		this.updateManifest("CreateActivity");
+	}
+	
+	/** All Actions (List, Show, Edit, Create) */
+	public void generateAllAction() {
 		// Info
 		System.out.print(">> Generate CRUD view for " +  meta.nameClass);
-		
-		
 		
 		try {
 			Configuration cfg = new Configuration();
@@ -102,142 +218,29 @@ public class ActivityGenerator {
 		}
 	}
 
-	/** List Action
-	 * @param cfg
-	 * @throws IOException
-	 * @throws TemplateException
-	 */
-	protected void generateListAction(Configuration cfg) throws IOException,
-			TemplateException {
-		
-		this.generateSource(cfg, 
-				"view/TemplateListActivity.java", 
-				"ListActivity.java");
-		this.generateResource(cfg, 
-				"activity_template_list.xml", 
-				"activity_", 
-				"_list.xml");
-		
-		this.generateSource(cfg, 
-				"view/TemplateListFragment.java", 
-				"ListFragment.java");
-		this.generateResource(cfg, 
-				"fragment_template_list.xml", 
-				"fragment_", 
-				"_list.xml");
-		
-		this.generateSource(cfg, 
-				"view/TemplateListAdapter.java", 
-				"ListAdapter.java");
-		this.generateResource(cfg, 
-				"row_template.xml", 
-				"row_", 
-				".xml");
-		
-		this.generateSource(cfg, 
-				"view/TemplateListLoader.java", 
-				"ListLoader.java");
-		
-		this.updateManifest("ListActivity");
-	}
-
-	/** Show Action
-	 * @param cfg
-	 * @throws IOException
-	 * @throws TemplateException
-	 */
-	protected void generateShowAction(Configuration cfg) throws IOException,
-			TemplateException {
-		
-		this.generateSource(cfg, 
-				"view/TemplateShowActivity.java", 
-				"ShowActivity.java");
-		this.generateResource(cfg, 
-				"activity_template_show.xml", 
-				"activity_", 
-				"_show.xml");
-		
-		this.generateSource(cfg, 
-				"view/TemplateShowFragment.java", 
-				"ShowFragment.java");
-		this.generateResource(cfg, 
-				"fragment_template_show.xml", 
-				"fragment_", 
-				"_show.xml");
-		
-		this.updateManifest("ShowActivity");
-	}
-
-	/** Edit Action
-	 * @param cfg
-	 * @throws IOException
-	 * @throws TemplateException
-	 */
-	protected void generateEditAction(Configuration cfg) throws IOException,
-			TemplateException {
-		
-		this.generateSource(cfg, 
-				"view/TemplateEditActivity.java", 
-				"EditActivity.java");
-		this.generateResource(cfg, 
-				"activity_template_edit.xml", 
-				"activity_", 
-				"_edit.xml");
-		
-		this.generateSource(cfg, 
-				"view/TemplateEditFragment.java", 
-				"EditFragment.java");
-		this.generateResource(cfg, 
-				"fragment_template_edit.xml", 
-				"fragment_", 
-				"_edit.xml");
-		
-		this.updateManifest("EditActivity");
-	}
-
-	/** Create Action
-	 * @param cfg
-	 * @throws IOException
-	 * @throws TemplateException
-	 */
-	protected void generateCreateAction(Configuration cfg) throws IOException,
-			TemplateException {
-		
-		this.generateSource(cfg, 
-				"view/TemplateCreateActivity.java", 
-				"CreateActivity.java"  );
-		this.generateResource(cfg, 
-				"activity_template_create.xml", 
-				"activity_", 
-				"_create.xml");
-		
-		this.generateSource(cfg, 
-				"view/TemplateCreateFragment.java", 
-				"CreateFragment.java");
-		this.generateResource(cfg, 
-				"fragment_template_create.xml", 
-				"fragment_", 
-				"_create.xml");
-		
-		this.updateManifest("CreateActivity");
-	}
-
 	/** Make Java Source Code
-	 * @param cfg
+	 * @param cfg Template engine
+	 * @param template Template path file. <br/>For list activity is "TemplateListActivity.java"
+	 * @param filename
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	private void generateSource(Configuration cfg, String template, String filepostname) throws IOException,
+	private void makeSourceControler(Configuration cfg, String template, String filename) throws IOException,
 			TemplateException {
 		
-		File file = FileUtils.makeFile(Console.pathProject + "/src/" + PackageUtils.extractPath(this.localNameSpace).toLowerCase() + "/" + this.meta.nameClass + filepostname);
+		File file = FileUtils.makeFile(
+				String.format("%s%s/%s",
+						this.adapter.getSourcePath(),
+						PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
+						String.format(filename, this.meta.nameClass)));
 		
 		// Debug Log
 		if (com.tactfactory.mda.command.Console.DEBUG)
 			System.out.print("\tGenerate Source : " + file.getAbsoluteFile() + "\n"); 
 		
 		// Create
-		Template tpl = cfg.getTemplate(TEMPLATE_PATH_FOLDER + "src/" + template);
+		Template tpl = cfg.getTemplate(
+				this.adapter.getTemplateSourceControlerPath() + template);
 		
 		OutputStreamWriter output;
 		/*if (false) //Console.DEBUG)
@@ -251,24 +254,29 @@ public class ActivityGenerator {
 	
 	/** Make Resource file
 	 * 
-	 * @param cfg Template engin
-	 * @param template Template path file. <br/>For list activity is "TemplateListActivity.java"
-	 * @param fileprename Prefix of resource file. <br/>Common is type of view "row_" or "activity_" or "fragment_"
-	 * @param filepostname Postfix of resource file. <br/>Common is type of action and extention file : "_list.xml" or "_edit.xml".
+	 * @param cfg Template engine
+	 * @param template Template path file.
+	 * @param filename Resource file. <br/>prefix is type of view "row_" or "activity_" or "fragment_" with <br/>postfix is type of action and extension file : "_list.xml" or "_edit.xml".
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	private void generateResource(Configuration cfg, String template, String fileprename, String filepostname) throws IOException,
+	private void makeResourceLayout(Configuration cfg, String template, String filename) throws IOException,
 		TemplateException {
 	
-		File file = FileUtils.makeFile(Console.pathProject + "/res/layout/" + fileprename + this.meta.nameClass.toLowerCase() + filepostname);
+		File file = FileUtils.makeFile(
+				String.format("%s/%s", 
+						this.adapter.getRessourceLayoutPath(),
+						String.format(filename, this.meta.nameClass.toLowerCase())));
 		
 		// Debug Log
 		if (com.tactfactory.mda.command.Console.DEBUG)
 			System.out.print("\tGenerate Ressource : " + file.getAbsoluteFile() + "\n"); 
 		
 		// Create
-		Template tpl = cfg.getTemplate(TEMPLATE_PATH_FOLDER+ "res/layout/"  + template);
+		Template tpl = cfg.getTemplate(
+				String.format("%s/%s",
+						this.adapter.getTemplateRessourceLayoutPath(),
+						template));
 		
 		OutputStreamWriter output;
 		/*if (false) //Console.DEBUG)
@@ -279,6 +287,22 @@ public class ActivityGenerator {
 		tpl.process(datamodel, output);
 		output.flush();
 	}
+	
+	/** Make Manifest file
+	 * 
+	 * @param cfg Template engine
+	 */
+	private void makeManifest(Configuration cfg) {
+		File file = FileUtils.makeFile(Console.pathProject + this.adapter.getManifest());
+		
+		// Debug Log
+		if (com.tactfactory.mda.command.Console.DEBUG)
+			System.out.print("\tGenerate Ressource : " + file.getAbsoluteFile() + "\n");
+		
+		// Create
+		//Template tpl = cfg.getTemplate(TEMPLATE_PATH_FOLDER+ "res/layout/"  + template);
+				
+	}
 
 	/**  Update Android Manifest
 	 * 
@@ -286,7 +310,10 @@ public class ActivityGenerator {
 	 */
 	private void updateManifest(String classFile) {
 		classFile = this.meta.nameClass + classFile;
-		String pathRelatif = String.format(".%s.%s.%s", TEMPLATE_VIEW, this.meta.nameClass.toLowerCase(), classFile );
+		String pathRelatif = String.format(".%s.%s.%s",
+				this.adapter.getControler(), 
+				this.meta.nameClass.toLowerCase(), 
+				classFile );
 		
 		// Debug Log
 		if (com.tactfactory.mda.command.Console.DEBUG)
@@ -294,7 +321,7 @@ public class ActivityGenerator {
 		
 		try {			
 			SAXBuilder builder = new SAXBuilder();
-			File xmlFile = FileUtils.makeFile(Console.pathProject + "/AndroidManifest.xml");
+			File xmlFile = FileUtils.makeFile(this.adapter.getManifestPathFile());
 	 
 			//TODO if (!xmlFile.exists())
 				

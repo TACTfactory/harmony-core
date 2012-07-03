@@ -12,7 +12,11 @@ import java.io.File;
 import java.io.IOException;
 
 public class FileUtils {
-	
+	/** Create a new file if doesn't exist (and path)
+	 * 
+	 * @param filename Full path of file
+	 * @return File instance
+	 */
 	public static File makeFile(String filename) {
 		File file = new File(filename);
 		
