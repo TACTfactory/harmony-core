@@ -12,6 +12,8 @@ import japa.parser.ast.CompilationUnit;
 
 import java.util.ArrayList;
 
+import com.tactfactory.mda.Harmony;
+
 public class GeneralCommand extends BaseCommand {
 	public static String LIST = "list";
 	public static String HELP = "help";

@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.command;
+package com.tactfactory.mda;
 
 import japa.parser.ast.CompilationUnit;
 
@@ -15,6 +15,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.tactfactory.mda.command.BaseCommand;
+import com.tactfactory.mda.command.FosCommand;
+import com.tactfactory.mda.command.GeneralCommand;
+import com.tactfactory.mda.command.OrmCommand;
+import com.tactfactory.mda.command.RouterCommand;
 
 public class Harmony {
 	/** Debug state*/
@@ -26,7 +30,7 @@ public class Harmony {
 	/** Project name */
 	public static String projectFolder;
 	
-	protected HashMap<Class<?>, BaseCommand> bootstrap = new HashMap<Class<?>, BaseCommand>();
+	public HashMap<Class<?>, BaseCommand> bootstrap = new HashMap<Class<?>, BaseCommand>();
 	protected ArrayList<CompilationUnit> entities = new ArrayList<CompilationUnit>();
 
 	public Harmony() throws Exception {

@@ -1,6 +1,6 @@
 package com.tactfactory.mda.plateforme;
 
-import com.tactfactory.mda.command.Harmony;
+import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 
 public abstract class BaseAdapter {	

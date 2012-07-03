@@ -12,6 +12,7 @@ import japa.parser.ast.CompilationUnit;
 
 import java.util.ArrayList;
 
+import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.JavaAdapter;
 import com.tactfactory.mda.plateforme.AndroidAdapter;

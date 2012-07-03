@@ -19,10 +19,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.google.common.base.Strings;
-import com.tactfactory.mda.command.Harmony;
-import com.tactfactory.mda.command.PackageUtils;
+import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.annotation.Column;
 import com.tactfactory.mda.orm.annotation.Entity;
+import com.tactfactory.mda.utils.PackageUtils;
 
 public class JavaAdapter {
 	private ArrayList<ClassMetadata> metas = new ArrayList<ClassMetadata>();
