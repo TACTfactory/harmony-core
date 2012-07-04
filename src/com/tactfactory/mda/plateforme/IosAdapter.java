@@ -10,7 +10,7 @@ package com.tactfactory.mda.plateforme;
 
 import com.tactfactory.mda.orm.ClassMetadata;
 
-public class IosAdapter extends BaseAdapter {
+public final class IosAdapter extends BaseAdapter {
 
 	/* (non-Javadoc)
 	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getNameSpace(com.tactfactory.mda.orm.ClassMetadata)

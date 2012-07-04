@@ -10,7 +10,7 @@ package com.tactfactory.mda.plateforme;
 
 import com.tactfactory.mda.orm.ClassMetadata;
 
-public class AndroidAdapter extends BaseAdapter {
+public final class AndroidAdapter extends BaseAdapter {
 	
 	public AndroidAdapter() {
 		// Structure
