@@ -8,19 +8,26 @@
  */
 package com.tactfactory.mda.orm;
 
+import com.tactfactory.mda.plateforme.BaseAdapter;
+
+/** Entity field metadata */
 public class FieldMetadata {
+	
+	/** Field name */
 	public String name;
+	
+	/** Field type */
 	public String type;
+	
+	/** GUI show field type */
 	public String customShowType;
+	
+	/** GUI edit field type */
 	public String customEditType;
 	
-	public void customize() {
-		if (type.equals("String") || type.equals("int") || type.equals("Date") ) {
-			this.customShowType = "TextView";
-			this.customEditType = "EditText";
-		} else if (type.equals("Boolean")) {
-			this.customShowType = "TextView";
-			this.customEditType = "CheckBox";
-		}
+	/** Customize edit and show GUI field */
+	public void customize(BaseAdapter adapter) {
+		this.customShowType = adapter.getViewComponentShow(this);
+		this.customEditType = adapter.getViewComponentEdit(this);
 	}
 }

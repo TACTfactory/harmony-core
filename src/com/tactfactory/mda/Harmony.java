@@ -20,6 +20,7 @@ import com.tactfactory.mda.command.GeneralCommand;
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.RouterCommand;
 
+/** Harmony main class */
 public class Harmony {
 	/** Debug state*/
 	public static final boolean DEBUG = true;

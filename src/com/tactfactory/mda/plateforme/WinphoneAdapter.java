@@ -9,7 +9,9 @@
 package com.tactfactory.mda.plateforme;
 
 import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.orm.FieldMetadata;
 
+/** Microsoft Adapter of project structure */
 public final class WinphoneAdapter extends BaseAdapter {
 
 	/* (non-Javadoc)
@@ -17,6 +19,24 @@ public final class WinphoneAdapter extends BaseAdapter {
 	 */
 	@Override
 	public String getNameSpace(ClassMetadata meta) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getViewComponentShow(com.tactfactory.mda.orm.FieldMetadata)
+	 */
+	@Override
+	public String getViewComponentShow(FieldMetadata field) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	/* (non-Javadoc)
+	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getViewComponentEdit(com.tactfactory.mda.orm.FieldMetadata)
+	 */
+	@Override
+	public String getViewComponentEdit(FieldMetadata field) {
 		// TODO Auto-generated method stub
 		return null;
 	}

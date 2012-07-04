@@ -18,10 +18,7 @@ import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
-/**
- * @author micky
- *
- */
+/** Harmony console class*/
 public class Console extends Harmony {
 	/**
 	 * @param args

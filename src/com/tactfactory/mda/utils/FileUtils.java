@@ -11,6 +11,7 @@ package com.tactfactory.mda.utils;
 import java.io.File;
 import java.io.IOException;
 
+/** Manipulate File tools */
 public class FileUtils {
 	/** Create a new file if doesn't exist (and path)
 	 * 

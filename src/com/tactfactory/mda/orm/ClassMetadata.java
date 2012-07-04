@@ -10,9 +10,16 @@ package com.tactfactory.mda.orm;
 
 import java.util.HashMap;
 
+/** Entity class metadata */
 public class ClassMetadata {
+	
+	/** Namespace of entity class */
 	public String nameSpace = "";
+	
+	/** Name of entity class */
 	public String nameClass = "";
+	
+	/** List of fields of entity class*/
 	public HashMap<String, FieldMetadata> fields = new HashMap<String, FieldMetadata>();
 	
 	

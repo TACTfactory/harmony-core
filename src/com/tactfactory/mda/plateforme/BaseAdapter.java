@@ -10,7 +10,9 @@ package com.tactfactory.mda.plateforme;
 
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.orm.FieldMetadata;
 
+/** Base Adapter of project structure */
 public abstract class BaseAdapter {	
 	// Structure
 	protected String resource;
@@ -25,8 +27,29 @@ public abstract class BaseAdapter {
 	// File
 	protected String manifest;
 	
+	// Abstract Methods
+	/** Generate plateforme Namespace
+	 * 
+	 * @param meta Entity to extract the namespace 
+	 * @return String Namespace
+	 */
 	public abstract String getNameSpace(ClassMetadata meta);
 	
+	/** Generate plateforme view component for Show action
+	 * 
+	 * @param field The field based of generator
+	 * @return String of the plateforme Component type
+	 */
+	public abstract String getViewComponentShow(FieldMetadata field);
+	
+	/** Generate plateforme view component for Edit action
+	 * 
+	 * @param field The field based of generator
+	 * @return String of the plateforme Component type
+	 */
+	public abstract String getViewComponentEdit(FieldMetadata field);
+	
+	// Utils
 	public final String getSourcePath() {
 		return String.format("%s/%s/", Harmony.pathProject, this.getSource() );
 	}
@@ -63,6 +86,7 @@ public abstract class BaseAdapter {
 		return String.format("%s/project/%s", this.getTemplate(), this.getManifest() );
 	}
 
+	// Getter and Setter
 	/**
 	 * @return the resource
 	 */

@@ -57,7 +57,7 @@ public class ActivityGenerator {
 		ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
 		for (FieldMetadata field : this.meta.fields.values()) {
 			Map<String, Object> modelField = new HashMap<String, Object>();
-			field.customize();
+			field.customize(adapter);
 			modelField.put("name", field.name);
 			modelField.put("type", field.type);
 			modelField.put("customEditType", field.customEditType);
