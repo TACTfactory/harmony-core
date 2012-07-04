@@ -35,7 +35,7 @@ public class Console extends Harmony {
 			throw new Exception("Usage Exception, please launch help !");
 		}
 			
-		// Need Project name !!!
+		// Need Project space !!!
 		projectFolder = argProject[0];
 		String patchNameSpace = "src/" + argProject[1] + "/entity/";
 			

@@ -18,6 +18,10 @@ import com.tactfactory.mda.orm.JavaAdapter;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.ActivityGenerator;
+import com.tactfactory.mda.template.AdapterGenerator;
+import com.tactfactory.mda.template.ProviderGenerator;
+import com.tactfactory.mda.template.SQLiteGenerator;
+import com.tactfactory.mda.template.WebServiceGenerator;
 
 public class OrmCommand extends BaseCommand {
 	public static String GENERATE_ENTITY 	= "orm:generate:entity";
@@ -46,13 +50,24 @@ public class OrmCommand extends BaseCommand {
 		if (Harmony.DEBUG)
 			System.out.print("\n");
 		
+		// Make View
 		ArrayList<ClassMetadata> metas = adapter.getMetas();
 		for (ClassMetadata meta : metas) {
 			try {
 				new ActivityGenerator(meta, this.adapter).generateAllAction();
+				new AdapterGenerator(meta, this.adapter).generate();
+				new WebServiceGenerator();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
+		}
+		
+		// Make Database
+		try {
+			new SQLiteGenerator(metas, this.adapter).generateDatabase();
+			new ProviderGenerator();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -82,6 +97,7 @@ public class OrmCommand extends BaseCommand {
 			ArrayList<ClassMetadata> metas = adapter.getMetas();
 			try {
 				new ActivityGenerator(metas.get(0), this.adapter).generateAllAction();
+				new AdapterGenerator(metas.get(0), this.adapter).generate();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

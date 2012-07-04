@@ -40,10 +40,10 @@ public class JavaAdapter {
 		if (!Strings.isNullOrEmpty(spackage)) {
 			
 			ClassMetadata meta = new ClassMetadata();
-			meta.nameSpace = spackage;
+			meta.space = spackage;
 			
 			new ClassVisitor().visit(mclass, meta);
-			if (!Strings.isNullOrEmpty(meta.nameClass)) {
+			if (!Strings.isNullOrEmpty(meta.name)) {
 				new FieldVisitor().visit(mclass, meta);
 				
 				this.metas.add(meta);
@@ -61,11 +61,11 @@ public class JavaAdapter {
 				String annotationType = annotationExpr.getName().toString();
 				if (annotationType.equals(PackageUtils.extractNameEntity(Entity.class))) {
 					 
-					meta.nameClass = PackageUtils.extractNameEntity(n.getName());
+					meta.name = PackageUtils.extractNameEntity(n.getName());
 					
 					// Debug Log
 					if (Harmony.DEBUG)
-						System.out.print("\tEntity: " + meta.nameSpace + ".entity." +  meta.nameClass + "\n");
+						System.out.print("\tEntity: " + meta.space + ".entity." +  meta.name + "\n");
 				}
 			}
 	    }

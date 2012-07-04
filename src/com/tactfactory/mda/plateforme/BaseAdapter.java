@@ -20,9 +20,11 @@ public abstract class BaseAdapter {
 	protected String template;
 	
 	// MVC
-	protected String model;
-	protected String view;
-	protected String controller;
+	protected String model		= "entity";
+	protected String view 		= "layout";
+	protected String controller = "view";
+	protected String data		= "data";
+	protected String provider	= "provider";
 	
 	// File
 	protected String manifest;
@@ -33,7 +35,14 @@ public abstract class BaseAdapter {
 	 * @param meta Entity to extract the namespace 
 	 * @return String Namespace
 	 */
-	public abstract String getNameSpace(ClassMetadata meta);
+	public abstract String getNameSpace(ClassMetadata meta, String type);
+	
+	/** Generate plateforme Namespace
+	 * 
+	 * @param meta Entity to extract the namespace 
+	 * @return String Namespace
+	 */
+	public abstract String getNameSpaceEntity(ClassMetadata meta, String type);
 	
 	/** Generate plateforme view component for Show action
 	 * 
@@ -60,6 +69,10 @@ public abstract class BaseAdapter {
 	
 	public final String getTemplateSourceControlerPath() {
 		return String.format("%s/%s/", this.getTemplateSourcePath(), this.getController() );
+	}
+	
+	public final String getTemplateSourceProviderPath() {
+		return String.format("%s/%s/", this.getTemplateSourcePath(), this.getProvider() );
 	}
 	
 	public final String getRessourcePath() {
@@ -183,6 +196,34 @@ public abstract class BaseAdapter {
 	 */
 	public final void setManifest(String manifest) {
 		this.manifest = manifest;
+	}
+
+	/**
+	 * @return the data
+	 */
+	public final String getData() {
+		return data;
+	}
+
+	/**
+	 * @return the provider
+	 */
+	public final String getProvider() {
+		return provider;
+	}
+
+	/**
+	 * @param data the data to set
+	 */
+	public final void setData(String data) {
+		this.data = data;
+	}
+
+	/**
+	 * @param provider the provider to set
+	 */
+	public final void setProvider(String provider) {
+		this.provider = provider;
 	}
 	
 	

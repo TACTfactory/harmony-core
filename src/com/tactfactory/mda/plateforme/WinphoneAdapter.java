@@ -15,10 +15,19 @@ import com.tactfactory.mda.orm.FieldMetadata;
 public final class WinphoneAdapter extends BaseAdapter {
 
 	/* (non-Javadoc)
+	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getNameSpace(com.tactfactory.mda.orm.ClassMetadata, java.lang.String)
+	 */
+	@Override
+	public String getNameSpace(ClassMetadata meta, String type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	/* (non-Javadoc)
 	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getNameSpace(com.tactfactory.mda.orm.ClassMetadata)
 	 */
 	@Override
-	public String getNameSpace(ClassMetadata meta) {
+	public String getNameSpaceEntity(ClassMetadata meta, String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}

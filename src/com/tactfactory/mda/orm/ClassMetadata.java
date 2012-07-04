@@ -14,10 +14,10 @@ import java.util.HashMap;
 public class ClassMetadata {
 	
 	/** Namespace of entity class */
-	public String nameSpace = "";
+	public String space = "";
 	
 	/** Name of entity class */
-	public String nameClass = "";
+	public String name = "";
 	
 	/** List of fields of entity class*/
 	public HashMap<String, FieldMetadata> fields = new HashMap<String, FieldMetadata>();

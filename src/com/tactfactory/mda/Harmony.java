@@ -28,8 +28,12 @@ public class Harmony {
 	public static Harmony instance;
 	/** Full path of project ex : /root/project/ */
 	public static String pathProject;
-	/** Project name */
+	/** Project space */
 	public static String projectFolder;
+	
+	public static String projectName;
+	public static String projectNameSpace;
+	
 	
 	public HashMap<Class<?>, BaseCommand> bootstrap = new HashMap<Class<?>, BaseCommand>();
 	protected ArrayList<CompilationUnit> entities = new ArrayList<CompilationUnit>();
@@ -56,6 +60,7 @@ public class Harmony {
 		
 		try {	
 			pathProject = new java.io.File("..").getCanonicalPath().concat("/" + projectFolder + "/") ;
+			projectName = projectFolder.replaceAll("-", "").replaceAll("_", "");
 			
 			// Debug Log
 			if (Harmony.DEBUG)

@@ -21,9 +21,11 @@ public final class AndroidAdapter extends BaseAdapter {
 		this.template 	= "tpl/android/";
 		
 		// MVC
-		this.model 		= "entity";
-		this.view 		= "layout";
-		this.controller = "view";
+		//this.model 		= "entity";
+		//this.view 		= "layout";
+		//this.controller	= "view";
+		//this.data			= "data";
+		//this.provider		= "provider";
 		
 		// File
 		this.manifest 	= "AndroidManifest.xml";
@@ -33,11 +35,10 @@ public final class AndroidAdapter extends BaseAdapter {
 	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getNameSpace(com.tactfactory.mda.orm.ClassMetadata)
 	 */
 	@Override
-	public String getNameSpace(ClassMetadata meta) {
-		return String.format("%s.%s.%s", 
-				meta.nameSpace,
-				this.getController(), 
-				meta.nameClass.toLowerCase());
+	public String getNameSpaceEntity(ClassMetadata meta, String type) {
+		return String.format("%s.%s", 
+				this.getNameSpace(meta, type),
+				meta.name.toLowerCase());
 	}
 
 	/* (non-Javadoc)
@@ -74,6 +75,13 @@ public final class AndroidAdapter extends BaseAdapter {
 		}
 		
 		return result;
+	}
+
+	@Override
+	public String getNameSpace(ClassMetadata meta, String type) {
+		return String.format("%s.%s", 
+				meta.space,
+				type);
 	}
 
 	

@@ -44,22 +44,21 @@ public class ActivityGenerator {
 	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 	
 	public ActivityGenerator(ClassMetadata meta, BaseAdapter adapter) throws Exception {
-		if (meta != null && adapter != null)
+		if (meta == null && adapter == null)
 			throw new Exception("No meta or adapter define.");
-		
 		
 		this.meta 		= meta;
 		this.adapter	= adapter;
 		
-		this.localNameSpace = this.adapter.getNameSpace(this.meta);
+		this.localNameSpace = this.adapter.getNameSpaceEntity(this.meta, this.adapter.getController());
 		
 		// Make fields
 		ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
 		for (FieldMetadata field : this.meta.fields.values()) {
 			Map<String, Object> modelField = new HashMap<String, Object>();
 			field.customize(adapter);
-			modelField.put("name", field.name);
-			modelField.put("type", field.type);
+			modelField.put(TagConstant.NAME, field.name);
+			modelField.put(TagConstant.TYPE, field.type);
 			modelField.put("customEditType", field.customEditType);
 			modelField.put("customShowType", field.customShowType);
 			
@@ -67,10 +66,10 @@ public class ActivityGenerator {
 		}
 		
 		// Make class
-		this.datamodel.put("namespace", meta.nameSpace);
-		this.datamodel.put("name", 		meta.nameClass);
-		this.datamodel.put("localnamespace", this.localNameSpace);
-		this.datamodel.put("fields", 	modelFields);
+		this.datamodel.put("namespace", 		meta.space);
+		this.datamodel.put(TagConstant.NAME, 	meta.name);
+		this.datamodel.put("localnamespace", 	this.localNameSpace);
+		this.datamodel.put(TagConstant.FIELDS, 	modelFields);
 	}
 	
 	public ActivityGenerator(ClassMetadata meta, BaseAdapter adapter, Boolean isWritable) throws Exception {
@@ -193,7 +192,7 @@ public class ActivityGenerator {
 	/** All Actions (List, Show, Edit, Create) */
 	public void generateAllAction() {
 		// Info
-		System.out.print(">> Generate CRUD view for " +  meta.nameClass);
+		System.out.print(">> Generate CRUD view for " +  meta.name);
 		
 		try {
 			Configuration cfg = new Configuration();
@@ -235,7 +234,7 @@ public class ActivityGenerator {
 				String.format("%s%s/%s",
 						this.adapter.getSourcePath(),
 						PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
-						String.format(filename, this.meta.nameClass)));
+						String.format(filename, this.meta.name)));
 		
 		// Debug Log
 		if (Harmony.DEBUG)
@@ -265,7 +264,7 @@ public class ActivityGenerator {
 		File file = FileUtils.makeFile(
 				String.format("%s/%s", 
 						this.adapter.getRessourceLayoutPath(),
-						String.format(filename, this.meta.nameClass.toLowerCase())));
+						String.format(filename, this.meta.name.toLowerCase())));
 		
 		// Debug Log
 		if (Harmony.DEBUG)
@@ -309,10 +308,10 @@ public class ActivityGenerator {
 	 * @param classFile
 	 */
 	private void updateManifest(String classFile) {
-		classFile = this.meta.nameClass + classFile;
+		classFile = this.meta.name + classFile;
 		String pathRelatif = String.format(".%s.%s.%s",
 				this.adapter.getController(), 
-				this.meta.nameClass.toLowerCase(), 
+				this.meta.name.toLowerCase(), 
 				classFile );
 		
 		// Debug Log
@@ -341,7 +340,7 @@ public class ActivityGenerator {
 			
 			if (findActivity == null) {
 				findActivity = new Element("activity");
-				findActivity.setAttribute("name", pathRelatif, ns);
+				findActivity.setAttribute("space", pathRelatif, ns);
 				applicationNode.addContent(findActivity);
 			}
 			
