@@ -9,5 +9,6 @@ public abstract class TagConstant {
 	public final static String SPACE = "space";
 	public final static String NAME = "name";
 	public final static String TYPE = "type";
-	
+	public final static String ALIAS = "alias";
+	public final static String IDS = "ids";
 }

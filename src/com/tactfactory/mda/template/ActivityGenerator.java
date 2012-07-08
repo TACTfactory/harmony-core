@@ -325,10 +325,12 @@ public class ActivityGenerator {
 			Element rootNode = doc.getRootElement();
 			Namespace ns = rootNode.getNamespace("android");
 			
-			// get Application Node
+			// Find Application Node
 			Element findActivity = null;
 			Element applicationNode = rootNode.getChild("application");
 			if (applicationNode != null) {
+				
+				// Find Activity Node
 				List<Element> activities = applicationNode.getChildren("activity");
 				for (Element activity : activities) {
 					if (activity.hasAttributes() && activity.getAttributeValue("name",ns).equals(pathRelatif) ) {
@@ -336,16 +338,51 @@ public class ActivityGenerator {
 						break;
 					}
 				}
+				
+				// If not found Node, create it
+				if (findActivity == null) {
+					findActivity = new Element("activity");
+					findActivity.setAttribute("name", pathRelatif, ns);
+					Element findFilter = new Element("intent-filter");
+					Element findAction = new Element("action");
+					Element findCategory = new Element("category");
+					Element findData = new Element("data");
+					
+					findFilter.addContent(findAction);
+					findFilter.addContent(findCategory);
+					findFilter.addContent(findData);
+					findActivity.addContent(findFilter);
+					applicationNode.addContent(findActivity);
+				}
+				
+				// Set values
+				findActivity.setAttribute("label", "@string/app_name", ns);
+				Element filterActivity = findActivity.getChild("intent-filter");
+				if (filterActivity != null) {
+					String data = "";
+					String action = "VIEW";
+					
+					if (pathRelatif.matches(".*List.*")) {
+						data = "vnc.android.cursor.collection/";
+					} else {
+						data = "vnc.android.cursor.item/";
+						
+						if (pathRelatif.matches(".*Edit.*"))
+							action = "EDIT";
+						else 		
+						
+						if (pathRelatif.matches(".*Create.*"))
+							action = "INSERT";
+					}
+					
+					data += this.adapter.getNameSpace(this.meta, "entity." + this.meta.name);
+					
+					filterActivity.getChild("action").setAttribute("name", "android.intent.action."+ action, ns);
+					filterActivity.getChild("category").setAttribute("name", "android.intent.category.DEFAULT", ns);
+					filterActivity.getChild("data").setAttribute("mimeType", data, ns);
+				}	
 			}
 			
-			if (findActivity == null) {
-				findActivity = new Element("activity");
-				findActivity.setAttribute("space", pathRelatif, ns);
-				applicationNode.addContent(findActivity);
-			}
-			
-			findActivity.setAttribute("label", "@string/app_name", ns);
-	 
 			// Write to File
 			XMLOutputter xmlOutput = new XMLOutputter();
 	 

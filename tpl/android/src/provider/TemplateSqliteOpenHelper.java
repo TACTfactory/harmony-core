@@ -1,9 +1,6 @@
 package ${local_namespace};
 
 import ${project_namespace}.BuildConfig;
-<#list entities as entity>
-//import ${local_namespace}.${entity.name}Adapter;
-</#list>
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -11,6 +8,10 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * This class makes it easy for ContentProvider implementations to defer opening and upgrading the database until first use, to avoid blocking application startup with long-running database upgrades.
+ * @see android.database.sqlite.SQLiteOpenHelper
+ */
 public class ${project_name}SqliteOpenHelper extends SQLiteOpenHelper {
 	protected String TAG = "DatabaseHelper";
 	
@@ -19,6 +20,9 @@ public class ${project_name}SqliteOpenHelper extends SQLiteOpenHelper {
 		super(context, name, factory, version);
 	}
 
+	/**
+	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate(android.database.sqlite.SQLiteDatabase)
+	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
 		if (BuildConfig.DEBUG)
@@ -39,6 +43,9 @@ public class ${project_name}SqliteOpenHelper extends SQLiteOpenHelper {
 		}*/
 	}
 
+	/**
+	 * @see android.database.sqlite.SQLiteOpenHelper#onUpgrade(android.database.sqlite.SQLiteDatabase, int, int)
+	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
 		if (BuildConfig.DEBUG)

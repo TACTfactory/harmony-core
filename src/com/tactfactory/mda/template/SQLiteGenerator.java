@@ -65,7 +65,7 @@ public class SQLiteGenerator {
 	/**  */
 	public void generateDatabase() {
 		// Info
-		System.out.print(">> Generate Database");
+		System.out.print(">> Generate Database\n");
 		
 		try {
 			Configuration cfg = new Configuration();

@@ -19,6 +19,8 @@ public class FieldMetadata {
 	/** Field type */
 	public String type;
 	
+	public boolean nullable;
+	
 	/** GUI show field type */
 	public String customShowType;
 	
