@@ -1,4 +1,7 @@
 /bin/*
+/vendor/*
+
+
 /gen/*
 /doc/internal/*
 /doc/stats/*
