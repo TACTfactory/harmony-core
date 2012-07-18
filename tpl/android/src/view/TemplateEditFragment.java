@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -17,13 +18,14 @@ import android.widget.*;
 
 import java.util.Date;
 
+import ${namespace}.data.${name}Adapter;
 import ${namespace}.entity.${name};
 
 /** ${name} edit fragment
  * 
  * @see android.app.Fragment
  */
-public class ${name}EditFragment extends Fragment {
+public class ${name}EditFragment extends Fragment implements OnClickListener {
 	/* Model data */
 	protected ${name} model;
 	
@@ -31,6 +33,7 @@ public class ${name}EditFragment extends Fragment {
     <#list fields as field>
     protected ${field.customEditType} ${field.name}View; 
     </#list>
+    protected Button saveButton;
     
     /** Initialize view of fields 
      * 
@@ -40,6 +43,8 @@ public class ${name}EditFragment extends Fragment {
 		<#foreach field in fields>
 		this.${field.name}View = (${field.customEditType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}); 
 		</#foreach>
+		this.saveButton = (Button) view.findViewById(R.id.${name?lower_case}_btn_save);
+		this.saveButton.setOnClickListener(this);
     }
     
     /** Load data from model to fields view */
@@ -104,6 +109,16 @@ public class ${name}EditFragment extends Fragment {
 	    return view;
 	}
 	
+	/** 
+	 * @see android.view.View.OnClickListener#onClick(android.view.View)
+	 */
+	@Override
+	public void onClick(View v) {
+		if (this.validateData()) {
+			new EditTask(this, this.model).execute();
+		}
+	}
+	
 	public static class EditTask extends AsyncTask<Void, Void, Integer> {
 		protected final Context context;
 		protected final ${name}EditFragment fragment;
@@ -134,14 +149,16 @@ public class ${name}EditFragment extends Fragment {
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 			
+			${name}Adapter ${name?lower_case}Adapter = new ${name}Adapter(context);
+			SQLiteDatabase db = ${name?lower_case}Adapter.open();
+			db.beginTransaction();
 			try {
-				// TODO to Implement
-				// REST call
-				//StootieWebServiceImpl service = new StootieWebServiceImpl(this.context);
-				//result = service.createStoot(this.stoot);
+				${name?lower_case}Adapter.update(this.entity);
 				
-			} catch (Exception e) {
-				e.printStackTrace();
+				db.setTransactionSuccessful();
+			} finally {
+				db.endTransaction();
+				${name?lower_case}Adapter.close();
 			}
 			
 			return result;

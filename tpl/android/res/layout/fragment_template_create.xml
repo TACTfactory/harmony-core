@@ -20,7 +20,12 @@
 	    <#if field.customEditType == "EditText" >
 	    android:inputType="text"
 	    </#if >
-	    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />
-	    
+	    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />	    
 </#list>
+	<Button
+    	android:id="@+id/${name?lower_case}_btn_save"
+    	android:layout_width="match_parent"
+    	android:layout_height="wrap_content"
+    	android:layout_below="@+id/${name?lower_case}_${fields?last.name?lower_case}"
+    	android:text="Create" />
 </RelativeLayout>

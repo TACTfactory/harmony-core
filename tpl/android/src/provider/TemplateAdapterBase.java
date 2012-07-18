@@ -1,6 +1,7 @@
 package ${local_namespace};
 
 import java.util.ArrayList;
+import java.util.Date;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -17,13 +18,10 @@ import ${project_namespace}.BuildConfig;
 public abstract class ${name}AdapterBase {
 	private static final String TAG = "${name}DatabaseAdapter";
 	
-	protected SQLiteDatabase mDatabase;
-	protected ${project_name}SqliteOpenHelper mBaseHelper;
-	
-	/** Table */
+	/** Table name of SQLite database */
 	public static final String TABLE_NAME = "${name}";
 	
-	// Fields
+	// Columns constants fields mapping
 	<#list fields as field>
 	public static final String ${field.alias} = "${field.name}";
 	</#list>
@@ -35,8 +33,7 @@ public abstract class ${name}AdapterBase {
 		</#list>
 	};
 
-	/**
-	 * Generate Schema for Database
+	/** Generate Schema for Database
 	 * 
 	 * @return "SQL query : CREATE TABLE..."
 	 */
@@ -44,16 +41,19 @@ public abstract class ${name}AdapterBase {
 		return "CREATE TABLE "
 		+ TABLE_NAME	+ " ("
 		<#list fields as field>
-		+ ${field.alias}	+ " ${field.type} <#if field_has_next>,</#if>"
+		+ ${field.alias}	+ " ${field.schema} <#if field_has_next>,</#if>"
 		</#list>
 		+ ");";
 		
 		//+ COL_ID 		+ " integer primary key autoincrement, "
 	}
 	
-	// General
-	/**
-	 * Constructor
+	// Database tools
+	protected SQLiteDatabase mDatabase;
+	protected ${project_name}SqliteOpenHelper mBaseHelper;
+		
+	/** Constructor
+	 * 
 	 * @param ctx context
 	 */
 	public ${name}AdapterBase(Context ctx) {		
@@ -64,38 +64,74 @@ public abstract class ${name}AdapterBase {
 				1);
 	}
 	
-	public SQLiteDatabase open() {
+	/** Initialize and open database
+	 * 
+	 * @return Open database
+	 */
+	public Database open() {
 		this.mDatabase = this.mBaseHelper.getWritableDatabase();
 		return this.mDatabase;
 	}
 
+	/** Close database */
 	public void close() {
 		mDatabase.close();
 	}
 
-	// Internals Converters
-	/**
-	 * Convert a Cursor to one entity
+	// Converters
+	/** Convert ${name} entity to Content Values for database
 	 * 
-	 * @param c Cursor object
-	 * @return Entity
+	 * @param ${name?lower_case} ${name} entity object
+	 * @return ContentValues object
 	 */
-	protected ${name} cursorToEntity(Cursor c) {
-		${name} result = ${name}AdapterBase.cursorTo${name}(c);
+	public static ContentValues ${name?lower_case}ToContentValues(${name} ${name?lower_case}) {		
+		ContentValues result = new ContentValues();
 		
-		if (BuildConfig.DEBUG)
-			Log.d(TAG, "Read DB(" + TABLE_NAME + ") : (" + result.hashCode() + ")");
+		<#list fields as field>
+			<#if (field.type == "Date")>
+		result.put(${field.alias}, 			String.valueOf(${name?lower_case}.get${field.name?cap_first}().toLocaleString()) );
+			<#elseif (field.type == "Boolean")>
+		result.put(${field.alias}, 			String.valueOf(${name?lower_case}.${field.name?uncap_first}()) );
+			<#else>
+		result.put(${field.alias}, 			String.valueOf(${name?lower_case}.get${field.name?cap_first}()) );
+			</#if>
+		</#list>
 		
 		return result;
 	}
 	
-	/**
-	 * Convert a Cursor of database to Array of entity
+	/** Convert Cursor of database to ${name} entity
 	 * 
 	 * @param c Cursor object
-	 * @return Array of entity
+	 * @return ${name} entity
 	 */
-	protected ArrayList<${name}> cursorToEntities(Cursor c) {
+	public static ${name} cursorTo${name}(Cursor c) {
+		${name} result = null;
+
+		if (c.getCount() != 0) {
+			result = new ${name}();			
+			<#list fields as field>
+				<#if (field.type == "Date")>
+			result.set${field.name?cap_first}(new Date(c.getString( c.getColumnIndexOrThrow(${field.alias})) ));
+				<#elseif (field.type == "Boolean" || field.type == "boolean")>
+			result.${field.name?uncap_first}(c.getString( c.getColumnIndexOrThrow(${field.alias}) ) == "true");
+				<#elseif (field.type == "int" || field.type == "Integer")>
+			result.set${field.name?cap_first}(c.getInt( c.getColumnIndexOrThrow(${field.alias}) ));
+				<#else>
+			result.set${field.name?cap_first}(c.getString( c.getColumnIndexOrThrow(${field.alias}) ));
+				</#if>
+			</#list>
+		}
+		
+		return result;
+	}
+	
+	/** Convert Cursor of database to Array of ${name} entity
+	 * 
+	 * @param c Cursor object
+	 * @return Array of ${name} entity
+	 */
+	public static ArrayList<${name}> cursorTo${name}s(Cursor c) {
 		ArrayList<${name}> result = new ArrayList<${name}>(c.getCount());
 
 		if (c.getCount() != 0) {
@@ -103,7 +139,7 @@ public abstract class ${name}AdapterBase {
 			
 			${name} item;
 			do {
-				item = this.cursorToEntity(c);
+				item = ${name}AdapterBase.cursorTo${name}(c);
 				result.add(item);
 			} while (c.moveToNext());
 			
@@ -113,70 +149,35 @@ public abstract class ${name}AdapterBase {
 
 		return result;
 	}
-
-	// Converters
-	/**
-	 * Convert ${name} entity to Content Values for database
-	 * @param ${name?lower_case} ${name} entity object
-	 * @return ContentValues object
-	 */
-	public static ContentValues ${name?lower_case}ToContentValues(${name} ${name?lower_case}) {		
-		ContentValues result = new ContentValues();
-		//result.put(COL_NAME, 	company.getName() );
-		
-		// TODO Insert or Update Collection of Speaker
-		
-		return result;
-	}
 	
-	/**
-	 * Convert Cursor of database to ${name} entity
-	 * @param c Cursor object
-	 * @return ${name} entity
-	 */
-	public static ${name} cursorTo${name}(Cursor c) {
-		${name} result = null;
-
-		if (c.getCount() != 0) {
-			result = new ${name}();
-			//result.setId(	c.getInt(	c.getColumnIndexOrThrow(COL_ID)));
-			//result.setName(	c.getString( c.getColumnIndexOrThrow(COL_NAME)));
-			
-			// TODO List<Speaker> speakers = ...
-			//result.setSpeakers(speakers);
-		}
-		
-		return result;
-	}
-	
-	// CRUD
-	/**
-	 * Find & read ${name} by id in database
+	// CRUD Entity
+	/** Find & read ${name} by id in database
+	 * 
 	 * @param id Identify of ${name}
 	 * @return ${name} entity
 	 */
 	public ${name} getByID(<#list ids as id>${id.type} ${id.name}<#if id_has_next>,</#if></#list>) {
 		Cursor c = this.getSingleCursor(id);
-		${name} result = this.cursorToEntity(c);
+		${name} result = ${name}AdapterBase.cursorTo${name}(c);
 		c.close();
 		
 		return result;
 	}
 	
-	/**
-	 * Read All ${name}s entities
+	/** Read All ${name}s entities
+	 * 
 	 * @return List of ${name} entities
 	 */
 	public ArrayList<${name}> getAll() {
 		Cursor c = this.getAllCursor();
-		ArrayList<${name}> result = this.cursorToEntities(c);
+		ArrayList<${name}> result = ${name}AdapterBase.cursorTo${name}s(c);
 		c.close();
 		
 		return result;
 	}
 	
-	/**
-	 * Insert a ${name} entity into database
+	/** Insert a ${name} entity into database
+	 * 
 	 * @param item The ${name} entity to persist 
 	 * @return Id of the ${name} entity
 	 */
@@ -192,19 +193,18 @@ public abstract class ${name}AdapterBase {
 				values);
 	}
 	
-	/**
-	 * Update a ${name} entity into database 
-	 * @param id Identify the ${name} entity to update
+	/** Update a ${name} entity into database 
+	 * 
 	 * @param item The ${name} entity to persist
 	 * @return 
 	 */
-	public int update(int id, ${name} item) {
+	public int update(${name} item) {
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
 		
 		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item);	
 		String whereClause = <#list ids as id> ${id.alias} + "=? <#if id_has_next>AND </#if>"</#list>;
-		String[] whereArgs = new String[] {<#list ids as id>String.valueOf(${id.name}) <#if id_has_next>, </#if></#list>};
+		String[] whereArgs = new String[] {<#list ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, </#if></#list>};
 		
 		return this.mDatabase.update(
 				TABLE_NAME, 
@@ -213,14 +213,14 @@ public abstract class ${name}AdapterBase {
 				whereArgs);
 	}
 	
-	/**
-	 * Delete a ${name} entity of database
+	/** Delete a ${name} entity of database
+	 * 
 	 * @param id Identify the ${name} entity to delete
 	 * @return
 	 */
-	public int remove(int id) {
+	public int remove(<#list ids as id>${id.type} ${id.name}<#if id_has_next>,</#if></#list>) {
 		if (BuildConfig.DEBUG)
-			Log.d(TAG, "Delete DB(" + TABLE_NAME + ")");
+			Log.d(TAG, "Delete DB(" + TABLE_NAME + ") id : "+ <#list ids as id>${id.name}<#if id_has_next> + " id : " + </#if></#list>);
 		
 		String whereClause = <#list ids as id> ${id.alias} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list ids as id>String.valueOf(${id.name}) <#if id_has_next>, </#if></#list>};
@@ -231,9 +231,10 @@ public abstract class ${name}AdapterBase {
 				whereArgs);
 	}
 	
-	protected Cursor getSingleCursor(int id) {
+	// Internal Cursor
+	protected Cursor getSingleCursor(<#list ids as id>${id.type} ${id.name}<#if id_has_next>,</#if></#list>) {
 		if (BuildConfig.DEBUG)
-			Log.d(TAG, "Get entities id: " + id);
+			Log.d(TAG, "Get entities id : " + <#list ids as id>${id.name}<#if id_has_next> + " id : " + </#if></#list>);
 		
 		String whereClause = <#list ids as id> ${id.alias} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list ids as id>String.valueOf(${id.name}) <#if id_has_next>, </#if></#list>};

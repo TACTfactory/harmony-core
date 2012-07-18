@@ -42,8 +42,9 @@ public class AdapterGenerator {
 			Map<String, Object> modelField = new HashMap<String, Object>();
 			field.customize(adapter);
 			modelField.put(TagConstant.NAME, field.name);
+			modelField.put(TagConstant.TYPE, field.type);
 			modelField.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(field));
-			modelField.put(TagConstant.TYPE, SqliteAdapter.generateStructure(field));
+			modelField.put(TagConstant.SCHEMA, SqliteAdapter.generateStructure(field));
 			
 			modelFields.add(modelField);
 		}

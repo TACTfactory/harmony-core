@@ -12,7 +12,7 @@ import android.util.Log;
  * This class makes it easy for ContentProvider implementations to defer opening and upgrading the database until first use, to avoid blocking application startup with long-running database upgrades.
  * @see android.database.sqlite.SQLiteOpenHelper
  */
-public class ${project_name}SqliteOpenHelper extends SQLiteOpenHelper {
+public class DatabaseOpenHelper extends SQLiteOpenHelper {
 	protected String TAG = "DatabaseHelper";
 	
 	public ${project_name}SqliteOpenHelper(Context context, String name,
