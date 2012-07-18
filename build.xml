@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Harmony" default="rebuild">
+	<description>
+		Harmony project build file.
+	</description>
+
+	<!-- load environment variables as properties -->
+	<property environment="env" />
+
+	<!-- load properties files -->
+	<property file="build.properties" />
+	<property file="../build.properties" />
+	<property file="${user.home}/build.properties" />
+
+	<!-- default folder location properties -->
+	<property name="src.rel-dir" value="src" />
+	<!-- property name="tests.src.rel-dir" value="tests" />
+	<property name="etc.rel-dir" value="etc" /-->
+	<property name="app.rel-dir" value="app" />
+	<property name="build.rel-dir" value="bin" />
+	<property name="lib.rel-dir" value="lib" />
+	<property name="dist.rel-dir" value="vendor/tact-core" />
+	<property name="doc.rel-dir" value="${dist.rel-dir}/javadoc" />
+	<property name="jar.rel-file" value="${dist.rel-dir}/${ant.project.name}.jar" />
+
+	<!-- project classpath -->
+
+	<path id="project.classpath">
+		<!-- compiled classes -->
+		<pathelement location="${build.rel-dir}" />
+		<!-- libraries -->
+		<fileset dir="${lib.rel-dir}">
+			<include name="*.jar" />
+		</fileset>
+	</path>
+	
+	
+	<!-- basic -->
+
+    <target name="init">
+        <mkdir dir="${build.rel-dir}"/>
+        <mkdir dir="${dist.rel-dir}"/>
+        <mkdir dir="${app.rel-dir}"/>
+    </target>
+
+    <target name="clean"
+        description="Delete temporary folders">
+        <delete dir="${build.rel-dir}" failonerror="false" deleteonexit="true" />
+        <delete dir="${dist.rel-dir}" failonerror="false" deleteonexit="true" />
+    </target>
+    
+    <!-- javadoc -->
+
+    <target name="javadoc" depends="init"
+        description="Generate Java classes documentation" >
+        <echo message="Generating javadocs to directory ${doc.rel-dir}" />
+        <delete dir="${doc.rel-dir}" />
+        <javadoc destdir="${doc.rel-dir}" sourcepath="">
+            <fileset dir="${src.rel-dir}" includes="**/*.java"/>
+            <classpath refid="project.classpath" />
+        </javadoc>
+    </target>
+    
+    
+    <!-- compile -->
+
+    <target name="prepare-resources" depends="init">
+    <!-- description="Prepare application resource files" -->
+        <copy todir="${build.rel-dir}" overwrite="true">
+            <fileset dir="${src.rel-dir}" includes="**/*.properties,**/*.xml" excludes="" />
+        </copy>
+        <replace dir="${build.rel-dir}" includes="**/*.properties,**/*.xml" excludes="" summary="true">
+            <replacefilter token="@example-token@" value="${example-property}" />
+        </replace>
+    </target>
+
+    <property name="compile.debug" value="true" />
+    <property name="compile.debuglevel" value="lines,vars,source" />
+
+    <target name="compile" depends="init,prepare-resources">
+    <!-- description="Compile source code" -->
+        <javac
+            srcdir="${src.rel-dir}"
+            destdir="${build.rel-dir}"
+            debug="${compile.debug}"
+            debuglevel="${compile.debuglevel}"
+            includeantruntime="false"
+        >
+            <compilerarg line="" /> <!-- "-Xlint:all", "-Xlint:all,-path", "-Xlint:all,-path,-unchecked" -->
+            <classpath refid="project.classpath" />
+        </javac>
+    </target>
+    
+    <!-- tests -->
+
+    <target name="compile-tests">
+    <!-- description="Compile tests" -->
+        <javac
+            srcdir="${tests.src.rel-dir}" 
+            destdir="${build.rel-dir}"
+            debug="${compile.debug}"
+            debuglevel="${compile.debuglevel}"
+        >
+            <classpath refid="project.classpath" />
+        </javac>
+    </target>
+
+    <target name="run-tests" depends="compile-tests"
+        description="Run tests">
+        <junit haltonfailure="yes" fork="true">
+            <classpath refid="project.classpath" />
+            <formatter type="plain" usefile="false" />
+            <batchtest>
+                <fileset dir="${tests.src.rel-dir}"
+                    includes="**/*Test.java">
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+	
+	<!-- build -->
+
+	<target name="post_build" depends="compile"
+        description="Build the project">
+        <delete dir="${build.rel-dir}" failonerror="false" deleteonexit="true" />
+    </target>
+
+    <target name="build" depends="compile"
+        description="Build the project">
+    </target>
+
+    <target name="rebuild" depends="clean,build">
+    <!-- description="Rebuild the project" -->
+    </target>
+    
+    <target name="buildall" depends="rebuild,create-jar,javadoc,post_build"
+        description="Build the project">
+    </target>
+    
+    <!-- library -->
+
+    <target name="create-jar" depends="compile">
+    <!-- description="Create a jar file" -->
+    	<pathconvert property="libs.project" pathsep=" ">
+		    <mapper>
+		      <chainedmapper>
+		 
+		        <!-- remove absolute path -->
+		        <flattenmapper />
+		 
+		        <!-- add lib/ prefix -->
+		        <globmapper from="*" to="lib/*" />
+		      </chainedmapper>
+		    </mapper>
+		 
+		    <path>
+		 
+		      <!-- lib.home contains all jar files, in several subdirectories -->
+		      <fileset dir="${lib.rel-dir}">
+		        <include name="**/*.jar" />
+		      </fileset>
+		    </path>
+		  </pathconvert>
+        <jar destfile="${jar.rel-file}" compress="true" filesetmanifest="merge">
+            <zipfileset dir="${build.rel-dir}"
+                        includes=""
+                        excludes="" />
+            <zipfileset dir="${lib.rel-dir}"
+            			prefix="${lib.rel-dir}"
+                        includes=""
+                        excludes="" />
+            <zipfileset dir="tpl"
+            			prefix="tpl"
+                        includes=""
+                        excludes="" />
+            <manifest>
+	            <attribute name="Main-Class" value="com.tactfactory.mda.Console"/>
+	            <attribute name="Class-Path" value="${libs.project}"/>
+            </manifest>
+            
+        </jar>
+    </target>
+</project>
