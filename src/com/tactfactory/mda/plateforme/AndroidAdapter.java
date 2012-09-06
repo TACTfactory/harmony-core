@@ -8,17 +8,21 @@
  */
 package com.tactfactory.mda.plateforme;
 
+import java.io.File;
+
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
+import com.tactfactory.mda.utils.FileUtils;
 
 /** Google Android Adapter of project structure */
 public final class AndroidAdapter extends BaseAdapter {
 	
 	public AndroidAdapter() {
 		// Structure
+		this.platform	= "android";
 		this.resource 	= "res";
 		this.source 	= "src";
-		this.template 	= "tpl/android/";
+		this.template 	= "tpl";
 		
 		// MVC
 		//this.model 		= "entity";
@@ -31,6 +35,20 @@ public final class AndroidAdapter extends BaseAdapter {
 		this.manifest 	= "AndroidManifest.xml";
 	}
 
+	@Override
+	public boolean makeProject()
+	{
+		boolean result = false;
+		//Generate base folders & files
+		File dirProj = FileUtils.makeFolderRecursive("../"+this.template+"/"+this.platform+"/"+"Project"+"/",
+							"../app/"+this.platform+"/",
+							true);
+		if(dirProj.exists() && dirProj.listFiles().length!=0)
+			result = true;
+		
+		return result;
+	}
+	
 	/* (non-Javadoc)
 	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getNameSpace(com.tactfactory.mda.orm.ClassMetadata)
 	 */
@@ -83,7 +101,4 @@ public final class AndroidAdapter extends BaseAdapter {
 				meta.space,
 				type);
 	}
-
-	
-
 }

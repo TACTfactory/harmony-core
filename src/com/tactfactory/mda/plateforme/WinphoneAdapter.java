@@ -8,12 +8,36 @@
  */
 package com.tactfactory.mda.plateforme;
 
+import java.io.File;
+
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
+import com.tactfactory.mda.utils.FileUtils;
 
 /** Microsoft Adapter of project structure */
 public final class WinphoneAdapter extends BaseAdapter {
 
+	public WinphoneAdapter()
+	{
+		this.platform	= "winphone";
+		this.resource 	= "res";
+		this.source 	= "src";
+		this.template 	= "tpl";
+	}
+
+	@Override
+	public boolean makeProject()
+	{
+		boolean result = false;
+		//Generate base folders & files
+		File dirProj = FileUtils.makeFolderRecursive("../"+this.template+"/"+this.platform+"/"+"Project"+"/",
+							"../app/"+this.platform+"/",
+							true);
+		if(dirProj.exists() && dirProj.listFiles().length!=0)
+			result = true;
+		
+		return result;
+	}
 	/* (non-Javadoc)
 	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getNameSpace(com.tactfactory.mda.orm.ClassMetadata, java.lang.String)
 	 */

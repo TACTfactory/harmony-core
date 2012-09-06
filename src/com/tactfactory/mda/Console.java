@@ -26,39 +26,42 @@ public class Console extends Harmony {
 	 */
 	public static void main(String[] args) throws Exception {
 
-		// sample syntax :  tact-mdatest:com/tactfactory/mdatest/android:User
-		String[] argProject = args[1].split(":");
-		
-		// If no arg
-		if (argProject.length < 2) {
-			System.out.print("Usage : java -jar tact-mda.jar testBundle:com/tactfactory/mdatest/android:User");
-			throw new Exception("Usage Exception, please launch help !");
-		}
-			
-		// Need Project space !!!
-		projectFolder = argProject[0];
-		String patchNameSpace = "src/" + argProject[1] + "/entity/";
-			
+		//argProject = args[1].split(":");
+
 		Console csl = new Console();
-
-		if (argProject.length == 3) {
-			csl.parseJavaFile(patchNameSpace + argProject[2] + ".java");
-		} else {
-			FilenameFilter filter = new FilenameFilter() {
-			    public boolean accept(File dir, String name) {
-			        return name.endsWith(".java");
-			    }
-			};
-			
-			File dir = new File(Console.pathProject + patchNameSpace);
-			String[] files = dir.list(filter);
-			
-			for (String filename : files) {
-				csl.parseJavaFile(patchNameSpace + filename);
-			}
+		
+		if(args.length==0) {
+			System.out.println("You need to pass commands to the tool!");
+			System.out.println("Usage : java -jar harmony.jar [command]");
+			System.out.println("ex : harmony.jar project:init:android\n");
+			csl.findAndExecute("help");
 		}
-
-		csl.findAndExecute(args[0]);
+		else {
+			//Execute command given in arguments
+			csl.findAndExecute(args[0]);
+		}
+		// Need Project Name Space !!!
+		//projectFolder = argProject[0];
+		
+//		String patchNameSpace = "src/" + argProject[1] + "/entity/";
+//
+//		if (argProject.length == 3) {
+//			csl.parseJavaFile(patchNameSpace + argProject[2] + ".java");
+//		}
+//		else {
+//			FilenameFilter filter = new FilenameFilter() {
+//			    public boolean accept(File dir, String name) {
+//			        return name.endsWith(".java");
+//			    }
+//			};
+//			
+//			File dir = new File(Console.pathProject + patchNameSpace);
+//			String[] files = dir.list(filter);
+//			
+//			for (String filename : files) {
+//				csl.parseJavaFile(patchNameSpace + filename);
+//			}
+//		}
 
 	}
 

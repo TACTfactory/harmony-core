@@ -10,6 +10,7 @@ package com.tactfactory.mda.command;
 
 import japa.parser.ast.CompilationUnit;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.tactfactory.mda.Harmony;
@@ -19,10 +20,10 @@ public class GeneralCommand extends BaseCommand {
 	public static String HELP = "help";
 
 	public void help() {
-		System.out.print("Welcome to TACT MDA !\n" +
+		System.out.println("Welcome to TACT MDA !\n" +
 				"You can generate a android project base on Model Driven Application. \n\n" +
 				"For list all available command launch : \n" +
-				"$ java console list");
+				"$java -jar harmony.jar list");
 	}
 
 	public void list() {
@@ -30,7 +31,7 @@ public class GeneralCommand extends BaseCommand {
 			baseCommand.summary();
 		}
 	}
-
+	
 	@Override
 	public void summary() {
 		System.out.print("\n> GENERAL\n");
@@ -47,7 +48,7 @@ public class GeneralCommand extends BaseCommand {
 		if (action.equals(HELP)) {
 			this.help();
 		} else
-				
+			
 		{
 			
 		}
@@ -56,7 +57,8 @@ public class GeneralCommand extends BaseCommand {
 	@Override
 	public boolean isAvailableCommand(String command) {
 		return (command.equals(LIST) ||
-				command.equals(HELP) );
+				command.equals(HELP)
+				);
 	}
 
 }
