@@ -8,13 +8,17 @@
  */
 package com.tactfactory.mda.utils;
 
+import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 /** Manipulate File tools */
 public class FileUtils {
@@ -47,6 +51,7 @@ public class FileUtils {
 		return file;
 	}
 	
+	/** copy file content from srcFile to destFile */
 	public static void copyfile(File srcFile, File destFile) {
 		try {
 			InputStream in = new FileInputStream(srcFile);
@@ -73,16 +78,13 @@ public class FileUtils {
 		}
 	}
 	
+	/** handle folder creation with its parents */
 	public static File makeFolder(String filename) {
 		File folder = new File(filename);
 
 		boolean success = false;
-		try {
-			success = folder.createNewFile();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		success = folder.mkdirs();
 	    if (success) {
 	        // Folder did not exists and was created
 	    	System.out.println("Folder '"+folder.getName()+"' did not exists and was created...");
@@ -97,8 +99,56 @@ public class FileUtils {
 		return folder;
 	}
 
-	public static File makeFolderRecursive(String srcPath, String destPath, boolean makeFiles)
+	/** convert file content to a string */
+	public static String FileToString(File file)
 	{
+		String result = null;
+		DataInputStream in = null;
+
+		try {
+			byte[] buffer = new byte[(int) file.length()];
+			in = new DataInputStream(new FileInputStream(file));
+			in.readFully(buffer);
+			result = new String(buffer);
+		} catch (IOException e) {
+			throw new RuntimeException("IO problem in fileToString", e);
+		} finally {
+			try {
+				in.close();
+			} catch (IOException e) { /* ignore it */
+			}
+		}
+		return result;
+	}
+	
+	/** convert file content to a string array with each line separated */
+	public static ArrayList<String> FileToStringArray(File file) {
+		
+		ArrayList<String> result = null;
+		String line = null;
+		DataInputStream in = null;
+
+		try {
+			result = new ArrayList<String>();
+			in = new DataInputStream(new FileInputStream(file));
+			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			
+			while ((line = br.readLine()) != null) {
+				result.add(line);
+			}
+		} catch (IOException e) {
+			throw new RuntimeException("IO problem in fileToString", e);
+		} finally {
+			try {
+				in.close();
+			} catch (IOException e) { /* ignore it */ }
+		}
+		return result;
+	}
+	
+	/** copy folder content recursively from srcPath to destPath, and copy files or not */
+	public static File makeFolderRecursive(String srcPath, String destPath, boolean makeFiles) {
+		
 		File dest_folder = new File(destPath);
 		File tpl_folder = new File(srcPath);
 		File tpl_files[] = tpl_folder.listFiles();
@@ -134,11 +184,12 @@ public class FileUtils {
 					    	else
 					    		System.out.println("Folder '"+tmp_file.getName()+"' creation error...");
 					    }
-						FileUtils.makeFolderRecursive(srcPath+tpl_files[i].getName()+"/",destPath+tmp_file.getName()+"/",false);
+						FileUtils.makeFolderRecursive(String.format("%s%s/", srcPath, tpl_files[i].getName()),
+														String.format("%s%s/",destPath, tmp_file.getName()),false);
 					}
 					else if(tpl_files[i].isFile() && makeFiles)
 					{
-						tmp_file = FileUtils.makeFile(destPath+"/"+tpl_files[i].getName());
+						tmp_file = FileUtils.makeFile(destPath+tpl_files[i].getName());
 						if(tmp_file.exists()) {
 			    			System.out.println("File '"+tpl_files[i].getName()+"' created...");
 			    			FileUtils.copyfile(tpl_files[i], tmp_file);
@@ -153,6 +204,50 @@ public class FileUtils {
 			}
 		}
 		return dest_folder;
+	}
+	
+	/** delete a directory with all its files recursively */
+	public static boolean deleteRecursive(File dir){
+		boolean result = false;
+		if(dir.exists()) {
+			if(dir.isDirectory()) {
+				//it's a directory, list files and call deleteDir on a dir
+				for(File f : dir.listFiles()) {
+					if(f.isDirectory()) {
+						FileUtils.deleteRecursive(f);
+					} else {
+						if(f.delete())
+							System.out.println("File '"+f.getPath()+"' deleted.");
+						else
+							System.out.println("File '"+f.getPath()+"' delete ERROR!");
+					}
+				}
+				
+				//folder content check, remove folder
+				if(dir.listFiles().length==0){
+					if(dir.delete()) {
+						System.out.println("Folder '"+dir.getPath()+"' deleted.");
+						result = true;
+					} else {
+						System.out.println("Folder '"+dir.getPath()+"' delete ERROR!");
+					}
+				} else {
+					System.out.println("Folder '"+dir.getPath()+"' NOT Empty!");
+				}
+				
+			} else {
+				// it's a file delete simply
+				if(dir.delete()) {
+					System.out.println("File '"+dir.getPath()+"' deleted.");
+					result = true;
+				} else {
+					System.out.println("File '"+dir.getPath()+"' delete ERROR!");
+				}
+			}
+		} else {
+			System.out.println("Folder '"+dir.getPath()+"' doesn't exists!");
+		}
+		return result;
 	}
 
 }

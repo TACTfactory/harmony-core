@@ -42,16 +42,16 @@ public class ActivityGenerator {
 	protected String localNameSpace;
 	protected boolean isWritable = true;
 	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
-	
+
 	public ActivityGenerator(ClassMetadata meta, BaseAdapter adapter) throws Exception {
 		if (meta == null && adapter == null)
 			throw new Exception("No meta or adapter define.");
-		
+
 		this.meta 		= meta;
 		this.adapter	= adapter;
-		
+
 		this.localNameSpace = this.adapter.getNameSpaceEntity(this.meta, this.adapter.getController());
-		
+
 		// Make fields
 		ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
 		for (FieldMetadata field : this.meta.fields.values()) {
@@ -61,56 +61,56 @@ public class ActivityGenerator {
 			modelField.put(TagConstant.TYPE, field.type);
 			modelField.put("customEditType", field.customEditType);
 			modelField.put("customShowType", field.customShowType);
-			
+
 			modelFields.add(modelField);
 		}
-		
+
 		// Make class
 		this.datamodel.put("namespace", 		meta.space);
 		this.datamodel.put(TagConstant.NAME, 	meta.name);
 		this.datamodel.put("localnamespace", 	this.localNameSpace);
 		this.datamodel.put(TagConstant.FIELDS, 	modelFields);
 	}
-	
+
 	public ActivityGenerator(ClassMetadata meta, BaseAdapter adapter, Boolean isWritable) throws Exception {
 		this(meta, adapter);
-		
+
 		this.isWritable = isWritable;
 	}
-	
+
 	/** List Action
 	 * @param cfg
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
 	public void generateListAction(Configuration cfg) throws IOException,
-			TemplateException {
-		
+	TemplateException {
+
 		this.makeSourceControler(cfg, 
 				"TemplateListActivity.java", 
 				"%sListActivity.java");
 		this.makeResourceLayout(cfg, 
 				"activity_template_list.xml", 
 				"activity_%s_list.xml");
-		
+
 		this.makeSourceControler(cfg, 
 				"TemplateListFragment.java", 
 				"%sListFragment.java");
 		this.makeResourceLayout(cfg, 
 				"fragment_template_list.xml", 
 				"fragment_%s_list.xml");
-		
+
 		this.makeSourceControler(cfg, 
 				"TemplateListAdapter.java", 
 				"%sListAdapter.java");
 		this.makeResourceLayout(cfg, 
 				"row_template.xml", 
 				"row_%s.xml");
-		
+
 		this.makeSourceControler(cfg, 
 				"TemplateListLoader.java", 
 				"%sListLoader.java");
-		
+
 		this.updateManifest("ListActivity");
 	}
 
@@ -120,22 +120,22 @@ public class ActivityGenerator {
 	 * @throws TemplateException
 	 */
 	public void generateShowAction(Configuration cfg) throws IOException,
-			TemplateException {
-		
+	TemplateException {
+
 		this.makeSourceControler(cfg, 
 				"TemplateShowActivity.java", 
 				"%sShowActivity.java");
 		this.makeResourceLayout(cfg, 
 				"activity_template_show.xml", 
 				"activity_%s_show.xml");
-		
+
 		this.makeSourceControler(cfg, 
 				"TemplateShowFragment.java", 
 				"%sShowFragment.java");
 		this.makeResourceLayout(cfg, 
 				"fragment_template_show.xml", 
 				"fragment_%s_show.xml");
-		
+
 		this.updateManifest("ShowActivity");
 	}
 
@@ -145,22 +145,22 @@ public class ActivityGenerator {
 	 * @throws TemplateException
 	 */
 	public void generateEditAction(Configuration cfg) throws IOException,
-			TemplateException {
-		
+	TemplateException {
+
 		this.makeSourceControler(cfg, 
 				"TemplateEditActivity.java", 
 				"%sEditActivity.java");
 		this.makeResourceLayout(cfg, 
 				"activity_template_edit.xml", 
 				"activity_%s_edit.xml");
-		
+
 		this.makeSourceControler(cfg, 
 				"TemplateEditFragment.java", 
 				"%sEditFragment.java");
 		this.makeResourceLayout(cfg, 
 				"fragment_template_edit.xml", 
 				"fragment_%s_edit.xml");
-		
+
 		this.updateManifest("EditActivity");
 	}
 
@@ -170,37 +170,37 @@ public class ActivityGenerator {
 	 * @throws TemplateException
 	 */
 	public void generateCreateAction(Configuration cfg) throws IOException,
-			TemplateException {
-		
+	TemplateException {
+
 		this.makeSourceControler(cfg, 
 				"TemplateCreateActivity.java", 
 				"%sCreateActivity.java"  );
 		this.makeResourceLayout(cfg, 
 				"activity_template_create.xml", 
 				"activity_%s_create.xml");
-		
+
 		this.makeSourceControler(cfg, 
 				"TemplateCreateFragment.java", 
 				"%sCreateFragment.java");
 		this.makeResourceLayout(cfg, 
 				"fragment_template_create.xml", 
 				"fragment_%s_create.xml");
-		
+
 		this.updateManifest("CreateActivity");
 	}
-	
+
 	/** All Actions (List, Show, Edit, Create) */
 	public void generateAllAction() {
 		// Info
 		System.out.print(">> Generate CRUD view for " +  meta.name);
-		
+
 		try {
-			Configuration cfg = new Configuration();
-			
+			Configuration cfg = new Configuration();						// Initialization of template engine
+
 			if (this.isWritable ) {
 				// Info
 				System.out.print(" with write actions \n");
-				
+
 				this.generateCreateAction(cfg);
 				this.generateEditAction(cfg);
 			} else {
@@ -210,7 +210,7 @@ public class ActivityGenerator {
 
 			this.generateShowAction(cfg);
 			this.generateListAction(cfg);
-			
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -228,28 +228,28 @@ public class ActivityGenerator {
 	 * @throws TemplateException
 	 */
 	private void makeSourceControler(Configuration cfg, String template, String filename) throws IOException,
-			TemplateException {
-		
+	TemplateException {
+
 		File file = FileUtils.makeFile(
 				String.format("%s%s/%s",
 						this.adapter.getSourcePath(),
 						PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
 						String.format(filename, this.meta.name)));
-		
+
 		// Debug Log
 		if (Harmony.DEBUG)
 			System.out.print("\tGenerate Source : " + file.getAbsoluteFile() + "\n"); 
-		
+
 		// Create
 		Template tpl = cfg.getTemplate(
-				this.adapter.getTemplateSourceControlerPath() + template);
-		
+				this.adapter.getTemplateSourceControlerPath() + template);		// Load template file in engine
+
 		OutputStreamWriter output = new FileWriter(file);
-		tpl.process(datamodel, output);
+		tpl.process(datamodel, output);											// Process datamodel (with previous template file), and output to output file
 		output.flush();
 		output.close();
 	}
-	
+
 	/** Make Resource file
 	 * 
 	 * @param cfg Template engine
@@ -259,29 +259,29 @@ public class ActivityGenerator {
 	 * @throws TemplateException
 	 */
 	private void makeResourceLayout(Configuration cfg, String template, String filename) throws IOException,
-		TemplateException {
-	
+	TemplateException {
+
 		File file = FileUtils.makeFile(
 				String.format("%s/%s", 
 						this.adapter.getRessourceLayoutPath(),
 						String.format(filename, this.meta.name.toLowerCase())));
-		
+
 		// Debug Log
 		if (Harmony.DEBUG)
 			System.out.print("\tGenerate Ressource : " + file.getAbsoluteFile() + "\n"); 
-		
+
 		// Create
 		Template tpl = cfg.getTemplate(
 				String.format("%s/%s",
 						this.adapter.getTemplateRessourceLayoutPath(),
 						template));
-		
+
 		OutputStreamWriter output = new FileWriter(file);
 		tpl.process(datamodel, output);
 		output.flush();
 		output.close();
 	}
-	
+
 	/** Make Manifest file
 	 * 
 	 * @param cfg Template engine
@@ -290,11 +290,11 @@ public class ActivityGenerator {
 	 */
 	private void makeManifest(Configuration cfg) throws IOException, TemplateException {
 		File file = FileUtils.makeFile(this.adapter.getManifestPathFile());
-		
+
 		// Debug Log
 		if (Harmony.DEBUG)
 			System.out.print("\tGenerate Manifest : " + file.getAbsoluteFile() + "\n");
-		
+
 		// Create
 		Template tpl = cfg.getTemplate(this.adapter.getTemplateManifestPathFile());
 		OutputStreamWriter output = new FileWriter(file);
@@ -313,86 +313,86 @@ public class ActivityGenerator {
 				this.adapter.getController(), 
 				this.meta.name.toLowerCase(), 
 				classFile );
-		
+
 		// Debug Log
 		if (Harmony.DEBUG)
 			System.out.print("\tUpdate Manifest : " + pathRelatif + "\n\n");
-		
-		try {			
-			SAXBuilder builder = new SAXBuilder();
+
+		try {
+			SAXBuilder builder = new SAXBuilder();		// Make engine
 			File xmlFile = FileUtils.makeFile(this.adapter.getManifestPathFile());
-			Document doc = (Document) builder.build(xmlFile);
-			Element rootNode = doc.getRootElement();
-			Namespace ns = rootNode.getNamespace("android");
-			
+			Document doc = (Document) builder.build(xmlFile); 	// Load XML File
+			Element rootNode = doc.getRootElement(); 			// Load Root element
+			Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
+
 			// Find Application Node
 			Element findActivity = null;
-			Element applicationNode = rootNode.getChild("application");
+			Element applicationNode = rootNode.getChild("application"); 	// Find a element
 			if (applicationNode != null) {
-				
+
 				// Find Activity Node
-				List<Element> activities = applicationNode.getChildren("activity");
+				List<Element> activities = applicationNode.getChildren("activity"); 	// Find many elements
 				for (Element activity : activities) {
-					if (activity.hasAttributes() && activity.getAttributeValue("name",ns).equals(pathRelatif) ) {
+					if (activity.hasAttributes() && activity.getAttributeValue("name",ns).equals(pathRelatif) ) {	// Load attribute value
 						findActivity = activity;
 						break;
 					}
 				}
-				
+
 				// If not found Node, create it
 				if (findActivity == null) {
-					findActivity = new Element("activity");
-					findActivity.setAttribute("name", pathRelatif, ns);
+					findActivity = new Element("activity");				// Create new element
+					findActivity.setAttribute("name", pathRelatif, ns);	// Add Attributes to element
 					Element findFilter = new Element("intent-filter");
 					Element findAction = new Element("action");
 					Element findCategory = new Element("category");
 					Element findData = new Element("data");
-					
-					findFilter.addContent(findAction);
+
+					findFilter.addContent(findAction);					// Add Child element
 					findFilter.addContent(findCategory);
 					findFilter.addContent(findData);
 					findActivity.addContent(findFilter);
 					applicationNode.addContent(findActivity);
 				}
-				
+
 				// Set values
 				findActivity.setAttribute("label", "@string/app_name", ns);
 				Element filterActivity = findActivity.getChild("intent-filter");
 				if (filterActivity != null) {
 					String data = "";
 					String action = "VIEW";
-					
+
 					if (pathRelatif.matches(".*List.*")) {
 						data = "vnc.android.cursor.collection/";
 					} else {
 						data = "vnc.android.cursor.item/";
-						
+
 						if (pathRelatif.matches(".*Edit.*"))
 							action = "EDIT";
 						else 		
-						
-						if (pathRelatif.matches(".*Create.*"))
-							action = "INSERT";
+
+							if (pathRelatif.matches(".*Create.*"))
+								action = "INSERT";
 					}
-					
+
 					data += this.adapter.getNameSpace(this.meta, "entity." + this.meta.name);
-					
+
 					filterActivity.getChild("action").setAttribute("name", "android.intent.action."+ action, ns);
 					filterActivity.getChild("category").setAttribute("name", "android.intent.category.DEFAULT", ns);
 					filterActivity.getChild("data").setAttribute("mimeType", data, ns);
 				}	
 			}
-			
+
 			// Write to File
 			XMLOutputter xmlOutput = new XMLOutputter();
-	 
+
 			// display nice nice
-			xmlOutput.setFormat(Format.getPrettyFormat());
+			xmlOutput.setFormat(Format.getPrettyFormat());				// Make beautiful file with indent !!!
 			xmlOutput.output(doc, new FileWriter(xmlFile.getAbsoluteFile()));
-		  } catch (IOException io) {
+		} catch (IOException io) {
 			io.printStackTrace();
-		  } catch (JDOMException e) {
+		} catch (JDOMException e) {
 			e.printStackTrace();
-		  }
 		}
+	}
 }

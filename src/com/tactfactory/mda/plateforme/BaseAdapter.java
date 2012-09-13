@@ -16,11 +16,13 @@ import com.tactfactory.mda.utils.FileUtils;
 /** Base Adapter of project structure */
 public abstract class BaseAdapter {	
 	// Structure
+	protected String project;
+
 	protected String platform;
 	protected String resource;
 	protected String source;
 	protected String template;
-	
+
 	// MVC
 	protected String model		= "entity";
 	protected String view 		= "layout";
@@ -32,43 +34,41 @@ public abstract class BaseAdapter {
 	protected String manifest;
 	
 	// Abstract Methods
-	public abstract boolean makeProject();
-	
-	/** Generate plateforme Namespace
+	/** Generate platform Namespace
 	 * 
 	 * @param meta Entity to extract the namespace 
 	 * @return String Namespace
 	 */
 	public abstract String getNameSpace(ClassMetadata meta, String type);
 	
-	/** Generate plateforme Namespace
+	/** Generate platform Namespace
 	 * 
 	 * @param meta Entity to extract the namespace 
 	 * @return String Namespace
 	 */
 	public abstract String getNameSpaceEntity(ClassMetadata meta, String type);
 	
-	/** Generate plateforme view component for Show action
+	/** Generate platform view component for Show action
 	 * 
 	 * @param field The field based of generator
-	 * @return String of the plateforme Component type
+	 * @return String of the platform Component type
 	 */
 	public abstract String getViewComponentShow(FieldMetadata field);
 	
-	/** Generate plateforme view component for Edit action
+	/** Generate platform view component for Edit action
 	 * 
 	 * @param field The field based of generator
-	 * @return String of the plateforme Component type
+	 * @return String of the platform Component type
 	 */
 	public abstract String getViewComponentEdit(FieldMetadata field);
 	
 	// Utils	
 	public final String getSourcePath() {
-		return String.format("%s/%s/", Harmony.pathProject, this.getSource() );
+		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getSource() );
 	}
 	
 	public final String getTemplateSourcePath() {
-		return String.format("%s/%s/", this.getTemplate(), this.getSource() );
+		return String.format("%s/%s/%s/", this.getTemplate(), this.getPlatform(), this.getSource() );
 	}
 	
 	public final String getTemplateSourceControlerPath() {
@@ -80,7 +80,7 @@ public abstract class BaseAdapter {
 	}
 	
 	public final String getRessourcePath() {
-		return String.format("%s/%s/", Harmony.pathProject, this.getResource() );
+		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getResource() );
 	}
 	
 	public final String getTemplateRessourcePath() {
@@ -95,15 +95,32 @@ public abstract class BaseAdapter {
 		return String.format("%s/%s/", this.getTemplateRessourcePath(), this.getView() );
 	}
 	
+	public final String getTemplateProjectPath() {
+		return String.format("%s/%s/%s/", this.getTemplate(), this.getPlatform(), this.getProject() );
+	}
+	
 	public final String getManifestPathFile() {
 		return String.format("%s/%s", Harmony.pathProject, this.getManifest() );
 	}
 	
 	public final String getTemplateManifestPathFile() {
-		return String.format("%s/project/%s", this.getTemplate(), this.getManifest() );
+		return String.format("%s/%s", this.getTemplateProjectPath(), this.getManifest() );
 	}
 
 	// Getter and Setter
+	/**
+	 * @return the project
+	 */
+	public final String getProject() {
+		return project;
+	}
+
+	/**
+	 * @param project the project to set
+	 */
+	public final void setProject(String project) {
+		this.project = project;
+	}
 	/**
 	 * @return the resource
 	 */
@@ -203,10 +220,10 @@ public abstract class BaseAdapter {
 	}
 
 	/**
-	 * @param controler the controller to set
+	 * @param controller the controller to set
 	 */
-	public final void setController(String controler) {
-		this.controller = controler;
+	public final void setController(String controller) {
+		this.controller = controller;
 	}
 
 	/**
