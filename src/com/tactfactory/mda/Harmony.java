@@ -41,6 +41,7 @@ public class Harmony {
 	/** Debug state*/
 	public static final boolean DEBUG = true;
 	public static final String VERSION = "Harmony version 0.1.0-DEV";
+	
 	/** Singleton of console */
 	public static Harmony instance;
 	/** Full path of project ( app folder in Harmony root ) */

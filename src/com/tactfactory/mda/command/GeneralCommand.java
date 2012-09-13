@@ -10,7 +10,6 @@ package com.tactfactory.mda.command;
 
 import japa.parser.ast.CompilationUnit;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import com.tactfactory.mda.Harmony;

@@ -12,12 +12,25 @@ import japa.parser.ast.CompilationUnit;
 
 import java.util.ArrayList;
 
+/** Common Command structure */
 public abstract class BaseCommand {
+	protected static final String SEPARATOR = ":";
 
+	/** Execute specific action
+	 * 
+	 * @param action to realize
+	 * @param entities of the project
+	 */
 	public abstract void execute(String action, ArrayList<CompilationUnit> entities);
 
+	/** Help of the bundle */
 	public abstract void summary();
 	
+	/** Check availability of command
+	 * 
+	 * @param command to check
+	 * @return true if found
+	 */
 	public abstract boolean isAvailableCommand(String command);
 
 }
