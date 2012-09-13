@@ -8,12 +8,17 @@
  */
 package com.tactfactory.mda;
 
+import japa.parser.JavaParser;
+import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.google.common.base.Strings;
 import com.tactfactory.mda.command.BaseCommand;
 import com.tactfactory.mda.command.FosCommand;
 import com.tactfactory.mda.command.GeneralCommand;
@@ -53,7 +58,7 @@ public class Harmony {
 	private void initialize() throws Exception {
 		instance = this;
 		
-		if (projectFolder == null || projectFolder.equals("")) {
+		if (Strings.isNullOrEmpty(projectFolder)) {
 			System.out.print("Not project folder define"); 
 			throw new Exception("Not project folder define");
 		}
@@ -106,5 +111,33 @@ public class Harmony {
 		}
 	}
 
-	
+	/** Load Entity */
+	public void parseJavaFile(String filename) {
+        FileInputStream in = null;
+        CompilationUnit cu = null;
+        
+		try {
+			// creates an input stream for the file to be parsed
+			in = new FileInputStream(Console.pathProject + filename);
+
+            // parse the file
+			cu = JavaParser.parse(in);
+        } catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+            try {
+				in.close();
+			} catch (IOException e) {
+				if (Harmony.DEBUG)
+					e.printStackTrace();
+			}
+        }
+		
+		//if (cu != null)
+		//	this.entities.add(cu);
+	}
 }

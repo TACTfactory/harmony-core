@@ -149,7 +149,7 @@
 		        <flattenmapper />
 		 
 		        <!-- add lib/ prefix -->
-		        <globmapper from="*" to="lib/*" />
+		        <globmapper from="*" to="../../lib/*" />
 		      </chainedmapper>
 		    </mapper>
 		 
@@ -165,14 +165,14 @@
             <zipfileset dir="${build.rel-dir}"
                         includes=""
                         excludes="" />
-            <zipfileset dir="${lib.rel-dir}"
+            <!-- zipfileset dir="${lib.rel-dir}"
             			prefix="${lib.rel-dir}"
                         includes=""
                         excludes="" />
             <zipfileset dir="tpl"
             			prefix="tpl"
                         includes=""
-                        excludes="" />
+                        excludes="" /-->
             <manifest>
 	            <attribute name="Main-Class" value="com.tactfactory.mda.Console"/>
 	            <attribute name="Class-Path" value="${libs.project}"/>
