@@ -40,6 +40,7 @@
     <target name="init">
         <mkdir dir="${build.rel-dir}"/>
         <mkdir dir="${dist.rel-dir}"/>
+        <mkdir dir="${dist.rel-dir}/${lib.rel-dir}"/>
         <mkdir dir="${app.rel-dir}"/>
     </target>
 
@@ -122,6 +123,12 @@
 
 	<target name="post_build" depends="compile"
         description="Build the project">
+		<!-- build a temporary lib dir, and flatten out the jars into one folder -->
+		<copy todir="${dist.rel-dir}/${lib.rel-dir}" flatten="true">
+		  <fileset dir="${lib.rel-dir}">
+		    <include name="*.jar"/>
+		  </fileset>
+		</copy>
         <delete dir="${build.rel-dir}" failonerror="false" deleteonexit="true" />
     </target>
 
@@ -129,8 +136,8 @@
         description="Build the project">
     </target>
 
-    <target name="rebuild" depends="clean,build">
-    <!-- description="Rebuild the project" -->
+    <target name="rebuild" depends="clean,build"
+		description="Rebuild the project">
     </target>
     
     <target name="buildall" depends="rebuild,create-jar,javadoc,post_build"

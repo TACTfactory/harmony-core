@@ -63,8 +63,8 @@ public class Console extends Harmony {
 				
 			Harmony harmony = new Harmony();
 
-			if (argProject.length == 3) {
-				harmony.parseJavaFile(patchNameSpace + argProject[2] + ".java");
+			if (args.length == 3) {
+				harmony.parseJavaFile(patchNameSpace + args[2] + ".java");
 			} else {
 				FilenameFilter filter = new FilenameFilter() {
 				    public boolean accept(File dir, String name) {

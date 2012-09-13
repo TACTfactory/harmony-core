@@ -36,13 +36,26 @@ public class OrmCommand extends BaseCommand {
 
 	}
 	
+	protected void generateEntity() {
+		JavaAdapter adapter = new JavaAdapter();
+		adapter.parse(this.entities.get(0));
+
+		ArrayList<ClassMetadata> metas = adapter.getMetas();
+		try {
+			new ActivityGenerator(metas.get(0), this.adapter).generateAllAction();
+			new AdapterGenerator(metas.get(0), this.adapter).generate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	protected void generateEntities() {
 		// Info Log
 		System.out.print(">> Analyse Models...\n");
 				
 		JavaAdapter adapter = new JavaAdapter();
 		
-		for (CompilationUnit mclass : entities) {
+		for (CompilationUnit mclass : this.entities) {
 			adapter.parse(mclass);
 		}
 		
@@ -78,31 +91,19 @@ public class OrmCommand extends BaseCommand {
 	@Override
 	public void summary() {
 		System.out.print("\n> ORM Bundle\n");
-		System.out.print(GENERATE_ENTITY + "\t => Generate Entry\n");
-		System.out.print(GENERATE_ENTITIES + "\t => Generate Entries\n");
-		System.out.print(GENERATE_FORM + "\t => Generate Form\n");
-		System.out.print(GENERATE_CRUD + "\t => Generate CRUD\n");
+		System.out.print("\t" + GENERATE_ENTITY + "\t => Generate Entry\n");
+		System.out.print("\t" + GENERATE_ENTITIES + "\t => Generate Entries\n");
+		System.out.print("\t" + GENERATE_FORM + "\t => Generate Form\n");
+		System.out.print("\t" + GENERATE_CRUD + "\t => Generate CRUD\n");
 	}
 
 	@Override
 	public void execute(String action, ArrayList<CompilationUnit> entities) {
 		System.out.print("> ORM Generator\n");
 		this.entities = entities;
-		
-		
-		if (action.equals(GENERATE_ENTITY)) {
-			JavaAdapter adapter = new JavaAdapter();
-			adapter.parse(entities.get(0));
-						
-			ArrayList<ClassMetadata> metas = adapter.getMetas();
-			try {
-				new ActivityGenerator(metas.get(0), this.adapter).generateAllAction();
-				new AdapterGenerator(metas.get(0), this.adapter).generate();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 
-			
+		if (action.equals(GENERATE_ENTITY)) {
+			this.generateEntity();
 		} else
 			
 		if (action.equals(GENERATE_ENTITIES)) {

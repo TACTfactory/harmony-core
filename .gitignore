@@ -9,4 +9,6 @@
 .project
 local.properties
 .settings/*
-/res/drawable-mdpi/_pre_production/*
+
+/app/*
+

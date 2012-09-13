@@ -8,11 +8,22 @@
  */
 package com.tactfactory.mda.plateforme;
 
+import java.io.File;
+
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
+import com.tactfactory.mda.utils.FileUtils;
 
 /** RIM Blackberry Adapter of project structure */
 public final class RimAdapter extends BaseAdapter {
+
+	public RimAdapter()
+	{
+		this.platform	= "rim";
+		this.resource 	= "res";
+		this.source 	= "src";
+		this.template 	= "tpl";
+	}
 
 	/* (non-Javadoc)
 	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getNameSpace(com.tactfactory.mda.orm.ClassMetadata, java.lang.String)

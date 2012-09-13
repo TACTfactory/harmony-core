@@ -10,6 +10,7 @@ package com.tactfactory.mda.command;
 
 import japa.parser.ast.CompilationUnit;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.tactfactory.mda.Harmony;
@@ -19,23 +20,27 @@ public class GeneralCommand extends BaseCommand {
 	public static String HELP = "help";
 
 	public void help() {
-		System.out.print("Welcome to TACT MDA !\n" +
-				"You can generate a android project base on Model Driven Application. \n\n" +
-				"For list all available command launch : \n" +
-				"$ java console list");
+		System.out.println("\nUsage:\n" +
+				"console [command[parameters]]\n");
+		System.out.println("Usage example:\n" +
+				"console project:init:android --name=test --namespace=com/tact/android/test --sdkdir=/root/android\n");
+		
+		System.out.println("Please use 'console list' to display available commands !");
 	}
 
 	public void list() {
+
+		System.out.print("\nAvailable Commands:\n");
 		for (BaseCommand baseCommand : Harmony.instance.bootstrap.values()) {
 			baseCommand.summary();
 		}
 	}
-
+	
 	@Override
 	public void summary() {
-		System.out.print("\n> GENERAL\n");
-		System.out.print("help\t => Help\n");
-		System.out.print("list\t => List all commands\n");
+		System.out.print("\n> General:\n");
+		System.out.print("\t"+HELP+"\t => Display this help message\n");
+		System.out.print("\t"+LIST+"\t => List all commands\n");
 	}
 
 	@Override
@@ -47,7 +52,7 @@ public class GeneralCommand extends BaseCommand {
 		if (action.equals(HELP)) {
 			this.help();
 		} else
-				
+			
 		{
 			
 		}
@@ -56,7 +61,8 @@ public class GeneralCommand extends BaseCommand {
 	@Override
 	public boolean isAvailableCommand(String command) {
 		return (command.equals(LIST) ||
-				command.equals(HELP) );
+				command.equals(HELP)
+				);
 	}
 
 }

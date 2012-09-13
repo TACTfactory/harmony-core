@@ -51,8 +51,8 @@
             -pre-build
             -pre-compile
             -post-compile (This is typically used for code obfuscation.
-                           Compiled code location: ${out.classes.absolute.dir}
-                           If this is not done in place, override ${out.dex.input.absolute.dir})
+                           Compiled code location: ${out_classes_absolute_dir}
+                           If this is not done in place, override ${out_dex_input_absolute_dir})
             -post-package
             -post-build
             -pre-clean
@@ -78,6 +78,6 @@
          in order to avoid having your file be overridden by tools such as "android update project"
     -->
     <!-- version-tag: 1 -->
-    <import file="${sdk.dir}/tools/ant/build.xml" />
+    <import file="${sdk_dir}/tools/ant/build.xml" />
 
 </project>
