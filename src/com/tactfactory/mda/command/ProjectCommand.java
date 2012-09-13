@@ -12,6 +12,7 @@ import japa.parser.ast.CompilationUnit;
 
 import java.util.ArrayList;
 
+import com.google.common.base.Strings;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.TargetPlateforme;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
@@ -53,7 +54,9 @@ public class ProjectCommand extends BaseCommand {
 	public static String REMOVE_WINPHONE= BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlateforme.WINPHONE.toLowerString();
 	public static String REMOVE_ALL 	= BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlateforme.ALL.toLowerString();
 
-	// Internal objects
+	// Internal
+	private static final String DEFAULT_PROJECT_NAME = "toto";
+	
 	protected BaseAdapter adapterAndroid = new AndroidAdapter();
 	protected BaseAdapter adapterIOS = new IosAdapter();
 	protected BaseAdapter adapterRIM = new RimAdapter();
@@ -61,19 +64,19 @@ public class ProjectCommand extends BaseCommand {
 
 	private static boolean userHasConfirmed = false;
 	private static boolean isProjectInit = false;
-	
-	private static final String DEFAULT_PROJECT_NAME = "toto";
 
 	/**
 	 * 
 	 */
 	private void initProjectName()
 	{
-		String projectName = Harmony.getUserInput("Please enter your Project Name [toto]:");
-		if(projectName!=null && projectName.length()!=0)
-			Harmony.projectName = projectName;
-		else
-			Harmony.projectName = DEFAULT_PROJECT_NAME;
+		if (Strings.isNullOrEmpty(Harmony.projectName)) {
+			String projectName = Harmony.getUserInput("Please enter your Project Name [toto]:");
+			if(projectName!=null && projectName.length()!=0)
+				Harmony.projectName = projectName;
+			else
+				Harmony.projectName = DEFAULT_PROJECT_NAME;
+		}
 	}
 	
 	/**
@@ -81,17 +84,19 @@ public class ProjectCommand extends BaseCommand {
 	 */
 	private void initProjectNameSpace()
 	{
-		String projectNameSpace = Harmony.getUserInput("Please enter your Project NameSpace [my.name.space.toto]:");
-		if(projectNameSpace!=null && projectNameSpace.length()!=0) {
-			if(projectNameSpace.endsWith(Harmony.projectName))
-				Harmony.projectNameSpace = projectNameSpace.replaceAll("\\.", "/");
-			else {
-				System.out.println("The NameSpace has to end with Project Name !");
-				this.initProjectNameSpace();
+		if (Strings.isNullOrEmpty(Harmony.projectNameSpace)) {
+			String projectNameSpace = Harmony.getUserInput("Please enter your Project NameSpace [my.name.space.toto]:");
+			if(projectNameSpace!=null && projectNameSpace.length()!=0) {
+				if(projectNameSpace.endsWith(Harmony.projectName))
+					Harmony.projectNameSpace = projectNameSpace.replaceAll("\\.", "/");
+				else {
+					System.out.println("The NameSpace has to end with Project Name !");
+					this.initProjectNameSpace();
+				}
 			}
-		}
-		else {
-			Harmony.projectNameSpace = "my.name.space.toto".replaceAll("\\.", "/");
+			else {
+				Harmony.projectNameSpace = "my.name.space.toto".replaceAll("\\.", "/");
+			}
 		}
 	}
 	
@@ -100,25 +105,27 @@ public class ProjectCommand extends BaseCommand {
 	 */
 	private void initProjectAndroidSdkPath()
 	{
-		String sdkPath = Harmony.getUserInput("Please enter AndroidSDK full path [/root/android-sdk/]:");
-		if(sdkPath!=null && sdkPath.length()!=0){
-			Harmony.androidSdkPath = sdkPath;
-		} else {
-			if(OsUtil.isWindows()) {
-				if(!OsUtil.isX64()) {
-					System.out.println("Detected: OS Windows x86");
-					Harmony.androidSdkPath = String.format("%s/%s/","C:/Program Files (x86)","android-sdk");
-				} else if(OsUtil.isX64()) {
-					System.out.println("Detected: OS Windows x64");
-					Harmony.androidSdkPath = String.format("%s/%s/","C:/Program Files","android-sdk");
-				} else {
-					System.out.println("Detected: OS Windows unkn arch");
-					Harmony.androidSdkPath = String.format("%s/%s/","C:/Program Files","android-sdk");
+		if (Strings.isNullOrEmpty(Harmony.androidSdkPath)) {
+			String sdkPath = Harmony.getUserInput("Please enter AndroidSDK full path [/root/android-sdk/]:");
+			if(sdkPath!=null && sdkPath.length()!=0){
+				Harmony.androidSdkPath = sdkPath;
+			} else {
+				if(OsUtil.isWindows()) {
+					if(!OsUtil.isX64()) {
+						System.out.println("Detected: OS Windows x86");
+						Harmony.androidSdkPath = String.format("%s/%s/","C:/Program Files (x86)","android-sdk");
+					} else if(OsUtil.isX64()) {
+						System.out.println("Detected: OS Windows x64");
+						Harmony.androidSdkPath = String.format("%s/%s/","C:/Program Files","android-sdk");
+					} else {
+						System.out.println("Detected: OS Windows unkn arch");
+						Harmony.androidSdkPath = String.format("%s/%s/","C:/Program Files","android-sdk");
+					}
 				}
-			}
-			else if(OsUtil.isLinux()) {
-				Harmony.androidSdkPath = "/root/android-sdk/";
-				System.out.println("Detected: OS Linux");
+				else if(OsUtil.isLinux()) {
+					Harmony.androidSdkPath = "/root/android-sdk/";
+					System.out.println("Detected: OS Linux");
+				}
 			}
 		}
 	}
@@ -136,14 +143,16 @@ public class ProjectCommand extends BaseCommand {
 			this.initProjectAndroidSdkPath();
 			
 			if(Harmony.DEBUG) {
-				System.out.println("ProjName: "+Harmony.projectName);
-				System.out.println("ProjNameSpace: "+Harmony.projectNameSpace);
-				System.out.println("AndroidSdkPath: "+Harmony.androidSdkPath);
+				System.out.println("ProjName: " 	 + Harmony.projectName);
+				System.out.println("ProjNameSpace: " + Harmony.projectNameSpace);
+				System.out.println("AndroidSdkPath: "+ Harmony.androidSdkPath);
 			}
 			
-			String accept = Harmony.getUserInput("Use below given parameters to process files? (y/n) ");
-			if(accept.contains("n")) {
-				this.initProjectParam();
+			if (Harmony.isConsole) {
+				String accept = Harmony.getUserInput("Use below given parameters to process files? (y/n) ");
+				if(accept.contains("n")) {
+					this.initProjectParam();
+				}
 			}
 			
 			isProjectInit = true;

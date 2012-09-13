@@ -19,6 +19,7 @@ public class Console extends Harmony {
 	 * @throws Exception 
 	 */
 	public static void main(String[] args) throws Exception {
+		Harmony.isConsole = true;
 		System.out.print("Harmony version 0.1.0\n");
 
 		// Check if has a parameter

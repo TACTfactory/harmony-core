@@ -11,7 +11,6 @@ package com.tactfactory.mda.plateforme;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
-import com.tactfactory.mda.utils.FileUtils;
 
 /** Base Adapter of project structure */
 public abstract class BaseAdapter {	
@@ -21,7 +20,7 @@ public abstract class BaseAdapter {
 	protected String platform;
 	protected String resource;
 	protected String source;
-	protected String template;
+	//protected String template;
 
 	// MVC
 	protected String model		= "entity";
@@ -68,7 +67,7 @@ public abstract class BaseAdapter {
 	}
 	
 	public final String getTemplateSourcePath() {
-		return String.format("%s/%s/%s/", this.getTemplate(), this.getPlatform(), this.getSource() );
+		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource() );
 	}
 	
 	public final String getTemplateSourceControlerPath() {
@@ -84,7 +83,7 @@ public abstract class BaseAdapter {
 	}
 	
 	public final String getTemplateRessourcePath() {
-		return String.format("%s/%s/", this.getTemplate(), this.getResource() );
+		return String.format("%s/%s/", Harmony.pathTemplate, this.getResource() );
 	}
 	
 	public final String getRessourceLayoutPath() {
@@ -96,7 +95,7 @@ public abstract class BaseAdapter {
 	}
 	
 	public final String getTemplateProjectPath() {
-		return String.format("%s/%s/%s/", this.getTemplate(), this.getPlatform(), this.getProject() );
+		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getProject() );
 	}
 	
 	public final String getManifestPathFile() {
@@ -138,9 +137,9 @@ public abstract class BaseAdapter {
 	/**
 	 * @return the template
 	 */
-	public final String getTemplate() {
+	/*public final String getTemplate() {
 		return template;
-	}
+	}*/
 
 	/**
 	 * @return the model
@@ -201,9 +200,9 @@ public abstract class BaseAdapter {
 	/**
 	 * @param template the template to set
 	 */
-	public final void setTemplate(String template) {
+	/*public final void setTemplate(String template) {
 		this.template = template;
-	}
+	}*/
 
 	/**
 	 * @param model the model to set

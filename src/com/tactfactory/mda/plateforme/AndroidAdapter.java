@@ -8,31 +8,8 @@
  */
 package com.tactfactory.mda.plateforme;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.HashMap;
-import java.util.List;
-
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.Namespace;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
-
-import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
-import com.tactfactory.mda.template.TagConstant;
-import com.tactfactory.mda.utils.FileUtils;
-import com.tactfactory.mda.utils.PackageUtils;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
 /** Google Android Adapter of project structure */
 public final class AndroidAdapter extends BaseAdapter {
@@ -43,7 +20,7 @@ public final class AndroidAdapter extends BaseAdapter {
 		this.platform	= "android";
 		this.resource 	= "res";
 		this.source 	= "src";
-		this.template 	= "tpl";
+		//this.template 	= "tpl";
 		
 		// MVC
 		//this.model 		= "entity";

@@ -46,12 +46,15 @@ public class Harmony {
 	public static Harmony instance;
 	/** Full path of project ( app folder in Harmony root ) */
 	public static String pathProject = "../app/";
+	
+	public static String pathTemplate = "../tpl/";
 	/** Project space */
 	public static String projectFolder = "android/";
 
 	public static String projectName;
 	public static String projectNameSpace;
 	public static String androidSdkPath;
+	public static boolean isConsole = false;
 
 	
 	public HashMap<Class<?>, BaseCommand> bootstrap = new HashMap<Class<?>, BaseCommand>();

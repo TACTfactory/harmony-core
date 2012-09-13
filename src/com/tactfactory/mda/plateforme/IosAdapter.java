@@ -8,11 +8,8 @@
  */
 package com.tactfactory.mda.plateforme;
 
-import java.io.File;
-
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
-import com.tactfactory.mda.utils.FileUtils;
 
 /** Apple iOS Adapter of project structure */
 public final class IosAdapter extends BaseAdapter {
@@ -22,7 +19,7 @@ public final class IosAdapter extends BaseAdapter {
 		this.platform	= "ios";
 		this.resource 	= "res";
 		this.source 	= "src";
-		this.template 	= "tpl";
+		//this.template 	= "tpl";
 	}
 
 

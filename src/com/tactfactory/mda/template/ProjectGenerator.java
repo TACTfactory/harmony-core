@@ -100,8 +100,8 @@ public class ProjectGenerator {
 		boolean result = false;
 		
 		File dirProj = FileUtils.makeFolderRecursive(
-				String.format("%s/%s/%s/%s/","..", this.adapter.getTemplate(), this.adapter.getPlatform(), "Project"),
-				String.format("%s/%s/%s/","..","app", this.adapter.getPlatform()),
+				String.format("%s/%s/%s/", Harmony.pathTemplate, this.adapter.getPlatform(), "project"),
+				String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()),
 				true);
 
 		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace);
@@ -123,8 +123,8 @@ public class ProjectGenerator {
 		boolean result = false;
 		//Generate base folders & files
 		File dirProj = FileUtils.makeFolderRecursive(
-					String.format("%s/%s/%s/%s/", "..", this.adapter.getTemplate(), this.adapter.getPlatform(), "Project"),
-					String.format("%s/%s/%s/","..", Harmony.pathProject, this.adapter.getPlatform()),
+					String.format("%s/%s/%s/", Harmony.pathTemplate , this.adapter.getPlatform(), "Project"),
+					String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()),
 							true);
 		if(dirProj.exists() && dirProj.listFiles().length!=0)
 			result = true;
