@@ -56,7 +56,9 @@
         description="Generate Java classes documentation" >
         <echo message="Generating javadocs to directory ${doc.rel-dir}" />
         <delete dir="${doc.rel-dir}" />
-        <javadoc destdir="${doc.rel-dir}" sourcepath="">
+        <javadoc destdir="${doc.rel-dir}" sourcepath="" 
+        	excludepackagenames="com.tactfactory.mda.test" 
+        	defaultexcludes="yes">
             <fileset dir="${src.rel-dir}" includes="**/*.java"/>
             <classpath refid="project.classpath" />
         </javadoc>
@@ -86,6 +88,7 @@
             debug="${compile.debug}"
             debuglevel="${compile.debuglevel}"
             includeantruntime="false"
+        	excludes="**/com/tactfactory/mda/test/**"
         >
             <compilerarg line="" /> <!-- "-Xlint:all", "-Xlint:all,-path", "-Xlint:all,-path,-unchecked" -->
             <classpath refid="project.classpath" />

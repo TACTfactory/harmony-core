@@ -1,7 +1,5 @@
 package com.tactfactory.mda.template;
 
-import com.tactfactory.mda.Harmony;
-
 public abstract class TagConstant {
 	//Project markers
 	public final static String PROJECT_NAMESPACE = "project_namespace";

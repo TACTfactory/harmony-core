@@ -127,11 +127,12 @@ public class FileUtils {
 		ArrayList<String> result = null;
 		String line = null;
 		DataInputStream in = null;
+		BufferedReader br = null;
 
 		try {
 			result = new ArrayList<String>();
 			in = new DataInputStream(new FileInputStream(file));
-			BufferedReader br = new BufferedReader(new InputStreamReader(in));
+			br = new BufferedReader(new InputStreamReader(in));
 			
 			while ((line = br.readLine()) != null) {
 				result.add(line);
@@ -141,6 +142,7 @@ public class FileUtils {
 		} finally {
 			try {
 				in.close();
+				br.close();
 			} catch (IOException e) { /* ignore it */ }
 		}
 		return result;
