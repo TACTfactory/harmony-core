@@ -19,7 +19,6 @@ public final class RimAdapter extends BaseAdapter {
 		this.platform	= "rim";
 		this.resource 	= "res";
 		this.source 	= "src";
-		//this.template 	= "tpl";
 	}
 
 	/* (non-Javadoc)

@@ -7,10 +7,12 @@ public class OsUtil {
 	private OsUtil() {
 	}
 
+	/** Return Os name */
 	public static String getOsName() {
 		return System.getProperty("os.name", "unknown");
 	}
 
+	/** Return Platform type (win32, linux, solaris, mac, or generic) */
 	public static String platform() {
 		String osname = System.getProperty("os.name", "generic").toLowerCase();
 		if (osname.startsWith("windows")) {

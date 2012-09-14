@@ -2,7 +2,7 @@ package com.tactfactory.mda;
 
 import com.google.common.base.Strings;
 
-public enum TargetPlateforme {
+public enum TargetPlatform {
 	ALL		(0),
 	WEB 	(1005),
 	ANDROID (2004),
@@ -20,7 +20,7 @@ public enum TargetPlateforme {
 	private static final String STRING_WINPHONE = "winphone";
 
 	private final int value;
-	TargetPlateforme (int value) {
+	TargetPlatform (int value) {
 		this.value = value;
 	}
 	public int getValue() {
@@ -57,20 +57,20 @@ public enum TargetPlateforme {
 		return result;
 	}
 	
-	public static TargetPlateforme parse(String target) {
-		TargetPlateforme result = TargetPlateforme.ALL;;
+	public static TargetPlatform parse(String target) {
+		TargetPlatform result = TargetPlatform.ALL;;
 		
 		if (!Strings.isNullOrEmpty(target)) {
 			if (target.toLowerCase().equals(STRING_ANDROID))
-				result = TargetPlateforme.ANDROID;
+				result = TargetPlatform.ANDROID;
 			else
 				
 			if (target.toLowerCase().equals(STRING_IPHONE))
-				result = TargetPlateforme.IPHONE;
+				result = TargetPlatform.IPHONE;
 			else
 				
 			if (target.toLowerCase().equals(STRING_WEB))
-				result = TargetPlateforme.WEB;
+				result = TargetPlatform.WEB;
 		}
 		
 		return result;

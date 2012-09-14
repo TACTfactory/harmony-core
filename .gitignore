@@ -11,4 +11,4 @@ local.properties
 .settings/*
 
 /app/*
-
+/lib/junit.jar

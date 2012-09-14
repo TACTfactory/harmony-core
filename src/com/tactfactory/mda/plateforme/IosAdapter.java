@@ -19,7 +19,6 @@ public final class IosAdapter extends BaseAdapter {
 		this.platform	= "ios";
 		this.resource 	= "res";
 		this.source 	= "src";
-		//this.template 	= "tpl";
 	}
 
 

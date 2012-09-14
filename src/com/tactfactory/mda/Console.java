@@ -20,7 +20,7 @@ public class Console extends Harmony {
 	 */
 	public static void main(String[] args) throws Exception {
 		Harmony.isConsole = true;
-		System.out.print("Harmony version 0.1.0\n");
+		System.out.println(Harmony.VERSION);
 
 		// Check if has a parameter
 		if (args.length == 0) {
@@ -36,25 +36,27 @@ public class Console extends Harmony {
 					"\t--no-interaction -n Do not ask any interactive question.\n" + 
 					"\t--shell\t\t -s Launch the shell.\n" + 
 					"\t--env\t\t -e The Environment name.\n" + 
-					"\t--no-debug \t    Switches off debug mode.");
-			
+					"\t--no-debug \t    Switches off debug mode.\n\n");
+
 			//System.out.print("Usage : console testBundle:com/tactfactory/mdatest/android:User");
+			System.out.println("Tips : please use 'list' command to display available commands!");
 			throw new Exception("Usage Exception, please launch help !");
 			
 		} else {
 			// Extract command
 			String[] cmd = args[0].split(":");
+			System.out.println(cmd);
 			
 			// Extract require command
-			String bunddle = cmd[0];
+			String bundle  = cmd[0];
 			String subject = cmd[1];
 			String action  = cmd[2];
-			String plateformeTmp = "";
+			String platformTmp = "";
 			
 			// Extract optional command
 			if (cmd.length > 3)
-				plateformeTmp = cmd[3];
-			TargetPlateforme plateforme = TargetPlateforme.parse(plateformeTmp);
+				platformTmp = cmd[3];
+			TargetPlatform platform = TargetPlatform.parse(platformTmp);
 			
 			// Extract parameters
 			String[] arg = args[1].split("\\");
@@ -81,8 +83,7 @@ public class Console extends Harmony {
 				}
 			}
 
-			harmony.findAndExecute(String.format("%s:%s:%s", cmd[0], cmd[1], cmd[2]));
-			
+			harmony.findAndExecute(String.format("%s:%s:%s", bundle, subject, action));
 		}
 	}
 	

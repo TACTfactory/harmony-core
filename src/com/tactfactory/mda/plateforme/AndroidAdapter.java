@@ -20,7 +20,6 @@ public final class AndroidAdapter extends BaseAdapter {
 		this.platform	= "android";
 		this.resource 	= "res";
 		this.source 	= "src";
-		//this.template 	= "tpl";
 		
 		// MVC
 		//this.model 		= "entity";

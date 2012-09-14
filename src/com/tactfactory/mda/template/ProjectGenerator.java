@@ -44,6 +44,12 @@ public class ProjectGenerator {
 		this.isWritable = isWritable;
 	}
 	
+	/**
+	 * Update Project File merge template & datamodel
+	 * 
+	 * @param destFile File to update
+	 * @param templateFile Template File to use
+	 */ 
 	public void updateProjectFile(File destFile, String templateFile) {
 
 		Configuration cfg = new Configuration();
@@ -78,6 +84,10 @@ public class ProjectGenerator {
 		}	
 	}
 	
+	/**
+	 * Make Platform specific Project Structure
+	 * @return success to make the platform project folder
+	 */
 	public boolean makeProject(){
 		boolean result = false;
 		if(this.adapter.getPlatform().equals("android")) {
@@ -95,12 +105,16 @@ public class ProjectGenerator {
 		
 		return result;
 	}
-	
+
+	/**
+	 * Make Android Project Structure
+	 * @return success to make the platform project folder
+	 */
 	private boolean makeProjectAndroid(){
 		boolean result = false;
 		
 		File dirProj = FileUtils.makeFolderRecursive(
-				String.format("%s/%s/%s/", Harmony.pathTemplate, this.adapter.getPlatform(), "project"),
+				String.format("%s/%s/%s/", Harmony.pathTemplate, this.adapter.getPlatform(), this.adapter.getProject()),
 				String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()),
 				true);
 
@@ -118,12 +132,16 @@ public class ProjectGenerator {
 		}
 		return result;
 	}
-	
+
+	/**
+	 * Make IOS Project Structure
+	 * @return success to make the platform project folder
+	 */
 	private boolean makeProjectIOS(){
 		boolean result = false;
 		//Generate base folders & files
 		File dirProj = FileUtils.makeFolderRecursive(
-					String.format("%s/%s/%s/", Harmony.pathTemplate , this.adapter.getPlatform(), "Project"),
+					String.format("%s/%s/%s/", Harmony.pathTemplate , this.adapter.getPlatform(), this.adapter.getProject()),
 					String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()),
 							true);
 		if(dirProj.exists() && dirProj.listFiles().length!=0)
@@ -131,19 +149,31 @@ public class ProjectGenerator {
 		
 		return result;
 	}
-	
+
+	/**
+	 * Make RIM Project Structure
+	 * @return success to make the platform project folder
+	 */
 	private boolean makeProjectRIM(){
 		boolean result = false;
 		
 		return result;
 	}
-	
+
+	/**
+	 * Make Windows Phone Project Structure
+	 * @return success to make the platform project folder
+	 */
 	private boolean makeProjectWinPhone(){
 		boolean result = false;
 		
 		return result;
 	}
-	
+
+	/**
+	 * Remove Platform specific Project Structure
+	 * @return success to make the platform project folder
+	 */
 	public boolean removeProject(){
 		boolean result = false;
 		File dirproj = new File(String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()));

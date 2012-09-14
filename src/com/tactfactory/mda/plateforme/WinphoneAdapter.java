@@ -19,7 +19,6 @@ public final class WinphoneAdapter extends BaseAdapter {
 		this.platform	= "winphone";
 		this.resource 	= "res";
 		this.source 	= "src";
-		//this.template 	= "tpl";
 	}
 
 	/* (non-Javadoc)

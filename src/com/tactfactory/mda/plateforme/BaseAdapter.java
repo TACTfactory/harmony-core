@@ -20,7 +20,6 @@ public abstract class BaseAdapter {
 	protected String platform;
 	protected String resource;
 	protected String source;
-	//protected String template;
 
 	// MVC
 	protected String model		= "entity";
@@ -135,13 +134,6 @@ public abstract class BaseAdapter {
 	}
 
 	/**
-	 * @return the template
-	 */
-	/*public final String getTemplate() {
-		return template;
-	}*/
-
-	/**
 	 * @return the model
 	 */
 	public final String getModel() {
@@ -196,13 +188,6 @@ public abstract class BaseAdapter {
 	public final void setSource(String source) {
 		this.source = source;
 	}
-
-	/**
-	 * @param template the template to set
-	 */
-	/*public final void setTemplate(String template) {
-		this.template = template;
-	}*/
 
 	/**
 	 * @param model the model to set
