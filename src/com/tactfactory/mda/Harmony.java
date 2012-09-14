@@ -35,6 +35,7 @@ import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.command.RouterCommand;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.OsUtil;
 
 /** Harmony main class */
 public class Harmony {
@@ -54,6 +55,10 @@ public class Harmony {
 	public static String projectName;
 	public static String projectNameSpace;
 	public static String androidSdkPath;
+	
+	private static final String DEFAULT_PROJECT_NAME = "toto";
+	private static final String DEFAULT_PROJECT_NAMESPACE = "com.tactfactory.toto";
+	
 	public static boolean isConsole = false;
 
 	
@@ -119,6 +124,76 @@ public class Harmony {
 	/** Select the proper command class */
 	public BaseCommand getCommand(Class<?> commandName) {
 		return this.bootstrap.get(commandName);
+	}
+
+	/**
+	 * Prompt Project Name to the user
+	 */
+	public static void initProjectName()
+	{
+		if (Strings.isNullOrEmpty(Harmony.projectName)) {
+			String projectName = Harmony.getUserInput("Please enter your Project Name ["+DEFAULT_PROJECT_NAME+"]:");
+			if(projectName!=null && projectName.length()!=0)
+				Harmony.projectName = projectName;
+			else
+				Harmony.projectName = DEFAULT_PROJECT_NAME;
+		}
+	}
+	
+	/**
+	 * Prompt Project Name Space to the user
+	 */
+	public static void initProjectNameSpace()
+	{
+		if (Strings.isNullOrEmpty(Harmony.projectNameSpace)) {
+			boolean good = false;
+			while(!good)
+			{
+				String projectNameSpace = Harmony.getUserInput("Please enter your Project NameSpace ["+DEFAULT_PROJECT_NAMESPACE+"]:");
+				if(projectNameSpace!=null && projectNameSpace.length()!=0) {
+					if(projectNameSpace.endsWith(Harmony.projectName)){
+						Harmony.projectNameSpace = projectNameSpace.replaceAll("\\.", "/");
+						good = true;
+					} else {
+						System.out.println("The NameSpace has to end with Project Name !");
+					}
+				}
+				else {
+					Harmony.projectNameSpace = DEFAULT_PROJECT_NAMESPACE.replaceAll("\\.", "/");
+					good=true;
+				}
+			}
+		}
+	}
+
+	/**
+	 * Prompt Project Android SDK Path to the user
+	 */
+	public static void initProjectAndroidSdkPath()
+	{
+		if (Strings.isNullOrEmpty(Harmony.androidSdkPath)) {
+			String sdkPath = Harmony.getUserInput("Please enter AndroidSDK full path [/root/android-sdk/]:");
+			if(sdkPath!=null && sdkPath.length()!=0){
+				Harmony.androidSdkPath = sdkPath;
+			} else {
+				if(OsUtil.isWindows()) {
+					if(!OsUtil.isX64()) {
+						System.out.println("Detected: OS Windows x86");
+						Harmony.androidSdkPath = String.format("%s/%s/","C:/Program Files (x86)","android-sdk");
+					} else if(OsUtil.isX64()) {
+						System.out.println("Detected: OS Windows x64");
+						Harmony.androidSdkPath = String.format("%s/%s/","C:/Program Files","android-sdk");
+					} else {
+						System.out.println("Detected: OS Windows unkn arch");
+						Harmony.androidSdkPath = String.format("%s/%s/","C:/Program Files","android-sdk");
+					}
+				}
+				else if(OsUtil.isLinux()) {
+					System.out.println("Detected: OS Linux");
+					Harmony.androidSdkPath = "/root/android-sdk/";
+				}
+			}
+		}
 	}
 
 	/**
