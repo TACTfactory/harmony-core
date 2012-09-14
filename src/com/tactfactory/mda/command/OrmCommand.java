@@ -11,10 +11,12 @@ package com.tactfactory.mda.command;
 import japa.parser.ast.CompilationUnit;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.JavaAdapter;
+import com.tactfactory.mda.parser.JavaModelParser;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.ActivityGenerator;
@@ -24,23 +26,45 @@ import com.tactfactory.mda.template.SQLiteGenerator;
 import com.tactfactory.mda.template.WebServiceGenerator;
 
 public class OrmCommand extends BaseCommand {
-	public static String GENERATE_ENTITY 	= "orm:generate:entity";
-	public static String GENERATE_ENTITIES	= "orm:generate:entities";
-	public static String GENERATE_FORM 		= "orm:generate:form";
-	public static String GENERATE_CRUD 		= "orm:generate:crud";
 	
-	protected ArrayList<CompilationUnit> entities;
+	//bundle name
+	public final static String BUNDLE = "orm";
+	public final static String SUBJECT = "generate";
+	
+	//actions
+	public final static String ACTION_ENTITY = "entity";
+	public final static String ACTION_ENTITIES = "entities";
+	public final static String ACTION_FORM = "form";
+	public final static String ACTION_CRUD = "crud";
+	
+	//commands
+	public static String GENERATE_ENTITY 	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITY;
+	public static String GENERATE_ENTITIES	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITIES;
+	public static String GENERATE_FORM 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_FORM;
+	public static String GENERATE_CRUD 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_CRUD;
+	
+	//internal
+	protected HashMap<String,String> command_args;
 	protected BaseAdapter adapter = new AndroidAdapter();
+	protected JavaModelParser javaModelParser = new JavaModelParser();
 
 	protected void generateForm() {
 
 	}
 	
-	protected void generateEntity() {
-		JavaAdapter adapter = new JavaAdapter();
-		adapter.parse(this.entities.get(0));
+	protected void generateEntity() throws Exception {
+		
+		if(this.command_args.size()!=0){
+			if(this.command_args.containsKey("filename"))
+				this.javaModelParser.loadEntity(this.command_args.get("filename"));
+			else
+				throw new Exception("No file name  to parse specified!");
+		}
+		
+		JavaAdapter javaAdapter = new JavaAdapter();
+		javaAdapter.parse(this.javaModelParser.getEntities().get(0));
 
-		ArrayList<ClassMetadata> metas = adapter.getMetas();
+		ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
 		try {
 			new ActivityGenerator(metas.get(0), this.adapter).generateAllAction();
 			new AdapterGenerator(metas.get(0), this.adapter).generate();
@@ -52,11 +76,13 @@ public class OrmCommand extends BaseCommand {
 	protected void generateEntities() {
 		// Info Log
 		System.out.print(">> Analyse Models...\n");
-				
-		JavaAdapter adapter = new JavaAdapter();
+
+		this.javaModelParser.loadEntities();
 		
-		for (CompilationUnit mclass : this.entities) {
-			adapter.parse(mclass);
+		JavaAdapter javaAdapter = new JavaAdapter();
+		
+		for (CompilationUnit mclass : this.javaModelParser.getEntities()) {
+			javaAdapter.parse(mclass);
 		}
 		
 		// Debug Log
@@ -64,7 +90,7 @@ public class OrmCommand extends BaseCommand {
 			System.out.print("\n");
 		
 		// Make View
-		ArrayList<ClassMetadata> metas = adapter.getMetas();
+		ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
 		for (ClassMetadata meta : metas) {
 			try {
 				new ActivityGenerator(meta, this.adapter).generateAllAction();
@@ -74,7 +100,7 @@ public class OrmCommand extends BaseCommand {
 				e.printStackTrace();
 			}
 		}
-		
+
 		// Make Database
 		try {
 			new SQLiteGenerator(metas, this.adapter).generateDatabase();
@@ -98,11 +124,23 @@ public class OrmCommand extends BaseCommand {
 	}
 
 	@Override
-	public void execute(String action, ArrayList<CompilationUnit> entities) {
+	public void execute(String action, String[] args, String option) {
 		System.out.print("> ORM Generator\n");
-		this.entities = entities;
 
+		//manage arguments
+		if(args.length!=0 && args!=null){
+			this.command_args = new HashMap<String,String>();
+			for(String arg : args){
+				if(arg.startsWith("--")){
+					String[] key = arg.split("=");
+					if(key.length>1)
+						this.command_args.put(key[0].substring(2),key[1]);
+				}
+			}
+		}
+		
 		if (action.equals(GENERATE_ENTITY)) {
+			//TODO Transmit entity filename from console args !!!!
 			this.generateEntity();
 		} else
 			

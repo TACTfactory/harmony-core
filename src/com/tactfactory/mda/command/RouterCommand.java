@@ -8,12 +8,16 @@
  */
 package com.tactfactory.mda.command;
 
-import japa.parser.ast.CompilationUnit;
-
-import java.util.ArrayList;
-
 public class RouterCommand extends BaseCommand {
 
+	public final static String BUNDLE = "router";
+	public final static String SUBJECT_GENERATE = "generate";
+	public final static String SUBJECT_DEBUG = "debug";
+	public final static String ACTION_MANIFEST = "manifest";
+	
+	public final static String ROUTER_DEBUG = BUNDLE + SEPARATOR + SUBJECT_DEBUG;
+	public final static String ROUTER_GENERATE_MANIFEST = BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_MANIFEST;
+	
 	protected void routerDebug() {
 	}
 
@@ -23,12 +27,12 @@ public class RouterCommand extends BaseCommand {
 	@Override
 	public void summary() {
 		System.out.print("\n> ROUTER Bundle\n");
-		System.out.print("router:debug\t => List all URI\n");
-		System.out.print("router:generate:manifest\t => Generate Manifest\n");
+		System.out.print("\t"+ROUTER_DEBUG+"\t => List all URI\n");
+		System.out.print("\t"+ROUTER_GENERATE_MANIFEST+"\t => Generate Manifest\n");
 	}
 
 	@Override
-	public void execute(String action, ArrayList<CompilationUnit> entities) {
+	public void execute(String action, String[] args, String option) {
 		// TODO Auto-generated method stub
 		
 	}

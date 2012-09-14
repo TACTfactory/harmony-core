@@ -8,9 +8,6 @@
  */
 package com.tactfactory.mda.command;
 
-import japa.parser.ast.CompilationUnit;
-
-import java.util.ArrayList;
 
 public class FosCommand extends BaseCommand {
 
@@ -35,13 +32,11 @@ public class FosCommand extends BaseCommand {
 	@Override
 	public void summary() {
 		// TODO Auto-generated method stub
-
 	}
 
 	@Override
-	public void execute(String action, ArrayList<CompilationUnit> entities) {
+	public void execute(String action, String[] args, String option) {
 		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

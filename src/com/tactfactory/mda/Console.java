@@ -63,11 +63,11 @@ public class Console extends Harmony {
 			
 			//projectFolder = argProject[0];
 			String patchNameSpace = "app/android/" + args[1] + "/entity/";
-				
+
 			Harmony harmony = new Harmony();
 
 			if (args.length == 3) {
-				harmony.parseJavaFile(patchNameSpace + args[2] + ".java");
+				//harmony.parseJavaFile(patchNameSpace + args[2] + ".java");
 			} else {
 				FilenameFilter filter = new FilenameFilter() {
 				    public boolean accept(File dir, String name) {
@@ -79,11 +79,11 @@ public class Console extends Harmony {
 				String[] files = dir.list(filter);
 				
 				for (String filename : files) {
-					harmony.parseJavaFile(patchNameSpace + filename);
+					//harmony.parseJavaFile(patchNameSpace + filename);
 				}
 			}
 
-			harmony.findAndExecute(String.format("%s:%s:%s", bundle, subject, action));
+			harmony.findAndExecute(String.format("%s:%s:%s", bundle, subject, action),null,null);
 		}
 	}
 	

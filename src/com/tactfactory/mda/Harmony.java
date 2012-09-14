@@ -8,12 +8,6 @@
  */
 package com.tactfactory.mda;
 
-import japa.parser.JavaParser;
-import japa.parser.ParseException;
-import japa.parser.ast.CompilationUnit;
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -60,10 +54,8 @@ public class Harmony {
 	private static final String DEFAULT_PROJECT_NAMESPACE = "com.tactfactory.toto";
 	
 	public static boolean isConsole = false;
-
 	
 	public HashMap<Class<?>, BaseCommand> bootstrap = new HashMap<Class<?>, BaseCommand>();
-	protected ArrayList<CompilationUnit> entities = new ArrayList<CompilationUnit>();
 
 	public Harmony() throws Exception {
 
@@ -88,7 +80,7 @@ public class Harmony {
 		
 		System.out.println("Current Working Path: "+new File(".").getCanonicalPath());
 
-		if (Harmony.projectNameSpace == null || Harmony.projectNameSpace.equals("")) {
+		if (Strings.isNullOrEmpty(Harmony.projectNameSpace)) {
 			
 			// get project namespace and project name from AndroidManifest.xml
 			File manifest = new File(Harmony.pathProject+Harmony.projectFolder+"AndroidManifest.xml");
@@ -121,9 +113,60 @@ public class Harmony {
 		}
 	}
 	
-	/** Select the proper command class */
+	/**
+	 * Select the proper command class
+	 * 
+	 * @param commandName Class command name
+	 * @return BaseCommand object
+	 */
 	public BaseCommand getCommand(Class<?> commandName) {
 		return this.bootstrap.get(commandName);
+	}
+
+	/**
+	 * Check and launch command in proper command class
+	 * 
+	 * @param action Command to execute
+	 * @param args Commands arguments
+	 * @param option Console option (ANSI,Debug,...)
+	 */
+	public void findAndExecute(String action, String[] args, String option) {
+		
+		// Select Action and launch
+		boolean isfindAction = false;
+		for (BaseCommand baseCommand : this.bootstrap.values()) {
+			if (baseCommand.isAvailableCommand(action)) {
+				baseCommand.execute(action,args,option);
+				isfindAction = true;
+			}
+		}
+
+		// No found action
+		if (!isfindAction) {
+			this.getCommand(GeneralCommand.class).execute(GeneralCommand.LIST,null,null);
+		}
+	}
+
+	/**
+	 * Generic user console prompt
+	 * 
+	 * @param promptMessage message to display
+	 * @return input user input
+	 */
+	public static String getUserInput(String promptMessage)
+	{
+		String input = null;
+		//  open up standard input
+		System.out.print(promptMessage);
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+		try {
+			input = br.readLine();
+		} catch (IOException e) {
+			e.getMessage();
+		}
+		return input;
 	}
 
 	/**
@@ -197,94 +240,10 @@ public class Harmony {
 	}
 
 	/**
-	 * @return the entities
+	 * Check initialization of project by searching nameSpace in androidmanifest.xml
+	 *
+	 * @return true if success
 	 */
-	public ArrayList<CompilationUnit> getEntities() {
-		return entities;
-	}
-
-	/**
-	 * @param entities the entities to set
-	 */
-	public void setEntities(ArrayList<CompilationUnit> entities) {
-		this.entities = entities;
-	}
-
-	/** Check and launch command in proper command class */
-	public void findAndExecute(String action) {
-		String[] actions = {action};
-		this.findAndExecute(actions);
-	}
-	public void findAndExecute(String[] action) {
-		
-		// Select Action and launch
-		boolean isfindAction = false;
-		for (BaseCommand baseCommand : this.bootstrap.values()) {
-			if (baseCommand.isAvailableCommand(action[0])) {
-				baseCommand.execute(action[0], entities);
-				isfindAction = true;
-			}
-		}
-
-		// No found action
-		if (!isfindAction) {
-			this.getCommand(GeneralCommand.class).execute(GeneralCommand.LIST, null);
-		}
-	}
-
-	/** Load Entity */
-	public void parseJavaFile(String filename) {
-        FileInputStream in = null;
-        CompilationUnit cu = null;
-        
-		try {
-			// creates an input stream for the file to be parsed
-			in = new FileInputStream(Console.pathProject + filename);
-
-            // parse the file
-			cu = JavaParser.parse(in);
-        } catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-            try {
-				in.close();
-			} catch (IOException e) {
-				if (Harmony.DEBUG)
-					e.printStackTrace();
-			}
-        }
-		
-		//if (cu != null)
-		//	this.entities.add(cu);
-	}
-
-	/**
-	 * Generic user console prompt
-	 * 
-	 * @param promptMessage message to display
-	 * @return input user input
-	 */
-	public static String getUserInput(String promptMessage)
-	{
-		String input = null;
-		//  open up standard input
-		System.out.print(promptMessage);
-
-		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
-		try {
-			input = br.readLine();
-		} catch (IOException e) {
-			e.getMessage();
-		}
-		return input;
-	}
-
-	/** Check initialization of project by searching nameSpace in androidmanifest.xml */
 	public static boolean isProjectInit()
 	{
 		boolean result = false;
@@ -299,7 +258,12 @@ public class Harmony {
 		return result;
 	}
 	
-	/** Extract Project NameSpace from AndroidManifest file */
+	/**
+	 * Extract Project NameSpace from AndroidManifest file
+	 * 
+	 * @param manifest Manifest File
+	 * @return Project Name Space
+	 */
 	public static String getNameSpaceFromManifest(File manifest)
 	{
 		String projnamespace = null;
@@ -326,7 +290,12 @@ public class Harmony {
 		return projnamespace;
 	}
 	
-	/** Extract Android SDK Path from local.properties file */
+	/**
+	 * Extract Android SDK Path from local.properties file
+	 * 
+	 * @param local_prop Local.properties File
+	 * @return Android SDK Path
+	 */
 	public static String getSdkDirFromProject(File local_prop)
 	{
 		String result = null;

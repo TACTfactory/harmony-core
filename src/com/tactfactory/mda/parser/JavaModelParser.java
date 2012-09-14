@@ -22,11 +22,26 @@ public class JavaModelParser {
 	private BaseAdapter adapter = new AndroidAdapter();
 	private String entityPath;
 	
-	
+	/** Constructor */
 	public JavaModelParser() {
 
 		this.entityPath = this.adapter.getSourcePath() + Harmony.projectNameSpace + "entity/";
-		
+	}
+	
+	/**
+	 * Load entity from one specified file
+	 * 
+	 * @param filename
+	 */
+	public void loadEntity(String filename)
+	{
+		this.parseJavaFile(this.entityPath + filename);
+	}
+	
+	/**
+	 * Load entities from all files found in entity folder
+	 */
+	public void loadEntities() {
 		FilenameFilter filter = new FilenameFilter() {
 		    public boolean accept(File dir, String name) {
 		        return name.endsWith(".java");
@@ -40,7 +55,7 @@ public class JavaModelParser {
 		}
 	}
 
-	/** Load Entity */
+	/** Parse java file to load entity */
 	private void parseJavaFile(String filename) {
         FileInputStream in = null;
         CompilationUnit cu = null;
@@ -69,4 +84,19 @@ public class JavaModelParser {
 		if (cu != null)
 			this.entities.add(cu);
 	}
+
+	/**
+	 * @return the entities
+	 */
+	public ArrayList<CompilationUnit> getEntities() {
+		return entities;
+	}
+
+	/**
+	 * @param entities the entities to set
+	 */
+	public void setEntities(ArrayList<CompilationUnit> entities) {
+		this.entities = entities;
+	}
+
 }

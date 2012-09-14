@@ -8,10 +8,6 @@
  */
 package com.tactfactory.mda.command;
 
-import japa.parser.ast.CompilationUnit;
-
-import java.util.ArrayList;
-
 /** Common Command structure */
 public abstract class BaseCommand {
 	protected static final String SEPARATOR = ":";
@@ -21,7 +17,7 @@ public abstract class BaseCommand {
 	 * @param action to realize
 	 * @param entities of the project
 	 */
-	public abstract void execute(String action, ArrayList<CompilationUnit> entities);
+	public abstract void execute(String action, String[] args, String option);
 
 	/** Help of the bundle */
 	public abstract void summary();

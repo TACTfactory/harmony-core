@@ -336,7 +336,7 @@ public class ProjectCommand extends BaseCommand {
 
 	/** @see BaseCommand#execute(String, ArrayList) */
 	@Override
-	public void execute(String action, ArrayList<CompilationUnit> entities) {
+	public void execute(String action, String[] args, String option) {
 		
 		if (action.equals(INIT_ANDROID)) {
 			this.initAndroid();

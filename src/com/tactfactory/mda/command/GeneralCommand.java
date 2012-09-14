@@ -8,10 +8,6 @@
  */
 package com.tactfactory.mda.command;
 
-import japa.parser.ast.CompilationUnit;
-
-import java.util.ArrayList;
-
 import com.tactfactory.mda.Harmony;
 
 public class GeneralCommand extends BaseCommand {
@@ -43,7 +39,7 @@ public class GeneralCommand extends BaseCommand {
 	}
 
 	@Override
-	public void execute(String action, ArrayList<CompilationUnit> entities) {
+	public void execute(String action, String[] args, String option) {
 		if (action.equals(LIST)) {
 			this.list();
 		} else
