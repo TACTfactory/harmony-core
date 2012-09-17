@@ -49,7 +49,7 @@ public class ProjectTest extends CommonTest {
 
 	@Test
 	public void initAndroid() {
-		this.harmony.findAndExecute(ProjectCommand.INIT_ANDROID);
+		this.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		
 		File manifestFile = new File(String.format("%s/android/AndroidManifest.xml", Harmony.pathProject));
 		assertTrue(manifestFile.exists());
@@ -57,7 +57,7 @@ public class ProjectTest extends CommonTest {
 	
 	@Test
 	public void initIphone() {
-		this.harmony.findAndExecute(ProjectCommand.INIT_IOS);
+		this.harmony.findAndExecute(ProjectCommand.INIT_IOS, null, null);
 		
 		// TODO add asserts (for folder/file exist..)
 	}
@@ -65,7 +65,7 @@ public class ProjectTest extends CommonTest {
 	@Ignore
 	@Test
 	public void initRim() {
-		this.harmony.findAndExecute(ProjectCommand.INIT_RIM);
+		this.harmony.findAndExecute(ProjectCommand.INIT_RIM, null, null);
 		
 		// TODO add asserts (for folder/file exist..)
 	}
@@ -73,7 +73,7 @@ public class ProjectTest extends CommonTest {
 	@Ignore
 	@Test
 	public void initWinphone() {
-		this.harmony.findAndExecute(ProjectCommand.INIT_WINPHONE);
+		this.harmony.findAndExecute(ProjectCommand.INIT_WINPHONE, null, null);
 		
 		// TODO add asserts (for folder/file exist..)
 	}
