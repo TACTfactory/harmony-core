@@ -26,8 +26,6 @@ public class OrmUpdateTest extends CommonTest {
 		String srcDir = String.format("src/%s", pathNameSpace);
 		
 		FileUtils.copyDirectory(new File(srcDir),new File(destDir));
-		
-		
 	}
 
 	/**

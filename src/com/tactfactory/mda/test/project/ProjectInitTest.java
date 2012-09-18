@@ -8,8 +8,6 @@
  */
 package com.tactfactory.mda.test.project;
 
-import static org.junit.Assert.*;
-
 import java.io.File;
 
 import org.junit.After;
@@ -52,8 +50,10 @@ public class ProjectInitTest extends CommonTest {
 	public void initAndroid() {
 		this.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		
-		File manifestFile = new File(String.format("%s/android/AndroidManifest.xml", Harmony.pathProject));
-		assertTrue(manifestFile.exists());
+		this.isFindFile("android/AndroidManifest.xml");
+		this.isFindFile("android/src");
+		this.isFindFile("android/src/com/tactfactory/mda/test/demact/entity");
+		this.isFindFile("android/res/values/config.xml");
 	}
 	
 	@Test

@@ -8,6 +8,10 @@
  */
 package com.tactfactory.mda.test;
 
+import static org.junit.Assert.assertTrue;
+
+import java.io.File;
+
 import com.tactfactory.mda.Harmony;
 
 /**
@@ -34,5 +38,10 @@ public abstract class CommonTest {
 	 * @throws java.lang.Exception
 	 */
 	public void tearDown() throws Exception {
+	}
+	
+	protected void isFindFile(String fileName) {
+		File file = new File(String.format("%s/%s", Harmony.pathProject, fileName));
+		assertTrue(file.exists());
 	}
 }

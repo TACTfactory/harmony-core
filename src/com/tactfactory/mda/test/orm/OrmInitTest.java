@@ -1,8 +1,7 @@
 package com.tactfactory.mda.test.orm;
 
-import static org.junit.Assert.assertTrue;
-
 import java.io.File;
+import java.io.IOException;
 
 import org.junit.After;
 import org.junit.Before;
@@ -22,15 +21,6 @@ public class OrmInitTest extends CommonTest {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		
-		this.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
-		String pathNameSpace = Harmony.projectNameSpace.replace(".", "//");
-		String destDir = String.format("%s/android/src/%s", Harmony.pathProject, pathNameSpace);
-		String srcDir = String.format("src/%s", pathNameSpace);
-		
-		FileUtils.copyDirectory(new File(srcDir),new File(destDir));
-		
-		
 	}
 
 	/**
@@ -40,13 +30,22 @@ public class OrmInitTest extends CommonTest {
 	@Override
 	public void tearDown() throws Exception {
 		super.tearDown();
-		
-		// File dirproj = new File(String.format("%s/android", Harmony.pathProject));
-		//TODO : enable !! FileUtils.deleteRecursive(dirproj);
 	}
 	
 	@Test
 	public void all() {
+		this.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+		
+		String pathNameSpace = Harmony.projectNameSpace.replace(".", "//");
+		String destDir = String.format("%s/android/src/%s", Harmony.pathProject, pathNameSpace);
+		String srcDir = String.format("src/%s", pathNameSpace);
+		
+		try {
+			FileUtils.copyDirectory(new File(srcDir),new File(destDir));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 		this.harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
 		
 		this.modelPost();
@@ -160,10 +159,5 @@ public class OrmInitTest extends CommonTest {
 	public void viewUserShow() {
 		this.isFindFile("android/src/com/tactfactory/mda/test/demact/view/user/UserShowActivity.java");
 		this.isFindFile("android/src/com/tactfactory/mda/test/demact/view/user/UserShowFragment.java");
-	}
-	
-	private void isFindFile(String fileName) {
-		File file = new File(String.format("%s/%s", Harmony.pathProject, fileName));
-		assertTrue(file.exists());
 	}
 }

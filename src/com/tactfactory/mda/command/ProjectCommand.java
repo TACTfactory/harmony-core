@@ -8,11 +8,8 @@
  */
 package com.tactfactory.mda.command;
 
-import japa.parser.ast.CompilationUnit;
-
 import java.util.ArrayList;
 
-import com.google.common.base.Strings;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.TargetPlatform;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
@@ -21,7 +18,6 @@ import com.tactfactory.mda.plateforme.IosAdapter;
 import com.tactfactory.mda.plateforme.RimAdapter;
 import com.tactfactory.mda.plateforme.WinphoneAdapter;
 import com.tactfactory.mda.template.ProjectGenerator;
-import com.tactfactory.mda.utils.OsUtil;
 
 /**
  * Structure project generator
