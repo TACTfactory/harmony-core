@@ -1,4 +1,4 @@
-package com.tactfactory.mda.test.jobeet;
+package com.tactfactory.mda.test.jobeet.entity;
 
 import java.util.ArrayList;
 import java.util.Date;

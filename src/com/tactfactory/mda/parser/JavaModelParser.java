@@ -25,7 +25,7 @@ public class JavaModelParser {
 	/** Constructor */
 	public JavaModelParser() {
 
-		this.entityPath = this.adapter.getSourcePath() + Harmony.projectNameSpace + "entity/";
+		this.entityPath = this.adapter.getSourcePath() + Harmony.projectNameSpace.replace(".", "/") + "/entity/";
 	}
 	
 	/**
@@ -62,7 +62,7 @@ public class JavaModelParser {
         
 		try {
 			// creates an input stream for the file to be parsed
-			in = new FileInputStream(Harmony.pathProject + filename);
+			in = new FileInputStream(filename);
 
             // parse the file
 			cu = JavaParser.parse(in);

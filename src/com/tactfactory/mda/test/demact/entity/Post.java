@@ -1,4 +1,4 @@
-package com.tactfactory.mda.test.demact;
+package com.tactfactory.mda.test.demact.entity;
 
 import java.util.ArrayList;
 import java.util.Date;

@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.test;
+package com.tactfactory.mda.test.project;
 
 import static org.junit.Assert.*;
 
@@ -19,12 +19,13 @@ import org.junit.Test;
 
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.command.ProjectCommand;
+import com.tactfactory.mda.test.CommonTest;
 import com.tactfactory.mda.utils.FileUtils;
 
 /**
  *
  */
-public class ProjectTest extends CommonTest {
+public class ProjectInitTest extends CommonTest {
 
 	/**
 	 * @throws java.lang.Exception
