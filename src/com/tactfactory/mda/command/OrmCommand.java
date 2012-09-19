@@ -129,7 +129,12 @@ public class OrmCommand extends BaseCommand {
 		this.commandArgs = Console.parseCommandArgs(args);
 		if (action.equals(GENERATE_ENTITY)) {
 			//TODO Transmit entity filename from console args !!!!
-			this.generateEntity();
+			try {
+				this.generateEntity();
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		} else
 			
 		if (action.equals(GENERATE_ENTITIES)) {

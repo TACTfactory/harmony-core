@@ -8,6 +8,8 @@
  */
 package com.tactfactory.mda.command;
 
+import japa.parser.ast.CompilationUnit;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 

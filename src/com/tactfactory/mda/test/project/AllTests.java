@@ -1,13 +1,14 @@
-package com.tactfactory.mda.test;
+package com.tactfactory.mda.test.project;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
+
 @RunWith(Suite.class)
-@SuiteClasses({ 
-	com.tactfactory.mda.test.project.AllTests.class, 
-	com.tactfactory.mda.test.orm.AllTests.class })
+@SuiteClasses({
+	ProjectInitTest.class })
+                
 public class AllTests {
 
 }

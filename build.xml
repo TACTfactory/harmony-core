@@ -81,7 +81,7 @@
     <property name="compile.debuglevel" value="lines,vars,source" />
 
     <target name="compile" depends="init,prepare-resources">
-    <!-- description="Compile source code" -->
+    <!-- description="Compile source code" excludes="**/com/tactfactory/mda/test/**" -->
         <javac
             srcdir="${src.rel-dir}"
             destdir="${build.rel-dir}"
@@ -116,7 +116,7 @@
             <formatter type="plain" usefile="false" />
             <batchtest>
                 <fileset dir="${tests.src.rel-dir}"
-                    includes="**/*Test.java">
+                    includes="**/test/*.java">
                 </fileset>
             </batchtest>
         </junit>

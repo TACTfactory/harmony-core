@@ -21,11 +21,11 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 
 /** Manipulate File tools */
-public class FileUtils {
+public class FileUtils extends org.apache.commons.io.FileUtils {
 	/** Create a new file if doesn't exist (and path)
 	 * 
 	 * @param filename Full path of file
-	 * @return File instance
+	 * @return File instance 
 	 */
 	public static File makeFile(String filename) {
 		File file = new File(filename);

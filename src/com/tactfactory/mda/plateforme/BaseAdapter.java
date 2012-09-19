@@ -82,7 +82,7 @@ public abstract class BaseAdapter {
 	}
 	
 	public final String getTemplateRessourcePath() {
-		return String.format("%s/%s/", Harmony.pathTemplate, this.getResource() );
+		return String.format("%s/%s/%s", Harmony.pathTemplate, this.platform, this.getResource() );
 	}
 	
 	public final String getRessourceLayoutPath() {
@@ -98,7 +98,7 @@ public abstract class BaseAdapter {
 	}
 	
 	public final String getManifestPathFile() {
-		return String.format("%s/%s", Harmony.pathProject, this.getManifest() );
+		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getManifest() );
 	}
 	
 	public final String getTemplateManifestPathFile() {
