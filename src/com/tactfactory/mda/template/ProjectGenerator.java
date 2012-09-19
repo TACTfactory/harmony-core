@@ -32,7 +32,7 @@ public class ProjectGenerator {
 		this.adapter	= adapter;
 
 		// Make class
-		this.datamodel.put(TagConstant.PROJECT_NAMESPACE, Harmony.projectNameSpace.replaceAll("/", "\\."));
+		this.datamodel.put(TagConstant.PROJECT_NAMESPACE, Harmony.projectNameSpace);
 		this.datamodel.put(TagConstant.ANDROID_SDK_DIR, Harmony.androidSdkPath);
 		this.datamodel.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
         this.datamodel.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
@@ -118,7 +118,7 @@ public class ProjectGenerator {
 				String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()),
 				true);
 
-		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("/", "\\."));
+		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/"));
 		
 		if(dirProj.exists() && dirProj.listFiles().length!=0)
 		{

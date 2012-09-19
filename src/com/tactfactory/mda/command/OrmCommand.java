@@ -46,7 +46,7 @@ public class OrmCommand extends BaseCommand {
 	
 	//internal
 	protected BaseAdapter adapter = new AndroidAdapter();
-	protected JavaModelParser javaModelParser = new JavaModelParser();
+	protected JavaModelParser javaModelParser;
 
 	protected void generateForm() {
 
@@ -54,6 +54,7 @@ public class OrmCommand extends BaseCommand {
 	
 	protected void generateEntity() {
 		
+		this.javaModelParser = new JavaModelParser();
 		if(this.commandArgs.size()!=0){
 			if(this.commandArgs.containsKey("filename")){
 				this.javaModelParser.loadEntity(this.commandArgs.get("filename"));
@@ -76,6 +77,7 @@ public class OrmCommand extends BaseCommand {
 		// Info Log
 		System.out.print(">> Analyse Models...\n");
 
+		this.javaModelParser = new JavaModelParser();
 		this.javaModelParser.loadEntities();
 		
 		JavaAdapter javaAdapter = new JavaAdapter();

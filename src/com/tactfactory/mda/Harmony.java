@@ -83,7 +83,7 @@ public class Harmony {
 		if (Strings.isNullOrEmpty(Harmony.projectNameSpace)) {
 			
 			// get project namespace and project name from AndroidManifest.xml
-			File manifest = new File(Harmony.pathProject+Harmony.projectFolder+"AndroidManifest.xml");
+			File manifest = new File(String.format("%s/%s/%s",Harmony.pathProject,Harmony.projectFolder,"AndroidManifest.xml"));
 			if(manifest.exists()) {
 				Harmony.projectNameSpace = Harmony.getNameSpaceFromManifest(manifest);
 
@@ -94,7 +94,7 @@ public class Harmony {
 				System.out.println("NameSpace not defined, please init the project with 'project:init:all'");
 			}
 			// get android sdk dir from local.properties
-			File local_prop = new File(Harmony.pathProject+Harmony.projectFolder+"local.properties");
+			File local_prop = new File(String.format("%s/%s/%s",Harmony.pathProject,Harmony.projectFolder,"local.properties"));
 			if(local_prop.exists())
 				Harmony.androidSdkPath = Harmony.getSdkDirFromProject(local_prop);
 			else

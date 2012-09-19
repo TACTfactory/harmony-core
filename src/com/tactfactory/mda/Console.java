@@ -108,9 +108,8 @@ public class Console extends Harmony {
 	 */
 	public static HashMap<String,String> parseCommandArgs(String[] args){
 		
-		HashMap<String,String> commandArgs = null;
-		if(args.length!=0 && args!=null){
-			commandArgs = new HashMap<String,String>();
+		HashMap<String,String> commandArgs = new HashMap<String,String>();
+		if(args!=null && args.length!=0){
 			for(String arg : args){
 				if(arg.startsWith("--")){
 					String[] key = arg.split("=");

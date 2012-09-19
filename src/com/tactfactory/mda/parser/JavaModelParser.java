@@ -25,7 +25,7 @@ public class JavaModelParser {
 	/** Constructor */
 	public JavaModelParser() {
 
-		this.entityPath = this.adapter.getSourcePath() + Harmony.projectNameSpace.replace(".", "/") + "/entity/";
+		this.entityPath = this.adapter.getSourcePath() + Harmony.projectNameSpace + "/entity/";
 	}
 	
 	/**
