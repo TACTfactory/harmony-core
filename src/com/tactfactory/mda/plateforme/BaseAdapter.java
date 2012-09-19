@@ -60,7 +60,7 @@ public abstract class BaseAdapter {
 	 */
 	public abstract String getViewComponentEdit(FieldMetadata field);
 	
-	// Utils	
+	// Utils
 	public final String getSourcePath() {
 		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getSource() );
 	}
@@ -70,11 +70,11 @@ public abstract class BaseAdapter {
 	}
 	
 	public final String getTemplateSourceControlerPath() {
-		return String.format("%s/%s/", this.getTemplateSourcePath(), this.getController() );
+		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getController() );
 	}
 	
 	public final String getTemplateSourceProviderPath() {
-		return String.format("%s/%s/", this.getTemplateSourcePath(), this.getProvider() );
+		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getProvider() );
 	}
 	
 	public final String getRessourcePath() {
@@ -82,19 +82,15 @@ public abstract class BaseAdapter {
 	}
 	
 	public final String getTemplateRessourcePath() {
-		return String.format("%s/%s/%s", Harmony.pathTemplate, this.platform, this.getResource() );
+		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getResource() );
 	}
 	
 	public final String getRessourceLayoutPath() {
-		return String.format("%s/%s/", this.getRessourcePath(), this.getView() );
+		return String.format("%s/%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getResource(), this.getView() );
 	}
 	
 	public final String getTemplateRessourceLayoutPath() {
-		return String.format("%s/%s/", this.getTemplateRessourcePath(), this.getView() );
-	}
-	
-	public final String getTemplateProjectPath() {
-		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getProject() );
+		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getResource(), this.getView() );
 	}
 	
 	public final String getManifestPathFile() {
@@ -102,9 +98,13 @@ public abstract class BaseAdapter {
 	}
 	
 	public final String getTemplateManifestPathFile() {
-		return String.format("%s/%s", this.getTemplateProjectPath(), this.getManifest() );
+		return String.format("%s/%s/%s/%s", Harmony.pathTemplate, this.getPlatform(), this.getProject(), this.getManifest() );
 	}
 
+	public final String getTemplateProjectPath() {
+		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getProject() );
+	}
+	
 	// Getter and Setter
 	/**
 	 * @return the project

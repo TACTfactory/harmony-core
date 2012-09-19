@@ -195,7 +195,11 @@ public class ActivityGenerator {
 		System.out.print(">> Generate CRUD view for " +  meta.name);
 
 		try {
+
+			// TODO Caution, freemarker template folder must have been specified
+			// freemarker bug with '../' folder so, just remove first '.'
 			Configuration cfg = new Configuration();						// Initialization of template engine
+			cfg.setDirectoryForTemplateLoading(new File("../"));
 
 			if (this.isWritable ) {
 				// Info
@@ -235,14 +239,16 @@ public class ActivityGenerator {
 						this.adapter.getSourcePath(),
 						PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
 						String.format(filename, this.meta.name)));
-
+		
 		// Debug Log
 		if (Harmony.DEBUG)
 			System.out.print("\tGenerate Source : " + file.getAbsoluteFile() + "\n"); 
 
 		// Create
 		Template tpl = cfg.getTemplate(
-				this.adapter.getTemplateSourceControlerPath() + template);		// Load template file in engine
+				String.format("%s%s",
+						this.adapter.getTemplateSourceControlerPath().substring(1),
+						template));		// Load template file in engine
 
 		OutputStreamWriter output = new FileWriter(file);
 		tpl.process(datamodel, output);											// Process datamodel (with previous template file), and output to output file
@@ -273,7 +279,7 @@ public class ActivityGenerator {
 		// Create
 		Template tpl = cfg.getTemplate(
 				String.format("%s/%s",
-						this.adapter.getTemplateRessourceLayoutPath(),
+						this.adapter.getTemplateRessourceLayoutPath().substring(1),
 						template));
 
 		OutputStreamWriter output = new FileWriter(file);

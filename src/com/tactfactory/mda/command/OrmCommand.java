@@ -53,7 +53,6 @@ public class OrmCommand extends BaseCommand {
 	}
 	
 	protected void generateEntity() {
-		
 		this.javaModelParser = new JavaModelParser();
 		if(this.commandArgs.size()!=0){
 			if(this.commandArgs.containsKey("filename")){
@@ -78,8 +77,12 @@ public class OrmCommand extends BaseCommand {
 		System.out.print(">> Analyse Models...\n");
 
 		this.javaModelParser = new JavaModelParser();
+		try{
 		this.javaModelParser.loadEntities();
-		
+		}
+		catch(Exception e){
+			e.printStackTrace();
+		}
 		JavaAdapter javaAdapter = new JavaAdapter();
 		
 		for (CompilationUnit mclass : this.javaModelParser.getEntities()) {
@@ -89,9 +92,9 @@ public class OrmCommand extends BaseCommand {
 		// Debug Log
 		if (Harmony.DEBUG)
 			System.out.print("\n");
-		
-		// Make View
+
 		ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
+		// Make View		
 		for (ClassMetadata meta : metas) {
 			try {
 				new ActivityGenerator(meta, this.adapter).generateAllAction();
@@ -130,7 +133,6 @@ public class OrmCommand extends BaseCommand {
 
 		this.commandArgs = Console.parseCommandArgs(args);
 		if (action.equals(GENERATE_ENTITY)) {
-			//TODO Transmit entity filename from console args !!!!
 			try {
 				this.generateEntity();
 			} catch (Exception e) {

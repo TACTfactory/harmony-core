@@ -75,6 +75,7 @@ public class AdapterGenerator {
 		
 		try {
 			Configuration cfg = new Configuration();
+			cfg.setDirectoryForTemplateLoading(new File("../"));
 			
 			this.makeSourceControler(cfg, 
 					"TemplateAdapterBase.java", 
@@ -119,7 +120,7 @@ public class AdapterGenerator {
 			
 			// Create
 			Template tpl = cfg.getTemplate(
-					this.adapter.getTemplateSourceProviderPath() + template);
+					this.adapter.getTemplateSourceProviderPath().substring(1) + template);
 			
 			OutputStreamWriter output = new FileWriter(file);
 			tpl.process(datamodel, output);

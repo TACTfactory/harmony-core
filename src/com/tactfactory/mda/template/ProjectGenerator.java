@@ -126,7 +126,7 @@ public class ProjectGenerator {
 			for(int i=0;i<dirProj.listFiles().length;i++)
 			{
 				if(dirProj.listFiles()[i].isFile()) {
-					this.updateProjectFile(dirProj.listFiles()[i],dirProj.listFiles()[i].getName());
+					this.updateProjectFile(dirProj.listFiles()[i], dirProj.listFiles()[i].getName());
 				}
 			}
 		}

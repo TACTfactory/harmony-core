@@ -41,7 +41,7 @@ public class JavaModelParser {
 	/**
 	 * Load entities from all files found in entity folder
 	 */
-	public void loadEntities() {
+	public void loadEntities() throws Exception {
 		FilenameFilter filter = new FilenameFilter() {
 		    public boolean accept(File dir, String name) {
 		        return name.endsWith(".java");
@@ -49,9 +49,12 @@ public class JavaModelParser {
 		};
 		File dir = new File(this.entityPath);
 		String[] files = dir.list(filter);
-
-		for (String filename : files) {
-			this.parseJavaFile(this.entityPath + filename);
+		if(files!=null) {
+			for (String filename : files) {
+				this.parseJavaFile(this.entityPath + filename);
+			}
+		} else {
+			throw new Exception("No entity files found!");
 		}
 	}
 

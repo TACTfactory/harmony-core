@@ -69,6 +69,7 @@ public class SQLiteGenerator {
 		
 		try {
 			Configuration cfg = new Configuration();
+			cfg.setDirectoryForTemplateLoading(new File("../"));
 			
 			this.makeSourceData(cfg, 
 					"TemplateSqliteOpenHelper.java", 
@@ -105,7 +106,7 @@ public class SQLiteGenerator {
 		
 		// Create
 		Template tpl = cfg.getTemplate(
-				this.adapter.getTemplateSourceProviderPath() + template);
+				this.adapter.getTemplateSourceProviderPath().substring(1) + template);
 		
 		OutputStreamWriter output = new FileWriter(file);
 		tpl.process(datamodel, output);
