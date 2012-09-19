@@ -10,6 +10,12 @@ package com.tactfactory.mda;
 
 import java.io.File;
 import java.io.FilenameFilter;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+
+import com.google.common.base.Strings;
 
 /** Harmony console class*/
 public class Console extends Harmony {
@@ -39,51 +45,51 @@ public class Console extends Harmony {
 					"\t--no-debug \t    Switches off debug mode.\n\n");
 
 			//System.out.print("Usage : console testBundle:com/tactfactory/mdatest/android:User");
-			System.out.println("Tips : please use 'list' command to display available commands!");
+			System.out.println("Tips : please use 'list' command to display available commands!\n");
 			throw new Exception("Usage Exception, please launch help !");
 			
 		} else {
+
+			String command = null;
+				String bundle = null;
+				String subject = null;
+				String action = null;
+			String[] commandArgs = null;
+			String commandOption = null;
+			String platformTmp = "";
+			TargetPlatform platform = null;
+			
 			// Extract command
 			String[] cmd = args[0].split(":");
-			System.out.println(cmd);
-			
-			// Extract require command
-			String bundle  = cmd[0];
-			String subject = cmd[1];
-			String action  = cmd[2];
-			String platformTmp = "";
-			
-			// Extract optional command
-			if (cmd.length > 3)
-				platformTmp = cmd[3];
-			TargetPlatform platform = TargetPlatform.parse(platformTmp);
-			
-			// Extract parameters
-			String[] arg = args[1].split("\\");
-			
-			//projectFolder = argProject[0];
-			String patchNameSpace = "app/android/" + args[1] + "/entity/";
 
-			Harmony harmony = new Harmony();
-
-			if (args.length == 3) {
-				//harmony.parseJavaFile(patchNameSpace + args[2] + ".java");
-			} else {
-				FilenameFilter filter = new FilenameFilter() {
-				    public boolean accept(File dir, String name) {
-				        return name.endsWith(".java");
-				    }
-				};
-				
-				File dir = new File(Console.pathProject + patchNameSpace);
-				String[] files = dir.list(filter);
-				
-				for (String filename : files) {
-					//harmony.parseJavaFile(patchNameSpace + filename);
-				}
+			// Extract required command
+			if(cmd.length==3) {
+				bundle  = cmd[0];
+				subject = cmd[1];
+				action  = cmd[2];
+				command = String.format("%s:%s:%s", bundle, subject, action);
 			}
-
-			harmony.findAndExecute(String.format("%s:%s:%s", bundle, subject, action),null,null);
+			// Extract optional command
+			else if(cmd.length>3){
+				platformTmp = cmd[3];
+				platform = TargetPlatform.parse(platformTmp);
+			}
+			else {
+				command = args[0];
+			}
+			
+			// Extract option command arguments
+			if(args.length>1){
+				// Remove command
+				List<String> list = new ArrayList<String>(Arrays.asList(args));
+				list.remove(0);
+				commandArgs = list.toArray(new String[args.length-1]);	
+			}
+			
+			Harmony harmony = new Harmony();
+			harmony.initialize();
+			
+			harmony.findAndExecute(command,commandArgs,commandOption);
 		}
 	}
 	
@@ -92,5 +98,27 @@ public class Console extends Harmony {
 		
 		// Extend bootstrap
 		//this.bootstrap.put(key, value)
+	}
+	
+	/**
+	 * Extract commandArgs and put them in an HashMap
+	 * 
+	 * @param args String array of command arguments with their identifier
+	 * @return HashMap<String,String> arguments
+	 */
+	public static HashMap<String,String> parseCommandArgs(String[] args){
+		
+		HashMap<String,String> commandArgs = null;
+		if(args.length!=0 && args!=null){
+			commandArgs = new HashMap<String,String>();
+			for(String arg : args){
+				if(arg.startsWith("--")){
+					String[] key = arg.split("=");
+					if(key.length>1)
+						commandArgs.put(key[0].substring(2),key[1]);
+				}
+			}
+		}
+		return commandArgs;
 	}
 }

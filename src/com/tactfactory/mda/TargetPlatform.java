@@ -58,7 +58,7 @@ public enum TargetPlatform {
 	}
 	
 	public static TargetPlatform parse(String target) {
-		TargetPlatform result = TargetPlatform.ALL;;
+		TargetPlatform result = TargetPlatform.ALL;
 		
 		if (!Strings.isNullOrEmpty(target)) {
 			if (target.toLowerCase().equals(STRING_ANDROID))

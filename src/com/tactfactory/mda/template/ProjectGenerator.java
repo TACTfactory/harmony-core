@@ -118,7 +118,7 @@ public class ProjectGenerator {
 				String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()),
 				true);
 
-		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace);
+		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("/", "\\."));
 		
 		if(dirProj.exists() && dirProj.listFiles().length!=0)
 		{

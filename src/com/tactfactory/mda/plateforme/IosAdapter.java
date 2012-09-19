@@ -16,6 +16,7 @@ public final class IosAdapter extends BaseAdapter {
 
 	public IosAdapter()
 	{
+		this.project	= "project";
 		this.platform	= "ios";
 		this.resource 	= "res";
 		this.source 	= "src";

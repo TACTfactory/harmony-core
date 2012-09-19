@@ -13,6 +13,7 @@ import japa.parser.ast.CompilationUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.tactfactory.mda.Console;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.JavaAdapter;
@@ -44,7 +45,6 @@ public class OrmCommand extends BaseCommand {
 	public static String GENERATE_CRUD 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_CRUD;
 	
 	//internal
-	protected HashMap<String,String> command_args;
 	protected BaseAdapter adapter = new AndroidAdapter();
 	protected JavaModelParser javaModelParser = new JavaModelParser();
 
@@ -52,24 +52,23 @@ public class OrmCommand extends BaseCommand {
 
 	}
 	
-	protected void generateEntity() throws Exception {
+	protected void generateEntity() {
 		
-		if(this.command_args.size()!=0){
-			if(this.command_args.containsKey("filename"))
-				this.javaModelParser.loadEntity(this.command_args.get("filename"));
-			else
-				throw new Exception("No file name  to parse specified!");
-		}
-		
-		JavaAdapter javaAdapter = new JavaAdapter();
-		javaAdapter.parse(this.javaModelParser.getEntities().get(0));
-
-		ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
-		try {
-			new ActivityGenerator(metas.get(0), this.adapter).generateAllAction();
-			new AdapterGenerator(metas.get(0), this.adapter).generate();
-		} catch (Exception e) {
-			e.printStackTrace();
+		if(this.commandArgs.size()!=0){
+			if(this.commandArgs.containsKey("filename")){
+				this.javaModelParser.loadEntity(this.commandArgs.get("filename"));
+			
+				JavaAdapter javaAdapter = new JavaAdapter();
+				javaAdapter.parse(this.javaModelParser.getEntities().get(0));
+	
+				ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
+				try {
+					new ActivityGenerator(metas.get(0), this.adapter).generateAllAction();
+					new AdapterGenerator(metas.get(0), this.adapter).generate();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
 		}
 	}
 	
@@ -127,18 +126,7 @@ public class OrmCommand extends BaseCommand {
 	public void execute(String action, String[] args, String option) {
 		System.out.print("> ORM Generator\n");
 
-		//manage arguments
-		if(args.length!=0 && args!=null){
-			this.command_args = new HashMap<String,String>();
-			for(String arg : args){
-				if(arg.startsWith("--")){
-					String[] key = arg.split("=");
-					if(key.length>1)
-						this.command_args.put(key[0].substring(2),key[1]);
-				}
-			}
-		}
-		
+		this.commandArgs = Console.parseCommandArgs(args);
 		if (action.equals(GENERATE_ENTITY)) {
 			//TODO Transmit entity filename from console args !!!!
 			this.generateEntity();

@@ -40,11 +40,11 @@ public class Harmony {
 	/** Singleton of console */
 	public static Harmony instance;
 	/** Full path of project ( app folder in Harmony root ) */
-	public static String pathProject = "../app/";
+	public static String pathProject = "../app";
 	
-	public static String pathTemplate = "../tpl/";
+	public static String pathTemplate = "../tpl";
 	/** Project space */
-	public static String projectFolder = "android/";
+	public static String projectFolder = "android";
 
 	public static String projectName;
 	public static String projectNameSpace;

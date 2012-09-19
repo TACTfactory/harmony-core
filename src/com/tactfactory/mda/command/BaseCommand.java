@@ -8,14 +8,18 @@
  */
 package com.tactfactory.mda.command;
 
+import java.util.HashMap;
+
 /** Common Command structure */
 public abstract class BaseCommand {
+	protected HashMap<String,String> commandArgs;
 	protected static final String SEPARATOR = ":";
 
 	/** Execute specific action
 	 * 
 	 * @param action to realize
-	 * @param entities of the project
+	 * @param args action arguments
+	 * @param option of console
 	 */
 	public abstract void execute(String action, String[] args, String option);
 

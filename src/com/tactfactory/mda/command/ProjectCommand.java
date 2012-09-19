@@ -8,11 +8,11 @@
  */
 package com.tactfactory.mda.command;
 
-import japa.parser.ast.CompilationUnit;
-
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.google.common.base.Strings;
+import com.tactfactory.mda.Console;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.TargetPlatform;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
@@ -21,7 +21,6 @@ import com.tactfactory.mda.plateforme.IosAdapter;
 import com.tactfactory.mda.plateforme.RimAdapter;
 import com.tactfactory.mda.plateforme.WinphoneAdapter;
 import com.tactfactory.mda.template.ProjectGenerator;
-import com.tactfactory.mda.utils.OsUtil;
 
 /**
  * Structure project generator
@@ -73,14 +72,29 @@ public class ProjectCommand extends BaseCommand {
 			while(!userHasConfirmed)
 			{
 				System.out.println(">> Project Parameters");
-				Harmony.initProjectName();
-				Harmony.initProjectNameSpace();
-				Harmony.initProjectAndroidSdkPath();
+				
+				//Project Name
+				if(!this.commandArgs.containsKey("name"))
+					Harmony.initProjectName();
+				else
+					Harmony.projectName = this.commandArgs.get("name");
+				
+				//Project NameSpace
+				if(!this.commandArgs.containsKey("namespace"))
+					Harmony.initProjectNameSpace();
+				else
+					Harmony.projectNameSpace = this.commandArgs.get("namespace");
+				
+				//Android sdk path
+				if(!this.commandArgs.containsKey("androidsdk"))
+					Harmony.initProjectAndroidSdkPath();
+				else
+					Harmony.androidSdkPath = this.commandArgs.get("androidsdk");
 				
 				if(Harmony.DEBUG) {
-					System.out.println("Project Name: " 	 + Harmony.projectName);
-					System.out.println("Project NameSpace: " + Harmony.projectNameSpace);
-					System.out.println("Android SDK Path: "+ Harmony.androidSdkPath);
+					System.out.println("Project Name: "			+ Harmony.projectName);
+					System.out.println("Project NameSpace: "	+ Harmony.projectNameSpace);
+					System.out.println("Android SDK Path: "		+ Harmony.androidSdkPath);
 				}
 				
 				if (Harmony.isConsole) {
@@ -91,6 +105,7 @@ public class ProjectCommand extends BaseCommand {
 						Harmony.projectName = null;
 						Harmony.projectNameSpace = null;
 						Harmony.androidSdkPath = null;
+						this.commandArgs.clear();
 					}
 				} else {
 					userHasConfirmed = true;
@@ -334,10 +349,11 @@ public class ProjectCommand extends BaseCommand {
 		System.out.print("\t"+REMOVE_ALL+"\t => Remove All project directories\n");
 	}
 
-	/** @see BaseCommand#execute(String, ArrayList) */
+	/** @see BaseCommand#execute(String, String[], String) */
 	@Override
 	public void execute(String action, String[] args, String option) {
-		
+
+		this.commandArgs = Console.parseCommandArgs(args);
 		if (action.equals(INIT_ANDROID)) {
 			this.initAndroid();
 		} else
