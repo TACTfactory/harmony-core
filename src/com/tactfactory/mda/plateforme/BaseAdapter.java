@@ -24,6 +24,7 @@ public abstract class BaseAdapter {
 	// MVC
 	protected String model		= "entity";
 	protected String view 		= "layout";
+	protected String values		= "value";
 	protected String controller = "view";
 	protected String data		= "data";
 	protected String provider	= "provider";
@@ -92,13 +93,20 @@ public abstract class BaseAdapter {
 	public final String getTemplateRessourceLayoutPath() {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getResource(), this.getView() );
 	}
+
+	public final String getRessourceValuesPath() {
+		return String.format("%s/%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getResource(), this.getValues() );
+	}
 	
+	public final String getTemplateRessourceValuesPath() {
+		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getResource(), this.getValues() );
+	}
 	public final String getManifestPathFile() {
 		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getManifest() );
 	}
 	
 	public final String getTemplateManifestPathFile() {
-		return String.format("%s/%s/%s/%s", Harmony.pathTemplate, this.getPlatform(), this.getProject(), this.getManifest() );
+		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getProject(), this.getManifest() );
 	}
 
 	public final String getTemplateProjectPath() {
@@ -225,17 +233,17 @@ public abstract class BaseAdapter {
 	}
 
 	/**
-	 * @return the provider
-	 */
-	public final String getProvider() {
-		return provider;
-	}
-
-	/**
 	 * @param data the data to set
 	 */
 	public final void setData(String data) {
 		this.data = data;
+	}
+
+	/**
+	 * @return the provider
+	 */
+	public final String getProvider() {
+		return provider;
 	}
 
 	/**
@@ -244,4 +252,19 @@ public abstract class BaseAdapter {
 	public final void setProvider(String provider) {
 		this.provider = provider;
 	}
+	
+	/**
+	 * @return the values
+	 */
+	public final String getValues() {
+		return values;
+	}
+
+	/**
+	 * @param values the values to set
+	 */
+	public final void setValues(String values) {
+		this.values = values;
+	}
+
 }

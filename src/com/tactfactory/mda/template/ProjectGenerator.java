@@ -32,7 +32,8 @@ public class ProjectGenerator {
 		this.adapter	= adapter;
 
 		// Make class
-		this.datamodel.put(TagConstant.PROJECT_NAMESPACE, Harmony.projectNameSpace);
+		this.datamodel.put(TagConstant.PROJECT_NAME, Harmony.projectName);
+		this.datamodel.put(TagConstant.PROJECT_NAMESPACE, Harmony.projectNameSpace.replaceAll("/","\\."));
 		this.datamodel.put(TagConstant.ANDROID_SDK_DIR, Harmony.androidSdkPath);
 		this.datamodel.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
         this.datamodel.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
@@ -63,7 +64,7 @@ public class ProjectGenerator {
 
 		// Debug Log
 		if (Harmony.DEBUG)
-			System.out.print("\tGenerate Project File : " + destFile.getAbsoluteFile() + "\n"); 
+			System.out.print("\tGenerate Project File : " + destFile.getAbsolutePath() + "\n"); 
 
 		// Create
 		Template tpl;
@@ -119,6 +120,9 @@ public class ProjectGenerator {
 				true);
 
 		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/"));
+		
+		this.updateProjectFile(new File(this.adapter.getRessourceValuesPath()+"configs.xml"),
+				this.adapter.getTemplateRessourceValuesPath().substring(1)+"configs.xml");
 		
 		if(dirProj.exists() && dirProj.listFiles().length!=0)
 		{
