@@ -22,7 +22,9 @@ public class JavaModelParser {
 	private BaseAdapter adapter = new AndroidAdapter();
 	private String entityPath;
 	
-	/** Constructor */
+	/**
+	 * Constructor
+	 */
 	public JavaModelParser() {
 
 		this.entityPath = this.adapter.getSourcePath() + Harmony.projectNameSpace + "/entity/";
@@ -31,15 +33,15 @@ public class JavaModelParser {
 	/**
 	 * Load entity from one specified file
 	 * 
-	 * @param filename
+	 * @param filename or path to file to parse
 	 */
 	public void loadEntity(String filename)
 	{
-		this.parseJavaFile(this.entityPath + filename);
+		this.parseJavaFile(filename);
 	}
 	
 	/**
-	 * Load entities from all files found in entity folder
+	 * Load entities files found in entity folder
 	 */
 	public void loadEntities() throws Exception {
 		FilenameFilter filter = new FilenameFilter() {
@@ -58,7 +60,11 @@ public class JavaModelParser {
 		}
 	}
 
-	/** Parse java file to load entity */
+	/**
+	 * Parse java file to load entities parameters
+	 * 
+	 * @param filename or path to the java file to parse
+	 */
 	private void parseJavaFile(String filename) {
         FileInputStream in = null;
         CompilationUnit cu = null;

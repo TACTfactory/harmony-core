@@ -8,8 +8,6 @@
  */
 package com.tactfactory.mda;
 
-import java.io.File;
-import java.io.FilenameFilter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -78,14 +76,14 @@ public class Console extends Harmony {
 				command = args[0];
 			}
 			
-			// Extract option command arguments
+			// Extract optional command arguments
 			if(args.length>1){
-				// Remove command
 				List<String> list = new ArrayList<String>(Arrays.asList(args));
 				list.remove(0);
 				commandArgs = list.toArray(new String[args.length-1]);	
 			}
 			
+			// Harmony command launch
 			Harmony harmony = new Harmony();
 			harmony.initialize();
 			

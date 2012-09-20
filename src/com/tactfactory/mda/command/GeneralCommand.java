@@ -14,6 +14,9 @@ public class GeneralCommand extends BaseCommand {
 	public static String LIST = "list";
 	public static String HELP = "help";
 
+	/*
+	 * Display Help Message
+	 */
 	public void help() {
 		System.out.println("\nUsage:\n" +
 				"console [command[parameters]]\n");
@@ -23,6 +26,9 @@ public class GeneralCommand extends BaseCommand {
 		System.out.println("Please use 'console list' to display available commands !");
 	}
 
+	/*
+	 * Display list of All commands
+	 */
 	public void list() {
 
 		System.out.print("\nAvailable Commands:\n");

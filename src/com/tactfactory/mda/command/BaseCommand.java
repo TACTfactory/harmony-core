@@ -10,7 +10,9 @@ package com.tactfactory.mda.command;
 
 import java.util.HashMap;
 
-/** Common Command structure */
+/** 
+ * Common Command structure 
+ */
 public abstract class BaseCommand {
 	protected HashMap<String,String> commandArgs;
 	protected static final String SEPARATOR = ":";
@@ -23,7 +25,9 @@ public abstract class BaseCommand {
 	 */
 	public abstract void execute(String action, String[] args, String option);
 
-	/** Help of the bundle */
+	/**
+	 * Display Bundle commands summary
+	 */
 	public abstract void summary();
 	
 	/** Check availability of command

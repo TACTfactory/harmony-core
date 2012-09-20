@@ -35,6 +35,8 @@ public class ProjectGenerator {
 		this.datamodel.put(TagConstant.PROJECT_NAME, Harmony.projectName);
 		this.datamodel.put(TagConstant.PROJECT_NAMESPACE, Harmony.projectNameSpace.replaceAll("/","\\."));
 		this.datamodel.put(TagConstant.ANDROID_SDK_DIR, Harmony.androidSdkPath);
+		
+		this.datamodel.put(TagConstant.ANT_ANDROID_SDK_DIR, new TagConstant.AndroidSDK("${sdk.dir}"));
 		this.datamodel.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
         this.datamodel.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
 	}
@@ -44,27 +46,32 @@ public class ProjectGenerator {
 
 		this.isWritable = isWritable;
 	}
-	
+
 	/**
 	 * Update Project File merge template & datamodel
 	 * 
 	 * @param destFile File to update
 	 * @param templateFile Template File to use
 	 */ 
-	public void updateProjectFile(File destFile, String templateFile) {
+	public void updateProjectFile(String destPath, String templateFile) {
 
 		Configuration cfg = new Configuration();
 		
 		try {
-			cfg.setDirectoryForTemplateLoading(destFile.getParentFile());
+			cfg.setDirectoryForTemplateLoading(new File("../"));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 
+		File destFile = new File(destPath);
+		if(!destFile.exists())
+			destFile = FileUtils.makeFile(destPath);
+		
 		// Debug Log
 		if (Harmony.DEBUG)
 			System.out.print("\tGenerate Project File : " + destFile.getAbsolutePath() + "\n"); 
+		
 
 		// Create
 		Template tpl;
@@ -114,23 +121,28 @@ public class ProjectGenerator {
 	private boolean makeProjectAndroid(){
 		boolean result = false;
 		
+		//create project template structure
 		File dirProj = FileUtils.makeFolderRecursive(
 				String.format("%s/%s/%s/", Harmony.pathTemplate, this.adapter.getPlatform(), this.adapter.getProject()),
 				String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()),
 				true);
-
+		
+		// create project name space folders
 		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/"));
 		
-		this.updateProjectFile(new File(this.adapter.getRessourceValuesPath()+"configs.xml"),
+		// create configs.xml
+		this.updateProjectFile(this.adapter.getRessourceValuesPath()+"configs.xml",
 				this.adapter.getTemplateRessourceValuesPath().substring(1)+"configs.xml");
 		
+		// Update newly created files with datamodel
 		if(dirProj.exists() && dirProj.listFiles().length!=0)
 		{
 			result = true;
 			for(int i=0;i<dirProj.listFiles().length;i++)
 			{
 				if(dirProj.listFiles()[i].isFile()) {
-					this.updateProjectFile(dirProj.listFiles()[i], dirProj.listFiles()[i].getName());
+					this.updateProjectFile(dirProj.listFiles()[i].getAbsolutePath(),
+							this.adapter.getTemplateProjectPath().substring(1) + dirProj.listFiles()[i].getName());
 				}
 			}
 		}

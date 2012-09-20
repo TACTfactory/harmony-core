@@ -8,12 +8,6 @@
  */
 package com.tactfactory.mda.command;
 
-import japa.parser.ast.CompilationUnit;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import com.google.common.base.Strings;
 import com.tactfactory.mda.Console;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.TargetPlatform;
@@ -25,7 +19,7 @@ import com.tactfactory.mda.plateforme.WinphoneAdapter;
 import com.tactfactory.mda.template.ProjectGenerator;
 
 /**
- * Structure project generator
+ * Project Structure Generator
  * 
  * can :
  * <ul>

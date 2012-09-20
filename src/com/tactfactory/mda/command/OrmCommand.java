@@ -11,7 +11,6 @@ package com.tactfactory.mda.command;
 import japa.parser.ast.CompilationUnit;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import com.tactfactory.mda.Console;
 import com.tactfactory.mda.Harmony;
@@ -25,7 +24,18 @@ import com.tactfactory.mda.template.AdapterGenerator;
 import com.tactfactory.mda.template.ProviderGenerator;
 import com.tactfactory.mda.template.SQLiteGenerator;
 import com.tactfactory.mda.template.WebServiceGenerator;
-
+/**
+ * Project Custom Files Code Generator
+ * 
+ * use Entity files in name space folder
+ * it can :
+ * <ul>
+ * <li>Generate entities</li>
+ * <li>Generate form</li>
+ * <li>Generate CRUD functions</li>
+ * </ul>
+ *
+ */
 public class OrmCommand extends BaseCommand {
 	
 	//bundle name
@@ -52,6 +62,9 @@ public class OrmCommand extends BaseCommand {
 
 	}
 	
+	/*
+	 * Generate java code files from first parsed Entity
+	 */
 	protected void generateEntity() {
 		this.javaModelParser = new JavaModelParser();
 		if(this.commandArgs.size()!=0){
@@ -72,17 +85,22 @@ public class OrmCommand extends BaseCommand {
 		}
 	}
 	
+	/*
+	 * Generate java code files from parsed Entities
+	 */
 	protected void generateEntities() {
 		// Info Log
 		System.out.print(">> Analyse Models...\n");
 
-		this.javaModelParser = new JavaModelParser();
-		try{
-		this.javaModelParser.loadEntities();
-		}
-		catch(Exception e){
+		// Parse models and load entities in CompilationUnits
+		try {
+			this.javaModelParser = new JavaModelParser();
+			this.javaModelParser.loadEntities();
+		} catch(Exception e) {
 			e.printStackTrace();
 		}
+		
+		// Convert CompilationUnits entities to ClassMetaData
 		JavaAdapter javaAdapter = new JavaAdapter();
 		
 		for (CompilationUnit mclass : this.javaModelParser.getEntities()) {
@@ -93,8 +111,8 @@ public class OrmCommand extends BaseCommand {
 		if (Harmony.DEBUG)
 			System.out.print("\n");
 
+		// Generate views from MetaData
 		ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
-		// Make View		
 		for (ClassMetadata meta : metas) {
 			try {
 				new ActivityGenerator(meta, this.adapter).generateAllAction();
@@ -105,7 +123,7 @@ public class OrmCommand extends BaseCommand {
 			}
 		}
 
-		// Make Database
+		// Make Database from MetaData
 		try {
 			new SQLiteGenerator(metas, this.adapter).generateDatabase();
 			new ProviderGenerator();
@@ -114,6 +132,9 @@ public class OrmCommand extends BaseCommand {
 		}
 	}
 
+	/*
+	 * Generate Create,Read,Upload,Delete code functions
+	 */
 	protected void generateCrud() {
 
 	}

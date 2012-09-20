@@ -24,7 +24,7 @@ public abstract class BaseAdapter {
 	// MVC
 	protected String model		= "entity";
 	protected String view 		= "layout";
-	protected String values		= "value";
+	protected String values		= "values";
 	protected String controller = "view";
 	protected String data		= "data";
 	protected String provider	= "provider";

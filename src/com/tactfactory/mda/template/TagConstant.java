@@ -6,6 +6,9 @@ public abstract class TagConstant {
 	public final static String PROJECT_NAME = "project_name";
 	public final static String LOCAL_NAMESPACE = "local_namespace";
 	public final static String ANDROID_SDK_DIR = "sdk_dir";
+	
+	// Ant markers
+	public final static String ANT_ANDROID_SDK_DIR = "sdk";
 	public final static String OUT_CLASSES_ABS_DIR = "out_classes_absolute_dir";
 	public final static String OUT_DEX_INPUT_ABS_DIR = "out_dex_input_absolute_dir";
 	
@@ -18,4 +21,17 @@ public abstract class TagConstant {
 	public final static String SCHEMA = "schema";
 	public final static String ALIAS = "alias";
 	public final static String IDS = "ids";
+	
+	
+	public static class AndroidSDK {
+		private String dir;
+
+		public AndroidSDK(String dir){
+			this.dir = dir;
+		}
+		
+		public String getDir() {
+			return dir;
+		}
+	}
 }
