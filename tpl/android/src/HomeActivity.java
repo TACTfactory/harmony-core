@@ -1,4 +1,4 @@
-package ${namespace};
+package ${project_namespace};
 
 import android.app.Activity;
 import android.os.Bundle;

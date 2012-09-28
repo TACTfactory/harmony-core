@@ -34,7 +34,119 @@ public class Post {
     @Column(name="expires_at")	// type="datetime", 
     protected Date expiresAt;
 
-    public Post() {
+    /**
+	 * @return the id
+	 */
+	public final int getId() {
+		return id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public final void setId(int id) {
+		this.id = id;
+	}
+
+	/**
+	 * @return the title
+	 */
+	public final String getTitle() {
+		return title;
+	}
+
+	/**
+	 * @param title the title to set
+	 */
+	public final void setTitle(String title) {
+		this.title = title;
+	}
+
+	/**
+	 * @return the content
+	 */
+	public final String getContent() {
+		return content;
+	}
+
+	/**
+	 * @param content the content to set
+	 */
+	public final void setContent(String content) {
+		this.content = content;
+	}
+
+	/**
+	 * @return the owner
+	 */
+	public final User getOwner() {
+		return owner;
+	}
+
+	/**
+	 * @param owner the owner to set
+	 */
+	public final void setOwner(User owner) {
+		this.owner = owner;
+	}
+
+	/**
+	 * @return the comments
+	 */
+	public final ArrayList<Comment> getComments() {
+		return comments;
+	}
+
+	/**
+	 * @param comments the comments to set
+	 */
+	public final void setComments(ArrayList<Comment> comments) {
+		this.comments = comments;
+	}
+
+	/**
+	 * @return the createdAt
+	 */
+	public final Date getCreatedAt() {
+		return createdAt;
+	}
+
+	/**
+	 * @param createdAt the createdAt to set
+	 */
+	public final void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	/**
+	 * @return the updatedAt
+	 */
+	public final Date getUpdatedAt() {
+		return updatedAt;
+	}
+
+	/**
+	 * @param updatedAt the updatedAt to set
+	 */
+	public final void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
+	/**
+	 * @return the expiresAt
+	 */
+	public final Date getExpiresAt() {
+		return expiresAt;
+	}
+
+	/**
+	 * @param expiresAt the expiresAt to set
+	 */
+	public final void setExpiresAt(Date expiresAt) {
+		this.expiresAt = expiresAt;
+	}
+
+	public Post() {
     	this.createdAt = new Date();
     	this.updatedAt = new Date();
     }

@@ -31,9 +31,12 @@ public class ProjectGenerator {
 
 		this.adapter	= adapter;
 
+		String projectNameSpace = ""+Harmony.projectNameSpace;
+		projectNameSpace = projectNameSpace.replaceAll("/","\\.");
+		
 		// Make class
 		this.datamodel.put(TagConstant.PROJECT_NAME, Harmony.projectName);
-		this.datamodel.put(TagConstant.PROJECT_NAMESPACE, Harmony.projectNameSpace.replaceAll("/","\\."));
+		this.datamodel.put(TagConstant.PROJECT_NAMESPACE, projectNameSpace);
 		this.datamodel.put(TagConstant.ANDROID_SDK_DIR, Harmony.androidSdkPath);
 		
 		this.datamodel.put(TagConstant.ANT_ANDROID_SDK_DIR, new TagConstant.AndroidSDK("${sdk.dir}"));
@@ -70,7 +73,7 @@ public class ProjectGenerator {
 		
 		// Debug Log
 		if (Harmony.DEBUG)
-			System.out.print("\tGenerate Project File : " + destFile.getAbsolutePath() + "\n"); 
+			System.out.print("\tGenerate Project File : " + destFile.getPath() + "\n"); 
 		
 
 		// Create
@@ -129,10 +132,18 @@ public class ProjectGenerator {
 		
 		// create project name space folders
 		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/"));
-		
+
+		// create HomeActivity.java
+		this.updateProjectFile(this.adapter.getSourcePath()+Harmony.projectNameSpace.replaceAll("\\.","/")+"/HomeActivity.java",
+				this.adapter.getTemplateSourcePath().substring(1)+"HomeActivity.java");
+
 		// create configs.xml
 		this.updateProjectFile(this.adapter.getRessourceValuesPath()+"configs.xml",
 				this.adapter.getTemplateRessourceValuesPath().substring(1)+"configs.xml");
+		
+		// create main.xml
+		this.updateProjectFile(this.adapter.getRessourceLayoutPath()+"main.xml",
+				this.adapter.getTemplateRessourceLayoutPath().substring(1)+"main.xml");
 		
 		// Update newly created files with datamodel
 		if(dirProj.exists() && dirProj.listFiles().length!=0)

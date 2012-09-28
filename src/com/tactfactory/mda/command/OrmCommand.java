@@ -92,7 +92,7 @@ public class OrmCommand extends BaseCommand {
 		// Info Log
 		System.out.print(">> Analyse Models...\n");
 
-		// Parse models and load entities in CompilationUnits
+		// Parse models and load entities into CompilationUnits
 		try {
 			this.javaModelParser = new JavaModelParser();
 			this.javaModelParser.loadEntities();

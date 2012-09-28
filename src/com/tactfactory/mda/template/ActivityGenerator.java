@@ -242,7 +242,7 @@ public class ActivityGenerator {
 		
 		// Debug Log
 		if (Harmony.DEBUG)
-			System.out.print("\tGenerate Source : " + file.getAbsoluteFile() + "\n"); 
+			System.out.print("\tGenerate Source : " + file.getPath() + "\n"); 
 
 		// Create
 		Template tpl = cfg.getTemplate(
