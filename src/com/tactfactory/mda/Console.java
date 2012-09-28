@@ -13,8 +13,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
-import com.google.common.base.Strings;
-
 /** Harmony console class*/
 public class Console extends Harmony {
 	

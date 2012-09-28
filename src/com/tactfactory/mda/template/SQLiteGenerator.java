@@ -24,7 +24,7 @@ public class SQLiteGenerator {
 	protected BaseAdapter adapter;
 	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 	protected String localNameSpace;
-	
+
 	public SQLiteGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
 		if (metas == null && adapter == null)
 			throw new Exception("No meta or adapter define.");
@@ -32,7 +32,7 @@ public class SQLiteGenerator {
 		this.metas 		= metas;
 		this.adapter	= adapter;
 		this.localNameSpace = this.adapter.getNameSpace(this.metas.get(0), this.adapter.getData());
-		
+
 		// Make entities
 		ArrayList<Map<String, Object>> modelEntities = new ArrayList<Map<String,Object>>();
 		for (ClassMetadata meta : this.metas) {

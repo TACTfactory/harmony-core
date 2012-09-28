@@ -36,15 +36,15 @@ public class OrmInitTest extends CommonTest {
 	public void all() {
 		this.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		
-		String pathNameSpace = Harmony.projectNameSpace.replace(".", "//");
-		String destDir = String.format("%s/android/src/%s", Harmony.pathProject, pathNameSpace);
-		String srcDir = String.format("src/%s", pathNameSpace);
+		String pathNameSpace = Harmony.projectNameSpace.replace(".", "/");
+		String srcDir = String.format("src/%s/%s/", pathNameSpace, "entity");
+		String destDir = String.format("%s/android/src/%s/%s/", Harmony.pathProject, pathNameSpace, "entity");
+		System.out.println(destDir);
 		
-		try {
-			FileUtils.copyDirectory(new File(srcDir),new File(destDir));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+		FileUtils.makeFolderRecursive(srcDir, destDir, true);
+		if(new File(destDir+"Post.java").exists())
+			System.out.println("yeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeees!");
 		
 		this.harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
 		

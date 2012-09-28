@@ -14,8 +14,8 @@
 
 	<!-- default folder location properties -->
 	<property name="src.rel-dir" value="src" />
-	<!-- property name="tests.src.rel-dir" value="tests" />
-	<property name="etc.rel-dir" value="etc" /-->
+	<property name="tests.src.rel-dir" value="src/com/tactfactory/mda/test" />
+	<!-- <property name="etc.rel-dir" value="etc" /-->
 	<property name="app.rel-dir" value="app" />
 	<property name="build.rel-dir" value="bin" />
 	<property name="lib.rel-dir" value="lib" />
@@ -111,7 +111,7 @@
 
     <target name="run-tests" depends="compile-tests"
         description="Run tests">
-        <junit haltonfailure="yes" fork="true">
+        <junit haltonfailure="yes" fork="false">
             <classpath refid="project.classpath" />
             <formatter type="plain" usefile="false" />
             <batchtest>

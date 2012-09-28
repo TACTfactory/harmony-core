@@ -53,9 +53,10 @@ public class ProjectInitTest extends CommonTest {
 		this.isFindFile("android/AndroidManifest.xml");
 		this.isFindFile("android/src");
 		this.isFindFile("android/src/com/tactfactory/mda/test/demact/entity");
-		this.isFindFile("android/res/values/config.xml");
+		this.isFindFile("android/res/values/configs.xml");
 	}
-	
+
+	@Ignore
 	@Test
 	public void initIphone() {
 		this.harmony.findAndExecute(ProjectCommand.INIT_IOS, null, null);
