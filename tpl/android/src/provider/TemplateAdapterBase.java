@@ -68,7 +68,7 @@ public abstract class ${name}AdapterBase {
 	 * 
 	 * @return Open database
 	 */
-	public Database open() {
+	public SQLiteDatabase open() {
 		this.mDatabase = this.mBaseHelper.getWritableDatabase();
 		return this.mDatabase;
 	}

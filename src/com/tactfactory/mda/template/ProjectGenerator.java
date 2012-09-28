@@ -129,9 +129,12 @@ public class ProjectGenerator {
 				String.format("%s/%s/%s/", Harmony.pathTemplate, this.adapter.getPlatform(), this.adapter.getProject()),
 				String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()),
 				true);
-		
+
 		// create project name space folders
 		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/"));
+		
+		// create empty package entity
+		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/")+"/entity/" );
 
 		// create HomeActivity.java
 		this.updateProjectFile(this.adapter.getSourcePath()+Harmony.projectNameSpace.replaceAll("\\.","/")+"/HomeActivity.java",
@@ -140,6 +143,10 @@ public class ProjectGenerator {
 		// create configs.xml
 		this.updateProjectFile(this.adapter.getRessourceValuesPath()+"configs.xml",
 				this.adapter.getTemplateRessourceValuesPath().substring(1)+"configs.xml");
+		
+		// create strings.xml
+		this.updateProjectFile(this.adapter.getRessourceValuesPath()+"strings.xml",
+				this.adapter.getTemplateRessourceValuesPath().substring(1)+"strings.xml");
 		
 		// create main.xml
 		this.updateProjectFile(this.adapter.getRessourceLayoutPath()+"main.xml",
@@ -152,7 +159,7 @@ public class ProjectGenerator {
 			for(int i=0;i<dirProj.listFiles().length;i++)
 			{
 				if(dirProj.listFiles()[i].isFile()) {
-					this.updateProjectFile(dirProj.listFiles()[i].getAbsolutePath(),
+					this.updateProjectFile(dirProj.listFiles()[i].getPath(),
 							this.adapter.getTemplateProjectPath().substring(1) + dirProj.listFiles()[i].getName());
 				}
 			}

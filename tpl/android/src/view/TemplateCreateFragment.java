@@ -19,8 +19,6 @@ import android.widget.*;
 
 import java.util.Date;
 
-import com.tactfactory.mdatest.android.data.PostAdapter;
-
 import ${namespace}.data.${name}Adapter;
 import ${namespace}.entity.${name};
 

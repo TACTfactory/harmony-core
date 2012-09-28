@@ -69,15 +69,26 @@ public class OrmCommand extends BaseCommand {
 		this.javaModelParser = new JavaModelParser();
 		if(this.commandArgs.size()!=0){
 			if(this.commandArgs.containsKey("filename")){
-				this.javaModelParser.loadEntity(this.commandArgs.get("filename"));
+				this.javaModelParser.loadEntity(
+					this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/")
+					+"/entity/" + this.commandArgs.get("filename"));
 			
 				JavaAdapter javaAdapter = new JavaAdapter();
 				javaAdapter.parse(this.javaModelParser.getEntities().get(0));
-	
+
+				// Generate views from MetaData
 				ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
 				try {
 					new ActivityGenerator(metas.get(0), this.adapter).generateAllAction();
 					new AdapterGenerator(metas.get(0), this.adapter).generate();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+
+				// Make Database from MetaData
+				try {
+					new SQLiteGenerator(metas, this.adapter).generateDatabase();
+					new ProviderGenerator();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}

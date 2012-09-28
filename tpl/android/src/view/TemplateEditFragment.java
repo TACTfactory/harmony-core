@@ -14,6 +14,7 @@ import android.app.ProgressDialog;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.database.sqlite.SQLiteDatabase;
 import android.widget.*;
 
 import java.util.Date;
