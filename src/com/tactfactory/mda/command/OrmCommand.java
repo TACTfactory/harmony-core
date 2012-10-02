@@ -21,6 +21,7 @@ import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.ActivityGenerator;
 import com.tactfactory.mda.template.AdapterGenerator;
+import com.tactfactory.mda.template.ProjectGenerator;
 import com.tactfactory.mda.template.ProviderGenerator;
 import com.tactfactory.mda.template.SQLiteGenerator;
 import com.tactfactory.mda.template.WebServiceGenerator;
@@ -124,6 +125,12 @@ public class OrmCommand extends BaseCommand {
 
 		// Generate views from MetaData
 		ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
+		try {
+			new ProjectGenerator(metas, this.adapter).generateHomeActivity();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		for (ClassMetadata meta : metas) {
 			try {
 				new ActivityGenerator(meta, this.adapter).generateAllAction();

@@ -11,6 +11,7 @@ import java.util.Map;
 
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.orm.FieldMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
@@ -41,7 +42,7 @@ public class SQLiteGenerator {
 			modelClass.put(TagConstant.NAME,	meta.name );
 			
 			// Make fields
-			/*ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
+			ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
 			for (FieldMetadata field : meta.fields.values()) {
 				Map<String, Object> modelField = new HashMap<String, Object>();
 				field.customize(adapter);
@@ -50,19 +51,19 @@ public class SQLiteGenerator {
 				
 				modelFields.add(modelField);
 			}
-			modelClass.put(TagConstant.FIELDS, modelFields);*/
+			modelClass.put(TagConstant.FIELDS, modelFields);
 			
 			modelEntities.add(modelClass);
 		}
-		
 		this.datamodel.put(TagConstant.PROJECT_NAME, 		Harmony.projectName);
 		this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	this.metas.get(0).space);
 		this.datamodel.put(TagConstant.ENTITIES,			modelEntities);
 		this.datamodel.put(TagConstant.LOCAL_NAMESPACE,		this.localNameSpace);
-		
 	}
 
-	/**  */
+	/**
+	 * Generate Database Interface Source Code
+	 */
 	public void generateDatabase() {
 		// Info
 		System.out.print(">> Generate Database\n");

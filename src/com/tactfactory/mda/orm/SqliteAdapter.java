@@ -21,8 +21,6 @@ public class SqliteAdapter {
 		} else {
 			builder.append(" null");
 		}
-		
-		
 		return builder.toString();
 	}
 	

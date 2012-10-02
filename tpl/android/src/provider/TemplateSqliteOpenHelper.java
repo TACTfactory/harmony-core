@@ -51,7 +51,7 @@ public class ${project_name}SqliteOpenHelper extends SQLiteOpenHelper {
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Update database..");
 		
-		//if (XxxxxAdapter.BASE_VERSION < 0) {
+		//if (SqliteAdapter.BASE_VERSION < 0) {
 			Log.i(TAG, "Upgrading database from version " + oldVersion + 
 					   " to " + newVersion + ", which will destroy all old data");
 		

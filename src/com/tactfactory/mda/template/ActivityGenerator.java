@@ -66,10 +66,10 @@ public class ActivityGenerator {
 		}
 
 		// Make class
-		this.datamodel.put("namespace", 		meta.space);
-		this.datamodel.put(TagConstant.NAME, 	meta.name);
-		this.datamodel.put("localnamespace", 	this.localNameSpace);
-		this.datamodel.put(TagConstant.FIELDS, 	modelFields);
+		this.datamodel.put("namespace", 					meta.space);
+		this.datamodel.put(TagConstant.NAME, 				meta.name);
+		this.datamodel.put("localnamespace", 				this.localNameSpace);
+		this.datamodel.put(TagConstant.FIELDS, 				modelFields);
 	}
 
 	public ActivityGenerator(ClassMetadata meta, BaseAdapter adapter, Boolean isWritable) throws Exception {
@@ -369,9 +369,9 @@ public class ActivityGenerator {
 					String action = "VIEW";
 
 					if (pathRelatif.matches(".*List.*")) {
-						data = "vnc.android.cursor.collection/";
+						data = "vnd.android.cursor.collection/";
 					} else {
-						data = "vnc.android.cursor.item/";
+						data = "vnd.android.cursor.item/";
 
 						if (pathRelatif.matches(".*Edit.*"))
 							action = "EDIT";

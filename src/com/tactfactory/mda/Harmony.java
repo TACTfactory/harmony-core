@@ -39,10 +39,19 @@ public class Harmony {
 	
 	/** Singleton of console */
 	public static Harmony instance;
-	/** Full path of project ( app folder in Harmony root ) */
+	
+	/** Path of project ( app folder in Harmony root ) */
 	public static String pathProject = "../app";
 	
+	/** Path of templates */
 	public static String pathTemplate = "../tpl";
+	
+	/** Path of libs */
+	public static String pathLibs = "../lib";
+	
+	/** Path of harmony */
+	public static String pathHarmony = "../vendor/tact-core";
+	
 	/** Project space */
 	public static String projectFolder = "android";
 

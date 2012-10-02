@@ -16,11 +16,11 @@ import com.tactfactory.mda.orm.FieldMetadata;
 public abstract class BaseAdapter {	
 	// Structure
 	protected String project;
-
 	protected String platform;
 	protected String resource;
 	protected String source;
-
+	protected String libs;
+	
 	// MVC
 	protected String model		= "entity";
 	protected String view 		= "layout";
@@ -111,6 +111,10 @@ public abstract class BaseAdapter {
 
 	public final String getTemplateProjectPath() {
 		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getProject() );
+	}
+	
+	public final String getLibsPath() {
+		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getLibs() );
 	}
 	
 	// Getter and Setter
@@ -266,5 +270,20 @@ public abstract class BaseAdapter {
 	public final void setValues(String values) {
 		this.values = values;
 	}
+
+	/**
+	 * @return the libs
+	 */
+	public final String getLibs() {
+		return libs;
+	}
+
+	/**
+	 * @param libs the libs to set
+	 */
+	public final void setLibs(String libs) {
+		this.libs = libs;
+	}
+
 
 }
