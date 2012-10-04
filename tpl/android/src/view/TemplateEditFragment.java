@@ -5,6 +5,7 @@ import ${namespace}.R;
 import android.os.Bundle;
 import android.os.AsyncTask;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,7 +18,12 @@ import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+
+import com.tactfactory.mda.test.demact.entity.User;
+import com.tactfactory.mda.test.demact.view.user.UserEditActivity;
 
 import ${namespace}.data.${name}Adapter;
 import ${namespace}.entity.${name};
@@ -56,7 +62,7 @@ public class ${name}EditFragment extends Fragment implements OnClickListener {
 		this.${field.name}View.setText(this.model.get${field.name?cap_first}()); 
 				</#if>
 				<#if (field.type == "Date")>
-		this.${field.name}View.setText(this.model.get${field.name?cap_first}().toLocaleString()); 
+		this.${field.name}View.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(this.model.get${field.name?cap_first}())); 
 				</#if>
 				<#if (field.type == "int")>
 		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}())); 
@@ -76,7 +82,11 @@ public class ${name}EditFragment extends Fragment implements OnClickListener {
 		this.model.set${field.name?cap_first}(this.${field.name}View.getEditableText().toString());
 				</#if>
 				<#if (field.type == "Date")>
-		this.model.set${field.name?cap_first}(new Date(this.${field.name}View.getEditableText().toString())); 
+		try {
+			this.model.set${field.name?cap_first}(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(this.${field.name}View.getEditableText().toString()));
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
 				</#if>
 				<#if (field.type == "int")>
 		this.model.set${field.name?cap_first}(Integer.parseInt(this.${field.name}View.getEditableText().toString()));
@@ -104,9 +114,13 @@ public class ${name}EditFragment extends Fragment implements OnClickListener {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {    	
 		// Inflate the layout for this fragment
 	    View view = inflater.inflate(R.layout.fragment_${name?lower_case}_edit, container, false);
-	    
+
+        Intent intent =  ${name}EditActivity.instance.getIntent();
+        this.model = (${name}) intent.getSerializableExtra("${name}");
+        	
 	    this.initializeComponent(view);
-	    
+	    this.loadData();
+
 	    return view;
 	}
 	
@@ -116,6 +130,8 @@ public class ${name}EditFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (this.validateData()) {
+			
+			this.saveData();
 			new EditTask(this, this.model).execute();
 		}
 	}

@@ -1,5 +1,6 @@
 package com.tactfactory.mda.test.demact.entity;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -7,7 +8,7 @@ import com.tactfactory.mda.orm.annotation.*;
 
 @Table
 @Entity
-public class Post {
+public class Post implements Serializable {
 	@Id
     @Column()					// type="integer",
     @GeneratedValue(strategy="IDENTITY")
@@ -34,6 +35,13 @@ public class Post {
     @Column(name="expires_at")	// type="datetime", 
     protected Date expiresAt;
 
+
+	public Post() {
+    	this.createdAt = new Date();
+    	this.updatedAt = new Date();
+    	this.expiresAt = new Date();
+    }
+	
     /**
 	 * @return the id
 	 */
@@ -145,9 +153,4 @@ public class Post {
 	public final void setExpiresAt(Date expiresAt) {
 		this.expiresAt = expiresAt;
 	}
-
-	public Post() {
-    	this.createdAt = new Date();
-    	this.updatedAt = new Date();
-    }
 }

@@ -1,9 +1,15 @@
 package ${localnamespace};
 
+import java.text.SimpleDateFormat;
+
+import com.tactfactory.mda.test.demact.entity.User;
+import com.tactfactory.mda.test.demact.view.user.UserShowActivity;
+
 import ${namespace}.R;
 
 import android.os.Bundle;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -43,7 +49,7 @@ public class ${name}ShowFragment extends Fragment {
 		this.${field.name}View.setText(this.model.get${field.name?cap_first}()); 
 				</#if>
 				<#if (field.type == "Date")>
-		this.${field.name}View.setText(this.model.get${field.name?cap_first}().toLocaleString()); 
+		this.${field.name}View.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(this.model.get${field.name?cap_first}())); 
 				</#if>
 				<#if (field.type == "int")>
 		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}())); 
@@ -63,8 +69,12 @@ public class ${name}ShowFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {    	
     	// Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_${name?lower_case}_show, container, false);
-        
+
+        Intent intent =  ${name}ShowActivity.instance.getIntent();
+        this.model = (${name}) intent.getSerializableExtra("${name}");
+        		
         this.initializeComponent(view);
+        this.loadData();
         
         return view;
     }

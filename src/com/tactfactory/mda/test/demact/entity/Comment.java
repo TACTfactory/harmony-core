@@ -1,12 +1,13 @@
 package com.tactfactory.mda.test.demact.entity;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.tactfactory.mda.orm.annotation.*;
 
 @Table
 @Entity
-public class Comment {
+public class Comment implements Serializable {
 	@Id
     @Column()					// type="integer",
     @GeneratedValue(strategy="IDENTITY")
@@ -24,6 +25,11 @@ public class Comment {
 	@Column(name="created_at")	// type="datetime",
     protected Date createdAt;
 
+
+	public Comment() {
+		this.id = -1;
+    	this.createdAt = new Date();
+    }
 	/**
 	 * @return the id
 	 */

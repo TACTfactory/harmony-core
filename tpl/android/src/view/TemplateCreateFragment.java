@@ -17,6 +17,8 @@ import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
 import android.widget.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import ${namespace}.data.${name}Adapter;
@@ -56,7 +58,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		this.${field.name}View.setText(this.model.get${field.name?cap_first}()); 
 				</#if>
 				<#if (field.type == "Date")>
-		this.${field.name}View.setText(this.model.get${field.name?cap_first}().toLocaleString()); 
+		this.${field.name}View.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(this.model.get${field.name?cap_first}()) ); 
 				</#if>
 				<#if (field.type == "int")>
 		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}())); 
@@ -76,7 +78,12 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		this.model.set${field.name?cap_first}(this.${field.name}View.getEditableText().toString());
 				</#if>
 				<#if (field.type == "Date")>
-		this.model.set${field.name?cap_first}(new Date(this.${field.name}View.getEditableText().toString())); 
+		try {
+			this.model.set${field.name?cap_first}(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(this.${field.name}View.getEditableText().toString()));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 				</#if>
 				<#if (field.type == "int")>
 		this.model.set${field.name?cap_first}(Integer.parseInt(this.${field.name}View.getEditableText().toString()));
@@ -106,7 +113,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
         View view = inflater.inflate(R.layout.fragment_${name?lower_case}_create, container, false);
         
         this.initializeComponent(view);
-        
+        this.loadData();
         return view;
     }
     
@@ -116,6 +123,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 	@Override
 	public void onClick(View v) {
 		if (this.validateData()) {
+			this.saveData();
 			new CreateTask(this, this.model).execute();
 		}
 	}

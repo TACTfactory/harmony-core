@@ -1,5 +1,6 @@
 package ${local_namespace};
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -89,7 +90,7 @@ public abstract class ${name}AdapterBase {
 		
 		<#list fields as field>
 			<#if (field.type == "Date")>
-		result.put(${field.alias}, 			String.valueOf(${name?lower_case}.get${field.name?cap_first}().toLocaleString()) );
+		result.put(${field.alias}, 			String.valueOf(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(${name?lower_case}.get${field.name?cap_first}())) );
 			<#elseif (field.type == "Boolean")>
 		result.put(${field.alias}, 			String.valueOf(${name?lower_case}.${field.name?uncap_first}()) );
 			<#else>
@@ -112,7 +113,12 @@ public abstract class ${name}AdapterBase {
 			result = new ${name}();			
 			<#list fields as field>
 				<#if (field.type == "Date")>
-			result.set${field.name?cap_first}(new Date(c.getString( c.getColumnIndexOrThrow(${field.alias})) ));
+			result.set${field.name?cap_first}(new Date());
+			try {
+				result.setCreatedAt(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(c.getString( c.getColumnIndexOrThrow(${field.alias})) ));
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 				<#elseif (field.type == "Boolean" || field.type == "boolean")>
 			result.${field.name?uncap_first}(c.getString( c.getColumnIndexOrThrow(${field.alias}) ) == "true");
 				<#elseif (field.type == "int" || field.type == "Integer")>

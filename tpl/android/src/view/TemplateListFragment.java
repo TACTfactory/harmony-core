@@ -2,6 +2,9 @@ package ${localnamespace};
 
 import java.util.List;
 
+import com.tactfactory.mda.test.demact.entity.User;
+import com.tactfactory.mda.test.demact.view.user.UserEditActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
@@ -11,13 +14,18 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemLongClickListener;
 
 import ${namespace}.R;
 import ${namespace}.entity.${name};
+import ${namespace}.view.${name?lower_case}.${name}ListActivity;
+import ${namespace}.view.${name?lower_case}.${name}ListLoader;
+
 
 public class ${name}ListFragment extends ListFragment
 	implements LoaderManager.LoaderCallbacks<List<${name}>> {
@@ -28,6 +36,7 @@ public class ${name}ListFragment extends ListFragment
     static final int INTERNAL_LIST_CONTAINER_ID = 0x00ff0003;
     
     protected ${name}ListAdapter mAdapter;
+    protected static ${name}ListFragment instance;
     
     /** (non-Javadoc)
 	 * @see android.support.v4.app.ListFragment#onCreateView(adroid.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
@@ -37,6 +46,7 @@ public class ${name}ListFragment extends ListFragment
 		//inflater.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
         View view = inflater.inflate(R.layout.fragment_${name?lower_case}_list, null);
         
+        ${name}ListFragment.instance = this;
         this.initializeHackCustomList(view);
         
         return view;
@@ -52,6 +62,7 @@ public class ${name}ListFragment extends ListFragment
         // Give some text to display if there is no data.  In a real
         // application this would come from a resource.
     	//this.setEmptyText(getString(R.string.${name?lower_case}_empty));
+    	this.setEmptyText("Empty list");
 
         // We have a menu item to show in action bar.
         //this.setHasOptionsMenu(true);
@@ -62,6 +73,24 @@ public class ${name}ListFragment extends ListFragment
 
         // Start out with a progress indicator.
         this.setListShown(false); 
+
+		// Prepare the loader.  Either re-connect with an existing one,
+		// or start a new one.
+		getLoaderManager().initLoader(0, null, this);
+		
+		this.getListView().setOnItemLongClickListener(new OnItemLongClickListener() {
+
+			@Override
+			public boolean onItemLongClick(final AdapterView<?> l, View v, final int position, long id) {
+		    	${name} item = (${name}) l.getItemAtPosition(position);
+
+		    	final Intent intent = new Intent(getActivity(), ${name}EditActivity.class);
+		    	intent.putExtra("${name}", item);
+		    	
+		        getActivity().startActivityForResult(intent,0);
+	            return true;
+			}
+		});
     }
     
     /** (non-Javadoc)
@@ -70,12 +99,11 @@ public class ${name}ListFragment extends ListFragment
     @Override 
     public void onListItemClick(ListView l, View v, int position, long id) {
     	${name} item = (${name}) l.getItemAtPosition(position);
-    	Bundle b = new Bundle();
-    	/*b.putSerializable(${name?upper_case}._PARCELABLE, item);
-    	
+
     	final Intent intent = new Intent(getActivity(), ${name}ShowActivity.class);
-    	intent.putExtras(b);
-        this.startActivity(intent);*/
+    	intent.putExtra("${name}", item);
+    	
+        this.startActivity(intent);
     }
 
     /** (non-Javadoc)
@@ -84,7 +112,8 @@ public class ${name}ListFragment extends ListFragment
     @SuppressWarnings("unchecked")
 	@Override 
     public Loader<List<${name}>> onCreateLoader(int id, Bundle bundle) { 
-    	return ((LoaderManager.LoaderCallbacks<List<${name}>>)getActivity()).onCreateLoader(0, bundle);
+    	//return ((LoaderManager.LoaderCallbacks<List<${name}>>)getActivity()).onCreateLoader(0, bundle);
+    	return new ${name}ListLoader(${name}ListActivity.context);
     }
 
     /** (non-Javadoc)
@@ -112,8 +141,7 @@ public class ${name}ListFragment extends ListFragment
         // Clear the data in the adapter.
         this.mAdapter.setData(null);
     }
-    
-	
+
     /** Initialize Custom List Fragment
      * 
      * @param rootView

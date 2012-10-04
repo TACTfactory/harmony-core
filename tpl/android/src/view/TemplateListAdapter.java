@@ -1,5 +1,6 @@
 package ${localnamespace};
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import android.content.Context;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.TextView;
 
 import ${namespace}.R;
 import ${namespace}.entity.${name};
@@ -49,6 +51,9 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
             
             holder = new ViewHolder();
 			//holder.title = (TextView) convertView.findViewById(R.id.stootsListTitle);
+			<#list fields as field>
+			holder.${field.name} = (TextView) convertView.findViewById(R.id.row_${name}_${field.name});
+			</#list>
 			
 			convertView.setTag(holder);
         } else {
@@ -64,7 +69,9 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
     
     /** Holder row */
 	private static class ViewHolder {
-		//TextView title;
+		<#list fields as field>
+		public TextView ${field.name};
+		</#list>
 		
 		/** Populate row with a ${name}
 		 * 
@@ -72,8 +79,13 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 		 */
 		public void populate(${name} item) {
 			
-			//title.setText(item.getTitle());
-			
+			<#list fields as field>
+			<#if (field.type="Date")>
+			this.${field.name}.setText(String.valueOf(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(item.get${field.name?cap_first}())) );
+			<#else>
+			this.${field.name}.setText(String.valueOf(item.get${field.name?cap_first}()) );
+			</#if>
+			</#list>
 		}
 	}
 }

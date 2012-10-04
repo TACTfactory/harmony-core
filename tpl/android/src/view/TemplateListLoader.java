@@ -3,8 +3,12 @@ package ${localnamespace};
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tactfactory.mda.test.demact.data.${name}Adapter;
+
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.content.AsyncTaskLoader;
+import android.util.Log;
 
 import ${namespace}.R;
 import ${namespace}.entity.${name};
@@ -14,9 +18,11 @@ import ${namespace}.entity.${name};
  */
 public class ${name}ListLoader extends AsyncTaskLoader<List<${name}>> {
     private List<${name}> m${name}s;
+    private Context context;
     
     public ${name}ListLoader(Context context) {
         super(context);
+        this.context = context;
     }
 
     /**
@@ -29,7 +35,14 @@ public class ${name}ListLoader extends AsyncTaskLoader<List<${name}>> {
     	List<${name}> result = new ArrayList<${name}>();
     	
     	// TODO Query of data
+
+    	${name}Adapter adapter = new ${name}Adapter(context);
+		SQLiteDatabase db = adapter.open();
     	try {
+    		db.beginTransaction();
+    		result = adapter.getAll();
+
+    		db.setTransactionSuccessful();
     		/*StootieWebService service = new StootieWebServiceImpl(getContext());
     		if (mStoot.getAsker() == null)
     			service.getStoot(mStoot);
@@ -62,6 +75,9 @@ public class ${name}ListLoader extends AsyncTaskLoader<List<${name}>> {
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		} finally {
+			db.endTransaction();
+			adapter.close();
 		}
     	
         // Sort the list.
