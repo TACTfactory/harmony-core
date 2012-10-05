@@ -187,7 +187,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 
 			if (result == 0) {
 				FragmentActivity activity = (FragmentActivity) this.context;
-				activity.finishActivity(0);
+				activity.finish();
 			} else {
 				AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
 				builder.setIcon(0);

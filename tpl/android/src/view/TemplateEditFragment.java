@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -171,6 +172,7 @@ public class ${name}EditFragment extends Fragment implements OnClickListener {
 				${name?lower_case}Adapter.update(this.entity);
 
 				db.setTransactionSuccessful();
+				result = 0;
 			} finally {
 				db.endTransaction();
 				${name?lower_case}Adapter.close();
@@ -187,7 +189,8 @@ public class ${name}EditFragment extends Fragment implements OnClickListener {
 			super.onPostExecute(result);
 
 			if (result == 0) {
-				//this.fragment.resetAll(true);
+				FragmentActivity activity = (FragmentActivity) this.context;
+				activity.finish();
 			} else {
 				AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
 				builder.setIcon(0);

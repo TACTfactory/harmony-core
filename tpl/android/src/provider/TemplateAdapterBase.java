@@ -42,7 +42,11 @@ public abstract class ${name}AdapterBase {
 		return "CREATE TABLE "
 		+ TABLE_NAME	+ " ("
 		<#list fields as field>
+		<#if (field.alias=="COL_ID")>
+		+ ${field.alias}		+ " integer primary key autoincrement <#if field_has_next>,</#if>"
+		<#else>
 		+ ${field.alias}	+ " ${field.schema} <#if field_has_next>,</#if>"
+		</#if>
 		</#list>
 		+ ");";
 		
