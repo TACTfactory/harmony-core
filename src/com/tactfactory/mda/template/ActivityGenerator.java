@@ -214,7 +214,7 @@ public class ActivityGenerator {
 
 			this.generateShowAction(cfg);
 			this.generateListAction(cfg);
-
+			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -251,7 +251,7 @@ public class ActivityGenerator {
 						template));		// Load template file in engine
 
 		OutputStreamWriter output = new FileWriter(file);
-		tpl.process(datamodel, output);											// Process datamodel (with previous template file), and output to output file
+		tpl.process(datamodel, output);		// Process datamodel (with previous template file), and output to output file
 		output.flush();
 		output.close();
 	}
@@ -283,7 +283,7 @@ public class ActivityGenerator {
 						template));
 
 		OutputStreamWriter output = new FileWriter(file);
-		tpl.process(datamodel, output);
+		tpl.process(this.datamodel, output);
 		output.flush();
 		output.close();
 	}

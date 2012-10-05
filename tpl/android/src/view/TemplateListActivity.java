@@ -13,31 +13,29 @@ import android.util.Log;
 
 public class ${name}ListActivity extends FragmentActivity {
 
-	public static Context context;
 	@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_${name?lower_case}_list);
-        
-        ${name}ListActivity.context = this;
-        // Google Analytics
-        //GoogleAnalyticsSessionManager.getInstance(getApplication()).incrementActivityCount();
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		this.setContentView(R.layout.activity_${name?lower_case}_list);
+
+		// Google Analytics
+		//GoogleAnalyticsSessionManager.getInstance(getApplication()).incrementActivityCount();
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		
+
 		// Google Analytics
 		/*GoogleAnalyticsTracker.getInstance().dispatch();
         GoogleAnalyticsSessionManager.getInstance().decrementActivityCount();*/
 	}
-    
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
 
-    	${name}ListFragment fragment = (${name}ListFragment)  getSupportFragmentManager().findFragmentById(R.id.fragment);
-    	fragment.getLoaderManager().restartLoader(0, null, fragment);
-    }
-	
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		${name}ListFragment fragment = (${name}ListFragment)  getSupportFragmentManager().findFragmentById(R.id.fragment);
+		fragment.getLoaderManager().restartLoader(0, null, fragment);
+	}
+
 }

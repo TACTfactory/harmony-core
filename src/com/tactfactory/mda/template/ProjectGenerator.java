@@ -271,7 +271,7 @@ public class ProjectGenerator {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
-		
+
 		File file = FileUtils.makeFile(
 				String.format("%s%s/%s",
 						this.adapter.getSourcePath(),
@@ -292,5 +292,53 @@ public class ProjectGenerator {
 		tpl.process(datamodel, output);
 		output.flush();
 		output.close();
+		
+		this.updateStringsXml(cfg);
+	}
+
+	/**
+	 * Update XML Strings
+	 * 
+	 * @param cfg Template engine
+	 */
+	public void updateStringsXml(Configuration cfg) {
+
+		try {
+			cfg.setDirectoryForTemplateLoading(new File("../"));
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+
+		File destFile = new File(String.format("%s%s",
+				this.adapter.getRessourceValuesPath(),
+				"strings.xml"));
+
+		if(!destFile.exists())
+			destFile = FileUtils.makeFile(destFile.getPath());
+
+		// Debug Log
+		if (Harmony.DEBUG)
+			System.out.print("\tUpdate Strings.xml File : " + destFile.getPath() + "\n"); 
+
+		// Create
+		Template tpl;
+		try {
+			tpl = cfg.getTemplate(String.format("%s%s",
+					this.adapter.getTemplateRessourceValuesPath().substring(1),
+					"strings.xml"));	// Load template file in engine
+
+			OutputStreamWriter output = new FileWriter(destFile);
+			tpl.process(this.datamodel, output);				// Process datamodel (with previous template file), and output to output file
+			output.flush();
+			output.close();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (TemplateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	
 	}
 }

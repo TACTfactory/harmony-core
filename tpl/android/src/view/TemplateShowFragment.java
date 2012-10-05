@@ -2,9 +2,6 @@ package ${localnamespace};
 
 import java.text.SimpleDateFormat;
 
-import com.tactfactory.mda.test.demact.entity.User;
-import com.tactfactory.mda.test.demact.view.user.UserShowActivity;
-
 import ${namespace}.R;
 
 import android.os.Bundle;
@@ -70,7 +67,7 @@ public class ${name}ShowFragment extends Fragment {
     	// Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_${name?lower_case}_show, container, false);
 
-        Intent intent =  ${name}ShowActivity.instance.getIntent();
+        Intent intent =  getActivity().getIntent();
         this.model = (${name}) intent.getSerializableExtra("${name}");
         		
         this.initializeComponent(view);

@@ -19,16 +19,16 @@ import android.widget.LinearLayout;
 
 public class HomeActivity extends Activity
 {
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
-        LinearLayout homeLayout = (LinearLayout) findViewById(R.id.homeLayout);
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState)
+	{
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.main);
+		LinearLayout homeLayout = (LinearLayout) findViewById(R.id.homeLayout);
 
-        <#if entities??>
-        //Debug buttons
+		<#if entities??>
+		//Debug buttons
 		<#list entities as entity>
 		//List
 		Button ${entity.name}ListButton = new Button(this);
@@ -40,10 +40,10 @@ public class HomeActivity extends Activity
 				HomeActivity.this.startActivity(intent);
 			}
 		});
-        homeLayout.addView(${entity.name}ListButton);
-        
-        //Create
-        Button ${entity.name}CreateButton = new Button(this);
+		homeLayout.addView(${entity.name}ListButton);
+
+		//Create
+		Button ${entity.name}CreateButton = new Button(this);
 		${entity.name}CreateButton.setText("${entity.name}CreateActivity");
 		${entity.name}CreateButton.setOnClickListener(new OnClickListener() {
 			@Override
@@ -52,9 +52,9 @@ public class HomeActivity extends Activity
 				HomeActivity.this.startActivity(intent);
 			}
 		});
-        homeLayout.addView(${entity.name}CreateButton);
-	    </#list>
-	    <#else>
-	    </#if>
-    }
+		homeLayout.addView(${entity.name}CreateButton);
+		</#list>
+		<#else>
+		</#if>
+	}
 }

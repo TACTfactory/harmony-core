@@ -6,24 +6,20 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
 public class ${name}ShowActivity extends FragmentActivity {
-	
-	public static ${name}ShowActivity instance;
-	
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        ${name}ShowActivity.instance = this;
-        
-        this.setContentView(R.layout.activity_${name?lower_case}_show);
-        
-        // Google Analytics
-        //GoogleAnalyticsSessionManager.getInstance(getApplication()).incrementActivityCount();
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		this.setContentView(R.layout.activity_${name?lower_case}_show);
+
+		// Google Analytics
+		//GoogleAnalyticsSessionManager.getInstance(getApplication()).incrementActivityCount();
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		
+
 		// Google Analytics
 		/*GoogleAnalyticsTracker.getInstance().dispatch();
         GoogleAnalyticsSessionManager.getInstance().decrementActivityCount();*/
