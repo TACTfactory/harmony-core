@@ -81,8 +81,8 @@ public class Harmony {
 	protected void initialize() throws Exception {
 		
 		if (Strings.isNullOrEmpty(projectFolder)) {
-			System.out.print("Not project folder define"); 
-			throw new Exception("Not project folder define");
+			System.out.print("Project folder undefined"); 
+			throw new Exception("Project folder undefined");
 		}
 		
 		Harmony.instance = this;
@@ -99,15 +99,10 @@ public class Harmony {
 				String[] projectNameSpaceData = Harmony.projectNameSpace.split("/");
 				Harmony.projectName = projectNameSpaceData[projectNameSpaceData.length-1];
 			}
-			else {
-				System.out.println("NameSpace not defined, please init the project with 'project:init:all'");
-			}
 			// get android sdk dir from local.properties
 			File local_prop = new File(String.format("%s/%s/%s",Harmony.pathProject,Harmony.projectFolder,"local.properties"));
 			if(local_prop.exists())
 				Harmony.androidSdkPath = Harmony.getSdkDirFromProject(local_prop);
-			else
-				System.out.println("Android SDK dir not defined, please init the project with 'project:init:all'");
 		}
 		else {
 			String[] projectNameSpaceData = Harmony.projectNameSpace.split("/");
@@ -228,22 +223,27 @@ public class Harmony {
 			if(sdkPath!=null && sdkPath.length()!=0){
 				Harmony.androidSdkPath = sdkPath;
 			} else {
+				String os_message = "Detected OS: ";
 				if(OsUtil.isWindows()) {
 					if(!OsUtil.isX64()) {
-						System.out.println("Detected: OS Windows x86");
+						os_message += "Windows x86";
 						Harmony.androidSdkPath = String.format("%s/%s/","C:/Program Files (x86)","android-sdk");
 					} else if(OsUtil.isX64()) {
-						System.out.println("Detected: OS Windows x64");
+						os_message += "Windows x64";
 						Harmony.androidSdkPath = String.format("%s/%s/","C:/Program Files","android-sdk");
 					} else {
-						System.out.println("Detected: OS Windows unkn arch");
+						os_message += "Windows x??";
 						Harmony.androidSdkPath = String.format("%s/%s/","C:/Program Files","android-sdk");
 					}
 				}
 				else if(OsUtil.isLinux()) {
-					System.out.println("Detected: OS Linux");
+					os_message += "Linux";
 					Harmony.androidSdkPath = "/root/android-sdk/";
 				}
+				
+				// Debug Log
+				if (Harmony.DEBUG)
+					System.out.println(os_message);
 			}
 		}
 	}

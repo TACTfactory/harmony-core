@@ -20,6 +20,8 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
 
+import com.tactfactory.mda.Harmony;
+
 /** Manipulate File tools */
 public class FileUtils extends org.apache.commons.io.FileUtils {
 	/** Create a new file if doesn't exist (and path)
@@ -69,9 +71,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			}
 			in.close();
 			out.close();
-			System.out.println("File "+srcFile.getName()+" copied to "+destFile.getPath());
+			// Debug Log
+			if (Harmony.DEBUG)
+				System.out.println("File "+srcFile.getName()+" copied to "+destFile.getPath());
 		} catch (FileNotFoundException ex) {
-			System.out.println(ex.getMessage() + " in the specified directory.");
+			// Debug Log
+			if (Harmony.DEBUG)
+				System.out.println(ex.getMessage() + " in the specified directory.");
 			//System.exit(0);
 		} catch (IOException e) {
 			System.out.println(e.getMessage());
@@ -87,13 +93,16 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		success = folder.mkdirs();
 	    if (success) {
 	        // Folder did not exists and was created
-	    	System.out.println("Folder '"+folder.getName()+"' did not exists and was created...");
+			if (Harmony.DEBUG)
+				System.out.println("Folder '"+folder.getName()+"' did not exists and was created...");
 	    } else {
 	        // Folder already exists
 	    	if(folder.exists())
-	    		System.out.println("Folder '"+folder.getName()+"' already exists...");
+				if (Harmony.DEBUG)
+					System.out.println("Folder '"+folder.getName()+"' already exists...");
 	    	else
-	    		System.out.println("Folder '"+folder.getName()+"' creation error...");
+				if (Harmony.DEBUG)
+					System.out.println("Folder '"+folder.getName()+"' creation error...");
 	    }
 		
 		return folder;
@@ -158,18 +167,22 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		boolean success = false;
 
 		if(!tpl_folder.isDirectory())
-			System.out.println("Folder src '"+srcPath+"' is not a folder");
+			if (Harmony.DEBUG)
+				System.out.println("Folder src '"+srcPath+"' is not a folder");
 		else if(tpl_files == null || tpl_files.length == 0)
-			System.out.println("No items inside '"+srcPath+"'");
+			if (Harmony.DEBUG)
+				System.out.println("No items inside '"+srcPath+"'");
 		else
 		{
 			success = dest_folder.mkdirs();
 			if(dest_folder.exists())
 			{
 				if(success)
-					System.out.println("Folder '"+dest_folder.getName()+"' did not exists and was created...");
+					if (Harmony.DEBUG)
+						System.out.println("Folder '"+dest_folder.getName()+"' did not exists and was created...");
 				else
-		    		System.out.println("Folder '"+dest_folder.getName()+"' already exists...");
+					if (Harmony.DEBUG)
+						System.out.println("Folder '"+dest_folder.getName()+"' already exists...");
 				for(int i=0;i<tpl_files.length;i++)
 				{
 					if(tpl_files[i].isDirectory())
@@ -178,13 +191,16 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 						success = tmp_file.mkdir();
 					    if (success) {
 					        // Folder did not exists and was created
-					    	System.out.println("Folder '"+tmp_file.getName()+"' did not exists and was created...");
+							if (Harmony.DEBUG)
+								System.out.println("Folder '"+tmp_file.getName()+"' did not exists and was created...");
 					    } else {
 					        // Folder already exists
 					    	if(tmp_file.exists())
-					    		System.out.println("Folder '"+tmp_file.getName()+"' already exists...");
+								if (Harmony.DEBUG)
+									System.out.println("Folder '"+tmp_file.getName()+"' already exists...");
 					    	else
-					    		System.out.println("Folder '"+tmp_file.getName()+"' creation error...");
+								if (Harmony.DEBUG)
+									System.out.println("Folder '"+tmp_file.getName()+"' creation error...");
 					    }
 						FileUtils.makeFolderRecursive(String.format("%s%s/", srcPath, tpl_files[i].getName()),
 														String.format("%s%s/",destPath, tmp_file.getName()),false);
@@ -193,16 +209,19 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 					{
 						tmp_file = FileUtils.makeFile(destPath+tpl_files[i].getName());
 						if(tmp_file.exists()) {
-			    			System.out.println("File '"+tpl_files[i].getName()+"' created...");
+							if (Harmony.DEBUG)
+								System.out.println("File '"+tpl_files[i].getName()+"' created...");
 			    			FileUtils.copyfile(tpl_files[i], tmp_file);
 						} else {
-			    			System.out.println("File '"+tpl_files[i].getName()+"' creation error...");
+							if (Harmony.DEBUG)
+								System.out.println("File '"+tpl_files[i].getName()+"' creation error...");
 						}
 					}
 				}
 			}
 			else {
-		    	System.out.println("Folder '"+dest_folder.getName()+"' creation Error...");
+				if (Harmony.DEBUG)
+					System.out.println("Folder '"+dest_folder.getName()+"' creation Error...");
 			}
 		}
 		return dest_folder;
@@ -219,35 +238,43 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 						FileUtils.deleteRecursive(f);
 					} else {
 						if(f.delete())
-							System.out.println("File '"+f.getPath()+"' deleted.");
+							if (Harmony.DEBUG)
+								System.out.println("File '"+f.getPath()+"' deleted.");
 						else
-							System.out.println("File '"+f.getPath()+"' delete ERROR!");
+							if (Harmony.DEBUG)
+								System.out.println("File '"+f.getPath()+"' delete ERROR!");
 					}
 				}
 				
 				//folder content check, remove folder
 				if(dir.listFiles().length==0){
 					if(dir.delete()) {
-						System.out.println("Folder '"+dir.getPath()+"' deleted.");
+						if (Harmony.DEBUG)
+							System.out.println("Folder '"+dir.getPath()+"' deleted.");
 						result = true;
 					} else {
-						System.out.println("Folder '"+dir.getPath()+"' delete ERROR!");
+						if (Harmony.DEBUG)
+							System.out.println("Folder '"+dir.getPath()+"' delete ERROR!");
 					}
 				} else {
-					System.out.println("Folder '"+dir.getPath()+"' NOT Empty!");
+					if (Harmony.DEBUG)
+						System.out.println("Folder '"+dir.getPath()+"' NOT Empty!");
 				}
 				
 			} else {
 				// it's a file delete simply
 				if(dir.delete()) {
-					System.out.println("File '"+dir.getPath()+"' deleted.");
+					if (Harmony.DEBUG)
+						System.out.println("File '"+dir.getPath()+"' deleted.");
 					result = true;
 				} else {
-					System.out.println("File '"+dir.getPath()+"' delete ERROR!");
+					if (Harmony.DEBUG)
+						System.out.println("File '"+dir.getPath()+"' delete ERROR!");
 				}
 			}
 		} else {
-			System.out.println("Folder '"+dir.getPath()+"' doesn't exists!");
+			if (Harmony.DEBUG)
+				System.out.println("Folder '"+dir.getPath()+"' doesn't exists!");
 		}
 		return result;
 	}

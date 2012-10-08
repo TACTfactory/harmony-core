@@ -31,11 +31,11 @@ import com.tactfactory.mda.template.ProjectGenerator;
 public class ProjectCommand extends BaseCommand {
 	/** Bundle name */
 	public static String BUNDLE 		= "project";
-	
+
 	// Actions
 	public static String ACTION_INIT 	= "init";
 	public static String ACTION_REMOVE 	= "remove";
-	
+
 	// Commands
 	public static String INIT_ANDROID 	= BUNDLE + SEPARATOR + ACTION_INIT + SEPARATOR + TargetPlatform.ANDROID.toLowerString();
 	public static String INIT_IOS 		= BUNDLE + SEPARATOR + ACTION_INIT + SEPARATOR + TargetPlatform.IPHONE.toLowerString();
@@ -68,31 +68,31 @@ public class ProjectCommand extends BaseCommand {
 			while(!userHasConfirmed)
 			{
 				System.out.println(">> Project Parameters");
-				
+
 				//Project Name
 				if(!this.commandArgs.containsKey("name"))
 					Harmony.initProjectName();
 				else
 					Harmony.projectName = this.commandArgs.get("name");
-				
+
 				//Project NameSpace
 				if(!this.commandArgs.containsKey("namespace"))
 					Harmony.initProjectNameSpace();
 				else
 					Harmony.projectNameSpace = this.commandArgs.get("namespace");
-				
+
 				//Android sdk path
 				if(!this.commandArgs.containsKey("androidsdk"))
 					Harmony.initProjectAndroidSdkPath();
 				else
 					Harmony.androidSdkPath = this.commandArgs.get("androidsdk");
-				
+
 				if(Harmony.DEBUG) {
 					System.out.println("Project Name: "			+ Harmony.projectName);
 					System.out.println("Project NameSpace: "	+ Harmony.projectNameSpace);
 					System.out.println("Android SDK Path: "		+ Harmony.androidSdkPath);
 				}
-				
+
 				if (Harmony.isConsole) {
 					String accept = Harmony.getUserInput("Use below given parameters to process files? (y/n) ");
 					if(!accept.contains("n")) {
@@ -111,25 +111,28 @@ public class ProjectCommand extends BaseCommand {
 			isProjectInit = true;
 		}
 	}
-	
+
 	/**
 	 * Initialize Android Project folders and files
 	 * @return success of Android project initialization
 	 */
-	public boolean initAndroid()
-	{
-		System.out.println("\nInit Project Google Android");
-		System.out.println("---------------------------\n");
-		
+	public boolean initAndroid() {
+
+		System.out.println("\nInit Project Google Android\n----------------------\n");
+
 		this.initProjectParam();
 		boolean result = false;
 
 		try {
 			if(new ProjectGenerator(this.adapterAndroid).makeProject()){
-				System.out.println("Init Android Project Success!");
+				// Debug Log
+				if (Harmony.DEBUG)
+					System.out.println("Init Android Project Success!");
 				result = true;
 			} else {
-				System.out.println("Init Android Project Fail!");
+				// Debug Log
+				if (Harmony.DEBUG)
+					System.out.println("Init Android Project Fail!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -141,19 +144,22 @@ public class ProjectCommand extends BaseCommand {
 	 * Initialize IOS Project folders and files
 	 * @return success of IOS project initialization
 	 */
-	public boolean initIOS()
-	{
-		System.out.println("\nInit Project Apple iOS");
-		System.out.println("----------------------\n");
+	public boolean initIOS() {
+
+		System.out.println("\nInit Project Apple iOS\n----------------------\n");
 
 		this.initProjectParam();
 		boolean result = false;
 		try {
 			if(new ProjectGenerator(this.adapterIOS).makeProject()){
-				System.out.println("Init IOS Project Success!");
+				// Debug Log
+				if (Harmony.DEBUG)
+					System.out.println("Init IOS Project Success!");
 				result = true;
 			} else {
-				System.out.println("Init IOS Project Fail!");
+				// Debug Log
+				if (Harmony.DEBUG)
+					System.out.println("Init IOS Project Fail!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -165,19 +171,22 @@ public class ProjectCommand extends BaseCommand {
 	 * Initialize RIM Project folders and files
 	 * @return success of RIM project initialization
 	 */
-	public boolean initRIM()
-	{
-		System.out.println("\nInit Project BlackBerry RIM");
-		System.out.println("---------------------------\n");
+	public boolean initRIM() {
+
+		System.out.println("\nInit Project BlackBerry RIM\n----------------------\n");
 
 		this.initProjectParam();
 		boolean result = false;
 		try {
 			if(new ProjectGenerator(this.adapterRIM).makeProject()){
-				System.out.println("Init RIM Project Success!");
+				// Debug Log
+				if (Harmony.DEBUG)
+					System.out.println("Init RIM Project Success!");
 				result = true;
 			} else {
-				System.out.println("Init RIM Project Fail!");
+				// Debug Log
+				if (Harmony.DEBUG)
+					System.out.println("Init RIM Project Fail!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -189,19 +198,22 @@ public class ProjectCommand extends BaseCommand {
 	 * Initialize Windows Phone Project folders and files
 	 * @return success of Windows Phone project initialization
 	 */
-	public boolean initWinPhone()
-	{
-		System.out.println("\nInit Project Windows Phone");
-		System.out.println("--------------------------\n");
+	public boolean initWinPhone() {
+
+		System.out.println("\nInit Project Windows Phone\n----------------------\n");
 
 		this.initProjectParam();
 		boolean result = false;
 		try{
 			if(new ProjectGenerator(this.adapterWinPhone).makeProject()){
-				System.out.println("Init WinPhone Project Success!");
+				// Debug Log
+				if (Harmony.DEBUG)
+					System.out.println("Init WinPhone Project Success!");
 				result = true;
 			} else {
-				System.out.println("Init WinPhone Project Fail!");
+				// Debug Log
+				if (Harmony.DEBUG)
+					System.out.println("Init WinPhone Project Fail!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -212,10 +224,10 @@ public class ProjectCommand extends BaseCommand {
 	/**
 	 * Initialize all project platforms
 	 */
-	public void initAll()
-	{
-		System.out.println("\nInit All Projects");
-		System.out.println("-----------------\n");
+	public void initAll() {
+
+		System.out.println("\nInit All Projects\n----------------------\n");
+
 		this.initProjectParam();
 		this.initAndroid();
 		this.initIOS();
@@ -226,8 +238,8 @@ public class ProjectCommand extends BaseCommand {
 	/**
 	 * Remove Android project folder
 	 */
-	public void removeAndroid()
-	{
+	public void removeAndroid() {
+
 		if(!userHasConfirmed) {
 			String accept = Harmony.getUserInput("Are you sure to Delete Android Project? (y/n) ");
 			if(accept.contains("n")) {
@@ -246,8 +258,8 @@ public class ProjectCommand extends BaseCommand {
 	/**
 	 * Remove IOS project folder
 	 */
-	public void removeIOS()
-	{
+	public void removeIOS() {
+
 		if(!userHasConfirmed) {
 			String accept = Harmony.getUserInput("Are you sure to Delete Apple iOS Project? (y/n) ");
 			if(accept.contains("n")) {
@@ -266,8 +278,8 @@ public class ProjectCommand extends BaseCommand {
 	/**
 	 * Remove RIM project folder
 	 */
-	public void removeRIM()
-	{
+	public void removeRIM() {
+
 		if(!userHasConfirmed) {
 			String accept = Harmony.getUserInput("Are you sure to Delete BlackBerry Rim Project? (y/n) ");
 			if(accept.contains("n")) {
@@ -286,8 +298,8 @@ public class ProjectCommand extends BaseCommand {
 	/**
 	 * Remove Windows Phone project folder
 	 */
-	public void removeWinPhone()
-	{
+	public void removeWinPhone() {
+
 		if(!userHasConfirmed) {
 			String accept = Harmony.getUserInput("Are you sure to Delete Windows Phone Project? (y/n) ");
 			if(accept.contains("n")) {
@@ -306,8 +318,8 @@ public class ProjectCommand extends BaseCommand {
 	/**
 	 * Remove all project platforms
 	 */
-	public void removeAll()
-	{
+	public void removeAll() {
+
 		if(!userHasConfirmed) {
 			String accept = Harmony.getUserInput("Are you sure to Delete All Projects? (y/n) ");
 			if(accept.contains("n")) {
@@ -327,7 +339,7 @@ public class ProjectCommand extends BaseCommand {
 			userHasConfirmed = false;
 		}
 	}
-	
+
 	/** @see BaseCommand#summary() */
 	@Override
 	public void summary() {
@@ -337,7 +349,7 @@ public class ProjectCommand extends BaseCommand {
 		System.out.print("\t"+INIT_RIM+"\t => Init BlackBerry project directory\n");
 		System.out.print("\t"+INIT_WINPHONE+"\t => Init Windows Phone project directory\n");
 		System.out.print("\t"+INIT_ALL+"\t => Init All project directories\n");
-		
+
 		System.out.print("\t"+REMOVE_ANDROID+"\t => Remove Google Android project directory\n");
 		System.out.print("\t"+REMOVE_IOS+"\t => Remove Apple IOS project directory\n");
 		System.out.print("\t"+REMOVE_RIM+"\t => Remove BlackBerry project directory\n");
@@ -354,45 +366,45 @@ public class ProjectCommand extends BaseCommand {
 			this.initAndroid();
 		} else
 
-		if (action.equals(INIT_IOS)) {
-			this.initIOS();
-		} else
-			
-		if (action.equals(INIT_RIM)) {
-			this.initRIM();
-		} else
-			
-		if (action.equals(INIT_WINPHONE)) {
-			this.initWinPhone();
-		} else
-			
-		if (action.equals(INIT_ALL)) {
-			this.initAll();
-		} else
+			if (action.equals(INIT_IOS)) {
+				this.initIOS();
+			} else
 
-		if (action.equals(REMOVE_ANDROID)) {
-			this.removeAndroid();
-		} else
+				if (action.equals(INIT_RIM)) {
+					this.initRIM();
+				} else
 
-		if (action.equals(REMOVE_IOS)) {
-			this.removeIOS();
-		} else
+					if (action.equals(INIT_WINPHONE)) {
+						this.initWinPhone();
+					} else
 
-		if (action.equals(REMOVE_RIM)) {
-			this.removeRIM();
-		} else
+						if (action.equals(INIT_ALL)) {
+							this.initAll();
+						} else
 
-		if (action.equals(REMOVE_WINPHONE)) {
-			this.removeWinPhone();
-		} else
+							if (action.equals(REMOVE_ANDROID)) {
+								this.removeAndroid();
+							} else
 
-		if (action.equals(REMOVE_ALL)) {
-			this.removeAll();
-		} else
-			
-		{
-			
-		}
+								if (action.equals(REMOVE_IOS)) {
+									this.removeIOS();
+								} else
+
+									if (action.equals(REMOVE_RIM)) {
+										this.removeRIM();
+									} else
+
+										if (action.equals(REMOVE_WINPHONE)) {
+											this.removeWinPhone();
+										} else
+
+											if (action.equals(REMOVE_ALL)) {
+												this.removeAll();
+											} else
+
+											{
+
+											}
 	}
 
 	/** @see BaseCommand#isAvailableCommand(String) */
@@ -410,5 +422,4 @@ public class ProjectCommand extends BaseCommand {
 				command.equals(REMOVE_ALL)
 				);
 	}
-
 }

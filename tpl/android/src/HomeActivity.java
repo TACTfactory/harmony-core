@@ -30,18 +30,6 @@ public class HomeActivity extends Activity
 		<#if entities??>
 		//Debug buttons
 		<#list entities as entity>
-		//List
-		Button ${entity.name}ListButton = new Button(this);
-		${entity.name}ListButton.setText("${entity.name}ListActivity");
-		${entity.name}ListButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Intent intent = new Intent(HomeActivity.this,${entity.name}ListActivity.class);
-				HomeActivity.this.startActivity(intent);
-			}
-		});
-		homeLayout.addView(${entity.name}ListButton);
-
 		//Create
 		Button ${entity.name}CreateButton = new Button(this);
 		${entity.name}CreateButton.setText("${entity.name}CreateActivity");
@@ -53,6 +41,17 @@ public class HomeActivity extends Activity
 			}
 		});
 		homeLayout.addView(${entity.name}CreateButton);
+		//List
+		Button ${entity.name}ListButton = new Button(this);
+		${entity.name}ListButton.setText("${entity.name}ListActivity");
+		${entity.name}ListButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				Intent intent = new Intent(HomeActivity.this,${entity.name}ListActivity.class);
+				HomeActivity.this.startActivity(intent);
+			}
+		});
+		homeLayout.addView(${entity.name}ListButton);
 		</#list>
 		<#else>
 		</#if>

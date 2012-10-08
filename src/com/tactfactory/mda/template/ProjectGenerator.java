@@ -120,7 +120,10 @@ public class ProjectGenerator {
 			tpl.process(this.datamodel, output);				// Process datamodel (with previous template file), and output to output file
 			output.flush();
 			output.close();
-			System.out.println("File "+destFile.getName()+" processed...");
+
+			// Debug Log
+			if (Harmony.DEBUG)
+				System.out.println("File "+destFile.getName()+" processed...");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -253,7 +256,9 @@ public class ProjectGenerator {
 		boolean result = false;
 		File dirproj = new File(String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()));
 		if(FileUtils.deleteRecursive(dirproj)) {
-			System.out.println("Project "+this.adapter.getPlatform()+" removed!");
+			// Debug Log
+			if (Harmony.DEBUG)
+				System.out.println("Project "+this.adapter.getPlatform()+" removed!");
 		}
 		return result;
 	}

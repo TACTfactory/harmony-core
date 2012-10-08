@@ -196,6 +196,14 @@ public abstract class ${name}AdapterBase {
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
 		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item);
+		<#list fields as field>
+			<#if (field.alias=="COL_ID")>
+				<#assign col_id="COL_ID">
+			</#if>
+		</#list>
+		<#if col_id??>
+		values.remove(${col_id});
+		</#if>
 		
 		return this.mDatabase.insert(
 				TABLE_NAME, 
