@@ -31,6 +31,8 @@ public abstract class BaseAdapter {
 	
 	// File
 	protected String manifest;
+	protected String home;
+	protected String strings;
 	
 	// Abstract Methods
 	/** Generate platform Namespace
@@ -62,6 +64,15 @@ public abstract class BaseAdapter {
 	public abstract String getViewComponentEdit(FieldMetadata field);
 	
 	// Utils
+
+	public final String getTemplateProjectPath() {
+		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getProject() );
+	}
+	
+	public final String getLibsPath() {
+		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getLibs() );
+	}
+	
 	public final String getSourcePath() {
 		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getSource() );
 	}
@@ -101,20 +112,32 @@ public abstract class BaseAdapter {
 	public final String getTemplateRessourceValuesPath() {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getResource(), this.getValues() );
 	}
+
 	public final String getManifestPathFile() {
-		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getManifest() );
+		return String.format("%s/%s/%s", Harmony.pathProject, this.getPlatform(), this.getManifest() );
 	}
 	
 	public final String getTemplateManifestPathFile() {
-		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getProject(), this.getManifest() );
+		return String.format("%s/%s/%s/%s", Harmony.pathTemplate, this.getPlatform(), this.getProject(), this.getManifest() );
 	}
 
-	public final String getTemplateProjectPath() {
-		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getProject() );
+	public final String getHomeActivityPathFile() {
+		return String.format("%s/%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(), this.getSource(), Harmony.projectNameSpace, this.getHome() );
 	}
 	
-	public final String getLibsPath() {
-		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getLibs() );
+	public final String getTemplateHomeActivityPathFile() {
+		return String.format("%s/%s/%s/%s", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getHome() );
+	}
+
+	public final String getStringsPathFile() {
+		return String.format("%s/%s/%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(),
+											this.getResource(), this.getValues(),
+											Harmony.projectNameSpace, this.getHome() );
+	}
+	
+	public final String getTemplateStringsPathFile() {
+		return String.format("%s/%s/%s/%s/%s", Harmony.pathTemplate, this.getPlatform(),
+											this.getResource(), this.getValues(), this.getStrings() );
 	}
 	
 	// Getter and Setter
@@ -284,6 +307,31 @@ public abstract class BaseAdapter {
 	public final void setLibs(String libs) {
 		this.libs = libs;
 	}
+	/**
+	 * @return the HomeActivity filename
+	 */
+	public final String getHome() {
+		return home;
+	}
 
+	/**
+	 * @param home the HomeActivity filename to set
+	 */
+	public final void setHome(String home) {
+		this.home = home;
+	}
 
+	/**
+	 * @return the strings.xml
+	 */
+	public final String getStrings() {
+		return strings;
+	}
+
+	/**
+	 * @param strings the strings.xml filename to set
+	 */
+	public final void setStrings(String strings) {
+		this.strings = strings;
+	}
 }

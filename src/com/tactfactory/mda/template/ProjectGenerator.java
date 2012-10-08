@@ -255,11 +255,17 @@ public class ProjectGenerator {
 	public boolean removeProject(){
 		boolean result = false;
 		File dirproj = new File(String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()));
-		if(FileUtils.deleteRecursive(dirproj)) {
-			// Debug Log
+		
+		int removeResult = FileUtils.deleteRecursive(dirproj);
+		if(removeResult==0)
 			if (Harmony.DEBUG)
 				System.out.println("Project "+this.adapter.getPlatform()+" removed!");
-		}
+		else
+			if (Harmony.DEBUG) {
+				System.out.println("Project "+this.adapter.getPlatform()+" NOT fully removed!\n");
+				System.out.println("Remove function return "+removeResult+" errors...\n");
+				System.out.println("Please check your file browser or file editor and try again...");
+			}
 		return result;
 	}
 
@@ -277,21 +283,14 @@ public class ProjectGenerator {
 			e1.printStackTrace();
 		}
 
-		File file = FileUtils.makeFile(
-				String.format("%s%s/%s",
-						this.adapter.getSourcePath(),
-						Harmony.projectNameSpace,
-						"HomeActivity.java"));
+		File file = FileUtils.makeFile(this.adapter.getHomeActivityPathFile() );
 
 		// Debug Log
 		if (Harmony.DEBUG)
 			System.out.print("\tGenerate Source : " + file.getPath() + "\n"); 
 
 		// Create
-		Template tpl = cfg.getTemplate(
-				String.format("%s%s",
-						this.adapter.getTemplateSourcePath().substring(1),
-						"HomeActivity.java"));
+		Template tpl = cfg.getTemplate(this.adapter.getTemplateHomeActivityPathFile().substring(1));
 
 		OutputStreamWriter output = new FileWriter(file);
 		tpl.process(datamodel, output);
@@ -315,9 +314,7 @@ public class ProjectGenerator {
 			e1.printStackTrace();
 		}
 
-		File destFile = new File(String.format("%s%s",
-				this.adapter.getRessourceValuesPath(),
-				"strings.xml"));
+		File destFile = new File(this.adapter.getStringsPathFile());
 
 		if(!destFile.exists())
 			destFile = FileUtils.makeFile(destFile.getPath());
@@ -329,9 +326,7 @@ public class ProjectGenerator {
 		// Create
 		Template tpl;
 		try {
-			tpl = cfg.getTemplate(String.format("%s%s",
-					this.adapter.getTemplateRessourceValuesPath().substring(1),
-					"strings.xml"));	// Load template file in engine
+			tpl = cfg.getTemplate(this.adapter.getTemplateStringsPathFile().substring(1));	// Load template file in engine
 
 			OutputStreamWriter output = new FileWriter(destFile);
 			tpl.process(this.datamodel, output);				// Process datamodel (with previous template file), and output to output file

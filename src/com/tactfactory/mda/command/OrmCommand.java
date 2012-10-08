@@ -38,23 +38,23 @@ import com.tactfactory.mda.template.WebServiceGenerator;
  *
  */
 public class OrmCommand extends BaseCommand {
-	
+
 	//bundle name
 	public final static String BUNDLE = "orm";
 	public final static String SUBJECT = "generate";
-	
+
 	//actions
 	public final static String ACTION_ENTITY = "entity";
 	public final static String ACTION_ENTITIES = "entities";
 	public final static String ACTION_FORM = "form";
 	public final static String ACTION_CRUD = "crud";
-	
+
 	//commands
 	public static String GENERATE_ENTITY 	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITY;
 	public static String GENERATE_ENTITIES	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITIES;
 	public static String GENERATE_FORM 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_FORM;
 	public static String GENERATE_CRUD 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_CRUD;
-	
+
 	//internal
 	protected BaseAdapter adapter = new AndroidAdapter();
 	protected JavaModelParser javaModelParser;
@@ -62,7 +62,7 @@ public class OrmCommand extends BaseCommand {
 	protected void generateForm() {
 
 	}
-	
+
 	/*
 	 * Generate java code files from first parsed Entity
 	 */
@@ -71,9 +71,9 @@ public class OrmCommand extends BaseCommand {
 		if(this.commandArgs.size()!=0){
 			if(this.commandArgs.containsKey("filename")){
 				this.javaModelParser.loadEntity(
-					this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/")
-					+"/entity/" + this.commandArgs.get("filename"));
-			
+						this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/")
+						+"/entity/" + this.commandArgs.get("filename"));
+
 				JavaAdapter javaAdapter = new JavaAdapter();
 				javaAdapter.parse(this.javaModelParser.getEntities().get(0));
 
@@ -96,7 +96,7 @@ public class OrmCommand extends BaseCommand {
 			}
 		}
 	}
-	
+
 	/*
 	 * Generate java code files from parsed Entities
 	 */
@@ -111,14 +111,14 @@ public class OrmCommand extends BaseCommand {
 		} catch(Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		// Convert CompilationUnits entities to ClassMetaData
 		JavaAdapter javaAdapter = new JavaAdapter();
-		
+
 		for (CompilationUnit mclass : this.javaModelParser.getEntities()) {
 			javaAdapter.parse(mclass);
 		}
-		
+
 		// Debug Log
 		if (Harmony.DEBUG)
 			System.out.print("\n");
@@ -130,7 +130,7 @@ public class OrmCommand extends BaseCommand {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		for (ClassMetadata meta : metas) {
 			try {
 				new ActivityGenerator(meta, this.adapter).generateAllAction();
@@ -179,23 +179,23 @@ public class OrmCommand extends BaseCommand {
 				e.printStackTrace();
 			}
 		} else
-			
-		if (action.equals(GENERATE_ENTITIES)) {
-			this.generateEntities();
-		} else
-		
-		if (action.equals(GENERATE_FORM)) {
-			this.generateForm();
-		} else
-			
-		if (action.equals(GENERATE_CRUD)) {
-			this.generateCrud();
-		} else
-			
-		{
-			
-		}
-		
+
+			if (action.equals(GENERATE_ENTITIES)) {
+				this.generateEntities();
+			} else
+
+				if (action.equals(GENERATE_FORM)) {
+					this.generateForm();
+				} else
+
+					if (action.equals(GENERATE_CRUD)) {
+						this.generateCrud();
+					} else
+
+					{
+
+					}
+
 	}
 
 	@Override

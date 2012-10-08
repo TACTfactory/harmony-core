@@ -228,21 +228,27 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/** delete a directory with all its files recursively */
-	public static boolean deleteRecursive(File dir){
-		boolean result = false;
+	public static int deleteRecursive(File dir)
+	{
+		return FileUtils.deleteRecursive(dir,0);
+	}
+	
+	public static int deleteRecursive(File dir, int result){
 		if(dir.exists()) {
 			if(dir.isDirectory()) {
 				//it's a directory, list files and call deleteDir on a dir
 				for(File f : dir.listFiles()) {
 					if(f.isDirectory()) {
-						FileUtils.deleteRecursive(f);
+						FileUtils.deleteRecursive(f,result);
 					} else {
 						if(f.delete())
 							if (Harmony.DEBUG)
 								System.out.println("File '"+f.getPath()+"' deleted.");
 						else
-							if (Harmony.DEBUG)
+							if (Harmony.DEBUG){
 								System.out.println("File '"+f.getPath()+"' delete ERROR!");
+								result++;
+							}
 					}
 				}
 				
@@ -251,14 +257,15 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 					if(dir.delete()) {
 						if (Harmony.DEBUG)
 							System.out.println("Folder '"+dir.getPath()+"' deleted.");
-						result = true;
 					} else {
 						if (Harmony.DEBUG)
 							System.out.println("Folder '"+dir.getPath()+"' delete ERROR!");
+						result++;
 					}
 				} else {
 					if (Harmony.DEBUG)
 						System.out.println("Folder '"+dir.getPath()+"' NOT Empty!");
+					result++;
 				}
 				
 			} else {
@@ -266,17 +273,17 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 				if(dir.delete()) {
 					if (Harmony.DEBUG)
 						System.out.println("File '"+dir.getPath()+"' deleted.");
-					result = true;
 				} else {
 					if (Harmony.DEBUG)
 						System.out.println("File '"+dir.getPath()+"' delete ERROR!");
+					result++;
 				}
 			}
 		} else {
 			if (Harmony.DEBUG)
 				System.out.println("Folder '"+dir.getPath()+"' doesn't exists!");
+			result++;
 		}
 		return result;
 	}
-
 }

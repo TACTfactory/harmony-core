@@ -55,8 +55,13 @@ public class Harmony {
 	/** Project space */
 	public static String projectFolder = "android";
 
+	/** Project name (demact) */
 	public static String projectName;
+	
+	/** Project NameSpace (com/tactfactory/mda/test/demact) */
 	public static String projectNameSpace;
+	
+	/** Android SDK path */
 	public static String androidSdkPath;
 	
 	private static final String DEFAULT_PROJECT_NAME = "toto";

@@ -31,6 +31,8 @@ public final class AndroidAdapter extends BaseAdapter {
 		
 		// File
 		this.manifest 	= "AndroidManifest.xml";
+		this.strings	= "strings.xml";
+		this.home		= "HomeActivity.java";
 	}
 
 	/* (non-Javadoc)
