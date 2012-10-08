@@ -175,16 +175,16 @@ public class ProjectGenerator {
 		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/")+"/entity/" );
 
 		// create HomeActivity.java
-		this.updateProjectFile(this.adapter.getSourcePath()+Harmony.projectNameSpace.replaceAll("\\.","/")+"/HomeActivity.java",
-				this.adapter.getTemplateSourcePath().substring(1)+"HomeActivity.java");
+		this.updateProjectFile(this.adapter.getHomeActivityPathFile(),
+				this.adapter.getTemplateHomeActivityPathFile().substring(1));
 
 		// create configs.xml
 		this.updateProjectFile(this.adapter.getRessourceValuesPath()+"configs.xml",
 				this.adapter.getTemplateRessourceValuesPath().substring(1)+"configs.xml");
 
 		// create strings.xml
-		this.updateProjectFile(this.adapter.getRessourceValuesPath()+"strings.xml",
-				this.adapter.getTemplateRessourceValuesPath().substring(1)+"strings.xml");
+		this.updateProjectFile(this.adapter.getStringsPathFile(),
+				this.adapter.getTemplateStringsPathFile().substring(1));
 
 		// create main.xml
 		this.updateProjectFile(this.adapter.getRessourceLayoutPath()+"main.xml",
@@ -257,15 +257,13 @@ public class ProjectGenerator {
 		File dirproj = new File(String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()));
 		
 		int removeResult = FileUtils.deleteRecursive(dirproj);
-		if(removeResult==0)
-			if (Harmony.DEBUG)
-				System.out.println("Project "+this.adapter.getPlatform()+" removed!");
-		else
-			if (Harmony.DEBUG) {
-				System.out.println("Project "+this.adapter.getPlatform()+" NOT fully removed!\n");
-				System.out.println("Remove function return "+removeResult+" errors...\n");
-				System.out.println("Please check your file browser or file editor and try again...");
-			}
+
+		if(removeResult==0) {
+			System.out.println("Project "+this.adapter.getPlatform()+" removed!");
+			result = true;
+		} else {
+			System.out.println("Remove Project "+this.adapter.getPlatform()+" return "+removeResult+" errors...\n");
+		}
 		return result;
 	}
 

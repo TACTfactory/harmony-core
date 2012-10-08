@@ -130,9 +130,8 @@ public abstract class BaseAdapter {
 	}
 
 	public final String getStringsPathFile() {
-		return String.format("%s/%s/%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(),
-											this.getResource(), this.getValues(),
-											Harmony.projectNameSpace, this.getHome() );
+		return String.format("%s/%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(),
+											this.getResource(), this.getValues(), this.getStrings() );
 	}
 	
 	public final String getTemplateStringsPathFile() {

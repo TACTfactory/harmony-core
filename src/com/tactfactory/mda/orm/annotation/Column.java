@@ -49,7 +49,7 @@ public @interface Column {
 	}
 	
 	/**
-	 * @return type: (optional, defaults to ‘string’) The mapping type to use for the column.
+	 * @return type: (optional, defaults to "string") The mapping type to use for the column.
 	 */
 	String type() default Type.TEXT;
 			

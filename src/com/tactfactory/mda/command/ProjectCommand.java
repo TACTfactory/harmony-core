@@ -79,7 +79,7 @@ public class ProjectCommand extends BaseCommand {
 				if(!this.commandArgs.containsKey("namespace"))
 					Harmony.initProjectNameSpace();
 				else
-					Harmony.projectNameSpace = this.commandArgs.get("namespace");
+					Harmony.projectNameSpace = this.commandArgs.get("namespace").replaceAll("\\.", "/");
 
 				//Android sdk path
 				if(!this.commandArgs.containsKey("androidsdk"))
@@ -248,7 +248,8 @@ public class ProjectCommand extends BaseCommand {
 			userHasConfirmed = true;
 		}
 		try {
-			new ProjectGenerator(this.adapterAndroid).removeProject();
+			if(!new ProjectGenerator(this.adapterAndroid).removeProject())
+				System.out.println("Please check your file browser or file editor and try again...");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -268,7 +269,8 @@ public class ProjectCommand extends BaseCommand {
 			userHasConfirmed = true;
 		}
 		try {
-			new ProjectGenerator(this.adapterIOS).removeProject();
+			if(!new ProjectGenerator(this.adapterIOS).removeProject())
+				System.out.println("Please check your file browser or file editor and try again...");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -288,7 +290,8 @@ public class ProjectCommand extends BaseCommand {
 			userHasConfirmed = true;
 		}
 		try {
-			new ProjectGenerator(this.adapterRIM).removeProject();
+			if(!new ProjectGenerator(this.adapterRIM).removeProject())
+				System.out.println("Please check your file browser or file editor and try again...");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -308,7 +311,8 @@ public class ProjectCommand extends BaseCommand {
 			userHasConfirmed = true;
 		}
 		try {
-			new ProjectGenerator(this.adapterWinPhone).removeProject();
+			if(!new ProjectGenerator(this.adapterWinPhone).removeProject())
+				System.out.println("Please check your file browser or file editor and try again...");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -328,10 +332,12 @@ public class ProjectCommand extends BaseCommand {
 			userHasConfirmed = true;
 		}
 		try {
-			new ProjectGenerator(this.adapterAndroid).removeProject();
-			new ProjectGenerator(this.adapterIOS).removeProject();
-			new ProjectGenerator(this.adapterRIM).removeProject();
-			new ProjectGenerator(this.adapterWinPhone).removeProject();
+			if(	!new ProjectGenerator(this.adapterAndroid).removeProject() |
+				!new ProjectGenerator(this.adapterIOS).removeProject() |
+				!new ProjectGenerator(this.adapterRIM).removeProject() |
+				!new ProjectGenerator(this.adapterWinPhone).removeProject() ){
+				System.out.println("Please check your file browser or file editor and try again...");
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
