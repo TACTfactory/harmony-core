@@ -68,29 +68,35 @@ public class JavaModelParser {
         FileInputStream in = null;
         CompilationUnit cu = null;
         
-		try {
-			// creates an input stream for the file to be parsed
-			in = new FileInputStream(filename);
-
-            // parse the file
-			cu = JavaParser.parse(in);
-        } catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-            try {
-				in.close();
-			} catch (IOException e) {
-				if (Harmony.DEBUG)
-					e.printStackTrace();
-			}
+        if(new File(filename).exists())
+        {
+			try {
+				// creates an input stream for the file to be parsed
+				in = new FileInputStream(filename);
+	
+	            // parse the file
+				cu = JavaParser.parse(in);
+	        } catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+	            try {
+					in.close();
+				} catch (IOException e) {
+					if (Harmony.DEBUG)
+						e.printStackTrace();
+				}
+	        }
+			
+			if (cu != null)
+				this.entities.add(cu);
+        } else {
+        	if(Harmony.DEBUG)
+        		System.out.println("Given model file doesn't exist!");
         }
-		
-		if (cu != null)
-			this.entities.add(cu);
 	}
 
 	/**

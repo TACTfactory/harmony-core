@@ -259,10 +259,12 @@ public class ProjectGenerator {
 		int removeResult = FileUtils.deleteRecursive(dirproj);
 
 		if(removeResult==0) {
-			System.out.println("Project "+this.adapter.getPlatform()+" removed!");
 			result = true;
+			if(Harmony.DEBUG)
+				System.out.println("Project "+this.adapter.getPlatform()+" removed!");
 		} else {
-			System.out.println("Remove Project "+this.adapter.getPlatform()+" return "+removeResult+" errors...\n");
+			if(Harmony.DEBUG)
+				System.out.println("Remove Project "+this.adapter.getPlatform()+" return "+removeResult+" errors...\n");
 		}
 		return result;
 	}

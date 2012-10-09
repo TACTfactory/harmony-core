@@ -198,9 +198,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 					{
 						tmp_file = FileUtils.makeFile(destPath+tpl_files[i].getName());
 						if(tmp_file.exists()) {
+			    			FileUtils.copyfile(tpl_files[i], tmp_file);
 							if (Harmony.DEBUG)
 								System.out.println("File '"+tpl_files[i].getName()+"' created...");
-			    			FileUtils.copyfile(tpl_files[i], tmp_file);
 						} else {
 							if (Harmony.DEBUG)
 								System.out.println("File '"+tpl_files[i].getName()+"' creation error...");
@@ -228,15 +228,16 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 				//it's a directory, list files and call deleteDir on a dir
 				for(File f : dir.listFiles()) {
 					if(f.isDirectory()) {
-						FileUtils.deleteRecursive(f,result);
+						result = FileUtils.deleteRecursive(f,result);
 					} else {
-						if(f.delete())
+						if(f.delete()){
+							if (Harmony.DEBUG)
 								System.out.println("File '"+f.getPath()+"' deleted.");
-						else
-							if (Harmony.DEBUG){
+						} else{
+							result++;
+							if (Harmony.DEBUG)
 								System.out.println("File '"+f.getPath()+"' delete ERROR!");
-								result++;
-							}
+						}
 					}
 				}
 				
@@ -246,14 +247,14 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 						if (Harmony.DEBUG)
 							System.out.println("Folder '"+dir.getPath()+"' deleted.");
 					} else {
+						result++;
 						if (Harmony.DEBUG)
 							System.out.println("Folder '"+dir.getPath()+"' delete ERROR!");
-						result++;
 					}
 				} else {
+					result++;
 					if (Harmony.DEBUG)
 						System.out.println("Folder '"+dir.getPath()+"' NOT Empty!");
-					result++;
 				}
 				
 			} else {
@@ -262,15 +263,15 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 					if (Harmony.DEBUG)
 						System.out.println("File '"+dir.getPath()+"' deleted.");
 				} else {
+					result++;
 					if (Harmony.DEBUG)
 						System.out.println("File '"+dir.getPath()+"' delete ERROR!");
-					result++;
 				}
 			}
 		} else {
+			result++;
 			if (Harmony.DEBUG)
 				System.out.println("Folder '"+dir.getPath()+"' doesn't exists!");
-			result++;
 		}
 		return result;
 	}

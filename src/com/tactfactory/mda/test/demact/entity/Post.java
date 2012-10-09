@@ -4,6 +4,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.joda.time.DateTime;
+
 import com.tactfactory.mda.orm.annotation.*;
 
 @Table
@@ -37,9 +39,9 @@ public class Post implements Serializable {
 
 
 	public Post() {
-    	this.createdAt = new Date();
-    	this.updatedAt = new Date();
-    	this.expiresAt = new Date();
+    	this.createdAt = new DateTime().toDate();
+    	this.updatedAt = new DateTime().toDate();
+    	this.expiresAt = new DateTime().toDate();
     }
 	
     /**

@@ -3,6 +3,8 @@ package com.tactfactory.mda.test.demact.entity;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.joda.time.DateTime;
+
 import com.tactfactory.mda.orm.annotation.*;
 
 @Table
@@ -28,7 +30,7 @@ public class Comment implements Serializable {
 
 	public Comment() {
 		this.id = -1;
-    	this.createdAt = new Date();
+    	this.createdAt = new DateTime().toDate();
     }
 	/**
 	 * @return the id

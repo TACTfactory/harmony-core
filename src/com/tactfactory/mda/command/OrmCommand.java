@@ -68,15 +68,18 @@ public class OrmCommand extends BaseCommand {
 	 */
 	protected void generateEntity() {
 		this.javaModelParser = new JavaModelParser();
-		if(this.commandArgs.size()!=0){
-			if(this.commandArgs.containsKey("filename")){
-				this.javaModelParser.loadEntity(
-						this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/")
+		
+		if(this.commandArgs.size()!=0 && this.commandArgs.containsKey("filename")) {
+			
+			this.javaModelParser.loadEntity(this.adapter.getSourcePath()
+						+Harmony.projectNameSpace.replaceAll("\\.","/")
 						+"/entity/" + this.commandArgs.get("filename"));
-
+			
+			if(this.javaModelParser.getEntities().size()!=0) {
+				
 				JavaAdapter javaAdapter = new JavaAdapter();
 				javaAdapter.parse(this.javaModelParser.getEntities().get(0));
-
+	
 				// Generate views from MetaData
 				ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
 				try {
@@ -85,7 +88,7 @@ public class OrmCommand extends BaseCommand {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
-
+	
 				// Make Database from MetaData
 				try {
 					new SQLiteGenerator(metas, this.adapter).generateDatabase();
@@ -93,7 +96,13 @@ public class OrmCommand extends BaseCommand {
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+			} else {
+				if(Harmony.DEBUG)
+					System.out.println("Given entity filename is not an entity!");
 			}
+		} else {
+			if(Harmony.DEBUG)
+				System.out.println("No given entity filename !");
 		}
 	}
 
@@ -114,39 +123,44 @@ public class OrmCommand extends BaseCommand {
 
 		// Convert CompilationUnits entities to ClassMetaData
 		JavaAdapter javaAdapter = new JavaAdapter();
-
-		for (CompilationUnit mclass : this.javaModelParser.getEntities()) {
-			javaAdapter.parse(mclass);
-		}
-
-		// Debug Log
-		if (Harmony.DEBUG)
-			System.out.print("\n");
-
-		// Generate views from MetaData
-		ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
-		try {
-			new ProjectGenerator(metas, this.adapter).generateHomeActivity();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		for (ClassMetadata meta : metas) {
+		if(this.javaModelParser.getEntities().size()!=0)
+		{
+			for (CompilationUnit mclass : this.javaModelParser.getEntities()) {
+				javaAdapter.parse(mclass);
+			}
+	
+			// Debug Log
+			if (Harmony.DEBUG)
+				System.out.print("\n");
+	
+			// Generate views from MetaData
+			ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
 			try {
-				new ActivityGenerator(meta, this.adapter).generateAllAction();
-				new AdapterGenerator(meta, this.adapter).generate();
-				new WebServiceGenerator();
+				new ProjectGenerator(metas, this.adapter).generateHomeActivity();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		}
-
-		// Make Database from MetaData
-		try {
-			new SQLiteGenerator(metas, this.adapter).generateDatabase();
-			new ProviderGenerator();
-		} catch (Exception e) {
-			e.printStackTrace();
+	
+			for (ClassMetadata meta : metas) {
+				try {
+					new ActivityGenerator(meta, this.adapter).generateAllAction();
+					new AdapterGenerator(meta, this.adapter).generate();
+					new WebServiceGenerator();
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+	
+			// Make Database from MetaData
+			try {
+				new SQLiteGenerator(metas, this.adapter).generateDatabase();
+				new ProviderGenerator();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+			if(Harmony.DEBUG)
+				System.out.println("No entities found in entity package!");
 		}
 	}
 
