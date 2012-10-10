@@ -35,6 +35,17 @@ public class AdapterGenerator {
 		this.adapter	= adapter;
 		
 		this.localNameSpace = this.adapter.getNameSpace(this.meta, this.adapter.getData());
+
+		// Make ids
+		ArrayList<Map<String, Object>> modelIds = new ArrayList<Map<String,Object>>();
+		for (FieldMetadata field : this.meta.ids.values()) {
+			Map<String, Object> modelId = new HashMap<String, Object>();
+			modelId.put(TagConstant.NAME, field.name);
+			modelId.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(field));
+			modelId.put(TagConstant.TYPE, field.type);
+			
+			modelIds.add(modelId);
+		}
 		
 		// Make fields
 		ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
@@ -49,15 +60,16 @@ public class AdapterGenerator {
 			modelFields.add(modelField);
 		}
 		
-		// Make ids
-		ArrayList<Map<String, Object>> modelIds = new ArrayList<Map<String,Object>>();
-		for (FieldMetadata field : this.meta.ids.values()) {
-			Map<String, Object> modelId = new HashMap<String, Object>();
-			modelId.put(TagConstant.NAME, field.name);
-			modelId.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(field));
-			modelId.put(TagConstant.TYPE, field.type);
+		// Make relations
+		ArrayList<Map<String, Object>> modelRelations = new ArrayList<Map<String,Object>>();
+		for (FieldMetadata relation : this.meta.relations.values()) {
+			Map<String, Object> modelRelation = new HashMap<String, Object>();
+			modelRelation.put(TagConstant.NAME, relation.name);
+			modelRelation.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(relation));
+			modelRelation.put(TagConstant.TYPE, relation.type);
+			modelRelation.put(TagConstant.RELATION_TYPE, relation.relation_type);
 			
-			modelIds.add(modelId);
+			modelRelations.add(modelRelation);
 		}
 		
 		// Make class
@@ -65,8 +77,9 @@ public class AdapterGenerator {
 		this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	meta.space);
 		this.datamodel.put(TagConstant.NAME, 				meta.name);
 		this.datamodel.put(TagConstant.LOCAL_NAMESPACE, 	this.localNameSpace);
-		this.datamodel.put(TagConstant.FIELDS,				modelFields);
 		this.datamodel.put(TagConstant.IDS,					modelIds);
+		this.datamodel.put(TagConstant.FIELDS,				modelFields);
+		this.datamodel.put(TagConstant.RELATIONS,			modelRelations);
 	}
 	
 	public void generate() {

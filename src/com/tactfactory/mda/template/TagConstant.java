@@ -15,6 +15,8 @@ public abstract class TagConstant {
 	//Template annotations
 	public final static String ENTITIES = "entities";
 	public final static String FIELDS = "fields";
+	public final static String RELATIONS = "relations";
+	public final static String RELATION_TYPE = "relation_type";
 	public final static String SPACE = "space";
 	public final static String NAME = "name";
 	public final static String TYPE = "type";

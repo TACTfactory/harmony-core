@@ -63,7 +63,7 @@ public class OrmCommand extends BaseCommand {
 
 	}
 
-	/*
+	/**
 	 * Generate java code files from first parsed Entity
 	 */
 	protected void generateEntity() {
@@ -106,7 +106,7 @@ public class OrmCommand extends BaseCommand {
 		}
 	}
 
-	/*
+	/**
 	 * Generate java code files from parsed Entities
 	 */
 	protected void generateEntities() {
@@ -164,7 +164,7 @@ public class OrmCommand extends BaseCommand {
 		}
 	}
 
-	/*
+	/**
 	 * Generate Create,Read,Upload,Delete code functions
 	 */
 	protected void generateCrud() {

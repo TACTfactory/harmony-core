@@ -21,20 +21,39 @@ public abstract class ${name}AdapterBase {
 	
 	/** Table name of SQLite database */
 	public static final String TABLE_NAME = "${name}";
+	<#if relations??>
+	<#list relations as relation>
+	<#if relation.relation_type=="@ManyToMany">
+	public static final String RELATION_${relation.name?upper_case}_TABLE_NAME ="${name}_to_${relation.name?cap_first}";
+	</#if>
+	</#list>
+	</#if>
 	
 	// Columns constants fields mapping
 	<#list fields as field>
 	public static final String ${field.alias} = "${field.name}";
 	</#list>
+	<#if relations??>
+	<#list relations as relation>
+	<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+	public static final String ${relation.alias} = "${relation.name?cap_first}";
+	</#if>
+	</#list>
+	</#if>
 	
 	/** Global Fields */
 	public static final String[] COLS = new String[] {
 		<#list fields as field>
-		${field.alias}<#if field_has_next>,</#if>
+		${field.alias}<#if field_has_next>,<#else><#if (relations?? && relations?size!=0 && (relations[0].relation_type=="@OneToOne" | relations[0].relation_type=="@ManyToOne"))>,</#if></#if>
+		</#list>
+		<#list relations as relation>
+		<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+		${relation.alias}<#if (relation_has_next && (relations[relation_index+1].relation_type=="@OneToOne" | relations[relation_index+1].relation_type=="@ManyToOne"))>,</#if>
+		</#if>
 		</#list>
 	};
 
-	/** Generate Schema for Database
+	/** Generate Entity Table Schema
 	 * 
 	 * @return "SQL query : CREATE TABLE..."
 	 */
@@ -48,10 +67,36 @@ public abstract class ${name}AdapterBase {
 		+ ${field.alias}	+ " ${field.schema} <#if field_has_next>,</#if>"
 		</#if>
 		</#list>
+		<#if relations??>
+			<#list relations as relation>
+				<#if relation.relation_type=="@OneToOne">
+		+ ${relation.alias}	+ " integer"
+				</#if>
+				<#if relation.relation_type=="@ManyToOne">
+		+ ${relation.alias}	+ " integer"
+				</#if>
+			</#list>
+		</#if>
 		+ ");";
-		
-		//+ COL_ID 		+ " integer primary key autoincrement, "
 	}
+	<#if relations??>
+		<#list relations as relation>
+			<#if relation.relation_type=="@ManyToMany">
+	/** Generate Entity Relations Table Schema
+	 * 
+	 * @return "SQL query : CREATE TABLE..."
+	 */
+	public static final String get${relation.name?cap_first}RelationSchema() {
+		return "CREATE TABLE "
+		+ RELATION_${relation.name?upper_case}_TABLE_NAME + "("
+		+ "COL_ID integer primary key autoincrement,"
+		+ "COL_${name?upper_case}_ID integer,"
+		+ "COL_${relation.name?upper_case}_ID integer"
+		+ ");";
+	}
+			</#if>
+		</#list>
+	</#if>
 	
 	// Database tools
 	protected SQLiteDatabase mDatabase;

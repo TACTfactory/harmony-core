@@ -18,6 +18,7 @@ public class FieldMetadata {
 	
 	/** Field type */
 	public String type;
+	public String relation_type;
 	
 	public boolean nullable;
 	

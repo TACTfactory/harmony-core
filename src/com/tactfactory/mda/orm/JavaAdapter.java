@@ -22,6 +22,10 @@ import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.annotation.Column;
 import com.tactfactory.mda.orm.annotation.Entity;
 import com.tactfactory.mda.orm.annotation.Id;
+import com.tactfactory.mda.orm.annotation.ManyToMany;
+import com.tactfactory.mda.orm.annotation.ManyToOne;
+import com.tactfactory.mda.orm.annotation.OneToMany;
+import com.tactfactory.mda.orm.annotation.OneToOne;
 import com.tactfactory.mda.utils.PackageUtils;
 
 public class JavaAdapter {
@@ -79,12 +83,22 @@ public class JavaAdapter {
 			FieldMetadata fieldMeta = new FieldMetadata();
 			fieldMeta.name = n.getVariables().get(0).toString();
 			fieldMeta.type = n.getType().toString();
+			fieldMeta.relation_type = n.getAnnotations().get(0).toString();
 			
 			boolean isColumn = false;
 			boolean isId = false;
+			boolean isRelation = false;
 			
 			for (AnnotationExpr annotationExpr : fieldAnnotations) {
 				String annotationType = annotationExpr.getName().toString();
+
+				if (annotationType.equals(PackageUtils.extractNameEntity(Id.class))) {
+					isId = true;
+					
+					// Debug Log
+					if (Harmony.DEBUG)
+						System.out.print("\t    ID: " + fieldMeta.name +"\n");
+				}
 				
 				if (annotationType.equals(PackageUtils.extractNameEntity(Column.class))) {
 					isColumn = true;
@@ -95,22 +109,54 @@ public class JavaAdapter {
 								" type of " + fieldMeta.type +"\n");
 				}
 				
-				if (annotationType.equals(PackageUtils.extractNameEntity(Id.class))) {
-					isId = true;
+				if (annotationType.equals(PackageUtils.extractNameEntity(OneToOne.class))) {
+					isRelation = true;
 					
 					// Debug Log
 					if (Harmony.DEBUG)
-						System.out.print("\t    ID: " + fieldMeta.name +"\n");
+						System.out.print("\t    Relation One to One: " + fieldMeta.name + 
+								" type of " + fieldMeta.type +"\n");
+				}
+				
+				if (annotationType.equals(PackageUtils.extractNameEntity(OneToMany.class))) {
+					isRelation = true;
+					
+					// Debug Log
+					if (Harmony.DEBUG)
+						System.out.print("\t    Relation One to Many: " + fieldMeta.name + 
+								" type of " + fieldMeta.type +"\n");
+				}
+				
+				if (annotationType.equals(PackageUtils.extractNameEntity(ManyToOne.class))) {
+					isRelation = true;
+					
+					// Debug Log
+					if (Harmony.DEBUG)
+						System.out.print("\t    Relation Many to One: " + fieldMeta.name + 
+								" type of " + fieldMeta.type +"\n");
+				}
+				
+				if (annotationType.equals(PackageUtils.extractNameEntity(ManyToMany.class))) {
+					//isRelation = true;
+					
+					// Debug Log
+					if (Harmony.DEBUG)
+						System.out.print("\t    Relation Many to Many: " + fieldMeta.name + 
+								" type of " + fieldMeta.type +"\n");
 				}
 			}
 			
 			// Set Field meta
+			if (isId) {
+				meta.ids.put(fieldMeta.name, fieldMeta);
+			}
+
 			if (isColumn)  {
 				meta.fields.put(fieldMeta.name, fieldMeta);
 			}
-			
-			if (isId) {
-				meta.ids.put(fieldMeta.name, fieldMeta);
+
+			if (isRelation)  {
+				meta.relations.put(fieldMeta.name, fieldMeta);
 			}
 			
 			/*for (Field field : mclass.getDeclaredFields()) {

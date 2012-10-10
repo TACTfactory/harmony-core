@@ -21,7 +21,10 @@ public class ClassMetadata {
 	
 	/** List of fields of entity class*/
 	public HashMap<String, FieldMetadata> fields = new HashMap<String, FieldMetadata>();
-	
+
 	/** List of ids of entity class*/
 	public HashMap<String, FieldMetadata> ids = new HashMap<String, FieldMetadata>();
+	
+	/** List of relations of entity class*/
+	public HashMap<String, FieldMetadata> relations = new HashMap<String, FieldMetadata>();
 }

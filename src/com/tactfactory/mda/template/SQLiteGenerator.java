@@ -52,6 +52,19 @@ public class SQLiteGenerator {
 				modelFields.add(modelField);
 			}
 			modelClass.put(TagConstant.FIELDS, modelFields);
+
+			// Make relations
+			ArrayList<Map<String, Object>> modelRelations = new ArrayList<Map<String,Object>>();
+			for (FieldMetadata relation : meta.relations.values()) {
+				Map<String, Object> modelRelation = new HashMap<String, Object>();
+				relation.customize(adapter);
+				modelRelation.put(TagConstant.NAME, relation.name);
+				modelRelation.put(TagConstant.TYPE, relation.type);
+				modelRelation.put(TagConstant.RELATION_TYPE, relation.relation_type);
+				
+				modelRelations.add(modelRelation);
+			}
+			modelClass.put(TagConstant.RELATIONS, modelRelations);
 			
 			modelEntities.add(modelClass);
 		}
