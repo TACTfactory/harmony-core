@@ -31,7 +31,7 @@ public class ${project_name}SqliteOpenHelper extends SQLiteOpenHelper {
 		/// Create Schema
 		<#list entities as entity>
 		db.execSQL( ${entity.name}Adapter.getSchema() );
-		<#list entity['relations'] as relation>
+		<#list entity["relations"] as relation>
 		<#if relation.relation_type=="@ManyToMany">
 		db.execSQL( ${entity.name}Adapter.get${relation.name?cap_first}RelationSchema() );
 		</#if>

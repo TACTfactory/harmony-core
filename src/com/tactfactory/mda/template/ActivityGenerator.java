@@ -37,7 +37,9 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class ActivityGenerator {	
+	protected List<ClassMetadata> metas;
 	protected ClassMetadata meta;
+	protected Map<String, Object> modelEntities;
 	protected BaseAdapter adapter;
 	protected String localNameSpace;
 	protected boolean isWritable = true;
@@ -55,8 +57,8 @@ public class ActivityGenerator {
 		// Make fields
 		ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
 		for (FieldMetadata field : this.meta.fields.values()) {
-			Map<String, Object> modelField = new HashMap<String, Object>();
-			field.customize(adapter);
+			field.customize(adapter);			Map<String, Object> modelField = new HashMap<String, Object>();
+
 			modelField.put(TagConstant.NAME, field.name);
 			modelField.put(TagConstant.TYPE, field.type);
 			modelField.put("customEditType", field.customEditType);

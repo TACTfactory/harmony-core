@@ -43,8 +43,13 @@ public abstract class ${name}AdapterBase {
 	
 	/** Global Fields */
 	public static final String[] COLS = new String[] {
+		<#if relations?size!=0>
+		<#assign endcoma=",">
+		<#else>
+		<#assign endcoma="">
+		</#if>
 		<#list fields as field>
-		${field.alias}<#if field_has_next>,<#else><#if (relations?? && relations?size!=0 && (relations[0].relation_type=="@OneToOne" | relations[0].relation_type=="@ManyToOne"))>,</#if></#if>
+		${field.alias}<#if field_has_next>,<#else>${endcoma}</#if>
 		</#list>
 		<#list relations as relation>
 		<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
@@ -64,15 +69,12 @@ public abstract class ${name}AdapterBase {
 		<#if (field.alias=="COL_ID")>
 		+ ${field.alias}		+ " integer primary key autoincrement <#if field_has_next>,</#if>"
 		<#else>
-		+ ${field.alias}	+ " ${field.schema} <#if field_has_next>,</#if>"
+		+ ${field.alias}	+ " ${field.schema} <#if field_has_next>,<#else><#if relations?size!=0>,</#if></#if>"
 		</#if>
 		</#list>
 		<#if relations??>
 			<#list relations as relation>
-				<#if relation.relation_type=="@OneToOne">
-		+ ${relation.alias}	+ " integer"
-				</#if>
-				<#if relation.relation_type=="@ManyToOne">
+				<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
 		+ ${relation.alias}	+ " integer"
 				</#if>
 			</#list>

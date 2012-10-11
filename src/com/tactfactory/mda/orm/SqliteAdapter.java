@@ -10,6 +10,7 @@ package com.tactfactory.mda.orm;
 
 public class SqliteAdapter {
 	private static String PREFIX = "COL_";
+	private static String SUFFIX = "_ID";
 
 	public static String generateStructure(FieldMetadata field) {
 		StringBuilder builder = new StringBuilder();
@@ -23,8 +24,12 @@ public class SqliteAdapter {
 		}
 		return builder.toString();
 	}
-	
+
 	public static String generateColumnName(FieldMetadata field) {
 		return PREFIX + field.name.toUpperCase();
+	}
+	
+	public static String generateRelationColumnName(String fieldName) {
+		return PREFIX + fieldName.toUpperCase() + SUFFIX;
 	}
 }

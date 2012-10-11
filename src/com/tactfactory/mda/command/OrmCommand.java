@@ -84,7 +84,7 @@ public class OrmCommand extends BaseCommand {
 				ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
 				try {
 					new ActivityGenerator(metas.get(0), this.adapter).generateAllAction();
-					new AdapterGenerator(metas.get(0), this.adapter).generate();
+					new AdapterGenerator(metas, this.adapter).generateAll();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -121,10 +121,10 @@ public class OrmCommand extends BaseCommand {
 			e.printStackTrace();
 		}
 
-		// Convert CompilationUnits entities to ClassMetaData
-		JavaAdapter javaAdapter = new JavaAdapter();
 		if(this.javaModelParser.getEntities().size()!=0)
 		{
+			// Convert CompilationUnits entities to ClassMetaData
+			JavaAdapter javaAdapter = new JavaAdapter();
 			for (CompilationUnit mclass : this.javaModelParser.getEntities()) {
 				javaAdapter.parse(mclass);
 			}
@@ -135,20 +135,19 @@ public class OrmCommand extends BaseCommand {
 	
 			// Generate views from MetaData
 			ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
-			try {
-				new ProjectGenerator(metas, this.adapter).generateHomeActivity();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-	
 			for (ClassMetadata meta : metas) {
 				try {
 					new ActivityGenerator(meta, this.adapter).generateAllAction();
-					new AdapterGenerator(meta, this.adapter).generate();
 					new WebServiceGenerator();
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
+			}
+			try {
+				new AdapterGenerator(metas, this.adapter).generateAll();
+				new ProjectGenerator(metas, this.adapter).generateHomeActivity();
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
 	
 			// Make Database from MetaData

@@ -137,7 +137,7 @@ public class JavaAdapter {
 				}
 				
 				if (annotationType.equals(PackageUtils.extractNameEntity(ManyToMany.class))) {
-					//isRelation = true;
+					isRelation = true;
 					
 					// Debug Log
 					if (Harmony.DEBUG)
