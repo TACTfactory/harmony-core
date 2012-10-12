@@ -67,7 +67,8 @@ public class ActivityGenerator {
 			// Make fields
 			ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
 			for (FieldMetadata field : this.meta.fields.values()) {
-				field.customize(adapter);			Map<String, Object> modelField = new HashMap<String, Object>();
+				Map<String, Object> modelField = new HashMap<String, Object>();
+				field.customize(adapter);
 	
 				modelField.put(TagConstant.NAME, field.name);
 				modelField.put(TagConstant.TYPE, field.type);
@@ -81,10 +82,14 @@ public class ActivityGenerator {
 			ArrayList<Map<String, Object>> modelRelations = new ArrayList<Map<String,Object>>();
 			for (FieldMetadata relation : this.meta.relations.values()) {
 				Map<String, Object> modelRelation = new HashMap<String, Object>();
+				relation.customize(adapter);
+				
 				modelRelation.put(TagConstant.NAME, relation.name);
 				modelRelation.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(relation));
 				modelRelation.put(TagConstant.TYPE, relation.type);
 				modelRelation.put(TagConstant.RELATION_TYPE, relation.relation_type);
+				modelRelation.put("customEditType", relation.customEditType);
+				modelRelation.put("customShowType", relation.customShowType);
 				
 				modelRelations.add(modelRelation);
 			}

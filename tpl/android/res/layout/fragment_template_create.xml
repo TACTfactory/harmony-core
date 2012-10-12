@@ -22,6 +22,25 @@
 	    </#if >
 	    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />	    
 </#list>
+${relations?size}
+<#list relations as relation>
+	<#if relation.relation_type=="@ManyToOne">
+    <TextView 
+    	android:id="@+id/${name?lower_case}_${relation.name?lower_case}_label"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/${name?lower_case}_${relations[(relation_index-1)].name?lower_case}"
+	    android:text="${relation.name?lower_case}"/>
+    <${relation.customEditType}
+		android:id="@+id/${name?lower_case}_${relation.name?lower_case}"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    <#if relation.customEditType == "EditText" >
+	    android:inputType="text"
+	    </#if >
+	    android:layout_below="@+id/${name?lower_case}_${relation.name?lower_case}_label" />	
+	</#if>
+</#list>
 	<Button
     	android:id="@+id/${name?lower_case}_btn_save"
     	android:layout_width="match_parent"
