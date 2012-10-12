@@ -36,7 +36,7 @@ public class OrmInitTest extends CommonTest {
 	public void all() {
 		this.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		
-		String pathNameSpace = Harmony.projectNameSpace.replace(".", "/");
+		String pathNameSpace = Harmony.projectNameSpace.replaceAll("\\.", "/");
 		String srcDir = String.format("src/%s/%s/", pathNameSpace, "entity");
 		String destDir = String.format("%s/android/src/%s/%s/", Harmony.pathProject, pathNameSpace, "entity");
 		System.out.println(destDir);

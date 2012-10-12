@@ -25,8 +25,8 @@ public abstract class CommonTest {
 	 */
 	public void setUp() throws Exception {
 		// Base configs
-		Harmony.projectName = "testApp";
-		Harmony.projectNameSpace = "com.tactfactory.mda.test.demact";
+		Harmony.projectName = "demact";
+		Harmony.projectNameSpace = "com/tactfactory/mda/test/demact";
 		Harmony.androidSdkPath = "/tmp/";
 		Harmony.pathProject = "app";
 		Harmony.pathTemplate = "../Harmony/tpl";

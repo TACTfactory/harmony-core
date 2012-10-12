@@ -62,7 +62,7 @@ public class ActivityGenerator {
 			Map<String, Object> modelClass = new HashMap<String, Object>();
 			modelClass.put(TagConstant.SPACE,	meta.space );
 			modelClass.put(TagConstant.NAME,	meta.name );
-			modelClass.put(TagConstant.LOCAL_NAMESPACE,	this.adapter.getNameSpace(this.meta, this.adapter.getData()) );
+			modelClass.put(TagConstant.LOCAL_NAMESPACE,	this.adapter.getNameSpaceEntity(this.meta, this.adapter.getController()) );
 			
 			// Make fields
 			ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
@@ -108,12 +108,12 @@ public class ActivityGenerator {
 		for(Map<String, Object> entity : this.modelEntities) {
 
 			this.meta = this.metas.get(i);
-			this.localNameSpace = this.meta.space;
+			this.localNameSpace = this.adapter.getNameSpaceEntity(this.meta, this.adapter.getController());;
 
 			// Make class
 			this.datamodel.put("namespace", 					entity.get(TagConstant.SPACE));
 			this.datamodel.put(TagConstant.NAME, 				entity.get(TagConstant.NAME));
-			this.datamodel.put("localnamespace", 				this.meta.space);
+			this.datamodel.put("localnamespace", 				this.localNameSpace);
 			this.datamodel.put(TagConstant.FIELDS, 				entity.get(TagConstant.FIELDS));
 			this.datamodel.put(TagConstant.RELATIONS, 			entity.get(TagConstant.RELATIONS));
 			
