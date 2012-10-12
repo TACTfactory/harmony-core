@@ -10,6 +10,7 @@ package com.tactfactory.mda.command;
 
 import japa.parser.ast.CompilationUnit;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import com.tactfactory.mda.Console;
@@ -71,34 +72,37 @@ public class OrmCommand extends BaseCommand {
 		
 		if(this.commandArgs.size()!=0 && this.commandArgs.containsKey("filename")) {
 			
-			this.javaModelParser.loadEntity(this.adapter.getSourcePath()
-						+Harmony.projectNameSpace.replaceAll("\\.","/")
-						+"/entity/" + this.commandArgs.get("filename"));
+			String entityPath = this.adapter.getSourcePath()
+					+Harmony.projectNameSpace.replaceAll("\\.","/")
+					+"/entity/" + this.commandArgs.get("filename");
 			
-			if(this.javaModelParser.getEntities().size()!=0) {
+			if(new File(entityPath).exists()) {
 				
-				JavaAdapter javaAdapter = new JavaAdapter();
-				javaAdapter.parse(this.javaModelParser.getEntities().get(0));
+				this.javaModelParser.loadEntity(entityPath);
+				if(this.javaModelParser.getEntities().size()!=0) {
+					
+					JavaAdapter javaAdapter = new JavaAdapter();
+					javaAdapter.parse(this.javaModelParser.getEntities().get(0));
+		
+					// Generate views from MetaData
+					ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
+					try {
+						new ActivityGenerator(metas, this.adapter).generateAll();
+						new AdapterGenerator(metas, this.adapter).generateAll();
 	
-				// Generate views from MetaData
-				ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
-				try {
-					new ActivityGenerator(metas.get(0), this.adapter).generateAllAction();
-					new AdapterGenerator(metas, this.adapter).generateAll();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-	
-				// Make Database from MetaData
-				try {
-					new SQLiteGenerator(metas, this.adapter).generateDatabase();
-					new ProviderGenerator();
-				} catch (Exception e) {
-					e.printStackTrace();
+						// Make Database from MetaData
+						new SQLiteGenerator(metas, this.adapter).generateDatabase();
+						new ProviderGenerator();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				} else {
+					if(Harmony.DEBUG)
+						System.out.println("Given entity filename is not an entity!");
 				}
 			} else {
 				if(Harmony.DEBUG)
-					System.out.println("Given entity filename is not an entity!");
+					System.out.println("Given entity file doesn't exist!");
 			}
 		} else {
 			if(Harmony.DEBUG)
@@ -135,23 +139,14 @@ public class OrmCommand extends BaseCommand {
 	
 			// Generate views from MetaData
 			ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
-			for (ClassMetadata meta : metas) {
-				try {
-					new ActivityGenerator(meta, this.adapter).generateAllAction();
-					new WebServiceGenerator();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
 			try {
-				new AdapterGenerator(metas, this.adapter).generateAll();
+				// Make
 				new ProjectGenerator(metas, this.adapter).generateHomeActivity();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-	
-			// Make Database from MetaData
-			try {
+				new ActivityGenerator(metas, this.adapter).generateAll();
+				new AdapterGenerator(metas, this.adapter).generateAll();
+				new WebServiceGenerator();
+
+				// Make Database from MetaData
 				new SQLiteGenerator(metas, this.adapter).generateDatabase();
 				new ProviderGenerator();
 			} catch (Exception e) {

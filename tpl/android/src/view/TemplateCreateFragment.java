@@ -70,7 +70,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		</#if>
 		</#foreach>
 	}
-
+	
 	/** Save data from fields view to model */
 	public void saveData() {
 		<#foreach field in fields>

@@ -31,11 +31,11 @@ public class ${project_name}SqliteOpenHelper extends SQLiteOpenHelper {
 		/// Create Schema
 		<#list entities as entity>
 		db.execSQL( ${entity.name}Adapter.getSchema() );
-		<#list entity["relations"] as relation>
-		<#if relation.relation_type=="@ManyToMany">
+			<#list entity["relations"] as relation>
+				<#if relation.relation_type=="@ManyToMany">
 		db.execSQL( ${entity.name}Adapter.get${relation.name?cap_first}RelationSchema() );
-		</#if>
-		</#list>
+				</#if>
+			</#list>
 	    </#list>
 		
 		// Sample of data
@@ -62,11 +62,11 @@ public class ${project_name}SqliteOpenHelper extends SQLiteOpenHelper {
 		
 			<#list entities as entity>
 			db.execSQL("DROP TABLE IF EXISTS "+ ${entity.name}Adapter.TABLE_NAME);
-			<#list entity['relations'] as relation>
-			<#if relation.relation_type=="@ManyToMany">
+				<#list entity['relations'] as relation>
+					<#if relation.relation_type=="@ManyToMany">
 			db.execSQL("DROP TABLE IF EXISTS "+${entity.name}Adapter.RELATION_${relation.name?upper_case}_TABLE_NAME );
-			</#if>
-			</#list>
+					</#if>
+				</#list>
 		    </#list>
 		//}
 		    

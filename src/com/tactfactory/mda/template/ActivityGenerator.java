@@ -28,6 +28,7 @@ import org.jdom2.output.XMLOutputter;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
+import com.tactfactory.mda.orm.SqliteAdapter;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
@@ -39,47 +40,88 @@ import freemarker.template.TemplateException;
 public class ActivityGenerator {	
 	protected List<ClassMetadata> metas;
 	protected ClassMetadata meta;
-	protected Map<String, Object> modelEntities;
+	protected List<Map<String, Object>> modelEntities;
 	protected BaseAdapter adapter;
 	protected String localNameSpace;
 	protected boolean isWritable = true;
 	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 
-	public ActivityGenerator(ClassMetadata meta, BaseAdapter adapter) throws Exception {
-		if (meta == null && adapter == null)
+	public ActivityGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
+		if (metas == null && adapter == null)
 			throw new Exception("No meta or adapter define.");
 
-		this.meta 		= meta;
+		this.metas 		= metas;
 		this.adapter	= adapter;
-
-		this.localNameSpace = this.adapter.getNameSpaceEntity(this.meta, this.adapter.getController());
-
-		// Make fields
-		ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
-		for (FieldMetadata field : this.meta.fields.values()) {
-			field.customize(adapter);			Map<String, Object> modelField = new HashMap<String, Object>();
-
-			modelField.put(TagConstant.NAME, field.name);
-			modelField.put(TagConstant.TYPE, field.type);
-			modelField.put("customEditType", field.customEditType);
-			modelField.put("customShowType", field.customShowType);
-
-			modelFields.add(modelField);
+		
+		// Make entities
+		this.modelEntities = new ArrayList<Map<String, Object>>();
+		for (ClassMetadata meta : this.metas) {
+			
+			this.meta = meta;
+			
+			Map<String, Object> modelClass = new HashMap<String, Object>();
+			modelClass.put(TagConstant.SPACE,	meta.space );
+			modelClass.put(TagConstant.NAME,	meta.name );
+			modelClass.put(TagConstant.LOCAL_NAMESPACE,	this.adapter.getNameSpace(this.meta, this.adapter.getData()) );
+			
+			// Make fields
+			ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
+			for (FieldMetadata field : this.meta.fields.values()) {
+				field.customize(adapter);			Map<String, Object> modelField = new HashMap<String, Object>();
+	
+				modelField.put(TagConstant.NAME, field.name);
+				modelField.put(TagConstant.TYPE, field.type);
+				modelField.put("customEditType", field.customEditType);
+				modelField.put("customShowType", field.customShowType);
+	
+				modelFields.add(modelField);
+			}
+			
+			// Make relations
+			ArrayList<Map<String, Object>> modelRelations = new ArrayList<Map<String,Object>>();
+			for (FieldMetadata relation : this.meta.relations.values()) {
+				Map<String, Object> modelRelation = new HashMap<String, Object>();
+				modelRelation.put(TagConstant.NAME, relation.name);
+				modelRelation.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(relation));
+				modelRelation.put(TagConstant.TYPE, relation.type);
+				modelRelation.put(TagConstant.RELATION_TYPE, relation.relation_type);
+				
+				modelRelations.add(modelRelation);
+			}
+			
+			modelClass.put(TagConstant.FIELDS, modelFields);
+			modelClass.put(TagConstant.RELATIONS, modelRelations);
+			
+			this.modelEntities.add(modelClass);
 		}
-
-		// Make class
-		this.datamodel.put("namespace", 					meta.space);
-		this.datamodel.put(TagConstant.NAME, 				meta.name);
-		this.datamodel.put("localnamespace", 				this.localNameSpace);
-		this.datamodel.put(TagConstant.FIELDS, 				modelFields);
 	}
 
-	public ActivityGenerator(ClassMetadata meta, BaseAdapter adapter, Boolean isWritable) throws Exception {
-		this(meta, adapter);
+	public ActivityGenerator(List<ClassMetadata> metas, BaseAdapter adapter, Boolean isWritable) throws Exception {
+		this(metas, adapter);
 
 		this.isWritable = isWritable;
 	}
 
+	public void generateAll() {
+
+		int i = 0;
+		for(Map<String, Object> entity : this.modelEntities) {
+
+			this.meta = this.metas.get(i);
+			this.localNameSpace = this.meta.space;
+
+			// Make class
+			this.datamodel.put("namespace", 					entity.get(TagConstant.SPACE));
+			this.datamodel.put(TagConstant.NAME, 				entity.get(TagConstant.NAME));
+			this.datamodel.put("localnamespace", 				this.meta.space);
+			this.datamodel.put(TagConstant.FIELDS, 				entity.get(TagConstant.FIELDS));
+			this.datamodel.put(TagConstant.RELATIONS, 			entity.get(TagConstant.RELATIONS));
+			
+			this.generateAllAction();
+			i++;
+		}
+	}
+	
 	/** List Action
 	 * @param cfg
 	 * @throws IOException

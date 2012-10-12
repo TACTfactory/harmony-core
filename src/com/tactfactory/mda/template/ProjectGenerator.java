@@ -274,6 +274,8 @@ public class ProjectGenerator {
 	 */
 	public void generateHomeActivity() throws IOException,TemplateException {
 
+		System.out.println(">> Generate HomeView & Strings");
+		
 		Configuration cfg = new Configuration();
 
 		try {
@@ -321,7 +323,7 @@ public class ProjectGenerator {
 
 		// Debug Log
 		if (Harmony.DEBUG)
-			System.out.print("\tUpdate Strings.xml File : " + destFile.getPath() + "\n"); 
+			System.out.println("\tUpdate Strings.xml File : " + destFile.getPath() + "\n"); 
 
 		// Create
 		Template tpl;
@@ -339,6 +341,6 @@ public class ProjectGenerator {
 		} catch (TemplateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}	
+		}
 	}
 }
