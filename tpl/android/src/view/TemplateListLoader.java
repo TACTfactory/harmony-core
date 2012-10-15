@@ -3,12 +3,12 @@ package ${localnamespace};
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tactfactory.mda.test.demact.data.${name}Adapter;
-
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
+
+import ${namespace}.data.${name}Adapter;
 
 import ${namespace}.R;
 import ${namespace}.entity.${name};

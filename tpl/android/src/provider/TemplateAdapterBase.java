@@ -22,11 +22,11 @@ public abstract class ${name}AdapterBase {
 	/** Table name of SQLite database */
 	public static final String TABLE_NAME = "${name}";
 	<#if relations??>
-	<#list relations as relation>
-	<#if relation.relation_type=="@ManyToMany">
+		<#list relations as relation>
+			<#if relation.relation_type=="@ManyToMany">
 	public static final String RELATION_${relation.name?upper_case}_TABLE_NAME ="${name}_to_${relation.name?cap_first}";
-	</#if>
-	</#list>
+			</#if>
+		</#list>
 	</#if>
 	
 	// Columns constants fields mapping
@@ -34,27 +34,22 @@ public abstract class ${name}AdapterBase {
 	public static final String ${field.alias} = "${field.name}";
 	</#list>
 	<#if relations??>
-	<#list relations as relation>
-	<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
-	public static final String ${relation.alias} = "${relation.name?cap_first}";
-	</#if>
-	</#list>
+		<#list relations as relation>
+			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+	public static final String ${relation.alias} = "${relation.name}";
+			</#if>
+		</#list>
 	</#if>
 	
 	/** Global Fields */
 	public static final String[] COLS = new String[] {
-		<#if relations?size!=0>
-		<#assign endcoma=",">
-		<#else>
-		<#assign endcoma="">
-		</#if>
 		<#list fields as field>
-		${field.alias}<#if field_has_next>,<#else>${endcoma}</#if>
+		${field.alias}<#if field_has_next>,<#else><#if relations?size!=0>,</#if></#if>
 		</#list>
 		<#list relations as relation>
-		<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
 		${relation.alias}<#if (relation_has_next && (relations[relation_index+1].relation_type=="@OneToOne" | relations[relation_index+1].relation_type=="@ManyToOne"))>,</#if>
-		</#if>
+			</#if>
 		</#list>
 	};
 
@@ -75,7 +70,7 @@ public abstract class ${name}AdapterBase {
 		<#if relations??>
 			<#list relations as relation>
 				<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
-		+ ${relation.alias}	+ " integer"
+		+ ${relation.alias}	+ " integer<#if (relation_has_next && (relations[relation_index+1].relation_type=="@OneToOne" | relations[relation_index+1].relation_type=="@ManyToOne"))>,</#if>"
 				</#if>
 			</#list>
 		</#if>

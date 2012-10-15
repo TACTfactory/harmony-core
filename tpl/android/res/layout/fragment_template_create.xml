@@ -22,14 +22,17 @@
 	    </#if >
 	    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />	    
 </#list>
-${relations?size}
 <#list relations as relation>
 	<#if relation.relation_type=="@ManyToOne">
     <TextView 
     	android:id="@+id/${name?lower_case}_${relation.name?lower_case}_label"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/${name?lower_case}_${relations[(relation_index-1)].name?lower_case}"
+	    <#if relation_index==0>
+	    android:layout_below="@+id/${name?lower_case}_${fields?last.name?lower_case}"
+	    <#else>
+	    android:layout_below="@+id/${name?lower_case}_${relations[relation_index-1].name?lower_case}"
+	    </#if>
 	    android:text="${relation.name?lower_case}"/>
     <${relation.customEditType}
 		android:id="@+id/${name?lower_case}_${relation.name?lower_case}"
@@ -45,6 +48,10 @@ ${relations?size}
     	android:id="@+id/${name?lower_case}_btn_save"
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
+    	<#if relations?size!=0>
+    	android:layout_below="@+id/${name?lower_case}_${relations?last.name?lower_case}"
+    	<#else>
     	android:layout_below="@+id/${name?lower_case}_${fields?last.name?lower_case}"
+    	</#if>
     	android:text="Create" />
 </RelativeLayout>

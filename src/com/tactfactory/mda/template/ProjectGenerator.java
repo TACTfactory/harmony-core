@@ -191,6 +191,8 @@ public class ProjectGenerator {
 				this.adapter.getTemplateRessourceLayoutPath().substring(1)+"main.xml");
 
 		// copy libraries
+		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathLibs,"joda-time-2.1.jar")),
+				new File(String.format("%s/%s",this.adapter.getLibsPath(),"joda-time-2.1.jar")));
 		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathHarmony,"Harmony.jar")),
 				new File(String.format("%s/%s",this.adapter.getLibsPath(),"Harmony.jar")));
 		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathLibs,"android-support-v4.jar")),

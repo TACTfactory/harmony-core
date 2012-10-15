@@ -1,8 +1,5 @@
 package ${localnamespace};
 
-import com.tactfactory.mda.test.demact.R;
-import com.tactfactory.mda.test.demact.view.comment.CommentListFragment;
-
 import ${namespace}.R;
 
 import android.content.Context;
