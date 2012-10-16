@@ -24,18 +24,18 @@ public class ${name}ShowFragment extends Fragment {
 	protected ${name} model;
 	
 	/* Fields View */
-    <#list fields as field>
+<#list fields as field>
     protected ${field.customShowType} ${field.name}View; 
-    </#list>
+</#list>
     
     /** Initialize view of fields 
      * 
      * @param view The layout inflating
      */
     protected void initializeComponent(View view) {
-		<#foreach field in fields>
+	<#foreach field in fields>
 		this.${field.name}View = (${field.customShowType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}); 
-		</#foreach>
+	</#foreach>
     }
     
     /** Load data from model to fields view */

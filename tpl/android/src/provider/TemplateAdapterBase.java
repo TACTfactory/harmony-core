@@ -10,6 +10,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+<#list relations as relation>
+	<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+import ${project_namespace}.entity.${relation.type};
+	</#if>
+</#list>
 import ${project_namespace}.entity.${name};
 import ${project_namespace}.BuildConfig;
 
@@ -143,6 +148,11 @@ public abstract class ${name}AdapterBase {
 		result.put(${field.alias}, 			String.valueOf(${name?lower_case}.get${field.name?cap_first}()) );
 			</#if>
 		</#list>
+		<#list relations as relation>
+			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+		result.put(${relation.alias}, 			String.valueOf(${name?lower_case}.get${relation.name?cap_first}().getId()) );
+			</#if>
+		</#list>
 		
 		return result;
 	}
@@ -171,6 +181,13 @@ public abstract class ${name}AdapterBase {
 			result.set${field.name?cap_first}(c.getInt( c.getColumnIndexOrThrow(${field.alias}) ));
 				<#else>
 			result.set${field.name?cap_first}(c.getString( c.getColumnIndexOrThrow(${field.alias}) ));
+				</#if>
+			</#list>
+			<#list relations as relation>
+				<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+			${relation.type} ${relation.name} = new ${relation.type}();
+			${relation.name}.setId( Integer.valueOf(c.getString( c.getColumnIndexOrThrow(${relation.alias}) )) );
+			result.set${relation.name?cap_first}(${relation.name});
 				</#if>
 			</#list>
 		}

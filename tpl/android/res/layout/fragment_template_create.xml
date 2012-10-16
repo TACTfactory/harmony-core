@@ -41,7 +41,8 @@
 	    <#if relation.customEditType == "EditText" >
 	    android:inputType="text"
 	    </#if >
-	    android:layout_below="@+id/${name?lower_case}_${relation.name?lower_case}_label" />	
+	    android:layout_below="@+id/${name?lower_case}_${relation.name?lower_case}_label" />
+	    <#assign last_relation=relation>
 	</#if>
 </#list>
 	<Button
@@ -49,7 +50,7 @@
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
     	<#if relations?size!=0>
-    	android:layout_below="@+id/${name?lower_case}_${relations?last.name?lower_case}"
+    	android:layout_below="@+id/${name?lower_case}_${last_relation.name?lower_case}"
     	<#else>
     	android:layout_below="@+id/${name?lower_case}_${fields?last.name?lower_case}"
     	</#if>

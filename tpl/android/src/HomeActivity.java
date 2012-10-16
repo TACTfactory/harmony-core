@@ -29,7 +29,7 @@ public class HomeActivity extends Activity
 
 		<#if entities??>
 		//Debug buttons
-		<#list entities as entity>
+			<#list entities as entity>
 		//Create
 		Button ${entity.name}CreateButton = new Button(this);
 		${entity.name}CreateButton.setText("${entity.name}CreateActivity");
@@ -52,8 +52,7 @@ public class HomeActivity extends Activity
 			}
 		});
 		homeLayout.addView(${entity.name}ListButton);
-		</#list>
-		<#else>
+			</#list>
 		</#if>
 	}
 }

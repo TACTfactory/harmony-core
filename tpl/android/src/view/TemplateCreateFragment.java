@@ -90,25 +90,25 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 	/** Save data from fields view to model */
 	public void saveData() {
 		<#foreach field in fields>
-		<#if (field.customEditType == "EditText") >
-		<#if (field.type == "String")>
+			<#if (field.customEditType == "EditText") >
+				<#if (field.type == "String")>
 		this.model.set${field.name?cap_first}(this.${field.name}View.getEditableText().toString());
-		</#if>
-		<#if (field.type == "Date")>
+				</#if>
+				<#if (field.type == "Date")>
 		try {
 			this.model.set${field.name?cap_first}(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(this.${field.name}View.getEditableText().toString()));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		</#if>
-		<#if (field.type == "int")>
+				</#if>
+				<#if (field.type == "int")>
 		this.model.set${field.name?cap_first}(Integer.parseInt(this.${field.name}View.getEditableText().toString()));
-		</#if>
-		</#if>
-		<#if (field.customEditType == "CheckBox") >
+				</#if>
+			</#if>
+			<#if (field.customEditType == "CheckBox") >
 		this.model.${field.name?uncap_first}(this.${field.name}View.isChecked());
-		</#if>
+			</#if>
 		</#foreach>
 	}
 

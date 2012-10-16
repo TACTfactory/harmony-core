@@ -22,6 +22,11 @@
 	    </#if >
 	    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />
 </#list>
+<#if relations??>
+	<#list relations as relation>
+		
+	</#list>
+</#if>
 	<Button
     	android:id="@+id/${name?lower_case}_btn_save"
     	android:layout_width="match_parent"
