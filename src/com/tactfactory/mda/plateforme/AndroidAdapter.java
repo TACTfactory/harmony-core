@@ -58,6 +58,10 @@ public final class AndroidAdapter extends BaseAdapter {
 			
 		if (field.type.equals("Boolean")) {
 			result = "TextView";
+		} else
+		
+		if(field.relation_type.equals("@ManyToOne")) {
+			result = "Spinner";
 		}
 		
 		return result;
@@ -72,10 +76,14 @@ public final class AndroidAdapter extends BaseAdapter {
 		
 		if (field.type.equals("String") || field.type.equals("int") || field.type.equals("Date") ) {
 
-		} else {
-			if (field.type.equals("Boolean")) {
-				result = "CheckBox";
-			}
+		} else
+
+		if (field.type.equals("Boolean")) {
+			result = "CheckBox";
+		} else
+			
+		if(field.relation_type.equals("@ManyToOne")) {
+			result = "Spinner";
 		}
 		
 		return result;

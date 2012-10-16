@@ -10,13 +10,13 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+import ${project_namespace}.BuildConfig;
+import ${project_namespace}.entity.${name};
 <#list relations as relation>
 	<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
 import ${project_namespace}.entity.${relation.type};
 	</#if>
 </#list>
-import ${project_namespace}.entity.${name};
-import ${project_namespace}.BuildConfig;
 
 /** ${name} adapter database abstract class <br/>
  * <b><i>Can't be edit this class is generate, and you loose all modification</i></b>

@@ -42,6 +42,10 @@
 	    android:inputType="text"
 	    </#if >
 	    android:layout_below="@+id/${name?lower_case}_${relation.name?lower_case}_label" />
+    <Spinner
+        android:id="@+id/${name?lower_case}_${relation.name?lower_case}_spinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 	    <#assign last_relation=relation>
 	</#if>
 </#list>
