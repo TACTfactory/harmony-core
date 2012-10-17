@@ -30,7 +30,6 @@ public class ${name}ShowFragment extends Fragment {
 <#list relations as relation>
 	<#if relation.relation_type=="@ManyToOne">
 	protected ${relation.customShowType} ${relation.name}View;
-	protected List<${relation.type}> ${relation.type}list;
 	</#if>
 </#list>
     
@@ -44,7 +43,7 @@ public class ${name}ShowFragment extends Fragment {
 	</#foreach>
 	<#list relations as relation>
 		<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
-		this.${relation.name}View = (${relation.customShowType}) view.findViewById(R.id.${name?lower_case}_${relation.name?lower_case}_spinner);
+		this.${relation.name}View = (${relation.customShowType}) view.findViewById(R.id.${name?lower_case}_${relation.name?lower_case});
 		</#if>
 	</#list>
     }
@@ -67,6 +66,11 @@ public class ${name}ShowFragment extends Fragment {
 		this.${field.name}View.setSelected(this.model.${field.name?uncap_first}()); 
 			</#if>
 		</#foreach>
+		<#list relations as relation>
+			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+		this.${relation.name}View.setText(String.valueOf(this.model.get${relation.name?cap_first}().getId())); 
+			</#if>
+		</#list>
     }
     
     /** Sets up the UI.

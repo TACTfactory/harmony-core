@@ -8,18 +8,29 @@
     android:paddingRight="10dp"
     android:paddingTop="2.5dp" >
 
-    <#assign i=0>
     <#list fields as field>
     <TextView
         android:id="@+id/row_${name}_${field.name}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        <#if (i==0)>
+        <#if (field_index==0)>
         android:layout_alignParentTop="true" />
 		<#else>
-		android:layout_below="@+id/row_${name}_${fields[i-1].name}" />
+		android:layout_below="@+id/row_${name}_${fields[field_index-1].name}" />
 		</#if>
-		<#assign i=i+1>
+    </#list>
+    <#list relations as relation>
+		<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+    <TextView
+        android:id="@+id/row_${name}_${relation.name}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        	<#if (relation_index==0)>
+        android:layout_below="@+id/row_${name}_${fields?last.name}" />
+			<#else>
+		android:layout_below="@+id/row_${name}_${relations[relation_index-1].name}" />
+			</#if>
+		</#if>
     </#list>
 
 </RelativeLayout>

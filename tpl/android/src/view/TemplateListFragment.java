@@ -124,7 +124,6 @@ implements LoaderManager.LoaderCallbacks<List<${name}>> {
 		} else {
 			this.setListShownNoAnimation(true);
 		}
-
 	}
 
 	/** (non-Javadoc)

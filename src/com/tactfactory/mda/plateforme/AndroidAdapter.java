@@ -61,7 +61,7 @@ public final class AndroidAdapter extends BaseAdapter {
 		} else
 		
 		if(field.relation_type.equals("@ManyToOne")) {
-			result = "Spinner";
+			result = "TextView";
 		}
 		
 		return result;
