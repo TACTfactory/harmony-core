@@ -92,6 +92,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		<#foreach relation in relations>
 			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
 		${relation.type}Adapter ${relation.type?lower_case}adapter = new ${relation.type}Adapter(getActivity());
+		${relation.type?lower_case}adapter.open();
 		this.${relation.type}list = ${relation.type?lower_case}adapter.getAll();
 		List<String> ${relation.type?lower_case}strings = new ArrayList<String>();
 		for(${relation.type} item : this.${relation.type}list) {
@@ -126,11 +127,11 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		this.model.${field.name?uncap_first}(this.${field.name}View.isChecked());
 			</#if>
 		</#foreach>
-		
-		//TODO DROP DOWN!
+
 		<#foreach relation in relations>
 			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
 		${relation.type}Adapter ${relation.type?lower_case}adapter = new ${relation.type}Adapter(getActivity());
+		${relation.type?lower_case}adapter.open();
 		${relation.type} ${relation.type?lower_case}item = ${relation.type?lower_case}adapter.getByID( this.${relation.type}list.get((int) this.${relation.name}View.getSelectedItemId()).getId() );
 		this.model.set${relation.name?cap_first}(${relation.type?lower_case}item);
 		

@@ -31,22 +31,15 @@
 	    <#if relation_index==0>
 	    android:layout_below="@+id/${name?lower_case}_${fields?last.name?lower_case}"
 	    <#else>
-	    android:layout_below="@+id/${name?lower_case}_${relations[relation_index-1].name?lower_case}"
+	    android:layout_below="@+id/${name?lower_case}_${relations[relation_index-1].name?lower_case}_spinner"
 	    </#if>
 	    android:text="${relation.name?lower_case}"/>
-    <${relation.customEditType}
-		android:id="@+id/${name?lower_case}_${relation.name?lower_case}"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    <#if relation.customEditType == "EditText" >
-	    android:inputType="text"
-	    </#if >
-	    android:layout_below="@+id/${name?lower_case}_${relation.name?lower_case}_label" />
     <Spinner
         android:id="@+id/${name?lower_case}_${relation.name?lower_case}_spinner"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
-	    <#assign last_relation=relation>
+        android:layout_height="wrap_content"
+	    android:layout_below="@+id/${name?lower_case}_${relation.name?lower_case}_label" />
+	    <#assign lastrelation=relation>
 	</#if>
 </#list>
 	<Button
@@ -54,7 +47,7 @@
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
     	<#if relations?size!=0>
-    	android:layout_below="@+id/${name?lower_case}_${last_relation.name?lower_case}"
+    	android:layout_below="@+id/${name?lower_case}_${lastrelation.name?lower_case}_spinner"
     	<#else>
     	android:layout_below="@+id/${name?lower_case}_${fields?last.name?lower_case}"
     	</#if>

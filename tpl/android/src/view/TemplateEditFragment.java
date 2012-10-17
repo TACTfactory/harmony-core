@@ -21,9 +21,17 @@ import android.widget.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 
-import ${namespace}.data.${name}Adapter;
 import ${namespace}.entity.${name};
+import ${namespace}.data.${name}Adapter;
+<#list relations as relation>
+	<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+import ${namespace}.data.${relation.type}Adapter;
+import ${namespace}.entity.${relation.type};
+	</#if>
+</#list>
 
 /** ${name} edit fragment
  * 
@@ -37,6 +45,12 @@ public class ${name}EditFragment extends Fragment implements OnClickListener {
 	<#list fields as field>
 	protected ${field.customEditType} ${field.name}View; 
 	</#list>
+	<#list relations as relation>
+		<#if relation.relation_type=="@ManyToOne">
+	protected ${relation.customEditType} ${relation.name}View;
+	protected List<${relation.type}> ${relation.type}list;
+		</#if>
+	</#list>
 	protected Button saveButton;
 
 	/** Initialize view of fields 
@@ -47,6 +61,11 @@ public class ${name}EditFragment extends Fragment implements OnClickListener {
 		<#foreach field in fields>
 		this.${field.name}View = (${field.customEditType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}); 
 		</#foreach>
+		<#list relations as relation>
+			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+		this.${relation.name}View = (${relation.customEditType}) view.findViewById(R.id.${name?lower_case}_${relation.name?lower_case}_spinner);
+			</#if>
+		</#list>
 		this.saveButton = (Button) view.findViewById(R.id.${name?lower_case}_btn_save);
 		this.saveButton.setOnClickListener(this);
 	}
@@ -54,20 +73,36 @@ public class ${name}EditFragment extends Fragment implements OnClickListener {
 	/** Load data from model to fields view */
 	public void loadData() {
 		<#foreach field in fields>
-		<#if (field.customEditType == "EditText") >
-		<#if (field.type == "String")>
+			<#if (field.customEditType == "EditText") >
+				<#if (field.type == "String")>
 		this.${field.name}View.setText(this.model.get${field.name?cap_first}()); 
-		</#if>
-		<#if (field.type == "Date")>
+				</#if>
+				<#if (field.type == "Date")>
 		this.${field.name}View.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(this.model.get${field.name?cap_first}())); 
-		</#if>
-		<#if (field.type == "int")>
+				</#if>
+				<#if (field.type == "int")>
 		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}())); 
-		</#if>
-		</#if>
-		<#if (field.customEditType == "CheckBox") >
+				</#if>
+			</#if>
+			<#if (field.customEditType == "CheckBox") >
 		this.${field.name}View.setSelected(this.model.${field.name?uncap_first}()); 
-		</#if>
+			</#if>
+		</#foreach>
+		<#foreach relation in relations>
+			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+
+		${relation.type}Adapter ${relation.type?lower_case}adapter = new ${relation.type}Adapter(getActivity());
+		${relation.type?lower_case}adapter.open();
+		this.${relation.type}list = ${relation.type?lower_case}adapter.getAll();
+		
+		List<String> ${relation.type?lower_case}strings = new ArrayList<String>();
+		for(${relation.type} item : this.${relation.type}list) {
+			${relation.type?lower_case}strings.add( String.valueOf(item.getId()) );
+		}
+		
+		ArrayAdapter<String> ${relation.type?lower_case}DataAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, ${relation.type?lower_case}strings);
+		this.${relation.name}View.setAdapter(${relation.type?lower_case}DataAdapter);
+			</#if>
 		</#foreach>
 	}
 
@@ -91,6 +126,14 @@ public class ${name}EditFragment extends Fragment implements OnClickListener {
 			</#if>
 			<#if (field.customEditType == "CheckBox") >
 		this.model.${field.name?uncap_first}(this.${field.name}View.isChecked());
+			</#if>
+		</#foreach>
+		<#foreach relation in relations>
+			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+		${relation.type}Adapter ${relation.type?lower_case}adapter = new ${relation.type}Adapter(getActivity());
+		${relation.type?lower_case}adapter.open();
+		${relation.type} ${relation.type?lower_case}item = ${relation.type?lower_case}adapter.getByID( this.${relation.type}list.get((int) this.${relation.name}View.getSelectedItemId()).getId() );
+		this.model.set${relation.name?cap_first}(${relation.type?lower_case}item);
 			</#if>
 		</#foreach>
 	}

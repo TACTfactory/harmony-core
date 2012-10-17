@@ -227,6 +227,8 @@ public abstract class ${name}AdapterBase {
 	 */
 	public ${name} getByID(<#list ids as id>${id.type} ${id.name}<#if id_has_next>,</#if></#list>) {
 		Cursor c = this.getSingleCursor(id);
+		if(c.getCount()!=0)
+			c.moveToFirst();
 		${name} result = ${name}AdapterBase.cursorTo${name}(c);
 		c.close();
 		

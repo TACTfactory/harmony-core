@@ -27,6 +27,12 @@ public class ${name}ShowFragment extends Fragment {
 <#list fields as field>
     protected ${field.customShowType} ${field.name}View; 
 </#list>
+<#list relations as relation>
+	<#if relation.relation_type=="@ManyToOne">
+	protected ${relation.customShowType} ${relation.name}View;
+	protected List<${relation.type}> ${relation.type}list;
+	</#if>
+</#list>
     
     /** Initialize view of fields 
      * 
@@ -36,6 +42,11 @@ public class ${name}ShowFragment extends Fragment {
 	<#foreach field in fields>
 		this.${field.name}View = (${field.customShowType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}); 
 	</#foreach>
+	<#list relations as relation>
+		<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+		this.${relation.name}View = (${relation.customShowType}) view.findViewById(R.id.${name?lower_case}_${relation.name?lower_case}_spinner);
+		</#if>
+	</#list>
     }
     
     /** Load data from model to fields view */
