@@ -144,7 +144,7 @@ public class OrmCommand extends BaseCommand {
 				new ProjectGenerator(metas, this.adapter).generateHomeActivity();
 				new ActivityGenerator(metas, this.adapter).generateAll();
 				new AdapterGenerator(metas, this.adapter).generateAll();
-				new WebServiceGenerator();
+				new WebServiceGenerator(metas, this.adapter).generateAll();
 
 				// Make Database from MetaData
 				new SQLiteGenerator(metas, this.adapter).generateDatabase();

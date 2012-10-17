@@ -49,7 +49,7 @@ public class Harmony {
 	/** Path of libs */
 	public static String pathLibs = "../lib";
 	
-	/** Path of harmony */
+	/** Path of harmony.jar */
 	public static String pathHarmony = "../vendor/tact-core";
 	
 	/** Project space */
@@ -60,9 +60,12 @@ public class Harmony {
 	
 	/** Project NameSpace (com/tactfactory/mda/test/demact) */
 	public static String projectNameSpace;
-	
+
 	/** Android SDK path */
 	public static String androidSdkPath;
+
+	/** Symfony path */
+	public static String symfonyPath = "D:/Site/wamp/www/Symfony";
 	
 	private static final String DEFAULT_PROJECT_NAME = "toto";
 	private static final String DEFAULT_PROJECT_NAMESPACE = "com.tactfactory.toto";

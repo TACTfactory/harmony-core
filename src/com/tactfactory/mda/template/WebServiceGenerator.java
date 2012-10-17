@@ -15,6 +15,7 @@ import com.tactfactory.mda.orm.FieldMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
+import com.tactfactory.mda.utils.SystemCommand;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -25,6 +26,7 @@ public class WebServiceGenerator {
 	protected BaseAdapter adapter;
 	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 	protected String localNameSpace;
+	private SystemCommand console;
 
 	public WebServiceGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
 		if (metas == null && adapter == null)
@@ -73,58 +75,35 @@ public class WebServiceGenerator {
 		this.datamodel.put(TagConstant.ENTITIES,			modelEntities);
 		this.datamodel.put(TagConstant.LOCAL_NAMESPACE,		this.localNameSpace);
 	}
-
-	/**
-	 * Generate Database Interface Source Code
-	 */
-	public void generateDatabase() {
+	
+	public void generateAll() {
 		// Info
-		System.out.print(">> Generate Database\n");
+		System.out.print(">> Generate WebService\n");
 		
-		try {
-			Configuration cfg = new Configuration();
-			cfg.setDirectoryForTemplateLoading(new File("../"));
-			
-			this.makeSourceData(cfg, 
-					"TemplateSqliteOpenHelper.java", 
-					"%sSqliteOpenHelper.java");
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TemplateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		List<String> command = new ArrayList<String>();
+		command.add("php");
+		command.add(String.format("%s/%s/%s", Harmony.symfonyPath, "app", "console") );
+
+		this.console = new SystemCommand();
+		this.console.executeCommand();
+		
+		System.out.print(console.getStandardOutputFromCommand()+"\n");
 	}
 	
-	/** Make Java Source Code
-	 * @param cfg Template engine
-	 * @param template Template path file.
-	 * @param filename
-	 * @throws IOException
-	 * @throws TemplateException
-	 */
-	private void makeSourceData(Configuration cfg, String template, String filename) throws IOException,
-			TemplateException {
-		
-		File file = FileUtils.makeFile(
-				String.format("%s%s/%s",
-						this.adapter.getSourcePath(),
-						PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
-						String.format(filename, Harmony.projectName)));
-		
-		// Debug Log
-		if (Harmony.DEBUG)
-			System.out.print("\tGenerate Source : " + file.getPath() + "\n"); 
-		
-		// Create
-		Template tpl = cfg.getTemplate(
-				this.adapter.getTemplateSourceProviderPath().substring(1) + template);
-		
-		OutputStreamWriter output = new FileWriter(file);
-		tpl.process(datamodel, output);
-		output.flush();
-		output.close();
+	private void generateSymfonyEntities() {
+
+		//php app/console generate:doctrine:entity --non-interaction --entity=AcmeBlogBundle:Post --fields="title:string(100) body:text" --format=xml
+		List<String> command = new ArrayList<String>();
+		command.add("php");
+		command.add(String.format("%s/%s/%s", Harmony.symfonyPath, "app", "console") );
+		command.add("generate:doctrine:entity");
+		command.add("--non-interaction");
+		command.add("--entity=AcmeBlogBundle:Post");
+		command.add("--fields=\"title:string(100) body:text\"");
+		command.add("--format=xml");
+
+		this.console.setCommandArgs(command);
+		this.console.executeCommand();
+
 	}
 }
