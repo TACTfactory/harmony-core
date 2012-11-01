@@ -1,7 +1,6 @@
 package com.tactfactory.mda.test.orm;
 
 import java.io.File;
-import java.io.IOException;
 
 import org.junit.After;
 import org.junit.Before;

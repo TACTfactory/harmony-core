@@ -1,9 +1,5 @@
 package com.tactfactory.mda.template;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -13,13 +9,7 @@ import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
-import com.tactfactory.mda.utils.FileUtils;
-import com.tactfactory.mda.utils.PackageUtils;
 import com.tactfactory.mda.utils.SystemCommand;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
 public class WebServiceGenerator {
 	protected List<ClassMetadata> metas;

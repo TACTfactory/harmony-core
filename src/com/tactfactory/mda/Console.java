@@ -45,11 +45,10 @@ public class Console extends Harmony {
 			throw new Exception("Usage Exception, please launch help !");
 			
 		} else {
-
 			String command = null;
-				String bundle = null;
-				String subject = null;
-				String action = null;
+			String bundle = null;
+			String subject = null;
+			String action = null;
 			String[] commandArgs = null;
 			String commandOption = null;
 			String platformTmp = "";
@@ -84,14 +83,12 @@ public class Console extends Harmony {
 			// Harmony command launch
 			Harmony harmony = new Harmony();
 			harmony.initialize();
-			
 			harmony.findAndExecute(command,commandArgs,commandOption);
 		}
 	}
 	
 	/** Constructor */
 	public Console() throws Exception {
-		
 		// Extend bootstrap
 		//this.bootstrap.put(key, value)
 	}

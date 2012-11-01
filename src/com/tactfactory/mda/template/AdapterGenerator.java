@@ -30,6 +30,7 @@ public class AdapterGenerator {
 	protected boolean isWritable = true;
 	protected HashMap<String, Object> datamodel;
 
+	@SuppressWarnings("unchecked")
 	public AdapterGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
 		if (meta == null && adapter == null)
 			throw new Exception("No meta or adapter define.");
@@ -94,61 +95,63 @@ public class AdapterGenerator {
 		
 		//List each entity hashmap
 		for(Object metaMap : this.entities.values()) {
-			Map<String, Object> modelClass = (Map<String, Object>)metaMap;
-			
-			//List each entity relation field
-			for (Object metaRelations : (ArrayList<Map<String, Object>>)modelClass.get(TagConstant.RELATIONS) ) {
-				Map<String, Object> relation = (Map<String, Object>) metaRelations;
+			if (metaMap instanceof Map<?, ?>) {
+				Map<String, Object> modelClass = (Map<String, Object>)metaMap;
 				
-				if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@OneToOne") ) {
-
-				} else
+				//List each entity relation field
+				for (Object metaRelations : (ArrayList<Map<String, Object>>)modelClass.get(TagConstant.RELATIONS) ) {
+					Map<String, Object> relation = (Map<String, Object>) metaRelations;
 					
-				if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@OneToMany")) {
-					System.out.println("\tFound a @OneToMany relation in "+modelClass.get(TagConstant.NAME) );
-					
-					// Target Entity type
-					String targetEntity = ((String)relation.get(TagConstant.TYPE)).replace("ArrayList<","").replace(">","");
-					System.out.println("\tCheck if @ManyToOne exists in "+targetEntity);
-					
-					// Get Target Entity Relations
-					if(this.entities.containsKey(targetEntity)) {
-						Map<String, Object> targetModelClass = (Map<String, Object>)this.entities.get(targetEntity);
-						ArrayList<Map<String, Object>> targetRelations = (ArrayList<Map<String, Object>>)targetModelClass.get(TagConstant.RELATIONS);
-						
-						// list and check for a reversed @OneToMany (@ManyToOne)
-						for(Map<String,Object> targetRelation : targetRelations) {
-							
-							if(	targetRelation.get(TagConstant.TYPE).equals(modelClass.get(TagConstant.NAME).toString())
-										&& targetRelation.get(TagConstant.RELATION_TYPE).toString().equals("@ManyToOne")) {
-								System.out.println("\t@ManyToOne Relation exists, no need to add column... ");
-								break;
-							} else {
-								System.out.println("\tNo @ManyToOne relation found, creating column...");
+					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@OneToOne") ) {
 	
-								Map<String, Object> modelRelation = new HashMap<String, Object>();
-								modelRelation.put(TagConstant.NAME,				modelClass.get(TagConstant.NAME).toString().toLowerCase());
-								modelRelation.put(TagConstant.ALIAS,			SqliteAdapter.generateRelationColumnName(
-																					modelClass.get(TagConstant.NAME).toString()));
-								modelRelation.put(TagConstant.TYPE,				modelClass.get(TagConstant.NAME).toString());
-								modelRelation.put(TagConstant.RELATION_TYPE,	"@ManyToOne");							
+					} else
+						
+					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@OneToMany")) {
+						System.out.println("\tFound a @OneToMany relation in "+modelClass.get(TagConstant.NAME) );
+						
+						// Target Entity type
+						String targetEntity = ((String)relation.get(TagConstant.TYPE)).replace("ArrayList<","").replace(">","");
+						System.out.println("\tCheck if @ManyToOne exists in "+targetEntity);
+						
+						// Get Target Entity Relations
+						if(this.entities.containsKey(targetEntity)) {
+							Map<String, Object> targetModelClass = (Map<String, Object>)this.entities.get(targetEntity);
+							ArrayList<Map<String, Object>> targetRelations = (ArrayList<Map<String, Object>>)targetModelClass.get(TagConstant.RELATIONS);
+							
+							// list and check for a reversed @OneToMany (@ManyToOne)
+							for(Map<String,Object> targetRelation : targetRelations) {
+								
+								if(	targetRelation.get(TagConstant.TYPE).equals(modelClass.get(TagConstant.NAME).toString())
+											&& targetRelation.get(TagConstant.RELATION_TYPE).toString().equals("@ManyToOne")) {
+									System.out.println("\t@ManyToOne Relation exists, no need to add column... ");
+									break;
+								} else {
+									System.out.println("\tNo @ManyToOne relation found, creating column...");
+		
+									Map<String, Object> modelRelation = new HashMap<String, Object>();
+									modelRelation.put(TagConstant.NAME,				modelClass.get(TagConstant.NAME).toString().toLowerCase());
+									modelRelation.put(TagConstant.ALIAS,			SqliteAdapter.generateRelationColumnName(
+																						modelClass.get(TagConstant.NAME).toString()));
+									modelRelation.put(TagConstant.TYPE,				modelClass.get(TagConstant.NAME).toString());
+									modelRelation.put(TagConstant.RELATION_TYPE,	"@ManyToOne");							
+								}
 							}
+	
+							System.out.print("\n");
+						} else {
+							System.out.println("\tTarget Entity not found please add it or use orm:generate:entities...");
 						}
-
-						System.out.print("\n");
-					} else {
-						System.out.println("\tTarget Entity not found please add it or use orm:generate:entities...");
-					}
-				} else
-				
-				if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@ManyToOne")) {
-
-				} else
-				
-				if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@ManyToMany")) {
-
-				} else {
+					} else
 					
+					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@ManyToOne")) {
+	
+					} else
+					
+					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@ManyToMany")) {
+	
+					} else {
+						
+					}
 				}
 			}
 		}
