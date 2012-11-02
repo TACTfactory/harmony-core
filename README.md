@@ -1,7 +1,7 @@
 README
 ======
 
-[![Build Status](https://build.tactfactory.com/symfony/?branch=master)]
+[![Build Status](https://support.tactfactory.com/projects/harmony/hudson/index?branch=master)](https://support.tactfactory.com/projects/harmony/hudson/index)
 
 What is Harmony?
 -----------------
@@ -22,7 +22,7 @@ Installation
 ------------
 
 The best way to install Harmony is to download the Harmony Standard Edition
-available at [https://support.tactfactory.com/harmony/wiki][1].
+available at [https://support.tactfactory.com/projects/harmony/wiki][1].
 
 Documentation
 -------------
@@ -45,9 +45,9 @@ Running Harmony Tests
 Information on how to run the Harmony test suite can be found in the
 [Running Harmony Tests][6] section.
 
-[1]: http://symfony.com/download
-[2]: https://support.tactfactory.com/harmony/wiki
-[3]: https://support.tactfactory.com/harmony/wiki
-[4]: https://support.tactfactory.com/harmony/wiki/contributing
-[5]: https://support.tactfactory.com/harmony/wiki/patches
-[6]: https://support.tactfactory.com/harmony/wiki/tests
+[1]: https://support.tactfactory.com/projects/harmony
+[2]: https://support.tactfactory.com/projects/harmony/wiki
+[3]: https://support.tactfactory.com/projects/harmony/wiki
+[4]: https://support.tactfactory.com/projects/harmony/wiki/contributing
+[5]: https://support.tactfactory.com/projects/harmony/wiki/patches
+[6]: https://support.tactfactory.com/projects/harmony/wiki/tests
