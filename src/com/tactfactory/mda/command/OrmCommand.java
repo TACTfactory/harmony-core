@@ -21,7 +21,7 @@ import com.tactfactory.mda.parser.JavaModelParser;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.ActivityGenerator;
-import com.tactfactory.mda.template.AdapterGenerator;
+import com.tactfactory.mda.template.SQLiteAdapterGenerator;
 import com.tactfactory.mda.template.ProjectGenerator;
 import com.tactfactory.mda.template.ProviderGenerator;
 import com.tactfactory.mda.template.SQLiteGenerator;
@@ -88,9 +88,9 @@ public class OrmCommand extends BaseCommand {
 					ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
 					try {
 						new ActivityGenerator(metas, this.adapter).generateAll();
-						new AdapterGenerator(metas, this.adapter).generateAll();
 	
 						// Make Database from MetaData
+						new SQLiteAdapterGenerator(metas, this.adapter).generateAll();
 						new SQLiteGenerator(metas, this.adapter).generateDatabase();
 						new ProviderGenerator();
 					} catch (Exception e) {
@@ -143,12 +143,15 @@ public class OrmCommand extends BaseCommand {
 				// Make
 				new ProjectGenerator(metas, this.adapter).generateHomeActivity();
 				new ActivityGenerator(metas, this.adapter).generateAll();
-				new AdapterGenerator(metas, this.adapter).generateAll();
-				new WebServiceGenerator(metas, this.adapter).generateAll();
 
 				// Make Database from MetaData
+				new SQLiteAdapterGenerator(metas, this.adapter).generateAll();
 				new SQLiteGenerator(metas, this.adapter).generateDatabase();
 				new ProviderGenerator();
+				
+				// Make Web Service from MetaData
+				new WebServiceGenerator(metas, this.adapter).generateAll();
+				
 			} catch (Exception e) {
 				e.printStackTrace();
 			}

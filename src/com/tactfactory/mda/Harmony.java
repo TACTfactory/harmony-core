@@ -40,17 +40,20 @@ public class Harmony {
 	/** Singleton of console */
 	public static Harmony instance;
 	
+	/** Path of Harmony base */
+	public static String pathBase = "./";
+	
 	/** Path of project ( app folder in Harmony root ) */
-	public static String pathProject = "../app";
+	public static String pathProject = pathBase + "app";
 	
 	/** Path of templates */
-	public static String pathTemplate = "../tpl";
+	public static String pathTemplate = pathBase + "tpl"; // "../../tpl";
 	
 	/** Path of libs */
-	public static String pathLibs = "../lib";
+	public static String pathLibs = pathBase + "lib";
 	
 	/** Path of harmony.jar */
-	public static String pathHarmony = "../vendor/tact-core";
+	public static String pathHarmony = pathBase + "vendor/tact-core";
 	
 	/** Project space */
 	public static String projectFolder = "android";
@@ -67,8 +70,8 @@ public class Harmony {
 	/** Symfony path */
 	public static String symfonyPath = "D:/Site/wamp/www/Symfony";
 	
-	private static final String DEFAULT_PROJECT_NAME = "toto";
-	private static final String DEFAULT_PROJECT_NAMESPACE = "com.tactfactory.toto";
+	private static final String DEFAULT_PROJECT_NAME = "demact";
+	private static final String DEFAULT_PROJECT_NAMESPACE = "com.tactfactory.mda.test.demact";
 	
 	public static boolean isConsole = false;
 	

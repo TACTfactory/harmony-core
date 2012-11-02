@@ -83,7 +83,7 @@ public class SQLiteGenerator {
 		
 		try {
 			Configuration cfg = new Configuration();
-			cfg.setDirectoryForTemplateLoading(new File("../"));
+			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
 			
 			this.makeSourceData(cfg, 
 					"TemplateSqliteOpenHelper.java", 

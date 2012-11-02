@@ -33,6 +33,9 @@ public class OrmInitTest extends CommonTest {
 	
 	@Test
 	public void all() {
+		System.out.println("Test Orm all");
+		System.out.println("###############################################################################");
+		
 		this.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		
 		String pathNameSpace = Harmony.projectNameSpace.replaceAll("\\.", "/");
@@ -51,6 +54,10 @@ public class OrmInitTest extends CommonTest {
 		this.modelComment();
 		this.modelUser();
 		
+		this.dataPost();
+		this.dataComment();
+		this.dataUser();
+		
 		this.viewPostCreate();
 		this.viewPostEdit();
 		this.viewPostList();
@@ -65,6 +72,21 @@ public class OrmInitTest extends CommonTest {
 		this.viewUserEdit();
 		this.viewUserList();
 		this.viewUserShow();
+		
+		this.ressourcePostCreate();
+		this.ressourcePostEdit();
+		this.ressourcePostList();
+		this.ressourcePostShow();
+		
+		this.ressourceCommentCreate();
+		this.ressourceCommentEdit();
+		this.ressourceCommentList();
+		this.ressourceCommentShow();
+		
+		this.ressourceUserCreate();
+		this.ressourceUserEdit();
+		this.ressourceUserList();
+		this.ressourceUserShow();
 	}
 	
 	@Test
@@ -73,13 +95,31 @@ public class OrmInitTest extends CommonTest {
 	}
 	
 	@Test
-	public void modelComment() {
+	public void modelComment() {		
 		this.isFindFile("android/src/com/tactfactory/mda/test/demact/entity/Comment.java");
 	}
 	
 	@Test
 	public void modelUser() {
 		this.isFindFile("android/src/com/tactfactory/mda/test/demact/entity/User.java");
+	}
+	
+	@Test
+	public void dataPost() {
+		this.isFindFile("android/src/com/tactfactory/mda/test/demact/data/PostAdapter.java");
+		this.isFindFile("android/src/com/tactfactory/mda/test/demact/data/PostAdapterBase.java");
+	}
+	
+	@Test
+	public void dataComment() {
+		this.isFindFile("android/src/com/tactfactory/mda/test/demact/data/CommentAdapter.java");
+		this.isFindFile("android/src/com/tactfactory/mda/test/demact/data/CommentAdapterBase.java");
+	}
+	
+	@Test
+	public void dataUser() {
+		this.isFindFile("android/src/com/tactfactory/mda/test/demact/data/UserAdapter.java");
+		this.isFindFile("android/src/com/tactfactory/mda/test/demact/data/UserAdapterBase.java");
 	}
 	
 	@Test
@@ -158,5 +198,80 @@ public class OrmInitTest extends CommonTest {
 	public void viewUserShow() {
 		this.isFindFile("android/src/com/tactfactory/mda/test/demact/view/user/UserShowActivity.java");
 		this.isFindFile("android/src/com/tactfactory/mda/test/demact/view/user/UserShowFragment.java");
+	}
+	
+	@Test
+	public void ressourcePostCreate() {
+		this.isFindFile("android/res/layout/activity_post_create.xml");
+		this.isFindFile("android/res/layout/fragment_post_create.xml");
+	}
+	
+	@Test
+	public void ressourcePostEdit() {
+		this.isFindFile("android/res/layout/activity_post_edit.xml");
+		this.isFindFile("android/res/layout/fragment_post_edit.xml");
+	}
+	
+	@Test
+	public void ressourcePostList() {
+		this.isFindFile("android/res/layout/activity_post_list.xml");
+		this.isFindFile("android/res/layout/fragment_post_list.xml");
+		this.isFindFile("android/res/layout/row_post.xml");
+	}
+	
+	@Test
+	public void ressourcePostShow() {
+		this.isFindFile("android/res/layout/activity_post_show.xml");
+		this.isFindFile("android/res/layout/fragment_post_show.xml");
+	}
+	
+	@Test
+	public void ressourceCommentCreate() {
+		this.isFindFile("android/res/layout/activity_comment_create.xml");
+		this.isFindFile("android/res/layout/fragment_comment_create.xml");
+	}
+	
+	@Test
+	public void ressourceCommentEdit() {
+		this.isFindFile("android/res/layout/activity_comment_edit.xml");
+		this.isFindFile("android/res/layout/fragment_comment_edit.xml");
+	}
+	
+	@Test
+	public void ressourceCommentList() {
+		this.isFindFile("android/res/layout/activity_comment_list.xml");
+		this.isFindFile("android/res/layout/fragment_comment_list.xml");
+		this.isFindFile("android/res/layout/row_comment.xml");
+	}
+	
+	@Test
+	public void ressourceCommentShow() {
+		this.isFindFile("android/res/layout/activity_comment_show.xml");
+		this.isFindFile("android/res/layout/fragment_comment_show.xml");
+	}
+	
+	@Test
+	public void ressourceUserCreate() {
+		this.isFindFile("android/res/layout/activity_user_create.xml");
+		this.isFindFile("android/res/layout/fragment_user_create.xml");
+	}
+	
+	@Test
+	public void ressourceUserEdit() {
+		this.isFindFile("android/res/layout/activity_user_edit.xml");
+		this.isFindFile("android/res/layout/fragment_user_edit.xml");
+	}
+	
+	@Test
+	public void ressourceUserList() {
+		this.isFindFile("android/res/layout/activity_user_list.xml");
+		this.isFindFile("android/res/layout/fragment_user_list.xml");
+		this.isFindFile("android/res/layout/row_user.xml");
+	}
+	
+	@Test
+	public void ressourceUserShow() {
+		this.isFindFile("android/res/layout/activity_user_show.xml");
+		this.isFindFile("android/res/layout/fragment_user_show.xml");
 	}
 }

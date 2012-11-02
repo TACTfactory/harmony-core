@@ -28,8 +28,8 @@ public abstract class CommonTest {
 		Harmony.projectName = "demact";
 		Harmony.projectNameSpace = "com/tactfactory/mda/test/demact";
 		Harmony.androidSdkPath = "/tmp/";
-		Harmony.pathProject = "app";
-		Harmony.pathTemplate = "../Harmony/tpl";
+		//Harmony.pathProject = "app";
+		//Harmony.pathTemplate = "../tpl";
 		
 		this.harmony = new Harmony();
 	}

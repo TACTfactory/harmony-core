@@ -248,7 +248,7 @@ public class ActivityGenerator {
 			// TODO Caution, freemarker template folder must have been specified
 			// freemarker bug with '../' folder so, just remove first '.'
 			Configuration cfg = new Configuration();						// Initialization of template engine
-			cfg.setDirectoryForTemplateLoading(new File("../"));
+			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
 
 			if (this.isWritable ) {
 				// Info
@@ -280,8 +280,8 @@ public class ActivityGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	private void makeSourceControler(Configuration cfg, String template, String filename) throws IOException,
-	TemplateException {
+	private void makeSourceControler(Configuration cfg, String template, String filename) 
+			throws IOException, TemplateException {
 
 		File file = FileUtils.makeFile(
 				String.format("%s%s/%s",
@@ -296,7 +296,7 @@ public class ActivityGenerator {
 		// Create
 		Template tpl = cfg.getTemplate(
 				String.format("%s%s",
-						this.adapter.getTemplateSourceControlerPath().substring(1),
+						this.adapter.getTemplateSourceControlerPath(),
 						template));		// Load template file in engine
 
 		OutputStreamWriter output = new FileWriter(file);

@@ -21,7 +21,7 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class AdapterGenerator {
+public class SQLiteAdapterGenerator {
 	protected List<ClassMetadata> metas;
 	protected Map<String, Object> entities;
 	protected ClassMetadata meta;
@@ -31,7 +31,7 @@ public class AdapterGenerator {
 	protected HashMap<String, Object> datamodel;
 
 	@SuppressWarnings("unchecked")
-	public AdapterGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
+	public SQLiteAdapterGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
 		if (meta == null && adapter == null)
 			throw new Exception("No meta or adapter define.");
 		
@@ -184,7 +184,7 @@ public class AdapterGenerator {
 		
 		try {
 			Configuration cfg = new Configuration();
-			cfg.setDirectoryForTemplateLoading(new File("../"));
+			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
 			
 			this.makeSourceControler(cfg, 
 					"TemplateAdapterBase.java", 

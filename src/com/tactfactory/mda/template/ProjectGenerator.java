@@ -96,7 +96,7 @@ public class ProjectGenerator {
 		Configuration cfg = new Configuration();
 
 		try {
-			cfg.setDirectoryForTemplateLoading(new File("../"));
+			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -114,6 +114,7 @@ public class ProjectGenerator {
 		// Create
 		Template tpl;
 		try {
+			
 			tpl = cfg.getTemplate(templateFile);	// Load template file in engine
 
 			OutputStreamWriter output = new FileWriter(destFile);
@@ -173,22 +174,25 @@ public class ProjectGenerator {
 
 		// create empty package entity
 		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/")+"/entity/" );
+		
+		// create libs folders
+		FileUtils.makeFolder(this.adapter.getLibsPath());
 
 		// create HomeActivity.java
 		this.updateProjectFile(this.adapter.getHomeActivityPathFile(),
-				this.adapter.getTemplateHomeActivityPathFile().substring(1));
+				this.adapter.getTemplateHomeActivityPathFile());
 
 		// create configs.xml
 		this.updateProjectFile(this.adapter.getRessourceValuesPath()+"configs.xml",
-				this.adapter.getTemplateRessourceValuesPath().substring(1)+"configs.xml");
+				this.adapter.getTemplateRessourceValuesPath()+"configs.xml");
 
 		// create strings.xml
 		this.updateProjectFile(this.adapter.getStringsPathFile(),
-				this.adapter.getTemplateStringsPathFile().substring(1));
+				this.adapter.getTemplateStringsPathFile()); //.substring(1));
 
 		// create main.xml
 		this.updateProjectFile(this.adapter.getRessourceLayoutPath()+"main.xml",
-				this.adapter.getTemplateRessourceLayoutPath().substring(1)+"main.xml");
+				this.adapter.getTemplateRessourceLayoutPath()+"main.xml");
 
 		// copy libraries
 		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathLibs,"joda-time-2.1.jar")),
@@ -206,7 +210,7 @@ public class ProjectGenerator {
 			{
 				if(dirProj.listFiles()[i].isFile()) {
 					this.updateProjectFile(dirProj.listFiles()[i].getPath(),
-							this.adapter.getTemplateProjectPath().substring(1) + dirProj.listFiles()[i].getName());
+							this.adapter.getTemplateProjectPath() + dirProj.listFiles()[i].getName());
 				}
 			}
 		}
@@ -281,7 +285,7 @@ public class ProjectGenerator {
 		Configuration cfg = new Configuration();
 
 		try {
-			cfg.setDirectoryForTemplateLoading(new File("../"));
+			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -312,7 +316,7 @@ public class ProjectGenerator {
 	public void updateStringsXml(Configuration cfg) {
 
 		try {
-			cfg.setDirectoryForTemplateLoading(new File("../"));
+			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -330,7 +334,7 @@ public class ProjectGenerator {
 		// Create
 		Template tpl;
 		try {
-			tpl = cfg.getTemplate(this.adapter.getTemplateStringsPathFile().substring(1));	// Load template file in engine
+			tpl = cfg.getTemplate(this.adapter.getTemplateStringsPathFile());	// Load template file in engine
 
 			OutputStreamWriter output = new FileWriter(destFile);
 			tpl.process(this.datamodel, output);				// Process datamodel (with previous template file), and output to output file

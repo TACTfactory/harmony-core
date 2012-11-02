@@ -1,12 +1,12 @@
 package ${project_namespace};
 
 <#if entities??>
-<#list entities as entity>
+	<#list entities as entity>
 import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}CreateActivity;
 import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}ListActivity;
 import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}ShowActivity;
 import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}EditActivity;
-</#list>
+	</#list>
 </#if>
 
 import android.app.Activity;
@@ -27,10 +27,11 @@ public class HomeActivity extends Activity
 		setContentView(R.layout.main);
 		LinearLayout homeLayout = (LinearLayout) findViewById(R.id.homeLayout);
 
+		// Base buttons
 		<#if entities??>
-		//Debug buttons
 			<#list entities as entity>
-		//Create
+		
+		// Create ${entity.name}
 		Button ${entity.name}CreateButton = new Button(this);
 		${entity.name}CreateButton.setText("${entity.name}CreateActivity");
 		${entity.name}CreateButton.setOnClickListener(new OnClickListener() {
@@ -41,7 +42,8 @@ public class HomeActivity extends Activity
 			}
 		});
 		homeLayout.addView(${entity.name}CreateButton);
-		//List
+		
+		// List ${entity.name}
 		Button ${entity.name}ListButton = new Button(this);
 		${entity.name}ListButton.setText("${entity.name}ListActivity");
 		${entity.name}ListButton.setOnClickListener(new OnClickListener() {
