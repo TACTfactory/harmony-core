@@ -24,7 +24,7 @@ public class HomeActivity extends Activity
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
+		this.setContentView(R.layout.main);
 		LinearLayout homeLayout = (LinearLayout) findViewById(R.id.homeLayout);
 
 		// Base buttons
