@@ -1,3 +1,3 @@
 #! /bin/sh
 
-java -jar ../vendor/tact-core/Harmony.jar $*
+java -jar ./vendor/tact-core/Harmony.jar $*
