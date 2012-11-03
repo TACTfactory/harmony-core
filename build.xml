@@ -124,6 +124,19 @@
         </junit>
     </target>
 	
+	<target name="run-jdepend" depends="compile-tests"
+		description="Run jdepend">
+		<jdepend outputfile="docs/jdepend.xml" fork="yes" format="xml">
+		    <sourcespath>
+		        <pathelement location="${src.rel-dir}"/>
+		    </sourcespath>
+		    <classpath refid="project.classpath" />
+		        <!--pathelement location="classes"/>
+		        <pathelement location="/usr/share/java/jdepend-2.9.jar"/>
+		    </classpath-->
+		</jdepend>
+	</target>
+	
 	<!-- build -->
 
 	<target name="post_build" depends="compile"

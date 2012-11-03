@@ -93,6 +93,10 @@ public class OrmCommand extends BaseCommand {
 						new SQLiteAdapterGenerator(metas, this.adapter).generateAll();
 						new SQLiteGenerator(metas, this.adapter).generateDatabase();
 						new ProviderGenerator();
+						
+						// Make Web Service from MetaData
+						// new WebServiceGenerator(metas, this.adapter).generateAll();
+						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -150,7 +154,7 @@ public class OrmCommand extends BaseCommand {
 				new ProviderGenerator();
 				
 				// Make Web Service from MetaData
-				new WebServiceGenerator(metas, this.adapter).generateAll();
+				// new WebServiceGenerator(metas, this.adapter).generateAll();
 				
 			} catch (Exception e) {
 				e.printStackTrace();
