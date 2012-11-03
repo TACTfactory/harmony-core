@@ -15,10 +15,12 @@
 	<!-- default folder location properties -->
 	<property name="src.rel-dir" value="src" />
 	<property name="tests.src.rel-dir" value="src/com/tactfactory/mda/test" />
+	<property name="tests.build.rel-dir" value="bin/com/tactfactory/mda/test" />
 	<!-- <property name="etc.rel-dir" value="etc" /-->
 	<property name="app.rel-dir" value="app" />
 	<property name="build.rel-dir" value="bin" />
 	<property name="lib.rel-dir" value="lib" />
+	<property name="tmp.rel-dir" value="tmp" />
 	<property name="dist.rel-dir" value="vendor/tact-core" />
 	<property name="doc.rel-dir" value="${dist.rel-dir}/javadoc" />
 	<property name="jar.rel-file" value="${dist.rel-dir}/${ant.project.name}.jar" />
@@ -42,12 +44,14 @@
         <mkdir dir="${dist.rel-dir}"/>
         <mkdir dir="${dist.rel-dir}/${lib.rel-dir}"/>
         <mkdir dir="${app.rel-dir}"/>
+    	<mkdir dir="${tmp.rel-dir}"/>
     </target>
 
     <target name="clean"
         description="Delete temporary folders">
         <delete dir="${build.rel-dir}" failonerror="false" deleteonexit="true" />
         <delete dir="${dist.rel-dir}" failonerror="false" deleteonexit="true" />
+    	<delete dir="${tmp.rel-dir}" failonerror="false" deleteonexit="true" />
     </target>
     
     <!-- javadoc -->
@@ -99,25 +103,24 @@
 
     <target name="compile-tests" depends="init,prepare-resources">
     <!-- description="Compile tests" -->
-        <javac
-            srcdir="${tests.src.rel-dir}" 
+    	<javac
+            srcdir="${src.rel-dir}"
             destdir="${build.rel-dir}"
             debug="${compile.debug}"
-            debuglevel="${compile.debuglevel}" >
+            debuglevel="${compile.debuglevel}"
+            includeantruntime="false"
+        >
+            <compilerarg line="" /> <!-- "-Xlint:all", "-Xlint:all,-path", "-Xlint:all,-path,-unchecked" -->
             <classpath refid="project.classpath" />
         </javac>
     </target>
 
-    <target name="run-tests" depends="compile-tests ,post_build"
+    <target name="run-tests" depends="compile-tests"
         description="Run tests">
-        <junit haltonfailure="yes" fork="false">
+        <junit haltonfailure="no" fork="yes">
             <classpath refid="project.classpath" />
-            <formatter type="plain" usefile="false" />
-            <batchtest>
-                <fileset dir="${tests.src.rel-dir}"
-                    includes="**/test/*.java">
-                </fileset>
-            </batchtest>
+            <formatter type="xml" />
+        	<test name="com.tactfactory.mda.test.AllTests" todir="${tmp.rel-dir}/"/> 
         </junit>
     </target>
 	

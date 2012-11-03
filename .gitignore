@@ -9,5 +9,5 @@
 .project
 local.properties
 .settings/*
-
+/tmp/*
 /app/*
