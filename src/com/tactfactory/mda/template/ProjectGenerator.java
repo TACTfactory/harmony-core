@@ -88,7 +88,7 @@ public class ProjectGenerator {
 	/**
 	 * Update Project File merge template & datamodel
 	 * 
-	 * @param destFile File to update
+	 * @param destPath File to update
 	 * @param templateFile Template File to use
 	 */ 
 	public void updateProjectFile(String destPath, String templateFile) {
