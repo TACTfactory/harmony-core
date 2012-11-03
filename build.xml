@@ -97,19 +97,18 @@
     
     <!-- tests -->
 
-    <target name="compile-tests">
+    <target name="compile-tests" depends="init,prepare-resources">
     <!-- description="Compile tests" -->
         <javac
             srcdir="${tests.src.rel-dir}" 
             destdir="${build.rel-dir}"
             debug="${compile.debug}"
-            debuglevel="${compile.debuglevel}"
-        >
+            debuglevel="${compile.debuglevel}" >
             <classpath refid="project.classpath" />
         </javac>
     </target>
 
-    <target name="run-tests" depends="compile-tests"
+    <target name="run-tests" depends="compile-tests ,post_build"
         description="Run tests">
         <junit haltonfailure="yes" fork="false">
             <classpath refid="project.classpath" />
