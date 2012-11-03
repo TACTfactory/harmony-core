@@ -56,7 +56,7 @@ public class ProjectInitTest extends CommonTest {
 		this.isFindFile("android/AndroidManifest.xml");
 		this.isFindFile("android/build.xml");
 		this.isFindFile("android/lint.xml");
-		this.isFindFile("android/local.properties");
+		//this.isFindFile("android/local.properties");
 		this.isFindFile("android/proguard-project.txt");
 		this.isFindFile("android/project.properties");
 		
