@@ -77,103 +77,107 @@ public class JavaAdapter {
 
 	private static class FieldVisitor extends VoidVisitorAdapter<ClassMetadata> {
 		@Override
-		public void visit(FieldDeclaration n, ClassMetadata meta) {
-			List<AnnotationExpr> fieldAnnotations = n.getAnnotations();
+		public void visit(FieldDeclaration field, ClassMetadata meta) {
+			List<AnnotationExpr> fieldAnnotations = field.getAnnotations();
 			
-			FieldMetadata fieldMeta = new FieldMetadata();
-			fieldMeta.name = n.getVariables().get(0).toString();
-			fieldMeta.type = n.getType().toString();
-			fieldMeta.relation_type = n.getAnnotations().get(0).toString();
-			
-			boolean isColumn = false;
-			boolean isId = false;
-			boolean isRelation = false;
-			
-			for (AnnotationExpr annotationExpr : fieldAnnotations) {
-				String annotationType = annotationExpr.getName().toString();
-
-				if (annotationType.equals(PackageUtils.extractNameEntity(Id.class))) {
-					isId = true;
-					
-					// Debug Log
-					if (Harmony.DEBUG)
-						System.out.print("\t    ID: " + fieldMeta.name +"\n");
-				}
+			if (	fieldAnnotations != null && 
+					fieldAnnotations.size() > 0 ) {
 				
-				if (annotationType.equals(PackageUtils.extractNameEntity(Column.class))) {
-					isColumn = true;
-					
-					// Debug Log
-					if (Harmony.DEBUG)
-						System.out.print("\t    Column: " + fieldMeta.name + 
-								" type of " + fieldMeta.type +"\n");
-				}
+				FieldMetadata fieldMeta = new FieldMetadata();
+				fieldMeta.name = field.getVariables().get(0).toString(); // FIXME not manage multi-variable
+				fieldMeta.type = field.getType().toString();
+				fieldMeta.relation_type = field.getAnnotations().get(0).toString(); // FIXME not manage multi-annotation
 				
-				if (annotationType.equals(PackageUtils.extractNameEntity(OneToOne.class))) {
-					isRelation = true;
-					
-					// Debug Log
-					if (Harmony.DEBUG)
-						System.out.print("\t    Relation One to One: " + fieldMeta.name + 
-								" type of " + fieldMeta.type +"\n");
-				}
+				boolean isColumn = false;
+				boolean isId = false;
+				boolean isRelation = false;
 				
-				if (annotationType.equals(PackageUtils.extractNameEntity(OneToMany.class))) {
-					isRelation = true;
-					
-					// Debug Log
-					if (Harmony.DEBUG)
-						System.out.print("\t    Relation One to Many: " + fieldMeta.name + 
-								" type of " + fieldMeta.type +"\n");
-				}
-				
-				if (annotationType.equals(PackageUtils.extractNameEntity(ManyToOne.class))) {
-					isRelation = true;
-					
-					// Debug Log
-					if (Harmony.DEBUG)
-						System.out.print("\t    Relation Many to One: " + fieldMeta.name + 
-								" type of " + fieldMeta.type +"\n");
-				}
-				
-				if (annotationType.equals(PackageUtils.extractNameEntity(ManyToMany.class))) {
-					isRelation = true;
-					
-					// Debug Log
-					if (Harmony.DEBUG)
-						System.out.print("\t    Relation Many to Many: " + fieldMeta.name + 
-								" type of " + fieldMeta.type +"\n");
-				}
-			}
-			
-			// Set Field meta
-			if (isId) {
-				meta.ids.put(fieldMeta.name, fieldMeta);
-			}
-
-			if (isColumn)  {
-				meta.fields.put(fieldMeta.name, fieldMeta);
-			}
-
-			if (isRelation)  {
-				meta.relations.put(fieldMeta.name, fieldMeta);
-			}
-			
-			/*for (Field field : mclass.getDeclaredFields()) {
-				if (columnAnnotation != null) {
-					
-					Annotation idAnnotation = field.getAnnotation(Id.class);
-					Annotation generateValueAnnotation = field.getAnnotation(GeneratedValue.class);
-					
-					if (com.tactfactory.mda.android.command.Console.DEBUG) {
-						if (idAnnotation != null)
-							System.out.print("\t " + idAnnotation + "\n");
+				for (AnnotationExpr annotationExpr : fieldAnnotations) {
+					String annotationType = annotationExpr.getName().toString();
+	
+					if (annotationType.equals(PackageUtils.extractNameEntity(Id.class))) {
+						isId = true;
 						
-						if (generateValueAnnotation != null)
-							System.out.print("\t " + generateValueAnnotation + "\n");
+						// Debug Log
+						if (Harmony.DEBUG)
+							System.out.print("\t    ID: " + fieldMeta.name +"\n");
+					}
+					
+					if (annotationType.equals(PackageUtils.extractNameEntity(Column.class))) {
+						isColumn = true;
+						
+						// Debug Log
+						if (Harmony.DEBUG)
+							System.out.print("\t    Column: " + fieldMeta.name + 
+									" type of " + fieldMeta.type +"\n");
+					}
+					
+					if (annotationType.equals(PackageUtils.extractNameEntity(OneToOne.class))) {
+						isRelation = true;
+						
+						// Debug Log
+						if (Harmony.DEBUG)
+							System.out.print("\t    Relation One to One: " + fieldMeta.name + 
+									" type of " + fieldMeta.type +"\n");
+					}
+					
+					if (annotationType.equals(PackageUtils.extractNameEntity(OneToMany.class))) {
+						isRelation = true;
+						
+						// Debug Log
+						if (Harmony.DEBUG)
+							System.out.print("\t    Relation One to Many: " + fieldMeta.name + 
+									" type of " + fieldMeta.type +"\n");
+					}
+					
+					if (annotationType.equals(PackageUtils.extractNameEntity(ManyToOne.class))) {
+						isRelation = true;
+						
+						// Debug Log
+						if (Harmony.DEBUG)
+							System.out.print("\t    Relation Many to One: " + fieldMeta.name + 
+									" type of " + fieldMeta.type +"\n");
+					}
+					
+					if (annotationType.equals(PackageUtils.extractNameEntity(ManyToMany.class))) {
+						isRelation = true;
+						
+						// Debug Log
+						if (Harmony.DEBUG)
+							System.out.print("\t    Relation Many to Many: " + fieldMeta.name + 
+									" type of " + fieldMeta.type +"\n");
 					}
 				}
-			}*/
+				
+				// Set Field meta
+				if (isId) {
+					meta.ids.put(fieldMeta.name, fieldMeta);
+				}
+	
+				if (isColumn)  {
+					meta.fields.put(fieldMeta.name, fieldMeta);
+				}
+	
+				if (isRelation)  {
+					meta.relations.put(fieldMeta.name, fieldMeta);
+				}
+				
+				/*for (Field field : mclass.getDeclaredFields()) {
+					if (columnAnnotation != null) {
+						
+						Annotation idAnnotation = field.getAnnotation(Id.class);
+						Annotation generateValueAnnotation = field.getAnnotation(GeneratedValue.class);
+						
+						if (com.tactfactory.mda.android.command.Console.DEBUG) {
+							if (idAnnotation != null)
+								System.out.print("\t " + idAnnotation + "\n");
+							
+							if (generateValueAnnotation != null)
+								System.out.print("\t " + generateValueAnnotation + "\n");
+						}
+					}
+				}*/
+			}
 		}
 	}
 }
