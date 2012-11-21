@@ -16,9 +16,14 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.ElementType.TYPE;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
+/**
+ * In order to mark a class for object-relational persistence it needs to be 
+ * designated as an entity. This can be done through the @Entity marker annotation.
+ */
 @Documented
 @Retention(SOURCE)
 @Target(TYPE)
 @Inherited
 public @interface Entity {
+	
 }

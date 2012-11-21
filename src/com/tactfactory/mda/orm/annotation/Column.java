@@ -16,6 +16,10 @@ import java.lang.annotation.Target;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 import static java.lang.annotation.ElementType.FIELD;
 
+/**
+ * To mark a property for relational persistence the @Column annotation is used. 
+ * This annotation usually requires at least 1 attribute to be set, the type. 
+ */
 @Documented
 @Retention(SOURCE)
 @Target(FIELD)
@@ -27,59 +31,77 @@ public @interface Column {
 	 */
 	public static abstract class Type {
 		/** Type that maps an SQL VARCHAR to a JAVA string. */
-		public final static String STRING = "string"; // 
+		public final static String STRING = "string";
+		/** Type that maps an SQL VARCHAR to a JAVA string with only ASCII value.*/
 		public final static String LOGIN = "login";
+		/** Type that maps an SQL VARCHAR to a JAVA string with only ASCII value but not show. */
 		public final static String PASSWORD = "password";
-		/** integer: Type that maps an SQL INT to a JAVA integer. */
+		/** Type that maps an SQL INT to a JAVA integer. */
 		public final static String INTEGER = "integer";
-	    /*smallint: Type that maps a database SMALLINT to a PHP integer.
-	    bigint: Type that maps a database BIGINT to a PHP string.
-	    boolean: Type that maps an SQL boolean to a PHP boolean.
-	    decimal: Type that maps an SQL DECIMAL to a PHP double.
-	    date: Type that maps an SQL DATETIME to a PHP DateTime object.
-	    time: Type that maps an SQL TIME to a PHP DateTime object.*/
-	    /** datetime: Type that maps an SQL DATETIME/TIMESTAMP to a PHP DateTime object. */
+	    /*smallint: Type that maps a database SMALLINT to a JAVA integer.
+	    bigint: Type that maps a database BIGINT to a JAVA string.
+	    boolean: Type that maps an SQL boolean to a JAVA boolean.
+	    decimal: Type that maps an SQL DECIMAL to a JAVA double.
+	    date: Type that maps an SQL DATETIME to a JAVA DateTime object.
+	    time: Type that maps an SQL TIME to a JAVA DateTime object.*/
+	    /** Type that maps an SQL DATETIME/TIMESTAMP to a JAVA DateTime object. */
 		public final static String DATETIME = "datetime";
-	    /** text: Type that maps an SQL CLOB to a JAVA string. */
+	    /** Type that maps an SQL CLOB to a JAVA string. */
 	    public final static String TEXT = "text";
-	    /*object: Type that maps a SQL CLOB to a PHP object using serialize() and unserialize()
-	    array: Type that maps a SQL CLOB to a PHP object using serialize() and unserialize()
-	    float: Type that maps a SQL Float (Double Precision) to a PHP double. IMPORTANT: Works only with locale settings that use decimal points as separator. */
+	    /*object: Type that maps a SQL CLOB to a JAVA object using serialize() and unserialize()
+	    array: Type that maps a SQL CLOB to a JAVA object using serialize() and unserialize()
+	    float: Type that maps a SQL Float (Double Precision) to a JAVA double. IMPORTANT: Works only with locale settings that use decimal points as separator. */
 
 	}
 	
 	/**
-	 * @return type: (optional, defaults to "string") The mapping type to use for the column.
+	 * The mapping type to use for the column.
+	 * 
+	 * @return (optional, defaults to "string") The mapping type to use for the column.
+	 * 
+	 * @see com.tactfactory.mda.orm.annotation.Column.Type
 	 */
-	String type() default Type.TEXT;
+	String type() default Type.STRING;
 			
 	/** 
-	 * @return name: (optional, defaults to field name) The name of the column in the database.
+	 * The name of the column in the database.
+	 * 
+	 * @return (optional, defaults to field name) The name of the column in the database.
 	 */
 	String name() default "";
 	
 	/**
-	 * @return length: (optional, default 255) The length of the column in the database. (Applies only if a string-valued column is used).
+	 * The length of the column in the database.
+	 * 
+	 * @return (optional, default 255) The length of the column in the database. (Applies only if a string-valued column is used).
 	 */
 	int length() default 255;
 	
 	/**
-	 * @return unique: (optional, default FALSE) Whether the column is a unique key.
+	 * Whether the column is a unique key.
+	 * 
+	 * @return (optional, default FALSE) Whether the column is a unique key.
 	 */
 	boolean unique() default false;
 	
 	/**
-	 * @return nullable: (optional, default FALSE) Whether the database column is nullable.
+	 * Whether the database column is nullable.
+	 * 
+	 * @return (optional, default FALSE) Whether the database column is nullable.
 	 */
 	boolean nullable() default false;
 	
 	/**
-	 * @return precision: (optional, default 0) The precision for a decimal (exact numeric) column. (Applies only if a decimal column is used.)
+	 * The precision for a decimal (exact numeric) column.
+	 * 
+	 * @return (optional, default 0) The precision for a decimal (exact numeric) column. (Applies only if a decimal column is used.)
 	 */
 	int precision() default 0;
 	
 	/**
-	 * @return scale: (optional, default 0) The scale for a decimal (exact numeric) column. (Applies only if a decimal column is used.)
+	 * The scale for a decimal (exact numeric) column.
+	 * 
+	 * @return (optional, default 0) The scale for a decimal (exact numeric) column. (Applies only if a decimal column is used.)
 	 */
 	int scale() default 0;
 }
