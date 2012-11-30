@@ -171,7 +171,7 @@ public abstract class ${name}AdapterBase {
 				<#if (field.type == "Date")>
 			result.set${field.name?cap_first}(new Date());
 			try {
-				result.setCreatedAt(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(c.getString( c.getColumnIndexOrThrow(${field.alias})) ));
+				result.set${field.name?cap_first}(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(c.getString( c.getColumnIndexOrThrow(${field.alias})) ));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
