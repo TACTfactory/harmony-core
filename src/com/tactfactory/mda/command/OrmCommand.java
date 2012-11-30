@@ -61,63 +61,90 @@ public class OrmCommand extends BaseCommand {
 	protected JavaModelParser javaModelParser;
 
 	protected void generateForm() {
-
+		ArrayList<ClassMetadata> metas = getMetasFromAll();
+		if(metas!=null){
+			generateActivitiesForEntities(metas, true);
+		}
 	}
 
 	/**
 	 * Generate java code files from first parsed Entity
 	 */
 	protected void generateEntity() {
-		this.javaModelParser = new JavaModelParser();
-		
-		if(this.commandArgs.size()!=0 && this.commandArgs.containsKey("filename")) {
-			
-			String entityPath = this.adapter.getSourcePath()
-					+Harmony.projectNameSpace.replaceAll("\\.","/")
-					+"/entity/" + this.commandArgs.get("filename");
-			
-			if(new File(entityPath).exists()) {
-				
-				this.javaModelParser.loadEntity(entityPath);
-				if(this.javaModelParser.getEntities().size()!=0) {
 					
-					JavaAdapter javaAdapter = new JavaAdapter();
-					javaAdapter.parse(this.javaModelParser.getEntities().get(0));
+		ArrayList<ClassMetadata> metas = getMetasFromArg();
 		
-					// Generate views from MetaData
-					ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
-					try {
-						new ActivityGenerator(metas, this.adapter).generateAll();
-	
-						// Make Database from MetaData
-						new SQLiteAdapterGenerator(metas, this.adapter).generateAll();
-						new SQLiteGenerator(metas, this.adapter).generateDatabase();
-						new ProviderGenerator();
-						
-						// Make Web Service from MetaData
-						// new WebServiceGenerator(metas, this.adapter).generateAll();
-						
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-				} else {
-					if(Harmony.DEBUG)
-						System.out.println("Given entity filename is not an entity!");
-				}
-			} else {
-				if(Harmony.DEBUG)
-					System.out.println("Given entity file doesn't exist!");
-			}
-		} else {
-			if(Harmony.DEBUG)
-				System.out.println("No given entity filename !");
+		if(metas!=null){
+			generateActivitiesForEntities(metas, false);
+			generateDBForEntities(metas);
 		}
+	
 	}
 
 	/**
 	 * Generate java code files from parsed Entities
 	 */
 	protected void generateEntities() {
+
+		ArrayList<ClassMetadata> metas = getMetasFromAll();
+		if(metas!=null){
+			generateActivitiesForEntities(metas, true);
+			generateDBForEntities(metas);
+		}
+
+	}
+
+	/**
+	 * Generate Create,Read,Upload,Delete code functions
+	 */
+	protected void generateCrud() {
+
+		ArrayList<ClassMetadata> metas = getMetasFromAll();
+		if(metas!=null){
+			generateDBForEntities(metas);
+		}
+	}
+	
+	protected void generateDBForEntities(ArrayList<ClassMetadata> metas){
+		try {
+			// Make Database from MetaData
+			new SQLiteAdapterGenerator(metas, this.adapter).generateAll();
+			new SQLiteGenerator(metas, this.adapter).generateDatabase();
+			new ProviderGenerator();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	protected ArrayList<ClassMetadata> getMetasFromArg(){
+		ArrayList<ClassMetadata> ret = null;
+		if(this.commandArgs.size()!=0 && this.commandArgs.containsKey("filename")) {
+			String entityPath = this.adapter.getSourcePath()
+					+Harmony.projectNameSpace.replaceAll("\\.","/")
+					+"/entity/" + this.commandArgs.get("filename");
+			File f = new File(entityPath);
+			if(f.exists() && !f.isDirectory()) {
+				this.javaModelParser.loadEntity(entityPath);
+				if(this.javaModelParser.getEntities().size()!=0) {
+					JavaAdapter javaAdapter = new JavaAdapter();
+					javaAdapter.parse(this.javaModelParser.getEntities().get(0));
+					ret = javaAdapter.getMetas();
+				}else{
+					System.out.println("Given entity filename is not an entity!");
+				}
+			}else{
+				System.out.println("Given entity file does not exist!");
+			}
+		}else{
+			System.out.println("No given filename!");
+		}
+		return ret;
+	}
+	
+	
+	protected ArrayList<ClassMetadata> getMetasFromAll(){
+		ArrayList<ClassMetadata> ret = null;
 		// Info Log
 		System.out.print(">> Analyse Models...\n");
 
@@ -137,39 +164,26 @@ public class OrmCommand extends BaseCommand {
 				javaAdapter.parse(mclass);
 			}
 	
-			// Debug Log
-			if (Harmony.DEBUG)
-				System.out.print("\n");
+			System.out.print("\n");
 	
 			// Generate views from MetaData
-			ArrayList<ClassMetadata> metas = javaAdapter.getMetas();
-			try {
-				// Make
-				new ProjectGenerator(metas, this.adapter).generateHomeActivity();
-				new ActivityGenerator(metas, this.adapter).generateAll();
-
-				// Make Database from MetaData
-				new SQLiteAdapterGenerator(metas, this.adapter).generateAll();
-				new SQLiteGenerator(metas, this.adapter).generateDatabase();
-				new ProviderGenerator();
-				
-				// Make Web Service from MetaData
-				// new WebServiceGenerator(metas, this.adapter).generateAll();
-				
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			ret = javaAdapter.getMetas();			
 		} else {
-			if(Harmony.DEBUG)
-				System.out.println("No entities found in entity package!");
+			System.out.println("No entities found in entity package!");
 		}
+		return ret;
 	}
-
-	/**
-	 * Generate Create,Read,Upload,Delete code functions
-	 */
-	protected void generateCrud() {
-
+	
+	protected void generateActivitiesForEntities(ArrayList<ClassMetadata> metas, boolean generateHome){
+		try {
+			// Make
+			if(generateHome)
+				new ProjectGenerator(metas, this.adapter).generateHomeActivity();
+			new ActivityGenerator(metas, this.adapter).generateAll();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override

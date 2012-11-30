@@ -109,9 +109,13 @@ public class ActivityGenerator {
 
 	public void generateAll() {
 
+		generateAll(true);
+	}
+	
+	public void generateAll(boolean overwriteGUI) {
+
 		int i = 0;
 		for(Map<String, Object> entity : this.modelEntities) {
-
 			this.meta = this.metas.get(i);
 			this.localNameSpace = this.adapter.getNameSpaceEntity(this.meta, this.adapter.getController());;
 
@@ -123,6 +127,7 @@ public class ActivityGenerator {
 			this.datamodel.put(TagConstant.RELATIONS, 			entity.get(TagConstant.RELATIONS));
 			
 			this.generateAllAction();
+			
 			i++;
 		}
 	}
@@ -282,27 +287,28 @@ public class ActivityGenerator {
 	 */
 	private void makeSourceControler(Configuration cfg, String template, String filename) 
 			throws IOException, TemplateException {
-
-		File file = FileUtils.makeFile(
-				String.format("%s%s/%s",
+		String filepath = String.format("%s%s/%s",
 						this.adapter.getSourcePath(),
 						PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
-						String.format(filename, this.meta.name)));
-		
-		// Debug Log
-		if (Harmony.DEBUG)
-			System.out.print("\tGenerate Source : " + file.getPath() + "\n"); 
-
-		// Create
-		Template tpl = cfg.getTemplate(
-				String.format("%s%s",
-						this.adapter.getTemplateSourceControlerPath(),
-						template));		// Load template file in engine
-
-		OutputStreamWriter output = new FileWriter(file);
-		tpl.process(datamodel, output);		// Process datamodel (with previous template file), and output to output file
-		output.flush();
-		output.close();
+						String.format(filename, this.meta.name));
+		if(!FileUtils.exists(filepath)){
+			File file = FileUtils.makeFile(filepath);
+			
+			// Debug Log
+			if (Harmony.DEBUG)
+				System.out.print("\tGenerate Source : " + file.getPath() + "\n"); 
+	
+			// Create
+			Template tpl = cfg.getTemplate(
+					String.format("%s%s",
+							this.adapter.getTemplateSourceControlerPath(),
+							template));		// Load template file in engine
+	
+			OutputStreamWriter output = new FileWriter(file);
+			tpl.process(datamodel, output);		// Process datamodel (with previous template file), and output to output file
+			output.flush();
+			output.close();
+		}
 	}
 
 	/** Make Resource file
@@ -315,26 +321,27 @@ public class ActivityGenerator {
 	 */
 	private void makeResourceLayout(Configuration cfg, String template, String filename) throws IOException,
 	TemplateException {
-
-		File file = FileUtils.makeFile(
-				String.format("%s/%s", 
-						this.adapter.getRessourceLayoutPath(),
-						String.format(filename, this.meta.name.toLowerCase())));
-
-		// Debug Log
-		if (Harmony.DEBUG)
-			System.out.print("\tGenerate Ressource : " + file.getAbsoluteFile() + "\n"); 
-
-		// Create
-		Template tpl = cfg.getTemplate(
-				String.format("%s/%s",
-						this.adapter.getTemplateRessourceLayoutPath().substring(1),
-						template));
-
-		OutputStreamWriter output = new FileWriter(file);
-		tpl.process(this.datamodel, output);
-		output.flush();
-		output.close();
+		String filepath = String.format("%s/%s", 
+										this.adapter.getRessourceLayoutPath(),
+										String.format(filename, this.meta.name.toLowerCase()));
+		if(!FileUtils.exists(filepath)){
+			File file = FileUtils.makeFile(filepath);
+	
+			// Debug Log
+			if (Harmony.DEBUG)
+				System.out.print("\tGenerate Ressource : " + file.getAbsoluteFile() + "\n"); 
+	
+			// Create
+			Template tpl = cfg.getTemplate(
+					String.format("%s/%s",
+							this.adapter.getTemplateRessourceLayoutPath().substring(1),
+							template));
+	
+			OutputStreamWriter output = new FileWriter(file);
+			tpl.process(this.datamodel, output);
+			output.flush();
+			output.close();
+		}
 	}
 
 	/** Make Manifest file

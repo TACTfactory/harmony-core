@@ -275,4 +275,10 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		}
 		return result;
 	}
+	
+	public static boolean exists(String filename){
+		File f = new File(filename);
+		System.out.println("File "+filename+ (f.exists()?" already exists !":" doesn't exists yet !"));
+		return f.exists();
+	}
 }
