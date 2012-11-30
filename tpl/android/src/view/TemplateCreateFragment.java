@@ -71,38 +71,6 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		this.saveButton.setOnClickListener(this);
 	}
 
-	/** Load data from model to fields view */
-	public void loadData() {
-		<#foreach field in fields>
-			<#if (field.customEditType == "EditText") >
-				<#if (field.type == "String")>
-		this.${field.name}View.setText(this.model.get${field.name?cap_first}()); 
-				</#if>
-				<#if (field.type == "Date")>
-		this.${field.name}View.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(this.model.get${field.name?cap_first}()) ); 
-				</#if>
-				<#if (field.type == "int")>
-		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}()));
-				</#if>
-			</#if>
-			<#if (field.customEditType == "CheckBox") >
-		this.${field.name}View.setSelected(this.model.${field.name?uncap_first}()); 
-			</#if>
-		</#foreach>
-		<#foreach relation in relations>
-			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
-		${relation.type}Adapter ${relation.type?lower_case}adapter = new ${relation.type}Adapter(getActivity());
-		${relation.type?lower_case}adapter.open();
-		this.${relation.type}list = ${relation.type?lower_case}adapter.getAll();
-		List<String> ${relation.type?lower_case}strings = new ArrayList<String>();
-		for(${relation.type} item : this.${relation.type}list) {
-			${relation.type?lower_case}strings.add( String.valueOf(item.getId()) );
-		}
-		ArrayAdapter<String> ${relation.type?lower_case}DataAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, ${relation.type?lower_case}strings);
-		this.${relation.name}View.setAdapter(${relation.type?lower_case}DataAdapter);
-			</#if>
-		</#foreach>
-	}
 	
 	/** Save data from fields view to model */
 	public void saveData() {
@@ -157,7 +125,6 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		View view = inflater.inflate(R.layout.fragment_${name?lower_case}_create, container, false);
 
 		this.initializeComponent(view);
-		this.loadData();
 		return view;
 	}
 
