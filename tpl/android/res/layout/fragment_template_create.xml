@@ -17,8 +17,10 @@
 		android:id="@+id/${name?lower_case}_${field.name?lower_case}"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    <#if field.customEditType == "EditText" >
+	    <#if field.type == "text" >
 	    android:inputType="text"
+	    <#elseif field.type=="password">
+	    android:inputType="password"
 	    </#if >
 	    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />	    
 </#list>

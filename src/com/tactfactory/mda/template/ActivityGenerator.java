@@ -106,13 +106,8 @@ public class ActivityGenerator {
 
 		this.isWritable = isWritable;
 	}
-
-	public void generateAll() {
-
-		generateAll(true);
-	}
 	
-	public void generateAll(boolean overwriteGUI) {
+	public void generateAll() {
 
 		int i = 0;
 		for(Map<String, Object> entity : this.modelEntities) {
@@ -322,8 +317,8 @@ public class ActivityGenerator {
 	private void makeResourceLayout(Configuration cfg, String template, String filename) throws IOException,
 	TemplateException {
 		String filepath = String.format("%s/%s", 
-										this.adapter.getRessourceLayoutPath(),
-										String.format(filename, this.meta.name.toLowerCase()));
+									this.adapter.getRessourceLayoutPath(),
+									String.format(filename, this.meta.name.toLowerCase()));
 		if(!FileUtils.exists(filepath)){
 			File file = FileUtils.makeFile(filepath);
 	

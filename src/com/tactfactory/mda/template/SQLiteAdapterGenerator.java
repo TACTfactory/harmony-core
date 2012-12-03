@@ -165,6 +165,7 @@ public class SQLiteAdapterGenerator {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public void generateAll() {
 		
 		for(Object modelEntity : this.entities.values()) {
