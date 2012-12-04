@@ -9,6 +9,7 @@
 package com.tactfactory.mda.utils;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
@@ -18,6 +19,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 import com.tactfactory.mda.Harmony;
@@ -123,6 +125,68 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			}
 		}
 		return result;
+	}
+
+	/** convert file content to a stringbuffer */
+	public static StringBuffer FileToStringBuffer(File file)
+	{
+		StringBuffer result = new StringBuffer();
+		String tmp;
+		String ln = System.getProperty("line.separator");
+		
+		FileInputStream fis = null;
+		InputStreamReader in = null;
+		BufferedReader br = null;
+		try{
+			fis = new FileInputStream(file);
+			in = new InputStreamReader(fis);
+			br = new BufferedReader(in);
+			while(true){
+				tmp = br.readLine();
+				if(tmp==null) break;
+				result.append(tmp);
+				result.append(ln);
+			}
+			
+		}catch(IOException e){
+			System.out.println("Error : "+e.getMessage());
+		}finally{
+			try{
+				br.close();
+				in.close();
+				fis.close();
+			}catch(IOException e){
+				
+			}
+		}
+		
+		
+		return result;
+	}
+	
+	/** convert file content to a string */
+	public static void StringBufferToFile(StringBuffer buff, File file)
+	{
+		FileOutputStream fos = null;
+		OutputStreamWriter out = null;
+		BufferedWriter bw = null;
+		try{
+			fos = new FileOutputStream(file);
+			out = new OutputStreamWriter(fos);
+			bw = new BufferedWriter(out);
+			bw.write(buff.toString());
+
+		}catch(IOException e){
+			System.out.println("Error : "+e.getMessage());
+		}finally{
+			try{
+				bw.close();
+				out.close();
+				fos.close();
+			}catch(IOException e){
+				
+			}
+		}
 	}
 	
 	/** convert file content to a string array with each line separated */

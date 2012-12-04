@@ -8,9 +8,14 @@
  */
 package com.tactfactory.mda.command;
 
+import japa.parser.JavaParser;
+import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import com.tactfactory.mda.Console;
@@ -21,6 +26,7 @@ import com.tactfactory.mda.parser.JavaModelParser;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.ActivityGenerator;
+import com.tactfactory.mda.template.EntityGenerator;
 import com.tactfactory.mda.template.SQLiteAdapterGenerator;
 import com.tactfactory.mda.template.ProjectGenerator;
 import com.tactfactory.mda.template.ProviderGenerator;
@@ -61,9 +67,14 @@ public class OrmCommand extends BaseCommand {
 	protected JavaModelParser javaModelParser;
 
 	protected void generateForm() {
-		ArrayList<ClassMetadata> metas = this.getMetasFromAll();
+		/*ArrayList<ClassMetadata> metas = this.getMetasFromAll();
 		if(metas!=null){
 			this.generateActivitiesForEntities(metas, true);
+		}*/
+		ArrayList<ClassMetadata> metas = this.getMetasFromAll();
+		if(metas!=null){
+			EntityGenerator eg = new EntityGenerator(metas, adapter);
+			eg.generateAll();
 		}
 	}
 
@@ -137,7 +148,7 @@ public class OrmCommand extends BaseCommand {
 				System.out.println("Given entity file does not exist!");
 			}
 		}else{
-			System.out.println("No given filename!");
+			System.out.println("No given filename! Specify a filename with --filename=\"Entity.java\"");
 		}
 		return ret;
 	}
@@ -224,7 +235,6 @@ public class OrmCommand extends BaseCommand {
 					{
 
 					}
-
 	}
 
 	@Override
