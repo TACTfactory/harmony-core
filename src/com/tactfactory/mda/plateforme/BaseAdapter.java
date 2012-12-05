@@ -28,6 +28,7 @@ public abstract class BaseAdapter {
 	protected String controller = "view";
 	protected String data		= "data";
 	protected String provider	= "provider";
+	protected String common		= "common";
 	
 	// File
 	protected String manifest;
@@ -87,6 +88,10 @@ public abstract class BaseAdapter {
 	
 	public final String getTemplateSourceProviderPath() {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getProvider() );
+	}
+	
+	public final String getTemplateSourceCommonPath() {
+		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getCommon() );
 	}
 	
 	public final String getRessourcePath() {
@@ -277,6 +282,20 @@ public abstract class BaseAdapter {
 	 */
 	public final void setProvider(String provider) {
 		this.provider = provider;
+	}
+
+	/**
+	 * @return the provider
+	 */
+	public final String getCommon() {
+		return common;
+	}
+
+	/**
+	 * @param provider the provider to set
+	 */
+	public final void setCommon(String common) {
+		this.common = common;
 	}
 	
 	/**

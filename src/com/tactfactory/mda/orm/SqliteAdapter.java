@@ -18,9 +18,9 @@ public class SqliteAdapter {
 		builder.append(" " + field.type.toLowerCase());
 		
 		if (field.nullable) {
-			builder.append(" not null");
-		} else {
 			builder.append(" null");
+		} else {
+			builder.append(" not null");
 		}
 		return builder.toString();
 	}

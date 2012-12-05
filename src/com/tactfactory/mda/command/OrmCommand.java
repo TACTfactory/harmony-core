@@ -8,9 +8,14 @@
  */
 package com.tactfactory.mda.command;
 
+import japa.parser.JavaParser;
+import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import com.tactfactory.mda.Console;
@@ -21,6 +26,7 @@ import com.tactfactory.mda.parser.JavaModelParser;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.ActivityGenerator;
+import com.tactfactory.mda.template.EntityGenerator;
 import com.tactfactory.mda.template.SQLiteAdapterGenerator;
 import com.tactfactory.mda.template.ProjectGenerator;
 import com.tactfactory.mda.template.ProviderGenerator;
@@ -88,6 +94,7 @@ public class OrmCommand extends BaseCommand {
 
 		ArrayList<ClassMetadata> metas = this.getMetasFromAll();
 		if(metas!=null){
+			new EntityGenerator(metas, this.adapter).generateAll();
 			this.generateActivitiesForEntities(metas, true);
 			this.generateDBForEntities(metas);
 		}
@@ -105,9 +112,12 @@ public class OrmCommand extends BaseCommand {
 		}
 	}
 	
+	/**
+	 * Generate the Persistence part for the given classes
+	 * @param metas The classes Metadata
+	 */
 	protected void generateDBForEntities(ArrayList<ClassMetadata> metas){
 		try {
-			// Make Database from MetaData
 			new SQLiteAdapterGenerator(metas, this.adapter).generateAll();
 			new SQLiteGenerator(metas, this.adapter).generateDatabase();
 			new ProviderGenerator();
@@ -117,6 +127,10 @@ public class OrmCommand extends BaseCommand {
 		}
 	}
 	
+	/**
+	 * Gets the Metadatas of the class which name is given in argument
+	 * @return The metadata of the class given with the argument --filename
+	 */
 	protected ArrayList<ClassMetadata> getMetasFromArg(){
 		ArrayList<ClassMetadata> ret = null;
 		if(this.commandArgs.size()!=0 && this.commandArgs.containsKey("filename")) {
@@ -137,12 +151,16 @@ public class OrmCommand extends BaseCommand {
 				System.out.println("Given entity file does not exist!");
 			}
 		}else{
-			System.out.println("No given filename!");
+			System.out.println("No given filename! Specify a filename with --filename=\"Entity.java\"");
 		}
 		return ret;
 	}
 	
 	
+	/**
+	 * Gets the Metadatas of all the entities actually in the package entity
+	 * @return The metadatas of the different classes
+	 */
 	protected ArrayList<ClassMetadata> getMetasFromAll(){
 		ArrayList<ClassMetadata> ret = null;
 		// Info Log
@@ -174,6 +192,11 @@ public class OrmCommand extends BaseCommand {
 		return ret;
 	}
 	
+
+	/**
+	 * Generate the GUI part for the given classes
+	 * @param metas The classes Metadata
+	 */
 	protected void generateActivitiesForEntities(ArrayList<ClassMetadata> metas, boolean generateHome){
 		try {
 			// Make
@@ -224,7 +247,6 @@ public class OrmCommand extends BaseCommand {
 					{
 
 					}
-
 	}
 
 	@Override
