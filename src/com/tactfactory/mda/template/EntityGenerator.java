@@ -32,6 +32,11 @@ public class EntityGenerator {
 	private String setTemplate;
 	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 
+	Configuration cfg = new Configuration(); // Initialization of template engine
+	
+	private final static int GET = 0;
+	private final static int SET = 1;
+
 	public EntityGenerator(List<ClassMetadata> metas, BaseAdapter adapter){
 		this.metas = metas;
 		this.adapter = adapter;
@@ -41,6 +46,13 @@ public class EntityGenerator {
 		
 		this.getTemplate = "itemGetter.java";
 		this.setTemplate = "itemSetter.java";
+		
+		try {
+			this.cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -56,7 +68,8 @@ public class EntityGenerator {
 				
 				addImplementsSerializable(fileString, cm);
 				generateGetterAndSetters(fileString, cm);
-				FileUtils.StringBufferToFile(fileString, entityFile);
+				
+				FileUtils.StringBufferToFile(fileString, entityFile); // After treatment on entity, write it in the original file
 			}
 		}
 	}
@@ -79,25 +92,27 @@ public class EntityGenerator {
 		
 		for(FieldMetadata f : fields){
 			if(!alreadyImplementsGet(f, cm)){
-				generateGet(fileString, f);
+				generateGetOrSet(fileString, f, GET);
 			}
 			if(!alreadyImplementsSet(f, cm)){
-				//generateSet(fileString, f);
+				generateGetOrSet(fileString, f, SET);
 			}
 		}
 	}
 	
-	private void generateGet(StringBuffer fileString, FieldMetadata f){
+	private void generateGetOrSet(StringBuffer fileString, FieldMetadata f, int type){
 		int lastAccolade = fileString.lastIndexOf("}");
 		try{
-			Configuration cfg = new Configuration(); // Initialization of template engine
-			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
-			
-			// Create
-			Template tpl = cfg.getTemplate(
+			String tplPath = "";
+			if(type==GET){
+				tplPath = this.getTemplate;
+			}else if (type==SET){
+				tplPath = this.setTemplate;
+			}
+			Template tpl = this.cfg.getTemplate(
 					String.format("%s%s",
 							this.adapter.getTemplateSourceCommonPath(),
-							this.getTemplate));		// Load template file in engine
+							tplPath));		// Load template file in engine
 		
 			
 			HashMap<String, Object> map = new HashMap<String, Object>();
@@ -131,8 +146,9 @@ public class EntityGenerator {
 	private boolean alreadyImplementsGet(FieldMetadata fm, ClassMetadata cm){
 		boolean ret = false;
 		ArrayList<MethodMetadata> methods = cm.methods;
+		String capitalizedName = fm.name.substring(0,1).toUpperCase() + fm.name.substring(1);
 		for(MethodMetadata m : methods){
-			if(m.name.equals("get"+fm.name) && m.argumentsTypes.size()==0 && m.type.equals(fm.type)){
+			if(m.name.equals("get"+capitalizedName) && m.argumentsTypes.size()==0 && m.type.equals(fm.type)){
 				ret = true;
 				if(Harmony.DEBUG) System.out.println("Already implements getter of "+fm.name+" => " + m.name);
 			}
@@ -143,8 +159,9 @@ public class EntityGenerator {
 	private boolean alreadyImplementsSet(FieldMetadata fm, ClassMetadata cm){
 		boolean ret = false;
 		ArrayList<MethodMetadata> methods = cm.methods;
+		String capitalizedName = fm.name.substring(0,1).toUpperCase() + fm.name.substring(1);
 		for(MethodMetadata m : methods){
-			if(m.name.equals("set"+fm.name) && m.argumentsTypes.size()==1 && m.argumentsTypes.get(0).equals(fm.type)){
+			if(m.name.equals("set"+capitalizedName) && m.argumentsTypes.size()==1 && m.argumentsTypes.get(0).equals(fm.type)){
 				ret = true;
 				if(Harmony.DEBUG) System.out.println("Already implements setter of "+fm.name+" => " + m.name);
 			}
