@@ -17,6 +17,8 @@ import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.Parameter;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.expr.AnnotationExpr;
+import japa.parser.ast.expr.MemberValuePair;
+import japa.parser.ast.expr.NormalAnnotationExpr;
 import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.type.PrimitiveType;
 import japa.parser.ast.type.Type;
@@ -31,6 +33,7 @@ import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.annotation.Column;
 import com.tactfactory.mda.orm.annotation.Entity;
 import com.tactfactory.mda.orm.annotation.Id;
+import com.tactfactory.mda.orm.annotation.JoinColumn;
 import com.tactfactory.mda.orm.annotation.ManyToMany;
 import com.tactfactory.mda.orm.annotation.ManyToOne;
 import com.tactfactory.mda.orm.annotation.OneToMany;
@@ -119,6 +122,8 @@ public class JavaAdapter {
 				fieldMeta.name = field.getVariables().get(0).toString(); // FIXME not manage multi-variable
 				fieldMeta.type = field.getType().toString();
 				fieldMeta.relation_type = field.getAnnotations().get(0).toString(); // FIXME not manage multi-annotation
+				fieldMeta.nullable = false; // Default nullable is false
+				
 				
 				boolean isColumn = false;
 				boolean isId = false;
@@ -136,6 +141,15 @@ public class JavaAdapter {
 					}
 					
 					if (annotationType.equals(PackageUtils.extractNameEntity(Column.class))) {
+						isColumn = true;
+						
+						// Debug Log
+						if (Harmony.DEBUG)
+							System.out.print("\t    Column: " + fieldMeta.name + 
+									" type of " + fieldMeta.type +"\n");
+					}
+					
+					if (annotationType.equals(PackageUtils.extractNameEntity(JoinColumn.class))) {
 						isColumn = true;
 						
 						// Debug Log
@@ -178,6 +192,15 @@ public class JavaAdapter {
 						if (Harmony.DEBUG)
 							System.out.print("\t    Relation Many to Many: " + fieldMeta.name + 
 									" type of " + fieldMeta.type +"\n");
+					}
+					
+					if(annotationExpr instanceof NormalAnnotationExpr){
+						NormalAnnotationExpr norm = (NormalAnnotationExpr)annotationExpr;
+						if(norm.getPairs()!=null && norm.getPairs().size()>0)
+							for(MemberValuePair mvp : norm.getPairs()) // Check if there are any arguments in the annotation
+								if(mvp.getName().equals("nullable") && mvp.getValue().toString().equals("true")){
+									fieldMeta.nullable = true;
+								}
 					}
 				}
 				
