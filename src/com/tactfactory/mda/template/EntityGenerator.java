@@ -89,10 +89,6 @@ public class EntityGenerator {
 	
 	private void generateGetterAndSetters(StringBuffer fileString, ClassMetadata cm){
 		Collection<FieldMetadata> fields = cm.fields.values();
-		/*if(cm.ids.size()>0)
-			//fields.addAll(cm.ids.values());
-		if(cm.relations.size()>0)
-			fields.addAll(cm.relations.values());*/
 		
 		for(FieldMetadata f : fields){
 			if(!alreadyImplementsGet(f, cm)){
