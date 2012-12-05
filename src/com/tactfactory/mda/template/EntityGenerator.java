@@ -33,9 +33,6 @@ public class EntityGenerator {
 	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 
 	Configuration cfg = new Configuration(); // Initialization of template engine
-	
-	private final static int GET = 0;
-	private final static int SET = 1;
 
 	public EntityGenerator(List<ClassMetadata> metas, BaseAdapter adapter){
 		this.metas = metas;
@@ -56,6 +53,9 @@ public class EntityGenerator {
 		
 	}
 	
+	/**
+	 * Implements serializable and add necessary getters and setters for all classes 
+	 */
 	public void generateAll(){
 		for(ClassMetadata cm : metas){ 
 			String filepath = String.format("%s/%s",
@@ -74,6 +74,12 @@ public class EntityGenerator {
 		}
 	}
 	
+	
+	/**
+	 * Implements serializable in the class if it doesn't already
+	 * @param fileString The stringbuffer containing the class java code
+	 * @param cm The Metadata containing the infos on the java class
+	 */
 	private void addImplementsSerializable(StringBuffer fileString, ClassMetadata cm){
 		
 			if(!alreadyImplementsSerializable(cm)){
@@ -87,32 +93,40 @@ public class EntityGenerator {
 			}
 	}
 	
+	
+	/**
+	 * Generate the necessary getters and setters for the class
+	 * @param fileString The stringbuffer containing the class java code
+	 * @param cm The Metadata containing the infos on the java class
+	 */
 	private void generateGetterAndSetters(StringBuffer fileString, ClassMetadata cm){
 		Collection<FieldMetadata> fields = cm.fields.values();
 		
 		for(FieldMetadata f : fields){
 			if(!alreadyImplementsGet(f, cm)){
-				generateGetOrSet(fileString, f, GET);
+				generateMethod(fileString, f, this.getTemplate);
 			}
 			if(!alreadyImplementsSet(f, cm)){
-				generateGetOrSet(fileString, f, SET);
+				generateMethod(fileString, f, this.setTemplate);
 			}
 		}
 	}
 	
-	private void generateGetOrSet(StringBuffer fileString, FieldMetadata f, int type){
+	
+	/**
+	 * Generate a get or set method following the given template
+	 * @param fileString The stringbuffer containing the class java code
+	 * @param f The concerned field
+	 * @param templateName The template file name
+	 */
+	private void generateMethod(StringBuffer fileString, FieldMetadata f, String templateName){
 		int lastAccolade = fileString.lastIndexOf("}");
 		try{
-			String tplPath = "";
-			if(type==GET){
-				tplPath = this.getTemplate;
-			}else if (type==SET){
-				tplPath = this.setTemplate;
-			}
+			
 			Template tpl = this.cfg.getTemplate(
 					String.format("%s%s",
 							this.adapter.getTemplateSourceCommonPath(),
-							tplPath));		// Load template file in engine
+							templateName));		// Load template file in engine
 		
 			
 			HashMap<String, Object> map = new HashMap<String, Object>();
@@ -132,6 +146,11 @@ public class EntityGenerator {
 		}		
 	}
 	
+	/**
+	 * Check if the class implements the class Serializable
+	 * @param cm The Metadata containing the infos on the java class
+	 */
+	
 	public boolean alreadyImplementsSerializable(ClassMetadata cm){
 		boolean ret = false;
 		for(String impl : cm.impls)
@@ -143,6 +162,11 @@ public class EntityGenerator {
 		return ret;
 	}
 	
+	/**
+	 * Check if the class already has a getter for the given field
+	 * @param fm The Metadata of the field
+	 * @param cm The Metadata containing the infos on the java class
+	 */
 	private boolean alreadyImplementsGet(FieldMetadata fm, ClassMetadata cm){
 		boolean ret = false;
 		ArrayList<MethodMetadata> methods = cm.methods;
@@ -156,6 +180,11 @@ public class EntityGenerator {
 		return ret;
 	}
 	
+	/**
+	 * Check if the class already has a setter for the given field
+	 * @param fm The Metadata of the field
+	 * @param cm The Metadata containing the infos on the java class
+	 */
 	private boolean alreadyImplementsSet(FieldMetadata fm, ClassMetadata cm){
 		boolean ret = false;
 		ArrayList<MethodMetadata> methods = cm.methods;

@@ -112,6 +112,10 @@ public class OrmCommand extends BaseCommand {
 		}
 	}
 	
+	/**
+	 * Generate the Persistence part for the given classes
+	 * @param metas The classes Metadata
+	 */
 	protected void generateDBForEntities(ArrayList<ClassMetadata> metas){
 		try {
 			new SQLiteAdapterGenerator(metas, this.adapter).generateAll();
@@ -123,6 +127,10 @@ public class OrmCommand extends BaseCommand {
 		}
 	}
 	
+	/**
+	 * Gets the Metadatas of the class which name is given in argument
+	 * @return The metadata of the class given with the argument --filename
+	 */
 	protected ArrayList<ClassMetadata> getMetasFromArg(){
 		ArrayList<ClassMetadata> ret = null;
 		if(this.commandArgs.size()!=0 && this.commandArgs.containsKey("filename")) {
@@ -149,6 +157,10 @@ public class OrmCommand extends BaseCommand {
 	}
 	
 	
+	/**
+	 * Gets the Metadatas of all the entities actually in the package entity
+	 * @return The metadatas of the different classes
+	 */
 	protected ArrayList<ClassMetadata> getMetasFromAll(){
 		ArrayList<ClassMetadata> ret = null;
 		// Info Log
@@ -180,6 +192,11 @@ public class OrmCommand extends BaseCommand {
 		return ret;
 	}
 	
+
+	/**
+	 * Generate the GUI part for the given classes
+	 * @param metas The classes Metadata
+	 */
 	protected void generateActivitiesForEntities(ArrayList<ClassMetadata> metas, boolean generateHome){
 		try {
 			// Make

@@ -164,7 +164,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		return result;
 	}
 	
-	/** convert file content to a string */
+	/** write stringbuffer contents to the given file */
 	public static void StringBufferToFile(StringBuffer buff, File file)
 	{
 		FileOutputStream fos = null;
