@@ -67,10 +67,10 @@ public class OrmCommand extends BaseCommand {
 	protected JavaModelParser javaModelParser;
 
 	protected void generateForm() {
-		ArrayList<ClassMetadata> metas = this.getMetasFromAll();
+		/*ArrayList<ClassMetadata> metas = this.getMetasFromAll();
 		if(metas!=null){
 			this.generateActivitiesForEntities(metas, true);
-		}
+		}*/
 	}
 
 	/**
@@ -78,12 +78,12 @@ public class OrmCommand extends BaseCommand {
 	 */
 	protected void generateEntity() {
 					
-		ArrayList<ClassMetadata> metas = this.getMetasFromArg();
+		/*ArrayList<ClassMetadata> metas = this.getMetasFromArg();
 		
 		if(metas!=null){
 			this.generateActivitiesForEntities(metas, false);
 			this.generateDBForEntities(metas);
-		}
+		}*/
 	
 	}
 

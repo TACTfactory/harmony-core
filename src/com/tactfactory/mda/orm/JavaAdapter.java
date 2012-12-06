@@ -9,6 +9,7 @@
 package com.tactfactory.mda.orm;
 
 import japa.parser.ast.CompilationUnit;
+import japa.parser.ast.ImportDeclaration;
 import japa.parser.ast.TypeParameter;
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
@@ -60,8 +61,10 @@ public class JavaAdapter {
 			
 			new ClassVisitor().visit(mclass, meta);
 			if (!Strings.isNullOrEmpty(meta.name)) {
+				new ImportVisitor().visit(mclass,meta);
 				new FieldVisitor().visit(mclass, meta);
 				new MethodVisitor().visit(mclass, meta);
+				
 				
 				this.metas.add(meta);
 			}
@@ -270,6 +273,15 @@ public class JavaAdapter {
 				System.out.println(mess);
 			}
 			meta.methods.add(methodMeta);
+			
+		}
+	}
+	
+	private static class ImportVisitor extends VoidVisitorAdapter<ClassMetadata> {
+		@Override
+		public void visit(ImportDeclaration imp, ClassMetadata meta) {
+			String impName = imp.getName().getName();
+			meta.imports.add(impName);
 			
 		}
 	}
