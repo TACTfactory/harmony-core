@@ -57,6 +57,7 @@ public class OrmInitTest extends CommonTest {
 			System.out.println("yeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeees!");
 		
 		this.harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
+		this.harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[]{}, null);
 		
 		this.modelPost();
 		this.modelComment();
