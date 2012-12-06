@@ -72,38 +72,32 @@ public class JavaAdapter {
 	    @Override
 	    public void visit(ClassOrInterfaceDeclaration n, ClassMetadata meta) {
 	    	List<AnnotationExpr> classAnnotations = n.getAnnotations();
-			
-			for (AnnotationExpr annotationExpr : classAnnotations) {
-				
-				String annotationType = annotationExpr.getName().toString();
-				if (annotationType.equals(PackageUtils.extractNameEntity(Entity.class))) {
-					 
-					meta.name = PackageUtils.extractNameEntity(n.getName());
+			if(classAnnotations!=null){
+				for (AnnotationExpr annotationExpr : classAnnotations) {
 					
-					// Debug Log
-					if (Harmony.DEBUG)
-						System.out.print("\tEntity: " + meta.space + ".entity." +  meta.name + "\n");
+					String annotationType = annotationExpr.getName().toString();
+					if (annotationType.equals(PackageUtils.extractNameEntity(Entity.class))) {
+						 
+						meta.name = PackageUtils.extractNameEntity(n.getName());
+						
+						// Debug Log
+						if (Harmony.DEBUG)
+							System.out.print("\tEntity: " + meta.space + ".entity." +  meta.name + "\n");
+					}
 				}
-			}
-			 
-			List<ClassOrInterfaceType> impls = n.getImplements();
-			if(impls!=null){
-				for(ClassOrInterfaceType impl : impls){					
-					meta.impls.add(impl.getName());		
+				 
+				List<ClassOrInterfaceType> impls = n.getImplements();
+				if(impls!=null){
+					for(ClassOrInterfaceType impl : impls){					
+						meta.impls.add(impl.getName());		
+					}
 				}
-			}
-			
-			List<ClassOrInterfaceType> exts = n.getExtends();
-			if(exts!=null){
-				for(ClassOrInterfaceType ext : exts){					
-					meta.exts = ext.getName();		
-				}
-			}
-			
-			List<BodyDeclaration> members = n.getMembers();
-			if(members!=null){
-				for(BodyDeclaration member : members){					
-					//meta.members.add(member.getName());		
+				
+				List<ClassOrInterfaceType> exts = n.getExtends();
+				if(exts!=null){
+					for(ClassOrInterfaceType ext : exts){					
+						meta.exts = ext.getName();		
+					}
 				}
 			}
 			
@@ -123,6 +117,7 @@ public class JavaAdapter {
 				fieldMeta.type = field.getType().toString();
 				fieldMeta.relation_type = field.getAnnotations().get(0).toString(); // FIXME not manage multi-annotation
 				fieldMeta.nullable = false; // Default nullable is false
+				fieldMeta.unique = false; 
 				
 				
 				boolean isColumn = false;
@@ -197,10 +192,25 @@ public class JavaAdapter {
 					if(annotationExpr instanceof NormalAnnotationExpr){
 						NormalAnnotationExpr norm = (NormalAnnotationExpr)annotationExpr;
 						if(norm.getPairs()!=null && norm.getPairs().size()>0)
-							for(MemberValuePair mvp : norm.getPairs()) // Check if there are any arguments in the annotation
-								if(mvp.getName().equals("nullable") && mvp.getValue().toString().equals("true")){
-									fieldMeta.nullable = true;
+							for(MemberValuePair mvp : norm.getPairs()){ // Check if there are any arguments in the annotation
+								if(annotationType.equals(PackageUtils.extractNameEntity(Column.class))){ // for @Column
+									if(mvp.getName().equals("nullable") && mvp.getValue().toString().equals("true")){
+										fieldMeta.nullable = true;
+									}else if(mvp.getName().equals("unique") && mvp.getValue().toString().equals("true")){
+										fieldMeta.unique = true;
+									}else if(mvp.getName().equals("length")){
+										fieldMeta.length = Integer.parseInt(mvp.getValue().toString());
+									}else if(mvp.getName().equals("precision")){
+										fieldMeta.precision = Integer.parseInt(mvp.getValue().toString());
+									}else if(mvp.getName().equals("scale")){
+										fieldMeta.scale = Integer.parseInt(mvp.getValue().toString());
+									}else if(mvp.getName().equals("type")){
+										fieldMeta.entity_type = mvp.getValue().toString();
+									}
+								} else if(annotationType.equals(PackageUtils.extractNameEntity(JoinColumn.class))){ // for @JoinColumn
+									
 								}
+							}	
 					}
 				}
 				

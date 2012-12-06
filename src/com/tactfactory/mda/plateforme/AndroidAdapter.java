@@ -72,10 +72,14 @@ public final class AndroidAdapter extends BaseAdapter {
 	 */
 	@Override
 	public String getViewComponentEdit(FieldMetadata field) {
-		String result = "EditText";
+		String result = "";
 		
-		if (field.type.equals("String") || field.type.equals("int") || field.type.equals("Date") ) {
-
+		if (field.type.equals("String") || field.type.equals("int")) {
+			result = "EditText";
+		} else
+			
+		if (field.type.equals("Date") ){
+			result = "DatePickerDialog";
 		} else
 
 		if (field.type.equals("Boolean")) {

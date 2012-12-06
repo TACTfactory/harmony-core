@@ -19,7 +19,7 @@ import ${project_namespace}.entity.${relation.type};
 </#list>
 
 /** ${name} adapter database abstract class <br/>
- * <b><i>Can't be edit this class is generate, and you loose all modification</i></b>
+ * <b><i>You should edit ${name}Adapter class instead of this one.</i></b>
  */
 public abstract class ${name}AdapterBase {
 	private static final String TAG = "${name}DatabaseAdapter";
