@@ -95,7 +95,6 @@ public class OrmCommand extends BaseCommand {
 		ArrayList<ClassMetadata> metas = this.getMetasFromAll();
 		if(metas!=null){
 			new EntityGenerator(metas, this.adapter).generateAll();
-			this.generateActivitiesForEntities(metas, true);
 			this.generateDBForEntities(metas);
 		}
 
@@ -108,7 +107,7 @@ public class OrmCommand extends BaseCommand {
 
 		ArrayList<ClassMetadata> metas = this.getMetasFromAll();
 		if(metas!=null){
-			this.generateDBForEntities(metas);
+			this.generateActivitiesForEntities(metas, true);
 		}
 	}
 	
