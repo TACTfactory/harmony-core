@@ -20,6 +20,7 @@ import java.util.Map;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
+import com.tactfactory.mda.orm.RelationMetadata;
 import com.tactfactory.mda.orm.SqliteAdapter;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
@@ -73,6 +74,7 @@ public class SQLiteAdapterGenerator {
 				field.customize(adapter);
 				modelField.put(TagConstant.NAME, field.name);
 				modelField.put(TagConstant.TYPE, field.type);
+				modelField.put("entity_type", field.entity_type);
 				modelField.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(field));
 				modelField.put(TagConstant.SCHEMA, SqliteAdapter.generateStructure(field));
 				
@@ -81,14 +83,19 @@ public class SQLiteAdapterGenerator {
 
 			// Make relations
 			ArrayList<Map<String, Object>> modelRelations = new ArrayList<Map<String,Object>>();
-			for (FieldMetadata relation : this.meta.relations.values()) {
-				Map<String, Object> modelRelation = new HashMap<String, Object>();
-				modelRelation.put(TagConstant.NAME, relation.name);
-				modelRelation.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(relation));
-				modelRelation.put(TagConstant.TYPE, relation.type);
-				modelRelation.put(TagConstant.RELATION_TYPE, relation.relation_type);
-				
-				modelRelations.add(modelRelation);
+			for (FieldMetadata field: this.meta.fields.values()) {
+				if(field.relation!=null){
+					RelationMetadata relation = field.relation;
+					Map<String, Object> modelRelation = new HashMap<String, Object>();
+					//modelRelation.put(TagConstant.NAME, relation.name);
+					modelRelation.put("field_alias", SqliteAdapter.generateColumnName(field));
+					modelRelation.put("field_ref", relation.field_ref+"");
+					modelRelation.put("entity_ref", relation.entity_ref);
+					modelRelation.put(TagConstant.TYPE, relation.type);
+					modelRelation.put(TagConstant.RELATION_TYPE, relation.type);
+					
+					modelRelations.add(modelRelation);
+				}
 			}
 			
 			modelClass.put(TagConstant.IDS, modelIds);

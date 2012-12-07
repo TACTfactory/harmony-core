@@ -27,6 +27,7 @@ import japa.parser.ast.type.VoidType;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import com.google.common.base.Strings;
@@ -115,10 +116,11 @@ public class JavaAdapter {
 			if (	fieldAnnotations != null && 
 					fieldAnnotations.size() > 0 ) {
 				
+				/*
 				FieldMetadata fieldMeta = new FieldMetadata();
 				fieldMeta.name = field.getVariables().get(0).toString(); // FIXME not manage multi-variable
 				fieldMeta.type = field.getType().toString();
-				fieldMeta.relation_type = field.getAnnotations().get(0).toString(); // FIXME not manage multi-annotation
+				//fieldMeta.relation_type = field.getAnnotations().get(0).toString(); // FIXME not manage multi-annotation
 				fieldMeta.nullable = false; // Default nullable is false
 				fieldMeta.unique = false; 
 				
@@ -228,7 +230,7 @@ public class JavaAdapter {
 	
 				if (isRelation)  {
 					meta.relations.put(fieldMeta.name, fieldMeta);
-				}
+				}*/
 				
 				/*for (Field field : mclass.getDeclaredFields()) {
 					if (columnAnnotation != null) {
@@ -245,7 +247,109 @@ public class JavaAdapter {
 						}
 					}
 				}*/
+				/** Store all the annotations for the field, and their arguments, in HashMaps*/
+				HashMap<String, HashMap<String,Object>> annotations = new HashMap<String, HashMap<String,Object>>();
+				for (AnnotationExpr annotationExpr : fieldAnnotations) {
+					HashMap<String, Object> annotationParams = new HashMap<String, Object>();
+					if(annotationExpr instanceof NormalAnnotationExpr){
+						NormalAnnotationExpr norm = (NormalAnnotationExpr)annotationExpr;
+						if(norm.getPairs()!=null && norm.getPairs().size()>0){
+							for(MemberValuePair pair : norm.getPairs()){
+								annotationParams.put(pair.getName(), pair.getValue());
+							}
+						}		
+					}	
+					annotations.put(annotationExpr.getName().toString(),annotationParams);
+				}
+				
+				RelationMetadata rm = null;
+				FieldMetadata fm = new FieldMetadata();
+				
+				fm.name = field.getVariables().get(0).toString(); // TODO : More than one var on a line
+				fm.type = field.getType().toString();
+				fm.entity_type = fm.type;
+				
+				if(annotations.containsKey("OneToOne")){
+					rm = new RelationMetadata();
+					extractRelation(annotations.get("OneToOne"),fm, rm);
+					rm.type = "OneToOne";
+					fm.entity_type = "int";
+				}
+				else if(annotations.containsKey("ManyToOne")){
+					rm = new RelationMetadata();
+					extractRelation(annotations.get("ManyToOne"),fm, rm);
+					rm.type = "ManyToOne";
+					fm.entity_type = "int";
+				}
+				else if(annotations.containsKey("OneToMany")){
+					rm = new RelationMetadata();
+					extractRelation(annotations.get("OneToMany"),fm, rm);
+					rm.type = "OneToMany";
+					fm.entity_type = "int";
+				}
+				else if(annotations.containsKey("ManyToMany")){
+					rm = new RelationMetadata();
+					extractRelation(annotations.get("ManyToMany"),fm, rm);
+					rm.type = "ManyToMany";
+					fm.entity_type = "int";
+				}
+				
+				if(annotations.containsKey("Column") && rm==null){ // If it's a relation, it can't be a Column					
+					extractColumn(annotations.get("Column"), fm);
+				}
+				
+				if(annotations.containsKey("JoinColumn")){
+					
+					extractJoinColumn(annotations.get("JoinColumn"), fm, rm);
+					
+					fm.type = field.getType().toString();
+					rm.field = fm.name;
+					//meta.fields.put(fm.name, fm);
+					//meta.relations.put(fm.name, rm);
+				}
+				
+				
+				
+				if(rm!=null) fm.relation = rm;//meta.relations.put(fm.name, rm);
+				if(annotations.containsKey("Id")) meta.ids.put(fm.name, fm);
+				meta.fields.put(fm.name, fm);
+				
 			}
+		}
+		
+		private void extractColumn(HashMap<String, Object> args, FieldMetadata fm){
+			if(args.containsKey("type"))
+				fm.entity_type = args.get("type").toString();
+			if(args.containsKey("name"))
+				fm.name = args.get("name").toString();
+			if(args.containsKey("nullable"))
+				fm.nullable = args.get("nullable").toString().equals("true");
+			if(args.containsKey("unique"))
+				fm.unique = args.get("unique").toString().equals("true");
+			if(args.containsKey("length"))
+				fm.length = Integer.parseInt(args.get("length").toString());
+			if(args.containsKey("precision"))
+				fm.precision = Integer.parseInt(args.get("precision").toString());
+			if(args.containsKey("scale"))
+				fm.scale = Integer.parseInt(args.get("scale").toString());
+		}
+		
+		private void extractJoinColumn(HashMap<String, Object> args, FieldMetadata fm, RelationMetadata rm){
+			if(args.containsKey("type"))
+				fm.type = args.get("type").toString();
+			if(args.containsKey("referencedColumnName"))
+				rm.field_ref = args.get("referencedColumnName").toString();
+			if(args.containsKey("unique"))
+				fm.unique = args.get("unique").toString().equals("true");
+			if(args.containsKey("nullable"))
+				fm.nullable = args.get("nullable").toString().equals("true");
+		}
+		
+		private void extractRelation(HashMap<String, Object> args, FieldMetadata fm, RelationMetadata rm){
+			if(args.containsKey("targetEntity")){
+				rm.entity_ref = args.get("targetEntity").toString();
+			}
+			rm.field = fm.name;
 		}
 	}
 	

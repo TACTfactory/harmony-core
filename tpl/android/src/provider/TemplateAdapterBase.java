@@ -75,8 +75,8 @@ public abstract class ${name}AdapterBase {
 		</#list>
 		<#if relations??>
 			<#list relations as relation>
-				<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
-		+ ${relation.alias}	+ " integer<#if (relation_has_next && (relations[relation_index+1].relation_type=="@OneToOne" | relations[relation_index+1].relation_type=="@ManyToOne"))>,</#if>"
+				<#if (relation.type=="OneToOne" | relation.type=="ManyToOne")>
+		+ "FOREIGN KEY(${relation.field_alias}) REFERENCES ${relation.entity_ref}(${relation.field_ref})<#if (relation_has_next && (relations[relation_index+1].relation_type=="@OneToOne" | relations[relation_index+1].relation_type=="@ManyToOne"))>,</#if>"
 				</#if>
 			</#list>
 		</#if>

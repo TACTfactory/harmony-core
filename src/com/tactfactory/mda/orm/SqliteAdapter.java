@@ -30,11 +30,18 @@ public class SqliteAdapter {
 			builder.append(" UNIQUE");
 		}
 		
-		
-		
 		if(!field.nullable) {
 			builder.append(" NOT NULL");
 		}
+		return builder.toString();
+	}
+	
+	public static String generateRelationStructure(FieldMetadata field) {
+		StringBuilder builder = new StringBuilder();
+		
+		RelationMetadata relation = field.relation;
+		builder.append("FOREIGN KEY("+generateColumnName(field)+") REFERENCES "+relation.entity_ref+"("+relation.field_ref+")");
+		
 		return builder.toString();
 	}
 

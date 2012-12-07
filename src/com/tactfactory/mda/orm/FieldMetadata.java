@@ -18,7 +18,7 @@ public class FieldMetadata {
 	
 	/** Field type */
 	public String type;
-	public String relation_type;
+	//public String relation_type;
 	public String entity_type = "string";
 	
 	public boolean nullable = false;
@@ -38,4 +38,6 @@ public class FieldMetadata {
 		this.customShowType = adapter.getViewComponentShow(this);
 		this.customEditType = adapter.getViewComponentEdit(this);
 	}
+	
+	public RelationMetadata relation;
 }

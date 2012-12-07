@@ -80,18 +80,20 @@ public class ActivityGenerator {
 			
 			// Make relations
 			ArrayList<Map<String, Object>> modelRelations = new ArrayList<Map<String,Object>>();
-			for (FieldMetadata relation : this.meta.relations.values()) {
-				Map<String, Object> modelRelation = new HashMap<String, Object>();
-				relation.customize(adapter);
-				
-				modelRelation.put(TagConstant.NAME, relation.name);
-				modelRelation.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(relation));
-				modelRelation.put(TagConstant.TYPE, relation.type);
-				modelRelation.put(TagConstant.RELATION_TYPE, relation.relation_type);
-				modelRelation.put("customEditType", relation.customEditType);
-				modelRelation.put("customShowType", relation.customShowType);
-				
-				modelRelations.add(modelRelation);
+			for (FieldMetadata field : this.meta.fields.values()) {
+				if(field.relation != null){
+					Map<String, Object> modelRelation = new HashMap<String, Object>();
+					field.customize(adapter);
+					
+					/*modelRelation.put(TagConstant.NAME, field.name);
+					modelRelation.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(field));
+					modelRelation.put(TagConstant.TYPE, field.type);*/
+					modelRelation.put(TagConstant.RELATION_TYPE, field.relation.type);
+					/*modelRelation.put("customEditType", field.customEditType);
+					modelRelation.put("customShowType", field.customShowType);*/
+					
+					modelRelations.add(modelRelation);
+				}
 			}
 			
 			modelClass.put(TagConstant.FIELDS, modelFields);

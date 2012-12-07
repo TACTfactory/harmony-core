@@ -27,7 +27,7 @@ public class ClassMetadata {
 	public HashMap<String, FieldMetadata> ids = new HashMap<String, FieldMetadata>();
 	
 	/** List of relations of entity class*/
-	public HashMap<String, FieldMetadata> relations = new HashMap<String, FieldMetadata>();
+	public HashMap<String, RelationMetadata> relations = new HashMap<String, RelationMetadata>();
 	
 	/** Class inherited by the entity class or null if none*/
 	public String exts = null;
