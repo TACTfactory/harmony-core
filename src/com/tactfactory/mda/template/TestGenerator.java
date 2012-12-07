@@ -39,10 +39,9 @@ public class TestGenerator {
 		
 		this.metas 		= metas;
 		this.adapter	= adapter;
-		this.localNameSpace = String.format("%s/%s", this.adapter.getSource(),
-				this.adapter.getNameSpace(this.metas.get(0), this.adapter.getTest()));
+		this.localNameSpace = this.adapter.getNameSpace(this.metas.get(0), this.adapter.getTest());
 		this.datamodel.put("localnamespace", 				this.localNameSpace);
-		this.datamodel.put(TagConstant.NAME,	"user" );
+		this.datamodel.put(TagConstant.NAME,	this.metas.get(0).name );
 	}
 	
 	/**
@@ -80,7 +79,8 @@ public class TestGenerator {
 			throws IOException, TemplateException {
 		String filepath = String.format("%s%s/%s",
 						this.adapter.getTestPath(),
-						PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
+						PackageUtils.extractPath(String.format(
+								"%s/%s", this.adapter.getSource(), this.localNameSpace)).toLowerCase(),
 						String.format(filename, this.datamodel.get(TagConstant.NAME)));
 		if(!FileUtils.exists(filepath)){
 			File file = FileUtils.makeFile(filepath);
