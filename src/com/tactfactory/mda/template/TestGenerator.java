@@ -70,9 +70,12 @@ public class TestGenerator {
 		}
 	}
 	
+	/**  
+	 * Generate DataBase Test  
+	 */ 
 	private void generate() {
 		// Info
-		System.out.print(">> Generate DB Test for " +  this.datamodel.get(TagConstant.NAME) + "\n");
+		System.out.print(">> Generate DB test source for " +  this.datamodel.get(TagConstant.NAME) + "\n");
 		
 		try {
 			Configuration cfg = new Configuration();
