@@ -65,8 +65,8 @@ public class EntityGenerator {
 			File entityFile = FileUtils.getFile(filepath);
 			if(entityFile.exists()){
 				StringBuffer fileString = FileUtils.FileToStringBuffer(entityFile); // Load the file once in a String buffer
-				
 				addImplementsSerializable(fileString, cm);
+				addImportSerializable(fileString,cm);
 				generateGetterAndSetters(fileString, cm);
 				
 				FileUtils.StringBufferToFile(fileString, entityFile); // After treatment on entity, write it in the original file
@@ -90,6 +90,25 @@ public class EntityGenerator {
 					}else{
 						fileString.insert(firstAccolade, " implements Serializable");
 					}				
+			}
+	}
+	
+	/**
+	 * Implements serializable in the class if it doesn't already
+	 * @param fileString The stringbuffer containing the class java code
+	 * @param cm The Metadata containing the infos on the java class
+	 */
+	private void addImportSerializable(StringBuffer fileString, ClassMetadata cm){
+		
+			if(!alreadyImportsSerializable(cm)){
+					
+				int insertPos ;
+				if(cm.imports.size()>0){ 
+					insertPos = fileString.indexOf("import");
+				}else{
+					insertPos = fileString.indexOf(";")+1;
+				}				
+				fileString.insert(insertPos, "\rimport java.io.Serializable;\r");
 			}
 	}
 	
@@ -194,6 +213,19 @@ public class EntityGenerator {
 				ret = true;
 				if(Harmony.DEBUG) System.out.println("Already implements setter of "+fm.name+" => " + m.name);
 			}
+		}
+		
+		return ret;
+	}
+	
+	/**
+	 * Check if the class already imports Serializable
+	 * @param cm The Metadata containing the infos on the java class
+	 */
+	private boolean alreadyImportsSerializable(ClassMetadata cm){
+		boolean ret = false;
+		for(String imp : cm.imports){
+			if(imp.equals("Serializable")) ret=true;
 		}
 		
 		return ret;

@@ -15,12 +15,25 @@ public class SqliteAdapter {
 	public static String generateStructure(FieldMetadata field) {
 		StringBuilder builder = new StringBuilder();
 		
-		builder.append(" " + field.type.toLowerCase());
+		builder.append(" " + field.entity_type.toLowerCase());
 		
-		if (field.nullable) {
-			builder.append(" null");
-		} else {
-			builder.append(" not null");
+		if(field.length!=255){
+			builder.append("("+field.length+")");
+		} else if (field.precision!=0){
+			builder.append("("+field.precision);
+			if(field.scale!=0){
+				builder.append(","+field.scale);
+			}
+			builder.append(")");
+		}
+		if(field.unique){
+			builder.append(" UNIQUE");
+		}
+		
+		
+		
+		if(!field.nullable) {
+			builder.append(" NOT NULL");
 		}
 		return builder.toString();
 	}
