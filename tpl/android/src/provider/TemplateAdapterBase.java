@@ -19,7 +19,8 @@ import ${project_namespace}.entity.${relation.type};
 </#list>
 
 /** ${name} adapter database abstract class <br/>
- * <b><i>You should edit ${name}Adapter class instead of this one.</i></b>
+ * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
+ * You should edit ${name}Adapter class instead of this one or you will lose all your modifications.</i></b>
  */
 public abstract class ${name}AdapterBase {
 	private static final String TAG = "${name}DatabaseAdapter";

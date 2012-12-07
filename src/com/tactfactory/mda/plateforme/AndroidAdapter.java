@@ -72,7 +72,7 @@ public final class AndroidAdapter extends BaseAdapter {
 	 */
 	@Override
 	public String getViewComponentEdit(FieldMetadata field) {
-		String result = "";
+		String result = "EditText";
 		
 		if (field.type.equals("String") || field.type.equals("int")) {
 			result = "EditText";

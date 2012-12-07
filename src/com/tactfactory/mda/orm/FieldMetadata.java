@@ -32,10 +32,6 @@ public class FieldMetadata {
 	
 	/** GUI edit field type */
 	public String customEditType;
-
-	
-
-	
 	
 	/** Customize edit and show GUI field */
 	public void customize(BaseAdapter adapter) {

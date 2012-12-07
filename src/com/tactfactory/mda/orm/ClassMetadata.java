@@ -38,6 +38,6 @@ public class ClassMetadata {
 	/** Implemented class list of the entity class */
 	public ArrayList<MethodMetadata> methods = new ArrayList<MethodMetadata>();
 
-	/** Imports of the class **/
+	/** Imports of the class */
 	public ArrayList<String> imports = new ArrayList<String>();
 }
