@@ -343,9 +343,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	public static boolean exists(String filename){
 		File f = new File(filename);
 		if(Harmony.DEBUG && f.exists())
-			System.out.println("File "+filename+ "already exists !");
+			System.out.println("File "+filename+ " already exists !");
 		else if(Harmony.DEBUG)
-			System.out.println("File "+filename+ "doesn't exists !");
+			System.out.println("File "+filename+ " doesn't exists !");
 		return f.exists();
 	}
 }

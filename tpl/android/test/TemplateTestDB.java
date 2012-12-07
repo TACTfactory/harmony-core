@@ -1,4 +1,4 @@
-package ${localnamespace};
+package ${local_namespace};
 
 import com.tactfactory.mda.test.demact.data.${name}Adapter;
 import com.tactfactory.mda.test.demact.entity.${name};

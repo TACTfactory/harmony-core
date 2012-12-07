@@ -130,7 +130,7 @@ public class OrmCommand extends BaseCommand {
 	protected void generateTestForEntities(ArrayList<ClassMetadata> metas){
 		try {
 			// Make
-			new TestGenerator(metas, this.adapter).generateTest();
+			new TestGenerator(metas, this.adapter).generateAll();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -27,10 +27,11 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class TestGenerator {
-	private List<ClassMetadata> metas;
+	protected List<ClassMetadata> metas;
+	protected ClassMetadata meta;
 	protected BaseAdapter adapter;
 	protected String localNameSpace;
-	protected List<Map<String, Object>> modelEntities;
+	protected Map<String, Object> entities;
 	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 	
 	public TestGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
@@ -39,17 +40,39 @@ public class TestGenerator {
 		
 		this.metas 		= metas;
 		this.adapter	= adapter;
-		this.localNameSpace = this.adapter.getNameSpace(this.metas.get(0), this.adapter.getTest());
-		this.datamodel.put("localnamespace", 				this.localNameSpace);
-		this.datamodel.put(TagConstant.NAME,	this.metas.get(0).name );
+		
+		// Make tests
+		this.entities = new HashMap<String, Object>();
+		for (ClassMetadata meta : this.metas) {
+			this.meta = meta;
+			this.datamodel = new HashMap<String, Object>();
+			this.datamodel.put(TagConstant.NAME,	meta.name );
+			this.datamodel.put(TagConstant.LOCAL_NAMESPACE,	this.adapter.getNameSpace(this.meta, this.adapter.getTest()) );
+			
+			this.entities.put((String) this.datamodel.get(TagConstant.NAME), this.datamodel);
+		}
 	}
 	
-	/**
-	 * Generate DataBase Test
-	 */
-	public void generateTest() {
+	@SuppressWarnings("unchecked")
+	public void generateAll() {
+		
+		for(Object modelEntity : this.entities.values()) {
+			
+			Map<String, Object> entity = (Map<String, Object>) modelEntity;
+			this.localNameSpace = (String) entity.get(TagConstant.LOCAL_NAMESPACE);
+			
+			// Make class
+			this.datamodel = new HashMap<String, Object>();
+			this.datamodel.put(TagConstant.NAME, 				entity.get(TagConstant.NAME));
+			this.datamodel.put(TagConstant.LOCAL_NAMESPACE, 	this.localNameSpace);
+			
+			this.generate();
+		}
+	}
+	
+	private void generate() {
 		// Info
-		System.out.print(">> Generate DB Test\n");
+		System.out.print(">> Generate DB Test for " +  this.datamodel.get(TagConstant.NAME) + "\n");
 		
 		try {
 			Configuration cfg = new Configuration();
@@ -66,6 +89,8 @@ public class TestGenerator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		System.out.print("\n");
 	}
 	
 	/** Make Java Source Code
@@ -87,7 +112,7 @@ public class TestGenerator {
 			
 			// Debug Log
 			if (Harmony.DEBUG)
-				System.out.print("\tGenerate DB Test : " + file.getPath() + "\n"); 
+				System.out.print("\tGenerate Source : " + file.getPath() + "\n"); 
 	
 			// Create
 			Template tpl = cfg.getTemplate(
