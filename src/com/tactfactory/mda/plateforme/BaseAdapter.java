@@ -20,7 +20,8 @@ public abstract class BaseAdapter {
 	protected String resource;
 	protected String source;
 	protected String libs;
-	
+	protected String test;
+
 	// MVC
 	protected String model		= "entity";
 	protected String view 		= "layout";
@@ -72,6 +73,10 @@ public abstract class BaseAdapter {
 	
 	public final String getLibsPath() {
 		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getLibs() );
+	}
+	
+	public final String getTestPath() {
+		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getTest() );
 	}
 	
 	public final String getSourcePath() {
@@ -142,6 +147,10 @@ public abstract class BaseAdapter {
 	public final String getTemplateStringsPathFile() {
 		return String.format("%s/%s/%s/%s/%s", Harmony.pathTemplate, this.getPlatform(),
 											this.getResource(), this.getValues(), this.getStrings() );
+	}
+	
+	public final String getTemplateTestsPath() {
+		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getTest() );
 	}
 	
 	// Getter and Setter
@@ -352,4 +361,19 @@ public abstract class BaseAdapter {
 	public final void setStrings(String strings) {
 		this.strings = strings;
 	}
+	
+	/**
+	 * @return the test
+	 */
+	public String getTest() {
+		return test;
+	}
+
+	/**
+	 * @param test the test to set
+	 */
+	public void setTest(String test) {
+		this.test = test;
+	}
+
 }

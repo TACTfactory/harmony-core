@@ -110,10 +110,12 @@ public class SQLiteAdapterGenerator {
 				for (Object metaRelations : (ArrayList<Map<String, Object>>)modelClass.get(TagConstant.RELATIONS) ) {
 					Map<String, Object> relation = (Map<String, Object>) metaRelations;
 					
+					// One to One relation
 					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@OneToOne") ) {
 	
 					} else
 						
+					// One to Many relation
 					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@OneToMany")) {
 						System.out.println("\tFound a @OneToMany relation in "+modelClass.get(TagConstant.NAME) );
 						
@@ -151,10 +153,12 @@ public class SQLiteAdapterGenerator {
 						}
 					} else
 					
+					// Many to One relation
 					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@ManyToOne")) {
 	
 					} else
 					
+					// Many to Many relation
 					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@ManyToMany")) {
 	
 					} else {

@@ -21,6 +21,7 @@ public final class AndroidAdapter extends BaseAdapter {
 		this.resource 	= "res";
 		this.source 	= "src";
 		this.libs		= "libs";
+		this.test		= "test";
 		
 		// MVC
 		//this.model 		= "entity";
@@ -74,8 +75,12 @@ public final class AndroidAdapter extends BaseAdapter {
 	public String getViewComponentEdit(FieldMetadata field) {
 		String result = "EditText";
 		
-		if (field.type.equals("String") || field.type.equals("int") || field.type.equals("Date") ) {
-
+		if (field.type.equals("String") || field.type.equals("int")) {
+			result = "EditText";
+		} else
+			
+		if (field.type.equals("Date") ){
+			result = "DatePickerDialog";
 		} else
 
 		if (field.type.equals("Boolean")) {

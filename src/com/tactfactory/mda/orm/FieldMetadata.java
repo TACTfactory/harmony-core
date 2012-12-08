@@ -19,8 +19,13 @@ public class FieldMetadata {
 	/** Field type */
 	public String type;
 	public String relation_type;
+	public String entity_type = "string";
 	
-	public boolean nullable;
+	public boolean nullable = false;
+	public boolean unique = false;
+	public int length = 255;
+	public int precision = 0;
+	public int scale = 0;
 	
 	/** GUI show field type */
 	public String customShowType;

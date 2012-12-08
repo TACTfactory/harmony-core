@@ -8,14 +8,9 @@
  */
 package com.tactfactory.mda.command;
 
-import japa.parser.JavaParser;
-import japa.parser.ParseException;
 import japa.parser.ast.CompilationUnit;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 import com.tactfactory.mda.Console;
@@ -31,7 +26,7 @@ import com.tactfactory.mda.template.SQLiteAdapterGenerator;
 import com.tactfactory.mda.template.ProjectGenerator;
 import com.tactfactory.mda.template.ProviderGenerator;
 import com.tactfactory.mda.template.SQLiteGenerator;
-import com.tactfactory.mda.template.WebServiceGenerator;
+import com.tactfactory.mda.template.TestGenerator;
 /**
  * Project Custom Files Code Generator
  * 
@@ -67,10 +62,10 @@ public class OrmCommand extends BaseCommand {
 	protected JavaModelParser javaModelParser;
 
 	protected void generateForm() {
-		ArrayList<ClassMetadata> metas = this.getMetasFromAll();
+		/*ArrayList<ClassMetadata> metas = this.getMetasFromAll();
 		if(metas!=null){
 			this.generateActivitiesForEntities(metas, true);
-		}
+		}*/
 	}
 
 	/**
@@ -78,12 +73,12 @@ public class OrmCommand extends BaseCommand {
 	 */
 	protected void generateEntity() {
 					
-		ArrayList<ClassMetadata> metas = this.getMetasFromArg();
+		/*ArrayList<ClassMetadata> metas = this.getMetasFromArg();
 		
 		if(metas!=null){
 			this.generateActivitiesForEntities(metas, false);
 			this.generateDBForEntities(metas);
-		}
+		}*/
 	
 	}
 
@@ -95,8 +90,8 @@ public class OrmCommand extends BaseCommand {
 		ArrayList<ClassMetadata> metas = this.getMetasFromAll();
 		if(metas!=null){
 			new EntityGenerator(metas, this.adapter).generateAll();
-			this.generateActivitiesForEntities(metas, true);
 			this.generateDBForEntities(metas);
+			this.generateTestForEntities(metas);
 		}
 
 	}
@@ -108,7 +103,7 @@ public class OrmCommand extends BaseCommand {
 
 		ArrayList<ClassMetadata> metas = this.getMetasFromAll();
 		if(metas!=null){
-			this.generateDBForEntities(metas);
+			this.generateActivitiesForEntities(metas, true);
 		}
 	}
 	
@@ -121,6 +116,20 @@ public class OrmCommand extends BaseCommand {
 			new SQLiteAdapterGenerator(metas, this.adapter).generateAll();
 			new SQLiteGenerator(metas, this.adapter).generateDatabase();
 			new ProviderGenerator();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Generate Test DB for Entities
+	 * @param metas The classes Metadata
+	 */
+	protected void generateTestForEntities(ArrayList<ClassMetadata> metas){
+		try {
+			// Make
+			new TestGenerator(metas, this.adapter).generateAll();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
