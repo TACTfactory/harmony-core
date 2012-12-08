@@ -30,6 +30,12 @@ public class JavaModelParser {
 	private BaseAdapter adapter = new AndroidAdapter();
 	private String entityPath;
 	
+	private FilenameFilter filter = new FilenameFilter() {
+	    public boolean accept(File dir, String name) {
+	        return name.endsWith(".java");
+	    }
+	};
+	
 	/**
 	 * Constructor
 	 */
@@ -51,13 +57,8 @@ public class JavaModelParser {
 	 * Load entities files found in entity folder
 	 */
 	public void loadEntities() throws Exception {
-		FilenameFilter filter = new FilenameFilter() {
-		    public boolean accept(File dir, String name) {
-		        return name.endsWith(".java");
-		    }
-		};
 		File dir = new File(this.entityPath);
-		String[] files = dir.list(filter);
+		String[] files = dir.list(this.filter);
 		if(files!=null) {
 			for (String filename : files) {
 				this.parseJavaFile(this.entityPath + filename);
@@ -74,6 +75,67 @@ public class JavaModelParser {
 	 */
 	private void parseJavaFile(String filename) {
         FileInputStream in = null;
+        CompilationUnit cu = null;
+        
+        if(new File(filename).exists())
+        {
+			try {
+				// creates an input stream for the file to be parsed
+				in = new FileInputStream(filename);
+	
+	            // parse the file
+				cu = JavaParser.parse(in);
+	        } catch (ParseException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (FileNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} finally {
+	            try {
+					in.close();
+				} catch (IOException e) {
+					if (Harmony.DEBUG)
+						e.printStackTrace();
+				}
+	        }
+			
+			if (cu != null)
+				this.entities.add(cu);
+        } else {
+        	if(Harmony.DEBUG)
+        		System.out.println("Given model file doesn't exist!");
+        }
+	}
+	
+	/**
+	 * Load entity from one specified file
+	 * 
+	 * @param filename or path to file to parse
+	 */
+	public void decorateEntity(String filename)
+	{
+		this.decorateJavaFile(filename);
+	}
+	
+	/**
+	 * Load entities files found in entity folder
+	 */
+	public void decorateEntities() throws Exception {
+		
+		File dir = new File(this.entityPath);
+		String[] files = dir.list(this.filter);
+		if(files!=null) {
+			for (String filename : files) {
+				this.decorateJavaFile(this.entityPath + filename);
+			}
+		} else {
+			throw new Exception("No entity files found!");
+		}
+	}
+	
+	private void decorateJavaFile(String filename) {
+		FileInputStream in = null;
         CompilationUnit cu = null;
         
         if(new File(filename).exists())
