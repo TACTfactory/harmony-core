@@ -68,7 +68,7 @@ public class JavaAdapter {
 	}
 	
 	private static class ClassVisitor extends VoidVisitorAdapter<ClassMetadata> {
-		private static final String FILTER_ENTITY =PackageUtils.extractNameEntity(Entity.class);
+		private static final String FILTER_ENTITY = PackageUtils.extractNameEntity(Entity.class);
 		
 	    @Override
 	    public void visit(ClassOrInterfaceDeclaration n, ClassMetadata meta) {
@@ -164,7 +164,7 @@ public class JavaAdapter {
 									}else if(mvp.getName().equals("scale")){
 										fieldMeta.scale = Integer.parseInt(mvp.getValue().toString());
 									}else if(mvp.getName().equals("type")){
-										fieldMeta.entity_type = mvp.getValue().toString();
+										fieldMeta.columnDefinition = mvp.getValue().toString();
 									}
 								} else if(annotationType.equals(PackageUtils.extractNameEntity(JoinColumn.class))){ // for @JoinColumn
 									

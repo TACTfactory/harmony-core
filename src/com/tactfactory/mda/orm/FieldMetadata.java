@@ -19,7 +19,7 @@ public class FieldMetadata {
 	/** Field type */
 	public String type;
 	public String relation_type;
-	public String entity_type = "string";
+	public String columnDefinition = "string";
 	
 	public boolean nullable = false;
 	public boolean unique = false;
