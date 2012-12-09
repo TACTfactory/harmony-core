@@ -8,6 +8,8 @@
  */
 package com.tactfactory.mda.orm;
 
+import com.tactfactory.mda.orm.annotation.Column;
+
 public class SqliteAdapter {
 	private static String PREFIX = "COL_";
 	private static String SUFFIX = "_ID";
@@ -38,6 +40,26 @@ public class SqliteAdapter {
 		}
 		
 		return builder.toString();
+	}
+	
+	public static String generateColumnType(FieldMetadata field) {
+		String type = field.columnDefinition;
+		
+		if (type.equals(Column.Type.STRING) ||
+			type.equals(Column.Type.TEXT)	||
+			type.equals(Column.Type.LOGIN)	) {
+			type = "VARCHAR";
+		} else
+			
+		if (type.equals(Column.Type.PASSWORD)) {
+			type = "VARCHAR";
+		} else
+			
+		if (type.equals(Column.Type.DATETIME)) {
+			//type = "VARCHAR";
+		} 
+
+		return type;
 	}
 
 	public static String generateColumnName(FieldMetadata field) {

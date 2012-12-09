@@ -68,7 +68,7 @@ public class SQLiteGenerator {
 				relation.customize(adapter);
 				modelRelation.put(TagConstant.NAME, relation.name);
 				modelRelation.put(TagConstant.TYPE, relation.type);
-				modelRelation.put(TagConstant.RELATION_TYPE, relation.relation_type);
+				modelRelation.put(TagConstant.RELATION_TYPE, relation.columnDefinition);
 				
 				modelRelations.add(modelRelation);
 			}
