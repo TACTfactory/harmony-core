@@ -87,7 +87,7 @@ public class ActivityGenerator {
 				modelRelation.put(TagConstant.NAME, relation.name);
 				modelRelation.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(relation));
 				modelRelation.put(TagConstant.TYPE, relation.type);
-				modelRelation.put(TagConstant.RELATION_TYPE, relation.relation_type);
+				modelRelation.put(TagConstant.RELATION_TYPE, relation.columnDefinition);
 				modelRelation.put("customEditType", relation.customEditType);
 				modelRelation.put("customShowType", relation.customShowType);
 				

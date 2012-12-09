@@ -8,6 +8,8 @@
  */
 package com.tactfactory.mda.orm;
 
+import java.util.HashMap;
+
 import com.tactfactory.mda.plateforme.BaseAdapter;
 
 /** Entity field metadata */
@@ -18,8 +20,8 @@ public class FieldMetadata {
 	
 	/** Field type */
 	public String type;
-	public String relation_type;
-	public String entity_type = "string";
+	public String columnDefinition;
+	public HashMap<String, String> options; // (Not use...) for extra option of all bundle!
 	
 	public boolean nullable = false;
 	public boolean unique = false;

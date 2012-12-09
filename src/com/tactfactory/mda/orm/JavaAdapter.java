@@ -24,6 +24,7 @@ import japa.parser.ast.visitor.VoidVisitorAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import com.google.common.base.Strings;
 import com.tactfactory.mda.Harmony;
@@ -68,7 +69,7 @@ public class JavaAdapter {
 	}
 	
 	private static class ClassVisitor extends VoidVisitorAdapter<ClassMetadata> {
-		private static final String FILTER_ENTITY =PackageUtils.extractNameEntity(Entity.class);
+		private static final String FILTER_ENTITY = PackageUtils.extractNameEntity(Entity.class);
 		
 	    @Override
 	    public void visit(ClassOrInterfaceDeclaration n, ClassMetadata meta) {
@@ -117,22 +118,24 @@ public class JavaAdapter {
 	}
 
 	private static class FieldVisitor extends VoidVisitorAdapter<ClassMetadata> {
-		private static final String FILTER_COLUMN = PackageUtils.extractNameEntity(Column.class);
-		private static final String FILTER_JOINCOLUMN = PackageUtils.extractNameEntity(JoinColumn.class);
-		
+		private static final String FILTER_ENTITY 		= PackageUtils.extractNameEntity(Id.class);
+		private static final String FILTER_COLUMN 		= PackageUtils.extractNameEntity(Column.class);
+		private static final String FILTER_JOINCOLUMN 	= PackageUtils.extractNameEntity(JoinColumn.class);
+		private static final String FILTER_ONE2ONE 		= PackageUtils.extractNameEntity(OneToOne.class);
+		private static final String FILTER_ONE2MANY 	= PackageUtils.extractNameEntity(OneToMany.class);
+		private static final String FILTER_MANY2ONE 	= PackageUtils.extractNameEntity(ManyToOne.class);
+		private static final String FILTER_MANY2MANY 	= PackageUtils.extractNameEntity(ManyToMany.class);
 		
 		@Override
 		public void visit(FieldDeclaration field, ClassMetadata meta) {
 			List<AnnotationExpr> fieldAnnotations = field.getAnnotations();
 			
-			if (fieldAnnotations != null && 
-					fieldAnnotations.size() > 0 ) {
+			if (fieldAnnotations != null) {
 				
-				// General
+				// General (defaults values)
 				FieldMetadata fieldMeta = new FieldMetadata();
 				fieldMeta.name = field.getVariables().get(0).toString(); // FIXME not manage multi-variable
 				fieldMeta.type = field.getType().toString();
-				fieldMeta.relation_type = field.getAnnotations().get(0).toString(); // FIXME not manage multi-annotation
 				fieldMeta.nullable = false; // Default nullable is false
 				fieldMeta.unique = false; 
 				
@@ -148,29 +151,7 @@ public class JavaAdapter {
 					isColumn = this.isColumn(fieldMeta, isColumn, annotationType);
 					isRelation = this.isRelation(fieldMeta, isRelation, annotationType);
 					
-					if(annotationExpr instanceof NormalAnnotationExpr){
-						NormalAnnotationExpr norm = (NormalAnnotationExpr)annotationExpr;
-						if(norm.getPairs()!=null && norm.getPairs().size()>0)
-							for(MemberValuePair mvp : norm.getPairs()){ // Check if there are any arguments in the annotation
-								if(annotationType.equals(PackageUtils.extractNameEntity(Column.class))){ // for @Column
-									if(mvp.getName().equals("nullable") && mvp.getValue().toString().equals("true")){
-										fieldMeta.nullable = true;
-									}else if(mvp.getName().equals("unique") && mvp.getValue().toString().equals("true")){
-										fieldMeta.unique = true;
-									}else if(mvp.getName().equals("length")){
-										fieldMeta.length = Integer.parseInt(mvp.getValue().toString());
-									}else if(mvp.getName().equals("precision")){
-										fieldMeta.precision = Integer.parseInt(mvp.getValue().toString());
-									}else if(mvp.getName().equals("scale")){
-										fieldMeta.scale = Integer.parseInt(mvp.getValue().toString());
-									}else if(mvp.getName().equals("type")){
-										fieldMeta.entity_type = mvp.getValue().toString();
-									}
-								} else if(annotationType.equals(PackageUtils.extractNameEntity(JoinColumn.class))){ // for @JoinColumn
-									
-								}
-							}	
-					}
+					this.loadAttributs(fieldMeta, annotationExpr, annotationType);
 				}
 				
 				// Set Field meta
@@ -185,6 +166,11 @@ public class JavaAdapter {
 				if (isRelation)  {
 					meta.relations.put(fieldMeta.name, fieldMeta);
 				}
+				
+				if (Strings.isNullOrEmpty(fieldMeta.columnDefinition)) {
+					fieldMeta.columnDefinition = fieldMeta.type;
+				}
+				fieldMeta.columnDefinition = SqliteAdapter.generateColumnType(fieldMeta);
 				
 				/*for (Field field : mclass.getDeclaredFields()) {
 					if (columnAnnotation != null) {
@@ -206,6 +192,63 @@ public class JavaAdapter {
 
 		/**
 		 * @param fieldMeta
+		 * @param annotationExpr
+		 * @param annotationType
+		 */
+		private void loadAttributs(FieldMetadata fieldMeta, AnnotationExpr annotationExpr, String annotationType) {
+			if (annotationExpr instanceof NormalAnnotationExpr) {
+				NormalAnnotationExpr norm = (NormalAnnotationExpr)annotationExpr;
+				
+				if (norm.getPairs()!=null) {
+					for(MemberValuePair mvp : norm.getPairs()) { // Check if there are any arguments in the annotation
+						
+						// Argument of Annotation Column
+						if (annotationType.equals(FILTER_COLUMN)) { 
+							// set nullable
+							if (mvp.getName().equals("nullable") && 
+									mvp.getValue().toString().equals("true")) {
+								fieldMeta.nullable = true;
+							}else 
+								
+							// Set unique 
+							if (mvp.getName().equals("unique") && 
+									mvp.getValue().toString().equals("true")) {
+								fieldMeta.unique = true;
+							}else 
+								
+							// set length
+							if (mvp.getName().equals("length")) {
+								fieldMeta.length = Integer.parseInt(mvp.getValue().toString());
+							}else 
+								
+							// set precision
+							if (mvp.getName().equals("precision")) {
+								fieldMeta.precision = Integer.parseInt(mvp.getValue().toString());
+							}else 
+								
+							// set scale
+							if (mvp.getName().equals("scale")) {
+								fieldMeta.scale = Integer.parseInt(mvp.getValue().toString());
+							}else 
+								
+							// set column definition
+							if (mvp.getName().equals("type")) {
+								fieldMeta.columnDefinition = mvp.getValue().toString();
+							}
+						} else 
+							
+						
+						// Argument of Annotation join Column
+						if (annotationType.equals(FILTER_JOINCOLUMN)) { // for @JoinColumn
+							
+						}
+					}	
+				}
+			}
+		}
+
+		/**
+		 * @param fieldMeta
 		 * @param isId
 		 * @param annotationType
 		 * @return
@@ -213,13 +256,14 @@ public class JavaAdapter {
 		private boolean isId(FieldMetadata fieldMeta, boolean old, String annotationType) {
 			boolean isId = old;
 			
-			if (annotationType.equals(PackageUtils.extractNameEntity(Id.class))) {
+			if (annotationType.equals(FILTER_ENTITY)) {
 				isId = true;
 				
 				// Debug Log
 				if (Harmony.DEBUG)
 					System.out.print("\t    ID: " + fieldMeta.name +"\n");
 			}
+			
 			return isId;
 		}
 		
@@ -246,6 +290,7 @@ public class JavaAdapter {
 							" type of " + fieldMeta.type +"\n");
 				}
 			}
+			
 			return isColumn;
 		}
 
@@ -257,10 +302,10 @@ public class JavaAdapter {
 		private boolean isRelation(FieldMetadata fieldMeta, boolean old, String annotationType) {
 			boolean isRelation = old;
 			
-			if (annotationType.equals(PackageUtils.extractNameEntity(OneToOne.class))	||
-				annotationType.equals(PackageUtils.extractNameEntity(OneToMany.class))	||
-				annotationType.equals(PackageUtils.extractNameEntity(ManyToOne.class))	||
-				annotationType.equals(PackageUtils.extractNameEntity(ManyToMany.class))	) {
+			if (annotationType.equals(FILTER_ONE2ONE)	||
+				annotationType.equals(FILTER_ONE2MANY)	||
+				annotationType.equals(FILTER_MANY2ONE)	||
+				annotationType.equals(FILTER_MANY2MANY)	) {
 				isRelation = true;
 				
 				// Debug Log
@@ -268,39 +313,51 @@ public class JavaAdapter {
 					System.out.print("\t    Relation " + annotationType + ": " + fieldMeta.name + 
 							" type of " + fieldMeta.type +"\n");
 			}
+			
 			return isRelation;
 		}
 	}
 	
 	private static class MethodVisitor extends VoidVisitorAdapter<ClassMetadata> {
+		
 		@Override
 		public void visit(MethodDeclaration method, ClassMetadata meta) {
 			MethodMetadata methodMeta = new MethodMetadata();
 			methodMeta.name = method.getName();
+			methodMeta.type = method.getType().toString(); 
+			
+			// Add Parameters
 			List<Parameter> parameters = method.getParameters();
 			if(parameters!=null){
 				for(Parameter param : parameters){
 					methodMeta.argumentsTypes.add(param.getType().toString());
 				}
 			}
-			Type methodType = method.getType();
-
-			methodMeta.type = methodType.toString();
-			//methodMeta.argumentsTypes = 
+			
+			// Debug Log
 			if(Harmony.DEBUG){
-				//methodMeta.argumentsTypes.get(0)
-				String mess = "\t\tFound method : "+methodMeta.type+" "+methodMeta.name+"(";
-				for(String args : methodMeta.argumentsTypes)
-					mess+=args+", ";
-				mess+=")";
-				System.out.println(mess);
+				StringBuilder builder = new StringBuilder(
+						String.format("\t\tFound method : %s %s(", methodMeta.type, methodMeta.name));
+				
+				for(String args : methodMeta.argumentsTypes) {
+					if (args != methodMeta.argumentsTypes.get(0))
+						builder.append(", ");
+					
+					builder.append(String.format("%s", args));
+				}
+					
+				builder.append(")");
+
+				System.out.println(builder.toString());
 			}
+			
 			meta.methods.add(methodMeta);
 			
 		}
 	}
 	
 	private static class ImportVisitor extends VoidVisitorAdapter<ClassMetadata> {
+		
 		@Override
 		public void visit(ImportDeclaration imp, ClassMetadata meta) {
 			String impName = imp.getName().getName();

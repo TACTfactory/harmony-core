@@ -61,7 +61,7 @@ public final class AndroidAdapter extends BaseAdapter {
 			result = "TextView";
 		} else
 		
-		if(field.relation_type.equals("@ManyToOne")) {
+		if (field.columnDefinition.equals("@ManyToOne")) {
 			result = "TextView";
 		}
 		
@@ -80,14 +80,14 @@ public final class AndroidAdapter extends BaseAdapter {
 		} else
 			
 		if (field.type.equals("Date") ){
-			result = "DatePickerDialog";
+			result = "EditText"; //"DatePickerDialog";
 		} else
 
 		if (field.type.equals("Boolean")) {
 			result = "CheckBox";
 		} else
 			
-		if(field.relation_type.equals("@ManyToOne")) {
+		if(field.columnDefinition.equals("@ManyToOne")) {
 			result = "Spinner";
 		}
 		

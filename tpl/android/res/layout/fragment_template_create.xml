@@ -49,7 +49,7 @@
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
     	<#if relations?size!=0>
-    	android:layout_below="@+id/${name?lower_case}_${lastrelation.name?lower_case}_spinner"
+    	android:layout_below="@+id/${name?lower_case}_${relations?last.name?lower_case}_spinner"
     	<#else>
     	android:layout_below="@+id/${name?lower_case}_${fields?last.name?lower_case}"
     	</#if>
