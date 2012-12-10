@@ -92,46 +92,47 @@ public class ProjectGenerator {
 	 * @param templateFile Template File to use
 	 */ 
 	public void updateProjectFile(String destPath, String templateFile) {
-
-		Configuration cfg = new Configuration();
-
-		try {
-			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		File destFile = new File(destPath);
-		if(!destFile.exists())
-			destFile = FileUtils.makeFile(destPath);
-
-		// Debug Log
-		if (Harmony.DEBUG)
-			System.out.print("\tGenerate Project File : " + destFile.getPath() + "\n"); 
-
-
-		// Create
-		Template tpl;
-		try {
-			
-			tpl = cfg.getTemplate(templateFile);	// Load template file in engine
-
-			OutputStreamWriter output = new FileWriter(destFile);
-			tpl.process(this.datamodel, output);				// Process datamodel (with previous template file), and output to output file
-			output.flush();
-			output.close();
-
+		if(!FileUtils.exists(destPath)){
+			Configuration cfg = new Configuration();
+	
+			try {
+				cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	
+			File destFile = new File(destPath);
+			if(!destFile.exists())
+				destFile = FileUtils.makeFile(destPath);
+	
 			// Debug Log
 			if (Harmony.DEBUG)
-				System.out.println("File "+destFile.getName()+" processed...");
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TemplateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}	
+				System.out.print("\tGenerate Project File : " + destFile.getPath() + "\n"); 
+	
+	
+			// Create
+			Template tpl;
+			try {
+				
+				tpl = cfg.getTemplate(templateFile);	// Load template file in engine
+	
+				OutputStreamWriter output = new FileWriter(destFile);
+				tpl.process(this.datamodel, output);				// Process datamodel (with previous template file), and output to output file
+				output.flush();
+				output.close();
+	
+				// Debug Log
+				if (Harmony.DEBUG)
+					System.out.println("File "+destFile.getName()+" processed...");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (TemplateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
+		}
 	}
 
 	/**
