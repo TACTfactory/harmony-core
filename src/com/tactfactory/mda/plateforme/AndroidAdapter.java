@@ -21,6 +21,7 @@ public final class AndroidAdapter extends BaseAdapter {
 		this.resource 	= "res";
 		this.source 	= "src";
 		this.libs		= "libs";
+		this.test		= "test";
 		
 		// MVC
 		//this.model 		= "entity";
@@ -60,9 +61,13 @@ public final class AndroidAdapter extends BaseAdapter {
 			result = "TextView";
 		}
 		
-		if(field.relation !=null && field.relation.type.equals("@ManyToOne")) {
-			result = "TextView";
-		}
+//<<<<<<< HEAD
+//		if(field.relation !=null && field.relation.type.equals("@ManyToOne")) {
+//=======
+//		if (field.columnDefinition.equals("@ManyToOne")) {
+//>>>>>>> refs/heads/master
+//			result = "TextView";
+//		}
 		
 		return result;
 	}
@@ -79,16 +84,20 @@ public final class AndroidAdapter extends BaseAdapter {
 		} else
 			
 		if (field.type.equals("Date") ){
-			result = "DatePickerDialog";
+			result = "EditText"; //"DatePickerDialog";
 		} else
 
 		if (field.type.equals("Boolean")) {
 			result = "CheckBox";
 		}
 			
-		if(field.relation !=null && field.relation.type.equals("@ManyToOne")) {
-			result = "Spinner";
-		}
+//<<<<<<< HEAD
+//		if(field.relation !=null && field.relation.type.equals("@ManyToOne")) {
+//=======
+//		if(field.columnDefinition.equals("@ManyToOne")) {
+//>>>>>>> refs/heads/master
+//			result = "Spinner";
+//		}
 		
 		return result;
 	}

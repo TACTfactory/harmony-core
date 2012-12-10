@@ -56,17 +56,15 @@ public class WebServiceGenerator {
 
 			// Make relations
 			ArrayList<Map<String, Object>> modelRelations = new ArrayList<Map<String,Object>>();
-			for (FieldMetadata field : meta.fields.values()) {
-				if(field.relation!=null){
-					RelationMetadata relation = field.relation;
-					Map<String, Object> modelRelation = new HashMap<String, Object>();
-					//relation.customize(adapter);
-					//modelRelation.put(TagConstant.NAME, relation.name);
-					modelRelation.put(TagConstant.TYPE, relation.type);
-					//modelRelation.put(TagConstant.RELATION_TYPE, relation.relation_type);
-					
-					modelRelations.add(modelRelation);
-				}
+
+			for (FieldMetadata relation : meta.relations.values()) {
+				Map<String, Object> modelRelation = new HashMap<String, Object>();
+				relation.customize(adapter);
+				modelRelation.put(TagConstant.NAME, relation.name);
+				modelRelation.put(TagConstant.TYPE, relation.type);
+				modelRelation.put(TagConstant.RELATION_TYPE, relation.columnDefinition);
+				
+				modelRelations.add(modelRelation);
 			}
 			modelClass.put(TagConstant.RELATIONS, modelRelations);
 			

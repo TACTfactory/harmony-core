@@ -104,4 +104,13 @@ public @interface Column {
 	 * @return (optional, default 0) The scale for a decimal (exact numeric) column. (Applies only if a decimal column is used.)
 	 */
 	int scale() default 0;
+	
+	/**
+	 * The database type to use for the column
+	 * 
+	 * @return (optional, defaults to type mapping) The database type to use for the column.
+	 * 
+	 * @see com.tactfactory.mda.orm.SqliteAdapter for mapping list
+	 */
+	String columnDefinition() default "";
 }

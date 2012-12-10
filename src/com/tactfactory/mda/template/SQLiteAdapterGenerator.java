@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -56,47 +57,11 @@ public class SQLiteAdapterGenerator {
 			modelClass.put(TagConstant.NAME,	meta.name );
 			modelClass.put(TagConstant.LOCAL_NAMESPACE,	this.adapter.getNameSpace(this.meta, this.adapter.getData()) );
 			
-			// Make ids
-			ArrayList<Map<String, Object>> modelIds = new ArrayList<Map<String,Object>>();
-			for (FieldMetadata field : this.meta.ids.values()) {
-				Map<String, Object> modelId = new HashMap<String, Object>();
-				modelId.put(TagConstant.NAME, field.name);
-				modelId.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(field));
-				modelId.put(TagConstant.TYPE, field.type);
-				
-				modelIds.add(modelId);
-			}
-			
-			// Make fields
-			ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
-			for (FieldMetadata field : this.meta.fields.values()) {
-				Map<String, Object> modelField = new HashMap<String, Object>();
-				field.customize(adapter);
-				modelField.put(TagConstant.NAME, field.name);
-				modelField.put(TagConstant.TYPE, field.type);
-				modelField.put("entity_type", field.entity_type);
-				modelField.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(field));
-				modelField.put(TagConstant.SCHEMA, SqliteAdapter.generateStructure(field));
-				
-				modelFields.add(modelField);
-			}
 
-			// Make relations
-			ArrayList<Map<String, Object>> modelRelations = new ArrayList<Map<String,Object>>();
-			for (FieldMetadata field: this.meta.fields.values()) {
-				if(field.relation!=null){
-					RelationMetadata relation = field.relation;
-					Map<String, Object> modelRelation = new HashMap<String, Object>();
-					//modelRelation.put(TagConstant.NAME, relation.name);
-					modelRelation.put("field_alias", SqliteAdapter.generateColumnName(field));
-					modelRelation.put("field_ref", relation.field_ref+"");
-					modelRelation.put("entity_ref", relation.entity_ref);
-					modelRelation.put(TagConstant.TYPE, relation.type);
-					modelRelation.put(TagConstant.RELATION_TYPE, relation.type);
-					
-					modelRelations.add(modelRelation);
-				}
-			}
+			// Make sub fields (ids, fields, relations)
+			ArrayList<Map<String, Object>> modelIds = this.loadSubFields(this.meta.ids.values());
+			ArrayList<Map<String, Object>> modelFields = this.loadSubFields(this.meta.fields.values());
+			ArrayList<Map<String, Object>> modelRelations = this.loadSubFields(this.meta.relations.values());
 			
 			modelClass.put(TagConstant.IDS, modelIds);
 			modelClass.put(TagConstant.FIELDS, modelFields);
@@ -117,10 +82,12 @@ public class SQLiteAdapterGenerator {
 				for (Object metaRelations : (ArrayList<Map<String, Object>>)modelClass.get(TagConstant.RELATIONS) ) {
 					Map<String, Object> relation = (Map<String, Object>) metaRelations;
 					
+					// One to One relation
 					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@OneToOne") ) {
 	
 					} else
 						
+					// One to Many relation
 					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@OneToMany")) {
 						System.out.println("\tFound a @OneToMany relation in "+modelClass.get(TagConstant.NAME) );
 						
@@ -158,10 +125,12 @@ public class SQLiteAdapterGenerator {
 						}
 					} else
 					
+					// Many to One relation
 					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@ManyToOne")) {
 	
 					} else
 					
+					// Many to Many relation
 					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@ManyToMany")) {
 	
 					} else {
@@ -170,6 +139,33 @@ public class SQLiteAdapterGenerator {
 				}
 			}
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	private ArrayList<Map<String, Object>> loadSubFields(Collection<FieldMetadata> values) {
+		ArrayList<Map<String, Object>> SubFields = new ArrayList<Map<String,Object>>();
+		for (FieldMetadata field : values) {
+			Map<String, Object> subField = new HashMap<String, Object>();
+			
+			// General
+			subField.put(TagConstant.NAME, field.name);
+			subField.put(TagConstant.TYPE, field.type);
+			subField.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(field));
+			
+			// if ids
+			
+			// if models
+			field.customize(adapter);
+			subField.put(TagConstant.SCHEMA, SqliteAdapter.generateStructure(field));
+			
+			// if relations
+			subField.put(TagConstant.RELATION_TYPE, field.columnDefinition);
+			
+			SubFields.add(subField);
+		}
+		return SubFields;
 	}
 	
 	@SuppressWarnings("unchecked")

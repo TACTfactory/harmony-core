@@ -1,9 +1,7 @@
 package com.tactfactory.mda.template;
 
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -17,7 +15,6 @@ import com.tactfactory.mda.orm.FieldMetadata;
 import com.tactfactory.mda.orm.MethodMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
-import com.tactfactory.mda.utils.PackageUtils;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;

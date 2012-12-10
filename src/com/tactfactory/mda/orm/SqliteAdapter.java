@@ -8,15 +8,17 @@
  */
 package com.tactfactory.mda.orm;
 
+import com.tactfactory.mda.orm.annotation.Column;
+
 public class SqliteAdapter {
 	private static String PREFIX = "COL_";
 	private static String SUFFIX = "_ID";
 
 	public static String generateStructure(FieldMetadata field) {
 		StringBuilder builder = new StringBuilder();
+		builder.append(" " + field.columnDefinition.toLowerCase());
 		
-		builder.append(" " + field.entity_type.toLowerCase());
-		
+		// Set Length
 		if(field.length!=255){
 			builder.append("("+field.length+")");
 		} else if (field.precision!=0){
@@ -26,13 +28,17 @@ public class SqliteAdapter {
 			}
 			builder.append(")");
 		}
+		
+		// Set Unique
 		if(field.unique){
 			builder.append(" UNIQUE");
 		}
 		
+		// Set Nullable
 		if(!field.nullable) {
 			builder.append(" NOT NULL");
 		}
+		
 		return builder.toString();
 	}
 	
@@ -43,6 +49,27 @@ public class SqliteAdapter {
 		builder.append("FOREIGN KEY("+generateColumnName(field)+") REFERENCES "+relation.entity_ref+"("+relation.field_ref+")");
 		
 		return builder.toString();
+
+	}
+
+	public static String generateColumnType(FieldMetadata field) {
+		String type = field.columnDefinition;
+		
+		if (type.equals(Column.Type.STRING) ||
+			type.equals(Column.Type.TEXT)	||
+			type.equals(Column.Type.LOGIN)	) {
+			type = "VARCHAR";
+		} else
+			
+		if (type.equals(Column.Type.PASSWORD)) {
+			type = "VARCHAR";
+		} else
+			
+		if (type.equals(Column.Type.DATETIME)) {
+			//type = "VARCHAR";
+		} 
+
+		return type;
 	}
 
 	public static String generateColumnName(FieldMetadata field) {
