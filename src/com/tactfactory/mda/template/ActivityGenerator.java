@@ -25,6 +25,7 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
+import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
@@ -241,7 +242,7 @@ public class ActivityGenerator {
 	/** All Actions (List, Show, Edit, Create) */
 	public void generateAllAction() {
 		// Info
-		System.out.print(">> Generate CRUD view for " +  meta.name);
+		ConsoleUtils.display(">> Generate CRUD view for " +  meta.name);
 
 		try {
 
@@ -252,13 +253,10 @@ public class ActivityGenerator {
 
 			if (this.isWritable ) {
 				// Info
-				System.out.print(" with write actions \n");
+				ConsoleUtils.display("   with write actions");
 
 				this.generateCreateAction(cfg);
 				this.generateEditAction(cfg);
-			} else {
-				// Info
-				System.out.print("\n");
 			}
 
 			this.generateShowAction(cfg);
@@ -290,8 +288,7 @@ public class ActivityGenerator {
 			File file = FileUtils.makeFile(filepath);
 			
 			// Debug Log
-			if (Harmony.DEBUG)
-				System.out.print("\tGenerate Source : " + file.getPath() + "\n"); 
+			ConsoleUtils.displayDebug("\tGenerate Source : " + file.getPath()); 
 	
 			// Create
 			Template tpl = cfg.getTemplate(
@@ -323,8 +320,7 @@ public class ActivityGenerator {
 			File file = FileUtils.makeFile(filepath);
 	
 			// Debug Log
-			if (Harmony.DEBUG)
-				System.out.print("\tGenerate Ressource : " + file.getAbsoluteFile() + "\n"); 
+			ConsoleUtils.displayDebug("\tGenerate Ressource : " + file.getAbsoluteFile()); 
 	
 			// Create
 			Template tpl = cfg.getTemplate(
@@ -349,8 +345,7 @@ public class ActivityGenerator {
 		File file = FileUtils.makeFile(this.adapter.getManifestPathFile());
 
 		// Debug Log
-		if (Harmony.DEBUG)
-			System.out.print("\tGenerate Manifest : " + file.getAbsoluteFile() + "\n");
+		ConsoleUtils.displayDebug("\tGenerate Manifest : " + file.getAbsoluteFile());
 
 		// Create
 		Template tpl = cfg.getTemplate(this.adapter.getTemplateManifestPathFile());
@@ -372,8 +367,7 @@ public class ActivityGenerator {
 				classFile );
 
 		// Debug Log
-		if (Harmony.DEBUG)
-			System.out.print("\tUpdate Manifest : " + pathRelatif + "\n\n");
+		ConsoleUtils.displayDebug("\tUpdate Manifest : " + pathRelatif);
 
 		try {
 			SAXBuilder builder = new SAXBuilder();		// Make engine
