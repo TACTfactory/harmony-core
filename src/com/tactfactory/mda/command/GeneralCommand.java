@@ -8,8 +8,11 @@
  */
 package com.tactfactory.mda.command;
 
+import net.xeoh.plugins.base.annotations.PluginImplementation;
+
 import com.tactfactory.mda.Harmony;
 
+@PluginImplementation
 public class GeneralCommand extends BaseCommand {
 	public static String LIST = "list";
 	public static String HELP = "help";
@@ -30,16 +33,20 @@ public class GeneralCommand extends BaseCommand {
 	 * Display list of All commands
 	 */
 	public void list() {
-
+		Command general = Harmony.instance.bootstrap.get(GeneralCommand.class);
+		
 		System.out.print("\nAvailable Commands:\n");
-		for (BaseCommand baseCommand : Harmony.instance.bootstrap.values()) {
-			baseCommand.summary();
+		general.summary();
+		
+		for (Command baseCommand : Harmony.instance.bootstrap.values()) {
+			if (baseCommand != general)
+				baseCommand.summary();
 		}
 	}
 	
 	@Override
 	public void summary() {
-		System.out.print("\n> General:\n");
+		System.out.print("\n> General \n");
 		System.out.print("\t"+HELP+"\t => Display this help message\n");
 		System.out.print("\t"+LIST+"\t => List all commands\n");
 	}

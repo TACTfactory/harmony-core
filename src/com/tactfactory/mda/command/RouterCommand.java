@@ -8,6 +8,9 @@
  */
 package com.tactfactory.mda.command;
 
+import net.xeoh.plugins.base.annotations.PluginImplementation;
+
+@PluginImplementation
 public class RouterCommand extends BaseCommand {
 
 	public final static String BUNDLE = "router";
