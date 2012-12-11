@@ -182,10 +182,10 @@ public class JavaAdapter {
 						
 						if (com.tactfactory.mda.android.command.Console.DEBUG) {
 							if (idAnnotation != null)
-								System.out.print("\t " + idAnnotation + "\n");
+								ConsoleUtils.display("\t " + idAnnotation + "\n");
 							
 							if (generateValueAnnotation != null)
-								System.out.print("\t " + generateValueAnnotation + "\n");
+								ConsoleUtils.display("\t " + generateValueAnnotation + "\n");
 						}
 					}
 				}*/

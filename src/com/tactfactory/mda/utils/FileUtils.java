@@ -88,10 +88,10 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			ConsoleUtils.displayDebug("File "+srcFile.getName()+" copied to "+destFile.getPath());
 			
 		} catch (FileNotFoundException ex) {
-			System.out.println(ex.getMessage() + " in the specified directory.");
+			ConsoleUtils.displayError(ex.getMessage() + " in the specified directory.");
 			//System.exit(0);
 		} catch (IOException e) {
-			System.out.println(e.getMessage());
+			ConsoleUtils.displayError(e.getMessage());
 		}
 	}
 	
@@ -104,13 +104,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		success = folder.mkdirs();
 	    if (success) {
 	        // Folder did not exists and was created
-			System.out.println("Folder '"+folder.getName()+"' did not exists and was created...");
+	    	ConsoleUtils.display("Folder '"+folder.getName()+"' did not exists and was created...");
 	    } else {
 	        // Folder already exists
 	    	if(folder.exists())
-				System.out.println("Folder '"+folder.getName()+"' already exists...");
+	    		ConsoleUtils.display("Folder '"+folder.getName()+"' already exists...");
 	    	else
-	    		System.out.println("Folder '"+folder.getName()+"' creation error...");
+	    		ConsoleUtils.display("Folder '"+folder.getName()+"' creation error...");
 	    }
 		
 		return folder;
@@ -160,7 +160,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			}
 			
 		}catch(IOException e){
-			System.out.println("Error : "+e.getMessage());
+			ConsoleUtils.displayError(e.getMessage());
 		}finally{
 			try{
 				br.close();
@@ -188,7 +188,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			bw.write(buff.toString());
 
 		}catch(IOException e){
-			System.out.println("Error : "+e.getMessage());
+			ConsoleUtils.displayError(e.getMessage());
 		}finally{
 			try{
 				bw.close();
@@ -237,18 +237,18 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		boolean success = false;
 
 		if(!tpl_folder.isDirectory())
-				System.out.println("Folder src '"+srcPath+"' is not a folder");
+			ConsoleUtils.display("Folder src '"+srcPath+"' is not a folder");
 		else if(tpl_files == null || tpl_files.length == 0)
-				System.out.println("No items inside '"+srcPath+"'");
+			ConsoleUtils.display("No items inside '"+srcPath+"'");
 		else
 		{
 			success = dest_folder.mkdirs();
 			if(dest_folder.exists())
 			{
 				if(success)
-						System.out.println("Folder '"+dest_folder.getName()+"' did not exists and was created...");
+					ConsoleUtils.display("Folder '"+dest_folder.getName()+"' did not exists and was created...");
 				else
-						System.out.println("Folder '"+dest_folder.getName()+"' already exists...");
+					ConsoleUtils.display("Folder '"+dest_folder.getName()+"' already exists...");
 				for(int i=0;i<tpl_files.length;i++)
 				{
 					if(tpl_files[i].isDirectory())
@@ -256,15 +256,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 						tmp_file = new File(destPath+tpl_files[i].getName()+"/");
 						success = tmp_file.mkdir();
 					    if (success) {
-					        // Folder did not exists and was created
-							if (Harmony.DEBUG)
-								System.out.println("Folder '"+tmp_file.getName()+"' did not exists and was created...");
+					    	ConsoleUtils.displayDebug("Folder '"+tmp_file.getName()+"' did not exists and was created...");
 					    } else {
 					        // Folder already exists
 					    	if(tmp_file.exists())
-									System.out.println("Folder '"+tmp_file.getName()+"' already exists...");
+					    		ConsoleUtils.display("Folder '"+tmp_file.getName()+"' already exists...");
 					    	else
-									System.out.println("Folder '"+tmp_file.getName()+"' creation error...");
+					    		ConsoleUtils.display("Folder '"+tmp_file.getName()+"' creation error...");
 					    }
 						FileUtils.makeFolderRecursive(String.format("%s%s/", srcPath, tpl_files[i].getName()),
 														String.format("%s%s/",destPath, tmp_file.getName()),false);
@@ -274,18 +272,15 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 						tmp_file = FileUtils.makeFile(destPath+tpl_files[i].getName());
 						if(tmp_file.exists()) {
 			    			FileUtils.copyfile(tpl_files[i], tmp_file);
-							if (Harmony.DEBUG)
-								System.out.println("File '"+tpl_files[i].getName()+"' created...");
+			    			ConsoleUtils.displayDebug("File '"+tpl_files[i].getName()+"' created...");
 						} else {
-							if (Harmony.DEBUG)
-								System.out.println("File '"+tpl_files[i].getName()+"' creation error...");
+							ConsoleUtils.displayError("File '"+tpl_files[i].getName()+"' creation error...");
 						}
 					}
 				}
 			}
 			else {
-				if (Harmony.DEBUG)
-					System.out.println("Folder '"+dest_folder.getName()+"' creation Error...");
+				ConsoleUtils.displayError("Folder '"+dest_folder.getName()+"' creation Error...");
 			}
 		}
 		return dest_folder;

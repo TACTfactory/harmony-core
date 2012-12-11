@@ -19,6 +19,7 @@ import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.plateforme.BaseAdapter;
@@ -103,8 +104,7 @@ public class JavaModelParser {
 			if (cu != null)
 				this.entities.add(cu);
         } else {
-        	if(Harmony.DEBUG)
-        		System.out.println("Given model file doesn't exist!");
+        	ConsoleUtils.displayWarning("Given model file doesn't exist!");
         }
 	}
 	
@@ -164,8 +164,7 @@ public class JavaModelParser {
 			if (cu != null)
 				this.entities.add(cu);
         } else {
-        	if(Harmony.DEBUG)
-        		System.out.println("Given model file doesn't exist!");
+        	ConsoleUtils.displayWarning("Given model file doesn't exist!");
         }
 	}
 

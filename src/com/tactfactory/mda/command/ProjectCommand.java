@@ -72,7 +72,7 @@ public class ProjectCommand extends BaseCommand {
 
 			while(!userHasConfirmed)
 			{
-				System.out.println(">> Project Parameters");
+				ConsoleUtils.display(">> Project Parameters");
 
 				//Project Name
 				if(!this.commandArgs.containsKey("name"))
@@ -92,11 +92,9 @@ public class ProjectCommand extends BaseCommand {
 				else
 					Harmony.androidSdkPath = this.commandArgs.get("androidsdk");
 
-				if(Harmony.DEBUG) {
-					System.out.println("Project Name: "			+ Harmony.projectName);
-					System.out.println("Project NameSpace: "	+ Harmony.projectNameSpace);
-					System.out.println("Android SDK Path: "		+ Harmony.androidSdkPath);
-				}
+				ConsoleUtils.displayDebug("Project Name: "			+ Harmony.projectName +
+						"\nProject NameSpace: "	+ Harmony.projectNameSpace +
+						"\nAndroid SDK Path: "		+ Harmony.androidSdkPath);
 
 				if (Harmony.isConsole) {
 					String accept = Harmony.getUserInput("Use below given parameters to process files? (y/n) ");
@@ -122,22 +120,18 @@ public class ProjectCommand extends BaseCommand {
 	 * @return success of Android project initialization
 	 */
 	public boolean initAndroid() {
-
-		System.out.println("\nInit Project Google Android\n----------------------\n");
+		ConsoleUtils.display("Init Project Google Android\n----------------------");
 
 		this.initProjectParam();
 		boolean result = false;
 
 		try {
 			if(new ProjectGenerator(this.adapterAndroid).makeProject()){
-				// Debug Log
-				if (Harmony.DEBUG)
-					System.out.println("Init Android Project Success!");
+				ConsoleUtils.displayDebug("Init Android Project Success!");
+				
 				result = true;
 			} else {
-				// Debug Log
-				if (Harmony.DEBUG)
-					System.out.println("Init Android Project Fail!");
+				ConsoleUtils.displayError("Init Android Project Fail!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -150,21 +144,16 @@ public class ProjectCommand extends BaseCommand {
 	 * @return success of IOS project initialization
 	 */
 	public boolean initIOS() {
-
-		System.out.println("\nInit Project Apple iOS\n----------------------\n");
+		ConsoleUtils.display("Init Project Apple iOS\n----------------------");
 
 		this.initProjectParam();
 		boolean result = false;
 		try {
 			if(new ProjectGenerator(this.adapterIOS).makeProject()){
-				// Debug Log
-				if (Harmony.DEBUG)
-					System.out.println("Init IOS Project Success!");
+				ConsoleUtils.displayDebug("Init IOS Project Success!");
 				result = true;
 			} else {
-				// Debug Log
-				if (Harmony.DEBUG)
-					System.out.println("Init IOS Project Fail!");
+				ConsoleUtils.displayError("Init IOS Project Fail!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -177,21 +166,16 @@ public class ProjectCommand extends BaseCommand {
 	 * @return success of RIM project initialization
 	 */
 	public boolean initRIM() {
-
-		System.out.println("\nInit Project BlackBerry RIM\n----------------------\n");
+		ConsoleUtils.display("Init Project BlackBerry RIM\n----------------------");
 
 		this.initProjectParam();
 		boolean result = false;
 		try {
 			if(new ProjectGenerator(this.adapterRIM).makeProject()){
-				// Debug Log
-				if (Harmony.DEBUG)
-					System.out.println("Init RIM Project Success!");
+				ConsoleUtils.displayDebug("Init RIM Project Success!");
 				result = true;
 			} else {
-				// Debug Log
-				if (Harmony.DEBUG)
-					System.out.println("Init RIM Project Fail!");
+				ConsoleUtils.displayError("Init RIM Project Fail!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -204,21 +188,16 @@ public class ProjectCommand extends BaseCommand {
 	 * @return success of Windows Phone project initialization
 	 */
 	public boolean initWinPhone() {
-
-		System.out.println("\nInit Project Windows Phone\n----------------------\n");
+		ConsoleUtils.display("Init Project Windows Phone\n----------------------");
 
 		this.initProjectParam();
 		boolean result = false;
 		try{
 			if(new ProjectGenerator(this.adapterWinPhone).makeProject()){
-				// Debug Log
-				if (Harmony.DEBUG)
-					System.out.println("Init WinPhone Project Success!");
+				ConsoleUtils.displayDebug("Init WinPhone Project Success!");
 				result = true;
 			} else {
-				// Debug Log
-				if (Harmony.DEBUG)
-					System.out.println("Init WinPhone Project Fail!");
+				ConsoleUtils.displayError("Init WinPhone Project Fail!");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -230,8 +209,7 @@ public class ProjectCommand extends BaseCommand {
 	 * Initialize all project platforms
 	 */
 	public void initAll() {
-
-		System.out.println("\nInit All Projects\n----------------------\n");
+		ConsoleUtils.display("Init All Projects\n----------------------");
 
 		this.initProjectParam();
 		this.initAndroid();
@@ -254,7 +232,7 @@ public class ProjectCommand extends BaseCommand {
 		}
 		try {
 			if(!new ProjectGenerator(this.adapterAndroid).removeProject())
-				System.out.println("Please check your file browser or file editor and try again...");
+				ConsoleUtils.display("Please check your file browser or file editor and try again...");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -275,7 +253,7 @@ public class ProjectCommand extends BaseCommand {
 		}
 		try {
 			if(!new ProjectGenerator(this.adapterIOS).removeProject())
-				System.out.println("Please check your file browser or file editor and try again...");
+				ConsoleUtils.display("Please check your file browser or file editor and try again...");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -296,7 +274,7 @@ public class ProjectCommand extends BaseCommand {
 		}
 		try {
 			if(!new ProjectGenerator(this.adapterRIM).removeProject())
-				System.out.println("Please check your file browser or file editor and try again...");
+				ConsoleUtils.display("Please check your file browser or file editor and try again...");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -317,7 +295,7 @@ public class ProjectCommand extends BaseCommand {
 		}
 		try {
 			if(!new ProjectGenerator(this.adapterWinPhone).removeProject())
-				System.out.println("Please check your file browser or file editor and try again...");
+				ConsoleUtils.display("Please check your file browser or file editor and try again...");
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -341,7 +319,7 @@ public class ProjectCommand extends BaseCommand {
 				!new ProjectGenerator(this.adapterIOS).removeProject() |
 				!new ProjectGenerator(this.adapterRIM).removeProject() |
 				!new ProjectGenerator(this.adapterWinPhone).removeProject() ){
-				System.out.println("Please check your file browser or file editor and try again...");
+				ConsoleUtils.display("Please check your file browser or file editor and try again...");
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

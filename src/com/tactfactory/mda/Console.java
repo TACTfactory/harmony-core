@@ -22,7 +22,8 @@ public class Console extends Harmony {
 	 */
 	public static void main(String[] args) throws Exception {
 		Harmony.isConsole = true;
-		System.out.println(Harmony.VERSION);
+		
+		ConsoleUtils.display(Harmony.VERSION);
 
 		// Check if has a parameter
 		if (args.length == 0) {
@@ -40,7 +41,7 @@ public class Console extends Harmony {
 					// "\t--env\t\t -e The Environment name.\n" + 
 					"\t--no-debug \t    Switches off debug mode.\n\n");
 
-			//System.out.print("Usage : console testBundle:com/tactfactory/mdatest/android:User");
+			//ConsoleUtils.display("Usage : console testBundle:com/tactfactory/mdatest/android:User");
 			ConsoleUtils.display("Tips : please use 'list' command to display available commands!\n");
 			throw new Exception("Usage Exception, please launch help !");
 			
