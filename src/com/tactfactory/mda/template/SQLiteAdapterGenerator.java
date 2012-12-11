@@ -83,7 +83,8 @@ public class SQLiteAdapterGenerator {
 					
 					// One to One relation
 					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@OneToOne") ) {
-	
+						ConsoleUtils.display("\tFound a @OneToOne relation in "+modelClass.get(TagConstant.NAME) );
+						
 					} else
 						
 					// One to Many relation
@@ -126,11 +127,13 @@ public class SQLiteAdapterGenerator {
 					
 					// Many to One relation
 					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@ManyToOne")) {
-	
+						ConsoleUtils.display("\tFound a @ManyToOne relation in "+modelClass.get(TagConstant.NAME) );
+						
 					} else
 					
 					// Many to Many relation
 					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@ManyToMany")) {
+						ConsoleUtils.display("\tFound a @ManyToMany relation in "+modelClass.get(TagConstant.NAME) );
 	
 					} else {
 						
@@ -169,6 +172,7 @@ public class SQLiteAdapterGenerator {
 	
 	@SuppressWarnings("unchecked")
 	public void generateAll() {
+		ConsoleUtils.display(">> Generate Adapter...");
 		
 		for(Object modelEntity : this.entities.values()) {
 			
@@ -191,7 +195,7 @@ public class SQLiteAdapterGenerator {
 	
 	private void generate() {
 		// Info
-		ConsoleUtils.display(">> Generate Adapter for " +  this.datamodel.get(TagConstant.NAME));
+		ConsoleUtils.display(">>> Generate Adapter for " +  this.datamodel.get(TagConstant.NAME));
 		
 		try {
 			Configuration cfg = new Configuration();
@@ -233,7 +237,7 @@ public class SQLiteAdapterGenerator {
 			File file = FileUtils.makeFile(filePath);
 			
 			// Debug Log
-			ConsoleUtils.displayDebug("\tGenerate Source : " + file.getPath()); 
+			ConsoleUtils.displayDebug("Generate Source : " + file.getPath()); 
 			
 			// Create
 			Template tpl = cfg.getTemplate(

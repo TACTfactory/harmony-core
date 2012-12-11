@@ -23,7 +23,7 @@ public class Console extends Harmony {
 	public static void main(String[] args) throws Exception {
 		Harmony.isConsole = true;
 		
-		ConsoleUtils.display(Harmony.VERSION);
+		ConsoleUtils.displayLicence("Harmony version " + Harmony.VERSION);
 
 		// Check if has a parameter
 		if (args.length == 0) {
@@ -43,7 +43,7 @@ public class Console extends Harmony {
 
 			//ConsoleUtils.display("Usage : console testBundle:com/tactfactory/mdatest/android:User");
 			ConsoleUtils.display("Tips : please use 'list' command to display available commands!\n");
-			throw new Exception("Usage Exception, please launch help !");
+			//throw new Exception("Usage Exception, please launch help !");
 			
 		} else {
 			String command = null;
@@ -54,6 +54,16 @@ public class Console extends Harmony {
 			String commandOption = null;
 			String platformTmp = "";
 			//TargetPlatform platform = null;
+			
+			for (int i = 0; i < args.length; i++) {
+				String arg = args[i];
+				
+				if (arg.startsWith("--")) {
+					
+				}
+					
+				
+			}
 			
 			// Extract command
 			String[] cmd = args[0].split(":");
@@ -69,8 +79,7 @@ public class Console extends Harmony {
 			else if(cmd.length>3){
 				platformTmp = cmd[3];
 				//platform = TargetPlatform.parse(platformTmp);
-			}
-			else {
+			} else {
 				command = args[0];
 			}
 			
