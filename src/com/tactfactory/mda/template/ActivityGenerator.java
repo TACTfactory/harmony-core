@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -65,42 +66,58 @@ public class ActivityGenerator {
 			modelClass.put(TagConstant.NAME,	meta.name );
 			modelClass.put(TagConstant.LOCAL_NAMESPACE,	this.adapter.getNameSpaceEntity(this.meta, this.adapter.getController()) );
 			
-			// Make fields
-			ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
-			for (FieldMetadata field : this.meta.fields.values()) {
-				Map<String, Object> modelField = new HashMap<String, Object>();
-				field.customize(adapter);
-	
-				modelField.put(TagConstant.NAME, field.name);
-				modelField.put(TagConstant.TYPE, field.type);
-				modelField.put("customEditType", field.customEditType);
-				modelField.put("customShowType", field.customShowType);
-	
-				modelFields.add(modelField);
-			}
-			
-			// Make relations
-			ArrayList<Map<String, Object>> modelRelations = new ArrayList<Map<String,Object>>();
 
-			for (FieldMetadata relation : this.meta.relations.values()) {
-				Map<String, Object> modelRelation = new HashMap<String, Object>();
-				relation.customize(adapter);
-				
-				modelRelation.put(TagConstant.NAME, relation.name);
-				modelRelation.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(relation));
-				modelRelation.put(TagConstant.TYPE, relation.type);
-				modelRelation.put(TagConstant.RELATION_TYPE, relation.columnDefinition);
-				modelRelation.put("customEditType", relation.customEditType);
-				modelRelation.put("customShowType", relation.customShowType);
-				
-				modelRelations.add(modelRelation);
-			}
+			
+			ArrayList<Map<String, Object>> modelFields = this.loadSubFields(this.meta.fields.values());
+			ArrayList<Map<String, Object>> modelRelations = this.loadSubFields(this.meta.relations.values());
 			
 			modelClass.put(TagConstant.FIELDS, modelFields);
 			modelClass.put(TagConstant.RELATIONS, modelRelations);
 			
 			this.modelEntities.add(modelClass);
 		}
+	}
+	
+	/**
+	 * @return
+	 */
+	private ArrayList<Map<String, Object>> loadSubFields(Collection<FieldMetadata> values) {
+		ArrayList<Map<String, Object>> SubFields = new ArrayList<Map<String,Object>>();
+		for (FieldMetadata field : values) {
+			Map<String, Object> subField = new HashMap<String, Object>();
+			
+			// General
+			subField.put(TagConstant.NAME, field.name);
+			subField.put(TagConstant.TYPE, field.type);
+			subField.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(field));
+
+			subField.put("customEditType", field.customEditType);
+			subField.put("customShowType", field.customShowType);
+			
+			// if ids
+			
+			// if models
+			field.customize(adapter);
+			subField.put(TagConstant.SCHEMA, SqliteAdapter.generateStructure(field));
+			
+			// if relations
+			if(field.relation!=null)
+				subField.put(TagConstant.RELATION, loadRelationSubField(field));
+			
+			SubFields.add(subField);
+		}
+		return SubFields;
+	}
+	
+	private Map<String, Object> loadRelationSubField(FieldMetadata fm){
+		Map<String, Object> relationSF = new HashMap<String, Object>();
+		
+		relationSF.put(TagConstant.TYPE, fm.relation.type);
+		relationSF.put("field_ref", fm.relation.field_ref);
+		relationSF.put("targetEntity", fm.relation.entity_ref);
+		relationSF.put(TagConstant.NAME, fm.relation.name);
+		
+		return relationSF;
 	}
 
 	public ActivityGenerator(List<ClassMetadata> metas, BaseAdapter adapter, Boolean isWritable) throws Exception {

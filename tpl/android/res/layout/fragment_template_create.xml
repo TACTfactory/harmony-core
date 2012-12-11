@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 <#list fields as field>
+	<#if !field.relation??>
     <TextView 
     	android:id="@+id/${name?lower_case}_${field.name?lower_case}_label"
 	    android:layout_width="match_parent"
@@ -22,16 +23,18 @@
 	    <#elseif field.type=="password">
 	    android:inputType="password"
 	    </#if >
-	    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />	    
+	    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />
+		<#assign lastField="${name?lower_case}_${field.name?lower_case}">
+	</#if>
 </#list>
 <#list relations as relation>
-	<#if relation.relation_type=="@ManyToOne">
+	<#if relation.relation.type=="ManyToOne">
     <TextView 
     	android:id="@+id/${name?lower_case}_${relation.name?lower_case}_label"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    <#if relation_index==0>
-	    android:layout_below="@+id/${name?lower_case}_${fields?last.name?lower_case}"
+	    android:layout_below="@+id/${lastField}"
 	    <#else>
 	    android:layout_below="@+id/${name?lower_case}_${relations[relation_index-1].name?lower_case}_spinner"
 	    </#if>

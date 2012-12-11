@@ -17,7 +17,7 @@ import ${namespace}.entity.${name};
 
 /** ${name} show fragment
  * 
- * @see android.app.Fragment
+ * see android.app.Fragment
  */
 public class ${name}ShowFragment extends Fragment {
 	/* Model data */
@@ -25,24 +25,26 @@ public class ${name}ShowFragment extends Fragment {
 	
 	/* Fields View */
 <#list fields as field>
-    protected ${field.customShowType} ${field.name}View; 
+	<#if !field.relation??>
+    protected ${field.customShowType} ${field.name}View;
+	</#if>
 </#list>
 <#list relations as relation>
-	<#if relation.relation_type=="@ManyToOne">
+	<#if relation.relation.type=="ManyToOne">
 	protected ${relation.customShowType} ${relation.name}View;
 	</#if>
 </#list>
     
     /** Initialize view of fields 
      * 
-     * @param view The layout inflating
+     * param view The layout inflating
      */
     protected void initializeComponent(View view) {
 	<#foreach field in fields>
 		this.${field.name}View = (${field.customShowType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}); 
 	</#foreach>
 	<#list relations as relation>
-		<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+		<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
 		this.${relation.name}View = (${relation.customShowType}) view.findViewById(R.id.${name?lower_case}_${relation.name?lower_case});
 		</#if>
 	</#list>
@@ -67,7 +69,7 @@ public class ${name}ShowFragment extends Fragment {
 			</#if>
 		</#foreach>
 		<#list relations as relation>
-			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+			<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
 		this.${relation.name}View.setText(String.valueOf(this.model.get${relation.name?cap_first}().getId())); 
 			</#if>
 		</#list>
@@ -75,7 +77,7 @@ public class ${name}ShowFragment extends Fragment {
     
     /** Sets up the UI.
 	 * 
-	 * @see android.support.v4.app.Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)
+	 * see android.support.v4.app.Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {    	

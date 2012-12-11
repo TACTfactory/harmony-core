@@ -60,14 +60,11 @@ public final class AndroidAdapter extends BaseAdapter {
 		if (field.type.equals("Boolean")) {
 			result = "TextView";
 		}
-		
-//<<<<<<< HEAD
-//		if(field.relation !=null && field.relation.type.equals("@ManyToOne")) {
-//=======
-//		if (field.columnDefinition.equals("@ManyToOne")) {
-//>>>>>>> refs/heads/master
-//			result = "TextView";
-//		}
+
+		if(field.relation !=null && field.relation.type.equals("ManyToOne")) {
+
+			result = "Spinner";
+		}
 		
 		return result;
 	}
@@ -91,13 +88,10 @@ public final class AndroidAdapter extends BaseAdapter {
 			result = "CheckBox";
 		}
 			
-//<<<<<<< HEAD
-//		if(field.relation !=null && field.relation.type.equals("@ManyToOne")) {
-//=======
-//		if(field.columnDefinition.equals("@ManyToOne")) {
-//>>>>>>> refs/heads/master
-//			result = "Spinner";
-//		}
+		if(field.relation !=null && field.relation.type.equals("ManyToOne")) {
+
+			result = "Spinner";
+		}
 		
 		return result;
 	}
