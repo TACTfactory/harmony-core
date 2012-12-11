@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.google.common.base.Strings;
+import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.annotation.Column;
 import com.tactfactory.mda.orm.annotation.Entity;
@@ -61,7 +62,6 @@ public class JavaAdapter {
 				new FieldVisitor().visit(mclass, meta);
 				new MethodVisitor().visit(mclass, meta);
 				
-				
 				this.metas.add(meta);
 			}
 		}
@@ -78,12 +78,10 @@ public class JavaAdapter {
 				for (AnnotationExpr annotationExpr : classAnnotations) {
 					String annotationType = annotationExpr.getName().toString();
 					if (annotationType.equals(FILTER_ENTITY)) {
-						 
 						meta.name = PackageUtils.extractNameEntity(n.getName());
 						
 						// Debug Log
-						if (Harmony.DEBUG)
-							System.out.print("\tEntity: " + meta.space + ".entity." +  meta.name + "\n");
+						ConsoleUtils.displayDebug("\tEntity : " + meta.space + ".entity." +  meta.name);
 					}
 				}
 				
@@ -92,7 +90,10 @@ public class JavaAdapter {
 					List<ClassOrInterfaceType> impls = n.getImplements();
 					if(impls!=null){
 						for(ClassOrInterfaceType impl : impls){					
-							meta.impls.add(impl.getName());		
+							meta.impls.add(impl.getName());
+							
+							// Debug Log
+							ConsoleUtils.displayDebug("\t\tImplement : " + impl.getName());
 						}
 					}
 					
@@ -101,6 +102,9 @@ public class JavaAdapter {
 					if(exts!=null){
 						for(ClassOrInterfaceType ext : exts){					
 							meta.exts = ext.getName();		
+							
+							// Debug Log
+							ConsoleUtils.displayDebug("\t\tExtend : " + ext.getName());
 						}
 					}
 					
@@ -253,6 +257,8 @@ public class JavaAdapter {
 		
 
 		/**
+		 * Check if Id annotation is present in entity
+		 * 
 		 * @param fieldMeta
 		 * @param isId
 		 * @param annotationType
@@ -265,14 +271,15 @@ public class JavaAdapter {
 				isId = true;
 				
 				// Debug Log
-				if (Harmony.DEBUG)
-					System.out.print("\t    ID: " + fieldMeta.name +"\n");
+				ConsoleUtils.displayDebug("\t\tID : " + fieldMeta.name);
 			}
 			
 			return isId;
 		}
 		
 		/**
+		 * Check if Column annotation is present in entity
+		 * 
 		 * @param fieldMeta
 		 * @param annotationType
 		 * @return
@@ -286,20 +293,20 @@ public class JavaAdapter {
 				isColumn = true;
 				
 				// Debug Log
-				if (Harmony.DEBUG) {
-					String type = "Column";
-					//if (type.equals()) 
-						
-						
-					System.out.print("\t    " + type + ": " + fieldMeta.name + 
-							" type of " + fieldMeta.type +"\n");
-				}
+				String type = "Column";
+				if (annotationType.equals(FILTER_JOINCOLUMN))
+					type = "Join Column";
+				
+				ConsoleUtils.displayDebug("\t\t" + type + " : " + fieldMeta.name + 
+						" type of " + fieldMeta.type);
 			}
 			
 			return isColumn;
 		}
 
 		/**
+		 * Check if Relation annotation is present in entity
+		 * 
 		 * @param fieldMeta
 		 * @param annotationType
 		 * @return
@@ -314,9 +321,8 @@ public class JavaAdapter {
 				isRelation = true;
 				
 				// Debug Log
-				if (Harmony.DEBUG)
-					System.out.print("\t    Relation " + annotationType + ": " + fieldMeta.name + 
-							" type of " + fieldMeta.type +"\n");
+				ConsoleUtils.displayDebug("\t\tRelation " + annotationType + 
+						" : " + fieldMeta.name + " type of " + fieldMeta.type);
 			}
 			
 			return isRelation;
@@ -339,10 +345,12 @@ public class JavaAdapter {
 				}
 			}
 			
+			meta.methods.add(methodMeta);
+			
 			// Debug Log
 			if(Harmony.DEBUG){
 				StringBuilder builder = new StringBuilder(
-						String.format("\t\tFound method : %s %s(", methodMeta.type, methodMeta.name));
+						String.format("\t\tMethod : %s %s(", methodMeta.type, methodMeta.name));
 				
 				for(String args : methodMeta.argumentsTypes) {
 					if (args != methodMeta.argumentsTypes.get(0))
@@ -353,11 +361,8 @@ public class JavaAdapter {
 					
 				builder.append(")");
 
-				System.out.println(builder.toString());
+				ConsoleUtils.displayDebug(builder.toString());
 			}
-			
-			meta.methods.add(methodMeta);
-			
 		}
 	}
 	
@@ -368,6 +373,8 @@ public class JavaAdapter {
 			String impName = imp.getName().getName();
 			meta.imports.add(impName);
 			
+			// Debug Log
+			ConsoleUtils.displayDebug("\t\tImport : " + impName);
 		}
 	}
 }

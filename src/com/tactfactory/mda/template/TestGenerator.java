@@ -16,6 +16,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
@@ -75,7 +76,7 @@ public class TestGenerator {
 	 */ 
 	private void generate() {
 		// Info
-		System.out.print(">> Generate DB test source for " +  this.datamodel.get(TagConstant.NAME) + "\n");
+		ConsoleUtils.display(">> Generate DB test source for " +  this.datamodel.get(TagConstant.NAME));
 		
 		try {
 			Configuration cfg = new Configuration();
@@ -92,8 +93,6 @@ public class TestGenerator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		System.out.print("\n");
 	}
 	
 	/** Make Java Source Code
@@ -114,8 +113,7 @@ public class TestGenerator {
 			File file = FileUtils.makeFile(filepath);
 			
 			// Debug Log
-			if (Harmony.DEBUG)
-				System.out.print("\tGenerate Source : " + file.getPath() + "\n"); 
+			ConsoleUtils.displayDebug("\tGenerate Source : " + file.getPath()); 
 	
 			// Create
 			Template tpl = cfg.getTemplate(

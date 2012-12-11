@@ -18,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
@@ -71,7 +72,7 @@ public class SQLiteAdapterGenerator {
 		}
 
 		//Message info
-		System.out.println(">> Analyse Databases relations in models");
+		ConsoleUtils.display(">> Analyse Databases relations in models");
 		
 		//List each entity hashmap
 		for(Object metaMap : this.entities.values()) {
@@ -89,11 +90,11 @@ public class SQLiteAdapterGenerator {
 						
 					// One to Many relation
 					if( ((String)relation.get(TagConstant.TYPE)).equals("@OneToMany")) {
-						System.out.println("\tFound a @OneToMany relation in "+modelClass.get(TagConstant.NAME) );
+						ConsoleUtils.display("\tFound a @OneToMany relation in "+modelClass.get(TagConstant.NAME) );
 						
 						// Target Entity type
 						String targetEntity = ((String)relation.get(TagConstant.TYPE)).replace("ArrayList<","").replace(">","");
-						System.out.println("\tCheck if @ManyToOne exists in "+targetEntity);
+						ConsoleUtils.display("\tCheck if @ManyToOne exists in "+targetEntity);
 						
 						// Get Target Entity Relations
 						if(this.entities.containsKey(targetEntity)) {
@@ -105,10 +106,10 @@ public class SQLiteAdapterGenerator {
 								
 								if(	targetRelation.get(TagConstant.TYPE).equals(modelClass.get(TagConstant.NAME).toString())
 											&& targetRelation.get(TagConstant.TYPE).toString().equals("@ManyToOne")) {
-									System.out.println("\t@ManyToOne Relation exists, no need to add column... ");
+									ConsoleUtils.display("\t@ManyToOne Relation exists, no need to add column... ");
 									break;
 								} else {
-									System.out.println("\tNo @ManyToOne relation found, creating column...");
+									ConsoleUtils.display("\tNo @ManyToOne relation found, creating column...");
 		
 									Map<String, Object> modelRelation = new HashMap<String, Object>();
 									modelRelation.put(TagConstant.NAME,				modelClass.get(TagConstant.NAME).toString().toLowerCase());
@@ -119,9 +120,9 @@ public class SQLiteAdapterGenerator {
 								}
 							}
 	
-							System.out.print("\n");
+							ConsoleUtils.display("..$..");
 						} else {
-							System.out.println("\tTarget Entity not found please add it or use orm:generate:entities...");
+							ConsoleUtils.displayWarning("\tTarget Entity not found please add it or use orm:generate:entities...");
 						}
 					} else
 					
@@ -204,7 +205,7 @@ public class SQLiteAdapterGenerator {
 	
 	private void generate() {
 		// Info
-		System.out.print(">> Generate Adapter for " +  this.datamodel.get(TagConstant.NAME) + "\n");
+		ConsoleUtils.display(">> Generate Adapter for " +  this.datamodel.get(TagConstant.NAME));
 		
 		try {
 			Configuration cfg = new Configuration();
@@ -225,8 +226,6 @@ public class SQLiteAdapterGenerator {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		System.out.print("\n");
 	}
 	
 	/** Make Java Source Code
@@ -248,8 +247,7 @@ public class SQLiteAdapterGenerator {
 			File file = FileUtils.makeFile(filePath);
 			
 			// Debug Log
-			if (Harmony.DEBUG)
-				System.out.print("\tGenerate Source : " + file.getPath() + "\n"); 
+			ConsoleUtils.displayDebug("\tGenerate Source : " + file.getPath()); 
 			
 			// Create
 			Template tpl = cfg.getTemplate(

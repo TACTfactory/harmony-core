@@ -10,6 +10,7 @@ package com.tactfactory.mda.command;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
+import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 
 @PluginImplementation
@@ -21,12 +22,11 @@ public class GeneralCommand extends BaseCommand {
 	 * Display Help Message
 	 */
 	public void help() {
-		System.out.println("\nUsage:\n" +
-				"console [command[parameters]]\n");
-		System.out.println("Usage example:\n" +
-				"console project:init:android --name=test --namespace=com/tact/android/test --sdkdir=/root/android\n");
-		
-		System.out.println("Please use 'console list' to display available commands !");
+		ConsoleUtils.display("Usage:\n" +
+				"\tconsole [command [--parameters]]\n" +
+				"\nUsage example:\n" +
+				"\tconsole project:init:android --name=test --namespace=com/tact/android/test --sdkdir=/root/android\n" +
+				"\nPlease use 'console list' to display available commands !");
 	}
 
 	/*
@@ -35,7 +35,7 @@ public class GeneralCommand extends BaseCommand {
 	public void list() {
 		Command general = Harmony.instance.bootstrap.get(GeneralCommand.class);
 		
-		System.out.print("\nAvailable Commands:\n");
+		ConsoleUtils.display("Available Commands:");
 		general.summary();
 		
 		for (Command baseCommand : Harmony.instance.bootstrap.values()) {
@@ -46,9 +46,9 @@ public class GeneralCommand extends BaseCommand {
 	
 	@Override
 	public void summary() {
-		System.out.print("\n> General \n");
-		System.out.print("\t"+HELP+"\t => Display this help message\n");
-		System.out.print("\t"+LIST+"\t => List all commands\n");
+		ConsoleUtils.display("\n> General \n"+
+				"\t"+HELP+"\t\t\t => Display this help message\n"+
+				"\t"+LIST+"\t\t\t => List all commands");
 	}
 
 	@Override

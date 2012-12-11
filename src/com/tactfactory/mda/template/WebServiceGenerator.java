@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
@@ -78,7 +79,7 @@ public class WebServiceGenerator {
 	
 	public void generateAll() {
 		// Info
-		System.out.print(">> Generate WebService\n");
+		ConsoleUtils.display(">> Generate WebService");
 		
 		List<String> command = new ArrayList<String>();
 		command.add("php");
@@ -87,7 +88,7 @@ public class WebServiceGenerator {
 		this.console = new SystemCommand();
 		this.console.executeCommand();
 		
-		System.out.print(console.getStandardOutputFromCommand()+"\n");
+		ConsoleUtils.displayDebug(console.getStandardOutputFromCommand().toString());
 	}
 	
 	private void generateSymfonyEntities() {

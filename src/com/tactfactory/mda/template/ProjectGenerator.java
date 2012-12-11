@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
@@ -107,8 +108,7 @@ public class ProjectGenerator {
 				destFile = FileUtils.makeFile(destPath);
 	
 			// Debug Log
-			if (Harmony.DEBUG)
-				System.out.print("\tGenerate Project File : " + destFile.getPath() + "\n"); 
+		ConsoleUtils.displayDebug("\tGenerate Project File : " + destFile.getPath()); 
 	
 	
 			// Create
@@ -295,8 +295,7 @@ public class ProjectGenerator {
 		File file = FileUtils.makeFile(this.adapter.getHomeActivityPathFile() );
 
 		// Debug Log
-		if (Harmony.DEBUG)
-			System.out.print("\tGenerate Source : " + file.getPath() + "\n"); 
+		ConsoleUtils.displayDebug("\tGenerate Source : " + file.getPath()); 
 
 		// Create
 		Template tpl = cfg.getTemplate(this.adapter.getTemplateHomeActivityPathFile().substring(1));
