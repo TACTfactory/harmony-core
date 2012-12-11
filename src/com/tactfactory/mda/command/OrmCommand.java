@@ -196,8 +196,6 @@ public class OrmCommand extends BaseCommand {
 				javaAdapter.parse(mclass);
 			}
 	
-			ConsoleUtils.display("");
-	
 			// Generate views from MetaData
 			ret = javaAdapter.getMetas();			
 		} else {

@@ -8,7 +8,7 @@ import print.color.ColoredPrinter;
 public class ConsoleUtils {
 	public static boolean quiet = false;
 	
-	private static ColoredPrinter cp = new ColoredPrinter.Builder(1, false).build();
+	private static ColoredPrinter cp = new ColoredPrinter.Builder(0, false).build();
 	
 	public static void display(String value) {
 		if (!quiet)
@@ -17,23 +17,23 @@ public class ConsoleUtils {
 	
 	public static void displayWarning(String value) {
 		if (!quiet)
-			cp.println(value, Attribute.NONE, FColor.YELLOW, BColor.NONE);
+			cp.println(value, Attribute.NONE, FColor.YELLOW, BColor.BLACK);
 	}
 	
 	public static void displayDebug(String value) {
 		if (!quiet && Harmony.DEBUG)
-			cp.println("[DEBUG]\t" + value + "\n", Attribute.NONE, FColor.BLUE, BColor.NONE);
+			cp.println("[DEBUG]\t" + value + "\n", Attribute.NONE, FColor.BLUE, BColor.BLACK);
 	}
 	
 	public static void displayError(String value) {
 		if (!quiet) {
-			cp.println("[ERROR]\t" + value + "\n", Attribute.NONE, FColor.RED, BColor.NONE);
+			cp.println("[ERROR]\t" + value + "\n", Attribute.NONE, FColor.RED, BColor.BLACK);
 		}
 	}
 
 	public static void displayLicence(String value) {
 		if (!quiet)
-			cp.println(value+ "\n", Attribute.BOLD, FColor.GREEN, BColor.NONE);
+			cp.println(value+ "\n", Attribute.BOLD, FColor.GREEN, BColor.BLACK);
 	}
 
 }
