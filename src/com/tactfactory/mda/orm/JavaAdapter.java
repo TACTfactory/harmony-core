@@ -139,7 +139,8 @@ public class JavaAdapter {
 				fieldMeta.nullable = false; // Default nullable is false
 				fieldMeta.unique = false; 
 				
-				HashMap<String, String> rel = new HashMap<String, String>();
+				//HashMap<String, String> rel = new HashMap<String, String>();
+				RelationMetadata rel = new RelationMetadata();
 				
 				// Database
 				boolean isColumn = false;
@@ -157,7 +158,7 @@ public class JavaAdapter {
 							annotationType.equals(FILTER_ONE2MANY)	||
 							annotationType.equals(FILTER_MANY2ONE)	||
 							annotationType.equals(FILTER_MANY2MANY)	){
-						rel.put("type", annotationType);
+						rel.type = annotationType;
 					}
 					
 					this.loadAttributes(rel, fieldMeta, annotationExpr, annotationType);
@@ -173,15 +174,10 @@ public class JavaAdapter {
 				//}
 	
 				if (isRelation) {
-					//meta.relations.put(fieldMeta.name, fieldMeta);
-					if(!rel.containsKey("fieldName")) 
-						rel.put("fieldName", fieldMeta.name);
-					rel.put("targetEntity",fieldMeta.type);
-					try {
-						meta.putRelation(rel.get("fieldName"), rel);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+					rel.field = fieldMeta.name;
+					rel.entity_ref = PackageUtils.extractClassNameFromArray(fieldMeta.type);
+					fieldMeta.relation = rel;
+					meta.relations.put(fieldMeta.name, fieldMeta);
 				}
 				
 				if (Strings.isNullOrEmpty(fieldMeta.columnDefinition)) {
@@ -199,7 +195,7 @@ public class JavaAdapter {
 		 * @param annotationExpr
 		 * @param annotationType
 		 */
-		private void loadAttributes(HashMap<String, String> rel, FieldMetadata fieldMeta, AnnotationExpr annotationExpr, String annotationType) {
+		private void loadAttributes(RelationMetadata rel, FieldMetadata fieldMeta, AnnotationExpr annotationExpr, String annotationType) {
 			if (annotationExpr instanceof NormalAnnotationExpr) {
 				NormalAnnotationExpr norm = (NormalAnnotationExpr)annotationExpr;
 				
@@ -242,11 +238,11 @@ public class JavaAdapter {
 						} else
 						
 						if (annotationType.equals(FILTER_JOINCOLUMN)) { // for @JoinColumn
-							if(mvp.getName().equals("referencedColumnName")){
-								rel.put("referencedColumnName", mvp.getValue().toString());
-							}
+							/*if(mvp.getName().equals("referencedColumnName")){
+								rel.field_ref.add(mvp.getValue().toString());
+							}*/
 							if(mvp.getName().equals("name")){
-								rel.put("name", mvp.getValue().toString());
+								rel.name = mvp.getValue().toString();
 							}
 						}
 					}	

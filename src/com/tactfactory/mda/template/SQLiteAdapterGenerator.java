@@ -80,15 +80,15 @@ public class SQLiteAdapterGenerator {
 				
 				//List each entity relation field
 				for (Object metaRelations : (ArrayList<Map<String, Object>>)modelClass.get(TagConstant.RELATIONS) ) {
-					Map<String, Object> relation = (Map<String, Object>) metaRelations;
+					Map<String, Object> relation = (Map<String, Object>) ((Map<String, Object>) metaRelations).get(TagConstant.RELATION);
 					
 					// One to One relation
-					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@OneToOne") ) {
+					if( ((String)relation.get(TagConstant.TYPE)).equals("@OneToOne") ) {
 	
 					} else
 						
 					// One to Many relation
-					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@OneToMany")) {
+					if( ((String)relation.get(TagConstant.TYPE)).equals("@OneToMany")) {
 						System.out.println("\tFound a @OneToMany relation in "+modelClass.get(TagConstant.NAME) );
 						
 						// Target Entity type
@@ -104,7 +104,7 @@ public class SQLiteAdapterGenerator {
 							for(Map<String,Object> targetRelation : targetRelations) {
 								
 								if(	targetRelation.get(TagConstant.TYPE).equals(modelClass.get(TagConstant.NAME).toString())
-											&& targetRelation.get(TagConstant.RELATION_TYPE).toString().equals("@ManyToOne")) {
+											&& targetRelation.get(TagConstant.TYPE).toString().equals("@ManyToOne")) {
 									System.out.println("\t@ManyToOne Relation exists, no need to add column... ");
 									break;
 								} else {
@@ -126,12 +126,12 @@ public class SQLiteAdapterGenerator {
 					} else
 					
 					// Many to One relation
-					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@ManyToOne")) {
+					if( ((String)relation.get(TagConstant.TYPE)).equals("@ManyToOne")) {
 	
 					} else
 					
 					// Many to Many relation
-					if( ((String)relation.get(TagConstant.RELATION_TYPE)).equals("@ManyToMany")) {
+					if( ((String)relation.get(TagConstant.TYPE)).equals("@ManyToMany")) {
 	
 					} else {
 						
@@ -161,11 +161,23 @@ public class SQLiteAdapterGenerator {
 			subField.put(TagConstant.SCHEMA, SqliteAdapter.generateStructure(field));
 			
 			// if relations
-			subField.put(TagConstant.RELATION_TYPE, field.columnDefinition);
+			if(field.relation!=null)
+				subField.put(TagConstant.RELATION, loadRelationSubField(field));
 			
 			SubFields.add(subField);
 		}
 		return SubFields;
+	}
+	
+	private Map<String, Object> loadRelationSubField(FieldMetadata fm){
+		Map<String, Object> relationSF = new HashMap<String, Object>();
+		
+		relationSF.put(TagConstant.TYPE, fm.relation.type);
+		relationSF.put("field_ref", fm.relation.field_ref);
+		relationSF.put("targetEntity", fm.relation.entity_ref);
+		relationSF.put(TagConstant.NAME, fm.relation.name);
+		
+		return relationSF;
 	}
 	
 	@SuppressWarnings("unchecked")

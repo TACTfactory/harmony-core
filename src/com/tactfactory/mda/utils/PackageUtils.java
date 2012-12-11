@@ -31,4 +31,15 @@ public class PackageUtils {
 	public static String extractPath(String bundlePackage) {
 		return bundlePackage.replace('.', '/');
 	}
+	
+	public static String extractClassNameFromArray(String arrayName){
+		String cName = arrayName;
+		if(arrayName.contains("<")){
+			cName = arrayName.substring(arrayName.indexOf("<")+1, arrayName.indexOf(">"));
+		}else if(arrayName.contains("[]")){
+			cName = arrayName.substring(0, arrayName.indexOf("["));
+		}
+		
+		return cName;
+	}
 }

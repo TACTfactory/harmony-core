@@ -1,5 +1,7 @@
 package com.tactfactory.mda.orm;
 
+import java.util.ArrayList;
+
 /** Entity relation Metadata*/
 public class RelationMetadata {
 
@@ -13,5 +15,8 @@ public class RelationMetadata {
 	public String entity_ref;
 	
 	/** The related entity's field which will be used for the relation*/
-	public String field_ref;
+	public ArrayList<String> field_ref = new ArrayList<String>();
+
+	/** The Foreign Key name*/
+	public String name;
 }

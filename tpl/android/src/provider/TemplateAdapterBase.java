@@ -13,7 +13,7 @@ import android.util.Log;
 import ${project_namespace}.BuildConfig;
 import ${project_namespace}.entity.${name};
 <#list relations as relation>
-	<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+	<#if (relation.relation.type=="@OneToOne" | relation.relation.type=="@ManyToOne")>
 import ${project_namespace}.entity.${relation.type};
 	</#if>
 </#list>
@@ -29,7 +29,7 @@ public abstract class ${name}AdapterBase {
 	public static final String TABLE_NAME = "${name}";
 	<#if relations??>
 		<#list relations as relation>
-			<#if relation.relation_type=="@ManyToMany">
+			<#if relation.relation.type=="@ManyToMany">
 	public static final String RELATION_${relation.name?upper_case}_TABLE_NAME ="${name}_to_${relation.name?cap_first}";
 			</#if>
 		</#list>
@@ -41,7 +41,7 @@ public abstract class ${name}AdapterBase {
 	</#list>
 	<#if relations??>
 		<#list relations as relation>
-			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+			<#if (relation.relation.type=="@OneToOne" | relation.relation.type=="@ManyToOne")>
 	public static final String ${relation.alias} = "${relation.name}";
 			</#if>
 		</#list>
@@ -50,11 +50,13 @@ public abstract class ${name}AdapterBase {
 	/** Global Fields */
 	public static final String[] COLS = new String[] {
 		<#list fields as field>
-		${field.alias}<#if field_has_next>,<#else><#if relations?size!=0>,</#if></#if>
+		<#if !field.relation??>
+		COL_${field.name?upper_case}<#if field_has_next>,<#else><#if relations?size!=0>,</#if></#if>
+		</#if>
 		</#list>
 		<#list relations as relation>
-			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
-		${relation.alias}<#if (relation_has_next && (relations[relation_index+1].relation_type=="@OneToOne" | relations[relation_index+1].relation_type=="@ManyToOne"))>,</#if>
+			<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
+		${relation.alias}<#if (relation_has_next && (relations[relation_index+1].relation.type=="@OneToOne" | relations[relation_index+1].relation.type=="@ManyToOne"))>,</#if>
 			</#if>
 		</#list>
 	};
@@ -76,7 +78,7 @@ public abstract class ${name}AdapterBase {
 		<#if relations??>
 			<#list relations as relation>
 				<#if (relation.type=="OneToOne" | relation.type=="ManyToOne")>
-		+ "FOREIGN KEY(${relation.field_alias}) REFERENCES ${relation.entity_ref}(${relation.field_ref})<#if (relation_has_next && (relations[relation_index+1].relation_type=="@OneToOne" | relations[relation_index+1].relation_type=="@ManyToOne"))>,</#if>"
+		+ "FOREIGN KEY(${relation.field_alias}) REFERENCES ${relation.entity_ref}(${relation.field_ref})<#if (relation_has_next && (relations[relation_index+1].relation.type=="@OneToOne" | relations[relation_index+1].relation.type=="@ManyToOne"))>,</#if>"
 				</#if>
 			</#list>
 		</#if>
@@ -84,7 +86,7 @@ public abstract class ${name}AdapterBase {
 	}
 	<#if relations??>
 		<#list relations as relation>
-			<#if relation.relation_type=="@ManyToMany">
+			<#if relation.relation.type=="@ManyToMany">
 	/** Generate Entity Relations Table Schema
 	 * 
 	 * @return "SQL query : CREATE TABLE..."
@@ -150,7 +152,7 @@ public abstract class ${name}AdapterBase {
 			</#if>
 		</#list>
 		<#list relations as relation>
-			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+			<#if (relation.relation.type=="@OneToOne" | relation.relation.type=="@ManyToOne")>
 		result.put(${relation.alias}, 			String.valueOf(${name?lower_case}.get${relation.name?cap_first}().getId()) );
 			</#if>
 		</#list>
@@ -185,7 +187,7 @@ public abstract class ${name}AdapterBase {
 				</#if>
 			</#list>
 			<#list relations as relation>
-				<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+				<#if (relation.relation.type=="@OneToOne" | relation.relation.type=="@ManyToOne")>
 			${relation.type} ${relation.name} = new ${relation.type}();
 			${relation.name}.setId( Integer.valueOf(c.getString( c.getColumnIndexOrThrow(${relation.alias}) )) );
 			result.set${relation.name?cap_first}(${relation.name});

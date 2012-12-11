@@ -17,6 +17,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;
 import com.tactfactory.mda.Harmony;
+import com.tactfactory.mda.orm.ClassCompletor;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.JavaAdapter;
 import com.tactfactory.mda.parser.JavaModelParser;
@@ -202,6 +203,7 @@ public class OrmCommand extends BaseCommand {
 		} else {
 			System.out.println("No entities found in entity package!");
 		}
+		new ClassCompletor(ret).execute();
 		return ret;
 	}
 	
