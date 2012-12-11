@@ -92,7 +92,6 @@ public class ProjectGenerator {
 	 * @param templateFile Template File to use
 	 */ 
 	public void updateProjectFile(String destPath, String templateFile) {
-
 		Configuration cfg = new Configuration();
 
 		try {

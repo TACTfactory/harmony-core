@@ -8,6 +8,9 @@
  */
 package com.tactfactory.mda.command;
 
+import net.xeoh.plugins.base.annotations.Capabilities;
+import net.xeoh.plugins.base.annotations.PluginImplementation;
+
 import com.tactfactory.mda.Console;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.TargetPlatform;
@@ -28,6 +31,7 @@ import com.tactfactory.mda.template.ProjectGenerator;
  * </ul>
  *
  */
+@PluginImplementation
 public class ProjectCommand extends BaseCommand {
 	/** Bundle name */
 	public static String BUNDLE 		= "project";
@@ -415,6 +419,7 @@ public class ProjectCommand extends BaseCommand {
 
 	/** @see BaseCommand#isAvailableCommand(String) */
 	@Override
+	@Capabilities
 	public boolean isAvailableCommand(String command) {
 		return (command.equals(INIT_ANDROID) ||
 				command.equals(INIT_IOS) ||

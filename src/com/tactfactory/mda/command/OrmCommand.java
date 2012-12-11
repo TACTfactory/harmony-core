@@ -13,6 +13,8 @@ import japa.parser.ast.CompilationUnit;
 import java.io.File;
 import java.util.ArrayList;
 
+import net.xeoh.plugins.base.annotations.PluginImplementation;
+
 import com.tactfactory.mda.Console;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
@@ -27,6 +29,7 @@ import com.tactfactory.mda.template.ProjectGenerator;
 import com.tactfactory.mda.template.ProviderGenerator;
 import com.tactfactory.mda.template.SQLiteGenerator;
 import com.tactfactory.mda.template.TestGenerator;
+
 /**
  * Project Custom Files Code Generator
  * 
@@ -39,6 +42,7 @@ import com.tactfactory.mda.template.TestGenerator;
  * </ul>
  *
  */
+@PluginImplementation
 public class OrmCommand extends BaseCommand {
 
 	//bundle name
