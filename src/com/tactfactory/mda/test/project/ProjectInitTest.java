@@ -45,9 +45,9 @@ public class ProjectInitTest extends CommonTest {
 		File dirproj = new File(String.format("%s/android", Harmony.pathProject));
 		FileUtils.deleteRecursive(dirproj);
 	}
-
+	
 	@Test
-	public void initAndroid() {
+ 	public void initAndroid() {
 		System.out.println("Test Project init Android");
 		System.out.println("###############################################################################");
 		

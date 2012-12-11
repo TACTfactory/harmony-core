@@ -13,28 +13,7 @@ import java.util.HashMap;
 /** 
  * Common Command structure 
  */
-public abstract class BaseCommand {
+public abstract class BaseCommand implements Command {
 	protected HashMap<String,String> commandArgs;
 	protected static final String SEPARATOR = ":";
-
-	/** Execute specific action
-	 * 
-	 * @param action to realize
-	 * @param args action arguments
-	 * @param option of console
-	 */
-	public abstract void execute(String action, String[] args, String option);
-
-	/**
-	 * Display Bundle commands summary
-	 */
-	public abstract void summary();
-	
-	/** Check availability of command
-	 * 
-	 * @param command to check
-	 * @return true if found
-	 */
-	public abstract boolean isAvailableCommand(String command);
-
 }
