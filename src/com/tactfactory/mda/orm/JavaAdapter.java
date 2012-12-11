@@ -340,7 +340,7 @@ public class JavaAdapter {
 			meta.methods.add(methodMeta);
 			
 			// Debug Log
-			if(Harmony.DEBUG){
+			if(Harmony.debug){
 				StringBuilder builder = new StringBuilder(
 						String.format("\tMethod : %s %s(", methodMeta.type, methodMeta.name));
 				

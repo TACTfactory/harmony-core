@@ -122,7 +122,7 @@ public class ProjectGenerator {
 			output.close();
 
 			// Debug Log
-			if (Harmony.DEBUG)
+			if (Harmony.debug)
 				System.out.println("File "+destFile.getName()+" processed...");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -227,6 +227,7 @@ public class ProjectGenerator {
 				String.format("%s/%s/%s/", Harmony.pathTemplate , this.adapter.getPlatform(), this.adapter.getProject()),
 				String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()),
 				true);
+		
 		if(dirProj.exists() && dirProj.listFiles().length!=0)
 			result = true;
 
@@ -265,11 +266,10 @@ public class ProjectGenerator {
 
 		if(removeResult==0) {
 			result = true;
-			if(Harmony.DEBUG)
-				System.out.println("Project "+this.adapter.getPlatform()+" removed!");
+			
+			ConsoleUtils.displayDebug("Project "+this.adapter.getPlatform()+" removed!");
 		} else {
-			if(Harmony.DEBUG)
-				System.out.println("Remove Project "+this.adapter.getPlatform()+" return "+removeResult+" errors...\n");
+			ConsoleUtils.displayError("Remove Project "+this.adapter.getPlatform()+" return "+removeResult+" errors...\n");
 		}
 		return result;
 	}
@@ -278,8 +278,7 @@ public class ProjectGenerator {
 	 * Generate HomeActivity File and merge it with datamodel
 	 */
 	public void generateHomeActivity() throws IOException,TemplateException {
-
-		System.out.println(">> Generate HomeView & Strings");
+		ConsoleUtils.display(">> Generate HomeView & Strings...");
 		
 		Configuration cfg = new Configuration();
 
@@ -326,8 +325,7 @@ public class ProjectGenerator {
 			destFile = FileUtils.makeFile(destFile.getPath());
 
 		// Debug Log
-		if (Harmony.DEBUG)
-			System.out.println("\tUpdate Strings.xml File : " + destFile.getPath() + "\n"); 
+		ConsoleUtils.displayDebug("Update Strings.xml File : " + destFile.getPath() + "\n"); 
 
 		// Create
 		Template tpl;

@@ -96,7 +96,7 @@ public class JavaModelParser {
 	            try {
 					in.close();
 				} catch (IOException e) {
-					if (Harmony.DEBUG)
+					if (Harmony.debug)
 						e.printStackTrace();
 				}
 	        }
@@ -156,7 +156,7 @@ public class JavaModelParser {
 	            try {
 					in.close();
 				} catch (IOException e) {
-					if (Harmony.DEBUG)
+					if (Harmony.debug)
 						e.printStackTrace();
 				}
 	        }
