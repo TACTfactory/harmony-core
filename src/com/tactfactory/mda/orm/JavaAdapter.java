@@ -80,7 +80,7 @@ public class JavaAdapter {
 						meta.name = PackageUtils.extractNameEntity(n.getName());
 						
 						// Debug Log
-						ConsoleUtils.displayDebug("\tEntity : " + meta.space + ".entity." +  meta.name);
+						ConsoleUtils.displayDebug("Entity : " + meta.space + ".entity." +  meta.name);
 					}
 				}
 				
@@ -92,7 +92,7 @@ public class JavaAdapter {
 							meta.impls.add(impl.getName());
 							
 							// Debug Log
-							ConsoleUtils.displayDebug("\t\tImplement : " + impl.getName());
+							ConsoleUtils.displayDebug("\tImplement : " + impl.getName());
 						}
 					}
 					
@@ -103,7 +103,7 @@ public class JavaAdapter {
 							meta.exts = ext.getName();		
 							
 							// Debug Log
-							ConsoleUtils.displayDebug("\t\tExtend : " + ext.getName());
+							ConsoleUtils.displayDebug("\tExtend : " + ext.getName());
 						}
 					}
 					
@@ -264,7 +264,7 @@ public class JavaAdapter {
 				isId = true;
 				
 				// Debug Log
-				ConsoleUtils.displayDebug("\t\tID : " + fieldMeta.name);
+				ConsoleUtils.displayDebug("\tID : " + fieldMeta.name);
 			}
 			
 			return isId;
@@ -290,7 +290,7 @@ public class JavaAdapter {
 				if (annotationType.equals(FILTER_JOINCOLUMN))
 					type = "Join Column";
 				
-				ConsoleUtils.displayDebug("\t\t" + type + " : " + fieldMeta.name + 
+				ConsoleUtils.displayDebug("\t" + type + " : " + fieldMeta.name + 
 						" type of " + fieldMeta.type);
 			}
 			
@@ -314,7 +314,7 @@ public class JavaAdapter {
 				isRelation = true;
 				
 				// Debug Log
-				ConsoleUtils.displayDebug("\t\tRelation " + annotationType + 
+				ConsoleUtils.displayDebug("\tRelation " + annotationType + 
 						" : " + fieldMeta.name + " type of " + fieldMeta.type);
 			}
 			
@@ -367,7 +367,7 @@ public class JavaAdapter {
 			meta.imports.add(impName);
 			
 			// Debug Log
-			ConsoleUtils.displayDebug("\t\tImport : " + impName);
+			ConsoleUtils.displayDebug("\tImport : " + impName);
 		}
 	}
 }

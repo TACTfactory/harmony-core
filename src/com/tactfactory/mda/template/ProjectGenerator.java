@@ -107,7 +107,7 @@ public class ProjectGenerator {
 			destFile = FileUtils.makeFile(destPath);
 
 		// Debug Log
-		ConsoleUtils.displayDebug("\tGenerate Project File : " + destFile.getPath()); 
+		ConsoleUtils.displayDebug("Generate Project File : " + destFile.getPath()); 
 
 
 		// Create
@@ -293,7 +293,7 @@ public class ProjectGenerator {
 		File file = FileUtils.makeFile(this.adapter.getHomeActivityPathFile() );
 
 		// Debug Log
-		ConsoleUtils.displayDebug("\tGenerate Source : " + file.getPath()); 
+		ConsoleUtils.displayDebug("Generate Source : " + file.getPath()); 
 
 		// Create
 		Template tpl = cfg.getTemplate(this.adapter.getTemplateHomeActivityPathFile().substring(1));

@@ -109,6 +109,7 @@ public class ActivityGenerator {
 	}
 	
 	public void generateAll() {
+		ConsoleUtils.display(">> Generate CRUD view...");
 
 		int i = 0;
 		for(Map<String, Object> entity : this.modelEntities) {
@@ -242,7 +243,7 @@ public class ActivityGenerator {
 	/** All Actions (List, Show, Edit, Create) */
 	public void generateAllAction() {
 		// Info
-		ConsoleUtils.display(">> Generate CRUD view for " +  meta.name);
+		ConsoleUtils.display(">>> Generate CRUD view for " +  meta.name);
 
 		try {
 
@@ -288,7 +289,7 @@ public class ActivityGenerator {
 			File file = FileUtils.makeFile(filepath);
 			
 			// Debug Log
-			ConsoleUtils.displayDebug("\tGenerate Source : " + file.getPath()); 
+			ConsoleUtils.displayDebug("Generate Source : " + file.getPath()); 
 	
 			// Create
 			Template tpl = cfg.getTemplate(
@@ -320,7 +321,7 @@ public class ActivityGenerator {
 			File file = FileUtils.makeFile(filepath);
 	
 			// Debug Log
-			ConsoleUtils.displayDebug("\tGenerate Ressource : " + file.getAbsoluteFile()); 
+			ConsoleUtils.displayDebug("Generate Ressource : " + file.getAbsoluteFile()); 
 	
 			// Create
 			Template tpl = cfg.getTemplate(
@@ -345,7 +346,7 @@ public class ActivityGenerator {
 		File file = FileUtils.makeFile(this.adapter.getManifestPathFile());
 
 		// Debug Log
-		ConsoleUtils.displayDebug("\tGenerate Manifest : " + file.getAbsoluteFile());
+		ConsoleUtils.displayDebug("Generate Manifest : " + file.getAbsoluteFile());
 
 		// Create
 		Template tpl = cfg.getTemplate(this.adapter.getTemplateManifestPathFile());
@@ -367,7 +368,7 @@ public class ActivityGenerator {
 				classFile );
 
 		// Debug Log
-		ConsoleUtils.displayDebug("\tUpdate Manifest : " + pathRelatif);
+		ConsoleUtils.displayDebug("Update Manifest : " + pathRelatif);
 
 		try {
 			SAXBuilder builder = new SAXBuilder();		// Make engine
