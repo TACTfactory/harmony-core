@@ -77,7 +77,7 @@ public class Harmony {
 	
 	public static boolean isConsole = false;
 	
-	PluginManager pluginManager;
+	private PluginManager pluginManager;
 	public HashMap<Class<?>, Command> bootstrap = new HashMap<Class<?>, Command>();
 
 	public Harmony() throws Exception {
@@ -105,11 +105,11 @@ public class Harmony {
 	protected void initialize() throws Exception {
 		// Check project folder
 		if (Strings.isNullOrEmpty(projectFolder)) {
-			System.out.print("Project folder undefined"); 
+			ConsoleUtils.displayError("Project folder undefined");
 			throw new Exception("Project folder undefined");
 		}
 		
-		System.out.println("Current Working Path: "+new File(".").getCanonicalPath());
+		ConsoleUtils.display("Current Working Path: " + new File(".").getCanonicalPath());
 
 		// Check name space
 		if (Strings.isNullOrEmpty(Harmony.projectNameSpace)) {
@@ -135,11 +135,10 @@ public class Harmony {
 		}
 		
 		// Debug Log
-		if (Harmony.DEBUG){
-			System.out.println("Current Project : " + projectName);
-			System.out.println("Current NameSpace : " + projectNameSpace);
-			System.out.println("Current Android SDK Path : " + androidSdkPath);
-		}
+		ConsoleUtils.displayDebug(
+				"Current Project : " + projectName + "/n" +
+				"Current NameSpace : " + projectNameSpace + "/n" +
+				"Current Android SDK Path : " + androidSdkPath);
 	}
 	
 	/**
@@ -172,7 +171,7 @@ public class Harmony {
 
 		// No found action
 		if (!isfindAction) {
-			System.out.print("\nCommand not found...\n");
+			ConsoleUtils.display("Command not found...");
 			
 			this.getCommand(GeneralCommand.class).execute(GeneralCommand.LIST,null,null);
 		}
@@ -188,8 +187,8 @@ public class Harmony {
 	 */
 	public static String getUserInput(String promptMessage) {
 		String input = null;
-		//  open up standard input
-		System.out.print(promptMessage);
+		
+		ConsoleUtils.display(promptMessage);
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 
 		try {
@@ -231,7 +230,7 @@ public class Harmony {
 						Harmony.projectNameSpace = projectNameSpace.replaceAll("\\.", "/");
 						good = true;
 					} else {
-						System.out.println("The NameSpace has to end with Project Name !");
+						ConsoleUtils.display("The NameSpace has to end with Project Name !");
 					}
 				} else {
 					Harmony.projectNameSpace = DEFAULT_PROJECT_NAMESPACE.replaceAll("\\.", "/");
@@ -271,8 +270,7 @@ public class Harmony {
 				}
 				
 				// Debug Log
-				if (Harmony.DEBUG)
-					System.out.println(os_message);
+				ConsoleUtils.displayDebug(os_message);
 			}
 		}
 	}
@@ -287,7 +285,7 @@ public class Harmony {
 		File projectFolder = new File(Harmony.projectFolder);
 		
 		if(projectFolder.exists() && projectFolder.listFiles().length!=0){
-			File manifest = new File(Harmony.projectFolder+"AndroidManifest.xml");
+			File manifest = new File(Harmony.projectFolder + "AndroidManifest.xml");
 			String namespace = Harmony.getNameSpaceFromManifest(manifest);
 			
 			if(namespace!=null && namespace!="${namespace}"){
@@ -347,7 +345,7 @@ public class Harmony {
 					if(!lines.get(i).contains(TagConstant.ANDROID_SDK_DIR)){
 						result=lines.get(i).replace("sdk.dir=", "");
 					} else {
-						System.out.println("Android SDK Dir not defined please init project...");
+						ConsoleUtils.displayWarning("Android SDK Dir not defined please init project...");
 					}
 					break;
 				}

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;
+import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.JavaAdapter;
@@ -149,7 +150,7 @@ public class OrmCommand extends BaseCommand {
 		if(this.commandArgs.size()!=0 && this.commandArgs.containsKey("filename")) {
 			String entityPath = this.adapter.getSourcePath()
 					+Harmony.projectNameSpace.replaceAll("\\.","/")
-					+"/entity/" + this.commandArgs.get("filename");
+					+"/entity/" + this.commandArgs.get("filename"); //TODO factoring !
 			File f = new File(entityPath);
 			if(f.exists() && !f.isDirectory()) {
 				this.javaModelParser.loadEntity(entityPath);
@@ -158,13 +159,13 @@ public class OrmCommand extends BaseCommand {
 					javaAdapter.parse(this.javaModelParser.getEntities().get(0));
 					ret = javaAdapter.getMetas();
 				}else{
-					System.out.println("Given entity filename is not an entity!");
+					ConsoleUtils.displayWarning("Given entity filename is not an entity!");
 				}
 			}else{
-				System.out.println("Given entity file does not exist!");
+				ConsoleUtils.displayWarning("Given entity file does not exist!");
 			}
 		}else{
-			System.out.println("No given filename! Specify a filename with --filename=\"Entity.java\"");
+			ConsoleUtils.displayWarning("No given filename! Specify a filename with --filename=\"Entity.java\"");
 		}
 		return ret;
 	}
@@ -177,7 +178,7 @@ public class OrmCommand extends BaseCommand {
 	protected ArrayList<ClassMetadata> getMetasFromAll(){
 		ArrayList<ClassMetadata> ret = null;
 		// Info Log
-		System.out.print(">> Analyse Models...\n");
+		ConsoleUtils.display(">> Analyse Models...");
 
 		// Parse models and load entities into CompilationUnits
 		try {
@@ -195,12 +196,12 @@ public class OrmCommand extends BaseCommand {
 				javaAdapter.parse(mclass);
 			}
 	
-			System.out.print("\n");
+			ConsoleUtils.display("");
 	
 			// Generate views from MetaData
 			ret = javaAdapter.getMetas();			
 		} else {
-			System.out.println("No entities found in entity package!");
+			ConsoleUtils.displayWarning("No entities found in entity package!");
 		}
 		return ret;
 	}
@@ -224,16 +225,16 @@ public class OrmCommand extends BaseCommand {
 
 	@Override
 	public void summary() {
-		System.out.print("\n> ORM Bundle\n");
-		System.out.print("\t" + GENERATE_ENTITY + "\t => Generate Entry\n");
-		System.out.print("\t" + GENERATE_ENTITIES + "\t => Generate Entries\n");
-		System.out.print("\t" + GENERATE_FORM + "\t => Generate Form\n");
-		System.out.print("\t" + GENERATE_CRUD + "\t => Generate CRUD\n");
+		ConsoleUtils.display("\n> ORM Bundle\n" +
+				"\t" + GENERATE_ENTITY + "\t => Generate Entry\n" +
+				"\t" + GENERATE_ENTITIES + "\t => Generate Entries\n" +
+				"\t" + GENERATE_FORM + "\t => Generate Form\n" +
+				"\t" + GENERATE_CRUD + "\t => Generate CRUD");
 	}
 
 	@Override
 	public void execute(String action, String[] args, String option) {
-		System.out.print("> ORM Generator\n");
+		ConsoleUtils.display("> ORM Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);
 		if (action.equals(GENERATE_ENTITY)) {

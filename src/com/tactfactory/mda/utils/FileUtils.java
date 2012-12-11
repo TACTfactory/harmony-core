@@ -22,30 +22,34 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
+import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 
 /** Manipulate File tools */
 public class FileUtils extends org.apache.commons.io.FileUtils {
+	
 	/** Create a new file if doesn't exist (and path)
 	 * 
 	 * @param filename Full path of file
 	 * @return File instance 
 	 */
 	public static File makeFile(String filename) {
+		boolean success = false;
 		File file = new File(filename);
 		
 		File parent = file.getParentFile();
 		if(!parent.exists() && !parent.mkdirs()){
+			ConsoleUtils.displayError("Couldn't create dir: " + parent);
 		    throw new IllegalStateException("Couldn't create dir: " + parent);
 		}
 
-		boolean success = false;
 		try {
 			success = file.createNewFile();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 	    if (success) {
 	        // File did not exist and was created
 	    } else {
@@ -55,8 +59,15 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		return file;
 	}
 	
-	/** copy file content from srcFile to destFile */
+	/** Copy file content from srcFile to destFile 
+	 *
+	 * @param srcFile Source path
+	 * @param destFile Destination path
+	 */
 	public static void copyfile(File srcFile, File destFile) {
+		byte[] buf = new byte[1024];
+		int len;
+		
 		try {
 			InputStream in = new FileInputStream(srcFile);
 
@@ -66,16 +77,16 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			// For Overwrite the file.
 			OutputStream out = new FileOutputStream(destFile);
 
-			byte[] buf = new byte[1024];
-			int len;
 			while ((len = in.read(buf)) > 0) {
 				out.write(buf, 0, len);
 			}
+			
 			in.close();
 			out.close();
+			
 			// Debug Log
-			if (Harmony.DEBUG)
-				System.out.println("File "+srcFile.getName()+" copied to "+destFile.getPath());
+			ConsoleUtils.displayDebug("File "+srcFile.getName()+" copied to "+destFile.getPath());
+			
 		} catch (FileNotFoundException ex) {
 			System.out.println(ex.getMessage() + " in the specified directory.");
 			//System.exit(0);
@@ -295,12 +306,11 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 						result = FileUtils.deleteRecursive(f,result);
 					} else {
 						if(f.delete()){
-							if (Harmony.DEBUG)
-								System.out.println("File '"+f.getPath()+"' deleted.");
+							ConsoleUtils.displayDebug("File '"+f.getPath()+"' deleted.");
 						} else{
 							result++;
-							if (Harmony.DEBUG)
-								System.out.println("File '"+f.getPath()+"' delete ERROR!");
+							
+							ConsoleUtils.displayWarning("File '"+f.getPath()+"' delete ERROR!");
 						}
 					}
 				}
@@ -308,44 +318,42 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 				//folder content check, remove folder
 				if(dir.listFiles().length==0){
 					if(dir.delete()) {
-						if (Harmony.DEBUG)
-							System.out.println("Folder '"+dir.getPath()+"' deleted.");
+						ConsoleUtils.displayDebug("Folder '"+dir.getPath()+"' deleted.");
 					} else {
 						result++;
-						if (Harmony.DEBUG)
-							System.out.println("Folder '"+dir.getPath()+"' delete ERROR!");
+						
+						ConsoleUtils.displayWarning("Folder '"+dir.getPath()+"' delete ERROR!");
 					}
 				} else {
 					result++;
-					if (Harmony.DEBUG)
-						System.out.println("Folder '"+dir.getPath()+"' NOT Empty!");
+					
+					ConsoleUtils.displayWarning("Folder '"+dir.getPath()+"' NOT Empty!");
 				}
 				
 			} else {
 				// it's a file delete simply
 				if(dir.delete()) {
-					if (Harmony.DEBUG)
-						System.out.println("File '"+dir.getPath()+"' deleted.");
+					ConsoleUtils.displayDebug("File '"+dir.getPath()+"' deleted.");
 				} else {
 					result++;
-					if (Harmony.DEBUG)
-						System.out.println("File '"+dir.getPath()+"' delete ERROR!");
+
+					ConsoleUtils.displayWarning("File '"+dir.getPath()+"' delete ERROR!");
 				}
 			}
 		} else {
 			result++;
-			if (Harmony.DEBUG)
-				System.out.println("Folder '"+dir.getPath()+"' doesn't exists!");
+			
+			ConsoleUtils.displayWarning("Folder '"+dir.getPath()+"' doesn't exists!");
 		}
 		return result;
 	}
 	
 	public static boolean exists(String filename){
 		File f = new File(filename);
-		if(Harmony.DEBUG && f.exists())
-			System.out.println("File "+filename+ " already exists !");
-		else if(Harmony.DEBUG)
-			System.out.println("File "+filename+ " doesn't exists !");
+		if( f.exists())
+			ConsoleUtils.displayDebug("File "+filename+ " already exists !");
+		else 
+			ConsoleUtils.displayDebug("File "+filename+ " doesn't exists !");
 		return f.exists();
 	}
 }

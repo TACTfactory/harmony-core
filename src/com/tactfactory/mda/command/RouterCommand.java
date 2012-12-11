@@ -8,6 +8,8 @@
  */
 package com.tactfactory.mda.command;
 
+import com.tactfactory.mda.ConsoleUtils;
+
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 @PluginImplementation
@@ -29,9 +31,9 @@ public class RouterCommand extends BaseCommand {
 
 	@Override
 	public void summary() {
-		System.out.print("\n> ROUTER Bundle\n");
-		System.out.print("\t"+ROUTER_DEBUG+"\t => List all URI\n");
-		System.out.print("\t"+ROUTER_GENERATE_MANIFEST+"\t => Generate Manifest\n");
+		ConsoleUtils.display("\n> ROUTER Bundle\n" +
+				"\t"+ROUTER_DEBUG+"\t\t => List all URI\n" +
+				"\t"+ROUTER_GENERATE_MANIFEST+" => Generate Manifest\n");
 	}
 
 	@Override

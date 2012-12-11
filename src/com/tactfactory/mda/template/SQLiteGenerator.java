@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
@@ -87,7 +88,7 @@ public class SQLiteGenerator {
 	 */
 	public void generateDatabase() {
 		// Info
-		System.out.print(">> Generate Database\n");
+		ConsoleUtils.display(">> Generate Database\n");
 		
 		try {
 			Configuration cfg = new Configuration();
@@ -123,8 +124,7 @@ public class SQLiteGenerator {
 						String.format(filename, Harmony.projectName)));
 		
 		// Debug Log
-		if (Harmony.DEBUG)
-			System.out.print("\tGenerate Source : " + file.getPath() + "\n"); 
+		ConsoleUtils.displayDebug("\tGenerate Source : " + file.getPath()); 
 		
 		// Create
 		Template tpl = cfg.getTemplate(

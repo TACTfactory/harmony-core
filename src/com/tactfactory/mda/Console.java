@@ -27,21 +27,21 @@ public class Console extends Harmony {
 		// Check if has a parameter
 		if (args.length == 0) {
 			// If no valid parameters
-			System.out.print("\nUsage:\n\t[options] command [arguments]\n");
-			System.out.print("\nOptions:\n" + 
+			ConsoleUtils.display("Usage:\n\t[options] command [arguments]\n");
+			ConsoleUtils.display("\nOptions:\n" + 
 					"\t--help\t\t -h Display this help message.\n" + 
 					"\t--quiet\t\t -q Do not output any message.\n" + 
 					"\t--verbose\t -v Increase verbosity of messages.\n" + 
 					"\t--version\t -V Display this application version.\n" + 
-					"\t--ansi\t\t    Force ANSI output.\n" + 
-					"\t--no-ansi\t    Disable ANSI output.\n" + 
-					"\t--no-interaction -n Do not ask any interactive question.\n" + 
-					"\t--shell\t\t -s Launch the shell.\n" + 
-					"\t--env\t\t -e The Environment name.\n" + 
+					// "\t--ansi\t\t    Force ANSI output.\n" + 
+					// "\t--no-ansi\t    Disable ANSI output.\n" + 
+					// "\t--no-interaction -n Do not ask any interactive question.\n" + 
+					// "\t--shell\t\t -s Launch the shell.\n" + 
+					// "\t--env\t\t -e The Environment name.\n" + 
 					"\t--no-debug \t    Switches off debug mode.\n\n");
 
 			//System.out.print("Usage : console testBundle:com/tactfactory/mdatest/android:User");
-			System.out.println("Tips : please use 'list' command to display available commands!\n");
+			ConsoleUtils.display("Tips : please use 'list' command to display available commands!\n");
 			throw new Exception("Usage Exception, please launch help !");
 			
 		} else {
@@ -52,7 +52,7 @@ public class Console extends Harmony {
 			String[] commandArgs = null;
 			String commandOption = null;
 			String platformTmp = "";
-			TargetPlatform platform = null;
+			//TargetPlatform platform = null;
 			
 			// Extract command
 			String[] cmd = args[0].split(":");
@@ -67,7 +67,7 @@ public class Console extends Harmony {
 			// Extract optional command
 			else if(cmd.length>3){
 				platformTmp = cmd[3];
-				platform = TargetPlatform.parse(platformTmp);
+				//platform = TargetPlatform.parse(platformTmp);
 			}
 			else {
 				command = args[0];

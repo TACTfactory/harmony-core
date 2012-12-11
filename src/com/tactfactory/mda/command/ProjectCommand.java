@@ -12,6 +12,7 @@ import net.xeoh.plugins.base.annotations.Capabilities;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;
+import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.TargetPlatform;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
@@ -353,18 +354,17 @@ public class ProjectCommand extends BaseCommand {
 	/** @see BaseCommand#summary() */
 	@Override
 	public void summary() {
-		System.out.print("\n> Project\n");
-		System.out.print("\t"+INIT_ANDROID+"\t => Init Android project directory\n");
-		System.out.print("\t"+INIT_IOS+"\t => Init Apple IOS project directory\n");
-		System.out.print("\t"+INIT_RIM+"\t => Init BlackBerry project directory\n");
-		System.out.print("\t"+INIT_WINPHONE+"\t => Init Windows Phone project directory\n");
-		System.out.print("\t"+INIT_ALL+"\t => Init All project directories\n");
-
-		System.out.print("\t"+REMOVE_ANDROID+"\t => Remove Google Android project directory\n");
-		System.out.print("\t"+REMOVE_IOS+"\t => Remove Apple IOS project directory\n");
-		System.out.print("\t"+REMOVE_RIM+"\t => Remove BlackBerry project directory\n");
-		System.out.print("\t"+REMOVE_WINPHONE+"\t => Remove Windows Phone project directory\n");
-		System.out.print("\t"+REMOVE_ALL+"\t => Remove All project directories\n");
+		ConsoleUtils.display("\n> Project\n"+
+				"\t"+INIT_ANDROID+"\t => Init Android project directory\n" +
+				"\t"+INIT_IOS+"\t => Init Apple IOS project directory\n" +
+				"\t"+INIT_RIM+"\t => Init BlackBerry project directory\n" +
+				"\t"+INIT_WINPHONE+"\t => Init Windows Phone project directory\n" +
+				"\t"+INIT_ALL+"\t => Init All project directories\n" +
+				"\t"+REMOVE_ANDROID+"\t => Remove Google Android project directory\n" +
+				"\t"+REMOVE_IOS+"\t => Remove Apple IOS project directory\n" +
+				"\t"+REMOVE_RIM+"\t => Remove BlackBerry project directory\n" +
+				"\t"+REMOVE_WINPHONE+"\t => Remove Windows Phone project directory\n" +
+				"\t"+REMOVE_ALL+"\t => Remove All project directories\n");
 	}
 
 	/** @see BaseCommand#execute(String, String[], String) */
