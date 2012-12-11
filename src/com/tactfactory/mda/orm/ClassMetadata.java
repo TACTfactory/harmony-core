@@ -11,6 +11,8 @@ package com.tactfactory.mda.orm;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.tactfactory.mda.Harmony;
+
 /** Entity class metadata */
 public class ClassMetadata {
 	
@@ -29,6 +31,9 @@ public class ClassMetadata {
 	/** List of relations of entity class*/
 	public HashMap<String, FieldMetadata> relations = new HashMap<String, FieldMetadata>();
 	
+	/** Relations**/
+	public HashMap<String, HashMap<String, String>> relat = new HashMap<String, HashMap<String, String>>();
+	
 	/** Class inherited by the entity class or null if none*/
 	public String exts = null;
 	
@@ -40,4 +45,14 @@ public class ClassMetadata {
 
 	/** Imports of the class */
 	public ArrayList<String> imports = new ArrayList<String>();
+	
+	/** Returns the relation identified by fieldName (and create it if it doesn't exist yet 
+	 * @throws Exception */
+	public void putRelation(String fieldName, HashMap<String, String> rel) throws Exception{
+		if(!this.relat.containsKey("fieldName")){
+			this.relat.put(fieldName, rel);
+		}else{
+			throw new Exception("Duplicate relation on field "+fieldName);
+		}
+	}
 }
