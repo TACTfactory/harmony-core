@@ -10,7 +10,6 @@ package com.tactfactory.mda.orm;
 
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
-import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
@@ -108,12 +107,12 @@ public class JavaAdapter {
 					}
 					
 					// Get list of Members
-					List<BodyDeclaration> members = n.getMembers();
+					/*List<BodyDeclaration> members = n.getMembers();
 					if(members!=null){
 						for(BodyDeclaration member : members){					
-							//meta.members.add(member.getName());	///TODO Micky > Good or Trash ? [Gregg]	
+							meta.members.add(member.getName());	///TODO Micky > Good or Trash ? [Gregg]	
 						}
-					}
+					}*/
 				}
 			}
 	    }
@@ -343,7 +342,7 @@ public class JavaAdapter {
 			// Debug Log
 			if(Harmony.DEBUG){
 				StringBuilder builder = new StringBuilder(
-						String.format("\t\tMethod : %s %s(", methodMeta.type, methodMeta.name));
+						String.format("\tMethod : %s %s(", methodMeta.type, methodMeta.name));
 				
 				for(String args : methodMeta.argumentsTypes) {
 					if (args != methodMeta.argumentsTypes.get(0))
