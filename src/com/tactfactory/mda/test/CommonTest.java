@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 
 /**
@@ -25,6 +26,11 @@ public abstract class CommonTest {
 	 */
 	public void setUp() throws Exception {
 		// Base configs
+		ConsoleUtils.ansi  = false;
+		ConsoleUtils.quiet = false;
+		Harmony.debug = true;
+		
+		// Project test config
 		Harmony.projectName = "demact";
 		Harmony.projectNameSpace = "com/tactfactory/mda/test/demact";
 		Harmony.androidSdkPath = "/tmp/";
@@ -38,6 +44,7 @@ public abstract class CommonTest {
 	 * @throws java.lang.Exception
 	 */
 	public void tearDown() throws Exception {
+		
 	}
 	
 	protected void isFindFile(String fileName) {

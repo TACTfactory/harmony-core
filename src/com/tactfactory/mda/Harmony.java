@@ -36,7 +36,9 @@ import com.tactfactory.mda.utils.OsUtil;
 /** Harmony main class */
 public class Harmony {
 	/** Debug state*/
-	public static final boolean DEBUG = true;
+	public static boolean debug = false;
+	
+	/** Harmony version */
 	public static final String VERSION = "0.3.0-DEV";
 	
 	/** Singleton of console */
