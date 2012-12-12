@@ -48,39 +48,39 @@ public class ProjectInitTest extends CommonTest {
 	
 	@Test
  	public void initAndroid() {
-		System.out.println("Test Project init Android");
+		System.out.println("\nTest Project init Android");
 		System.out.println("###############################################################################");
 		
 		this.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		
-		this.isFindFile("android/AndroidManifest.xml");
-		this.isFindFile("android/build.xml");
-		this.isFindFile("android/lint.xml");
+		this.hasFindFile("android/AndroidManifest.xml");
+		this.hasFindFile("android/build.xml");
+		this.hasFindFile("android/lint.xml");
 		//this.isFindFile("android/local.properties");
-		this.isFindFile("android/proguard-project.txt");
-		this.isFindFile("android/project.properties");
+		this.hasFindFile("android/proguard-project.txt");
+		this.hasFindFile("android/project.properties");
 		
-		this.isFindFile("android/src");
-		this.isFindFile("android/src/com/tactfactory/mda/test/demact");
-		this.isFindFile("android/src/com/tactfactory/mda/test/demact/entity");
+		this.hasFindFile("android/src");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/entity");
 		//this.isFindFile("android/src/com/tactfactory/mda/test/demact/view/HomeActivity.java");
 		//this.isFindFile("android/res/");
 		
-		this.isFindFile("android/libs");
-		this.isFindFile("android/libs/android-support-v4.jar");
-		this.isFindFile("android/libs/Harmony.jar");
-		this.isFindFile("android/libs/joda-time-2.1.jar");
+		this.hasFindFile("android/libs");
+		this.hasFindFile("android/libs/android-support-v4.jar");
+		this.hasFindFile("android/libs/Harmony.jar");
+		this.hasFindFile("android/libs/joda-time-2.1.jar");
 		
-		this.isFindFile("android/res");
-		this.isFindFile("android/res/values");
-		this.isFindFile("android/res/values/configs.xml");
-		this.isFindFile("android/res/values/strings.xml");
+		this.hasFindFile("android/res");
+		this.hasFindFile("android/res/values");
+		this.hasFindFile("android/res/values/configs.xml");
+		this.hasFindFile("android/res/values/strings.xml");
 	}
 
 	@Ignore
 	@Test
 	public void initIphone() {
-		System.out.println("Test Project init iphone");
+		System.out.println("\nTest Project init iphone");
 		System.out.println("###############################################################################");
 		
 		this.harmony.findAndExecute(ProjectCommand.INIT_IOS, null, null);
@@ -91,7 +91,7 @@ public class ProjectInitTest extends CommonTest {
 	@Ignore
 	@Test
 	public void initRim() {
-		System.out.println("Test Project init RIM");
+		System.out.println("\nTest Project init RIM");
 		System.out.println("###############################################################################");
 		
 		this.harmony.findAndExecute(ProjectCommand.INIT_RIM, null, null);
@@ -102,7 +102,7 @@ public class ProjectInitTest extends CommonTest {
 	@Ignore
 	@Test
 	public void initWinphone() {
-		System.out.println("Test Project init Windows Phone");
+		System.out.println("\nTest Project init Windows Phone");
 		System.out.println("###############################################################################");
 		
 		

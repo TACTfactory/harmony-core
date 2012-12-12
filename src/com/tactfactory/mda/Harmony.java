@@ -140,7 +140,7 @@ public class Harmony {
 		ConsoleUtils.display(
 				"Current Project : " + projectName + "\n" +
 				"Current NameSpace : " + projectNameSpace + "\n" +
-				"Current Android SDK Path : " + androidSdkPath);
+				"Current Android SDK Path : " + androidSdkPath + "\n");
 	}
 	
 	/**

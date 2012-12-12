@@ -175,7 +175,7 @@ public class OrmCommand extends BaseCommand {
 	 * Gets the Metadatas of all the entities actually in the package entity
 	 * @return The metadatas of the different classes
 	 */
-	protected ArrayList<ClassMetadata> getMetasFromAll(){
+	public ArrayList<ClassMetadata> getMetasFromAll(){
 		ArrayList<ClassMetadata> ret = null;
 		// Info Log
 		ConsoleUtils.display(">> Analyse Models...");
@@ -223,7 +223,7 @@ public class OrmCommand extends BaseCommand {
 
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> ORM Bundle\n" +
+		ConsoleUtils.display("\n> ORM \n" +
 				"\t" + GENERATE_ENTITY + "\t => Generate Entry\n" +
 				"\t" + GENERATE_ENTITIES + "\t => Generate Entries\n" +
 				"\t" + GENERATE_FORM + "\t => Generate Form\n" +

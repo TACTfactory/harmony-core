@@ -31,7 +31,7 @@ public class RouterCommand extends BaseCommand {
 
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> ROUTER Bundle\n" +
+		ConsoleUtils.display("\n> ROUTER \n" +
 				"\t"+ROUTER_DEBUG+"\t\t => List all URI\n" +
 				"\t"+ROUTER_GENERATE_MANIFEST+" => Generate Manifest\n");
 	}

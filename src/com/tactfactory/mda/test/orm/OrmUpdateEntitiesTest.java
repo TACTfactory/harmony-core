@@ -15,11 +15,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.tactfactory.mda.Harmony;
+import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.test.CommonTest;
 import com.tactfactory.mda.utils.FileUtils;
 
-public class OrmUpdateTest extends CommonTest {
+public class OrmUpdateEntitiesTest extends CommonTest {
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -29,11 +30,10 @@ public class OrmUpdateTest extends CommonTest {
 		super.setUp();
 		
 		this.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
-		String pathNameSpace = Harmony.projectNameSpace.replace(".", "//");
-		String destDir = String.format("%s/android/src/%s", Harmony.pathProject, pathNameSpace);
-		String srcDir = String.format("src/%s", pathNameSpace);
-		
-		FileUtils.copyDirectory(new File(srcDir),new File(destDir));
+		this.makeEntities();
+		this.harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
+		// The real test
+		this.harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
 	}
 
 	/**

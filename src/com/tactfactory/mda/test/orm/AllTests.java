@@ -15,8 +15,9 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-	OrmInitTest.class//, 
-	//OrmUpdateTest.class 
+	OrmInitEntitiesTest.class,
+	OrmInitViewTest.class,
+	OrmUpdateEntitiesTest.class,
 	})
                 
 public class AllTests {

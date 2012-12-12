@@ -228,7 +228,6 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/** copy folder content recursively from srcPath to destPath, and copy files or not */
 	public static File makeFolderRecursive(String srcPath, String destPath, boolean makeFiles) {
-		
 		File dest_folder = new File(destPath);
 		File tpl_folder = new File(srcPath);
 		File tpl_files[] = tpl_folder.listFiles();
