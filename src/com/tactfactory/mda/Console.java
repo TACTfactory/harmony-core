@@ -27,7 +27,7 @@ public class Console extends Harmony {
 
 		// Check if has a parameter
 		if (args.length == 0) {
-			ConsoleUtils.displayLicence("Harmony version " + Harmony.VERSION);
+			ConsoleUtils.displayLicence("Harmony version " + Harmony.VERSION + "\n");
 			
 			// If no valid parameters
 			ConsoleUtils.display("Usage:\n\t[options] command [arguments]\n");
@@ -123,10 +123,11 @@ public class Console extends Harmony {
 			for (int i = 0; i < args.length; i++) {
 				String arg = args[i];
 				
-				if(arg.startsWith(ARGUMENT_PREFIX_SHORT)){
+				if(arg.startsWith(ARGUMENT_PREFIX_SHORT)) {
 					String key = arg.substring(1);
-					if (arg.startsWith(ARGUMENT_PREFIX))
+					if (arg.startsWith(ARGUMENT_PREFIX)) {
 						key = arg.substring(2);
+					}
 					
 					// Help call
 					if (key.equals("h") || key.equals("help")) {
@@ -145,7 +146,7 @@ public class Console extends Harmony {
 					
 					// Version mode
 					if (key.equals("V") || key.equals("version")) {
-						ConsoleUtils.displayLicence("Harmony version " + Harmony.VERSION);
+						ConsoleUtils.displayLicence("Harmony version " + Harmony.VERSION + "\n");
 					} else
 						
 					// ANSI mode (default)
@@ -161,7 +162,9 @@ public class Console extends Harmony {
 					currentPosition = i;
 					break;
 				}		
-			}
+			} 
+		} else {
+			ConsoleUtils.displayDebug("No option found !");
 		}
 		
 		return currentPosition;
