@@ -67,7 +67,7 @@ public class SqliteAdapter {
 			
 		if (type.equals(Column.Type.DATETIME)) {
 			//type = "VARCHAR";
-		} 
+		}
 
 		return type;
 	}

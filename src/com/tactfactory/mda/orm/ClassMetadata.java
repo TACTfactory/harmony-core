@@ -9,9 +9,13 @@
 package com.tactfactory.mda.orm;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
+import java.util.Map;
 
 import com.tactfactory.mda.Harmony;
+import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.template.TagConstant;
 
 /** Entity class metadata */
 public class ClassMetadata {
@@ -42,4 +46,28 @@ public class ClassMetadata {
 
 	/** Imports of the class */
 	public ArrayList<String> imports = new ArrayList<String>();
+	
+	public Map<String, Object> toMap(BaseAdapter adapter){
+		HashMap<String, Object> model = new HashMap<String, Object>();
+		model.put(TagConstant.SPACE, this.space);
+		model.put(TagConstant.NAME, this.name);
+		model.put(TagConstant.LOCAL_NAMESPACE, adapter.getNameSpaceEntity(this, adapter.getController()));
+		//model.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(this));
+		model.put(TagConstant.FIELDS, toFieldArray(this.fields.values(), adapter));
+		model.put(TagConstant.IDS, toFieldArray(this.ids.values(), adapter));
+		model.put(TagConstant.RELATIONS, toFieldArray(this.relations.values(), adapter));
+		
+		return model;
+	}
+	
+	private ArrayList<Map<String,Object>> toFieldArray(Collection<FieldMetadata> c, BaseAdapter adapter){
+		ArrayList<Map<String,Object>> SubFields = new ArrayList<Map<String,Object>>();
+		for (FieldMetadata field : c) {
+			Map<String, Object> subField = new HashMap<String, Object>();
+			field.customize(adapter);
+			subField = field.toMap();
+			SubFields.add(subField);
+		}
+		return SubFields;
+	}
 }

@@ -25,7 +25,7 @@ import java.util.Date;
 import ${namespace}.data.${name}Adapter;
 import ${namespace}.entity.${name};
 <#list relations as relation>
-	<#if (relation.relation.type=="@OneToOne" | relation.relation.type=="@ManyToOne")>
+	<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
 import ${namespace}.data.${relation.type}Adapter;
 import ${namespace}.entity.${relation.type};
 	</#if>
@@ -46,7 +46,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		</#if>
 	</#list>
 	<#list relations as relation>
-		<#if relation.relation.type=="ManyToOne">
+		<#if relation.relation.type=="ManyToOne" | relation.relation.type=="OneToOne">
 	protected ${relation.customEditType} ${relation.name}View;
 	protected List<${relation.type}> ${relation.type}list;
 		</#if>
@@ -77,19 +77,22 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 	public void loadData() {
 		<#foreach field in fields>
 			<#if !field.relation??>
+		<#if (field.type!="int")>
+		if(this.model.get${field.name?cap_first}()!=null)
+		</#if>
 			<#if (field.customEditType == "EditText") >
 				<#if (field.type == "String")>
-		this.${field.name}View.setText(this.model.get${field.name?cap_first}()); 
+			this.${field.name}View.setText(this.model.get${field.name?cap_first}()); 
 				</#if>
 				<#if (field.type == "Date")>
-		this.${field.name}View.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(this.model.get${field.name?cap_first}())); 
+			this.${field.name}View.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(this.model.get${field.name?cap_first}())); 
 				</#if>
 				<#if (field.type == "int")>
-		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}())); 
+			this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}())); 
 				</#if>
 			</#if>
 			<#if (field.customEditType == "CheckBox") >
-		this.${field.name}View.setSelected(this.model.${field.name?uncap_first}()); 
+			this.${field.name}View.setSelected(this.model.${field.name?uncap_first}()); 
 			</#if>
 			</#if>
 		</#foreach>

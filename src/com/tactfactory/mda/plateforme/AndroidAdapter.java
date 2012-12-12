@@ -61,10 +61,10 @@ public final class AndroidAdapter extends BaseAdapter {
 			result = "TextView";
 		}
 
-		if(field.relation !=null && field.relation.type.equals("ManyToOne")) {
+		/*if(field.relation !=null && field.relation.type.equals("ManyToOne")) {
 
 			result = "Spinner";
-		}
+		}*/
 		
 		return result;
 	}
@@ -88,7 +88,7 @@ public final class AndroidAdapter extends BaseAdapter {
 			result = "CheckBox";
 		}
 			
-		if(field.relation !=null && field.relation.type.equals("ManyToOne")) {
+		if(field.relation !=null && (field.relation.type.equals("ManyToOne") || field.relation.type.equals("OneToOne"))) {
 
 			result = "Spinner";
 		}

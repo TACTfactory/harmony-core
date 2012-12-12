@@ -153,6 +153,7 @@ public class SQLiteAdapterGenerator {
 			// General
 			subField.put(TagConstant.NAME, field.name);
 			subField.put(TagConstant.TYPE, field.type);
+			subField.put("columnDefinition", field.columnDefinition);
 			subField.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(field));
 			
 			// if ids

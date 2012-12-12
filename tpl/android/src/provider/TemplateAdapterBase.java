@@ -1,3 +1,7 @@
+<#function alias name>
+	<#return "COL_"+name?upper_case>
+</#function>
+
 package ${local_namespace};
 
 import java.text.SimpleDateFormat;
@@ -38,7 +42,7 @@ public abstract class ${name}AdapterBase {
 	// Columns constants fields mapping
 	<#list fields as field>
 		<#if !field.relation??>
-	public static final String COL_${field.name?upper_case} = "${field.name}";
+	public static final String ${alias(field.name)} = "${field.name}";
 		</#if>
 	</#list>
 	<#if relations??>
@@ -53,7 +57,7 @@ public abstract class ${name}AdapterBase {
 	public static final String[] COLS = new String[] {
 		<#list fields as field>
 		<#if !field.relation??>
-		COL_${field.name?upper_case}<#if field_has_next>,<#else><#if relations?size!=0>,</#if></#if>
+		${alias(field.name)}<#if field_has_next>,<#else><#if relations?size!=0>,</#if></#if>
 		</#if>
 		</#list>
 		<#list relations as relation>
@@ -72,20 +76,21 @@ public abstract class ${name}AdapterBase {
 		+ TABLE_NAME	+ " ("
 		<#list fields as field>
 			<#if !field.relation??>
-		+ COL_${field.name?upper_case}	+ " ${field.schema} <#list ids as id><#if id.name==field.name>PRIMARY KEY</#if></#list><#if field_has_next | relations?size!=0 | ids?size!=0>,</#if>"
+		+ ${alias(field.name)}	+ " ${field.schema} <#list ids as id><#if id.name==field.name & ids?size==1>PRIMARY KEY <#if field.columnDefinition=="integer">AUTOINCREMENT</#if></#if></#list><#if field_has_next | relations?size!=0 | (ids?size>1)>,</#if>"
+			<#else>
+		+ REF_${field.relation.targetEntity?upper_case}_${field.relation.field_ref[0]?upper_case} + " int NOT NULL,"
 			</#if>
 		</#list>
 		<#if relations??>
 			<#list relations as relation>
-		+ REF_${relation.relation.targetEntity?upper_case}_${relation.relation.field_ref[0]?upper_case} + " int NOT NULL<#if relation_has_next | ids?size!=0>,</#if>"
 				<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
-		+ "FOREIGN KEY("+REF_${relation.relation.targetEntity?upper_case}_${relation.relation.field_ref[0]?upper_case}+") REFERENCES ${relation.relation.targetEntity}("+${relation.relation.targetEntity}AdapterBase.COL_${relation.relation.field_ref[0]?upper_case}+")<#if (relation_has_next && (relations[relation_index+1].relation.type=="OneToOne" | relations[relation_index+1].relation.type=="ManyToOne"))>,</#if>"
+		+ "FOREIGN KEY("+REF_${relation.relation.targetEntity?upper_case}_${relation.relation.field_ref[0]?upper_case}+") REFERENCES ${relation.relation.targetEntity}("+${relation.relation.targetEntity}AdapterBase.COL_${relation.relation.field_ref[0]?upper_case}+")<#if (relation_has_next && (relations[relation_index+1].relation.type=="OneToOne" | relations[relation_index+1].relation.type=="ManyToOne")) | (ids?size>1)>,</#if>"
 				</#if>
 			</#list>
 		</#if>
-		<#--<#if ids??>
-		+ "PRIMARY KEY ("+<#list ids as id>COL_${id.name?upper_case}<#if id_has_next>+","+</#if></#list>+")"
-		</#if>-->
+		<#if (ids?size>1)>
+		+ "PRIMARY KEY ("+<#list ids as id>${alias(id.name)}<#if id_has_next>+","+</#if></#list>+")"
+		</#if>
 		+ ");";
 	}
 	<#if relations??>

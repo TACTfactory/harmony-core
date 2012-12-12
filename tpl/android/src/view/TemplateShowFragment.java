@@ -30,7 +30,7 @@ public class ${name}ShowFragment extends Fragment {
 	</#if>
 </#list>
 <#list relations as relation>
-	<#if relation.relation.type=="ManyToOne">
+	<#if relation.relation.type=="ManyToOne" | relation.relation.type=="OneToOne">
 	protected ${relation.customShowType} ${relation.name}View;
 	</#if>
 </#list>
@@ -41,7 +41,9 @@ public class ${name}ShowFragment extends Fragment {
      */
     protected void initializeComponent(View view) {
 	<#foreach field in fields>
+		<#if !field.relation??>
 		this.${field.name}View = (${field.customShowType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}); 
+		</#if>
 	</#foreach>
 	<#list relations as relation>
 		<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>

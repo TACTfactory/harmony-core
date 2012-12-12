@@ -18,6 +18,7 @@ import japa.parser.ast.body.Parameter;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.expr.MemberValuePair;
 import japa.parser.ast.expr.NormalAnnotationExpr;
+import japa.parser.ast.expr.StringLiteralExpr;
 import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 
@@ -237,7 +238,7 @@ public class JavaAdapter {
 								
 							// set column definition
 							if (mvp.getName().equals("type")) {
-								fieldMeta.columnDefinition = mvp.getValue().toString();
+								fieldMeta.columnDefinition = ((StringLiteralExpr)mvp.getValue()).getValue();
 							}
 						} else
 						
