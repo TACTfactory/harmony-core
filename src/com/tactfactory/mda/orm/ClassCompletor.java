@@ -40,7 +40,7 @@ public class ClassCompletor {
 					rel.field_ref.add(ids.get(i).name);
 				}
 			}
-			if(Harmony.DEBUG){
+			if(Harmony.debug){
 				System.out.println("Relation "+rel.type+" on field "+rel.field+" targets "+rel.entity_ref+"("+rel.field_ref.get(0)+")");
 			}
 		}

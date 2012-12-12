@@ -56,9 +56,9 @@ public class TestGenerator {
 	
 	@SuppressWarnings("unchecked")
 	public void generateAll() {
+		ConsoleUtils.display(">> Generate Repository test...");
 		
 		for(Object modelEntity : this.entities.values()) {
-			
 			Map<String, Object> entity = (Map<String, Object>) modelEntity;
 			this.localNameSpace = (String) entity.get(TagConstant.LOCAL_NAMESPACE);
 			
@@ -76,7 +76,7 @@ public class TestGenerator {
 	 */ 
 	private void generate() {
 		// Info
-		ConsoleUtils.display(">> Generate DB test source for " +  this.datamodel.get(TagConstant.NAME));
+				ConsoleUtils.display(">>> Generate Repository test for " +  this.datamodel.get(TagConstant.NAME));
 		
 		try {
 			Configuration cfg = new Configuration();
@@ -113,7 +113,7 @@ public class TestGenerator {
 			File file = FileUtils.makeFile(filepath);
 			
 			// Debug Log
-			ConsoleUtils.displayDebug("\tGenerate Source : " + file.getPath()); 
+			ConsoleUtils.displayDebug("Generate Source : " + file.getPath()); 
 	
 			// Create
 			Template tpl = cfg.getTemplate(

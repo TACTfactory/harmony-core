@@ -23,9 +23,9 @@ public class GeneralCommand extends BaseCommand {
 	 */
 	public void help() {
 		ConsoleUtils.display("Usage:\n" +
-				"\tconsole [command [--parameters]]\n" +
+				"\tconsole [--options] command [--parameters]\n" +
 				"\nUsage example:\n" +
-				"\tconsole project:init:android --name=test --namespace=com/tact/android/test --sdkdir=/root/android\n" +
+				"\tconsole --verbose project:init:android --name=test --namespace=com/tact/android/test --sdkdir=/root/android\n" +
 				"\nPlease use 'console list' to display available commands !");
 	}
 

@@ -90,7 +90,7 @@ public class SQLiteGenerator {
 	 */
 	public void generateDatabase() {
 		// Info
-		ConsoleUtils.display(">> Generate Database\n");
+		ConsoleUtils.display(">> Generate Database");
 		
 		try {
 			Configuration cfg = new Configuration();
@@ -126,7 +126,7 @@ public class SQLiteGenerator {
 						String.format(filename, Harmony.projectName)));
 		
 		// Debug Log
-		ConsoleUtils.displayDebug("\tGenerate Source : " + file.getPath()); 
+		ConsoleUtils.displayDebug("Generate Source : " + file.getPath()); 
 		
 		// Create
 		Template tpl = cfg.getTemplate(
