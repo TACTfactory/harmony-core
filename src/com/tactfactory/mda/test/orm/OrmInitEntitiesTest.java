@@ -19,6 +19,8 @@ import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.orm.FieldMetadata;
+import com.tactfactory.mda.orm.annotation.Column.Type;
 import com.tactfactory.mda.test.CommonTest;
 
 public class OrmInitEntitiesTest extends CommonTest {
@@ -72,6 +74,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.hasUserImport();
 		this.hasUserId();
 		this.hasUserColumn();
+		this.hasUserFieldAnnotations();
 		
 		// Post
 		this.hasPostEntity();
@@ -210,6 +213,37 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.hasColumn(userMeta, "createdAt");
 	}
 	
+	@Test
+	public void hasUserFieldAnnotations(){
+		this.isFieldNullable(userMeta, "id", false);
+		this.isFieldNullable(userMeta, "login", false);
+		this.isFieldNullable(userMeta, "password", false);
+		this.isFieldNullable(userMeta, "firstname", true);
+		this.isFieldNullable(userMeta, "lastname", false);
+		this.isFieldNullable(userMeta, "createdAt", false);
+		
+		this.isFieldUnique(userMeta, "id", false);
+		this.isFieldUnique(userMeta, "login", true);
+		this.isFieldUnique(userMeta, "password", false);
+		this.isFieldUnique(userMeta, "firstname", false);
+		this.isFieldUnique(userMeta, "lastname", false);
+		this.isFieldUnique(userMeta, "createdAt", false);
+		
+		this.isFieldName(userMeta, "id", "id");
+		this.isFieldName(userMeta, "login", "login");
+		this.isFieldName(userMeta, "password", "password");
+		this.isFieldName(userMeta, "firstname", "firstname");
+		this.isFieldName(userMeta, "lastname", "lastname");
+		this.isFieldName(userMeta, "createdAt", "created_at");
+		
+		
+		this.isFieldLength(userMeta, "id", 255);
+		this.isFieldLength(userMeta, "login", 255);
+		this.isFieldLength(userMeta, "password", 255);
+		this.isFieldLength(userMeta, "firstname", 255);
+		this.isFieldLength(userMeta, "lastname", 255);
+		this.isFieldLength(userMeta, "createdAt", 255);
+	}
 	
 	//// REPOSITORY POST ////
 	@Test
@@ -281,5 +315,51 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 */
 	private void hasExtend(ClassMetadata userMeta, String value) {
 		Assert.assertTrue("Check if extend " + value, userMeta.exts.contains(value));
+	}
+	
+	/**
+	 * @param classMeta
+	 * @param fieldName
+	 */
+	private void isFieldNullable(ClassMetadata classMeta, String fieldName, boolean nullable){
+		if(nullable)
+			Assert.assertTrue("Check if field " +fieldName +" is nullable", classMeta.fields.get(fieldName).nullable);
+		else
+			Assert.assertFalse("Check if field " +fieldName +" is nullable", classMeta.fields.get(fieldName).nullable);
+	}
+	
+	/**
+	 * @param classMeta
+	 * @param fieldName
+	 */
+	private void isFieldUnique(ClassMetadata classMeta, String fieldName, boolean unique){
+		if(unique)
+			Assert.assertTrue("Check if field " +fieldName +" is unique", classMeta.fields.get(fieldName).unique);
+		else
+			Assert.assertFalse("Check if field " +fieldName +" is unique", classMeta.fields.get(fieldName).unique);
+	}
+	
+	/**
+	 * @param classMeta
+	 * @param fieldName
+	 */
+	private void isFieldName(ClassMetadata classMeta, String fieldName, String name){
+		Assert.assertEquals(classMeta.fields.get(fieldName).name_in_db,name);
+	}
+	
+	/**
+	 * @param classMeta
+	 * @param fieldName
+	 */
+	private void isFieldLength(ClassMetadata classMeta, String fieldName, int length){
+		Assert.assertEquals(classMeta.fields.get(fieldName).length,length);
+	}
+	
+	/**
+	 * @param classMeta
+	 * @param fieldName
+	 */
+	private void isFieldType(ClassMetadata classMeta, String fieldName, Type type){
+		Assert.assertEquals(classMeta.fields.get(fieldName).type,type);
 	}
 }

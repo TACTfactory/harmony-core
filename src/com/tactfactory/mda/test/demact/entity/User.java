@@ -30,7 +30,7 @@ public class User extends Object implements Cloneable {
 	@Column(type=Type.PASSWORD)	// type="string", length=255
     protected String password;
 	
-	@Column(nullable=false)		// type="string", length=255
+	@Column(nullable=true)		// type="string", length=255
     protected String firstname;
 	
 	@Column()					// type="string", length=255

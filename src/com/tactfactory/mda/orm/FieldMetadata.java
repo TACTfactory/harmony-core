@@ -11,6 +11,7 @@ package com.tactfactory.mda.orm;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tactfactory.mda.orm.annotation.Column.Type;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
@@ -22,6 +23,13 @@ public class FieldMetadata {
 	
 	/** Field type */
 	public String type;
+	
+	/** Field name */
+	public String name_in_db;
+	
+	/** Field type as given in attribute */
+	public Type type_attribute;
+	
 	
 	/** Field database type */
 	public String columnDefinition;
@@ -47,6 +55,10 @@ public class FieldMetadata {
 		this.customEditType = adapter.getViewComponentEdit(this);
 	}
 	
+	/**
+	 * Transform the field to a map of strings and a relation map
+	 * @return the map
+	 */
 	public Map<String, Object> toMap(){
 		HashMap<String, Object> model = new HashMap<String, Object>();
 		model.put(TagConstant.NAME, this.name);
@@ -66,5 +78,6 @@ public class FieldMetadata {
 		return model;
 	}
 	
+	/** Relation mapped to this field*/
 	public RelationMetadata relation;
 }

@@ -36,6 +36,7 @@ import com.tactfactory.mda.orm.annotation.ManyToMany;
 import com.tactfactory.mda.orm.annotation.ManyToOne;
 import com.tactfactory.mda.orm.annotation.OneToMany;
 import com.tactfactory.mda.orm.annotation.OneToOne;
+import com.tactfactory.mda.orm.annotation.Column.Type;
 import com.tactfactory.mda.utils.PackageUtils;
 
 public class JavaAdapter {
@@ -138,6 +139,7 @@ public class JavaAdapter {
 				// General (defaults values)
 				FieldMetadata fieldMeta = new FieldMetadata();
 				fieldMeta.name = field.getVariables().get(0).getId().getName(); // FIXME not manage multi-variable
+				fieldMeta.name_in_db = fieldMeta.name;
 				fieldMeta.type = field.getType().toString();
 
 				fieldMeta.nullable = false; // Default nullable is false
@@ -168,14 +170,9 @@ public class JavaAdapter {
 					this.loadAttributes(rel, fieldMeta, annotationExpr, annotationType);
 				}
 				
-				// Set Field meta
 				if (isId) {
 					meta.ids.put(fieldMeta.name, fieldMeta);
 				}
-	
-				//if (isColumn)  {
-					meta.fields.put(fieldMeta.name, fieldMeta);
-				//}
 	
 				if (isRelation) {
 					rel.field = fieldMeta.name;
@@ -184,8 +181,13 @@ public class JavaAdapter {
 					meta.relations.put(fieldMeta.name, fieldMeta);
 				}
 				
+				meta.fields.put(fieldMeta.name, fieldMeta);
+				
 				if (Strings.isNullOrEmpty(fieldMeta.columnDefinition)) {
-					fieldMeta.columnDefinition = fieldMeta.type;
+					if(fieldMeta.type_attribute!=null)
+						fieldMeta.columnDefinition = fieldMeta.type_attribute.getValue();
+					else
+						fieldMeta.columnDefinition = fieldMeta.type;
 				}
 				fieldMeta.columnDefinition = SqliteAdapter.generateColumnType(fieldMeta);
 				
@@ -214,6 +216,14 @@ public class JavaAdapter {
 								fieldMeta.nullable = true;
 							}else 
 								
+							// set name
+							if (mvp.getName().equals("name")) {
+								if(mvp.getValue() instanceof StringLiteralExpr)
+									fieldMeta.name_in_db = ((StringLiteralExpr)mvp.getValue()).getValue();
+								else
+									fieldMeta.name_in_db = mvp.getValue().toString();
+							}else 
+								
 							// Set unique 
 							if (mvp.getName().equals("unique") && 
 									mvp.getValue().toString().equals("true")) {
@@ -237,10 +247,11 @@ public class JavaAdapter {
 								
 							// set column definition
 							if (mvp.getName().equals("type")) {
+								//TODO : Generate warning if type not recognized
 								if(mvp.getValue() instanceof StringLiteralExpr)
-									fieldMeta.columnDefinition = ((StringLiteralExpr)mvp.getValue()).getValue();
+									fieldMeta.type_attribute = Type.fromString(((StringLiteralExpr)mvp.getValue()).getValue());
 								else
-									fieldMeta.columnDefinition = mvp.getValue().toString();
+									fieldMeta.type_attribute = Type.fromString(mvp.getValue().toString());
 							}
 						} else
 						

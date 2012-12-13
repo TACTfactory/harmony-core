@@ -47,6 +47,12 @@ public class ClassMetadata {
 	/** Imports of the class */
 	public ArrayList<String> imports = new ArrayList<String>();
 	
+	
+	/**
+	 * Transform the class to a map of strings and maps (for each field) given an adapter
+	 * @param adapter The adapter used to customize the fields
+	 * @return the map
+	 */
 	public Map<String, Object> toMap(BaseAdapter adapter){
 		HashMap<String, Object> model = new HashMap<String, Object>();
 		model.put(TagConstant.SPACE, this.space);

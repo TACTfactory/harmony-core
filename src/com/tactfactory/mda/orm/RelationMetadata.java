@@ -24,6 +24,10 @@ public class RelationMetadata {
 	/** The Foreign Key name*/
 	public String name;
 	
+	/**
+	 * Transform the relation to a field of map of strings
+	 * @return
+	 */
 	public Map<String, Object> toMap(){
 		HashMap<String, Object> model = new HashMap<String, Object>();
 		model.put(TagConstant.NAME, this.name);
