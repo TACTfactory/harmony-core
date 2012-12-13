@@ -137,7 +137,7 @@ public class JavaAdapter {
 
 				// General (defaults values)
 				FieldMetadata fieldMeta = new FieldMetadata();
-				fieldMeta.name = field.getVariables().get(0).toString(); // FIXME not manage multi-variable
+				fieldMeta.name = field.getVariables().get(0).getId().getName(); // FIXME not manage multi-variable
 				fieldMeta.type = field.getType().toString();
 
 				fieldMeta.nullable = false; // Default nullable is false
