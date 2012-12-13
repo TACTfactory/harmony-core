@@ -4,7 +4,7 @@ import org.junit.*;
 
 import com.tactfactory.mda.command.*;
 
-public class PluginTest extends CommonTest {
+public class CoreTest extends CommonTest {
 	
 	/**
 	 * @throws java.lang.Exception

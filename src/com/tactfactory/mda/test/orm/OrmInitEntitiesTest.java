@@ -8,7 +8,6 @@
  */
 package com.tactfactory.mda.test.orm;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import org.junit.After;
@@ -16,15 +15,15 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.test.CommonTest;
-import com.tactfactory.mda.utils.FileUtils;
 
 public class OrmInitEntitiesTest extends CommonTest {
+	static ClassMetadata userMeta = null, postMeta = null, commentMeta = null;
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -53,7 +52,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
 		OrmCommand command = (OrmCommand) Harmony.instance.bootstrap.get(OrmCommand.class);
 		
-		ClassMetadata userMeta = null, postMeta = null, commentMeta = null;
+		
 		ArrayList<ClassMetadata> metas = command.getMetasFromAll();
 		for (ClassMetadata classMetadata : metas) {
 			if (classMetadata.name.equals("User"))
@@ -68,61 +67,30 @@ public class OrmInitEntitiesTest extends CommonTest {
 		
 		// Check Model Decoration
 		// User
-		this.modelUser();
-		Assert.assertNotNull("User no parsed !", userMeta);
-		this.hasImplement(userMeta, "Serializable");
-		this.hasImport(userMeta, "Serializable");
-		this.hasImport(userMeta, "Date");
-		this.hasImport(userMeta, "annotation");
-		this.hasImport(userMeta, "Type");
-		this.hasId(userMeta, "id");
-		this.hasColumn(userMeta, "id");
-		this.hasColumn(userMeta, "login");
-		this.hasColumn(userMeta, "password");
-		this.hasColumn(userMeta, "firstname");
-		this.hasColumn(userMeta, "lastname");
-		this.hasColumn(userMeta, "createdAt");
-
+		this.hasUserEntity();
+		this.hasUserImplement();
+		this.hasUserImport();
+		this.hasUserId();
+		this.hasUserColumn();
 		
 		// Post
-		this.modelPost();
-		Assert.assertNotNull("Post no parsed !", postMeta);
-		this.hasImplement(postMeta, "Serializable");
-		this.hasImport(postMeta, "Serializable");
-		this.hasImport(postMeta, "ArrayList");
-		this.hasImport(postMeta, "Date");
-		this.hasImport(postMeta, "DateTime");
-		this.hasImport(postMeta, "annotation");
-		this.hasId(postMeta, "id");
-		this.hasColumn(postMeta, "id");
-		this.hasColumn(postMeta, "title");
-		this.hasColumn(postMeta, "content");
-		this.hasColumn(postMeta, "owner");
-		this.hasColumn(postMeta, "comments");
-		this.hasColumn(postMeta, "createdAt");
-		this.hasColumn(postMeta, "updatedAt");
-		this.hasColumn(postMeta, "expiresAt");
+		this.hasPostEntity();
+		this.hasPostImplement();
+		this.hasPostImport();
+		this.hasPostId();
+		this.hasPostColumn();
 		
 		// Comment
-		this.modelComment();
-		Assert.assertNotNull("Comment no parsed !", commentMeta);
-		this.hasImplement(commentMeta, "Serializable");
-		this.hasExtend(commentMeta, "Object");
-		this.hasImport(commentMeta, "Serializable");
-		this.hasImport(commentMeta, "Date");
-		this.hasImport(commentMeta, "DateTime");
-		this.hasImport(commentMeta, "annotation");
-		this.hasId(commentMeta, "id");
-		this.hasColumn(commentMeta, "id");
-		this.hasColumn(commentMeta, "content");
-		this.hasColumn(commentMeta, "owner");
-		this.hasColumn(commentMeta, "post");
-		this.hasColumn(commentMeta, "createdAt");
+		this.hasCommentEntity();
+		this.hasCommentImplement();
+		this.hasCommentImport();
+		this.hasCommentId();
+		this.hasCommentColumn();
 		
 		
-		this.dataPost();
-		this.dataComment();
-		this.dataUser();
+		this.hasUserRepository();
+		this.hasPostRepository();
+		this.hasCommentRepository();
 		
 		/* For Yoan
 		this.testRepoPost();
@@ -131,6 +99,155 @@ public class OrmInitEntitiesTest extends CommonTest {
 		*/
 	}
 
+	
+	//// POST ////
+	@Test
+	public void hasPostEntity() {
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/entity/Post.java");
+		Assert.assertNotNull("Post no parsed !", postMeta);
+	}
+	
+	@Test
+	public void hasPostImplement() {
+		this.hasImplement(postMeta, "Serializable");
+	}
+	
+	@Test
+	public void hasPostImport() {
+		this.hasImport(postMeta, "Serializable");
+		this.hasImport(postMeta, "ArrayList");
+		this.hasImport(postMeta, "Date");
+		this.hasImport(postMeta, "DateTime");
+		this.hasImport(postMeta, "annotation");
+	}
+	
+	@Test
+	public void hasPostId() {
+		this.hasId(postMeta, "id");
+	}
+	
+	@Test
+	public void hasPostColumn() {
+		this.hasColumn(postMeta, "id");
+		this.hasColumn(postMeta, "title");
+		this.hasColumn(postMeta, "content");
+		this.hasColumn(postMeta, "owner");
+		this.hasColumn(postMeta, "comments");
+		this.hasColumn(postMeta, "createdAt");
+		this.hasColumn(postMeta, "updatedAt");
+		this.hasColumn(postMeta, "expiresAt");
+	}
+	
+	
+	//// COMMENT ////
+	@Test
+	public void hasCommentEntity() {		
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/entity/Comment.java");
+		Assert.assertNotNull("Comment no parsed !", commentMeta);
+	}
+	
+	@Test
+	public void hasCommentImplement() {
+		this.hasImplement(commentMeta, "Serializable");
+		this.hasExtend(commentMeta, "Object");
+	}
+	
+	@Test
+	public void hasCommentImport() {
+		this.hasImport(commentMeta, "Serializable");
+		this.hasImport(commentMeta, "Date");
+		this.hasImport(commentMeta, "DateTime");
+		this.hasImport(commentMeta, "annotation");
+	}
+	
+	@Test
+	public void hasCommentId() {
+		this.hasId(commentMeta, "id");
+	}
+	
+	@Test
+	public void hasCommentColumn() {
+		this.hasColumn(commentMeta, "id");
+		this.hasColumn(commentMeta, "content");
+		this.hasColumn(commentMeta, "owner");
+		this.hasColumn(commentMeta, "post");
+		this.hasColumn(commentMeta, "createdAt");
+	}
+	
+	
+	//// USER ////
+	@Test
+	public void hasUserEntity() {
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/entity/User.java");
+		Assert.assertNotNull("User no parsed !", userMeta);
+	}
+	
+	@Test
+	public void hasUserImplement() {
+		this.hasImplement(userMeta, "Serializable");
+	}
+	
+	@Test
+	public void hasUserImport() {
+		this.hasImport(userMeta, "Serializable");
+		this.hasImport(userMeta, "Date");
+		this.hasImport(userMeta, "annotation");
+		this.hasImport(userMeta, "Type");
+	}
+	
+	@Test
+	public void hasUserId() {
+		this.hasId(userMeta, "id");
+	}
+	
+	@Test
+	public void hasUserColumn() {
+		this.hasColumn(userMeta, "id");
+		this.hasColumn(userMeta, "login");
+		this.hasColumn(userMeta, "password");
+		this.hasColumn(userMeta, "firstname");
+		this.hasColumn(userMeta, "lastname");
+		this.hasColumn(userMeta, "createdAt");
+	}
+	
+	
+	//// REPOSITORY POST ////
+	@Test
+	public void hasPostRepository() {
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/PostAdapter.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/PostAdapterBase.java");
+	}
+	
+	
+	//// REPOSITORY COMMENT ////
+	@Test
+	public void hasCommentRepository() {
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/CommentAdapter.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/CommentAdapterBase.java");
+	}
+	
+	
+	//// REPOSITORY USER ////
+	@Test
+	public void hasUserRepository() {
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/UserAdapter.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/UserAdapterBase.java");
+	}
+	
+	
+	//// TEST REPOSITORY POST ////
+	//TODO Yoan
+	
+	
+	//// TEST REPOSITORY COMMENT ////
+	//TODO Yoan
+	
+	
+	//// TEST REPOSITORY USER ////
+	//TODO Yoan
+	
+	
+	//// INTERNAL ////
 	/**
 	 * @param userMeta
 	 */
@@ -165,39 +282,4 @@ public class OrmInitEntitiesTest extends CommonTest {
 	private void hasExtend(ClassMetadata userMeta, String value) {
 		Assert.assertTrue("Check if extend " + value, userMeta.exts.contains(value));
 	}
-	
-	@Test
-	public void modelPost() {
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/entity/Post.java");
-	}
-	
-	@Test
-	public void modelComment() {		
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/entity/Comment.java");
-	}
-	
-	@Test
-	public void modelUser() {
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/entity/User.java");
-	}
-	
-	@Test
-	public void dataPost() {
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/PostAdapter.java");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/PostAdapterBase.java");
-	}
-	
-	@Test
-	public void dataComment() {
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/CommentAdapter.java");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/CommentAdapterBase.java");
-	}
-	
-	@Test
-	public void dataUser() {
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/UserAdapter.java");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/UserAdapterBase.java");
-	}
-	
-	
 }
