@@ -22,7 +22,11 @@ public class FieldMetadata {
 	
 	/** Field type */
 	public String type;
+	
+	/** Field database type */
 	public String columnDefinition;
+	
+	/** Field optional */
 	public HashMap<String, String> options; // (Not use...) for extra option of all bundle!
 	
 	public boolean nullable = false;

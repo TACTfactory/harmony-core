@@ -120,7 +120,7 @@ public class ProjectCommand extends BaseCommand {
 	 * @return success of Android project initialization
 	 */
 	public boolean initAndroid() {
-		ConsoleUtils.display("Init Project Google Android\n----------------------");
+		ConsoleUtils.display("> Init Project Google Android");
 
 		this.initProjectParam();
 		boolean result = false;
@@ -144,7 +144,7 @@ public class ProjectCommand extends BaseCommand {
 	 * @return success of IOS project initialization
 	 */
 	public boolean initIOS() {
-		ConsoleUtils.display("Init Project Apple iOS\n----------------------");
+		ConsoleUtils.display("> Init Project Apple iOS");
 
 		this.initProjectParam();
 		boolean result = false;
@@ -166,7 +166,7 @@ public class ProjectCommand extends BaseCommand {
 	 * @return success of RIM project initialization
 	 */
 	public boolean initRIM() {
-		ConsoleUtils.display("Init Project BlackBerry RIM\n----------------------");
+		ConsoleUtils.display("> Init Project BlackBerry RIM");
 
 		this.initProjectParam();
 		boolean result = false;
@@ -188,7 +188,7 @@ public class ProjectCommand extends BaseCommand {
 	 * @return success of Windows Phone project initialization
 	 */
 	public boolean initWinPhone() {
-		ConsoleUtils.display("Init Project Windows Phone\n----------------------");
+		ConsoleUtils.display("> Init Project Windows Phone");
 
 		this.initProjectParam();
 		boolean result = false;
@@ -209,7 +209,7 @@ public class ProjectCommand extends BaseCommand {
 	 * Initialize all project platforms
 	 */
 	public void initAll() {
-		ConsoleUtils.display("Init All Projects\n----------------------");
+		ConsoleUtils.display("> Init All Projects");
 
 		this.initProjectParam();
 		this.initAndroid();

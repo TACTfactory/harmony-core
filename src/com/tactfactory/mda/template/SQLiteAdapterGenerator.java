@@ -40,7 +40,6 @@ public class SQLiteAdapterGenerator {
 	protected boolean isWritable = true;
 	protected HashMap<String, Object> datamodel;
 
-	@SuppressWarnings("unchecked")
 	public SQLiteAdapterGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
 		if (metas == null && adapter == null)
 			throw new Exception("No meta or adapter define.");
@@ -49,16 +48,21 @@ public class SQLiteAdapterGenerator {
 		this.adapter	= adapter;
 		
 		// Make entities
-		this.entities = new HashMap<String, Object>();
-		for (ClassMetadata meta : this.metas) {
+		this.makeEntityModel();
 			if(!meta.fields.isEmpty()){
 				Map<String, Object> modelClass = meta.toMap(this.adapter);
 				modelClass.put(TagConstant.LOCAL_NAMESPACE, this.adapter.getNameSpace(meta, this.adapter.getData()));
 				
 				this.entities.put((String) modelClass.get(TagConstant.NAME), modelClass);
+		this.makeRelationModel();
 			}
 		}
 
+	/**
+	 * 
+	 */
+	@SuppressWarnings("unchecked")
+	private void makeRelationModel() {
 		//Message info
 		ConsoleUtils.display(">> Analyse Databases relations in models");
 		
@@ -130,6 +134,32 @@ public class SQLiteAdapterGenerator {
 					}
 				}
 			}
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void makeEntityModel() {
+		this.entities = new HashMap<String, Object>();
+		for (ClassMetadata meta : this.metas) {
+			this.meta = meta;
+			Map<String, Object> modelClass = new HashMap<String, Object>();
+			modelClass.put(TagConstant.SPACE,	meta.space );
+			modelClass.put(TagConstant.NAME,	meta.name );
+			modelClass.put(TagConstant.LOCAL_NAMESPACE,	this.adapter.getNameSpace(this.meta, this.adapter.getData()) );
+			
+			// Make sub fields (ids, fields, relations)
+			ArrayList<Map<String, Object>> modelIds = this.loadSubFields(this.meta.ids.values());
+			ArrayList<Map<String, Object>> modelFields = this.loadSubFields(this.meta.fields.values());
+			ArrayList<Map<String, Object>> modelRelations = this.loadSubFields(this.meta.relations.values());
+			
+			// Make sub fields (ids, fields, relations)
+			modelClass.put(TagConstant.IDS, modelIds);
+			modelClass.put(TagConstant.FIELDS, modelFields);
+			modelClass.put(TagConstant.RELATIONS, modelRelations);
+			
+			this.entities.put((String) modelClass.get(TagConstant.NAME), modelClass);
 		}
 	}
 

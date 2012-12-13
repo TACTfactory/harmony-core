@@ -7,6 +7,7 @@
 /doc/API/*
 .classpath
 .project
+!/tpl/android/project/.project
 local.properties
 .settings/*
 /tmp/*

@@ -14,12 +14,14 @@ import java.io.File;
 
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
+import com.tactfactory.mda.utils.FileUtils;
 
 /**
  *
  */
 public abstract class CommonTest {
 	protected Harmony harmony;
+	//protected AndroidAdapter adapterTargetAdapter = new AndroidAdapter(); //TODO transform to 
 
 	/**
 	 * @throws java.lang.Exception
@@ -47,7 +49,20 @@ public abstract class CommonTest {
 		
 	}
 	
-	protected void isFindFile(String fileName) {
+	protected void makeEntities() {
+		String pathNameSpace = Harmony.projectNameSpace.replaceAll("\\.", "/");
+		String srcDir = String.format("src/%s/%s/", pathNameSpace, "entity");
+		String destDir = String.format("%s/android/src/%s/%s/", Harmony.pathProject, pathNameSpace, "entity");
+		System.out.println(destDir);
+		
+		// FileUtils.copyDirectory(new File(srcDir),new File(destDir));
+		FileUtils.makeFolderRecursive(srcDir, destDir, true);
+		if(new File(destDir+"Post.java").exists())
+			ConsoleUtils.displayDebug("Entity is copy to generated package !");
+	}
+	
+	
+	protected void hasFindFile(String fileName) {
 		File file = new File(String.format("%s/%s", Harmony.pathProject, fileName));
 		assertTrue(file.exists());
 	}

@@ -8,7 +8,6 @@
  */
 package com.tactfactory.mda.test.demact.entity;
 
-import java.io.Serializable;
 import java.util.Date;
 
 import com.tactfactory.mda.orm.annotation.*;
@@ -16,7 +15,10 @@ import com.tactfactory.mda.orm.annotation.Column.Type;
 
 @Table
 @Entity
-public class User implements Serializable {
+public class User extends Object implements Cloneable {
+	@SuppressWarnings("unused")
+	private static final long serialVersionUID = 7032873279928549706L;
+
 	@Id
     @Column()					// type="integer",
     @GeneratedValue(strategy="IDENTITY")
@@ -28,7 +30,7 @@ public class User implements Serializable {
 	@Column(type=Type.PASSWORD)	// type="string", length=255
     protected String password;
 	
-	@Column()					// type="string", length=255
+	@Column(nullable=false)		// type="string", length=255
     protected String firstname;
 	
 	@Column()					// type="string", length=255

@@ -4,7 +4,7 @@ import org.junit.*;
 
 import com.tactfactory.mda.command.*;
 
-public class PluginTest extends CommonTest {
+public class CoreTest extends CommonTest {
 	
 	/**
 	 * @throws java.lang.Exception
@@ -35,7 +35,7 @@ public class PluginTest extends CommonTest {
 	
 	@Test
 	public void list() {
-		System.out.println("Test List bundle/command");
+		System.out.println("\nTest List bundle/command");
 		System.out.println("###############################################################################");
 		
 		this.harmony.findAndExecute(GeneralCommand.LIST, null, null);
@@ -43,7 +43,7 @@ public class PluginTest extends CommonTest {
 	
 	@Test
 	public void help() {
-		System.out.println("Test Help");
+		System.out.println("\nTest Help");
 		System.out.println("###############################################################################");
 		
 		this.harmony.findAndExecute(GeneralCommand.HELP, null, null);
