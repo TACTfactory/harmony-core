@@ -35,7 +35,6 @@ import freemarker.template.TemplateException;
 public class SQLiteAdapterGenerator {
 	protected List<ClassMetadata> metas;
 	protected Map<String, Object> entities;
-	protected ClassMetadata meta;
 	protected BaseAdapter adapter;
 	protected String localNameSpace;
 	protected boolean isWritable = true;
@@ -43,7 +42,7 @@ public class SQLiteAdapterGenerator {
 
 	@SuppressWarnings("unchecked")
 	public SQLiteAdapterGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
-		if (meta == null && adapter == null)
+		if (metas == null && adapter == null)
 			throw new Exception("No meta or adapter define.");
 		
 		this.metas		= metas;
@@ -52,23 +51,12 @@ public class SQLiteAdapterGenerator {
 		// Make entities
 		this.entities = new HashMap<String, Object>();
 		for (ClassMetadata meta : this.metas) {
-			this.meta = meta;
-			Map<String, Object> modelClass = new HashMap<String, Object>();
-			modelClass.put(TagConstant.SPACE,	meta.space );
-			modelClass.put(TagConstant.NAME,	meta.name );
-			modelClass.put(TagConstant.LOCAL_NAMESPACE,	this.adapter.getNameSpace(this.meta, this.adapter.getData()) );
-			
-
-			// Make sub fields (ids, fields, relations)
-			ArrayList<Map<String, Object>> modelIds = this.loadSubFields(this.meta.ids.values());
-			ArrayList<Map<String, Object>> modelFields = this.loadSubFields(this.meta.fields.values());
-			ArrayList<Map<String, Object>> modelRelations = this.loadSubFields(this.meta.relations.values());
-			
-			modelClass.put(TagConstant.IDS, modelIds);
-			modelClass.put(TagConstant.FIELDS, modelFields);
-			modelClass.put(TagConstant.RELATIONS, modelRelations);
-			
-			this.entities.put((String) modelClass.get(TagConstant.NAME), modelClass);
+			if(!meta.fields.isEmpty()){
+				Map<String, Object> modelClass = meta.toMap(this.adapter);
+				modelClass.put(TagConstant.LOCAL_NAMESPACE, this.adapter.getNameSpace(meta, this.adapter.getData()));
+				
+				this.entities.put((String) modelClass.get(TagConstant.NAME), modelClass);
+			}
 		}
 
 		//Message info
@@ -145,45 +133,6 @@ public class SQLiteAdapterGenerator {
 		}
 	}
 
-	/**
-	 * @return
-	 */
-	private ArrayList<Map<String, Object>> loadSubFields(Collection<FieldMetadata> values) {
-		ArrayList<Map<String, Object>> SubFields = new ArrayList<Map<String,Object>>();
-		for (FieldMetadata field : values) {
-			Map<String, Object> subField = new HashMap<String, Object>();
-			
-			// General
-			subField.put(TagConstant.NAME, field.name);
-			subField.put(TagConstant.TYPE, field.type);
-			subField.put("columnDefinition", field.columnDefinition);
-			subField.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(field));
-			
-			// if ids
-			
-			// if models
-			field.customize(adapter);
-			subField.put(TagConstant.SCHEMA, SqliteAdapter.generateStructure(field));
-			
-			// if relations
-			if(field.relation!=null)
-				subField.put(TagConstant.RELATION, loadRelationSubField(field));
-			
-			SubFields.add(subField);
-		}
-		return SubFields;
-	}
-	
-	private Map<String, Object> loadRelationSubField(FieldMetadata fm){
-		Map<String, Object> relationSF = new HashMap<String, Object>();
-		
-		relationSF.put(TagConstant.TYPE, fm.relation.type);
-		relationSF.put("field_ref", fm.relation.field_ref);
-		relationSF.put("targetEntity", fm.relation.entity_ref);
-		relationSF.put(TagConstant.NAME, fm.relation.name);
-		
-		return relationSF;
-	}
 	
 	@SuppressWarnings("unchecked")
 	public void generateAll() {

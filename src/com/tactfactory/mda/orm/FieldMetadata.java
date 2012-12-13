@@ -53,6 +53,8 @@ public class FieldMetadata {
 		model.put("customEditType", this.customEditType);
 		model.put("customShowType", this.customShowType);
 		
+		model.put(TagConstant.SCHEMA, SqliteAdapter.generateStructure(this));
+		
 		if(relation!=null){
 			model.put(TagConstant.RELATION, this.relation.toMap());
 		}
