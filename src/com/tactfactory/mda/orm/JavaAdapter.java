@@ -237,7 +237,10 @@ public class JavaAdapter {
 								
 							// set column definition
 							if (mvp.getName().equals("type")) {
-								fieldMeta.columnDefinition = ((StringLiteralExpr)mvp.getValue()).getValue();
+								if(mvp.getValue() instanceof StringLiteralExpr)
+									fieldMeta.columnDefinition = ((StringLiteralExpr)mvp.getValue()).getValue();
+								else
+									fieldMeta.columnDefinition = mvp.getValue().toString();
 							}
 						} else
 						
