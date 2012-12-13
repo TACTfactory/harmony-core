@@ -234,7 +234,6 @@ public abstract class ${name}AdapterBase {
 
 		return result;
 	}
-	<#if ids??>
 	// CRUD Entity
 	/** Find & read ${name} by id in database
 	 * 
@@ -242,6 +241,7 @@ public abstract class ${name}AdapterBase {
 	 * return ${name} entity
 	 */
 	public ${name} getByID(<#list ids as id>${id.type} ${id.name}<#if id_has_next>,</#if></#list>) {
+		<#if (ids?size>0)>
 		Cursor c = this.getSingleCursor(id);
 		if(c.getCount()!=0)
 			c.moveToFirst();
@@ -249,8 +249,10 @@ public abstract class ${name}AdapterBase {
 		c.close();
 		
 		return result;
+		<#else>
+		throw new UnsupportedOperationException("Method not implemented yet.");
+		</#if>
 	}
-	</#if>
 	/** Read All ${name}s entities
 	 * 
 	 * return List of ${name} entities
@@ -273,14 +275,9 @@ public abstract class ${name}AdapterBase {
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
 		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item);
-		<#list fields as field>
-			<#if (field.alias=="COL_ID")>
-				<#assign col_id="COL_ID">
-			</#if>
+		<#list ids as id>
+				values.remove(${alias(id.name)});
 		</#list>
-		<#if col_id??>
-		values.remove(${col_id});
-		</#if>
 		
 		return this.mDatabase.insert(
 				TABLE_NAME, 
@@ -294,11 +291,12 @@ public abstract class ${name}AdapterBase {
 	 * return 
 	 */
 	public int update(${name} item) {
+		<#if (ids?size>0)>
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
 		
 		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item);	
-		String whereClause = <#list ids as id> ${id.alias} + "=? <#if id_has_next>AND </#if>"</#list>;
+		String whereClause = <#list ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, </#if></#list>};
 		
 		return this.mDatabase.update(
@@ -306,6 +304,9 @@ public abstract class ${name}AdapterBase {
 				values, 
 				whereClause, 
 				whereArgs);
+		<#else>
+		throw new UnsupportedOperationException("Method not implemented yet.");
+		</#if>
 	}
 	
 	/** Delete a ${name} entity of database
@@ -314,24 +315,29 @@ public abstract class ${name}AdapterBase {
 	 * return
 	 */
 	public int remove(<#list ids as id>${id.type} ${id.name}<#if id_has_next>,</#if></#list>) {
+		<#if (ids?size>0)>
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Delete DB(" + TABLE_NAME + ") id : "+ <#list ids as id>${id.name}<#if id_has_next> + " id : " + </#if></#list>);
 		
-		String whereClause = <#list ids as id> ${id.alias} + "=? <#if id_has_next>AND </#if>"</#list>;
+		String whereClause = <#list ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list ids as id>String.valueOf(${id.name}) <#if id_has_next>, </#if></#list>};
 		
 		return this.mDatabase.delete(
 				TABLE_NAME, 
 				whereClause, 
 				whereArgs);
+		<#else>
+		throw new UnsupportedOperationException("Method not implemented yet.");
+		</#if>
 	}
 	
 	// Internal Cursor
 	protected Cursor getSingleCursor(<#list ids as id>${id.type} ${id.name}<#if id_has_next>,</#if></#list>) {
+		<#if (ids?size>0)>
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Get entities id : " + <#list ids as id>${id.name}<#if id_has_next> + " id : " + </#if></#list>);
 		
-		String whereClause = <#list ids as id> ${id.alias} + "=? <#if id_has_next>AND </#if>"</#list>;
+		String whereClause = <#list ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list ids as id>String.valueOf(${id.name}) <#if id_has_next>, </#if></#list>};
 		
 		return this.mDatabase.query(
@@ -342,6 +348,9 @@ public abstract class ${name}AdapterBase {
 				null, 
 				null, 
 				null);
+		<#else>
+		throw new UnsupportedOperationException("Method not implemented yet.");
+		</#if>
 	}
 	
 	protected Cursor getAllCursor() {
