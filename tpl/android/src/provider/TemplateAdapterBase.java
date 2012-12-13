@@ -234,7 +234,7 @@ public abstract class ${name}AdapterBase {
 
 		return result;
 	}
-	
+	<#if ids??>
 	// CRUD Entity
 	/** Find & read ${name} by id in database
 	 * 
@@ -250,7 +250,7 @@ public abstract class ${name}AdapterBase {
 		
 		return result;
 	}
-	
+	</#if>
 	/** Read All ${name}s entities
 	 * 
 	 * return List of ${name} entities
