@@ -48,11 +48,11 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 
 			holder = new ViewHolder();
 			<#list fields as field>
-			holder.${field.name} = (TextView) convertView.findViewById(R.id.row_${name}_${field.name});
+			holder.${field.name} = (TextView) convertView.findViewById(R.id.row_${name?lower_case}_${field.name});
 			</#list>
 			<#list relations as relation>
 				<#if (relation.relation.type=="@OneToOne" | relation.relation.type=="@ManyToOne")>
-			holder.${relation.name} = (TextView) convertView.findViewById(R.id.row_${name}_${relation.name});
+			holder.${relation.name} = (TextView) convertView.findViewById(R.id.row_${name?lower_case}_${relation.name});
 				</#if>
 			</#list>
 			

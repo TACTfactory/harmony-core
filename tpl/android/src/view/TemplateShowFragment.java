@@ -87,7 +87,7 @@ public class ${name}ShowFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_${name?lower_case}_show, container, false);
 
         Intent intent =  getActivity().getIntent();
-        this.model = (${name}) intent.getSerializableExtra("${name}");
+        this.model = (${name?cap_first}) intent.getSerializableExtra("${name}");
         		
         this.initializeComponent(view);
         this.loadData();
