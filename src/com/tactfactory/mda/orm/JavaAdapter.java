@@ -10,7 +10,6 @@ package com.tactfactory.mda.orm;
 
 import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
-import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
@@ -18,6 +17,7 @@ import japa.parser.ast.body.Parameter;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.expr.MemberValuePair;
 import japa.parser.ast.expr.NormalAnnotationExpr;
+import japa.parser.ast.expr.StringLiteralExpr;
 import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 
@@ -81,7 +81,7 @@ public class JavaAdapter {
 						meta.name = PackageUtils.extractNameEntity(n.getName());
 						
 						// Debug Log
-						ConsoleUtils.displayDebug("\tEntity : " + meta.space + ".entity." +  meta.name);
+						ConsoleUtils.displayDebug("Entity : " + meta.space + ".entity." +  meta.name);
 					}
 				}
 				
@@ -93,7 +93,7 @@ public class JavaAdapter {
 							meta.impls.add(impl.getName());
 							
 							// Debug Log
-							ConsoleUtils.displayDebug("\t\tImplement : " + impl.getName());
+							ConsoleUtils.displayDebug("\tImplement : " + impl.getName());
 						}
 					}
 					
@@ -104,17 +104,17 @@ public class JavaAdapter {
 							meta.exts = ext.getName();		
 							
 							// Debug Log
-							ConsoleUtils.displayDebug("\t\tExtend : " + ext.getName());
+							ConsoleUtils.displayDebug("\tExtend : " + ext.getName());
 						}
 					}
 					
 					// Get list of Members
-					List<BodyDeclaration> members = n.getMembers();
+					/*List<BodyDeclaration> members = n.getMembers();
 					if(members!=null){
 						for(BodyDeclaration member : members){					
-							//meta.members.add(member.getName());	///TODO Micky > Good or Trash ? [Gregg]	
+							meta.members.add(member.getName());	///TODO Micky > Good or Trash ? [Gregg]	
 						}
-					}
+					}*/
 				}
 			}
 	    }
@@ -237,7 +237,7 @@ public class JavaAdapter {
 								
 							// set column definition
 							if (mvp.getName().equals("type")) {
-								fieldMeta.columnDefinition = mvp.getValue().toString();
+								fieldMeta.columnDefinition = ((StringLiteralExpr)mvp.getValue()).getValue();
 							}
 						} else
 						
@@ -271,7 +271,7 @@ public class JavaAdapter {
 				isId = true;
 				
 				// Debug Log
-				ConsoleUtils.displayDebug("\t\tID : " + fieldMeta.name);
+				ConsoleUtils.displayDebug("\tID : " + fieldMeta.name);
 			}
 			
 			return isId;
@@ -297,7 +297,7 @@ public class JavaAdapter {
 				if (annotationType.equals(FILTER_JOINCOLUMN))
 					type = "Join Column";
 				
-				ConsoleUtils.displayDebug("\t\t" + type + " : " + fieldMeta.name + 
+				ConsoleUtils.displayDebug("\t" + type + " : " + fieldMeta.name + 
 						" type of " + fieldMeta.type);
 			}
 			
@@ -321,7 +321,7 @@ public class JavaAdapter {
 				isRelation = true;
 				
 				// Debug Log
-				ConsoleUtils.displayDebug("\t\tRelation " + annotationType + 
+				ConsoleUtils.displayDebug("\tRelation " + annotationType + 
 						" : " + fieldMeta.name + " type of " + fieldMeta.type);
 			}
 			
@@ -348,9 +348,9 @@ public class JavaAdapter {
 			meta.methods.add(methodMeta);
 			
 			// Debug Log
-			if(Harmony.DEBUG){
+			if(Harmony.debug){
 				StringBuilder builder = new StringBuilder(
-						String.format("\t\tMethod : %s %s(", methodMeta.type, methodMeta.name));
+						String.format("\tMethod : %s %s(", methodMeta.type, methodMeta.name));
 				
 				for(String args : methodMeta.argumentsTypes) {
 					if (args != methodMeta.argumentsTypes.get(0))
@@ -374,7 +374,7 @@ public class JavaAdapter {
 			meta.imports.add(impName);
 			
 			// Debug Log
-			ConsoleUtils.displayDebug("\t\tImport : " + impName);
+			ConsoleUtils.displayDebug("\tImport : " + impName);
 		}
 	}
 }

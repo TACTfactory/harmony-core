@@ -5,13 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 <#list fields as field>
+	<#if !field.relation??>
     <TextView 
     	android:id="@+id/${name?lower_case}_${field.name?lower_case}_label"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    <#if (field_index > 0) >
-	    android:layout_below="@+id/${name?lower_case}_${fields[field_index-1].name?lower_case}"
+	    android:layout_below="@+id/${name?lower_case}_${lastFieldName?lower_case}"
 	    </#if >
+	    <#assign lastFieldName=field.name>
 	    android:text="${field.name?lower_case}"/>
     <${field.customShowType}
 		android:id="@+id/${name?lower_case}_${field.name?lower_case}"
@@ -21,9 +23,10 @@
 	    android:inputType="text"
 	    </#if >
 	    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />
+	</#if>
 </#list>
 <#list relations as relation>
-	<#if relation.relation.type=="@ManyToOne">
+	<#if relation.relation.type=="ManyToOne">
     <TextView 
     	android:id="@+id/${name?lower_case}_${relation.name?lower_case}_label"
 	    android:layout_width="match_parent"

@@ -17,8 +17,9 @@
 			<#if (field_index==0)>
         android:layout_alignParentTop="true" />
 			<#else>
-		android:layout_below="@+id/row_${name}_${fields[field_index-1].name}" />
+		android:layout_below="@+id/row_${name}_${lastFieldName}" />
 			</#if>
+			<#assign lastFieldName=field.name>
 		</#if>
     </#list>
     <#list relations as relation>
@@ -28,7 +29,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         	<#if (relation_index==0)>
-        android:layout_below="@+id/row_${name}_${fields?last.name}" />
+        android:layout_below="@+id/row_${name}_${lastFieldName}" />
 			<#else>
 		android:layout_below="@+id/row_${name}_${relations[relation_index-1].name}" />
 			</#if>

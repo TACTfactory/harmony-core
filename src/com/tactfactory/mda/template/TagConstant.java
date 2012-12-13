@@ -32,6 +32,8 @@ public abstract class TagConstant {
 	public final static String ALIAS = "alias";
 	public final static String IDS = "ids";
 	public final static String RELATION = "relation";
+	public final static String FIELD_REF = "field_ref";
+	public final static String ENTITY_REF = "targetEntity";
 
 	public static class AndroidSDK {
 		private String dir;

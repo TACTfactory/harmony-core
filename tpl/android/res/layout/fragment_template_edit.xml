@@ -24,7 +24,7 @@
 </#list>
 <#if relations??>
 	<#list relations as relation>
-		<#if relation.relation.type=="@ManyToOne">
+		<#if relation.relation.type=="ManyToOne">
     <TextView 
     	android:id="@+id/${name?lower_case}_${relation.name?lower_case}_label"
 	    android:layout_width="match_parent"

@@ -123,7 +123,7 @@ public class ProjectGenerator {
 				output.close();
 	
 				// Debug Log
-				if (Harmony.DEBUG)
+				if (Harmony.debug)
 					System.out.println("File "+destFile.getName()+" processed...");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -168,7 +168,7 @@ public class ProjectGenerator {
 		File dirProj = FileUtils.makeFolderRecursive(
 				String.format("%s/%s/%s/", Harmony.pathTemplate, this.adapter.getPlatform(), this.adapter.getProject()),
 				String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()),
-				true);
+				false);
 
 		// create project name space folders
 		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/"));
@@ -202,16 +202,18 @@ public class ProjectGenerator {
 				new File(String.format("%s/%s",this.adapter.getLibsPath(),"Harmony.jar")));
 		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathLibs,"android-support-v4.jar")),
 				new File(String.format("%s/%s",this.adapter.getLibsPath(),"android-support-v4.jar")));
+		
+		File dirTpl = new File(String.format("%s/%s/%s/", Harmony.pathTemplate, this.adapter.getPlatform(), this.adapter.getProject()));
 
 		// Update newly created files with datamodel
-		if(dirProj.exists() && dirProj.listFiles().length!=0)
+		if(dirTpl.exists() && dirTpl.listFiles().length!=0)
 		{
 			result = true;
-			for(int i=0;i<dirProj.listFiles().length;i++)
+			for(int i=0;i<dirTpl.listFiles().length;i++)
 			{
-				if(dirProj.listFiles()[i].isFile()) {
-					this.updateProjectFile(dirProj.listFiles()[i].getPath(),
-							this.adapter.getTemplateProjectPath() + dirProj.listFiles()[i].getName());
+				if(dirTpl.listFiles()[i].isFile()) {
+					this.updateProjectFile(String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform())+dirTpl.listFiles()[i].getName(),
+							this.adapter.getTemplateProjectPath() + dirTpl.listFiles()[i].getName());
 				}
 			}
 		}
@@ -229,6 +231,7 @@ public class ProjectGenerator {
 				String.format("%s/%s/%s/", Harmony.pathTemplate , this.adapter.getPlatform(), this.adapter.getProject()),
 				String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()),
 				true);
+		
 		if(dirProj.exists() && dirProj.listFiles().length!=0)
 			result = true;
 
@@ -267,11 +270,10 @@ public class ProjectGenerator {
 
 		if(removeResult==0) {
 			result = true;
-			if(Harmony.DEBUG)
-				System.out.println("Project "+this.adapter.getPlatform()+" removed!");
+			
+			ConsoleUtils.displayDebug("Project "+this.adapter.getPlatform()+" removed!");
 		} else {
-			if(Harmony.DEBUG)
-				System.out.println("Remove Project "+this.adapter.getPlatform()+" return "+removeResult+" errors...\n");
+			ConsoleUtils.displayError("Remove Project "+this.adapter.getPlatform()+" return "+removeResult+" errors...\n");
 		}
 		return result;
 	}
@@ -280,8 +282,7 @@ public class ProjectGenerator {
 	 * Generate HomeActivity File and merge it with datamodel
 	 */
 	public void generateHomeActivity() throws IOException,TemplateException {
-
-		System.out.println(">> Generate HomeView & Strings");
+		ConsoleUtils.display(">> Generate HomeView & Strings...");
 		
 		Configuration cfg = new Configuration();
 
@@ -295,7 +296,7 @@ public class ProjectGenerator {
 		File file = FileUtils.makeFile(this.adapter.getHomeActivityPathFile() );
 
 		// Debug Log
-		ConsoleUtils.displayDebug("\tGenerate Source : " + file.getPath()); 
+		ConsoleUtils.displayDebug("Generate Source : " + file.getPath()); 
 
 		// Create
 		Template tpl = cfg.getTemplate(this.adapter.getTemplateHomeActivityPathFile().substring(1));
@@ -328,8 +329,7 @@ public class ProjectGenerator {
 			destFile = FileUtils.makeFile(destFile.getPath());
 
 		// Debug Log
-		if (Harmony.DEBUG)
-			System.out.println("\tUpdate Strings.xml File : " + destFile.getPath() + "\n"); 
+		ConsoleUtils.displayDebug("Update Strings.xml File : " + destFile.getPath() + "\n"); 
 
 		// Create
 		Template tpl;

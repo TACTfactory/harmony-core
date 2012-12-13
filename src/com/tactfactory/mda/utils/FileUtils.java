@@ -23,7 +23,6 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 
 import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.Harmony;
 
 /** Manipulate File tools */
 public class FileUtils extends org.apache.commons.io.FileUtils {

@@ -85,6 +85,7 @@ public class SQLiteAdapterGenerator {
 					
 					// One to One relation
 					if( ((String)relation.get(TagConstant.TYPE)).equals("@OneToOne") ) {
+						ConsoleUtils.display("\tFound a @OneToOne relation in "+modelClass.get(TagConstant.NAME) );
 	
 					} else
 						
@@ -128,11 +129,13 @@ public class SQLiteAdapterGenerator {
 					
 					// Many to One relation
 					if( ((String)relation.get(TagConstant.TYPE)).equals("@ManyToOne")) {
-	
+						ConsoleUtils.display("\tFound a @ManyToOne relation in "+modelClass.get(TagConstant.NAME) );
 					} else
 					
 					// Many to Many relation
 					if( ((String)relation.get(TagConstant.TYPE)).equals("@ManyToMany")) {
+
+						ConsoleUtils.display("\tFound a @ManyToMany relation in "+modelClass.get(TagConstant.NAME) );
 	
 					} else {
 						
@@ -153,6 +156,7 @@ public class SQLiteAdapterGenerator {
 			// General
 			subField.put(TagConstant.NAME, field.name);
 			subField.put(TagConstant.TYPE, field.type);
+			subField.put("columnDefinition", field.columnDefinition);
 			subField.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(field));
 			
 			// if ids
@@ -183,6 +187,7 @@ public class SQLiteAdapterGenerator {
 	
 	@SuppressWarnings("unchecked")
 	public void generateAll() {
+		ConsoleUtils.display(">> Generate Adapter...");
 		
 		for(Object modelEntity : this.entities.values()) {
 			
@@ -205,7 +210,7 @@ public class SQLiteAdapterGenerator {
 	
 	private void generate() {
 		// Info
-		ConsoleUtils.display(">> Generate Adapter for " +  this.datamodel.get(TagConstant.NAME));
+		ConsoleUtils.display(">>> Generate Adapter for " +  this.datamodel.get(TagConstant.NAME));
 		
 		try {
 			Configuration cfg = new Configuration();
@@ -247,7 +252,7 @@ public class SQLiteAdapterGenerator {
 			File file = FileUtils.makeFile(filePath);
 			
 			// Debug Log
-			ConsoleUtils.displayDebug("\tGenerate Source : " + file.getPath()); 
+			ConsoleUtils.displayDebug("Generate Source : " + file.getPath()); 
 			
 			// Create
 			Template tpl = cfg.getTemplate(

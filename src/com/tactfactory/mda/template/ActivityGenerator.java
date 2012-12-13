@@ -61,7 +61,7 @@ public class ActivityGenerator {
 			
 			this.meta = meta;
 			
-			Map<String, Object> modelClass = new HashMap<String, Object>();
+			Map<String, Object> modelClass = meta.toMap(this.adapter);/*new HashMap<String, Object>();
 			modelClass.put(TagConstant.SPACE,	meta.space );
 			modelClass.put(TagConstant.NAME,	meta.name );
 			modelClass.put(TagConstant.LOCAL_NAMESPACE,	this.adapter.getNameSpaceEntity(this.meta, this.adapter.getController()) );
@@ -72,7 +72,7 @@ public class ActivityGenerator {
 			ArrayList<Map<String, Object>> modelRelations = this.loadSubFields(this.meta.relations.values());
 			
 			modelClass.put(TagConstant.FIELDS, modelFields);
-			modelClass.put(TagConstant.RELATIONS, modelRelations);
+			modelClass.put(TagConstant.RELATIONS, modelRelations);*/
 			
 			this.modelEntities.add(modelClass);
 		}
@@ -81,7 +81,7 @@ public class ActivityGenerator {
 	/**
 	 * @return
 	 */
-	private ArrayList<Map<String, Object>> loadSubFields(Collection<FieldMetadata> values) {
+	/*private ArrayList<Map<String, Object>> loadSubFields(Collection<FieldMetadata> values) {
 		ArrayList<Map<String, Object>> SubFields = new ArrayList<Map<String,Object>>();
 		for (FieldMetadata field : values) {
 			Map<String, Object> subField = new HashMap<String, Object>();
@@ -103,13 +103,15 @@ public class ActivityGenerator {
 			// if relations
 			if(field.relation!=null)
 				subField.put(TagConstant.RELATION, loadRelationSubField(field));
+			field.customize(adapter);
+			subField = field.toMap();
 			
 			SubFields.add(subField);
 		}
 		return SubFields;
-	}
+	}*/
 	
-	private Map<String, Object> loadRelationSubField(FieldMetadata fm){
+	/*private Map<String, Object> loadRelationSubField(FieldMetadata fm){
 		Map<String, Object> relationSF = new HashMap<String, Object>();
 		
 		relationSF.put(TagConstant.TYPE, fm.relation.type);
@@ -118,7 +120,7 @@ public class ActivityGenerator {
 		relationSF.put(TagConstant.NAME, fm.relation.name);
 		
 		return relationSF;
-	}
+	}*/
 
 	public ActivityGenerator(List<ClassMetadata> metas, BaseAdapter adapter, Boolean isWritable) throws Exception {
 		this(metas, adapter);
@@ -127,6 +129,7 @@ public class ActivityGenerator {
 	}
 	
 	public void generateAll() {
+		ConsoleUtils.display(">> Generate CRUD view...");
 
 		int i = 0;
 		for(Map<String, Object> entity : this.modelEntities) {
@@ -260,7 +263,7 @@ public class ActivityGenerator {
 	/** All Actions (List, Show, Edit, Create) */
 	public void generateAllAction() {
 		// Info
-		ConsoleUtils.display(">> Generate CRUD view for " +  meta.name);
+		ConsoleUtils.display(">>> Generate CRUD view for " +  meta.name);
 
 		try {
 
@@ -306,7 +309,7 @@ public class ActivityGenerator {
 			File file = FileUtils.makeFile(filepath);
 			
 			// Debug Log
-			ConsoleUtils.displayDebug("\tGenerate Source : " + file.getPath()); 
+			ConsoleUtils.displayDebug("Generate Source : " + file.getPath()); 
 	
 			// Create
 			Template tpl = cfg.getTemplate(
@@ -338,7 +341,7 @@ public class ActivityGenerator {
 			File file = FileUtils.makeFile(filepath);
 	
 			// Debug Log
-			ConsoleUtils.displayDebug("\tGenerate Ressource : " + file.getAbsoluteFile()); 
+			ConsoleUtils.displayDebug("Generate Ressource : " + file.getAbsoluteFile()); 
 	
 			// Create
 			Template tpl = cfg.getTemplate(
@@ -363,7 +366,7 @@ public class ActivityGenerator {
 		File file = FileUtils.makeFile(this.adapter.getManifestPathFile());
 
 		// Debug Log
-		ConsoleUtils.displayDebug("\tGenerate Manifest : " + file.getAbsoluteFile());
+		ConsoleUtils.displayDebug("Generate Manifest : " + file.getAbsoluteFile());
 
 		// Create
 		Template tpl = cfg.getTemplate(this.adapter.getTemplateManifestPathFile());
@@ -385,7 +388,7 @@ public class ActivityGenerator {
 				classFile );
 
 		// Debug Log
-		ConsoleUtils.displayDebug("\tUpdate Manifest : " + pathRelatif);
+		ConsoleUtils.displayDebug("Update Manifest : " + pathRelatif);
 
 		try {
 			SAXBuilder builder = new SAXBuilder();		// Make engine

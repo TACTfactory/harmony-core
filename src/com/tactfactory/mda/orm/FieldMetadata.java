@@ -9,8 +9,10 @@
 package com.tactfactory.mda.orm;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.template.TagConstant;
 
 /** Entity field metadata */
 public class FieldMetadata {
@@ -39,6 +41,23 @@ public class FieldMetadata {
 	public void customize(BaseAdapter adapter) {
 		this.customShowType = adapter.getViewComponentShow(this);
 		this.customEditType = adapter.getViewComponentEdit(this);
+	}
+	
+	public Map<String, Object> toMap(){
+		HashMap<String, Object> model = new HashMap<String, Object>();
+		model.put(TagConstant.NAME, this.name);
+		model.put(TagConstant.TYPE, this.type);
+		model.put("columnDefinition", this.columnDefinition);
+		//model.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(this));
+
+		model.put("customEditType", this.customEditType);
+		model.put("customShowType", this.customShowType);
+		
+		if(relation!=null){
+			model.put(TagConstant.RELATION, this.relation.toMap());
+		}
+		
+		return model;
 	}
 	
 	public RelationMetadata relation;
