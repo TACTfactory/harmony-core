@@ -15,10 +15,13 @@ import java.util.Date;
 import org.joda.time.DateTime;
 
 import com.tactfactory.mda.orm.annotation.*;
+import com.tactfactory.mda.orm.annotation.Column.Type;
 
 @Table
 @Entity
 public class Post implements Serializable {
+	private static final long serialVersionUID = -6549779793416923128L;
+
 	@Id
     @Column()					// type="integer",
     @GeneratedValue(strategy="IDENTITY")
@@ -27,7 +30,7 @@ public class Post implements Serializable {
 	@Column(unique=true)	// type="string", length=255
     protected String title;
 	
-	@Column(length=40000)	// type="string"
+	@Column(length=40000, type=Type.TEXT)	// type="string"
     protected String content;
 	
 	@ManyToOne
