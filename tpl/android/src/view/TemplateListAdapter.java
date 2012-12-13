@@ -51,7 +51,7 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 			holder.${field.name} = (TextView) convertView.findViewById(R.id.row_${name}_${field.name});
 			</#list>
 			<#list relations as relation>
-				<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+				<#if (relation.relation.type=="@OneToOne" | relation.relation.type=="@ManyToOne")>
 			holder.${relation.name} = (TextView) convertView.findViewById(R.id.row_${name}_${relation.name});
 				</#if>
 			</#list>
@@ -74,7 +74,7 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 		public TextView ${field.name};
 		</#list>
 		<#list relations as relation>
-			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+			<#if (relation.relation.type=="@OneToOne" | relation.relation.type=="@ManyToOne")>
 		public TextView ${relation.name};
 			</#if>
 		</#list>
@@ -93,7 +93,7 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 				</#if>
 			</#list>
 			<#list relations as relation>
-				<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+				<#if (relation.relation.type=="@OneToOne" | relation.relation.type=="@ManyToOne")>
 			this.${relation.name}.setText(String.valueOf(item.get${relation.name?cap_first}().getId()) );
 				</#if>
 			</#list>

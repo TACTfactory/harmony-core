@@ -25,7 +25,7 @@ import java.util.List;
 import ${namespace}.entity.${name};
 import ${namespace}.data.${name}Adapter;
 <#list relations as relation>
-	<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+	<#if (relation.relation.type=="@OneToOne" | relation.relation.type=="@ManyToOne")>
 import ${namespace}.data.${relation.type}Adapter;
 import ${namespace}.entity.${relation.type};
 	</#if>
@@ -44,7 +44,7 @@ public class ${name}EditFragment extends Fragment implements OnClickListener {
 	protected ${field.customEditType} ${field.name}View; 
 	</#list>
 	<#list relations as relation>
-		<#if relation.relation_type=="@ManyToOne">
+		<#if relation.relation.type=="@ManyToOne">
 	protected ${relation.customEditType} ${relation.name}View;
 	protected List<${relation.type}> ${relation.type}list;
 		</#if>
@@ -60,7 +60,7 @@ public class ${name}EditFragment extends Fragment implements OnClickListener {
 		this.${field.name}View = (${field.customEditType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}); 
 		</#foreach>
 		<#list relations as relation>
-			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+			<#if (relation.relation.type=="@OneToOne" | relation.relation.type=="@ManyToOne")>
 		this.${relation.name}View = (${relation.customEditType}) view.findViewById(R.id.${name?lower_case}_${relation.name?lower_case}_spinner);
 			</#if>
 		</#list>
@@ -87,7 +87,7 @@ public class ${name}EditFragment extends Fragment implements OnClickListener {
 			</#if>
 		</#foreach>
 		<#foreach relation in relations>
-			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+			<#if (relation.relation.type=="@OneToOne" | relation.relation.type=="@ManyToOne")>
 
 		${relation.type}Adapter ${relation.type?lower_case}adapter = new ${relation.type}Adapter(getActivity());
 		${relation.type?lower_case}adapter.open();
@@ -127,7 +127,7 @@ public class ${name}EditFragment extends Fragment implements OnClickListener {
 			</#if>
 		</#foreach>
 		<#foreach relation in relations>
-			<#if (relation.relation_type=="@OneToOne" | relation.relation_type=="@ManyToOne")>
+			<#if (relation.relation.type=="@OneToOne" | relation.relation.type=="@ManyToOne")>
 		${relation.type}Adapter ${relation.type?lower_case}adapter = new ${relation.type}Adapter(getActivity());
 		${relation.type?lower_case}adapter.open();
 		${relation.type} ${relation.type?lower_case}item = ${relation.type?lower_case}adapter.getByID( this.${relation.type}list.get((int) this.${relation.name}View.getSelectedItemId()).getId() );
