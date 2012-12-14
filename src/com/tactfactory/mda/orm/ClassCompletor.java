@@ -10,9 +10,12 @@ import com.tactfactory.mda.Harmony;
  * with the information it needs from the others ClassMetadatas*/
 
 public class ClassCompletor {
+	ArrayList<ClassMetadata> metas_array;
 	HashMap<String, ClassMetadata> metas = new HashMap<String, ClassMetadata>();
+	HashMap<String, ClassMetadata> newMetas = new HashMap<String, ClassMetadata>();
 	
 	public ClassCompletor(ArrayList<ClassMetadata> metas){
+		this.metas_array = metas;
 		for(ClassMetadata cm : metas){
 			this.metas.put(cm.name, cm);
 		}
@@ -22,6 +25,7 @@ public class ClassCompletor {
 		for(ClassMetadata cm : metas.values()){
 			updateRelations(cm);
 		}
+		this.metas_array.addAll(newMetas.values());
 	}
 	
 	/**
@@ -61,7 +65,53 @@ public class ClassCompletor {
 					else
 						rel.joinTable = rel.entity_ref+"to"+cm.name;
 				}
+				if(!this.metas.containsKey(rel.joinTable)){ // If jointable doesn't exist yet, create it
+
+					ConsoleUtils.displayDebug("Association Table => "+rel.joinTable);
+					ClassMetadata classMeta = new ClassMetadata();
+					classMeta.name = rel.joinTable;
+					classMeta.isAssociationClass = true;
+					classMeta.space = cm.space;
+					FieldMetadata id = new FieldMetadata();
+						id.columnDefinition = "integer";
+						id.type = "integer";
+						id.name = "id";
+						classMeta.ids.put("id", id);
+						classMeta.fields.put("id", id);
+						
+					FieldMetadata ref1 = generateRefField(cm.name);
+					RelationMetadata rel1 = new RelationMetadata();
+						rel1.entity_ref = cm.name;
+						for(FieldMetadata cmid : cm.ids.values())
+							rel1.field_ref.add(cmid.name);
+						rel1.type = "ManyToOne";
+						ref1.relation = rel1;
+						
+					classMeta.fields.put(ref1.name, ref1);
+					classMeta.relations.put(ref1.name, ref1);
+					
+					FieldMetadata ref2 = generateRefField(rel.entity_ref);
+					RelationMetadata rel2 = new RelationMetadata();
+						rel2.entity_ref = rel.entity_ref;
+						rel2.field_ref = rel.field_ref;
+						rel2.type = "ManyToOne";
+						ref2.relation = rel2;
+						
+					classMeta.fields.put(ref2.name, ref2);
+					classMeta.relations.put(ref2.name, ref2);
+					
+					this.newMetas.put(classMeta.name, classMeta);
+				}
 			}
 		}
+	}
+	
+	private FieldMetadata generateRefField(String name){
+		FieldMetadata id = new FieldMetadata();
+		id.columnDefinition = "integer";
+		id.type = name;
+		id.name = name.toLowerCase()+"_id";
+		id.name_in_db = id.name;
+		return id;
 	}
 }

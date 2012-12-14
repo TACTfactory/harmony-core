@@ -149,14 +149,17 @@ public class SQLiteAdapterGenerator {
 			this.localNameSpace = (String) entity.get(TagConstant.LOCAL_NAMESPACE);
 			
 			// Make class
-			this.datamodel = new HashMap<String, Object>();
+			/*this.datamodel = new HashMap<String, Object>();
 			this.datamodel.put(TagConstant.PROJECT_NAME, 		Harmony.projectName);
 			this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	entity.get(TagConstant.SPACE));
 			this.datamodel.put(TagConstant.NAME, 				entity.get(TagConstant.NAME));
 			this.datamodel.put(TagConstant.LOCAL_NAMESPACE, 	this.localNameSpace);
 			this.datamodel.put(TagConstant.IDS,					entity.get(TagConstant.IDS));
 			this.datamodel.put(TagConstant.FIELDS,				entity.get(TagConstant.FIELDS));
-			this.datamodel.put(TagConstant.RELATIONS,			entity.get(TagConstant.RELATIONS));
+			this.datamodel.put(TagConstant.RELATIONS,			entity.get(TagConstant.RELATIONS));*/
+			this.datamodel = (HashMap<String, Object>) modelEntity;
+			this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	entity.get(TagConstant.SPACE));
+			this.datamodel.put(TagConstant.PROJECT_NAME, 		Harmony.projectName);
 			
 			this.generate();
 		}

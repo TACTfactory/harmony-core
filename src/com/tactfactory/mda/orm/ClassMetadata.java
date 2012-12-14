@@ -19,6 +19,8 @@ import com.tactfactory.mda.template.TagConstant;
 
 /** Entity class metadata */
 public class ClassMetadata {
+	/** Used for join tables (ManyToMany relations)*/
+	public boolean isAssociationClass = false;
 	
 	/** Namespace of entity class */
 	public String space = "";
@@ -58,6 +60,9 @@ public class ClassMetadata {
 		model.put(TagConstant.SPACE, this.space);
 		model.put(TagConstant.NAME, this.name);
 		model.put(TagConstant.LOCAL_NAMESPACE, adapter.getNameSpaceEntity(this, adapter.getController()));
+		model.put("isAssociationClass","false");
+		if(isAssociationClass)
+			model.put("isAssociationClass","true");
 		//model.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(this));
 		model.put(TagConstant.FIELDS, toFieldArray(this.fields.values(), adapter));
 		model.put(TagConstant.IDS, toFieldArray(this.ids.values(), adapter));
