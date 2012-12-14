@@ -125,8 +125,7 @@ public class ProjectGenerator {
 				output.close();
 	
 				// Debug Log
-				if (Harmony.debug)
-					System.out.println("File "+destFile.getName()+" processed...");
+				ConsoleUtils.displayDebug("File "+destFile.getName()+" processed...");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

@@ -3,6 +3,7 @@ package com.tactfactory.mda.orm;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 
 /** The class ClassCompletor will complete all ClassMetadatas 
@@ -40,9 +41,7 @@ public class ClassCompletor {
 					rel.field_ref.add(ids.get(i).name);
 				}
 			}
-			if(Harmony.debug){
-				System.out.println("Relation "+rel.type+" on field "+rel.field+" targets "+rel.entity_ref+"("+rel.field_ref.get(0)+")");
-			}
+			ConsoleUtils.displayDebug("Relation "+rel.type+" on field "+rel.field+" targets "+rel.entity_ref+"("+rel.field_ref.get(0)+")");
 		}
 	}
 }
