@@ -61,10 +61,10 @@ public final class AndroidAdapter extends BaseAdapter {
 			result = "TextView";
 		}
 
-		/*if(field.relation !=null && field.relation.type.equals("ManyToOne")) {
+		if(field.relation !=null && (field.relation.type.equals("OneToMany") || field.relation.type.equals("ManyToMany"))) {
 
 			result = "Spinner";
-		}*/
+		}
 		
 		return result;
 	}
