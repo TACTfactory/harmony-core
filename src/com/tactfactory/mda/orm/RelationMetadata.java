@@ -40,8 +40,8 @@ public class RelationMetadata {
 		model.put(TagConstant.TYPE, this.type);
 		model.put(TagConstant.FIELD_REF, this.field_ref);
 		model.put(TagConstant.ENTITY_REF, this.entity_ref);
-		if(inversedBy!=null && !inversedBy.isEmpty())
-			model.put("inversedBy", this.inversedBy);
+		model.put("inversedBy", this.inversedBy);
+		model.put("joinTable", this.joinTable);
 		
 		return model;
 	}

@@ -46,7 +46,7 @@ public class ClassCompletor {
 				}
 			}
 			ConsoleUtils.displayDebug("Relation "+rel.type+" on field "+rel.field+" targets "+rel.entity_ref+"("+rel.field_ref.get(0)+")");
-			if(rel.type.equals("OneToMany")){ // get inversedBy 
+			if(rel.type.equals("OneToMany") || rel.type.equals("ManyToMany")){ // get inversedBy 
 				if(rel.inversedBy==null || rel.inversedBy.isEmpty()){
 					HashMap<String, FieldMetadata> rels_ref = this.metas.get(targetEntity).relations;
 					for(FieldMetadata rel_ref : rels_ref.values()){
@@ -57,7 +57,7 @@ public class ClassCompletor {
 					}
 					
 				}
-			} else
+			}
 			if(rel.type.equals("ManyToMany")){
 				if(rel.joinTable==null || rel.joinTable.isEmpty()){
 					if(cm.name.compareTo(rel.entity_ref)>0) // Name JoinTable AtoB where A and B are the entities names ordered by alphabetic order
@@ -65,7 +65,7 @@ public class ClassCompletor {
 					else
 						rel.joinTable = rel.entity_ref+"to"+cm.name;
 				}
-				if(!this.metas.containsKey(rel.joinTable)){ // If jointable doesn't exist yet, create it
+				if(!this.metas.containsKey(rel.joinTable) && !this.newMetas.containsKey(rel.joinTable)){ // If jointable doesn't exist yet, create it
 
 					ConsoleUtils.displayDebug("Association Table => "+rel.joinTable);
 					ClassMetadata classMeta = new ClassMetadata();
@@ -84,6 +84,7 @@ public class ClassCompletor {
 						rel1.entity_ref = cm.name;
 						for(FieldMetadata cmid : cm.ids.values())
 							rel1.field_ref.add(cmid.name);
+						rel1.inversedBy = rel.inversedBy;
 						rel1.type = "ManyToOne";
 						ref1.relation = rel1;
 						
@@ -94,6 +95,7 @@ public class ClassCompletor {
 					RelationMetadata rel2 = new RelationMetadata();
 						rel2.entity_ref = rel.entity_ref;
 						rel2.field_ref = rel.field_ref;
+						rel2.inversedBy = fm.name;
 						rel2.type = "ManyToOne";
 						ref2.relation = rel2;
 						
@@ -101,6 +103,10 @@ public class ClassCompletor {
 					classMeta.relations.put(ref2.name, ref2);
 					
 					this.newMetas.put(classMeta.name, classMeta);
+				}else if(this.newMetas.containsKey(rel.joinTable)){ // Complete it !
+					ClassMetadata jtable = this.newMetas.get(rel.joinTable);
+					FieldMetadata relation = jtable.relations.get(rel.entity_ref.toLowerCase()+"_id");
+					relation.relation.inversedBy = fm.name;
 				}
 			}
 		}

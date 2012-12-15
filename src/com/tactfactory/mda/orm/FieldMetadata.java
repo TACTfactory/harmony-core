@@ -30,6 +30,8 @@ public class FieldMetadata {
 	/** Field type as given in attribute */
 	public Type type_attribute;
 	
+	/** Is final ?*/
+	public boolean isFinal = false;
 	
 	/** Field database type */
 	public String columnDefinition;
@@ -70,7 +72,7 @@ public class FieldMetadata {
 		model.put("customShowType", this.customShowType);
 		
 		model.put(TagConstant.SCHEMA, SqliteAdapter.generateStructure(this));
-		
+		model.put("final", this.isFinal);
 		if(relation!=null){
 			model.put(TagConstant.RELATION, this.relation.toMap());
 		}

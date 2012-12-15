@@ -75,7 +75,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 	public void loadData() {
 		<#foreach field in fields>
 			<#if !field.relation??>
-		<#if (field.type!="int")>
+		<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long")>
 		if(this.model.get${field.name?cap_first}()!=null)
 		</#if>
 			<#if (field.customEditType == "EditText") >
@@ -100,6 +100,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		${relation.type}Adapter ${relation.type?lower_case}adapter = new ${relation.type}Adapter(getActivity());
 		${relation.type?lower_case}adapter.open();
 		this.${relation.type}list = ${relation.type?lower_case}adapter.getAll();
+		${relation.type?lower_case}adapter.close();
 		
 		List<String> ${relation.type?lower_case}strings = new ArrayList<String>();
 		for(${relation.type} item : this.${relation.type}list) {
@@ -131,6 +132,9 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 				</#if>
 				<#if (field.type == "int")>
 		this.model.set${field.name?cap_first}(Integer.parseInt(this.${field.name}View.getEditableText().toString()));
+				</#if>
+				<#if (field.type == "boolean")>
+		this.model.set${field.name?cap_first}(this.${field.name}View.getEditableText().toString().equals("true"));
 				</#if>
 			</#if>
 			<#if (field.customEditType == "CheckBox") >
