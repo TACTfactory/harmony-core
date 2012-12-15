@@ -13,7 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -21,8 +20,6 @@ import java.util.Map;
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
-import com.tactfactory.mda.orm.FieldMetadata;
-import com.tactfactory.mda.orm.RelationMetadata;
 import com.tactfactory.mda.orm.SqliteAdapter;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
@@ -63,6 +60,8 @@ public class SQLiteAdapterGenerator {
 	 */
 	@SuppressWarnings("unchecked")
 	private void makeRelationModel() {
+		String relationType = null;
+		String modelName = null;
 		//Message info
 		ConsoleUtils.display(">> Analyse Databases relations in models");
 		
@@ -74,20 +73,22 @@ public class SQLiteAdapterGenerator {
 				//List each entity relation field
 				for (Object metaRelations : (ArrayList<Map<String, Object>>)modelClass.get(TagConstant.RELATIONS) ) {
 					Map<String, Object> relation = (Map<String, Object>) ((Map<String, Object>) metaRelations).get(TagConstant.RELATION);
+					relationType = ((String)relation.get(TagConstant.TYPE));
+					modelName = ((String)modelClass.get(TagConstant.NAME));
 					
 					// One to One relation
-					if( ((String)relation.get(TagConstant.TYPE)).equals("@OneToOne") ) {
-						ConsoleUtils.display("\tFound a @OneToOne relation in "+modelClass.get(TagConstant.NAME) );
+					if (relationType.equals("@OneToOne") ) {
+						ConsoleUtils.display("\tFound a @OneToOne relation in " + modelName );
 	
 					} else
 						
 					// One to Many relation
-					if( ((String)relation.get(TagConstant.TYPE)).equals("@OneToMany")) {
-						ConsoleUtils.display("\tFound a @OneToMany relation in "+modelClass.get(TagConstant.NAME) );
+					if (relationType.equals("@OneToMany")) {
+						ConsoleUtils.display("\tFound a @OneToMany relation in " + modelName );
 						
 						// Target Entity type
-						String targetEntity = ((String)relation.get(TagConstant.TYPE)).replace("ArrayList<","").replace(">","");
-						ConsoleUtils.display("\tCheck if @ManyToOne exists in "+targetEntity);
+						String targetEntity = relationType.replace("ArrayList<","").replace(">","");
+						ConsoleUtils.display("\tCheck if @ManyToOne exists in " + targetEntity);
 						
 						// Get Target Entity Relations
 						if(this.entities.containsKey(targetEntity)) {
@@ -97,7 +98,7 @@ public class SQLiteAdapterGenerator {
 							// list and check for a reversed @OneToMany (@ManyToOne)
 							for(Map<String,Object> targetRelation : targetRelations) {
 								
-								if(	targetRelation.get(TagConstant.TYPE).equals(modelClass.get(TagConstant.NAME).toString())
+								if(	targetRelation.get(TagConstant.TYPE).equals(modelName)
 											&& targetRelation.get(TagConstant.TYPE).toString().equals("@ManyToOne")) {
 									ConsoleUtils.display("\t@ManyToOne Relation exists, no need to add column... ");
 									break;
@@ -105,10 +106,9 @@ public class SQLiteAdapterGenerator {
 									ConsoleUtils.display("\tNo @ManyToOne relation found, creating column...");
 		
 									Map<String, Object> modelRelation = new HashMap<String, Object>();
-									modelRelation.put(TagConstant.NAME,				modelClass.get(TagConstant.NAME).toString().toLowerCase());
-									modelRelation.put(TagConstant.ALIAS,			SqliteAdapter.generateRelationColumnName(
-																						modelClass.get(TagConstant.NAME).toString()));
-									modelRelation.put(TagConstant.TYPE,				modelClass.get(TagConstant.NAME).toString());
+									modelRelation.put(TagConstant.NAME,				modelName.toLowerCase());
+									modelRelation.put(TagConstant.ALIAS,			SqliteAdapter.generateRelationColumnName(modelName));
+									modelRelation.put(TagConstant.TYPE,				modelName);
 									modelRelation.put(TagConstant.RELATION_TYPE,	"@ManyToOne");							
 								}
 							}
@@ -120,15 +120,13 @@ public class SQLiteAdapterGenerator {
 					} else
 					
 					// Many to One relation
-					if( ((String)relation.get(TagConstant.TYPE)).equals("@ManyToOne")) {
-						ConsoleUtils.display("\tFound a @ManyToOne relation in "+modelClass.get(TagConstant.NAME) );
+					if (relationType.equals("@ManyToOne")) {
+						ConsoleUtils.display("\tFound a @ManyToOne relation in " + modelName );
 					} else
 					
 					// Many to Many relation
-					if( ((String)relation.get(TagConstant.TYPE)).equals("@ManyToMany")) {
-
-						ConsoleUtils.display("\tFound a @ManyToMany relation in "+modelClass.get(TagConstant.NAME) );
-	
+					if (relationType.equals("@ManyToMany")) {
+						ConsoleUtils.display("\tFound a @ManyToMany relation in " + modelName );
 					} else {
 						
 					}
