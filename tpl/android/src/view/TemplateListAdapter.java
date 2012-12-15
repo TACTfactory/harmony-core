@@ -48,11 +48,13 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 
 			holder = new ViewHolder();
 			<#list fields as field>
-			holder.${field.name} = (TextView) convertView.findViewById(R.id.row_${name}_${field.name});
+				<#if !field.relation??>
+			holder.${field.name} = (TextView) convertView.findViewById(R.id.row_${name?lower_case}_${field.name});
+				</#if>
 			</#list>
 			<#list relations as relation>
-				<#if (relation.relation.type=="@OneToOne" | relation.relation.type=="@ManyToOne")>
-			holder.${relation.name} = (TextView) convertView.findViewById(R.id.row_${name}_${relation.name});
+				<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
+			holder.${relation.name} = (TextView) convertView.findViewById(R.id.row_${name?lower_case}_${relation.name});
 				</#if>
 			</#list>
 			
@@ -71,10 +73,12 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 	/** Holder row */
 	private static class ViewHolder {
 		<#list fields as field>
+			<#if !field.relation??>
 		public TextView ${field.name};
+			</#if>
 		</#list>
 		<#list relations as relation>
-			<#if (relation.relation.type=="@OneToOne" | relation.relation.type=="@ManyToOne")>
+			<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
 		public TextView ${relation.name};
 			</#if>
 		</#list>

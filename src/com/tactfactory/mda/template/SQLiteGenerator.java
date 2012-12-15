@@ -47,37 +47,39 @@ public class SQLiteGenerator {
 		// Make entities
 		ArrayList<Map<String, Object>> modelEntities = new ArrayList<Map<String,Object>>();
 		for (ClassMetadata meta : this.metas) {
-			Map<String, Object> modelClass = new HashMap<String, Object>();
-			modelClass.put(TagConstant.SPACE,	meta.space );
-			modelClass.put(TagConstant.NAME,	meta.name );
-			
-			// Make fields
-			ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
-			for (FieldMetadata field : meta.fields.values()) {
-				Map<String, Object> modelField = new HashMap<String, Object>();
-				field.customize(adapter);
-				modelField.put(TagConstant.NAME, field.name);
-				modelField.put(TagConstant.TYPE, field.type);
+			if(!meta.fields.isEmpty()){
+				Map<String, Object> modelClass = new HashMap<String, Object>();
+				modelClass.put(TagConstant.SPACE,	meta.space );
+				modelClass.put(TagConstant.NAME,	meta.name );
 				
-				modelFields.add(modelField);
-			}
-			modelClass.put(TagConstant.FIELDS, modelFields);
-
-			// Make relations
-			ArrayList<Map<String, Object>> modelRelations = new ArrayList<Map<String,Object>>();
-
-			for (FieldMetadata relation : meta.relations.values()) {
-				Map<String, Object> modelRelation = new HashMap<String, Object>();
-				relation.customize(adapter);
-				modelRelation.put(TagConstant.NAME, relation.name);
-				modelRelation.put(TagConstant.TYPE, relation.type);
-				modelRelation.put(TagConstant.RELATION_TYPE, relation.columnDefinition);
+				// Make fields
+				ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
+				for (FieldMetadata field : meta.fields.values()) {
+					Map<String, Object> modelField = new HashMap<String, Object>();
+					field.customize(adapter);
+					modelField.put(TagConstant.NAME, field.name);
+					modelField.put(TagConstant.TYPE, field.type);
+					
+					modelFields.add(modelField);
+				}
+				modelClass.put(TagConstant.FIELDS, modelFields);
+	
+				// Make relations
+				ArrayList<Map<String, Object>> modelRelations = new ArrayList<Map<String,Object>>();
+	
+				for (FieldMetadata relation : meta.relations.values()) {
+					Map<String, Object> modelRelation = new HashMap<String, Object>();
+					relation.customize(adapter);
+					modelRelation.put(TagConstant.NAME, relation.name);
+					modelRelation.put(TagConstant.TYPE, relation.type);
+					modelRelation.put(TagConstant.RELATION_TYPE, relation.columnDefinition);
+					
+					modelRelations.add(modelRelation);
+				}
+				modelClass.put(TagConstant.RELATIONS, modelRelations);
 				
-				modelRelations.add(modelRelation);
+				modelEntities.add(modelClass);
 			}
-			modelClass.put(TagConstant.RELATIONS, modelRelations);
-			
-			modelEntities.add(modelClass);
 		}
 		this.datamodel.put(TagConstant.PROJECT_NAME, 		Harmony.projectName);
 		this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	this.metas.get(0).space);

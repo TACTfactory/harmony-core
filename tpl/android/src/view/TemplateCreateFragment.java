@@ -25,10 +25,8 @@ import java.util.Date;
 import ${namespace}.data.${name}Adapter;
 import ${namespace}.entity.${name};
 <#list relations as relation>
-	<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
-import ${namespace}.data.${relation.type}Adapter;
-import ${namespace}.entity.${relation.type};
-	</#if>
+import ${namespace}.data.${relation.relation.targetEntity}Adapter;
+import ${namespace}.entity.${relation.relation.targetEntity};
 </#list>
 
 /** ${name} create fragment

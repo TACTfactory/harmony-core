@@ -1,3 +1,4 @@
+<#assign name=name?lower_case>
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout 
 	xmlns:android="http://schemas.android.com/apk/res/android"
@@ -34,17 +35,14 @@
     	android:id="@+id/${name?lower_case}_${relation.name?lower_case}_label"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    <#if relation_index==0>
 	    android:layout_below="@+id/${lastField}"
-	    <#else>
-	    android:layout_below="@+id/${name?lower_case}_${relations[relation_index-1].name?lower_case}_spinner"
-	    </#if>
 	    android:text="${relation.name?lower_case}"/>
     <Spinner
         android:id="@+id/${name?lower_case}_${relation.name?lower_case}_spinner"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 	    android:layout_below="@+id/${name?lower_case}_${relation.name?lower_case}_label" />
+		<#assign lastField="${name?lower_case}_${relation.name?lower_case}_spinner">
 	</#if>
 </#list>
 	<Button
@@ -52,7 +50,7 @@
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
     	<#if relations?size!=0>
-    	android:layout_below="@+id/${name?lower_case}_${relations?last.name?lower_case}_spinner"
+    	android:layout_below="@+id/${lastField}"
     	<#else>
     	android:layout_below="@+id/${name?lower_case}_${fields?last.name?lower_case}"
     	</#if>

@@ -25,7 +25,7 @@ import freemarker.template.TemplateException;
 
 public class ProjectGenerator {	
 	protected List<ClassMetadata> metas;
-	protected ClassMetadata meta;
+	//protected ClassMetadata meta;
 	protected BaseAdapter adapter;
 
 	protected boolean isWritable = true;
@@ -64,23 +64,25 @@ public class ProjectGenerator {
 			// Make entities
 			ArrayList<Map<String, Object>> modelEntities = new ArrayList<Map<String,Object>>();
 			for (ClassMetadata meta : this.metas) {
-				Map<String, Object> modelClass = new HashMap<String, Object>();
-				modelClass.put(TagConstant.SPACE,	meta.space );
-				modelClass.put(TagConstant.NAME,	meta.name );
-
-				// Make fields
-				ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
-				for (FieldMetadata field : meta.fields.values()) {
-					Map<String, Object> modelField = new HashMap<String, Object>();
-					field.customize(adapter);
-					modelField.put(TagConstant.NAME, field.name);
-					modelField.put(TagConstant.TYPE, field.type);
-
-					modelFields.add(modelField);
+				if(!meta.fields.isEmpty()){
+					Map<String, Object> modelClass = new HashMap<String, Object>();
+					modelClass.put(TagConstant.SPACE,	meta.space );
+					modelClass.put(TagConstant.NAME,	meta.name );
+	
+					// Make fields
+					ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
+					for (FieldMetadata field : meta.fields.values()) {
+						Map<String, Object> modelField = new HashMap<String, Object>();
+						field.customize(adapter);
+						modelField.put(TagConstant.NAME, field.name);
+						modelField.put(TagConstant.TYPE, field.type);
+	
+						modelFields.add(modelField);
+					}
+					modelClass.put(TagConstant.FIELDS, modelFields);
+	
+					modelEntities.add(modelClass);
 				}
-				modelClass.put(TagConstant.FIELDS, modelFields);
-
-				modelEntities.add(modelClass);
 			}
 			this.datamodel.put(TagConstant.ENTITIES, modelEntities);
 		}
@@ -123,8 +125,7 @@ public class ProjectGenerator {
 				output.close();
 	
 				// Debug Log
-				if (Harmony.debug)
-					System.out.println("File "+destFile.getName()+" processed...");
+				ConsoleUtils.displayDebug("File "+destFile.getName()+" processed...");
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

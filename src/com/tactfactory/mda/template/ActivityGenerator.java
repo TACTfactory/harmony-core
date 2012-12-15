@@ -41,7 +41,7 @@ import freemarker.template.TemplateException;
 
 public class ActivityGenerator {	
 	protected List<ClassMetadata> metas;
-	protected ClassMetadata meta;
+	//protected ClassMetadata meta;
 	protected List<Map<String, Object>> modelEntities;
 	protected BaseAdapter adapter;
 	protected String localNameSpace;
@@ -58,69 +58,15 @@ public class ActivityGenerator {
 		// Make entities
 		this.modelEntities = new ArrayList<Map<String, Object>>();
 		for (ClassMetadata meta : this.metas) {
-			
-			this.meta = meta;
-			
-			Map<String, Object> modelClass = meta.toMap(this.adapter);/*new HashMap<String, Object>();
-			modelClass.put(TagConstant.SPACE,	meta.space );
-			modelClass.put(TagConstant.NAME,	meta.name );
-			modelClass.put(TagConstant.LOCAL_NAMESPACE,	this.adapter.getNameSpaceEntity(this.meta, this.adapter.getController()) );
-			
-
-			
-			ArrayList<Map<String, Object>> modelFields = this.loadSubFields(this.meta.fields.values());
-			ArrayList<Map<String, Object>> modelRelations = this.loadSubFields(this.meta.relations.values());
-			
-			modelClass.put(TagConstant.FIELDS, modelFields);
-			modelClass.put(TagConstant.RELATIONS, modelRelations);*/
-			
-			this.modelEntities.add(modelClass);
+			if(!meta.fields.isEmpty()){
+				//this.meta = meta;
+				
+				Map<String, Object> modelClass = meta.toMap(this.adapter);
+				
+				this.modelEntities.add(modelClass);
+			}
 		}
 	}
-	
-	/**
-	 * @return
-	 */
-	/*private ArrayList<Map<String, Object>> loadSubFields(Collection<FieldMetadata> values) {
-		ArrayList<Map<String, Object>> SubFields = new ArrayList<Map<String,Object>>();
-		for (FieldMetadata field : values) {
-			Map<String, Object> subField = new HashMap<String, Object>();
-			
-			// General
-			subField.put(TagConstant.NAME, field.name);
-			subField.put(TagConstant.TYPE, field.type);
-			subField.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(field));
-
-			subField.put("customEditType", field.customEditType);
-			subField.put("customShowType", field.customShowType);
-			
-			// if ids
-			
-			// if models
-			field.customize(adapter);
-			subField.put(TagConstant.SCHEMA, SqliteAdapter.generateStructure(field));
-			
-			// if relations
-			if(field.relation!=null)
-				subField.put(TagConstant.RELATION, loadRelationSubField(field));
-			field.customize(adapter);
-			subField = field.toMap();
-			
-			SubFields.add(subField);
-		}
-		return SubFields;
-	}*/
-	
-	/*private Map<String, Object> loadRelationSubField(FieldMetadata fm){
-		Map<String, Object> relationSF = new HashMap<String, Object>();
-		
-		relationSF.put(TagConstant.TYPE, fm.relation.type);
-		relationSF.put("field_ref", fm.relation.field_ref);
-		relationSF.put("targetEntity", fm.relation.entity_ref);
-		relationSF.put(TagConstant.NAME, fm.relation.name);
-		
-		return relationSF;
-	}*/
 
 	public ActivityGenerator(List<ClassMetadata> metas, BaseAdapter adapter, Boolean isWritable) throws Exception {
 		this(metas, adapter);
@@ -133,8 +79,9 @@ public class ActivityGenerator {
 
 		int i = 0;
 		for(Map<String, Object> entity : this.modelEntities) {
-			this.meta = this.metas.get(i);
-			this.localNameSpace = this.adapter.getNameSpaceEntity(this.meta, this.adapter.getController());;
+			//this.meta = this.metas.get(i);
+			//this.localNameSpace = this.adapter.getNameSpaceEntity(this.meta, this.adapter.getController());;
+			this.localNameSpace = Harmony.projectNameSpace.replace('/', '.') +"."+ this.adapter.getController()+"."+((String)entity.get(TagConstant.NAME)).toLowerCase();
 
 			// Make class
 			this.datamodel.put("namespace", 					entity.get(TagConstant.SPACE));
@@ -143,7 +90,7 @@ public class ActivityGenerator {
 			this.datamodel.put(TagConstant.FIELDS, 				entity.get(TagConstant.FIELDS));
 			this.datamodel.put(TagConstant.RELATIONS, 			entity.get(TagConstant.RELATIONS));
 			
-			this.generateAllAction();
+			this.generateAllAction((String)entity.get(TagConstant.NAME));
 			
 			i++;
 		}
@@ -154,35 +101,33 @@ public class ActivityGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	public void generateListAction(Configuration cfg) throws IOException,
+	public void generateListAction(Configuration cfg, String entityName) throws IOException,
 	TemplateException {
+		ArrayList<String> javas = new ArrayList<String>();
+		javas.add("%sListActivity.java");
+		javas.add("%sListFragment.java");
+		javas.add("%sListAdapter.java");
+		javas.add("%sListLoader.java");
+		
+		ArrayList<String> xmls = new ArrayList<String>();
+		xmls.add("activity_%s_list.xml");
+		xmls.add("fragment_%s_list.xml");		
+		xmls.add("row_%s.xml");
+		
 
-		this.makeSourceControler(cfg, 
-				"TemplateListActivity.java", 
-				"%sListActivity.java");
-		this.makeResourceLayout(cfg, 
-				"activity_template_list.xml", 
-				"activity_%s_list.xml");
+		for(String java : javas){
+			this.makeSourceControler(cfg, 
+					String.format(java, "Template"),
+					String.format(java, entityName));
+		}
+		
+		for(String xml : xmls){
+			this.makeResourceLayout(cfg, 
+					String.format(xml, "template"),
+					String.format(xml, entityName.toLowerCase()));
+		}
 
-		this.makeSourceControler(cfg, 
-				"TemplateListFragment.java", 
-				"%sListFragment.java");
-		this.makeResourceLayout(cfg, 
-				"fragment_template_list.xml", 
-				"fragment_%s_list.xml");
-
-		this.makeSourceControler(cfg, 
-				"TemplateListAdapter.java", 
-				"%sListAdapter.java");
-		this.makeResourceLayout(cfg, 
-				"row_template.xml", 
-				"row_%s.xml");
-
-		this.makeSourceControler(cfg, 
-				"TemplateListLoader.java", 
-				"%sListLoader.java");
-
-		this.updateManifest("ListActivity");
+		this.updateManifest("ListActivity", entityName);
 	}
 
 	/** Show Action
@@ -190,24 +135,31 @@ public class ActivityGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	public void generateShowAction(Configuration cfg) throws IOException,
+	public void generateShowAction(Configuration cfg, String entityName) throws IOException,
 	TemplateException {
 
-		this.makeSourceControler(cfg, 
-				"TemplateShowActivity.java", 
-				"%sShowActivity.java");
-		this.makeResourceLayout(cfg, 
-				"activity_template_show.xml", 
-				"activity_%s_show.xml");
+		ArrayList<String> javas = new ArrayList<String>();
+		javas.add("%sShowActivity.java");
+		javas.add("%sShowFragment.java");
+		
+		ArrayList<String> xmls = new ArrayList<String>();
+		xmls.add("activity_%s_show.xml");
+		xmls.add("fragment_%s_show.xml");
+		
 
-		this.makeSourceControler(cfg, 
-				"TemplateShowFragment.java", 
-				"%sShowFragment.java");
-		this.makeResourceLayout(cfg, 
-				"fragment_template_show.xml", 
-				"fragment_%s_show.xml");
+		for(String java : javas){
+			this.makeSourceControler(cfg, 
+					String.format(java, "Template"),
+					String.format(java, entityName));
+		}
+		
+		for(String xml : xmls){
+			this.makeResourceLayout(cfg, 
+					String.format(xml, "template"),
+					String.format(xml, entityName.toLowerCase()));
+		}
 
-		this.updateManifest("ShowActivity");
+		this.updateManifest("ShowActivity", entityName);
 	}
 
 	/** Edit Action
@@ -215,24 +167,31 @@ public class ActivityGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	public void generateEditAction(Configuration cfg) throws IOException,
+	public void generateEditAction(Configuration cfg, String entityName) throws IOException,
 	TemplateException {
+		
+		ArrayList<String> javas = new ArrayList<String>();
+		javas.add("%sEditActivity.java");
+		javas.add("%sEditFragment.java");
+		
+		ArrayList<String> xmls = new ArrayList<String>();
+		xmls.add("activity_%s_edit.xml");
+		xmls.add("fragment_%s_edit.xml");
+		
 
-		this.makeSourceControler(cfg, 
-				"TemplateEditActivity.java", 
-				"%sEditActivity.java");
-		this.makeResourceLayout(cfg, 
-				"activity_template_edit.xml", 
-				"activity_%s_edit.xml");
+		for(String java : javas){
+			this.makeSourceControler(cfg, 
+					String.format(java, "Template"),
+					String.format(java, entityName));
+		}
+		
+		for(String xml : xmls){
+			this.makeResourceLayout(cfg, 
+					String.format(xml, "template"),
+					String.format(xml, entityName.toLowerCase()));
+		}
 
-		this.makeSourceControler(cfg, 
-				"TemplateEditFragment.java", 
-				"%sEditFragment.java");
-		this.makeResourceLayout(cfg, 
-				"fragment_template_edit.xml", 
-				"fragment_%s_edit.xml");
-
-		this.updateManifest("EditActivity");
+		this.updateManifest("EditActivity", entityName);
 	}
 
 	/** Create Action
@@ -240,30 +199,38 @@ public class ActivityGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	public void generateCreateAction(Configuration cfg) throws IOException,
+	public void generateCreateAction(Configuration cfg, String entityName) throws IOException,
 	TemplateException {
+		
+		ArrayList<String> javas = new ArrayList<String>();
+		javas.add("%sCreateActivity.java");
+		javas.add("%sCreateFragment.java");
+		
+		ArrayList<String> xmls = new ArrayList<String>();
+		xmls.add("activity_%s_create.xml");
+		xmls.add("fragment_%s_create.xml");
+		
 
-		this.makeSourceControler(cfg, 
-				"TemplateCreateActivity.java", 
-				"%sCreateActivity.java"  );
-		this.makeResourceLayout(cfg, 
-				"activity_template_create.xml", 
-				"activity_%s_create.xml");
+		for(String java : javas){
+			this.makeSourceControler(cfg, 
+					String.format(java, "Template"),
+					String.format(java, entityName));
+		}
+		
+		for(String xml : xmls){
+			this.makeResourceLayout(cfg, 
+					String.format(xml, "template"),
+					String.format(xml, entityName.toLowerCase()));
+		}
 
-		this.makeSourceControler(cfg, 
-				"TemplateCreateFragment.java", 
-				"%sCreateFragment.java");
-		this.makeResourceLayout(cfg, 
-				"fragment_template_create.xml", 
-				"fragment_%s_create.xml");
 
-		this.updateManifest("CreateActivity");
+		this.updateManifest("CreateActivity", entityName);
 	}
 
 	/** All Actions (List, Show, Edit, Create) */
-	public void generateAllAction() {
+	public void generateAllAction(String entityName) {
 		// Info
-		ConsoleUtils.display(">>> Generate CRUD view for " +  meta.name);
+		ConsoleUtils.display(">>> Generate CRUD view for " +  entityName);
 
 		try {
 
@@ -276,12 +243,12 @@ public class ActivityGenerator {
 				// Info
 				ConsoleUtils.display("   with write actions");
 
-				this.generateCreateAction(cfg);
-				this.generateEditAction(cfg);
+				this.generateCreateAction(cfg, entityName);
+				this.generateEditAction(cfg, entityName);
 			}
 
-			this.generateShowAction(cfg);
-			this.generateListAction(cfg);
+			this.generateShowAction(cfg, entityName);
+			this.generateListAction(cfg, entityName);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -304,7 +271,7 @@ public class ActivityGenerator {
 		String filepath = String.format("%s%s/%s",
 						this.adapter.getSourcePath(),
 						PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
-						String.format(filename, this.meta.name));
+						filename);
 		if(!FileUtils.exists(filepath)){
 			File file = FileUtils.makeFile(filepath);
 			
@@ -336,7 +303,7 @@ public class ActivityGenerator {
 	TemplateException {
 		String filepath = String.format("%s/%s", 
 									this.adapter.getRessourceLayoutPath(),
-									String.format(filename, this.meta.name.toLowerCase()));
+									filename);
 		if(!FileUtils.exists(filepath)){
 			File file = FileUtils.makeFile(filepath);
 	
@@ -380,11 +347,11 @@ public class ActivityGenerator {
 	 * 
 	 * @param classFile
 	 */
-	private void updateManifest(String classFile) {
-		classFile = this.meta.name + classFile;
+	private void updateManifest(String classFile, String entityName) {
+		classFile = entityName + classFile;
 		String pathRelatif = String.format(".%s.%s.%s",
 				this.adapter.getController(), 
-				this.meta.name.toLowerCase(), 
+				entityName.toLowerCase(), 
 				classFile );
 
 		// Debug Log
@@ -447,8 +414,8 @@ public class ActivityGenerator {
 								action = "INSERT";
 					}
 
-					data += this.adapter.getNameSpace(this.meta, "entity." + this.meta.name);
-
+					
+					data += Harmony.projectNameSpace + adapter.getModel() + entityName;
 					filterActivity.getChild("action").setAttribute("name", "android.intent.action."+ action, ns);
 					filterActivity.getChild("category").setAttribute("name", "android.intent.category.DEFAULT", ns);
 					filterActivity.getChild("data").setAttribute("mimeType", data, ns);

@@ -12,8 +12,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-
+import java.util.List;
+import java.util.ArrayList;
 import ${namespace}.entity.${name};
+<#list relations as relation>
+import ${namespace}.entity.${relation.relation.targetEntity};
+</#list>
 
 /** ${name} show fragment
  * 
@@ -30,9 +34,12 @@ public class ${name}ShowFragment extends Fragment {
 	</#if>
 </#list>
 <#list relations as relation>
-	<#if relation.relation.type=="ManyToOne" | relation.relation.type=="OneToOne">
+	<#--<#if relation.relation.type=="ManyToOne" | relation.relation.type=="OneToOne">-->
 	protected ${relation.customShowType} ${relation.name}View;
+	<#if relation.relation.type=="OneToMany">
+	protected List<${relation.relation.targetEntity}> ${relation.relation.targetEntity}list;
 	</#if>
+	<#--</#if>-->
 </#list>
     
     /** Initialize view of fields 
@@ -46,9 +53,9 @@ public class ${name}ShowFragment extends Fragment {
 		</#if>
 	</#foreach>
 	<#list relations as relation>
-		<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
+		<#--<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>-->
 		this.${relation.name}View = (${relation.customShowType}) view.findViewById(R.id.${name?lower_case}_${relation.name?lower_case});
-		</#if>
+		<#--</#if>-->
 	</#list>
     }
     
@@ -73,6 +80,17 @@ public class ${name}ShowFragment extends Fragment {
 		<#list relations as relation>
 			<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
 		this.${relation.name}View.setText(String.valueOf(this.model.get${relation.name?cap_first}().getId())); 
+			<#else>
+		this.${relation.relation.targetEntity}list = this.model.get${relation.name?cap_first}();//${relation.relation.targetEntity?lower_case}adapter.getAll();
+		
+		List<String> ${relation.relation.targetEntity?lower_case}strings = new ArrayList<String>();
+		for(${relation.relation.targetEntity} item : this.${relation.relation.targetEntity}list) {
+			${relation.relation.targetEntity?lower_case}strings.add( String.valueOf(item.getId()) );
+		}
+		
+		ArrayAdapter<String> ${relation.relation.targetEntity?lower_case}DataAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, ${relation.relation.targetEntity?lower_case}strings);
+		this.${relation.name}View.setAdapter(${relation.relation.targetEntity?lower_case}DataAdapter);
+		//this.${relation.name}View.setText(String.valueOf(this.model.get${relation.name?cap_first}().getId())); 	
 			</#if>
 		</#list>
     }
@@ -87,7 +105,7 @@ public class ${name}ShowFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_${name?lower_case}_show, container, false);
 
         Intent intent =  getActivity().getIntent();
-        this.model = (${name}) intent.getSerializableExtra("${name}");
+        this.model = (${name?cap_first}) intent.getSerializableExtra("${name}");
         		
         this.initializeComponent(view);
         this.loadData();
