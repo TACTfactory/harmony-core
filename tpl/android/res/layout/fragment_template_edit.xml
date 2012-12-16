@@ -10,7 +10,7 @@
     	android:id="@+id/${name?lower_case}_${field.name?lower_case}_label"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    <#if (field_index > 0) >
+	    <#if (lastFieldName??) >
 	    android:layout_below="@+id/${name?lower_case}_${fields[field_index-1].name?lower_case}"
 	    </#if >
 	    android:text="${field.name?lower_case}"/>
