@@ -290,7 +290,7 @@ public abstract class ${name}AdapterBase {
 			<#if relation.relation.type=="OneToMany">
 		${relation.relation.targetEntity}Adapter ${relation.relation.targetEntity?lower_case}Adapter = new ${relation.relation.targetEntity}Adapter(this.context);
 		${relation.relation.targetEntity?lower_case}Adapter.open(this.mDatabase);
-		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getBy${relation.relation.inversedBy?cap_first}(result.getId()));
+		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getByXXXXX(result.getId())); // relation.relation.inversedBy?cap_first
 			
 			</#if>
 		</#list>
