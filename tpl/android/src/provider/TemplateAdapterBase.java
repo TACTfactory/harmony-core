@@ -292,7 +292,7 @@ public abstract class ${name}AdapterBase {
 			<#if relation.relation.type=="OneToMany">
 		${relation.relation.targetEntity}Adapter ${relation.relation.targetEntity?lower_case}Adapter = new ${relation.relation.targetEntity}Adapter(this.context);
 		${relation.relation.targetEntity?lower_case}Adapter.open(this.mDatabase);
-		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getByXXXXX(result.getId())); // relation.relation.inversedBy?cap_first
+		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getBy{name}(result.getId())); // relation.relation.inversedBy?cap_first
 			
 			</#if>
 		</#list>
@@ -345,7 +345,7 @@ public abstract class ${name}AdapterBase {
 		${relation.relation.targetEntity}Adapter adapt${relation.relation.targetEntity} = new ${relation.relation.targetEntity}Adapter(this.context);
 		adapt${relation.relation.targetEntity}.open(this.mDatabase);
 		for(${name} ${name?lower_case} : result){
-			${name?lower_case}.set${relation.name?cap_first}(adapt${relation.relation.targetEntity}.getByYyyyyy(${name?lower_case}.getId())); // relation.relation.inversedBy?cap_first
+			${name?lower_case}.set${relation.name?cap_first}(adapt${relation.relation.targetEntity}.getBy{name}(${name?lower_case}.getId())); // relation.relation.inversedBy?cap_first
 		}
 		
 			</#if>
