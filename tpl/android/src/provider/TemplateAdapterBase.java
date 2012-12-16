@@ -340,10 +340,10 @@ public abstract class ${name}AdapterBase {
 	<#if relations??>
 		<#list relations as relation>
 			<#if relation.relation.type=="OneToMany">
-		${relation.relation.targetEntity}Adapter adapt = new ${relation.relation.targetEntity}Adapter(this.context);
-		adapt.open(this.mDatabase);
+		${relation.relation.targetEntity}Adapter adapt${relation.relation.targetEntity} = new ${relation.relation.targetEntity}Adapter(this.context);
+		adapt${relation.relation.targetEntity}.open(this.mDatabase);
 		for(${name} ${name?lower_case} : result){
-			${name?lower_case}.set${relation.name?cap_first}(adapt.getByYyyyyy(${name?lower_case}.getId())); // relation.relation.inversedBy?cap_first
+			${name?lower_case}.set${relation.name?cap_first}(adapt${relation.relation.targetEntity}.getByYyyyyy(${name?lower_case}.getId())); // relation.relation.inversedBy?cap_first
 		}
 		
 			</#if>
