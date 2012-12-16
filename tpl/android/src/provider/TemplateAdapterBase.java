@@ -216,7 +216,7 @@ public abstract class ${name}AdapterBase {
 
 	<#list fields as field>
 		<#if !field.relation??>
-			<#if (field.type == "Date")>
+			<#if (field.type?lower_case == "date" || field.type?lower_case == "datetime" || field.type?lower_case = "time" )>
 			
 			result.set${field.name?cap_first}(new Date());
 			try {
@@ -225,10 +225,12 @@ public abstract class ${name}AdapterBase {
 				e.printStackTrace();
 			}
 
-			<#elseif (field.type == "Boolean" || field.type == "boolean")>
+			<#elseif (field.type?lower_case == "boolean" )>
 			result.set${field.name?cap_first}  (c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ).equals("true"));
 			<#elseif (field.type == "int" || field.type == "Integer")>
 			result.set${field.name?cap_first}(c.getInt( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
+			<#elseif (field.type == "float" )>
+			result.set${field.name?cap_first}(c.getFloat( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
 			<#else>
 			result.set${field.name?cap_first}(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
 			</#if>
