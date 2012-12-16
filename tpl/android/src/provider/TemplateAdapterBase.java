@@ -18,7 +18,7 @@ import android.util.Log;
 
 import ${project_namespace}.BuildConfig;
 <#if !isAssociationClass??>
-<#define isAssociationClass="false">
+<#assign isAssociationClass="false">
 </#if>
 <#if isAssociationClass=="false">
 import ${project_namespace}.entity.${name};
