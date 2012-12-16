@@ -15,7 +15,7 @@
         android:id="@+id/row_${name}_${field.name}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-			<#if (lastFieldName??)>
+			<#if (!lastFieldName??)>
         android:layout_alignParentTop="true" />
 			<#else>
 		android:layout_below="@+id/row_${name}_${lastFieldName}" />
