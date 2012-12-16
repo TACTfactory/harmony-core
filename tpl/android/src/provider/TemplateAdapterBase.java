@@ -33,6 +33,7 @@ import ${project_namespace}.entity.${relation.relation.targetEntity};
  */
 public abstract class ${name}AdapterBase {
 	private static final String TAG = "${name}DatabaseAdapter";
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	
 	/** Table name of SQLite database */
 	public static final String TABLE_NAME = "${name}";
@@ -186,7 +187,7 @@ public abstract class ${name}AdapterBase {
 	<#list fields as field>
 		<#if !field.relation??>
 			<#if (field.type == "Date")>
-		result.put(COL_${field.name?upper_case}, 			String.valueOf(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(${name?lower_case}.get${field.name?cap_first}())) );
+		result.put(COL_${field.name?upper_case}, 			String.valueOf(dateFormat.format(${name?lower_case}.get${field.name?cap_first}())) );
 			<#elseif (field.type == "Boolean")>
 		result.put(COL_${field.name?upper_case}, 			String.valueOf(${name?lower_case}.${field.name?uncap_first}()) );
 			<#else>
@@ -218,9 +219,9 @@ public abstract class ${name}AdapterBase {
 		<#if !field.relation??>
 			<#if (field.type?lower_case == "date" || field.type?lower_case == "datetime" || field.type?lower_case = "time" )>
 			
-			result.set${field.name?cap_first}(new Date());
+			result.set${field.name?cap_first}(new DateTime());
 			try {
-				result.set${field.name?cap_first}(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case})) ));
+				result.set${field.name?cap_first}(new DateTime(dateFormat.parse(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case})) )));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
