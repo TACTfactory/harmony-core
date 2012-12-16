@@ -343,7 +343,7 @@ public abstract class ${name}AdapterBase {
 		${relation.relation.targetEntity}Adapter adapt = new ${relation.relation.targetEntity}Adapter(this.context);
 		adapt.open(this.mDatabase);
 		for(${name} ${name?lower_case} : result){
-			${name?lower_case}.set${relation.name?cap_first}(adapt.getBy${relation.relation.inversedBy?cap_first}(${name?lower_case}.getId()));
+			${name?lower_case}.set${relation.name?cap_first}(adapt.getByYyyyyy(${name?lower_case}.getId())); // relation.relation.inversedBy?cap_first
 		}
 		
 			</#if>
