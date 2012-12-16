@@ -33,11 +33,7 @@
     	android:id="@+id/${name?lower_case}_${relation.name?lower_case}_label"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    <#if relation_index==0>
-	    android:layout_below="@+id/${name?lower_case}_${fields?last.name?lower_case}"
-	    <#else>
 	    android:layout_below="@+id/${lastField}"
-	    </#if>
 	    android:text="${relation.name?lower_case}"/>
     <${relation.customShowType}
 		android:id="@+id/${name?lower_case}_${relation.name?lower_case}"

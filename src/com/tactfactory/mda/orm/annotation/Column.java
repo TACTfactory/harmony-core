@@ -101,7 +101,7 @@ public @interface Column {
 	 * 
 	 * @see com.tactfactory.mda.orm.annotation.Column.Type
 	 */
-	Type type() default Type.STRING;
+	String type() default "String";
 			
 	/** 
 	 * The name of the column in the database.

@@ -218,6 +218,7 @@ public class EntityGenerator {
 	 * @param cm The Metadata containing the infos on the java class
 	 */
 	private boolean alreadyImplementsSet(FieldMetadata fm, ClassMetadata cm){
+		if(fm.isFinal) return true;
 		boolean result = false;
 		ArrayList<MethodMetadata> methods = cm.methods;
 		String capitalizedName = fm.name.substring(0,1).toUpperCase() + fm.name.substring(1);
