@@ -13,6 +13,7 @@ import japa.parser.ast.ImportDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
+import japa.parser.ast.body.ModifierSet;
 import japa.parser.ast.body.Parameter;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.expr.MemberValuePair;
@@ -135,9 +136,9 @@ public class JavaAdapter {
 			List<AnnotationExpr> fieldAnnotations = field.getAnnotations();
 			
 			if (fieldAnnotations != null) {
-
 				// General (defaults values)
 				FieldMetadata fieldMeta = new FieldMetadata();
+				fieldMeta.isFinal = ModifierSet.isFinal(field.getModifiers());
 				fieldMeta.name = field.getVariables().get(0).getId().getName(); // FIXME not manage multi-variable
 				fieldMeta.name_in_db = fieldMeta.name;
 				fieldMeta.type = field.getType().toString();
@@ -181,7 +182,8 @@ public class JavaAdapter {
 					meta.relations.put(fieldMeta.name, fieldMeta);
 				}
 				
-				meta.fields.put(fieldMeta.name, fieldMeta);
+				if(isId || isColumn || isRelation)
+					meta.fields.put(fieldMeta.name, fieldMeta);
 				
 				if (Strings.isNullOrEmpty(fieldMeta.columnDefinition)) {
 					if(fieldMeta.type_attribute!=null)
@@ -350,6 +352,7 @@ public class JavaAdapter {
 			MethodMetadata methodMeta = new MethodMetadata();
 			methodMeta.name = method.getName();
 			methodMeta.type = method.getType().toString(); 
+			methodMeta.isFinal = ModifierSet.isFinal(method.getModifiers());
 			
 			// Add Parameters
 			List<Parameter> parameters = method.getParameters();

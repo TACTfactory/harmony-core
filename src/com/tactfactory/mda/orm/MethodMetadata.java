@@ -11,4 +11,7 @@ public class MethodMetadata {
 	
 	/** Arguments types*/
 	public ArrayList<String> argumentsTypes = new ArrayList<String>();
+	
+	/** final ?*/
+	public boolean isFinal = false;
 }

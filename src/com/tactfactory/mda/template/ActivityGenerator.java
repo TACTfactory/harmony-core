@@ -58,7 +58,7 @@ public class ActivityGenerator {
 		// Make entities
 		this.modelEntities = new ArrayList<Map<String, Object>>();
 		for (ClassMetadata meta : this.metas) {
-			if(!meta.fields.isEmpty()){
+			if(!meta.fields.isEmpty() && !meta.isAssociationClass){
 				//this.meta = meta;
 				
 				Map<String, Object> modelClass = meta.toMap(this.adapter);

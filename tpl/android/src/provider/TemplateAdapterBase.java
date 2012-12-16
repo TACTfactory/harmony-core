@@ -5,7 +5,6 @@
 	<#return "REF_"+relation.relation.targetEntity?upper_case+"_"+relation.relation.field_ref[0]?upper_case>
 </#function>
 package ${local_namespace};
-
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -17,11 +16,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import ${project_namespace}.BuildConfig;
-import ${project_namespace}.entity.${name};
+<#if isAssociationClass=="false">import ${project_namespace}.entity.${name};</#if>
 <#list relations as relation>
-	<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
-import ${project_namespace}.entity.${relation.type};
-	</#if>
+import ${project_namespace}.entity.${relation.relation.targetEntity};
 </#list>
 
 /** ${name} adapter database abstract class <br/>
@@ -90,7 +87,7 @@ public abstract class ${name}AdapterBase {
 		+ TABLE_NAME	+ " ("
 		<#list fields as field>
 			<#if !field.relation??>
-		+ ${alias(field.name)}	+ " ${field.schema} <#list ids as id><#if id.name==field.name & ids?size==1>PRIMARY KEY <#if field.columnDefinition=="integer">AUTOINCREMENT</#if></#if></#list><#if (field_has_next && (!fields[field_index+1].relation?? || fields[field_index+1].relation.type!="OneToMany")) | (ids?size>1)>,</#if>"
+		+ ${alias(field.name)}	+ " ${field.schema} <#list ids as id><#if id.name==field.name & ids?size==1>PRIMARY KEY <#if field.columnDefinition=="integer">AUTOINCREMENT</#if></#if></#list><#if (field_has_next && (!fields[field_index+1].relation?? || fields[field_index+1].relation.type!="OneToMany")) || (ids?size>1) || (relations?size>0)>,</#if>"
 			<#elseif field.relation.type!="OneToMany">
 		+ ${ref_alias(field)} + " int NOT NULL,"
 			</#if>
@@ -109,7 +106,7 @@ public abstract class ${name}AdapterBase {
 		</#if>
 		+ ");";
 	}
-	<#if relations??>
+	<#--<#if relations??>
 		<#list relations as relation>
 			<#if relation.relation.type=="ManyToMany">
 	/** Generate Entity Relations Table Schema
@@ -126,7 +123,7 @@ public abstract class ${name}AdapterBase {
 	}
 			</#if>
 		</#list>
-	</#if>
+	</#if>-->
 	
 	// Database tools
 	protected SQLiteDatabase mDatabase;
@@ -167,7 +164,7 @@ public abstract class ${name}AdapterBase {
 	public void close() {
 		mDatabase.close();
 	}
-
+	<#if isAssociationClass!="true">
 	// Converters
 	/** Convert ${name} entity to Content Values for database
 	 * 
@@ -208,7 +205,7 @@ public abstract class ${name}AdapterBase {
 		if (c.getCount() != 0) {
 			result = new ${name}();			
 			<#list fields as field>
-				<#if !field.relation??>
+				<#if !field.relation?? && !field.final>
 					<#if (field.type == "Date")>
 			result.set${field.name?cap_first}(new Date());
 			try {
@@ -217,7 +214,7 @@ public abstract class ${name}AdapterBase {
 				e.printStackTrace();
 			}
 					<#elseif (field.type == "Boolean" || field.type == "boolean")>
-			result.${field.name?uncap_first}(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ) == "true");
+			result.set${field.name?cap_first}(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ).equals("true"));
 					<#elseif (field.type == "int" || field.type == "Integer")>
 			result.set${field.name?cap_first}(c.getInt( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
 					<#else>
@@ -301,6 +298,16 @@ public abstract class ${name}AdapterBase {
 		
 		return result;
 	 }
+			<#elseif relation.relation.type=="ManyToMany">
+			
+	public ArrayList<${name}> getBy${relation.name?cap_first}(int ${relation.name?lower_case}_id){
+		Cursor c = this.getCursor(${ref_alias(relation)}+"=?", new String[]{${relation.name?lower_case}_id+""});
+		ArrayList<${name}> result = ${name}AdapterBase.cursorTo${name}s(c);
+		c.close();
+		
+		return result;
+	 }		
+			
 			</#if>
 		</#list>
 	</#if>
@@ -340,6 +347,14 @@ public abstract class ${name}AdapterBase {
 		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item);
 		<#list ids as id>
 				values.remove(${alias(id.name)});
+		</#list>
+		<#list relations as relation>
+			<#if relation.relation.type=="ManyToMany">
+				${relation.relation.joinTable}AdapterBase adapt = new ${relation.relation.joinTable}Adapter(this.context);
+				for(${relation.relation.targetEntity?cap_first} i : item.get${relation.name?cap_first}()){
+					adapt.insert(item.getId(), i.get${relation.relation.field_ref[0]?cap_first}());
+				}
+			</#if>
 		</#list>
 		
 		return this.mDatabase.insert(
@@ -415,7 +430,7 @@ public abstract class ${name}AdapterBase {
 		
 		return getCursor(null, null);
 	}
-	
+	</#if>
 	protected Cursor getCursor(String whereClause, String[] whereArgs){
 		return this.mDatabase.query(
 				TABLE_NAME,
@@ -426,4 +441,59 @@ public abstract class ${name}AdapterBase {
 				null,
 				null);
 	}
+	<#if isAssociationClass=="true">
+		<#--<#list relations as relation>
+	public ArrayList<${relation.type}> get${relation.type}s(int id){
+		${relation.type}Adapter adapt = new ${relation.type}Adapter(this.context);
+		return adapt.getBy${name}(id);
+	}
+		</#list>-->
+		
+	/** Insert a ${name} entity into database
+	 * 
+	 * param item The ${name} entity to persist 
+	 * return Id of the ${name} entity
+	 */
+	public long insert(int ${relations[0].type?lower_case}_id, int ${relations[1].type?lower_case}_id) {
+		if (BuildConfig.DEBUG)
+			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
+		
+		ContentValues values = new ContentValues();
+		values.put(${ref_alias(relations[0])}, ${relations[0].type?lower_case}_id);
+		values.put(${ref_alias(relations[1])}, ${relations[1].type?lower_case}_id);
+		<#list relations as relation>
+			<#if relation.relation.type=="ManyToMany">
+				${relation.relation.joinTable}AdapterBase adapt = new ${relation.relation.joinTable}Adapter(this.context);
+				for(${relation.relation.targetEntity?cap_first} i : item.get${relation.name?cap_first}()){
+					adapt.insert(item.getId(), i.get${relation.relation.field_ref[0]?cap_first}());
+				}
+			</#if>
+		</#list>
+		
+		return this.mDatabase.insert(
+				TABLE_NAME, 
+				null, 
+				values);
+	}
+		/** Find & read ${name} by ${relations[0].name}
+	 *
+	 *
+	 */
+	 
+	 public ArrayList<${relations[0].relation.targetEntity}> getBy${relations[1].relation.targetEntity?cap_first}(int ${relations[1].name?lower_case}){
+		Cursor c = this.getCursor(${ref_alias(relations[1])}+"=?", new String[]{${relations[1].name?lower_case}+""});
+		ArrayList<${name}> result = ${name}AdapterBase.cursorTo${name}s(c);
+		c.close();
+		
+		return result;
+	 }
+	public ArrayList<${relations[0].type}> get${relations[0].type}s(int id){
+		${relations[0].type}Adapter adapt = new ${relations[0].type}Adapter(this.context);
+		return adapt.getBy${relations[1].relation.inversedBy?cap_first}(id);
+	}
+	public ArrayList<${relations[1].type}> get${relations[1].type}s(int id){
+		${relations[1].type}Adapter adapt = new ${relations[1].type}Adapter(this.context);
+		return adapt.getBy${relations[0].relation.inversedBy?cap_first}(id);
+	}
+	</#if>
 }
