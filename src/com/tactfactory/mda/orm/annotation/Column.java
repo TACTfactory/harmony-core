@@ -35,6 +35,7 @@ public @interface Column {
 		TEXT("text"),
 		INTEGER("integer"),
 		INT("int"),
+		FLOAT("float"),
 		DATETIME("datetime"),
 		DATE("date"),
 		TIME("time"),
