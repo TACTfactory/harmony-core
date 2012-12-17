@@ -2,7 +2,7 @@
 	<#return "COL_"+name?upper_case>
 </#function>
 <#function ref_alias relation>
-	<#return "REF_"+relation.relation.targetEntity?upper_case+"_"+relation.relation.field_ref[0]?upper_case>
+	<#return "COL_"+relation.name?upper_case+"_"+relation.relation.field_ref[0]?upper_case>
 </#function>
 package ${local_namespace};
 import java.text.SimpleDateFormat;
