@@ -11,7 +11,7 @@
     	android:id="@+id/${name?lower_case}_${field.name?lower_case}_label"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    <#if (field_index > 0) >
+	    <#if (lastFieldName??) >
 	    android:layout_below="@+id/${name?lower_case}_${lastFieldName?lower_case}"
 	    </#if >
 		<#assign lastFieldName=field.name>
@@ -20,10 +20,30 @@
 		android:id="@+id/${name?lower_case}_${field.name?lower_case}"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    <#if field.type == "text" >
+	    <#if field.customEditType == "EditText" >
+	    	<#if field.type == "text" >
+	    android:inputType="textCapWords|textAutoComplete|textMultiLine"
+	    	<#elseif field.type=="password">
+	    android:inputType="textPassword"
+	    	<#elseif field.type=="email">
+	    android:inputType="textEmailAddress"
+	    	<#elseif field.type=="date">
+	    android:inputType="date"
+	    	<#elseif field.type=="time">
+	    android:inputType="time"
+	    	<#elseif field.type=="datetime">
+	    android:inputType="datetime"
+	    	<#elseif field.type=="phone">
+	    android:inputType="phone"
+	    	<#elseif field.type=="zipcode">
+	    android:inputType="textPostalAddress"
+	    	<#elseif field.type=="integer" || field.type=="int" || field.type=="ean">
+	    android:inputType="number"
+	    	<#elseif field.type=="float">
+	    android:inputType="numberDecimal"
+	    	<#else>
 	    android:inputType="text"
-	    <#elseif field.type=="password">
-	    android:inputType="password"
+	    	</#if >
 	    </#if >
 	    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />
 		<#assign lastField="${name?lower_case}_${field.name?lower_case}">

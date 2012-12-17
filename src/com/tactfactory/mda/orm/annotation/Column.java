@@ -30,13 +30,25 @@ public @interface Column {
 	 * Mapping Type defines the mapping between a Java type and an SQL type.
 	 */
 	public enum Type {
+		// BASE
 		STRING("string"),
-		LOGIN("login"),
-		PASSWORD("password"),
+		TEXT("text"),
 		INTEGER("integer"),
 		INT("int"),
+		FLOAT("float"),
 		DATETIME("datetime"),
-		TEXT("text");
+		DATE("date"),
+		TIME("time"),
+		
+		// EXTEND
+		LOGIN("login"),
+		PASSWORD("password"),
+		EMAIL("email"),
+		PHONE("phone"),
+		CITY("city"),
+		ZIPCODE("zipcode"),
+		COUNTRY("country"),
+		BC_EAN("ean");
 		
 		private String type;
 		
@@ -141,4 +153,11 @@ public @interface Column {
 	 * @see com.tactfactory.mda.orm.SqliteAdapter for mapping list
 	 */
 	String columnDefinition() default "";
+	
+	/**
+	 * Hide field in view
+	 * 
+	 * @return (optional, defaults to false) Hide the filed in a view.
+	 */
+	boolean hidden() default false;
 }

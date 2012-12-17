@@ -33,6 +33,9 @@ public class Post implements Serializable {
 	@Column(length=40000, type="String")	// type="string"
     protected String content;
 	
+	@Column
+	protected ArrayList<String> categories;
+	
 	@ManyToOne
 	protected User owner;
 	

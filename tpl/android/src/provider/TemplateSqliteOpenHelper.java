@@ -29,14 +29,14 @@ public class ${project_name}SqliteOpenHelper extends SQLiteOpenHelper {
 			Log.d(TAG, "Create database..");
 		
 		/// Create Schema
-		<#list entities as entity>
+	<#list entities as entity>
 		db.execSQL( ${entity.name}Adapter.getSchema() );
-			<#list entity["relations"] as relation>
-				<#if relation.type=="ManyToMany">
+		<#list entity["relations"] as relation>
+			<#if relation.type=="ManyToMany">
 		db.execSQL( ${entity.name}Adapter.get${relation.name?cap_first}RelationSchema() );
-				</#if>
-			</#list>
-	    </#list>
+			</#if>
+		</#list>
+	</#list>
 		
 		// Sample of data
 		/*InitialDataBase data = new InitialData(db);
@@ -60,14 +60,14 @@ public class ${project_name}SqliteOpenHelper extends SQLiteOpenHelper {
 			Log.i(TAG, "Upgrading database from version " + oldVersion + 
 					   " to " + newVersion + ", which will destroy all old data");
 		
-			<#list entities as entity>
+		<#list entities as entity>
 			db.execSQL("DROP TABLE IF EXISTS "+ ${entity.name}Adapter.TABLE_NAME);
-				<#list entity['relations'] as relation>
-					<#if relation.type=="ManyToMany">
+			<#list entity['relations'] as relation>
+				<#if relation.type=="ManyToMany">
 			db.execSQL("DROP TABLE IF EXISTS "+${entity.name}Adapter.RELATION_${relation.name?upper_case}_TABLE_NAME );
-					</#if>
-				</#list>
-		    </#list>
+				</#if>
+			</#list>
+	    </#list>
 		//}
 		    
 		this.onCreate(db);
