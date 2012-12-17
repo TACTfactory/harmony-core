@@ -1,8 +1,14 @@
 <#function alias name>
 	<#return "COL_"+name?upper_case>
 </#function>
-<#function ref_alias relation>
-	<#return "COL_"+relation.name?upper_case+"_"+relation.relation.field_ref[0]?upper_case>
+<#function hasRelationOrIds>
+	<#if (ids?size>1)><#return true></#if>
+	<#list relations as relation>
+		<#if relation.relation.type!="OneToMany">
+			<#return true>
+		</#if>
+	</#list>
+	<#return false>
 </#function>
 package ${local_namespace};
 
@@ -17,9 +23,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import ${project_namespace}.BuildConfig;
-<#if !isAssociationClass??>
-<#assign isAssociationClass="false">
-</#if>
 <#if isAssociationClass=="false">
 import ${project_namespace}.entity.${name};
 </#if>
@@ -37,50 +40,21 @@ public abstract class ${name}AdapterBase {
 	
 	/** Table name of SQLite database */
 	public static final String TABLE_NAME = "${name}";
-<#if relations??>
-	<#list relations as relation>
-		<#if relation.relation.type=="ManyToMany">
-	public static final String RELATION_${relation.name?upper_case}_TABLE_NAME ="${name}_to_${relation.name?cap_first}";
-		</#if>
-	</#list>
-</#if>
 	
 	// Columns constants fields mapping
 <#list fields as field>
-	<#if !field.relation??>
+	<#if !field.relation?? || field.relation.type!="OneToMany">
 	public static final String ${alias(field.name)} = "${field.name}";
 	</#if>
 </#list>
-<#if relations??>
-	<#list relations as relation>
-		<#if relation.relation.type!="OneToMany">
-	public static final String ${ref_alias(relation)} = "${relation.name}";
-		</#if>
-	</#list>
-</#if>
-	
-	// Columns constants for assocation table
-<#if relations??>
-	<#list relations as relation>
-		<#if relation.relation.type=="ManyToMany">
-	public static final String ASSOC_COL_${relation.relation.targetEntity?upper_case}_ID = "${relation.relation.targetEntity?lower_case}_id";
-	public static final String ASSOC_COL_${name?upper_case}_ID = "${name?lower_case}_id";
-		</#if>
-	</#list>
-</#if>
 	
 	/** Global Fields */
 	public static final String[] COLS = new String[] {
+<#assign firstFieldDone=false>
 <#list fields as field>
-	<#if !field.relation??>
-		${alias(field.name)}<#if field_has_next>,<#else><#if relations?size!=0>,</#if></#if>
-	</#if>
-</#list>
-<#list relations as relation>
-	<#if relation.relation.type!="OneToMany">
-		${ref_alias(relation)}<#if (relation_has_next && relations[relation_index+1].relation.type!="OneToMany")>,</#if>
-	</#if>
-</#list>
+	<#if !field.relation?? || field.relation.type!="OneToMany">
+<#if firstFieldDone>,</#if>
+		${alias(field.name)}<#assign firstFieldDone=true></#if></#list>
 	};
 	
 	private Context context;
@@ -93,47 +67,26 @@ public abstract class ${name}AdapterBase {
 		return "CREATE TABLE "
 		+ TABLE_NAME	+ " ("
 <#list fields as field>
-	<#if !field.relation??>
-		+ ${alias(field.name)}	+ " ${field.schema} <#list ids as id><#if id.name==field.name & ids?size==1>PRIMARY KEY <#if field.columnDefinition=="integer">AUTOINCREMENT</#if></#if></#list><#if (field_has_next && (!fields[field_index+1].relation?? || fields[field_index+1].relation.type!="OneToMany")) || (ids?size>1) || (relations?size>0)>,</#if>"
-	<#elseif field.relation.type!="OneToMany">
-		+ ${ref_alias(field)} + " int NOT NULL,"
+	<#if !field.relation?? || field.relation.type!="OneToMany">
+		<#if lastLine??>${lastLine},"</#if>
+		<#assign lastLine="+ "+alias(field.name)+"	+ \""+field.schema>
 	</#if>
 </#list>
+		${lastLine}<#if hasRelationOrIds()>,</#if>"
 <#if relations??>
 	<#list relations as relation>
+		<#if lastRelation??>${lastRelation},"</#if>
 		<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
-		+ "FOREIGN KEY("+${ref_alias(relation)}+") REFERENCES ${relation.relation.targetEntity}("+${relation.relation.targetEntity}AdapterBase.COL_${relation.relation.field_ref[0]?upper_case}+")<#if (relation_has_next && (relations[relation_index+1].relation.type=="OneToOne" | relations[relation_index+1].relation.type=="ManyToOne")) | (ids?size>1)>,</#if>"
-		<#elseif relation.relation.type=="ManyToMany">
-		+ "FOREIGN KEY("+${ref_alias(relation)}+") REFERENCES "+RELATION_${relation.name?upper_case}_TABLE_NAME+"("+${relation.relation.targetEntity}AdapterBase.COL_${relation.relation.field_ref[0]?upper_case}+")<#if (relation_has_next && (relations[relation_index+1].relation.type=="OneToOne" | relations[relation_index+1].relation.type=="ManyToOne")) | (ids?size>1)>,</#if>"
+			<#assign lastRelation="+\"FOREIGN KEY(\"+"+alias(relation.name)+"+\") REFERENCES \"+"+relation.relation.targetEntity+"AdapterBase.TABLE_NAME+\" (\"+"+relation.relation.targetEntity+"AdapterBase."+alias(relation.relation.field_ref[0])+"+\")">
 		</#if>
 	</#list>
+		<#if lastRelation??>${lastRelation}<#if (ids?size>1)>,</#if>"</#if>
 </#if>
 <#if (ids?size>1)>
 		+ "PRIMARY KEY ("+<#list ids as id>${alias(id.name)}<#if id_has_next>+","+</#if></#list>+")"
 </#if>
 		+ ");";
 	}
-
-<#if relations??>
-	<#list relations as relation>
-		<#if relation.relation.type=="ManyToMany">
-			
-	/** Generate Entity Relations Table Schema
-	 * 
-	 * @return "SQL query : CREATE TABLE..."
-	 */
-	public static final String get${relation.name?cap_first}RelationSchema() {
-		return "CREATE TABLE "
-		+ RELATION_${relation.name?upper_case}_TABLE_NAME + "("
-		+ "id integer primary key autoincrement,"
-		+ ASSOC_COL_${relation.relation.targetEntity?upper_case}_ID+" integer,"
-		+ ASSOC_COL_${name?upper_case}_ID+" integer"
-		+ ");";
-	}
-	
-		</#if>
-	</#list>
-</#if>
 	
 	// Database tools
 	protected SQLiteDatabase mDatabase;
@@ -182,24 +135,28 @@ public abstract class ${name}AdapterBase {
 	 * @param ${name?lower_case} ${name} entity object
 	 * @return ContentValues object
 	 */
-	public static ContentValues ${name?lower_case}ToContentValues(${name} ${name?lower_case}) {		
+	public static ContentValues ${name?lower_case}ToContentValues(${name} ${name?lower_case}<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.programmatic>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {		
 		ContentValues result = new ContentValues();		
 	<#list fields as field>
-		<#if !field.relation??>
-			<#if (field.type == "Date")>
-		result.put(COL_${field.name?upper_case}, 			String.valueOf(dateFormat.format(${name?lower_case}.get${field.name?cap_first}())) );
-			<#elseif (field.type == "Boolean")>
-		result.put(COL_${field.name?upper_case}, 			String.valueOf(${name?lower_case}.${field.name?uncap_first}()) );
+		<#if !field.programmatic>
+			<#if !field.relation??>
+				<#if (field.type == "Date")>
+		result.put(${alias(field.name)}, 			String.valueOf(dateFormat.format(${name?lower_case}.get${field.name?cap_first}())) );
+				<#elseif (field.type == "Boolean")>
+		result.put(${alias(field.name)}, 			String.valueOf(${name?lower_case}.${field.name?uncap_first}()) );
+				<#else>
+		result.put(${alias(field.name)}, 			String.valueOf(${name?lower_case}.get${field.name?cap_first}()) );
+				</#if>
 			<#else>
-		result.put(COL_${field.name?upper_case}, 			String.valueOf(${name?lower_case}.get${field.name?cap_first}()) );
+				<#if (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
+		result.put(${alias(field.name)}, 			String.valueOf(${name?lower_case}.get${field.name?cap_first}().getId()) );
+				</#if>
 			</#if>
+		<#else>
+		result.put(${alias(field.name)},			String.valueOf(${field.relation.targetEntity?lower_case}_id));
 		</#if>
 	</#list>
-	<#list relations as relation>
-		<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
-		result.put(${ref_alias(relation)}, 			String.valueOf(${name?lower_case}.get${relation.name?cap_first}().getId()) );
-		</#if>
-	</#list>
+
 		
 		return result;
 	}
@@ -216,9 +173,10 @@ public abstract class ${name}AdapterBase {
 			result = new ${name}();			
 
 	<#list fields as field>
-		<#if !field.relation??>
-			<#if (field.type?lower_case == "date" || field.type?lower_case == "datetime" || field.type?lower_case = "time" )>
-			
+		<#if !field.programmatic>
+			<#if !field.relation??>
+				<#if (field.type?lower_case == "date" || field.type?lower_case == "datetime" || field.type?lower_case = "time" )>
+				
 			result.set${field.name?cap_first}(new DateTime());
 			try {
 				result.set${field.name?cap_first}(new DateTime(dateFormat.parse(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case})) )));
@@ -226,24 +184,20 @@ public abstract class ${name}AdapterBase {
 				e.printStackTrace();
 			}
 
-			<#elseif (field.type?lower_case == "boolean" )>
+				<#elseif (field.type?lower_case == "boolean" )>
 			result.set${field.name?cap_first}  (c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ).equals("true"));
-			<#elseif (field.type == "int" || field.type == "Integer")>
+				<#elseif (field.type == "int" || field.type == "Integer")>
 			result.set${field.name?cap_first}(c.getInt( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
-			<#elseif (field.type == "float" )>
+				<#elseif (field.type == "float" )>
 			result.set${field.name?cap_first}(c.getFloat( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
-			<#else>
+				<#else>
 			result.set${field.name?cap_first}(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
+				</#if>
+			<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
+			${field.type} ${field.name} = new ${field.type}();
+			${field.name}.setId( Integer.valueOf(c.getString( c.getColumnIndexOrThrow(${alias(field.name)}) )) );
+			result.set${field.name?cap_first}(${field.name});	
 			</#if>
-		</#if>
-	</#list>
-	<#list relations as relation>
-		<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
-			
-			${relation.type} ${relation.name} = new ${relation.type}();
-			${relation.name}.setId( Integer.valueOf(c.getString( c.getColumnIndexOrThrow(${ref_alias(relation)}) )) );
-			result.set${relation.name?cap_first}(${relation.name});
-			
 		</#if>
 	</#list>
 		}
@@ -311,7 +265,7 @@ public abstract class ${name}AdapterBase {
 	 * @return List of ${name} entities
 	 */
 	 public ArrayList<${name}> getBy${relation.name?cap_first}(int ${relation.name?lower_case}_id){
-		Cursor c = this.getCursor(${ref_alias(relation)}+"=?", new String[]{${relation.name?lower_case}_id+""});
+		Cursor c = this.getCursor(${alias(relation.name)}+"=?", new String[]{${relation.name?lower_case}_id+""});
 		ArrayList<${name}> result = ${name}AdapterBase.cursorTo${name}s(c);
 		c.close();
 		
@@ -320,7 +274,7 @@ public abstract class ${name}AdapterBase {
 	 
 			<#elseif relation.relation.type=="ManyToMany">		
 	public ArrayList<${name}> getBy${relation.name?cap_first}(int ${relation.name?lower_case}_id){
-		Cursor c = this.getCursor(${ref_alias(relation)}+"=?", new String[]{${relation.name?lower_case}_id+""});
+		Cursor c = this.getCursor(${alias(relation.name)}+"=?", new String[]{${relation.name?lower_case}_id+""});
 		ArrayList<${name}> result = ${name}AdapterBase.cursorTo${name}s(c);
 		c.close();
 		
@@ -361,11 +315,11 @@ public abstract class ${name}AdapterBase {
 	 * @param item The ${name} entity to persist 
 	 * @return Id of the ${name} entity
 	 */
-	public long insert(${name} item) {
+	public long insert(${name} item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.programmatic>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
-		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item);
+		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.programmatic>, ${relation.relation.targetEntity?lower_case}_id</#if></#list>);
 	<#list ids as id>
 		values.remove(${alias(id.name)});
 	</#list>
@@ -391,12 +345,12 @@ public abstract class ${name}AdapterBase {
 	 * @param item The ${name} entity to persist
 	 * @return 
 	 */
-	public int update(${name} item) {
+	public int update(${name} item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.programmatic>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
 	<#if (ids?size>0)>
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
 		
-		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item);	
+		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.programmatic>, ${relation.relation.targetEntity?lower_case}_id</#if></#list>);	
 		String whereClause = <#list ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, </#if></#list>};
 		
@@ -486,8 +440,8 @@ public abstract class ${name}AdapterBase {
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
 		ContentValues values = new ContentValues();
-		values.put(${ref_alias(relations[0])}, ${relations[0].type?lower_case}_id);
-		values.put(${ref_alias(relations[1])}, ${relations[1].type?lower_case}_id);
+		values.put(${alias(relations[0].name)}, ${relations[0].type?lower_case}_id);
+		values.put(${alias(relations[1].name)}, ${relations[1].type?lower_case}_id);
 	<#list relations as relation>
 		<#if relation.relation.type=="ManyToMany">
 		
@@ -507,7 +461,7 @@ public abstract class ${name}AdapterBase {
 	
 	/** Find & read ${name} by ${relations[0].name}v*/
 	public ArrayList<${relations[0].relation.targetEntity}> getBy${relations[1].relation.targetEntity?cap_first}(int ${relations[1].name?lower_case}){
-		Cursor c = this.getCursor(${ref_alias(relations[1])}+"=?", new String[]{${relations[1].name?lower_case}+""});
+		Cursor c = this.getCursor(${alias(relations[1].name)}+"=?", new String[]{${relations[1].name?lower_case}+""});
 		ArrayList<${name}> result = ${name}AdapterBase.cursorTo${name}s(c);
 		c.close();
 		

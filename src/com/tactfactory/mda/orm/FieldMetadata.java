@@ -51,6 +51,12 @@ public class FieldMetadata {
 	/** GUI edit field type */
 	public String customEditType;
 	
+	/** Is field hidden ? */
+	public boolean hidden = false;
+	
+	/** Is field hidden ? */
+	public boolean programmatic = false;
+	
 	/** Customize edit and show GUI field */
 	public void customize(BaseAdapter adapter) {
 		this.customShowType = adapter.getViewComponentShow(this);
@@ -65,6 +71,7 @@ public class FieldMetadata {
 		HashMap<String, Object> model = new HashMap<String, Object>();
 		model.put(TagConstant.NAME, this.name);
 		model.put(TagConstant.TYPE, this.type);
+		model.put("length", this.length);
 		model.put("columnDefinition", this.columnDefinition);
 		//model.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(this));
 
@@ -76,6 +83,8 @@ public class FieldMetadata {
 		if(relation!=null){
 			model.put(TagConstant.RELATION, this.relation.toMap());
 		}
+		
+		model.put("programmatic", this.programmatic);
 		
 		return model;
 	}
