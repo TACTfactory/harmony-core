@@ -11,9 +11,9 @@ package com.tactfactory.mda.orm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
@@ -29,13 +29,13 @@ public class ClassMetadata {
 	public String name = "";
 	
 	/** List of fields of entity class*/
-	public HashMap<String, FieldMetadata> fields = new HashMap<String, FieldMetadata>();
+	public LinkedHashMap<String, FieldMetadata> fields = new LinkedHashMap<String, FieldMetadata>();
 
 	/** List of ids of entity class*/
-	public HashMap<String, FieldMetadata> ids = new HashMap<String, FieldMetadata>();
+	public LinkedHashMap<String, FieldMetadata> ids = new LinkedHashMap<String, FieldMetadata>();
 	
 	/** List of relations of entity class*/
-	public HashMap<String, FieldMetadata> relations = new HashMap<String, FieldMetadata>();
+	public LinkedHashMap<String, FieldMetadata> relations = new LinkedHashMap<String, FieldMetadata>();
 		
 	/** Class inherited by the entity class or null if none*/
 	public String extendType = null;
@@ -57,28 +57,34 @@ public class ClassMetadata {
 	 */
 	public Map<String, Object> toMap(BaseAdapter adapter){
 		HashMap<String, Object> model = new HashMap<String, Object>();
-		model.put(TagConstant.SPACE, this.space);
-		model.put(TagConstant.NAME, this.name);
+		
+		model.put(TagConstant.SPACE,	this.space);
+		model.put(TagConstant.NAME,		this.name);
 		model.put(TagConstant.LOCAL_NAMESPACE, adapter.getNameSpaceEntity(this, adapter.getController()));
+		//model.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(this));
+		model.put(TagConstant.FIELDS,	this.toFieldArray(this.fields.values(), adapter));
+		model.put(TagConstant.IDS,		this.toFieldArray(this.ids.values(), adapter));
+		model.put(TagConstant.RELATIONS,this.toFieldArray(this.relations.values(), adapter));
 		model.put("isAssociationClass","false");
 		if(isAssociationClass)
 			model.put("isAssociationClass","true");
-		//model.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(this));
-		model.put(TagConstant.FIELDS, toFieldArray(this.fields.values(), adapter));
-		model.put(TagConstant.IDS, toFieldArray(this.ids.values(), adapter));
-		model.put(TagConstant.RELATIONS, toFieldArray(this.relations.values(), adapter));
 		
 		return model;
 	}
 	
 	private ArrayList<Map<String,Object>> toFieldArray(Collection<FieldMetadata> c, BaseAdapter adapter){
-		ArrayList<Map<String,Object>> SubFields = new ArrayList<Map<String,Object>>();
+		ArrayList<Map<String,Object>> result = new ArrayList<Map<String,Object>>();
+		Map<String, Object> subField = null;
+		
 		for (FieldMetadata field : c) {
-			Map<String, Object> subField = new HashMap<String, Object>();
 			field.customize(adapter);
+			
+			subField = new HashMap<String, Object>();
 			subField = field.toMap();
-			SubFields.add(subField);
+			
+			result.add(subField);
 		}
-		return SubFields;
+		
+		return result;
 	}
 }
