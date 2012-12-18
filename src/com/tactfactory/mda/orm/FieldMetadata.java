@@ -40,6 +40,7 @@ public class FieldMetadata {
 	public int length = 255;
 	public int precision = 0;
 	public int scale = 0;
+	public boolean hidden = false;
 	
 	/** GUI show field type */
 	public String customShowType;
