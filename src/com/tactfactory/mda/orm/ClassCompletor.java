@@ -86,7 +86,7 @@ public class ClassCompletor {
 					ConsoleUtils.displayDebug("Association Table => "+rel.joinTable);
 					ClassMetadata classMeta = new ClassMetadata();
 					classMeta.name = rel.joinTable;
-					classMeta.isAssociationClass = true;
+					classMeta.internal = true;
 					classMeta.space = cm.space;
 					FieldMetadata id = new FieldMetadata();
 						id.columnDefinition = "integer";

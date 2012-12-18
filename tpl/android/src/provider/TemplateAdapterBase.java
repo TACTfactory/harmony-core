@@ -1,3 +1,5 @@
+<#import "methods.tpl" as m>
+
 <#function alias name>
 	<#return "COL_"+name?upper_case>
 </#function>
@@ -23,7 +25,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import ${project_namespace}.BuildConfig;
-<#if isAssociationClass=="false">
+<#if internal=="false">
 import ${project_namespace}.entity.${name};
 </#if>
 <#list relations as relation>
@@ -128,25 +130,19 @@ public abstract class ${name}AdapterBase {
 		mDatabase.close();
 	}
 	
-<#if isAssociationClass!="true">
+<#if internal!="true">
 	// Converters
 	/** Convert ${name} entity to Content Values for database
 	 * 
 	 * @param ${name?lower_case} ${name} entity object
 	 * @return ContentValues object
 	 */
-	public static ContentValues ${name?lower_case}ToContentValues(${name} ${name?lower_case}<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.programmatic>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {		
+	public static ContentValues ${name?lower_case}ToContentValues(${name} ${name?lower_case}<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {		
 		ContentValues result = new ContentValues();		
 	<#list fields as field>
-		<#if !field.programmatic>
+		<#if !field.internal>
 			<#if !field.relation??>
-				<#if (field.type == "Date")>
-		result.put(${alias(field.name)}, 			String.valueOf(dateFormat.format(${name?lower_case}.get${field.name?cap_first}())) );
-				<#elseif (field.type == "Boolean")>
-		result.put(${alias(field.name)}, 			String.valueOf(${name?lower_case}.${field.name?uncap_first}()) );
-				<#else>
-		result.put(${alias(field.name)}, 			String.valueOf(${name?lower_case}.get${field.name?cap_first}()) );
-				</#if>
+		result.put(${alias(field.name)}, 			${m.typeToParser(name, field)} );				
 			<#else>
 				<#if (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 		result.put(${alias(field.name)}, 			String.valueOf(${name?lower_case}.get${field.name?cap_first}().getId()) );
@@ -173,7 +169,7 @@ public abstract class ${name}AdapterBase {
 			result = new ${name}();			
 
 	<#list fields as field>
-		<#if !field.programmatic>
+		<#if !field.internal>
 			<#if !field.relation??>
 				<#if (field.type?lower_case == "date" || field.type?lower_case == "datetime" || field.type?lower_case = "time" )>
 				
@@ -186,12 +182,12 @@ public abstract class ${name}AdapterBase {
 
 				<#elseif (field.type?lower_case == "boolean" )>
 			result.set${field.name?cap_first}  (c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ).equals("true"));
-				<#elseif (field.type == "int" || field.type == "Integer")>
+				<#elseif (field.type == "int" || field.type == "Integer" || field.type == "phone" || field.type == "ean" || field.type == "zipcode")>
 			result.set${field.name?cap_first}(c.getInt( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
 				<#elseif (field.type == "float" )>
 			result.set${field.name?cap_first}(c.getFloat( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
 				<#else>
-			result.set${field.name?cap_first}(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
+			result.set${field.name?cap_first}(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) )); 
 				</#if>
 			<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 			${field.type} ${field.name} = new ${field.type}();
@@ -315,11 +311,11 @@ public abstract class ${name}AdapterBase {
 	 * @param item The ${name} entity to persist 
 	 * @return Id of the ${name} entity
 	 */
-	public long insert(${name} item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.programmatic>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
+	public long insert(${name} item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
-		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.programmatic>, ${relation.relation.targetEntity?lower_case}_id</#if></#list>);
+		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, ${relation.relation.targetEntity?lower_case}_id</#if></#list>);
 	<#list ids as id>
 		values.remove(${alias(id.name)});
 	</#list>
@@ -345,12 +341,12 @@ public abstract class ${name}AdapterBase {
 	 * @param item The ${name} entity to persist
 	 * @return 
 	 */
-	public int update(${name} item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.programmatic>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
+	public int update(${name} item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
 	<#if (ids?size>0)>
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
 		
-		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.programmatic>, ${relation.relation.targetEntity?lower_case}_id</#if></#list>);	
+		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, ${relation.relation.targetEntity?lower_case}_id</#if></#list>);	
 		String whereClause = <#list ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, </#if></#list>};
 		
@@ -421,7 +417,7 @@ public abstract class ${name}AdapterBase {
 				null);
 	}
 	
-<#if isAssociationClass=="true">
+<#if internal=="true">
 	<#--<#list relations as relation>
 	public ArrayList<${relation.type}> get${relation.type}s(int id){
 		${relation.type}Adapter adapt = new ${relation.type}Adapter(this.context);

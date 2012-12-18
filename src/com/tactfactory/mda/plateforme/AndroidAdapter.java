@@ -103,4 +103,75 @@ public final class AndroidAdapter extends BaseAdapter {
 				meta.space,
 				type);
 	}
+
+	@Override
+	public String getNativeType(String type) {
+		String ret = type;
+		if(type.equals("string")){
+			ret = "String";
+		}else
+			
+		if(type.equals("text")){
+			ret = "String";	
+		}else
+			
+		if(type.equals("integer")){
+			ret = "int";
+		}else
+			
+		if(type.equals("int")){
+			ret = "int";
+		}else
+			
+		if(type.equals("float")){
+			ret = "float";
+		}else
+			
+		if(type.equals("datetime")){
+			ret = "Date";
+		}else
+			
+		if(type.equals("date")){
+			ret = "Date";
+		}else
+			
+		if(type.equals("time")){
+			ret = "Date";
+		}else
+			
+		if(type.equals("login")){
+			ret = "String";
+		}else
+			
+		if(type.equals("password")){
+			ret = "String";
+		}else
+			
+		if(type.equals("email")){
+			ret = "String";
+		}else
+			
+		if(type.equals("phone")){
+			ret = "int";
+		}else
+			
+		if(type.equals("city")){
+			ret = "String";
+		}else
+			
+		if(type.equals("zipcode")){
+			ret = "int";
+		}else
+			
+		if(type.equals("country")){
+			ret = "String";
+		}else
+			
+		if(type.equals("ean")){
+			ret = "int";
+		}
+		return ret;
+	}
+	
+	
 }

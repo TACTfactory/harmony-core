@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Date;
 
+import org.joda.time.DateTime;
+
 import ${namespace}.data.${name}Adapter;
 import ${namespace}.entity.${name};
 <#list relations as relation>
@@ -44,9 +46,9 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		</#if>
 	</#list>
 	<#list relations as relation>
-		<#if relation.relation.type=="ManyToOne" | relation.relation.type=="OneToOne">
+		<#if relation.relation.type=="ManyToOne" || relation.relation.type=="OneToOne">
 	protected ${relation.customEditType} ${relation.name}View;
-	protected List<${relation.type}> ${relation.type}list;
+	protected List<${relation.type}> ${relation.name}List;
 		</#if>
 	</#list>
 	
@@ -73,85 +75,87 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 
 	/** Load data from model to fields view */
 	public void loadData() {
-		<#foreach field in fields>
+		<#foreach field in fields>						
+		<#if !field.internal>
 			<#if !field.relation??>
-		<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long")>
+				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="phone") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
 		if(this.model.get${field.name?cap_first}()!=null)
-		</#if>
-			<#if (field.customEditType == "EditText") >
-				<#if (field.type == "String")>
+				</#if>
+				<#if (field.customEditType == "EditText") >
+					<#if (field.type == "String") || field.type == "email" || field.type == "login" || field.type == "password" || field.type == "city" || field.type=="text" || field.type== "country">
 			this.${field.name}View.setText(this.model.get${field.name?cap_first}()); 
-				</#if>
-				<#if (field.type == "Date")>
+					</#if>
+					<#if (field.type == "Date") || field.type == "DateTime" || field.type == "Time">
 			this.${field.name}View.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(this.model.get${field.name?cap_first}())); 
-				</#if>
-				<#if (field.type == "int")>
+					</#if>
+					<#if (field.type == "int") || (field.type=="long") || (field.type=="phone") || (field.type=="ean") || (field.type=="zipcode") || field.type=="float">
 			this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}())); 
-				</#if>
-			</#if>
-			<#if (field.customEditType == "CheckBox") >
+					</#if>
+				<#elseif (field.customEditType == "CheckBox") >
 			this.${field.name}View.setSelected(this.model.${field.name?uncap_first}()); 
-			</#if>
-			</#if>
-		</#foreach>
-		<#foreach relation in relations>
-			<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
+				</#if>			
+			<#elseif field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">
 
-		${relation.type}Adapter ${relation.type?lower_case}adapter = new ${relation.type}Adapter(getActivity());
-		${relation.type?lower_case}adapter.open();
-		this.${relation.type}list = ${relation.type?lower_case}adapter.getAll();
-		${relation.type?lower_case}adapter.close();
+		${field.type}Adapter ${field.name}Adapter = new ${field.type}Adapter(getActivity());
+		${field.name}Adapter.open();
+		this.${field.name}List = ${field.name}Adapter.getAll();
+		${field.name}Adapter.close();
 		
-		List<String> ${relation.type?lower_case}strings = new ArrayList<String>();
-		for(${relation.type} item : this.${relation.type}list) {
-			${relation.type?lower_case}strings.add( String.valueOf(item.getId()) );
+		List<String> ${field.name}Strings = new ArrayList<String>();
+		for(${field.type} item : this.${field.name}List) {
+			${field.name}Strings.add( String.valueOf(item.getId()) );
 		}
 		
-		ArrayAdapter<String> ${relation.type?lower_case}DataAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, ${relation.type?lower_case}strings);
-		this.${relation.name}View.setAdapter(${relation.type?lower_case}DataAdapter);
+		ArrayAdapter<String> ${field.name}DataAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, ${field.name}Strings);
+		this.${field.name}View.setAdapter(${field.name}DataAdapter);
+
 			</#if>
+		</#if>
 		</#foreach>
 	}
 	
 	/** Save data from fields view to model */
 	public void saveData() {
 		<#foreach field in fields>
-		<#if !field.relation??>
+		<#if !field.internal>
+			<#if !field.relation??>
 		if(!this.${field.name}View.getEditableText().toString().equals(""))
-			<#if (field.customEditType == "EditText") >
-				<#if (field.type == "String")>
+				<#if (field.customEditType == "EditText") >
+					<#if (field.type == "String") || field.type == "email" || field.type == "password" || field.type == "login" || field.type == "city" || field.type=="text" || field.type== "country">
 		this.model.set${field.name?cap_first}(this.${field.name}View.getEditableText().toString());
-				</#if>
-				<#if (field.type == "Date")>
+					<#elseif (field.type == "Date")>
 		try {
 			this.model.set${field.name?cap_first}(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(this.${field.name}View.getEditableText().toString()));
 		} catch (ParseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-				</#if>
-				<#if (field.type == "int")>
+					<#elseif (field.type == "DateTime")>
+		try {
+			this.model.set${field.name?cap_first}(new DateTime(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(this.${field.name}View.getEditableText().toString()).getTime()));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+					<#elseif (field.type == "int") || field.type == "zipcode" || field.type == "phone">
 		this.model.set${field.name?cap_first}(Integer.parseInt(this.${field.name}View.getEditableText().toString()));
-				</#if>
-				<#if (field.type == "boolean")>
+					<#elseif (field.type == "float")>
+		this.model.set${field.name?cap_first}(Float.parseFloat(this.${field.name}View.getEditableText().toString()));
+					<#elseif (field.type == "boolean")>
 		this.model.set${field.name?cap_first}(this.${field.name}View.getEditableText().toString().equals("true"));
+					</#if>
 				</#if>
+				<#if (field.customEditType == "CheckBox") >
+		this.model.set${field.name?cap_first}(this.${field.name}View.isChecked());
+				</#if>
+			<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
+		${field.relation.targetEntity} tmp${field.name?cap_first} = new ${field.relation.targetEntity?cap_first}();
+		tmp${field.name?cap_first}.setId(Integer.parseInt(this.${field.name}View.getSelectedItem().toString()));
+		this.model.set${field.name?cap_first}(tmp${field.name?cap_first});
 			</#if>
-			<#if (field.customEditType == "CheckBox") >
-		this.model.${field.name?uncap_first}(this.${field.name}View.isChecked());
-			</#if>
-		</#if>
+		</#if>	
 		</#foreach>
 
-		<#foreach relation in relations>
-			<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
-		${relation.type}Adapter ${relation.type?lower_case}adapter = new ${relation.type}Adapter(getActivity());
-		${relation.type?lower_case}adapter.open();
-		${relation.type} ${relation.type?lower_case}item = ${relation.type?lower_case}adapter.getByID( this.${relation.type}list.get((int) this.${relation.name}View.getSelectedItemId()).getId() );
-		this.model.set${relation.name?cap_first}(${relation.type?lower_case}item);
-		
-			</#if>
-		</#foreach>
 	}
 
 	/** Check data is valid
@@ -223,7 +227,8 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 			SQLiteDatabase db = ${name?lower_case}Adapter.open();
 			db.beginTransaction();
 			try {
-				${name?lower_case}Adapter.insert(this.entity);
+				<#list relations as relation><#if relation.internal>//TODO: Care with insert</#if></#list>
+				${name?lower_case}Adapter.insert(this.entity<#list relations as relation><#if relation.internal>, 0</#if></#list>);
 
 				db.setTransactionSuccessful();
 			} finally {

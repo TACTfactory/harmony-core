@@ -33,37 +33,66 @@ public @interface Column {
 	 * Mapping Type defines the mapping between a Java type and an SQL type.
 	 */
 	public enum Type {
+		//Name		Internal	length	null	prec	scale	unique
+		
 		// BASE
-		STRING("string"),
-		TEXT("text"),
-		INTEGER("integer"),
-		INT("int"),
-		BOOLEAN("boolean"),
-		FLOAT("float"),
-		DATETIME("datetime"),
-		DATE("date"),
-		TIME("time"),
-		OBJECT("object"),
-		RELATION("relation"),
+		STRING(		"string", 	255, 	true, 	null, 	null, 	null),
+		TEXT(		"text", 	1024, 	true, 	null, 	null, 	null),
+		INTEGER(	"integer", 	null, 	true, 	null, 	null, 	null),
+		INT(		"int", 		null, 	false,	null,	null,	null),
+		FLOAT(		"float", 	null, 	false,	null,	null,	null),
+		DATETIME(	"datetime", null,	true,	null,	null,	null),
+		DATE(		"date", 	null, 	true,	null,	null,	null),
+		TIME(		"time",		null,	true,	null,	null,	null),
 		
 		// EXTEND
-		LOGIN("login"),
-		PASSWORD("password"),
-		EMAIL("email"),
-		PHONE("phone"),
-		CITY("city"),
-		ZIPCODE("zipcode"),
-		COUNTRY("country"),
-		BC_EAN("ean");
+		LOGIN(		"login", 	255, 	false,	null,	null,	true),
+		PASSWORD(	"password", 255, 	false,	null,	null,	true),
+		EMAIL(		"email", 	255,	true,	null,	null,	true),
+		PHONE(		"phone", 	24,		true,	null,	null,	null),
+		CITY(		"city", 	255, 	true,	null,	null,	null),
+		ZIPCODE(	"zipcode", 	9999999,true,	null,	null,	null),
+		COUNTRY(	"country",	255,	true,	null,	null,	null),
+		BC_EAN(		"ean",		12,		true,	null,	null,	null);
 		
 		private String type;
+		private int length = Integer.MAX_VALUE;
+		private boolean nullable = false;	
+		//columnDefinition is define by DatabaseAdapter
+		private int precision = Integer.MAX_VALUE;
+		private int scale = Integer.MAX_VALUE;
 		
-		private Type(String value){
+		private Type(String value, Integer length, Boolean nullable, Integer precision, Integer scale, Boolean unique){
 			this.type = value;
+			
+			if (length != null)
+				this.length = length;
+
+			if (precision != null)
+				this.precision  = precision;
+			
+			if (scale != null)
+				this.scale = scale;
 		}
 		
 		public String getValue(){
-			return type;
+			return this.type;
+		}
+		
+		public int getLength() {
+			return this.length;
+		}
+		
+		public boolean isNullable() {
+			return this.nullable;
+		}
+		
+		public int getPrecision() {
+			return this.precision;
+		}
+		
+		public int getScale() {
+			return this.scale;
 		}
 		
 		public static Type fromString(String value){
@@ -74,8 +103,10 @@ public @interface Column {
 					}    
 				}
 			}
-			return Type.OBJECT;
+			
+			return null;
 		}
+		
 		
 		public static Type fromName(String name){
 			if(name.lastIndexOf(".")>0)
@@ -88,12 +119,13 @@ public @interface Column {
 					return (Type)field.get(Type.class);
 				}
 				else 
-					return Type.OBJECT;
+					return null;
 			}catch(Exception e){
-				return Type.OBJECT;
+				return null;
 			}
 			
 		}
+		
 		/** Type that maps an SQL VARCHAR to a JAVA string. */
 		//public final static String STRING = "string";
 		/** Type that maps an SQL VARCHAR to a JAVA string with only ASCII value.*/

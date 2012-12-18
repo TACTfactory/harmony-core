@@ -124,18 +124,20 @@ public class EntityGenerator {
 		Collection<FieldMetadata> fields = cm.fields.values();
 		
 		for(FieldMetadata f : fields){
-			// Getter
-			if(!this.alreadyImplementsGet(f, cm)){ 
-				ConsoleUtils.displayDebug("Add implements getter of " + f.fieldName + " => get" + CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_CAMEL, f.fieldName));
+			if(!f.internal){
+				// Getter
+				if(!this.alreadyImplementsGet(f, cm)){ 
+					ConsoleUtils.displayDebug("Add implements getter of " + f.fieldName + " => get" + CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_CAMEL, f.fieldName));
+					
+					this.generateMethod(fileString, f, this.getTemplate);
+				}
 				
-				this.generateMethod(fileString, f, this.getTemplate);
-			}
-			
-			// Setter
-			if(!this.alreadyImplementsSet(f, cm)){
-				ConsoleUtils.displayDebug("Add implements setter of " + f.fieldName + " => set" + CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_CAMEL, f.fieldName));
-				
-				this.generateMethod(fileString, f, this.setTemplate);
+				// Setter
+				if(!this.alreadyImplementsSet(f, cm)){
+					ConsoleUtils.displayDebug("Add implements setter of " + f.fieldName + " => set" + CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_CAMEL, f.fieldName));
+					
+					this.generateMethod(fileString, f, this.setTemplate);
+				}
 			}
 		}
 	}
@@ -152,7 +154,7 @@ public class EntityGenerator {
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		map.put("property",f.fieldName);
-		map.put("property_type",f.type);
+		map.put("property_type",this.adapter.getNativeType(f.type));
 		
 		try{
 			StringWriter writer = new StringWriter();
@@ -203,7 +205,7 @@ public class EntityGenerator {
 		for(MethodMetadata m : methods){
 			if(m.name.equals("get"+capitalizedName) && 
 					m.argumentsTypes.size()==0 && 
-					m.type.equals(fm.type)){
+					m.type.equals(this.adapter.getNativeType(fm.type))){
 				ret = true;
 				
 				ConsoleUtils.displayDebug("Already implements getter of " + fm.fieldName + " => " + m.name);
@@ -225,7 +227,7 @@ public class EntityGenerator {
 		for(MethodMetadata m : methods){
 			if(m.name.equals("set"+capitalizedName) && 
 					m.argumentsTypes.size()==1 && 
-					m.argumentsTypes.get(0).equals(fm.type)){
+					m.argumentsTypes.get(0).equals(this.adapter.getNativeType(fm.type))){
 				result = true;
 				
 				ConsoleUtils.displayDebug("Already implements setter of " + fm.fieldName + " => " + m.name);

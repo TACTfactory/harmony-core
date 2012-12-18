@@ -49,9 +49,6 @@ public class FieldMetadata {
 	public String customEditType;
 	
 	/** Is field hidden ? */
-	public boolean hidden = false;
-	
-	/** Is field hidden ? */
 	public boolean internal = false;
 	
 	/** Customize edit and show GUI field */
@@ -68,15 +65,12 @@ public class FieldMetadata {
 		HashMap<String, Object> model = new HashMap<String, Object>();
 		model.put(TagConstant.NAME, this.fieldName);
 		model.put(TagConstant.TYPE, this.type);
-		model.put("length", this.length);
 		model.put("columnDefinition", this.columnDefinition);
-		//model.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(this));
 
 		model.put("customEditType", this.customEditType);
 		model.put("customShowType", this.customShowType);
 		
 		model.put(TagConstant.SCHEMA, SqliteAdapter.generateStructure(this));
-//		model.put("final", this.isFinal);
 		if(relation!=null){
 			model.put(TagConstant.RELATION, this.relation.toMap());
 		}

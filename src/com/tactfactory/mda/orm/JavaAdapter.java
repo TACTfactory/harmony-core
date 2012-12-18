@@ -180,7 +180,6 @@ public class JavaAdapter {
 					rel.field = fieldMeta.fieldName;
 					rel.entity_ref = PackageUtils.extractClassNameFromArray(field.getType().toString());
 					fieldMeta.relation = rel;
-					fieldMeta.type = rel.entity_ref;
 					meta.relations.put(fieldMeta.fieldName, fieldMeta);
 				}
 				
