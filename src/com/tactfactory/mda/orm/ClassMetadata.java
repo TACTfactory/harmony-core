@@ -11,6 +11,7 @@ package com.tactfactory.mda.orm;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.tactfactory.mda.plateforme.BaseAdapter;
@@ -28,13 +29,13 @@ public class ClassMetadata {
 	public String name = "";
 	
 	/** List of fields of entity class*/
-	public HashMap<String, FieldMetadata> fields = new HashMap<String, FieldMetadata>();
+	public LinkedHashMap<String, FieldMetadata> fields = new LinkedHashMap<String, FieldMetadata>();
 
 	/** List of ids of entity class*/
-	public HashMap<String, FieldMetadata> ids = new HashMap<String, FieldMetadata>();
+	public LinkedHashMap<String, FieldMetadata> ids = new LinkedHashMap<String, FieldMetadata>();
 	
 	/** List of relations of entity class*/
-	public HashMap<String, FieldMetadata> relations = new HashMap<String, FieldMetadata>();
+	public LinkedHashMap<String, FieldMetadata> relations = new LinkedHashMap<String, FieldMetadata>();
 		
 	/** Class inherited by the entity class or null if none*/
 	public String exts = null;
@@ -60,13 +61,13 @@ public class ClassMetadata {
 		model.put(TagConstant.SPACE,	this.space);
 		model.put(TagConstant.NAME,		this.name);
 		model.put(TagConstant.LOCAL_NAMESPACE, adapter.getNameSpaceEntity(this, adapter.getController()));
-		model.put("isAssociationClass","false");
-		if(isAssociationClass)
-			model.put("isAssociationClass","true");
 		//model.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(this));
 		model.put(TagConstant.FIELDS,	this.toFieldArray(this.fields.values(), adapter));
 		model.put(TagConstant.IDS,		this.toFieldArray(this.ids.values(), adapter));
 		model.put(TagConstant.RELATIONS,this.toFieldArray(this.relations.values(), adapter));
+		model.put("isAssociationClass","false");
+		if(isAssociationClass)
+			model.put("isAssociationClass","true");
 		
 		return model;
 	}
