@@ -24,4 +24,6 @@ public @interface OneToOne {
 	String targetEntity() default "";
 	String mappedBy() default "";
 	String inversedBy() default "";
+	
+	boolean hidden() default false;
 }

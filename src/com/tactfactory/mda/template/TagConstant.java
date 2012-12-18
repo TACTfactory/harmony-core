@@ -34,6 +34,7 @@ public abstract class TagConstant {
 	public final static String SCHEMA = "schema";
 	public final static String ALIAS = "alias";
 	public final static String IDS = "ids";
+	public final static String HIDDEN = "hidden";
 	
 
 	public static class AndroidSDK {
