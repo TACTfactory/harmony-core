@@ -8,7 +8,7 @@ package ${local_namespace};
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
+import org.joda.time.DateTime;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -18,7 +18,7 @@ import android.util.Log;
 
 import ${project_namespace}.BuildConfig;
 <#if !isAssociationClass??>
-<#define isAssociationClass="false">
+<#assign isAssociationClass="false">
 </#if>
 <#if isAssociationClass=="false">
 import ${project_namespace}.entity.${name};
@@ -33,6 +33,7 @@ import ${project_namespace}.entity.${relation.relation.targetEntity};
  */
 public abstract class ${name}AdapterBase {
 	private static final String TAG = "${name}DatabaseAdapter";
+	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	
 	/** Table name of SQLite database */
 	public static final String TABLE_NAME = "${name}";
@@ -186,7 +187,7 @@ public abstract class ${name}AdapterBase {
 	<#list fields as field>
 		<#if !field.relation??>
 			<#if (field.type == "Date")>
-		result.put(COL_${field.name?upper_case}, 			String.valueOf(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(${name?lower_case}.get${field.name?cap_first}())) );
+		result.put(COL_${field.name?upper_case}, 			String.valueOf(dateFormat.format(${name?lower_case}.get${field.name?cap_first}())) );
 			<#elseif (field.type == "Boolean")>
 		result.put(COL_${field.name?upper_case}, 			String.valueOf(${name?lower_case}.${field.name?uncap_first}()) );
 			<#else>
@@ -216,19 +217,21 @@ public abstract class ${name}AdapterBase {
 
 	<#list fields as field>
 		<#if !field.relation??>
-			<#if (field.type == "Date")>
+			<#if (field.type?lower_case == "date" || field.type?lower_case == "datetime" || field.type?lower_case = "time" )>
 			
-			result.set${field.name?cap_first}(new Date());
+			result.set${field.name?cap_first}(new DateTime());
 			try {
-				result.set${field.name?cap_first}(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case})) ));
+				result.set${field.name?cap_first}(new DateTime(dateFormat.parse(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case})) )));
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
 
-			<#elseif (field.type == "Boolean" || field.type == "boolean")>
+			<#elseif (field.type?lower_case == "boolean" )>
 			result.set${field.name?cap_first}  (c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ).equals("true"));
 			<#elseif (field.type == "int" || field.type == "Integer")>
 			result.set${field.name?cap_first}(c.getInt( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
+			<#elseif (field.type == "float" )>
+			result.set${field.name?cap_first}(c.getFloat( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
 			<#else>
 			result.set${field.name?cap_first}(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
 			</#if>
@@ -290,7 +293,7 @@ public abstract class ${name}AdapterBase {
 			<#if relation.relation.type=="OneToMany">
 		${relation.relation.targetEntity}Adapter ${relation.relation.targetEntity?lower_case}Adapter = new ${relation.relation.targetEntity}Adapter(this.context);
 		${relation.relation.targetEntity?lower_case}Adapter.open(this.mDatabase);
-		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getBy${relation.relation.inversedBy?cap_first}(result.getId()));
+		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getBy${name}(result.getId())); // relation.relation.inversedBy?cap_first
 			
 			</#if>
 		</#list>
@@ -340,10 +343,10 @@ public abstract class ${name}AdapterBase {
 	<#if relations??>
 		<#list relations as relation>
 			<#if relation.relation.type=="OneToMany">
-		${relation.relation.targetEntity}Adapter adapt = new ${relation.relation.targetEntity}Adapter(this.context);
-		adapt.open(this.mDatabase);
+		${relation.relation.targetEntity}Adapter adapt${relation.relation.targetEntity} = new ${relation.relation.targetEntity}Adapter(this.context);
+		adapt${relation.relation.targetEntity}.open(this.mDatabase);
 		for(${name} ${name?lower_case} : result){
-			${name?lower_case}.set${relation.name?cap_first}(adapt.getBy${relation.relation.inversedBy?cap_first}(${name?lower_case}.getId()));
+			${name?lower_case}.set${relation.name?cap_first}(adapt${relation.relation.targetEntity}.getBy${name}(${name?lower_case}.getId())); // relation.relation.inversedBy?cap_first
 		}
 		
 			</#if>
