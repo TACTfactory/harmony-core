@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 <#list fields as field>
-	<#if !field.relation??>
+	<#if !field.relation?? && !field.hidden >
     <TextView 
     	android:id="@+id/${name?lower_case}_${field.name?lower_case}_label"
 	    android:layout_width="match_parent"

@@ -23,7 +23,7 @@ public class Post implements Serializable {
 	private static final long serialVersionUID = -6549779793416923128L;
 
 	@Id
-    @Column(type="integer")			// type="integer",
+    @Column(type="integer", hidden=true)
     @GeneratedValue(strategy="IDENTITY")
     protected int id;
 	
@@ -42,13 +42,13 @@ public class Post implements Serializable {
 	@OneToMany
 	protected ArrayList<Comment> comments;
 	
-	@Column(name="created_at")	// type="datetime",
+	@Column(name="created_at")
     protected Date createdAt;
 
-    @Column(name="updated_at")	// type="datetime", 
+    @Column(name="updated_at")
     protected Date updatedAt;
 
-    @Column(name="expires_at")	// type="datetime", 
+    @Column(name="expires_at")
     protected Date expiresAt;
 
 

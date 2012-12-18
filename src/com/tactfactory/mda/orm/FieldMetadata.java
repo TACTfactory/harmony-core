@@ -68,6 +68,7 @@ public class FieldMetadata {
 		model.put(TagConstant.TYPE, this.type);
 		model.put("columnDefinition", this.columnDefinition);
 		//model.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(this));
+		model.put(TagConstant.HIDDEN, this.hidden);
 
 		model.put("customEditType", this.customEditType);
 		model.put("customShowType", this.customShowType);
