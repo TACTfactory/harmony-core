@@ -12,6 +12,9 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.lang.reflect.Field;
+
+import com.tactfactory.mda.ConsoleUtils;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 import static java.lang.annotation.ElementType.FIELD;
@@ -35,10 +38,13 @@ public @interface Column {
 		TEXT("text"),
 		INTEGER("integer"),
 		INT("int"),
+		BOOLEAN("boolean"),
 		FLOAT("float"),
 		DATETIME("datetime"),
 		DATE("date"),
 		TIME("time"),
+		OBJECT("object"),
+		RELATION("relation"),
 		
 		// EXTEND
 		LOGIN("login"),
@@ -68,7 +74,25 @@ public @interface Column {
 					}    
 				}
 			}
-			return null;
+			return Type.OBJECT;
+		}
+		
+		public static Type fromName(String name){
+			if(name.lastIndexOf(".")>0)
+				name = name.substring(name.lastIndexOf(".")+1); // Take only what comes after the last dot
+			ConsoleUtils.displayDebug("Searching for Type : "+name);
+			try{
+				Field field = Type.class.getField(name);	
+				if(field.isEnumConstant()) {
+					ConsoleUtils.displayDebug("Found type : "+name);
+					return (Type)field.get(Type.class);
+				}
+				else 
+					return Type.OBJECT;
+			}catch(Exception e){
+				return Type.OBJECT;
+			}
+			
 		}
 		/** Type that maps an SQL VARCHAR to a JAVA string. */
 		//public final static String STRING = "string";
@@ -101,7 +125,7 @@ public @interface Column {
 	 * 
 	 * @see com.tactfactory.mda.orm.annotation.Column.Type
 	 */
-	String type() default "String";
+	Type type() default Type.STRING;
 			
 	/** 
 	 * The name of the column in the database.

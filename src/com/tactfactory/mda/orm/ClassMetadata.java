@@ -38,10 +38,10 @@ public class ClassMetadata {
 	public LinkedHashMap<String, FieldMetadata> relations = new LinkedHashMap<String, FieldMetadata>();
 		
 	/** Class inherited by the entity class or null if none*/
-	public String exts = null;
+	public String extendType = null;
 	
 	/** Implemented class list of the entity class */
-	public ArrayList<String> impls = new ArrayList<String>();
+	public ArrayList<String> implementTypes = new ArrayList<String>();
 	
 	/** Implemented class list of the entity class */
 	public ArrayList<MethodMetadata> methods = new ArrayList<MethodMetadata>();

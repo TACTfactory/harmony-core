@@ -73,7 +73,7 @@ public class SqliteAdapter {
 	}
 
 	public static String generateColumnName(FieldMetadata field) {
-		return PREFIX + field.name.toUpperCase();
+		return PREFIX + field.fieldName.toUpperCase();
 	}
 	
 	public static String generateRelationColumnName(String fieldName) {

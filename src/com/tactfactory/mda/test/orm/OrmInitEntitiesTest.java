@@ -229,12 +229,12 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.isFieldUnique(userMeta, "lastname", false);
 		this.isFieldUnique(userMeta, "createdAt", false);
 		
-		this.isFieldName(userMeta, "id", "id");
-		this.isFieldName(userMeta, "login", "login");
-		this.isFieldName(userMeta, "password", "password");
-		this.isFieldName(userMeta, "firstname", "firstname");
-		this.isFieldName(userMeta, "lastname", "lastname");
-		this.isFieldName(userMeta, "createdAt", "created_at");
+		this.hasFieldColumnName(userMeta, "id", "id");
+		this.hasFieldColumnName(userMeta, "login", "login");
+		this.hasFieldColumnName(userMeta, "password", "password");
+		this.hasFieldColumnName(userMeta, "firstname", "firstname");
+		this.hasFieldColumnName(userMeta, "lastname", "lastname");
+		this.hasFieldColumnName(userMeta, "createdAt", "created_at");
 		
 		
 		this.isFieldLength(userMeta, "id", 255);
@@ -307,14 +307,14 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 * @param userMeta
 	 */
 	private void hasImplement(ClassMetadata userMeta, String value) {
-		Assert.assertTrue("Check if implement " + value, userMeta.impls.contains(value));
+		Assert.assertTrue("Check if implement " + value, userMeta.implementTypes.contains(value));
 	}
 	
 	/**
 	 * @param userMeta
 	 */
 	private void hasExtend(ClassMetadata userMeta, String value) {
-		Assert.assertTrue("Check if extend " + value, userMeta.exts.contains(value));
+		Assert.assertTrue("Check if extend " + value, userMeta.extendType.contains(value));
 	}
 	
 	/**
@@ -343,8 +343,8 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 * @param classMeta
 	 * @param fieldName
 	 */
-	private void isFieldName(ClassMetadata classMeta, String fieldName, String name){
-		Assert.assertEquals(classMeta.fields.get(fieldName).name_in_db,name);
+	private void hasFieldColumnName(ClassMetadata classMeta, String fieldName, String name){
+		Assert.assertEquals(classMeta.fields.get(fieldName).columnName,name);
 	}
 	
 	/**
