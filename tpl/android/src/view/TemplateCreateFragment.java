@@ -41,16 +41,22 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 
 	/* Fields View */
 	<#list fields as field>
-		<#if !field.relation??>
+		<#if !field.internal && !field.hidden>
+			<#if !field.relation??>
 	protected ${field.customEditType} ${field.name}View;
+			<#else>
+	protected Button ${field.name}Button;
+	protected List<${field.relation.targetEntity}> ${field.name}List;
+	protected Dialog ${field.name}Dialog;
+				<#if field.relation.type=="OneToMany" || field.relation.type=="ManyToMany">
+	protected boolean[] checked${field.name?cap_first};
+				<#else>
+	protected int selected${field.name?cap_first};
+				</#if>
+			</#if>
 		</#if>
 	</#list>
-	<#list relations as relation>
-		<#if relation.relation.type=="ManyToOne" || relation.relation.type=="OneToOne">
-	protected ${relation.customEditType} ${relation.name}View;
-	protected List<${relation.type}> ${relation.name}List;
-		</#if>
-	</#list>
+
 	
 	protected Button saveButton;
 
@@ -60,23 +66,103 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 	 */
 	protected void initializeComponent(View view) {
 		<#foreach field in fields>
-			<#if !field.relation??>
-		this.${field.name}View = (${field.customEditType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}); 
+			<#if !field.internal && !field.hidden>
+				<#if !field.relation??>
+		this.${field.name}View = (${field.customEditType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});
+				<#else>
+		this.${field.name}Button = (Button) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}_button);
+		this.${field.name}Button.setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
+				onClick${field.name?cap_first}Button(v);
+			}
+		});
+				</#if>
 			</#if>
 		</#foreach>
-		<#list relations as relation>
-			<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
-		this.${relation.name}View = (${relation.customEditType}) view.findViewById(R.id.${name?lower_case}_${relation.name?lower_case}_spinner);
-			</#if>
-		</#list>
+		
 		this.saveButton = (Button) view.findViewById(R.id.${name?lower_case}_btn_save);
 		this.saveButton.setOnClickListener(this);
 	}
+	
+	<#list relations as relation>
+		<#if !relation.internal && !relation.hidden>
+	/** Initialize dialog
+	 * 
+	 */		<#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
+	protected void init${relation.name?cap_first}Dialog(List<${relation.relation.targetEntity}> list){
+		String[] listAdapter = new String[list.size()];
+		boolean[] checks = new boolean[list.size()];
+		this.checked${relation.name?cap_first} = new boolean[list.size()];
+		int i=0;
+		for(${relation.relation.targetEntity} item : list){
+			listAdapter[i] = String.valueOf(item.getId());
+			checks[i] = false;
+			i++;
+		}
+		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+		builder.setTitle("Select ${relation.name}")
+				.setMultiChoiceItems(listAdapter, checks, new DialogInterface.OnMultiChoiceClickListener(){
+					public void onClick(DialogInterface dialog, int which, boolean isChecked){
+						${name}CreateFragment.this.checked${relation.name?cap_first}[which] = isChecked;
+					}
+				}).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		            @Override
+		            public void onClick(DialogInterface dialog, int id) {
+		            	//${name}CreateFragment.this.onOk${relation.name?cap_first}();
+		            }
+		        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		            @Override
+		            public void onClick(DialogInterface dialog, int id) {
+		            	${name}CreateFragment.this.onCancel${relation.name?cap_first}();
+		            }
+		        });
+		
+		${relation.name}Dialog = builder.create();
+	}
+			<#else>
+	protected void init${relation.name?cap_first}Dialog(List<${relation.relation.targetEntity}> list){
+		String[] listAdapter = new String[list.size()];
+		int i=0;
+		for(${relation.relation.targetEntity} item : list){
+			listAdapter[i] = String.valueOf(item.getId());
+			i++;
+		}
+		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+		builder.setTitle("Select ${relation.name}")
+				.setSingleChoiceItems(listAdapter, 0, new DialogInterface.OnClickListener(){
+					public void onClick(DialogInterface dialog, int id){
+						${name}CreateFragment.this.selected${relation.name?cap_first} = id;
+					}
+				}).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+		            @Override
+		            public void onClick(DialogInterface dialog, int id) {
+		            	//${name}CreateFragment.this.onOk${relation.name?cap_first}();
+		            }
+		        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		            @Override
+		            public void onClick(DialogInterface dialog, int id) {
+		            	${name}CreateFragment.this.onCancel${relation.name?cap_first}();
+		            }
+		        });
+		
+		${relation.name}Dialog = builder.create();
+	} 
+	 		</#if>
+	
+	protected void onCancel${relation.name?cap_first}(){
+		//TODO : Don't change the list
+	}
+	
+	protected void onClick${relation.name?cap_first}Button(View v){
+		${relation.name}Dialog.show();
+	}
+		</#if>
+	</#list>
 
 	/** Load data from model to fields view */
 	public void loadData() {
 		<#foreach field in fields>						
-		<#if !field.internal>
+		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="phone") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
 		if(this.model.get${field.name?cap_first}()!=null)
@@ -94,21 +180,13 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 				<#elseif (field.customEditType == "CheckBox") >
 			this.${field.name}View.setSelected(this.model.${field.name?uncap_first}()); 
 				</#if>			
-			<#elseif field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">
-
-		${field.type}Adapter ${field.name}Adapter = new ${field.type}Adapter(getActivity());
+			<#else>
+				
+		${field.relation.targetEntity}Adapter ${field.name}Adapter = new ${field.relation.targetEntity}Adapter(getActivity());
 		${field.name}Adapter.open();
 		this.${field.name}List = ${field.name}Adapter.getAll();
 		${field.name}Adapter.close();
-		
-		List<String> ${field.name}Strings = new ArrayList<String>();
-		for(${field.type} item : this.${field.name}List) {
-			${field.name}Strings.add( String.valueOf(item.getId()) );
-		}
-		
-		ArrayAdapter<String> ${field.name}DataAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, ${field.name}Strings);
-		this.${field.name}View.setAdapter(${field.name}DataAdapter);
-
+		init${field.name?cap_first}Dialog(${field.name}List);
 			</#if>
 		</#if>
 		</#foreach>
@@ -117,7 +195,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 	/** Save data from fields view to model */
 	public void saveData() {
 		<#foreach field in fields>
-		<#if !field.internal>
+		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 		if(!this.${field.name}View.getEditableText().toString().equals(""))
 				<#if (field.customEditType == "EditText") >
@@ -150,7 +228,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 				</#if>
 			<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 		${field.relation.targetEntity} tmp${field.name?cap_first} = new ${field.relation.targetEntity?cap_first}();
-		tmp${field.name?cap_first}.setId(Integer.parseInt(this.${field.name}View.getSelectedItem().toString()));
+		tmp${field.name?cap_first}.setId(this.selected${field.name?cap_first});
 		this.model.set${field.name?cap_first}(tmp${field.name?cap_first});
 			</#if>
 		</#if>	

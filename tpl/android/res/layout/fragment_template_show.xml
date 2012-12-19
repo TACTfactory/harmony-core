@@ -6,57 +6,25 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 <#list fields as field>
-	<#if !field.relation??>
+	<#if !field.internal && !field.hidden>
     <TextView 
     	android:id="@+id/${name?lower_case}_${field.name?lower_case}_label"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    <#if (lastFieldName??) >
+		    <#if (lastFieldName??) >
 	    android:layout_below="@+id/${name?lower_case}_${lastFieldName?lower_case}"
-	    </#if >
-	    <#assign lastFieldName=field.name>
+	    	</#if >
+	    	<#assign lastFieldName=field.name>
 	    android:text="${field.name?lower_case}"/>
     <${field.customShowType}
 		android:id="@+id/${name?lower_case}_${field.name?lower_case}"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    <#if field.customShowType == "EditText" >
+		    <#if field.customShowType == "EditText" >
 	    android:inputType="text"
-	    </#if >
+	    	</#if >
 	    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />
-		<#assign lastField="${name?lower_case}_${field.name?lower_case}">
-	</#if>
-</#list>
-<#list relations as relation>
-	<#if relation.relation.type=="ManyToOne" | relation.relation.type=="OneToOne">
-    <TextView 
-    	android:id="@+id/${name?lower_case}_${relation.name?lower_case}_label"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/${lastField}"
-	    android:text="${relation.name?lower_case}"/>
-    <${relation.customShowType}
-		android:id="@+id/${name?lower_case}_${relation.name?lower_case}"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    <#if relation.customShowType == "EditText" >
-	    android:inputType="text"
-	    </#if >
-	    android:layout_below="@+id/${name?lower_case}_${relation.name?lower_case}_label" />
-		<#assign lastField="${name?lower_case}_${relation.name?lower_case}">
-	<#else>
-	<TextView 
-    	android:id="@+id/${name?lower_case}_${relation.name?lower_case}_label"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-	    android:layout_below="@+id/${lastField}"
-	    android:text="${relation.name?lower_case}"/>
-    <Spinner
-        android:id="@+id/${name?lower_case}_${relation.name?lower_case}"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-	    android:layout_below="@+id/${name?lower_case}_${relation.name?lower_case}_label" />
-		<#assign lastField="${name?lower_case}_${relation.name?lower_case}">
+			<#assign lastField="${name?lower_case}_${field.name?lower_case}">
 	</#if>
 </#list>
 </RelativeLayout>
