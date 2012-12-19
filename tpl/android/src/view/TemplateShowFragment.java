@@ -62,37 +62,37 @@ public class ${name}ShowFragment extends Fragment {
     /** Load data from model to fields view */
     public void loadData() {
     	<#foreach field in fields>
-    		<#if (field.customEditType == "EditText") >
-    			<#if (field.type == "String")>
+		<#if !field.internal>
+			<#if !field.relation??>
+		    		<#if (field.customEditType == "EditText") >
+    					<#if (field.type == "String")>
 		this.${field.name}View.setText(this.model.get${field.name?cap_first}()); 
-				</#if>
-				<#if (field.type == "Date")>
+					</#if>
+					<#if (field.type == "Date")>
 		this.${field.name}View.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(this.model.get${field.name?cap_first}())); 
-				</#if>
-				<#if (field.type == "int")>
+					</#if>
+					<#if (field.type == "int")>
 		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}())); 
+					</#if>
 				</#if>
-			</#if>
-			<#if (field.customEditType == "CheckBox") >
+				<#if (field.customEditType == "CheckBox") >
 		this.${field.name}View.setSelected(this.model.${field.name?uncap_first}()); 
-			</#if>
-		</#foreach>
-		<#list relations as relation>
-			<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
-		this.${relation.name}View.setText(String.valueOf(this.model.get${relation.name?cap_first}().getId())); 
+				</#if>
+			<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
+		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}().getId())); 
 			<#else>
-		this.${relation.relation.targetEntity}list = this.model.get${relation.name?cap_first}();//${relation.relation.targetEntity?lower_case}adapter.getAll();
+		this.${field.relation.targetEntity}list = this.model.get${field.name?cap_first}();
 		
-		List<String> ${relation.relation.targetEntity?lower_case}strings = new ArrayList<String>();
-		for(${relation.relation.targetEntity} item : this.${relation.relation.targetEntity}list) {
-			${relation.relation.targetEntity?lower_case}strings.add( String.valueOf(item.getId()) );
+		List<String> ${field.relation.targetEntity?lower_case}strings = new ArrayList<String>();
+		for(${field.relation.targetEntity} item : this.${field.relation.targetEntity}list) {
+			${field.relation.targetEntity?lower_case}strings.add( String.valueOf(item.getId()) );
 		}
 		
-		ArrayAdapter<String> ${relation.relation.targetEntity?lower_case}DataAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, ${relation.relation.targetEntity?lower_case}strings);
-		this.${relation.name}View.setAdapter(${relation.relation.targetEntity?lower_case}DataAdapter);
-		//this.${relation.name}View.setText(String.valueOf(this.model.get${relation.name?cap_first}().getId())); 	
+		ArrayAdapter<String> ${field.relation.targetEntity?lower_case}DataAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, ${field.relation.targetEntity?lower_case}strings);
+		this.${field.name}View.setAdapter(${field.relation.targetEntity?lower_case}DataAdapter);
 			</#if>
-		</#list>
+		</#if>
+	</#foreach>
     }
     
     /** Sets up the UI.

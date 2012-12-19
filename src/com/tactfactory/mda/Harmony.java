@@ -228,7 +228,7 @@ public class Harmony {
 				String projectNameSpace = Harmony.getUserInput("Please enter your Project NameSpace ["+DEFAULT_PROJECT_NAMESPACE+"]:");
 				
 				if(projectNameSpace!=null && projectNameSpace.length()!=0) {
-					if(projectNameSpace.endsWith(Harmony.projectName)){
+					if(projectNameSpace.toLowerCase().endsWith(Harmony.projectName.toLowerCase())){
 						Harmony.projectNameSpace = projectNameSpace.replaceAll("\\.", "/");
 						good = true;
 					} else {

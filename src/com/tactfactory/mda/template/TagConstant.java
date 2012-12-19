@@ -24,6 +24,7 @@ public abstract class TagConstant {
 	public final static String ENTITIES = "entities";
 	public final static String ENTITY_REF = "targetEntity";
 	public final static String FIELDS = "fields";
+	public final static String FIELD_DEF = "columnDefinition";
 	public final static String FIELD_REF = "field_ref";
 	public final static String RELATIONS = "relations";
 	public final static String RELATION = "relation";

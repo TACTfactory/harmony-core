@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
+import com.tactfactory.mda.orm.annotation.Column.Type;
 
 /** The class ClassCompletor will complete all ClassMetadatas 
  * with the information it needs from the others ClassMetadatas*/
@@ -42,21 +43,36 @@ public class ClassCompletor {
 				ArrayList<FieldMetadata> ids = new ArrayList<FieldMetadata>(cm_ref.ids.values());
 				
 				for(int i=0;i<ids.size();i++){
-					rel.field_ref.add(ids.get(i).name);
+					rel.field_ref.add(ids.get(i).fieldName);
 				}
 			}
 			ConsoleUtils.displayDebug("Relation "+rel.type+" on field "+rel.field+" targets "+rel.entity_ref+"("+rel.field_ref.get(0)+")");
-			if(rel.type.equals("OneToMany") || rel.type.equals("ManyToMany")){ // get inversedBy 
-				if(rel.inversedBy==null || rel.inversedBy.isEmpty()){
-					HashMap<String, FieldMetadata> rels_ref = this.metas.get(targetEntity).relations;
-					for(FieldMetadata rel_ref : rels_ref.values()){
-						if(rel_ref.relation.entity_ref.equals(cm.name))
-						{
-							rel.inversedBy = rel_ref.name;
-						}
-					}
-					
+			if(rel.type.equals("OneToMany")){ // set inverse relation if it doesn't exists
+				// Check if relation ManyToOne exists in target entity
+				ClassMetadata entity_ref = this.metas.get(rel.entity_ref);
+				boolean relFound = false;
+				for(FieldMetadata rel_entity_ref : entity_ref.relations.values()){
+					if(rel_entity_ref.relation.entity_ref.equals(cm.name)) relFound = true;
 				}
+				// if it doesn't :
+				if(!relFound){
+					// Create it
+					FieldMetadata new_field = new FieldMetadata();
+					new_field.columnDefinition = "integer";
+					new_field.hidden = true;
+					new_field.internal = true;
+					new_field.fieldName = cm.name.toLowerCase();
+					new_field.type = cm.name;
+					new_field.relation = new RelationMetadata();
+					new_field.relation.entity_ref = cm.name;
+					for(FieldMetadata id : cm.ids.values())
+						new_field.relation.field_ref.add(id.fieldName);
+					new_field.relation.field = new_field.fieldName;
+					new_field.relation.type = "ManyToOne";
+					entity_ref.fields.put(new_field.fieldName, new_field);
+					entity_ref.relations.put(new_field.fieldName, new_field);
+				}
+				
 			}
 			if(rel.type.equals("ManyToMany")){
 				if(rel.joinTable==null || rel.joinTable.isEmpty()){
@@ -70,12 +86,12 @@ public class ClassCompletor {
 					ConsoleUtils.displayDebug("Association Table => "+rel.joinTable);
 					ClassMetadata classMeta = new ClassMetadata();
 					classMeta.name = rel.joinTable;
-					classMeta.isAssociationClass = true;
+					classMeta.internal = true;
 					classMeta.space = cm.space;
 					FieldMetadata id = new FieldMetadata();
 						id.columnDefinition = "integer";
 						id.type = "integer";
-						id.name = "id";
+						id.fieldName = "id";
 						classMeta.ids.put("id", id);
 						classMeta.fields.put("id", id);
 						
@@ -83,30 +99,30 @@ public class ClassCompletor {
 					RelationMetadata rel1 = new RelationMetadata();
 						rel1.entity_ref = cm.name;
 						for(FieldMetadata cmid : cm.ids.values())
-							rel1.field_ref.add(cmid.name);
-						rel1.inversedBy = rel.inversedBy;
+							rel1.field_ref.add(cmid.fieldName);
+						//rel1.inversedBy = rel.inversedBy;
 						rel1.type = "ManyToOne";
 						ref1.relation = rel1;
 						
-					classMeta.fields.put(ref1.name, ref1);
-					classMeta.relations.put(ref1.name, ref1);
+					classMeta.fields.put(ref1.fieldName, ref1);
+					classMeta.relations.put(ref1.fieldName, ref1);
 					
 					FieldMetadata ref2 = generateRefField(rel.entity_ref);
 					RelationMetadata rel2 = new RelationMetadata();
 						rel2.entity_ref = rel.entity_ref;
 						rel2.field_ref = rel.field_ref;
-						rel2.inversedBy = fm.name;
+						//rel2.inversedBy = fm.name;
 						rel2.type = "ManyToOne";
 						ref2.relation = rel2;
 						
-					classMeta.fields.put(ref2.name, ref2);
-					classMeta.relations.put(ref2.name, ref2);
+					classMeta.fields.put(ref2.fieldName, ref2);
+					classMeta.relations.put(ref2.fieldName, ref2);
 					
 					this.newMetas.put(classMeta.name, classMeta);
 				}else if(this.newMetas.containsKey(rel.joinTable)){ // Complete it !
 					ClassMetadata jtable = this.newMetas.get(rel.joinTable);
 					FieldMetadata relation = jtable.relations.get(rel.entity_ref.toLowerCase()+"_id");
-					relation.relation.inversedBy = fm.name;
+					//relation.relation.inversedBy = fm.name;
 				}
 			}
 		}
@@ -115,9 +131,9 @@ public class ClassCompletor {
 	private FieldMetadata generateRefField(String name){
 		FieldMetadata id = new FieldMetadata();
 		id.columnDefinition = "integer";
-		id.type = name;
-		id.name = name.toLowerCase()+"_id";
-		id.name_in_db = id.name;
+		id.type = "integer";
+		id.fieldName = name.toLowerCase()+"_id";
+		id.columnName = id.fieldName;
 		return id;
 	}
 }

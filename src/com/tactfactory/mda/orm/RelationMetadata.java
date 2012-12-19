@@ -25,7 +25,7 @@ public class RelationMetadata {
 	public String name;
 
 	/** Inversed by (in case of OneToMany)*/
-	public String inversedBy;
+	//public String inversedBy;
 
 	/** Name of the join table used to join ManyToMany relations*/
 	public String joinTable;
@@ -40,7 +40,7 @@ public class RelationMetadata {
 		model.put(TagConstant.TYPE, this.type);
 		model.put(TagConstant.FIELD_REF, this.field_ref);
 		model.put(TagConstant.ENTITY_REF, this.entity_ref);
-		model.put("inversedBy", this.inversedBy);
+		//model.put("inversedBy", this.inversedBy);
 		model.put("joinTable", this.joinTable);
 		
 		return model;

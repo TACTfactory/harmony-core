@@ -91,7 +91,7 @@ public class JavaAdapter {
 					List<ClassOrInterfaceType> impls = n.getImplements();
 					if(impls!=null){
 						for(ClassOrInterfaceType impl : impls){					
-							meta.impls.add(impl.getName());
+							meta.implementTypes.add(impl.getName());
 							
 							// Debug Log
 							ConsoleUtils.displayDebug("\tImplement : " + impl.getName());
@@ -102,7 +102,7 @@ public class JavaAdapter {
 					List<ClassOrInterfaceType> exts = n.getExtends();
 					if(exts!=null){
 						for(ClassOrInterfaceType ext : exts){					
-							meta.exts = ext.getName();		
+							meta.extendType = ext.getName();		
 							
 							// Debug Log
 							ConsoleUtils.displayDebug("\tExtend : " + ext.getName());
@@ -137,10 +137,12 @@ public class JavaAdapter {
 			if (fieldAnnotations != null) {
 				// General (required !)
 				FieldMetadata fieldMeta = new FieldMetadata();
-				fieldMeta.isFinal = ModifierSet.isFinal(field.getModifiers());
-				fieldMeta.name = field.getVariables().get(0).getId().getName(); // FIXME not manage multi-variable
-				fieldMeta.name_in_db = fieldMeta.name;
+				
 				fieldMeta.type = field.getType().toString();
+				
+				//fieldMeta.isFinal = ModifierSet.isFinal(field.getModifiers());
+				fieldMeta.fieldName = field.getVariables().get(0).getId().getName(); // FIXME not manage multi-variable
+				fieldMeta.columnName = fieldMeta.fieldName;
 
 				// Set defaults values
 				fieldMeta.hidden = false;
@@ -180,29 +182,26 @@ public class JavaAdapter {
 				
 				// ID relation
 				if (isId) {
-					meta.ids.put(fieldMeta.name, fieldMeta);
+					meta.ids.put(fieldMeta.fieldName, fieldMeta);
 				}
 	
 				// Object relation
 				if (isRelation) {
-					rel.field = fieldMeta.name;
-					rel.entity_ref = PackageUtils.extractClassNameFromArray(fieldMeta.type);
+					rel.field = fieldMeta.fieldName;
+					rel.entity_ref = PackageUtils.extractClassNameFromArray(field.getType().toString());
 					fieldMeta.relation = rel;
-					meta.relations.put(fieldMeta.name, fieldMeta);
+					meta.relations.put(fieldMeta.fieldName, fieldMeta);
 				}
-				
+
 				// Adjust databases column definition
 				if (Strings.isNullOrEmpty(fieldMeta.columnDefinition)) {
-					if(fieldMeta.type_attribute!=null)
-						fieldMeta.columnDefinition = fieldMeta.type_attribute.getValue();
-					else
-						fieldMeta.columnDefinition = fieldMeta.type;
+					fieldMeta.columnDefinition = fieldMeta.type;
 				}
 				fieldMeta.columnDefinition = SqliteAdapter.generateColumnType(fieldMeta);
 				
 				// Add to meta dictionary
 				if (isId || isColumn || isRelation)
-					meta.fields.put(fieldMeta.name, fieldMeta);
+					meta.fields.put(fieldMeta.fieldName, fieldMeta);
 			}
 		}
 
@@ -231,9 +230,9 @@ public class JavaAdapter {
 							// set name
 							if (mvp.getName().equals("name")) {
 								if(mvp.getValue() instanceof StringLiteralExpr)
-									fieldMeta.name_in_db = ((StringLiteralExpr)mvp.getValue()).getValue();
+									fieldMeta.columnName = ((StringLiteralExpr)mvp.getValue()).getValue();
 								else
-									fieldMeta.name_in_db = mvp.getValue().toString();
+									fieldMeta.columnName = mvp.getValue().toString();
 							}else 
 								
 							// Set unique 
@@ -260,12 +259,24 @@ public class JavaAdapter {
 							// set column definition
 							if (mvp.getName().equals("type")) {
 								//TODO : Generate warning if type not recognized
-								if(mvp.getValue() instanceof StringLiteralExpr)
-									fieldMeta.type_attribute = Type.fromString(((StringLiteralExpr)mvp.getValue()).getValue());
-								else
-									fieldMeta.type_attribute = Type.fromString(mvp.getValue().toString());
-							} else 
+								String type = "";
 								
+								if(mvp.getValue() instanceof StringLiteralExpr)
+									type = ((StringLiteralExpr)mvp.getValue()).getValue();
+								else
+									type = mvp.getValue().toString();
+								
+								fieldMeta.type = Type.fromName(type).getValue();
+							}else
+								
+							// set scale
+							if (mvp.getName().equals("columnDefinition")) {
+								if(mvp.getValue() instanceof StringLiteralExpr)
+									fieldMeta.columnDefinition = ((StringLiteralExpr)mvp.getValue()).getValue();
+								else
+									fieldMeta.columnDefinition = mvp.getValue().toString();
+							} else 
+						
 							// set if hide column view
 							if (mvp.getName().equals("hidden") && mvp.getValue().toString().equals("true")){
 								fieldMeta.hidden = true;
@@ -303,7 +314,7 @@ public class JavaAdapter {
 				isId = true;
 				
 				// Debug Log
-				ConsoleUtils.displayDebug("\tID : " + fieldMeta.name);
+				ConsoleUtils.displayDebug("\tID : " + fieldMeta.fieldName);
 			}
 			
 			return isId;
@@ -329,7 +340,7 @@ public class JavaAdapter {
 				if (annotationType.equals(FILTER_JOINCOLUMN))
 					type = "Join Column";
 				
-				ConsoleUtils.displayDebug("\t" + type + " : " + fieldMeta.name + 
+				ConsoleUtils.displayDebug("\t" + type + " : " + fieldMeta.fieldName + 
 						" type of " + fieldMeta.type);
 			}
 			
@@ -354,7 +365,7 @@ public class JavaAdapter {
 				
 				// Debug Log
 				ConsoleUtils.displayDebug("\tRelation " + annotationType + 
-						" : " + fieldMeta.name + " type of " + fieldMeta.type);
+						" : " + fieldMeta.fieldName + " type of " + fieldMeta.type);
 			}
 			
 			return isRelation;

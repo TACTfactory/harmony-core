@@ -20,7 +20,7 @@ import com.tactfactory.mda.template.TagConstant;
 /** Entity class metadata */
 public class ClassMetadata {
 	/** Used for join tables (ManyToMany relations)*/
-	public boolean isAssociationClass = false;
+	public boolean internal = false;
 	
 	/** Namespace of entity class */
 	public String space = "";
@@ -38,10 +38,10 @@ public class ClassMetadata {
 	public LinkedHashMap<String, FieldMetadata> relations = new LinkedHashMap<String, FieldMetadata>();
 		
 	/** Class inherited by the entity class or null if none*/
-	public String exts = null;
+	public String extendType = null;
 	
 	/** Implemented class list of the entity class */
-	public ArrayList<String> impls = new ArrayList<String>();
+	public ArrayList<String> implementTypes = new ArrayList<String>();
 	
 	/** Implemented class list of the entity class */
 	public ArrayList<MethodMetadata> methods = new ArrayList<MethodMetadata>();
@@ -65,9 +65,9 @@ public class ClassMetadata {
 		model.put(TagConstant.FIELDS,	this.toFieldArray(this.fields.values(), adapter));
 		model.put(TagConstant.IDS,		this.toFieldArray(this.ids.values(), adapter));
 		model.put(TagConstant.RELATIONS,this.toFieldArray(this.relations.values(), adapter));
-		model.put("isAssociationClass","false");
-		if(isAssociationClass)
-			model.put("isAssociationClass","true");
+		model.put("internal","false");
+		if(internal)
+			model.put("internal","true");
 		
 		return model;
 	}

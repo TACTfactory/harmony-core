@@ -90,17 +90,16 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 		public void populate(${name} item) {
 
 			<#list fields as field>
-				<#if (!field.relation??)>
-					<#if (field.type="Date")>
+				<#if !field.internal>
+					<#if (!field.relation??)>
+						<#if (field.type="Date")>
 			this.${field.name}.setText(String.valueOf(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(item.get${field.name?cap_first}())) );
-					<#else>
+						<#else>
 			this.${field.name}.setText(String.valueOf(item.get${field.name?cap_first}()) );
+						</#if>
+					<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
+			this.${field.name}.setText(String.valueOf(item.get${field.name?cap_first}().getId()) );
 					</#if>
-				</#if>
-			</#list>
-			<#list relations as relation>
-				<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
-			this.${relation.name}.setText(String.valueOf(item.get${relation.name?cap_first}().getId()) );
 				</#if>
 			</#list>
 

@@ -11,7 +11,6 @@ package com.tactfactory.mda.orm;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.tactfactory.mda.orm.annotation.Column.Type;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
@@ -19,19 +18,13 @@ import com.tactfactory.mda.template.TagConstant;
 public class FieldMetadata {
 	
 	/** Field name */
-	public String name;
+	public String fieldName;
 	
 	/** Field type */
 	public String type;
 	
-	/** Field name */
-	public String name_in_db;
-	
-	/** Field type as given in attribute */
-	public Type type_attribute;
-	
-	/** Is final ?*/
-	public boolean isFinal = false;
+	/** Column name */
+	public String columnName;
 	
 	/** Field database type */
 	public String columnDefinition;
@@ -41,6 +34,7 @@ public class FieldMetadata {
 	
 	public boolean nullable = false;
 	public boolean unique = false;
+	public boolean id = false;
 	public int length = 255;
 	public int precision = 0;
 	public int scale = 0;
@@ -51,6 +45,9 @@ public class FieldMetadata {
 	
 	/** GUI edit field type */
 	public String customEditType;
+	
+	/** Is field hidden ? */
+	public boolean internal = false;
 	
 	/** Customize edit and show GUI field */
 	public void customize(BaseAdapter adapter) {
@@ -64,7 +61,7 @@ public class FieldMetadata {
 	 */
 	public Map<String, Object> toMap(){
 		HashMap<String, Object> model = new HashMap<String, Object>();
-		model.put(TagConstant.NAME, this.name);
+		model.put(TagConstant.NAME, this.fieldName);
 		model.put(TagConstant.TYPE, this.type);
 		model.put("columnDefinition", this.columnDefinition);
 		//model.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(this));
@@ -74,10 +71,11 @@ public class FieldMetadata {
 		model.put("customShowType", this.customShowType);
 		
 		model.put(TagConstant.SCHEMA, SqliteAdapter.generateStructure(this));
-		model.put("final", this.isFinal);
 		if(relation!=null){
 			model.put(TagConstant.RELATION, this.relation.toMap());
 		}
+		
+		model.put("internal", this.internal);
 		
 		return model;
 	}

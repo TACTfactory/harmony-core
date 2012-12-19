@@ -74,7 +74,7 @@ public class ProjectGenerator {
 					for (FieldMetadata field : meta.fields.values()) {
 						Map<String, Object> modelField = new HashMap<String, Object>();
 						field.customize(adapter);
-						modelField.put(TagConstant.NAME, field.name);
+						modelField.put(TagConstant.NAME, field.fieldName);
 						modelField.put(TagConstant.TYPE, field.type);
 	
 						modelFields.add(modelField);

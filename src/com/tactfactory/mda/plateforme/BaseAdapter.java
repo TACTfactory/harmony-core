@@ -65,6 +65,13 @@ public abstract class BaseAdapter {
 	 */
 	public abstract String getViewComponentEdit(FieldMetadata field);
 	
+	/** Convert a Harmony type into a native type
+	 * 
+	 * @param type The type name
+	 * @return String of the native type 
+	 */
+	public abstract String getNativeType(String type);
+	
 	// Utils
 
 	public final String getTemplateProjectPath() {

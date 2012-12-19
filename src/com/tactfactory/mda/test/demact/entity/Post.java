@@ -23,14 +23,14 @@ public class Post implements Serializable {
 	private static final long serialVersionUID = -6549779793416923128L;
 
 	@Id
-    @Column(type="integer", hidden=true)
+    @Column(type=Type.INTEGER, hidden=true)
     @GeneratedValue(strategy="IDENTITY")
     protected int id;
 	
 	@Column(unique=true)	// type="string", length=255
     protected String title;
 	
-	@Column(length=40000, type="String")	// type="string"
+	@Column(length=40000, type=Type.STRING)	// type="string"
     protected String content;
 	
 	@Column

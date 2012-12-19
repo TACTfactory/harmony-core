@@ -19,11 +19,11 @@ import com.tactfactory.mda.orm.annotation.Column.Type;
 public class Comment extends Object {
 	
 	@Id
-    @Column(type="integer", hidden=true)
+    @Column(type=Type.INTEGER, hidden=true)
     @GeneratedValue(strategy="IDENTITY")
     protected int id;
 
-	@Column(length=2000, type="String")
+	@Column(length=2000, type=Type.STRING)
     protected String content;
 	
 	@ManyToOne

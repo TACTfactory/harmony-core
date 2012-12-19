@@ -57,4 +57,10 @@ public final class WinphoneAdapter extends BaseAdapter {
 		return null;
 	}
 
+	@Override
+	public String getNativeType(String type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
