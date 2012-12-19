@@ -365,7 +365,7 @@ public abstract class ${name}AdapterBase {
 	 * @param id Identify the ${name} entity to delete
 	 * @return
 	 */
-	public int remove(<#list ids as id>${javaType(id.type)} ${id.name}<#if id_has_next>,</#if></#list>) {
+	public int remove(<#list ids as id>${m.javaType(id.type)} ${id.name}<#if id_has_next>,</#if></#list>) {
 	<#if (ids?size>0)>
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Delete DB(" + TABLE_NAME + ") id : "+ <#list ids as id>${id.name}<#if id_has_next> + " id : " + </#if></#list>);
@@ -383,7 +383,7 @@ public abstract class ${name}AdapterBase {
 	}
 	
 	// Internal Cursor
-	protected Cursor getSingleCursor(<#list ids as id>${javaType(id.type)} ${id.name}<#if id_has_next>,</#if></#list>) {
+	protected Cursor getSingleCursor(<#list ids as id>${m.javaType(id.type)} ${id.name}<#if id_has_next>,</#if></#list>) {
 	<#if (ids?size>0)>
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Get entities id : " + <#list ids as id>${id.name}<#if id_has_next> + " id : " + </#if></#list>);
