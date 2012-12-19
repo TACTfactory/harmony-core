@@ -319,21 +319,29 @@ public abstract class ${name}AdapterBase {
 	<#list ids as id>
 		values.remove(${alias(id.name)});
 	</#list>
+		int newid = (int)this.mDatabase.insert(
+			TABLE_NAME, 
+			null, 
+			values);
+	
 	<#list relations as relation>
 		<#if relation.relation.type=="ManyToMany">
 			
-		${relation.relation.joinTable}AdapterBase adapt = new ${relation.relation.joinTable}Adapter(this.context);
+		${relation.relation.joinTable}AdapterBase ${relation.name?uncap_first}Adapter = new ${relation.relation.joinTable}Adapter(this.context);
 		for(${relation.relation.targetEntity?cap_first} i : item.get${relation.name?cap_first}()){
-			adapt.insert(item.getId(), i.get${relation.relation.field_ref[0]?cap_first}());
+			${relation.name?uncap_first}Adapter.insert(newid, i.get${relation.relation.field_ref[0]?cap_first}());
 		}
-			
+		<#elseif relation.relation.type=="OneToMany">
+		${relation.relation.targetEntity}AdapterBase ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}Adapter(this.context);
+		${relation.name?uncap_first}Adapter.open(this.mDatabase);
+		for(${relation.relation.targetEntity?cap_first} i : item.get${relation.name?cap_first}()){
+			${relation.name?uncap_first}Adapter.update(i, newid);
+		}
+		
 		</#if>
 	</#list>
 		
-		return this.mDatabase.insert(
-				TABLE_NAME, 
-				null, 
-				values);
+		return newid;
 	}
 	
 	/** Update a ${name} entity into database 
