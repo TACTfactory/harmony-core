@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.ArrayList;
 import ${namespace}.entity.${name};
 <#list relations as relation>
-	<#if !relation.internal>
+	<#if !relation.internal && !relation.hidden>
 import ${namespace}.entity.${relation.relation.targetEntity};
 	</#if>
 </#list>
@@ -32,11 +32,7 @@ public class ${name}ShowFragment extends Fragment {
 	/* Fields View */
 <#list fields as field>
 	<#if !field.internal && !field.hidden>
-		<#if !field.relation??>
     protected ${field.customShowType} ${field.name}View;
-    	<#else>
-    protected ${field.customShowType} ${field.name}View;
-		</#if>
 	</#if>
 </#list>
     

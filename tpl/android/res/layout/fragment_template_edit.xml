@@ -6,76 +6,73 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 <#list fields as field>
-	<#if !field.relation?? && !field.hidden >
-	    <TextView 
-	    	android:id="@+id/${name?lower_case}_${field.name?lower_case}_label"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    <#if (lastFieldName??) >
-		    android:layout_below="@+id/${name?lower_case}_${fields[field_index-1].name?lower_case}"
-		    </#if >
-		    android:text="${field.name?lower_case}"/>
-	    <${field.customEditType}
-			android:id="@+id/${name?lower_case}_${field.name?lower_case}"
-		    android:layout_width="match_parent"
-		    android:layout_height="wrap_content"
-		    <#if field.customEditType == "EditText" >
-		    	<#if field.type == "text" >
-		    android:inputType="textCapWords|textAutoComplete|textMultiLine"
-		    	<#elseif field.type=="password">
-		    android:inputType="textPassword"
-		    	<#elseif field.type=="email">
-		    android:inputType="textEmailAddress"
-		    	<#elseif field.type=="date">
-		    android:inputType="date"
-		    	<#elseif field.type=="time">
-		    android:inputType="time"
-		    	<#elseif field.type=="datetime">
-		    android:inputType="datetime"
-		    	<#elseif field.type=="phone">
-		    android:inputType="phone"
-		    	<#elseif field.type=="zipcode">
-		    android:inputType="textPostalAddress"
-		    	<#elseif field.type=="integer" || field.type=="int" || field.type=="ean">
-		    android:inputType="number"
-		    	<#elseif field.type=="float">
-		    android:inputType="numberDecimal"
-		    	<#else>
-		    android:inputType="text"
-		    	</#if >
-		    </#if >
-		    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />
-	</#if >
-</#list>
-<#if relations??>
-	<#list relations as relation>
-		<#if relation.relation.type=="ManyToOne">
+	<#if !field.internal && !field.hidden>
+		<#if !field.relation??>
     <TextView 
-    	android:id="@+id/${name?lower_case}_${relation.name?lower_case}_label"
+    	android:id="@+id/${name?lower_case}_${field.name?lower_case}_label"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    <#if relation_index==0>
-	    android:layout_below="@+id/${name?lower_case}_${fields?last.name?lower_case}"
-	    <#else>
-	    android:layout_below="@+id/${name?lower_case}_${relations[relation_index-1].name?lower_case}_spinner"
-	    </#if>
-	    android:text="${relation.name?lower_case}"/>
-    <Spinner
-        android:id="@+id/${name?lower_case}_${relation.name?lower_case}_spinner"
+	    	<#if (lastField??) >
+	    android:layout_below="@+id/${lastField}"
+	    	</#if >
+
+	    android:text="${field.name?lower_case}"/>
+    <${field.customEditType}
+		android:id="@+id/${name?lower_case}_${field.name?lower_case}"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+		    <#if field.customEditType == "EditText" >
+	    		<#if field.type == "text" >
+	    android:inputType="textCapWords|textAutoComplete|textMultiLine"
+	    		<#elseif field.type=="password">
+	    android:inputType="textPassword"
+	    		<#elseif field.type=="email">
+	    android:inputType="textEmailAddress"
+	    		<#elseif field.type=="date">
+	    android:inputType="date"
+	    		<#elseif field.type=="time">
+	    android:inputType="time"
+		    	<#elseif field.type=="datetime">
+	    android:inputType="datetime"
+		    	<#elseif field.type=="phone">
+	    android:inputType="phone"
+	    		<#elseif field.type=="zipcode">
+	    android:inputType="textPostalAddress"
+	    		<#elseif field.type=="integer" || field.type=="int" || field.type=="ean">
+	    android:inputType="number"
+		    	<#elseif field.type=="float">
+	    android:inputType="numberDecimal"
+		    	<#else>
+	    android:inputType="text"
+	    		</#if >
+	    	</#if >
+	    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />
+			<#assign lastField="${name?lower_case}_${field.name?lower_case}">
+		<#else>
+    <TextView 
+    	android:id="@+id/${name?lower_case}_${field.name?lower_case}_label"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/${lastField}"
+	    android:text="${field.name?lower_case}"/>
+    <Button
+        android:id="@+id/${name?lower_case}_${field.name?lower_case}_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-	    android:layout_below="@+id/${name?lower_case}_${relation.name?lower_case}_label" />
+	    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />
+			<#assign lastField="${name?lower_case}_${field.name?lower_case}_button">
 		</#if>
-	</#list>
-</#if>
+	</#if>
+</#list>
+
 	<Button
     	android:id="@+id/${name?lower_case}_btn_save"
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
     	<#if relations?size!=0>
-    	android:layout_below="@+id/${name?lower_case}_${relations?last.name?lower_case}_spinner"
+    	android:layout_below="@+id/${lastField}"
     	<#else>
     	android:layout_below="@+id/${name?lower_case}_${fields?last.name?lower_case}"
     	</#if>
-    	android:text="Save" />
+    	android:text="Create" />
 </RelativeLayout>

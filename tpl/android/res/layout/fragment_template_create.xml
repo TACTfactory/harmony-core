@@ -7,15 +7,15 @@
     android:layout_height="match_parent" >
 <#list fields as field>
 	<#if !field.internal && !field.hidden>
-		<#if !field.relation?? && !field.hidden >
+		<#if !field.relation??>
     <TextView 
     	android:id="@+id/${name?lower_case}_${field.name?lower_case}_label"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-	    	<#if (lastFieldName??) >
-	    android:layout_below="@+id/${name?lower_case}_${lastFieldName?lower_case}"
+	    	<#if (lastField??) >
+	    android:layout_below="@+id/${lastField}"
 	    	</#if >
-			<#assign lastFieldName=field.name>
+
 	    android:text="${field.name?lower_case}"/>
     <${field.customEditType}
 		android:id="@+id/${name?lower_case}_${field.name?lower_case}"
