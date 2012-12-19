@@ -182,6 +182,7 @@ public class JavaAdapter {
 				
 				// ID relation
 				if (isId) {
+					fieldMeta.id = true;
 					meta.ids.put(fieldMeta.fieldName, fieldMeta);
 				}
 	
@@ -195,7 +196,7 @@ public class JavaAdapter {
 
 				// Adjust databases column definition
 				if (Strings.isNullOrEmpty(fieldMeta.columnDefinition)) {
-					fieldMeta.columnDefinition = fieldMeta.type;
+					fieldMeta.columnDefinition = SqliteAdapter.generateColumnDefinition(fieldMeta.type);
 				}
 				fieldMeta.columnDefinition = SqliteAdapter.generateColumnType(fieldMeta);
 				

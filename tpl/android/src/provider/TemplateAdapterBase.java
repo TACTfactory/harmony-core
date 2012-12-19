@@ -182,7 +182,7 @@ public abstract class ${name}AdapterBase {
 
 				<#elseif (field.type?lower_case == "boolean" )>
 			result.set${field.name?cap_first}  (c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ).equals("true"));
-				<#elseif (field.type == "int" || field.type == "Integer" || field.type == "phone" || field.type == "ean" || field.type == "zipcode")>
+				<#elseif (field.type == "int" || field.type == "integer" || field.type == "phone" || field.type == "ean" || field.type == "zipcode")>
 			result.set${field.name?cap_first}(c.getInt( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
 				<#elseif (field.type == "float" )>
 			result.set${field.name?cap_first}(c.getFloat( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
@@ -231,7 +231,7 @@ public abstract class ${name}AdapterBase {
 	 * @param id Identify of ${name}
 	 * @return ${name} entity
 	 */
-	public ${name} getByID(<#list ids as id>${id.type} ${id.name}<#if id_has_next>,</#if></#list>) {
+	public ${name} getByID(<#list ids as id>${m.javaType(id.type)} ${id.name}<#if id_has_next>,</#if></#list>) {
 	<#if (ids?size>0)>
 		Cursor c = this.getSingleCursor(id);
 		if(c.getCount()!=0)
@@ -319,21 +319,29 @@ public abstract class ${name}AdapterBase {
 	<#list ids as id>
 		values.remove(${alias(id.name)});
 	</#list>
+		int newid = (int)this.mDatabase.insert(
+			TABLE_NAME, 
+			null, 
+			values);
+	
 	<#list relations as relation>
 		<#if relation.relation.type=="ManyToMany">
 			
-		${relation.relation.joinTable}AdapterBase adapt = new ${relation.relation.joinTable}Adapter(this.context);
+		${relation.relation.joinTable}AdapterBase ${relation.name?uncap_first}Adapter = new ${relation.relation.joinTable}Adapter(this.context);
 		for(${relation.relation.targetEntity?cap_first} i : item.get${relation.name?cap_first}()){
-			adapt.insert(item.getId(), i.get${relation.relation.field_ref[0]?cap_first}());
+			${relation.name?uncap_first}Adapter.insert(newid, i.get${relation.relation.field_ref[0]?cap_first}());
 		}
-			
+		<#elseif relation.relation.type=="OneToMany">
+		${relation.relation.targetEntity}AdapterBase ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}Adapter(this.context);
+		${relation.name?uncap_first}Adapter.open(this.mDatabase);
+		for(${relation.relation.targetEntity?cap_first} i : item.get${relation.name?cap_first}()){
+			${relation.name?uncap_first}Adapter.update(i, newid);
+		}
+		
 		</#if>
 	</#list>
 		
-		return this.mDatabase.insert(
-				TABLE_NAME, 
-				null, 
-				values);
+		return newid;
 	}
 	
 	/** Update a ${name} entity into database 
@@ -365,7 +373,7 @@ public abstract class ${name}AdapterBase {
 	 * @param id Identify the ${name} entity to delete
 	 * @return
 	 */
-	public int remove(<#list ids as id>${id.type} ${id.name}<#if id_has_next>,</#if></#list>) {
+	public int remove(<#list ids as id>${m.javaType(id.type)} ${id.name}<#if id_has_next>,</#if></#list>) {
 	<#if (ids?size>0)>
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Delete DB(" + TABLE_NAME + ") id : "+ <#list ids as id>${id.name}<#if id_has_next> + " id : " + </#if></#list>);
@@ -383,7 +391,7 @@ public abstract class ${name}AdapterBase {
 	}
 	
 	// Internal Cursor
-	protected Cursor getSingleCursor(<#list ids as id>${id.type} ${id.name}<#if id_has_next>,</#if></#list>) {
+	protected Cursor getSingleCursor(<#list ids as id>${m.javaType(id.type)} ${id.name}<#if id_has_next>,</#if></#list>) {
 	<#if (ids?size>0)>
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Get entities id : " + <#list ids as id>${id.name}<#if id_has_next> + " id : " + </#if></#list>);

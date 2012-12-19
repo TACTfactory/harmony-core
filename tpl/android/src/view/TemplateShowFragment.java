@@ -16,7 +16,9 @@ import java.util.List;
 import java.util.ArrayList;
 import ${namespace}.entity.${name};
 <#list relations as relation>
+	<#if !relation.internal && !relation.hidden>
 import ${namespace}.entity.${relation.relation.targetEntity};
+	</#if>
 </#list>
 
 /** ${name} show fragment
@@ -29,17 +31,9 @@ public class ${name}ShowFragment extends Fragment {
 	
 	/* Fields View */
 <#list fields as field>
-	<#if !field.relation??>
+	<#if !field.internal && !field.hidden>
     protected ${field.customShowType} ${field.name}View;
 	</#if>
-</#list>
-<#list relations as relation>
-	<#--<#if relation.relation.type=="ManyToOne" | relation.relation.type=="OneToOne">-->
-	protected ${relation.customShowType} ${relation.name}View;
-	<#if relation.relation.type=="OneToMany">
-	protected List<${relation.relation.targetEntity}> ${relation.relation.targetEntity}list;
-	</#if>
-	<#--</#if>-->
 </#list>
     
     /** Initialize view of fields 
@@ -48,50 +42,40 @@ public class ${name}ShowFragment extends Fragment {
      */
     protected void initializeComponent(View view) {
 	<#foreach field in fields>
-		<#if !field.relation??>
-		this.${field.name}View = (${field.customShowType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}); 
+		<#if !field.internal && !field.hidden>
+		this.${field.name}View = (${field.customShowType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});
 		</#if>
 	</#foreach>
-	<#list relations as relation>
-		<#--<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>-->
-		this.${relation.name}View = (${relation.customShowType}) view.findViewById(R.id.${name?lower_case}_${relation.name?lower_case});
-		<#--</#if>-->
-	</#list>
     }
     
     /** Load data from model to fields view */
     public void loadData() {
     	<#foreach field in fields>
-		<#if !field.internal>
-			<#if !field.relation??>
+			<#if !field.internal && !field.hidden>
+				<#if !field.relation??>
 		    		<#if (field.customEditType == "EditText") >
     					<#if (field.type == "String")>
 		this.${field.name}View.setText(this.model.get${field.name?cap_first}()); 
-					</#if>
-					<#if (field.type == "Date")>
+						</#if>
+						<#if (field.type == "Date")>
 		this.${field.name}View.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(this.model.get${field.name?cap_first}())); 
-					</#if>
-					<#if (field.type == "int")>
+						</#if>
+						<#if (field.type == "int")>
 		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}())); 
-					</#if>
-				</#if>
-				<#if (field.customEditType == "CheckBox") >
+						</#if>
+					<#elseif (field.customEditType == "CheckBox") >
 		this.${field.name}View.setSelected(this.model.${field.name?uncap_first}()); 
-				</#if>
-			<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
+					</#if>
+				<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}().getId())); 
-			<#else>
-		this.${field.relation.targetEntity}list = this.model.get${field.name?cap_first}();
-		
-		List<String> ${field.relation.targetEntity?lower_case}strings = new ArrayList<String>();
-		for(${field.relation.targetEntity} item : this.${field.relation.targetEntity}list) {
-			${field.relation.targetEntity?lower_case}strings.add( String.valueOf(item.getId()) );
+				<#else>
+		String ${field.name}Value = "";
+		for(${field.relation.targetEntity} item : this.model.get${field.name?cap_first}()){
+			${field.name}Value+=item.getId()+",";
 		}
-		
-		ArrayAdapter<String> ${field.relation.targetEntity?lower_case}DataAdapter = new ArrayAdapter<String>(getActivity(),android.R.layout.simple_spinner_item, ${field.relation.targetEntity?lower_case}strings);
-		this.${field.name}View.setAdapter(${field.relation.targetEntity?lower_case}DataAdapter);
+		this.${field.name}View.setText(${field.name}Value);
+				</#if>
 			</#if>
-		</#if>
 	</#foreach>
     }
     

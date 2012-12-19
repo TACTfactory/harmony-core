@@ -18,6 +18,7 @@ public class SqliteAdapter {
 		StringBuilder builder = new StringBuilder();
 		builder.append(" " + field.columnDefinition.toLowerCase());
 		
+		
 		// Set Length
 		if(field.length!=255){
 			builder.append("("+field.length+")");
@@ -37,6 +38,11 @@ public class SqliteAdapter {
 		// Set Nullable
 		if(!field.nullable) {
 			builder.append(" NOT NULL");
+		}
+		
+		if(field.id){
+			builder.append(" PRIMARY KEY");
+			if(field.columnDefinition.equals("integer")) builder.append(" AUTOINCREMENT");
 		}
 		
 		return builder.toString();
@@ -78,5 +84,12 @@ public class SqliteAdapter {
 	
 	public static String generateRelationColumnName(String fieldName) {
 		return PREFIX + fieldName.toUpperCase() + SUFFIX;
+	}
+	
+	public static String generateColumnDefinition(String type){
+		String ret = type;
+		if(type.equals("int"))
+			ret = "integer";
+		return ret;
 	}
 }

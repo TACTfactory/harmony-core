@@ -1,4 +1,3 @@
-<#assign name=name?lower_case>
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -10,30 +9,17 @@
     android:paddingTop="2.5dp" >
 
     <#list fields as field>
-		<#if !field.relation??>
+    	<#if !field.internal && !field.hidden>	
     <TextView
-        android:id="@+id/row_${name}_${field.name}"
+        android:id="@+id/row_${name?lower_case}_${field.name}"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-			<#if (!lastFieldName??)>
+				<#if (!lastFieldName??)>
         android:layout_alignParentTop="true" />
-			<#else>
-		android:layout_below="@+id/row_${name}_${lastFieldName}" />
-			</#if>
+				<#else>
+		android:layout_below="@+id/row_${name?lower_case}_${lastFieldName}" />
+				</#if>
 			<#assign lastFieldName=field.name>
-		</#if>
-    </#list>
-    <#list relations as relation>
-		<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
-    <TextView
-        android:id="@+id/row_${name}_${relation.name}"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        	<#if (relation_index==0)>
-        android:layout_below="@+id/row_${name}_${lastFieldName}" />
-			<#else>
-		android:layout_below="@+id/row_${name}_${relations[relation_index-1].name}" />
-			</#if>
 		</#if>
     </#list>
 

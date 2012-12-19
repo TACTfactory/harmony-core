@@ -13,6 +13,12 @@ import android.widget.TextView;
 import ${namespace}.R;
 import ${namespace}.entity.${name};
 
+<#list relations as relation>
+	<#if !relation.internal && !relation.hidden>
+import ${namespace}.entity.${relation.relation.targetEntity};
+	</#if>
+</#list>
+
 public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 	private final LayoutInflater mInflater;
 
@@ -48,13 +54,8 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 
 			holder = new ViewHolder();
 			<#list fields as field>
-				<#if !field.relation??>
+				<#if !field.internal && !field.hidden>
 			holder.${field.name} = (TextView) convertView.findViewById(R.id.row_${name?lower_case}_${field.name});
-				</#if>
-			</#list>
-			<#list relations as relation>
-				<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
-			holder.${relation.name} = (TextView) convertView.findViewById(R.id.row_${name?lower_case}_${relation.name});
 				</#if>
 			</#list>
 			
@@ -73,13 +74,8 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 	/** Holder row */
 	private static class ViewHolder {
 		<#list fields as field>
-			<#if !field.relation??>
+			<#if !field.hidden && !field.internal>
 		public TextView ${field.name};
-			</#if>
-		</#list>
-		<#list relations as relation>
-			<#if (relation.relation.type=="OneToOne" | relation.relation.type=="ManyToOne")>
-		public TextView ${relation.name};
 			</#if>
 		</#list>
 
@@ -90,7 +86,7 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 		public void populate(${name} item) {
 
 			<#list fields as field>
-				<#if !field.internal>
+				<#if !field.internal && !field.hidden>
 					<#if (!field.relation??)>
 						<#if (field.type="Date")>
 			this.${field.name}.setText(String.valueOf(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(item.get${field.name?cap_first}())) );
@@ -99,6 +95,12 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 						</#if>
 					<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 			this.${field.name}.setText(String.valueOf(item.get${field.name?cap_first}().getId()) );
+					<#elseif (field.relation.type=="OneToMany" | field.relation.type=="ManyToMany")>
+			String ${field.name}String = "";
+			for(${field.relation.targetEntity?cap_first} ${field.name}Entity : item.get${field.name?cap_first}()){
+				${field.name}String += ${field.name}Entity.getId()+",";
+			}
+			this.${field.name}.setText(String.valueOf(${field.name}String) );		
 					</#if>
 				</#if>
 			</#list>
