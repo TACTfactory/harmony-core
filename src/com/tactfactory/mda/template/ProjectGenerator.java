@@ -165,12 +165,6 @@ public class ProjectGenerator {
 	private boolean makeProjectAndroid(){
 		boolean result = false;
 
-		//create project template structure
-		File dirProj = FileUtils.makeFolderRecursive(
-				String.format("%s/%s/%s/", Harmony.pathTemplate, this.adapter.getPlatform(), this.adapter.getProject()),
-				String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()),
-				false);
-
 		// create project name space folders
 		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/"));
 
@@ -204,7 +198,7 @@ public class ProjectGenerator {
 		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathLibs,"android-support-v4.jar")),
 				new File(String.format("%s/%s",this.adapter.getLibsPath(),"android-support-v4.jar")));
 		
-		File dirTpl = new File(String.format("%s/%s/%s/", Harmony.pathTemplate, this.adapter.getPlatform(), this.adapter.getProject()));
+		File dirTpl = new File(this.adapter.getTemplateProjectPath());
 
 		// Update newly created files with datamodel
 		if(dirTpl.exists() && dirTpl.listFiles().length!=0)
