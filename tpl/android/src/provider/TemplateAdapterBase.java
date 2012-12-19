@@ -182,7 +182,7 @@ public abstract class ${name}AdapterBase {
 
 				<#elseif (field.type?lower_case == "boolean" )>
 			result.set${field.name?cap_first}  (c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ).equals("true"));
-				<#elseif (field.type == "int" || field.type == "Integer" || field.type == "phone" || field.type == "ean" || field.type == "zipcode")>
+				<#elseif (field.type == "int" || field.type == "integer" || field.type == "phone" || field.type == "ean" || field.type == "zipcode")>
 			result.set${field.name?cap_first}(c.getInt( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
 				<#elseif (field.type == "float" )>
 			result.set${field.name?cap_first}(c.getFloat( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
@@ -231,7 +231,7 @@ public abstract class ${name}AdapterBase {
 	 * @param id Identify of ${name}
 	 * @return ${name} entity
 	 */
-	public ${name} getByID(<#list ids as id>${id.type} ${id.name}<#if id_has_next>,</#if></#list>) {
+	public ${name} getByID(<#list ids as id>${m.javaType(id.type)} ${id.name}<#if id_has_next>,</#if></#list>) {
 	<#if (ids?size>0)>
 		Cursor c = this.getSingleCursor(id);
 		if(c.getCount()!=0)

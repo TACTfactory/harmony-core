@@ -230,6 +230,14 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		${field.relation.targetEntity} tmp${field.name?cap_first} = new ${field.relation.targetEntity?cap_first}();
 		tmp${field.name?cap_first}.setId(this.selected${field.name?cap_first});
 		this.model.set${field.name?cap_first}(tmp${field.name?cap_first});
+			<#else>
+		ArrayList<${field.relation.targetEntity}> tmp${field.name?cap_first}List = new ArrayList<${field.relation.targetEntity?cap_first}>();
+		for(int i=0; i<this.checked${field.name?cap_first}.length; i++){
+			if(this.checked${field.name?cap_first}[i])
+				tmp${field.name?cap_first}List.add(this.${field.name}List.get(i));
+		}
+		
+		this.model.set${field.name?cap_first}(tmp${field.name?cap_first}List);
 			</#if>
 		</#if>	
 		</#foreach>

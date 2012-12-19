@@ -13,6 +13,12 @@ import android.widget.TextView;
 import ${namespace}.R;
 import ${namespace}.entity.${name};
 
+<#list relations as relation>
+	<#if !relation.internal && !relation.hidden>
+import ${namespace}.entity.${relation.relation.targetEntity};
+	</#if>
+</#list>
+
 public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 	private final LayoutInflater mInflater;
 
