@@ -35,6 +35,11 @@ public class TestProjectGenerator {
 		// Make class
 		this.datamodel.put(TagConstant.PROJECT_NAME, Harmony.projectName);
 		this.datamodel.put(TagConstant.PROJECT_NAMESPACE, projectNameSpace);
+		this.datamodel.put(TagConstant.ANDROID_SDK_DIR, Harmony.androidSdkPath);
+
+		this.datamodel.put(TagConstant.ANT_ANDROID_SDK_DIR, new TagConstant.AndroidSDK("${sdk.dir}"));
+		this.datamodel.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
+		this.datamodel.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
 	}
 
 	public TestProjectGenerator(BaseAdapter adapter, Boolean isWritable) throws Exception {

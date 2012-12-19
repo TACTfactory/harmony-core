@@ -8,6 +8,8 @@
 .classpath
 .project
 !/tpl/android/project/.project
+!/tpl/android/test/project/.project
+!/tpl/android/test/project/.classpath
 local.properties
 .settings/*
 /tmp/*
