@@ -20,7 +20,7 @@ public class User extends Object implements Cloneable {
 	private static final long serialVersionUID = 7032873279928549706L;
 
 	@Id
-    @Column(type=Type.INTEGER)				// type="integer",
+    @Column(type=Type.INTEGER, hidden=true)
     @GeneratedValue(strategy="IDENTITY")
     protected int id;
 

@@ -11,8 +11,6 @@ package com.tactfactory.mda.orm;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.tactfactory.mda.orm.annotation.Column;
-import com.tactfactory.mda.orm.annotation.Column.Type;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
@@ -66,6 +64,8 @@ public class FieldMetadata {
 		model.put(TagConstant.NAME, this.fieldName);
 		model.put(TagConstant.TYPE, this.type);
 		model.put("columnDefinition", this.columnDefinition);
+		//model.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(this));
+		model.put(TagConstant.HIDDEN, this.hidden);
 
 		model.put("customEditType", this.customEditType);
 		model.put("customShowType", this.customShowType);

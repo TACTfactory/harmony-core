@@ -23,7 +23,6 @@ import japa.parser.ast.type.ClassOrInterfaceType;
 import japa.parser.ast.visitor.VoidVisitorAdapter;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import com.google.common.base.Strings;
@@ -136,7 +135,7 @@ public class JavaAdapter {
 			List<AnnotationExpr> fieldAnnotations = field.getAnnotations();
 			
 			if (fieldAnnotations != null) {
-				// General (defaults values)
+				// General (required !)
 				FieldMetadata fieldMeta = new FieldMetadata();
 				
 				fieldMeta.type = field.getType().toString();
@@ -145,17 +144,25 @@ public class JavaAdapter {
 				fieldMeta.fieldName = field.getVariables().get(0).getId().getName(); // FIXME not manage multi-variable
 				fieldMeta.columnName = fieldMeta.fieldName;
 
-				fieldMeta.nullable = false; // Default nullable is false
-				fieldMeta.unique = false; 
+				// Set defaults values
+				fieldMeta.hidden = false;
 				
-				//HashMap<String, String> rel = new HashMap<String, String>();
+				Type type = null;
+				if (type == null) {
+					fieldMeta.nullable = false;
+					fieldMeta.unique = false; 
+				} else { // TODO use type default value
+					//fieldMeta.nullable 	= type.getNullable();
+					//fieldMeta.unique	= type.getUnique();
+				}
+				
+				// Database definitions
 				RelationMetadata rel = new RelationMetadata();
-				
-				// Database
 				boolean isColumn = false;
 				boolean isId = false;
 				boolean isRelation = false;
 				
+				// Analyze
 				for (AnnotationExpr annotationExpr : fieldAnnotations) {
 					String annotationType = annotationExpr.getName().toString();
 	
@@ -173,28 +180,28 @@ public class JavaAdapter {
 					this.loadAttributes(rel, fieldMeta, annotationExpr, annotationType);
 				}
 				
-				// Load type
-				
-				
+				// ID relation
+				if (isId) {
+					meta.ids.put(fieldMeta.fieldName, fieldMeta);
+				}
+	
+				// Object relation
 				if (isRelation) {
 					rel.field = fieldMeta.fieldName;
 					rel.entity_ref = PackageUtils.extractClassNameFromArray(field.getType().toString());
 					fieldMeta.relation = rel;
 					meta.relations.put(fieldMeta.fieldName, fieldMeta);
 				}
-				
-				if (isId) {
-					meta.ids.put(fieldMeta.fieldName, fieldMeta);
-				}
-				
-				if(isId || isColumn || isRelation)
-					meta.fields.put(fieldMeta.fieldName, fieldMeta);
-				
+
+				// Adjust databases column definition
 				if (Strings.isNullOrEmpty(fieldMeta.columnDefinition)) {
 					fieldMeta.columnDefinition = fieldMeta.type;
 				}
 				fieldMeta.columnDefinition = SqliteAdapter.generateColumnType(fieldMeta);
 				
+				// Add to meta dictionary
+				if (isId || isColumn || isRelation)
+					meta.fields.put(fieldMeta.fieldName, fieldMeta);
 			}
 		}
 
@@ -253,10 +260,12 @@ public class JavaAdapter {
 							if (mvp.getName().equals("type")) {
 								//TODO : Generate warning if type not recognized
 								String type = "";
+								
 								if(mvp.getValue() instanceof StringLiteralExpr)
 									type = ((StringLiteralExpr)mvp.getValue()).getValue();
 								else
 									type = mvp.getValue().toString();
+								
 								fieldMeta.type = Type.fromName(type).getValue();
 							}else
 								
@@ -266,7 +275,12 @@ public class JavaAdapter {
 									fieldMeta.columnDefinition = ((StringLiteralExpr)mvp.getValue()).getValue();
 								else
 									fieldMeta.columnDefinition = mvp.getValue().toString();
-							} 
+							} else 
+						
+							// set if hide column view
+							if (mvp.getName().equals("hidden") && mvp.getValue().toString().equals("true")){
+								fieldMeta.hidden = true;
+							}
 							
 						} else
 						
