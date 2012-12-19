@@ -38,7 +38,7 @@ public abstract class ${name}TestDBBase extends AndroidTestCase {
 	}
 	
 	/** Test case Create Entity */
-	public void create() {
+	public void testCreate() {
 		int result = -1;
 
 		this.db = this.adapter.open();
@@ -56,7 +56,7 @@ public abstract class ${name}TestDBBase extends AndroidTestCase {
 	}
 	
 	/** Test case Read Entity */
-	public void read() {
+	public void testRead() {
 		int result = -1;
 
 		this.db = this.adapter.open();
@@ -76,7 +76,7 @@ public abstract class ${name}TestDBBase extends AndroidTestCase {
 	}
 	
 	/** Test case Update Entity */
-	public void update() {
+	public void testUpdate() {
 		// TODO on all fields
 		//this.model.setXxxx(newValue);
 		
@@ -100,7 +100,7 @@ public abstract class ${name}TestDBBase extends AndroidTestCase {
 	}
 	
 	/** Test case Update Entity */
-	public void delete() {
+	public void testDelete() {
 		int result = -1;
 
 		this.db = this.adapter.open();
