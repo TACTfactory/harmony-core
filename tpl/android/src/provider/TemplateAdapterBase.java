@@ -231,7 +231,7 @@ public abstract class ${name}AdapterBase {
 	 * @param id Identify of ${name}
 	 * @return ${name} entity
 	 */
-	public ${name} getByID(<#list ids as id>${id.type} ${id.name}<#if id_has_next>,</#if></#list>) {
+	public ${name} getByID(<#list ids as id>${m.javaType(id.type)} ${id.name}<#if id_has_next>,</#if></#list>) {
 	<#if (ids?size>0)>
 		Cursor c = this.getSingleCursor(id);
 		if(c.getCount()!=0)
