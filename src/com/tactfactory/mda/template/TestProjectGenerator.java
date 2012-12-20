@@ -49,7 +49,7 @@ public class TestProjectGenerator {
 	}
 
 	/**
-	 * Update Project File merge template & datamodel
+	 * Update Test Project File merge template & datamodel
 	 * 
 	 * @param destPath File to update
 	 * @param templateFile Template File to use
@@ -98,7 +98,7 @@ public class TestProjectGenerator {
 
 	/**
 	 * Make Platform specific Project Structure
-	 * @return success to make the platform project folder
+	 * @return success to make the platform test project folder
 	 */
 	public boolean makeProject(){
 		boolean result = false;
@@ -152,7 +152,7 @@ public class TestProjectGenerator {
 
 	/**
 	 * Make IOS Test Project Structure
-	 * @return success to make the platform project folder
+	 * @return success to make the platform test project folder
 	 */
 	private boolean makeTestProjectIOS(){
 		boolean result = false;
@@ -170,7 +170,7 @@ public class TestProjectGenerator {
 
 	/**
 	 * Make RIM Test Project Structure
-	 * @return success to make the platform project folder
+	 * @return success to make the platform test project folder
 	 */
 	private boolean makeTestProjectRIM(){
 		boolean result = false;
@@ -180,52 +180,11 @@ public class TestProjectGenerator {
 
 	/**
 	 * Make Windows Phone Test Project Structure
-	 * @return success to make the platform project folder
+	 * @return success to make the platform test project folder
 	 */
 	private boolean makeTestProjectWinPhone(){
 		boolean result = false;
 
 		return result;
-	}
-
-	/**
-	 * Update XML Strings
-	 * 
-	 * @param cfg Template engine
-	 */
-	public void updateStringsXml(Configuration cfg) {
-
-		try {
-			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-
-		File destFile = new File(this.adapter.getStringsPathFile());
-
-		if(!destFile.exists())
-			destFile = FileUtils.makeFile(destFile.getPath());
-
-		// Debug Log
-		ConsoleUtils.displayDebug("Update Strings.xml File : " + destFile.getPath() + "\n"); 
-
-		// Create
-		Template tpl;
-		try {
-			tpl = cfg.getTemplate(this.adapter.getTemplateStringsPathFile());	// Load template file in engine
-
-			OutputStreamWriter output = new FileWriter(destFile);
-			tpl.process(this.datamodel, output);				// Process datamodel (with previous template file), and output to output file
-			output.flush();
-			output.close();
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TemplateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 }
