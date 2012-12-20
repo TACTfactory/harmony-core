@@ -47,8 +47,9 @@ public class TestGenerator {
 		for (ClassMetadata meta : this.metas) {
 			this.meta = meta;
 			this.datamodel = new HashMap<String, Object>();
-			this.datamodel.put(TagConstant.NAME,	meta.name );
+			this.datamodel.put(TagConstant.NAME,			meta.name );
 			this.datamodel.put(TagConstant.LOCAL_NAMESPACE,	this.adapter.getNameSpace(this.meta, this.adapter.getTest()) );
+			this.datamodel.put(TagConstant.SPACE, 			meta.space);
 			
 			this.entities.put((String) this.datamodel.get(TagConstant.NAME), this.datamodel);
 		}
@@ -68,6 +69,7 @@ public class TestGenerator {
 			this.datamodel = new HashMap<String, Object>();
 			this.datamodel.put(TagConstant.NAME, 				entity.get(TagConstant.NAME));
 			this.datamodel.put(TagConstant.LOCAL_NAMESPACE, 	this.localNameSpace);
+			this.datamodel.put("namespace", 					entity.get(TagConstant.SPACE));
 			
 			this.generate();
 		}
@@ -86,11 +88,13 @@ public class TestGenerator {
 			
 			this.makeSourceTest(cfg, 
 					"TemplateTestDBBase.java", 
-					"%sTestDBBase.java");
+					"%sTestDBBase.java",
+					true);
 			
 			this.makeSourceTest(cfg, 
 					"TemplateTestDB.java", 
-					"%sTestDB.java");
+					"%sTestDB.java",
+					false);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -108,14 +112,15 @@ public class TestGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	private void makeSourceTest(Configuration cfg, String template, String filename) 
+	private void makeSourceTest(Configuration cfg, String template, String filename, boolean override) 
 			throws IOException, TemplateException {
 		String filepath = String.format("%s%s/%s",
 						this.adapter.getTestPath(),
 						PackageUtils.extractPath(String.format(
 								"%s/%s", this.adapter.getSource(), this.localNameSpace)).toLowerCase(),
 						String.format(filename, this.datamodel.get(TagConstant.NAME)));
-		if(!FileUtils.exists(filepath)){
+		
+		if(!(!override && FileUtils.exists(filepath))){
 			File file = FileUtils.makeFile(filepath);
 			
 			// Debug Log
