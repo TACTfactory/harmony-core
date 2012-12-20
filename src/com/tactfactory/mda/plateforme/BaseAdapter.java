@@ -164,6 +164,16 @@ public abstract class BaseAdapter {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getTest(), this.getProject() );
 	}
 	
+	public final String getStringsTestPathFile() {
+		return String.format("%s/%s/%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(), this.getTest(),
+											this.getResource(), this.getValues(), this.getStrings() );
+	}
+	
+	public final String getTemplateStringsTestPathFile() {
+		return String.format("%s/%s/%s/%s/%s/%s", Harmony.pathTemplate, this.getPlatform(),this.getTest(),
+											this.getResource(), this.getValues(), this.getStrings() );
+	}
+	
 	public final String getSourceDataNameSpace() {
 		return String.format("%s.%s.%s.%s", Harmony.pathProject, this.getPlatform(), this.getSource(), this.getData());
 	}

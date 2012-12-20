@@ -129,8 +129,8 @@ public class TestProjectGenerator {
 		//FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/"));
 
 		// create strings.xml
-		//this.updateProjectFile(this.adapter.getStringsPathFile(),
-		//		this.adapter.getTemplateStringsPathFile()); //.substring(1));
+		this.updateProjectFile(this.adapter.getStringsTestPathFile(),
+				this.adapter.getTemplateStringsTestPathFile()); //.substring(1));
 		
 		File dirTpl = new File(this.adapter.getTemplateTestProjectPath());
 
