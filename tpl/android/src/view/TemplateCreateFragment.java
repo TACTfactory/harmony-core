@@ -27,6 +27,9 @@ import java.util.Locale;
 
 import org.joda.time.DateTime;
 
+import com.tactfactory.mda.test.demact.RangeDatePickerDialog;
+import com.tactfactory.mda.test.demact.view.user.UserCreateFragment;
+
 import ${namespace}.data.${name}Adapter;
 import ${namespace}.entity.${name};
 <#list relations as relation>
@@ -73,30 +76,58 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 				<#if !field.relation??>
 		this.${field.name}View = (${field.customEditType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});
 		<#if field.type == "date">
-			this.${field.name}View.setOnClickListener(new OnClickListener(){
-				public void onClick(View v){
-					// Calendar
-					final Calendar c = Calendar.getInstance();
-					int year = c.get(Calendar.YEAR);
-			        int month = c.get(Calendar.MONTH);
-			        int day = c.get(Calendar.DAY_OF_MONTH);
-					
-					DatePickerDialog ${field.name}Dpd = new RangeDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-	                    public void onDateSet(DatePicker view, int year, int month, int day) {
-	                        final Date date = new GregorianCalendar(year, month, day).getTime();
-	                        
-	                        ${name}CreateFragment.this.${field.name}View.setText(new SimpleDateFormat("dd/MM/yyyy").format(date); 
-	                    }
-	                },
-	                year,
-	                month,
-	                day,
-	                "Select ${field.name} date");
+		this.${field.name}View.setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
+				// Calendar
+				final Calendar c = Calendar.getInstance();
+				int year = c.get(Calendar.YEAR);
+		        int month = c.get(Calendar.MONTH);
+		        int day = c.get(Calendar.DAY_OF_MONTH);
+				
+				DatePickerDialog ${field.name}Dpd = new RangeDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+                    public void onDateSet(DatePicker view, int year, int month, int day) {
+                        final Date date = new GregorianCalendar(year, month, day).getTime();
+                        
+                        ${name}CreateFragment.this.${field.name}View.setText(new SimpleDateFormat("dd/MM/yyyy").format(date)); 
+                    }
+                },
+                year,
+                month,
+                day,
+                "Select ${field.name} date");
 
-	                ${field.name}Dpd.show();
-				}
-			});
+                ${field.name}Dpd.show();
+			}
+		});
 		</#if>
+		<#if field.type == "time">
+		this.${field.name}View.setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
+				// Calendar
+				final Calendar c = Calendar.getInstance();
+				final int year = c.get(Calendar.YEAR);
+		        final int month = c.get(Calendar.MONTH);
+		        final int day = c.get(Calendar.DAY_OF_MONTH);
+		        
+		        int hour = c.get(Calendar.HOUR_OF_DAY);
+		        int minute = c.get(Calendar.MINUTE);
+		        
+		        TimePickerDialog ${field.name}Tpd = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+					
+					@Override
+					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                        final Date time = new GregorianCalendar(year, month, day, hourOfDay, minute).getTime(); 
+						
+                        ${name}CreateFragment.this.${field.name}View.setText(new SimpleDateFormat("HH:mm").format(time)); 
+					}
+				}, hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
+				
+		        ${field.name}Tpd.show();
+			}
+		});
+		
+		
+		
 				<#else>
 		this.${field.name}Button = (Button) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}_button);
 		this.${field.name}Button.setOnClickListener(new OnClickListener(){
