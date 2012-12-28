@@ -18,9 +18,12 @@ import android.widget.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import org.joda.time.DateTime;
 
@@ -69,6 +72,31 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 			<#if !field.internal && !field.hidden>
 				<#if !field.relation??>
 		this.${field.name}View = (${field.customEditType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});
+		<#if field.type == "date">
+			this.${field.name}View.setOnClickListener(new OnClickListener(){
+				public void onClick(View v){
+					// Calendar
+					final Calendar c = Calendar.getInstance();
+					int year = c.get(Calendar.YEAR);
+			        int month = c.get(Calendar.MONTH);
+			        int day = c.get(Calendar.DAY_OF_MONTH);
+					
+					DatePickerDialog ${field.name}Dpd = new RangeDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
+	                    public void onDateSet(DatePicker view, int year, int month, int day) {
+	                        final Date date = new GregorianCalendar(year, month, day).getTime();
+	                        
+	                        ${name}CreateFragment.this.${field.name}View.setText(new SimpleDateFormat("dd/MM/yyyy").format(date); 
+	                    }
+	                },
+	                year,
+	                month,
+	                day,
+	                "Select ${field.name} date");
+
+	                ${field.name}Dpd.show();
+				}
+			});
+		</#if>
 				<#else>
 		this.${field.name}Button = (Button) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}_button);
 		this.${field.name}Button.setOnClickListener(new OnClickListener(){

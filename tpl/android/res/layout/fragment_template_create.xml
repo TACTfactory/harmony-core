@@ -30,10 +30,13 @@
 	    android:inputType="textEmailAddress"
 	    		<#elseif field.type=="date">
 	    android:inputType="date"
+	    android:focusable="false"
 	    		<#elseif field.type=="time">
 	    android:inputType="time"
+	    android:focusable="false"
 		    	<#elseif field.type=="datetime">
 	    android:inputType="datetime"
+	    android:focusable="false"
 		    	<#elseif field.type=="phone">
 	    android:inputType="phone"
 	    		<#elseif field.type=="zipcode">
