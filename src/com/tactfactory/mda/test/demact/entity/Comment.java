@@ -8,7 +8,6 @@
  */
 package com.tactfactory.mda.test.demact.entity;
 
-import java.util.Date;
 import org.joda.time.DateTime;
 
 import com.tactfactory.mda.orm.annotation.*;
@@ -33,14 +32,14 @@ public class Comment extends Object {
 	protected Post post;
 	
 	@Column(name="created_at")	// type="datetime",
-    protected Date createdAt;
+    protected DateTime createdAt;
 	
 	@Column
 	protected boolean validate = false;
 
 	public Comment() {
 		this.id = -1;
-    	this.createdAt = new DateTime().toDate();
+    	this.createdAt = new DateTime();
     }
 	
 }

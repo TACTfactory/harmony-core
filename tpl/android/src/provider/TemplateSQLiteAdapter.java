@@ -3,13 +3,13 @@ package ${local_namespace};
 import android.content.Context;
 
 /** ${name} adapter database class */
-public class ${name}Adapter extends ${name}AdapterBase {
+public class ${name}SQLiteAdapter extends ${name}SQLiteAdapterBase {
 	
 	/**
 	 * Constructor
 	 * @param ctx context
 	 */
-	public ${name}Adapter(Context ctx) {
+	public ${name}SQLiteAdapter(Context ctx) {
 		super(ctx);
 	}
 }

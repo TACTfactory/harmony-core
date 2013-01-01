@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.content.AsyncTaskLoader;
 import android.util.Log;
 
-import ${namespace}.data.${name}Adapter;
+import ${namespace}.data.${name}SQLiteAdapter;
 
 import ${namespace}.R;
 import ${namespace}.entity.${name};
@@ -37,41 +37,13 @@ public class ${name}ListLoader extends AsyncTaskLoader<List<${name}>> {
 
 		// TODO Query of data
 
-		${name}Adapter adapter = new ${name}Adapter(context);
+		${name}SQLiteAdapter adapter = new ${name}SQLiteAdapter(context);
 		SQLiteDatabase db = adapter.open();
 		try {
 			db.beginTransaction();
 			result = adapter.getAll();
 
 			db.setTransactionSuccessful();
-			/*StootieWebService service = new StootieWebServiceImpl(getContext());
-    		if (mStoot.getAsker() == null)
-    			service.getStoot(mStoot);
-
-    		service = new StootieWebServiceImpl(getContext());
-    		result = service.getMessages(mStoot);
-
-    		for (int i = 0 ; i < result.size(); i++) {
-    			service = new StootieWebServiceImpl(getContext());
-    			User userFinded = result.get(i).getSender(); // User find by object
-
-    			User userToFind = null; // User finded in cache
-    			for (User user : users) {
-					if (user.getId() == userFinded.getId()){
-						userToFind = user; // Found in cache
-						break;			   // Optim
-					}
-				}
-
-    			// Full load network !!
-    			if (userToFind == null) {
-    				userToFind = service.getUser(userFinded);
-    				users.add(userToFind);
-    			}
-
-    			// Set to model
-    			result.get(i).setSender(userToFind);
-    		}*/
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block

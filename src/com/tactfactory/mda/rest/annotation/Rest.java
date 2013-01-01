@@ -17,8 +17,7 @@ import static java.lang.annotation.RetentionPolicy.SOURCE;
 import static java.lang.annotation.ElementType.TYPE;
 
 /**
- * To mark a property for relational persistence the @Column annotation is used. 
- * This annotation usually requires at least 1 attribute to be set, the type. 
+ * To mark a entity for remote/central persistence/access the @Rest annotation is used.
  */
 @Documented
 @Retention(SOURCE)
@@ -26,12 +25,44 @@ import static java.lang.annotation.ElementType.TYPE;
 @Inherited
 public @interface Rest {
 	
+	/** Security access of REST query */
+	public enum Security {
+		NONE(0),
+		SESSION(1);
+		
+		private int value;
+		
+		private Security(int value) {
+			this.value = value;
+		}
+		
+		public int getValue(){
+			return this.value;
+		}
+		
+		public static Security fromValue(int value){
+				for (Security type : Security.values()) {
+					if (value == type.value) {
+						return type;
+					}    
+				}
+			
+			return null;
+		}
+	}
+	
 	/**
-	 * The uri for type to use for the column
+	 * The uri for entity
 	 * 
-	 * @return (optional, defaults to type mapping) The database type to use for the column.
+	 * @return (optional, defaults to entity name) The path route to use for entity.
 	 * 
-	 * @see com.tactfactory.mda.orm.SqliteAdapter for mapping list
 	 */
 	String uri() default "";
+	
+	/**
+	 * The security level
+	 * 
+	 * @return (optional, defaults to none) Security level to use.
+	 */
+	Security security() default Security.NONE;
 }

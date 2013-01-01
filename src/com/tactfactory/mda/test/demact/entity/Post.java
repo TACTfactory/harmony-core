@@ -10,7 +10,6 @@ package com.tactfactory.mda.test.demact.entity;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.joda.time.DateTime;
 
@@ -43,19 +42,19 @@ public class Post implements Serializable {
 	protected ArrayList<Comment> comments;
 	
 	@Column(name="created_at")
-    protected Date createdAt;
+    protected DateTime createdAt;
 
     @Column(name="updated_at")
-    protected Date updatedAt;
+    protected DateTime updatedAt;
 
     @Column(name="expires_at")
-    protected Date expiresAt;
+    protected DateTime expiresAt;
 
 
 	public Post() {
-    	this.createdAt = new DateTime().toDate();
-    	this.updatedAt = new DateTime().toDate();
-    	this.expiresAt = new DateTime().toDate();
+    	this.createdAt = new DateTime();
+    	this.updatedAt = new DateTime();
+    	this.expiresAt = new DateTime();
     }
 	
     /**
@@ -131,42 +130,42 @@ public class Post implements Serializable {
 	/**
 	 * @return the createdAt
 	 */
-	public final Date getCreatedAt() {
+	public final DateTime getCreatedAt() {
 		return createdAt;
 	}
 
 	/**
 	 * @param createdAt the createdAt to set
 	 */
-	public final void setCreatedAt(Date createdAt) {
+	public final void setCreatedAt(DateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 
 	/**
 	 * @return the updatedAt
 	 */
-	public final Date getUpdatedAt() {
+	public final DateTime getUpdatedAt() {
 		return updatedAt;
 	}
 
 	/**
 	 * @param updatedAt the updatedAt to set
 	 */
-	public final void setUpdatedAt(Date updatedAt) {
+	public final void setUpdatedAt(DateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 
 	/**
 	 * @return the expiresAt
 	 */
-	public final Date getExpiresAt() {
+	public final DateTime getExpiresAt() {
 		return expiresAt;
 	}
 
 	/**
 	 * @param expiresAt the expiresAt to set
 	 */
-	public final void setExpiresAt(Date expiresAt) {
+	public final void setExpiresAt(DateTime expiresAt) {
 		this.expiresAt = expiresAt;
 	}
 }

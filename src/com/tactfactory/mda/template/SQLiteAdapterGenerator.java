@@ -172,12 +172,12 @@ public class SQLiteAdapterGenerator {
 			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
 			
 			this.makeSourceControler(cfg, 
-					"TemplateAdapterBase.java", 
-					"%sAdapterBase.java", true);
+					"TemplateSQLiteAdapterBase.java", 
+					"%sSQLiteAdapterBase.java", true);
 			
 			this.makeSourceControler(cfg, 
-					"TemplateAdapter.java", 
-					"%sAdapter.java", false);
+					"TemplateSQLiteAdapter.java", 
+					"%sSQLiteAdapter.java", false);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block

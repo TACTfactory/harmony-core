@@ -80,7 +80,7 @@ public class Harmony {
 	public static boolean isConsole = false;
 	
 	private PluginManager pluginManager;
-	public HashMap<Class<?>, Command> bootstrap = new HashMap<Class<?>, Command>();
+	private HashMap<Class<?>, Command> bootstrap = new HashMap<Class<?>, Command>();
 
 	public Harmony() throws Exception {
 		final JSPFProperties props = new JSPFProperties();
@@ -152,6 +152,10 @@ public class Harmony {
 	public Command getCommand(Class<?> commandName) {
 		return this.bootstrap.get(commandName);
 	}
+	
+	public Collection<Command> getCommands() {
+		return this.bootstrap.values();
+	}
 
 	/**
 	 * Check and launch command in proper command class
@@ -210,7 +214,7 @@ public class Harmony {
 		if (Strings.isNullOrEmpty(Harmony.projectName)) {
 			String projectName = Harmony.getUserInput("Please enter your Project Name ["+DEFAULT_PROJECT_NAME+"]:");
 			
-			if (projectName!=null && projectName.length()!=0)
+			if (!Strings.isNullOrEmpty(projectName))
 				Harmony.projectName = projectName;
 			else
 				Harmony.projectName = DEFAULT_PROJECT_NAME;
@@ -227,7 +231,7 @@ public class Harmony {
 			while (!good) {
 				String projectNameSpace = Harmony.getUserInput("Please enter your Project NameSpace ["+DEFAULT_PROJECT_NAMESPACE+"]:");
 				
-				if(projectNameSpace!=null && projectNameSpace.length()!=0) {
+				if(!Strings.isNullOrEmpty(projectNameSpace)) {
 					if(projectNameSpace.toLowerCase().endsWith(Harmony.projectName.toLowerCase())){
 						Harmony.projectNameSpace = projectNameSpace.replaceAll("\\.", "/");
 						good = true;
@@ -249,7 +253,7 @@ public class Harmony {
 		if (Strings.isNullOrEmpty(Harmony.androidSdkPath)) {
 			String sdkPath = Harmony.getUserInput("Please enter AndroidSDK full path [/root/android-sdk/]:");
 			
-			if(sdkPath!=null && sdkPath.length()!=0){
+			if(!Strings.isNullOrEmpty(sdkPath)){
 				Harmony.androidSdkPath = sdkPath;
 			} else {
 				String os_message = "Detected OS: ";
@@ -268,7 +272,7 @@ public class Harmony {
 				}
 				else if(OsUtil.isLinux()) {
 					os_message += "Linux";
-					Harmony.androidSdkPath = "/root/android-sdk/";
+					Harmony.androidSdkPath = "/opt/android-sdk/";
 				}
 				
 				// Debug Log

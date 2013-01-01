@@ -24,10 +24,10 @@ import java.util.Date;
 
 import org.joda.time.DateTime;
 
-import ${namespace}.data.${name}Adapter;
+import ${namespace}.data.${name}SQLiteAdapter;
 import ${namespace}.entity.${name};
 <#list relations as relation>
-import ${namespace}.data.${relation.relation.targetEntity}Adapter;
+import ${namespace}.data.${relation.relation.targetEntity}SQLiteAdapter;
 import ${namespace}.entity.${relation.relation.targetEntity};
 </#list>
 
@@ -88,7 +88,8 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		<#if !relation.internal && !relation.hidden>
 	/** Initialize dialog
 	 * 
-	 */		<#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
+	 */		
+<#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
 	protected void init${relation.name?cap_first}Dialog(List<${relation.relation.targetEntity}> list){
 		String[] listAdapter = new String[list.size()];
 		boolean[] checks = new boolean[list.size()];
@@ -182,7 +183,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 				</#if>			
 			<#else>
 				
-		${field.relation.targetEntity}Adapter ${field.name}Adapter = new ${field.relation.targetEntity}Adapter(getActivity());
+		${field.relation.targetEntity}SQLiteAdapter ${field.name}Adapter = new ${field.relation.targetEntity}SQLiteAdapter(getActivity());
 		${field.name}Adapter.open();
 		this.${field.name}List = ${field.name}Adapter.getAll();
 		${field.name}Adapter.close();
@@ -309,7 +310,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 
-			${name}Adapter ${name?lower_case}Adapter = new ${name}Adapter(context);
+			${name}SQLiteAdapter ${name?lower_case}Adapter = new ${name}SQLiteAdapter(context);
 			SQLiteDatabase db = ${name?lower_case}Adapter.open();
 			db.beginTransaction();
 			try {
