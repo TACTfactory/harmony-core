@@ -8,17 +8,13 @@
  */
 package com.tactfactory.mda.test.orm;
 
-import java.io.File;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.test.CommonTest;
-import com.tactfactory.mda.utils.FileUtils;
 
 public class OrmUpdateEntitiesTest extends CommonTest {
 	/**

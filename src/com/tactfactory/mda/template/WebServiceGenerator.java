@@ -17,7 +17,6 @@ import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
-import com.tactfactory.mda.orm.RelationMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.SystemCommand;
 
@@ -91,7 +90,7 @@ public class WebServiceGenerator {
 		ConsoleUtils.displayDebug(console.getStandardOutputFromCommand().toString());
 	}
 	
-	private void generateSymfonyEntities() {
+	public void generateSymfonyEntities() {
 
 		//php app/console generate:doctrine:entity --non-interaction --entity=AcmeBlogBundle:Post --fields="title:string(100) body:text" --format=xml
 		List<String> command = new ArrayList<String>();

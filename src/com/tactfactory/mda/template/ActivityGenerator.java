@@ -13,7 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -29,8 +28,6 @@ import org.jdom2.output.XMLOutputter;
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
-import com.tactfactory.mda.orm.FieldMetadata;
-import com.tactfactory.mda.orm.SqliteAdapter;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
@@ -77,7 +74,6 @@ public class ActivityGenerator {
 	public void generateAll() {
 		ConsoleUtils.display(">> Generate CRUD view...");
 
-		int i = 0;
 		for(Map<String, Object> entity : this.modelEntities) {
 			//this.meta = this.metas.get(i);
 			//this.localNameSpace = this.adapter.getNameSpaceEntity(this.meta, this.adapter.getController());;
@@ -91,8 +87,6 @@ public class ActivityGenerator {
 			this.datamodel.put(TagConstant.RELATIONS, 			entity.get(TagConstant.RELATIONS));
 			
 			this.generateAllAction((String)entity.get(TagConstant.NAME));
-			
-			i++;
 		}
 	}
 	
@@ -329,7 +323,7 @@ public class ActivityGenerator {
 	 * @throws IOException 
 	 * @throws TemplateException 
 	 */
-	private void makeManifest(Configuration cfg) throws IOException, TemplateException {
+	public void makeManifest(Configuration cfg) throws IOException, TemplateException {
 		File file = FileUtils.makeFile(this.adapter.getManifestPathFile());
 
 		// Debug Log

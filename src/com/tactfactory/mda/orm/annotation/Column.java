@@ -214,7 +214,7 @@ public @interface Column {
 	 * 
 	 * @return (optional, defaults to type mapping) The database type to use for the column.
 	 * 
-	 * @see com.tactfactory.mda.orm.SqliteAdapter for mapping list
+	 * @see com.tactfactory.mda.plateforme.SqliteAdapter for mapping list
 	 */
 	String columnDefinition() default "";
 	

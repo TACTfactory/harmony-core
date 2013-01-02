@@ -33,7 +33,7 @@ public class Post implements Serializable {
     protected String content;
 	
 	@Column
-	protected ArrayList<String> categories;
+	protected String categories;
 	
 	@ManyToOne
 	protected User owner;
