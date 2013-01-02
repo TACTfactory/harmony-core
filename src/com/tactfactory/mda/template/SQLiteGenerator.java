@@ -17,6 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
@@ -98,8 +99,8 @@ public class SQLiteGenerator {
 			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
 			
 			this.makeSourceData(cfg, 
-					"TemplateSqliteOpenHelper.java", 
-					"%sSqliteOpenHelper.java");
+					"TemplateSQLiteOpenHelper.java", 
+					"%sSQLiteOpenHelper.java");
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -124,7 +125,7 @@ public class SQLiteGenerator {
 				String.format("%s%s/%s",
 						this.adapter.getSourcePath(),
 						PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
-						String.format(filename, Harmony.projectName)));
+						String.format(filename, CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, Harmony.projectName))));
 		
 		// Debug Log
 		ConsoleUtils.displayDebug("Generate Source : " + file.getPath()); 

@@ -19,7 +19,6 @@ import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.orm.ClassMetadata;
-import com.tactfactory.mda.orm.FieldMetadata;
 import com.tactfactory.mda.orm.annotation.Column.Type;
 import com.tactfactory.mda.test.CommonTest;
 
@@ -52,7 +51,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		this.makeEntities();
 		this.harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
-		OrmCommand command = (OrmCommand) Harmony.instance.bootstrap.get(OrmCommand.class);
+		OrmCommand command = (OrmCommand) Harmony.instance.getCommand(OrmCommand.class);
 		
 		
 		ArrayList<ClassMetadata> metas = command.getMetasFromAll();
@@ -119,7 +118,6 @@ public class OrmInitEntitiesTest extends CommonTest {
 	public void hasPostImport() {
 		this.hasImport(postMeta, "Serializable");
 		this.hasImport(postMeta, "ArrayList");
-		this.hasImport(postMeta, "Date");
 		this.hasImport(postMeta, "DateTime");
 		this.hasImport(postMeta, "annotation");
 	}
@@ -158,7 +156,6 @@ public class OrmInitEntitiesTest extends CommonTest {
 	@Test
 	public void hasCommentImport() {
 		this.hasImport(commentMeta, "Serializable");
-		this.hasImport(commentMeta, "Date");
 		this.hasImport(commentMeta, "DateTime");
 		this.hasImport(commentMeta, "annotation");
 	}
@@ -193,7 +190,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	@Test
 	public void hasUserImport() {
 		this.hasImport(userMeta, "Serializable");
-		this.hasImport(userMeta, "Date");
+		this.hasImport(userMeta, "DateTime");
 		this.hasImport(userMeta, "annotation");
 		this.hasImport(userMeta, "Type");
 	}
@@ -248,24 +245,24 @@ public class OrmInitEntitiesTest extends CommonTest {
 	//// REPOSITORY POST ////
 	@Test
 	public void hasPostRepository() {
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/PostAdapter.java");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/PostAdapterBase.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/PostSQLiteAdapter.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/PostSQLiteAdapterBase.java");
 	}
 	
 	
 	//// REPOSITORY COMMENT ////
 	@Test
 	public void hasCommentRepository() {
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/CommentAdapter.java");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/CommentAdapterBase.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/CommentSQLiteAdapter.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/CommentSQLiteAdapterBase.java");
 	}
 	
 	
 	//// REPOSITORY USER ////
 	@Test
 	public void hasUserRepository() {
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/UserAdapter.java");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/UserAdapterBase.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/UserSQLiteAdapter.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/UserSQLiteAdapterBase.java");
 	}
 	
 	

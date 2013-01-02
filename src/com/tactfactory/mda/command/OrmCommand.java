@@ -20,17 +20,10 @@ import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassCompletor;
 import com.tactfactory.mda.orm.ClassMetadata;
-import com.tactfactory.mda.orm.JavaAdapter;
 import com.tactfactory.mda.parser.JavaModelParser;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.plateforme.BaseAdapter;
-import com.tactfactory.mda.template.ActivityGenerator;
-import com.tactfactory.mda.template.EntityGenerator;
-import com.tactfactory.mda.template.SQLiteAdapterGenerator;
-import com.tactfactory.mda.template.ProjectGenerator;
-import com.tactfactory.mda.template.ProviderGenerator;
-import com.tactfactory.mda.template.SQLiteGenerator;
-import com.tactfactory.mda.template.TestGenerator;
+import com.tactfactory.mda.template.*;
 
 /**
  * Project Custom Files Code Generator
@@ -156,9 +149,8 @@ public class OrmCommand extends BaseCommand {
 			if(f.exists() && !f.isDirectory()) {
 				this.javaModelParser.loadEntity(entityPath);
 				if(this.javaModelParser.getEntities().size()!=0) {
-					JavaAdapter javaAdapter = new JavaAdapter();
-					javaAdapter.parse(this.javaModelParser.getEntities().get(0));
-					ret = javaAdapter.getMetas();
+					this.javaModelParser.parse(this.javaModelParser.getEntities().get(0));
+					ret = this.javaModelParser.getMetas();
 				}else{
 					ConsoleUtils.displayWarning("Given entity filename is not an entity!");
 				}
@@ -192,13 +184,12 @@ public class OrmCommand extends BaseCommand {
 		if(this.javaModelParser.getEntities().size()!=0)
 		{
 			// Convert CompilationUnits entities to ClassMetaData
-			JavaAdapter javaAdapter = new JavaAdapter();
 			for (CompilationUnit mclass : this.javaModelParser.getEntities()) {
-				javaAdapter.parse(mclass);
+				this.javaModelParser.parse(mclass);
 			}
 	
 			// Generate views from MetaData
-			ret = javaAdapter.getMetas();			
+			ret = this.javaModelParser.getMetas();			
 		} else {
 			ConsoleUtils.displayWarning("No entities found in entity package!");
 		}

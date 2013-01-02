@@ -47,8 +47,9 @@ public class TestGenerator {
 		for (ClassMetadata meta : this.metas) {
 			this.meta = meta;
 			this.datamodel = new HashMap<String, Object>();
-			this.datamodel.put(TagConstant.NAME,	meta.name );
+			this.datamodel.put(TagConstant.NAME,			meta.name );
 			this.datamodel.put(TagConstant.LOCAL_NAMESPACE,	this.adapter.getNameSpace(this.meta, this.adapter.getTest()) );
+			this.datamodel.put(TagConstant.SPACE, 			meta.space);
 			
 			this.entities.put((String) this.datamodel.get(TagConstant.NAME), this.datamodel);
 		}
@@ -58,6 +59,8 @@ public class TestGenerator {
 	public void generateAll() {
 		ConsoleUtils.display(">> Generate Repository test...");
 		
+		this.initTestAndroid();
+		
 		for(Object modelEntity : this.entities.values()) {
 			Map<String, Object> entity = (Map<String, Object>) modelEntity;
 			this.localNameSpace = (String) entity.get(TagConstant.LOCAL_NAMESPACE);
@@ -66,6 +69,7 @@ public class TestGenerator {
 			this.datamodel = new HashMap<String, Object>();
 			this.datamodel.put(TagConstant.NAME, 				entity.get(TagConstant.NAME));
 			this.datamodel.put(TagConstant.LOCAL_NAMESPACE, 	this.localNameSpace);
+			this.datamodel.put("namespace", 					entity.get(TagConstant.SPACE));
 			
 			this.generate();
 		}
@@ -82,10 +86,16 @@ public class TestGenerator {
 			Configuration cfg = new Configuration();
 			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
 			
-			this.makeSourceControler(cfg, 
-					"TemplateTestDB.java", 
-					"%sTestDB.java");
+			this.makeSourceTest(cfg, 
+					"TemplateTestDBBase.java", 
+					"%sTestDBBase.java",
+					true);
 			
+			this.makeSourceTest(cfg, 
+					"TemplateTestDB.java", 
+					"%sTestDB.java",
+					false);
+
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -102,14 +112,15 @@ public class TestGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	private void makeSourceControler(Configuration cfg, String template, String filename) 
+	private void makeSourceTest(Configuration cfg, String template, String filename, boolean override) 
 			throws IOException, TemplateException {
 		String filepath = String.format("%s%s/%s",
 						this.adapter.getTestPath(),
 						PackageUtils.extractPath(String.format(
 								"%s/%s", this.adapter.getSource(), this.localNameSpace)).toLowerCase(),
 						String.format(filename, this.datamodel.get(TagConstant.NAME)));
-		if(!FileUtils.exists(filepath)){
+		
+		if(!(!override && FileUtils.exists(filepath))){
 			File file = FileUtils.makeFile(filepath);
 			
 			// Debug Log
@@ -126,5 +137,28 @@ public class TestGenerator {
 			output.flush();
 			output.close();
 		}
+	}
+	
+	/**
+	 * Initialize Test Android Project folders and files
+	 * @return success of Test Android project initialization
+	 */
+	public boolean initTestAndroid() {
+		ConsoleUtils.display("> Init Test Project Google Android");
+
+		boolean result = false;
+
+		try {
+			if(new TestProjectGenerator(this.adapter).makeProject()){
+				ConsoleUtils.displayDebug("Init Test Android Project Success!");
+				
+				result = true;
+			} else {
+				ConsoleUtils.displayError("Init Test Android Project Fail!");
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 }

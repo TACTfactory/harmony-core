@@ -20,8 +20,8 @@ import java.util.Map;
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
-import com.tactfactory.mda.orm.SqliteAdapter;
 import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.plateforme.SqliteAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
@@ -172,12 +172,12 @@ public class SQLiteAdapterGenerator {
 			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
 			
 			this.makeSourceControler(cfg, 
-					"TemplateAdapterBase.java", 
-					"%sAdapterBase.java", true);
+					"TemplateSQLiteAdapterBase.java", 
+					"%sSQLiteAdapterBase.java", true);
 			
 			this.makeSourceControler(cfg, 
-					"TemplateAdapter.java", 
-					"%sAdapter.java", false);
+					"TemplateSQLiteAdapter.java", 
+					"%sSQLiteAdapter.java", false);
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
