@@ -12,10 +12,10 @@ import android.util.Log;
  * This class makes it easy for ContentProvider implementations to defer opening and upgrading the database until first use, to avoid blocking application startup with long-running database upgrades.
  * @see android.database.sqlite.SQLiteOpenHelper
  */
-public class ${project_name}SqliteOpenHelper extends SQLiteOpenHelper {
+public class ${project_name?cap_first}SQLiteOpenHelper extends SQLiteOpenHelper {
 	protected String TAG = "DatabaseHelper";
 	
-	public ${project_name}SqliteOpenHelper(Context context, String name,
+	public ${project_name?cap_first}SQLiteOpenHelper(Context context, String name,
 			CursorFactory factory, int version) {
 		super(context, name, factory, version);
 	}
@@ -30,10 +30,10 @@ public class ${project_name}SqliteOpenHelper extends SQLiteOpenHelper {
 		
 		/// Create Schema
 	<#list entities as entity>
-		db.execSQL( ${entity.name}Adapter.getSchema() );
+		db.execSQL( ${entity.name}SQLiteAdapter.getSchema() );
 		<#list entity["relations"] as relation>
 			<#if relation.type=="ManyToMany">
-		db.execSQL( ${entity.name}Adapter.get${relation.name?cap_first}RelationSchema() );
+		db.execSQL( ${entity.name}SQLiteAdapter.get${relation.name?cap_first}RelationSchema() );
 			</#if>
 		</#list>
 	</#list>
@@ -61,10 +61,10 @@ public class ${project_name}SqliteOpenHelper extends SQLiteOpenHelper {
 					   " to " + newVersion + ", which will destroy all old data");
 		
 		<#list entities as entity>
-			db.execSQL("DROP TABLE IF EXISTS "+ ${entity.name}Adapter.TABLE_NAME);
+			db.execSQL("DROP TABLE IF EXISTS "+ ${entity.name}SQLiteAdapter.TABLE_NAME);
 			<#list entity['relations'] as relation>
 				<#if relation.type=="ManyToMany">
-			db.execSQL("DROP TABLE IF EXISTS "+${entity.name}Adapter.RELATION_${relation.name?upper_case}_TABLE_NAME );
+			db.execSQL("DROP TABLE IF EXISTS "+${entity.name}SQLiteAdapter.RELATION_${relation.name?upper_case}_TABLE_NAME );
 				</#if>
 			</#list>
 	    </#list>

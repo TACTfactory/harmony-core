@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.Harmony;
-import com.tactfactory.mda.orm.annotation.Column.Type;
 
 /** The class ClassCompletor will complete all ClassMetadatas 
  * with the information it needs from the others ClassMetadatas*/
@@ -120,8 +118,8 @@ public class ClassCompletor {
 					
 					this.newMetas.put(classMeta.name, classMeta);
 				}else if(this.newMetas.containsKey(rel.joinTable)){ // Complete it !
-					ClassMetadata jtable = this.newMetas.get(rel.joinTable);
-					FieldMetadata relation = jtable.relations.get(rel.entity_ref.toLowerCase()+"_id");
+					//ClassMetadata jtable = this.newMetas.get(rel.joinTable);
+					//FieldMetadata relation = jtable.relations.get(rel.entity_ref.toLowerCase()+"_id");
 					//relation.relation.inversedBy = fm.name;
 				}
 			}

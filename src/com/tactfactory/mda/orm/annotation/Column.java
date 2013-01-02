@@ -57,7 +57,8 @@ public @interface Column {
 		
 		private String type;
 		private int length = Integer.MAX_VALUE;
-		private boolean nullable = false;	
+		private boolean nullable = false;
+		private boolean unique = false;
 		//columnDefinition is define by DatabaseAdapter
 		private int precision = Integer.MAX_VALUE;
 		private int scale = Integer.MAX_VALUE;
@@ -73,6 +74,9 @@ public @interface Column {
 			
 			if (scale != null)
 				this.scale = scale;
+			
+			if (unique != null)
+				this.unique = unique;
 		}
 		
 		public String getValue(){
@@ -85,6 +89,10 @@ public @interface Column {
 		
 		public boolean isNullable() {
 			return this.nullable;
+		}
+		
+		public boolean isUnique() {
+			return this.unique;
 		}
 		
 		public int getPrecision() {
@@ -206,7 +214,7 @@ public @interface Column {
 	 * 
 	 * @return (optional, defaults to type mapping) The database type to use for the column.
 	 * 
-	 * @see com.tactfactory.mda.orm.SqliteAdapter for mapping list
+	 * @see com.tactfactory.mda.plateforme.SqliteAdapter for mapping list
 	 */
 	String columnDefinition() default "";
 	

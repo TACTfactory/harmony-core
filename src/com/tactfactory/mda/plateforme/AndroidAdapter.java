@@ -10,7 +10,6 @@ package com.tactfactory.mda.plateforme;
 
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
-import com.tactfactory.mda.orm.annotation.Column.Type;
 
 /** Google Android Adapter of project structure */
 public final class AndroidAdapter extends BaseAdapter {

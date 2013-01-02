@@ -26,11 +26,11 @@ public class CoreTest extends CommonTest {
 	
 	@Test
 	public void loadPlugins() {
-		Assert.assertTrue(!this.harmony.bootstrap.isEmpty());
+		Assert.assertTrue(!this.harmony.getCommands().isEmpty());
 		
-		Assert.assertNotNull(this.harmony.bootstrap.get(GeneralCommand.class));
-		Assert.assertNotNull(this.harmony.bootstrap.get(ProjectCommand.class));
-		Assert.assertNotNull(this.harmony.bootstrap.get(OrmCommand.class));
+		Assert.assertNotNull(this.harmony.getCommand(GeneralCommand.class));
+		Assert.assertNotNull(this.harmony.getCommand(ProjectCommand.class));
+		Assert.assertNotNull(this.harmony.getCommand(OrmCommand.class));
 	}
 	
 	@Test

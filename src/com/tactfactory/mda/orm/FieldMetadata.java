@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.plateforme.SqliteAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
 /** Entity field metadata */
