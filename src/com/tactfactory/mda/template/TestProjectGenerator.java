@@ -7,9 +7,10 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.HashMap;
+import java.util.ArrayList;
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
+import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 
@@ -17,19 +18,13 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class TestProjectGenerator {	
-	protected BaseAdapter adapter;
-
+public class TestProjectGenerator extends GeneratorBase {
 	protected boolean isWritable = true;
-	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 
 	public TestProjectGenerator(BaseAdapter adapter) throws Exception {
-		if (adapter == null)
-			throw new Exception("No adapter defined.");
+		super(new ArrayList<ClassMetadata>(), adapter);
 
-		this.adapter	= adapter;
-
-		String projectNameSpace = ""+Harmony.projectNameSpace;
+		String projectNameSpace = "" + Harmony.projectNameSpace;
 		projectNameSpace = projectNameSpace.replaceAll("/","\\.");
 
 		// Make class

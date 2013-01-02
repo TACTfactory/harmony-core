@@ -29,21 +29,15 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class EntityGenerator {
-	protected List<ClassMetadata> metas;	// Meta-models
-	protected BaseAdapter adapter;			// Platform adapter
-	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
-	
-	// Local variable
+public class EntityGenerator extends GeneratorBase {
 	protected String getterTemplate = "itemGetter.java";
 	protected String setterTemplate = "itemSetter.java";
 	
 	protected String entityFolder;
 	protected Configuration cfg = new Configuration(); // Initialization of template engine
 
-	public EntityGenerator(List<ClassMetadata> metas, BaseAdapter adapter){
-		this.metas = metas;
-		this.adapter = adapter;
+	public EntityGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception{
+		super(metas, adapter);
 
 		this.entityFolder = this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.", "/") + "/entity/";
 

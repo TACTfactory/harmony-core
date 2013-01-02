@@ -13,13 +13,10 @@ import java.util.List;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 
-public class ProviderGenerator {
-	private List<ClassMetadata> metas;
-	private BaseAdapter adapter;
+public class ProviderGenerator extends GeneratorBase {
 	
-	public ProviderGenerator(List<ClassMetadata> metas, BaseAdapter adapter) {
-		this.metas = metas;
-		this.adapter = adapter;
+	public ProviderGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
+		super(metas, adapter);
 	}
 	
 	public void generateProvider() {
