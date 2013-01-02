@@ -88,8 +88,10 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 			<#list fields as field>
 				<#if !field.internal && !field.hidden>
 					<#if (!field.relation??)>
-						<#if (field.type="Date")>
+						<#if (field.type=="Date")>
 			this.${field.name}.setText(String.valueOf(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(item.get${field.name?cap_first}())) );
+						<#elseif field.type=="boolean">
+			this.${field.name}.setText(String.valueOf(item.is${field.name?cap_first}()) );			
 						<#else>
 			this.${field.name}.setText(String.valueOf(item.get${field.name?cap_first}()) );
 						</#if>

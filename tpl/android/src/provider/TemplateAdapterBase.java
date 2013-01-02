@@ -311,11 +311,11 @@ public abstract class ${name}AdapterBase {
 	 * @param item The ${name} entity to persist 
 	 * @return Id of the ${name} entity
 	 */
-	public long insert(${name} item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
+	public long insert(${name} item<#list relations as relation><#if relation.relation.type=="ManyToOne">, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
-		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, ${relation.relation.targetEntity?lower_case}_id</#if></#list>);
+		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item<#list relations as relation><#if relation.relation.type=="ManyToOne">, ${relation.relation.targetEntity?lower_case}_id</#if></#list>);
 	<#list ids as id>
 		values.remove(${alias(id.name)});
 	</#list>
@@ -349,12 +349,12 @@ public abstract class ${name}AdapterBase {
 	 * @param item The ${name} entity to persist
 	 * @return 
 	 */
-	public int update(${name} item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
+	public int update(${name} item<#list relations as relation><#if relation.relation.type=="ManyToOne">, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
 	<#if (ids?size>0)>
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
 		
-		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, ${relation.relation.targetEntity?lower_case}_id</#if></#list>);	
+		ContentValues values = ${name}AdapterBase.${name?lower_case}ToContentValues(item<#list relations as relation><#if relation.relation.type=="ManyToOne">, ${relation.relation.targetEntity?lower_case}_id</#if></#list>);	
 		String whereClause = <#list ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, </#if></#list>};
 		
