@@ -30,12 +30,14 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class SQLiteAdapterGenerator {
-	protected List<ClassMetadata> metas;
+	protected List<ClassMetadata> metas;	// Meta-models
+	protected BaseAdapter adapter;			// Platform adapter
+	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
+	
+	// Local variable
 	protected Map<String, Object> entities;
-	protected BaseAdapter adapter;
 	protected String localNameSpace;
 	protected boolean isWritable = true;
-	protected HashMap<String, Object> datamodel;
 
 	public SQLiteAdapterGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
 		if (metas == null && adapter == null)
@@ -44,16 +46,17 @@ public class SQLiteAdapterGenerator {
 		this.metas		= metas;
 		this.adapter	= adapter;
 		this.entities = new HashMap<String, Object>();
-			for(ClassMetadata meta : metas){
-				if(!meta.fields.isEmpty()){
-					Map<String, Object> modelClass = meta.toMap(this.adapter);
-					modelClass.put(TagConstant.LOCAL_NAMESPACE, this.adapter.getNameSpace(meta, this.adapter.getData()));
-					
-					this.entities.put((String) modelClass.get(TagConstant.NAME), modelClass);
-					this.makeRelationModel();
-				}
+		
+		for(ClassMetadata meta : metas){
+			if(!meta.fields.isEmpty()){
+				Map<String, Object> modelClass = meta.toMap(this.adapter);
+				modelClass.put(TagConstant.LOCAL_NAMESPACE, this.adapter.getNameSpace(meta, this.adapter.getData()));
+				
+				this.entities.put((String) modelClass.get(TagConstant.NAME), modelClass);
+				this.makeRelationModel();
 			}
 		}
+	}
 
 	/**
 	 * 

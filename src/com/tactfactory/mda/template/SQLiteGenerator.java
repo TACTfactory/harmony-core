@@ -31,9 +31,11 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class SQLiteGenerator {
-	protected List<ClassMetadata> metas;
-	protected BaseAdapter adapter;
+	protected List<ClassMetadata> metas;	// Meta-models
+	protected BaseAdapter adapter;			// Platform adapter
 	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
+	
+	// Local variable
 	protected String localNameSpace;
 
 	public SQLiteGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {

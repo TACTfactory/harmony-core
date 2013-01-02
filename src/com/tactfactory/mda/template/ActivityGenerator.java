@@ -37,13 +37,14 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class ActivityGenerator {	
-	protected List<ClassMetadata> metas;
-	//protected ClassMetadata meta;
+	protected List<ClassMetadata> metas;	// Meta-models
+	protected BaseAdapter adapter;			// Platform adapter
+	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
+	
+	// Local variable
 	protected List<Map<String, Object>> modelEntities;
-	protected BaseAdapter adapter;
 	protected String localNameSpace;
 	protected boolean isWritable = true;
-	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 
 	public ActivityGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
 		if (metas == null && adapter == null)

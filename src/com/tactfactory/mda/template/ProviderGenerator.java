@@ -8,5 +8,21 @@
  */
 package com.tactfactory.mda.template;
 
+import java.util.List;
+
+import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.plateforme.BaseAdapter;
+
 public class ProviderGenerator {
+	private List<ClassMetadata> metas;
+	private BaseAdapter adapter;
+	
+	public ProviderGenerator(List<ClassMetadata> metas, BaseAdapter adapter) {
+		this.metas = metas;
+		this.adapter = adapter;
+	}
+	
+	public void generateProvider() {
+		
+	}
 }
