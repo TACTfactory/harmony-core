@@ -13,7 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,22 +35,13 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class ActivityGenerator {	
-	protected List<ClassMetadata> metas;	// Meta-models
-	protected BaseAdapter adapter;			// Platform adapter
-	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
-	
-	// Local variable
+public class ActivityGenerator extends BaseGenerator {
 	protected List<Map<String, Object>> modelEntities;
 	protected String localNameSpace;
 	protected boolean isWritable = true;
 
 	public ActivityGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
-		if (metas == null && adapter == null)
-			throw new Exception("No meta or adapter define.");
-
-		this.metas 		= metas;
-		this.adapter	= adapter;
+		super(metas, adapter);
 		
 		// Make entities
 		this.modelEntities = new ArrayList<Map<String, Object>>();
@@ -96,8 +86,8 @@ public class ActivityGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	public void generateListAction(Configuration cfg, String entityName) throws IOException,
-	TemplateException {
+	public void generateListAction(Configuration cfg, String entityName) 
+			throws IOException, TemplateException {
 		ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sListActivity.java");
 		javas.add("%sListFragment.java");
@@ -130,8 +120,8 @@ public class ActivityGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	public void generateShowAction(Configuration cfg, String entityName) throws IOException,
-	TemplateException {
+	public void generateShowAction(Configuration cfg, String entityName) 
+			throws IOException, TemplateException {
 
 		ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sShowActivity.java");
@@ -162,8 +152,8 @@ public class ActivityGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	public void generateEditAction(Configuration cfg, String entityName) throws IOException,
-	TemplateException {
+	public void generateEditAction(Configuration cfg, String entityName) 
+			throws IOException, TemplateException {
 		
 		ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sEditActivity.java");
@@ -194,8 +184,8 @@ public class ActivityGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	public void generateCreateAction(Configuration cfg, String entityName) throws IOException,
-	TemplateException {
+	public void generateCreateAction(Configuration cfg, String entityName) 
+			throws IOException, TemplateException {
 		
 		ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sCreateActivity.java");
@@ -294,8 +284,8 @@ public class ActivityGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	private void makeResourceLayout(Configuration cfg, String template, String filename) throws IOException,
-	TemplateException {
+	private void makeResourceLayout(Configuration cfg, String template, String filename) 
+			throws IOException, TemplateException {
 		String filepath = String.format("%s/%s", 
 									this.adapter.getRessourceLayoutPath(),
 									filename);
@@ -324,7 +314,8 @@ public class ActivityGenerator {
 	 * @throws IOException 
 	 * @throws TemplateException 
 	 */
-	public void makeManifest(Configuration cfg) throws IOException, TemplateException {
+	public void makeManifest(Configuration cfg) 
+			throws IOException, TemplateException {
 		File file = FileUtils.makeFile(this.adapter.getManifestPathFile());
 
 		// Debug Log

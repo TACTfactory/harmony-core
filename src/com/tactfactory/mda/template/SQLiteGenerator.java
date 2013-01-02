@@ -30,20 +30,12 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class SQLiteGenerator {
-	protected List<ClassMetadata> metas;	// Meta-models
-	protected BaseAdapter adapter;			// Platform adapter
-	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
-	
-	// Local variable
+public class SQLiteGenerator extends BaseGenerator {
 	protected String localNameSpace;
 
 	public SQLiteGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
-		if (metas == null && adapter == null)
-			throw new Exception("No meta or adapter define.");
+		super(metas, adapter);
 		
-		this.metas 		= metas;
-		this.adapter	= adapter;
 		this.localNameSpace = this.adapter.getNameSpace(this.metas.get(0), this.adapter.getData());
 
 		// Make entities

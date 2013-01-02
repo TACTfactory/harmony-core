@@ -29,22 +29,14 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class SQLiteAdapterGenerator {
-	protected List<ClassMetadata> metas;	// Meta-models
-	protected BaseAdapter adapter;			// Platform adapter
-	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
-	
-	// Local variable
+public class SQLiteAdapterGenerator extends BaseGenerator {	
 	protected Map<String, Object> entities;
 	protected String localNameSpace;
 	protected boolean isWritable = true;
 
 	public SQLiteAdapterGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
-		if (metas == null && adapter == null)
-			throw new Exception("No meta or adapter define.");
+		super(metas, adapter);
 		
-		this.metas		= metas;
-		this.adapter	= adapter;
 		this.entities = new HashMap<String, Object>();
 		
 		for(ClassMetadata meta : metas){

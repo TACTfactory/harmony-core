@@ -1,10 +1,19 @@
 package com.tactfactory.mda.template;
 
+import java.util.List;
+
+import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 
-public class WebServiceClientAdapterGenerator {
-	protected BaseAdapter adapter;
+public class WebServiceClientAdapterGenerator extends BaseGenerator {
 	
+	public WebServiceClientAdapterGenerator(List<ClassMetadata> metas,
+			BaseAdapter adapter) throws Exception {
+		super(metas, adapter);
+		
+		
+	}
+
 	/**
 	 * Update XML Strings
 	 * 
