@@ -99,7 +99,6 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("fragment_%s_list.xml");		
 		xmls.add("row_%s.xml");
 		
-
 		for(String java : javas){
 			this.makeSourceControler(cfg, 
 					String.format(java, "Template"),

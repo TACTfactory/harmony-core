@@ -108,6 +108,7 @@ public class OrmCommand extends BaseCommand {
 	protected void makeLayoutDatabase(ArrayList<ClassMetadata> metas){
 		try {
 			new EntityGenerator(metas, this.adapter).generateAll();
+			new ApplicationGenerator(metas, this.adapter).generateApplication();
 			new SQLiteAdapterGenerator(metas, this.adapter).generateAll();
 			new SQLiteGenerator(metas, this.adapter).generateDatabase();
 			new ProviderGenerator(metas, this.adapter).generateProvider();
