@@ -1,7 +1,8 @@
 <#import "methods.tpl" as m>
 package ${localnamespace};
 
-import java.text.SimpleDateFormat;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 
 import ${namespace}.R;
 

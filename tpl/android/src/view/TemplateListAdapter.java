@@ -1,7 +1,9 @@
 <#import "methods.tpl" as m>
 package ${localnamespace};
 
-import java.text.SimpleDateFormat;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+
 import java.util.List;
 
 import android.content.Context;
@@ -99,9 +101,9 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 					<#if (!field.relation??)>
 						<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
 			if(model.get${field.name?cap_first}()!=null)
-				${m.setLoader(field)}
+				${m.setAdapterLoader(field)}
 						<#else>
-			${m.setLoader(field)}
+			${m.setAdapterLoader(field)}
 						</#if>
 					<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 			this.${field.name}View.setText(String.valueOf(model.get${field.name?cap_first}().getId()) );

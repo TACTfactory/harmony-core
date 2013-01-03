@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 
 import ${namespace}.data.${name}SQLiteAdapter;
 import ${namespace}.entity.${name};

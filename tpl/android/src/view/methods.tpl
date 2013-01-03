@@ -9,11 +9,35 @@
 		<#if type=="string" || type=="email" || type=="login" || type=="password" || type=="city" || type=="text" || type=="phone" || type=="country">
 			<#assign ret=ret+getter>
 		<#elseif type=="datetime">
-			<#assign ret=ret+"new SimpleDateFormat(\"dd/MM/yyyy HH:mm:ss\").format("+getter+")">
+			<#assign ret=ret+getter+".toString(DateTimeFormat.shortDateTime())">
 		<#elseif type=="date">
-			<#assign ret=ret+"new SimpleDateFormat(\"dd/MM/yyyy\").format("+getter+")">
+			<#assign ret=ret+getter+".toString(DateTimeFormat.shortDate())">
 		<#elseif type=="time">
-			<#assign ret=ret+"new SimpleDateFormat(\"HH:mm:ss\").format("+getter+")">
+			<#assign ret=ret+getter+".toString(DateTimeFormat.shortTime())">
+		<#elseif type == "int" || type=="long" || type=="ean" || type=="zipcode" || type=="float">
+			<#assign ret=ret+"String.valueOf("+getter+")">
+		</#if>
+		<#assign ret=ret+");">
+	</#if>
+	<#return ret>
+</#function>
+
+<#function setAdapterLoader field>
+	<#assign type=field.type?lower_case>
+	<#assign ret="this."+field.name+"View">
+	<#if type=="boolean">
+		<#assign ret=ret+".setChecked(model.is"+field.name?cap_first+"());">
+	<#else>
+		<#assign getter="model.get"+field.name?cap_first+"()">
+		<#assign ret=ret+".setText(">
+		<#if type=="string" || type=="email" || type=="login" || type=="password" || type=="city" || type=="text" || type=="phone" || type=="country">
+			<#assign ret=ret+getter>
+		<#elseif type=="datetime">
+			<#assign ret=ret+getter+".toString(DateTimeFormat.shortDateTime())">
+		<#elseif type=="date">
+			<#assign ret=ret+getter+".toString(DateTimeFormat.shortDate())">
+		<#elseif type=="time">
+			<#assign ret=ret+getter+".toString(DateTimeFormat.shortTime())">
 		<#elseif type == "int" || type=="long" || type=="ean" || type=="zipcode" || type=="float">
 			<#assign ret=ret+"String.valueOf("+getter+")">
 		</#if>
