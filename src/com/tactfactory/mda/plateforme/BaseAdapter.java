@@ -30,11 +30,13 @@ public abstract class BaseAdapter {
 	protected String data		= "data";
 	protected String provider	= "provider";
 	protected String common		= "common";
+	protected String service	= "service";
 	
 	// File
 	protected String manifest;
 	protected String home;
 	protected String strings;
+	protected String configs;
 	
 	// Abstract Methods
 	/** Generate platform Namespace

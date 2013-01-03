@@ -22,7 +22,7 @@ public class Comment extends Object {
     @GeneratedValue(strategy="IDENTITY")
     protected int id;
 
-	@Column(length=2000, type=Type.STRING)
+	@Column(length=2000, type=Type.TEXT)
     protected String content;
 	
 	@ManyToOne

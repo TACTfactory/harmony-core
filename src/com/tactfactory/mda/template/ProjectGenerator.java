@@ -23,21 +23,13 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class ProjectGenerator {	
-	protected List<ClassMetadata> metas;
-	//protected ClassMetadata meta;
-	protected BaseAdapter adapter;
-
+public class ProjectGenerator extends BaseGenerator {
 	protected boolean isWritable = true;
-	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 
 	public ProjectGenerator(BaseAdapter adapter) throws Exception {
-		if (adapter == null)
-			throw new Exception("No adapter defined.");
+		super(new ArrayList<ClassMetadata>(), adapter);
 
-		this.adapter	= adapter;
-
-		String projectNameSpace = ""+Harmony.projectNameSpace;
+		String projectNameSpace = "" + Harmony.projectNameSpace;
 		projectNameSpace = projectNameSpace.replaceAll("/","\\.");
 
 		// Make class

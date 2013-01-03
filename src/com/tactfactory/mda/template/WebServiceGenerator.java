@@ -20,19 +20,13 @@ import com.tactfactory.mda.orm.FieldMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.SystemCommand;
 
-public class WebServiceGenerator {
-	protected List<ClassMetadata> metas;
-	protected BaseAdapter adapter;
-	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
+public class WebServiceGenerator extends BaseGenerator {
 	protected String localNameSpace;
 	private SystemCommand console;
 
 	public WebServiceGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
-		if (metas == null && adapter == null)
-			throw new Exception("No meta or adapter define.");
+		super(metas, adapter);
 		
-		this.metas 		= metas;
-		this.adapter	= adapter;
 		this.localNameSpace = this.adapter.getNameSpace(this.metas.get(0), this.adapter.getData());
 
 		// Make entities

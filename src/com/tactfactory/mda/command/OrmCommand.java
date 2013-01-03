@@ -10,19 +10,15 @@ package com.tactfactory.mda.command;
 
 import japa.parser.ast.CompilationUnit;
 
-import java.io.File;
 import java.util.ArrayList;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;
 import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.Harmony;
-import com.tactfactory.mda.orm.ClassCompletor;
-import com.tactfactory.mda.orm.ClassMetadata;
-import com.tactfactory.mda.parser.JavaModelParser;
-import com.tactfactory.mda.plateforme.AndroidAdapter;
-import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.orm.*;
+import com.tactfactory.mda.parser.*;
+import com.tactfactory.mda.plateforme.*;
 import com.tactfactory.mda.template.*;
 
 /**
@@ -71,12 +67,12 @@ public class OrmCommand extends BaseCommand {
 	 * Generate java code files from first parsed Entity
 	 */
 	protected void generateEntity() {
-					
 		/*ArrayList<ClassMetadata> metas = this.getMetasFromArg();
 		
 		if(metas!=null){
-			this.generateActivitiesForEntities(metas, false);
-			this.generateDBForEntities(metas);
+			//this.generateActivitiesForEntities(metas, false);
+			this.makeLayoutDatabase(metas);
+			this.makeLayoutTestDatabase(metas);
 		}*/
 	
 	}
@@ -88,9 +84,8 @@ public class OrmCommand extends BaseCommand {
 
 		ArrayList<ClassMetadata> metas = this.getMetasFromAll();
 		if(metas!=null){
-			new EntityGenerator(metas, this.adapter).generateAll();
-			this.generateDBForEntities(metas);
-			this.generateTestForEntities(metas);
+			this.makeLayoutDatabase(metas);
+			this.makeLayoutTestDatabase(metas);
 		}
 
 	}
@@ -102,7 +97,7 @@ public class OrmCommand extends BaseCommand {
 
 		ArrayList<ClassMetadata> metas = this.getMetasFromAll();
 		if(metas!=null){
-			this.generateActivitiesForEntities(metas, true);
+			this.makeLayoutUi(metas, true);
 		}
 	}
 	
@@ -110,11 +105,13 @@ public class OrmCommand extends BaseCommand {
 	 * Generate the Persistence part for the given classes
 	 * @param metas The classes Metadata
 	 */
-	protected void generateDBForEntities(ArrayList<ClassMetadata> metas){
+	protected void makeLayoutDatabase(ArrayList<ClassMetadata> metas){
 		try {
+			new EntityGenerator(metas, this.adapter).generateAll();
+			new ApplicationGenerator(metas, this.adapter).generateApplication();
 			new SQLiteAdapterGenerator(metas, this.adapter).generateAll();
 			new SQLiteGenerator(metas, this.adapter).generateDatabase();
-			new ProviderGenerator();
+			new ProviderGenerator(metas, this.adapter).generateProvider();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -125,7 +122,7 @@ public class OrmCommand extends BaseCommand {
 	 * Generate Test DB for Entities
 	 * @param metas The classes Metadata
 	 */
-	protected void generateTestForEntities(ArrayList<ClassMetadata> metas){
+	protected void makeLayoutTestDatabase(ArrayList<ClassMetadata> metas){
 		try {
 			// Make
 			new TestGenerator(metas, this.adapter).generateAll();
@@ -136,34 +133,49 @@ public class OrmCommand extends BaseCommand {
 	}
 	
 	/**
-	 * Gets the Metadatas of the class which name is given in argument
-	 * @return The metadata of the class given with the argument --filename
+	 * Generate the GUI part for the given classes
+	 * @param metas The classes Metadata
 	 */
-	protected ArrayList<ClassMetadata> getMetasFromArg(){
-		ArrayList<ClassMetadata> ret = null;
-		if(this.commandArgs.size()!=0 && this.commandArgs.containsKey("filename")) {
-			String entityPath = this.adapter.getSourcePath()
-					+Harmony.projectNameSpace.replaceAll("\\.","/")
-					+"/entity/" + this.commandArgs.get("filename"); //TODO factoring !
-			File f = new File(entityPath);
-			if(f.exists() && !f.isDirectory()) {
-				this.javaModelParser.loadEntity(entityPath);
-				if(this.javaModelParser.getEntities().size()!=0) {
-					this.javaModelParser.parse(this.javaModelParser.getEntities().get(0));
-					ret = this.javaModelParser.getMetas();
-				}else{
-					ConsoleUtils.displayWarning("Given entity filename is not an entity!");
-				}
-			}else{
-				ConsoleUtils.displayWarning("Given entity file does not exist!");
-			}
-		}else{
-			ConsoleUtils.displayWarning("No given filename! Specify a filename with --filename=\"Entity.java\"");
+	protected void makeLayoutUi(ArrayList<ClassMetadata> metas, boolean generateHome){
+		try {
+			// Make
+			if(generateHome)
+				new ProjectGenerator(metas, this.adapter).generateHomeActivity();
+			new ActivityGenerator(metas, this.adapter).generateAll();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		return ret;
 	}
-	
-	
+
+//	/**
+//	 * Gets the Metadatas of the class which name is given in argument
+//	 * @return The metadata of the class given with the argument --filename
+//	 */
+//	private ArrayList<ClassMetadata> getMetasFromArg(){
+//		ArrayList<ClassMetadata> ret = null;
+//		if(this.commandArgs.size()!=0 && this.commandArgs.containsKey("filename")) {
+//			String entityPath = this.adapter.getSourcePath()
+//					+Harmony.projectNameSpace.replaceAll("\\.","/")
+//					+"/entity/" + this.commandArgs.get("filename"); //TODO factoring !
+//			File f = new File(entityPath);
+//			if(f.exists() && !f.isDirectory()) {
+//				this.javaModelParser.loadEntity(entityPath);
+//				if(this.javaModelParser.getEntities().size()!=0) {
+//					this.javaModelParser.parse(this.javaModelParser.getEntities().get(0));
+//					ret = this.javaModelParser.getMetas();
+//				}else{
+//					ConsoleUtils.displayWarning("Given entity filename is not an entity!");
+//				}
+//			}else{
+//				ConsoleUtils.displayWarning("Given entity file does not exist!");
+//			}
+//		}else{
+//			ConsoleUtils.displayWarning("No given filename! Specify a filename with --filename=\"Entity.java\"");
+//		}
+//		return ret;
+//	}
+		
 	/**
 	 * Gets the Metadatas of all the entities actually in the package entity
 	 * @return The metadatas of the different classes
@@ -197,23 +209,6 @@ public class OrmCommand extends BaseCommand {
 		return ret;
 	}
 	
-
-	/**
-	 * Generate the GUI part for the given classes
-	 * @param metas The classes Metadata
-	 */
-	protected void generateActivitiesForEntities(ArrayList<ClassMetadata> metas, boolean generateHome){
-		try {
-			// Make
-			if(generateHome)
-				new ProjectGenerator(metas, this.adapter).generateHomeActivity();
-			new ActivityGenerator(metas, this.adapter).generateAll();
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	@Override
 	public void summary() {
 		ConsoleUtils.display("\n> ORM \n" +
@@ -237,21 +232,19 @@ public class OrmCommand extends BaseCommand {
 			}
 		} else
 
-			if (action.equals(GENERATE_ENTITIES)) {
-				this.generateEntities();
-			} else
+		if (action.equals(GENERATE_ENTITIES)) {
+			this.generateEntities();
+		} else
 
-				if (action.equals(GENERATE_FORM)) {
-					this.generateForm();
-				} else
+		if (action.equals(GENERATE_FORM)) {
+			this.generateForm();
+		} else
 
-					if (action.equals(GENERATE_CRUD)) {
-						this.generateCrud();
-					} else
+		if (action.equals(GENERATE_CRUD)) {
+			this.generateCrud();
+		} else {
 
-					{
-
-					}
+		}
 	}
 
 	@Override
