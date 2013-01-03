@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.tactfactory.mda.ConsoleUtils;
@@ -34,12 +33,12 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 	protected String localNameSpace;
 	protected boolean isWritable = true;
 
-	public SQLiteAdapterGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
-		super(metas, adapter);
+	public SQLiteAdapterGenerator(BaseAdapter adapter) throws Exception {
+		super(adapter);
 		
 		this.entities = new HashMap<String, Object>();
 		
-		for(ClassMetadata meta : metas){
+		for(ClassMetadata meta : metas.entities.values()){
 			if(!meta.fields.isEmpty()){
 				Map<String, Object> modelClass = meta.toMap(this.adapter);
 				modelClass.put(TagConstant.LOCAL_NAMESPACE, this.adapter.getNameSpace(meta, this.adapter.getData()));
@@ -142,17 +141,9 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 			this.localNameSpace = (String) entity.get(TagConstant.LOCAL_NAMESPACE);
 			
 			// Make class
-			/*this.datamodel = new HashMap<String, Object>();
-			this.datamodel.put(TagConstant.PROJECT_NAME, 		Harmony.projectName);
-			this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	entity.get(TagConstant.SPACE));
-			this.datamodel.put(TagConstant.NAME, 				entity.get(TagConstant.NAME));
-			this.datamodel.put(TagConstant.LOCAL_NAMESPACE, 	this.localNameSpace);
-			this.datamodel.put(TagConstant.IDS,					entity.get(TagConstant.IDS));
-			this.datamodel.put(TagConstant.FIELDS,				entity.get(TagConstant.FIELDS));
-			this.datamodel.put(TagConstant.RELATIONS,			entity.get(TagConstant.RELATIONS));*/
 			this.datamodel = (HashMap<String, Object>) modelEntity;
 			this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	entity.get(TagConstant.SPACE));
-			this.datamodel.put(TagConstant.PROJECT_NAME, 		Harmony.projectName);
+			this.datamodel.put(TagConstant.PROJECT_NAME, 		this.metas.projectName);
 			
 			this.generate();
 		}

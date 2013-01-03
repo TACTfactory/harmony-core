@@ -13,7 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.tactfactory.mda.ConsoleUtils;
@@ -31,12 +30,12 @@ public class TestGenerator extends BaseGenerator {
 	protected String localNameSpace;
 	protected Map<String, Object> entities;
 	
-	public TestGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
-		super(metas, adapter);
+	public TestGenerator(BaseAdapter adapter) throws Exception {
+		super(adapter);
 		
 		// Make tests
 		this.entities = new HashMap<String, Object>();
-		for (ClassMetadata meta : this.metas) {
+		for (ClassMetadata meta : this.metas.entities.values()) {
 			this.datamodel = new HashMap<String, Object>();
 			this.datamodel.put(TagConstant.NAME,			meta.name );
 			this.datamodel.put(TagConstant.LOCAL_NAMESPACE,	this.adapter.getNameSpace(meta, this.adapter.getTest()) );

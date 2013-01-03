@@ -141,7 +141,7 @@ public abstract class BaseAdapter {
 	}
 
 	public final String getHomeActivityPathFile() {
-		return String.format("%s/%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(), this.getSource(), Harmony.projectNameSpace, this.getHome() );
+		return String.format("%s/%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(), this.getSource(), Harmony.metas.projectNameSpace, this.getHome() );
 	}
 	
 	public final String getTemplateHomeActivityPathFile() {

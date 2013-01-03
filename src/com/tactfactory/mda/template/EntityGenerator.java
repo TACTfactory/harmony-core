@@ -14,7 +14,6 @@ import java.io.StringWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.ConsoleUtils;
@@ -36,10 +35,10 @@ public class EntityGenerator extends BaseGenerator {
 	protected String entityFolder;
 	protected Configuration cfg = new Configuration(); // Initialization of template engine
 
-	public EntityGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception{
-		super(metas, adapter);
+	public EntityGenerator(BaseAdapter adapter) throws Exception{
+		super(adapter);
 
-		this.entityFolder = this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.", "/") + "/entity/";
+		this.entityFolder = this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.", "/") + "/entity/";
 
 		try {
 			this.cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
@@ -55,7 +54,7 @@ public class EntityGenerator extends BaseGenerator {
 	public void generateAll(){
 		ConsoleUtils.display(">> Decorate entities...");
 		
-		for(ClassMetadata cm : metas){ 
+		for(ClassMetadata cm : metas.entities.values()){ 
 			String filepath = String.format("%s/%s",
 					this.entityFolder,
 					String.format("%s.java", cm.name));

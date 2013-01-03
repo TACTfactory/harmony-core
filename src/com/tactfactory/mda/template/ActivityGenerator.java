@@ -40,12 +40,12 @@ public class ActivityGenerator extends BaseGenerator {
 	protected String localNameSpace;
 	protected boolean isWritable = true;
 
-	public ActivityGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
-		super(metas, adapter);
+	public ActivityGenerator(BaseAdapter adapter) throws Exception {
+		super(adapter);
 		
 		// Make entities
 		this.modelEntities = new ArrayList<Map<String, Object>>();
-		for (ClassMetadata meta : this.metas) {
+		for (ClassMetadata meta : this.metas.entities.values()) {
 			if(!meta.fields.isEmpty() && !meta.internal){
 				//this.meta = meta;
 				
@@ -56,8 +56,8 @@ public class ActivityGenerator extends BaseGenerator {
 		}
 	}
 
-	public ActivityGenerator(List<ClassMetadata> metas, BaseAdapter adapter, Boolean isWritable) throws Exception {
-		this(metas, adapter);
+	public ActivityGenerator(BaseAdapter adapter, Boolean isWritable) throws Exception {
+		this(adapter);
 
 		this.isWritable = isWritable;
 	}
@@ -68,7 +68,7 @@ public class ActivityGenerator extends BaseGenerator {
 		for(Map<String, Object> entity : this.modelEntities) {
 			//this.meta = this.metas.get(i);
 			//this.localNameSpace = this.adapter.getNameSpaceEntity(this.meta, this.adapter.getController());;
-			this.localNameSpace = Harmony.projectNameSpace.replace('/', '.') +"."+ this.adapter.getController()+"."+((String)entity.get(TagConstant.NAME)).toLowerCase();
+			this.localNameSpace = this.metas.projectNameSpace.replace('/', '.') +"."+ this.adapter.getController()+"."+((String)entity.get(TagConstant.NAME)).toLowerCase();
 
 			// Make class
 			this.datamodel.put("namespace", 					entity.get(TagConstant.SPACE));
@@ -400,7 +400,7 @@ public class ActivityGenerator extends BaseGenerator {
 					}
 
 					
-					data += Harmony.projectNameSpace + adapter.getModel() + entityName;
+					data += this.metas.projectNameSpace + adapter.getModel() + entityName;
 					filterActivity.getChild("action").setAttribute("name", "android.intent.action."+ action, ns);
 					filterActivity.getChild("category").setAttribute("name", "android.intent.category.DEFAULT", ns);
 					filterActivity.getChild("data").setAttribute("mimeType", data, ns);

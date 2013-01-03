@@ -7,10 +7,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
-import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 
@@ -22,13 +20,13 @@ public class TestProjectGenerator extends BaseGenerator {
 	protected boolean isWritable = true;
 
 	public TestProjectGenerator(BaseAdapter adapter) throws Exception {
-		super(new ArrayList<ClassMetadata>(), adapter);
+		super(adapter);
 
-		String projectNameSpace = "" + Harmony.projectNameSpace;
+		String projectNameSpace = "" + this.metas.projectNameSpace;
 		projectNameSpace = projectNameSpace.replaceAll("/","\\.");
 
 		// Make class
-		this.datamodel.put(TagConstant.PROJECT_NAME, Harmony.projectName);
+		this.datamodel.put(TagConstant.PROJECT_NAME, 	this.metas.projectName);
 		this.datamodel.put(TagConstant.PROJECT_NAMESPACE, projectNameSpace);
 		this.datamodel.put(TagConstant.ANDROID_SDK_DIR, Harmony.androidSdkPath);
 
