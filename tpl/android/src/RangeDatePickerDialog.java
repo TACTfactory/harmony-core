@@ -60,6 +60,7 @@ public class RangeDatePickerDialog extends DatePickerDialog {
 		this.title = title;
 		
 		this.setTitle(this.title);
+		this.setCancelable(true);
 		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
 			if (this.minDate != null) {

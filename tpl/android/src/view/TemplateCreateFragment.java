@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +27,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import com.tactfactory.mda.test.demact.RangeDatePickerDialog;
 import com.tactfactory.mda.test.demact.view.user.UserCreateFragment;
@@ -75,20 +78,26 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 			<#if !field.internal && !field.hidden>
 				<#if !field.relation??>
 		this.${field.name}View = (${field.customEditType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});
-		<#if field.type == "date">
+		<#if field.type == "date" || field.type == "datetime">
 		this.${field.name}View.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
-				// Calendar
-				final Calendar c = Calendar.getInstance();
-				int year = c.get(Calendar.YEAR);
-		        int month = c.get(Calendar.MONTH);
-		        int day = c.get(Calendar.DAY_OF_MONTH);
+		        DateTime dt = new DateTime();
+		        final DateTimeFormatter fmt = DateTimeFormat.shortDate();
+		        
+				if (!TextUtils.isEmpty(${name}CreateFragment.this.${field.name}View.getText())){
+					String strInputDate = ${name}CreateFragment.this.${field.name}View.getText().toString();
+				    dt = fmt.parseDateTime(strInputDate);
+				}
+				
+				int year = dt.getYear();
+			    int month = dt.getMonthOfYear() - 1;
+			    int day = dt.getDayOfMonth();
 				
 				DatePickerDialog ${field.name}Dpd = new RangeDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
                     public void onDateSet(DatePicker view, int year, int month, int day) {
-                        final Date date = new GregorianCalendar(year, month, day).getTime();
+                        DateTime date = new DateTime(year, month + 1, day, 0, 0);
                         
-                        ${name}CreateFragment.this.${field.name}View.setText(new SimpleDateFormat("dd/MM/yyyy").format(date)); 
+                        ${name}CreateFragment.this.${field.name}View.setText(date.toString(fmt)); 
                     }
                 },
                 year,
@@ -100,25 +109,29 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 			}
 		});
 		</#if>
-		<#if field.type == "time">
+		<#if field.type == "time" || field.type == "datetime">
 		this.${field.name}View.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
-				// Calendar
-				final Calendar c = Calendar.getInstance();
-				final int year = c.get(Calendar.YEAR);
-		        final int month = c.get(Calendar.MONTH);
-		        final int day = c.get(Calendar.DAY_OF_MONTH);
+				DateTime dt = new DateTime();
+		        final DateTimeFormatter fmt = DateTimeFormat.shortTime();
 		        
-		        int hour = c.get(Calendar.HOUR_OF_DAY);
-		        int minute = c.get(Calendar.MINUTE);
+				if (!TextUtils.isEmpty(${name}CreateFragment.this.${field.name}View.getText())){
+					String strInputTime = ${name}CreateFragment.this.${field.name}View.getText().toString();
+				    dt = fmt.parseDateTime(strInputTime);
+				}
+				
+				int hour = dt.getHourOfDay();
+				int minute = dt.getMinuteOfHour();
 		        
 		        TimePickerDialog ${field.name}Tpd = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
 					
 					@Override
 					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                        final Date time = new GregorianCalendar(year, month, day, hourOfDay, minute).getTime(); 
-						
-                        ${name}CreateFragment.this.${field.name}View.setText(new SimpleDateFormat("HH:mm").format(time)); 
+						DateTime date = new DateTime(0);
+						date = new DateTime(date.getYear(), date.getDayOfMonth(), date.getDayOfMonth(), 
+								hourOfDay, minute);
+                        
+                        ${name}CreateFragment.this.${field.name}View.setText(date.toString(fmt));
 					}
 				}, hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
 				
@@ -126,7 +139,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 			}
 		});
 		
-		
+			</#if>
 		
 				<#else>
 		this.${field.name}Button = (Button) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}_button);
