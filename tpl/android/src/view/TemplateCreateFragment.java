@@ -1,3 +1,4 @@
+<#import "methods.tpl" as m>
 package ${localnamespace};
 
 import ${namespace}.R;
@@ -30,9 +31,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import com.tactfactory.mda.test.demact.RangeDatePickerDialog;
-import com.tactfactory.mda.test.demact.view.user.UserCreateFragment;
-
 import ${namespace}.data.${name}SQLiteAdapter;
 import ${namespace}.entity.${name};
 <#list relations as relation>
@@ -52,7 +50,11 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 	<#list fields as field>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
-	protected ${field.customEditType} ${field.name}View;
+				<#if field.type=="boolean">
+	protected CheckBox ${field.name}View;
+				<#else>
+	protected EditText ${field.name}View;			
+				</#if>
 			<#else>
 	protected Button ${field.name}Button;
 	protected List<${field.relation.targetEntity}> ${field.name}List;
@@ -77,7 +79,10 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		<#foreach field in fields>
 			<#if !field.internal && !field.hidden>
 				<#if !field.relation??>
-		this.${field.name}View = (${field.customEditType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});
+					<#if field.type=="boolean">
+		this.${field.name}View = (CheckBox) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});
+					<#else>
+		this.${field.name}View = (EditText) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});			
 		<#if field.type == "date" || field.type == "datetime">
 		this.${field.name}View.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
@@ -138,9 +143,9 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		        ${field.name}Tpd.show();
 			}
 		});
-		
+				</#if>
 			</#if>
-		
+
 				<#else>
 		this.${field.name}Button = (Button) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}_button);
 		this.${field.name}Button.setOnClickListener(new OnClickListener(){
@@ -237,24 +242,13 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		<#foreach field in fields>						
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
-				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="phone") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
+				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
 		if(this.model.get${field.name?cap_first}()!=null)
+			${m.setLoader(field)}
+				<#else>
+		${m.setLoader(field)}
 				</#if>
-				<#if (field.customEditType == "EditText") >
-					<#if (field.type == "String") || field.type == "email" || field.type == "login" || field.type == "password" || field.type == "city" || field.type=="text" || field.type== "country">
-			this.${field.name}View.setText(this.model.get${field.name?cap_first}()); 
-					</#if>
-					<#if (field.type == "Date") || field.type == "DateTime" || field.type == "Time">
-			this.${field.name}View.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(this.model.get${field.name?cap_first}())); 
-					</#if>
-					<#if (field.type == "int") || (field.type=="long") || (field.type=="phone") || (field.type=="ean") || (field.type=="zipcode") || field.type=="float">
-			this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}())); 
-					</#if>
-				<#elseif (field.customEditType == "CheckBox") >
-			this.${field.name}View.setSelected(this.model.${field.name?uncap_first}()); 
-				</#if>			
 			<#else>
-				
 		${field.relation.targetEntity}SQLiteAdapter ${field.name}Adapter = new ${field.relation.targetEntity}SQLiteAdapter(getActivity());
 		${field.name}Adapter.open();
 		this.${field.name}List = ${field.name}Adapter.getAll();
@@ -262,6 +256,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		init${field.name?cap_first}Dialog(${field.name}List);
 			</#if>
 		</#if>
+		
 		</#foreach>
 	}
 	
@@ -270,34 +265,11 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		<#foreach field in fields>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
+				<#if field.type!="boolean">
 		if(!this.${field.name}View.getEditableText().toString().equals(""))
-				<#if (field.customEditType == "EditText") >
-					<#if (field.type == "String") || field.type == "email" || field.type == "password" || field.type == "login" || field.type == "city" || field.type=="text" || field.type== "country">
-		this.model.set${field.name?cap_first}(this.${field.name}View.getEditableText().toString());
-					<#elseif (field.type == "Date")>
-		try {
-			this.model.set${field.name?cap_first}(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(this.${field.name}View.getEditableText().toString()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-					<#elseif (field.type == "DateTime")>
-		try {
-			this.model.set${field.name?cap_first}(new DateTime(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(this.${field.name}View.getEditableText().toString()).getTime()));
-		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-					<#elseif (field.type == "int") || field.type == "zipcode" || field.type == "phone">
-		this.model.set${field.name?cap_first}(Integer.parseInt(this.${field.name}View.getEditableText().toString()));
-					<#elseif (field.type == "float")>
-		this.model.set${field.name?cap_first}(Float.parseFloat(this.${field.name}View.getEditableText().toString()));
-					<#elseif (field.type == "boolean")>
-		this.model.set${field.name?cap_first}(this.${field.name}View.getEditableText().toString().equals("true"));
-					</#if>
-				</#if>
-				<#if (field.customEditType == "CheckBox") >
-		this.model.set${field.name?cap_first}(this.${field.name}View.isChecked());
+			${m.setSaver(field)}
+				<#else>
+		${m.setSaver(field)}
 				</#if>
 			<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 		${field.relation.targetEntity} tmp${field.name?cap_first} = new ${field.relation.targetEntity?cap_first}();

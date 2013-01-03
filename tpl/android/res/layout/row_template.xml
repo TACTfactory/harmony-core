@@ -17,7 +17,7 @@
 				<#if (!lastFieldName??)>
         android:layout_alignParentTop="true" />
 				<#else>
-		android:layout_below="@+id/row_${name?lower_case}_${lastFieldName}" />
+	android:layout_below="@+id/row_${name?lower_case}_${lastFieldName}" />
 				</#if>
 			<#assign lastFieldName=field.name>
 		</#if>

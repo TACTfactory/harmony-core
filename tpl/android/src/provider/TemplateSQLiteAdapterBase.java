@@ -311,7 +311,7 @@ public abstract class ${name}SQLiteAdapterBase {
 	 * @param item The ${name} entity to persist 
 	 * @return Id of the ${name} entity
 	 */
-	public long insert(${name} item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
+	public long insert(${name} item<#list relations as relation><#if relation.relation.type=="ManyToOne">, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
@@ -349,7 +349,7 @@ public abstract class ${name}SQLiteAdapterBase {
 	 * @param item The ${name} entity to persist
 	 * @return 
 	 */
-	public int update(${name} item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
+	public int update(${name} item<#list relations as relation><#if relation.relation.type=="ManyToOne">, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
 	<#if (ids?size>0)>
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
