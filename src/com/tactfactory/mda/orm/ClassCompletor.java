@@ -48,12 +48,12 @@ public class ClassCompletor {
 			if(rel.type.equals("OneToMany")){ // set inverse relation if it doesn't exists
 				// Check if relation ManyToOne exists in target entity
 				ClassMetadata entity_ref = this.metas.get(rel.entity_ref);
-				boolean relFound = false;
+				/*boolean relFound = false;
 				for(FieldMetadata rel_entity_ref : entity_ref.relations.values()){
 					if(rel_entity_ref.relation.entity_ref.equals(cm.name)) relFound = true;
-				}
+				}*/
 				// if it doesn't :
-				if(!relFound){
+				if(rel.mappedBy==null){
 					// Create it
 					FieldMetadata new_field = new FieldMetadata();
 					new_field.columnDefinition = "integer";
@@ -67,6 +67,7 @@ public class ClassCompletor {
 						new_field.relation.field_ref.add(id.fieldName);
 					new_field.relation.field = new_field.fieldName;
 					new_field.relation.type = "ManyToOne";
+					new_field.relation.inversedBy = fm.fieldName;
 					entity_ref.fields.put(new_field.fieldName, new_field);
 					entity_ref.relations.put(new_field.fieldName, new_field);
 				}

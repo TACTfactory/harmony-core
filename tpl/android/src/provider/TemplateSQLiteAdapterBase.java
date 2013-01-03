@@ -305,17 +305,18 @@ public abstract class ${name}SQLiteAdapterBase {
 		
 		return result;
 	}
+
 	
 	/** Insert a ${name} entity into database
 	 * 
 	 * @param item The ${name} entity to persist 
 	 * @return Id of the ${name} entity
 	 */
-	public long insert(${name} item<#list relations as relation><#if relation.relation.type=="ManyToOne">, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
+	public long insert(${name} item) {
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
-		ContentValues values = ${name}SQLiteAdapterBase.${name?lower_case}ToContentValues(item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, ${relation.relation.targetEntity?lower_case}_id</#if></#list>);
+		ContentValues values = ${name}SQLiteAdapterBase.${name?lower_case}ToContentValues(item);
 	<#list ids as id>
 		values.remove(${alias(id.name)});
 	</#list>
@@ -334,8 +335,13 @@ public abstract class ${name}SQLiteAdapterBase {
 		<#elseif relation.relation.type=="OneToMany">
 		${relation.relation.targetEntity}SQLiteAdapterBase ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
 		${relation.name?uncap_first}Adapter.open(this.mDatabase);
-		for(${relation.relation.targetEntity?cap_first} i : item.get${relation.name?cap_first}()){
-			${relation.name?uncap_first}Adapter.update(i, newid);
+		for(${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()){
+			<#if relation.relation.mappedBy??>
+			${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
+			${relation.name?uncap_first}Adapter.updateWith${name?cap_first}${relation.name?cap_first}(${relation.relation.targetEntity?lower_case});
+			<#else>
+			${relation.name?uncap_first}Adapter.updateWith${name?cap_first}${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}, newid);
+			</#if>
 		}
 		
 		</#if>
@@ -349,12 +355,12 @@ public abstract class ${name}SQLiteAdapterBase {
 	 * @param item The ${name} entity to persist
 	 * @return 
 	 */
-	public int update(${name} item<#list relations as relation><#if relation.relation.type=="ManyToOne">, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
+	public int update(${name} item) {
 	<#if (ids?size>0)>
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
 		
-		ContentValues values = ${name}SQLiteAdapterBase.${name?lower_case}ToContentValues(item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, ${relation.relation.targetEntity?lower_case}_id</#if></#list>);	
+		ContentValues values = ${name}SQLiteAdapterBase.${name?lower_case}ToContentValues(item);	
 		String whereClause = <#list ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, </#if></#list>};
 		
@@ -367,6 +373,80 @@ public abstract class ${name}SQLiteAdapterBase {
 		throw new UnsupportedOperationException("Method not implemented yet.");
 	</#if>
 	}
+
+	<#list relations as relation>
+		<#if relation.relation.type=="ManyToOne" && relation.internal>
+			
+	/** Update a ${name} entity into database 
+	 * 
+	 * @param item The ${name} entity to persist
+	 * @return 
+	 */
+	public int updateWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(${name} item, int ${relation.relation.targetEntity?lower_case}_id) {
+			<#if (ids?size>0)>
+		if (BuildConfig.DEBUG)
+			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
+
+		ContentValues values = ${name}SQLiteAdapterBase.${name?lower_case}ToContentValues(item, ${relation.relation.targetEntity?lower_case}_id);	
+		String whereClause = <#list ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
+		String[] whereArgs = new String[] {<#list ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, </#if></#list>};
+
+		return this.mDatabase.update(
+				TABLE_NAME, 
+				values, 
+				whereClause, 
+				whereArgs);
+			<#else>
+		throw new UnsupportedOperationException("Method not implemented yet.");
+			</#if>
+	}
+
+	
+	/** Insert a ${name} entity into database
+	 * 
+	 * @param item The ${name} entity to persist 
+	 * @return Id of the ${name} entity
+	 */
+	public long insertWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(${name} item, int ${relation.relation.targetEntity?lower_case}_id) {
+		if (BuildConfig.DEBUG)
+			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
+		
+		ContentValues values = ${name}SQLiteAdapterBase.${name?lower_case}ToContentValues(item, ${relation.relation.targetEntity?lower_case}_id);
+	<#list ids as id>
+		values.remove(${alias(id.name)});
+	</#list>
+		int newid = (int)this.mDatabase.insert(
+			TABLE_NAME, 
+			null, 
+			values);
+	
+	<#list relations as relation>
+		<#if relation.relation.type=="ManyToMany">
+			
+		${relation.relation.joinTable}SQLiteAdapterBase ${relation.name?uncap_first}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.context);
+		for(${relation.relation.targetEntity?cap_first} i : item.get${relation.name?cap_first}()){
+			${relation.name?uncap_first}Adapter.insert(newid, i.get${relation.relation.field_ref[0]?cap_first}());
+		}
+		<#elseif relation.relation.type=="OneToMany">
+		${relation.relation.targetEntity}SQLiteAdapterBase ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
+		${relation.name?uncap_first}Adapter.open(this.mDatabase);
+		for(${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()){
+			<#if relation.relation.mappedBy??>
+			${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
+			${relation.name?uncap_first}Adapter.update(${relation.relation.targetEntity?lower_case});
+			<#else>
+			${relation.name?uncap_first}Adapter.update(${relation.relation.targetEntity?lower_case}, newid);
+			</#if>
+		}
+		
+		</#if>
+	</#list>
+		
+		return newid;
+	}			
+
+		</#if>
+	</#list>
 	
 	/** Delete a ${name} entity of database
 	 * 
