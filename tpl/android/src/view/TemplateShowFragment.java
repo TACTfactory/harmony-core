@@ -1,3 +1,4 @@
+<#import "methods.tpl" as m>
 package ${localnamespace};
 
 import java.text.SimpleDateFormat;
@@ -32,7 +33,11 @@ public class ${name}ShowFragment extends Fragment {
 	/* Fields View */
 <#list fields as field>
 	<#if !field.internal && !field.hidden>
-    protected ${field.customShowType} ${field.name}View;
+		<#if field.type=="boolean">
+	protected CheckBox ${field.name}View;
+		<#else>
+	protected TextView ${field.name}View;			
+		</#if>
 	</#if>
 </#list>
     
@@ -43,7 +48,12 @@ public class ${name}ShowFragment extends Fragment {
     protected void initializeComponent(View view) {
 	<#foreach field in fields>
 		<#if !field.internal && !field.hidden>
-		this.${field.name}View = (${field.customShowType}) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});
+			<#if field.type=="boolean">
+		this.${field.name}View = (CheckBox) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});
+		this.${field.name}View.setEnabled(false);
+			<#else>
+		this.${field.name}View = (TextView) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});			
+			</#if>
 		</#if>
 	</#foreach>
     }
@@ -53,18 +63,11 @@ public class ${name}ShowFragment extends Fragment {
     	<#foreach field in fields>
 			<#if !field.internal && !field.hidden>
 				<#if !field.relation??>
-		    		<#if (field.customEditType == "EditText") >
-    					<#if (field.type == "String")>
-		this.${field.name}View.setText(this.model.get${field.name?cap_first}()); 
-						</#if>
-						<#if (field.type == "Date")>
-		this.${field.name}View.setText(new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(this.model.get${field.name?cap_first}())); 
-						</#if>
-						<#if (field.type == "int")>
-		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}())); 
-						</#if>
-					<#elseif (field.customEditType == "CheckBox") >
-		this.${field.name}View.setSelected(this.model.${field.name?uncap_first}()); 
+		    			<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
+		if(this.model.get${field.name?cap_first}()!=null)
+			${m.setLoader(field)}
+					<#else>
+		${m.setLoader(field)}
 					</#if>
 				<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}().getId())); 
