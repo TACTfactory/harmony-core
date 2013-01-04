@@ -45,7 +45,7 @@ public class ProjectGenerator extends BaseGenerator {
 			// Make entities
 			ArrayList<Map<String, Object>> modelEntities = new ArrayList<Map<String,Object>>();
 			for (ClassMetadata meta : this.metas.entities.values()) {
-				if(!meta.fields.isEmpty()){
+				if(!meta.fields.isEmpty() && !meta.internal){
 					Map<String, Object> modelClass = new HashMap<String, Object>();
 					modelClass.put(TagConstant.SPACE,	meta.space );
 					modelClass.put(TagConstant.NAME,	meta.name );

@@ -10,25 +10,27 @@
 
 	<#list fields as field>
 		<#if !field.internal && !field.hidden>	
-			<#if field.type=="boolean">
+			<#if !field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")>
+				<#if field.type=="boolean">
 	    <CheckBox
 		android:id="@+id/row_${name?lower_case}_${field.name?lower_case}"
 	    	android:layout_width="match_parent"
 	    	android:layout_height="wrap_content"
 		android:focusable="false"
 		android:enabled="false"
-			<#else>
+				<#else>
 	    <TextView
 		android:id="@+id/row_${name?lower_case}_${field.name?lower_case}"
 	    	android:layout_width="match_parent"
 	    	android:layout_height="wrap_content"
-			</#if>
-			<#if (!lastFieldName??)>
+				</#if>
+				<#if (!lastFieldName??)>
 	        android:layout_alignParentTop="true" />
-			<#else>
+				<#else>
 		android:layout_below="@+id/row_${name?lower_case}_${lastFieldName}" />
+				</#if>
+				<#assign lastFieldName=field.name?lower_case>
 			</#if>
-			<#assign lastFieldName=field.name?lower_case>
 		</#if>
 	</#list>
 
