@@ -182,7 +182,7 @@ public abstract class ${name}SQLiteAdapterBase {
 
 				<#elseif (field.type?lower_case == "boolean" )>
 			result.set${field.name?cap_first}  (c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ).equals("true"));
-				<#elseif (field.type == "int" || field.type == "integer" || field.type == "phone" || field.type == "ean" || field.type == "zipcode")>
+				<#elseif (field.type == "int" || field.type == "integer" || field.type == "ean" || field.type == "zipcode")>
 			result.set${field.name?cap_first}(c.getInt( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
 				<#elseif (field.type == "float" )>
 			result.set${field.name?cap_first}(c.getFloat( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
@@ -433,9 +433,9 @@ public abstract class ${name}SQLiteAdapterBase {
 		for(${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()){
 			<#if relation.relation.mappedBy??>
 			${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
-			${relation.name?uncap_first}Adapter.update(${relation.relation.targetEntity?lower_case});
+			${relation.name?uncap_first}Adapter.updateWith${name?cap_first}${relation.name?cap_first}(${relation.relation.targetEntity?lower_case});
 			<#else>
-			${relation.name?uncap_first}Adapter.update(${relation.relation.targetEntity?lower_case}, newid);
+			${relation.name?uncap_first}Adapter.updateWith${name?cap_first}${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}, newid);
 			</#if>
 		}
 		
