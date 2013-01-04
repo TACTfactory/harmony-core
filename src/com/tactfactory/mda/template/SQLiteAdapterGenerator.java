@@ -14,7 +14,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.tactfactory.mda.ConsoleUtils;
@@ -29,31 +28,26 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class SQLiteAdapterGenerator {
-	protected List<ClassMetadata> metas;
+public class SQLiteAdapterGenerator extends BaseGenerator {	
 	protected Map<String, Object> entities;
-	protected BaseAdapter adapter;
 	protected String localNameSpace;
 	protected boolean isWritable = true;
-	protected HashMap<String, Object> datamodel;
 
-	public SQLiteAdapterGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
-		if (metas == null && adapter == null)
-			throw new Exception("No meta or adapter define.");
+	public SQLiteAdapterGenerator(BaseAdapter adapter) throws Exception {
+		super(adapter);
 		
-		this.metas		= metas;
-		this.adapter	= adapter;
 		this.entities = new HashMap<String, Object>();
-			for(ClassMetadata meta : metas){
-				if(!meta.fields.isEmpty()){
-					Map<String, Object> modelClass = meta.toMap(this.adapter);
-					modelClass.put(TagConstant.LOCAL_NAMESPACE, this.adapter.getNameSpace(meta, this.adapter.getData()));
-					
-					this.entities.put((String) modelClass.get(TagConstant.NAME), modelClass);
-					this.makeRelationModel();
-				}
+		
+		for(ClassMetadata meta : metas.entities.values()){
+			if(!meta.fields.isEmpty()){
+				Map<String, Object> modelClass = meta.toMap(this.adapter);
+				modelClass.put(TagConstant.LOCAL_NAMESPACE, this.adapter.getNameSpace(meta, this.adapter.getData()));
+				
+				this.entities.put((String) modelClass.get(TagConstant.NAME), modelClass);
+				this.makeRelationModel();
 			}
 		}
+	}
 
 	/**
 	 * 
@@ -147,17 +141,9 @@ public class SQLiteAdapterGenerator {
 			this.localNameSpace = (String) entity.get(TagConstant.LOCAL_NAMESPACE);
 			
 			// Make class
-			/*this.datamodel = new HashMap<String, Object>();
-			this.datamodel.put(TagConstant.PROJECT_NAME, 		Harmony.projectName);
-			this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	entity.get(TagConstant.SPACE));
-			this.datamodel.put(TagConstant.NAME, 				entity.get(TagConstant.NAME));
-			this.datamodel.put(TagConstant.LOCAL_NAMESPACE, 	this.localNameSpace);
-			this.datamodel.put(TagConstant.IDS,					entity.get(TagConstant.IDS));
-			this.datamodel.put(TagConstant.FIELDS,				entity.get(TagConstant.FIELDS));
-			this.datamodel.put(TagConstant.RELATIONS,			entity.get(TagConstant.RELATIONS));*/
 			this.datamodel = (HashMap<String, Object>) modelEntity;
 			this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	entity.get(TagConstant.SPACE));
-			this.datamodel.put(TagConstant.PROJECT_NAME, 		Harmony.projectName);
+			this.datamodel.put(TagConstant.PROJECT_NAME, 		this.metas.projectName);
 			
 			this.generate();
 		}

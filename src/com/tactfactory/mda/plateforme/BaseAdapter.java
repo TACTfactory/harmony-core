@@ -30,11 +30,13 @@ public abstract class BaseAdapter {
 	protected String data		= "data";
 	protected String provider	= "provider";
 	protected String common		= "common";
+	protected String service	= "service";
 	
 	// File
 	protected String manifest;
 	protected String home;
 	protected String strings;
+	protected String configs;
 	
 	// Abstract Methods
 	/** Generate platform Namespace
@@ -139,7 +141,7 @@ public abstract class BaseAdapter {
 	}
 
 	public final String getHomeActivityPathFile() {
-		return String.format("%s/%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(), this.getSource(), Harmony.projectNameSpace, this.getHome() );
+		return String.format("%s/%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(), this.getSource(), Harmony.metas.projectNameSpace, this.getHome() );
 	}
 	
 	public final String getTemplateHomeActivityPathFile() {

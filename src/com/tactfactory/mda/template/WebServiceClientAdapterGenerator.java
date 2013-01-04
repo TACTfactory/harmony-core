@@ -2,9 +2,12 @@ package com.tactfactory.mda.template;
 
 import com.tactfactory.mda.plateforme.BaseAdapter;
 
-public class WebServiceClientAdapterGenerator {
-	protected BaseAdapter adapter;
+public class WebServiceClientAdapterGenerator extends BaseGenerator {
 	
+	public WebServiceClientAdapterGenerator(BaseAdapter adapter) throws Exception {
+		super(adapter);
+	}
+
 	/**
 	 * Update XML Strings
 	 * 

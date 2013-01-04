@@ -53,9 +53,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
 		OrmCommand command = (OrmCommand) Harmony.instance.getCommand(OrmCommand.class);
 		
-		
-		ArrayList<ClassMetadata> metas = command.getMetasFromAll();
-		for (ClassMetadata classMetadata : metas) {
+		for (ClassMetadata classMetadata : command.getMetasFromAll().values()) {
 			if (classMetadata.name.equals("User"))
 				userMeta = classMetadata;
 			

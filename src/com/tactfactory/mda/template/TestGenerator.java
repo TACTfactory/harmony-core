@@ -13,7 +13,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.tactfactory.mda.ConsoleUtils;
@@ -27,28 +26,19 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class TestGenerator {
-	protected List<ClassMetadata> metas;
-	protected ClassMetadata meta;
-	protected BaseAdapter adapter;
+public class TestGenerator extends BaseGenerator {
 	protected String localNameSpace;
 	protected Map<String, Object> entities;
-	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 	
-	public TestGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
-		if (metas == null && adapter == null)
-			throw new Exception("No meta or adapter define.");
-		
-		this.metas 		= metas;
-		this.adapter	= adapter;
+	public TestGenerator(BaseAdapter adapter) throws Exception {
+		super(adapter);
 		
 		// Make tests
 		this.entities = new HashMap<String, Object>();
-		for (ClassMetadata meta : this.metas) {
-			this.meta = meta;
+		for (ClassMetadata meta : this.metas.entities.values()) {
 			this.datamodel = new HashMap<String, Object>();
 			this.datamodel.put(TagConstant.NAME,			meta.name );
-			this.datamodel.put(TagConstant.LOCAL_NAMESPACE,	this.adapter.getNameSpace(this.meta, this.adapter.getTest()) );
+			this.datamodel.put(TagConstant.LOCAL_NAMESPACE,	this.adapter.getNameSpace(meta, this.adapter.getTest()) );
 			this.datamodel.put(TagConstant.SPACE, 			meta.space);
 			
 			this.entities.put((String) this.datamodel.get(TagConstant.NAME), this.datamodel);
