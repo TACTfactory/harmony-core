@@ -91,6 +91,7 @@ public class ClassCompletor {
 						id.columnDefinition = "integer";
 						id.type = "integer";
 						id.fieldName = "id";
+						id.id = true;
 						classMeta.ids.put("id", id);
 						classMeta.fields.put("id", id);
 						
@@ -99,7 +100,7 @@ public class ClassCompletor {
 						rel1.entity_ref = cm.name;
 						for(FieldMetadata cmid : cm.ids.values())
 							rel1.field_ref.add(cmid.fieldName);
-						//rel1.inversedBy = rel.inversedBy;
+						rel1.inversedBy = fm.fieldName;
 						rel1.type = "ManyToOne";
 						ref1.relation = rel1;
 						
@@ -110,7 +111,7 @@ public class ClassCompletor {
 					RelationMetadata rel2 = new RelationMetadata();
 						rel2.entity_ref = rel.entity_ref;
 						rel2.field_ref = rel.field_ref;
-						//rel2.inversedBy = fm.name;
+						//rel2.inversedBy = rel.inversedBy;
 						rel2.type = "ManyToOne";
 						ref2.relation = rel2;
 						
@@ -119,9 +120,9 @@ public class ClassCompletor {
 					
 					this.newMetas.put(classMeta.name, classMeta);
 				}else if(this.newMetas.containsKey(rel.joinTable)){ // Complete it !
-					//ClassMetadata jtable = this.newMetas.get(rel.joinTable);
-					//FieldMetadata relation = jtable.relations.get(rel.entity_ref.toLowerCase()+"_id");
-					//relation.relation.inversedBy = fm.name;
+					ClassMetadata jtable = this.newMetas.get(rel.joinTable);
+					FieldMetadata relation = jtable.relations.get(cm.name.toLowerCase()+"_id");
+					relation.relation.inversedBy = fm.fieldName;
 				}
 			}
 		}

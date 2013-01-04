@@ -57,11 +57,13 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 			holder = new ViewHolder();
 			<#list fields as field>
 				<#if !field.internal && !field.hidden>
-					<#if field.type=="boolean">
+					<#if !field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")>  
+						<#if field.type=="boolean">
 			holder.${field.name}View = (CheckBox) convertView.findViewById(R.id.row_${name?lower_case}_${field.name?lower_case});
 			holder.${field.name}View.setEnabled(false);
-					<#else>
+						<#else>
 			holder.${field.name}View = (TextView) convertView.findViewById(R.id.row_${name?lower_case}_${field.name?lower_case});			
+						</#if>
 					</#if>
 				</#if>
 			</#list>
@@ -82,10 +84,12 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 	private static class ViewHolder {
 		<#list fields as field>
 			<#if !field.hidden && !field.internal>
-				<#if field.type=="boolean">
+				<#if !field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")>  
+					<#if field.type=="boolean">
 		protected CheckBox ${field.name}View;
-				<#else>
+					<#else>
 		protected TextView ${field.name}View;			
+					</#if>
 				</#if>
 			</#if>
 		</#list>
@@ -106,13 +110,7 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 			${m.setAdapterLoader(field)}
 						</#if>
 					<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
-			this.${field.name}View.setText(String.valueOf(model.get${field.name?cap_first}().getId()) );
-					<#elseif (field.relation.type=="OneToMany" | field.relation.type=="ManyToMany")>
-			String ${field.name}String = "";
-			for(${field.relation.targetEntity?cap_first} ${field.name}Entity : model.get${field.name?cap_first}()){
-				${field.name}String += ${field.name}Entity.getId()+",";
-			}
-			this.${field.name}View.setText(String.valueOf(${field.name}String) );		
+			this.${field.name}View.setText(String.valueOf(model.get${field.name?cap_first}().getId()) );	
 					</#if>
 				</#if>
 			</#list>
