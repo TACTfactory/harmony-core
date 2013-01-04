@@ -58,10 +58,10 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 			<#list fields as field>
 				<#if !field.internal && !field.hidden>
 					<#if field.type=="boolean">
-			holder.${field.name}View = (CheckBox) convertView.findViewById(R.id.${name?lower_case}_${field.name?lower_case});
+			holder.${field.name}View = (CheckBox) convertView.findViewById(R.id.row_${name?lower_case}_${field.name?lower_case});
 			holder.${field.name}View.setEnabled(false);
 					<#else>
-			holder.${field.name}View = (TextView) convertView.findViewById(R.id.${name?lower_case}_${field.name?lower_case});			
+			holder.${field.name}View = (TextView) convertView.findViewById(R.id.row_${name?lower_case}_${field.name?lower_case});			
 					</#if>
 				</#if>
 			</#list>

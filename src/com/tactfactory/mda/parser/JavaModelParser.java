@@ -383,11 +383,20 @@ public class JavaModelParser {
 						} else
 						
 						if (annotationType.equals(FILTER_JOINCOLUMN)) { // for @JoinColumn
-							/*if(mvp.getName().equals("referencedColumnName")){
-								rel.field_ref.add(mvp.getValue().toString());
-							}*/
 							if(mvp.getName().equals("name")){
-								rel.name = mvp.getValue().toString();
+								rel.name = ((StringLiteralExpr)mvp.getValue()).getValue();
+							}
+						} else
+							
+						if (annotationType.equals(FILTER_ONE2MANY)){
+							if(mvp.getName().equals("mappedBy")){
+								rel.mappedBy = ((StringLiteralExpr)mvp.getValue()).getValue();
+							}
+						} else
+						
+						if (annotationType.equals(FILTER_MANY2ONE)){
+							if(mvp.getName().equals("inversedBy")){
+								rel.inversedBy = mvp.getValue().toString();
 							}
 						}
 					}	
