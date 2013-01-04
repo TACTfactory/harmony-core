@@ -9,6 +9,7 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,6 +31,10 @@ import java.util.Locale;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+
+import com.tactfactory.mda.test.demact.CustomDatePickerDialog;
+import com.tactfactory.mda.test.demact.R;
+import com.tactfactory.mda.test.demact.view.user.UserCreateFragment;
 
 import ${namespace}.data.${name}SQLiteAdapter;
 import ${namespace}.entity.${name};
@@ -87,30 +92,32 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		this.${field.name}View.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 		        DateTime dt = new DateTime();
-		        final DateTimeFormatter fmt = DateTimeFormat.shortDate();
+		        final java.text.DateFormat df = DateFormat.getDateFormat(getActivity());
 		        
 				if (!TextUtils.isEmpty(${name}CreateFragment.this.${field.name}View.getText())){
 					String strInputDate = ${name}CreateFragment.this.${field.name}View.getText().toString();
-				    dt = fmt.parseDateTime(strInputDate);
+					try {
+						Date date = df.parse(strInputDate);
+						dt = new DateTime(date.getTime());
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
 				}
 				
-				int year = dt.getYear();
-			    int month = dt.getMonthOfYear() - 1;
-			    int day = dt.getDayOfMonth();
-				
-				DatePickerDialog ${field.name}Dpd = new RangeDatePickerDialog(getActivity(), new DatePickerDialog.OnDateSetListener() {
-                    public void onDateSet(DatePicker view, int year, int month, int day) {
-                        DateTime date = new DateTime(year, month + 1, day, 0, 0);
-                        
-                        ${name}CreateFragment.this.${field.name}View.setText(date.toString(fmt)); 
-                    }
-                },
-                year,
-                month,
-                day,
-                "Select ${field.name} date");
+			    CustomDatePickerDialog ${field.name}Dpd = new CustomDatePickerDialog(getActivity(), dt, "Select ${field.name} date");
+			    ${field.name}Dpd.setPositiveButton(getActivity().getString(R.string.common_ok), new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						DatePicker dp = ((CustomDatePickerDialog) dialog).getDatePicker();
+						DateTime date = new DateTime(dp.getYear(), dp.getMonth() + 1, dp.getDayOfMonth(), 0, 0);
+						${name}CreateFragment.this.${field.name}View.setText(df.format(date.toDate()));
+					}
+				});
 
-                ${field.name}Dpd.show();
+			    ${field.name}Dpd.show();
 			}
 		});
 		</#if>
