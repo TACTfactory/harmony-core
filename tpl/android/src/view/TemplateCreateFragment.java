@@ -291,8 +291,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 			SQLiteDatabase db = ${name?lower_case}Adapter.open();
 			db.beginTransaction();
 			try {
-				<#list relations as relation><#if relation.internal>//TODO: Care with insert</#if></#list>
-				${name?lower_case}Adapter.insert(this.entity<#list relations as relation><#if relation.internal>, 0</#if></#list>);
+				${name?lower_case}Adapter.insert(this.entity);
 
 				db.setTransactionSuccessful();
 			} finally {

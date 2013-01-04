@@ -316,7 +316,7 @@ public abstract class ${name}SQLiteAdapterBase {
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
-		ContentValues values = ${name}SQLiteAdapterBase.${name?lower_case}ToContentValues(item);
+		ContentValues values = ${name}SQLiteAdapterBase.${name?lower_case}ToContentValues(item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 	<#list ids as id>
 		values.remove(${alias(id.name)});
 	</#list>
@@ -360,7 +360,7 @@ public abstract class ${name}SQLiteAdapterBase {
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
 		
-		ContentValues values = ${name}SQLiteAdapterBase.${name?lower_case}ToContentValues(item);	
+		ContentValues values = ${name}SQLiteAdapterBase.${name?lower_case}ToContentValues(item<#list relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);	
 		String whereClause = <#list ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, </#if></#list>};
 		
@@ -387,7 +387,7 @@ public abstract class ${name}SQLiteAdapterBase {
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
 
-		ContentValues values = ${name}SQLiteAdapterBase.${name?lower_case}ToContentValues(item, ${relation.relation.targetEntity?lower_case}_id);	
+		ContentValues values = ${name}SQLiteAdapterBase.${name?lower_case}ToContentValues(item<#list relations as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>, ${relation.relation.targetEntity?lower_case}_id<#else>, 0</#if></#if></#list>);	
 		String whereClause = <#list ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, </#if></#list>};
 
@@ -411,7 +411,7 @@ public abstract class ${name}SQLiteAdapterBase {
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
-		ContentValues values = ${name}SQLiteAdapterBase.${name?lower_case}ToContentValues(item, ${relation.relation.targetEntity?lower_case}_id);
+		ContentValues values = ${name}SQLiteAdapterBase.${name?lower_case}ToContentValues(item<#list relations as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>, ${relation.relation.targetEntity?lower_case}_id<#else>, 0</#if></#if></#list>);
 	<#list ids as id>
 		values.remove(${alias(id.name)});
 	</#list>
