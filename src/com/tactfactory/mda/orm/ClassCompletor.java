@@ -9,22 +9,22 @@ import com.tactfactory.mda.ConsoleUtils;
  * with the information it needs from the others ClassMetadatas*/
 
 public class ClassCompletor {
-	ArrayList<ClassMetadata> metas_array;
+	//ArrayList<ClassMetadata> metas_array;
 	HashMap<String, ClassMetadata> metas = new HashMap<String, ClassMetadata>();
 	HashMap<String, ClassMetadata> newMetas = new HashMap<String, ClassMetadata>();
 	
-	public ClassCompletor(ArrayList<ClassMetadata> metas){
-		this.metas_array = metas;
-		for(ClassMetadata cm : metas){
-			this.metas.put(cm.name, cm);
-		}
+	public ClassCompletor(HashMap<String, ClassMetadata> metas){
+		this.metas = metas;
 	}
 	
 	public void execute(){
 		for(ClassMetadata cm : metas.values()){
 			updateRelations(cm);
 		}
-		this.metas_array.addAll(newMetas.values());
+		
+		for (ClassMetadata meta : newMetas.values()) {
+			this.metas.put(meta.name, meta);
+		}
 	}
 	
 	/**
@@ -36,6 +36,7 @@ public class ClassCompletor {
 		for(FieldMetadata fm : cm.relations.values()){ // For each relation in the class
 			RelationMetadata rel = fm.relation;
 			String targetEntity = rel.entity_ref;
+			
 			if(rel.field_ref.isEmpty()){
 				ClassMetadata cm_ref = this.metas.get(targetEntity);
 				ArrayList<FieldMetadata> ids = new ArrayList<FieldMetadata>(cm_ref.ids.values());
@@ -44,6 +45,7 @@ public class ClassCompletor {
 					rel.field_ref.add(ids.get(i).fieldName);
 				}
 			}
+			
 			ConsoleUtils.displayDebug("Relation "+rel.type+" on field "+rel.field+" targets "+rel.entity_ref+"("+rel.field_ref.get(0)+")");
 			if(rel.type.equals("OneToMany")){ // set inverse relation if it doesn't exists
 				// Check if relation ManyToOne exists in target entity

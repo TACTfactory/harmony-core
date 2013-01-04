@@ -16,7 +16,7 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 public class ProviderGenerator extends BaseGenerator {
 	
 	public ProviderGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
-		super(metas, adapter);
+		super(adapter);
 	}
 	
 	public void generateProvider() {

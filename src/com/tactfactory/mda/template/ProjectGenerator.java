@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.tactfactory.mda.ConsoleUtils;
@@ -27,35 +26,25 @@ public class ProjectGenerator extends BaseGenerator {
 	protected boolean isWritable = true;
 
 	public ProjectGenerator(BaseAdapter adapter) throws Exception {
-		super(new ArrayList<ClassMetadata>(), adapter);
+		super(adapter);
 
-		String projectNameSpace = "" + Harmony.projectNameSpace;
+		String projectNameSpace = "" + this.metas.projectNameSpace;
 		projectNameSpace = projectNameSpace.replaceAll("/","\\.");
 
 		// Make class
-		this.datamodel.put(TagConstant.PROJECT_NAME, Harmony.projectName);
+		this.datamodel.put(TagConstant.PROJECT_NAME, this.metas.projectName);
 		this.datamodel.put(TagConstant.PROJECT_NAMESPACE, projectNameSpace);
 		this.datamodel.put(TagConstant.ANDROID_SDK_DIR, Harmony.androidSdkPath);
 
 		this.datamodel.put(TagConstant.ANT_ANDROID_SDK_DIR, new TagConstant.AndroidSDK("${sdk.dir}"));
 		this.datamodel.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
 		this.datamodel.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
-	}
-
-	public ProjectGenerator(BaseAdapter adapter, Boolean isWritable) throws Exception {
-		this(adapter);
-
-		this.isWritable = isWritable;
-	}
-
-	public ProjectGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
-		this(adapter);
-
+		
 		this.metas = metas;
-		if(this.metas!=null&&this.metas.size()!=0){
+		if(this.metas!=null&&this.metas.entities.size()!=0){
 			// Make entities
 			ArrayList<Map<String, Object>> modelEntities = new ArrayList<Map<String,Object>>();
-			for (ClassMetadata meta : this.metas) {
+			for (ClassMetadata meta : this.metas.entities.values()) {
 				if(!meta.fields.isEmpty()){
 					Map<String, Object> modelClass = new HashMap<String, Object>();
 					modelClass.put(TagConstant.SPACE,	meta.space );
@@ -78,6 +67,12 @@ public class ProjectGenerator extends BaseGenerator {
 			}
 			this.datamodel.put(TagConstant.ENTITIES, modelEntities);
 		}
+	}
+
+	public ProjectGenerator(BaseAdapter adapter, Boolean isWritable) throws Exception {
+		this(adapter);
+
+		this.isWritable = isWritable;
 	}
 
 	/**
@@ -158,10 +153,10 @@ public class ProjectGenerator extends BaseGenerator {
 		boolean result = false;
 
 		// create project name space folders
-		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/"));
+		FileUtils.makeFolder(this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.","/"));
 
 		// create empty package entity
-		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/")+"/entity/" );
+		FileUtils.makeFolder(this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.","/")+"/entity/" );
 		
 		// create libs folders
 		FileUtils.makeFolder(this.adapter.getLibsPath());

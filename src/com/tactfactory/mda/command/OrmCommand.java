@@ -10,12 +10,13 @@ package com.tactfactory.mda.command;
 
 import japa.parser.ast.CompilationUnit;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;
 import com.tactfactory.mda.ConsoleUtils;
+import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.*;
 import com.tactfactory.mda.parser.*;
 import com.tactfactory.mda.plateforme.*;
@@ -57,7 +58,7 @@ public class OrmCommand extends BaseCommand {
 	protected JavaModelParser javaModelParser;
 
 	protected void generateForm() {
-		/*ArrayList<ClassMetadata> metas = this.getMetasFromAll();
+		/*ApplicationMetadata metas = this.getMetasFromAll();
 		if(metas!=null){
 			this.generateActivitiesForEntities(metas, true);
 		}*/
@@ -67,7 +68,7 @@ public class OrmCommand extends BaseCommand {
 	 * Generate java code files from first parsed Entity
 	 */
 	protected void generateEntity() {
-		/*ArrayList<ClassMetadata> metas = this.getMetasFromArg();
+		/*ApplicationMetadata metas = this.getMetasFromArg();
 		
 		if(metas!=null){
 			//this.generateActivitiesForEntities(metas, false);
@@ -81,11 +82,10 @@ public class OrmCommand extends BaseCommand {
 	 * Generate java code files from parsed Entities
 	 */
 	protected void generateEntities() {
-
-		ArrayList<ClassMetadata> metas = this.getMetasFromAll();
-		if(metas!=null){
-			this.makeLayoutDatabase(metas);
-			this.makeLayoutTestDatabase(metas);
+		Harmony.metas.entities = this.getMetasFromAll();
+		if(Harmony.metas.entities!=null){
+			this.makeLayoutDatabase();
+			this.makeLayoutTestDatabase();
 		}
 
 	}
@@ -94,24 +94,22 @@ public class OrmCommand extends BaseCommand {
 	 * Generate Create,Read,Upload,Delete code functions
 	 */
 	protected void generateCrud() {
-
-		ArrayList<ClassMetadata> metas = this.getMetasFromAll();
-		if(metas!=null){
-			this.makeLayoutUi(metas, true);
+		Harmony.metas.entities = this.getMetasFromAll();
+		if(Harmony.metas.entities != null){
+			this.makeLayoutUi(true);
 		}
 	}
 	
 	/**
 	 * Generate the Persistence part for the given classes
-	 * @param metas The classes Metadata
 	 */
-	protected void makeLayoutDatabase(ArrayList<ClassMetadata> metas){
+	protected void makeLayoutDatabase(){
 		try {
-			new EntityGenerator(metas, this.adapter).generateAll();
-			new ApplicationGenerator(metas, this.adapter).generateApplication();
-			new SQLiteAdapterGenerator(metas, this.adapter).generateAll();
-			new SQLiteGenerator(metas, this.adapter).generateDatabase();
-			new ProviderGenerator(metas, this.adapter).generateProvider();
+			new EntityGenerator(this.adapter).generateAll();
+			new ApplicationGenerator(this.adapter).generateApplication();
+			new SQLiteAdapterGenerator(this.adapter).generateAll();
+			new SQLiteGenerator(this.adapter).generateDatabase();
+			//new ProviderGenerator(this.adapter).generateProvider();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -120,12 +118,11 @@ public class OrmCommand extends BaseCommand {
 	
 	/**
 	 * Generate Test DB for Entities
-	 * @param metas The classes Metadata
 	 */
-	protected void makeLayoutTestDatabase(ArrayList<ClassMetadata> metas){
+	protected void makeLayoutTestDatabase(){
 		try {
 			// Make
-			new TestGenerator(metas, this.adapter).generateAll();
+			new TestGenerator(this.adapter).generateAll();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -134,14 +131,13 @@ public class OrmCommand extends BaseCommand {
 	
 	/**
 	 * Generate the GUI part for the given classes
-	 * @param metas The classes Metadata
 	 */
-	protected void makeLayoutUi(ArrayList<ClassMetadata> metas, boolean generateHome){
+	protected void makeLayoutUi(boolean generateHome){
 		try {
 			// Make
 			if(generateHome)
-				new ProjectGenerator(metas, this.adapter).generateHomeActivity();
-			new ActivityGenerator(metas, this.adapter).generateAll();
+				new ProjectGenerator(this.adapter).generateHomeActivity();
+			new ActivityGenerator(this.adapter).generateAll();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -178,10 +174,10 @@ public class OrmCommand extends BaseCommand {
 		
 	/**
 	 * Gets the Metadatas of all the entities actually in the package entity
-	 * @return The metadatas of the different classes
+	 * @return The metadatas of the application
 	 */
-	public ArrayList<ClassMetadata> getMetasFromAll(){
-		ArrayList<ClassMetadata> ret = null;
+	public LinkedHashMap<String, ClassMetadata> getMetasFromAll(){
+		LinkedHashMap<String, ClassMetadata> ret = null;
 		// Info Log
 		ConsoleUtils.display(">> Analyse Models...");
 
@@ -193,19 +189,26 @@ public class OrmCommand extends BaseCommand {
 			e.printStackTrace();
 		}
 
-		if(this.javaModelParser.getEntities().size()!=0)
-		{
-			// Convert CompilationUnits entities to ClassMetaData
+		// Convert CompilationUnits entities to ClassMetaData
+		if (this.javaModelParser.getEntities().size() > 0) {
 			for (CompilationUnit mclass : this.javaModelParser.getEntities()) {
 				this.javaModelParser.parse(mclass);
 			}
 	
 			// Generate views from MetaData
-			ret = this.javaModelParser.getMetas();			
+			if (this.javaModelParser.getMetas().size() > 0) {
+				ret = new LinkedHashMap<String, ClassMetadata>();
+				
+				for (ClassMetadata meta : this.javaModelParser.getMetas()) {
+					ret.put(meta.name, meta);
+				}
+			}
 		} else {
 			ConsoleUtils.displayWarning("No entities found in entity package!");
 		}
+		
 		new ClassCompletor(ret).execute();
+		
 		return ret;
 	}
 	

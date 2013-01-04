@@ -33,8 +33,8 @@ public abstract class CommonTest {
 		Harmony.debug = true;
 		
 		// Project test config
-		Harmony.projectName = "demact";
-		Harmony.projectNameSpace = "com/tactfactory/mda/test/demact";
+		Harmony.metas.projectName = "demact";
+		Harmony.metas.projectNameSpace = "com/tactfactory/mda/test/demact";
 		Harmony.androidSdkPath = "/tmp/";
 		//Harmony.pathProject = "app";
 		//Harmony.pathTemplate = "../tpl";
@@ -50,7 +50,7 @@ public abstract class CommonTest {
 	}
 	
 	protected void makeEntities() {
-		String pathNameSpace = Harmony.projectNameSpace.replaceAll("\\.", "/");
+		String pathNameSpace = Harmony.metas.projectNameSpace.replaceAll("\\.", "/");
 		String srcDir = String.format("src/%s/%s/", pathNameSpace, "entity");
 		String destDir = String.format("%s/android/src/%s/%s/", Harmony.pathProject, pathNameSpace, "entity");
 		System.out.println(destDir);

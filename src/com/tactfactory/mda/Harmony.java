@@ -29,6 +29,7 @@ import org.jdom2.input.SAXBuilder;
 
 import com.google.common.base.Strings;
 import com.tactfactory.mda.command.*;
+import com.tactfactory.mda.orm.ApplicationMetadata;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.OsUtil;
@@ -43,6 +44,9 @@ public class Harmony {
 	
 	/** Singleton of console */
 	public static Harmony instance;
+	
+	/** Application meta-data */
+	public static ApplicationMetadata metas = new ApplicationMetadata();
 	
 	/** Path of Harmony base */
 	public static String pathBase = "./";
@@ -61,12 +65,6 @@ public class Harmony {
 	
 	/** Project space */
 	public static String projectFolder = "android";
-
-	/** Project name (demact) */
-	public static String projectName;
-	
-	/** Project NameSpace (com/tactfactory/mda/test/demact) */
-	public static String projectNameSpace;
 
 	/** Android SDK path */
 	public static String androidSdkPath;
@@ -114,16 +112,16 @@ public class Harmony {
 		ConsoleUtils.display("Current Working Path: " + new File(".").getCanonicalPath());
 
 		// Check name space
-		if (Strings.isNullOrEmpty(Harmony.projectNameSpace)) {
+		if (Strings.isNullOrEmpty(Harmony.metas.projectNameSpace)) {
 			
 			// get project namespace and project name from AndroidManifest.xml
 			File manifest = new File(String.format("%s/%s/%s",Harmony.pathProject,Harmony.projectFolder,"AndroidManifest.xml"));
 			
 			if(manifest.exists()) {
-				Harmony.projectNameSpace = Harmony.getNameSpaceFromManifest(manifest);
+				Harmony.metas.projectNameSpace = Harmony.getNameSpaceFromManifest(manifest);
 
-				String[] projectNameSpaceData = Harmony.projectNameSpace.split("/");
-				Harmony.projectName = projectNameSpaceData[projectNameSpaceData.length-1];
+				String[] projectNameSpaceData = Harmony.metas.projectNameSpace.split("/");
+				Harmony.metas.projectName = projectNameSpaceData[projectNameSpaceData.length-1];
 			}
 			
 			// get android sdk dir from local.properties
@@ -132,15 +130,15 @@ public class Harmony {
 				Harmony.androidSdkPath = Harmony.getSdkDirFromProject(local_prop);
 		}
 		else {
-			String[] projectNameSpaceData = Harmony.projectNameSpace.split("/");
-			Harmony.projectName = projectNameSpaceData[projectNameSpaceData.length-1];
+			String[] projectNameSpaceData = Harmony.metas.projectNameSpace.split("/");
+			Harmony.metas.projectName = projectNameSpaceData[projectNameSpaceData.length-1];
 		}
 		
 		// Debug Log
 		ConsoleUtils.display(
-				"Current Project : " + projectName + "\n" +
-				"Current NameSpace : " + projectNameSpace + "\n" +
-				"Current Android SDK Path : " + androidSdkPath + "\n");
+				"Current Project : " + Harmony.metas.projectName + "\n" +
+				"Current NameSpace : " + Harmony.metas.projectNameSpace + "\n" +
+				"Current Android SDK Path : " + Harmony.androidSdkPath + "\n");
 	}
 	
 	/**
@@ -211,13 +209,13 @@ public class Harmony {
 	 */
 	public static void initProjectName()
 	{
-		if (Strings.isNullOrEmpty(Harmony.projectName)) {
+		if (Strings.isNullOrEmpty(Harmony.metas.projectName)) {
 			String projectName = Harmony.getUserInput("Please enter your Project Name ["+DEFAULT_PROJECT_NAME+"]:");
 			
 			if (!Strings.isNullOrEmpty(projectName))
-				Harmony.projectName = projectName;
+				Harmony.metas.projectName = projectName;
 			else
-				Harmony.projectName = DEFAULT_PROJECT_NAME;
+				Harmony.metas.projectName = DEFAULT_PROJECT_NAME;
 		}
 	}
 	
@@ -225,21 +223,21 @@ public class Harmony {
 	 * Prompt Project Name Space to the user
 	 */
 	public static void initProjectNameSpace() {
-		if (Strings.isNullOrEmpty(Harmony.projectNameSpace)) {
+		if (Strings.isNullOrEmpty(Harmony.metas.projectNameSpace)) {
 			boolean good = false;
 			
 			while (!good) {
 				String projectNameSpace = Harmony.getUserInput("Please enter your Project NameSpace ["+DEFAULT_PROJECT_NAMESPACE+"]:");
 				
 				if(!Strings.isNullOrEmpty(projectNameSpace)) {
-					if(projectNameSpace.toLowerCase().endsWith(Harmony.projectName.toLowerCase())){
-						Harmony.projectNameSpace = projectNameSpace.replaceAll("\\.", "/");
+					if(projectNameSpace.toLowerCase().endsWith(Harmony.metas.projectName.toLowerCase())){
+						Harmony.metas.projectNameSpace = projectNameSpace.replaceAll("\\.", "/");
 						good = true;
 					} else {
 						ConsoleUtils.display("The NameSpace has to end with Project Name !");
 					}
 				} else {
-					Harmony.projectNameSpace = DEFAULT_PROJECT_NAMESPACE.replaceAll("\\.", "/");
+					Harmony.metas.projectNameSpace = DEFAULT_PROJECT_NAMESPACE.replaceAll("\\.", "/");
 					good=true;
 				}
 			}

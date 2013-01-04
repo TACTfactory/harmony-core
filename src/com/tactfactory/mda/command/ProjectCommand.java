@@ -78,13 +78,13 @@ public class ProjectCommand extends BaseCommand {
 				if(!this.commandArgs.containsKey("name"))
 					Harmony.initProjectName();
 				else
-					Harmony.projectName = this.commandArgs.get("name");
+					Harmony.metas.projectName = this.commandArgs.get("name");
 
 				//Project NameSpace
 				if(!this.commandArgs.containsKey("namespace"))
 					Harmony.initProjectNameSpace();
 				else
-					Harmony.projectNameSpace = this.commandArgs.get("namespace").replaceAll("\\.", "/");
+					Harmony.metas.projectNameSpace = this.commandArgs.get("namespace").replaceAll("\\.", "/");
 
 				//Android sdk path
 				if(!this.commandArgs.containsKey("androidsdk"))
@@ -92,17 +92,17 @@ public class ProjectCommand extends BaseCommand {
 				else
 					Harmony.androidSdkPath = this.commandArgs.get("androidsdk");
 
-				ConsoleUtils.displayDebug("Project Name: "			+ Harmony.projectName +
-						"\nProject NameSpace: "	+ Harmony.projectNameSpace +
-						"\nAndroid SDK Path: "		+ Harmony.androidSdkPath);
+				ConsoleUtils.displayDebug("Project Name: "	+ Harmony.metas.projectName +
+						"\nProject NameSpace: "				+ Harmony.metas.projectNameSpace +
+						"\nAndroid SDK Path: "				+ Harmony.androidSdkPath);
 
 				if (Harmony.isConsole) {
 					String accept = Harmony.getUserInput("Use below given parameters to process files? (y/n) ");
 					if(!accept.contains("n")) {
 						userHasConfirmed = true;
 					} else {
-						Harmony.projectName = null;
-						Harmony.projectNameSpace = null;
+						Harmony.metas.projectName = null;
+						Harmony.metas.projectNameSpace = null;
 						Harmony.androidSdkPath = null;
 						this.commandArgs.clear();
 					}
@@ -354,45 +354,43 @@ public class ProjectCommand extends BaseCommand {
 			this.initAndroid();
 		} else
 
-			if (action.equals(INIT_IOS)) {
-				this.initIOS();
-			} else
+		if (action.equals(INIT_IOS)) {
+			this.initIOS();
+		} else
 
-				if (action.equals(INIT_RIM)) {
-					this.initRIM();
-				} else
+		if (action.equals(INIT_RIM)) {
+			this.initRIM();
+		} else
 
-					if (action.equals(INIT_WINPHONE)) {
-						this.initWinPhone();
-					} else
+		if (action.equals(INIT_WINPHONE)) {
+			this.initWinPhone();
+		} else
 
-						if (action.equals(INIT_ALL)) {
-							this.initAll();
-						} else
+		if (action.equals(INIT_ALL)) {
+			this.initAll();
+		} else
 
-							if (action.equals(REMOVE_ANDROID)) {
-								this.removeAndroid();
-							} else
+		if (action.equals(REMOVE_ANDROID)) {
+			this.removeAndroid();
+		} else
 
-								if (action.equals(REMOVE_IOS)) {
-									this.removeIOS();
-								} else
+		if (action.equals(REMOVE_IOS)) {
+			this.removeIOS();
+		} else
 
-									if (action.equals(REMOVE_RIM)) {
-										this.removeRIM();
-									} else
+		if (action.equals(REMOVE_RIM)) {
+			this.removeRIM();
+		} else
 
-										if (action.equals(REMOVE_WINPHONE)) {
-											this.removeWinPhone();
-										} else
+		if (action.equals(REMOVE_WINPHONE)) {
+			this.removeWinPhone();
+		} else
 
-											if (action.equals(REMOVE_ALL)) {
-												this.removeAll();
-											} else
+		if (action.equals(REMOVE_ALL)) {
+			this.removeAll();
+		} else {
 
-											{
-
-											}
+		}
 	}
 
 	/** @see BaseCommand#isAvailableCommand(String) */
