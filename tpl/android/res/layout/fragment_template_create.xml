@@ -57,7 +57,9 @@
     	android:id="@+id/${name?lower_case}_${field.name?lower_case}_label"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
+		    	<#if (lastField??) >
 	    android:layout_below="@+id/${lastField}"
+		    	</#if >
 	    android:text="${field.name?lower_case}"/>
     <Button
         android:id="@+id/${name?lower_case}_${field.name?lower_case}_button"

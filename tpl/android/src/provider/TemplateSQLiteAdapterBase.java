@@ -12,6 +12,7 @@
 	</#list>
 	<#return false>
 </#function>
+
 package ${local_namespace};
 
 import java.text.SimpleDateFormat;
