@@ -50,10 +50,7 @@ public class ClassCompletor {
 			if(rel.type.equals("OneToMany")){ // set inverse relation if it doesn't exists
 				// Check if relation ManyToOne exists in target entity
 				ClassMetadata entity_ref = this.metas.get(rel.entity_ref);
-				/*boolean relFound = false;
-				for(FieldMetadata rel_entity_ref : entity_ref.relations.values()){
-					if(rel_entity_ref.relation.entity_ref.equals(cm.name)) relFound = true;
-				}*/
+
 				// if it doesn't :
 				if(rel.mappedBy==null){
 					// Create it
