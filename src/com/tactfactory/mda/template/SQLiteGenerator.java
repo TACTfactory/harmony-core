@@ -14,9 +14,9 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
@@ -29,23 +29,19 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class SQLiteGenerator {
-	protected List<ClassMetadata> metas;
-	protected BaseAdapter adapter;
-	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
+public class SQLiteGenerator extends BaseGenerator {
 	protected String localNameSpace;
 
-	public SQLiteGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
-		if (metas == null && adapter == null)
-			throw new Exception("No meta or adapter define.");
-		
-		this.metas 		= metas;
-		this.adapter	= adapter;
-		this.localNameSpace = this.adapter.getNameSpace(this.metas.get(0), this.adapter.getData());
+	public SQLiteGenerator(BaseAdapter adapter) throws Exception {
+		super(adapter);
+		String globalNameSpace = "";
 
 		// Make entities
 		ArrayList<Map<String, Object>> modelEntities = new ArrayList<Map<String,Object>>();
-		for (ClassMetadata meta : this.metas) {
+		for (ClassMetadata meta : this.metas.entities.values()) {
+			this.localNameSpace = this.adapter.getNameSpace(meta, this.adapter.getData());
+			globalNameSpace = meta.space;
+			
 			if(!meta.fields.isEmpty()){
 				Map<String, Object> modelClass = new HashMap<String, Object>();
 				modelClass.put(TagConstant.SPACE,	meta.space );
@@ -80,8 +76,8 @@ public class SQLiteGenerator {
 				modelEntities.add(modelClass);
 			}
 		}
-		this.datamodel.put(TagConstant.PROJECT_NAME, 		Harmony.projectName);
-		this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	this.metas.get(0).space);
+		this.datamodel.put(TagConstant.PROJECT_NAME, 		this.metas.projectName);
+		this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	globalNameSpace);
 		this.datamodel.put(TagConstant.ENTITIES,			modelEntities);
 		this.datamodel.put(TagConstant.LOCAL_NAMESPACE,		this.localNameSpace);
 	}
@@ -98,8 +94,8 @@ public class SQLiteGenerator {
 			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
 			
 			this.makeSourceData(cfg, 
-					"TemplateSqliteOpenHelper.java", 
-					"%sSqliteOpenHelper.java");
+					"TemplateSQLiteOpenHelper.java", 
+					"%sSQLiteOpenHelper.java");
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -124,7 +120,7 @@ public class SQLiteGenerator {
 				String.format("%s%s/%s",
 						this.adapter.getSourcePath(),
 						PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
-						String.format(filename, Harmony.projectName)));
+						String.format(filename, CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.metas.projectName))));
 		
 		// Debug Log
 		ConsoleUtils.displayDebug("Generate Source : " + file.getPath()); 

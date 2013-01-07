@@ -8,7 +8,7 @@
  */
 package com.tactfactory.mda.test.demact.entity;
 
-import java.util.Date;
+import org.joda.time.DateTime;
 
 import com.tactfactory.mda.orm.annotation.*;
 import com.tactfactory.mda.orm.annotation.Column.Type;
@@ -37,12 +37,12 @@ public class User extends Object implements Cloneable {
     protected String lastname;
 	
 	@Column(name="created_at")	// type="datetime",
-    protected Date createdAt;
+    protected DateTime createdAt;
 
 
 	public User() {
 		this.id = -1;
-    	this.createdAt = new Date();
+    	this.createdAt = new DateTime();
     }
 	
 	/**
@@ -118,14 +118,14 @@ public class User extends Object implements Cloneable {
 	/**
 	 * @return the createdAt
 	 */
-	public final Date getCreatedAt() {
+	public final DateTime getCreatedAt() {
 		return createdAt;
 	}
 
 	/**
 	 * @param createdAt the createdAt to set
 	 */
-	public final void setCreatedAt(Date createdAt) {
+	public final void setCreatedAt(DateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 }

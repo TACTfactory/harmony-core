@@ -23,7 +23,7 @@ public class ConsoleUtils {
 	public static void displayWarning(String value) {
 		if (!quiet)
 			if (ansi) {
-				cp.println(value, Attribute.NONE, FColor.YELLOW, BColor.BLACK);
+				cp.println("[WARNING]\t" + value + "\n", Attribute.NONE, FColor.YELLOW, BColor.BLACK);
 			} else {
 				System.out.println(value);
 			}

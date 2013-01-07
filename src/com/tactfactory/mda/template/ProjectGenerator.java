@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.tactfactory.mda.ConsoleUtils;
@@ -23,48 +22,30 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class ProjectGenerator {	
-	protected List<ClassMetadata> metas;
-	//protected ClassMetadata meta;
-	protected BaseAdapter adapter;
-
+public class ProjectGenerator extends BaseGenerator {
 	protected boolean isWritable = true;
-	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 
 	public ProjectGenerator(BaseAdapter adapter) throws Exception {
-		if (adapter == null)
-			throw new Exception("No adapter defined.");
+		super(adapter);
 
-		this.adapter	= adapter;
-
-		String projectNameSpace = ""+Harmony.projectNameSpace;
+		String projectNameSpace = "" + this.metas.projectNameSpace;
 		projectNameSpace = projectNameSpace.replaceAll("/","\\.");
 
 		// Make class
-		this.datamodel.put(TagConstant.PROJECT_NAME, Harmony.projectName);
+		this.datamodel.put(TagConstant.PROJECT_NAME, this.metas.projectName);
 		this.datamodel.put(TagConstant.PROJECT_NAMESPACE, projectNameSpace);
 		this.datamodel.put(TagConstant.ANDROID_SDK_DIR, Harmony.androidSdkPath);
 
 		this.datamodel.put(TagConstant.ANT_ANDROID_SDK_DIR, new TagConstant.AndroidSDK("${sdk.dir}"));
 		this.datamodel.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
 		this.datamodel.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
-	}
-
-	public ProjectGenerator(BaseAdapter adapter, Boolean isWritable) throws Exception {
-		this(adapter);
-
-		this.isWritable = isWritable;
-	}
-
-	public ProjectGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
-		this(adapter);
-
+		
 		this.metas = metas;
-		if(this.metas!=null&&this.metas.size()!=0){
+		if(this.metas!=null&&this.metas.entities.size()!=0){
 			// Make entities
 			ArrayList<Map<String, Object>> modelEntities = new ArrayList<Map<String,Object>>();
-			for (ClassMetadata meta : this.metas) {
-				if(!meta.fields.isEmpty()){
+			for (ClassMetadata meta : this.metas.entities.values()) {
+				if(!meta.fields.isEmpty() && !meta.internal){
 					Map<String, Object> modelClass = new HashMap<String, Object>();
 					modelClass.put(TagConstant.SPACE,	meta.space );
 					modelClass.put(TagConstant.NAME,	meta.name );
@@ -86,6 +67,12 @@ public class ProjectGenerator {
 			}
 			this.datamodel.put(TagConstant.ENTITIES, modelEntities);
 		}
+	}
+
+	public ProjectGenerator(BaseAdapter adapter, Boolean isWritable) throws Exception {
+		this(adapter);
+
+		this.isWritable = isWritable;
 	}
 
 	/**
@@ -165,17 +152,11 @@ public class ProjectGenerator {
 	private boolean makeProjectAndroid(){
 		boolean result = false;
 
-		//create project template structure
-		File dirProj = FileUtils.makeFolderRecursive(
-				String.format("%s/%s/%s/", Harmony.pathTemplate, this.adapter.getPlatform(), this.adapter.getProject()),
-				String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()),
-				false);
-
 		// create project name space folders
-		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/"));
+		FileUtils.makeFolder(this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.","/"));
 
 		// create empty package entity
-		FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/")+"/entity/" );
+		FileUtils.makeFolder(this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.","/")+"/entity/" );
 		
 		// create libs folders
 		FileUtils.makeFolder(this.adapter.getLibsPath());
@@ -204,7 +185,7 @@ public class ProjectGenerator {
 		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathLibs,"android-support-v4.jar")),
 				new File(String.format("%s/%s",this.adapter.getLibsPath(),"android-support-v4.jar")));
 		
-		File dirTpl = new File(String.format("%s/%s/%s/", Harmony.pathTemplate, this.adapter.getPlatform(), this.adapter.getProject()));
+		File dirTpl = new File(this.adapter.getTemplateProjectPath());
 
 		// Update newly created files with datamodel
 		if(dirTpl.exists() && dirTpl.listFiles().length!=0)

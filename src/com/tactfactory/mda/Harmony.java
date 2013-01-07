@@ -8,8 +8,11 @@
  */
 package com.tactfactory.mda;
 
+import japa.parser.ast.expr.ThisExpr;
+
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -29,6 +32,7 @@ import org.jdom2.input.SAXBuilder;
 
 import com.google.common.base.Strings;
 import com.tactfactory.mda.command.*;
+import com.tactfactory.mda.orm.ApplicationMetadata;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.OsUtil;
@@ -43,6 +47,9 @@ public class Harmony {
 	
 	/** Singleton of console */
 	public static Harmony instance;
+	
+	/** Application meta-data */
+	public static ApplicationMetadata metas = new ApplicationMetadata();
 	
 	/** Path of Harmony base */
 	public static String pathBase = "./";
@@ -62,14 +69,10 @@ public class Harmony {
 	/** Project space */
 	public static String projectFolder = "android";
 
-	/** Project name (demact) */
-	public static String projectName;
-	
-	/** Project NameSpace (com/tactfactory/mda/test/demact) */
-	public static String projectNameSpace;
-
 	/** Android SDK path */
 	public static String androidSdkPath;
+	
+	public static String androidSdkVersion;
 
 	/** Symfony path */
 	public static String symfonyPath = "D:/Site/wamp/www/Symfony";
@@ -80,7 +83,7 @@ public class Harmony {
 	public static boolean isConsole = false;
 	
 	private PluginManager pluginManager;
-	public HashMap<Class<?>, Command> bootstrap = new HashMap<Class<?>, Command>();
+	private HashMap<Class<?>, Command> bootstrap = new HashMap<Class<?>, Command>();
 
 	public Harmony() throws Exception {
 		final JSPFProperties props = new JSPFProperties();
@@ -114,33 +117,35 @@ public class Harmony {
 		ConsoleUtils.display("Current Working Path: " + new File(".").getCanonicalPath());
 
 		// Check name space
-		if (Strings.isNullOrEmpty(Harmony.projectNameSpace)) {
+		if (Strings.isNullOrEmpty(Harmony.metas.projectNameSpace)) {
 			
 			// get project namespace and project name from AndroidManifest.xml
 			File manifest = new File(String.format("%s/%s/%s",Harmony.pathProject,Harmony.projectFolder,"AndroidManifest.xml"));
 			
 			if(manifest.exists()) {
-				Harmony.projectNameSpace = Harmony.getNameSpaceFromManifest(manifest);
+				Harmony.metas.projectNameSpace = Harmony.getNameSpaceFromManifest(manifest);
 
-				String[] projectNameSpaceData = Harmony.projectNameSpace.split("/");
-				Harmony.projectName = projectNameSpaceData[projectNameSpaceData.length-1];
+				String[] projectNameSpaceData = Harmony.metas.projectNameSpace.split("/");
+				Harmony.metas.projectName = projectNameSpaceData[projectNameSpaceData.length-1];
 			}
 			
 			// get android sdk dir from local.properties
-			File local_prop = new File(String.format("%s/%s/%s",Harmony.pathProject,Harmony.projectFolder,"local.properties"));
+			File local_prop = new File(String.format("%s/%s/%s",Harmony.pathProject,Harmony.projectFolder,"project.properties"));
 			if(local_prop.exists())
 				Harmony.androidSdkPath = Harmony.getSdkDirFromProject(local_prop);
+				Harmony.androidSdkVersion = getAndroidSdkVersion(Harmony.androidSdkPath);
 		}
 		else {
-			String[] projectNameSpaceData = Harmony.projectNameSpace.split("/");
-			Harmony.projectName = projectNameSpaceData[projectNameSpaceData.length-1];
+			String[] projectNameSpaceData = Harmony.metas.projectNameSpace.split("/");
+			Harmony.metas.projectName = projectNameSpaceData[projectNameSpaceData.length-1];
 		}
 		
 		// Debug Log
 		ConsoleUtils.display(
-				"Current Project : " + projectName + "\n" +
-				"Current NameSpace : " + projectNameSpace + "\n" +
-				"Current Android SDK Path : " + androidSdkPath + "\n");
+				"Current Project : " + Harmony.metas.projectName + "\n" +
+				"Current NameSpace : " + Harmony.metas.projectNameSpace + "\n" +
+				"Current Android SDK Path : " + Harmony.androidSdkPath + "\n" +
+				"Current Android SDK Revision : " + Harmony.androidSdkVersion);
 	}
 	
 	/**
@@ -151,6 +156,10 @@ public class Harmony {
 	 */
 	public Command getCommand(Class<?> commandName) {
 		return this.bootstrap.get(commandName);
+	}
+	
+	public Collection<Command> getCommands() {
+		return this.bootstrap.values();
 	}
 
 	/**
@@ -207,13 +216,13 @@ public class Harmony {
 	 */
 	public static void initProjectName()
 	{
-		if (Strings.isNullOrEmpty(Harmony.projectName)) {
+		if (Strings.isNullOrEmpty(Harmony.metas.projectName)) {
 			String projectName = Harmony.getUserInput("Please enter your Project Name ["+DEFAULT_PROJECT_NAME+"]:");
 			
-			if (projectName!=null && projectName.length()!=0)
-				Harmony.projectName = projectName;
+			if (!Strings.isNullOrEmpty(projectName))
+				Harmony.metas.projectName = projectName;
 			else
-				Harmony.projectName = DEFAULT_PROJECT_NAME;
+				Harmony.metas.projectName = DEFAULT_PROJECT_NAME;
 		}
 	}
 	
@@ -221,21 +230,21 @@ public class Harmony {
 	 * Prompt Project Name Space to the user
 	 */
 	public static void initProjectNameSpace() {
-		if (Strings.isNullOrEmpty(Harmony.projectNameSpace)) {
+		if (Strings.isNullOrEmpty(Harmony.metas.projectNameSpace)) {
 			boolean good = false;
 			
 			while (!good) {
 				String projectNameSpace = Harmony.getUserInput("Please enter your Project NameSpace ["+DEFAULT_PROJECT_NAMESPACE+"]:");
 				
-				if(projectNameSpace!=null && projectNameSpace.length()!=0) {
-					if(projectNameSpace.toLowerCase().endsWith(Harmony.projectName.toLowerCase())){
-						Harmony.projectNameSpace = projectNameSpace.replaceAll("\\.", "/");
+				if(!Strings.isNullOrEmpty(projectNameSpace)) {
+					if(projectNameSpace.toLowerCase().endsWith(Harmony.metas.projectName.toLowerCase())){
+						Harmony.metas.projectNameSpace = projectNameSpace.replaceAll("\\.", "/");
 						good = true;
 					} else {
 						ConsoleUtils.display("The NameSpace has to end with Project Name !");
 					}
 				} else {
-					Harmony.projectNameSpace = DEFAULT_PROJECT_NAMESPACE.replaceAll("\\.", "/");
+					Harmony.metas.projectNameSpace = DEFAULT_PROJECT_NAMESPACE.replaceAll("\\.", "/");
 					good=true;
 				}
 			}
@@ -249,8 +258,9 @@ public class Harmony {
 		if (Strings.isNullOrEmpty(Harmony.androidSdkPath)) {
 			String sdkPath = Harmony.getUserInput("Please enter AndroidSDK full path [/root/android-sdk/]:");
 			
-			if(sdkPath!=null && sdkPath.length()!=0){
+			if(!Strings.isNullOrEmpty(sdkPath)){
 				Harmony.androidSdkPath = sdkPath;
+				Harmony.androidSdkVersion = getAndroidSdkVersion(Harmony.androidSdkPath);
 			} else {
 				String os_message = "Detected OS: ";
 				
@@ -268,7 +278,7 @@ public class Harmony {
 				}
 				else if(OsUtil.isLinux()) {
 					os_message += "Linux";
-					Harmony.androidSdkPath = "/root/android-sdk/";
+					Harmony.androidSdkPath = "/opt/android-sdk/";
 				}
 				
 				// Debug Log
@@ -351,6 +361,34 @@ public class Harmony {
 					}
 					break;
 				}
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Extract Android SDK Path from local.properties file
+	 * 
+	 * @param local_prop Local.properties File
+	 * @return Android SDK Path
+	 */
+	public static String getAndroidSdkVersion(String sdkPath) {
+		String result = null;
+		
+		File sdkProperties = new File(sdkPath+"/tools/source.properties");
+		if(sdkProperties.exists()){
+			try{
+				FileInputStream fis = new FileInputStream(sdkProperties);
+				InputStreamReader isr = new InputStreamReader(fis);
+				BufferedReader br = new BufferedReader(isr);
+				String line;
+				while((line = br.readLine()) !=null){
+					if(line.startsWith("Pkg.Revision")){
+						result = line.substring(line.lastIndexOf("=")+1);
+					}
+				}
+			}catch(IOException e){
+				
 			}
 		}
 		return result;

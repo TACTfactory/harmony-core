@@ -8,5 +8,18 @@
  */
 package com.tactfactory.mda.template;
 
-public class ProviderGenerator {
+import java.util.List;
+
+import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.plateforme.BaseAdapter;
+
+public class ProviderGenerator extends BaseGenerator {
+	
+	public ProviderGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
+		super(adapter);
+	}
+	
+	public void generateProvider() {
+		
+	}
 }

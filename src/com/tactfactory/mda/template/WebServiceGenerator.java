@@ -17,28 +17,21 @@ import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
-import com.tactfactory.mda.orm.RelationMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.SystemCommand;
 
-public class WebServiceGenerator {
-	protected List<ClassMetadata> metas;
-	protected BaseAdapter adapter;
-	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
+public class WebServiceGenerator extends BaseGenerator {
 	protected String localNameSpace;
 	private SystemCommand console;
 
-	public WebServiceGenerator(List<ClassMetadata> metas, BaseAdapter adapter) throws Exception {
-		if (metas == null && adapter == null)
-			throw new Exception("No meta or adapter define.");
+	public WebServiceGenerator(BaseAdapter adapter) throws Exception {
+		super(adapter);
 		
-		this.metas 		= metas;
-		this.adapter	= adapter;
-		this.localNameSpace = this.adapter.getNameSpace(this.metas.get(0), this.adapter.getData());
+		this.localNameSpace = this.adapter.getNameSpace(this.metas.entities.get(0), this.adapter.getData());
 
 		// Make entities
 		ArrayList<Map<String, Object>> modelEntities = new ArrayList<Map<String,Object>>();
-		for (ClassMetadata meta : this.metas) {
+		for (ClassMetadata meta : this.metas.entities.values()) {
 			Map<String, Object> modelClass = new HashMap<String, Object>();
 			modelClass.put(TagConstant.SPACE,	meta.space );
 			modelClass.put(TagConstant.NAME,	meta.name );
@@ -71,8 +64,8 @@ public class WebServiceGenerator {
 			
 			modelEntities.add(modelClass);
 		}
-		this.datamodel.put(TagConstant.PROJECT_NAME, 		Harmony.projectName);
-		this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	this.metas.get(0).space);
+		this.datamodel.put(TagConstant.PROJECT_NAME, 		this.metas.projectName);
+		this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	this.metas.entities.get(0).space);
 		this.datamodel.put(TagConstant.ENTITIES,			modelEntities);
 		this.datamodel.put(TagConstant.LOCAL_NAMESPACE,		this.localNameSpace);
 	}
@@ -91,7 +84,7 @@ public class WebServiceGenerator {
 		ConsoleUtils.displayDebug(console.getStandardOutputFromCommand().toString());
 	}
 	
-	private void generateSymfonyEntities() {
+	public void generateSymfonyEntities() {
 
 		//php app/console generate:doctrine:entity --non-interaction --entity=AcmeBlogBundle:Post --fields="title:string(100) body:text" --format=xml
 		List<String> command = new ArrayList<String>();
