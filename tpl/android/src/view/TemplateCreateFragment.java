@@ -32,10 +32,6 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import com.tactfactory.mda.test.demact.CustomDatePickerDialog;
-import com.tactfactory.mda.test.demact.R;
-import com.tactfactory.mda.test.demact.view.user.UserCreateFragment;
-
 import ${namespace}.data.${name}SQLiteAdapter;
 import ${namespace}.entity.${name};
 <#list relations as relation>
