@@ -8,8 +8,6 @@
  */
 package com.tactfactory.mda;
 
-import japa.parser.ast.expr.ThisExpr;
-
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
@@ -387,8 +385,9 @@ public class Harmony {
 						result = line.substring(line.lastIndexOf("=")+1);
 					}
 				}
+				br.close();
 			}catch(IOException e){
-				
+				ConsoleUtils.displayError(e.getMessage());
 			}
 		}
 		return result;

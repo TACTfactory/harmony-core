@@ -8,8 +8,6 @@
  */
 package com.tactfactory.mda.test.orm;
 
-import java.util.ArrayList;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
