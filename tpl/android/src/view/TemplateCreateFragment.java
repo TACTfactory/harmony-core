@@ -8,6 +8,8 @@ import android.os.AsyncTask;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
+import android.text.TextUtils;
+import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,12 +21,20 @@ import android.widget.*;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+import com.tactfactory.mda.test.demact.CustomDatePickerDialog;
+import com.tactfactory.mda.test.demact.R;
+import com.tactfactory.mda.test.demact.view.user.UserCreateFragment;
 
 import ${namespace}.data.${name}SQLiteAdapter;
 import ${namespace}.entity.${name};
@@ -78,7 +88,71 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		this.${field.name}View = (CheckBox) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});
 					<#else>
 		this.${field.name}View = (EditText) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});			
-					</#if>
+		<#if field.type == "date" || field.type == "datetime">
+		this.${field.name}View.setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
+		        DateTime dt = new DateTime();
+		        final java.text.DateFormat df = DateFormat.getDateFormat(getActivity());
+		        
+				if (!TextUtils.isEmpty(${name}CreateFragment.this.${field.name}View.getText())){
+					String strInputDate = ${name}CreateFragment.this.${field.name}View.getText().toString();
+					try {
+						Date date = df.parse(strInputDate);
+						dt = new DateTime(date.getTime());
+					} catch (ParseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+				}
+				
+			    CustomDatePickerDialog ${field.name}Dpd = new CustomDatePickerDialog(getActivity(), dt, "Select ${field.name} date");
+			    ${field.name}Dpd.setPositiveButton(getActivity().getString(R.string.common_ok), new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						DatePicker dp = ((CustomDatePickerDialog) dialog).getDatePicker();
+						DateTime date = new DateTime(dp.getYear(), dp.getMonth() + 1, dp.getDayOfMonth(), 0, 0);
+						${name}CreateFragment.this.${field.name}View.setText(df.format(date.toDate()));
+					}
+				});
+
+			    ${field.name}Dpd.show();
+			}
+		});
+		</#if>
+		<#if field.type == "time" || field.type == "datetime">
+		this.${field.name}View.setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
+				DateTime dt = new DateTime();
+		        final DateTimeFormatter fmt = DateTimeFormat.shortTime();
+		        
+				if (!TextUtils.isEmpty(${name}CreateFragment.this.${field.name}View.getText())){
+					String strInputTime = ${name}CreateFragment.this.${field.name}View.getText().toString();
+				    dt = fmt.parseDateTime(strInputTime);
+				}
+				
+				int hour = dt.getHourOfDay();
+				int minute = dt.getMinuteOfHour();
+		        
+		        TimePickerDialog ${field.name}Tpd = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+					
+					@Override
+					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+						DateTime date = new DateTime(0);
+						date = new DateTime(date.getYear(), date.getDayOfMonth(), date.getDayOfMonth(), 
+								hourOfDay, minute);
+                        
+                        ${name}CreateFragment.this.${field.name}View.setText(date.toString(fmt));
+					}
+				}, hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
+				
+		        ${field.name}Tpd.show();
+			}
+		});
+				</#if>
+			</#if>
+
 				<#else>
 		this.${field.name}Button = (Button) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}_button);
 		this.${field.name}Button.setOnClickListener(new OnClickListener(){
