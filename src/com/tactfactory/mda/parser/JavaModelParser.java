@@ -177,7 +177,7 @@ public class JavaModelParser {
 					String annotationType = annotationExpr.getName().toString();
 					if (annotationType.equals(FILTER_ENTITY)) {
 						meta.name = PackageUtils.extractNameEntity(n.getName());
-						
+						SqliteAdapter.Keywords.exists(meta.name);
 						// Debug Log
 						ConsoleUtils.displayDebug("Entity : " + meta.space + ".entity." +  meta.name);
 					}
@@ -300,7 +300,14 @@ public class JavaModelParser {
 				// Add to meta dictionary
 				if (isId || isColumn || isRelation)
 					meta.fields.put(fieldMeta.fieldName, fieldMeta);
+				
+				SqliteAdapter.Keywords.exists(fieldMeta.fieldName);
+				if(!fieldMeta.fieldName.equals(fieldMeta.columnName))
+					SqliteAdapter.Keywords.exists(fieldMeta.columnName);
+				SqliteAdapter.Keywords.exists(fieldMeta.columnDefinition);
+				SqliteAdapter.Keywords.exists(fieldMeta.type);
 			}
+					
 		}
 
 

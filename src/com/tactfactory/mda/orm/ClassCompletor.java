@@ -62,6 +62,7 @@ public class ClassCompletor {
 					new_field.hidden = true;
 					new_field.internal = true;
 					new_field.fieldName = cm.name.toLowerCase();
+					new_field.columnName = new_field.fieldName;
 					new_field.type = cm.name;
 					new_field.relation = new RelationMetadata();
 					new_field.relation.entity_ref = cm.name;
@@ -93,6 +94,7 @@ public class ClassCompletor {
 						id.columnDefinition = "integer";
 						id.type = "integer";
 						id.fieldName = "id";
+						id.columnName = id.fieldName;
 						id.id = true;
 						classMeta.ids.put("id", id);
 						classMeta.fields.put("id", id);

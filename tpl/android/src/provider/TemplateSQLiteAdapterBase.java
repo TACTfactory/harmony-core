@@ -46,7 +46,7 @@ public abstract class ${name}SQLiteAdapterBase {
 	// Columns constants fields mapping
 <#list fields as field>
 	<#if !field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")>
-	public static final String ${alias(field.name)} = "${field.name}";
+	public static final String ${alias(field.name)} = "${field.columnName}";
 	</#if>
 </#list>
 	

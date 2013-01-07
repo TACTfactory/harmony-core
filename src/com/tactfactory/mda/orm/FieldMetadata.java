@@ -64,6 +64,7 @@ public class FieldMetadata {
 		HashMap<String, Object> model = new HashMap<String, Object>();
 		model.put(TagConstant.NAME, this.fieldName);
 		model.put(TagConstant.TYPE, this.type);
+		model.put("columnName", this.columnName);
 		model.put("columnDefinition", this.columnDefinition);
 		//model.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(this));
 		model.put(TagConstant.HIDDEN, this.hidden);
