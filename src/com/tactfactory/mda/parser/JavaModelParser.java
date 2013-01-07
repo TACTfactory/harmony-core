@@ -177,7 +177,7 @@ public class JavaModelParser {
 					String annotationType = annotationExpr.getName().toString();
 					if (annotationType.equals(FILTER_ENTITY)) {
 						meta.name = PackageUtils.extractNameEntity(n.getName());
-						
+						SqliteAdapter.Keywords.exists(meta.name);
 						// Debug Log
 						ConsoleUtils.displayDebug("Entity : " + meta.space + ".entity." +  meta.name);
 					}
@@ -300,7 +300,14 @@ public class JavaModelParser {
 				// Add to meta dictionary
 				if (isId || isColumn || isRelation)
 					meta.fields.put(fieldMeta.fieldName, fieldMeta);
+				
+				SqliteAdapter.Keywords.exists(fieldMeta.fieldName);
+				if(!fieldMeta.fieldName.equals(fieldMeta.columnName))
+					SqliteAdapter.Keywords.exists(fieldMeta.columnName);
+				SqliteAdapter.Keywords.exists(fieldMeta.columnDefinition);
+				SqliteAdapter.Keywords.exists(fieldMeta.type);
 			}
+					
 		}
 
 
@@ -383,11 +390,20 @@ public class JavaModelParser {
 						} else
 						
 						if (annotationType.equals(FILTER_JOINCOLUMN)) { // for @JoinColumn
-							/*if(mvp.getName().equals("referencedColumnName")){
-								rel.field_ref.add(mvp.getValue().toString());
-							}*/
 							if(mvp.getName().equals("name")){
-								rel.name = mvp.getValue().toString();
+								rel.name = ((StringLiteralExpr)mvp.getValue()).getValue();
+							}
+						} else
+							
+						if (annotationType.equals(FILTER_ONE2MANY)){
+							if(mvp.getName().equals("mappedBy")){
+								rel.mappedBy = ((StringLiteralExpr)mvp.getValue()).getValue();
+							}
+						} else
+						
+						if (annotationType.equals(FILTER_MANY2ONE)){
+							if(mvp.getName().equals("inversedBy")){
+								rel.inversedBy = mvp.getValue().toString();
 							}
 						}
 					}	

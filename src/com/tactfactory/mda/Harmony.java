@@ -8,8 +8,11 @@
  */
 package com.tactfactory.mda;
 
+import japa.parser.ast.expr.ThisExpr;
+
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
@@ -68,6 +71,8 @@ public class Harmony {
 
 	/** Android SDK path */
 	public static String androidSdkPath;
+	
+	public static String androidSdkVersion;
 
 	/** Symfony path */
 	public static String symfonyPath = "D:/Site/wamp/www/Symfony";
@@ -125,9 +130,10 @@ public class Harmony {
 			}
 			
 			// get android sdk dir from local.properties
-			File local_prop = new File(String.format("%s/%s/%s",Harmony.pathProject,Harmony.projectFolder,"local.properties"));
+			File local_prop = new File(String.format("%s/%s/%s",Harmony.pathProject,Harmony.projectFolder,"project.properties"));
 			if(local_prop.exists())
 				Harmony.androidSdkPath = Harmony.getSdkDirFromProject(local_prop);
+				Harmony.androidSdkVersion = getAndroidSdkVersion(Harmony.androidSdkPath);
 		}
 		else {
 			String[] projectNameSpaceData = Harmony.metas.projectNameSpace.split("/");
@@ -138,7 +144,8 @@ public class Harmony {
 		ConsoleUtils.display(
 				"Current Project : " + Harmony.metas.projectName + "\n" +
 				"Current NameSpace : " + Harmony.metas.projectNameSpace + "\n" +
-				"Current Android SDK Path : " + Harmony.androidSdkPath + "\n");
+				"Current Android SDK Path : " + Harmony.androidSdkPath + "\n" +
+				"Current Android SDK Revision : " + Harmony.androidSdkVersion);
 	}
 	
 	/**
@@ -253,6 +260,7 @@ public class Harmony {
 			
 			if(!Strings.isNullOrEmpty(sdkPath)){
 				Harmony.androidSdkPath = sdkPath;
+				Harmony.androidSdkVersion = getAndroidSdkVersion(Harmony.androidSdkPath);
 			} else {
 				String os_message = "Detected OS: ";
 				
@@ -353,6 +361,34 @@ public class Harmony {
 					}
 					break;
 				}
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Extract Android SDK Path from local.properties file
+	 * 
+	 * @param local_prop Local.properties File
+	 * @return Android SDK Path
+	 */
+	public static String getAndroidSdkVersion(String sdkPath) {
+		String result = null;
+		
+		File sdkProperties = new File(sdkPath+"/tools/source.properties");
+		if(sdkProperties.exists()){
+			try{
+				FileInputStream fis = new FileInputStream(sdkProperties);
+				InputStreamReader isr = new InputStreamReader(fis);
+				BufferedReader br = new BufferedReader(isr);
+				String line;
+				while((line = br.readLine()) !=null){
+					if(line.startsWith("Pkg.Revision")){
+						result = line.substring(line.lastIndexOf("=")+1);
+					}
+				}
+			}catch(IOException e){
+				
 			}
 		}
 		return result;

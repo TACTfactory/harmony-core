@@ -7,24 +7,29 @@
     android:layout_height="match_parent" >
 <#list fields as field>
 	<#if !field.internal && !field.hidden>
-    <TextView 
-    	android:id="@+id/${name?lower_case}_${field.name?lower_case}_label"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
+	<TextView 
+		android:id="@+id/${name?lower_case}_${field.name?lower_case}_label"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
 		    <#if (lastFieldName??) >
-	    android:layout_below="@+id/${name?lower_case}_${lastFieldName?lower_case}"
+		android:layout_below="@+id/${name?lower_case}_${lastFieldName?lower_case}"
 	    	</#if >
 	    	<#assign lastFieldName=field.name>
-	    android:text="${field.name?lower_case}"/>
-    <${field.customShowType}
+		android:text="${field.name?lower_case}"/>
+		<#if field.type=="boolean">
+	    <CheckBox
 		android:id="@+id/${name?lower_case}_${field.name?lower_case}"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-		    <#if field.customShowType == "EditText" >
-	    android:inputType="text"
-	    	</#if >
-	    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />
-			<#assign lastField="${name?lower_case}_${field.name?lower_case}">
+	    	android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+		<#else>
+	    <TextView
+		android:id="@+id/${name?lower_case}_${field.name?lower_case}"
+	    	android:layout_width="match_parent"
+	    	android:layout_height="wrap_content"
+	    	android:inputType="text"
+		</#if>
+	    	android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />
+		<#assign lastField="${name?lower_case}_${field.name?lower_case}">
 	</#if>
 </#list>
 </RelativeLayout>

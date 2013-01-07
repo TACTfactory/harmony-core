@@ -199,9 +199,12 @@ public class EntityGenerator extends BaseGenerator {
 		boolean ret = false;
 		ArrayList<MethodMetadata> methods = cm.methods;
 		String capitalizedName = fm.fieldName.substring(0,1).toUpperCase() + fm.fieldName.substring(1);
-		
+		String prefix = "get";
+		if(fm.type.equals("boolean")){
+			prefix = "is";
+		}
 		for(MethodMetadata m : methods){
-			if(m.name.equals("get"+capitalizedName) && 
+			if(m.name.equals(prefix+capitalizedName) && 
 					m.argumentsTypes.size()==0 && 
 					m.type.equals(this.adapter.getNativeType(fm.type))){
 				ret = true;
@@ -209,6 +212,7 @@ public class EntityGenerator extends BaseGenerator {
 				ConsoleUtils.displayDebug("Already implements getter of " + fm.fieldName + " => " + m.name);
 			}
 		}
+					
 		return ret;
 	}
 	

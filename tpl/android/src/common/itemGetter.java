@@ -1,6 +1,6 @@
 	/**
 	 * @return the ${property}
 	 */
-	public ${property_type} get${property?cap_first}() {
+	public ${property_type} <#if property_type=="boolean">is<#else>get</#if>${property?cap_first}() {
 	     return this.${property};
 	}

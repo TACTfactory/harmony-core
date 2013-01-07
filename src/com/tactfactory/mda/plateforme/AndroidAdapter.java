@@ -151,7 +151,7 @@ public final class AndroidAdapter extends BaseAdapter {
 		}else
 			
 		if(type.equals("phone")){
-			ret = "int";
+			ret = "String";
 		}else
 			
 		if(type.equals("city")){
