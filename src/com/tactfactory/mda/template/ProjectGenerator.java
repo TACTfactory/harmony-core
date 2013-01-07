@@ -40,7 +40,6 @@ public class ProjectGenerator extends BaseGenerator {
 		this.datamodel.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
 		this.datamodel.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
 		
-		this.metas = metas;
 		if(this.metas!=null&&this.metas.entities.size()!=0){
 			// Make entities
 			ArrayList<Map<String, Object>> modelEntities = new ArrayList<Map<String,Object>>();
