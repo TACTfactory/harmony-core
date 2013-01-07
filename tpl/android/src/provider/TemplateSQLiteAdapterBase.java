@@ -13,6 +13,15 @@
 	<#return false>
 </#function>
 
+<#function isInArray array var>
+	<#list array as item>
+		<#if item==var>
+			<#return true>
+		</#if>
+	</#list>
+	<#return false>
+</#function>
+
 package ${local_namespace};
 
 import java.text.SimpleDateFormat;
@@ -29,8 +38,12 @@ import ${project_namespace}.BuildConfig;
 <#if internal=="false">
 import ${project_namespace}.entity.${name};
 </#if>
+<#assign import_array = []>
 <#list relations as relation>
+	<#if !isInArray(import_array, relation.relation.targetEntity)>
+		<#assign import_array = import_array + [relation.relation.targetEntity]>
 import ${project_namespace}.entity.${relation.relation.targetEntity};
+	</#if>
 </#list>
 
 /** ${name} adapter database abstract class <br/>
