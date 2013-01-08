@@ -26,8 +26,11 @@ public abstract class TagConstant {
 	public final static String ENTITIES = "entities";
 	public final static String ENTITY_REF = "targetEntity";
 	public final static String FIELDS = "fields";
+	public final static String FIELD_NAME = "columnName";
 	public final static String FIELD_DEF = "columnDefinition";
 	public final static String FIELD_REF = "field_ref";
+	public final static String FIELD_CUSTOM_EDIT = "customEditType";
+	public final static String FIELD_CUSTOM_SHOW = "customShowType";
 	public final static String RELATIONS = "relations";
 	public final static String RELATION = "relation";
 	public final static String RELATION_TYPE = "relation_type";
@@ -38,6 +41,7 @@ public abstract class TagConstant {
 	public final static String ALIAS = "alias";
 	public final static String IDS = "ids";
 	public final static String HIDDEN = "hidden";
+	public final static String INTERNAL = "internal";
 	
 	
 

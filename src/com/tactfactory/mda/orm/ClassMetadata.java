@@ -52,6 +52,12 @@ public class ClassMetadata extends BaseMetadata{
 	/** Imports of the class */
 	public ArrayList<String> imports = new ArrayList<String>();
 	
+	/** Add Component String of field */
+	public void makeString(String componentName) {
+		String key = name.toLowerCase() + "_"+ componentName.toLowerCase();
+		TranslationMetadata.addDefaultTranslation(key, name);
+	}
+	
 	/**
 	 * Transform the class to a map of strings and maps (for each field) given an adapter
 	 * @param adapter The adapter used to customize the fields
@@ -67,9 +73,10 @@ public class ClassMetadata extends BaseMetadata{
 		model.put(TagConstant.FIELDS,	this.toFieldArray(this.fields.values(), adapter));
 		model.put(TagConstant.IDS,		this.toFieldArray(this.ids.values(), adapter));
 		model.put(TagConstant.RELATIONS,this.toFieldArray(this.relations.values(), adapter));
-		model.put("internal","false");
+		model.put(TagConstant.INTERNAL,			"false");
+		
 		if(internal)
-			model.put("internal","true");
+			model.put(TagConstant.INTERNAL,		"true");
 		
 		for(BaseMetadata option : options.values()){
 			model.put(option.getName(), option.toMap(adapter));
@@ -87,6 +94,10 @@ public class ClassMetadata extends BaseMetadata{
 			
 			subField = new HashMap<String, Object>();
 			subField = field.toMap();
+			
+			// Add field translate
+			if (!field.internal && !field.hidden)
+				field.makeString("label");
 			
 			result.add(subField);
 		}
