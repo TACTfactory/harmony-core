@@ -35,7 +35,10 @@ public class RestGenerator extends BaseGenerator {
 			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
 			
 			for(ClassMetadata cm : Harmony.metas.entities.values()){
-				makeSource(cfg, "TemplateWebServiceAdapterBase.java", cm.name+"WebServiceAdapterBase.java", cm.toMap(this.adapter), true);
+				if(cm.options.get("rest")!=null){
+					makeSource(cfg, "TemplateWebServiceClientAdapterBase.java", cm.name+"WebServiceClientAdapterBase.java", cm.toMap(this.adapter), true);
+					makeSource(cfg, "TemplateWebServiceClientAdapter.java", cm.name+"WebServiceClientAdapter.java", cm.toMap(this.adapter), true);
+				}
 			}
 		}catch(IOException e){
 			ConsoleUtils.displayError(e.getMessage());
@@ -43,7 +46,8 @@ public class RestGenerator extends BaseGenerator {
 		} catch (TemplateException e) {
 			ConsoleUtils.displayError(e.getMessage());
 			e.printStackTrace();
-		}			
+		} 
+		
 	}
 	
 	/** Make Java Source Code
@@ -56,7 +60,7 @@ public class RestGenerator extends BaseGenerator {
 	private void makeSource(Configuration cfg, String templatePath, String filePath, Map<String, Object> datamodel, boolean override) throws IOException,
 			TemplateException {
 		
-		File file = FileUtils.makeFile(filePath);
+		File file = FileUtils.makeFile(this.adapter.getSourcePath()+this.metas.projectNameSpace+"/"+this.adapter.getData()+"/"+filePath);
 		
 		if (override || !file.exists()) {
 			

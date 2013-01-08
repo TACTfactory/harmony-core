@@ -13,6 +13,8 @@ public abstract class TagConstant {
 	public final static String PROJECT_NAMESPACE = "project_namespace";
 	public final static String PROJECT_NAME = "project_name";
 	public final static String LOCAL_NAMESPACE = "local_namespace";
+	public final static String CONTROLLER_NAMESPACE = "controller_namespace";
+	public final static String DATA_NAMESPACE = "data_namespace";
 	public final static String ANDROID_SDK_DIR = "sdk_dir";
 	
 	// Ant markers
@@ -36,6 +38,7 @@ public abstract class TagConstant {
 	public final static String ALIAS = "alias";
 	public final static String IDS = "ids";
 	public final static String HIDDEN = "hidden";
+	
 	
 
 	public static class AndroidSDK {

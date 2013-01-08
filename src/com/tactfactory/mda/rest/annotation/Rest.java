@@ -12,6 +12,9 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.lang.reflect.Field;
+
+import com.tactfactory.mda.ConsoleUtils;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 import static java.lang.annotation.ElementType.TYPE;
@@ -48,6 +51,24 @@ public @interface Rest {
 				}
 			
 			return null;
+		}
+		
+		public static Security fromName(String name){
+			if(name.lastIndexOf(".")>0)
+				name = name.substring(name.lastIndexOf(".")+1); // Take only what comes after the last dot
+			ConsoleUtils.displayDebug("Searching for Security : "+name);
+			try{
+				Field field = Security.class.getField(name);	
+				if(field.isEnumConstant()) {
+					ConsoleUtils.displayDebug("Found Security : "+name);
+					return (Security)field.get(Security.class);
+				}
+				else 
+					return null;
+			}catch(Exception e){
+				return null;
+			}
+			
 		}
 	}
 	

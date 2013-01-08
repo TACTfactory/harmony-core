@@ -43,9 +43,19 @@ import com.tactfactory.mda.utils.PackageUtils;
 public class JavaModelParser {
 	private static final String FILE_EXT = ".java";
 	private static final String PATH_ENTITY = "/entity/";
+	
+	private static final String FILTER_ENTITY	 	= PackageUtils.extractNameEntity(Entity.class);
+	private static final String FILTER_ID	 		= PackageUtils.extractNameEntity(Id.class);
+	private static final String FILTER_COLUMN 		= PackageUtils.extractNameEntity(Column.class);
+	private static final String FILTER_JOINCOLUMN 	= PackageUtils.extractNameEntity(JoinColumn.class);
+	private static final String FILTER_ONE2ONE 		= PackageUtils.extractNameEntity(OneToOne.class);
+	private static final String FILTER_ONE2MANY 	= PackageUtils.extractNameEntity(OneToMany.class);
+	private static final String FILTER_MANY2ONE 	= PackageUtils.extractNameEntity(ManyToOne.class);
+	private static final String FILTER_MANY2MANY 	= PackageUtils.extractNameEntity(ManyToMany.class);
 
 	private ArrayList<CompilationUnit> entities = new ArrayList<CompilationUnit>();
 	private ArrayList<ClassMetadata> metas = new ArrayList<ClassMetadata>();
+	private ArrayList<BaseParser> bundleParsers = new ArrayList<BaseParser>();
 	private BaseAdapter adapter = new AndroidAdapter();
 	private String entityPath;
 	
@@ -60,6 +70,10 @@ public class JavaModelParser {
 	 */
 	public JavaModelParser() {
 		this.entityPath = this.adapter.getSourcePath() + Harmony.metas.projectNameSpace.replaceAll("\\.", "/") + PATH_ENTITY;
+	}
+	
+	public void registerParser(BaseParser parser){
+		this.bundleParsers.add(parser);
 	}
 	
 	/**
@@ -150,7 +164,6 @@ public class JavaModelParser {
 	public void parse(CompilationUnit mclass) {
 		String spackage = PackageUtils.extractNameSpace(mclass.getPackage().getName().toString());
 		if (!Strings.isNullOrEmpty(spackage)) {
-			
 			ClassMetadata meta = new ClassMetadata();
 			meta.space = spackage;
 			
@@ -165,15 +178,22 @@ public class JavaModelParser {
 		}
 	}
 	
-	private static class ClassVisitor extends VoidVisitorAdapter<ClassMetadata> {
-		private static final String FILTER_ENTITY = PackageUtils.extractNameEntity(Entity.class);
+	private class ClassVisitor extends VoidVisitorAdapter<ClassMetadata> {
 		
 	    @Override
 	    public void visit(ClassOrInterfaceDeclaration n, ClassMetadata meta) {
-	    	// Get list of annotations
+	    	// Call the parsers which have been registered by the bundle
+	    	for(BaseParser b_parser : bundleParsers){
+	    		b_parser.visitClass(n, meta);
+	    	}
+
 	    	List<AnnotationExpr> classAnnotations = n.getAnnotations();
 			if(classAnnotations!=null){
 				for (AnnotationExpr annotationExpr : classAnnotations) {
+
+					for(BaseParser b_parser : bundleParsers)
+			    		b_parser.visitClassAnnotation(meta, annotationExpr, meta);
+					
 					String annotationType = annotationExpr.getName().toString();
 					if (annotationType.equals(FILTER_ENTITY)) {
 						meta.name = PackageUtils.extractNameEntity(n.getName());
@@ -218,17 +238,14 @@ public class JavaModelParser {
 	    }
 	}
 
-	private static class FieldVisitor extends VoidVisitorAdapter<ClassMetadata> {
-		private static final String FILTER_ENTITY 		= PackageUtils.extractNameEntity(Id.class);
-		private static final String FILTER_COLUMN 		= PackageUtils.extractNameEntity(Column.class);
-		private static final String FILTER_JOINCOLUMN 	= PackageUtils.extractNameEntity(JoinColumn.class);
-		private static final String FILTER_ONE2ONE 		= PackageUtils.extractNameEntity(OneToOne.class);
-		private static final String FILTER_ONE2MANY 	= PackageUtils.extractNameEntity(OneToMany.class);
-		private static final String FILTER_MANY2ONE 	= PackageUtils.extractNameEntity(ManyToOne.class);
-		private static final String FILTER_MANY2MANY 	= PackageUtils.extractNameEntity(ManyToMany.class);
+	public class FieldVisitor extends VoidVisitorAdapter<ClassMetadata> {
 		
 		@Override
 		public void visit(FieldDeclaration field, ClassMetadata meta) {
+	    	// Call the parsers which have been registered by the bundle
+	    	for(BaseParser b_parser : bundleParsers)
+	    		b_parser.visitField(field, meta);
+			
 			List<AnnotationExpr> fieldAnnotations = field.getAnnotations();
 			
 			if (fieldAnnotations != null) {
@@ -262,6 +279,10 @@ public class JavaModelParser {
 				// Analyze
 				for (AnnotationExpr annotationExpr : fieldAnnotations) {
 					String annotationType = annotationExpr.getName().toString();
+					
+
+			    	for(BaseParser b_parser : bundleParsers)
+			    		b_parser.visitFieldAnnotation(fieldMeta, annotationExpr, meta);
 	
 					isId = this.isId(fieldMeta, isId, annotationType);
 					isColumn = this.isColumn(fieldMeta, isColumn, annotationType);
@@ -424,7 +445,7 @@ public class JavaModelParser {
 		private boolean isId(FieldMetadata fieldMeta, boolean old, String annotationType) {
 			boolean isId = old;
 			
-			if (annotationType.equals(FILTER_ENTITY)) {
+			if (annotationType.equals(FILTER_ID)) {
 				isId = true;
 				
 				// Debug Log
@@ -486,10 +507,14 @@ public class JavaModelParser {
 		}
 	}
 	
-	private static class MethodVisitor extends VoidVisitorAdapter<ClassMetadata> {
+	private class MethodVisitor extends VoidVisitorAdapter<ClassMetadata> {
 		
 		@Override
 		public void visit(MethodDeclaration method, ClassMetadata meta) {
+	    	// Call the parsers which have been registered by the bundle
+	    	for(BaseParser b_parser : bundleParsers)
+	    		b_parser.visitMethod(method, meta);
+			
 			MethodMetadata methodMeta = new MethodMetadata();
 			methodMeta.name = method.getName();
 			methodMeta.type = method.getType().toString(); 
@@ -524,10 +549,14 @@ public class JavaModelParser {
 		}
 	}
 	
-	private static class ImportVisitor extends VoidVisitorAdapter<ClassMetadata> {
+	private class ImportVisitor extends VoidVisitorAdapter<ClassMetadata> {
 		
 		@Override
 		public void visit(ImportDeclaration imp, ClassMetadata meta) {
+	    	// Call the parsers which have been registered by the bundle
+	    	for(BaseParser b_parser : bundleParsers)
+	    		b_parser.visitImport(imp, meta);
+	    	
 			String impName = imp.getName().getName();
 			meta.imports.add(impName);
 			

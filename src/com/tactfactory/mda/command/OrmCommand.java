@@ -195,19 +195,19 @@ public class OrmCommand extends BaseCommand {
 				this.javaModelParser.parse(mclass);
 			}
 	
-			// Generate views from MetaData
+			// Generate views from MetaData 
 			if (this.javaModelParser.getMetas().size() > 0) {
 				ret = new LinkedHashMap<String, ClassMetadata>();
 				
 				for (ClassMetadata meta : this.javaModelParser.getMetas()) {
 					ret.put(meta.name, meta);
 				}
+				
+				new ClassCompletor(ret).execute();
 			}
 		} else {
 			ConsoleUtils.displayWarning("No entities found in entity package!");
 		}
-		
-		new ClassCompletor(ret).execute();
 		
 		return ret;
 	}
