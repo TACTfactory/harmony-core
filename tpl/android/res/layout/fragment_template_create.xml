@@ -6,24 +6,26 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 <#list fields as field>
+	<#assign m_id="${name?lower_case}_${field.name?lower_case}">
+	<#assign m_id_label="${m_id}_label">
 	<#if !field.internal && !field.hidden>
 		<#if !field.relation??>
     <TextView 
-    	android:id="@+id/${name?lower_case}_${field.name?lower_case}_label"
+    	android:id="@+id/${m_id_label}"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 		    	<#if (lastField??) >
 	    android:layout_below="@+id/${lastField}"
 		    	</#if >
-	    android:text="${field.name?lower_case}"/>
+	    android:text="@string/${m_id_label}"/>
 			<#if field.type=="boolean">
     <CheckBox
-	    android:id="@+id/${name?lower_case}_${field.name?lower_case}"
+	    android:id="@+id/${m_id}"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"	
 			<#else>
     <EditText
-		android:id="@+id/${name?lower_case}_${field.name?lower_case}"
+		android:id="@+id/${m_id}"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 		    		<#if field.type == "text" >
@@ -53,23 +55,23 @@
 	    android:inputType="text"
 		    		</#if >
 			</#if>
-	    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />
-			<#assign lastField="${name?lower_case}_${field.name?lower_case}">
+	    android:layout_below="@+id/${m_id_label}" />
+			<#assign lastField="${m_id}">
 		<#else>
     <TextView 
-    	android:id="@+id/${name?lower_case}_${field.name?lower_case}_label"
+    	android:id="@+id/${m_id_label}"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 		    	<#if (lastField??) >
 	    android:layout_below="@+id/${lastField}"
 		    	</#if >
-	    android:text="${field.name?lower_case}"/>
+	    android:text="@string/${m_id_label}"/>
     <Button
-        android:id="@+id/${name?lower_case}_${field.name?lower_case}_button"
+        android:id="@+id/${m_id}_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-	    android:layout_below="@+id/${name?lower_case}_${field.name?lower_case}_label" />
-			<#assign lastField="${name?lower_case}_${field.name?lower_case}_button">
+	    android:layout_below="@+id/${m_id_label}" />
+			<#assign lastField="${m_id}_button">
 		</#if>
 	</#if>
 </#list>
