@@ -51,10 +51,10 @@ public class Console extends Harmony {
 			if (!Strings.isNullOrEmpty(this.shortName)) {
 				result.append("\t\t" + ARGUMENT_PREFIX_SHORT + this.shortName);
 			} else {
-				result.append("\t\t\t\t");
+				result.append("\t\t");
 			}
 			
-			result.append(this.description);
+			result.append("\t\t" + this.description);
 			
 			result.append("\n");
 			return result.toString();
