@@ -17,6 +17,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Locale;
 
 import net.xeoh.plugins.base.PluginManager;
 import net.xeoh.plugins.base.impl.PluginManagerFactory;
@@ -41,7 +42,7 @@ public class Harmony {
 	public static boolean debug = false;
 	
 	/** Harmony version */
-	public static final String VERSION = "0.3.0-DEV";
+	public static final String VERSION = "0.4.0-DEV";
 	
 	/** Singleton of console */
 	public static Harmony instance;
@@ -100,6 +101,7 @@ public class Harmony {
 			this.bootstrap.put(command.getClass(), command);
 		}
 	
+		Locale.setDefault(Locale.US);
 		Harmony.instance = this;
 	}
 

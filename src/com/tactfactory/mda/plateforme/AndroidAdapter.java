@@ -106,6 +106,7 @@ public final class AndroidAdapter extends BaseAdapter {
 	@Override
 	public String getNativeType(String type) {
 		String ret = type;
+		
 		if(type.equals("string")){
 			ret = "String";
 		}else
