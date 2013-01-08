@@ -11,9 +11,7 @@ import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.BaseGenerator;
-import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.FileUtils;
-import com.tactfactory.mda.utils.PackageUtils;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;

@@ -11,12 +11,83 @@ package com.tactfactory.mda;
 import java.util.Arrays;
 import java.util.HashMap;
 
+import com.google.common.base.Strings;
+
 /** Harmony console class*/
 public class Console extends Harmony {
+	protected final static String HARMONY_VERSION = "Harmony version " + Harmony.VERSION + "\n";
 	protected final static String ARGUMENT_PREFIX = "--";
 	protected final static String ARGUMENT_PREFIX_SHORT = "-";
 	protected final static String ARGUMENT_AFFECT = "=";
 	
+	protected static enum Option {
+		//name		Internal	Short	Help message
+		HELP		("help",	"h",	"Display this help message."),
+		QUIET		("quiet",	"q",	"Do not output any message."),
+		VERBOSE		("verbose",	"v",	"Increase verbosity of messages."),
+		VERSION		("version",	"V",	"Display this application version."),
+		ANSI		("ansi",	null,	"Force ANSI output."),
+		NO_ANSI		("no-ansi",	null,	"Disable ANSI output.");
+		
+		// "\t--no-interaction -n Do not ask any interactive question.\n" + 
+		// "\t--shell\t\t -s Launch the shell.\n" + 
+		// "\t--env\t\t -e The Environment name.\n" + 
+		// "\t--no-debug \t    Switches off debug mode.\n\n"
+		
+		private String fullName;
+		private String shortName;
+		private String description;
+		
+		private Option(String fullName, String shortName, String description) {
+			this.fullName = fullName;
+			this.shortName = shortName;
+			this.description = description;
+		}
+		
+		public String toString() {
+			StringBuilder result = new StringBuilder();
+			result.append("\t" + ARGUMENT_PREFIX + this.fullName);
+			
+			if (!Strings.isNullOrEmpty(this.shortName)) {
+				result.append("\t\t" + ARGUMENT_PREFIX_SHORT + this.shortName);
+			} else {
+				result.append("\t\t");
+			}
+			
+			result.append("\t\t" + this.description);
+			
+			result.append("\n");
+			return result.toString();
+		}
+	
+		public boolean equal(String value) {
+			return (value.equals(this.shortName) || value.equals(this.fullName));
+		}
+		
+		public static Option fromFullName(String value){
+			if (value!= null) {
+				for (Option option : Option.values()) {
+					if (value.equalsIgnoreCase(option.fullName)) {
+						return option;
+					}    
+				}
+			}
+			
+			return null;
+		}
+		
+		public static Option fromShortName(String value){
+			if (value!= null) {
+				for (Option option : Option.values()) {
+					if (value.equalsIgnoreCase(option.shortName)) {
+						return option;
+					}    
+				}
+			}
+			
+			return null;
+		}
+	}
 	
 	/** Extract command line parameters for java core
 	 * @param args
@@ -27,22 +98,17 @@ public class Console extends Harmony {
 
 		// Check if has a parameter
 		if (args.length == 0) {
-			ConsoleUtils.displayLicence("Harmony version " + Harmony.VERSION + "\n");
+			ConsoleUtils.displayLicence(HARMONY_VERSION);
 			
 			// If no valid parameters
 			ConsoleUtils.display("Usage:\n\t[options] command [arguments]\n");
 			ConsoleUtils.display("\nOptions:\n" + 
-					"\t--help\t\t -h Display this help message.\n" + 
-					"\t--quiet\t\t -q Do not output any message.\n" + 
-					"\t--verbose\t -v Increase verbosity of messages.\n" + 
-					"\t--version\t -V Display this application version.\n" + 
-					"\t--ansi\t\t    Force ANSI output.\n" + 
-					"\t--no-ansi\t    Disable ANSI output.\n"  
-					// "\t--no-interaction -n Do not ask any interactive question.\n" + 
-					// "\t--shell\t\t -s Launch the shell.\n" + 
-					// "\t--env\t\t -e The Environment name.\n" + 
-					// "\t--no-debug \t    Switches off debug mode.\n\n"
-					);
+					Option.HELP + 
+					Option.QUIET + 
+					Option.VERBOSE + 
+					Option.VERSION +
+					Option.ANSI + 
+					Option.NO_ANSI);
 
 			//ConsoleUtils.display("Usage : console testBundle:com/tactfactory/mdatest/android:User");
 			ConsoleUtils.display("Tips : please use 'list' command to display available commands!\n");
@@ -94,13 +160,6 @@ public class Console extends Harmony {
 
 		// Extract required command
 		if(splitCommand.length == 3) {
-			/*
-			String bundle = null;
-			String subject = null;
-			String action = null; 
-			bundle  = cmd[0];
-			subject = cmd[1];
-			action  = cmd[2];*/
 			command = args[currentPosition]; //String.format("%s:%s:%s", bundle, subject, action);
 		} else
 			
@@ -130,32 +189,32 @@ public class Console extends Harmony {
 					}
 					
 					// Help call
-					if (key.equals("h") || key.equals("help")) {
+					if (Option.HELP.equal(key)) {
 						
 					} else
 					
 					// Quiet mode
-					if (key.equals("q") || key.equals("quiet")) {								
+					if (Option.QUIET.equal(key)) {								
 						ConsoleUtils.quiet = true;
 					} else
 					
 					// Verbose mode
-					if (key.equals("v") || key.equals("verbose")) {
+					if (Option.VERBOSE.equal(key)) {
 						Harmony.debug = true;
 					} else
 					
 					// Version mode
-					if (key.equals("V") || key.equals("version")) {
-						ConsoleUtils.displayLicence("Harmony version " + Harmony.VERSION + "\n");
+					if (Option.VERSION.equal(key)) {
+						ConsoleUtils.displayLicence(HARMONY_VERSION);
 					} else
 						
 					// ANSI mode (default)
-					if (key.equals("ansi")) {
+					if (Option.ANSI.equal(key)) {
 						ConsoleUtils.ansi = true;
 					} else
 						
 					// NO_ANSI mode
-					if (key.equals("no-ansi")) {
+					if (Option.NO_ANSI.equal(key)) {
 						ConsoleUtils.ansi = false;
 					}
 				} else {
@@ -185,9 +244,9 @@ public class Console extends Harmony {
 	public static HashMap<String,String> parseCommandArgs(String[] args){
 		
 		HashMap<String,String> commandArgs = new HashMap<String,String>();
-		if(args!=null && args.length!=0){
-			for(String arg : args){
-				if(arg.startsWith(ARGUMENT_PREFIX)){
+		if (args!=null && args.length!=0){
+			for (String arg : args){
+				if (arg.startsWith(ARGUMENT_PREFIX)){
 					String[] key = arg.split(ARGUMENT_AFFECT);
 					
 					if (key.length > 1)

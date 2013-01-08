@@ -1,17 +1,9 @@
 package com.tactfactory.mda.rest.command;
 
-import japa.parser.ast.CompilationUnit;
-
-import java.util.LinkedHashMap;
-
 import com.tactfactory.mda.Console;
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.command.BaseCommand;
-import com.tactfactory.mda.orm.ClassCompletor;
-import com.tactfactory.mda.orm.ClassMetadata;
-import com.tactfactory.mda.parser.JavaModelParser;
-import com.tactfactory.mda.rest.template.RestGenerator;
 
 public class RestCommand extends BaseCommand{
 	

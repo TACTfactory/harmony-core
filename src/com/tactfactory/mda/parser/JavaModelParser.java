@@ -39,11 +39,10 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.plateforme.SqliteAdapter;
 import com.tactfactory.mda.utils.PackageUtils;
 
-
 public class JavaModelParser {
 	private static final String FILE_EXT = ".java";
 	private static final String PATH_ENTITY = "/entity/";
-
+	
 	private ArrayList<CompilationUnit> entities = new ArrayList<CompilationUnit>();
 	private ArrayList<ClassMetadata> metas = new ArrayList<ClassMetadata>();
 	private BaseAdapter adapter = new AndroidAdapter();
@@ -172,14 +171,19 @@ public class JavaModelParser {
 	    public void visit(ClassOrInterfaceDeclaration n, ClassMetadata meta) {
 	    	// Get list of annotations
 	    	List<AnnotationExpr> classAnnotations = n.getAnnotations();
-			if(classAnnotations!=null){
+			if (classAnnotations!=null) {
 				for (AnnotationExpr annotationExpr : classAnnotations) {
 					String annotationType = annotationExpr.getName().toString();
 					if (annotationType.equals(FILTER_ENTITY)) {
 						meta.name = PackageUtils.extractNameEntity(n.getName());
+						
+						// Check reserved keywords
 						SqliteAdapter.Keywords.exists(meta.name);
+						
 						// Debug Log
 						ConsoleUtils.displayDebug("Entity : " + meta.space + ".entity." +  meta.name);
+						
+						break;
 					}
 				}
 				
@@ -233,13 +237,13 @@ public class JavaModelParser {
 			
 			if (fieldAnnotations != null) {
 				// General (required !)
-				FieldMetadata fieldMeta = new FieldMetadata();
+				FieldMetadata fieldMeta = new FieldMetadata(meta);
 				
 				fieldMeta.type = field.getType().toString();
 				
 				//fieldMeta.isFinal = ModifierSet.isFinal(field.getModifiers());
-				fieldMeta.fieldName = field.getVariables().get(0).getId().getName(); // FIXME not manage multi-variable
-				fieldMeta.columnName = fieldMeta.fieldName;
+				fieldMeta.name = field.getVariables().get(0).getId().getName(); // FIXME not manage multi-variable
+				fieldMeta.columnName = fieldMeta.name;
 
 				// Set defaults values
 				fieldMeta.hidden = false;
@@ -280,15 +284,15 @@ public class JavaModelParser {
 				// ID relation
 				if (isId) {
 					fieldMeta.id = true;
-					meta.ids.put(fieldMeta.fieldName, fieldMeta);
+					meta.ids.put(fieldMeta.name, fieldMeta);
 				}
 	
 				// Object relation
 				if (isRelation) {
-					rel.field = fieldMeta.fieldName;
+					rel.field = fieldMeta.name;
 					rel.entity_ref = PackageUtils.extractClassNameFromArray(field.getType().toString());
 					fieldMeta.relation = rel;
-					meta.relations.put(fieldMeta.fieldName, fieldMeta);
+					meta.relations.put(fieldMeta.name, fieldMeta);
 				}
 
 				// Adjust databases column definition
@@ -299,18 +303,17 @@ public class JavaModelParser {
 				
 				// Add to meta dictionary
 				if (isId || isColumn || isRelation)
-					meta.fields.put(fieldMeta.fieldName, fieldMeta);
+					meta.fields.put(fieldMeta.name, fieldMeta);
 				
-				SqliteAdapter.Keywords.exists(fieldMeta.fieldName);
-				if(!fieldMeta.fieldName.equals(fieldMeta.columnName))
+				// Check SQLite reserved keywords
+				SqliteAdapter.Keywords.exists(fieldMeta.name);
+				if(!fieldMeta.name.equals(fieldMeta.columnName))
 					SqliteAdapter.Keywords.exists(fieldMeta.columnName);
 				SqliteAdapter.Keywords.exists(fieldMeta.columnDefinition);
 				SqliteAdapter.Keywords.exists(fieldMeta.type);
 			}
 					
 		}
-
-
 
 		/**
 		 * @param fieldMeta
@@ -410,8 +413,6 @@ public class JavaModelParser {
 				}
 			}
 		}
-		
-		
 
 		/**
 		 * Check if Id annotation is present in entity
@@ -428,7 +429,7 @@ public class JavaModelParser {
 				isId = true;
 				
 				// Debug Log
-				ConsoleUtils.displayDebug("\tID : " + fieldMeta.fieldName);
+				ConsoleUtils.displayDebug("\tID : " + fieldMeta.name);
 			}
 			
 			return isId;
@@ -454,7 +455,7 @@ public class JavaModelParser {
 				if (annotationType.equals(FILTER_JOINCOLUMN))
 					type = "Join Column";
 				
-				ConsoleUtils.displayDebug("\t" + type + " : " + fieldMeta.fieldName + 
+				ConsoleUtils.displayDebug("\t" + type + " : " + fieldMeta.name + 
 						" type of " + fieldMeta.type);
 			}
 			
@@ -479,7 +480,7 @@ public class JavaModelParser {
 				
 				// Debug Log
 				ConsoleUtils.displayDebug("\tRelation " + annotationType + 
-						" : " + fieldMeta.fieldName + " type of " + fieldMeta.type);
+						" : " + fieldMeta.name + " type of " + fieldMeta.type);
 			}
 			
 			return isRelation;

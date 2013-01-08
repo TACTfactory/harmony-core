@@ -42,7 +42,7 @@ public class ClassCompletor {
 				ArrayList<FieldMetadata> ids = new ArrayList<FieldMetadata>(cm_ref.ids.values());
 				
 				for(int i=0;i<ids.size();i++){
-					rel.field_ref.add(ids.get(i).fieldName);
+					rel.field_ref.add(ids.get(i).name);
 				}
 			}
 			
@@ -54,22 +54,22 @@ public class ClassCompletor {
 				// if it doesn't :
 				if(rel.mappedBy==null){
 					// Create it
-					FieldMetadata new_field = new FieldMetadata();
+					FieldMetadata new_field = new FieldMetadata(cm);
 					new_field.columnDefinition = "integer";
 					new_field.hidden = true;
 					new_field.internal = true;
-					new_field.fieldName = cm.name.toLowerCase();
-					new_field.columnName = new_field.fieldName;
+					new_field.name = cm.name.toLowerCase();
+					new_field.columnName = new_field.name;
 					new_field.type = cm.name;
 					new_field.relation = new RelationMetadata();
 					new_field.relation.entity_ref = cm.name;
 					for(FieldMetadata id : cm.ids.values())
-						new_field.relation.field_ref.add(id.fieldName);
-					new_field.relation.field = new_field.fieldName;
+						new_field.relation.field_ref.add(id.name);
+					new_field.relation.field = new_field.name;
 					new_field.relation.type = "ManyToOne";
-					new_field.relation.inversedBy = fm.fieldName;
-					entity_ref.fields.put(new_field.fieldName, new_field);
-					entity_ref.relations.put(new_field.fieldName, new_field);
+					new_field.relation.inversedBy = fm.name;
+					entity_ref.fields.put(new_field.name, new_field);
+					entity_ref.relations.put(new_field.name, new_field);
 				}
 				
 			}
@@ -87,28 +87,28 @@ public class ClassCompletor {
 					classMeta.name = rel.joinTable;
 					classMeta.internal = true;
 					classMeta.space = cm.space;
-					FieldMetadata id = new FieldMetadata();
+					FieldMetadata id = new FieldMetadata(classMeta);
 						id.columnDefinition = "integer";
 						id.type = "integer";
-						id.fieldName = "id";
-						id.columnName = id.fieldName;
+						id.name = "id";
+						id.columnName = id.name;
 						id.id = true;
 						classMeta.ids.put("id", id);
 						classMeta.fields.put("id", id);
 						
-					FieldMetadata ref1 = generateRefField(cm.name);
+					FieldMetadata ref1 = generateRefField(cm.name, cm);
 					RelationMetadata rel1 = new RelationMetadata();
 						rel1.entity_ref = cm.name;
 						for(FieldMetadata cmid : cm.ids.values())
-							rel1.field_ref.add(cmid.fieldName);
-						rel1.inversedBy = fm.fieldName;
+							rel1.field_ref.add(cmid.name);
+						rel1.inversedBy = fm.name;
 						rel1.type = "ManyToOne";
 						ref1.relation = rel1;
 						
-					classMeta.fields.put(ref1.fieldName, ref1);
-					classMeta.relations.put(ref1.fieldName, ref1);
+					classMeta.fields.put(ref1.name, ref1);
+					classMeta.relations.put(ref1.name, ref1);
 					
-					FieldMetadata ref2 = generateRefField(rel.entity_ref);
+					FieldMetadata ref2 = generateRefField(rel.entity_ref, cm);
 					RelationMetadata rel2 = new RelationMetadata();
 						rel2.entity_ref = rel.entity_ref;
 						rel2.field_ref = rel.field_ref;
@@ -116,25 +116,25 @@ public class ClassCompletor {
 						rel2.type = "ManyToOne";
 						ref2.relation = rel2;
 						
-					classMeta.fields.put(ref2.fieldName, ref2);
-					classMeta.relations.put(ref2.fieldName, ref2);
+					classMeta.fields.put(ref2.name, ref2);
+					classMeta.relations.put(ref2.name, ref2);
 					
 					this.newMetas.put(classMeta.name, classMeta);
 				}else if(this.newMetas.containsKey(rel.joinTable)){ // Complete it !
 					ClassMetadata jtable = this.newMetas.get(rel.joinTable);
 					FieldMetadata relation = jtable.relations.get(cm.name.toLowerCase()+"_id");
-					relation.relation.inversedBy = fm.fieldName;
+					relation.relation.inversedBy = fm.name;
 				}
 			}
 		}
 	}
 	
-	private FieldMetadata generateRefField(String name){
-		FieldMetadata id = new FieldMetadata();
+	private static FieldMetadata generateRefField(String name, ClassMetadata owner){
+		FieldMetadata id = new FieldMetadata(owner);
 		id.columnDefinition = "integer";
 		id.type = "integer";
-		id.fieldName = name.toLowerCase()+"_id";
-		id.columnName = id.fieldName;
+		id.name = name.toLowerCase()+"_id";
+		id.columnName = id.name;
 		return id;
 	}
 }

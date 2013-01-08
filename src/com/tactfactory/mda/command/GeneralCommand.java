@@ -18,7 +18,7 @@ public class GeneralCommand extends BaseCommand {
 	public static String LIST = "list";
 	public static String HELP = "help";
 
-	/*
+	/**
 	 * Display Help Message
 	 */
 	public void help() {
@@ -29,7 +29,7 @@ public class GeneralCommand extends BaseCommand {
 				"\nPlease use 'console list' to display available commands !");
 	}
 
-	/*
+	/**
 	 * Display list of All commands
 	 */
 	public void list() {
@@ -59,9 +59,7 @@ public class GeneralCommand extends BaseCommand {
 			
 		if (action.equals(HELP)) {
 			this.help();
-		} else
-			
-		{
+		} else {
 			
 		}
 	}

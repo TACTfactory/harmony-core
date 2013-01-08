@@ -17,9 +17,10 @@ import com.tactfactory.mda.template.TagConstant;
 
 /** Entity field metadata */
 public class FieldMetadata {
+	public ClassMetadata owner;
 	
 	/** Field name */
-	public String fieldName;
+	public String name;
 	
 	/** Field type */
 	public String type;
@@ -32,6 +33,9 @@ public class FieldMetadata {
 	
 	/** Field optional */
 	public HashMap<String, String> options; // (Not use...) for extra option of all bundle!
+	
+	/** Relation mapped to this field*/
+	public RelationMetadata relation;
 	
 	public boolean nullable = false;
 	public boolean unique = false;
@@ -50,10 +54,20 @@ public class FieldMetadata {
 	/** Is field hidden ? */
 	public boolean internal = false;
 	
+	public FieldMetadata(ClassMetadata owner) {
+		this.owner = owner;
+	}
+	
 	/** Customize edit and show GUI field */
 	public void customize(BaseAdapter adapter) {
 		this.customShowType = adapter.getViewComponentShow(this);
 		this.customEditType = adapter.getViewComponentEdit(this);
+	}
+	
+	/** Add Component String of field */
+	public void makeString(String componentName) {
+		String key = owner.name.toLowerCase() + "_" + name.toLowerCase() + "_"+ componentName.toLowerCase();;
+		TranslationMetadata.addDefaultTranslation(key, name);
 	}
 	
 	/**
@@ -62,26 +76,23 @@ public class FieldMetadata {
 	 */
 	public Map<String, Object> toMap(){
 		HashMap<String, Object> model = new HashMap<String, Object>();
-		model.put(TagConstant.NAME, this.fieldName);
-		model.put(TagConstant.TYPE, this.type);
-		model.put("columnName", this.columnName);
-		model.put("columnDefinition", this.columnDefinition);
-		//model.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(this));
-		model.put(TagConstant.HIDDEN, this.hidden);
-
-		model.put("customEditType", this.customEditType);
-		model.put("customShowType", this.customShowType);
 		
-		model.put(TagConstant.SCHEMA, SqliteAdapter.generateStructure(this));
+		model.put(TagConstant.NAME, 		this.name);
+		model.put(TagConstant.TYPE, 		this.type);
+		model.put(TagConstant.FIELD_NAME, 	this.columnName);
+		model.put(TagConstant.FIELD_DEF, 	this.columnDefinition);
+		model.put(TagConstant.HIDDEN, 		this.hidden);
+
+		model.put(TagConstant.FIELD_CUSTOM_EDIT, 	this.customEditType);
+		model.put(TagConstant.FIELD_CUSTOM_SHOW, 	this.customShowType);
+		
+		model.put(TagConstant.SCHEMA, 	SqliteAdapter.generateStructure(this));
+		model.put(TagConstant.INTERNAL, 	this.internal);
+		
 		if(relation!=null){
 			model.put(TagConstant.RELATION, this.relation.toMap());
 		}
 		
-		model.put("internal", this.internal);
-		
 		return model;
 	}
-	
-	/** Relation mapped to this field*/
-	public RelationMetadata relation;
 }

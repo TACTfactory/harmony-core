@@ -14,7 +14,6 @@ import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.orm.FieldMetadata;
 import com.tactfactory.mda.orm.RelationMetadata;
 import com.tactfactory.mda.orm.annotation.Column;
-import com.tactfactory.mda.orm.annotation.Column.Type;
 
 public class SqliteAdapter {
 	private static String PREFIX = "COL_";
@@ -85,7 +84,7 @@ public class SqliteAdapter {
 	}
 
 	public static String generateColumnName(FieldMetadata field) {
-		return PREFIX + field.fieldName.toUpperCase();
+		return PREFIX + field.name.toUpperCase();
 	}
 	
 	public static String generateRelationColumnName(String fieldName) {
