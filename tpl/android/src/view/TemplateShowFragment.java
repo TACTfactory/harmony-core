@@ -20,8 +20,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+
 import java.util.List;
 import java.util.ArrayList;
+
+import ${namespace}.harmony.util.DateUtils;
 import ${namespace}.data.${name}SQLiteAdapter;
 import ${namespace}.entity.${name};
 <#list relations as relation>

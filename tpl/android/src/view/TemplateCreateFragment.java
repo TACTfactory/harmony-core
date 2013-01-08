@@ -19,19 +19,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.app.*;
 import android.widget.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
+import ${namespace}.harmony.widget.CustomDatePickerDialog;
+import ${namespace}.harmony.widget.CustomTimePickerDialog;
+import ${namespace}.harmony.util.DateUtils;
 import ${namespace}.data.${name}SQLiteAdapter;
 import ${namespace}.entity.${name};
 <#list relations as relation>
@@ -53,6 +48,10 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 			<#if !field.relation??>
 				<#if field.type=="boolean">
 	protected CheckBox ${field.name}View;
+				<#elseif field.type=="datetime" || field.type=="date">
+	protected EditText ${field.name}DateView;
+				<#elseif field.type=="datetime" || field.type=="time">
+	protected EditText ${field.name}TimeView;
 				<#else>
 	protected EditText ${field.name}View;			
 				</#if>
@@ -82,18 +81,43 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 				<#if !field.relation??>
 					<#if field.type=="boolean">
 		this.${field.name}View = (CheckBox) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});
-					<#else>
-		this.${field.name}View = (EditText) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});			
-		<#if field.type == "date" || field.type == "datetime">
-		this.${field.name}View.setOnClickListener(new OnClickListener(){
+					<#elseif field.type == "date" || field.type == "datetime">
+		this.${field.name}DateView = (EditText) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}_date);			
+		this.${field.name}DateView.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 		        DateTime dt = new DateTime();
 		        final java.text.DateFormat df = DateFormat.getDateFormat(getActivity());
 		        
-				if (!TextUtils.isEmpty(${name}CreateFragment.this.${field.name}View.getText())){
-					String strInputDate = ${name}CreateFragment.this.${field.name}View.getText().toString();
+				if (!TextUtils.isEmpty(${name}CreateFragment.this.${field.name}DateView.getText())){
+					String strInputDate = ${name}CreateFragment.this.${field.name}DateView.getText().toString();
+					dt = DateUtils.formatStringToDate(strInputDate);
+				}
+				
+			    CustomDatePickerDialog ${field.name}Dpd = new CustomDatePickerDialog(getActivity(), dt, "Select ${field.name} date");
+			    ${field.name}Dpd.setPositiveButton(getActivity().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+					
+					@Override
+					public void onClick(DialogInterface dialog, int which) {
+						DatePicker dp = ((CustomDatePickerDialog) dialog).getDatePicker();
+						DateTime date = new DateTime(dp.getYear(), dp.getMonth() + 1, dp.getDayOfMonth(), 0, 0);
+						${name}CreateFragment.this.${field.name}DateView.setText(df.format(date.toDate()));
+					}
+				});
+
+			    ${field.name}Dpd.show();
+			}
+		});					
+					<#elseif field.type == "time" || field.type == "datetime">
+		this.${field.name}TimeView = (EditText) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}_time);
+		this.${field.name}TimeView.setOnClickListener(new OnClickListener(){
+			public void onClick(View v){
+				DateTime dt = new DateTime(); 
+		        final java.text.DateFormat tf = DateFormat.getTimeFormat(getActivity());
+		        
+				if (!TextUtils.isEmpty(${name}CreateFragment.this.${field.name}TimeView.getText())){
+					String strInputDate = ${name}CreateFragment.this.${field.name}TimeView.getText().toString();
 					try {
-						Date date = df.parse(strInputDate);
+						Date date = tf.parse(strInputDate);
 						dt = new DateTime(date.getTime());
 					} catch (ParseException e) {
 						// TODO Auto-generated catch block
@@ -102,52 +126,28 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 					
 				}
 				
-			    CustomDatePickerDialog ${field.name}Dpd = new CustomDatePickerDialog(getActivity(), dt, "Select ${field.name} date");
-			    ${field.name}Dpd.setPositiveButton(getActivity().getString(R.string.common_ok), new DialogInterface.OnClickListener() {
+			    CustomTimePickerDialog ${field.name}Tpd = new CustomTimePickerDialog(getActivity(), dt, 
+			    		android.text.format.DateFormat.is24HourFormat(getActivity()), "Select ${field.name} time");
+			    ${field.name}Tpd.setPositiveButton(getActivity().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						DatePicker dp = ((CustomDatePickerDialog) dialog).getDatePicker();
-						DateTime date = new DateTime(dp.getYear(), dp.getMonth() + 1, dp.getDayOfMonth(), 0, 0);
-						${name}CreateFragment.this.${field.name}View.setText(df.format(date.toDate()));
+						TimePicker tp = ((CustomTimePickerDialog) dialog).getTimePicker();
+						
+						DateTime date = new DateTime(0);
+						date = new DateTime(date.getYear(), date.getDayOfMonth(), date.getDayOfMonth(), 
+								tp.getCurrentHour(), tp.getCurrentMinute());
+
+						${name}CreateFragment.this.${field.name}TimeView.setText(tf.format(date.toDate()));
 					}
 				});
 
-			    ${field.name}Dpd.show();
+			    ${field.name}Tpd.show();
 			}
 		});
-		</#if>
-		<#if field.type == "time" || field.type == "datetime">
-		this.${field.name}View.setOnClickListener(new OnClickListener(){
-			public void onClick(View v){
-				DateTime dt = new DateTime();
-		        final DateTimeFormatter fmt = DateTimeFormat.shortTime();
-		        
-				if (!TextUtils.isEmpty(${name}CreateFragment.this.${field.name}View.getText())){
-					String strInputTime = ${name}CreateFragment.this.${field.name}View.getText().toString();
-				    dt = fmt.parseDateTime(strInputTime);
-				}
-				
-				int hour = dt.getHourOfDay();
-				int minute = dt.getMinuteOfHour();
-		        
-		        TimePickerDialog ${field.name}Tpd = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-					
-					@Override
-					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-						DateTime date = new DateTime(0);
-						date = new DateTime(date.getYear(), date.getDayOfMonth(), date.getDayOfMonth(), 
-								hourOfDay, minute);
-                        
-                        ${name}CreateFragment.this.${field.name}View.setText(date.toString(fmt));
-					}
-				}, hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
-				
-		        ${field.name}Tpd.show();
-			}
-		});
-				</#if>
-			</#if>
+					<#else>
+		this.${field.name}View = (EditText) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});
+					</#if>
 
 				<#else>
 		this.${field.name}Button = (Button) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}_button);
@@ -269,7 +269,13 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if field.type!="boolean">
+					<#if field.type=="date" || field.type=="datetime">
+		if(!this.${field.name}DateView.getEditableText().toString().equals(""))
+					<#elseif field.type=="time" || field.type=="datetime">
+		if(!this.${field.name}TimeView.getEditableText().toString().equals(""))
+					<#else>
 		if(!this.${field.name}View.getEditableText().toString().equals(""))
+					</#if>
 			${m.setSaver(field)}
 				<#else>
 		${m.setSaver(field)}

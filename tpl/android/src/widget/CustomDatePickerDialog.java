@@ -1,7 +1,6 @@
-/**
- * 
- */
-package com.tactfactory.mda.test.demact;
+package ${localnamespace}.harmony.widget;
+
+import ${namespace}.R;
 
 import org.joda.time.DateTime;
 
@@ -111,7 +110,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 			}
 		}
 		
-		this.setNegativeButton(this.ctx.getString(R.string.common_cancel), new DialogInterface.OnClickListener() {
+		this.setNegativeButton(this.ctx.getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {

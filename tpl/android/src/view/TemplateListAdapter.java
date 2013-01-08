@@ -1,8 +1,9 @@
 <#import "methods.tpl" as m>
 package ${localnamespace};
 
+import ${namespace}.R;
+
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 
 import java.util.List;
 
@@ -12,7 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
-import ${namespace}.R;
+import ${namespace}.harmony.util.DateUtils;
 import ${namespace}.entity.${name};
 
 <#list relations as relation>

@@ -17,15 +17,13 @@ import android.database.sqlite.SQLiteDatabase;
 import android.app.*;
 import android.widget.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 
+import ${namespace}.harmony.util.DateUtils;
 import ${namespace}.data.${name}SQLiteAdapter;
 import ${namespace}.entity.${name};
 <#list relations as relation>
