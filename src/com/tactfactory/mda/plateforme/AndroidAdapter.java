@@ -10,6 +10,7 @@ package com.tactfactory.mda.plateforme;
 
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
+import com.tactfactory.mda.orm.annotation.Column;
 
 /** Google Android Adapter of project structure */
 public final class AndroidAdapter extends BaseAdapter {
@@ -107,67 +108,67 @@ public final class AndroidAdapter extends BaseAdapter {
 	public String getNativeType(String type) {
 		String ret = type;
 		
-		if(type.equals("string")){
+		if(type.equals(Column.Type.STRING.getValue())){
 			ret = "String";
 		}else
 			
-		if(type.equals("text")){
+		if(type.equals(Column.Type.TEXT.getValue())){
 			ret = "String";	
 		}else
 			
-		if(type.equals("integer")){
+		if(type.equals(Column.Type.INTEGER.getValue())){
 			ret = "int";
 		}else
 			
-		if(type.equals("int")){
+		if(type.equals(Column.Type.INT.getValue())){
 			ret = "int";
 		}else
 			
-		if(type.equals("float")){
+		if(type.equals(Column.Type.FLOAT.getValue())){
 			ret = "float";
 		}else
 			
-		if(type.equals("datetime")){
-			ret = "Date";
+		if(type.equals(Column.Type.DATETIME.getValue())){
+			ret = "DateTime";
 		}else
 			
-		if(type.equals("date")){
-			ret = "Date";
+		if(type.equals(Column.Type.DATE.getValue())){
+			ret = "DateTime";
 		}else
 			
-		if(type.equals("time")){
-			ret = "Date";
+		if(type.equals(Column.Type.TIME.getValue())){
+			ret = "DateTime";
 		}else
 			
-		if(type.equals("login")){
+		if(type.equals(Column.Type.LOGIN.getValue())){
 			ret = "String";
 		}else
 			
-		if(type.equals("password")){
+		if(type.equals(Column.Type.PASSWORD.getValue())){
 			ret = "String";
 		}else
 			
-		if(type.equals("email")){
+		if(type.equals(Column.Type.EMAIL.getValue())){
 			ret = "String";
 		}else
 			
-		if(type.equals("phone")){
+		if(type.equals(Column.Type.PHONE.getValue())){
 			ret = "String";
 		}else
 			
-		if(type.equals("city")){
+		if(type.equals(Column.Type.CITY.getValue())){
 			ret = "String";
 		}else
 			
-		if(type.equals("zipcode")){
+		if(type.equals(Column.Type.ZIPCODE.getValue())){
 			ret = "int";
 		}else
 			
-		if(type.equals("country")){
+		if(type.equals(Column.Type.COUNTRY.getValue())){
 			ret = "String";
 		}else
 			
-		if(type.equals("ean")){
+		if(type.equals(Column.Type.BC_EAN.getValue())){
 			ret = "int";
 		}
 		return ret;
