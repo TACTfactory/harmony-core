@@ -14,6 +14,7 @@ import java.util.HashMap;
  * Common Command structure 
  */
 public abstract class BaseCommand implements Command {
-	protected HashMap<String,String> commandArgs;
 	protected static final String SEPARATOR = ":";
+	
+	protected HashMap<String,String> commandArgs;
 }

@@ -49,6 +49,12 @@ public class ClassMetadata {
 	/** Imports of the class */
 	public ArrayList<String> imports = new ArrayList<String>();
 	
+	/** Add Component String of field */
+	public void makeString(String componentName) {
+		String key = name.toLowerCase() + "_"+ componentName.toLowerCase();
+		TranslationMetadata.addDefaultTranslation(key, name);
+	}
+	
 	/**
 	 * Transform the class to a map of strings and maps (for each field) given an adapter
 	 * @param adapter The adapter used to customize the fields
@@ -60,13 +66,13 @@ public class ClassMetadata {
 		model.put(TagConstant.SPACE,	this.space);
 		model.put(TagConstant.NAME,		this.name);
 		model.put(TagConstant.LOCAL_NAMESPACE, adapter.getNameSpaceEntity(this, adapter.getController()));
-		//model.put(TagConstant.ALIAS, SqliteAdapter.generateColumnName(this));
 		model.put(TagConstant.FIELDS,	this.toFieldArray(this.fields.values(), adapter));
 		model.put(TagConstant.IDS,		this.toFieldArray(this.ids.values(), adapter));
 		model.put(TagConstant.RELATIONS,this.toFieldArray(this.relations.values(), adapter));
-		model.put("internal","false");
+		model.put(TagConstant.INTERNAL,			"false");
+		
 		if(internal)
-			model.put("internal","true");
+			model.put(TagConstant.INTERNAL,		"true");
 		
 		return model;
 	}
@@ -80,6 +86,10 @@ public class ClassMetadata {
 			
 			subField = new HashMap<String, Object>();
 			subField = field.toMap();
+			
+			// Add field translate
+			if (!field.internal && !field.hidden)
+				field.makeString("label");
 			
 			result.add(subField);
 		}

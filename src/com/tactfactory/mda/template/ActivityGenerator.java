@@ -27,6 +27,7 @@ import org.jdom2.output.XMLOutputter;
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.orm.TranslationMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
@@ -47,9 +48,8 @@ public class ActivityGenerator extends BaseGenerator {
 		this.modelEntities = new ArrayList<Map<String, Object>>();
 		for (ClassMetadata meta : this.metas.entities.values()) {
 			if(!meta.fields.isEmpty() && !meta.internal){
-				//this.meta = meta;
-				
 				Map<String, Object> modelClass = meta.toMap(this.adapter);
+				meta.makeString("label");
 				
 				this.modelEntities.add(modelClass);
 			}
@@ -81,12 +81,47 @@ public class ActivityGenerator extends BaseGenerator {
 		}
 	}
 	
+	/** All Actions (List, Show, Edit, Create) */
+	public void generateAllAction(String entityName) {
+		// Info
+		ConsoleUtils.display(">>> Generate CRUD view for " +  entityName);
+
+		try {
+			Configuration cfg = new Configuration();						// Initialization of template engine
+			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
+
+			if (this.isWritable ) {
+				// Info
+				ConsoleUtils.display("   with write actions");
+
+				this.generateCreateAction(cfg, entityName);
+				this.generateEditAction(cfg, entityName);
+				
+				TranslationMetadata.addDefaultTranslation(
+						entityName.toLowerCase() + "_progress_save_title", 
+						entityName +" save progress");
+				TranslationMetadata.addDefaultTranslation(
+						entityName.toLowerCase() + "_progress_save_message", 
+						entityName +" is saving to database&#8230;");
+			}
+
+			this.generateShowAction(cfg, entityName);
+			this.generateListAction(cfg, entityName);
+			
+			new TranslationGenerator(this.adapter).generateStringsXml();
+			
+		} catch (Exception e) {
+			ConsoleUtils.displayError(e.getMessage());
+			e.printStackTrace();
+		}
+	}
+	
 	/** List Action
 	 * @param cfg
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	public void generateListAction(Configuration cfg, String entityName) 
+	protected void generateListAction(Configuration cfg, String entityName) 
 			throws IOException, TemplateException {
 		ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sListActivity.java");
@@ -110,8 +145,12 @@ public class ActivityGenerator extends BaseGenerator {
 					String.format(xml, "template"),
 					String.format(xml, entityName.toLowerCase()));
 		}
-
+		
 		this.updateManifest("ListActivity", entityName);
+		
+		TranslationMetadata.addDefaultTranslation(
+				entityName.toLowerCase() + "_empty_list", 
+				entityName +" list is empty !");
 	}
 
 	/** Show Action
@@ -119,7 +158,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	public void generateShowAction(Configuration cfg, String entityName) 
+	protected void generateShowAction(Configuration cfg, String entityName) 
 			throws IOException, TemplateException {
 
 		ArrayList<String> javas = new ArrayList<String>();
@@ -151,7 +190,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	public void generateEditAction(Configuration cfg, String entityName) 
+	protected void generateEditAction(Configuration cfg, String entityName) 
 			throws IOException, TemplateException {
 		
 		ArrayList<String> javas = new ArrayList<String>();
@@ -176,6 +215,10 @@ public class ActivityGenerator extends BaseGenerator {
 		}
 
 		this.updateManifest("EditActivity", entityName);
+		
+		TranslationMetadata.addDefaultTranslation(
+				entityName.toLowerCase() + "_error_edit", 
+				entityName +" edition error&#8230;");
 	}
 
 	/** Create Action
@@ -183,7 +226,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	public void generateCreateAction(Configuration cfg, String entityName) 
+	protected void generateCreateAction(Configuration cfg, String entityName) 
 			throws IOException, TemplateException {
 		
 		ArrayList<String> javas = new ArrayList<String>();
@@ -209,38 +252,10 @@ public class ActivityGenerator extends BaseGenerator {
 
 
 		this.updateManifest("CreateActivity", entityName);
-	}
-
-	/** All Actions (List, Show, Edit, Create) */
-	public void generateAllAction(String entityName) {
-		// Info
-		ConsoleUtils.display(">>> Generate CRUD view for " +  entityName);
-
-		try {
-
-			// TODO Caution, freemarker template folder must have been specified
-			// freemarker bug with '../' folder so, just remove first '.'
-			Configuration cfg = new Configuration();						// Initialization of template engine
-			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
-
-			if (this.isWritable ) {
-				// Info
-				ConsoleUtils.display("   with write actions");
-
-				this.generateCreateAction(cfg, entityName);
-				this.generateEditAction(cfg, entityName);
-			}
-
-			this.generateShowAction(cfg, entityName);
-			this.generateListAction(cfg, entityName);
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TemplateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		
+		TranslationMetadata.addDefaultTranslation(
+				entityName.toLowerCase() + "_error_create", 
+				entityName +" creation error&#8230;");
 	}
 
 	/** Make Java Source Code

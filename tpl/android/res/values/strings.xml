@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="hello">Hello world!</string>
-	<#if entities??>
-	<#list entities as entity>    <string name="${entity.name?lower_case}_error_create">${entity.name} creation error&#8230;</string>
-    <string name="${entity.name?lower_case}_empty_list">${entity.name} list is empty&#8230;</string>
-    <string name="${entity.name?lower_case}_error_edit">${entity.name} edition error&#8230;</string>
-    <string name="${entity.name?lower_case}_progress_save_title">${entity.name} save progress</string>
-    <string name="${entity.name?lower_case}_progress_save_message">${entity.name} is saving to database&#8230;</string>
-	</#list>
-	</#if>
+
 </resources>

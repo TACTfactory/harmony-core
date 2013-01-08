@@ -126,14 +126,14 @@ public class EntityGenerator extends BaseGenerator {
 			if(!f.internal){
 				// Getter
 				if(!this.alreadyImplementsGet(f, cm)){ 
-					ConsoleUtils.displayDebug("Add implements getter of " + f.fieldName + " => get" + CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_CAMEL, f.fieldName));
+					ConsoleUtils.displayDebug("Add implements getter of " + f.name + " => get" + CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_CAMEL, f.name));
 					
 					this.generateMethod(fileString, f, this.getterTemplate);
 				}
 				
 				// Setter
 				if(!this.alreadyImplementsSet(f, cm)){
-					ConsoleUtils.displayDebug("Add implements setter of " + f.fieldName + " => set" + CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_CAMEL, f.fieldName));
+					ConsoleUtils.displayDebug("Add implements setter of " + f.name + " => set" + CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_CAMEL, f.name));
 					
 					this.generateMethod(fileString, f, this.setterTemplate);
 				}
@@ -152,7 +152,7 @@ public class EntityGenerator extends BaseGenerator {
 		int lastAccolade = fileString.lastIndexOf("}");
 		
 		HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("property",f.fieldName);
+		map.put("property",f.name);
 		map.put("property_type",this.adapter.getNativeType(f.type));
 		
 		try{
@@ -198,7 +198,7 @@ public class EntityGenerator extends BaseGenerator {
 	protected boolean alreadyImplementsGet(FieldMetadata fm, ClassMetadata cm){
 		boolean ret = false;
 		ArrayList<MethodMetadata> methods = cm.methods;
-		String capitalizedName = fm.fieldName.substring(0,1).toUpperCase() + fm.fieldName.substring(1);
+		String capitalizedName = fm.name.substring(0,1).toUpperCase() + fm.name.substring(1);
 		String prefix = "get";
 		if(fm.type.equals("boolean")){
 			prefix = "is";
@@ -209,7 +209,7 @@ public class EntityGenerator extends BaseGenerator {
 					m.type.equals(this.adapter.getNativeType(fm.type))){
 				ret = true;
 				
-				ConsoleUtils.displayDebug("Already implements getter of " + fm.fieldName + " => " + m.name);
+				ConsoleUtils.displayDebug("Already implements getter of " + fm.name + " => " + m.name);
 			}
 		}
 					
@@ -224,7 +224,7 @@ public class EntityGenerator extends BaseGenerator {
 	protected boolean alreadyImplementsSet(FieldMetadata fm, ClassMetadata cm){
 		boolean result = false;
 		ArrayList<MethodMetadata> methods = cm.methods;
-		String capitalizedName = fm.fieldName.substring(0,1).toUpperCase() + fm.fieldName.substring(1);
+		String capitalizedName = fm.name.substring(0,1).toUpperCase() + fm.name.substring(1);
 		
 		for(MethodMetadata m : methods){
 			if(m.name.equals("set"+capitalizedName) && 
@@ -232,7 +232,7 @@ public class EntityGenerator extends BaseGenerator {
 					m.argumentsTypes.get(0).equals(this.adapter.getNativeType(fm.type))){
 				result = true;
 				
-				ConsoleUtils.displayDebug("Already implements setter of " + fm.fieldName + " => " + m.name);
+				ConsoleUtils.displayDebug("Already implements setter of " + fm.name + " => " + m.name);
 			}
 		}
 		

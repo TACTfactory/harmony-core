@@ -40,7 +40,6 @@ public class ProjectGenerator extends BaseGenerator {
 		this.datamodel.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
 		this.datamodel.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
 		
-		this.metas = metas;
 		if(this.metas!=null&&this.metas.entities.size()!=0){
 			// Make entities
 			ArrayList<Map<String, Object>> modelEntities = new ArrayList<Map<String,Object>>();
@@ -55,7 +54,7 @@ public class ProjectGenerator extends BaseGenerator {
 					for (FieldMetadata field : meta.fields.values()) {
 						Map<String, Object> modelField = new HashMap<String, Object>();
 						field.customize(adapter);
-						modelField.put(TagConstant.NAME, field.fieldName);
+						modelField.put(TagConstant.NAME, field.name);
 						modelField.put(TagConstant.TYPE, field.type);
 	
 						modelFields.add(modelField);
@@ -73,54 +72,6 @@ public class ProjectGenerator extends BaseGenerator {
 		this(adapter);
 
 		this.isWritable = isWritable;
-	}
-
-	/**
-	 * Update Project File merge template & datamodel
-	 * 
-	 * @param destPath File to update
-	 * @param templateFile Template File to use
-	 */ 
-	public void updateProjectFile(String destPath, String templateFile) {
-		if(!FileUtils.exists(destPath)){
-			Configuration cfg = new Configuration();
-	
-			try {
-				cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-	
-			File destFile = new File(destPath);
-			if(!destFile.exists())
-				destFile = FileUtils.makeFile(destPath);
-	
-			// Debug Log
-		ConsoleUtils.displayDebug("\tGenerate Project File : " + destFile.getPath()); 
-	
-	
-			// Create
-			Template tpl;
-			try {
-				
-				tpl = cfg.getTemplate(templateFile);	// Load template file in engine
-	
-				OutputStreamWriter output = new FileWriter(destFile);
-				tpl.process(this.datamodel, output);				// Process datamodel (with previous template file), and output to output file
-				output.flush();
-				output.close();
-	
-				// Debug Log
-				ConsoleUtils.displayDebug("File "+destFile.getName()+" processed...");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (TemplateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
-		}
 	}
 
 	/**
@@ -144,102 +95,7 @@ public class ProjectGenerator extends BaseGenerator {
 
 		return result;
 	}
-
-	/**
-	 * Make Android Project Structure
-	 * @return success to make the platform project folder
-	 */
-	private boolean makeProjectAndroid(){
-		boolean result = false;
-
-		// create project name space folders
-		FileUtils.makeFolder(this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.","/"));
-
-		// create empty package entity
-		FileUtils.makeFolder(this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.","/")+"/entity/" );
-		
-		// create libs folders
-		FileUtils.makeFolder(this.adapter.getLibsPath());
-
-		// create HomeActivity.java
-		this.updateProjectFile(this.adapter.getHomeActivityPathFile(),
-				this.adapter.getTemplateHomeActivityPathFile());
-
-		// create configs.xml
-		this.updateProjectFile(this.adapter.getRessourceValuesPath()+"configs.xml",
-				this.adapter.getTemplateRessourceValuesPath()+"configs.xml");
-
-		// create strings.xml
-		this.updateProjectFile(this.adapter.getStringsPathFile(),
-				this.adapter.getTemplateStringsPathFile()); //.substring(1));
-
-		// create main.xml
-		this.updateProjectFile(this.adapter.getRessourceLayoutPath()+"main.xml",
-				this.adapter.getTemplateRessourceLayoutPath()+"main.xml");
-
-		// copy libraries
-		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathLibs,"joda-time-2.1.jar")),
-				new File(String.format("%s/%s",this.adapter.getLibsPath(),"joda-time-2.1.jar")));
-		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathHarmony,"Harmony.jar")),
-				new File(String.format("%s/%s",this.adapter.getLibsPath(),"Harmony.jar")));
-		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathLibs,"android-support-v4.jar")),
-				new File(String.format("%s/%s",this.adapter.getLibsPath(),"android-support-v4.jar")));
-		
-		File dirTpl = new File(this.adapter.getTemplateProjectPath());
-
-		// Update newly created files with datamodel
-		if(dirTpl.exists() && dirTpl.listFiles().length!=0)
-		{
-			result = true;
-			for(int i=0;i<dirTpl.listFiles().length;i++)
-			{
-				if(dirTpl.listFiles()[i].isFile()) {
-					this.updateProjectFile(String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform())+dirTpl.listFiles()[i].getName(),
-							this.adapter.getTemplateProjectPath() + dirTpl.listFiles()[i].getName());
-				}
-			}
-		}
-		return result;
-	}
-
-	/**
-	 * Make IOS Project Structure
-	 * @return success to make the platform project folder
-	 */
-	private boolean makeProjectIOS(){
-		boolean result = false;
-		//Generate base folders & files
-		File dirProj = FileUtils.makeFolderRecursive(
-				String.format("%s/%s/%s/", Harmony.pathTemplate , this.adapter.getPlatform(), this.adapter.getProject()),
-				String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()),
-				true);
-		
-		if(dirProj.exists() && dirProj.listFiles().length!=0)
-			result = true;
-
-		return result;
-	}
-
-	/**
-	 * Make RIM Project Structure
-	 * @return success to make the platform project folder
-	 */
-	private boolean makeProjectRIM(){
-		boolean result = false;
-
-		return result;
-	}
-
-	/**
-	 * Make Windows Phone Project Structure
-	 * @return success to make the platform project folder
-	 */
-	private boolean makeProjectWinPhone(){
-		boolean result = false;
-
-		return result;
-	}
-
+	
 	/**
 	 * Remove Platform specific Project Structure
 	 * @return success to make the platform project folder
@@ -287,48 +143,161 @@ public class ProjectGenerator extends BaseGenerator {
 		tpl.process(datamodel, output);
 		output.flush();
 		output.close();
-		
-		this.updateStringsXml(cfg);
 	}
 
 	/**
-	 * Update XML Strings
-	 * 
-	 * @param cfg Template engine
+	 * Make Android Project Structure
+	 * @return success to make the platform project folder
 	 */
-	public void updateStringsXml(Configuration cfg) {
+	protected boolean makeProjectAndroid(){
+		boolean result = false;
 
-		try {
-			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+		// create project name space folders
+		FileUtils.makeFolder(this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.","/"));
+
+		// create empty package entity
+		FileUtils.makeFolder(this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.","/")+"/entity/" );
+		
+		// create libs folders
+		FileUtils.makeFolder(this.adapter.getLibsPath());
+
+		// create HomeActivity.java
+		this.updateProjectFile(this.adapter.getHomeActivityPathFile(),
+				this.adapter.getTemplateHomeActivityPathFile());
+
+		// create configs.xml
+		this.updateProjectFile(this.adapter.getRessourceValuesPath()+"configs.xml",
+				this.adapter.getTemplateRessourceValuesPath()+"configs.xml");
+
+		// create strings.xml
+		this.updateProjectFile(this.adapter.getStringsPathFile(),
+				this.adapter.getTemplateStringsPathFile()); //.substring(1));
+
+		// create main.xml
+		this.updateProjectFile(this.adapter.getRessourceLayoutPath()+"main.xml",
+				this.adapter.getTemplateRessourceLayoutPath()+"main.xml");
+
+		// copy libraries
+		this.updateLibrary("joda-time-2.1.jar");
+		this.updateLibrary("guava-12.0.jar");
+		this.updateLibrary("android-support-v4.jar");
+		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathHarmony,"Harmony.jar")),
+				new File(String.format("%s/%s",this.adapter.getLibsPath(),"Harmony.jar")));
+		
+		File dirTpl = new File(this.adapter.getTemplateProjectPath());
+
+		// Update newly created files with datamodel
+		if(dirTpl.exists() && dirTpl.listFiles().length!=0)
+		{
+			result = true;
+			for(int i=0;i<dirTpl.listFiles().length;i++)
+			{
+				if(dirTpl.listFiles()[i].isFile()) {
+					this.updateProjectFile(String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform())+dirTpl.listFiles()[i].getName(),
+							this.adapter.getTemplateProjectPath() + dirTpl.listFiles()[i].getName());
+				}
+			}
 		}
+		return result;
+	}
 
-		File destFile = new File(this.adapter.getStringsPathFile());
+	/**
+	 * Make IOS Project Structure
+	 * @return success to make the platform project folder
+	 */
+	protected boolean makeProjectIOS(){
+		boolean result = false;
+		//Generate base folders & files
+		File dirProj = FileUtils.makeFolderRecursive(
+				String.format("%s/%s/%s/", Harmony.pathTemplate , this.adapter.getPlatform(), this.adapter.getProject()),
+				String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()),
+				true);
+		
+		if(dirProj.exists() && dirProj.listFiles().length!=0)
+			result = true;
 
-		if(!destFile.exists())
-			destFile = FileUtils.makeFile(destFile.getPath());
+		return result;
+	}
 
-		// Debug Log
-		ConsoleUtils.displayDebug("Update Strings.xml File : " + destFile.getPath() + "\n"); 
+	/**
+	 * Make RIM Project Structure
+	 * @return success to make the platform project folder
+	 */
+	protected boolean makeProjectRIM(){
+		boolean result = false;
 
-		// Create
-		Template tpl;
-		try {
-			tpl = cfg.getTemplate(this.adapter.getTemplateStringsPathFile());	// Load template file in engine
+		return result;
+	}
 
-			OutputStreamWriter output = new FileWriter(destFile);
-			tpl.process(this.datamodel, output);				// Process datamodel (with previous template file), and output to output file
-			output.flush();
-			output.close();
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TemplateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+	/**
+	 * Make Windows Phone Project Structure
+	 * @return success to make the platform project folder
+	 */
+	protected boolean makeProjectWinPhone(){
+		boolean result = false;
+
+		return result;
+	}
+	
+	/**
+	 * Update Project File merge template & datamodel
+	 * 
+	 * @param destPath File to update
+	 * @param templateFile Template File to use
+	 */ 
+	protected void updateProjectFile(String destPath, String templateFile) {
+		if(!FileUtils.exists(destPath)){
+			Configuration cfg = new Configuration();
+	
+			try {
+				cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+	
+			File destFile = new File(destPath);
+			if(!destFile.exists())
+				destFile = FileUtils.makeFile(destPath);
+	
+			// Debug Log
+			ConsoleUtils.displayDebug("\tGenerate Project File : " + destFile.getPath()); 
+	
+	
+			// Create
+			Template tpl;
+			try {
+				
+				tpl = cfg.getTemplate(templateFile);	// Load template file in engine
+	
+				OutputStreamWriter output = new FileWriter(destFile);
+				tpl.process(this.datamodel, output);				// Process datamodel (with previous template file), and output to output file
+				output.flush();
+				output.close();
+	
+				// Debug Log
+				ConsoleUtils.displayDebug("File "+destFile.getName()+" processed...");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (TemplateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}	
 		}
 	}
+	
+	/**
+	 * Update Libs
+	 */
+	protected void updateLibrary(String libName) {
+		File dest = new File(String.format("%s/%s", this.adapter.getLibsPath(), libName));
+		
+		if (!dest.exists())
+			FileUtils.copyfile(
+					new File(String.format("%s/%s", Harmony.pathLibs, libName)),
+					dest);
+	}
+
+	
 }
