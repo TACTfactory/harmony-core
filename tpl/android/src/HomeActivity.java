@@ -1,11 +1,13 @@
 package ${project_namespace};
 
 <#if entities??>
-	<#list entities as entity>
+	<#list entities?values as entity>
+		<#if entity.fields?? && (entity.fields?size>0) && entity.internal!="true">
 import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}CreateActivity;
 import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}ListActivity;
 import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}ShowActivity;
 import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}EditActivity;
+		</#if>
 	</#list>
 </#if>
 
@@ -29,8 +31,8 @@ public class HomeActivity extends Activity
 
 		// Base buttons
 		<#if entities??>
-			<#list entities as entity>
-		
+			<#list entities?values as entity>
+				<#if entity.fields?? && (entity.fields?size>0) && entity.internal!="true">
 		// Create ${entity.name}
 		Button ${entity.name}CreateButton = new Button(this);
 		${entity.name}CreateButton.setText("${entity.name}CreateActivity");
@@ -54,6 +56,7 @@ public class HomeActivity extends Activity
 			}
 		});
 		homeLayout.addView(${entity.name}ListButton);
+				</#if>
 			</#list>
 		</#if>
 	}

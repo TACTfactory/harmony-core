@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
@@ -67,9 +68,11 @@ public class ClassMetadata extends BaseMetadata{
 		HashMap<String, Object> model = new HashMap<String, Object>();
 		
 		model.put(TagConstant.SPACE,	this.space);
+		model.put(TagConstant.PROJECT_NAME,	Harmony.metas.projectName);
 		model.put(TagConstant.NAME,		this.name);
 		model.put(TagConstant.CONTROLLER_NAMESPACE, adapter.getNameSpaceEntity(this, adapter.getController()));
 		model.put(TagConstant.DATA_NAMESPACE, adapter.getNameSpace(this, adapter.getData()));
+		model.put(TagConstant.TEST_NAMESPACE, adapter.getNameSpace(this, adapter.getTest()));
 		model.put(TagConstant.FIELDS,	this.toFieldArray(this.fields.values(), adapter));
 		model.put(TagConstant.IDS,		this.toFieldArray(this.ids.values(), adapter));
 		model.put(TagConstant.RELATIONS,this.toFieldArray(this.relations.values(), adapter));

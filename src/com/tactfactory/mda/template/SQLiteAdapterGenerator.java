@@ -41,90 +41,7 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		for(ClassMetadata meta : metas.entities.values()){
 			if(!meta.fields.isEmpty()){
 				Map<String, Object> modelClass = meta.toMap(this.adapter);
-				modelClass.put(TagConstant.LOCAL_NAMESPACE, this.adapter.getNameSpace(meta, this.adapter.getData()));
-				
 				this.entities.put((String) modelClass.get(TagConstant.NAME), modelClass);
-				this.makeRelationModel();
-			}
-		}
-	}
-
-	/**
-	 * 
-	 */
-	@SuppressWarnings("unchecked")
-	private void makeRelationModel() {
-		String relationType = null;
-		String modelName = null;
-		//Message info
-		ConsoleUtils.display(">> Analyse Databases relations in models");
-		
-		//List each entity hashmap
-		for(Object metaMap : this.entities.values()) {
-			if (metaMap instanceof Map<?, ?>) {
-				Map<String, Object> modelClass = (Map<String, Object>)metaMap;
-				
-				//List each entity relation field
-				for (Object metaRelations : (ArrayList<Map<String, Object>>)modelClass.get(TagConstant.RELATIONS) ) {
-					Map<String, Object> relation = (Map<String, Object>) ((Map<String, Object>) metaRelations).get(TagConstant.RELATION);
-					relationType = ((String)relation.get(TagConstant.TYPE));
-					modelName = ((String)modelClass.get(TagConstant.NAME));
-					
-					// One to One relation
-					if (relationType.equals("@OneToOne") ) {
-						ConsoleUtils.display("\tFound a @OneToOne relation in " + modelName );
-	
-					} else
-						
-					// One to Many relation
-					if (relationType.equals("@OneToMany")) {
-						ConsoleUtils.display("\tFound a @OneToMany relation in " + modelName );
-						
-						// Target Entity type
-						String targetEntity = relationType.replace("ArrayList<","").replace(">","");
-						ConsoleUtils.display("\tCheck if @ManyToOne exists in " + targetEntity);
-						
-						// Get Target Entity Relations
-						if(this.entities.containsKey(targetEntity)) {
-							Map<String, Object> targetModelClass = (Map<String, Object>)this.entities.get(targetEntity);
-							ArrayList<Map<String, Object>> targetRelations = (ArrayList<Map<String, Object>>)targetModelClass.get(TagConstant.RELATIONS);
-							
-							// list and check for a reversed @OneToMany (@ManyToOne)
-							for(Map<String,Object> targetRelation : targetRelations) {
-								
-								if(	targetRelation.get(TagConstant.TYPE).equals(modelName)
-											&& targetRelation.get(TagConstant.TYPE).toString().equals("@ManyToOne")) {
-									ConsoleUtils.display("\t@ManyToOne Relation exists, no need to add column... ");
-									break;
-								} else {
-									ConsoleUtils.display("\tNo @ManyToOne relation found, creating column...");
-		
-									Map<String, Object> modelRelation = new HashMap<String, Object>();
-									modelRelation.put(TagConstant.NAME,				modelName.toLowerCase());
-									modelRelation.put(TagConstant.ALIAS,			SqliteAdapter.generateRelationColumnName(modelName));
-									modelRelation.put(TagConstant.TYPE,				modelName);
-									modelRelation.put(TagConstant.RELATION_TYPE,	"@ManyToOne");							
-								}
-							}
-	
-							ConsoleUtils.display("..$..");
-						} else {
-							ConsoleUtils.displayWarning("\tTarget Entity not found please add it or use orm:generate:entities...");
-						}
-					} else
-					
-					// Many to One relation
-					if (relationType.equals("@ManyToOne")) {
-						ConsoleUtils.display("\tFound a @ManyToOne relation in " + modelName );
-					} else
-					
-					// Many to Many relation
-					if (relationType.equals("@ManyToMany")) {
-						ConsoleUtils.display("\tFound a @ManyToMany relation in " + modelName );
-					} else {
-						
-					}
-				}
 			}
 		}
 	}
@@ -138,12 +55,10 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		for(Object modelEntity : this.entities.values()) {
 			
 			Map<String, Object> entity = (Map<String, Object>) modelEntity;
-			this.localNameSpace = (String) entity.get(TagConstant.LOCAL_NAMESPACE);
+			this.localNameSpace = (String) entity.get(TagConstant.DATA_NAMESPACE);
 			
 			// Make class
 			this.datamodel = (HashMap<String, Object>) modelEntity;
-			this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	entity.get(TagConstant.SPACE));
-			this.datamodel.put(TagConstant.PROJECT_NAME, 		this.metas.projectName);
 			
 			this.generate();
 		}

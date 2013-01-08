@@ -35,51 +35,8 @@ public class SQLiteGenerator extends BaseGenerator {
 	public SQLiteGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
 		String globalNameSpace = "";
-
-		// Make entities
-		ArrayList<Map<String, Object>> modelEntities = new ArrayList<Map<String,Object>>();
-		for (ClassMetadata meta : this.metas.entities.values()) {
-			this.localNameSpace = this.adapter.getNameSpace(meta, this.adapter.getData());
-			globalNameSpace = meta.space;
-			
-			if(!meta.fields.isEmpty()){
-				Map<String, Object> modelClass = new HashMap<String, Object>();
-				modelClass.put(TagConstant.SPACE,	meta.space );
-				modelClass.put(TagConstant.NAME,	meta.name );
-				
-				// Make fields
-				ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
-				for (FieldMetadata field : meta.fields.values()) {
-					Map<String, Object> modelField = new HashMap<String, Object>();
-					field.customize(adapter);
-					modelField.put(TagConstant.NAME, field.name);
-					modelField.put(TagConstant.TYPE, field.type);
-					
-					modelFields.add(modelField);
-				}
-				modelClass.put(TagConstant.FIELDS, modelFields);
-	
-				// Make relations
-				ArrayList<Map<String, Object>> modelRelations = new ArrayList<Map<String,Object>>();
-	
-				for (FieldMetadata relation : meta.relations.values()) {
-					Map<String, Object> modelRelation = new HashMap<String, Object>();
-					relation.customize(adapter);
-					modelRelation.put(TagConstant.NAME, relation.name);
-					modelRelation.put(TagConstant.TYPE, relation.type);
-					modelRelation.put(TagConstant.RELATION_TYPE, relation.columnDefinition);
-					
-					modelRelations.add(modelRelation);
-				}
-				modelClass.put(TagConstant.RELATIONS, modelRelations);
-				
-				modelEntities.add(modelClass);
-			}
-		}
-		this.datamodel.put(TagConstant.PROJECT_NAME, 		this.metas.projectName);
-		this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	globalNameSpace);
-		this.datamodel.put(TagConstant.ENTITIES,			modelEntities);
-		this.datamodel.put(TagConstant.LOCAL_NAMESPACE,		this.localNameSpace);
+		this.datamodel = (HashMap<String, Object>) this.metas.toMap(this.adapter);
+		this.localNameSpace = this.metas.projectNameSpace+"/"+this.adapter.getData();
 	}
 
 	/**

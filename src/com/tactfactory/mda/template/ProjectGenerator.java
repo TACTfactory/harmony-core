@@ -28,19 +28,20 @@ public class ProjectGenerator extends BaseGenerator {
 	public ProjectGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
 
-		String projectNameSpace = "" + this.metas.projectNameSpace;
-		projectNameSpace = projectNameSpace.replaceAll("/","\\.");
+		//String projectNameSpace = "" + this.metas.projectNameSpace;
+		//projectNameSpace = projectNameSpace.replaceAll("/","\\.");
 
 		// Make class
-		this.datamodel.put(TagConstant.PROJECT_NAME, this.metas.projectName);
+		/*this.datamodel.put(TagConstant.PROJECT_NAME, this.metas.projectName);
 		this.datamodel.put(TagConstant.PROJECT_NAMESPACE, projectNameSpace);
 		this.datamodel.put(TagConstant.ANDROID_SDK_DIR, Harmony.androidSdkPath);
 
 		this.datamodel.put(TagConstant.ANT_ANDROID_SDK_DIR, new TagConstant.AndroidSDK("${sdk.dir}"));
 		this.datamodel.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
-		this.datamodel.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
+		this.datamodel.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");*/
+		this.datamodel = (HashMap<String, Object>) Harmony.metas.toMap(this.adapter);
 		
-		if(this.metas!=null&&this.metas.entities.size()!=0){
+		/*if(this.metas!=null&&this.metas.entities.size()!=0){
 			// Make entities
 			ArrayList<Map<String, Object>> modelEntities = new ArrayList<Map<String,Object>>();
 			for (ClassMetadata meta : this.metas.entities.values()) {
@@ -65,7 +66,7 @@ public class ProjectGenerator extends BaseGenerator {
 				}
 			}
 			this.datamodel.put(TagConstant.ENTITIES, modelEntities);
-		}
+		}*/
 	}
 
 	public ProjectGenerator(BaseAdapter adapter, Boolean isWritable) throws Exception {

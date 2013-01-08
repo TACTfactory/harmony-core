@@ -32,17 +32,6 @@ public class TestGenerator extends BaseGenerator {
 	
 	public TestGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
-		
-		// Make tests
-		this.entities = new HashMap<String, Object>();
-		for (ClassMetadata meta : this.metas.entities.values()) {
-			this.datamodel = new HashMap<String, Object>();
-			this.datamodel.put(TagConstant.NAME,			meta.name );
-			this.datamodel.put(TagConstant.LOCAL_NAMESPACE,	this.adapter.getNameSpace(meta, this.adapter.getTest()) );
-			this.datamodel.put(TagConstant.SPACE, 			meta.space);
-			
-			this.entities.put((String) this.datamodel.get(TagConstant.NAME), this.datamodel);
-		}
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -51,15 +40,9 @@ public class TestGenerator extends BaseGenerator {
 		
 		this.initTestAndroid();
 		
-		for(Object modelEntity : this.entities.values()) {
-			Map<String, Object> entity = (Map<String, Object>) modelEntity;
-			this.localNameSpace = (String) entity.get(TagConstant.LOCAL_NAMESPACE);
-			
-			// Make class
-			this.datamodel = new HashMap<String, Object>();
-			this.datamodel.put(TagConstant.NAME, 				entity.get(TagConstant.NAME));
-			this.datamodel.put(TagConstant.LOCAL_NAMESPACE, 	this.localNameSpace);
-			this.datamodel.put("namespace", 					entity.get(TagConstant.SPACE));
+		for(ClassMetadata cm : this.metas.entities.values()){
+			this.datamodel = (HashMap<String, Object>) cm.toMap(this.adapter);
+			this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getTest());
 			
 			this.generate();
 		}

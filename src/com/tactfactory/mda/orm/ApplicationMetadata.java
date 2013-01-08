@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
@@ -41,10 +42,16 @@ public class ApplicationMetadata {
 		for(ClassMetadata cm : this.entities.values()){
 			entitiesMap.put(cm.name, cm.toMap(adapt));
 		}
-		
+		 
 		ret.put(TagConstant.PROJECT_NAME, 		this.projectName);
-		ret.put(TagConstant.PROJECT_NAMESPACE, 	this.projectNameSpace);
+		ret.put(TagConstant.PROJECT_NAMESPACE, 	this.projectNameSpace.replaceAll("/", "\\."));
 		ret.put(TagConstant.ENTITIES, 			entitiesMap);
+		
+		ret.put(TagConstant.ANDROID_SDK_DIR, Harmony.androidSdkPath);
+
+		ret.put(TagConstant.ANT_ANDROID_SDK_DIR, new TagConstant.AndroidSDK("${sdk.dir}"));
+		ret.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
+		ret.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
 		
 		return ret;
 	}

@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -66,17 +67,8 @@ public class ActivityGenerator extends BaseGenerator {
 		ConsoleUtils.display(">> Generate CRUD view...");
 
 		for(Map<String, Object> entity : this.modelEntities) {
-			//this.meta = this.metas.get(i);
-			//this.localNameSpace = this.adapter.getNameSpaceEntity(this.meta, this.adapter.getController());;
-			this.localNameSpace = this.metas.projectNameSpace.replace('/', '.') +"."+ this.adapter.getController()+"."+((String)entity.get(TagConstant.NAME)).toLowerCase();
-
-			// Make class
-			this.datamodel.put("namespace", 					entity.get(TagConstant.SPACE));
-			this.datamodel.put(TagConstant.NAME, 				entity.get(TagConstant.NAME));
-			this.datamodel.put("localnamespace", 				this.localNameSpace);
-			this.datamodel.put(TagConstant.FIELDS, 				entity.get(TagConstant.FIELDS));
-			this.datamodel.put(TagConstant.RELATIONS, 			entity.get(TagConstant.RELATIONS));
-			
+			//TODO : Examine code logic (wrong ?)
+			this.datamodel = (HashMap<String, Object>) entity;
 			this.generateAllAction((String)entity.get(TagConstant.NAME));
 		}
 	}

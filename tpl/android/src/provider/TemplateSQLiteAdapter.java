@@ -1,4 +1,4 @@
-package ${local_namespace};
+package ${data_namespace};
 
 import android.content.Context;
 

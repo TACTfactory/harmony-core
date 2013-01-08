@@ -171,6 +171,12 @@ public class OrmCommand extends BaseCommand {
 //		}
 //		return ret;
 //	}
+	
+	public void parseProject(){
+		ApplicationMetadata am = new ApplicationMetadata(); 
+		am.entities = getMetasFromAll();
+		Harmony.metas = am;
+	}
 		
 	/**
 	 * Gets the Metadatas of all the entities actually in the package entity

@@ -1,5 +1,5 @@
 <#import "methods.tpl" as m>
-package ${localnamespace};
+package ${controller_namespace};
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
