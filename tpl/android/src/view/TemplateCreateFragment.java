@@ -1,7 +1,8 @@
+<#assign curr = entities[current_entity]>
 <#import "methods.tpl" as m>
-package ${controller_namespace};
+package ${curr.controller_namespace};
 
-import ${namespace}.R;
+import ${curr.namespace}.R;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
@@ -32,23 +33,23 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-import ${namespace}.data.${name}SQLiteAdapter;
-import ${namespace}.entity.${name};
-<#list relations as relation>
-import ${namespace}.data.${relation.relation.targetEntity}SQLiteAdapter;
-import ${namespace}.entity.${relation.relation.targetEntity};
+import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
+import ${curr.namespace}.entity.${curr.name};
+<#list curr.relations as relation>
+import ${curr.namespace}.data.${relation.relation.targetEntity}SQLiteAdapter;
+import ${curr.namespace}.entity.${relation.relation.targetEntity};
 </#list>
 
-/** ${name} create fragment
+/** ${curr.name} create fragment
  * 
  * @see android.app.Fragment
  */
-public class ${name}CreateFragment extends Fragment implements OnClickListener {
+public class ${curr.name}CreateFragment extends Fragment implements OnClickListener {
 	/* Model data */
-	protected ${name} model = new ${name}();
+	protected ${curr.name} model = new ${curr.name}();
 
 	/* Fields View */
-	<#list fields as field>
+	<#list curr.fields as field>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if field.type=="boolean">
@@ -77,21 +78,21 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 	 * @param view The layout inflating
 	 */
 	protected void initializeComponent(View view) {
-		<#foreach field in fields>
+		<#foreach field in curr.fields>
 			<#if !field.internal && !field.hidden>
 				<#if !field.relation??>
 					<#if field.type=="boolean">
-		this.${field.name}View = (CheckBox) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});
+		this.${field.name}View = (CheckBox) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 					<#else>
-		this.${field.name}View = (EditText) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});			
+		this.${field.name}View = (EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});			
 		<#if field.type == "date" || field.type == "datetime">
 		this.${field.name}View.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 		        DateTime dt = new DateTime();
 		        final java.text.DateFormat df = DateFormat.getDateFormat(getActivity());
 		        
-				if (!TextUtils.isEmpty(${name}CreateFragment.this.${field.name}View.getText())){
-					String strInputDate = ${name}CreateFragment.this.${field.name}View.getText().toString();
+				if (!TextUtils.isEmpty(${curr.name}CreateFragment.this.${field.name}View.getText())){
+					String strInputDate = ${curr.name}CreateFragment.this.${field.name}View.getText().toString();
 					try {
 						Date date = df.parse(strInputDate);
 						dt = new DateTime(date.getTime());
@@ -109,7 +110,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 					public void onClick(DialogInterface dialog, int which) {
 						DatePicker dp = ((CustomDatePickerDialog) dialog).getDatePicker();
 						DateTime date = new DateTime(dp.getYear(), dp.getMonth() + 1, dp.getDayOfMonth(), 0, 0);
-						${name}CreateFragment.this.${field.name}View.setText(df.format(date.toDate()));
+						${curr.name}CreateFragment.this.${field.name}View.setText(df.format(date.toDate()));
 					}
 				});
 
@@ -123,8 +124,8 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 				DateTime dt = new DateTime();
 		        final DateTimeFormatter fmt = DateTimeFormat.shortTime();
 		        
-				if (!TextUtils.isEmpty(${name}CreateFragment.this.${field.name}View.getText())){
-					String strInputTime = ${name}CreateFragment.this.${field.name}View.getText().toString();
+				if (!TextUtils.isEmpty(${curr.name}CreateFragment.this.${field.name}View.getText())){
+					String strInputTime = ${curr.name}CreateFragment.this.${field.name}View.getText().toString();
 				    dt = fmt.parseDateTime(strInputTime);
 				}
 				
@@ -139,7 +140,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 						date = new DateTime(date.getYear(), date.getDayOfMonth(), date.getDayOfMonth(), 
 								hourOfDay, minute);
                         
-                        ${name}CreateFragment.this.${field.name}View.setText(date.toString(fmt));
+                        ${curr.name}CreateFragment.this.${field.name}View.setText(date.toString(fmt));
 					}
 				}, hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
 				
@@ -150,7 +151,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 			</#if>
 
 				<#else>
-		this.${field.name}Button = (Button) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}_button);
+		this.${field.name}Button = (Button) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_button);
 		this.${field.name}Button.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 				onClick${field.name?cap_first}Button(v);
@@ -160,11 +161,11 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 			</#if>
 		</#foreach>
 		
-		this.saveButton = (Button) view.findViewById(R.id.${name?lower_case}_btn_save);
+		this.saveButton = (Button) view.findViewById(R.id.${curr.name?lower_case}_btn_save);
 		this.saveButton.setOnClickListener(this);
 	}
 	
-	<#list relations as relation>
+	<#list curr.relations as relation>
 		<#if !relation.internal && !relation.hidden>
 	/** Initialize dialog
 	 * 
@@ -184,17 +185,17 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		builder.setTitle("Select ${relation.name}")
 				.setMultiChoiceItems(listAdapter, checks, new DialogInterface.OnMultiChoiceClickListener(){
 					public void onClick(DialogInterface dialog, int which, boolean isChecked){
-						${name}CreateFragment.this.checked${relation.name?cap_first}[which] = isChecked;
+						${curr.name}CreateFragment.this.checked${relation.name?cap_first}[which] = isChecked;
 					}
 				}).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 		            @Override
 		            public void onClick(DialogInterface dialog, int id) {
-		            	//${name}CreateFragment.this.onOk${relation.name?cap_first}();
+		            	//${curr.name}CreateFragment.this.onOk${relation.name?cap_first}();
 		            }
 		        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 		            @Override
 		            public void onClick(DialogInterface dialog, int id) {
-		            	${name}CreateFragment.this.onCancel${relation.name?cap_first}();
+		            	${curr.name}CreateFragment.this.onCancel${relation.name?cap_first}();
 		            }
 		        });
 		
@@ -212,17 +213,17 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		builder.setTitle("Select ${relation.name}")
 				.setSingleChoiceItems(listAdapter, 0, new DialogInterface.OnClickListener(){
 					public void onClick(DialogInterface dialog, int id){
-						${name}CreateFragment.this.selected${relation.name?cap_first} = id;
+						${curr.name}CreateFragment.this.selected${relation.name?cap_first} = id;
 					}
 				}).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 		            @Override
 		            public void onClick(DialogInterface dialog, int id) {
-		            	//${name}CreateFragment.this.onOk${relation.name?cap_first}();
+		            	//${curr.name}CreateFragment.this.onOk${relation.name?cap_first}();
 		            }
 		        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 		            @Override
 		            public void onClick(DialogInterface dialog, int id) {
-		            	${name}CreateFragment.this.onCancel${relation.name?cap_first}();
+		            	${curr.name}CreateFragment.this.onCancel${relation.name?cap_first}();
 		            }
 		        });
 		
@@ -242,7 +243,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 
 	/** Load data from model to fields view */
 	public void loadData() {
-		<#foreach field in fields>						
+		<#foreach field in curr.fields>						
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
@@ -265,7 +266,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 	
 	/** Save data from fields view to model */
 	public void saveData() {
-		<#foreach field in fields>
+		<#foreach field in curr.fields>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if field.type!="boolean">
@@ -307,7 +308,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {    	
 		// Inflate the layout for this fragment
-		View view = inflater.inflate(R.layout.fragment_${name?lower_case}_create, container, false);
+		View view = inflater.inflate(R.layout.fragment_${curr.name?lower_case}_create, container, false);
 
 		this.initializeComponent(view);
 		this.loadData();
@@ -327,12 +328,12 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 
 	public static class CreateTask extends AsyncTask<Void, Void, Integer> {
 		protected final Context context;
-		protected final ${name}CreateFragment fragment;
-		protected final ${name} entity;
+		protected final ${curr.name}CreateFragment fragment;
+		protected final ${curr.name} entity;
 		protected String errorMsg;
 		protected ProgressDialog progress;
 
-		public CreateTask(${name}CreateFragment fragment, ${name} entity) {
+		public CreateTask(${curr.name}CreateFragment fragment, ${curr.name} entity) {
 			this.fragment = fragment;
 			this.context = fragment.getActivity();
 			this.entity = entity;
@@ -346,8 +347,8 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 			super.onPreExecute();
 
 			this.progress = ProgressDialog.show(context,
-					this.context.getString(R.string.${name?lower_case}_progress_save_title),
-					this.context.getString(R.string.${name?lower_case}_progress_save_message));
+					this.context.getString(R.string.${curr.name?lower_case}_progress_save_title),
+					this.context.getString(R.string.${curr.name?lower_case}_progress_save_message));
 		}
 
 		/* (non-Javadoc)
@@ -357,16 +358,16 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 
-			${name}SQLiteAdapter ${name?lower_case}Adapter = new ${name}SQLiteAdapter(context);
-			SQLiteDatabase db = ${name?lower_case}Adapter.open();
+			${curr.name}SQLiteAdapter ${curr.name?lower_case}Adapter = new ${curr.name}SQLiteAdapter(context);
+			SQLiteDatabase db = ${curr.name?lower_case}Adapter.open();
 			db.beginTransaction();
 			try {
-				${name?lower_case}Adapter.insert(this.entity);
+				${curr.name?lower_case}Adapter.insert(this.entity);
 
 				db.setTransactionSuccessful();
 			} finally {
 				db.endTransaction();
-				${name?lower_case}Adapter.close();
+				${curr.name?lower_case}Adapter.close();
 
 				result = 0;
 			}
@@ -387,7 +388,7 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 			} else {
 				AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
 				builder.setIcon(0);
-				builder.setMessage(this.context.getString(R.string.${name?lower_case}_error_create));
+				builder.setMessage(this.context.getString(R.string.${curr.name?lower_case}_error_create));
 				builder.setPositiveButton(
 						this.context.getString(android.R.string.yes), 
 						new Dialog.OnClickListener() {

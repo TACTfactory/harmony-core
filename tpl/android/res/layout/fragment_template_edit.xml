@@ -1,12 +1,13 @@
-<#assign name=name?lower_case>
+<#assign curr = entities[current_entity]>
+<#assign currname=curr.name?lower_case>
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout 
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-<#list fields as field>
-	<#assign m_id="${name?lower_case}_${field.name?lower_case}">
+<#list curr.fields as field>
+	<#assign m_id="${currname?lower_case}_${field.name?lower_case}">
 	<#assign m_id_label="${m_id}_label">
 	<#if !field.internal && !field.hidden>
 		<#if !field.relation??>
@@ -74,13 +75,13 @@
 </#list>
 
 	<Button
-    	android:id="@+id/${name?lower_case}_btn_save"
+    	android:id="@+id/${currname?lower_case}_btn_save"
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
-    	<#if relations?size!=0>
+    	<#if curr.relations?size!=0>
     	android:layout_below="@+id/${lastField}"
     	<#else>
-    	android:layout_below="@+id/${name?lower_case}_${fields?last.name?lower_case}"
+    	android:layout_below="@+id/${currname?lower_case}_${curr.fields?last.name?lower_case}"
     	</#if>
     	android:text="Edit" />
 </RelativeLayout>

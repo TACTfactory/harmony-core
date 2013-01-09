@@ -1,3 +1,4 @@
+<#assign curr = entities[current_entity]>
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout 
 	xmlns:android="http://schemas.android.com/apk/res/android"
@@ -8,10 +9,10 @@
 
     <fragment
         android:id="@+id/fragment"
-        android:name="${controller_namespace}.${name}ListFragment"
+        android:name="${curr.controller_namespace}.${curr.name}ListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_${name?lower_case}_list" >
+        tools:layout="@layout/fragment_${curr.name?lower_case}_list" >
     </fragment>
 
 </RelativeLayout>

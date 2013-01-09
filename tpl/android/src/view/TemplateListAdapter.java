@@ -1,5 +1,6 @@
+<#assign curr = entities[current_entity]>
 <#import "methods.tpl" as m>
-package ${controller_namespace};
+package ${curr.controller_namespace};
 
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
@@ -12,33 +13,33 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
-import ${namespace}.R;
-import ${namespace}.entity.${name};
+import ${curr.namespace}.R;
+import ${curr.namespace}.entity.${curr.name};
 
-<#list relations as relation>
+<#list curr.relations as relation>
 	<#if !relation.internal && !relation.hidden>
-import ${namespace}.entity.${relation.relation.targetEntity};
+import ${curr.namespace}.entity.${relation.relation.targetEntity};
 	</#if>
 </#list>
 
-public class ${name}ListAdapter extends ArrayAdapter<${name}> {
+public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}> {
 	private final LayoutInflater mInflater;
 
-	public ${name}ListAdapter(Context context) {
-		super(context, R.layout.row_${name?lower_case});
+	public ${curr.name}ListAdapter(Context context) {
+		super(context, R.layout.row_${curr.name?lower_case});
 
 		this.mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 	}
 
-	/** Set Array of ${name}
+	/** Set Array of ${curr.name}
 	 * 
 	 * @param data the array
 	 */
-	public void setData(List<${name}> data) {
+	public void setData(List<${curr.name}> data) {
 		this.clear();
 
 		if (data != null) {
-			for (${name} item : data) {
+			for (${curr.name} item : data) {
 				this.add(item);
 			}
 		}
@@ -52,17 +53,17 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 		ViewHolder holder;
 
 		if (convertView == null) {
-			convertView = this.mInflater.inflate(R.layout.row_${name?lower_case}, parent, false);
+			convertView = this.mInflater.inflate(R.layout.row_${curr.name?lower_case}, parent, false);
 
 			holder = new ViewHolder();
-			<#list fields as field>
+			<#list curr.fields as field>
 				<#if !field.internal && !field.hidden>
 					<#if !field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")>  
 						<#if field.type=="boolean">
-			holder.${field.name}View = (CheckBox) convertView.findViewById(R.id.row_${name?lower_case}_${field.name?lower_case});
+			holder.${field.name}View = (CheckBox) convertView.findViewById(R.id.row_${curr.name?lower_case}_${field.name?lower_case});
 			holder.${field.name}View.setEnabled(false);
 						<#else>
-			holder.${field.name}View = (TextView) convertView.findViewById(R.id.row_${name?lower_case}_${field.name?lower_case});			
+			holder.${field.name}View = (TextView) convertView.findViewById(R.id.row_${curr.name?lower_case}_${field.name?lower_case});			
 						</#if>
 					</#if>
 				</#if>
@@ -73,7 +74,7 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		${name} item = getItem(position);
+		${curr.name} item = getItem(position);
 		if ( item != null && holder != null)
 			holder.populate(item);
 
@@ -82,7 +83,7 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 
 	/** Holder row */
 	private static class ViewHolder {
-		<#list fields as field>
+		<#list curr.fields as field>
 			<#if !field.hidden && !field.internal>
 				<#if !field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")>  
 					<#if field.type=="boolean">
@@ -94,13 +95,13 @@ public class ${name}ListAdapter extends ArrayAdapter<${name}> {
 			</#if>
 		</#list>
 
-		/** Populate row with a ${name}
+		/** Populate row with a ${curr.name}
 		 * 
-		 * @param item ${name} data
+		 * @param item ${curr.name} data
 		 */
-		public void populate(${name} model) {
+		public void populate(${curr.name} model) {
 
-			<#list fields as field>
+			<#list curr.fields as field>
 				<#if !field.internal && !field.hidden>
 					<#if (!field.relation??)>
 						<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>

@@ -39,7 +39,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class ActivityGenerator extends BaseGenerator {
-	protected List<Map<String, Object>> modelEntities;
+	//protected List<Map<String, Object>> modelEntities;
 	protected String localNameSpace;
 	protected boolean isWritable = true;
 
@@ -47,15 +47,16 @@ public class ActivityGenerator extends BaseGenerator {
 		super(adapter);
 		
 		// Make entities
-		this.modelEntities = new ArrayList<Map<String, Object>>();
+		//this.modelEntities = new ArrayList<Map<String, Object>>();
 		for (ClassMetadata meta : this.metas.entities.values()) {
 			if(!meta.fields.isEmpty() && !meta.internal){
-				Map<String, Object> modelClass = meta.toMap(this.adapter);
+				//Map<String, Object> modelClass = meta.toMap(this.adapter);
 				meta.makeString("label");
 				
-				this.modelEntities.add(modelClass);
+				//this.modelEntities.add(modelClass);
 			}
 		}
+		this.datamodel = Harmony.metas.toMap(this.adapter);
 	}
 
 	public ActivityGenerator(BaseAdapter adapter, Boolean isWritable) throws Exception {
@@ -67,11 +68,12 @@ public class ActivityGenerator extends BaseGenerator {
 	public void generateAll() {
 		ConsoleUtils.display(">> Generate CRUD view...");
 
-		for(Map<String, Object> entity : this.modelEntities) {
-			//TODO : Examine code logic (wrong ?)
-			this.datamodel = (HashMap<String, Object>) entity;
-			this.localNameSpace = this.metas.projectNameSpace.replace('/', '.') +"."+ this.adapter.getController()+"."+((String)entity.get(TagConstant.NAME)).toLowerCase();
-			this.generateAllAction((String)entity.get(TagConstant.NAME));
+		for(ClassMetadata classmap : Harmony.metas.entities.values()){
+			if(!classmap.internal && !classmap.fields.isEmpty()){
+				this.datamodel.put(TagConstant.CURRENT_ENTITY, classmap.getName());
+				this.localNameSpace = this.adapter.getNameSpace(classmap, this.adapter.getController())+"."+classmap.getName().toLowerCase();//this.metas.projectNameSpace.replace('/', '.') +"."+ this.adapter.getController()+"."+((String)entity.get(TagConstant.NAME)).toLowerCase();
+				generateAllAction(classmap.getName());
+			}
 		}
 	}
 	
@@ -81,7 +83,7 @@ public class ActivityGenerator extends BaseGenerator {
 		ConsoleUtils.display(">>> Generate CRUD view for " +  entityName);
 
 		try {
-			Configuration cfg = new Configuration();						// Initialization of template engine
+			Configuration cfg = new Configuration();   // Initialization of template engine
 			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
 
 			if (this.isWritable ) {

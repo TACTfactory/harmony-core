@@ -1,3 +1,4 @@
+<#assign curr = entities[current_entity]>
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout 
 	xmlns:android="http://schemas.android.com/apk/res/android"
@@ -6,7 +7,7 @@
 	android:layout_width="fill_parent"
 	android:layout_height="fill_parent" >
 	<RelativeLayout 
-	    android:id="@+id/${name?lower_case}ListContainer" 
+	    android:id="@+id/${curr.name?lower_case}ListContainer" 
 		android:layout_width="fill_parent"
 	    android:layout_height="fill_parent" >
 		<TextView
@@ -15,7 +16,7 @@
 			android:layout_height="wrap_content"
 			android:padding="10dp"
 			android:gravity="center"
-			android:text="@string/${name?lower_case}_empty_list" />
+			android:text="@string/${curr.name?lower_case}_empty_list" />
 	    <ListView
 			android:id="@android:id/list"
 			android:isScrollContainer="true" 
@@ -31,7 +32,7 @@
 	</RelativeLayout>
 	
 	<LinearLayout 
-	    android:id="@+id/${name?lower_case}ProgressLayout"
+	    android:id="@+id/${curr.name?lower_case}ProgressLayout"
 	    android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
 		android:orientation="vertical"
