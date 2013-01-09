@@ -4,27 +4,17 @@
 package com.tactfactory.mda.template;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
-
 public class ProjectGenerator extends BaseGenerator {
 	protected boolean isWritable = true;
 
 	public ProjectGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
-
-		//String projectNameSpace = "" + this.metas.projectNameSpace;
-		//projectNameSpace = projectNameSpace.replaceAll("/","\\.");
 
 		this.datamodel = this.metas.toMap(this.adapter);
 	}
@@ -80,30 +70,13 @@ public class ProjectGenerator extends BaseGenerator {
 	/**
 	 * Generate HomeActivity File and merge it with datamodel
 	 */
-	public void generateHomeActivity() throws IOException,TemplateException {
+	public void generateHomeActivity() {
 		ConsoleUtils.display(">> Generate HomeView & Strings...");
-		
-		Configuration cfg = new Configuration();
 
-		try {
-			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
-		} catch (IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
+		String fullFilePath = this.adapter.getHomeActivityPathFile();
+		String fullTemplatePath = this.adapter.getTemplateHomeActivityPathFile().substring(1);
 
-		File file = FileUtils.makeFile(this.adapter.getHomeActivityPathFile() );
-
-		// Debug Log
-		ConsoleUtils.displayDebug("Generate Source : " + file.getPath()); 
-
-		// Create
-		Template tpl = cfg.getTemplate(this.adapter.getTemplateHomeActivityPathFile().substring(1));
-
-		OutputStreamWriter output = new FileWriter(file);
-		tpl.process(datamodel, output);
-		output.flush();
-		output.close();
+		super.makeSource(fullTemplatePath, fullFilePath, true);
 	}
 
 	/**
@@ -122,21 +95,28 @@ public class ProjectGenerator extends BaseGenerator {
 		// create libs folders
 		FileUtils.makeFolder(this.adapter.getLibsPath());
 
-		// create HomeActivity.java
-		this.updateProjectFile(this.adapter.getHomeActivityPathFile(),
-				this.adapter.getTemplateHomeActivityPathFile());
+		// create HomeActivity.java 
+		super.makeSource(this.adapter.getHomeActivityPathFile(),
+				this.adapter.getTemplateHomeActivityPathFile(),
+				false);
 
 		// create configs.xml
-		this.updateProjectFile(this.adapter.getRessourceValuesPath()+"configs.xml",
-				this.adapter.getTemplateRessourceValuesPath()+"configs.xml");
+		super.makeSource(
+				this.adapter.getTemplateRessourceValuesPath()+"configs.xml",
+				this.adapter.getRessourceValuesPath()+"configs.xml",
+				false);
 
 		// create strings.xml
-		this.updateProjectFile(this.adapter.getStringsPathFile(),
-				this.adapter.getTemplateStringsPathFile()); //.substring(1));
+		super.makeSource(
+				this.adapter.getTemplateStringsPathFile(),
+				this.adapter.getStringsPathFile(),
+				false);
 
 		// create main.xml
-		this.updateProjectFile(this.adapter.getRessourceLayoutPath()+"main.xml",
-				this.adapter.getTemplateRessourceLayoutPath()+"main.xml");
+		super.makeSource(
+				this.adapter.getTemplateRessourceLayoutPath()+"main.xml",
+				this.adapter.getRessourceLayoutPath()+"main.xml",
+				false);
 
 		// copy libraries
 		this.updateLibrary("joda-time-2.1.jar");
@@ -154,8 +134,10 @@ public class ProjectGenerator extends BaseGenerator {
 			for(int i=0;i<dirTpl.listFiles().length;i++)
 			{
 				if(dirTpl.listFiles()[i].isFile()) {
-					this.updateProjectFile(String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform())+dirTpl.listFiles()[i].getName(),
-							this.adapter.getTemplateProjectPath() + dirTpl.listFiles()[i].getName());
+					super.makeSource(
+							this.adapter.getTemplateProjectPath() + dirTpl.listFiles()[i].getName(),
+							String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform())+dirTpl.listFiles()[i].getName(),
+							false);
 				}
 			}
 		}
@@ -198,54 +180,6 @@ public class ProjectGenerator extends BaseGenerator {
 		boolean result = false;
 
 		return result;
-	}
-	
-	/**
-	 * Update Project File merge template & datamodel
-	 * 
-	 * @param destPath File to update
-	 * @param templateFile Template File to use
-	 */ 
-	protected void updateProjectFile(String destPath, String templateFile) {
-		if(!FileUtils.exists(destPath)){
-			Configuration cfg = new Configuration();
-	
-			try {
-				cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-	
-			File destFile = new File(destPath);
-			if(!destFile.exists())
-				destFile = FileUtils.makeFile(destPath);
-	
-			// Debug Log
-			ConsoleUtils.displayDebug("\tGenerate Project File : " + destFile.getPath()); 
-	
-	
-			// Create
-			Template tpl;
-			try {
-				
-				tpl = cfg.getTemplate(templateFile);	// Load template file in engine
-	
-				OutputStreamWriter output = new FileWriter(destFile);
-				tpl.process(this.datamodel, output);				// Process datamodel (with previous template file), and output to output file
-				output.flush();
-				output.close();
-	
-				// Debug Log
-				ConsoleUtils.displayDebug("File "+destFile.getName()+" processed...");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (TemplateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
-		}
 	}
 	
 	/**

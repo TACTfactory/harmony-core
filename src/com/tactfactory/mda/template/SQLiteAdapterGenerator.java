@@ -8,25 +8,13 @@
  */
 package com.tactfactory.mda.template;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
-import com.tactfactory.mda.plateforme.SqliteAdapter;
-import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
 public class SQLiteAdapterGenerator extends BaseGenerator {	
 	protected Map<String, Object> entities;
@@ -45,8 +33,6 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 			}
 		}
 	}
-
-
 	
 	@SuppressWarnings("unchecked")
 	public void generateAll() {
@@ -69,55 +55,33 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		ConsoleUtils.display(">>> Generate Adapter for " +  this.datamodel.get(TagConstant.NAME));
 		
 		try {
-			Configuration cfg = new Configuration();
-			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
-			
-			this.makeSourceControler(cfg, 
+			this.makeSourceControler( 
 					"TemplateSQLiteAdapterBase.java", 
 					"%sSQLiteAdapterBase.java", true);
 			
-			this.makeSourceControler(cfg, 
+			this.makeSourceControler(
 					"TemplateSQLiteAdapter.java", 
 					"%sSQLiteAdapter.java", false);
 			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TemplateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		} catch (Exception e) {
+			ConsoleUtils.displayError(e.getMessage());
 		}
 	}
 	
-	/** Make Java Source Code
-	 * @param cfg Template engine
+	/** 
+	 * Make Java Source Code
+	 * 
 	 * @param template Template path file. <br/>For list activity is "TemplateListActivity.java"
 	 * @param filename
-	 * @throws IOException
-	 * @throws TemplateException
 	 */
-	private void makeSourceControler(Configuration cfg, String template, String filename, boolean override) throws IOException,
-			TemplateException {
-		String filePath = String.format("%s%s/%s",
+	private void makeSourceControler(String template, String filename, boolean override) {
+		String fullFilePath = String.format("%s%s/%s",
 				this.adapter.getSourcePath(),
 				PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
 				String.format(filename, this.datamodel.get(TagConstant.NAME)));
-		File testFile = new File(filePath);
-
-		if (!(!override && testFile.exists())) {
-			File file = FileUtils.makeFile(filePath);
-			
-			// Debug Log
-			ConsoleUtils.displayDebug("Generate Source : " + file.getPath()); 
-			
-			// Create
-			Template tpl = cfg.getTemplate(
-					this.adapter.getTemplateSourceProviderPath().substring(1) + template);
-			
-			OutputStreamWriter output = new FileWriter(file);
-			tpl.process(datamodel, output);
-			output.flush();
-			output.close();
-		}
+		
+		String fullTemplatePath = this.adapter.getTemplateSourceProviderPath().substring(1) + template;
+		
+		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 }

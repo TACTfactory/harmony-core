@@ -2,7 +2,6 @@ package com.tactfactory.mda.rest.command;
 
 import japa.parser.ast.CompilationUnit;
 
-import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -17,8 +16,6 @@ import com.tactfactory.mda.parser.JavaModelParser;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.rest.parser.RestParser;
 import com.tactfactory.mda.rest.template.RestGenerator;
-
-import freemarker.template.TemplateException;
 
 @PluginImplementation
 public class RestCommand extends BaseCommand{

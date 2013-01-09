@@ -4,19 +4,11 @@
 package com.tactfactory.mda.template;
 
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.HashMap;
 
-import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
 public class TestProjectGenerator extends BaseGenerator {
 	protected boolean isWritable = true;
@@ -27,14 +19,6 @@ public class TestProjectGenerator extends BaseGenerator {
 		String projectNameSpace = "" + this.metas.projectNameSpace;
 		projectNameSpace = projectNameSpace.replaceAll("/","\\.");
 
-		// Make class
-		/*this.datamodel.put(TagConstant.PROJECT_NAME, 	this.metas.projectName);
-		this.datamodel.put(TagConstant.PROJECT_NAMESPACE, projectNameSpace);
-		this.datamodel.put(TagConstant.ANDROID_SDK_DIR, Harmony.androidSdkPath);
-
-		this.datamodel.put(TagConstant.ANT_ANDROID_SDK_DIR, new TagConstant.AndroidSDK("${sdk.dir}"));
-		this.datamodel.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
-		this.datamodel.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");*/
 		this.datamodel = (HashMap<String, Object>) this.metas.toMap(this.adapter);
 	}
 
@@ -42,54 +26,6 @@ public class TestProjectGenerator extends BaseGenerator {
 		this(adapter);
 
 		this.isWritable = isWritable;
-	}
-
-	/**
-	 * Update Test Project File merge template & datamodel
-	 * 
-	 * @param destPath File to update
-	 * @param templateFile Template File to use
-	 */ 
-	public void updateProjectFile(String destPath, String templateFile) {
-		if(!FileUtils.exists(destPath)){
-			Configuration cfg = new Configuration();
-	
-			try {
-				cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-	
-			File destFile = new File(destPath);
-			if(!destFile.exists())
-				destFile = FileUtils.makeFile(destPath);
-	
-			// Debug Log
-		ConsoleUtils.displayDebug("\tGenerate Test Project File : " + destFile.getPath()); 
-	
-	
-			// Create
-			Template tpl;
-			try {
-				
-				tpl = cfg.getTemplate(templateFile);	// Load template file in engine
-	
-				OutputStreamWriter output = new FileWriter(destFile);
-				tpl.process(this.datamodel, output);				// Process datamodel (with previous template file), and output to output file
-				output.flush();
-				output.close();
-	
-				// Debug Log
-				ConsoleUtils.displayDebug("File "+destFile.getName()+" processed...");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (TemplateException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
-		}
 	}
 
 	/**
@@ -125,21 +61,27 @@ public class TestProjectGenerator extends BaseGenerator {
 		//FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/"));
 
 		// create strings.xml
-		this.updateProjectFile(this.adapter.getStringsTestPathFile(),
-				this.adapter.getTemplateStringsTestPathFile()); //.substring(1));
+		super.makeSource(
+				this.adapter.getTemplateStringsTestPathFile(), 
+				this.adapter.getStringsTestPathFile(), false);
 		
 		File dirTpl = new File(this.adapter.getTemplateTestProjectPath());
 
 		// Update newly created files with datamodel
-		if(dirTpl.exists() && dirTpl.listFiles().length!=0)
-		{
+		if(dirTpl.exists() && dirTpl.listFiles().length!=0) {
 			result = true;
 			for(int i=0;i<dirTpl.listFiles().length;i++)
 			{
 				if(dirTpl.listFiles()[i].isFile()) {
-					this.updateProjectFile(String.format("%s/%s/%s/", Harmony.pathProject, this.adapter.getPlatform(), 
-							this.adapter.getTest())+dirTpl.listFiles()[i].getName(),
-							this.adapter.getTemplateTestProjectPath() + dirTpl.listFiles()[i].getName());
+					String fullFilePath = String.format("%s/%s/%s/%s", 
+							Harmony.pathProject, 
+							this.adapter.getPlatform(), 
+							this.adapter.getTest(),
+							dirTpl.listFiles()[i].getName());
+					
+					String fullTemplatePath = this.adapter.getTemplateTestProjectPath() + dirTpl.listFiles()[i].getName();
+					
+					super.makeSource(fullTemplatePath, fullFilePath, false);
 				}
 			}
 		}
@@ -152,6 +94,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	 */
 	private boolean makeTestProjectIOS(){
 		boolean result = false;
+		
 		//Generate base folders & files
 		File dirProj = FileUtils.makeFolderRecursive(
 				String.format("%s/%s/%s/", Harmony.pathTemplate , this.adapter.getPlatform(), this.adapter.getProject()),
