@@ -32,7 +32,6 @@ import org.jdom2.input.SAXBuilder;
 import com.google.common.base.Strings;
 import com.tactfactory.mda.command.*;
 import com.tactfactory.mda.orm.ApplicationMetadata;
-import com.tactfactory.mda.rest.command.RestCommand;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.OsUtil;

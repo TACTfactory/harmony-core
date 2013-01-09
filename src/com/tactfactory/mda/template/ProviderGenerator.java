@@ -11,7 +11,6 @@ package com.tactfactory.mda.template;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
@@ -26,15 +25,10 @@ import org.jdom2.output.XMLOutputter;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.TranslationMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
-import freemarker.template.TemplateException;
 
 public class ProviderGenerator extends BaseGenerator {
 	protected String localNameSpace;
@@ -52,59 +46,37 @@ public class ProviderGenerator extends BaseGenerator {
 	
 	public void generateProvider() {
 		try {
-			Configuration cfg = new Configuration();	// Initialization of template engine
-			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
-			
-			this.makeSourceProvider(cfg, "TemplateProvider.java", this.nameProvider + ".java");
+			this.makeSourceProvider("TemplateProvider.java", this.nameProvider + ".java");
 			
 			this.updateManifest(this.nameProvider);
 			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (TemplateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			TranslationMetadata.addDefaultTranslation("uri_not_supported", "URI not supported");
+			TranslationMetadata.addDefaultTranslation("app_provider_name", "Provider of " + this.metas.projectName);
+			TranslationMetadata.addDefaultTranslation("app_provider_description", "Provider of " + this.metas.projectName + " for acces to data");
+			
+		} catch (Exception e) {
+			ConsoleUtils.displayError(e.getMessage());
 		}
-		
-		TranslationMetadata.addDefaultTranslation("uri_not_supported", "URI not supported");
-		TranslationMetadata.addDefaultTranslation("app_provider_name", "Provider of " + this.metas.projectName);
-		TranslationMetadata.addDefaultTranslation("app_provider_description", "Provider of " + this.metas.projectName + " for acces to data");
-		
 	}
 	
-	/** Make Java Source Code
-	 * @param cfg Template engine
+	/** 
+	 * Make Java Source Code
+	 * 
 	 * @param template Template path file. <br/>For list activity is "TemplateListActivity.java"
 	 * @param filename
-	 * @throws IOException
-	 * @throws TemplateException
 	 */
-	private void makeSourceProvider(Configuration cfg, String template, String filename) 
-			throws IOException, TemplateException {
+	private void makeSourceProvider(String template, String filename) {
 		
-		String filepath = String.format("%s%s/%s",
+		String fullFilePath = String.format("%s%s/%s",
 						this.adapter.getSourcePath(),
 						PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
 						filename);
 		
-		if(!FileUtils.exists(filepath)){
-			File file = FileUtils.makeFile(filepath);
-			
-			// Debug Log
-			ConsoleUtils.displayDebug("Generate Source : " + file.getPath()); 
-	
-			// Create
-			Template tpl = cfg.getTemplate(
-					String.format("%s%s",
-							this.adapter.getTemplateSourceProviderPath(),
-							template));		// Load template file in engine
-	
-			OutputStreamWriter output = new FileWriter(file);
-			tpl.process(this.datamodel, output);		// Process datamodel (with previous template file), and output to output file
-			output.flush();
-			output.close();
-		}
+		String fullTemplatePath = String.format("%s%s",
+				this.adapter.getTemplateSourceProviderPath(),
+				template);
+		
+		super.makeSource(fullTemplatePath, fullFilePath, false);
 	}
 
 	/**  Update Android Manifest

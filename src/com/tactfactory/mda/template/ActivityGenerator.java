@@ -68,19 +68,14 @@ public class ActivityGenerator extends BaseGenerator {
 	
 	/** All Actions (List, Show, Edit, Create) */
 	public void generateAllAction(String entityName) {
-		// Info
 		ConsoleUtils.display(">>> Generate CRUD view for " +  entityName);
-
+		
 		try {
-			Configuration cfg = new Configuration();   // Initialization of template engine
-			cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
-
 			if (this.isWritable ) {
-				// Info
 				ConsoleUtils.display("   with write actions");
-
-				this.generateCreateAction(cfg, entityName);
-				this.generateEditAction(cfg, entityName);
+	
+				this.generateCreateAction(entityName);
+				this.generateEditAction(entityName);
 				
 				TranslationMetadata.addDefaultTranslation(
 						entityName.toLowerCase() + "_progress_save_title", 
@@ -89,15 +84,13 @@ public class ActivityGenerator extends BaseGenerator {
 						entityName.toLowerCase() + "_progress_save_message", 
 						entityName +" is saving to database&#8230;");
 			}
-
-			this.generateShowAction(cfg, entityName);
-			this.generateListAction(cfg, entityName);
-			
+	
+			this.generateShowAction(entityName);
+			this.generateListAction(entityName);
+		
 			new TranslationGenerator(this.adapter).generateStringsXml();
-			
 		} catch (Exception e) {
 			ConsoleUtils.displayError(e.getMessage());
-			e.printStackTrace();
 		}
 	}
 	
@@ -106,8 +99,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	protected void generateListAction(Configuration cfg, String entityName) 
-			throws IOException, TemplateException {
+	protected void generateListAction(String entityName) {
 		ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sListActivity.java");
 		javas.add("%sListFragment.java");
@@ -120,13 +112,13 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("row_%s.xml");
 		
 		for(String java : javas){
-			this.makeSourceControler(cfg, 
+			this.makeSourceControler( 
 					String.format(java, "Template"),
 					String.format(java, entityName));
 		}
 		
 		for(String xml : xmls){
-			this.makeResourceLayout(cfg, 
+			this.makeResourceLayout( 
 					String.format(xml, "template"),
 					String.format(xml, entityName.toLowerCase()));
 		}
@@ -143,8 +135,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	protected void generateShowAction(Configuration cfg, String entityName) 
-			throws IOException, TemplateException {
+	protected void generateShowAction(String entityName) {
 
 		ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sShowActivity.java");
@@ -156,13 +147,13 @@ public class ActivityGenerator extends BaseGenerator {
 		
 
 		for(String java : javas){
-			this.makeSourceControler(cfg, 
+			this.makeSourceControler(
 					String.format(java, "Template"),
 					String.format(java, entityName));
 		}
 		
 		for(String xml : xmls){
-			this.makeResourceLayout(cfg, 
+			this.makeResourceLayout( 
 					String.format(xml, "template"),
 					String.format(xml, entityName.toLowerCase()));
 		}
@@ -175,8 +166,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	protected void generateEditAction(Configuration cfg, String entityName) 
-			throws IOException, TemplateException {
+	protected void generateEditAction(String entityName) {
 		
 		ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sEditActivity.java");
@@ -188,13 +178,13 @@ public class ActivityGenerator extends BaseGenerator {
 		
 
 		for(String java : javas){
-			this.makeSourceControler(cfg, 
+			this.makeSourceControler( 
 					String.format(java, "Template"),
 					String.format(java, entityName));
 		}
 		
 		for(String xml : xmls){
-			this.makeResourceLayout(cfg, 
+			this.makeResourceLayout( 
 					String.format(xml, "template"),
 					String.format(xml, entityName.toLowerCase()));
 		}
@@ -211,8 +201,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	protected void generateCreateAction(Configuration cfg, String entityName) 
-			throws IOException, TemplateException {
+	protected void generateCreateAction(String entityName) {
 		
 		ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sCreateActivity.java");
@@ -224,13 +213,13 @@ public class ActivityGenerator extends BaseGenerator {
 		
 
 		for(String java : javas){
-			this.makeSourceControler(cfg, 
+			this.makeSourceControler(
 					String.format(java, "Template"),
 					String.format(java, entityName));
 		}
 		
 		for(String xml : xmls){
-			this.makeResourceLayout(cfg, 
+			this.makeResourceLayout(
 					String.format(xml, "template"),
 					String.format(xml, entityName.toLowerCase()));
 		}
@@ -244,67 +233,37 @@ public class ActivityGenerator extends BaseGenerator {
 	}
 
 	/** Make Java Source Code
-	 * @param cfg Template engine
+	 * 
 	 * @param template Template path file. <br/>For list activity is "TemplateListActivity.java"
 	 * @param filename
-	 * @throws IOException
-	 * @throws TemplateException
 	 */
-	private void makeSourceControler(Configuration cfg, String template, String filename) 
-			throws IOException, TemplateException {
-		String filepath = String.format("%s%s/%s",
+	private void makeSourceControler(String template, String filename) {
+		String fullFilePath = String.format("%s%s/%s",
 						this.adapter.getSourcePath(),
 						PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
 						filename);
-		if(!FileUtils.exists(filepath)){
-			File file = FileUtils.makeFile(filepath);
-			
-			// Debug Log
-			ConsoleUtils.displayDebug("Generate Source : " + file.getPath()); 
-	
-			// Create
-			Template tpl = cfg.getTemplate(
-					String.format("%s%s",
-							this.adapter.getTemplateSourceControlerPath(),
-							template));		// Load template file in engine
-	
-			OutputStreamWriter output = new FileWriter(file);
-			tpl.process(datamodel, output);		// Process datamodel (with previous template file), and output to output file
-			output.flush();
-			output.close();
-		}
+		String fullTemplatePath = String.format("%s%s",
+				this.adapter.getTemplateSourceControlerPath(),
+				template);
+		
+		super.makeSource(fullTemplatePath, fullFilePath, false);
 	}
 
-	/** Make Resource file
+	/** 
+	 * Make Resource file
 	 * 
-	 * @param cfg Template engine
 	 * @param template Template path file.
 	 * @param filename Resource file. <br/>prefix is type of view "row_" or "activity_" or "fragment_" with <br/>postfix is type of action and extension file : "_list.xml" or "_edit.xml".
-	 * @throws IOException
-	 * @throws TemplateException
 	 */
-	private void makeResourceLayout(Configuration cfg, String template, String filename) 
-			throws IOException, TemplateException {
-		String filepath = String.format("%s/%s", 
+	private void makeResourceLayout(String template, String filename) {
+		String fullFilePath = String.format("%s/%s", 
 									this.adapter.getRessourceLayoutPath(),
 									filename);
-		if(!FileUtils.exists(filepath)){
-			File file = FileUtils.makeFile(filepath);
-	
-			// Debug Log
-			ConsoleUtils.displayDebug("Generate Ressource : " + file.getAbsoluteFile()); 
-	
-			// Create
-			Template tpl = cfg.getTemplate(
-					String.format("%s/%s",
-							this.adapter.getTemplateRessourceLayoutPath().substring(1),
-							template));
-	
-			OutputStreamWriter output = new FileWriter(file);
-			tpl.process(this.datamodel, output);
-			output.flush();
-			output.close();
-		}
+		String fullTemplatePath = String.format("%s/%s",
+				this.adapter.getTemplateRessourceLayoutPath().substring(1),
+				template);
+		
+		super.makeSource(fullTemplatePath, fullFilePath, false);
 	}
 
 	/** Make Manifest file
