@@ -13,6 +13,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -408,11 +409,20 @@ public class ActivityGenerator extends BaseGenerator {
 					}
 
 					
-					data += this.metas.projectNameSpace + adapter.getModel() + entityName;
+					data += this.metas.projectNameSpace.replace('/', '.') + entityName;
 					filterActivity.getChild("action").setAttribute("name", "android.intent.action."+ action, ns);
 					filterActivity.getChild("category").setAttribute("name", "android.intent.category.DEFAULT", ns);
 					filterActivity.getChild("data").setAttribute("mimeType", data, ns);
-				}	
+				}
+				
+				// Clean code
+				applicationNode.sortChildren(new Comparator<Element>() {
+
+					@Override
+					public int compare(Element o1, Element o2) {
+						return (o1.getName().compareToIgnoreCase(o2.getName()));
+					}
+				});
 			}
 
 			// Write to File

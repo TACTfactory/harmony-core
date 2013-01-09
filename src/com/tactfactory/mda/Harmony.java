@@ -72,6 +72,7 @@ public class Harmony {
 	/** Android SDK path */
 	public static String androidSdkPath;
 	
+	/** Android SDK version */
 	public static String androidSdkVersion;
 
 	/** Symfony path */

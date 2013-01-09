@@ -173,6 +173,4 @@ public final class AndroidAdapter extends BaseAdapter {
 		}
 		return ret;
 	}
-	
-	
 }

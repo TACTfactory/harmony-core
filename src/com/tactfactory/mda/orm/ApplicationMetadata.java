@@ -10,7 +10,6 @@ package com.tactfactory.mda.orm;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
-import java.util.Map;
 import java.util.TreeMap;
 
 import com.tactfactory.mda.Harmony;
@@ -38,23 +37,27 @@ public class ApplicationMetadata implements BaseMetadata {
 	 * @param adapter The adapter used to customize the fields
 	 * @return the map
 	 */
-	public Map<String, Object> toMap(BaseAdapter adapt){
-		Map<String, Object> ret = new HashMap<String, Object>();
-		Map<String, Object> entitiesMap = new HashMap<String, Object>();
+	public HashMap<String, Object> toMap(BaseAdapter adapt){
+		HashMap<String, Object> ret = new HashMap<String, Object>();
+		HashMap<String, Object> entitiesMap = new HashMap<String, Object>();
 		
+		// Make Map for entities
 		for(ClassMetadata cm : this.entities.values()){
 			entitiesMap.put(cm.name, cm.toMap(adapt));
 		}
-		 
+		
+		// Add root
 		ret.put(TagConstant.PROJECT_NAME, 		this.projectName);
 		ret.put(TagConstant.PROJECT_NAMESPACE, 	this.projectNameSpace.replaceAll("/", "\\."));
+
 		ret.put(TagConstant.ENTITIES, 			entitiesMap);
 		
 		ret.put(TagConstant.ANDROID_SDK_DIR, Harmony.androidSdkPath);
-
 		ret.put(TagConstant.ANT_ANDROID_SDK_DIR, new TagConstant.AndroidSDK("${sdk.dir}"));
 		ret.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
 		ret.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
+		
+		// Add Extra bundle
 		for(BaseMetadata bm : options.values()){
 			ret.put(bm.getName(), bm.toMap(adapt));
 		}
