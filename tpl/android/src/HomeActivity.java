@@ -5,8 +5,6 @@ package ${project_namespace};
 		<#if entity.fields?? && (entity.fields?size>0) && entity.internal!="true">
 import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}CreateActivity;
 import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}ListActivity;
-import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}ShowActivity;
-import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}EditActivity;
 		</#if>
 	</#list>
 </#if>

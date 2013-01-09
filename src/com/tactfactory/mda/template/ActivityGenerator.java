@@ -44,35 +44,26 @@ public class ActivityGenerator extends BaseGenerator {
 	protected boolean isWritable = true;
 
 	public ActivityGenerator(BaseAdapter adapter) throws Exception {
-		super(adapter);
+		this(adapter, true);
 		
-		// Make entities
-		//this.modelEntities = new ArrayList<Map<String, Object>>();
-		for (ClassMetadata meta : this.metas.entities.values()) {
-			if(!meta.fields.isEmpty() && !meta.internal){
-				//Map<String, Object> modelClass = meta.toMap(this.adapter);
-				meta.makeString("label");
-				
-				//this.modelEntities.add(modelClass);
-			}
-		}
-		this.datamodel = Harmony.metas.toMap(this.adapter);
 	}
 
 	public ActivityGenerator(BaseAdapter adapter, Boolean isWritable) throws Exception {
-		this(adapter);
+		super(adapter);
 
 		this.isWritable = isWritable;
+		this.datamodel = Harmony.metas.toMap(this.adapter);
 	}
 	
 	public void generateAll() {
 		ConsoleUtils.display(">> Generate CRUD view...");
 
-		for(ClassMetadata classmap : Harmony.metas.entities.values()){
-			if(!classmap.internal && !classmap.fields.isEmpty()){
-				this.datamodel.put(TagConstant.CURRENT_ENTITY, classmap.getName());
-				this.localNameSpace = this.adapter.getNameSpace(classmap, this.adapter.getController())+"."+classmap.getName().toLowerCase();//this.metas.projectNameSpace.replace('/', '.') +"."+ this.adapter.getController()+"."+((String)entity.get(TagConstant.NAME)).toLowerCase();
-				generateAllAction(classmap.getName());
+		for(ClassMetadata cm : Harmony.metas.entities.values()){
+			if(!cm.internal && !cm.fields.isEmpty()){
+				cm.makeString("label");
+				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
+				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getController())+"."+cm.getName().toLowerCase();
+				generateAllAction(cm.getName());
 			}
 		}
 	}
