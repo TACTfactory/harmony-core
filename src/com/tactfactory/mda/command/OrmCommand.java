@@ -109,7 +109,7 @@ public class OrmCommand extends BaseCommand {
 			new ApplicationGenerator(this.adapter).generateApplication();
 			new SQLiteAdapterGenerator(this.adapter).generateAll();
 			new SQLiteGenerator(this.adapter).generateDatabase();
-			//new ProviderGenerator(this.adapter).generateProvider();
+			new ProviderGenerator(this.adapter).generateProvider();
 			
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -171,6 +171,12 @@ public class OrmCommand extends BaseCommand {
 //		}
 //		return ret;
 //	}
+	
+	public void parseProject(){
+		ApplicationMetadata am = new ApplicationMetadata(); 
+		am.entities = getMetasFromAll();
+		Harmony.metas = am;
+	}
 		
 	/**
 	 * Gets the Metadatas of all the entities actually in the package entity
@@ -195,19 +201,19 @@ public class OrmCommand extends BaseCommand {
 				this.javaModelParser.parse(mclass);
 			}
 	
-			// Generate views from MetaData
+			// Generate views from MetaData 
 			if (this.javaModelParser.getMetas().size() > 0) {
 				ret = new LinkedHashMap<String, ClassMetadata>();
 				
 				for (ClassMetadata meta : this.javaModelParser.getMetas()) {
 					ret.put(meta.name, meta);
 				}
+				
+				new ClassCompletor(ret).execute();
 			}
 		} else {
 			ConsoleUtils.displayWarning("No entities found in entity package!");
 		}
-		
-		new ClassCompletor(ret).execute();
 		
 		return ret;
 	}

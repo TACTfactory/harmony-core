@@ -15,9 +15,11 @@ import org.joda.time.DateTime;
 
 import com.tactfactory.mda.orm.annotation.*;
 import com.tactfactory.mda.orm.annotation.Column.Type;
+import com.tactfactory.mda.rest.annotation.Rest;
 
 @Table
 @Entity
+@Rest
 public class Post implements Serializable {
 	private static final long serialVersionUID = -6549779793416923128L;
 

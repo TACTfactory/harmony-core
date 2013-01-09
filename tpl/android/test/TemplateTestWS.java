@@ -1,4 +1,4 @@
-package ${localnamespace};
+package ${test_namespace};
 
 import android.content.Context;
 import android.test.AndroidTestCase;

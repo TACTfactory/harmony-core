@@ -22,7 +22,7 @@
 	<#return false>
 </#function>
 
-package ${local_namespace};
+package ${data_namespace};
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -34,15 +34,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import ${project_namespace}.BuildConfig;
+import ${namespace}.BuildConfig;
 <#if internal=="false">
-import ${project_namespace}.entity.${name};
+import ${namespace}.entity.${name};
 </#if>
 <#assign import_array = []>
 <#list relations as relation>
 	<#if !isInArray(import_array, relation.relation.targetEntity)>
 		<#assign import_array = import_array + [relation.relation.targetEntity]>
-import ${project_namespace}.entity.${relation.relation.targetEntity};
+import ${namespace}.entity.${relation.relation.targetEntity};
 	</#if>
 </#list>
 

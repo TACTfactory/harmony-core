@@ -1,4 +1,4 @@
-package ${localnamespace};
+package ${controller_namespace};
 
 import java.util.ArrayList;
 import java.util.List;

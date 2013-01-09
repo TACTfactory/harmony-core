@@ -1,4 +1,5 @@
+package ${data_namespace};
 
-public class TemplateWebServiceClientAdapter {
-
+public class ${name}WebServiceClientAdapter extends ${name}WebServiceClientAdapterBase{
+	
 }

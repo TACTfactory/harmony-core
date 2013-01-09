@@ -158,7 +158,7 @@
 		description="Rebuild the project">
     </target>
     
-    <target name="buildall" depends="rebuild,create-jar,javadoc,post_build"
+    <target name="buildall" depends="rebuild,create-jar,post_build"
         description="Build the project">
     </target>
     

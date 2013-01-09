@@ -17,3 +17,27 @@
 		<#return type>
 	</#if>
 </#function>
+
+<#function setJsonLoader name field>
+	<#assign type=field.type?lower_case>
+	<#assign ret=name?lower_case>
+	<#if type=="boolean">
+		<#assign ret=ret+".setChecked(this.model.is"+field.name?cap_first+"());">
+	<#else>
+		<#assign getter="this.model.get"+field.name?cap_first+"()">
+		<#assign ret=ret+".setText(">
+		<#if type=="string" || type=="email" || type=="login" || type=="password" || type=="city" || type=="text" || type=="phone" || type=="country">
+			<#assign ret=ret+getter>
+		<#elseif type=="datetime">
+			<#assign ret=ret+getter+".toString(DateTimeFormat.shortDateTime())">
+		<#elseif type=="date">
+			<#assign ret=ret+"DateFormat.getDateFormat(getActivity()).format("+getter+".toDate())">
+		<#elseif type=="time">
+			<#assign ret=ret+getter+".toString(DateTimeFormat.shortTime())">
+		<#elseif type == "int" || type=="long" || type=="ean" || type=="zipcode" || type=="float">
+			<#assign ret=ret+"String.valueOf("+getter+")"> 
+		</#if>
+		<#assign ret=ret+");">
+	</#if>
+	<#return ret>
+</#function>

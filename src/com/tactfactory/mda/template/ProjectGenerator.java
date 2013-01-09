@@ -7,14 +7,9 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
-import com.tactfactory.mda.orm.ClassMetadata;
-import com.tactfactory.mda.orm.FieldMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 
@@ -28,44 +23,10 @@ public class ProjectGenerator extends BaseGenerator {
 	public ProjectGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
 
-		String projectNameSpace = "" + this.metas.projectNameSpace;
-		projectNameSpace = projectNameSpace.replaceAll("/","\\.");
+		//String projectNameSpace = "" + this.metas.projectNameSpace;
+		//projectNameSpace = projectNameSpace.replaceAll("/","\\.");
 
-		// Make class
-		this.datamodel.put(TagConstant.PROJECT_NAME, this.metas.projectName);
-		this.datamodel.put(TagConstant.PROJECT_NAMESPACE, projectNameSpace);
-		this.datamodel.put(TagConstant.ANDROID_SDK_DIR, Harmony.androidSdkPath);
-
-		this.datamodel.put(TagConstant.ANT_ANDROID_SDK_DIR, new TagConstant.AndroidSDK("${sdk.dir}"));
-		this.datamodel.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
-		this.datamodel.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
-		
-		if(this.metas!=null&&this.metas.entities.size()!=0){
-			// Make entities
-			ArrayList<Map<String, Object>> modelEntities = new ArrayList<Map<String,Object>>();
-			for (ClassMetadata meta : this.metas.entities.values()) {
-				if(!meta.fields.isEmpty() && !meta.internal){
-					Map<String, Object> modelClass = new HashMap<String, Object>();
-					modelClass.put(TagConstant.SPACE,	meta.space );
-					modelClass.put(TagConstant.NAME,	meta.name );
-	
-					// Make fields
-					ArrayList<Map<String, Object>> modelFields = new ArrayList<Map<String,Object>>();
-					for (FieldMetadata field : meta.fields.values()) {
-						Map<String, Object> modelField = new HashMap<String, Object>();
-						field.customize(adapter);
-						modelField.put(TagConstant.NAME, field.name);
-						modelField.put(TagConstant.TYPE, field.type);
-	
-						modelFields.add(modelField);
-					}
-					modelClass.put(TagConstant.FIELDS, modelFields);
-	
-					modelEntities.add(modelClass);
-				}
-			}
-			this.datamodel.put(TagConstant.ENTITIES, modelEntities);
-		}
+		this.datamodel = this.metas.toMap(this.adapter);
 	}
 
 	public ProjectGenerator(BaseAdapter adapter, Boolean isWritable) throws Exception {

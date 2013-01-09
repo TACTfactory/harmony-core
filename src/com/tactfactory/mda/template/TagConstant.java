@@ -13,6 +13,9 @@ public abstract class TagConstant {
 	public final static String PROJECT_NAMESPACE = "project_namespace";
 	public final static String PROJECT_NAME = "project_name";
 	public final static String LOCAL_NAMESPACE = "local_namespace";
+	public final static String CONTROLLER_NAMESPACE = "controller_namespace";
+	public final static String TEST_NAMESPACE = "test_namespace";
+	public final static String DATA_NAMESPACE = "data_namespace";
 	public final static String ANDROID_SDK_DIR = "sdk_dir";
 	
 	// Ant markers
@@ -32,7 +35,7 @@ public abstract class TagConstant {
 	public final static String RELATIONS = "relations";
 	public final static String RELATION = "relation";
 	public final static String RELATION_TYPE = "relation_type";
-	public final static String SPACE = "space";
+	public final static String SPACE = "namespace";
 	public final static String NAME = "name";
 	public final static String TYPE = "type";
 	public final static String SCHEMA = "schema";
@@ -40,6 +43,7 @@ public abstract class TagConstant {
 	public final static String IDS = "ids";
 	public final static String HIDDEN = "hidden";
 	public final static String INTERNAL = "internal";
+	
 	
 
 	public static class AndroidSDK {

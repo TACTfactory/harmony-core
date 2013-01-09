@@ -1,5 +1,5 @@
 <#import "methods.tpl" as m>
-package ${localnamespace};
+package ${controller_namespace};
 
 import ${namespace}.R;
 

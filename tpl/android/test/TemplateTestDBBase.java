@@ -1,4 +1,4 @@
-package ${local_namespace};
+package ${test_namespace};
 
 import ${namespace}.data.${name}Adapter;
 import ${namespace}.entity.${name};

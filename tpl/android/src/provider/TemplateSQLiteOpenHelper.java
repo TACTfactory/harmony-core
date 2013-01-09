@@ -1,4 +1,4 @@
-package ${local_namespace};
+package ${project_namespace}.data;
 
 import ${project_namespace}.BuildConfig;
 
@@ -29,13 +29,15 @@ public class ${project_name?cap_first}SQLiteOpenHelper extends SQLiteOpenHelper 
 			Log.d(TAG, "Create database..");
 		
 		/// Create Schema
-	<#list entities as entity>
+	<#list entities?values as entity>
+		<#if entity.fields?? && (entity.fields?size>0)>
 		db.execSQL( ${entity.name}SQLiteAdapter.getSchema() );
-		<#list entity["relations"] as relation>
-			<#if relation.type=="ManyToMany">
+			<#list entity["relations"] as relation>
+				<#if relation.type=="ManyToMany">
 		db.execSQL( ${entity.name}SQLiteAdapter.get${relation.name?cap_first}RelationSchema() );
-			</#if>
-		</#list>
+				</#if>
+			</#list>
+		</#if>
 	</#list>
 		
 		// Sample of data
@@ -60,13 +62,15 @@ public class ${project_name?cap_first}SQLiteOpenHelper extends SQLiteOpenHelper 
 			Log.i(TAG, "Upgrading database from version " + oldVersion + 
 					   " to " + newVersion + ", which will destroy all old data");
 		
-		<#list entities as entity>
+		<#list entities?values as entity>
+			<#if entity.fields?? && (entity.fields?size>0)>
 			db.execSQL("DROP TABLE IF EXISTS "+ ${entity.name}SQLiteAdapter.TABLE_NAME);
-			<#list entity['relations'] as relation>
-				<#if relation.type=="ManyToMany">
+				<#list entity['relations'] as relation>
+					<#if relation.type=="ManyToMany">
 			db.execSQL("DROP TABLE IF EXISTS "+${entity.name}SQLiteAdapter.RELATION_${relation.name?upper_case}_TABLE_NAME );
-				</#if>
-			</#list>
+					</#if>
+				</#list>
+			</#if>
 	    </#list>
 		//}
 		    
