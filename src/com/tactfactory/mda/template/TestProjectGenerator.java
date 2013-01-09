@@ -126,7 +126,7 @@ public class TestProjectGenerator extends BaseGenerator {
 
 		// create strings.xml
 		this.updateProjectFile(this.adapter.getStringsTestPathFile(),
-				this.adapter.getTemplateStringsTestPathFile()); //.substring(1));
+								this.adapter.getTemplateStringsTestPathFile()); //.substring(1));
 		
 		File dirTpl = new File(this.adapter.getTemplateTestProjectPath());
 
