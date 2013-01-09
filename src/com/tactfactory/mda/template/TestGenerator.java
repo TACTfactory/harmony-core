@@ -30,10 +30,12 @@ public class TestGenerator extends BaseGenerator {
 		this.initTestAndroid();
 		
 		for(ClassMetadata cm : this.appMetas.entities.values()){
-			this.datamodel = (HashMap<String, Object>) cm.toMap(this.adapter);
-			this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getTest());
-			
-			this.generate(null);
+			if (!cm.fields.isEmpty()) {
+				this.datamodel = (HashMap<String, Object>) cm.toMap(this.adapter);
+				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getTest());
+				
+				this.generate(null);
+			}
 		}
 	}
 	
