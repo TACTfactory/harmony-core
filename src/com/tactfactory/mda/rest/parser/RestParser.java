@@ -51,7 +51,7 @@ public class RestParser extends BaseParser{
 
 	@Override
 	public void visitClassAnnotation(ClassMetadata cm,
-			AnnotationExpr fieldAnnot, ClassMetadata meta) {
+			AnnotationExpr fieldAnnot) {
 		if(fieldAnnot.getName().toString().equals(ANNOT_REST)){
 			RestMetadata rm = new RestMetadata();
 			rm.isEnabled = true;

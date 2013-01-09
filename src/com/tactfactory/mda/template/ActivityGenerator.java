@@ -69,6 +69,7 @@ public class ActivityGenerator extends BaseGenerator {
 		for(Map<String, Object> entity : this.modelEntities) {
 			//TODO : Examine code logic (wrong ?)
 			this.datamodel = (HashMap<String, Object>) entity;
+			this.localNameSpace = this.metas.projectNameSpace.replace('/', '.') +"."+ this.adapter.getController()+"."+((String)entity.get(TagConstant.NAME)).toLowerCase();
 			this.generateAllAction((String)entity.get(TagConstant.NAME));
 		}
 	}

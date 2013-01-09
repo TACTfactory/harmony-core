@@ -17,7 +17,7 @@ import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
-public class ApplicationMetadata {
+public class ApplicationMetadata implements BaseMetadata {
 	/** Project name (demact) */
 	public String projectName;
 	
@@ -26,6 +26,9 @@ public class ApplicationMetadata {
 	
 	/** List of Entity of entity class */
 	public LinkedHashMap<String, ClassMetadata> entities = new LinkedHashMap<String, ClassMetadata>();
+	
+	/** List of Entity of entity class */
+	public LinkedHashMap<String, BaseMetadata> options = new LinkedHashMap<String, BaseMetadata>();
 	
 	/** List of string use in application */
 	public TreeMap<String, TranslationMetadata> translates = new TreeMap<String, TranslationMetadata>();
@@ -52,7 +55,15 @@ public class ApplicationMetadata {
 		ret.put(TagConstant.ANT_ANDROID_SDK_DIR, new TagConstant.AndroidSDK("${sdk.dir}"));
 		ret.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
 		ret.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
+		for(BaseMetadata bm : options.values()){
+			ret.put(bm.getName(), bm.toMap(adapt));
+		}
 		
 		return ret;
+	}
+
+	@Override
+	public String getName() {
+		return projectName;
 	}
 }

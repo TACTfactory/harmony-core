@@ -11,25 +11,60 @@
 </#function>
 
 <#function typeToJsonType field>
-	<#if field.type=="int" || field.type=="integer">
-		<#return "Int">
-	<#elseif field.type=="float">
-		<#return "Float">
-	<#elseif field.type=="double">
-		<#return "Double">
-	<#elseif field.type=="long">
-		<#return "Long">
+	<#if !field.relation??>
+		<#if field.type=="int" || field.type=="integer">
+			<#return "Int">
+		<#elseif field.type=="float">
+			<#return "Float">
+		<#elseif field.type=="double">
+			<#return "Double">
+		<#elseif field.type=="long">
+			<#return "Long">
+		<#else>
+			<#return "String">
+		</#if>
 	<#else>
-		<#return "String">
+		<#if field.relation.type=="ManyToMany"||field.relation.type=="OneToMany">
+			<#return "JSONObject">
+		<#else>
+			<#return "JSONObject">
+		</#if>
 	</#if>
+</#function>
+
+<#function getFormatter datetype>
+	<#assign ret="ISODateTimeFormat.">
+	<#if datetype?lower_case=="datetime">
+		<#assign ret=ret+"dateTime()">
+	<#elseif datetype?lower_case=="time">
+		<#assign ret=ret+"dateTime()">
+	<#elseif datetype?lower_case=="date">
+		<#assign ret=ret+"dateTime()">
+	</#if>
+	<#return ret>
 </#function>
 
 package ${data_namespace};
 
-import ${space}.entity.${name};
+import ${namespace}.entity.${name};
+
 import org.json.*;
 
+import java.util.List;
+import java.util.ArrayList;
+
+import android.util.Log;
+
+import org.joda.time.format.ISODateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+
+<#list relations as relation>
+import ${namespace}.entity.${relation.relation.targetEntity};
+</#list>
+
 public class ${name}WebServiceClientAdapterBase {
+	private static final String TAG = "${name}WebServiceClientAdapterBase";
+
 	<#list fields as field>
 		<#if !field.internal>
 	private static final String ${alias(field.name)} = "${jsonID(field.name)}";
@@ -40,7 +75,8 @@ public class ${name}WebServiceClientAdapterBase {
 	 *
 	 *
 	 */
-	protected int getByID(${name} ${name?lower_case}){
+	protected int get(${name} ${name?lower_case}){
+		JSONObject json = new JSONObject();
 		return 0;
 	}
 
@@ -72,14 +108,34 @@ public class ${name}WebServiceClientAdapterBase {
 	 *
 	 *
 	 */
-	public static boolean extract${name}(JSONObject json, ${name} ${name?lower_case}){
+	public static boolean extract(JSONObject json, ${name} ${name?lower_case}){
 		boolean result = false;
 		
 		int id = json.optInt("id", 0);
 
 		if (id != 0) {
 			<#list fields as field>
-			${name?lower_case}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${name?lower_case}.get${field.name?cap_first}()));
+				<#if !field.internal>
+					<#if !field.relation??>
+						<#if field.type?lower_case=="date"||field.type?lower_case=="datetime"||field.type?lower_case=="time">
+			DateTimeFormatter ${field.name?uncap_first}Formatter = ${getFormatter(field.type)};
+			${name?lower_case}.set${field.name?cap_first}(${field.name?uncap_first}Formatter.parseDateTime(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${name?lower_case}.get${field.name?cap_first}().toString())));	
+						<#else>
+			${name?lower_case}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${name?lower_case}.get${field.name?cap_first}()));	
+						</#if>
+					<#else>
+						<#if field.relation.type=="OneToMany" || field.relation.type=="ManyToMany">
+			/*ArrayList<${field.relation.targetEntity}> ${field.name?uncap_first} = new ArrayList<${field.relation.targetEntity}>();
+			${field.relation.targetEntity}WebServiceClientAdapter.extract${field.relation.targetEntity}s(json.opt${typeToJsonType(field)}(${alias(field.name)}), ${field.name?uncap_first});
+			${name?lower_case}.set${field.name?cap_first}(${field.name?uncap_first});*/
+						<#else>
+			/*${field.relation.targetEntity} ${field.name?uncap_first} = new ${field.relation.targetEntity}();
+			${field.relation.targetEntity}WebServiceClientAdapter.extract(json.opt${typeToJsonType(field)}(${alias(field.name)}), ${field.name?uncap_first});
+			${name?lower_case}.set${field.name?cap_first}(${field.name?uncap_first});*/
+						</#if>
+					</#if>
+
+				</#if>
 			</#list>
 			
 			result = true;
@@ -92,7 +148,7 @@ public class ${name}WebServiceClientAdapterBase {
 	 *
 	 *
 	 */
-	public static boolean extract${name}s(JSONObject json, List<${name}> ${name?lower_case}s){
+	public static int extract${name}s(JSONObject json, List<${name}> ${name?lower_case}s) throws JSONException{
 		JSONArray itemArray = json.optJSONArray("${name}s");
 		
 		int result = -1;
@@ -118,5 +174,27 @@ public class ${name}WebServiceClientAdapterBase {
 		}
 		
 		return result;
+	}
+
+	/**
+	 *	
+	 *
+	 */
+	public static JSONObject ${name?uncap_first}ToJson(${name} ${name?uncap_first}){
+		JSONObject params = new JSONObject();
+		try{
+			<#list fields as field>
+				<#if !field.internal>
+					<#if field.type?lower_case=="date" || field.type?lower_case=="time" || field.type?lower_case=="datetime">
+			params.put(${alias(field.name)}, ${name?lower_case}.get${field.name?cap_first}().toString());
+					<#else>
+			params.put(${alias(field.name)}, ${name?lower_case}.get${field.name?cap_first}());
+					</#if>
+				</#if>
+			</#list>
+		} catch (JSONException e) {
+			Log.e(TAG, e.getMessage());
+		}
+		return params;
 	}
 }

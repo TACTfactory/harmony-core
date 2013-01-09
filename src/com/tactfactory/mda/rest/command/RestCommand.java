@@ -2,6 +2,7 @@ package com.tactfactory.mda.rest.command;
 
 import japa.parser.ast.CompilationUnit;
 
+import java.io.IOException;
 import java.util.LinkedHashMap;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -16,6 +17,8 @@ import com.tactfactory.mda.parser.JavaModelParser;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.rest.parser.RestParser;
 import com.tactfactory.mda.rest.template.RestGenerator;
+
+import freemarker.template.TemplateException;
 
 @PluginImplementation
 public class RestCommand extends BaseCommand{
@@ -66,6 +69,34 @@ public class RestCommand extends BaseCommand{
 		}
 
 	}
+	
+/*	public void generateMetas(){
+		// Info Log
+		ConsoleUtils.display(">> Analyse Models...");
+		
+		// Parse models and load entities into CompilationUnits
+		try {
+			JavaModelParser javaModelParser = new JavaModelParser();
+			javaModelParser.registerParser(new RestParser());
+			javaModelParser.loadEntities();
+
+			// Convert CompilationUnits entities to ClassMetaData
+			if (javaModelParser.getEntities().size() > 0) {
+				for (CompilationUnit mclass : javaModelParser.getEntities()) {
+					javaModelParser.parse(mclass);
+				}
+			}
+		} catch(IOException e){
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch(TemplateException e){
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}*/
 	
 	/**
 	 * Gets the Metadatas of all the entities actually in the package entity

@@ -19,7 +19,7 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
 /** Entity class metadata */
-public class ClassMetadata extends BaseMetadata{
+public class ClassMetadata implements BaseMetadata{
 	/** Used for join tables (ManyToMany relations)*/
 	public boolean internal = false;
 	

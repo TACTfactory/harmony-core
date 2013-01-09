@@ -193,7 +193,7 @@ public class JavaModelParser {
 				for (AnnotationExpr annotationExpr : classAnnotations) {
 
 					for(BaseParser b_parser : bundleParsers)
-			    		b_parser.visitClassAnnotation(meta, annotationExpr, meta);
+			    		b_parser.visitClassAnnotation(meta, annotationExpr);
 					
 					String annotationType = annotationExpr.getName().toString();
 					if (annotationType.equals(FILTER_ENTITY)) {
@@ -205,7 +205,7 @@ public class JavaModelParser {
 						// Debug Log
 						ConsoleUtils.displayDebug("Entity : " + meta.space + ".entity." +  meta.name);
 						
-						break;
+						//break;
 					}
 				}
 				
