@@ -3,10 +3,6 @@
 	<#assign ret="this."+field.name+"View">
 	<#if type=="boolean">
 		<#assign ret=ret+".setChecked(this.model.is"+field.name?cap_first+"());">
-	<#elseif type=="datetime" || type=="date">
-		<#assign ret="this."+field.name+"DateView.setText(DateUtils.formatDateToString(this.model.get"+field.name?cap_first+"()));">
-	<#elseif type=="datetime" || type=="time">
-		<#assign ret="this."+field.name+"TimeView.setText(DateUtils.formatTimeToString(this.model.get"+field.name?cap_first+"()));">
 	<#else>
 		<#assign getter="this.model.get"+field.name?cap_first+"()">
 		<#assign ret=ret+".setText(">
@@ -25,10 +21,13 @@
 	<#assign ret="this."+field.name+"View">
 	<#if type=="boolean">
 		<#assign ret=ret+".setChecked(model.is"+field.name?cap_first+"());">
-	<#elseif type=="datetime" || type=="date">
+	<#elseif type=="datetime" || type=="date" || type=="time">
+		<#if type=="datetime" || type=="date">
 		<#assign ret="this."+field.name+"DateView.setText(DateUtils.formatDateToString(model.get"+field.name?cap_first+"()));">
-	<#elseif type=="datetime" || type=="time">
+		</#if>
+		<#if type=="datetime" || type=="time">
 		<#assign ret="this."+field.name+"TimeView.setText(DateUtils.formatTimeToString(model.get"+field.name?cap_first+"()));">
+		</#if>
 	<#else>
 		<#assign getter="model.get"+field.name?cap_first+"()">
 		<#assign ret=ret+".setText(">
@@ -51,12 +50,14 @@
 		<#assign ret=ret+"DateUtils.formatStringToDate(this."+field.name+"DateView.getEditableText().toString()));">
 	<#elseif type=="time">
 		<#assign ret=ret+"DateUtils.formatStringToTime(this."+field.name+"TimeView.getEditableText().toString()));">
+	<#elseif type=="datetime">
+		<#assign ret=ret+"DateUtils.formatStringToDateTime(
+				this."+field.name+"DateView.getEditableText().toString(),
+				this."+field.name+"TimeView.getEditableText().toString()));">
 	<#else>
 		<#assign getter="this."+field.name+"View.getEditableText().toString()">
 		<#if type=="string" || type=="email" || type=="login" || type=="password" || type=="city" || type=="text" || type=="phone" || type=="country">
 			<#assign ret=ret+getter>
-		<#elseif type=="datetime">
-			<#assign ret=ret+"DateTimeFormat.shortDateTime().parseDateTime("+getter+")">
 		<#elseif type == "int" || type=="ean" || type=="zipcode">
 			<#assign ret=ret+"Integer.parseInt("+getter+")">
 		<#elseif type=="long">

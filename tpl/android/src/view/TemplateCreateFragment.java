@@ -48,10 +48,13 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 			<#if !field.relation??>
 				<#if field.type=="boolean">
 	protected CheckBox ${field.name}View;
-				<#elseif field.type=="datetime" || field.type=="date">
+				<#elseif field.type?lower_case=="datetime" || field.type=="date" || field.type=="time">
+					<#if field.type?lower_case=="datetime" || field.type=="date">
 	protected EditText ${field.name}DateView;
-				<#elseif field.type=="datetime" || field.type=="time">
+					</#if>
+					<#if field.type?lower_case=="datetime" || field.type=="time">
 	protected EditText ${field.name}TimeView;
+					</#if>
 				<#else>
 	protected EditText ${field.name}View;			
 				</#if>
@@ -68,7 +71,6 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		</#if>
 	</#list>
 
-	
 	protected Button saveButton;
 
 	/** Initialize view of fields 
@@ -81,12 +83,12 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 				<#if !field.relation??>
 					<#if field.type=="boolean">
 		this.${field.name}View = (CheckBox) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});
-					<#elseif field.type == "date" || field.type == "datetime">
+					<#elseif field.type?lower_case=="datetime" || field.type=="date" || field.type=="time">
+						<#if field.type == "date" || field.type?lower_case == "datetime">
 		this.${field.name}DateView = (EditText) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}_date);			
 		this.${field.name}DateView.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 		        DateTime dt = new DateTime();
-		        final java.text.DateFormat df = DateFormat.getDateFormat(getActivity());
 		        
 				if (!TextUtils.isEmpty(${name}CreateFragment.this.${field.name}DateView.getText())){
 					String strInputDate = ${name}CreateFragment.this.${field.name}DateView.getText().toString();
@@ -100,30 +102,23 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 					public void onClick(DialogInterface dialog, int which) {
 						DatePicker dp = ((CustomDatePickerDialog) dialog).getDatePicker();
 						DateTime date = new DateTime(dp.getYear(), dp.getMonth() + 1, dp.getDayOfMonth(), 0, 0);
-						${name}CreateFragment.this.${field.name}DateView.setText(df.format(date.toDate()));
+						${name}CreateFragment.this.${field.name}DateView.setText(DateUtils.formatDateToString(date));
 					}
 				});
 
 			    ${field.name}Dpd.show();
 			}
-		});					
-					<#elseif field.type == "time" || field.type == "datetime">
+		});			
+						</#if>
+						<#if field.type == "time" || field.type?lower_case == "datetime">
 		this.${field.name}TimeView = (EditText) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}_time);
 		this.${field.name}TimeView.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 				DateTime dt = new DateTime(); 
-		        final java.text.DateFormat tf = DateFormat.getTimeFormat(getActivity());
 		        
 				if (!TextUtils.isEmpty(${name}CreateFragment.this.${field.name}TimeView.getText())){
 					String strInputDate = ${name}CreateFragment.this.${field.name}TimeView.getText().toString();
-					try {
-						Date date = tf.parse(strInputDate);
-						dt = new DateTime(date.getTime());
-					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					
+					dt = DateUtils.formatStringToTime(strInputDate);
 				}
 				
 			    CustomTimePickerDialog ${field.name}Tpd = new CustomTimePickerDialog(getActivity(), dt, 
@@ -138,17 +133,17 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 						date = new DateTime(date.getYear(), date.getDayOfMonth(), date.getDayOfMonth(), 
 								tp.getCurrentHour(), tp.getCurrentMinute());
 
-						${name}CreateFragment.this.${field.name}TimeView.setText(tf.format(date.toDate()));
+						${name}CreateFragment.this.${field.name}TimeView.setText(DateUtils.formatTimeToString(date));
 					}
 				});
 
 			    ${field.name}Tpd.show();
 			}
 		});
+						</#if>
 					<#else>
 		this.${field.name}View = (EditText) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case});
 					</#if>
-
 				<#else>
 		this.${field.name}Button = (Button) view.findViewById(R.id.${name?lower_case}_${field.name?lower_case}_button);
 		this.${field.name}Button.setOnClickListener(new OnClickListener(){
@@ -246,8 +241,18 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
-		if(this.model.get${field.name?cap_first}()!=null)
-			${m.setLoader(field)}
+		if(this.model.get${field.name?cap_first}()!=null){
+					<#if field.type?lower_case=="datetime" || field.type=="date" || field.type=="time">
+						<#if field.type?lower_case=="datetime" || field.type=="date">
+			this.${field.name}DateView.setText(DateUtils.formatDateToString(this.model.get${field.name?cap_first}()));
+						</#if>
+						<#if field.type?lower_case=="datetime" || field.type=="time">
+			this.${field.name}TimeView.setText(DateUtils.formatTimeToString(this.model.get${field.name?cap_first}()));
+						</#if>
+					<#else>
+			${m.setLoader(field)}			
+					</#if>
+		}
 				<#else>
 		${m.setLoader(field)}
 				</#if>
@@ -269,9 +274,9 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if field.type!="boolean">
-					<#if field.type=="date" || field.type=="datetime">
+					<#if field.type=="date" || field.type?lower_case=="datetime">
 		if(!this.${field.name}DateView.getEditableText().toString().equals(""))
-					<#elseif field.type=="time" || field.type=="datetime">
+					<#elseif field.type=="time" || field.type?lower_case=="datetime">
 		if(!this.${field.name}TimeView.getEditableText().toString().equals(""))
 					<#else>
 		if(!this.${field.name}View.getEditableText().toString().equals(""))

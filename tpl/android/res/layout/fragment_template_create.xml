@@ -22,7 +22,45 @@
     <CheckBox
 	    android:id="@+id/${m_id}"
 	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"	
+	    android:layout_height="wrap_content"
+	    android:layout_below="@+id/${m_id_label}" />
+	    	<#elseif field.type?lower_case=="datetime" || field.type=="date" || field.type=="time">
+	<LinearLayout
+        android:id="@+id/${m_id}"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/${m_id_label}"
+        android:animateLayoutChanges="false"
+        android:orientation="horizontal" >
+				<#if field.type?lower_case=="datetime" || field.type=="date">
+        <EditText
+            android:id="@+id/${m_id}_date"
+            android:layout_height="wrap_content"
+            		<#if field.type?lower_case=="datetime">
+            android:layout_width="0px"
+            android:paddingRight="4dp"
+            android:layout_weight="7"
+            		<#else>
+            android:layout_width="match_parent"	
+            		</#if>
+            android:focusable="false"
+            android:singleLine="true"
+            style="@style/TextAppearance.Edit_Spinner" />
+				</#if>
+				<#if field.type?lower_case=="datetime" || field.type=="time">
+        <EditText
+            android:id="@+id/${m_id}_time"
+            android:layout_height="wrap_content"
+            		<#if field.type?lower_case=="datetime">
+            android:layout_width="0px"
+            android:layout_weight="4"
+            		<#else>
+            android:layout_width="match_parent"	
+            		</#if>
+            android:focusable="false"
+            style="@style/TextAppearance.Edit_Spinner" />
+            	</#if>
+    </LinearLayout>
 			<#else>
     <EditText
 		android:id="@+id/${m_id}"
@@ -34,15 +72,6 @@
 	    android:inputType="textPassword"
 		    		<#elseif field.type=="email">
 	    android:inputType="textEmailAddress"
-		    		<#elseif field.type=="date">
-	    android:inputType="date"
-	    android:focusable="false"
-	    			<#elseif field.type=="time">
-	    android:inputType="time"
-	    android:focusable="false"
-		    		<#elseif field.type=="datetime">
-	    android:inputType="datetime"
-	    android:focusable="false"
 		    		<#elseif field.type=="phone">
 	    android:inputType="phone"
 		    		<#elseif field.type=="zipcode">
@@ -54,8 +83,8 @@
 			    	<#else>
 	    android:inputType="text"
 		    		</#if >
+		android:layout_below="@+id/${m_id_label}" />
 			</#if>
-	    android:layout_below="@+id/${m_id_label}" />
 			<#assign lastField="${m_id}">
 		<#else>
     <TextView 
