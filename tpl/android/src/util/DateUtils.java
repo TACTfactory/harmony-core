@@ -1,22 +1,17 @@
-package ${localnamespace}.harmony.util;
+package ${project_namespace}.harmony.util;
 
 import java.text.ParseException;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 
-import android.content.Context;
+import ${namespace}.DemactApplication;
+
 import android.text.format.DateFormat;
 
 public class DateUtils extends android.text.format.DateUtils{
-	private Context ctx;
-	private static java.text.DateFormat df;
-	private static java.text.DateFormat tf;
-
-	public DateUtils(Context context) {
-		this.ctx = context;
-		df = DateFormat.getDateFormat(this.ctx);
-		tf = DateFormat.getTimeFormat(this.ctx);
-	}
+	private static java.text.DateFormat df = DateFormat.getDateFormat(DemactApplication.getApplication());
+	private static java.text.DateFormat tf = DateFormat.getTimeFormat(DemactApplication.getApplication());
 
 	public static String formatDateToString(DateTime date){
 		return df.format(date.toDate());
@@ -34,6 +29,15 @@ public class DateUtils extends android.text.format.DateUtils{
 		return formatStringToDateTime(tf, time);
 	}
 	
+	public static DateTime formatStringToDateTime(String date, String time){
+		DateTime dt = formatStringToDate(date);
+		DateTime t = formatStringToDate(time);
+		
+		dt = new DateTime(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),t.getHourOfDay(),t.getMinuteOfHour());
+		
+		return dt;
+	}
+	
 	public static DateTime formatStringToDateTime(java.text.DateFormat dateFormat, String dateTime){
 		DateTime dt = null;
 		
@@ -45,5 +49,9 @@ public class DateUtils extends android.text.format.DateUtils{
 		}
 		
 		return dt;
+	}
+	
+	public static DateTime formatISOStringToDateTime(String dateTime){
+		return new DateTime(ISODateTimeFormat.dateTime().parseDateTime(dateTime));
 	}
 }

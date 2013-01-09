@@ -1,4 +1,4 @@
-package ${localnamespace}.harmony.widget;
+package ${namespace}.harmony.widget;
 
 import ${namespace}.R;
 

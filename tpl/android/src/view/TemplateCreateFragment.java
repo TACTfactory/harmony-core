@@ -22,11 +22,30 @@ import android.widget.*;
 import java.util.List;
 import java.util.ArrayList;
 
+<#assign importDate=false 
+	     importTime=false>
+<#list fields as field>
+	<#if field.type=="date" || field.type=="time" || field.type?lower_case=="datetime">
+		<#if (field.type=="date" || field.type?lower_case=="datetime") && !importDate>
+			<#assign importDate=true>
+		</#if>
+		<#if (field.type=="time" || field.type?lower_case=="datetime") && !importTime>
+			<#assign importTime=true>
+		</#if>
+	</#if>
+</#list>
+<#if importDate || importTime>
 import org.joda.time.DateTime;
 
+	<#if importDate>
 import ${namespace}.harmony.widget.CustomDatePickerDialog;
+	</#if>
+	<#if importTime>
 import ${namespace}.harmony.widget.CustomTimePickerDialog;
+	</#if>
+	
 import ${namespace}.harmony.util.DateUtils;
+</#if>
 import ${namespace}.data.${name}SQLiteAdapter;
 import ${namespace}.entity.${name};
 <#list relations as relation>
