@@ -109,7 +109,7 @@ public class OrmCommand extends BaseCommand {
 			new ApplicationGenerator(this.adapter).generateApplication();
 			new SQLiteAdapterGenerator(this.adapter).generateAll();
 			new SQLiteGenerator(this.adapter).generateDatabase();
-			//new ProviderGenerator(this.adapter).generateProvider();
+			new ProviderGenerator(this.adapter).generateProvider();
 			
 		} catch (Exception e) {
 			e.printStackTrace();

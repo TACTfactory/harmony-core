@@ -32,14 +32,10 @@ public class ProjectGenerator extends BaseGenerator {
 		projectNameSpace = projectNameSpace.replaceAll("/","\\.");
 
 		// Make class
-		this.datamodel.put(TagConstant.PROJECT_NAME, this.metas.projectName);
+		this.datamodel = this.metas.toMap(this.adapter);
 		this.datamodel.put(TagConstant.PROJECT_NAMESPACE, projectNameSpace);
-		this.datamodel.put(TagConstant.ANDROID_SDK_DIR, Harmony.androidSdkPath);
 
-		this.datamodel.put(TagConstant.ANT_ANDROID_SDK_DIR, new TagConstant.AndroidSDK("${sdk.dir}"));
-		this.datamodel.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
-		this.datamodel.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
-		
+		this.datamodel.remove(this.datamodel.get(TagConstant.ENTITIES));
 		if(this.metas!=null&&this.metas.entities.size()!=0){
 			// Make entities
 			ArrayList<Map<String, Object>> modelEntities = new ArrayList<Map<String,Object>>();
