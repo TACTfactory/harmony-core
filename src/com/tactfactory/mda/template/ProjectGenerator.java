@@ -16,7 +16,7 @@ public class ProjectGenerator extends BaseGenerator {
 	public ProjectGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
 
-		this.datamodel = this.metas.toMap(this.adapter);
+		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 
 	public ProjectGenerator(BaseAdapter adapter, Boolean isWritable) throws Exception {
@@ -87,10 +87,10 @@ public class ProjectGenerator extends BaseGenerator {
 		boolean result = false;
 
 		// create project name space folders
-		FileUtils.makeFolder(this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.","/"));
+		FileUtils.makeFolder(this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.","/"));
 
 		// create empty package entity
-		FileUtils.makeFolder(this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.","/")+"/entity/" );
+		FileUtils.makeFolder(this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.","/")+"/entity/" );
 		
 		// create libs folders
 		FileUtils.makeFolder(this.adapter.getLibsPath());

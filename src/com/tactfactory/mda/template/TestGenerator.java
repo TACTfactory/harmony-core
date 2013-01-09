@@ -29,7 +29,7 @@ public class TestGenerator extends BaseGenerator {
 		
 		this.initTestAndroid();
 		
-		for(ClassMetadata cm : this.metas.entities.values()){
+		for(ClassMetadata cm : this.appMetas.entities.values()){
 			this.datamodel = (HashMap<String, Object>) cm.toMap(this.adapter);
 			this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getTest());
 			

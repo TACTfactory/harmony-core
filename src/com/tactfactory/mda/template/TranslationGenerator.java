@@ -42,7 +42,7 @@ public class TranslationGenerator extends BaseGenerator {
 			Element rootNode = doc.getRootElement(); 			// Load Root element
 			Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
 
-			for (TranslationMetadata translationMeta : this.metas.translates.values()) {
+			for (TranslationMetadata translationMeta : this.appMetas.translates.values()) {
 				findTranslation = null;
 				
 				// Debug Log

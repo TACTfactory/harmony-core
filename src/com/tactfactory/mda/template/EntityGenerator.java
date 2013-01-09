@@ -38,7 +38,7 @@ public class EntityGenerator extends BaseGenerator {
 	public EntityGenerator(BaseAdapter adapter) throws Exception{
 		super(adapter);
 
-		this.entityFolder = this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.", "/") + "/entity/";
+		this.entityFolder = this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.", "/") + "/entity/";
 
 		try {
 			this.cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));
@@ -54,7 +54,7 @@ public class EntityGenerator extends BaseGenerator {
 	public void generateAll(){
 		ConsoleUtils.display(">> Decorate entities...");
 		
-		for(ClassMetadata cm : metas.entities.values()){ 
+		for(ClassMetadata cm : appMetas.entities.values()){ 
 			String filepath = String.format("%s/%s",
 					this.entityFolder,
 					String.format("%s.java", cm.name));

@@ -27,11 +27,11 @@ public class WebServiceGenerator extends BaseGenerator {
 	public WebServiceGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
-		this.localNameSpace = this.adapter.getNameSpace(this.metas.entities.get(0), this.adapter.getData());
+		this.localNameSpace = this.adapter.getNameSpace(this.appMetas.entities.get(0), this.adapter.getData());
 
 		// Make entities
 		ArrayList<Map<String, Object>> modelEntities = new ArrayList<Map<String,Object>>();
-		for (ClassMetadata meta : this.metas.entities.values()) {
+		for (ClassMetadata meta : this.appMetas.entities.values()) {
 			Map<String, Object> modelClass = new HashMap<String, Object>();
 			modelClass.put(TagConstant.SPACE,	meta.space );
 			modelClass.put(TagConstant.NAME,	meta.name );
@@ -64,8 +64,8 @@ public class WebServiceGenerator extends BaseGenerator {
 			
 			modelEntities.add(modelClass);
 		}
-		this.datamodel.put(TagConstant.PROJECT_NAME, 		this.metas.projectName);
-		this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	this.metas.entities.get(0).space);
+		this.datamodel.put(TagConstant.PROJECT_NAME, 		this.appMetas.name);
+		this.datamodel.put(TagConstant.PROJECT_NAMESPACE,	this.appMetas.entities.get(0).space);
 		this.datamodel.put(TagConstant.ENTITIES,			modelEntities);
 		this.datamodel.put(TagConstant.LOCAL_NAMESPACE,		this.localNameSpace);
 	}

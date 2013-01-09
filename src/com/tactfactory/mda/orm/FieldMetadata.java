@@ -9,18 +9,15 @@
 package com.tactfactory.mda.orm;
 
 import java.util.HashMap;
-import java.util.Map;
 
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.plateforme.SqliteAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
 /** Entity field metadata */
-public class FieldMetadata {
+public class FieldMetadata extends BaseMetadata {
+	/** Owner */
 	public ClassMetadata owner;
-	
-	/** Field name */
-	public String name;
 	
 	/** Field type */
 	public String type;
@@ -74,7 +71,8 @@ public class FieldMetadata {
 	 * Transform the field to a map of strings and a relation map
 	 * @return the map
 	 */
-	public Map<String, Object> toMap(){
+	@Override
+	public HashMap<String, Object> toMap(BaseAdapter adapter){
 		HashMap<String, Object> model = new HashMap<String, Object>();
 		
 		model.put(TagConstant.NAME, 		this.name);
@@ -86,11 +84,11 @@ public class FieldMetadata {
 		model.put(TagConstant.FIELD_CUSTOM_EDIT, 	this.customEditType);
 		model.put(TagConstant.FIELD_CUSTOM_SHOW, 	this.customShowType);
 		
-		model.put(TagConstant.SCHEMA, 	SqliteAdapter.generateStructure(this));
+		model.put(TagConstant.SCHEMA, 		SqliteAdapter.generateStructure(this));
 		model.put(TagConstant.INTERNAL, 	this.internal);
 		
 		if(relation!=null){
-			model.put(TagConstant.RELATION, this.relation.toMap());
+			model.put(TagConstant.RELATION, this.relation.toMap(adapter));
 		}
 		
 		return model;
