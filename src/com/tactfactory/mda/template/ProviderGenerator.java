@@ -54,6 +54,7 @@ public class ProviderGenerator extends BaseGenerator {
 			TranslationMetadata.addDefaultTranslation("app_provider_name", "Provider of " + this.appMetas.name);
 			TranslationMetadata.addDefaultTranslation("app_provider_description", "Provider of " + this.appMetas.name + " for acces to data");
 			
+			new TranslationGenerator(this.adapter).generateStringsXml();
 		} catch (Exception e) {
 			ConsoleUtils.displayError(e.getMessage());
 		}

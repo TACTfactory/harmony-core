@@ -43,12 +43,11 @@ public class ActivityGenerator extends BaseGenerator {
 	protected List<Map<String, Object>> modelEntities;
 	protected String localNameSpace;
 	protected boolean isWritable = true;
-
+	private boolean isDate = false;
+	private boolean isTime = false;
+	
 	public ActivityGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
-		
-		boolean isDate = false;
-		boolean isTime = false;
 		
 		// Make entities
 		this.modelEntities = new ArrayList<Map<String, Object>>();
@@ -56,25 +55,21 @@ public class ActivityGenerator extends BaseGenerator {
 			if(!meta.fields.isEmpty() && !meta.internal){
 				Map<String, Object> modelClass = meta.toMap(this.adapter);
 				meta.makeString("label");
-				
+	
 				// copy Widget
-				if (!(isDate && isTime)) {
+				if (!(this.isDate && this.isTime)) {
 					for (FieldMetadata field : meta.fields.values()) {
 						String type = field.type.toLowerCase();
 						if ((type == Type.DATE.getValue() || 
 								type == Type.DATETIME.getValue()) &&
-								!isDate) {
-							isDate = true;
-							this.updateWidget("CustomDatePickerDialog.java");
-							this.makeResourceLayout("dialog_date_picker.xml", "dialog_date_picker.xml");
+								!this.isDate) {
+							this.isDate = true;
 						}
 						
 						if ((type == Type.TIME.getValue() || 
 								type == Type.DATETIME.getValue()) &&
-								!isTime) {
-							isTime = true;
-							this.updateWidget("CustomTimePickerDialog.java");
-							this.makeResourceLayout("dialog_time_picker.xml", "dialog_time_picker.xml");
+								!this.isTime) {
+							this.isTime = true;
 						}
 					}
 				}
@@ -98,6 +93,14 @@ public class ActivityGenerator extends BaseGenerator {
 			this.datamodel = (HashMap<String, Object>) entity;
 			this.localNameSpace = this.appMetas.projectNameSpace.replace('/', '.') +"."+ this.adapter.getController()+"."+((String)entity.get(TagConstant.NAME)).toLowerCase();
 			this.generateAllAction((String)entity.get(TagConstant.NAME));
+		}
+		
+		if (this.isDate) {
+			this.updateWidget("CustomDatePickerDialog.java", "dialog_date_picker.xml");
+		}
+		
+		if (this.isTime) {
+			this.updateWidget("CustomTimePickerDialog.java", "dialog_time_picker.xml");
 		}
 	}
 	
@@ -426,13 +429,11 @@ public class ActivityGenerator extends BaseGenerator {
 	/**
 	 * Update Widget
 	 */
-	protected void updateWidget(String widgetName) {
-		FileUtils.makeFolder(this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.","/")+"/harmony/widget/" );
-		File dest = new File(String.format("%s/%s", this.adapter.getWidgetPath(), widgetName));
-		
-		if (!dest.exists())
-			FileUtils.copyfile(
-					new File(String.format("%s/%s", this.adapter.getTemplateWidgetPath(), widgetName)),
-					dest);
+	protected void updateWidget(String widgetName, String layoutName) {
+		super.makeSource(
+				String.format("%s%s", this.adapter.getTemplateWidgetPath(), widgetName), 
+				String.format("%s%s", this.adapter.getWidgetPath(), widgetName), 
+				false);
+		this.makeResourceLayout(layoutName, layoutName);
 	}
 }

@@ -115,6 +115,12 @@ public class ProjectGenerator extends BaseGenerator {
 				this.adapter.getTemplateStringsPathFile(),
 				this.adapter.getStringsPathFile(),
 				false);
+		
+		// create configs.xml
+		super.makeSource(
+				this.adapter.getTemplateRessourceValuesPath()+"styles.xml",
+				this.adapter.getRessourceValuesPath()+"styles.xml",
+				false);
 
 		// create main.xml
 		super.makeSource(
@@ -206,12 +212,8 @@ public class ProjectGenerator extends BaseGenerator {
 	/**
 	 * Update Utils
 	 */
-	protected void updateUtil(String utilName) {
-		File dest = new File(String.format("%s/%s", this.adapter.getUtilPath(), utilName));
-		if (!dest.exists()) {
-			FileUtils.copyfile(
-					new File(String.format("%s/%s", this.adapter.getTemplateUtilPath(), utilName)),
-					dest);
-		}
+	protected void updateUtil(String utilName) {		
+		super.makeSource(String.format("%s%s", this.adapter.getTemplateUtilPath(), utilName), 
+				String.format("%s%s", this.adapter.getUtilPath(), utilName), false);
 	}
 }

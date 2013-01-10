@@ -5,13 +5,15 @@ import java.text.ParseException;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 
-import ${namespace}.DemactApplication;
+import ${project_namespace}.${project_name}Application;
 
 import android.text.format.DateFormat;
 
 public class DateUtils extends android.text.format.DateUtils{
-	private static java.text.DateFormat df = DateFormat.getDateFormat(DemactApplication.getApplication());
-	private static java.text.DateFormat tf = DateFormat.getTimeFormat(DemactApplication.getApplication());
+	private static java.text.DateFormat df = DateFormat.getDateFormat(
+			${project_name}Application.getApplication());
+	private static java.text.DateFormat tf = DateFormat.getTimeFormat(
+			${project_name}Application.getApplication());
 
 	public static String formatDateToString(DateTime date){
 		return df.format(date.toDate());
