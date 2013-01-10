@@ -92,8 +92,12 @@ public class ProjectGenerator extends BaseGenerator {
 		// create empty package entity
 		FileUtils.makeFolder(this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.","/")+"/entity/" );
 		
-		// create libs folders
+		// create util folder
+		FileUtils.makeFolder(this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.","/")+"/harmony/util/" );
+		
+		// create libs folder
 		FileUtils.makeFolder(this.adapter.getLibsPath());
+		
 
 		// create HomeActivity.java 
 		super.makeSource(this.adapter.getHomeActivityPathFile(),
@@ -124,6 +128,9 @@ public class ProjectGenerator extends BaseGenerator {
 		this.updateLibrary("android-support-v4.jar");
 		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathHarmony,"Harmony.jar")),
 				new File(String.format("%s/%s",this.adapter.getLibsPath(),"Harmony.jar")));
+		
+		// copy utils
+		this.updateUtil("DateUtils.java");
 		
 		File dirTpl = new File(this.adapter.getTemplateProjectPath());
 
@@ -194,5 +201,15 @@ public class ProjectGenerator extends BaseGenerator {
 					dest);
 	}
 
-	
+	/**
+	 * Update Utils
+	 */
+	protected void updateUtil(String utilName) {
+		File dest = new File(String.format("%s/%s", this.adapter.getUtilPath(), utilName));
+		if (!dest.exists()) {
+			FileUtils.copyfile(
+					new File(String.format("%s/%s", this.adapter.getTemplateUtilPath(), utilName)),
+					dest);
+		}
+	}
 }

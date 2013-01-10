@@ -28,7 +28,9 @@ import org.jdom2.output.XMLOutputter;
 
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.orm.FieldMetadata;
 import com.tactfactory.mda.orm.TranslationMetadata;
+import com.tactfactory.mda.orm.annotation.Column.Type;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
@@ -45,6 +47,9 @@ public class ActivityGenerator extends BaseGenerator {
 	public ActivityGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
+		boolean isDate = false;
+		boolean isTime = false;
+		
 		// Make entities
 		this.modelEntities = new ArrayList<Map<String, Object>>();
 		for (ClassMetadata meta : this.metas.entities.values()) {
@@ -52,6 +57,28 @@ public class ActivityGenerator extends BaseGenerator {
 				Map<String, Object> modelClass = meta.toMap(this.adapter);
 				meta.makeString("label");
 				
+				// copy Widget
+				if (!(isDate && isTime)) {
+					for (FieldMetadata field : meta.fields.values()) {
+						String type = field.type.toLowerCase();
+						if ((type == Type.DATE.getValue() || 
+								type == Type.DATETIME.getValue()) &&
+								!isDate) {
+							isDate = true;
+							this.updateWidget("CustomDatePickerDialog.java");
+							this.makeResourceLayout("dialog_date_picker.xml", "dialog_date_picker.xml");
+						}
+						
+						if ((type == Type.TIME.getValue() || 
+								type == Type.DATETIME.getValue()) &&
+								!isTime) {
+							isTime = true;
+							this.updateWidget("CustomTimePickerDialog.java");
+							this.makeResourceLayout("dialog_time_picker.xml", "dialog_time_picker.xml");
+						}
+					}
+				}
+								
 				this.modelEntities.add(modelClass);
 			}
 		}
@@ -394,5 +421,18 @@ public class ActivityGenerator extends BaseGenerator {
 		} catch (JDOMException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Update Widget
+	 */
+	protected void updateWidget(String widgetName) {
+		FileUtils.makeFolder(this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.","/")+"/harmony/widget/" );
+		File dest = new File(String.format("%s/%s", this.adapter.getWidgetPath(), widgetName));
+		
+		if (!dest.exists())
+			FileUtils.copyfile(
+					new File(String.format("%s/%s", this.adapter.getTemplateWidgetPath(), widgetName)),
+					dest);
 	}
 }
