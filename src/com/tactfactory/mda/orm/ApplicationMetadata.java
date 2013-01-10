@@ -58,9 +58,11 @@ public class ApplicationMetadata implements BaseMetadata {
 		ret.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
 		
 		// Add Extra bundle
+		HashMap<String, Object> optionsMap = new HashMap<String, Object>();
 		for(BaseMetadata bm : options.values()){
-			ret.put(bm.getName(), bm.toMap(adapt));
+			optionsMap.put(bm.getName(), bm.toMap(adapt));
 		}
+		ret.put(TagConstant.OPTIONS, optionsMap);
 		
 		return ret;
 	}

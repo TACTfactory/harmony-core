@@ -5,12 +5,13 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.tactfactory.mda.orm.BaseMetadata;
+import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
 public class ApplicationRestMetadata implements BaseMetadata{
 	private final String name = "rest";
-	public LinkedHashMap<String, RestMetadata> entities = new LinkedHashMap<String, RestMetadata>();
+	public LinkedHashMap<String, ClassMetadata> entities = new LinkedHashMap<String, ClassMetadata>();
 	
 	@Override
 	public Map<String, Object> toMap(BaseAdapter adapter) {

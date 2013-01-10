@@ -6,6 +6,7 @@ import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.BaseGenerator;
+import com.tactfactory.mda.template.TagConstant;
 
 public class RestGenerator extends BaseGenerator {
 
@@ -14,13 +15,14 @@ public class RestGenerator extends BaseGenerator {
 	}
 	
 	public void generateAll() {
+		this.datamodel = this.metas.toMap(this.adapter);
 		this.generateWSAdapter();
 	}
 	
 	protected void generateWSAdapter(){
 		for (ClassMetadata cm : Harmony.metas.entities.values()) {
 			if (cm.options.get("rest")!=null) {
-				this.datamodel = (HashMap<String, Object>) cm.toMap(this.adapter);
+				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
 				this.makeSource( 
 						"TemplateWebServiceClientAdapterBase.java", 
 						cm.name+"WebServiceClientAdapterBase.java", 

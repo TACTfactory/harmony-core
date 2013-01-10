@@ -14,6 +14,7 @@ import com.tactfactory.mda.orm.ClassCompletor;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.parser.JavaModelParser;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
+import com.tactfactory.mda.rest.parser.RestCompletor;
 import com.tactfactory.mda.rest.parser.RestParser;
 import com.tactfactory.mda.rest.template.RestGenerator;
 
@@ -55,7 +56,8 @@ public class RestCommand extends BaseCommand{
 	 * Generate java code files from parsed Entities
 	 */
 	protected void generateAdapters() {
-		Harmony.metas.entities = getMetasFromAll();
+		//Harmony.metas.entities = getMetasFromAll();
+		generateMetas();
 		if(Harmony.metas.entities!=null){
 			try {
 				new RestGenerator(new AndroidAdapter()).generateAll();
@@ -67,7 +69,7 @@ public class RestCommand extends BaseCommand{
 
 	}
 	
-/*	public void generateMetas(){
+	public void generateMetas(){
 		// Info Log
 		ConsoleUtils.display(">> Analyse Models...");
 		
@@ -82,24 +84,27 @@ public class RestCommand extends BaseCommand{
 				for (CompilationUnit mclass : javaModelParser.getEntities()) {
 					javaModelParser.parse(mclass);
 				}
+				
+				// Generate views from MetaData
+				if (javaModelParser.getMetas().size() > 0) {
+					for (ClassMetadata meta : javaModelParser.getMetas()) {
+						Harmony.metas.entities.put(meta.name, meta);
+					}
+					new ClassCompletor(Harmony.metas.entities).execute();
+					new RestCompletor().generateApplicationRestMetadata(Harmony.metas);
+				}
 			}
-		} catch(IOException e){
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch(TemplateException e){
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-	}*/
+	}
 	
 	/**
 	 * Gets the Metadatas of all the entities actually in the package entity
 	 * @return The metadatas of the application
 	 */
-	public LinkedHashMap<String, ClassMetadata> getMetasFromAll(){
+	/*public LinkedHashMap<String, ClassMetadata> getMetasFromAll(){
 		LinkedHashMap<String, ClassMetadata> ret = null;
 		// Info Log
 		ConsoleUtils.display(">> Analyse Models...");
@@ -134,7 +139,7 @@ public class RestCommand extends BaseCommand{
 		}
 		
 		return ret;
-	}
+	}*/
 
 
 	@Override
