@@ -11,7 +11,6 @@ package com.tactfactory.mda.template;
 import java.util.Map;
 
 import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.PackageUtils;
@@ -22,7 +21,7 @@ public class TestGenerator extends BaseGenerator {
 	
 	public TestGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
-		this.datamodel = Harmony.metas.toMap(this.adapter);
+		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
 	public void generateAll() {
@@ -31,7 +30,7 @@ public class TestGenerator extends BaseGenerator {
 		this.initTestAndroid();
 		
 		
-		for(ClassMetadata cm : this.metas.entities.values()){
+		for(ClassMetadata cm : this.appMetas.entities.values()){
 			//this.datamodel = (HashMap<String, Object>) cm.toMap(this.adapter);
 			this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getTest());
 			this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());

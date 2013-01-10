@@ -1,7 +1,8 @@
 <#assign curr = entities[current_entity]>
 package ${curr.test_namespace};
 
-import ${curr.namespace}.data.${curr.name}Adapter;
+
+import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 
 import android.content.Context;
@@ -16,7 +17,9 @@ import junit.framework.Assert;
  */
 public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	private Context ctx;
-	private ${curr.name}Adapter adapter;
+
+	private ${curr.name}SQLiteAdapter adapter;
+
 	private SQLiteDatabase db;
 	private ${curr.name} entity;
 
@@ -27,7 +30,8 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		super.setUp();
 		
 		this.ctx = this.getContext();
-		this.adapter = new ${curr.name}Adapter(this.ctx);
+		
+		this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
 		this.entity = new ${curr.name}();
 	}
 

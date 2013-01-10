@@ -1,11 +1,16 @@
 package com.tactfactory.mda.orm;
 
-import java.util.Map;
+import java.util.LinkedHashMap;
 
-import com.tactfactory.mda.plateforme.BaseAdapter;
-
-public interface BaseMetadata {
-
-	public abstract Map<String, Object> toMap(BaseAdapter adapter);
-	public abstract String getName();
+public abstract class BaseMetadata implements Metadata {
+	/** Component name */
+	public String name;
+	
+	/** List of bundles Metadata */
+	public LinkedHashMap<String, Metadata> options = new LinkedHashMap<String, Metadata>();
+	
+	@Override
+	public String getName(){
+		return this.name;
+	}
 }

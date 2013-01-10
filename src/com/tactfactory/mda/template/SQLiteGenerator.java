@@ -21,8 +21,8 @@ public class SQLiteGenerator extends BaseGenerator {
 	public SQLiteGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
-		this.datamodel = this.metas.toMap(this.adapter);
-		this.localNameSpace = this.metas.projectNameSpace+"/"+this.adapter.getData();
+		this.datamodel = this.appMetas.toMap(this.adapter);
+		this.localNameSpace = this.appMetas.projectNameSpace+"/"+this.adapter.getData();
 	}
 
 	/**
@@ -54,7 +54,7 @@ public class SQLiteGenerator extends BaseGenerator {
 		String fullFilePath = String.format("%s%s/%s",
 						this.adapter.getSourcePath(),
 						PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
-						String.format(filename, CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.metas.projectName)));
+						String.format(filename, CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name)));
 		
 		String fullTemplatePath = this.adapter.getTemplateSourceProviderPath().substring(1) + template;
 		

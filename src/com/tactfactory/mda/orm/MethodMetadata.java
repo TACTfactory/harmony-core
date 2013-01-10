@@ -9,12 +9,12 @@
 package com.tactfactory.mda.orm;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
-public class MethodMetadata {
-	/** Field name */
-	public String name;
-	
-	/** Field type */
+import com.tactfactory.mda.plateforme.BaseAdapter;
+
+public class MethodMetadata extends BaseMetadata {	
+	/** Return type */
 	public String type;
 	
 	/** Arguments types*/
@@ -22,4 +22,10 @@ public class MethodMetadata {
 	
 	/** final ?*/
 	public boolean isFinal = false;
+
+	@Override
+	public HashMap<String, Object> toMap(BaseAdapter adapter) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

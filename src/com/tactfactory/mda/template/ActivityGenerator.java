@@ -43,7 +43,6 @@ public class ActivityGenerator extends BaseGenerator {
 
 	public ActivityGenerator(BaseAdapter adapter) throws Exception {
 		this(adapter, true);
-		
 	}
 
 	public ActivityGenerator(BaseAdapter adapter, Boolean isWritable) throws Exception {
@@ -56,7 +55,7 @@ public class ActivityGenerator extends BaseGenerator {
 	public void generateAll() {
 		ConsoleUtils.display(">> Generate CRUD view...");
 
-		for(ClassMetadata cm : Harmony.metas.entities.values()){
+		for(ClassMetadata cm : this.appMetas.entities.values()){
 			if(!cm.internal && !cm.fields.isEmpty()){
 				cm.makeString("label");
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
@@ -359,7 +358,7 @@ public class ActivityGenerator extends BaseGenerator {
 					}
 
 					
-					data += this.metas.projectNameSpace.replace('/', '.') + entityName;
+					data += this.appMetas.projectNameSpace.replace('/', '.') + entityName;
 					filterActivity.getChild("action").setAttribute("name", "android.intent.action."+ action, ns);
 					filterActivity.getChild("category").setAttribute("name", "android.intent.category.DEFAULT", ns);
 					filterActivity.getChild("data").setAttribute("mimeType", data, ns);

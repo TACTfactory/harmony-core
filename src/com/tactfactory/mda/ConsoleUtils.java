@@ -23,6 +23,7 @@ public class ConsoleUtils {
 		if (!quiet)
 			if (ansi) {
 				cp.println(value);
+				cp.clear();
 			} else {
 				System.out.println(value);
 			}
@@ -32,6 +33,7 @@ public class ConsoleUtils {
 		if (!quiet)
 			if (ansi) {
 				cp.println("[WARNING]\t" + value + "\n", Attribute.NONE, FColor.YELLOW, BColor.BLACK);
+				cp.clear();
 			} else {
 				System.out.println(value);
 			}
@@ -41,6 +43,7 @@ public class ConsoleUtils {
 		if (!quiet && Harmony.debug)
 			if (ansi) {
 				cp.println("[DEBUG]\t" + value + "\n", Attribute.NONE, FColor.BLUE, BColor.BLACK);
+				cp.clear();
 			} else {
 				System.out.println("[DEBUG]\t" + value);
 			}
@@ -50,6 +53,7 @@ public class ConsoleUtils {
 		if (!quiet) 
 			if (ansi) {
 				cp.println("[ERROR]\t" + value + "\n", Attribute.NONE, FColor.RED, BColor.BLACK);
+				cp.clear();
 			} else {
 				System.out.println("[ERROR]\t" + value);
 			}
@@ -59,6 +63,7 @@ public class ConsoleUtils {
 		if (!quiet)
 			if (ansi) {
 				cp.println(value + "\n", Attribute.BOLD, FColor.GREEN, BColor.BLACK);
+				cp.clear();
 			} else {
 				System.out.println(value);
 			}

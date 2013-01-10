@@ -9,7 +9,6 @@
 package com.tactfactory.mda.template;
 
 import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.PackageUtils;
@@ -21,13 +20,13 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 	public SQLiteAdapterGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
-		this.datamodel = Harmony.metas.toMap(this.adapter);
+		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
 	public void generateAll() {
 		ConsoleUtils.display(">> Generate Adapter...");
 		
-		for(ClassMetadata cm : Harmony.metas.entities.values()){
+		for(ClassMetadata cm : this.appMetas.entities.values()){
 			if(!cm.fields.isEmpty()){
 				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getData());
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);

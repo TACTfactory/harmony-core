@@ -16,10 +16,10 @@ public class TestProjectGenerator extends BaseGenerator {
 	public TestProjectGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
 
-		String projectNameSpace = "" + this.metas.projectNameSpace;
+		String projectNameSpace = "" + this.appMetas.projectNameSpace;
 		projectNameSpace = projectNameSpace.replaceAll("/","\\.");
 
-		this.datamodel = (HashMap<String, Object>) this.metas.toMap(this.adapter);
+		this.datamodel = (HashMap<String, Object>) this.appMetas.toMap(this.adapter);
 	}
 
 	public TestProjectGenerator(BaseAdapter adapter, Boolean isWritable) throws Exception {
