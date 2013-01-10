@@ -16,6 +16,7 @@ public abstract class TagConstant {
 	public final static String CONTROLLER_NAMESPACE = "controller_namespace";
 	public final static String TEST_NAMESPACE = "test_namespace";
 	public final static String DATA_NAMESPACE = "data_namespace";
+	public final static String ENTITY_NAMESPACE = "entity_namespace";
 	public final static String ANDROID_SDK_DIR = "sdk_dir";
 	
 	// Ant markers
@@ -43,6 +44,11 @@ public abstract class TagConstant {
 	public final static String IDS = "ids";
 	public final static String HIDDEN = "hidden";
 	public final static String INTERNAL = "internal";
+	public final static String CURRENT_ENTITY = "current_entity";
+	public final static String OPTIONS = "options";
+	public static final String LEVEL = "level";
+	public static final String MODE = "mode";
+	public static final String PRIORITY = "priority";
 	
 	
 

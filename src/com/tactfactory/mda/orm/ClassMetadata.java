@@ -20,6 +20,7 @@ import com.tactfactory.mda.template.TagConstant;
 
 /** Entity class metadata */
 public class ClassMetadata extends BaseMetadata {
+
 	/** Used for join tables (ManyToMany relations)*/
 	public boolean internal = false;
 	
@@ -52,6 +53,7 @@ public class ClassMetadata extends BaseMetadata {
 		String key = name.toLowerCase() + "_"+ componentName.toLowerCase();
 		TranslationMetadata.addDefaultTranslation(key, name);
 	}
+
 	
 	/**
 	 * Transform the class to a map of strings and maps (for each field) given an adapter
@@ -76,9 +78,11 @@ public class ClassMetadata extends BaseMetadata {
 		if(this.internal)
 			model.put(TagConstant.INTERNAL,		"true");
 		
+		HashMap<String, Object> optionsModel = new HashMap<String, Object>();
 		for(Metadata option : options.values()){
-			model.put(option.getName(), option.toMap(adapter));
+			optionsModel.put(option.getName(), option.toMap(adapter));
 		}
+		model.put(TagConstant.OPTIONS, optionsModel);
 		
 		return model;
 	}
@@ -101,7 +105,5 @@ public class ClassMetadata extends BaseMetadata {
 		}
 		
 		return result;
-	}
-	
-	
+	}	
 }

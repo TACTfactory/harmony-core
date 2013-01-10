@@ -44,6 +44,7 @@ public class ApplicationMetadata extends BaseMetadata {
 		// Add root
 		ret.put(TagConstant.PROJECT_NAME, 		this.name);
 		ret.put(TagConstant.PROJECT_NAMESPACE, 	this.projectNameSpace.replaceAll("/", "\\."));
+		ret.put(TagConstant.DATA_NAMESPACE, 	this.projectNameSpace.replaceAll("/", "\\.")+"."+adapt.getData());
 
 		ret.put(TagConstant.ENTITIES, 			entitiesMap);
 		
@@ -53,9 +54,11 @@ public class ApplicationMetadata extends BaseMetadata {
 		ret.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
 		
 		// Add Extra bundle
+		HashMap<String, Object> optionsMap = new HashMap<String, Object>();
 		for(Metadata bm : options.values()){
-			ret.put(bm.getName(), bm.toMap(adapt));
+			optionsMap.put(bm.getName(), bm.toMap(adapt));
 		}
+		ret.put(TagConstant.OPTIONS, optionsMap);
 		
 		return ret;
 	}

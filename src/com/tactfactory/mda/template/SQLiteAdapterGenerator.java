@@ -8,51 +8,36 @@
  */
 package com.tactfactory.mda.template;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.PackageUtils;
 
 public class SQLiteAdapterGenerator extends BaseGenerator {	
-	protected Map<String, Object> entities;
 	protected String localNameSpace;
 	protected boolean isWritable = true;
 
 	public SQLiteAdapterGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
-		this.entities = new HashMap<String, Object>();
-		
-		for(ClassMetadata meta : appMetas.entities.values()){
-			if(!meta.fields.isEmpty()){
-				Map<String, Object> modelClass = meta.toMap(this.adapter);
-				this.entities.put((String) modelClass.get(TagConstant.NAME), modelClass);
-			}
-		}
+		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
-	@SuppressWarnings("unchecked")
 	public void generateAll() {
 		ConsoleUtils.display(">> Generate Adapter...");
 		
-		for(Object modelEntity : this.entities.values()) {
-			
-			Map<String, Object> entity = (Map<String, Object>) modelEntity;
-			this.localNameSpace = (String) entity.get(TagConstant.DATA_NAMESPACE);
-			
-			// Make class
-			this.datamodel = (HashMap<String, Object>) modelEntity;
-			
-			this.generate();
+		for(ClassMetadata cm : this.appMetas.entities.values()){
+			if(!cm.fields.isEmpty()){
+				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getData());
+				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
+				this.generate();
+			}
 		}
 	}
 	
 	private void generate() {
 		// Info
-		ConsoleUtils.display(">>> Generate Adapter for " +  this.datamodel.get(TagConstant.NAME));
+		ConsoleUtils.display(">>> Generate Adapter for " +  this.datamodel.get(TagConstant.CURRENT_ENTITY));
 		
 		try {
 			this.makeSourceControler( 
@@ -78,7 +63,7 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		String fullFilePath = String.format("%s%s/%s",
 				this.adapter.getSourcePath(),
 				PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
-				String.format(filename, this.datamodel.get(TagConstant.NAME)));
+				String.format(filename, this.datamodel.get(TagConstant.CURRENT_ENTITY)));
 		
 		String fullTemplatePath = this.adapter.getTemplateSourceProviderPath().substring(1) + template;
 		

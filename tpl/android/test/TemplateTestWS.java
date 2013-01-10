@@ -1,18 +1,19 @@
-package ${test_namespace};
+<#assign curr = entities[current_entity]>
+package ${curr.test_namespace};
 
 import android.content.Context;
 import android.test.AndroidTestCase;
 
 import junit.framework.Assert;
 
-/** ${name} Web Service Test
+/** ${curr.name} Web Service Test
  * 
  * @see android.app.Fragment
  */
-public class ${name}TestWS extends AndroidTestCase {
+public class ${curr.name}TestWS extends AndroidTestCase {
 	private Context ctx;
-	private ${name} model;
-	private ${name}WS web;
+	private ${curr.name} model;
+	private ${curr.name}WS web;
 
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
@@ -21,9 +22,9 @@ public class ${name}TestWS extends AndroidTestCase {
 		super.setUp();
 		
 		this.ctx = this.getContext();
-		this.web = new ${name}WS(this.ctx);
+		this.web = new ${curr.name}WS(this.ctx);
 		
-		this.model = new ${name}();
+		this.model = new ${curr.name}();
 		// TODO initial values of test
 		//this.model.setXxxx();
 	}
@@ -36,7 +37,7 @@ public class ${name}TestWS extends AndroidTestCase {
 	}
 	
 	/* (non-Javadoc)
-	 * @see ${localnamespace}.${name}Ws#login(Account)
+	 * @see ${localnamespace}.${curr.name}Ws#login(Account)
 	 */
 	/*public void authentificate() {		
 		int result = this.ws.login(this.me);

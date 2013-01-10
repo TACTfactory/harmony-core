@@ -1,7 +1,9 @@
-package ${test_namespace};
+<#assign curr = entities[current_entity]>
+package ${curr.test_namespace};
 
-import ${namespace}.data.${name}SQLiteAdapter;
-import ${namespace}.entity.${name};
+
+import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
+import ${curr.namespace}.entity.${curr.name};
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -9,15 +11,17 @@ import android.test.AndroidTestCase;
 
 import junit.framework.Assert;
 
-/** ${name} database test abstract class <br/>
+/** ${curr.name} database test abstract class <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
- * You should edit ${name}TestDB class instead of this one or you will lose all your modifications.</i></b>
+ * You should edit ${curr.name}TestDB class instead of this one or you will lose all your modifications.</i></b>
  */
-public abstract class ${name}TestDBBase extends AndroidTestCase {
+public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	private Context ctx;
-	private ${name}SQLiteAdapter adapter;
+
+	private ${curr.name}SQLiteAdapter adapter;
+
 	private SQLiteDatabase db;
-	private ${name} entity;
+	private ${curr.name} entity;
 
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
@@ -26,8 +30,9 @@ public abstract class ${name}TestDBBase extends AndroidTestCase {
 		super.setUp();
 		
 		this.ctx = this.getContext();
-		this.adapter = new ${name}SQLiteAdapter(this.ctx);
-		this.entity = new ${name}();
+		
+		this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
+		this.entity = new ${curr.name}();
 	}
 
 	/* (non-Javadoc)

@@ -1,13 +1,6 @@
+<#assign curr = entities[current_entity]>
 <#function alias name>
 	<#return "JSON_"+name?upper_case>
-</#function>
-
-<#function jsonID name>
-	<#if (name?length>2)>
-		<#return name?substring(0,3)>
-	<#else>
-		<#return name>
-	</#if>
 </#function>
 
 <#function typeToJsonType field>
@@ -20,6 +13,8 @@
 			<#return "Double">
 		<#elseif field.type=="long">
 			<#return "Long">
+		<#elseif field.type=="boolean">
+			<#return "Boolean">
 		<#else>
 			<#return "String">
 		</#if>
@@ -44,9 +39,14 @@
 	<#return ret>
 </#function>
 
-package ${data_namespace};
+<#function isRestEntity entityName>
+	<#return entities[entityName].options.rest??>
+</#function>
 
-import ${namespace}.entity.${name};
+package ${curr.data_namespace};
+
+import ${curr.namespace}.entity.${curr.name};
+import ${data_namespace}.RestClient.Verb;
 
 import org.json.*;
 
@@ -54,84 +54,249 @@ import java.util.List;
 import java.util.ArrayList;
 
 import android.util.Log;
+import android.content.Context;
 
 import org.joda.time.format.ISODateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-<#list relations as relation>
-import ${namespace}.entity.${relation.relation.targetEntity};
+<#list curr.relations as relation>
+	<#if isRestEntity(relation.relation.targetEntity)>
+import ${curr.namespace}.entity.${relation.relation.targetEntity};
+	</#if>
 </#list>
 
-public class ${name}WebServiceClientAdapterBase {
-	private static final String TAG = "${name}WebServiceClientAdapterBase";
+public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAdapterBase{
+	private static final String TAG = "${curr.name}WebServiceClientAdapterBase";
+	private String host = "TOTO";
+	private static String REST_FORMAT = ".json"; //JSon RSS xml or empty (for html)
 
-	<#list fields as field>
+	private static final String ${alias(curr.name)} = "${curr.name}";
+	<#list curr.fields as field>
 		<#if !field.internal>
-	private static final String ${alias(field.name)} = "${jsonID(field.name)}";
+			<#if !field.relation?? || isRestEntity(field.relation.targetEntity)>
+	private static final String ${alias(field.name)} = "${field.name?uncap_first}";
+			</#if>
 		</#if>
 	</#list>
+
+	public ${curr.name}WebServiceClientAdapterBase(Context context){
+		super(context);
+	}
 	
 	/**
 	 *
 	 *
 	 */
-	protected int get(${name} ${name?lower_case}){
-		JSONObject json = new JSONObject();
-		return 0;
+	public int getAll(List<${curr.name}> ${curr.name?lower_case}s){
+		int result = -1;
+		String response = this.invokeRequest(
+					Verb.GET,
+					String.format(
+						"${curr.options.rest.uri?lower_case}%s",
+						REST_FORMAT),
+					null);
+		if (this.isValidResponse(response) && this.isValidRequest()) {
+			try {
+				JSONObject json = new JSONObject(response);
+				result = ${curr.name}WebServiceClientAdapter.extract${curr.name?cap_first}s(json, ${curr.name?lower_case}s);
+			} catch (JSONException e) {
+				Log.e(TAG, e.getMessage());
+				${curr.name?lower_case}s = null;
+			}
+		}
+
+		return result;
 	}
 
 	/**
 	 *
 	 *
 	 */
-	protected int insert(${name} ${name?lower_case}){
-		return 0;
+	public int get(${curr.name} ${curr.name?lower_case}){
+		int result = -1;
+		String response = this.invokeRequest(
+					Verb.GET,
+					String.format(
+						"${curr.options.rest.uri?lower_case}/%s%s",
+						${curr.name?lower_case}.getId(), 
+						REST_FORMAT),
+					null);
+		if (this.isValidResponse(response) && this.isValidRequest()) {
+			try {
+				JSONObject json = new JSONObject(response);
+				${curr.name}WebServiceClientAdapter.extract(json, ${curr.name?lower_case});
+				result = 0;
+			} catch (JSONException e) {
+				Log.e(TAG, e.getMessage());
+				${curr.name?lower_case} = null;
+			}
+		}
+
+		return result;
 	}
 
 	/**
 	 *
 	 *
 	 */
-	protected int update(${name} ${name?lower_case}){
-		return 0;
+	public int insert(${curr.name} ${curr.name?lower_case}){
+		int result = -1;
+		String response = this.invokeRequest(
+					Verb.POST,
+					String.format(
+						"${curr.options.rest.uri?lower_case}%s",
+						REST_FORMAT),
+					${curr.name}WebServiceClientAdapter.${curr.name?uncap_first}ToJson(${curr.name?lower_case}));
+		if (this.isValidResponse(response) && this.isValidRequest()) {
+			result = 0;
+		}
+
+		return result;
 	}
 
 	/**
 	 *
 	 *
 	 */
-	protected int delete(${name} ${name?lower_case}){
-		return 0;
+	public int update(${curr.name} ${curr.name?lower_case}){
+		int result = -1;
+		String response = this.invokeRequest(
+					Verb.PUT,
+					String.format(
+						"${curr.options.rest.uri?lower_case}/%s%s",
+						${curr.name?lower_case}.getId(),
+						REST_FORMAT),
+					${curr.name}WebServiceClientAdapter.${curr.name?uncap_first}ToJson(${curr.name?lower_case}));
+		if (this.isValidResponse(response) && this.isValidRequest()) {
+			result = 0;
+		}
+
+		return result;
 	}
 
 	/**
 	 *
 	 *
 	 */
-	public static boolean extract(JSONObject json, ${name} ${name?lower_case}){
+	public int delete(${curr.name} ${curr.name?lower_case}){
+		int result = -1;
+		String response = this.invokeRequest(
+					Verb.DELETE,
+					String.format(
+						"${curr.options.rest.uri?lower_case}/%s%s",
+						${curr.name?lower_case}.getId(), 
+						REST_FORMAT),
+					null);
+		if (this.isValidResponse(response) && this.isValidRequest()) {
+			result = 0;
+		}
+
+		return result;
+	}
+
+	<#list curr.relations as relation>
+		<#if isRestEntity(relation.relation.targetEntity)>
+			<#if relation.relation.type=="OneToMany">
+
+			<#elseif relation.relation.type=="ManyToMany" || relation.relation.type=="ManyToOne">
+	/**
+	 *
+	 *
+	 */
+	public int getBy${relation.relation.targetEntity}(List<${curr.name}> ${curr.name?lower_case}s, ${relation.relation.targetEntity} ${relation.relation.targetEntity?lower_case}){
+		int result = -1;
+		String response = this.invokeRequest(
+					Verb.GET,
+					String.format(
+						"${entities[relation.relation.targetEntity].options.rest.uri?lower_case}/%s/${curr.options.rest.uri?lower_case}%s",
+						${relation.relation.targetEntity?lower_case}.getId(), 
+						REST_FORMAT),
+					null);
+
+		if (this.isValidResponse(response) && this.isValidRequest()) {
+			try {
+				JSONObject json = new JSONObject(response);
+				result = ${curr.name}WebServiceClientAdapter.extract${curr.name}s(json, ${curr.name?lower_case}s);
+
+			} catch (JSONException e) {
+				Log.e(TAG, e.getMessage());
+				${curr.name?lower_case}s = null;
+			}
+		}
+
+		return result;
+	}
+
+			<#else>
+	/**
+	 *
+	 *
+	 */
+	public int getBy${relation.relation.targetEntity}(${curr.name} ${curr.name?uncap_first}, ${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first}){
+		int result = -1;
+		String response = this.invokeRequest(
+					Verb.GET,
+					String.format(
+						"${entities[relation.relation.targetEntity].options.rest.uri?lower_case}/%s/${curr.options.rest.uri?lower_case}%s",
+						${relation.relation.targetEntity?uncap_first}.getId(), 
+						REST_FORMAT),
+					null);
+
+		if (this.isValidResponse(response) && this.isValidRequest()) {
+			try {
+				JSONObject json = new JSONObject(response);
+				${curr.name}WebServiceClientAdapter.extract(json, ${curr.name?uncap_first});
+				result = 0;
+
+			} catch (JSONException e) {
+				Log.e(TAG, e.getMessage());
+				${curr.name?uncap_first} = null;
+			}
+		}
+
+		return result;
+	}
+
+			</#if>
+		</#if>
+	</#list>
+
+	/**
+	 *
+	 *
+	 */
+	public static boolean extract(JSONObject json, ${curr.name} ${curr.name?lower_case}){
 		boolean result = false;
 		
 		int id = json.optInt("id", 0);
 
 		if (id != 0) {
-			<#list fields as field>
+			<#list curr.fields as field>
 				<#if !field.internal>
 					<#if !field.relation??>
 						<#if field.type?lower_case=="date"||field.type?lower_case=="datetime"||field.type?lower_case=="time">
 			DateTimeFormatter ${field.name?uncap_first}Formatter = ${getFormatter(field.type)};
-			${name?lower_case}.set${field.name?cap_first}(${field.name?uncap_first}Formatter.parseDateTime(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${name?lower_case}.get${field.name?cap_first}().toString())));	
+			${curr.name?lower_case}.set${field.name?cap_first}(${field.name?uncap_first}Formatter.parseDateTime(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?lower_case}.get${field.name?cap_first}().toString())));	
+						<#elseif field.type?lower_case=="boolean">
+			${curr.name?lower_case}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?lower_case}.is${field.name?cap_first}()));	
 						<#else>
-			${name?lower_case}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${name?lower_case}.get${field.name?cap_first}()));	
+			${curr.name?lower_case}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?lower_case}.get${field.name?cap_first}()));	
 						</#if>
 					<#else>
-						<#if field.relation.type=="OneToMany" || field.relation.type=="ManyToMany">
-			/*ArrayList<${field.relation.targetEntity}> ${field.name?uncap_first} = new ArrayList<${field.relation.targetEntity}>();
-			${field.relation.targetEntity}WebServiceClientAdapter.extract${field.relation.targetEntity}s(json.opt${typeToJsonType(field)}(${alias(field.name)}), ${field.name?uncap_first});
-			${name?lower_case}.set${field.name?cap_first}(${field.name?uncap_first});*/
-						<#else>
-			/*${field.relation.targetEntity} ${field.name?uncap_first} = new ${field.relation.targetEntity}();
+						<#if isRestEntity(field.relation.targetEntity)>
+							<#if field.relation.type=="OneToMany" || field.relation.type=="ManyToMany">
+			ArrayList<${field.relation.targetEntity}> ${field.name?uncap_first} = new ArrayList<${field.relation.targetEntity}>();
+			try{
+				${field.relation.targetEntity}WebServiceClientAdapter.extract${field.relation.targetEntity}s(json.opt${typeToJsonType(field)}(${alias(field.name)}), ${field.name?uncap_first});
+				${curr.name?lower_case}.set${field.name?cap_first}(${field.name?uncap_first});
+			}catch(JSONException e){
+				Log.e(TAG, e.getMessage());
+			}
+							<#else>
+			${field.relation.targetEntity} ${field.name?uncap_first} = new ${field.relation.targetEntity}();
 			${field.relation.targetEntity}WebServiceClientAdapter.extract(json.opt${typeToJsonType(field)}(${alias(field.name)}), ${field.name?uncap_first});
-			${name?lower_case}.set${field.name?cap_first}(${field.name?uncap_first});*/
+			${curr.name?lower_case}.set${field.name?cap_first}(${field.name?uncap_first});
+							</#if>
 						</#if>
 					</#if>
 
@@ -148,8 +313,8 @@ public class ${name}WebServiceClientAdapterBase {
 	 *
 	 *
 	 */
-	public static int extract${name}s(JSONObject json, List<${name}> ${name?lower_case}s) throws JSONException{
-		JSONArray itemArray = json.optJSONArray("${name}s");
+	public static int extract${curr.name}s(JSONObject json, List<${curr.name}> ${curr.name?lower_case}s) throws JSONException{
+		JSONArray itemArray = json.optJSONArray(${alias(curr.name)});
 		
 		int result = -1;
 		
@@ -157,12 +322,12 @@ public class ${name}WebServiceClientAdapterBase {
 			int count = itemArray.length();			
 			
 			for (int i = 0 ; i < count; i++) {
-				JSONObject json${name} = itemArray.getJSONObject(i);
+				JSONObject json${curr.name} = itemArray.getJSONObject(i);
 				
-				${name} ${name?lower_case} = new ${name}();
-				if (extract(json${name}, ${name?lower_case})){
-					synchronized (${name?lower_case}s) {
-						${name?lower_case}s.add(${name?lower_case});
+				${curr.name} ${curr.name?lower_case} = new ${curr.name}();
+				if (extract(json${curr.name}, ${curr.name?lower_case})){
+					synchronized (${curr.name?lower_case}s) {
+						${curr.name?lower_case}s.add(${curr.name?lower_case});
 					}
 				}
 			}
@@ -180,15 +345,27 @@ public class ${name}WebServiceClientAdapterBase {
 	 *	
 	 *
 	 */
-	public static JSONObject ${name?uncap_first}ToJson(${name} ${name?uncap_first}){
+	public static JSONObject ${curr.name?uncap_first}ToJson(${curr.name} ${curr.name?uncap_first}){
 		JSONObject params = new JSONObject();
 		try{
-			<#list fields as field>
+			<#list curr.fields as field>
 				<#if !field.internal>
-					<#if field.type?lower_case=="date" || field.type?lower_case=="time" || field.type?lower_case=="datetime">
-			params.put(${alias(field.name)}, ${name?lower_case}.get${field.name?cap_first}().toString());
+					<#if !field.relation??>
+						<#if field.type?lower_case=="date" || field.type?lower_case=="time" || field.type?lower_case=="datetime">
+			params.put(${alias(field.name)}, ${curr.name?lower_case}.get${field.name?cap_first}().toString());
+						<#elseif field.type?lower_case=="boolean">
+			params.put(${alias(field.name)}, ${curr.name?lower_case}.is${field.name?cap_first}());
+						<#else>
+			params.put(${alias(field.name)}, ${curr.name?lower_case}.get${field.name?cap_first}());
+						</#if>
 					<#else>
-			params.put(${alias(field.name)}, ${name?lower_case}.get${field.name?cap_first}());
+						<#if isRestEntity(field.relation.targetEntity)>
+							<#if field.relation.type=="OneToMany" || field.relation.type=="ManyToMany">
+			params.put(${alias(field.name)}, ${field.relation.targetEntity?cap_first}WebServiceClientAdapter.${field.relation.targetEntity?uncap_first}sToJson(${curr.name?lower_case}.get${field.name?cap_first}()));
+							<#else>
+			params.put(${alias(field.name)}, ${field.relation.targetEntity?cap_first}WebServiceClientAdapter.${field.relation.targetEntity?uncap_first}ToJson(${curr.name?lower_case}.get${field.name?cap_first}()));
+							</#if>
+						</#if>
 					</#if>
 				</#if>
 			</#list>
@@ -196,5 +373,20 @@ public class ${name}WebServiceClientAdapterBase {
 			Log.e(TAG, e.getMessage());
 		}
 		return params;
+	}
+
+	/**
+	 *	
+	 *
+	 */
+	public static JSONArray ${curr.name?uncap_first}sToJson(List<${curr.name}> ${curr.name?uncap_first}s){
+		JSONArray itemArray = new JSONArray();
+		
+		for (int i = 0 ; i < ${curr.name?uncap_first}s.size(); i++) {
+			JSONObject json${curr.name} = ${curr.name?uncap_first}ToJson(${curr.name?uncap_first}s.get(i));
+			itemArray.put(json${curr.name});
+		}
+		
+		return itemArray;
 	}
 }

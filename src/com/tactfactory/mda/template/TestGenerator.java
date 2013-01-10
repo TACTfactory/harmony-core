@@ -8,7 +8,6 @@
  */
 package com.tactfactory.mda.template;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import com.tactfactory.mda.ConsoleUtils;
@@ -22,6 +21,7 @@ public class TestGenerator extends BaseGenerator {
 	
 	public TestGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
+		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
 	public void generateAll() {
@@ -29,22 +29,21 @@ public class TestGenerator extends BaseGenerator {
 		
 		this.initTestAndroid();
 		
+		
 		for(ClassMetadata cm : this.appMetas.entities.values()){
-			if (!cm.fields.isEmpty()) {
-				this.datamodel = (HashMap<String, Object>) cm.toMap(this.adapter);
-				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getTest());
-				
-				this.generate(null);
-			}
+			//this.datamodel = (HashMap<String, Object>) cm.toMap(this.adapter);
+			this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getTest());
+			this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
+			this.generate();
 		}
 	}
 	
 	/**  
 	 * Generate DataBase Test  
 	 */ 
-	private void generate(String entity) {
+	private void generate() {
 		// Info
-				ConsoleUtils.display(">>> Generate Repository test for " +  this.datamodel.get(TagConstant.NAME));
+				ConsoleUtils.display(">>> Generate Repository test for " +  this.datamodel.get(TagConstant.CURRENT_ENTITY));
 		
 		try {			
 			this.makeSourceTest(
@@ -73,7 +72,7 @@ public class TestGenerator extends BaseGenerator {
 						this.adapter.getTestPath(),
 						PackageUtils.extractPath(String.format(
 								"%s/%s", this.adapter.getSource(), this.localNameSpace)).toLowerCase(),
-						String.format(filename, this.datamodel.get(TagConstant.NAME)));
+						String.format(filename, this.datamodel.get(TagConstant.CURRENT_ENTITY)));
 		
 		String fullTemplatePath = String.format("%s%s",
 					this.adapter.getTemplateTestsPath(),

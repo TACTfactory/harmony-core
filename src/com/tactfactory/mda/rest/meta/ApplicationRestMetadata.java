@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 
 import com.tactfactory.mda.orm.BaseMetadata;
+import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
 public class ApplicationRestMetadata extends BaseMetadata{
-	private static final String NAME = "rest";
-	public LinkedHashMap<String, RestMetadata> entities = new LinkedHashMap<String, RestMetadata>();
+	private final String NAME = "rest";
+	public LinkedHashMap<String, ClassMetadata> entities = new LinkedHashMap<String, ClassMetadata>();
 	
 	public ApplicationRestMetadata() {
 		this.name = NAME;
@@ -18,8 +19,11 @@ public class ApplicationRestMetadata extends BaseMetadata{
 	@Override
 	public HashMap<String, Object> toMap(BaseAdapter adapter) {
 		HashMap<String, Object> ret = new HashMap<String, Object>();
-		
-		ret.put(TagConstant.ENTITIES, entities);
+		HashMap<String, Object> entitiesMap = new HashMap<String, Object>();
+		for(ClassMetadata cm : this.entities.values()){
+			entitiesMap.put(cm.getName(), cm.toMap(adapter));
+		}
+		ret.put(TagConstant.ENTITIES, entitiesMap);
 		
 		return ret;
 	}

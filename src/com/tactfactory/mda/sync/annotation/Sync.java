@@ -12,6 +12,10 @@ import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
+import java.lang.reflect.Field;
+
+import com.tactfactory.mda.ConsoleUtils;
+import com.tactfactory.mda.rest.annotation.Rest.Security;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 import static java.lang.annotation.ElementType.TYPE;
@@ -48,6 +52,24 @@ public @interface Sync {
 			
 			return null;
 		}
+		
+		public static Level fromName(String name){
+			if(name.lastIndexOf(".")>0)
+				name = name.substring(name.lastIndexOf(".")+1); // Take only what comes after the last dot
+			ConsoleUtils.displayDebug("Sync for Security : "+name);
+			try{
+				Field field = Level.class.getField(name);	
+				if(field.isEnumConstant()) {
+					ConsoleUtils.displayDebug("Found Security : "+name);
+					return (Level)field.get(Level.class);
+				}
+				else 
+					return null;
+			}catch(Exception e){
+				return null;
+			}
+			
+		}
 	}
 	
 	/** Mode of trigger for synchronization */
@@ -73,6 +95,24 @@ public @interface Sync {
 			}
 			
 			return null;
+		}
+		
+		public static Mode fromName(String name){
+			if(name.lastIndexOf(".")>0)
+				name = name.substring(name.lastIndexOf(".")+1); // Take only what comes after the last dot
+			ConsoleUtils.displayDebug("Sync for Security : "+name);
+			try{
+				Field field = Mode.class.getField(name);	
+				if(field.isEnumConstant()) {
+					ConsoleUtils.displayDebug("Found Security : "+name);
+					return (Mode)field.get(Mode.class);
+				}
+				else 
+					return null;
+			}catch(Exception e){
+				return null;
+			}
+			
 		}
 	}
 	

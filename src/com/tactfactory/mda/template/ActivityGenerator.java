@@ -14,9 +14,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -27,6 +25,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 import com.tactfactory.mda.ConsoleUtils;
+import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.TranslationMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
@@ -38,39 +37,31 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class ActivityGenerator extends BaseGenerator {
-	protected List<Map<String, Object>> modelEntities;
+	//protected List<Map<String, Object>> modelEntities;
 	protected String localNameSpace;
 	protected boolean isWritable = true;
 
 	public ActivityGenerator(BaseAdapter adapter) throws Exception {
-		super(adapter);
-		
-		// Make entities
-		this.modelEntities = new ArrayList<Map<String, Object>>();
-		for (ClassMetadata meta : this.appMetas.entities.values()) {
-			if(!meta.fields.isEmpty() && !meta.internal){
-				Map<String, Object> modelClass = meta.toMap(this.adapter);
-				meta.makeString("label");
-				
-				this.modelEntities.add(modelClass);
-			}
-		}
+		this(adapter, true);
 	}
 
 	public ActivityGenerator(BaseAdapter adapter, Boolean isWritable) throws Exception {
-		this(adapter);
+		super(adapter);
 
 		this.isWritable = isWritable;
+		this.datamodel = Harmony.metas.toMap(this.adapter);
 	}
 	
 	public void generateAll() {
 		ConsoleUtils.display(">> Generate CRUD view...");
 
-		for(Map<String, Object> entity : this.modelEntities) {
-			//TODO : Examine code logic (wrong ?)
-			this.datamodel = (HashMap<String, Object>) entity;
-			this.localNameSpace = this.appMetas.projectNameSpace.replace('/', '.') +"."+ this.adapter.getController()+"."+((String)entity.get(TagConstant.NAME)).toLowerCase();
-			this.generateAllAction((String)entity.get(TagConstant.NAME));
+		for(ClassMetadata cm : this.appMetas.entities.values()){
+			if(!cm.internal && !cm.fields.isEmpty()){
+				cm.makeString("label");
+				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
+				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getController())+"."+cm.getName().toLowerCase();
+				generateAllAction(cm.getName());
+			}
 		}
 	}
 	

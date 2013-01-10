@@ -100,6 +100,10 @@ public abstract class BaseAdapter {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getController() );
 	}
 	
+	public final String getTemplateSourceServicePath() {
+		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getService() );
+	}
+	
 	public final String getTemplateSourceProviderPath() {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getProvider() );
 	}
@@ -333,6 +337,21 @@ public abstract class BaseAdapter {
 	public final void setCommon(String common) {
 		this.common = common;
 	}
+	
+	/**
+	 * @return the service
+	 */
+	public final String getService() {
+		return service;
+	}
+
+	/**
+	 * @param service the service to set
+	 */
+	public final void setService(String service) {
+		this.service = service;
+	}
+
 	
 	/**
 	 * @return the values

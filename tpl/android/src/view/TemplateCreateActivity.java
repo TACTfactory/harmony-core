@@ -1,16 +1,18 @@
-package ${controller_namespace};
+<#assign curr = entities[current_entity]>
 
-import ${namespace}.R;
+package ${curr.controller_namespace};
+
+import ${curr.namespace}.R;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 
-public class ${name}CreateActivity extends FragmentActivity {
+public class ${curr.name}CreateActivity extends FragmentActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_${name?lower_case}_create);
+        this.setContentView(R.layout.activity_${curr.name?lower_case}_create);
         
         // Google Analytics
         //GoogleAnalyticsSessionManager.getInstance(getApplication()).incrementActivityCount();
