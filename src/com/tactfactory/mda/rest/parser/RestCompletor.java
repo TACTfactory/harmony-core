@@ -1,10 +1,6 @@
 package com.tactfactory.mda.rest.parser;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.tactfactory.mda.orm.ApplicationMetadata;
-import com.tactfactory.mda.orm.BaseMetadata;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.rest.meta.ApplicationRestMetadata;
 

@@ -12,7 +12,6 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 
 import org.jdom2.Document;
@@ -40,7 +39,7 @@ public class ProviderGenerator extends BaseGenerator {
 		this.nameProvider = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.metas.projectName + "Provider");
 		this.localNameSpace = this.metas.projectNameSpace.replace('/', '.') +"."+ this.adapter.getProvider();
 		
-		this.datamodel = (HashMap<String, Object>) this.metas.toMap(this.adapter);
+		this.datamodel = this.metas.toMap(this.adapter);
 		this.datamodel.put(TagConstant.LOCAL_NAMESPACE, this.localNameSpace);
 	}
 	

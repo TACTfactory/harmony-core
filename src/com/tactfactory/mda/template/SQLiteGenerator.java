@@ -9,7 +9,6 @@
 package com.tactfactory.mda.template;
 
 import java.io.IOException;
-import java.util.HashMap;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.ConsoleUtils;
@@ -22,7 +21,7 @@ public class SQLiteGenerator extends BaseGenerator {
 	public SQLiteGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
-		this.datamodel = (HashMap<String, Object>) this.metas.toMap(this.adapter);
+		this.datamodel = this.metas.toMap(this.adapter);
 		this.localNameSpace = this.metas.projectNameSpace+"/"+this.adapter.getData();
 	}
 

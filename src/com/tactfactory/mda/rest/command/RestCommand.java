@@ -2,8 +2,6 @@ package com.tactfactory.mda.rest.command;
 
 import japa.parser.ast.CompilationUnit;
 
-import java.util.LinkedHashMap;
-
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;

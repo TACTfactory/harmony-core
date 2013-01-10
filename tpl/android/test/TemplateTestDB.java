@@ -1,6 +1,8 @@
-package ${test_namespace};
+<#assign curr = entities[current_entity]>
 
-/** ${name} database test class */
-public class ${name}TestDB extends ${name}TestDBBase {
+package ${curr.test_namespace};
+
+/** ${curr.name} database test class */
+public class ${curr.name}TestDB extends ${curr.name}TestDBBase {
 
 }

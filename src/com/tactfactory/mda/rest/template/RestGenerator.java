@@ -1,7 +1,5 @@
 package com.tactfactory.mda.rest.template;
 
-import java.util.HashMap;
-
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
