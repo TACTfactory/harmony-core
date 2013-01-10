@@ -15,7 +15,6 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
 import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.rest.annotation.Rest.Security;
 
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 import static java.lang.annotation.ElementType.TYPE;
