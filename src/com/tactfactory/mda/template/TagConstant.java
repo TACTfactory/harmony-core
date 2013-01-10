@@ -46,6 +46,9 @@ public abstract class TagConstant {
 	public final static String INTERNAL = "internal";
 	public final static String CURRENT_ENTITY = "current_entity";
 	public final static String OPTIONS = "options";
+	public static final String LEVEL = "level";
+	public static final String MODE = "mode";
+	public static final String PRIORITY = "priority";
 	
 	
 
