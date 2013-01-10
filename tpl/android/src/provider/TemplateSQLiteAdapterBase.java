@@ -23,7 +23,7 @@
 	<#return false>
 </#function>
 
-package ${curr.data_namespace};
+package ${data_namespace};
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -51,7 +51,7 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
  * You should edit ${curr.name}Adapter class instead of this one or you will lose all your modifications.</i></b>
  */
-public abstract class ${curr.name}SQLiteAdapterBase {
+public abstract class ${curr.name}SQLiteAdapterBase{
 	private static final String TAG = "${curr.name}DatabaseAdapter";
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	

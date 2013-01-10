@@ -19,8 +19,11 @@ public class ApplicationRestMetadata extends BaseMetadata{
 	@Override
 	public HashMap<String, Object> toMap(BaseAdapter adapter) {
 		HashMap<String, Object> ret = new HashMap<String, Object>();
-		
-		ret.put(TagConstant.ENTITIES, entities);
+		HashMap<String, Object> entitiesMap = new HashMap<String, Object>();
+		for(ClassMetadata cm : this.entities.values()){
+			entitiesMap.put(cm.getName(), cm.toMap(adapter));
+		}
+		ret.put(TagConstant.ENTITIES, entitiesMap);
 		
 		return ret;
 	}

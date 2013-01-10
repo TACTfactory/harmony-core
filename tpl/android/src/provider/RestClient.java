@@ -8,7 +8,7 @@
  * Create      : 2011
  * 
  **************************************************************************/
-package com.tactfactory.android.lib;
+package ${data_namespace};
 
 import java.io.File;
 import java.io.IOException;
@@ -60,12 +60,11 @@ public class RestClient {
     protected int statusCode;
     
     protected String serviceName;
-    protected int port;
     protected String login, password;
     protected String sessionId, CSRFtoken;
  
     //The serviceName should be the name of the Service you are going to be using.
-    public RestClient(String serviceName, int port){    	
+    public RestClient(String serviceName){    	
         HttpParams myParams = new BasicHttpParams();
         
         // Set timeout
@@ -76,7 +75,6 @@ public class RestClient {
         
         this.httpClient = new DefaultHttpClient(myParams);
         this.serviceName = serviceName;
-        this.port = port;
     }
     
     public void setAuth(String login, String password) {
@@ -111,7 +109,7 @@ public class RestClient {
 		this.statusCode = 404;
 		
         HttpResponse response = null;
-        HttpHost targetHost = new HttpHost(this.serviceName, port);
+        HttpHost targetHost = new HttpHost(this.serviceName);
         //HttpEntity entity = this.buildMultipartEntity(params);
         HttpEntity entity = null;
         if (jsonParams != null && jsonParams.has("file")) {
