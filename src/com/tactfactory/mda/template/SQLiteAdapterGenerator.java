@@ -26,7 +26,7 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		
 		this.entities = new HashMap<String, Object>();
 		
-		for(ClassMetadata meta : metas.entities.values()){
+		for(ClassMetadata meta : appMetas.entities.values()){
 			if(!meta.fields.isEmpty()){
 				Map<String, Object> modelClass = meta.toMap(this.adapter);
 				this.entities.put((String) modelClass.get(TagConstant.NAME), modelClass);

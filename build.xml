@@ -93,6 +93,10 @@
             debuglevel="${compile.debuglevel}"
             includeantruntime="false"
         	excludes="**/com/tactfactory/mda/test/**"
+        	target="1.6"
+        	source="1.6"
+        	
+        	bootclasspath="jdk1.6.0/lib/rt.jar"
         >
             <compilerarg line="" /> <!-- "-Xlint:all", "-Xlint:all,-path", "-Xlint:all,-path,-unchecked" -->
             <classpath refid="project.classpath" />

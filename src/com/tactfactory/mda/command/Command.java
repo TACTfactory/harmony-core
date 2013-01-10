@@ -11,6 +11,7 @@ package com.tactfactory.mda.command;
 import net.xeoh.plugins.base.Plugin;
 
 public interface Command extends Plugin {
+	
 	/** Execute specific action
 	 * 
 	 * @param action to realize

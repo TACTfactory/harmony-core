@@ -37,10 +37,10 @@ public class ProviderGenerator extends BaseGenerator {
 	public ProviderGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
-		this.nameProvider = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.metas.projectName + "Provider");
-		this.localNameSpace = this.metas.projectNameSpace.replace('/', '.') +"."+ this.adapter.getProvider();
+		this.nameProvider = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name + "Provider");
+		this.localNameSpace = this.appMetas.projectNameSpace.replace('/', '.') +"."+ this.adapter.getProvider();
 		
-		this.datamodel = (HashMap<String, Object>) this.metas.toMap(this.adapter);
+		this.datamodel = (HashMap<String, Object>) this.appMetas.toMap(this.adapter);
 		this.datamodel.put(TagConstant.LOCAL_NAMESPACE, this.localNameSpace);
 	}
 	
@@ -51,8 +51,8 @@ public class ProviderGenerator extends BaseGenerator {
 			this.updateManifest(this.nameProvider);
 			
 			TranslationMetadata.addDefaultTranslation("uri_not_supported", "URI not supported");
-			TranslationMetadata.addDefaultTranslation("app_provider_name", "Provider of " + this.metas.projectName);
-			TranslationMetadata.addDefaultTranslation("app_provider_description", "Provider of " + this.metas.projectName + " for acces to data");
+			TranslationMetadata.addDefaultTranslation("app_provider_name", "Provider of " + this.appMetas.name);
+			TranslationMetadata.addDefaultTranslation("app_provider_description", "Provider of " + this.appMetas.name + " for acces to data");
 			
 		} catch (Exception e) {
 			ConsoleUtils.displayError(e.getMessage());
@@ -122,7 +122,7 @@ public class ProviderGenerator extends BaseGenerator {
 				}
 
 				// Set values
-				findProvider.setAttribute("authorities", 	this.metas.projectNameSpace.replace('/', '.'), ns);
+				findProvider.setAttribute("authorities", 	this.appMetas.projectNameSpace.replace('/', '.'), ns);
 				findProvider.setAttribute("label", 			"@string/app_provider_name", ns);
 				findProvider.setAttribute("description", 	"@string/app_provider_description", ns);
 				

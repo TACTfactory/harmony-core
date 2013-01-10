@@ -127,7 +127,7 @@ public class Harmony {
 				Harmony.metas.projectNameSpace = Harmony.getNameSpaceFromManifest(manifest);
 
 				String[] projectNameSpaceData = Harmony.metas.projectNameSpace.split("/");
-				Harmony.metas.projectName = projectNameSpaceData[projectNameSpaceData.length-1];
+				Harmony.metas.name = projectNameSpaceData[projectNameSpaceData.length-1];
 			}
 			
 			// get android sdk dir from local.properties
@@ -138,12 +138,12 @@ public class Harmony {
 		}
 		else {
 			String[] projectNameSpaceData = Harmony.metas.projectNameSpace.split("/");
-			Harmony.metas.projectName = projectNameSpaceData[projectNameSpaceData.length-1];
+			Harmony.metas.name = projectNameSpaceData[projectNameSpaceData.length-1];
 		}
 		
 		// Debug Log
 		ConsoleUtils.display(
-				"Current Project : " + Harmony.metas.projectName + "\n" +
+				"Current Project : " + Harmony.metas.name + "\n" +
 				"Current NameSpace : " + Harmony.metas.projectNameSpace + "\n" +
 				"Current Android SDK Path : " + Harmony.androidSdkPath + "\n" +
 				"Current Android SDK Revision : " + Harmony.androidSdkVersion);
@@ -217,13 +217,13 @@ public class Harmony {
 	 */
 	public static void initProjectName()
 	{
-		if (Strings.isNullOrEmpty(Harmony.metas.projectName)) {
+		if (Strings.isNullOrEmpty(Harmony.metas.name)) {
 			String projectName = Harmony.getUserInput("Please enter your Project Name ["+DEFAULT_PROJECT_NAME+"]:");
 			
 			if (!Strings.isNullOrEmpty(projectName))
-				Harmony.metas.projectName = projectName;
+				Harmony.metas.name = projectName;
 			else
-				Harmony.metas.projectName = DEFAULT_PROJECT_NAME;
+				Harmony.metas.name = DEFAULT_PROJECT_NAME;
 		}
 	}
 	
@@ -238,7 +238,7 @@ public class Harmony {
 				String projectNameSpace = Harmony.getUserInput("Please enter your Project NameSpace ["+DEFAULT_PROJECT_NAMESPACE+"]:");
 				
 				if(!Strings.isNullOrEmpty(projectNameSpace)) {
-					if(projectNameSpace.toLowerCase().endsWith(Harmony.metas.projectName.toLowerCase())){
+					if(projectNameSpace.toLowerCase().endsWith(Harmony.metas.name.toLowerCase())){
 						Harmony.metas.projectNameSpace = projectNameSpace.replaceAll("\\.", "/");
 						good = true;
 					} else {

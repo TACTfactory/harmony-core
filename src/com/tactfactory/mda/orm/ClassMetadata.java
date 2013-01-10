@@ -19,19 +19,13 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
 /** Entity class metadata */
-public class ClassMetadata implements BaseMetadata{
+public class ClassMetadata extends BaseMetadata {
 	/** Used for join tables (ManyToMany relations)*/
 	public boolean internal = false;
 	
 	/** Namespace of entity class */
 	public String space = "";
-	
-	/** Name of entity class */
-	public String name = "";
-	
-	/** List of bundles Metadata*/
-	public LinkedHashMap<String, BaseMetadata> options = new LinkedHashMap<String, BaseMetadata>();
-	
+
 	/** List of fields of entity class*/
 	public LinkedHashMap<String, FieldMetadata> fields = new LinkedHashMap<String, FieldMetadata>();
 
@@ -64,24 +58,25 @@ public class ClassMetadata implements BaseMetadata{
 	 * @param adapter The adapter used to customize the fields
 	 * @return the map
 	 */
-	public Map<String, Object> toMap(BaseAdapter adapter){
+	@Override
+	public HashMap<String, Object> toMap(BaseAdapter adapter){
 		HashMap<String, Object> model = new HashMap<String, Object>();
 		
-		model.put(TagConstant.SPACE,	this.space);
-		model.put(TagConstant.PROJECT_NAME,	Harmony.metas.projectName);
-		model.put(TagConstant.NAME,		this.name);
+		model.put(TagConstant.SPACE,			this.space);
+		model.put(TagConstant.PROJECT_NAME,		Harmony.metas.name);
+		model.put(TagConstant.NAME,				this.name);
 		model.put(TagConstant.CONTROLLER_NAMESPACE, adapter.getNameSpaceEntity(this, adapter.getController()));
-		model.put(TagConstant.DATA_NAMESPACE, adapter.getNameSpace(this, adapter.getData()));
-		model.put(TagConstant.TEST_NAMESPACE, adapter.getNameSpace(this, adapter.getTest()));
-		model.put(TagConstant.FIELDS,	this.toFieldArray(this.fields.values(), adapter));
-		model.put(TagConstant.IDS,		this.toFieldArray(this.ids.values(), adapter));
-		model.put(TagConstant.RELATIONS,this.toFieldArray(this.relations.values(), adapter));
+		model.put(TagConstant.DATA_NAMESPACE, 	adapter.getNameSpace(this, adapter.getData()));
+		model.put(TagConstant.TEST_NAMESPACE, 	adapter.getNameSpace(this, adapter.getTest()));
+		model.put(TagConstant.FIELDS,			this.toFieldArray(this.fields.values(), adapter));
+		model.put(TagConstant.IDS,				this.toFieldArray(this.ids.values(), adapter));
+		model.put(TagConstant.RELATIONS,		this.toFieldArray(this.relations.values(), adapter));
 		model.put(TagConstant.INTERNAL,			"false");
 		
-		if(internal)
+		if(this.internal)
 			model.put(TagConstant.INTERNAL,		"true");
 		
-		for(BaseMetadata option : options.values()){
+		for(Metadata option : options.values()){
 			model.put(option.getName(), option.toMap(adapter));
 		}
 		
@@ -96,7 +91,7 @@ public class ClassMetadata implements BaseMetadata{
 			field.customize(adapter);
 			
 			subField = new HashMap<String, Object>();
-			subField = field.toMap();
+			subField = field.toMap(adapter);
 			
 			// Add field translate
 			if (!field.internal && !field.hidden)
@@ -108,7 +103,5 @@ public class ClassMetadata implements BaseMetadata{
 		return result;
 	}
 	
-	public String getName(){
-		return this.name;
-	}
+	
 }

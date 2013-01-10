@@ -156,7 +156,7 @@ public class JavaModelParser {
 	}
 	
 	/**
-	 * @return the metas
+	 * @return the appMetas
 	 */
 	public ArrayList<ClassMetadata> getMetas() {
 		return metas;

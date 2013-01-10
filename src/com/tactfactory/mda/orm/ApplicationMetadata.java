@@ -16,18 +16,12 @@ import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
-public class ApplicationMetadata implements BaseMetadata {
-	/** Project name (demact) */
-	public String projectName;
-	
+public class ApplicationMetadata extends BaseMetadata {	
 	/** Project NameSpace (com/tactfactory/mda/test/demact) */
 	public String projectNameSpace;
 	
 	/** List of Entity of entity class */
 	public LinkedHashMap<String, ClassMetadata> entities = new LinkedHashMap<String, ClassMetadata>();
-	
-	/** List of Entity of entity class */
-	public LinkedHashMap<String, BaseMetadata> options = new LinkedHashMap<String, BaseMetadata>();
 	
 	/** List of string use in application */
 	public TreeMap<String, TranslationMetadata> translates = new TreeMap<String, TranslationMetadata>();
@@ -37,6 +31,7 @@ public class ApplicationMetadata implements BaseMetadata {
 	 * @param adapter The adapter used to customize the fields
 	 * @return the map
 	 */
+	@Override
 	public HashMap<String, Object> toMap(BaseAdapter adapt){
 		HashMap<String, Object> ret = new HashMap<String, Object>();
 		HashMap<String, Object> entitiesMap = new HashMap<String, Object>();
@@ -47,7 +42,7 @@ public class ApplicationMetadata implements BaseMetadata {
 		}
 		
 		// Add root
-		ret.put(TagConstant.PROJECT_NAME, 		this.projectName);
+		ret.put(TagConstant.PROJECT_NAME, 		this.name);
 		ret.put(TagConstant.PROJECT_NAMESPACE, 	this.projectNameSpace.replaceAll("/", "\\."));
 
 		ret.put(TagConstant.ENTITIES, 			entitiesMap);
@@ -58,15 +53,10 @@ public class ApplicationMetadata implements BaseMetadata {
 		ret.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
 		
 		// Add Extra bundle
-		for(BaseMetadata bm : options.values()){
+		for(Metadata bm : options.values()){
 			ret.put(bm.getName(), bm.toMap(adapt));
 		}
 		
 		return ret;
-	}
-
-	@Override
-	public String getName() {
-		return projectName;
 	}
 }

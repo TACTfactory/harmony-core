@@ -17,7 +17,7 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public abstract class BaseGenerator {
-	protected ApplicationMetadata metas;	// Meta-models
+	protected ApplicationMetadata appMetas;	// Meta-models
 	protected BaseAdapter adapter;			// Platform adapter
 	protected HashMap<String, Object> datamodel = new HashMap<String, Object>();
 	
@@ -27,7 +27,7 @@ public abstract class BaseGenerator {
 		if (adapter == null)
 			throw new Exception("No adapter define.");
 		
-		this.metas		= Harmony.metas;	// FIXME Clone object tree
+		this.appMetas		= Harmony.metas;	// FIXME Clone object tree
 		this.adapter	= adapter;
 		
 		this.cfg.setDirectoryForTemplateLoading(new File(Harmony.pathBase));

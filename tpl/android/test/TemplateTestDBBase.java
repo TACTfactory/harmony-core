@@ -1,6 +1,6 @@
 package ${test_namespace};
 
-import ${namespace}.data.${name}Adapter;
+import ${namespace}.data.${name}SQLiteAdapter;
 import ${namespace}.entity.${name};
 
 import android.content.Context;
@@ -15,7 +15,7 @@ import junit.framework.Assert;
  */
 public abstract class ${name}TestDBBase extends AndroidTestCase {
 	private Context ctx;
-	private ${name}Adapter adapter;
+	private ${name}SQLiteAdapter adapter;
 	private SQLiteDatabase db;
 	private ${name} entity;
 
@@ -26,7 +26,7 @@ public abstract class ${name}TestDBBase extends AndroidTestCase {
 		super.setUp();
 		
 		this.ctx = this.getContext();
-		this.adapter = new ${name}Adapter(this.ctx);
+		this.adapter = new ${name}SQLiteAdapter(this.ctx);
 		this.entity = new ${name}();
 	}
 

@@ -18,3 +18,39 @@
 #-keepclassmembers class fqcn.of.javascript.interface.for.webview {
 #   public *;
 #}
+
+-repackageclasses ''
+-allowaccessmodification
+-optimizations !code/simplification/arithmetic
+
+#-keep class javax.** { *; }
+#-keep class org.** { *; }
+
+# Keep line numbers so they appear in the stack trace of the develeper console
+-keepattributes SourceFile,LineNumberTable
+
+# Google Guava
+# see http://code.google.com/p/guava-libraries/wiki/UsingProGuardWithGuava
+#-keep public class com.google.common.**
+-dontwarn sun.misc.Unsafe
+-dontwarn com.google.common.collect.MinMaxPriorityQueue
+
+# Joda
+-keep public class org.joda.time.** { public protected *; }
+-dontwarn org.joda.convert.FromString
+-dontwarn org.joda.convert.ToString
+
+# Harmony
+-dontwarn com.tactfactory.mda.**
+
+# Facebook
+#-keep class com.facebook.** { *; }
+#-dontwarn com.facebook.**
+
+# Twitter
+#-keep class twitter4j.** { *; }
+
+# Flurry
+#-dontwarn com.flurry.**
+
+-target 1.6

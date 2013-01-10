@@ -33,7 +33,7 @@ public abstract class CommonTest {
 		Harmony.debug = true;
 		
 		// Project test config
-		Harmony.metas.projectName = "demact";
+		Harmony.metas.name = "demact";
 		Harmony.metas.projectNameSpace = "com/tactfactory/mda/test/demact";
 		Harmony.androidSdkPath = "/tmp/";
 		//Harmony.pathProject = "app";

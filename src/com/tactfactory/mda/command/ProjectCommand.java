@@ -60,58 +60,61 @@ public class ProjectCommand extends BaseCommand {
 	protected BaseAdapter adapterRIM = new RimAdapter();
 	protected BaseAdapter adapterWinPhone = new WinphoneAdapter();
 
-	private static boolean userHasConfirmed = false;
-	private static boolean isProjectInit = false;
+	private boolean userHasConfirmed = false;
+	private boolean isProjectInit = false;
 
 	/**
 	 * Init Project Parameters (project name, namespace, android sdk path)
 	 */
-	public void initProjectParam()
-	{
-		if(!isProjectInit) {
-
-			while(!userHasConfirmed)
-			{
+	public void initProjectParam() {
+		if (!this.isProjectInit) {
+			while (!this.userHasConfirmed) {
 				ConsoleUtils.display(">> Project Parameters");
 
 				//Project Name
-				if(!this.commandArgs.containsKey("name"))
+				if(!this.commandArgs.containsKey("name")) {
 					Harmony.initProjectName();
-				else
-					Harmony.metas.projectName = this.commandArgs.get("name");
-
+				} else {
+					Harmony.metas.name = this.commandArgs.get("name");
+				}
+					
 				//Project NameSpace
-				if(!this.commandArgs.containsKey("namespace"))
+				if(!this.commandArgs.containsKey("namespace")) {
 					Harmony.initProjectNameSpace();
-				else
+				} else {
 					Harmony.metas.projectNameSpace = this.commandArgs.get("namespace").replaceAll("\\.", "/");
-
+				}
+					
 				//Android sdk path
-				if(!this.commandArgs.containsKey("androidsdk"))
+				if(!this.commandArgs.containsKey("androidsdk")) {
 					Harmony.initProjectAndroidSdkPath();
-				else
+				} else {
 					Harmony.androidSdkPath = this.commandArgs.get("androidsdk");
-
-				ConsoleUtils.displayDebug("Project Name: "	+ Harmony.metas.projectName +
+				}
+					
+				ConsoleUtils.displayDebug("Project Name: "	+ Harmony.metas.name +
 						"\nProject NameSpace: "				+ Harmony.metas.projectNameSpace +
 						"\nAndroid SDK Path: "				+ Harmony.androidSdkPath);
 
+				// Confirmation
 				if (Harmony.isConsole) {
 					String accept = Harmony.getUserInput("Use below given parameters to process files? (y/n) ");
-					if(!accept.contains("n")) {
-						userHasConfirmed = true;
+					
+					if (!accept.contains("n")) {
+						this.userHasConfirmed 			= true;
 					} else {
-						Harmony.metas.projectName = null;
-						Harmony.metas.projectNameSpace = null;
-						Harmony.androidSdkPath = null;
+						Harmony.metas.name 		= null;
+						Harmony.metas.projectNameSpace 	= null;
+						Harmony.androidSdkPath 			= null;
 						this.commandArgs.clear();
 					}
 				} else {
-					userHasConfirmed = true;
+					this.userHasConfirmed = true;
 				}
 			}
-			userHasConfirmed = false;
-			isProjectInit = true;
+			
+			this.userHasConfirmed = false;
+			this.isProjectInit = true;
 		}
 	}
 
@@ -126,7 +129,7 @@ public class ProjectCommand extends BaseCommand {
 		boolean result = false;
 
 		try {
-			if(new ProjectGenerator(this.adapterAndroid).makeProject()){
+			if(new ProjectGenerator(this.adapterAndroid).makeProject()) {
 				ConsoleUtils.displayDebug("Init Android Project Success!");
 				
 				result = true;
@@ -134,8 +137,9 @@ public class ProjectCommand extends BaseCommand {
 				ConsoleUtils.displayError("Init Android Project Fail!");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			ConsoleUtils.displayError(e.getMessage());
 		}
+		
 		return result;
 	}
 
@@ -148,16 +152,18 @@ public class ProjectCommand extends BaseCommand {
 
 		this.initProjectParam();
 		boolean result = false;
+		
 		try {
-			if(new ProjectGenerator(this.adapterIOS).makeProject()){
+			if (new ProjectGenerator(this.adapterIOS).makeProject()) {
 				ConsoleUtils.displayDebug("Init IOS Project Success!");
 				result = true;
 			} else {
 				ConsoleUtils.displayError("Init IOS Project Fail!");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			ConsoleUtils.displayError(e.getMessage());
 		}
+		
 		return result;
 	}
 
@@ -170,16 +176,18 @@ public class ProjectCommand extends BaseCommand {
 
 		this.initProjectParam();
 		boolean result = false;
+		
 		try {
-			if(new ProjectGenerator(this.adapterRIM).makeProject()){
+			if (new ProjectGenerator(this.adapterRIM).makeProject()) {
 				ConsoleUtils.displayDebug("Init RIM Project Success!");
 				result = true;
 			} else {
 				ConsoleUtils.displayError("Init RIM Project Fail!");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			ConsoleUtils.displayError(e.getMessage());
 		}
+		
 		return result;
 	}
 
@@ -192,16 +200,18 @@ public class ProjectCommand extends BaseCommand {
 
 		this.initProjectParam();
 		boolean result = false;
+		
 		try{
-			if(new ProjectGenerator(this.adapterWinPhone).makeProject()){
+			if (new ProjectGenerator(this.adapterWinPhone).makeProject()) {
 				ConsoleUtils.displayDebug("Init WinPhone Project Success!");
 				result = true;
 			} else {
 				ConsoleUtils.displayError("Init WinPhone Project Fail!");
 			}
 		} catch (Exception e) {
-			e.printStackTrace();
+			ConsoleUtils.displayError(e.getMessage());
 		}
+		
 		return result;
 	}
 
@@ -222,20 +232,19 @@ public class ProjectCommand extends BaseCommand {
 	 * Remove Android project folder
 	 */
 	public void removeAndroid() {
-
-		if(!userHasConfirmed) {
+		if (!this.userHasConfirmed) {
 			String accept = Harmony.getUserInput("Are you sure to Delete Android Project? (y/n) ");
-			if(accept.contains("n")) {
-				return;
-			}
-			userHasConfirmed = true;
+			
+			if(accept.contains("n")) { return; }
+			
+			this.userHasConfirmed = true;
 		}
+		
 		try {
-			if(!new ProjectGenerator(this.adapterAndroid).removeProject())
+			if (!new ProjectGenerator(this.adapterAndroid).removeProject())
 				ConsoleUtils.display("Please check your file browser or file editor and try again...");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ConsoleUtils.displayError(e.getMessage());
 		}
 	}
 
@@ -243,20 +252,19 @@ public class ProjectCommand extends BaseCommand {
 	 * Remove IOS project folder
 	 */
 	public void removeIOS() {
-
-		if(!userHasConfirmed) {
+		if (!this.userHasConfirmed) {
 			String accept = Harmony.getUserInput("Are you sure to Delete Apple iOS Project? (y/n) ");
-			if(accept.contains("n")) {
-				return;
-			}
-			userHasConfirmed = true;
+			
+			if(accept.contains("n")) { return; }
+			
+			this.userHasConfirmed = true;
 		}
+		
 		try {
-			if(!new ProjectGenerator(this.adapterIOS).removeProject())
+			if (!new ProjectGenerator(this.adapterIOS).removeProject())
 				ConsoleUtils.display("Please check your file browser or file editor and try again...");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ConsoleUtils.displayError(e.getMessage());
 		}
 	}
 
@@ -264,20 +272,19 @@ public class ProjectCommand extends BaseCommand {
 	 * Remove RIM project folder
 	 */
 	public void removeRIM() {
-
-		if(!userHasConfirmed) {
+		if(!this.userHasConfirmed) {
 			String accept = Harmony.getUserInput("Are you sure to Delete BlackBerry Rim Project? (y/n) ");
-			if(accept.contains("n")) {
-				return;
-			}
-			userHasConfirmed = true;
+			
+			if(accept.contains("n")) { return; }
+			
+			this.userHasConfirmed = true;
 		}
+		
 		try {
-			if(!new ProjectGenerator(this.adapterRIM).removeProject())
+			if (!new ProjectGenerator(this.adapterRIM).removeProject())
 				ConsoleUtils.display("Please check your file browser or file editor and try again...");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ConsoleUtils.displayError(e.getMessage());
 		}
 	}
 
@@ -285,20 +292,19 @@ public class ProjectCommand extends BaseCommand {
 	 * Remove Windows Phone project folder
 	 */
 	public void removeWinPhone() {
-
-		if(!userHasConfirmed) {
+		if (!this.userHasConfirmed) {
 			String accept = Harmony.getUserInput("Are you sure to Delete Windows Phone Project? (y/n) ");
-			if(accept.contains("n")) {
-				return;
-			}
-			userHasConfirmed = true;
+			
+			if (accept.contains("n")) { return; }
+			
+			this.userHasConfirmed = true;
 		}
+		
 		try {
 			if(!new ProjectGenerator(this.adapterWinPhone).removeProject())
 				ConsoleUtils.display("Please check your file browser or file editor and try again...");
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ConsoleUtils.displayError(e.getMessage());
 		}
 	}
 
@@ -306,26 +312,25 @@ public class ProjectCommand extends BaseCommand {
 	 * Remove all project platforms
 	 */
 	public void removeAll() {
-
-		if(!userHasConfirmed) {
+		if(!this.userHasConfirmed) {
 			String accept = Harmony.getUserInput("Are you sure to Delete All Projects? (y/n) ");
-			if(accept.contains("n")) {
-				return;
-			}
-			userHasConfirmed = true;
+			
+			if(accept.contains("n")) { return; }
+			
+			this.userHasConfirmed = true;
 		}
+		
 		try {
-			if(	!new ProjectGenerator(this.adapterAndroid).removeProject() |
+			if (!new ProjectGenerator(this.adapterAndroid).removeProject() |
 				!new ProjectGenerator(this.adapterIOS).removeProject() |
 				!new ProjectGenerator(this.adapterRIM).removeProject() |
-				!new ProjectGenerator(this.adapterWinPhone).removeProject() ){
+				!new ProjectGenerator(this.adapterWinPhone).removeProject() ) {
 				ConsoleUtils.display("Please check your file browser or file editor and try again...");
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ConsoleUtils.displayError(e.getMessage());
 		} finally {
-			userHasConfirmed = false;
+			this.userHasConfirmed = false;
 		}
 	}
 
@@ -348,8 +353,8 @@ public class ProjectCommand extends BaseCommand {
 	/** @see BaseCommand#execute(String, String[], String) */
 	@Override
 	public void execute(String action, String[] args, String option) {
-
 		this.commandArgs = Console.parseCommandArgs(args);
+		
 		if (action.equals(INIT_ANDROID)) {
 			this.initAndroid();
 		} else
@@ -358,13 +363,13 @@ public class ProjectCommand extends BaseCommand {
 			this.initIOS();
 		} else
 
-		if (action.equals(INIT_RIM)) {
-			this.initRIM();
-		} else
+//		if (action.equals(INIT_RIM)) {
+//			this.initRIM();
+//		} else
 
-		if (action.equals(INIT_WINPHONE)) {
-			this.initWinPhone();
-		} else
+//		if (action.equals(INIT_WINPHONE)) {
+//			this.initWinPhone();
+//		} else
 
 		if (action.equals(INIT_ALL)) {
 			this.initAll();
@@ -378,13 +383,13 @@ public class ProjectCommand extends BaseCommand {
 			this.removeIOS();
 		} else
 
-		if (action.equals(REMOVE_RIM)) {
-			this.removeRIM();
-		} else
+//		if (action.equals(REMOVE_RIM)) {
+//			this.removeRIM();
+//		} else
 
-		if (action.equals(REMOVE_WINPHONE)) {
-			this.removeWinPhone();
-		} else
+//		if (action.equals(REMOVE_WINPHONE)) {
+//			this.removeWinPhone();
+//		} else
 
 		if (action.equals(REMOVE_ALL)) {
 			this.removeAll();
@@ -404,8 +409,8 @@ public class ProjectCommand extends BaseCommand {
 				command.equals(INIT_ALL) ||
 				command.equals(REMOVE_ANDROID) ||
 				command.equals(REMOVE_IOS) ||
-				command.equals(REMOVE_RIM) ||
-				command.equals(REMOVE_WINPHONE) ||
+				//command.equals(REMOVE_RIM) ||
+				//command.equals(REMOVE_WINPHONE) ||
 				command.equals(REMOVE_ALL)
 				);
 	}
