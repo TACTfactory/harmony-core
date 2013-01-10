@@ -33,7 +33,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	
 	public static DateTime formatStringToDateTime(String date, String time){
 		DateTime dt = formatStringToDate(date);
-		DateTime t = formatStringToDate(time);
+		DateTime t = formatStringToTime(time);
 		
 		dt = new DateTime(dt.getYear(),dt.getMonthOfYear(),dt.getDayOfMonth(),t.getHourOfDay(),t.getMinuteOfHour());
 		

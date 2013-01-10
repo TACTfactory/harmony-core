@@ -3,8 +3,6 @@ package ${controller_namespace};
 
 import ${namespace}.R;
 
-import org.joda.time.DateTime;
-
 import java.util.List;
 
 import android.content.Context;
@@ -13,9 +11,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
-import ${namespace}.harmony.util.DateUtils;
-import ${namespace}.entity.${name};
+<#assign importDate=false>
+<#list fields as field>
+	<#if field.type=="date" || field.type=="time" && !importDate>
+		<#assign importDate=true>
+	</#if>
+</#list>
+<#if importDate>
+import org.joda.time.DateTime;
 
+import ${namespace}.harmony.util.DateUtils;
+</#if>
+import ${namespace}.entity.${name};
 <#list relations as relation>
 	<#if !relation.internal && !relation.hidden>
 import ${namespace}.entity.${relation.relation.targetEntity};

@@ -76,6 +76,16 @@ public class ${name}ShowFragment extends Fragment {
 				<#if !field.relation??>
 		    			<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
 		if(this.model.get${field.name?cap_first}()!=null)
+							<#if field.type?lower_case=="datetime" || field.type=="date" || field.type=="time">
+								<#if field.type?lower_case=="datetime">
+			this.${field.name}View.setText(this.model.get${field.name?cap_first}().toString());
+								<#/if>
+								<#if field.type=="date">
+			this.${field.name}View.setText(DateUtils.formatDateToString(model.get"+field.name?cap_first+"()));
+								<#/if>
+								<#if field.type=="time">
+			this.${field.name}View.setText(DateUtils.formatTimeToString(model.get"+field.name?cap_first+"()));					
+								<#/if>
 			${m.setLoader(field)}
 					<#else>
 		${m.setLoader(field)}

@@ -22,11 +22,14 @@
 	<#if type=="boolean">
 		<#assign ret=ret+".setChecked(model.is"+field.name?cap_first+"());">
 	<#elseif type=="datetime" || type=="date" || type=="time">
-		<#if type=="datetime" || type=="date">
-		<#assign ret="this."+field.name+"DateView.setText(DateUtils.formatDateToString(model.get"+field.name?cap_first+"()));">
+		<#if type=="datetime">
+			<#assign ret=ret+".setText(model.get"+field.name?cap_first+"().toString());">
 		</#if>
-		<#if type=="datetime" || type=="time">
-		<#assign ret="this."+field.name+"TimeView.setText(DateUtils.formatTimeToString(model.get"+field.name?cap_first+"()));">
+		<#if type=="date">
+			<#assign ret=ret+".setText(DateUtils.formatDateToString(model.get"+field.name?cap_first+"()));">
+		</#if>
+		<#if type=="time">
+			<#assign ret=ret+".setText(DateUtils.formatTimeToString(model.get"+field.name?cap_first+"()));">
 		</#if>
 	<#else>
 		<#assign getter="model.get"+field.name?cap_first+"()">
