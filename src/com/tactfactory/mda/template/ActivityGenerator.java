@@ -427,7 +427,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * Update Widget
 	 */
 	protected void updateWidget(String widgetName) {
-		FileUtils.makeFolder(this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.","/")+"/harmony/widget/" );
+		FileUtils.makeFolder(this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.","/")+"/harmony/widget/" );
 		File dest = new File(String.format("%s/%s", this.adapter.getWidgetPath(), widgetName));
 		
 		if (!dest.exists())

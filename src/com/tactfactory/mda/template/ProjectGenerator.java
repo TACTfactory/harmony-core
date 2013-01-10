@@ -93,7 +93,7 @@ public class ProjectGenerator extends BaseGenerator {
 		FileUtils.makeFolder(this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.","/")+"/entity/" );
 		
 		// create util folder
-		FileUtils.makeFolder(this.adapter.getSourcePath() + this.metas.projectNameSpace.replaceAll("\\.","/")+"/harmony/util/" );
+		FileUtils.makeFolder(this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.","/")+"/harmony/util/" );
 		
 		// create libs folder
 		FileUtils.makeFolder(this.adapter.getLibsPath());
