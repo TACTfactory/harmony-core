@@ -28,6 +28,7 @@ import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.TranslationMetadata;
+import com.tactfactory.mda.orm.TranslationMetadata.Group;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
@@ -78,10 +79,12 @@ public class ActivityGenerator extends BaseGenerator {
 				
 				TranslationMetadata.addDefaultTranslation(
 						entityName.toLowerCase() + "_progress_save_title", 
-						entityName +" save progress");
+						entityName +" save progress",
+						Group.MODEL);
 				TranslationMetadata.addDefaultTranslation(
 						entityName.toLowerCase() + "_progress_save_message", 
-						entityName +" is saving to database&#8230;");
+						entityName +" is saving to database&#8230;",
+						Group.MODEL);
 			}
 	
 			this.generateShowAction(entityName);
@@ -90,6 +93,7 @@ public class ActivityGenerator extends BaseGenerator {
 			new TranslationGenerator(this.adapter).generateStringsXml();
 		} catch (Exception e) {
 			ConsoleUtils.displayError(e.getMessage());
+			e.printStackTrace();
 		}
 	}
 	
@@ -126,7 +130,8 @@ public class ActivityGenerator extends BaseGenerator {
 		
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase() + "_empty_list", 
-				entityName +" list is empty !");
+				entityName +" list is empty !",
+				Group.MODEL);
 	}
 
 	/** Show Action
@@ -192,7 +197,8 @@ public class ActivityGenerator extends BaseGenerator {
 		
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase() + "_error_edit", 
-				entityName +" edition error&#8230;");
+				entityName +" edition error&#8230;",
+				Group.MODEL);
 	}
 
 	/** Create Action
@@ -228,7 +234,8 @@ public class ActivityGenerator extends BaseGenerator {
 		
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase() + "_error_create", 
-				entityName +" creation error&#8230;");
+				entityName +" creation error&#8230;",
+				Group.MODEL);
 	}
 
 	/** Make Java Source Code
@@ -304,8 +311,8 @@ public class ActivityGenerator extends BaseGenerator {
 			SAXBuilder builder = new SAXBuilder();		// Make engine
 			File xmlFile = FileUtils.makeFile(this.adapter.getManifestPathFile());
 			Document doc = (Document) builder.build(xmlFile); 	// Load XML File
-			Element rootNode = doc.getRootElement(); 			// Load Root element
-			Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
+			final Element rootNode = doc.getRootElement(); 			// Load Root element
+			final Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
 
 			// Find Application Node
 			Element findActivity = null;
@@ -358,7 +365,7 @@ public class ActivityGenerator extends BaseGenerator {
 					}
 
 					
-					data += this.appMetas.projectNameSpace.replace('/', '.') + entityName;
+					data += this.appMetas.projectNameSpace.replace('/', '.') + "." + entityName;
 					filterActivity.getChild("action").setAttribute("name", "android.intent.action."+ action, ns);
 					filterActivity.getChild("category").setAttribute("name", "android.intent.category.DEFAULT", ns);
 					filterActivity.getChild("data").setAttribute("mimeType", data, ns);
@@ -366,7 +373,6 @@ public class ActivityGenerator extends BaseGenerator {
 				
 				// Clean code
 				applicationNode.sortChildren(new Comparator<Element>() {
-
 					@Override
 					public int compare(Element o1, Element o2) {
 						return (o1.getName().compareToIgnoreCase(o2.getName()));
