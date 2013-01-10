@@ -52,7 +52,7 @@ public class ActivityGenerator extends BaseGenerator {
 		
 		// Make entities
 		this.modelEntities = new ArrayList<Map<String, Object>>();
-		for (ClassMetadata meta : this.metas.entities.values()) {
+		for (ClassMetadata meta : this.appMetas.entities.values()) {
 			if(!meta.fields.isEmpty() && !meta.internal){
 				Map<String, Object> modelClass = meta.toMap(this.adapter);
 				meta.makeString("label");
@@ -96,7 +96,7 @@ public class ActivityGenerator extends BaseGenerator {
 		for(Map<String, Object> entity : this.modelEntities) {
 			//TODO : Examine code logic (wrong ?)
 			this.datamodel = (HashMap<String, Object>) entity;
-			this.localNameSpace = this.metas.projectNameSpace.replace('/', '.') +"."+ this.adapter.getController()+"."+((String)entity.get(TagConstant.NAME)).toLowerCase();
+			this.localNameSpace = this.appMetas.projectNameSpace.replace('/', '.') +"."+ this.adapter.getController()+"."+((String)entity.get(TagConstant.NAME)).toLowerCase();
 			this.generateAllAction((String)entity.get(TagConstant.NAME));
 		}
 	}
@@ -394,7 +394,7 @@ public class ActivityGenerator extends BaseGenerator {
 					}
 
 					
-					data += this.metas.projectNameSpace.replace('/', '.') + entityName;
+					data += this.appMetas.projectNameSpace.replace('/', '.') + entityName;
 					filterActivity.getChild("action").setAttribute("name", "android.intent.action."+ action, ns);
 					filterActivity.getChild("category").setAttribute("name", "android.intent.category.DEFAULT", ns);
 					filterActivity.getChild("data").setAttribute("mimeType", data, ns);

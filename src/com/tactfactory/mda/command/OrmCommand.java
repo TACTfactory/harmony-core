@@ -58,9 +58,9 @@ public class OrmCommand extends BaseCommand {
 	protected JavaModelParser javaModelParser;
 
 	protected void generateForm() {
-		/*ApplicationMetadata metas = this.getMetasFromAll();
-		if(metas!=null){
-			this.generateActivitiesForEntities(metas, true);
+		/*ApplicationMetadata appMetas = this.getMetasFromAll();
+		if(appMetas!=null){
+			this.generateActivitiesForEntities(appMetas, true);
 		}*/
 	}
 
@@ -68,12 +68,12 @@ public class OrmCommand extends BaseCommand {
 	 * Generate java code files from first parsed Entity
 	 */
 	protected void generateEntity() {
-		/*ApplicationMetadata metas = this.getMetasFromArg();
+		/*ApplicationMetadata appMetas = this.getMetasFromArg();
 		
-		if(metas!=null){
-			//this.generateActivitiesForEntities(metas, false);
-			this.makeLayoutDatabase(metas);
-			this.makeLayoutTestDatabase(metas);
+		if(appMetas!=null){
+			//this.generateActivitiesForEntities(appMetas, false);
+			this.makeLayoutDatabase(appMetas);
+			this.makeLayoutTestDatabase(appMetas);
 		}*/
 	
 	}
@@ -83,6 +83,7 @@ public class OrmCommand extends BaseCommand {
 	 */
 	protected void generateEntities() {
 		Harmony.metas.entities = this.getMetasFromAll();
+		
 		if(Harmony.metas.entities!=null){
 			this.makeLayoutDatabase();
 			this.makeLayoutTestDatabase();
@@ -95,6 +96,7 @@ public class OrmCommand extends BaseCommand {
 	 */
 	protected void generateCrud() {
 		Harmony.metas.entities = this.getMetasFromAll();
+		
 		if(Harmony.metas.entities != null){
 			this.makeLayoutUi(true);
 		}
@@ -112,7 +114,7 @@ public class OrmCommand extends BaseCommand {
 			new ProviderGenerator(this.adapter).generateProvider();
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			ConsoleUtils.displayError(e.getMessage());
 		}
 	}
 	
@@ -121,11 +123,10 @@ public class OrmCommand extends BaseCommand {
 	 */
 	protected void makeLayoutTestDatabase(){
 		try {
-			// Make
 			new TestGenerator(this.adapter).generateAll();
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			ConsoleUtils.displayError(e.getMessage());
 		}
 	}
 	
@@ -134,43 +135,17 @@ public class OrmCommand extends BaseCommand {
 	 */
 	protected void makeLayoutUi(boolean generateHome){
 		try {
-			// Make
-			if(generateHome)
+			if(generateHome) {
 				new ProjectGenerator(this.adapter).generateHomeActivity();
+			}
+				
 			new ActivityGenerator(this.adapter).generateAll();
 			
 		} catch (Exception e) {
-			e.printStackTrace();
+			ConsoleUtils.displayError(e.getMessage());
 		}
 	}
 
-//	/**
-//	 * Gets the Metadatas of the class which name is given in argument
-//	 * @return The metadata of the class given with the argument --filename
-//	 */
-//	private ArrayList<ClassMetadata> getMetasFromArg(){
-//		ArrayList<ClassMetadata> ret = null;
-//		if(this.commandArgs.size()!=0 && this.commandArgs.containsKey("filename")) {
-//			String entityPath = this.adapter.getSourcePath()
-//					+Harmony.projectNameSpace.replaceAll("\\.","/")
-//					+"/entity/" + this.commandArgs.get("filename"); //TODO factoring !
-//			File f = new File(entityPath);
-//			if(f.exists() && !f.isDirectory()) {
-//				this.javaModelParser.loadEntity(entityPath);
-//				if(this.javaModelParser.getEntities().size()!=0) {
-//					this.javaModelParser.parse(this.javaModelParser.getEntities().get(0));
-//					ret = this.javaModelParser.getMetas();
-//				}else{
-//					ConsoleUtils.displayWarning("Given entity filename is not an entity!");
-//				}
-//			}else{
-//				ConsoleUtils.displayWarning("Given entity file does not exist!");
-//			}
-//		}else{
-//			ConsoleUtils.displayWarning("No given filename! Specify a filename with --filename=\"Entity.java\"");
-//		}
-//		return ret;
-//	}
 	
 	public void parseProject(){
 		ApplicationMetadata am = new ApplicationMetadata(); 
@@ -184,7 +159,6 @@ public class OrmCommand extends BaseCommand {
 	 */
 	public LinkedHashMap<String, ClassMetadata> getMetasFromAll(){
 		LinkedHashMap<String, ClassMetadata> ret = null;
-		// Info Log
 		ConsoleUtils.display(">> Analyse Models...");
 
 		// Parse models and load entities into CompilationUnits
@@ -192,7 +166,7 @@ public class OrmCommand extends BaseCommand {
 			this.javaModelParser = new JavaModelParser();
 			this.javaModelParser.loadEntities();
 		} catch(Exception e) {
-			e.printStackTrace();
+			ConsoleUtils.displayError(e.getMessage());
 		}
 
 		// Convert CompilationUnits entities to ClassMetaData
@@ -232,27 +206,27 @@ public class OrmCommand extends BaseCommand {
 		ConsoleUtils.display("> ORM Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);
-		if (action.equals(GENERATE_ENTITY)) {
-			try {
+		
+		try {
+			if (action.equals(GENERATE_ENTITY)) {
 				this.generateEntity();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			} else
+	
+			if (action.equals(GENERATE_ENTITIES)) {
+				this.generateEntities();
+			} else
+	
+			if (action.equals(GENERATE_FORM)) {
+				this.generateForm();
+			} else
+	
+			if (action.equals(GENERATE_CRUD)) {
+				this.generateCrud();
+			} else {
+	
 			}
-		} else
-
-		if (action.equals(GENERATE_ENTITIES)) {
-			this.generateEntities();
-		} else
-
-		if (action.equals(GENERATE_FORM)) {
-			this.generateForm();
-		} else
-
-		if (action.equals(GENERATE_CRUD)) {
-			this.generateCrud();
-		} else {
-
+		} catch (Exception e) {
+			ConsoleUtils.displayError(e.getMessage());
 		}
 	}
 

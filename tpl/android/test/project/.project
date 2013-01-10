@@ -3,7 +3,7 @@
 	<name>${project_name}-test</name>
 	<comment></comment>
 	<projects>
-		<project>HomeActivity</project>
+		<project>${project_name}</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

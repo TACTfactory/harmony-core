@@ -34,7 +34,7 @@ public class RestGenerator extends BaseGenerator {
 	}
 	
 	protected void makeSource(String templateName, String fileName, boolean override) {
-		String fullFilePath = this.adapter.getSourcePath() + this.metas.projectNameSpace + "/" + this.adapter.getData() + "/" + fileName;
+		String fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + this.adapter.getData() + "/" + fileName;
 		String fullTemplatePath = this.adapter.getTemplateSourceProviderPath().substring(1) + templateName;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);

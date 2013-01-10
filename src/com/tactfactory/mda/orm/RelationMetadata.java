@@ -10,12 +10,12 @@ package com.tactfactory.mda.orm;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
+import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
 /** Entity relation Metadata*/
-public class RelationMetadata {
+public class RelationMetadata extends BaseMetadata {
 
 	/** The type of relation */
 	public String type;
@@ -28,9 +28,6 @@ public class RelationMetadata {
 	
 	/** The related entity's field which will be used for the relation*/
 	public ArrayList<String> field_ref = new ArrayList<String>();
-
-	/** The Foreign Key name*/
-	public String name;
 
 	/** Inversed by (in case of OneToMany)*/
 	public String mappedBy;
@@ -45,7 +42,8 @@ public class RelationMetadata {
 	 * Transform the relation to a field of map of strings
 	 * @return
 	 */
-	public Map<String, Object> toMap(){
+	@Override
+	public HashMap<String, Object> toMap(BaseAdapter adapter){
 		HashMap<String, Object> model = new HashMap<String, Object>();
 		model.put(TagConstant.NAME, this.name);
 		model.put(TagConstant.TYPE, this.type);

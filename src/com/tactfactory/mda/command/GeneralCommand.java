@@ -67,8 +67,7 @@ public class GeneralCommand extends BaseCommand {
 	@Override
 	public boolean isAvailableCommand(String command) {
 		return (command.equals(LIST) ||
-				command.equals(HELP)
-				);
+				command.equals(HELP) );
 	}
 
 }
