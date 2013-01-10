@@ -25,6 +25,9 @@ public class ApplicationMetadata extends BaseMetadata {
 	
 	/** List of string use in application */
 	public TreeMap<String, TranslationMetadata> translates = new TreeMap<String, TranslationMetadata>();
+
+	/** List of config use in application */
+	public TreeMap<String, ConfigMetadata> configs = new TreeMap<String, ConfigMetadata>();
 	
 	/**
 	 * Transform the application to a map of strings and maps (for each field) given an adapter

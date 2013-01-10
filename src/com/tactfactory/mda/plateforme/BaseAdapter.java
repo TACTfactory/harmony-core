@@ -158,6 +158,16 @@ public abstract class BaseAdapter {
 											this.getResource(), this.getValues(), this.getStrings() );
 	}
 	
+	public final String getConfigsPathFile() {
+		return String.format("%s/%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(),
+											this.getResource(), this.getValues(), this.getConfigs() );
+	}
+
+	public final String getTemplateConfigsPathFile() {
+		return String.format("%s/%s/%s/%s/%s", Harmony.pathTemplate, this.getPlatform(),
+											this.getResource(), this.getValues(), this.getConfigs() );
+	}
+	
 	public final String getTemplateTestsPath() {
 		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getTest() );
 	}
@@ -379,7 +389,14 @@ public abstract class BaseAdapter {
 	 * @return the strings.xml
 	 */
 	public final String getStrings() {
-		return strings;
+		return this.strings;
+	}
+	
+	/**
+	 * @return the configs.xml
+	 */
+	private Object getConfigs() {
+		return this.configs;
 	}
 
 	/**
