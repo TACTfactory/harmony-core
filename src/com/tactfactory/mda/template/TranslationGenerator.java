@@ -3,6 +3,7 @@ package com.tactfactory.mda.template;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
@@ -40,7 +41,7 @@ public class TranslationGenerator extends BaseGenerator {
 			File xmlFile = FileUtils.makeFile(this.adapter.getStringsPathFile() );
 			Document doc = (Document) builder.build(xmlFile); 	// Load XML File
 			Element rootNode = doc.getRootElement(); 			// Load Root element
-			Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
+			final Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
 
 			for (TranslationMetadata translationMeta : this.appMetas.translates.values()) {
 				findTranslation = null;
@@ -70,6 +71,25 @@ public class TranslationGenerator extends BaseGenerator {
 					translationMeta.i18n.put(Locale.getDefault(), findTranslation.getText());
 				}
 			}
+			
+			// Clean code
+			rootNode.sortChildren(new Comparator<Element>() {
+
+				@Override
+				public int compare(Element o1, Element o2) {
+					String metaName1 = o1.getAttributeValue("name", ns);
+					String metaName2 = o2.getAttributeValue("name", ns);
+					TranslationMetadata meta1 = TranslationGenerator.this.appMetas.translates.get(metaName1);
+					TranslationMetadata meta2 = TranslationGenerator.this.appMetas.translates.get(metaName2);
+					
+					if (meta1 != null && meta2 != null) {
+						int groupScore = meta1.group.getValue() - meta2.group.getValue();
+						if (groupScore != 0) return groupScore;
+					}
+					
+					return metaName1.compareToIgnoreCase(metaName2);
+				}
+			});
 			
 			// Write to File
 			XMLOutputter xmlOutput = new XMLOutputter();

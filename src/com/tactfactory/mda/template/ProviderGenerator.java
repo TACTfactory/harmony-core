@@ -26,6 +26,7 @@ import org.jdom2.output.XMLOutputter;
 import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.orm.TranslationMetadata;
+import com.tactfactory.mda.orm.TranslationMetadata.Group;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
@@ -50,10 +51,20 @@ public class ProviderGenerator extends BaseGenerator {
 			
 			this.updateManifest(this.nameProvider);
 			
-			TranslationMetadata.addDefaultTranslation("uri_not_supported", "URI not supported");
-			TranslationMetadata.addDefaultTranslation("app_provider_name", "Provider of " + this.appMetas.name);
-			TranslationMetadata.addDefaultTranslation("app_provider_description", "Provider of " + this.appMetas.name + " for acces to data");
+			TranslationMetadata.addDefaultTranslation(
+					"uri_not_supported", 
+					"URI not supported", 
+					Group.PROVIDER);
+			TranslationMetadata.addDefaultTranslation(
+					"app_provider_name", 
+					"Provider of " + this.appMetas.name, 
+					Group.PROVIDER);
+			TranslationMetadata.addDefaultTranslation(
+					"app_provider_description", 
+					"Provider of " + this.appMetas.name + " for acces to data", 
+					Group.PROVIDER);
 			
+			new TranslationGenerator(this.adapter).generateStringsXml();
 		} catch (Exception e) {
 			ConsoleUtils.displayError(e.getMessage());
 		}

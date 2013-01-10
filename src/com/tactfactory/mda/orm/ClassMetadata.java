@@ -15,6 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.tactfactory.mda.Harmony;
+import com.tactfactory.mda.orm.TranslationMetadata.Group;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
@@ -50,7 +51,7 @@ public class ClassMetadata extends BaseMetadata {
 	/** Add Component String of field */
 	public void makeString(String componentName) {
 		String key = name.toLowerCase() + "_"+ componentName.toLowerCase();
-		TranslationMetadata.addDefaultTranslation(key, name);
+		TranslationMetadata.addDefaultTranslation(key, name, Group.MODEL);
 	}
 	
 	/**

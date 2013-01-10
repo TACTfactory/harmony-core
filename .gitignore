@@ -9,6 +9,7 @@
 .project
 !/tpl/android/project/.project
 !/tpl/android/project/.classpath
+!/tpl/android/project/local.properties
 !/tpl/android/test/project/.project
 !/tpl/android/test/project/.classpath
 local.properties

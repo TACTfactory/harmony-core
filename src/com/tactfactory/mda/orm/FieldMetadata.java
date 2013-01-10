@@ -10,6 +10,7 @@ package com.tactfactory.mda.orm;
 
 import java.util.HashMap;
 
+import com.tactfactory.mda.orm.TranslationMetadata.Group;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.plateforme.SqliteAdapter;
 import com.tactfactory.mda.template.TagConstant;
@@ -64,7 +65,7 @@ public class FieldMetadata extends BaseMetadata {
 	/** Add Component String of field */
 	public void makeString(String componentName) {
 		String key = owner.name.toLowerCase() + "_" + name.toLowerCase() + "_"+ componentName.toLowerCase();;
-		TranslationMetadata.addDefaultTranslation(key, name);
+		TranslationMetadata.addDefaultTranslation(key, name, Group.MODEL);
 	}
 	
 	/**
