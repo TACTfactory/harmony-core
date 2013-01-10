@@ -38,6 +38,17 @@ public class CustomDatePickerDialog extends AlertDialog {
 		
 		this.initializeDatePickerDialog(context, date, title, null, null);
 	}
+	
+	/**
+	 * @param context
+	 * @param date
+	 * @param title
+	 */
+	public CustomDatePickerDialog(Context context, DateTime date, int idTitle) {
+		super(context);
+		
+		this.initializeDatePickerDialog(context, date, context.getString(idTitle), null, null);
+	}
 
 	/**
 	 * @param context

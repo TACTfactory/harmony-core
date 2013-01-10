@@ -114,7 +114,7 @@ public class ${name}EditFragment extends Fragment implements OnClickListener {
 					dt = DateUtils.formatStringToDate(strInputDate);
 				}
 				
-			    CustomDatePickerDialog ${field.name}Dpd = new CustomDatePickerDialog(getActivity(), dt, "Select ${field.name} date");
+			    CustomDatePickerDialog ${field.name}Dpd = new CustomDatePickerDialog(getActivity(), dt, R.string.${name?lower_case}_${field.name?lower_case}_date_title);
 			    ${field.name}Dpd.setPositiveButton(getActivity().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
 					
 					@Override
@@ -141,7 +141,7 @@ public class ${name}EditFragment extends Fragment implements OnClickListener {
 				}
 				
 			    CustomTimePickerDialog ${field.name}Tpd = new CustomTimePickerDialog(getActivity(), dt, 
-			    		android.text.format.DateFormat.is24HourFormat(getActivity()), "Select ${field.name} time");
+			    		android.text.format.DateFormat.is24HourFormat(getActivity()), R.string.${name?lower_case}_${field.name?lower_case}_time_title);
 			    ${field.name}Tpd.setPositiveButton(getActivity().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
 					
 					@Override

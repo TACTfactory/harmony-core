@@ -9,7 +9,6 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -36,6 +35,8 @@ import java.util.ArrayList;
 </#list>
 <#if importDate || importTime>
 import org.joda.time.DateTime;
+
+import com.tactfactory.mda.test.demact.view.user.UserCreateFragment;
 
 	<#if importDate>
 import ${namespace}.harmony.widget.CustomDatePickerDialog;
@@ -109,12 +110,13 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 			public void onClick(View v){
 		        DateTime dt = new DateTime();
 		        
-				if (!TextUtils.isEmpty(${name}CreateFragment.this.${field.name}DateView.getText())){
-					String strInputDate = ${name}CreateFragment.this.${field.name}DateView.getText().toString();
+		        String ${field.name}Date = ${name}CreateFragment.this.${field.name}DateView.getText().toString();
+				if (!TextUtils.isEmpty(${field.name}Date)) {
+					String strInputDate = ${field.name}Date;
 					dt = DateUtils.formatStringToDate(strInputDate);
 				}
 				
-			    CustomDatePickerDialog ${field.name}Dpd = new CustomDatePickerDialog(getActivity(), dt, "Select ${field.name} date");
+			    CustomDatePickerDialog ${field.name}Dpd = new CustomDatePickerDialog(getActivity(), dt, R.string.${name?lower_case}_${field.name?lower_case}_date_title);
 			    ${field.name}Dpd.setPositiveButton(getActivity().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
 					
 					@Override
@@ -135,13 +137,14 @@ public class ${name}CreateFragment extends Fragment implements OnClickListener {
 			public void onClick(View v){
 				DateTime dt = new DateTime(); 
 		        
-				if (!TextUtils.isEmpty(${name}CreateFragment.this.${field.name}TimeView.getText())){
-					String strInputDate = ${name}CreateFragment.this.${field.name}TimeView.getText().toString();
-					dt = DateUtils.formatStringToTime(strInputDate);
+				String ${field.name}Time = ${name}CreateFragment.this.${field.name}TimeView.getText().toString();
+				if (!TextUtils.isEmpty(${field.name}Time)) {
+					String strInputTime = ${field.name}Time;
+					dt = DateUtils.formatStringToDate(strInputTime);
 				}
 				
 			    CustomTimePickerDialog ${field.name}Tpd = new CustomTimePickerDialog(getActivity(), dt, 
-			    		android.text.format.DateFormat.is24HourFormat(getActivity()), "Select ${field.name} time");
+			    		android.text.format.DateFormat.is24HourFormat(getActivity()), R.string.${name?lower_case}_${field.name?lower_case}_time_title);
 			    ${field.name}Tpd.setPositiveButton(getActivity().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
 					
 					@Override

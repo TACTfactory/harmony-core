@@ -8,8 +8,10 @@
  */
 package com.tactfactory.mda.orm;
 
+import java.security.acl.Group;
 import java.util.HashMap;
 
+import com.tactfactory.mda.orm.annotation.Column.Type;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.plateforme.SqliteAdapter;
 import com.tactfactory.mda.template.TagConstant;
@@ -63,8 +65,30 @@ public class FieldMetadata extends BaseMetadata {
 	
 	/** Add Component String of field */
 	public void makeString(String componentName) {
-		String key = owner.name.toLowerCase() + "_" + name.toLowerCase() + "_"+ componentName.toLowerCase();;
-		TranslationMetadata.addDefaultTranslation(key, name);
+		String key = owner.name.toLowerCase() + "_" + name.toLowerCase();
+		boolean isDate = (this.type == Type.DATE.getValue());
+		boolean isTime = (this.type == Type.TIME.getValue());
+		boolean isDateTime = (this.type.toLowerCase() == Type.DATETIME.getValue());
+		
+		if (isDate || isDateTime || isTime) {
+			if (isDate || isDateTime) {
+				TranslationMetadata.addDefaultTranslation(
+						key + "_date_title",
+						"Select "+ this.name +" date"); //, Group.MODEL);
+			} 
+			
+			if (isTime || isDateTime) {
+				TranslationMetadata.addDefaultTranslation(
+						key + "_date_title",
+						"Select "+ this.name +" time"); //, Group.MODEL);
+			} 
+			
+			
+		} else {
+			TranslationMetadata.addDefaultTranslation(
+					key + "_"+ componentName.toLowerCase(),
+					name); //, Group.MODEL);
+		}
 	}
 	
 	/**

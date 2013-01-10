@@ -35,6 +35,17 @@ public class CustomTimePickerDialog extends AlertDialog {
 		this.initializeTimePickerDialog(context, date, is24HourView, title);
 	}
 	
+	/**
+	 * @param context
+	 * @param date
+	 * @param title
+	 */
+	public CustomTimePickerDialog(Context context, DateTime date, boolean is24HourView, int idTitle) {
+		super(context);
+		
+		this.initializeTimePickerDialog(context, date, is24HourView, context.getString(idTitle));
+	}
+	
 	private void initializeTimePickerDialog(Context context, DateTime date, boolean is24HourView, String title) {
 		this.ctx = context;
 		this.title = title;
