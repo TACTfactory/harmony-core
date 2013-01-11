@@ -258,7 +258,7 @@ public class JavaModelParser {
 				// General (required !)
 				FieldMetadata fieldMeta = new FieldMetadata(meta);
 				
-				fieldMeta.type = field.getType().toString();
+				fieldMeta.type = Type.toTypeString(field.getType().toString());
 				
 				//fieldMeta.isFinal = ModifierSet.isFinal(field.getModifiers());
 				fieldMeta.name = field.getVariables().get(0).getId().getName(); // FIXME not manage multi-variable
@@ -267,14 +267,15 @@ public class JavaModelParser {
 				// Set defaults values
 				fieldMeta.hidden = false;
 				
-				Type type = null;
-				if (type == null) {
-					fieldMeta.nullable = false;
-					fieldMeta.unique = false; 
-				} //else { // TODO use type default value
-					//fieldMeta.nullable 	= type.getNullable();
-					//fieldMeta.unique	= type.getUnique();
-				//}
+				// Set default values for type if type is recognized
+				Type type = Type.fromName(fieldMeta.type);
+				if (type != null) {
+					fieldMeta.nullable = type.isNullable();
+					fieldMeta.unique = type.isUnique();
+					fieldMeta.length = type.getLength();
+					fieldMeta.precision = type.getPrecision();
+					fieldMeta.scale = type.getScale();					
+				}
 				
 				// Database definitions
 				RelationMetadata rel = new RelationMetadata();

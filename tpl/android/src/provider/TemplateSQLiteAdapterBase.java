@@ -90,7 +90,7 @@ public abstract class ${curr.name}SQLiteAdapterBase{
 	</#if>
 </#list>
 		${lastLine}<#if hasRelationOrIds()>,</#if>"
-<#if relations??>
+<#if curr.relations??>
 	<#list curr.relations as relation>
 		<#if lastRelation??>${lastRelation},"</#if>
 		<#if (relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne")>

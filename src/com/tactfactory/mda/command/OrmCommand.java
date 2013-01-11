@@ -55,7 +55,6 @@ public class OrmCommand extends BaseCommand {
 
 	//internal
 	protected BaseAdapter adapter = new AndroidAdapter();
-	protected JavaModelParser javaModelParser;
 
 	protected void generateForm() {
 		/*ApplicationMetadata appMetas = this.getMetasFromAll();
@@ -82,7 +81,7 @@ public class OrmCommand extends BaseCommand {
 	 * Generate java code files from parsed Entities
 	 */
 	protected void generateEntities() {
-		Harmony.metas.entities = this.getMetasFromAll();
+		this.generateMetas();
 		
 		if(Harmony.metas.entities!=null){
 			this.makeLayoutDatabase();
@@ -95,8 +94,7 @@ public class OrmCommand extends BaseCommand {
 	 * Generate Create,Read,Upload,Delete code functions
 	 */
 	protected void generateCrud() {
-		Harmony.metas.entities = this.getMetasFromAll();
-		
+		this.generateMetas();
 		if(Harmony.metas.entities != null){
 			this.makeLayoutUi(true);
 		}
@@ -146,51 +144,8 @@ public class OrmCommand extends BaseCommand {
 		}
 	}
 
-	
-	public void parseProject(){
-		ApplicationMetadata am = new ApplicationMetadata(); 
-		am.entities = getMetasFromAll();
-		Harmony.metas = am;
-	}
 		
-	/**
-	 * Gets the Metadatas of all the entities actually in the package entity
-	 * @return The metadatas of the application
-	 */
-	public LinkedHashMap<String, ClassMetadata> getMetasFromAll(){
-		LinkedHashMap<String, ClassMetadata> ret = null;
-		ConsoleUtils.display(">> Analyse Models...");
-
-		// Parse models and load entities into CompilationUnits
-		try {
-			this.javaModelParser = new JavaModelParser();
-			this.javaModelParser.loadEntities();
-		} catch(Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
-		}
-
-		// Convert CompilationUnits entities to ClassMetaData
-		if (this.javaModelParser.getEntities().size() > 0) {
-			for (CompilationUnit mclass : this.javaModelParser.getEntities()) {
-				this.javaModelParser.parse(mclass);
-			}
 	
-			// Generate views from MetaData 
-			if (this.javaModelParser.getMetas().size() > 0) {
-				ret = new LinkedHashMap<String, ClassMetadata>();
-				
-				for (ClassMetadata meta : this.javaModelParser.getMetas()) {
-					ret.put(meta.name, meta);
-				}
-				
-				new ClassCompletor(ret).execute();
-			}
-		} else {
-			ConsoleUtils.displayWarning("No entities found in entity package!");
-		}
-		
-		return ret;
-	}
 	
 	@Override
 	public void summary() {
