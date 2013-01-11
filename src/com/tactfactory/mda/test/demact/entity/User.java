@@ -12,9 +12,11 @@ import org.joda.time.DateTime;
 
 import com.tactfactory.mda.orm.annotation.*;
 import com.tactfactory.mda.orm.annotation.Column.Type;
+import com.tactfactory.mda.rest.annotation.Rest;
 
 @Table
 @Entity
+@Rest(security=Rest.Security.SESSION, uri="user-uri")
 public class User extends Object implements Cloneable {
 	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 7032873279928549706L;
