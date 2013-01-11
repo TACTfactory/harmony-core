@@ -25,7 +25,6 @@
 
 package ${data_namespace};
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import org.joda.time.DateTime;
 
@@ -46,6 +45,7 @@ import ${curr.namespace}.entity.${curr.name};
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
 	</#if>
 </#list>
+import ${curr.namespace}.harmony.util.DateUtils;
 
 /** ${curr.name} adapter database abstract class <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
@@ -53,7 +53,6 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
  */
 public abstract class ${curr.name}SQLiteAdapterBase{
 	private static final String TAG = "${curr.name}DatabaseAdapter";
-	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	
 	/** Table name of SQLite database */
 	public static final String TABLE_NAME = "${curr.name}";
@@ -188,11 +187,12 @@ public abstract class ${curr.name}SQLiteAdapterBase{
 			<#if !field.relation??>
 				<#if (field.type == "date" || field.type == "datetime" || field.type = "time" )>
 				
-			result.set${field.name?cap_first}(new DateTime());
 			try {
-				result.set${field.name?cap_first}(new DateTime(dateFormat.parse(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case})) )));
+				result.set${field.name?cap_first}(new DateTime(
+						DateUtils.formatISOStringToDateTime(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case})) )));
 			} catch (Exception e) {
 				e.printStackTrace();
+				result.set${field.name?cap_first}(new DateTime());
 			}
 
 				<#elseif (field.type == "boolean" )>
