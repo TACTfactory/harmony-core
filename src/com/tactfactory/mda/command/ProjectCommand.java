@@ -20,6 +20,7 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.plateforme.IosAdapter;
 import com.tactfactory.mda.plateforme.RimAdapter;
 import com.tactfactory.mda.plateforme.WinphoneAdapter;
+import com.tactfactory.mda.template.ApplicationGenerator;
 import com.tactfactory.mda.template.ProjectGenerator;
 
 /**
@@ -132,6 +133,7 @@ public class ProjectCommand extends BaseCommand {
 			if(new ProjectGenerator(this.adapterAndroid).makeProject()) {
 				ConsoleUtils.displayDebug("Init Android Project Success!");
 				
+				new ApplicationGenerator(this.adapterAndroid).generateApplication();
 				result = true;
 			} else {
 				ConsoleUtils.displayError("Init Android Project Fail!");

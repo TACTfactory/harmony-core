@@ -64,6 +64,12 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
 	</#if>
 </#list>
 
+/**
+ * 
+ * b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
+ * You should edit ${curr.name}WebServiceClientAdapter class instead of this one or you will lose all your modifications.</i></b>
+ *
+ */
 public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAdapterBase{
 	private static final String TAG = "${curr.name}WebServiceClientAdapterBase";
 	private static String REST_FORMAT = ".json"; //JSon RSS xml or empty (for html)
