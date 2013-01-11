@@ -339,7 +339,7 @@ public class ProjectCommand extends BaseCommand {
 	/** @see BaseCommand#summary() */
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> Project\n"+
+		ConsoleUtils.display("\n> PROJECT \n" +
 				"\t"+INIT_ANDROID+"\t => Init Android project directory\n" +
 				"\t"+INIT_IOS+"\t => Init Apple IOS project directory\n" +
 				"\t"+INIT_RIM+"\t => Init BlackBerry project directory\n" +
