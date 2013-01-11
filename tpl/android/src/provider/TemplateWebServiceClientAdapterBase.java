@@ -51,7 +51,6 @@ import ${data_namespace}.RestClient.Verb;
 import org.json.*;
 
 import java.util.List;
-import java.util.ArrayList;
 
 import android.util.Log;
 import android.content.Context;
@@ -65,9 +64,14 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
 	</#if>
 </#list>
 
+/**
+ * 
+ * b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
+ * You should edit ${curr.name}WebServiceClientAdapter class instead of this one or you will lose all your modifications.</i></b>
+ *
+ */
 public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAdapterBase{
 	private static final String TAG = "${curr.name}WebServiceClientAdapterBase";
-	private String host = "TOTO";
 	private static String REST_FORMAT = ".json"; //JSon RSS xml or empty (for html)
 
 	private static final String ${alias(curr.name)} = "${curr.name}";
