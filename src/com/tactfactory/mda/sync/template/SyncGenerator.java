@@ -1,7 +1,6 @@
 package com.tactfactory.mda.sync.template;
 
 import com.google.common.base.CaseFormat;
-import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.BaseGenerator;
 

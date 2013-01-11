@@ -43,10 +43,8 @@ public class RestCommand extends BaseCommand{
 	 * Generate java code files from parsed Entities
 	 */
 	protected void generateAdapters() {
-		//Harmony.metas.entities = getMetasFromAll();
-		this.registerParser(new RestParser());
+
 		this.generateMetas();
-		new RestCompletor().generateApplicationRestMetadata(Harmony.metas);
 		if(Harmony.metas.entities!=null){
 			try {
 				new RestGenerator(new AndroidAdapter()).generateAll();
@@ -55,6 +53,13 @@ public class RestCommand extends BaseCommand{
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	@Override
+	public void generateMetas(){
+		this.registerParser(new RestParser());
+		super.generateMetas();
+		new RestCompletor().generateApplicationRestMetadata(Harmony.metas);
 	}
 	
 	

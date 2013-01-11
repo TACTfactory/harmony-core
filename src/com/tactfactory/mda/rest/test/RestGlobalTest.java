@@ -17,6 +17,7 @@ import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.rest.annotation.Rest;
 import com.tactfactory.mda.rest.command.RestCommand;
 import com.tactfactory.mda.rest.meta.RestMetadata;
+import com.tactfactory.mda.rest.parser.RestCompletor;
 import com.tactfactory.mda.test.CommonTest;
 
 public class RestGlobalTest extends CommonTest{
@@ -54,6 +55,7 @@ public class RestGlobalTest extends CommonTest{
 		
 		RestCommand command = (RestCommand) Harmony.instance.getCommand(RestCommand.class);
 		command.generateMetas();
+		
 		
 		this.isCommentRest();
 		this.isPostRest();
