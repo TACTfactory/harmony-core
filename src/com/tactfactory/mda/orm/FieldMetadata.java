@@ -86,12 +86,12 @@ public class FieldMetadata extends BaseMetadata {
 						String.format(formatTitle , this.name, Type.TIME.getValue()), 
 						Group.MODEL);
 			} 
-		} else {
-			TranslationMetadata.addDefaultTranslation(
+		} 
+		
+		TranslationMetadata.addDefaultTranslation(
 					key + "_"+ componentName.toLowerCase(),
 					name, 
 					Group.MODEL);
-		}
 	}
 	
 	/**
