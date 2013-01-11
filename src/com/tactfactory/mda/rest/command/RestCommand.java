@@ -49,7 +49,9 @@ public class RestCommand extends BaseCommand{
 	 */
 	protected void generateAdapters() {
 		//Harmony.metas.entities = getMetasFromAll();
-		generateMetas();
+		javaModelParser.registerParser(new RestParser());
+		this.generateMetas();
+		new RestCompletor().generateApplicationRestMetadata(Harmony.metas);
 		if(Harmony.metas.entities!=null){
 			try {
 				new RestGenerator(new AndroidAdapter()).generateAll();
@@ -57,38 +59,6 @@ public class RestCommand extends BaseCommand{
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}
-
-	}
-	
-	public void generateMetas(){
-		// Info Log
-		ConsoleUtils.display(">> Analyse Models...");
-		
-		// Parse models and load entities into CompilationUnits
-		try {
-			JavaModelParser javaModelParser = new JavaModelParser();
-			javaModelParser.registerParser(new RestParser());
-			javaModelParser.loadEntities();
-
-			// Convert CompilationUnits entities to ClassMetaData
-			if (javaModelParser.getEntities().size() > 0) {
-				for (CompilationUnit mclass : javaModelParser.getEntities()) {
-					javaModelParser.parse(mclass);
-				}
-				
-				// Generate views from MetaData
-				if (javaModelParser.getMetas().size() > 0) {
-					for (ClassMetadata meta : javaModelParser.getMetas()) {
-						Harmony.metas.entities.put(meta.name, meta);
-					}
-					new ClassCompletor(Harmony.metas.entities).execute();
-					new RestCompletor().generateApplicationRestMetadata(Harmony.metas);
-				}
-			}
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 	}
 	
