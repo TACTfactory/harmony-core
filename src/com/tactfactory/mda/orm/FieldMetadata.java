@@ -66,8 +66,8 @@ public class FieldMetadata extends BaseMetadata {
 	/** Add Component String of field */
 	public void makeString(String componentName) {
 		String key = owner.name.toLowerCase() + "_" + name.toLowerCase();
-		boolean isDate = (this.type == Type.DATE.getValue());
-		boolean isTime = (this.type == Type.TIME.getValue());
+		boolean isDate = (this.type.equals(Type.DATE.getValue()));
+		boolean isTime = (this.type.equals(Type.TIME.getValue()));
 		boolean isDateTime = (this.type.toLowerCase() == Type.DATETIME.getValue());
 		
 		if (isDate || isDateTime || isTime) {

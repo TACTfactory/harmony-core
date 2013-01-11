@@ -53,18 +53,18 @@ public class ActivityGenerator extends BaseGenerator {
 		for (ClassMetadata meta : this.appMetas.entities.values()) {
 			if(!meta.fields.isEmpty() && !meta.internal) {
 				// copy Widget
-				if (!(this.isDate && this.isTime)) {
+				if (!this.isDate || !this.isTime) {
 					for (FieldMetadata field : meta.fields.values()) {
 						String type = field.type.toLowerCase();
-						if ((type == Type.DATE.getValue() || 
-								type == Type.DATETIME.getValue()) &&
-								!this.isDate) {
+						if (!this.isDate && (
+								type.equals(Type.DATE.getValue()) || 
+								type.equals(Type.DATETIME.getValue()))) {
 							this.isDate = true;
 						}
 						
-						if ((type == Type.TIME.getValue() || 
-								type == Type.DATETIME.getValue()) &&
-								!this.isTime) {
+						if (!this.isTime && (
+								type.equals(Type.TIME.getValue()) || 
+								type.equals(Type.DATETIME.getValue()))) {
 							this.isTime = true;
 						}
 					}
