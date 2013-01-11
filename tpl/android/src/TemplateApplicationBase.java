@@ -1,23 +1,26 @@
 package ${project_namespace};
 
-import ${project_namespace}.lib.R;
+import ${project_namespace}.R;
 
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 
-/** Common all life data/service
+/** 
+ * Common all life data/service
+ * 
+ * b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
+ * You should edit ${project_name?cap_first}Application class instead of this one or you will lose all your modifications.</i></b>
  * 
  */
-public class ApplicationBase extends Application {
-	private final static String TAG = "ApplicationBase";
-	private volatile static ApplicationBase singleton;
+public abstract class ${project_name?cap_first}ApplicationBase extends Application {
+	private final static String TAG = "${project_name?cap_first}";
+	private volatile static ${project_name?cap_first}ApplicationBase singleton;
 	
 	/** Called when the application is first created. */
 	@Override
@@ -29,8 +32,8 @@ public class ApplicationBase extends Application {
 		deviceID = getUDID(this);
 		
 		// Manage unmanaged error of application
-		Thread.setDefaultUncaughtExceptionHandler(
-				new ApplicationCrashHandler(super.getApplicationContext()));
+		//Thread.setDefaultUncaughtExceptionHandler(
+		//		new ApplicationCrashHandler(super.getApplicationContext()));
 	}
 
 	/**
@@ -81,10 +84,10 @@ public class ApplicationBase extends Application {
 	 */
 	public static String getVersion(Context ctx) {
 		SharedPreferences settings = ctx.getSharedPreferences(
-				ApplicationBase.PREFS_PUBL, Context.MODE_WORLD_READABLE);
+				${project_name?cap_first}ApplicationBase.PREFS_PUBL, Context.MODE_WORLD_READABLE);
 		
 		return settings.getString(
-				ApplicationBase.PREFS_VERS, "");
+				${project_name?cap_first}ApplicationBase.PREFS_VERS, "");
 	}
 	/** Check if is a new version of Application
 	 * 
@@ -103,11 +106,11 @@ public class ApplicationBase extends Application {
 	 */
 	public static void setVersion(Context ctx) {
 		SharedPreferences settings = ctx.getSharedPreferences(
-				ApplicationBase.PREFS_PUBL, Context.MODE_WORLD_READABLE);
+				${project_name?cap_first}ApplicationBase.PREFS_PUBL, Context.MODE_WORLD_READABLE);
 		
 		String currentVersion = ctx.getString(R.string.app_version);
 	    SharedPreferences.Editor editor = settings.edit();
-	    editor.putString(ApplicationBase.PREFS_VERS, currentVersion);
+	    editor.putString(${project_name?cap_first}ApplicationBase.PREFS_VERS, currentVersion);
 		
 	    // Commit the edits!
 	    editor.commit();

@@ -21,6 +21,9 @@ public abstract class BaseAdapter {
 	protected String source;
 	protected String libs;
 	protected String test;
+	protected String harmony;
+	protected String widget;
+	protected String util;
 
 	// MVC
 	protected String model		= "entity";
@@ -92,6 +95,24 @@ public abstract class BaseAdapter {
 		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getSource() );
 	}
 	
+	public final String getWidgetPath() {
+		return String.format("%s/%s/%s/%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getSource(), 
+				Harmony.metas.projectNameSpace, this.getHarmony(), this.getWidget() );
+	}
+	
+	public final String getUtilPath() {
+		return String.format("%s/%s/%s/%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getSource(), 
+				Harmony.metas.projectNameSpace, this.getHarmony(), this.getUtil() );
+	}
+	
+	public final String getTemplateWidgetPath() {
+		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getWidget() );
+	}
+	
+	public final String getTemplateUtilPath() {
+		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getUtil() );
+	}	
+	
 	public final String getTemplateSourcePath() {
 		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource() );
 	}
@@ -160,6 +181,16 @@ public abstract class BaseAdapter {
 	public final String getTemplateStringsPathFile() {
 		return String.format("%s/%s/%s/%s/%s", Harmony.pathTemplate, this.getPlatform(),
 											this.getResource(), this.getValues(), this.getStrings() );
+	}
+	
+	public final String getConfigsPathFile() {
+		return String.format("%s/%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(),
+											this.getResource(), this.getValues(), this.getConfigs() );
+	}
+
+	public final String getTemplateConfigsPathFile() {
+		return String.format("%s/%s/%s/%s/%s", Harmony.pathTemplate, this.getPlatform(),
+											this.getResource(), this.getValues(), this.getConfigs() );
 	}
 	
 	public final String getTemplateTestsPath() {
@@ -398,7 +429,14 @@ public abstract class BaseAdapter {
 	 * @return the strings.xml
 	 */
 	public final String getStrings() {
-		return strings;
+		return this.strings;
+	}
+	
+	/**
+	 * @return the configs.xml
+	 */
+	private Object getConfigs() {
+		return this.configs;
 	}
 
 	/**
@@ -420,6 +458,48 @@ public abstract class BaseAdapter {
 	 */
 	public void setTest(String test) {
 		this.test = test;
+	}
+
+	/**
+	 * @return the harmony
+	 */
+	public String getHarmony() {
+		return harmony;
+	}
+
+	/**
+	 * @param harmony the harmony to set
+	 */
+	public void setHarmony(String harmony) {
+		this.harmony = harmony;
+	}
+
+	/**
+	 * @return the widget
+	 */
+	public String getWidget() {
+		return widget;
+	}
+
+	/**
+	 * @param widget the widget to set
+	 */
+	public void setWidget(String widget) {
+		this.widget = widget;
+	}
+
+	/**
+	 * @return the util
+	 */
+	public String getUtil() {
+		return util;
+	}
+
+	/**
+	 * @param util the util to set
+	 */
+	public void setUtil(String util) {
+		this.util = util;
 	}
 
 }

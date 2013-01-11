@@ -15,8 +15,6 @@ import japa.parser.ast.expr.StringLiteralExpr;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
 import com.tactfactory.mda.parser.BaseParser;
-import com.tactfactory.mda.rest.annotation.Rest;
-import com.tactfactory.mda.rest.meta.RestMetadata;
 import com.tactfactory.mda.sync.annotation.Sync;
 import com.tactfactory.mda.sync.meta.SyncMetadata;
 import com.tactfactory.mda.utils.PackageUtils;
