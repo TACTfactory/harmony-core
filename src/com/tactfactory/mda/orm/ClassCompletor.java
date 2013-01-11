@@ -44,6 +44,8 @@ public class ClassCompletor {
 				for(int i=0;i<ids.size();i++){
 					rel.field_ref.add(ids.get(i).name);
 				}
+				fm.columnDefinition = ids.get(0).type;
+				
 			}
 			
 			ConsoleUtils.displayDebug("Relation "+rel.type+" on field "+rel.field+" targets "+rel.entity_ref+"("+rel.field_ref.get(0)+")");
