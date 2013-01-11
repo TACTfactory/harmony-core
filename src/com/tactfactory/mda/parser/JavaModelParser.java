@@ -270,11 +270,12 @@ public class JavaModelParser {
 				// Set default values for type if type is recognized
 				Type type = Type.fromName(fieldMeta.type);
 				if (type != null) {
+					fieldMeta.type = type.getValue();
 					fieldMeta.nullable = type.isNullable();
 					fieldMeta.unique = type.isUnique();
 					fieldMeta.length = type.getLength();
 					fieldMeta.precision = type.getPrecision();
-					fieldMeta.scale = type.getScale();					
+					fieldMeta.scale = type.getScale();				
 				}
 				
 				// Database definitions
