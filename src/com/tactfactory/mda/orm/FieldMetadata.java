@@ -71,21 +71,21 @@ public class FieldMetadata extends BaseMetadata {
 		boolean isDateTime = (this.type.toLowerCase() == Type.DATETIME.getValue());
 		
 		if (isDate || isDateTime || isTime) {
+			String formatKey = "%s_%s_title";
+			String formatTitle = "Select %s %s";
 			if (isDate || isDateTime) {
 				TranslationMetadata.addDefaultTranslation(
-						key + "_date_title",
-						"Select "+ this.name +" date", 
+						String.format(formatKey, key, Type.DATE.getValue()),
+						String.format(formatTitle , this.name, Type.DATE.getValue()), 
 						Group.MODEL);
 			} 
 			
 			if (isTime || isDateTime) {
 				TranslationMetadata.addDefaultTranslation(
-						key + "_date_title",
-						"Select "+ this.name +" time", 
+						String.format(formatKey, key, Type.TIME.getValue()),
+						String.format(formatTitle , this.name, Type.TIME.getValue()), 
 						Group.MODEL);
 			} 
-			
-			
 		} else {
 			TranslationMetadata.addDefaultTranslation(
 					key + "_"+ componentName.toLowerCase(),

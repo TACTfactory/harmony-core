@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 
+import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.Harmony;
 
 public class TranslationMetadata {
@@ -61,7 +62,7 @@ public class TranslationMetadata {
 	 */
 	public static TranslationMetadata addDefaultTranslation(String key, String defaultValue) {		
 		TranslationMetadata translateMeta = new TranslationMetadata();
-		translateMeta.key = key;
+		translateMeta.key = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, key);
 		translateMeta.i18n.put(Locale.getDefault(), defaultValue);
 		
 		Harmony.metas.translates.put(translateMeta.key, translateMeta);

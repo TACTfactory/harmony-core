@@ -37,7 +37,6 @@ import java.util.ArrayList;
 <#if importDate || importTime>
 import org.joda.time.DateTime;
 
-import ${curr.namespace}.view.user.UserCreateFragment; //FixMe
 	<#if importDate>
 import ${curr.namespace}.harmony.widget.CustomDatePickerDialog;
 	</#if>
