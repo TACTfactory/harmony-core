@@ -2,9 +2,6 @@
 <#import "methods.tpl" as m>
 package ${curr.controller_namespace};
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-
 import ${curr.namespace}.R;
 
 import android.os.AsyncTask;
@@ -24,7 +21,16 @@ import android.widget.*;
 
 import java.util.List;
 import java.util.ArrayList;
+
+<#assign importDate=false>
+<#list curr.fields as field>
+	<#if !importDate && (field.type=="date" || field.type=="time")>
+		<#assign importDate=true>
+	</#if>
+</#list>
+<#if importDate>
 import ${curr.namespace}.harmony.util.DateUtils;
+</#if>
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 <#list curr.relations as relation>
@@ -69,38 +75,46 @@ public class ${curr.name}ShowFragment extends Fragment {
 	</#foreach>
     }
     
-    /** Load data from model to curr.fields view */
+    /** Load data from model to fields view */
     public void loadData() {
-    	<#foreach field in curr.fields >
-			<#if !field.internal && !field.hidden >
-				<#if !field.relation?? >
-		    		<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
-		if(this.model.get${field.name?cap_first}()!=null)
-						<#if field.type?lower_case=="datetime" || field.type=="date" || field.type=="time" >
-							<#if field.type?lower_case=="datetime" >
+    <#foreach field in curr.fields>
+		<#if !field.internal && !field.hidden>
+			<#if !field.relation??>
+		    	<#if (field.type!="int") && 
+		    	(field.type!="boolean") && 
+		    	(field.type!="long") && 
+		    	(field.type!="ean") && 
+		    	(field.type!="zipcode") && 
+		    	(field.type!="float")>
+		if(this.model.get${field.name?cap_first}()!=null) {
+					<#if field.type?lower_case=="datetime" || field.type=="date" || field.type=="time">
+						<#if field.type?lower_case=="datetime">
 			this.${field.name}View.setText(this.model.get${field.name?cap_first}().toString());
-							<#/if>
-							<#if field.type=="date">
-			this.${field.name}View.setText(DateUtils.formatDateToString(model.get"+field.name?cap_first+"()));
-							<#/if>
-							<#if field.type=="time">
-			this.${field.name}View.setText(DateUtils.formatTimeToString(model.get"+field.name?cap_first+"()));					
-							<#/if>
-			${m.setLoader(field)}
-						<#else>
-			${m.setLoader(field)}
 						</#if>
-				<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
-		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}().getId())); 
+						<#if field.type=="date">
+			this.${field.name}View.setText(DateUtils.formatDateToString(model.get${field.name?cap_first}()));
+						</#if>
+						<#if field.type=="time">
+			this.${field.name}View.setText(DateUtils.formatTimeToString(model.get${field.name?cap_first}()));					
+						</#if>
 					<#else>
+			${m.setLoader(field)}
+					</#if>
+		}	
+				<#else>
+		${m.setLoader(field)}
+				</#if>
+			<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
+		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}().getId())); 
+			<#else>
 		String ${field.name}Value = "";
 		for(${field.relation.targetEntity} item : this.model.get${field.name?cap_first}()){
 			${field.name}Value+=item.getId()+",";
 		}
 		this.${field.name}View.setText(${field.name}Value);
-					</#if>
-				</#if>
-		</#foreach>
+			</#if>
+		</#if>
+	</#foreach>
     }
     
     /** Sets up the UI.
