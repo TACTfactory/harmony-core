@@ -84,8 +84,9 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	}
 	
 	/**
-	 *
-	 *
+	 * Retrieve all the ${curr.name}s in the given list. Uses the route : ${curr.options.rest.uri?lower_case}
+	 * @param ${curr.name?lower_case}s : The list in which the ${curr.name}s will be returned
+	 * @return The number of ${curr.name}s returned
 	 */
 	public int getAll(List<${curr.name}> ${curr.name?lower_case}s){
 		int result = -1;
@@ -109,8 +110,9 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	}
 
 	/**
-	 *
-	 *
+	 * Retrieve one ${curr.name}. Uses the route : ${curr.options.rest.uri?lower_case}/%id%
+	 * @param ${curr.name?lower_case} : The ${curr.name} to retrieve (set the ID)
+	 * @return -1 if an error has occured. 0 if not.
 	 */
 	public int get(${curr.name} ${curr.name?lower_case}){
 		int result = -1;
@@ -136,8 +138,9 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	}
 
 	/**
-	 *
-	 *
+	 * Insert the ${curr.name}. Uses the route : ${curr.options.rest.uri?lower_case}
+	 * @param ${curr.name?lower_case} : The ${curr.name} to insert
+	 * @return -1 if an error has occured. 0 if not.
 	 */
 	public int insert(${curr.name} ${curr.name?lower_case}){
 		int result = -1;
@@ -155,8 +158,9 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	}
 
 	/**
-	 *
-	 *
+	 * Update a ${curr.name}. Uses the route : ${curr.options.rest.uri?lower_case}/%id%
+	 * @param ${curr.name?lower_case} : The ${curr.name} to update
+	 * @return -1 if an error has occured. 0 if not.
 	 */
 	public int update(${curr.name} ${curr.name?lower_case}){
 		int result = -1;
@@ -175,8 +179,9 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	}
 
 	/**
-	 *
-	 *
+	 * Delete a ${curr.name}. Uses the route : ${curr.options.rest.uri?lower_case}/%id%
+	 * @param ${curr.name?lower_case} : The ${curr.name} to delete (only the id is necessary)
+	 * @return -1 if an error has occured. 0 if not.
 	 */
 	public int delete(${curr.name} ${curr.name?lower_case}){
 		int result = -1;
@@ -200,8 +205,10 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 
 			<#elseif relation.relation.type=="ManyToMany" || relation.relation.type=="ManyToOne">
 	/**
-	 *
-	 *
+	 * Get the ${curr.name}s associated with a ${relation.relation.targetEntity}. Uses the route : ${entities[relation.relation.targetEntity].options.rest.uri?lower_case}/%${relation.relation.targetEntity}_id%/${curr.options.rest.uri?lower_case}
+	 * @param ${curr.name?lower_case}s : The list in which the ${curr.name}s will be returned
+	 * @param ${relation.relation.targetEntity?lower_case} : The associated ${relation.relation.targetEntity?lower_case}
+	 * @return The number of ${curr.name}s returned
 	 */
 	public int getBy${relation.relation.targetEntity}(List<${curr.name}> ${curr.name?lower_case}s, ${relation.relation.targetEntity} ${relation.relation.targetEntity?lower_case}){
 		int result = -1;
@@ -229,8 +236,10 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 
 			<#else>
 	/**
-	 *
-	 *
+	 * Get the ${curr.name} associated with a ${relation.relation.targetEntity}. Uses the route : ${entities[relation.relation.targetEntity].options.rest.uri?lower_case}/%${relation.relation.targetEntity}_id%/${curr.options.rest.uri?lower_case}
+	 * @param ${curr.name?lower_case} : The ${curr.name} that will be returned
+	 * @param ${relation.relation.targetEntity?lower_case} : The associated ${relation.relation.targetEntity?lower_case}
+	 * @return -1 if an error has occured. 0 if not.
 	 */
 	public int getBy${relation.relation.targetEntity}(${curr.name} ${curr.name?uncap_first}, ${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first}){
 		int result = -1;
@@ -262,8 +271,10 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	</#list>
 
 	/**
-	 *
-	 *
+	 * Extract a ${curr.name} from a JSONObject describing a ${curr.name}
+	 * @param json The JSONObject describing the ${curr.name}
+	 * @param ${curr.name?lower_case} The returned ${curr.name}
+	 * @return true if a ${curr.name} was found. false if not
 	 */
 	public static boolean extract(JSONObject json, ${curr.name} ${curr.name?lower_case}){
 		boolean result = false;
@@ -310,8 +321,10 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	}
 
 	/**
-	 *
-	 *
+	 * Extract a list of ${curr.name}s from a JSONObject describing an array of ${curr.name}s
+	 * @param json The JSONObject describing the array of ${curr.name}s
+	 * @param ${curr.name?lower_case}s The returned list of ${curr.name}s
+	 * @return The number of ${curr.name}s found in the JSON
 	 */
 	public static int extract${curr.name}s(JSONObject json, List<${curr.name}> ${curr.name?lower_case}s) throws JSONException{
 		JSONArray itemArray = json.optJSONArray(${alias(curr.name)});
@@ -342,8 +355,9 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	}
 
 	/**
-	 *	
-	 *
+	 * Convert a ${curr.name} to a JSONObject	
+	 * @param ${curr.name?uncap_first} The ${curr.name} to convert
+	 * @return The converted ${curr.name}
 	 */
 	public static JSONObject ${curr.name?uncap_first}ToJson(${curr.name} ${curr.name?uncap_first}){
 		JSONObject params = new JSONObject();
@@ -376,8 +390,9 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	}
 
 	/**
-	 *	
-	 *
+	 * Convert a list of ${curr.name}s to a JSONArray	
+	 * @param ${curr.name?uncap_first}s The array of ${curr.name}s to convert
+	 * @return The array of converted ${curr.name}s
 	 */
 	public static JSONArray ${curr.name?uncap_first}sToJson(List<${curr.name}> ${curr.name?uncap_first}s){
 		JSONArray itemArray = new JSONArray();
