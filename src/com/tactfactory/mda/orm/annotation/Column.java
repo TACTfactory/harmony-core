@@ -131,8 +131,25 @@ public @interface Column {
 			}catch(Exception e){
 				return null;
 			}
-			
 		}
+			
+		public static String toTypeString(String name){
+				if(name.lastIndexOf(".")>0)
+					name = name.substring(name.lastIndexOf(".")+1); // Take only what comes after the last dot
+				ConsoleUtils.displayDebug("Searching for Type : "+name);
+				try{
+					Field field = Type.class.getField(name);	
+					if(field.isEnumConstant()) {
+						ConsoleUtils.displayDebug("Found type : "+name);
+						return ((Type)field.get(Type.class)).getValue();
+					}
+					else 
+						return name;
+				}catch(Exception e){
+					return name;
+				}
+		}
+			
 		
 		/** Type that maps an SQL VARCHAR to a JAVA string. */
 		//public final static String STRING = "string";
