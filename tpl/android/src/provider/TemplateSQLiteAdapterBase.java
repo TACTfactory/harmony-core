@@ -186,7 +186,7 @@ public abstract class ${curr.name}SQLiteAdapterBase{
 	<#list curr.fields as field>
 		<#if !field.internal>
 			<#if !field.relation??>
-				<#if (field.type?lower_case == "date" || field.type?lower_case == "datetime" || field.type?lower_case = "time" )>
+				<#if (field.type == "date" || field.type == "datetime" || field.type = "time" )>
 				
 			result.set${field.name?cap_first}(new DateTime());
 			try {
@@ -195,7 +195,7 @@ public abstract class ${curr.name}SQLiteAdapterBase{
 				e.printStackTrace();
 			}
 
-				<#elseif (field.type?lower_case == "boolean" )>
+				<#elseif (field.type == "boolean" )>
 			result.set${field.name?cap_first}  (c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ).equals("true"));
 				<#elseif (field.type == "int" || field.type == "integer" || field.type == "ean" || field.type == "zipcode")>
 			result.set${field.name?cap_first}(c.getInt( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));

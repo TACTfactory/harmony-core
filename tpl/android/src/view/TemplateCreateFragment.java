@@ -25,11 +25,11 @@ import java.util.ArrayList;
 <#assign importDate=false 
 	     importTime=false>
 <#list curr.fields as field>
-	<#if field.type=="date" || field.type=="time" || field.type?lower_case=="datetime">
-		<#if (field.type=="date" || field.type?lower_case=="datetime") && !importDate>
+	<#if field.type=="date" || field.type=="time" || field.type=="datetime">
+		<#if (field.type=="date" || field.type=="datetime") && !importDate>
 			<#assign importDate=true>
 		</#if>
-		<#if (field.type=="time" || field.type?lower_case=="datetime") && !importTime>
+		<#if (field.type=="time" || field.type=="datetime") && !importTime>
 			<#assign importTime=true>
 		</#if>
 	</#if>
@@ -67,11 +67,11 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 			<#if !field.relation??>
 				<#if field.type=="boolean">
 	protected CheckBox ${field.name}View;
-				<#elseif field.type?lower_case=="datetime" || field.type=="date" || field.type=="time">
-					<#if field.type?lower_case=="datetime" || field.type=="date">
+				<#elseif field.type=="datetime" || field.type=="date" || field.type=="time">
+					<#if field.type=="datetime" || field.type=="date">
 	protected EditText ${field.name}DateView;
 					</#if>
-					<#if field.type?lower_case=="datetime" || field.type=="time">
+					<#if field.type=="datetime" || field.type=="time">
 	protected EditText ${field.name}TimeView;
 					</#if>
 				<#else>
@@ -102,8 +102,8 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 				<#if !field.relation??>
 					<#if field.type=="boolean">
 		this.${field.name}View = (CheckBox) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
-					<#elseif field.type?lower_case=="datetime" || field.type=="date" || field.type=="time">
-						<#if field.type == "date" || field.type?lower_case == "datetime">
+					<#elseif field.type=="datetime" || field.type=="date" || field.type=="time">
+						<#if field.type == "date" || field.type == "datetime">
 						
 		this.${field.name}DateView = (EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_date);			
 		this.${field.name}DateView.setOnClickListener(new OnClickListener(){
@@ -141,7 +141,7 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 			}
 		});			
 						</#if>
-						<#if field.type == "time" || field.type?lower_case == "datetime">
+						<#if field.type == "time" || field.type == "datetime">
 						
 		this.${field.name}TimeView = (EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_time);
 		this.${field.name}TimeView.setOnClickListener(new OnClickListener(){
@@ -273,11 +273,11 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 			<#if !field.relation??>
 				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
 		if(this.model.get${field.name?cap_first}()!=null){
-					<#if field.type?lower_case=="datetime" || field.type=="date" || field.type=="time">
-						<#if field.type?lower_case=="datetime" || field.type=="date">
+					<#if field.type=="datetime" || field.type=="date" || field.type=="time">
+						<#if field.type=="datetime" || field.type=="date">
 			this.${field.name}DateView.setText(DateUtils.formatDateToString(this.model.get${field.name?cap_first}()));
 						</#if>
-						<#if field.type?lower_case=="datetime" || field.type=="time">
+						<#if field.type=="datetime" || field.type=="time">
 			this.${field.name}TimeView.setText(DateUtils.formatTimeToString(this.model.get${field.name?cap_first}()));
 						</#if>
 					<#else>
@@ -305,9 +305,9 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if field.type!="boolean">
-					<#if field.type=="date" || field.type?lower_case=="datetime">
+					<#if field.type=="date" || field.type=="datetime">
 		if(!this.${field.name}DateView.getEditableText().toString().equals(""))
-					<#elseif field.type=="time" || field.type?lower_case=="datetime">
+					<#elseif field.type=="time" || field.type=="datetime">
 		if(!this.${field.name}TimeView.getEditableText().toString().equals(""))
 					<#else>
 		if(!this.${field.name}View.getEditableText().toString().equals(""))

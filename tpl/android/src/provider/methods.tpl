@@ -19,7 +19,7 @@
 </#function>
 
 <#function setJsonLoader name field>
-	<#assign type=field.type?lower_case>
+	<#assign type=field.type>
 	<#assign ret=name?lower_case>
 	<#if type=="boolean">
 		<#assign ret=ret+".setChecked(this.model.is"+field.name?cap_first+"());">
