@@ -10,7 +10,6 @@ import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -20,19 +19,34 @@ import android.database.sqlite.SQLiteDatabase;
 import android.app.*;
 import android.widget.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Locale;
 
+<#assign importDate=false 
+	     importTime=false>
+<#list curr.fields as field>
+	<#if field.type=="date" || field.type=="time" || field.type?lower_case=="datetime">
+		<#if (field.type=="date" || field.type?lower_case=="datetime") && !importDate>
+			<#assign importDate=true>
+		</#if>
+		<#if (field.type=="time" || field.type?lower_case=="datetime") && !importTime>
+			<#assign importTime=true>
+		</#if>
+	</#if>
+</#list>
+<#if importDate || importTime>
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
+import ${curr.namespace}.view.user.UserCreateFragment; //FixMe
+	<#if importDate>
+import ${curr.namespace}.harmony.widget.CustomDatePickerDialog;
+	</#if>
+	<#if importTime>
+import ${curr.namespace}.harmony.widget.CustomTimePickerDialog;
+	</#if>
+	
+import ${curr.namespace}.harmony.util.DateUtils;
+</#if>
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 <#list curr.relations as relation>
@@ -54,6 +68,13 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 			<#if !field.relation??>
 				<#if field.type=="boolean">
 	protected CheckBox ${field.name}View;
+				<#elseif field.type?lower_case=="datetime" || field.type=="date" || field.type=="time">
+					<#if field.type?lower_case=="datetime" || field.type=="date">
+	protected EditText ${field.name}DateView;
+					</#if>
+					<#if field.type?lower_case=="datetime" || field.type=="time">
+	protected EditText ${field.name}TimeView;
+					</#if>
 				<#else>
 	protected EditText ${field.name}View;			
 				</#if>
@@ -70,7 +91,6 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 		</#if>
 	</#list>
 
-	
 	protected Button saveButton;
 
 	/** Initialize view of fields 
@@ -83,15 +103,15 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 				<#if !field.relation??>
 					<#if field.type=="boolean">
 		this.${field.name}View = (CheckBox) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
-					<#else>
-		this.${field.name}View = (EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});			
-		<#if field.type == "date" || field.type == "datetime">
-		this.${field.name}View.setOnClickListener(new OnClickListener(){
+					<#elseif field.type?lower_case=="datetime" || field.type=="date" || field.type=="time">
+						<#if field.type == "date" || field.type?lower_case == "datetime">
+						
+		this.${field.name}DateView = (EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_date);			
+		this.${field.name}DateView.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 		        DateTime dt = new DateTime();
-		        final java.text.DateFormat df = DateFormat.getDateFormat(getActivity());
-		        
-				if (!TextUtils.isEmpty(${curr.name}CreateFragment.this.${field.name}View.getText())){
+
+/*				if (!TextUtils.isEmpty(${curr.name}CreateFragment.this.${field.name}View.getText())){
 					String strInputDate = ${curr.name}CreateFragment.this.${field.name}View.getText().toString();
 					try {
 						Date date = df.parse(strInputDate);
@@ -100,56 +120,62 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
-					
+*/					
+
+		        String ${field.name}Date = ${curr.name}CreateFragment.this.${field.name}DateView.getText().toString();
+				if (!TextUtils.isEmpty(${field.name}Date)) {
+					String strInputDate = ${field.name}Date;
+					dt = DateUtils.formatStringToDate(strInputDate);
 				}
 				
-			    CustomDatePickerDialog ${field.name}Dpd = new CustomDatePickerDialog(getActivity(), dt, "Select ${field.name} date");
-			    ${field.name}Dpd.setPositiveButton(getActivity().getString(R.string.common_ok), new DialogInterface.OnClickListener() {
-					
+			    CustomDatePickerDialog ${field.name}Dpd = new CustomDatePickerDialog(getActivity(), dt, R.string.${curr.name?lower_case}_${field.name?lower_case}_date_title);
+			    ${field.name}Dpd.setPositiveButton(getActivity().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 						DatePicker dp = ((CustomDatePickerDialog) dialog).getDatePicker();
 						DateTime date = new DateTime(dp.getYear(), dp.getMonth() + 1, dp.getDayOfMonth(), 0, 0);
-						${curr.name}CreateFragment.this.${field.name}View.setText(df.format(date.toDate()));
+						${curr.name}CreateFragment.this.${field.name}DateView.setText(DateUtils.formatDateToString(date));
 					}
 				});
 
 			    ${field.name}Dpd.show();
 			}
-		});
-		</#if>
-		<#if field.type == "time" || field.type == "datetime">
-		this.${field.name}View.setOnClickListener(new OnClickListener(){
+		});			
+						</#if>
+						<#if field.type == "time" || field.type?lower_case == "datetime">
+						
+		this.${field.name}TimeView = (EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_time);
+		this.${field.name}TimeView.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
-				DateTime dt = new DateTime();
-		        final DateTimeFormatter fmt = DateTimeFormat.shortTime();
-		        
-				if (!TextUtils.isEmpty(${curr.name}CreateFragment.this.${field.name}View.getText())){
-					String strInputTime = ${curr.name}CreateFragment.this.${field.name}View.getText().toString();
-				    dt = fmt.parseDateTime(strInputTime);
+				DateTime dt = new DateTime(); 
+				String ${field.name}Time = ${curr.name}CreateFragment.this.${field.name}TimeView.getText().toString();
+				if (!TextUtils.isEmpty(${field.name}Time)) {
+					String strInputTime = ${field.name}Time;
+					dt = DateUtils.formatStringToDate(strInputTime);
 				}
 				
-				int hour = dt.getHourOfDay();
-				int minute = dt.getMinuteOfHour();
-		        
-		        TimePickerDialog ${field.name}Tpd = new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-					
+			    CustomTimePickerDialog ${field.name}Tpd = new CustomTimePickerDialog(getActivity(), dt, 
+			    		android.text.format.DateFormat.is24HourFormat(getActivity()), R.string.${curr.name?lower_case}_${field.name?lower_case}_time_title);
+			    ${field.name}Tpd.setPositiveButton(getActivity().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
 					@Override
-					public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+					public void onClick(DialogInterface dialog, int which) {
+						TimePicker tp = ((CustomTimePickerDialog) dialog).getTimePicker();
+						
 						DateTime date = new DateTime(0);
 						date = new DateTime(date.getYear(), date.getDayOfMonth(), date.getDayOfMonth(), 
-								hourOfDay, minute);
-                        
-                        ${curr.name}CreateFragment.this.${field.name}View.setText(date.toString(fmt));
+								tp.getCurrentHour(), tp.getCurrentMinute());
+
+						${curr.name}CreateFragment.this.${field.name}TimeView.setText(DateUtils.formatTimeToString(date));
 					}
-				}, hour, minute, android.text.format.DateFormat.is24HourFormat(getActivity()));
-				
-		        ${field.name}Tpd.show();
+				});
+
+			    ${field.name}Tpd.show();
 			}
 		});
-				</#if>
-			</#if>
-
+						</#if>
+					<#else>
+		this.${field.name}View = (EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
+					</#if>
 				<#else>
 		this.${field.name}Button = (Button) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_button);
 		this.${field.name}Button.setOnClickListener(new OnClickListener(){
@@ -247,8 +273,18 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
-		if(this.model.get${field.name?cap_first}()!=null)
-			${m.setLoader(field)}
+		if(this.model.get${field.name?cap_first}()!=null){
+					<#if field.type?lower_case=="datetime" || field.type=="date" || field.type=="time">
+						<#if field.type?lower_case=="datetime" || field.type=="date">
+			this.${field.name}DateView.setText(DateUtils.formatDateToString(this.model.get${field.name?cap_first}()));
+						</#if>
+						<#if field.type?lower_case=="datetime" || field.type=="time">
+			this.${field.name}TimeView.setText(DateUtils.formatTimeToString(this.model.get${field.name?cap_first}()));
+						</#if>
+					<#else>
+			${m.setLoader(field)}			
+					</#if>
+		}
 				<#else>
 		${m.setLoader(field)}
 				</#if>
@@ -270,7 +306,13 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if field.type!="boolean">
+					<#if field.type=="date" || field.type?lower_case=="datetime">
+		if(!this.${field.name}DateView.getEditableText().toString().equals(""))
+					<#elseif field.type=="time" || field.type?lower_case=="datetime">
+		if(!this.${field.name}TimeView.getEditableText().toString().equals(""))
+					<#else>
 		if(!this.${field.name}View.getEditableText().toString().equals(""))
+					</#if>
 			${m.setSaver(field)}
 				<#else>
 		${m.setSaver(field)}

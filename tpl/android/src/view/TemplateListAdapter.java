@@ -2,8 +2,7 @@
 <#import "methods.tpl" as m>
 package ${curr.controller_namespace};
 
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
+import ${curr.namespace}.R;
 
 import java.util.List;
 
@@ -13,10 +12,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
-import ${curr.namespace}.R;
 import ${curr.namespace}.entity.${curr.name};
-
 <#list curr.relations as relation>
+<#assign importDate=false>
+<#list curr.fields as field>
+	<#if field.type=="date" || field.type=="time" && !importDate>
+		<#assign importDate=true>
+	</#if>
+</#list>
+<#if importDate>
+import org.joda.time.DateTime;
+
+import ${curr.namespace}.harmony.util.DateUtils;
+</#if>
+import ${curr.namespace}.entity.${curr.name};
 	<#if !relation.internal && !relation.hidden>
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
 	</#if>

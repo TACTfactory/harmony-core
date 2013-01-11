@@ -23,6 +23,9 @@ public final class AndroidAdapter extends BaseAdapter {
 		this.source 	= "src";
 		this.libs		= "libs";
 		this.test		= "test";
+		this.harmony 	= "harmony";
+		this.widget		= "widget";
+		this.util		= "util";
 		
 		// MVC
 		//this.model 		= "entity";

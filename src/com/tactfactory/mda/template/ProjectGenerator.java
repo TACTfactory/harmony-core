@@ -92,8 +92,12 @@ public class ProjectGenerator extends BaseGenerator {
 		// create empty package entity
 		FileUtils.makeFolder(this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.","/")+"/entity/" );
 		
-		// create libs folders
+		// create util folder
+		FileUtils.makeFolder(this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.","/")+"/harmony/util/" );
+		
+		// create libs folder
 		FileUtils.makeFolder(this.adapter.getLibsPath());
+		
 
 		// create HomeActivity.java 
 		super.makeSource(this.adapter.getHomeActivityPathFile(),
@@ -111,6 +115,12 @@ public class ProjectGenerator extends BaseGenerator {
 				this.adapter.getTemplateStringsPathFile(),
 				this.adapter.getStringsPathFile(),
 				false);
+		
+		// create configs.xml
+		super.makeSource(
+				this.adapter.getTemplateRessourceValuesPath()+"styles.xml",
+				this.adapter.getRessourceValuesPath()+"styles.xml",
+				false);
 
 		// create main.xml
 		super.makeSource(
@@ -127,6 +137,9 @@ public class ProjectGenerator extends BaseGenerator {
 		
 		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathHarmony,"Harmony.jar")),
 				new File(String.format("%s/%s",this.adapter.getLibsPath(),"Harmony.jar")));
+		
+		// copy utils
+		this.updateUtil("DateUtils.java");
 		
 		File dirTpl = new File(this.adapter.getTemplateProjectPath());
 
@@ -197,5 +210,11 @@ public class ProjectGenerator extends BaseGenerator {
 					dest);
 	}
 
-	
+	/**
+	 * Update Utils
+	 */
+	protected void updateUtil(String utilName) {		
+		super.makeSource(String.format("%s%s", this.adapter.getTemplateUtilPath(), utilName), 
+				String.format("%s%s", this.adapter.getUtilPath(), utilName), false);
+	}
 }

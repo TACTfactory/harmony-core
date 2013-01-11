@@ -27,8 +27,10 @@ import org.jdom2.output.XMLOutputter;
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.orm.FieldMetadata;
 import com.tactfactory.mda.orm.TranslationMetadata;
 import com.tactfactory.mda.orm.TranslationMetadata.Group;
+import com.tactfactory.mda.orm.annotation.Column.Type;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
@@ -41,9 +43,36 @@ public class ActivityGenerator extends BaseGenerator {
 	//protected List<Map<String, Object>> modelEntities;
 	protected String localNameSpace;
 	protected boolean isWritable = true;
-
+	private boolean isDate = false;
+	private boolean isTime = false;
+	
 	public ActivityGenerator(BaseAdapter adapter) throws Exception {
 		this(adapter, true);
+		
+		// Make entities
+		for (ClassMetadata meta : this.appMetas.entities.values()) {
+			if(!meta.fields.isEmpty() && !meta.internal) {
+				// copy Widget
+				if (!(this.isDate && this.isTime)) {
+					for (FieldMetadata field : meta.fields.values()) {
+						String type = field.type.toLowerCase();
+						if ((type == Type.DATE.getValue() || 
+								type == Type.DATETIME.getValue()) &&
+								!this.isDate) {
+							this.isDate = true;
+							break;
+						}
+						
+						if ((type == Type.TIME.getValue() || 
+								type == Type.DATETIME.getValue()) &&
+								!this.isTime) {
+							this.isTime = true;
+							break;
+						}
+					}
+				}
+			}
+		}
 	}
 
 	public ActivityGenerator(BaseAdapter adapter, Boolean isWritable) throws Exception {
@@ -63,6 +92,14 @@ public class ActivityGenerator extends BaseGenerator {
 				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getController())+"."+cm.getName().toLowerCase();
 				generateAllAction(cm.getName());
 			}
+		}
+		
+		if (this.isDate) {
+			this.updateWidget("CustomDatePickerDialog.java", "dialog_date_picker.xml");
+		}
+		
+		if (this.isTime) {
+			this.updateWidget("CustomTimePickerDialog.java", "dialog_time_picker.xml");
 		}
 	}
 	
@@ -391,5 +428,16 @@ public class ActivityGenerator extends BaseGenerator {
 		} catch (JDOMException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	/**
+	 * Update Widget
+	 */
+	protected void updateWidget(String widgetName, String layoutName) {
+		super.makeSource(
+				String.format("%s%s", this.adapter.getTemplateWidgetPath(), widgetName), 
+				String.format("%s%s", this.adapter.getWidgetPath(), widgetName), 
+				false);
+		this.makeResourceLayout(layoutName, layoutName);
 	}
 }

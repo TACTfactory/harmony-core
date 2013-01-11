@@ -42,6 +42,7 @@ public class ApplicationMetadata extends BaseMetadata {
 		// Make Map for entities
 		for(ClassMetadata cm : this.entities.values()){
 			entitiesMap.put(cm.name, cm.toMap(adapt));
+			cm.makeString("label");
 		}
 		
 		// Add root
