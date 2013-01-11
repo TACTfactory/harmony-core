@@ -1,6 +1,6 @@
-package ${namespace}.harmony.widget;
+package ${project_namespace}.harmony.widget;
 
-import ${namespace}.R;
+import ${project_namespace}.R;
 
 import org.joda.time.DateTime;
 

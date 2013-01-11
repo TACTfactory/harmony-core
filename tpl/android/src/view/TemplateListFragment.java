@@ -20,9 +20,7 @@ import android.widget.AdapterView.OnItemLongClickListener;
 
 import ${curr.namespace}.R;
 import ${curr.namespace}.entity.${curr.name};
-import ${curr.namespace}.view.${curr.name?lower_case}.${curr.name}ListActivity;
 import ${curr.namespace}.view.${curr.name?lower_case}.${curr.name}ListLoader;
-
 
 public class ${curr.name}ListFragment extends ListFragment
 implements LoaderManager.LoaderCallbacks<List<${curr.name}>> {

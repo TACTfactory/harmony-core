@@ -7,11 +7,8 @@ import java.util.List;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v4.content.AsyncTaskLoader;
-import android.util.Log;
 
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
-
-import ${curr.namespace}.R;
 import ${curr.namespace}.entity.${curr.name};
 
 /**

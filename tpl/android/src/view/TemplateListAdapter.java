@@ -12,20 +12,17 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
-import ${curr.namespace}.entity.${curr.name};
-<#list curr.relations as relation>
 <#assign importDate=false>
 <#list curr.fields as field>
-	<#if field.type=="date" || field.type=="time" && !importDate>
+	<#if !importDate && (field.type=="date" || field.type=="time")>
 		<#assign importDate=true>
 	</#if>
 </#list>
 <#if importDate>
-import org.joda.time.DateTime;
-
 import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
 import ${curr.namespace}.entity.${curr.name};
+<#list curr.relations as relation>
 	<#if !relation.internal && !relation.hidden>
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
 	</#if>
@@ -109,7 +106,6 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}> {
 		 * @param item ${curr.name} data
 		 */
 		public void populate(${curr.name} model) {
-
 			<#list curr.fields as field>
 				<#if !field.internal && !field.hidden>
 					<#if (!field.relation??)>
@@ -124,7 +120,6 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}> {
 					</#if>
 				</#if>
 			</#list>
-
 		}
 	}
 }

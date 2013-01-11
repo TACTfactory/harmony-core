@@ -60,16 +60,16 @@ public class ActivityGenerator extends BaseGenerator {
 								type == Type.DATETIME.getValue()) &&
 								!this.isDate) {
 							this.isDate = true;
-							break;
 						}
 						
 						if ((type == Type.TIME.getValue() || 
 								type == Type.DATETIME.getValue()) &&
 								!this.isTime) {
 							this.isTime = true;
-							break;
 						}
 					}
+				} else {
+					break;
 				}
 			}
 		}
