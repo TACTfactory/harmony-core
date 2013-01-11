@@ -68,7 +68,7 @@ public class FieldMetadata extends BaseMetadata {
 		String key = owner.name.toLowerCase() + "_" + name.toLowerCase();
 		boolean isDate = (this.type.equals(Type.DATE.getValue()));
 		boolean isTime = (this.type.equals(Type.TIME.getValue()));
-		boolean isDateTime = (this.type.toLowerCase() == Type.DATETIME.getValue());
+		boolean isDateTime = (this.type.equals(Type.DATETIME.getValue()));
 		
 		if (isDate || isDateTime || isTime) {
 			String formatKey = "%s_%s_title";

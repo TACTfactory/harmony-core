@@ -121,7 +121,7 @@ public @interface Column {
 				name = name.substring(name.lastIndexOf(".")+1); // Take only what comes after the last dot
 			ConsoleUtils.displayDebug("Searching for Type : "+name);
 			try{
-				Field field = Type.class.getField(name);	
+				Field field = Type.class.getField(name.toUpperCase());	
 				if(field.isEnumConstant()) {
 					ConsoleUtils.displayDebug("Found type : "+name);
 					return (Type)field.get(Type.class);
