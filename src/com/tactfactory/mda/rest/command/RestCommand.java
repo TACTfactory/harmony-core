@@ -1,16 +1,11 @@
 package com.tactfactory.mda.rest.command;
 
-import japa.parser.ast.CompilationUnit;
-
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.command.BaseCommand;
-import com.tactfactory.mda.orm.ClassCompletor;
-import com.tactfactory.mda.orm.ClassMetadata;
-import com.tactfactory.mda.parser.JavaModelParser;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.rest.parser.RestCompletor;
 import com.tactfactory.mda.rest.parser.RestParser;
@@ -49,7 +44,7 @@ public class RestCommand extends BaseCommand{
 	 */
 	protected void generateAdapters() {
 		//Harmony.metas.entities = getMetasFromAll();
-		javaModelParser.registerParser(new RestParser());
+		this.registerParser(new RestParser());
 		this.generateMetas();
 		new RestCompletor().generateApplicationRestMetadata(Harmony.metas);
 		if(Harmony.metas.entities!=null){

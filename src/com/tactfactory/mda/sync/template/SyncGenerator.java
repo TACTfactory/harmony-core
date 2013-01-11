@@ -1,5 +1,7 @@
 package com.tactfactory.mda.sync.template;
 
+import com.google.common.base.CaseFormat;
+import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.BaseGenerator;
 
@@ -19,20 +21,20 @@ public class SyncGenerator extends BaseGenerator {
 		
 		// Make Abstract Adapter Base general for all entities
 		this.makeSource(
-				"SyncBinder.java", 
-				"SyncBinder.java",
+				"TemplateSyncBinder.java", 
+				String.format("%sSyncBinder.java", CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name)),
 				true);
 		
 		// Make RestClient
 		this.makeSource(
-				"ISyncListener.java", 
-				"ISyncListener.java",
+				"ITemplateSyncListener.java", 
+				String.format("I%sSyncListener.java", CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name)),
 				true);
 		
 		// Make RestClient
 		this.makeSource(
-				"ISyncService.java", 
-				"ISyncService.java",
+				"ITemplateSyncService.java", 
+				String.format("I%sSyncService.java", CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name)),
 				true);
 	}
 		

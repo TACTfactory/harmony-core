@@ -10,6 +10,7 @@ package com.tactfactory.mda.command;
 
 import japa.parser.ast.CompilationUnit;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -17,6 +18,7 @@ import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassCompletor;
 import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.parser.BaseParser;
 import com.tactfactory.mda.parser.JavaModelParser;
 
 /** 
@@ -24,9 +26,10 @@ import com.tactfactory.mda.parser.JavaModelParser;
  */
 public abstract class BaseCommand implements Command {
 	protected static final String SEPARATOR = ":";
+	protected ArrayList<BaseParser> registeredParsers = new ArrayList<BaseParser>();
 	
 	protected HashMap<String,String> commandArgs;
-	protected JavaModelParser javaModelParser = new JavaModelParser();
+	protected JavaModelParser javaModelParser;
 	
 	/**
 	 * Gets the Metadatas of all the entities actually in the package entity
@@ -35,7 +38,9 @@ public abstract class BaseCommand implements Command {
 	 */
 	public void generateMetas(){
 		ConsoleUtils.display(">> Analyse Models...");
-
+		this.javaModelParser = new JavaModelParser();
+		for(BaseParser parser : this.registeredParsers)
+			this.javaModelParser.registerParser(parser);
 		// Parse models and load entities into CompilationUnits
 		try {
 			this.javaModelParser.loadEntities();
@@ -59,5 +64,9 @@ public abstract class BaseCommand implements Command {
 		} else {
 			ConsoleUtils.displayWarning("No entities found in entity package!");
 		}
+	}
+	
+	public void registerParser(BaseParser parser){
+		this.registeredParsers.add(parser);
 	}
 }
