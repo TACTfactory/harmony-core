@@ -185,7 +185,7 @@ public abstract class ${curr.name}SQLiteAdapterBase{
 	<#list curr.fields as field>
 		<#if !field.internal>
 			<#if !field.relation??>
-				<#if (field.type == "date" || field.type == "datetime" || field.type = "time" )>
+				<#if (field.type == "date") || (field.type == "datetime") || (field.type == "time")>
 				
 			try {
 				result.set${field.name?cap_first}(new DateTime(
