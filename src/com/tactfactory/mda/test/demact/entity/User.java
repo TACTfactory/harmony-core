@@ -13,10 +13,14 @@ import org.joda.time.DateTime;
 import com.tactfactory.mda.orm.annotation.*;
 import com.tactfactory.mda.orm.annotation.Column.Type;
 import com.tactfactory.mda.rest.annotation.Rest;
+import com.tactfactory.mda.sync.annotation.Sync;
+import com.tactfactory.mda.sync.annotation.Sync.Mode;
 
-@Table
+//All annotation with forced value/parameter
+@Table(name="local_user")
 @Entity
 @Rest(security=Rest.Security.SESSION, uri="user-uri")
+@Sync(mode=Mode.REAL_TIME)
 public class User extends Object implements Cloneable {
 	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 7032873279928549706L;

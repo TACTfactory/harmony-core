@@ -12,9 +12,17 @@ import org.joda.time.DateTime;
 
 import com.tactfactory.mda.orm.annotation.*;
 import com.tactfactory.mda.orm.annotation.Column.Type;
+import com.tactfactory.mda.rest.annotation.Rest;
+import com.tactfactory.mda.rest.annotation.Rest.Security;
+import com.tactfactory.mda.sync.annotation.Sync;
+import com.tactfactory.mda.sync.annotation.Sync.Level;
+import com.tactfactory.mda.sync.annotation.Sync.Mode;
 
+// Annotation with default and forced value/parameter
 @Table
 @Entity
+@Rest(security=Security.SESSION)
+@Sync(level=Level.SESSION, mode=Mode.REAL_TIME, priority=Sync.Priority.LOW)
 public class Comment extends Object {
 	
 	@Id

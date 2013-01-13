@@ -52,7 +52,7 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
  * You should edit ${curr.name}Adapter class instead of this one or you will lose all your modifications.</i></b>
  */
 public abstract class ${curr.name}SQLiteAdapterBase{
-	private static final String TAG = "${curr.name}DatabaseAdapter";
+	private static final String TAG = "${curr.name}DBAdapter";
 	private static final SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
 	
 	/** Table name of SQLite database */

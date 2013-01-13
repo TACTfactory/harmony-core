@@ -8,17 +8,11 @@
  */
 package com.tactfactory.mda.command;
 
-import japa.parser.ast.CompilationUnit;
-
-import java.util.LinkedHashMap;
-
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
-import com.tactfactory.mda.orm.*;
-import com.tactfactory.mda.parser.*;
 import com.tactfactory.mda.plateforme.*;
 import com.tactfactory.mda.template.*;
 
@@ -143,9 +137,6 @@ public class OrmCommand extends BaseCommand {
 			ConsoleUtils.displayError(e.getMessage());
 		}
 	}
-
-		
-	
 	
 	@Override
 	public void summary() {

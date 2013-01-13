@@ -115,6 +115,13 @@ public @interface Sync {
 		}
 	}
 	
+	/** Priority level */
+	public static class Priority {
+		public static final int NORMALE = 5;
+		public static final int HIGH = 0;
+		public static final int LOW = 9;
+	}
+	
 	/**
 	 * Synchronization Level of entity
 	 * 

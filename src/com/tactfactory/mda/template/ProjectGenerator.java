@@ -144,11 +144,10 @@ public class ProjectGenerator extends BaseGenerator {
 		File dirTpl = new File(this.adapter.getTemplateProjectPath());
 
 		// Update newly created files with datamodel
-		if(dirTpl.exists() && dirTpl.listFiles().length!=0)
-		{
+		if(dirTpl.exists() && dirTpl.listFiles().length!=0) {
 			result = true;
-			for(int i=0;i<dirTpl.listFiles().length;i++)
-			{
+			
+			for(int i=0;i<dirTpl.listFiles().length;i++) {
 				if(dirTpl.listFiles()[i].isFile()) {
 					super.makeSource(
 							this.adapter.getTemplateProjectPath() + dirTpl.listFiles()[i].getName(),

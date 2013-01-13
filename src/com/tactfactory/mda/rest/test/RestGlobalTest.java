@@ -1,9 +1,5 @@
 package com.tactfactory.mda.rest.test;
 
-import static org.junit.Assert.assertTrue;
-
-import java.io.File;
-
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -12,12 +8,10 @@ import org.junit.Test;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
-import com.tactfactory.mda.orm.ApplicationMetadata;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.rest.annotation.Rest;
 import com.tactfactory.mda.rest.command.RestCommand;
 import com.tactfactory.mda.rest.meta.RestMetadata;
-import com.tactfactory.mda.rest.parser.RestCompletor;
 import com.tactfactory.mda.test.CommonTest;
 
 public class RestGlobalTest extends CommonTest{
@@ -47,6 +41,8 @@ public class RestGlobalTest extends CommonTest{
 		
 		this.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		this.makeEntities();
+		this.harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
+		this.harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[]{}, null);
 		this.harmony.findAndExecute(RestCommand.GENERATE_ADAPTERS, new String[]{}, null);
 		
 		this.hasGlobalAbstractWebServiceAdapters();
@@ -58,16 +54,14 @@ public class RestGlobalTest extends CommonTest{
 		
 		
 		this.isCommentRest();
-		this.isPostRest();
-		this.isUserRest();
 		
 		this.hasPostSecurity();
 		this.hasPostUri();
+		this.isPostRest();
 		
 		this.hasUserSecurity();
 		this.hasUserUri();
-		
-		
+		this.isUserRest();
 	}
 	
 	@Test
@@ -96,7 +90,7 @@ public class RestGlobalTest extends CommonTest{
 	
 	@Test
 	public void isCommentRest(){
-		this.isNotRest(Harmony.metas.entities.get("Comment"));
+		this.isRest(Harmony.metas.entities.get("Comment"));
 	}
 	
 	@Test
