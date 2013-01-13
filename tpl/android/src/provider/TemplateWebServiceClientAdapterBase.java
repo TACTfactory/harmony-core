@@ -289,10 +289,10 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 			<#list curr.fields as field>
 				<#if !field.internal>
 					<#if !field.relation??>
-						<#if field.type?lower_case=="date"||field.type?lower_case=="datetime"||field.type?lower_case=="time">
+						<#if field.type=="date"||field.type=="datetime"||field.type=="time">
 			DateTimeFormatter ${field.name?uncap_first}Formatter = ${getFormatter(field.type)};
 			${curr.name?lower_case}.set${field.name?cap_first}(${field.name?uncap_first}Formatter.parseDateTime(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?lower_case}.get${field.name?cap_first}().toString())));	
-						<#elseif field.type?lower_case=="boolean">
+						<#elseif field.type=="boolean">
 			${curr.name?lower_case}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?lower_case}.is${field.name?cap_first}()));	
 						<#else>
 			${curr.name?lower_case}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?lower_case}.get${field.name?cap_first}()));	
@@ -369,9 +369,9 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 			<#list curr.fields as field>
 				<#if !field.internal>
 					<#if !field.relation??>
-						<#if field.type?lower_case=="date" || field.type?lower_case=="time" || field.type?lower_case=="datetime">
+						<#if field.type=="date" || field.type=="time" || field.type=="datetime">
 			params.put(${alias(field.name)}, ${curr.name?lower_case}.get${field.name?cap_first}().toString());
-						<#elseif field.type?lower_case=="boolean">
+						<#elseif field.type=="boolean">
 			params.put(${alias(field.name)}, ${curr.name?lower_case}.is${field.name?cap_first}());
 						<#else>
 			params.put(${alias(field.name)}, ${curr.name?lower_case}.get${field.name?cap_first}());

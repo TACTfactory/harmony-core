@@ -1,5 +1,5 @@
 <#function setLoader field>
-	<#assign type=field.type?lower_case>
+	<#assign type=field.type>
 	<#assign ret="this."+field.name+"View">
 	<#if type=="boolean">
 		<#assign ret=ret+".setChecked(this.model.is"+field.name?cap_first+"());">
@@ -17,7 +17,7 @@
 </#function>
 
 <#function setAdapterLoader field>
-	<#assign type=field.type?lower_case>
+	<#assign type=field.type>
 	<#assign ret="this."+field.name+"View">
 	<#if type=="boolean">
 		<#assign ret=ret+".setChecked(model.is"+field.name?cap_first+"());">
@@ -45,7 +45,7 @@
 </#function>
 
 <#function setSaver field>
-	<#assign type=field.type?lower_case>
+	<#assign type=field.type>
 	<#assign ret="this.model.set"+field.name?cap_first+"(">
 	<#if type=="boolean">
 		<#assign ret=ret+"this."+field.name+"View.isChecked());">
