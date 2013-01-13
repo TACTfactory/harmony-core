@@ -87,8 +87,8 @@ public class ${curr.name}ShowFragment extends Fragment {
 		    	(field.type!="zipcode") && 
 		    	(field.type!="float")>
 		if(this.model.get${field.name?cap_first}()!=null) {
-					<#if field.type?lower_case=="datetime" || field.type=="date" || field.type=="time">
-						<#if field.type?lower_case=="datetime">
+					<#if field.type=="datetime" || field.type=="date" || field.type=="time">
+						<#if field.type=="datetime">
 			this.${field.name}View.setText(this.model.get${field.name?cap_first}().toString());
 						</#if>
 						<#if field.type=="date">

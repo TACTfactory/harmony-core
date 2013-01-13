@@ -55,7 +55,7 @@ public class ActivityGenerator extends BaseGenerator {
 				// copy Widget
 				if (!this.isDate || !this.isTime) {
 					for (FieldMetadata field : meta.fields.values()) {
-						String type = field.type.toLowerCase();
+						String type = field.type;
 						if (!this.isDate && (
 								type.equals(Type.DATE.getValue()) || 
 								type.equals(Type.DATETIME.getValue()))) {
