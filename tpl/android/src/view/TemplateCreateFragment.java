@@ -1,5 +1,5 @@
-<#assign curr = entities[current_entity]>
-<#import "methods.tpl" as m>
+<#assign curr = entities[current_entity] />
+<#import "methods.tpl" as m />
 package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
@@ -22,25 +22,25 @@ import android.widget.*;
 import java.util.List;
 import java.util.ArrayList;
 
-<#assign importDate=false 
-	     importTime=false>
+<#assign importDate=false />
+<#assign importTime=false />
 <#list curr.fields as field>
 	<#if field.type=="date" || field.type=="time" || field.type=="datetime">
-		<#if (field.type=="date" || field.type=="datetime") && !importDate>
-			<#assign importDate=true>
+		<#if ((field.type=="date" || field.type=="datetime") && !importDate)>
+			<#assign importDate=true />
 		</#if>
-		<#if (field.type=="time" || field.type=="datetime") && !importTime>
-			<#assign importTime=true>
+		<#if ((field.type=="time" || field.type=="datetime") && !importTime)>
+			<#assign importTime=true />
 		</#if>
 	</#if>
 </#list>
-<#if importDate || importTime>
+<#if (importDate || importTime)>
 import org.joda.time.DateTime;
 
-	<#if importDate>
+	<#if (importDate)>
 import ${curr.namespace}.harmony.widget.CustomDatePickerDialog;
 	</#if>
-	<#if importTime>
+	<#if (importTime)>
 import ${curr.namespace}.harmony.widget.CustomTimePickerDialog;
 	</#if>
 	
