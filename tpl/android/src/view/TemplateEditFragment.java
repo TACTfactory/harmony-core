@@ -1,5 +1,5 @@
-<#assign curr = entities[current_entity]>
-<#import "methods.tpl" as m>
+<#assign curr = entities[current_entity] />
+<#import "methods.tpl" as m />
 package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
@@ -22,25 +22,25 @@ import android.widget.*;
 import java.util.List;
 import java.util.ArrayList;
 
-<#assign importDate=false 
-	     importTime=false>
+<#assign importDate=false />
+<#assign importTime=false />
 <#list curr.fields as field>
-	<#if field.type=="date" || field.type=="time" || field.type=="datetime">
-		<#if (field.type=="date" || field.type=="datetime") && !importDate>
-			<#assign importDate=true>
+	<#if (field.type=="date" || field.type=="time" || field.type=="datetime")>
+		<#if ((field.type=="date" || field.type=="datetime") && !importDate)>
+			<#assign importDate=true />
 		</#if>
-		<#if (field.type=="time" || field.type=="datetime") && !importTime>
-			<#assign importTime=true>
+		<#if ((field.type=="time" || field.type=="datetime") && !importTime)>
+			<#assign importTime=true />
 		</#if>
 	</#if>
 </#list>
-<#if importDate || importTime>
+<#if (importDate || importTime)>
 import org.joda.time.DateTime;
 
-	<#if importDate>
+	<#if (importDate)>
 import ${curr.namespace}.harmony.widget.CustomDatePickerDialog;
 	</#if>
-	<#if importTime>
+	<#if (importTime)>
 import ${curr.namespace}.harmony.widget.CustomTimePickerDialog;
 	</#if>
 import ${curr.namespace}.harmony.util.DateUtils;
@@ -62,15 +62,15 @@ public class ${curr.name}EditFragment extends Fragment implements OnClickListene
 
 	/* curr.fields View */
 	<#list curr.fields as field>
-		<#if !field.internal && !field.hidden>
-			<#if !field.relation??>
-				<#if field.type=="boolean">
+		<#if (!field.internal && !field.hidden)>
+			<#if (!field.relation??)>
+				<#if (field.type=="boolean")>
 	protected CheckBox ${field.name}View;
-				<#elseif field.type=="datetime" || field.type=="date" || field.type=="time">
-					<#if field.type=="datetime" || field.type=="date">
+				<#elseif (field.type=="datetime" || field.type=="date" || field.type=="time")>
+					<#if (field.type=="datetime" || field.type=="date")>
 	protected EditText ${field.name}DateView;
 					</#if>
-					<#if field.type=="datetime" || field.type=="time">
+					<#if (field.type=="datetime" || field.type=="time")>
 	protected EditText ${field.name}TimeView;
 					</#if>
 				<#else>
@@ -80,7 +80,7 @@ public class ${curr.name}EditFragment extends Fragment implements OnClickListene
 	protected Button ${field.name}Button;
 	protected List<${field.relation.targetEntity}> ${field.name}List;
 	protected Dialog ${field.name}Dialog;
-				<#if field.relation.type=="OneToMany" || field.relation.type=="ManyToMany">
+				<#if (field.relation.type=="OneToMany" || field.relation.type=="ManyToMany")>
 	protected boolean[] checked${field.name?cap_first};
 				<#else>
 	protected int selected${field.name?cap_first};

@@ -1,5 +1,5 @@
-<#assign curr = entities[current_entity]>
-<#import "methods.tpl" as m>
+<#assign curr = entities[current_entity] />
+<#import "methods.tpl" as m />
 package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
@@ -22,19 +22,19 @@ import android.widget.*;
 import java.util.List;
 import java.util.ArrayList;
 
-<#assign importDate=false>
+<#assign importDate=false />
 <#list curr.fields as field>
-	<#if !importDate && (field.type=="date" || field.type=="time")>
-		<#assign importDate=true>
+	<#if (!importDate && (field.type=="date" || field.type=="time"))>
+		<#assign importDate=true />
 	</#if>
 </#list>
-<#if importDate>
+<#if (importDate)>
 import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 <#list curr.relations as relation>
-	<#if !relation.internal && !relation.hidden>
+	<#if (!relation.internal && !relation.hidden)>
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
 	</#if>
 </#list>
@@ -49,8 +49,8 @@ public class ${curr.name}ShowFragment extends Fragment {
 	
 	/* curr.fields View */
 <#list curr.fields as field>
-	<#if !field.internal && !field.hidden>
-		<#if field.type=="boolean">
+	<#if (!field.internal && !field.hidden)>
+		<#if (field.type=="boolean")>
 	protected CheckBox ${field.name}View;
 		<#else>
 	protected TextView ${field.name}View;			
@@ -64,8 +64,8 @@ public class ${curr.name}ShowFragment extends Fragment {
      */
     protected void initializeComponent(View view) {
 	<#foreach field in curr.fields>
-		<#if !field.internal && !field.hidden>
-			<#if field.type=="boolean">
+		<#if (!field.internal && !field.hidden)>
+			<#if (field.type=="boolean")>
 		this.${field.name}View = (CheckBox) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 		this.${field.name}View.setEnabled(false);
 			<#else>
@@ -78,23 +78,23 @@ public class ${curr.name}ShowFragment extends Fragment {
     /** Load data from model to fields view */
     public void loadData() {
     <#foreach field in curr.fields>
-		<#if !field.internal && !field.hidden>
-			<#if !field.relation??>
-		    	<#if (field.type!="int") && 
+		<#if (!field.internal && !field.hidden)>
+			<#if (!field.relation??)>
+		    	<#if ((field.type!="int") && 
 		    	(field.type!="boolean") && 
 		    	(field.type!="long") && 
 		    	(field.type!="ean") && 
 		    	(field.type!="zipcode") && 
-		    	(field.type!="float")>
+		    	(field.type!="float"))>
 		if(this.model.get${field.name?cap_first}()!=null) {
-					<#if field.type=="datetime" || field.type=="date" || field.type=="time">
-						<#if field.type=="datetime">
+					<#if (field.type=="datetime" || field.type=="date" || field.type=="time")>
+						<#if (field.type=="datetime")>
 			this.${field.name}View.setText(this.model.get${field.name?cap_first}().toString());
 						</#if>
-						<#if field.type=="date">
+						<#if (field.type=="date")>
 			this.${field.name}View.setText(DateUtils.formatDateToString(model.get${field.name?cap_first}()));
 						</#if>
-						<#if field.type=="time">
+						<#if (field.type=="time")>
 			this.${field.name}View.setText(DateUtils.formatTimeToString(model.get${field.name?cap_first}()));					
 						</#if>
 					<#else>
@@ -104,7 +104,7 @@ public class ${curr.name}ShowFragment extends Fragment {
 				<#else>
 		${m.setLoader(field)}
 				</#if>
-			<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
+			<#elseif (field.relation.type=="OneToOne" || field.relation.type=="ManyToOne")>
 		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}().getId())); 
 			<#else>
 		String ${field.name}Value = "";

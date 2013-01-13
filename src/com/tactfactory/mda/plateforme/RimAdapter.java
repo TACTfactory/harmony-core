@@ -63,4 +63,10 @@ public final class RimAdapter extends BaseAdapter {
 		return null;
 	}
 
+	@Override
+	public void resizeImage() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

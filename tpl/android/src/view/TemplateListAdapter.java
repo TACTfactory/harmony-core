@@ -1,5 +1,5 @@
-<#assign curr = entities[current_entity]>
-<#import "methods.tpl" as m>
+<#assign curr = entities[current_entity] />
+<#import "methods.tpl" as m />
 package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
@@ -12,18 +12,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
-<#assign importDate=false>
+<#assign importDate=false />
 <#list curr.fields as field>
-	<#if !importDate && (field.type=="date" || field.type=="time")>
-		<#assign importDate=true>
+	<#if (!importDate && (field.type=="date" || field.type=="time"))>
+		<#assign importDate=true />
 	</#if>
 </#list>
-<#if importDate>
+<#if (importDate)>
 import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
 import ${curr.namespace}.entity.${curr.name};
 <#list curr.relations as relation>
-	<#if !relation.internal && !relation.hidden>
+	<#if (!relation.internal && !relation.hidden)>
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
 	</#if>
 </#list>
@@ -63,9 +63,9 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}> {
 
 			holder = new ViewHolder();
 			<#list curr.fields as field>
-				<#if !field.internal && !field.hidden>
-					<#if !field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")>  
-						<#if field.type=="boolean">
+				<#if (!field.internal && !field.hidden)>
+					<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>  
+						<#if (field.type=="boolean")>
 			holder.${field.name}View = (CheckBox) convertView.findViewById(R.id.row_${curr.name?lower_case}_${field.name?lower_case});
 			holder.${field.name}View.setEnabled(false);
 						<#else>
@@ -90,9 +90,9 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}> {
 	/** Holder row */
 	private static class ViewHolder {
 		<#list curr.fields as field>
-			<#if !field.hidden && !field.internal>
-				<#if !field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")>  
-					<#if field.type=="boolean">
+			<#if (!field.hidden && !field.internal)>
+				<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>  
+					<#if (field.type=="boolean")>
 		protected CheckBox ${field.name}View;
 					<#else>
 		protected TextView ${field.name}View;			
@@ -107,7 +107,7 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}> {
 		 */
 		public void populate(${curr.name} model) {
 			<#list curr.fields as field>
-				<#if !field.internal && !field.hidden>
+				<#if (!field.internal && !field.hidden)>
 					<#if (!field.relation??)>
 						<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
 			if(model.get${field.name?cap_first}()!=null)

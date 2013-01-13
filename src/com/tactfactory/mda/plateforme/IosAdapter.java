@@ -65,5 +65,12 @@ public final class IosAdapter extends BaseAdapter {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+
+	@Override
+	public void resizeImage() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

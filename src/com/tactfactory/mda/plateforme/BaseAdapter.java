@@ -77,6 +77,9 @@ public abstract class BaseAdapter {
 	 */
 	public abstract String getNativeType(String type);
 	
+	/** Convert image structure to alternative resolution */
+	public abstract void resizeImage();
+	
 	// Utils
 
 	public final String getTemplateProjectPath() {

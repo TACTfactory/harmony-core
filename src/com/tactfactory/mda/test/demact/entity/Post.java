@@ -31,10 +31,10 @@ public class Post implements Serializable {
     @GeneratedValue(strategy="IDENTITY")
     protected int id;
 	
-	@Column(unique=true)	// type="string", length=255
+	@Column(unique=true, length=140)
     protected String title;
 	
-	@Column(length=40000, type=Type.STRING)	// type="string"
+	@Column(length=40000, type=Type.TEXT)
     protected String content;
 	
 	@Column
