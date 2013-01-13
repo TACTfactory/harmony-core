@@ -71,7 +71,7 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
  *
  */
 public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAdapterBase{
-	private static final String TAG = "${curr.name}WebServiceClientAdapterBase";
+	private static final String TAG = "${curr.name}WSClientAdapter";
 	private static String REST_FORMAT = ".json"; //JSon RSS xml or empty (for html)
 
 	private static final String ${alias(curr.name)} = "${curr.name}";
@@ -116,7 +116,7 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	/**
 	 * Retrieve one ${curr.name}. Uses the route : ${curr.options.rest.uri?lower_case}/%id%
 	 * @param ${curr.name?lower_case} : The ${curr.name} to retrieve (set the ID)
-	 * @return -1 if an error has occured. 0 if not.
+	 * @return -1 if an error has occurred. 0 if not.
 	 */
 	public int get(${curr.name} ${curr.name?lower_case}){
 		int result = -1;
@@ -144,7 +144,7 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	/**
 	 * Insert the ${curr.name}. Uses the route : ${curr.options.rest.uri?lower_case}
 	 * @param ${curr.name?lower_case} : The ${curr.name} to insert
-	 * @return -1 if an error has occured. 0 if not.
+	 * @return -1 if an error has occurred. 0 if not.
 	 */
 	public int insert(${curr.name} ${curr.name?lower_case}){
 		int result = -1;
@@ -164,7 +164,7 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	/**
 	 * Update a ${curr.name}. Uses the route : ${curr.options.rest.uri?lower_case}/%id%
 	 * @param ${curr.name?lower_case} : The ${curr.name} to update
-	 * @return -1 if an error has occured. 0 if not.
+	 * @return -1 if an error has occurred. 0 if not.
 	 */
 	public int update(${curr.name} ${curr.name?lower_case}){
 		int result = -1;
@@ -185,7 +185,7 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	/**
 	 * Delete a ${curr.name}. Uses the route : ${curr.options.rest.uri?lower_case}/%id%
 	 * @param ${curr.name?lower_case} : The ${curr.name} to delete (only the id is necessary)
-	 * @return -1 if an error has occured. 0 if not.
+	 * @return -1 if an error has occurred. 0 if not.
 	 */
 	public int delete(${curr.name} ${curr.name?lower_case}){
 		int result = -1;
@@ -243,7 +243,7 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	 * Get the ${curr.name} associated with a ${relation.relation.targetEntity}. Uses the route : ${entities[relation.relation.targetEntity].options.rest.uri?lower_case}/%${relation.relation.targetEntity}_id%/${curr.options.rest.uri?lower_case}
 	 * @param ${curr.name?lower_case} : The ${curr.name} that will be returned
 	 * @param ${relation.relation.targetEntity?lower_case} : The associated ${relation.relation.targetEntity?lower_case}
-	 * @return -1 if an error has occured. 0 if not.
+	 * @return -1 if an error has occurred. 0 if not.
 	 */
 	public int getBy${relation.relation.targetEntity}(${curr.name} ${curr.name?uncap_first}, ${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first}){
 		int result = -1;

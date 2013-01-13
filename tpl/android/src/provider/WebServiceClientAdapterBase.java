@@ -20,7 +20,7 @@ import android.text.TextUtils;
 import android.widget.Toast;
 
 public abstract class WebServiceClientAdapterBase{
-	private static final String TAG = "WebServiceClientAdapterBase";
+	private static final String TAG = "WSClientAdapter";
 
 	private List<Header> headers = new ArrayList<Header>();
 	private RestClient restClient;
