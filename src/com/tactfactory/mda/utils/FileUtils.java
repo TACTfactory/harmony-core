@@ -27,7 +27,8 @@ import com.tactfactory.mda.ConsoleUtils;
 /** Manipulate File tools */
 public class FileUtils extends org.apache.commons.io.FileUtils {
 	
-	/** Create a new file if doesn't exist (and path)
+	/** 
+	 * Create a new file if doesn't exist (and path)
 	 * 
 	 * @param filename Full path of file
 	 * @return File instance 
@@ -58,7 +59,8 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		return file;
 	}
 	
-	/** Copy file content from srcFile to destFile 
+	/** 
+	 * Copy file content from srcFile to destFile 
 	 *
 	 * @param srcFile Source path
 	 * @param destFile Destination path
@@ -348,5 +350,19 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		else 
 			ConsoleUtils.displayDebug("File "+filename+ " doesn't exists !");
 		return f.exists();
+	}
+	
+	/*
+	 * Get the extension of a file.
+	 */  
+	public static String getExtension(File f) {
+	    String ext = null;
+	    String s = f.getName();
+	    int i = s.lastIndexOf('.');
+
+	    if (i > 0 &&  i < s.length() - 1) {
+	        ext = s.substring(i+1).toLowerCase();
+	    }
+	    return ext;
 	}
 }

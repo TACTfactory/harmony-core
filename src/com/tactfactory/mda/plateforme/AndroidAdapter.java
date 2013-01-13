@@ -8,9 +8,15 @@
  */
 package com.tactfactory.mda.plateforme;
 
+import java.io.File;
+import java.io.FilenameFilter;
+import java.io.IOException;
+
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.FieldMetadata;
 import com.tactfactory.mda.orm.annotation.Column;
+import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.ImageUtils;
 
 /** Google Android Adapter of project structure */
 public final class AndroidAdapter extends BaseAdapter {
@@ -176,5 +182,46 @@ public final class AndroidAdapter extends BaseAdapter {
 			ret = "int";
 		}
 		return ret;
+	}
+	
+	private FilenameFilter filter = new FilenameFilter() {
+	    public boolean accept(File dir, String name) {
+	        return	name.endsWith(".png") || 
+	        		name.endsWith(".jpg");
+	    }
+	};
+	
+	public void resizeImage() {
+		File imageDirectoryXHD	= new File(this.getRessourcePath() + "/drawable-xhdpi");
+		File imageDirectoryHD 	= new File(this.getRessourcePath() + "/drawable-hdpi");
+		File imageDirectoryMD 	= new File(this.getRessourcePath() + "/drawable-mdpi");
+		File imageDirectoryLD 	= new File(this.getRessourcePath() + "/drawable-ldpi");
+		File imageHD;
+		File imageMD;
+		File imageLD;
+		
+		if(imageDirectoryXHD.exists() && imageDirectoryXHD.listFiles().length > 0) {
+			File[] imagesFiles = imageDirectoryXHD.listFiles(filter);
+			FileUtils.makeFolder(imageDirectoryHD.getAbsolutePath());
+			FileUtils.makeFolder(imageDirectoryMD.getAbsolutePath());
+			FileUtils.makeFolder(imageDirectoryLD.getAbsolutePath());
+			
+			for (File imageXHD : imagesFiles) {
+				try {
+					imageHD = new File(imageDirectoryHD.getCanonicalPath() + "/" + imageXHD.getName());
+					imageMD = new File(imageDirectoryMD.getCanonicalPath() + "/" + imageXHD.getName());
+					imageLD = new File(imageDirectoryLD.getCanonicalPath() + "/" + imageXHD.getName());
+						
+					ImageUtils.resize(imageXHD, imageHD, 0.75f);
+					ImageUtils.resize(imageXHD, imageMD, 0.50f);
+					ImageUtils.resize(imageXHD, imageLD, 0.375f);
+					
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				
+			}
+		}
 	}
 }
