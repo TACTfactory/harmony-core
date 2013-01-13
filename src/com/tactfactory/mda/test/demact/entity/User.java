@@ -30,19 +30,19 @@ public class User extends Object implements Cloneable {
     @GeneratedValue(strategy="IDENTITY")
     protected int id;
 
-	@Column(unique=true)		// type="string", length=255
+	@Column(type=Type.LOGIN)
     protected String login;
 	
-	@Column(type=Type.STRING)	// type="string", length=255
+	@Column(type=Type.PASSWORD)
     protected String password;
 	
-	@Column(nullable=true)		// type="string", length=255
+	@Column(nullable=true)
     protected String firstname;
 	
-	@Column()					// type="string", length=255
+	@Column()
     protected String lastname;
 	
-	@Column(name="created_at")	// type="datetime",
+	@Column(name="created_at")
     protected DateTime createdAt;
 
 
