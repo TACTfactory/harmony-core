@@ -22,33 +22,33 @@ public class SqliteAdapter {
 	public static String generateStructure(FieldMetadata field) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(" " + field.columnDefinition.toLowerCase());
-		
-		
-		// Set Length
-		if(field.length!=255){
-			builder.append("("+field.length+")");
-		} else if (field.precision!=0){
-			builder.append("("+field.precision);
-			if(field.scale!=0){
-				builder.append(","+field.scale);
-			}
-			builder.append(")");
-		}
-		
-		// Set Unique
-		if(field.unique){
-			builder.append(" UNIQUE");
-		}
-		
-		// Set Nullable
-		if(!field.nullable) {
-			builder.append(" NOT NULL");
-		}
-		
 		if(field.id){
 			builder.append(" PRIMARY KEY");
 			if(field.columnDefinition.equals("integer")) builder.append(" AUTOINCREMENT");
+		}else{
+		
+			// Set Length
+			if(field.length!=255){
+				builder.append("("+field.length+")");
+			} else if (field.precision!=0){
+				builder.append("("+field.precision);
+				if(field.scale!=0){
+					builder.append(","+field.scale);
+				}
+				builder.append(")");
+			}
+			
+			// Set Unique
+			if(field.unique){
+				builder.append(" UNIQUE");
+			}
+			
+			// Set Nullable
+			if(!field.nullable) {
+				builder.append(" NOT NULL");
+			}
 		}
+
 		
 		return builder.toString();
 	}

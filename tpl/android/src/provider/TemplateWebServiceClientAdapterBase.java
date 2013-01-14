@@ -58,8 +58,13 @@ import android.content.Context;
 import org.joda.time.format.ISODateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+<#assign alreadyImportArrayList=false>
 <#list curr.relations as relation>
 	<#if isRestEntity(relation.relation.targetEntity)>
+		<#if !alreadyImportArrayList && (relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany")>
+import java.util.ArrayList;
+			<#assign alreadyImportArrayList=true>
+		</#if>
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
 	</#if>
 </#list>
