@@ -110,17 +110,6 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 			public void onClick(View v){
 		        DateTime dt = new DateTime();
 
-/*				if (!TextUtils.isEmpty(${curr.name}CreateFragment.this.${field.name}View.getText())){
-					String strInputDate = ${curr.name}CreateFragment.this.${field.name}View.getText().toString();
-					try {
-						Date date = df.parse(strInputDate);
-						dt = new DateTime(date.getTime());
-					} catch (ParseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-*/					
-
 		        String ${field.name}Date = ${curr.name}CreateFragment.this.${field.name}DateView.getText().toString();
 				if (!TextUtils.isEmpty(${field.name}Date)) {
 					String strInputDate = ${field.name}Date;
@@ -147,10 +136,11 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 		this.${field.name}TimeView.setOnClickListener(new OnClickListener(){
 			public void onClick(View v){
 				DateTime dt = new DateTime(); 
+				
 				String ${field.name}Time = ${curr.name}CreateFragment.this.${field.name}TimeView.getText().toString();
 				if (!TextUtils.isEmpty(${field.name}Time)) {
 					String strInputTime = ${field.name}Time;
-					dt = DateUtils.formatStringToDate(strInputTime);
+					dt = DateUtils.formatStringToTime(strInputTime);
 				}
 				
 			    CustomTimePickerDialog ${field.name}Tpd = new CustomTimePickerDialog(getActivity(), dt, 
