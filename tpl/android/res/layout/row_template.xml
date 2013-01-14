@@ -1,4 +1,4 @@
-<#assign curr = entities[current_entity]>
+<#assign curr = entities[current_entity] />
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -9,11 +9,11 @@
     android:paddingRight="10dp"
     android:paddingTop="2.5dp" >
 	<#list curr.fields as field>
-		<#assign m_id="${curr.name?lower_case}_${field.name?lower_case}">
-		<#assign m_id_label="${m_id}_label">
-		<#if !field.internal && !field.hidden>	
-			<#if !field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")>
-				<#if field.type=="boolean">
+		<#assign m_id="${curr.name?lower_case}_${field.name?lower_case}" />
+		<#assign m_id_label="${m_id}_label" />
+		<#if (!field.internal && !field.hidden)>	
+			<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
+				<#if (field.type=="boolean")>
 	    <CheckBox
 		android:id="@+id/row_${m_id}"
 	    	android:layout_width="match_parent"
@@ -31,7 +31,7 @@
 				<#else>
 		android:layout_below="@+id/row_${curr.name?lower_case}_${lastFieldName}" />
 				</#if>
-				<#assign lastFieldName=field.name?lower_case>
+				<#assign lastFieldName=field.name?lower_case />
 			</#if>
 		</#if>
 	</#list>
