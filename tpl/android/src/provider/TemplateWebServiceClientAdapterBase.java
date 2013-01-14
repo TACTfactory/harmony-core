@@ -219,12 +219,12 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	 * @param ${relation.relation.targetEntity?lower_case} : The associated ${relation.relation.targetEntity?lower_case}
 	 * @return The number of ${curr.name}s returned
 	 */
-	public int getBy${relation.relation.targetEntity}(List<${curr.name}> ${curr.name?lower_case}s, ${relation.relation.targetEntity} ${relation.relation.targetEntity?lower_case}){
+	public int getBy${relation.name?cap_first}(List<${curr.name}> ${curr.name?lower_case}s, ${relation.relation.targetEntity} ${relation.relation.targetEntity?lower_case}){
 		int result = -1;
 		String response = this.invokeRequest(
 					Verb.GET,
 					String.format(
-						"${entities[relation.relation.targetEntity].options.rest.uri?lower_case}/%s/${curr.options.rest.uri?lower_case}%s",
+						"${curr.options.rest.uri?lower_case}/${relation.name?lower_case}/%s%s",
 						${relation.relation.targetEntity?lower_case}.getId(), 
 						REST_FORMAT),
 					null);
@@ -255,7 +255,7 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 		String response = this.invokeRequest(
 					Verb.GET,
 					String.format(
-						"${entities[relation.relation.targetEntity].options.rest.uri?lower_case}/%s/${curr.options.rest.uri?lower_case}%s",
+						"${curr.options.rest.uri?lower_case}/${relation.name?lower_case}/%s%s",
 						${relation.relation.targetEntity?uncap_first}.getId(), 
 						REST_FORMAT),
 					null);
