@@ -1,4 +1,4 @@
-<#assign curr = entities[current_entity]>
+<#assign curr = entities[current_entity] />
 package ${curr.data_namespace};
 
 import android.content.Context;

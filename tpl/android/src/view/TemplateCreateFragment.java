@@ -19,8 +19,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.app.*;
 import android.widget.*;
 
-import java.util.List;
-import java.util.ArrayList;
 
 <#assign importDate=false />
 <#assign importTime=false />
@@ -48,10 +46,25 @@ import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
+<#assign mustImportArrayList=false />
+<#assign import_array = [] />
 <#list curr.relations as relation>
+	<#if (!relation.internal && !relation.hidden)>
+		<#if (!m.isInArray(import_array, relation.relation.targetEntity))>
+			<#assign import_array = import_array + [relation.relation.targetEntity] />
 import ${curr.namespace}.data.${relation.relation.targetEntity}SQLiteAdapter;
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
+			<#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
+				<#assign mustImportArrayList=true />
+			</#if>
+		</#if>
+	</#if>
 </#list>
+
+import java.util.List;
+<#if (mustImportArrayList)>
+import java.util.ArrayList;
+</#if>
 
 /** ${curr.name} create fragment
  * 
@@ -218,7 +231,7 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 	}
 			<#else>
 	protected void init${relation.name?cap_first}Dialog(List<${relation.relation.targetEntity}> list){
-		String[] listAdapter = new String[list.size()];
+		final String[] listAdapter = new String[list.size()];
 		int i=0;
 		for(${relation.relation.targetEntity} item : list){
 			listAdapter[i] = String.valueOf(item.getId());
@@ -228,12 +241,12 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 		builder.setTitle("Select ${relation.name}")
 				.setSingleChoiceItems(listAdapter, 0, new DialogInterface.OnClickListener(){
 					public void onClick(DialogInterface dialog, int id){
-						${curr.name}CreateFragment.this.selected${relation.name?cap_first} = id;
+						//${curr.name}CreateFragment.this.selected${relation.name?cap_first} = Integer.parseInt(listAdapter[id]);
 					}
 				}).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 		            @Override
 		            public void onClick(DialogInterface dialog, int id) {
-		            	//${curr.name}CreateFragment.this.onOk${relation.name?cap_first}();
+		            	${curr.name}CreateFragment.this.selected${relation.name?cap_first} = Integer.parseInt(listAdapter[((AlertDialog)dialog).getListView().getCheckedItemPosition()]);
 		            }
 		        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 		            @Override

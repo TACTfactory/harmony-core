@@ -30,10 +30,10 @@ public class ${project_name?cap_first}SQLiteOpenHelper extends SQLiteOpenHelper 
 		
 		/// Create Schema
 	<#list entities?values as entity>
-		<#if entity.fields?? && (entity.fields?size>0)>
+		<#if (entity.fields?? && (entity.fields?size>0))>
 		db.execSQL( ${entity.name}SQLiteAdapter.getSchema() );
 			<#list entity["relations"] as relation>
-				<#if relation.type=="ManyToMany">
+				<#if (relation.type=="ManyToMany")>
 		db.execSQL( ${entity.name}SQLiteAdapter.get${relation.name?cap_first}RelationSchema() );
 				</#if>
 			</#list>
@@ -63,10 +63,10 @@ public class ${project_name?cap_first}SQLiteOpenHelper extends SQLiteOpenHelper 
 					   " to " + newVersion + ", which will destroy all old data");
 		
 		<#list entities?values as entity>
-			<#if entity.fields?? && (entity.fields?size>0)>
+			<#if (entity.fields?? && (entity.fields?size>0))>
 			db.execSQL("DROP TABLE IF EXISTS "+ ${entity.name}SQLiteAdapter.TABLE_NAME);
 				<#list entity['relations'] as relation>
-					<#if relation.type=="ManyToMany">
+					<#if (relation.type=="ManyToMany")>
 			db.execSQL("DROP TABLE IF EXISTS "+${entity.name}SQLiteAdapter.RELATION_${relation.name?upper_case}_TABLE_NAME );
 					</#if>
 				</#list>

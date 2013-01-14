@@ -1,46 +1,55 @@
-<#assign curr = entities[current_entity]>
+<#assign curr = entities[current_entity] />
 <#function alias name>
-	<#return "JSON_"+name?upper_case>
+	<#return "JSON_"+name?upper_case />
 </#function>
 
 <#function typeToJsonType field>
-	<#if !field.relation??>
-		<#if field.type=="int" || field.type=="integer">
-			<#return "Int">
-		<#elseif field.type=="float">
-			<#return "Float">
-		<#elseif field.type=="double">
-			<#return "Double">
-		<#elseif field.type=="long">
-			<#return "Long">
-		<#elseif field.type=="boolean">
-			<#return "Boolean">
+	<#if (!field.relation??)>
+		<#if (field.type=="int" || field.type=="integer")>
+			<#return "Int" />
+		<#elseif (field.type=="float")>
+			<#return "Float" />
+		<#elseif (field.type=="double")>
+			<#return "Double" />
+		<#elseif (field.type=="long")>
+			<#return "Long" />
+		<#elseif (field.type=="boolean")>
+			<#return "Boolean" />
 		<#else>
-			<#return "String">
+			<#return "String" />
 		</#if>
 	<#else>
-		<#if field.relation.type=="ManyToMany"||field.relation.type=="OneToMany">
-			<#return "JSONObject">
+		<#if (field.relation.type=="ManyToMany" || field.relation.type=="OneToMany")>
+			<#return "JSONObject" />
 		<#else>
-			<#return "JSONObject">
+			<#return "JSONObject" />
 		</#if>
 	</#if>
 </#function>
 
 <#function getFormatter datetype>
-	<#assign ret="ISODateTimeFormat.">
-	<#if datetype?lower_case=="datetime">
-		<#assign ret=ret+"dateTime()">
-	<#elseif datetype?lower_case=="time">
-		<#assign ret=ret+"dateTime()">
-	<#elseif datetype?lower_case=="date">
-		<#assign ret=ret+"dateTime()">
+	<#assign ret="ISODateTimeFormat." />
+	<#if (datetype?lower_case=="datetime")>
+		<#assign ret=ret+"dateTime()" />
+	<#elseif (datetype?lower_case=="time")>
+		<#assign ret=ret+"dateTime()" />
+	<#elseif (datetype?lower_case=="date")>
+		<#assign ret=ret+"dateTime()" />
 	</#if>
-	<#return ret>
+	<#return ret />
 </#function>
 
 <#function isRestEntity entityName>
-	<#return entities[entityName].options.rest??>
+	<#return entities[entityName].options.rest?? />
+</#function>
+
+<#function isInArray array var>
+	<#list array as item>
+		<#if (item==var)>
+			<#return true />
+		</#if>
+	</#list>
+	<#return false />
 </#function>
 
 package ${curr.data_namespace};
@@ -58,9 +67,18 @@ import android.content.Context;
 import org.joda.time.format.ISODateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+<#assign import_array = [] />
+<#assign alreadyImportArrayList=false />
 <#list curr.relations as relation>
-	<#if isRestEntity(relation.relation.targetEntity)>
+	<#if (isRestEntity(relation.relation.targetEntity))>
+		<#if (!alreadyImportArrayList && (relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany"))>
+import java.util.ArrayList;
+			<#assign alreadyImportArrayList=true />
+		</#if>
+		<#if (!isInArray(import_array, relation.relation.targetEntity))>
+			<#assign import_array = import_array + [relation.relation.targetEntity] />
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
+		</#if>
 	</#if>
 </#list>
 
@@ -76,8 +94,8 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 
 	private static final String ${alias(curr.name)} = "${curr.name}";
 	<#list curr.fields as field>
-		<#if !field.internal>
-			<#if !field.relation?? || isRestEntity(field.relation.targetEntity)>
+		<#if (!field.internal)>
+			<#if (!field.relation?? || isRestEntity(field.relation.targetEntity))>
 	private static final String ${alias(field.name)} = "${field.name?uncap_first}";
 			</#if>
 		</#if>
@@ -204,22 +222,22 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	}
 
 	<#list curr.relations as relation>
-		<#if isRestEntity(relation.relation.targetEntity)>
-			<#if relation.relation.type=="OneToMany">
+		<#if (isRestEntity(relation.relation.targetEntity))>
+			<#if (relation.relation.type=="OneToMany")>
 
-			<#elseif relation.relation.type=="ManyToMany" || relation.relation.type=="ManyToOne">
+			<#elseif (relation.relation.type=="ManyToMany" || relation.relation.type=="ManyToOne")>
 	/**
 	 * Get the ${curr.name}s associated with a ${relation.relation.targetEntity}. Uses the route : ${entities[relation.relation.targetEntity].options.rest.uri?lower_case}/%${relation.relation.targetEntity}_id%/${curr.options.rest.uri?lower_case}
 	 * @param ${curr.name?lower_case}s : The list in which the ${curr.name}s will be returned
 	 * @param ${relation.relation.targetEntity?lower_case} : The associated ${relation.relation.targetEntity?lower_case}
 	 * @return The number of ${curr.name}s returned
 	 */
-	public int getBy${relation.relation.targetEntity}(List<${curr.name}> ${curr.name?lower_case}s, ${relation.relation.targetEntity} ${relation.relation.targetEntity?lower_case}){
+	public int getBy${relation.name?cap_first}(List<${curr.name}> ${curr.name?lower_case}s, ${relation.relation.targetEntity} ${relation.relation.targetEntity?lower_case}){
 		int result = -1;
 		String response = this.invokeRequest(
 					Verb.GET,
 					String.format(
-						"${entities[relation.relation.targetEntity].options.rest.uri?lower_case}/%s/${curr.options.rest.uri?lower_case}%s",
+						"${curr.options.rest.uri?lower_case}/${relation.name?lower_case}/%s%s",
 						${relation.relation.targetEntity?lower_case}.getId(), 
 						REST_FORMAT),
 					null);
@@ -250,7 +268,7 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 		String response = this.invokeRequest(
 					Verb.GET,
 					String.format(
-						"${entities[relation.relation.targetEntity].options.rest.uri?lower_case}/%s/${curr.options.rest.uri?lower_case}%s",
+						"${curr.options.rest.uri?lower_case}/${relation.name?lower_case}/%s%s",
 						${relation.relation.targetEntity?uncap_first}.getId(), 
 						REST_FORMAT),
 					null);
@@ -287,19 +305,19 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 
 		if (id != 0) {
 			<#list curr.fields as field>
-				<#if !field.internal>
-					<#if !field.relation??>
-						<#if field.type=="date"||field.type=="datetime"||field.type=="time">
+				<#if (!field.internal)>
+					<#if (!field.relation??)>
+						<#if (field.type=="date"||field.type=="datetime"||field.type=="time")>
 			DateTimeFormatter ${field.name?uncap_first}Formatter = ${getFormatter(field.type)};
 			${curr.name?lower_case}.set${field.name?cap_first}(${field.name?uncap_first}Formatter.parseDateTime(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?lower_case}.get${field.name?cap_first}().toString())));	
-						<#elseif field.type=="boolean">
+						<#elseif (field.type=="boolean")>
 			${curr.name?lower_case}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?lower_case}.is${field.name?cap_first}()));	
 						<#else>
 			${curr.name?lower_case}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?lower_case}.get${field.name?cap_first}()));	
 						</#if>
 					<#else>
-						<#if isRestEntity(field.relation.targetEntity)>
-							<#if field.relation.type=="OneToMany" || field.relation.type=="ManyToMany">
+						<#if (isRestEntity(field.relation.targetEntity))>
+							<#if (field.relation.type=="OneToMany" || field.relation.type=="ManyToMany")>
 			ArrayList<${field.relation.targetEntity}> ${field.name?uncap_first} = new ArrayList<${field.relation.targetEntity}>();
 			try{
 				${field.relation.targetEntity}WebServiceClientAdapter.extract${field.relation.targetEntity}s(json.opt${typeToJsonType(field)}(${alias(field.name)}), ${field.name?uncap_first});
@@ -367,18 +385,18 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 		JSONObject params = new JSONObject();
 		try{
 			<#list curr.fields as field>
-				<#if !field.internal>
-					<#if !field.relation??>
-						<#if field.type=="date" || field.type=="time" || field.type=="datetime">
+				<#if (!field.internal)>
+					<#if (!field.relation??)>
+						<#if (field.type=="date" || field.type=="time" || field.type=="datetime")>
 			params.put(${alias(field.name)}, ${curr.name?lower_case}.get${field.name?cap_first}().toString());
-						<#elseif field.type=="boolean">
+						<#elseif (field.type=="boolean")>
 			params.put(${alias(field.name)}, ${curr.name?lower_case}.is${field.name?cap_first}());
 						<#else>
 			params.put(${alias(field.name)}, ${curr.name?lower_case}.get${field.name?cap_first}());
 						</#if>
 					<#else>
-						<#if isRestEntity(field.relation.targetEntity)>
-							<#if field.relation.type=="OneToMany" || field.relation.type=="ManyToMany">
+						<#if (isRestEntity(field.relation.targetEntity))>
+							<#if (field.relation.type=="OneToMany" || field.relation.type=="ManyToMany")>
 			params.put(${alias(field.name)}, ${field.relation.targetEntity?cap_first}WebServiceClientAdapter.${field.relation.targetEntity?uncap_first}sToJson(${curr.name?lower_case}.get${field.name?cap_first}()));
 							<#else>
 			params.put(${alias(field.name)}, ${field.relation.targetEntity?cap_first}WebServiceClientAdapter.${field.relation.targetEntity?uncap_first}ToJson(${curr.name?lower_case}.get${field.name?cap_first}()));
