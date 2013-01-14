@@ -11,9 +11,9 @@ import com.tactfactory.mda.template.TagConstant;
 public class SyncMetadata extends BaseMetadata{
 	private final static String NAME = "sync";
 	
-	public Level level;
-	public Mode mode;
-	public int priority;
+	public Level level = Level.GLOBAL;
+	public Mode mode = Mode.POOLING;
+	public int priority = 1;
 	
 	public SyncMetadata(){
 		this.name = NAME;

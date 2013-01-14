@@ -44,10 +44,12 @@ public class SyncParser extends BaseParser{
 						//TODO : Generate warning if type not recognized
 						int priority  = 0;
 						
-						if(pair.getValue() instanceof StringLiteralExpr){
+						if (pair.getValue() instanceof IntegerLiteralExpr) {
 							priority = Integer.parseInt(((IntegerLiteralExpr)pair.getValue()).getValue());
+						}else if (pair.getValue() instanceof StringLiteralExpr) {
+							priority = Sync.Priority.fromName(((StringLiteralExpr)pair.getValue()).getValue());
 						}else{
-							priority = Integer.parseInt(pair.getValue().toString());
+							priority = Sync.Priority.fromName(pair.getValue().toString());
 						}
 						
 						sm.priority= priority;

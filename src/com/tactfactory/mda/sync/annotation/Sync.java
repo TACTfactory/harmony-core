@@ -120,6 +120,21 @@ public @interface Sync {
 		public static final int NORMALE = 5;
 		public static final int HIGH = 0;
 		public static final int LOW = 9;
+		
+		public static int fromName(String name){
+			if(name.lastIndexOf(".")>0)
+				name = name.substring(name.lastIndexOf(".")+1); // Take only what comes after the last dot
+			ConsoleUtils.displayDebug("Sync for Security : "+name);
+			try{
+				Field field = Priority.class.getField(name);	
+				ConsoleUtils.displayDebug("Found Security : "+name);
+				return field.getInt(new Priority());
+				
+			}catch(Exception e){
+				return 0;
+			}
+			
+		}
 	}
 	
 	/**

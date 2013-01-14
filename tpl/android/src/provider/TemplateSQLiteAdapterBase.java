@@ -255,14 +255,20 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		c.close();
 		
 		<#list curr.relations as relation>
-			<#if (relation.relation.type=="OneToMany")>
+			<#if (!relation.internal)>
+				<#if (relation.relation.type=="OneToMany")>
 		${relation.relation.targetEntity}SQLiteAdapter ${relation.relation.targetEntity?lower_case}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
 		${relation.relation.targetEntity?lower_case}Adapter.open(this.mDatabase);
-		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getBy${curr.name}(result.getId())); // relation.relation.inversedBy?cap_first
-			<#elseif (relation.relation.type=="ManyToMany")>
+		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getBy${relation.relation.inversedBy}(result.getId())); // relation.relation.inversedBy?cap_first
+				<#elseif (relation.relation.type=="ManyToMany")>
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.context);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
 		result.set${relation.name?cap_first}(${relation.relation.joinTable?lower_case}Adapter.getBy${curr.name}(result.getId())); // relation.relation.inversedBy?cap_first
+				<#else>
+		${relation.relation.targetEntity}SQLiteAdapter ${relation.relation.targetEntity?lower_case}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
+		${relation.relation.targetEntity?lower_case}Adapter.open(this.mDatabase);
+		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getByID(result.get${relation.name?cap_first}().getId())); // relation.relation.inversedBy?cap_first		
+				</#if>
 			</#if>
 		</#list>
 		return result;
@@ -279,7 +285,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 	 * @return List of ${curr.name} entities
 	 */
 	 public ArrayList<${curr.name}> getBy${relation.name?cap_first}(int ${relation.name?lower_case}_id){
-		Cursor c = this.getCursor(${alias(relation.name)}+"=?", new String[]{${relation.name?lower_case}_id+""});
+		Cursor c = this.select(${alias(relation.name)}+"=?", new String[]{${relation.name?lower_case}_id+""}, null, null, null);
 		ArrayList<${curr.name}> result = ${curr.name}SQLiteAdapterBase.cursorTo${curr.name}s(c);
 		c.close();
 		
@@ -338,8 +344,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 	<#list curr.ids as id>
 		values.remove(${alias(id.name)});
 	</#list>
-		int newid = (int)this.mDatabase.insert(
-			TABLE_NAME, 
+		int newid = (int)this.insert(
 			null, 
 			values);
 	
@@ -383,8 +388,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		String whereClause = <#list curr.ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list curr.ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, </#if></#list>};
 		
-		return this.mDatabase.update(
-				TABLE_NAME, 
+		return this.update(
 				values, 
 				whereClause, 
 				whereArgs);
@@ -410,8 +414,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		String whereClause = <#list curr.ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list curr.ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, </#if></#list>};
 
-		return this.mDatabase.update(
-				TABLE_NAME, 
+		return this.update(
 				values, 
 				whereClause, 
 				whereArgs);
@@ -434,8 +437,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 	<#list curr.ids as id>
 		values.remove(${alias(id.name)});
 	</#list>
-		int newid = (int)this.mDatabase.insert(
-			TABLE_NAME, 
+		int newid = (int)this.insert(
 			null, 
 			values);
 	
@@ -480,8 +482,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		String whereClause = <#list curr.ids as id> ${alias(id.name)} + "=? <#if (id_has_next)>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list curr.ids as id>String.valueOf(${id.name}) <#if (id_has_next)>, </#if></#list>};
 		
-		return this.mDatabase.delete(
-				TABLE_NAME, 
+		return this.delete( 
 				whereClause, 
 				whereArgs);
 	<#else>
@@ -498,7 +499,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		String whereClause = <#list curr.ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list curr.ids as id>String.valueOf(${id.name}) <#if id_has_next>, </#if></#list>};
 		
-		return getCursor(whereClause, whereArgs);
+		return this.select(whereClause, whereArgs, null, null, null);
 	<#else>
 		throw new UnsupportedOperationException("Method not implemented yet.");
 	</#if>
@@ -508,20 +509,42 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Get all entities");
 		
-		return getCursor(null, null);
+		return this.select(null, null, null, null, null);
 	}
 	
 </#if>
 
-	protected Cursor getCursor(String whereClause, String[] whereArgs){
+	public Cursor select(String whereClause, String[] whereArgs, String groupBy, String having, String orderBy){
 		return this.mDatabase.query(
 				TABLE_NAME,
 				COLS,
 				whereClause,
 				whereArgs,
-				null,
-				null,
-				null);
+				groupBy,
+				having,
+				orderBy);
+	}
+	
+	public long insert(String nullColumnHack, ContentValues item){
+		return this.mDatabase.insert(
+				TABLE_NAME,
+				nullColumnHack,
+				item);
+	}
+	
+	public int delete(String whereClause, String[] whereArgs){
+		return this.mDatabase.delete(
+				TABLE_NAME,
+				whereClause,
+				whereArgs);
+	}
+	
+	public int update(ContentValues item, String whereClause, String[] whereArgs){
+		return this.mDatabase.update(
+				TABLE_NAME,
+				item,
+				whereClause,
+				whereArgs);
 	}
 	
 <#if (curr.internal=="true")>

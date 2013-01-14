@@ -19,8 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
 
-import java.util.List;
-import java.util.ArrayList;
 
 <#assign importDate=false />
 <#list curr.fields as field>
@@ -33,9 +31,13 @@ import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
+<#assign import_array = [] />
 <#list curr.relations as relation>
-	<#if (!relation.internal && !relation.hidden)>
+	<#if (!relation.internal && !relation.hidden && (relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany"))>
+		<#if (!m.isInArray(import_array, relation.relation.targetEntity))>
+			<#assign import_array = import_array + [relation.relation.targetEntity] />
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
+		</#if>
 	</#if>
 </#list>
 
