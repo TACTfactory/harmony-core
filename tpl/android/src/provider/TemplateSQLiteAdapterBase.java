@@ -1,5 +1,5 @@
-<#assign curr = entities[current_entity]>
-<#import "methods.tpl" as m>
+<#assign curr = entities[current_entity] />
+<#import "methods.ftl" as m />
 
 <#function alias name>
 	<#return "COL_"+name?upper_case>
@@ -38,10 +38,10 @@ import ${curr.namespace}.BuildConfig;
 <#if curr.internal=="false">
 import ${curr.namespace}.entity.${curr.name};
 </#if>
-<#assign import_array = []>
+<#assign import_array = [] />
 <#list curr.relations as relation>
 	<#if !isInArray(import_array, relation.relation.targetEntity)>
-		<#assign import_array = import_array + [relation.relation.targetEntity]>
+		<#assign import_array = import_array + [relation.relation.targetEntity] />
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
 	</#if>
 </#list>
@@ -66,11 +66,11 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 	
 	/** Global Fields */
 	public static final String[] COLS = new String[] {
-<#assign firstFieldDone=false>
+<#assign firstFieldDone=false />
 <#list curr.fields as field>
 	<#if !field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")>
 <#if firstFieldDone>,</#if>
-		${alias(field.name)}<#assign firstFieldDone=true></#if></#list>
+		${alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
 	};
 	
 	private Context context;

@@ -1,46 +1,46 @@
-<#assign curr = entities[current_entity]>
+<#assign curr = entities[current_entity]/>
 <#function alias name>
-	<#return "JSON_"+name?upper_case>
+	<#return "JSON_"+name?upper_case />
 </#function>
 
 <#function typeToJsonType field>
 	<#if !field.relation??>
 		<#if field.type=="int" || field.type=="integer">
-			<#return "Int">
+			<#return "Int" />
 		<#elseif field.type=="float">
-			<#return "Float">
+			<#return "Float" />
 		<#elseif field.type=="double">
-			<#return "Double">
+			<#return "Double" />
 		<#elseif field.type=="long">
-			<#return "Long">
+			<#return "Long" />
 		<#elseif field.type=="boolean">
-			<#return "Boolean">
+			<#return "Boolean" />
 		<#else>
-			<#return "String">
+			<#return "String" />
 		</#if>
 	<#else>
 		<#if field.relation.type=="ManyToMany"||field.relation.type=="OneToMany">
-			<#return "JSONObject">
+			<#return "JSONObject" />
 		<#else>
-			<#return "JSONObject">
+			<#return "JSONObject" />
 		</#if>
 	</#if>
 </#function>
 
 <#function getFormatter datetype>
-	<#assign ret="ISODateTimeFormat.">
+	<#assign ret="ISODateTimeFormat." />
 	<#if datetype?lower_case=="datetime">
-		<#assign ret=ret+"dateTime()">
+		<#assign ret=ret+"dateTime()" />
 	<#elseif datetype?lower_case=="time">
-		<#assign ret=ret+"dateTime()">
+		<#assign ret=ret+"dateTime()" />
 	<#elseif datetype?lower_case=="date">
-		<#assign ret=ret+"dateTime()">
+		<#assign ret=ret+"dateTime()" />
 	</#if>
-	<#return ret>
+	<#return ret />
 </#function>
 
 <#function isRestEntity entityName>
-	<#return entities[entityName].options.rest??>
+	<#return entities[entityName].options.rest?? />
 </#function>
 
 package ${curr.data_namespace};
@@ -58,12 +58,12 @@ import android.content.Context;
 import org.joda.time.format.ISODateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
-<#assign alreadyImportArrayList=false>
+<#assign alreadyImportArrayList=false />
 <#list curr.relations as relation>
 	<#if isRestEntity(relation.relation.targetEntity)>
 		<#if !alreadyImportArrayList && (relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany")>
 import java.util.ArrayList;
-			<#assign alreadyImportArrayList=true>
+			<#assign alreadyImportArrayList=true />
 		</#if>
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
 	</#if>
