@@ -38,6 +38,7 @@ public @interface Column {
 		// BASE
 		STRING(		"string", 	255, 	true, 	null, 	null, 	null),
 		TEXT(		"text", 	1024, 	true, 	null, 	null, 	null),
+		BOOLEAN(	"boolean", 	null, 	false, 	null, 	null, 	null),
 		INTEGER(	"integer", 	null, 	true, 	null, 	null, 	null),
 		INT(		"int", 		null, 	false,	null,	null,	null),
 		FLOAT(		"float", 	null, 	false,	null,	null,	null),

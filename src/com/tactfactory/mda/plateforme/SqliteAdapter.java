@@ -14,6 +14,7 @@ import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.orm.FieldMetadata;
 import com.tactfactory.mda.orm.RelationMetadata;
 import com.tactfactory.mda.orm.annotation.Column;
+import com.tactfactory.mda.orm.annotation.Column.Type;
 
 public class SqliteAdapter {
 	private static String PREFIX = "COL_";
@@ -28,11 +29,12 @@ public class SqliteAdapter {
 		}else{
 		
 			// Set Length
-			if(field.length!=255){
+			Type fieldType = Type.fromName(field.columnDefinition);
+			if(field.length!=fieldType.getLength()){
 				builder.append("("+field.length+")");
-			} else if (field.precision!=0){
+			} else if (field.precision!=fieldType.getPrecision()){
 				builder.append("("+field.precision);
-				if(field.scale!=0){
+				if(field.scale!=fieldType.getScale()){
 					builder.append(","+field.scale);
 				}
 				builder.append(")");
