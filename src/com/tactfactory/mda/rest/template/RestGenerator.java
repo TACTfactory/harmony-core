@@ -1,5 +1,6 @@
 package com.tactfactory.mda.rest.template;
 
+import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.ConfigMetadata;
 import com.tactfactory.mda.orm.TranslationMetadata;
@@ -8,6 +9,7 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.BaseGenerator;
 import com.tactfactory.mda.template.ConfigGenerator;
 import com.tactfactory.mda.template.TagConstant;
+import com.tactfactory.mda.template.TestDBGenerator;
 import com.tactfactory.mda.template.TranslationGenerator;
 
 public class RestGenerator extends BaseGenerator {
@@ -19,6 +21,12 @@ public class RestGenerator extends BaseGenerator {
 	public void generateAll() {
 		this.datamodel = this.appMetas.toMap(this.adapter);
 		this.generateWSAdapter();
+		try {
+			new TestWSGenerator(this.adapter).generateAll();
+			
+		} catch (Exception e) {
+			ConsoleUtils.displayError(e.getMessage());
+		}
 	}
 	
 	protected void generateWSAdapter(){
