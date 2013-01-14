@@ -43,6 +43,15 @@
 	<#return entities[entityName].options.rest?? />
 </#function>
 
+<#function isInArray array var>
+	<#list array as item>
+		<#if (item==var)>
+			<#return true />
+		</#if>
+	</#list>
+	<#return false />
+</#function>
+
 package ${curr.data_namespace};
 
 import ${curr.namespace}.entity.${curr.name};
@@ -58,6 +67,7 @@ import android.content.Context;
 import org.joda.time.format.ISODateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+<#assign import_array = [] />
 <#assign alreadyImportArrayList=false />
 <#list curr.relations as relation>
 	<#if (isRestEntity(relation.relation.targetEntity))>
@@ -65,7 +75,10 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 			<#assign alreadyImportArrayList=true />
 		</#if>
+		<#if (!isInArray(import_array, relation.relation.targetEntity))>
+			<#assign import_array = import_array + [relation.relation.targetEntity] />
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
+		</#if>
 	</#if>
 </#list>
 
