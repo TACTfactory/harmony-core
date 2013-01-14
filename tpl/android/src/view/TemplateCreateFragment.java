@@ -231,7 +231,7 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 	}
 			<#else>
 	protected void init${relation.name?cap_first}Dialog(List<${relation.relation.targetEntity}> list){
-		String[] listAdapter = new String[list.size()];
+		final String[] listAdapter = new String[list.size()];
 		int i=0;
 		for(${relation.relation.targetEntity} item : list){
 			listAdapter[i] = String.valueOf(item.getId());
@@ -241,12 +241,12 @@ public class ${curr.name}CreateFragment extends Fragment implements OnClickListe
 		builder.setTitle("Select ${relation.name}")
 				.setSingleChoiceItems(listAdapter, 0, new DialogInterface.OnClickListener(){
 					public void onClick(DialogInterface dialog, int id){
-						${curr.name}CreateFragment.this.selected${relation.name?cap_first} = id;
+						//${curr.name}CreateFragment.this.selected${relation.name?cap_first} = Integer.parseInt(listAdapter[id]);
 					}
 				}).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 		            @Override
 		            public void onClick(DialogInterface dialog, int id) {
-		            	//${curr.name}CreateFragment.this.onOk${relation.name?cap_first}();
+		            	${curr.name}CreateFragment.this.selected${relation.name?cap_first} = Integer.parseInt(listAdapter[((AlertDialog)dialog).getListView().getCheckedItemPosition()]);
 		            }
 		        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 		            @Override

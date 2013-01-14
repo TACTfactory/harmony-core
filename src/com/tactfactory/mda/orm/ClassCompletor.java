@@ -70,6 +70,7 @@ public class ClassCompletor {
 					new_field.relation.field = new_field.name;
 					new_field.relation.type = "ManyToOne";
 					new_field.relation.inversedBy = fm.name;
+					fm.relation.inversedBy = new_field.name;
 					entity_ref.fields.put(new_field.name, new_field);
 					entity_ref.relations.put(new_field.name, new_field);
 				}
