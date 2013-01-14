@@ -22,11 +22,6 @@ import android.widget.*;
 import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
 import ${curr.namespace}.entity.${curr.name};
-<#list curr.relations as relation>
-	<#if (!relation.internal && !relation.hidden)>
-import ${curr.namespace}.entity.${relation.relation.targetEntity};
-	</#if>
-</#list>
 
 public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}> {
 	private final LayoutInflater mInflater;

@@ -43,6 +43,15 @@
 	<#return entities[entityName].options.rest?? />
 </#function>
 
+<#function isInArray array var>
+	<#list array as item>
+		<#if (item==var)>
+			<#return true />
+		</#if>
+	</#list>
+	<#return false />
+</#function>
+
 package ${curr.data_namespace};
 
 import ${curr.namespace}.entity.${curr.name};
@@ -58,6 +67,7 @@ import android.content.Context;
 import org.joda.time.format.ISODateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
+<#assign import_array = [] />
 <#assign alreadyImportArrayList=false />
 <#list curr.relations as relation>
 	<#if (isRestEntity(relation.relation.targetEntity))>
@@ -65,7 +75,10 @@ import org.joda.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 			<#assign alreadyImportArrayList=true />
 		</#if>
+		<#if (!isInArray(import_array, relation.relation.targetEntity))>
+			<#assign import_array = import_array + [relation.relation.targetEntity] />
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
+		</#if>
 	</#if>
 </#list>
 
@@ -219,12 +232,12 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 	 * @param ${relation.relation.targetEntity?lower_case} : The associated ${relation.relation.targetEntity?lower_case}
 	 * @return The number of ${curr.name}s returned
 	 */
-	public int getBy${relation.relation.targetEntity}(List<${curr.name}> ${curr.name?lower_case}s, ${relation.relation.targetEntity} ${relation.relation.targetEntity?lower_case}){
+	public int getBy${relation.name?cap_first}(List<${curr.name}> ${curr.name?lower_case}s, ${relation.relation.targetEntity} ${relation.relation.targetEntity?lower_case}){
 		int result = -1;
 		String response = this.invokeRequest(
 					Verb.GET,
 					String.format(
-						"${entities[relation.relation.targetEntity].options.rest.uri?lower_case}/%s/${curr.options.rest.uri?lower_case}%s",
+						"${curr.options.rest.uri?lower_case}/${relation.name?lower_case}/%s%s",
 						${relation.relation.targetEntity?lower_case}.getId(), 
 						REST_FORMAT),
 					null);
@@ -255,7 +268,7 @@ public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAda
 		String response = this.invokeRequest(
 					Verb.GET,
 					String.format(
-						"${entities[relation.relation.targetEntity].options.rest.uri?lower_case}/%s/${curr.options.rest.uri?lower_case}%s",
+						"${curr.options.rest.uri?lower_case}/${relation.name?lower_case}/%s%s",
 						${relation.relation.targetEntity?uncap_first}.getId(), 
 						REST_FORMAT),
 					null);
