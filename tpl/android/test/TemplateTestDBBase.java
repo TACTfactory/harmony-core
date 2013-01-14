@@ -1,4 +1,4 @@
-<#assign curr = entities[current_entity]>
+<#assign curr = entities[current_entity] />
 package ${curr.test_namespace};
 
 
