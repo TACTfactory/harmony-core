@@ -60,7 +60,7 @@ public class ClassCompletor {
 					new_field.columnDefinition = "integer";
 					new_field.hidden = true;
 					new_field.internal = true;
-					new_field.name = cm.name.toLowerCase();
+					new_field.name = cm.name.toLowerCase()+"_internal";
 					new_field.columnName = new_field.name;
 					new_field.type = cm.name;
 					new_field.relation = new RelationMetadata();

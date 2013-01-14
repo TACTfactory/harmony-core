@@ -357,7 +357,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		for(${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()){
 			<#if relation.relation.mappedBy??>
 			${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
-			${relation.name?uncap_first}Adapter.updateWith${curr.name?cap_first}${relation.name?cap_first}(${relation.relation.targetEntity?lower_case});
+			${relation.name?uncap_first}Adapter.update(${relation.relation.targetEntity?lower_case});
 			<#else>
 			${relation.name?uncap_first}Adapter.updateWith${curr.name?cap_first}${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}, newid);
 			</#if>
