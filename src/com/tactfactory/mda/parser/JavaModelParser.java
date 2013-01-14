@@ -257,9 +257,13 @@ public class JavaModelParser {
 			if (fieldAnnotations != null) {
 				// General (required !)
 				FieldMetadata fieldMeta = new FieldMetadata(meta);
-				
+			
 				fieldMeta.type = Type.toTypeString(field.getType().toString());
 				
+				// Java types Date and Time are deprecated in Harmony
+				if(fieldMeta.type.toLowerCase().equals("date") || fieldMeta.type.toLowerCase().equals("time")){
+					ConsoleUtils.displayWarning("You should use DateTime java type instead of "+fieldMeta.type+". Errors may occur.");
+				}
 				//fieldMeta.isFinal = ModifierSet.isFinal(field.getModifiers());
 				fieldMeta.name = field.getVariables().get(0).getId().getName(); // FIXME not manage multi-variable
 				fieldMeta.columnName = fieldMeta.name;

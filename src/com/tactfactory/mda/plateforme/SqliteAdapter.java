@@ -14,6 +14,7 @@ import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.orm.FieldMetadata;
 import com.tactfactory.mda.orm.RelationMetadata;
 import com.tactfactory.mda.orm.annotation.Column;
+import com.tactfactory.mda.orm.annotation.Column.Type;
 
 public class SqliteAdapter {
 	private static String PREFIX = "COL_";
@@ -22,33 +23,34 @@ public class SqliteAdapter {
 	public static String generateStructure(FieldMetadata field) {
 		StringBuilder builder = new StringBuilder();
 		builder.append(" " + field.columnDefinition.toLowerCase());
-		
-		
-		// Set Length
-		if(field.length!=255){
-			builder.append("("+field.length+")");
-		} else if (field.precision!=0){
-			builder.append("("+field.precision);
-			if(field.scale!=0){
-				builder.append(","+field.scale);
-			}
-			builder.append(")");
-		}
-		
-		// Set Unique
-		if(field.unique){
-			builder.append(" UNIQUE");
-		}
-		
-		// Set Nullable
-		if(!field.nullable) {
-			builder.append(" NOT NULL");
-		}
-		
 		if(field.id){
 			builder.append(" PRIMARY KEY");
 			if(field.columnDefinition.equals("integer")) builder.append(" AUTOINCREMENT");
+		}else{
+		
+			// Set Length
+			Type fieldType = Type.fromName(field.columnDefinition);
+			if(field.length!=fieldType.getLength()){
+				builder.append("("+field.length+")");
+			} else if (field.precision!=fieldType.getPrecision()){
+				builder.append("("+field.precision);
+				if(field.scale!=fieldType.getScale()){
+					builder.append(","+field.scale);
+				}
+				builder.append(")");
+			}
+			
+			// Set Unique
+			if(field.unique){
+				builder.append(" UNIQUE");
+			}
+			
+			// Set Nullable
+			if(!field.nullable) {
+				builder.append(" NOT NULL");
+			}
 		}
+
 		
 		return builder.toString();
 	}

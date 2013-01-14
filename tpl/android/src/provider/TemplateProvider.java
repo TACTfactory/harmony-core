@@ -17,12 +17,12 @@ public class ${project_name?cap_first}Provider extends ContentProvider {
 	private String URI_NOT_SUPPORTED;
 	
 	// Internal code
-	<#assign id = 0> 
+	<#assign id = 0 /> 
 	<#list entities?values as entity>
 		<#if (entity.fields?size>0) >
 	protected static final int ${entity.name?upper_case}_ALL 		= ${id + 0};
 	protected static final int ${entity.name?upper_case}_ONE 		= ${id + 1};
-		<#assign id = id + 10> 
+		<#assign id = id + 10 /> 
 		</#if>
 	</#list>
 	
