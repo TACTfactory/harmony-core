@@ -115,7 +115,7 @@ public class OrmCommand extends BaseCommand {
 	 */
 	protected void makeLayoutTestDatabase(){
 		try {
-			new TestGenerator(this.adapter).generateAll();
+			new TestDBGenerator(this.adapter).generateAll();
 			
 		} catch (Exception e) {
 			ConsoleUtils.displayError(e.getMessage());
