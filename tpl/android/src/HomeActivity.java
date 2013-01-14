@@ -1,8 +1,8 @@
 package ${project_namespace};
 
-<#if entities??>
+<#if (entities??)>
 	<#list entities?values as entity>
-		<#if entity.fields?? && (entity.fields?size>0) && entity.internal!="true">
+		<#if (entity.fields?? && (entity.fields?size>0) && entity.internal!="true")>
 import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}CreateActivity;
 import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}ListActivity;
 		</#if>
@@ -28,9 +28,9 @@ public class HomeActivity extends Activity
 		LinearLayout homeLayout = (LinearLayout) findViewById(R.id.homeLayout);
 
 		// Base buttons
-		<#if entities??>
+		<#if (entities??)>
 			<#list entities?values as entity>
-				<#if entity.fields?? && (entity.fields?size>0) && entity.internal!="true">
+				<#if (entity.fields?? && (entity.fields?size>0) && entity.internal!="true")>
 		// Create ${entity.name}
 		Button ${entity.name}CreateButton = new Button(this);
 		${entity.name}CreateButton.setText("${entity.name}CreateActivity");
