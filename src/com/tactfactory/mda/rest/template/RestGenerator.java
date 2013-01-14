@@ -1,5 +1,8 @@
 package com.tactfactory.mda.rest.template;
 
+import java.io.File;
+
+import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.ConfigMetadata;
 import com.tactfactory.mda.orm.TranslationMetadata;
@@ -9,6 +12,7 @@ import com.tactfactory.mda.template.BaseGenerator;
 import com.tactfactory.mda.template.ConfigGenerator;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.template.TranslationGenerator;
+import com.tactfactory.mda.utils.FileUtils;
 
 public class RestGenerator extends BaseGenerator {
 
@@ -22,6 +26,8 @@ public class RestGenerator extends BaseGenerator {
 	}
 	
 	protected void generateWSAdapter(){
+		this.updateLibrary("httpmime-4.1.1.jar");
+		
 		TranslationMetadata.addDefaultTranslation("common_network_error", "Connection error", Group.COMMON);
 		
 		ConfigMetadata.addConfiguration("rest_url_prod", "https://domain.tlk:443/");
@@ -68,5 +74,17 @@ public class RestGenerator extends BaseGenerator {
 		String fullTemplatePath = this.adapter.getTemplateSourceProviderPath().substring(1) + templateName;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
+	}
+	
+	/**
+	 * Update Libs
+	 */
+	protected void updateLibrary(String libName) {
+		File dest = new File(String.format("%s/%s", this.adapter.getLibsPath(), libName));
+		
+		if (!dest.exists())
+			FileUtils.copyfile(
+					new File(String.format("%s/%s", Harmony.pathLibs, libName)),
+					dest);
 	}
 }

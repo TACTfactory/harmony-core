@@ -133,7 +133,6 @@ public class ProjectGenerator extends BaseGenerator {
 		this.updateLibrary("guava-12.0.jar");
 		this.updateLibrary("android-support-v4.jar");
 		this.updateLibrary("jsr305.jar");
-		this.updateLibrary("httpmime-4.1.1.jar");
 		
 		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathHarmony,"Harmony.jar")),
 				new File(String.format("%s/%s",this.adapter.getLibsPath(),"Harmony.jar")));
