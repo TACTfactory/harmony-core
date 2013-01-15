@@ -136,15 +136,15 @@ public class ${project_name?cap_first}Provider extends ContentProvider {
 		case ${entity.name?upper_case}_ONE:
 			try {
 				id = Integer.parseInt(uri.getPathSegments().get(1));
-//				result = this.dbAdapter${entity.name?cap_first}.remove(id);
+				result = this.dbAdapter${entity.name?cap_first}.delete(id);
 			} catch (Exception e) {
 				throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
 			}
 			break;
 		case ${entity.name?upper_case}_ALL:
-//			result = this.dbAdapter${entity.name?cap_first}.remove(
-//						selection, 
-//						selectionArgs);
+			result = this.dbAdapter${entity.name?cap_first}.delete(
+						selection, 
+						selectionArgs);
 			break;
 			</#if>
 		</#list>
@@ -168,7 +168,7 @@ public class ${project_name?cap_first}Provider extends ContentProvider {
 		
 		// ${entity.name}
 		case ${entity.name?upper_case}_ALL:
-//			id = this.dbAdapter${entity.name?cap_first}.insert(values);
+			id = this.dbAdapter${entity.name?cap_first}.insert(null, values);
 			
 			if (id > 0) {
 				result = ContentUris.withAppendedId(${project_name?cap_first}Provider.${entity.name?upper_case}_URI, id);
@@ -198,14 +198,16 @@ public class ${project_name?cap_first}Provider extends ContentProvider {
 		// ${entity.name}
 		case ${entity.name?upper_case}_ONE:
 			id = Integer.parseInt(uri.getPathSegments().get(1));
-//			result = this.dbAdapter${entity.name?cap_first}.get${entity.name?cap_first}ItemCursor(id);
+			result = this.dbAdapter${entity.name?cap_first}.query(id);
 			break;
 		case ${entity.name?upper_case}_ALL:
-//			result = this.dbAdapter${entity.name?cap_first}.getAll${entity.name?cap_first}ItemCursor(
-//						projection, 
-//						selection,
-//						selectionArgs, 
-//						sortOrder);
+			result = this.dbAdapter${entity.name?cap_first}.query(
+						projection, 
+						selection,
+						selectionArgs, 
+						sortOrder,
+						null,
+						null);
 			break;
 			</#if>
 		</#list>
@@ -231,16 +233,16 @@ public class ${project_name?cap_first}Provider extends ContentProvider {
 		// ${entity.name}
 		case ${entity.name?upper_case}_ONE:
 			id = uri.getPathSegments().get(1);
-//			result = this.dbAdapter${entity.name?cap_first}.update(
-//					values, 
-//					${entity.name?cap_first}SQLiteAdapter.COL_ID + " = " + id, 
-//					selectionArgs);
+			result = this.dbAdapter${entity.name?cap_first}.update(
+					values, 
+					${entity.name?cap_first}SQLiteAdapter.COL_ID + " = " + id, 
+					selectionArgs);
 			break;
 		case ${entity.name?upper_case}_ALL:
-//			result = this.dbAdapter${entity.name?cap_first}.update(
-//						values, 
-//						selection, 
-//						selectionArgs);
+			result = this.dbAdapter${entity.name?cap_first}.update(
+						values, 
+						selection, 
+						selectionArgs);
 			break;
 			</#if>
 		</#list>
