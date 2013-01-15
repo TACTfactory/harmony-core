@@ -54,21 +54,24 @@ public class TranslationMetadata {
 	public HashMap<Locale, String> i18n = new LinkedHashMap<Locale, String>();
 	
 	/**
+	 * Insert to meta a new resource string in the default group (Group.NONE)
+	 * 
+	 * @param key
+	 * @param defaultValue
+	 * @return the TranslationMetadata generated
+	 */
+	public static TranslationMetadata addDefaultTranslation(String key, String defaultValue) {		
+		return addDefaultTranslation(key, defaultValue, Group.NONE);
+	}
+	
+	/**
 	 * Insert to meta a new resource string
 	 * 
 	 * @param key
 	 * @param defaultValue
-	 * @return
+	 * @param group 
+	 * @return the TranslationMetadata generated
 	 */
-	public static TranslationMetadata addDefaultTranslation(String key, String defaultValue) {		
-		TranslationMetadata translateMeta = new TranslationMetadata();
-		translateMeta.key = CaseFormat.UPPER_CAMEL.to(CaseFormat.LOWER_UNDERSCORE, key);
-		translateMeta.i18n.put(Locale.getDefault(), defaultValue);
-		
-		Harmony.metas.translates.put(translateMeta.key, translateMeta);
-		
-		return translateMeta;
-	}
 	
 	public static TranslationMetadata addDefaultTranslation(String key, String defaultValue, Group group) {		
 		TranslationMetadata translateMeta = new TranslationMetadata();

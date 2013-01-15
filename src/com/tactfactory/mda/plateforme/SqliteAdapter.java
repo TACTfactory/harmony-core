@@ -30,23 +30,23 @@ public class SqliteAdapter {
 		
 			// Set Length
 			Type fieldType = Type.fromName(field.columnDefinition);
-			if(field.length!=fieldType.getLength()){
+			if(field.length!=null && field.length!=fieldType.getLength()){
 				builder.append("("+field.length+")");
-			} else if (field.precision!=fieldType.getPrecision()){
+			} else if (field.precision!=null && field.precision!=fieldType.getPrecision()){
 				builder.append("("+field.precision);
-				if(field.scale!=fieldType.getScale()){
+				if(field.scale!=null && field.scale!=fieldType.getScale()){
 					builder.append(","+field.scale);
 				}
 				builder.append(")");
 			}
 			
 			// Set Unique
-			if(field.unique){
+			if(field.unique!=null && field.unique){
 				builder.append(" UNIQUE");
 			}
 			
 			// Set Nullable
-			if(!field.nullable) {
+			if(field.nullable!=null && !field.nullable) {
 				builder.append(" NOT NULL");
 			}
 		}

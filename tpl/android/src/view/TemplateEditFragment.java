@@ -7,6 +7,7 @@ import ${curr.namespace}.R;
 import android.os.Bundle;
 import android.os.AsyncTask;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
@@ -354,8 +355,12 @@ public class ${curr.name}EditFragment extends Fragment implements OnClickListene
 		// Inflate the layout for this fragment
 		View view = inflater.inflate(R.layout.fragment_${curr.name?lower_case}_edit, container, false);
 
+		Intent intent =  getActivity().getIntent();
+		this.model = (${curr.name}) intent.getSerializableExtra("${curr.name}");
+		
 		this.initializeComponent(view);
 		this.loadData();
+		
 		return view;
 	}
 

@@ -27,8 +27,6 @@ public class ConfigGenerator extends BaseGenerator {
 
 	/**
 	 * Update XML Strings
-	 * 
-	 * @param cfg Template engine
 	 */
 	public void generateConfigXml() {		
 		ConsoleUtils.display(">> Generate config string...");

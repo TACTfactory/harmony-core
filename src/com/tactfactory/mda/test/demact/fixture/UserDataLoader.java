@@ -132,7 +132,7 @@ public class UserDataLoader extends FixtureBase {
 	}
 
 	/**
-	 * @see com.tactfactory.mda.test.FixtureBase#load()
+	 * @see com.tactfactory.mda.test.FixtureBase#load(DataManager manager)
 	 */
 	@Override
 	public void load(DataManager manager) {

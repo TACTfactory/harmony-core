@@ -270,18 +270,7 @@ public class JavaModelParser {
 
 				// Set defaults values
 				fieldMeta.hidden = false;
-				
-				// Set default values for type if type is recognized
-				Type type = Type.fromName(fieldMeta.type);
-				if (type != null) {
-					fieldMeta.type = type.getValue();
-					fieldMeta.nullable = type.isNullable();
-					fieldMeta.unique = type.isUnique();
-					fieldMeta.length = type.getLength();
-					fieldMeta.precision = type.getPrecision();
-					fieldMeta.scale = type.getScale();				
-				}
-				
+								
 				// Database definitions
 				RelationMetadata rel = new RelationMetadata();
 				boolean isColumn = false;
@@ -308,6 +297,22 @@ public class JavaModelParser {
 					}
 					
 					this.loadAttributes(rel, fieldMeta, annotationExpr, annotationType);
+					
+					// Set default values for type if type is recognized
+					Type type = Type.fromName(fieldMeta.type);
+					if (type != null) {
+						fieldMeta.type = type.getValue();
+						if(fieldMeta.nullable == null)
+							fieldMeta.nullable = type.isNullable();
+						if(fieldMeta.unique == null)
+							fieldMeta.unique = type.isUnique();
+						if(fieldMeta.length == null)
+							fieldMeta.length = type.getLength();
+						if(fieldMeta.precision == null)
+							fieldMeta.precision = type.getPrecision();
+						if(fieldMeta.scale == null)
+							fieldMeta.scale = type.getScale();				
+					}
 				}
 				
 				// ID relation

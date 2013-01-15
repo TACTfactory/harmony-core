@@ -30,7 +30,7 @@ public class User extends Object implements Cloneable {
     @GeneratedValue(strategy="IDENTITY")
     protected int id;
 
-	@Column(type=Type.LOGIN, unique=true)
+	@Column(type=Type.LOGIN)
     protected String login;
 	
 	@Column(type=Type.PASSWORD)

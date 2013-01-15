@@ -40,7 +40,7 @@ public class RelationMetadata extends BaseMetadata {
 	
 	/**
 	 * Transform the relation to a field of map of strings
-	 * @return
+	 * @return the generated HashMap
 	 */
 	@Override
 	public HashMap<String, Object> toMap(BaseAdapter adapter){
