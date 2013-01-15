@@ -1,7 +1,7 @@
 package com.tactfactory.mda.rest.parser;
 
-import com.tactfactory.mda.orm.ApplicationMetadata;
-import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.meta.ApplicationMetadata;
+import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.rest.meta.RestMetadata;
 
 public class RestCompletor {

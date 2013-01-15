@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.orm;
+package com.tactfactory.mda.meta;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;

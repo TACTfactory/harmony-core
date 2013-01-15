@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.orm;
+package com.tactfactory.mda.meta;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,7 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.tactfactory.mda.Harmony;
-import com.tactfactory.mda.orm.TranslationMetadata.Group;
+import com.tactfactory.mda.meta.TranslationMetadata.Group;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 

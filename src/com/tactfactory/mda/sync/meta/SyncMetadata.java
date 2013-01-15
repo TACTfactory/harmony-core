@@ -2,7 +2,7 @@ package com.tactfactory.mda.sync.meta;
 
 import java.util.HashMap;
 
-import com.tactfactory.mda.orm.BaseMetadata;
+import com.tactfactory.mda.meta.BaseMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.sync.annotation.Sync.Level;
 import com.tactfactory.mda.sync.annotation.Sync.Mode;

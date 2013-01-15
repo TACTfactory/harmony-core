@@ -15,7 +15,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.orm.ConfigMetadata;
+import com.tactfactory.mda.meta.ConfigMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 

@@ -8,8 +8,8 @@
  */
 package com.tactfactory.mda.plateforme;
 
-import com.tactfactory.mda.orm.ClassMetadata;
-import com.tactfactory.mda.orm.FieldMetadata;
+import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.FieldMetadata;
 
 /** Microsoft Adapter of project structure */
 public final class WinphoneAdapter extends BaseAdapter {

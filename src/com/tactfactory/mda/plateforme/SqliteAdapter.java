@@ -11,10 +11,10 @@ package com.tactfactory.mda.plateforme;
 import java.lang.reflect.Field;
 
 import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.orm.FieldMetadata;
-import com.tactfactory.mda.orm.RelationMetadata;
-import com.tactfactory.mda.orm.annotation.Column;
-import com.tactfactory.mda.orm.annotation.Column.Type;
+import com.tactfactory.mda.annotation.Column;
+import com.tactfactory.mda.annotation.Column.Type;
+import com.tactfactory.mda.meta.FieldMetadata;
+import com.tactfactory.mda.meta.RelationMetadata;
 
 public class SqliteAdapter {
 	private static String PREFIX = "COL_";

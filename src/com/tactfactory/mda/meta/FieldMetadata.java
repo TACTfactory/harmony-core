@@ -6,12 +6,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.orm;
+package com.tactfactory.mda.meta;
 
 import java.util.HashMap;
 
-import com.tactfactory.mda.orm.TranslationMetadata.Group;
-import com.tactfactory.mda.orm.annotation.Column.Type;
+import com.tactfactory.mda.annotation.Column.Type;
+import com.tactfactory.mda.meta.TranslationMetadata.Group;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.plateforme.SqliteAdapter;
 import com.tactfactory.mda.template.TagConstant;
@@ -36,12 +36,12 @@ public class FieldMetadata extends BaseMetadata {
 	/** Relation mapped to this field*/
 	public RelationMetadata relation;
 	
-	public Boolean nullable = null;
-	public Boolean unique = null;
+	public Boolean nullable = false;
+	public Boolean unique = false;
 	public boolean id = false;
-	public Integer length = null;
-	public Integer precision = null;
-	public Integer scale = null;
+	public Integer length = 255;
+	public Integer precision = 0;
+	public Integer scale = 0;
 	public boolean hidden = false;
 	
 	/** GUI show field type */

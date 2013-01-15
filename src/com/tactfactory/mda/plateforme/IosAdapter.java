@@ -8,8 +8,8 @@
  */
 package com.tactfactory.mda.plateforme;
 
-import com.tactfactory.mda.orm.ClassMetadata;
-import com.tactfactory.mda.orm.FieldMetadata;
+import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.FieldMetadata;
 
 /** Apple iOS Adapter of project structure */
 public final class IosAdapter extends BaseAdapter {
