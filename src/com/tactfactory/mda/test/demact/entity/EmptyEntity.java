@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 package com.tactfactory.mda.test.demact.entity;
-import com.tactfactory.mda.orm.annotation.Entity;
+import com.tactfactory.mda.annotation.Entity;
 
 @Entity
 public class EmptyEntity {

@@ -11,9 +11,8 @@ package com.tactfactory.mda.rest.template;
 import java.util.Map;
 
 import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
-import com.tactfactory.mda.rest.meta.RestMetadata;
 import com.tactfactory.mda.template.BaseGenerator;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.PackageUtils;

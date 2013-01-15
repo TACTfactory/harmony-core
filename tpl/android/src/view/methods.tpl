@@ -48,7 +48,7 @@
 	<#assign type=field.type />
 	<#assign ret="this.model.set"+field.name?cap_first+"(" />
 	<#if (type=="boolean")>
-		<#assign ret=ret+"this."+field.name+"View.isChecked());"/>
+		<#assign ret=ret+"this."+field.name+"View.isChecked());" />
 	<#elseif (type=="date")>
 		<#assign ret=ret+"DateUtils.formatStringToDate(this."+field.name+"DateView.getEditableText().toString()));" />
 	<#elseif (type=="time")>

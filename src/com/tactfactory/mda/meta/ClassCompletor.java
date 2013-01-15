@@ -1,4 +1,4 @@
-package com.tactfactory.mda.orm;
+package com.tactfactory.mda.meta;
 
 import java.util.ArrayList;
 import java.util.HashMap;

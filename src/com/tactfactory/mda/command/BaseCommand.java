@@ -15,8 +15,8 @@ import java.util.HashMap;
 
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
-import com.tactfactory.mda.orm.ClassCompletor;
-import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.meta.ClassCompletor;
+import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.parser.BaseParser;
 import com.tactfactory.mda.parser.JavaModelParser;
 

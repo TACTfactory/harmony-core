@@ -102,7 +102,7 @@ public class ${curr.name}ShowFragment extends Fragment {
 					<#else>
 			${m.setLoader(field)}
 					</#if>
-		}
+		} 
 				<#else>
 		${m.setLoader(field)}
 				</#if>

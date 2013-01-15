@@ -9,8 +9,8 @@
 package com.tactfactory.mda.plateforme;
 
 import com.tactfactory.mda.Harmony;
-import com.tactfactory.mda.orm.ClassMetadata;
-import com.tactfactory.mda.orm.FieldMetadata;
+import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.FieldMetadata;
 
 /** Base Adapter of project structure */
 public abstract class BaseAdapter {	

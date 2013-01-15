@@ -14,11 +14,13 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.tactfactory.mda.Harmony;
+import com.tactfactory.mda.annotation.Column.Type;
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
-import com.tactfactory.mda.orm.ClassMetadata;
-import com.tactfactory.mda.orm.annotation.Column.Type;
+import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.test.CommonTest;
+import com.tactfactory.mda.test.DataManager;
+import com.tactfactory.mda.test.demact.fixture.UserDataLoader;
 
 public class OrmInitEntitiesTest extends CommonTest {
 	static ClassMetadata userMeta = null, postMeta = null, commentMeta = null;
@@ -98,6 +100,16 @@ public class OrmInitEntitiesTest extends CommonTest {
 		*/
 	}
 
+	@Test
+	public void loadYamlFixture() {
+		UserDataLoader loader = new UserDataLoader();
+		loader.getModelFixtures();
+		loader.load(new DataManager());		
+		
+		Assert.assertNotNull("Post no fixtured !", loader.getModelFixture("Dupond"));
+		Assert.assertNotNull("Post no fixtured !", loader.getModelFixture("Haddock"));
+		Assert.assertNotNull("Post no fixtured !", loader.getModelFixture("Tournesol"));
+	}
 	
 	//// POST ////
 	@Test

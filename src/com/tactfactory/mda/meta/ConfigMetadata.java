@@ -1,4 +1,4 @@
-package com.tactfactory.mda.orm;
+package com.tactfactory.mda.meta;
 
 import com.tactfactory.mda.Harmony;
 

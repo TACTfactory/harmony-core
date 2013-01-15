@@ -18,9 +18,9 @@ import java.util.HashMap;
 import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
-import com.tactfactory.mda.orm.ClassMetadata;
-import com.tactfactory.mda.orm.FieldMetadata;
-import com.tactfactory.mda.orm.MethodMetadata;
+import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.FieldMetadata;
+import com.tactfactory.mda.meta.MethodMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 

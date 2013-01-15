@@ -1,0 +1,22 @@
+User:
+ Dupond:
+  id: 0
+  firstname: Dupond
+  lastname: Dupont
+  login: dup
+  password: password
+  createdAt: 01/01/2012 00:00:000
+ Haddock:
+  id: 1
+  firstname: Haddock
+  lastname: Archibald
+  login: had
+  password: password
+  createdAt: 01/01/2012 00:00:000
+ Tournesol:
+  id: 2
+  firstname: Tournesol
+  lastname: Tryphon
+  login: tou
+  password: password
+  createdAt: 01/01/2012 00:00:000

@@ -2,7 +2,7 @@ package com.tactfactory.mda.rest.meta;
 
 import java.util.HashMap;
 
-import com.tactfactory.mda.orm.BaseMetadata;
+import com.tactfactory.mda.meta.BaseMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.rest.annotation.Rest.Security;
 

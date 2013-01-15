@@ -8,7 +8,7 @@ import org.junit.Test;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
-import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.rest.annotation.Rest;
 import com.tactfactory.mda.rest.command.RestCommand;
 import com.tactfactory.mda.rest.meta.RestMetadata;
