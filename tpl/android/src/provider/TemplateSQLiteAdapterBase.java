@@ -73,7 +73,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		${alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
 	};
 	
-	private Context context;
+	<#if (curr.relations?size>0)>private Context context;</#if>
 
 	/** Generate Entity Table Schema
 	 * 
@@ -113,7 +113,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 	 * @param ctx context
 	 */
 	public ${curr.name}SQLiteAdapterBase(Context ctx) {	
-		this.context = ctx;
+		<#if (curr.relations?size>0)>this.context = ctx;</#if>
 		this.mBaseHelper = new ${project_name?cap_first}SQLiteOpenHelper(
 				ctx, 
 				"database", 
@@ -285,7 +285,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 	 * @return List of ${curr.name} entities
 	 */
 	 public ArrayList<${curr.name}> getBy${relation.name?cap_first}(int ${relation.name?lower_case}_id){
-		Cursor c = this.select(${alias(relation.name)}+"=?", new String[]{${relation.name?lower_case}_id+""}, null, null, null);
+		Cursor c = this.query(COLS, ${alias(relation.name)}+"=?", new String[]{${relation.name?lower_case}_id+""}, null, null, null);
 		ArrayList<${curr.name}> result = ${curr.name}SQLiteAdapterBase.cursorTo${curr.name}s(c);
 		c.close();
 		
@@ -499,7 +499,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		String whereClause = <#list curr.ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list curr.ids as id>String.valueOf(${id.name}) <#if id_has_next>, </#if></#list>};
 		
-		return this.select(whereClause, whereArgs, null, null, null);
+		return this.query(COLS, whereClause, whereArgs, null, null, null);
 	<#else>
 		throw new UnsupportedOperationException("Method not implemented yet.");
 	</#if>
@@ -509,20 +509,34 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		if (BuildConfig.DEBUG)
 			Log.d(TAG, "Get all entities");
 		
-		return this.select(null, null, null, null, null);
+		return this.query(COLS, null, null, null, null, null);
 	}
 	
 </#if>
 
-	public Cursor select(String whereClause, String[] whereArgs, String groupBy, String having, String orderBy){
+	public Cursor query(String[] projection, String whereClause, String[] whereArgs, String groupBy, String having, String orderBy){
 		return this.mDatabase.query(
 				TABLE_NAME,
-				COLS,
+				projection,
 				whereClause,
 				whereArgs,
 				groupBy,
 				having,
 				orderBy);
+	}
+	
+	public Cursor query(int id){
+		<#if curr.ids?size==0>
+			throw new UnsupportedOperationException("Method not implemented yet.");
+		<#else>
+		return this.query(
+				COLS,
+				COL_ID+" = ?",
+				new String[]{String.valueOf(id)},
+				null,
+				null,
+				null);
+		</#if>
 	}
 	
 	public long insert(String nullColumnHack, ContentValues item){
@@ -537,6 +551,16 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 				TABLE_NAME,
 				whereClause,
 				whereArgs);
+	}
+	
+	public int delete(int id){
+		<#if curr.ids?size==0>
+			throw new UnsupportedOperationException("Method not implemented yet.");
+		<#else>
+		return this.delete(
+				COL_ID+" = ?",
+				new String[]{String.valueOf(id)});
+		</#if>
 	}
 	
 	public int update(ContentValues item, String whereClause, String[] whereArgs){
