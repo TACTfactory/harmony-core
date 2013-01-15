@@ -2,6 +2,7 @@ package com.tactfactory.mda.rest.template;
 
 import java.io.File;
 
+import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.orm.ConfigMetadata;
@@ -23,6 +24,12 @@ public class RestGenerator extends BaseGenerator {
 	public void generateAll() {
 		this.datamodel = this.appMetas.toMap(this.adapter);
 		this.generateWSAdapter();
+		try {
+			new TestWSGenerator(this.adapter).generateAll();
+			
+		} catch (Exception e) {
+			ConsoleUtils.displayError(e.getMessage());
+		}
 	}
 	
 	protected void generateWSAdapter(){
