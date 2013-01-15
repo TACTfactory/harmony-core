@@ -6,12 +6,12 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.orm;
+package com.tactfactory.mda.meta;
 
 import java.util.HashMap;
 
-import com.tactfactory.mda.orm.TranslationMetadata.Group;
-import com.tactfactory.mda.orm.annotation.Column.Type;
+import com.tactfactory.mda.annotation.Column.Type;
+import com.tactfactory.mda.meta.TranslationMetadata.Group;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.plateforme.SqliteAdapter;
 import com.tactfactory.mda.template.TagConstant;

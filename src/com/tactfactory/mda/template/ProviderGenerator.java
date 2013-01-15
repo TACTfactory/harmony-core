@@ -24,8 +24,8 @@ import org.jdom2.output.XMLOutputter;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.orm.TranslationMetadata;
-import com.tactfactory.mda.orm.TranslationMetadata.Group;
+import com.tactfactory.mda.meta.TranslationMetadata;
+import com.tactfactory.mda.meta.TranslationMetadata.Group;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;

@@ -6,9 +6,9 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.orm.annotation;
+package com.tactfactory.mda.annotation;
 
-import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.ElementType.FIELD;
 import static java.lang.annotation.RetentionPolicy.SOURCE;
 
 import java.lang.annotation.Documented;
@@ -16,20 +16,10 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-/**
- * The entity will be persisted to a table with @Table annotation
- * By default, the entity will be persisted to a table with the same name as the class name.
- */
 @Documented
 @Retention(SOURCE)
-@Target(TYPE)
+@Target(FIELD)
 @Inherited
-public @interface Table {
+public @interface JoinTable {
 
-	/**
-	 * The table name.
-	 * 
-	 * @return The table name
-	 */
-	String name() default "";
 }

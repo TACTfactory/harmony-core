@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.orm.annotation;
+package com.tactfactory.mda.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
@@ -181,7 +181,7 @@ public @interface Column {
 	 * 
 	 * @return (optional, defaults to "string") The mapping type to use for the column.
 	 * 
-	 * @see com.tactfactory.mda.orm.annotation.Column.Type
+	 * @see com.tactfactory.mda.annotation.Column.Type
 	 */
 	Type type() default Type.STRING;
 			

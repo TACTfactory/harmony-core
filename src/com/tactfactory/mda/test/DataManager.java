@@ -1,6 +1,6 @@
 package com.tactfactory.mda.test;
 
-import com.tactfactory.mda.orm.ClassMetadata;
+import com.tactfactory.mda.meta.ClassMetadata;
 
 public class DataManager {
 	/**

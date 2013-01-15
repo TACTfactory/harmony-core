@@ -6,8 +6,8 @@ import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.expr.AnnotationExpr;
 
-import com.tactfactory.mda.orm.ClassMetadata;
-import com.tactfactory.mda.orm.FieldMetadata;
+import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.FieldMetadata;
 
 public abstract class BaseParser {
 

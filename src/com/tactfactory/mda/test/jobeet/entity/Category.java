@@ -2,7 +2,7 @@ package com.tactfactory.mda.test.jobeet.entity;
 
 import java.util.ArrayList;
 
-import com.tactfactory.mda.orm.annotation.*;
+import com.tactfactory.mda.annotation.*;
 
 @Table
 @Entity

@@ -13,8 +13,8 @@ import java.util.ArrayList;
 
 import org.joda.time.DateTime;
 
-import com.tactfactory.mda.orm.annotation.*;
-import com.tactfactory.mda.orm.annotation.Column.Type;
+import com.tactfactory.mda.annotation.*;
+import com.tactfactory.mda.annotation.Column.Type;
 import com.tactfactory.mda.rest.annotation.Rest;
 import com.tactfactory.mda.sync.annotation.Sync;
 

@@ -12,9 +12,9 @@ import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
 
-import com.tactfactory.mda.orm.ClassMetadata;
-import com.tactfactory.mda.orm.FieldMetadata;
-import com.tactfactory.mda.orm.annotation.Column;
+import com.tactfactory.mda.annotation.Column;
+import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.ImageUtils;
 
