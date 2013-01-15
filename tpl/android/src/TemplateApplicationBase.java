@@ -10,6 +10,13 @@ import android.net.NetworkInfo;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import java.util.ArrayList;
+
+<#if options.fixture?? && options.fixture.enabled>
+	<#list entities?values as entity>
+import ${fixture_namespace}.${entity.name?cap_first}DataLoader;
+	</#list>
+</#if>
 
 /** 
  * Common all life data/service
@@ -21,6 +28,8 @@ import android.util.Log;
 public abstract class ${project_name?cap_first}ApplicationBase extends Application {
 	private final static String TAG = "${project_name?cap_first}";
 	private volatile static ${project_name?cap_first}ApplicationBase singleton;
+	@SuppressWarnings("rawtypes")
+	public ArrayList<Class> loaders = new ArrayList<Class>();
 	
 	/** Called when the application is first created. */
 	@Override
@@ -34,6 +43,12 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		// Manage unmanaged error of application
 		//Thread.setDefaultUncaughtExceptionHandler(
 		//		new ApplicationCrashHandler(super.getApplicationContext()));
+		
+		<#if options.fixture?? && options.fixture.enabled>
+			<#list entities?values as entity>
+		this.loaders.add(${entity.name?cap_first}DataLoader.class);
+			</#list>
+		</#if>
 	}
 
 	/**

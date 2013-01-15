@@ -43,36 +43,36 @@ public class UserDataLoader extends FixtureBase {
 	public void getModelFixtures() {
 		User user = null;
 		
-//		// XML Loader
-//		try {
-//			String entityName = "User";
-//			String currentDir = new File(".").getAbsolutePath();
-//
-//			SAXBuilder builder = new SAXBuilder();		// Make engine
-//			File xmlFile = new File(currentDir + "/src/com/tactfactory/mda/test/demact/fixture/" + entityName + ".xml");
-//			Document doc = (Document) builder.build(xmlFile); 	// Load XML File
-//			final Element rootNode = doc.getRootElement(); 			// Load Root element
-//			//final Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
-//
-//			// Find Application Node
-//			List<Element> entities = rootNode.getChildren(entityName); 	// Find a element
-//			if (entities != null) {
-//				for (Element element : entities) {
-//					user = new User();
-//					user.setId(Integer.parseInt(element.getChildText("id")));
-//					user.setFirstname((String)element.getChildText("firstname"));
-//					user.setLastname((String)element.getChildText("lastname"));
-//					user.setLogin((String)element.getChildText("login"));
-//					user.setPassword((String)element.getChildText("password"));
-//					user.setCreatedAt(new DateTime());
-//					users.put((String)element.getAttributeValue("id") , user);
-//				}
-//			}
-//		} catch (IOException io) {
-//			io.printStackTrace();
-//		} catch (JDOMException e) {
-//			e.printStackTrace();
-//		}
+		// XML Loader
+		try {
+			String entityName = "User";
+			String currentDir = new File(".").getAbsolutePath();
+
+			SAXBuilder builder = new SAXBuilder();		// Make engine
+			File xmlFile = new File(currentDir + "/src/com/tactfactory/mda/test/demact/fixture/" + entityName + ".xml");
+			Document doc = (Document) builder.build(xmlFile); 	// Load XML File
+			final Element rootNode = doc.getRootElement(); 			// Load Root element
+			//final Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
+
+			// Find Application Node
+			List<Element> entities = rootNode.getChildren(entityName); 	// Find a element
+			if (entities != null) {
+				for (Element element : entities) {
+					user = new User();
+					user.setId(Integer.parseInt(element.getChildText("id")));
+					user.setFirstname((String)element.getChildText("firstname"));
+					user.setLastname((String)element.getChildText("lastname"));
+					user.setLogin((String)element.getChildText("login"));
+					user.setPassword((String)element.getChildText("password"));
+					user.setCreatedAt(new DateTime());
+					users.put((String)element.getAttributeValue("id") , user);
+				}
+			}
+		} catch (IOException io) {
+			io.printStackTrace();
+		} catch (JDOMException e) {
+			e.printStackTrace();
+		}
 		
 //		// YAML Loader
 //		try {
