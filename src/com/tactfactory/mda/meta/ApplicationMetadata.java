@@ -31,7 +31,7 @@ public class ApplicationMetadata extends BaseMetadata {
 	
 	/**
 	 * Transform the application to a map of strings and maps (for each field) given an adapter
-	 * @param adapter The adapter used to customize the fields
+	 * @param adapt The adapter used to customize the fields
 	 * @return the map
 	 */
 	@Override

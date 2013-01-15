@@ -28,8 +28,6 @@ public class TranslationGenerator extends BaseGenerator {
 
 	/**
 	 * Update XML Strings
-	 * 
-	 * @param cfg Template engine
 	 */
 	public void generateStringsXml() {
 		Element findTranslation;

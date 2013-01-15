@@ -370,7 +370,7 @@ public class Harmony {
 	/**
 	 * Extract Android SDK Path from local.properties file
 	 * 
-	 * @param local_prop Local.properties File
+	 * @param sdkPath The sdk path
 	 * @return Android SDK Path
 	 */
 	public static String getAndroidSdkVersion(String sdkPath) {

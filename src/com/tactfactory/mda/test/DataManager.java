@@ -8,8 +8,8 @@ public class DataManager {
      *
      * This is just a convenient shortcut for getRepository($className)->find($id).
      *
-     * @param string
-     * @param mixed
+     * @param nameClass
+     * @param id
      * @return object
      */
     public Object find(String nameClass, int id) {
@@ -47,7 +47,6 @@ public class DataManager {
      * The object passed to merge will not become associated/managed with this ObjectManager.
      *
      * @param object $object
-     * @return object
      */
     public void merge(Object object) {
     	
@@ -57,7 +56,7 @@ public class DataManager {
      * Clears the ObjectManager. All objects that are currently managed
      * by this ObjectManager become detached.
      *
-     * @param string $objectName if given, only objects of this type will get detached
+     * @param objectName $objectName if given, only objects of this type will get detached
      */
     public void clear(String objectName) {
     	
@@ -98,7 +97,7 @@ public class DataManager {
     /**
      * Gets the repository for a class.
      *
-     * @param string $className
+     * @param className $className
      * @return \Doctrine\Common\Persistence\ObjectRepository
      */
     public Object getRepository(String className) {
@@ -111,7 +110,7 @@ public class DataManager {
      * The class name must be the fully-qualified class name without a leading backslash
      * (as it is returned by get_class($obj)).
      *
-     * @param string $className
+     * @param className $className
      * @return \Doctrine\Common\Persistence\Mapping\ClassMetadata
      */
     public ClassMetadata getClassMetadata(String className) {

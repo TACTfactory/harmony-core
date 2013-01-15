@@ -11,7 +11,6 @@ public class WebServiceClientAdapterGenerator extends BaseGenerator {
 	/**
 	 * Update XML Strings
 	 * 
-	 * @param cfg Template engine
 	 */
 	public void updateConfig() {
 		/* Add to config file (configs.xml on android)

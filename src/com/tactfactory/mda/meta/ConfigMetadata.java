@@ -14,7 +14,7 @@ public class ConfigMetadata {
 	 * 
 	 * @param key
 	 * @param value
-	 * @return
+	 * @return the generated ConfigMetadata
 	 */
 	public static ConfigMetadata addConfiguration(String key, String value) {		
 		ConfigMetadata configMeta = new ConfigMetadata();

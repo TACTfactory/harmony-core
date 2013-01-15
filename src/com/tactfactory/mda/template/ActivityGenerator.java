@@ -135,7 +135,7 @@ public class ActivityGenerator extends BaseGenerator {
 	}
 	
 	/** List Action
-	 * @param cfg
+	 * @param entityName The entity to generate
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
@@ -172,7 +172,7 @@ public class ActivityGenerator extends BaseGenerator {
 	}
 
 	/** Show Action
-	 * @param cfg
+	 * @param entityName The entity to generate
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
@@ -203,7 +203,7 @@ public class ActivityGenerator extends BaseGenerator {
 	}
 
 	/** Edit Action
-	 * @param cfg
+	 * @param entityName The entity to generate
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
@@ -239,7 +239,7 @@ public class ActivityGenerator extends BaseGenerator {
 	}
 
 	/** Create Action
-	 * @param cfg
+	 * @param entityName The entity to generate
 	 * @throws IOException
 	 * @throws TemplateException
 	 */

@@ -33,7 +33,6 @@ public abstract class BaseCommand implements Command {
 	/**
 	 * Gets the Metadatas of all the entities actually in the package entity
 	 * You can register your own bundle parsers with the method this.javaModelParser.registerParser() 
-	 * @return The metadatas of the application
 	 */
 	public void generateMetas(){
 		ConsoleUtils.display(">> Analyse Models...");
