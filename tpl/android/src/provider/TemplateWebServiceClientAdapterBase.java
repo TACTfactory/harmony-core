@@ -88,7 +88,7 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
  * You should edit ${curr.name}WebServiceClientAdapter class instead of this one or you will lose all your modifications.</i></b>
  *
  */
-public class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAdapterBase{
+public abstract class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAdapterBase{
 	private static final String TAG = "${curr.name}WSClientAdapter";
 	private static String REST_FORMAT = ".json"; //JSon RSS xml or empty (for html)
 

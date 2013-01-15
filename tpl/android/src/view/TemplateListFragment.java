@@ -102,7 +102,6 @@ implements LoaderManager.LoaderCallbacks<List<${curr.name}>> {
 	/** (non-Javadoc)
 	 * @see android.support.v4.app.LoaderManager#onCreateLoader(int, android.os.Bundle)
 	 */
-	@SuppressWarnings("unchecked")
 	@Override 
 	public Loader<List<${curr.name}>> onCreateLoader(int id, Bundle bundle) { 
 		//return ((LoaderManager.LoaderCallbacks<List<${curr.name}>>)getActivity()).onCreateLoader(0, bundle);
