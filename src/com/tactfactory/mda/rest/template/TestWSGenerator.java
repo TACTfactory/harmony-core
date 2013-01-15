@@ -13,6 +13,7 @@ import java.util.Map;
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.orm.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.rest.meta.RestMetadata;
 import com.tactfactory.mda.template.BaseGenerator;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.PackageUtils;
@@ -30,7 +31,7 @@ public class TestWSGenerator extends BaseGenerator {
 		ConsoleUtils.display(">> Generate Rest test...");
 		
 		for(ClassMetadata cm : this.appMetas.entities.values()){
-			if(!cm.internal && !cm.fields.isEmpty()){
+			if(cm.options.containsKey("rest") && !cm.internal && !cm.fields.isEmpty()){
 				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getTest());
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
 				this.generate();
