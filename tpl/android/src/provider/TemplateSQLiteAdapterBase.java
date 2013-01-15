@@ -73,7 +73,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		${alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
 	};
 	
-	private Context context;
+	<#if (curr.relations?size>0)>private Context context;</#if>
 
 	/** Generate Entity Table Schema
 	 * 
@@ -113,7 +113,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 	 * @param ctx context
 	 */
 	public ${curr.name}SQLiteAdapterBase(Context ctx) {	
-		this.context = ctx;
+		<#if (curr.relations?size>0)>this.context = ctx;</#if>
 		this.mBaseHelper = new ${project_name?cap_first}SQLiteOpenHelper(
 				ctx, 
 				"database", 

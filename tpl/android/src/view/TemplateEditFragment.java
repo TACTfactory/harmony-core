@@ -46,9 +46,11 @@ import ${curr.namespace}.harmony.util.DateUtils;
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 <#assign mustImportArrayList=false />
+<#assign mustImportList=false />
 <#assign import_array = [] />
 <#list curr.relations as relation>
 	<#if (!relation.internal && !relation.hidden)>
+		<#assign mustImportList=true />
 		<#if (!m.isInArray(import_array, relation.relation.targetEntity))>
 			<#assign import_array = import_array + [relation.relation.targetEntity] />
 import ${curr.namespace}.data.${relation.relation.targetEntity}SQLiteAdapter;
@@ -60,9 +62,11 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
 	</#if>
 </#list>
 
-import java.util.List;
 <#if (mustImportArrayList)>
 import java.util.ArrayList;
+</#if>
+<#if (mustImportList)>
+import java.util.List;
 </#if>
 
 /** ${curr.name} create fragment
