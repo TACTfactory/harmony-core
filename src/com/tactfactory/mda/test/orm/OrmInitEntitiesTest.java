@@ -231,12 +231,12 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.hasFieldColumnName(userMeta, "createdAt", "created_at");
 		
 		
-		this.isFieldLength(userMeta, "id", 255);
+		this.isFieldLength(userMeta, "id", Integer.MAX_VALUE);
 		this.isFieldLength(userMeta, "login", 255);
 		this.isFieldLength(userMeta, "password", 255);
 		this.isFieldLength(userMeta, "firstname", 255);
 		this.isFieldLength(userMeta, "lastname", 255);
-		this.isFieldLength(userMeta, "createdAt", 255);
+		this.isFieldLength(userMeta, "createdAt", Integer.MAX_VALUE);
 	}
 	
 	//// REPOSITORY POST ////
@@ -346,7 +346,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 * @param fieldName
 	 */
 	private void isFieldLength(ClassMetadata classMeta, String fieldName, int length){
-		Assert.assertEquals(classMeta.fields.get(fieldName).length,length);
+		Assert.assertEquals(classMeta.fields.get(fieldName).length,Integer.valueOf(length));
 	}
 	
 	/**

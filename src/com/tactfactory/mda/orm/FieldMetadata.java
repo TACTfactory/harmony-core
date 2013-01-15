@@ -36,12 +36,12 @@ public class FieldMetadata extends BaseMetadata {
 	/** Relation mapped to this field*/
 	public RelationMetadata relation;
 	
-	public boolean nullable = false;
-	public boolean unique = false;
+	public Boolean nullable = null;
+	public Boolean unique = null;
 	public boolean id = false;
-	public int length = 255;
-	public int precision = 0;
-	public int scale = 0;
+	public Integer length = null;
+	public Integer precision = null;
+	public Integer scale = null;
 	public boolean hidden = false;
 	
 	/** GUI show field type */

@@ -48,7 +48,7 @@ public @interface Column {
 		
 		// EXTEND
 		LOGIN(		"login", 	255, 	false,	null,	null,	true),
-		PASSWORD(	"password", 255, 	false,	null,	null,	true),
+		PASSWORD(	"password", 255, 	false,	null,	null,	null),
 		EMAIL(		"email", 	255,	true,	null,	null,	true),
 		PHONE(		"phone", 	24,		true,	null,	null,	null),
 		CITY(		"city", 	255, 	true,	null,	null,	null),
