@@ -383,6 +383,7 @@ public class ActivityGenerator extends BaseGenerator {
 
 				// Set values
 				findActivity.setAttribute("label", "@string/app_name", ns);
+				findActivity.setAttribute("exported", "false", ns);
 				Element filterActivity = findActivity.getChild("intent-filter");
 				if (filterActivity != null) {
 					String data = "";

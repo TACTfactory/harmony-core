@@ -4,6 +4,7 @@ import ${project_namespace}.R;
 
 import org.joda.time.DateTime;
 
+import android.annotation.TargetApi;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -95,6 +96,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 	/* (non-Javadoc)
 	 * @see android.app.AlertDialog#onCreate(android.os.Bundle)
 	 */
+	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		this.setTitle(title);
