@@ -44,11 +44,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		//Thread.setDefaultUncaughtExceptionHandler(
 		//		new ApplicationCrashHandler(super.getApplicationContext()));
 		
-		<#if options.fixture?? && options.fixture.enabled>
-			<#list entities?values as entity>
-		this.loaders.add(${entity.name?cap_first}DataLoader.class);
-			</#list>
-		</#if>
+
 	}
 
 	/**
