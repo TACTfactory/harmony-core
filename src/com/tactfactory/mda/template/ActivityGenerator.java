@@ -40,7 +40,6 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class ActivityGenerator extends BaseGenerator {
-	//protected List<Map<String, Object>> modelEntities;
 	protected String localNameSpace;
 	protected boolean isWritable = true;
 	private boolean isDate = false;
