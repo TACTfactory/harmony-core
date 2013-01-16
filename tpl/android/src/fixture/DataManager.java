@@ -17,6 +17,7 @@ import ${project_namespace}.entity.${entity.name?cap_first};
 public class DataManager {
 	protected HashMap<String, ${project_name?cap_first}SQLiteAdapterBase> adapters = new HashMap<String, ${project_name?cap_first}SQLiteAdapterBase>();
 	protected boolean isSuccessfull = true;
+	protected boolean isInInternalTransaction = false;
 	protected SQLiteDatabase db;
 	
 	public DataManager(Context ctx, SQLiteDatabase db){
@@ -24,6 +25,7 @@ public class DataManager {
 		<#list entities?values as entity>
 			<#if (entity.fields?size>0)>
 		this.adapters.put("${entity.name}", new ${entity.name?cap_first}SQLiteAdapter(ctx));
+		this.adapters.get("${entity.name}").open(this.db);		
 			</#if>
 		</#list>
 	}
@@ -149,10 +151,12 @@ public class DataManager {
      * database.
      */
     public void flush() {
-    	if (this.isSuccessfull)
-    		this.db.setTransactionSuccessful();
-    	this.db.endTransaction();
-    	
+    	if(this.isInInternalTransaction){
+    		if (this.isSuccessfull)
+    			this.db.setTransactionSuccessful();
+    		this.db.endTransaction();
+    		this.isInInternalTransaction = false;
+    	}
     }
 
     /**
@@ -191,9 +195,10 @@ public class DataManager {
     
     private void beginTransaction(){    	
     	// If we are not already in a transaction, begin it
-    	if(!this.db.inTransaction()){
+    	if(!this.isInInternalTransaction){
     		this.db.beginTransaction();
     		this.isSuccessfull = true;
+    		this.isInInternalTransaction = true;
     	}
     }
 
