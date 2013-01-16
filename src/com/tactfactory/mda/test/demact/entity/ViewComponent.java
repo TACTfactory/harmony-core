@@ -7,10 +7,15 @@ import org.joda.time.DateTime;
 import com.tactfactory.mda.annotation.Column;
 import com.tactfactory.mda.annotation.Entity;
 import com.tactfactory.mda.annotation.Column.Type;
+import com.tactfactory.mda.annotation.Id;
 
 @Entity
 public class ViewComponent implements Serializable {
 	private static final long serialVersionUID = -6623985483853173832L;
+	
+	@Id
+	@Column
+	protected int id;
 	
 	@Column(type=Type.STRING)
 	protected String string;
