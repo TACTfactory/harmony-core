@@ -115,5 +115,5 @@
     	<#else>
     	android:layout_below="@+id/${currname?lower_case}_${curr.fields?last.name?lower_case}"
     	</#if>
-    	android:text="Edit" />
+    	android:text="@string/common_edit" />
 </RelativeLayout>

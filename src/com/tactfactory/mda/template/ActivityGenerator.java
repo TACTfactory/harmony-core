@@ -115,6 +115,16 @@ public class ActivityGenerator extends BaseGenerator {
 				this.generateEditAction(entityName);
 				
 				TranslationMetadata.addDefaultTranslation(
+						"common_create",
+						"Create",
+						Group.COMMON);
+				
+				TranslationMetadata.addDefaultTranslation(
+						"common_edit",
+						"Edit",
+						Group.COMMON);
+				
+				TranslationMetadata.addDefaultTranslation(
 						entityName.toLowerCase() + "_progress_save_title", 
 						entityName +" save progress",
 						Group.MODEL);
@@ -236,6 +246,7 @@ public class ActivityGenerator extends BaseGenerator {
 				entityName.toLowerCase() + "_error_edit", 
 				entityName +" edition error&#8230;",
 				Group.MODEL);
+				
 	}
 
 	/** Create Action
