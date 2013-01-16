@@ -34,6 +34,7 @@ public abstract class BaseAdapter {
 	protected String provider	= "provider";
 	protected String common		= "common";
 	protected String service	= "service";
+	protected String fixture 	= "fixture";
 	
 	// File
 	protected String manifest;
@@ -130,6 +131,10 @@ public abstract class BaseAdapter {
 	
 	public final String getTemplateSourceProviderPath() {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getProvider() );
+	}
+	
+	public final String getTemplateSourceFixturePath() {
+		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getFixture() );
 	}
 	
 	public final String getTemplateSourceCommonPath() {
@@ -384,6 +389,21 @@ public abstract class BaseAdapter {
 	 */
 	public final void setService(String service) {
 		this.service = service;
+	}
+	
+	
+	/**
+	 * @return the service
+	 */
+	public final String getFixture() {
+		return fixture;
+	}
+
+	/**
+	 * @param service the service to set
+	 */
+	public final void setFixture(String fixture) {
+		this.fixture = fixture;
 	}
 
 	

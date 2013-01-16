@@ -47,9 +47,11 @@ public class ApplicationMetadata extends BaseMetadata {
 		
 		// Add root
 		ret.put(TagConstant.PROJECT_NAME, 		this.name);
+		ret.put(TagConstant.PROJECT_PATH, 		this.projectNameSpace);
 		ret.put(TagConstant.PROJECT_NAMESPACE, 	this.projectNameSpace.replaceAll("/", "\\."));
 		ret.put(TagConstant.DATA_NAMESPACE, 	this.projectNameSpace.replaceAll("/", "\\.")+"."+adapt.getData());
 		ret.put(TagConstant.SERVICE_NAMESPACE, 	this.projectNameSpace.replaceAll("/", "\\.")+"."+adapt.getService());
+		ret.put(TagConstant.FIXTURE_NAMESPACE, 	this.projectNameSpace.replaceAll("/", "\\.")+"."+adapt.getFixture());
 
 		ret.put(TagConstant.ENTITIES, 			entitiesMap);
 		

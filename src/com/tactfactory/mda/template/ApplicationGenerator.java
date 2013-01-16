@@ -22,14 +22,16 @@ public class ApplicationGenerator extends BaseGenerator {
 	public void generateApplication() {
 		this.makeSource(
 				"TemplateApplication.java", 
-				this.applicationName + "Application.java");
+				this.applicationName + "Application.java",
+				false);
 		
 		this.makeSource(
 				"TemplateApplicationBase.java", 
-				this.applicationName + "ApplicationBase.java");
+				this.applicationName + "ApplicationBase.java",
+				true);
 	}
 	
-	private void makeSource(String templateName, String fileName) {
+	protected void makeSource(String templateName, String fileName, boolean override) {
 		String fullFilePath = String.format("%s%s/%s",
 				this.adapter.getSourcePath(),
 				PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
@@ -39,6 +41,6 @@ public class ApplicationGenerator extends BaseGenerator {
 				this.adapter.getTemplateSourcePath() ,
 				templateName);
 		
-		super.makeSource(fullTemplatePath, fullFilePath, false);
+		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 }
