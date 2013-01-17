@@ -23,6 +23,15 @@
 	<#return false />
 </#function>
 
+<#function getMappedField field>
+	<#assign ref_entity = entities[field.relation.targetEntity] />
+	<#list ref_entity.fields as ref_field>
+		<#if ref_field.name == field.relation.mappedBy>
+			<#return ref_field />
+		</#if>
+	</#list>
+</#function>
+
 package ${data_namespace};
 
 import java.util.ArrayList;
@@ -334,7 +343,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 		${relation.relation.targetEntity}SQLiteAdapterBase ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
 		${relation.name?uncap_first}Adapter.open(this.mDatabase);
 		for(${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()){
-			<#if (relation.relation.mappedBy??)>
+			<#if (relation.relation.mappedBy?? && !getMappedField(relation).internal)>
 			${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
 			${relation.name?uncap_first}Adapter.update(${relation.relation.targetEntity?lower_case});
 			<#else>

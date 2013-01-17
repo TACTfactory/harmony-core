@@ -47,6 +47,10 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 		String entityName = "${curr.name?cap_first}";
 		
 		<#if fixtureType=="xml">
+		String patternDate = "yyyy-mm-dd";
+		String patternTime = "hh:MM:ss";
+		String patternDateTime = "yyyy-mm-dd hh:MM:ss";
+		
 		// XML Loader
 		try {
 			//String currentDir = new File(".").getAbsolutePath();
@@ -69,11 +73,11 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 								<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
 							${curr.name?uncap_first}.set${field.name?cap_first}(Integer.parseInt(element.getChildText("${field.name?uncap_first}")));
 								<#elseif field.type=="date">
-							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatStringToDate(element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternDate,element.getChildText("${field.name?uncap_first}")));
 								<#elseif field.type=="datetime">
-							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatISOStringToDateTime(element.getChildText("${field.name?uncap_first}")));
+								${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternDateTime,element.getChildText("${field.name?uncap_first}")));
 								<#elseif field.type=="time">
-							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatStringToTime(element.getChildText("${field.name?uncap_first}")));
+								${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternTime,element.getChildText("${field.name?uncap_first}")));
 								<#elseif field.type=="boolean">
 							${curr.name?uncap_first}.set${field.name?cap_first}(Boolean.parseBoolean(element.getChildText("${field.name?uncap_first}")));		
 								<#else>
