@@ -12,10 +12,6 @@ import com.tactfactory.mda.annotation.Id;
 @Entity
 public class ViewComponent implements Serializable {
 	private static final long serialVersionUID = -6623985483853173832L;
-
-	@Column
-	@Id
-	protected int id;
 	
 	@Id
 	@Column

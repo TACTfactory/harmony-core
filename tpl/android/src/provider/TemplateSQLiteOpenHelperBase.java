@@ -1,6 +1,6 @@
 package ${project_namespace}.data;
 
-import ${project_namespace}.BuildConfig;
+import ${project_namespace}.${project_name?cap_first}Application;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -31,7 +31,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	 */
 	@Override
 	public void onCreate(SQLiteDatabase db) {
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Create database..");
 		
 		/// Create Schema
@@ -57,7 +57,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	 */
 	@Override
 	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Update database..");
 		
 		//if (SqliteAdapter.BASE_VERSION < 0) {

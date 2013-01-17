@@ -1,6 +1,6 @@
 package ${data_namespace};
 
-import com.tactfactory.mda.test.demact.BuildConfig;
+import ${project_namespace}.${project_name?cap_first}Application;
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -59,7 +59,7 @@ public abstract class ${project_name?cap_first}SQLiteAdapterBase{
 	
 	
 	protected Cursor getAllCursor() {
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Get all entities");
 		
 		return this.query(this.getCols(), null, null, null, null, null);
