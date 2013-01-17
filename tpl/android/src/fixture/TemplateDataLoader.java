@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 <#if fixtureType=="xml">
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -47,9 +48,9 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 		String entityName = "${curr.name?cap_first}";
 		
 		<#if fixtureType=="xml">
-		String patternDate = "yyyy-mm-dd";
-		String patternTime = "hh:MM:ss";
-		String patternDateTime = "yyyy-mm-dd hh:MM:ss";
+		String patternDate = "yyyy-MM-dd";
+		String patternTime = "HH:mm";
+		String patternDateTime = "yyyy-MM-dd HH:mm";
 		
 		// XML Loader
 		try {
@@ -68,25 +69,26 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 					for (Element element : entities) {
 						${curr.name?uncap_first} = new ${curr.name?cap_first}();
 						<#list curr.fields as field>
+							<#if (!field.internal)>
 						if(element.getChildText("${field.name?uncap_first}")!=null){
-							<#if !field.relation??>
-								<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
+								<#if !field.relation??>
+									<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
 							${curr.name?uncap_first}.set${field.name?cap_first}(Integer.parseInt(element.getChildText("${field.name?uncap_first}")));
-								<#elseif field.type=="date">
-							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternDate,element.getChildText("${field.name?uncap_first}")));
-								<#elseif field.type=="datetime">
-								${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternDateTime,element.getChildText("${field.name?uncap_first}")));
-								<#elseif field.type=="time">
-								${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternTime,element.getChildText("${field.name?uncap_first}")));
-								<#elseif field.type=="boolean">
+									<#elseif field.type=="date">
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternDate).parseDateTime(element.getChildText("${field.name?uncap_first}")));
+									<#elseif field.type=="datetime">
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternDateTime).parseDateTime(element.getChildText("${field.name?uncap_first}")));
+									<#elseif field.type=="time">
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternTime).parseDateTime(element.getChildText("${field.name?uncap_first}")));
+									<#elseif field.type=="boolean">
 							${curr.name?uncap_first}.set${field.name?cap_first}(Boolean.parseBoolean(element.getChildText("${field.name?uncap_first}")));		
-								<#else>
+									<#else>
 							${curr.name?uncap_first}.set${field.name?cap_first}(element.getChildText("${field.name?uncap_first}"));
-								</#if>
-							<#else>
-								<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">
-							${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.get(element.getChildText("${field.name?uncap_first}")));
+									</#if>
 								<#else>
+									<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">
+							${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.get(element.getChildText("${field.name?uncap_first}")));
+									<#else>
 							ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
 							List<Element> ${field.relation.targetEntity?uncap_first}sMap = element.getChildren("${field.name?uncap_first}");
 							for(Element ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap){
@@ -94,9 +96,10 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 									${field.relation.targetEntity?uncap_first}s.add(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.get(${field.relation.targetEntity?uncap_first}Name.getText()));
 							}
 							${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first}s);		
+									</#if>
 								</#if>
-							</#if>
 						}
+							</#if>
 						</#list>
 						${curr.name?uncap_first}s.put((String)element.getAttributeValue("id") , ${curr.name?uncap_first});
 					}
