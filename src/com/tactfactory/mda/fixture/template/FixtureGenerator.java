@@ -64,11 +64,25 @@ public class FixtureGenerator extends BaseGenerator{
 		}
 	}
 	
+	public void purge() {
+		for(ClassMetadata cm : this.appMetas.entities.values()){
+			this.removeSource(cm.name+".xml");
+			this.removeSource(cm.name+".yml");
+		}
+		
+	}
+	
 	protected void makeSource(String templateName, String fileName, boolean override) {
 		String fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + this.adapter.getFixture() + "/" + fileName;
 		String fullTemplatePath = this.adapter.getTemplateSourceFixturePath().substring(1) + templateName;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
+	}
+	
+	protected void removeSource(String fileName) {
+		String fullFilePath = this.adapter.getAssetsPath() + "/" + fileName;
+		File f = new File(fullFilePath);
+		f.delete();
 	}
 	
 	protected void makeBaseFixture(String templateName, String fileName, boolean override){
