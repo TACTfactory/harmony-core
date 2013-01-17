@@ -26,6 +26,7 @@ public final class AndroidAdapter extends BaseAdapter {
 		this.project	= "project";
 		this.platform	= "android";
 		this.resource 	= "res";
+		this.assets 	= "assets";
 		this.source 	= "src";
 		this.libs		= "libs";
 		this.test		= "test";

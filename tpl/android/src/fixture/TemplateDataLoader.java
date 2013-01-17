@@ -5,6 +5,9 @@ package ${fixture_namespace};
 import android.content.Context;
 
 import ${project_namespace}.harmony.util.*;
+<#if (curr.relations?size>0)>
+import ${project_namespace}.entity.*;
+</#if>
 <#if fixtureType=="xml">
 import java.io.InputStream;
 import java.io.IOException;
@@ -21,7 +24,7 @@ import ${curr.namespace}.entity.${curr.name};
 import com.tactfactory.mda.test.demact.fixture.DataManager;
 
 public class ${curr.name?cap_first}DataLoader extends FixtureBase {
-	HashMap<String, ${curr.name?cap_first}> ${curr.name?uncap_first}s = new HashMap<String, ${curr.name?cap_first}>();
+	public static HashMap<String, ${curr.name?cap_first}> ${curr.name?uncap_first}s = new HashMap<String, ${curr.name?cap_first}>();
 	
 	public ${curr.name?cap_first}DataLoader(Context context){
 		super(context);
@@ -50,21 +53,29 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 					for (Element element : entities) {
 						${curr.name?uncap_first} = new ${curr.name?cap_first}();
 						<#list curr.fields as field>
+						if(element.getChildText("${field.name?uncap_first}")!=null){
 							<#if !field.relation??>
 								<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
-						${curr.name?uncap_first}.set${field.name?cap_first}(Integer.parseInt(element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(Integer.parseInt(element.getChildText("${field.name?uncap_first}")));
 								<#elseif field.type=="date">
-						${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatStringToDate(element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatStringToDate(element.getChildText("${field.name?uncap_first}")));
 								<#elseif field.type=="datetime">
-						${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatISOStringToDateTime(element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatISOStringToDateTime(element.getChildText("${field.name?uncap_first}")));
 								<#elseif field.type=="time">
-						${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatStringToTime(element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatStringToTime(element.getChildText("${field.name?uncap_first}")));
 								<#elseif field.type=="boolean">
-						${curr.name?uncap_first}.set${field.name?cap_first}(Boolean.parseBoolean(element.getChildText("${field.name?uncap_first}")));		
+							${curr.name?uncap_first}.set${field.name?cap_first}(Boolean.parseBoolean(element.getChildText("${field.name?uncap_first}")));		
 								<#else>
-						${curr.name?uncap_first}.set${field.name?cap_first}(element.getChildText("${field.name?uncap_first}"));
+							${curr.name?uncap_first}.set${field.name?cap_first}(element.getChildText("${field.name?uncap_first}"));
+								</#if>
+							<#else>
+								<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">
+							${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.get(element.getChildText("${field.name?uncap_first}")));
+								<#else>
+							${curr.name?uncap_first}.set${field.name?cap_first}(new ArrayList<${field.relation.targetEntity?cap_first}>());		
 								</#if>
 							</#if>
+						}
 						</#list>
 						${curr.name?uncap_first}s.put((String)element.getAttributeValue("id") , ${curr.name?uncap_first});
 					}
@@ -85,7 +96,7 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 	@Override
 	public void load(DataManager manager) {
 		for (${curr.name?cap_first} ${curr.name?uncap_first} : this.${curr.name?uncap_first}s.values()) {
-			manager.persist(${curr.name?uncap_first});
+			${curr.name?uncap_first}.setId(manager.persist(${curr.name?uncap_first}));
 		}
 		manager.flush();
 	}

@@ -61,7 +61,12 @@ public class FixtureCommand extends BaseCommand{
 	}
 	
 	public void load(){
-		
+		try {
+			new FixtureGenerator(new AndroidAdapter()).load();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void purge(){

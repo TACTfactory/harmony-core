@@ -18,6 +18,7 @@ public abstract class BaseAdapter {
 	protected String project;
 	protected String platform;
 	protected String resource;
+	protected String assets;
 	protected String source;
 	protected String libs;
 	protected String test;
@@ -145,6 +146,10 @@ public abstract class BaseAdapter {
 		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getResource() );
 	}
 	
+	public final String getAssetsPath() {
+		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getAssets() );
+	}
+	
 	public final String getTemplateRessourcePath() {
 		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getResource() );
 	}
@@ -243,6 +248,13 @@ public abstract class BaseAdapter {
 	public final String getResource() {
 		return resource;
 	}
+	
+	/**
+	 * @return the resource
+	 */
+	public final String getAssets() {
+		return assets;
+	}
 
 	/**
 	 * @return the source
@@ -298,6 +310,13 @@ public abstract class BaseAdapter {
 	 */
 	public final void setResource(String ressource) {
 		this.resource = ressource;
+	}
+	
+	/**
+	 * @param ressource the resource to set
+	 */
+	public final void setAssets(String assets) {
+		this.assets = assets;
 	}
 
 	/**

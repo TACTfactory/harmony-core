@@ -233,7 +233,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 				<#if (relation.relation.type=="OneToMany")>
 		${relation.relation.targetEntity}SQLiteAdapter ${relation.relation.targetEntity?lower_case}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
 		${relation.relation.targetEntity?lower_case}Adapter.open(this.mDatabase);
-		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getBy${relation.relation.inversedBy}(result.getId())); // relation.relation.inversedBy?cap_first
+		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getBy${relation.relation.mappedBy?cap_first}(result.getId())); // relation.relation.inversedBy?cap_first
 				<#elseif (relation.relation.type=="ManyToMany")>
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.context);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
