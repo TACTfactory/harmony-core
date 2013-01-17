@@ -1,0 +1,31 @@
+Post:
+   Post1:
+      id: 0
+      title: "Post 1"
+      content: "Je dirais meme plus..."
+      categories: "Radotage"
+      owner: Dupond
+      comments: 
+      createdAt: 01/01/2012 00:00
+      updatedAt: 01/01/2012 00:00
+      expiresAt: 01/01/2012 00:00
+   Post2:
+      id: 0
+      title: "Post 2"
+      content: "Bachibouzouk"
+      categories: "Insulte"
+      owner: Haddock
+      comments: 
+      createdAt: 01/01/2012 00:00
+      updatedAt: 01/01/2012 00:00
+      expiresAt: 01/01/2012 00:00
+   Post3:
+      id: 0
+      title: "Post 3"
+      content: "Mais oui, c'est un gymnote..."
+      categories: "Fait scientifique"
+      owner: Tournesol
+      comments: 
+      createdAt: 01/01/2012 00:00
+      updatedAt: 01/01/2012 00:00
+      expiresAt: 01/01/2012 00:00

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<ViewComponent id="VC1">
+		<id>0</id>
+		<string>Dupond</string>
+		<text>Dupont</text>
+		<datetime>dup</datetime>
+		<date>password</date>
+		<time>01/01/2012 00:00:000</time>
+		<login>VC1 login</login>
+		<password>VC1 password</password>
+		<email>user1@vc1.com</email>
+		<phone>VC1-060101</phone>
+		<city>VC1 city</city>
+		<zipcode>01000</zipcode>
+		<country>VC1 country</country>
+	</ViewComponent>
+	<ViewComponent id="VC2">
+		<id>0</id>
+		<string>Dupond</string>
+		<text>Dupont</text>
+		<datetime>dup</datetime>
+		<date>password</date>
+		<time>02/02/2022 00:00:000</time>
+		<login>VC2 login</login>
+		<password>VC2 password</password>
+		<email>user2@vc2.com</email>
+		<phone>VC2-060202</phone>
+		<city>VC2 city</city>
+		<zipcode>02000</zipcode>
+		<country>VC2 country</country>
+	</ViewComponent>
+	<ViewComponent id="VC3">
+		<id>0</id>
+		<string>Dupond</string>
+		<text>Dupont</text>
+		<datetime>dup</datetime>
+		<date>password</date>
+		<time>03/03/3033 00:00:000</time>
+		<login>VC3 login</login>
+		<password>VC3 password</password>
+		<email>user3@vc3.com</email>
+		<phone>VC3-060303</phone>
+		<city>VC3 city</city>
+		<zipcode>03000</zipcode>
+		<country>VC3 country</country>
+	</ViewComponent>
+</list>
