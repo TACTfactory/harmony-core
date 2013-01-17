@@ -48,6 +48,8 @@ import org.json.JSONObject;
 import android.text.TextUtils;
 import android.util.Log;
 
+import ${project_namespace}.${project_name?cap_first}Application;
+
 public class RestClient {
 	private final String TAG = "WebService";
 
@@ -146,8 +148,9 @@ public class RestClient {
             if (resultEntity != null)
             	result = EntityUtils.toString(resultEntity, HTTP.UTF_8);
                 
-            if (debugWeb) {
+            if (debugWeb && ${project_name?cap_first}Application.DEBUG) {
                 final long endTime2 = System.currentTimeMillis();
+                
                 
                 // System.out.println( "The REST response is:\n " + serviceResponse);
                 Log.d(TAG, "Time taken in REST operation : "+ (endTime - startTime) + " ms. => ["+ verb +"]" + path);
@@ -215,7 +218,7 @@ public class RestClient {
     	try {
 			String path = jsonParams.getString("file");
 
-	    	if (debugWeb)
+	    	if (debugWeb && ${project_name?cap_first}Application.DEBUG)
 	    		Log.d(TAG, "key : file value :" + path);
 	    	
 	    	if (!TextUtils.isEmpty(path)) {

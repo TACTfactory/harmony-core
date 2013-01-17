@@ -2,6 +2,7 @@ package ${local_namespace};
 
 import ${project_namespace}.data.*;
 import ${project_namespace}.R;
+import ${project_namespace}.${project_name?cap_first}Application;
 
 import android.content.ContentProvider;
 import android.content.ContentUris;
@@ -51,7 +52,8 @@ public class ${project_name?cap_first}Provider extends ContentProvider {
 	
 	// Static constructor
 	protected static void initializeProvider() {
-		Log.d(TAG, "Initialize Provider...");
+		if (${project_name?cap_first}Application.DEBUG)
+			Log.d(TAG, "Initialize Provider...");
 		
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		<#list entities?values as entity>
@@ -189,7 +191,7 @@ public class ${project_name?cap_first}Provider extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 		Cursor result = null;
-		int id, hash = 0;
+		int id = 0;
 		
 		switch (uriMatcher.match(uri)) {
 		<#list entities?values as entity>

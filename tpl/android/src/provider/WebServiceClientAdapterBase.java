@@ -11,12 +11,13 @@ import org.json.JSONException;
 
 import ${data_namespace}.RestClient.Verb;
 import ${project_namespace}.R;
-import ${project_namespace}.BuildConfig;
+import ${project_namespace}.${project_name?cap_first}Application;
 
 import android.content.Context;
 
 import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.widget.Toast;
 
 public abstract class WebServiceClientAdapterBase{
@@ -33,10 +34,9 @@ public abstract class WebServiceClientAdapterBase{
 
 
 	public WebServiceClientAdapterBase(Context context){
-		if(BuildConfig.DEBUG){
+		if (${project_name?cap_first}Application.DEBUG){
 			host = this.context.getString(R.string.rest_url_dev);
-		}
-		else{
+		} else {
 			host = this.context.getString(R.string.rest_url_prod);
 		}
 
@@ -64,6 +64,9 @@ public abstract class WebServiceClientAdapterBase{
 
 		} catch (Exception e) {
 			this.displayOups();
+			
+			if (${project_name?cap_first}Application.DEBUG)
+				Log.d(TAG, e.getMessage());
 		}
 
 		return response;
@@ -130,10 +133,16 @@ public abstract class WebServiceClientAdapterBase{
 	}
 	
 	protected boolean isValidRequest() {
-		return (this.statusCode >= 200 && this.statusCode < 300 && this.errorCode == 0);
+		return (
+				this.statusCode >= 200 && 
+				this.statusCode < 300 && 
+				this.errorCode == 0);
 	}
 	
 	protected boolean isValidResponse(String response) {
-		return (response != null && !response.trim().equals("") && response.startsWith("{"));
+		return (
+				response != null && 
+				!response.trim().equals("") && 
+				response.startsWith("{"));
 	}
 }

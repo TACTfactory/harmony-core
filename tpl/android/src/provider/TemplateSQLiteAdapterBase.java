@@ -42,7 +42,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-import ${curr.namespace}.BuildConfig;
+import ${project_namespace}.${project_name?cap_first}Application;
 <#if (curr.internal=="false")>
 import ${curr.namespace}.entity.${curr.name};
 </#if>
@@ -216,7 +216,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 				result.add(item);
 			} while (c.moveToNext());
 			
-			if (BuildConfig.DEBUG)
+			if (${project_name?cap_first}Application.DEBUG)
 				Log.d(TAG, "Read DB(" + TABLE_NAME + ") count : " + c.getCount() );
 		}
 
@@ -320,7 +320,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 	 * @return Id of the ${curr.name} entity
 	 */
 	public long insert(${curr.name} item) {
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
 		ContentValues values = ${curr.name}SQLiteAdapterBase.${curr.name?lower_case}ToContentValues(item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
@@ -364,7 +364,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 	 */
 	public int update(${curr.name} item) {
 	<#if (curr.ids?size>0)>
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
 		
 		ContentValues values = ${curr.name}SQLiteAdapterBase.${curr.name?lower_case}ToContentValues(item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);	
@@ -390,7 +390,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 	 */
 	public int updateWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(${curr.name} item, int ${relation.relation.targetEntity?lower_case}_id) {
 			<#if (curr.ids?size>0)>
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
 
 		ContentValues values = ${curr.name}SQLiteAdapterBase.${curr.name?lower_case}ToContentValues(item<#list curr.relations as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>, ${relation.relation.targetEntity?lower_case}_id<#else>, 0</#if></#if></#list>);	
@@ -413,7 +413,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 	 * @return Id of the ${curr.name} entity
 	 */
 	public long insertWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(${curr.name} item, int ${relation.relation.targetEntity?lower_case}_id) {
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
 		ContentValues values = ${curr.name}SQLiteAdapterBase.${curr.name?lower_case}ToContentValues(item<#list curr.relations as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>, ${relation.relation.targetEntity?lower_case}_id<#else>, 0</#if></#if></#list>);
@@ -459,7 +459,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 	 */
 	public int remove(<#list curr.ids as id>${m.javaType(id.type)} ${id.name}<#if (id_has_next)>,</#if></#list>) {
 	<#if (curr.ids?size>0)>
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Delete DB(" + TABLE_NAME + ") id : "+ <#list curr.ids as id>${id.name}<#if (id_has_next)> + " id : " + </#if></#list>);
 		
 		String whereClause = <#list curr.ids as id> ${alias(id.name)} + "=? <#if (id_has_next)>AND </#if>"</#list>;
@@ -476,7 +476,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 	// Internal Cursor
 	protected Cursor getSingleCursor(<#list curr.ids as id>${m.javaType(id.type)} ${id.name}<#if id_has_next>,</#if></#list>) {
 	<#if (curr.ids?size>0)>
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Get entities id : " + <#list curr.ids as id>${id.name}<#if id_has_next> + " id : " + </#if></#list>);
 		
 		String whereClause = <#list curr.ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
@@ -530,7 +530,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 	 * return Id of the ${curr.name} entity
 	 */
 	public long insert(int ${curr.relations[0].name?lower_case}, int ${curr.relations[1].name?lower_case}) {
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
 		ContentValues values = new ContentValues();
