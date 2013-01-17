@@ -1,3 +1,4 @@
+<#assign fixtureType = options["fixture"].type />
 package ${fixture_namespace};
 
 import android.content.Context;
@@ -32,7 +33,7 @@ public abstract class FixtureBase {
 		return 0;
 	}
 
-	
+	<#if (fixtureType=="xml")>
 	// Retrieve an xml file from the assets
 	public InputStream getXml(String entityName){
 		AssetManager assetManager = this.context.getAssets();
@@ -45,4 +46,18 @@ public abstract class FixtureBase {
 		}
 		return ret;
 	}
+	<#elseif (fixtureType=="yml")>
+	// Retrieve an xml file from the assets
+	public InputStream getYml(String entityName){
+		AssetManager assetManager = this.context.getAssets();
+		InputStream ret = null;
+		try{
+			ret = assetManager.open(entityName+".yml");
+		}catch(Exception e){
+			// TODO Auto-generated method stub
+			e.printStackTrace();
+		}
+		return ret;
+	}
+	</#if>
 }

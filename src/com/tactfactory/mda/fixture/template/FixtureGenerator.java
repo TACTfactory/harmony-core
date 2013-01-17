@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 
 import com.tactfactory.mda.ConsoleUtils;
+import com.tactfactory.mda.fixture.metadata.FixtureMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.ApplicationGenerator;
@@ -37,15 +38,17 @@ public class FixtureGenerator extends BaseGenerator{
 	
 	public void init() {
 		 try {
+			 String fixtureType = ((FixtureMetadata)this.appMetas.options.get("fixture")).type;
+			 
 			 //Copy JDOM Library
 			this.updateLibrary("jdom-2.0.2.jar");
+			this.updateLibrary("snakeyaml-1.10-android.jar");
 			
 			//Create base classes for Fixtures loaders
 			this.makeSource("FixtureBase.java", "FixtureBase.java", true);
 			this.makeSource("DataManager.java", "DataManager.java", true);
 			
-			//Update ApplicationGenerator
-			new ApplicationGenerator(this.adapter).generateApplication();
+			//Update SQLiteOpenHelper
 			new SQLiteGenerator(this.adapter).generateDatabase();
 			
 			//Create each entity's data loader
@@ -53,7 +56,7 @@ public class FixtureGenerator extends BaseGenerator{
 				if(cm.fields.size()>0){
 					this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
 					this.makeSource("TemplateDataLoader.java", cm.name+"DataLoader.java", true);
-					this.makeBaseFixture("TemplateFixture.xml", cm.name+".xml", true);
+					this.makeBaseFixture("TemplateFixture."+fixtureType, cm.name+"."+fixtureType, false);
 				}
 			}
 		} catch (Exception e) {
