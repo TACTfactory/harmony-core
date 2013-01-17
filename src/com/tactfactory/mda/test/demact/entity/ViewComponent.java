@@ -17,6 +17,10 @@ public class ViewComponent implements Serializable {
 	@Id
 	protected int id;
 	
+	@Id
+	@Column
+	protected int id;
+	
 	@Column(type=Type.STRING)
 	protected String string;
 	

@@ -31,7 +31,6 @@ import org.joda.time.DateTime;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import ${curr.namespace}.BuildConfig;
@@ -51,7 +50,7 @@ import ${curr.namespace}.harmony.util.DateUtils;
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
  * You should edit ${curr.name}Adapter class instead of this one or you will lose all your modifications.</i></b>
  */
-public abstract class ${curr.name}SQLiteAdapterBase {
+public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_first}SQLiteAdapterBase{
 	private static final String TAG = "${curr.name}DBAdapter";
 	
 	/** Table name of SQLite database */
@@ -73,7 +72,13 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		${alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
 	};
 	
-	<#if (curr.relations?size>0)>private Context context;</#if>
+	public String getTableName(){
+		return TABLE_NAME;
+	}
+	
+	public String[] getCols(){
+		return COLS;
+	}
 
 	/** Generate Entity Table Schema
 	 * 
@@ -104,44 +109,13 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		+ ");";
 	}
 	
-	// Database tools
-	protected SQLiteDatabase mDatabase;
-	protected ${project_name?cap_first}SQLiteOpenHelper mBaseHelper;
 		
 	/** Constructor
 	 * 
 	 * @param ctx context
 	 */
 	public ${curr.name}SQLiteAdapterBase(Context ctx) {	
-		<#if (curr.relations?size>0)>this.context = ctx;</#if>
-		this.mBaseHelper = new ${project_name?cap_first}SQLiteOpenHelper(
-				ctx, 
-				"database", 
-				null,
-				1);
-	}
-	
-	/** Initialize and open database
-	 * 
-	 * @return Open database
-	 */
-	public SQLiteDatabase open() {
-		this.mDatabase = this.mBaseHelper.getWritableDatabase();
-		return this.mDatabase;
-	}
-	
-	/** Initialize and open database
-	 * 
-	 * @return Open database
-	 */
-	public SQLiteDatabase open(SQLiteDatabase db) {
-		this.mDatabase = db;
-		return this.mDatabase;
-	}
-
-	/** Close database */
-	public void close() {
-		mDatabase.close();
+		super(ctx);
 	}
 	
 <#if (curr.internal!="true")>
@@ -505,25 +479,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 	</#if>
 	}
 	
-	protected Cursor getAllCursor() {
-		if (BuildConfig.DEBUG)
-			Log.d(TAG, "Get all entities");
-		
-		return this.query(COLS, null, null, null, null, null);
-	}
-	
 </#if>
-
-	public Cursor query(String[] projection, String whereClause, String[] whereArgs, String groupBy, String having, String orderBy){
-		return this.mDatabase.query(
-				TABLE_NAME,
-				projection,
-				whereClause,
-				whereArgs,
-				groupBy,
-				having,
-				orderBy);
-	}
 	
 	public Cursor query(int id){
 		<#if curr.ids?size==0>
@@ -539,20 +495,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		</#if>
 	}
 	
-	public long insert(String nullColumnHack, ContentValues item){
-		return this.mDatabase.insert(
-				TABLE_NAME,
-				nullColumnHack,
-				item);
-	}
-	
-	public int delete(String whereClause, String[] whereArgs){
-		return this.mDatabase.delete(
-				TABLE_NAME,
-				whereClause,
-				whereArgs);
-	}
-	
+
 	public int delete(int id){
 		<#if curr.ids?size==0>
 			throw new UnsupportedOperationException("Method not implemented yet.");
@@ -561,14 +504,6 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 				COL_ID+" = ?",
 				new String[]{String.valueOf(id)});
 		</#if>
-	}
-	
-	public int update(ContentValues item, String whereClause, String[] whereArgs){
-		return this.mDatabase.update(
-				TABLE_NAME,
-				item,
-				whereClause,
-				whereArgs);
 	}
 	
 <#if (curr.internal=="true")>
