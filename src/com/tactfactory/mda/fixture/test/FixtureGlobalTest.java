@@ -1,0 +1,120 @@
+package com.tactfactory.mda.fixture.test;
+
+import java.io.File;
+
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
+
+import com.tactfactory.mda.ConsoleUtils;
+import com.tactfactory.mda.Harmony;
+import com.tactfactory.mda.command.OrmCommand;
+import com.tactfactory.mda.command.ProjectCommand;
+import com.tactfactory.mda.fixture.command.FixtureCommand;
+import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.rest.command.RestCommand;
+import com.tactfactory.mda.sync.annotation.Sync;
+import com.tactfactory.mda.sync.annotation.Sync.Level;
+import com.tactfactory.mda.sync.annotation.Sync.Mode;
+import com.tactfactory.mda.sync.annotation.Sync.Priority;
+import com.tactfactory.mda.sync.command.SyncCommand;
+import com.tactfactory.mda.sync.meta.SyncMetadata;
+import com.tactfactory.mda.test.CommonTest;
+import com.tactfactory.mda.utils.FileUtils;
+
+public class FixtureGlobalTest extends CommonTest{
+	
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@Before
+	@Override
+	public void setUp() throws Exception {
+		super.setUp();
+	}
+
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@After
+	@Override
+	public void tearDown() throws Exception {
+		super.tearDown();
+	}
+	
+	@Test
+	public void all() {
+		System.out.println("\nTest Orm generate entity");
+		System.out.println("###############################################################################");
+		
+		this.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+		this.makeEntities();
+		this.harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
+		this.harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[]{}, null);
+		this.harmony.findAndExecute(RestCommand.GENERATE_ADAPTERS, new String[]{}, null);
+		this.harmony.findAndExecute(SyncCommand.GENERATE_SERVICE, new String[]{}, null);
+		this.harmony.findAndExecute(FixtureCommand.FIXTURE_INIT, new String[]{"--format=xml"}, null);
+		
+		// Copy fixture files
+		this.copyFixturesXml();
+		this.harmony.findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[]{}, null);
+		this.hasFixturesXml();		
+		
+		this.harmony.findAndExecute(FixtureCommand.FIXTURE_PURGE, new String[]{}, null);
+		this.harmony.findAndExecute(FixtureCommand.FIXTURE_INIT, new String[]{}, null);
+		this.copyFixturesYml();
+		this.harmony.findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[]{}, null);
+		this.hasFixturesYml();		
+	}
+	
+	@Test
+	public void hasFixtureLoaders() {
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/UserDataLoader.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/CommentDataLoader.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/PostDataLoader.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/ViewComponentDataLoader.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/FixtureBase.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/DataManager.java");
+	}
+	
+	@Test
+	public void hasFixturesXml() {
+		this.hasFindFile("android/assets/User.xml");
+		this.hasFindFile("android/assets/Comment.xml");
+		this.hasFindFile("android/assets/Post.xml");
+		this.hasFindFile("android/assets/ViewComponent.xml");
+	}
+	
+	@Test
+	public void hasFixturesYml() {
+		this.hasFindFile("android/assets/User.yml");
+		this.hasFindFile("android/assets/Comment.yml");
+		this.hasFindFile("android/assets/Post.yml");
+		this.hasFindFile("android/assets/ViewComponent.yml");
+	}
+	
+	protected void copyFixturesXml() {
+		String pathNameSpace = Harmony.metas.projectNameSpace.replaceAll("\\.", "/");
+		String srcDir = String.format("src/%s/%s/%s/", pathNameSpace, "fixture", "xml");
+		String destDir = String.format("%s/android/assets/", Harmony.pathProject);
+		System.out.println(destDir);
+		
+		// FileUtils.copyDirectory(new File(srcDir),new File(destDir));
+		FileUtils.makeFolderRecursive(srcDir, destDir, true);
+		if(new File(destDir+"Post.xml").exists())
+			ConsoleUtils.displayDebug("Entity is copy to generated package !");
+	}
+	
+	protected void copyFixturesYml() {
+		String pathNameSpace = Harmony.metas.projectNameSpace.replaceAll("\\.", "/");
+		String srcDir = String.format("src/%s/%s/%s/", pathNameSpace, "fixture", "yml");
+		String destDir = String.format("%s/android/assets/", Harmony.pathProject);
+		System.out.println(destDir);
+		
+		// FileUtils.copyDirectory(new File(srcDir),new File(destDir));
+		FileUtils.makeFolderRecursive(srcDir, destDir, true);
+		if(new File(destDir+"Post.xml").exists())
+			ConsoleUtils.displayDebug("Entity is copy to generated package !");
+	}
+}

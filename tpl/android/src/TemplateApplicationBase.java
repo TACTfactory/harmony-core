@@ -12,12 +12,6 @@ import android.telephony.TelephonyManager;
 import android.util.Log;
 import java.util.ArrayList;
 
-<#if options.fixture?? && options.fixture.enabled>
-	<#list entities?values as entity>
-import ${fixture_namespace}.${entity.name?cap_first}DataLoader;
-	</#list>
-</#if>
-
 /** 
  * Common all life data/service
  * 
@@ -28,8 +22,6 @@ import ${fixture_namespace}.${entity.name?cap_first}DataLoader;
 public abstract class ${project_name?cap_first}ApplicationBase extends Application {
 	private final static String TAG = "${project_name?cap_first}";
 	private volatile static ${project_name?cap_first}ApplicationBase singleton;
-	@SuppressWarnings("rawtypes")
-	public ArrayList<Class> loaders = new ArrayList<Class>();
 	
 	/** Called when the application is first created. */
 	@Override

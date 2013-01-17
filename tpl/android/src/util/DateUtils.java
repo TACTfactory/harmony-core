@@ -3,6 +3,7 @@ package ${project_namespace}.harmony.util;
 import java.text.ParseException;
 
 import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.ISODateTimeFormat;
 
 import ${project_namespace}.${project_name?cap_first}Application;
@@ -93,5 +94,16 @@ public class DateUtils extends android.text.format.DateUtils{
 	 */
 	public static DateTime formatISOStringToDateTime(String dateTime){
 		return new DateTime(ISODateTimeFormat.dateTime().parseDateTime(dateTime));
+	}
+	
+	
+	/**
+	 * Convert a string to a datetime thanks to the given pattern
+	 * @param pattern The datetime pattern (ex. "dd-mm-yyyy" or "yyyy-MM-dd hh:mm")
+	 * @param dateTime date string
+	 * @return datetime
+	 */
+	public static DateTime formatPattern(String pattern, String dateTime){
+		return new DateTime(DateTimeFormat.forPattern(pattern).parseDateTime(dateTime));
 	}
 }

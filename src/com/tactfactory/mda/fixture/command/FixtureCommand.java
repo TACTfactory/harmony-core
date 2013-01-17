@@ -51,7 +51,12 @@ public class FixtureCommand extends BaseCommand{
 			FixtureMetadata fixtureMeta = new FixtureMetadata();
 			
 			//TODO : get type by user input
-			fixtureMeta.type = "xml";
+			fixtureMeta.type = "yml";
+			if(this.commandArgs.containsKey("format")){
+				String format = this.commandArgs.get("format");
+				if(format.equals("xml") || format.equals("yml"))
+					fixtureMeta.type = format; 
+			}
 			Harmony.metas.options.put(fixtureMeta.getName(), fixtureMeta);
 			new FixtureGenerator(new AndroidAdapter()).init();
 		} catch (Exception e) {
@@ -61,11 +66,22 @@ public class FixtureCommand extends BaseCommand{
 	}
 	
 	public void load(){
-		
+		try {
+			new FixtureGenerator(new AndroidAdapter()).load();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void purge(){
-		
+		try{
+			this.generateMetas();
+			new FixtureGenerator(new AndroidAdapter()).purge();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public void update(){

@@ -63,20 +63,22 @@ public class DataManager {
      *
      * @param object $object The instance to make managed and persistent.
      */
-    public void persist(Object object) {
+    public int persist(Object object) {
     	this.beginTransaction();
     	try{
     	<#list entities?values as entity>
     		<#if (entity.fields?size>0)>
     		if(object instanceof ${entity.name}){
     		
-    			((${entity.name}SQLiteAdapter)this.adapters.get("${entity.name}")).insert((${entity.name})object);
+    			return (int)((${entity.name}SQLiteAdapter)this.adapters.get("${entity.name}")).insert((${entity.name})object);
     		}
     		</#if>
     	</#list>
     	} catch (Exception ex) {
+    		ex.printStackTrace();
     		this.isSuccessfull = false;
     	}    	
+    	return 0;
     }
 
     /**

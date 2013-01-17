@@ -1,6 +1,10 @@
 package com.tactfactory.mda.fixture.template;
 
+import java.io.File;
+import java.io.IOException;
+
 import com.tactfactory.mda.ConsoleUtils;
+import com.tactfactory.mda.fixture.metadata.FixtureMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.ApplicationGenerator;
@@ -17,33 +21,55 @@ public class FixtureGenerator extends BaseGenerator{
 		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
+	public void load() {
+		File fixtAppSrc = new File("fixtures/app");
+		if(fixtAppSrc.exists()){
+			File fixtAppDest = new File(this.adapter.getAssetsPath());
+			try {
+				FileUtils.copyDirectory(fixtAppSrc, fixtAppDest);
+				ConsoleUtils.displayDebug("Copying fixtures/app into "+fixtAppDest.getPath());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}else{
+			ConsoleUtils.displayError("You must init the fixtures before loading them. Use the command orm:fixture:init.");
+		}
+	}
+	
 	public void init() {
 		 try {
+			 String fixtureType = ((FixtureMetadata)this.appMetas.options.get("fixture")).type;
+			 
 			 //Copy JDOM Library
 			this.updateLibrary("jdom-2.0.2.jar");
-			
-			//Create fixture's base folders
-			FileUtils.makeFolder("fixtures");
-			FileUtils.makeFolder("fixtures/app");
-			FileUtils.makeFolder("fixtures/test");
+			this.updateLibrary("snakeyaml-1.10-android.jar");
 			
 			//Create base classes for Fixtures loaders
 			this.makeSource("FixtureBase.java", "FixtureBase.java", true);
 			this.makeSource("DataManager.java", "DataManager.java", true);
 			
-			//Update ApplicationGenerator
-			new ApplicationGenerator(this.adapter).generateApplication();
+			//Update SQLiteOpenHelper
 			new SQLiteGenerator(this.adapter).generateDatabase();
 			
 			//Create each entity's data loader
 			for(ClassMetadata cm : this.appMetas.entities.values()){
-				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
-				this.makeSource("TemplateDataLoader.java", cm.name+"DataLoader.java", true);
-				this.makeBaseFixture("TemplateFixture.xml", cm.name+".xml", true);
+				if(cm.fields.size()>0){
+					this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
+					this.makeSource("TemplateDataLoader.java", cm.name+"DataLoader.java", true);
+					this.makeBaseFixture("TemplateFixture."+fixtureType, cm.name+"."+fixtureType, false);
+				}
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void purge() {
+		for(ClassMetadata cm : this.appMetas.entities.values()){
+			this.removeSource(cm.name+".xml");
+			this.removeSource(cm.name+".yml");
+		}
+		
 	}
 	
 	protected void makeSource(String templateName, String fileName, boolean override) {
@@ -53,12 +79,18 @@ public class FixtureGenerator extends BaseGenerator{
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 	
+	protected void removeSource(String fileName) {
+		String fullFilePath = this.adapter.getAssetsPath() + "/" + fileName;
+		File f = new File(fullFilePath);
+		f.delete();
+	}
+	
 	protected void makeBaseFixture(String templateName, String fileName, boolean override){
-		String fullFilePath = "fixture/app/"+fileName;
+		String fullFilePath = "fixtures/app/"+fileName;
 		String fullTemplatePath = this.adapter.getTemplateSourceFixturePath().substring(1) + templateName;
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 		
-		fullFilePath = "fixture/test/"+fileName;
+		fullFilePath = "fixtures/test/"+fileName;
 		fullTemplatePath = this.adapter.getTemplateSourceFixturePath().substring(1) + templateName;
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
