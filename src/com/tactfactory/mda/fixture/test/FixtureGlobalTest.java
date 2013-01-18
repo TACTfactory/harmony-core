@@ -97,10 +97,12 @@ public class FixtureGlobalTest extends CommonTest{
 	protected void copyFixturesXml() {
 		String pathNameSpace = Harmony.metas.projectNameSpace.replaceAll("\\.", "/");
 		String srcDir = String.format("src/%s/%s/%s/", pathNameSpace, "fixture", "xml");
-		String destDir = String.format("%s/android/assets/", Harmony.pathProject);
+		String destDir = String.format("fixtures/app/");
 		System.out.println(destDir);
 		
 		// FileUtils.copyDirectory(new File(srcDir),new File(destDir));
+		FileUtils.makeFolderRecursive(srcDir, destDir, true);
+		destDir = String.format("fixtures/test/");
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
 		if(new File(destDir+"Post.xml").exists())
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");
@@ -109,12 +111,14 @@ public class FixtureGlobalTest extends CommonTest{
 	protected void copyFixturesYml() {
 		String pathNameSpace = Harmony.metas.projectNameSpace.replaceAll("\\.", "/");
 		String srcDir = String.format("src/%s/%s/%s/", pathNameSpace, "fixture", "yml");
-		String destDir = String.format("%s/android/assets/", Harmony.pathProject);
+		String destDir = String.format("fixtures/app/");
 		System.out.println(destDir);
 		
 		// FileUtils.copyDirectory(new File(srcDir),new File(destDir));
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
-		if(new File(destDir+"Post.xml").exists())
+		destDir = String.format("fixtures/test/");
+		FileUtils.makeFolderRecursive(srcDir, destDir, true);
+		if(new File(destDir+"Post.yml").exists())
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");
 	}
 }
