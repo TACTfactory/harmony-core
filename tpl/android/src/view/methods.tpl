@@ -23,7 +23,7 @@
 		<#assign ret=ret+".setChecked(model.is"+field.name?cap_first+"());" />
 	<#elseif (type=="datetime" || type=="date" || type=="time")>
 		<#if (type=="datetime")>
-			<#assign ret=ret+".setText(model.get"+field.name?cap_first+"().toString());" />
+			<#assign ret=ret+".setText(DateUtils.formatDateTimeToString(model.get"+field.name?cap_first+"()));" />
 		</#if>
 		<#if (type=="date")>
 			<#assign ret=ret+".setText(DateUtils.formatDateToString(model.get"+field.name?cap_first+"()));" />
