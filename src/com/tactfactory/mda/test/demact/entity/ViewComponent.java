@@ -13,6 +13,10 @@ import com.tactfactory.mda.annotation.Id;
 public class ViewComponent implements Serializable {
 	private static final long serialVersionUID = -6623985483853173832L;
 	
+	@Id
+	@Column()
+	protected int id;
+	
 	@Column(type=Type.STRING)
 	protected String string;
 	
