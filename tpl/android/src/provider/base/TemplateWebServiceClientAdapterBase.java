@@ -52,8 +52,9 @@
 	<#return false />
 </#function>
 
-package ${curr.data_namespace};
+package ${curr.data_namespace}.base;
 
+import ${data_namespace}.*;
 import ${curr.namespace}.entity.${curr.name};
 import ${data_namespace}.RestClient.Verb;
 
