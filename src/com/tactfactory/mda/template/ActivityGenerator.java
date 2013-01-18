@@ -40,7 +40,6 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class ActivityGenerator extends BaseGenerator {
-	//protected List<Map<String, Object>> modelEntities;
 	protected String localNameSpace;
 	protected boolean isWritable = true;
 	private boolean isDate = false;
@@ -113,6 +112,16 @@ public class ActivityGenerator extends BaseGenerator {
 	
 				this.generateCreateAction(entityName);
 				this.generateEditAction(entityName);
+				
+				TranslationMetadata.addDefaultTranslation(
+						"common_create",
+						"Create",
+						Group.COMMON);
+				
+				TranslationMetadata.addDefaultTranslation(
+						"common_edit",
+						"Edit",
+						Group.COMMON);
 				
 				TranslationMetadata.addDefaultTranslation(
 						entityName.toLowerCase() + "_progress_save_title", 
@@ -236,6 +245,7 @@ public class ActivityGenerator extends BaseGenerator {
 				entityName.toLowerCase() + "_error_edit", 
 				entityName +" edition error&#8230;",
 				Group.MODEL);
+				
 	}
 
 	/** Create Action

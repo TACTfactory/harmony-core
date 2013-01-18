@@ -10,6 +10,7 @@ package com.tactfactory.mda.template;
 
 public abstract class TagConstant {
 	//Project markers
+	public static final String PROJECT_PATH = "project_path";
 	public final static String PROJECT_NAMESPACE = "project_namespace";
 	public final static String PROJECT_NAME = "project_name";
 	public final static String LOCAL_NAMESPACE = "local_namespace";
@@ -18,6 +19,7 @@ public abstract class TagConstant {
 	public final static String DATA_NAMESPACE = "data_namespace";
 	public final static String ENTITY_NAMESPACE = "entity_namespace";
 	public final static String SERVICE_NAMESPACE = "service_namespace";
+	public static final String FIXTURE_NAMESPACE = "fixture_namespace";
 	public final static String ANDROID_SDK_DIR = "sdk_dir";
 	
 	// Ant markers
@@ -50,6 +52,8 @@ public abstract class TagConstant {
 	public static final String LEVEL = "level";
 	public static final String MODE = "mode";
 	public static final String PRIORITY = "priority";
+	
+	
 	
 	
 	

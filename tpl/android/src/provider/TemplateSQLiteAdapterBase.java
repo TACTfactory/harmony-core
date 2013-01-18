@@ -23,6 +23,15 @@
 	<#return false />
 </#function>
 
+<#function getMappedField field>
+	<#assign ref_entity = entities[field.relation.targetEntity] />
+	<#list ref_entity.fields as ref_field>
+		<#if ref_field.name == field.relation.mappedBy>
+			<#return ref_field />
+		</#if>
+	</#list>
+</#function>
+
 package ${data_namespace};
 
 import java.util.ArrayList;
@@ -31,10 +40,9 @@ import org.joda.time.DateTime;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
-import ${curr.namespace}.BuildConfig;
+import ${project_namespace}.${project_name?cap_first}Application;
 <#if (curr.internal=="false")>
 import ${curr.namespace}.entity.${curr.name};
 </#if>
@@ -51,7 +59,7 @@ import ${curr.namespace}.harmony.util.DateUtils;
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
  * You should edit ${curr.name}Adapter class instead of this one or you will lose all your modifications.</i></b>
  */
-public abstract class ${curr.name}SQLiteAdapterBase {
+public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_first}SQLiteAdapterBase{
 	private static final String TAG = "${curr.name}DBAdapter";
 	
 	/** Table name of SQLite database */
@@ -73,7 +81,13 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		${alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
 	};
 	
-	<#if (curr.relations?size>0)>private Context context;</#if>
+	public String getTableName(){
+		return TABLE_NAME;
+	}
+	
+	public String[] getCols(){
+		return COLS;
+	}
 
 	/** Generate Entity Table Schema
 	 * 
@@ -104,44 +118,13 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		+ ");";
 	}
 	
-	// Database tools
-	protected SQLiteDatabase mDatabase;
-	protected ${project_name?cap_first}SQLiteOpenHelper mBaseHelper;
 		
 	/** Constructor
 	 * 
 	 * @param ctx context
 	 */
 	public ${curr.name}SQLiteAdapterBase(Context ctx) {	
-		<#if (curr.relations?size>0)>this.context = ctx;</#if>
-		this.mBaseHelper = new ${project_name?cap_first}SQLiteOpenHelper(
-				ctx, 
-				"database", 
-				null,
-				1);
-	}
-	
-	/** Initialize and open database
-	 * 
-	 * @return Open database
-	 */
-	public SQLiteDatabase open() {
-		this.mDatabase = this.mBaseHelper.getWritableDatabase();
-		return this.mDatabase;
-	}
-	
-	/** Initialize and open database
-	 * 
-	 * @return Open database
-	 */
-	public SQLiteDatabase open(SQLiteDatabase db) {
-		this.mDatabase = db;
-		return this.mDatabase;
-	}
-
-	/** Close database */
-	public void close() {
-		mDatabase.close();
+		super(ctx);
 	}
 	
 <#if (curr.internal!="true")>
@@ -233,7 +216,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 				result.add(item);
 			} while (c.moveToNext());
 			
-			if (BuildConfig.DEBUG)
+			if (${project_name?cap_first}Application.DEBUG)
 				Log.d(TAG, "Read DB(" + TABLE_NAME + ") count : " + c.getCount() );
 		}
 
@@ -259,7 +242,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 				<#if (relation.relation.type=="OneToMany")>
 		${relation.relation.targetEntity}SQLiteAdapter ${relation.relation.targetEntity?lower_case}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
 		${relation.relation.targetEntity?lower_case}Adapter.open(this.mDatabase);
-		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getBy${relation.relation.inversedBy}(result.getId())); // relation.relation.inversedBy?cap_first
+		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getBy${relation.relation.mappedBy?cap_first}(result.getId())); // relation.relation.inversedBy?cap_first
 				<#elseif (relation.relation.type=="ManyToMany")>
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.context);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
@@ -337,7 +320,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 	 * @return Id of the ${curr.name} entity
 	 */
 	public long insert(${curr.name} item) {
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
 		ContentValues values = ${curr.name}SQLiteAdapterBase.${curr.name?lower_case}ToContentValues(item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
@@ -360,7 +343,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		${relation.relation.targetEntity}SQLiteAdapterBase ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
 		${relation.name?uncap_first}Adapter.open(this.mDatabase);
 		for(${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()){
-			<#if (relation.relation.mappedBy??)>
+			<#if (relation.relation.mappedBy?? && !getMappedField(relation).internal)>
 			${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
 			${relation.name?uncap_first}Adapter.update(${relation.relation.targetEntity?lower_case});
 			<#else>
@@ -381,7 +364,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 	 */
 	public int update(${curr.name} item) {
 	<#if (curr.ids?size>0)>
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
 		
 		ContentValues values = ${curr.name}SQLiteAdapterBase.${curr.name?lower_case}ToContentValues(item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);	
@@ -407,7 +390,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 	 */
 	public int updateWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(${curr.name} item, int ${relation.relation.targetEntity?lower_case}_id) {
 			<#if (curr.ids?size>0)>
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
 
 		ContentValues values = ${curr.name}SQLiteAdapterBase.${curr.name?lower_case}ToContentValues(item<#list curr.relations as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>, ${relation.relation.targetEntity?lower_case}_id<#else>, 0</#if></#if></#list>);	
@@ -430,7 +413,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 	 * @return Id of the ${curr.name} entity
 	 */
 	public long insertWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(${curr.name} item, int ${relation.relation.targetEntity?lower_case}_id) {
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
 		ContentValues values = ${curr.name}SQLiteAdapterBase.${curr.name?lower_case}ToContentValues(item<#list curr.relations as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>, ${relation.relation.targetEntity?lower_case}_id<#else>, 0</#if></#if></#list>);
@@ -476,7 +459,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 	 */
 	public int remove(<#list curr.ids as id>${m.javaType(id.type)} ${id.name}<#if (id_has_next)>,</#if></#list>) {
 	<#if (curr.ids?size>0)>
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Delete DB(" + TABLE_NAME + ") id : "+ <#list curr.ids as id>${id.name}<#if (id_has_next)> + " id : " + </#if></#list>);
 		
 		String whereClause = <#list curr.ids as id> ${alias(id.name)} + "=? <#if (id_has_next)>AND </#if>"</#list>;
@@ -493,7 +476,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 	// Internal Cursor
 	protected Cursor getSingleCursor(<#list curr.ids as id>${m.javaType(id.type)} ${id.name}<#if id_has_next>,</#if></#list>) {
 	<#if (curr.ids?size>0)>
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Get entities id : " + <#list curr.ids as id>${id.name}<#if id_has_next> + " id : " + </#if></#list>);
 		
 		String whereClause = <#list curr.ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
@@ -505,25 +488,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 	</#if>
 	}
 	
-	protected Cursor getAllCursor() {
-		if (BuildConfig.DEBUG)
-			Log.d(TAG, "Get all entities");
-		
-		return this.query(COLS, null, null, null, null, null);
-	}
-	
 </#if>
-
-	public Cursor query(String[] projection, String whereClause, String[] whereArgs, String groupBy, String having, String orderBy){
-		return this.mDatabase.query(
-				TABLE_NAME,
-				projection,
-				whereClause,
-				whereArgs,
-				groupBy,
-				having,
-				orderBy);
-	}
 	
 	public Cursor query(int id){
 		<#if curr.ids?size==0>
@@ -539,20 +504,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 		</#if>
 	}
 	
-	public long insert(String nullColumnHack, ContentValues item){
-		return this.mDatabase.insert(
-				TABLE_NAME,
-				nullColumnHack,
-				item);
-	}
-	
-	public int delete(String whereClause, String[] whereArgs){
-		return this.mDatabase.delete(
-				TABLE_NAME,
-				whereClause,
-				whereArgs);
-	}
-	
+
 	public int delete(int id){
 		<#if curr.ids?size==0>
 			throw new UnsupportedOperationException("Method not implemented yet.");
@@ -561,14 +513,6 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 				COL_ID+" = ?",
 				new String[]{String.valueOf(id)});
 		</#if>
-	}
-	
-	public int update(ContentValues item, String whereClause, String[] whereArgs){
-		return this.mDatabase.update(
-				TABLE_NAME,
-				item,
-				whereClause,
-				whereArgs);
 	}
 	
 <#if (curr.internal=="true")>
@@ -586,7 +530,7 @@ public abstract class ${curr.name}SQLiteAdapterBase {
 	 * return Id of the ${curr.name} entity
 	 */
 	public long insert(int ${curr.relations[0].name?lower_case}, int ${curr.relations[1].name?lower_case}) {
-		if (BuildConfig.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
 		ContentValues values = new ContentValues();

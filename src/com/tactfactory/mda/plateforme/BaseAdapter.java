@@ -18,6 +18,7 @@ public abstract class BaseAdapter {
 	protected String project;
 	protected String platform;
 	protected String resource;
+	protected String assets;
 	protected String source;
 	protected String libs;
 	protected String test;
@@ -34,6 +35,7 @@ public abstract class BaseAdapter {
 	protected String provider	= "provider";
 	protected String common		= "common";
 	protected String service	= "service";
+	protected String fixture 	= "fixture";
 	
 	// File
 	protected String manifest;
@@ -132,12 +134,20 @@ public abstract class BaseAdapter {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getProvider() );
 	}
 	
+	public final String getTemplateSourceFixturePath() {
+		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getFixture() );
+	}
+	
 	public final String getTemplateSourceCommonPath() {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getCommon() );
 	}
 	
 	public final String getRessourcePath() {
 		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getResource() );
+	}
+	
+	public final String getAssetsPath() {
+		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getAssets() );
 	}
 	
 	public final String getTemplateRessourcePath() {
@@ -238,6 +248,13 @@ public abstract class BaseAdapter {
 	public final String getResource() {
 		return resource;
 	}
+	
+	/**
+	 * @return the resource
+	 */
+	public final String getAssets() {
+		return assets;
+	}
 
 	/**
 	 * @return the source
@@ -293,6 +310,13 @@ public abstract class BaseAdapter {
 	 */
 	public final void setResource(String ressource) {
 		this.resource = ressource;
+	}
+	
+	/**
+	 * @param ressource the resource to set
+	 */
+	public final void setAssets(String assets) {
+		this.assets = assets;
 	}
 
 	/**
@@ -384,6 +408,21 @@ public abstract class BaseAdapter {
 	 */
 	public final void setService(String service) {
 		this.service = service;
+	}
+	
+	
+	/**
+	 * @return the service
+	 */
+	public final String getFixture() {
+		return fixture;
+	}
+
+	/**
+	 * @param service the service to set
+	 */
+	public final void setFixture(String fixture) {
+		this.fixture = fixture;
 	}
 
 	

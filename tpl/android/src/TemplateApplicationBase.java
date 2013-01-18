@@ -10,6 +10,7 @@ import android.net.NetworkInfo;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+import java.util.ArrayList;
 
 /** 
  * Common all life data/service
@@ -34,6 +35,8 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		// Manage unmanaged error of application
 		//Thread.setDefaultUncaughtExceptionHandler(
 		//		new ApplicationCrashHandler(super.getApplicationContext()));
+		
+
 	}
 
 	/**

@@ -35,7 +35,18 @@ public class SQLiteGenerator extends BaseGenerator {
 		try {			
 			this.makeSourceData(
 					"TemplateSQLiteOpenHelper.java", 
-					"%sSQLiteOpenHelper.java");
+					"%sSQLiteOpenHelper.java",
+					false);
+			
+			this.makeSourceData(
+					"TemplateSQLiteOpenHelperBase.java", 
+					"%sSQLiteOpenHelperBase.java",
+					true);
+			
+			this.makeSourceData(
+					"ApplicationSQLiteAdapterBase.java", 
+					"%sSQLiteAdapterBase.java",
+					true);
 			
 		} catch (Exception e) {
 			ConsoleUtils.displayError(e.getMessage());
@@ -49,7 +60,7 @@ public class SQLiteGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	private void makeSourceData(String template, String filename) {
+	private void makeSourceData(String template, String filename, boolean override) {
 		
 		String fullFilePath = String.format("%s%s/%s",
 						this.adapter.getSourcePath(),
@@ -58,6 +69,6 @@ public class SQLiteGenerator extends BaseGenerator {
 		
 		String fullTemplatePath = this.adapter.getTemplateSourceProviderPath().substring(1) + template;
 		
-		super.makeSource(fullTemplatePath, fullFilePath, true);
+		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 }

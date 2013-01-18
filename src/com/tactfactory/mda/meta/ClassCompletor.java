@@ -73,6 +73,7 @@ public class ClassCompletor {
 					fm.relation.inversedBy = new_field.name;
 					entity_ref.fields.put(new_field.name, new_field);
 					entity_ref.relations.put(new_field.name, new_field);
+					rel.mappedBy = new_field.name;
 				}
 				
 			}
