@@ -1,6 +1,5 @@
 <#assign curr = entities[current_entity] />
 <#import "methods.ftl" as m />
-
 <#function alias name>
 	<#return "COL_"+name?upper_case />
 </#function>
@@ -13,7 +12,6 @@
 	</#list>
 	<#return false />
 </#function>
-
 <#function isInArray array var>
 	<#list array as item>
 		<#if (item==var)>
@@ -22,7 +20,6 @@
 	</#list>
 	<#return false />
 </#function>
-
 <#function getMappedField field>
 	<#assign ref_entity = entities[field.relation.targetEntity] />
 	<#list ref_entity.fields as ref_field>
@@ -31,7 +28,18 @@
 		</#if>
 	</#list>
 </#function>
-
+<#assign hasDateTime=false />
+<#assign hasTime=false />
+<#assign hasDate=false />
+<#list curr.fields as field>
+	<#if field.type=="date">
+		<#assign hasDate=true />
+	<#elseif field.type=="time">
+		<#assign hasTime=true />
+	<#elseif field.type="datetime">
+		<#assign hasDateTime=true />
+	</#if>
+</#list>
 package ${data_namespace};
 
 import java.util.ArrayList;
@@ -53,7 +61,7 @@ import ${curr.namespace}.entity.${curr.name};
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
 	</#if>
 </#list>
-import ${curr.namespace}.harmony.util.DateUtils;
+<#if hasDate || hasTime || hasDateTime>import ${curr.namespace}.harmony.util.DateUtils;</#if>
 
 /** ${curr.name} adapter database abstract class <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
