@@ -33,6 +33,10 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		
 		this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
 		this.entity = new ${curr.name}();
+		
+		this.db = this.adapter.open();
+		this.db.beginTransaction();
+		this.entity.setId((int) this.adapter.insert(this.entity));
 	}
 
 	/* (non-Javadoc)
@@ -40,22 +44,16 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	 */
 	protected void tearDown() throws Exception {
 		super.tearDown();
+		
+		this.db.endTransaction();
+		this.adapter.close();
 	}
 	
 	/** Test case Create Entity */
 	public void testCreate() {
 		int result = -1;
 
-		this.db = this.adapter.open();
-		this.db.beginTransaction();
-		try {
-			result = (int) this.adapter.insert(this.entity);
-
-			this.db.setTransactionSuccessful();
-		} finally {
-			this.db.endTransaction();
-			this.adapter.close();
-		}
+		result = this.entity.getId();
 
 		Assert.assertTrue(result >= 0);
 	}
@@ -64,18 +62,9 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	public void testRead() {
 		int result = -1;
 
-		this.db = this.adapter.open();
-		this.db.beginTransaction();
-		try {
-			this.entity = this.adapter.getByID(this.entity.getId()); // TODO Generate by @Id annotation
-			if (this.entity != null)
-				result = 0;
-
-			this.db.setTransactionSuccessful();
-		} finally {
-			this.db.endTransaction();
-			this.adapter.close();
-		}
+		this.entity = this.adapter.getByID(this.entity.getId()); // TODO Generate by @Id annotation
+		if (this.entity != null)
+			result = 0;
 		
 		Assert.assertTrue(result >= 0);
 	}
@@ -87,17 +76,8 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		
 		int result = -1;
 
-		this.db = this.adapter.open();
-		this.db.beginTransaction();
-		try {
-			result = this.adapter.update(this.entity);
+		result = this.adapter.update(this.entity);
 
-			this.db.setTransactionSuccessful();
-		} finally {
-			this.db.endTransaction();
-			this.adapter.close();
-		}
-		
 		Assert.assertTrue(result >= 0);
 
 		// TODO on all fields
@@ -108,16 +88,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	public void testDelete() {
 		int result = -1;
 
-		this.db = this.adapter.open();
-		this.db.beginTransaction();
-		try {
-			result = this.adapter.remove(this.entity.getId());
-
-			this.db.setTransactionSuccessful();
-		} finally {
-			this.db.endTransaction();
-			this.adapter.close();
-		}
+		result = this.adapter.remove(this.entity.getId());
 		
 		Assert.assertTrue(result >= 0);
 	}
