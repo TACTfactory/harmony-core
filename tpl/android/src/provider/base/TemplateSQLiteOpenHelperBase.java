@@ -1,5 +1,6 @@
-package ${project_namespace}.data;
+package ${data_namespace}.base;
 
+import ${data_namespace}.*;
 import ${project_namespace}.${project_name?cap_first}Application;
 
 import android.content.Context;

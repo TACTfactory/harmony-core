@@ -66,21 +66,21 @@ public class RestGlobalTest extends CommonTest{
 	
 	@Test
 	public void hasGlobalAbstractWebServiceAdapters() {
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/WebServiceClientAdapterBase.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/base/WebServiceClientAdapterBase.java");
 	}
 	
 	////WEB SERVICE ADAPTERS POST ////
 	@Test
 	public void hasPostWebServiceAdapters() {
 		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/PostWebServiceClientAdapter.java");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/PostWebServiceClientAdapterBase.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/base/PostWebServiceClientAdapterBase.java");
 	}
 	
 	////WEB SERVICE ADAPTERS USER ////
 	@Test
 	public void hasUserWebServiceAdapters() {
 		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/UserWebServiceClientAdapter.java");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/UserWebServiceClientAdapterBase.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/base/UserWebServiceClientAdapterBase.java");
 	}
 	
 	@Test

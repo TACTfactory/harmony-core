@@ -41,8 +41,8 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		
 		try {
 			this.makeSourceControler( 
-					"TemplateSQLiteAdapterBase.java", 
-					"%sSQLiteAdapterBase.java", true);
+					"base/TemplateSQLiteAdapterBase.java", 
+					"base/%sSQLiteAdapterBase.java", true);
 			
 			this.makeSourceControler(
 					"TemplateSQLiteAdapter.java", 
