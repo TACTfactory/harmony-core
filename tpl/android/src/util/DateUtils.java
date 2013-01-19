@@ -36,6 +36,15 @@ public class DateUtils extends android.text.format.DateUtils{
 	}
 	
 	/**
+	 * Convert datetime to Android string date + time format
+	 * @param date to convert
+	 * @return string datetime with Android date + time format
+	 */
+	public static String formatDateTimeToString(DateTime date){
+		return String.format("%s %s", formatDateToString(date), formatTimeToString(date));
+	}
+	
+	/**
 	 * Convert Android String date format to datetime
 	 * @param date Android string date format to convert
 	 * @return datetime

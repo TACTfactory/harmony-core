@@ -1,6 +1,7 @@
 <#assign curr = entities[current_entity] />
 package ${curr.data_namespace};
 
+import ${data_namespace}.base.${curr.name}SQLiteAdapterBase;
 import android.content.Context;
 
 /** ${curr.name} adapter database class */

@@ -44,6 +44,9 @@ public class User extends Object implements Cloneable {
 	
 	@Column(name="created_at")
     protected DateTime createdAt;
+	
+	@Column(type=Type.DATE)
+    protected DateTime birthdate;
 
 
 	public User() {
@@ -133,5 +136,19 @@ public class User extends Object implements Cloneable {
 	 */
 	public final void setCreatedAt(DateTime createdAt) {
 		this.createdAt = createdAt;
+	}
+	
+	/**
+	 * @return the birthdate
+	 */
+	public final DateTime getBirthdate() {
+		return birthdate;
+	}
+
+	/**
+	 * @param birthdate the birthdate to set
+	 */
+	public final void setBirthdate(DateTime birthdate) {
+		this.birthdate = birthdate;
 	}
 }

@@ -48,8 +48,8 @@ public class RestGenerator extends BaseGenerator {
 		
 		// Make Abstract Adapter Base general for all entities
 		this.makeSource(
-				"WebServiceClientAdapterBase.java", 
-				"WebServiceClientAdapterBase.java",
+				"base/WebServiceClientAdapterBase.java", 
+				"base/WebServiceClientAdapterBase.java",
 				true);
 		
 		// Make RestClient
@@ -62,8 +62,8 @@ public class RestGenerator extends BaseGenerator {
 			if (cm.options.get("rest")!=null) {
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
 				this.makeSource( 
-						"TemplateWebServiceClientAdapterBase.java", 
-						cm.name+"WebServiceClientAdapterBase.java", 
+						"base/TemplateWebServiceClientAdapterBase.java", 
+						"base/"+cm.name+"WebServiceClientAdapterBase.java", 
 						true);
 				this.makeSource(
 						"TemplateWebServiceClientAdapter.java", 

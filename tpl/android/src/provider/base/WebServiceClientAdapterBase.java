@@ -1,5 +1,6 @@
-package ${data_namespace};
+package ${data_namespace}.base;
 
+import ${data_namespace}.*;
 import java.util.ArrayList;
 import java.util.List;
 

@@ -57,7 +57,6 @@ public class FixtureCommand extends BaseCommand{
 		try {
 			this.generateMetas();
 			FixtureMetadata fixtureMeta = new FixtureMetadata();
-			
 			//TODO : get type by user input
 			fixtureMeta.type = "yml";
 			if(this.commandArgs.containsKey("format")){

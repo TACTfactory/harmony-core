@@ -39,13 +39,13 @@ public class SQLiteGenerator extends BaseGenerator {
 					false);
 			
 			this.makeSourceData(
-					"TemplateSQLiteOpenHelperBase.java", 
-					"%sSQLiteOpenHelperBase.java",
+					"base/TemplateSQLiteOpenHelperBase.java", 
+					"base/%sSQLiteOpenHelperBase.java",
 					true);
 			
 			this.makeSourceData(
-					"ApplicationSQLiteAdapterBase.java", 
-					"%sSQLiteAdapterBase.java",
+					"base/ApplicationSQLiteAdapterBase.java", 
+					"base/%sSQLiteAdapterBase.java",
 					true);
 			
 		} catch (Exception e) {

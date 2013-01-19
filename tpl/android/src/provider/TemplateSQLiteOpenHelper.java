@@ -1,5 +1,6 @@
-package ${project_namespace}.data;
+package ${data_namespace};
 
+import ${data_namespace}.base.${project_name?cap_first}SQLiteOpenHelperBase;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 

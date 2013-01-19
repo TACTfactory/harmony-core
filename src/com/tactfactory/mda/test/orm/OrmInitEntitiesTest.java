@@ -243,7 +243,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	@Test
 	public void hasPostRepository() {
 		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/PostSQLiteAdapter.java");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/PostSQLiteAdapterBase.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/base/PostSQLiteAdapterBase.java");
 	}
 	
 	
@@ -251,7 +251,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	@Test
 	public void hasCommentRepository() {
 		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/CommentSQLiteAdapter.java");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/CommentSQLiteAdapterBase.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/base/CommentSQLiteAdapterBase.java");
 	}
 	
 	
@@ -259,7 +259,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	@Test
 	public void hasUserRepository() {
 		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/UserSQLiteAdapter.java");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/UserSQLiteAdapterBase.java");
+		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/base/UserSQLiteAdapterBase.java");
 	}
 	
 	

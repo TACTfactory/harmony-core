@@ -6,7 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.tactfactory.mda.meta.ClassMetadata;
 import java.util.HashMap;
 
-import ${data_namespace}.${project_name?cap_first}SQLiteAdapterBase;
+import ${data_namespace}.base.${project_name?cap_first}SQLiteAdapterBase;
 <#list entities?values as entity>
 	<#if (entity.fields?size>0)>
 import ${data_namespace}.${entity.name?cap_first}SQLiteAdapter;
