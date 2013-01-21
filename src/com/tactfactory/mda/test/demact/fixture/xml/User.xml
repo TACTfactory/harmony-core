@@ -6,7 +6,8 @@
 		<lastname>Dupont</lastname>
 		<login>dup</login>
 		<password>password</password>
-		<createdAt>01/01/2012 00:00:000</createdAt>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<birthdate>2012-01-01 00:00</birthdate>
 	</User>
 	<User id="Haddock">
 		<id>1</id>
@@ -14,7 +15,8 @@
 		<lastname>Archibald</lastname>
 		<login>had</login>
 		<password>password</password>
-		<createdAt>01/01/2012 00:00:000</createdAt>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<birthdate>2012-01-01 00:00</birthdate>
 	</User>
 	<User id="Tournesol">
 		<id>2</id>
@@ -22,6 +24,7 @@
 		<lastname>Tryphon</lastname>
 		<login>tou</login>
 		<password>password</password>
-		<createdAt>01/01/2012 00:00:000</createdAt>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<birthdate>2012-01-01 00:00</birthdate>
 	</User>
 </list>

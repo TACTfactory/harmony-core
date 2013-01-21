@@ -50,6 +50,11 @@
 </#function>
 package ${data_namespace}.base;
 
+import com.tactfactory.mda.test.demact.data.CommentSQLiteAdapter;
+import com.tactfactory.mda.test.demact.data.PostSQLiteAdapter;
+import com.tactfactory.mda.test.demact.data.UserSQLiteAdapter;
+import com.tactfactory.mda.test.demact.data.ViewComponentSQLiteAdapter;
+
 import ${data_namespace}.*;
 import ${project_namespace}.${project_name?cap_first}Application;
 
@@ -102,6 +107,18 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 		this.loadData(db);
 	</#if>
 		
+	}
+	
+	/**
+	 * Clear the database given in parameters
+	 * @param db The database to clear
+	 */
+	public static void clearDatabase(SQLiteDatabase db){
+		<#list entities?values as entity>
+			<#if (entity.fields?? && (entity.fields?size>0))>
+		db.delete(${entity.name?cap_first}SQLiteAdapter.TABLE_NAME, null, null);	
+			</#if>
+		</#list>
 	}
 
 	/**

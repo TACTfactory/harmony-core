@@ -48,19 +48,10 @@ package ${curr.test_namespace};
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 
-<#assign relatedOrderedEntities = [] />
 <#list orderedEntities as entityName>
-	<#if entityName==curr.name>
-		<#break />
-	<#else>
-		<#assign relatedOrderedEntities = relatedOrderedEntities + [entityName] />
 import ${fixture_namespace}.${entityName}DataLoader;
-	</#if>
 </#list>
-import ${fixture_namespace}.${curr.name}DataLoader;
-<#if (relatedOrderedEntities?size>0)>
 import ${fixture_namespace}.DataManager;
-</#if>
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -92,22 +83,16 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		this.db = this.adapter.open();
 		this.db.beginTransaction();
 		
-		<#if (relatedOrderedEntities?size>0)>
 		DataManager manager = new DataManager(this.ctx, this.db);
-		</#if>
-		<#list relatedOrderedEntities as entityName>
+		<#list orderedEntities as entityName>
 		${entityName}DataLoader ${entityName?uncap_first}Loader = new ${entityName}DataLoader(this.ctx);
 		${entityName?uncap_first}Loader.getModelFixtures();
 		${entityName?uncap_first}Loader.load(manager);
 		</#list>
-		${curr.name}DataLoader ${curr.name?uncap_first}Loader = new ${curr.name}DataLoader(this.ctx);
-		${curr.name?uncap_first}Loader.getModelFixtures();
 		
-		
-		this.entity = (${curr.name})${curr.name?uncap_first}Loader.${curr.name?uncap_first}s.values().toArray()[0];
-		
-		
-		this.entity.setId((int) this.adapter.insert(this.entity));
+		this.entity = new ${curr.name?cap_first}();
+		this.entity.setId(TestUtils.generateRandomInt(0,${curr.name?uncap_first}Loader.${curr.name?uncap_first}s.size()));
+		//this.entity.setId((int) this.adapter.insert(this.entity));
 	}
 
 	/* (non-Javadoc)
@@ -123,8 +108,24 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	/** Test case Create Entity */
 	public void testCreate() {
 		int result = -1;
+		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
+		<#list curr.fields as field>
+			<#if field.type=="string" || field.type=="text" || field.type=="phone" || field.type=="login" || field.type=="password">
+		${curr.name?uncap_first}.set${field.name?cap_first}("${field.name?uncap_first}_"+TestUtils.generateRandomString(10));
+			<#elseif field.type=="int" || field.type=="zipcode" || field.type=="ean">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomInt(0,100));
+			<#elseif field.type=="boolean">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomBool());
+			<#elseif field.type=="date">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDate());
+			<#elseif field.type=="time">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomTime());
+			<#elseif field.type=="datetime">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDateTime());
+			</#if>
+		</#list>
 
-		result = this.entity.getId();
+		result = (int)this.adapter.insert(${curr.name?uncap_first});
 
 		Assert.assertTrue(result >= 0);
 	}
@@ -148,24 +149,33 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	
 	/** Test case Update Entity */
 	public void testUpdate() {
-		// TODO on all fields
-		//this.model.setXxxx(newValue);
-		
+		${curr.name?cap_first} ${curr.name?uncap_first} = this.adapter.getByID(this.entity.getId()); // TODO Generate by @Id annotation 
 		int result = -1;
+		<#list curr.fields as field>
+			<#if field.type=="string" || field.type=="text" || field.type=="phone" || field.type=="login" || field.type=="password">
+		${curr.name?uncap_first}.set${field.name?cap_first}("${field.name?uncap_first}_"+TestUtils.generateRandomString(10));
+			<#elseif field.type=="int" || field.type=="zipcode" || field.type=="ean">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomInt(0,100));
+			<#elseif field.type=="boolean">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomBool());
+			<#elseif field.type=="date">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDate());
+			<#elseif field.type=="time">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomTime());
+			<#elseif field.type=="datetime">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDateTime());
+			</#if>
+		</#list>
 
-		result = this.adapter.update(this.entity);
+		result = (int)this.adapter.update(${curr.name?uncap_first});
 
 		Assert.assertTrue(result >= 0);
-
-		// TODO on all fields
-		//Assert.assertEquals(newValue, this.model.getXxxx()) 
 	}
 	
 	/** Test case Update Entity */
 	public void testDelete() {
-		int result = -1;
-
-		result = this.adapter.remove(this.entity.getId());
+		int result = -1; 
+		result = (int)this.adapter.remove(this.entity.getId());
 		
 		Assert.assertTrue(result >= 0);
 	}

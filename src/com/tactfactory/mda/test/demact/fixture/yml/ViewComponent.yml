@@ -3,8 +3,8 @@ ViewComponent:
       id: 0
       string: "VC1 String"
       text: "VC1 Text"
-      datetime: 01/01/2012 00:00
-      date: 01/01/2012
+      dateTime: 2001-12-15 2:59:43.10
+      date: 2012-01-01
       time: 00:00
       login: "VC1 login"
       password: "VC1 password"
@@ -17,8 +17,8 @@ ViewComponent:
       id: 0
       string: "VC2 String"
       text: "VC2 Text"
-      datetime: 01/01/2012 00:00
-      date: 01/01/2012
+      dateTime: 2001-12-15 2:59:43.10
+      date: 2012-01-01
       time: 00:00
       login: "VC2 login"
       password: "VC2 password"
@@ -31,8 +31,8 @@ ViewComponent:
       id: 0
       string: "VC3 String"
       text: "VC3 Text"
-      datetime: 01/01/2012 00:00
-      date: 01/01/2012
+      dateTime: 2001-12-15 2:59:43.10
+      date: 2012-01-01
       time: 00:00
       login: "VC3 login"
       password: "VC3 password"

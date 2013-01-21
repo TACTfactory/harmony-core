@@ -6,9 +6,10 @@ Post:
       categories: "Radotage"
       owner: Dupond
       comments: 
-      createdAt: 01/01/2012 00:00
-      updatedAt: 01/01/2012 00:00
-      expiresAt: 01/01/2012 00:00
+         comment : Comment1
+      createdAt: 2001-12-15 2:59:43.10
+      updatedAt: 2001-12-15 2:59:43.10
+      expiresAt: 2001-12-15 2:59:43.10
    Post2:
       id: 0
       title: "Post 2"
@@ -16,9 +17,10 @@ Post:
       categories: "Insulte"
       owner: Haddock
       comments: 
-      createdAt: 01/01/2012 00:00
-      updatedAt: 01/01/2012 00:00
-      expiresAt: 01/01/2012 00:00
+         comment : Comment2
+      createdAt: 2001-12-15 2:59:43.10
+      updatedAt: 2001-12-15 2:59:43.10
+      expiresAt: 2001-12-15 2:59:43.10
    Post3:
       id: 0
       title: "Post 3"
@@ -26,6 +28,7 @@ Post:
       categories: "Fait scientifique"
       owner: Tournesol
       comments: 
-      createdAt: 01/01/2012 00:00
-      updatedAt: 01/01/2012 00:00
-      expiresAt: 01/01/2012 00:00
+         comment : Comment3
+      createdAt: 2001-12-15 2:59:43.10
+      updatedAt: 2001-12-15 2:59:43.10
+      expiresAt: 2001-12-15 2:59:43.10

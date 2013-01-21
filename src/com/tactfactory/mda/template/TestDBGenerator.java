@@ -28,7 +28,7 @@ public class TestDBGenerator extends BaseGenerator {
 		ConsoleUtils.display(">> Generate Repository test...");
 		
 		this.initTestAndroid();
-		
+	
 		for(ClassMetadata cm : this.appMetas.entities.values()){
 			if(!cm.internal && !cm.fields.isEmpty()){
 				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getTest());
@@ -36,6 +36,7 @@ public class TestDBGenerator extends BaseGenerator {
 				this.generate();
 			}
 		}
+		this.makeSourceTest("TestUtils.java", "TestUtils.java", true);
 	}
 	
 	/**  

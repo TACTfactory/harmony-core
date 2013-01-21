@@ -25,11 +25,12 @@ import android.content.Context;
 import ${project_namespace}.entity.*;
 import java.util.ArrayList;
 </#if>
-
+<#if (hasTime || hasDate || hasDateTime)>
+import org.joda.time.format.DateTimeFormat;
+</#if>
 import java.io.InputStream;
 <#if fixtureType=="xml">
 import java.io.IOException;
-import org.joda.time.format.DateTimeFormat;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -60,11 +61,11 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 		${curr.name?cap_first} ${curr.name?uncap_first} = null;
 		String entityName = "${curr.name?cap_first}";
 		
-		<#if fixtureType=="xml">
-		<#if hasDate>String patternDate = "yyyy-MM-dd";</#if>
-		<#if hasTime>String patternTime = "HH:mm";</#if>
-		<#if hasDateTime>String patternDateTime = "yyyy-MM-dd HH:mm";</#if>
 		
+		<#if hasTime>String patternTime = "HH:mm";</#if>
+		<#if fixtureType=="xml">
+		<#if hasDateTime>String patternDateTime = "yyyy-MM-dd HH:mm";</#if>
+		<#if hasDate>String patternDate = "yyyy-MM-dd";</#if>
 		// XML Loader
 		try {
 			//String currentDir = new File(".").getAbsolutePath();
@@ -143,11 +144,14 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 							<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
 					${curr.name?uncap_first}.set${field.name?cap_first}((Integer)columns.get("${field.name?uncap_first}"));
 							<#elseif field.type=="date">
+					//${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternDate).parseDateTime((String)columns.get("${field.name?uncap_first}")));
 					${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
 							<#elseif field.type=="datetime">
+					//${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternDateTime).parseDateTime((String)columns.get("${field.name?uncap_first}")));		
 					${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
 							<#elseif field.type=="time">
-					${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
+					${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternTime).parseDateTime((String)columns.get("${field.name?uncap_first}")));
+					//${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
 							<#elseif field.type=="boolean">
 					${curr.name?uncap_first}.set${field.name?cap_first}((Boolean)columns.get("${field.name?uncap_first}"));		
 							<#else>
