@@ -57,7 +57,7 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 	}
 	
 	@Override
-	public void getModelFixtures() {
+	public void getModelFixtures(int mode) {
 		${curr.name?cap_first} ${curr.name?uncap_first} = null;
 		String entityName = "${curr.name?cap_first}";
 		
@@ -71,7 +71,11 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 			//String currentDir = new File(".").getAbsolutePath();
 
 			SAXBuilder builder = new SAXBuilder();		// Make engine
-			InputStream xmlStream = this.getXml(entityName);//new File(currentDir + "${project_path}/fixture/" + entityName + ".xml");
+			InputStream xmlStream;
+			if(mode==MODE_BASE)
+				xmlStream = this.getXml("app/"+entityName);
+			else
+				xmlStream = this.getXml("test/"+entityName);
 			if(xmlStream != null){
 				Document doc = (Document) builder.build(xmlStream); 	// Load XML File
 				final Element rootNode = doc.getRootElement(); 			// Load Root element
@@ -129,7 +133,11 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 		<#elseif fixtureType=="yml">
 		// YAML Loader
 		Yaml yaml = new Yaml();
-		InputStream inputStream = this.getYml(entityName);
+		InputStream inputStream;
+		if(mode==MODE_BASE)
+			inputStream = this.getYml("app/"+entityName);
+		else
+			inputStream = this.getYml("test/"+entityName);
 		
 		Map<?, ?> map = (Map<?, ?>) yaml.load(inputStream);
 		if(map != null && map.containsKey(entityName)){

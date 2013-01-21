@@ -1,7 +1,7 @@
 <#function callLoader entity>
 	<#assign ret="//Load "+entity.name+" fixtures\r\t\t" /> 
 	<#assign ret=ret+entity.name?cap_first+"DataLoader "+entity.name?uncap_first+"Loader = new "+entity.name?cap_first+"DataLoader(this.context);\r\t\t" />
-	<#assign ret=ret+entity.name?uncap_first+"Loader.getModelFixtures();\r\t\t" />
+	<#assign ret=ret+entity.name?uncap_first+"Loader.getModelFixtures("+entity.name?cap_first+"DataLoader.MODE_BASE);\r\t\t" />
 	<#assign ret=ret+entity.name?uncap_first+"Loader.load(manager);\r" />
 	<#return ret />
 </#function>

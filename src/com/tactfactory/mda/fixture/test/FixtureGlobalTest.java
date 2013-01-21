@@ -80,18 +80,28 @@ public class FixtureGlobalTest extends CommonTest{
 	
 	@Test
 	public void hasFixturesXml() {
-		this.hasFindFile("android/assets/User.xml");
-		this.hasFindFile("android/assets/Comment.xml");
-		this.hasFindFile("android/assets/Post.xml");
-		this.hasFindFile("android/assets/ViewComponent.xml");
+		this.hasFindFile("android/assets/app/User.xml");
+		this.hasFindFile("android/assets/app/Comment.xml");
+		this.hasFindFile("android/assets/app/Post.xml");
+		this.hasFindFile("android/assets/app/ViewComponent.xml");
+		
+		this.hasFindFile("android/assets/test/User.xml");
+		this.hasFindFile("android/assets/test/Comment.xml");
+		this.hasFindFile("android/assets/test/Post.xml");
+		this.hasFindFile("android/assets/test/ViewComponent.xml");
 	}
 	
 	@Test
 	public void hasFixturesYml() {
-		this.hasFindFile("android/assets/User.yml");
-		this.hasFindFile("android/assets/Comment.yml");
-		this.hasFindFile("android/assets/Post.yml");
-		this.hasFindFile("android/assets/ViewComponent.yml");
+		this.hasFindFile("android/assets/app/User.yml");
+		this.hasFindFile("android/assets/app/Comment.yml");
+		this.hasFindFile("android/assets/app/Post.yml");
+		this.hasFindFile("android/assets/app/ViewComponent.yml");
+		
+		this.hasFindFile("android/assets/test/User.yml");
+		this.hasFindFile("android/assets/test/Comment.yml");
+		this.hasFindFile("android/assets/test/Post.yml");
+		this.hasFindFile("android/assets/test/ViewComponent.yml");
 	}
 	
 	protected void copyFixturesXml() {
