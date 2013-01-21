@@ -48,11 +48,17 @@ package ${curr.test_namespace};
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 
+<#list curr.relations as relation>
+import ${curr.namespace}.entity.${relation.relation.targetEntity?cap_first};
+import ${data_namespace}.${relation.relation.targetEntity?cap_first}SQLiteAdapter;
+</#list>
+
 <#list orderedEntities as entityName>
 import ${fixture_namespace}.${entityName}DataLoader;
 </#list>
 import ${fixture_namespace}.DataManager;
 
+import java.util.ArrayList;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
@@ -90,9 +96,8 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		${entityName?uncap_first}Loader.load(manager);
 		</#list>
 		
-		this.entity = new ${curr.name?cap_first}();
-		this.entity.setId(TestUtils.generateRandomInt(0,${curr.name?uncap_first}Loader.${curr.name?uncap_first}s.size()));
-		//this.entity.setId((int) this.adapter.insert(this.entity));
+		ArrayList<${curr.name?cap_first}> entities = this.adapter.getAll();
+		this.entity = entities.get(TestUtils.generateRandomInt(0,entities.size()));
 	}
 
 	/* (non-Javadoc)
@@ -108,22 +113,8 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	/** Test case Create Entity */
 	public void testCreate() {
 		int result = -1;
-		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
-		<#list curr.fields as field>
-			<#if field.type=="string" || field.type=="text" || field.type=="phone" || field.type=="login" || field.type=="password">
-		${curr.name?uncap_first}.set${field.name?cap_first}("${field.name?uncap_first}_"+TestUtils.generateRandomString(10));
-			<#elseif field.type=="int" || field.type=="zipcode" || field.type=="ean">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomInt(0,100));
-			<#elseif field.type=="boolean">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomBool());
-			<#elseif field.type=="date">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDate());
-			<#elseif field.type=="time">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomTime());
-			<#elseif field.type=="datetime">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDateTime());
-			</#if>
-		</#list>
+		${curr.name?cap_first} ${curr.name?uncap_first} = this.generateRandom();
+		
 
 		result = (int)this.adapter.insert(${curr.name?uncap_first});
 
@@ -134,17 +125,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	public void testRead() {
 		${curr.name?cap_first} result = this.adapter.getByID(this.entity.getId()); // TODO Generate by @Id annotation 
 		
-		<#list curr.fields as field>
-			<#if !field.internal>
-				<#if field.type=="int" || field.type=="integer" || field.type=="long" || field.type=="double" || field.type=="zipcode" || field.type=="ean">
-		Assert.assertTrue(result.get${field.name?cap_first}()==this.entity.get${field.name?cap_first}());
-				<#elseif field.type=="boolean">
-		Assert.assertTrue(result.is${field.name?cap_first}()==this.entity.is${field.name?cap_first}());		
-				<#else>
-		Assert.assertTrue(result.get${field.name?cap_first}().equals(this.entity.get${field.name?cap_first}()));
-				</#if>
-			</#if>
-		</#list>
+		equals(result, this.entity);
 	}
 	
 	/** Test case Update Entity */
@@ -178,5 +159,77 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		result = (int)this.adapter.remove(this.entity.getId());
 		
 		Assert.assertTrue(result >= 0);
+	}
+	
+	private ${curr.name?cap_first} generateRandom(){
+		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
+		
+		<#list curr.fields as field>
+			<#if !field.internal>
+				<#if !field.relation??>
+					<#if field.type=="string" || field.type=="text" || field.type=="phone" || field.type=="login" || field.type=="password">
+		${curr.name?uncap_first}.set${field.name?cap_first}("${field.name?uncap_first}_"+TestUtils.generateRandomString(10));
+					<#elseif field.type=="int" || field.type=="zipcode" || field.type=="ean">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomInt(0,100));
+					<#elseif field.type=="boolean">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomBool());
+					<#elseif field.type=="date">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDate());
+					<#elseif field.type=="time">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomTime());
+					<#elseif field.type=="datetime">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDateTime());
+					</#if>
+				<#else>
+					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
+		${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.name?uncap_first}Adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.ctx);
+		${field.name?uncap_first}Adapter.open(this.db);
+		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = ${field.name?uncap_first}Adapter.getAll();
+		${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
+					<#else>
+		${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.name?uncap_first}Adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.ctx);
+		${field.name?uncap_first}Adapter.open(this.db);
+		ArrayList<${field.relation.targetEntity?cap_first}> all${field.name?cap_first}s = ${field.name?uncap_first}Adapter.getAll();
+		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
+		${field.name?uncap_first}s.add(all${field.name?cap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
+		${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s);			
+					</#if>
+				</#if>
+			</#if>
+		</#list>
+		
+		return ${curr.name?uncap_first};
+	}
+	
+	public static boolean equals(${curr.name?cap_first} ${curr.name?uncap_first}1, ${curr.name?cap_first} ${curr.name?uncap_first}2){
+		boolean ret = true;
+		
+		<#list curr.fields as field>
+			<#if !field.internal>
+				<#if !field.relation??>
+					<#if field.type=="int" || field.type=="integer" || field.type=="long" || field.type=="double" || field.type=="zipcode" || field.type=="ean">
+		Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}()==${curr.name?uncap_first}2.get${field.name?cap_first}());
+					<#elseif field.type=="boolean">
+		Assert.assertTrue(${curr.name?uncap_first}1.is${field.name?cap_first}()==${curr.name?uncap_first}2.is${field.name?cap_first}());		
+					<#elseif field.type=="date" || field.type=="time" || field.type=="datetime">
+		Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().equals(${curr.name?uncap_first}2.get${field.name?cap_first}()));
+					<#else>
+		Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().equals(${curr.name?uncap_first}2.get${field.name?cap_first}()));
+					</#if>
+				<#else>
+					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
+		Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().getId()==${curr.name?uncap_first}2.get${field.name?cap_first}().getId());
+					<#else>
+		for(int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
+			Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).getId()
+								== ${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).getId());
+		}
+					
+					</#if>
+				</#if>
+			</#if>
+		</#list>
+		
+		return ret;
 	}
 }

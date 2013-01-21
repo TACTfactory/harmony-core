@@ -135,8 +135,8 @@ public abstract class TestUtils{
      public static DateTime generateRandomDate(){
     	 int year, month, day;
     	 year = (int)(Math.random()*200)+1900;
-    	 month = (int)(Math.random()*11);
-    	 day = (int)(Math.random()*27);
+    	 month = (int)(Math.random()*11)+1;
+    	 day = (int)(Math.random()*27)+1;
     	 return DateTimeFormat.forPattern(patternDate).parseDateTime(year+"/"+month+"/"+day);
      }
      
