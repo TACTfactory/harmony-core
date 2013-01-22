@@ -60,7 +60,7 @@ import ${fixture_namespace}.DataManager;
 
 import java.util.ArrayList;
 
-import com.tactfactory.mda.test.demact.data.base.DemactSQLiteOpenHelperBase;
+import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -90,7 +90,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		
 		this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
 		this.db = this.adapter.open();
-		DemactSQLiteOpenHelperBase.clearDatabase(this.db);
+		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
 		this.db.beginTransaction();
 		
 		DataManager manager = new DataManager(this.ctx, this.db);
@@ -111,7 +111,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		super.tearDown();
 		
 		this.db.endTransaction();
-		DemactSQLiteOpenHelperBase.clearDatabase(this.db);
+		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
 		this.adapter.close();
 	}
 	
@@ -164,6 +164,10 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomInt(0,100));
 					<#elseif field.type=="boolean">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomBool());
+					<#elseif field.type=="double">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDouble(0,100));
+					<#elseif field.type=="float">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomFloat(0,100));
 					<#elseif field.type=="date">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDate());
 					<#elseif field.type=="time">
@@ -198,7 +202,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		<#list curr.fields as field>
 			<#if !field.internal>
 				<#if !field.relation??>
-					<#if field.type=="int" || field.type=="integer" || field.type=="long" || field.type=="double" || field.type=="zipcode" || field.type=="ean">
+					<#if field.type=="int" || field.type=="integer" || field.type=="long" || field.type=="double" || field.type=="float" || field.type=="zipcode" || field.type=="ean">
 		Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}()==${curr.name?uncap_first}2.get${field.name?cap_first}());
 					<#elseif field.type=="boolean">
 		Assert.assertTrue(${curr.name?uncap_first}1.is${field.name?cap_first}()==${curr.name?uncap_first}2.is${field.name?cap_first}());		

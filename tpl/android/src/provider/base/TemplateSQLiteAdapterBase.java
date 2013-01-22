@@ -249,17 +249,17 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 		<#list curr.relations as relation>
 			<#if (!relation.internal)>
 				<#if (relation.relation.type=="OneToMany")>
-		${relation.relation.targetEntity}SQLiteAdapter ${relation.relation.targetEntity?lower_case}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
-		${relation.relation.targetEntity?lower_case}Adapter.open(this.mDatabase);
-		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getBy${relation.relation.mappedBy?cap_first}(result.getId())); // relation.relation.inversedBy?cap_first
+		${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
+		${relation.name?uncap_first}Adapter.open(this.mDatabase);
+		result.set${relation.name?cap_first}(${relation.name?uncap_first}Adapter.getBy${relation.relation.mappedBy?cap_first}(result.getId())); // relation.relation.inversedBy?cap_first
 				<#elseif (relation.relation.type=="ManyToMany")>
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.context);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
 		result.set${relation.name?cap_first}(${relation.relation.joinTable?lower_case}Adapter.getBy${curr.name}(result.getId())); // relation.relation.inversedBy?cap_first
 				<#else>
-		${relation.relation.targetEntity}SQLiteAdapter ${relation.relation.targetEntity?lower_case}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
-		${relation.relation.targetEntity?lower_case}Adapter.open(this.mDatabase);
-		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getByID(result.get${relation.name?cap_first}().getId())); // relation.relation.inversedBy?cap_first		
+		${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
+		${relation.name?uncap_first}Adapter.open(this.mDatabase);
+		result.set${relation.name?cap_first}(${relation.name?uncap_first}Adapter.getByID(result.get${relation.name?cap_first}().getId())); // relation.relation.inversedBy?cap_first		
 				</#if>
 			</#if>
 		</#list>
@@ -444,7 +444,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 		${relation.relation.targetEntity}SQLiteAdapterBase ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
 		${relation.name?uncap_first}Adapter.open(this.mDatabase);
 		for(${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()){
-			<#if (relation.relation.mappedBy??)>
+			<#if (relation.relation.mappedBy?? && !getMappedField(relation).internal)>
 			${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
 			${relation.name?uncap_first}Adapter.updateWith${curr.name?cap_first}${relation.name?cap_first}(${relation.relation.targetEntity?lower_case});
 			<#else>

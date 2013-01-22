@@ -50,10 +50,6 @@
 </#function>
 package ${data_namespace}.base;
 
-import com.tactfactory.mda.test.demact.data.CommentSQLiteAdapter;
-import com.tactfactory.mda.test.demact.data.PostSQLiteAdapter;
-import com.tactfactory.mda.test.demact.data.UserSQLiteAdapter;
-import com.tactfactory.mda.test.demact.data.ViewComponentSQLiteAdapter;
 
 import ${data_namespace}.*;
 import ${project_namespace}.${project_name?cap_first}Application;

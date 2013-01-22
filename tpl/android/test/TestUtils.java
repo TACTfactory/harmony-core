@@ -117,6 +117,10 @@ public abstract class TestUtils{
     	 return Math.random()*(max-min)+min;
      }
      
+     public static float generateRandomFloat(float min, float max){
+    	 return (float)generateRandomDouble(min, max);
+     }
+     
      public static boolean generateRandomBool(){
     	 return (Math.random()>0.5);
      }

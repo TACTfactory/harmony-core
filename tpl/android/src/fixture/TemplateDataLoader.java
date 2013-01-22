@@ -47,8 +47,6 @@ import java.util.LinkedHashMap;
 
 import ${curr.namespace}.entity.${curr.name};
 
-import com.tactfactory.mda.test.demact.fixture.DataManager;
-
 public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 	public static LinkedHashMap<String, ${curr.name?cap_first}> ${curr.name?uncap_first}s = new LinkedHashMap<String, ${curr.name?cap_first}>();
 	
@@ -151,15 +149,16 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 						<#if !field.relation??>
 							<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
 					${curr.name?uncap_first}.set${field.name?cap_first}((Integer)columns.get("${field.name?uncap_first}"));
+							<#elseif field.type=="double">
+					${curr.name?uncap_first}.set${field.name?cap_first}((Double)columns.get("${field.name?uncap_first}"));
+							<#elseif field.type=="float">
+					${curr.name?uncap_first}.set${field.name?cap_first}((Float)columns.get("${field.name?uncap_first}"));
 							<#elseif field.type=="date">
-					//${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternDate).parseDateTime((String)columns.get("${field.name?uncap_first}")));
 					${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
-							<#elseif field.type=="datetime">
-					//${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternDateTime).parseDateTime((String)columns.get("${field.name?uncap_first}")));		
+							<#elseif field.type=="datetime">		
 					${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
 							<#elseif field.type=="time">
 					${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternTime).parseDateTime((String)columns.get("${field.name?uncap_first}")));
-					//${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
 							<#elseif field.type=="boolean">
 					${curr.name?uncap_first}.set${field.name?cap_first}((Boolean)columns.get("${field.name?uncap_first}"));		
 							<#else>

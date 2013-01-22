@@ -26,7 +26,7 @@ public abstract class ${project_name?cap_first}SQLiteAdapterBase{
 	 */
 	protected ${project_name?cap_first}SQLiteAdapterBase(Context ctx) {	
 		this.context = ctx;
-		this.mBaseHelper = new DemactSQLiteOpenHelper(
+		this.mBaseHelper = new ${project_name?cap_first}SQLiteOpenHelper(
 				ctx, 
 				"database", 
 				null,
