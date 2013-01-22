@@ -48,9 +48,15 @@ package ${curr.test_namespace};
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 
+<#assign importList = [] />
 <#list curr.relations as relation>
+	<#if !relation.internal>
+		<#if !isInArray(importList, relation.relation.targetEntity)>
 import ${curr.namespace}.entity.${relation.relation.targetEntity?cap_first};
 import ${data_namespace}.${relation.relation.targetEntity?cap_first}SQLiteAdapter;
+			<#assign importList = importList + [relation.relation.targetEntity] />
+		</#if>
+	</#if>
 </#list>
 
 <#list orderedEntities as entityName>
