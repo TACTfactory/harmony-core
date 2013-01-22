@@ -25,11 +25,14 @@ import android.content.Context;
 import ${project_namespace}.entity.*;
 import java.util.ArrayList;
 </#if>
-<#if (hasTime || hasDate || hasDateTime)>
-import org.joda.time.format.DateTimeFormat;
-</#if>
+
 import java.io.InputStream;
 <#if fixtureType=="xml">
+	<#if (hasTime || hasDate || hasDateTime)>
+import ${project_namespace}.harmony.util.DateUtils;
+import java.util.Date;
+import org.joda.time.DateTime;
+	</#if>
 import java.io.IOException;
 import org.jdom2.Document;
 import org.jdom2.Element;
@@ -37,10 +40,16 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import java.util.List;
 <#elseif fixtureType=="yml">
-import org.yaml.snakeyaml.Yaml;
-import org.joda.time.DateTime;
-import java.util.Map;
+	<#if (hasTime)>
+import ${project_namespace}.harmony.util.DateUtils;
+	</#if>
+	<#if (hasTime || hasDate || hasDateTime)>
 import java.util.Date;
+import org.joda.time.DateTime;
+	</#if>
+import org.yaml.snakeyaml.Yaml;
+import java.util.Map;
+
 </#if>
 
 import java.util.LinkedHashMap;
@@ -91,11 +100,11 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 									<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
 							${curr.name?uncap_first}.set${field.name?cap_first}(Integer.parseInt(element.getChildText("${field.name?uncap_first}")));
 									<#elseif field.type=="date">
-							${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternDate).parseDateTime(element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternDate, element.getChildText("${field.name?uncap_first}")));
 									<#elseif field.type=="datetime">
-							${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternDateTime).parseDateTime(element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternDateTime, element.getChildText("${field.name?uncap_first}")));
 									<#elseif field.type=="time">
-							${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternTime).parseDateTime(element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternTime, element.getChildText("${field.name?uncap_first}")));
 									<#elseif field.type=="boolean">
 							${curr.name?uncap_first}.set${field.name?cap_first}(Boolean.parseBoolean(element.getChildText("${field.name?uncap_first}")));		
 									<#else>
@@ -152,13 +161,13 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 							<#elseif field.type=="double">
 					${curr.name?uncap_first}.set${field.name?cap_first}((Double)columns.get("${field.name?uncap_first}"));
 							<#elseif field.type=="float">
-					${curr.name?uncap_first}.set${field.name?cap_first}((Float)columns.get("${field.name?uncap_first}"));
+					${curr.name?uncap_first}.set${field.name?cap_first}(((Double)columns.get("${field.name?uncap_first}")).floatValue());
 							<#elseif field.type=="date">
 					${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
 							<#elseif field.type=="datetime">		
 					${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
 							<#elseif field.type=="time">
-					${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternTime).parseDateTime((String)columns.get("${field.name?uncap_first}")));
+					${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternTime,(String)columns.get("${field.name?uncap_first}")));
 							<#elseif field.type=="boolean">
 					${curr.name?uncap_first}.set${field.name?cap_first}((Boolean)columns.get("${field.name?uncap_first}"));		
 							<#else>

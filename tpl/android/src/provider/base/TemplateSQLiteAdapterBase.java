@@ -42,9 +42,11 @@
 </#list>
 package ${data_namespace}.base;
 
+<#if (curr.relations?size>0)>
 import ${data_namespace}.*;
+</#if>
 import java.util.ArrayList;
-import org.joda.time.DateTime;
+
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -57,12 +59,17 @@ import ${curr.namespace}.entity.${curr.name};
 </#if>
 <#assign import_array = [] />
 <#list curr.relations as relation>
-	<#if (!isInArray(import_array, relation.relation.targetEntity))>
-		<#assign import_array = import_array + [relation.relation.targetEntity] />
+	<#if !relation.internal>
+		<#if (!isInArray(import_array, relation.relation.targetEntity))>
+			<#assign import_array = import_array + [relation.relation.targetEntity] />
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
+		</#if>
 	</#if>
 </#list>
-<#if hasDate || hasTime || hasDateTime>import ${curr.namespace}.harmony.util.DateUtils;</#if>
+<#if hasDate || hasTime || hasDateTime>
+import ${curr.namespace}.harmony.util.DateUtils;
+import org.joda.time.DateTime;
+</#if>
 
 /** ${curr.name} adapter database abstract class <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
