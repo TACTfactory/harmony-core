@@ -189,8 +189,8 @@ public abstract class ${curr.name}SQLiteAdapterBase extends SQLiteAdapterBase<${
 			try {
 				result.set${field.name?cap_first}(new DateTime(
 						DateUtils.formatISOStringToDateTime(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case})) )));
-			} catch (Exception e) {
-				e.printStackTrace();
+			} catch (IllegalArgumentException e) {
+				Log.e(TAG, e.getMessage());
 				result.set${field.name?cap_first}(new DateTime());
 			}
 
