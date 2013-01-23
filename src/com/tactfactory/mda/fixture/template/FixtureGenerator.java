@@ -29,11 +29,20 @@ public class FixtureGenerator extends BaseGenerator{
 	
 	public void load() {
 		File fixtAppSrc = new File("fixtures/app");
+		File fixtTestSrc = new File("fixtures/test");
 		if(fixtAppSrc.exists()){
-			File fixtAppDest = new File(this.adapter.getAssetsPath());
+			File fixtAppDest = new File(this.adapter.getAssetsPath()+"/app");
+			File fixtTestDest = new File(this.adapter.getAssetsPath()+"/test");
+			if(!fixtAppDest.exists())
+				fixtAppDest.mkdir();
+			if(!fixtTestDest.exists())
+				fixtTestDest.mkdir();
 			try {
 				FileUtils.copyDirectory(fixtAppSrc, fixtAppDest);
 				ConsoleUtils.displayDebug("Copying fixtures/app into "+fixtAppDest.getPath());
+				FileUtils.copyDirectory(fixtTestSrc, fixtTestDest);
+				ConsoleUtils.displayDebug("Copying fixtures/test into "+fixtTestDest.getPath());
+				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

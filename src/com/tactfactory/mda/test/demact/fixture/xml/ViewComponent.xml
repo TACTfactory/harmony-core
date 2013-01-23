@@ -2,11 +2,11 @@
 <list>
 	<ViewComponent id="VC1">
 		<id>0</id>
-		<string>Dupond</string>
-		<text>Dupont</text>
-		<datetime>dup</datetime>
-		<date>password</date>
-		<time>01/01/2012 00:00:000</time>
+		<string>String</string>
+		<text>Texte</text>
+		<datetime>2012-01-01 00:00</datetime>
+		<date>2012-01-01</date>
+		<time>00:00</time>
 		<login>VC1 login</login>
 		<password>VC1 password</password>
 		<email>user1@vc1.com</email>
@@ -19,9 +19,9 @@
 		<id>0</id>
 		<string>Dupond</string>
 		<text>Dupont</text>
-		<datetime>dup</datetime>
-		<date>password</date>
-		<time>02/02/2022 00:00:000</time>
+		<datetime>2012-01-01 00:00</datetime>
+		<date>2012-01-01</date>
+		<time>00:00</time>
 		<login>VC2 login</login>
 		<password>VC2 password</password>
 		<email>user2@vc2.com</email>
@@ -34,9 +34,9 @@
 		<id>0</id>
 		<string>Dupond</string>
 		<text>Dupont</text>
-		<datetime>dup</datetime>
-		<date>password</date>
-		<time>03/03/3033 00:00:000</time>
+		<datetime>2012-01-01 00:00</datetime>
+		<date>2012-01-01</date>
+		<time>00:00</time>
 		<login>VC3 login</login>
 		<password>VC3 password</password>
 		<email>user3@vc3.com</email>

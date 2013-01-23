@@ -24,12 +24,14 @@ import android.widget.*;
 <#assign importDate=false />
 <#assign importTime=false />
 <#list curr.fields as field>
-	<#if (field.type=="date" || field.type=="time" || field.type=="datetime")>
-		<#if ((field.type=="date" || field.type=="datetime") && !importDate)>
-			<#assign importDate=true />
-		</#if>
-		<#if ((field.type=="time" || field.type=="datetime") && !importTime)>
-			<#assign importTime=true />
+	<#if !field.internal && !field.hidden>
+		<#if (field.type=="date" || field.type=="time" || field.type=="datetime")>
+			<#if ((field.type=="date" || field.type=="datetime") && !importDate)>
+				<#assign importDate=true />
+			</#if>
+			<#if ((field.type=="time" || field.type=="datetime") && !importTime)>
+				<#assign importTime=true />
+			</#if>
 		</#if>
 	</#if>
 </#list>
@@ -310,11 +312,11 @@ public class ${curr.name}EditFragment extends Fragment implements OnClickListene
 			<#if !field.relation??>
 				<#if field.type!="boolean">
 					<#if field.type=="date" || field.type=="datetime">
-		if(!this.${field.name}DateView.getEditableText().toString().equals(""))
-					<#elseif field.type=="time" || field.type=="datetime">
-		if(!this.${field.name}TimeView.getEditableText().toString().equals(""))
-					<#else>
-		if(!this.${field.name}View.getEditableText().toString().equals(""))
+			if(!TextUtils.isEmpty(this.${field.name}DateView.getEditableText()))
+						<#elseif field.type=="time" || field.type=="datetime">
+			if(!TextUtils.isEmpty(this.${field.name}TimeView.getEditableText()))
+						<#else>
+			if(!TextUtils.isEmpty(this.${field.name}View.getEditableText()))
 					</#if>
 			${m.setSaver(field)}
 				<#else>

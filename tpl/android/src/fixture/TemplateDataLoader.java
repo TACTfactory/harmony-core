@@ -28,25 +28,33 @@ import java.util.ArrayList;
 
 import java.io.InputStream;
 <#if fixtureType=="xml">
+	<#if (hasTime || hasDate || hasDateTime)>
+import ${project_namespace}.harmony.util.DateUtils;
+import java.util.Date;
+import org.joda.time.DateTime;
+	</#if>
 import java.io.IOException;
-import org.joda.time.format.DateTimeFormat;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import java.util.List;
 <#elseif fixtureType=="yml">
-import org.yaml.snakeyaml.Yaml;
-import org.joda.time.DateTime;
-import java.util.Map;
+	<#if (hasTime)>
+import ${project_namespace}.harmony.util.DateUtils;
+	</#if>
+	<#if (hasTime || hasDate || hasDateTime)>
 import java.util.Date;
+import org.joda.time.DateTime;
+	</#if>
+import org.yaml.snakeyaml.Yaml;
+import java.util.Map;
+
 </#if>
 
 import java.util.LinkedHashMap;
 
 import ${curr.namespace}.entity.${curr.name};
-
-import com.tactfactory.mda.test.demact.fixture.DataManager;
 
 public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 	public static LinkedHashMap<String, ${curr.name?cap_first}> ${curr.name?uncap_first}s = new LinkedHashMap<String, ${curr.name?cap_first}>();
@@ -56,21 +64,25 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 	}
 	
 	@Override
-	public void getModelFixtures() {
+	public void getModelFixtures(int mode) {
 		${curr.name?cap_first} ${curr.name?uncap_first} = null;
 		String entityName = "${curr.name?cap_first}";
 		
-		<#if fixtureType=="xml">
-		<#if hasDate>String patternDate = "yyyy-MM-dd";</#if>
-		<#if hasTime>String patternTime = "HH:mm";</#if>
-		<#if hasDateTime>String patternDateTime = "yyyy-MM-dd HH:mm";</#if>
 		
+		<#if hasTime>String patternTime = "HH:mm";</#if>
+		<#if fixtureType=="xml">
+		<#if hasDateTime>String patternDateTime = "yyyy-MM-dd HH:mm";</#if>
+		<#if hasDate>String patternDate = "yyyy-MM-dd";</#if>
 		// XML Loader
 		try {
 			//String currentDir = new File(".").getAbsolutePath();
 
 			SAXBuilder builder = new SAXBuilder();		// Make engine
-			InputStream xmlStream = this.getXml(entityName);//new File(currentDir + "${project_path}/fixture/" + entityName + ".xml");
+			InputStream xmlStream;
+			if(mode==MODE_BASE)
+				xmlStream = this.getXml("app/"+entityName);
+			else
+				xmlStream = this.getXml("test/"+entityName);
 			if(xmlStream != null){
 				Document doc = (Document) builder.build(xmlStream); 	// Load XML File
 				final Element rootNode = doc.getRootElement(); 			// Load Root element
@@ -88,11 +100,11 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 									<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
 							${curr.name?uncap_first}.set${field.name?cap_first}(Integer.parseInt(element.getChildText("${field.name?uncap_first}")));
 									<#elseif field.type=="date">
-							${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternDate).parseDateTime(element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternDate, element.getChildText("${field.name?uncap_first}")));
 									<#elseif field.type=="datetime">
-							${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternDateTime).parseDateTime(element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternDateTime, element.getChildText("${field.name?uncap_first}")));
 									<#elseif field.type=="time">
-							${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternTime).parseDateTime(element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternTime, element.getChildText("${field.name?uncap_first}")));
 									<#elseif field.type=="boolean">
 							${curr.name?uncap_first}.set${field.name?cap_first}(Boolean.parseBoolean(element.getChildText("${field.name?uncap_first}")));		
 									<#else>
@@ -128,7 +140,11 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 		<#elseif fixtureType=="yml">
 		// YAML Loader
 		Yaml yaml = new Yaml();
-		InputStream inputStream = this.getYml(entityName);
+		InputStream inputStream;
+		if(mode==MODE_BASE)
+			inputStream = this.getYml("app/"+entityName);
+		else
+			inputStream = this.getYml("test/"+entityName);
 		
 		Map<?, ?> map = (Map<?, ?>) yaml.load(inputStream);
 		if(map != null && map.containsKey(entityName)){
@@ -142,12 +158,16 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 						<#if !field.relation??>
 							<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
 					${curr.name?uncap_first}.set${field.name?cap_first}((Integer)columns.get("${field.name?uncap_first}"));
+							<#elseif field.type=="double">
+					${curr.name?uncap_first}.set${field.name?cap_first}((Double)columns.get("${field.name?uncap_first}"));
+							<#elseif field.type=="float">
+					${curr.name?uncap_first}.set${field.name?cap_first}(((Double)columns.get("${field.name?uncap_first}")).floatValue());
 							<#elseif field.type=="date">
 					${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
-							<#elseif field.type=="datetime">
+							<#elseif field.type=="datetime">		
 					${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
 							<#elseif field.type=="time">
-					${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
+					${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternTime,(String)columns.get("${field.name?uncap_first}")));
 							<#elseif field.type=="boolean">
 					${curr.name?uncap_first}.set${field.name?cap_first}((Boolean)columns.get("${field.name?uncap_first}"));		
 							<#else>

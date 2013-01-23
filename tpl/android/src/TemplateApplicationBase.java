@@ -1,5 +1,7 @@
 package ${project_namespace};
 
+import java.text.DateFormat;
+
 import ${project_namespace}.R;
 
 import android.app.Application;
@@ -21,6 +23,8 @@ import android.util.Log;
 public abstract class ${project_name?cap_first}ApplicationBase extends Application {
 	private final static String TAG = "${project_name?cap_first}";
 	private volatile static ${project_name?cap_first}ApplicationBase singleton;
+	private static DateFormat df;
+	private static DateFormat tf;
 	
 	/** Called when the application is first created. */
 	@Override
@@ -30,6 +34,8 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		Log.i(TAG, "Starting application...");
 		
 		deviceID = getUDID(this);
+		df = android.text.format.DateFormat.getDateFormat((Context)singleton);
+		tf = android.text.format.DateFormat.getTimeFormat((Context)singleton);
 		
 		// Manage unmanaged error of application
 		//Thread.setDefaultUncaughtExceptionHandler(
@@ -129,4 +135,14 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 	    return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
 	}
+	
+	public static DateFormat getDateFormat() {
+		return df;
+	}
+	
+	public static DateFormat getTimeFormat() {
+		return tf;
+	}
+			
+	
 }

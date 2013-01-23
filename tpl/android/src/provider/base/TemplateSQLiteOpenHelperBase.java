@@ -1,7 +1,7 @@
 <#function callLoader entity>
 	<#assign ret="//Load "+entity.name+" fixtures\r\t\t" /> 
 	<#assign ret=ret+entity.name?cap_first+"DataLoader "+entity.name?uncap_first+"Loader = new "+entity.name?cap_first+"DataLoader(this.context);\r\t\t" />
-	<#assign ret=ret+entity.name?uncap_first+"Loader.getModelFixtures();\r\t\t" />
+	<#assign ret=ret+entity.name?uncap_first+"Loader.getModelFixtures("+entity.name?cap_first+"DataLoader.MODE_BASE);\r\t\t" />
 	<#assign ret=ret+entity.name?uncap_first+"Loader.load(manager);\r" />
 	<#return ret />
 </#function>
@@ -49,6 +49,7 @@
 	<#return ret>
 </#function>
 package ${data_namespace}.base;
+
 
 import ${data_namespace}.*;
 import ${project_namespace}.${project_name?cap_first}Application;
@@ -102,6 +103,18 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 		this.loadData(db);
 	</#if>
 		
+	}
+	
+	/**
+	 * Clear the database given in parameters
+	 * @param db The database to clear
+	 */
+	public static void clearDatabase(SQLiteDatabase db){
+		<#list entities?values as entity>
+			<#if (entity.fields?? && (entity.fields?size>0))>
+		db.delete(${entity.name?cap_first}SQLiteAdapter.TABLE_NAME, null, null);	
+			</#if>
+		</#list>
 	}
 
 	/**
