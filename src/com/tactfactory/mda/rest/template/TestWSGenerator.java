@@ -47,8 +47,8 @@ public class TestWSGenerator extends BaseGenerator {
 		
 		try {			
 			this.makeSourceTest(
-					"TemplateTestWSBase.java", 
-					"%sTestWSBase.java",
+					"base/TemplateTestWSBase.java", 
+					"base/%sTestWSBase.java",
 					true);
 			
 			this.makeSourceTest(

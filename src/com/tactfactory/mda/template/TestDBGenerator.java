@@ -48,8 +48,8 @@ public class TestDBGenerator extends BaseGenerator {
 		
 		try {			
 			this.makeSourceTest(
-					"TemplateTestDBBase.java", 
-					"%sTestDBBase.java",
+					"base/TemplateTestDBBase.java", 
+					"base/%sTestDBBase.java",
 					true);
 			
 			this.makeSourceTest(
