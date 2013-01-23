@@ -319,34 +319,39 @@ public abstract class ${curr.name}SQLiteAdapterBase extends SQLiteAdapterBase<${
 	<#list curr.ids as id>
 		values.remove(${alias(id.name)});
 	</#list>
-		int newid = (int)this.insert(
-			null, 
-			values);
+	
+		if(values.size()!=0){
+			int newid = (int)this.insert(
+					null, 
+					values);
 	
 	<#list curr.relations as relation>
 		<#if (relation.relation.type=="ManyToMany")>
 			
-		${relation.relation.joinTable}SQLiteAdapterBase ${relation.name?uncap_first}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.context);
-		${relation.name?uncap_first}Adapter.open(this.mDatabase);
-		for(${relation.relation.targetEntity?cap_first} i : item.get${relation.name?cap_first}()){
-			${relation.name?uncap_first}Adapter.insert(newid, i.get${relation.relation.field_ref[0]?cap_first}());
-		}
+			${relation.relation.joinTable}SQLiteAdapterBase ${relation.name?uncap_first}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.context);
+			${relation.name?uncap_first}Adapter.open(this.mDatabase);
+			for(${relation.relation.targetEntity?cap_first} i : item.get${relation.name?cap_first}()){
+				${relation.name?uncap_first}Adapter.insert(newid, i.get${relation.relation.field_ref[0]?cap_first}());
+			}
 		<#elseif (relation.relation.type=="OneToMany")>
-		${relation.relation.targetEntity}SQLiteAdapterBase ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
-		${relation.name?uncap_first}Adapter.open(this.mDatabase);
-		for(${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()){
+			${relation.relation.targetEntity}SQLiteAdapterBase ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
+			${relation.name?uncap_first}Adapter.open(this.mDatabase);
+			for(${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()){
 			<#if (relation.relation.mappedBy?? && !getMappedField(relation).internal)>
-			${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
-			${relation.name?uncap_first}Adapter.update(${relation.relation.targetEntity?lower_case});
+				${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
+				${relation.name?uncap_first}Adapter.update(${relation.relation.targetEntity?lower_case});
 			<#else>
-			${relation.name?uncap_first}Adapter.updateWith${curr.name?cap_first}${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}, newid);
+				${relation.name?uncap_first}Adapter.updateWith${curr.name?cap_first}${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}, newid);
 			</#if>
-		}
+			}
 		
 		</#if>
 	</#list>
 		
-		return newid;
+			return newid;
+		}else{
+			return 0;
+		}
 	}
 	
 	/** Update a ${curr.name} entity into database 

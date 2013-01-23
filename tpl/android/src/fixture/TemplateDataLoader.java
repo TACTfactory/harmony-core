@@ -57,6 +57,7 @@ import java.util.LinkedHashMap;
 import ${curr.namespace}.entity.${curr.name};
 
 public class ${curr.name?cap_first}DataLoader extends FixtureBase {
+	private static String TAG = "${curr.name?cap_first}DataLoader";
 	public static LinkedHashMap<String, ${curr.name?cap_first}> ${curr.name?uncap_first}s = new LinkedHashMap<String, ${curr.name?cap_first}>();
 	
 	public ${curr.name?cap_first}DataLoader(Context context){
@@ -132,10 +133,10 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 			}
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage());
 		} catch (JDOMException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage());
 		}
 		<#elseif fixtureType=="yml">
 		// YAML Loader
@@ -149,47 +150,49 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 		Map<?, ?> map = (Map<?, ?>) yaml.load(inputStream);
 		if(map != null && map.containsKey(entityName)){
 			Map<?, ?> listEntities = (Map<?, ?>) map.get(entityName);
-			for (Object name : listEntities.keySet()) {
-				Map<?, ?> columns = (Map<?, ?>) listEntities.get(name);
-				${curr.name?uncap_first} = new ${curr.name?cap_first}();
-				<#list curr.fields as field>
-					<#if (!field.internal)>
-				if(columns.get("${field.name?uncap_first}")!=null){
-						<#if !field.relation??>
-							<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
-					${curr.name?uncap_first}.set${field.name?cap_first}((Integer)columns.get("${field.name?uncap_first}"));
-							<#elseif field.type=="double">
-					${curr.name?uncap_first}.set${field.name?cap_first}((Double)columns.get("${field.name?uncap_first}"));
-							<#elseif field.type=="float">
-					${curr.name?uncap_first}.set${field.name?cap_first}(((Double)columns.get("${field.name?uncap_first}")).floatValue());
-							<#elseif field.type=="date">
-					${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
-							<#elseif field.type=="datetime">		
-					${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
-							<#elseif field.type=="time">
-					${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternTime,(String)columns.get("${field.name?uncap_first}")));
-							<#elseif field.type=="boolean">
-					${curr.name?uncap_first}.set${field.name?cap_first}((Boolean)columns.get("${field.name?uncap_first}"));		
+			if(listEntities!=null){
+				for (Object name : listEntities.keySet()) {
+					Map<?, ?> columns = (Map<?, ?>) listEntities.get(name);
+					${curr.name?uncap_first} = new ${curr.name?cap_first}();
+					<#list curr.fields as field>
+						<#if (!field.internal)>
+					if(columns.get("${field.name?uncap_first}")!=null){
+							<#if !field.relation??>
+								<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
+						${curr.name?uncap_first}.set${field.name?cap_first}((Integer)columns.get("${field.name?uncap_first}"));
+								<#elseif field.type=="double">
+						${curr.name?uncap_first}.set${field.name?cap_first}((Double)columns.get("${field.name?uncap_first}"));
+								<#elseif field.type=="float">
+						${curr.name?uncap_first}.set${field.name?cap_first}(((Double)columns.get("${field.name?uncap_first}")).floatValue());
+								<#elseif field.type=="date">
+						${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
+								<#elseif field.type=="datetime">		
+						${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
+								<#elseif field.type=="time">
+						${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternTime,(String)columns.get("${field.name?uncap_first}")));
+								<#elseif field.type=="boolean">
+						${curr.name?uncap_first}.set${field.name?cap_first}((Boolean)columns.get("${field.name?uncap_first}"));		
+								<#else>
+						${curr.name?uncap_first}.set${field.name?cap_first}((String)columns.get("${field.name?uncap_first}"));
+								</#if>
 							<#else>
-					${curr.name?uncap_first}.set${field.name?cap_first}((String)columns.get("${field.name?uncap_first}"));
+								<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">
+						${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.get((String)columns.get("${field.name?uncap_first}")));
+								<#else>
+						ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
+						Map<?, ?> ${field.relation.targetEntity?uncap_first}sMap = (Map<?, ?>)columns.get("${field.name?uncap_first}");
+						for(Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()){
+							if(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.containsKey((String)${field.relation.targetEntity?uncap_first}Name))
+								${field.relation.targetEntity?uncap_first}s.add(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.get((String)${field.relation.targetEntity?uncap_first}Name));
+						}
+						${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first}s);		
+								</#if>
 							</#if>
-						<#else>
-							<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">
-					${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.get((String)columns.get("${field.name?uncap_first}")));
-							<#else>
-					ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
-					Map<?, ?> ${field.relation.targetEntity?uncap_first}sMap = (Map<?, ?>)columns.get("${field.name?uncap_first}");
-					for(Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()){
-						if(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.containsKey((String)${field.relation.targetEntity?uncap_first}Name))
-							${field.relation.targetEntity?uncap_first}s.add(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.get((String)${field.relation.targetEntity?uncap_first}Name));
 					}
-					${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first}s);		
-							</#if>
 						</#if>
+					</#list>
+					${curr.name?uncap_first}s.put((String)name , ${curr.name?uncap_first});
 				}
-					</#if>
-				</#list>
-				${curr.name?uncap_first}s.put((String)name , ${curr.name?uncap_first});
 			}
 		}
 		<#else>
