@@ -1,9 +1,16 @@
+/**
+ * This file is part of the Harmony package.
+ *
+ * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.tactfactory.mda.fixture.test;
 
 import java.io.File;
 
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -12,14 +19,8 @@ import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.fixture.command.FixtureCommand;
-import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.rest.command.RestCommand;
-import com.tactfactory.mda.sync.annotation.Sync;
-import com.tactfactory.mda.sync.annotation.Sync.Level;
-import com.tactfactory.mda.sync.annotation.Sync.Mode;
-import com.tactfactory.mda.sync.annotation.Sync.Priority;
 import com.tactfactory.mda.sync.command.SyncCommand;
-import com.tactfactory.mda.sync.meta.SyncMetadata;
 import com.tactfactory.mda.test.CommonTest;
 import com.tactfactory.mda.utils.FileUtils;
 

@@ -1,9 +1,14 @@
+/**
+ * This file is part of the Harmony package.
+ *
+ * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.tactfactory.mda.rest.template;
 
-import java.io.File;
-
 import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.meta.ConfigMetadata;
 import com.tactfactory.mda.meta.TranslationMetadata;
@@ -13,7 +18,6 @@ import com.tactfactory.mda.template.BaseGenerator;
 import com.tactfactory.mda.template.ConfigGenerator;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.template.TranslationGenerator;
-import com.tactfactory.mda.utils.FileUtils;
 
 public class RestGenerator extends BaseGenerator {
 

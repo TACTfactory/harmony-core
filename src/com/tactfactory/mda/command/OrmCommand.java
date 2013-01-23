@@ -42,9 +42,9 @@ public class OrmCommand extends BaseCommand {
 	public final static String ACTION_CRUD = "crud";
 
 	//commands
-	public static String GENERATE_ENTITY 	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITY;
+	//public static String GENERATE_ENTITY 	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITY;
 	public static String GENERATE_ENTITIES	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITIES;
-	public static String GENERATE_FORM 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_FORM;
+	//public static String GENERATE_FORM 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_FORM;
 	public static String GENERATE_CRUD 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_CRUD;
 
 	//internal
@@ -141,9 +141,9 @@ public class OrmCommand extends BaseCommand {
 	@Override
 	public void summary() {
 		ConsoleUtils.display("\n> ORM \n" +
-				"\t" + GENERATE_ENTITY + "\t => Generate Entry\n" +
+				// "\t" + GENERATE_ENTITY + "\t => Generate Entry\n" +
 				"\t" + GENERATE_ENTITIES + "\t => Generate Entries\n" +
-				"\t" + GENERATE_FORM + "\t => Generate Form\n" +
+				// "\t" + GENERATE_FORM + "\t => Generate Form\n" +
 				"\t" + GENERATE_CRUD + "\t => Generate CRUD");
 	}
 
@@ -154,17 +154,17 @@ public class OrmCommand extends BaseCommand {
 		this.commandArgs = Console.parseCommandArgs(args);
 		
 		try {
-			if (action.equals(GENERATE_ENTITY)) {
+			/*if (action.equals(GENERATE_ENTITY)) {
 				this.generateEntity();
-			} else
+			} else*/
 	
 			if (action.equals(GENERATE_ENTITIES)) {
 				this.generateEntities();
 			} else
 	
-			if (action.equals(GENERATE_FORM)) {
+			/*if (action.equals(GENERATE_FORM)) {
 				this.generateForm();
-			} else
+			} else*/
 	
 			if (action.equals(GENERATE_CRUD)) {
 				this.generateCrud();
@@ -178,9 +178,9 @@ public class OrmCommand extends BaseCommand {
 
 	@Override
 	public boolean isAvailableCommand(String command) {
-		return (command.equals(GENERATE_ENTITY) ||
+		return (//command.equals(GENERATE_ENTITY) ||
 				command.equals(GENERATE_ENTITIES) ||
-				command.equals(GENERATE_FORM) ||
+				//command.equals(GENERATE_FORM) ||
 				command.equals(GENERATE_CRUD) );
 	}
 }

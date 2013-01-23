@@ -12,7 +12,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 
-import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.Harmony;
 
 public class TranslationMetadata {
