@@ -3,37 +3,58 @@
 package ${fixture_namespace};
 
 import android.content.Context;
-
-import ${project_namespace}.harmony.util.*;
-<#if (curr.relations?size>0)>
+<#assign isToMany=false />
+<#assign hasDateTime=false />
+<#assign hasTime=false />
+<#assign hasDate=false />
+<#list curr.relations as relation>
+	<#if relation.relation.type=="ManyToMany" || relation.relation.type=="OneToMany">
+		<#assign isToMany=true />
+	</#if>
+</#list>
+<#list curr.fields as field>
+	<#if field.type=="date">
+		<#assign hasDate=true />
+	<#elseif field.type=="time">
+		<#assign hasTime=true />
+	<#elseif field.type="datetime">
+		<#assign hasDateTime=true />
+	</#if>
+</#list>
+<#if isToMany>
 import ${project_namespace}.entity.*;
+import java.util.ArrayList;
 </#if>
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.io.IOException;
-import java.util.List;
-import java.util.Map;
-import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 <#if fixtureType=="xml">
+	<#if (hasTime || hasDate || hasDateTime)>
+import ${project_namespace}.harmony.util.DateUtils;
+import java.util.Date;
+import org.joda.time.DateTime;
+	</#if>
+import java.io.IOException;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+import java.util.List;
 <#elseif fixtureType=="yml">
-import org.yaml.snakeyaml.Yaml;
+	<#if (hasTime)>
+import ${project_namespace}.harmony.util.DateUtils;
+	</#if>
+	<#if (hasTime || hasDate || hasDateTime)>
 import java.util.Date;
+import org.joda.time.DateTime;
+	</#if>
+import org.yaml.snakeyaml.Yaml;
+import java.util.Map;
+
 </#if>
 
 import java.util.LinkedHashMap;
-import java.util.ArrayList;
 
 import ${curr.namespace}.entity.${curr.name};
-
-import com.tactfactory.mda.test.demact.fixture.DataManager;
 
 public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 	public static LinkedHashMap<String, ${curr.name?cap_first}> ${curr.name?uncap_first}s = new LinkedHashMap<String, ${curr.name?cap_first}>();
@@ -43,21 +64,25 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 	}
 	
 	@Override
-	public void getModelFixtures() {
+	public void getModelFixtures(int mode) {
 		${curr.name?cap_first} ${curr.name?uncap_first} = null;
 		String entityName = "${curr.name?cap_first}";
 		
-		<#if fixtureType=="xml">
-		String patternDate = "yyyy-MM-dd";
-		String patternTime = "HH:mm";
-		String patternDateTime = "yyyy-MM-dd HH:mm";
 		
+		<#if hasTime>String patternTime = "HH:mm";</#if>
+		<#if fixtureType=="xml">
+		<#if hasDateTime>String patternDateTime = "yyyy-MM-dd HH:mm";</#if>
+		<#if hasDate>String patternDate = "yyyy-MM-dd";</#if>
 		// XML Loader
 		try {
 			//String currentDir = new File(".").getAbsolutePath();
 
 			SAXBuilder builder = new SAXBuilder();		// Make engine
-			InputStream xmlStream = this.getXml(entityName);//new File(currentDir + "${project_path}/fixture/" + entityName + ".xml");
+			InputStream xmlStream;
+			if(mode==MODE_BASE)
+				xmlStream = this.getXml("app/"+entityName);
+			else
+				xmlStream = this.getXml("test/"+entityName);
 			if(xmlStream != null){
 				Document doc = (Document) builder.build(xmlStream); 	// Load XML File
 				final Element rootNode = doc.getRootElement(); 			// Load Root element
@@ -75,11 +100,11 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 									<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
 							${curr.name?uncap_first}.set${field.name?cap_first}(Integer.parseInt(element.getChildText("${field.name?uncap_first}")));
 									<#elseif field.type=="date">
-							${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternDate).parseDateTime(element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternDate, element.getChildText("${field.name?uncap_first}")));
 									<#elseif field.type=="datetime">
-							${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternDateTime).parseDateTime(element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternDateTime, element.getChildText("${field.name?uncap_first}")));
 									<#elseif field.type=="time">
-							${curr.name?uncap_first}.set${field.name?cap_first}(DateTimeFormat.forPattern(patternTime).parseDateTime(element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternTime, element.getChildText("${field.name?uncap_first}")));
 									<#elseif field.type=="boolean">
 							${curr.name?uncap_first}.set${field.name?cap_first}(Boolean.parseBoolean(element.getChildText("${field.name?uncap_first}")));		
 									<#else>
@@ -105,15 +130,21 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 					}
 				}
 			}
-		} catch (IOException io) {
-			io.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		} catch (JDOMException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		<#elseif fixtureType=="yml">
 		// YAML Loader
 		Yaml yaml = new Yaml();
-		InputStream inputStream = this.getYml(entityName);
+		InputStream inputStream;
+		if(mode==MODE_BASE)
+			inputStream = this.getYml("app/"+entityName);
+		else
+			inputStream = this.getYml("test/"+entityName);
 		
 		Map<?, ?> map = (Map<?, ?>) yaml.load(inputStream);
 		if(map != null && map.containsKey(entityName)){
@@ -122,25 +153,30 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 				Map<?, ?> columns = (Map<?, ?>) listEntities.get(name);
 				${curr.name?uncap_first} = new ${curr.name?cap_first}();
 				<#list curr.fields as field>
+					<#if (!field.internal)>
 				if(columns.get("${field.name?uncap_first}")!=null){
-					<#if !field.relation??>
-						<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
+						<#if !field.relation??>
+							<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
 					${curr.name?uncap_first}.set${field.name?cap_first}((Integer)columns.get("${field.name?uncap_first}"));
-						<#elseif field.type=="date">
+							<#elseif field.type=="double">
+					${curr.name?uncap_first}.set${field.name?cap_first}((Double)columns.get("${field.name?uncap_first}"));
+							<#elseif field.type=="float">
+					${curr.name?uncap_first}.set${field.name?cap_first}(((Double)columns.get("${field.name?uncap_first}")).floatValue());
+							<#elseif field.type=="date">
 					${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
-						<#elseif field.type=="datetime">
+							<#elseif field.type=="datetime">		
 					${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
-						<#elseif field.type=="time">
-					${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
-						<#elseif field.type=="boolean">
+							<#elseif field.type=="time">
+					${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternTime,(String)columns.get("${field.name?uncap_first}")));
+							<#elseif field.type=="boolean">
 					${curr.name?uncap_first}.set${field.name?cap_first}((Boolean)columns.get("${field.name?uncap_first}"));		
-						<#else>
+							<#else>
 					${curr.name?uncap_first}.set${field.name?cap_first}((String)columns.get("${field.name?uncap_first}"));
-						</#if>
-					<#else>
-						<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">
-					${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.get((String)columns.get("${field.name?uncap_first}")));
+							</#if>
 						<#else>
+							<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">
+					${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.get((String)columns.get("${field.name?uncap_first}")));
+							<#else>
 					ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
 					Map<?, ?> ${field.relation.targetEntity?uncap_first}sMap = (Map<?, ?>)columns.get("${field.name?uncap_first}");
 					for(Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()){
@@ -148,9 +184,10 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 							${field.relation.targetEntity?uncap_first}s.add(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.get((String)${field.relation.targetEntity?uncap_first}Name));
 					}
 					${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first}s);		
+							</#if>
 						</#if>
-					</#if>
 				}
+					</#if>
 				</#list>
 				${curr.name?uncap_first}s.put((String)name , ${curr.name?uncap_first});
 			}
@@ -162,7 +199,7 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 
 	@Override
 	public void load(DataManager manager) {
-		for (${curr.name?cap_first} ${curr.name?uncap_first} : this.${curr.name?uncap_first}s.values()) {
+		for (${curr.name?cap_first} ${curr.name?uncap_first} : ${curr.name?cap_first}DataLoader.${curr.name?uncap_first}s.values()) {
 			${curr.name?uncap_first}.setId(manager.persist(${curr.name?uncap_first}));
 		}
 		manager.flush();
@@ -173,7 +210,7 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 	 */
 	@Override
 	public Object getModelFixture(String id) {
-		return this.${curr.name?uncap_first}s.get(id);
+		return ${curr.name?cap_first}DataLoader.${curr.name?uncap_first}s.get(id);
 	}
 	
 	/**

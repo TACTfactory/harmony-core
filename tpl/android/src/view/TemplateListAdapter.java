@@ -14,8 +14,10 @@ import android.widget.*;
 
 <#assign importDate=false />
 <#list curr.fields as field>
-	<#if (!importDate && (field.type=="date" || field.type=="time"))>
-		<#assign importDate=true />
+	<#if !field.internal && !field.hidden>
+		<#if (!importDate && (field.type=="date" || field.type=="time" || field.type=="datetime"))>
+			<#assign importDate=true />
+		</#if>
 	</#if>
 </#list>
 <#if (importDate)>

@@ -8,14 +8,8 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import ${project_namespace}.${project_name?cap_first}Application;
 
-import android.text.format.DateFormat;
-
 /** Utils for date manipulation */
 public class DateUtils extends android.text.format.DateUtils{
-	private static java.text.DateFormat df = DateFormat.getDateFormat(
-			${project_name?cap_first}Application.getApplication());
-	private static java.text.DateFormat tf = DateFormat.getTimeFormat(
-			${project_name?cap_first}Application.getApplication());
 
 	/**
 	 * Convert date to Android string date format
@@ -23,7 +17,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @return string date with Android date format
 	 */
 	public static String formatDateToString(DateTime date){
-		return df.format(date.toDate());
+		return ${project_name?cap_first}Application.getDateFormat().format(date.toDate());
 	}
 	
 	/**
@@ -32,7 +26,16 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @return string time with Android time format
 	 */
 	public static String formatTimeToString(DateTime date){
-		return tf.format(date.toDate());
+		return ${project_name?cap_first}Application.getTimeFormat().format(date.toDate());
+	}
+	
+	/**
+	 * Convert datetime to Android string date + time format
+	 * @param date to convert
+	 * @return string datetime with Android date + time format
+	 */
+	public static String formatDateTimeToString(DateTime date){
+		return String.format("%s %s", formatDateToString(date), formatTimeToString(date));
 	}
 	
 	/**
@@ -41,7 +44,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @return datetime
 	 */
 	public static DateTime formatStringToDate(String date){
-		return formatStringToDateTime(df, date);
+		return formatStringToDateTime(${project_name?cap_first}Application.getDateFormat(), date);
 	}
 	
 	/**
@@ -50,7 +53,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @return datetime
 	 */
 	public static DateTime formatStringToTime(String time){
-		return formatStringToDateTime(tf, time);
+		return formatStringToDateTime(${project_name?cap_first}Application.getTimeFormat(), time);
 	}
 	
 	/**

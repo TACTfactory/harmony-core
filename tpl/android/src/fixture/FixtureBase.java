@@ -7,6 +7,8 @@ import java.io.InputStream;
 
 public abstract class FixtureBase {	
 	protected Context context;
+	public static int MODE_BASE = 0x00;
+	public static int MODE_TEST = 0x01;
 	
 	public FixtureBase(Context context){
 		this.context = context;
@@ -14,7 +16,7 @@ public abstract class FixtureBase {
 	/**
      * Load the fixtures for the current model.
      */
-	public abstract void getModelFixtures();
+	public abstract void getModelFixtures(int mode);
 
 	/**
 	 * Load data fixtures

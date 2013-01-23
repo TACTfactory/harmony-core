@@ -22,8 +22,10 @@ import android.widget.*;
 
 <#assign importDate=false />
 <#list curr.fields as field>
-	<#if (!importDate && (field.type=="date" || field.type=="time"))>
-		<#assign importDate=true />
+	<#if !field.hidden>
+		<#if (!importDate && (field.type=="date" || field.type=="time" || field.type=="datetime"))>
+			<#assign importDate=true />
+		</#if>
 	</#if>
 </#list>
 <#if (importDate)>
@@ -91,7 +93,7 @@ public class ${curr.name}ShowFragment extends Fragment {
 		if(this.model.get${field.name?cap_first}()!=null) {
 					<#if (field.type=="datetime" || field.type=="date" || field.type=="time")>
 						<#if (field.type=="datetime")>
-			this.${field.name}View.setText(this.model.get${field.name?cap_first}().toString());
+			this.${field.name}View.setText(DateUtils.formatDateTimeToString(model.get${field.name?cap_first}()));
 						</#if>
 						<#if (field.type=="date")>
 			this.${field.name}View.setText(DateUtils.formatDateToString(model.get${field.name?cap_first}()));

@@ -1,5 +1,6 @@
-package ${data_namespace};
+package ${data_namespace}.base;
 
+import ${data_namespace}.*;
 import ${project_namespace}.${project_name?cap_first}Application;
 
 import android.content.ContentValues;
@@ -25,7 +26,7 @@ public abstract class ${project_name?cap_first}SQLiteAdapterBase{
 	 */
 	protected ${project_name?cap_first}SQLiteAdapterBase(Context ctx) {	
 		this.context = ctx;
-		this.mBaseHelper = new DemactSQLiteOpenHelper(
+		this.mBaseHelper = new ${project_name?cap_first}SQLiteOpenHelper(
 				ctx, 
 				"database", 
 				null,

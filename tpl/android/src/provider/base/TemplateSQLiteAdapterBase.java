@@ -1,6 +1,5 @@
 <#assign curr = entities[current_entity] />
 <#import "methods.ftl" as m />
-
 <#function alias name>
 	<#return "COL_"+name?upper_case />
 </#function>
@@ -13,7 +12,6 @@
 	</#list>
 	<#return false />
 </#function>
-
 <#function isInArray array var>
 	<#list array as item>
 		<#if (item==var)>
@@ -22,7 +20,6 @@
 	</#list>
 	<#return false />
 </#function>
-
 <#function getMappedField field>
 	<#assign ref_entity = entities[field.relation.targetEntity] />
 	<#list ref_entity.fields as ref_field>
@@ -31,11 +28,25 @@
 		</#if>
 	</#list>
 </#function>
+<#assign hasDateTime=false />
+<#assign hasTime=false />
+<#assign hasDate=false />
+<#list curr.fields as field>
+	<#if field.type=="date">
+		<#assign hasDate=true />
+	<#elseif field.type=="time">
+		<#assign hasTime=true />
+	<#elseif field.type="datetime">
+		<#assign hasDateTime=true />
+	</#if>
+</#list>
+package ${data_namespace}.base;
 
-package ${data_namespace};
-
+<#if (curr.relations?size>0)>
+import ${data_namespace}.*;
+</#if>
 import java.util.ArrayList;
-import org.joda.time.DateTime;
+
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -48,12 +59,17 @@ import ${curr.namespace}.entity.${curr.name};
 </#if>
 <#assign import_array = [] />
 <#list curr.relations as relation>
-	<#if (!isInArray(import_array, relation.relation.targetEntity))>
-		<#assign import_array = import_array + [relation.relation.targetEntity] />
+	<#if !relation.internal>
+		<#if (!isInArray(import_array, relation.relation.targetEntity))>
+			<#assign import_array = import_array + [relation.relation.targetEntity] />
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
+		</#if>
 	</#if>
 </#list>
+<#if hasDate || hasTime || hasDateTime>
 import ${curr.namespace}.harmony.util.DateUtils;
+import org.joda.time.DateTime;
+</#if>
 
 /** ${curr.name} adapter database abstract class <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
@@ -240,17 +256,17 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 		<#list curr.relations as relation>
 			<#if (!relation.internal)>
 				<#if (relation.relation.type=="OneToMany")>
-		${relation.relation.targetEntity}SQLiteAdapter ${relation.relation.targetEntity?lower_case}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
-		${relation.relation.targetEntity?lower_case}Adapter.open(this.mDatabase);
-		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getBy${relation.relation.mappedBy?cap_first}(result.getId())); // relation.relation.inversedBy?cap_first
+		${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
+		${relation.name?uncap_first}Adapter.open(this.mDatabase);
+		result.set${relation.name?cap_first}(${relation.name?uncap_first}Adapter.getBy${relation.relation.mappedBy?cap_first}(result.getId())); // relation.relation.inversedBy?cap_first
 				<#elseif (relation.relation.type=="ManyToMany")>
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.context);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
 		result.set${relation.name?cap_first}(${relation.relation.joinTable?lower_case}Adapter.getBy${curr.name}(result.getId())); // relation.relation.inversedBy?cap_first
 				<#else>
-		${relation.relation.targetEntity}SQLiteAdapter ${relation.relation.targetEntity?lower_case}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
-		${relation.relation.targetEntity?lower_case}Adapter.open(this.mDatabase);
-		result.set${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}Adapter.getByID(result.get${relation.name?cap_first}().getId())); // relation.relation.inversedBy?cap_first		
+		${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
+		${relation.name?uncap_first}Adapter.open(this.mDatabase);
+		result.set${relation.name?cap_first}(${relation.name?uncap_first}Adapter.getByID(result.get${relation.name?cap_first}().getId())); // relation.relation.inversedBy?cap_first		
 				</#if>
 			</#if>
 		</#list>
@@ -435,7 +451,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 		${relation.relation.targetEntity}SQLiteAdapterBase ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
 		${relation.name?uncap_first}Adapter.open(this.mDatabase);
 		for(${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()){
-			<#if (relation.relation.mappedBy??)>
+			<#if (relation.relation.mappedBy?? && !getMappedField(relation).internal)>
 			${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
 			${relation.name?uncap_first}Adapter.updateWith${curr.name?cap_first}${relation.name?cap_first}(${relation.relation.targetEntity?lower_case});
 			<#else>
