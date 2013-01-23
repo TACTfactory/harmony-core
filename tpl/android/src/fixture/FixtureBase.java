@@ -8,7 +8,7 @@ import java.io.IOException;
 import android.util.Log;
 
 
-public abstract class FixtureBase {	
+public abstract class FixtureBase<T> {	
 	private static String TAG = "FixtureBase";
 	protected Context context;
 	public static int MODE_BASE = 0x00;
@@ -27,7 +27,7 @@ public abstract class FixtureBase {
 	 */
 	public abstract void load(DataManager manager);
 	
-	public abstract Object getModelFixture(String id);
+	public abstract T getModelFixture(String id);
 
 	/**
 	 * Get the order of this fixture

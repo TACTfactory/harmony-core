@@ -56,7 +56,7 @@ import java.util.LinkedHashMap;
 
 import ${curr.namespace}.entity.${curr.name};
 
-public class ${curr.name?cap_first}DataLoader extends FixtureBase {
+public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?cap_first}> {
 	private static String TAG = "${curr.name?cap_first}DataLoader";
 	public static LinkedHashMap<String, ${curr.name?cap_first}> ${curr.name?uncap_first}s = new LinkedHashMap<String, ${curr.name?cap_first}>();
 	
@@ -212,7 +212,7 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase {
 	 * @see com.tactfactory.mda.test.FixtureBase#getModelFixture(java.lang.String)
 	 */
 	@Override
-	public Object getModelFixture(String id) {
+	public ${curr.name?cap_first} getModelFixture(String id) {
 		return ${curr.name?cap_first}DataLoader.${curr.name?uncap_first}s.get(id);
 	}
 	
