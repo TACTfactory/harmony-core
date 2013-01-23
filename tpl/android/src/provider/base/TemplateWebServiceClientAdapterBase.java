@@ -108,10 +108,10 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 	
 	/**
 	 * Retrieve all the ${curr.name}s in the given list. Uses the route : ${curr.options.rest.uri?lower_case}
-	 * @param ${curr.name?lower_case}s : The list in which the ${curr.name}s will be returned
+	 * @param ${curr.name?uncap_first}s : The list in which the ${curr.name}s will be returned
 	 * @return The number of ${curr.name}s returned
 	 */
-	public int getAll(List<${curr.name}> ${curr.name?lower_case}s){
+	public int getAll(List<${curr.name}> ${curr.name?uncap_first}s){
 		int result = -1;
 		String response = this.invokeRequest(
 					Verb.GET,
@@ -122,10 +122,10 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 		if (this.isValidResponse(response) && this.isValidRequest()) {
 			try {
 				JSONObject json = new JSONObject(response);
-				result = ${curr.name}WebServiceClientAdapter.extract${curr.name?cap_first}s(json, ${curr.name?lower_case}s);
+				result = ${curr.name}WebServiceClientAdapter.extract${curr.name?cap_first}s(json, ${curr.name?uncap_first}s);
 			} catch (JSONException e) {
 				Log.e(TAG, e.getMessage());
-				${curr.name?lower_case}s = null;
+				${curr.name?uncap_first}s = null;
 			}
 		}
 
@@ -134,26 +134,26 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 
 	/**
 	 * Retrieve one ${curr.name}. Uses the route : ${curr.options.rest.uri?lower_case}/%id%
-	 * @param ${curr.name?lower_case} : The ${curr.name} to retrieve (set the ID)
+	 * @param ${curr.name?uncap_first} : The ${curr.name} to retrieve (set the ID)
 	 * @return -1 if an error has occurred. 0 if not.
 	 */
-	public int get(${curr.name} ${curr.name?lower_case}){
+	public int get(${curr.name} ${curr.name?uncap_first}){
 		int result = -1;
 		String response = this.invokeRequest(
 					Verb.GET,
 					String.format(
 						"${curr.options.rest.uri?lower_case}/%s%s",
-						${curr.name?lower_case}.getId(), 
+						${curr.name?uncap_first}.getId(), 
 						REST_FORMAT),
 					null);
 		if (this.isValidResponse(response) && this.isValidRequest()) {
 			try {
 				JSONObject json = new JSONObject(response);
-				${curr.name}WebServiceClientAdapter.extract(json, ${curr.name?lower_case});
+				${curr.name}WebServiceClientAdapter.extract(json, ${curr.name?uncap_first});
 				result = 0;
 			} catch (JSONException e) {
 				Log.e(TAG, e.getMessage());
-				${curr.name?lower_case} = null;
+				${curr.name?uncap_first} = null;
 			}
 		}
 
@@ -162,17 +162,17 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 
 	/**
 	 * Insert the ${curr.name}. Uses the route : ${curr.options.rest.uri?lower_case}
-	 * @param ${curr.name?lower_case} : The ${curr.name} to insert
+	 * @param ${curr.name?uncap_first} : The ${curr.name} to insert
 	 * @return -1 if an error has occurred. 0 if not.
 	 */
-	public int insert(${curr.name} ${curr.name?lower_case}){
+	public int insert(${curr.name} ${curr.name?uncap_first}){
 		int result = -1;
 		String response = this.invokeRequest(
 					Verb.POST,
 					String.format(
 						"${curr.options.rest.uri?lower_case}%s",
 						REST_FORMAT),
-					${curr.name}WebServiceClientAdapter.${curr.name?uncap_first}ToJson(${curr.name?lower_case}));
+					${curr.name}WebServiceClientAdapter.${curr.name?uncap_first}ToJson(${curr.name?uncap_first}));
 		if (this.isValidResponse(response) && this.isValidRequest()) {
 			result = 0;
 		}
@@ -182,18 +182,18 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 
 	/**
 	 * Update a ${curr.name}. Uses the route : ${curr.options.rest.uri?lower_case}/%id%
-	 * @param ${curr.name?lower_case} : The ${curr.name} to update
+	 * @param ${curr.name?uncap_first} : The ${curr.name} to update
 	 * @return -1 if an error has occurred. 0 if not.
 	 */
-	public int update(${curr.name} ${curr.name?lower_case}){
+	public int update(${curr.name} ${curr.name?uncap_first}){
 		int result = -1;
 		String response = this.invokeRequest(
 					Verb.PUT,
 					String.format(
 						"${curr.options.rest.uri?lower_case}/%s%s",
-						${curr.name?lower_case}.getId(),
+						${curr.name?uncap_first}.getId(),
 						REST_FORMAT),
-					${curr.name}WebServiceClientAdapter.${curr.name?uncap_first}ToJson(${curr.name?lower_case}));
+					${curr.name}WebServiceClientAdapter.${curr.name?uncap_first}ToJson(${curr.name?uncap_first}));
 		if (this.isValidResponse(response) && this.isValidRequest()) {
 			result = 0;
 		}
@@ -203,16 +203,16 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 
 	/**
 	 * Delete a ${curr.name}. Uses the route : ${curr.options.rest.uri?lower_case}/%id%
-	 * @param ${curr.name?lower_case} : The ${curr.name} to delete (only the id is necessary)
+	 * @param ${curr.name?uncap_first} : The ${curr.name} to delete (only the id is necessary)
 	 * @return -1 if an error has occurred. 0 if not.
 	 */
-	public int delete(${curr.name} ${curr.name?lower_case}){
+	public int delete(${curr.name} ${curr.name?uncap_first}){
 		int result = -1;
 		String response = this.invokeRequest(
 					Verb.DELETE,
 					String.format(
 						"${curr.options.rest.uri?lower_case}/%s%s",
-						${curr.name?lower_case}.getId(), 
+						${curr.name?uncap_first}.getId(), 
 						REST_FORMAT),
 					null);
 		if (this.isValidResponse(response) && this.isValidRequest()) {
@@ -229,11 +229,11 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 			<#elseif (relation.relation.type=="ManyToMany" || relation.relation.type=="ManyToOne")>
 	/**
 	 * Get the ${curr.name}s associated with a ${relation.relation.targetEntity}. Uses the route : ${entities[relation.relation.targetEntity].options.rest.uri?lower_case}/%${relation.relation.targetEntity}_id%/${curr.options.rest.uri?lower_case}
-	 * @param ${curr.name?lower_case}s : The list in which the ${curr.name}s will be returned
+	 * @param ${curr.name?uncap_first}s : The list in which the ${curr.name}s will be returned
 	 * @param ${relation.relation.targetEntity?lower_case} : The associated ${relation.relation.targetEntity?lower_case}
 	 * @return The number of ${curr.name}s returned
 	 */
-	public int getBy${relation.name?cap_first}(List<${curr.name}> ${curr.name?lower_case}s, ${relation.relation.targetEntity} ${relation.relation.targetEntity?lower_case}){
+	public int getBy${relation.name?cap_first}(List<${curr.name}> ${curr.name?uncap_first}s, ${relation.relation.targetEntity} ${relation.relation.targetEntity?lower_case}){
 		int result = -1;
 		String response = this.invokeRequest(
 					Verb.GET,
@@ -246,11 +246,11 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 		if (this.isValidResponse(response) && this.isValidRequest()) {
 			try {
 				JSONObject json = new JSONObject(response);
-				result = ${curr.name}WebServiceClientAdapter.extract${curr.name}s(json, ${curr.name?lower_case}s);
+				result = ${curr.name}WebServiceClientAdapter.extract${curr.name}s(json, ${curr.name?uncap_first}s);
 
 			} catch (JSONException e) {
 				Log.e(TAG, e.getMessage());
-				${curr.name?lower_case}s = null;
+				${curr.name?uncap_first}s = null;
 			}
 		}
 
@@ -260,7 +260,7 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 			<#else>
 	/**
 	 * Get the ${curr.name} associated with a ${relation.relation.targetEntity}. Uses the route : ${entities[relation.relation.targetEntity].options.rest.uri?lower_case}/%${relation.relation.targetEntity}_id%/${curr.options.rest.uri?lower_case}
-	 * @param ${curr.name?lower_case} : The ${curr.name} that will be returned
+	 * @param ${curr.name?uncap_first} : The ${curr.name} that will be returned
 	 * @param ${relation.relation.targetEntity?lower_case} : The associated ${relation.relation.targetEntity?lower_case}
 	 * @return -1 if an error has occurred. 0 if not.
 	 */
@@ -296,10 +296,10 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 	/**
 	 * Extract a ${curr.name} from a JSONObject describing a ${curr.name}
 	 * @param json The JSONObject describing the ${curr.name}
-	 * @param ${curr.name?lower_case} The returned ${curr.name}
+	 * @param ${curr.name?uncap_first} The returned ${curr.name}
 	 * @return true if a ${curr.name} was found. false if not
 	 */
-	public static boolean extract(JSONObject json, ${curr.name} ${curr.name?lower_case}){
+	public static boolean extract(JSONObject json, ${curr.name} ${curr.name?uncap_first}){
 		boolean result = false;
 		
 		int id = json.optInt("id", 0);
@@ -310,11 +310,11 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 					<#if (!field.relation??)>
 						<#if (field.type=="date"||field.type=="datetime"||field.type=="time")>
 			DateTimeFormatter ${field.name?uncap_first}Formatter = ${getFormatter(field.type)};
-			${curr.name?lower_case}.set${field.name?cap_first}(${field.name?uncap_first}Formatter.parseDateTime(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?lower_case}.get${field.name?cap_first}().toString())));	
+			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}Formatter.parseDateTime(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?uncap_first}.get${field.name?cap_first}().toString())));	
 						<#elseif (field.type=="boolean")>
-			${curr.name?lower_case}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?lower_case}.is${field.name?cap_first}()));	
+			${curr.name?uncap_first}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?uncap_first}.is${field.name?cap_first}()));	
 						<#else>
-			${curr.name?lower_case}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?lower_case}.get${field.name?cap_first}()));	
+			${curr.name?uncap_first}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?uncap_first}.get${field.name?cap_first}()));	
 						</#if>
 					<#else>
 						<#if (isRestEntity(field.relation.targetEntity))>
@@ -322,14 +322,14 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 			ArrayList<${field.relation.targetEntity}> ${field.name?uncap_first} = new ArrayList<${field.relation.targetEntity}>();
 			try{
 				${field.relation.targetEntity}WebServiceClientAdapter.extract${field.relation.targetEntity}s(json.opt${typeToJsonType(field)}(${alias(field.name)}), ${field.name?uncap_first});
-				${curr.name?lower_case}.set${field.name?cap_first}(${field.name?uncap_first});
+				${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first});
 			}catch(JSONException e){
 				Log.e(TAG, e.getMessage());
 			}
 							<#else>
 			${field.relation.targetEntity} ${field.name?uncap_first} = new ${field.relation.targetEntity}();
 			${field.relation.targetEntity}WebServiceClientAdapter.extract(json.opt${typeToJsonType(field)}(${alias(field.name)}), ${field.name?uncap_first});
-			${curr.name?lower_case}.set${field.name?cap_first}(${field.name?uncap_first});
+			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first});
 							</#if>
 						</#if>
 					</#if>
@@ -346,10 +346,10 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 	/**
 	 * Extract a list of ${curr.name}s from a JSONObject describing an array of ${curr.name}s
 	 * @param json The JSONObject describing the array of ${curr.name}s
-	 * @param ${curr.name?lower_case}s The returned list of ${curr.name}s
+	 * @param ${curr.name?uncap_first}s The returned list of ${curr.name}s
 	 * @return The number of ${curr.name}s found in the JSON
 	 */
-	public static int extract${curr.name}s(JSONObject json, List<${curr.name}> ${curr.name?lower_case}s) throws JSONException{
+	public static int extract${curr.name}s(JSONObject json, List<${curr.name}> ${curr.name?uncap_first}s) throws JSONException{
 		JSONArray itemArray = json.optJSONArray(${alias(curr.name)});
 		
 		int result = -1;
@@ -360,10 +360,10 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 			for (int i = 0 ; i < count; i++) {
 				JSONObject json${curr.name} = itemArray.getJSONObject(i);
 				
-				${curr.name} ${curr.name?lower_case} = new ${curr.name}();
-				if (extract(json${curr.name}, ${curr.name?lower_case})){
-					synchronized (${curr.name?lower_case}s) {
-						${curr.name?lower_case}s.add(${curr.name?lower_case});
+				${curr.name} ${curr.name?uncap_first} = new ${curr.name}();
+				if (extract(json${curr.name}, ${curr.name?uncap_first})){
+					synchronized (${curr.name?uncap_first}s) {
+						${curr.name?uncap_first}s.add(${curr.name?uncap_first});
 					}
 				}
 			}
@@ -389,18 +389,18 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 				<#if (!field.internal)>
 					<#if (!field.relation??)>
 						<#if (field.type=="date" || field.type=="time" || field.type=="datetime")>
-			params.put(${alias(field.name)}, ${curr.name?lower_case}.get${field.name?cap_first}().toString());
+			params.put(${alias(field.name)}, ${curr.name?uncap_first}.get${field.name?cap_first}().toString());
 						<#elseif (field.type=="boolean")>
-			params.put(${alias(field.name)}, ${curr.name?lower_case}.is${field.name?cap_first}());
+			params.put(${alias(field.name)}, ${curr.name?uncap_first}.is${field.name?cap_first}());
 						<#else>
-			params.put(${alias(field.name)}, ${curr.name?lower_case}.get${field.name?cap_first}());
+			params.put(${alias(field.name)}, ${curr.name?uncap_first}.get${field.name?cap_first}());
 						</#if>
 					<#else>
 						<#if (isRestEntity(field.relation.targetEntity))>
 							<#if (field.relation.type=="OneToMany" || field.relation.type=="ManyToMany")>
-			params.put(${alias(field.name)}, ${field.relation.targetEntity?cap_first}WebServiceClientAdapter.${field.relation.targetEntity?uncap_first}sToJson(${curr.name?lower_case}.get${field.name?cap_first}()));
+			params.put(${alias(field.name)}, ${field.relation.targetEntity?cap_first}WebServiceClientAdapter.${field.relation.targetEntity?uncap_first}sToJson(${curr.name?uncap_first}.get${field.name?cap_first}()));
 							<#else>
-			params.put(${alias(field.name)}, ${field.relation.targetEntity?cap_first}WebServiceClientAdapter.${field.relation.targetEntity?uncap_first}ToJson(${curr.name?lower_case}.get${field.name?cap_first}()));
+			params.put(${alias(field.name)}, ${field.relation.targetEntity?cap_first}WebServiceClientAdapter.${field.relation.targetEntity?uncap_first}ToJson(${curr.name?uncap_first}.get${field.name?cap_first}()));
 							</#if>
 						</#if>
 					</#if>

@@ -64,25 +64,27 @@ public class RestParser extends BaseParser{
 			if (fieldAnnot instanceof NormalAnnotationExpr) {
 				NormalAnnotationExpr norm = (NormalAnnotationExpr)fieldAnnot;
 				List<MemberValuePair> pairs = norm.getPairs();
-				for(MemberValuePair pair : pairs){
-					if(pair.getName().equals(ANNOT_REST_SECURITY)){
-						//TODO : Generate warning if type not recognized
-						String security = "";
+				if(pairs!=null){
+					for(MemberValuePair pair : pairs){
+						if(pair.getName().equals(ANNOT_REST_SECURITY)){
+							//TODO : Generate warning if type not recognized
+							String security = "";
+							
+							if(pair.getValue() instanceof StringLiteralExpr){
+								security = ((StringLiteralExpr)pair.getValue()).getValue();
+							}else{
+								security = pair.getValue().toString();
+							}
+							
+							rm.security = Rest.Security.fromName(security);
+						} else
 						
-						if(pair.getValue() instanceof StringLiteralExpr){
-							security = ((StringLiteralExpr)pair.getValue()).getValue();
-						}else{
-							security = pair.getValue().toString();
-						}
-						
-						rm.security = Rest.Security.fromName(security);
-					} else
-					
-					if(pair.getName().equals(ANNOT_REST_URI)){
-						if(pair.getValue() instanceof StringLiteralExpr){
-							rm.uri = ((StringLiteralExpr)pair.getValue()).getValue();
-						}else{
-							rm.uri = pair.getValue().toString();
+						if(pair.getName().equals(ANNOT_REST_URI)){
+							if(pair.getValue() instanceof StringLiteralExpr){
+								rm.uri = ((StringLiteralExpr)pair.getValue()).getValue();
+							}else{
+								rm.uri = pair.getValue().toString();
+							}
 						}
 					}
 				}
