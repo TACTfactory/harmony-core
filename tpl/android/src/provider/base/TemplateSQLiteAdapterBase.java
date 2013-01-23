@@ -75,7 +75,7 @@ import org.joda.time.DateTime;
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
  * You should edit ${curr.name}Adapter class instead of this one or you will lose all your modifications.</i></b>
  */
-public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_first}SQLiteAdapterBase{
+public abstract class ${curr.name}SQLiteAdapterBase extends SQLiteAdapterBase<${curr.name}>{
 	private static final String TAG = "${curr.name}DBAdapter";
 	
 	/** Table name of SQLite database */
@@ -121,8 +121,8 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 		${lastLine}<#if hasRelationOrIds()>,</#if>"
 <#if (curr.relations??)>
 	<#list curr.relations as relation>
-		<#if (lastRelation??)>${lastRelation},"</#if>
 		<#if (relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne")>
+			<#if (lastRelation??)>${lastRelation},"</#if>
 			<#assign lastRelation="+\"FOREIGN KEY(\"+"+alias(relation.name)+"+\") REFERENCES \"+"+relation.relation.targetEntity+"SQLiteAdapter.TABLE_NAME+\" (\"+"+relation.relation.targetEntity+"SQLiteAdapter."+alias(relation.relation.field_ref[0])+"+\")">
 		</#if>
 	</#list>
@@ -175,7 +175,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 	 * @param c Cursor object
 	 * @return ${curr.name} entity
 	 */
-	public static ${curr.name} cursorTo${curr.name}(Cursor c) {
+	public ${curr.name} cursorToItem(Cursor c) {
 		${curr.name} result = null;
 
 		if (c.getCount() != 0) {
@@ -215,30 +215,6 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 		return result;
 	}
 	
-	/** Convert Cursor of database to Array of ${curr.name} entity
-	 * 
-	 * @param c Cursor object
-	 * @return Array of ${curr.name} entity
-	 */
-	public static ArrayList<${curr.name}> cursorTo${curr.name}s(Cursor c) {
-		ArrayList<${curr.name}> result = new ArrayList<${curr.name}>(c.getCount());
-
-		if (c.getCount() != 0) {
-			c.moveToFirst();
-			
-			${curr.name} item;
-			do {
-				item = ${curr.name}SQLiteAdapterBase.cursorTo${curr.name}(c);
-				result.add(item);
-			} while (c.moveToNext());
-			
-			if (${project_name?cap_first}Application.DEBUG)
-				Log.d(TAG, "Read DB(" + TABLE_NAME + ") count : " + c.getCount() );
-		}
-
-		return result;
-	}
-	
 	//// CRUD Entity ////
 	/** Find & read ${curr.name} by id in database
 	 * 
@@ -250,7 +226,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 		Cursor c = this.getSingleCursor(id);
 		if(c.getCount()!=0)
 			c.moveToFirst();
-		${curr.name} result = ${curr.name}SQLiteAdapterBase.cursorTo${curr.name}(c);
+		${curr.name} result = this.cursorToItem(c);
 		c.close();
 		
 		<#list curr.relations as relation>
@@ -285,7 +261,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 	 */
 	 public ArrayList<${curr.name}> getBy${relation.name?cap_first}(int ${relation.name?lower_case}_id){
 		Cursor c = this.query(COLS, ${alias(relation.name)}+"=?", new String[]{${relation.name?lower_case}_id+""}, null, null, null);
-		ArrayList<${curr.name}> result = ${curr.name}SQLiteAdapterBase.cursorTo${curr.name}s(c);
+		ArrayList<${curr.name}> result = this.cursorToItems(c);
 		c.close();
 		
 		return result;
@@ -294,7 +270,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 			<#elseif (relation.relation.type=="ManyToMany")>	<#--
 	public ArrayList<${curr.name}> getBy${relation.name?cap_first}(int ${relation.name?lower_case}_id){
 		Cursor c = this.getCursor(${alias(relation.name)}+"=?", new String[]{${relation.name?lower_case}_id+""});
-		ArrayList<${curr.name}> result = ${curr.name}SQLiteAdapterBase.cursorTo${curr.name}s(c);
+		ArrayList<${curr.name}> result = this.cursorToItems(c);
 		c.close();
 		
 		return result;
@@ -310,7 +286,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 	 */
 	public ArrayList<${curr.name}> getAll() {
 		Cursor c = this.getAllCursor();
-		ArrayList<${curr.name}> result = ${curr.name}SQLiteAdapterBase.cursorTo${curr.name}s(c);
+		ArrayList<${curr.name}> result = this.cursorToItems(c);
 		c.close();
 		
 	<#if (relations??)>
@@ -545,6 +521,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 	 * param item The ${curr.name} entity to persist 
 	 * return Id of the ${curr.name} entity
 	 */
+	@Override
 	public long insert(int ${curr.relations[0].name?lower_case}, int ${curr.relations[1].name?lower_case}) {
 		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
@@ -562,7 +539,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${project_name?cap_f
 	<#--/** Find & read ${curr.name} by ${curr.relations[0].name}v*/
 	public ArrayList<${curr.relations[0].relation.targetEntity}> getBy${curr.relations[1].relation.targetEntity?cap_first}(int ${curr.relations[1].name?lower_case}){
 		Cursor c = this.getCursor(${alias(curr.relations[1].name)}+"=?", new String[]{${curr.relations[1].name?lower_case}+""});
-		ArrayList<${curr.name}> result = ${curr.name}SQLiteAdapterBase.cursorTo${curr.name}s(c);
+		ArrayList<${curr.name}> result = this.cursorToItems(c);
 		c.close();
 		
 		return result;

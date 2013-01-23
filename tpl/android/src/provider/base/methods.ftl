@@ -3,8 +3,6 @@
 		<#return className?lower_case+".get"+field.name?cap_first+"().toString()" />
 	<#elseif (field.type == "boolean")>
 		<#return "String.valueOf("+className?lower_case+".is"+field.name?cap_first+"())"/>
-	<#elseif ((field.type == "int") || (field.type == "integer"))>
-		<#return "String.valueOf("+className?lower_case+".get"+field.name?cap_first+"())"/>
 	<#else>
 		<#return "String.valueOf("+className?lower_case+".get"+field.name?cap_first+"())"/>
 	</#if>

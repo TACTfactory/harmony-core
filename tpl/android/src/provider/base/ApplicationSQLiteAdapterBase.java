@@ -8,8 +8,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.Cursor;
 import android.util.Log;
+import java.util.ArrayList;
 
-public abstract class ${project_name?cap_first}SQLiteAdapterBase{
+public abstract class SQLiteAdapterBase<T>{
 
 	/** Table name of SQLite database */
 	public static String TAG = "${project_name?cap_first}SQLiteAdapterBase";
@@ -24,7 +25,7 @@ public abstract class ${project_name?cap_first}SQLiteAdapterBase{
 	 * 
 	 * @param ctx context
 	 */
-	protected ${project_name?cap_first}SQLiteAdapterBase(Context ctx) {	
+	protected SQLiteAdapterBase(Context ctx) {	
 		this.context = ctx;
 		this.mBaseHelper = new ${project_name?cap_first}SQLiteOpenHelper(
 				ctx, 
@@ -103,4 +104,64 @@ public abstract class ${project_name?cap_first}SQLiteAdapterBase{
 	
 	protected abstract String getTableName();
 	protected abstract String[] getCols();
+	
+		
+	/** Read All Comments entities
+	 * 
+	 * @return List of Comment entities
+	 */
+	public ArrayList<T> getAll() {
+		Cursor c = this.getAllCursor();
+		ArrayList<T> result = this.cursorToItems(c);
+		c.close();
+		
+		
+		return result;
+	}
+	
+	/** Convert Cursor of database to Array of Comment entity
+	 * 
+	 * @param c Cursor object
+	 * @return Array of Comment entity
+	 */
+	public ArrayList<T> cursorToItems(Cursor c) {
+		ArrayList<T> result = new ArrayList<T>(c.getCount());
+
+		if (c.getCount() != 0) {
+			c.moveToFirst();
+			
+			T item;
+			do {
+				item = this.cursorToItem(c);
+				result.add(item);
+			} while (c.moveToNext());
+			
+			//if (DemactApplication.DEBUG)
+			//	Log.d(TAG, "Read DB(" + TABLE_NAME + ") count : " + c.getCount() );
+		}
+
+		return result;
+	}
+	
+	/** Convert Cursor of database to Comment entity
+	 * 
+	 * @param c Cursor object
+	 * @return Comment entity
+	 */
+	public abstract T cursorToItem(Cursor c);
+	
+
+	/** Insert a Comment entity into database
+	 * 
+	 * @param item The Comment entity to persist 
+	 * @return Id of the Comment entity
+	 */
+	public abstract long insert(T item);
+	
+	/** Update a Comment entity into database 
+	 * 
+	 * @param item The Comment entity to persist
+	 * @return 
+	 */
+	public abstract int update(T item);
 }
