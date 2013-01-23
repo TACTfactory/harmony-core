@@ -1,3 +1,11 @@
+/**
+ * This file is part of the Harmony package.
+ *
+ * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.tactfactory.mda.test.demact.entity;
 
 import java.io.Serializable;
@@ -6,6 +14,7 @@ import org.joda.time.DateTime;
 
 import com.tactfactory.mda.annotation.Column;
 import com.tactfactory.mda.annotation.Entity;
+import com.tactfactory.mda.annotation.GeneratedValue;
 import com.tactfactory.mda.annotation.Column.Type;
 import com.tactfactory.mda.annotation.Id;
 
@@ -14,8 +23,9 @@ public class ViewComponent implements Serializable {
 	private static final long serialVersionUID = -6623985483853173832L;
 	
 	@Id
-	@Column()
-	protected int id;
+    @Column(type=Type.INTEGER, hidden=true)
+    @GeneratedValue(strategy="IDENTITY")
+    protected int id;
 	
 	@Column(type=Type.STRING)
 	protected String string;

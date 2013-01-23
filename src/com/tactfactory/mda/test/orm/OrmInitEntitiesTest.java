@@ -19,7 +19,6 @@ import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.test.CommonTest;
-import com.tactfactory.mda.test.DataManager;
 
 public class OrmInitEntitiesTest extends CommonTest {
 	static ClassMetadata userMeta = null, postMeta = null, commentMeta = null;
