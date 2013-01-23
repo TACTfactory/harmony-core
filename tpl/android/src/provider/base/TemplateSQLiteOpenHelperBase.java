@@ -132,7 +132,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	}
 	
 	<#if options.fixture?? && options.fixture.enabled>
-	@SuppressWarnings("rawtypes")
+	//@SuppressWarnings("rawtypes")
 	private void loadData(SQLiteDatabase db){
 		// Sample of data
 		DataManager manager = new DataManager(this.context, db);
