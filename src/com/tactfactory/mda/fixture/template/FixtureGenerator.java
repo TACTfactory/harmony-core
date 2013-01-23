@@ -11,6 +11,8 @@ package com.tactfactory.mda.fixture.template;
 import java.io.File;
 import java.io.IOException;
 
+import java.io.FileFilter;
+
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.fixture.metadata.FixtureMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
@@ -38,11 +40,16 @@ public class FixtureGenerator extends BaseGenerator{
 			if(!fixtTestDest.exists())
 				fixtTestDest.mkdir();
 			try {
-				FileUtils.copyDirectory(fixtAppSrc, fixtAppDest);
+				FileFilter ff = new FileFilter() {
+					@Override
+					public boolean accept(File arg0) {
+						return (arg0.getPath().endsWith(".xml") || arg0.getPath().endsWith(".yml")); 
+					}
+				};
+				FileUtils.copyDirectory(fixtAppSrc, fixtAppDest, ff);
 				ConsoleUtils.displayDebug("Copying fixtures/app into "+fixtAppDest.getPath());
-				FileUtils.copyDirectory(fixtTestSrc, fixtTestDest);
+				FileUtils.copyDirectory(fixtTestSrc, fixtTestDest, ff);
 				ConsoleUtils.displayDebug("Copying fixtures/test into "+fixtTestDest.getPath());
-				
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
