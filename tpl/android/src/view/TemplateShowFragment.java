@@ -160,8 +160,8 @@ public class ${curr.name}ShowFragment extends Fragment {
 			super.onPreExecute();
 
 			this.progress = ProgressDialog.show(context,
-					this.context.getString(R.string.${curr.name?lower_case}_progress_save_title),
-					this.context.getString(R.string.${curr.name?lower_case}_progress_save_message));
+					this.context.getString(R.string.${curr.name?lower_case}_progress_load_title),
+					this.context.getString(R.string.${curr.name?lower_case}_progress_load_message));
 		}
 
 		/* (non-Javadoc)
@@ -201,7 +201,7 @@ public class ${curr.name}ShowFragment extends Fragment {
 			} else {
 				AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
 				builder.setIcon(0);
-				builder.setMessage(this.context.getString(R.string.${curr.name?lower_case}_error_create));
+				builder.setMessage(this.context.getString(R.string.${curr.name?lower_case}_error_load));
 				builder.setPositiveButton(
 						this.context.getString(android.R.string.yes), 
 						new Dialog.OnClickListener() {

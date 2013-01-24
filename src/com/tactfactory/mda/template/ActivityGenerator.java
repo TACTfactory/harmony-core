@@ -135,6 +135,15 @@ public class ActivityGenerator extends BaseGenerator {
 	
 			this.generateShowAction(entityName);
 			this.generateListAction(entityName);
+			
+			TranslationMetadata.addDefaultTranslation(
+					entityName.toLowerCase() + "_progress_load_title", 
+					entityName +" Loading progress",
+					Group.MODEL);
+			TranslationMetadata.addDefaultTranslation(
+					entityName.toLowerCase() + "_progress_load_message", 
+					entityName +" is loading&#8230;",
+					Group.MODEL);
 		
 			new TranslationGenerator(this.adapter).generateStringsXml();
 		} catch (Exception e) {
@@ -209,6 +218,12 @@ public class ActivityGenerator extends BaseGenerator {
 		}
 
 		this.updateManifest("ShowActivity", entityName);
+		
+
+		TranslationMetadata.addDefaultTranslation(
+				entityName.toLowerCase() + "_error_load", 
+				entityName +" loading error&#8230;",
+				Group.MODEL);
 	}
 
 	/** Edit Action
