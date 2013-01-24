@@ -109,7 +109,9 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		</#list>
 		
 		ArrayList<${curr.name?cap_first}> entities = this.adapter.getAll();
-		this.entity = entities.get(TestUtils.generateRandomInt(0,entities.size()));
+		if(entities.size()>0){
+			this.entity = entities.get(TestUtils.generateRandomInt(0,entities.size()));
+		}
 	}
 
 	/* (non-Javadoc)
@@ -136,27 +138,31 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	
 	/** Test case Read Entity */
 	public void testRead() {
-		${curr.name?cap_first} result = this.adapter.getByID(this.entity.getId()); // TODO Generate by @Id annotation 
-		
+		${curr.name?cap_first} result = null;
+		if(this.entity!=null){
+			result = this.adapter.getByID(this.entity.getId()); // TODO Generate by @Id annotation 
+		}
 		equals(result, this.entity);
 	}
 	
 	/** Test case Update Entity */
 	public void testUpdate() {
-		${curr.name?cap_first} ${curr.name?uncap_first} = generateRandom();
-		${curr.name?uncap_first}.setId(this.entity.getId()); // TODO Generate by @Id annotation 
 		int result = -1;
-
-		result = (int)this.adapter.update(${curr.name?uncap_first});
-
+		if(this.entity!=null){
+			${curr.name?cap_first} ${curr.name?uncap_first} = generateRandom();
+			${curr.name?uncap_first}.setId(this.entity.getId()); // TODO Generate by @Id annotation 
+		
+			result = (int)this.adapter.update(${curr.name?uncap_first});
+		}
 		Assert.assertTrue(result >= 0);
 	}
 	
 	/** Test case Update Entity */
 	public void testDelete() {
 		int result = -1; 
-		result = (int)this.adapter.remove(this.entity.getId());
-		
+		if(this.entity!=null){
+			result = (int)this.adapter.remove(this.entity.getId());
+		}
 		Assert.assertTrue(result >= 0);
 	}
 	
@@ -206,32 +212,34 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	
 	public static boolean equals(${curr.name?cap_first} ${curr.name?uncap_first}1, ${curr.name?cap_first} ${curr.name?uncap_first}2){
 		boolean ret = true;
-		
+		Assert.assertNotNull(${curr.name?uncap_first}1);
+		Assert.assertNotNull(${curr.name?uncap_first}2);
+		if(${curr.name?uncap_first}1!=null && ${curr.name?uncap_first}2 !=null){
 		<#list curr.fields as field>
 			<#if !field.internal>
 				<#if !field.relation??>
 					<#if field.type=="int" || field.type=="integer" || field.type=="long" || field.type=="double" || field.type=="float" || field.type=="zipcode" || field.type=="ean">
-		Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}()==${curr.name?uncap_first}2.get${field.name?cap_first}());
+			Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}()==${curr.name?uncap_first}2.get${field.name?cap_first}());
 					<#elseif field.type=="boolean">
-		Assert.assertTrue(${curr.name?uncap_first}1.is${field.name?cap_first}()==${curr.name?uncap_first}2.is${field.name?cap_first}());		
+			Assert.assertTrue(${curr.name?uncap_first}1.is${field.name?cap_first}()==${curr.name?uncap_first}2.is${field.name?cap_first}());		
 					<#elseif field.type=="date" || field.type=="time" || field.type=="datetime">
-		Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().equals(${curr.name?uncap_first}2.get${field.name?cap_first}()));
+			Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().equals(${curr.name?uncap_first}2.get${field.name?cap_first}()));
 					<#else>
-		Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().equals(${curr.name?uncap_first}2.get${field.name?cap_first}()));
+			Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().equals(${curr.name?uncap_first}2.get${field.name?cap_first}()));
 					</#if>
 				<#else>
 					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
-		Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().getId()==${curr.name?uncap_first}2.get${field.name?cap_first}().getId());
+			Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().getId()==${curr.name?uncap_first}2.get${field.name?cap_first}().getId());
 					<#else>
-		for(int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
-			Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).getId()
-								== ${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).getId());
-		}
-					
+			for(int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
+				Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).getId()
+							== ${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).getId());
+			}
 					</#if>
 				</#if>
 			</#if>
 		</#list>
+		}
 		
 		return ret;
 	}

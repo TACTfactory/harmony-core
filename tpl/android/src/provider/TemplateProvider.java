@@ -76,12 +76,16 @@ public class ${project_name?cap_first}Provider extends ContentProvider {
 		URI_NOT_SUPPORTED = this.getContext().getString(
 				R.string.uri_not_supported);
 		
+		try{
 		<#list entities?values as entity>
 			<#if (entity.fields?size>0) >
-		this.dbAdapter${entity.name?cap_first} = new ${entity.name?cap_first}SQLiteAdapter(this.mContext);
-		this.dbAdapter${entity.name?cap_first}.open();
+			this.dbAdapter${entity.name?cap_first} = new ${entity.name?cap_first}SQLiteAdapter(this.mContext);
+			this.dbAdapter${entity.name?cap_first}.open();
 			</#if>
 		</#list>
+		}catch(Exception e){
+			Log.e(TAG, e.getMessage());
+		}
 		
 		<#list entities?values as entity>
 			<#if (entity.fields?size>0) >

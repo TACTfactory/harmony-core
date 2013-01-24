@@ -350,7 +350,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends SQLiteAdapterBase<${
 		
 			return newid;
 		}else{
-			return 0;
+			return -1;
 		}
 	}
 	
