@@ -17,6 +17,7 @@ public abstract class BaseAdapter {
 	// Structure
 	protected String project;
 	protected String platform;
+	protected String webPlatform = "web";
 	protected String resource;
 	protected String assets;
 	protected String source;
@@ -136,6 +137,10 @@ public abstract class BaseAdapter {
 	
 	public final String getTemplateSourceFixturePath() {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getFixture() );
+	}
+	
+	public final String getWebTemplateSourceEntityPath() {
+		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getWebPlatform(), this.getSource(), this.getModel() );
 	}
 	
 	public final String getTemplateSourceCommonPath() {
@@ -305,6 +310,21 @@ public abstract class BaseAdapter {
 		this.platform = platform;
 	}
 
+	/**
+	 * @return the platform
+	 */
+	public final String getWebPlatform() {
+		return webPlatform;
+	}
+
+	/**
+	 * @param platform the platform to set
+	 */
+	public final void setWebPlatform(String webPlatform) {
+		this.webPlatform = webPlatform;
+	}
+
+	
 	/**
 	 * @param ressource the resource to set
 	 */
