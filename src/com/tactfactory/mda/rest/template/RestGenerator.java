@@ -23,10 +23,10 @@ public class RestGenerator extends BaseGenerator {
 
 	public RestGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
+		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
 	public void generateAll() {
-		this.datamodel = this.appMetas.toMap(this.adapter);
 		this.generateWSAdapter();
 		try {
 			new TestWSGenerator(this.adapter).generateAll();

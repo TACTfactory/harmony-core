@@ -4,9 +4,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.tactfactory.mda.meta.ClassMetadata;
+
 import java.util.HashMap;
 
-import ${data_namespace}.base.${project_name?cap_first}SQLiteAdapterBase;
+import ${data_namespace}.base.SQLiteAdapterBase;
 <#list entities?values as entity>
 	<#if (entity.fields?size>0)>
 import ${data_namespace}.${entity.name?cap_first}SQLiteAdapter;
@@ -15,7 +16,7 @@ import ${project_namespace}.entity.${entity.name?cap_first};
 </#list>
 
 public class DataManager {
-	protected HashMap<String, ${project_name?cap_first}SQLiteAdapterBase> adapters = new HashMap<String, ${project_name?cap_first}SQLiteAdapterBase>();
+	protected HashMap<String, SQLiteAdapterBase<?>> adapters = new HashMap<String, SQLiteAdapterBase<?>>();
 	protected boolean isSuccessfull = true;
 	protected boolean isInInternalTransaction = false;
 	protected SQLiteDatabase db;
@@ -63,17 +64,13 @@ public class DataManager {
      *
      * @param object $object The instance to make managed and persistent.
      */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
     public int persist(Object object) {
     	this.beginTransaction();
     	try{
-    	<#list entities?values as entity>
-    		<#if (entity.fields?size>0)>
-    		if(object instanceof ${entity.name}){
-    		
-    			return (int)((${entity.name}SQLiteAdapter)this.adapters.get("${entity.name}")).insert((${entity.name})object);
-    		}
-    		</#if>
-    	</#list>
+    		SQLiteAdapterBase adapter = this.getRepository(object);
+    			
+    		return (int)adapter.insert(object);
     	} catch (Exception ex) {
     		ex.printStackTrace();
     		this.isSuccessfull = false;
@@ -167,9 +164,22 @@ public class DataManager {
      * @param className $className
      * @return \Doctrine\Common\Persistence\ObjectRepository
      */
-    public ${project_name?cap_first}SQLiteAdapterBase getRepository(String className) {
+    public SQLiteAdapterBase<?> getRepository(String className) {
     	return this.adapters.get(className);
     }
+    
+    
+    /**
+     * Gets the repository for a given object
+     *
+     * @param o object
+     * @return \Doctrine\Common\Persistence\ObjectRepository
+     */
+	private SQLiteAdapterBase<?> getRepository(Object o) {
+		String className = o.getClass().getSimpleName();
+	
+		return this.getRepository(className);
+	}
 
     /**
      * Returns the ClassMetadata descriptor for a class.

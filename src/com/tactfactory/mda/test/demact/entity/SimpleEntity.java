@@ -10,8 +10,10 @@ package com.tactfactory.mda.test.demact.entity;
 
 import com.tactfactory.mda.annotation.*;
 import com.tactfactory.mda.annotation.Column.Type;
+import com.tactfactory.mda.rest.annotation.Rest;
 
 @Entity
+@Rest()
 public class SimpleEntity {
 	@Id
     @Column(type=Type.INTEGER, hidden=true)

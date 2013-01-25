@@ -31,7 +31,7 @@ public class FieldMetadata extends BaseMetadata {
 	public String columnDefinition;
 	
 	/** Field optional */
-	public HashMap<String, String> options; // (Not use...) for extra option of all bundle!
+	public HashMap<String, BaseMetadata> options = new HashMap<String, BaseMetadata>(); // (Not use...) for extra option of all bundle!
 	
 	/** Relation mapped to this field*/
 	public RelationMetadata relation;
@@ -107,6 +107,7 @@ public class FieldMetadata extends BaseMetadata {
 		model.put(TagConstant.FIELD_NAME, 	this.columnName);
 		model.put(TagConstant.FIELD_DEF, 	this.columnDefinition);
 		model.put(TagConstant.HIDDEN, 		this.hidden);
+		model.put(TagConstant.ID, 		    this.id);
 
 		model.put(TagConstant.FIELD_CUSTOM_EDIT, 	this.customEditType);
 		model.put(TagConstant.FIELD_CUSTOM_SHOW, 	this.customShowType);
@@ -117,6 +118,12 @@ public class FieldMetadata extends BaseMetadata {
 		if(relation!=null){
 			model.put(TagConstant.RELATION, this.relation.toMap(adapter));
 		}
+		
+		HashMap<String, Object> optionsModel = new HashMap<String, Object>();
+		for(BaseMetadata bm : options.values()){
+			optionsModel.put(bm.getName(), bm.toMap(adapter));
+		}
+		model.put(TagConstant.OPTIONS, optionsModel);
 		
 		return model;
 	}

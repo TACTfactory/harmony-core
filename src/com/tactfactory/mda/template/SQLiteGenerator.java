@@ -45,7 +45,7 @@ public class SQLiteGenerator extends BaseGenerator {
 			
 			this.makeSourceData(
 					"base/ApplicationSQLiteAdapterBase.java", 
-					"base/%sSQLiteAdapterBase.java",
+					"base/SQLiteAdapterBase.java",
 					true);
 			
 		} catch (Exception e) {

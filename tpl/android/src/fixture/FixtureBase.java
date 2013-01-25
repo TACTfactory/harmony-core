@@ -4,8 +4,12 @@ package ${fixture_namespace};
 import android.content.Context;
 import android.content.res.AssetManager;
 import java.io.InputStream;
+import java.io.IOException;
+import android.util.Log;
 
-public abstract class FixtureBase {	
+
+public abstract class FixtureBase<T> {	
+	private static String TAG = "FixtureBase";
 	protected Context context;
 	public static int MODE_BASE = 0x00;
 	public static int MODE_TEST = 0x01;
@@ -23,7 +27,7 @@ public abstract class FixtureBase {
 	 */
 	public abstract void load(DataManager manager);
 	
-	public abstract Object getModelFixture(String id);
+	public abstract T getModelFixture(String id);
 
 	/**
 	 * Get the order of this fixture
@@ -42,9 +46,9 @@ public abstract class FixtureBase {
 		InputStream ret = null;
 		try{
 			ret = assetManager.open(entityName+".xml");
-		}catch(Exception e){
+		}catch(IOException e){
 			// TODO Auto-generated method stub
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage());
 		}
 		return ret;
 	}
@@ -55,9 +59,9 @@ public abstract class FixtureBase {
 		InputStream ret = null;
 		try{
 			ret = assetManager.open(entityName+".yml");
-		}catch(Exception e){
+		}catch(IOException e){
 			// TODO Auto-generated method stub
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage());
 		}
 		return ret;
 	}

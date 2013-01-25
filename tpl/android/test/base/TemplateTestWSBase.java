@@ -1,5 +1,7 @@
 <#assign curr = entities[current_entity] />
-package ${curr.test_namespace};
+package ${curr.test_namespace}.base;
+
+import ${curr.test_namespace}.*;
 
 
 import ${curr.namespace}.data.${curr.name}WebServiceClientAdapter;
