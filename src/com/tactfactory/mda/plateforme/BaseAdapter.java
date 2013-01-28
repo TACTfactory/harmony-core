@@ -143,6 +143,10 @@ public abstract class BaseAdapter {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getWebPlatform(), this.getSource(), this.getModel() );
 	}
 	
+	public final String getWebTemplatePath() {
+		return String.format("%s/%s/", Harmony.pathTemplate, this.getWebPlatform());
+	}
+	
 	public final String getTemplateSourceCommonPath() {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getCommon() );
 	}
