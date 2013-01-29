@@ -15,11 +15,14 @@ import com.tactfactory.mda.symfony.template.WebGenerator;
 public class SymfonyCommand extends BaseCommand{
 	
 	//bundle name
-	public final static String BUNDLE = "symfony";
+	public final static String BUNDLE = "web";
+	public final static String SUBJECT_SYMFONY = "symfony";
+	public final static String SUBJECT_BUNDLES = "bundles";
 	public final static String SUBJECT_PROJECT = "project";
 	public final static String SUBJECT_GENERATE = "generate";
 
 	//actions
+	public final static String ACTION_INSTALL = "install";
 	public final static String ACTION_INIT = "init";
 	public final static String ACTION_ENTITIES = "entities";
 	public final static String ACTION_REPOSITORIES = "repositories";
@@ -28,6 +31,8 @@ public class SymfonyCommand extends BaseCommand{
 	public static String PROJECT_INIT = BUNDLE + SEPARATOR + SUBJECT_PROJECT + SEPARATOR + ACTION_INIT;
 	public static String GENERATE_ENTITIES = BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_ENTITIES;
 	public static String GENERATE_REPOSITORIES = BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_REPOSITORIES;
+	public static String INSTALL_SYMFONY = BUNDLE + SEPARATOR + SUBJECT_SYMFONY + SEPARATOR + ACTION_INSTALL;
+	public static String INSTALL_BUNDLES = BUNDLE + SEPARATOR + SUBJECT_BUNDLES + SEPARATOR + ACTION_INSTALL;
 
 	@Override
 	public void execute(String action, String[] args, String option) {
@@ -35,26 +40,15 @@ public class SymfonyCommand extends BaseCommand{
 
 		this.commandArgs = Console.parseCommandArgs(args);
 		if (action.equals(GENERATE_ENTITIES)){
-			try{
-				this.generateEntities();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			this.generateEntities();
 		}else if (action.equals(GENERATE_REPOSITORIES)){
-			try{
-				this.generateWebRepositories();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			this.generateWebRepositories();
 		}else if (action.equals(PROJECT_INIT)){
-			try{
-				this.initProject();
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			this.initProject();
+		}else if (action.equals(INSTALL_BUNDLES)){
+			this.installBundles();
+		}else if (action.equals(INSTALL_SYMFONY)){
+			this.installSymfony();
 		}
 	}
 	
@@ -98,11 +92,33 @@ public class SymfonyCommand extends BaseCommand{
 		this.generateMetas();
 		if(Harmony.metas.entities!=null){
 			try {
-				new WebGenerator(new AndroidAdapter()).generateWebRepositories();
+				new WebGenerator(new AndroidAdapter()).generateWebControllers();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
+	}
+	
+	/**
+	 * Generate yaml entities for symfony
+	 */
+	protected void installSymfony() {
+		try {
+			new WebGenerator(new AndroidAdapter()).installSymfony();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	/**
+	 * Generate yaml entities for symfony
+	 */
+	protected void installBundles() {
+		try {
+			new WebGenerator(new AndroidAdapter()).installBundles();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -127,6 +143,8 @@ public class SymfonyCommand extends BaseCommand{
 	@Override
 	public boolean isAvailableCommand(String command) {
 		return (command.equals(PROJECT_INIT)||
+				command.equals(INSTALL_BUNDLES)||
+				command.equals(INSTALL_SYMFONY)||
 				command.equals(GENERATE_ENTITIES)||
 				command.equals(GENERATE_REPOSITORIES));
 	}
