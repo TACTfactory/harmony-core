@@ -2,7 +2,7 @@
 	<#assign ret="//Load "+entity.name+" fixtures\r\t\t" /> 
 	<#assign ret=ret+entity.name?cap_first+"DataLoader "+entity.name?uncap_first+"Loader = new "+entity.name?cap_first+"DataLoader(this.context);\r\t\t" />
 	<#assign ret=ret+entity.name?uncap_first+"Loader.getModelFixtures("+entity.name?cap_first+"DataLoader.MODE_BASE);\r\t\t" />
-	<#assign ret=ret+entity.name?uncap_first+"Loader.load(manager);\r" />
+	<#assign ret=ret+entity.name?uncap_first+"Loader.load(manager);\r\r" />
 	<#return ret />
 </#function>
 
@@ -50,12 +50,17 @@
 </#function>
 package ${data_namespace}.base;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 import ${data_namespace}.*;
 import ${project_namespace}.${project_name?cap_first}Application;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
@@ -73,10 +78,23 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	protected String TAG = "DatabaseHelper";
 	protected Context context;
 	
+	// Android's default system path of the database.
+	private static String DB_PATH = "/data/data/${project_namespace}/databases/";	
+	private static String DB_NAME;
+	private static boolean assetsExist = false;
+	
 	public ${project_name?cap_first}SQLiteOpenHelperBase(Context context, String name,
 			CursorFactory factory, int version) {
 		super(context, name, factory, version);
 		this.context = context;
+		DB_NAME = name;
+		
+		try {
+			this.context.getAssets().open(DB_NAME);
+			assetsExist = true;
+		} catch (IOException e) {
+			assetsExist = false;
+		}
 	}
 
 	/**
@@ -87,13 +105,14 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Create database..");
 		
-		/// Create Schema
+		if (!assetsExist) {
+			/// Create Schema
 	<#list entities?values as entity>
 		<#if (entity.fields?? && (entity.fields?size>0))>
-		db.execSQL( ${entity.name}SQLiteAdapter.getSchema() );
+			db.execSQL( ${entity.name}SQLiteAdapter.getSchema() );
 			<#list entity["relations"] as relation>
 				<#if (relation.type=="ManyToMany")>
-		db.execSQL( ${entity.name}SQLiteAdapter.get${relation.name?cap_first}RelationSchema() );
+			db.execSQL( ${entity.name}SQLiteAdapter.get${relation.name?cap_first}RelationSchema() );
 				</#if>
 			</#list>
 		</#if>
@@ -102,6 +121,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	<#if options.fixture?? && options.fixture.enabled>
 		this.loadData(db);
 	</#if>
+		}
 		
 	}
 	
@@ -159,4 +179,79 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 		</#list>
 	}
 	</#if>
+	
+	/**
+	 * Creates a empty database on the system and rewrites it with your own
+	 * database.
+	 * */
+	public void createDataBase() throws IOException {
+		if (assetsExist && !checkDataBase()){
+			// By calling this method and empty database will be created into
+			// the default system path
+			// so we're gonna be able to overwrite that database with ours
+			this.getReadableDatabase();
+	
+			try {
+				copyDataBase();
+	
+			} catch (IOException e) {
+				throw new Error("Error copying database");
+			}
+		}
+	}
+	
+	/**
+	 * Check if the database already exist to avoid re-copying the file each
+	 * time you open the application.
+	 * 
+	 * @return true if it exists, false if it doesn't
+	 */
+	private boolean checkDataBase() {
+
+		SQLiteDatabase checkDB = null;
+		try {
+			String myPath = DB_PATH + DB_NAME;
+			// NOTE : the system throw error message : "Database is locked" when
+			// the Database is not found (incorrect path)
+			checkDB = SQLiteDatabase.openDatabase(myPath, null,
+					SQLiteDatabase.OPEN_READONLY);
+		} catch (SQLiteException e) {
+			// database doesn't exist yet.
+		}
+
+		if (checkDB != null) {
+			checkDB.close();
+		}
+
+		return checkDB != null ? true : false;
+	}
+
+	/**
+	 * Copies your database from your local assets-folder to the just created
+	 * empty database in the system folder, from where it can be accessed and
+	 * handled. This is done by transfering bytestream.
+	 * */
+	private void copyDataBase() throws IOException {
+
+		// Open your local db as the input stream
+		InputStream myInput = this.context.getAssets().open(DB_NAME);
+		
+		// Path to the just created empty db
+		String outFileName = DB_PATH + DB_NAME;
+
+		// Open the empty db as the output stream
+		OutputStream myOutput = new FileOutputStream(outFileName);
+
+		// transfer bytes from the inputfile to the outputfile
+		byte[] buffer = new byte[1024];
+		int length;
+		while ((length = myInput.read(buffer)) > 0) {
+			myOutput.write(buffer, 0, length);
+		}
+
+		// Close the streams
+		myOutput.flush();
+		myOutput.close();
+		myInput.close();
+	}
 }
