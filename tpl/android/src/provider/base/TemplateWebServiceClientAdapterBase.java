@@ -2,7 +2,6 @@
 <#function alias name>
 	<#return "JSON_"+name?upper_case />
 </#function>
-
 <#function typeToJsonType field>
 	<#if (!field.relation??)>
 		<#if (field.type=="int" || field.type=="integer")>
@@ -26,7 +25,6 @@
 		</#if>
 	</#if>
 </#function>
-
 <#function getFormatter datetype>
 	<#assign ret="ISODateTimeFormat." />
 	<#if (datetype?lower_case=="datetime")>
@@ -38,11 +36,9 @@
 	</#if>
 	<#return ret />
 </#function>
-
 <#function isRestEntity entityName>
 	<#return entities[entityName].options.rest?? />
 </#function>
-
 <#function isInArray array var>
 	<#list array as item>
 		<#if (item==var)>
@@ -51,6 +47,8 @@
 	</#list>
 	<#return false />
 </#function>
+package ${curr.data_namespace}.base;
+
 
 <#assign importDate = false />
 <#list curr.fields as field>
@@ -60,9 +58,6 @@ import org.joda.time.format.DateTimeFormatter;
 		<#assign importDate = true />
 	</#if>
 </#list>
-
-package ${curr.data_namespace}.base;
-
 import ${data_namespace}.*;
 import ${curr.namespace}.entity.${curr.name};
 import ${data_namespace}.RestClient.Verb;
