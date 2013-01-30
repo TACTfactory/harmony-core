@@ -134,6 +134,8 @@ public class SymfonyCommand extends BaseCommand{
 	@Override
 	public void summary() {
 		ConsoleUtils.display("\n> REST \n" +
+				"\t" + INSTALL_SYMFONY + "\t => Install symfony\n"+
+				"\t" + INSTALL_BUNDLES + "\t => Install the needed bundles\n"+
 				"\t" + PROJECT_INIT + "\t => Init symfony project\n"+
 				"\t" + GENERATE_ENTITIES + "\t => Generate Web Entities\n"+
 				"\t" + GENERATE_REPOSITORIES + "\t => Generate Web Repositories");

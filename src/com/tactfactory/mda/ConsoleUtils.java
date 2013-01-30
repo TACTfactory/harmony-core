@@ -111,6 +111,9 @@ public class ConsoleUtils {
 			public void run() {
 				while(this.isRunning){
 					try{
+						if(!(this.processInput.ready() || this.processError.ready())){
+							Thread.sleep(200);
+						}
 						if(this.processInput.ready()){
 							String input  = this.processInput.readLine();
 							if(input!=null && !input.isEmpty())
@@ -119,8 +122,6 @@ public class ConsoleUtils {
 							String error = this.processError.readLine();
 							if(error!=null && !error.isEmpty())
 								ConsoleUtils.displayError(error);
-						}else{
-							Thread.sleep(200);
 						}
 					}catch(InterruptedException e){
 						ConsoleUtils.displayError(e.getMessage());

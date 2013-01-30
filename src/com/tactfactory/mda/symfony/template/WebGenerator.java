@@ -59,8 +59,16 @@ public class WebGenerator extends BaseGenerator{
 		//Execute composer.phar to download and install fosrestbundle:
 		this.launchCommand("php "+this.symfonyPath+"/composer.phar update -d "+this.symfonyPath+"/Symfony");
 		
-		StringBuffer sb = FileUtils.FileToStringBuffer(new File("tpl/web/config/config.yml"));
-		this.addToFile(sb.toString(), this.symfonyPath+"/Symfony/app/config/config.yml");
+		File configTplFile = new File("tpl/web/config/config.yml");
+		StringBuffer sb = FileUtils.FileToStringBuffer(configTplFile);
+		//this.addToFile(sb.toString(), this.symfonyPath+"/Symfony/app/config/config.yml");
+		File configFile = new File(this.symfonyPath+"/Symfony/app/config/config.yml");
+		FileUtils.appendToFile(sb.toString(), configFile);
+		
+		String restBundleLoad = "\n\t\tnew FOS\\RestBundle\\FOSRestBundle(),";
+		this.addAfter(restBundleLoad, "$bundles = array(", this.symfonyPath+"/Symfony/app/AppKernel.php");
+		String serializerBundleLoad = "\n\t\tnew JMS\\SerializerBundle\\JMSSerializerBundle(),";
+		this.addAfter(serializerBundleLoad, restBundleLoad, this.symfonyPath+"/Symfony/app/AppKernel.php");
 	}
 	
 	public void initProject(){
@@ -139,5 +147,10 @@ public class WebGenerator extends BaseGenerator{
 		}catch(IOException e){
 			ConsoleUtils.displayError(e.getMessage());
 		}
+	}
+	
+	protected void addAfter(String content, String after, String filePath){
+		File file = new File(filePath);
+		FileUtils.addToFile(content, after, file);
 	}
 }
