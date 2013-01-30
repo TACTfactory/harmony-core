@@ -12,7 +12,7 @@
 		<TextView  
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" 
-		    android:text="You are generate your first Android project with Harmony."
+		    android:text="You have generated your first Android project with Harmony."
 		    android:paddingBottom="16dp"
 		    />
 		<TextView  
@@ -30,7 +30,7 @@
 		<TextView  
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" 
-		    android:text="Now create your models into the package entity at root of the project package."
+		    android:text="Now you can create your models in the entity package of the project."
 		    android:paddingBottom="4dp"
 		    />
 		<TextView  
@@ -63,13 +63,21 @@
 		<TextView  
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" 
-		    android:text="After create your models, run SymfoMobile CLI CRUD view generator."
+		    android:text="After creating your models, run Harmony CLI Entities and CRUD view generator."
 		    android:paddingBottom="4dp"
 		    />
 		<TextView  
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" 
-		    android:text="script/console orm:generate:entities ${project_name}:com/company/android"
+		    android:text="script/console orm:generate:entities"
+		    android:textSize="12sp"
+		    android:textColor="@android:color/darker_gray"
+		    android:paddingBottom="8dp"
+		    />
+		<TextView  
+		    android:layout_width="fill_parent" 
+		    android:layout_height="wrap_content" 
+		    android:text="script/console orm:generate:crud"
 		    android:textSize="12sp"
 		    android:textColor="@android:color/darker_gray"
 		    android:paddingBottom="8dp"
@@ -89,7 +97,7 @@
 		<TextView  
 		    android:layout_width="fill_parent" 
 		    android:layout_height="wrap_content" 
-		    android:text="Refresh and clean your project and run again..."
+		    android:text="Refresh, clean and run your project again..."
 		    android:paddingBottom="24dp"
 		    />
 		<TextView  
