@@ -4,6 +4,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.ConsoleUtils;
@@ -16,10 +17,15 @@ import com.tactfactory.mda.utils.FileUtils;
 
 public class WebGenerator extends BaseGenerator{
 	private String symfonyPath = "www";
+	private static final int GENERATE_ENTITIES	= 0x00;
+	private static final int INSTALL_SYMFONY	= 0x01;
+	private static final int INSTALL_BUNDLES		= 0x02;
+	private static final int INIT_PROJECT 		= 0x03;
 	
 	public WebGenerator(BaseAdapter adapter) throws Exception {
 		super(adapter);
 		this.datamodel = this.appMetas.toMap(this.adapter);
+		
 	}
 	
 	public void generateEntities(){
@@ -28,9 +34,8 @@ public class WebGenerator extends BaseGenerator{
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
 				makeEntity(cm.name);
 			}
-		}
-		String name = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name);
-		this.launchCommand("php "+this.symfonyPath+"/Symfony/app/console doctrine:generate:entities "+name+"ApiBundle");
+		}		
+		this.launchCommand(GENERATE_ENTITIES);
 	}
 	
 	public void generateWebControllers(){
@@ -48,7 +53,7 @@ public class WebGenerator extends BaseGenerator{
 		this.copyFile(this.adapter.getWebTemplatePath()+"composer.phar", this.symfonyPath+"/");
 		
 		// Execute composer.phar to download symfony :
-		this.launchCommand("php "+this.symfonyPath+"/composer.phar create-project symfony/framework-standard-edition "+this.symfonyPath+"/Symfony dev-master");
+		this.launchCommand(INSTALL_SYMFONY);
 	}
 	
 	public void installBundles(){
@@ -57,7 +62,7 @@ public class WebGenerator extends BaseGenerator{
 		this.copyFile(this.adapter.getWebTemplatePath()+"composer.json", this.symfonyPath+"/Symfony/");
 		
 		//Execute composer.phar to download and install fosrestbundle:
-		this.launchCommand("php "+this.symfonyPath+"/composer.phar update -d "+this.symfonyPath+"/Symfony");
+		this.launchCommand(INSTALL_BUNDLES);
 		
 		File configTplFile = new File("tpl/web/config/config.yml");
 		StringBuffer sb = FileUtils.FileToStringBuffer(configTplFile);
@@ -72,14 +77,7 @@ public class WebGenerator extends BaseGenerator{
 	}
 	
 	public void initProject(){
-		
-		
-		String name = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name);
-		//Init project
-		String command = "php "+this.symfonyPath+"/Symfony/app/console generate:bundle --namespace="+name+"/ApiBundle --dir="+this.symfonyPath+"/Symfony/src"+"  --bundle-name="+name+"ApiBundle --format=yml --structure=yes --no-interaction";
-		System.out.println("Executing : "+command);
-		this.launchCommand(command);
-	
+		this.launchCommand(INIT_PROJECT);
 	}
 	
 	protected void makeEntity(String entityName){
@@ -101,10 +99,10 @@ public class WebGenerator extends BaseGenerator{
 		super.appendSource(fullTemplatePath, fullFilePath);
 	}
 	
-	protected void launchCommand(String command){
+	protected void launchCommand(int command){
 		try {
-			Runtime rt = Runtime.getRuntime();
-			Process exec = rt.exec(command);
+			ProcessBuilder pb = new ProcessBuilder(this.getCommand(command));
+			Process exec = pb.start();
 			
 
 			ProcessToConsoleBridge bridge = new ProcessToConsoleBridge(exec);
@@ -152,5 +150,52 @@ public class WebGenerator extends BaseGenerator{
 	protected void addAfter(String content, String after, String filePath){
 		File file = new File(filePath);
 		FileUtils.addToFile(content, after, file);
+	}
+	
+	private ArrayList<String> getCommand(int command){
+		String projectName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name);
+		ArrayList<String> commandArgs = new ArrayList<String>();
+		switch(command){
+			case INSTALL_SYMFONY:
+				commandArgs.add("php");
+				commandArgs.add(this.symfonyPath+"/composer.phar"); // Composer path
+				commandArgs.add("create-project");
+				commandArgs.add("symfony/framework-standard-edition"); // Project to install
+				commandArgs.add(this.symfonyPath+"/Symfony"); // Installation folder
+				commandArgs.add("dev-master"); // Version
+				break;
+				
+			case INSTALL_BUNDLES:
+				//"php "+this.symfonyPath+"/composer.phar update -d "+this.symfonyPath+"/Symfony"
+				commandArgs.add("php");
+				commandArgs.add(this.symfonyPath+"/composer.phar"); // Composer path
+				commandArgs.add("update");
+				commandArgs.add("-d");
+				commandArgs.add(this.symfonyPath+"/Symfony"); // Installation folder
+				break;
+				
+			case INIT_PROJECT:
+				//"php "+this.symfonyPath+"/Symfony/app/console generate:bundle --namespace="+name+"/ApiBundle --dir="+this.symfonyPath+"/Symfony/src"+"  --bundle-name="+name+"ApiBundle --format=yml --structure=yes --no-interaction"
+				commandArgs.add("php");
+				commandArgs.add(this.symfonyPath+"/Symfony/app/console"); // Symfony console path
+				commandArgs.add("generate:bundle");
+				commandArgs.add("--namespace="+projectName+"/ApiBundle"); // Namespace
+				commandArgs.add("--dir="+this.symfonyPath+"/Symfony/src"); // Bundle folder
+				commandArgs.add("--bundle-name="+projectName+"ApiBundle"); // Bundle name
+				commandArgs.add("--format=yml"); // Format
+				commandArgs.add("--structure=yes"); // Generate project folder structure
+				commandArgs.add("--no-interaction"); // Silent mode
+				break;
+				
+			case GENERATE_ENTITIES:
+				//"php "+this.symfonyPath+"/Symfony/app/console doctrine:generate:entities "+name+"ApiBundle"
+				commandArgs.add("php");
+				commandArgs.add(this.symfonyPath+"/Symfony/app/console"); // Symfony console path
+				commandArgs.add("generate:generate:entities");
+				commandArgs.add(projectName+"ApiBundle"); // Bundle Namespace
+				break;
+		}
+		
+		return commandArgs;
 	}
 }
