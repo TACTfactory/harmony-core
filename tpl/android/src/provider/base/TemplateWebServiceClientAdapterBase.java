@@ -52,6 +52,15 @@
 	<#return false />
 </#function>
 
+<#assign importDate = false />
+<#list curr.fields as field>
+	<#if !importDate && (field.type=="date" || field.type=="time" || field.type=="datetime")>
+import org.joda.time.format.ISODateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
+		<#assign importDate = true />
+	</#if>
+</#list>
+
 package ${curr.data_namespace}.base;
 
 import ${data_namespace}.*;
@@ -64,9 +73,6 @@ import java.util.List;
 
 import android.util.Log;
 import android.content.Context;
-
-import org.joda.time.format.ISODateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 
 <#assign import_array = [] />
 <#assign alreadyImportArrayList=false />

@@ -9,6 +9,7 @@ import com.tactfactory.mda.command.BaseCommand;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.rest.parser.RestCompletor;
 import com.tactfactory.mda.rest.parser.RestParser;
+import com.tactfactory.mda.symfony.adapter.SymfonyAdapter;
 import com.tactfactory.mda.symfony.template.WebGenerator;
 
 @PluginImplementation
@@ -60,7 +61,7 @@ public class SymfonyCommand extends BaseCommand{
 		this.generateMetas();
 		if(Harmony.metas.entities!=null){
 			try {
-				new WebGenerator(new AndroidAdapter()).initProject();
+				new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).initProject();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -76,7 +77,7 @@ public class SymfonyCommand extends BaseCommand{
 		this.generateMetas();
 		if(Harmony.metas.entities!=null){
 			try {
-				new WebGenerator(new AndroidAdapter()).generateEntities();
+				new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).generateEntities();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -92,7 +93,7 @@ public class SymfonyCommand extends BaseCommand{
 		this.generateMetas();
 		if(Harmony.metas.entities!=null){
 			try {
-				new WebGenerator(new AndroidAdapter()).generateWebControllers();
+				new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).generateWebControllers();
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -105,7 +106,7 @@ public class SymfonyCommand extends BaseCommand{
 	 */
 	protected void installSymfony() {
 		try {
-			new WebGenerator(new AndroidAdapter()).installSymfony();
+			new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).installSymfony();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -116,7 +117,7 @@ public class SymfonyCommand extends BaseCommand{
 	 */
 	protected void installBundles() {
 		try {
-			new WebGenerator(new AndroidAdapter()).installBundles();
+			new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).installBundles();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
