@@ -33,38 +33,39 @@ public @interface Column {
 	 * Mapping Type defines the mapping between a Java type and an SQL type.
 	 */
 	public enum Type {
-		//Name		Internal	length	null	prec	scale	unique
+		//Name		Internal	length	null	prec	scale	unique	isLocale
 		
 		// BASE
-		STRING(		"string", 	255, 	true, 	null, 	null, 	null),
-		TEXT(		"text", 	1024, 	true, 	null, 	null, 	null),
-		BOOLEAN(	"boolean", 	null, 	false, 	null, 	null, 	null),
-		INTEGER(	"integer", 	null, 	true, 	null, 	null, 	null),
-		INT(		"int", 		null, 	false,	null,	null,	null),
-		FLOAT(		"float", 	null, 	false,	null,	null,	null),
-		DATETIME(	"datetime", null,	true,	null,	null,	null),
-		DATE(		"date", 	null, 	true,	null,	null,	null),
-		TIME(		"time",		null,	true,	null,	null,	null),
+		STRING(		"string", 	255, 	true, 	null, 	null, 	null,	null),
+		TEXT(		"text", 	1024, 	true, 	null, 	null, 	null,	null),
+		BOOLEAN(	"boolean", 	null, 	false, 	null, 	null, 	null,	null),
+		INTEGER(	"integer", 	null, 	true, 	null, 	null, 	null,	null),
+		INT(		"int", 		null, 	false,	null,	null,	null,	null),
+		FLOAT(		"float", 	null, 	false,	null,	null,	null,	null),
+		DATETIME(	"datetime", null,	true,	null,	null,	null,	true),
+		DATE(		"date", 	null, 	true,	null,	null,	null,	true),
+		TIME(		"time",		null,	true,	null,	null,	null,	true),
 		
 		// EXTEND
-		LOGIN(		"login", 	255, 	false,	null,	null,	true),
-		PASSWORD(	"password", 255, 	false,	null,	null,	null),
-		EMAIL(		"email", 	255,	true,	null,	null,	true),
-		PHONE(		"phone", 	24,		true,	null,	null,	null),
-		CITY(		"city", 	255, 	true,	null,	null,	null),
-		ZIPCODE(	"zipcode", 	9999999,true,	null,	null,	null),
-		COUNTRY(	"country",	255,	true,	null,	null,	null),
-		BC_EAN(		"ean",		12,		true,	null,	null,	null);
+		LOGIN(		"login", 	255, 	false,	null,	null,	true,	null),
+		PASSWORD(	"password", 255, 	false,	null,	null,	null,	null),
+		EMAIL(		"email", 	255,	true,	null,	null,	true,	null),
+		PHONE(		"phone", 	24,		true,	null,	null,	null,	null),
+		CITY(		"city", 	255, 	true,	null,	null,	null,	null),
+		ZIPCODE(	"zipcode", 	9999999,true,	null,	null,	null,	null),
+		COUNTRY(	"country",	255,	true,	null,	null,	null,	null),
+		BC_EAN(		"ean",		12,		true,	null,	null,	null,	null);
 		
 		private String type;
 		private int length = Integer.MAX_VALUE;
 		private boolean nullable = false;
 		private boolean unique = false;
+		private boolean isLocale = true;
 		//columnDefinition is define by DatabaseAdapter
 		private int precision = Integer.MAX_VALUE;
 		private int scale = Integer.MAX_VALUE;
 		
-		private Type(String value, Integer length, Boolean nullable, Integer precision, Integer scale, Boolean unique){
+		private Type(String value, Integer length, Boolean nullable, Integer precision, Integer scale, Boolean unique, Boolean isLocale){
 			this.type = value;
 			
 			if (length != null)
@@ -78,6 +79,9 @@ public @interface Column {
 			
 			if (unique != null)
 				this.unique = unique;
+			
+			if(isLocale!=null)
+				this.isLocale = isLocale;
 		}
 		
 		public String getValue(){
@@ -102,6 +106,10 @@ public @interface Column {
 		
 		public int getScale() {
 			return this.scale;
+		}
+		
+		public boolean isLocale() {
+			return this.isLocale;
 		}
 		
 		public static Type fromString(String value){
@@ -242,4 +250,12 @@ public @interface Column {
 	 * @return (optional, defaults to false) Hide the filed in a view.
 	 */
 	boolean hidden() default false;
+	
+	/**
+	 * (Date, DateTime and Time only)
+	 * Use locale for date
+	 * 
+	 * @return (optional, defaults to true) Adjust date to locale
+	 */
+	boolean locale() default true;
 }
