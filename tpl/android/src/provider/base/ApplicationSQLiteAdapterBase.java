@@ -8,6 +8,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.Cursor;
 import android.util.Log;
+
+import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class SQLiteAdapterBase<T>{
@@ -29,9 +31,15 @@ public abstract class SQLiteAdapterBase<T>{
 		this.context = ctx;
 		this.mBaseHelper = new ${project_name?cap_first}SQLiteOpenHelper(
 				ctx, 
-				"database", 
+				"database.sqlite", 
 				null,
 				1);
+		
+		try {
+			this.mBaseHelper.createDataBase();
+		} catch (IOException ioe) {
+			throw new Error("Unable to create database");
+		}
 	}
 	
 	
