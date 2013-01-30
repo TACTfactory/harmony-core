@@ -79,7 +79,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	protected Context context;
 	
 	// Android's default system path of the database.
-	private static String DB_PATH = "/data/data/${project_namespace}/databases/";	
+	private static String DB_PATH;	
 	private static String DB_NAME;
 	private static boolean assetsExist = false;
 	
@@ -88,6 +88,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 		super(context, name, factory, version);
 		this.context = context;
 		DB_NAME = name;
+		DB_PATH = context.getDatabasePath(DB_NAME).getAbsolutePath();
 		
 		try {
 			this.context.getAssets().open(DB_NAME);
