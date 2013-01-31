@@ -118,10 +118,6 @@ public class SyncGlobalTest extends CommonTest{
 		Assert.assertTrue("Check if sync " + cm.name, cm.options.containsKey("sync"));
 	}
 	
-	private void isNotSync(ClassMetadata cm){
-		Assert.assertFalse("Check if sync " + cm.name, cm.options.containsKey("sync"));
-	}
-	
 	private void hasMode(ClassMetadata cm, Sync.Mode value){
 		Assert.assertTrue("Check if Mode of " + cm.name + " is "+value.getValue(), ((SyncMetadata)cm.options.get("sync")).mode.equals(value));
 	}

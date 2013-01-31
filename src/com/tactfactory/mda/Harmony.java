@@ -59,11 +59,11 @@ public class Harmony {
 	/** Path of templates */
 	public static String pathTemplate = pathBase + "tpl"; // "../../tpl";
 	
-	/** Path of libs */
-	public static String pathLibs = pathBase + "lib";
-	
 	/** Path of harmony.jar */
 	public static String pathHarmony = pathBase + "vendor/tact-core";
+	
+	/** Path of libs */
+	public static String pathLibs = pathHarmony + "/lib";
 	
 	/** Project space */
 	public static String projectFolder = "android";
