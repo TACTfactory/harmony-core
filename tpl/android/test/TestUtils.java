@@ -126,6 +126,7 @@ public abstract class TestUtils{
      public static DateTime generateRandomDateTime(){
     	 DateTime date = generateRandomDate();
     	 DateTime time = generateRandomTime();
+    	 
     	 return new DateTime(
     			 		date.getYear(),
     			 		date.getMonthOfYear(),
@@ -141,7 +142,7 @@ public abstract class TestUtils{
     	 month = (int)(Math.random()*11)+1;
     	 day = (int)(Math.random()*27)+1;
     	 
-    	 return new DateTime(year,month,day,0,0);
+    	 return new DateTime(year, month, day, 0, 0);
      }
      
      public static DateTime generateRandomTime(){
@@ -151,6 +152,11 @@ public abstract class TestUtils{
     	 hours = (int)(Math.random()*23);
     	 minutes = (int)(Math.random()*59);
     	 
-    	 return new DateTime(dt.getYear(), dt.getMonthOfYear(), dt.getDayOfMonth(), hours, minutes);
+    	 return new DateTime(
+		    			 dt.getYear(), 
+		    			 dt.getMonthOfYear(),
+		    			 dt.getDayOfMonth(), 
+		    			 hours, 
+		    			 minutes);
      }
 }
