@@ -43,6 +43,7 @@ public class FieldMetadata extends BaseMetadata {
 	public Integer precision = null;
 	public Integer scale = null;
 	public boolean hidden = false;
+	public Boolean isLocale = true;
 	
 	/** GUI show field type */
 	public String customShowType;
@@ -114,6 +115,7 @@ public class FieldMetadata extends BaseMetadata {
 		
 		model.put(TagConstant.SCHEMA, 		SqliteAdapter.generateStructure(this));
 		model.put(TagConstant.INTERNAL, 	this.internal);
+		model.put(TagConstant.IS_LOCALE, 	this.isLocale);
 		
 		if(relation!=null){
 			model.put(TagConstant.RELATION, this.relation.toMap(adapter));
