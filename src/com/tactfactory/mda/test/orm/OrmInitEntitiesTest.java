@@ -347,12 +347,4 @@ public class OrmInitEntitiesTest extends CommonTest {
 	private void isFieldLength(ClassMetadata classMeta, String fieldName, int length){
 		Assert.assertEquals(classMeta.fields.get(fieldName).length,Integer.valueOf(length));
 	}
-	
-	/**
-	 * @param classMeta
-	 * @param fieldName
-	 */
-	private void isFieldType(ClassMetadata classMeta, String fieldName, Type type){
-		Assert.assertEquals(classMeta.fields.get(fieldName).type,type);
-	}
 }

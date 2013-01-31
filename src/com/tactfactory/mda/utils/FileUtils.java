@@ -365,4 +365,28 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	    }
 	    return ext;
 	}
+	
+	public static boolean appendToFile(String content, File file){
+		StringBuffer sb = FileUtils.FileToStringBuffer(file);
+		//If content doesn't exists in the file yet
+		if(sb.indexOf(content)==-1){
+			int offset = sb.length(); 
+			sb.insert(offset, content);
+			FileUtils.StringBufferToFile(sb, file);
+			return true;
+		}
+		return false;
+	}
+	
+	public static boolean addToFile(String content, String after, File file){
+		StringBuffer sb = FileUtils.FileToStringBuffer(file);
+		//If content doesn't exists in the file yet
+		if(sb.indexOf(content)==-1){
+			int offset = sb.indexOf(after)+after.length();
+			sb.insert(offset, content);
+			FileUtils.StringBufferToFile(sb, file);
+			return true;
+		}
+		return false;
+	}
 }

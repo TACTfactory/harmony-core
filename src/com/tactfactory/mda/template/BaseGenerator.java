@@ -75,6 +75,40 @@ public abstract class BaseGenerator {
 		}
 	}
 	
+	/** 
+	 * Make Java Source Code
+	 * 
+	 * @param templatePath Template path file. <br/>For list activity is "TemplateListActivity.java"
+	 * @param generatePath
+	 * @param override
+	 */
+	protected void appendSource(String templatePath, String generatePath) {
+		if (FileUtils.exists(generatePath)){
+			File generateFile = new File(generatePath);
+			
+			try {
+				// Debug Log
+				ConsoleUtils.displayDebug("Generate Source : " + generateFile.getPath()); 
+				
+				// Create
+				Template tpl = this.cfg.getTemplate(templatePath);
+				
+				// Write and close
+				OutputStreamWriter output = new FileWriter(generateFile, true);
+				tpl.process(this.datamodel, output);
+				output.flush();
+				output.close();
+				
+			} catch (IOException e) {
+				ConsoleUtils.displayError(e.getMessage());
+				e.printStackTrace();
+			} catch (TemplateException e) {
+				ConsoleUtils.displayError(e.getMessage());
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	
 	/**
 	 * Update Libs

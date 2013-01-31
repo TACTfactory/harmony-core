@@ -122,10 +122,6 @@ public class RestGlobalTest extends CommonTest{
 		Assert.assertTrue("Check if rest " + cm.name, cm.options.containsKey("rest"));
 	}
 	
-	private void isNotRest(ClassMetadata cm){
-		Assert.assertFalse("Check if rest " + cm.name, cm.options.containsKey("rest"));
-	}
-	
 	private void hasUri(ClassMetadata cm, String value){
 		Assert.assertTrue("Check if URI of " + cm.name + " is "+value, ((RestMetadata)cm.options.get("rest")).uri.equals(value));
 	}

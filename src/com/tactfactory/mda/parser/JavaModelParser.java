@@ -311,7 +311,9 @@ public class JavaModelParser {
 						if(fieldMeta.precision == null)
 							fieldMeta.precision = type.getPrecision();
 						if(fieldMeta.scale == null)
-							fieldMeta.scale = type.getScale();				
+							fieldMeta.scale = type.getScale();		
+						if(fieldMeta.isLocale == null)
+							fieldMeta.isLocale = type.isLocale();		
 					}
 				}
 				
@@ -396,6 +398,11 @@ public class JavaModelParser {
 							// set scale
 							if (mvp.getName().equals("scale")) {
 								fieldMeta.scale = Integer.parseInt(mvp.getValue().toString());
+							}else
+								
+							// set scale
+							if (mvp.getName().equals("locale")) {
+								fieldMeta.isLocale = Boolean.parseBoolean(mvp.getValue().toString());
 							}else 
 								
 							// set column definition

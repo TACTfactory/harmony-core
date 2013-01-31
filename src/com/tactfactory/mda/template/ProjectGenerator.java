@@ -195,18 +195,6 @@ public class ProjectGenerator extends BaseGenerator {
 
 		return result;
 	}
-	
-	/**
-	 * Update Libs
-	 */
-	protected void updateLibrary(String libName) {
-		File dest = new File(String.format("%s/%s", this.adapter.getLibsPath(), libName));
-		
-		if (!dest.exists())
-			FileUtils.copyfile(
-					new File(String.format("%s/%s", Harmony.pathLibs, libName)),
-					dest);
-	}
 
 	/**
 	 * Update Utils
