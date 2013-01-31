@@ -185,13 +185,16 @@ public abstract class ${curr.name}SQLiteAdapterBase extends SQLiteAdapterBase<${
 	<#list curr.fields as field>
 		<#if (!field.internal)>
 			<#if (!field.relation??)>
-				<#if ((field.type == "date") || (field.type == "datetime") || (field.type == "time"))>
-				
-			try {
-				result.set${field.name?cap_first}(new DateTime(
-						DateUtils.formatISOStringToDateTime(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case})) )));
-			} catch (IllegalArgumentException e) {
-				Log.e(TAG, e.getMessage());
+				<#if ((field.type == "date") || (field.type == "datetime") || (field.type == "time"))> 
+			
+					<#if field.is_locale>
+			DateTime dt${field.name?cap_first} = DateUtils.formatLocalISOStringToDateTime(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case})) );	
+					<#else>
+			DateTime dt${field.name?cap_first} = DateUtils.formatISOStringToDateTime(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case})) );	
+					</#if>
+			if (dt${field.name?cap_first} != null){
+				result.set${field.name?cap_first}(dt${field.name?cap_first});
+			} else {
 				result.set${field.name?cap_first}(new DateTime());
 			}
 
