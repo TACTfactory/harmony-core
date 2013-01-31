@@ -69,6 +69,7 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
 <#if hasDate || hasTime || hasDateTime>
 import ${curr.namespace}.harmony.util.DateUtils;
 import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 </#if>
 
 /** ${curr.name} adapter database abstract class <br/>
