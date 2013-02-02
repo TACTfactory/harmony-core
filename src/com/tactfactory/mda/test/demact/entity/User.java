@@ -45,7 +45,7 @@ public class User extends Object implements Cloneable {
 	@Column(name="created_at")
     protected DateTime createdAt;
 	
-	@Column(type=Type.DATE)
+	@Column(type=Type.DATE, locale=true)
     protected DateTime birthdate;
 
 
