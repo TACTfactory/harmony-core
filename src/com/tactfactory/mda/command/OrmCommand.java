@@ -106,7 +106,7 @@ public class OrmCommand extends BaseCommand {
 			new ProviderGenerator(this.adapter).generateProvider();
 			
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 	
@@ -118,7 +118,7 @@ public class OrmCommand extends BaseCommand {
 			new TestDBGenerator(this.adapter).generateAll();
 			
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 	
@@ -134,7 +134,7 @@ public class OrmCommand extends BaseCommand {
 			new ActivityGenerator(this.adapter).generateAll();
 			
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 	
@@ -172,7 +172,7 @@ public class OrmCommand extends BaseCommand {
 	
 			}
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 

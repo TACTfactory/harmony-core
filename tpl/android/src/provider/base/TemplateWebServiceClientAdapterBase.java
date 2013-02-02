@@ -85,7 +85,7 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
 
 /**
  * 
- * b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
+ * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
  * You should edit ${curr.name}WebServiceClientAdapter class instead of this one or you will lose all your modifications.</i></b>
  *
  */

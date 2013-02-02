@@ -57,7 +57,7 @@ public class TestWSGenerator extends BaseGenerator {
 					false);
 
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 	

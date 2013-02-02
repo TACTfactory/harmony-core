@@ -58,7 +58,7 @@ public class TestDBGenerator extends BaseGenerator {
 					false);
 
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 	
@@ -97,7 +97,7 @@ public class TestDBGenerator extends BaseGenerator {
 				
 				result = true;
 			} else {
-				ConsoleUtils.displayError("Init Test Android Project Fail!");
+				ConsoleUtils.displayError(new Exception("Init Test Android Project Fail!"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

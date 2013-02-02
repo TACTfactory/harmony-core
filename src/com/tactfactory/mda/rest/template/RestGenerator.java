@@ -32,7 +32,7 @@ public class RestGenerator extends BaseGenerator {
 			new TestWSGenerator(this.adapter).generateAll();
 			
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 	
