@@ -42,9 +42,9 @@ public @interface Column {
 		INTEGER(	"integer", 	null, 	true, 	null, 	null, 	null,	null),
 		INT(		"int", 		null, 	false,	null,	null,	null,	null),
 		FLOAT(		"float", 	null, 	false,	null,	null,	null,	null),
-		DATETIME(	"datetime", null,	true,	null,	null,	null,	true),
-		DATE(		"date", 	null, 	true,	null,	null,	null,	true),
-		TIME(		"time",		null,	true,	null,	null,	null,	true),
+		DATETIME(	"datetime", null,	true,	null,	null,	null,	false),
+		DATE(		"date", 	null, 	true,	null,	null,	null,	false),
+		TIME(		"time",		null,	true,	null,	null,	null,	false),
 		
 		// EXTEND
 		LOGIN(		"login", 	255, 	false,	null,	null,	true,	null),
@@ -60,7 +60,7 @@ public @interface Column {
 		private int length = Integer.MAX_VALUE;
 		private boolean nullable = false;
 		private boolean unique = false;
-		private boolean isLocale = true;
+		private boolean isLocale = false;
 		//columnDefinition is define by DatabaseAdapter
 		private int precision = Integer.MAX_VALUE;
 		private int scale = Integer.MAX_VALUE;
@@ -257,5 +257,5 @@ public @interface Column {
 	 * 
 	 * @return (optional, defaults to true) Adjust date to locale
 	 */
-	boolean locale() default true;
+	boolean locale() default false;
 }

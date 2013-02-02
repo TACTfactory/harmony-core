@@ -8,8 +8,6 @@ import org.joda.time.format.DateTimeFormat;
 public abstract class TestUtils{
 
 	private static final Random RANDOM = new Random();
-	private static final String patternTime = "HH:mm";
-	private static final String patternDate = "yyyy/MM/dd";
 	
      /**
       * <p>Creates a random string based on a variety of options, using
@@ -128,6 +126,7 @@ public abstract class TestUtils{
      public static DateTime generateRandomDateTime(){
     	 DateTime date = generateRandomDate();
     	 DateTime time = generateRandomTime();
+    	 
     	 return new DateTime(
     			 		date.getYear(),
     			 		date.getMonthOfYear(),
@@ -138,16 +137,26 @@ public abstract class TestUtils{
      
      public static DateTime generateRandomDate(){
     	 int year, month, day;
+    	 
     	 year = (int)(Math.random()*200)+1900;
     	 month = (int)(Math.random()*11)+1;
     	 day = (int)(Math.random()*27)+1;
-    	 return DateTimeFormat.forPattern(patternDate).parseDateTime(year+"/"+month+"/"+day);
+    	 
+    	 return new DateTime(year, month, day, 0, 0);
      }
      
      public static DateTime generateRandomTime(){
+    	 DateTime dt = new DateTime();
     	 int hours,minutes; 
+    	 
     	 hours = (int)(Math.random()*23);
     	 minutes = (int)(Math.random()*59);
-    	 return DateTimeFormat.forPattern(patternTime).parseDateTime(hours+":"+minutes);
+    	 
+    	 return new DateTime(
+		    			 dt.getYear(), 
+		    			 dt.getMonthOfYear(),
+		    			 dt.getDayOfMonth(), 
+		    			 hours, 
+		    			 minutes);
      }
 }

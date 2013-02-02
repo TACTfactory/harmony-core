@@ -6,11 +6,14 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.ISODateTimeFormat;
 
+import android.util.Log;
+
 import ${project_namespace}.${project_name?cap_first}Application;
 
 /** Utils for date manipulation */
 public class DateUtils extends android.text.format.DateUtils{
-
+	private static final String TAG = "DateUtils";
+	
 	/**
 	 * Convert date to Android string date format
 	 * @param date to convert
@@ -83,8 +86,7 @@ public class DateUtils extends android.text.format.DateUtils{
 		try {
 			dt = new DateTime(dateFormat.parse(dateTime).getTime());
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage());
 		}
 		
 		return dt;
@@ -96,9 +98,33 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @return datetime
 	 */
 	public static DateTime formatISOStringToDateTime(String dateTime){
-		return new DateTime(ISODateTimeFormat.dateTime().parseDateTime(dateTime));
+		DateTime dt = null;
+		
+		try {
+			dt = new DateTime(ISODateTimeFormat.dateTime().parseDateTime(dateTime));
+		} catch (IllegalArgumentException e) {
+			Log.e(TAG, e.getMessage());
+		}
+		
+		return dt;
 	}
 	
+	/**
+	 * Convert ISO8601 string localdate to datetime
+	 * @param dateTime ISO8601 string localdate
+	 * @return datetime
+	 */
+	public static DateTime formatLocalISOStringToDateTime(String dateTime){
+		DateTime dt = null;
+		
+		try {
+			dt = new DateTime(ISODateTimeFormat.localDateOptionalTimeParser().parseDateTime(dateTime));
+		} catch (IllegalArgumentException e) {
+			Log.e(TAG, e.getMessage());
+		}
+		
+		return dt;
+	}
 	
 	/**
 	 * Convert a string to a datetime thanks to the given pattern
@@ -107,6 +133,14 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @return datetime
 	 */
 	public static DateTime formatPattern(String pattern, String dateTime){
-		return new DateTime(DateTimeFormat.forPattern(pattern).parseDateTime(dateTime));
+		DateTime dt = null;
+		
+		try {
+			dt = new DateTime(DateTimeFormat.forPattern(pattern).parseDateTime(dateTime));
+		} catch (IllegalArgumentException e) {
+			Log.e(TAG, e.getMessage());
+		}
+		
+		return dt;
 	}
 }
