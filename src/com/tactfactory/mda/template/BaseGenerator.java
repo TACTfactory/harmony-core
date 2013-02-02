@@ -66,10 +66,10 @@ public abstract class BaseGenerator {
 				output.close();
 				
 			} catch (IOException e) {
-				ConsoleUtils.displayError(e.getMessage());
+				ConsoleUtils.displayError(e);
 				e.printStackTrace();
 			} catch (TemplateException e) {
-				ConsoleUtils.displayError(e.getMessage());
+				ConsoleUtils.displayError(e);
 				e.printStackTrace();
 			}
 		}
@@ -100,10 +100,10 @@ public abstract class BaseGenerator {
 				output.close();
 				
 			} catch (IOException e) {
-				ConsoleUtils.displayError(e.getMessage());
+				ConsoleUtils.displayError(e);
 				e.printStackTrace();
 			} catch (TemplateException e) {
-				ConsoleUtils.displayError(e.getMessage());
+				ConsoleUtils.displayError(e);
 				e.printStackTrace();
 			}
 		}

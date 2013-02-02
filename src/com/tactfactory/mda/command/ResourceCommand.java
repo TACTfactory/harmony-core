@@ -62,7 +62,7 @@ public class ResourceCommand extends BaseCommand {
 	
 			}
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 

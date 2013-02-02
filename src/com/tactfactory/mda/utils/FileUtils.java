@@ -39,8 +39,9 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 		
 		File parent = file.getParentFile();
 		if(!parent.exists() && !parent.mkdirs()){
-			ConsoleUtils.displayError("Couldn't create dir: " + parent);
-		    throw new IllegalStateException("Couldn't create dir: " + parent);
+			IllegalStateException exception = new IllegalStateException("Couldn't create dir: " + parent);;
+			ConsoleUtils.displayError(exception);
+		    throw exception;
 		}
 
 		try {
@@ -89,10 +90,10 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			ConsoleUtils.displayDebug("File "+srcFile.getName()+" copied to "+destFile.getPath());
 			
 		} catch (FileNotFoundException ex) {
-			ConsoleUtils.displayError(ex.getMessage() + " in the specified directory.");
+			ConsoleUtils.displayError(new Exception(ex.getMessage() + " in the specified directory.", ex));
 			//System.exit(0);
 		} catch (IOException e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 	
@@ -161,7 +162,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			}
 			
 		}catch(IOException e){
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}finally{
 			try{
 				br.close();
@@ -189,7 +190,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			bw.write(buff.toString());
 
 		}catch(IOException e){
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}finally{
 			try{
 				bw.close();
@@ -274,13 +275,13 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			    			FileUtils.copyfile(tpl_files[i], tmp_file);
 			    			ConsoleUtils.displayDebug("File '"+tpl_files[i].getName()+"' created...");
 						} else {
-							ConsoleUtils.displayError("File '"+tpl_files[i].getName()+"' creation error...");
+							ConsoleUtils.displayError(new Exception("File '"+tpl_files[i].getName()+"' creation error..."));
 						}
 					}
 				}
 			}
 			else {
-				ConsoleUtils.displayError("Folder '"+dest_folder.getName()+"' creation Error...");
+				ConsoleUtils.displayError(new Exception("Folder '"+dest_folder.getName()+"' creation Error..."));
 			}
 		}
 		return dest_folder;

@@ -136,10 +136,10 @@ public class ProjectCommand extends BaseCommand {
 				new ApplicationGenerator(this.adapterAndroid).generateApplication();
 				result = true;
 			} else {
-				ConsoleUtils.displayError("Init Android Project Fail!");
+				ConsoleUtils.displayError(new Exception("Init Android Project Fail!"));
 			}
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 		
 		return result;
@@ -160,10 +160,10 @@ public class ProjectCommand extends BaseCommand {
 				ConsoleUtils.displayDebug("Init IOS Project Success!");
 				result = true;
 			} else {
-				ConsoleUtils.displayError("Init IOS Project Fail!");
+				ConsoleUtils.displayError(new Exception("Init IOS Project Fail!"));
 			}
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 		
 		return result;
@@ -184,10 +184,10 @@ public class ProjectCommand extends BaseCommand {
 				ConsoleUtils.displayDebug("Init RIM Project Success!");
 				result = true;
 			} else {
-				ConsoleUtils.displayError("Init RIM Project Fail!");
+				ConsoleUtils.displayError(new Exception("Init RIM Project Fail!"));
 			}
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 		
 		return result;
@@ -208,10 +208,10 @@ public class ProjectCommand extends BaseCommand {
 				ConsoleUtils.displayDebug("Init WinPhone Project Success!");
 				result = true;
 			} else {
-				ConsoleUtils.displayError("Init WinPhone Project Fail!");
+				ConsoleUtils.displayError(new Exception("Init WinPhone Project Fail!"));
 			}
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 		
 		return result;
@@ -246,7 +246,7 @@ public class ProjectCommand extends BaseCommand {
 			if (!new ProjectGenerator(this.adapterAndroid).removeProject())
 				ConsoleUtils.display("Please check your file browser or file editor and try again...");
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 
@@ -266,7 +266,7 @@ public class ProjectCommand extends BaseCommand {
 			if (!new ProjectGenerator(this.adapterIOS).removeProject())
 				ConsoleUtils.display("Please check your file browser or file editor and try again...");
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 
@@ -286,7 +286,7 @@ public class ProjectCommand extends BaseCommand {
 			if (!new ProjectGenerator(this.adapterRIM).removeProject())
 				ConsoleUtils.display("Please check your file browser or file editor and try again...");
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 
@@ -306,7 +306,7 @@ public class ProjectCommand extends BaseCommand {
 			if(!new ProjectGenerator(this.adapterWinPhone).removeProject())
 				ConsoleUtils.display("Please check your file browser or file editor and try again...");
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 
@@ -330,7 +330,7 @@ public class ProjectCommand extends BaseCommand {
 				ConsoleUtils.display("Please check your file browser or file editor and try again...");
 			}
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		} finally {
 			this.userHasConfirmed = false;
 		}

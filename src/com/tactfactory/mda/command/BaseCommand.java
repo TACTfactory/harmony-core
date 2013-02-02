@@ -43,7 +43,7 @@ public abstract class BaseCommand implements Command {
 		try {
 			this.javaModelParser.loadEntities();
 		} catch(Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 
 		// Convert CompilationUnits entities to ClassMetaData

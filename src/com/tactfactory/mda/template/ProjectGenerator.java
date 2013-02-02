@@ -62,7 +62,7 @@ public class ProjectGenerator extends BaseGenerator {
 			
 			ConsoleUtils.displayDebug("Project "+this.adapter.getPlatform()+" removed!");
 		} else {
-			ConsoleUtils.displayError("Remove Project "+this.adapter.getPlatform()+" return "+removeResult+" errors...\n");
+			ConsoleUtils.displayError(new Exception("Remove Project "+this.adapter.getPlatform()+" return "+removeResult+" errors...\n"));
 		}
 		return result;
 	}

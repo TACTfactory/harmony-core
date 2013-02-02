@@ -168,9 +168,9 @@ public class EntityGenerator extends BaseGenerator {
 			fileString.insert(lastAccolade, getString + "\n\n");
 			
 		}catch(IOException e){
-			ConsoleUtils.displayError(e.toString());
+			ConsoleUtils.displayError(e);
 		}catch(TemplateException e){
-			ConsoleUtils.displayError(e.toString());
+			ConsoleUtils.displayError(e);
 		}		
 	}
 	

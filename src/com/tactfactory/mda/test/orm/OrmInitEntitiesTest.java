@@ -14,7 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.tactfactory.mda.Harmony;
-import com.tactfactory.mda.annotation.Column.Type;
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.meta.ClassMetadata;
