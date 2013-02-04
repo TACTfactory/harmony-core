@@ -166,7 +166,7 @@ public class WebGenerator extends BaseGenerator{
 				commandArgs.add("create-project");
 				commandArgs.add("symfony/framework-standard-edition"); // Project to install
 				commandArgs.add(this.symfonyAdapter.getWebPath()); // Installation folder
-				commandArgs.add("dev-master"); // Version
+				commandArgs.add("2.1.7"); // Version
 				break;
 				
 			case INSTALL_BUNDLES:
