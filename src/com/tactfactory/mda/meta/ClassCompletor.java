@@ -27,11 +27,11 @@ public class ClassCompletor {
 	
 	public void execute(){
 		for(ClassMetadata cm : metas.values()){
-			updateRelations(cm);
+			this.updateRelations(cm);
 		}
 		
-		for (ClassMetadata meta : newMetas.values()) {
-			this.metas.put(meta.name, meta);
+		for (ClassMetadata cm : newMetas.values()) {
+			this.metas.put(cm.name, cm);
 		}
 	}
 	
@@ -44,6 +44,8 @@ public class ClassCompletor {
 		for(FieldMetadata fm : cm.relations.values()){ // For each relation in the class
 			RelationMetadata rel = fm.relation;
 			String targetEntity = rel.entity_ref;
+			
+			this.checkRelationIntegrity(fm);
 			
 			if(rel.field_ref.isEmpty()){
 				ClassMetadata cm_ref = this.metas.get(targetEntity);
@@ -148,5 +150,12 @@ public class ClassCompletor {
 		id.name = name.toLowerCase()+"_id";
 		id.columnName = id.name;
 		return id;
+	}
+	
+	private void checkRelationIntegrity(FieldMetadata fm){
+		if(!this.metas.containsKey(fm.relation.entity_ref)){
+				ConsoleUtils.displayError("Entity "+fm.name+" refers to the non Entity class "+fm.relation.entity_ref);
+			
+		}
 	}
 }
