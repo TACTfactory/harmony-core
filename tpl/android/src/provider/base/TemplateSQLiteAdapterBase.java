@@ -223,7 +223,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends SQLiteAdapterBase<${
 	 */
 	public ${curr.name} getByID(<#list curr.ids as id>${m.javaType(id.type)} ${id.name}<#if (id_has_next)>,</#if></#list>) {
 	<#if (curr.ids?size>0)>
-		Cursor c = this.getSingleCursor(id);
+		Cursor c = this.getSingleCursor(<#list curr.ids as id>${id.name}<#if (id_has_next)>,</#if></#list>);
 		if(c.getCount()!=0)
 			c.moveToFirst();
 		${curr.name} result = this.cursorToItem(c);
