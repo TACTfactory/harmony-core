@@ -41,9 +41,14 @@ public class ClassCompletor {
 	 * @param cm The class owning the relations
 	 */
 	private void updateRelations(ClassMetadata cm){
+		ArrayList<FieldMetadata> newFields= new ArrayList<FieldMetadata>();
 		for(FieldMetadata fm : cm.relations.values()){ // For each relation in the class
+			boolean isRecursive = false;
 			RelationMetadata rel = fm.relation;
 			String targetEntity = rel.entity_ref;
+			if(targetEntity.equals(cm.name)){
+				isRecursive = true;
+			}
 			
 			this.checkRelationIntegrity(fm);
 			
@@ -81,8 +86,12 @@ public class ClassCompletor {
 					new_field.relation.type = "ManyToOne";
 					new_field.relation.inversedBy = fm.name;
 					fm.relation.inversedBy = new_field.name;
-					entity_ref.fields.put(new_field.name, new_field);
-					entity_ref.relations.put(new_field.name, new_field);
+					if(isRecursive){
+						newFields.add(new_field);
+					}else{
+						entity_ref.fields.put(new_field.name, new_field);
+						entity_ref.relations.put(new_field.name, new_field);
+					}
 					rel.mappedBy = new_field.name;
 				}
 				
@@ -140,6 +149,11 @@ public class ClassCompletor {
 					relation.relation.inversedBy = fm.name;
 				}
 			}
+		}
+		// Add internal recursive relations
+		for(FieldMetadata newField : newFields){
+			cm.fields.put(newField.name, newField);
+			cm.relations.put(newField.name, newField);
 		}
 	}
 	

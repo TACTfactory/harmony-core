@@ -1,8 +1,16 @@
 <#assign curr = entities[current_entity] />
+<#function hasOnlyRecursiveRelations entity>
+	<#list entity.relations as relation>
+		<#if relation.relation.targetEntity!=entity.name> 
+			<#return false>
+		</#if>
+	</#list>
+	<#return true>
+</#function>
 <#function getZeroRelationsEntities>
 	<#assign ret = [] />
 	<#list entities?values as entity>
-		<#if (entity.fields?size!=0 && entity.relations?size==0)>
+		<#if (entity.fields?size!=0 && hasOnlyRecursiveRelations(entity))>
 			<#assign ret = ret + [entity.name]>
 		</#if>
 	</#list>

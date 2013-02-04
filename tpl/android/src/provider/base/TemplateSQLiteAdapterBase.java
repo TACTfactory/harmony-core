@@ -57,7 +57,7 @@ import ${project_namespace}.${project_name?cap_first}Application;
 <#if (curr.internal=="false")>
 import ${curr.namespace}.entity.${curr.name};
 </#if>
-<#assign import_array = [] />
+<#assign import_array = [curr.name] />
 <#list curr.relations as relation>
 	<#if !relation.internal>
 		<#if (!isInArray(import_array, relation.relation.targetEntity))>

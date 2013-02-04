@@ -69,7 +69,7 @@ import java.util.List;
 import android.util.Log;
 import android.content.Context;
 
-<#assign import_array = [] />
+<#assign import_array = [curr.name] />
 <#assign alreadyImportArrayList=false />
 <#list curr.relations as relation>
 	<#if (isRestEntity(relation.relation.targetEntity))>
