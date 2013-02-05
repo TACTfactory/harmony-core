@@ -14,6 +14,8 @@ import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.command.BaseCommand;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
+import com.tactfactory.mda.rest.parser.RestCompletor;
+import com.tactfactory.mda.rest.parser.RestParser;
 import com.tactfactory.mda.sync.parser.SyncCompletor;
 import com.tactfactory.mda.sync.parser.SyncParser;
 import com.tactfactory.mda.sync.template.SyncGenerator;
@@ -64,9 +66,11 @@ public class SyncCommand extends BaseCommand{
 	}
 	
 	public void generateMetas(){
+		this.registerParser(new RestParser());
 		this.registerParser(new SyncParser());
 		super.generateMetas();
 		new SyncCompletor();
+		new RestCompletor().generateApplicationRestMetadata(Harmony.metas);
 	}
 	
 	

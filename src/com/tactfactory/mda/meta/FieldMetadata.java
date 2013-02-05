@@ -116,6 +116,7 @@ public class FieldMetadata extends BaseMetadata {
 		model.put(TagConstant.SCHEMA, 		SqliteAdapter.generateStructure(this));
 		model.put(TagConstant.INTERNAL, 	this.internal);
 		model.put(TagConstant.IS_LOCALE, 	this.isLocale);
+		model.put(TagConstant.NULLABLE,		this.nullable);
 		
 		if(relation!=null){
 			model.put(TagConstant.RELATION, this.relation.toMap(adapter));

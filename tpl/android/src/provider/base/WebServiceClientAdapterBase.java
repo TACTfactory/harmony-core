@@ -6,9 +6,13 @@ import java.util.List;
 
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import com.tactfactory.mda.test.demact.data.RestClient.Verb;
 
 import ${data_namespace}.RestClient.Verb;
 import ${project_namespace}.R;
@@ -23,7 +27,8 @@ import android.widget.Toast;
 
 public abstract class WebServiceClientAdapterBase{
 	private static final String TAG = "WSClientAdapter";
-
+	protected static String REST_FORMAT = ".json"; //JSon RSS xml or empty (for html)
+	
 	private List<Header> headers = new ArrayList<Header>();
 	private RestClient restClient;
 	private Context context;
@@ -31,20 +36,22 @@ public abstract class WebServiceClientAdapterBase{
 	private int errorCode;
 	private String error;
 
+	
+
 	private String host;
 
 
 	public WebServiceClientAdapterBase(Context context){
-		if (${project_name?cap_first}Application.DEBUG){
-			host = this.context.getString(R.string.rest_url_dev);
-		} else {
-			host = this.context.getString(R.string.rest_url_prod);
-		}
 
 		this.headers.add(new BasicHeader("Content-Type","application/json"));
 		this.headers.add(new BasicHeader("Accept","application/json"));
 
 		this.context = context;
+		if (${project_name?cap_first}Application.DEBUG){
+			host = this.context.getString(R.string.rest_url_dev);
+		} else {
+			host = this.context.getString(R.string.rest_url_prod);
+		}
 		this.restClient = new RestClient(host);
 	}
 
@@ -145,5 +152,13 @@ public abstract class WebServiceClientAdapterBase{
 				response != null && 
 				!response.trim().equals("") && 
 				response.startsWith("{"));
+	}
+	
+	public DateTime syncTime() {
+		String uri = String.format(
+				"sync%s",
+				REST_FORMAT);
+		String response = this.invokeRequest(Verb.GET, uri , null).replace("\"", "");
+		return ISODateTimeFormat.dateTimeNoMillis().parseDateTime(response);
 	}
 }

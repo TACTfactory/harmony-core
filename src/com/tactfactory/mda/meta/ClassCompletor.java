@@ -74,6 +74,7 @@ public class ClassCompletor {
 					FieldMetadata new_field = new FieldMetadata(cm);
 					new_field.columnDefinition = "integer";
 					new_field.hidden = true;
+					new_field.nullable = fm.nullable;
 					new_field.internal = true;
 					new_field.name = cm.name+fm.name+"_Internal";
 					new_field.columnName = cm.name+"_"+fm.name+"_internal";

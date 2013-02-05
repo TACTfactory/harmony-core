@@ -87,7 +87,7 @@ public abstract class BaseGenerator {
 			
 			try {
 				// Debug Log
-				ConsoleUtils.displayDebug("Generate Source : " + generateFile.getPath()); 
+				ConsoleUtils.displayDebug("Append Source : " + generateFile.getPath()); 
 				
 				// Create
 				Template tpl = this.cfg.getTemplate(templatePath);

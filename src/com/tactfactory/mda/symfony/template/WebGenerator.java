@@ -33,16 +33,48 @@ public class WebGenerator extends BaseGenerator{
 	}
 	
 	public void generateEntities(){
+		String fullFilePath = this.symfonyAdapter.getWebBundleYmlEntitiesPath(this.projectName) + "EntityBase.orm.yml";
+		String fullTemplatePath = this.symfonyAdapter.getWebTemplateEntityPath().substring(1)+"EntityBase.orm.yml";
+		super.makeSource(fullTemplatePath, fullFilePath, false);
+		
+
+		
+		fullFilePath = this.symfonyAdapter.getWebEntitiesPath(this.projectName) + "EntityBase.php";
+		fullTemplatePath = this.symfonyAdapter.getWebTemplateEntityPath().substring(1)+"EntityBase.php";
+		super.makeSource(fullTemplatePath, fullFilePath, true);
+		
+		// Generate yml descriptor files
 		for(ClassMetadata cm : this.appMetas.entities.values()){
 			if(cm.options.containsKey("rest") && cm.fields.size()>0){
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
 				makeEntity(cm.name);
 			}
 		}		
+		
+		// Execute symfony command for entities generation
 		this.launchCommand(GENERATE_ENTITIES);
+
+		
+		// Add inheritance in php entities
+		for(ClassMetadata cm : this.appMetas.entities.values()){
+			if(cm.options.containsKey("rest") && cm.fields.size()>0){
+				String content = " extends EntityBase";
+				String after = "class "+cm.name;
+				String filePath = this.symfonyAdapter.getWebEntitiesPath(this.projectName) + cm.name + ".php";
+				this.addAfter(content, after, filePath);
+			}
+		}
 	}
 	
 	public void generateWebControllers(){
+		String fullFilePath = this.symfonyAdapter.getWebControllerPath(this.projectName)+"RestDefaultController.php";
+		String fullTemplatePath = this.symfonyAdapter.getWebTemplateControllerPath().substring(1)+"RestDefaultController.php";
+		super.makeSource(fullTemplatePath, fullFilePath, true);
+		
+		String routingPath = this.symfonyAdapter.getWebPath()+"app/config/routing.yml";
+		String content = this.appMetas.name+"_rest_default:\n    type:     rest\n    resource: "+this.projectName+"\\ApiBundle\\Controller\\RestDefaultController\n\n";
+		this.addToFile(content, routingPath);
+		
 		for(ClassMetadata cm : this.appMetas.entities.values()){
 			if(cm.options.containsKey("rest") && cm.fields.size()>0){
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
@@ -143,9 +175,12 @@ public class WebGenerator extends BaseGenerator{
 	protected void addToFile(String content, String filePath){
 		try{
 			File f = new File(filePath);
-			BufferedWriter bw = new BufferedWriter(new FileWriter(f, true));
-			bw.write(content);
-			bw.close();
+			StringBuffer sb = FileUtils.FileToStringBuffer(f);
+			if(sb.indexOf(content)==-1){
+				BufferedWriter bw = new BufferedWriter(new FileWriter(f, true));
+				bw.write(content);
+				bw.close();
+			}
 		}catch(IOException e){
 			ConsoleUtils.displayError(e.getMessage());
 		}

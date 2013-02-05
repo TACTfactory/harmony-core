@@ -43,6 +43,7 @@ public class SyncParser extends BaseParser{
 	@Override
 	public void visitClassAnnotation(ClassMetadata cm, AnnotationExpr fieldAnnot) {
 		if(fieldAnnot.getName().toString().equals(ANNOT_SYNC)){
+			// Parse Sync arguments
 			SyncMetadata sm = new SyncMetadata();
 			if (fieldAnnot instanceof NormalAnnotationExpr) {
 				NormalAnnotationExpr norm = (NormalAnnotationExpr)fieldAnnot;
@@ -85,8 +86,35 @@ public class SyncParser extends BaseParser{
 				}
 			}
 			cm.options.put(SYNC, sm);
+			
+			// Update fields of entity (fields of extends base)
+			FieldMetadata serverId = new FieldMetadata(cm);
+			serverId.name = "serverId";
+			serverId.columnName = "serverId";
+			serverId.type = "integer";
+			serverId.columnDefinition = "integer";
+			serverId.hidden = true;
+			serverId.nullable = true;
+			cm.fields.put(serverId.name, serverId);
+			
+			FieldMetadata sync_dtag = new FieldMetadata(cm);
+			sync_dtag.name = "sync_dtag";
+			sync_dtag.columnName = "sync_dtag";
+			sync_dtag.type = "boolean";
+			sync_dtag.columnDefinition = "boolean";
+			sync_dtag.hidden = true;
+			sync_dtag.nullable = false;
+			cm.fields.put(sync_dtag.name, sync_dtag);
+			
+			FieldMetadata sync_udate = new FieldMetadata(cm);
+			sync_udate.name = "sync_uDate";
+			sync_udate.columnName = "sync_uDate";
+			sync_udate.type = "datetime";
+			sync_udate.columnDefinition = "datetime";
+			sync_udate.hidden = true;
+			sync_udate.nullable = true;
+			cm.fields.put(sync_udate.name, sync_udate);
 		}
-		
 	}
 
 	@Override

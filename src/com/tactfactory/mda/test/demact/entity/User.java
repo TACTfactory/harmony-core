@@ -8,8 +8,6 @@
  */
 package com.tactfactory.mda.test.demact.entity;
 
-import java.util.ArrayList;
-
 import org.joda.time.DateTime;
 
 import com.tactfactory.mda.annotation.*;
@@ -49,9 +47,6 @@ public class User extends Object implements Cloneable {
 	
 	@Column(type=Type.DATE)
     protected DateTime birthdate;
-	
-	@OneToMany
-	private ArrayList<User> friends;
 
 
 	public User() {

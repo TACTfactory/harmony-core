@@ -130,6 +130,10 @@ public abstract class BaseAdapter {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getService() );
 	}
 	
+	public final String getTemplateSourceEntityBasePath() {
+		return String.format("%s/%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getModel(), "base" );
+	}
+	
 	public final String getTemplateSourceProviderPath() {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getProvider() );
 	}

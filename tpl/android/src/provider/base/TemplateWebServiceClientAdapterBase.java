@@ -25,14 +25,44 @@
 		</#if>
 	</#if>
 </#function>
+<#function extract field>
+	<#if (!field.internal)>
+		<#if (!field.relation??)>
+			<#if (field.type=="date"||field.type=="datetime"||field.type=="time")>
+		DateTimeFormatter ${field.name?uncap_first}Formatter = ${getFormatter(field.type)};
+		${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}Formatter.parseDateTime(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?uncap_first}.get${field.name?cap_first}().toString())));	
+			<#elseif (field.type=="boolean")>
+		${curr.name?uncap_first}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?uncap_first}.is${field.name?cap_first}()));	
+			<#else>
+		${curr.name?uncap_first}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?uncap_first}.get${field.name?cap_first}()));	
+			</#if>
+		<#else>
+			<#if (isRestEntity(field.relation.targetEntity))>
+				<#if (field.relation.type=="OneToMany" || field.relation.type=="ManyToMany")>
+		ArrayList<${field.relation.targetEntity}> ${field.name?uncap_first} = new ArrayList<${field.relation.targetEntity}>();
+		try{
+		${field.relation.targetEntity}WebServiceClientAdapter.extract${field.relation.targetEntity}s(json.opt${typeToJsonType(field)}(${alias(field.name)}), ${field.name?uncap_first});
+		${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first});
+		}catch(JSONException e){
+		Log.e(TAG, e.getMessage());
+		}
+				<#else>
+		${field.relation.targetEntity} ${field.name?uncap_first} = new ${field.relation.targetEntity}();
+		${field.relation.targetEntity}WebServiceClientAdapter.extract(json.opt${typeToJsonType(field)}(${alias(field.name)}), ${field.name?uncap_first});
+		${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first});
+				</#if>
+			</#if>
+		</#if>
+	</#if>
+</#function>
 <#function getFormatter datetype>
 	<#assign ret="ISODateTimeFormat." />
 	<#if (datetype?lower_case=="datetime")>
-		<#assign ret=ret+"dateTime()" />
+		<#assign ret=ret+"dateTimeNoMillis()" />
 	<#elseif (datetype?lower_case=="time")>
-		<#assign ret=ret+"dateTime()" />
+		<#assign ret=ret+"dateTimeNoMillis()" />
 	<#elseif (datetype?lower_case=="date")>
-		<#assign ret=ret+"dateTime()" />
+		<#assign ret=ret+"dateTimeNoMillis()" />
 	</#if>
 	<#return ret />
 </#function>
@@ -53,18 +83,22 @@ package ${curr.data_namespace}.base;
 <#assign importDate = false />
 <#list curr.fields as field>
 	<#if !importDate && (field.type=="date" || field.type=="time" || field.type=="datetime")>
-import org.joda.time.format.ISODateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 		<#assign importDate = true />
 	</#if>
 </#list>
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
+
 import ${data_namespace}.*;
 import ${curr.namespace}.entity.${curr.name};
+import ${curr.namespace}.entity.base.EntityBase;
 import ${data_namespace}.RestClient.Verb;
 
 import org.json.*;
 
 import java.util.List;
+import java.util.ArrayList;
 
 import android.util.Log;
 import android.content.Context;
@@ -92,7 +126,6 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
  */
 public abstract class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAdapterBase{
 	private static final String TAG = "${curr.name}WSClientAdapter";
-	private static String REST_FORMAT = ".json"; //JSon RSS xml or empty (for html)
 
 	private static final String ${alias(curr.name)} = "${curr.name}";
 	<#list curr.fields as field>
@@ -377,7 +410,37 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 		
 		return result;
 	}
-
+	
+	<#if (curr.options.sync??)>
+	public static int extract${curr.name?cap_first}s(JSONObject json, String paramName, List<EntityBase> ${curr.name?uncap_first}s) throws JSONException{
+		JSONArray itemArray = json.optJSONArray(paramName);
+		
+		int result = -1;
+		
+		if (itemArray != null) {
+			int count = itemArray.length();			
+			
+			for (int i = 0 ; i < count; i++) {
+				JSONObject json${curr.name?cap_first} = itemArray.getJSONObject(i);
+				
+				${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
+				if (extract(json${curr.name?cap_first}, ${curr.name?uncap_first})){
+					synchronized (${curr.name?uncap_first}s) {
+						${curr.name?uncap_first}s.add(${curr.name?uncap_first});
+					}
+				}
+			}
+		}
+		
+		if (!json.isNull("Meta")){
+			JSONObject meta = json.optJSONObject("Meta");
+			result = meta.optInt("nbt",0);
+		}
+		
+		return result;
+	}
+	</#if>
+	
 	/**
 	 * Convert a ${curr.name} to a JSONObject	
 	 * @param ${curr.name?uncap_first} The ${curr.name} to convert
@@ -428,4 +491,70 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 		
 		return itemArray;
 	}
+	
+	<#if (curr.options.sync??)>
+	public void sync(DateTime dateLast, DateTime dateStart, 
+			ArrayList<EntityBase> deleted, ArrayList<EntityBase> inserted, 
+			ArrayList<EntityBase> updated, ArrayList<EntityBase> merged) {
+		
+		
+		String uri = String.format(
+				"${curr.name?uncap_first}",
+				dateLast.toString(ISODateTimeFormat.dateTime().withZoneUTC()),
+				dateStart.toString(ISODateTimeFormat.dateTime().withZoneUTC()),
+				REST_FORMAT);
+		
+		JSONObject json = new JSONObject();
+		this.addJsonDate(json, "lastSyncDate", dateLast);
+		this.addJsonDate(json, "startSyncDate", dateStart);
+		this.addJson${curr.name?cap_first}s(json, "${curr.name?cap_first}s-d", deleted);
+		this.addJson${curr.name?cap_first}s(json, "${curr.name?cap_first}s-i", inserted);
+		this.addJson${curr.name?cap_first}s(json, "${curr.name?cap_first}s-u", updated);
+	    //this.addJsonUsers(json, "Users-m", merged);
+		
+		String response = this.invokeRequest(Verb.POST, uri , json);
+		
+		inserted.clear();
+		updated.clear();
+		merged.clear();
+		
+		try{
+			JSONObject jsonResp = new JSONObject(response);
+			${curr.name?cap_first}WebServiceClientAdapter.extract${curr.name?cap_first}s(jsonResp, "${curr.name?cap_first}s-i", inserted);
+			${curr.name?cap_first}WebServiceClientAdapter.extract${curr.name?cap_first}s(jsonResp, "${curr.name?cap_first}s-u", updated);
+			${curr.name?cap_first}WebServiceClientAdapter.extract${curr.name?cap_first}s(jsonResp, "${curr.name?cap_first}s-m", merged);
+		}catch(JSONException e){
+			Log.e(TAG, e.getMessage());
+		}
+		
+	}
+	
+	private JSONObject addJsonDate(JSONObject js${curr.name?cap_first}s, String paramName, DateTime date) {
+		try {
+			js${curr.name?cap_first}s.put(paramName, date.toString());
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return js${curr.name?cap_first}s;
+	}
+	
+	private JSONObject addJson${curr.name?cap_first}s(JSONObject js${curr.name?cap_first}s, String paramName, ArrayList<EntityBase> entities) {		
+		ArrayList<${curr.name?cap_first}> ${curr.name?uncap_first}s = new ArrayList<${curr.name?cap_first}>();
+		for (EntityBase entity : entities) {
+			${curr.name?uncap_first}s.add((${curr.name?cap_first})entity);
+		}
+		JSONArray jsattr = ${curr.name?cap_first}WebServiceClientAdapter.${curr.name?uncap_first}sToJson(${curr.name?uncap_first}s);
+
+		try {
+			js${curr.name?cap_first}s.put(paramName, jsattr);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return js${curr.name?cap_first}s;
+	}
+	</#if>
 }

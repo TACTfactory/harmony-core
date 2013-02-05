@@ -8,7 +8,7 @@ public class SymfonyAdapter{
 	protected String config = "config";
 	protected String bundle = "Bundle";
 	protected String controller = "Controller";
-	protected String entities = "Entities";
+	protected String entities = "Entity";
 	protected String source = "src";
 	
 	public final String getWebTemplateEntityPath() {
@@ -25,10 +25,6 @@ public class SymfonyAdapter{
 	
 	public final String getWebTemplatePath() {
 		return String.format("%s/%s/", Harmony.pathTemplate, this.getWebRoot());
-	}
-	
-	public final String getWebEntityPath() {
-		return String.format("%s%s/%s/", this.getWebPath(), this.getBundle(), this.getEntities());
 	}
 	
 	public final String getWebControllerPath(String projectName) {
@@ -50,6 +46,10 @@ public class SymfonyAdapter{
 	public final String getWebBundleConfigPath(String projectName) {
 		return String.format("%s%s/%s/", this.getWebBundlePath(projectName), "Resources", this.getConfig());
 	}
+	
+	public String getWebEntitiesPath(String projectName) {
+		return String.format("%s%s/", this.getWebBundlePath(projectName), this.getEntities());
+	}	
 	
 	public final String getWebSourcePath() {
 		return String.format("%s%s/", this.getWebPath(), this.getSource());
@@ -117,7 +117,7 @@ public class SymfonyAdapter{
 
 	public void setSource(String source) {
 		this.source = source;
-	}	
+	}
 
 
 }

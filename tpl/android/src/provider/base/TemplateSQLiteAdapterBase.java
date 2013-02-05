@@ -69,6 +69,7 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
 <#if hasDate || hasTime || hasDateTime>
 import ${curr.namespace}.harmony.util.DateUtils;
 import org.joda.time.DateTime;
+
 </#if>
 
 /** ${curr.name} adapter database abstract class <br/>
@@ -179,33 +180,37 @@ public abstract class ${curr.name}SQLiteAdapterBase extends SQLiteAdapterBase<${
 		${curr.name} result = null;
 
 		if (c.getCount() != 0) {
-			result = new ${curr.name}();			
-
+			result = new ${curr.name}();
+			
+			int index;
 	<#list curr.fields as field>
-		<#if (!field.internal)>
+		<#if (!field.internal && !(field.relation?? && (field.relation.type=="ManyToMany" || field.relation.type=="OneToMany")))>
+		
+			index = c.getColumnIndexOrThrow(${alias(field.name)});
+			<#if (field.nullable?? && field.nullable)>
+			if(!c.isNull(index))
+			</#if>
 			<#if (!field.relation??)>
 				<#if ((field.type == "date") || (field.type == "datetime") || (field.type == "time"))>
-				
 			try {
 				result.set${field.name?cap_first}(new DateTime(
-						DateUtils.formatISOStringToDateTime(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case})) )));
+						DateUtils.formatISOStringToDateTime(c.getString(index) )));
 			} catch (IllegalArgumentException e) {
 				Log.e(TAG, e.getMessage());
 				result.set${field.name?cap_first}(new DateTime());
 			}
-
 				<#elseif (field.type == "boolean")>
-			result.set${field.name?cap_first}  (c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ).equals("true"));
+			result.set${field.name?cap_first}  (c.getString(index).equals("true"));
 				<#elseif (field.type == "int" || field.type == "integer" || field.type == "ean" || field.type == "zipcode")>
-			result.set${field.name?cap_first}(c.getInt( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
+			result.set${field.name?cap_first}(c.getInt(index));
 				<#elseif (field.type == "float")>
-			result.set${field.name?cap_first}(c.getFloat( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
+			result.set${field.name?cap_first}(c.getFloat(index));
 				<#else>
-			result.set${field.name?cap_first}(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) )); 
+			result.set${field.name?cap_first}(c.getString(index)); 
 				</#if>
 			<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 			${field.type} ${field.name} = new ${field.type}();
-			${field.name}.setId( Integer.valueOf(c.getString( c.getColumnIndexOrThrow(${alias(field.name)}) )) );
+			${field.name}.setId(c.getInt(index)) ;
 			result.set${field.name?cap_first}(${field.name});	
 			</#if>
 		</#if>
@@ -251,6 +256,19 @@ public abstract class ${curr.name}SQLiteAdapterBase extends SQLiteAdapterBase<${
 		throw new UnsupportedOperationException("Method not implemented yet.");
 	</#if>
 	}
+	
+	<#if curr.options.sync??>
+	public ${curr.name?cap_first} getByServerID(Integer serverId){
+		Cursor c = this.query(COLS, COL_SERVERID+"=? ", new String[]{String.valueOf(serverId)}, null, null, null);
+		if(c.getCount()!=0)
+			c.moveToFirst();
+		${curr.name?cap_first} result = this.cursorToItem(c);
+		c.close();
+		
+		return result;
+	}
+	</#if>
+	
 	
 	<#if (curr.relations??)>
 		<#list curr.relations as relation>

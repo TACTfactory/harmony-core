@@ -13,7 +13,7 @@ ${project_name?cap_first}\ApiBundle\Entity\${curr.name}:
     repositoryClass: ${project_name?cap_first}\ApiBundle\Entity\${curr.name}Repository
     fields:
 <#list curr.fields as field>
-	<#if !field.relation?? && !field.internal>
+	<#if !field.relation?? && !field.internal && field.name!="id">
         ${field.name}:
             type: ${typeConvert(field.type)}
 		<#if field.id>
