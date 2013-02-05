@@ -135,6 +135,7 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 			</#if>
 		</#if>
 	</#list>
+	private static final String JSON_MOBILE_ID = "mobile_id";
 
 	public ${curr.name}WebServiceClientAdapterBase(Context context){
 		super(context);
@@ -342,13 +343,22 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 			<#list curr.fields as field>
 				<#if (!field.internal)>
 					<#if (!field.relation??)>
-						<#if (field.type=="date"||field.type=="datetime"||field.type=="time")>
+						<#if (field.name?lower_case=="id")>
+			user.setId(json.optInt(JSON_MOBILE_ID, 0));			
+						<#elseif (field.name=="serverId")>
+			int server_id = json.optInt(JSON_ID);
+			
+			if (server_id != 0)
+				user.setServerId(server_id);	
+						<#else>
+							<#if (field.type=="date"||field.type=="datetime"||field.type=="time")>
 			DateTimeFormatter ${field.name?uncap_first}Formatter = ${getFormatter(field.type)};
 			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}Formatter.parseDateTime(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?uncap_first}.get${field.name?cap_first}().toString())));	
-						<#elseif (field.type=="boolean")>
+							<#elseif (field.type=="boolean")>
 			${curr.name?uncap_first}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?uncap_first}.is${field.name?cap_first}()));	
-						<#else>
+							<#else>
 			${curr.name?uncap_first}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?uncap_first}.get${field.name?cap_first}()));	
+							</#if>
 						</#if>
 					<#else>
 						<#if (isRestEntity(field.relation.targetEntity))>
