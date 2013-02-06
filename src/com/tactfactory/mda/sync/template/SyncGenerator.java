@@ -34,16 +34,24 @@ public class SyncGenerator extends BaseGenerator {
 	}
 	
 	protected void generateSync(){
+		// EntityBase.java
 		String fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.", "/") + "/entity/base/EntityBase.java";
 		String fullTemplatePath = this.adapter.getTemplateSourceEntityBasePath().substring(1) + "EntityBase.java";
 		
 		super.makeSource(fullTemplatePath, fullFilePath, true);
 		
-		// Make Abstract Adapter Base general for all entities
+		// TemplateSyncService.java
 		this.makeSource(
 				"TemplateSyncService.java", 
 				String.format("%sSyncService.java", CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name)),
 				true);
+		
+		// SyncClientAdapterBase
+		fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + this.adapter.getData() + "/" + "base/SyncClientAdapterBase.java";
+		fullTemplatePath = this.adapter.getTemplateSourceProviderPath().substring(1) + "base/SyncClientAdapterBase.java";
+		
+		super.makeSource(fullTemplatePath, fullFilePath, true);
+		
 		
 		for(ClassMetadata cm : this.appMetas.entities.values()){
 			if(cm.options.containsKey("sync")){

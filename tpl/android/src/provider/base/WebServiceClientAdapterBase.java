@@ -25,7 +25,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-public abstract class WebServiceClientAdapterBase{
+public abstract class WebServiceClientAdapterBase<T>{
 	private static final String TAG = "WSClientAdapter";
 	protected static String REST_FORMAT = ".json"; //JSon RSS xml or empty (for html)
 	
@@ -154,6 +154,7 @@ public abstract class WebServiceClientAdapterBase{
 				response.startsWith("{"));
 	}
 	
+	
 	public DateTime syncTime() {
 		String uri = String.format(
 				"sync%s",
@@ -161,4 +162,129 @@ public abstract class WebServiceClientAdapterBase{
 		String response = this.invokeRequest(Verb.GET, uri , null).replace("\"", "");
 		return ISODateTimeFormat.dateTimeNoMillis().parseDateTime(response);
 	}
+	
+	
+	/**
+	 * Convert a <T> to a JSONObject	
+	 * @param item The <T> to convert
+	 * @return The converted <T>
+	 */
+	public abstract JSONObject itemToJson(T item);
+	
+	/**
+	 * Convert a list of <T> to a JSONArray	
+	 * @param users The array of <T> to convert
+	 * @return The array of converted <T>
+	 */
+	public JSONArray itemsToJson(List<T> items){
+		JSONArray itemArray = new JSONArray();
+		
+		for (int i = 0 ; i < items.size(); i++) {
+			JSONObject jsonItems = this.itemToJson(items.get(i));
+			itemArray.put(jsonItems);
+		}
+		
+		return itemArray;
+	}
+	
+	/**
+	 * Extract a <T> from a JSONObject describing a <T>
+	 * @param json The JSONObject describing the <T>
+	 * @param item The returned <T>
+	 * @return true if a <T> was found. false if not
+	 */
+	public abstract T extract(JSONObject json);
+	
+	/**
+	 * Extract a list of <T> from a JSONObject describing an array of <T> given the array name
+	 * @param json The JSONObject describing the array of <T>
+	 * @param items The returned list of <T>
+	 * @param paramName The name of the array
+	 * @return The number of <T> found in the JSON
+	 */
+	public int extractItems(JSONObject json, String paramName, List<T> items) throws JSONException{
+		JSONArray itemArray = json.optJSONArray(paramName);
+		
+		int result = -1;
+		
+		if (itemArray != null) {
+			int count = itemArray.length();			
+			
+			for (int i = 0 ; i < count; i++) {
+				JSONObject jsonItem = itemArray.getJSONObject(i);
+				
+				T item = extract(jsonItem);
+				if (item!=null){
+					synchronized (items) {
+						items.add(item);
+					}
+				}
+			}
+		}
+		
+		if (!json.isNull("Meta")){
+			JSONObject meta = json.optJSONObject("Meta");
+			result = meta.optInt("nbt",0);
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Delete a <T>. 
+	 * @param item : The <T> to delete (only the id is necessary)
+	 * @return -1 if an error has occurred. 0 if not.
+	 */
+	public abstract int delete(T item);
+	
+	/**
+	 * Update a <T>.
+	 * @param item : The <T> to update
+	 * @return -1 if an error has occurred. 0 if not.
+	 */
+	public abstract int update(T item);
+	
+	/**
+	 * Retrieve all the <T> in the given list.
+	 * @param items : The list in which the <T> will be returned
+	 * @return The number of <T> returned
+	 */
+	public abstract int getAll(List<T> items);
+
+	/**
+	 * Retrieve one <T>.
+	 * @param item : The <T> to retrieve (set the ID)
+	 * @return -1 if an error has occurred. 0 if not.
+	 */ 
+	public abstract int get(T item);
+	
+	
+	/**
+	 * Insert the User. Uses the route : user-uri
+	 * @param user : The User to insert
+	 * @return -1 if an error has occurred. 0 if not.
+	 */
+	public int insert(T item){
+		int result = -1;
+		String response = this.invokeRequest(
+					Verb.POST,
+					String.format(
+						"%s%s",
+						this.getUri(),
+						REST_FORMAT),
+					itemToJson(item));
+		if (this.isValidResponse(response) && this.isValidRequest()) {
+			result = 0;
+		}
+
+		return result;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	public abstract String getUri();
+	
 }

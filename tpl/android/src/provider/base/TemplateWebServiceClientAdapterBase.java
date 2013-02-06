@@ -122,13 +122,18 @@ import java.util.ArrayList;
 	</#if>
 </#if>
 
+<#if (curr.options.sync??)>
+	<#assign extends="SyncClientAdapterBase<${curr.name?cap_first}>" />
+<#else>
+	<#assign extends="WebServiceClientAdapterBase<${curr.name?cap_first}>" />
+</#if>
 /**
  * 
  * b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
  * You should edit ${curr.name}WebServiceClientAdapter class instead of this one or you will lose all your modifications.</i></b>
  *
  */
-public abstract class ${curr.name}WebServiceClientAdapterBase extends WebServiceClientAdapterBase{
+public abstract class ${curr.name}WebServiceClientAdapterBase extends ${extends}{
 	private static final String TAG = "${curr.name}WSClientAdapter";
 
 	private static final String ${alias(curr.name)} = "${curr.name}";
@@ -163,7 +168,7 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 		if (this.isValidResponse(response) && this.isValidRequest()) {
 			try {
 				JSONObject json = new JSONObject(response);
-				result = ${curr.name}WebServiceClientAdapter.extract${curr.name?cap_first}s(json, ${curr.name?uncap_first}s);
+				result = extractItems(json, "${curr.name?cap_first}s", ${curr.name?uncap_first}s);
 			} catch (JSONException e) {
 				Log.e(TAG, e.getMessage());
 				${curr.name?uncap_first}s = null;
@@ -190,7 +195,7 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 		if (this.isValidResponse(response) && this.isValidRequest()) {
 			try {
 				JSONObject json = new JSONObject(response);
-				${curr.name}WebServiceClientAdapter.extract(json, ${curr.name?uncap_first});
+				${curr.name?uncap_first} = extract(json);
 				result = 0;
 			} catch (JSONException e) {
 				Log.e(TAG, e.getMessage());
@@ -201,24 +206,8 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 		return result;
 	}
 
-	/**
-	 * Insert the ${curr.name}. Uses the route : ${curr.options.rest.uri?lower_case}
-	 * @param ${curr.name?uncap_first} : The ${curr.name} to insert
-	 * @return -1 if an error has occurred. 0 if not.
-	 */
-	public int insert(${curr.name} ${curr.name?uncap_first}){
-		int result = -1;
-		String response = this.invokeRequest(
-					Verb.POST,
-					String.format(
-						"${curr.options.rest.uri?lower_case}%s",
-						REST_FORMAT),
-					${curr.name}WebServiceClientAdapter.${curr.name?uncap_first}ToJson(${curr.name?uncap_first}));
-		if (this.isValidResponse(response) && this.isValidRequest()) {
-			result = 0;
-		}
-
-		return result;
+	public String getUri(){
+		return "user-uri";
 	}
 
 	/**
@@ -234,7 +223,7 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 						"${curr.options.rest.uri?lower_case}/%s%s",
 						${curr.name?uncap_first}.getId(),
 						REST_FORMAT),
-					${curr.name}WebServiceClientAdapter.${curr.name?uncap_first}ToJson(${curr.name?uncap_first}));
+					itemToJson(${curr.name?uncap_first}));
 		if (this.isValidResponse(response) && this.isValidRequest()) {
 			result = 0;
 		}
@@ -287,7 +276,7 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 		if (this.isValidResponse(response) && this.isValidRequest()) {
 			try {
 				JSONObject json = new JSONObject(response);
-				result = ${curr.name}WebServiceClientAdapter.extract${curr.name}s(json, ${curr.name?uncap_first}s);
+				result = this.extractItems(json, "${curr.name?cap_first}s", ${curr.name?uncap_first}s);
 
 			} catch (JSONException e) {
 				Log.e(TAG, e.getMessage());
@@ -340,8 +329,8 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 	 * @param ${curr.name?uncap_first} The returned ${curr.name}
 	 * @return true if a ${curr.name} was found. false if not
 	 */
-	public static boolean extract(JSONObject json, ${curr.name} ${curr.name?uncap_first}){
-		boolean result = false;
+	public Comment extract(JSONObject json){
+		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
 		
 		int id = json.optInt("id", 0);
 
@@ -389,82 +378,17 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 				</#if>
 			</#list>
 			
-			result = true;
 		}
 		
-		return result;
+		return ${curr.name?uncap_first};
 	}
-
-	/**
-	 * Extract a list of ${curr.name}s from a JSONObject describing an array of ${curr.name}s
-	 * @param json The JSONObject describing the array of ${curr.name}s
-	 * @param ${curr.name?uncap_first}s The returned list of ${curr.name}s
-	 * @return The number of ${curr.name}s found in the JSON
-	 */
-	public static int extract${curr.name}s(JSONObject json, List<${curr.name}> ${curr.name?uncap_first}s) throws JSONException{
-		JSONArray itemArray = json.optJSONArray(${alias(curr.name)});
-		
-		int result = -1;
-		
-		if (itemArray != null) {
-			int count = itemArray.length();			
-			
-			for (int i = 0 ; i < count; i++) {
-				JSONObject json${curr.name} = itemArray.getJSONObject(i);
-				
-				${curr.name} ${curr.name?uncap_first} = new ${curr.name}();
-				if (extract(json${curr.name}, ${curr.name?uncap_first})){
-					synchronized (${curr.name?uncap_first}s) {
-						${curr.name?uncap_first}s.add(${curr.name?uncap_first});
-					}
-				}
-			}
-		}
-		
-		if (!json.isNull("Meta")){
-			JSONObject meta = json.optJSONObject("Meta");
-			result = meta.optInt("nbt",0);
-		}
-		
-		return result;
-	}
-	
-	<#if (curr.options.sync??)>
-	public static int extract${curr.name?cap_first}s(JSONObject json, String paramName, List<EntityBase> ${curr.name?uncap_first}s) throws JSONException{
-		JSONArray itemArray = json.optJSONArray(paramName);
-		
-		int result = -1;
-		
-		if (itemArray != null) {
-			int count = itemArray.length();			
-			
-			for (int i = 0 ; i < count; i++) {
-				JSONObject json${curr.name?cap_first} = itemArray.getJSONObject(i);
-				
-				${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
-				if (extract(json${curr.name?cap_first}, ${curr.name?uncap_first})){
-					synchronized (${curr.name?uncap_first}s) {
-						${curr.name?uncap_first}s.add(${curr.name?uncap_first});
-					}
-				}
-			}
-		}
-		
-		if (!json.isNull("Meta")){
-			JSONObject meta = json.optJSONObject("Meta");
-			result = meta.optInt("nbt",0);
-		}
-		
-		return result;
-	}
-	</#if>
 	
 	/**
 	 * Convert a ${curr.name} to a JSONObject	
 	 * @param ${curr.name?uncap_first} The ${curr.name} to convert
 	 * @return The converted ${curr.name}
 	 */
-	public static JSONObject ${curr.name?uncap_first}ToJson(${curr.name} ${curr.name?uncap_first}){
+	public JSONObject itemToJson(${curr.name} ${curr.name?uncap_first}){
 		JSONObject params = new JSONObject();
 		try{
 			<#list curr.fields as field>
@@ -498,85 +422,5 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 		return params;
 	}
 
-	/**
-	 * Convert a list of ${curr.name}s to a JSONArray	
-	 * @param ${curr.name?uncap_first}s The array of ${curr.name}s to convert
-	 * @return The array of converted ${curr.name}s
-	 */
-	public static JSONArray ${curr.name?uncap_first}sToJson(List<${curr.name}> ${curr.name?uncap_first}s){
-		JSONArray itemArray = new JSONArray();
-		
-		for (int i = 0 ; i < ${curr.name?uncap_first}s.size(); i++) {
-			JSONObject json${curr.name} = ${curr.name?uncap_first}ToJson(${curr.name?uncap_first}s.get(i));
-			itemArray.put(json${curr.name});
-		}
-		
-		return itemArray;
-	}
-	
-	<#if (curr.options.sync??)>
-	public void sync(DateTime dateLast, DateTime dateStart, 
-			ArrayList<EntityBase> deleted, ArrayList<EntityBase> inserted, 
-			ArrayList<EntityBase> updated, ArrayList<EntityBase> merged) {
-		
-		
-		String uri = String.format(
-				"${curr.name?uncap_first}",
-				dateLast.toString(ISODateTimeFormat.dateTime().withZoneUTC()),
-				dateStart.toString(ISODateTimeFormat.dateTime().withZoneUTC()),
-				REST_FORMAT);
-		
-		JSONObject json = new JSONObject();
-		this.addJsonDate(json, "lastSyncDate", dateLast);
-		this.addJsonDate(json, "startSyncDate", dateStart);
-		this.addJson${curr.name?cap_first}s(json, "${curr.name?cap_first}s-d", deleted);
-		this.addJson${curr.name?cap_first}s(json, "${curr.name?cap_first}s-i", inserted);
-		this.addJson${curr.name?cap_first}s(json, "${curr.name?cap_first}s-u", updated);
-	    //this.addJsonUsers(json, "Users-m", merged);
-		
-		String response = this.invokeRequest(Verb.POST, uri , json);
-		
-		inserted.clear();
-		updated.clear();
-		merged.clear();
-		
-		try{
-			JSONObject jsonResp = new JSONObject(response);
-			${curr.name?cap_first}WebServiceClientAdapter.extract${curr.name?cap_first}s(jsonResp, "${curr.name?cap_first}s-i", inserted);
-			${curr.name?cap_first}WebServiceClientAdapter.extract${curr.name?cap_first}s(jsonResp, "${curr.name?cap_first}s-u", updated);
-			${curr.name?cap_first}WebServiceClientAdapter.extract${curr.name?cap_first}s(jsonResp, "${curr.name?cap_first}s-m", merged);
-		}catch(JSONException e){
-			Log.e(TAG, e.getMessage());
-		}
-		
-	}
-	
-	private JSONObject addJsonDate(JSONObject js${curr.name?cap_first}s, String paramName, DateTime date) {
-		try {
-			js${curr.name?cap_first}s.put(paramName, date.toString());
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return js${curr.name?cap_first}s;
-	}
-	
-	private JSONObject addJson${curr.name?cap_first}s(JSONObject js${curr.name?cap_first}s, String paramName, ArrayList<EntityBase> entities) {		
-		ArrayList<${curr.name?cap_first}> ${curr.name?uncap_first}s = new ArrayList<${curr.name?cap_first}>();
-		for (EntityBase entity : entities) {
-			${curr.name?uncap_first}s.add((${curr.name?cap_first})entity);
-		}
-		JSONArray jsattr = ${curr.name?cap_first}WebServiceClientAdapter.${curr.name?uncap_first}sToJson(${curr.name?uncap_first}s);
 
-		try {
-			js${curr.name?cap_first}s.put(paramName, jsattr);
-		} catch (JSONException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		return js${curr.name?cap_first}s;
-	}
-	</#if>
 }
