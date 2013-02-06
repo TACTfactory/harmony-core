@@ -23,7 +23,7 @@ import com.tactfactory.mda.sync.annotation.Sync.Mode;
 @Entity
 @Rest(security=Security.SESSION)
 @Sync(level=Level.SESSION, mode=Mode.REAL_TIME, priority=Sync.Priority.LOW)
-public class Comment extends Object {
+public class Comment {
 	
 	@Id
     @Column(type=Type.INTEGER, hidden=true)

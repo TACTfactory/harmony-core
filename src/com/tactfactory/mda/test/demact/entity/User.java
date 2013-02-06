@@ -21,7 +21,7 @@ import com.tactfactory.mda.sync.annotation.Sync.Mode;
 @Entity
 @Rest(security=Rest.Security.SESSION, uri="user-uri")
 @Sync(mode=Mode.REAL_TIME)
-public class User extends Object implements Cloneable {
+public class User implements Cloneable {
 	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 7032873279928549706L;
 

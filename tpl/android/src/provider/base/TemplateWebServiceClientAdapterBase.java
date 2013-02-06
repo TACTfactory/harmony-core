@@ -92,13 +92,11 @@ import org.joda.time.format.ISODateTimeFormat;
 
 import ${data_namespace}.*;
 import ${curr.namespace}.entity.${curr.name};
-import ${curr.namespace}.entity.base.EntityBase;
 import ${data_namespace}.RestClient.Verb;
 
 import org.json.*;
 
 import java.util.List;
-import java.util.ArrayList;
 
 import android.util.Log;
 import android.content.Context;
@@ -117,6 +115,12 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
 		</#if>
 	</#if>
 </#list>
+<#if (curr.options.sync??)>
+import ${curr.namespace}.entity.base.EntityBase;
+	<#if !alreadyImportArrayList>
+import java.util.ArrayList;
+	</#if>
+</#if>
 
 /**
  * 
@@ -135,7 +139,9 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 			</#if>
 		</#if>
 	</#list>
+	<#if (curr.options.sync??)>
 	private static final String JSON_MOBILE_ID = "mobile_id";
+	</#if>
 
 	public ${curr.name}WebServiceClientAdapterBase(Context context){
 		super(context);
@@ -343,17 +349,19 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 			<#list curr.fields as field>
 				<#if (!field.internal)>
 					<#if (!field.relation??)>
-						<#if (field.name?lower_case=="id")>
-			user.setId(json.optInt(JSON_MOBILE_ID, 0));			
-						<#elseif (field.name=="serverId")>
+						<#if (curr.options.sync?? && field.name?lower_case=="id")>
+			${curr.name?uncap_first}.setId(json.optInt(JSON_MOBILE_ID, 0));			
+						<#elseif (curr.options.sync?? && field.name=="serverId")>
 			int server_id = json.optInt(JSON_ID);
 			
 			if (server_id != 0)
-				user.setServerId(server_id);	
+				${curr.name?uncap_first}.setServerId(server_id);	
 						<#else>
 							<#if (field.type=="date"||field.type=="datetime"||field.type=="time")>
+			DateTime ${field.name?uncap_first} = ${curr.name?uncap_first}.get${field.name?cap_first}();
+			if(${field.name?uncap_first} ==null) ${field.name?uncap_first} = new DateTime();
 			DateTimeFormatter ${field.name?uncap_first}Formatter = ${getFormatter(field.type)};
-			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}Formatter.parseDateTime(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?uncap_first}.get${field.name?cap_first}().toString())));	
+			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}Formatter.parseDateTime(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${field.name?uncap_first}.toString())));	
 							<#elseif (field.type=="boolean")>
 			${curr.name?uncap_first}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?uncap_first}.is${field.name?cap_first}()));	
 							<#else>
@@ -462,7 +470,11 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends WebService
 			<#list curr.fields as field>
 				<#if (!field.internal)>
 					<#if (!field.relation??)>
-						<#if (field.type=="date" || field.type=="time" || field.type=="datetime")>
+						<#if (curr.options.sync?? && field.name?lower_case=="id")>
+			params.put(JSON_ID, ${curr.name?uncap_first}.getServerId());
+						<#elseif (curr.options.sync?? && field.name=="serverId")>
+			params.put(JSON_MOBILE_ID, ${curr.name?uncap_first}.getId());			
+						<#elseif (field.type=="date" || field.type=="time" || field.type=="datetime")>
 			params.put(${alias(field.name)}, ${curr.name?uncap_first}.get${field.name?cap_first}().toString());
 						<#elseif (field.type=="boolean")>
 			params.put(${alias(field.name)}, ${curr.name?uncap_first}.is${field.name?cap_first}());
