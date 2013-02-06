@@ -101,7 +101,7 @@ public class DateUtils extends android.text.format.DateUtils{
 		DateTime dt = null;
 		
 		try {
-			dt = new DateTime(ISODateTimeFormat.dateTime().parseDateTime(dateTime));
+			dt = new DateTime(ISODateTimeFormat.dateTimeNoMillis().parseDateTime(dateTime));
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, e.getMessage());
 		}
