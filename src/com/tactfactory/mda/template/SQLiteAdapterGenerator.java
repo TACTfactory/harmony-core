@@ -49,7 +49,7 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 					"%sSQLiteAdapter.java", false);
 			
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 	

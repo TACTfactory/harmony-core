@@ -182,7 +182,7 @@ public class WebGenerator extends BaseGenerator{
 				bw.close();
 			}
 		}catch(IOException e){
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 	

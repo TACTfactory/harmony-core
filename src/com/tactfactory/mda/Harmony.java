@@ -111,7 +111,7 @@ public class Harmony {
 	protected void initialize() throws Exception {
 		// Check project folder
 		if (Strings.isNullOrEmpty(projectFolder)) {
-			ConsoleUtils.displayError("Project folder undefined");
+			ConsoleUtils.displayError(new Exception("Project folder undefined"));
 			throw new Exception("Project folder undefined");
 		}
 		
@@ -121,13 +121,16 @@ public class Harmony {
 		if (Strings.isNullOrEmpty(Harmony.metas.projectNameSpace)) {
 			
 			// get project namespace and project name from AndroidManifest.xml
-			File manifest = new File(String.format("%s/%s/%s",Harmony.pathProject,Harmony.projectFolder,"AndroidManifest.xml"));
+			File manifest = new File(String.format("%s/%s/%s", Harmony.pathProject, Harmony.projectFolder,"AndroidManifest.xml"));
+			File config = new File(String.format("%s/%s/%s", Harmony.pathProject, Harmony.projectFolder,"/res/values/configs.xml")); //FIXME path by adapter
 			
 			if(manifest.exists()) {
 				Harmony.metas.projectNameSpace = Harmony.getNameSpaceFromManifest(manifest);
+				
 
-				String[] projectNameSpaceData = Harmony.metas.projectNameSpace.split("/");
-				Harmony.metas.name = projectNameSpaceData[projectNameSpaceData.length-1];
+				//String[] projectNameSpaceData = Harmony.metas.projectNameSpace.split("/");
+				Harmony.metas.name = Harmony.getProjectNameFromConfig(config);
+				//projectNameSpaceData[projectNameSpaceData.length-1];
 			}
 			
 			// get android sdk dir from local.properties
@@ -206,7 +209,7 @@ public class Harmony {
 		try {
 			input = br.readLine();
 		} catch (IOException e) {
-			e.getMessage();
+			ConsoleUtils.displayError(e);
 		}
 		
 		return input;
@@ -342,6 +345,43 @@ public class Harmony {
 	}
 	
 	/**
+	 * Extract Project NameSpace from AndroidManifest file
+	 * 
+	 * @param manifest Manifest File
+	 * @return Project Name Space
+	 */
+	public static String getProjectNameFromConfig(File config) {
+		String projname = null;
+		SAXBuilder builder;
+		Document doc;
+		
+		if(config.exists()) {
+			builder = new SAXBuilder();								// Make engine
+			try {
+				doc = (Document) builder.build(config);			// Load XML File
+				Element rootNode = doc.getRootElement(); 			// Load Root element
+				//Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
+
+				for (Element element : rootNode.getChildren("string")) {
+					if (element.getAttribute("name").getValue().equals("app_name")) {
+						projname = element.getValue();
+						break;
+					}
+					
+				}
+			} catch (JDOMException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
+		return projname;
+	}
+	
+	/**
 	 * Extract Android SDK Path from local.properties file
 	 * 
 	 * @param local_prop Local.properties File
@@ -390,7 +430,7 @@ public class Harmony {
 				}
 				br.close();
 			}catch(IOException e){
-				ConsoleUtils.displayError(e.getMessage());
+				ConsoleUtils.displayError(e);
 			}
 		}
 		return result;

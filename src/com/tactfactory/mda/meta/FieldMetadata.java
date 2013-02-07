@@ -43,7 +43,7 @@ public class FieldMetadata extends BaseMetadata {
 	public Integer precision = null;
 	public Integer scale = null;
 	public boolean hidden = false;
-	public Boolean isLocale = true;
+	public Boolean isLocale = null;
 	
 	/** GUI show field type */
 	public String customShowType;

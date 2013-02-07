@@ -55,13 +55,23 @@ public class ConsoleUtils {
 			}
 	}
 	
-	public static void displayError(String value) {
+	private static String getStackTrace(StackTraceElement[] stackTraceElements) {
+		StringBuilder result = new StringBuilder();
+
+		for (StackTraceElement stackTraceElement : stackTraceElements) {
+			result.append(stackTraceElement.toString()).append("\n");
+		}
+		
+		return result.toString();
+	}
+	
+	public static void displayError(Exception value) {
 		if (!quiet) 
 			if (ansi) {
-				cp.println("[ERROR]\t" + value + "\n", Attribute.NONE, FColor.RED, BColor.BLACK);
+				cp.println("[ERROR]\t" + value + "\n" + getStackTrace(value.getStackTrace()) + "\n", Attribute.NONE, FColor.RED, BColor.BLACK);
 				cp.clear();
 			} else {
-				System.out.println("[ERROR]\t" + value);
+				System.out.println("[ERROR]\t" + value + "\n" + getStackTrace(value.getStackTrace()) + "\n");
 			}
 	}
 
@@ -119,12 +129,12 @@ public class ConsoleUtils {
 						if(this.processError.ready()){
 							String error = this.processError.readLine();
 							if(error!=null && !error.isEmpty())
-								ConsoleUtils.displayError(error);
+								ConsoleUtils.displayError(new Exception(error));
 						}
 					}catch(InterruptedException e){
-						ConsoleUtils.displayError(e.getMessage());
+						ConsoleUtils.displayError(e);
 					}catch(IOException e){
-						ConsoleUtils.displayError(e.getMessage());
+						ConsoleUtils.displayError(e);
 					}
 				}
 				try {
@@ -174,9 +184,9 @@ public class ConsoleUtils {
 							Thread.sleep(200);
 						}
 					} catch (IOException e) {
-						ConsoleUtils.displayError(e.getMessage());
+						ConsoleUtils.displayError(e);
 					} catch (InterruptedException e) {
-						ConsoleUtils.displayError(e.getMessage());
+						ConsoleUtils.displayError(e);
 					}
 					
 				}

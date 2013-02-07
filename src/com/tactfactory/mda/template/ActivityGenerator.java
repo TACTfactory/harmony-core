@@ -147,7 +147,7 @@ public class ActivityGenerator extends BaseGenerator {
 		
 			new TranslationGenerator(this.adapter).generateStringsXml();
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 			e.printStackTrace();
 		}
 	}

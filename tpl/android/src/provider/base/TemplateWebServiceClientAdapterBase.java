@@ -84,6 +84,7 @@ package ${curr.data_namespace}.base;
 <#list curr.fields as field>
 	<#if !importDate && (field.type=="date" || field.type=="time" || field.type=="datetime")>
 import org.joda.time.format.DateTimeFormatter;
+import ${curr.namespace}.harmony.util.DateUtils;
 		<#assign importDate = true />
 	</#if>
 </#list>
@@ -129,7 +130,7 @@ import java.util.ArrayList;
 </#if>
 /**
  * 
- * b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
+ * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
  * You should edit ${curr.name}WebServiceClientAdapter class instead of this one or you will lose all your modifications.</i></b>
  *
  */
@@ -345,14 +346,15 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends ${extends}
 			
 			if (server_id != 0)
 				${curr.name?uncap_first}.setServerId(server_id);	
+
 						<#else>
 							<#if (field.type=="date"||field.type=="datetime"||field.type=="time")>
 			DateTime ${field.name?uncap_first} = ${curr.name?uncap_first}.get${field.name?cap_first}();
 			if(${field.name?uncap_first} ==null) ${field.name?uncap_first} = new DateTime();
 			DateTimeFormatter ${field.name?uncap_first}Formatter = ${getFormatter(field.type)};
-			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}Formatter.parseDateTime(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${field.name?uncap_first}.toString(${field.name?uncap_first}Formatter))));	
+			${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatISOStringToDateTime(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?uncap_first}.get${field.name?cap_first}().toString(${field.name?uncap_first}Formatter))));
 							<#elseif (field.type=="boolean")>
-			${curr.name?uncap_first}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?uncap_first}.is${field.name?cap_first}()));	
+			${curr.name?uncap_first}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?uncap_first}.is${field.name?cap_first}()));		
 							<#else>
 			${curr.name?uncap_first}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?uncap_first}.get${field.name?cap_first}()));	
 							</#if>

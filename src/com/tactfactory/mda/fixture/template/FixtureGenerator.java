@@ -54,7 +54,7 @@ public class FixtureGenerator extends BaseGenerator{
 				e.printStackTrace();
 			}
 		}else{
-			ConsoleUtils.displayError("You must init the fixtures before loading them. Use the command orm:fixture:init.");
+			ConsoleUtils.displayError(new Exception("You must init the fixtures before loading them. Use the command orm:fixture:init."));
 		}
 	}
 	
