@@ -169,7 +169,7 @@ public class ClassCompletor {
 	
 	private void checkRelationIntegrity(FieldMetadata fm){
 		if(!this.metas.containsKey(fm.relation.entity_ref)){
-				ConsoleUtils.displayError("Entity "+fm.name+" refers to the non Entity class "+fm.relation.entity_ref);
+				ConsoleUtils.displayError(new Exception("Entity "+fm.name+" refers to the non Entity class "+fm.relation.entity_ref));
 			
 		}
 	}

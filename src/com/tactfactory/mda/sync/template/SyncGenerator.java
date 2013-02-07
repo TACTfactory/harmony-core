@@ -113,13 +113,13 @@ public class SyncGenerator extends BaseGenerator {
 			String extendedClass = cm.extendType;
 			if(!extendedClass.equals("EntityBase")){ 				// Extended class is already Entity Base, do nothing
 				if(!this.appMetas.entities.containsKey(extendedClass)){ 		// Extended class is not an entity, warn the user
-					ConsoleUtils.displayError("The entity "+entityName+" must extends a sync Entity or nothing.");
+					ConsoleUtils.displayError(new Exception("The entity "+entityName+" must extends a sync Entity or nothing."));
 					
 				} else {
 					
 					ClassMetadata extendedCm = this.appMetas.entities.get(extendedClass); // Get extended entity
 					if(!extendedCm.options.containsKey("sync")){				// Extended class is an entity but which is not syncable, warn the user
-						ConsoleUtils.displayError("The entity "+entityName+" must extends a sync Entity or nothing.");
+						ConsoleUtils.displayError(new Exception("The entity "+entityName+" must extends a sync Entity or nothing."));
 					} 
 				}
 			}
@@ -199,9 +199,9 @@ public class SyncGenerator extends BaseGenerator {
 				xmlOutput.output(doc, new FileWriter(xmlFile.getAbsoluteFile()));
 			}
 		} catch(JDOMException e){
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		} catch(IOException e){
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 }
