@@ -172,4 +172,6 @@ public abstract class SQLiteAdapterBase<T>{
 	 * @return 
 	 */
 	public abstract int update(T item);
+	
+	public abstract int delete(T item);
 }

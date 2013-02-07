@@ -26,15 +26,15 @@ import android.util.Log;
 import android.widget.Toast;
 
 public abstract class WebServiceClientAdapterBase<T>{
-	private static final String TAG = "WSClientAdapter";
+	protected static final String TAG = "WSClientAdapter";
 	protected static String REST_FORMAT = ".json"; //JSon RSS xml or empty (for html)
 	
-	private List<Header> headers = new ArrayList<Header>();
-	private RestClient restClient;
-	private Context context;
-	private int statusCode;
-	private int errorCode;
-	private String error;
+	protected List<Header> headers = new ArrayList<Header>();
+	protected RestClient restClient;
+	protected Context context;
+	protected int statusCode;
+	protected int errorCode;
+	protected String error;
 
 	
 
@@ -52,10 +52,10 @@ public abstract class WebServiceClientAdapterBase<T>{
 		} else {
 			host = this.context.getString(R.string.rest_url_prod);
 		}
-		this.restClient = new RestClient(host);
 	}
 
 	protected synchronized String invokeRequest(Verb verb, String request, JSONObject params) {
+		this.restClient = new RestClient(host);
 		String response = "";
 		
 		StringBuilder error = new StringBuilder();
@@ -172,6 +172,13 @@ public abstract class WebServiceClientAdapterBase<T>{
 	public abstract JSONObject itemToJson(T item);
 	
 	/**
+	 * Convert a <T> to a JSONObject	
+	 * @param item The <T> to convert
+	 * @return The converted <T>
+	 */
+	public abstract JSONObject itemIdToJson(T item);
+	
+	/**
 	 * Convert a list of <T> to a JSONArray	
 	 * @param users The array of <T> to convert
 	 * @return The array of converted <T>
@@ -187,6 +194,23 @@ public abstract class WebServiceClientAdapterBase<T>{
 		return itemArray;
 	}
 	
+	
+	/**
+	 * Convert a list of <T> to a JSONArray	
+	 * @param users The array of <T> to convert
+	 * @return The array of converted <T>
+	 */
+	public JSONArray itemsIdToJson(List<T> items){
+		JSONArray itemArray = new JSONArray();
+		
+		for (int i = 0 ; i < items.size(); i++) {
+			JSONObject jsonItems = this.itemIdToJson(items.get(i));
+			itemArray.put(jsonItems);
+		}
+		
+		return itemArray;
+	}
+	
 	/**
 	 * Extract a <T> from a JSONObject describing a <T>
 	 * @param json The JSONObject describing the <T>
@@ -195,6 +219,7 @@ public abstract class WebServiceClientAdapterBase<T>{
 	 */
 	public abstract T extract(JSONObject json);
 	
+		
 	/**
 	 * Extract a list of <T> from a JSONObject describing an array of <T> given the array name
 	 * @param json The JSONObject describing the array of <T>

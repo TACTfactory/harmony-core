@@ -7,62 +7,58 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.Log; 
 
 import com.tactfactory.mda.test.demact.${project_name?cap_first}Application;
+import com.tactfactory.mda.test.demact.data.base.SyncSQLiteAdapterBase;
 import com.tactfactory.mda.test.demact.data.UserSQLiteAdapter;
 import com.tactfactory.mda.test.demact.data.UserWebServiceClientAdapter;
 import com.tactfactory.mda.test.demact.entity.User;
 import com.tactfactory.mda.test.demact.entity.base.EntityBase;
 
-public class ${project_name?cap_first}SyncService extends Thread{
+import com.tactfactory.mda.test.demact.data.base.SyncClientAdapterBase;
+
+public class ${project_name?cap_first}SyncService<T extends EntityBase>{
 	private final static String TAG = "SyncService";
 	
-	private ArrayList<EntityBase> base;
-	private ArrayList<EntityBase> baseCopy;
+	private ArrayList<T> base;
+	private ArrayList<T> baseCopy;
 	
 	private Context context;
 	
 	public DateTime lastSyncDate;
 	public DateTime startSync;
 	
-	private UserSQLiteAdapter client;
+	private SyncSQLiteAdapterBase<T> client;
+	private SyncClientAdapterBase<T> server;
 	
-	ArrayList<EntityBase> deleted = new ArrayList<EntityBase>();
-	ArrayList<EntityBase> inserted = new ArrayList<EntityBase>();
-	ArrayList<EntityBase> updated = new ArrayList<EntityBase>();
-	ArrayList<EntityBase> merged = new ArrayList<EntityBase>();
+	ArrayList<T> deleted = new ArrayList<T>();
+	ArrayList<T> inserted = new ArrayList<T>();
+	ArrayList<T> updated = new ArrayList<T>();
+	ArrayList<T> merged = new ArrayList<T>();
 	
-	public ${project_name?cap_first}SyncService(Context ctx){
+	public ${project_name?cap_first}SyncService(Context ctx, SyncSQLiteAdapterBase<T> client, SyncClientAdapterBase<T> server){
 		super();
 		
-		this.context = ctx;
-		
-		this.client = new UserSQLiteAdapter(ctx);
+		this.client = client;
+		this.server = server;
 	}
 	
-	@Override
 	public void run() {			
 		this.sync(this.getLocalData());			
 	}
 	
-	public ArrayList<EntityBase> getLocalData(){
+	public ArrayList<T> getLocalData(){
 		this.client.open();
 		
-		ArrayList<User> users = this.client.getAll();
+		ArrayList<T> items = this.client.getAll();
 		
 		this.client.close();
-		
-		ArrayList<EntityBase> items = new ArrayList<EntityBase>();
-		
-		for(User u : users){
-			items.add(u);
-		}
-		
+				
 		return items;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public void sync(ArrayList<EntityBase> base){
+	public void sync(ArrayList<T> base){
 		this.base = base;
-		this.baseCopy = (ArrayList<EntityBase>) this.base.clone();
+		this.baseCopy = (ArrayList<T>) this.base.clone();
 		
 		this.lastSyncDate = ${project_name?cap_first}Application.getLastSyncDate();
 		
@@ -79,11 +75,9 @@ public class ${project_name?cap_first}SyncService extends Thread{
 				this.checkInsertItem();
 				this.checkUpdateItem();
 				
-				UserWebServiceClientAdapter server = new UserWebServiceClientAdapter(this.context);
-				this.startSync = server.syncTime();
+				this.startSync = this.server.syncTime();
 				
-				server = new UserWebServiceClientAdapter(this.context);
-				server.sync(${project_name?cap_first}Application.getLastSyncDate(), startSync, this.deleted, this.inserted, this.updated, this.merged);
+				this.server.sync(${project_name?cap_first}Application.getLastSyncDate(), startSync, this.deleted, this.inserted, this.updated, this.merged);
 				
 				SQLiteDatabase db = this.client.open();
 				//db.beginTransaction();
@@ -112,7 +106,7 @@ public class ${project_name?cap_first}SyncService extends Thread{
 	 * 
 	 */
 	private void checkDeleteItem() {
-		for (EntityBase entity : this.baseCopy) {
+		for (T entity : this.baseCopy) {
 			if (entity.sync_uDate.isAfter(lastSyncDate) && entity.sync_dtag) {
 				this.deleted.add(entity);
 			}
@@ -123,9 +117,9 @@ public class ${project_name?cap_first}SyncService extends Thread{
 	 * 
 	 */
 	private void checkInsertItem() {
-		for (EntityBase entity : this.baseCopy) {
+		for (T entity : this.baseCopy) {
 			if (!entity.sync_dtag && entity.serverId == null && 
-					!deleted.contains(((User)entity).getId())) {
+					!deleted.contains(entity.getId())) {
 				this.inserted.add(entity);
 			}
 		}
@@ -135,12 +129,12 @@ public class ${project_name?cap_first}SyncService extends Thread{
 	 * 
 	 */
 	private void checkUpdateItem() {
-		for (EntityBase entity : this.baseCopy) {
+		for (T entity : this.baseCopy) {
 			if (entity.sync_uDate.isAfter(this.lastSyncDate) &&
 					!entity.sync_dtag && 
 					entity.serverId != null &&
-					!deleted.contains(((User)entity).getId()) &&
-					!inserted.contains(((User)entity).getId())) {					
+					!deleted.contains(entity.getId()) &&
+					!inserted.contains(entity.getId())) {					
 				this.updated.add(entity);
 			}
 		}
@@ -151,18 +145,18 @@ public class ${project_name?cap_first}SyncService extends Thread{
 	 */
 	private void updateItem() {
 		// Remove sync entities
-		for (EntityBase deletedEntity : this.deleted) {
-			this.client.delete(((User)deletedEntity).getId());
+		for (T deletedEntity : this.deleted) {
+			this.client.delete(deletedEntity);
 		}
 					
 		// Refresh insert sync entities (for id) 
-		for (EntityBase insertedEntity : this.inserted) {
-			this.client.update((User)insertedEntity);
+		for (T insertedEntity : this.inserted) {
+			this.client.update(insertedEntity);
 		}
 		
 		// Refresh updated sync entities (for all reason)
-		for (EntityBase updatedEntity : this.updated) {
-			this.client.update((User)updatedEntity);
+		for (T updatedEntity : this.updated) {
+			this.client.update(updatedEntity);
 		}
 		
 		// Complex Merge delta entities from last sync...
@@ -173,10 +167,10 @@ public class ${project_name?cap_first}SyncService extends Thread{
 	 * 
 	 */
 	private void mergeItems() {		
-		for (EntityBase entityBase : this.merged) {
+		for (T entityBase : this.merged) {
 			
 			// Find mobile entity
-			EntityBase oldEntity = this.client.getByServerID(entityBase.serverId);
+			T oldEntity = this.client.getByServerID(entityBase.getServerId());
 			
 			if (oldEntity != null) {
 				// If entity exists locally
@@ -184,7 +178,7 @@ public class ${project_name?cap_first}SyncService extends Thread{
 				if (entityBase.sync_dtag) {
 					// Delete
 					//**********************************************************
-					this.client.remove(((User)oldEntity).getId());
+					this.client.delete(oldEntity);
 					
 					Log.d(TAG, "Delete !");
 				} else {
@@ -192,8 +186,8 @@ public class ${project_name?cap_first}SyncService extends Thread{
 					//**********************************************************
 					
 					// Sync data
-					((User)entityBase).setId(((User)oldEntity).getId());
-					this.client.update((User)entityBase);
+					entityBase.setId(oldEntity.getId());
+					this.client.update(entityBase);
 					
 					Log.d(TAG, "Update !");
 				}
@@ -208,7 +202,7 @@ public class ${project_name?cap_first}SyncService extends Thread{
 				} else {
 					// Create
 					//**********************************************************
-					this.client.insert((User)entityBase);
+					this.client.insert(entityBase);
 					
 					Log.d(TAG, "Create !");
 				}

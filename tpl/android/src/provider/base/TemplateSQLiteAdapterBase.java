@@ -1,4 +1,5 @@
 <#assign curr = entities[current_entity] />
+<#assign sync = curr.options.sync?? />
 <#import "methods.ftl" as m />
 <#function alias name>
 	<#return "COL_"+name?upper_case />
@@ -71,12 +72,16 @@ import ${curr.namespace}.harmony.util.DateUtils;
 import org.joda.time.DateTime;
 
 </#if>
-
+<#if sync>
+	<#assign extend="SyncSQLiteAdapterBase<"+curr.name+">" />
+<#else>
+	<#assign extend="SQLiteAdapterBase<"+curr.name+">" />
+</#if>
 /** ${curr.name} adapter database abstract class <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
  * You should edit ${curr.name}Adapter class instead of this one or you will lose all your modifications.</i></b>
  */
-public abstract class ${curr.name}SQLiteAdapterBase extends SQLiteAdapterBase<${curr.name}>{
+public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 	private static final String TAG = "${curr.name}DBAdapter";
 	
 	/** Table name of SQLite database */
@@ -255,20 +260,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends SQLiteAdapterBase<${
 	<#else>
 		throw new UnsupportedOperationException("Method not implemented yet.");
 	</#if>
-	}
-	
-	<#if curr.options.sync??>
-	public ${curr.name?cap_first} getByServerID(Integer serverId){
-		Cursor c = this.query(COLS, COL_SERVERID+"=? ", new String[]{String.valueOf(serverId)}, null, null, null);
-		if(c.getCount()!=0)
-			c.moveToFirst();
-		${curr.name?cap_first} result = this.cursorToItem(c);
-		c.close();
-		
-		return result;
-	}
-	</#if>
-	
+	}	
 	
 	<#if (curr.relations??)>
 		<#list curr.relations as relation>
@@ -486,6 +478,10 @@ public abstract class ${curr.name}SQLiteAdapterBase extends SQLiteAdapterBase<${
 	<#else>
 		throw new UnsupportedOperationException("Method not implemented yet.");
 	</#if>
+	}
+	
+	public int delete(${curr.name?cap_first} ${curr.name?uncap_first}){
+		return this.delete(${curr.name?uncap_first}.getId());
 	}
 	
 	// Internal Cursor

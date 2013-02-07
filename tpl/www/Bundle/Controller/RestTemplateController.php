@@ -1,11 +1,18 @@
 <#assign curr = entities[current_entity] />
 <?php
 
-namespace ${project_name}\ApiBundle\Controller;
+namespace ${project_name?cap_first}\ApiBundle\Controller;
 
 use FOS\RestBundle\Controller\FOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
-use Demact\ApiBundle\Entity\${curr.name?cap_first};
+use ${project_name?cap_first}\ApiBundle\Entity\${curr.name?cap_first};
+<#assign importList = [] />
+<#list curr.relations as relation>
+	<#if !importList?seq_contains(relation.relation.targetEntity)>
+use ${project_name?cap_first}\ApiBundle\Controller\Rest${relation.relation.targetEntity?cap_first}Controller;
+		<#assign importList = importList + [relation.relation.targetEntity] />
+	</#if>
+</#list>
 
 /**
  * PostRepository
@@ -19,7 +26,7 @@ class Rest${curr.name?cap_first}Controller extends FOSRestController{
 	const ${field.name?upper_case} = "${field.name?uncap_first}";
 	</#if>
 </#list>
-	const SYNCUDATE = "sync_udate";
+	const SYNCUDATE = "sync_uDate";
 	const SYNCDTAG = "sync_dtag";
 	const ID_MOBILE = "mobile_id";
 
@@ -30,12 +37,12 @@ class Rest${curr.name?cap_first}Controller extends FOSRestController{
 
 
 	/** 
-	* GET /${curr.name?uncap_first}/{id} 
+	* GET /${curr.options.rest.uri}/{id} 
 	*  
 	* @param string $${curr.name?uncap_first}Id
 	* @return Response 
 	*
-	* @Rest\Get("/${curr.name?uncap_first}/{id}")
+	* @Rest\Get("/${curr.options.rest.uri}/{id}")
 	*/  
 	public function get${curr.name?cap_first}Action($id){  
 		$em = $this->getDoctrine()->getManager();
@@ -45,9 +52,9 @@ class Rest${curr.name?cap_first}Controller extends FOSRestController{
 	}	
 
 	/** 
-	* PUT /${curr.name?uncap_first} 
+	* PUT /${curr.options.rest.uri} 
 	*
-	* @Rest\Put("/${curr.name?uncap_first}")
+	* @Rest\Put("/${curr.options.rest.uri}")
 	*/  
 	public function create${curr.name?cap_first}Action(){  
 		$${curr.name?uncap_first} = new ${curr.name?cap_first}();
@@ -62,9 +69,9 @@ class Rest${curr.name?cap_first}Controller extends FOSRestController{
 
 
 	/** 
-	* GET /${curr.name?uncap_first} 
+	* GET /${curr.options.rest.uri}
 	*
-	* @Rest\Get("/${curr.name?uncap_first}")
+	* @Rest\Get("/${curr.options.rest.uri}")
 	*/  
 	public function getAll${curr.name?cap_first}Action(){  
 		$em = $this->getDoctrine()->getManager();
@@ -74,9 +81,9 @@ class Rest${curr.name?cap_first}Controller extends FOSRestController{
 	}	
 
 	/** 
-	* POST /${curr.name?uncap_first}/{id} 
+	* POST /${curr.options.rest.uri}/{id} 
 	*
-	* @Rest\Post("/${curr.name?uncap_first}/{id}")
+	* @Rest\Post("/${curr.options.rest.uri}/{id}")
 	*/  
 	public function update${curr.name?cap_first}Action($id){  
 		$em = $this->getDoctrine()->getManager();
@@ -91,9 +98,9 @@ class Rest${curr.name?cap_first}Controller extends FOSRestController{
 
 
 	/** 
-	* DELETE /${curr.name?uncap_first}/{id} 
+	* DELETE /${curr.options.rest.uri}/{id} 
 	*
-	* @Rest\Delete("/${curr.name?uncap_first}/{id}")
+	* @Rest\Delete("/${curr.options.rest.uri}/{id}")
 	*/  
 	public function delete${curr.name?cap_first}Action($id){  
 		$em = $this->getDoctrine()->getManager();
@@ -126,7 +133,7 @@ class Rest${curr.name?cap_first}Controller extends FOSRestController{
 	/**
 	 * POST
 	 *
-	 * @Rest\Post("/${curr.name?uncap_first}")
+	 * @Rest\Post("/${curr.options.rest.uri}")
 	 */
 	public function sync${curr.name?cap_first}Action() {
 		// Debug
@@ -159,16 +166,16 @@ class Rest${curr.name?cap_first}Controller extends FOSRestController{
 		$em->flush();
 		
 		$view = $this->view(array(
-			'${curr.name?cap_first}s-m' => self::arrayToJson($this->${curr.name?uncap_first}sm),
-			'${curr.name?cap_first}s-i' => self::arrayToJson($this->${curr.name?uncap_first}si),
-			'${curr.name?cap_first}s-u' => self::arrayToJson($this->${curr.name?uncap_first}su),
-			'${curr.name?cap_first}s-d' => self::arrayToJson($this->${curr.name?uncap_first}sd)
+			'${curr.options.rest.uri}s-m' => self::arrayToJson($this->${curr.name?uncap_first}sm),
+			'${curr.options.rest.uri}s-i' => self::arrayToJson($this->${curr.name?uncap_first}si),
+			'${curr.options.rest.uri}s-u' => self::arrayToJson($this->${curr.name?uncap_first}su),
+			'${curr.options.rest.uri}s-d' => self::arrayToJson($this->${curr.name?uncap_first}sd)
 			), 200);
 		return $this->handleView($view);
 	}
 	
 	/** 
-	* GET /${curr.name?uncap_first}/merge
+	* GET /${curr.options.rest.uri}/merge
 	*/
 	private function merge($em, $lastSyncDate){
 		$repository = $this->getDoctrine()
@@ -187,10 +194,10 @@ class Rest${curr.name?cap_first}Controller extends FOSRestController{
 	
 	
 	/** 
-	* PUT /${curr.name?uncap_first}/insert
+	* PUT /${curr.options.rest.uri}/insert
 	*/
 	private function insert($em, $json, $startSyncDate){
-		foreach($json['${curr.name?cap_first}s-i'] as $json_${curr.name?uncap_first}){
+		foreach($json['${curr.options.rest.uri}s-i'] as $json_${curr.name?uncap_first}){
 			$entity = new ${curr.name?cap_first}();
 			$this->extract($entity, $json_${curr.name?uncap_first});
 			
@@ -206,10 +213,10 @@ class Rest${curr.name?cap_first}Controller extends FOSRestController{
 	}
 	
 	/** 
-	* POST /${curr.name?uncap_first}/update
+	* POST /${curr.options.rest.uri}/update
 	*/
 	private function update($em, $json, $startSyncDate){
-		foreach($json['${curr.name?cap_first}s-u'] as $json_${curr.name?uncap_first}){
+		foreach($json['${curr.options.rest.uri}s-u'] as $json_${curr.name?uncap_first}){
 			$entity = new ${curr.name?cap_first}();
 			$this->extract($entity, $json_${curr.name?uncap_first});
 			
@@ -243,10 +250,10 @@ class Rest${curr.name?cap_first}Controller extends FOSRestController{
 	}
 	
 	/** 
-	* DELETE /${curr.name?uncap_first}/delete 
+	* DELETE /${curr.options.rest.uri}/delete 
 	*/
 	private function delete($em, $json, $startSyncDate){
-		foreach($json['${curr.name?cap_first}s-d'] as $json_${curr.name?uncap_first}){
+		foreach($json['${curr.options.rest.uri}s-d'] as $json_${curr.name?uncap_first}){
 			$entity = new ${curr.name?cap_first}();
 			$this->extract($entity, $json_${curr.name?uncap_first});
 			
@@ -296,7 +303,6 @@ class Rest${curr.name?cap_first}Controller extends FOSRestController{
 	public static function toJson($${curr.name?uncap_first}){
 		if($${curr.name?uncap_first}!=null){
 			$json = array();
-			$json[self::ID_MOBILE] = $user->getMobileId();
 <#list curr.fields as field>
 	<#if !field.internal>
 		<#if !field.relation??>
@@ -307,16 +313,32 @@ class Rest${curr.name?cap_first}Controller extends FOSRestController{
 			</#if>
 		<#else>
 			<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
-			$json[self::${field.name?upper_case}] = Rest${field.relation.targetEntity?cap_first}Controller::toJson($${curr.name?uncap_first}->get${field.name?cap_first}());
+			$json[self::${field.name?upper_case}] = Rest${field.relation.targetEntity?cap_first}Controller::idToJson($${curr.name?uncap_first}->get${field.name?cap_first}());
 			<#else>
 			$json[self::${field.name?upper_case}] = Rest${field.relation.targetEntity?cap_first}Controller::arrayToJson($${curr.name?uncap_first}->get${field.name?cap_first}());
 			</#if>
 		</#if>
 	</#if>
 </#list>
+			$json[self::ID_MOBILE] = $${curr.name?uncap_first}->getMobileId();
 			$json[self::SYNCUDATE] = $${curr.name?uncap_first}->getSyncUDate()->format(\DateTime::W3C);
 			$json[self::SYNCDTAG] = $${curr.name?uncap_first}->getSyncDtag();
 
+			return $json;
+		}else{
+			return null;
+		}
+	}
+
+
+	/**
+	 * Convert a comment to a JSon
+	 *
+	 */
+	public static function idToJson($${curr.name?uncap_first}){
+		if($${curr.name?uncap_first}!=null){
+			$json = array();
+			$json[self::ID] = $${curr.name?uncap_first}->getId();
 			return $json;
 		}else{
 			return null;

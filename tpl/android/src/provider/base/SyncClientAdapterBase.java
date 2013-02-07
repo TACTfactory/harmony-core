@@ -54,18 +54,14 @@ public abstract class SyncClientAdapterBase<T extends EntityBase> extends WebSer
 			ArrayList<T> updated, ArrayList<T> merged) {
 		
 		
-		String uri = String.format(
-				"user",
-				dateLast.toString(ISODateTimeFormat.dateTime().withZoneUTC()),
-				dateStart.toString(ISODateTimeFormat.dateTime().withZoneUTC()),
-				REST_FORMAT);
+		String uri = this.getUri();
 		
 		JSONObject json = new JSONObject();
 		this.addJsonDate(json, "lastSyncDate", dateLast);
 		this.addJsonDate(json, "startSyncDate", dateStart);
-		this.addJsonItems(json, "Users-d", deleted);
-		this.addJsonItems(json, "Users-i", inserted);
-		this.addJsonItems(json, "Users-u", updated);
+		this.addJsonItems(json, uri+"s-d", deleted);
+		this.addJsonItems(json, uri+"s-i", inserted);
+		this.addJsonItems(json, uri+"s-u", updated);
 	    //this.addJsonUsers(json, "Users-m", merged);
 		
 		String response = this.invokeRequest(Verb.POST, uri , json);
@@ -76,9 +72,9 @@ public abstract class SyncClientAdapterBase<T extends EntityBase> extends WebSer
 		
 		try{
 			JSONObject jsonResp = new JSONObject(response);
-			extractItems(jsonResp, "Users-i", inserted);
-			extractItems(jsonResp, "Users-u", updated);
-			extractItems(jsonResp, "Users-m", merged);
+			extractItems(jsonResp, uri+"s-i", inserted);
+			extractItems(jsonResp, uri+"s-u", updated);
+			extractItems(jsonResp, uri+"s-m", merged);
 		}catch(JSONException e){
 			Log.e(TAG, e.getMessage());
 		}

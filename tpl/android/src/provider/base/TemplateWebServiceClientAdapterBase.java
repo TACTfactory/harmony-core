@@ -207,7 +207,7 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends ${extends}
 	}
 
 	public String getUri(){
-		return "user-uri";
+		return "${curr.options.rest.uri}";
 	}
 
 	/**
@@ -329,7 +329,7 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends ${extends}
 	 * @param ${curr.name?uncap_first} The returned ${curr.name}
 	 * @return true if a ${curr.name} was found. false if not
 	 */
-	public Comment extract(JSONObject json){
+	public ${curr.name?cap_first} extract(JSONObject json){
 		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
 		
 		int id = json.optInt("id", 0);
@@ -350,7 +350,7 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends ${extends}
 			DateTime ${field.name?uncap_first} = ${curr.name?uncap_first}.get${field.name?cap_first}();
 			if(${field.name?uncap_first} ==null) ${field.name?uncap_first} = new DateTime();
 			DateTimeFormatter ${field.name?uncap_first}Formatter = ${getFormatter(field.type)};
-			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}Formatter.parseDateTime(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${field.name?uncap_first}.toString())));	
+			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}Formatter.parseDateTime(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${field.name?uncap_first}.toString(${field.name?uncap_first}Formatter))));	
 							<#elseif (field.type=="boolean")>
 			${curr.name?uncap_first}.set${field.name?cap_first}(json.opt${typeToJsonType(field)}(${alias(field.name)}, ${curr.name?uncap_first}.is${field.name?cap_first}()));	
 							<#else>
@@ -359,19 +359,23 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends ${extends}
 						</#if>
 					<#else>
 						<#if (isRestEntity(field.relation.targetEntity))>
+			if(json.has(${alias(field.name)})){
 							<#if (field.relation.type=="OneToMany" || field.relation.type=="ManyToMany")>
-			ArrayList<${field.relation.targetEntity}> ${field.name?uncap_first} = new ArrayList<${field.relation.targetEntity}>();
-			try{
-				${field.relation.targetEntity}WebServiceClientAdapter.extract${field.relation.targetEntity}s(json.opt${typeToJsonType(field)}(${alias(field.name)}), ${field.name?uncap_first});
-				${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first});
-			}catch(JSONException e){
-				Log.e(TAG, e.getMessage());
-			}
+				ArrayList<${field.relation.targetEntity}> ${field.name?uncap_first} = new ArrayList<${field.relation.targetEntity}>();
+				${field.relation.targetEntity}WebServiceClientAdapter ${field.name}Adapter = new ${field.relation.targetEntity}WebServiceClientAdapter(this.context);
+				try{
+					//.opt${typeToJsonType(field)}(${alias(field.name)})
+					${field.name}Adapter.extractItems(json, ${alias(field.name)}, ${field.name?uncap_first});
+					${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first});
+				}catch(JSONException e){
+					Log.e(TAG, e.getMessage());
+				}
 							<#else>
-			${field.relation.targetEntity} ${field.name?uncap_first} = new ${field.relation.targetEntity}();
-			${field.relation.targetEntity}WebServiceClientAdapter.extract(json.opt${typeToJsonType(field)}(${alias(field.name)}), ${field.name?uncap_first});
-			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first});
+				${field.relation.targetEntity}WebServiceClientAdapter ${field.name}Adapter = new ${field.relation.targetEntity}WebServiceClientAdapter(this.context);
+				${field.relation.targetEntity} ${field.name?uncap_first} = ${field.name}Adapter.extract(json.opt${typeToJsonType(field)}(${alias(field.name)}));
+				${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first});
 							</#if>
+			}
 						</#if>
 					</#if>
 
@@ -399,7 +403,9 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends ${extends}
 						<#elseif (curr.options.sync?? && field.name=="serverId")>
 			params.put(JSON_MOBILE_ID, ${curr.name?uncap_first}.getId());			
 						<#elseif (field.type=="date" || field.type=="time" || field.type=="datetime")>
-			params.put(${alias(field.name)}, ${curr.name?uncap_first}.get${field.name?cap_first}().toString());
+			if(${curr.name?uncap_first}.get${field.name?cap_first}()!=null){
+				params.put(${alias(field.name)}, ${curr.name?uncap_first}.get${field.name?cap_first}().toString());
+			}
 						<#elseif (field.type=="boolean")>
 			params.put(${alias(field.name)}, ${curr.name?uncap_first}.is${field.name?cap_first}());
 						<#else>
@@ -407,11 +413,18 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends ${extends}
 						</#if>
 					<#else>
 						<#if (isRestEntity(field.relation.targetEntity))>
+			if(${curr.name?uncap_first}.get${field.name?cap_first}()!=null){
+				${field.relation.targetEntity?cap_first}WebServiceClientAdapter ${field.name}Adapter = new ${field.relation.targetEntity?cap_first}WebServiceClientAdapter(this.context);
 							<#if (field.relation.type=="OneToMany" || field.relation.type=="ManyToMany")>
-			params.put(${alias(field.name)}, ${field.relation.targetEntity?cap_first}WebServiceClientAdapter.${field.relation.targetEntity?uncap_first}sToJson(${curr.name?uncap_first}.get${field.name?cap_first}()));
+				params.put(${alias(field.name)}, ${field.name}Adapter.itemsIdToJson(${curr.name?uncap_first}.get${field.name?cap_first}()));
 							<#else>
-			params.put(${alias(field.name)}, ${field.relation.targetEntity?cap_first}WebServiceClientAdapter.${field.relation.targetEntity?uncap_first}ToJson(${curr.name?uncap_first}.get${field.name?cap_first}()));
+				${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.name}SQLAdapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.context);
+				${field.name}SQLAdapter.open();
+				${curr.name?uncap_first}.set${field.name?cap_first}(${field.name}SQLAdapter.getByID(${curr.name?uncap_first}.get${field.name?cap_first}().getId()));
+				${field.name}SQLAdapter.close();
+				params.put(${alias(field.name)}, ${field.name}Adapter.itemIdToJson(${curr.name?uncap_first}.get${field.name?cap_first}()));
 							</#if>
+			}
 						</#if>
 					</#if>
 				</#if>
@@ -422,5 +435,20 @@ public abstract class ${curr.name}WebServiceClientAdapterBase extends ${extends}
 		return params;
 	}
 
+	
+	/**
+	 * Convert a <T> to a JSONObject	
+	 * @param item The <T> to convert
+	 * @return The converted <T>
+	 */
+	public JSONObject itemIdToJson(${curr.name?cap_first} item){
+		JSONObject params = new JSONObject();
+		try{
+			params.put(${alias(curr.ids[0].name)}, item.getId());
+		} catch (JSONException e) {
+			Log.e(TAG, e.getMessage());
+		}
+		return params;
+	}
 
 }

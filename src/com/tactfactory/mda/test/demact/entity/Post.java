@@ -43,7 +43,7 @@ public class Post implements Serializable {
 	@ManyToOne
 	protected User owner;
 	
-	@OneToMany
+	@OneToMany(mappedBy="post")
 	protected ArrayList<Comment> comments;
 	
 	@Column(name="created_at")

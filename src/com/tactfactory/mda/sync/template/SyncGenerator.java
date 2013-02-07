@@ -9,6 +9,17 @@
 package com.tactfactory.mda.sync.template;
 
 import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.List;
+
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.ConsoleUtils;
@@ -34,6 +45,8 @@ public class SyncGenerator extends BaseGenerator {
 	}
 	
 	protected void generateSync(){
+		// Add internet permission to manifest :
+		this.addPermissionManifest("android.permission.INTERNET");
 		// EntityBase.java
 		String fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.", "/") + "/entity/base/EntityBase.java";
 		String fullTemplatePath = this.adapter.getTemplateSourceEntityBasePath().substring(1) + "EntityBase.java";
@@ -46,9 +59,20 @@ public class SyncGenerator extends BaseGenerator {
 				String.format("%sSyncService.java", CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name)),
 				true);
 		
+		// TemplateSyncThread.java
+		this.makeSource(
+				"TemplateSyncThread.java", 
+				String.format("%sSyncThread.java", CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name)),
+				true);
+		
 		// SyncClientAdapterBase
 		fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + this.adapter.getData() + "/" + "base/SyncClientAdapterBase.java";
 		fullTemplatePath = this.adapter.getTemplateSourceProviderPath().substring(1) + "base/SyncClientAdapterBase.java";
+		
+		super.makeSource(fullTemplatePath, fullFilePath, true);
+		
+		fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + this.adapter.getData() + "/" + "base/SyncSQLiteAdapterBase.java";
+		fullTemplatePath = this.adapter.getTemplateSourceProviderPath().substring(1) + "base/SyncSQLiteAdapterBase.java";
 		
 		super.makeSource(fullTemplatePath, fullFilePath, true);
 		
@@ -138,6 +162,47 @@ public class SyncGenerator extends BaseGenerator {
 		}
 		
 		return index;
+	}
+	
+	/**  Update Android Manifest
+	 * 
+	 * @param classFile
+	 */
+	private void addPermissionManifest(String permissionName) {
+		try{ 
+			SAXBuilder builder = new SAXBuilder();		// Make engine
+			File xmlFile = FileUtils.makeFile(this.adapter.getManifestPathFile());
+			Document doc = (Document) builder.build(xmlFile); 	// Load XML File
+			final Element rootNode = doc.getRootElement(); 			// Load Root element
+			final Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
+			Element foundPermission = null;
+			// Find Permission Node
+			List<Element> permissions = rootNode.getChildren("uses-permission"); 	// Find many elements
+			for (Element permission : permissions) {
+				if (permission.getAttributeValue("name",ns).equals(permissionName) ) {	// Load attribute value
+					foundPermission = permission;
+					break;
+				}
+			}
+			
+			// If not found Node, create it
+			if (foundPermission == null) {
+				foundPermission = new Element("uses-permission");				// Create new element
+				foundPermission.setAttribute("name", permissionName, ns);	// Add Attributes to element
+				rootNode.addContent(foundPermission);
+				
+				// Write to File
+				XMLOutputter xmlOutput = new XMLOutputter();
+
+				// display nice nice
+				xmlOutput.setFormat(Format.getPrettyFormat());				// Make beautiful file with indent !!!
+				xmlOutput.output(doc, new FileWriter(xmlFile.getAbsoluteFile()));
+			}
+		} catch(JDOMException e){
+			ConsoleUtils.displayError(e.getMessage());
+		} catch(IOException e){
+			ConsoleUtils.displayError(e.getMessage());
+		}
 	}
 }
 
