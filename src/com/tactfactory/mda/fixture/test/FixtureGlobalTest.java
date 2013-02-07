@@ -33,6 +33,7 @@ public class FixtureGlobalTest extends CommonTest{
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
+		this.initAllTests();
 	}
 
 	/**
@@ -44,8 +45,7 @@ public class FixtureGlobalTest extends CommonTest{
 		super.tearDown();
 	}
 	
-	@Test
-	public void all() {
+	private void initAllTests() {
 		System.out.println("\nTest Orm generate entity");
 		System.out.println("###############################################################################");
 		
@@ -66,7 +66,12 @@ public class FixtureGlobalTest extends CommonTest{
 		this.harmony.findAndExecute(FixtureCommand.FIXTURE_INIT, new String[]{}, null);
 		this.copyFixturesYml();
 		this.harmony.findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[]{}, null);
-		this.hasFixturesYml();		
+		this.hasFixturesYml();	
+	}
+	
+	//@Test
+	public void all() {
+		this.initAllTests();	
 	}
 	
 	@Test
