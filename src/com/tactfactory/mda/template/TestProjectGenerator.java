@@ -60,6 +60,9 @@ public class TestProjectGenerator extends BaseGenerator {
 		// create project name space folders
 		//FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/"));
 
+		// create libs folder
+		FileUtils.makeFolder(this.adapter.getTestLibsPath());
+				
 		// create strings.xml
 		super.makeSource(
 				this.adapter.getTemplateStringsTestPathFile(), 
