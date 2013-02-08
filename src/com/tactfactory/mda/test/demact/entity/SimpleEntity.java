@@ -10,7 +10,7 @@ package com.tactfactory.mda.test.demact.entity;
 
 import com.tactfactory.mda.annotation.*;
 import com.tactfactory.mda.annotation.Column.Type;
-import com.tactfactory.mda.rest.annotation.Rest;
+import com.tactfactory.mda.bundles.rest.annotation.Rest;
 
 @Entity
 @Rest()
