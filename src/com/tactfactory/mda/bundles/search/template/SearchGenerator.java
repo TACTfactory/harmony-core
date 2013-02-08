@@ -17,10 +17,18 @@ public class SearchGenerator  extends BaseGenerator {
 	public void generateAll() {
 		this.datamodel = this.appMetas.toMap(this.adapter);
 		for(ClassMetadata cm : this.appMetas.entities.values()){
-			if(cm.fields.size()>0 && isClassSearchable(cm)){
-				this.makeSource(cm, "TemplateSearch.java",cm.name+"Search.java",false);
+			if(isClassSearchable(cm)){
+				this.generateActivity(cm);
 			}
 		}
+	}
+	
+	private void generateActivity(ClassMetadata cm){
+		this.makeSource(cm, "TemplateSearchActivity.java",cm.name+"SearchActivity.java",false);
+		this.makeSource(cm, "TemplateSearchFragment.java",cm.name+"SearchFragment.java",false);
+		
+		this.makeLayout(cm, "activity_template_search.xml","activity_"+cm.name.toLowerCase()+"_search.xml",false);
+		this.makeLayout(cm, "fragment_template_search.xml","fragment_"+cm.name.toLowerCase()+"_search.xml",false);
 	}
 	
 	private boolean isClassSearchable(ClassMetadata cm){
@@ -37,7 +45,18 @@ public class SearchGenerator  extends BaseGenerator {
 		String fullFilePath = this.adapter.getSourcePath() + PackageUtils.extractPath(this.adapter.getNameSpace(cm, this.adapter.getController())+"."+cm.getName().toLowerCase())+ "/" + fileName;
 		String fullTemplatePath = this.adapter.getTemplateSourceControlerPath().substring(1) + templateName;
 		
-		System.out.println(fullTemplatePath+" => "+fullFilePath);
+		super.makeSource(fullTemplatePath, fullFilePath, override);
+	}
+	
+	protected void makeLayout(ClassMetadata cm, String templateName, String fileName, boolean override) {
+		this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
+		String fullFilePath = String.format("%s/%s", 
+				this.adapter.getRessourceLayoutPath(),
+				fileName);
+		String fullTemplatePath = String.format("%s/%s",
+				this.adapter.getTemplateRessourceLayoutPath().substring(1),
+				templateName);
+		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 }
