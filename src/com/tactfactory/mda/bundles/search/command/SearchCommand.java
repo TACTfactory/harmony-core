@@ -18,17 +18,17 @@ public class SearchCommand  extends BaseCommand{
 	public final static String SUBJECT = "generate";
 
 	//actions
-	public final static String ACTION_LOADERS = "loaders";
+	public final static String ACTION_ACTIVITIES = "activities";
 
 	//commands
-	public static String GENERATE_LOADERS	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_LOADERS;
+	public static String GENERATE_ACTIVITIES = BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ACTIVITIES;
 
 	@Override
 	public void execute(String action, String[] args, String option) {
 		ConsoleUtils.display("> Adapters Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);
-		if (action.equals(GENERATE_LOADERS)) {
+		if (action.equals(GENERATE_ACTIVITIES)) {
 			try {
 				this.generateLoaders();
 			} catch (Exception e) {
@@ -66,13 +66,13 @@ public class SearchCommand  extends BaseCommand{
 	@Override
 	public void summary() {
 		ConsoleUtils.display("\n> Search \n" +
-				"\t" + GENERATE_LOADERS + "\t => Generate Loaders");
+				"\t" + GENERATE_ACTIVITIES + "\t => Generate Activities");
 		
 	}
 
 	@Override
 	public boolean isAvailableCommand(String command) {
-		return (command.equals(GENERATE_LOADERS));
+		return (command.equals(GENERATE_ACTIVITIES));
 	}
 
 }
