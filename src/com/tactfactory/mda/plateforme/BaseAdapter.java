@@ -22,6 +22,7 @@ public abstract class BaseAdapter {
 	protected String source;
 	protected String libs;
 	protected String test;
+	protected String testLibs;
 	protected String harmony;
 	protected String widget;
 	protected String util;
@@ -94,6 +95,10 @@ public abstract class BaseAdapter {
 	
 	public final String getTestPath() {
 		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getTest() );
+	}
+	
+	public final String getTestLibsPath() {
+		return String.format("%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(), this.getTest(), this.getTestLibs() );
 	}
 	
 	public final String getSourcePath() {
@@ -501,6 +506,20 @@ public abstract class BaseAdapter {
 	 */
 	public void setTest(String test) {
 		this.test = test;
+	}
+	
+	/**
+	 * @return the testLibs
+	 */
+	public String getTestLibs() {
+		return this.testLibs;
+	}
+
+	/**
+	 * @param testLibs the testLibs to set
+	 */
+	public void setTestLibs(String testLibs) {
+		this.testLibs = testLibs;
 	}
 
 	/**

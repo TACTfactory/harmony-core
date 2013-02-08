@@ -65,6 +65,8 @@ public class TestProjectGenerator extends BaseGenerator {
 				this.adapter.getTemplateStringsTestPathFile(), 
 				this.adapter.getStringsTestPathFile(), false);
 		
+		this.updateLibrary("android-junit-report-1.5.8.jar");
+		
 		File dirTpl = new File(this.adapter.getTemplateTestProjectPath());
 
 		// Update newly created files with datamodel
@@ -125,5 +127,18 @@ public class TestProjectGenerator extends BaseGenerator {
 		boolean result = false;
 
 		return result;
+	}
+	
+	/**
+	 * Update TestLibs
+	 */
+	@Override
+	protected void updateLibrary(String libName) {
+		File dest = new File(String.format("%s/%s", this.adapter.getTestLibsPath(), libName));
+		
+		if (!dest.exists())
+			FileUtils.copyfile(
+					new File(String.format("%s/%s", Harmony.pathLibs, libName)),
+					dest);
 	}
 }
