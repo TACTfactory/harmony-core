@@ -190,37 +190,40 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 			int index;
 	<#list curr.fields as field>
 		<#if (!field.internal && !(field.relation?? && (field.relation.type=="ManyToMany" || field.relation.type=="OneToMany")))>
-		
+			<#assign t="" />
 			index = c.getColumnIndexOrThrow(${alias(field.name)});
 			<#if (field.nullable?? && field.nullable)>
-			if(!c.isNull(index))
+			if(!c.isNull(index)){<#assign t="\t" />
 			</#if>
 			<#if (!field.relation??)>
 				<#if ((field.type == "date") || (field.type == "datetime") || (field.type == "time"))> 
 			
 					<#if field.is_locale>
-			DateTime dt${field.name?cap_first} = DateUtils.formatLocalISOStringToDateTime(c.getString(index) );	
+			${t}DateTime dt${field.name?cap_first} = DateUtils.formatLocalISOStringToDateTime(c.getString(index) );	
 					<#else>
-			DateTime dt${field.name?cap_first} = DateUtils.formatISOStringToDateTime(c.getString(index) );	
+			${t}DateTime dt${field.name?cap_first} = DateUtils.formatISOStringToDateTime(c.getString(index) );	
 					</#if>
-			if (dt${field.name?cap_first} != null){
-				result.set${field.name?cap_first}(dt${field.name?cap_first});
-			} else {
-				result.set${field.name?cap_first}(new DateTime());
-			}
+				${t}if (dt${field.name?cap_first} != null){
+					${t}result.set${field.name?cap_first}(dt${field.name?cap_first});
+				${t}} else {
+				${t}result.set${field.name?cap_first}(new DateTime());
+			${t}}
 				<#elseif (field.type == "boolean")>
-			result.set${field.name?cap_first}  (c.getString(index).equals("true"));
+			${t}result.set${field.name?cap_first}  (c.getString(index).equals("true"));
 				<#elseif (field.type == "int" || field.type == "integer" || field.type == "ean" || field.type == "zipcode")>
-			result.set${field.name?cap_first}(c.getInt(index));
+			${t}result.set${field.name?cap_first}(c.getInt(index));
 				<#elseif (field.type == "float")>
-			result.set${field.name?cap_first}(c.getFloat(index));
+			${t}result.set${field.name?cap_first}(c.getFloat(index));
 				<#else>
-			result.set${field.name?cap_first}(c.getString(index)); 
+			${t}result.set${field.name?cap_first}(c.getString(index)); 
 				</#if>
 			<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
-			${field.type} ${field.name} = new ${field.type}();
-			${field.name}.setId(c.getInt(index)) ;
-			result.set${field.name?cap_first}(${field.name});	
+			${t}${field.type} ${field.name} = new ${field.type}();
+			${t}${field.name}.setId(c.getInt(index)) ;
+			${t}result.set${field.name?cap_first}(${field.name});	
+			</#if>
+			<#if (field.nullable?? && field.nullable)>
+			}
 			</#if>
 		</#if>
 	</#list>

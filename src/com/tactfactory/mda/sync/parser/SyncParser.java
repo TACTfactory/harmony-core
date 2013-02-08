@@ -113,6 +113,7 @@ public class SyncParser extends BaseParser{
 			sync_udate.columnDefinition = "datetime";
 			sync_udate.hidden = true;
 			sync_udate.nullable = true;
+			sync_udate.isLocale = true;
 			cm.fields.put(sync_udate.name, sync_udate);
 		}
 	}
