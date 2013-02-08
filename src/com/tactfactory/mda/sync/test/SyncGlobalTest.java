@@ -34,6 +34,7 @@ public class SyncGlobalTest extends CommonTest{
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
+		this.initAllTests();
 	}
 
 	/**
@@ -45,8 +46,7 @@ public class SyncGlobalTest extends CommonTest{
 		super.tearDown();
 	}
 	
-	@Test
-	public void all() {
+	private void initAllTests() {
 		System.out.println("\nTest Orm generate entity");
 		System.out.println("###############################################################################");
 		
@@ -60,7 +60,11 @@ public class SyncGlobalTest extends CommonTest{
 		
 		SyncCommand command = (SyncCommand) Harmony.instance.getCommand(SyncCommand.class);
 		command.generateMetas();
-		
+	}
+	
+	//@Test
+	public void all() {
+		this.initAllTests();		
 		
 		this.isCommentSync();
 		this.isPostSync();

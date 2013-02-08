@@ -29,6 +29,10 @@ public class OrmInitEntitiesTest extends CommonTest {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
+		
+		if (userMeta == null) {
+			this.initAll();
+		}
 	}
 
 	/**
@@ -40,8 +44,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 		super.tearDown();
 	}
 	
-	@Test
-	public void all() {
+	private void initAll() {
 		System.out.println("\nTest Orm generate entity");
 		System.out.println("###############################################################################");
 		
@@ -61,6 +64,11 @@ public class OrmInitEntitiesTest extends CommonTest {
 			if (classMetadata.name.equals("Comment"))
 				commentMeta = classMetadata;
 		}
+	}
+	
+	//@Test
+	public void all() {
+		this.initAll();
 		
 		// Check Model Decoration
 		// User

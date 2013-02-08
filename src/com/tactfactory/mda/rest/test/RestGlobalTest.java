@@ -23,6 +23,7 @@ public class RestGlobalTest extends CommonTest{
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
+		this.initAllTests();
 	}
 
 	/**
@@ -34,8 +35,7 @@ public class RestGlobalTest extends CommonTest{
 		super.tearDown();
 	}
 	
-	@Test
-	public void all() {
+	private void initAllTests() {
 		System.out.println("\nTest Orm generate entity");
 		System.out.println("###############################################################################");
 		
@@ -50,8 +50,12 @@ public class RestGlobalTest extends CommonTest{
 		this.hasUserWebServiceAdapters();
 		
 		RestCommand command = (RestCommand) Harmony.instance.getCommand(RestCommand.class);
-		command.generateMetas();
-		
+		command.generateMetas();	
+	}
+	
+	//@Test
+	public void all() {
+		this.initAllTests();	
 		
 		this.isCommentRest();
 		
