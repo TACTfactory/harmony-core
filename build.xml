@@ -3,7 +3,7 @@
 	<description>
 		Harmony project build file.
 	</description>
-
+	
 	<!-- load environment variables as properties -->
 	<property environment="env" />
 
@@ -20,11 +20,12 @@
 	<property name="app.rel-dir" value="app" />
 	<property name="build.rel-dir" value="bin" />
 	<property name="lib.rel-dir" value="lib" />
+	<property name="tools.rel-dir" value="tools" />
 	<property name="tmp.rel-dir" value="tmp" />
 	<property name="dist.rel-dir" value="vendor/tact-core" />
 	<property name="doc.rel-dir" value="${dist.rel-dir}/javadoc" />
 	<property name="jar.rel-file" value="${dist.rel-dir}/${ant.project.name}.jar" />
-
+		
 	<!-- project classpath -->
 
 	<path id="project.classpath">
@@ -34,8 +35,7 @@
 		<fileset dir="${lib.rel-dir}">
 			<include name="*.jar" />
 		</fileset>
-	</path>
-	
+	</path>	
 	
 	<!-- basic -->
 
@@ -113,6 +113,8 @@
             debug="${compile.debug}"
             debuglevel="${compile.debuglevel}"
             includeantruntime="false"
+            target="1.6"
+        	source="1.6"
         >
             <compilerarg line="" /> <!-- "-Xlint:all", "-Xlint:all,-path", "-Xlint:all,-path,-unchecked" -->
             <classpath refid="project.classpath" />
@@ -121,11 +123,63 @@
 
     <target name="run-tests" depends="compile-tests"
         description="Run tests">
+
+        <path id="test.classpath">
+			<pathelement location="${emma.instr-dir}"/>
+			<pathelement location="${emma.dir}"/>
+			<fileset dir="${emma.dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${lib.rel-dir}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${dist.rel-dir}">
+				<include name="*.jar" />
+			</fileset>
+		</path>
+		
+    	<emma enabled="${emma.enabled}" >
+		    <instr instrpathref="emma.coverage.classes"
+		         destdir="${emma.instr-dir}"
+		         metadatafile="${emma.out-dir}/metadata.emma"
+		         merge="true">
+		        <filter value="${emma.filter}" />
+		    </instr>
+		</emma>
+
         <junit haltonfailure="no" fork="yes">
+            <!-- <jvmarg value="-Demma.coverage.out.file=${emma.out-dir}/coverage.emma" />
+			<jvmarg value="-Demma.coverage.out.merge=false" /> -->
+			<!-- <jvmarg value="-XX:-UseSplitVerifier" /> -->
+            					
             <classpath refid="project.classpath" />
             <formatter type="xml" />
-        	<test name="com.tactfactory.mda.test.AllTests" todir="${tmp.rel-dir}/"/> 
+        	<test name="com.tactfactory.mda.test.AllTests" todir="${tmp.rel-dir}/"/>
         </junit>
+        
+        <emma enabled="${emma.enabled}" >
+		    <report sourcepath="src"
+		          sort="+block,+name,+method,+class"
+		          metrics="method:70,block:80,line:80,class:100"
+		    >
+		    <!-- collect all EMMA data dumps (metadata and runtime)
+		         [this can be done via nested <fileset> fileset elements
+		         or <file> elements pointing to a single file]:
+		    -->
+		    <fileset dir="${emma.out-dir}" >
+		        <include name="*.emma" />
+		    </fileset>
+		    
+		    <!-- for every type of report desired, configure a nested
+		         element; various report parameters
+		         can be inherited from the parent <report>
+		         and individually overridden for each report type:
+		    -->
+		    <xml outfile="${emma.out-dir}/coverage.xml"
+		        depth="method"
+		    />
+		    </report>
+		</emma>
     </target>
 	
 	<target name="run-jdepend" depends="compile-tests"
@@ -208,5 +262,27 @@
             </manifest>
             
         </jar>
+    </target>
+    
+    <!-- emma -->   
+	<property name="emma.dir" value="${tools.rel-dir}" />
+	<property name="emma.out-dir" value="${tmp.rel-dir}" />
+	<property name="emma.instr-dir" value="emmainstr" />
+	
+	<path id="emma.lib" >
+	    <pathelement location="${emma.dir}/emma.jar" />
+	    <pathelement location="${emma.dir}/emma_ant.jar" />
+	</path>
+	
+	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+	
+	<path id="emma.coverage.classes" >
+	    <pathelement location="${build.rel-dir}" />
+	</path>
+	
+	<target name="emma"> <!-- enable code coverage -->
+        <property name="emma.enabled" value="true" />
+        <property name="emma.filter" value="" />
+        <mkdir dir="${emma.instr-dir}" />        
     </target>
 </project>
