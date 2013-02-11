@@ -182,26 +182,21 @@
         <if condition="${emma.enabled}">
             <then>
 		        <emma enabled="${emma.enabled}" >
-				    <report sourcepath="src"
-				          sort="+block,+name,+method,+class"
-				          metrics="method:70,block:80,line:80,class:100"
-				    >
-				    <!-- collect all EMMA data dumps (metadata and runtime)
-				         [this can be done via nested <fileset> fileset elements
-				         or <file> elements pointing to a single file]:
-				    -->
-				    <fileset dir="${emma.out-dir}" >
-				        <include name="*.emma" />
-				    </fileset>
-				    
-				    <!-- for every type of report desired, configure a nested
-				         element; various report parameters
-				         can be inherited from the parent <report>
-				         and individually overridden for each report type:
-				    -->
-				    <xml outfile="${emma.out-dir}/coverage.xml"
-				        depth="method"
-				    />
+				    <report sourcepath="src">
+					    <!-- collect all EMMA data dumps (metadata and runtime)
+					         [this can be done via nested <fileset> fileset elements
+					         or <file> elements pointing to a single file]:
+					    -->
+					    <fileset dir="${emma.out-dir}" >
+					        <include name="*.emma" />
+					    </fileset>
+					    
+					    <!-- for every type of report desired, configure a nested
+					         element; various report parameters
+					         can be inherited from the parent <report>
+					         and individually overridden for each report type:
+					    -->
+					    <xml outfile="${emma.out-dir}/coverage.xml"/>
 				    </report>
 				</emma>
 			</then>
