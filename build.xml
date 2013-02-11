@@ -3,7 +3,7 @@
 	<description>
 		Harmony project build file.
 	</description>
-	
+	    
 	<!-- load environment variables as properties -->
 	<property environment="env" />
 
@@ -26,6 +26,14 @@
 	<property name="doc.rel-dir" value="${dist.rel-dir}/javadoc" />
 	<property name="jar.rel-file" value="${dist.rel-dir}/${ant.project.name}.jar" />
 		
+	<!-- jar file from where the tasks are loaded -->
+    <path id="android.antlibs">
+        <pathelement path="${tools.rel-dir}/anttasks.jar" />
+    </path>
+
+    <!-- Custom tasks -->
+    <taskdef resource="anttasks.properties" classpathref="android.antlibs" />
+    
 	<!-- project classpath -->
 
 	<path id="project.classpath">
@@ -52,6 +60,7 @@
         <delete dir="${build.rel-dir}" failonerror="false" deleteonexit="true" />
         <delete dir="${dist.rel-dir}" failonerror="false" deleteonexit="true" />
     	<delete dir="${tmp.rel-dir}" failonerror="false" deleteonexit="true" />
+    	<delete dir="${emma.instr-dir}" failonerror="false" deleteonexit="true" />
     </target>
     
     <!-- javadoc -->
@@ -124,62 +133,79 @@
     <target name="run-tests" depends="compile-tests"
         description="Run tests">
 
-        <path id="test.classpath">
-			<pathelement location="${emma.instr-dir}"/>
-			<pathelement location="${emma.dir}"/>
-			<fileset dir="${emma.dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${lib.rel-dir}">
-				<include name="*.jar" />
-			</fileset>
-			<fileset dir="${dist.rel-dir}">
-				<include name="*.jar" />
-			</fileset>
-		</path>
-		
-    	<emma enabled="${emma.enabled}" >
-		    <instr instrpathref="emma.coverage.classes"
-		         destdir="${emma.instr-dir}"
-		         metadatafile="${emma.out-dir}/metadata.emma"
-		         merge="true">
-		        <filter value="${emma.filter}" />
-		    </instr>
-		</emma>
+        <if condition="${emma.enabled}">
+            <then>
+		    	<emma enabled="${emma.enabled}" >
+				    <instr instrpathref="emma.coverage.classes"
+				         destdir="${emma.instr-dir}"
+				         metadatafile="${emma.out-dir}/metadata.emma"
+				         merge="true">
+				        <filter value="${emma.filter}" />
+				    </instr>
+				</emma>
+				
+		    	<path id="emma.test.classpath">
+					<pathelement location="${emma.instr-dir}"/>
+					<pathelement location="${emma.dir}"/>
+					<fileset dir="${emma.dir}">
+						<include name="*.jar" />
+					</fileset>
+					<fileset dir="${lib.rel-dir}">
+						<include name="*.jar" />
+					</fileset>
+					<fileset dir="${dist.rel-dir}">
+						<include name="*.jar" />
+					</fileset>
+				</path>
+				
+		    	<property name="test.classpath.id" value="emma.test.classpath" />
+			</then>
+			<else>
+			    <property name="test.classpath.id" value="project.classpath" />
+			</else>
+		</if>
 
         <junit haltonfailure="no" fork="yes">
-            <!-- <jvmarg value="-Demma.coverage.out.file=${emma.out-dir}/coverage.emma" />
-			<jvmarg value="-Demma.coverage.out.merge=false" /> -->
-			<!-- <jvmarg value="-XX:-UseSplitVerifier" /> -->
-            					
-            <classpath refid="project.classpath" />
+            <!-- <if condition="${emma.enabled}">
+	            <then> -->
+		            <jvmarg value="-Demma.coverage.out.file=${emma.out-dir}/coverage.emma" />
+					<jvmarg value="-Demma.coverage.out.merge=false" />
+					<!-- <jvmarg value="-XX:-UseSplitVerifier" /> -->
+           		<!-- </then>
+      		</if>	 -->		
+      		
+            <classpath refid="${test.classpath.id}" />
             <formatter type="xml" />
         	<test name="com.tactfactory.mda.test.AllTests" todir="${tmp.rel-dir}/"/>
         </junit>
         
-        <emma enabled="${emma.enabled}" >
-		    <report sourcepath="src"
-		          sort="+block,+name,+method,+class"
-		          metrics="method:70,block:80,line:80,class:100"
-		    >
-		    <!-- collect all EMMA data dumps (metadata and runtime)
-		         [this can be done via nested <fileset> fileset elements
-		         or <file> elements pointing to a single file]:
-		    -->
-		    <fileset dir="${emma.out-dir}" >
-		        <include name="*.emma" />
-		    </fileset>
-		    
-		    <!-- for every type of report desired, configure a nested
-		         element; various report parameters
-		         can be inherited from the parent <report>
-		         and individually overridden for each report type:
-		    -->
-		    <xml outfile="${emma.out-dir}/coverage.xml"
-		        depth="method"
-		    />
-		    </report>
-		</emma>
+        <if condition="${emma.enabled}">
+            <then>
+		        <emma enabled="${emma.enabled}" >
+				    <report sourcepath="src"
+				          sort="+block,+name,+method,+class"
+				          metrics="method:70,block:80,line:80,class:100"
+				    >
+				    <!-- collect all EMMA data dumps (metadata and runtime)
+				         [this can be done via nested <fileset> fileset elements
+				         or <file> elements pointing to a single file]:
+				    -->
+				    <fileset dir="${emma.out-dir}" >
+				        <include name="*.emma" />
+				    </fileset>
+				    
+				    <!-- for every type of report desired, configure a nested
+				         element; various report parameters
+				         can be inherited from the parent <report>
+				         and individually overridden for each report type:
+				    -->
+				    <xml outfile="${emma.out-dir}/coverage.xml"
+				        depth="method"
+				    />
+				    </report>
+				</emma>
+			</then>
+		</if>
     </target>
 	
 	<target name="run-jdepend" depends="compile-tests"
