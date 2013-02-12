@@ -35,7 +35,13 @@ public abstract class CommonTest {
 		// Project test config
 		Harmony.metas.name = "demact";
 		Harmony.metas.projectNameSpace = "com/tactfactory/mda/test/demact";
-		Harmony.androidSdkPath = "/tmp/";
+		
+		if (Harmony.androidSdkPath == null || Harmony.androidSdkPath.isEmpty()) {
+			String local_prop = String.format("%s/%s/%s", Harmony.pathProject, Harmony.projectFolder, "local.properties");
+			
+			if ((Harmony.androidSdkPath = Harmony.getSdkDirFromPropertiesFile(local_prop)) == null);
+				Harmony.androidSdkPath = "/opt/android-sdk-linux_86/";
+		}
 		
 		this.harmony = new Harmony();
 	}

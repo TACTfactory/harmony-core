@@ -60,10 +60,15 @@ public class TestProjectGenerator extends BaseGenerator {
 		// create project name space folders
 		//FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/"));
 
+		// create libs folder
+		FileUtils.makeFolder(this.adapter.getTestLibsPath());
+				
 		// create strings.xml
 		super.makeSource(
 				this.adapter.getTemplateStringsTestPathFile(), 
 				this.adapter.getStringsTestPathFile(), false);
+		
+		this.updateLibrary("android-junit-report-1.5.8.jar");
 		
 		File dirTpl = new File(this.adapter.getTemplateTestProjectPath());
 
@@ -125,5 +130,18 @@ public class TestProjectGenerator extends BaseGenerator {
 		boolean result = false;
 
 		return result;
+	}
+	
+	/**
+	 * Update TestLibs
+	 */
+	@Override
+	protected void updateLibrary(String libName) {
+		File dest = new File(String.format("%s/%s", this.adapter.getTestLibsPath(), libName));
+		
+		if (!dest.exists())
+			FileUtils.copyfile(
+					new File(String.format("%s/%s", Harmony.pathLibs, libName)),
+					dest);
 	}
 }
