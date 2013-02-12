@@ -9,7 +9,7 @@ import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}ListAct
 	</#list>
 </#if>
 
-import android.app.Activity;
+import android.support.v4.app.FragmentActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
@@ -17,7 +17,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-public class HomeActivity extends Activity
+public class HomeActivity extends FragmentActivity
 {
 	/** Called when the activity is first created. */
 	@Override

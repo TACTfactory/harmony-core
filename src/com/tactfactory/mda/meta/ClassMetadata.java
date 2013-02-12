@@ -68,6 +68,7 @@ public class ClassMetadata extends BaseMetadata {
 		model.put(TagConstant.SPACE,			this.space);
 		model.put(TagConstant.PROJECT_NAME,		Harmony.metas.name);
 		model.put(TagConstant.NAME,				this.name);
+		model.put(TagConstant.EXTENDS,			this.extendType);
 		model.put(TagConstant.CONTROLLER_NAMESPACE, adapter.getNameSpaceEntity(this, adapter.getController()));
 		model.put(TagConstant.DATA_NAMESPACE, 	adapter.getNameSpace(this, adapter.getData()));
 		model.put(TagConstant.TEST_NAMESPACE, 	adapter.getNameSpace(this, adapter.getTest()));

@@ -12,18 +12,18 @@ import org.joda.time.DateTime;
 
 import com.tactfactory.mda.annotation.*;
 import com.tactfactory.mda.annotation.Column.Type;
-import com.tactfactory.mda.rest.annotation.Rest;
-import com.tactfactory.mda.rest.annotation.Rest.Security;
-import com.tactfactory.mda.sync.annotation.Sync;
-import com.tactfactory.mda.sync.annotation.Sync.Level;
-import com.tactfactory.mda.sync.annotation.Sync.Mode;
+import com.tactfactory.mda.bundles.rest.annotation.Rest;
+import com.tactfactory.mda.bundles.rest.annotation.Rest.Security;
+import com.tactfactory.mda.bundles.sync.annotation.Sync;
+import com.tactfactory.mda.bundles.sync.annotation.Sync.Level;
+import com.tactfactory.mda.bundles.sync.annotation.Sync.Mode;
 
 // Annotation with default and forced value/parameter
 @Table
 @Entity
 @Rest(security=Security.SESSION)
 @Sync(level=Level.SESSION, mode=Mode.REAL_TIME, priority=Sync.Priority.LOW)
-public class Comment extends Object {
+public class Comment {
 	
 	@Id
     @Column(type=Type.INTEGER, hidden=true)

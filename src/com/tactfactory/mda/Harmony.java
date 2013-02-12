@@ -134,7 +134,7 @@ public class Harmony {
 			}
 			
 			// get android sdk dir from local.properties
-			File local_prop = new File(String.format("%s/%s/%s",Harmony.pathProject,Harmony.projectFolder,"project.properties"));
+			File local_prop = new File(String.format("%s/%s/%s",Harmony.pathProject,Harmony.projectFolder,"local.properties"));
 			if(local_prop.exists())
 				Harmony.androidSdkPath = Harmony.getSdkDirFromProject(local_prop);
 				Harmony.androidSdkVersion = getAndroidSdkVersion(Harmony.androidSdkPath);

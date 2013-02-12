@@ -175,7 +175,7 @@ public class ${curr.name}ShowFragment extends Fragment {
 			SQLiteDatabase db = ${curr.name?lower_case}Adapter.open();
 			db.beginTransaction();
 			try {
-				this.entity = ${curr.name?lower_case}Adapter.getByID(this.entity.getId());
+				this.entity = ${curr.name?lower_case}Adapter.getByID(<#if (curr.ids?size>0)>this.entity.getId()</#if>);
 
 				db.setTransactionSuccessful();
 			} finally {

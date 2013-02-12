@@ -130,6 +130,10 @@ public abstract class BaseAdapter {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getService() );
 	}
 	
+	public final String getTemplateSourceEntityBasePath() {
+		return String.format("%s/%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getModel(), "base" );
+	}
+	
 	public final String getTemplateSourceProviderPath() {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getProvider() );
 	}
@@ -314,7 +318,7 @@ public abstract class BaseAdapter {
 	}
 	
 	/**
-	 * @param ressource the resource to set
+	 * @param assets the assets folder
 	 */
 	public final void setAssets(String assets) {
 		this.assets = assets;
@@ -420,7 +424,7 @@ public abstract class BaseAdapter {
 	}
 
 	/**
-	 * @param service the service to set
+	 * @param fixture the fixture folder
 	 */
 	public final void setFixture(String fixture) {
 		this.fixture = fixture;

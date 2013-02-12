@@ -125,7 +125,8 @@ public class ConsoleUtils {
 							String input  = this.processInput.readLine();
 							if(input!=null && !input.isEmpty())
 								ConsoleUtils.display(input);
-						}else if(this.processError.ready()){
+						}
+						if(this.processError.ready()){
 							String error = this.processError.readLine();
 							if(error!=null && !error.isEmpty())
 								ConsoleUtils.displayError(new Exception(error));

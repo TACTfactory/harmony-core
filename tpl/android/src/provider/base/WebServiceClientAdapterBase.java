@@ -6,9 +6,13 @@ import java.util.List;
 
 import org.apache.http.Header;
 import org.apache.http.message.BasicHeader;
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
 import org.json.JSONObject;
 import org.json.JSONArray;
 import org.json.JSONException;
+
+import com.tactfactory.mda.test.demact.data.RestClient.Verb;
 
 import ${data_namespace}.RestClient.Verb;
 import ${project_namespace}.R;
@@ -21,34 +25,37 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.widget.Toast;
 
-public abstract class WebServiceClientAdapterBase{
-	private static final String TAG = "WSClientAdapter";
+public abstract class WebServiceClientAdapterBase<T>{
+	protected static final String TAG = "WSClientAdapter";
+	protected static String REST_FORMAT = ".json"; //JSon RSS xml or empty (for html)
+	
+	protected List<Header> headers = new ArrayList<Header>();
+	protected RestClient restClient;
+	protected Context context;
+	protected int statusCode;
+	protected int errorCode;
+	protected String error;
 
-	private List<Header> headers = new ArrayList<Header>();
-	private RestClient restClient;
-	private Context context;
-	private int statusCode;
-	private int errorCode;
-	private String error;
+	
 
 	private String host;
 
 
 	public WebServiceClientAdapterBase(Context context){
-		if (${project_name?cap_first}Application.DEBUG){
-			host = this.context.getString(R.string.rest_url_dev);
-		} else {
-			host = this.context.getString(R.string.rest_url_prod);
-		}
 
 		this.headers.add(new BasicHeader("Content-Type","application/json"));
 		this.headers.add(new BasicHeader("Accept","application/json"));
 
 		this.context = context;
-		this.restClient = new RestClient(host);
+		if (${project_name?cap_first}Application.DEBUG){
+			host = this.context.getString(R.string.rest_url_dev);
+		} else {
+			host = this.context.getString(R.string.rest_url_prod);
+		}
 	}
 
 	protected synchronized String invokeRequest(Verb verb, String request, JSONObject params) {
+		this.restClient = new RestClient(host);
 		String response = "";
 		
 		StringBuilder error = new StringBuilder();
@@ -146,4 +153,163 @@ public abstract class WebServiceClientAdapterBase{
 				!response.trim().equals("") && 
 				response.startsWith("{"));
 	}
+	
+	
+	public DateTime syncTime() {
+		String uri = String.format(
+				"sync%s",
+				REST_FORMAT);
+		String response = this.invokeRequest(Verb.GET, uri , null).replace("\"", "");
+		return ISODateTimeFormat.dateTimeNoMillis().parseDateTime(response);
+	}
+	
+	
+	/**
+	 * Convert a <T> to a JSONObject	
+	 * @param item The <T> to convert
+	 * @return The converted <T>
+	 */
+	public abstract JSONObject itemToJson(T item);
+	
+	/**
+	 * Convert a <T> to a JSONObject	
+	 * @param item The <T> to convert
+	 * @return The converted <T>
+	 */
+	public abstract JSONObject itemIdToJson(T item);
+	
+	/**
+	 * Convert a list of <T> to a JSONArray	
+	 * @param users The array of <T> to convert
+	 * @return The array of converted <T>
+	 */
+	public JSONArray itemsToJson(List<T> items){
+		JSONArray itemArray = new JSONArray();
+		
+		for (int i = 0 ; i < items.size(); i++) {
+			JSONObject jsonItems = this.itemToJson(items.get(i));
+			itemArray.put(jsonItems);
+		}
+		
+		return itemArray;
+	}
+	
+	
+	/**
+	 * Convert a list of <T> to a JSONArray	
+	 * @param users The array of <T> to convert
+	 * @return The array of converted <T>
+	 */
+	public JSONArray itemsIdToJson(List<T> items){
+		JSONArray itemArray = new JSONArray();
+		
+		for (int i = 0 ; i < items.size(); i++) {
+			JSONObject jsonItems = this.itemIdToJson(items.get(i));
+			itemArray.put(jsonItems);
+		}
+		
+		return itemArray;
+	}
+	
+	/**
+	 * Extract a <T> from a JSONObject describing a <T>
+	 * @param json The JSONObject describing the <T>
+	 * @param item The returned <T>
+	 * @return true if a <T> was found. false if not
+	 */
+	public abstract T extract(JSONObject json);
+	
+		
+	/**
+	 * Extract a list of <T> from a JSONObject describing an array of <T> given the array name
+	 * @param json The JSONObject describing the array of <T>
+	 * @param items The returned list of <T>
+	 * @param paramName The name of the array
+	 * @return The number of <T> found in the JSON
+	 */
+	public int extractItems(JSONObject json, String paramName, List<T> items) throws JSONException{
+		JSONArray itemArray = json.optJSONArray(paramName);
+		
+		int result = -1;
+		
+		if (itemArray != null) {
+			int count = itemArray.length();			
+			
+			for (int i = 0 ; i < count; i++) {
+				JSONObject jsonItem = itemArray.getJSONObject(i);
+				
+				T item = extract(jsonItem);
+				if (item!=null){
+					synchronized (items) {
+						items.add(item);
+					}
+				}
+			}
+		}
+		
+		if (!json.isNull("Meta")){
+			JSONObject meta = json.optJSONObject("Meta");
+			result = meta.optInt("nbt",0);
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Delete a <T>. 
+	 * @param item : The <T> to delete (only the id is necessary)
+	 * @return -1 if an error has occurred. 0 if not.
+	 */
+	public abstract int delete(T item);
+	
+	/**
+	 * Update a <T>.
+	 * @param item : The <T> to update
+	 * @return -1 if an error has occurred. 0 if not.
+	 */
+	public abstract int update(T item);
+	
+	/**
+	 * Retrieve all the <T> in the given list.
+	 * @param items : The list in which the <T> will be returned
+	 * @return The number of <T> returned
+	 */
+	public abstract int getAll(List<T> items);
+
+	/**
+	 * Retrieve one <T>.
+	 * @param item : The <T> to retrieve (set the ID)
+	 * @return -1 if an error has occurred. 0 if not.
+	 */ 
+	public abstract int get(T item);
+	
+	
+	/**
+	 * Insert the User. Uses the route : user-uri
+	 * @param user : The User to insert
+	 * @return -1 if an error has occurred. 0 if not.
+	 */
+	public int insert(T item){
+		int result = -1;
+		String response = this.invokeRequest(
+					Verb.POST,
+					String.format(
+						"%s%s",
+						this.getUri(),
+						REST_FORMAT),
+					itemToJson(item));
+		if (this.isValidResponse(response) && this.isValidRequest()) {
+			result = 0;
+		}
+
+		return result;
+	}
+	
+	/**
+	 * 
+	 * 
+	 * 
+	 */
+	public abstract String getUri();
+	
 }

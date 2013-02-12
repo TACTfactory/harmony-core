@@ -76,11 +76,10 @@ public abstract class BaseGenerator {
 	}
 	
 	/** 
-	 * Make Java Source Code
+	 * Append Source Code to existing file
 	 * 
 	 * @param templatePath Template path file. <br/>For list activity is "TemplateListActivity.java"
 	 * @param generatePath
-	 * @param override
 	 */
 	protected void appendSource(String templatePath, String generatePath) {
 		if (FileUtils.exists(generatePath)){
@@ -88,7 +87,7 @@ public abstract class BaseGenerator {
 			
 			try {
 				// Debug Log
-				ConsoleUtils.displayDebug("Generate Source : " + generateFile.getPath()); 
+				ConsoleUtils.displayDebug("Append Source : " + generateFile.getPath()); 
 				
 				// Create
 				Template tpl = this.cfg.getTemplate(templatePath);
