@@ -125,8 +125,7 @@ public class Harmony {
 			File config = new File(String.format("%s/%s/%s", Harmony.pathProject, Harmony.projectFolder,"/res/values/configs.xml")); //FIXME path by adapter
 			
 			if(manifest.exists()) {
-				Harmony.metas.projectNameSpace = Harmony.getNameSpaceFromManifest(manifest);
-				
+				Harmony.metas.projectNameSpace = Harmony.getNameSpaceFromManifest(manifest);				
 
 				//String[] projectNameSpaceData = Harmony.metas.projectNameSpace.split("/");
 				Harmony.metas.name = Harmony.getProjectNameFromConfig(config);
@@ -134,10 +133,15 @@ public class Harmony {
 			}
 			
 			// get android sdk dir from local.properties
-			File local_prop = new File(String.format("%s/%s/%s",Harmony.pathProject,Harmony.projectFolder,"local.properties"));
-			if(local_prop.exists())
-				Harmony.androidSdkPath = Harmony.getSdkDirFromProject(local_prop);
-				Harmony.androidSdkVersion = getAndroidSdkVersion(Harmony.androidSdkPath);
+//			File local_prop = new File(String.format("%s/%s/%s",Harmony.pathProject,Harmony.projectFolder,"local.properties"));
+//			if(local_prop.exists())
+//				Harmony.androidSdkPath = Harmony.getSdkDirFromProject(local_prop);
+//				Harmony.androidSdkVersion = getAndroidSdkVersion(Harmony.androidSdkPath);
+
+			String project_prop = String.format("%s/%s/%s",Harmony.pathProject,Harmony.projectFolder,"project.properties");
+			
+			Harmony.androidSdkPath = Harmony.getSdkDirFromPropertiesFile(project_prop);			
+			Harmony.androidSdkVersion = getAndroidSdkVersion(Harmony.androidSdkPath);
 		}
 		else {
 			String[] projectNameSpaceData = Harmony.metas.projectNameSpace.split("/");
@@ -382,16 +386,16 @@ public class Harmony {
 	}
 	
 	/**
-	 * Extract Android SDK Path from local.properties file
+	 * Extract Android SDK Path from .properties file
 	 * 
-	 * @param local_prop Local.properties File
+	 * @param file_prop .properties File
 	 * @return Android SDK Path
 	 */
-	public static String getSdkDirFromProject(File local_prop) {
+	public static String getSdkDirFromPropertiesFile(File file_prop) {
 		String result = null;
 		
-		if(local_prop.exists()){
-			ArrayList<String> lines = FileUtils.FileToStringArray(local_prop);
+		if(file_prop.exists()){
+			ArrayList<String> lines = FileUtils.FileToStringArray(file_prop);
 			
 			for(int i=0;i<lines.size();i++){
 				if(lines.get(i).startsWith("sdk.dir=")){
@@ -404,6 +408,22 @@ public class Harmony {
 				}
 			}
 		}
+		
+		return result;
+	}
+	
+	/**
+	 * Extract Android SDK Path from .properties file
+	 * 
+	 * @param file_path .properties File path
+	 * @return Android SDK Path
+	 */
+	public static String getSdkDirFromPropertiesFile(String file_path) {
+		String result = null;
+		
+		File file_prop = new File(file_path);
+		result = getSdkDirFromPropertiesFile(file_prop);
+		
 		return result;
 	}
 	
