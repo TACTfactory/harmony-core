@@ -11,6 +11,7 @@ package com.tactfactory.mda.bundles.sync.test;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import com.tactfactory.mda.Harmony;
@@ -56,13 +57,12 @@ public class SyncGlobalTest extends CommonTest{
 		this.harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[]{}, null);
 		this.harmony.findAndExecute(SyncCommand.GENERATE_SERVICE, new String[]{}, null);
 		
-		this.hasGlobalService();
-		
 		SyncCommand command = (SyncCommand) Harmony.instance.getCommand(SyncCommand.class);
 		command.generateMetas();
 	}
 	
-	//@Test
+	@Test
+	@Ignore
 	public void all() {
 		this.initAllTests();		
 		
@@ -76,6 +76,7 @@ public class SyncGlobalTest extends CommonTest{
 	}
 	
 	@Test
+	@Ignore
 	public void hasGlobalService() {
 		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/service/IDemactSyncListener.java");
 		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/service/IDemactSyncService.java");
