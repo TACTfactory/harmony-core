@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="Harmony" default="buildall">
+<project name="harmony" default="buildall">
 	<description>
 		Harmony project build file.
 	</description>
@@ -37,6 +37,17 @@
 		</fileset>
 	</path>
 	
+	<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
+		<classpath>
+			<pathelement location="${env.PMD_HOME}/lib/pmd-*.jar" />
+		</classpath>
+	</taskdef>
+	
+	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask">
+		<classpath>
+			<pathelement location="${env.FINDBUGS_HOME}" />
+		</classpath>
+	</taskdef>
 	
 	<!-- basic -->
 
@@ -106,8 +117,8 @@
     
     <!-- tests -->
 
-    <target name="compile-tests" depends="init,prepare-resources">
-    <!-- description="Compile tests" -->
+    <target name="compile-tests" depends="init,prepare-resources"
+    	description="Compile tests" >
     	<javac
             srcdir="${src.rel-dir}"
             destdir="${build.rel-dir}"
@@ -128,6 +139,30 @@
         	<test name="com.tactfactory.mda.test.AllTests" todir="${tmp.rel-dir}/"/> 
         </junit>
     </target>
+	
+	<target name="run-findbugs" depends="jar"
+		description="Run findbugs">
+	    <findbugs home="${env.FINDBUGS_HOME}"
+	              output="xml"
+	              outputFile="findbugs.xml" >
+	      <auxClasspath path="${env.FINDBUGS_HOME}/lib/Regex.jar" />
+	      <sourcePath path="${src.rel-dir}" />
+	      <class location="${env.FINDBUGS_HOME}/bin/bcel.jar" />
+	    </findbugs>
+	  </target>
+	
+	<target name="run-pmd" depends="run-findbugs"
+		description="Run pmd">
+		<pmd shortFilenames="true">
+			<ruleset></ruleset>
+			<formatter type="html" toFile="pmd_report.html" linkPrefix="http://pmd.sourceforge.net/xref/"/>
+			<formatter type="xml" toFile="pmd.xml"/>
+			<fileset dir="${src.rel-dir}">
+				<include name="**/*.java"/>
+				<exclude name="**/*Test*"/>
+			</fileset>
+		</pmd>
+	</target>
 	
 	<target name="run-jdepend" depends="compile-tests"
 		description="Run jdepend">
@@ -166,13 +201,13 @@
 		description="Rebuild the project">
     </target>
     
-    <target name="buildall" depends="rebuild,create-jar,post_build"
+    <target name="buildall" depends="rebuild,jar,post_build"
         description="Build the project">
     </target>
     
     <!-- library -->
 
-    <target name="create-jar" depends="compile">
+    <target name="jar" depends="compile">
     <!-- description="Create a jar file" -->
     	<pathconvert property="libs.project" pathsep=" ">
 		    <mapper>

@@ -4,7 +4,7 @@
 package com.tactfactory.mda.template;
 
 import java.io.File;
-import java.io.IOException;
+import java.util.ArrayList;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.ConsoleUtils;
@@ -132,20 +132,20 @@ public class ProjectGenerator extends BaseGenerator {
 		
 		// create HarmonyFragmentActivity
 		super.makeSource(
-				this.adapter.getTemplateSourcePath()+"HarmonyFragmentActivity.java",
-				"./app/android/src/"+this.appMetas.projectNameSpace+"/"+"HarmonyFragmentActivity.java",
+				this.adapter.getTemplateSourcePath()+"harmony/view/HarmonyFragmentActivity.java",
+				"./app/android/src/"+this.appMetas.projectNameSpace+"/harmony/view/"+"HarmonyFragmentActivity.java",
 				false);
 		
 		// create HarmonyFragment
 		super.makeSource(
-				this.adapter.getTemplateSourcePath()+"HarmonyFragment.java",
-				"./app/android/src/"+this.appMetas.projectNameSpace+"/"+"HarmonyFragment.java",
+				this.adapter.getTemplateSourcePath()+"harmony/view/HarmonyFragment.java",
+				"./app/android/src/"+this.appMetas.projectNameSpace+"/harmony/view/"+"HarmonyFragment.java",
 				false);
 		
 		// create HarmonyListFragment
 		super.makeSource(
-				this.adapter.getTemplateSourcePath()+"HarmonyListFragment.java",
-				"./app/android/src/"+this.appMetas.projectNameSpace+"/"+"HarmonyListFragment.java",
+				this.adapter.getTemplateSourcePath()+"harmony/view/HarmonyListFragment.java",
+				"./app/android/src/"+this.appMetas.projectNameSpace+"/harmony/view/"+"HarmonyListFragment.java",
 				false);
 		
 		// create ProjectMenuBase
@@ -172,17 +172,34 @@ public class ProjectGenerator extends BaseGenerator {
 		this.updateLibrary("jsr305.jar");
 		
 		/// copy sherlock library
-		try {
+		//TODO test if git is install
+		ArrayList<String> command = new ArrayList<String>();
+		command.add("git"); 						// Command/Tools
+		command.add("clone");						// Command action
+		command.add("https://github.com/JakeWharton/ActionBarSherlock.git"); // command depot
+		command.add("app/android/libs/sherlock"); 	// Command destination folder
+		ConsoleUtils.launchCommand(command);
+		command.clear();
+		command.add("cd");
+		command.add("app/android/libs/sherlock");
+		ConsoleUtils.launchCommand(command);
+		command.clear();
+		command.add("git");
+		command.add("checkout");
+		command.add("4.2.0");
+		ConsoleUtils.launchCommand(command);
+		
+		/*try {
 			File dirSherlock = new File(String.format("%s/%s", Harmony.pathLibs, "sherlock-4.2"));
 			File dirSherlockDest = new File(String.format("%s/%s", this.adapter.getLibsPath(), "sherlock-4.2"));
 			FileUtils.copyDirectory(dirSherlock, dirSherlockDest);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
+		}*/
 		
 		/// copy Harmony library
-		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathHarmony,"Harmony.jar")),
-				new File(String.format("%s/%s",this.adapter.getLibsPath(),"Harmony.jar")));
+		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathHarmony,"harmony.jar")),
+				new File(String.format("%s/%s",this.adapter.getLibsPath(),"harmony.jar")));
 		
 		// copy utils
 		this.updateUtil("DateUtils.java");

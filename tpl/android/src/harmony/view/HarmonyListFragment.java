@@ -1,4 +1,4 @@
-package ${project_namespace};
+package ${project_namespace}.harmony.view;
 
 import java.util.List;
 

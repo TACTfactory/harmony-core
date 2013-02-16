@@ -1,4 +1,4 @@
-package ${project_namespace};
+package ${project_namespace}.harmony.view;
 
 import android.content.Intent;
 import android.os.Bundle;

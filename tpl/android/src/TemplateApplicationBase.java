@@ -17,10 +17,10 @@ import android.net.NetworkInfo;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
-
-<#if (sync)>
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+
+<#if (sync)>
 import ${project_namespace}.harmony.util.DateUtils;
 import org.joda.time.DateTime;
 </#if>

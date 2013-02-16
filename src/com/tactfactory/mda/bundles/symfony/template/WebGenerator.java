@@ -8,7 +8,6 @@ import java.util.ArrayList;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.ConsoleUtils.ProcessToConsoleBridge;
 import com.tactfactory.mda.bundles.symfony.adapter.SymfonyAdapter;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
@@ -52,7 +51,7 @@ public class WebGenerator extends BaseGenerator{
 		}		
 		
 		// Execute symfony command for entities generation
-		this.launchCommand(GENERATE_ENTITIES);
+		ConsoleUtils.launchCommand(this.getCommand(GENERATE_ENTITIES));
 
 		
 		// Add inheritance in php entities
@@ -89,7 +88,7 @@ public class WebGenerator extends BaseGenerator{
 		this.copyFile(this.symfonyAdapter.getWebTemplatePath()+"composer.phar", this.symfonyAdapter.getWebRootPath());
 		
 		// Execute composer.phar to download symfony :
-		this.launchCommand(INSTALL_SYMFONY);
+		ConsoleUtils.launchCommand(this.getCommand(INSTALL_SYMFONY));
 	}
 	
 	public void installBundles(){
@@ -98,7 +97,7 @@ public class WebGenerator extends BaseGenerator{
 		this.copyFile(this.symfonyAdapter.getWebTemplatePath()+"composer.json", this.symfonyAdapter.getWebPath());
 		
 		//Execute composer.phar to download and install fosrestbundle:
-		this.launchCommand(INSTALL_BUNDLES);
+		ConsoleUtils.launchCommand(this.getCommand(INSTALL_BUNDLES));
 		
 		File configTplFile = new File(this.symfonyAdapter.getWebTemplateConfigPath()+"config.yml");
 		StringBuffer sb = FileUtils.FileToStringBuffer(configTplFile);
@@ -113,7 +112,7 @@ public class WebGenerator extends BaseGenerator{
 	}
 	
 	public void initProject(){
-		this.launchCommand(INIT_PROJECT);
+		ConsoleUtils.launchCommand(this.getCommand(INIT_PROJECT));
 	}
 	
 	protected void makeEntity(String entityName){
@@ -133,29 +132,6 @@ public class WebGenerator extends BaseGenerator{
 		fullTemplatePath = this.symfonyAdapter.getWebTemplateConfigPath()+"routing.yml";
 		
 		super.appendSource(fullTemplatePath, fullFilePath);
-	}
-	
-	protected void launchCommand(int command){
-		try {
-			ProcessBuilder pb = new ProcessBuilder(this.getCommand(command));
-			Process exec = pb.start();
-			
-
-			ProcessToConsoleBridge bridge = new ProcessToConsoleBridge(exec);
-			bridge.start();
-			try {
-				exec.waitFor();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-			bridge.stop();
-			
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 	}
 	
 	protected void copyFile(String srcPath, String destPath){

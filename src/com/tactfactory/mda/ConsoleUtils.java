@@ -13,6 +13,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 import print.color.Ansi.Attribute;
 import print.color.Ansi.BColor;
@@ -86,7 +87,30 @@ public class ConsoleUtils {
 	}
 	
 	
-	public static class ProcessToConsoleBridge{
+	public static void launchCommand(ArrayList<String> command){
+		try {
+			ProcessBuilder pb = new ProcessBuilder(command);
+			Process exec = pb.start();
+			
+
+			ProcessToConsoleBridge bridge = new ProcessToConsoleBridge(exec);
+			bridge.start();
+			try {
+				exec.waitFor();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			bridge.stop();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	protected static class ProcessToConsoleBridge {
 		InputBridge in;
 		OutputBridge out;
 		
