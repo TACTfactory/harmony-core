@@ -68,7 +68,7 @@ public class ProjectInitTest extends CommonTest {
 		
 		this.hasFindFile("android/libs");
 		this.hasFindFile("android/libs/android-support-v4.jar");
-		this.hasFindFile("android/libs/Harmony.jar");
+		this.hasFindFile("android/libs/harmony.jar");
 		this.hasFindFile("android/libs/joda-time-2.1.jar");
 		
 		this.hasFindFile("android/res");

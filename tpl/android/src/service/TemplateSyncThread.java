@@ -67,7 +67,6 @@ import ${data_namespace}.${entity.name?cap_first}WebServiceClientAdapter;
 import ${entity_namespace}.${entity.name?cap_first};
 </#list>
 
-
 public class ${project_name?cap_first}SyncThread extends Thread{
 	private Context context;
 	

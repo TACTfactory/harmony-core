@@ -10,12 +10,19 @@ import ${curr.namespace}.criterias.${curr.name?cap_first}Criterias ;
 import ${curr.namespace}.criterias.base.Criteria.Type ;
 
 import android.os.Bundle;
+import android.os.AsyncTask;
 import android.content.Intent;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.database.sqlite.SQLiteDatabase;
+import android.app.*;
 import android.widget.*;
 
 
@@ -37,7 +44,6 @@ import android.widget.*;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 
-
 	<#if (importDate)>
 import ${curr.namespace}.harmony.widget.CustomDatePickerDialog;
 	</#if>
@@ -47,6 +53,8 @@ import ${curr.namespace}.harmony.widget.CustomTimePickerDialog;
 	
 import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
+
+import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 <#assign mustImportArrayList=false />
 <#assign mustImportList=false />
@@ -65,6 +73,7 @@ import ${curr.namespace}.criterias.${relation.relation.targetEntity}Criterias;
 		</#if>
 	</#if>
 </#list>
+
 <#if (import_array?size>0 || importDate || importTime)>
 import android.app.*;
 import android.content.DialogInterface;
@@ -82,7 +91,6 @@ import java.util.List;
  * @see android.app.Fragment
  */
 public class ${curr.name}SearchFragment extends HarmonyFragment implements OnClickListener {
-	
 	/* Model data */
 	protected ${curr.name} model = new ${curr.name}();
 
@@ -314,6 +322,7 @@ public class ${curr.name}SearchFragment extends HarmonyFragment implements OnCli
 		View view = inflater.inflate(R.layout.fragment_${curr.name?lower_case}_search, container, false);
 
 		this.loadData();
+
 		this.initializeComponent(view);
 		return view;
 	}

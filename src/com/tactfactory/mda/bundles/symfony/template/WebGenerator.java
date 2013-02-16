@@ -52,7 +52,6 @@ public class WebGenerator extends BaseGenerator{
 		
 		// Execute symfony command for entities generation
 		ConsoleUtils.launchCommand(this.getCommand(GENERATE_ENTITIES));
-
 		
 		// Add inheritance in php entities
 		for(ClassMetadata cm : this.appMetas.entities.values()){

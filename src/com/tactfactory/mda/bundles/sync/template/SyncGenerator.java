@@ -28,7 +28,6 @@ import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.ApplicationGenerator;
 import com.tactfactory.mda.template.BaseGenerator;
-import com.tactfactory.mda.template.EntityGenerator;
 import com.tactfactory.mda.template.SQLiteAdapterGenerator;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.FileUtils;
