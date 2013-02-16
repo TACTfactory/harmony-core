@@ -20,7 +20,7 @@
 	<property name="app.rel-dir" value="app" />
 	<property name="build.rel-dir" value="bin" />
 	<property name="lib.rel-dir" value="lib" />
-	<property name="tools.rel-dir" value="tools" />
+	<property name="ant-lib.rel-dir" value="${lib.rel-dir}/ant" />
 	<property name="tmp.rel-dir" value="tmp" />
 	<property name="dist.rel-dir" value="vendor/tact-core" />
 	<property name="doc.rel-dir" value="${dist.rel-dir}/javadoc" />
@@ -28,7 +28,7 @@
 		
 	<!-- jar file from where the tasks are loaded -->
     <path id="android.antlibs">
-        <pathelement path="${tools.rel-dir}/anttasks.jar" />
+        <pathelement path="${ant-lib.rel-dir}/anttasks.jar" />
     </path>
 
     <!-- Custom tasks -->
@@ -286,7 +286,7 @@
     </target>
     
     <!-- emma -->   
-	<property name="emma.dir" value="${tools.rel-dir}" />
+	<property name="emma.dir" value="${lib.rel-dir}/emma" />
 	<property name="emma.out-dir" value="${tmp.rel-dir}" />
 	<property name="emma.instr-dir" value="emmainstr" />
 	
