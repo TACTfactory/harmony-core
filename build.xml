@@ -46,15 +46,15 @@
 		</fileset>
 	</path>
 	
-	<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
+	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask">
 		<classpath>
-			<pathelement location="${env.PMD_HOME}/lib/pmd-*.jar" />
+			<pathelement location="${FINDBUGS_HOME}" />
 		</classpath>
 	</taskdef>
 	
-	<taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask">
+	<taskdef name="pmd" classname="net.sourceforge.pmd.ant.PMDTask">
 		<classpath>
-			<pathelement location="${env.FINDBUGS_HOME}" />
+			<pathelement location="${PMD_HOME}/lib/pmd-*.jar" />
 		</classpath>
 	</taskdef>
 	
@@ -117,8 +117,7 @@
         	target="1.6"
         	source="1.6"
         	
-        	bootclasspath="jdk1.6.0/lib/rt.jar"
-        >
+        	bootclasspath="jdk1.6.0/lib/rt.jar" >
             <compilerarg line="" /> <!-- "-Xlint:all", "-Xlint:all,-path", "-Xlint:all,-path,-unchecked" -->
             <classpath refid="project.classpath" />
         </javac>
@@ -135,8 +134,7 @@
             debuglevel="${compile.debuglevel}"
             includeantruntime="false"
             target="1.6"
-        	source="1.6"
-        >
+        	source="1.6" >
             <compilerarg line="" /> <!-- "-Xlint:all", "-Xlint:all,-path", "-Xlint:all,-path,-unchecked" -->
             <classpath refid="project.classpath" />
         </javac>
