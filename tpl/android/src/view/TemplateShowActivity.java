@@ -3,10 +3,11 @@ package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
 
-import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
+import ${project_namespace}.HarmonyFragmentActivity;
 
-public class ${curr.name}ShowActivity extends FragmentActivity {
+import android.os.Bundle;
+
+public class ${curr.name}ShowActivity extends HarmonyFragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {

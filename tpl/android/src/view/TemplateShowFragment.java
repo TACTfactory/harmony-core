@@ -4,6 +4,8 @@ package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
 
+import ${project_namespace}.HarmonyFragment;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.app.AlertDialog;
@@ -13,12 +15,10 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
-
 
 <#assign importDate=false />
 <#list curr.fields as field>
@@ -47,7 +47,7 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
  * 
  * see android.app.Fragment
  */
-public class ${curr.name}ShowFragment extends Fragment {
+public class ${curr.name}ShowFragment extends HarmonyFragment {
 	/* Model data */
 	protected ${curr.name} model;
 	
@@ -175,7 +175,7 @@ public class ${curr.name}ShowFragment extends Fragment {
 			SQLiteDatabase db = ${curr.name?lower_case}Adapter.open();
 			db.beginTransaction();
 			try {
-				this.entity = ${curr.name?lower_case}Adapter.getByID(this.entity.getId());
+				this.entity = ${curr.name?lower_case}Adapter.getByID(<#if (curr.ids?size>0)>this.entity.getId()</#if>);
 
 				db.setTransactionSuccessful();
 			} finally {

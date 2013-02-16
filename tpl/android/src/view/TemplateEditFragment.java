@@ -4,12 +4,13 @@ package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
 
+import ${project_namespace}.HarmonyFragmentActivity;
+import ${project_namespace}.HarmonyFragment;
+
 import android.os.Bundle;
 import android.os.AsyncTask;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -76,7 +77,7 @@ import java.util.List;
  * 
  * @see android.app.Fragment
  */
-public class ${curr.name}EditFragment extends Fragment implements OnClickListener {
+public class ${curr.name}EditFragment extends HarmonyFragment implements OnClickListener {
 	/* Model data */
 	protected ${curr.name} model = new ${curr.name}();
 
@@ -434,7 +435,7 @@ public class ${curr.name}EditFragment extends Fragment implements OnClickListene
 			super.onPostExecute(result);
 
 			if (result == 0) {
-				FragmentActivity activity = (FragmentActivity) this.context;
+				HarmonyFragmentActivity activity = (HarmonyFragmentActivity) this.context;
 				activity.finish();
 			} else {
 				AlertDialog.Builder builder = new AlertDialog.Builder(this.context);

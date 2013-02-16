@@ -4,14 +4,17 @@
     android:versionCode="1"
     android:versionName="1.0" >
 
-    <uses-sdk android:minSdkVersion="7" />
+    <uses-sdk 
+    	android:minSdkVersion="7" 
+    	android:targetSdkVersion="17" />
 
     <instrumentation
-        android:name="android.test.InstrumentationTestRunner"
+        android:name="com.zutubi.android.junitreport.JUnitReportTestRunner"
         android:targetPackage="${project_namespace}" />
 
     <application
-        android:label="@string/app_name" >
+        android:label="@string/app_name"
+        android:allowBackup="true">
         <uses-library android:name="android.test.runner" />
     </application>
 

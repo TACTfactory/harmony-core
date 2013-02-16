@@ -10,18 +10,21 @@ import android.support.v4.content.AsyncTaskLoader;
 
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
+import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
 
 /**
  * ${curr.name} Loader
  */
 public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> {
-
+	
+	private ${curr.name?cap_first}Criterias criterias = null;
 	private List<${curr.name}> m${curr.name}s;
 	private Context context;
 
-	public ${curr.name}ListLoader(Context context) {
+	public ${curr.name}ListLoader(Context context, ${curr.name?cap_first}Criterias crit) {
 		super(context);
 		this.context = context;
+		this.criterias = crit;
 	}
 
 	/**
@@ -39,7 +42,7 @@ public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> 
 		SQLiteDatabase db = adapter.open();
 		try {
 			db.beginTransaction();
-			result = adapter.getAll();
+			result = adapter.getAll(this.criterias);
 
 			db.setTransactionSuccessful();
 

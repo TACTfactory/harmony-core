@@ -19,7 +19,7 @@ public abstract class TagConstant {
 	public final static String DATA_NAMESPACE = "data_namespace";
 	public final static String ENTITY_NAMESPACE = "entity_namespace";
 	public final static String SERVICE_NAMESPACE = "service_namespace";
-	public static final String FIXTURE_NAMESPACE = "fixture_namespace";
+	public final static String FIXTURE_NAMESPACE = "fixture_namespace";
 	public final static String ANDROID_SDK_DIR = "sdk_dir";
 	
 	// Ant markers
@@ -40,6 +40,7 @@ public abstract class TagConstant {
 	public final static String RELATION = "relation";
 	public final static String RELATION_TYPE = "relation_type";
 	public final static String SPACE = "namespace";
+	public static final String EXTENDS = "extends";
 	public final static String NAME = "name";
 	public final static String TYPE = "type";
 	public final static String SCHEMA = "schema";
@@ -54,9 +55,7 @@ public abstract class TagConstant {
 	public static final String MODE = "mode";
 	public static final String PRIORITY = "priority";
 	public static final String ID = "id";
-	
-	
-	
+	public static final String NULLABLE = "nullable";
 	
 	
 

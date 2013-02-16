@@ -4,7 +4,9 @@
 package com.tactfactory.mda.template;
 
 import java.io.File;
+import java.io.IOException;
 
+import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.plateforme.BaseAdapter;
@@ -62,7 +64,7 @@ public class ProjectGenerator extends BaseGenerator {
 			
 			ConsoleUtils.displayDebug("Project "+this.adapter.getPlatform()+" removed!");
 		} else {
-			ConsoleUtils.displayError("Remove Project "+this.adapter.getPlatform()+" return "+removeResult+" errors...\n");
+			ConsoleUtils.displayError(new Exception("Remove Project "+this.adapter.getPlatform()+" return "+removeResult+" errors...\n"));
 		}
 		return result;
 	}
@@ -127,22 +129,66 @@ public class ProjectGenerator extends BaseGenerator {
 				this.adapter.getTemplateRessourceLayoutPath()+"main.xml",
 				this.adapter.getRessourceLayoutPath()+"main.xml",
 				false);
+		
+		// create HarmonyFragmentActivity
+		super.makeSource(
+				this.adapter.getTemplateSourcePath()+"HarmonyFragmentActivity.java",
+				"./app/android/src/"+this.appMetas.projectNameSpace+"/"+"HarmonyFragmentActivity.java",
+				false);
+		
+		// create HarmonyFragment
+		super.makeSource(
+				this.adapter.getTemplateSourcePath()+"HarmonyFragment.java",
+				"./app/android/src/"+this.appMetas.projectNameSpace+"/"+"HarmonyFragment.java",
+				false);
+		
+		// create HarmonyListFragment
+		super.makeSource(
+				this.adapter.getTemplateSourcePath()+"HarmonyListFragment.java",
+				"./app/android/src/"+this.appMetas.projectNameSpace+"/"+"HarmonyListFragment.java",
+				false);
+		
+		// create ProjectMenuBase
+		super.makeSource(
+				this.adapter.getTemplateSourcePath()+"menu/TemplateMenuBase.java",
+				"./app/android/src/"+this.appMetas.projectNameSpace+"/menu/"+CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name) +"MenuBase.java",
+				false);
+		
+		// create ProjectMenu
+		super.makeSource(
+				this.adapter.getTemplateSourcePath()+"menu/TemplateMenu.java",
+				"./app/android/src/"+this.appMetas.projectNameSpace+"/menu/"+CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name) +"Menu.java",
+				false);
+		
+		// create ProjectMenu
+		super.makeSource(
+				this.adapter.getTemplateSourcePath()+"menu/MenuWrapperBase.java",
+				"./app/android/src/"+this.appMetas.projectNameSpace+"/menu/" + "MenuWrapperBase.java",
+				false);
 
 		// copy libraries
 		this.updateLibrary("joda-time-2.1.jar");
 		this.updateLibrary("guava-12.0.jar");
-		this.updateLibrary("android-support-v4.jar");
 		this.updateLibrary("jsr305.jar");
 		
+		/// copy sherlock library
+		try {
+			File dirSherlock = new File(String.format("%s/%s", Harmony.pathLibs, "sherlock-4.2"));
+			File dirSherlockDest = new File(String.format("%s/%s", this.adapter.getLibsPath(), "sherlock-4.2"));
+			FileUtils.copyDirectory(dirSherlock, dirSherlockDest);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		/// copy Harmony library
 		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.pathHarmony,"Harmony.jar")),
 				new File(String.format("%s/%s",this.adapter.getLibsPath(),"Harmony.jar")));
 		
 		// copy utils
 		this.updateUtil("DateUtils.java");
-		
-		File dirTpl = new File(this.adapter.getTemplateProjectPath());
 
 		// Update newly created files with datamodel
+		File dirTpl = new File(this.adapter.getTemplateProjectPath());
 		if(dirTpl.exists() && dirTpl.listFiles().length!=0) {
 			result = true;
 			
@@ -194,13 +240,5 @@ public class ProjectGenerator extends BaseGenerator {
 		boolean result = false;
 
 		return result;
-	}
-
-	/**
-	 * Update Utils
-	 */
-	protected void updateUtil(String utilName) {		
-		super.makeSource(String.format("%s%s", this.adapter.getTemplateUtilPath(), utilName), 
-				String.format("%s%s", this.adapter.getUtilPath(), utilName), false);
 	}
 }

@@ -14,7 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.tactfactory.mda.Harmony;
-import com.tactfactory.mda.annotation.Column.Type;
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.meta.ClassMetadata;
@@ -30,6 +29,10 @@ public class OrmInitEntitiesTest extends CommonTest {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
+		
+		if (userMeta == null) {
+			this.initAll();
+		}
 	}
 
 	/**
@@ -41,8 +44,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 		super.tearDown();
 	}
 	
-	@Test
-	public void all() {
+	private void initAll() {
 		System.out.println("\nTest Orm generate entity");
 		System.out.println("###############################################################################");
 		
@@ -62,6 +64,11 @@ public class OrmInitEntitiesTest extends CommonTest {
 			if (classMetadata.name.equals("Comment"))
 				commentMeta = classMetadata;
 		}
+	}
+	
+	//@Test
+	public void all() {
+		this.initAll();
 		
 		// Check Model Decoration
 		// User
@@ -146,7 +153,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	@Test
 	public void hasCommentImplement() {
 		this.hasImplement(commentMeta, "Serializable");
-		this.hasExtend(commentMeta, "Object");
+		//TODO add test this.hasExtend(commentMeta, "EntityBase");
 	}
 	
 	@Test

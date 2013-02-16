@@ -1,3 +1,9 @@
+<#assign sync=false />
+<#list entities?values as entity>
+	<#if entity.options.sync??>
+		<#assign sync=true />
+	</#if>
+</#list>
 package ${project_namespace};
 
 import java.text.DateFormat;
@@ -6,12 +12,18 @@ import ${project_namespace}.R;
 
 import android.app.Application;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
+
+<#if (sync)>
+import android.content.SharedPreferences;
+import android.content.SharedPreferences.Editor;
+import ${project_namespace}.harmony.util.DateUtils;
+import org.joda.time.DateTime;
+</#if>
 
 /** 
  * Common all life data/service
@@ -25,11 +37,25 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	private volatile static ${project_name?cap_first}ApplicationBase singleton;
 	private static DateFormat df;
 	private static DateFormat tf;
+	<#if (sync)>
+	private static SharedPreferences preferences;
+	</#if>
 	
 	/** Called when the application is first created. */
 	@Override
 	public void onCreate() {
 		super.onCreate();
+		
+		<#if (sync)>
+		preferences = this.getSharedPreferences(
+				"${project_name?uncap_first}", Context.MODE_PRIVATE);
+		
+		if(!preferences.contains("lastSyncDate")){
+			// TODO: First Sync
+			
+			${project_name?cap_first}ApplicationBase.setLastSyncDate(new DateTime().minusWeeks(1));
+		}
+		</#if>
 		singleton = this;
 		Log.i(TAG, "Starting application...");
 		
@@ -143,6 +169,16 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	public static DateFormat getTimeFormat() {
 		return tf;
 	}
-			
+		
+	<#if (sync)>
+	public static DateTime getLastSyncDate() {
+		return DateUtils.formatISOStringToDateTime(preferences.getString("lastSyncDate", null));
+	}
 	
+	public static void setLastSyncDate(DateTime dt){
+		Editor edit = preferences.edit();
+		edit.putString("lastSyncDate", dt.toString());
+		edit.commit();
+	}
+	</#if>
 }

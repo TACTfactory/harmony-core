@@ -67,7 +67,7 @@ public class ProviderGenerator extends BaseGenerator {
 			
 			new TranslationGenerator(this.adapter).generateStringsXml();
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 		}
 	}
 	

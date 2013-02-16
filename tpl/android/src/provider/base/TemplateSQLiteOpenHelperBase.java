@@ -6,11 +6,18 @@
 	<#return ret />
 </#function>
 
-
+<#function hasOnlyRecursiveRelations entity>
+	<#list entity.relations as relation>
+		<#if relation.relation.targetEntity!=entity.name> 
+			<#return false>
+		</#if>
+	</#list>
+	<#return true>
+</#function>
 <#function getZeroRelationsEntities>
 	<#assign ret = [] />
 	<#list entities?values as entity>
-		<#if entity.relations?size==0>
+		<#if hasOnlyRecursiveRelations(entity)>
 			<#assign ret = ret + [entity.name]>
 		</#if>
 	</#list>

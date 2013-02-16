@@ -1,4 +1,5 @@
 <#assign curr = entities[current_entity] />
+<#assign sync = curr.options.sync?? />
 <#import "methods.ftl" as m />
 <#function alias name>
 	<#return "COL_"+name?upper_case />
@@ -57,7 +58,7 @@ import ${project_namespace}.${project_name?cap_first}Application;
 <#if (curr.internal=="false")>
 import ${curr.namespace}.entity.${curr.name};
 </#if>
-<#assign import_array = [] />
+<#assign import_array = [curr.name] />
 <#list curr.relations as relation>
 	<#if !relation.internal>
 		<#if (!isInArray(import_array, relation.relation.targetEntity))>
@@ -71,12 +72,16 @@ import ${curr.namespace}.harmony.util.DateUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 </#if>
-
+<#if sync>
+	<#assign extend="SyncSQLiteAdapterBase<"+curr.name+">" />
+<#else>
+	<#assign extend="SQLiteAdapterBase<"+curr.name+">" />
+</#if>
 /** ${curr.name} adapter database abstract class <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
  * You should edit ${curr.name}Adapter class instead of this one or you will lose all your modifications.</i></b>
  */
-public abstract class ${curr.name}SQLiteAdapterBase extends SQLiteAdapterBase<${curr.name}>{
+public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 	private static final String TAG = "${curr.name}DBAdapter";
 	
 	/** Table name of SQLite database */
@@ -180,37 +185,45 @@ public abstract class ${curr.name}SQLiteAdapterBase extends SQLiteAdapterBase<${
 		${curr.name} result = null;
 
 		if (c.getCount() != 0) {
-			result = new ${curr.name}();			
-
+			result = new ${curr.name}();
+			
+			int index;
 	<#list curr.fields as field>
-		<#if (!field.internal)>
+		<#if (!field.internal && !(field.relation?? && (field.relation.type=="ManyToMany" || field.relation.type=="OneToMany")))>
+			<#assign t="" />
+			index = c.getColumnIndexOrThrow(${alias(field.name)});
+			<#if (field.nullable?? && field.nullable)>
+			if(!c.isNull(index)){<#assign t="\t" />
+			</#if>
 			<#if (!field.relation??)>
 				<#if ((field.type == "date") || (field.type == "datetime") || (field.type == "time"))> 
 			
 					<#if field.is_locale>
-			DateTime dt${field.name?cap_first} = DateUtils.formatLocalISOStringToDateTime(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case})) );	
+			${t}DateTime dt${field.name?cap_first} = DateUtils.formatLocalISOStringToDateTime(c.getString(index) );	
 					<#else>
-			DateTime dt${field.name?cap_first} = DateUtils.formatISOStringToDateTime(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case})) );	
+			${t}DateTime dt${field.name?cap_first} = DateUtils.formatISOStringToDateTime(c.getString(index) );	
 					</#if>
-			if (dt${field.name?cap_first} != null){
-				result.set${field.name?cap_first}(dt${field.name?cap_first});
-			} else {
-				result.set${field.name?cap_first}(new DateTime());
-			}
-
+				${t}if (dt${field.name?cap_first} != null){
+					${t}result.set${field.name?cap_first}(dt${field.name?cap_first});
+				${t}} else {
+				${t}result.set${field.name?cap_first}(new DateTime());
+			${t}}
 				<#elseif (field.type == "boolean")>
-			result.set${field.name?cap_first}  (c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ).equals("true"));
+			${t}result.set${field.name?cap_first}  (c.getString(index).equals("true"));
 				<#elseif (field.type == "int" || field.type == "integer" || field.type == "ean" || field.type == "zipcode")>
-			result.set${field.name?cap_first}(c.getInt( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
+			${t}result.set${field.name?cap_first}(c.getInt(index));
 				<#elseif (field.type == "float")>
-			result.set${field.name?cap_first}(c.getFloat( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) ));
+			${t}result.set${field.name?cap_first}(c.getFloat(index));
 				<#else>
-			result.set${field.name?cap_first}(c.getString( c.getColumnIndexOrThrow(COL_${field.name?upper_case}) )); 
+			${t}result.set${field.name?cap_first}(c.getString(index)); 
 				</#if>
 			<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
-			${field.type} ${field.name} = new ${field.type}();
-			${field.name}.setId( Integer.valueOf(c.getString( c.getColumnIndexOrThrow(${alias(field.name)}) )) );
-			result.set${field.name?cap_first}(${field.name});	
+			${t}${field.type} ${field.name} = new ${field.type}();
+			${t}${field.name}.setId(c.getInt(index)) ;
+			${t}result.set${field.name?cap_first}(${field.name});	
+			</#if>
+			<#if (field.nullable?? && field.nullable)>
+			}
 			</#if>
 		</#if>
 	</#list>
@@ -227,7 +240,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends SQLiteAdapterBase<${
 	 */
 	public ${curr.name} getByID(<#list curr.ids as id>${m.javaType(id.type)} ${id.name}<#if (id_has_next)>,</#if></#list>) {
 	<#if (curr.ids?size>0)>
-		Cursor c = this.getSingleCursor(id);
+		Cursor c = this.getSingleCursor(<#list curr.ids as id>${id.name}<#if (id_has_next)>,</#if></#list>);
 		if(c.getCount()!=0)
 			c.moveToFirst();
 		${curr.name} result = this.cursorToItem(c);
@@ -254,7 +267,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends SQLiteAdapterBase<${
 	<#else>
 		throw new UnsupportedOperationException("Method not implemented yet.");
 	</#if>
-	}
+	}	
 	
 	<#if (curr.relations??)>
 		<#list curr.relations as relation>
@@ -472,6 +485,10 @@ public abstract class ${curr.name}SQLiteAdapterBase extends SQLiteAdapterBase<${
 	<#else>
 		throw new UnsupportedOperationException("Method not implemented yet.");
 	</#if>
+	}
+	
+	public int delete(${curr.name?cap_first} ${curr.name?uncap_first}){
+		return this.delete(${curr.name?uncap_first}.getId());
 	}
 	
 	// Internal Cursor

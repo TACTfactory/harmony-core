@@ -12,16 +12,19 @@ import org.joda.time.DateTime;
 
 import com.tactfactory.mda.annotation.*;
 import com.tactfactory.mda.annotation.Column.Type;
-import com.tactfactory.mda.rest.annotation.Rest;
-import com.tactfactory.mda.sync.annotation.Sync;
-import com.tactfactory.mda.sync.annotation.Sync.Mode;
+import com.tactfactory.mda.bundles.rest.annotation.Rest;
+import com.tactfactory.mda.bundles.search.annotation.Searchable;
+import com.tactfactory.mda.bundles.social.annotation.Social;
+import com.tactfactory.mda.bundles.sync.annotation.Sync;
+import com.tactfactory.mda.bundles.sync.annotation.Sync.Mode;
 
 //All annotation with forced value/parameter
 @Table(name="local_user")
 @Entity
 @Rest(security=Rest.Security.SESSION, uri="user-uri")
 @Sync(mode=Mode.REAL_TIME)
-public class User extends Object implements Cloneable {
+@Social
+public class User implements Cloneable {
 	@SuppressWarnings("unused")
 	private static final long serialVersionUID = 7032873279928549706L;
 
@@ -31,6 +34,7 @@ public class User extends Object implements Cloneable {
     protected int id;
 
 	@Column(type=Type.LOGIN)
+	@Searchable
     protected String login;
 	
 	@Column(type=Type.PASSWORD)

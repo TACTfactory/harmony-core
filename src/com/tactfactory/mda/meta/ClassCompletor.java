@@ -27,11 +27,11 @@ public class ClassCompletor {
 	
 	public void execute(){
 		for(ClassMetadata cm : metas.values()){
-			updateRelations(cm);
+			this.updateRelations(cm);
 		}
 		
-		for (ClassMetadata meta : newMetas.values()) {
-			this.metas.put(meta.name, meta);
+		for (ClassMetadata cm : newMetas.values()) {
+			this.metas.put(cm.name, cm);
 		}
 	}
 	
@@ -41,9 +41,16 @@ public class ClassCompletor {
 	 * @param cm The class owning the relations
 	 */
 	private void updateRelations(ClassMetadata cm){
+		ArrayList<FieldMetadata> newFields= new ArrayList<FieldMetadata>();
 		for(FieldMetadata fm : cm.relations.values()){ // For each relation in the class
+			boolean isRecursive = false;
 			RelationMetadata rel = fm.relation;
 			String targetEntity = rel.entity_ref;
+			if(targetEntity.equals(cm.name)){
+				isRecursive = true;
+			}
+			
+			this.checkRelationIntegrity(fm);
 			
 			if(rel.field_ref.isEmpty()){
 				ClassMetadata cm_ref = this.metas.get(targetEntity);
@@ -67,6 +74,7 @@ public class ClassCompletor {
 					FieldMetadata new_field = new FieldMetadata(cm);
 					new_field.columnDefinition = "integer";
 					new_field.hidden = true;
+					new_field.nullable = fm.nullable;
 					new_field.internal = true;
 					new_field.name = cm.name+fm.name+"_Internal";
 					new_field.columnName = cm.name+"_"+fm.name+"_internal";
@@ -79,8 +87,12 @@ public class ClassCompletor {
 					new_field.relation.type = "ManyToOne";
 					new_field.relation.inversedBy = fm.name;
 					fm.relation.inversedBy = new_field.name;
-					entity_ref.fields.put(new_field.name, new_field);
-					entity_ref.relations.put(new_field.name, new_field);
+					if(isRecursive){
+						newFields.add(new_field);
+					}else{
+						entity_ref.fields.put(new_field.name, new_field);
+						entity_ref.relations.put(new_field.name, new_field);
+					}
 					rel.mappedBy = new_field.name;
 				}
 				
@@ -139,6 +151,11 @@ public class ClassCompletor {
 				}
 			}
 		}
+		// Add internal recursive relations
+		for(FieldMetadata newField : newFields){
+			cm.fields.put(newField.name, newField);
+			cm.relations.put(newField.name, newField);
+		}
 	}
 	
 	private static FieldMetadata generateRefField(String name, ClassMetadata owner){
@@ -148,5 +165,12 @@ public class ClassCompletor {
 		id.name = name.toLowerCase()+"_id";
 		id.columnName = id.name;
 		return id;
+	}
+	
+	private void checkRelationIntegrity(FieldMetadata fm){
+		if(!this.metas.containsKey(fm.relation.entity_ref)){
+				ConsoleUtils.displayError(new Exception("Entity "+fm.name+" refers to the non Entity class "+fm.relation.entity_ref));
+			
+		}
 	}
 }

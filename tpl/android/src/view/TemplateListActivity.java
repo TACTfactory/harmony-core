@@ -3,11 +3,12 @@ package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
 
+import ${project_namespace}.HarmonyFragmentActivity;
+
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.FragmentActivity;
 
-public class ${curr.name}ListActivity extends FragmentActivity {
+public class ${curr.name}ListActivity extends HarmonyFragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -29,9 +30,15 @@ public class ${curr.name}ListActivity extends FragmentActivity {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-		${curr.name}ListFragment fragment = (${curr.name}ListFragment)  getSupportFragmentManager().findFragmentById(R.id.fragment);
-		fragment.getLoaderManager().restartLoader(0, null, fragment);
+		super.onActivityResult(requestCode, resultCode, data);
+		if(requestCode<=0xFFFF){
+			switch(requestCode){
+				default:
+					${curr.name}ListFragment fragment = (${curr.name}ListFragment)  getSupportFragmentManager().findFragmentById(R.id.fragment);
+					fragment.getLoaderManager().restartLoader(0, null, fragment);
+					break;
+			}
+		}
 	}
 
 }

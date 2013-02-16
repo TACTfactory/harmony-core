@@ -24,6 +24,7 @@ public class OrmInitViewTest extends CommonTest {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
+		this.initAllTests();
 	}
 
 	/**
@@ -35,8 +36,7 @@ public class OrmInitViewTest extends CommonTest {
 		super.tearDown();
 	}
 	
-	@Test
-	public void all() {
+	private void initAllTests() {
 		System.out.println("\nTest Orm generate View");
 		System.out.println("###############################################################################");
 		
@@ -44,6 +44,11 @@ public class OrmInitViewTest extends CommonTest {
 		this.makeEntities();
 		this.harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
 		this.harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[]{}, null);
+	}
+	
+	//@Test
+	public void all() {
+		this.initAllTests();
 		
 		this.viewPostCreate();
 		this.viewPostEdit();

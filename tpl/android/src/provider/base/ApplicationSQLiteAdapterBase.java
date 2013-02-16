@@ -12,6 +12,9 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import ${project_namespace}.criterias.base.Criteria;
+import ${project_namespace}.criterias.base.CriteriasBase;
+
 public abstract class SQLiteAdapterBase<T>{
 
 	/** Table name of SQLite database */
@@ -127,6 +130,21 @@ public abstract class SQLiteAdapterBase<T>{
 		return result;
 	}
 	
+	/** Read All Users entities
+	 * 
+	 * @return List of User entities
+	 */
+	public ArrayList<T> getAll(CriteriasBase crits) {
+		if(crits == null || crits.isEmpty()){
+			return this.getAll();
+		}else{
+			Cursor c = this.mDatabase.rawQuery("SELECT * FROM "+this.getTableName()+" WHERE "+crits.toSQLiteString(), null);
+			ArrayList<T> result = this.cursorToItems(c);
+			c.close();
+			return result;
+		}	
+	}
+	
 	/** Convert Cursor of database to Array of Comment entity
 	 * 
 	 * @param c Cursor object
@@ -172,4 +190,6 @@ public abstract class SQLiteAdapterBase<T>{
 	 * @return 
 	 */
 	public abstract int update(T item);
+	
+	public abstract int delete(T item);
 }

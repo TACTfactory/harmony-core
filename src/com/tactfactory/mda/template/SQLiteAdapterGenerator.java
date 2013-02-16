@@ -33,6 +33,17 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 				this.generate();
 			}
 		}
+		
+		ConsoleUtils.display(">> Generate CriteriaBase...");
+		this.makeSourceCriteria(
+				"base/Criteria.java", 
+				"base/Criteria.java", false);
+		this.makeSourceCriteria(
+				"base/CriteriasBase.java", 
+				"base/CriteriasBase.java", true);
+		this.makeSourceCriteria(
+				"base/ICriteria.java", 
+				"base/ICriteria.java", false);
 	}
 	
 	private void generate() {
@@ -49,7 +60,18 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 					"%sSQLiteAdapter.java", false);
 			
 		} catch (Exception e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
+		}
+		
+		// Info
+		ConsoleUtils.display(">>> Generate Criterias for " +  this.datamodel.get(TagConstant.CURRENT_ENTITY));
+		try {
+			this.makeSourceCriteria(
+					"TemplateCriterias.java", 
+					"%sCriterias.java", false);
+			
+		} catch (Exception e) {
+			ConsoleUtils.displayError(e);
 		}
 	}
 	
@@ -66,6 +88,24 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 				String.format(filename, this.datamodel.get(TagConstant.CURRENT_ENTITY)));
 		
 		String fullTemplatePath = this.adapter.getTemplateSourceProviderPath().substring(1) + template;
+		
+		super.makeSource(fullTemplatePath, fullFilePath, override);
+	}
+	
+	/** 
+	 * Make Java Source Code
+	 * 
+	 * @param template Template path file. <br/>For list activity is "TemplateListActivity.java"
+	 * @param filename
+	 */
+	private void makeSourceCriteria(String template, String filename, boolean override) {
+		String fullFilePath = String.format("%s%s/%s/%s",
+				this.adapter.getSourcePath(),
+				this.appMetas.projectNameSpace,
+				this.adapter.getCriterias(),
+				String.format(filename, this.datamodel.get(TagConstant.CURRENT_ENTITY)));
+		
+		String fullTemplatePath = this.adapter.getTemplateSourceCriteriasPath().substring(1) + template;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}

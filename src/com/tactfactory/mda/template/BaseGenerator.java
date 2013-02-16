@@ -66,21 +66,20 @@ public abstract class BaseGenerator {
 				output.close();
 				
 			} catch (IOException e) {
-				ConsoleUtils.displayError(e.getMessage());
+				ConsoleUtils.displayError(e);
 				e.printStackTrace();
 			} catch (TemplateException e) {
-				ConsoleUtils.displayError(e.getMessage());
+				ConsoleUtils.displayError(e);
 				e.printStackTrace();
 			}
 		}
 	}
 	
 	/** 
-	 * Make Java Source Code
+	 * Append Source Code to existing file
 	 * 
 	 * @param templatePath Template path file. <br/>For list activity is "TemplateListActivity.java"
 	 * @param generatePath
-	 * @param override
 	 */
 	protected void appendSource(String templatePath, String generatePath) {
 		if (FileUtils.exists(generatePath)){
@@ -88,7 +87,7 @@ public abstract class BaseGenerator {
 			
 			try {
 				// Debug Log
-				ConsoleUtils.displayDebug("Generate Source : " + generateFile.getPath()); 
+				ConsoleUtils.displayDebug("Append Source : " + generateFile.getPath()); 
 				
 				// Create
 				Template tpl = this.cfg.getTemplate(templatePath);
@@ -100,10 +99,10 @@ public abstract class BaseGenerator {
 				output.close();
 				
 			} catch (IOException e) {
-				ConsoleUtils.displayError(e.getMessage());
+				ConsoleUtils.displayError(e);
 				e.printStackTrace();
 			} catch (TemplateException e) {
-				ConsoleUtils.displayError(e.getMessage());
+				ConsoleUtils.displayError(e);
 				e.printStackTrace();
 			}
 		}
@@ -120,5 +119,13 @@ public abstract class BaseGenerator {
 			FileUtils.copyfile(
 					new File(String.format("%s/%s", Harmony.pathLibs, libName)),
 					dest);
+	}
+	
+	/**
+	 * Generate Utils
+	 */
+	protected void updateUtil(String utilName) {		
+		makeSource(String.format("%s%s", this.adapter.getTemplateUtilPath(), utilName), 
+				String.format("%s%s", this.adapter.getUtilPath(), utilName), false);
 	}
 }

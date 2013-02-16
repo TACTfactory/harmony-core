@@ -1,11 +1,14 @@
 <#assign curr = entities[current_entity] />
 package ${curr.controller_namespace};
 
+import java.util.ArrayList;
 import java.util.List;
+
+import ${project_namespace}.criterias.base.Criteria;
+import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
@@ -18,12 +21,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
+import ${project_namespace}.HarmonyListFragment;
+
 import ${curr.namespace}.R;
 import ${curr.namespace}.entity.${curr.name};
 import ${curr.namespace}.view.${curr.name?lower_case}.${curr.name}ListLoader;
 
-public class ${curr.name}ListFragment extends ListFragment
-implements LoaderManager.LoaderCallbacks<List<${curr.name}>> {
+public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}> {
 
 	// Recall internal address (Hack Micky)
 	static final int INTERNAL_EMPTY_ID = 0x00ff0001;
@@ -104,8 +108,12 @@ implements LoaderManager.LoaderCallbacks<List<${curr.name}>> {
 	 */
 	@Override 
 	public Loader<List<${curr.name}>> onCreateLoader(int id, Bundle bundle) { 
-		//return ((LoaderManager.LoaderCallbacks<List<${curr.name}>>)getActivity()).onCreateLoader(0, bundle);
-		return new ${curr.name}ListLoader(getActivity());
+		${curr.name?cap_first}Criterias crit = null;
+		if(bundle!=null){
+			crit = (${curr.name?cap_first}Criterias)bundle.get(${curr.name?cap_first}Criterias._PARCELABLE);
+		}
+			
+		return new ${curr.name?cap_first}ListLoader(getActivity(), crit );
 	}
 
 	/** (non-Javadoc)

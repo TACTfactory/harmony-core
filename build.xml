@@ -22,6 +22,7 @@
 	<property name="lib.rel-dir" value="lib" />
 	<property name="tmp.rel-dir" value="tmp" />
 	<property name="dist.rel-dir" value="vendor/tact-core" />
+	<property name="sherlock.rel-dir" value="sherlock-4.2" />
 	<property name="doc.rel-dir" value="${dist.rel-dir}/javadoc" />
 	<property name="jar.rel-file" value="${dist.rel-dir}/${ant.project.name}.jar" />
 
@@ -150,6 +151,9 @@
 		  <fileset dir="${lib.rel-dir}">
 		    <include name="*.jar"/>
 		  </fileset>
+		</copy>
+		<copy todir="${dist.rel-dir}/${lib.rel-dir}/${sherlock.rel-dir}">
+		  <fileset dir="${lib.rel-dir}/${sherlock.rel-dir}"/>
 		</copy>
         <delete dir="${build.rel-dir}" failonerror="false" deleteonexit="true" />
     </target>

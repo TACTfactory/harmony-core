@@ -22,6 +22,7 @@ public abstract class BaseAdapter {
 	protected String source;
 	protected String libs;
 	protected String test;
+	protected String testLibs;
 	protected String harmony;
 	protected String widget;
 	protected String util;
@@ -36,6 +37,7 @@ public abstract class BaseAdapter {
 	protected String common		= "common";
 	protected String service	= "service";
 	protected String fixture 	= "fixture";
+	protected String criterias  = "criterias"; 
 	
 	// File
 	protected String manifest;
@@ -96,6 +98,10 @@ public abstract class BaseAdapter {
 		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getTest() );
 	}
 	
+	public final String getTestLibsPath() {
+		return String.format("%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(), this.getTest(), this.getTestLibs() );
+	}
+	
 	public final String getSourcePath() {
 		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getSource() );
 	}
@@ -130,8 +136,16 @@ public abstract class BaseAdapter {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getService() );
 	}
 	
+	public final String getTemplateSourceEntityBasePath() {
+		return String.format("%s/%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getModel(), "base" );
+	}
+	
 	public final String getTemplateSourceProviderPath() {
 		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getProvider() );
+	}
+	
+	public final String getTemplateSourceCriteriasPath() {
+		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getCriterias() );
 	}
 	
 	public final String getTemplateSourceFixturePath() {
@@ -314,7 +328,7 @@ public abstract class BaseAdapter {
 	}
 	
 	/**
-	 * @param ressource the resource to set
+	 * @param assets the assets folder
 	 */
 	public final void setAssets(String assets) {
 		this.assets = assets;
@@ -382,6 +396,20 @@ public abstract class BaseAdapter {
 	public final void setProvider(String provider) {
 		this.provider = provider;
 	}
+	
+	/**
+	 * @return the criterias
+	 */
+	public final String getCriterias() {
+		return criterias;
+	}
+
+	/**
+	 * @param criterias the criterias to set
+	 */
+	public final void setCriterias(String criterias) {
+		this.criterias = criterias;
+	}
 
 	/**
 	 * @return the common
@@ -420,7 +448,7 @@ public abstract class BaseAdapter {
 	}
 
 	/**
-	 * @param service the service to set
+	 * @param fixture the fixture folder
 	 */
 	public final void setFixture(String fixture) {
 		this.fixture = fixture;
@@ -501,6 +529,20 @@ public abstract class BaseAdapter {
 	 */
 	public void setTest(String test) {
 		this.test = test;
+	}
+	
+	/**
+	 * @return the testLibs
+	 */
+	public String getTestLibs() {
+		return this.testLibs;
+	}
+
+	/**
+	 * @param testLibs the testLibs to set
+	 */
+	public void setTestLibs(String testLibs) {
+		this.testLibs = testLibs;
 	}
 
 	/**

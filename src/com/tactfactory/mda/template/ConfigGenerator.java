@@ -96,10 +96,10 @@ public class ConfigGenerator extends BaseGenerator {
 			xmlOutput.output(doc, new FileWriter(xmlFile.getAbsoluteFile()));
 			
 		} catch (IOException io) {
-			ConsoleUtils.displayError(io.getMessage());
+			ConsoleUtils.displayError(io);
 			io.printStackTrace();
 		} catch (JDOMException e) {
-			ConsoleUtils.displayError(e.getMessage());
+			ConsoleUtils.displayError(e);
 			e.printStackTrace();
 		}
 	}
