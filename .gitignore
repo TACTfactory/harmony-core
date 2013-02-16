@@ -4,6 +4,7 @@
 /gen/*
 /tmp/*
 /fixtures
+/emmainstr
 
 /doc/internal/*
 /doc/stats/*

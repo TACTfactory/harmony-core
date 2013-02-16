@@ -3,7 +3,7 @@
 	<description>
 		Harmony project build file.
 	</description>
-
+	    
 	<!-- load environment variables as properties -->
 	<property environment="env" />
 
@@ -20,12 +20,21 @@
 	<property name="app.rel-dir" value="app" />
 	<property name="build.rel-dir" value="bin" />
 	<property name="lib.rel-dir" value="lib" />
+	<property name="ant-lib.rel-dir" value="${lib.rel-dir}/ant" />
 	<property name="tmp.rel-dir" value="tmp" />
 	<property name="dist.rel-dir" value="vendor/tact-core" />
 	<property name="sherlock.rel-dir" value="sherlock-4.2" />
 	<property name="doc.rel-dir" value="${dist.rel-dir}/javadoc" />
 	<property name="jar.rel-file" value="${dist.rel-dir}/${ant.project.name}.jar" />
+		
+	<!-- jar file from where the tasks are loaded -->
+    <path id="android.antlibs">
+        <pathelement path="${ant-lib.rel-dir}/anttasks.jar" />
+    </path>
 
+    <!-- Custom tasks -->
+    <taskdef resource="anttasks.properties" classpathref="android.antlibs" />
+    
 	<!-- project classpath -->
 
 	<path id="project.classpath">
@@ -125,6 +134,8 @@
             debug="${compile.debug}"
             debuglevel="${compile.debuglevel}"
             includeantruntime="false"
+            target="1.6"
+        	source="1.6"
         >
             <compilerarg line="" /> <!-- "-Xlint:all", "-Xlint:all,-path", "-Xlint:all,-path,-unchecked" -->
             <classpath refid="project.classpath" />
@@ -133,11 +144,75 @@
 
     <target name="run-tests" depends="compile-tests"
         description="Run tests">
+
+        <if condition="${emma.enabled}">
+            <then>
+		    	<emma enabled="${emma.enabled}" >
+				    <instr instrpathref="emma.coverage.classes"
+				         destdir="${emma.instr-dir}"
+				         metadatafile="${emma.out-dir}/metadata.emma"
+				         merge="true">
+				        <filter value="${emma.filter}" />
+				    </instr>
+				</emma>
+				
+		    	<path id="emma.test.classpath">
+					<pathelement location="${emma.instr-dir}"/>
+					<pathelement location="${emma.dir}"/>
+					<fileset dir="${emma.dir}">
+						<include name="*.jar" />
+					</fileset>
+					<fileset dir="${lib.rel-dir}">
+						<include name="*.jar" />
+					</fileset>
+					<fileset dir="${dist.rel-dir}">
+						<include name="*.jar" />
+					</fileset>
+				</path>
+				
+		    	<property name="test.classpath.id" value="emma.test.classpath" />
+			</then>
+			<else>
+			    <property name="test.classpath.id" value="project.classpath" />
+			</else>
+		</if>
+
         <junit haltonfailure="no" fork="yes">
-            <classpath refid="project.classpath" />
+            <!-- <if condition="${emma.enabled}">
+	            <then> -->
+		            <jvmarg value="-Demma.coverage.out.file=${emma.out-dir}/coverage.emma" />
+					<jvmarg value="-Demma.coverage.out.merge=false" />
+					<!-- <jvmarg value="-XX:-UseSplitVerifier" /> -->
+           		<!-- </then>
+      		</if>	 -->		
+      		
+            <classpath refid="${test.classpath.id}" />
             <formatter type="xml" />
-        	<test name="com.tactfactory.mda.test.AllTests" todir="${tmp.rel-dir}/"/> 
+        	<test name="com.tactfactory.mda.test.AllTests" todir="${tmp.rel-dir}/"/>
         </junit>
+        
+        <if condition="${emma.enabled}">
+            <then>
+		        <emma enabled="${emma.enabled}" >
+				    <report sourcepath="src">
+					    <!-- collect all EMMA data dumps (metadata and runtime)
+					         [this can be done via nested <fileset> fileset elements
+					         or <file> elements pointing to a single file]:
+					    -->
+					    <fileset dir="${emma.out-dir}" >
+					        <include name="*.emma" />
+					    </fileset>
+					    
+					    <!-- for every type of report desired, configure a nested
+					         element; various report parameters
+					         can be inherited from the parent <report>
+					         and individually overridden for each report type:
+					    -->
+					    <xml outfile="${emma.out-dir}/coverage.xml"/>
+				    </report>
+				</emma>
+			</then>
+		</if>
     </target>
 	
 	<target name="run-findbugs" depends="jar"
@@ -247,5 +322,27 @@
             </manifest>
             
         </jar>
+    </target>
+    
+    <!-- emma -->   
+	<property name="emma.dir" value="${lib.rel-dir}/emma" />
+	<property name="emma.out-dir" value="${tmp.rel-dir}/coverage" />
+	<property name="emma.instr-dir" value="${tmp.rel-dir}/emmainstr" />
+	
+	<path id="emma.lib" >
+	    <pathelement location="${emma.dir}/emma.jar" />
+	    <pathelement location="${emma.dir}/emma_ant.jar" />
+	</path>
+	
+	<taskdef resource="emma_ant.properties" classpathref="emma.lib" />
+	
+	<path id="emma.coverage.classes" >
+	    <pathelement location="${build.rel-dir}" />
+	</path>
+	
+	<target name="emma"> <!-- enable code coverage -->
+        <property name="emma.enabled" value="true" />
+        <property name="emma.filter" value="" />
+        <mkdir dir="${emma.instr-dir}" />        
     </target>
 </project>
