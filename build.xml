@@ -26,7 +26,11 @@
 	<property name="sherlock.rel-dir" value="sherlock-4.2" />
 	<property name="doc.rel-dir" value="${dist.rel-dir}/javadoc" />
 	<property name="jar.rel-file" value="${dist.rel-dir}/${ant.project.name}.jar" />
+	
 		
+	<property name="compile.debug" value="true" />
+	<property name="compile.debuglevel" value="lines,vars,source" />
+	
 	<!-- jar file from where the tasks are loaded -->
     <path id="android.antlibs">
         <pathelement path="${ant-lib.rel-dir}/anttasks.jar" />
@@ -76,7 +80,6 @@
         </javadoc>
     </target>
     
-    
     <!-- compile -->
 
     <target name="prepare-resources" depends="init">
@@ -88,9 +91,6 @@
             <replacefilter token="@example-token@" value="${example-property}" />
         </replace>
     </target>
-
-    <property name="compile.debug" value="true" />
-    <property name="compile.debuglevel" value="lines,vars,source" />
 
     <target name="compile" depends="init,prepare-resources">
     <!-- description="Compile source code" excludes="**/com/tactfactory/mda/test/**" -->
@@ -233,6 +233,10 @@
 	<target name="run-checkstyle" depends="compile-tests" 
 		description="Report of code convention violations.">
 		
+		<echo message="patch ${env.FINDBUGS_HOME}" />
+			<echo message="patch ${env.PMD_HOME}" />
+			<echo message="patch ${env.CHECKSTYLE_HOME}" />
+		
 		<!-- Fail this target if CheckStyle is not installed. -->
         <available file="${env.CHECKSTYLE_HOME}/checkstyle-5.6-all.jar"
 			property="checkstyle.available"/>
@@ -269,14 +273,14 @@
 			classname="net.sourceforge.pmd.ant.PMDTask" />
 		<pmd shortFilenames="true">
 			<ruleset>basic</ruleset> 
-			<ruleset>braces</ruleset> 
+			<!--ruleset>braces</ruleset> 
 			<ruleset>codesize</ruleset> 
 			<ruleset>clone</ruleset> 
 			<ruleset>controversial</ruleset> 
 			<ruleset>coupling</ruleset> 
 			<ruleset>design</ruleset> 
 			<ruleset>javabeans</ruleset> 
-			<ruleset>strings</ruleset> 
+			<ruleset>strings</ruleset--> 
 			<!--formatter type="html" toFile="pmd_report.html" linkPrefix="http://pmd.sourceforge.net/xref/" /-->
 			<formatter type="xml" toFile="pmd.xml"/>
 			<fileset dir="${src.rel-dir}">
@@ -299,8 +303,6 @@
 		</jdepend>
 	</target>
 	
-	<target name="reports" depends="run-checkstyle,run-findbugs,run-pmd" />
-	<target name="tests" depends="run-tests" />
 	<!-- build -->
 
 	<target name="post_build" depends="compile"
@@ -329,6 +331,10 @@
         description="Build the project">
     </target>
     
+	<target name="tests" depends="run-tests" />
+	
+	<target name="reports" depends="run-checkstyle,run-findbugs" />
+	
     <!-- library -->
 
     <target name="jar" depends="compile">
