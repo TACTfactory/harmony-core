@@ -233,10 +233,6 @@
 	<target name="run-checkstyle" depends="compile-tests" 
 		description="Report of code convention violations.">
 		
-		<echo message="patch ${env.FINDBUGS_HOME}" />
-			<echo message="patch ${env.PMD_HOME}" />
-			<echo message="patch ${env.CHECKSTYLE_HOME}" />
-		
 		<!-- Fail this target if CheckStyle is not installed. -->
         <available file="${env.CHECKSTYLE_HOME}/checkstyle-5.6-all.jar"
 			property="checkstyle.available"/>
@@ -264,23 +260,34 @@
 	
 	<target name="run-pmd" depends="compile-tests"
 		description="Run pmd">
+		
+		<!-- Fail this target if Pmd is not installed. -->
 		<available file="${env.PMD_HOME}/lib/pmd-5.0.2.jar" 
 			property="pmd.available" />
 		<fail unless="pmd.available"
 			message="Error: PMD_HOME not set or pmd-5.0.2.jar not found." />
+		
+		<path id="pmd.classpath">
+	    	<fileset dir="${env.PMD_HOME}/lib/">
+	            <include name="**/*.jar" />
+	        </fileset>
+	    </path>
+		
+		<!-- Run this target if Pmd is installed. -->
 		<taskdef name="pmd" 
+			classpathref="pmd.classpath"
 			classpath="${env.PMD_HOME}/lib/pmd-5.0.2.jar"
 			classname="net.sourceforge.pmd.ant.PMDTask" />
 		<pmd shortFilenames="true">
-			<ruleset>basic</ruleset> 
-			<!--ruleset>braces</ruleset> 
-			<ruleset>codesize</ruleset> 
-			<ruleset>clone</ruleset> 
-			<ruleset>controversial</ruleset> 
-			<ruleset>coupling</ruleset> 
-			<ruleset>design</ruleset> 
-			<ruleset>javabeans</ruleset> 
-			<ruleset>strings</ruleset--> 
+			<ruleset>java-basic</ruleset> 
+			<ruleset>java-braces</ruleset> 
+			<ruleset>java-codesize</ruleset> 
+			<ruleset>java-clone</ruleset> 
+			<ruleset>java-controversial</ruleset> 
+			<ruleset>java-javabeans</ruleset> 
+			<!--ruleset>java-coupling</ruleset> 
+			<ruleset>java-design</ruleset--> 
+			<ruleset>java-strings</ruleset> 
 			<!--formatter type="html" toFile="pmd_report.html" linkPrefix="http://pmd.sourceforge.net/xref/" /-->
 			<formatter type="xml" toFile="pmd.xml"/>
 			<fileset dir="${src.rel-dir}">
@@ -288,6 +295,8 @@
 				<exclude name="**/*Test*"/>
 			</fileset>
 		</pmd>
+		
+		<!-- Report -->
 	</target>
 	
 	<target name="run-jdepend" depends="compile-tests"
@@ -333,7 +342,7 @@
     
 	<target name="tests" depends="run-tests" />
 	
-	<target name="reports" depends="run-checkstyle,run-findbugs" />
+	<target name="reports" depends="run-checkstyle,run-findbugs,run-pmd" />
 	
     <!-- library -->
 
