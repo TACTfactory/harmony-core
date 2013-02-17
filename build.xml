@@ -26,7 +26,10 @@
 	<property name="sherlock.rel-dir" value="sherlock-4.2" />
 	<property name="doc.rel-dir" value="${dist.rel-dir}/javadoc" />
 	<property name="jar.rel-file" value="${dist.rel-dir}/${ant.project.name}.jar" />
-		
+	<property name="env.FINDBUGS_HOME" value="/home/micky/TACTfactory/projects/lib/findbugs-2.0.2/" />
+	<property name="env.PMD_HOME" value="/home/micky/TACTfactory/projects/lib/pmd-bin-5.0.2/" />
+	<property name="env.CHECKSTYLE_HOME" value="/home/micky/TACTfactory/projects/lib/checkstyle-5.6/" />	
+	
 	<!-- jar file from where the tasks are loaded -->
     <path id="android.antlibs">
         <pathelement path="${ant-lib.rel-dir}/anttasks.jar" />
@@ -230,7 +233,7 @@
         />
 	</target>
 	
-	<target name="run-checkstyle" depends="compile" 
+	<target name="run-checkstyle" depends="compile-tests" 
 		description="Report of code convention violations.">
 		
 		<!-- Fail this target if CheckStyle is not installed. -->
@@ -258,7 +261,7 @@
         />
 	</target>
 	
-	<target name="run-pmd" depends="compile"
+	<target name="run-pmd" depends="compile-tests"
 		description="Run pmd">
 		<available file="${env.PMD_HOME}/lib/pmd-5.0.2.jar" 
 			property="pmd.available" />
@@ -309,9 +312,9 @@
 		    <include name="*.jar"/>
 		  </fileset>
 		</copy>
-		<copy todir="${dist.rel-dir}/${lib.rel-dir}/${sherlock.rel-dir}">
+		<!--copy todir="${dist.rel-dir}/${lib.rel-dir}/${sherlock.rel-dir}">
 		  <fileset dir="${lib.rel-dir}/${sherlock.rel-dir}"/>
-		</copy>
+		</copy-->
         <delete dir="${build.rel-dir}" failonerror="false" deleteonexit="true" />
     </target>
 
