@@ -22,3 +22,8 @@
 
 .settings/*
 /app/*
+/checkstyle_report.html
+/checkstyle_report.xml
+/pmd.xml
+/findbugs.xml
+/findbugs-default.html
