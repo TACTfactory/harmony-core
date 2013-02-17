@@ -26,10 +26,7 @@
 	<property name="sherlock.rel-dir" value="sherlock-4.2" />
 	<property name="doc.rel-dir" value="${dist.rel-dir}/javadoc" />
 	<property name="jar.rel-file" value="${dist.rel-dir}/${ant.project.name}.jar" />
-	<property name="env.FINDBUGS_HOME" value="/home/micky/TACTfactory/projects/lib/findbugs-2.0.2/" />
-	<property name="env.PMD_HOME" value="/home/micky/TACTfactory/projects/lib/pmd-bin-5.0.2/" />
-	<property name="env.CHECKSTYLE_HOME" value="/home/micky/TACTfactory/projects/lib/checkstyle-5.6/" />	
-	
+		
 	<!-- jar file from where the tasks are loaded -->
     <path id="android.antlibs">
         <pathelement path="${ant-lib.rel-dir}/anttasks.jar" />
@@ -302,6 +299,8 @@
 		</jdepend>
 	</target>
 	
+	<target name="reports" depends="run-checkstyle,run-findbugs,run-pmd" />
+	<target name="tests" depends="run-tests" />
 	<!-- build -->
 
 	<target name="post_build" depends="compile"
