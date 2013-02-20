@@ -157,7 +157,7 @@ public class RestClient {
                 Log.d(TAG, "Time taken in service response construction : "+ (endTime2 - endTime) + " ms.");
             }
 
-        } catch(ConnectTimeoutException e){
+        } catch (ConnectTimeoutException e){
             Log.e(TAG, "Connection timed out. The host may be unreachable.");
             e.printStackTrace();
             
@@ -257,7 +257,7 @@ public class RestClient {
         } else if (verb == Verb.POST) {
         	result = new HttpPost(path);
         	
-        	if(httpEntity!=null)
+        	if (httpEntity!=null)
         		((HttpPost)result).setEntity(httpEntity);
         	
         } else if (verb == Verb.DELETE) {
@@ -266,13 +266,13 @@ public class RestClient {
         } else {
         	result = new HttpPut(path);
         	
-        	if(httpEntity!=null)
+        	if (httpEntity!=null)
         		((HttpPut)result).setEntity(httpEntity);
         }
         
         if (result !=null) {
         	if (headers!=null){
-	            for(Header header:headers)
+	            for (Header header:headers)
 	            	result.addHeader(header);
         	}
         } 

@@ -44,7 +44,7 @@ public class EntityGenerator extends BaseGenerator {
 	public void generateAll(){
 		ConsoleUtils.display(">> Decorate entities...");
 		
-		for(final ClassMetadata cm : this.appMetas.entities.values()){ 
+		for (final ClassMetadata cm : this.appMetas.entities.values()){ 
 			final String filepath = String.format("%s/%s",
 					this.entityFolder,
 					String.format("%s.java", cm.name));
@@ -52,7 +52,7 @@ public class EntityGenerator extends BaseGenerator {
 			ConsoleUtils.display(">>> Decorate " + cm.name);
 			
 			final File entityFile = FileUtils.getFile(filepath);
-			if(entityFile.exists()){
+			if (entityFile.exists()){
 				final StringBuffer fileString = FileUtils.fileToStringBuffer(entityFile); // Load the file once in a String buffer
 				
 				this.addImplementsSerializable(fileString, cm);
@@ -71,13 +71,13 @@ public class EntityGenerator extends BaseGenerator {
 	 * @param cm The Metadata containing the infos on the java class
 	 */
 	protected void addImplementsSerializable(final StringBuffer fileString, final ClassMetadata cm){
-		if(!this.alreadyImplementsSerializable(cm)){
+		if (!this.alreadyImplementsSerializable(cm)){
 			ConsoleUtils.displayDebug("Add serializable implement");
 			final int firstAccolade = fileString.indexOf("{");
 			
-			if(cm.implementTypes.size() > 0){ // Class already implements an interface which is not Serializable
+			if (cm.implementTypes.size() > 0){ // Class already implements an interface which is not Serializable
 				fileString.insert(firstAccolade, ", Serializable");
-			}else{
+			} else {
 				fileString.insert(firstAccolade, " implements Serializable");
 			}				
 		}
@@ -89,13 +89,13 @@ public class EntityGenerator extends BaseGenerator {
 	 * @param cm The Metadata containing the infos on the java class
 	 */
 	protected void addImportSerializable(final StringBuffer fileString, final ClassMetadata cm){
-		if(!this.alreadyImportsSerializable(cm)){
+		if (!this.alreadyImportsSerializable(cm)){
 			ConsoleUtils.displayDebug("Add serializable import");
 			int insertPos ;
 			
-			if(cm.imports.size()>0){ 
+			if (cm.imports.size()>0){ 
 				insertPos = fileString.indexOf("import");
-			}else{
+			} else {
 				insertPos = fileString.indexOf(";")+1;
 			}
 			
@@ -112,17 +112,17 @@ public class EntityGenerator extends BaseGenerator {
 	protected void generateGetterAndSetters(final StringBuffer fileString, final ClassMetadata cm){
 		final Collection<FieldMetadata> fields = cm.fields.values();
 		
-		for(final FieldMetadata f : fields){
-			if(!f.internal){
+		for (final FieldMetadata f : fields){
+			if (!f.internal){
 				// Getter
-				if(!this.alreadyImplementsGet(f, cm)){ 
+				if (!this.alreadyImplementsGet(f, cm)){ 
 					ConsoleUtils.displayDebug("Add implements getter of " + f.name + " => get" + CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_CAMEL, f.name));
 					
 					this.generateMethod(fileString, f, this.getterTemplate);
 				}
 				
 				// Setter
-				if(!this.alreadyImplementsSet(f, cm)){
+				if (!this.alreadyImplementsSet(f, cm)){
 					ConsoleUtils.displayDebug("Add implements setter of " + f.name + " => set" + CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_CAMEL, f.name));
 					
 					this.generateMethod(fileString, f, this.setterTemplate);
@@ -145,7 +145,7 @@ public class EntityGenerator extends BaseGenerator {
 		map.put("property",f.name);
 		map.put("property_type",this.adapter.getNativeType(f.type));
 		
-		try{
+		try {
 			final StringWriter writer = new StringWriter();
 			
 			final Template tpl = this.cfg.getTemplate(
@@ -157,9 +157,9 @@ public class EntityGenerator extends BaseGenerator {
 			final StringBuffer getString = writer.getBuffer();
 			fileString.insert(lastAccolade, getString + "\n\n");
 			
-		}catch(final IOException e){
+		} catch (final IOException e){
 			ConsoleUtils.displayError(e);
-		}catch(final TemplateException e){
+		} catch (final TemplateException e){
 			ConsoleUtils.displayError(e);
 		}		
 	}
@@ -170,8 +170,8 @@ public class EntityGenerator extends BaseGenerator {
 	 */
 	protected boolean alreadyImplementsSerializable(final ClassMetadata cm){
 		boolean ret = false;
-		for(final String impl : cm.implementTypes){
-			if("Serializable".equals(impl)){				
+		for (final String impl : cm.implementTypes){
+			if ("Serializable".equals(impl)){				
 				ret = true;
 				
 				ConsoleUtils.displayDebug("Already implements Serializable !");
@@ -191,11 +191,11 @@ public class EntityGenerator extends BaseGenerator {
 		final List<MethodMetadata> methods = cm.methods;
 		final String capitalizedName = fm.name.substring(0,1).toUpperCase() + fm.name.substring(1);
 		String prefix = "get";
-		if("boolean".equals(fm.type)){
+		if ("boolean".equals(fm.type)){
 			prefix = "is";
 		}
-		for(final MethodMetadata m : methods){
-			if(m.name.equals(prefix+capitalizedName) && 
+		for (final MethodMetadata m : methods){
+			if (m.name.equals(prefix+capitalizedName) && 
 					m.argumentsTypes.size()==0 && 
 					m.type.equals(this.adapter.getNativeType(fm.type))){
 				ret = true;
@@ -217,8 +217,8 @@ public class EntityGenerator extends BaseGenerator {
 		final List<MethodMetadata> methods = cm.methods;
 		final String capitalizedName = fm.name.substring(0,1).toUpperCase() + fm.name.substring(1);
 		
-		for(final MethodMetadata m : methods){
-			if(m.name.equals("set"+capitalizedName) && 
+		for (final MethodMetadata m : methods){
+			if (m.name.equals("set"+capitalizedName) && 
 					m.argumentsTypes.size()==1 && 
 					m.argumentsTypes.get(0).equals(this.adapter.getNativeType(fm.type))){
 				result = true;
@@ -236,8 +236,8 @@ public class EntityGenerator extends BaseGenerator {
 	 */
 	protected boolean alreadyImportsSerializable(final ClassMetadata cm){
 		boolean ret = false;
-		for(final String imp : cm.imports){
-			if("Serializable".equals(imp)) {
+		for (final String imp : cm.imports){
+			if ("Serializable".equals(imp)) {
 				ret=true;
 			}
 		}

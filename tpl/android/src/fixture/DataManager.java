@@ -45,7 +45,7 @@ public class DataManager {
     	
     	<#list entities?values as entity>
     		<#if (entity.fields?size>0) && (entity.ids?size>0)>
-    	if(nameClass.equals("${entity.name}")){
+    	if (nameClass.equals("${entity.name}")){
         	ret = ((${entity.name}SQLiteAdapter)this.adapters.get(nameClass)).query(id);
     	}
     		</#if>
@@ -67,7 +67,7 @@ public class DataManager {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public int persist(Object object) {
     	this.beginTransaction();
-    	try{
+    	try {
     		SQLiteAdapterBase adapter = this.getRepository(object);
     			
     		return (int)adapter.insert(object);
@@ -87,10 +87,10 @@ public class DataManager {
      */
     public void remove(Object object) {
     	this.beginTransaction();
-    	try{
+    	try {
     	<#list entities?values as entity>
     		<#if (entity.fields?size>0 && entity.ids?size>0)>
-    		if(object instanceof ${entity.name}){
+    		if (object instanceof ${entity.name}){
     			((${entity.name}SQLiteAdapter)this.adapters.get("${entity.name}")).remove(((${entity.name})object).getId());
     		}
     		</#if>
@@ -150,7 +150,7 @@ public class DataManager {
      * database.
      */
     public void flush() {
-    	if(this.isInInternalTransaction){
+    	if (this.isInInternalTransaction){
     		if (this.isSuccessfull)
     			this.db.setTransactionSuccessful();
     		this.db.endTransaction();
@@ -207,7 +207,7 @@ public class DataManager {
     
     private void beginTransaction(){    	
     	// If we are not already in a transaction, begin it
-    	if(!this.isInInternalTransaction){
+    	if (!this.isInInternalTransaction){
     		this.db.beginTransaction();
     		this.isSuccessfull = true;
     		this.isInInternalTransaction = true;

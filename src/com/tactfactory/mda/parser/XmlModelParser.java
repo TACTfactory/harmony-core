@@ -8,6 +8,12 @@
  */
 package com.tactfactory.mda.parser;
 
+/**
+ * XmlModelParser.
+ * Parser for xml model description files
+ * @author gregg
+ *
+ */
 public class XmlModelParser {
 
 }

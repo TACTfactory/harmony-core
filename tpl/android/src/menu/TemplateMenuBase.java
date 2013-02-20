@@ -53,7 +53,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	private void initializeMenu(Menu menu) {
 		this.menu = menu;
 		
-		for(int i=0; i<this.menus.size();i++){
+		for (int i=0; i<this.menus.size();i++){
 			this.menus.valueAt(i).initializeMenu(menu);
 		}
 		
@@ -73,7 +73,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 		int currentClass = this.context.getClass().hashCode();
 		int currentFragment = this.fragment.getClass().hashCode();
 		
-		for(int i=0; i<this.menus.size();i++){
+		for (int i=0; i<this.menus.size();i++){
 			this.menus.valueAt(i).updateMenu(menu, currentClass, currentFragment, this.context);
 		}
 	}
@@ -106,7 +106,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	}
 	
 	private void onActivityResult(int requestCode, int resultCode, Intent data){
-		for(int i=0; i<this.menus.size();i++){
+		for (int i=0; i<this.menus.size();i++){
 			this.menus.valueAt(i).onActivityResult(requestCode, resultCode, data, this.context, this.fragment);
 		}
 	}

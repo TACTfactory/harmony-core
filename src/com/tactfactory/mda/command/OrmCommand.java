@@ -60,7 +60,7 @@ public class OrmCommand extends BaseCommand {
 
 	protected void generateForm() {
 		/*ApplicationMetadata appMetas = this.getMetasFromAll();
-		if(appMetas!=null){
+		if (appMetas!=null){
 			this.generateActivitiesForEntities(appMetas, true);
 		}*/
 	}
@@ -71,7 +71,7 @@ public class OrmCommand extends BaseCommand {
 	protected void generateEntity() {
 		/*ApplicationMetadata appMetas = this.getMetasFromArg();
 		
-		if(appMetas!=null){
+		if (appMetas!=null){
 			//this.generateActivitiesForEntities(appMetas, false);
 			this.makeLayoutDatabase(appMetas);
 			this.makeLayoutTestDatabase(appMetas);
@@ -85,7 +85,7 @@ public class OrmCommand extends BaseCommand {
 	protected void generateEntities() {
 		this.generateMetas();
 		
-		if(ApplicationMetadata.INSTANCE.entities!=null){
+		if (ApplicationMetadata.INSTANCE.entities!=null){
 			this.makeLayoutDatabase();
 			this.makeLayoutTestDatabase();
 		}
@@ -97,7 +97,7 @@ public class OrmCommand extends BaseCommand {
 	 */
 	protected void generateCrud() {
 		this.generateMetas();
-		if(ApplicationMetadata.INSTANCE.entities != null){
+		if (ApplicationMetadata.INSTANCE.entities != null){
 			this.makeLayoutUi(true);
 		}
 	}
@@ -135,7 +135,7 @@ public class OrmCommand extends BaseCommand {
 	 */
 	protected void makeLayoutUi(final boolean generateHome){
 		try {
-			if(generateHome) {
+			if (generateHome) {
 				new ProjectGenerator(this.adapter).generateHomeActivity();
 			}
 				

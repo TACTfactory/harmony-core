@@ -12,11 +12,14 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-
+/**
+ * All Harmony tests related to project generation 
+ * @author gregg
+ *
+ */
 @RunWith(Suite.class)
-@SuiteClasses({
-	ProjectInitTest.class })
-                
+@SuiteClasses({	ProjectInitTest.class })
+
 public class AllTests {
 
 }

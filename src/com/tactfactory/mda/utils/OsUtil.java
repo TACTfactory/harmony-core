@@ -42,13 +42,11 @@ public abstract class OsUtil {
 
 	/** warning! only gives JRE architecture, 
 	 * on x64 machine with x86 JRE installed, prints 'x86' */
-	public static String getArch()
-	{
+	public static String getArch() {
 		return System.getProperty("os.arch", GENERIC);
 	}
 	
-	public static boolean isX64()
-	{
+	public static boolean isX64() {
 		boolean is64bit = false;
 		if (isWindows()) {
 			if (System.getProperty("os.name").contains("Windows")) {

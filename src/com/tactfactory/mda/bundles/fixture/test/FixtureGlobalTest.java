@@ -132,7 +132,7 @@ public class FixtureGlobalTest extends CommonTest{
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
 		destDir = String.format("fixtures/test/");
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
-		if(new File(destDir+"Post.xml").exists()) {
+		if (new File(destDir+"Post.xml").exists()) {
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");
 		}
 	}
@@ -148,7 +148,7 @@ public class FixtureGlobalTest extends CommonTest{
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
 		destDir = String.format("fixtures/test/");
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
-		if(new File(destDir+"Post.yml").exists()) {
+		if (new File(destDir+"Post.yml").exists()) {
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");
 		}
 	}

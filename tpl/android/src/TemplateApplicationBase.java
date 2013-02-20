@@ -50,7 +50,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		preferences = this.getSharedPreferences(
 				"${project_name?uncap_first}", Context.MODE_PRIVATE);
 		
-		if(!preferences.contains("lastSyncDate")){
+		if (!preferences.contains("lastSyncDate")){
 			// TODO: First Sync
 			
 			${project_name?cap_first}ApplicationBase.setLastSyncDate(new DateTime().minusWeeks(1));

@@ -12,14 +12,17 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-
+/**
+ * All tests related to ORM initialization and generation
+ * @author gregg
+ *
+ */
 @RunWith(Suite.class)
 @SuiteClasses({
 	OrmInitEntitiesTest.class,
 	OrmInitViewTest.class,
-	OrmUpdateEntitiesTest.class
-	})
-                
+	OrmUpdateEntitiesTest.class })
+
 public class AllTests {
         /*public static void main(String[] args) {
                 JUnitCore.runClasses(new Class[] { AllTests.class });

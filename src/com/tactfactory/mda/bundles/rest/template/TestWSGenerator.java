@@ -26,8 +26,8 @@ public class TestWSGenerator extends BaseGenerator {
 	public void generateAll() {
 		ConsoleUtils.display(">> Generate Rest test...");
 		
-		for(final ClassMetadata cm : this.appMetas.entities.values()){
-			if(cm.options.containsKey("rest") && !cm.internal && !cm.fields.isEmpty()){
+		for (final ClassMetadata cm : this.appMetas.entities.values()){
+			if (cm.options.containsKey("rest") && !cm.internal && !cm.fields.isEmpty()){
 				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getTest());
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
 				this.generate();

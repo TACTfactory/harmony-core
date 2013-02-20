@@ -10,19 +10,26 @@ package com.tactfactory.mda.plateforme;
 
 import com.tactfactory.mda.meta.ClassMetadata;
 
-/** Microsoft Adapter of project structure */
+/** 
+ * Microsoft Adapter of project structure.
+ * 
+ */
 public final class WinphoneAdapter extends BaseAdapter {
 
-	public WinphoneAdapter()
-	{
+	/**
+	 * Constructor
+	 */
+	public WinphoneAdapter() {
 		super();
 		this.platform	= "winphone";
 		this.resource 	= "res";
 		this.source 	= "src";
 	}
 
-	/* (non-Javadoc)
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getNameSpace(com.tactfactory.mda.orm.ClassMetadata, java.lang.String)
+	/** 
+	 * @see com.tactfactory.mda.plateforme.BaseAdapter
+	 * #getNameSpace(com.tactfactory.mda.orm.ClassMetadata,
+	 * 				 java.lang.String)
 	 */
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
@@ -30,8 +37,10 @@ public final class WinphoneAdapter extends BaseAdapter {
 		return null;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getNameSpace(com.tactfactory.mda.orm.ClassMetadata)
+	/**
+	 * @see com.tactfactory.mda.plateforme.BaseAdapter
+	 * #getNameSpaceEntity(com.tactfactory.mda.orm.ClassMetadata,
+	 * 					 java.lang.String)
 	 */
 	@Override
 	public String getNameSpaceEntity(final ClassMetadata cm, final String type) {
@@ -39,8 +48,9 @@ public final class WinphoneAdapter extends BaseAdapter {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getViewComponentShow(com.tactfactory.mda.orm.FieldMetadata)
+	/** 
+	 * @see com.tactfactory.mda.plateforme.BaseAdapter#
+	 * getViewComponentShow(com.tactfactory.mda.orm.FieldMetadata)
 	 */
 	/*@Override
 	public String getViewComponentShow(FieldMetadata field) {
@@ -48,8 +58,9 @@ public final class WinphoneAdapter extends BaseAdapter {
 		return null;
 	}*/
 
-	/* (non-Javadoc)
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getViewComponentEdit(com.tactfactory.mda.orm.FieldMetadata)
+	/** 
+	 * @see com.tactfactory.mda.plateforme.BaseAdapter#
+	 * getViewComponentEdit(com.tactfactory.mda.orm.FieldMetadata)
 	 */
 	/*@Override
 	public String getViewComponentEdit(FieldMetadata field) {

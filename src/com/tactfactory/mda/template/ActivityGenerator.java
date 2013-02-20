@@ -41,9 +41,9 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class ActivityGenerator extends BaseGenerator {
-	private final static String LOWER_TEMPLATE = "template";
-	private final static String TEMPLATE = "Template";
-	private final static String NAME = "name";
+	private static final String LOWER_TEMPLATE = "template";
+	private static final String TEMPLATE = "Template";
+	private static final String NAME = "name";
 	
 	protected String localNameSpace;
 	protected boolean isWritable = true;
@@ -55,7 +55,7 @@ public class ActivityGenerator extends BaseGenerator {
 		
 		// Make entities
 		for (final ClassMetadata meta : this.appMetas.entities.values()) {
-			if(!meta.fields.isEmpty() && !meta.internal) {
+			if (!meta.fields.isEmpty() && !meta.internal) {
 				// copy Widget
 				if (this.isDate && this.isTime) {
 					break;
@@ -63,14 +63,14 @@ public class ActivityGenerator extends BaseGenerator {
 					for (final FieldMetadata field : meta.fields.values()) {
 						final String type = field.type;
 						if (!this.isDate && (
-								type.equals(Type.DATE.getValue()) || 
-								type.equals(Type.DATETIME.getValue()))) {
+								type.equals(Type.DATE.getValue())  
+								|| type.equals(Type.DATETIME.getValue()))) {
 							this.isDate = true;
 						}
 						
 						if (!this.isTime && (
-								type.equals(Type.TIME.getValue()) || 
-								type.equals(Type.DATETIME.getValue()))) {
+								type.equals(Type.TIME.getValue())  
+								|| type.equals(Type.DATETIME.getValue()))) {
 							this.isTime = true;
 						}
 					}
@@ -79,18 +79,19 @@ public class ActivityGenerator extends BaseGenerator {
 		}
 	}
 
-	public ActivityGenerator(final BaseAdapter adapter, final Boolean isWritable) throws Exception {
+	public ActivityGenerator(final BaseAdapter adapter,
+			final Boolean writable) throws Exception {
 		super(adapter);
 
-		this.isWritable = isWritable;
+		this.isWritable = writable;
 		this.datamodel = ApplicationMetadata.INSTANCE.toMap(this.adapter);
 	}
 	
-	public void generateAll() {
+	public final void generateAll() {
 		ConsoleUtils.display(">> Generate CRUD view...");
 
-		for(final ClassMetadata cm : this.appMetas.entities.values()){
-			if(!cm.internal && !cm.fields.isEmpty()){
+		for (final ClassMetadata cm : this.appMetas.entities.values()) {
+			if (!cm.internal && !cm.fields.isEmpty()){
 				cm.makeString("label");
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
 				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getController())+"."+cm.getName().toLowerCase(Locale.ENGLISH);
@@ -173,13 +174,13 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("fragment_%s_list.xml");		
 		xmls.add("row_%s.xml");
 		
-		for(final String java : javas){
+		for (final String java : javas){
 			this.makeSourceControler( 
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
 		
-		for(final String xml : xmls){
+		for (final String xml : xmls){
 			this.makeResourceLayout( 
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
@@ -209,13 +210,13 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("fragment_%s_show.xml");
 		
 
-		for(final String java : javas){
+		for (final String java : javas){
 			this.makeSourceControler(
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
 		
-		for(final String xml : xmls){
+		for (final String xml : xmls){
 			this.makeResourceLayout( 
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
@@ -246,13 +247,13 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("fragment_%s_edit.xml");
 		
 
-		for(final String java : javas){
+		for (final String java : javas){
 			this.makeSourceControler( 
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
 		
-		for(final String xml : xmls){
+		for (final String xml : xmls){
 			this.makeResourceLayout( 
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
@@ -283,13 +284,13 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("fragment_%s_create.xml");
 		
 
-		for(final String java : javas){
+		for (final String java : javas){
 			this.makeSourceControler(
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
 		
-		for(final String xml : xmls){
+		for (final String xml : xmls){
 			this.makeResourceLayout(
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
@@ -366,12 +367,12 @@ public class ActivityGenerator extends BaseGenerator {
 	 * 
 	 * @param classFile
 	 */
-	private void updateManifest(String classF, final String entityName) {
+	private void updateManifest(final String classF, final String entityName) {
 		String classFile = entityName + classF;
 		final String pathRelatif = String.format(".%s.%s.%s",
 				this.adapter.getController(), 
 				entityName.toLowerCase(Locale.ENGLISH), 
-				classFile );
+				classFile);
 
 		// Debug Log
 		ConsoleUtils.displayDebug("Update Manifest : " + pathRelatif);

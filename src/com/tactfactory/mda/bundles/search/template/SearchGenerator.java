@@ -44,8 +44,8 @@ public class SearchGenerator  extends BaseGenerator {
 	
 	public void generateAll() {
 		this.datamodel = this.appMetas.toMap(this.adapter);
-		for(final ClassMetadata cm : this.appMetas.entities.values()){
-			if(this.isClassSearchable(cm)){
+		for (final ClassMetadata cm : this.appMetas.entities.values()){
+			if (this.isClassSearchable(cm)){
 				this.generateActivity(cm);
 			}
 		}
@@ -77,8 +77,8 @@ public class SearchGenerator  extends BaseGenerator {
 	
 	private boolean isClassSearchable(final ClassMetadata cm){
 		boolean isSearchable = false;
-		for(final FieldMetadata fm : cm.fields.values()){
-			if(fm.options.containsKey("search")){
+		for (final FieldMetadata fm : cm.fields.values()){
+			if (fm.options.containsKey("search")){
 				isSearchable = true;
 			}
 		}

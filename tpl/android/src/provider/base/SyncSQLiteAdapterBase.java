@@ -18,7 +18,7 @@ public abstract class SyncSQLiteAdapterBase<T extends EntityBase> extends SQLite
 	
 	public T getByServerID(Integer serverId){
 		Cursor c = this.query(this.getCols(), COL_SERVERID+"=? ", new String[]{String.valueOf(serverId)}, null, null, null);
-		if(c.getCount()!=0)
+		if (c.getCount()!=0)
 			c.moveToFirst();
 		T result = this.cursorToItem(c);
 		c.close();

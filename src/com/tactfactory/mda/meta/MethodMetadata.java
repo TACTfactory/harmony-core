@@ -16,18 +16,23 @@ import java.util.Map;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
+/**
+ * Metadatas representing a Method.
+ * @author gregg
+ *
+ */
 public class MethodMetadata extends BaseMetadata {	
-	/** Return type */
+	/** Return type. */
 	public String type;
 	
-	/** Arguments types*/
+	/** Arguments types. */
 	public List<String> argumentsTypes = new ArrayList<String>();
 	
-	/** final ?*/
+	/** Final. */
 	public boolean isFinal;
 
 	@Override
-	public Map<String, Object> toMap(final BaseAdapter adapter) {
+	public final Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> map = new HashMap<String, Object>();
 		map.put(TagConstant.TYPE, this.type);
 		map.put("isFinal", this.isFinal);

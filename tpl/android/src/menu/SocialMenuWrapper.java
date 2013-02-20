@@ -31,7 +31,7 @@ public class SocialMenuWrapper extends MenuWrapperBase{
 			
 		<#list entities?values as entity>
 			<#if entity.options.social??>
-		if(currentFragmentHashCode == ${entity.name?cap_first}ShowFragment.class.hashCode()){
+		if (currentFragmentHashCode == ${entity.name?cap_first}ShowFragment.class.hashCode()){
 			/** Getting the actionprovider associated with the menu item whose id is share */
 	        ShareActionProvider mShareActionProvider = new ShareActionProvider(context);
 	        
@@ -42,7 +42,7 @@ public class SocialMenuWrapper extends MenuWrapperBase{
 	        shareIntent.putExtra(Intent.EXTRA_TEXT,"Sample Content !!!");
 	        
 	        /** Setting a share intent */
-	        if(shareIntent!=null)
+	        if (shareIntent!=null)
 	            mShareActionProvider.setShareIntent(shareIntent);
 			
 	        this.socialItem.setActionProvider(mShareActionProvider);

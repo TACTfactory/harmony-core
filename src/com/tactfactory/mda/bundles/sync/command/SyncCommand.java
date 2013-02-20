@@ -13,7 +13,6 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 import com.tactfactory.mda.Console;
 import com.tactfactory.mda.bundles.rest.parser.RestCompletor;
 import com.tactfactory.mda.bundles.rest.parser.RestParser;
-import com.tactfactory.mda.bundles.sync.parser.SyncCompletor;
 import com.tactfactory.mda.bundles.sync.parser.SyncParser;
 import com.tactfactory.mda.bundles.sync.template.SyncGenerator;
 import com.tactfactory.mda.command.BaseCommand;
@@ -55,7 +54,7 @@ public class SyncCommand extends BaseCommand{
 	protected void generateAdapters() {
 		//Harmony.metas.entities = getMetasFromAll();
 		this.generateMetas();
-		if(ApplicationMetadata.INSTANCE.entities!=null){
+		if (ApplicationMetadata.INSTANCE.entities!=null){
 			try {
 				new SyncGenerator(new AndroidAdapter()).generateAll();
 			} catch (final Exception e) {
@@ -71,7 +70,6 @@ public class SyncCommand extends BaseCommand{
 		this.registerParser(new RestParser());
 		this.registerParser(new SyncParser());
 		super.generateMetas();
-		new SyncCompletor();
 		new RestCompletor().generateApplicationRestMetadata(ApplicationMetadata.INSTANCE);
 	}
 	

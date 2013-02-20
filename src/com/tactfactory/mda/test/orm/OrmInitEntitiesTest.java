@@ -138,7 +138,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.hasImport(postMeta, SERIALIZABLE);
 		this.hasImport(postMeta, "ArrayList");
 		this.hasImport(postMeta, "DateTime");
-		this.hasImport(postMeta, "annotation");
+		this.hasImport(postMeta, "Entity");
 	}
 	
 	@Test
@@ -176,7 +176,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	public void hasCommentImport() {
 		this.hasImport(commentMeta, SERIALIZABLE);
 		this.hasImport(commentMeta, "DateTime");
-		this.hasImport(commentMeta, "annotation");
+		this.hasImport(commentMeta, "Entity");
 	}
 	
 	@Test
@@ -210,7 +210,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	public void hasUserImport() {
 		this.hasImport(userMeta, SERIALIZABLE);
 		this.hasImport(userMeta, "DateTime");
-		this.hasImport(userMeta, "annotation");
+		this.hasImport(userMeta, "Entity");
 		this.hasImport(userMeta, "Type");
 	}
 	
