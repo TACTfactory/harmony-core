@@ -2,11 +2,16 @@ package ${project_namespace}.criterias.base;
 
 import java.io.Serializable;
 
+/** Criteria. Criteria used for some db requests.*/
 public class Criteria implements Serializable, ICriteria{
 	private String key;
 	private String value;
 	private Type type = Type.EQUALS;
 
+	/**
+	 *  Convert the criteria to an SQLite String
+	 * @return The SQLite String representation of the criteria. ex : "(price > 15.0)" 
+	 */
 	@Override
 	public String toSQLiteString(){
 		return "("+key +" "+ type.getSQL() +" "+ value+")";

@@ -8,13 +8,13 @@
  */
 package com.tactfactory.mda.bundles.social.annotation;
 
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
-
-import static java.lang.annotation.RetentionPolicy.SOURCE;
-import static java.lang.annotation.ElementType.TYPE;
 
 /**
  * To mark a entity for display share menu the @Social annotation is used.

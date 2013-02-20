@@ -8,7 +8,6 @@
  */
 package com.tactfactory.mda.bundles.rest.template;
 
-import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.meta.ConfigMetadata;
 import com.tactfactory.mda.meta.TranslationMetadata;
@@ -18,10 +17,11 @@ import com.tactfactory.mda.template.BaseGenerator;
 import com.tactfactory.mda.template.ConfigGenerator;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.template.TranslationGenerator;
+import com.tactfactory.mda.utils.ConsoleUtils;
 
 public class RestGenerator extends BaseGenerator {
 
-	public RestGenerator(BaseAdapter adapter) throws Exception {
+	public RestGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
@@ -31,7 +31,7 @@ public class RestGenerator extends BaseGenerator {
 		try {
 			new TestWSGenerator(this.adapter).generateAll();
 			
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
@@ -58,7 +58,7 @@ public class RestGenerator extends BaseGenerator {
 				"RestClient.java",
 				true);
 		
-		for (ClassMetadata cm : this.appMetas.entities.values()) {
+		for (final ClassMetadata cm : this.appMetas.entities.values()) {
 			if (cm.options.get("rest")!=null) {
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
 				this.makeSource( 
@@ -74,15 +74,16 @@ public class RestGenerator extends BaseGenerator {
 		try {
 			new TranslationGenerator(this.adapter).generateStringsXml();
 			new ConfigGenerator(this.adapter).generateConfigXml();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ConsoleUtils.displayError(e);
 		}
 	}
 		
-	protected void makeSource(String templateName, String fileName, boolean override) {
-		String fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + this.adapter.getData() + "/" + fileName;
-		String fullTemplatePath = this.adapter.getTemplateSourceProviderPath().substring(1) + templateName;
+	@Override
+	protected void makeSource(final String templateName, final String fileName, final boolean override) {
+		final String fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + this.adapter.getData() + "/" + fileName;
+		final String fullTemplatePath = this.adapter.getTemplateSourceProviderPath().substring(1) + templateName;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}

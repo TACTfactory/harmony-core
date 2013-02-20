@@ -10,43 +10,52 @@ package com.tactfactory.mda.plateforme;
 
 import java.lang.reflect.Field;
 
-import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.annotation.Column;
 import com.tactfactory.mda.annotation.Column.Type;
-import com.tactfactory.mda.meta.FieldMetadata;
-import com.tactfactory.mda.meta.RelationMetadata;
+import com.tactfactory.mda.utils.ConsoleUtils;
 
 public class SqliteAdapter {
 	private static String PREFIX = "COL_";
 	private static String SUFFIX = "_ID";
 
-	public static String generateStructure(FieldMetadata field) {
-		StringBuilder builder = new StringBuilder();
-		builder.append(" " + field.columnDefinition.toLowerCase());
-		if(field.id){
+	public static String generateStructure(final String name, final String type, final Integer length,
+											final Integer scale, final Integer precision, final boolean isId,
+											final Boolean isUnique, final Boolean isNullable) {
+		final StringBuilder builder = new StringBuilder();
+		builder.append(' ');
+		builder.append(type.toLowerCase());
+		if(isId){
 			builder.append(" PRIMARY KEY");
-			if(field.columnDefinition.equals("integer")) builder.append(" AUTOINCREMENT");
+			if(type.equals("integer")){
+				builder.append(" AUTOINCREMENT");
+			}
 		}else{
 		
 			// Set Length
-			Type fieldType = Type.fromName(field.columnDefinition);
-			if(field.length!=null && field.length!=fieldType.getLength()){
-				builder.append("("+field.length+")");
-			} else if (field.precision!=null && field.precision!=fieldType.getPrecision()){
-				builder.append("("+field.precision);
-				if(field.scale!=null && field.scale!=fieldType.getScale()){
-					builder.append(","+field.scale);
+			final Type fieldType = Type.fromName(type);
+			if(fieldType!=null){
+				if(length!=null && length!=fieldType.getLength()){
+					builder.append('(');
+					builder.append(length);
+					builder.append(')');
+				} else if (precision!=null && precision!=fieldType.getPrecision()){
+					builder.append('(');
+					builder.append(precision);
+					if(scale!=null && scale!=fieldType.getScale()){
+						builder.append(',');
+						builder.append(scale);
+					}
+					builder.append(')');
 				}
-				builder.append(")");
 			}
 			
 			// Set Unique
-			if(field.unique!=null && field.unique){
+			if(isUnique!=null && isUnique){
 				builder.append(" UNIQUE");
 			}
 			
 			// Set Nullable
-			if(field.nullable!=null && !field.nullable) {
+			if(isNullable==null || !isNullable) {
 				builder.append(" NOT NULL");
 			}
 		}
@@ -54,49 +63,39 @@ public class SqliteAdapter {
 		
 		return builder.toString();
 	}
-	
-	public static String generateRelationStructure(FieldMetadata field) {
-		StringBuilder builder = new StringBuilder();
-		
-		RelationMetadata relation = field.relation;
-		builder.append("FOREIGN KEY("+generateColumnName(field)+") REFERENCES "+relation.entity_ref+"("+relation.field_ref+")");
-		
-		return builder.toString();
 
-	}
-
-	public static String generateColumnType(FieldMetadata field) {
-		String type = field.columnDefinition;
-		
-		if (type.equals(Column.Type.STRING) ||
-			type.equals(Column.Type.TEXT)	||
-			type.equals(Column.Type.LOGIN)	) {
+	public static String generateColumnType(final String fieldType) {
+		String type = fieldType;
+		if (type.equals(Column.Type.STRING.getValue()) ||
+			type.equals(Column.Type.TEXT.getValue())	||
+			type.equals(Column.Type.LOGIN.getValue())	) {
 			type = "VARCHAR";
 		} else
 			
-		if (type.equals(Column.Type.PASSWORD)) {
+		if (type.equals(Column.Type.PASSWORD.getValue())) {
 			type = "VARCHAR";
-		} else
+		} /*else
 			
-		if (type.equals(Column.Type.DATETIME)) {
+		if (type.equals(Column.Type.DATETIME.getValue())) {
 			//type = "VARCHAR";
-		}
+		}*/
 
 		return type;
 	}
 
-	public static String generateColumnName(FieldMetadata field) {
-		return PREFIX + field.name.toUpperCase();
+	public static String generateColumnName(final String fieldName) {
+		return PREFIX + fieldName.toUpperCase();
 	}
 	
-	public static String generateRelationColumnName(String fieldName) {
+	public static String generateRelationColumnName(final String fieldName) {
 		return PREFIX + fieldName.toUpperCase() + SUFFIX;
 	}
 	
-	public static String generateColumnDefinition(String type){
+	public static String generateColumnDefinition(final String type){
 		String ret = type;
-		if(type.equals("int"))
+		if(type.equals("int")) {
 			ret = "integer";
+		}
 		return ret;
 	}
 	
@@ -223,19 +222,21 @@ public class SqliteAdapter {
 		WHEN,
 		WHERE;
 		
-		public static boolean exists(String name){
+		public static boolean exists(final String name){
+			boolean exists = false;
 			try{
-				Field field = Keywords.class.getField(name.toUpperCase());	
+				final Field field = Keywords.class.getField(name.toUpperCase());	
 				if(field.isEnumConstant()) {
 					ConsoleUtils.displayWarning(name+" is a reserved SQLite keyword. You may have problems with your database schema.");
-					return true;
+					exists = true;
 				}
-				else 
-					return false;
-			}catch(Exception e){
-				return false;
+				else {
+					exists = false;
+				}
+			} catch (final NoSuchFieldException e) {
+				exists = false;
 			}
-			
+			return exists;
 		}
 		
 	}

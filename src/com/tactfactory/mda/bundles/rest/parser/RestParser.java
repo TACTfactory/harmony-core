@@ -8,8 +8,6 @@
  */
 package com.tactfactory.mda.bundles.rest.parser;
 
-import java.util.List;
-
 import japa.parser.ast.ImportDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
@@ -18,6 +16,8 @@ import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.expr.MemberValuePair;
 import japa.parser.ast.expr.NormalAnnotationExpr;
 import japa.parser.ast.expr.StringLiteralExpr;
+
+import java.util.List;
 
 import com.tactfactory.mda.bundles.rest.annotation.Rest;
 import com.tactfactory.mda.bundles.rest.meta.RestMetadata;
@@ -32,40 +32,40 @@ public class RestParser extends BaseParser{
 	private static final String ANNOT_REST_SECURITY = "security";
 	private static final String ANNOT_REST_URI = "uri";
 	@Override
-	public void visitClass(ClassOrInterfaceDeclaration field, ClassMetadata meta) {
+	public void visitClass(final ClassOrInterfaceDeclaration field, final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitField(FieldDeclaration field, ClassMetadata meta) {
+	public void visitField(final FieldDeclaration field, final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitMethod(MethodDeclaration method, ClassMetadata meta) {
+	public void visitMethod(final MethodDeclaration method, final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitImport(ImportDeclaration imp, ClassMetadata meta) {
+	public void visitImport(final ImportDeclaration imp, final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitClassAnnotation(ClassMetadata cm,
-			AnnotationExpr fieldAnnot) {
+	public void visitClassAnnotation(final ClassMetadata cm,
+			final AnnotationExpr fieldAnnot) {
 		if(fieldAnnot.getName().toString().equals(ANNOT_REST)){
-			RestMetadata rm = new RestMetadata();
+			final RestMetadata rm = new RestMetadata();
 			rm.isEnabled = true;
 			if (fieldAnnot instanceof NormalAnnotationExpr) {
-				NormalAnnotationExpr norm = (NormalAnnotationExpr)fieldAnnot;
-				List<MemberValuePair> pairs = norm.getPairs();
+				final NormalAnnotationExpr norm = (NormalAnnotationExpr)fieldAnnot;
+				final List<MemberValuePair> pairs = norm.getPairs();
 				if(pairs!=null){
-					for(MemberValuePair pair : pairs){
+					for(final MemberValuePair pair : pairs){
 						if(pair.getName().equals(ANNOT_REST_SECURITY)){
 							//TODO : Generate warning if type not recognized
 							String security = "";
@@ -95,8 +95,8 @@ public class RestParser extends BaseParser{
 	}
 
 	@Override
-	public void visitFieldAnnotation(FieldMetadata field,
-			AnnotationExpr fieldAnnot, ClassMetadata meta) {
+	public void visitFieldAnnotation(final FieldMetadata field,
+			final AnnotationExpr fieldAnnot, final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}

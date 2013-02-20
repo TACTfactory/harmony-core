@@ -14,7 +14,7 @@ import java.io.IOException;
 
 import com.tactfactory.mda.annotation.Column;
 import com.tactfactory.mda.meta.ClassMetadata;
-import com.tactfactory.mda.meta.FieldMetadata;
+import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.ImageUtils;
 
@@ -22,6 +22,7 @@ import com.tactfactory.mda.utils.ImageUtils;
 public final class AndroidAdapter extends BaseAdapter {
 
 	public AndroidAdapter() {
+		super();
 		// Structure
 		this.project	= "project";
 		this.platform	= "android";
@@ -53,23 +54,19 @@ public final class AndroidAdapter extends BaseAdapter {
 	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getNameSpace(com.tactfactory.mda.orm.ClassMetadata)
 	 */
 	@Override
-	public String getNameSpaceEntity(ClassMetadata meta, String type) {
+	public String getNameSpaceEntity(final ClassMetadata cm, final String type) {
 		return String.format("%s.%s", 
-				this.getNameSpace(meta, type),
-				meta.name.toLowerCase());
+				this.getNameSpace(cm, type),
+				cm.name.toLowerCase());
 	}
 
 	/* (non-Javadoc)
 	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getViewComponentShow(com.tactfactory.mda.orm.FieldMetadata)
 	 */
-	@Override
+	/*@Override
 	public String getViewComponentShow(FieldMetadata field) {
 		String result = "TextView";
 		
-		if (field.type.equals("String") || field.type.equals("int") || field.type.equals("Date") ) {
-
-		} else 
-			
 		if (field.type.equals("Boolean")) {
 			result = "TextView";
 		}
@@ -80,12 +77,12 @@ public final class AndroidAdapter extends BaseAdapter {
 		}
 		
 		return result;
-	}
+	}*/
 
 	/* (non-Javadoc)
 	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getViewComponentEdit(com.tactfactory.mda.orm.FieldMetadata)
 	 */
-	@Override
+	/*@Override
 	public String getViewComponentEdit(FieldMetadata field) {
 		String result = "EditText";
 		
@@ -107,108 +104,114 @@ public final class AndroidAdapter extends BaseAdapter {
 		}
 		
 		return result;
-	}
+	}*/
 
 	@Override
-	public String getNameSpace(ClassMetadata meta, String type) {
+	public String getNameSpace(final ClassMetadata cm, final String type) {
 		return String.format("%s.%s", 
-				meta.space,
+				cm.space,
 				type);
 	}
 
 	@Override
-	public String getNativeType(String type) {
+	public String getNativeType(final String type) {
+		final String FLOAT = "float";
+		final String STR = "String";
+		final String INT = "int";
+		final String DATETIME = "DateTime";
 		String ret = type;
 		
 		if(type.equals(Column.Type.STRING.getValue())){
-			ret = "String";
+			ret = STR;
 		}else
 			
 		if(type.equals(Column.Type.TEXT.getValue())){
-			ret = "String";	
+			ret = STR;	
 		}else
 			
 		if(type.equals(Column.Type.INTEGER.getValue())){
-			ret = "int";
+			ret = INT;
 		}else
 			
 		if(type.equals(Column.Type.INT.getValue())){
-			ret = "int";
+			ret = INT;
 		}else
 			
 		if(type.equals(Column.Type.FLOAT.getValue())){
-			ret = "float";
+			ret = FLOAT;
 		}else
 			
 		if(type.equals(Column.Type.DATETIME.getValue())){
-			ret = "DateTime";
+			ret = DATETIME;
 		}else
 			
 		if(type.equals(Column.Type.DATE.getValue())){
-			ret = "DateTime";
+			ret = DATETIME;
 		}else
 			
 		if(type.equals(Column.Type.TIME.getValue())){
-			ret = "DateTime";
+			ret = DATETIME;
 		}else
 			
 		if(type.equals(Column.Type.LOGIN.getValue())){
-			ret = "String";
+			ret = STR;
 		}else
 			
 		if(type.equals(Column.Type.PASSWORD.getValue())){
-			ret = "String";
+			ret = STR;
 		}else
 			
 		if(type.equals(Column.Type.EMAIL.getValue())){
-			ret = "String";
+			ret = STR;
 		}else
 			
 		if(type.equals(Column.Type.PHONE.getValue())){
-			ret = "String";
+			ret = STR;
 		}else
 			
 		if(type.equals(Column.Type.CITY.getValue())){
-			ret = "String";
+			ret = STR;
 		}else
 			
 		if(type.equals(Column.Type.ZIPCODE.getValue())){
-			ret = "int";
+			ret = INT;
 		}else
 			
 		if(type.equals(Column.Type.COUNTRY.getValue())){
-			ret = "String";
+			ret = STR;
 		}else
 			
 		if(type.equals(Column.Type.BC_EAN.getValue())){
-			ret = "int";
+			ret = INT;
 		}
 		return ret;
 	}
 	
-	private FilenameFilter filter = new FilenameFilter() {
-	    public boolean accept(File dir, String name) {
+	private final FilenameFilter filter = new FilenameFilter() {
+	    @Override
+		public boolean accept(final File dir, final String name) {
 	        return	name.endsWith(".png") || 
 	        		name.endsWith(".jpg");
 	    }
 	};
 	
+	@Override
 	public void resizeImage() {
-		File imageDirectoryXHD	= new File(this.getRessourcePath() + "/drawable-xhdpi");
-		File imageDirectoryHD 	= new File(this.getRessourcePath() + "/drawable-hdpi");
-		File imageDirectoryMD 	= new File(this.getRessourcePath() + "/drawable-mdpi");
-		File imageDirectoryLD 	= new File(this.getRessourcePath() + "/drawable-ldpi");
+		final File imageDirectoryXHD	= new File(this.getRessourcePath() + "/drawable-xhdpi");
+		final File imageDirectoryHD 	= new File(this.getRessourcePath() + "/drawable-hdpi");
+		final File imageDirectoryMD 	= new File(this.getRessourcePath() + "/drawable-mdpi");
+		final File imageDirectoryLD 	= new File(this.getRessourcePath() + "/drawable-ldpi");
 		File imageHD;
 		File imageMD;
 		File imageLD;
 		
 		if(imageDirectoryXHD.exists() && imageDirectoryXHD.listFiles().length > 0) {
-			File[] imagesFiles = imageDirectoryXHD.listFiles(filter);
+			final File[] imagesFiles = imageDirectoryXHD.listFiles(this.filter);
 			FileUtils.makeFolder(imageDirectoryHD.getAbsolutePath());
 			FileUtils.makeFolder(imageDirectoryMD.getAbsolutePath());
 			FileUtils.makeFolder(imageDirectoryLD.getAbsolutePath());
 			
-			for (File imageXHD : imagesFiles) {
+			for (final File imageXHD : imagesFiles) {
 				try {
 					imageHD = new File(imageDirectoryHD.getCanonicalPath() + "/" + imageXHD.getName());
 					imageMD = new File(imageDirectoryMD.getCanonicalPath() + "/" + imageXHD.getName());
@@ -218,9 +221,9 @@ public final class AndroidAdapter extends BaseAdapter {
 					ImageUtils.resize(imageXHD, imageMD, 0.50f);
 					ImageUtils.resize(imageXHD, imageLD, 0.375f);
 					
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					ConsoleUtils.displayError(e);
 				}
 				
 			}

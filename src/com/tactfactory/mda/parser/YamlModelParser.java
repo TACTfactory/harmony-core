@@ -15,28 +15,26 @@ import java.io.InputStream;
 
 import org.yaml.snakeyaml.Yaml;
 
-public class YamlModelParser {
+import com.tactfactory.mda.utils.ConsoleUtils;
 
-	public YamlModelParser(){
-		
-	}
+public class YamlModelParser {
 	
-    public void loadEntities(String filename) {
+    public void loadEntities(final String filename) {
     	InputStream in = null;
 		try {
 			in = new FileInputStream(filename);
-	        Yaml yaml = new Yaml();
+	        final Yaml yaml = new Yaml();
 	        yaml.load(in);
 	        
 	        // TODO parse given Object to CompilationUnit
 	        
 			in.close();
-		} catch (FileNotFoundException e) {
+		} catch (final FileNotFoundException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
+			ConsoleUtils.displayError(e);
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ConsoleUtils.displayError(e);
 		}
     }
 }

@@ -60,14 +60,14 @@ public abstract class TagConstant {
 	
 
 	public static class AndroidSDK {
-		private String dir;
+		private final String dir;
 
-		public AndroidSDK(String dir){
+		public AndroidSDK(final String dir){
 			this.dir = dir;
 		}
 		
 		public String getDir() {
-			return dir;
+			return this.dir;
 		}
 	}
 }

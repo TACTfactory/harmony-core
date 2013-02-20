@@ -12,9 +12,10 @@ import java.util.Arrays;
 import java.util.HashMap;
 
 import com.google.common.base.Strings;
+import com.tactfactory.mda.utils.ConsoleUtils;
 
 /** Harmony console class*/
-public class Console extends Harmony {
+public abstract class Console extends Harmony {
 	protected final static String HARMONY_VERSION = "Harmony version " + Harmony.VERSION + "\n";
 	protected final static String ARGUMENT_PREFIX = "--";
 	protected final static String ARGUMENT_PREFIX_SHORT = "-";
@@ -38,54 +39,60 @@ public class Console extends Harmony {
 		private String shortName;
 		private String description;
 		
-		private Option(String fullName, String shortName, String description) {
+		private Option(final String fullName, final String shortName, final String description) {
 			this.fullName = fullName;
 			this.shortName = shortName;
 			this.description = description;
 		}
 		
+		@Override
 		public String toString() {
-			StringBuilder result = new StringBuilder();
-			result.append("\t" + ARGUMENT_PREFIX + this.fullName);
+			final StringBuilder result = new StringBuilder();
+			result.append('\t');
+			result.append(ARGUMENT_PREFIX);
+			result.append(this.fullName);
 			
+			result.append("\t\t");
 			if (!Strings.isNullOrEmpty(this.shortName)) {
-				result.append("\t\t" + ARGUMENT_PREFIX_SHORT + this.shortName);
-			} else {
-				result.append("\t\t");
+				result.append(ARGUMENT_PREFIX_SHORT);
+				result.append(this.shortName);
 			}
 			
-			result.append("\t\t" + this.description);
+			result.append("\t\t");
+			result.append(this.description);
 			
-			result.append("\n");
+			result.append('\n');
 			return result.toString();
 		}
 	
-		public boolean equal(String value) {
-			return (value.equals(this.shortName) || value.equals(this.fullName));
+		public boolean equal(final String value) {
+			return value.equals(this.shortName) || value.equals(this.fullName);
 		}
 		
-		public static Option fromFullName(String value){
+		public static Option fromFullName(final String value){
+			Option ret = null;
 			if (value!= null) {
-				for (Option option : Option.values()) {
+				for (final Option option : Option.values()) {
 					if (value.equalsIgnoreCase(option.fullName)) {
-						return option;
+						ret = option;
 					}    
 				}
 			}
 			
-			return null;
+			return ret;
 		}
 		
-		public static Option fromShortName(String value){
+		public static Option fromShortName(final String value){
+			Option ret = null;
 			if (value!= null) {
-				for (Option option : Option.values()) {
+				for (final Option option : Option.values()) {
 					if (value.equalsIgnoreCase(option.shortName)) {
-						return option;
+						ret = option;
 					}    
 				}
 			}
 			
-			return null;
+			return ret;
 		}
 	}
 	
@@ -93,7 +100,7 @@ public class Console extends Harmony {
 	 * @param args
 	 * @throws Exception 
 	 */
-	public static void main(String[] args) throws Exception {
+	public static void main(final String[] args) throws Exception {
 		Harmony.isConsole = true;
 
 		// Check if has a parameter
@@ -110,21 +117,19 @@ public class Console extends Harmony {
 					Option.ANSI + 
 					Option.NO_ANSI);
 
-			//ConsoleUtils.display("Usage : console testBundle:com/tactfactory/mdatest/android:User");
 			ConsoleUtils.display("Tips : please use 'list' command to display available commands!\n");
-			//throw new Exception("Usage Exception, please launch help !");
 			
 		} else {
-			String commandOption = null;
+			final String commandOption = null;
 			
 			// Extract Argument
-			int currentPosition 	= Console.extractOptions(args);
-			String command 			= Console.extractCommand(args, currentPosition);
-			String[] commandArgs 	= Console.extractCommandArgument(args, currentPosition+1);
+			final int currentPosition 	= Console.extractOptions(args);
+			final String command 			= Console.extractCommand(args, currentPosition);
+			final String[] commandArgs 	= Console.extractCommandArgument(args, currentPosition+1);
 
 			
 			// Harmony command launch
-			Harmony harmony = new Harmony();
+			final Harmony harmony = new Harmony();
 			harmony.initialize();
 			harmony.findAndExecute(command, commandArgs, commandOption);
 		}
@@ -135,7 +140,7 @@ public class Console extends Harmony {
 	 * @param commandArgs
 	 * @return
 	 */
-	private static String[] extractCommandArgument(String[] args, int currentPosition) {
+	private static String[] extractCommandArgument(final String[] args, final int currentPosition) {
 		String[] commandArgs = null;
 		
 		// Extract optional command arguments
@@ -152,46 +157,34 @@ public class Console extends Harmony {
 	 * @param currentPosition
 	 * @return
 	 */
-	private static String extractCommand(String[] args, int currentPosition) {
+	private static String extractCommand(final String[] args, final int currentPosition) {
 		String command = args[currentPosition];
 		
 		// Extract command
-		String[] splitCommand = args[currentPosition].split(":");
+		final String[] splitCommand = args[currentPosition].split(":");
 
 		// Extract required command
 		if(splitCommand.length == 3) {
 			command = args[currentPosition]; //String.format("%s:%s:%s", bundle, subject, action);
-		} else
-			
-		// Extract optional command
-		if(splitCommand.length > 3){
-			//platformTmp = cmd[3];
-			//platform = TargetPlatform.parse(platformTmp);
-		} 
-		
+		}
 		return command;
 	}
 
 	/**
 	 * @param args
 	 */
-	private static int extractOptions(String[] args) {
+	private static int extractOptions(final String[] args) {
 		int currentPosition = 0;
 		
 		if (args[0].startsWith(ARGUMENT_PREFIX_SHORT)) {
 			for (int i = 0; i < args.length; i++) {
-				String arg = args[i];
+				final String arg = args[i];
 				
 				if(arg.startsWith(ARGUMENT_PREFIX_SHORT)) {
 					String key = arg.substring(1);
 					if (arg.startsWith(ARGUMENT_PREFIX)) {
 						key = arg.substring(2);
 					}
-					
-					// Help call
-					if (Option.HELP.equal(key)) {
-						
-					} else
 					
 					// Quiet mode
 					if (Option.QUIET.equal(key)) {								
@@ -200,7 +193,7 @@ public class Console extends Harmony {
 					
 					// Verbose mode
 					if (Option.VERBOSE.equal(key)) {
-						Harmony.debug = true;
+						ConsoleUtils.debug = true;
 					} else
 					
 					// Version mode
@@ -231,6 +224,7 @@ public class Console extends Harmony {
 	
 	/** Constructor */
 	public Console() throws Exception {
+		super();
 		// Extend bootstrap
 		//this.bootstrap.put(key, value)
 	}
@@ -241,16 +235,17 @@ public class Console extends Harmony {
 	 * @param args String array of command arguments with their identifier
 	 * @return HashMap<String,String> arguments
 	 */
-	public static HashMap<String,String> parseCommandArgs(String[] args){
+	public static HashMap<String,String> parseCommandArgs(final String[] args){
 		
-		HashMap<String,String> commandArgs = new HashMap<String,String>();
+		final HashMap<String,String> commandArgs = new HashMap<String,String>();
 		if (args!=null && args.length!=0){
-			for (String arg : args){
+			for (final String arg : args){
 				if (arg.startsWith(ARGUMENT_PREFIX)){
-					String[] key = arg.split(ARGUMENT_AFFECT);
+					final String[] key = arg.split(ARGUMENT_AFFECT);
 					
-					if (key.length > 1)
+					if (key.length > 1){
 						commandArgs.put(key[0].substring(2),key[1]);
+					}
 				}
 			}
 		}

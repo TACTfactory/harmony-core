@@ -9,8 +9,9 @@
 package com.tactfactory.mda.template;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -23,14 +24,15 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.meta.TranslationMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 
 public class TranslationGenerator extends BaseGenerator {
+	private static final String NAME = "name";
 
-	public TranslationGenerator(BaseAdapter adapter) throws Exception {
+	public TranslationGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 	}
 
@@ -38,28 +40,28 @@ public class TranslationGenerator extends BaseGenerator {
 	 * Update XML Strings
 	 */
 	public void generateStringsXml() {
-		Element findTranslation;
+		
 		
 		ConsoleUtils.display(">> Generate translate string...");
 		
 		try {
-			SAXBuilder builder = new SAXBuilder();		// Make engine
-			File xmlFile = FileUtils.makeFile(this.adapter.getStringsPathFile() );
-			Document doc = (Document) builder.build(xmlFile); 	// Load XML File
-			Element rootNode = doc.getRootElement(); 			// Load Root element
+			final SAXBuilder builder = new SAXBuilder();		// Make engine
+			final File xmlFile = FileUtils.makeFile(this.adapter.getStringsPathFile() );
+			final Document doc = builder.build(xmlFile); 	// Load XML File
+			final Element rootNode = doc.getRootElement(); 			// Load Root element
 			final Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
 
-			for (TranslationMetadata translationMeta : this.appMetas.translates.values()) {
-				findTranslation = null;
+			for (final TranslationMetadata translationMeta : this.appMetas.translates.values()) {
+				Element findTranslation = null;
 				
 				// Debug Log
 				ConsoleUtils.displayDebug("Update String : " + translationMeta.key);
 				
 				// Find Activity Node
-				List<Element> translates = rootNode.getChildren("string"); 	// Find many elements
-				for (Element translationXml : translates) {
+				final List<Element> translates = rootNode.getChildren("string"); 	// Find many elements
+				for (final Element translationXml : translates) {
 					if (translationXml.hasAttributes() && 
-							translationXml.getAttributeValue("name",ns).equals(translationMeta.key)) {	// Load name value
+							translationXml.getAttributeValue(NAME,ns).equals(translationMeta.key)) {	// Load name value
 						findTranslation = translationXml;
 						
 						break;
@@ -69,7 +71,7 @@ public class TranslationGenerator extends BaseGenerator {
 				// If not found Node, create it
 				if (findTranslation == null) {
 					findTranslation = new Element("string");		// Create new element
-					findTranslation.setAttribute("name", translationMeta.key, ns);	// Add name to element
+					findTranslation.setAttribute(NAME, translationMeta.key, ns);	// Add name to element
 					findTranslation.setText(translationMeta.i18n.get(Locale.getDefault()) ); // Set values
 					
 					rootNode.addContent(findTranslation);
@@ -82,15 +84,17 @@ public class TranslationGenerator extends BaseGenerator {
 			rootNode.sortChildren(new Comparator<Element>() {
 
 				@Override
-				public int compare(Element o1, Element o2) {
-					String metaName1 = o1.getAttributeValue("name", ns);
-					String metaName2 = o2.getAttributeValue("name", ns);
-					TranslationMetadata meta1 = TranslationGenerator.this.appMetas.translates.get(metaName1);
-					TranslationMetadata meta2 = TranslationGenerator.this.appMetas.translates.get(metaName2);
+				public int compare(final Element o1, final Element o2) {
+					final String metaName1 = o1.getAttributeValue(NAME, ns);
+					final String metaName2 = o2.getAttributeValue(NAME, ns);
+					final TranslationMetadata meta1 = TranslationGenerator.this.appMetas.translates.get(metaName1);
+					final TranslationMetadata meta2 = TranslationGenerator.this.appMetas.translates.get(metaName2);
 					
 					if (meta1 != null && meta2 != null) {
-						int groupScore = meta1.group.getValue() - meta2.group.getValue();
-						if (groupScore != 0) return groupScore;
+						final int groupScore = meta1.group.getValue() - meta2.group.getValue();
+						if (groupScore != 0) {
+							return groupScore;
+						}
 					}
 					
 					return metaName1.compareToIgnoreCase(metaName2);
@@ -98,16 +102,14 @@ public class TranslationGenerator extends BaseGenerator {
 			});
 			
 			// Write to File
-			XMLOutputter xmlOutput = new XMLOutputter();
+			final XMLOutputter xmlOutput = new XMLOutputter();
 			xmlOutput.setFormat(Format.getPrettyFormat());			// Make beautiful file with indent !!!
-			xmlOutput.output(doc, new FileWriter(xmlFile.getAbsoluteFile()));
+			xmlOutput.output(doc, new OutputStreamWriter(new FileOutputStream(xmlFile.getAbsoluteFile()), "UTF-8"));
 			
-		} catch (IOException io) {
+		} catch (final IOException io) {
 			ConsoleUtils.displayError(io);
-			io.printStackTrace();
-		} catch (JDOMException e) {
+		} catch (final JDOMException e) {
 			ConsoleUtils.displayError(e);
-			e.printStackTrace();
 		}
 	}
 }

@@ -8,16 +8,16 @@
  */
 package com.tactfactory.mda.bundles.rest.annotation;
 
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
-import com.tactfactory.mda.ConsoleUtils;
-
-import static java.lang.annotation.RetentionPolicy.SOURCE;
-import static java.lang.annotation.ElementType.TYPE;
+import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
  * To mark a entity for remote/central persistence/access the @Rest annotation is used.
@@ -35,7 +35,7 @@ public @interface Rest {
 		
 		private int value;
 		
-		private Security(int value) {
+		private Security(final int value) {
 			this.value = value;
 		}
 		
@@ -43,32 +43,38 @@ public @interface Rest {
 			return this.value;
 		}
 		
-		public static Security fromValue(int value){
-				for (Security type : Security.values()) {
+		public static Security fromValue(final int value){
+			Security ret = null;
+				for (final Security type : Security.values()) {
 					if (value == type.value) {
-						return type;
+						ret = type;
 					}    
 				}
 			
-			return null;
+			return ret;
 		}
 		
 		public static Security fromName(String name){
-			if(name.lastIndexOf(".")>0)
-				name = name.substring(name.lastIndexOf(".")+1); // Take only what comes after the last dot
+			Security ret;
+			if(name.lastIndexOf('.')>0) {
+				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot
+			}
 			ConsoleUtils.displayDebug("Searching for Security : "+name);
 			try{
-				Field field = Security.class.getField(name);	
+				final Field field = Security.class.getField(name);	
 				if(field.isEnumConstant()) {
 					ConsoleUtils.displayDebug("Found Security : "+name);
-					return (Security)field.get(Security.class);
+					ret = (Security)field.get(Security.class);
+				} else {
+					ret = null;
 				}
-				else 
-					return null;
-			}catch(Exception e){
-				return null;
+			} catch (final NoSuchFieldException e) {
+				ret = null;
+			} catch (final IllegalAccessException e) {
+				ret = null;				
 			}
 			
+			return ret;
 		}
 	}
 	

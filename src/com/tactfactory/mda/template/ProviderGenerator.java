@@ -9,8 +9,9 @@
 package com.tactfactory.mda.template;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Comparator;
 import java.util.List;
 
@@ -23,10 +24,10 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 import com.google.common.base.CaseFormat;
-import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.meta.TranslationMetadata;
 import com.tactfactory.mda.meta.TranslationMetadata.Group;
 import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
@@ -34,7 +35,7 @@ public class ProviderGenerator extends BaseGenerator {
 	protected String localNameSpace;
 	protected String nameProvider;
 	
-	public ProviderGenerator(BaseAdapter adapter) throws Exception {
+	public ProviderGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
 		this.nameProvider = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name + "Provider");
@@ -66,7 +67,7 @@ public class ProviderGenerator extends BaseGenerator {
 					Group.PROVIDER);
 			
 			new TranslationGenerator(this.adapter).generateStringsXml();
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
@@ -77,14 +78,14 @@ public class ProviderGenerator extends BaseGenerator {
 	 * @param template Template path file. <br/>For list activity is "TemplateListActivity.java"
 	 * @param filename
 	 */
-	private void makeSourceProvider(String template, String filename) {
+	private void makeSourceProvider(final String template, final String filename) {
 		
-		String fullFilePath = String.format("%s%s/%s",
+		final String fullFilePath = String.format("%s%s/%s",
 						this.adapter.getSourcePath(),
 						PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
 						filename);
 		
-		String fullTemplatePath = String.format("%s%s",
+		final String fullTemplatePath = String.format("%s%s",
 				this.adapter.getTemplateSourceProviderPath(),
 				template);
 		
@@ -96,8 +97,8 @@ public class ProviderGenerator extends BaseGenerator {
 	 * 
 	 * @param classFile
 	 */
-	private void updateManifest(String nameProvider) {
-		String pathRelatif = String.format("%s.%s",
+	private void updateManifest(final String nameProvider) {
+		final String pathRelatif = String.format("%s.%s",
 				this.localNameSpace, 
 				nameProvider );
 
@@ -105,20 +106,20 @@ public class ProviderGenerator extends BaseGenerator {
 		ConsoleUtils.displayDebug("Update Manifest : " + pathRelatif);
 
 		try {
-			SAXBuilder builder = new SAXBuilder();		// Make engine
-			File xmlFile = FileUtils.makeFile(this.adapter.getManifestPathFile());
-			Document doc = (Document) builder.build(xmlFile); 	// Load XML File
-			Element rootNode = doc.getRootElement(); 			// Load Root element
-			Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
+			final SAXBuilder builder = new SAXBuilder();		// Make engine
+			final File xmlFile = FileUtils.makeFile(this.adapter.getManifestPathFile());
+			final Document doc = builder.build(xmlFile); 	// Load XML File
+			final Element rootNode = doc.getRootElement(); 			// Load Root element
+			final Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
 
 			// Find Application Node
 			Element findProvider = null;
-			Element applicationNode = rootNode.getChild("application"); 	// Find a element
+			final Element applicationNode = rootNode.getChild("application"); 	// Find a element
 			if (applicationNode != null) {
 
 				// Find Activity Node
-				List<Element> providers = applicationNode.getChildren("provider"); 	// Find many elements
-				for (Element provider : providers) {
+				final List<Element> providers = applicationNode.getChildren("provider"); 	// Find many elements
+				for (final Element provider : providers) {
 					if (provider.hasAttributes() && provider.getAttributeValue("name",ns).equals(pathRelatif) ) {	// Load attribute value
 						findProvider = provider;
 						break;
@@ -142,22 +143,22 @@ public class ProviderGenerator extends BaseGenerator {
 				applicationNode.sortChildren(new Comparator<Element>() {
 
 					@Override
-					public int compare(Element o1, Element o2) {
-						return (o1.getName().compareToIgnoreCase(o2.getName()));
+					public int compare(final Element o1, final Element o2) {
+						return o1.getName().compareToIgnoreCase(o2.getName());
 					}
 				});
 			}
 
 			// Write to File
-			XMLOutputter xmlOutput = new XMLOutputter();
+			final XMLOutputter xmlOutput = new XMLOutputter();
 
 			// display nice nice
 			xmlOutput.setFormat(Format.getPrettyFormat());				// Make beautiful file with indent !!!
-			xmlOutput.output(doc, new FileWriter(xmlFile.getAbsoluteFile()));
-		} catch (IOException io) {
-			io.printStackTrace();
-		} catch (JDOMException e) {
-			e.printStackTrace();
+			xmlOutput.output(doc, new OutputStreamWriter(new FileOutputStream(xmlFile.getAbsoluteFile()), "UTF-8"));
+		} catch (final IOException io) {
+			ConsoleUtils.displayError(io);
+		} catch (final JDOMException e) {
+			ConsoleUtils.displayError(e);
 		}
 	}
 }

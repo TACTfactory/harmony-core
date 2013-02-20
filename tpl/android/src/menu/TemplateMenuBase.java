@@ -16,8 +16,6 @@ import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.widget.ShareActionProvider;
 
 import ${project_namespace}.HarmonyFragmentActivity;
-import ${project_namespace}.view.user.UserShowActivity;
-import ${project_namespace}.view.user.UserShowFragment;
 
 import android.content.Context;
 import android.content.Intent;
@@ -25,7 +23,7 @@ import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
 
-public abstract class DemactMenuBase {
+public abstract class ${project_name?cap_first}MenuBase {
 	public final static int SHARE			= 1;
 	public final static int SEARCH			= 2;
 	
@@ -37,11 +35,11 @@ public abstract class DemactMenuBase {
 	
 	protected Menu menu;
 	
-	protected DemactMenuBase(Context context) throws Exception {
+	protected ${project_name?cap_first}MenuBase(Context context) throws Exception {
 		this(context, null);
 	}
 	
-	protected DemactMenuBase(Context context, Fragment fragment) throws Exception {
+	protected ${project_name?cap_first}MenuBase(Context context, Fragment fragment) throws Exception {
 		if (context == null)
 			throw new Exception("Unable to Initialise Menu Helper with no context");
 		

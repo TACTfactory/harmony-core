@@ -13,9 +13,9 @@ import java.io.Serializable;
 import org.joda.time.DateTime;
 
 import com.tactfactory.mda.annotation.Column;
+import com.tactfactory.mda.annotation.Column.Type;
 import com.tactfactory.mda.annotation.Entity;
 import com.tactfactory.mda.annotation.GeneratedValue;
-import com.tactfactory.mda.annotation.Column.Type;
 import com.tactfactory.mda.annotation.Id;
 
 @Entity

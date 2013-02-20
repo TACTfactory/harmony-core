@@ -21,11 +21,12 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-
-import com.tactfactory.mda.ConsoleUtils;
+import java.util.List;
 
 /** Manipulate File tools */
-public class FileUtils extends org.apache.commons.io.FileUtils {
+public abstract class FileUtils extends org.apache.commons.io.FileUtils {
+	private static final String FOLDER 	= "Folder '";
+	private static final String FILE 	= "File '";
 	
 	/** 
 	 * Create a new file if doesn't exist (and path)
@@ -33,30 +34,22 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param filename Full path of file
 	 * @return File instance 
 	 */
-	public static File makeFile(String filename) {
-		boolean success = false;
-		File file = new File(filename);
+	public static File makeFile(final String filename) {
+		final File file = new File(filename);
 		
-		File parent = file.getParentFile();
+		final File parent = file.getParentFile();
 		if(!parent.exists() && !parent.mkdirs()){
-			IllegalStateException exception = new IllegalStateException("Couldn't create dir: " + parent);;
+			final IllegalStateException exception = new IllegalStateException("Couldn't create dir: " + parent);
 			ConsoleUtils.displayError(exception);
 		    throw exception;
 		}
 
 		try {
-			success = file.createNewFile();
-		} catch (IOException e) {
+			file.createNewFile();
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ConsoleUtils.displayError(e);
 		}
-		
-	    if (success) {
-	        // File did not exist and was created
-	    } else {
-	        // File already exists
-	    }
-		
 		return file;
 	}
 	
@@ -66,21 +59,22 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @param srcFile Source path
 	 * @param destFile Destination path
 	 */
-	public static void copyfile(File srcFile, File destFile) {
-		byte[] buf = new byte[1024];
+	public static void copyfile(final File srcFile, final File destFile) {
+		final byte[] buf = new byte[1024];
 		int len;
 		
 		try {
-			InputStream in = new FileInputStream(srcFile);
+			final InputStream in = new FileInputStream(srcFile);
 
 			// For Append the file.
 			// OutputStream out = new FileOutputStream(f2,true);
 
 			// For Overwrite the file.
-			OutputStream out = new FileOutputStream(destFile);
-
-			while ((len = in.read(buf)) > 0) {
+			final OutputStream out = new FileOutputStream(destFile);
+			len = in.read(buf);
+			while (len > 0) {
 				out.write(buf, 0, len);
+				len = in.read(buf);
 			}
 			
 			in.close();
@@ -89,63 +83,67 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			// Debug Log
 			ConsoleUtils.displayDebug("File "+srcFile.getName()+" copied to "+destFile.getPath());
 			
-		} catch (FileNotFoundException ex) {
+		} catch (final FileNotFoundException ex) {
 			ConsoleUtils.displayError(new Exception(ex.getMessage() + " in the specified directory.", ex));
 			//System.exit(0);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
 	
 	/** handle folder creation with its parents */
-	public static File makeFolder(String filename) {
-		File folder = new File(filename);
+	public static File makeFolder(final String filename) {
+		final File folder = new File(filename);
 
 		boolean success = false;
 
 		success = folder.mkdirs();
 	    if (success) {
 	        // Folder did not exists and was created
-	    	ConsoleUtils.display("Folder '"+folder.getName()+"' did not exists and was created...");
+	    	ConsoleUtils.display(FOLDER+folder.getName()+"' did not exists and was created...");
 	    } else {
 	        // Folder already exists
-	    	if(folder.exists())
-	    		ConsoleUtils.display("Folder '"+folder.getName()+"' already exists...");
-	    	else
-	    		ConsoleUtils.display("Folder '"+folder.getName()+"' creation error...");
+	    	if(folder.exists()) {
+	    		ConsoleUtils.display(FOLDER+folder.getName()+"' already exists...");
+	    	} else {
+	    		ConsoleUtils.display(FOLDER+folder.getName()+"' creation error...");
+	    	}
 	    }
 		
 		return folder;
 	}
 
 	/** convert file content to a string */
-	public static String FileToString(File file)
+	public static String fileToString(final File file)
 	{
 		String result = null;
 		DataInputStream in = null;
 
 		try {
-			byte[] buffer = new byte[(int) file.length()];
+			final byte[] buffer = new byte[(int) file.length()];
 			in = new DataInputStream(new FileInputStream(file));
 			in.readFully(buffer);
 			result = new String(buffer);
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new RuntimeException("IO problem in fileToString", e);
 		} finally {
 			try {
-				in.close();
-			} catch (IOException e) { /* ignore it */
+				if (in != null) {
+					in.close();
+				}
+			} catch (final IOException e) { 
+				ConsoleUtils.displayError(e);
 			}
 		}
 		return result;
 	}
 
 	/** convert file content to a stringbuffer */
-	public static StringBuffer FileToStringBuffer(File file)
+	public static StringBuffer fileToStringBuffer(final File file)
 	{
-		StringBuffer result = new StringBuffer();
+		final StringBuffer result = new StringBuffer();
 		String tmp;
-		String ln = System.getProperty("line.separator");
+		final String ln = System.getProperty("line.separator");
 		
 		FileInputStream fis = null;
 		InputStreamReader in = null;
@@ -156,20 +154,28 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			br = new BufferedReader(in);
 			while(true){
 				tmp = br.readLine();
-				if(tmp==null) break;
+				if(tmp==null) {
+					break;
+				}
 				result.append(tmp);
 				result.append(ln);
 			}
 			
-		}catch(IOException e){
+		}catch(final IOException e){
 			ConsoleUtils.displayError(e);
 		}finally{
 			try{
-				br.close();
-				in.close();
-				fis.close();
-			}catch(IOException e){
-				
+				if (br != null) {
+					br.close();
+				}
+				if (in != null) {
+					in.close();
+				}
+				if (fis != null) {
+					fis.close();
+				}
+			}catch(final IOException e){
+				ConsoleUtils.displayError(e);
 			}
 		}
 		
@@ -178,7 +184,7 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/** write stringbuffer contents to the given file */
-	public static void StringBufferToFile(StringBuffer buff, File file)
+	public static void stringBufferToFile(final StringBuffer buff, final File file)
 	{
 		FileOutputStream fos = null;
 		OutputStreamWriter out = null;
@@ -189,21 +195,27 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			bw = new BufferedWriter(out);
 			bw.write(buff.toString());
 
-		}catch(IOException e){
+		}catch(final IOException e){
 			ConsoleUtils.displayError(e);
 		}finally{
 			try{
-				bw.close();
-				out.close();
-				fos.close();
-			}catch(IOException e){
-				
+				if (bw != null) {
+					bw.close();
+				}
+				if (out != null) {
+					out.close();
+				}
+				if (fos != null) {
+					fos.close();
+				}
+			}catch(final IOException e){
+				ConsoleUtils.displayError(e);
 			}
 		}
 	}
 	
 	/** convert file content to a string array with each line separated */
-	public static ArrayList<String> FileToStringArray(File file) {
+	public static List<String> fileToStringArray(final File file) {
 		
 		ArrayList<String> result = null;
 		String line = null;
@@ -214,99 +226,104 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 			result = new ArrayList<String>();
 			in = new DataInputStream(new FileInputStream(file));
 			br = new BufferedReader(new InputStreamReader(in));
-			
-			while ((line = br.readLine()) != null) {
+			line = br.readLine(); 
+			while (line != null) {
 				result.add(line);
+				line = br.readLine();
 			}
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			throw new RuntimeException("IO problem in fileToString", e);
 		} finally {
 			try {
-				in.close();
-				br.close();
-			} catch (IOException e) { /* ignore it */ }
+				if (in != null) {
+					in.close();
+				}
+				if (br != null) {
+					br.close();
+				}
+			} catch (final IOException e) { 
+				ConsoleUtils.displayError(e);
+			}
 		}
 		return result;
 	}
 	
 	/** copy folder content recursively from srcPath to destPath, and copy files or not */
-	public static File makeFolderRecursive(String srcPath, String destPath, boolean makeFiles) {
-		File dest_folder = new File(destPath);
-		File tpl_folder = new File(srcPath);
-		File tpl_files[] = tpl_folder.listFiles();
-		File tmp_file = null;
+	public static File makeFolderRecursive(final String srcPath, final String destPath, final boolean makeFiles) {
+		final File destFolder = new File(destPath);
+		final File tplFolder = new File(srcPath);
+		final File tplFiles[] = tplFolder.listFiles();
+		File tmpFile = null;
 		boolean success = false;
 
-		if(!tpl_folder.isDirectory())
+		if(!tplFolder.isDirectory()) {
 			ConsoleUtils.display("Folder src '"+srcPath+"' is not a folder");
-		else if(tpl_files == null || tpl_files.length == 0)
+		} else if(tplFiles == null || tplFiles.length == 0) {
 			ConsoleUtils.display("No items inside '"+srcPath+"'");
-		else
-		{
-			success = dest_folder.mkdirs();
-			if(dest_folder.exists())
+		} else {
+			success = destFolder.mkdirs();
+			if(destFolder.exists())
 			{
-				if(success)
-					ConsoleUtils.display("Folder '"+dest_folder.getName()+"' did not exists and was created...");
-				else
-					ConsoleUtils.display("Folder '"+dest_folder.getName()+"' already exists...");
-				for(int i=0;i<tpl_files.length;i++)
-				{
-					if(tpl_files[i].isDirectory())
-					{
-						tmp_file = new File(destPath+tpl_files[i].getName()+"/");
-						success = tmp_file.mkdir();
+				if(success) {
+					ConsoleUtils.display(FOLDER+destFolder.getName()+"' did not exists and was created...");
+				} else {
+					ConsoleUtils.display(FOLDER+destFolder.getName()+"' already exists...");
+				}
+				for (final File tplFile : tplFiles) {
+					if(tplFile.isDirectory())	{
+						tmpFile = new File(destPath+tplFile.getName()+"/");
+						success = tmpFile.mkdir();
 					    if (success) {
-					    	ConsoleUtils.displayDebug("Folder '"+tmp_file.getName()+"' did not exists and was created...");
+					    	ConsoleUtils.displayDebug(FOLDER+tmpFile.getName()+"' did not exists and was created...");
 					    } else {
 					        // Folder already exists
-					    	if(tmp_file.exists())
-					    		ConsoleUtils.display("Folder '"+tmp_file.getName()+"' already exists...");
-					    	else
-					    		ConsoleUtils.display("Folder '"+tmp_file.getName()+"' creation error...");
+					    	if(tmpFile.exists()) {
+					    		ConsoleUtils.display(FOLDER+tmpFile.getName()+"' already exists...");
+					    	} else {
+					    		ConsoleUtils.display(FOLDER+tmpFile.getName()+"' creation error...");
+					    	}
 					    }
-						FileUtils.makeFolderRecursive(String.format("%s%s/", srcPath, tpl_files[i].getName()),
-														String.format("%s%s/",destPath, tmp_file.getName()),false);
+						FileUtils.makeFolderRecursive(String.format("%s%s/", srcPath, tplFile.getName()),
+														String.format("%s%s/",destPath, tmpFile.getName()),false);
 					}
-					else if(tpl_files[i].isFile() && makeFiles)
-					{
-						tmp_file = FileUtils.makeFile(destPath+tpl_files[i].getName());
-						if(tmp_file.exists()) {
-			    			FileUtils.copyfile(tpl_files[i], tmp_file);
-			    			ConsoleUtils.displayDebug("File '"+tpl_files[i].getName()+"' created...");
+					else if(tplFile.isFile() && makeFiles)	{
+						tmpFile = FileUtils.makeFile(destPath+tplFile.getName());
+						if(tmpFile.exists()) {
+			    			FileUtils.copyfile(tplFile, tmpFile);
+			    			ConsoleUtils.displayDebug(FILE+tplFile.getName()+"' created...");
 						} else {
-							ConsoleUtils.displayError(new Exception("File '"+tpl_files[i].getName()+"' creation error..."));
+							ConsoleUtils.displayError(new Exception(FILE+tplFile.getName()+"' creation error..."));
 						}
 					}
 				}
 			}
 			else {
-				ConsoleUtils.displayError(new Exception("Folder '"+dest_folder.getName()+"' creation Error..."));
+				ConsoleUtils.displayError(new Exception(FOLDER+destFolder.getName()+"' creation Error..."));
 			}
 		}
-		return dest_folder;
+		return destFolder;
 	}
 	
 	/** delete a directory with all its files recursively */
-	public static int deleteRecursive(File dir)
+	public static int deleteRecursive(final File dir)
 	{
 		return FileUtils.deleteRecursive(dir,0);
 	}
 	
-	public static int deleteRecursive(File dir, int result){
+	public static int deleteRecursive(final File dir, int result){
 		if(dir.exists()) {
 			if(dir.isDirectory()) {
 				//it's a directory, list files and call deleteDir on a dir
-				for(File f : dir.listFiles()) {
+				for(final File f : dir.listFiles()) {
 					if(f.isDirectory()) {
 						result = FileUtils.deleteRecursive(f,result);
 					} else {
 						if(f.delete()){
-							ConsoleUtils.displayDebug("File '"+f.getPath()+"' deleted.");
+							ConsoleUtils.displayDebug(FILE+f.getPath()+"' deleted.");
 						} else{
 							result++;
 							
-							ConsoleUtils.displayWarning("File '"+f.getPath()+"' delete ERROR!");
+							ConsoleUtils.displayWarning(FILE+f.getPath()+"' delete ERROR!");
 						}
 					}
 				}
@@ -314,52 +331,53 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 				//folder content check, remove folder
 				if(dir.listFiles().length==0){
 					if(dir.delete()) {
-						ConsoleUtils.displayDebug("Folder '"+dir.getPath()+"' deleted.");
+						ConsoleUtils.displayDebug(FOLDER+dir.getPath()+"' deleted.");
 					} else {
 						result++;
 						
-						ConsoleUtils.displayWarning("Folder '"+dir.getPath()+"' delete ERROR!");
+						ConsoleUtils.displayWarning(FOLDER+dir.getPath()+"' delete ERROR!");
 					}
 				} else {
 					result++;
 					
-					ConsoleUtils.displayWarning("Folder '"+dir.getPath()+"' NOT Empty!");
+					ConsoleUtils.displayWarning(FOLDER+dir.getPath()+"' NOT Empty!");
 				}
 				
 			} else {
 				// it's a file delete simply
 				if(dir.delete()) {
-					ConsoleUtils.displayDebug("File '"+dir.getPath()+"' deleted.");
+					ConsoleUtils.displayDebug(FILE+dir.getPath()+"' deleted.");
 				} else {
 					result++;
 
-					ConsoleUtils.displayWarning("File '"+dir.getPath()+"' delete ERROR!");
+					ConsoleUtils.displayWarning(FILE+dir.getPath()+"' delete ERROR!");
 				}
 			}
 		} else {
 			result++;
 			
-			ConsoleUtils.displayWarning("Folder '"+dir.getPath()+"' doesn't exists!");
+			ConsoleUtils.displayWarning(FOLDER+dir.getPath()+"' doesn't exists!");
 		}
 		return result;
 	}
 	
-	public static boolean exists(String filename){
-		File f = new File(filename);
-		if( f.exists())
+	public static boolean exists(final String filename){
+		final File f = new File(filename);
+		if( f.exists()) {
 			ConsoleUtils.displayDebug("File "+filename+ " already exists !");
-		else 
+		} else { 
 			ConsoleUtils.displayDebug("File "+filename+ " doesn't exists !");
+		}
 		return f.exists();
 	}
 	
 	/*
 	 * Get the extension of a file.
 	 */  
-	public static String getExtension(File f) {
+	public static String getExtension(final File f) {
 	    String ext = null;
-	    String s = f.getName();
-	    int i = s.lastIndexOf('.');
+	    final String s = f.getName();
+	    final int i = s.lastIndexOf('.');
 
 	    if (i > 0 &&  i < s.length() - 1) {
 	        ext = s.substring(i+1).toLowerCase();
@@ -367,27 +385,29 @@ public class FileUtils extends org.apache.commons.io.FileUtils {
 	    return ext;
 	}
 	
-	public static boolean appendToFile(String content, File file){
-		StringBuffer sb = FileUtils.FileToStringBuffer(file);
+	public static boolean appendToFile(final String content, final File file){
+		boolean success = false;
+		final StringBuffer sb = FileUtils.fileToStringBuffer(file);
 		//If content doesn't exists in the file yet
-		if(sb.indexOf(content)==-1){
-			int offset = sb.length(); 
+		if(sb.indexOf(content)==-1) {
+			final int offset = sb.length(); 
 			sb.insert(offset, content);
-			FileUtils.StringBufferToFile(sb, file);
-			return true;
+			FileUtils.stringBufferToFile(sb, file);
+			success = true;
 		}
-		return false;
+		return success;
 	}
 	
-	public static boolean addToFile(String content, String after, File file){
-		StringBuffer sb = FileUtils.FileToStringBuffer(file);
+	public static boolean addToFile(final String content, final String after, final File file){
+		boolean success = false;
+		final StringBuffer sb = FileUtils.fileToStringBuffer(file);
 		//If content doesn't exists in the file yet
-		if(sb.indexOf(content)==-1){
-			int offset = sb.indexOf(after)+after.length();
+		if(sb.indexOf(content)==-1) {
+			final int offset = sb.indexOf(after)+after.length();
 			sb.insert(offset, content);
-			FileUtils.StringBufferToFile(sb, file);
-			return true;
+			FileUtils.stringBufferToFile(sb, file);
+			success = true;
 		}
-		return false;
+		return success;
 	}
 }

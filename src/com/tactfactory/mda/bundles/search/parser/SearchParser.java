@@ -1,3 +1,11 @@
+/**
+ * This file is part of the Harmony package.
+ *
+ * (c) Gregg Cesarine <gregg.cesarine@tactfactory.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.tactfactory.mda.bundles.search.parser;
 
 import japa.parser.ast.ImportDeclaration;
@@ -18,41 +26,41 @@ public class SearchParser  extends BaseParser{
 	private static final String ANNOT_SEARCHABLE = PackageUtils.extractNameEntity(Searchable.class);
 	
 	@Override
-	public void visitClass(ClassOrInterfaceDeclaration field, ClassMetadata meta) {
+	public void visitClass(final ClassOrInterfaceDeclaration field, final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitField(FieldDeclaration field, ClassMetadata meta) {
+	public void visitField(final FieldDeclaration field, final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitMethod(MethodDeclaration method, ClassMetadata meta) {
+	public void visitMethod(final MethodDeclaration method, final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitImport(ImportDeclaration imp, ClassMetadata meta) {
+	public void visitImport(final ImportDeclaration imp, final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitClassAnnotation(ClassMetadata cm,
-			AnnotationExpr fieldAnnot) {
+	public void visitClassAnnotation(final ClassMetadata cm,
+			final AnnotationExpr fieldAnnot) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public void visitFieldAnnotation(FieldMetadata field,
-			AnnotationExpr fieldAnnot, ClassMetadata meta) {
+	public void visitFieldAnnotation(final FieldMetadata field,
+			final AnnotationExpr fieldAnnot, final ClassMetadata meta) {
 
 		if(fieldAnnot.getName().toString().equals(ANNOT_SEARCHABLE)){
-			SearchMetadata sm = new SearchMetadata();
+			final SearchMetadata sm = new SearchMetadata();
 			field.options.put(SEARCH, sm);
 		}
 		

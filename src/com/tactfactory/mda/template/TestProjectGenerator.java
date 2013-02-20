@@ -4,7 +4,6 @@
 package com.tactfactory.mda.template;
 
 import java.io.File;
-import java.util.HashMap;
 
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.plateforme.BaseAdapter;
@@ -13,16 +12,13 @@ import com.tactfactory.mda.utils.FileUtils;
 public class TestProjectGenerator extends BaseGenerator {
 	protected boolean isWritable = true;
 
-	public TestProjectGenerator(BaseAdapter adapter) throws Exception {
+	public TestProjectGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 
-		String projectNameSpace = "" + this.appMetas.projectNameSpace;
-		projectNameSpace = projectNameSpace.replaceAll("/","\\.");
-
-		this.datamodel = (HashMap<String, Object>) this.appMetas.toMap(this.adapter);
+		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 
-	public TestProjectGenerator(BaseAdapter adapter, Boolean isWritable) throws Exception {
+	public TestProjectGenerator(final BaseAdapter adapter, final Boolean isWritable) throws Exception {
 		this(adapter);
 
 		this.isWritable = isWritable;
@@ -70,7 +66,7 @@ public class TestProjectGenerator extends BaseGenerator {
 		
 		this.updateLibrary("android-junit-report-1.5.8.jar");
 		
-		File dirTpl = new File(this.adapter.getTemplateTestProjectPath());
+		final File dirTpl = new File(this.adapter.getTemplateTestProjectPath());
 
 		// Update newly created files with datamodel
 		if(dirTpl.exists() && dirTpl.listFiles().length!=0) {
@@ -78,13 +74,13 @@ public class TestProjectGenerator extends BaseGenerator {
 			for(int i=0;i<dirTpl.listFiles().length;i++)
 			{
 				if(dirTpl.listFiles()[i].isFile()) {
-					String fullFilePath = String.format("%s/%s/%s/%s", 
-							Harmony.pathProject, 
+					final String fullFilePath = String.format("%s/%s/%s/%s", 
+							Harmony.PATH_PROJECT, 
 							this.adapter.getPlatform(), 
 							this.adapter.getTest(),
 							dirTpl.listFiles()[i].getName());
 					
-					String fullTemplatePath = this.adapter.getTemplateTestProjectPath() + dirTpl.listFiles()[i].getName();
+					final String fullTemplatePath = this.adapter.getTemplateTestProjectPath() + dirTpl.listFiles()[i].getName();
 					
 					super.makeSource(fullTemplatePath, fullFilePath, false);
 				}
@@ -101,13 +97,14 @@ public class TestProjectGenerator extends BaseGenerator {
 		boolean result = false;
 		
 		//Generate base folders & files
-		File dirProj = FileUtils.makeFolderRecursive(
-				String.format("%s/%s/%s/", Harmony.pathTemplate , this.adapter.getPlatform(), this.adapter.getProject()),
-				String.format("%s/%s/", Harmony.pathProject, this.adapter.getPlatform()),
+		final File dirProj = FileUtils.makeFolderRecursive(
+				String.format("%s/%s/%s/", Harmony.PATH_TEMPLATE , this.adapter.getPlatform(), this.adapter.getProject()),
+				String.format("%s/%s/", Harmony.PATH_PROJECT, this.adapter.getPlatform()),
 				true);
 		
-		if(dirProj.exists() && dirProj.listFiles().length!=0)
+		if(dirProj.exists() && dirProj.listFiles().length!=0) {
 			result = true;
+		}
 
 		return result;
 	}
@@ -117,7 +114,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	 * @return success to make the platform test project folder
 	 */
 	private boolean makeTestProjectRIM(){
-		boolean result = false;
+		final boolean result = false;
 
 		return result;
 	}
@@ -127,7 +124,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	 * @return success to make the platform test project folder
 	 */
 	private boolean makeTestProjectWinPhone(){
-		boolean result = false;
+		final boolean result = false;
 
 		return result;
 	}
@@ -136,12 +133,13 @@ public class TestProjectGenerator extends BaseGenerator {
 	 * Update TestLibs
 	 */
 	@Override
-	protected void updateLibrary(String libName) {
-		File dest = new File(String.format("%s/%s", this.adapter.getTestLibsPath(), libName));
+	protected void updateLibrary(final String libName) {
+		final File dest = new File(String.format("%s/%s", this.adapter.getTestLibsPath(), libName));
 		
-		if (!dest.exists())
+		if (!dest.exists()) {
 			FileUtils.copyfile(
-					new File(String.format("%s/%s", Harmony.pathLibs, libName)),
+					new File(String.format("%s/%s", Harmony.PATH_LIBS, libName)),
 					dest);
+		}
 	}
 }

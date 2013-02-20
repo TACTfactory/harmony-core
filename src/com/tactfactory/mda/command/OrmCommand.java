@@ -11,10 +11,18 @@ package com.tactfactory.mda.command;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;
-import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.Harmony;
-import com.tactfactory.mda.plateforme.*;
-import com.tactfactory.mda.template.*;
+import com.tactfactory.mda.meta.ApplicationMetadata;
+import com.tactfactory.mda.plateforme.AndroidAdapter;
+import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.template.ActivityGenerator;
+import com.tactfactory.mda.template.ApplicationGenerator;
+import com.tactfactory.mda.template.EntityGenerator;
+import com.tactfactory.mda.template.ProjectGenerator;
+import com.tactfactory.mda.template.ProviderGenerator;
+import com.tactfactory.mda.template.SQLiteAdapterGenerator;
+import com.tactfactory.mda.template.SQLiteGenerator;
+import com.tactfactory.mda.template.TestDBGenerator;
+import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
  * Project Custom Files Code Generator
@@ -43,9 +51,9 @@ public class OrmCommand extends BaseCommand {
 
 	//commands
 	//public static String GENERATE_ENTITY 	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITY;
-	public static String GENERATE_ENTITIES	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITIES;
+	public final static String GENERATE_ENTITIES	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITIES;
 	//public static String GENERATE_FORM 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_FORM;
-	public static String GENERATE_CRUD 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_CRUD;
+	public final static String GENERATE_CRUD 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_CRUD;
 
 	//internal
 	protected BaseAdapter adapter = new AndroidAdapter();
@@ -77,7 +85,7 @@ public class OrmCommand extends BaseCommand {
 	protected void generateEntities() {
 		this.generateMetas();
 		
-		if(Harmony.metas.entities!=null){
+		if(ApplicationMetadata.INSTANCE.entities!=null){
 			this.makeLayoutDatabase();
 			this.makeLayoutTestDatabase();
 		}
@@ -89,7 +97,7 @@ public class OrmCommand extends BaseCommand {
 	 */
 	protected void generateCrud() {
 		this.generateMetas();
-		if(Harmony.metas.entities != null){
+		if(ApplicationMetadata.INSTANCE.entities != null){
 			this.makeLayoutUi(true);
 		}
 	}
@@ -105,7 +113,7 @@ public class OrmCommand extends BaseCommand {
 			new SQLiteGenerator(this.adapter).generateDatabase();
 			new ProviderGenerator(this.adapter).generateProvider();
 			
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
@@ -117,7 +125,7 @@ public class OrmCommand extends BaseCommand {
 		try {
 			new TestDBGenerator(this.adapter).generateAll();
 			
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
@@ -125,7 +133,7 @@ public class OrmCommand extends BaseCommand {
 	/**
 	 * Generate the GUI part for the given classes
 	 */
-	protected void makeLayoutUi(boolean generateHome){
+	protected void makeLayoutUi(final boolean generateHome){
 		try {
 			if(generateHome) {
 				new ProjectGenerator(this.adapter).generateHomeActivity();
@@ -133,7 +141,7 @@ public class OrmCommand extends BaseCommand {
 				
 			new ActivityGenerator(this.adapter).generateAll();
 			
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
@@ -148,7 +156,7 @@ public class OrmCommand extends BaseCommand {
 	}
 
 	@Override
-	public void execute(String action, String[] args, String option) {
+	public void execute(final String action, final String[] args, final String option) {
 		ConsoleUtils.display("> ORM Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);
@@ -168,19 +176,17 @@ public class OrmCommand extends BaseCommand {
 	
 			if (action.equals(GENERATE_CRUD)) {
 				this.generateCrud();
-			} else {
-	
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
 
 	@Override
-	public boolean isAvailableCommand(String command) {
-		return (//command.equals(GENERATE_ENTITY) ||
-				command.equals(GENERATE_ENTITIES) ||
-				//command.equals(GENERATE_FORM) ||
-				command.equals(GENERATE_CRUD) );
+	public boolean isAvailableCommand(final String command) {
+		return  //command.equals(GENERATE_ENTITY) 	||
+				command.equals(GENERATE_ENTITIES) 	||
+				//command.equals(GENERATE_FORM)		||
+				command.equals(GENERATE_CRUD) ;
 	}
 }

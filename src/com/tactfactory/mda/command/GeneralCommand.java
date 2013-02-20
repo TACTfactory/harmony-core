@@ -10,13 +10,13 @@ package com.tactfactory.mda.command;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
-import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.Harmony;
+import com.tactfactory.mda.utils.ConsoleUtils;
 
 @PluginImplementation
 public class GeneralCommand extends BaseCommand {
-	public static String LIST = "list";
-	public static String HELP = "help";
+	public final static String LIST = "list";
+	public final static String HELP = "help";
 
 	/**
 	 * Display Help Message
@@ -33,14 +33,15 @@ public class GeneralCommand extends BaseCommand {
 	 * Display list of All commands
 	 */
 	public void list() {
-		Command general = Harmony.instance.getCommand(GeneralCommand.class);
+		final Command general = Harmony.instance.getCommand(GeneralCommand.class);
 		
 		ConsoleUtils.display("Available Commands:");
 		general.summary();
 		
-		for (Command baseCommand : Harmony.instance.getCommands()) {
-			if (baseCommand != general)
+		for (final Command baseCommand : Harmony.instance.getCommands()) {
+			if (baseCommand != general){
 				baseCommand.summary();
+			}
 		}
 	}
 	
@@ -52,22 +53,20 @@ public class GeneralCommand extends BaseCommand {
 	}
 
 	@Override
-	public void execute(String action, String[] args, String option) {
+	public void execute(final String action, final String[] args, final String option) {
 		if (action.equals(LIST)) {
 			this.list();
 		} else
 			
 		if (action.equals(HELP)) {
 			this.help();
-		} else {
-			
 		}
 	}
 
 	@Override
-	public boolean isAvailableCommand(String command) {
-		return (command.equals(LIST) ||
-				command.equals(HELP) );
+	public boolean isAvailableCommand(final String command) {
+		return 	command.equals(LIST) ||
+				command.equals(HELP) ;
 	}
 
 }

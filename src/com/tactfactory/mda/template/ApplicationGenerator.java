@@ -16,7 +16,7 @@ public class ApplicationGenerator extends BaseGenerator {
 	protected String localNameSpace;
 	protected String applicationName;
 
-	public ApplicationGenerator(BaseAdapter adapter) throws Exception {
+	public ApplicationGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
 		this.localNameSpace = this.appMetas.projectNameSpace.replace('/', '.');
@@ -39,13 +39,14 @@ public class ApplicationGenerator extends BaseGenerator {
 				true);
 	}
 	
-	protected void makeSource(String templateName, String fileName, boolean override) {
-		String fullFilePath = String.format("%s%s/%s",
+	@Override
+	protected void makeSource(final String templateName, final String fileName, final boolean override) {
+		final String fullFilePath = String.format("%s%s/%s",
 				this.adapter.getSourcePath(),
 				PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
 				fileName);
 
-		String fullTemplatePath = String.format("%s%s",
+		final String fullTemplatePath = String.format("%s%s",
 				this.adapter.getTemplateSourcePath() ,
 				templateName);
 		

@@ -14,7 +14,7 @@ public class FosCommand extends BaseCommand {
 	public void fosUserCreate() {
 	}
 
-	public void fosUserActivate(String login) {
+	public void fosUserActivate(final String login) {
 	}
 
 	public void fosUserDeactivate() {
@@ -23,10 +23,10 @@ public class FosCommand extends BaseCommand {
 	public void fosUserChangepassword() {
 	}
 
-	public void fosUserDemote(Object role) {
+	public void fosUserDemote(final Object role) {
 	}
 
-	public void fosUserPromote(Object role) {
+	public void fosUserPromote(final Object role) {
 	}
 
 	@Override
@@ -35,12 +35,12 @@ public class FosCommand extends BaseCommand {
 	}
 
 	@Override
-	public void execute(String action, String[] args, String option) {
+	public void execute(final String action, final String[] args, final String option) {
 		// TODO Auto-generated method stub
 	}
 
 	@Override
-	public boolean isAvailableCommand(String command) {
+	public boolean isAvailableCommand(final String command) {
 		// TODO Auto-generated method stub
 		return false;
 	}

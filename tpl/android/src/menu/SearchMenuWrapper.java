@@ -20,7 +20,6 @@ package ${project_namespace}.menu;
 import com.actionbarsherlock.internal.view.menu.ActionMenuItem;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.tactfactory.mda.test.demact.menu.DemactMenu;
 
 import ${project_namespace}.HarmonyFragmentActivity;
 import ${project_namespace}.HarmonyListFragment;
@@ -40,7 +39,7 @@ public class SearchMenuWrapper extends MenuWrapperBase{
 
 	@Override
 	protected void initializeMenu(Menu menu) {
-		this.searchItem 	= menu.add(0, DemactMenu.SEARCH , Menu.NONE, menuName);
+		this.searchItem 	= menu.add(0, ${project_name?cap_first}Menu.SEARCH , Menu.NONE, menuName);
 		this.searchItem.setShowAsAction(ActionMenuItem.SHOW_AS_ACTION_IF_ROOM|ActionMenuItem.SHOW_AS_ACTION_WITH_TEXT);
 		this.searchItem.setVisible(false);
 	}
@@ -71,7 +70,7 @@ public class SearchMenuWrapper extends MenuWrapperBase{
 		</#list>
 		
 		if(intent!=null){
-			fragment.startActivityForResult(intent, DemactMenu.SEARCH);
+			fragment.startActivityForResult(intent, ${project_name?cap_first}Menu.SEARCH);
 			return true;
 		}else{
 			return false;
@@ -81,7 +80,7 @@ public class SearchMenuWrapper extends MenuWrapperBase{
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent data, Context context, Fragment fragment) {
-		if(requestCode==DemactMenu.SEARCH){
+		if(requestCode==${project_name?cap_first}Menu.SEARCH){
 			if(resultCode==HarmonyFragmentActivity.RESULT_OK){
 				((HarmonyListFragment)fragment).getLoaderManager().restartLoader(0, data.getExtras(), (HarmonyListFragment)fragment);
 			}

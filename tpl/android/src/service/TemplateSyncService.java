@@ -11,11 +11,6 @@ import ${data_namespace}.base.SyncSQLiteAdapterBase;
 import ${data_namespace}.base.SyncClientAdapterBase;
 import ${entity_namespace}.base.EntityBase;
 
-//FIXME Gregg
-import ${data_namespace}.UserSQLiteAdapter;
-import ${data_namespace}.UserWebServiceClientAdapter;
-import ${entity_namespace}.User;
-
 public class ${project_name?cap_first}SyncService<T extends EntityBase>{
 	private final static String TAG = "SyncService";
 	

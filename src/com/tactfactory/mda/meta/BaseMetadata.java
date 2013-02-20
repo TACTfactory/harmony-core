@@ -9,13 +9,14 @@
 package com.tactfactory.mda.meta;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public abstract class BaseMetadata implements Metadata {
 	/** Component name */
 	public String name;
 	
 	/** List of bundles Metadata */
-	public LinkedHashMap<String, Metadata> options = new LinkedHashMap<String, Metadata>();
+	public Map<String, Metadata> options = new LinkedHashMap<String, Metadata>();
 	
 	@Override
 	public String getName(){

@@ -10,6 +10,7 @@ package com.tactfactory.mda.bundles.social.meta;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 import com.tactfactory.mda.meta.BaseMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
@@ -17,18 +18,19 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
 public class ApplicationSocialMetadata extends BaseMetadata{
-	private final String NAME = "social";
-	public LinkedHashMap<String, ClassMetadata> entities = new LinkedHashMap<String, ClassMetadata>();
+	private static final String NAME = "social";
+	public Map<String, ClassMetadata> entities = new LinkedHashMap<String, ClassMetadata>();
 	
 	public ApplicationSocialMetadata() {
+		super();
 		this.name = NAME;
 	}
 	
 	@Override
-	public HashMap<String, Object> toMap(BaseAdapter adapter) {
-		HashMap<String, Object> ret = new HashMap<String, Object>();
-		HashMap<String, Object> entitiesMap = new HashMap<String, Object>();
-		for(ClassMetadata cm : this.entities.values()){
+	public Map<String, Object> toMap(final BaseAdapter adapter) {
+		final Map<String, Object> ret = new HashMap<String, Object>();
+		final Map<String, Object> entitiesMap = new HashMap<String, Object>();
+		for(final ClassMetadata cm : this.entities.values()){
 			entitiesMap.put(cm.getName(), cm.toMap(adapter));
 		}
 		ret.put(TagConstant.ENTITIES, entitiesMap);

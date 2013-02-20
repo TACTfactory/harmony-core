@@ -15,20 +15,21 @@ import com.tactfactory.mda.meta.BaseMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 
 public class RestMetadata extends BaseMetadata{	
-	private final String NAME = "rest";
+	private final static String NAME = "rest";
 	public boolean isEnabled = false;
 	public Security security = Security.NONE;
 	public String uri;
 	
 	
 	public RestMetadata() {
+		super();
 		this.name = NAME;
 	}
 	
 	
 	@Override
-	public HashMap<String, Object> toMap(BaseAdapter adapter) {
-		HashMap<String, Object> ret = new HashMap<String, Object>();
+	public HashMap<String, Object> toMap(final BaseAdapter adapter) {
+		final HashMap<String, Object> ret = new HashMap<String, Object>();
 		
 		ret.put("isEnabled", this.isEnabled);
 		ret.put("uri", this.uri);

@@ -18,17 +18,17 @@ public interface Command extends Plugin {
 	 * @param args action arguments
 	 * @param option of console
 	 */
-	public void execute(String action, String[] args, String option);
+	void execute(String action, String[] args, String option);
 
 	/**
 	 * Display Bundle commands summary
 	 */
-	public void summary();
+	void summary();
 	
 	/** Check availability of command
 	 * 
 	 * @param command to check
 	 * @return true if found
 	 */
-	public boolean isAvailableCommand(String command);
+	boolean isAvailableCommand(String command);
 }

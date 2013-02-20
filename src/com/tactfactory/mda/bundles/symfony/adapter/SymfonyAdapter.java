@@ -1,3 +1,11 @@
+/**
+ * This file is part of the Harmony package.
+ *
+ * (c) Gregg Cesarine <gregg.cesarine@tactfactory.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.tactfactory.mda.bundles.symfony.adapter;
 
 import com.tactfactory.mda.Harmony;
@@ -12,26 +20,26 @@ public class SymfonyAdapter{
 	protected String source = "src";
 	
 	public final String getWebTemplateEntityPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getWebRoot(), this.getBundle(), this.getEntities());
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getWebRoot(), this.getBundle(), this.getEntities());
 	}
 	
 	public final String getWebTemplateControllerPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getWebRoot(), this.getBundle(), this.getController());
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getWebRoot(), this.getBundle(), this.getController());
 	}
 	
 	public final String getWebTemplateConfigPath() {
-		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getWebRoot(), this.getConfig());
+		return String.format("%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getWebRoot(), this.getConfig());
 	}
 	
 	public final String getWebTemplatePath() {
-		return String.format("%s/%s/", Harmony.pathTemplate, this.getWebRoot());
+		return String.format("%s/%s/", Harmony.PATH_TEMPLATE, this.getWebRoot());
 	}
 	
-	public final String getWebControllerPath(String projectName) {
+	public final String getWebControllerPath(final String projectName) {
 		return String.format("%s%s/", this.getWebBundlePath(projectName), this.getController());
 	}
 	
-	public final String getWebBundleYmlEntitiesPath(String projectName) {
+	public final String getWebBundleYmlEntitiesPath(final String projectName) {
 		return String.format("%s%s/", this.getWebBundleConfigPath(projectName), "doctrine");
 	}
 	
@@ -39,15 +47,15 @@ public class SymfonyAdapter{
 		return String.format("%s%s/", this.getWebPath(), this.getConfig());
 	}
 	
-	public final String getWebBundlePath(String projectName) {
+	public final String getWebBundlePath(final String projectName) {
 		return String.format("%s%s/%s/", this.getWebSourcePath(), projectName, "ApiBundle");
 	}
 	
-	public final String getWebBundleConfigPath(String projectName) {
+	public final String getWebBundleConfigPath(final String projectName) {
 		return String.format("%s%s/%s/", this.getWebBundlePath(projectName), "Resources", this.getConfig());
 	}
 	
-	public String getWebEntitiesPath(String projectName) {
+	public String getWebEntitiesPath(final String projectName) {
 		return String.format("%s%s/", this.getWebBundlePath(projectName), this.getEntities());
 	}	
 	
@@ -64,50 +72,50 @@ public class SymfonyAdapter{
 	}
 
 	public String getWebPlatform() {
-		return webPlatform;
+		return this.webPlatform;
 	}
 
-	public void setWebPlatform(String webPlatform) {
+	public void setWebPlatform(final String webPlatform) {
 		this.webPlatform = webPlatform;
 	}
 	
 	public String getWebRoot() {
-		return webRoot;
+		return this.webRoot;
 	}
 
-	public void setWebRoot(String webRoot) {
+	public void setWebRoot(final String webRoot) {
 		this.webRoot = webRoot;
 	}
 
 	public String getConfig() {
-		return config;
+		return this.config;
 	}
 
-	public void setConfig(String config) {
+	public void setConfig(final String config) {
 		this.config = config;
 	}
 
 	public String getBundle() {
-		return bundle;
+		return this.bundle;
 	}
 
-	public void setBundle(String bundle) {
+	public void setBundle(final String bundle) {
 		this.bundle = bundle;
 	}
 
 	public String getController() {
-		return controller;
+		return this.controller;
 	}
 
-	public void setController(String controller) {
+	public void setController(final String controller) {
 		this.controller = controller;
 	}
 
 	public String getEntities() {
-		return entities;
+		return this.entities;
 	}
 
-	public void setEntities(String entities) {
+	public void setEntities(final String entities) {
 		this.entities = entities;
 	}	
 
@@ -115,7 +123,7 @@ public class SymfonyAdapter{
 		return this.source;
 	}
 
-	public void setSource(String source) {
+	public void setSource(final String source) {
 		this.source = source;
 	}
 

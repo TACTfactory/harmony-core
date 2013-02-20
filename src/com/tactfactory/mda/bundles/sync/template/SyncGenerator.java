@@ -22,7 +22,6 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 import com.google.common.base.CaseFormat;
-import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.bundles.rest.template.RestGenerator;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
@@ -30,11 +29,12 @@ import com.tactfactory.mda.template.ApplicationGenerator;
 import com.tactfactory.mda.template.BaseGenerator;
 import com.tactfactory.mda.template.SQLiteAdapterGenerator;
 import com.tactfactory.mda.template.TagConstant;
+import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 
 public class SyncGenerator extends BaseGenerator {
 
-	public SyncGenerator(BaseAdapter adapter) throws Exception {
+	public SyncGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 	}
 	
@@ -76,7 +76,7 @@ public class SyncGenerator extends BaseGenerator {
 		super.makeSource(fullTemplatePath, fullFilePath, true);
 		
 		
-		for(ClassMetadata cm : this.appMetas.entities.values()){
+		for(final ClassMetadata cm : this.appMetas.entities.values()){
 			if(cm.options.containsKey("sync")){
 				this.addInheritance(cm);
 			}
@@ -87,36 +87,37 @@ public class SyncGenerator extends BaseGenerator {
 			new SQLiteAdapterGenerator(this.adapter).generateAll();
 			new RestGenerator(this.adapter).generateAll();
 			
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ConsoleUtils.displayError(e);
 		}
 	}
 		
-	protected void makeSource(String templateName, String fileName, boolean override) {
-		String fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + this.adapter.getService() + "/" + fileName;
-		String fullTemplatePath = this.adapter.getTemplateSourceServicePath().substring(1) + templateName;
+	@Override
+	protected void makeSource(final String templateName, final String fileName, final boolean override) {
+		final String fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + this.adapter.getService() + "/" + fileName;
+		final String fullTemplatePath = this.adapter.getTemplateSourceServicePath().substring(1) + templateName;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 	
-	private void addInheritance(ClassMetadata cm){
-		String entityName = cm.name;
-		File entityFile = new File(this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.", "/") + "/entity/" + entityName +".java");
-		StringBuffer sb = FileUtils.FileToStringBuffer(entityFile);
-		String extendsString = " extends EntityBase";
-		String classDeclaration = "class "+entityName;
-		int aClassDefinitionIndex = this.indexOf(sb, classDeclaration, false)+classDeclaration.length();
+	private void addInheritance(final ClassMetadata cm){
+		final String entityName = cm.name;
+		final File entityFile = new File(this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.", "/") + "/entity/" + entityName +".java");
+		final StringBuffer sb = FileUtils.fileToStringBuffer(entityFile);
+		final String extendsString = " extends EntityBase";
+		final String classDeclaration = "class "+entityName;
+		final int aClassDefinitionIndex = this.indexOf(sb, classDeclaration, false)+classDeclaration.length();
 		
 		if(cm.extendType!=null){ 	// Entity already extends something
-			String extendedClass = cm.extendType;
+			final String extendedClass = cm.extendType;
 			if(!extendedClass.equals("EntityBase")){ 				// Extended class is already Entity Base, do nothing
 				if(!this.appMetas.entities.containsKey(extendedClass)){ 		// Extended class is not an entity, warn the user
 					ConsoleUtils.displayError(new Exception("The entity "+entityName+" must extends a sync Entity or nothing."));
 					
 				} else {
 					
-					ClassMetadata extendedCm = this.appMetas.entities.get(extendedClass); // Get extended entity
+					final ClassMetadata extendedCm = this.appMetas.entities.get(extendedClass); // Get extended entity
 					if(!extendedCm.options.containsKey("sync")){				// Extended class is an entity but which is not syncable, warn the user
 						ConsoleUtils.displayError(new Exception("The entity "+entityName+" must extends a sync Entity or nothing."));
 					} 
@@ -125,20 +126,20 @@ public class SyncGenerator extends BaseGenerator {
 		} else {				// Entity doesn't extend anything
 			sb.insert(aClassDefinitionIndex, extendsString);
 			if(!cm.imports.contains("EntityBase")){ // Add import EntityBase if it doesn't exist yet
-				int packageIndex = this.indexOf(sb, "package", false);
-				int lineAfterPackageIndex = sb.indexOf("\n", packageIndex)+1;
-				sb.insert(lineAfterPackageIndex, String.format("\nimport %s.base.EntityBase;\n",this.datamodel.get(TagConstant.ENTITY_NAMESPACE)));
+				final int packageIndex = this.indexOf(sb, "package", false);
+				final int lineAfterPackageIndex = sb.indexOf("\n", packageIndex)+1;
+				sb.insert(lineAfterPackageIndex, String.format("%nimport %s.base.EntityBase;%n",this.datamodel.get(TagConstant.ENTITY_NAMESPACE)));
 				
 			}
-			FileUtils.StringBufferToFile(sb, entityFile);
+			FileUtils.stringBufferToFile(sb, entityFile);
 		}
 	}
 	
-	private int indexOf(StringBuffer sb, String content, boolean allowComments){
+	private int indexOf(final StringBuffer sb, final String content, final boolean allowComments){
 		return this.indexOf(sb, content, 0, allowComments);
 	}
 	
-	private int indexOf(StringBuffer sb, String content, int fromIndex, boolean allowComments){
+	private int indexOf(final StringBuffer sb, final String content, int fromIndex, final boolean allowComments){
 		int index = -1;
 		if(allowComments){
 			index = sb.indexOf(content, fromIndex);
@@ -146,12 +147,12 @@ public class SyncGenerator extends BaseGenerator {
 			int tmpIndex;
 			do{
 				tmpIndex = sb.indexOf(content, fromIndex);
-				int lastCommentClose = sb.lastIndexOf("*/", tmpIndex);
-				int lastCommentOpen = sb.lastIndexOf("/*", tmpIndex);
-				int lastLineComment = sb.lastIndexOf("//", tmpIndex);
-				int lastCarriotRet = sb.lastIndexOf("\n", tmpIndex);
-				if(		(lastCommentClose >= lastCommentOpen)	// If the last multi-line comment is close 
-					&& 	(lastLineComment  <= lastCarriotRet)){ 	// And if there is a carriot return after the last single-line comment
+				final int lastCommentClose = sb.lastIndexOf("*/", tmpIndex);
+				final int lastCommentOpen = sb.lastIndexOf("/*", tmpIndex);
+				final int lastLineComment = sb.lastIndexOf("//", tmpIndex);
+				final int lastCarriotRet = sb.lastIndexOf("\n", tmpIndex);
+				if(		lastCommentClose >= lastCommentOpen		// If the last multi-line comment is close 
+					&& 	lastLineComment  <= lastCarriotRet){ 	// And if there is a carriot return after the last single-line comment
 					index = tmpIndex;							// Index is good 
 					break;
 				} else{
@@ -167,17 +168,17 @@ public class SyncGenerator extends BaseGenerator {
 	 * 
 	 * @param classFile
 	 */
-	private void addPermissionManifest(String permissionName) {
+	private void addPermissionManifest(final String permissionName) {
 		try{ 
-			SAXBuilder builder = new SAXBuilder();		// Make engine
-			File xmlFile = FileUtils.makeFile(this.adapter.getManifestPathFile());
-			Document doc = (Document) builder.build(xmlFile); 	// Load XML File
+			final SAXBuilder builder = new SAXBuilder();		// Make engine
+			final File xmlFile = FileUtils.makeFile(this.adapter.getManifestPathFile());
+			final Document doc = builder.build(xmlFile); 	// Load XML File
 			final Element rootNode = doc.getRootElement(); 			// Load Root element
 			final Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
 			Element foundPermission = null;
 			// Find Permission Node
-			List<Element> permissions = rootNode.getChildren("uses-permission"); 	// Find many elements
-			for (Element permission : permissions) {
+			final List<Element> permissions = rootNode.getChildren("uses-permission"); 	// Find many elements
+			for (final Element permission : permissions) {
 				if (permission.getAttributeValue("name",ns).equals(permissionName) ) {	// Load attribute value
 					foundPermission = permission;
 					break;
@@ -191,15 +192,15 @@ public class SyncGenerator extends BaseGenerator {
 				rootNode.addContent(foundPermission);
 				
 				// Write to File
-				XMLOutputter xmlOutput = new XMLOutputter();
+				final XMLOutputter xmlOutput = new XMLOutputter();
 
 				// display nice nice
 				xmlOutput.setFormat(Format.getPrettyFormat());				// Make beautiful file with indent !!!
 				xmlOutput.output(doc, new FileWriter(xmlFile.getAbsoluteFile()));
 			}
-		} catch(JDOMException e){
+		} catch(final JDOMException e){
 			ConsoleUtils.displayError(e);
-		} catch(IOException e){
+		} catch(final IOException e){
 			ConsoleUtils.displayError(e);
 		}
 	}

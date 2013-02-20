@@ -6,115 +6,124 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda;
+package com.tactfactory.mda.utils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
+import java.util.List;
 
 import print.color.Ansi.Attribute;
 import print.color.Ansi.BColor;
 import print.color.Ansi.FColor;
 import print.color.ColoredPrinter;
 
-public class ConsoleUtils {
-	public static boolean quiet = false;
+public abstract class ConsoleUtils {
+	/** Debug state*/
+	public static boolean debug;
+	public static boolean quiet;
 	public static boolean ansi = true;
+	private static char newLine = '\n';
+	private static char tab = '\t';
 	
 	private static ColoredPrinter cp = new ColoredPrinter.Builder(0, false).build();
 	
-	public static void display(String value) {
-		if (!quiet)
+	public static void display(final String value) {
+		if (!quiet) {
 			if (ansi) {
 				cp.println(value);
 				cp.clear();
 			} else {
 				System.out.println(value);
 			}
+		}
 	}
 	
-	public static void displayWarning(String value) {
-		if (!quiet)
+	public static void displayWarning(final String value) {
+		if (!quiet) {
 			if (ansi) {
-				cp.println("[WARNING]\t" + value + "\n", Attribute.NONE, FColor.YELLOW, BColor.BLACK);
+				cp.println("[WARNING]" + tab + value + newLine, Attribute.NONE, FColor.YELLOW, BColor.BLACK);
 				cp.clear();
 			} else {
 				System.out.println(value);
 			}
+		}
 	}
 	
-	public static void displayDebug(String value) {
-		if (!quiet && Harmony.debug)
+	public static void displayDebug(final String value) {
+		if (!quiet && ConsoleUtils.debug) {
 			if (ansi) {
-				cp.println("[DEBUG]\t" + value + "\n", Attribute.NONE, FColor.BLUE, BColor.BLACK);
+				cp.println("[DEBUG]" + tab + value + newLine, Attribute.NONE, FColor.BLUE, BColor.BLACK);
 				cp.clear();
 			} else {
-				System.out.println("[DEBUG]\t" + value);
+				System.out.println("[DEBUG]" + tab + value);
 			}
+		}
 	}
 	
-	private static String getStackTrace(StackTraceElement[] stackTraceElements) {
-		StringBuilder result = new StringBuilder();
+	private static String getStackTrace(final StackTraceElement[] stackTraceElements) {
+		final StringBuilder result = new StringBuilder();
 
-		for (StackTraceElement stackTraceElement : stackTraceElements) {
-			result.append(stackTraceElement.toString()).append("\n");
+		for (final StackTraceElement stackTraceElement : stackTraceElements) {
+			result.append(stackTraceElement.toString()).append(newLine);
 		}
 		
 		return result.toString();
 	}
 	
-	public static void displayError(Exception value) {
-		if (!quiet) 
+	public static void displayError(final Exception value) {
+		if (!quiet) {
 			if (ansi) {
-				cp.println("[ERROR]\t" + value + "\n" + getStackTrace(value.getStackTrace()) + "\n", Attribute.NONE, FColor.RED, BColor.BLACK);
+				cp.println("[ERROR]" + tab + value + newLine + getStackTrace(value.getStackTrace()) + newLine, Attribute.NONE, FColor.RED, BColor.BLACK);
 				cp.clear();
 			} else {
-				System.out.println("[ERROR]\t" + value + "\n" + getStackTrace(value.getStackTrace()) + "\n");
+				System.out.println("[ERROR]" + tab + value + newLine + getStackTrace(value.getStackTrace()) + newLine);
 			}
+		}
 	}
 
-	public static void displayLicence(String value) {
-		if (!quiet)
+	public static void displayLicence(final String value) {
+		if (!quiet) {
 			if (ansi) {
-				cp.println(value + "\n", Attribute.BOLD, FColor.GREEN, BColor.BLACK);
+				cp.println(value + newLine, Attribute.BOLD, FColor.GREEN, BColor.BLACK);
 				cp.clear();
 			} else {
 				System.out.println(value);
 			}
+		}
 	}
 	
 	
-	public static void launchCommand(ArrayList<String> command){
+	public static void launchCommand(final List<String> command){
 		try {
-			ProcessBuilder pb = new ProcessBuilder(command);
-			Process exec = pb.start();
+			final ProcessBuilder pb = new ProcessBuilder(command);
+			final Process exec = pb.start();
 			
 
-			ProcessToConsoleBridge bridge = new ProcessToConsoleBridge(exec);
+			final ProcessToConsoleBridge bridge = new ProcessToConsoleBridge(exec);
 			bridge.start();
 			try {
 				exec.waitFor();
-			} catch (InterruptedException e) {
+			} catch (final InterruptedException e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				ConsoleUtils.displayError(e);
 			}
 			
 			bridge.stop();
 			
-		} catch (IOException e) {
+		} catch (final IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ConsoleUtils.displayError(e);
 		}
 	}
 	
 	protected static class ProcessToConsoleBridge {
-		InputBridge in;
-		OutputBridge out;
+		private final InputBridge in;
+		private final OutputBridge out;
 		
-		public ProcessToConsoleBridge(Process proc){
+		public ProcessToConsoleBridge(final Process proc){
 			this.in = new InputBridge(proc);
 			this.out = new OutputBridge(proc);
 		}
@@ -129,16 +138,18 @@ public class ConsoleUtils {
 			this.out.terminate();
 		}
 		
-		private class InputBridge extends Thread{
-			private BufferedReader processInput;
-			private BufferedReader processError;
-			private boolean isRunning = false;
+		private static class InputBridge extends Thread{
+			private final BufferedReader processInput;
+			private final BufferedReader processError;
+			private boolean isRunning;
 			
-			public InputBridge(Process proc){
+			public InputBridge(final Process proc){
+				super();
 				this.processInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
 				this.processError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
 			}
 			
+			@Override
 			public void run() {
 				while(this.isRunning){
 					try{
@@ -146,27 +157,29 @@ public class ConsoleUtils {
 							Thread.sleep(200);
 						}
 						if(this.processInput.ready()){
-							String input  = this.processInput.readLine();
-							if(input!=null && !input.isEmpty())
+							final String input  = this.processInput.readLine();
+							if(input!=null && !input.isEmpty()){
 								ConsoleUtils.display(input);
+							}
 						}
 						if(this.processError.ready()){
-							String error = this.processError.readLine();
-							if(error!=null && !error.isEmpty())
+							final String error = this.processError.readLine();
+							if(error!=null && !error.isEmpty()){
 								ConsoleUtils.displayError(new Exception(error));
+							}
 						}
-					}catch(InterruptedException e){
+					}catch(final InterruptedException e){
 						ConsoleUtils.displayError(e);
-					}catch(IOException e){
+					}catch(final IOException e){
 						ConsoleUtils.displayError(e);
 					}
 				}
 				try {
 					this.processInput.close();
 					this.processError.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					ConsoleUtils.displayError(e);
 				}
 			}
 			
@@ -182,34 +195,33 @@ public class ConsoleUtils {
 			}
 		}
 		
-		private class OutputBridge extends Thread{
-			private BufferedReader consoleInput;
-			private BufferedWriter processOutput;
-			private boolean isRunning = false;
+		private static class OutputBridge extends Thread{
+			private final BufferedReader consoleInput;
+			private final BufferedWriter processOutput;
+			private boolean isRunning;
 			
-			public OutputBridge(Process proc){
+			public OutputBridge(final Process proc){
+				super();
 				this.processOutput = new BufferedWriter(new OutputStreamWriter(proc.getOutputStream()));
 				this.consoleInput = new BufferedReader(new InputStreamReader(System.in));
 			}
 			
+			@Override
 			public void run() {
 				while(this.isRunning){
 					try {
-						/*while(!this.consoleInput.ready()){
-							if(!this.isRunning)
-								break;
-						}*/
 						String output = null;
 						if(this.consoleInput.ready()){
-								output = this.consoleInput.readLine();
-							if(output!=null && !output.isEmpty())
+							output = this.consoleInput.readLine();
+							if(output!=null && !output.isEmpty()){
 								this.processOutput.write(output);
+							}
 						}else{
 							Thread.sleep(200);
 						}
-					} catch (IOException e) {
+					} catch (final IOException e) {
 						ConsoleUtils.displayError(e);
-					} catch (InterruptedException e) {
+					} catch (final InterruptedException e) {
 						ConsoleUtils.displayError(e);
 					}
 					
@@ -217,9 +229,9 @@ public class ConsoleUtils {
 				try {
 					this.consoleInput.close();
 					this.processOutput.close();
-				} catch (IOException e) {
+				} catch (final IOException e) {
 					// TODO Auto-generated catch block
-					e.printStackTrace();
+					ConsoleUtils.displayError(e);
 				}
 			}
 

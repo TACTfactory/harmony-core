@@ -11,9 +11,9 @@ package com.tactfactory.mda.command;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;
-import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.parser.*;
-import com.tactfactory.mda.plateforme.*;
+import com.tactfactory.mda.plateforme.AndroidAdapter;
+import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
  * 
@@ -31,12 +31,11 @@ public class ResourceCommand extends BaseCommand {
 	public final static String ACTION_TRANSLATE = "translate";
 
 	//commands
-	public static String GENERATE_IMAGE 	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_IMAGE;
-	public static String GENERATE_TRANSLATE	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_TRANSLATE;
+	public final static String GENERATE_IMAGE 	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_IMAGE;
+	public final static String GENERATE_TRANSLATE	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_TRANSLATE;
 
 	//internal
-	protected BaseAdapter adapter = new AndroidAdapter();
-	protected JavaModelParser javaModelParser;
+	protected final BaseAdapter adapter = new AndroidAdapter();
 	
 	@Override
 	public void summary() {
@@ -46,7 +45,7 @@ public class ResourceCommand extends BaseCommand {
 	}
 
 	@Override
-	public void execute(String action, String[] args, String option) {
+	public void execute(final String action, final String[] args, final String option) {
 		ConsoleUtils.display("> Resource Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);
@@ -54,21 +53,15 @@ public class ResourceCommand extends BaseCommand {
 		try {
 			if (action.equals(GENERATE_IMAGE)) {
 				this.adapter.resizeImage();
-			} else
-	
-			if (action.equals(GENERATE_TRANSLATE)) {
-				//this.generateTranslate();
-			} else {
-	
 			}
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
 
 	@Override
-	public boolean isAvailableCommand(String command) {
-		return (command.equals(GENERATE_IMAGE) ||
-				command.equals(GENERATE_TRANSLATE)  );
+	public boolean isAvailableCommand(final String command) {
+		return  command.equals(GENERATE_IMAGE) ||
+				command.equals(GENERATE_TRANSLATE) ;
 	}
 }

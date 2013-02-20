@@ -8,8 +8,11 @@
  */
 package com.tactfactory.mda.test.demact.entity;
 
-import com.tactfactory.mda.annotation.*;
+import com.tactfactory.mda.annotation.Column;
 import com.tactfactory.mda.annotation.Column.Type;
+import com.tactfactory.mda.annotation.Entity;
+import com.tactfactory.mda.annotation.GeneratedValue;
+import com.tactfactory.mda.annotation.Id;
 import com.tactfactory.mda.bundles.rest.annotation.Rest;
 
 @Entity

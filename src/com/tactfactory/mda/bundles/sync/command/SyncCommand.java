@@ -9,16 +9,17 @@
 package com.tactfactory.mda.bundles.sync.command;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
+
 import com.tactfactory.mda.Console;
-import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.bundles.rest.parser.RestCompletor;
 import com.tactfactory.mda.bundles.rest.parser.RestParser;
 import com.tactfactory.mda.bundles.sync.parser.SyncCompletor;
 import com.tactfactory.mda.bundles.sync.parser.SyncParser;
 import com.tactfactory.mda.bundles.sync.template.SyncGenerator;
 import com.tactfactory.mda.command.BaseCommand;
+import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
+import com.tactfactory.mda.utils.ConsoleUtils;
 
 @PluginImplementation
 public class SyncCommand extends BaseCommand{
@@ -31,19 +32,19 @@ public class SyncCommand extends BaseCommand{
 	public final static String ACTION_SERVICE = "service";
 
 	//commands
-	public static String GENERATE_SERVICE	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_SERVICE;
+	public final static String GENERATE_SERVICE	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_SERVICE;
 
 	@Override
-	public void execute(String action, String[] args, String option) {
+	public void execute(final String action, final String[] args, final String option) {
 		ConsoleUtils.display("> Sync Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);
 		if (action.equals(GENERATE_SERVICE)) {
 			try {
 				this.generateAdapters();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				ConsoleUtils.displayError(e);
 			}
 		}
 	}
@@ -54,23 +55,24 @@ public class SyncCommand extends BaseCommand{
 	protected void generateAdapters() {
 		//Harmony.metas.entities = getMetasFromAll();
 		this.generateMetas();
-		if(Harmony.metas.entities!=null){
+		if(ApplicationMetadata.INSTANCE.entities!=null){
 			try {
 				new SyncGenerator(new AndroidAdapter()).generateAll();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				ConsoleUtils.displayError(e);
 			}
 		}
 
 	}
 	
+	@Override
 	public void generateMetas(){
 		this.registerParser(new RestParser());
 		this.registerParser(new SyncParser());
 		super.generateMetas();
 		new SyncCompletor();
-		new RestCompletor().generateApplicationRestMetadata(Harmony.metas);
+		new RestCompletor().generateApplicationRestMetadata(ApplicationMetadata.INSTANCE);
 	}
 	
 	
@@ -83,7 +85,7 @@ public class SyncCommand extends BaseCommand{
 	}
 
 	@Override
-	public boolean isAvailableCommand(String command) {
-		return (command.equals(GENERATE_SERVICE));
+	public boolean isAvailableCommand(final String command) {
+		return command.equals(GENERATE_SERVICE);
 	}
 }
