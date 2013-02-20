@@ -14,34 +14,43 @@ import com.tactfactory.mda.annotation.Column;
 import com.tactfactory.mda.annotation.Column.Type;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
-public class SqliteAdapter {
-	private static String PREFIX = "COL_";
-	private static String SUFFIX = "_ID";
+public abstract class SqliteAdapter {
+	private static final String PREFIX = "COL_";
+	private static final String SUFFIX = "_ID";
 
-	public static String generateStructure(final String name, final String type, final Integer length,
-											final Integer scale, final Integer precision, final boolean isId,
-											final Boolean isUnique, final Boolean isNullable) {
+	public static String generateStructure (
+								final String name, 
+								final String type,
+								final Integer length,
+								final Integer scale,
+								final Integer precision, 
+								final boolean isId,
+								final Boolean isUnique, 
+								final Boolean isNullable) {
+		
 		final StringBuilder builder = new StringBuilder();
 		builder.append(' ');
 		builder.append(type.toLowerCase());
-		if(isId){
+		if (isId) {
 			builder.append(" PRIMARY KEY");
-			if(type.equals("integer")){
+			if (type.equals("integer")) {
 				builder.append(" AUTOINCREMENT");
 			}
-		}else{
+		} else {
 		
 			// Set Length
 			final Type fieldType = Type.fromName(type);
-			if(fieldType!=null){
-				if(length!=null && length!=fieldType.getLength()){
+			if (fieldType != null) {
+				if (length != null && length != fieldType.getLength()) {
 					builder.append('(');
 					builder.append(length);
 					builder.append(')');
-				} else if (precision!=null && precision!=fieldType.getPrecision()){
+				} else if (precision != null 
+						&& precision != fieldType.getPrecision()) {
 					builder.append('(');
 					builder.append(precision);
-					if(scale!=null && scale!=fieldType.getScale()){
+					if (scale != null 
+							&& scale != fieldType.getScale()) {
 						builder.append(',');
 						builder.append(scale);
 					}
@@ -50,12 +59,12 @@ public class SqliteAdapter {
 			}
 			
 			// Set Unique
-			if(isUnique!=null && isUnique){
+			if (isUnique != null && isUnique) {
 				builder.append(" UNIQUE");
 			}
 			
 			// Set Nullable
-			if(isNullable==null || !isNullable) {
+			if (isNullable == null || !isNullable) {
 				builder.append(" NOT NULL");
 			}
 		}
@@ -66,9 +75,9 @@ public class SqliteAdapter {
 
 	public static String generateColumnType(final String fieldType) {
 		String type = fieldType;
-		if (type.equals(Column.Type.STRING.getValue()) ||
-			type.equals(Column.Type.TEXT.getValue())	||
-			type.equals(Column.Type.LOGIN.getValue())	) {
+		if (type.equals(Column.Type.STRING.getValue()) 
+			|| type.equals(Column.Type.TEXT.getValue()) 
+			|| type.equals(Column.Type.LOGIN.getValue())) {
 			type = "VARCHAR";
 		} else
 			
@@ -91,15 +100,15 @@ public class SqliteAdapter {
 		return PREFIX + fieldName.toUpperCase() + SUFFIX;
 	}
 	
-	public static String generateColumnDefinition(final String type){
+	public static String generateColumnDefinition(final String type) {
 		String ret = type;
-		if(type.equals("int")) {
+		if (type.equals("int")) {
 			ret = "integer";
 		}
 		return ret;
 	}
 	
-	public static enum Keywords{
+	public static enum Keywords {
 		ABORT,
 		ACTION,
 		ADD,
@@ -222,15 +231,19 @@ public class SqliteAdapter {
 		WHEN,
 		WHERE;
 		
-		public static boolean exists(final String name){
+		public static boolean exists(final String name) {
 			boolean exists = false;
-			try{
-				final Field field = Keywords.class.getField(name.toUpperCase());	
-				if(field.isEnumConstant()) {
-					ConsoleUtils.displayWarning(name+" is a reserved SQLite keyword. You may have problems with your database schema.");
+			try {
+				final Field field = 
+						Keywords.class.getField(name.toUpperCase());	
+				if (field.isEnumConstant()) {
+					ConsoleUtils.displayWarning(
+							name 
+							+ " is a reserved SQLite keyword."
+							+ " You may have problems with"
+							+ " your database schema.");
 					exists = true;
-				}
-				else {
+				} else {
 					exists = false;
 				}
 			} catch (final NoSuchFieldException e) {

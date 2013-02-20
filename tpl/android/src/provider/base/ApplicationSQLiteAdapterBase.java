@@ -135,9 +135,9 @@ public abstract class SQLiteAdapterBase<T>{
 	 * @return List of T entities
 	 */
 	public ArrayList<T> getAll(CriteriasBase crits) {
-		if(crits == null || crits.isEmpty()){
+		if (crits == null || crits.isEmpty()){
 			return this.getAll();
-		}else{
+		} else {
 			Cursor c = this.mDatabase.rawQuery("SELECT * FROM "+this.getTableName()+" WHERE "+crits.toSQLiteString(), null);
 			ArrayList<T> result = this.cursorToItems(c);
 			c.close();

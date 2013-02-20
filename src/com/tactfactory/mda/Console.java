@@ -144,7 +144,7 @@ public abstract class Console extends Harmony {
 		String[] commandArgs = null;
 		
 		// Extract optional command arguments
-		if(args.length > currentPosition){
+		if (args.length > currentPosition){
 			commandArgs = Arrays.copyOfRange(args, currentPosition, args.length);
 		}
 		
@@ -164,7 +164,7 @@ public abstract class Console extends Harmony {
 		final String[] splitCommand = args[currentPosition].split(":");
 
 		// Extract required command
-		if(splitCommand.length == 3) {
+		if (splitCommand.length == 3) {
 			command = args[currentPosition]; //String.format("%s:%s:%s", bundle, subject, action);
 		}
 		return command;
@@ -180,7 +180,7 @@ public abstract class Console extends Harmony {
 			for (int i = 0; i < args.length; i++) {
 				final String arg = args[i];
 				
-				if(arg.startsWith(ARGUMENT_PREFIX_SHORT)) {
+				if (arg.startsWith(ARGUMENT_PREFIX_SHORT)) {
 					String key = arg.substring(1);
 					if (arg.startsWith(ARGUMENT_PREFIX)) {
 						key = arg.substring(2);

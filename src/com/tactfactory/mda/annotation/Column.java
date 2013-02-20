@@ -82,7 +82,7 @@ public @interface Column {
 				this.unique = unique;
 			}
 			
-			if(isLocale!=null) {
+			if (isLocale!=null) {
 				this.isLocale = isLocale;
 			}
 		}
@@ -131,12 +131,12 @@ public @interface Column {
 		
 		public static Type fromName(String name){
 			Type ret;
-			if(name.lastIndexOf('.')>0){
+			if (name.lastIndexOf('.')>0){
 				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot
 			}
-			try{
+			try {
 				final Field field = Type.class.getField(name.toUpperCase());	
-				if(field.isEnumConstant()) {
+				if (field.isEnumConstant()) {
 					ret = (Type)field.get(Type.class);
 				} else {
 					 ret = null; 

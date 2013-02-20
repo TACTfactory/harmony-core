@@ -122,7 +122,7 @@ public class Harmony {
 			final File manifest = new File(String.format("%s/%s/%s", Harmony.PATH_PROJECT, Harmony.projectFolder,"AndroidManifest.xml"));
 			final File config = new File(String.format("%s/%s/%s", Harmony.PATH_PROJECT, Harmony.projectFolder,"/res/values/configs.xml")); //FIXME path by adapter
 			
-			if(manifest.exists()) {
+			if (manifest.exists()) {
 				ApplicationMetadata.INSTANCE.projectNameSpace = Harmony.getNameSpaceFromManifest(manifest);				
 
 				//String[] projectNameSpaceData = Harmony.metas.projectNameSpace.split(delimiter);
@@ -132,7 +132,7 @@ public class Harmony {
 			
 			// get android sdk dir from local.properties
 //			File local_prop = new File(String.format("%s/%s/%s",Harmony.PATH_PROJECT,Harmony.projectFolder,"local.properties"));
-//			if(local_prop.exists())
+//			if (local_prop.exists())
 //				Harmony.androidSdkPath = Harmony.getSdkDirFromProject(local_prop);
 //				Harmony.androidSdkVersion = getAndroidSdkVersion(Harmony.androidSdkPath);
 
@@ -220,15 +220,15 @@ public class Harmony {
 	/**
 	 * Prompt Project Name to the user
 	 */
-	public static void initProjectName()
-	{
+	public static void initProjectName() {
 		if (Strings.isNullOrEmpty(ApplicationMetadata.INSTANCE.name)) {
-			final String projectName = Harmony.getUserInput("Please enter your Project Name ["+DEFAULT_PROJECT_NAME+"]:");
+			final String projectName = 
+					Harmony.getUserInput("Please enter your Project Name ["+DEFAULT_PROJECT_NAME+"]:");
 			
 			if (Strings.isNullOrEmpty(projectName)){
 				ApplicationMetadata.INSTANCE.name = DEFAULT_PROJECT_NAME;
 			}
-			else{
+			else {
 				ApplicationMetadata.INSTANCE.name = projectName;
 			}
 		}
@@ -244,12 +244,12 @@ public class Harmony {
 			while (!good) {
 				final String projectNameSpace = Harmony.getUserInput("Please enter your Project NameSpace ["+DEFAULT_PROJECT_NAMESPACE+"]:");
 				
-				if(Strings.isNullOrEmpty(projectNameSpace)) {
+				if (Strings.isNullOrEmpty(projectNameSpace)) {
 					ApplicationMetadata.INSTANCE.projectNameSpace = DEFAULT_PROJECT_NAMESPACE.replaceAll("\\.", delimiter);
 					good=true;
 					
 				} else {
-					if(projectNameSpace.toLowerCase(Locale.ENGLISH).endsWith(ApplicationMetadata.INSTANCE.name.toLowerCase())){
+					if (projectNameSpace.toLowerCase(Locale.ENGLISH).endsWith(ApplicationMetadata.INSTANCE.name.toLowerCase())){
 						ApplicationMetadata.INSTANCE.projectNameSpace = projectNameSpace.replaceAll("\\.", delimiter);
 						good = true;
 					} else {
@@ -267,17 +267,17 @@ public class Harmony {
 		if (Strings.isNullOrEmpty(ApplicationMetadata.androidSdkPath)) {
 			final String sdkPath = Harmony.getUserInput("Please enter AndroidSDK full path [/root/android-sdk/]:");
 			
-			if(!Strings.isNullOrEmpty(sdkPath)){
+			if (!Strings.isNullOrEmpty(sdkPath)){
 				ApplicationMetadata.androidSdkPath = sdkPath;
 				Harmony.androidSdkVersion = getAndroidSdkVersion(ApplicationMetadata.androidSdkPath);
 			} else {
 				String osMessage = "Detected OS: ";
 				
-				if(OsUtil.isWindows()) {
-					if(OsUtil.isX64()) {
+				if (OsUtil.isWindows()) {
+					if (OsUtil.isX64()) {
 						osMessage += "Windows x64";
 						ApplicationMetadata.androidSdkPath = String.format("%s/%s/","C:/Program Files","android-sdk");
-					} else if(!OsUtil.isX64()) {
+					} else if (!OsUtil.isX64()) {
 						osMessage += "Windows x86";
 						ApplicationMetadata.androidSdkPath = String.format("%s/%s/","C:/Program Files (x86)","android-sdk");
 					} else {
@@ -285,7 +285,7 @@ public class Harmony {
 						ApplicationMetadata.androidSdkPath = String.format("%s/%s/","C:/Program Files","android-sdk");
 					}
 				}
-				else if(OsUtil.isLinux()) {
+				else if (OsUtil.isLinux()) {
 					osMessage += "Linux";
 					ApplicationMetadata.androidSdkPath = "/opt/android-sdk/";
 				}
@@ -305,11 +305,11 @@ public class Harmony {
 		boolean result = false;
 		final File projectFolder = new File(Harmony.projectFolder);
 		
-		if(projectFolder.exists() && projectFolder.listFiles().length!=0){
+		if (projectFolder.exists() && projectFolder.listFiles().length!=0){
 			final File manifest = new File(Harmony.projectFolder + "AndroidManifest.xml");
 			final String namespace = Harmony.getNameSpaceFromManifest(manifest);
 			
-			if(namespace!=null && !namespace.equals("${namespace}")){
+			if (namespace!=null && !namespace.equals("${namespace}")){
 				result = true;
 			}
 		}
@@ -328,7 +328,7 @@ public class Harmony {
 		SAXBuilder builder;
 		Document doc;
 		
-		if(manifest.exists()) {
+		if (manifest.exists()) {
 			builder = new SAXBuilder();								// Make engine
 			try {
 				doc = builder.build(manifest);			// Load XML File
@@ -360,7 +360,7 @@ public class Harmony {
 		SAXBuilder builder;
 		Document doc;
 		
-		if(config.exists()) {
+		if (config.exists()) {
 			builder = new SAXBuilder();								// Make engine
 			try {
 				doc = builder.build(config);			// Load XML File
@@ -395,12 +395,12 @@ public class Harmony {
 	public static String getSdkDirFromPropertiesFile(final File file_prop) {
 		String result = null;
 		
-		if(file_prop.exists()){
+		if (file_prop.exists()){
 			final List<String> lines = FileUtils.fileToStringArray(file_prop);
 			
-			for(int i=0;i<lines.size();i++){
-				if(lines.get(i).startsWith("sdk.dir=")){
-					if(lines.get(i).contains(TagConstant.ANDROID_SDK_DIR)){
+			for (int i=0;i<lines.size();i++){
+				if (lines.get(i).startsWith("sdk.dir=")){
+					if (lines.get(i).contains(TagConstant.ANDROID_SDK_DIR)){
 						ConsoleUtils.displayWarning("Android SDK Dir not defined please init project...");
 					} else {
 						result=lines.get(i).replace("sdk.dir=", "");
@@ -438,20 +438,20 @@ public class Harmony {
 		String result = null;
 		
 		final File sdkProperties = new File(sdkPath+"/tools/source.properties");
-		if(sdkProperties.exists()){
-			try{
+		if (sdkProperties.exists()){
+			try {
 				final FileInputStream fis = new FileInputStream(sdkProperties);
 				final InputStreamReader isr = new InputStreamReader(fis);
 				final BufferedReader br = new BufferedReader(isr);
 				String line = br.readLine();
-				while(line !=null){
-					if(line.startsWith("Pkg.Revision")){
+				while (line !=null){
+					if (line.startsWith("Pkg.Revision")){
 						result = line.substring(line.lastIndexOf('=')+1);
 					}
 					line = br.readLine();
 				}
 				br.close();
-			}catch(final IOException e){
+			} catch (final IOException e){
 				ConsoleUtils.displayError(e);
 			}
 		}

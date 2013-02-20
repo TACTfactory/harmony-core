@@ -117,7 +117,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		</#list>
 		
 		ArrayList<${curr.name?cap_first}> entities = this.adapter.getAll();
-		if(entities.size()>0){
+		if (entities.size()>0){
 			this.entity = entities.get(TestUtils.generateRandomInt(0,entities.size()));
 		}
 	}
@@ -147,7 +147,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	/** Test case Read Entity */
 	public void testRead() {
 		${curr.name?cap_first} result = null;
-		if(this.entity!=null){
+		if (this.entity!=null){
 			result = this.adapter.getByID(this.entity.getId()); // TODO Generate by @Id annotation 
 		}
 		equals(result, this.entity);
@@ -156,7 +156,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	/** Test case Update Entity */
 	public void testUpdate() {
 		int result = -1;
-		if(this.entity!=null){
+		if (this.entity!=null){
 			${curr.name?cap_first} ${curr.name?uncap_first} = generateRandom();
 			${curr.name?uncap_first}.setId(this.entity.getId()); // TODO Generate by @Id annotation 
 		
@@ -168,7 +168,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	/** Test case Update Entity */
 	public void testDelete() {
 		int result = -1; 
-		if(this.entity!=null){
+		if (this.entity!=null){
 			result = (int)this.adapter.remove(this.entity.getId());
 		}
 		Assert.assertTrue(result >= 0);
@@ -222,7 +222,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		boolean ret = true;
 		Assert.assertNotNull(${curr.name?uncap_first}1);
 		Assert.assertNotNull(${curr.name?uncap_first}2);
-		if(${curr.name?uncap_first}1!=null && ${curr.name?uncap_first}2 !=null){
+		if (${curr.name?uncap_first}1!=null && ${curr.name?uncap_first}2 !=null){
 		<#list curr.fields as field>
 			<#if !field.internal>
 				<#if !field.relation??>
@@ -239,7 +239,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 			Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().getId()==${curr.name?uncap_first}2.get${field.name?cap_first}().getId());
 					<#else>
-			for(int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
+			for (int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
 				Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).getId()
 							== ${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).getId());
 			}

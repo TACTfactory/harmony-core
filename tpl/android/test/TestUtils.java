@@ -72,8 +72,8 @@ public abstract class TestUtils{
                  || (numbers && Character.isDigit(ch))
                  || (!letters && !numbers)) 
              {
-                 if(ch >= 56320 && ch <= 57343) {
-                     if(count == 0) {
+                 if (ch >= 56320 && ch <= 57343) {
+                     if (count == 0) {
                          count++;
                      } else {
                          // low surrogate, insert high surrogate after putting it in
@@ -81,8 +81,8 @@ public abstract class TestUtils{
                          count--;
                          buffer[count] = (char) (55296 + random.nextInt(128));
                      }
-                 } else if(ch >= 55296 && ch <= 56191) {
-                     if(count == 0) {
+                 } else if (ch >= 55296 && ch <= 56191) {
+                     if (count == 0) {
                          count++;
                      } else {
                          // high surrogate, insert low surrogate before putting it in
@@ -90,7 +90,7 @@ public abstract class TestUtils{
                          count--;
                          buffer[count] = ch;
                      }
-                 } else if(ch >= 56192 && ch <= 56319) {
+                 } else if (ch >= 56192 && ch <= 56319) {
                      // private high surrogate, no effing clue, so skip it
                      count++;
                  } else {

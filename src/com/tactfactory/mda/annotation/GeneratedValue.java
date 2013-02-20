@@ -21,10 +21,10 @@ import java.lang.annotation.Target;
 @Target(FIELD)
 @Inherited
 public @interface GeneratedValue {
-	public final static String MODE_AUTO = "AUTO";
-	public final static String MODE_NONE = "NONE";
-	public final static String MODE_SEQUENCE = "SEQUENCE";
-	public final static String MODE_IDENTITY = "IDENTITY";
+	String MODE_AUTO = "AUTO";
+	String MODE_NONE = "NONE";
+	String MODE_SEQUENCE = "SEQUENCE";
+	String MODE_IDENTITY = "IDENTITY";
 	
 	String strategy() default MODE_AUTO;
 }

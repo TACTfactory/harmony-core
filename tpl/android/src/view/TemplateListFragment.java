@@ -109,7 +109,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}> 
 	@Override 
 	public Loader<List<${curr.name}>> onCreateLoader(int id, Bundle bundle) { 
 		${curr.name?cap_first}Criterias crit = null;
-		if(bundle!=null){
+		if (bundle!=null){
 			crit = (${curr.name?cap_first}Criterias)bundle.get(${curr.name?cap_first}Criterias._PARCELABLE);
 		}
 			

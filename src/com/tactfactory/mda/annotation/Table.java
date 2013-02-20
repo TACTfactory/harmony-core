@@ -18,7 +18,8 @@ import java.lang.annotation.Target;
 
 /**
  * The entity will be persisted to a table with @Table annotation
- * By default, the entity will be persisted to a table with the same name as the class name.
+ * By default, the entity will be persisted 
+ * to a table with the same name as the class name.
  */
 @Documented
 @Retention(SOURCE)

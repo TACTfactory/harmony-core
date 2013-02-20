@@ -56,13 +56,13 @@ public @interface Rest {
 		
 		public static Security fromName(String name){
 			Security ret;
-			if(name.lastIndexOf('.')>0) {
+			if (name.lastIndexOf('.')>0) {
 				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot
 			}
 			ConsoleUtils.displayDebug("Searching for Security : "+name);
-			try{
+			try {
 				final Field field = Security.class.getField(name);	
-				if(field.isEnumConstant()) {
+				if (field.isEnumConstant()) {
 					ConsoleUtils.displayDebug("Found Security : "+name);
 					ret = (Security)field.get(Security.class);
 				} else {

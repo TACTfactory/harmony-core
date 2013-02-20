@@ -16,6 +16,12 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+
+/**
+ * Annotation defining which name to use as a JoinTable
+ * @author gregg
+ *
+ */
 @Documented
 @Retention(SOURCE)
 @Target(FIELD)

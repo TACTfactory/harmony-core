@@ -16,11 +16,26 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation defining the JoinColumn
+ * @author gregg
+ *
+ */
 @Documented
 @Retention(SOURCE)
 @Target(FIELD)
 @Inherited
 public @interface JoinColumn {
+	
+	/**
+	 * The JoinColumn name
+	 * @return The JoinColumn name
+	 */
 	String name() default "";
+	
+	/**
+	 * The referenced Column name
+	 * @return The referenced Column name
+	 */
 	String referencedColumnName() default Id.COLUMN_ID;
 }

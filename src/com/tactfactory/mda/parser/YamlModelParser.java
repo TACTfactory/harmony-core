@@ -17,9 +17,21 @@ import org.yaml.snakeyaml.Yaml;
 
 import com.tactfactory.mda.utils.ConsoleUtils;
 
+
+/**
+ * YamlModelParser.
+ * Parser for Yaml model description files
+ * @author gregg
+ *
+ */
 public class YamlModelParser {
 	
-    public void loadEntities(final String filename) {
+	
+	/**
+	 * Load the entities in the Yaml file <filename>
+	 * @param filename
+	 */
+    public final void loadEntities(final String filename) {
     	InputStream in = null;
 		try {
 			in = new FileInputStream(filename);

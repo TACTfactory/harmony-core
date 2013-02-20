@@ -51,10 +51,10 @@ public class RelationMetadata extends BaseMetadata {
 		model.put(TagConstant.TYPE, this.type);
 		model.put(TagConstant.FIELD_REF, this.fieldRef);
 		model.put(TagConstant.ENTITY_REF, this.entityRef);
-		if(this.inversedBy!=null) {
+		if (this.inversedBy!=null) {
 			model.put("inversedBy", this.inversedBy);
 		}
-		if(this.mappedBy!=null) {
+		if (this.mappedBy!=null) {
 			model.put("mappedBy", this.mappedBy);
 		}
 		model.put("joinTable", this.joinTable);

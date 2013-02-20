@@ -12,14 +12,15 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-
+/**
+ * All the tests related to the Fixture generation and loading
+ * @author gregg
+ *
+ */
 @RunWith(Suite.class)
 @SuiteClasses({
-	FixtureGlobalTest.class
-		})
-                
+	FixtureGlobalTest.class })
+
 public class AllTests {
-        /*public static void main(String[] args) {
-                JUnitCore.runClasses(new Class[] { AllTests.class });
-        }*/
+
 }

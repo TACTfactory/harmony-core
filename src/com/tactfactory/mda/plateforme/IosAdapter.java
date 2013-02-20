@@ -10,11 +10,13 @@ package com.tactfactory.mda.plateforme;
 
 import com.tactfactory.mda.meta.ClassMetadata;
 
-/** Apple iOS Adapter of project structure */
+/** Apple iOS Adapter of project structure. */
 public final class IosAdapter extends BaseAdapter {
 
-	public IosAdapter()
-	{
+	/**
+	 * Constructor.
+	 */
+	public IosAdapter()	{
 		super();
 		this.project	= "project";
 		this.platform	= "ios";
@@ -23,8 +25,9 @@ public final class IosAdapter extends BaseAdapter {
 	}
 
 
-	/* (non-Javadoc)
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getNameSpace(com.tactfactory.mda.orm.ClassMetadata, java.lang.String)
+	/**
+	 * @see com.tactfactory.mda.plateforme.BaseAdapter#
+	 * getNameSpace(com.tactfactory.mda.orm.ClassMetadata, java.lang.String)
 	 */
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
@@ -32,8 +35,9 @@ public final class IosAdapter extends BaseAdapter {
 		return null;
 	}
 	
-	/* (non-Javadoc)
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getNameSpace(com.tactfactory.mda.orm.ClassMetadata)
+	/** 
+	 * @see com.tactfactory.mda.plateforme.BaseAdapter#
+	 * getNameSpaceEntity(com.tactfactory.mda.orm.ClassMetadata, java.lang.String)
 	 */
 	@Override
 	public String getNameSpaceEntity(final ClassMetadata cm, final String type) {
@@ -41,18 +45,12 @@ public final class IosAdapter extends BaseAdapter {
 		return null;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getViewComponentShow(com.tactfactory.mda.orm.FieldMetadata)
-	 */
 	/*@Override
 	public String getViewComponentShow(FieldMetadata field) {
 		// TODO Auto-generated method stub
 		return null;
 	}*/
 
-	/* (non-Javadoc)
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getViewComponentEdit(com.tactfactory.mda.orm.FieldMetadata)
-	 */
 	/*@Override
 	public String getViewComponentEdit(FieldMetadata field) {
 		// TODO Auto-generated method stub
