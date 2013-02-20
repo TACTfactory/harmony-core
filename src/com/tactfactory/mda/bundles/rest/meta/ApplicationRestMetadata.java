@@ -17,18 +17,19 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
 public class ApplicationRestMetadata extends BaseMetadata{
-	private final String NAME = "rest";
+	private final static String NAME = "rest";
 	public LinkedHashMap<String, ClassMetadata> entities = new LinkedHashMap<String, ClassMetadata>();
 	
 	public ApplicationRestMetadata() {
+		super();
 		this.name = NAME;
 	}
 	
 	@Override
-	public HashMap<String, Object> toMap(BaseAdapter adapter) {
-		HashMap<String, Object> ret = new HashMap<String, Object>();
-		HashMap<String, Object> entitiesMap = new HashMap<String, Object>();
-		for(ClassMetadata cm : this.entities.values()){
+	public HashMap<String, Object> toMap(final BaseAdapter adapter) {
+		final HashMap<String, Object> ret = new HashMap<String, Object>();
+		final HashMap<String, Object> entitiesMap = new HashMap<String, Object>();
+		for(final ClassMetadata cm : this.entities.values()){
 			entitiesMap.put(cm.getName(), cm.toMap(adapter));
 		}
 		ret.put(TagConstant.ENTITIES, entitiesMap);

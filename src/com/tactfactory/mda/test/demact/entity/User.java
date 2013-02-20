@@ -8,10 +8,16 @@
  */
 package com.tactfactory.mda.test.demact.entity;
 
+import java.io.Serializable;
+
 import org.joda.time.DateTime;
 
-import com.tactfactory.mda.annotation.*;
+import com.tactfactory.mda.annotation.Column;
 import com.tactfactory.mda.annotation.Column.Type;
+import com.tactfactory.mda.annotation.Entity;
+import com.tactfactory.mda.annotation.GeneratedValue;
+import com.tactfactory.mda.annotation.Id;
+import com.tactfactory.mda.annotation.Table;
 import com.tactfactory.mda.bundles.rest.annotation.Rest;
 import com.tactfactory.mda.bundles.search.annotation.Searchable;
 import com.tactfactory.mda.bundles.social.annotation.Social;
@@ -24,8 +30,7 @@ import com.tactfactory.mda.bundles.sync.annotation.Sync.Mode;
 @Rest(security=Rest.Security.SESSION, uri="user-uri")
 @Sync(mode=Mode.REAL_TIME)
 @Social
-public class User implements Cloneable {
-	@SuppressWarnings("unused")
+public class User implements Cloneable, Serializable {
 	private static final long serialVersionUID = 7032873279928549706L;
 
 	@Id
@@ -58,17 +63,31 @@ public class User implements Cloneable {
     	this.createdAt = new DateTime();
     }
 	
+	@Override
+	public User clone() throws CloneNotSupportedException{
+		final User u = (User)super.clone();
+		u.id = this.id;
+		u.login = this.login;
+		u.password = this.password;
+		u.firstname = this.firstname;
+		u.lastname = this.lastname;
+		u.createdAt = new DateTime(this.createdAt);
+		u.birthdate = new DateTime(this.birthdate);
+		
+		return u;
+	}
+	
 	/**
 	 * @return the id
 	 */
 	public final int getId() {
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public final void setId(int id) {
+	public final void setId(final int id) {
 		this.id = id;
 	}
 
@@ -76,13 +95,13 @@ public class User implements Cloneable {
 	 * @return the login
 	 */
 	public final String getLogin() {
-		return login;
+		return this.login;
 	}
 
 	/**
 	 * @param login the login to set
 	 */
-	public final void setLogin(String login) {
+	public final void setLogin(final String login) {
 		this.login = login;
 	}
 
@@ -90,13 +109,13 @@ public class User implements Cloneable {
 	 * @return the password
 	 */
 	public final String getPassword() {
-		return password;
+		return this.password;
 	}
 
 	/**
 	 * @param password the password to set
 	 */
-	public final void setPassword(String password) {
+	public final void setPassword(final String password) {
 		this.password = password;
 	}
 
@@ -104,13 +123,13 @@ public class User implements Cloneable {
 	 * @return the firstname
 	 */
 	public final String getFirstname() {
-		return firstname;
+		return this.firstname;
 	}
 
 	/**
 	 * @param firstname the firstname to set
 	 */
-	public final void setFirstname(String firstname) {
+	public final void setFirstname(final String firstname) {
 		this.firstname = firstname;
 	}
 
@@ -118,13 +137,13 @@ public class User implements Cloneable {
 	 * @return the lastname
 	 */
 	public final String getLastname() {
-		return lastname;
+		return this.lastname;
 	}
 
 	/**
 	 * @param lastname the lastname to set
 	 */
-	public final void setLastname(String lastname) {
+	public final void setLastname(final String lastname) {
 		this.lastname = lastname;
 	}
 
@@ -132,13 +151,13 @@ public class User implements Cloneable {
 	 * @return the createdAt
 	 */
 	public final DateTime getCreatedAt() {
-		return createdAt;
+		return this.createdAt;
 	}
 
 	/**
 	 * @param createdAt the createdAt to set
 	 */
-	public final void setCreatedAt(DateTime createdAt) {
+	public final void setCreatedAt(final DateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 	
@@ -146,13 +165,13 @@ public class User implements Cloneable {
 	 * @return the birthdate
 	 */
 	public final DateTime getBirthdate() {
-		return birthdate;
+		return this.birthdate;
 	}
 
 	/**
 	 * @param birthdate the birthdate to set
 	 */
-	public final void setBirthdate(DateTime birthdate) {
+	public final void setBirthdate(final DateTime birthdate) {
 		this.birthdate = birthdate;
 	}
 }

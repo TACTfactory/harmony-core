@@ -8,11 +8,24 @@
  */
 package com.tactfactory.mda.test;
 
-import org.junit.*;
+import org.junit.After;
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
-import com.tactfactory.mda.command.*;
+import com.tactfactory.mda.command.GeneralCommand;
+import com.tactfactory.mda.command.OrmCommand;
+import com.tactfactory.mda.command.ProjectCommand;
 
 public class CoreTest extends CommonTest {
+	
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBefore() throws Exception {
+		CommonTest.setUpBefore();
+	}
 	
 	/**
 	 * @throws java.lang.Exception
@@ -34,11 +47,11 @@ public class CoreTest extends CommonTest {
 	
 	@Test
 	public void loadPlugins() {
-		Assert.assertTrue(!this.harmony.getCommands().isEmpty());
+		Assert.assertTrue(!CommonTest.harmony.getCommands().isEmpty());
 		
-		Assert.assertNotNull(this.harmony.getCommand(GeneralCommand.class));
-		Assert.assertNotNull(this.harmony.getCommand(ProjectCommand.class));
-		Assert.assertNotNull(this.harmony.getCommand(OrmCommand.class));
+		Assert.assertNotNull(CommonTest.harmony.getCommand(GeneralCommand.class));
+		Assert.assertNotNull(CommonTest.harmony.getCommand(ProjectCommand.class));
+		Assert.assertNotNull(CommonTest.harmony.getCommand(OrmCommand.class));
 	}
 	
 	@Test
@@ -46,7 +59,7 @@ public class CoreTest extends CommonTest {
 		System.out.println("\nTest List bundle/command");
 		System.out.println("###############################################################################");
 		
-		this.harmony.findAndExecute(GeneralCommand.LIST, null, null);
+		CommonTest.harmony.findAndExecute(GeneralCommand.LIST, null, null);
 	} 
 	
 	@Test
@@ -54,6 +67,6 @@ public class CoreTest extends CommonTest {
 		System.out.println("\nTest Help");
 		System.out.println("###############################################################################");
 		
-		this.harmony.findAndExecute(GeneralCommand.HELP, null, null);
+		CommonTest.harmony.findAndExecute(GeneralCommand.HELP, null, null);
 	}
 }

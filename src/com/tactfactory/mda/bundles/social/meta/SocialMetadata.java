@@ -9,21 +9,23 @@
 package com.tactfactory.mda.bundles.social.meta;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.tactfactory.mda.meta.BaseMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 
 public class SocialMetadata extends BaseMetadata{	
-	private final String NAME = "social";
+	private final static String NAME = "social";
 	public boolean isEnabled = false;
 	
 	public SocialMetadata() {
+		super();
 		this.name = NAME;
 	}
 	
 	@Override
-	public HashMap<String, Object> toMap(BaseAdapter adapter) {
-		HashMap<String, Object> ret = new HashMap<String, Object>();
+	public Map<String, Object> toMap(final BaseAdapter adapter) {
+		final Map<String, Object> ret = new HashMap<String, Object>();
 		
 		ret.put("isEnabled", this.isEnabled);
 		

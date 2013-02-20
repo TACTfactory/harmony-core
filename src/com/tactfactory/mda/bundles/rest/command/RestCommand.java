@@ -11,13 +11,13 @@ package com.tactfactory.mda.bundles.rest.command;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;
-import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.bundles.rest.parser.RestCompletor;
 import com.tactfactory.mda.bundles.rest.parser.RestParser;
 import com.tactfactory.mda.bundles.rest.template.RestGenerator;
 import com.tactfactory.mda.command.BaseCommand;
+import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
+import com.tactfactory.mda.utils.ConsoleUtils;
 
 @PluginImplementation
 public class RestCommand extends BaseCommand{
@@ -30,19 +30,19 @@ public class RestCommand extends BaseCommand{
 	public final static String ACTION_ADAPTERS = "adapters";
 
 	//commands
-	public static String GENERATE_ADAPTERS	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ADAPTERS;
+	public final static String GENERATE_ADAPTERS	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ADAPTERS;
 
 	@Override
-	public void execute(String action, String[] args, String option) {
+	public void execute(final String action, final String[] args, final String option) {
 		ConsoleUtils.display("> Adapters Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);
 		if (action.equals(GENERATE_ADAPTERS)) {
 			try {
 				this.generateAdapters();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				ConsoleUtils.displayError(e);
 			}
 		}
 	}
@@ -53,12 +53,12 @@ public class RestCommand extends BaseCommand{
 	protected void generateAdapters() {
 
 		this.generateMetas();
-		if(Harmony.metas.entities!=null){
+		if(ApplicationMetadata.INSTANCE.entities!=null){
 			try {
 				new RestGenerator(new AndroidAdapter()).generateAll();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				ConsoleUtils.displayError(e);
 			}
 		}
 	}
@@ -67,7 +67,7 @@ public class RestCommand extends BaseCommand{
 	public void generateMetas(){
 		this.registerParser(new RestParser());
 		super.generateMetas();
-		new RestCompletor().generateApplicationRestMetadata(Harmony.metas);
+		new RestCompletor().generateApplicationRestMetadata(ApplicationMetadata.INSTANCE);
 	}
 	
 	
@@ -80,8 +80,8 @@ public class RestCommand extends BaseCommand{
 	}
 
 	@Override
-	public boolean isAvailableCommand(String command) {
-		return (command.equals(GENERATE_ADAPTERS));
+	public boolean isAvailableCommand(final String command) {
+		return command.equals(GENERATE_ADAPTERS);
 	}
 
 }

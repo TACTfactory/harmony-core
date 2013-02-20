@@ -13,8 +13,14 @@ import java.util.ArrayList;
 
 import org.joda.time.DateTime;
 
-import com.tactfactory.mda.annotation.*;
+import com.tactfactory.mda.annotation.Column;
 import com.tactfactory.mda.annotation.Column.Type;
+import com.tactfactory.mda.annotation.Entity;
+import com.tactfactory.mda.annotation.GeneratedValue;
+import com.tactfactory.mda.annotation.Id;
+import com.tactfactory.mda.annotation.ManyToOne;
+import com.tactfactory.mda.annotation.OneToMany;
+import com.tactfactory.mda.annotation.Table;
 import com.tactfactory.mda.bundles.rest.annotation.Rest;
 import com.tactfactory.mda.bundles.sync.annotation.Sync;
 
@@ -66,13 +72,13 @@ public class Post implements Serializable {
 	 * @return the id
 	 */
 	public final int getId() {
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public final void setId(int id) {
+	public final void setId(final int id) {
 		this.id = id;
 	}
 
@@ -80,13 +86,13 @@ public class Post implements Serializable {
 	 * @return the title
 	 */
 	public final String getTitle() {
-		return title;
+		return this.title;
 	}
 
 	/**
 	 * @param title the title to set
 	 */
-	public final void setTitle(String title) {
+	public final void setTitle(final String title) {
 		this.title = title;
 	}
 
@@ -94,13 +100,13 @@ public class Post implements Serializable {
 	 * @return the content
 	 */
 	public final String getContent() {
-		return content;
+		return this.content;
 	}
 
 	/**
 	 * @param content the content to set
 	 */
-	public final void setContent(String content) {
+	public final void setContent(final String content) {
 		this.content = content;
 	}
 
@@ -108,13 +114,13 @@ public class Post implements Serializable {
 	 * @return the owner
 	 */
 	public final User getOwner() {
-		return owner;
+		return this.owner;
 	}
 
 	/**
 	 * @param owner the owner to set
 	 */
-	public final void setOwner(User owner) {
+	public final void setOwner(final User owner) {
 		this.owner = owner;
 	}
 
@@ -122,13 +128,13 @@ public class Post implements Serializable {
 	 * @return the comments
 	 */
 	public final ArrayList<Comment> getComments() {
-		return comments;
+		return this.comments;
 	}
 
 	/**
 	 * @param comments the comments to set
 	 */
-	public final void setComments(ArrayList<Comment> comments) {
+	public final void setComments(final ArrayList<Comment> comments) {
 		this.comments = comments;
 	}
 
@@ -136,13 +142,13 @@ public class Post implements Serializable {
 	 * @return the createdAt
 	 */
 	public final DateTime getCreatedAt() {
-		return createdAt;
+		return this.createdAt;
 	}
 
 	/**
 	 * @param createdAt the createdAt to set
 	 */
-	public final void setCreatedAt(DateTime createdAt) {
+	public final void setCreatedAt(final DateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 
@@ -150,13 +156,13 @@ public class Post implements Serializable {
 	 * @return the updatedAt
 	 */
 	public final DateTime getUpdatedAt() {
-		return updatedAt;
+		return this.updatedAt;
 	}
 
 	/**
 	 * @param updatedAt the updatedAt to set
 	 */
-	public final void setUpdatedAt(DateTime updatedAt) {
+	public final void setUpdatedAt(final DateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 
@@ -164,13 +170,13 @@ public class Post implements Serializable {
 	 * @return the expiresAt
 	 */
 	public final DateTime getExpiresAt() {
-		return expiresAt;
+		return this.expiresAt;
 	}
 
 	/**
 	 * @param expiresAt the expiresAt to set
 	 */
-	public final void setExpiresAt(DateTime expiresAt) {
+	public final void setExpiresAt(final DateTime expiresAt) {
 		this.expiresAt = expiresAt;
 	}
 }

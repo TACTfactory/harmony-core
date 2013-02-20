@@ -8,9 +8,9 @@
  */
 package com.tactfactory.mda.command;
 
-import com.tactfactory.mda.ConsoleUtils;
-
 import net.xeoh.plugins.base.annotations.PluginImplementation;
+
+import com.tactfactory.mda.utils.ConsoleUtils;
 
 @PluginImplementation
 public class RouterCommand extends BaseCommand {
@@ -37,13 +37,13 @@ public class RouterCommand extends BaseCommand {
 	}
 
 	@Override
-	public void execute(String action, String[] args, String option) {
+	public void execute(final String action, final String[] args, final String option) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public boolean isAvailableCommand(String command) {
+	public boolean isAvailableCommand(final String command) {
 		// TODO Auto-generated method stub
 		return false;
 	}

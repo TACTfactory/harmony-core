@@ -19,15 +19,31 @@ public class FixtureMetadata extends BaseMetadata{
 	public String type;
 	
 	public FixtureMetadata(){
+		super();
 		this.name = NAME;
 	}
 	
 	@Override
-	public HashMap<String, Object> toMap(BaseAdapter adapter) {
-		HashMap<String, Object> model = new HashMap<String, Object>();
-			model.put("enabled", enabled);
-			model.put("type", type);
+	public HashMap<String, Object> toMap(final BaseAdapter adapter) {
+		final HashMap<String, Object> model = new HashMap<String, Object>();
+			model.put("enabled", this.enabled);
+			model.put("type", this.type);
 		return model;
 	}
 
+	public boolean getEnabled(){
+		return this.enabled;
+	}
+	
+	public void setEnabled(final boolean enabled){
+		this.enabled = enabled;
+	}
+	
+	public String getType(){
+		return this.type;
+	}
+	
+	public void setType(final String type){
+		this.type = type;
+	}
 }

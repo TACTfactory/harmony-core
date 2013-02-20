@@ -10,6 +10,8 @@ package com.tactfactory.mda.meta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
@@ -24,10 +26,10 @@ public class RelationMetadata extends BaseMetadata {
 	public String field;
 	
 	/** The related entity */
-	public String entity_ref;
+	public String entityRef;
 	
 	/** The related entity's field which will be used for the relation*/
-	public ArrayList<String> field_ref = new ArrayList<String>();
+	public List<String> fieldRef = new ArrayList<String>();
 
 	/** Inversed by (in case of OneToMany)*/
 	public String mappedBy;
@@ -43,16 +45,18 @@ public class RelationMetadata extends BaseMetadata {
 	 * @return the generated HashMap
 	 */
 	@Override
-	public HashMap<String, Object> toMap(BaseAdapter adapter){
-		HashMap<String, Object> model = new HashMap<String, Object>();
+	public Map<String, Object> toMap(final BaseAdapter adapter){
+		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put(TagConstant.NAME, this.name);
 		model.put(TagConstant.TYPE, this.type);
-		model.put(TagConstant.FIELD_REF, this.field_ref);
-		model.put(TagConstant.ENTITY_REF, this.entity_ref);
-		if(inversedBy!=null)
+		model.put(TagConstant.FIELD_REF, this.fieldRef);
+		model.put(TagConstant.ENTITY_REF, this.entityRef);
+		if(this.inversedBy!=null) {
 			model.put("inversedBy", this.inversedBy);
-		if(mappedBy!=null)
+		}
+		if(this.mappedBy!=null) {
 			model.put("mappedBy", this.mappedBy);
+		}
 		model.put("joinTable", this.joinTable);
 		
 		return model;

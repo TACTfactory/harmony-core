@@ -12,9 +12,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
-import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.meta.TranslationMetadata.Group;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
@@ -29,44 +30,44 @@ public class ClassMetadata extends BaseMetadata {
 	public String space = "";
 
 	/** List of fields of entity class*/
-	public LinkedHashMap<String, FieldMetadata> fields = new LinkedHashMap<String, FieldMetadata>();
+	public Map<String, FieldMetadata> fields = new LinkedHashMap<String, FieldMetadata>();
 
 	/** List of ids of entity class*/
-	public LinkedHashMap<String, FieldMetadata> ids = new LinkedHashMap<String, FieldMetadata>();
+	public Map<String, FieldMetadata> ids = new LinkedHashMap<String, FieldMetadata>();
 	
 	/** List of relations of entity class*/
-	public LinkedHashMap<String, FieldMetadata> relations = new LinkedHashMap<String, FieldMetadata>();
+	public Map<String, FieldMetadata> relations = new LinkedHashMap<String, FieldMetadata>();
 		
 	/** Class inherited by the entity class or null if none*/
-	public String extendType = null;
+	public String extendType;
 	
 	/** Implemented class list of the entity class */
-	public ArrayList<String> implementTypes = new ArrayList<String>();
+	public List<String> implementTypes = new ArrayList<String>();
 	
 	/** Implemented class list of the entity class */
-	public ArrayList<MethodMetadata> methods = new ArrayList<MethodMetadata>();
+	public List<MethodMetadata> methods = new ArrayList<MethodMetadata>();
 
 	/** Imports of the class */
-	public ArrayList<String> imports = new ArrayList<String>();
+	public List<String> imports = new ArrayList<String>();
 	
 	/** Add Component String of field */
-	public void makeString(String componentName) {
-		String key = name.toLowerCase() + "_"+ componentName.toLowerCase();
-		TranslationMetadata.addDefaultTranslation(key, name, Group.MODEL);
+	public void makeString(final String componentName) {
+		final String key = this.name.toLowerCase() + "_"+ componentName.toLowerCase(Locale.ENGLISH);
+		TranslationMetadata.addDefaultTranslation(key, this.name, Group.MODEL);
 	}
 
 	
 	/**
-	 * Transform the class to a map of strings and maps (for each field) given an adapter
+	 * Transform the class to a map given an adapter
 	 * @param adapter The adapter used to customize the fields
 	 * @return the map
 	 */
 	@Override
-	public HashMap<String, Object> toMap(BaseAdapter adapter){
-		HashMap<String, Object> model = new HashMap<String, Object>();
+	public Map<String, Object> toMap(final BaseAdapter adapter){
+		final Map<String, Object> model = new HashMap<String, Object>();
 		
 		model.put(TagConstant.SPACE,			this.space);
-		model.put(TagConstant.PROJECT_NAME,		Harmony.metas.name);
+		//model.put(TagConstant.PROJECT_NAME,		Harmony.metas.name);
 		model.put(TagConstant.NAME,				this.name);
 		model.put(TagConstant.EXTENDS,			this.extendType);
 		model.put(TagConstant.CONTROLLER_NAMESPACE, adapter.getNameSpaceEntity(this, adapter.getController()));
@@ -77,11 +78,12 @@ public class ClassMetadata extends BaseMetadata {
 		model.put(TagConstant.RELATIONS,		this.toFieldArray(this.relations.values(), adapter));
 		model.put(TagConstant.INTERNAL,			"false");
 		
-		if(this.internal)
+		if(this.internal) {
 			model.put(TagConstant.INTERNAL,		"true");
+		}
 		
-		HashMap<String, Object> optionsModel = new HashMap<String, Object>();
-		for(Metadata option : options.values()){
+		final Map<String, Object> optionsModel = new HashMap<String, Object>();
+		for(final Metadata option : this.options.values()){
 			optionsModel.put(option.getName(), option.toMap(adapter));
 		}
 		model.put(TagConstant.OPTIONS, optionsModel);
@@ -89,19 +91,19 @@ public class ClassMetadata extends BaseMetadata {
 		return model;
 	}
 	
-	private ArrayList<Map<String,Object>> toFieldArray(Collection<FieldMetadata> c, BaseAdapter adapter){
-		ArrayList<Map<String,Object>> result = new ArrayList<Map<String,Object>>();
+	private List<Map<String,Object>> toFieldArray(final Collection<FieldMetadata> c, final BaseAdapter adapter){
+		final List<Map<String,Object>> result = new ArrayList<Map<String,Object>>();
 		Map<String, Object> subField = null;
 		
-		for (FieldMetadata field : c) {
-			field.customize(adapter);
+		for (final FieldMetadata field : c) {
+			//field.customize(adapter);
 			
-			subField = new HashMap<String, Object>();
 			subField = field.toMap(adapter);
 			
 			// Add field translate
-			if (!field.internal && !field.hidden)
+			if (!field.internal && !field.hidden) {
 				field.makeString("label");
+			}
 			
 			result.add(subField);
 		}

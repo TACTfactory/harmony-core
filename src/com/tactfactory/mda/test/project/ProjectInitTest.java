@@ -12,6 +12,7 @@ import java.io.File;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
@@ -24,6 +25,16 @@ import com.tactfactory.mda.utils.FileUtils;
  *
  */
 public class ProjectInitTest extends CommonTest {
+	private final static String SHARP_DELIMITOR = "#############################################################################";
+
+	
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBefore() throws Exception {
+		CommonTest.setUpBefore();
+	}
 
 	/**
 	 * @throws java.lang.Exception
@@ -42,48 +53,48 @@ public class ProjectInitTest extends CommonTest {
 	public void tearDown() throws Exception {
 		super.tearDown();
 		
-		File dirproj = new File(String.format("%s/android", Harmony.pathProject));
+		final File dirproj = new File(String.format("%s/android", Harmony.PATH_PROJECT));
 		FileUtils.deleteRecursive(dirproj);
 	}
 	
 	@Test
  	public void initAndroid() {
 		System.out.println("\nTest Project init Android");
-		System.out.println("###############################################################################");
+		System.out.println(SHARP_DELIMITOR);
 		
-		this.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+		CommonTest.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		
-		this.hasFindFile("android/AndroidManifest.xml");
-		this.hasFindFile("android/build.xml");
-		this.hasFindFile("android/lint.xml");
+		CommonTest.hasFindFile("android/AndroidManifest.xml");
+		CommonTest.hasFindFile("android/build.xml");
+		CommonTest.hasFindFile("android/lint.xml");
 		//this.isFindFile("android/local.properties");
-		this.hasFindFile("android/proguard-project.txt");
-		this.hasFindFile("android/project.properties");
+		CommonTest.hasFindFile("android/proguard-project.txt");
+		CommonTest.hasFindFile("android/project.properties");
 		
-		this.hasFindFile("android/src");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/entity");
+		CommonTest.hasFindFile("android/src");
+		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact");
+		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/entity");
 		//this.isFindFile("android/src/com/tactfactory/mda/test/demact/view/HomeActivity.java");
 		//this.isFindFile("android/res/");
 		
-		this.hasFindFile("android/libs");
-		this.hasFindFile("android/libs/android-support-v4.jar");
-		this.hasFindFile("android/libs/harmony.jar");
-		this.hasFindFile("android/libs/joda-time-2.1.jar");
+		CommonTest.hasFindFile("android/libs");
+		//CommonTest.hasFindFile("android/libs/android-support-v4.jar");
+		CommonTest.hasFindFile("android/libs/harmony.jar");
+		CommonTest.hasFindFile("android/libs/joda-time-2.1.jar");
 		
-		this.hasFindFile("android/res");
-		this.hasFindFile("android/res/values");
-		this.hasFindFile("android/res/values/configs.xml");
-		this.hasFindFile("android/res/values/strings.xml");
+		CommonTest.hasFindFile("android/res");
+		CommonTest.hasFindFile("android/res/values");
+		CommonTest.hasFindFile("android/res/values/configs.xml");
+		CommonTest.hasFindFile("android/res/values/strings.xml");
 	}
 
 	@Ignore
 	@Test
 	public void initIphone() {
 		System.out.println("\nTest Project init iphone");
-		System.out.println("###############################################################################");
+		System.out.println(SHARP_DELIMITOR);
 		
-		this.harmony.findAndExecute(ProjectCommand.INIT_IOS, null, null);
+		CommonTest.harmony.findAndExecute(ProjectCommand.INIT_IOS, null, null);
 		
 		// TODO add asserts (for folder/file exist..)
 	}
@@ -92,9 +103,9 @@ public class ProjectInitTest extends CommonTest {
 	@Test
 	public void initRim() {
 		System.out.println("\nTest Project init RIM");
-		System.out.println("###############################################################################");
+		System.out.println(SHARP_DELIMITOR);
 		
-		this.harmony.findAndExecute(ProjectCommand.INIT_RIM, null, null);
+		CommonTest.harmony.findAndExecute(ProjectCommand.INIT_RIM, null, null);
 		
 		// TODO add asserts (for folder/file exist..)
 	}
@@ -103,10 +114,10 @@ public class ProjectInitTest extends CommonTest {
 	@Test
 	public void initWinphone() {
 		System.out.println("\nTest Project init Windows Phone");
-		System.out.println("###############################################################################");
+		System.out.println(SHARP_DELIMITOR);
 		
 		
-		this.harmony.findAndExecute(ProjectCommand.INIT_WINPHONE, null, null);
+		CommonTest.harmony.findAndExecute(ProjectCommand.INIT_WINPHONE, null, null);
 		
 		// TODO add asserts (for folder/file exist..)
 	}

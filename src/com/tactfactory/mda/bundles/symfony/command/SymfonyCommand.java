@@ -1,16 +1,24 @@
+/**
+ * This file is part of the Harmony package.
+ *
+ * (c) Gregg Cesarine <gregg.cesarine@tactfactory.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.tactfactory.mda.bundles.symfony.command;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;
-import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.bundles.rest.parser.RestCompletor;
 import com.tactfactory.mda.bundles.rest.parser.RestParser;
 import com.tactfactory.mda.bundles.symfony.adapter.SymfonyAdapter;
 import com.tactfactory.mda.bundles.symfony.template.WebGenerator;
 import com.tactfactory.mda.command.BaseCommand;
+import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
+import com.tactfactory.mda.utils.ConsoleUtils;
 
 @PluginImplementation
 public class SymfonyCommand extends BaseCommand{
@@ -29,14 +37,14 @@ public class SymfonyCommand extends BaseCommand{
 	public final static String ACTION_REPOSITORIES = "repositories";
 
 	//commands
-	public static String PROJECT_INIT = BUNDLE + SEPARATOR + SUBJECT_PROJECT + SEPARATOR + ACTION_INIT;
-	public static String GENERATE_ENTITIES = BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_ENTITIES;
-	public static String GENERATE_REPOSITORIES = BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_REPOSITORIES;
-	public static String INSTALL_SYMFONY = BUNDLE + SEPARATOR + SUBJECT_SYMFONY + SEPARATOR + ACTION_INSTALL;
-	public static String INSTALL_BUNDLES = BUNDLE + SEPARATOR + SUBJECT_BUNDLES + SEPARATOR + ACTION_INSTALL;
+	public final static String PROJECT_INIT = BUNDLE + SEPARATOR + SUBJECT_PROJECT + SEPARATOR + ACTION_INIT;
+	public final static String GENERATE_ENTITIES = BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_ENTITIES;
+	public final static String GENERATE_REPOSITORIES = BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_REPOSITORIES;
+	public final static String INSTALL_SYMFONY = BUNDLE + SEPARATOR + SUBJECT_SYMFONY + SEPARATOR + ACTION_INSTALL;
+	public final static String INSTALL_BUNDLES = BUNDLE + SEPARATOR + SUBJECT_BUNDLES + SEPARATOR + ACTION_INSTALL;
 
 	@Override
-	public void execute(String action, String[] args, String option) {
+	public void execute(final String action, final String[] args, final String option) {
 		ConsoleUtils.display("> Adapters Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);
@@ -59,12 +67,12 @@ public class SymfonyCommand extends BaseCommand{
 	protected void initProject() {
 
 		this.generateMetas();
-		if(Harmony.metas.entities!=null){
+		if(ApplicationMetadata.INSTANCE.entities!=null){
 			try {
 				new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).initProject();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				ConsoleUtils.displayError(e);
 			}
 		}
 	}
@@ -75,12 +83,12 @@ public class SymfonyCommand extends BaseCommand{
 	protected void generateEntities() {
 
 		this.generateMetas();
-		if(Harmony.metas.entities!=null){
+		if(ApplicationMetadata.INSTANCE.entities!=null){
 			try {
 				new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).generateEntities();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				ConsoleUtils.displayError(e);
 			}
 		}
 	}
@@ -91,12 +99,12 @@ public class SymfonyCommand extends BaseCommand{
 	protected void generateWebRepositories() {
 
 		this.generateMetas();
-		if(Harmony.metas.entities!=null){
+		if(ApplicationMetadata.INSTANCE.entities!=null){
 			try {
 				new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).generateWebControllers();
-			} catch (Exception e) {
+			} catch (final Exception e) {
 				// TODO Auto-generated catch block
-				e.printStackTrace();
+				ConsoleUtils.displayError(e);
 			}
 		}
 	}
@@ -107,8 +115,8 @@ public class SymfonyCommand extends BaseCommand{
 	protected void installSymfony() {
 		try {
 			new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).installSymfony();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (final Exception e) {
+			ConsoleUtils.displayError(e);
 		}
 	}
 	
@@ -118,8 +126,8 @@ public class SymfonyCommand extends BaseCommand{
 	protected void installBundles() {
 		try {
 			new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).installBundles();
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (final Exception e) {
+			ConsoleUtils.displayError(e);
 		}
 	}
 	
@@ -127,7 +135,7 @@ public class SymfonyCommand extends BaseCommand{
 	public void generateMetas(){
 		this.registerParser(new RestParser());
 		super.generateMetas();
-		new RestCompletor().generateApplicationRestMetadata(Harmony.metas);
+		new RestCompletor().generateApplicationRestMetadata(ApplicationMetadata.INSTANCE);
 	}
 	
 	
@@ -144,12 +152,12 @@ public class SymfonyCommand extends BaseCommand{
 	}
 
 	@Override
-	public boolean isAvailableCommand(String command) {
-		return (command.equals(PROJECT_INIT)||
+	public boolean isAvailableCommand(final String command) {
+		return  command.equals(PROJECT_INIT)||
 				command.equals(INSTALL_BUNDLES)||
 				command.equals(INSTALL_SYMFONY)||
 				command.equals(GENERATE_ENTITIES)||
-				command.equals(GENERATE_REPOSITORIES));
+				command.equals(GENERATE_REPOSITORIES);
 	}
 
 }

@@ -10,10 +10,11 @@ package com.tactfactory.mda.utils;
 
 import java.io.File;
 
-public class OsUtil {
+public abstract class OsUtil {
+	private final static String GENERIC = "generic";
+	private final static char BEGIN = 'c';
+	private final static char END = 'z';
 
-	private OsUtil() {
-	}
 
 	/** Return Os name */
 	public static String getOsName() {
@@ -22,46 +23,51 @@ public class OsUtil {
 
 	/** Return Platform type (win32, linux, solaris, mac, or generic) */
 	public static String platform() {
-		String osname = System.getProperty("os.name", "generic").toLowerCase();
+		String ret = GENERIC;
+		final String osname = System.getProperty("os.name", GENERIC).toLowerCase();
 		if (osname.startsWith("windows")) {
-			return "win32";
+			ret = "win32";
 		}
 		else if (osname.startsWith("linux")) {
-			return "linux";
+			ret = "linux";
 		}
 		else if (osname.startsWith("sunos")) {
-			return "solaris";
+			ret = "solaris";
 		}
 		else if (osname.startsWith("mac") || osname.startsWith("darwin")) {
-			return "mac";
+			ret = "mac";
 		}
-		else return "generic";
+		return ret;
 	}
 
-	/** warning! only gives JRE architecture, on x64 machine with x86 JRE installed, prints 'x86' */
+	/** warning! only gives JRE architecture, 
+	 * on x64 machine with x86 JRE installed, prints 'x86' */
 	public static String getArch()
 	{
-		return System.getProperty("os.arch", "generic");
+		return System.getProperty("os.arch", GENERIC);
 	}
 	
 	public static boolean isX64()
 	{
-		if (!isWindows()) { return false; }
 		boolean is64bit = false;
-		if (System.getProperty("os.name").contains("Windows")) {
-		    is64bit = (System.getenv("ProgramFiles(x86)") != null);
+		if (isWindows()) {
+			if (System.getProperty("os.name").contains("Windows")) {
+			    is64bit = System.getenv("ProgramFiles(x86)") != null;
+			} else {
+			    is64bit = System.getProperty("os.arch").indexOf("64") != -1;
+			}
 		} else {
-		    is64bit = (System.getProperty("os.arch").indexOf("64") != -1);
+			is64bit = false;
 		}
 		return is64bit;
 	}
 	
 	public static boolean isWindows() {
-		return (getOsName().toLowerCase().indexOf("windows") >= 0);
+		return getOsName().toLowerCase().contains("windows");
 	}
 
 	public static boolean isLinux() {
-		return getOsName().toLowerCase().indexOf("linux") >= 0;
+		return getOsName().toLowerCase().contains("linux");
 	}
 
 	public static boolean isMac() {
@@ -76,44 +82,40 @@ public class OsUtil {
 
 	/** return windows system drive */
 	public static String findWindowsSystemDrive() {
-		if (!isWindows()) { return null; }
 		String sysdrive = null;
-		if (System.getProperty("java.version", "").startsWith("1.5.")) {
+		if (isWindows() && System.getProperty("java.version", "").startsWith("1.5.")) {
 			// System.getEnv(String name) is deprecated and throws java.lang.Error
 			// in java 1.2 through 1.4. but un-deprecated in 1.5
-			sysdrive = System.getenv("SYSTEMDRIVE");
+			sysdrive = System.getenv("SYSTEMDRIVE");	
 		}
 		return sysdrive;
 	}
 
 	/** return windows system root folder */
 	public static String findWindowsSystemRoot() {
-		if (!isWindows()) { return null; }
-
-		if (System.getProperty("java.version", "").startsWith("1.5.")) {
-			// System.getEnv(String name) is deprecated and throws java.lang.Error
-			// in java 1.2 through 1.4. but un-deprecated in 1.5
-			String root = System.getenv("SYSTEMROOT");
-			if (root != null) { return root; }
-		}
-		else {
-			// try to find it by looking at the file system
-			final char begin = 'c';
-			final char end = 'z';
-	
-			for (char drive = begin; drive < end; drive++) {
-				File root = new File(drive + ":\\WINDOWS");
-				if (root.exists() && root.isDirectory()){
-					return root.getAbsolutePath().toString();
-				}
-	
-				root = new File(drive + ":\\WINNT");
-				if (root.exists() && root.isDirectory()) {
-					return root.getAbsolutePath().toString();
+		String sysRoot = null;
+		if (isWindows()) { 
+			if (System.getProperty("java.version", "").startsWith("1.5.")) {
+				// System.getEnv(String name) is deprecated and throws java.lang.Error
+				// in java 1.2 through 1.4. but un-deprecated in 1.5
+				sysRoot = System.getenv("SYSTEMROOT");
+			}
+			else {
+				// try to find it by looking at the file system
+				for (char drive = OsUtil.BEGIN; drive < OsUtil.END; drive++) {
+					File root = new File(drive + ":\\WINDOWS");
+					if (root.exists() && root.isDirectory()){
+						sysRoot = root.getAbsolutePath().toString();
+					}
+		
+					root = new File(drive + ":\\WINNT");
+					if (root.exists() && root.isDirectory()) {
+						sysRoot = root.getAbsolutePath().toString();
+					}
 				}
 			}
 		}
-		return null;
+		return sysRoot;
 	}
 }
 
@@ -674,7 +676,7 @@ public class OsUtil {
 //
 //
 //
-// --------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 //
 //
 // Other Unix Systems

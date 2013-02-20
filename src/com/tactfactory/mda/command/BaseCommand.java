@@ -13,12 +13,12 @@ import japa.parser.ast.CompilationUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.Harmony;
-import com.tactfactory.mda.meta.ClassCompletor;
+import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.parser.BaseParser;
+import com.tactfactory.mda.parser.ClassCompletor;
 import com.tactfactory.mda.parser.JavaModelParser;
+import com.tactfactory.mda.utils.ConsoleUtils;
 
 /** 
  * Common Command structure 
@@ -37,34 +37,35 @@ public abstract class BaseCommand implements Command {
 	public void generateMetas(){
 		ConsoleUtils.display(">> Analyse Models...");
 		this.javaModelParser = new JavaModelParser();
-		for(BaseParser parser : this.registeredParsers)
+		for(final BaseParser parser : this.registeredParsers){
 			this.javaModelParser.registerParser(parser);
+		}
 		// Parse models and load entities into CompilationUnits
 		try {
 			this.javaModelParser.loadEntities();
-		} catch(Exception e) {
+		} catch(final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 
 		// Convert CompilationUnits entities to ClassMetaData
 		if (this.javaModelParser.getEntities().size() > 0) {
-			for (CompilationUnit mclass : this.javaModelParser.getEntities()) {
+			for (final CompilationUnit mclass : this.javaModelParser.getEntities()) {
 				this.javaModelParser.parse(mclass);
 			}
 	
 			// Generate views from MetaData 
 			if (this.javaModelParser.getMetas().size() > 0) {				
-				for (ClassMetadata meta : this.javaModelParser.getMetas()) {
-					Harmony.metas.entities.put(meta.name, meta);
+				for (final ClassMetadata meta : this.javaModelParser.getMetas()) {
+					ApplicationMetadata.INSTANCE.entities.put(meta.name, meta);
 				}
-				new ClassCompletor(Harmony.metas.entities).execute();
+				new ClassCompletor(ApplicationMetadata.INSTANCE.entities).execute();
 			}
 		} else {
 			ConsoleUtils.displayWarning("No entities found in entity package!");
 		}
 	}
 	
-	public void registerParser(BaseParser parser){
+	public void registerParser(final BaseParser parser){
 		this.registeredParsers.add(parser);
 	}
 }

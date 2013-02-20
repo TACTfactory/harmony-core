@@ -24,14 +24,15 @@ public class SyncMetadata extends BaseMetadata{
 	public int priority = 1;
 	
 	public SyncMetadata(){
+		super();
 		this.name = NAME;
 	}
 	@Override
-	public HashMap<String, Object> toMap(BaseAdapter adapter) {
-		HashMap<String, Object> model = new HashMap<String, Object>();
-		model.put(TagConstant.LEVEL, level.getValue());
-		model.put(TagConstant.MODE, mode.getValue());
-		model.put(TagConstant.PRIORITY, priority);
+	public HashMap<String, Object> toMap(final BaseAdapter adapter) {
+		final HashMap<String, Object> model = new HashMap<String, Object>();
+		model.put(TagConstant.LEVEL, this.level.getValue());
+		model.put(TagConstant.MODE, this.mode.getValue());
+		model.put(TagConstant.PRIORITY, this.priority);
 		return model;
 	}
 

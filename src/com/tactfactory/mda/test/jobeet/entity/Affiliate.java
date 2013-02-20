@@ -3,7 +3,12 @@ package com.tactfactory.mda.test.jobeet.entity;
 import java.util.ArrayList;
 import java.util.Date;
 
-import com.tactfactory.mda.annotation.*;
+import com.tactfactory.mda.annotation.Column;
+import com.tactfactory.mda.annotation.Entity;
+import com.tactfactory.mda.annotation.GeneratedValue;
+import com.tactfactory.mda.annotation.Id;
+import com.tactfactory.mda.annotation.ManyToMany;
+import com.tactfactory.mda.annotation.Table;
 
 @Table
 @Entity
@@ -35,13 +40,13 @@ public class Affiliate {
 	 * @return the id
 	 */
 	public final int getId() {
-		return id;
+		return this.id;
 	}
 
 	/**
 	 * @param id the id to set
 	 */
-	public final void setId(int id) {
+	public final void setId(final int id) {
 		this.id = id;
 	}
 
@@ -49,13 +54,13 @@ public class Affiliate {
 	 * @return the url
 	 */
 	public final String getUrl() {
-		return url;
+		return this.url;
 	}
 
 	/**
 	 * @param url the url to set
 	 */
-	public final void setUrl(String url) {
+	public final void setUrl(final String url) {
 		this.url = url;
 	}
 
@@ -63,13 +68,13 @@ public class Affiliate {
 	 * @return the email
 	 */
 	public final String getEmail() {
-		return email;
+		return this.email;
 	}
 
 	/**
 	 * @param email the email to set
 	 */
-	public final void setEmail(String email) {
+	public final void setEmail(final String email) {
 		this.email = email;
 	}
 
@@ -77,13 +82,13 @@ public class Affiliate {
 	 * @return the token
 	 */
 	public final String getToken() {
-		return token;
+		return this.token;
 	}
 
 	/**
 	 * @param token the token to set
 	 */
-	public final void setToken(String token) {
+	public final void setToken(final String token) {
 		this.token = token;
 	}
 
@@ -91,13 +96,13 @@ public class Affiliate {
 	 * @return the isActivated
 	 */
 	public final boolean isActivated() {
-		return isActivated;
+		return this.isActivated;
 	}
 
 	/**
 	 * @param isActivated the isActivated to set
 	 */
-	public final void setActivated(boolean isActivated) {
+	public final void setActivated(final boolean isActivated) {
 		this.isActivated = isActivated;
 	}
 
@@ -105,27 +110,27 @@ public class Affiliate {
 	 * @return the createdAt
 	 */
 	public final Date getCreatedAt() {
-		return createdAt;
+		return new Date(this.createdAt.getTime());
 	}
 
 	/**
 	 * @param createdAt the createdAt to set
 	 */
-	public final void setCreatedAt(Date createdAt) {
-		this.createdAt = createdAt;
+	public final void setCreatedAt(final Date createdAt) {
+		this.createdAt = new Date(createdAt.getTime());
 	}
 
 	/**
 	 * @return the categories
 	 */
 	public final ArrayList<Category> getCategories() {
-		return categories;
+		return this.categories;
 	}
 
 	/**
 	 * @param categories the categories to set
 	 */
-	public final void setCategories(ArrayList<Category> categories) {
+	public final void setCategories(final ArrayList<Category> categories) {
 		this.categories = categories;
 	}
 

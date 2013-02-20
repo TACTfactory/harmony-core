@@ -8,18 +8,15 @@
  */
 package com.tactfactory.mda.template;
 
-import java.util.Map;
-
-import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
 public class TestDBGenerator extends BaseGenerator {
 	protected String localNameSpace;
-	protected Map<String, Object> entities;
 	
-	public TestDBGenerator(BaseAdapter adapter) throws Exception {
+	public TestDBGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
@@ -29,7 +26,7 @@ public class TestDBGenerator extends BaseGenerator {
 		
 		this.initTestAndroid();
 	
-		for(ClassMetadata cm : this.appMetas.entities.values()){
+		for(final ClassMetadata cm : this.appMetas.entities.values()){
 			if(!cm.internal && !cm.fields.isEmpty()){
 				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getTest());
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
@@ -57,7 +54,7 @@ public class TestDBGenerator extends BaseGenerator {
 					"%sTestDB.java",
 					false);
 
-		} catch (Exception e) {
+		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
@@ -68,14 +65,14 @@ public class TestDBGenerator extends BaseGenerator {
 	 * @param template Template path file. <br/>For list activity is "TemplateListActivity.java"
 	 * @param filename
 	 */
-	private void makeSourceTest(String template, String filename, boolean override) {
-		String fullFilePath = String.format("%s%s/%s",
+	private void makeSourceTest(final String template, final String filename, final boolean override) {
+		final String fullFilePath = String.format("%s%s/%s",
 						this.adapter.getTestPath(),
 						PackageUtils.extractPath(String.format(
 								"%s/%s", this.adapter.getSource(), this.localNameSpace)).toLowerCase(),
 						String.format(filename, this.datamodel.get(TagConstant.CURRENT_ENTITY)));
 		
-		String fullTemplatePath = String.format("%s%s",
+		final String fullTemplatePath = String.format("%s%s",
 					this.adapter.getTemplateTestsPath(),
 					template);
 		
@@ -99,8 +96,8 @@ public class TestDBGenerator extends BaseGenerator {
 			} else {
 				ConsoleUtils.displayError(new Exception("Init Test Android Project Fail!"));
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (final Exception e) {
+			ConsoleUtils.displayError(e);
 		}
 		return result;
 	}

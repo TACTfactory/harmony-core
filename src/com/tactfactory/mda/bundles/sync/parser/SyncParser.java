@@ -8,8 +8,6 @@
  */
 package com.tactfactory.mda.bundles.sync.parser;
 
-import java.util.List;
-
 import japa.parser.ast.ImportDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
@@ -19,6 +17,8 @@ import japa.parser.ast.expr.IntegerLiteralExpr;
 import japa.parser.ast.expr.MemberValuePair;
 import japa.parser.ast.expr.NormalAnnotationExpr;
 import japa.parser.ast.expr.StringLiteralExpr;
+
+import java.util.List;
 
 import com.tactfactory.mda.bundles.sync.annotation.Sync;
 import com.tactfactory.mda.bundles.sync.meta.SyncMetadata;
@@ -35,20 +35,20 @@ public class SyncParser extends BaseParser{
 	private static final String ANNOT_SYNC_PRIORITY = "priority";
 
 	@Override
-	public void visitClass(ClassOrInterfaceDeclaration n, ClassMetadata meta) {
+	public void visitClass(final ClassOrInterfaceDeclaration n, final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitClassAnnotation(ClassMetadata cm, AnnotationExpr fieldAnnot) {
+	public void visitClassAnnotation(final ClassMetadata cm, final AnnotationExpr fieldAnnot) {
 		if(fieldAnnot.getName().toString().equals(ANNOT_SYNC)){
 			// Parse Sync arguments
-			SyncMetadata sm = new SyncMetadata();
+			final SyncMetadata sm = new SyncMetadata();
 			if (fieldAnnot instanceof NormalAnnotationExpr) {
-				NormalAnnotationExpr norm = (NormalAnnotationExpr)fieldAnnot;
-				List<MemberValuePair> pairs = norm.getPairs();
-				for(MemberValuePair pair : pairs){
+				final NormalAnnotationExpr norm = (NormalAnnotationExpr)fieldAnnot;
+				final List<MemberValuePair> pairs = norm.getPairs();
+				for(final MemberValuePair pair : pairs){
 					if(pair.getName().equals(ANNOT_SYNC_PRIORITY)){
 						//TODO : Generate warning if type not recognized
 						int priority  = 0;
@@ -88,7 +88,7 @@ public class SyncParser extends BaseParser{
 			cm.options.put(SYNC, sm);
 			
 			// Update fields of entity (fields of extends base)
-			FieldMetadata serverId = new FieldMetadata(cm);
+			final FieldMetadata serverId = new FieldMetadata(cm);
 			serverId.name = "serverId";
 			serverId.columnName = "serverId";
 			serverId.type = "integer";
@@ -97,7 +97,7 @@ public class SyncParser extends BaseParser{
 			serverId.nullable = true;
 			cm.fields.put(serverId.name, serverId);
 			
-			FieldMetadata sync_dtag = new FieldMetadata(cm);
+			final FieldMetadata sync_dtag = new FieldMetadata(cm);
 			sync_dtag.name = "sync_dtag";
 			sync_dtag.columnName = "sync_dtag";
 			sync_dtag.type = "boolean";
@@ -106,7 +106,7 @@ public class SyncParser extends BaseParser{
 			sync_dtag.nullable = false;
 			cm.fields.put(sync_dtag.name, sync_dtag);
 			
-			FieldMetadata sync_udate = new FieldMetadata(cm);
+			final FieldMetadata sync_udate = new FieldMetadata(cm);
 			sync_udate.name = "sync_uDate";
 			sync_udate.columnName = "sync_uDate";
 			sync_udate.type = "datetime";
@@ -119,26 +119,26 @@ public class SyncParser extends BaseParser{
 	}
 
 	@Override
-	public void visitField(FieldDeclaration field, ClassMetadata meta) {
+	public void visitField(final FieldDeclaration field, final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitFieldAnnotation(FieldMetadata field,
-			AnnotationExpr fieldAnnot, ClassMetadata meta) {
+	public void visitFieldAnnotation(final FieldMetadata field,
+			final AnnotationExpr fieldAnnot, final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitMethod(MethodDeclaration method, ClassMetadata meta) {
+	public void visitMethod(final MethodDeclaration method, final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitImport(ImportDeclaration imp, ClassMetadata meta) {
+	public void visitImport(final ImportDeclaration imp, final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}

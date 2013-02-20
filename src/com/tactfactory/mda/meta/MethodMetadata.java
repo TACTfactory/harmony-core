@@ -10,22 +10,28 @@ package com.tactfactory.mda.meta;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.template.TagConstant;
 
 public class MethodMetadata extends BaseMetadata {	
 	/** Return type */
 	public String type;
 	
 	/** Arguments types*/
-	public ArrayList<String> argumentsTypes = new ArrayList<String>();
+	public List<String> argumentsTypes = new ArrayList<String>();
 	
 	/** final ?*/
-	public boolean isFinal = false;
+	public boolean isFinal;
 
 	@Override
-	public HashMap<String, Object> toMap(BaseAdapter adapter) {
-		// TODO Auto-generated method stub
-		return null;
+	public Map<String, Object> toMap(final BaseAdapter adapter) {
+		final Map<String, Object> map = new HashMap<String, Object>();
+		map.put(TagConstant.TYPE, this.type);
+		map.put("isFinal", this.isFinal);
+		map.put("args", this.argumentsTypes);
+		return map;
 	}
 }

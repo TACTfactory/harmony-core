@@ -10,6 +10,7 @@ package com.tactfactory.mda.test.orm;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tactfactory.mda.command.OrmCommand;
@@ -17,6 +18,16 @@ import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.test.CommonTest;
 
 public class OrmUpdateEntitiesTest extends CommonTest {
+	
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBefore() throws Exception {
+		CommonTest.setUpBefore();
+		initAll();
+	}
+	
 	/**
 	 * @throws java.lang.Exception
 	 */
@@ -24,12 +35,6 @@ public class OrmUpdateEntitiesTest extends CommonTest {
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		
-		this.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
-		this.makeEntities();
-		this.harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
-		// The real test
-		this.harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
 	}
 
 	/**
@@ -40,8 +45,16 @@ public class OrmUpdateEntitiesTest extends CommonTest {
 	public void tearDown() throws Exception {
 		super.tearDown();
 		
-		// File dirproj = new File(String.format("%s/android", Harmony.pathProject));
+		// File dirproj = new File(String.format("%s/android", Harmony.PATH_PROJECT));
 		//TODO : enable !! FileUtils.deleteRecursive(dirproj);
+	}
+	
+	private static void initAll() {
+		harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+		makeEntities();
+		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
+		// The real test
+		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
 	}
 	
 	@Test

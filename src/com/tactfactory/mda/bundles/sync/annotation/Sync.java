@@ -8,16 +8,16 @@
  */
 package com.tactfactory.mda.bundles.sync.annotation;
 
+import static java.lang.annotation.ElementType.TYPE;
+import static java.lang.annotation.RetentionPolicy.SOURCE;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
-import com.tactfactory.mda.ConsoleUtils;
-
-import static java.lang.annotation.RetentionPolicy.SOURCE;
-import static java.lang.annotation.ElementType.TYPE;
+import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
  * To mark a entity for synchronize between local and remote persistence the @Sync annotation is used.
@@ -34,7 +34,7 @@ public @interface Sync {
 		SESSION(1);
 		
 		private int value;
-		private Level(int value) {
+		private Level(final int value) {
 			this.value = value;
 		}
 		
@@ -42,32 +42,37 @@ public @interface Sync {
 			return this.value;
 		}
 		
-		public static Level fromValue(int value){
-			for (Level type : Level.values()) {
+		public static Level fromValue(final int value){
+			Level ret = null;
+			for (final Level type : Level.values()) {
 				if (value == type.value) {
-					return type;
+					ret = type;
 				}    
 			}
 			
-			return null;
+			return ret;
 		}
 		
 		public static Level fromName(String name){
-			if(name.lastIndexOf(".")>0)
-				name = name.substring(name.lastIndexOf(".")+1); // Take only what comes after the last dot
+			Level ret;
+			if(name.lastIndexOf('.')>0) {
+				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot
+			}
 			ConsoleUtils.displayDebug("Sync for Security : "+name);
 			try{
-				Field field = Level.class.getField(name);	
+				final Field field = Level.class.getField(name);	
 				if(field.isEnumConstant()) {
 					ConsoleUtils.displayDebug("Found Security : "+name);
-					return (Level)field.get(Level.class);
+					ret = (Level)field.get(Level.class);
+				} else {
+					ret = null;
 				}
-				else 
-					return null;
-			}catch(Exception e){
-				return null;
+			} catch (final NoSuchFieldException e) {
+				ret = null;
+			} catch (final IllegalAccessException e) {
+				ret = null;
 			}
-			
+			return ret;
 		}
 	}
 	
@@ -78,7 +83,7 @@ public @interface Sync {
 		PUSH(3);
 		
 		private int value;
-		private Mode(int value) {
+		private Mode(final int value) {
 			this.value = value;
 		}
 		
@@ -86,32 +91,38 @@ public @interface Sync {
 			return this.value;
 		}
 		
-		public static Mode fromValue(int value){
-			for (Mode type : Mode.values()) {
+		public static Mode fromValue(final int value){
+			Mode ret = null;
+			for (final Mode type : Mode.values()) {
 				if (value == type.value) {
-					return type;
+					ret = type;
 				}    
 			}
 			
-			return null;
+			return ret;
 		}
 		
 		public static Mode fromName(String name){
-			if(name.lastIndexOf(".")>0)
-				name = name.substring(name.lastIndexOf(".")+1); // Take only what comes after the last dot
+			Mode ret;
+			if(name.lastIndexOf('.')>0) {
+				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot
+			}
 			ConsoleUtils.displayDebug("Sync for Security : "+name);
 			try{
-				Field field = Mode.class.getField(name);	
+				final Field field = Mode.class.getField(name);	
 				if(field.isEnumConstant()) {
 					ConsoleUtils.displayDebug("Found Security : "+name);
-					return (Mode)field.get(Mode.class);
+					ret = (Mode)field.get(Mode.class);
+				} else {
+					ret = null;
 				}
-				else 
-					return null;
-			}catch(Exception e){
-				return null;
+			} catch (final NoSuchFieldException e) {
+				ret = null;
+			} catch (final IllegalAccessException e) {
+				ret = null;
 			}
 			
+			return ret;
 		}
 	}
 	
@@ -122,18 +133,22 @@ public @interface Sync {
 		public static final int LOW = 9;
 		
 		public static int fromName(String name){
-			if(name.lastIndexOf(".")>0)
-				name = name.substring(name.lastIndexOf(".")+1); // Take only what comes after the last dot
+			int ret = 0;
+			if(name.lastIndexOf('.')>0) {
+				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot
+			}
 			ConsoleUtils.displayDebug("Sync for Security : "+name);
 			try{
-				Field field = Priority.class.getField(name);	
+				final Field field = Priority.class.getField(name);	
 				ConsoleUtils.displayDebug("Found Security : "+name);
-				return field.getInt(new Priority());
+				ret = field.getInt(Priority.class);
 				
-			}catch(Exception e){
-				return 0;
+			} catch (final NoSuchFieldException e) {
+				ret = 0;
+			} catch (final IllegalAccessException e) {
+				ret = 0;
 			}
-			
+			return ret;
 		}
 	}
 	

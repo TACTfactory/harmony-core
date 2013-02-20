@@ -20,7 +20,7 @@ public class SocialMenuWrapper extends MenuWrapperBase{
 
 	@Override
 	protected void initializeMenu(Menu menu) {
-		this.socialItem 	= menu.add(0, DemactMenu.SHARE , Menu.NONE, menuName);
+		this.socialItem 	= menu.add(0, ${project_name?cap_first}Menu.SHARE , Menu.NONE, menuName);
 		this.socialItem.setShowAsAction(ActionMenuItem.SHOW_AS_ACTION_IF_ROOM|ActionMenuItem.SHOW_AS_ACTION_WITH_TEXT);
 		this.socialItem.setVisible(false);
 	}

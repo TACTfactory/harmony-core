@@ -179,7 +179,7 @@ class Rest${curr.name?cap_first}Controller extends FOSRestController{
 	*/
 	private function merge($em, $lastSyncDate){
 		$repository = $this->getDoctrine()
-			->getRepository('DemactApiBundle:${curr.name?cap_first}');
+			->getRepository('${project_name?cap_first}ApiBundle:${curr.name?cap_first}');
 
 		$query = $repository->createQueryBuilder('u')
 			->where('u.sync_uDate >= :date')
@@ -222,7 +222,7 @@ class Rest${curr.name?cap_first}Controller extends FOSRestController{
 			
 			// check if sync
 			if ($entity->getId() != null) {
-				$selectEntity = $em->getRepository('DemactApiBundle:${curr.name?cap_first}')->find($entity->getId());
+				$selectEntity = $em->getRepository('${project_name?cap_first}ApiBundle:${curr.name?cap_first}')->find($entity->getId());
 					
 				if ($entity->getSyncUDate() > $selectEntity->getSyncUDate()) {
 					// Update server with updated entity (db updated)
@@ -260,7 +260,7 @@ class Rest${curr.name?cap_first}Controller extends FOSRestController{
 			// check if sync
 			if ($entity->getId() != null) {
 				$this->logger->debug("\tServer sync Client: find " .$entity->getId());
-				$selectEntity = $em->getRepository('DemactApiBundle:${curr.name?cap_first}')->find($entity->getId());
+				$selectEntity = $em->getRepository('${project_name?cap_first}ApiBundle:${curr.name?cap_first}')->find($entity->getId());
 				
 				if ($entity->getSyncUDate() > $selectEntity->getSyncUDate()) {
 					// Update/Delete server with updated entity (db updated)

@@ -9,49 +9,50 @@
 package com.tactfactory.mda.bundles.fixture.template;
 
 import java.io.File;
+import java.io.FileFilter;
 import java.io.IOException;
 
-import java.io.FileFilter;
-
-import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.bundles.fixture.metadata.FixtureMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.BaseGenerator;
 import com.tactfactory.mda.template.SQLiteGenerator;
 import com.tactfactory.mda.template.TagConstant;
+import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 
 public class FixtureGenerator extends BaseGenerator{
 
-	public FixtureGenerator(BaseAdapter adapter) throws Exception {
+	public FixtureGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
 	public void load() {
-		File fixtAppSrc = new File("fixtures/app");
-		File fixtTestSrc = new File("fixtures/test");
+		final File fixtAppSrc = new File("fixtures/app");
+		final File fixtTestSrc = new File("fixtures/test");
 		if(fixtAppSrc.exists()){
-			File fixtAppDest = new File(this.adapter.getAssetsPath()+"/app");
-			File fixtTestDest = new File(this.adapter.getAssetsPath()+"/test");
-			if(!fixtAppDest.exists())
+			final File fixtAppDest = new File(this.adapter.getAssetsPath()+"/app");
+			final File fixtTestDest = new File(this.adapter.getAssetsPath()+"/test");
+			if(!fixtAppDest.exists()) {
 				fixtAppDest.mkdir();
-			if(!fixtTestDest.exists())
+			}
+			if(!fixtTestDest.exists()) {
 				fixtTestDest.mkdir();
+			}
 			try {
-				FileFilter ff = new FileFilter() {
+				final FileFilter ff = new FileFilter() {
 					@Override
-					public boolean accept(File arg0) {
-						return (arg0.getPath().endsWith(".xml") || arg0.getPath().endsWith(".yml")); 
+					public boolean accept(final File arg0) {
+						return arg0.getPath().endsWith(".xml") || arg0.getPath().endsWith(".yml"); 
 					}
 				};
 				FileUtils.copyDirectory(fixtAppSrc, fixtAppDest, ff);
 				ConsoleUtils.displayDebug("Copying fixtures/app into "+fixtAppDest.getPath());
 				FileUtils.copyDirectory(fixtTestSrc, fixtTestDest, ff);
 				ConsoleUtils.displayDebug("Copying fixtures/test into "+fixtTestDest.getPath());
-			} catch (IOException e) {
-				e.printStackTrace();
+			} catch (final IOException e) {
+				ConsoleUtils.displayError(e);
 			}
 		}else{
 			ConsoleUtils.displayError(new Exception("You must init the fixtures before loading them. Use the command orm:fixture:init."));
@@ -60,7 +61,7 @@ public class FixtureGenerator extends BaseGenerator{
 	
 	public void init() {
 		 try {
-			 String fixtureType = ((FixtureMetadata)this.appMetas.options.get("fixture")).type;
+			 final String fixtureType = ((FixtureMetadata)this.appMetas.options.get("fixture")).type;
 			 
 			 //Copy JDOM Library
 			this.updateLibrary("jdom-2.0.2.jar");
@@ -74,40 +75,41 @@ public class FixtureGenerator extends BaseGenerator{
 			new SQLiteGenerator(this.adapter).generateDatabase();
 			
 			//Create each entity's data loader
-			for(ClassMetadata cm : this.appMetas.entities.values()){
+			for(final ClassMetadata cm : this.appMetas.entities.values()){
 				if(cm.fields.size()>0){
 					this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
 					this.makeSource("TemplateDataLoader.java", cm.name+"DataLoader.java", true);
 					this.makeBaseFixture("TemplateFixture."+fixtureType, cm.name+"."+fixtureType, false);
 				}
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (final Exception e) {
+			ConsoleUtils.displayError(e);
 		}
 	}
 	
 	public void purge() {
-		for(ClassMetadata cm : this.appMetas.entities.values()){
+		for(final ClassMetadata cm : this.appMetas.entities.values()){
 			this.removeSource(cm.name+".xml");
 			this.removeSource(cm.name+".yml");
 		}
 		
 	}
 	
-	protected void makeSource(String templateName, String fileName, boolean override) {
-		String fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + this.adapter.getFixture() + "/" + fileName;
-		String fullTemplatePath = this.adapter.getTemplateSourceFixturePath().substring(1) + templateName;
+	@Override
+	protected void makeSource(final String templateName, final String fileName, final boolean override) {
+		final String fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + this.adapter.getFixture() + "/" + fileName;
+		final String fullTemplatePath = this.adapter.getTemplateSourceFixturePath().substring(1) + templateName;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 	
-	protected void removeSource(String fileName) {
-		String fullFilePath = this.adapter.getAssetsPath() + "/" + fileName;
-		File f = new File(fullFilePath);
+	protected void removeSource(final String fileName) {
+		final String fullFilePath = this.adapter.getAssetsPath() + "/" + fileName;
+		final File f = new File(fullFilePath);
 		f.delete();
 	}
 	
-	protected void makeBaseFixture(String templateName, String fileName, boolean override){
+	protected void makeBaseFixture(final String templateName, final String fileName, final boolean override){
 		String fullFilePath = "fixtures/app/"+fileName;
 		String fullTemplatePath = this.adapter.getTemplateSourceFixturePath().substring(1) + templateName;
 		super.makeSource(fullTemplatePath, fullFilePath, override);

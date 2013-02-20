@@ -9,8 +9,8 @@
 package com.tactfactory.mda.plateforme;
 
 import com.tactfactory.mda.Harmony;
+import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
-import com.tactfactory.mda.meta.FieldMetadata;
 
 /** Base Adapter of project structure */
 public abstract class BaseAdapter {	
@@ -51,28 +51,29 @@ public abstract class BaseAdapter {
 	 * @param meta Entity to extract the namespace 
 	 * @return String Namespace
 	 */
-	public abstract String getNameSpace(ClassMetadata meta, String type);
+	public abstract String getNameSpace(ClassMetadata cm, String type);
 	
 	/** Generate platform Namespace
 	 * 
 	 * @param meta Entity to extract the namespace 
 	 * @return String Namespace
 	 */
-	public abstract String getNameSpaceEntity(ClassMetadata meta, String type);
+	public abstract String getNameSpaceEntity(ClassMetadata cm, String type);
 	
+
 	/** Generate platform view component for Show action
 	 * 
 	 * @param field The field based of generator
 	 * @return String of the platform Component type
 	 */
-	public abstract String getViewComponentShow(FieldMetadata field);
+	//public abstract String getViewComponentShow(FieldMetadata field);
 	
 	/** Generate platform view component for Edit action
 	 * 
 	 * @param field The field based of generator
 	 * @return String of the platform Component type
 	 */
-	public abstract String getViewComponentEdit(FieldMetadata field);
+	//public abstract String getViewComponentEdit(FieldMetadata field);
 	
 	/** Convert a Harmony type into a native type
 	 * 
@@ -87,160 +88,160 @@ public abstract class BaseAdapter {
 	// Utils
 
 	public final String getTemplateProjectPath() {
-		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getProject() );
+		return String.format("%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getProject() );
 	}
 	
 	public final String getLibsPath() {
-		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getLibs() );
+		return String.format("%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getLibs() );
 	}
 	
 	public final String getTestPath() {
-		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getTest() );
+		return String.format("%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getTest() );
 	}
 	
 	public final String getTestLibsPath() {
-		return String.format("%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(), this.getTest(), this.getTestLibs() );
+		return String.format("%s/%s/%s/%s", Harmony.PATH_PROJECT, this.getPlatform(), this.getTest(), this.getTestLibs() );
 	}
 	
 	public final String getSourcePath() {
-		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getSource() );
+		return String.format("%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getSource() );
 	}
 	
 	public final String getWidgetPath() {
-		return String.format("%s/%s/%s/%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getSource(), 
-				Harmony.metas.projectNameSpace, this.getHarmony(), this.getWidget() );
+		return String.format("%s/%s/%s/%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getSource(), 
+				ApplicationMetadata.INSTANCE.projectNameSpace, this.getHarmony(), this.getWidget() );
 	}
 	
 	public final String getUtilPath() {
-		return String.format("%s/%s/%s/%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getSource(), 
-				Harmony.metas.projectNameSpace, this.getHarmony(), this.getUtil() );
+		return String.format("%s/%s/%s/%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getSource(), 
+				ApplicationMetadata.INSTANCE.projectNameSpace, this.getHarmony(), this.getUtil() );
 	}
 	
 	public final String getTemplateWidgetPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getWidget() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getWidget() );
 	}
 	
 	public final String getTemplateUtilPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getUtil() );
+		return String.format("%s/%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getHarmony(), this.getUtil() );
 	}	
 	
 	public final String getTemplateSourcePath() {
-		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource() );
+		return String.format("%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource() );
 	}
 	
 	public final String getTemplateSourceControlerPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getController() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getController() );
 	}
 	
 	public final String getTemplateSourceServicePath() {
-		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getService() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getService() );
 	}
 	
 	public final String getTemplateSourceEntityBasePath() {
-		return String.format("%s/%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getModel(), "base" );
+		return String.format("%s/%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getModel(), "base" );
 	}
 	
 	public final String getTemplateSourceProviderPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getProvider() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getProvider() );
 	}
 	
 	public final String getTemplateSourceCriteriasPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getCriterias() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getCriterias() );
 	}
 	
 	public final String getTemplateSourceFixturePath() {
-		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getFixture() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getFixture() );
 	}
 
 	
 	public final String getTemplateSourceCommonPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getCommon() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getCommon() );
 	}
 	
 	public final String getRessourcePath() {
-		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getResource() );
+		return String.format("%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getResource() );
 	}
 	
 	public final String getAssetsPath() {
-		return String.format("%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getAssets() );
+		return String.format("%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getAssets() );
 	}
 	
 	public final String getTemplateRessourcePath() {
-		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getResource() );
+		return String.format("%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getResource() );
 	}
 	
 	public final String getRessourceLayoutPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getResource(), this.getView() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getResource(), this.getView() );
 	}
 	
 	public final String getTemplateRessourceLayoutPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getResource(), this.getView() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getResource(), this.getView() );
 	}
 
 	public final String getRessourceValuesPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.pathProject, this.getPlatform(), this.getResource(), this.getValues() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getResource(), this.getValues() );
 	}
 	
 	public final String getTemplateRessourceValuesPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getResource(), this.getValues() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getResource(), this.getValues() );
 	}
 
 	public final String getManifestPathFile() {
-		return String.format("%s/%s/%s", Harmony.pathProject, this.getPlatform(), this.getManifest() );
+		return String.format("%s/%s/%s", Harmony.PATH_PROJECT, this.getPlatform(), this.getManifest() );
 	}
 	
 	public final String getTemplateManifestPathFile() {
-		return String.format("%s/%s/%s/%s", Harmony.pathTemplate, this.getPlatform(), this.getProject(), this.getManifest() );
+		return String.format("%s/%s/%s/%s", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getProject(), this.getManifest() );
 	}
 
 	public final String getHomeActivityPathFile() {
-		return String.format("%s/%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(), this.getSource(), Harmony.metas.projectNameSpace, this.getHome() );
+		return String.format("%s/%s/%s/%s/%s", Harmony.PATH_PROJECT, this.getPlatform(), this.getSource(), ApplicationMetadata.INSTANCE.projectNameSpace, this.getHome() );
 	}
 	
 	public final String getTemplateHomeActivityPathFile() {
-		return String.format("%s/%s/%s/%s", Harmony.pathTemplate, this.getPlatform(), this.getSource(), this.getHome() );
+		return String.format("%s/%s/%s/%s", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getHome() );
 	}
 
 	public final String getStringsPathFile() {
-		return String.format("%s/%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(),
+		return String.format("%s/%s/%s/%s/%s", Harmony.PATH_PROJECT, this.getPlatform(),
 											this.getResource(), this.getValues(), this.getStrings() );
 	}
 	
 	public final String getTemplateStringsPathFile() {
-		return String.format("%s/%s/%s/%s/%s", Harmony.pathTemplate, this.getPlatform(),
+		return String.format("%s/%s/%s/%s/%s", Harmony.PATH_TEMPLATE, this.getPlatform(),
 											this.getResource(), this.getValues(), this.getStrings() );
 	}
 	
 	public final String getConfigsPathFile() {
-		return String.format("%s/%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(),
+		return String.format("%s/%s/%s/%s/%s", Harmony.PATH_PROJECT, this.getPlatform(),
 											this.getResource(), this.getValues(), this.getConfigs() );
 	}
 
 	public final String getTemplateConfigsPathFile() {
-		return String.format("%s/%s/%s/%s/%s", Harmony.pathTemplate, this.getPlatform(),
+		return String.format("%s/%s/%s/%s/%s", Harmony.PATH_TEMPLATE, this.getPlatform(),
 											this.getResource(), this.getValues(), this.getConfigs() );
 	}
 	
 	public final String getTemplateTestsPath() {
-		return String.format("%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getTest() );
+		return String.format("%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getTest() );
 	}
 	
 	public final String getTemplateTestProjectPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.pathTemplate, this.getPlatform(), this.getTest(), this.getProject() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getTest(), this.getProject() );
 	}
 	
 	public final String getStringsTestPathFile() {
-		return String.format("%s/%s/%s/%s/%s/%s", Harmony.pathProject, this.getPlatform(), this.getTest(),
+		return String.format("%s/%s/%s/%s/%s/%s", Harmony.PATH_PROJECT, this.getPlatform(), this.getTest(),
 											this.getResource(), this.getValues(), this.getStrings() );
 	}
 	
 	public final String getTemplateStringsTestPathFile() {
-		return String.format("%s/%s/%s/%s/%s/%s", Harmony.pathTemplate, this.getPlatform(),this.getTest(),
+		return String.format("%s/%s/%s/%s/%s/%s", Harmony.PATH_TEMPLATE, this.getPlatform(),this.getTest(),
 											this.getResource(), this.getValues(), this.getStrings() );
 	}
 	
 	public final String getSourceDataNameSpace() {
-		return String.format("%s.%s.%s.%s", Harmony.pathProject, this.getPlatform(), this.getSource(), this.getData());
+		return String.format("%s.%s.%s.%s", Harmony.PATH_PROJECT, this.getPlatform(), this.getSource(), this.getData());
 	}
 	
 	// Getter and Setter
@@ -248,124 +249,124 @@ public abstract class BaseAdapter {
 	 * @return the project
 	 */
 	public final String getProject() {
-		return project;
+		return this.project;
 	}
 
 	/**
 	 * @param project the project to set
 	 */
-	public final void setProject(String project) {
+	public final void setProject(final String project) {
 		this.project = project;
 	}
 	/**
 	 * @return the resource
 	 */
 	public final String getResource() {
-		return resource;
+		return this.resource;
 	}
 	
 	/**
 	 * @return the resource
 	 */
 	public final String getAssets() {
-		return assets;
+		return this.assets;
 	}
 
 	/**
 	 * @return the source
 	 */
 	public final String getSource() {
-		return source;
+		return this.source;
 	}
 
 	/**
 	 * @return the model
 	 */
 	public final String getModel() {
-		return model;
+		return this.model;
 	}
 
 	/**
 	 * @return the view
 	 */
 	public final String getView() {
-		return view;
+		return this.view;
 	}
 
 	/**
 	 * @return the controller
 	 */
 	public final String getController() {
-		return controller;
+		return this.controller;
 	}
 
 	/**
 	 * @return the manifest
 	 */
 	public final String getManifest() {
-		return manifest;
+		return this.manifest;
 	}
 
 	/**
 	 * @return the platform
 	 */
 	public final String getPlatform() {
-		return platform;
+		return this.platform;
 	}
 
 	/**
 	 * @param platform the platform to set
 	 */
-	public final void setPlatform(String platform) {
+	public final void setPlatform(final String platform) {
 		this.platform = platform;
 	}
 
 	/**
 	 * @param ressource the resource to set
 	 */
-	public final void setResource(String ressource) {
+	public final void setResource(final String ressource) {
 		this.resource = ressource;
 	}
 	
 	/**
 	 * @param assets the assets folder
 	 */
-	public final void setAssets(String assets) {
+	public final void setAssets(final String assets) {
 		this.assets = assets;
 	}
 
 	/**
 	 * @param source the source to set
 	 */
-	public final void setSource(String source) {
+	public final void setSource(final String source) {
 		this.source = source;
 	}
 
 	/**
 	 * @param model the model to set
 	 */
-	public final void setModel(String model) {
+	public final void setModel(final String model) {
 		this.model = model;
 	}
 
 	/**
 	 * @param view the view to set
 	 */
-	public final void setView(String view) {
+	public final void setView(final String view) {
 		this.view = view;
 	}
 
 	/**
 	 * @param controller the controller to set
 	 */
-	public final void setController(String controller) {
+	public final void setController(final String controller) {
 		this.controller = controller;
 	}
 
 	/**
 	 * @param manifest the manifest to set
 	 */
-	public final void setManifest(String manifest) {
+	public final void setManifest(final String manifest) {
 		this.manifest = manifest;
 	}
 
@@ -373,13 +374,13 @@ public abstract class BaseAdapter {
 	 * @return the data
 	 */
 	public final String getData() {
-		return data;
+		return this.data;
 	}
 
 	/**
 	 * @param data the data to set
 	 */
-	public final void setData(String data) {
+	public final void setData(final String data) {
 		this.data = data;
 	}
 
@@ -387,13 +388,13 @@ public abstract class BaseAdapter {
 	 * @return the provider
 	 */
 	public final String getProvider() {
-		return provider;
+		return this.provider;
 	}
 
 	/**
 	 * @param provider the provider to set
 	 */
-	public final void setProvider(String provider) {
+	public final void setProvider(final String provider) {
 		this.provider = provider;
 	}
 	
@@ -401,13 +402,13 @@ public abstract class BaseAdapter {
 	 * @return the criterias
 	 */
 	public final String getCriterias() {
-		return criterias;
+		return this.criterias;
 	}
 
 	/**
 	 * @param criterias the criterias to set
 	 */
-	public final void setCriterias(String criterias) {
+	public final void setCriterias(final String criterias) {
 		this.criterias = criterias;
 	}
 
@@ -415,13 +416,13 @@ public abstract class BaseAdapter {
 	 * @return the common
 	 */
 	public final String getCommon() {
-		return common;
+		return this.common;
 	}
 
 	/**
 	 * @param common the common to set
 	 */
-	public final void setCommon(String common) {
+	public final void setCommon(final String common) {
 		this.common = common;
 	}
 	
@@ -429,13 +430,13 @@ public abstract class BaseAdapter {
 	 * @return the service
 	 */
 	public final String getService() {
-		return service;
+		return this.service;
 	}
 
 	/**
 	 * @param service the service to set
 	 */
-	public final void setService(String service) {
+	public final void setService(final String service) {
 		this.service = service;
 	}
 	
@@ -444,13 +445,13 @@ public abstract class BaseAdapter {
 	 * @return the service
 	 */
 	public final String getFixture() {
-		return fixture;
+		return this.fixture;
 	}
 
 	/**
 	 * @param fixture the fixture folder
 	 */
-	public final void setFixture(String fixture) {
+	public final void setFixture(final String fixture) {
 		this.fixture = fixture;
 	}
 
@@ -459,13 +460,13 @@ public abstract class BaseAdapter {
 	 * @return the values
 	 */
 	public final String getValues() {
-		return values;
+		return this.values;
 	}
 
 	/**
 	 * @param values the values to set
 	 */
-	public final void setValues(String values) {
+	public final void setValues(final String values) {
 		this.values = values;
 	}
 
@@ -473,26 +474,26 @@ public abstract class BaseAdapter {
 	 * @return the libs
 	 */
 	public final String getLibs() {
-		return libs;
+		return this.libs;
 	}
 
 	/**
 	 * @param libs the libs to set
 	 */
-	public final void setLibs(String libs) {
+	public final void setLibs(final String libs) {
 		this.libs = libs;
 	}
 	/**
 	 * @return the HomeActivity filename
 	 */
 	public final String getHome() {
-		return home;
+		return this.home;
 	}
 
 	/**
 	 * @param home the HomeActivity filename to set
 	 */
-	public final void setHome(String home) {
+	public final void setHome(final String home) {
 		this.home = home;
 	}
 
@@ -513,7 +514,7 @@ public abstract class BaseAdapter {
 	/**
 	 * @param strings the strings.xml filename to set
 	 */
-	public final void setStrings(String strings) {
+	public final void setStrings(final String strings) {
 		this.strings = strings;
 	}
 	
@@ -521,13 +522,13 @@ public abstract class BaseAdapter {
 	 * @return the test
 	 */
 	public String getTest() {
-		return test;
+		return this.test;
 	}
 
 	/**
 	 * @param test the test to set
 	 */
-	public void setTest(String test) {
+	public void setTest(final String test) {
 		this.test = test;
 	}
 	
@@ -541,7 +542,7 @@ public abstract class BaseAdapter {
 	/**
 	 * @param testLibs the testLibs to set
 	 */
-	public void setTestLibs(String testLibs) {
+	public void setTestLibs(final String testLibs) {
 		this.testLibs = testLibs;
 	}
 
@@ -549,13 +550,13 @@ public abstract class BaseAdapter {
 	 * @return the harmony
 	 */
 	public String getHarmony() {
-		return harmony;
+		return this.harmony;
 	}
 
 	/**
 	 * @param harmony the harmony to set
 	 */
-	public void setHarmony(String harmony) {
+	public void setHarmony(final String harmony) {
 		this.harmony = harmony;
 	}
 
@@ -563,13 +564,13 @@ public abstract class BaseAdapter {
 	 * @return the widget
 	 */
 	public String getWidget() {
-		return widget;
+		return this.widget;
 	}
 
 	/**
 	 * @param widget the widget to set
 	 */
-	public void setWidget(String widget) {
+	public void setWidget(final String widget) {
 		this.widget = widget;
 	}
 
@@ -577,13 +578,13 @@ public abstract class BaseAdapter {
 	 * @return the util
 	 */
 	public String getUtil() {
-		return util;
+		return this.util;
 	}
 
 	/**
 	 * @param util the util to set
 	 */
-	public void setUtil(String util) {
+	public void setUtil(final String util) {
 		this.util = util;
 	}
 

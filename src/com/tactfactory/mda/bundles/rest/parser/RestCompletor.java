@@ -13,22 +13,15 @@ import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
 
 public class RestCompletor {
-	public RestCompletor(){
-		
-	}
 	
-	public void generateApplicationRestMetadata(ApplicationMetadata am){
-		//ApplicationRestMetadata ret = new ApplicationRestMetadata();
-		for(ClassMetadata cm : am.entities.values()){
+	public void generateApplicationRestMetadata(final ApplicationMetadata am){
+		for(final ClassMetadata cm : am.entities.values()){
 			if(cm.options.containsKey("rest")){
-				RestMetadata rm = (RestMetadata)cm.options.get("rest");
+				final RestMetadata rm = (RestMetadata)cm.options.get("rest");
 				if(rm.uri==null || rm.uri.equals("")){
 					rm.uri = cm.name;
 				}
-				//ret.entities.put(cm.getName(), cm);
 			}
 		}
-		//am.options.put(ret.getName(), ret);
-		
 	}
 }

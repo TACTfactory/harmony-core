@@ -12,37 +12,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Locale;
 
-import com.tactfactory.mda.Harmony;
-
 public class TranslationMetadata {
-	
-	public static enum Group {
-		NONE(0),
-		COMMON(1),
-		MODEL(2),
-		PROVIDER(3),
-		SERVICE(4);
-		
-		private int value;
-		private Group(int value) {
-			this.value = value;
-		}
-		
-		public int getValue(){
-			return this.value;
-		}
-		
-		public static Group fromValue(int value){
-			for (Group group : Group.values()) {
-				if (value == group.value) {
-					return group;
-				}    
-			}
-			
-			return null;
-		}
-	}
-	
 	/** Identify string resource */
 	public String key;
 	
@@ -52,6 +22,35 @@ public class TranslationMetadata {
 	/** Translate resources (by Locale) */
 	public HashMap<Locale, String> i18n = new LinkedHashMap<Locale, String>();
 	
+	
+	public static enum Group {
+		NONE(0),
+		COMMON(1),
+		MODEL(2),
+		PROVIDER(3),
+		SERVICE(4);
+		
+		private final int value;
+		private Group(final int value) {
+			this.value = value;
+		}
+		
+		public int getValue(){
+			return this.value;
+		}
+		
+		public static Group fromValue(final int value){
+			Group ret = null;
+			for (final Group group : Group.values()) {
+				if (value == group.value) {
+					ret = group;
+				}    
+			}
+			
+			return ret;
+		}
+	}
+	
 	/**
 	 * Insert to meta a new resource string in the default group (Group.NONE)
 	 * 
@@ -59,7 +58,7 @@ public class TranslationMetadata {
 	 * @param defaultValue
 	 * @return the TranslationMetadata generated
 	 */
-	public static TranslationMetadata addDefaultTranslation(String key, String defaultValue) {		
+	public static TranslationMetadata addDefaultTranslation(final String key, final String defaultValue) {		
 		return addDefaultTranslation(key, defaultValue, Group.NONE);
 	}
 	
@@ -72,13 +71,13 @@ public class TranslationMetadata {
 	 * @return the TranslationMetadata generated
 	 */
 	
-	public static TranslationMetadata addDefaultTranslation(String key, String defaultValue, Group group) {		
-		TranslationMetadata translateMeta = new TranslationMetadata();
+	public static TranslationMetadata addDefaultTranslation(final String key, final String defaultValue, final Group group) {		
+		final TranslationMetadata translateMeta = new TranslationMetadata();
 		translateMeta.key = key;
 		translateMeta.group = group;
 		translateMeta.i18n.put(Locale.getDefault(), defaultValue);
 		
-		Harmony.metas.translates.put(translateMeta.key, translateMeta);
+		ApplicationMetadata.INSTANCE.translates.put(translateMeta.key, translateMeta);
 		
 		return translateMeta;
 	}

@@ -28,7 +28,7 @@ public enum TargetPlatform {
 	private static final String STRING_WINPHONE = "winphone";
 
 	private final int value;
-	TargetPlatform (int value) {
+	TargetPlatform (final int value) {
 		this.value = value;
 	}
 	public int getValue() {
@@ -65,20 +65,21 @@ public enum TargetPlatform {
 		return result;
 	}
 	
-	public static TargetPlatform parse(String target) {
+	public static TargetPlatform parse(final String target) {
 		TargetPlatform result = TargetPlatform.ALL;
 		
 		if (!Strings.isNullOrEmpty(target)) {
-			if (target.toLowerCase().equals(STRING_ANDROID))
+			if (target.equalsIgnoreCase(STRING_ANDROID)){
 				result = TargetPlatform.ANDROID;
-			else
+			} else
 				
-			if (target.toLowerCase().equals(STRING_IPHONE))
+			if (target.equalsIgnoreCase(STRING_IPHONE)) {
 				result = TargetPlatform.IPHONE;
-			else
+			} else 
 				
-			if (target.toLowerCase().equals(STRING_WEB))
+			if (target.equalsIgnoreCase(STRING_WEB)) {
 				result = TargetPlatform.WEB;
+			}
 		}
 		
 		return result;

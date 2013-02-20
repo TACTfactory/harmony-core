@@ -130,9 +130,9 @@ public abstract class SQLiteAdapterBase<T>{
 		return result;
 	}
 	
-	/** Read All Users entities
-	 * 
-	 * @return List of User entities
+	/** Read All T entities given some criterias
+	 * @param crits The criterias to use for the request
+	 * @return List of T entities
 	 */
 	public ArrayList<T> getAll(CriteriasBase crits) {
 		if(crits == null || crits.isEmpty()){

@@ -9,8 +9,9 @@
 package com.tactfactory.mda.template;
 
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Comparator;
 import java.util.List;
 
@@ -22,14 +23,15 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-import com.tactfactory.mda.ConsoleUtils;
 import com.tactfactory.mda.meta.ConfigMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 
 public class ConfigGenerator extends BaseGenerator {
+	private static final String NAME = "name";
 
-	public ConfigGenerator(BaseAdapter adapter) throws Exception {
+	public ConfigGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 	}
 
@@ -38,26 +40,25 @@ public class ConfigGenerator extends BaseGenerator {
 	 */
 	public void generateConfigXml() {		
 		ConsoleUtils.display(">> Generate config string...");
-		Element findConfig;
 		
 		try {
-			SAXBuilder builder = new SAXBuilder();		// Make engine
-			File xmlFile = FileUtils.makeFile(this.adapter.getConfigsPathFile() );
-			Document doc = (Document) builder.build(xmlFile); 	// Load XML File
-			Element rootNode = doc.getRootElement(); 			// Load Root element
+			final SAXBuilder builder = new SAXBuilder();		// Make engine
+			final File xmlFile = FileUtils.makeFile(this.adapter.getConfigsPathFile() );
+			final Document doc = builder.build(xmlFile); 	// Load XML File
+			final Element rootNode = doc.getRootElement(); 			// Load Root element
 			final Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
 
-			for (ConfigMetadata configMeta : this.appMetas.configs.values()) {
-				findConfig = null;
+			for (final ConfigMetadata configMeta : this.appMetas.configs.values()) {
+				Element findConfig = null;
 				
 				// Debug Log
 				ConsoleUtils.displayDebug("Update config : " + configMeta.key);
 				
 				// Find String Node
-				List<Element> configs = rootNode.getChildren("string"); 	// Find many elements
-				for (Element configXml : configs) {
+				final List<Element> configs = rootNode.getChildren("string"); 	// Find many elements
+				for (final Element configXml : configs) {
 					if (configXml.hasAttributes() && 
-							configXml.getAttributeValue("name",ns).equals(configMeta.key)) {	// Load name value
+							configXml.getAttributeValue(NAME,ns).equals(configMeta.key)) {	// Load name value
 						findConfig = configXml;
 						
 						break;
@@ -67,7 +68,7 @@ public class ConfigGenerator extends BaseGenerator {
 				// If not found Node, create it
 				if (findConfig == null) {
 					findConfig = new Element("string");		// Create new element
-					findConfig.setAttribute("name", configMeta.key, ns);	// Add name to element
+					findConfig.setAttribute(NAME, configMeta.key, ns);	// Add name to element
 					findConfig.setText(configMeta.value); // Set values
 					
 					rootNode.addContent(findConfig);
@@ -82,25 +83,23 @@ public class ConfigGenerator extends BaseGenerator {
 				String metaName2;
 				
 				@Override
-				public int compare(Element o1, Element o2) {
-					metaName1 = o1.getAttributeValue("name", ns);
-					metaName2 = o2.getAttributeValue("name", ns);
+				public int compare(final Element o1, final Element o2) {
+					this.metaName1 = o1.getAttributeValue(NAME, ns);
+					this.metaName2 = o2.getAttributeValue(NAME, ns);
 					
-					return metaName1.compareToIgnoreCase(metaName2);
+					return this.metaName1.compareToIgnoreCase(this.metaName2);
 				}
 			});
 			
 			// Write to File
-			XMLOutputter xmlOutput = new XMLOutputter();
+			final XMLOutputter xmlOutput = new XMLOutputter();
 			xmlOutput.setFormat(Format.getPrettyFormat());			// Make beautiful file with indent !!!
-			xmlOutput.output(doc, new FileWriter(xmlFile.getAbsoluteFile()));
+			xmlOutput.output(doc, new OutputStreamWriter(new FileOutputStream(xmlFile.getAbsoluteFile()), "UTF-8"));
 			
-		} catch (IOException io) {
+		} catch (final IOException io) {
 			ConsoleUtils.displayError(io);
-			io.printStackTrace();
-		} catch (JDOMException e) {
+		} catch (final JDOMException e) {
 			ConsoleUtils.displayError(e);
-			e.printStackTrace();
 		}
 	}
 }

@@ -12,19 +12,29 @@ import java.io.File;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.tactfactory.mda.ConsoleUtils;
-import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.bundles.fixture.command.FixtureCommand;
 import com.tactfactory.mda.bundles.rest.command.RestCommand;
 import com.tactfactory.mda.bundles.sync.command.SyncCommand;
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
+import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.test.CommonTest;
+import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 
 public class FixtureGlobalTest extends CommonTest{
+	
+	/**
+	 * @throws java.lang.Exception
+	 */
+	@BeforeClass
+	public static void setUpBefore() throws Exception {
+		CommonTest.setUpBefore();
+		initAll();
+	}
 	
 	/**
 	 * @throws java.lang.Exception
@@ -33,7 +43,6 @@ public class FixtureGlobalTest extends CommonTest{
 	@Override
 	public void setUp() throws Exception {
 		super.setUp();
-		this.initAllTests();
 	}
 
 	/**
@@ -45,74 +54,77 @@ public class FixtureGlobalTest extends CommonTest{
 		super.tearDown();
 	}
 	
-	private void initAllTests() {
+	private static void initAll() {
 		System.out.println("\nTest Orm generate entity");
 		System.out.println("###############################################################################");
 		
-		this.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
-		this.makeEntities();
-		this.harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
-		this.harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[]{}, null);
-		this.harmony.findAndExecute(RestCommand.GENERATE_ADAPTERS, new String[]{}, null);
-		this.harmony.findAndExecute(SyncCommand.GENERATE_SERVICE, new String[]{}, null);
-		this.harmony.findAndExecute(FixtureCommand.FIXTURE_INIT, new String[]{"--format=xml"}, null);
-		
-		// Copy fixture files
-		this.copyFixturesXml();
-		this.harmony.findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[]{}, null);
-		this.hasFixturesXml();		
-		
-		this.harmony.findAndExecute(FixtureCommand.FIXTURE_PURGE, new String[]{}, null);
-		this.harmony.findAndExecute(FixtureCommand.FIXTURE_INIT, new String[]{}, null);
-		this.copyFixturesYml();
-		this.harmony.findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[]{}, null);
-		this.hasFixturesYml();	
+		harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+		makeEntities();
+		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
+		harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[]{}, null);
+		harmony.findAndExecute(RestCommand.GENERATE_ADAPTERS, new String[]{}, null);
+		harmony.findAndExecute(SyncCommand.GENERATE_SERVICE, new String[]{}, null);
+		harmony.findAndExecute(FixtureCommand.FIXTURE_INIT, new String[]{"--format=xml"}, null);
 	}
 	
 	//@Test
 	public void all() {
-		this.initAllTests();	
+			
 	}
 	
 	@Test
 	public void hasFixtureLoaders() {
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/UserDataLoader.java");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/CommentDataLoader.java");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/PostDataLoader.java");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/ViewComponentDataLoader.java");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/FixtureBase.java");
-		this.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/DataManager.java");
+		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/UserDataLoader.java");
+		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/CommentDataLoader.java");
+		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/PostDataLoader.java");
+		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/ViewComponentDataLoader.java");
+		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/FixtureBase.java");
+		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/DataManager.java");
 	}
 	
 	@Test
 	public void hasFixturesXml() {
-		this.hasFindFile("android/assets/app/User.xml");
-		this.hasFindFile("android/assets/app/Comment.xml");
-		this.hasFindFile("android/assets/app/Post.xml");
-		this.hasFindFile("android/assets/app/ViewComponent.xml");
+		// Copy fixture files
+		copyFixturesXml();
+		CommonTest.harmony.findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[]{}, null);
+				
+		CommonTest.hasFindFile("android/assets/app/User.xml");
+		CommonTest.hasFindFile("android/assets/app/Comment.xml");
+		CommonTest.hasFindFile("android/assets/app/Post.xml");
+		CommonTest.hasFindFile("android/assets/app/ViewComponent.xml");
 		
-		this.hasFindFile("android/assets/test/User.xml");
-		this.hasFindFile("android/assets/test/Comment.xml");
-		this.hasFindFile("android/assets/test/Post.xml");
-		this.hasFindFile("android/assets/test/ViewComponent.xml");
+		CommonTest.hasFindFile("android/assets/test/User.xml");
+		CommonTest.hasFindFile("android/assets/test/Comment.xml");
+		CommonTest.hasFindFile("android/assets/test/Post.xml");
+		CommonTest.hasFindFile("android/assets/test/ViewComponent.xml");
 	}
 	
 	@Test
 	public void hasFixturesYml() {
-		this.hasFindFile("android/assets/app/User.yml");
-		this.hasFindFile("android/assets/app/Comment.yml");
-		this.hasFindFile("android/assets/app/Post.yml");
-		this.hasFindFile("android/assets/app/ViewComponent.yml");
+		//Purge & init
+		CommonTest.harmony.findAndExecute(FixtureCommand.FIXTURE_PURGE, new String[]{}, null);
+		CommonTest.harmony.findAndExecute(FixtureCommand.FIXTURE_INIT, new String[]{}, null);
 		
-		this.hasFindFile("android/assets/test/User.yml");
-		this.hasFindFile("android/assets/test/Comment.yml");
-		this.hasFindFile("android/assets/test/Post.yml");
-		this.hasFindFile("android/assets/test/ViewComponent.yml");
+		// Copy fixture files
+		copyFixturesYml();
+		CommonTest.harmony.findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[]{}, null);
+		
+		CommonTest.hasFindFile("android/assets/app/User.yml");
+		CommonTest.hasFindFile("android/assets/app/Comment.yml");
+		CommonTest.hasFindFile("android/assets/app/Post.yml");
+		CommonTest.hasFindFile("android/assets/app/ViewComponent.yml");
+		
+		CommonTest.hasFindFile("android/assets/test/User.yml");
+		CommonTest.hasFindFile("android/assets/test/Comment.yml");
+		CommonTest.hasFindFile("android/assets/test/Post.yml");
+		CommonTest.hasFindFile("android/assets/test/ViewComponent.yml");
 	}
+
 	
-	protected void copyFixturesXml() {
-		String pathNameSpace = Harmony.metas.projectNameSpace.replaceAll("\\.", "/");
-		String srcDir = String.format("src/%s/%s/%s/", pathNameSpace, "fixture", "xml");
+	protected static void copyFixturesXml() {
+		final String pathNameSpace = ApplicationMetadata.INSTANCE.projectNameSpace.replaceAll("\\.", "/");
+		final String srcDir = String.format("src/%s/%s/%s/", pathNameSpace, "fixture", "xml");
+
 		String destDir = String.format("fixtures/app/");
 		System.out.println(destDir);
 		
@@ -120,13 +132,15 @@ public class FixtureGlobalTest extends CommonTest{
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
 		destDir = String.format("fixtures/test/");
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
-		if(new File(destDir+"Post.xml").exists())
+		if(new File(destDir+"Post.xml").exists()) {
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");
+		}
 	}
 	
-	protected void copyFixturesYml() {
-		String pathNameSpace = Harmony.metas.projectNameSpace.replaceAll("\\.", "/");
-		String srcDir = String.format("src/%s/%s/%s/", pathNameSpace, "fixture", "yml");
+	protected static void copyFixturesYml() {
+		final String pathNameSpace = ApplicationMetadata.INSTANCE.projectNameSpace.replaceAll("\\.", "/");
+		final String srcDir = String.format("src/%s/%s/%s/", pathNameSpace, "fixture", "yml");
+
 		String destDir = String.format("fixtures/app/");
 		System.out.println(destDir);
 		
@@ -134,7 +148,8 @@ public class FixtureGlobalTest extends CommonTest{
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
 		destDir = String.format("fixtures/test/");
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
-		if(new File(destDir+"Post.yml").exists())
+		if(new File(destDir+"Post.yml").exists()) {
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");
+		}
 	}
 }
