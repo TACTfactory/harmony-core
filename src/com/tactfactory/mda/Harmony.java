@@ -253,8 +253,8 @@ public class Harmony {
 					if (projectNameSpace.toLowerCase(Locale.ENGLISH).endsWith(
 									ApplicationMetadata.INSTANCE.name.toLowerCase())){
 						
-						String namespaceForm = "^(((([a-z0-9_]+).)*)([a-z0-9_]+))$";
-						if (Pattern.matches(projectNameSpace,namespaceForm)) {
+						String namespaceForm = "^(((([a-z0-9_]+)\\.)*)([a-z0-9_]+))$";
+						if (Pattern.matches(namespaceForm,projectNameSpace)) {
 							ApplicationMetadata.INSTANCE.projectNameSpace = projectNameSpace.replaceAll("\\.", delimiter);
 							good = true;
 						} else {
