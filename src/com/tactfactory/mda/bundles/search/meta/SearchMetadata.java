@@ -13,8 +13,8 @@ import java.util.HashMap;
 import com.tactfactory.mda.meta.BaseMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 
-public class SearchMetadata extends BaseMetadata{	
-	private final static String NAME = "search";
+public class SearchMetadata extends BaseMetadata {	
+	private static final String NAME = "search";
 	
 	
 	public SearchMetadata() {

@@ -55,14 +55,14 @@ public @interface Sync {
 		
 		public static Level fromName(String name) {
 			Level ret;
-			if (name.lastIndexOf('.')>0) {
-				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot
+			if (name.lastIndexOf('.') > 0) {
+				name = name.substring(name.lastIndexOf('.') + 1); // Take only what comes after the last dot
 			}
-			ConsoleUtils.displayDebug("Sync for Security : "+name);
+			ConsoleUtils.displayDebug("Sync for Security : " + name);
 			try {
 				final Field field = Level.class.getField(name);	
 				if (field.isEnumConstant()) {
-					ConsoleUtils.displayDebug("Found Security : "+name);
+					ConsoleUtils.displayDebug("Found Security : " + name);
 					ret = (Level)field.get(Level.class);
 				} else {
 					ret = null;
@@ -104,14 +104,14 @@ public @interface Sync {
 		
 		public static Mode fromName(String name) {
 			Mode ret;
-			if (name.lastIndexOf('.')>0) {
-				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot
+			if (name.lastIndexOf('.') > 0) {
+				name = name.substring(name.lastIndexOf('.') + 1); // Take only what comes after the last dot
 			}
-			ConsoleUtils.displayDebug("Sync for Security : "+name);
+			ConsoleUtils.displayDebug("Sync for Security : " + name);
 			try {
 				final Field field = Mode.class.getField(name);	
 				if (field.isEnumConstant()) {
-					ConsoleUtils.displayDebug("Found Security : "+name);
+					ConsoleUtils.displayDebug("Found Security : " + name);
 					ret = (Mode)field.get(Mode.class);
 				} else {
 					ret = null;
@@ -134,13 +134,13 @@ public @interface Sync {
 		
 		public static int fromName(String name) {
 			int ret = 0;
-			if (name.lastIndexOf('.')>0) {
-				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot
+			if (name.lastIndexOf('.') > 0) {
+				name = name.substring(name.lastIndexOf('.') + 1); // Take only what comes after the last dot
 			}
-			ConsoleUtils.displayDebug("Sync for Security : "+name);
+			ConsoleUtils.displayDebug("Sync for Security : " + name);
 			try {
 				final Field field = Priority.class.getField(name);	
-				ConsoleUtils.displayDebug("Found Security : "+name);
+				ConsoleUtils.displayDebug("Found Security : " + name);
 				ret = field.getInt(Priority.class);
 				
 			} catch (final NoSuchFieldException e) {

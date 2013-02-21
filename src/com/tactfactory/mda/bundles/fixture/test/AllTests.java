@@ -18,7 +18,7 @@ import org.junit.runners.Suite.SuiteClasses;
  *
  */
 @RunWith(Suite.class)
-@SuiteClasses({
+@SuiteClasses( {
 	FixtureGlobalTest.class })
 
 public class AllTests {

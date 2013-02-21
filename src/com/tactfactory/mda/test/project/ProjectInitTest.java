@@ -27,10 +27,10 @@ import com.tactfactory.mda.utils.FileUtils;
 public class ProjectInitTest extends CommonTest {
 	private static final  String SHARP_DELIMITOR = 
 			  "#################" 
-			+ "#################" 
-			+ "#################" 
-			+ "#################" 
-			+ "#########";
+			 + "#################" 
+			 + "#################" 
+			 + "#################" 
+			 + "#########";
 
 	
 	/**

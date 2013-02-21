@@ -55,9 +55,9 @@ public class ProjectGenerator extends BaseGenerator {
 		if (removeResult == 0) {
 			result = true;
 			
-			ConsoleUtils.displayDebug("Project "+this.adapter.getPlatform()+" removed!");
+			ConsoleUtils.displayDebug("Project " + this.adapter.getPlatform() + " removed!");
 		} else {
-			ConsoleUtils.displayError(new Exception("Remove Project "+this.adapter.getPlatform()+" return "+removeResult+" errors...\n"));
+			ConsoleUtils.displayError(new Exception("Remove Project " + this.adapter.getPlatform() + " return " + removeResult + " errors...\n"));
 		}
 		return result;
 	}
@@ -82,13 +82,13 @@ public class ProjectGenerator extends BaseGenerator {
 		boolean result = false;
 
 		// create project name space folders
-		FileUtils.makeFolder(this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.","/"));
+		FileUtils.makeFolder(this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.", "/"));
 
 		// create empty package entity
-		FileUtils.makeFolder(this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.","/")+"/entity/" );
+		FileUtils.makeFolder(this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.", "/") + "/entity/");
 		
 		// create util folder
-		FileUtils.makeFolder(this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.","/")+"/harmony/util/" );
+		FileUtils.makeFolder(this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.", "/") + "/harmony/util/");
 		
 		// create libs folder
 		FileUtils.makeFolder(this.adapter.getLibsPath());
@@ -101,8 +101,8 @@ public class ProjectGenerator extends BaseGenerator {
 
 		// create configs.xml
 		super.makeSource(
-				this.adapter.getTemplateRessourceValuesPath()+"configs.xml",
-				this.adapter.getRessourceValuesPath()+"configs.xml",
+				this.adapter.getTemplateRessourceValuesPath() + "configs.xml",
+				this.adapter.getRessourceValuesPath() + "configs.xml",
 				false);
 
 		// create strings.xml
@@ -113,51 +113,51 @@ public class ProjectGenerator extends BaseGenerator {
 		
 		// create configs.xml
 		super.makeSource(
-				this.adapter.getTemplateRessourceValuesPath()+"styles.xml",
-				this.adapter.getRessourceValuesPath()+"styles.xml",
+				this.adapter.getTemplateRessourceValuesPath() + "styles.xml",
+				this.adapter.getRessourceValuesPath() + "styles.xml",
 				false);
 
 		// create main.xml
 		super.makeSource(
-				this.adapter.getTemplateRessourceLayoutPath()+"main.xml",
-				this.adapter.getRessourceLayoutPath()+"main.xml",
+				this.adapter.getTemplateRessourceLayoutPath() + "main.xml",
+				this.adapter.getRessourceLayoutPath() + "main.xml",
 				false);
 		
 		// create HarmonyFragmentActivity
 		super.makeSource(
 
-				this.adapter.getTemplateSourcePath()+"harmony/view/HarmonyFragmentActivity.java",
-				"./app/android/src/"+this.appMetas.projectNameSpace+"/harmony/view/"+"HarmonyFragmentActivity.java",
+				this.adapter.getTemplateSourcePath() + "harmony/view/HarmonyFragmentActivity.java",
+				"./app/android/src/" + this.appMetas.projectNameSpace + "/harmony/view/" + "HarmonyFragmentActivity.java",
 				false);
 		
 		// create HarmonyFragment
 		super.makeSource(
-				this.adapter.getTemplateSourcePath()+"harmony/view/HarmonyFragment.java",
-				"./app/android/src/"+this.appMetas.projectNameSpace+"/harmony/view/"+"HarmonyFragment.java",
+				this.adapter.getTemplateSourcePath() + "harmony/view/HarmonyFragment.java",
+				"./app/android/src/" + this.appMetas.projectNameSpace + "/harmony/view/" + "HarmonyFragment.java",
 				false);
 		
 		// create HarmonyListFragment
 		super.makeSource(
-				this.adapter.getTemplateSourcePath()+"harmony/view/HarmonyListFragment.java",
-				"./app/android/src/"+this.appMetas.projectNameSpace+"/harmony/view/"+"HarmonyListFragment.java",
+				this.adapter.getTemplateSourcePath() + "harmony/view/HarmonyListFragment.java",
+				"./app/android/src/" + this.appMetas.projectNameSpace + "/harmony/view/" + "HarmonyListFragment.java",
 				false);
 		
 		// create ProjectMenuBase
 		super.makeSource(
-				this.adapter.getTemplateSourcePath()+"menu/TemplateMenuBase.java",
-				"./app/android/src/"+this.appMetas.projectNameSpace+"/menu/"+CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name) +"MenuBase.java",
+				this.adapter.getTemplateSourcePath() + "menu/TemplateMenuBase.java",
+				"./app/android/src/" + this.appMetas.projectNameSpace + "/menu/" + CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name) + "MenuBase.java",
 				false);
 		
 		// create ProjectMenu
 		super.makeSource(
-				this.adapter.getTemplateSourcePath()+"menu/TemplateMenu.java",
-				"./app/android/src/"+this.appMetas.projectNameSpace+"/menu/"+CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name) +"Menu.java",
+				this.adapter.getTemplateSourcePath() + "menu/TemplateMenu.java",
+				"./app/android/src/" + this.appMetas.projectNameSpace + "/menu/" + CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name) + "Menu.java",
 				false);
 		
 		// create ProjectMenu
 		super.makeSource(
-				this.adapter.getTemplateSourcePath()+"menu/MenuWrapperBase.java",
-				"./app/android/src/"+this.appMetas.projectNameSpace+"/menu/" + "MenuWrapperBase.java",
+				this.adapter.getTemplateSourcePath() + "menu/MenuWrapperBase.java",
+				"./app/android/src/" + this.appMetas.projectNameSpace + "/menu/" + "MenuWrapperBase.java",
 				false);
 
 		// copy libraries
@@ -194,22 +194,22 @@ public class ProjectGenerator extends BaseGenerator {
 		}*/
 		
 		/// copy Harmony library
-		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.PATH_HARMONY,"harmony.jar")),
-				new File(String.format("%s/%s",this.adapter.getLibsPath(),"harmony.jar")));
+		FileUtils.copyfile(new File(String.format("%s/%s", Harmony.PATH_HARMONY, "harmony.jar")),
+				new File(String.format("%s/%s", this.adapter.getLibsPath(), "harmony.jar")));
 		
 		// copy utils
 		this.updateUtil("DateUtils.java");
 
 		// Update newly created files with datamodel
 		final File dirTpl = new File(this.adapter.getTemplateProjectPath());
-		if (dirTpl.exists() && dirTpl.listFiles().length!=0) {
+		if (dirTpl.exists() && dirTpl.listFiles().length != 0) {
 			result = true;
 			
 			for (int i = 0; i < dirTpl.listFiles().length; i++) {
 				if (dirTpl.listFiles()[i].isFile()) {
 					super.makeSource(
 							this.adapter.getTemplateProjectPath() + dirTpl.listFiles()[i].getName(),
-							String.format("%s/%s/", Harmony.PATH_PROJECT, this.adapter.getPlatform())+dirTpl.listFiles()[i].getName(),
+							String.format("%s/%s/", Harmony.PATH_PROJECT, this.adapter.getPlatform()) + dirTpl.listFiles()[i].getName(),
 							false);
 				}
 			}
@@ -229,7 +229,7 @@ public class ProjectGenerator extends BaseGenerator {
 				String.format("%s/%s/", Harmony.PATH_PROJECT, this.adapter.getPlatform()),
 				true);
 		
-		if (dirProj.exists() && dirProj.listFiles().length!=0) {
+		if (dirProj.exists() && dirProj.listFiles().length != 0) {
 			result = true;
 		}
 

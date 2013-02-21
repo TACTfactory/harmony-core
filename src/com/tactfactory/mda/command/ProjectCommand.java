@@ -37,26 +37,26 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 @PluginImplementation
 public class ProjectCommand extends BaseCommand {
 	/** Bundle name */
-	public final static String BUNDLE 		= "project";
+	public static final String BUNDLE 		= "project";
 	
-	private final static String ERROR_MSG = "Please check your file browser or file editor and try again...";
+	private static final String ERROR_MSG = "Please check your file browser or file editor and try again...";
 
 	// Actions
-	public final static String ACTION_INIT 	= "init";
-	public final static String ACTION_REMOVE 	= "remove";
+	public static final String ACTION_INIT 	= "init";
+	public static final String ACTION_REMOVE 	= "remove";
 
 	// Commands
-	public final static String INIT_ANDROID 	= BUNDLE + SEPARATOR + ACTION_INIT + SEPARATOR + TargetPlatform.ANDROID.toLowerString();
-	public final static String INIT_IOS 		= BUNDLE + SEPARATOR + ACTION_INIT + SEPARATOR + TargetPlatform.IPHONE.toLowerString();
-	public final static String INIT_RIM 		= BUNDLE + SEPARATOR + ACTION_INIT + SEPARATOR + TargetPlatform.RIM.toLowerString();
-	public final static String INIT_WINPHONE 	= BUNDLE + SEPARATOR + ACTION_INIT + SEPARATOR + TargetPlatform.WINPHONE.toLowerString();
-	public final static String INIT_ALL		= BUNDLE + SEPARATOR + ACTION_INIT + SEPARATOR + TargetPlatform.ALL.toLowerString();
+	public static final String INIT_ANDROID 	= BUNDLE + SEPARATOR + ACTION_INIT + SEPARATOR + TargetPlatform.ANDROID.toLowerString();
+	public static final String INIT_IOS 		= BUNDLE + SEPARATOR + ACTION_INIT + SEPARATOR + TargetPlatform.IPHONE.toLowerString();
+	public static final String INIT_RIM 		= BUNDLE + SEPARATOR + ACTION_INIT + SEPARATOR + TargetPlatform.RIM.toLowerString();
+	public static final String INIT_WINPHONE 	= BUNDLE + SEPARATOR + ACTION_INIT + SEPARATOR + TargetPlatform.WINPHONE.toLowerString();
+	public static final String INIT_ALL		= BUNDLE + SEPARATOR + ACTION_INIT + SEPARATOR + TargetPlatform.ALL.toLowerString();
 
-	public final static String REMOVE_ANDROID = BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.ANDROID.toLowerString();
-	public final static String REMOVE_IOS 	= BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.IPHONE.toLowerString();
-	public final static String REMOVE_RIM 	= BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.RIM.toLowerString();
-	public final static String REMOVE_WINPHONE = BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.WINPHONE.toLowerString();
-	public final static String REMOVE_ALL 	= BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.ALL.toLowerString();
+	public static final String REMOVE_ANDROID = BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.ANDROID.toLowerString();
+	public static final String REMOVE_IOS 	= BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.IPHONE.toLowerString();
+	public static final String REMOVE_RIM 	= BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.RIM.toLowerString();
+	public static final String REMOVE_WINPHONE = BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.WINPHONE.toLowerString();
+	public static final String REMOVE_ALL 	= BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.ALL.toLowerString();
 
 	// Internal	
 	protected final BaseAdapter adapterAndroid = new AndroidAdapter();
@@ -96,9 +96,9 @@ public class ProjectCommand extends BaseCommand {
 					ApplicationMetadata.androidSdkPath = this.commandArgs.get("androidsdk");
 				}
 					
-				ConsoleUtils.displayDebug("Project Name: "	+ ApplicationMetadata.INSTANCE.name +
-						"\nProject NameSpace: "				+ ApplicationMetadata.INSTANCE.projectNameSpace +
-						"\nAndroid SDK Path: "				+ ApplicationMetadata.androidSdkPath);
+				ConsoleUtils.displayDebug("Project Name: "	 + ApplicationMetadata.INSTANCE.name + 
+						"\nProject NameSpace: "				 + ApplicationMetadata.INSTANCE.projectNameSpace + 
+						"\nAndroid SDK Path: "				 + ApplicationMetadata.androidSdkPath);
 
 				// Confirmation
 				if (Harmony.isConsole) {
@@ -339,7 +339,7 @@ public class ProjectCommand extends BaseCommand {
 			if (!new ProjectGenerator(this.adapterAndroid).removeProject() |
 				!new ProjectGenerator(this.adapterIOS).removeProject() |
 				!new ProjectGenerator(this.adapterRIM).removeProject() |
-				!new ProjectGenerator(this.adapterWinPhone).removeProject() ) {
+				!new ProjectGenerator(this.adapterWinPhone).removeProject()) {
 				ConsoleUtils.display(ERROR_MSG);
 			}
 		} catch (final Exception e) {
@@ -352,16 +352,16 @@ public class ProjectCommand extends BaseCommand {
 	/** @see BaseCommand#summary() */
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> PROJECT \n" +
-				"\t" + INIT_ANDROID + "\t => Init Android project directory\n" +
-				"\t" + INIT_IOS + "\t => Init Apple IOS project directory\n" +
-				"\t" + INIT_RIM + "\t => Init BlackBerry project directory\n" +
-				"\t" + INIT_WINPHONE + "\t => Init Windows Phone project directory\n" +
-				"\t" + INIT_ALL + "\t => Init All project directories\n" +
-				"\t" + REMOVE_ANDROID + "\t => Remove Google Android project directory\n" +
-				"\t" + REMOVE_IOS + "\t => Remove Apple IOS project directory\n" +
-				"\t" + REMOVE_RIM + "\t => Remove BlackBerry project directory\n" +
-				"\t" + REMOVE_WINPHONE + "\t => Remove Windows Phone project directory\n" +
+		ConsoleUtils.display("\n> PROJECT \n" + 
+				"\t" + INIT_ANDROID + "\t => Init Android project directory\n" + 
+				"\t" + INIT_IOS + "\t => Init Apple IOS project directory\n" + 
+				"\t" + INIT_RIM + "\t => Init BlackBerry project directory\n" + 
+				"\t" + INIT_WINPHONE + "\t => Init Windows Phone project directory\n" + 
+				"\t" + INIT_ALL + "\t => Init All project directories\n" + 
+				"\t" + REMOVE_ANDROID + "\t => Remove Google Android project directory\n" + 
+				"\t" + REMOVE_IOS + "\t => Remove Apple IOS project directory\n" + 
+				"\t" + REMOVE_RIM + "\t => Remove BlackBerry project directory\n" + 
+				"\t" + REMOVE_WINPHONE + "\t => Remove Windows Phone project directory\n" + 
 				"\t" + REMOVE_ALL + "\t => Remove All project directories\n");
 	}
 

@@ -51,7 +51,7 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		ConsoleUtils.display(">>> Generate Adapter for " +  this.datamodel.get(TagConstant.CURRENT_ENTITY));
 		
 		try {
-			this.makeSourceControler( 
+			this.makeSourceControler(
 					"base/TemplateSQLiteAdapterBase.java", 
 					"base/%sSQLiteAdapterBase.java", true);
 			

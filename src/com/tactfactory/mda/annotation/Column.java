@@ -35,25 +35,25 @@ public @interface Column {
 		//Name		Internal	length	null	prec	scale	unique	isLocale
 		
 		// BASE
-		STRING(		"string", 	255, 	true, 	null, 	null, 	null,	null),
-		TEXT(		"text", 	1024, 	true, 	null, 	null, 	null,	null),
-		BOOLEAN(	"boolean", 	null, 	false, 	null, 	null, 	null,	null),
-		INTEGER(	"integer", 	null, 	true, 	null, 	null, 	null,	null),
-		INT(		"int", 		null, 	false,	null,	null,	null,	null),
-		FLOAT(		"float", 	null, 	false,	null,	null,	null,	null),
-		DATETIME(	"datetime", null,	true,	null,	null,	null,	false),
-		DATE(		"date", 	null, 	true,	null,	null,	null,	false),
-		TIME(		"time",		null,	true,	null,	null,	null,	false),
+		STRING	("string", 	255, 	true, 	null, 	null, 	null,	null),
+		TEXT	("text", 	1024, 	true, 	null, 	null, 	null,	null),
+		BOOLEAN	("boolean", 	null, 	false, 	null, 	null, 	null,	null),
+		INTEGER	("integer", 	null, 	true, 	null, 	null, 	null,	null),
+		INT		("int", 		null, 	false,	null,	null,	null,	null),
+		FLOAT	("float", 	null, 	false,	null,	null,	null,	null),
+		DATETIME("datetime", null,	true,	null,	null,	null,	false),
+		DATE	("date", 	null, 	true,	null,	null,	null,	false),
+		TIME	("time",		null,	true,	null,	null,	null,	false),
 		
 		// EXTEND
-		LOGIN(		"login", 	255, 	false,	null,	null,	true,	null),
-		PASSWORD(	"password", 255, 	false,	null,	null,	null,	null),
-		EMAIL(		"email", 	255,	true,	null,	null,	true,	null),
-		PHONE(		"phone", 	24,		true,	null,	null,	null,	null),
-		CITY(		"city", 	255, 	true,	null,	null,	null,	null),
-		ZIPCODE(	"zipcode", 	9999999,true,	null,	null,	null,	null),
-		COUNTRY(	"country",	255,	true,	null,	null,	null,	null),
-		BC_EAN(		"ean",		12,		true,	null,	null,	null,	null);
+		LOGIN	("login", 	255, 	false,	null,	null,	true,	null),
+		PASSWORD("password", 255, 	false,	null,	null,	null,	null),
+		EMAIL	("email", 	255,	true,	null,	null,	true,	null),
+		PHONE	("phone", 	24,		true,	null,	null,	null,	null),
+		CITY	("city", 	255, 	true,	null,	null,	null,	null),
+		ZIPCODE	("zipcode", 255, 	true,	null,	null,	null,	null),
+		COUNTRY	("country",	255,	true,	null,	null,	null,	null),
+		BC_EAN	("ean",		12,		true,	null,	null,	null,	null);
 		
 		private String type;
 		private int length = Integer.MAX_VALUE;
@@ -124,7 +124,7 @@ public @interface Column {
 		
 		public static Type fromString(final String value) {
 			Type ret = null;
-			if (value!= null) {
+			if (value != null) {
 				for (final Type type : Type.values()) {
 					if (value.equalsIgnoreCase(type.type)) {
 						ret = type;
@@ -138,8 +138,8 @@ public @interface Column {
 		
 		public static Type fromName(String name) {
 			Type ret;
-			if (name.lastIndexOf('.')>0) {
-				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot
+			if (name.lastIndexOf('.') > 0) {
+				name = name.substring(name.lastIndexOf('.') + 1); // Take only what comes after the last dot
 			}
 			try {
 				final Field field = Type.class.getField(name.toUpperCase());	
@@ -167,13 +167,13 @@ public @interface Column {
 			
 		
 		/** Type that maps an SQL VARCHAR to a JAVA string. */
-		//public final static String STRING = "string";
+		//public static final String STRING = "string";
 		/** Type that maps an SQL VARCHAR to a JAVA string with only ASCII value.*/
-		//public final static String LOGIN = "login";
+		//public static final String LOGIN = "login";
 		/** Type that maps an SQL VARCHAR to a JAVA string with only ASCII value but not show. */
-		//public final static String PASSWORD = "password";
+		//public static final String PASSWORD = "password";
 		/** Type that maps an SQL INT to a JAVA integer. */
-		//public final static String INTEGER = "integer";
+		//public static final String INTEGER = "integer";
 	    /*smallint: Type that maps a database SMALLINT to a JAVA integer.
 	    bigint: Type that maps a database BIGINT to a JAVA string.
 	    boolean: Type that maps an SQL boolean to a JAVA boolean.
@@ -181,9 +181,9 @@ public @interface Column {
 	    date: Type that maps an SQL DATETIME to a JAVA DateTime object.
 	    time: Type that maps an SQL TIME to a JAVA DateTime object.*/
 	    /** Type that maps an SQL DATETIME/TIMESTAMP to a JAVA DateTime object. */
-		//public final static String DATETIME = "datetime";
+		//public static final String DATETIME = "datetime";
 	    /** Type that maps an SQL CLOB to a JAVA string. */
-	   // public final static String TEXT = "text";
+	   // public static final String TEXT = "text";
 	    /*object: Type that maps a SQL CLOB to a JAVA object using serialize() and unserialize()
 	    array: Type that maps a SQL CLOB to a JAVA object using serialize() and unserialize()
 	    float: Type that maps a SQL Float (Double Precision) to a JAVA double. IMPORTANT: Works only with locale settings that use decimal points as separator. */

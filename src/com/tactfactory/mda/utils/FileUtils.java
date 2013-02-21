@@ -70,7 +70,7 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 			final InputStream in = new FileInputStream(srcFile);
 
 			// For Append the file.
-			// OutputStream out = new FileOutputStream(f2,true);
+			// OutputStream out = new FileOutputStream(f2, true);
 
 			// For Overwrite the file.
 			final OutputStream out = new FileOutputStream(destFile);
@@ -85,9 +85,9 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 			
 			// Debug Log
 			ConsoleUtils.displayDebug("File "
-						+ srcFile.getName()
-						+ " copied to "
-						+ destFile.getPath());
+						 + srcFile.getName()
+						 + " copied to "
+						 + destFile.getPath());
 			
 		} catch (final FileNotFoundException ex) {
 			ConsoleUtils.displayError(ex);
@@ -107,18 +107,18 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 	    if (success) {
 	        // Folder did not exists and was created
 	    	ConsoleUtils.display(FOLDER
-	    			+ folder.getName()
-	    			+ "' did not exists and was created...");
+	    			 + folder.getName()
+	    			 + "' did not exists and was created...");
 	    } else {
 	        // Folder already exists
 	    	if (folder.exists()) {
 	    		ConsoleUtils.display(FOLDER
-	    				+ folder.getName()
-	    				+ "' already exists...");
+	    				 + folder.getName()
+	    				 + "' already exists...");
 	    	} else {
 	    		ConsoleUtils.display(FOLDER
-	    				+ folder.getName()
-	    				+ "' creation error...");
+	    				 + folder.getName()
+	    				 + "' creation error...");
 	    	}
 	    }
 		
@@ -196,7 +196,7 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 	
 	/** write stringbuffer contents to the given file */
 	public static void stringBufferToFile(final StringBuffer buff,
-				final File file)	{
+				final File file)	 {
 		FileOutputStream fos = null;
 		OutputStreamWriter out = null;
 		BufferedWriter bw = null;
@@ -273,44 +273,44 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 
 		if (!tplFolder.isDirectory()) {
 			ConsoleUtils.display("Folder src '" 
-						+ srcPath 
-						+ "' is not a folder");
+						 + srcPath 
+						 + "' is not a folder");
 		} else if (tplFiles == null || tplFiles.length == 0) {
 			ConsoleUtils.display("No items inside '" 
-							+ srcPath 
-							+ "'");
+							 + srcPath 
+							 + "'");
 		} else {
 			success = destFolder.mkdirs();
 			if (destFolder.exists()) {
 				if (success) {
 					ConsoleUtils.display(FOLDER
-							+ destFolder.getName()
-							+ "' did not exists and was created.");
+							 + destFolder.getName()
+							 + "' did not exists and was created.");
 				} else {
 					ConsoleUtils.display(FOLDER
-							+ destFolder.getName()
-							+ "' already exists...");
+							 + destFolder.getName()
+							 + "' already exists...");
 				}
 				for (final File tplFile : tplFiles) {
-					if (tplFile.isDirectory())	{
+					if (tplFile.isDirectory())	 {
 						tmpFile = new File(destPath
                                 + tplFile.getName()
-								+ "/");
+								 + "/");
 						success = tmpFile.mkdir(); 
 					    if (success) {
 					    	ConsoleUtils.displayDebug(FOLDER
-					    			+ tmpFile.getName()
-					    			+ "' did not exists and was created...");
+					    			 + tmpFile.getName()
+					    			 + "' did not exists and was created...");
 					    } else {
 					        // Folder already exists
 					    	if (tmpFile.exists()) {
 					    		ConsoleUtils.display(FOLDER
-					    				+ tmpFile.getName()
-					    				+ "' already exists...");
+					    				 + tmpFile.getName()
+					    				 + "' already exists...");
 					    	} else {
 					    		ConsoleUtils.display(FOLDER
-					    				+ tmpFile.getName()
-					    				+ "' creation error...");
+					    				 + tmpFile.getName()
+					    				 + "' creation error...");
 					    	}
 					    }
 						FileUtils.makeFolderRecursive(
@@ -323,26 +323,26 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 								false);
 					} else if (tplFile.isFile() && makeFiles) {
 						tmpFile = FileUtils.makeFile(destPath
-								+ tplFile.getName());
+								 + tplFile.getName());
 						if (tmpFile.exists()) {
 			    			FileUtils.copyfile(tplFile, tmpFile);
 			    			ConsoleUtils.displayDebug(FILE
-			    					+ tplFile.getName() 
-			    					+ "' created...");
+			    					 + tplFile.getName() 
+			    					 + "' created...");
 						} else {
 							ConsoleUtils.displayError(
 									new Exception(
 											FILE 
-											+ tplFile.getName()
-											+ "' creation error..."));
+											 + tplFile.getName()
+											 + "' creation error..."));
 						}
 					}
 				}
 			} else {
 				ConsoleUtils.displayError(
 						new Exception(FOLDER
-								+ destFolder.getName()
-								+ "' creation Error..."));
+								 + destFolder.getName()
+								 + "' creation Error..."));
 			}
 		}
 		return destFolder;
@@ -364,14 +364,14 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 					} else {
 						if (f.delete()) {
 							ConsoleUtils.displayDebug(FILE
-									+ f.getPath()
-									+ "' deleted.");
+									 + f.getPath()
+									 + "' deleted.");
 						} else {
 							ret++;
 							
 							ConsoleUtils.displayWarning(FILE
-									+ f.getPath()
-									+ "' delete ERROR!");
+									 + f.getPath()
+									 + "' delete ERROR!");
 						}
 					}
 				}
@@ -380,43 +380,43 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 				if (dir.listFiles().length == 0) {
 					if (dir.delete()) {
 						ConsoleUtils.displayDebug(FOLDER
-								+ dir.getPath()
-								+ "' deleted.");
+								 + dir.getPath()
+								 + "' deleted.");
 					} else {
 						ret++;
 						
 						ConsoleUtils.displayWarning(FOLDER
-								+ dir.getPath()
-								+ "' delete ERROR!");
+								 + dir.getPath()
+								 + "' delete ERROR!");
 					}
 				} else {
 					ret++;
 					
 					ConsoleUtils.displayWarning(FOLDER
-							+ dir.getPath()
-							+ "' NOT Empty!");
+							 + dir.getPath()
+							 + "' NOT Empty!");
 				}
 				
 			} else {
 				// it's a file delete simply
 				if (dir.delete()) {
 					ConsoleUtils.displayDebug(FILE
-							+ dir.getPath()
-							+ "' deleted.");
+							 + dir.getPath()
+							 + "' deleted.");
 				} else {
 					ret++;
 
 					ConsoleUtils.displayWarning(FILE
-							+ dir.getPath()
-							+ "' delete ERROR!");
+							 + dir.getPath()
+							 + "' delete ERROR!");
 				}
 			}
 		} else {
 			ret++;
 			
 			ConsoleUtils.displayWarning(FOLDER
-					+ dir.getPath()
-					+ "' doesn't exists!");
+					 + dir.getPath()
+					 + "' doesn't exists!");
 		}
 		return ret;
 	}
@@ -425,12 +425,12 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		final File f = new File(filename);
 		if (f.exists()) {
 			ConsoleUtils.displayDebug("File "
-					+ filename
-					+ " already exists !");
+					 + filename
+					 + " already exists !");
 		} else { 
 			ConsoleUtils.displayDebug("File "
-						+ filename
-						+ " doesn't exists !");
+						 + filename
+						 + " doesn't exists !");
 		}
 		return f.exists();
 	}

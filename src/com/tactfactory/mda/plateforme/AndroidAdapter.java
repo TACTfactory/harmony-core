@@ -20,6 +20,10 @@ import com.tactfactory.mda.utils.ImageUtils;
 
 /** Google Android Adapter of project structure */
 public final class AndroidAdapter extends BaseAdapter {
+	private static final String FLOAT = "float";
+	private static final String STR = "String";
+	private static final String INT = "int";
+	private static final String DATETIME = "DateTime";
 
 	public AndroidAdapter() {
 		super();
@@ -71,7 +75,7 @@ public final class AndroidAdapter extends BaseAdapter {
 			result = "TextView";
 		}
 
-		if (field.relation !=null && (field.relation.type.equals("OneToMany") || field.relation.type.equals("ManyToMany"))) {
+		if (field.relation != null && (field.relation.type.equals("OneToMany") || field.relation.type.equals("ManyToMany"))) {
 
 			result = "TextView";
 		}
@@ -90,7 +94,7 @@ public final class AndroidAdapter extends BaseAdapter {
 			result = "EditText";
 		} else
 			
-		if (field.type.equals("Date") ) {
+		if (field.type.equals("Date")) {
 			result = "EditText"; //"DatePickerDialog";
 		} else
 
@@ -98,7 +102,7 @@ public final class AndroidAdapter extends BaseAdapter {
 			result = "CheckBox";
 		}
 			
-		if (field.relation !=null && (field.relation.type.equals("ManyToOne") || field.relation.type.equals("OneToOne"))) {
+		if (field.relation != null && (field.relation.type.equals("ManyToOne") || field.relation.type.equals("OneToOne"))) {
 
 			result = "Spinner";
 		}
@@ -115,10 +119,6 @@ public final class AndroidAdapter extends BaseAdapter {
 
 	@Override
 	public String getNativeType(final String type) {
-		final String FLOAT = "float";
-		final String STR = "String";
-		final String INT = "int";
-		final String DATETIME = "DateTime";
 		String ret = type;
 		
 		if (type.equals(Column.Type.STRING.getValue())) {

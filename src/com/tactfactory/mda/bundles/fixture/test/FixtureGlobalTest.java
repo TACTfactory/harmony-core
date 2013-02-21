@@ -25,7 +25,7 @@ import com.tactfactory.mda.test.CommonTest;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 
-public class FixtureGlobalTest extends CommonTest{
+public class FixtureGlobalTest extends CommonTest {
 	
 	/**
 	 * @throws java.lang.Exception
@@ -60,11 +60,11 @@ public class FixtureGlobalTest extends CommonTest{
 		
 		harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
-		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
-		harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[]{}, null);
-		harmony.findAndExecute(RestCommand.GENERATE_ADAPTERS, new String[]{}, null);
-		harmony.findAndExecute(SyncCommand.GENERATE_SERVICE, new String[]{}, null);
-		harmony.findAndExecute(FixtureCommand.FIXTURE_INIT, new String[]{"--forma =xml"}, null);
+		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
+		harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[] {}, null);
+		harmony.findAndExecute(RestCommand.GENERATE_ADAPTERS, new String[] {}, null);
+		harmony.findAndExecute(SyncCommand.GENERATE_SERVICE, new String[] {}, null);
+		harmony.findAndExecute(FixtureCommand.FIXTURE_INIT, new String[] {"--forma =xml"}, null);
 	}
 	
 	//@Test
@@ -86,7 +86,7 @@ public class FixtureGlobalTest extends CommonTest{
 	public void hasFixturesXml() {
 		// Copy fixture files
 		copyFixturesXml();
-		CommonTest.harmony.findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[]{}, null);
+		CommonTest.harmony.findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[] {}, null);
 				
 		CommonTest.hasFindFile("android/assets/app/User.xml");
 		CommonTest.hasFindFile("android/assets/app/Comment.xml");
@@ -102,12 +102,12 @@ public class FixtureGlobalTest extends CommonTest{
 	@Test
 	public void hasFixturesYml() {
 		//Purge & init
-		CommonTest.harmony.findAndExecute(FixtureCommand.FIXTURE_PURGE, new String[]{}, null);
-		CommonTest.harmony.findAndExecute(FixtureCommand.FIXTURE_INIT, new String[]{}, null);
+		CommonTest.harmony.findAndExecute(FixtureCommand.FIXTURE_PURGE, new String[] {}, null);
+		CommonTest.harmony.findAndExecute(FixtureCommand.FIXTURE_INIT, new String[] {}, null);
 		
 		// Copy fixture files
 		copyFixturesYml();
-		CommonTest.harmony.findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[]{}, null);
+		CommonTest.harmony.findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[] {}, null);
 		
 		CommonTest.hasFindFile("android/assets/app/User.yml");
 		CommonTest.hasFindFile("android/assets/app/Comment.yml");
@@ -128,11 +128,11 @@ public class FixtureGlobalTest extends CommonTest{
 		String destDir = String.format("fixtures/app/");
 		System.out.println(destDir);
 		
-		// FileUtils.copyDirectory(new File(srcDir),new File(destDir));
+		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
 		destDir = String.format("fixtures/test/");
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
-		if (new File(destDir+"Post.xml").exists()) {
+		if (new File(destDir + "Post.xml").exists()) {
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");
 		}
 	}
@@ -144,11 +144,11 @@ public class FixtureGlobalTest extends CommonTest{
 		String destDir = String.format("fixtures/app/");
 		System.out.println(destDir);
 		
-		// FileUtils.copyDirectory(new File(srcDir),new File(destDir));
+		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
 		destDir = String.format("fixtures/test/");
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
-		if (new File(destDir+"Post.yml").exists()) {
+		if (new File(destDir + "Post.yml").exists()) {
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");
 		}
 	}

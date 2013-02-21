@@ -43,7 +43,7 @@ public class ConfigGenerator extends BaseGenerator {
 		
 		try {
 			final SAXBuilder builder = new SAXBuilder();		// Make engine
-			final File xmlFile = FileUtils.makeFile(this.adapter.getConfigsPathFile() );
+			final File xmlFile = FileUtils.makeFile(this.adapter.getConfigsPathFile());
 			final Document doc = builder.build(xmlFile); 	// Load XML File
 			final Element rootNode = doc.getRootElement(); 			// Load Root element
 			final Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
@@ -58,7 +58,7 @@ public class ConfigGenerator extends BaseGenerator {
 				final List<Element> configs = rootNode.getChildren("string"); 	// Find many elements
 				for (final Element configXml : configs) {
 					if (configXml.hasAttributes() && 
-							configXml.getAttributeValue(NAME,ns).equals(configMeta.key)) {	// Load name value
+							configXml.getAttributeValue(NAME, ns).equals(configMeta.key)) {	// Load name value
 						findConfig = configXml;
 						
 						break;

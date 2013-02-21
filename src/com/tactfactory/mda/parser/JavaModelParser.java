@@ -179,7 +179,7 @@ public class JavaModelParser {
 			
 			new ClassVisitor().visit(mclass, meta);
 			if (!Strings.isNullOrEmpty(meta.name)) {
-				new ImportVisitor().visit(mclass,meta);
+				new ImportVisitor().visit(mclass, meta);
 				new FieldVisitor().visit(mclass, meta);
 				new MethodVisitor().visit(mclass, meta);
 				
@@ -199,7 +199,7 @@ public class JavaModelParser {
 	    	}
 
 	    	final List<AnnotationExpr> classAnnotations = n.getAnnotations();
-			if (classAnnotations!=null) {
+			if (classAnnotations != null) {
 				for (final AnnotationExpr annotationExpr : classAnnotations) {
 
 					for (final BaseParser bParser : JavaModelParser.this.bundleParsers) {
@@ -223,7 +223,7 @@ public class JavaModelParser {
 				if (!Strings.isNullOrEmpty(meta.name)) {
 					// Get list of Implement type
 					final List<ClassOrInterfaceType> impls = n.getImplements();
-					if (impls!=null) {
+					if (impls != null) {
 						for (final ClassOrInterfaceType impl : impls) {					
 							meta.implementTypes.add(impl.getName());
 							
@@ -234,7 +234,7 @@ public class JavaModelParser {
 					
 					// Get Extend type
 					final List<ClassOrInterfaceType> exts = n.getExtends();
-					if (exts!=null) {
+					if (exts != null) {
 						for (final ClassOrInterfaceType ext : exts) {					
 							meta.extendType = ext.getName();		
 							
@@ -245,7 +245,7 @@ public class JavaModelParser {
 					
 					// Get list of Members
 					/*List<BodyDeclaration> members = n.getMembers();
-					if (members!=null) {
+					if (members != null) {
 						for (BodyDeclaration member : members) {					
 							meta.members.add(member.getName());	///TODO Micky > Good or Trash ? [Gregg]	
 						}
@@ -274,7 +274,7 @@ public class JavaModelParser {
 				
 				// Java types Date and Time are deprecated in Harmony
 				if (fieldMeta.type.equalsIgnoreCase("date") || fieldMeta.type.equalsIgnoreCase("time")) {
-					ConsoleUtils.displayWarning("You should use DateTime java type instead of "+fieldMeta.type+". Errors may occur.");
+					ConsoleUtils.displayWarning("You should use DateTime java type instead of " + fieldMeta.type + ". Errors may occur.");
 				}
 				//fieldMeta.isFinal = ModifierSet.isFinal(field.getModifiers());
 				fieldMeta.name = field.getVariables().get(0).getId().getName(); // FIXME not manage multi-variable
@@ -305,7 +305,7 @@ public class JavaModelParser {
 					if (annotationType.equals(FILTER_ONE2ONE)	||
 							annotationType.equals(FILTER_ONE2MANY)	||
 							annotationType.equals(FILTER_MANY2ONE)	||
-							annotationType.equals(FILTER_MANY2MANY)	) {
+							annotationType.equals(FILTER_MANY2MANY)) {
 						rel.type = annotationType;
 					}
 					
@@ -381,14 +381,14 @@ public class JavaModelParser {
 			if (annotationExpr instanceof NormalAnnotationExpr) {
 				final NormalAnnotationExpr norm = (NormalAnnotationExpr)annotationExpr;
 				
-				if (norm.getPairs()!=null) {
+				if (norm.getPairs() != null) {
 					for (final MemberValuePair mvp : norm.getPairs()) { // Check if there are any arguments in the annotation
 						
 						// Argument of Annotation Column
 						if (annotationType.equals(FILTER_COLUMN)) { 
 							// set nullable
-							if (mvp.getName().equals("nullable") && 
-									mvp.getValue().toString().equals("true")) {
+							if (mvp.getName().equals("nullable")  
+									&& mvp.getValue().toString().equals("true")) {
 								fieldMeta.nullable = true;
 							} else 
 								
@@ -402,8 +402,8 @@ public class JavaModelParser {
 							} else 
 								
 							// Set unique 
-							if (mvp.getName().equals("unique") && 
-									mvp.getValue().toString().equals("true")) {
+							if (mvp.getName().equals("unique")  
+									&& mvp.getValue().toString().equals("true")) {
 								fieldMeta.unique = true;
 							} else 
 								
@@ -541,7 +541,7 @@ public class JavaModelParser {
 			if (annotationType.equals(FILTER_ONE2ONE)	||
 				annotationType.equals(FILTER_ONE2MANY)	||
 				annotationType.equals(FILTER_MANY2ONE)	||
-				annotationType.equals(FILTER_MANY2MANY)	) {
+				annotationType.equals(FILTER_MANY2MANY)) {
 				isRelation = true;
 				
 				// Debug Log
@@ -569,7 +569,7 @@ public class JavaModelParser {
 			
 			// Add Parameters
 			final List<Parameter> parameters = method.getParameters();
-			if (parameters!=null) {
+			if (parameters != null) {
 				for (final Parameter param : parameters) {
 					methodMeta.argumentsTypes.add(param.getType().toString());
 				}

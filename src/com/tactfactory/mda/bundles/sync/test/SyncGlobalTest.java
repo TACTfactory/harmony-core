@@ -28,7 +28,7 @@ import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.test.CommonTest;
 
-public class SyncGlobalTest extends CommonTest{
+public class SyncGlobalTest extends CommonTest {
 	private static final String POST = "Post";
 	private static final String COMMENT = "Comment";
 	private static final String USER = "User";
@@ -67,9 +67,9 @@ public class SyncGlobalTest extends CommonTest{
 		
 		harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
-		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
-		harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[]{}, null);
-		harmony.findAndExecute(SyncCommand.GENERATE_SERVICE, new String[]{}, null);
+		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
+		harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[] {}, null);
+		harmony.findAndExecute(SyncCommand.GENERATE_SERVICE, new String[] {}, null);
 		
 		final SyncCommand command = (SyncCommand) Harmony.instance.getCommand(SyncCommand.class);
 		command.generateMetas();
@@ -136,15 +136,15 @@ public class SyncGlobalTest extends CommonTest{
 	}
 	
 	private void hasMode(final ClassMetadata cm, final Sync.Mode value) {
-		Assert.assertTrue("Check if Mode of " + cm.name + " is "+value.getValue(), ((SyncMetadata)cm.options.get(SYNC)).mode.equals(value));
+		Assert.assertTrue("Check if Mode of " + cm.name + " is " + value.getValue(), ((SyncMetadata)cm.options.get(SYNC)).mode.equals(value));
 	}
 	
 	private void hasLevel(final ClassMetadata cm, final Sync.Level value) {
-		Assert.assertTrue("Check if Level of " + cm.name + " is "+value.getValue(), ((SyncMetadata)cm.options.get(SYNC)).level.equals(value));
+		Assert.assertTrue("Check if Level of " + cm.name + " is " + value.getValue(), ((SyncMetadata)cm.options.get(SYNC)).level.equals(value));
 	}
 	
 	private void hasPriority(final ClassMetadata cm, final int value) {
-		Assert.assertTrue("Check if Priority of " + cm.name + " is "+value, ((SyncMetadata)cm.options.get(SYNC)).priority == value);
+		Assert.assertTrue("Check if Priority of " + cm.name + " is " + value, ((SyncMetadata)cm.options.get(SYNC)).priority == value);
 	}
 	
 }

@@ -16,10 +16,10 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 
 /** Harmony console class*/
 public abstract class Console extends Harmony {
-	protected final static String HARMONY_VERSION = "Harmony version " + Harmony.VERSION + "\n";
-	protected final static String ARGUMENT_PREFIX = "--";
-	protected final static String ARGUMENT_PREFIX_SHORT = "-";
-	protected final static String ARGUMENT_AFFECT = "=";
+	protected static final String HARMONY_VERSION = "Harmony version " + Harmony.VERSION + "\n";
+	protected static final String ARGUMENT_PREFIX = "--";
+	protected static final String ARGUMENT_PREFIX_SHORT = "-";
+	protected static final String ARGUMENT_AFFECT = "=";
 	
 	protected static enum Option {
 		//name		Internal	Short	Help message
@@ -71,7 +71,7 @@ public abstract class Console extends Harmony {
 		
 		public static Option fromFullName(final String value) {
 			Option ret = null;
-			if (value!= null) {
+			if (value != null) {
 				for (final Option option : Option.values()) {
 					if (value.equalsIgnoreCase(option.fullName)) {
 						ret = option;
@@ -84,7 +84,7 @@ public abstract class Console extends Harmony {
 		
 		public static Option fromShortName(final String value) {
 			Option ret = null;
-			if (value!= null) {
+			if (value != null) {
 				for (final Option option : Option.values()) {
 					if (value.equalsIgnoreCase(option.shortName)) {
 						ret = option;
@@ -113,7 +113,7 @@ public abstract class Console extends Harmony {
 					Option.HELP + 
 					Option.QUIET + 
 					Option.VERBOSE + 
-					Option.VERSION +
+					Option.VERSION + 
 					Option.ANSI + 
 					Option.NO_ANSI);
 
@@ -125,7 +125,7 @@ public abstract class Console extends Harmony {
 			// Extract Argument
 			final int currentPosition 	= Console.extractOptions(args);
 			final String command 			= Console.extractCommand(args, currentPosition);
-			final String[] commandArgs 	= Console.extractCommandArgument(args, currentPosition+1);
+			final String[] commandArgs 	= Console.extractCommandArgument(args, currentPosition + 1);
 
 			
 			// Harmony command launch
@@ -233,18 +233,18 @@ public abstract class Console extends Harmony {
 	 * Extract commandArgs and put them in an HashMap
 	 * 
 	 * @param args String array of command arguments with their identifier
-	 * @return HashMap<String,String> arguments
+	 * @return HashMap<String, String> arguments
 	 */
-	public static HashMap<String,String> parseCommandArgs(final String[] args) {
+	public static HashMap<String, String> parseCommandArgs(final String[] args) {
 		
-		final HashMap<String,String> commandArgs = new HashMap<String,String>();
-		if (args!=null && args.length!=0) {
+		final HashMap<String, String> commandArgs = new HashMap<String, String>();
+		if (args != null && args.length != 0) {
 			for (final String arg : args) {
 				if (arg.startsWith(ARGUMENT_PREFIX)) {
 					final String[] key = arg.split(ARGUMENT_AFFECT);
 					
 					if (key.length > 1) {
-						commandArgs.put(key[0].substring(2),key[1]);
+						commandArgs.put(key[0].substring(2), key[1]);
 					}
 				}
 			}

@@ -5,7 +5,7 @@ import com.tactfactory.mda.template.BaseGenerator;
 
 public class SocialGenerator  extends BaseGenerator {
 
-	public SocialGenerator(final BaseAdapter adapter) throws Exception{
+	public SocialGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		// TODO Auto-generated constructor stub
 	}
@@ -18,7 +18,7 @@ public class SocialGenerator  extends BaseGenerator {
 	
 	protected void makeMenu(final boolean override) {
 		final String fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + "menu" + "/" + "SocialMenuWrapper.java";
-		final String fullTemplatePath = this.adapter.getTemplateSourcePath()+"menu/SocialMenuWrapper.java";
+		final String fullTemplatePath = this.adapter.getTemplateSourcePath() + "menu/SocialMenuWrapper.java";
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}

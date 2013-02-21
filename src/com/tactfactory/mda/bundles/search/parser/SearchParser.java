@@ -21,7 +21,7 @@ import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.parser.BaseParser;
 import com.tactfactory.mda.utils.PackageUtils;
 
-public class SearchParser  extends BaseParser{
+public class SearchParser  extends BaseParser {
 	private static final String SEARCH = "search";
 	private static final String ANNOT_SEARCHABLE = PackageUtils.extractNameEntity(Searchable.class);
 	

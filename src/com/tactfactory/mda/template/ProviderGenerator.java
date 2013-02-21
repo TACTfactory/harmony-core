@@ -39,7 +39,7 @@ public class ProviderGenerator extends BaseGenerator {
 		super(adapter);
 		
 		this.nameProvider = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name + "Provider");
-		this.localNameSpace = this.appMetas.projectNameSpace.replace('/', '.') +"."+ this.adapter.getProvider();
+		this.localNameSpace = this.appMetas.projectNameSpace.replace('/', '.') + "." + this.adapter.getProvider();
 		
 
 		this.datamodel = this.appMetas.toMap(this.adapter);
@@ -100,7 +100,7 @@ public class ProviderGenerator extends BaseGenerator {
 	private void updateManifest(final String nameProvider) {
 		final String pathRelatif = String.format("%s.%s",
 				this.localNameSpace, 
-				nameProvider );
+				nameProvider);
 
 		// Debug Log
 		ConsoleUtils.displayDebug("Update Manifest : " + pathRelatif);
@@ -120,7 +120,7 @@ public class ProviderGenerator extends BaseGenerator {
 				// Find Activity Node
 				final List<Element> providers = applicationNode.getChildren("provider"); 	// Find many elements
 				for (final Element provider : providers) {
-					if (provider.hasAttributes() && provider.getAttributeValue("name",ns).equals(pathRelatif) ) {	// Load attribute value
+					if (provider.hasAttributes() && provider.getAttributeValue("name", ns).equals(pathRelatif)) {	// Load attribute value
 						findProvider = provider;
 						break;
 					}

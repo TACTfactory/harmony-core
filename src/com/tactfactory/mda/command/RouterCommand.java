@@ -15,13 +15,13 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 @PluginImplementation
 public class RouterCommand extends BaseCommand {
 
-	public final static String BUNDLE = "router";
-	public final static String SUBJECT_GENERATE = "generate";
-	public final static String SUBJECT_DEBUG = "debug";
-	public final static String ACTION_MANIFEST = "manifest";
+	public static final String BUNDLE = "router";
+	public static final String SUBJECT_GENERATE = "generate";
+	public static final String SUBJECT_DEBUG = "debug";
+	public static final String ACTION_MANIFEST = "manifest";
 	
-	public final static String ROUTER_DEBUG = BUNDLE + SEPARATOR + SUBJECT_DEBUG;
-	public final static String ROUTER_GENERATE_MANIFEST = BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_MANIFEST;
+	public static final String ROUTER_DEBUG = BUNDLE + SEPARATOR + SUBJECT_DEBUG;
+	public static final String ROUTER_GENERATE_MANIFEST = BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_MANIFEST;
 	
 	protected void routerDebug() {
 	}
@@ -31,9 +31,9 @@ public class RouterCommand extends BaseCommand {
 
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> ROUTER \n" +
-				"\t"+ROUTER_DEBUG+"\t\t => List all URI\n" +
-				"\t"+ROUTER_GENERATE_MANIFEST+" => Generate Manifest\n");
+		ConsoleUtils.display("\n> ROUTER \n" + 
+				"\t" + ROUTER_DEBUG + "\t\t => List all URI\n" + 
+				"\t" + ROUTER_GENERATE_MANIFEST + " => Generate Manifest\n");
 	}
 
 	@Override

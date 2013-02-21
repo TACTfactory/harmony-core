@@ -51,16 +51,16 @@ public class OrmInitViewTest extends CommonTest {
 	private static void initAll() {
 		System.out.println("\nTest Orm generate View");
 		System.out.println("###############" 
-				+ "##############" 
-				+ "##############"
-				+ "##################################");
+				 + "##############" 
+				 + "##############"
+				 + "##################################");
 		
 		harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
 		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES,
-				new String[]{},
+				new String[] {},
 				null);
-		harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[]{}, null);
+		harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[] {}, null);
 	}
 	
 	//@Test

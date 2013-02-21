@@ -94,7 +94,7 @@ public class ActivityGenerator extends BaseGenerator {
 			if (!cm.internal && !cm.fields.isEmpty()) {
 				cm.makeString("label");
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
-				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getController())+"."+cm.getName().toLowerCase(Locale.ENGLISH);
+				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getController()) + "." + cm.getName().toLowerCase(Locale.ENGLISH);
 				this.generateAllAction(cm.getName());
 			}
 		}
@@ -113,7 +113,7 @@ public class ActivityGenerator extends BaseGenerator {
 		ConsoleUtils.display(">>> Generate CRUD view for " +  entityName);
 		
 		try {
-			if (this.isWritable ) {
+			if (this.isWritable) {
 				ConsoleUtils.display("   with write actions");
 	
 				this.generateCreateAction(entityName);
@@ -131,11 +131,11 @@ public class ActivityGenerator extends BaseGenerator {
 				
 				TranslationMetadata.addDefaultTranslation(
 						entityName.toLowerCase(Locale.ENGLISH) + "_progress_save_title", 
-						entityName +" save progress",
+						entityName + " save progress",
 						Group.MODEL);
 				TranslationMetadata.addDefaultTranslation(
 						entityName.toLowerCase(Locale.ENGLISH) + "_progress_save_message", 
-						entityName +" is saving to database&#8230;",
+						entityName + " is saving to database&#8230;",
 						Group.MODEL);
 			}
 	
@@ -144,11 +144,11 @@ public class ActivityGenerator extends BaseGenerator {
 			
 			TranslationMetadata.addDefaultTranslation(
 					entityName.toLowerCase(Locale.ENGLISH) + "_progress_load_title", 
-					entityName +" Loading progress",
+					entityName + " Loading progress",
 					Group.MODEL);
 			TranslationMetadata.addDefaultTranslation(
 					entityName.toLowerCase(Locale.ENGLISH) + "_progress_load_message", 
-					entityName +" is loading&#8230;",
+					entityName + " is loading&#8230;",
 					Group.MODEL);
 		
 			new TranslationGenerator(this.adapter).generateStringsXml();
@@ -175,13 +175,13 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("row_%s.xml");
 		
 		for (final String java : javas) {
-			this.makeSourceControler( 
+			this.makeSourceControler(
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
 		
 		for (final String xml : xmls) {
-			this.makeResourceLayout( 
+			this.makeResourceLayout(
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
 		}
@@ -190,7 +190,7 @@ public class ActivityGenerator extends BaseGenerator {
 		
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_empty_list", 
-				entityName +" list is empty !",
+				entityName + " list is empty !",
 				Group.MODEL);
 	}
 
@@ -217,7 +217,7 @@ public class ActivityGenerator extends BaseGenerator {
 		}
 		
 		for (final String xml : xmls) {
-			this.makeResourceLayout( 
+			this.makeResourceLayout(
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
 		}
@@ -227,7 +227,7 @@ public class ActivityGenerator extends BaseGenerator {
 
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_load", 
-				entityName +" loading error&#8230;",
+				entityName + " loading error&#8230;",
 				Group.MODEL);
 	}
 
@@ -248,13 +248,13 @@ public class ActivityGenerator extends BaseGenerator {
 		
 
 		for (final String java : javas) {
-			this.makeSourceControler( 
+			this.makeSourceControler(
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
 		
 		for (final String xml : xmls) {
-			this.makeResourceLayout( 
+			this.makeResourceLayout(
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
 		}
@@ -263,7 +263,7 @@ public class ActivityGenerator extends BaseGenerator {
 		
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_edit", 
-				entityName +" edition error&#8230;",
+				entityName + " edition error&#8230;",
 				Group.MODEL);
 				
 	}
@@ -301,7 +301,7 @@ public class ActivityGenerator extends BaseGenerator {
 		
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_create", 
-				entityName +" creation error&#8230;",
+				entityName + " creation error&#8230;",
 				Group.MODEL);
 	}
 
@@ -392,7 +392,7 @@ public class ActivityGenerator extends BaseGenerator {
 				// Find Activity Node
 				final List<Element> activities = applicationNode.getChildren("activity"); 	// Find many elements
 				for (final Element activity : activities) {
-					if (activity.hasAttributes() && activity.getAttributeValue(NAME,ns).equals(pathRelatif) ) {	// Load attribute value
+					if (activity.hasAttributes() && activity.getAttributeValue(NAME, ns).equals(pathRelatif)) {	// Load attribute value
 						findActivity = activity;
 						break;
 					}
@@ -441,7 +441,7 @@ public class ActivityGenerator extends BaseGenerator {
 					data.append('.');
 					data.append(entityName);
 					
-					filterActivity.getChild("action").setAttribute(NAME, "android.intent.action."+ action, ns);
+					filterActivity.getChild("action").setAttribute(NAME, "android.intent.action." + action, ns);
 					filterActivity.getChild("category").setAttribute(NAME, "android.intent.category.DEFAULT", ns);
 					filterActivity.getChild("data").setAttribute("mimeType", data.toString(), ns);
 				}

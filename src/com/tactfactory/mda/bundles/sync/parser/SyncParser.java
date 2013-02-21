@@ -27,7 +27,7 @@ import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.parser.BaseParser;
 import com.tactfactory.mda.utils.PackageUtils;
 
-public class SyncParser extends BaseParser{
+public class SyncParser extends BaseParser {
 	private static final String SYNC = "sync";
 	private static final String ANNOT_SYNC = PackageUtils.extractNameEntity(Sync.class);
 	private static final String ANNOT_SYNC_LEVEL = "level";

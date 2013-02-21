@@ -28,7 +28,7 @@ public enum TargetPlatform {
 	private static final String STRING_WINPHONE = "winphone";
 
 	private final int value;
-	TargetPlatform (final int value) {
+	TargetPlatform(final int value) {
 		this.value = value;
 	}
 	public int getValue() {

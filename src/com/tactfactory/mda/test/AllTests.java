@@ -19,7 +19,7 @@ import org.junit.runners.Suite.SuiteClasses;
  *
  */
 @RunWith(Suite.class)
-@SuiteClasses({ 
+@SuiteClasses( { 
 	com.tactfactory.mda.test.CoreTest.class,
 	com.tactfactory.mda.test.project.AllTests.class, 
 	com.tactfactory.mda.test.orm.AllTests.class,

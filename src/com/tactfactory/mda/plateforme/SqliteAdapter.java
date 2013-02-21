@@ -18,7 +18,7 @@ public abstract class SqliteAdapter {
 	private static final String PREFIX = "COL_";
 	private static final String SUFFIX = "_ID";
 
-	public static String generateStructure (
+	public static String generateStructure(
 								final String name, 
 								final String type,
 								final Integer length,
@@ -239,9 +239,9 @@ public abstract class SqliteAdapter {
 				if (field.isEnumConstant()) {
 					ConsoleUtils.displayWarning(
 							name 
-							+ " is a reserved SQLite keyword."
-							+ " You may have problems with"
-							+ " your database schema.");
+							 + " is a reserved SQLite keyword."
+							 + " You may have problems with"
+							 + " your database schema.");
 					exists = true;
 				} else {
 					exists = false;

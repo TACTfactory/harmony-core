@@ -136,7 +136,7 @@ public abstract class OsUtil {
 // java.versio = "1.0.2" "1.0.2"
 // file.separato = "\" "\"
 // path.separato = ";" ";"
-// line.separato = "0xd,0xa" "0xd,0xa"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 // ------------------------------------------------------
@@ -154,7 +154,7 @@ public abstract class OsUtil {
 // java.versio = "1.1.4" "1.1.4"
 // file.separato = "\" "\"
 // path.separato = ";" ";"
-// line.separato = "0xd,0xa" "0xd,0xa"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 // ------------------------------------------------------
@@ -172,7 +172,7 @@ public abstract class OsUtil {
 // java.versio = "1.1" "1.1"
 // file.separato = "\" "\"
 // path.separato = ";" ";"
-// line.separato = "0xd,0xa" "0xd,0xa"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 // ------------------------------------------------------
@@ -190,7 +190,7 @@ public abstract class OsUtil {
 // java.versio = "1.1.6" "1.1.6"
 // file.separato = "\" "\"
 // path.separato = ";" ";"
-// line.separato = "0xd,0xa" "0xd,0xa"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 // ------------------------------------------------------
@@ -239,7 +239,7 @@ public abstract class OsUtil {
 // java.versio = "1.1.4" "1.1.4"
 // file.separato = "\" "\"
 // path.separato = ";" ";"
-// line.separato = "0xd,0xa" "0xd,0xa"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 // ------------------------------------------------------
@@ -276,7 +276,7 @@ public abstract class OsUtil {
 // java.versio = "1.1" "1.1"
 // file.separato = "\" "\"
 // path.separato = ";" ";"
-// line.separato = "0xd,0xa" "0xd,0xa"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 // ------------------------------------------------------
@@ -312,7 +312,7 @@ public abstract class OsUtil {
 // java.versio = "1.2beta4" "1.2beta4"
 // file.separato = "\" "\"
 // path.separato = ";" ";"
-// line.separato = "0xd,0xa" "0xd,0xa"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 // ------------------------------------------------------
@@ -330,7 +330,7 @@ public abstract class OsUtil {
 // java.versio = "1.1.5" "1.1.5"
 // file.separato = "\" "\"
 // path.separato = ";" ";"
-// line.separato = "0xd,0xa" "0xd,0xa"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 // ------------------------------------------------------
@@ -348,7 +348,7 @@ public abstract class OsUtil {
 // java.versio = "1.0.2" "1.0.2"
 // file.separato = "\" "\"
 // path.separato = ";" ";"
-// line.separato = "0xd,0xa" "0xd,0xa"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 //
@@ -661,7 +661,7 @@ public abstract class OsUtil {
 // java.versio = "1.1.6" "1.1.6"
 // file.separato = "\" "\"
 // path.separato = ";" ";"
-// line.separato = "0xd,0xa" "0xd,0xa"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 //
@@ -703,7 +703,7 @@ public abstract class OsUtil {
 // here are the results for the latest HP-UX JDK (HP-UX 10.20):
 // AS told me (CK) that for HP-UX java.version 
 // will always have the same general format;
-// the letter ( "C" in the sample ) might change, and there may or may
+// the letter ( "C" in the sample) might change, and there may or may
 // not be a date after the version number.
 // Contributor: AS
 //
@@ -867,6 +867,6 @@ public abstract class OsUtil {
 // java.versio = "1.1.5 " "1.1.5 "
 // file.separato = "\" "\"
 // path.separato = ";" ";"
-// line.separato = "0xd,0xa" "0xd,0xa"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //

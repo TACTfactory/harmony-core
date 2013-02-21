@@ -26,7 +26,7 @@ import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.parser.BaseParser;
 import com.tactfactory.mda.utils.PackageUtils;
 
-public class RestParser extends BaseParser{
+public class RestParser extends BaseParser {
 	private static final String REST = "rest";
 	private static final String ANNOT_REST = PackageUtils.extractNameEntity(Rest.class);
 	private static final String ANNOT_REST_SECURITY = "security";
@@ -64,7 +64,7 @@ public class RestParser extends BaseParser{
 			if (fieldAnnot instanceof NormalAnnotationExpr) {
 				final NormalAnnotationExpr norm = (NormalAnnotationExpr)fieldAnnot;
 				final List<MemberValuePair> pairs = norm.getPairs();
-				if (pairs!=null) {
+				if (pairs != null) {
 					for (final MemberValuePair pair : pairs) {
 						if (pair.getName().equals(ANNOT_REST_SECURITY)) {
 							//TODO : Generate warning if type not recognized

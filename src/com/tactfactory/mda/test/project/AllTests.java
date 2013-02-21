@@ -18,7 +18,7 @@ import org.junit.runners.Suite.SuiteClasses;
  *
  */
 @RunWith(Suite.class)
-@SuiteClasses({	ProjectInitTest.class })
+@SuiteClasses( {	ProjectInitTest.class })
 
 public class AllTests {
 

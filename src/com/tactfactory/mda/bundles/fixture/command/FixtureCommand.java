@@ -19,22 +19,22 @@ import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 @PluginImplementation
-public class FixtureCommand extends BaseCommand{
+public class FixtureCommand extends BaseCommand {
 	//bundle name
-	public final static String BUNDLE = "orm";
-	public final static String SUBJECT = "fixture";
+	public static final String BUNDLE = "orm";
+	public static final String SUBJECT = "fixture";
 
 	//actions
-	public final static String ACTION_INIT = "init";
-	public final static String ACTION_LOAD = "load";
-	public final static String ACTION_PURGE = "purge";
-	public final static String ACTION_UPDATE = "update";
+	public static final String ACTION_INIT = "init";
+	public static final String ACTION_LOAD = "load";
+	public static final String ACTION_PURGE = "purge";
+	public static final String ACTION_UPDATE = "update";
 
 	//commands
-	public final static String FIXTURE_INIT	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_INIT;
-	public final static String FIXTURE_LOAD	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_LOAD;
-	public final static String FIXTURE_PURGE	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_PURGE;
-	public final static String FIXTURE_UPDATE = BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_UPDATE;
+	public static final String FIXTURE_INIT	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_INIT;
+	public static final String FIXTURE_LOAD	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_LOAD;
+	public static final String FIXTURE_PURGE	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_PURGE;
+	public static final String FIXTURE_UPDATE = BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_UPDATE;
 	
 	@Override
 	public void execute(final String action, final String[] args, final String option) {
@@ -98,20 +98,20 @@ public class FixtureCommand extends BaseCommand{
 
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> FIXTURE \n" +
-				"\t" + FIXTURE_INIT + "\t => Initialize fixtures, create loaders\n"+
-				"\t" + FIXTURE_LOAD + "\t => Load fixtures into the projects (overwrite)\n"+
-				"\t" + FIXTURE_PURGE + "\t => Clear fixtures on the projects\n"+
+		ConsoleUtils.display("\n> FIXTURE \n" + 
+				"\t" + FIXTURE_INIT + "\t => Initialize fixtures, create loaders\n" + 
+				"\t" + FIXTURE_LOAD + "\t => Load fixtures into the projects (overwrite)\n" + 
+				"\t" + FIXTURE_PURGE + "\t => Clear fixtures on the projects\n" + 
 				"\t" + FIXTURE_UPDATE + "\t => Update the fixtures in the project");
 		
 	}
 
 	@Override
 	public boolean isAvailableCommand(final String command) {
-		return 	command.equals(FIXTURE_INIT) || 
-				command.equals(FIXTURE_LOAD) ||
-				command.equals(FIXTURE_PURGE)||
-				command.equals(FIXTURE_UPDATE);
+		return 	command.equals(FIXTURE_INIT) 
+				|| command.equals(FIXTURE_LOAD)
+				|| command.equals(FIXTURE_PURGE)
+				|| command.equals(FIXTURE_UPDATE);
 		
 	}
 

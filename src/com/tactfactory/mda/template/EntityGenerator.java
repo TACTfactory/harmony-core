@@ -32,7 +32,7 @@ public class EntityGenerator extends BaseGenerator {
 	
 	protected String entityFolder;
 	
-	public EntityGenerator(final BaseAdapter adapter) throws Exception{
+	public EntityGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 
 		this.entityFolder = this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.", "/") + "/entity/";
@@ -56,7 +56,7 @@ public class EntityGenerator extends BaseGenerator {
 				final StringBuffer fileString = FileUtils.fileToStringBuffer(entityFile); // Load the file once in a String buffer
 				
 				this.addImplementsSerializable(fileString, cm);
-				this.addImportSerializable(fileString,cm);
+				this.addImportSerializable(fileString, cm);
 				this.generateGetterAndSetters(fileString, cm);
 				
 				FileUtils.stringBufferToFile(fileString, entityFile); // After treatment on entity, write it in the original file
@@ -73,7 +73,7 @@ public class EntityGenerator extends BaseGenerator {
 	protected void addImplementsSerializable(final StringBuffer fileString, final ClassMetadata cm) {
 		if (!this.alreadyImplementsSerializable(cm)) {
 			ConsoleUtils.displayDebug("Add serializable implement");
-			final int firstAccolade = fileString.indexOf("{");
+			final int firstAccolade = fileString.indexOf(" {");
 			
 			if (cm.implementTypes.size() > 0) { // Class already implements an interface which is not Serializable
 				fileString.insert(firstAccolade, ", Serializable");
@@ -91,12 +91,12 @@ public class EntityGenerator extends BaseGenerator {
 	protected void addImportSerializable(final StringBuffer fileString, final ClassMetadata cm) {
 		if (!this.alreadyImportsSerializable(cm)) {
 			ConsoleUtils.displayDebug("Add serializable import");
-			int insertPos ;
+			int insertPos;
 			
-			if (cm.imports.size()>0) { 
+			if (cm.imports.size() > 0) { 
 				insertPos = fileString.indexOf("import");
 			} else {
-				insertPos = fileString.indexOf(";")+1;
+				insertPos = fileString.indexOf(";") + 1;
 			}
 			
 			fileString.insert(insertPos, "\rimport java.io.Serializable;\r");
@@ -142,8 +142,8 @@ public class EntityGenerator extends BaseGenerator {
 		final int lastAccolade = fileString.lastIndexOf("}");
 		
 		final HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("property",f.name);
-		map.put("property_type",this.adapter.getNativeType(f.type));
+		map.put("property", f.name);
+		map.put("property_type", this.adapter.getNativeType(f.type));
 		
 		try {
 			final StringWriter writer = new StringWriter();
@@ -189,14 +189,14 @@ public class EntityGenerator extends BaseGenerator {
 	protected boolean alreadyImplementsGet(final FieldMetadata fm, final ClassMetadata cm) {
 		boolean ret = false;
 		final List<MethodMetadata> methods = cm.methods;
-		final String capitalizedName = fm.name.substring(0,1).toUpperCase() + fm.name.substring(1);
+		final String capitalizedName = fm.name.substring(0, 1).toUpperCase() + fm.name.substring(1);
 		String prefix = "get";
 		if ("boolean".equals(fm.type)) {
 			prefix = "is";
 		}
 		for (final MethodMetadata m : methods) {
-			if (m.name.equals(prefix+capitalizedName) && 
-					m.argumentsTypes.size()==0 && 
+			if (m.name.equals(prefix + capitalizedName) && 
+					m.argumentsTypes.size() == 0 && 
 					m.type.equals(this.adapter.getNativeType(fm.type))) {
 				ret = true;
 				
@@ -215,11 +215,11 @@ public class EntityGenerator extends BaseGenerator {
 	protected boolean alreadyImplementsSet(final FieldMetadata fm, final ClassMetadata cm) {
 		boolean result = false;
 		final List<MethodMetadata> methods = cm.methods;
-		final String capitalizedName = fm.name.substring(0,1).toUpperCase() + fm.name.substring(1);
+		final String capitalizedName = fm.name.substring(0, 1).toUpperCase() + fm.name.substring(1);
 		
 		for (final MethodMetadata m : methods) {
-			if (m.name.equals("set"+capitalizedName) && 
-					m.argumentsTypes.size()==1 && 
+			if (m.name.equals("set" + capitalizedName) && 
+					m.argumentsTypes.size() == 1 && 
 					m.argumentsTypes.get(0).equals(this.adapter.getNativeType(fm.type))) {
 				result = true;
 				

@@ -87,11 +87,11 @@ public abstract class ConsoleUtils {
 	public static void displayError(final Exception value) {
 		if (!quiet) {
 			String message = 	"[ERROR]" 
-								+ TAB 
-								+ value 
-								+ NEWLINE 
-								+ getStackTrace(value.getStackTrace()) 
-								+ NEWLINE; 
+								 + TAB 
+								 + value 
+								 + NEWLINE 
+								 + getStackTrace(value.getStackTrace()) 
+								 + NEWLINE; 
 			if (ansi) {
 				cp.println(message,
 						Attribute.NONE,

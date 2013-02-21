@@ -52,11 +52,11 @@ public class SearchGenerator  extends BaseGenerator {
 	}
 	
 	private void generateActivity(final ClassMetadata cm) {
-		this.makeSource(cm, "TemplateSearchActivity.java",cm.name+"SearchActivity.java",false);
-		this.makeSource(cm, "TemplateSearchFragment.java",cm.name+"SearchFragment.java",false);
+		this.makeSource(cm, "TemplateSearchActivity.java", cm.name + "SearchActivity.java", false);
+		this.makeSource(cm, "TemplateSearchFragment.java", cm.name + "SearchFragment.java", false);
 		
-		this.makeLayout(cm, "activity_template_search.xml","activity_"+cm.name.toLowerCase()+"_search.xml",false);
-		this.makeLayout(cm, "fragment_template_search.xml","fragment_"+cm.name.toLowerCase()+"_search.xml",false);
+		this.makeLayout(cm, "activity_template_search.xml", "activity_" + cm.name.toLowerCase() + "_search.xml", false);
+		this.makeLayout(cm, "fragment_template_search.xml", "fragment_" + cm.name.toLowerCase() + "_search.xml", false);
 		
 		TranslationMetadata.addDefaultTranslation("common_search", "Search", Group.COMMON);
 		
@@ -87,7 +87,7 @@ public class SearchGenerator  extends BaseGenerator {
 
 	protected void makeSource(final ClassMetadata cm, final String templateName, final String fileName, final boolean override) {
 		this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
-		final String fullFilePath = this.adapter.getSourcePath() + PackageUtils.extractPath(this.adapter.getNameSpace(cm, this.adapter.getController())+"."+cm.getName().toLowerCase())+ "/" + fileName;
+		final String fullFilePath = this.adapter.getSourcePath() + PackageUtils.extractPath(this.adapter.getNameSpace(cm, this.adapter.getController()) + "." + cm.getName().toLowerCase()) + "/" + fileName;
 		final String fullTemplatePath = this.adapter.getTemplateSourceControlerPath().substring(1) + templateName;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
@@ -95,7 +95,7 @@ public class SearchGenerator  extends BaseGenerator {
 	
 	protected void makeMenu(final boolean override) {
 		final String fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + "menu" + "/" + "SearchMenuWrapper.java";
-		final String fullTemplatePath = this.adapter.getTemplateSourcePath()+"menu/SearchMenuWrapper.java";
+		final String fullTemplatePath = this.adapter.getTemplateSourcePath() + "menu/SearchMenuWrapper.java";
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
@@ -121,7 +121,7 @@ public class SearchGenerator  extends BaseGenerator {
 		final String pathRelatif = String.format(".%s.%s.%s",
 				this.adapter.getController(), 
 				entityName.toLowerCase(), 
-				classFile );
+				classFile);
 
 		// Debug Log
 		ConsoleUtils.displayDebug("Update Manifest : " + pathRelatif);
@@ -141,7 +141,7 @@ public class SearchGenerator  extends BaseGenerator {
 				// Find Activity Node
 				final List<Element> activities = applicationNode.getChildren("activity"); 	// Find many elements
 				for (final Element activity : activities) {
-					if (activity.hasAttributes() && activity.getAttributeValue(NAME,ns).equals(pathRelatif) ) {	// Load attribute value
+					if (activity.hasAttributes() && activity.getAttributeValue(NAME, ns).equals(pathRelatif)) {	// Load attribute value
 						findActivity = activity;
 						break;
 					}
@@ -169,7 +169,7 @@ public class SearchGenerator  extends BaseGenerator {
 					final String action = "SEARCH";
 					
 					//data = this.appMetas.projectNameSpace.replace('/', '.') + "." + entityName;
-					filterActivity.getChild("action").setAttribute(NAME, "android.intent.action."+ action, ns);
+					filterActivity.getChild("action").setAttribute(NAME, "android.intent.action." + action, ns);
 					filterActivity.getChild("category").setAttribute(NAME, "android.intent.category.DEFAULT", ns);
 				}
 				

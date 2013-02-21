@@ -27,7 +27,7 @@ public abstract class BaseCommand implements Command {
 	protected static final String SEPARATOR = ":";
 	protected ArrayList<BaseParser> registeredParsers = new ArrayList<BaseParser>();
 	
-	protected HashMap<String,String> commandArgs;
+	protected HashMap<String, String> commandArgs;
 	protected JavaModelParser javaModelParser;
 	
 	/**

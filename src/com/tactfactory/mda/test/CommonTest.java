@@ -86,7 +86,7 @@ public abstract class CommonTest {
 
 		System.out.println(destDir);
 		
-		// FileUtils.copyDirectory(new File(srcDir),new File(destDir));
+		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
 		if (new File(destDir + "Post.java").exists()) {
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");

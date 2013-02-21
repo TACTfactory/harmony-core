@@ -45,7 +45,7 @@ public class TestProjectGenerator extends BaseGenerator {
 
 		// create project name space folders
 		//FileUtils.makeFolder(this.adapter.getSourcePath() 
-		// + Harmony.projectNameSpace.replaceAll("\\.","/"));
+		// + Harmony.projectNameSpace.replaceAll("\\.", "/"));
 
 		// create libs folder
 		FileUtils.makeFolder(this.adapter.getTestLibsPath());
@@ -72,7 +72,7 @@ public class TestProjectGenerator extends BaseGenerator {
 					
 					final String fullTemplatePath = 
 							this.adapter.getTemplateTestProjectPath() 
-							+ dirTpl.listFiles()[i].getName();
+							 + dirTpl.listFiles()[i].getName();
 					
 					super.makeSource(fullTemplatePath, fullFilePath, false);
 				}

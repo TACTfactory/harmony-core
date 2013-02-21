@@ -52,11 +52,11 @@ public class OrmUpdateEntitiesTest extends CommonTest {
 		harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
 		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES,
-				new String[]{},
+				new String[] {},
 				null);
 		// The real test
 		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES,
-				new String[]{},
+				new String[] {},
 				null);
 	}
 	

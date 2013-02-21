@@ -72,12 +72,12 @@ public class OrmInitEntitiesTest extends CommonTest {
 		System.out.println("\nTest Orm generate entity");
 		System.out.println(
 				"########################################"
-				+ "######################################");
+				 + "######################################");
 
 		harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
 		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES,
-				new String[]{}, 
+				new String[] {}, 
 				null);
 		final OrmCommand command = 
 				(OrmCommand) Harmony.instance.getCommand(OrmCommand.class);
@@ -290,7 +290,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	public final void hasCommentRepository() {
 		CommonTest.hasFindFile(DATA_PATH + "CommentSQLiteAdapter.java");
 		CommonTest.hasFindFile(DATA_PATH 
-				+ "base/CommentSQLiteAdapterBase.java");
+				 + "base/CommentSQLiteAdapterBase.java");
 	}
 	
 	

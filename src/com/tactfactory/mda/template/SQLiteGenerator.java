@@ -20,7 +20,7 @@ public class SQLiteGenerator extends BaseGenerator {
 		super(adapter);
 		
 		this.datamodel = this.appMetas.toMap(this.adapter);
-		this.localNameSpace = this.appMetas.projectNameSpace+"/"+this.adapter.getData();
+		this.localNameSpace = this.appMetas.projectNameSpace + "/" + this.adapter.getData();
 	}
 
 	/**

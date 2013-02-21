@@ -96,7 +96,7 @@ public class FieldMetadata extends BaseMetadata {
 		} 
 		
 		TranslationMetadata.addDefaultTranslation(
-					key + "_"+ componentName.toLowerCase(Locale.ENGLISH),
+					key + "_" + componentName.toLowerCase(Locale.ENGLISH),
 					this.name, 
 					Group.MODEL);
 	}
@@ -131,7 +131,7 @@ public class FieldMetadata extends BaseMetadata {
 		model.put(TagConstant.IS_LOCALE, 	this.isLocale);
 		model.put(TagConstant.NULLABLE,		this.nullable);
 		
-		if (this.relation!=null) {
+		if (this.relation != null) {
 			model.put(TagConstant.RELATION, this.relation.toMap(adapter));
 		}
 		
