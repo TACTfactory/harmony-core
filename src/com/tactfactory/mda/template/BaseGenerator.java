@@ -50,8 +50,10 @@ public abstract class BaseGenerator {
 	 * @param generatePath
 	 * @param override
 	 */
-	protected void makeSource(final String templatePath, final String generatePath, final boolean override) {
-		if (!FileUtils.exists(generatePath) || override){
+	protected void makeSource(final String templatePath,
+			final String generatePath,
+			final boolean override) {
+		if (!FileUtils.exists(generatePath) || override) {
 			final File generateFile = FileUtils.makeFile(generatePath);
 			
 			try {
@@ -62,7 +64,7 @@ public abstract class BaseGenerator {
 				final Template tpl = this.cfg.getTemplate(templatePath);
 				
 				// Write and close
-				final OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(generateFile), "UTF-8");
+				final OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(generateFile), FileUtils.DEFAULT_ENCODING);
 				tpl.process(this.datamodel, output);
 				output.flush();
 				output.close();
@@ -85,7 +87,7 @@ public abstract class BaseGenerator {
 	 * @param generatePath
 	 */
 	protected void appendSource(final String templatePath, final String generatePath) {
-		if (FileUtils.exists(generatePath)){
+		if (FileUtils.exists(generatePath)) {
 			final File generateFile = new File(generatePath);
 			
 			try {
@@ -96,7 +98,7 @@ public abstract class BaseGenerator {
 				final Template tpl = this.cfg.getTemplate(templatePath);
 				
 				// Write and close
-				final OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(generateFile, true), "UTF-8");
+				final OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(generateFile, true), FileUtils.DEFAULT_ENCODING);
 				tpl.process(this.datamodel, output);
 				output.flush();
 				output.close();

@@ -15,18 +15,20 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 
 @PluginImplementation
 public class GeneralCommand extends BaseCommand {
-	public final static String LIST = "list";
-	public final static String HELP = "help";
+	public static final String LIST = "list";
+	public static final String HELP = "help";
 
 	/**
 	 * Display Help Message
 	 */
 	public void help() {
-		ConsoleUtils.display("Usage:\n" +
-				"\tconsole [--options] command [--parameters]\n" +
-				"\nUsage example:\n" +
-				"\tconsole --verbose project:init:android --name=test --namespace=com/tact/android/test --sdkdir=/root/android\n" +
-				"\nPlease use 'console list' to display available commands !");
+		ConsoleUtils.display("Usage:\n" 
+				+ "\tconsole [--options] command [--parameters]\n" 
+				+ "\nUsage example:\n" 
+				+ "\tconsole --verbose project:init:android --nam =test " 
+				+ "--namespac =com/tact/android/test --sdkdi =/root/android\n" 
+				+ "\nPlease use 'console list' to display available commands !"
+				);
 	}
 
 	/**
@@ -39,7 +41,7 @@ public class GeneralCommand extends BaseCommand {
 		general.summary();
 		
 		for (final Command baseCommand : Harmony.instance.getCommands()) {
-			if (baseCommand != general){
+			if (baseCommand != general) {
 				baseCommand.summary();
 			}
 		}
@@ -47,13 +49,15 @@ public class GeneralCommand extends BaseCommand {
 	
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> General \n"+
-				"\t"+HELP+"\t\t\t => Display this help message\n"+
-				"\t"+LIST+"\t\t\t => List all commands");
+		ConsoleUtils.display("\n> General \n" 
+				+ "\t" + HELP + "\t\t\t => Display this help message\n" 
+				+ "\t" + LIST + "\t\t\t => List all commands");
 	}
 
 	@Override
-	public void execute(final String action, final String[] args, final String option) {
+	public void execute(final String action, 
+			final String[] args, 
+			final String option) {
 		if (action.equals(LIST)) {
 			this.list();
 		} else
@@ -65,8 +69,8 @@ public class GeneralCommand extends BaseCommand {
 
 	@Override
 	public boolean isAvailableCommand(final String command) {
-		return 	command.equals(LIST) ||
-				command.equals(HELP) ;
+		return 	command.equals(LIST)
+				|| command.equals(HELP);
 	}
 
 }

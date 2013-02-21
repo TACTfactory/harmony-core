@@ -27,24 +27,28 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 public class EntityGenerator extends BaseGenerator {
-	protected String getterTemplate = "itemGetter.java";
-	protected String setterTemplate = "itemSetter.java";
+	private String getterTemplate = "itemGetter.java";
+	private String setterTemplate = "itemSetter.java";
 	
-	protected String entityFolder;
+	private String entityFolder;
 	
-	public EntityGenerator(final BaseAdapter adapter) throws Exception{
+	public EntityGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 
-		this.entityFolder = this.adapter.getSourcePath() + this.appMetas.projectNameSpace.replaceAll("\\.", "/") + "/entity/";
+		this.entityFolder = 
+				this.adapter.getSourcePath() 
+				+ this.appMetas.projectNameSpace.replaceAll("\\.", "/") 
+				+ "/entity/";
 	}
 	
 	/**
-	 * Implements serializable and add necessary getters and setters for all classes 
+	 * Implements serializable 
+	 * and add necessary getters and setters for all classes. 
 	 */
-	public void generateAll(){
+	public final void generateAll() {
 		ConsoleUtils.display(">> Decorate entities...");
 		
-		for (final ClassMetadata cm : this.appMetas.entities.values()){ 
+		for (final ClassMetadata cm : this.appMetas.entities.values()) { 
 			final String filepath = String.format("%s/%s",
 					this.entityFolder,
 					String.format("%s.java", cm.name));
@@ -52,14 +56,17 @@ public class EntityGenerator extends BaseGenerator {
 			ConsoleUtils.display(">>> Decorate " + cm.name);
 			
 			final File entityFile = FileUtils.getFile(filepath);
-			if (entityFile.exists()){
-				final StringBuffer fileString = FileUtils.fileToStringBuffer(entityFile); // Load the file once in a String buffer
+			if (entityFile.exists()) {
+				// Load the file once in a String buffer
+				final StringBuffer fileString = 
+						FileUtils.fileToStringBuffer(entityFile); 
 				
 				this.addImplementsSerializable(fileString, cm);
-				this.addImportSerializable(fileString,cm);
+				this.addImportSerializable(fileString, cm);
 				this.generateGetterAndSetters(fileString, cm);
 				
-				FileUtils.stringBufferToFile(fileString, entityFile); // After treatment on entity, write it in the original file
+				 // After treatment on entity, write it in the original file
+				FileUtils.stringBufferToFile(fileString, entityFile);
 			}
 		}
 	}
@@ -70,12 +77,15 @@ public class EntityGenerator extends BaseGenerator {
 	 * @param fileString The stringbuffer containing the class java code
 	 * @param cm The Metadata containing the infos on the java class
 	 */
-	protected void addImplementsSerializable(final StringBuffer fileString, final ClassMetadata cm){
-		if (!this.alreadyImplementsSerializable(cm)){
+	protected final void addImplementsSerializable(
+			final StringBuffer fileString,
+			final ClassMetadata cm) {
+		if (!this.alreadyImplementsSerializable(cm)) {
 			ConsoleUtils.displayDebug("Add serializable implement");
-			final int firstAccolade = fileString.indexOf("{");
+			final int firstAccolade = fileString.indexOf(" {");
 			
-			if (cm.implementTypes.size() > 0){ // Class already implements an interface which is not Serializable
+			// Class already implements an interface which is not Serializable
+			if (cm.implementTypes.size() > 0) { 
 				fileString.insert(firstAccolade, ", Serializable");
 			} else {
 				fileString.insert(firstAccolade, " implements Serializable");
@@ -88,15 +98,16 @@ public class EntityGenerator extends BaseGenerator {
 	 * @param fileString The stringbuffer containing the class java code
 	 * @param cm The Metadata containing the infos on the java class
 	 */
-	protected void addImportSerializable(final StringBuffer fileString, final ClassMetadata cm){
-		if (!this.alreadyImportsSerializable(cm)){
+	protected final void addImportSerializable(final StringBuffer fileString,
+			final ClassMetadata cm) {
+		if (!this.alreadyImportsSerializable(cm)) {
 			ConsoleUtils.displayDebug("Add serializable import");
-			int insertPos ;
+			int insertPos;
 			
-			if (cm.imports.size()>0){ 
+			if (cm.imports.size() > 0) { 
 				insertPos = fileString.indexOf("import");
 			} else {
-				insertPos = fileString.indexOf(";")+1;
+				insertPos = fileString.indexOf(";") + 1;
 			}
 			
 			fileString.insert(insertPos, "\rimport java.io.Serializable;\r");
@@ -109,20 +120,21 @@ public class EntityGenerator extends BaseGenerator {
 	 * @param fileString The stringbuffer containing the class java code
 	 * @param cm The Metadata containing the infos on the java class
 	 */
-	protected void generateGetterAndSetters(final StringBuffer fileString, final ClassMetadata cm){
+	protected final void generateGetterAndSetters(final StringBuffer fileString,
+			final ClassMetadata cm) {
 		final Collection<FieldMetadata> fields = cm.fields.values();
 		
-		for (final FieldMetadata f : fields){
-			if (!f.internal){
+		for (final FieldMetadata f : fields) {
+			if (!f.internal) {
 				// Getter
-				if (!this.alreadyImplementsGet(f, cm)){ 
+				if (!this.alreadyImplementsGet(f, cm)) { 
 					ConsoleUtils.displayDebug("Add implements getter of " + f.name + " => get" + CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_CAMEL, f.name));
 					
 					this.generateMethod(fileString, f, this.getterTemplate);
 				}
 				
 				// Setter
-				if (!this.alreadyImplementsSet(f, cm)){
+				if (!this.alreadyImplementsSet(f, cm)) {
 					ConsoleUtils.displayDebug("Add implements setter of " + f.name + " => set" + CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_CAMEL, f.name));
 					
 					this.generateMethod(fileString, f, this.setterTemplate);
@@ -138,12 +150,14 @@ public class EntityGenerator extends BaseGenerator {
 	 * @param f The concerned field
 	 * @param templateName The template file name
 	 */
-	protected void generateMethod(final StringBuffer fileString, final FieldMetadata f, final String templateName){
+	protected final void generateMethod(final StringBuffer fileString, 
+			final FieldMetadata f, 
+			final String templateName) {
 		final int lastAccolade = fileString.lastIndexOf("}");
 		
 		final HashMap<String, Object> map = new HashMap<String, Object>();
-		map.put("property",f.name);
-		map.put("property_type",this.adapter.getNativeType(f.type));
+		map.put("property", f.name);
+		map.put("property_type", this.adapter.getNativeType(f.type));
 		
 		try {
 			final StringWriter writer = new StringWriter();
@@ -157,9 +171,9 @@ public class EntityGenerator extends BaseGenerator {
 			final StringBuffer getString = writer.getBuffer();
 			fileString.insert(lastAccolade, getString + "\n\n");
 			
-		} catch (final IOException e){
+		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);
-		} catch (final TemplateException e){
+		} catch (final TemplateException e) {
 			ConsoleUtils.displayError(e);
 		}		
 	}
@@ -168,10 +182,11 @@ public class EntityGenerator extends BaseGenerator {
 	 * Check if the class implements the class Serializable
 	 * @param cm The Metadata containing the infos on the java class
 	 */
-	protected boolean alreadyImplementsSerializable(final ClassMetadata cm){
+	protected final boolean alreadyImplementsSerializable(
+			final ClassMetadata cm) {
 		boolean ret = false;
-		for (final String impl : cm.implementTypes){
-			if ("Serializable".equals(impl)){				
+		for (final String impl : cm.implementTypes) {
+			if ("Serializable".equals(impl)) {				
 				ret = true;
 				
 				ConsoleUtils.displayDebug("Already implements Serializable !");
@@ -186,21 +201,26 @@ public class EntityGenerator extends BaseGenerator {
 	 * @param fm The Metadata of the field
 	 * @param cm The Metadata containing the infos on the java class
 	 */
-	protected boolean alreadyImplementsGet(final FieldMetadata fm, final ClassMetadata cm){
+	protected final boolean alreadyImplementsGet(final FieldMetadata fm,
+			final ClassMetadata cm) {
 		boolean ret = false;
 		final List<MethodMetadata> methods = cm.methods;
-		final String capitalizedName = fm.name.substring(0,1).toUpperCase() + fm.name.substring(1);
+		final String capitalizedName = fm.name.substring(0, 1).toUpperCase() 
+				+ fm.name.substring(1);
 		String prefix = "get";
-		if ("boolean".equals(fm.type)){
+		if ("boolean".equals(fm.type)) {
 			prefix = "is";
 		}
-		for (final MethodMetadata m : methods){
-			if (m.name.equals(prefix+capitalizedName) && 
-					m.argumentsTypes.size()==0 && 
-					m.type.equals(this.adapter.getNativeType(fm.type))){
+		for (final MethodMetadata m : methods) {
+			if (m.name.equals(prefix + capitalizedName) 
+					&& m.argumentsTypes.size() == 0 
+					&& m.type.equals(this.adapter.getNativeType(fm.type))) {
 				ret = true;
 				
-				ConsoleUtils.displayDebug("Already implements getter of " + fm.name + " => " + m.name);
+				ConsoleUtils.displayDebug("Already implements getter of " 
+						+ fm.name 
+						+ " => " 
+						+ m.name);
 			}
 		}
 					
@@ -212,18 +232,24 @@ public class EntityGenerator extends BaseGenerator {
 	 * @param fm The Metadata of the field
 	 * @param cm The Metadata containing the infos on the java class
 	 */
-	protected boolean alreadyImplementsSet(final FieldMetadata fm, final ClassMetadata cm){
+	protected final boolean alreadyImplementsSet(final FieldMetadata fm, 
+			final ClassMetadata cm) {
 		boolean result = false;
 		final List<MethodMetadata> methods = cm.methods;
-		final String capitalizedName = fm.name.substring(0,1).toUpperCase() + fm.name.substring(1);
+		final String capitalizedName = fm.name.substring(0, 1).toUpperCase() 
+				+ fm.name.substring(1);
 		
-		for (final MethodMetadata m : methods){
-			if (m.name.equals("set"+capitalizedName) && 
-					m.argumentsTypes.size()==1 && 
-					m.argumentsTypes.get(0).equals(this.adapter.getNativeType(fm.type))){
+		for (final MethodMetadata m : methods) {
+			if (m.name.equals("set" + capitalizedName) 
+					&& m.argumentsTypes.size() == 1 
+					&& m.argumentsTypes.get(0).equals(
+							this.adapter.getNativeType(fm.type))) {
 				result = true;
 				
-				ConsoleUtils.displayDebug("Already implements setter of " + fm.name + " => " + m.name);
+				ConsoleUtils.displayDebug("Already implements setter of " 
+						+ fm.name 
+						+ " => " 
+						+ m.name);
 			}
 		}
 		
@@ -234,11 +260,11 @@ public class EntityGenerator extends BaseGenerator {
 	 * Check if the class already imports Serializable
 	 * @param cm The Metadata containing the infos on the java class
 	 */
-	protected boolean alreadyImportsSerializable(final ClassMetadata cm){
+	protected final boolean alreadyImportsSerializable(final ClassMetadata cm) {
 		boolean ret = false;
-		for (final String imp : cm.imports){
+		for (final String imp : cm.imports) {
 			if ("Serializable".equals(imp)) {
-				ret=true;
+				ret = true;
 			}
 		}
 		

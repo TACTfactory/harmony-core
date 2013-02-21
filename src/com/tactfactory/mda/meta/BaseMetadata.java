@@ -19,7 +19,7 @@ public abstract class BaseMetadata implements Metadata {
 	public Map<String, Metadata> options =
 			new LinkedHashMap<String, Metadata>();
 	
-	public String getName(){
+	public String getName() {
 		return this.name;
 	}
 	

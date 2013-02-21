@@ -16,7 +16,7 @@ import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.test.CommonTest;
 
-public class RestGlobalTest extends CommonTest{
+public class RestGlobalTest extends CommonTest {
 	private static final String POST = "Post";
 	private static final String COMMENT = "Comment";
 	private static final String USER = "User";
@@ -52,11 +52,11 @@ public class RestGlobalTest extends CommonTest{
 		System.out.println("\nTest Orm generate entity");
 		System.out.println("###############################################################################");
 		
-		harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
-		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
-		harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[]{}, null);
-		harmony.findAndExecute(RestCommand.GENERATE_ADAPTERS, new String[]{}, null);
+		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
+		getHarmony().findAndExecute(OrmCommand.GENERATE_CRUD, new String[] {}, null);
+		getHarmony().findAndExecute(RestCommand.GENERATE_ADAPTERS, new String[] {}, null);
 				
 		final RestCommand command = (RestCommand) Harmony.instance.getCommand(RestCommand.class);
 		command.generateMetas();	
@@ -99,50 +99,50 @@ public class RestGlobalTest extends CommonTest{
 	}
 	
 	@Test
-	public void isUserRest(){
+	public void isUserRest() {
 		this.isRest(ApplicationMetadata.INSTANCE.entities.get(USER));
 	}
 	
 	@Test
-	public void isCommentRest(){
+	public void isCommentRest() {
 		this.isRest(ApplicationMetadata.INSTANCE.entities.get(COMMENT));
 	}
 	
 	@Test
-	public void isPostRest(){
+	public void isPostRest() {
 		this.isRest(ApplicationMetadata.INSTANCE.entities.get(POST));
 	}
 	
 	@Test
-	public void hasPostUri(){
+	public void hasPostUri() {
 		this.hasUri(ApplicationMetadata.INSTANCE.entities.get(POST), POST);
 	}
 	
 	@Test
-	public void hasUserUri(){
+	public void hasUserUri() {
 		this.hasUri(ApplicationMetadata.INSTANCE.entities.get(USER), "user-uri");
 	}
 	
 	@Test
-	public void hasPostSecurity(){
+	public void hasPostSecurity() {
 		this.hasSecurity(ApplicationMetadata.INSTANCE.entities.get(POST), Rest.Security.NONE);
 	}
 	
 	@Test
-	public void hasUserSecurity(){
+	public void hasUserSecurity() {
 		this.hasSecurity(ApplicationMetadata.INSTANCE.entities.get(USER), Rest.Security.SESSION);
 	}
 	
-	private void isRest(final ClassMetadata cm){
+	private void isRest(final ClassMetadata cm) {
 		Assert.assertTrue("Check if rest " + cm.name, cm.options.containsKey(REST));
 	}
 	
-	private void hasUri(final ClassMetadata cm, final String value){
-		Assert.assertTrue("Check if URI of " + cm.name + " is "+value, ((RestMetadata)cm.options.get(REST)).uri.equals(value));
+	private void hasUri(final ClassMetadata cm, final String value) {
+		Assert.assertTrue("Check if URI of " + cm.name + " is " + value, ((RestMetadata) cm.options.get(REST)).uri.equals(value));
 	}
 	
-	private void hasSecurity(final ClassMetadata cm, final Rest.Security value){
-		Assert.assertTrue("Check if SECURITY of " + cm.name + " is "+value.getValue(), ((RestMetadata)cm.options.get(REST)).security.equals(value));
+	private void hasSecurity(final ClassMetadata cm, final Rest.Security value) {
+		Assert.assertTrue("Check if SECURITY of " + cm.name + " is " + value.getValue(), ((RestMetadata) cm.options.get(REST)).security.equals(value));
 	}
 	
 }

@@ -33,7 +33,7 @@ public class OrmUpdateEntitiesTest extends CommonTest {
 	 */
 	@Before
 	@Override
-	public void setUp() throws Exception {
+	public final void setUp() throws Exception {
 		super.setUp();
 	}
 
@@ -42,19 +42,22 @@ public class OrmUpdateEntitiesTest extends CommonTest {
 	 */
 	@After
 	@Override
-	public void tearDown() throws Exception {
+	public final void tearDown() throws Exception {
 		super.tearDown();
 		
-		// File dirproj = new File(String.format("%s/android", Harmony.PATH_PROJECT));
 		//TODO : enable !! FileUtils.deleteRecursive(dirproj);
 	}
 	
 	private static void initAll() {
-		harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
-		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
+		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES,
+				new String[] {},
+				null);
 		// The real test
-		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
+		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES,
+				new String[] {},
+				null);
 	}
 	
 	@Test

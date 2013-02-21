@@ -9,8 +9,12 @@
 package com.tactfactory.mda.bundles.search.template;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import java.util.Comparator;
 import java.util.List;
 
@@ -44,19 +48,19 @@ public class SearchGenerator  extends BaseGenerator {
 	
 	public void generateAll() {
 		this.datamodel = this.appMetas.toMap(this.adapter);
-		for (final ClassMetadata cm : this.appMetas.entities.values()){
-			if (this.isClassSearchable(cm)){
+		for (final ClassMetadata cm : this.appMetas.entities.values()) {
+			if (this.isClassSearchable(cm)) {
 				this.generateActivity(cm);
 			}
 		}
 	}
 	
-	private void generateActivity(final ClassMetadata cm){
-		this.makeSource(cm, "TemplateSearchActivity.java",cm.name+"SearchActivity.java",false);
-		this.makeSource(cm, "TemplateSearchFragment.java",cm.name+"SearchFragment.java",false);
+	private void generateActivity(final ClassMetadata cm) {
+		this.makeSource(cm, "TemplateSearchActivity.java", cm.name + "SearchActivity.java", false);
+		this.makeSource(cm, "TemplateSearchFragment.java", cm.name + "SearchFragment.java", false);
 		
-		this.makeLayout(cm, "activity_template_search.xml","activity_"+cm.name.toLowerCase()+"_search.xml",false);
-		this.makeLayout(cm, "fragment_template_search.xml","fragment_"+cm.name.toLowerCase()+"_search.xml",false);
+		this.makeLayout(cm, "activity_template_search.xml", "activity_" + cm.name.toLowerCase() + "_search.xml", false);
+		this.makeLayout(cm, "fragment_template_search.xml", "fragment_" + cm.name.toLowerCase() + "_search.xml", false);
 		
 		TranslationMetadata.addDefaultTranslation("common_search", "Search", Group.COMMON);
 		
@@ -71,14 +75,14 @@ public class SearchGenerator  extends BaseGenerator {
 		}
 	}
 	
-	private void generateMenu(){
+	private void generateMenu() {
 		this.makeMenu(true);
 	}
 	
-	private boolean isClassSearchable(final ClassMetadata cm){
+	private boolean isClassSearchable(final ClassMetadata cm) {
 		boolean isSearchable = false;
-		for (final FieldMetadata fm : cm.fields.values()){
-			if (fm.options.containsKey("search")){
+		for (final FieldMetadata fm : cm.fields.values()) {
+			if (fm.options.containsKey("search")) {
 				isSearchable = true;
 			}
 		}
@@ -87,7 +91,7 @@ public class SearchGenerator  extends BaseGenerator {
 
 	protected void makeSource(final ClassMetadata cm, final String templateName, final String fileName, final boolean override) {
 		this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
-		final String fullFilePath = this.adapter.getSourcePath() + PackageUtils.extractPath(this.adapter.getNameSpace(cm, this.adapter.getController())+"."+cm.getName().toLowerCase())+ "/" + fileName;
+		final String fullFilePath = this.adapter.getSourcePath() + PackageUtils.extractPath(this.adapter.getNameSpace(cm, this.adapter.getController()) + "." + cm.getName().toLowerCase()) + "/" + fileName;
 		final String fullTemplatePath = this.adapter.getTemplateSourceControlerPath().substring(1) + templateName;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
@@ -95,7 +99,7 @@ public class SearchGenerator  extends BaseGenerator {
 	
 	protected void makeMenu(final boolean override) {
 		final String fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + "menu" + "/" + "SearchMenuWrapper.java";
-		final String fullTemplatePath = this.adapter.getTemplateSourcePath()+"menu/SearchMenuWrapper.java";
+		final String fullTemplatePath = this.adapter.getTemplateSourcePath() + "menu/SearchMenuWrapper.java";
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
@@ -116,12 +120,12 @@ public class SearchGenerator  extends BaseGenerator {
 	 * 
 	 * @param classFile
 	 */
-	private void updateManifest(String classFile, final String entityName) {
-		classFile = entityName + classFile;
+	private void updateManifest(final String classFile, final String entityName) {
+		String realClassFile = entityName + classFile;
 		final String pathRelatif = String.format(".%s.%s.%s",
 				this.adapter.getController(), 
 				entityName.toLowerCase(), 
-				classFile );
+				realClassFile);
 
 		// Debug Log
 		ConsoleUtils.displayDebug("Update Manifest : " + pathRelatif);
@@ -141,7 +145,7 @@ public class SearchGenerator  extends BaseGenerator {
 				// Find Activity Node
 				final List<Element> activities = applicationNode.getChildren("activity"); 	// Find many elements
 				for (final Element activity : activities) {
-					if (activity.hasAttributes() && activity.getAttributeValue(NAME,ns).equals(pathRelatif) ) {	// Load attribute value
+					if (activity.hasAttributes() && activity.getAttributeValue(NAME, ns).equals(pathRelatif)) {	// Load attribute value
 						findActivity = activity;
 						break;
 					}
@@ -169,7 +173,7 @@ public class SearchGenerator  extends BaseGenerator {
 					final String action = "SEARCH";
 					
 					//data = this.appMetas.projectNameSpace.replace('/', '.') + "." + entityName;
-					filterActivity.getChild("action").setAttribute(NAME, "android.intent.action."+ action, ns);
+					filterActivity.getChild("action").setAttribute(NAME, "android.intent.action." + action, ns);
 					filterActivity.getChild("category").setAttribute(NAME, "android.intent.category.DEFAULT", ns);
 				}
 				
@@ -187,7 +191,7 @@ public class SearchGenerator  extends BaseGenerator {
 
 			// display nice nice
 			xmlOutput.setFormat(Format.getPrettyFormat());				// Make beautiful file with indent !!!
-			xmlOutput.output(doc, new FileWriter(xmlFile.getAbsoluteFile()));
+			xmlOutput.output(doc, new OutputStreamWriter(new FileOutputStream(xmlFile.getAbsoluteFile()), FileUtils.DEFAULT_ENCODING));
 		} catch (final IOException io) {
 			ConsoleUtils.displayError(io);
 		} catch (final JDOMException e) {

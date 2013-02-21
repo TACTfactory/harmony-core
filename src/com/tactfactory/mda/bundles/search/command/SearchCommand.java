@@ -19,17 +19,17 @@ import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 @PluginImplementation
-public class SearchCommand  extends BaseCommand{
+public class SearchCommand  extends BaseCommand {
 	
 	//bundle name
-	public final static String BUNDLE = "search";
-	public final static String SUBJECT = "generate";
+	public static final String BUNDLE = "search";
+	public static final String SUBJECT = "generate";
 
 	//actions
-	public final static String ACTION_ACTIVITIES = "activities";
+	public static final String ACTION_ACTIVITIES = "activities";
 
 	//commands
-	public final static String GENERATE_ACTIVITIES = BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ACTIVITIES;
+	public static final String GENERATE_ACTIVITIES = BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ACTIVITIES;
 
 	@Override
 	public void execute(final String action, final String[] args, final String option) {
@@ -52,7 +52,7 @@ public class SearchCommand  extends BaseCommand{
 	protected void generateLoaders() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities!=null){
+		if (ApplicationMetadata.INSTANCE.entities != null) {
 			try {
 				new SearchGenerator(new AndroidAdapter()).generateAll();
 			} catch (final Exception e) {
@@ -63,7 +63,7 @@ public class SearchCommand  extends BaseCommand{
 	}
 	
 	@Override
-	public void generateMetas(){
+	public void generateMetas() {
 		this.registerParser(new SearchParser());
 		super.generateMetas();
 		//new SearchCompletor().generateApplicationRestMetadata(Harmony.metas);
@@ -73,8 +73,8 @@ public class SearchCommand  extends BaseCommand{
 
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> Search \n" +
-				"\t" + GENERATE_ACTIVITIES + "\t => Generate Activities");
+		ConsoleUtils.display("\n> Search \n" 
+				+ "\t" + GENERATE_ACTIVITIES + "\t => Generate Activities");
 		
 	}
 

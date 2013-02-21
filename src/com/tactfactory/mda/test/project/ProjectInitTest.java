@@ -25,7 +25,12 @@ import com.tactfactory.mda.utils.FileUtils;
  *
  */
 public class ProjectInitTest extends CommonTest {
-	private final static String SHARP_DELIMITOR = "#############################################################################";
+	private static final  String SHARP_DELIMITOR = 
+			  "#################" 
+			 + "#################" 
+			 + "#################" 
+			 + "#################" 
+			 + "#########";
 
 	
 	/**
@@ -41,7 +46,7 @@ public class ProjectInitTest extends CommonTest {
 	 */
 	@Before
 	@Override
-	public void setUp() throws Exception {
+	public final void setUp() throws Exception {
 		super.setUp();
 	}
 
@@ -50,19 +55,23 @@ public class ProjectInitTest extends CommonTest {
 	 */
 	@After
 	@Override
-	public void tearDown() throws Exception {
+	public final void tearDown() throws Exception {
 		super.tearDown();
 		
-		final File dirproj = new File(String.format("%s/android", Harmony.PATH_PROJECT));
+		final File dirproj = 
+				new File(String.format("%s/android",
+						Harmony.PATH_PROJECT));
 		FileUtils.deleteRecursive(dirproj);
 	}
 	
 	@Test
- 	public void initAndroid() {
+ 	public final void initAndroid() {
 		System.out.println("\nTest Project init Android");
 		System.out.println(SHARP_DELIMITOR);
 		
-		CommonTest.harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+		CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID,
+				null,
+				null);
 		
 		CommonTest.hasFindFile("android/AndroidManifest.xml");
 		CommonTest.hasFindFile("android/build.xml");
@@ -73,8 +82,8 @@ public class ProjectInitTest extends CommonTest {
 		
 		CommonTest.hasFindFile("android/src");
 		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact");
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/entity");
-		//this.isFindFile("android/src/com/tactfactory/mda/test/demact/view/HomeActivity.java");
+		CommonTest.hasFindFile(
+				"android/src/com/tactfactory/mda/test/demact/entity");
 		//this.isFindFile("android/res/");
 		
 		CommonTest.hasFindFile("android/libs");
@@ -90,34 +99,36 @@ public class ProjectInitTest extends CommonTest {
 
 	@Ignore
 	@Test
-	public void initIphone() {
+	public final void initIphone() {
 		System.out.println("\nTest Project init iphone");
 		System.out.println(SHARP_DELIMITOR);
 		
-		CommonTest.harmony.findAndExecute(ProjectCommand.INIT_IOS, null, null);
+		CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_IOS, null, null);
 		
 		// TODO add asserts (for folder/file exist..)
 	}
 	
 	@Ignore
 	@Test
-	public void initRim() {
+	public final void initRim() {
 		System.out.println("\nTest Project init RIM");
 		System.out.println(SHARP_DELIMITOR);
 		
-		CommonTest.harmony.findAndExecute(ProjectCommand.INIT_RIM, null, null);
+		CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_RIM, null, null);
 		
 		// TODO add asserts (for folder/file exist..)
 	}
 	
 	@Ignore
 	@Test
-	public void initWinphone() {
+	public final void initWinphone() {
 		System.out.println("\nTest Project init Windows Phone");
 		System.out.println(SHARP_DELIMITOR);
 		
 		
-		CommonTest.harmony.findAndExecute(ProjectCommand.INIT_WINPHONE, null, null);
+		CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_WINPHONE, 
+									null, 
+									null);
 		
 		// TODO add asserts (for folder/file exist..)
 	}

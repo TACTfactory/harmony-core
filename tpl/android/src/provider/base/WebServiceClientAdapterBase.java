@@ -99,7 +99,7 @@ public abstract class WebServiceClientAdapterBase<T>{
 			if (arrayErrors != null) {
 				int count = arrayErrors.length();			
 				
-				for (int i = 0 ; i < count; i++) {
+				for (int i = 0; i < count; i++) {
 					error.append(arrayErrors.optString(i, null));
 					if (!TextUtils.isEmpty(error.toString()))
 						builder.append(error + "; ");
@@ -184,7 +184,7 @@ public abstract class WebServiceClientAdapterBase<T>{
 	public JSONArray itemsToJson(List<T> items){
 		JSONArray itemArray = new JSONArray();
 		
-		for (int i = 0 ; i < items.size(); i++) {
+		for (int i = 0; i < items.size(); i++) {
 			JSONObject jsonItems = this.itemToJson(items.get(i));
 			itemArray.put(jsonItems);
 		}
@@ -201,7 +201,7 @@ public abstract class WebServiceClientAdapterBase<T>{
 	public JSONArray itemsIdToJson(List<T> items){
 		JSONArray itemArray = new JSONArray();
 		
-		for (int i = 0 ; i < items.size(); i++) {
+		for (int i = 0; i < items.size(); i++) {
 			JSONObject jsonItems = this.itemIdToJson(items.get(i));
 			itemArray.put(jsonItems);
 		}
@@ -233,7 +233,7 @@ public abstract class WebServiceClientAdapterBase<T>{
 		if (itemArray != null) {
 			int count = itemArray.length();			
 			
-			for (int i = 0 ; i < count; i++) {
+			for (int i = 0; i < count; i++) {
 				JSONObject jsonItem = itemArray.getJSONObject(i);
 				
 				T item = extract(jsonItem);

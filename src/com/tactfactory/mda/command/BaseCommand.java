@@ -24,20 +24,23 @@ import com.tactfactory.mda.utils.ConsoleUtils;
  * Common Command structure 
  */
 public abstract class BaseCommand implements Command {
-	protected static final String SEPARATOR = ":";
-	protected ArrayList<BaseParser> registeredParsers = new ArrayList<BaseParser>();
+	private ArrayList<BaseParser> registeredParsers 
+			= new ArrayList<BaseParser>();
 	
-	protected HashMap<String,String> commandArgs;
-	protected JavaModelParser javaModelParser;
+	protected static final String SEPARATOR = ":";
+	
+	protected HashMap<String, String> commandArgs;
+	private JavaModelParser javaModelParser;
 	
 	/**
 	 * Gets the Metadatas of all the entities actually in the package entity
-	 * You can register your own bundle parsers with the method this.javaModelParser.registerParser() 
+	 * You can register your own bundle parsers 
+	 * with the method this.javaModelParser.registerParser() 
 	 */
-	public void generateMetas(){
+	public void generateMetas() {
 		ConsoleUtils.display(">> Analyse Models...");
 		this.javaModelParser = new JavaModelParser();
-		for (final BaseParser parser : this.registeredParsers){
+		for (final BaseParser parser : this.registeredParsers) {
 			this.javaModelParser.registerParser(parser);
 		}
 		// Parse models and load entities into CompilationUnits
@@ -49,23 +52,26 @@ public abstract class BaseCommand implements Command {
 
 		// Convert CompilationUnits entities to ClassMetaData
 		if (this.javaModelParser.getEntities().size() > 0) {
-			for (final CompilationUnit mclass : this.javaModelParser.getEntities()) {
+			for (final CompilationUnit mclass 
+					: this.javaModelParser.getEntities()) {
 				this.javaModelParser.parse(mclass);
 			}
 	
 			// Generate views from MetaData 
 			if (this.javaModelParser.getMetas().size() > 0) {				
-				for (final ClassMetadata meta : this.javaModelParser.getMetas()) {
+				for (final ClassMetadata meta 
+						: this.javaModelParser.getMetas()) {
 					ApplicationMetadata.INSTANCE.entities.put(meta.name, meta);
 				}
-				new ClassCompletor(ApplicationMetadata.INSTANCE.entities).execute();
+				new ClassCompletor(
+						ApplicationMetadata.INSTANCE.entities).execute();
 			}
 		} else {
 			ConsoleUtils.displayWarning("No entities found in entity package!");
 		}
 	}
 	
-	public void registerParser(final BaseParser parser){
+	public final void registerParser(final BaseParser parser) {
 		this.registeredParsers.add(parser);
 	}
 }

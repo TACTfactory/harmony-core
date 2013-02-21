@@ -45,8 +45,8 @@ public class ActivityGenerator extends BaseGenerator {
 	private static final String TEMPLATE = "Template";
 	private static final String NAME = "name";
 	
-	protected String localNameSpace;
-	protected boolean isWritable = true;
+	private String localNameSpace;
+	private boolean isWritable = true;
 	private boolean isDate;
 	private boolean isTime;
 	
@@ -91,10 +91,10 @@ public class ActivityGenerator extends BaseGenerator {
 		ConsoleUtils.display(">> Generate CRUD view...");
 
 		for (final ClassMetadata cm : this.appMetas.entities.values()) {
-			if (!cm.internal && !cm.fields.isEmpty()){
+			if (!cm.internal && !cm.fields.isEmpty()) {
 				cm.makeString("label");
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
-				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getController())+"."+cm.getName().toLowerCase(Locale.ENGLISH);
+				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getController()) + "." + cm.getName().toLowerCase(Locale.ENGLISH);
 				this.generateAllAction(cm.getName());
 			}
 		}
@@ -109,11 +109,11 @@ public class ActivityGenerator extends BaseGenerator {
 	}
 	
 	/** All Actions (List, Show, Edit, Create) */
-	public void generateAllAction(final String entityName) {
+	public final void generateAllAction(final String entityName) {
 		ConsoleUtils.display(">>> Generate CRUD view for " +  entityName);
 		
 		try {
-			if (this.isWritable ) {
+			if (this.isWritable) {
 				ConsoleUtils.display("   with write actions");
 	
 				this.generateCreateAction(entityName);
@@ -131,11 +131,11 @@ public class ActivityGenerator extends BaseGenerator {
 				
 				TranslationMetadata.addDefaultTranslation(
 						entityName.toLowerCase(Locale.ENGLISH) + "_progress_save_title", 
-						entityName +" save progress",
+						entityName + " save progress",
 						Group.MODEL);
 				TranslationMetadata.addDefaultTranslation(
 						entityName.toLowerCase(Locale.ENGLISH) + "_progress_save_message", 
-						entityName +" is saving to database&#8230;",
+						entityName + " is saving to database&#8230;",
 						Group.MODEL);
 			}
 	
@@ -144,11 +144,11 @@ public class ActivityGenerator extends BaseGenerator {
 			
 			TranslationMetadata.addDefaultTranslation(
 					entityName.toLowerCase(Locale.ENGLISH) + "_progress_load_title", 
-					entityName +" Loading progress",
+					entityName + " Loading progress",
 					Group.MODEL);
 			TranslationMetadata.addDefaultTranslation(
 					entityName.toLowerCase(Locale.ENGLISH) + "_progress_load_message", 
-					entityName +" is loading&#8230;",
+					entityName + " is loading&#8230;",
 					Group.MODEL);
 		
 			new TranslationGenerator(this.adapter).generateStringsXml();
@@ -162,7 +162,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	protected void generateListAction(final String entityName) {
+	protected final void generateListAction(final String entityName) {
 		final ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sListActivity.java");
 		javas.add("%sListFragment.java");
@@ -174,13 +174,13 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("fragment_%s_list.xml");		
 		xmls.add("row_%s.xml");
 		
-		for (final String java : javas){
+		for (final String java : javas) {
 			this.makeSourceControler( 
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
 		
-		for (final String xml : xmls){
+		for (final String xml : xmls) {
 			this.makeResourceLayout( 
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
@@ -190,7 +190,7 @@ public class ActivityGenerator extends BaseGenerator {
 		
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_empty_list", 
-				entityName +" list is empty !",
+				entityName + " list is empty !",
 				Group.MODEL);
 	}
 
@@ -199,7 +199,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	protected void generateShowAction(final String entityName) {
+	protected final void generateShowAction(final String entityName) {
 
 		final ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sShowActivity.java");
@@ -210,14 +210,14 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("fragment_%s_show.xml");
 		
 
-		for (final String java : javas){
+		for (final String java : javas) {
 			this.makeSourceControler(
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
 		
-		for (final String xml : xmls){
-			this.makeResourceLayout( 
+		for (final String xml : xmls) {
+			this.makeResourceLayout(
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
 		}
@@ -227,7 +227,7 @@ public class ActivityGenerator extends BaseGenerator {
 
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_load", 
-				entityName +" loading error&#8230;",
+				entityName + " loading error&#8230;",
 				Group.MODEL);
 	}
 
@@ -236,7 +236,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	protected void generateEditAction(final String entityName) {
+	protected final void generateEditAction(final String entityName) {
 		
 		final ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sEditActivity.java");
@@ -247,14 +247,14 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("fragment_%s_edit.xml");
 		
 
-		for (final String java : javas){
-			this.makeSourceControler( 
+		for (final String java : javas) {
+			this.makeSourceControler(
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
 		
-		for (final String xml : xmls){
-			this.makeResourceLayout( 
+		for (final String xml : xmls) {
+			this.makeResourceLayout(
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
 		}
@@ -263,7 +263,7 @@ public class ActivityGenerator extends BaseGenerator {
 		
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_edit", 
-				entityName +" edition error&#8230;",
+				entityName + " edition error&#8230;",
 				Group.MODEL);
 				
 	}
@@ -273,7 +273,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	protected void generateCreateAction(final String entityName) {
+	protected final void generateCreateAction(final String entityName) {
 		
 		final ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sCreateActivity.java");
@@ -284,13 +284,13 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("fragment_%s_create.xml");
 		
 
-		for (final String java : javas){
+		for (final String java : javas) {
 			this.makeSourceControler(
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
 		
-		for (final String xml : xmls){
+		for (final String xml : xmls) {
 			this.makeResourceLayout(
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
@@ -301,7 +301,7 @@ public class ActivityGenerator extends BaseGenerator {
 		
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_create", 
-				entityName +" creation error&#8230;",
+				entityName + " creation error&#8230;",
 				Group.MODEL);
 	}
 
@@ -348,7 +348,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException 
 	 * @throws TemplateException 
 	 */
-	public void makeManifest(final Configuration cfg) 
+	public final void makeManifest(final Configuration cfg) 
 			throws IOException, TemplateException {
 		final File file = FileUtils.makeFile(this.adapter.getManifestPathFile());
 
@@ -357,7 +357,7 @@ public class ActivityGenerator extends BaseGenerator {
 
 		// Create
 		final Template tpl = cfg.getTemplate(this.adapter.getTemplateManifestPathFile());
-		final OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+		final OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(file), FileUtils.DEFAULT_ENCODING);
 		tpl.process(this.datamodel, output);
 		output.flush();
 		output.close();
@@ -392,7 +392,7 @@ public class ActivityGenerator extends BaseGenerator {
 				// Find Activity Node
 				final List<Element> activities = applicationNode.getChildren("activity"); 	// Find many elements
 				for (final Element activity : activities) {
-					if (activity.hasAttributes() && activity.getAttributeValue(NAME,ns).equals(pathRelatif) ) {	// Load attribute value
+					if (activity.hasAttributes() && activity.getAttributeValue(NAME, ns).equals(pathRelatif)) {	// Load attribute value
 						findActivity = activity;
 						break;
 					}
@@ -441,7 +441,7 @@ public class ActivityGenerator extends BaseGenerator {
 					data.append('.');
 					data.append(entityName);
 					
-					filterActivity.getChild("action").setAttribute(NAME, "android.intent.action."+ action, ns);
+					filterActivity.getChild("action").setAttribute(NAME, "android.intent.action." + action, ns);
 					filterActivity.getChild("category").setAttribute(NAME, "android.intent.category.DEFAULT", ns);
 					filterActivity.getChild("data").setAttribute("mimeType", data.toString(), ns);
 				}
@@ -463,7 +463,7 @@ public class ActivityGenerator extends BaseGenerator {
 			xmlOutput.output(doc,
 							new OutputStreamWriter(
 								new FileOutputStream(xmlFile.getAbsoluteFile()),
-								"UTF-8"));
+								FileUtils.DEFAULT_ENCODING));
 		} catch (final IOException io) {
 			ConsoleUtils.displayError(io);
 		} catch (final JDOMException e) {
@@ -474,7 +474,7 @@ public class ActivityGenerator extends BaseGenerator {
 	/**
 	 * Update Widget
 	 */
-	protected void updateWidget(final String widgetName, final String layoutName) {
+	protected final void updateWidget(final String widgetName, final String layoutName) {
 		super.makeSource(
 				String.format("%s%s", this.adapter.getTemplateWidgetPath(), widgetName), 
 				String.format("%s%s", this.adapter.getWidgetPath(), widgetName), 

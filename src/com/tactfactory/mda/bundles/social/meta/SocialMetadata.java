@@ -14,8 +14,8 @@ import java.util.Map;
 import com.tactfactory.mda.meta.BaseMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 
-public class SocialMetadata extends BaseMetadata{	
-	private final static String NAME = "social";
+public class SocialMetadata extends BaseMetadata {	
+	private static final String NAME = "social";
 	public boolean isEnabled = false;
 	
 	public SocialMetadata() {

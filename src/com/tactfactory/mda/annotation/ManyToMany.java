@@ -32,12 +32,14 @@ public @interface ManyToMany {
 	String targetEntity() default "";
 	
 	/**
-	 * The field in the target Entity inverting this relation (for bidirectionnal entities only)
+	 * The field in the target Entity 
+	 * inverting this relation (for bidirectionnal entities only).
 	 */
 	String inversedBy() default "";
 	
 	/**
-	 * The field in the target Entity mapping this relation (for bidirectionnal entities only)
+	 * The field in the target Entity 
+	 * mapping this relation (for bidirectionnal entities only).
 	 */
 	String mappedBy() default "";
 }
