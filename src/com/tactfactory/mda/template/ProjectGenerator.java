@@ -172,30 +172,22 @@ public class ProjectGenerator extends BaseGenerator {
 		this.updateLibrary("jsr305.jar");
 		
 		/// copy sherlock library
-
 		//TODO test if git is install
+		String pathSherlock = String.format("%s%s", this.adapter.getLibsPath(), "sherlock");
 		final ArrayList<String> command = new ArrayList<String>();
 		command.add("git"); 						// Command/Tools
 		command.add("clone");						// Command action
 		command.add("https://github.com/JakeWharton/ActionBarSherlock.git"); // command depot
-		command.add("app/android/libs/sherlock"); 	// Command destination folder
+		command.add(String.format("%s%s", this.adapter.getLibsPath(), "sherlock")); // Command destination folder
 		ConsoleUtils.launchCommand(command);
 		command.clear();
 		command.add("git");
-		command.add("--git-dir=app/android/libs/sherlock/.git");
-		command.add("--work-tree=app/android/libs/sherlock/");
+		command.add(String.format("%s%s/%s", "--git-dir=", pathSherlock, ".git"));
+		command.add(String.format("%s%s", "--work-tree=", pathSherlock));
 		command.add("checkout");
 		command.add("4.2.0");
 		ConsoleUtils.launchCommand(command);
-		
-		/*try {
-			File dirSherlock = new File(String.format("%s/%s", Harmony.pathLibs, "sherlock-4.2"));
-			File dirSherlockDest = new File(String.format("%s/%s", this.adapter.getLibsPath(), "sherlock-4.2"));
-			FileUtils.copyDirectory(dirSherlock, dirSherlockDest);
-		} catch (IOException e) {
-			ConsoleUtils.displayError(e);
-
-		}*/
+		FileUtils.deleteRecursive(new File(String.format("%s/%s", pathSherlock, "samples"))); //delete samples
 		
 		/// copy Harmony library
 		FileUtils.copyfile(new File(String.format("%s/%s",Harmony.PATH_HARMONY,"harmony.jar")),
