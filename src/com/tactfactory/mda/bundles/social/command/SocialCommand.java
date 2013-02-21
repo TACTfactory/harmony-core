@@ -72,8 +72,8 @@ public class SocialCommand extends BaseCommand {
 
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> Social \n" + 
-				"\t" + GENERATE_SOCIAL + "\t => Generate Social");
+		ConsoleUtils.display("\n> Social \n" 
+				+ "\t" + GENERATE_SOCIAL + "\t => Generate Social");
 		
 	}
 

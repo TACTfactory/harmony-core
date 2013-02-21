@@ -18,7 +18,7 @@ import org.junit.runners.Suite.SuiteClasses;
  *
  */
 @RunWith(Suite.class)
-@SuiteClasses( {
+@SuiteClasses({
 	SyncGlobalTest.class })
 
 public class AllTests {

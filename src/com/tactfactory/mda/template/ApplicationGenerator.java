@@ -27,7 +27,7 @@ public class ApplicationGenerator extends BaseGenerator {
 		
 	}
 	
-	public void generateApplication() {
+	public final void generateApplication() {
 		this.makeSource(
 				"TemplateApplication.java", 
 				this.applicationName + "Application.java",
@@ -40,7 +40,7 @@ public class ApplicationGenerator extends BaseGenerator {
 	}
 	
 	@Override
-	protected void makeSource(final String templateName, final String fileName, final boolean override) {
+	protected final void makeSource(final String templateName, final String fileName, final boolean override) {
 		final String fullFilePath = String.format("%s%s/%s",
 				this.adapter.getSourcePath(),
 				PackageUtils.extractPath(this.localNameSpace).toLowerCase(),

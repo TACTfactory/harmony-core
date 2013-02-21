@@ -136,15 +136,15 @@ public class SyncGlobalTest extends CommonTest {
 	}
 	
 	private void hasMode(final ClassMetadata cm, final Sync.Mode value) {
-		Assert.assertTrue("Check if Mode of " + cm.name + " is " + value.getValue(), ((SyncMetadata)cm.options.get(SYNC)).mode.equals(value));
+		Assert.assertTrue("Check if Mode of " + cm.name + " is " + value.getValue(), ((SyncMetadata) cm.options.get(SYNC)).mode.equals(value));
 	}
 	
 	private void hasLevel(final ClassMetadata cm, final Sync.Level value) {
-		Assert.assertTrue("Check if Level of " + cm.name + " is " + value.getValue(), ((SyncMetadata)cm.options.get(SYNC)).level.equals(value));
+		Assert.assertTrue("Check if Level of " + cm.name + " is " + value.getValue(), ((SyncMetadata) cm.options.get(SYNC)).level.equals(value));
 	}
 	
 	private void hasPriority(final ClassMetadata cm, final int value) {
-		Assert.assertTrue("Check if Priority of " + cm.name + " is " + value, ((SyncMetadata)cm.options.get(SYNC)).priority == value);
+		Assert.assertTrue("Check if Priority of " + cm.name + " is " + value, ((SyncMetadata) cm.options.get(SYNC)).priority == value);
 	}
 	
 }

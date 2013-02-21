@@ -148,11 +148,11 @@ public class OrmCommand extends BaseCommand {
 	
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> ORM \n" + 
-				// "\t" + GENERATE_ENTITY + "\t => Generate Entry\n" + 
-				"\t" + GENERATE_ENTITIES + "\t => Generate Entries\n" + 
-				// "\t" + GENERATE_FORM + "\t => Generate Form\n" + 
-				"\t" + GENERATE_CRUD + "\t => Generate CRUD");
+		ConsoleUtils.display("\n> ORM \n" 
+				// + "\t" + GENERATE_ENTITY + "\t => Generate Entry\n" 
+				+ "\t" + GENERATE_ENTITIES + "\t => Generate Entries\n" 
+				// + "\t" + GENERATE_FORM + "\t => Generate Form\n" 
+				+ "\t" + GENERATE_CRUD + "\t => Generate CRUD");
 	}
 
 	@Override
@@ -184,9 +184,9 @@ public class OrmCommand extends BaseCommand {
 
 	@Override
 	public boolean isAvailableCommand(final String command) {
-		return  //command.equals(GENERATE_ENTITY) 	||
-				command.equals(GENERATE_ENTITIES) 	||
-				//command.equals(GENERATE_FORM)		||
-				command.equals(GENERATE_CRUD);
+		return  //|| command.equals(GENERATE_ENTITY)	
+				command.equals(GENERATE_ENTITIES) 	
+				//|| command.equals(GENERATE_FORM)		
+				|| command.equals(GENERATE_CRUD);
 	}
 }

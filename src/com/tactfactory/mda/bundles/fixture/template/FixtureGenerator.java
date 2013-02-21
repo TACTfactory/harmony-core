@@ -61,7 +61,7 @@ public class FixtureGenerator extends BaseGenerator {
 	
 	public void init() {
 		 try {
-			 final String fixtureType = ((FixtureMetadata)this.appMetas.options.get("fixture")).type;
+			 final String fixtureType = ((FixtureMetadata) this.appMetas.options.get("fixture")).type;
 			 
 			 //Copy JDOM Library
 			this.updateLibrary("jdom-2.0.2.jar");

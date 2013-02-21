@@ -152,12 +152,12 @@ public abstract class ConsoleUtils {
 			this.out = new OutputBridge(proc);
 		}
 		
-		public void start() {
+		public final void start() {
 			this.in.start();
 			this.out.start();
 		}
 		
-		public void stop() {
+		public final void stop() {
 			this.in.terminate();
 			this.out.terminate();
 		}

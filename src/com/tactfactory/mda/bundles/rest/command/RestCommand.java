@@ -74,8 +74,8 @@ public class RestCommand extends BaseCommand {
 
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> REST \n" + 
-				"\t" + GENERATE_ADAPTERS + "\t => Generate Adapters");
+		ConsoleUtils.display("\n> REST \n" 
+				+ "\t" + GENERATE_ADAPTERS + "\t => Generate Adapters");
 		
 	}
 

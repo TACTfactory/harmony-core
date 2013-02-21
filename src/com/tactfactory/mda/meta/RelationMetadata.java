@@ -45,7 +45,7 @@ public class RelationMetadata extends BaseMetadata {
 	 * @return the generated HashMap
 	 */
 	@Override
-	public Map<String, Object> toMap(final BaseAdapter adapter) {
+	public final Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put(TagConstant.NAME, this.name);
 		model.put(TagConstant.TYPE, this.type);

@@ -20,7 +20,8 @@ import java.lang.reflect.Field;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
- * To mark a entity for synchronize between local and remote persistence the @Sync annotation is used.
+ * To mark a entity for synchronize between 
+ * local and remote persistence the @Sync annotation is used.
  */
 @Documented
 @Retention(SOURCE)
@@ -53,17 +54,21 @@ public @interface Sync {
 			return ret;
 		}
 		
-		public static Level fromName(String name) {
+		public static Level fromName(final String name) {
+			String realName;
 			Level ret;
 			if (name.lastIndexOf('.') > 0) {
-				name = name.substring(name.lastIndexOf('.') + 1); // Take only what comes after the last dot
+				// Take only what comes after the last dot
+				realName = name.substring(name.lastIndexOf('.') + 1); 
+			} else {
+				realName = name;
 			}
-			ConsoleUtils.displayDebug("Sync for Security : " + name);
+			ConsoleUtils.displayDebug("Sync for Security : " + realName);
 			try {
-				final Field field = Level.class.getField(name);	
+				final Field field = Level.class.getField(realName);	
 				if (field.isEnumConstant()) {
-					ConsoleUtils.displayDebug("Found Security : " + name);
-					ret = (Level)field.get(Level.class);
+					ConsoleUtils.displayDebug("Found Security : " + realName);
+					ret = (Level) field.get(Level.class);
 				} else {
 					ret = null;
 				}
@@ -102,17 +107,20 @@ public @interface Sync {
 			return ret;
 		}
 		
-		public static Mode fromName(String name) {
+		public static Mode fromName(final String name) {
+			String realName;
 			Mode ret;
 			if (name.lastIndexOf('.') > 0) {
-				name = name.substring(name.lastIndexOf('.') + 1); // Take only what comes after the last dot
+				realName = name.substring(name.lastIndexOf('.') + 1); // Take only what comes after the last dot
+			} else {
+				realName = name;
 			}
-			ConsoleUtils.displayDebug("Sync for Security : " + name);
+			ConsoleUtils.displayDebug("Sync for Security : " + realName);
 			try {
-				final Field field = Mode.class.getField(name);	
+				final Field field = Mode.class.getField(realName);	
 				if (field.isEnumConstant()) {
-					ConsoleUtils.displayDebug("Found Security : " + name);
-					ret = (Mode)field.get(Mode.class);
+					ConsoleUtils.displayDebug("Found Security : " + realName);
+					ret = (Mode) field.get(Mode.class);
 				} else {
 					ret = null;
 				}
@@ -132,15 +140,19 @@ public @interface Sync {
 		public static final int HIGH = 0;
 		public static final int LOW = 9;
 		
-		public static int fromName(String name) {
+		public static int fromName(final String name) {
+			String realName;
 			int ret = 0;
 			if (name.lastIndexOf('.') > 0) {
-				name = name.substring(name.lastIndexOf('.') + 1); // Take only what comes after the last dot
+				// Take only what comes after the last dot
+				realName = name.substring(name.lastIndexOf('.') + 1); 
+			} else {
+				realName = name;
 			}
-			ConsoleUtils.displayDebug("Sync for Security : " + name);
+			ConsoleUtils.displayDebug("Sync for Security : " + realName);
 			try {
-				final Field field = Priority.class.getField(name);	
-				ConsoleUtils.displayDebug("Found Security : " + name);
+				final Field field = Priority.class.getField(realName);	
+				ConsoleUtils.displayDebug("Found Security : " + realName);
 				ret = field.getInt(Priority.class);
 				
 			} catch (final NoSuchFieldException e) {

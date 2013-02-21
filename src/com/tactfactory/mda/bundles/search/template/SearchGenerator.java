@@ -116,12 +116,12 @@ public class SearchGenerator  extends BaseGenerator {
 	 * 
 	 * @param classFile
 	 */
-	private void updateManifest(String classFile, final String entityName) {
-		classFile = entityName + classFile;
+	private void updateManifest(final String classFile, final String entityName) {
+		String realClassFile = entityName + classFile;
 		final String pathRelatif = String.format(".%s.%s.%s",
 				this.adapter.getController(), 
 				entityName.toLowerCase(), 
-				classFile);
+				realClassFile);
 
 		// Debug Log
 		ConsoleUtils.displayDebug("Update Manifest : " + pathRelatif);

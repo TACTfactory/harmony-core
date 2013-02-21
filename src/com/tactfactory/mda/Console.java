@@ -16,7 +16,9 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 
 /** Harmony console class*/
 public abstract class Console extends Harmony {
-	protected static final String HARMONY_VERSION = "Harmony version " + Harmony.VERSION + "\n";
+	private static final int REQUIRED_COMMANDS = 3;
+	protected static final String HARMONY_VERSION = 
+			"Harmony version " + Harmony.VERSION + "\n";
 	protected static final String ARGUMENT_PREFIX = "--";
 	protected static final String ARGUMENT_PREFIX_SHORT = "-";
 	protected static final String ARGUMENT_AFFECT = "=";
@@ -39,7 +41,9 @@ public abstract class Console extends Harmony {
 		private String shortName;
 		private String description;
 		
-		private Option(final String fullName, final String shortName, final String description) {
+		private Option(final String fullName, 
+				final String shortName, 
+				final String description) {
 			this.fullName = fullName;
 			this.shortName = shortName;
 			this.description = description;
@@ -109,13 +113,13 @@ public abstract class Console extends Harmony {
 			
 			// If no valid parameters
 			ConsoleUtils.display("Usage:\n\t[options] command [arguments]\n");
-			ConsoleUtils.display("\nOptions:\n" + 
-					Option.HELP + 
-					Option.QUIET + 
-					Option.VERBOSE + 
-					Option.VERSION + 
-					Option.ANSI + 
-					Option.NO_ANSI);
+			ConsoleUtils.display("\nOptions:\n" 
+					+ Option.HELP 
+					+ Option.QUIET 
+					+ Option.VERBOSE 
+					+ Option.VERSION 
+					+ Option.ANSI 
+					+ Option.NO_ANSI);
 
 			ConsoleUtils.display("Tips : please use 'list' command to display available commands!\n");
 			
@@ -157,15 +161,17 @@ public abstract class Console extends Harmony {
 	 * @param currentPosition
 	 * @return
 	 */
-	private static String extractCommand(final String[] args, final int currentPosition) {
+	private static String extractCommand(final String[] args,
+			final int currentPosition) {
 		String command = args[currentPosition];
 		
 		// Extract command
 		final String[] splitCommand = args[currentPosition].split(":");
 
 		// Extract required command
-		if (splitCommand.length == 3) {
-			command = args[currentPosition]; //String.format("%s:%s:%s", bundle, subject, action);
+		if (splitCommand.length == REQUIRED_COMMANDS) {
+			//String.format("%s:%s:%s", bundle, subject, action);
+			command = args[currentPosition]; 
 		}
 		return command;
 	}

@@ -109,7 +109,7 @@ public class ActivityGenerator extends BaseGenerator {
 	}
 	
 	/** All Actions (List, Show, Edit, Create) */
-	public void generateAllAction(final String entityName) {
+	public final void generateAllAction(final String entityName) {
 		ConsoleUtils.display(">>> Generate CRUD view for " +  entityName);
 		
 		try {
@@ -162,7 +162,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	protected void generateListAction(final String entityName) {
+	protected final void generateListAction(final String entityName) {
 		final ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sListActivity.java");
 		javas.add("%sListFragment.java");
@@ -199,7 +199,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	protected void generateShowAction(final String entityName) {
+	protected final void generateShowAction(final String entityName) {
 
 		final ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sShowActivity.java");
@@ -236,7 +236,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	protected void generateEditAction(final String entityName) {
+	protected final void generateEditAction(final String entityName) {
 		
 		final ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sEditActivity.java");
@@ -273,7 +273,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	protected void generateCreateAction(final String entityName) {
+	protected final void generateCreateAction(final String entityName) {
 		
 		final ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sCreateActivity.java");
@@ -348,7 +348,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws IOException 
 	 * @throws TemplateException 
 	 */
-	public void makeManifest(final Configuration cfg) 
+	public final void makeManifest(final Configuration cfg) 
 			throws IOException, TemplateException {
 		final File file = FileUtils.makeFile(this.adapter.getManifestPathFile());
 
@@ -474,7 +474,7 @@ public class ActivityGenerator extends BaseGenerator {
 	/**
 	 * Update Widget
 	 */
-	protected void updateWidget(final String widgetName, final String layoutName) {
+	protected final void updateWidget(final String widgetName, final String layoutName) {
 		super.makeSource(
 				String.format("%s%s", this.adapter.getTemplateWidgetPath(), widgetName), 
 				String.format("%s%s", this.adapter.getWidgetPath(), widgetName), 

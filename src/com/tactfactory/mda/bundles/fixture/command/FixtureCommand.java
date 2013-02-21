@@ -98,11 +98,11 @@ public class FixtureCommand extends BaseCommand {
 
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> FIXTURE \n" + 
-				"\t" + FIXTURE_INIT + "\t => Initialize fixtures, create loaders\n" + 
-				"\t" + FIXTURE_LOAD + "\t => Load fixtures into the projects (overwrite)\n" + 
-				"\t" + FIXTURE_PURGE + "\t => Clear fixtures on the projects\n" + 
-				"\t" + FIXTURE_UPDATE + "\t => Update the fixtures in the project");
+		ConsoleUtils.display("\n> FIXTURE \n" 
+				+ "\t" + FIXTURE_INIT + "\t => Initialize fixtures, create loaders\n" 
+				+ "\t" + FIXTURE_LOAD + "\t => Load fixtures into the projects (overwrite)\n" 
+				+ "\t" + FIXTURE_PURGE + "\t => Clear fixtures on the projects\n" 
+				+ "\t" + FIXTURE_UPDATE + "\t => Update the fixtures in the project");
 		
 	}
 

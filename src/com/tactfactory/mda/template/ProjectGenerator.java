@@ -24,18 +24,15 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Make Platform specific Project Structure
 	 * @return success to make the platform project folder
 	 */
-	public boolean makeProject() {
+	public final boolean makeProject() {
 		boolean result = false;
 		if (this.adapter.getPlatform().equals("android")) {
 			result = this.makeProjectAndroid();
-		}
-		else if (this.adapter.getPlatform().equals("ios")) {
+		} else if (this.adapter.getPlatform().equals("ios")) {
 			result = this.makeProjectIOS();
-		}
-		else if (this.adapter.getPlatform().equals("rim")) {
+		} else if (this.adapter.getPlatform().equals("rim")) {
 			result = this.makeProjectRIM();
-		}
-		else if (this.adapter.getPlatform().equals("winphone")) {
+		} else if (this.adapter.getPlatform().equals("winphone")) {
 			result = this.makeProjectWinPhone();
 		}
 
@@ -46,7 +43,7 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Remove Platform specific Project Structure
 	 * @return success to make the platform project folder
 	 */
-	public boolean removeProject() {
+	public final boolean removeProject() {
 		boolean result = false;
 		final File dirproj = new File(String.format("%s/%s/", Harmony.PATH_PROJECT, this.adapter.getPlatform()));
 		
@@ -65,7 +62,7 @@ public class ProjectGenerator extends BaseGenerator {
 	/**
 	 * Generate HomeActivity File and merge it with datamodel
 	 */
-	public void generateHomeActivity() {
+	public final void generateHomeActivity() {
 		ConsoleUtils.display(">> Generate HomeView & Strings...");
 
 		final String fullFilePath = this.adapter.getHomeActivityPathFile();
@@ -78,7 +75,7 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Make Android Project Structure
 	 * @return success to make the platform project folder
 	 */
-	protected boolean makeProjectAndroid() {
+	protected final boolean makeProjectAndroid() {
 		boolean result = false;
 
 		// create project name space folders
@@ -221,7 +218,7 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Make IOS Project Structure
 	 * @return success to make the platform project folder
 	 */
-	protected boolean makeProjectIOS() {
+	protected final boolean makeProjectIOS() {
 		boolean result = false;
 		//Generate base folders & files
 		final File dirProj = FileUtils.makeFolderRecursive(
@@ -240,7 +237,7 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Make RIM Project Structure
 	 * @return success to make the platform project folder
 	 */
-	protected boolean makeProjectRIM() {
+	protected final boolean makeProjectRIM() {
 		final boolean result = false;
 
 		return result;
@@ -250,7 +247,7 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Make Windows Phone Project Structure
 	 * @return success to make the platform project folder
 	 */
-	protected boolean makeProjectWinPhone() {
+	protected final boolean makeProjectWinPhone() {
 		final boolean result = false;
 
 		return result;

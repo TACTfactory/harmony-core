@@ -141,18 +141,17 @@ public class Harmony {
 			
 			ApplicationMetadata.androidSdkPath = Harmony.getSdkDirFromPropertiesFile(projectProp);			
 			Harmony.androidSdkVersion = getAndroidSdkVersion(ApplicationMetadata.androidSdkPath);
-		}
-		else {
+		} else {
 			final String[] projectNameSpaceData = ApplicationMetadata.INSTANCE.projectNameSpace.split(DELIMITER);
 			ApplicationMetadata.INSTANCE.name = projectNameSpaceData[projectNameSpaceData.length - 1];
 		}
 		
 		// Debug Log
 		ConsoleUtils.display(
-				"Current Project : " + ApplicationMetadata.INSTANCE.name + "\n" + 
-				"Current NameSpace : " + ApplicationMetadata.INSTANCE.projectNameSpace + "\n" + 
-				"Current Android SDK Path : " + ApplicationMetadata.androidSdkPath + "\n" + 
-				"Current Android SDK Revision : " + Harmony.androidSdkVersion);
+				"Current Project : " + ApplicationMetadata.INSTANCE.name + "\n" 
+				+ "Current NameSpace : " + ApplicationMetadata.INSTANCE.projectNameSpace + "\n" 
+				+ "Current Android SDK Path : " + ApplicationMetadata.androidSdkPath + "\n" 
+				+ "Current Android SDK Revision : " + Harmony.androidSdkVersion);
 	}
 	
 	/**
@@ -228,8 +227,7 @@ public class Harmony {
 			
 			if (Strings.isNullOrEmpty(projectName)) {
 				ApplicationMetadata.INSTANCE.name = DEFAULT_PROJECT_NAME;
-			}
-			else {
+			} else {
 				ApplicationMetadata.INSTANCE.name = projectName;
 			}
 		}
@@ -292,8 +290,7 @@ public class Harmony {
 						osMessage += "Windows x??";
 						ApplicationMetadata.androidSdkPath = String.format("%s/%s/", "C:/Program Files", "android-sdk");
 					}
-				}
-				else if (OsUtil.isLinux()) {
+				} else if (OsUtil.isLinux()) {
 					osMessage += "Linux";
 					ApplicationMetadata.androidSdkPath = "/opt/android-sdk/";
 				}

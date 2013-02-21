@@ -38,27 +38,39 @@ public class ConfigGenerator extends BaseGenerator {
 	/**
 	 * Update XML Strings
 	 */
-	public void generateConfigXml() {		
+	public final void generateConfigXml() {		
 		ConsoleUtils.display(">> Generate config string...");
 		
 		try {
-			final SAXBuilder builder = new SAXBuilder();		// Make engine
-			final File xmlFile = FileUtils.makeFile(this.adapter.getConfigsPathFile());
-			final Document doc = builder.build(xmlFile); 	// Load XML File
-			final Element rootNode = doc.getRootElement(); 			// Load Root element
-			final Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
+			// Make engine
+			final SAXBuilder builder = new SAXBuilder();		
+			final File xmlFile = 
+					FileUtils.makeFile(this.adapter.getConfigsPathFile());
+			
+			// Load XML File
+			final Document doc = builder.build(xmlFile);
+			
+			// Load Root element
+			final Element rootNode = doc.getRootElement();
+			
+			// Load Name space (required for manipulate attributes)
+			final Namespace ns = rootNode.getNamespace("android");	
 
-			for (final ConfigMetadata configMeta : this.appMetas.configs.values()) {
+			for (final ConfigMetadata configMeta 
+					: this.appMetas.configs.values()) {
 				Element findConfig = null;
 				
 				// Debug Log
 				ConsoleUtils.displayDebug("Update config : " + configMeta.key);
 				
 				// Find String Node
-				final List<Element> configs = rootNode.getChildren("string"); 	// Find many elements
+				final List<Element> configs = 
+						rootNode.getChildren("string"); 	
+				// Find many elements
 				for (final Element configXml : configs) {
-					if (configXml.hasAttributes() && 
-							configXml.getAttributeValue(NAME, ns).equals(configMeta.key)) {	// Load name value
+					if (configXml.hasAttributes() 
+							&& configXml.getAttributeValue(NAME, ns)
+								.equals(configMeta.key)) {	// Load name value
 						findConfig = configXml;
 						
 						break;
@@ -67,8 +79,12 @@ public class ConfigGenerator extends BaseGenerator {
 
 				// If not found Node, create it
 				if (findConfig == null) {
-					findConfig = new Element("string");		// Create new element
-					findConfig.setAttribute(NAME, configMeta.key, ns);	// Add name to element
+					// Create new element
+					findConfig = new Element("string");
+					
+					// Add name to element
+					findConfig.setAttribute(NAME, configMeta.key, ns);
+					
 					findConfig.setText(configMeta.value); // Set values
 					
 					rootNode.addContent(findConfig);
@@ -79,22 +95,25 @@ public class ConfigGenerator extends BaseGenerator {
 			
 			// Clean code
 			rootNode.sortChildren(new Comparator<Element>() {
-				String metaName1;
-				String metaName2;
-				
+							
 				@Override
 				public int compare(final Element o1, final Element o2) {
-					this.metaName1 = o1.getAttributeValue(NAME, ns);
-					this.metaName2 = o2.getAttributeValue(NAME, ns);
+					final String metaName1 = o1.getAttributeValue(NAME, ns);
+					final String metaName2 = o2.getAttributeValue(NAME, ns);
 					
-					return this.metaName1.compareToIgnoreCase(this.metaName2);
+					return metaName1.compareToIgnoreCase(metaName2);
 				}
 			});
 			
 			// Write to File
 			final XMLOutputter xmlOutput = new XMLOutputter();
-			xmlOutput.setFormat(Format.getPrettyFormat());			// Make beautiful file with indent !!!
-			xmlOutput.output(doc, new OutputStreamWriter(new FileOutputStream(xmlFile.getAbsoluteFile()), "UTF-8"));
+			// Make beautiful file with indent !!!
+			xmlOutput.setFormat(Format.getPrettyFormat());			
+			xmlOutput.output(doc, 
+					new OutputStreamWriter(
+							new FileOutputStream(
+									xmlFile.getAbsoluteFile()),
+									"UTF-8"));
 			
 		} catch (final IOException io) {
 			ConsoleUtils.displayError(io);

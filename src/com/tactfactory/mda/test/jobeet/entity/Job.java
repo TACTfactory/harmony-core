@@ -13,6 +13,8 @@ import com.tactfactory.mda.annotation.Table;
 @Table
 @Entity
 public class Job {
+	private static final int STRING_LENGTH = 4000;
+	
     @Id
     @Column()					// typ ="integer",
     @GeneratedValue(strategy = "IDENTITY")
@@ -40,10 +42,10 @@ public class Job {
     @Column()					// typ ="string", lengt =255
     protected String location;
 
-    @Column(length = 4000)		// typ ="string",
+    @Column(length = STRING_LENGTH)		// typ ="string",
     protected String description;
 
-    @Column(length = 4000, name = "how_to_apply")	// typ ="string", 
+    @Column(length = STRING_LENGTH, name = "how_to_apply")	// typ ="string", 
     protected String howToApply;
 
     @Column(unique = true)		// typ ="string", lengt ="255", 

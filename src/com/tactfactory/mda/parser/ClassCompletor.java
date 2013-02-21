@@ -29,7 +29,7 @@ public class ClassCompletor {
 		this.metas = entities;
 	}
 	
-	public void execute() {
+	public final void execute() {
 		for (final ClassMetadata cm : this.metas.values()) {
 			this.updateRelations(cm);
 		}

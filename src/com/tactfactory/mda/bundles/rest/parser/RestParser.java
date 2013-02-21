@@ -62,7 +62,7 @@ public class RestParser extends BaseParser {
 			final RestMetadata rm = new RestMetadata();
 			rm.isEnabled = true;
 			if (fieldAnnot instanceof NormalAnnotationExpr) {
-				final NormalAnnotationExpr norm = (NormalAnnotationExpr)fieldAnnot;
+				final NormalAnnotationExpr norm = (NormalAnnotationExpr) fieldAnnot;
 				final List<MemberValuePair> pairs = norm.getPairs();
 				if (pairs != null) {
 					for (final MemberValuePair pair : pairs) {
@@ -71,7 +71,7 @@ public class RestParser extends BaseParser {
 							String security = "";
 							
 							if (pair.getValue() instanceof StringLiteralExpr) {
-								security = ((StringLiteralExpr)pair.getValue()).getValue();
+								security = ((StringLiteralExpr) pair.getValue()).getValue();
 							} else {
 								security = pair.getValue().toString();
 							}
@@ -81,7 +81,7 @@ public class RestParser extends BaseParser {
 						
 						if (pair.getName().equals(ANNOT_REST_URI)) {
 							if (pair.getValue() instanceof StringLiteralExpr) {
-								rm.uri = ((StringLiteralExpr)pair.getValue()).getValue();
+								rm.uri = ((StringLiteralExpr) pair.getValue()).getValue();
 							} else {
 								rm.uri = pair.getValue().toString();
 							}

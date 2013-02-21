@@ -64,7 +64,7 @@ public class User implements Cloneable, Serializable {
     }
 	
 	@Override
-	public User clone() throws CloneNotSupportedException {
+	public final User clone() throws CloneNotSupportedException {
 		final User u = (User) super.clone();
 		u.id = this.id;
 		u.login = this.login;

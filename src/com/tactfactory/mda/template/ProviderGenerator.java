@@ -47,7 +47,7 @@ public class ProviderGenerator extends BaseGenerator {
 		this.datamodel.put(TagConstant.LOCAL_NAMESPACE, this.localNameSpace);
 	}
 	
-	public void generateProvider() {
+	public final void generateProvider() {
 		try {
 			this.makeSourceProvider("TemplateProvider.java", this.nameProvider + ".java");
 			

@@ -73,8 +73,8 @@ public class SearchCommand  extends BaseCommand {
 
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> Search \n" + 
-				"\t" + GENERATE_ACTIVITIES + "\t => Generate Activities");
+		ConsoleUtils.display("\n> Search \n" 
+				+ "\t" + GENERATE_ACTIVITIES + "\t => Generate Activities");
 		
 	}
 

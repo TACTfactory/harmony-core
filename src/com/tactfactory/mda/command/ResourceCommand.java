@@ -39,9 +39,9 @@ public class ResourceCommand extends BaseCommand {
 	
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> " + BUNDLE.toUpperCase() + " \n" + 
-				"\t" + GENERATE_IMAGE + "\t => Generate all resize of the HD images\n" + 
-				"\t" + GENERATE_TRANSLATE + "\t => Generate translate\n");
+		ConsoleUtils.display("\n> " + BUNDLE.toUpperCase() + " \n" 
+				+ "\t" + GENERATE_IMAGE + "\t => Generate all resize of the HD images\n" 
+				+ "\t" + GENERATE_TRANSLATE + "\t => Generate translate\n");
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class ResourceCommand extends BaseCommand {
 
 	@Override
 	public boolean isAvailableCommand(final String command) {
-		return  command.equals(GENERATE_IMAGE) ||
-				command.equals(GENERATE_TRANSLATE);
+		return  command.equals(GENERATE_IMAGE)
+				|| command.equals(GENERATE_TRANSLATE);
 	}
 }

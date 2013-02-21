@@ -22,11 +22,13 @@ public class GeneralCommand extends BaseCommand {
 	 * Display Help Message
 	 */
 	public void help() {
-		ConsoleUtils.display("Usage:\n" + 
-				"\tconsole [--options] command [--parameters]\n" + 
-				"\nUsage example:\n" + 
-				"\tconsole --verbose project:init:android --nam =test --namespac =com/tact/android/test --sdkdi =/root/android\n" + 
-				"\nPlease use 'console list' to display available commands !");
+		ConsoleUtils.display("Usage:\n" 
+				+ "\tconsole [--options] command [--parameters]\n" 
+				+ "\nUsage example:\n" 
+				+ "\tconsole --verbose project:init:android --nam =test " 
+				+ "--namespac =com/tact/android/test --sdkdi =/root/android\n" 
+				+ "\nPlease use 'console list' to display available commands !"
+				);
 	}
 
 	/**
@@ -47,13 +49,15 @@ public class GeneralCommand extends BaseCommand {
 	
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> General \n" + 
-				"\t" + HELP + "\t\t\t => Display this help message\n" + 
-				"\t" + LIST + "\t\t\t => List all commands");
+		ConsoleUtils.display("\n> General \n" 
+				+ "\t" + HELP + "\t\t\t => Display this help message\n" 
+				+ "\t" + LIST + "\t\t\t => List all commands");
 	}
 
 	@Override
-	public void execute(final String action, final String[] args, final String option) {
+	public void execute(final String action, 
+			final String[] args, 
+			final String option) {
 		if (action.equals(LIST)) {
 			this.list();
 		} else
@@ -65,8 +69,8 @@ public class GeneralCommand extends BaseCommand {
 
 	@Override
 	public boolean isAvailableCommand(final String command) {
-		return 	command.equals(LIST) ||
-				command.equals(HELP);
+		return 	command.equals(LIST)
+				|| command.equals(HELP);
 	}
 
 }

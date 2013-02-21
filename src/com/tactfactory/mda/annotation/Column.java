@@ -136,15 +136,20 @@ public @interface Column {
 		}
 		
 		
-		public static Type fromName(String name) {
+		public static Type fromName(final String name) {
+			String realName;
 			Type ret;
 			if (name.lastIndexOf('.') > 0) {
-				name = name.substring(name.lastIndexOf('.') + 1); // Take only what comes after the last dot
+				// Take only what comes after the last dot
+				realName = name.substring(name.lastIndexOf('.') + 1); 
+			} else {
+				realName = name;
 			}
 			try {
-				final Field field = Type.class.getField(name.toUpperCase());	
+				final Field field = 
+						Type.class.getField(realName.toUpperCase());	
 				if (field.isEnumConstant()) {
-					ret = (Type)field.get(Type.class);
+					ret = (Type) field.get(Type.class);
 				} else {
 					 ret = null; 
 				}
@@ -164,36 +169,14 @@ public @interface Column {
 			}
 			return ret;
 		}
-			
-		
-		/** Type that maps an SQL VARCHAR to a JAVA string. */
-		//public static final String STRING = "string";
-		/** Type that maps an SQL VARCHAR to a JAVA string with only ASCII value.*/
-		//public static final String LOGIN = "login";
-		/** Type that maps an SQL VARCHAR to a JAVA string with only ASCII value but not show. */
-		//public static final String PASSWORD = "password";
-		/** Type that maps an SQL INT to a JAVA integer. */
-		//public static final String INTEGER = "integer";
-	    /*smallint: Type that maps a database SMALLINT to a JAVA integer.
-	    bigint: Type that maps a database BIGINT to a JAVA string.
-	    boolean: Type that maps an SQL boolean to a JAVA boolean.
-	    decimal: Type that maps an SQL DECIMAL to a JAVA double.
-	    date: Type that maps an SQL DATETIME to a JAVA DateTime object.
-	    time: Type that maps an SQL TIME to a JAVA DateTime object.*/
-	    /** Type that maps an SQL DATETIME/TIMESTAMP to a JAVA DateTime object. */
-		//public static final String DATETIME = "datetime";
-	    /** Type that maps an SQL CLOB to a JAVA string. */
-	   // public static final String TEXT = "text";
-	    /*object: Type that maps a SQL CLOB to a JAVA object using serialize() and unserialize()
-	    array: Type that maps a SQL CLOB to a JAVA object using serialize() and unserialize()
-	    float: Type that maps a SQL Float (Double Precision) to a JAVA double. IMPORTANT: Works only with locale settings that use decimal points as separator. */
 
 	}
 	
 	/**
 	 * The mapping type to use for the column.
 	 * 
-	 * @return (optional, defaults to "string") The mapping type to use for the column.
+	 * @return (optional, defaults to "string") 
+	 * The mapping type to use for the column.
 	 * 
 	 * @see com.tactfactory.mda.annotation.Column.Type
 	 */
@@ -202,14 +185,17 @@ public @interface Column {
 	/** 
 	 * The name of the column in the database.
 	 * 
-	 * @return (optional, defaults to field name) The name of the column in the database.
+	 * @return (optional, defaults to field name) 
+	 * The name of the column in the database.
 	 */
 	String name() default "";
 	
 	/**
 	 * The length of the column in the database.
 	 * 
-	 * @return (optional, default 255) The length of the column in the database. (Applies only if a string-valued column is used).
+	 * @return (optional, default 255) 
+	 * The length of the column in the database. 
+	 * (Applies only if a string-valued column is used).
 	 */
 	int length() default 255;
 	
@@ -223,28 +209,34 @@ public @interface Column {
 	/**
 	 * Whether the database column is nullable.
 	 * 
-	 * @return (optional, default FALSE) Whether the database column is nullable.
+	 * @return (optional, default FALSE) 
+	 * Whether the database column is nullable.
 	 */
 	boolean nullable() default false;
 	
 	/**
 	 * The precision for a decimal (exact numeric) column.
 	 * 
-	 * @return (optional, default 0) The precision for a decimal (exact numeric) column. (Applies only if a decimal column is used.)
+	 * @return (optional, default 0) 
+	 * The precision for a decimal (exact numeric) column. 
+	 * (Applies only if a decimal column is used.)
 	 */
 	int precision() default 0;
 	
 	/**
 	 * The scale for a decimal (exact numeric) column.
 	 * 
-	 * @return (optional, default 0) The scale for a decimal (exact numeric) column. (Applies only if a decimal column is used.)
+	 * @return (optional, default 0) 
+	 * The scale for a decimal (exact numeric) column. 
+	 * (Applies only if a decimal column is used.)
 	 */
 	int scale() default 0;
 	
 	/**
 	 * The database type to use for the column
 	 * 
-	 * @return (optional, defaults to type mapping) The database type to use for the column.
+	 * @return (optional, defaults to type mapping) 
+	 * The database type to use for the column.
 	 * 
 	 * @see com.tactfactory.mda.plateforme.SqliteAdapter for mapping list
 	 */

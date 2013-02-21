@@ -25,7 +25,8 @@ public abstract class TagConstant {
 	// Ant markers
 	public static final String ANT_ANDROID_SDK_DIR = "sdk";
 	public static final String OUT_CLASSES_ABS_DIR = "out_classes_absolute_dir";
-	public static final String OUT_DEX_INPUT_ABS_DIR = "out_dex_input_absolute_dir";
+	public static final String OUT_DEX_INPUT_ABS_DIR = 
+			"out_dex_input_absolute_dir";
 	
 	//Template annotations
 	public static final String ENTITIES = "entities";
@@ -56,18 +57,4 @@ public abstract class TagConstant {
 	public static final String PRIORITY = "priority";
 	public static final String ID = "id";
 	public static final String NULLABLE = "nullable";
-	
-	
-
-	public static class AndroidSDK {
-		private final String dir;
-
-		public AndroidSDK(final String dir) {
-			this.dir = dir;
-		}
-		
-		public String getDir() {
-			return this.dir;
-		}
-	}
 }

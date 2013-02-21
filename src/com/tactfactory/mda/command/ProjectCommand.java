@@ -96,9 +96,9 @@ public class ProjectCommand extends BaseCommand {
 					ApplicationMetadata.androidSdkPath = this.commandArgs.get("androidsdk");
 				}
 					
-				ConsoleUtils.displayDebug("Project Name: "	 + ApplicationMetadata.INSTANCE.name + 
-						"\nProject NameSpace: "				 + ApplicationMetadata.INSTANCE.projectNameSpace + 
-						"\nAndroid SDK Path: "				 + ApplicationMetadata.androidSdkPath);
+				ConsoleUtils.displayDebug("Project Name: "	 + ApplicationMetadata.INSTANCE.name
+						 + "\nProject NameSpace: "			 + ApplicationMetadata.INSTANCE.projectNameSpace
+						 + "\nAndroid SDK Path: "			 + ApplicationMetadata.androidSdkPath);
 
 				// Confirmation
 				if (Harmony.isConsole) {
@@ -352,17 +352,17 @@ public class ProjectCommand extends BaseCommand {
 	/** @see BaseCommand#summary() */
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> PROJECT \n" + 
-				"\t" + INIT_ANDROID + "\t => Init Android project directory\n" + 
-				"\t" + INIT_IOS + "\t => Init Apple IOS project directory\n" + 
-				"\t" + INIT_RIM + "\t => Init BlackBerry project directory\n" + 
-				"\t" + INIT_WINPHONE + "\t => Init Windows Phone project directory\n" + 
-				"\t" + INIT_ALL + "\t => Init All project directories\n" + 
-				"\t" + REMOVE_ANDROID + "\t => Remove Google Android project directory\n" + 
-				"\t" + REMOVE_IOS + "\t => Remove Apple IOS project directory\n" + 
-				"\t" + REMOVE_RIM + "\t => Remove BlackBerry project directory\n" + 
-				"\t" + REMOVE_WINPHONE + "\t => Remove Windows Phone project directory\n" + 
-				"\t" + REMOVE_ALL + "\t => Remove All project directories\n");
+		ConsoleUtils.display("\n> PROJECT \n"  
+				+ "\t" + INIT_ANDROID + "\t => Init Android project directory\n"
+				+ "\t" + INIT_IOS + "\t => Init Apple IOS project directory\n"  
+				+ "\t" + INIT_RIM + "\t => Init BlackBerry project directory\n" 
+				+ "\t" + INIT_WINPHONE + "\t => Init Windows Phone project directory\n"
+				+ "\t" + INIT_ALL + "\t => Init All project directories\n" 
+				+ "\t" + REMOVE_ANDROID + "\t => Remove Google Android project directory\n"
+				+ "\t" + REMOVE_IOS + "\t => Remove Apple IOS project directory\n"
+				+ "\t" + REMOVE_RIM + "\t => Remove BlackBerry project directory\n"
+				+ "\t" + REMOVE_WINPHONE + "\t => Remove Windows Phone project directory\n"
+				+ "\t" + REMOVE_ALL + "\t => Remove All project directories\n");
 	}
 
 	/** @see BaseCommand#execute(String, String[], String) */
@@ -415,15 +415,15 @@ public class ProjectCommand extends BaseCommand {
 	@Override
 	@Capabilities
 	public boolean isAvailableCommand(final String command) {
-		return  command.equals(INIT_ANDROID) ||
-				command.equals(INIT_IOS) ||
-				//command.equals(INIT_RIM) ||
-				//command.equals(INIT_WINPHONE) ||
-				command.equals(INIT_ALL) ||
-				command.equals(REMOVE_ANDROID) ||
-				command.equals(REMOVE_IOS) ||
-				//command.equals(REMOVE_RIM) ||
-				//command.equals(REMOVE_WINPHONE) ||
-				command.equals(REMOVE_ALL);
+		return  command.equals(INIT_ANDROID) 
+				|| command.equals(INIT_IOS) 
+				//|| command.equals(INIT_RIM) 
+				//|| command.equals(INIT_WINPHONE) 
+				|| command.equals(INIT_ALL) 
+				|| command.equals(REMOVE_ANDROID) 
+				|| command.equals(REMOVE_IOS) 
+				//|| command.equals(REMOVE_RIM)
+				//|| command.equals(REMOVE_WINPHONE) 
+				|| command.equals(REMOVE_ALL);
 	}
 }

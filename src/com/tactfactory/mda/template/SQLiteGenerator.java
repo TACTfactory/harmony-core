@@ -26,7 +26,7 @@ public class SQLiteGenerator extends BaseGenerator {
 	/**
 	 * Generate Database Interface Source Code
 	 */
-	public void generateDatabase() {
+	public final void generateDatabase() {
 		// Info
 		ConsoleUtils.display(">> Generate Database");
 		

@@ -138,11 +138,11 @@ public class RestGlobalTest extends CommonTest {
 	}
 	
 	private void hasUri(final ClassMetadata cm, final String value) {
-		Assert.assertTrue("Check if URI of " + cm.name + " is " + value, ((RestMetadata)cm.options.get(REST)).uri.equals(value));
+		Assert.assertTrue("Check if URI of " + cm.name + " is " + value, ((RestMetadata) cm.options.get(REST)).uri.equals(value));
 	}
 	
 	private void hasSecurity(final ClassMetadata cm, final Rest.Security value) {
-		Assert.assertTrue("Check if SECURITY of " + cm.name + " is " + value.getValue(), ((RestMetadata)cm.options.get(REST)).security.equals(value));
+		Assert.assertTrue("Check if SECURITY of " + cm.name + " is " + value.getValue(), ((RestMetadata) cm.options.get(REST)).security.equals(value));
 	}
 	
 }

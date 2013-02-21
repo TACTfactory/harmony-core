@@ -139,14 +139,15 @@ public class SyncGenerator extends BaseGenerator {
 		return this.indexOf(sb, content, 0, allowComments);
 	}
 	
-	private int indexOf(final StringBuffer sb, final String content, int fromIndex, final boolean allowComments) {
+	private int indexOf(final StringBuffer sb, final String content, final int fromIndex, final boolean allowComments) {
+		int fIndex = fromIndex;
 		int index = -1;
 		if (allowComments) {
-			index = sb.indexOf(content, fromIndex);
+			index = sb.indexOf(content, fIndex);
 		} else {
 			int tmpIndex;
 			do {
-				tmpIndex = sb.indexOf(content, fromIndex);
+				tmpIndex = sb.indexOf(content, fIndex);
 				final int lastCommentClose = sb.lastIndexOf("*/", tmpIndex);
 				final int lastCommentOpen = sb.lastIndexOf("/*", tmpIndex);
 				final int lastLineComment = sb.lastIndexOf("//", tmpIndex);
@@ -156,7 +157,7 @@ public class SyncGenerator extends BaseGenerator {
 					index = tmpIndex;							// Index is good 
 					break;
 				} else {
-					fromIndex = tmpIndex + 1;
+					fIndex = tmpIndex + 1;
 				}
 			 } while (tmpIndex != -1);
 		}

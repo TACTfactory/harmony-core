@@ -20,6 +20,10 @@ import com.tactfactory.mda.utils.ImageUtils;
 
 /** Google Android Adapter of project structure */
 public final class AndroidAdapter extends BaseAdapter {
+	private static final float HD_RATIO = 0.75f;
+	private static final float MD_RATIO = 0.50f;
+	private static final float LD_RATIO = 0.375f;
+	
 	private static final String FLOAT = "float";
 	private static final String STR = "String";
 	private static final String INT = "int";
@@ -54,61 +58,18 @@ public final class AndroidAdapter extends BaseAdapter {
 		this.configs	= "configs.xml";
 	}
 
-	/* (non-Javadoc)
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getNameSpace(com.tactfactory.mda.orm.ClassMetadata)
+	/** 
+	 * @see com.tactfactory.mda.plateforme.BaseAdapter#
+	 * getNameSpaceEntity(com.tactfactory.mda.orm.ClassMetadata,
+	 * 			 java.lang.String)
 	 */
 	@Override
-	public String getNameSpaceEntity(final ClassMetadata cm, final String type) {
+	public String getNameSpaceEntity(final ClassMetadata cm, 
+			final String type) {
 		return String.format("%s.%s", 
 				this.getNameSpace(cm, type),
 				cm.name.toLowerCase());
 	}
-
-	/* (non-Javadoc)
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getViewComponentShow(com.tactfactory.mda.orm.FieldMetadata)
-	 */
-	/*@Override
-	public String getViewComponentShow(FieldMetadata field) {
-		String result = "TextView";
-		
-		if (field.type.equals("Boolean")) {
-			result = "TextView";
-		}
-
-		if (field.relation != null && (field.relation.type.equals("OneToMany") || field.relation.type.equals("ManyToMany"))) {
-
-			result = "TextView";
-		}
-		
-		return result;
-	}*/
-
-	/* (non-Javadoc)
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#getViewComponentEdit(com.tactfactory.mda.orm.FieldMetadata)
-	 */
-	/*@Override
-	public String getViewComponentEdit(FieldMetadata field) {
-		String result = "EditText";
-		
-		if (field.type.equals("String") || field.type.equals("int")) {
-			result = "EditText";
-		} else
-			
-		if (field.type.equals("Date")) {
-			result = "EditText"; //"DatePickerDialog";
-		} else
-
-		if (field.type.equals("Boolean")) {
-			result = "CheckBox";
-		}
-			
-		if (field.relation != null && (field.relation.type.equals("ManyToOne") || field.relation.type.equals("OneToOne"))) {
-
-			result = "Spinner";
-		}
-		
-		return result;
-	}*/
 
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
@@ -190,22 +151,28 @@ public final class AndroidAdapter extends BaseAdapter {
 	private final FilenameFilter filter = new FilenameFilter() {
 	    @Override
 		public boolean accept(final File dir, final String name) {
-	        return	name.endsWith(".png") || 
-	        		name.endsWith(".jpg");
+	        return	name.endsWith(".png") 
+	        		|| name.endsWith(".jpg");
 	    }
 	};
 	
 	@Override
 	public void resizeImage() {
-		final File imageDirectoryXHD	= new File(this.getRessourcePath() + "/drawable-xhdpi");
-		final File imageDirectoryHD 	= new File(this.getRessourcePath() + "/drawable-hdpi");
-		final File imageDirectoryMD 	= new File(this.getRessourcePath() + "/drawable-mdpi");
-		final File imageDirectoryLD 	= new File(this.getRessourcePath() + "/drawable-ldpi");
+		final File imageDirectoryXHD	
+				= new File(this.getRessourcePath() + "/drawable-xhdpi");
+		final File imageDirectoryHD 
+				= new File(this.getRessourcePath() + "/drawable-hdpi");
+		final File imageDirectoryMD 	
+				= new File(this.getRessourcePath() + "/drawable-mdpi");
+		final File imageDirectoryLD 	
+				= new File(this.getRessourcePath() + "/drawable-ldpi");
+		
 		File imageHD;
 		File imageMD;
 		File imageLD;
 		
-		if (imageDirectoryXHD.exists() && imageDirectoryXHD.listFiles().length > 0) {
+		if (imageDirectoryXHD.exists() 
+				&& imageDirectoryXHD.listFiles().length > 0) {
 			final File[] imagesFiles = imageDirectoryXHD.listFiles(this.filter);
 			FileUtils.makeFolder(imageDirectoryHD.getAbsolutePath());
 			FileUtils.makeFolder(imageDirectoryMD.getAbsolutePath());
@@ -213,13 +180,21 @@ public final class AndroidAdapter extends BaseAdapter {
 			
 			for (final File imageXHD : imagesFiles) {
 				try {
-					imageHD = new File(imageDirectoryHD.getCanonicalPath() + "/" + imageXHD.getName());
-					imageMD = new File(imageDirectoryMD.getCanonicalPath() + "/" + imageXHD.getName());
-					imageLD = new File(imageDirectoryLD.getCanonicalPath() + "/" + imageXHD.getName());
+					imageHD = new File(imageDirectoryHD.getCanonicalPath() 
+							+ "/" 
+							+ imageXHD.getName());
+					
+					imageMD = new File(imageDirectoryMD.getCanonicalPath() 
+							+ "/" 
+							+ imageXHD.getName());
+					
+					imageLD = new File(imageDirectoryLD.getCanonicalPath() 
+							+ "/" 
+							+ imageXHD.getName());
 						
-					ImageUtils.resize(imageXHD, imageHD, 0.75f);
-					ImageUtils.resize(imageXHD, imageMD, 0.50f);
-					ImageUtils.resize(imageXHD, imageLD, 0.375f);
+					ImageUtils.resize(imageXHD, imageHD, HD_RATIO);
+					ImageUtils.resize(imageXHD, imageMD, MD_RATIO);
+					ImageUtils.resize(imageXHD, imageLD, LD_RATIO);
 					
 				} catch (final IOException e) {
 					// TODO Auto-generated catch block

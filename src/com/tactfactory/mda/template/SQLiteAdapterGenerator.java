@@ -23,7 +23,7 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
-	public void generateAll() {
+	public final void generateAll() {
 		ConsoleUtils.display(">> Generate Adapter...");
 		
 		for (final ClassMetadata cm : this.appMetas.entities.values()) {

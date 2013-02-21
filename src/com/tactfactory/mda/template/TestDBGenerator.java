@@ -21,7 +21,7 @@ public class TestDBGenerator extends BaseGenerator {
 		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
-	public void generateAll() {
+	public final void generateAll() {
 		ConsoleUtils.display(">> Generate Repository test...");
 		
 		this.initTestAndroid();
@@ -83,7 +83,7 @@ public class TestDBGenerator extends BaseGenerator {
 	 * Initialize Test Android Project folders and files
 	 * @return success of Test Android project initialization
 	 */
-	public boolean initTestAndroid() {
+	public final boolean initTestAndroid() {
 		ConsoleUtils.display("> Init Test Project Google Android");
 
 		boolean result = false;

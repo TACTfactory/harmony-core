@@ -12,59 +12,52 @@ import java.lang.reflect.Field;
 
 import com.tactfactory.mda.annotation.Column;
 import com.tactfactory.mda.annotation.Column.Type;
+import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 public abstract class SqliteAdapter {
 	private static final String PREFIX = "COL_";
 	private static final String SUFFIX = "_ID";
 
-	public static String generateStructure(
-								final String name, 
-								final String type,
-								final Integer length,
-								final Integer scale,
-								final Integer precision, 
-								final boolean isId,
-								final Boolean isUnique, 
-								final Boolean isNullable) {
+	public static String generateStructure(final FieldMetadata fm) {
 		
 		final StringBuilder builder = new StringBuilder();
 		builder.append(' ');
-		builder.append(type.toLowerCase());
-		if (isId) {
+		builder.append(fm.type.toLowerCase());
+		if (fm.id) {
 			builder.append(" PRIMARY KEY");
-			if (type.equals("integer")) {
+			if (fm.type.equals("integer")) {
 				builder.append(" AUTOINCREMENT");
 			}
 		} else {
 		
 			// Set Length
-			final Type fieldType = Type.fromName(type);
+			final Type fieldType = Type.fromName(fm.type);
 			if (fieldType != null) {
-				if (length != null && length != fieldType.getLength()) {
+				if (fm.length != null && fm.length != fieldType.getLength()) {
 					builder.append('(');
-					builder.append(length);
+					builder.append(fm.length);
 					builder.append(')');
-				} else if (precision != null 
-						&& precision != fieldType.getPrecision()) {
+				} else if (fm.precision != null 
+						&& fm.precision != fieldType.getPrecision()) {
 					builder.append('(');
-					builder.append(precision);
-					if (scale != null 
-							&& scale != fieldType.getScale()) {
+					builder.append(fm.precision);
+					if (fm.scale != null 
+							&& fm.scale != fieldType.getScale()) {
 						builder.append(',');
-						builder.append(scale);
+						builder.append(fm.scale);
 					}
 					builder.append(')');
 				}
 			}
 			
 			// Set Unique
-			if (isUnique != null && isUnique) {
+			if (fm.unique != null && fm.unique) {
 				builder.append(" UNIQUE");
 			}
 			
 			// Set Nullable
-			if (isNullable == null || !isNullable) {
+			if (fm.nullable == null || !fm.nullable) {
 				builder.append(" NOT NULL");
 			}
 		}

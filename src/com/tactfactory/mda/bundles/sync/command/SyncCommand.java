@@ -77,8 +77,8 @@ public class SyncCommand extends BaseCommand {
 
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> SYNC \n" + 
-				"\t" + GENERATE_SERVICE + "\t => Generate Adapters");
+		ConsoleUtils.display("\n> SYNC \n" 
+				+ "\t" + GENERATE_SERVICE + "\t => Generate Adapters");
 		
 	}
 
