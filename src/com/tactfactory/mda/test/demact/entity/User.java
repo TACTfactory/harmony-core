@@ -25,36 +25,36 @@ import com.tactfactory.mda.bundles.sync.annotation.Sync;
 import com.tactfactory.mda.bundles.sync.annotation.Sync.Mode;
 
 //All annotation with forced value/parameter
-@Table(name="local_user")
+@Table(name = "local_user")
 @Entity
-@Rest(security=Rest.Security.SESSION, uri="user-uri")
-@Sync(mode=Mode.REAL_TIME)
+@Rest(security = Rest.Security.SESSION, uri = "user-uri")
+@Sync(mode = Mode.REAL_TIME)
 @Social
 public class User implements Cloneable, Serializable {
 	private static final long serialVersionUID = 7032873279928549706L;
 
 	@Id
-    @Column(type=Type.INTEGER, hidden=true)
-    @GeneratedValue(strategy="IDENTITY")
+    @Column(type = Type.INTEGER, hidden = true)
+    @GeneratedValue(strategy = "IDENTITY")
     protected int id;
 
-	@Column(type=Type.LOGIN)
+	@Column(type = Type.LOGIN)
 	@Searchable
     protected String login;
 	
-	@Column(type=Type.PASSWORD)
+	@Column(type = Type.PASSWORD)
     protected String password;
 	
-	@Column(nullable=true)
+	@Column(nullable = true)
     protected String firstname;
 	
 	@Column()
     protected String lastname;
 	
-	@Column(name="created_at")
+	@Column(name = "created_at")
     protected DateTime createdAt;
 	
-	@Column(type=Type.DATE, locale=true)
+	@Column(type = Type.DATE, locale = true)
     protected DateTime birthdate;
 
 

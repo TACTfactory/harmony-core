@@ -64,7 +64,7 @@ public class FixtureGlobalTest extends CommonTest{
 		harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[]{}, null);
 		harmony.findAndExecute(RestCommand.GENERATE_ADAPTERS, new String[]{}, null);
 		harmony.findAndExecute(SyncCommand.GENERATE_SERVICE, new String[]{}, null);
-		harmony.findAndExecute(FixtureCommand.FIXTURE_INIT, new String[]{"--format=xml"}, null);
+		harmony.findAndExecute(FixtureCommand.FIXTURE_INIT, new String[]{"--forma =xml"}, null);
 	}
 	
 	//@Test

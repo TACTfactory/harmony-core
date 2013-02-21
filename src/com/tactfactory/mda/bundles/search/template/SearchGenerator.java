@@ -44,14 +44,14 @@ public class SearchGenerator  extends BaseGenerator {
 	
 	public void generateAll() {
 		this.datamodel = this.appMetas.toMap(this.adapter);
-		for (final ClassMetadata cm : this.appMetas.entities.values()){
-			if (this.isClassSearchable(cm)){
+		for (final ClassMetadata cm : this.appMetas.entities.values()) {
+			if (this.isClassSearchable(cm)) {
 				this.generateActivity(cm);
 			}
 		}
 	}
 	
-	private void generateActivity(final ClassMetadata cm){
+	private void generateActivity(final ClassMetadata cm) {
 		this.makeSource(cm, "TemplateSearchActivity.java",cm.name+"SearchActivity.java",false);
 		this.makeSource(cm, "TemplateSearchFragment.java",cm.name+"SearchFragment.java",false);
 		
@@ -71,14 +71,14 @@ public class SearchGenerator  extends BaseGenerator {
 		}
 	}
 	
-	private void generateMenu(){
+	private void generateMenu() {
 		this.makeMenu(true);
 	}
 	
-	private boolean isClassSearchable(final ClassMetadata cm){
+	private boolean isClassSearchable(final ClassMetadata cm) {
 		boolean isSearchable = false;
-		for (final FieldMetadata fm : cm.fields.values()){
-			if (fm.options.containsKey("search")){
+		for (final FieldMetadata fm : cm.fields.values()) {
+			if (fm.options.containsKey("search")) {
 				isSearchable = true;
 			}
 		}

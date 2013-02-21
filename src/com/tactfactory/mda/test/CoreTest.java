@@ -33,7 +33,7 @@ public class CoreTest extends CommonTest {
 	 */
 	@Before
 	@Override
-	public void setUp() throws Exception {
+	public final void setUp() throws Exception {
 		super.setUp();
 	}
 
@@ -42,31 +42,36 @@ public class CoreTest extends CommonTest {
 	 */
 	@After
 	@Override
-	public void tearDown() throws Exception {
+	public final void tearDown() throws Exception {
 		super.tearDown();
 	}
 	
 	@Test
-	public void loadPlugins() {
+	public final void loadPlugins() {
 		Assert.assertTrue(!CommonTest.harmony.getCommands().isEmpty());
 		
-		Assert.assertNotNull(CommonTest.harmony.getCommand(GeneralCommand.class));
-		Assert.assertNotNull(CommonTest.harmony.getCommand(ProjectCommand.class));
-		Assert.assertNotNull(CommonTest.harmony.getCommand(OrmCommand.class));
+		Assert.assertNotNull(
+				CommonTest.harmony.getCommand(GeneralCommand.class));
+		Assert.assertNotNull(
+				CommonTest.harmony.getCommand(ProjectCommand.class));
+		Assert.assertNotNull(
+				CommonTest.harmony.getCommand(OrmCommand.class));
 	}
 	
 	@Test
-	public void list() {
+	public final void list() {
 		System.out.println("\nTest List bundle/command");
-		System.out.println("###############################################################################");
+		System.out.println("########################################"
+				 + "#######################################");
 		
 		CommonTest.harmony.findAndExecute(GeneralCommand.LIST, null, null);
 	} 
 	
 	@Test
-	public void help() {
+	public final void help() {
 		System.out.println("\nTest Help");
-		System.out.println("###############################################################################");
+		System.out.println("#######################################"
+				 + "########################################");
 		
 		CommonTest.harmony.findAndExecute(GeneralCommand.HELP, null, null);
 	}

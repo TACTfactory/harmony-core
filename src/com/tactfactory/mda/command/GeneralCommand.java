@@ -25,7 +25,7 @@ public class GeneralCommand extends BaseCommand {
 		ConsoleUtils.display("Usage:\n" +
 				"\tconsole [--options] command [--parameters]\n" +
 				"\nUsage example:\n" +
-				"\tconsole --verbose project:init:android --name=test --namespace=com/tact/android/test --sdkdir=/root/android\n" +
+				"\tconsole --verbose project:init:android --nam =test --namespac =com/tact/android/test --sdkdi =/root/android\n" +
 				"\nPlease use 'console list' to display available commands !");
 	}
 
@@ -39,7 +39,7 @@ public class GeneralCommand extends BaseCommand {
 		general.summary();
 		
 		for (final Command baseCommand : Harmony.instance.getCommands()) {
-			if (baseCommand != general){
+			if (baseCommand != general) {
 				baseCommand.summary();
 			}
 		}

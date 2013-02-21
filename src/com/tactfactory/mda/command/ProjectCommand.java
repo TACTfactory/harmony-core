@@ -55,7 +55,7 @@ public class ProjectCommand extends BaseCommand {
 	public final static String REMOVE_ANDROID = BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.ANDROID.toLowerString();
 	public final static String REMOVE_IOS 	= BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.IPHONE.toLowerString();
 	public final static String REMOVE_RIM 	= BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.RIM.toLowerString();
-	public final static String REMOVE_WINPHONE= BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.WINPHONE.toLowerString();
+	public final static String REMOVE_WINPHONE = BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.WINPHONE.toLowerString();
 	public final static String REMOVE_ALL 	= BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.ALL.toLowerString();
 
 	// Internal	
@@ -269,7 +269,7 @@ public class ProjectCommand extends BaseCommand {
 		}
 		
 		try {
-			if (!new ProjectGenerator(this.adapterIOS).removeProject()){
+			if (!new ProjectGenerator(this.adapterIOS).removeProject()) {
 				ConsoleUtils.display(ERROR_MSG);
 			}
 		} catch (final Exception e) {
@@ -353,16 +353,16 @@ public class ProjectCommand extends BaseCommand {
 	@Override
 	public void summary() {
 		ConsoleUtils.display("\n> PROJECT \n" +
-				"\t"+INIT_ANDROID+"\t => Init Android project directory\n" +
-				"\t"+INIT_IOS+"\t => Init Apple IOS project directory\n" +
-				"\t"+INIT_RIM+"\t => Init BlackBerry project directory\n" +
-				"\t"+INIT_WINPHONE+"\t => Init Windows Phone project directory\n" +
-				"\t"+INIT_ALL+"\t => Init All project directories\n" +
-				"\t"+REMOVE_ANDROID+"\t => Remove Google Android project directory\n" +
-				"\t"+REMOVE_IOS+"\t => Remove Apple IOS project directory\n" +
-				"\t"+REMOVE_RIM+"\t => Remove BlackBerry project directory\n" +
-				"\t"+REMOVE_WINPHONE+"\t => Remove Windows Phone project directory\n" +
-				"\t"+REMOVE_ALL+"\t => Remove All project directories\n");
+				"\t" + INIT_ANDROID + "\t => Init Android project directory\n" +
+				"\t" + INIT_IOS + "\t => Init Apple IOS project directory\n" +
+				"\t" + INIT_RIM + "\t => Init BlackBerry project directory\n" +
+				"\t" + INIT_WINPHONE + "\t => Init Windows Phone project directory\n" +
+				"\t" + INIT_ALL + "\t => Init All project directories\n" +
+				"\t" + REMOVE_ANDROID + "\t => Remove Google Android project directory\n" +
+				"\t" + REMOVE_IOS + "\t => Remove Apple IOS project directory\n" +
+				"\t" + REMOVE_RIM + "\t => Remove BlackBerry project directory\n" +
+				"\t" + REMOVE_WINPHONE + "\t => Remove Windows Phone project directory\n" +
+				"\t" + REMOVE_ALL + "\t => Remove All project directories\n");
 	}
 
 	/** @see BaseCommand#execute(String, String[], String) */

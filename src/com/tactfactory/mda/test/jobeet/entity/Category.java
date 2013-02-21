@@ -13,11 +13,11 @@ import com.tactfactory.mda.annotation.Table;
 @Entity
 public class Category {
     @Id
-    @Column()				// type="integer"
-    @GeneratedValue(strategy="IDENTITY")
+    @Column()				
+    @GeneratedValue(strategy = "IDENTITY")
     protected int id;
 
-    @Column( unique=true)	// type="string", length=255
+    @Column(unique = true)
     protected String name;
     
     @ManyToMany()

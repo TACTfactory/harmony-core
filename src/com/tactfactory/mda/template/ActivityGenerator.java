@@ -91,7 +91,7 @@ public class ActivityGenerator extends BaseGenerator {
 		ConsoleUtils.display(">> Generate CRUD view...");
 
 		for (final ClassMetadata cm : this.appMetas.entities.values()) {
-			if (!cm.internal && !cm.fields.isEmpty()){
+			if (!cm.internal && !cm.fields.isEmpty()) {
 				cm.makeString("label");
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
 				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getController())+"."+cm.getName().toLowerCase(Locale.ENGLISH);
@@ -174,13 +174,13 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("fragment_%s_list.xml");		
 		xmls.add("row_%s.xml");
 		
-		for (final String java : javas){
+		for (final String java : javas) {
 			this.makeSourceControler( 
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
 		
-		for (final String xml : xmls){
+		for (final String xml : xmls) {
 			this.makeResourceLayout( 
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
@@ -210,13 +210,13 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("fragment_%s_show.xml");
 		
 
-		for (final String java : javas){
+		for (final String java : javas) {
 			this.makeSourceControler(
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
 		
-		for (final String xml : xmls){
+		for (final String xml : xmls) {
 			this.makeResourceLayout( 
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
@@ -247,13 +247,13 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("fragment_%s_edit.xml");
 		
 
-		for (final String java : javas){
+		for (final String java : javas) {
 			this.makeSourceControler( 
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
 		
-		for (final String xml : xmls){
+		for (final String xml : xmls) {
 			this.makeResourceLayout( 
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
@@ -284,13 +284,13 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("fragment_%s_create.xml");
 		
 
-		for (final String java : javas){
+		for (final String java : javas) {
 			this.makeSourceControler(
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
 		
-		for (final String xml : xmls){
+		for (final String xml : xmls) {
 			this.makeResourceLayout(
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));

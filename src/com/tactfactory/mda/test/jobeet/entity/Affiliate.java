@@ -14,23 +14,23 @@ import com.tactfactory.mda.annotation.Table;
 @Entity
 public class Affiliate {
 	@Id
-    @Column()					// type="integer",
-    @GeneratedValue(strategy="IDENTITY")
+    @Column()					// typ ="integer",
+    @GeneratedValue(strategy = "IDENTITY")
     protected int id;
 	
-	@Column(nullable=true)		// type="string", length=255 
+	@Column(nullable = true)		// typ ="string", lengt =255 
     protected String url;
 	
-	@Column()					// type="string", length="255"
+	@Column()					// typ ="string", lengt ="255"
     protected String email;
 	
-	@Column(unique=true)		// type="string", length="255", 
+	@Column(unique = true)		// typ ="string", lengt ="255", 
     protected String token;
 	
-	@Column(name="is_activated")// type="boolean", 
+	@Column(name = "is_activated")// typ ="boolean", 
     protected boolean isActivated;
 	
-	@Column(name="created_at")	// type="datetime",
+	@Column(name = "created_at")	// typ ="datetime",
     protected Date createdAt;
 	
 	@ManyToMany()

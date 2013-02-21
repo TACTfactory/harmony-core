@@ -25,12 +25,12 @@ public class ClassCompletor {
 	private Map<String, ClassMetadata> metas;
 	private final Map<String, ClassMetadata> newMetas = new HashMap<String, ClassMetadata>();
 	
-	public ClassCompletor(final Map<String, ClassMetadata> entities){
+	public ClassCompletor(final Map<String, ClassMetadata> entities) {
 		this.metas = entities;
 	}
 	
-	public void execute(){
-		for (final ClassMetadata cm : this.metas.values()){
+	public void execute() {
+		for (final ClassMetadata cm : this.metas.values()) {
 			this.updateRelations(cm);
 		}
 		
@@ -44,23 +44,23 @@ public class ClassCompletor {
 	 * (actually sets the referenced columns for the target entities)
 	 * @param cm The class owning the relations
 	 */
-	private void updateRelations(final ClassMetadata cm){
-		final ArrayList<FieldMetadata> newFields= new ArrayList<FieldMetadata>();
-		for (final FieldMetadata fm : cm.relations.values()){ // For each relation in the class
+	private void updateRelations(final ClassMetadata cm) {
+		final ArrayList<FieldMetadata> newFields = new ArrayList<FieldMetadata>();
+		for (final FieldMetadata fm : cm.relations.values()) { // For each relation in the class
 			boolean isRecursive = false;
 			final RelationMetadata rel = fm.relation;
 			final String targetEntity = rel.entityRef;
-			if (targetEntity.equals(cm.name)){
+			if (targetEntity.equals(cm.name)) {
 				isRecursive = true;
 			}
 			
 			this.checkRelationIntegrity(fm);
 			
-			if (rel.fieldRef.isEmpty()){
+			if (rel.fieldRef.isEmpty()) {
 				final ClassMetadata cm_ref = this.metas.get(targetEntity);
 				final ArrayList<FieldMetadata> ids = new ArrayList<FieldMetadata>(cm_ref.ids.values());
 				
-				for (int i=0;i<ids.size();i++){
+				for (int i = 0; i < ids.size(); i++) {
 					rel.fieldRef.add(ids.get(i).name);
 				}
 				fm.columnDefinition = ids.get(0).type;
@@ -68,12 +68,12 @@ public class ClassCompletor {
 			}
 			
 			ConsoleUtils.displayDebug("Relation "+rel.type+" on field "+rel.field+" targets "+rel.entityRef+"("+rel.fieldRef.get(0)+")");
-			if ("OneToMany".equals(rel.type)){ // set inverse relation if it doesn't exists
+			if ("OneToMany".equals(rel.type)) { // set inverse relation if it doesn't exists
 				// Check if relation ManyToOne exists in target entity
 				final ClassMetadata entityRef = this.metas.get(rel.entityRef);
 
 				// if it doesn't :
-				if (rel.mappedBy==null){
+				if (rel.mappedBy == null) {
 					// Create it
 					final FieldMetadata new_field = new FieldMetadata(cm);
 					new_field.columnDefinition = "integer";
@@ -85,14 +85,14 @@ public class ClassCompletor {
 					new_field.type = cm.name;
 					new_field.relation = new RelationMetadata();
 					new_field.relation.entityRef = cm.name;
-					for (final FieldMetadata id : cm.ids.values()){
+					for (final FieldMetadata id : cm.ids.values()) {
 						new_field.relation.fieldRef.add(id.name);
 					}
 					new_field.relation.field = new_field.name;
 					new_field.relation.type = "ManyToOne";
 					new_field.relation.inversedBy = fm.name;
 					fm.relation.inversedBy = new_field.name;
-					if (isRecursive){
+					if (isRecursive) {
 						newFields.add(new_field);
 					} else {
 						entityRef.fields.put(new_field.name, new_field);
@@ -102,16 +102,16 @@ public class ClassCompletor {
 				}
 				
 			}
-			if ("ManyToMany".equals(rel.type)){
-				if (rel.joinTable==null || rel.joinTable.isEmpty()){
+			if ("ManyToMany".equals(rel.type)) {
+				if (rel.joinTable == null || rel.joinTable.isEmpty()) {
 					// Name JoinTable AtoB where A and B are the entities names ordered by alphabetic order
-					if (cm.name.compareTo(rel.entityRef)>0){ 
+					if (cm.name.compareTo(rel.entityRef)>0) { 
 						rel.joinTable = cm.name+"to"+rel.entityRef;
 					} else {
 						rel.joinTable = rel.entityRef+"to"+cm.name;
 					}
 				}
-				if (!this.metas.containsKey(rel.joinTable) && !this.newMetas.containsKey(rel.joinTable)){ // If jointable doesn't exist yet, create it
+				if (!this.metas.containsKey(rel.joinTable) && !this.newMetas.containsKey(rel.joinTable)) { // If jointable doesn't exist yet, create it
 
 					ConsoleUtils.displayDebug("Association Table => "+rel.joinTable);
 					final ClassMetadata classMeta = new ClassMetadata();
@@ -130,7 +130,7 @@ public class ClassCompletor {
 					final FieldMetadata ref1 = generateRefField(cm.name, cm);
 					final RelationMetadata rel1 = new RelationMetadata();
 						rel1.entityRef = cm.name;
-						for (final FieldMetadata cmid : cm.ids.values()){
+						for (final FieldMetadata cmid : cm.ids.values()) {
 							rel1.fieldRef.add(cmid.name);
 						}
 						rel1.inversedBy = fm.name;
@@ -152,7 +152,7 @@ public class ClassCompletor {
 					classMeta.relations.put(ref2.name, ref2);
 					
 					this.newMetas.put(classMeta.name, classMeta);
-				} else if (this.newMetas.containsKey(rel.joinTable)){ // Complete it !
+				} else if (this.newMetas.containsKey(rel.joinTable)) { // Complete it !
 					final ClassMetadata jtable = this.newMetas.get(rel.joinTable);
 					final FieldMetadata relation = jtable.relations.get(cm.name.toLowerCase()+"_id");
 					relation.relation.inversedBy = fm.name;
@@ -160,13 +160,13 @@ public class ClassCompletor {
 			}
 		}
 		// Add internal recursive relations
-		for (final FieldMetadata newField : newFields){
+		for (final FieldMetadata newField : newFields) {
 			cm.fields.put(newField.name, newField);
 			cm.relations.put(newField.name, newField);
 		}
 	}
 	
-	private static FieldMetadata generateRefField(final String name, final ClassMetadata owner){
+	private static FieldMetadata generateRefField(final String name, final ClassMetadata owner) {
 		final FieldMetadata id = new FieldMetadata(owner);
 		id.columnDefinition = "integer";
 		id.type = "integer";
@@ -175,8 +175,8 @@ public class ClassCompletor {
 		return id;
 	}
 	
-	private void checkRelationIntegrity(final FieldMetadata fm){
-		if (!this.metas.containsKey(fm.relation.entityRef)){
+	private void checkRelationIntegrity(final FieldMetadata fm) {
+		if (!this.metas.containsKey(fm.relation.entityRef)) {
 				ConsoleUtils.displayError(new ConstraintException("Entity "+fm.name+" refers to the non Entity class "+fm.relation.entityRef));
 			
 		}

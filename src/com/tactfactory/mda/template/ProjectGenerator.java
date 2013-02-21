@@ -24,7 +24,7 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Make Platform specific Project Structure
 	 * @return success to make the platform project folder
 	 */
-	public boolean makeProject(){
+	public boolean makeProject() {
 		boolean result = false;
 		if (this.adapter.getPlatform().equals("android")) {
 			result = this.makeProjectAndroid();
@@ -46,13 +46,13 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Remove Platform specific Project Structure
 	 * @return success to make the platform project folder
 	 */
-	public boolean removeProject(){
+	public boolean removeProject() {
 		boolean result = false;
 		final File dirproj = new File(String.format("%s/%s/", Harmony.PATH_PROJECT, this.adapter.getPlatform()));
 		
 		final int removeResult = FileUtils.deleteRecursive(dirproj);
 
-		if (removeResult==0) {
+		if (removeResult == 0) {
 			result = true;
 			
 			ConsoleUtils.displayDebug("Project "+this.adapter.getPlatform()+" removed!");
@@ -78,7 +78,7 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Make Android Project Structure
 	 * @return success to make the platform project folder
 	 */
-	protected boolean makeProjectAndroid(){
+	protected boolean makeProjectAndroid() {
 		boolean result = false;
 
 		// create project name space folders
@@ -205,7 +205,7 @@ public class ProjectGenerator extends BaseGenerator {
 		if (dirTpl.exists() && dirTpl.listFiles().length!=0) {
 			result = true;
 			
-			for (int i=0;i<dirTpl.listFiles().length;i++) {
+			for (int i = 0; i < dirTpl.listFiles().length; i++) {
 				if (dirTpl.listFiles()[i].isFile()) {
 					super.makeSource(
 							this.adapter.getTemplateProjectPath() + dirTpl.listFiles()[i].getName(),
@@ -221,7 +221,7 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Make IOS Project Structure
 	 * @return success to make the platform project folder
 	 */
-	protected boolean makeProjectIOS(){
+	protected boolean makeProjectIOS() {
 		boolean result = false;
 		//Generate base folders & files
 		final File dirProj = FileUtils.makeFolderRecursive(
@@ -240,7 +240,7 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Make RIM Project Structure
 	 * @return success to make the platform project folder
 	 */
-	protected boolean makeProjectRIM(){
+	protected boolean makeProjectRIM() {
 		final boolean result = false;
 
 		return result;
@@ -250,7 +250,7 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Make Windows Phone Project Structure
 	 * @return success to make the platform project folder
 	 */
-	protected boolean makeProjectWinPhone(){
+	protected boolean makeProjectWinPhone() {
 		final boolean result = false;
 
 		return result;

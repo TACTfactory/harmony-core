@@ -42,14 +42,14 @@ public class SyncParser extends BaseParser{
 
 	@Override
 	public void visitClassAnnotation(final ClassMetadata cm, final AnnotationExpr fieldAnnot) {
-		if (fieldAnnot.getName().toString().equals(ANNOT_SYNC)){
+		if (fieldAnnot.getName().toString().equals(ANNOT_SYNC)) {
 			// Parse Sync arguments
 			final SyncMetadata sm = new SyncMetadata();
 			if (fieldAnnot instanceof NormalAnnotationExpr) {
 				final NormalAnnotationExpr norm = (NormalAnnotationExpr)fieldAnnot;
 				final List<MemberValuePair> pairs = norm.getPairs();
-				for (final MemberValuePair pair : pairs){
-					if (pair.getName().equals(ANNOT_SYNC_PRIORITY)){
+				for (final MemberValuePair pair : pairs) {
+					if (pair.getName().equals(ANNOT_SYNC_PRIORITY)) {
 						//TODO : Generate warning if type not recognized
 						int priority  = 0;
 						
@@ -61,12 +61,12 @@ public class SyncParser extends BaseParser{
 							priority = Sync.Priority.fromName(pair.getValue().toString());
 						}
 						
-						sm.priority= priority;
+						sm.priority = priority;
 					} else
 					
-					if (pair.getName().equals(ANNOT_SYNC_MODE)){
+					if (pair.getName().equals(ANNOT_SYNC_MODE)) {
 						String mode = "";
-						if (pair.getValue() instanceof StringLiteralExpr){
+						if (pair.getValue() instanceof StringLiteralExpr) {
 							mode = ((StringLiteralExpr)pair.getValue()).getValue();
 						} else {
 							mode = pair.getValue().toString();
@@ -74,9 +74,9 @@ public class SyncParser extends BaseParser{
 						sm.mode = Sync.Mode.fromName(mode);
 					}
 					
-					if (pair.getName().equals(ANNOT_SYNC_LEVEL)){
+					if (pair.getName().equals(ANNOT_SYNC_LEVEL)) {
 						String level = "";
-						if (pair.getValue() instanceof StringLiteralExpr){
+						if (pair.getValue() instanceof StringLiteralExpr) {
 							level = ((StringLiteralExpr)pair.getValue()).getValue();
 						} else {
 							level = pair.getValue().toString();

@@ -90,7 +90,7 @@ public final class AndroidAdapter extends BaseAdapter {
 			result = "EditText";
 		} else
 			
-		if (field.type.equals("Date") ){
+		if (field.type.equals("Date") ) {
 			result = "EditText"; //"DatePickerDialog";
 		} else
 
@@ -121,67 +121,67 @@ public final class AndroidAdapter extends BaseAdapter {
 		final String DATETIME = "DateTime";
 		String ret = type;
 		
-		if (type.equals(Column.Type.STRING.getValue())){
+		if (type.equals(Column.Type.STRING.getValue())) {
 			ret = STR;
 		} else
 			
-		if (type.equals(Column.Type.TEXT.getValue())){
+		if (type.equals(Column.Type.TEXT.getValue())) {
 			ret = STR;	
 		} else
 			
-		if (type.equals(Column.Type.INTEGER.getValue())){
+		if (type.equals(Column.Type.INTEGER.getValue())) {
 			ret = INT;
 		} else
 			
-		if (type.equals(Column.Type.INT.getValue())){
+		if (type.equals(Column.Type.INT.getValue())) {
 			ret = INT;
 		} else
 			
-		if (type.equals(Column.Type.FLOAT.getValue())){
+		if (type.equals(Column.Type.FLOAT.getValue())) {
 			ret = FLOAT;
 		} else
 			
-		if (type.equals(Column.Type.DATETIME.getValue())){
+		if (type.equals(Column.Type.DATETIME.getValue())) {
 			ret = DATETIME;
 		} else
 			
-		if (type.equals(Column.Type.DATE.getValue())){
+		if (type.equals(Column.Type.DATE.getValue())) {
 			ret = DATETIME;
 		} else
 			
-		if (type.equals(Column.Type.TIME.getValue())){
+		if (type.equals(Column.Type.TIME.getValue())) {
 			ret = DATETIME;
 		} else
 			
-		if (type.equals(Column.Type.LOGIN.getValue())){
+		if (type.equals(Column.Type.LOGIN.getValue())) {
 			ret = STR;
 		} else
 			
-		if (type.equals(Column.Type.PASSWORD.getValue())){
+		if (type.equals(Column.Type.PASSWORD.getValue())) {
 			ret = STR;
 		} else
 			
-		if (type.equals(Column.Type.EMAIL.getValue())){
+		if (type.equals(Column.Type.EMAIL.getValue())) {
 			ret = STR;
 		} else
 			
-		if (type.equals(Column.Type.PHONE.getValue())){
+		if (type.equals(Column.Type.PHONE.getValue())) {
 			ret = STR;
 		} else
 			
-		if (type.equals(Column.Type.CITY.getValue())){
+		if (type.equals(Column.Type.CITY.getValue())) {
 			ret = STR;
 		} else
 			
-		if (type.equals(Column.Type.ZIPCODE.getValue())){
+		if (type.equals(Column.Type.ZIPCODE.getValue())) {
 			ret = INT;
 		} else
 			
-		if (type.equals(Column.Type.COUNTRY.getValue())){
+		if (type.equals(Column.Type.COUNTRY.getValue())) {
 			ret = STR;
 		} else
 			
-		if (type.equals(Column.Type.BC_EAN.getValue())){
+		if (type.equals(Column.Type.BC_EAN.getValue())) {
 			ret = INT;
 		}
 		return ret;

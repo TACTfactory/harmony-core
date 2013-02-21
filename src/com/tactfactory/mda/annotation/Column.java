@@ -18,7 +18,8 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
 /**
- * To mark a property for relational persistence the @Column annotation is used. 
+ * To mark a property for 
+ * relational persistence the @Column annotation is used. 
  * This annotation usually requires at least 1 attribute to be set, the type. 
  */
 @Documented
@@ -63,7 +64,13 @@ public @interface Column {
 		private int precision = Integer.MAX_VALUE;
 		private int scale = Integer.MAX_VALUE;
 		
-		private Type(final String value, final Integer length, final Boolean nullable, final Integer precision, final Integer scale, final Boolean unique, final Boolean isLocale){
+		private Type(final String value,
+				final Integer length, 
+				final Boolean nullable, 
+				final Integer precision, 
+				final Integer scale, 
+				final Boolean unique,
+				final Boolean isLocale) {
 			this.type = value;
 			
 			if (length != null) {
@@ -82,12 +89,12 @@ public @interface Column {
 				this.unique = unique;
 			}
 			
-			if (isLocale!=null) {
+			if (isLocale != null) {
 				this.isLocale = isLocale;
 			}
 		}
 		
-		public String getValue(){
+		public String getValue() {
 			return this.type;
 		}
 		
@@ -115,7 +122,7 @@ public @interface Column {
 			return this.isLocale;
 		}
 		
-		public static Type fromString(final String value){
+		public static Type fromString(final String value) {
 			Type ret = null;
 			if (value!= null) {
 				for (final Type type : Type.values()) {
@@ -129,9 +136,9 @@ public @interface Column {
 		}
 		
 		
-		public static Type fromName(String name){
+		public static Type fromName(String name) {
 			Type ret;
-			if (name.lastIndexOf('.')>0){
+			if (name.lastIndexOf('.')>0) {
 				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot
 			}
 			try {
@@ -149,7 +156,7 @@ public @interface Column {
 			return ret;
 		}
 			
-		public static String toTypeString(final String name){
+		public static String toTypeString(final String name) {
 			String ret = name;
 			final Type t = fromName(name);
 			if (t != null) {

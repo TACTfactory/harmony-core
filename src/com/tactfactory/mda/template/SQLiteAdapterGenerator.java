@@ -26,8 +26,8 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 	public void generateAll() {
 		ConsoleUtils.display(">> Generate Adapter...");
 		
-		for (final ClassMetadata cm : this.appMetas.entities.values()){
-			if (!cm.fields.isEmpty()){
+		for (final ClassMetadata cm : this.appMetas.entities.values()) {
+			if (!cm.fields.isEmpty()) {
 				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getData());
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
 				this.generate();

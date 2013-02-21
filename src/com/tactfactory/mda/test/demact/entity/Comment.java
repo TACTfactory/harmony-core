@@ -28,17 +28,17 @@ import com.tactfactory.mda.bundles.sync.annotation.Sync.Mode;
 // Annotation with default and forced value/parameter
 @Table
 @Entity
-@Rest(security=Security.SESSION)
-@Sync(level=Level.SESSION, mode=Mode.REAL_TIME, priority=Sync.Priority.LOW)
+@Rest(security = Security.SESSION)
+@Sync(level = Level.SESSION, mode = Mode.REAL_TIME, priority = Sync.Priority.LOW)
 @SuppressWarnings(value = "serial")
 public class Comment implements Serializable { //TODO extends EntityBase {
 	
 	@Id
-    @Column(type=Type.INTEGER, hidden=true)
-    @GeneratedValue(strategy="IDENTITY")
+    @Column(type = Type.INTEGER, hidden = true)
+    @GeneratedValue(strategy = "IDENTITY")
     protected int id;
 
-	@Column(length=2000, type=Type.TEXT)
+	@Column(length = 2000, type = Type.TEXT)
     protected String content;
 	
 	@ManyToOne
@@ -47,7 +47,7 @@ public class Comment implements Serializable { //TODO extends EntityBase {
 	@ManyToOne
 	protected Post post;
 	
-	@Column(name="created_at")	// type="datetime",
+	@Column(name = "created_at")	// typ ="datetime",
     protected DateTime createdAt;
 	
 	@Column

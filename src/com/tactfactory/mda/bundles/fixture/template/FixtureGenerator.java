@@ -31,7 +31,7 @@ public class FixtureGenerator extends BaseGenerator{
 	public void load() {
 		final File fixtAppSrc = new File("fixtures/app");
 		final File fixtTestSrc = new File("fixtures/test");
-		if (fixtAppSrc.exists()){
+		if (fixtAppSrc.exists()) {
 			final File fixtAppDest = new File(this.adapter.getAssetsPath()+"/app");
 			final File fixtTestDest = new File(this.adapter.getAssetsPath()+"/test");
 			if (!fixtAppDest.exists()) {
@@ -75,8 +75,8 @@ public class FixtureGenerator extends BaseGenerator{
 			new SQLiteGenerator(this.adapter).generateDatabase();
 			
 			//Create each entity's data loader
-			for (final ClassMetadata cm : this.appMetas.entities.values()){
-				if (cm.fields.size()>0){
+			for (final ClassMetadata cm : this.appMetas.entities.values()) {
+				if (cm.fields.size()>0) {
 					this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
 					this.makeSource("TemplateDataLoader.java", cm.name+"DataLoader.java", true);
 					this.makeBaseFixture("TemplateFixture."+fixtureType, cm.name+"."+fixtureType, false);
@@ -88,7 +88,7 @@ public class FixtureGenerator extends BaseGenerator{
 	}
 	
 	public void purge() {
-		for (final ClassMetadata cm : this.appMetas.entities.values()){
+		for (final ClassMetadata cm : this.appMetas.entities.values()) {
 			this.removeSource(cm.name+".xml");
 			this.removeSource(cm.name+".yml");
 		}
@@ -109,7 +109,7 @@ public class FixtureGenerator extends BaseGenerator{
 		f.delete();
 	}
 	
-	protected void makeBaseFixture(final String templateName, final String fileName, final boolean override){
+	protected void makeBaseFixture(final String templateName, final String fileName, final boolean override) {
 		String fullFilePath = "fixtures/app/"+fileName;
 		String fullTemplatePath = this.adapter.getTemplateSourceFixturePath().substring(1) + templateName;
 		super.makeSource(fullTemplatePath, fullFilePath, override);

@@ -38,11 +38,11 @@ public @interface Sync {
 			this.value = value;
 		}
 		
-		public int getValue(){
+		public int getValue() {
 			return this.value;
 		}
 		
-		public static Level fromValue(final int value){
+		public static Level fromValue(final int value) {
 			Level ret = null;
 			for (final Level type : Level.values()) {
 				if (value == type.value) {
@@ -53,7 +53,7 @@ public @interface Sync {
 			return ret;
 		}
 		
-		public static Level fromName(String name){
+		public static Level fromName(String name) {
 			Level ret;
 			if (name.lastIndexOf('.')>0) {
 				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot
@@ -87,11 +87,11 @@ public @interface Sync {
 			this.value = value;
 		}
 		
-		public int getValue(){
+		public int getValue() {
 			return this.value;
 		}
 		
-		public static Mode fromValue(final int value){
+		public static Mode fromValue(final int value) {
 			Mode ret = null;
 			for (final Mode type : Mode.values()) {
 				if (value == type.value) {
@@ -102,7 +102,7 @@ public @interface Sync {
 			return ret;
 		}
 		
-		public static Mode fromName(String name){
+		public static Mode fromName(String name) {
 			Mode ret;
 			if (name.lastIndexOf('.')>0) {
 				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot
@@ -132,7 +132,7 @@ public @interface Sync {
 		public static final int HIGH = 0;
 		public static final int LOW = 9;
 		
-		public static int fromName(String name){
+		public static int fromName(String name) {
 			int ret = 0;
 			if (name.lastIndexOf('.')>0) {
 				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot

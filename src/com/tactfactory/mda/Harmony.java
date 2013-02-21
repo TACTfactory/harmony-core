@@ -226,7 +226,7 @@ public class Harmony {
 			final String projectName = 
 					Harmony.getUserInput("Please enter your Project Name ["+DEFAULT_PROJECT_NAME+"]:");
 			
-			if (Strings.isNullOrEmpty(projectName)){
+			if (Strings.isNullOrEmpty(projectName)) {
 				ApplicationMetadata.INSTANCE.name = DEFAULT_PROJECT_NAME;
 			}
 			else {
@@ -247,11 +247,11 @@ public class Harmony {
 				
 				if (Strings.isNullOrEmpty(projectNameSpace)) {
 					ApplicationMetadata.INSTANCE.projectNameSpace = DEFAULT_PROJECT_NAMESPACE.replaceAll("\\.", delimiter);
-					good=true;
+					good = true;
 					
 				} else {
 					if (projectNameSpace.toLowerCase(Locale.ENGLISH).endsWith(
-									ApplicationMetadata.INSTANCE.name.toLowerCase())){
+									ApplicationMetadata.INSTANCE.name.toLowerCase())) {
 						
 						String namespaceForm = "^(((([a-z0-9_]+)\\.)*)([a-z0-9_]+))$";
 						if (Pattern.matches(namespaceForm,projectNameSpace)) {
@@ -275,7 +275,7 @@ public class Harmony {
 		if (Strings.isNullOrEmpty(ApplicationMetadata.androidSdkPath)) {
 			final String sdkPath = Harmony.getUserInput("Please enter AndroidSDK full path [/root/android-sdk/]:");
 			
-			if (!Strings.isNullOrEmpty(sdkPath)){
+			if (!Strings.isNullOrEmpty(sdkPath)) {
 				ApplicationMetadata.androidSdkPath = sdkPath;
 				Harmony.androidSdkVersion = getAndroidSdkVersion(ApplicationMetadata.androidSdkPath);
 			} else {
@@ -313,11 +313,11 @@ public class Harmony {
 		boolean result = false;
 		final File projectFolder = new File(Harmony.projectFolder);
 		
-		if (projectFolder.exists() && projectFolder.listFiles().length!=0){
+		if (projectFolder.exists() && projectFolder.listFiles().length!=0) {
 			final File manifest = new File(Harmony.projectFolder + "AndroidManifest.xml");
 			final String namespace = Harmony.getNameSpaceFromManifest(manifest);
 			
-			if (namespace!=null && !namespace.equals("${namespace}")){
+			if (namespace!=null && !namespace.equals("${namespace}")) {
 				result = true;
 			}
 		}
@@ -403,15 +403,15 @@ public class Harmony {
 	public static String getSdkDirFromPropertiesFile(final File file_prop) {
 		String result = null;
 		
-		if (file_prop.exists()){
+		if (file_prop.exists()) {
 			final List<String> lines = FileUtils.fileToStringArray(file_prop);
 			
-			for (int i=0;i<lines.size();i++){
-				if (lines.get(i).startsWith("sdk.dir=")){
-					if (lines.get(i).contains(TagConstant.ANDROID_SDK_DIR)){
+			for (int i = 0; i < lines.size(); i++) {
+				if (lines.get(i).startsWith("sdk.di =")) {
+					if (lines.get(i).contains(TagConstant.ANDROID_SDK_DIR)) {
 						ConsoleUtils.displayWarning("Android SDK Dir not defined please init project...");
 					} else {
-						result=lines.get(i).replace("sdk.dir=", "");
+						result = lines.get(i).replace("sdk.di =", "");
 					}
 					break;
 				}
@@ -446,20 +446,20 @@ public class Harmony {
 		String result = null;
 		
 		final File sdkProperties = new File(sdkPath+"/tools/source.properties");
-		if (sdkProperties.exists()){
+		if (sdkProperties.exists()) {
 			try {
 				final FileInputStream fis = new FileInputStream(sdkProperties);
 				final InputStreamReader isr = new InputStreamReader(fis);
 				final BufferedReader br = new BufferedReader(isr);
 				String line = br.readLine();
-				while (line !=null){
-					if (line.startsWith("Pkg.Revision")){
+				while (line !=null) {
+					if (line.startsWith("Pkg.Revision")) {
 						result = line.substring(line.lastIndexOf('=')+1);
 					}
 					line = br.readLine();
 				}
 				br.close();
-			} catch (final IOException e){
+			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);
 			}
 		}

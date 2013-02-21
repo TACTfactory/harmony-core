@@ -33,14 +33,14 @@ public class Post implements Serializable {
 	private static final long serialVersionUID = -6549779793416923128L;
 
 	@Id
-    @Column(type=Type.INTEGER, hidden=true)
-    @GeneratedValue(strategy="IDENTITY")
+    @Column(type = Type.INTEGER, hidden = true)
+    @GeneratedValue(strategy = "IDENTITY")
     protected int id;
 	
-	@Column(unique=true, length=140)
+	@Column(unique = true, length = 140)
     protected String title;
 	
-	@Column(length=40000, type=Type.TEXT)
+	@Column(length = 40000, type = Type.TEXT)
     protected String content;
 	
 	@Column
@@ -49,16 +49,16 @@ public class Post implements Serializable {
 	@ManyToOne
 	protected User owner;
 	
-	@OneToMany(mappedBy="post")
+	@OneToMany(mappedBy = "post")
 	protected ArrayList<Comment> comments;
 	
-	@Column(name="created_at")
+	@Column(name = "created_at")
     protected DateTime createdAt;
 
-    @Column(name="updated_at")
+    @Column(name = "updated_at")
     protected DateTime updatedAt;
 
-    @Column(name="expires_at")
+    @Column(name = "expires_at")
     protected DateTime expiresAt;
 
 

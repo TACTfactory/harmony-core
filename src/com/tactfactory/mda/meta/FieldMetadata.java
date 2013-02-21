@@ -106,7 +106,7 @@ public class FieldMetadata extends BaseMetadata {
 	 * @return the map
 	 */
 	@Override
-	public Map<String, Object> toMap(final BaseAdapter adapter){
+	public Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		
 		model.put(TagConstant.NAME, 		this.name);
@@ -131,12 +131,12 @@ public class FieldMetadata extends BaseMetadata {
 		model.put(TagConstant.IS_LOCALE, 	this.isLocale);
 		model.put(TagConstant.NULLABLE,		this.nullable);
 		
-		if (this.relation!=null){
+		if (this.relation!=null) {
 			model.put(TagConstant.RELATION, this.relation.toMap(adapter));
 		}
 		
 		final HashMap<String, Object> optionsModel = new HashMap<String, Object>();
-		for (final BaseMetadata bm : this.options.values()){
+		for (final BaseMetadata bm : this.options.values()) {
 			optionsModel.put(bm.getName(), bm.toMap(adapter));
 		}
 		model.put(TagConstant.OPTIONS, optionsModel);

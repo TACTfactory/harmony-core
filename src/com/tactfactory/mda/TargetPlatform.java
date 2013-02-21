@@ -69,7 +69,7 @@ public enum TargetPlatform {
 		TargetPlatform result = TargetPlatform.ALL;
 		
 		if (!Strings.isNullOrEmpty(target)) {
-			if (target.equalsIgnoreCase(STRING_ANDROID)){
+			if (target.equalsIgnoreCase(STRING_ANDROID)) {
 				result = TargetPlatform.ANDROID;
 			} else
 				

@@ -47,7 +47,7 @@ public abstract class TagConstant {
 	public final static String ALIAS = "alias";
 	public final static String IDS = "ids";
 	public final static String HIDDEN = "hidden";
-	public final static String IS_LOCALE= "is_locale";
+	public final static String IS_LOCALE = "is_locale";
 	public final static String INTERNAL = "internal";
 	public final static String CURRENT_ENTITY = "current_entity";
 	public final static String OPTIONS = "options";
@@ -62,7 +62,7 @@ public abstract class TagConstant {
 	public static class AndroidSDK {
 		private final String dir;
 
-		public AndroidSDK(final String dir){
+		public AndroidSDK(final String dir) {
 			this.dir = dir;
 		}
 		

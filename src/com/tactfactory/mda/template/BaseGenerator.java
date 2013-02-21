@@ -51,7 +51,7 @@ public abstract class BaseGenerator {
 	 * @param override
 	 */
 	protected void makeSource(final String templatePath, final String generatePath, final boolean override) {
-		if (!FileUtils.exists(generatePath) || override){
+		if (!FileUtils.exists(generatePath) || override) {
 			final File generateFile = FileUtils.makeFile(generatePath);
 			
 			try {
@@ -85,7 +85,7 @@ public abstract class BaseGenerator {
 	 * @param generatePath
 	 */
 	protected void appendSource(final String templatePath, final String generatePath) {
-		if (FileUtils.exists(generatePath)){
+		if (FileUtils.exists(generatePath)) {
 			final File generateFile = new File(generatePath);
 			
 			try {

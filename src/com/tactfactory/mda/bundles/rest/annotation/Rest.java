@@ -39,11 +39,11 @@ public @interface Rest {
 			this.value = value;
 		}
 		
-		public int getValue(){
+		public int getValue() {
 			return this.value;
 		}
 		
-		public static Security fromValue(final int value){
+		public static Security fromValue(final int value) {
 			Security ret = null;
 				for (final Security type : Security.values()) {
 					if (value == type.value) {
@@ -54,7 +54,7 @@ public @interface Rest {
 			return ret;
 		}
 		
-		public static Security fromName(String name){
+		public static Security fromName(String name) {
 			Security ret;
 			if (name.lastIndexOf('.')>0) {
 				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot

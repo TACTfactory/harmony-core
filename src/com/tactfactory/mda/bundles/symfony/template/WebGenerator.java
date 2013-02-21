@@ -284,22 +284,22 @@ public final class WebGenerator extends BaseGenerator {
 				commandArgs.add("generate:bundle");
 				
 				 // Namespace
-				commandArgs.add("--namespace=" + projectName + "/ApiBundle");
+				commandArgs.add("--namespac =" + projectName + "/ApiBundle");
 				
 				 // Bundle folder
 				commandArgs.add(
-						"--dir=" 
+						"--di =" 
 						+ this.symfonyAdapter.getWebPath()
 						+ "src");
 				
 				 // Bundle name
-				commandArgs.add("--bundle-name=" + projectName + "ApiBundle");
+				commandArgs.add("--bundle-nam =" + projectName + "ApiBundle");
 				
 				// Format
-				commandArgs.add("--format=yml"); 
+				commandArgs.add("--forma =yml"); 
 				
 				// Generate project folder structure
-				commandArgs.add("--structure=yes"); 
+				commandArgs.add("--structur =yes"); 
 				
 				 // Silent mode
 				commandArgs.add("--no-interaction");

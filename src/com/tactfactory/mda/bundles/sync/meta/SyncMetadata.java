@@ -23,7 +23,7 @@ public class SyncMetadata extends BaseMetadata{
 	public Mode mode = Mode.POOLING;
 	public int priority = 1;
 	
-	public SyncMetadata(){
+	public SyncMetadata() {
 		super();
 		this.name = NAME;
 	}
