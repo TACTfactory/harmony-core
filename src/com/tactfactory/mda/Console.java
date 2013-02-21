@@ -105,7 +105,7 @@ public abstract class Console extends Harmony {
 	 * @throws Exception 
 	 */
 	public static void main(final String[] args) throws Exception {
-		Harmony.isConsole = true;
+		ConsoleUtils.setConsole(true);
 
 		// Check if has a parameter
 		if (args.length == 0) {
@@ -194,12 +194,12 @@ public abstract class Console extends Harmony {
 					
 					// Quiet mode
 					if (Option.QUIET.equal(key)) {								
-						ConsoleUtils.quiet = true;
+						ConsoleUtils.setQuiet(true);
 					} else
 					
 					// Verbose mode
 					if (Option.VERBOSE.equal(key)) {
-						ConsoleUtils.debug = true;
+						ConsoleUtils.setDebug(true);
 					} else
 					
 					// Version mode
@@ -209,12 +209,12 @@ public abstract class Console extends Harmony {
 						
 					// ANSI mode (default)
 					if (Option.ANSI.equal(key)) {
-						ConsoleUtils.ansi = true;
+						ConsoleUtils.setAnsi(true);
 					} else
 						
 					// NO_ANSI mode
 					if (Option.NO_ANSI.equal(key)) {
-						ConsoleUtils.ansi = false;
+						ConsoleUtils.setAnsi(false);
 					}
 				} else {
 					currentPosition = i;
@@ -241,9 +241,11 @@ public abstract class Console extends Harmony {
 	 * @param args String array of command arguments with their identifier
 	 * @return HashMap<String, String> arguments
 	 */
-	public static HashMap<String, String> parseCommandArgs(final String[] args) {
+	public static HashMap<String, String> parseCommandArgs(
+			final String[] args) {
 		
-		final HashMap<String, String> commandArgs = new HashMap<String, String>();
+		final HashMap<String, String> commandArgs =
+				new HashMap<String, String>();
 		if (args != null && args.length != 0) {
 			for (final String arg : args) {
 				if (arg.startsWith(ARGUMENT_PREFIX)) {

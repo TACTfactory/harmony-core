@@ -58,13 +58,13 @@ public class FixtureGlobalTest extends CommonTest {
 		System.out.println("\nTest Orm generate entity");
 		System.out.println("###############################################################################");
 		
-		harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
-		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
-		harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[] {}, null);
-		harmony.findAndExecute(RestCommand.GENERATE_ADAPTERS, new String[] {}, null);
-		harmony.findAndExecute(SyncCommand.GENERATE_SERVICE, new String[] {}, null);
-		harmony.findAndExecute(FixtureCommand.FIXTURE_INIT, new String[] {"--forma =xml"}, null);
+		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
+		getHarmony().findAndExecute(OrmCommand.GENERATE_CRUD, new String[] {}, null);
+		getHarmony().findAndExecute(RestCommand.GENERATE_ADAPTERS, new String[] {}, null);
+		getHarmony().findAndExecute(SyncCommand.GENERATE_SERVICE, new String[] {}, null);
+		getHarmony().findAndExecute(FixtureCommand.FIXTURE_INIT, new String[] {"--forma =xml"}, null);
 	}
 	
 	//@Test
@@ -86,7 +86,7 @@ public class FixtureGlobalTest extends CommonTest {
 	public void hasFixturesXml() {
 		// Copy fixture files
 		copyFixturesXml();
-		CommonTest.harmony.findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[] {}, null);
+		CommonTest.getHarmony().findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[] {}, null);
 				
 		CommonTest.hasFindFile("android/assets/app/User.xml");
 		CommonTest.hasFindFile("android/assets/app/Comment.xml");
@@ -102,12 +102,12 @@ public class FixtureGlobalTest extends CommonTest {
 	@Test
 	public void hasFixturesYml() {
 		//Purge & init
-		CommonTest.harmony.findAndExecute(FixtureCommand.FIXTURE_PURGE, new String[] {}, null);
-		CommonTest.harmony.findAndExecute(FixtureCommand.FIXTURE_INIT, new String[] {}, null);
+		CommonTest.getHarmony().findAndExecute(FixtureCommand.FIXTURE_PURGE, new String[] {}, null);
+		CommonTest.getHarmony().findAndExecute(FixtureCommand.FIXTURE_INIT, new String[] {}, null);
 		
 		// Copy fixture files
 		copyFixturesYml();
-		CommonTest.harmony.findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[] {}, null);
+		CommonTest.getHarmony().findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[] {}, null);
 		
 		CommonTest.hasFindFile("android/assets/app/User.yml");
 		CommonTest.hasFindFile("android/assets/app/Comment.yml");

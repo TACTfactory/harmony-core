@@ -22,9 +22,9 @@ import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.test.CommonTest;
 
 public class OrmInitEntitiesTest extends CommonTest {
-	protected static ClassMetadata userMeta = null;
-	protected static ClassMetadata postMeta = null;
-	protected static ClassMetadata commentMeta = null;
+	private static ClassMetadata userMeta = null;
+	private static ClassMetadata postMeta = null;
+	private static ClassMetadata commentMeta = null;
 	private static final String CREATED_AT = "createdAt";
 	private static final String SERIALIZABLE = "Serializable";
 	private static final String LASTNAME = "lastname";
@@ -74,9 +74,9 @@ public class OrmInitEntitiesTest extends CommonTest {
 				"########################################"
 				 + "######################################");
 
-		harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
-		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES,
+		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES,
 				new String[] {}, 
 				null);
 		final OrmCommand command = 

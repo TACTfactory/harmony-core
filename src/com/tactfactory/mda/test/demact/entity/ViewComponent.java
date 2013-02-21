@@ -25,42 +25,42 @@ public class ViewComponent implements Serializable {
 	@Id
     @Column(type = Type.INTEGER, hidden = true)
     @GeneratedValue(strategy = "IDENTITY")
-    protected int id;
+	private int id;
 	
 	@Column(type = Type.STRING)
-	protected String string;
+	private String string;
 	
 	@Column(type = Type.TEXT)
-	protected String text;
+	private String text;
 
 	@Column(type = Type.DATETIME)
-	protected DateTime dateTime;
+	private DateTime dateTime;
 	
 	@Column(type = Type.DATE)
-	protected DateTime date;
+	private DateTime date;
 	
 	@Column(type = Type.TIME)
-	protected DateTime time;
+	private DateTime time;
 	
 	@Column(type = Type.LOGIN)
-	protected String login;
+	private String login;
 	
 	@Column(type = Type.PASSWORD)
-	protected String password;
+	private String password;
 	
 	@Column(type = Type.EMAIL)
-	protected String email;
+	private String email;
 	
 	@Column(type = Type.PHONE)
-	protected String phone;
+	private String phone;
 	
 	@Column(type = Type.CITY)
-	protected String city;
+	private String city;
 	
 	@Column(type = Type.ZIPCODE)
-	protected int zipCode;
+	private int zipCode;
 	
 	@Column(type = Type.COUNTRY)
-	protected String country;
+	private String country;
 	
 }

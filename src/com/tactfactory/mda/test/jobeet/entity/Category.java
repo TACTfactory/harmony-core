@@ -15,13 +15,13 @@ public class Category {
     @Id
     @Column()				
     @GeneratedValue(strategy = "IDENTITY")
-    protected int id;
+    private int id;
 
     @Column(unique = true)
-    protected String name;
+    private String name;
     
     @ManyToMany()
-	protected ArrayList<Affiliate> affiliates;
+    private ArrayList<Affiliate> affiliates;
 
 	/**
 	 * @return the id

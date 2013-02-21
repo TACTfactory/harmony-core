@@ -45,8 +45,8 @@ public class ActivityGenerator extends BaseGenerator {
 	private static final String TEMPLATE = "Template";
 	private static final String NAME = "name";
 	
-	protected String localNameSpace;
-	protected boolean isWritable = true;
+	private String localNameSpace;
+	private boolean isWritable = true;
 	private boolean isDate;
 	private boolean isTime;
 	

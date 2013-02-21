@@ -35,7 +35,7 @@ public class ResourceCommand extends BaseCommand {
 	public static final String GENERATE_TRANSLATE	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_TRANSLATE;
 
 	//internal
-	protected final BaseAdapter adapter = new AndroidAdapter();
+	private final BaseAdapter adapter = new AndroidAdapter();
 	
 	@Override
 	public void summary() {

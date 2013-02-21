@@ -55,12 +55,12 @@ public class OrmInitViewTest extends CommonTest {
 				 + "##############"
 				 + "##################################");
 		
-		harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
-		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES,
+		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES,
 				new String[] {},
 				null);
-		harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[] {}, null);
+		getHarmony().findAndExecute(OrmCommand.GENERATE_CRUD, new String[] {}, null);
 	}
 	
 	//@Test

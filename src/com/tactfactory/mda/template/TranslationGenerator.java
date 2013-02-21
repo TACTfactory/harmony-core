@@ -67,7 +67,7 @@ public class TranslationGenerator extends BaseGenerator {
 				
 				// Debug Log
 				ConsoleUtils.displayDebug(
-						"Update String : " + translationMeta.key);
+						"Update String : " + translationMeta.getKey());
 				
 				// Find Activity Node
 				final List<Element> translates = 
@@ -77,7 +77,7 @@ public class TranslationGenerator extends BaseGenerator {
 				for (final Element translationXml : translates) {
 					if (translationXml.hasAttributes() 
 							&&  translationXml.getAttributeValue(NAME, ns)
-								.equals(translationMeta.key)) {	
+								.equals(translationMeta.getKey())) {	
 						// Load name value
 						findTranslation = translationXml;
 						
@@ -92,15 +92,18 @@ public class TranslationGenerator extends BaseGenerator {
 					findTranslation = new Element("string");
 					
 					// Add name to element
-					findTranslation.setAttribute(NAME, translationMeta.key, ns);
+					findTranslation.setAttribute(NAME,
+							translationMeta.getKey(),
+							ns);
 					
 					// Set values
 					findTranslation.setText(
-							translationMeta.i18n.get(Locale.getDefault())); 
+							translationMeta.getI18n().get(
+									Locale.getDefault())); 
 					
 					rootNode.addContent(findTranslation);
 				} else {
-					translationMeta.i18n.put(Locale.getDefault(),
+					translationMeta.getI18n().put(Locale.getDefault(),
 							findTranslation.getText());
 				}
 			}
@@ -121,7 +124,7 @@ public class TranslationGenerator extends BaseGenerator {
 					
 					if (meta1 != null && meta2 != null) {
 						final int groupScore = 
-								meta1.group.getValue() - meta2.group.getValue();
+								meta1.getGroup().getValue() - meta2.getGroup().getValue();
 						if (groupScore != 0) {
 							return groupScore;
 						}

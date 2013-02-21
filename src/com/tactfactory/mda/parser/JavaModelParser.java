@@ -613,7 +613,7 @@ public class JavaModelParser {
 			meta.methods.add(methodMeta);
 			
 			// Debug Log
-			if (ConsoleUtils.debug) {
+			if (ConsoleUtils.isDebug()) {
 				final StringBuilder builder = new StringBuilder(
 						String.format("\tMethod : %s %s(", methodMeta.type, methodMeta.name));
 				

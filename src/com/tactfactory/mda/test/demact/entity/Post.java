@@ -35,31 +35,31 @@ public class Post implements Serializable {
 	@Id
     @Column(type = Type.INTEGER, hidden = true)
     @GeneratedValue(strategy = "IDENTITY")
-    protected int id;
+    private int id;
 	
 	@Column(unique = true, length = 140)
-    protected String title;
+    private String title;
 	
 	@Column(length = 40000, type = Type.TEXT)
-    protected String content;
+    private String content;
 	
 	@Column
-	protected String categories;
+	private String categories;
 	
 	@ManyToOne
-	protected User owner;
+	private User owner;
 	
 	@OneToMany(mappedBy = "post")
-	protected ArrayList<Comment> comments;
+	private ArrayList<Comment> comments;
 	
 	@Column(name = "created_at")
-    protected DateTime createdAt;
+    private DateTime createdAt;
 
     @Column(name = "updated_at")
-    protected DateTime updatedAt;
+    private DateTime updatedAt;
 
     @Column(name = "expires_at")
-    protected DateTime expiresAt;
+    private DateTime expiresAt;
 
 
 	public Post() {

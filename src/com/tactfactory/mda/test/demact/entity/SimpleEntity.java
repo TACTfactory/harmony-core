@@ -26,6 +26,6 @@ public class SimpleEntity {
 	@Id
     @Column(type = Type.INTEGER, hidden = true)
     @GeneratedValue(strategy = "IDENTITY")
-    protected int id;
+	private int id;
 
 }

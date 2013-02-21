@@ -16,25 +16,25 @@ public class Affiliate {
 	@Id
     @Column()					// typ ="integer",
     @GeneratedValue(strategy = "IDENTITY")
-    protected int id;
+	private int id;
 	
 	@Column(nullable = true)		// typ ="string", lengt =255 
-    protected String url;
+	private String url;
 	
 	@Column()					// typ ="string", lengt ="255"
-    protected String email;
+	private String email;
 	
 	@Column(unique = true)		// typ ="string", lengt ="255", 
-    protected String token;
+	private String token;
 	
 	@Column(name = "is_activated")// typ ="boolean", 
-    protected boolean isActivated;
+	private boolean isActivated;
 	
 	@Column(name = "created_at")	// typ ="datetime",
-    protected Date createdAt;
+	private Date createdAt;
 	
 	@ManyToMany()
-	protected ArrayList<Category> categories;
+	private ArrayList<Category> categories;
 
 	/**
 	 * @return the id

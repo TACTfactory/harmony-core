@@ -36,26 +36,26 @@ public class User implements Cloneable, Serializable {
 	@Id
     @Column(type = Type.INTEGER, hidden = true)
     @GeneratedValue(strategy = "IDENTITY")
-    protected int id;
+    private int id;
 
 	@Column(type = Type.LOGIN)
 	@Searchable
-    protected String login;
+    private String login;
 	
 	@Column(type = Type.PASSWORD)
-    protected String password;
+    private String password;
 	
 	@Column(nullable = true)
-    protected String firstname;
+    private String firstname;
 	
 	@Column()
-    protected String lastname;
+    private String lastname;
 	
 	@Column(name = "created_at")
-    protected DateTime createdAt;
+    private DateTime createdAt;
 	
 	@Column(type = Type.DATE, locale = true)
-    protected DateTime birthdate;
+    private DateTime birthdate;
 
 
 	public User() {

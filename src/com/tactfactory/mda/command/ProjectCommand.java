@@ -59,10 +59,10 @@ public class ProjectCommand extends BaseCommand {
 	public static final String REMOVE_ALL 	= BUNDLE + SEPARATOR + ACTION_REMOVE + SEPARATOR + TargetPlatform.ALL.toLowerString();
 
 	// Internal	
-	protected final BaseAdapter adapterAndroid = new AndroidAdapter();
-	protected final BaseAdapter adapterIOS = new IosAdapter();
-	protected final BaseAdapter adapterRIM = new RimAdapter();
-	protected final BaseAdapter adapterWinPhone = new WinphoneAdapter();
+	private final BaseAdapter adapterAndroid = new AndroidAdapter();
+	private final BaseAdapter adapterIOS = new IosAdapter();
+	private final BaseAdapter adapterRIM = new RimAdapter();
+	private final BaseAdapter adapterWinPhone = new WinphoneAdapter();
 
 	private boolean userHasConfirmed = false;
 	private boolean isProjectInit = false;
@@ -101,7 +101,7 @@ public class ProjectCommand extends BaseCommand {
 						 + "\nAndroid SDK Path: "			 + ApplicationMetadata.androidSdkPath);
 
 				// Confirmation
-				if (Harmony.isConsole) {
+				if (ConsoleUtils.isConsole()) {
 					final String accept = Harmony.getUserInput("Use below given parameters to process files? (y/n) ");
 					
 					if (!accept.contains("n")) {
@@ -326,9 +326,11 @@ public class ProjectCommand extends BaseCommand {
 	/**
 	 * Remove all project platforms
 	 */
-	public void removeAll() {
+	public final void removeAll() {
 		if (!this.userHasConfirmed) {
-			final String accept = Harmony.getUserInput("Are you sure to Delete All Projects? (y/n) ");
+			final String accept = 
+					Harmony.getUserInput(
+							"Are you sure to Delete All Projects? (y/n) ");
 			
 			if (accept.contains("n")) { return; }
 			

@@ -21,16 +21,16 @@ import com.tactfactory.mda.utils.FileUtils;
  *
  */
 public abstract class CommonTest {
-	protected static Harmony harmony; 
+	private static Harmony harmony; 
 
 	/**
 	 * @throws java.lang.Exception
 	 */
 	public static void setUpBefore() throws Exception {
 		// Base configs
-		ConsoleUtils.ansi  = false;
-		ConsoleUtils.quiet = false;
-		ConsoleUtils.debug = true;
+		ConsoleUtils.setAnsi(false);
+		ConsoleUtils.setQuiet(false);
+		ConsoleUtils.setDebug(true);
 		
 		// Project test config
 		ApplicationMetadata.INSTANCE.name = "demact";
@@ -42,7 +42,7 @@ public abstract class CommonTest {
 			final String localProp = 
 					String.format("%s/%s/%s",
 							Harmony.PATH_PROJECT, 
-							Harmony.projectFolder, 
+							Harmony.getProjectFolder(), 
 							"local.properties");
 			
 			ApplicationMetadata.androidSdkPath = 
@@ -68,6 +68,10 @@ public abstract class CommonTest {
 	 */
 	public void tearDown() throws Exception {
 		
+	}
+	
+	public static Harmony getHarmony() {
+		return harmony;
 	}
 	
 	protected static void makeEntities() {

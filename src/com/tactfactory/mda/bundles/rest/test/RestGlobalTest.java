@@ -52,11 +52,11 @@ public class RestGlobalTest extends CommonTest {
 		System.out.println("\nTest Orm generate entity");
 		System.out.println("###############################################################################");
 		
-		harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
-		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
-		harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[] {}, null);
-		harmony.findAndExecute(RestCommand.GENERATE_ADAPTERS, new String[] {}, null);
+		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
+		getHarmony().findAndExecute(OrmCommand.GENERATE_CRUD, new String[] {}, null);
+		getHarmony().findAndExecute(RestCommand.GENERATE_ADAPTERS, new String[] {}, null);
 				
 		final RestCommand command = (RestCommand) Harmony.instance.getCommand(RestCommand.class);
 		command.generateMetas();	

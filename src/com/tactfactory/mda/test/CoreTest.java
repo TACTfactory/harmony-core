@@ -48,14 +48,14 @@ public class CoreTest extends CommonTest {
 	
 	@Test
 	public final void loadPlugins() {
-		Assert.assertTrue(!CommonTest.harmony.getCommands().isEmpty());
+		Assert.assertTrue(!CommonTest.getHarmony().getCommands().isEmpty());
 		
 		Assert.assertNotNull(
-				CommonTest.harmony.getCommand(GeneralCommand.class));
+				CommonTest.getHarmony().getCommand(GeneralCommand.class));
 		Assert.assertNotNull(
-				CommonTest.harmony.getCommand(ProjectCommand.class));
+				CommonTest.getHarmony().getCommand(ProjectCommand.class));
 		Assert.assertNotNull(
-				CommonTest.harmony.getCommand(OrmCommand.class));
+				CommonTest.getHarmony().getCommand(OrmCommand.class));
 	}
 	
 	@Test
@@ -64,7 +64,7 @@ public class CoreTest extends CommonTest {
 		System.out.println("########################################"
 				 + "#######################################");
 		
-		CommonTest.harmony.findAndExecute(GeneralCommand.LIST, null, null);
+		CommonTest.getHarmony().findAndExecute(GeneralCommand.LIST, null, null);
 	} 
 	
 	@Test
@@ -73,6 +73,6 @@ public class CoreTest extends CommonTest {
 		System.out.println("#######################################"
 				 + "########################################");
 		
-		CommonTest.harmony.findAndExecute(GeneralCommand.HELP, null, null);
+		CommonTest.getHarmony().findAndExecute(GeneralCommand.HELP, null, null);
 	}
 }

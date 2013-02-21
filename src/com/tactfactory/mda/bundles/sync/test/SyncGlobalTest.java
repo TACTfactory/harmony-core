@@ -65,11 +65,11 @@ public class SyncGlobalTest extends CommonTest {
 		System.out.println("\nTest Orm generate entity");
 		System.out.println("###############################################################################");
 		
-		harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
-		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
-		harmony.findAndExecute(OrmCommand.GENERATE_CRUD, new String[] {}, null);
-		harmony.findAndExecute(SyncCommand.GENERATE_SERVICE, new String[] {}, null);
+		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
+		getHarmony().findAndExecute(OrmCommand.GENERATE_CRUD, new String[] {}, null);
+		getHarmony().findAndExecute(SyncCommand.GENERATE_SERVICE, new String[] {}, null);
 		
 		final SyncCommand command = (SyncCommand) Harmony.instance.getCommand(SyncCommand.class);
 		command.generateMetas();

@@ -49,13 +49,13 @@ public class OrmUpdateEntitiesTest extends CommonTest {
 	}
 	
 	private static void initAll() {
-		harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
-		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES,
+		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES,
 				new String[] {},
 				null);
 		// The real test
-		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES,
+		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES,
 				new String[] {},
 				null);
 	}

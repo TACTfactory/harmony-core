@@ -56,7 +56,7 @@ public class OrmCommand extends BaseCommand {
 	public static final String GENERATE_CRUD 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_CRUD;
 
 	//internal
-	protected BaseAdapter adapter = new AndroidAdapter();
+	private BaseAdapter adapter = new AndroidAdapter();
 
 	protected void generateForm() {
 		/*ApplicationMetadata appMetas = this.getMetasFromAll();

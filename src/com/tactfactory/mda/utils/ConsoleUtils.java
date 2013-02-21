@@ -22,9 +22,10 @@ import print.color.ColoredPrinter;
 
 public abstract class ConsoleUtils {
 	/** Debug state*/
-	public static boolean debug;
-	public static boolean quiet;
-	public static boolean ansi = true;
+	private static boolean debug;
+	private static boolean quiet;
+	private static boolean ansi = true;
+	private static boolean isConsole;
 	
 	/** Constants */
 	private static final char NEWLINE = '\n';
@@ -33,6 +34,38 @@ public abstract class ConsoleUtils {
 	
 	private static ColoredPrinter cp =
 			new ColoredPrinter.Builder(0, false).build();
+	
+	public static boolean isDebug() {
+		return debug;
+	}
+
+	public static void setDebug(final boolean debug) {
+		ConsoleUtils.debug = debug;
+	}
+
+	public static boolean isQuiet() {
+		return quiet;
+	}
+
+	public static void setQuiet(final boolean quiet) {
+		ConsoleUtils.quiet = quiet;
+	}
+
+	public static boolean isAnsi() {
+		return ansi;
+	}
+
+	public static void setAnsi(final boolean ansi) {
+		ConsoleUtils.ansi = ansi;
+	}
+	
+	public static boolean isConsole() {
+		return isConsole;
+	}
+
+	public static void setConsole(final boolean isConsole) {
+		ConsoleUtils.isConsole = isConsole;
+	}
 	
 	public static void display(final String value) {
 		if (!quiet) {

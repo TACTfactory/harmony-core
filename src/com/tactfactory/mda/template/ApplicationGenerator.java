@@ -13,14 +13,16 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.PackageUtils;
 
 public class ApplicationGenerator extends BaseGenerator {
-	protected String localNameSpace;
-	protected String applicationName;
+	private String localNameSpace;
+	private String applicationName;
 
 	public ApplicationGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
 		this.localNameSpace = this.appMetas.projectNameSpace.replace('/', '.');
-		this.applicationName = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name);
+		this.applicationName = 
+				CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
+						this.appMetas.name);
 		
 		this.datamodel = this.appMetas.toMap(this.adapter);
 		this.datamodel.put(TagConstant.LOCAL_NAMESPACE, this.localNameSpace);
@@ -40,7 +42,9 @@ public class ApplicationGenerator extends BaseGenerator {
 	}
 	
 	@Override
-	protected final void makeSource(final String templateName, final String fileName, final boolean override) {
+	protected final void makeSource(final String templateName,
+			final String fileName, 
+			final boolean override) {
 		final String fullFilePath = String.format("%s%s/%s",
 				this.adapter.getSourcePath(),
 				PackageUtils.extractPath(this.localNameSpace).toLowerCase(),

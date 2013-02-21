@@ -18,56 +18,56 @@ public class Job {
     @Id
     @Column()					// typ ="integer",
     @GeneratedValue(strategy = "IDENTITY")
-    protected int id;
+    private int id;
 
     @ManyToOne() 				// targetEntit ="Category"
     @JoinColumn(name = "category_id", referencedColumnName = "id")
-    protected Category category;
+    private Category category;
 
     @Column()					// typ ="string", lengt =255
-    protected String type;
+    private String type;
 
     @Column(nullable = true)		// typ ="string", lengt =255
-    protected String company;
+    private String company;
 
     @Column()					// typ ="string", lengt =255
-    protected String logo;
+    private String logo;
 
     @Column(nullable = true)		// typ ="string", lengt =255 
-    protected String url;
+    private String url;
 
     @Column(nullable = true)		// typ ="string", lengt =255
-    protected String position;
+    private String position;
 
     @Column()					// typ ="string", lengt =255
-    protected String location;
+    private String location;
 
     @Column(length = STRING_LENGTH)		// typ ="string",
-    protected String description;
+    private String description;
 
     @Column(length = STRING_LENGTH, name = "how_to_apply")	// typ ="string", 
-    protected String howToApply;
+    private String howToApply;
 
     @Column(unique = true)		// typ ="string", lengt ="255", 
-    protected String token;
+    private String token;
 
     @Column(name = "is_public")	// typ ="boolean", 
-    protected boolean isPublic;
+    private boolean isPublic;
 
     @Column(name = "is_activated")// typ ="boolean", 
-    protected boolean isActivated;
+    private boolean isActivated;
 
     @Column()					// typ ="string", lengt ="255"
-    protected String email;
+    private String email;
 
     @Column(name = "created_at")	// typ ="datetime",
-    protected Date createdAt;
+    private Date createdAt;
 
     @Column(name = "updated_at")	// typ ="datetime", 
-    protected Date updatedAt;
+    private Date updatedAt;
 
     @Column(name = "expires_at")	// typ ="datetime", 
-    protected Date expiresAt;
+    private Date expiresAt;
 
     /**
 	 * @return the id
