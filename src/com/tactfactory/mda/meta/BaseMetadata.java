@@ -16,9 +16,9 @@ public abstract class BaseMetadata implements Metadata {
 	public String name;
 	
 	/** List of bundles Metadata */
-	public Map<String, Metadata> options = new LinkedHashMap<String, Metadata>();
+	public Map<String, Metadata> options =
+			new LinkedHashMap<String, Metadata>();
 	
-	@Override
 	public String getName(){
 		return this.name;
 	}

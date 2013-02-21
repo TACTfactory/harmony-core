@@ -44,9 +44,9 @@ public abstract class FixtureBase<T> {
 	public InputStream getXml(String entityName){
 		AssetManager assetManager = this.context.getAssets();
 		InputStream ret = null;
-		try{
+		try {
 			ret = assetManager.open(entityName+".xml");
-		}catch(IOException e){
+		} catch (IOException e){
 			// TODO Auto-generated method stub
 			Log.e(TAG, e.getMessage());
 		}
@@ -57,9 +57,9 @@ public abstract class FixtureBase<T> {
 	public InputStream getYml(String entityName){
 		AssetManager assetManager = this.context.getAssets();
 		InputStream ret = null;
-		try{
+		try {
 			ret = assetManager.open(entityName+".yml");
-		}catch(IOException e){
+		} catch (IOException e){
 			// TODO Auto-generated method stub
 			Log.e(TAG, e.getMessage());
 		}

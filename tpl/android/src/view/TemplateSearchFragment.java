@@ -216,7 +216,7 @@ public class ${curr.name}SearchFragment extends HarmonyFragment implements OnCli
 		boolean[] checks = new boolean[list.size()];
 		this.checked${relation.name?cap_first} = new boolean[list.size()];
 		int i=0;
-		for(${relation.relation.targetEntity} item : list){
+		for (${relation.relation.targetEntity} item : list){
 			listAdapter[i] = String.valueOf(item.getId());
 			checks[i] = false;
 			i++;
@@ -231,8 +231,8 @@ public class ${curr.name}SearchFragment extends HarmonyFragment implements OnCli
 		            @Override
 		            public void onClick(DialogInterface dialog, int id) {
 		            	String value = "";
-		            	for(int i=0;i<checked${relation.name?cap_first}.length;i++){
-		            		if(checked${relation.name?cap_first}[i]){
+		            	for (int i=0;i<checked${relation.name?cap_first}.length;i++){
+		            		if (checked${relation.name?cap_first}[i]){
 		            			value+=(i+1)+" ";
 		            		}		            			
 		            	}
@@ -253,7 +253,7 @@ public class ${curr.name}SearchFragment extends HarmonyFragment implements OnCli
 	protected void init${relation.name?cap_first}Dialog(List<${relation.relation.targetEntity}> list){
 		final String[] listAdapter = new String[list.size()];
 		int i=0;
-		for(${relation.relation.targetEntity} item : list){
+		for (${relation.relation.targetEntity} item : list){
 			listAdapter[i] = String.valueOf(item.getId());
 			i++;
 		}
@@ -344,7 +344,7 @@ public class ${curr.name}SearchFragment extends HarmonyFragment implements OnCli
 					<#assign date=false /><#assign time=false />
 					<#if field.type=="date" || field.type=="datetime"><#assign date = true /></#if>
 					<#if field.type=="time" || field.type=="datetime"><#assign time = true /></#if>
-		if(<#if date>!TextUtils.isEmpty(this.${field.name}DateView.getText().toString())</#if><#if (date && time)> && </#if><#if time>!TextUtils.isEmpty(this.${field.name}TimeView.getText().toString())</#if>){
+		if (<#if date>!TextUtils.isEmpty(this.${field.name}DateView.getText().toString())</#if><#if (date && time)> && </#if><#if time>!TextUtils.isEmpty(this.${field.name}TimeView.getText().toString())</#if>){
 				
 			<#if (date && time)>
 			DateTime dt = DateUtils.formatStringToDateTime(
@@ -365,13 +365,13 @@ public class ${curr.name}SearchFragment extends HarmonyFragment implements OnCli
 		}
 				<#else>
 					<#if field.relation??>
-		if(!TextUtils.isEmpty(this.${field.name}Button.getText().toString())){
+		if (!TextUtils.isEmpty(this.${field.name}Button.getText().toString())){
 						<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 			criterias.add("${field.columnName}", this.${field.name}Button.getText().toString(), Type.EQUALS);
 						<#else>
 			String[] values = this.${field.name}Button.getText().toString().split(",");
 			${field.relation.targetEntity}Criterias ${field.name}Crits = new ${field.relation.targetEntity}Criterias(${curr.name?cap_first}Criterias.GroupType.OR);
-			for(String value : values){
+			for (String value : values){
 				${field.name}Crits.add("id", value.trim(), Type.EQUALS);
 			}
 			criterias.add("id", "(SELECT ${field.relation.mappedBy} FROM ${field.relation.targetEntity} WHERE "+${field.name}Crits.toSQLiteString()+")", Type.IN);				
@@ -381,11 +381,11 @@ public class ${curr.name}SearchFragment extends HarmonyFragment implements OnCli
 						<#if field.type=="boolean">
 						
 						<#elseif field.type=="string" || field.type=="text" || field.type=="phone" || field.type=="login" || field.type=="password">
-		if(!TextUtils.isEmpty(this.${field.name}View.getText().toString())){
+		if (!TextUtils.isEmpty(this.${field.name}View.getText().toString())){
 			criterias.add("${field.columnName}", "%"+this.${field.name}View.getText().toString()+"%", Type.LIKE);
 		}					
 						<#else>
-		if(!TextUtils.isEmpty(this.${field.name}View.getText().toString())){
+		if (!TextUtils.isEmpty(this.${field.name}View.getText().toString())){
 			criterias.add("${field.columnName}", this.${field.name}View.getText().toString(), Type.EQUALS);
 		}					
 						</#if>

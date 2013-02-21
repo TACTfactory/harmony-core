@@ -17,7 +17,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * To mark a field which will be searchable
+ * To mark a field which will be searchable.
  */
 @Documented
 @Retention(SOURCE)

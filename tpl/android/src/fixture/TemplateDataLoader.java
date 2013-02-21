@@ -80,11 +80,11 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 
 			SAXBuilder builder = new SAXBuilder();		// Make engine
 			InputStream xmlStream;
-			if(mode==MODE_BASE)
+			if (mode==MODE_BASE)
 				xmlStream = this.getXml("app/"+entityName);
 			else
 				xmlStream = this.getXml("test/"+entityName);
-			if(xmlStream != null){
+			if (xmlStream != null){
 				Document doc = (Document) builder.build(xmlStream); 	// Load XML File
 				final Element rootNode = doc.getRootElement(); 			// Load Root element
 				//final Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
@@ -96,7 +96,7 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 						${curr.name?uncap_first} = new ${curr.name?cap_first}();
 						<#list curr.fields as field>
 							<#if (!field.internal)>
-						if(element.getChildText("${field.name?uncap_first}")!=null){
+						if (element.getChildText("${field.name?uncap_first}")!=null){
 								<#if !field.relation??>
 									<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
 							${curr.name?uncap_first}.set${field.name?cap_first}(Integer.parseInt(element.getChildText("${field.name?uncap_first}")));
@@ -117,8 +117,8 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 									<#else>
 							ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
 							List<Element> ${field.relation.targetEntity?uncap_first}sMap = element.getChildren("${field.name?uncap_first}");
-							for(Element ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap){
-								if(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.containsKey(${field.relation.targetEntity?uncap_first}Name.getText()))
+							for (Element ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap){
+								if (${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.containsKey(${field.relation.targetEntity?uncap_first}Name.getText()))
 									${field.relation.targetEntity?uncap_first}s.add(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.get(${field.relation.targetEntity?uncap_first}Name.getText()));
 							}
 							${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first}s);		
@@ -142,21 +142,21 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 		// YAML Loader
 		Yaml yaml = new Yaml();
 		InputStream inputStream;
-		if(mode==MODE_BASE)
+		if (mode==MODE_BASE)
 			inputStream = this.getYml("app/"+entityName);
 		else
 			inputStream = this.getYml("test/"+entityName);
 		
 		Map<?, ?> map = (Map<?, ?>) yaml.load(inputStream);
-		if(map != null && map.containsKey(entityName)){
+		if (map != null && map.containsKey(entityName)){
 			Map<?, ?> listEntities = (Map<?, ?>) map.get(entityName);
-			if(listEntities!=null){
+			if (listEntities!=null){
 				for (Object name : listEntities.keySet()) {
 					Map<?, ?> columns = (Map<?, ?>) listEntities.get(name);
 					${curr.name?uncap_first} = new ${curr.name?cap_first}();
 					<#list curr.fields as field>
 						<#if (!field.internal)>
-					if(columns.get("${field.name?uncap_first}")!=null){
+					if (columns.get("${field.name?uncap_first}")!=null){
 							<#if !field.relation??>
 								<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
 						${curr.name?uncap_first}.set${field.name?cap_first}((Integer)columns.get("${field.name?uncap_first}"));
@@ -181,8 +181,8 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 								<#else>
 						ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
 						Map<?, ?> ${field.relation.targetEntity?uncap_first}sMap = (Map<?, ?>)columns.get("${field.name?uncap_first}");
-						for(Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()){
-							if(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.containsKey((String)${field.relation.targetEntity?uncap_first}Name))
+						for (Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()){
+							if (${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.containsKey((String)${field.relation.targetEntity?uncap_first}Name))
 								${field.relation.targetEntity?uncap_first}s.add(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.get((String)${field.relation.targetEntity?uncap_first}Name));
 						}
 						${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first}s);		

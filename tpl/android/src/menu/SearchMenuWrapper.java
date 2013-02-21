@@ -49,7 +49,7 @@ public class SearchMenuWrapper extends MenuWrapperBase{
 			int currentFragmentHashCode, Context context) {
 		
 		<#list search_entities as entity>
-		if(currentFragmentHashCode == ${entity.name?cap_first}ListFragment.class.hashCode()){
+		if (currentFragmentHashCode == ${entity.name?cap_first}ListFragment.class.hashCode()){
 			this.searchItem.setVisible(true);
 	    }
 		</#list>
@@ -64,15 +64,15 @@ public class SearchMenuWrapper extends MenuWrapperBase{
 		Intent intent = null;
 		
 		<#list search_entities as entity>
-		if(currentFragmentHashCode == ${entity.name?cap_first}ListFragment.class.hashCode()){
+		if (currentFragmentHashCode == ${entity.name?cap_first}ListFragment.class.hashCode()){
 			intent = new Intent(ctx, ${entity.name?cap_first}SearchActivity.class);
 	    }
 		</#list>
 		
-		if(intent!=null){
+		if (intent!=null){
 			fragment.startActivityForResult(intent, ${project_name?cap_first}Menu.SEARCH);
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}
@@ -80,8 +80,8 @@ public class SearchMenuWrapper extends MenuWrapperBase{
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode,
 			Intent data, Context context, Fragment fragment) {
-		if(requestCode==${project_name?cap_first}Menu.SEARCH){
-			if(resultCode==HarmonyFragmentActivity.RESULT_OK){
+		if (requestCode==${project_name?cap_first}Menu.SEARCH){
+			if (resultCode==HarmonyFragmentActivity.RESULT_OK){
 				((HarmonyListFragment)fragment).getLoaderManager().restartLoader(0, data.getExtras(), (HarmonyListFragment)fragment);
 			}
 		}

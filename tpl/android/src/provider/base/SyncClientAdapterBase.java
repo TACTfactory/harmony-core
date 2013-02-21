@@ -70,12 +70,12 @@ public abstract class SyncClientAdapterBase<T extends EntityBase> extends WebSer
 		updated.clear();
 		merged.clear();
 		
-		try{
+		try {
 			JSONObject jsonResp = new JSONObject(response);
 			extractItems(jsonResp, uri+"s-i", inserted);
 			extractItems(jsonResp, uri+"s-u", updated);
 			extractItems(jsonResp, uri+"s-m", merged);
-		}catch(JSONException e){
+		} catch (JSONException e){
 			Log.e(TAG, e.getMessage());
 		}
 	}

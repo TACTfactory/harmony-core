@@ -211,7 +211,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		boolean[] checks = new boolean[list.size()];
 		this.checked${relation.name?cap_first} = new boolean[list.size()];
 		int i=0;
-		for(${relation.relation.targetEntity} item : list){
+		for (${relation.relation.targetEntity} item : list){
 			listAdapter[i] = String.valueOf(item.getId());
 			checks[i] = false;
 			i++;
@@ -240,7 +240,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 	protected void init${relation.name?cap_first}Dialog(List<${relation.relation.targetEntity}> list){
 		final String[] listAdapter = new String[list.size()];
 		int i=0;
-		for(${relation.relation.targetEntity} item : list){
+		for (${relation.relation.targetEntity} item : list){
 			listAdapter[i] = String.valueOf(item.getId());
 			i++;
 		}
@@ -282,7 +282,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
-		if(this.model.get${field.name?cap_first}()!=null){
+		if (this.model.get${field.name?cap_first}()!=null){
 					<#if field.type=="datetime" || field.type=="date" || field.type=="time">
 						<#if field.type=="datetime" || field.type=="date">
 			this.${field.name}DateView.setText(DateUtils.formatDateToString(this.model.get${field.name?cap_first}()));
@@ -316,11 +316,11 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 			<#if !field.relation??>
 				<#if field.type!="boolean">
 					<#if field.type=="date" || field.type=="datetime">
-		if(!TextUtils.isEmpty(this.${field.name}DateView.getEditableText()))
+		if (!TextUtils.isEmpty(this.${field.name}DateView.getEditableText()))
 					<#elseif field.type=="time" || field.type=="datetime">
-		if(!TextUtils.isEmpty(this.${field.name}TimeView.getEditableText()))
+		if (!TextUtils.isEmpty(this.${field.name}TimeView.getEditableText()))
 					<#else>
-		if(!TextUtils.isEmpty(this.${field.name}View.getEditableText()))
+		if (!TextUtils.isEmpty(this.${field.name}View.getEditableText()))
 					</#if>
 			${m.setSaver(field)}
 				<#else>
@@ -332,8 +332,8 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		this.model.set${field.name?cap_first}(tmp${field.name?cap_first});
 			<#else>
 		ArrayList<${field.relation.targetEntity}> tmp${field.name?cap_first}List = new ArrayList<${field.relation.targetEntity?cap_first}>();
-		for(int i=0; i<this.checked${field.name?cap_first}.length; i++){
-			if(this.checked${field.name?cap_first}[i])
+		for (int i=0; i<this.checked${field.name?cap_first}.length; i++){
+			if (this.checked${field.name?cap_first}[i])
 				tmp${field.name?cap_first}List.add(this.${field.name}List.get(i));
 		}
 		

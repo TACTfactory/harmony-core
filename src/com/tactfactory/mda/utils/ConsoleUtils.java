@@ -151,26 +151,26 @@ public abstract class ConsoleUtils {
 			
 			@Override
 			public void run() {
-				while(this.isRunning){
-					try{
-						if(!(this.processInput.ready() || this.processError.ready())){
+				while (this.isRunning){
+					try {
+						if (!(this.processInput.ready() || this.processError.ready())){
 							Thread.sleep(200);
 						}
-						if(this.processInput.ready()){
+						if (this.processInput.ready()){
 							final String input  = this.processInput.readLine();
-							if(input!=null && !input.isEmpty()){
+							if (input!=null && !input.isEmpty()){
 								ConsoleUtils.display(input);
 							}
 						}
-						if(this.processError.ready()){
+						if (this.processError.ready()){
 							final String error = this.processError.readLine();
-							if(error!=null && !error.isEmpty()){
+							if (error!=null && !error.isEmpty()){
 								ConsoleUtils.displayError(new Exception(error));
 							}
 						}
-					}catch(final InterruptedException e){
+					} catch (final InterruptedException e){
 						ConsoleUtils.displayError(e);
-					}catch(final IOException e){
+					} catch (final IOException e){
 						ConsoleUtils.displayError(e);
 					}
 				}
@@ -208,15 +208,15 @@ public abstract class ConsoleUtils {
 			
 			@Override
 			public void run() {
-				while(this.isRunning){
+				while (this.isRunning){
 					try {
 						String output = null;
-						if(this.consoleInput.ready()){
+						if (this.consoleInput.ready()){
 							output = this.consoleInput.readLine();
-							if(output!=null && !output.isEmpty()){
+							if (output!=null && !output.isEmpty()){
 								this.processOutput.write(output);
 							}
-						}else{
+						} else {
 							Thread.sleep(200);
 						}
 					} catch (final IOException e) {

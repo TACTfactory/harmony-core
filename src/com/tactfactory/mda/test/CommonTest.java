@@ -21,8 +21,7 @@ import com.tactfactory.mda.utils.FileUtils;
  *
  */
 public abstract class CommonTest {
-	protected static Harmony harmony;
-	//protected AndroidAdapter adapterTargetAdapter = new AndroidAdapter(); //TODO transform to 
+	protected static Harmony harmony; 
 
 	/**
 	 * @throws java.lang.Exception
@@ -35,13 +34,22 @@ public abstract class CommonTest {
 		
 		// Project test config
 		ApplicationMetadata.INSTANCE.name = "demact";
-		ApplicationMetadata.INSTANCE.projectNameSpace = "com/tactfactory/mda/test/demact";
+		ApplicationMetadata.INSTANCE.projectNameSpace 
+				= "com/tactfactory/mda/test/demact";
 		
-		if (ApplicationMetadata.androidSdkPath == null || ApplicationMetadata.androidSdkPath.isEmpty()) {
-			final String local_prop = String.format("%s/%s/%s", Harmony.PATH_PROJECT, Harmony.projectFolder, "local.properties");
+		if (ApplicationMetadata.androidSdkPath == null 
+				|| ApplicationMetadata.androidSdkPath.isEmpty()) {
+			final String localProp = 
+					String.format("%s/%s/%s",
+							Harmony.PATH_PROJECT, 
+							Harmony.projectFolder, 
+							"local.properties");
 			
-			if ((ApplicationMetadata.androidSdkPath = Harmony.getSdkDirFromPropertiesFile(local_prop)) == null) {
-				ApplicationMetadata.androidSdkPath = "/opt/android-sdk-linux_86/";
+			ApplicationMetadata.androidSdkPath = 
+					Harmony.getSdkDirFromPropertiesFile(localProp);
+			if (ApplicationMetadata.androidSdkPath == null) {
+				ApplicationMetadata.androidSdkPath =
+						"/opt/android-sdk-linux_86/";
 			}
 		}
 		
@@ -63,21 +71,34 @@ public abstract class CommonTest {
 	}
 	
 	protected static void makeEntities() {
-		final String pathNameSpace = ApplicationMetadata.INSTANCE.projectNameSpace.replaceAll("\\.", "/");
-		final String srcDir = String.format("src/%s/%s/", pathNameSpace, "entity");
-		final String destDir = String.format("%s/android/src/%s/%s/", Harmony.PATH_PROJECT, pathNameSpace, "entity");
+		final String pathNameSpace = 
+				ApplicationMetadata.INSTANCE.projectNameSpace.replaceAll("\\.",
+						"/");
+		final String srcDir = 
+				String.format("src/%s/%s/", 
+						pathNameSpace, 
+						"entity");
+		final String destDir = 
+				String.format("%s/android/src/%s/%s/", 
+						Harmony.PATH_PROJECT, 
+						pathNameSpace, 
+						"entity");
 
 		System.out.println(destDir);
 		
 		// FileUtils.copyDirectory(new File(srcDir),new File(destDir));
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
-		if(new File(destDir+"Post.java").exists()) {
+		if (new File(destDir + "Post.java").exists()) {
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");
 		}
 	}
 	
 	protected static void hasFindFile(final String fileName) {
-		final File file = new File(String.format("%s/%s", Harmony.PATH_PROJECT, fileName));
+		final File file = 
+				new File(
+					String.format("%s/%s",
+						Harmony.PATH_PROJECT, 
+						fileName));
 
 		assertTrue(file.exists());
 	}

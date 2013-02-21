@@ -10,9 +10,16 @@ package com.tactfactory.mda.command;
 
 import net.xeoh.plugins.base.Plugin;
 
+
+/**
+ * Interface defining the commmands class for all bundles.
+ * @author gregg
+ *
+ */
 public interface Command extends Plugin {
 	
-	/** Execute specific action
+	/** 
+	 * Execute specific action.
 	 * 
 	 * @param action to realize
 	 * @param args action arguments
@@ -21,11 +28,12 @@ public interface Command extends Plugin {
 	void execute(String action, String[] args, String option);
 
 	/**
-	 * Display Bundle commands summary
+	 * Display Bundle commands summary.
 	 */
 	void summary();
 	
-	/** Check availability of command
+	/** 
+	 * Check availability of command.
 	 * 
 	 * @param command to check
 	 * @return true if found

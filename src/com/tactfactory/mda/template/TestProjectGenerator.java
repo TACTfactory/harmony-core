@@ -30,16 +30,16 @@ public class TestProjectGenerator extends BaseGenerator {
 	 */
 	public boolean makeProject(){
 		boolean result = false;
-		if(this.adapter.getPlatform().equals("android")) {
+		if (this.adapter.getPlatform().equals("android")) {
 			result = this.makeTestProjectAndroid();
 		}
-		else if(this.adapter.getPlatform().equals("ios")) {
+		else if (this.adapter.getPlatform().equals("ios")) {
 			result = this.makeTestProjectIOS();
 		}
-		else if(this.adapter.getPlatform().equals("rim")) {
+		else if (this.adapter.getPlatform().equals("rim")) {
 			result = this.makeTestProjectRIM();
 		}
-		else if(this.adapter.getPlatform().equals("winphone")) {
+		else if (this.adapter.getPlatform().equals("winphone")) {
 			result = this.makeTestProjectWinPhone();
 		}
 
@@ -50,7 +50,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	 * Make Android Test Project Structure
 	 * @return success to make the platform test project folder
 	 */
-	private boolean makeTestProjectAndroid(){
+	private boolean makeTestProjectAndroid() {
 		boolean result = false;
 
 		// create project name space folders
@@ -69,11 +69,10 @@ public class TestProjectGenerator extends BaseGenerator {
 		final File dirTpl = new File(this.adapter.getTemplateTestProjectPath());
 
 		// Update newly created files with datamodel
-		if(dirTpl.exists() && dirTpl.listFiles().length!=0) {
+		if (dirTpl.exists() && dirTpl.listFiles().length!=0) {
 			result = true;
-			for(int i=0;i<dirTpl.listFiles().length;i++)
-			{
-				if(dirTpl.listFiles()[i].isFile()) {
+			for (int i=0;i<dirTpl.listFiles().length;i++) {
+				if (dirTpl.listFiles()[i].isFile()) {
 					final String fullFilePath = String.format("%s/%s/%s/%s", 
 							Harmony.PATH_PROJECT, 
 							this.adapter.getPlatform(), 
@@ -102,7 +101,7 @@ public class TestProjectGenerator extends BaseGenerator {
 				String.format("%s/%s/", Harmony.PATH_PROJECT, this.adapter.getPlatform()),
 				true);
 		
-		if(dirProj.exists() && dirProj.listFiles().length!=0) {
+		if (dirProj.exists() && dirProj.listFiles().length!=0) {
 			result = true;
 		}
 

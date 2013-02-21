@@ -3,14 +3,15 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-
+/**
+ * All the tests related to Rest generation
+ * @author gregg
+ *
+ */
 @RunWith(Suite.class)
 @SuiteClasses({
-	RestGlobalTest.class
-		})
-                
+	RestGlobalTest.class })
+
 public class AllTests {
-        /*public static void main(String[] args) {
-                JUnitCore.runClasses(new Class[] { AllTests.class });
-        }*/
+
 }

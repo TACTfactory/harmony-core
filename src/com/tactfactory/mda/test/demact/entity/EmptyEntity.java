@@ -9,6 +9,11 @@
 package com.tactfactory.mda.test.demact.entity;
 import com.tactfactory.mda.annotation.Entity;
 
+/**
+ * Empty entity for test purposes only
+ * @author gregg
+ *
+ */
 @Entity
 public class EmptyEntity {
 

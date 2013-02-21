@@ -13,8 +13,8 @@ public class ${curr.name?cap_first}Criterias extends CriteriasBase{
 	public boolean validCriteria(Criteria c) {
 		String key = c.getKey();
 		String[] possibleKeys = ${curr.name?cap_first}SQLiteAdapter.COLS;
-		for(String pKey : possibleKeys){
-			if(key.equals(pKey)){
+		for (String pKey : possibleKeys){
+			if (key.equals(pKey)){
 				return true;
 			}
 		}

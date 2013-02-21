@@ -18,10 +18,10 @@ public abstract class CriteriasBase implements Serializable, ICriteria{
 		
 	public String toSQLiteString(){
 		String ret = "(";
-		for(int i=0;i<this.arr.size();i++){
+		for (int i=0;i<this.arr.size();i++){
 			ICriteria crit = this.arr.get(i);
 			ret+=crit.toSQLiteString();
-			if(i!=this.arr.size()-1){
+			if (i!=this.arr.size()-1){
 				ret+=" "+type.getSqlType()+" ";
 			}
 		}
@@ -42,10 +42,10 @@ public abstract class CriteriasBase implements Serializable, ICriteria{
 	 * @return True if the criterias is valid and doesn't exists yet
 	 */
 	public boolean add(Criteria c){
-		if(this.validCriteria(c) && !this.arr.contains(c)){
+		if (this.validCriteria(c) && !this.arr.contains(c)){
 			arr.add(c);
 			return true;
-		}else{
+		} else {
 			return false;
 		}
 	}

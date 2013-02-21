@@ -72,7 +72,7 @@ public final class AndroidAdapter extends BaseAdapter {
 			result = "TextView";
 		}
 
-		if(field.relation !=null && (field.relation.type.equals("OneToMany") || field.relation.type.equals("ManyToMany"))) {
+		if (field.relation !=null && (field.relation.type.equals("OneToMany") || field.relation.type.equals("ManyToMany"))) {
 
 			result = "TextView";
 		}
@@ -99,7 +99,7 @@ public final class AndroidAdapter extends BaseAdapter {
 			result = "CheckBox";
 		}
 			
-		if(field.relation !=null && (field.relation.type.equals("ManyToOne") || field.relation.type.equals("OneToOne"))) {
+		if (field.relation !=null && (field.relation.type.equals("ManyToOne") || field.relation.type.equals("OneToOne"))) {
 
 			result = "Spinner";
 		}
@@ -122,67 +122,67 @@ public final class AndroidAdapter extends BaseAdapter {
 		final String DATETIME = "DateTime";
 		String ret = type;
 		
-		if(type.equals(Column.Type.STRING.getValue())){
+		if (type.equals(Column.Type.STRING.getValue())){
 			ret = STR;
-		}else
+		} else
 			
-		if(type.equals(Column.Type.TEXT.getValue())){
+		if (type.equals(Column.Type.TEXT.getValue())){
 			ret = STR;	
-		}else
+		} else
 			
-		if(type.equals(Column.Type.INTEGER.getValue())){
+		if (type.equals(Column.Type.INTEGER.getValue())){
 			ret = INT;
-		}else
+		} else
 			
-		if(type.equals(Column.Type.INT.getValue())){
+		if (type.equals(Column.Type.INT.getValue())){
 			ret = INT;
-		}else
+		} else
 			
-		if(type.equals(Column.Type.FLOAT.getValue())){
+		if (type.equals(Column.Type.FLOAT.getValue())){
 			ret = FLOAT;
-		}else
+		} else
 			
-		if(type.equals(Column.Type.DATETIME.getValue())){
+		if (type.equals(Column.Type.DATETIME.getValue())){
 			ret = DATETIME;
-		}else
+		} else
 			
-		if(type.equals(Column.Type.DATE.getValue())){
+		if (type.equals(Column.Type.DATE.getValue())){
 			ret = DATETIME;
-		}else
+		} else
 			
-		if(type.equals(Column.Type.TIME.getValue())){
+		if (type.equals(Column.Type.TIME.getValue())){
 			ret = DATETIME;
-		}else
+		} else
 			
-		if(type.equals(Column.Type.LOGIN.getValue())){
+		if (type.equals(Column.Type.LOGIN.getValue())){
 			ret = STR;
-		}else
+		} else
 			
-		if(type.equals(Column.Type.PASSWORD.getValue())){
+		if (type.equals(Column.Type.PASSWORD.getValue())){
 			ret = STR;
-		}else
+		} else
 			
-		if(type.equals(Column.Type.EMAIL.getValue())){
+		if (type.equals(Column.Type.EMAIL.getValue())){
 			ret = STR;
-		}else
+		} else
 			
-		if(type.equals(Column.Type.PHONE.getValue())){
+		if (type.equals(Column.Type.PHONE.getValue())){
 			ret = STR;
-		}else
+		} else
 			
-		if(type.equals(Column.Type.CITY.getValue())){
+		if (type.equals(Column.Type.CITY.getValue())){
 			ret = STR;
-		}else
+		} else
 			
-		if(type.equals(Column.Type.ZIPCODE.getValue())){
+		if (type.equals(Column.Type.ZIPCODE.getValue())){
 			ret = INT;
-		}else
+		} else
 			
-		if(type.equals(Column.Type.COUNTRY.getValue())){
+		if (type.equals(Column.Type.COUNTRY.getValue())){
 			ret = STR;
-		}else
+		} else
 			
-		if(type.equals(Column.Type.BC_EAN.getValue())){
+		if (type.equals(Column.Type.BC_EAN.getValue())){
 			ret = INT;
 		}
 		return ret;
@@ -206,7 +206,7 @@ public final class AndroidAdapter extends BaseAdapter {
 		File imageMD;
 		File imageLD;
 		
-		if(imageDirectoryXHD.exists() && imageDirectoryXHD.listFiles().length > 0) {
+		if (imageDirectoryXHD.exists() && imageDirectoryXHD.listFiles().length > 0) {
 			final File[] imagesFiles = imageDirectoryXHD.listFiles(this.filter);
 			FileUtils.makeFolder(imageDirectoryHD.getAbsolutePath());
 			FileUtils.makeFolder(imageDirectoryMD.getAbsolutePath());

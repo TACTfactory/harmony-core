@@ -37,13 +37,13 @@ public abstract class BaseCommand implements Command {
 	public void generateMetas(){
 		ConsoleUtils.display(">> Analyse Models...");
 		this.javaModelParser = new JavaModelParser();
-		for(final BaseParser parser : this.registeredParsers){
+		for (final BaseParser parser : this.registeredParsers){
 			this.javaModelParser.registerParser(parser);
 		}
 		// Parse models and load entities into CompilationUnits
 		try {
 			this.javaModelParser.loadEntities();
-		} catch(final Exception e) {
+		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 

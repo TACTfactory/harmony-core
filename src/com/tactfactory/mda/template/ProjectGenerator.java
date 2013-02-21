@@ -26,16 +26,16 @@ public class ProjectGenerator extends BaseGenerator {
 	 */
 	public boolean makeProject(){
 		boolean result = false;
-		if(this.adapter.getPlatform().equals("android")) {
+		if (this.adapter.getPlatform().equals("android")) {
 			result = this.makeProjectAndroid();
 		}
-		else if(this.adapter.getPlatform().equals("ios")) {
+		else if (this.adapter.getPlatform().equals("ios")) {
 			result = this.makeProjectIOS();
 		}
-		else if(this.adapter.getPlatform().equals("rim")) {
+		else if (this.adapter.getPlatform().equals("rim")) {
 			result = this.makeProjectRIM();
 		}
-		else if(this.adapter.getPlatform().equals("winphone")) {
+		else if (this.adapter.getPlatform().equals("winphone")) {
 			result = this.makeProjectWinPhone();
 		}
 
@@ -52,7 +52,7 @@ public class ProjectGenerator extends BaseGenerator {
 		
 		final int removeResult = FileUtils.deleteRecursive(dirproj);
 
-		if(removeResult==0) {
+		if (removeResult==0) {
 			result = true;
 			
 			ConsoleUtils.displayDebug("Project "+this.adapter.getPlatform()+" removed!");
@@ -218,11 +218,11 @@ public class ProjectGenerator extends BaseGenerator {
 
 		// Update newly created files with datamodel
 		final File dirTpl = new File(this.adapter.getTemplateProjectPath());
-		if(dirTpl.exists() && dirTpl.listFiles().length!=0) {
+		if (dirTpl.exists() && dirTpl.listFiles().length!=0) {
 			result = true;
 			
-			for(int i=0;i<dirTpl.listFiles().length;i++) {
-				if(dirTpl.listFiles()[i].isFile()) {
+			for (int i=0;i<dirTpl.listFiles().length;i++) {
+				if (dirTpl.listFiles()[i].isFile()) {
 					super.makeSource(
 							this.adapter.getTemplateProjectPath() + dirTpl.listFiles()[i].getName(),
 							String.format("%s/%s/", Harmony.PATH_PROJECT, this.adapter.getPlatform())+dirTpl.listFiles()[i].getName(),
@@ -245,7 +245,7 @@ public class ProjectGenerator extends BaseGenerator {
 				String.format("%s/%s/", Harmony.PATH_PROJECT, this.adapter.getPlatform()),
 				true);
 		
-		if(dirProj.exists() && dirProj.listFiles().length!=0) {
+		if (dirProj.exists() && dirProj.listFiles().length!=0) {
 			result = true;
 		}
 

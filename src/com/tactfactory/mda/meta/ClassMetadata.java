@@ -78,12 +78,12 @@ public class ClassMetadata extends BaseMetadata {
 		model.put(TagConstant.RELATIONS,		this.toFieldArray(this.relations.values(), adapter));
 		model.put(TagConstant.INTERNAL,			"false");
 		
-		if(this.internal) {
+		if (this.internal) {
 			model.put(TagConstant.INTERNAL,		"true");
 		}
 		
 		final Map<String, Object> optionsModel = new HashMap<String, Object>();
-		for(final Metadata option : this.options.values()){
+		for (final Metadata option : this.options.values()){
 			optionsModel.put(option.getName(), option.toMap(adapter));
 		}
 		model.put(TagConstant.OPTIONS, optionsModel);

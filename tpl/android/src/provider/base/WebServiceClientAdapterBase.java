@@ -106,7 +106,7 @@ public abstract class WebServiceClientAdapterBase<T>{
 				}
 				
 				error.append(builder.toString());
-			}else {
+			} else {
 				error.append(jsonErr.optString("msg", ""));
 			}
 			

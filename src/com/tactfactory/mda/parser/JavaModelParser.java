@@ -101,7 +101,7 @@ public class JavaModelParser {
 		final File dir = new File(this.entityPath);
 		final String[] files = dir.list(this.filter);
 		
-		if(files==null) {
+		if (files==null) {
 			throw new Exception("No entity files found!");
 		} else {
 			for (final String filename : files) {
@@ -119,8 +119,7 @@ public class JavaModelParser {
         FileInputStream in = null;
         CompilationUnit cu = null;
         
-        if(new File(filename).exists())
-        {
+        if (new File(filename).exists()) {
 			try {
 				// creates an input stream for the file to be parsed
 				in = new FileInputStream(filename);
@@ -135,7 +134,7 @@ public class JavaModelParser {
 				ConsoleUtils.displayError(e);
 			} finally {
 	            try {
-	            	if (in!=null) {
+	            	if (in != null) {
 	            		in.close();
 	            	}
 				} catch (final IOException e) {
@@ -194,7 +193,7 @@ public class JavaModelParser {
 	    @Override
 	    public void visit(final ClassOrInterfaceDeclaration n, final ClassMetadata meta) {
 	    	// Call the parsers which have been registered by the bundle
-	    	for(final BaseParser bParser : JavaModelParser.this.bundleParsers){
+	    	for (final BaseParser bParser : JavaModelParser.this.bundleParsers){
 	    		
 	    		bParser.visitClass(n, meta);
 	    	}
@@ -203,7 +202,7 @@ public class JavaModelParser {
 			if (classAnnotations!=null) {
 				for (final AnnotationExpr annotationExpr : classAnnotations) {
 
-					for(final BaseParser bParser : JavaModelParser.this.bundleParsers){
+					for (final BaseParser bParser : JavaModelParser.this.bundleParsers){
 			    		bParser.visitClassAnnotation(meta, annotationExpr);
 					}
 					
@@ -224,8 +223,8 @@ public class JavaModelParser {
 				if (!Strings.isNullOrEmpty(meta.name)) {
 					// Get list of Implement type
 					final List<ClassOrInterfaceType> impls = n.getImplements();
-					if(impls!=null){
-						for(final ClassOrInterfaceType impl : impls){					
+					if (impls!=null){
+						for (final ClassOrInterfaceType impl : impls){					
 							meta.implementTypes.add(impl.getName());
 							
 							// Debug Log
@@ -235,8 +234,8 @@ public class JavaModelParser {
 					
 					// Get Extend type
 					final List<ClassOrInterfaceType> exts = n.getExtends();
-					if(exts!=null){
-						for(final ClassOrInterfaceType ext : exts){					
+					if (exts!=null){
+						for (final ClassOrInterfaceType ext : exts){					
 							meta.extendType = ext.getName();		
 							
 							// Debug Log
@@ -246,8 +245,8 @@ public class JavaModelParser {
 					
 					// Get list of Members
 					/*List<BodyDeclaration> members = n.getMembers();
-					if(members!=null){
-						for(BodyDeclaration member : members){					
+					if (members!=null){
+						for (BodyDeclaration member : members){					
 							meta.members.add(member.getName());	///TODO Micky > Good or Trash ? [Gregg]	
 						}
 					}*/
@@ -261,7 +260,7 @@ public class JavaModelParser {
 		@Override
 		public void visit(final FieldDeclaration field, final ClassMetadata meta) {
 	    	// Call the parsers which have been registered by the bundle
-	    	for(final BaseParser bParser : JavaModelParser.this.bundleParsers){
+	    	for (final BaseParser bParser : JavaModelParser.this.bundleParsers){
 	    		bParser.visitField(field, meta);
 	    	}
 			
@@ -274,7 +273,7 @@ public class JavaModelParser {
 				fieldMeta.type = Type.toTypeString(field.getType().toString());
 				
 				// Java types Date and Time are deprecated in Harmony
-				if(fieldMeta.type.equalsIgnoreCase("date") || fieldMeta.type.equalsIgnoreCase("time")){
+				if (fieldMeta.type.equalsIgnoreCase("date") || fieldMeta.type.equalsIgnoreCase("time")){
 					ConsoleUtils.displayWarning("You should use DateTime java type instead of "+fieldMeta.type+". Errors may occur.");
 				}
 				//fieldMeta.isFinal = ModifierSet.isFinal(field.getModifiers());
@@ -295,7 +294,7 @@ public class JavaModelParser {
 					final String annotationType = annotationExpr.getName().toString();
 					
 
-			    	for(final BaseParser bParser : JavaModelParser.this.bundleParsers){
+			    	for (final BaseParser bParser : JavaModelParser.this.bundleParsers){
 			    		bParser.visitFieldAnnotation(fieldMeta, annotationExpr, meta);
 			    	}
 	
@@ -316,22 +315,22 @@ public class JavaModelParser {
 					final Type type = Type.fromName(fieldMeta.type);
 					if (type != null) {
 						fieldMeta.type = type.getValue();
-						if(fieldMeta.nullable == null) {
+						if (fieldMeta.nullable == null) {
 							fieldMeta.nullable = type.isNullable();
 						}
-						if(fieldMeta.unique == null) {
+						if (fieldMeta.unique == null) {
 							fieldMeta.unique = type.isUnique();
 						}
-						if(fieldMeta.length == null) {
+						if (fieldMeta.length == null) {
 							fieldMeta.length = type.getLength();
 						}
-						if(fieldMeta.precision == null) {
+						if (fieldMeta.precision == null) {
 							fieldMeta.precision = type.getPrecision();
 						}
-						if(fieldMeta.scale == null) {
+						if (fieldMeta.scale == null) {
 							fieldMeta.scale = type.getScale();
 						}
-						if(fieldMeta.isLocale == null) {
+						if (fieldMeta.isLocale == null) {
 							fieldMeta.isLocale = type.isLocale();
 						}
 					}
@@ -364,7 +363,7 @@ public class JavaModelParser {
 				
 				// Check SQLite reserved keywords
 				SqliteAdapter.Keywords.exists(fieldMeta.name);
-				if(!fieldMeta.name.equals(fieldMeta.columnName)) {
+				if (!fieldMeta.name.equals(fieldMeta.columnName)) {
 					SqliteAdapter.Keywords.exists(fieldMeta.columnName);
 				}
 				SqliteAdapter.Keywords.exists(fieldMeta.columnDefinition);
@@ -383,7 +382,7 @@ public class JavaModelParser {
 				final NormalAnnotationExpr norm = (NormalAnnotationExpr)annotationExpr;
 				
 				if (norm.getPairs()!=null) {
-					for(final MemberValuePair mvp : norm.getPairs()) { // Check if there are any arguments in the annotation
+					for (final MemberValuePair mvp : norm.getPairs()) { // Check if there are any arguments in the annotation
 						
 						// Argument of Annotation Column
 						if (annotationType.equals(FILTER_COLUMN)) { 
@@ -391,60 +390,60 @@ public class JavaModelParser {
 							if (mvp.getName().equals("nullable") && 
 									mvp.getValue().toString().equals("true")) {
 								fieldMeta.nullable = true;
-							}else 
+							} else 
 								
 							// set name
 							if (mvp.getName().equals("name")) {
-								if(mvp.getValue() instanceof StringLiteralExpr) {
+								if (mvp.getValue() instanceof StringLiteralExpr) {
 									fieldMeta.columnName = ((StringLiteralExpr)mvp.getValue()).getValue();
 								} else {
 									fieldMeta.columnName = mvp.getValue().toString();
 								}
-							}else 
+							} else 
 								
 							// Set unique 
 							if (mvp.getName().equals("unique") && 
 									mvp.getValue().toString().equals("true")) {
 								fieldMeta.unique = true;
-							}else 
+							} else 
 								
 							// set length
 							if (mvp.getName().equals("length")) {
 								fieldMeta.length = Integer.parseInt(mvp.getValue().toString());
-							}else 
+							} else 
 								
 							// set precision
 							if (mvp.getName().equals("precision")) {
 								fieldMeta.precision = Integer.parseInt(mvp.getValue().toString());
-							}else 
+							} else 
 								
 							// set scale
 							if (mvp.getName().equals("scale")) {
 								fieldMeta.scale = Integer.parseInt(mvp.getValue().toString());
-							}else
+							} else
 								
 							// set scale
 							if (mvp.getName().equals("locale")) {
 								fieldMeta.isLocale = Boolean.parseBoolean(mvp.getValue().toString());
-							}else 
+							} else 
 								
 							// set column definition
 							if (mvp.getName().equals("type")) {
 								//TODO : Generate warning if type not recognized
 								String type = "";
 								
-								if(mvp.getValue() instanceof StringLiteralExpr) {
+								if (mvp.getValue() instanceof StringLiteralExpr) {
 									type = ((StringLiteralExpr)mvp.getValue()).getValue();
 								} else {
 									type = mvp.getValue().toString();
 								}
 								
 								fieldMeta.type = Type.fromName(type).getValue();
-							}else
+							} else
 								
 							// set scale
 							if (mvp.getName().equals("columnDefinition")) {
-								if(mvp.getValue() instanceof StringLiteralExpr) {
+								if (mvp.getValue() instanceof StringLiteralExpr) {
 									fieldMeta.columnDefinition = ((StringLiteralExpr)mvp.getValue()).getValue();
 								} else {
 									fieldMeta.columnDefinition = mvp.getValue().toString();
@@ -459,19 +458,19 @@ public class JavaModelParser {
 						} else
 						
 						if (annotationType.equals(FILTER_JOINCOLUMN)) { // for @JoinColumn
-							if(mvp.getName().equals("name")){
+							if (mvp.getName().equals("name")){
 								rel.name = ((StringLiteralExpr)mvp.getValue()).getValue();
 							}
 						} else
 							
 						if (annotationType.equals(FILTER_ONE2MANY)){
-							if(mvp.getName().equals("mappedBy")){
+							if (mvp.getName().equals("mappedBy")){
 								rel.mappedBy = ((StringLiteralExpr)mvp.getValue()).getValue();
 							}
 						} else
 						
 						if (annotationType.equals(FILTER_MANY2ONE)){
-							if(mvp.getName().equals("inversedBy")){
+							if (mvp.getName().equals("inversedBy")){
 								rel.inversedBy = mvp.getValue().toString();
 							}
 						}
@@ -559,7 +558,7 @@ public class JavaModelParser {
 		@Override
 		public void visit(final MethodDeclaration method, final ClassMetadata meta) {
 	    	// Call the parsers which have been registered by the bundle
-	    	for(final BaseParser bParser : JavaModelParser.this.bundleParsers){
+	    	for (final BaseParser bParser : JavaModelParser.this.bundleParsers){
 	    		bParser.visitMethod(method, meta);
 	    	}
 			
@@ -570,8 +569,8 @@ public class JavaModelParser {
 			
 			// Add Parameters
 			final List<Parameter> parameters = method.getParameters();
-			if(parameters!=null){
-				for(final Parameter param : parameters){
+			if (parameters!=null){
+				for (final Parameter param : parameters){
 					methodMeta.argumentsTypes.add(param.getType().toString());
 				}
 			}
@@ -579,12 +578,12 @@ public class JavaModelParser {
 			meta.methods.add(methodMeta);
 			
 			// Debug Log
-			if(ConsoleUtils.debug){
+			if (ConsoleUtils.debug){
 				final StringBuilder builder = new StringBuilder(
 						String.format("\tMethod : %s %s(", methodMeta.type, methodMeta.name));
 				
-				for(final String args : methodMeta.argumentsTypes) {
-					if(!args.equals(methodMeta.argumentsTypes.get(0))) {
+				for (final String args : methodMeta.argumentsTypes) {
+					if (!args.equals(methodMeta.argumentsTypes.get(0))) {
 						builder.append(", ");
 					}
 					
@@ -603,7 +602,7 @@ public class JavaModelParser {
 		@Override
 		public void visit(final ImportDeclaration imp, final ClassMetadata meta) {
 	    	// Call the parsers which have been registered by the bundle
-	    	for(final BaseParser bParser : JavaModelParser.this.bundleParsers){
+	    	for (final BaseParser bParser : JavaModelParser.this.bundleParsers){
 	    		bParser.visitImport(imp, meta);
 	    	}
 	    	

@@ -90,7 +90,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		    	(field.type!="ean") && 
 		    	(field.type!="zipcode") && 
 		    	(field.type!="float"))>
-		if(this.model.get${field.name?cap_first}()!=null) {
+		if (this.model.get${field.name?cap_first}()!=null) {
 					<#if (field.type=="datetime" || field.type=="date" || field.type=="time")>
 						<#if (field.type=="datetime")>
 			this.${field.name}View.setText(DateUtils.formatDateTimeToString(model.get${field.name?cap_first}()));
@@ -112,7 +112,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}().getId())); 
 			<#else>
 		String ${field.name}Value = "";
-		for(${field.relation.targetEntity} item : this.model.get${field.name?cap_first}()){
+		for (${field.relation.targetEntity} item : this.model.get${field.name?cap_first}()){
 			${field.name}Value+=item.getId()+",";
 		}
 		this.${field.name}View.setText(${field.name}Value);

@@ -76,21 +76,21 @@ public class ProjectCommand extends BaseCommand {
 				ConsoleUtils.display(">> Project Parameters");
 
 				//Project Name
-				if(!this.commandArgs.containsKey("name")) {
+				if (!this.commandArgs.containsKey("name")) {
 					Harmony.initProjectName();
 				} else {
 					ApplicationMetadata.INSTANCE.name = this.commandArgs.get("name");
 				}
 					
 				//Project NameSpace
-				if(!this.commandArgs.containsKey("namespace")) {
+				if (!this.commandArgs.containsKey("namespace")) {
 					Harmony.initProjectNameSpace();
 				} else {
 					ApplicationMetadata.INSTANCE.projectNameSpace = this.commandArgs.get("namespace").replaceAll("\\.", "/");
 				}
 					
 				//Android sdk path
-				if(!this.commandArgs.containsKey("androidsdk")) {
+				if (!this.commandArgs.containsKey("androidsdk")) {
 					Harmony.initProjectAndroidSdkPath();
 				} else {
 					ApplicationMetadata.androidSdkPath = this.commandArgs.get("androidsdk");
@@ -133,7 +133,7 @@ public class ProjectCommand extends BaseCommand {
 		boolean result = false;
 
 		try {
-			if(new ProjectGenerator(this.adapterAndroid).makeProject()) {
+			if (new ProjectGenerator(this.adapterAndroid).makeProject()) {
 				ConsoleUtils.displayDebug("Init Android Project Success!");
 				
 				new ApplicationGenerator(this.adapterAndroid).generateApplication();
@@ -206,7 +206,7 @@ public class ProjectCommand extends BaseCommand {
 		this.initProjectParam();
 		boolean result = false;
 		
-		try{
+		try {
 			if (new ProjectGenerator(this.adapterWinPhone).makeProject()) {
 				ConsoleUtils.displayDebug("Init WinPhone Project Success!");
 				result = true;
@@ -240,7 +240,7 @@ public class ProjectCommand extends BaseCommand {
 		if (!this.userHasConfirmed) {
 			final String accept = Harmony.getUserInput("Are you sure to Delete Android Project? (y/n) ");
 			
-			if(accept.contains("n")) {
+			if (accept.contains("n")) {
 				return; 
 			}
 			
@@ -263,7 +263,7 @@ public class ProjectCommand extends BaseCommand {
 		if (!this.userHasConfirmed) {
 			final String accept = Harmony.getUserInput("Are you sure to Delete Apple iOS Project? (y/n) ");
 			
-			if(accept.contains("n")) { return; }
+			if (accept.contains("n")) { return; }
 			
 			this.userHasConfirmed = true;
 		}
@@ -281,11 +281,12 @@ public class ProjectCommand extends BaseCommand {
 	 * Remove RIM project folder
 	 */
 	public void removeRIM() {
-		if(!this.userHasConfirmed) {
-			final String accept = Harmony.getUserInput("Are you sure to Delete BlackBerry Rim Project? (y/n) ");
+		if (!this.userHasConfirmed) {
+			final String accept =
+					Harmony.getUserInput(
+							"Are you sure to Delete BlackBerry Rim Project? (y/n)");
 			
-			if(accept.contains("n"))
-			{ 
+			if (accept.contains("n")) { 
 				return; 
 			}
 			
@@ -314,7 +315,7 @@ public class ProjectCommand extends BaseCommand {
 		}
 		
 		try {
-			if(!new ProjectGenerator(this.adapterWinPhone).removeProject()) {
+			if (!new ProjectGenerator(this.adapterWinPhone).removeProject()) {
 				ConsoleUtils.display(ERROR_MSG);
 			}
 		} catch (final Exception e) {
@@ -326,10 +327,10 @@ public class ProjectCommand extends BaseCommand {
 	 * Remove all project platforms
 	 */
 	public void removeAll() {
-		if(!this.userHasConfirmed) {
+		if (!this.userHasConfirmed) {
 			final String accept = Harmony.getUserInput("Are you sure to Delete All Projects? (y/n) ");
 			
-			if(accept.contains("n")) { return; }
+			if (accept.contains("n")) { return; }
 			
 			this.userHasConfirmed = true;
 		}

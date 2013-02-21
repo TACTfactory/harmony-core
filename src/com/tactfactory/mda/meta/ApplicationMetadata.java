@@ -51,7 +51,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 		final Map<String, Object> entitiesMap = new HashMap<String, Object>();
 		
 		// Make Map for entities
-		for(final ClassMetadata cm : this.entities.values()){
+		for (final ClassMetadata cm : this.entities.values()){
 			entitiesMap.put(cm.name, cm.toMap(adapt));
 			cm.makeString("label");
 		}
@@ -78,7 +78,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 		
 		// Add Extra bundle
 		final HashMap<String, Object> optionsMap = new HashMap<String, Object>();
-		for(final Metadata bm : this.options.values()){
+		for (final Metadata bm : this.options.values()){
 			optionsMap.put(bm.getName(), bm.toMap(adapt));
 		}
 		ret.put(TagConstant.OPTIONS, optionsMap);
