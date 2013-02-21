@@ -33,7 +33,7 @@ public class FieldMetadata extends BaseMetadata {
 	public String columnDefinition;
 	
 	/** Field optional */
-	public Map<String, BaseMetadata> options = new HashMap<String, BaseMetadata>(); // (Not use...) for extra option of all bundle!
+	//public Map<String, BaseMetadata> options = new HashMap<String, BaseMetadata>(); // (Not use...) for extra option of all bundle!
 	
 	/** Relation mapped to this field*/
 	public RelationMetadata relation;
@@ -50,12 +50,6 @@ public class FieldMetadata extends BaseMetadata {
 	public boolean id;
 	
 	
-	/** GUI show field type */
-	public String customShowType;
-	
-	/** GUI edit field type */
-	public String customEditType;
-	
 	/** Is field hidden ? */
 	public boolean internal = false;
 	
@@ -63,12 +57,7 @@ public class FieldMetadata extends BaseMetadata {
 		super();
 		this.owner = owner;
 	}
-	
-	/** Customize edit and show GUI field */
-	/*public void customize(BaseAdapter adapter) {
-		this.customShowType = adapter.getViewComponentShow(this);
-		this.customEditType = adapter.getViewComponentEdit(this);
-	}*/
+
 	
 	/** Add Component String of field */
 	public void makeString(final String componentName) {
@@ -116,8 +105,6 @@ public class FieldMetadata extends BaseMetadata {
 		model.put(TagConstant.HIDDEN, 		this.hidden);
 		model.put(TagConstant.ID, 		    this.id);
 
-		//model.put(TagConstant.FIELD_CUSTOM_EDIT, 	this.customEditType);
-		//model.put(TagConstant.FIELD_CUSTOM_SHOW, 	this.customShowType);
 		
 		model.put(TagConstant.SCHEMA, 		SqliteAdapter.generateStructure(this.name,
 																			this.columnDefinition, 
@@ -136,7 +123,7 @@ public class FieldMetadata extends BaseMetadata {
 		}
 		
 		final HashMap<String, Object> optionsModel = new HashMap<String, Object>();
-		for (final BaseMetadata bm : this.options.values()){
+		for (final Metadata bm : this.options.values()){
 			optionsModel.put(bm.getName(), bm.toMap(adapter));
 		}
 		model.put(TagConstant.OPTIONS, optionsModel);

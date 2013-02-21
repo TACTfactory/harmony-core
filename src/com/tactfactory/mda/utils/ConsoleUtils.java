@@ -13,6 +13,7 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import print.color.Ansi.Attribute;
@@ -139,14 +140,18 @@ public abstract class ConsoleUtils {
 		}
 		
 		private static class InputBridge extends Thread{
-			private final BufferedReader processInput;
-			private final BufferedReader processError;
+			private BufferedReader processInput;
+			private BufferedReader processError;
 			private boolean isRunning;
 			
 			public InputBridge(final Process proc){
 				super();
-				this.processInput = new BufferedReader(new InputStreamReader(proc.getInputStream()));
-				this.processError = new BufferedReader(new InputStreamReader(proc.getErrorStream()));
+				try {
+					this.processInput = new BufferedReader(new InputStreamReader(proc.getInputStream(), FileUtils.DEFAULT_ENCODING));
+					this.processError = new BufferedReader(new InputStreamReader(proc.getErrorStream(), FileUtils.DEFAULT_ENCODING));
+				} catch (UnsupportedEncodingException e) {
+					ConsoleUtils.displayError(e);
+				}
 			}
 			
 			@Override
@@ -196,14 +201,18 @@ public abstract class ConsoleUtils {
 		}
 		
 		private static class OutputBridge extends Thread{
-			private final BufferedReader consoleInput;
-			private final BufferedWriter processOutput;
+			private BufferedReader consoleInput;
+			private BufferedWriter processOutput;
 			private boolean isRunning;
 			
 			public OutputBridge(final Process proc){
 				super();
-				this.processOutput = new BufferedWriter(new OutputStreamWriter(proc.getOutputStream()));
-				this.consoleInput = new BufferedReader(new InputStreamReader(System.in));
+				try {
+				this.processOutput = new BufferedWriter(new OutputStreamWriter(proc.getOutputStream(), FileUtils.DEFAULT_ENCODING));
+				this.consoleInput = new BufferedReader(new InputStreamReader(System.in, FileUtils.DEFAULT_ENCODING));
+				} catch (UnsupportedEncodingException e) {
+					ConsoleUtils.displayError(e);
+				}
 			}
 			
 			@Override

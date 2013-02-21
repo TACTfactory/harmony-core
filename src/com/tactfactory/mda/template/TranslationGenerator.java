@@ -104,7 +104,7 @@ public class TranslationGenerator extends BaseGenerator {
 			// Write to File
 			final XMLOutputter xmlOutput = new XMLOutputter();
 			xmlOutput.setFormat(Format.getPrettyFormat());			// Make beautiful file with indent !!!
-			xmlOutput.output(doc, new OutputStreamWriter(new FileOutputStream(xmlFile.getAbsoluteFile()), "UTF-8"));
+			xmlOutput.output(doc, new OutputStreamWriter(new FileOutputStream(xmlFile.getAbsoluteFile()), FileUtils.DEFAULT_ENCODING));
 			
 		} catch (final IOException io) {
 			ConsoleUtils.displayError(io);

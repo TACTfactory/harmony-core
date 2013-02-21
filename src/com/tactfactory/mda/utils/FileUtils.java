@@ -25,6 +25,7 @@ import java.util.List;
 
 /** Manipulate File tools */
 public abstract class FileUtils extends org.apache.commons.io.FileUtils {
+	public static final String DEFAULT_ENCODING = "UTF-8";
 	private static final int BUFFER_SIZE = 1024;
 	private static final String FOLDER 	= "Folder '";
 	private static final String FILE 	= "File '";
@@ -134,7 +135,7 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 			final byte[] buffer = new byte[(int) file.length()];
 			in = new DataInputStream(new FileInputStream(file));
 			in.readFully(buffer);
-			result = new String(buffer);
+			result = new String(buffer, FileUtils.DEFAULT_ENCODING);
 		} catch (final IOException e) {
 			throw new RuntimeException("IO problem in fileToString",
 					e);
@@ -161,7 +162,7 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		BufferedReader br = null;
 		try {
 			fis = new FileInputStream(file);
-			in = new InputStreamReader(fis);
+			in = new InputStreamReader(fis, FileUtils.DEFAULT_ENCODING);
 			br = new BufferedReader(in);
 			while (true) {
 				tmp = br.readLine();
@@ -202,7 +203,7 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		BufferedWriter bw = null;
 		try {
 			fos = new FileOutputStream(file);
-			out = new OutputStreamWriter(fos);
+			out = new OutputStreamWriter(fos, FileUtils.DEFAULT_ENCODING);
 			bw = new BufferedWriter(out);
 			bw.write(buff.toString());
 
@@ -236,7 +237,7 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		try {
 			result = new ArrayList<String>();
 			in = new DataInputStream(new FileInputStream(file));
-			br = new BufferedReader(new InputStreamReader(in));
+			br = new BufferedReader(new InputStreamReader(in, FileUtils.DEFAULT_ENCODING));
 			line = br.readLine(); 
 			while (line != null) {
 				result.add(line);

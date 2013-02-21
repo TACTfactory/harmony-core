@@ -15,7 +15,6 @@ import com.tactfactory.mda.utils.PackageUtils;
 
 public class SQLiteAdapterGenerator extends BaseGenerator {	
 	protected String localNameSpace;
-	protected boolean isWritable = true;
 
 	public SQLiteAdapterGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);

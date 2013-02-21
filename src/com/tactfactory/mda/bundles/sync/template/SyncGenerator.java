@@ -9,8 +9,10 @@
 package com.tactfactory.mda.bundles.sync.template;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.List;
 
 import org.jdom2.Document;
@@ -196,7 +198,7 @@ public class SyncGenerator extends BaseGenerator {
 
 				// display nice nice
 				xmlOutput.setFormat(Format.getPrettyFormat());				// Make beautiful file with indent !!!
-				xmlOutput.output(doc, new FileWriter(xmlFile.getAbsoluteFile()));
+				xmlOutput.output(doc, new OutputStreamWriter(new FileOutputStream(xmlFile.getAbsoluteFile()), FileUtils.DEFAULT_ENCODING));
 			}
 		} catch (final JDOMException e){
 			ConsoleUtils.displayError(e);

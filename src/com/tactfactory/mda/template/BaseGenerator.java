@@ -62,7 +62,7 @@ public abstract class BaseGenerator {
 				final Template tpl = this.cfg.getTemplate(templatePath);
 				
 				// Write and close
-				final OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(generateFile), "UTF-8");
+				final OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(generateFile), FileUtils.DEFAULT_ENCODING);
 				tpl.process(this.datamodel, output);
 				output.flush();
 				output.close();
@@ -96,7 +96,7 @@ public abstract class BaseGenerator {
 				final Template tpl = this.cfg.getTemplate(templatePath);
 				
 				// Write and close
-				final OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(generateFile, true), "UTF-8");
+				final OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(generateFile, true), FileUtils.DEFAULT_ENCODING);
 				tpl.process(this.datamodel, output);
 				output.flush();
 				output.close();

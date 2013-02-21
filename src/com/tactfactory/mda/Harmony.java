@@ -65,7 +65,7 @@ public class Harmony {
 	public static final String PATH_LIBS = PATH_HARMONY + "/lib";
 	
 	/** Project space */
-	public static String projectFolder = "android";
+	public static final String projectFolder = "android";
 	
 	/** Delimiter */
 	private static final String delimiter = "/";
@@ -205,11 +205,11 @@ public class Harmony {
 	 */
 	public static String getUserInput(final String promptMessage) {
 		String input = null;
-		
-		ConsoleUtils.display(promptMessage);
-		final BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
-
 		try {
+			ConsoleUtils.display(promptMessage);
+			final BufferedReader br = new BufferedReader(new InputStreamReader(System.in, FileUtils.DEFAULT_ENCODING));
+
+		
 			input = br.readLine();
 		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);
@@ -449,7 +449,7 @@ public class Harmony {
 		if (sdkProperties.exists()){
 			try {
 				final FileInputStream fis = new FileInputStream(sdkProperties);
-				final InputStreamReader isr = new InputStreamReader(fis);
+				final InputStreamReader isr = new InputStreamReader(fis, FileUtils.DEFAULT_ENCODING);
 				final BufferedReader br = new BufferedReader(isr);
 				String line = br.readLine();
 				while (line !=null){

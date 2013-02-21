@@ -357,7 +357,7 @@ public class ActivityGenerator extends BaseGenerator {
 
 		// Create
 		final Template tpl = cfg.getTemplate(this.adapter.getTemplateManifestPathFile());
-		final OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(file), "UTF-8");
+		final OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(file), FileUtils.DEFAULT_ENCODING);
 		tpl.process(this.datamodel, output);
 		output.flush();
 		output.close();
@@ -463,7 +463,7 @@ public class ActivityGenerator extends BaseGenerator {
 			xmlOutput.output(doc,
 							new OutputStreamWriter(
 								new FileOutputStream(xmlFile.getAbsoluteFile()),
-								"UTF-8"));
+								FileUtils.DEFAULT_ENCODING));
 		} catch (final IOException io) {
 			ConsoleUtils.displayError(io);
 		} catch (final JDOMException e) {

@@ -9,8 +9,12 @@
 package com.tactfactory.mda.bundles.search.template;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.Charset;
+import java.nio.charset.CharsetEncoder;
 import java.util.Comparator;
 import java.util.List;
 
@@ -187,7 +191,7 @@ public class SearchGenerator  extends BaseGenerator {
 
 			// display nice nice
 			xmlOutput.setFormat(Format.getPrettyFormat());				// Make beautiful file with indent !!!
-			xmlOutput.output(doc, new FileWriter(xmlFile.getAbsoluteFile()));
+			xmlOutput.output(doc, new OutputStreamWriter(new FileOutputStream(xmlFile.getAbsoluteFile()), FileUtils.DEFAULT_ENCODING));
 		} catch (final IOException io) {
 			ConsoleUtils.displayError(io);
 		} catch (final JDOMException e) {

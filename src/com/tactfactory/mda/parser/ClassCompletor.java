@@ -183,7 +183,7 @@ public class ClassCompletor {
 	}
 	
 	@SuppressWarnings("serial")
-	public class ConstraintException extends Exception {
+	public static class ConstraintException extends Exception {
 
 		public ConstraintException(final String msg) {
 			super(msg);

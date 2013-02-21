@@ -336,10 +336,14 @@ public class ProjectCommand extends BaseCommand {
 		}
 		
 		try {
-			if (!new ProjectGenerator(this.adapterAndroid).removeProject() |
-				!new ProjectGenerator(this.adapterIOS).removeProject() |
-				!new ProjectGenerator(this.adapterRIM).removeProject() |
-				!new ProjectGenerator(this.adapterWinPhone).removeProject() ) {
+			boolean removedAndroid = new ProjectGenerator(this.adapterAndroid).removeProject();
+			boolean removedIOS = new ProjectGenerator(this.adapterIOS).removeProject();
+			boolean removedRIM = new ProjectGenerator(this.adapterRIM).removeProject();
+			boolean removedWin = new ProjectGenerator(this.adapterWinPhone).removeProject();
+			if (!removedAndroid
+				|| !removedIOS
+				|| ! removedRIM
+				|| !removedWin ) {
 				ConsoleUtils.display(ERROR_MSG);
 			}
 		} catch (final Exception e) {

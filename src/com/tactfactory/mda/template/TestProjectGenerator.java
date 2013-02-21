@@ -10,18 +10,11 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 
 public class TestProjectGenerator extends BaseGenerator {
-	protected boolean isWritable = true;
 
 	public TestProjectGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 
 		this.datamodel = this.appMetas.toMap(this.adapter);
-	}
-
-	public TestProjectGenerator(final BaseAdapter adapter, final Boolean isWritable) throws Exception {
-		this(adapter);
-
-		this.isWritable = isWritable;
 	}
 
 	/**
