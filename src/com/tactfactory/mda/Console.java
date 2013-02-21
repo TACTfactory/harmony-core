@@ -69,7 +69,7 @@ public abstract class Console extends Harmony {
 			return value.equals(this.shortName) || value.equals(this.fullName);
 		}
 		
-		public static Option fromFullName(final String value){
+		public static Option fromFullName(final String value) {
 			Option ret = null;
 			if (value!= null) {
 				for (final Option option : Option.values()) {
@@ -82,7 +82,7 @@ public abstract class Console extends Harmony {
 			return ret;
 		}
 		
-		public static Option fromShortName(final String value){
+		public static Option fromShortName(final String value) {
 			Option ret = null;
 			if (value!= null) {
 				for (final Option option : Option.values()) {
@@ -144,7 +144,7 @@ public abstract class Console extends Harmony {
 		String[] commandArgs = null;
 		
 		// Extract optional command arguments
-		if (args.length > currentPosition){
+		if (args.length > currentPosition) {
 			commandArgs = Arrays.copyOfRange(args, currentPosition, args.length);
 		}
 		
@@ -235,15 +235,15 @@ public abstract class Console extends Harmony {
 	 * @param args String array of command arguments with their identifier
 	 * @return HashMap<String,String> arguments
 	 */
-	public static HashMap<String,String> parseCommandArgs(final String[] args){
+	public static HashMap<String,String> parseCommandArgs(final String[] args) {
 		
 		final HashMap<String,String> commandArgs = new HashMap<String,String>();
-		if (args!=null && args.length!=0){
-			for (final String arg : args){
-				if (arg.startsWith(ARGUMENT_PREFIX)){
+		if (args!=null && args.length!=0) {
+			for (final String arg : args) {
+				if (arg.startsWith(ARGUMENT_PREFIX)) {
 					final String[] key = arg.split(ARGUMENT_AFFECT);
 					
-					if (key.length > 1){
+					if (key.length > 1) {
 						commandArgs.put(key[0].substring(2),key[1]);
 					}
 				}

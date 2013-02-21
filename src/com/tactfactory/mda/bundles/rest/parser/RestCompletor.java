@@ -14,11 +14,11 @@ import com.tactfactory.mda.meta.ClassMetadata;
 
 public class RestCompletor {
 	
-	public void generateApplicationRestMetadata(final ApplicationMetadata am){
-		for (final ClassMetadata cm : am.entities.values()){
-			if (cm.options.containsKey("rest")){
+	public void generateApplicationRestMetadata(final ApplicationMetadata am) {
+		for (final ClassMetadata cm : am.entities.values()) {
+			if (cm.options.containsKey("rest")) {
 				final RestMetadata rm = (RestMetadata)cm.options.get("rest");
-				if (rm.uri==null || rm.uri.equals("")){
+				if (rm.uri==null || rm.uri.equals("")) {
 					rm.uri = cm.name;
 				}
 			}

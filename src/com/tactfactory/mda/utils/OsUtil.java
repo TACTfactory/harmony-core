@@ -102,7 +102,7 @@ public abstract class OsUtil {
 				// try to find it by looking at the file system
 				for (char drive = OsUtil.BEGIN; drive < OsUtil.END; drive++) {
 					File root = new File(drive + ":\\WINDOWS");
-					if (root.exists() && root.isDirectory()){
+					if (root.exists() && root.isDirectory()) {
 						sysRoot = root.getAbsolutePath().toString();
 					}
 		

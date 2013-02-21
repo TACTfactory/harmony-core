@@ -59,7 +59,7 @@ public class SearchParser  extends BaseParser{
 	public void visitFieldAnnotation(final FieldMetadata field,
 			final AnnotationExpr fieldAnnot, final ClassMetadata meta) {
 
-		if (fieldAnnot.getName().toString().equals(ANNOT_SEARCHABLE)){
+		if (fieldAnnot.getName().toString().equals(ANNOT_SEARCHABLE)) {
 			final SearchMetadata sm = new SearchMetadata();
 			field.options.put(SEARCH, sm);
 		}

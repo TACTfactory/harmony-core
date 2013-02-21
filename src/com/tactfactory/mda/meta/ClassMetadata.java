@@ -63,7 +63,7 @@ public class ClassMetadata extends BaseMetadata {
 	 * @return the map
 	 */
 	@Override
-	public Map<String, Object> toMap(final BaseAdapter adapter){
+	public Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		
 		model.put(TagConstant.SPACE,			this.space);
@@ -83,7 +83,7 @@ public class ClassMetadata extends BaseMetadata {
 		}
 		
 		final Map<String, Object> optionsModel = new HashMap<String, Object>();
-		for (final Metadata option : this.options.values()){
+		for (final Metadata option : this.options.values()) {
 			optionsModel.put(option.getName(), option.toMap(adapter));
 		}
 		model.put(TagConstant.OPTIONS, optionsModel);
@@ -91,7 +91,7 @@ public class ClassMetadata extends BaseMetadata {
 		return model;
 	}
 	
-	private List<Map<String,Object>> toFieldArray(final Collection<FieldMetadata> c, final BaseAdapter adapter){
+	private List<Map<String,Object>> toFieldArray(final Collection<FieldMetadata> c, final BaseAdapter adapter) {
 		final List<Map<String,Object>> result = new ArrayList<Map<String,Object>>();
 		Map<String, Object> subField = null;
 		

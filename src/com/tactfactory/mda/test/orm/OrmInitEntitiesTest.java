@@ -230,7 +230,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	}
 	
 	@Test
-	public void hasUserFieldAnnotations(){
+	public void hasUserFieldAnnotations() {
 		this.isFieldNullable(userMeta, "id", false);
 		this.isFieldNullable(userMeta, LOGIN, false);
 		this.isFieldNullable(userMeta, PASSWORD, false);
@@ -346,7 +346,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 * @param classMeta
 	 * @param fieldName
 	 */
-	private void isFieldUnique(final ClassMetadata classMeta, final String fieldName, final boolean unique){
+	private void isFieldUnique(final ClassMetadata classMeta, final String fieldName, final boolean unique) {
 		if (unique) {
 			Assert.assertTrue(MSG_CHECK_IF_FIELD +fieldName +" is unique", classMeta.fields.get(fieldName).unique);
 		} else {
@@ -358,7 +358,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 * @param classMeta
 	 * @param fieldName
 	 */
-	private void hasFieldColumnName(final ClassMetadata classMeta, final String fieldName, final String name){
+	private void hasFieldColumnName(final ClassMetadata classMeta, final String fieldName, final String name) {
 		Assert.assertEquals(classMeta.fields.get(fieldName).columnName,name);
 	}
 	
@@ -366,7 +366,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 * @param classMeta
 	 * @param fieldName
 	 */
-	private void isFieldLength(final ClassMetadata classMeta, final String fieldName, final int length){
+	private void isFieldLength(final ClassMetadata classMeta, final String fieldName, final int length) {
 		Assert.assertEquals(classMeta.fields.get(fieldName).length,Integer.valueOf(length));
 	}
 }

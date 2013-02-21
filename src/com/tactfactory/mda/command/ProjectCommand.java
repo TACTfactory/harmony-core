@@ -269,7 +269,7 @@ public class ProjectCommand extends BaseCommand {
 		}
 		
 		try {
-			if (!new ProjectGenerator(this.adapterIOS).removeProject()){
+			if (!new ProjectGenerator(this.adapterIOS).removeProject()) {
 				ConsoleUtils.display(ERROR_MSG);
 			}
 		} catch (final Exception e) {

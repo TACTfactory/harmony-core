@@ -53,7 +53,7 @@ public class RestCommand extends BaseCommand{
 	protected void generateAdapters() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities!=null){
+		if (ApplicationMetadata.INSTANCE.entities!=null) {
 			try {
 				new RestGenerator(new AndroidAdapter()).generateAll();
 			} catch (final Exception e) {
@@ -64,7 +64,7 @@ public class RestCommand extends BaseCommand{
 	}
 	
 	@Override
-	public void generateMetas(){
+	public void generateMetas() {
 		this.registerParser(new RestParser());
 		super.generateMetas();
 		new RestCompletor().generateApplicationRestMetadata(ApplicationMetadata.INSTANCE);

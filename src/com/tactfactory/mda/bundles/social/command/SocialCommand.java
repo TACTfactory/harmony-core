@@ -52,7 +52,7 @@ public class SocialCommand extends BaseCommand{
 	protected void generateAdapters() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities!=null){
+		if (ApplicationMetadata.INSTANCE.entities!=null) {
 			try {
 				new SocialGenerator(new AndroidAdapter()).generateMenu();
 			} catch (final Exception e) {
@@ -63,7 +63,7 @@ public class SocialCommand extends BaseCommand{
 	}
 	
 	@Override
-	public void generateMetas(){
+	public void generateMetas() {
 		this.registerParser(new SocialParser());
 		super.generateMetas();
 	}

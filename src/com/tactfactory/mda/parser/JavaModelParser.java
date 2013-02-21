@@ -53,27 +53,73 @@ import com.tactfactory.mda.plateforme.SqliteAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
+/**
+ * Parses a group of java files
+ * @author Gregg Cesarine
+ *
+ */
 public class JavaModelParser {
-	private static final String FILE_EXT = ".java";
-	private static final String PATH_ENTITY = "/entity/";
+	/** Extension. */
+	private static final String FILE_EXT =
+			".java";
+	
+	/** Entity path. */
+	private static final String PATH_ENTITY = 
+			"/entity/";
 	
 
-	private static final String FILTER_ENTITY	 	= PackageUtils.extractNameEntity(Entity.class);
-	private static final String FILTER_ID	 		= PackageUtils.extractNameEntity(Id.class);
-	private static final String FILTER_COLUMN 		= PackageUtils.extractNameEntity(Column.class);
-	private static final String FILTER_JOINCOLUMN 	= PackageUtils.extractNameEntity(JoinColumn.class);
-	private static final String FILTER_ONE2ONE 		= PackageUtils.extractNameEntity(OneToOne.class);
-	private static final String FILTER_ONE2MANY 	= PackageUtils.extractNameEntity(OneToMany.class);
-	private static final String FILTER_MANY2ONE 	= PackageUtils.extractNameEntity(ManyToOne.class);
-	private static final String FILTER_MANY2MANY 	= PackageUtils.extractNameEntity(ManyToMany.class);
+	/** Entity annotation name. */
+	private static final String FILTER_ENTITY	 	= 
+			PackageUtils.extractNameEntity(Entity.class);
+	
+	/** Id annotation name. */
+	private static final String FILTER_ID	 		= 
+			PackageUtils.extractNameEntity(Id.class);
+	
+	/** Column annotation name. */
+	private static final String FILTER_COLUMN 		= 
+			PackageUtils.extractNameEntity(Column.class);
+	
+	/** JoinColumn annotation name. */
+	private static final String FILTER_JOINCOLUMN 	= 
+			PackageUtils.extractNameEntity(JoinColumn.class);
+	
+	/** OneToOne annotation name. */
+	private static final String FILTER_ONE2ONE 		= 
+			PackageUtils.extractNameEntity(OneToOne.class);
+	
+	/** OneToMany annotation name. */
+	private static final String FILTER_ONE2MANY 	= 
+			PackageUtils.extractNameEntity(OneToMany.class);
+	
+	/** ManyToOne annotation name. */
+	private static final String FILTER_MANY2ONE 	= 
+			PackageUtils.extractNameEntity(ManyToOne.class);
+	
+	/** ManyToMany annotation name. */
+	private static final String FILTER_MANY2MANY 	= 
+			PackageUtils.extractNameEntity(ManyToMany.class);
 
 
-	private List<CompilationUnit> entities = new ArrayList<CompilationUnit>();
-	private final List<ClassMetadata> metas = new ArrayList<ClassMetadata>();
-	private final List<BaseParser> bundleParsers = new ArrayList<BaseParser>();
+	/** Entities compilations units (used by JavaParser). */
+	private List<CompilationUnit> entities = 
+			new ArrayList<CompilationUnit>();
+	
+	/** Entity metadatas. */
+	private final List<ClassMetadata> metas =
+			new ArrayList<ClassMetadata>();
+	
+	/** List of all the bundles parsers. */
+	private final List<BaseParser> bundleParsers = 
+			new ArrayList<BaseParser>();
+	
+	/** Adapter used to retrieves entity files. */
 	private final BaseAdapter adapter = new AndroidAdapter();
+	
+	/** Entity files path. */
 	private final String entityPath = this.adapter.getSourcePath() + ApplicationMetadata.INSTANCE.projectNameSpace.replaceAll("\\.", "/") + PATH_ENTITY;
 	
+	/** Filter for java files only*/
 	private final FilenameFilter filter = new FilenameFilter() {
 	    @Override
 		public boolean accept(final File dir, final String name) {
@@ -81,7 +127,12 @@ public class JavaModelParser {
 	    }
 	};
 	
-	public void registerParser(final BaseParser parser){
+	
+	/**
+	 * Register a parser to the general parser.
+	 * @param parser
+	 */
+	public void registerParser(final BaseParser parser) {
 		this.bundleParsers.add(parser);
 	}
 	
@@ -179,7 +230,7 @@ public class JavaModelParser {
 			
 			new ClassVisitor().visit(mclass, meta);
 			if (!Strings.isNullOrEmpty(meta.name)) {
-				new ImportVisitor().visit(mclass,meta);
+				new ImportVisitor().visit(mclass, meta);
 				new FieldVisitor().visit(mclass, meta);
 				new MethodVisitor().visit(mclass, meta);
 				
@@ -193,16 +244,16 @@ public class JavaModelParser {
 	    @Override
 	    public void visit(final ClassOrInterfaceDeclaration n, final ClassMetadata meta) {
 	    	// Call the parsers which have been registered by the bundle
-	    	for (final BaseParser bParser : JavaModelParser.this.bundleParsers){
+	    	for (final BaseParser bParser : JavaModelParser.this.bundleParsers) {
 	    		
 	    		bParser.visitClass(n, meta);
 	    	}
 
 	    	final List<AnnotationExpr> classAnnotations = n.getAnnotations();
-			if (classAnnotations!=null) {
+			if (classAnnotations != null) {
 				for (final AnnotationExpr annotationExpr : classAnnotations) {
 
-					for (final BaseParser bParser : JavaModelParser.this.bundleParsers){
+					for (final BaseParser bParser : JavaModelParser.this.bundleParsers) {
 			    		bParser.visitClassAnnotation(meta, annotationExpr);
 					}
 					
@@ -223,8 +274,8 @@ public class JavaModelParser {
 				if (!Strings.isNullOrEmpty(meta.name)) {
 					// Get list of Implement type
 					final List<ClassOrInterfaceType> impls = n.getImplements();
-					if (impls!=null){
-						for (final ClassOrInterfaceType impl : impls){					
+					if (impls != null) {
+						for (final ClassOrInterfaceType impl : impls) {					
 							meta.implementTypes.add(impl.getName());
 							
 							// Debug Log
@@ -234,8 +285,8 @@ public class JavaModelParser {
 					
 					// Get Extend type
 					final List<ClassOrInterfaceType> exts = n.getExtends();
-					if (exts!=null){
-						for (final ClassOrInterfaceType ext : exts){					
+					if (exts != null) {
+						for (final ClassOrInterfaceType ext : exts) {					
 							meta.extendType = ext.getName();		
 							
 							// Debug Log
@@ -245,8 +296,8 @@ public class JavaModelParser {
 					
 					// Get list of Members
 					/*List<BodyDeclaration> members = n.getMembers();
-					if (members!=null){
-						for (BodyDeclaration member : members){					
+					if (members!=null) {
+						for (BodyDeclaration member : members) {					
 							meta.members.add(member.getName());	///TODO Micky > Good or Trash ? [Gregg]	
 						}
 					}*/
@@ -260,7 +311,7 @@ public class JavaModelParser {
 		@Override
 		public void visit(final FieldDeclaration field, final ClassMetadata meta) {
 	    	// Call the parsers which have been registered by the bundle
-	    	for (final BaseParser bParser : JavaModelParser.this.bundleParsers){
+	    	for (final BaseParser bParser : JavaModelParser.this.bundleParsers) {
 	    		bParser.visitField(field, meta);
 	    	}
 			
@@ -273,7 +324,7 @@ public class JavaModelParser {
 				fieldMeta.type = Type.toTypeString(field.getType().toString());
 				
 				// Java types Date and Time are deprecated in Harmony
-				if (fieldMeta.type.equalsIgnoreCase("date") || fieldMeta.type.equalsIgnoreCase("time")){
+				if (fieldMeta.type.equalsIgnoreCase("date") || fieldMeta.type.equalsIgnoreCase("time")) {
 					ConsoleUtils.displayWarning("You should use DateTime java type instead of "+fieldMeta.type+". Errors may occur.");
 				}
 				//fieldMeta.isFinal = ModifierSet.isFinal(field.getModifiers());
@@ -294,7 +345,7 @@ public class JavaModelParser {
 					final String annotationType = annotationExpr.getName().toString();
 					
 
-			    	for (final BaseParser bParser : JavaModelParser.this.bundleParsers){
+			    	for (final BaseParser bParser : JavaModelParser.this.bundleParsers) {
 			    		bParser.visitFieldAnnotation(fieldMeta, annotationExpr, meta);
 			    	}
 	
@@ -305,7 +356,7 @@ public class JavaModelParser {
 					if (annotationType.equals(FILTER_ONE2ONE)	||
 							annotationType.equals(FILTER_ONE2MANY)	||
 							annotationType.equals(FILTER_MANY2ONE)	||
-							annotationType.equals(FILTER_MANY2MANY)	){
+							annotationType.equals(FILTER_MANY2MANY)	) {
 						rel.type = annotationType;
 					}
 					
@@ -451,26 +502,26 @@ public class JavaModelParser {
 							} else 
 						
 							// set if hide column view
-							if (mvp.getName().equals("hidden") && mvp.getValue().toString().equals("true")){
+							if (mvp.getName().equals("hidden") && mvp.getValue().toString().equals("true")) {
 								fieldMeta.hidden = true;
 							}
 							
 						} else
 						
 						if (annotationType.equals(FILTER_JOINCOLUMN)) { // for @JoinColumn
-							if (mvp.getName().equals("name")){
+							if (mvp.getName().equals("name")) {
 								rel.name = ((StringLiteralExpr)mvp.getValue()).getValue();
 							}
 						} else
 							
-						if (annotationType.equals(FILTER_ONE2MANY)){
-							if (mvp.getName().equals("mappedBy")){
+						if (annotationType.equals(FILTER_ONE2MANY)) {
+							if (mvp.getName().equals("mappedBy")) {
 								rel.mappedBy = ((StringLiteralExpr)mvp.getValue()).getValue();
 							}
 						} else
 						
-						if (annotationType.equals(FILTER_MANY2ONE)){
-							if (mvp.getName().equals("inversedBy")){
+						if (annotationType.equals(FILTER_MANY2ONE)) {
+							if (mvp.getName().equals("inversedBy")) {
 								rel.inversedBy = mvp.getValue().toString();
 							}
 						}
@@ -558,7 +609,7 @@ public class JavaModelParser {
 		@Override
 		public void visit(final MethodDeclaration method, final ClassMetadata meta) {
 	    	// Call the parsers which have been registered by the bundle
-	    	for (final BaseParser bParser : JavaModelParser.this.bundleParsers){
+	    	for (final BaseParser bParser : JavaModelParser.this.bundleParsers) {
 	    		bParser.visitMethod(method, meta);
 	    	}
 			
@@ -569,8 +620,8 @@ public class JavaModelParser {
 			
 			// Add Parameters
 			final List<Parameter> parameters = method.getParameters();
-			if (parameters!=null){
-				for (final Parameter param : parameters){
+			if (parameters!=null) {
+				for (final Parameter param : parameters) {
 					methodMeta.argumentsTypes.add(param.getType().toString());
 				}
 			}
@@ -578,7 +629,7 @@ public class JavaModelParser {
 			meta.methods.add(methodMeta);
 			
 			// Debug Log
-			if (ConsoleUtils.debug){
+			if (ConsoleUtils.debug) {
 				final StringBuilder builder = new StringBuilder(
 						String.format("\tMethod : %s %s(", methodMeta.type, methodMeta.name));
 				
@@ -602,7 +653,7 @@ public class JavaModelParser {
 		@Override
 		public void visit(final ImportDeclaration imp, final ClassMetadata meta) {
 	    	// Call the parsers which have been registered by the bundle
-	    	for (final BaseParser bParser : JavaModelParser.this.bundleParsers){
+	    	for (final BaseParser bParser : JavaModelParser.this.bundleParsers) {
 	    		bParser.visitImport(imp, meta);
 	    	}
 	    	

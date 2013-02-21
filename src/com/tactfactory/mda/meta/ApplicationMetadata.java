@@ -38,7 +38,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 	/** List of config use in application */
 	public Map<String, ConfigMetadata> configs = new TreeMap<String, ConfigMetadata>();
 	
-	private ApplicationMetadata(){}
+	private ApplicationMetadata() {}
 	
 	/**
 	 * Transform the application to a map given an adapter
@@ -46,12 +46,12 @@ public final class ApplicationMetadata extends BaseMetadata {
 	 * @return the map
 	 */
 	@Override
-	public Map<String, Object> toMap(final BaseAdapter adapt){
+	public Map<String, Object> toMap(final BaseAdapter adapt) {
 		final Map<String, Object> ret = new HashMap<String, Object>();
 		final Map<String, Object> entitiesMap = new HashMap<String, Object>();
 		
 		// Make Map for entities
-		for (final ClassMetadata cm : this.entities.values()){
+		for (final ClassMetadata cm : this.entities.values()) {
 			entitiesMap.put(cm.name, cm.toMap(adapt));
 			cm.makeString("label");
 		}
@@ -78,7 +78,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 		
 		// Add Extra bundle
 		final HashMap<String, Object> optionsMap = new HashMap<String, Object>();
-		for (final Metadata bm : this.options.values()){
+		for (final Metadata bm : this.options.values()) {
 			optionsMap.put(bm.getName(), bm.toMap(adapt));
 		}
 		ret.put(TagConstant.OPTIONS, optionsMap);

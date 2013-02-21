@@ -58,19 +58,19 @@ public class RestParser extends BaseParser{
 	@Override
 	public void visitClassAnnotation(final ClassMetadata cm,
 			final AnnotationExpr fieldAnnot) {
-		if (fieldAnnot.getName().toString().equals(ANNOT_REST)){
+		if (fieldAnnot.getName().toString().equals(ANNOT_REST)) {
 			final RestMetadata rm = new RestMetadata();
 			rm.isEnabled = true;
 			if (fieldAnnot instanceof NormalAnnotationExpr) {
 				final NormalAnnotationExpr norm = (NormalAnnotationExpr)fieldAnnot;
 				final List<MemberValuePair> pairs = norm.getPairs();
-				if (pairs!=null){
-					for (final MemberValuePair pair : pairs){
-						if (pair.getName().equals(ANNOT_REST_SECURITY)){
+				if (pairs!=null) {
+					for (final MemberValuePair pair : pairs) {
+						if (pair.getName().equals(ANNOT_REST_SECURITY)) {
 							//TODO : Generate warning if type not recognized
 							String security = "";
 							
-							if (pair.getValue() instanceof StringLiteralExpr){
+							if (pair.getValue() instanceof StringLiteralExpr) {
 								security = ((StringLiteralExpr)pair.getValue()).getValue();
 							} else {
 								security = pair.getValue().toString();
@@ -79,8 +79,8 @@ public class RestParser extends BaseParser{
 							rm.security = Rest.Security.fromName(security);
 						} else
 						
-						if (pair.getName().equals(ANNOT_REST_URI)){
-							if (pair.getValue() instanceof StringLiteralExpr){
+						if (pair.getName().equals(ANNOT_REST_URI)) {
+							if (pair.getValue() instanceof StringLiteralExpr) {
 								rm.uri = ((StringLiteralExpr)pair.getValue()).getValue();
 							} else {
 								rm.uri = pair.getValue().toString();

@@ -35,11 +35,11 @@ public class TranslationMetadata {
 			this.value = value;
 		}
 		
-		public int getValue(){
+		public int getValue() {
 			return this.value;
 		}
 		
-		public static Group fromValue(final int value){
+		public static Group fromValue(final int value) {
 			Group ret = null;
 			for (final Group group : Group.values()) {
 				if (value == group.value) {

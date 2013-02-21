@@ -32,13 +32,13 @@ public abstract class PackageUtils {
 		return bundlePackage.replace('.', '/');
 	}
 	
-	public static String extractClassNameFromArray(final String arrayName){
+	public static String extractClassNameFromArray(final String arrayName) {
 		String cName = arrayName;
-		if (arrayName.indexOf('<')>=0){
+		if (arrayName.indexOf('<')>=0) {
 			cName = arrayName.substring(
 						arrayName.indexOf('<')+1,
 						arrayName.indexOf('>'));
-		} else if (arrayName.contains("[]")){
+		} else if (arrayName.contains("[]")) {
 			cName = arrayName.substring(0, arrayName.indexOf('['));
 		}
 		

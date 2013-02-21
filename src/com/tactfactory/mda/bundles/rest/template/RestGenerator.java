@@ -36,7 +36,7 @@ public class RestGenerator extends BaseGenerator {
 		}
 	}
 	
-	protected void generateWSAdapter(){
+	protected void generateWSAdapter() {
 		this.updateLibrary("httpmime-4.1.1.jar");
 		
 		TranslationMetadata.addDefaultTranslation("common_network_error", "Connection error", Group.COMMON);

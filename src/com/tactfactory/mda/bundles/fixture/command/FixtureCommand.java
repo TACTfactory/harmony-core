@@ -43,25 +43,25 @@ public class FixtureCommand extends BaseCommand{
 		this.commandArgs = Console.parseCommandArgs(args);
 		if (action.equals(FIXTURE_INIT)) {
 			this.init();
-		} else if (action.equals(FIXTURE_LOAD)){
+		} else if (action.equals(FIXTURE_LOAD)) {
 			this.load();
-		} else if (action.equals(FIXTURE_PURGE)){
+		} else if (action.equals(FIXTURE_PURGE)) {
 			this.purge();
-		} else if (action.equals(FIXTURE_UPDATE)){
+		} else if (action.equals(FIXTURE_UPDATE)) {
 			this.update();
 		}
 		
 	}
 	
-	public void init(){
+	public void init() {
 		try {
 			this.generateMetas();
 			final FixtureMetadata fixtureMeta = new FixtureMetadata();
 			//TODO : get type by user input
 			fixtureMeta.type = "yml";
-			if (this.commandArgs.containsKey("format")){
+			if (this.commandArgs.containsKey("format")) {
 				final String format = this.commandArgs.get("format");
-				if (format.equals("xml") || format.equals("yml")){
+				if (format.equals("xml") || format.equals("yml")) {
 					fixtureMeta.type = format; 
 				}
 			}
@@ -73,7 +73,7 @@ public class FixtureCommand extends BaseCommand{
 		}
 	}
 	
-	public void load(){
+	public void load() {
 		try {
 			new FixtureGenerator(new AndroidAdapter()).load();
 		} catch (final Exception e) {
@@ -82,7 +82,7 @@ public class FixtureCommand extends BaseCommand{
 		}
 	}
 	
-	public void purge(){
+	public void purge() {
 		try {
 			this.generateMetas();
 			new FixtureGenerator(new AndroidAdapter()).purge();
@@ -92,7 +92,7 @@ public class FixtureCommand extends BaseCommand{
 		}
 	}
 	
-	public void update(){
+	public void update() {
 		
 	}
 

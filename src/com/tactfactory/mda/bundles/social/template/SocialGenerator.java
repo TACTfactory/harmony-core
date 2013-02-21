@@ -10,7 +10,7 @@ public class SocialGenerator  extends BaseGenerator {
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void generateMenu(){
+	public void generateMenu() {
 		this.datamodel = this.appMetas.toMap(this.adapter);
 		this.makeMenu(true);
 	}

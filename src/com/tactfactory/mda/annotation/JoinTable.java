@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 
 
 /**
- * Annotation defining which name to use as a JoinTable
+ * Annotation defining which name to use as a JoinTable.
  * @author gregg
  *
  */

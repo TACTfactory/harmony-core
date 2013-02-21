@@ -34,10 +34,10 @@ public abstract class BaseCommand implements Command {
 	 * Gets the Metadatas of all the entities actually in the package entity
 	 * You can register your own bundle parsers with the method this.javaModelParser.registerParser() 
 	 */
-	public void generateMetas(){
+	public void generateMetas() {
 		ConsoleUtils.display(">> Analyse Models...");
 		this.javaModelParser = new JavaModelParser();
-		for (final BaseParser parser : this.registeredParsers){
+		for (final BaseParser parser : this.registeredParsers) {
 			this.javaModelParser.registerParser(parser);
 		}
 		// Parse models and load entities into CompilationUnits
@@ -65,7 +65,7 @@ public abstract class BaseCommand implements Command {
 		}
 	}
 	
-	public void registerParser(final BaseParser parser){
+	public void registerParser(final BaseParser parser) {
 		this.registeredParsers.add(parser);
 	}
 }

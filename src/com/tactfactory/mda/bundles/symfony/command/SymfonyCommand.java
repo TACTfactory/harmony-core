@@ -48,15 +48,15 @@ public class SymfonyCommand extends BaseCommand{
 		ConsoleUtils.display("> Adapters Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);
-		if (action.equals(GENERATE_ENTITIES)){
+		if (action.equals(GENERATE_ENTITIES)) {
 			this.generateEntities();
-		} else if (action.equals(GENERATE_REPOSITORIES)){
+		} else if (action.equals(GENERATE_REPOSITORIES)) {
 			this.generateWebRepositories();
-		} else if (action.equals(PROJECT_INIT)){
+		} else if (action.equals(PROJECT_INIT)) {
 			this.initProject();
-		} else if (action.equals(INSTALL_BUNDLES)){
+		} else if (action.equals(INSTALL_BUNDLES)) {
 			this.installBundles();
-		} else if (action.equals(INSTALL_SYMFONY)){
+		} else if (action.equals(INSTALL_SYMFONY)) {
 			this.installSymfony();
 		}
 	}
@@ -67,7 +67,7 @@ public class SymfonyCommand extends BaseCommand{
 	protected void initProject() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities!=null){
+		if (ApplicationMetadata.INSTANCE.entities!=null) {
 			try {
 				new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).initProject();
 			} catch (final Exception e) {
@@ -83,7 +83,7 @@ public class SymfonyCommand extends BaseCommand{
 	protected void generateEntities() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities!=null){
+		if (ApplicationMetadata.INSTANCE.entities!=null) {
 			try {
 				new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).generateEntities();
 			} catch (final Exception e) {
@@ -99,7 +99,7 @@ public class SymfonyCommand extends BaseCommand{
 	protected void generateWebRepositories() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities!=null){
+		if (ApplicationMetadata.INSTANCE.entities!=null) {
 			try {
 				new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).generateWebControllers();
 			} catch (final Exception e) {
@@ -132,7 +132,7 @@ public class SymfonyCommand extends BaseCommand{
 	}
 	
 	@Override
-	public void generateMetas(){
+	public void generateMetas() {
 		this.registerParser(new RestParser());
 		super.generateMetas();
 		new RestCompletor().generateApplicationRestMetadata(ApplicationMetadata.INSTANCE);

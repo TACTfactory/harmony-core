@@ -62,7 +62,7 @@ public abstract class TagConstant {
 	public static class AndroidSDK {
 		private final String dir;
 
-		public AndroidSDK(final String dir){
+		public AndroidSDK(final String dir) {
 			this.dir = dir;
 		}
 		

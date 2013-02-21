@@ -97,7 +97,7 @@ public abstract class ConsoleUtils {
 	}
 	
 	
-	public static void launchCommand(final List<String> command){
+	public static void launchCommand(final List<String> command) {
 		try {
 			final ProcessBuilder pb = new ProcessBuilder(command);
 			final Process exec = pb.start();
@@ -124,17 +124,17 @@ public abstract class ConsoleUtils {
 		private final InputBridge in;
 		private final OutputBridge out;
 		
-		public ProcessToConsoleBridge(final Process proc){
+		public ProcessToConsoleBridge(final Process proc) {
 			this.in = new InputBridge(proc);
 			this.out = new OutputBridge(proc);
 		}
 		
-		public void start(){
+		public void start() {
 			this.in.start();
 			this.out.start();
 		}
 		
-		public void stop(){
+		public void stop() {
 			this.in.terminate();
 			this.out.terminate();
 		}
@@ -144,7 +144,7 @@ public abstract class ConsoleUtils {
 			private BufferedReader processError;
 			private boolean isRunning;
 			
-			public InputBridge(final Process proc){
+			public InputBridge(final Process proc) {
 				super();
 				try {
 					this.processInput = new BufferedReader(new InputStreamReader(proc.getInputStream(), FileUtils.DEFAULT_ENCODING));
@@ -156,26 +156,26 @@ public abstract class ConsoleUtils {
 			
 			@Override
 			public void run() {
-				while (this.isRunning){
+				while (this.isRunning) {
 					try {
-						if (!(this.processInput.ready() || this.processError.ready())){
+						if (!(this.processInput.ready() || this.processError.ready())) {
 							Thread.sleep(200);
 						}
-						if (this.processInput.ready()){
+						if (this.processInput.ready()) {
 							final String input  = this.processInput.readLine();
-							if (input!=null && !input.isEmpty()){
+							if (input!=null && !input.isEmpty()) {
 								ConsoleUtils.display(input);
 							}
 						}
-						if (this.processError.ready()){
+						if (this.processError.ready()) {
 							final String error = this.processError.readLine();
-							if (error!=null && !error.isEmpty()){
+							if (error!=null && !error.isEmpty()) {
 								ConsoleUtils.displayError(new Exception(error));
 							}
 						}
-					} catch (final InterruptedException e){
+					} catch (final InterruptedException e) {
 						ConsoleUtils.displayError(e);
-					} catch (final IOException e){
+					} catch (final IOException e) {
 						ConsoleUtils.displayError(e);
 					}
 				}
@@ -205,7 +205,7 @@ public abstract class ConsoleUtils {
 			private BufferedWriter processOutput;
 			private boolean isRunning;
 			
-			public OutputBridge(final Process proc){
+			public OutputBridge(final Process proc) {
 				super();
 				try {
 				this.processOutput = new BufferedWriter(new OutputStreamWriter(proc.getOutputStream(), FileUtils.DEFAULT_ENCODING));
@@ -217,12 +217,12 @@ public abstract class ConsoleUtils {
 			
 			@Override
 			public void run() {
-				while (this.isRunning){
+				while (this.isRunning) {
 					try {
 						String output = null;
-						if (this.consoleInput.ready()){
+						if (this.consoleInput.ready()) {
 							output = this.consoleInput.readLine();
-							if (output!=null && !output.isEmpty()){
+							if (output!=null && !output.isEmpty()) {
 								this.processOutput.write(output);
 							}
 						} else {

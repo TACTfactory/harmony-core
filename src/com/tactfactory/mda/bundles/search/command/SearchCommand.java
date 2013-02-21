@@ -52,7 +52,7 @@ public class SearchCommand  extends BaseCommand{
 	protected void generateLoaders() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities!=null){
+		if (ApplicationMetadata.INSTANCE.entities!=null) {
 			try {
 				new SearchGenerator(new AndroidAdapter()).generateAll();
 			} catch (final Exception e) {
@@ -63,7 +63,7 @@ public class SearchCommand  extends BaseCommand{
 	}
 	
 	@Override
-	public void generateMetas(){
+	public void generateMetas() {
 		this.registerParser(new SearchParser());
 		super.generateMetas();
 		//new SearchCompletor().generateApplicationRestMetadata(Harmony.metas);

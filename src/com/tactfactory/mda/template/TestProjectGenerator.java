@@ -21,7 +21,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	 * Make Platform specific Project Structure
 	 * @return success to make the platform test project folder
 	 */
-	public boolean makeProject(){
+	public boolean makeProject() {
 		boolean result = false;
 		if (this.adapter.getPlatform().equals("android")) {
 			result = this.makeTestProjectAndroid();
@@ -85,7 +85,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	 * Make IOS Test Project Structure
 	 * @return success to make the platform test project folder
 	 */
-	private boolean makeTestProjectIOS(){
+	private boolean makeTestProjectIOS() {
 		boolean result = false;
 		
 		//Generate base folders & files
@@ -105,7 +105,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	 * Make RIM Test Project Structure
 	 * @return success to make the platform test project folder
 	 */
-	private boolean makeTestProjectRIM(){
+	private boolean makeTestProjectRIM() {
 		final boolean result = false;
 
 		return result;
@@ -115,7 +115,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	 * Make Windows Phone Test Project Structure
 	 * @return success to make the platform test project folder
 	 */
-	private boolean makeTestProjectWinPhone(){
+	private boolean makeTestProjectWinPhone() {
 		final boolean result = false;
 
 		return result;

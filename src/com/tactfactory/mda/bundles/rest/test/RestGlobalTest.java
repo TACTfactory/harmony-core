@@ -99,49 +99,49 @@ public class RestGlobalTest extends CommonTest{
 	}
 	
 	@Test
-	public void isUserRest(){
+	public void isUserRest() {
 		this.isRest(ApplicationMetadata.INSTANCE.entities.get(USER));
 	}
 	
 	@Test
-	public void isCommentRest(){
+	public void isCommentRest() {
 		this.isRest(ApplicationMetadata.INSTANCE.entities.get(COMMENT));
 	}
 	
 	@Test
-	public void isPostRest(){
+	public void isPostRest() {
 		this.isRest(ApplicationMetadata.INSTANCE.entities.get(POST));
 	}
 	
 	@Test
-	public void hasPostUri(){
+	public void hasPostUri() {
 		this.hasUri(ApplicationMetadata.INSTANCE.entities.get(POST), POST);
 	}
 	
 	@Test
-	public void hasUserUri(){
+	public void hasUserUri() {
 		this.hasUri(ApplicationMetadata.INSTANCE.entities.get(USER), "user-uri");
 	}
 	
 	@Test
-	public void hasPostSecurity(){
+	public void hasPostSecurity() {
 		this.hasSecurity(ApplicationMetadata.INSTANCE.entities.get(POST), Rest.Security.NONE);
 	}
 	
 	@Test
-	public void hasUserSecurity(){
+	public void hasUserSecurity() {
 		this.hasSecurity(ApplicationMetadata.INSTANCE.entities.get(USER), Rest.Security.SESSION);
 	}
 	
-	private void isRest(final ClassMetadata cm){
+	private void isRest(final ClassMetadata cm) {
 		Assert.assertTrue("Check if rest " + cm.name, cm.options.containsKey(REST));
 	}
 	
-	private void hasUri(final ClassMetadata cm, final String value){
+	private void hasUri(final ClassMetadata cm, final String value) {
 		Assert.assertTrue("Check if URI of " + cm.name + " is "+value, ((RestMetadata)cm.options.get(REST)).uri.equals(value));
 	}
 	
-	private void hasSecurity(final ClassMetadata cm, final Rest.Security value){
+	private void hasSecurity(final ClassMetadata cm, final Rest.Security value) {
 		Assert.assertTrue("Check if SECURITY of " + cm.name + " is "+value.getValue(), ((RestMetadata)cm.options.get(REST)).security.equals(value));
 	}
 	

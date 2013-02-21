@@ -39,7 +39,7 @@ public class GeneralCommand extends BaseCommand {
 		general.summary();
 		
 		for (final Command baseCommand : Harmony.instance.getCommands()) {
-			if (baseCommand != general){
+			if (baseCommand != general) {
 				baseCommand.summary();
 			}
 		}

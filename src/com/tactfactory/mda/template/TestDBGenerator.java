@@ -26,8 +26,8 @@ public class TestDBGenerator extends BaseGenerator {
 		
 		this.initTestAndroid();
 	
-		for (final ClassMetadata cm : this.appMetas.entities.values()){
-			if (!cm.internal && !cm.fields.isEmpty()){
+		for (final ClassMetadata cm : this.appMetas.entities.values()) {
+			if (!cm.internal && !cm.fields.isEmpty()) {
 				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getTest());
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
 				this.generate();
@@ -89,7 +89,7 @@ public class TestDBGenerator extends BaseGenerator {
 		boolean result = false;
 
 		try {
-			if (new TestProjectGenerator(this.adapter).makeProject()){
+			if (new TestProjectGenerator(this.adapter).makeProject()) {
 				ConsoleUtils.displayDebug("Init Test Android Project Success!");
 				
 				result = true;

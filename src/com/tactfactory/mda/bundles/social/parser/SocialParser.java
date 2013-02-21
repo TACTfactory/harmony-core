@@ -52,7 +52,7 @@ public class SocialParser extends BaseParser{
 	@Override
 	public void visitClassAnnotation(final ClassMetadata cm,
 			final AnnotationExpr fieldAnnot) {
-		if (fieldAnnot.getName().toString().equals(ANNOT_SOCIAL)){
+		if (fieldAnnot.getName().toString().equals(ANNOT_SOCIAL)) {
 			final SocialMetadata rm = new SocialMetadata();
 			rm.isEnabled = true;
 			cm.options.put(SOCIAL, rm);

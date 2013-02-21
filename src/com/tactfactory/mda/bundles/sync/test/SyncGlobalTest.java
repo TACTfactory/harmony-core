@@ -96,54 +96,54 @@ public class SyncGlobalTest extends CommonTest{
 	}
 	
 	@Test
-	public void isUserSync(){
+	public void isUserSync() {
 		this.isSync(ApplicationMetadata.INSTANCE.entities.get(USER));
 	}
 	
 	@Test
-	public void isCommentSync(){
+	public void isCommentSync() {
 		this.isSync(ApplicationMetadata.INSTANCE.entities.get(COMMENT));
 	}
 	
 	@Test
-	public void isPostSync(){
+	public void isPostSync() {
 		this.isSync(ApplicationMetadata.INSTANCE.entities.get(POST));
 	}
 	
 	@Test
-	public void hasPostSyncParameters(){
+	public void hasPostSyncParameters() {
 		this.hasLevel(ApplicationMetadata.INSTANCE.entities.get(POST), Level.GLOBAL);
 		this.hasMode(ApplicationMetadata.INSTANCE.entities.get(POST), Mode.POOLING);
 		this.hasPriority(ApplicationMetadata.INSTANCE.entities.get(POST), 1);
 	}
 	
 	@Test
-	public void hasUserSyncParameters(){
+	public void hasUserSyncParameters() {
 		this.hasLevel(ApplicationMetadata.INSTANCE.entities.get(USER), Level.GLOBAL);
 		this.hasMode(ApplicationMetadata.INSTANCE.entities.get(USER), Mode.REAL_TIME);
 		this.hasPriority(ApplicationMetadata.INSTANCE.entities.get(USER), 1);
 	}
 	
 	@Test
-	public void hasCommentSyncParameters(){
+	public void hasCommentSyncParameters() {
 		this.hasLevel(ApplicationMetadata.INSTANCE.entities.get(COMMENT), Level.SESSION);
 		this.hasMode(ApplicationMetadata.INSTANCE.entities.get(COMMENT), Mode.REAL_TIME);
 		this.hasPriority(ApplicationMetadata.INSTANCE.entities.get(COMMENT), Priority.LOW);
 	}
 	
-	private void isSync(final ClassMetadata cm){
+	private void isSync(final ClassMetadata cm) {
 		Assert.assertTrue("Check if sync " + cm.name, cm.options.containsKey(SYNC));
 	}
 	
-	private void hasMode(final ClassMetadata cm, final Sync.Mode value){
+	private void hasMode(final ClassMetadata cm, final Sync.Mode value) {
 		Assert.assertTrue("Check if Mode of " + cm.name + " is "+value.getValue(), ((SyncMetadata)cm.options.get(SYNC)).mode.equals(value));
 	}
 	
-	private void hasLevel(final ClassMetadata cm, final Sync.Level value){
+	private void hasLevel(final ClassMetadata cm, final Sync.Level value) {
 		Assert.assertTrue("Check if Level of " + cm.name + " is "+value.getValue(), ((SyncMetadata)cm.options.get(SYNC)).level.equals(value));
 	}
 	
-	private void hasPriority(final ClassMetadata cm, final int value){
+	private void hasPriority(final ClassMetadata cm, final int value) {
 		Assert.assertTrue("Check if Priority of " + cm.name + " is "+value, ((SyncMetadata)cm.options.get(SYNC)).priority == value);
 	}
 	

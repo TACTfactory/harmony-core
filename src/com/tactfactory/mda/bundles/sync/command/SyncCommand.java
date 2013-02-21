@@ -54,7 +54,7 @@ public class SyncCommand extends BaseCommand{
 	protected void generateAdapters() {
 		//Harmony.metas.entities = getMetasFromAll();
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities!=null){
+		if (ApplicationMetadata.INSTANCE.entities!=null) {
 			try {
 				new SyncGenerator(new AndroidAdapter()).generateAll();
 			} catch (final Exception e) {
@@ -66,7 +66,7 @@ public class SyncCommand extends BaseCommand{
 	}
 	
 	@Override
-	public void generateMetas(){
+	public void generateMetas() {
 		this.registerParser(new RestParser());
 		this.registerParser(new SyncParser());
 		super.generateMetas();
