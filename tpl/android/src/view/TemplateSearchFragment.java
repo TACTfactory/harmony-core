@@ -3,8 +3,8 @@
 package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
-import ${project_namespace}.HarmonyFragment;
-import ${project_namespace}.HarmonyFragmentActivity;
+import ${project_namespace}.harmony.view.HarmonyFragment;
+import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 
 import ${curr.namespace}.criterias.${curr.name?cap_first}Criterias ;
 import ${curr.namespace}.criterias.base.Criteria.Type ;

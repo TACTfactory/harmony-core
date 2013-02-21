@@ -4,8 +4,8 @@ package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
 
-import ${project_namespace}.HarmonyFragmentActivity;
-import ${project_namespace}.HarmonyFragment;
+import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
+import ${project_namespace}.harmony.view.HarmonyFragment;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
