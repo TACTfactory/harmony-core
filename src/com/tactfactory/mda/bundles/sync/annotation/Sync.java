@@ -20,7 +20,9 @@ import java.lang.reflect.Field;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
- * To mark a entity for synchronize between local and remote persistence the @Sync annotation is used.
+ * To mark a entity for synchronize
+ * between local and remote persistence
+ * the @Sync annotation is used.
  */
 @Documented
 @Retention(SOURCE)
@@ -153,23 +155,17 @@ public @interface Sync {
 	}
 	
 	/**
-	 * Synchronization Level of entity
-	 * 
-	 * @return (optional, defaults to GLOBAL) The level to use for synchronize.
+	 * Synchronization Level of entity.
 	 */
 	Level level() default Level.GLOBAL;
 	
 	/**
-	 * Synchronization mode of entity
-	 * 
-	 * @return (optional, defaults to POOLING) The mode to use for synchronize.
+	 * Synchronization mode of entity.
 	 */
 	Mode mode() default Mode.POOLING;
 	
 	/**
-	 * Synchronization priority of entity
-	 * 
-	 * @return (optional, defaults to 1) The ratio priority to use for synchronize.
+	 * Synchronization priority of entity.
 	 */
 	int priority() default 1;
 }
