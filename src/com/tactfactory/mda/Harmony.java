@@ -19,6 +19,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.regex.Pattern;
 
 import net.xeoh.plugins.base.PluginManager;
 import net.xeoh.plugins.base.impl.PluginManagerFactory;
@@ -249,9 +250,16 @@ public class Harmony {
 					good=true;
 					
 				} else {
-					if (projectNameSpace.toLowerCase(Locale.ENGLISH).endsWith(ApplicationMetadata.INSTANCE.name.toLowerCase())){
-						ApplicationMetadata.INSTANCE.projectNameSpace = projectNameSpace.replaceAll("\\.", delimiter);
-						good = true;
+					if (projectNameSpace.toLowerCase(Locale.ENGLISH).endsWith(
+									ApplicationMetadata.INSTANCE.name.toLowerCase())){
+						
+						String namespaceForm = "^(((([a-z0-9_]+).)*)([a-z0-9_]+))$";
+						if (Pattern.matches(projectNameSpace,namespaceForm)) {
+							ApplicationMetadata.INSTANCE.projectNameSpace = projectNameSpace.replaceAll("\\.", delimiter);
+							good = true;
+						} else {
+							ConsoleUtils.display("You can't use special characters except '.' in the NameSpace.");
+						}
 					} else {
 						ConsoleUtils.display("The NameSpace has to end with Project Name !");
 					}
