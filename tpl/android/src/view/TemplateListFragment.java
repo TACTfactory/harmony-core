@@ -1,10 +1,8 @@
 <#assign curr = entities[current_entity] />
 package ${curr.controller_namespace};
 
-import java.util.ArrayList;
 import java.util.List;
 
-import ${project_namespace}.criterias.base.Criteria;
 import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
 
 import android.content.Intent;
@@ -21,7 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.AdapterView.OnItemLongClickListener;
 
-import ${project_namespace}.HarmonyListFragment;
+import ${project_namespace}.harmony.view.HarmonyListFragment;
 
 import ${curr.namespace}.R;
 import ${curr.namespace}.entity.${curr.name};
