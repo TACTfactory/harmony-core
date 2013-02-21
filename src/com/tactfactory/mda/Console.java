@@ -121,15 +121,19 @@ public abstract class Console extends Harmony {
 					+ Option.ANSI 
 					+ Option.NO_ANSI);
 
-			ConsoleUtils.display("Tips : please use 'list' command to display available commands!\n");
+			ConsoleUtils.display("Tips : please use 'list' command to"
+					 + " display available commands!\n");
 			
 		} else {
 			final String commandOption = null;
 			
 			// Extract Argument
-			final int currentPosition 	= Console.extractOptions(args);
-			final String command 			= Console.extractCommand(args, currentPosition);
-			final String[] commandArgs 	= Console.extractCommandArgument(args, currentPosition + 1);
+			final int currentPosition 	= 
+					Console.extractOptions(args);
+			final String command 		=
+					Console.extractCommand(args, currentPosition);
+			final String[] commandArgs 	= 
+					Console.extractCommandArgument(args, currentPosition + 1);
 
 			
 			// Harmony command launch
@@ -144,12 +148,15 @@ public abstract class Console extends Harmony {
 	 * @param commandArgs
 	 * @return
 	 */
-	private static String[] extractCommandArgument(final String[] args, final int currentPosition) {
+	private static String[] extractCommandArgument(final String[] args,
+				final int currentPosition) {
 		String[] commandArgs = null;
 		
 		// Extract optional command arguments
 		if (args.length > currentPosition) {
-			commandArgs = Arrays.copyOfRange(args, currentPosition, args.length);
+			commandArgs = Arrays.copyOfRange(args,
+					currentPosition, 
+					args.length);
 		}
 		
 		return commandArgs;
