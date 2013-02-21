@@ -16,8 +16,8 @@ import com.tactfactory.mda.meta.BaseMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
-public class SyncMetadata extends BaseMetadata{
-	private final static String NAME = "sync";
+public class SyncMetadata extends BaseMetadata {
+	private static final String NAME = "sync";
 	
 	public Level level = Level.GLOBAL;
 	public Mode mode = Mode.POOLING;

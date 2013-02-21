@@ -28,30 +28,32 @@ import com.tactfactory.mda.bundles.sync.annotation.Sync.Mode;
 // Annotation with default and forced value/parameter
 @Table
 @Entity
-@Rest(security=Security.SESSION)
-@Sync(level=Level.SESSION, mode=Mode.REAL_TIME, priority=Sync.Priority.LOW)
+@Rest(security = Security.SESSION)
+@Sync(level = Level.SESSION,
+	mode = Mode.REAL_TIME,
+	priority = Sync.Priority.LOW)
 @SuppressWarnings(value = "serial")
 public class Comment implements Serializable { //TODO extends EntityBase {
 	
 	@Id
-    @Column(type=Type.INTEGER, hidden=true)
-    @GeneratedValue(strategy="IDENTITY")
-    protected int id;
+    @Column(type = Type.INTEGER, hidden = true)
+    @GeneratedValue(strategy = "IDENTITY")
+    private int id;
 
-	@Column(length=2000, type=Type.TEXT)
-    protected String content;
+	@Column(length = 2000, type = Type.TEXT)
+    private String content;
 	
 	@ManyToOne
-	protected User owner;
+	private User owner;
 	
 	@ManyToOne
-	protected Post post;
+	private Post post;
 	
-	@Column(name="created_at")	// type="datetime",
-    protected DateTime createdAt;
+	@Column(name = "created_at")	// typ ="datetime",
+    private DateTime createdAt;
 	
 	@Column
-	protected boolean validate = false;
+	private boolean validate = false;
 
 	public Comment() {
 		this.id = -1;

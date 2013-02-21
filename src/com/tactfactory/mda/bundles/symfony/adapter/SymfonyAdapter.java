@@ -10,7 +10,7 @@ package com.tactfactory.mda.bundles.symfony.adapter;
 
 import com.tactfactory.mda.Harmony;
 
-public class SymfonyAdapter{
+public class SymfonyAdapter {
 	protected String webRoot = "www";	
 	protected String webPlatform = "Symfony";	
 	protected String config = "config";

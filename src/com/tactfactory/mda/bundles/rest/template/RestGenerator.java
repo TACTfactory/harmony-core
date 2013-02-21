@@ -59,15 +59,15 @@ public class RestGenerator extends BaseGenerator {
 				true);
 		
 		for (final ClassMetadata cm : this.appMetas.entities.values()) {
-			if (cm.options.get("rest")!=null) {
+			if (cm.options.get("rest") != null) {
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
-				this.makeSource( 
+				this.makeSource(
 						"base/TemplateWebServiceClientAdapterBase.java", 
-						"base/"+cm.name+"WebServiceClientAdapterBase.java", 
+						"base/" + cm.name + "WebServiceClientAdapterBase.java", 
 						true);
 				this.makeSource(
 						"TemplateWebServiceClientAdapter.java", 
-						cm.name+"WebServiceClientAdapter.java", 
+						cm.name + "WebServiceClientAdapter.java", 
 						true);
 			}
 		}	

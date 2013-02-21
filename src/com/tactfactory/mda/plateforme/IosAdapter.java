@@ -16,7 +16,7 @@ public final class IosAdapter extends BaseAdapter {
 	/**
 	 * Constructor.
 	 */
-	public IosAdapter()	{
+	public IosAdapter()	 {
 		super();
 		this.project	= "project";
 		this.platform	= "ios";

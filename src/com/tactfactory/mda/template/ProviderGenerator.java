@@ -32,14 +32,19 @@ import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
 public class ProviderGenerator extends BaseGenerator {
-	protected String localNameSpace;
-	protected String nameProvider;
+	private String localNameSpace;
+	private String nameProvider;
 	
 	public ProviderGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
-		this.nameProvider = CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name + "Provider");
-		this.localNameSpace = this.appMetas.projectNameSpace.replace('/', '.') +"."+ this.adapter.getProvider();
+		this.nameProvider = 
+				CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, 
+						this.appMetas.name + "Provider");
+		this.localNameSpace = 
+				this.appMetas.projectNameSpace.replace('/', '.') 
+				+ "." 
+				+ this.adapter.getProvider();
 		
 
 		this.datamodel = this.appMetas.toMap(this.adapter);
@@ -47,9 +52,10 @@ public class ProviderGenerator extends BaseGenerator {
 		this.datamodel.put(TagConstant.LOCAL_NAMESPACE, this.localNameSpace);
 	}
 	
-	public void generateProvider() {
+	public final void generateProvider() {
 		try {
-			this.makeSourceProvider("TemplateProvider.java", this.nameProvider + ".java");
+			this.makeSourceProvider("TemplateProvider.java",
+					this.nameProvider + ".java");
 			
 			this.updateManifest(this.nameProvider);
 			
@@ -75,14 +81,17 @@ public class ProviderGenerator extends BaseGenerator {
 	/** 
 	 * Make Java Source Code
 	 * 
-	 * @param template Template path file. <br/>For list activity is "TemplateListActivity.java"
+	 * @param template Template path file. 
+	 * <br/>For list activity is "TemplateListActivity.java"
 	 * @param filename
 	 */
-	private void makeSourceProvider(final String template, final String filename) {
+	private void makeSourceProvider(final String template, 
+			final String filename) {
 		
 		final String fullFilePath = String.format("%s%s/%s",
 						this.adapter.getSourcePath(),
-						PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
+						PackageUtils.extractPath(this.localNameSpace)
+							.toLowerCase(),
 						filename);
 		
 		final String fullTemplatePath = String.format("%s%s",
@@ -100,27 +109,43 @@ public class ProviderGenerator extends BaseGenerator {
 	private void updateManifest(final String nameProvider) {
 		final String pathRelatif = String.format("%s.%s",
 				this.localNameSpace, 
-				nameProvider );
+				nameProvider);
 
 		// Debug Log
 		ConsoleUtils.displayDebug("Update Manifest : " + pathRelatif);
 
 		try {
-			final SAXBuilder builder = new SAXBuilder();		// Make engine
-			final File xmlFile = FileUtils.makeFile(this.adapter.getManifestPathFile());
-			final Document doc = builder.build(xmlFile); 	// Load XML File
-			final Element rootNode = doc.getRootElement(); 			// Load Root element
-			final Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
+			// Make engine
+			final SAXBuilder builder = new SAXBuilder();		
+			final File xmlFile 
+				= FileUtils.makeFile(this.adapter.getManifestPathFile());
+			
+			// Load XML File
+			final Document doc = builder.build(xmlFile);
+			
+			// Load Root element
+			final Element rootNode = doc.getRootElement(); 			
+			
+			// Load Name space (required for manipulate attributes)
+			final Namespace ns = rootNode.getNamespace("android");	
 
 			// Find Application Node
 			Element findProvider = null;
-			final Element applicationNode = rootNode.getChild("application"); 	// Find a element
+			
+			// Find a element
+			final Element applicationNode = rootNode.getChild("application"); 	
 			if (applicationNode != null) {
 
 				// Find Activity Node
-				final List<Element> providers = applicationNode.getChildren("provider"); 	// Find many elements
+				final List<Element> providers 
+						= applicationNode.getChildren("provider");
+				
+				// Find many elements
 				for (final Element provider : providers) {
-					if (provider.hasAttributes() && provider.getAttributeValue("name",ns).equals(pathRelatif) ) {	// Load attribute value
+					if (provider.hasAttributes() 
+							&& provider.getAttributeValue("name", ns)
+									.equals(pathRelatif)) {	
+						// Load attribute value
 						findProvider = provider;
 						break;
 					}
@@ -128,16 +153,22 @@ public class ProviderGenerator extends BaseGenerator {
 
 				// If not found Node, create it
 				if (findProvider == null) {
-					findProvider = new Element("provider");				// Create new element
-					findProvider.setAttribute("name", pathRelatif, ns);	// Add Attributes to element
+					// Create new element
+					findProvider = new Element("provider");
+					
+					// Add Attributes to element
+					findProvider.setAttribute("name", pathRelatif, ns);	
 
 					applicationNode.addContent(findProvider);
 				}
 
 				// Set values
-				findProvider.setAttribute("authorities", 	this.appMetas.projectNameSpace.replace('/', '.'), ns);
-				findProvider.setAttribute("label", 			"@string/app_provider_name", ns);
-				findProvider.setAttribute("description", 	"@string/app_provider_description", ns);
+				findProvider.setAttribute("authorities", 	
+						this.appMetas.projectNameSpace.replace('/', '.'), ns);
+				findProvider.setAttribute("label", 			
+						"@string/app_provider_name", ns);
+				findProvider.setAttribute("description", 	
+						"@string/app_provider_description", ns);
 				
 				// Clean code
 				applicationNode.sortChildren(new Comparator<Element>() {
@@ -152,9 +183,12 @@ public class ProviderGenerator extends BaseGenerator {
 			// Write to File
 			final XMLOutputter xmlOutput = new XMLOutputter();
 
-			// display nice nice
-			xmlOutput.setFormat(Format.getPrettyFormat());				// Make beautiful file with indent !!!
-			xmlOutput.output(doc, new OutputStreamWriter(new FileOutputStream(xmlFile.getAbsoluteFile()), FileUtils.DEFAULT_ENCODING));
+			// Make beautiful file with indent !!!
+			xmlOutput.setFormat(Format.getPrettyFormat());				
+			xmlOutput.output(doc,
+					new OutputStreamWriter(
+							new FileOutputStream(xmlFile.getAbsoluteFile()),
+									FileUtils.DEFAULT_ENCODING));
 		} catch (final IOException io) {
 			ConsoleUtils.displayError(io);
 		} catch (final JDOMException e) {

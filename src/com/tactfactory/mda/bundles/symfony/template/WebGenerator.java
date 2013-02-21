@@ -49,10 +49,10 @@ public final class WebGenerator extends BaseGenerator {
 		String fullFilePath = 
 				this.symfonyAdapter.getWebBundleYmlEntitiesPath(
 						this.projectName)
-				+ "EntityBase.orm.yml";
+				 + "EntityBase.orm.yml";
 		String fullTemplatePath = 
 				this.symfonyAdapter.getWebTemplateEntityPath().substring(1)
-				+ "EntityBase.orm.yml";
+				 + "EntityBase.orm.yml";
 		super.makeSource(fullTemplatePath, fullFilePath, false);
 		
 
@@ -60,10 +60,10 @@ public final class WebGenerator extends BaseGenerator {
 		fullFilePath = 
 				this.symfonyAdapter.getWebEntitiesPath(
 						this.projectName)
-				+ "EntityBase.php";
+				 + "EntityBase.php";
 		fullTemplatePath = 
 				this.symfonyAdapter.getWebTemplateEntityPath().substring(1)
-				+ "EntityBase.php";
+				 + "EntityBase.php";
 		super.makeSource(fullTemplatePath, fullFilePath, true);
 		
 		// Generate yml descriptor files
@@ -85,8 +85,8 @@ public final class WebGenerator extends BaseGenerator {
 				final String filePath = 
 						this.symfonyAdapter.getWebEntitiesPath(
 								this.projectName) 
-						+ cm.name 
-						+ ".php";
+						 + cm.name 
+						 + ".php";
 				this.addAfter(content, after, filePath);
 			}
 		}
@@ -96,10 +96,10 @@ public final class WebGenerator extends BaseGenerator {
 		final String fullFilePath = 
 				this.symfonyAdapter.getWebControllerPath(
 						this.projectName)
-				+ "RestDefaultController.php";
+				 + "RestDefaultController.php";
 		final String fullTemplatePath = 
 				this.symfonyAdapter.getWebTemplateControllerPath().substring(1)
-				+ "RestDefaultController.php";
+				 + "RestDefaultController.php";
 		
 		super.makeSource(fullTemplatePath, fullFilePath, true);
 		
@@ -107,9 +107,9 @@ public final class WebGenerator extends BaseGenerator {
 				this.symfonyAdapter.getWebPath() + "app/config/routing.yml";
 		final String content = 
 				this.appMetas.name 
-				+ "_rest_default:\n    type:     rest\n    resource: "
-				+ this.projectName
-				+ "\\ApiBundle\\Controller\\RestDefaultController\n\n";
+				 + "_rest_default:\n    type:     rest\n    resource: "
+				 + this.projectName
+				 + "\\ApiBundle\\Controller\\RestDefaultController\n\n";
 		this.addToFile(content, routingPath);
 		
 		for (final ClassMetadata cm : this.appMetas.entities.values()) {
@@ -143,20 +143,20 @@ public final class WebGenerator extends BaseGenerator {
 		
 		final File configTplFile = 
 				new File(this.symfonyAdapter.getWebTemplateConfigPath()
-						+ "config.yml");
+						 + "config.yml");
 		final StringBuffer sb = FileUtils.fileToStringBuffer(configTplFile);
 		final File configFile = 
 				new File(this.symfonyAdapter.getWebPath()
-						+ "app/config/config.yml");
+						 + "app/config/config.yml");
 		FileUtils.appendToFile(sb.toString(), configFile);
 		
 		final String restBundleLoad =
-				"\n\t\tnew FOS\\RestBundle\\FOSRestBundle(),";
+				"\n\t\tnew FOS\\RestBundle\\FOSRestBundle(), ";
 		this.addAfter(restBundleLoad,
 					"$bundles = array(",
 					this.symfonyAdapter.getWebPath() + "app/AppKernel.php");
 		final String serializerBundleLoad = 
-				"\n\t\tnew JMS\\SerializerBundle\\JMSSerializerBundle(),";
+				"\n\t\tnew JMS\\SerializerBundle\\JMSSerializerBundle(), ";
 		this.addAfter(serializerBundleLoad, 
 				restBundleLoad, 
 				this.symfonyAdapter.getWebPath() + "app/AppKernel.php");
@@ -170,11 +170,11 @@ public final class WebGenerator extends BaseGenerator {
 		final String fullFilePath = 
 				this.symfonyAdapter.getWebBundleYmlEntitiesPath(
 						this.projectName) 
-				+ entityName
-				+ ".orm.yml";
+				 + entityName
+				 + ".orm.yml";
 		final String fullTemplatePath = 
 				this.symfonyAdapter.getWebTemplateEntityPath().substring(1)
-				+ "entity.yml";
+				 + "entity.yml";
 		
 		super.makeSource(fullTemplatePath, fullFilePath, true);
 	}
@@ -183,10 +183,10 @@ public final class WebGenerator extends BaseGenerator {
 		String fullFilePath = 
 				this.symfonyAdapter.getWebControllerPath(
 						this.projectName)
-				+ "Rest" + entityName + "Controller.php";
+				 + "Rest" + entityName + "Controller.php";
 		String fullTemplatePath = 
 				this.symfonyAdapter.getWebTemplateControllerPath().substring(1)
-				+ "RestTemplateController.php";
+				 + "RestTemplateController.php";
 		
 		super.makeSource(fullTemplatePath, fullFilePath, true);
 		
@@ -244,7 +244,7 @@ public final class WebGenerator extends BaseGenerator {
 				// Composer path
 				commandArgs.add(
 						this.symfonyAdapter.getWebRootPath() 
-						+ "/composer.phar");
+						 + "/composer.phar");
 				commandArgs.add("create-project");
 				
 				// Project to install
@@ -264,7 +264,7 @@ public final class WebGenerator extends BaseGenerator {
 				// Composer path
 				commandArgs.add(
 						this.symfonyAdapter.getWebRootPath()
-						+ "composer.phar");
+						 + "composer.phar");
 				
 				// Update Command
 				commandArgs.add("update");
@@ -282,26 +282,26 @@ public final class WebGenerator extends BaseGenerator {
 				// Symfony console path
 				commandArgs.add(
 						this.symfonyAdapter.getWebPath()
-						+ "app/console"); 
+						 + "app/console"); 
 				commandArgs.add("generate:bundle");
 				
 				 // Namespace
-				commandArgs.add("--namespace=" + projectName + "/ApiBundle");
+				commandArgs.add("--namespac =" + projectName + "/ApiBundle");
 				
 				 // Bundle folder
 				commandArgs.add(
-						"--dir=" 
-						+ this.symfonyAdapter.getWebPath()
-						+ "src");
+						"--di =" 
+						 + this.symfonyAdapter.getWebPath()
+						 + "src");
 				
 				 // Bundle name
-				commandArgs.add("--bundle-name=" + projectName + "ApiBundle");
+				commandArgs.add("--bundle-nam =" + projectName + "ApiBundle");
 				
 				// Format
-				commandArgs.add("--format=yml"); 
+				commandArgs.add("--forma =yml"); 
 				
 				// Generate project folder structure
-				commandArgs.add("--structure=yes"); 
+				commandArgs.add("--structur =yes"); 
 				
 				 // Silent mode
 				commandArgs.add("--no-interaction");
@@ -314,7 +314,7 @@ public final class WebGenerator extends BaseGenerator {
 				 // Symfony console path
 				commandArgs.add(
 						this.symfonyAdapter.getWebPath()
-						+ "app/console");
+						 + "app/console");
 				
 				commandArgs.add("doctrine:generate:entities");
 				

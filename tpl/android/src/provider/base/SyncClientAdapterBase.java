@@ -88,7 +88,7 @@ public abstract class SyncClientAdapterBase<T extends EntityBase> extends WebSer
 		if (itemArray != null) {
 			int count = itemArray.length();			
 			
-			for (int i = 0 ; i < count; i++) {
+			for (int i = 0; i < count; i++) {
 				JSONObject jsonItem = itemArray.getJSONObject(i);
 				
 				T item = extract(jsonItem);

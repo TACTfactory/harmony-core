@@ -21,16 +21,16 @@ import com.tactfactory.mda.utils.FileUtils;
  *
  */
 public abstract class CommonTest {
-	protected static Harmony harmony; 
+	private static Harmony harmony; 
 
 	/**
 	 * @throws java.lang.Exception
 	 */
 	public static void setUpBefore() throws Exception {
 		// Base configs
-		ConsoleUtils.ansi  = false;
-		ConsoleUtils.quiet = false;
-		ConsoleUtils.debug = true;
+		ConsoleUtils.setAnsi(false);
+		ConsoleUtils.setQuiet(false);
+		ConsoleUtils.setDebug(true);
 		
 		// Project test config
 		ApplicationMetadata.INSTANCE.name = "demact";
@@ -42,7 +42,7 @@ public abstract class CommonTest {
 			final String localProp = 
 					String.format("%s/%s/%s",
 							Harmony.PATH_PROJECT, 
-							Harmony.projectFolder, 
+							Harmony.getProjectFolder(), 
 							"local.properties");
 			
 			ApplicationMetadata.androidSdkPath = 
@@ -70,6 +70,10 @@ public abstract class CommonTest {
 		
 	}
 	
+	public static Harmony getHarmony() {
+		return harmony;
+	}
+	
 	protected static void makeEntities() {
 		final String pathNameSpace = 
 				ApplicationMetadata.INSTANCE.projectNameSpace.replaceAll("\\.",
@@ -86,7 +90,7 @@ public abstract class CommonTest {
 
 		System.out.println(destDir);
 		
-		// FileUtils.copyDirectory(new File(srcDir),new File(destDir));
+		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		FileUtils.makeFolderRecursive(srcDir, destDir, true);
 		if (new File(destDir + "Post.java").exists()) {
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");

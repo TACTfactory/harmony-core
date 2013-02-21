@@ -23,13 +23,50 @@ import print.color.ColoredPrinter;
 
 public abstract class ConsoleUtils {
 	/** Debug state*/
-	public static boolean debug;
-	public static boolean quiet;
-	public static boolean ansi = true;
-	private static char newLine = '\n';
-	private static char tab = '\t';
+	private static boolean debug;
+	private static boolean quiet;
+	private static boolean ansi = true;
+	private static boolean isConsole;
 	
-	private static ColoredPrinter cp = new ColoredPrinter.Builder(0, false).build();
+	/** Constants */
+	private static final char NEWLINE = '\n';
+	private static final char TAB = '\t';
+	private static final int SLEEP_TIME = 200;
+	
+	private static ColoredPrinter cp =
+			new ColoredPrinter.Builder(0, false).build();
+	
+	public static boolean isDebug() {
+		return debug;
+	}
+
+	public static void setDebug(final boolean debug) {
+		ConsoleUtils.debug = debug;
+	}
+
+	public static boolean isQuiet() {
+		return quiet;
+	}
+
+	public static void setQuiet(final boolean quiet) {
+		ConsoleUtils.quiet = quiet;
+	}
+
+	public static boolean isAnsi() {
+		return ansi;
+	}
+
+	public static void setAnsi(final boolean ansi) {
+		ConsoleUtils.ansi = ansi;
+	}
+	
+	public static boolean isConsole() {
+		return isConsole;
+	}
+
+	public static void setConsole(final boolean isConsole) {
+		ConsoleUtils.isConsole = isConsole;
+	}
 	
 	public static void display(final String value) {
 		if (!quiet) {
@@ -45,7 +82,10 @@ public abstract class ConsoleUtils {
 	public static void displayWarning(final String value) {
 		if (!quiet) {
 			if (ansi) {
-				cp.println("[WARNING]" + tab + value + newLine, Attribute.NONE, FColor.YELLOW, BColor.BLACK);
+				cp.println("[WARNING]" + TAB + value + NEWLINE,
+						Attribute.NONE,
+						FColor.YELLOW,
+						BColor.BLACK);
 				cp.clear();
 			} else {
 				System.out.println(value);
@@ -56,19 +96,23 @@ public abstract class ConsoleUtils {
 	public static void displayDebug(final String value) {
 		if (!quiet && ConsoleUtils.debug) {
 			if (ansi) {
-				cp.println("[DEBUG]" + tab + value + newLine, Attribute.NONE, FColor.BLUE, BColor.BLACK);
+				cp.println("[DEBUG]" + TAB + value + NEWLINE,
+						Attribute.NONE,
+						FColor.BLUE,
+						BColor.BLACK);
 				cp.clear();
 			} else {
-				System.out.println("[DEBUG]" + tab + value);
+				System.out.println("[DEBUG]" + TAB + value);
 			}
 		}
 	}
 	
-	private static String getStackTrace(final StackTraceElement[] stackTraceElements) {
+	private static String getStackTrace(
+			final StackTraceElement[] stackTraceElements) {
 		final StringBuilder result = new StringBuilder();
 
 		for (final StackTraceElement stackTraceElement : stackTraceElements) {
-			result.append(stackTraceElement.toString()).append(newLine);
+			result.append(stackTraceElement.toString()).append(NEWLINE);
 		}
 		
 		return result.toString();
@@ -76,11 +120,20 @@ public abstract class ConsoleUtils {
 	
 	public static void displayError(final Exception value) {
 		if (!quiet) {
+			String message = 	"[ERROR]" 
+								 + TAB 
+								 + value 
+								 + NEWLINE 
+								 + getStackTrace(value.getStackTrace()) 
+								 + NEWLINE; 
 			if (ansi) {
-				cp.println("[ERROR]" + tab + value + newLine + getStackTrace(value.getStackTrace()) + newLine, Attribute.NONE, FColor.RED, BColor.BLACK);
+				cp.println(message,
+						Attribute.NONE,
+						FColor.RED,
+						BColor.BLACK);
 				cp.clear();
 			} else {
-				System.out.println("[ERROR]" + tab + value + newLine + getStackTrace(value.getStackTrace()) + newLine);
+				System.out.println(message);
 			}
 		}
 	}
@@ -88,7 +141,10 @@ public abstract class ConsoleUtils {
 	public static void displayLicence(final String value) {
 		if (!quiet) {
 			if (ansi) {
-				cp.println(value + newLine, Attribute.BOLD, FColor.GREEN, BColor.BLACK);
+				cp.println(value + NEWLINE,
+						Attribute.BOLD,
+						FColor.GREEN,
+						BColor.BLACK);
 				cp.clear();
 			} else {
 				System.out.println(value);
@@ -103,7 +159,8 @@ public abstract class ConsoleUtils {
 			final Process exec = pb.start();
 			
 
-			final ProcessToConsoleBridge bridge = new ProcessToConsoleBridge(exec);
+			final ProcessToConsoleBridge bridge = 
+					new ProcessToConsoleBridge(exec);
 			bridge.start();
 			try {
 				exec.waitFor();
@@ -128,18 +185,18 @@ public abstract class ConsoleUtils {
 			this.in = new InputBridge(proc);
 			this.out = new OutputBridge(proc);
 		}
-		
-		public void start() {
+
+		public final void start() {
 			this.in.start();
 			this.out.start();
 		}
 		
-		public void stop() {
+		public final void stop() {
 			this.in.terminate();
 			this.out.terminate();
 		}
 		
-		private static class InputBridge extends Thread{
+		private static class InputBridge extends Thread {
 			private BufferedReader processInput;
 			private BufferedReader processError;
 			private boolean isRunning;
@@ -147,8 +204,14 @@ public abstract class ConsoleUtils {
 			public InputBridge(final Process proc) {
 				super();
 				try {
-					this.processInput = new BufferedReader(new InputStreamReader(proc.getInputStream(), FileUtils.DEFAULT_ENCODING));
-					this.processError = new BufferedReader(new InputStreamReader(proc.getErrorStream(), FileUtils.DEFAULT_ENCODING));
+					this.processInput = 
+							new BufferedReader(
+									new InputStreamReader(proc.getInputStream(),
+											FileUtils.DEFAULT_ENCODING));
+					this.processError = 
+							new BufferedReader(
+									new InputStreamReader(proc.getErrorStream(),
+											FileUtils.DEFAULT_ENCODING));
 				} catch (UnsupportedEncodingException e) {
 					ConsoleUtils.displayError(e);
 				}
@@ -158,18 +221,19 @@ public abstract class ConsoleUtils {
 			public void run() {
 				while (this.isRunning) {
 					try {
-						if (!(this.processInput.ready() || this.processError.ready())) {
-							Thread.sleep(200);
+						if (!(this.processInput.ready() 
+								|| this.processError.ready())) {
+							Thread.sleep(SLEEP_TIME);
 						}
 						if (this.processInput.ready()) {
 							final String input  = this.processInput.readLine();
-							if (input!=null && !input.isEmpty()) {
+							if (input != null && !input.isEmpty()) {
 								ConsoleUtils.display(input);
 							}
 						}
 						if (this.processError.ready()) {
 							final String error = this.processError.readLine();
-							if (error!=null && !error.isEmpty()) {
+							if (error != null && !error.isEmpty()) {
 								ConsoleUtils.displayError(new Exception(error));
 							}
 						}
@@ -200,7 +264,7 @@ public abstract class ConsoleUtils {
 			}
 		}
 		
-		private static class OutputBridge extends Thread{
+		private static class OutputBridge extends Thread {
 			private BufferedReader consoleInput;
 			private BufferedWriter processOutput;
 			private boolean isRunning;
@@ -208,8 +272,14 @@ public abstract class ConsoleUtils {
 			public OutputBridge(final Process proc) {
 				super();
 				try {
-				this.processOutput = new BufferedWriter(new OutputStreamWriter(proc.getOutputStream(), FileUtils.DEFAULT_ENCODING));
-				this.consoleInput = new BufferedReader(new InputStreamReader(System.in, FileUtils.DEFAULT_ENCODING));
+					this.processOutput = 
+							new BufferedWriter(
+									new OutputStreamWriter(proc.getOutputStream(),
+											FileUtils.DEFAULT_ENCODING));
+					this.consoleInput = 
+							new BufferedReader(
+									new InputStreamReader(System.in,
+											FileUtils.DEFAULT_ENCODING));
 				} catch (UnsupportedEncodingException e) {
 					ConsoleUtils.displayError(e);
 				}
@@ -222,11 +292,11 @@ public abstract class ConsoleUtils {
 						String output = null;
 						if (this.consoleInput.ready()) {
 							output = this.consoleInput.readLine();
-							if (output!=null && !output.isEmpty()) {
+							if (output != null && !output.isEmpty()) {
 								this.processOutput.write(output);
 							}
 						} else {
-							Thread.sleep(200);
+							Thread.sleep(SLEEP_TIME);
 						}
 					} catch (final IOException e) {
 						ConsoleUtils.displayError(e);

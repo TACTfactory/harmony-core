@@ -219,7 +219,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 				</#if>
 			<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 			${t}${field.type} ${field.name} = new ${field.type}();
-			${t}${field.name}.setId(c.getInt(index)) ;
+			${t}${field.name}.setId(c.getInt(index));
 			${t}result.set${field.name?cap_first}(${field.name});	
 			</#if>
 			<#if (field.nullable?? && field.nullable)>

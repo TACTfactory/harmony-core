@@ -13,8 +13,8 @@ import java.util.HashMap;
 import com.tactfactory.mda.meta.BaseMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 
-public class FixtureMetadata extends BaseMetadata{
-	private final static String NAME = "fixture"; 
+public class FixtureMetadata extends BaseMetadata {
+	private static final String NAME = "fixture"; 
 	public boolean enabled = true;
 	public String type;
 	

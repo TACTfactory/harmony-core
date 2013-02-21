@@ -16,7 +16,7 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
 public class TestWSGenerator extends BaseGenerator {
-	protected String localNameSpace;
+	private String localNameSpace;
 	
 	public TestWSGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);

@@ -33,7 +33,8 @@ public @interface OneToMany {
 	String targetEntity() default "";
 	
 	/**
-	 * The field in the target Entity mapping this relation (for bidirectionnal entities only)
+	 * The field in the target Entity mapping 
+	 * this relation (for bidirectionnal entities only).
 	 * @return the field name
 	 */
 	String mappedBy() default "";

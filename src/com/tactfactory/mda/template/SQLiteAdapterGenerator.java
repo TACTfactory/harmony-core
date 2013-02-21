@@ -14,7 +14,8 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
 public class SQLiteAdapterGenerator extends BaseGenerator {	
-	protected String localNameSpace;
+	
+	private String localNameSpace;
 
 	public SQLiteAdapterGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
@@ -22,12 +23,13 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
-	public void generateAll() {
+	public final void generateAll() {
 		ConsoleUtils.display(">> Generate Adapter...");
 		
 		for (final ClassMetadata cm : this.appMetas.entities.values()) {
 			if (!cm.fields.isEmpty()) {
-				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getData());
+				this.localNameSpace = 
+						this.adapter.getNameSpace(cm, this.adapter.getData());
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
 				this.generate();
 			}
@@ -47,10 +49,11 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 	
 	private void generate() {
 		// Info
-		ConsoleUtils.display(">>> Generate Adapter for " +  this.datamodel.get(TagConstant.CURRENT_ENTITY));
+		ConsoleUtils.display(">>> Generate Adapter for " 
+				+ this.datamodel.get(TagConstant.CURRENT_ENTITY));
 		
 		try {
-			this.makeSourceControler( 
+			this.makeSourceControler(
 					"base/TemplateSQLiteAdapterBase.java", 
 					"base/%sSQLiteAdapterBase.java", true);
 			
@@ -63,7 +66,8 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		}
 		
 		// Info
-		ConsoleUtils.display(">>> Generate Criterias for " +  this.datamodel.get(TagConstant.CURRENT_ENTITY));
+		ConsoleUtils.display(">>> Generate Criterias for "
+				+ this.datamodel.get(TagConstant.CURRENT_ENTITY));
 		try {
 			this.makeSourceCriteria(
 					"TemplateCriterias.java", 
@@ -81,13 +85,18 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 	 * 		For list activity is "TemplateListActivity.java"
 	 * @param filename
 	 */
-	private void makeSourceControler(final String template, final String filename, final boolean override) {
+	private void makeSourceControler(final String template, 
+			final String filename, 
+			final boolean override) {
 		final String fullFilePath = String.format("%s%s/%s",
 				this.adapter.getSourcePath(),
 				PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
-				String.format(filename, this.datamodel.get(TagConstant.CURRENT_ENTITY)));
+				String.format(filename,
+						this.datamodel.get(TagConstant.CURRENT_ENTITY)));
 		
-		final String fullTemplatePath = this.adapter.getTemplateSourceProviderPath().substring(1) + template;
+		final String fullTemplatePath =
+				this.adapter.getTemplateSourceProviderPath().substring(1) 
+				+ template;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
@@ -99,14 +108,19 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 	 * 		For list activity is "TemplateListActivity.java"
 	 * @param filename
 	 */
-	private void makeSourceCriteria(final String template, final String filename, final boolean override) {
+	private void makeSourceCriteria(final String template,
+			final String filename, 
+			final boolean override) {
 		final String fullFilePath = String.format("%s%s/%s/%s",
 				this.adapter.getSourcePath(),
 				this.appMetas.projectNameSpace,
 				this.adapter.getCriterias(),
-				String.format(filename, this.datamodel.get(TagConstant.CURRENT_ENTITY)));
+				String.format(filename, 
+						this.datamodel.get(TagConstant.CURRENT_ENTITY)));
 		
-		final String fullTemplatePath = this.adapter.getTemplateSourceCriteriasPath().substring(1) + template;
+		final String fullTemplatePath = 
+				this.adapter.getTemplateSourceCriteriasPath().substring(1) 
+				+ template;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}

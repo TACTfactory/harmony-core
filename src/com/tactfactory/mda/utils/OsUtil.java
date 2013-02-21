@@ -11,9 +11,9 @@ package com.tactfactory.mda.utils;
 import java.io.File;
 
 public abstract class OsUtil {
-	private final static String GENERIC = "generic";
-	private final static char BEGIN = 'c';
-	private final static char END = 'z';
+	private static final String GENERIC = "generic";
+	private static final char BEGIN = 'c';
+	private static final char END = 'z';
 
 
 	/** Return Os name */
@@ -24,17 +24,15 @@ public abstract class OsUtil {
 	/** Return Platform type (win32, linux, solaris, mac, or generic) */
 	public static String platform() {
 		String ret = GENERIC;
-		final String osname = System.getProperty("os.name", GENERIC).toLowerCase();
+		final String osname = 
+				System.getProperty("os.name", GENERIC).toLowerCase();
 		if (osname.startsWith("windows")) {
 			ret = "win32";
-		}
-		else if (osname.startsWith("linux")) {
+		} else if (osname.startsWith("linux")) {
 			ret = "linux";
-		}
-		else if (osname.startsWith("sunos")) {
+		} else if (osname.startsWith("sunos")) {
 			ret = "solaris";
-		}
-		else if (osname.startsWith("mac") || osname.startsWith("darwin")) {
+		} else if (osname.startsWith("mac") || osname.startsWith("darwin")) {
 			ret = "mac";
 		}
 		return ret;
@@ -81,8 +79,10 @@ public abstract class OsUtil {
 	/** return windows system drive */
 	public static String findWindowsSystemDrive() {
 		String sysdrive = null;
-		if (isWindows() && System.getProperty("java.version", "").startsWith("1.5.")) {
-			// System.getEnv(String name) is deprecated and throws java.lang.Error
+		if (isWindows() 
+				&& System.getProperty("java.version", "").startsWith("1.5.")) {
+			// System.getEnv(String name) 
+			// is deprecated and throws java.lang.Error
 			// in java 1.2 through 1.4. but un-deprecated in 1.5
 			sysdrive = System.getenv("SYSTEMDRIVE");	
 		}
@@ -94,11 +94,11 @@ public abstract class OsUtil {
 		String sysRoot = null;
 		if (isWindows()) { 
 			if (System.getProperty("java.version", "").startsWith("1.5.")) {
-				// System.getEnv(String name) is deprecated and throws java.lang.Error
+				// System.getEnv(String name) 
+				// is deprecated and throws java.lang.Error
 				// in java 1.2 through 1.4. but un-deprecated in 1.5
 				sysRoot = System.getenv("SYSTEMROOT");
-			}
-			else {
+			} else {
 				// try to find it by looking at the file system
 				for (char drive = OsUtil.BEGIN; drive < OsUtil.END; drive++) {
 					File root = new File(drive + ":\\WINDOWS");
@@ -128,15 +128,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: CK
 //
-// os.name= "Windows 95" "windows 95"
-// os.arch= "x86" "x86"
-// os.version= "4.0" "4.0"
-// java.vendor= "Sun Microsystems Inc." "sun microsystems inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.0.2" "1.0.2"
-// file.separator= "\" "\"
-// path.separator= ";" ";"
-// line.separator= "0xd,0xa" "0xd,0xa"
+// os.nam = "Windows 95" "windows 95"
+// os.arc = "x86" "x86"
+// os.versio = "4.0" "4.0"
+// java.vendo = "Sun Microsystems Inc." "sun microsystems inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.0.2" "1.0.2"
+// file.separato = "\" "\"
+// path.separato = ";" ";"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 // ------------------------------------------------------
@@ -146,15 +146,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: CK
 //
-// os.name= "Windows 95" "windows 95"
-// os.arch= "x86" "x86"
-// os.version= "4.0" "4.0"
-// java.vendor= "Sun Microsystems Inc." "sun microsystems inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.4" "1.1.4"
-// file.separator= "\" "\"
-// path.separator= ";" ";"
-// line.separator= "0xd,0xa" "0xd,0xa"
+// os.nam = "Windows 95" "windows 95"
+// os.arc = "x86" "x86"
+// os.versio = "4.0" "4.0"
+// java.vendo = "Sun Microsystems Inc." "sun microsystems inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.4" "1.1.4"
+// file.separato = "\" "\"
+// path.separato = ";" ";"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 // ------------------------------------------------------
@@ -164,15 +164,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: AB
 //
-// os.name= "Windows NT" "windows nt"
-// os.arch= "x86" "x86"
-// os.version= "4.0" "4.0"
-// java.vendor= "Microsoft Corp." "microsoft corp."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1" "1.1"
-// file.separator= "\" "\"
-// path.separator= ";" ";"
-// line.separator= "0xd,0xa" "0xd,0xa"
+// os.nam = "Windows NT" "windows nt"
+// os.arc = "x86" "x86"
+// os.versio = "4.0" "4.0"
+// java.vendo = "Microsoft Corp." "microsoft corp."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1" "1.1"
+// file.separato = "\" "\"
+// path.separato = ";" ";"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 // ------------------------------------------------------
@@ -182,15 +182,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: NB
 //
-// os.name= "Windows NT" "windows nt"
-// os.arch= "x86" "x86"
-// os.version= "4.0" "4.0"
-// java.vendor= "Sun Microsystems Inc." "sun microsystems inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.6" "1.1.6"
-// file.separator= "\" "\"
-// path.separator= ";" ";"
-// line.separator= "0xd,0xa" "0xd,0xa"
+// os.nam = "Windows NT" "windows nt"
+// os.arc = "x86" "x86"
+// os.versio = "4.0" "4.0"
+// java.vendo = "Sun Microsystems Inc." "sun microsystems inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.6" "1.1.6"
+// file.separato = "\" "\"
+// path.separato = ";" ";"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 // ------------------------------------------------------
@@ -213,15 +213,15 @@ public abstract class OsUtil {
 // a windows machine...
 // Contributor: AW
 //
-// os.name= "Windows CE" "windows ce"
-// os.arch= "Unknown" "unknown"
-// os.version= "2.0 Beta" "2.0 beta"
-// java.vendor= "Microsoft" "microsoft"
-// java.class.version= "JDK1.1" "jdk1.1"
-// java.version= "JDK1.1" "jdk1.1"
-// file.separator= "\" "\"
-// path.separator= ";" ";"
-// line.separator= "0xa" "0xa"
+// os.nam = "Windows CE" "windows ce"
+// os.arc = "Unknown" "unknown"
+// os.versio = "2.0 Beta" "2.0 beta"
+// java.vendo = "Microsoft" "microsoft"
+// java.class.versio = "JDK1.1" "jdk1.1"
+// java.versio = "JDK1.1" "jdk1.1"
+// file.separato = "\" "\"
+// path.separato = ";" ";"
+// line.separato = "0xa" "0xa"
 //
 //
 // ------------------------------------------------------
@@ -231,15 +231,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: AL
 //
-// os.name= "Windows NT" "windows nt"
-// os.arch= "x86" "x86"
-// os.version= "4.0" "4.0"
-// java.vendor= "SuperCede Inc." "supercede inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.4" "1.1.4"
-// file.separator= "\" "\"
-// path.separator= ";" ";"
-// line.separator= "0xd,0xa" "0xd,0xa"
+// os.nam = "Windows NT" "windows nt"
+// os.arc = "x86" "x86"
+// os.versio = "4.0" "4.0"
+// java.vendo = "SuperCede Inc." "supercede inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.4" "1.1.4"
+// file.separato = "\" "\"
+// path.separato = ";" ";"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 // ------------------------------------------------------
@@ -249,16 +249,16 @@ public abstract class OsUtil {
 // Notes: Obtained in Netscape Navigator 4.03.
 // Contributor: DG
 //
-// os.name= "Windows 95" "windows 95"
-// os.arch= "x86" "x86"
-// os.version= "4.0" "4.0"
-// java.vendor= "Netscape Communications Corporation""netscape
+// os.nam = "Windows 95" "windows 95"
+// os.arc = "x86" "x86"
+// os.versio = "4.0" "4.0"
+// java.vendo = "Netscape Communications Corporation""netscape
 // communications corporation"
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.2" "1.1.2"
-// file.separator= "\" "\"
-// path.separator= ";" ";"
-// line.separator= "0xa" "0xa"
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.2" "1.1.2"
+// file.separato = "\" "\"
+// path.separato = ";" ";"
+// line.separato = "0xa" "0xa"
 //
 //
 // ------------------------------------------------------
@@ -268,15 +268,15 @@ public abstract class OsUtil {
 // Notes: Obtained in Internet Explorer 4 (version 4.71.1712.6).
 // Contributor: DG
 //
-// os.name= "Windows 95" "windows 95"
-// os.arch= "x86" "x86"
-// os.version= "4.0" "4.0"
-// java.vendor= "Microsoft Corp." "microsoft corp."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1" "1.1"
-// file.separator= "\" "\"
-// path.separator= ";" ";"
-// line.separator= "0xd,0xa" "0xd,0xa"
+// os.nam = "Windows 95" "windows 95"
+// os.arc = "x86" "x86"
+// os.versio = "4.0" "4.0"
+// java.vendo = "Microsoft Corp." "microsoft corp."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1" "1.1"
+// file.separato = "\" "\"
+// path.separato = ";" ";"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 // ------------------------------------------------------
@@ -286,15 +286,15 @@ public abstract class OsUtil {
 // Notes: Created in Netscape Navigator 3.01 for Win95.
 // Contributor: DG
 //
-// os.name= "Windows 95" "windows 95"
-// os.arch= "Pentium" "pentium"
-// os.version= "4.0" "4.0"
-// java.vendor= "Netscape Communications Corporation""netscape communications corporation"
-// java.class.version= "45.3" "45.3"
-// java.version= "1.02" "1.02"
-// file.separator= "/" "/"
-// path.separator= ";" ";"
-// line.separator= "0xa" "0xa"
+// os.nam = "Windows 95" "windows 95"
+// os.arc = "Pentium" "pentium"
+// os.versio = "4.0" "4.0"
+// java.vendo = "Netscape Communications Corporation""netscape communications corporation"
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.02" "1.02"
+// file.separato = "/" "/"
+// path.separato = ";" ";"
+// line.separato = "0xa" "0xa"
 //
 //
 // ------------------------------------------------------
@@ -304,15 +304,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: JH2
 //
-// os.name= "Windows NT" "windows nt"
-// os.arch= "x86" "x86"
-// os.version= "4.0" "4.0"
-// java.vendor= "Sun Microsystems Inc." "sun microsystems inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.2beta4" "1.2beta4"
-// file.separator= "\" "\"
-// path.separator= ";" ";"
-// line.separator= "0xd,0xa" "0xd,0xa"
+// os.nam = "Windows NT" "windows nt"
+// os.arc = "x86" "x86"
+// os.versio = "4.0" "4.0"
+// java.vendo = "Sun Microsystems Inc." "sun microsystems inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.2beta4" "1.2beta4"
+// file.separato = "\" "\"
+// path.separato = ";" ";"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 // ------------------------------------------------------
@@ -322,15 +322,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: JH2
 //
-// os.name= "Windows NT" "windows nt"
-// os.arch= "x86" "x86"
-// os.version= "4.0" "4.0"
-// java.vendor= "Symantec Corporation" "symantec corporation"
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.5" "1.1.5"
-// file.separator= "\" "\"
-// path.separator= ";" ";"
-// line.separator= "0xd,0xa" "0xd,0xa"
+// os.nam = "Windows NT" "windows nt"
+// os.arc = "x86" "x86"
+// os.versio = "4.0" "4.0"
+// java.vendo = "Symantec Corporation" "symantec corporation"
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.5" "1.1.5"
+// file.separato = "\" "\"
+// path.separato = ";" ";"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 // ------------------------------------------------------
@@ -340,20 +340,20 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: PB
 //
-// os.name= "Windows NT" "windows nt"
-// os.arch= "x86" "x86"
-// os.version= "4.0" "4.0"
-// java.vendor= "Microsoft Corp." "microsoft corp."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.0.2" "1.0.2"
-// file.separator= "\" "\"
-// path.separator= ";" ";"
-// line.separator= "0xd,0xa" "0xd,0xa"
+// os.nam = "Windows NT" "windows nt"
+// os.arc = "x86" "x86"
+// os.versio = "4.0" "4.0"
+// java.vendo = "Microsoft Corp." "microsoft corp."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.0.2" "1.0.2"
+// file.separato = "\" "\"
+// path.separato = ";" ";"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 //
 //
-// --------------------------------------------------------------------------------
+// -------------------------------------------------------------------------
 //
 //
 // Mac VMs
@@ -367,15 +367,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: CK
 //
-// os.name= "Mac OS" "mac os"
-// os.arch= "PowerPC" "powerpc"
-// os.version= "7.5.1" "7.5.1"
-// java.vendor= "Metrowerks Corp." "metrowerks corp."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.3" "1.1.3"
-// file.separator= "/" "/"
-// path.separator= ";" ";"
-// line.separator= "0xd" "0xd"
+// os.nam = "Mac OS" "mac os"
+// os.arc = "PowerPC" "powerpc"
+// os.versio = "7.5.1" "7.5.1"
+// java.vendo = "Metrowerks Corp." "metrowerks corp."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.3" "1.1.3"
+// file.separato = "/" "/"
+// path.separato = ";" ";"
+// line.separato = "0xd" "0xd"
 //
 //
 // ------------------------------------------------------
@@ -385,15 +385,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: CK
 //
-// os.name= "Mac OS" "mac os"
-// os.arch= "PowerPC" "powerpc"
-// os.version= "7.5.1" "7.5.1"
-// java.vendor= "Apple Computer, Inc." "apple computer, inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.0.2" "1.0.2"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xd" "0xd"
+// os.nam = "Mac OS" "mac os"
+// os.arc = "PowerPC" "powerpc"
+// os.versio = "7.5.1" "7.5.1"
+// java.vendo = "Apple Computer, Inc." "apple computer, inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.0.2" "1.0.2"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xd" "0xd"
 //
 //
 // ------------------------------------------------------
@@ -403,15 +403,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: BG
 //
-// os.name= "Mac OS" "mac os"
-// os.arch= "PowerPC" "powerpc"
-// os.version= "8.1" "8.1"
-// java.vendor= "Apple Computer, Inc." "apple computer, inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.3" "1.1.3"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xd" "0xd"
+// os.nam = "Mac OS" "mac os"
+// os.arc = "PowerPC" "powerpc"
+// os.versio = "8.1" "8.1"
+// java.vendo = "Apple Computer, Inc." "apple computer, inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.3" "1.1.3"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xd" "0xd"
 //
 //
 // ------------------------------------------------------
@@ -421,15 +421,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: MJ
 //
-// os.name= "Mac OS" "mac os"
-// os.arch= "PowerPC" "powerpc"
-// os.version= "8" "8"
-// java.vendor= "Apple Computer, Inc." "apple computer, inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.5" "1.1.5"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xd" "0xd"
+// os.nam = "Mac OS" "mac os"
+// os.arc = "PowerPC" "powerpc"
+// os.versio = "8" "8"
+// java.vendo = "Apple Computer, Inc." "apple computer, inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.5" "1.1.5"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xd" "0xd"
 //
 //
 // ------------------------------------------------------
@@ -439,15 +439,15 @@ public abstract class OsUtil {
 // Notes: Obtained in Netscape Navigator 4.05-98085.
 // Contributor: DG
 //
-// os.name= "Mac OS" "mac os"
-// os.arch= "PowerPC" "powerpc"
-// os.version= "7.5" "7.5"
-// java.vendor= "Netscape Communications Corporation""netscape communications corporation"
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.2" "1.1.2"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xa" "0xa"
+// os.nam = "Mac OS" "mac os"
+// os.arc = "PowerPC" "powerpc"
+// os.versio = "7.5" "7.5"
+// java.vendo = "Netscape Communications Corporation""netscape communications corporation"
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.2" "1.1.2"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xa" "0xa"
 //
 //
 // ------------------------------------------------------
@@ -458,15 +458,15 @@ public abstract class OsUtil {
 // pop-up preference set to "Microsoft Virtual Machine".
 // Contributor: DG
 //
-// os.name= "MacOS" "macos"
-// os.arch= "PowerPC" "powerpc"
-// os.version= "8.1.0" "8.1.0"
-// java.vendor= "Microsoft Corp." "microsoft corp."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.4" "1.1.4"
-// file.separator= "/" "/"
-// path.separator= ";" ";"
-// line.separator= "0xd" "0xd"
+// os.nam = "MacOS" "macos"
+// os.arc = "PowerPC" "powerpc"
+// os.versio = "8.1.0" "8.1.0"
+// java.vendo = "Microsoft Corp." "microsoft corp."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.4" "1.1.4"
+// file.separato = "/" "/"
+// path.separato = ";" ";"
+// line.separato = "0xd" "0xd"
 //
 //
 // ------------------------------------------------------
@@ -477,15 +477,15 @@ public abstract class OsUtil {
 // pop-up preference set to "Apple MRJ".
 // Contributor: DG
 //
-// os.name= "Mac OS" "mac os"
-// os.arch= "PowerPC" "powerpc"
-// os.version= "8.1" "8.1"
-// java.vendor= "Apple Computer, Inc." "apple computer, inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.3" "1.1.3"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xd" "0xd"
+// os.nam = "Mac OS" "mac os"
+// os.arc = "PowerPC" "powerpc"
+// os.versio = "8.1" "8.1"
+// java.vendo = "Apple Computer, Inc." "apple computer, inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.3" "1.1.3"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xd" "0xd"
 //
 //
 //
@@ -504,16 +504,16 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: CK
 //
-// os.name= "Linux" "linux"
-// os.arch= "x86" "x86"
-// os.version= "2.0.31" "2.0.31"
-// java.vendor= "Sun Microsystems Inc., ported by Randy Chapman and Steve Byrne""sun microsystems inc., ported by randy
+// os.nam = "Linux" "linux"
+// os.arc = "x86" "x86"
+// os.versio = "2.0.31" "2.0.31"
+// java.vendo = "Sun Microsystems Inc., ported by Randy Chapman and Steve Byrne""sun microsystems inc., ported by randy
 // chapman and steve byrne"
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.6" "1.1.6"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xa" "0xa"
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.6" "1.1.6"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xa" "0xa"
 //
 //
 //
@@ -538,15 +538,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: MJ
 //
-// os.name= "Solaris" "solaris"
-// os.arch= "sparc" "sparc"
-// os.version= "2.x" "2.x"
-// java.vendor= "Sun Microsystems Inc." "sun microsystems inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.6" "1.1.6"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xa" "0xa"
+// os.nam = "Solaris" "solaris"
+// os.arc = "sparc" "sparc"
+// os.versio = "2.x" "2.x"
+// java.vendo = "Sun Microsystems Inc." "sun microsystems inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.6" "1.1.6"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xa" "0xa"
 //
 //
 // ------------------------------------------------------
@@ -556,15 +556,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: JH
 //
-// os.name= "Solaris" "solaris"
-// os.arch= "sparc" "sparc"
-// os.version= "2.x" "2.x"
-// java.vendor= "Sun Microsystems Inc." "sun microsystems inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.6" "1.1.6"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xa" "0xa"
+// os.nam = "Solaris" "solaris"
+// os.arc = "sparc" "sparc"
+// os.versio = "2.x" "2.x"
+// java.vendo = "Sun Microsystems Inc." "sun microsystems inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.6" "1.1.6"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xa" "0xa"
 //
 //
 // ------------------------------------------------------
@@ -574,15 +574,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: AB
 //
-// os.name= "Solaris" "solaris"
-// os.arch= "sparc" "sparc"
-// os.version= "2.x" "2.x"
-// java.vendor= "Sun Microsystems Inc." "sun microsystems inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.6" "1.1.6"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xa" "0xa"
+// os.nam = "Solaris" "solaris"
+// os.arc = "sparc" "sparc"
+// os.versio = "2.x" "2.x"
+// java.vendo = "Sun Microsystems Inc." "sun microsystems inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.6" "1.1.6"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xa" "0xa"
 //
 //
 // ------------------------------------------------------
@@ -592,27 +592,27 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: NB
 //
-// os.name= "Solaris" "solaris"
-// os.arch= "sparc" "sparc"
-// os.version= "2.x" "2.x"
-// java.vendor= "Sun Microsystems Inc." "sun microsystems inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.3" "1.1.3"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xa" "0xa"
+// os.nam = "Solaris" "solaris"
+// os.arc = "sparc" "sparc"
+// os.versio = "2.x" "2.x"
+// java.vendo = "Sun Microsystems Inc." "sun microsystems inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.3" "1.1.3"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xa" "0xa"
 //
 //
 // ------------------------------------------------------
 // On my Sun with JDK 1.1.6 I get -
 // Contributor: CA
 //
-// osName=Solaris
-// osArch=sparc
-// osVersion=2.x
-// vendor=Sun Microsystems Inc.
-// APIVersion=45.3
-// interpreterVersion=1.1.6
+// osNam =Solaris
+// osArc =sparc
+// osVersio =2.x
+// vendo =Sun Microsystems Inc.
+// APIVersio =45.3
+// interpreterVersio =1.1.6
 //
 //
 // ------------------------------------------------------
@@ -622,15 +622,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: CA
 //
-// os.name= "Solaris" "solaris"
-// os.arch= "sparc" "sparc"
-// os.version= "2.x" "2.x"
-// java.vendor= "Sun Microsystems Inc." "sun microsystems inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.0.2" "1.0.2"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xa" "0xa"
+// os.nam = "Solaris" "solaris"
+// os.arc = "sparc" "sparc"
+// os.versio = "2.x" "2.x"
+// java.vendo = "Sun Microsystems Inc." "sun microsystems inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.0.2" "1.0.2"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xa" "0xa"
 //
 //
 //
@@ -653,15 +653,15 @@ public abstract class OsUtil {
 // Notes: JDK 1.1.6 IBM build o116-19980728 (JIT: javax), OS/2 Warp 4, FP7
 // Contributor: SP
 //
-// os.name= "OS/2" "os/2"
-// os.arch= "x86" "x86"
-// os.version= "20.40" "20.40"
-// java.vendor= "IBM Corporation" "ibm corporation"
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.6" "1.1.6"
-// file.separator= "\" "\"
-// path.separator= ";" ";"
-// line.separator= "0xd,0xa" "0xd,0xa"
+// os.nam = "OS/2" "os/2"
+// os.arc = "x86" "x86"
+// os.versio = "20.40" "20.40"
+// java.vendo = "IBM Corporation" "ibm corporation"
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.6" "1.1.6"
+// file.separato = "\" "\"
+// path.separato = ";" ";"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //
 //
@@ -688,33 +688,35 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: SS
 //
-// os.name= "MPE/iX" "mpe/ix"
-// os.arch= "PA-RISC" "pa-risc"
-// os.version= "C.55.00" "c.55.00"
-// java.vendor= "HP CSY (freeware)." "hp csy (freeware)."
-// java.class.version= "45.3" "45.3"
-// java.version= "JDK 1.1.5" "jdk 1.1.5"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xa" "0xa"
+// os.nam = "MPE/iX" "mpe/ix"
+// os.arc = "PA-RISC" "pa-risc"
+// os.versio = "C.55.00" "c.55.00"
+// java.vendo = "HP CSY (freeware)." "hp csy (freeware)."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "JDK 1.1.5" "jdk 1.1.5"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xa" "0xa"
 //
 //
 // ------------------------------------------------------
 // here are the results for the latest HP-UX JDK (HP-UX 10.20):
-// AS told me (CK) that for HP-UX java.version will always have the same general format;
-// the letter ( "C" in the sample ) might change, and there may or may
+// AS told me (CK) that for HP-UX java.version 
+// will always have the same general format;
+// the letter ( "C" in the sample) might change, and there may or may
 // not be a date after the version number.
 // Contributor: AS
 //
-// os.name= "HP-UX" "hp-ux"
-// os.arch= "PA-RISC" "pa-risc"
-// os.version= "B.10.20" "b.10.20"
-// java.vendor= "Hewlett Packard Co." "hewlett packard co."
-// java.class.version= "45.3" "45.3"
-// java.version= "HP-UX Java C.01.15.03 07/07/98""hp-ux java c.01.15.03 07/07/98"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xa" "0xa"
+// os.nam = "HP-UX" "hp-ux"
+// os.arc = "PA-RISC" "pa-risc"
+// os.versio = "B.10.20" "b.10.20"
+// java.vendo = "Hewlett Packard Co." "hewlett packard co."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "HP-UX Java C.01.15.03 07/07/98"
+// 			"hp-ux java c.01.15.03 07/07/98"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xa" "0xa"
 //
 //
 // ------------------------------------------------------
@@ -724,15 +726,15 @@ public abstract class OsUtil {
 // Notes: (see the notes in the previous entry)
 // Contributor: NB
 //
-// os.name= "HP-UX" "hp-ux"
-// os.arch= "PA-RISC" "pa-risc"
-// os.version= "B.10.20" "b.10.20"
-// java.vendor= "Hewlett Packard Co." "hewlett packard co."
-// java.class.version= "45.3" "45.3"
-// java.version= "HP-UX Java C.01.15.01" "hp-ux java c.01.15.01"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xa" "0xa"
+// os.nam = "HP-UX" "hp-ux"
+// os.arc = "PA-RISC" "pa-risc"
+// os.versio = "B.10.20" "b.10.20"
+// java.vendo = "Hewlett Packard Co." "hewlett packard co."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "HP-UX Java C.01.15.01" "hp-ux java c.01.15.01"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xa" "0xa"
 //
 //
 // ------------------------------------------------------
@@ -742,15 +744,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: NB
 //
-// os.name= "AIX" "aix"
-// os.arch= "Power" "power"
-// os.version= "4.3" "4.3"
-// java.vendor= "IBM Corporation" "ibm corporation"
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.2" "1.1.2"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xa" "0xa"
+// os.nam = "AIX" "aix"
+// os.arc = "Power" "power"
+// os.versio = "4.3" "4.3"
+// java.vendo = "IBM Corporation" "ibm corporation"
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.2" "1.1.2"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xa" "0xa"
 //
 //
 // ------------------------------------------------------
@@ -773,15 +775,15 @@ public abstract class OsUtil {
 // since it was a really early port.
 // Contributor: CA
 //
-// os.name= "Solaris" "solaris"
-// os.arch= "sparc" "sparc"
-// os.version= "2.x" "2.x"
-// java.vendor= "Sun Microsystems Inc." "sun microsystems inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "hsu:11/21/21-22:43" "hsu:11/21/21-22:43"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xa" "0xa"
+// os.nam = "Solaris" "solaris"
+// os.arc = "sparc" "sparc"
+// os.versio = "2.x" "2.x"
+// java.vendo = "Sun Microsystems Inc." "sun microsystems inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "hsu:11/21/21-22:43" "hsu:11/21/21-22:43"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xa" "0xa"
 //
 //
 // ------------------------------------------------------
@@ -791,16 +793,16 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: CA
 //
-// os.name= "FreeBSD" "freebsd"
-// os.arch= "x86" "x86"
-// os.version= "2.2.2-RELEASE" "2.2.2-release"
-// java.vendor= "Sun Microsystems Inc., port by java-port@FreeBSD.org""sun microsystems inc., port by
+// os.nam = "FreeBSD" "freebsd"
+// os.arc = "x86" "x86"
+// os.versio = "2.2.2-RELEASE" "2.2.2-release"
+// java.vendo = "Sun Microsystems Inc., port by java-port@FreeBSD.org""sun microsystems inc., port by
 // java-port@freebsd.org"
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.6" "1.1.6"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xa" "0xa"
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.6" "1.1.6"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xa" "0xa"
 //
 //
 // ------------------------------------------------------
@@ -810,15 +812,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: YA
 //
-// os.name= "Irix" "irix"
-// os.arch= "mips" "mips"
-// os.version= "6.3" "6.3"
-// java.vendor= "Silicon Graphics Inc." "silicon graphics inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "3.1.1 (Sun 1.1.6)" "3.1.1 (sun 1.1.6)"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xa" "0xa"
+// os.nam = "Irix" "irix"
+// os.arc = "mips" "mips"
+// os.versio = "6.3" "6.3"
+// java.vendo = "Silicon Graphics Inc." "silicon graphics inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "3.1.1 (Sun 1.1.6)" "3.1.1 (sun 1.1.6)"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xa" "0xa"
 //
 //
 // ------------------------------------------------------
@@ -828,15 +830,15 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: MK
 //
-// os.name= "Digital Unix" "digital unix"
-// os.arch= "alpha" "alpha"
-// os.version= "4.0" "4.0"
-// java.vendor= "Digital Equipment Corp." "digital equipment corp."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.5" "1.1.5"
-// file.separator= "/" "/"
-// path.separator= ":" ":"
-// line.separator= "0xa" "0xa"
+// os.nam = "Digital Unix" "digital unix"
+// os.arc = "alpha" "alpha"
+// os.versio = "4.0" "4.0"
+// java.vendo = "Digital Equipment Corp." "digital equipment corp."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.5" "1.1.5"
+// file.separato = "/" "/"
+// path.separato = ":" ":"
+// line.separato = "0xa" "0xa"
 //
 //
 //
@@ -857,14 +859,14 @@ public abstract class OsUtil {
 // Notes:
 // Contributor: FJ
 //
-// os.name= "NetWare 4.11" "netware 4.11"
-// os.arch= "x86" "x86"
-// os.version= "4.11" "4.11"
-// java.vendor= "Novell Inc." "novell inc."
-// java.class.version= "45.3" "45.3"
-// java.version= "1.1.5 " "1.1.5 "
-// file.separator= "\" "\"
-// path.separator= ";" ";"
-// line.separator= "0xd,0xa" "0xd,0xa"
+// os.nam = "NetWare 4.11" "netware 4.11"
+// os.arc = "x86" "x86"
+// os.versio = "4.11" "4.11"
+// java.vendo = "Novell Inc." "novell inc."
+// java.class.versio = "45.3" "45.3"
+// java.versio = "1.1.5 " "1.1.5 "
+// file.separato = "\" "\"
+// path.separato = ";" ";"
+// line.separato = "0xd, 0xa" "0xd, 0xa"
 //
 //

@@ -25,37 +25,37 @@ import com.tactfactory.mda.bundles.sync.annotation.Sync;
 import com.tactfactory.mda.bundles.sync.annotation.Sync.Mode;
 
 //All annotation with forced value/parameter
-@Table(name="local_user")
+@Table(name = "local_user")
 @Entity
-@Rest(security=Rest.Security.SESSION, uri="user-uri")
-@Sync(mode=Mode.REAL_TIME)
+@Rest(security = Rest.Security.SESSION, uri = "user-uri")
+@Sync(mode = Mode.REAL_TIME)
 @Social
 public class User implements Cloneable, Serializable {
 	private static final long serialVersionUID = 7032873279928549706L;
 
 	@Id
-    @Column(type=Type.INTEGER, hidden=true)
-    @GeneratedValue(strategy="IDENTITY")
-    protected int id;
+    @Column(type = Type.INTEGER, hidden = true)
+    @GeneratedValue(strategy = "IDENTITY")
+    private int id;
 
-	@Column(type=Type.LOGIN)
+	@Column(type = Type.LOGIN)
 	@Searchable
-    protected String login;
+    private String login;
 	
-	@Column(type=Type.PASSWORD)
-    protected String password;
+	@Column(type = Type.PASSWORD)
+    private String password;
 	
-	@Column(nullable=true)
-    protected String firstname;
+	@Column(nullable = true)
+    private String firstname;
 	
 	@Column()
-    protected String lastname;
+    private String lastname;
 	
-	@Column(name="created_at")
-    protected DateTime createdAt;
+	@Column(name = "created_at")
+    private DateTime createdAt;
 	
-	@Column(type=Type.DATE, locale=true)
-    protected DateTime birthdate;
+	@Column(type = Type.DATE, locale = true)
+    private DateTime birthdate;
 
 
 	public User() {
@@ -64,8 +64,8 @@ public class User implements Cloneable, Serializable {
     }
 	
 	@Override
-	public User clone() throws CloneNotSupportedException{
-		final User u = (User)super.clone();
+	public final User clone() throws CloneNotSupportedException {
+		final User u = (User) super.clone();
 		u.id = this.id;
 		u.login = this.login;
 		u.password = this.password;

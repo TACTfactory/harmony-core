@@ -23,44 +23,44 @@ public class ViewComponent implements Serializable {
 	private static final long serialVersionUID = -6623985483853173832L;
 	
 	@Id
-    @Column(type=Type.INTEGER, hidden=true)
-    @GeneratedValue(strategy="IDENTITY")
-    protected int id;
+    @Column(type = Type.INTEGER, hidden = true)
+    @GeneratedValue(strategy = "IDENTITY")
+	private int id;
 	
-	@Column(type=Type.STRING)
-	protected String string;
+	@Column(type = Type.STRING)
+	private String string;
 	
-	@Column(type=Type.TEXT)
-	protected String text;
+	@Column(type = Type.TEXT)
+	private String text;
 
-	@Column(type=Type.DATETIME)
-	protected DateTime dateTime;
+	@Column(type = Type.DATETIME)
+	private DateTime dateTime;
 	
-	@Column(type=Type.DATE)
-	protected DateTime date;
+	@Column(type = Type.DATE)
+	private DateTime date;
 	
-	@Column(type=Type.TIME)
-	protected DateTime time;
+	@Column(type = Type.TIME)
+	private DateTime time;
 	
-	@Column(type=Type.LOGIN)
-	protected String login;
+	@Column(type = Type.LOGIN)
+	private String login;
 	
-	@Column(type=Type.PASSWORD)
-	protected String password;
+	@Column(type = Type.PASSWORD)
+	private String password;
 	
-	@Column(type=Type.EMAIL)
-	protected String email;
+	@Column(type = Type.EMAIL)
+	private String email;
 	
-	@Column(type=Type.PHONE)
-	protected String phone;
+	@Column(type = Type.PHONE)
+	private String phone;
 	
-	@Column(type=Type.CITY)
-	protected String city;
+	@Column(type = Type.CITY)
+	private String city;
 	
-	@Column(type=Type.ZIPCODE)
-	protected int zipCode;
+	@Column(type = Type.ZIPCODE)
+	private int zipCode;
 	
-	@Column(type=Type.COUNTRY)
-	protected String country;
+	@Column(type = Type.COUNTRY)
+	private String country;
 	
 }

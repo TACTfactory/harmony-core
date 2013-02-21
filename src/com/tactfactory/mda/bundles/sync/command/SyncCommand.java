@@ -21,17 +21,17 @@ import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 @PluginImplementation
-public class SyncCommand extends BaseCommand{
+public class SyncCommand extends BaseCommand {
 	
 	//bundle name
-	public final static String BUNDLE = "sync";
-	public final static String SUBJECT = "generate";
+	public static final String BUNDLE = "sync";
+	public static final String SUBJECT = "generate";
 
 	//actions
-	public final static String ACTION_SERVICE = "service";
+	public static final String ACTION_SERVICE = "service";
 
 	//commands
-	public final static String GENERATE_SERVICE	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_SERVICE;
+	public static final String GENERATE_SERVICE	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_SERVICE;
 
 	@Override
 	public void execute(final String action, final String[] args, final String option) {
@@ -54,7 +54,7 @@ public class SyncCommand extends BaseCommand{
 	protected void generateAdapters() {
 		//Harmony.metas.entities = getMetasFromAll();
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities!=null) {
+		if (ApplicationMetadata.INSTANCE.entities != null) {
 			try {
 				new SyncGenerator(new AndroidAdapter()).generateAll();
 			} catch (final Exception e) {
@@ -77,8 +77,8 @@ public class SyncCommand extends BaseCommand{
 
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> SYNC \n" +
-				"\t" + GENERATE_SERVICE + "\t => Generate Adapters");
+		ConsoleUtils.display("\n> SYNC \n" 
+				+ "\t" + GENERATE_SERVICE + "\t => Generate Adapters");
 		
 	}
 

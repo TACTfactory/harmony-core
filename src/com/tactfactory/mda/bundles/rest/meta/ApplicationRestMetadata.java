@@ -16,8 +16,8 @@ import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
-public class ApplicationRestMetadata extends BaseMetadata{
-	private final static String NAME = "rest";
+public class ApplicationRestMetadata extends BaseMetadata {
+	private static final String NAME = "rest";
 	public LinkedHashMap<String, ClassMetadata> entities = new LinkedHashMap<String, ClassMetadata>();
 	
 	public ApplicationRestMetadata() {

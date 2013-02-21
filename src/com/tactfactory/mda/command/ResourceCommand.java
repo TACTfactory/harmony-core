@@ -23,25 +23,25 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 public class ResourceCommand extends BaseCommand {
 
 	//bundle name
-	public final static String BUNDLE = "resource";
-	public final static String SUBJECT = "generate";
+	public static final String BUNDLE = "resource";
+	public static final String SUBJECT = "generate";
 
 	//actions
-	public final static String ACTION_IMAGE = "image";
-	public final static String ACTION_TRANSLATE = "translate";
+	public static final String ACTION_IMAGE = "image";
+	public static final String ACTION_TRANSLATE = "translate";
 
 	//commands
-	public final static String GENERATE_IMAGE 	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_IMAGE;
-	public final static String GENERATE_TRANSLATE	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_TRANSLATE;
+	public static final String GENERATE_IMAGE 	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_IMAGE;
+	public static final String GENERATE_TRANSLATE	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_TRANSLATE;
 
 	//internal
-	protected final BaseAdapter adapter = new AndroidAdapter();
+	private final BaseAdapter adapter = new AndroidAdapter();
 	
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> " + BUNDLE.toUpperCase() + " \n" +
-				"\t" + GENERATE_IMAGE + "\t => Generate all resize of the HD images\n" +
-				"\t" + GENERATE_TRANSLATE + "\t => Generate translate\n");
+		ConsoleUtils.display("\n> " + BUNDLE.toUpperCase() + " \n" 
+				+ "\t" + GENERATE_IMAGE + "\t => Generate all resize of the HD images\n" 
+				+ "\t" + GENERATE_TRANSLATE + "\t => Generate translate\n");
 	}
 
 	@Override
@@ -61,7 +61,7 @@ public class ResourceCommand extends BaseCommand {
 
 	@Override
 	public boolean isAvailableCommand(final String command) {
-		return  command.equals(GENERATE_IMAGE) ||
-				command.equals(GENERATE_TRANSLATE) ;
+		return  command.equals(GENERATE_IMAGE)
+				|| command.equals(GENERATE_TRANSLATE);
 	}
 }

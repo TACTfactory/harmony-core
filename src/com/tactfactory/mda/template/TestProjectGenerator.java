@@ -21,18 +21,15 @@ public class TestProjectGenerator extends BaseGenerator {
 	 * Make Platform specific Project Structure
 	 * @return success to make the platform test project folder
 	 */
-	public boolean makeProject() {
+	public final boolean makeProject() {
 		boolean result = false;
 		if (this.adapter.getPlatform().equals("android")) {
 			result = this.makeTestProjectAndroid();
-		}
-		else if (this.adapter.getPlatform().equals("ios")) {
+		} else if (this.adapter.getPlatform().equals("ios")) {
 			result = this.makeTestProjectIOS();
-		}
-		else if (this.adapter.getPlatform().equals("rim")) {
+		} else if (this.adapter.getPlatform().equals("rim")) {
 			result = this.makeTestProjectRIM();
-		}
-		else if (this.adapter.getPlatform().equals("winphone")) {
+		} else if (this.adapter.getPlatform().equals("winphone")) {
 			result = this.makeTestProjectWinPhone();
 		}
 
@@ -47,7 +44,8 @@ public class TestProjectGenerator extends BaseGenerator {
 		boolean result = false;
 
 		// create project name space folders
-		//FileUtils.makeFolder(this.adapter.getSourcePath() + Harmony.projectNameSpace.replaceAll("\\.","/"));
+		//FileUtils.makeFolder(this.adapter.getSourcePath() 
+		// + Harmony.projectNameSpace.replaceAll("\\.", "/"));
 
 		// create libs folder
 		FileUtils.makeFolder(this.adapter.getTestLibsPath());
@@ -62,9 +60,9 @@ public class TestProjectGenerator extends BaseGenerator {
 		final File dirTpl = new File(this.adapter.getTemplateTestProjectPath());
 
 		// Update newly created files with datamodel
-		if (dirTpl.exists() && dirTpl.listFiles().length!=0) {
+		if (dirTpl.exists() && dirTpl.listFiles().length != 0) {
 			result = true;
-			for (int i=0;i<dirTpl.listFiles().length;i++) {
+			for (int i = 0; i < dirTpl.listFiles().length; i++) {
 				if (dirTpl.listFiles()[i].isFile()) {
 					final String fullFilePath = String.format("%s/%s/%s/%s", 
 							Harmony.PATH_PROJECT, 
@@ -72,7 +70,9 @@ public class TestProjectGenerator extends BaseGenerator {
 							this.adapter.getTest(),
 							dirTpl.listFiles()[i].getName());
 					
-					final String fullTemplatePath = this.adapter.getTemplateTestProjectPath() + dirTpl.listFiles()[i].getName();
+					final String fullTemplatePath = 
+							this.adapter.getTemplateTestProjectPath() 
+							 + dirTpl.listFiles()[i].getName();
 					
 					super.makeSource(fullTemplatePath, fullFilePath, false);
 				}
@@ -90,11 +90,16 @@ public class TestProjectGenerator extends BaseGenerator {
 		
 		//Generate base folders & files
 		final File dirProj = FileUtils.makeFolderRecursive(
-				String.format("%s/%s/%s/", Harmony.PATH_TEMPLATE , this.adapter.getPlatform(), this.adapter.getProject()),
-				String.format("%s/%s/", Harmony.PATH_PROJECT, this.adapter.getPlatform()),
+				String.format("%s/%s/%s/",
+						Harmony.PATH_TEMPLATE,
+						this.adapter.getPlatform(),
+						this.adapter.getProject()),
+				String.format("%s/%s/", 
+						Harmony.PATH_PROJECT, 
+						this.adapter.getPlatform()),
 				true);
 		
-		if (dirProj.exists() && dirProj.listFiles().length!=0) {
+		if (dirProj.exists() && dirProj.listFiles().length != 0) {
 			result = true;
 		}
 
@@ -125,12 +130,16 @@ public class TestProjectGenerator extends BaseGenerator {
 	 * Update TestLibs
 	 */
 	@Override
-	protected void updateLibrary(final String libName) {
-		final File dest = new File(String.format("%s/%s", this.adapter.getTestLibsPath(), libName));
+	protected final void updateLibrary(final String libName) {
+		final File dest = new File(String.format("%s/%s",
+				this.adapter.getTestLibsPath(),
+				libName));
 		
 		if (!dest.exists()) {
 			FileUtils.copyfile(
-					new File(String.format("%s/%s", Harmony.PATH_LIBS, libName)),
+					new File(String.format("%s/%s", 
+							Harmony.PATH_LIBS,
+							libName)),
 					dest);
 		}
 	}

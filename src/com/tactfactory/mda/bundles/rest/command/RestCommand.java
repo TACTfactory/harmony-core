@@ -20,17 +20,17 @@ import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 @PluginImplementation
-public class RestCommand extends BaseCommand{
+public class RestCommand extends BaseCommand {
 	
 	//bundle name
-	public final static String BUNDLE = "rest";
-	public final static String SUBJECT = "generate";
+	public static final String BUNDLE = "rest";
+	public static final String SUBJECT = "generate";
 
 	//actions
-	public final static String ACTION_ADAPTERS = "adapters";
+	public static final String ACTION_ADAPTERS = "adapters";
 
 	//commands
-	public final static String GENERATE_ADAPTERS	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ADAPTERS;
+	public static final String GENERATE_ADAPTERS	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ADAPTERS;
 
 	@Override
 	public void execute(final String action, final String[] args, final String option) {
@@ -53,7 +53,7 @@ public class RestCommand extends BaseCommand{
 	protected void generateAdapters() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities!=null) {
+		if (ApplicationMetadata.INSTANCE.entities != null) {
 			try {
 				new RestGenerator(new AndroidAdapter()).generateAll();
 			} catch (final Exception e) {
@@ -74,8 +74,8 @@ public class RestCommand extends BaseCommand{
 
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> REST \n" +
-				"\t" + GENERATE_ADAPTERS + "\t => Generate Adapters");
+		ConsoleUtils.display("\n> REST \n" 
+				+ "\t" + GENERATE_ADAPTERS + "\t => Generate Adapters");
 		
 	}
 

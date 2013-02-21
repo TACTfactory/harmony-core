@@ -18,7 +18,8 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
 /**
- * To mark a property for relational persistence the @Column annotation is used. 
+ * To mark a property for 
+ * relational persistence the @Column annotation is used. 
  * This annotation usually requires at least 1 attribute to be set, the type. 
  */
 @Documented
@@ -34,25 +35,25 @@ public @interface Column {
 		//Name		Internal	length	null	prec	scale	unique	isLocale
 		
 		// BASE
-		STRING(		"string", 	255, 	true, 	null, 	null, 	null,	null),
-		TEXT(		"text", 	1024, 	true, 	null, 	null, 	null,	null),
-		BOOLEAN(	"boolean", 	null, 	false, 	null, 	null, 	null,	null),
-		INTEGER(	"integer", 	null, 	true, 	null, 	null, 	null,	null),
-		INT(		"int", 		null, 	false,	null,	null,	null,	null),
-		FLOAT(		"float", 	null, 	false,	null,	null,	null,	null),
-		DATETIME(	"datetime", null,	true,	null,	null,	null,	false),
-		DATE(		"date", 	null, 	true,	null,	null,	null,	false),
-		TIME(		"time",		null,	true,	null,	null,	null,	false),
+		STRING	("string", 	255, 	true, 	null, 	null, 	null,	null),
+		TEXT	("text", 	1024, 	true, 	null, 	null, 	null,	null),
+		BOOLEAN	("boolean", 	null, 	false, 	null, 	null, 	null,	null),
+		INTEGER	("integer", 	null, 	true, 	null, 	null, 	null,	null),
+		INT		("int", 		null, 	false,	null,	null,	null,	null),
+		FLOAT	("float", 	null, 	false,	null,	null,	null,	null),
+		DATETIME("datetime", null,	true,	null,	null,	null,	false),
+		DATE	("date", 	null, 	true,	null,	null,	null,	false),
+		TIME	("time",		null,	true,	null,	null,	null,	false),
 		
 		// EXTEND
-		LOGIN(		"login", 	255, 	false,	null,	null,	true,	null),
-		PASSWORD(	"password", 255, 	false,	null,	null,	null,	null),
-		EMAIL(		"email", 	255,	true,	null,	null,	true,	null),
-		PHONE(		"phone", 	24,		true,	null,	null,	null,	null),
-		CITY(		"city", 	255, 	true,	null,	null,	null,	null),
-		ZIPCODE(	"zipcode", 	9999999,true,	null,	null,	null,	null),
-		COUNTRY(	"country",	255,	true,	null,	null,	null,	null),
-		BC_EAN(		"ean",		12,		true,	null,	null,	null,	null);
+		LOGIN	("login", 	255, 	false,	null,	null,	true,	null),
+		PASSWORD("password", 255, 	false,	null,	null,	null,	null),
+		EMAIL	("email", 	255,	true,	null,	null,	true,	null),
+		PHONE	("phone", 	24,		true,	null,	null,	null,	null),
+		CITY	("city", 	255, 	true,	null,	null,	null,	null),
+		ZIPCODE	("zipcode", 255, 	true,	null,	null,	null,	null),
+		COUNTRY	("country",	255,	true,	null,	null,	null,	null),
+		BC_EAN	("ean",		12,		true,	null,	null,	null,	null);
 		
 		private String type;
 		private int length = Integer.MAX_VALUE;
@@ -63,7 +64,14 @@ public @interface Column {
 		private int precision = Integer.MAX_VALUE;
 		private int scale = Integer.MAX_VALUE;
 		
-		private Type(final String value, final Integer length, final Boolean nullable, final Integer precision, final Integer scale, final Boolean unique, final Boolean isLocale) {
+
+		private Type(final String value,
+				final Integer length, 
+				final Boolean nullable, 
+				final Integer precision, 
+				final Integer scale, 
+				final Boolean unique,
+				final Boolean isLocale) {
 			this.type = value;
 			
 			if (length != null) {
@@ -82,7 +90,7 @@ public @interface Column {
 				this.unique = unique;
 			}
 			
-			if (isLocale!=null) {
+			if (isLocale != null) {
 				this.isLocale = isLocale;
 			}
 		}
@@ -117,7 +125,7 @@ public @interface Column {
 		
 		public static Type fromString(final String value) {
 			Type ret = null;
-			if (value!= null) {
+			if (value != null) {
 				for (final Type type : Type.values()) {
 					if (value.equalsIgnoreCase(type.type)) {
 						ret = type;
@@ -129,15 +137,21 @@ public @interface Column {
 		}
 		
 		
-		public static Type fromName(String name) {
+
+		public static Type fromName(final String name) {
+			String realName;
 			Type ret;
-			if (name.lastIndexOf('.')>0) {
-				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot
+			if (name.lastIndexOf('.') > 0) {
+				// Take only what comes after the last dot
+				realName = name.substring(name.lastIndexOf('.') + 1); 
+			} else {
+				realName = name;
 			}
 			try {
-				final Field field = Type.class.getField(name.toUpperCase());	
+				final Field field = 
+						Type.class.getField(realName.toUpperCase());	
 				if (field.isEnumConstant()) {
-					ret = (Type)field.get(Type.class);
+					ret = (Type) field.get(Type.class);
 				} else {
 					 ret = null; 
 				}
@@ -157,36 +171,14 @@ public @interface Column {
 			}
 			return ret;
 		}
-			
-		
-		/** Type that maps an SQL VARCHAR to a JAVA string. */
-		//public final static String STRING = "string";
-		/** Type that maps an SQL VARCHAR to a JAVA string with only ASCII value.*/
-		//public final static String LOGIN = "login";
-		/** Type that maps an SQL VARCHAR to a JAVA string with only ASCII value but not show. */
-		//public final static String PASSWORD = "password";
-		/** Type that maps an SQL INT to a JAVA integer. */
-		//public final static String INTEGER = "integer";
-	    /*smallint: Type that maps a database SMALLINT to a JAVA integer.
-	    bigint: Type that maps a database BIGINT to a JAVA string.
-	    boolean: Type that maps an SQL boolean to a JAVA boolean.
-	    decimal: Type that maps an SQL DECIMAL to a JAVA double.
-	    date: Type that maps an SQL DATETIME to a JAVA DateTime object.
-	    time: Type that maps an SQL TIME to a JAVA DateTime object.*/
-	    /** Type that maps an SQL DATETIME/TIMESTAMP to a JAVA DateTime object. */
-		//public final static String DATETIME = "datetime";
-	    /** Type that maps an SQL CLOB to a JAVA string. */
-	   // public final static String TEXT = "text";
-	    /*object: Type that maps a SQL CLOB to a JAVA object using serialize() and unserialize()
-	    array: Type that maps a SQL CLOB to a JAVA object using serialize() and unserialize()
-	    float: Type that maps a SQL Float (Double Precision) to a JAVA double. IMPORTANT: Works only with locale settings that use decimal points as separator. */
 
 	}
 	
 	/**
 	 * The mapping type to use for the column.
 	 * 
-	 * @return (optional, defaults to "string") The mapping type to use for the column.
+	 * @return (optional, defaults to "string") 
+	 * The mapping type to use for the column.
 	 * 
 	 * @see com.tactfactory.mda.annotation.Column.Type
 	 */
@@ -195,14 +187,17 @@ public @interface Column {
 	/** 
 	 * The name of the column in the database.
 	 * 
-	 * @return (optional, defaults to field name) The name of the column in the database.
+	 * @return (optional, defaults to field name) 
+	 * The name of the column in the database.
 	 */
 	String name() default "";
 	
 	/**
 	 * The length of the column in the database.
 	 * 
-	 * @return (optional, default 255) The length of the column in the database. (Applies only if a string-valued column is used).
+	 * @return (optional, default 255) 
+	 * The length of the column in the database. 
+	 * (Applies only if a string-valued column is used).
 	 */
 	int length() default 255;
 	
@@ -216,28 +211,34 @@ public @interface Column {
 	/**
 	 * Whether the database column is nullable.
 	 * 
-	 * @return (optional, default FALSE) Whether the database column is nullable.
+	 * @return (optional, default FALSE) 
+	 * Whether the database column is nullable.
 	 */
 	boolean nullable() default false;
 	
 	/**
 	 * The precision for a decimal (exact numeric) column.
 	 * 
-	 * @return (optional, default 0) The precision for a decimal (exact numeric) column. (Applies only if a decimal column is used.)
+	 * @return (optional, default 0) 
+	 * The precision for a decimal (exact numeric) column. 
+	 * (Applies only if a decimal column is used.)
 	 */
 	int precision() default 0;
 	
 	/**
 	 * The scale for a decimal (exact numeric) column.
 	 * 
-	 * @return (optional, default 0) The scale for a decimal (exact numeric) column. (Applies only if a decimal column is used.)
+	 * @return (optional, default 0) 
+	 * The scale for a decimal (exact numeric) column. 
+	 * (Applies only if a decimal column is used.)
 	 */
 	int scale() default 0;
 	
 	/**
 	 * The database type to use for the column
 	 * 
-	 * @return (optional, defaults to type mapping) The database type to use for the column.
+	 * @return (optional, defaults to type mapping) 
+	 * The database type to use for the column.
 	 * 
 	 * @see com.tactfactory.mda.plateforme.SqliteAdapter for mapping list
 	 */

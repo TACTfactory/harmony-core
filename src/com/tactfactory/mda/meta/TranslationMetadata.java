@@ -13,14 +13,15 @@ import java.util.LinkedHashMap;
 import java.util.Locale;
 
 public class TranslationMetadata {
+
 	/** Identify string resource */
-	public String key;
+	private String key;
 	
 	/** Groups of string resource */
-	public Group group = Group.NONE;
+	private Group group = Group.NONE;
 	
 	/** Translate resources (by Locale) */
-	public HashMap<Locale, String> i18n = new LinkedHashMap<Locale, String>();
+	private HashMap<Locale, String> i18n = new LinkedHashMap<Locale, String>();
 	
 	
 	public static enum Group {
@@ -80,5 +81,29 @@ public class TranslationMetadata {
 		ApplicationMetadata.INSTANCE.translates.put(translateMeta.key, translateMeta);
 		
 		return translateMeta;
+	}
+	
+	public final String getKey() {
+		return key;
+	}
+
+	public final void setKey(final String key) {
+		this.key = key;
+	}
+
+	public final Group getGroup() {
+		return group;
+	}
+
+	public final void setGroup(final Group group) {
+		this.group = group;
+	}
+
+	public final HashMap<Locale, String> getI18n() {
+		return i18n;
+	}
+
+	public final void setI18n(final HashMap<Locale, String> i18n) {
+		this.i18n = i18n;
 	}
 }

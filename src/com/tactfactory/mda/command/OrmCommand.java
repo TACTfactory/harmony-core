@@ -40,27 +40,27 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 public class OrmCommand extends BaseCommand {
 
 	//bundle name
-	public final static String BUNDLE = "orm";
-	public final static String SUBJECT = "generate";
+	public static final String BUNDLE = "orm";
+	public static final String SUBJECT = "generate";
 
 	//actions
-	public final static String ACTION_ENTITY = "entity";
-	public final static String ACTION_ENTITIES = "entities";
-	public final static String ACTION_FORM = "form";
-	public final static String ACTION_CRUD = "crud";
+	public static final String ACTION_ENTITY = "entity";
+	public static final String ACTION_ENTITIES = "entities";
+	public static final String ACTION_FORM = "form";
+	public static final String ACTION_CRUD = "crud";
 
 	//commands
 	//public static String GENERATE_ENTITY 	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITY;
-	public final static String GENERATE_ENTITIES	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITIES;
+	public static final String GENERATE_ENTITIES	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITIES;
 	//public static String GENERATE_FORM 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_FORM;
-	public final static String GENERATE_CRUD 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_CRUD;
+	public static final String GENERATE_CRUD 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_CRUD;
 
 	//internal
-	protected BaseAdapter adapter = new AndroidAdapter();
+	private BaseAdapter adapter = new AndroidAdapter();
 
 	protected void generateForm() {
 		/*ApplicationMetadata appMetas = this.getMetasFromAll();
-		if (appMetas!=null) {
+		if (appMetas != null) {
 			this.generateActivitiesForEntities(appMetas, true);
 		}*/
 	}
@@ -71,7 +71,7 @@ public class OrmCommand extends BaseCommand {
 	protected void generateEntity() {
 		/*ApplicationMetadata appMetas = this.getMetasFromArg();
 		
-		if (appMetas!=null) {
+		if (appMetas != null) {
 			//this.generateActivitiesForEntities(appMetas, false);
 			this.makeLayoutDatabase(appMetas);
 			this.makeLayoutTestDatabase(appMetas);
@@ -85,7 +85,7 @@ public class OrmCommand extends BaseCommand {
 	protected void generateEntities() {
 		this.generateMetas();
 		
-		if (ApplicationMetadata.INSTANCE.entities!=null) {
+		if (ApplicationMetadata.INSTANCE.entities != null) {
 			this.makeLayoutDatabase();
 			this.makeLayoutTestDatabase();
 		}
@@ -93,7 +93,7 @@ public class OrmCommand extends BaseCommand {
 	}
 
 	/**
-	 * Generate Create,Read,Upload,Delete code functions
+	 * Generate Create,Read, Upload, Delete code functions
 	 */
 	protected void generateCrud() {
 		this.generateMetas();
@@ -148,11 +148,11 @@ public class OrmCommand extends BaseCommand {
 	
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> ORM \n" +
-				// "\t" + GENERATE_ENTITY + "\t => Generate Entry\n" +
-				"\t" + GENERATE_ENTITIES + "\t => Generate Entries\n" +
-				// "\t" + GENERATE_FORM + "\t => Generate Form\n" +
-				"\t" + GENERATE_CRUD + "\t => Generate CRUD");
+		ConsoleUtils.display("\n> ORM \n" 
+				// + "\t" + GENERATE_ENTITY + "\t => Generate Entry\n" 
+				+ "\t" + GENERATE_ENTITIES + "\t => Generate Entries\n" 
+				// + "\t" + GENERATE_FORM + "\t => Generate Form\n" 
+				+ "\t" + GENERATE_CRUD + "\t => Generate CRUD");
 	}
 
 	@Override
@@ -184,9 +184,9 @@ public class OrmCommand extends BaseCommand {
 
 	@Override
 	public boolean isAvailableCommand(final String command) {
-		return  //command.equals(GENERATE_ENTITY) 	||
-				command.equals(GENERATE_ENTITIES) 	||
-				//command.equals(GENERATE_FORM)		||
-				command.equals(GENERATE_CRUD) ;
+		return  //|| command.equals(GENERATE_ENTITY)	
+				command.equals(GENERATE_ENTITIES) 	
+				//|| command.equals(GENERATE_FORM)		
+				|| command.equals(GENERATE_CRUD);
 	}
 }

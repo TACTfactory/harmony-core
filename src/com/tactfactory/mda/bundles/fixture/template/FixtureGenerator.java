@@ -21,7 +21,7 @@ import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 
-public class FixtureGenerator extends BaseGenerator{
+public class FixtureGenerator extends BaseGenerator {
 
 	public FixtureGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
@@ -32,8 +32,8 @@ public class FixtureGenerator extends BaseGenerator{
 		final File fixtAppSrc = new File("fixtures/app");
 		final File fixtTestSrc = new File("fixtures/test");
 		if (fixtAppSrc.exists()) {
-			final File fixtAppDest = new File(this.adapter.getAssetsPath()+"/app");
-			final File fixtTestDest = new File(this.adapter.getAssetsPath()+"/test");
+			final File fixtAppDest = new File(this.adapter.getAssetsPath() + "/app");
+			final File fixtTestDest = new File(this.adapter.getAssetsPath() + "/test");
 			if (!fixtAppDest.exists()) {
 				fixtAppDest.mkdir();
 			}
@@ -48,9 +48,9 @@ public class FixtureGenerator extends BaseGenerator{
 					}
 				};
 				FileUtils.copyDirectory(fixtAppSrc, fixtAppDest, ff);
-				ConsoleUtils.displayDebug("Copying fixtures/app into "+fixtAppDest.getPath());
+				ConsoleUtils.displayDebug("Copying fixtures/app into " + fixtAppDest.getPath());
 				FileUtils.copyDirectory(fixtTestSrc, fixtTestDest, ff);
-				ConsoleUtils.displayDebug("Copying fixtures/test into "+fixtTestDest.getPath());
+				ConsoleUtils.displayDebug("Copying fixtures/test into " + fixtTestDest.getPath());
 			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);
 			}
@@ -61,7 +61,7 @@ public class FixtureGenerator extends BaseGenerator{
 	
 	public void init() {
 		 try {
-			 final String fixtureType = ((FixtureMetadata)this.appMetas.options.get("fixture")).type;
+			 final String fixtureType = ((FixtureMetadata) this.appMetas.options.get("fixture")).type;
 			 
 			 //Copy JDOM Library
 			this.updateLibrary("jdom-2.0.2.jar");
@@ -76,10 +76,10 @@ public class FixtureGenerator extends BaseGenerator{
 			
 			//Create each entity's data loader
 			for (final ClassMetadata cm : this.appMetas.entities.values()) {
-				if (cm.fields.size()>0) {
+				if (cm.fields.size() > 0) {
 					this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
-					this.makeSource("TemplateDataLoader.java", cm.name+"DataLoader.java", true);
-					this.makeBaseFixture("TemplateFixture."+fixtureType, cm.name+"."+fixtureType, false);
+					this.makeSource("TemplateDataLoader.java", cm.name + "DataLoader.java", true);
+					this.makeBaseFixture("TemplateFixture." + fixtureType, cm.name + "." + fixtureType, false);
 				}
 			}
 		} catch (final Exception e) {
@@ -89,8 +89,8 @@ public class FixtureGenerator extends BaseGenerator{
 	
 	public void purge() {
 		for (final ClassMetadata cm : this.appMetas.entities.values()) {
-			this.removeSource(cm.name+".xml");
-			this.removeSource(cm.name+".yml");
+			this.removeSource(cm.name + ".xml");
+			this.removeSource(cm.name + ".yml");
 		}
 		
 	}
@@ -110,11 +110,11 @@ public class FixtureGenerator extends BaseGenerator{
 	}
 	
 	protected void makeBaseFixture(final String templateName, final String fileName, final boolean override) {
-		String fullFilePath = "fixtures/app/"+fileName;
+		String fullFilePath = "fixtures/app/" + fileName;
 		String fullTemplatePath = this.adapter.getTemplateSourceFixturePath().substring(1) + templateName;
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 		
-		fullFilePath = "fixtures/test/"+fileName;
+		fullFilePath = "fixtures/test/" + fileName;
 		fullTemplatePath = this.adapter.getTemplateSourceFixturePath().substring(1) + templateName;
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
