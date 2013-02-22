@@ -14,7 +14,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 
 /**
- * All Harmony tests
+ * All Harmony tests.
  * @author gregg
  *
  */

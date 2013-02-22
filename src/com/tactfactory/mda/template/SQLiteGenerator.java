@@ -25,7 +25,7 @@ public class SQLiteGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Generate Database Interface Source Code
+	 * Generate Database Interface Source Code.
 	 */
 	public final void generateDatabase() {
 		// Info
@@ -52,7 +52,7 @@ public class SQLiteGenerator extends BaseGenerator {
 		}
 	}
 	
-	/** Make Java Source Code
+	/** Make Java Source Code.
 	 * @param template Template path file.
 	 * @param filename
 	 */

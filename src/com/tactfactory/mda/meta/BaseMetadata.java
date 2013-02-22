@@ -12,10 +12,10 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 public abstract class BaseMetadata implements Metadata {
-	/** Component name */
+	/** Component name. */
 	public String name;
 	
-	/** List of bundles Metadata */
+	/** List of bundles Metadata. */
 	public Map<String, Metadata> options =
 			new LinkedHashMap<String, Metadata>();
 	

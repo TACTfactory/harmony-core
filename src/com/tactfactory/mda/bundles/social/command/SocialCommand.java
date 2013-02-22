@@ -50,7 +50,7 @@ public class SocialCommand extends BaseCommand {
 	}
 	
 	/**
-	 * Generate java code files from parsed Entities
+	 * Generate java code files from parsed Entities.
 	 */
 	protected void generateAdapters() {
 

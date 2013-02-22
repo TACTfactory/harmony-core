@@ -13,7 +13,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 /**
- * All Harmony tests related to project generation 
+ * All Harmony tests related to project generation.
  * @author gregg
  *
  */

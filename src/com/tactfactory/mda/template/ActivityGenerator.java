@@ -114,7 +114,7 @@ public class ActivityGenerator extends BaseGenerator {
 		}
 	}
 	
-	/** All Actions (List, Show, Edit, Create) */
+	/** All Actions (List, Show, Edit, Create). */
 	public final void generateAllAction(final String entityName) {
 		ConsoleUtils.display(">>> Generate CRUD view for " +  entityName);
 		
@@ -167,7 +167,7 @@ public class ActivityGenerator extends BaseGenerator {
 		}
 	}
 	
-	/** List Action
+	/** List Action.
 	 * @param entityName The entity to generate
 	 * @throws IOException
 	 * @throws TemplateException
@@ -204,7 +204,7 @@ public class ActivityGenerator extends BaseGenerator {
 				Group.MODEL);
 	}
 
-	/** Show Action
+	/** Show Action.
 	 * @param entityName The entity to generate
 	 * @throws IOException
 	 * @throws TemplateException
@@ -241,7 +241,7 @@ public class ActivityGenerator extends BaseGenerator {
 				Group.MODEL);
 	}
 
-	/** Edit Action
+	/** Edit Action.
 	 * @param entityName The entity to generate
 	 * @throws IOException
 	 * @throws TemplateException
@@ -278,7 +278,7 @@ public class ActivityGenerator extends BaseGenerator {
 				
 	}
 
-	/** Create Action
+	/** Create Action.
 	 * @param entityName The entity to generate
 	 * @throws IOException
 	 * @throws TemplateException
@@ -315,7 +315,7 @@ public class ActivityGenerator extends BaseGenerator {
 				Group.MODEL);
 	}
 
-	/** Make Java Source Code
+	/** Make Java Source Code.
 	 * 
 	 * @param template Template path file. 
 	 *		For list activity is "TemplateListActivity.java"
@@ -336,7 +336,7 @@ public class ActivityGenerator extends BaseGenerator {
 	}
 
 	/** 
-	 * Make Resource file
+	 * Make Resource file.
 	 * 
 	 * @param template Template path file.
 	 * @param filename Resource file. 
@@ -356,7 +356,7 @@ public class ActivityGenerator extends BaseGenerator {
 		super.makeSource(fullTemplatePath, fullFilePath, false);
 	}
 
-	/** Make Manifest file
+	/** Make Manifest file.
 	 * 
 	 * @param cfg Template engine
 	 * @throws IOException 
@@ -383,7 +383,7 @@ public class ActivityGenerator extends BaseGenerator {
 		output.close();
 	}
 
-	/**  Update Android Manifest
+	/**  Update Android Manifest.
 	 * 
 	 * @param classFile
 	 */
@@ -517,7 +517,7 @@ public class ActivityGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Update Widget
+	 * Update Widget.
 	 */
 	protected final void updateWidget(final String widgetName, 
 			final String layoutName) {

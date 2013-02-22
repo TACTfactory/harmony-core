@@ -17,7 +17,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Annotation defining the JoinColumn
+ * Annotation defining the JoinColumn.
  * @author gregg
  *
  */

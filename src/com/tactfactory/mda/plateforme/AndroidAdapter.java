@@ -18,17 +18,43 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.ImageUtils;
 
-/** Google Android Adapter of project structure */
+/** Google Android Adapter of project structure. */
 public final class AndroidAdapter extends BaseAdapter {
+	/** Ratio for HD images resizing. */
 	private static final float HD_RATIO = 0.75f;
+	
+	/** Ratio for MD images resizing. */
 	private static final float MD_RATIO = 0.50f;
+	
+	/** Ratio for LD images resizing. */
 	private static final float LD_RATIO = 0.375f;
 	
+	/** Float type. */
 	private static final String FLOAT = "float";
+	
+	/** String type. */
 	private static final String STR = "String";
+	
+	/** Int type. */
 	private static final String INT = "int";
+	
+	/** DateTime type. */
 	private static final String DATETIME = "DateTime";
+	
+	/**
+	 * FilenameFilter for images.
+	 */
+	private final FilenameFilter filter = new FilenameFilter() {
+	    @Override
+		public boolean accept(final File dir, final String name) {
+	        return	name.endsWith(".png") 
+	        		|| name.endsWith(".jpg");
+	    }
+	};
 
+	/**
+	 * Constructor.
+	 */
 	public AndroidAdapter() {
 		super();
 		// Structure
@@ -57,12 +83,7 @@ public final class AndroidAdapter extends BaseAdapter {
 		this.home		= "HomeActivity.java";
 		this.configs	= "configs.xml";
 	}
-
-	/** 
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#
-	 * getNameSpaceEntity(com.tactfactory.mda.orm.ClassMetadata,
-	 * 			 java.lang.String)
-	 */
+ 
 	@Override
 	public String getNameSpaceEntity(final ClassMetadata cm, 
 			final String type) {
@@ -148,13 +169,7 @@ public final class AndroidAdapter extends BaseAdapter {
 		return ret;
 	}
 	
-	private final FilenameFilter filter = new FilenameFilter() {
-	    @Override
-		public boolean accept(final File dir, final String name) {
-	        return	name.endsWith(".png") 
-	        		|| name.endsWith(".jpg");
-	    }
-	};
+
 	
 	@Override
 	public void resizeImage() {

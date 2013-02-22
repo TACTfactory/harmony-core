@@ -52,7 +52,7 @@ public class SyncCommand extends BaseCommand {
 	}
 	
 	/**
-	 * Generate java code files from parsed Entities
+	 * Generate java code files from parsed Entities.
 	 */
 	protected void generateAdapters() {
 		//Harmony.metas.entities = getMetasFromAll();

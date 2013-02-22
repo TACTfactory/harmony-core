@@ -18,7 +18,7 @@ import com.tactfactory.mda.meta.RelationMetadata;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 /** The class ClassCompletor will complete all ClassMetadatas 
- * with the information it needs from the others ClassMetadatas*/
+ * with the information it needs from the others ClassMetadatas. */
 
 public class ClassCompletor {
 	//ArrayList<ClassMetadata> metas_array;
@@ -41,7 +41,7 @@ public class ClassCompletor {
 	}
 	
 	/**
-	 * Update all the relations in a class 
+	 * Update all the relations in a class.
 	 * (actually sets the referenced columns for the target entities)
 	 * @param cm The class owning the relations
 	 */

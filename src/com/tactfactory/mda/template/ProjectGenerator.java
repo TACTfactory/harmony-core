@@ -21,7 +21,7 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Make Platform specific Project Structure
+	 * Make Platform specific Project Structure.
 	 * @return success to make the platform project folder
 	 */
 	public final boolean makeProject() {
@@ -39,7 +39,7 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Remove Platform specific Project Structure
+	 * Remove Platform specific Project Structure.
 	 * @return success to make the platform project folder
 	 */
 	public final boolean removeProject() {
@@ -67,7 +67,7 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Generate HomeActivity File and merge it with datamodel
+	 * Generate HomeActivity File and merge it with datamodel.
 	 */
 	public final void generateHomeActivity() {
 		ConsoleUtils.display(">> Generate HomeView & Strings...");
@@ -80,7 +80,7 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Make Android Project Structure
+	 * Make Android Project Structure.
 	 * @return success to make the platform project folder
 	 */
 	protected final boolean makeProjectAndroid() {
@@ -264,7 +264,7 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Make IOS Project Structure
+	 * Make IOS Project Structure.
 	 * @return success to make the platform project folder
 	 */
 	protected final boolean makeProjectIOS() {
@@ -288,7 +288,7 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Make RIM Project Structure
+	 * Make RIM Project Structure.
 	 * @return success to make the platform project folder
 	 */
 	protected final boolean makeProjectRIM() {
@@ -298,7 +298,7 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Make Windows Phone Project Structure
+	 * Make Windows Phone Project Structure.
 	 * @return success to make the platform project folder
 	 */
 	protected final boolean makeProjectWinPhone() {

@@ -21,7 +21,7 @@ import com.tactfactory.mda.parser.JavaModelParser;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 /** 
- * Common Command structure 
+ * Common Command structure.
  */
 public abstract class BaseCommand implements Command {
 	private ArrayList<BaseParser> registeredParsers 
@@ -33,7 +33,7 @@ public abstract class BaseCommand implements Command {
 	private JavaModelParser javaModelParser;
 	
 	/**
-	 * Gets the Metadatas of all the entities actually in the package entity
+	 * Gets the Metadatas of all the entities actually in the package entity.
 	 * You can register your own bundle parsers 
 	 * with the method this.javaModelParser.registerParser() 
 	 */

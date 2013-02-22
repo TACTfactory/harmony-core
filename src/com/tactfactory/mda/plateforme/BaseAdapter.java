@@ -12,81 +12,94 @@ import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
 
-/** Base Adapter of project structure */
+/** Base Adapter of project structure. */
 public abstract class BaseAdapter {	
 	// Structure
+	/** Project path. */
 	protected String project;
+	/** Platform path. */
 	protected String platform;
+	/** Resources path. */
 	protected String resource;
+	/** Assets path. */
 	protected String assets;
+	/** Soruce path. */
 	protected String source;
+	/** Libs path. */
 	protected String libs;
+	/** Tests path. */
 	protected String test;
+	/** Tests libraries path. */
 	protected String testLibs;
+	/** Harmony path. */
 	protected String harmony;
+	/** Widgets path. */
 	protected String widget;
+	/** Utility classes path. */
 	protected String util;
 
 	// MVC
+	/** Models path. */
 	protected String model		= "entity";
+	/** Views path. */
 	protected String view 		= "layout";
+	/** Values path. */
 	protected String values		= "values";
+	/** Controllers path. */
 	protected String controller = "view";
+	/** Data path. */
 	protected String data		= "data";
+	/** Providers path. */
 	protected String provider	= "provider";
+	/** Common path. */
 	protected String common		= "common";
+	/** Services path. */
 	protected String service	= "service";
+	/** Fixtures path. */
 	protected String fixture 	= "fixture";
+	/** Criterias path. */
 	protected String criterias  = "criterias"; 
 	
 	// File
+	/** Manifest path. */
 	protected String manifest;
+	/** Home path. */
 	protected String home;
+	/** Strings path. */
 	protected String strings;
+	/** Configs path. */
 	protected String configs;
 	
 	// Abstract Methods
-	/** Generate platform Namespace
+	/** Generate platform Namespace.
 	 * 
 	 * @param cm Entity to extract the namespace 
 	 * @return String Namespace
 	 */
 	public abstract String getNameSpace(ClassMetadata cm, String type);
 	
-	/** Generate platform Namespace
+	/** Generate platform Namespace.
 	 * 
 	 * @param cm Entity to extract the namespace 
 	 * @return String Namespace
 	 */
 	public abstract String getNameSpaceEntity(ClassMetadata cm, String type);
 	
-
-	/** Generate platform view component for Show action
-	 * 
-	 * @param field The field based of generator
-	 * @return String of the platform Component type
-	 */
-	//public abstract String getViewComponentShow(FieldMetadata field);
-	
-	/** Generate platform view component for Edit action
-	 * 
-	 * @param field The field based of generator
-	 * @return String of the platform Component type
-	 */
-	//public abstract String getViewComponentEdit(FieldMetadata field);
-	
-	/** Convert a Harmony type into a native type
+	/** Convert a Harmony type into a native type.
 	 * 
 	 * @param type The type name
 	 * @return String of the native type 
 	 */
 	public abstract String getNativeType(String type);
 	
-	/** Convert image structure to alternative resolution */
+	/** Convert image structure to alternative resolution. */
 	public abstract void resizeImage();
 	
 	// Utils
-
+	/**
+	 * Get the template project path.
+	 * @return The template project path
+	 */
 	public final String getTemplateProjectPath() {
 		return String.format("%s/%s/%s/",
 				Harmony.PATH_TEMPLATE,
@@ -94,6 +107,10 @@ public abstract class BaseAdapter {
 				this.getProject());
 	}
 	
+	/**
+	 * Get the libraries path.
+	 * @return The libraries path
+	 */
 	public final String getLibsPath() {
 		return String.format("%s/%s/%s/",
 				Harmony.PATH_PROJECT,
@@ -101,6 +118,10 @@ public abstract class BaseAdapter {
 				this.getLibs());
 	}
 	
+	/**
+	 * Get the tests path.
+	 * @return The tests path
+	 */
 	public final String getTestPath() {
 		return String.format("%s/%s/%s/", 
 				Harmony.PATH_PROJECT,
@@ -108,6 +129,10 @@ public abstract class BaseAdapter {
 				this.getTest());
 	}
 	
+	/**
+	 * Get the test libraries path.
+	 * @return The test libraries path
+	 */
 	public final String getTestLibsPath() {
 		return String.format("%s/%s/%s/%s", 
 				Harmony.PATH_PROJECT, 
@@ -116,6 +141,10 @@ public abstract class BaseAdapter {
 				this.getTestLibs());
 	}
 	
+	/**
+	 * Get the sources path.
+	 * @return The sources path
+	 */
 	public final String getSourcePath() {
 		return String.format("%s/%s/%s/", 
 				Harmony.PATH_PROJECT, 
@@ -123,6 +152,10 @@ public abstract class BaseAdapter {
 				this.getSource());
 	}
 	
+	/**
+	 * Get the widgets path.
+	 * @return The widgets path
+	 */
 	public final String getWidgetPath() {
 		return String.format("%s/%s/%s/%s/%s/%s/", 
 				Harmony.PATH_PROJECT, 
@@ -133,6 +166,10 @@ public abstract class BaseAdapter {
 				this.getWidget());
 	}
 	
+	/**
+	 * Get the utility classes path.
+	 * @return The utility classes path
+	 */
 	public final String getUtilPath() {
 		return String.format("%s/%s/%s/%s/%s/%s/",
 				Harmony.PATH_PROJECT, 
@@ -143,6 +180,10 @@ public abstract class BaseAdapter {
 				this.getUtil());
 	}
 	
+	/**
+	 * Get the widget's templates path.
+	 * @return The widget's templates path
+	 */
 	public final String getTemplateWidgetPath() {
 		return String.format("%s/%s/%s/%s/",
 				Harmony.PATH_TEMPLATE, 
@@ -151,6 +192,10 @@ public abstract class BaseAdapter {
 				this.getWidget());
 	}
 	
+	/**
+	 * Get the utility classes' templates path.
+	 * @return The utility classes' templates path
+	 */
 	public final String getTemplateUtilPath() {
 		return String.format("%s/%s/%s/%s/%s/",
 				Harmony.PATH_TEMPLATE, 
@@ -160,6 +205,10 @@ public abstract class BaseAdapter {
 				this.getUtil());
 	}	
 	
+	/**
+	 * Get the sources's templates path.
+	 * @return The source's templates path
+	 */
 	public final String getTemplateSourcePath() {
 		return String.format("%s/%s/%s/", 
 				Harmony.PATH_TEMPLATE, 
@@ -167,6 +216,10 @@ public abstract class BaseAdapter {
 				this.getSource());
 	}
 	
+	/**
+	 * Get the controllers' templates path.
+	 * @return The controllers' templates path
+	 */
 	public final String getTemplateSourceControlerPath() {
 		return String.format("%s/%s/%s/%s/",
 				Harmony.PATH_TEMPLATE,
@@ -175,6 +228,10 @@ public abstract class BaseAdapter {
 				this.getController());
 	}
 	
+	/**
+	 * Get the services' templates path.
+	 * @return The services' templates path
+	 */
 	public final String getTemplateSourceServicePath() {
 		return String.format("%s/%s/%s/%s/", 
 				Harmony.PATH_TEMPLATE, 
@@ -183,6 +240,10 @@ public abstract class BaseAdapter {
 				this.getService());
 	}
 	
+	/**
+	 * Get the entities' templates path.
+	 * @return The entities' templates path
+	 */
 	public final String getTemplateSourceEntityBasePath() {
 		return String.format("%s/%s/%s/%s/%s/",
 				Harmony.PATH_TEMPLATE,
@@ -192,6 +253,10 @@ public abstract class BaseAdapter {
 				"base");
 	}
 	
+	/**
+	 * Get the providers' templates path.
+	 * @return The providers' templates path
+	 */
 	public final String getTemplateSourceProviderPath() {
 		return String.format("%s/%s/%s/%s/",
 				Harmony.PATH_TEMPLATE,
@@ -200,6 +265,10 @@ public abstract class BaseAdapter {
 				this.getProvider());
 	}
 	
+	/**
+	 * Get the criteria's templates path.
+	 * @return The criteria's templates path
+	 */
 	public final String getTemplateSourceCriteriasPath() {
 		return String.format("%s/%s/%s/%s/",
 				Harmony.PATH_TEMPLATE,
@@ -208,6 +277,10 @@ public abstract class BaseAdapter {
 				this.getCriterias());
 	}
 	
+	/**
+	 * Get the fixtures' templates path.
+	 * @return The fixtures' templates path
+	 */
 	public final String getTemplateSourceFixturePath() {
 		return String.format("%s/%s/%s/%s/", 
 				Harmony.PATH_TEMPLATE,
@@ -216,7 +289,10 @@ public abstract class BaseAdapter {
 				this.getFixture());
 	}
 
-	
+	/**
+	 * Get the common's templates path.
+	 * @return The common's templates path
+	 */
 	public final String getTemplateSourceCommonPath() {
 		return String.format("%s/%s/%s/%s/",
 				Harmony.PATH_TEMPLATE,
@@ -225,6 +301,10 @@ public abstract class BaseAdapter {
 				this.getCommon());
 	}
 	
+	/**
+	 * Get the resource path.
+	 * @return The resource path
+	 */
 	public final String getRessourcePath() {
 		return String.format("%s/%s/%s/",
 				Harmony.PATH_PROJECT, 
@@ -232,6 +312,10 @@ public abstract class BaseAdapter {
 				this.getResource());
 	}
 	
+	/**
+	 * Get the assets path.
+	 * @return The assets path
+	 */
 	public final String getAssetsPath() {
 		return String.format("%s/%s/%s/", 
 				Harmony.PATH_PROJECT, 
@@ -239,6 +323,10 @@ public abstract class BaseAdapter {
 				this.getAssets());
 	}
 	
+	/**
+	 * Get the resource's templates path.
+	 * @return The resource's templates path
+	 */
 	public final String getTemplateRessourcePath() {
 		return String.format("%s/%s/%s/",
 				Harmony.PATH_TEMPLATE,
@@ -246,6 +334,10 @@ public abstract class BaseAdapter {
 				this.getResource());
 	}
 	
+	/**
+	 * Get the resource's layouts path.
+	 * @return The resource's layouts path
+	 */
 	public final String getRessourceLayoutPath() {
 		return String.format("%s/%s/%s/%s/",
 				Harmony.PATH_PROJECT,
@@ -254,6 +346,10 @@ public abstract class BaseAdapter {
 				this.getView());
 	}
 	
+	/**
+	 * Get the resources' layouts' templates path.
+	 * @return The resources' layouts' templates path
+	 */
 	public final String getTemplateRessourceLayoutPath() {
 		return String.format("%s/%s/%s/%s/",
 				Harmony.PATH_TEMPLATE, 
@@ -262,6 +358,10 @@ public abstract class BaseAdapter {
 				this.getView());
 	}
 
+	/**
+	 * Get the resources' values path.
+	 * @return The resources values path
+	 */
 	public final String getRessourceValuesPath() {
 		return String.format("%s/%s/%s/%s/",
 				Harmony.PATH_PROJECT, 
@@ -270,6 +370,10 @@ public abstract class BaseAdapter {
 				this.getValues());
 	}
 	
+	/**
+	 * Get the resources' values' templates path.
+	 * @return The resources values' templates path
+	 */
 	public final String getTemplateRessourceValuesPath() {
 		return String.format("%s/%s/%s/%s/", 
 				Harmony.PATH_TEMPLATE, 
@@ -278,6 +382,10 @@ public abstract class BaseAdapter {
 				this.getValues());
 	}
 
+	/**
+	 * Get the manifest's path.
+	 * @return The manifest's path
+	 */
 	public final String getManifestPathFile() {
 		return String.format("%s/%s/%s", 
 				Harmony.PATH_PROJECT, 
@@ -285,6 +393,10 @@ public abstract class BaseAdapter {
 				this.getManifest());
 	}
 	
+	/**
+	 * Get the manifest's template path.
+	 * @return The manifest's template path
+	 */
 	public final String getTemplateManifestPathFile() {
 		return String.format("%s/%s/%s/%s",
 				Harmony.PATH_TEMPLATE,
@@ -293,6 +405,10 @@ public abstract class BaseAdapter {
 				this.getManifest());
 	}
 
+	/**
+	 * Get the home activity path.
+	 * @return The home activity path
+	 */
 	public final String getHomeActivityPathFile() {
 		return String.format("%s/%s/%s/%s/%s",
 				Harmony.PATH_PROJECT,
@@ -302,6 +418,10 @@ public abstract class BaseAdapter {
 				this.getHome());
 	}
 	
+	/**
+	 * Get the home activity template path.
+	 * @return The home activity template path
+	 */
 	public final String getTemplateHomeActivityPathFile() {
 		return String.format("%s/%s/%s/%s", 
 				Harmony.PATH_TEMPLATE, 
@@ -310,6 +430,10 @@ public abstract class BaseAdapter {
 				this.getHome());
 	}
 
+	/**
+	 * Get the strings path.
+	 * @return The strings path
+	 */
 	public final String getStringsPathFile() {
 		return String.format("%s/%s/%s/%s/%s", 
 				Harmony.PATH_PROJECT, 
@@ -319,6 +443,10 @@ public abstract class BaseAdapter {
 				this.getStrings());
 	}
 	
+	/**
+	 * Get the strings template path.
+	 * @return The strings template path
+	 */
 	public final String getTemplateStringsPathFile() {
 		return String.format("%s/%s/%s/%s/%s",
 				Harmony.PATH_TEMPLATE, 
@@ -328,6 +456,10 @@ public abstract class BaseAdapter {
 				this.getStrings());
 	}
 	
+	/**
+	 * Get the configs path.
+	 * @return The configs path
+	 */
 	public final String getConfigsPathFile() {
 		return String.format("%s/%s/%s/%s/%s", 
 				Harmony.PATH_PROJECT,
@@ -337,6 +469,10 @@ public abstract class BaseAdapter {
 				this.getConfigs());
 	}
 
+	/**
+	 * Get the configs template path.
+	 * @return The configs template path
+	 */
 	public final String getTemplateConfigsPathFile() {
 		return String.format("%s/%s/%s/%s/%s",
 				Harmony.PATH_TEMPLATE, 
@@ -346,6 +482,10 @@ public abstract class BaseAdapter {
 				this.getConfigs());
 	}
 	
+	/**
+	 * Get the tests templates path.
+	 * @return The tests templates path
+	 */
 	public final String getTemplateTestsPath() {
 		return String.format("%s/%s/%s/",
 				Harmony.PATH_TEMPLATE,
@@ -353,6 +493,10 @@ public abstract class BaseAdapter {
 				this.getTest());
 	}
 	
+	/**
+	 * Get the test project templates path.
+	 * @return The test project templates path
+	 */
 	public final String getTemplateTestProjectPath() {
 		return String.format("%s/%s/%s/%s/", 
 				Harmony.PATH_TEMPLATE,
@@ -361,6 +505,10 @@ public abstract class BaseAdapter {
 				this.getProject());
 	}
 	
+	/**
+	 * Get the strings tests path.
+	 * @return The strings tests path
+	 */
 	public final String getStringsTestPathFile() {
 		return String.format("%s/%s/%s/%s/%s/%s",
 				Harmony.PATH_PROJECT, 
@@ -371,6 +519,10 @@ public abstract class BaseAdapter {
 				this.getStrings());
 	}
 	
+	/**
+	 * Get the strings tests templates path.
+	 * @return The strings tests templates path
+	 */
 	public final String getTemplateStringsTestPathFile() {
 		return String.format("%s/%s/%s/%s/%s/%s",
 				Harmony.PATH_TEMPLATE, 
@@ -381,6 +533,11 @@ public abstract class BaseAdapter {
 				this.getStrings());
 	}
 	
+	
+	/**
+	 * Get the source data namespace.
+	 * @return The source data namespace
+	 */
 	public final String getSourceDataNameSpace() {
 		return String.format("%s.%s.%s.%s", 
 				Harmony.PATH_PROJECT, 

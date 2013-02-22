@@ -18,21 +18,21 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.plateforme.SqliteAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
-/** Entity field metadata */
+/** Entity field metadata. */
 public class FieldMetadata extends BaseMetadata {
-	/** Owner */
+	/** Owner. */
 	public ClassMetadata owner;
 	
-	/** Field type */
+	/** Field type. */
 	public String type;
 	
-	/** Column name */
+	/** Column name. */
 	public String columnName;
 	
-	/** Field database type */
+	/** Field database type. */
 	public String columnDefinition;
 	
-	/** Relation mapped to this field*/
+	/** Relation mapped to this field. */
 	public RelationMetadata relation;
 	
 	public Boolean nullable;
@@ -56,7 +56,7 @@ public class FieldMetadata extends BaseMetadata {
 	}
 
 	
-	/** Add Component String of field */
+	/** Add Component String of field. */
 	public final void makeString(final String componentName) {
 		final String key = 
 				this.owner.name.toLowerCase() + "_" + this.name.toLowerCase();
@@ -93,7 +93,7 @@ public class FieldMetadata extends BaseMetadata {
 	}
 	
 	/**
-	 * Transform the field to a map of strings and a relation map
+	 * Transform the field to a map of strings and a relation map.
 	 * @return the map
 	 */
 	@Override

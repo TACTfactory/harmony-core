@@ -10,14 +10,14 @@ package com.tactfactory.mda.meta;
 
 
 public class ConfigMetadata {
-	/** Identify configuration resource */
+	/** Identify configuration resource. */
 	public String key;
 	
-	/** Value of configuration resource */
+	/** Value of configuration resource. */
 	public String value;
 	
 	/**
-	 * Insert to meta a new resource configuration
+	 * Insert to meta a new resource configuration.
 	 * 
 	 * @param key
 	 * @param value

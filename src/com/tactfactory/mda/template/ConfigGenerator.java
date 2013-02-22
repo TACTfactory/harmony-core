@@ -36,7 +36,7 @@ public class ConfigGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Update XML Strings
+	 * Update XML Strings.
 	 */
 	public final void generateConfigXml() {		
 		ConsoleUtils.display(">> Generate config string...");

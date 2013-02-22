@@ -20,42 +20,42 @@ import com.tactfactory.mda.meta.TranslationMetadata.Group;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
-/** Entity class metadata */
+/** Entity class metadata. */
 public class ClassMetadata extends BaseMetadata {
 
-	/** Used for join tables (ManyToMany relations)*/
+	/** Used for join tables (ManyToMany relations). */
 	public boolean internal = false;
 	
-	/** Namespace of entity class */
+	/** Namespace of entity class. */
 	public String space = "";
 
-	/** List of fields of entity class*/
+	/** List of fields of entity class. */
 	public Map<String, FieldMetadata> fields = 
 			new LinkedHashMap<String, FieldMetadata>();
 
-	/** List of ids of entity class*/
+	/** List of ids of entity class. */
 	public Map<String, FieldMetadata> ids = 
 			new LinkedHashMap<String, FieldMetadata>();
 	
-	/** List of relations of entity class*/
+	/** List of relations of entity class. */
 	public Map<String, FieldMetadata> relations =
 			new LinkedHashMap<String, FieldMetadata>();
 		
-	/** Class inherited by the entity class or null if none*/
+	/** Class inherited by the entity class or null if none. */
 	public String extendType;
 	
-	/** Implemented class list of the entity class */
+	/** Implemented class list of the entity class. */
 	public List<String> implementTypes = 
 			new ArrayList<String>();
 	
-	/** Implemented class list of the entity class */
+	/** Implemented class list of the entity class. */
 	public List<MethodMetadata> methods = 
 			new ArrayList<MethodMetadata>();
 
-	/** Imports of the class */
+	/** Imports of the class. */
 	public List<String> imports = new ArrayList<String>();
 	
-	/** Add Component String of field */
+	/** Add Component String of field. */
 	public void makeString(final String componentName) {
 		final String key = this.name.toLowerCase() 
 				+ "_" + componentName.toLowerCase(Locale.ENGLISH);
@@ -64,7 +64,7 @@ public class ClassMetadata extends BaseMetadata {
 
 	
 	/**
-	 * Transform the class to a map given an adapter
+	 * Transform the class to a map given an adapter.
 	 * @param adapter The adapter used to customize the fields
 	 * @return the map
 	 */

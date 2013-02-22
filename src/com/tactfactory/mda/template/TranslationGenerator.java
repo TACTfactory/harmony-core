@@ -37,7 +37,7 @@ public class TranslationGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Update XML Strings
+	 * Update XML Strings.
 	 */
 	public final void generateStringsXml() {
 		

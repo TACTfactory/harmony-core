@@ -38,7 +38,7 @@ public class TestDBGenerator extends BaseGenerator {
 	}
 	
 	/**  
-	 * Generate DataBase Test  
+	 * Generate DataBase Test.
 	 */ 
 	private void generate() {
 		// Info
@@ -62,7 +62,7 @@ public class TestDBGenerator extends BaseGenerator {
 	}
 	
 	/** 
-	 * Make Java Source Code
+	 * Make Java Source Code.
 	 * 
 	 * @param template Template path file. 
 	 * <br/>For list activity is "TemplateListActivity.java"
@@ -89,7 +89,7 @@ public class TestDBGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Initialize Test Android Project folders and files
+	 * Initialize Test Android Project folders and files.
 	 * @return success of Test Android project initialization
 	 */
 	public final boolean initTestAndroid() {

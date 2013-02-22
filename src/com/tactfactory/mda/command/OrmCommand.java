@@ -25,7 +25,7 @@ import com.tactfactory.mda.template.TestDBGenerator;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
- * Project Custom Files Code Generator
+ * Project Custom Files Code Generator.
  * 
  * use Entity files in name space folder
  * it can :
@@ -70,7 +70,7 @@ public class OrmCommand extends BaseCommand {
 	}
 
 	/**
-	 * Generate java code files from first parsed Entity
+	 * Generate java code files from first parsed Entity.
 	 */
 	protected void generateEntity() {
 		/*ApplicationMetadata appMetas = this.getMetasFromArg();
@@ -84,7 +84,7 @@ public class OrmCommand extends BaseCommand {
 	}
 
 	/**
-	 * Generate java code files from parsed Entities
+	 * Generate java code files from parsed Entities.
 	 */
 	protected void generateEntities() {
 		this.generateMetas();
@@ -97,7 +97,7 @@ public class OrmCommand extends BaseCommand {
 	}
 
 	/**
-	 * Generate Create,Read, Upload, Delete code functions
+	 * Generate Create,Read, Upload, Delete code functions.
 	 */
 	protected void generateCrud() {
 		this.generateMetas();
@@ -107,7 +107,7 @@ public class OrmCommand extends BaseCommand {
 	}
 	
 	/**
-	 * Generate the Persistence part for the given classes
+	 * Generate the Persistence part for the given classes.
 	 */
 	protected void makeLayoutDatabase() {
 		try {
@@ -123,7 +123,7 @@ public class OrmCommand extends BaseCommand {
 	}
 	
 	/**
-	 * Generate Test DB for Entities
+	 * Generate Test DB for Entities.
 	 */
 	protected void makeLayoutTestDatabase() {
 		try {
@@ -135,7 +135,7 @@ public class OrmCommand extends BaseCommand {
 	}
 	
 	/**
-	 * Generate the GUI part for the given classes
+	 * Generate the GUI part for the given classes.
 	 */
 	protected void makeLayoutUi(final boolean generateHome) {
 		try {

@@ -19,7 +19,7 @@ public class GeneralCommand extends BaseCommand {
 	public static final String HELP = "help";
 
 	/**
-	 * Display Help Message
+	 * Display Help Message.
 	 */
 	public void help() {
 		ConsoleUtils.display("Usage:\n" 
@@ -32,7 +32,7 @@ public class GeneralCommand extends BaseCommand {
 	}
 
 	/**
-	 * Display list of All commands
+	 * Display list of All commands.
 	 */
 	public void list() {
 		final Command general = 

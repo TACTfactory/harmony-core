@@ -29,7 +29,7 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 @Inherited
 public @interface Rest {
 	
-	/** Security access of REST query */
+	/** Security access of REST query. */
 	public enum Security {
 		NONE(0),
 		SESSION(1);

@@ -25,7 +25,7 @@ import com.tactfactory.mda.template.ProjectGenerator;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
- * Project Structure Generator
+ * Project Structure Generator.
  * 
  * can :
  * <ul>
@@ -36,7 +36,7 @@ import com.tactfactory.mda.utils.ConsoleUtils;
  */
 @PluginImplementation
 public class ProjectCommand extends BaseCommand {
-	/** Bundle name */
+	/** Bundle name. */
 	public static final String BUNDLE 		= "project";
 	
 	private static final String ERROR_MSG = 
@@ -117,7 +117,7 @@ public class ProjectCommand extends BaseCommand {
 	private boolean isProjectInit = false;
 
 	/**
-	 * Init Project Parameters (project name, namespace, android sdk path)
+	 * Init Project Parameters (project name, namespace, android sdk path).
 	 */
 	public final void initProjectParam() {
 		if (!this.isProjectInit) {
@@ -181,7 +181,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Initialize Android Project folders and files
+	 * Initialize Android Project folders and files.
 	 * @return success of Android project initialization
 	 */
 	public final boolean initAndroid() {
@@ -209,7 +209,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Initialize IOS Project folders and files
+	 * Initialize IOS Project folders and files.
 	 * @return success of IOS project initialization
 	 */
 	public final boolean initIOS() {
@@ -234,7 +234,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Initialize RIM Project folders and files
+	 * Initialize RIM Project folders and files.
 	 * @return success of RIM project initialization
 	 */
 	public final boolean initRIM() {
@@ -259,7 +259,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Initialize Windows Phone Project folders and files
+	 * Initialize Windows Phone Project folders and files.
 	 * @return success of Windows Phone project initialization
 	 */
 	public final boolean initWinPhone() {
@@ -284,7 +284,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Initialize all project platforms
+	 * Initialize all project platforms.
 	 */
 	public final void initAll() {
 		ConsoleUtils.display("> Init All Projects");
@@ -297,7 +297,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Remove Android project folder
+	 * Remove Android project folder.
 	 */
 	public final void removeAndroid() {
 		if (!this.userHasConfirmed) {
@@ -322,7 +322,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Remove IOS project folder
+	 * Remove IOS project folder.
 	 */
 	public final void removeIOS() {
 		if (!this.userHasConfirmed) {
@@ -345,7 +345,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Remove RIM project folder
+	 * Remove RIM project folder.
 	 */
 	public final void removeRIM() {
 		if (!this.userHasConfirmed) {
@@ -371,7 +371,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Remove Windows Phone project folder
+	 * Remove Windows Phone project folder.
 	 */
 	public final void removeWinPhone() {
 		if (!this.userHasConfirmed) {
@@ -393,7 +393,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Remove all project platforms
+	 * Remove all project platforms.
 	 */
 	public final void removeAll() {
 		if (!this.userHasConfirmed) {
@@ -428,7 +428,6 @@ public class ProjectCommand extends BaseCommand {
 		}
 	}
 
-	/** @see BaseCommand#summary() */
 	@Override
 	public final void summary() {
 		ConsoleUtils.display("\n> PROJECT \n"  
@@ -463,7 +462,6 @@ public class ProjectCommand extends BaseCommand {
 				+ "\t => Remove All project directories\n");
 	}
 
-	/** @see BaseCommand#execute(String, String[], String) */
 	@Override
 	public final void execute(final String action,
 			final String[] args, 
@@ -511,7 +509,6 @@ public class ProjectCommand extends BaseCommand {
 		}
 	}
 
-	/** @see BaseCommand#isAvailableCommand(String) */
 	@Override
 	@Capabilities
 	public final boolean isAvailableCommand(final String command) {

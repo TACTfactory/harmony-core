@@ -54,7 +54,7 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
 /**
- * Parses a group of java files
+ * Parses a group of java files.
  * @author Gregg Cesarine
  *
  */
@@ -123,7 +123,7 @@ public class JavaModelParser {
 				.replaceAll("\\.", "/") 
 			+ PATH_ENTITY;
 	
-	/** Filter for java files only*/
+	/** Filter for java files only. */
 	private final FilenameFilter filter = new FilenameFilter() {
 	    @Override
 		public boolean accept(final File dir, final String name) {
@@ -140,7 +140,7 @@ public class JavaModelParser {
 	}
 	
 	/**
-	 * Load entity from one specified file
+	 * Load entity from one specified file.
 	 * 
 	 * @param filename or path to file to parse
 	 */
@@ -149,7 +149,7 @@ public class JavaModelParser {
 	}
 	
 	/**
-	 * Load entities files found in entity folder
+	 * Load entities files found in entity folder.
 	 */
 	public final void loadEntities() throws Exception {
 		final File dir = new File(this.entityPath);
@@ -165,7 +165,7 @@ public class JavaModelParser {
 	}
 
 	/**
-	 * Parse java file to load entities parameters
+	 * Parse java file to load entities parameters.
 	 * 
 	 * @param filename or path to the java file to parse
 	 */
@@ -598,12 +598,12 @@ public class JavaModelParser {
 		}
 
 		/**
-		 * Check if Id annotation is present in entity
+		 * Check if Id annotation is present in entity.
 		 * 
-		 * @param fieldMeta
-		 * @param isId
-		 * @param annotationType
-		 * @return
+		 * @param fieldMeta The field metadata to complete
+		 * @param old Is the field already known as an id ?
+		 * @param annotationType The annotation to parse
+		 * @return True if the field is an ID
 		 */
 		private boolean isId(final FieldMetadata fieldMeta, 
 				final boolean old, 
@@ -621,11 +621,12 @@ public class JavaModelParser {
 		}
 		
 		/**
-		 * Check if Column annotation is present in entity
+		 * Check if Column annotation is present in entity.
 		 * 
-		 * @param fieldMeta
-		 * @param annotationType
-		 * @return
+		 * @param fieldMeta The FieldMetadata to complete
+		 * @param old Was this field already a column ?
+		 * @param annotationType The annotation to parse
+		 * @return True if the field is a column
 		 */
 		private boolean isColumn(final FieldMetadata fieldMeta, 
 				final boolean old, 
@@ -651,11 +652,12 @@ public class JavaModelParser {
 		}
 
 		/**
-		 * Check if Relation annotation is present in entity
+		 * Check if Relation annotation is present in entity.
 		 * 
-		 * @param fieldMeta
-		 * @param annotationType
-		 * @return
+		 * @param fieldMeta The FieldMetadata to complete
+		 * @param old Was this field already a relation ?
+		 * @param annotationType The annotation to parse
+		 * @return True if the field is a relation
 		 */
 		private boolean isRelation(final FieldMetadata fieldMeta, 
 				final boolean old, 

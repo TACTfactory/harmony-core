@@ -4,7 +4,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 /**
- * All the tests related to Rest generation
+ * All the tests related to Rest generation.
  * @author gregg
  *
  */

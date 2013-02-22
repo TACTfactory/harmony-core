@@ -70,7 +70,7 @@ public class SymfonyCommand extends BaseCommand {
 	}
 	
 	/**
-	 * Generate java code files from parsed Entities
+	 * Generate java code files from parsed Entities.
 	 */
 	protected void initProject() {
 
@@ -87,7 +87,7 @@ public class SymfonyCommand extends BaseCommand {
 	}
 	
 	/**
-	 * Generate yaml entities for symfony
+	 * Generate yaml entities for symfony.
 	 */
 	protected void generateEntities() {
 
@@ -104,7 +104,7 @@ public class SymfonyCommand extends BaseCommand {
 	}
 	
 	/**
-	 * Generate yaml entities for symfony
+	 * Generate yaml entities for symfony.
 	 */
 	protected void generateWebRepositories() {
 
@@ -121,7 +121,7 @@ public class SymfonyCommand extends BaseCommand {
 	}
 	
 	/**
-	 * Generate yaml entities for symfony
+	 * Generate yaml entities for symfony.
 	 */
 	protected void installSymfony() {
 		try {
@@ -133,7 +133,7 @@ public class SymfonyCommand extends BaseCommand {
 	}
 	
 	/**
-	 * Generate yaml entities for symfony
+	 * Generate yaml entities for symfony.
 	 */
 	protected void installBundles() {
 		try {

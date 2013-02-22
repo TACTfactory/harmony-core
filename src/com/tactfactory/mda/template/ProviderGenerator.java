@@ -79,7 +79,7 @@ public class ProviderGenerator extends BaseGenerator {
 	}
 	
 	/** 
-	 * Make Java Source Code
+	 * Make Java Source Code.
 	 * 
 	 * @param template Template path file. 
 	 * <br/>For list activity is "TemplateListActivity.java"
@@ -101,7 +101,7 @@ public class ProviderGenerator extends BaseGenerator {
 		super.makeSource(fullTemplatePath, fullFilePath, false);
 	}
 
-	/**  Update Android Manifest
+	/**  Update Android Manifest.
 	 * @param nameProvider 
 	 * 
 	 * @param classFile

@@ -150,7 +150,7 @@ public class SearchGenerator  extends BaseGenerator {
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 	
-	/**  Update Android Manifest
+	/**  Update Android Manifest.
 	 * 
 	 * @param classFile
 	 */

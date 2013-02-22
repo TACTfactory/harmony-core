@@ -223,9 +223,9 @@ public class SyncGenerator extends BaseGenerator {
 		return index;
 	}
 	
-	/**  Update Android Manifest
+	/**  Update Android Manifest.
 	 * 
-	 * @param classFile
+	 * @param permissionName The permission to add
 	 */
 	private void addPermissionManifest(final String permissionName) {
 		try { 

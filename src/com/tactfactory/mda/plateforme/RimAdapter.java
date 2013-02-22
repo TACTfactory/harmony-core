@@ -14,7 +14,7 @@ import com.tactfactory.mda.meta.ClassMetadata;
 public final class RimAdapter extends BaseAdapter {
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public RimAdapter() {
 		super();
@@ -22,22 +22,13 @@ public final class RimAdapter extends BaseAdapter {
 		this.resource 	= "res";
 		this.source 	= "src";
 	}
-
-	/** 
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter
-	 * #getNameSpace(com.tactfactory.mda.orm.ClassMetadata, java.lang.String)
-	 */
+ 
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	/** 
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter
-	 * #getNameSpaceEntity(com.tactfactory.mda.orm.ClassMetadata, 
-	 * 		java.lang.String)
-	 */
+
 	@Override
 	public String getNameSpaceEntity(final ClassMetadata cm, 
 			final String type) {

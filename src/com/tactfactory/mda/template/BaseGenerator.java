@@ -48,7 +48,7 @@ public abstract class BaseGenerator {
 	}
 	
 	/** 
-	 * Make Java Source Code
+	 * Make Java Source Code.
 	 * 
 	 * @param templatePath Template path file. 
 	 * 		For list activity is "TemplateListActivity.java"
@@ -89,7 +89,7 @@ public abstract class BaseGenerator {
 	}
 	
 	/** 
-	 * Append Source Code to existing file
+	 * Append Source Code to existing file.
 	 * 
 	 * @param templatePath Template path file. 
 	 * 			For list activity is "TemplateListActivity.java"
@@ -129,7 +129,7 @@ public abstract class BaseGenerator {
 	
 	
 	/**
-	 * Update Libs
+	 * Update Libs.
 	 */
 	protected void updateLibrary(final String libName) {
 		final File dest = new File(
@@ -144,7 +144,7 @@ public abstract class BaseGenerator {
 	}
 	
 	/**
-	 * Generate Utils
+	 * Generate Utils.
 	 */
 	protected void updateUtil(final String utilName) {		
 		this.makeSource(

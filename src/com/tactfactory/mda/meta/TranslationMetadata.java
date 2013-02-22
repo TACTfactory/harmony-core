@@ -14,13 +14,13 @@ import java.util.Locale;
 
 public class TranslationMetadata {
 
-	/** Identify string resource */
+	/** Identify string resource. */
 	private String key;
 	
-	/** Groups of string resource */
+	/** Groups of string resource. */
 	private Group group = Group.NONE;
 	
-	/** Translate resources (by Locale) */
+	/** Translate resources (by Locale). */
 	private HashMap<Locale, String> i18n = new LinkedHashMap<Locale, String>();
 	
 	
@@ -53,7 +53,7 @@ public class TranslationMetadata {
 	}
 	
 	/**
-	 * Insert to meta a new resource string in the default group (Group.NONE)
+	 * Insert to meta a new resource string in the default group (Group.NONE).
 	 * 
 	 * @param key
 	 * @param defaultValue
@@ -65,7 +65,7 @@ public class TranslationMetadata {
 	}
 	
 	/**
-	 * Insert to meta a new resource string
+	 * Insert to meta a new resource string.
 	 * 
 	 * @param key
 	 * @param defaultValue

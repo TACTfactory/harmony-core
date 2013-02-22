@@ -18,7 +18,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Make Platform specific Project Structure
+	 * Make Platform specific Project Structure.
 	 * @return success to make the platform test project folder
 	 */
 	public final boolean makeProject() {
@@ -37,7 +37,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Make Android Test Project Structure
+	 * Make Android Test Project Structure.
 	 * @return success to make the platform test project folder
 	 */
 	private boolean makeTestProjectAndroid() {
@@ -82,7 +82,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Make IOS Test Project Structure
+	 * Make IOS Test Project Structure.
 	 * @return success to make the platform test project folder
 	 */
 	private boolean makeTestProjectIOS() {
@@ -107,7 +107,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Make RIM Test Project Structure
+	 * Make RIM Test Project Structure.
 	 * @return success to make the platform test project folder
 	 */
 	private boolean makeTestProjectRIM() {
@@ -117,7 +117,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Make Windows Phone Test Project Structure
+	 * Make Windows Phone Test Project Structure.
 	 * @return success to make the platform test project folder
 	 */
 	private boolean makeTestProjectWinPhone() {
@@ -127,7 +127,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Update TestLibs
+	 * Update TestLibs.
 	 */
 	@Override
 	protected final void updateLibrary(final String libName) {

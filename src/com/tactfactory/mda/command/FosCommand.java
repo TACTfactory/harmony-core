@@ -41,14 +41,14 @@ public class FosCommand extends BaseCommand {
 	}
 
 	/**
-	 * Remote a user
+	 * Remote a user.
 	 * @param role
 	 */
 	public void fosUserDemote(final Object role) {
 	}
 
 	/**
-	 * Promote a user
+	 * Promote a user.
 	 * @param role
 	 */
 	public void fosUserPromote(final Object role) {

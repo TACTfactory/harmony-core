@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 package com.tactfactory.mda.plateforme;
-
+ 
 import com.tactfactory.mda.meta.ClassMetadata;
 
 /** 
@@ -17,7 +17,7 @@ import com.tactfactory.mda.meta.ClassMetadata;
 public final class WinphoneAdapter extends BaseAdapter {
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public WinphoneAdapter() {
 		super();
@@ -26,22 +26,12 @@ public final class WinphoneAdapter extends BaseAdapter {
 		this.source 	= "src";
 	}
 
-	/** 
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter
-	 * #getNameSpace(com.tactfactory.mda.orm.ClassMetadata,
-	 * 				 java.lang.String)
-	 */
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	/**
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter
-	 * #getNameSpaceEntity(com.tactfactory.mda.orm.ClassMetadata,
-	 * 					 java.lang.String)
-	 */
+
 	@Override
 	public String getNameSpaceEntity(final ClassMetadata cm, 
 			final String type) {

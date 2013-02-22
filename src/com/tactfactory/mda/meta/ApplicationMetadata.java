@@ -20,25 +20,25 @@ public final class ApplicationMetadata extends BaseMetadata {
 	private static final String PATH_DELIMITER = "/";
 	private static final String PACKAGE_DELIMITER = "\\.";
 	
-	/** Singleton*/
+	/** Singleton. */
 	public static final ApplicationMetadata INSTANCE =
 			new ApplicationMetadata();
 	
-	/** Android SDK Path*/
+	/** Android SDK Path. */
 	public static String androidSdkPath;
 	
-	/** Project NameSpace (com/tactfactory/mda/test/demact) */
+	/** Project NameSpace (com/tactfactory/mda/test/demact). */
 	public String projectNameSpace;
 	
-	/** List of Entity of entity class */
+	/** List of Entity of entity class. */
 	public Map<String, ClassMetadata> entities =
 			new LinkedHashMap<String, ClassMetadata>();
 	
-	/** List of string use in application */
+	/** List of string use in application. */
 	public Map<String, TranslationMetadata> translates =
 			new TreeMap<String, TranslationMetadata>();
 
-	/** List of config use in application */
+	/** List of config use in application. */
 	public Map<String, ConfigMetadata> configs =
 			new TreeMap<String, ConfigMetadata>();
 	
@@ -46,7 +46,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 	private ApplicationMetadata() { }
 	
 	/**
-	 * Transform the application to a map given an adapter
+	 * Transform the application to a map given an adapter.
 	 * @param adapt The adapter used to customize the fields
 	 * @return the map
 	 */

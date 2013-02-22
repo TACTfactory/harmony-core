@@ -17,7 +17,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Annotation used to define a OneToMany relation (1-N)
+ * Annotation used to define a OneToMany relation (1-N).
  * @author gregg
  *
  */

@@ -79,7 +79,7 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 	}
 	
 	/** 
-	 * Make Java Source Code
+	 * Make Java Source Code.
 	 * 
 	 * @param template Template path file. 
 	 * 		For list activity is "TemplateListActivity.java"
@@ -102,7 +102,7 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 	}
 	
 	/** 
-	 * Make Java Source Code
+	 * Make Java Source Code.
 	 * 
 	 * @param template Template path file. 
 	 * 		For list activity is "TemplateListActivity.java"

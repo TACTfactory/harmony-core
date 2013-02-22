@@ -28,7 +28,7 @@ public class YamlModelParser {
 	
 	
 	/**
-	 * Load the entities in the Yaml file <filename>
+	 * Load the entities in the Yaml file <filename>.
 	 * @param filename
 	 */
     public final void loadEntities(final String filename) {

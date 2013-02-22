@@ -39,7 +39,7 @@ public class TestWSGenerator extends BaseGenerator {
 	}
 	
 	/**  
-	 * Generate Rest Test  
+	 * Generate Rest Test. 
 	 */ 
 	private void generate() {
 		// Info
@@ -63,7 +63,7 @@ public class TestWSGenerator extends BaseGenerator {
 	}
 	
 	/** 
-	 * Make Java Source Code
+	 * Make Java Source Code.
 	 * 
 	 * @param template Template path file. 
 	 * <br/>For list activity is "TemplateListActivity.java"
