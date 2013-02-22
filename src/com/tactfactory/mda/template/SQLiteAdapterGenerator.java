@@ -13,16 +13,29 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
+/**
+ * SQLite Adapters generator.
+ * @author gregg
+ *
+ */
 public class SQLiteAdapterGenerator extends BaseGenerator {	
-	
+	/** The local name space. */
 	private String localNameSpace;
 
+	/**
+	 * Constructor.
+	 * @param adapter The adapter to use
+	 * @throws Exception 
+	 */
 	public SQLiteAdapterGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
 		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
+	/**
+	 * Generate the adapters and the criterias.
+	 */
 	public final void generateAll() {
 		ConsoleUtils.display(">> Generate Adapter...");
 		
@@ -47,6 +60,9 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 				"base/ICriteria.java", false);
 	}
 	
+	/**
+	 * Generate the current entity's adapters and criteria.
+	 */
 	private void generate() {
 		// Info
 		ConsoleUtils.display(">>> Generate Adapter for " 
@@ -83,7 +99,8 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 	 * 
 	 * @param template Template path file. 
 	 * 		For list activity is "TemplateListActivity.java"
-	 * @param filename
+	 * @param filename The destination file
+	 * @param override True if must overwrite file.
 	 */
 	private void makeSourceControler(final String template, 
 			final String filename, 
@@ -106,7 +123,8 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 	 * 
 	 * @param template Template path file. 
 	 * 		For list activity is "TemplateListActivity.java"
-	 * @param filename
+	 * @param filename Destination file name
+	 * @param override True if must overwrite file.
 	 */
 	private void makeSourceCriteria(final String template,
 			final String filename, 

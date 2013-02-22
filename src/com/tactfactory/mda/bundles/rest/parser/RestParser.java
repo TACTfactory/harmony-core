@@ -26,11 +26,20 @@ import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.parser.BaseParser;
 import com.tactfactory.mda.utils.PackageUtils;
 
+/**
+ * Parser for Rest bundle.
+ * @author gregg
+ *
+ */
 public class RestParser extends BaseParser {
+	/** Bundle name. */
 	private static final String REST = "rest";
+	/** Rest annotation name. */
 	private static final String ANNOT_REST = 
 			PackageUtils.extractNameEntity(Rest.class);
+	/** Security argument name. */
 	private static final String ANNOT_REST_SECURITY = "security";
+	/** URI argument name. */
 	private static final String ANNOT_REST_URI = "uri";
 	@Override
 	public void visitClass(final ClassOrInterfaceDeclaration field, 
@@ -61,7 +70,7 @@ public class RestParser extends BaseParser {
 	}
 
 	@Override
-	public void visitClassAnnotation(final ClassMetadata cm,
+	public final void visitClassAnnotation(final ClassMetadata cm,
 			final AnnotationExpr fieldAnnot) {
 		if (fieldAnnot.getName().toString().equals(ANNOT_REST)) {
 			final RestMetadata rm = new RestMetadata();

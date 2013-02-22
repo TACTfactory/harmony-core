@@ -12,8 +12,17 @@ import com.tactfactory.mda.bundles.rest.meta.RestMetadata;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
 
+/**
+ * Completor for rest bundle.
+ * @author gregg
+ *
+ */
 public class RestCompletor {
 	
+	/**
+	 * Store all rest entities in an ApplicationRestMetadata class.
+	 * @param am The ApplicationMetadata.
+	 */
 	public final void generateApplicationRestMetadata(
 			final ApplicationMetadata am) {
 		for (final ClassMetadata cm : am.entities.values()) {

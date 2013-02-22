@@ -40,16 +40,36 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
+/**
+ * Generate the CRUD activities.
+ * @author gregg
+ *
+ */
 public class ActivityGenerator extends BaseGenerator {
+	/** "template". */
 	private static final String LOWER_TEMPLATE = "template";
+	/** "Template". */
 	private static final String TEMPLATE = "Template";
+	/** "name". */
 	private static final String NAME = "name";
 	
+	/** The local namespace. */
 	private String localNameSpace;
+	
+	/** Are the entities writable ? */
 	private boolean isWritable = true;
+	
+	/** Has the project a date ? */ 
 	private boolean isDate;
+	
+	/** Has the project a time ? */
 	private boolean isTime;
 	
+	/**
+	 * Constructor.
+	 * @param adapter The adapter to use
+	 * @throws Exception 
+	 */
 	public ActivityGenerator(final BaseAdapter adapter) throws Exception {
 		this(adapter, true);
 		
@@ -79,6 +99,12 @@ public class ActivityGenerator extends BaseGenerator {
 		}
 	}
 
+	/**
+	 * Constructor.
+	 * @param adapter The adapter to use.
+	 * @param writable Are the entities writable ? (default to true)
+	 * @throws Exception 
+	 */
 	public ActivityGenerator(final BaseAdapter adapter,
 			final Boolean writable) throws Exception {
 		super(adapter);
@@ -87,6 +113,9 @@ public class ActivityGenerator extends BaseGenerator {
 		this.datamodel = ApplicationMetadata.INSTANCE.toMap(this.adapter);
 	}
 	
+	/**
+	 * Generate all activities for every entity.
+	 */
 	public final void generateAll() {
 		ConsoleUtils.display(">> Generate CRUD view...");
 
@@ -114,7 +143,10 @@ public class ActivityGenerator extends BaseGenerator {
 		}
 	}
 	
-	/** All Actions (List, Show, Edit, Create). */
+	/** 
+	 * Generate all actions (List, Show, Edit, Create). 
+	 * @param entityName The entity for which to generate the crud. 
+	 */
 	public final void generateAllAction(final String entityName) {
 		ConsoleUtils.display(">>> Generate CRUD view for " +  entityName);
 		
@@ -319,7 +351,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * 
 	 * @param template Template path file. 
 	 *		For list activity is "TemplateListActivity.java"
-	 * @param filename
+	 * @param filename The destination file name.
 	 */
 	private void makeSourceControler(final String template,
 			final String filename) {
@@ -383,9 +415,10 @@ public class ActivityGenerator extends BaseGenerator {
 		output.close();
 	}
 
-	/**  Update Android Manifest.
-	 * 
-	 * @param classFile
+	/**  
+	 * Update Android Manifest.
+	 * @param classF The class file name
+	 * @param entityName the entity for which to update the manifest for.
 	 */
 	private void updateManifest(final String classF, final String entityName) {
 		String classFile = entityName + classF;
@@ -518,6 +551,8 @@ public class ActivityGenerator extends BaseGenerator {
 	
 	/**
 	 * Update Widget.
+	 * @param widgetName The widget name.
+	 * @param layoutName The layout name.
 	 */
 	protected final void updateWidget(final String widgetName, 
 			final String layoutName) {

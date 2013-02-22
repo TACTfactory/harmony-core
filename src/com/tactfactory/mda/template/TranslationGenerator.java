@@ -29,9 +29,21 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 
+/**
+ * Strings and config generator.
+ *
+ */
 public class TranslationGenerator extends BaseGenerator {
+	/**
+	 * Bundle name.
+	 */
 	private static final String NAME = "name";
 
+	/**
+	 * Constructor.
+	 * @param adapter The adapter to use.
+	 * @throws Exception 
+	 */
 	public TranslationGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 	}

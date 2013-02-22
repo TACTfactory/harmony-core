@@ -14,13 +14,24 @@ import com.tactfactory.mda.bundles.rest.annotation.Rest.Security;
 import com.tactfactory.mda.meta.BaseMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 
-public class RestMetadata extends BaseMetadata {	
+/**
+ * Metadata for Bundle Rest.
+ * @author gregg
+ *
+ */
+public class RestMetadata extends BaseMetadata {
+	/** Bundle name. */
 	private static final String NAME = "rest";
+	/** Bundle enable state. */
 	public boolean isEnabled = false;
+	/** Security level. */
 	public Security security = Security.NONE;
+	/** URI. */
 	public String uri;
 	
-	
+	/**
+	 * Constructor.
+	 */
 	public RestMetadata() {
 		super();
 		this.name = NAME;
@@ -28,7 +39,7 @@ public class RestMetadata extends BaseMetadata {
 	
 	
 	@Override
-	public HashMap<String, Object> toMap(final BaseAdapter adapter) {
+	public final HashMap<String, Object> toMap(final BaseAdapter adapter) {
 		final HashMap<String, Object> ret = new HashMap<String, Object>();
 		
 		ret.put("isEnabled", this.isEnabled);

@@ -17,18 +17,28 @@ import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
+/**
+ * Social metadata at application level.
+ * @author gregg
+ *
+ */
 public class ApplicationSocialMetadata extends BaseMetadata {
+	/** Bundle name. */
 	private static final String NAME = "social";
+	/** Social entities. */
 	public Map<String, ClassMetadata> entities =
 			new LinkedHashMap<String, ClassMetadata>();
 	
+	/**
+	 * Constructor.
+	 */
 	public ApplicationSocialMetadata() {
 		super();
 		this.name = NAME;
 	}
 	
 	@Override
-	public Map<String, Object> toMap(final BaseAdapter adapter) {
+	public final Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> ret = new HashMap<String, Object>();
 		final Map<String, Object> entitiesMap = new HashMap<String, Object>();
 		for (final ClassMetadata cm : this.entities.values()) {

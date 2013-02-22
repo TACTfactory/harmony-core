@@ -33,18 +33,34 @@ import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 
+/**
+ * Generator for Sync.
+ * @author gregg
+ *
+ */
 public class SyncGenerator extends BaseGenerator {
 
+	/**
+	 * Constructor.
+	 * @param adapter The adapter to use.
+	 * @throws Exception 
+	 */
 	public SyncGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 	}
 	
-	public void generateAll() {
+	/**
+	 * Generate sync for all entities.
+	 */
+	public final void generateAll() {
 		this.datamodel = this.appMetas.toMap(this.adapter);
 		this.generateSync();
 	}
 	
-	protected void generateSync() {
+	/**
+	 * Generate sync.
+	 */
+	protected final void generateSync() {
 		// Add internet permission to manifest :
 		this.addPermissionManifest("android.permission.INTERNET");
 		// EntityBase.java
@@ -113,7 +129,7 @@ public class SyncGenerator extends BaseGenerator {
 	}
 		
 	@Override
-	protected void makeSource(final String templateName, 
+	protected final void makeSource(final String templateName, 
 			final String fileName, 
 			final boolean override) {
 		final String fullFilePath = 
@@ -129,6 +145,10 @@ public class SyncGenerator extends BaseGenerator {
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 	
+	/**
+	 * Add inheritance to php Entity.
+	 * @param cm The entity metadata
+	 */
 	private void addInheritance(final ClassMetadata cm) {
 		final String entityName = cm.name;
 		final File entityFile = 
@@ -184,12 +204,30 @@ public class SyncGenerator extends BaseGenerator {
 		}
 	}
 	
+	/**
+	 * Returns the first index of a content in a String buffer. 
+	 * (can exclude comments)
+	 * @param sb The Strinbuffer to parse.
+	 * @param content The content to search for.
+	 * @param allowComments True to include comments in the search.
+	 * @return the index of the found String. -1 if nothing found.
+	 */
 	private int indexOf(final StringBuffer sb, 
 			final String content,
 			final boolean allowComments) {
 		return this.indexOf(sb, content, 0, allowComments);
 	}
 	
+	/**
+	 * Returns the first index of a content in a String buffer 
+	 * after the given index. 
+	 * (can exclude comments)
+	 * @param sb The Strinbuffer to parse.
+	 * @param content The content to search for.
+	 * @param fromIndex The index where to begin the search
+	 * @param allowComments True to include comments in the search.
+	 * @return the index of the found String. -1 if nothing found.
+	 */
 	private int indexOf(final StringBuffer sb, 
 			final String content, 
 			final int fromIndex, 

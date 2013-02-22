@@ -15,15 +15,28 @@ import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
+/**
+ * WebService tests generator.
+ *
+ */
 public class TestWSGenerator extends BaseGenerator {
+	/** Local name space. */
 	private String localNameSpace;
 	
+	/**
+	 * Constructor. 
+	 * @param adapter The adapter to use.
+	 * @throws Exception 
+	 */
 	public TestWSGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
-	public void generateAll() {
+	/**
+	 * Generate all tests.
+	 */
+	public final void generateAll() {
 		ConsoleUtils.display(">> Generate Rest test...");
 		
 		for (final ClassMetadata cm : this.appMetas.entities.values()) {
@@ -67,7 +80,8 @@ public class TestWSGenerator extends BaseGenerator {
 	 * 
 	 * @param template Template path file. 
 	 * <br/>For list activity is "TemplateListActivity.java"
-	 * @param filename
+	 * @param filename Destination file name.
+	 * @param override True if must overwrite file.
 	 */
 	private void makeSourceTest(final String template, 
 			final String filename, 

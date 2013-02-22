@@ -19,14 +19,27 @@ import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.template.TranslationGenerator;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
+/**
+ * Generator for bundle Rest.
+ * @author gregg
+ *
+ */
 public class RestGenerator extends BaseGenerator {
 
+	/**
+	 * Constructor.
+	 * @param adapter The used adapter.
+	 * @throws Exception 
+	 */
 	public RestGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
-	public void generateAll() {
+	/**
+	 * Generates everything.
+	 */
+	public final void generateAll() {
 		this.generateWSAdapter();
 		try {
 			new TestWSGenerator(this.adapter).generateAll();
@@ -36,7 +49,10 @@ public class RestGenerator extends BaseGenerator {
 		}
 	}
 	
-	protected void generateWSAdapter() {
+	/**
+	 * Generate WebService Adapter.
+	 */
+	protected final void generateWSAdapter() {
 		this.updateLibrary("httpmime-4.1.1.jar");
 		
 		TranslationMetadata.addDefaultTranslation(
@@ -84,7 +100,7 @@ public class RestGenerator extends BaseGenerator {
 	}
 		
 	@Override
-	protected void makeSource(final String templateName, 
+	protected final void makeSource(final String templateName, 
 			final String fileName, 
 			final boolean override) {
 		final String fullFilePath = 

@@ -24,25 +24,39 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
+/**
+ * Base Generator.
+ * @author gregg
+ *
+ */
 public abstract class BaseGenerator {
 	// Meta-models
+	/** The application metadata. */
 	protected ApplicationMetadata appMetas;	
 	
 	// Platform adapter
+	/** The used adapter. */
 	protected BaseAdapter adapter;
+	/** The datamodel. */
 	protected Map<String, Object> datamodel;
 	
 	// Config
+	/** The freemarker configuration. */
 	protected Configuration cfg = new Configuration();	
 
-	public BaseGenerator(final BaseAdapter adapter) throws Exception {
+	/**
+	 * Constructor.
+	 * @param adapt The adapter to use
+	 * @throws Exception 
+	 */
+	public BaseGenerator(final BaseAdapter adapt) throws Exception {
 		if (adapter == null) {
 			throw new Exception("No adapter define.");
 		}
 		
 		// FIXME Clone object tree
 		this.appMetas		= ApplicationMetadata.INSTANCE;	
-		this.adapter	= adapter;
+		this.adapter	= adapt;
 		
 		this.cfg.setDirectoryForTemplateLoading(new File(Harmony.PATH_BASE));
 	}
@@ -52,8 +66,9 @@ public abstract class BaseGenerator {
 	 * 
 	 * @param templatePath Template path file. 
 	 * 		For list activity is "TemplateListActivity.java"
-	 * @param generatePath
-	 * @param override
+	 * @param generatePath The destination file path
+	 * @param override True for recreating the file. 
+	 * 			False for not writing anything if the file already exists. 
 	 */
 	protected void makeSource(final String templatePath,
 			final String generatePath,
@@ -93,7 +108,7 @@ public abstract class BaseGenerator {
 	 * 
 	 * @param templatePath Template path file. 
 	 * 			For list activity is "TemplateListActivity.java"
-	 * @param generatePath
+	 * @param generatePath Destination file.
 	 */
 	protected void appendSource(final String templatePath, 
 			final String generatePath) {
@@ -130,6 +145,7 @@ public abstract class BaseGenerator {
 	
 	/**
 	 * Update Libs.
+	 * @param libName The library name
 	 */
 	protected void updateLibrary(final String libName) {
 		final File dest = new File(
@@ -145,6 +161,7 @@ public abstract class BaseGenerator {
 	
 	/**
 	 * Generate Utils.
+	 * @param utilName The utility class name
 	 */
 	protected void updateUtil(final String utilName) {		
 		this.makeSource(

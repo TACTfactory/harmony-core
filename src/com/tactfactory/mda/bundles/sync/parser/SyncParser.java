@@ -27,12 +27,22 @@ import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.parser.BaseParser;
 import com.tactfactory.mda.utils.PackageUtils;
 
+/**
+ * Parser for Sync annotations.
+ * @author gregg
+ *
+ */
 public class SyncParser extends BaseParser {
+	/** Bundle name. */
 	private static final String SYNC = "sync";
+	/** Sync annotation name. */
 	private static final String ANNOT_SYNC = 
 			PackageUtils.extractNameEntity(Sync.class);
+	/** Sync argument Level name. */
 	private static final String ANNOT_SYNC_LEVEL = "level";
+	/** Sync argument Mode name. */
 	private static final String ANNOT_SYNC_MODE = "mode";
+	/** Sync argument Priority name. */
 	private static final String ANNOT_SYNC_PRIORITY = "priority";
 
 	@Override
@@ -43,7 +53,7 @@ public class SyncParser extends BaseParser {
 	}
 
 	@Override
-	public void visitClassAnnotation(final ClassMetadata cm,
+	public final void visitClassAnnotation(final ClassMetadata cm,
 			final AnnotationExpr fieldAnnot) {
 		if (fieldAnnot.getName().toString().equals(ANNOT_SYNC)) {
 			// Parse Sync arguments

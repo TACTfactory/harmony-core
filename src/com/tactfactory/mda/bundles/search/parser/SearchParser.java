@@ -21,8 +21,15 @@ import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.parser.BaseParser;
 import com.tactfactory.mda.utils.PackageUtils;
 
+/**
+ * Parser for Search Bundle.
+ * @author gregg
+ *
+ */
 public class SearchParser  extends BaseParser {
+	/** Bundle name. */
 	private static final String SEARCH = "search";
+	/** Searchable annotation name. */
 	private static final String ANNOT_SEARCHABLE =
 			PackageUtils.extractNameEntity(Searchable.class);
 	
@@ -61,7 +68,7 @@ public class SearchParser  extends BaseParser {
 	}
 
 	@Override
-	public void visitFieldAnnotation(final FieldMetadata field,
+	public final void visitFieldAnnotation(final FieldMetadata field,
 			final AnnotationExpr fieldAnnot, final ClassMetadata meta) {
 
 		if (fieldAnnot.getName().toString().equals(ANNOT_SEARCHABLE)) {

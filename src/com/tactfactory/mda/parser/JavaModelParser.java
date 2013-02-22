@@ -133,7 +133,7 @@ public class JavaModelParser {
 	
 	/**
 	 * Register a parser to the general parser.
-	 * @param parser
+	 * @param parser The parser to register.
 	 */
 	public final void registerParser(final BaseParser parser) {
 		this.bundleParsers.add(parser);
@@ -150,6 +150,7 @@ public class JavaModelParser {
 	
 	/**
 	 * Load entities files found in entity folder.
+	 * @throws Exception 
 	 */
 	public final void loadEntities() throws Exception {
 		final File dir = new File(this.entityPath);
@@ -225,6 +226,11 @@ public class JavaModelParser {
 		return this.metas;
 	}
 	
+	/**
+	 * Parse the given compilation unit and convert it to a 
+	 * ClassMetadata.
+	 * @param mclass The compilation unit
+	 */
 	public final void parse(final CompilationUnit mclass) {
 		final String spackage = PackageUtils.extractNameSpace(
 				mclass.getPackage().getName().toString());
@@ -243,6 +249,11 @@ public class JavaModelParser {
 		}
 	}
 	
+	/**
+	 * JavaParser Class Visitor.
+	 * @author gregg
+	 *
+	 */
 	private class ClassVisitor extends VoidVisitorAdapter<ClassMetadata> {
 		
 	    @Override
@@ -320,6 +331,11 @@ public class JavaModelParser {
 	    }
 	}
 
+	/**
+	 * JavaParser Field Visitor.
+	 * @author gregg
+	 *
+	 */
 	public class FieldVisitor extends VoidVisitorAdapter<ClassMetadata> {
 		
 		@Override
@@ -464,9 +480,11 @@ public class JavaModelParser {
 		}
 
 		/**
-		 * @param fieldMeta
-		 * @param annotationExpr
-		 * @param annotationType
+		 * Load the field attributes.
+		 * @param fieldMeta The field Metadata.
+		 * @param annotationExpr The annotation expression.
+		 * @param annotationType The annotation Type.
+		 * @param rel The relation Metadata
 		 */
 		private void loadAttributes(final RelationMetadata rel, 
 				final FieldMetadata fieldMeta, 
@@ -683,6 +701,11 @@ public class JavaModelParser {
 		}
 	}
 	
+	/**
+	 * JavaParser Method Visitor.
+	 * @author gregg
+	 *
+	 */
 	private class MethodVisitor extends VoidVisitorAdapter<ClassMetadata> {
 		
 		@Override
@@ -730,6 +753,11 @@ public class JavaModelParser {
 		}
 	}
 	
+	/**
+	 * JavaParser import Visitor.
+	 * @author gregg
+	 *
+	 */
 	private class ImportVisitor extends VoidVisitorAdapter<ClassMetadata> {
 		
 		@Override

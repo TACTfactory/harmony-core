@@ -21,14 +21,27 @@ import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 
+/**
+ * Fixture bundle generator.
+ * @author gregg
+ *
+ */
 public class FixtureGenerator extends BaseGenerator {
 
+	/**
+	 * Constructor.
+	 * @param adapter The adapter to use.
+	 * @throws Exception 
+	 */
 	public FixtureGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
-	public void load() {
+	/**
+	 * Load the fixtures.
+	 */
+	public final void load() {
 		final File fixtAppSrc = new File("fixtures/app");
 		final File fixtTestSrc = new File("fixtures/test");
 		if (fixtAppSrc.exists()) {
@@ -66,7 +79,10 @@ public class FixtureGenerator extends BaseGenerator {
 		}
 	}
 	
-	public void init() {
+	/**
+	 * Generate the loaders and the base fixtures.
+	 */
+	public final void init() {
 		 try {
 			 final String fixtureType = ((FixtureMetadata) 
 							 this.appMetas.options.get("fixture")).type;
@@ -100,7 +116,10 @@ public class FixtureGenerator extends BaseGenerator {
 		}
 	}
 	
-	public void purge() {
+	/**
+	 * Delete the existing fixtures.
+	 */
+	public final void purge() {
 		for (final ClassMetadata cm : this.appMetas.entities.values()) {
 			this.removeSource(cm.name + ".xml");
 			this.removeSource(cm.name + ".yml");
@@ -109,7 +128,7 @@ public class FixtureGenerator extends BaseGenerator {
 	}
 	
 	@Override
-	protected void makeSource(final String templateName,
+	protected final void makeSource(final String templateName,
 			final String fileName, 
 			final boolean override) {
 		final String fullFilePath = 
@@ -125,14 +144,24 @@ public class FixtureGenerator extends BaseGenerator {
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 	
-	protected void removeSource(final String fileName) {
+	/**
+	 * Delete file in assets directory.
+	 * @param fileName The filename.
+	 */
+	protected final void removeSource(final String fileName) {
 		final String fullFilePath = 
 				this.adapter.getAssetsPath() + "/" + fileName;
 		final File f = new File(fullFilePath);
 		f.delete();
 	}
 	
-	protected void makeBaseFixture(final String templateName,
+	/**
+	 * Make base fixture.
+	 * @param templateName The template name.
+	 * @param fileName The destination file name.
+	 * @param override True for overwrite existing fixture.
+	 */
+	protected final void makeBaseFixture(final String templateName,
 			final String fileName, 
 			final boolean override) {
 		String fullFilePath = "fixtures/app/" + fileName;

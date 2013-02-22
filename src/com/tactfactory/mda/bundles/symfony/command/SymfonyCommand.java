@@ -20,37 +20,60 @@ import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
+/**
+ * Symfony command class.
+ * @author gregg
+ *
+ */
 @PluginImplementation
 public class SymfonyCommand extends BaseCommand {
 	
 	//bundle name
+	/** Bundle name. */
 	public static final String BUNDLE = "web";
+	/** Symfony subject. */
 	public static final String SUBJECT_SYMFONY = "symfony";
+	/** Bundles subject. */
 	public static final String SUBJECT_BUNDLES = "bundles";
+	/** Project subject. */
 	public static final String SUBJECT_PROJECT = "project";
+	/** Generation subject. */
 	public static final String SUBJECT_GENERATE = "generate";
 
 	//actions
+	/** Install Action. */
 	public static final String ACTION_INSTALL = "install";
+	/** Init Action. */
 	public static final String ACTION_INIT = "init";
+	/** Entities Action. */
 	public static final String ACTION_ENTITIES = "entities";
+	/** Repositories Action. */
 	public static final String ACTION_REPOSITORIES = "repositories";
 
 	//commands
+	/** Command : WEB:PROJECT:INIT. */
 	public static final String PROJECT_INIT = 
 			BUNDLE + SEPARATOR + SUBJECT_PROJECT + SEPARATOR + ACTION_INIT;
+	
+	/** Command : WEB:GENERATE:ENTITIES. */
 	public static final String GENERATE_ENTITIES =
 			BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_ENTITIES;
+	
+	/** Command : WEB:GENERATE:REPOSITORIES. */
 	public static final String GENERATE_REPOSITORIES =
 			BUNDLE + SEPARATOR + SUBJECT_GENERATE 
 			+ SEPARATOR + ACTION_REPOSITORIES;
+	
+	/** Command : WEB:SYMFONY:INSTALL. */
 	public static final String INSTALL_SYMFONY = 
 			BUNDLE + SEPARATOR + SUBJECT_SYMFONY + SEPARATOR + ACTION_INSTALL;
+	
+	/** Command : WEB:BUNDLES:INSTALL. */
 	public static final String INSTALL_BUNDLES = 
 			BUNDLE + SEPARATOR + SUBJECT_BUNDLES + SEPARATOR + ACTION_INSTALL;
 
 	@Override
-	public void execute(final String action, 
+	public final void execute(final String action, 
 			final String[] args, 
 			final String option) {
 		ConsoleUtils.display("> Adapters Generator");
@@ -72,7 +95,7 @@ public class SymfonyCommand extends BaseCommand {
 	/**
 	 * Generate java code files from parsed Entities.
 	 */
-	protected void initProject() {
+	protected final void initProject() {
 
 		this.generateMetas();
 		if (ApplicationMetadata.INSTANCE.entities != null) {
@@ -89,7 +112,7 @@ public class SymfonyCommand extends BaseCommand {
 	/**
 	 * Generate yaml entities for symfony.
 	 */
-	protected void generateEntities() {
+	protected final void generateEntities() {
 
 		this.generateMetas();
 		if (ApplicationMetadata.INSTANCE.entities != null) {
@@ -106,7 +129,7 @@ public class SymfonyCommand extends BaseCommand {
 	/**
 	 * Generate yaml entities for symfony.
 	 */
-	protected void generateWebRepositories() {
+	protected final void generateWebRepositories() {
 
 		this.generateMetas();
 		if (ApplicationMetadata.INSTANCE.entities != null) {
@@ -123,7 +146,7 @@ public class SymfonyCommand extends BaseCommand {
 	/**
 	 * Generate yaml entities for symfony.
 	 */
-	protected void installSymfony() {
+	protected final void installSymfony() {
 		try {
 			new WebGenerator(new AndroidAdapter(), 
 					new SymfonyAdapter()).installSymfony();
@@ -135,7 +158,7 @@ public class SymfonyCommand extends BaseCommand {
 	/**
 	 * Generate yaml entities for symfony.
 	 */
-	protected void installBundles() {
+	protected final void installBundles() {
 		try {
 			new WebGenerator(new AndroidAdapter(),
 					new SymfonyAdapter()).installBundles();
@@ -145,7 +168,7 @@ public class SymfonyCommand extends BaseCommand {
 	}
 	
 	@Override
-	public void generateMetas() {
+	public final void generateMetas() {
 		this.registerParser(new RestParser());
 		super.generateMetas();
 		new RestCompletor().generateApplicationRestMetadata(
@@ -155,7 +178,7 @@ public class SymfonyCommand extends BaseCommand {
 	
 
 	@Override
-	public void summary() {
+	public final void summary() {
 		ConsoleUtils.display("\n> REST \n" 
 				+ "\t" + INSTALL_SYMFONY + "\t => Install symfony\n" 
 				+ "\t" + INSTALL_BUNDLES + "\t => Install the needed bundles\n" 
@@ -167,7 +190,7 @@ public class SymfonyCommand extends BaseCommand {
 	}
 
 	@Override
-	public boolean isAvailableCommand(final String command) {
+	public final boolean isAvailableCommand(final String command) {
 		return  command.equals(PROJECT_INIT) 
 				|| command.equals(INSTALL_BUNDLES) 
 				|| command.equals(INSTALL_SYMFONY) 

@@ -71,9 +71,11 @@ public abstract class BaseAdapter {
 	private String configs;
 	
 	// Abstract Methods
-	/** Generate platform Namespace.
+	/** 
+	 * Generate platform Namespace.
 	 * 
 	 * @param cm Entity to extract the namespace 
+	 * @param type The namespace type.
 	 * @return String Namespace
 	 */
 	public abstract String getNameSpace(ClassMetadata cm, String type);
@@ -81,6 +83,7 @@ public abstract class BaseAdapter {
 	/** Generate platform Namespace.
 	 * 
 	 * @param cm Entity to extract the namespace 
+	 * @param type The namespace type.
 	 * @return String Namespace
 	 */
 	public abstract String getNameSpaceEntity(ClassMetadata cm, String type);

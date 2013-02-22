@@ -55,7 +55,10 @@ public class ClassMetadata extends BaseMetadata {
 	/** Imports of the class. */
 	public List<String> imports = new ArrayList<String>();
 	
-	/** Add Component String of field. */
+	/** 
+	 * Add Component String of field. 
+	 * @param componentName Component name
+	 */
 	public final void makeString(final String componentName) {
 		final String key = this.name.toLowerCase() 
 				+ "_" + componentName.toLowerCase(Locale.ENGLISH);
@@ -103,7 +106,12 @@ public class ClassMetadata extends BaseMetadata {
 		return model;
 	}
 	
-
+	/**
+	 * Build a map from a collection of fields.
+	 * @param c The collection of fields
+	 * @param adapter The adapter to use.
+	 * @return The fields map.
+	 */
 	private List<Map<String, Object>> toFieldArray(
 			final Collection<FieldMetadata> c, 
 			final BaseAdapter adapter) {

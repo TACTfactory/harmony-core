@@ -12,10 +12,21 @@ import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.PackageUtils;
 
+/**
+ * Generate the application.
+ *
+ */
 public class ApplicationGenerator extends BaseGenerator {
+	/** The local name space. */
 	private String localNameSpace;
+	/** The application name. */
 	private String applicationName;
 
+	/**
+	 * Constructor.
+	 * @param adapter the adapter to use
+	 * @throws Exception 
+	 */
 	public ApplicationGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
@@ -29,6 +40,9 @@ public class ApplicationGenerator extends BaseGenerator {
 		
 	}
 	
+	/**
+	 * Generate the application.
+	 */
 	public final void generateApplication() {
 		this.makeSource(
 				"TemplateApplication.java", 

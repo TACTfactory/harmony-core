@@ -42,6 +42,7 @@ public class RelationMetadata extends BaseMetadata {
 	
 	/**
 	 * Transform the relation to a field of map of strings.
+	 * @param adapter The adapter to use.
 	 * @return the generated HashMap
 	 */
 	@Override

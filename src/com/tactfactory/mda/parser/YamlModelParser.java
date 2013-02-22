@@ -29,7 +29,7 @@ public class YamlModelParser {
 	
 	/**
 	 * Load the entities in the Yaml file <filename>.
-	 * @param filename
+	 * @param filename The filename to load.
 	 */
     public final void loadEntities(final String filename) {
     	InputStream in = null;

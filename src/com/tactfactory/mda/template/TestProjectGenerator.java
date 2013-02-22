@@ -9,8 +9,17 @@ import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.FileUtils;
 
+/**
+ * Test project generator.
+ *
+ */
 public class TestProjectGenerator extends BaseGenerator {
 
+	/**
+	 * Constructor.
+	 * @param adapter The adapter to use.
+	 * @throws Exception 
+	 */
 	public TestProjectGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 
@@ -128,6 +137,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	
 	/**
 	 * Update TestLibs.
+	 * @param libName The library name.
 	 */
 	@Override
 	protected final void updateLibrary(final String libName) {

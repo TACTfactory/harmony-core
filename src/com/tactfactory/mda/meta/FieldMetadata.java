@@ -35,28 +35,42 @@ public class FieldMetadata extends BaseMetadata {
 	/** Relation mapped to this field. */
 	public RelationMetadata relation;
 	
+	/** Field nullability. */
 	public Boolean nullable;
+	/** Field unicity. */
 	public Boolean unique;
+	/** Field locality. */
 	public Boolean isLocale;
 	
+	/** Field length. */
 	public Integer length;
+	/** Field precision. */
 	public Integer precision;
+	/** Field scale. */
 	public Integer scale;
 	
+	/** Is Field hidden ? */
 	public boolean hidden;
+	/** Is field ID ? */
 	public boolean id;
 	
 	
-	/** Is field hidden ? */
+	/** Is field internal ? */
 	public boolean internal = false;
 	
+	/**
+	 * Constructor.
+	 * @param owner ClassMetadata owning this field.
+	 */
 	public FieldMetadata(final ClassMetadata owner) {
 		super();
 		this.owner = owner;
 	}
 
 	
-	/** Add Component String of field. */
+	/** Add Component String of field.
+	 * @param componentName The component name
+	 */
 	public final void makeString(final String componentName) {
 		final String key = 
 				this.owner.name.toLowerCase() + "_" + this.name.toLowerCase();
@@ -94,10 +108,10 @@ public class FieldMetadata extends BaseMetadata {
 	
 	/**
 	 * Transform the field to a map of strings and a relation map.
+	 * @param adapter The adapter to use.
 	 * @return the map
 	 */
 	@Override
-
 	public final Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		

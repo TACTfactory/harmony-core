@@ -31,19 +31,35 @@ public @interface Rest {
 	
 	/** Security access of REST query. */
 	public enum Security {
+		/** No Security. */
 		NONE(0),
+		/** Session Security. */
 		SESSION(1);
 		
+		/** Security id. */
 		private int value;
 		
-		private Security(final int value) {
-			this.value = value;
+		/** 
+		 * Constructor.
+		 * @param v Security id.
+		 */
+		private Security(final int v) {
+			this.value = v;
 		}
 		
+		/**
+		 * Get Security id.
+		 * @return The security id
+		 */
 		public int getValue() {
 			return this.value;
 		}
 		
+		/**
+		 * Retrieve Security from given id.
+		 * @param value The id
+		 * @return The found Security. Null if no Security found.
+		 */
 		public static Security fromValue(final int value) {
 			Security ret = null;
 				for (final Security type : Security.values()) {
@@ -55,6 +71,11 @@ public @interface Rest {
 			return ret;
 		}
 		
+		/**
+		 * Retrieves the Security by its enum name. (reflection)
+		 * @param name The Security enum name.
+		 * @return The security
+		 */
 		public static Security fromName(final String name) {
 			String realName;
 			Security ret;

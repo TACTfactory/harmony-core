@@ -18,22 +18,31 @@ import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
+/**
+ * Social Bundle command class.
+ * @author gregg
+ *
+ */
 @PluginImplementation
 public class SocialCommand extends BaseCommand {
 	
 	//bundle name
+	/** Bundle name. */
 	public static final String BUNDLE = "social";
+	/** Generation subject. */
 	public static final String SUBJECT = "generate";
 
 	//actions
+	/** Social action. */
 	public static final String ACTION_SOCIAL = "social";
 
 	//commands
+	/** Command : SOCIAL:GENERATE:SOCIAL.*/
 	public static final String GENERATE_SOCIAL	=
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_SOCIAL;
 
 	@Override
-	public void execute(final String action, 
+	public final void execute(final String action, 
 			final String[] args,
 			final String option) {
 		ConsoleUtils.display("> Social Generator");
@@ -52,7 +61,7 @@ public class SocialCommand extends BaseCommand {
 	/**
 	 * Generate java code files from parsed Entities.
 	 */
-	protected void generateAdapters() {
+	protected final void generateAdapters() {
 
 		this.generateMetas();
 		if (ApplicationMetadata.INSTANCE.entities != null) {
@@ -66,7 +75,7 @@ public class SocialCommand extends BaseCommand {
 	}
 	
 	@Override
-	public void generateMetas() {
+	public final void generateMetas() {
 		this.registerParser(new SocialParser());
 		super.generateMetas();
 	}
@@ -74,14 +83,14 @@ public class SocialCommand extends BaseCommand {
 	
 
 	@Override
-	public void summary() {
+	public final void summary() {
 		ConsoleUtils.display("\n> Social \n" 
 				+ "\t" + GENERATE_SOCIAL + "\t => Generate Social");
 		
 	}
 
 	@Override
-	public boolean isAvailableCommand(final String command) {
+	public final boolean isAvailableCommand(final String command) {
 		return command.equals(GENERATE_SOCIAL);
 	}
 

@@ -25,37 +25,40 @@ import com.tactfactory.mda.test.CommonTest;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 
+/**
+ * Test class for Fixtures generation and loading.
+ * @author gregg
+ *
+ */
 public class FixtureGlobalTest extends CommonTest {
+	/** Fixture path. */
 	private static final String FIXTURE_PATH = 
 			"android/src/com/tactfactory/mda/test/demact/fixture/";
 	
 	/**
-	 * @throws java.lang.Exception
+	 * @throws java.lang.Exception 
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {
 		CommonTest.setUpBefore();
 		initAll();
 	}
-	
-	/**
-	 * @throws java.lang.Exception
-	 */
+
 	@Before
 	@Override
-	public void setUp() throws Exception {
+	public final void setUp() throws Exception {
 		super.setUp();
 	}
 
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@After
 	@Override
-	public void tearDown() throws Exception {
+	public final void tearDown() throws Exception {
 		super.tearDown();
 	}
 	
+	/**
+	 * Initialize the tests.
+	 */
 	private static void initAll() {
 		System.out.println("\nTest Orm generate entity");
 		System.out.println("######################################" 
@@ -77,13 +80,11 @@ public class FixtureGlobalTest extends CommonTest {
 				null);
 	}
 	
-	//@Test
-	public void all() {
-			
-	}
-	
+	/**
+	 * Tests if loaders are generated.
+	 */
 	@Test
-	public void hasFixtureLoaders() {
+	public final void hasFixtureLoaders() {
 		CommonTest.hasFindFile(FIXTURE_PATH + "UserDataLoader.java");
 		CommonTest.hasFindFile(FIXTURE_PATH + "CommentDataLoader.java");
 		CommonTest.hasFindFile(FIXTURE_PATH + "PostDataLoader.java");
@@ -92,8 +93,11 @@ public class FixtureGlobalTest extends CommonTest {
 		CommonTest.hasFindFile(FIXTURE_PATH + "DataManager.java");
 	}
 	
+	/**
+	 * Tests if XML Fixtures have really been loaded.
+	 */
 	@Test
-	public void hasFixturesXml() {
+	public final void hasFixturesXml() {
 		// Copy fixture files
 		copyFixturesXml();
 		CommonTest.getHarmony().findAndExecute(
@@ -110,8 +114,11 @@ public class FixtureGlobalTest extends CommonTest {
 		CommonTest.hasFindFile("android/assets/test/ViewComponent.xml");
 	}
 	
+	/**
+	 * Tests if YML Fixtures have really been loaded.
+	 */
 	@Test
-	public void hasFixturesYml() {
+	public final void hasFixturesYml() {
 		//Purge & init
 		CommonTest.getHarmony().findAndExecute(
 				FixtureCommand.FIXTURE_PURGE, new String[] {}, null);
@@ -134,8 +141,10 @@ public class FixtureGlobalTest extends CommonTest {
 		CommonTest.hasFindFile("android/assets/test/ViewComponent.yml");
 	}
 
-	
-	protected static void copyFixturesXml() {
+	/**
+	 * Copy XML fixtures in test project.
+	 */
+	protected static final void copyFixturesXml() {
 		final String pathNameSpace = 
 				ApplicationMetadata.INSTANCE.projectNameSpace.replaceAll(
 						"\\.", "/");
@@ -156,7 +165,10 @@ public class FixtureGlobalTest extends CommonTest {
 		}
 	}
 	
-	protected static void copyFixturesYml() {
+	/**
+	 * Copy YML fixtures in test project.
+	 */
+	protected static final void copyFixturesYml() {
 		final String pathNameSpace = 
 				ApplicationMetadata.INSTANCE.projectNameSpace.replaceAll(
 						"\\.", "/");

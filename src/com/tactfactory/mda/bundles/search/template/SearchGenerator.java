@@ -35,15 +35,29 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
+/**
+ * Generator for Search Bundle.
+ * @author gregg
+ *
+ */
 public class SearchGenerator  extends BaseGenerator {
+	/** Bundle name. */
 	private static final String NAME = "name";
 
+	/**
+	 * Constructor.
+	 * @param adapter The adapter to use.
+	 * @throws Exception 
+	 */
 	public SearchGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void generateAll() {
+	/**
+	 * Generate all activities.
+	 */
+	public final void generateAll() {
 		this.datamodel = this.appMetas.toMap(this.adapter);
 		for (final ClassMetadata cm : this.appMetas.entities.values()) {
 			if (this.isClassSearchable(cm)) {
@@ -52,6 +66,10 @@ public class SearchGenerator  extends BaseGenerator {
 		}
 	}
 	
+	/**
+	 * Generate activity for given class.
+	 * @param cm The class to generate the activity for.
+	 */
 	private void generateActivity(final ClassMetadata cm) {
 		this.makeSource(cm, 
 				"TemplateSearchActivity.java", 
@@ -85,10 +103,18 @@ public class SearchGenerator  extends BaseGenerator {
 		}
 	}
 	
+	/**
+	 * Generate the bundle menu. 
+	 */
 	private void generateMenu() {
 		this.makeMenu(true);
 	}
 	
+	/**
+	 * Detect whether the class has a Searchable field or not.
+	 * @param cm The class
+	 * @return True if the class has a searchable field
+	 */
 	private boolean isClassSearchable(final ClassMetadata cm) {
 		boolean isSearchable = false;
 		for (final FieldMetadata fm : cm.fields.values()) {
@@ -99,7 +125,14 @@ public class SearchGenerator  extends BaseGenerator {
 		return isSearchable;
 	}
 
-	protected void makeSource(final ClassMetadata cm,
+	/**
+	 * Make activity/fragment for given entity.
+	 * @param cm The entity
+	 * @param templateName The template name
+	 * @param fileName The destination file name
+	 * @param override True if overwrite the file
+	 */
+	protected final void makeSource(final ClassMetadata cm,
 			final String templateName,
 			final String fileName, 
 			final boolean override) {
@@ -121,7 +154,11 @@ public class SearchGenerator  extends BaseGenerator {
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 	
-	protected void makeMenu(final boolean override) {
+	/**
+	 * Build the Search Menu.
+	 * @param override True if overwrite existing search menu.
+	 */
+	protected final void makeMenu(final boolean override) {
 		final String fullFilePath = 
 				this.adapter.getSourcePath()
 				+ this.appMetas.projectNameSpace 
@@ -135,7 +172,14 @@ public class SearchGenerator  extends BaseGenerator {
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 	
-	protected void makeLayout(final ClassMetadata cm, 
+	/**
+	 * Make search activity/fragment layout.
+	 * @param cm The class to generate the layout for.
+	 * @param templateName The template name
+	 * @param fileName The destination file name
+	 * @param override True if overwrite file.
+	 */
+	protected final void makeLayout(final ClassMetadata cm, 
 			final String templateName, 
 			final String fileName,
 			final boolean override) {
@@ -150,9 +194,11 @@ public class SearchGenerator  extends BaseGenerator {
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 	
-	/**  Update Android Manifest.
+	/**  
+	 * Update Android Manifest.
 	 * 
-	 * @param classFile
+	 * @param classFile The class file.
+	 * @param entityName The entity name.
 	 */
 	private void updateManifest(final String classFile,
 			final String entityName) {

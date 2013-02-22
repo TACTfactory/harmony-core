@@ -16,8 +16,15 @@ import java.util.TreeMap;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
+/**
+ * Application Metadata.
+ * @author gregg
+ *
+ */
 public final class ApplicationMetadata extends BaseMetadata {
+	/** Path delimiter. */
 	private static final String PATH_DELIMITER = "/";
+	/** Package delimiter. */
 	private static final String PACKAGE_DELIMITER = "\\.";
 	
 	/** Singleton. */
@@ -43,6 +50,9 @@ public final class ApplicationMetadata extends BaseMetadata {
 			new TreeMap<String, ConfigMetadata>();
 	
 
+	/**
+	 * Constructor.
+	 */
 	private ApplicationMetadata() { }
 	
 	/**

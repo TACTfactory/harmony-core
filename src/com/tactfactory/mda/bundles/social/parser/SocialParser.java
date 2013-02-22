@@ -21,8 +21,14 @@ import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.parser.BaseParser;
 import com.tactfactory.mda.utils.PackageUtils;
 
+/**
+ * Parser for social annotation.
+ *
+ */
 public class SocialParser extends BaseParser {
+	/** Bundle name. */ 
 	private static final String SOCIAL = "social";
+	/** Social Annotation name. */
 	private static final String ANNOT_SOCIAL =
 			PackageUtils.extractNameEntity(Social.class);
 	
@@ -56,7 +62,7 @@ public class SocialParser extends BaseParser {
 	}
 
 	@Override
-	public void visitClassAnnotation(final ClassMetadata cm,
+	public final void visitClassAnnotation(final ClassMetadata cm,
 			final AnnotationExpr fieldAnnot) {
 		if (fieldAnnot.getName().toString().equals(ANNOT_SOCIAL)) {
 			final SocialMetadata rm = new SocialMetadata();

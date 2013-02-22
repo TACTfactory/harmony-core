@@ -22,14 +22,24 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 
 public class ClassCompletor {
 	//ArrayList<ClassMetadata> metas_array;
+	/** Class metadata. */
 	private Map<String, ClassMetadata> metas;
+	
+	/** Newly created class metadata. */
 	private final Map<String, ClassMetadata> newMetas = 
 			new HashMap<String, ClassMetadata>();
 	
+	/**
+	 * Constructor.
+	 * @param entities Entities map.
+	 */
 	public ClassCompletor(final Map<String, ClassMetadata> entities) {
 		this.metas = entities;
 	}
 	
+	/**
+	 * Complete classes.
+	 */
 	public final void execute() {
 		for (final ClassMetadata cm : this.metas.values()) {
 			this.updateRelations(cm);
@@ -184,6 +194,12 @@ public class ClassCompletor {
 		}
 	}
 	
+	/**
+	 * Generate a reference field for relations.
+	 * @param name referenced field name.
+	 * @param owner New field owner.
+	 * @return The newly created field.
+	 */
 	private static FieldMetadata generateRefField(final String name, 
 			final ClassMetadata owner) {
 		final FieldMetadata id = new FieldMetadata(owner);
@@ -194,6 +210,10 @@ public class ClassCompletor {
 		return id;
 	}
 	
+	/**
+	 * Check if field relation is valid.
+	 * @param fm The field metadata of the relation.
+	 */
 	private void checkRelationIntegrity(final FieldMetadata fm) {
 		if (!this.metas.containsKey(fm.relation.entityRef)) {
 				ConsoleUtils.displayError(new ConstraintException(
@@ -204,9 +224,18 @@ public class ClassCompletor {
 		}
 	}
 	
+	/**
+	 * Relation Constraint Exception. 
+	 * @author gregg
+	 *
+	 */
 	@SuppressWarnings("serial")
 	public static class ConstraintException extends Exception {
 
+		/**
+		 * Constructor.
+		 * @param msg The exception message.
+		 */
 		public ConstraintException(final String msg) {
 			super(msg);
 		}
