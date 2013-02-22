@@ -19,7 +19,8 @@ import com.tactfactory.mda.template.TagConstant;
 
 public class ApplicationSocialMetadata extends BaseMetadata {
 	private static final String NAME = "social";
-	public Map<String, ClassMetadata> entities = new LinkedHashMap<String, ClassMetadata>();
+	public Map<String, ClassMetadata> entities =
+			new LinkedHashMap<String, ClassMetadata>();
 	
 	public ApplicationSocialMetadata() {
 		super();

@@ -17,6 +17,9 @@ import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.test.CommonTest;
 
 public class RestGlobalTest extends CommonTest {
+	private static final String DATA_PATH = 
+			"android/src/com/tactfactory/mda/test/demact/data/";
+	
 	private static final String POST = "Post";
 	private static final String COMMENT = "Comment";
 	private static final String USER = "User";
@@ -50,15 +53,20 @@ public class RestGlobalTest extends CommonTest {
 	
 	private static void initAll() {
 		System.out.println("\nTest Orm generate entity");
-		System.out.println("###############################################################################");
+		System.out.println("########################################" +
+				"#######################################");
 		
 		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
-		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
-		getHarmony().findAndExecute(OrmCommand.GENERATE_CRUD, new String[] {}, null);
-		getHarmony().findAndExecute(RestCommand.GENERATE_ADAPTERS, new String[] {}, null);
+		getHarmony().findAndExecute(
+				OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
+		getHarmony().findAndExecute(
+				OrmCommand.GENERATE_CRUD, new String[] {}, null);
+		getHarmony().findAndExecute(
+				RestCommand.GENERATE_ADAPTERS, new String[] {}, null);
 				
-		final RestCommand command = (RestCommand) Harmony.instance.getCommand(RestCommand.class);
+		final RestCommand command = 
+				(RestCommand) Harmony.instance.getCommand(RestCommand.class);
 		command.generateMetas();	
 	}
 	
@@ -81,21 +89,26 @@ public class RestGlobalTest extends CommonTest {
 	
 	@Test
 	public void hasGlobalAbstractWebServiceAdapters() {
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/base/WebServiceClientAdapterBase.java");
+		CommonTest.hasFindFile(
+				DATA_PATH + "base/WebServiceClientAdapterBase.java");
 	}
 	
 	////WEB SERVICE ADAPTERS POST ////
 	@Test
 	public void hasPostWebServiceAdapters() {
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/PostWebServiceClientAdapter.java");
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/base/PostWebServiceClientAdapterBase.java");
+		CommonTest.hasFindFile(
+				DATA_PATH + "PostWebServiceClientAdapter.java");
+		CommonTest.hasFindFile(
+				DATA_PATH + "base/PostWebServiceClientAdapterBase.java");
 	}
 	
 	////WEB SERVICE ADAPTERS USER ////
 	@Test
 	public void hasUserWebServiceAdapters() {
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/UserWebServiceClientAdapter.java");
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/base/UserWebServiceClientAdapterBase.java");
+		CommonTest.hasFindFile(
+				DATA_PATH + "UserWebServiceClientAdapter.java");
+		CommonTest.hasFindFile(
+				DATA_PATH + "base/UserWebServiceClientAdapterBase.java");
 	}
 	
 	@Test
@@ -120,29 +133,37 @@ public class RestGlobalTest extends CommonTest {
 	
 	@Test
 	public void hasUserUri() {
-		this.hasUri(ApplicationMetadata.INSTANCE.entities.get(USER), "user-uri");
+		this.hasUri(ApplicationMetadata.INSTANCE.entities.get(USER), 
+				"user-uri");
 	}
 	
 	@Test
 	public void hasPostSecurity() {
-		this.hasSecurity(ApplicationMetadata.INSTANCE.entities.get(POST), Rest.Security.NONE);
+		this.hasSecurity(ApplicationMetadata.INSTANCE.entities.get(POST),
+				Rest.Security.NONE);
 	}
 	
 	@Test
 	public void hasUserSecurity() {
-		this.hasSecurity(ApplicationMetadata.INSTANCE.entities.get(USER), Rest.Security.SESSION);
+		this.hasSecurity(ApplicationMetadata.INSTANCE.entities.get(USER),
+				Rest.Security.SESSION);
 	}
 	
 	private void isRest(final ClassMetadata cm) {
-		Assert.assertTrue("Check if rest " + cm.name, cm.options.containsKey(REST));
+		Assert.assertTrue("Check if rest " + cm.name,
+				cm.options.containsKey(REST));
 	}
 	
 	private void hasUri(final ClassMetadata cm, final String value) {
-		Assert.assertTrue("Check if URI of " + cm.name + " is " + value, ((RestMetadata) cm.options.get(REST)).uri.equals(value));
+		Assert.assertTrue("Check if URI of " + cm.name + " is " + value, 
+				((RestMetadata) cm.options.get(REST)).uri.equals(value));
 	}
 	
-	private void hasSecurity(final ClassMetadata cm, final Rest.Security value) {
-		Assert.assertTrue("Check if SECURITY of " + cm.name + " is " + value.getValue(), ((RestMetadata) cm.options.get(REST)).security.equals(value));
+	private void hasSecurity(final ClassMetadata cm,
+			final Rest.Security value) {
+		Assert.assertTrue(
+				"Check if SECURITY of " + cm.name + " is " + value.getValue(), 
+				((RestMetadata) cm.options.get(REST)).security.equals(value));
 	}
 	
 }

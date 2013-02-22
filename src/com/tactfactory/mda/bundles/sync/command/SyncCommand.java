@@ -31,10 +31,13 @@ public class SyncCommand extends BaseCommand {
 	public static final String ACTION_SERVICE = "service";
 
 	//commands
-	public static final String GENERATE_SERVICE	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_SERVICE;
+	public static final String GENERATE_SERVICE	=
+			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_SERVICE;
 
 	@Override
-	public void execute(final String action, final String[] args, final String option) {
+	public void execute(final String action,
+			final String[] args, 
+			final String option) {
 		ConsoleUtils.display("> Sync Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);
@@ -70,7 +73,8 @@ public class SyncCommand extends BaseCommand {
 		this.registerParser(new RestParser());
 		this.registerParser(new SyncParser());
 		super.generateMetas();
-		new RestCompletor().generateApplicationRestMetadata(ApplicationMetadata.INSTANCE);
+		new RestCompletor().generateApplicationRestMetadata(
+				ApplicationMetadata.INSTANCE);
 	}
 	
 	

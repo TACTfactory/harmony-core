@@ -59,7 +59,8 @@ public class TranslationMetadata {
 	 * @param defaultValue
 	 * @return the TranslationMetadata generated
 	 */
-	public static TranslationMetadata addDefaultTranslation(final String key, final String defaultValue) {		
+	public static TranslationMetadata addDefaultTranslation(final String key, 
+			final String defaultValue) {		
 		return addDefaultTranslation(key, defaultValue, Group.NONE);
 	}
 	
@@ -72,13 +73,16 @@ public class TranslationMetadata {
 	 * @return the TranslationMetadata generated
 	 */
 	
-	public static TranslationMetadata addDefaultTranslation(final String key, final String defaultValue, final Group group) {		
+	public static TranslationMetadata addDefaultTranslation(final String key, 
+			final String defaultValue, 
+			final Group group) {		
 		final TranslationMetadata translateMeta = new TranslationMetadata();
 		translateMeta.key = key;
 		translateMeta.group = group;
 		translateMeta.i18n.put(Locale.getDefault(), defaultValue);
 		
-		ApplicationMetadata.INSTANCE.translates.put(translateMeta.key, translateMeta);
+		ApplicationMetadata.INSTANCE.translates.put(translateMeta.key,
+				translateMeta);
 		
 		return translateMeta;
 	}

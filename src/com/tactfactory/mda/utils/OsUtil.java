@@ -289,7 +289,8 @@ public abstract class OsUtil {
 // os.nam = "Windows 95" "windows 95"
 // os.arc = "Pentium" "pentium"
 // os.versio = "4.0" "4.0"
-// java.vendo = "Netscape Communications Corporation""netscape communications corporation"
+// java.vendo = "Netscape Communications Corporation"
+// "netscape communications corporation"
 // java.class.versio = "45.3" "45.3"
 // java.versio = "1.02" "1.02"
 // file.separato = "/" "/"
@@ -442,7 +443,8 @@ public abstract class OsUtil {
 // os.nam = "Mac OS" "mac os"
 // os.arc = "PowerPC" "powerpc"
 // os.versio = "7.5" "7.5"
-// java.vendo = "Netscape Communications Corporation""netscape communications corporation"
+// java.vendo = "Netscape Communications Corporation"
+// "netscape communications corporation"
 // java.class.versio = "45.3" "45.3"
 // java.versio = "1.1.2" "1.1.2"
 // file.separato = "/" "/"
@@ -454,7 +456,8 @@ public abstract class OsUtil {
 // OS: MacOS version 8.1
 // Processor: PowerPC 750 (?)
 // VM: Microsoft Virtual Machine
-// Notes: Obtained in Internet Explorer 4.01 (PowerPC) with "Java virtual Machine"
+// Notes: Obtained in Internet Explorer 4.01 (PowerPC) 
+// with "Java virtual Machine"
 // pop-up preference set to "Microsoft Virtual Machine".
 // Contributor: DG
 //
@@ -473,7 +476,8 @@ public abstract class OsUtil {
 // OS: MacOS version 8.1
 // Processor: PowerPC 750 (?)
 // VM: Apple MRJ
-// Notes: Obtained in Internet Explorer 4.01 (PowerPC) with "Java virtual Machine"
+// Notes: Obtained in Internet Explorer 4.01 (PowerPC) 
+// with "Java virtual Machine"
 // pop-up preference set to "Apple MRJ".
 // Contributor: DG
 //
@@ -490,7 +494,7 @@ public abstract class OsUtil {
 //
 //
 //
-// --------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 //
 //
 // Linux VMs
@@ -507,7 +511,8 @@ public abstract class OsUtil {
 // os.nam = "Linux" "linux"
 // os.arc = "x86" "x86"
 // os.versio = "2.0.31" "2.0.31"
-// java.vendo = "Sun Microsystems Inc., ported by Randy Chapman and Steve Byrne""sun microsystems inc., ported by randy
+// java.vendo = "Sun Microsystems Inc., ported by Randy Chapman and Steve Byrne"
+// "sun microsystems inc., ported by randy
 // chapman and steve byrne"
 // java.class.versio = "45.3" "45.3"
 // java.versio = "1.1.6" "1.1.6"
@@ -524,7 +529,7 @@ public abstract class OsUtil {
 //
 //
 //
-// --------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 //
 //
 // Solaris
@@ -639,7 +644,7 @@ public abstract class OsUtil {
 //
 //
 //
-// --------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 //
 //
 // OS/2
@@ -771,8 +776,8 @@ public abstract class OsUtil {
 // OS: FreeBSD 2.2.2
 // Processor: Intel Pentium
 // VM: FreeBSD port of JDK1.0.2 (Jeff Hsu?)
-// Notes: This is actually for FreeBSD with the JDK 1.0.2. It probably says Solaris
-// since it was a really early port.
+// Notes: This is actually for FreeBSD with the JDK 1.0.2.
+// It probably says Solaris since it was a really early port.
 // Contributor: CA
 //
 // os.nam = "Solaris" "solaris"
@@ -796,7 +801,8 @@ public abstract class OsUtil {
 // os.nam = "FreeBSD" "freebsd"
 // os.arc = "x86" "x86"
 // os.versio = "2.2.2-RELEASE" "2.2.2-release"
-// java.vendo = "Sun Microsystems Inc., port by java-port@FreeBSD.org""sun microsystems inc., port by
+// java.vendo = "Sun Microsystems Inc., port by java-port@FreeBSD.org"
+// "sun microsystems inc., port by
 // java-port@freebsd.org"
 // java.class.versio = "45.3" "45.3"
 // java.versio = "1.1.6" "1.1.6"
@@ -845,7 +851,7 @@ public abstract class OsUtil {
 //
 //
 //
-// --------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 //
 //
 // Other Platforms

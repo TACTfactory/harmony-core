@@ -11,64 +11,96 @@ package com.tactfactory.mda.bundles.symfony.adapter;
 import com.tactfactory.mda.Harmony;
 
 public class SymfonyAdapter {
-	protected String webRoot = "www";	
-	protected String webPlatform = "Symfony";	
-	protected String config = "config";
-	protected String bundle = "Bundle";
-	protected String controller = "Controller";
-	protected String entities = "Entity";
-	protected String source = "src";
+	private String webRoot = "www";	
+	private String webPlatform = "Symfony";	
+	private String config = "config";
+	private String bundle = "Bundle";
+	private String controller = "Controller";
+	private String entities = "Entity";
+	private String source = "src";
 	
 	public final String getWebTemplateEntityPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getWebRoot(), this.getBundle(), this.getEntities());
+		return String.format("%s/%s/%s/%s/", 
+				Harmony.PATH_TEMPLATE, 
+				this.getWebRoot(), 
+				this.getBundle(), 
+				this.getEntities());
 	}
 	
 	public final String getWebTemplateControllerPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getWebRoot(), this.getBundle(), this.getController());
+		return String.format("%s/%s/%s/%s/", 
+				Harmony.PATH_TEMPLATE,
+				this.getWebRoot(), 
+				this.getBundle(), 
+				this.getController());
 	}
 	
 	public final String getWebTemplateConfigPath() {
-		return String.format("%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getWebRoot(), this.getConfig());
+		return String.format("%s/%s/%s/", 
+				Harmony.PATH_TEMPLATE,
+				this.getWebRoot(), 
+				this.getConfig());
 	}
 	
 	public final String getWebTemplatePath() {
-		return String.format("%s/%s/", Harmony.PATH_TEMPLATE, this.getWebRoot());
+		return String.format("%s/%s/",
+				Harmony.PATH_TEMPLATE,
+				this.getWebRoot());
 	}
 	
 	public final String getWebControllerPath(final String projectName) {
-		return String.format("%s%s/", this.getWebBundlePath(projectName), this.getController());
+		return String.format("%s%s/", 
+				this.getWebBundlePath(projectName),
+				this.getController());
 	}
 	
 	public final String getWebBundleYmlEntitiesPath(final String projectName) {
-		return String.format("%s%s/", this.getWebBundleConfigPath(projectName), "doctrine");
+		return String.format("%s%s/", 
+				this.getWebBundleConfigPath(projectName),
+				"doctrine");
 	}
 	
 	public final String getWebConfigPath() {
-		return String.format("%s%s/", this.getWebPath(), this.getConfig());
+		return String.format("%s%s/", 
+				this.getWebPath(), 
+				this.getConfig());
 	}
 	
 	public final String getWebBundlePath(final String projectName) {
-		return String.format("%s%s/%s/", this.getWebSourcePath(), projectName, "ApiBundle");
+		return String.format("%s%s/%s/",
+				this.getWebSourcePath(),
+				projectName, 
+				"ApiBundle");
 	}
 	
 	public final String getWebBundleConfigPath(final String projectName) {
-		return String.format("%s%s/%s/", this.getWebBundlePath(projectName), "Resources", this.getConfig());
+		return String.format("%s%s/%s/", 
+				this.getWebBundlePath(projectName),
+				"Resources", 
+				this.getConfig());
 	}
 	
 	public String getWebEntitiesPath(final String projectName) {
-		return String.format("%s%s/", this.getWebBundlePath(projectName), this.getEntities());
+		return String.format("%s%s/",
+				this.getWebBundlePath(projectName), 
+				this.getEntities());
 	}	
 	
 	public final String getWebSourcePath() {
-		return String.format("%s%s/", this.getWebPath(), this.getSource());
+		return String.format("%s%s/", 
+				this.getWebPath(),
+				this.getSource());
 	}
 	
 	public final String getWebPath() {
-		return String.format("%s%s/", this.getWebRootPath(), this.getWebPlatform());
+		return String.format("%s%s/",
+				this.getWebRootPath(), 
+				this.getWebPlatform());
 	}
 	
 	public final String getWebRootPath() {
-		return String.format("%s/", this.getWebRoot());
+		return String.format("%s/", 
+				this.getWebRoot());
 	}
 
 	public String getWebPlatform() {

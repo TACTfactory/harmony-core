@@ -27,8 +27,11 @@ public class TestWSGenerator extends BaseGenerator {
 		ConsoleUtils.display(">> Generate Rest test...");
 		
 		for (final ClassMetadata cm : this.appMetas.entities.values()) {
-			if (cm.options.containsKey("rest") && !cm.internal && !cm.fields.isEmpty()) {
-				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getTest());
+			if (cm.options.containsKey("rest") 
+					&& !cm.internal 
+					&& !cm.fields.isEmpty()) {
+				this.localNameSpace = 
+						this.adapter.getNameSpace(cm, this.adapter.getTest());
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
 				this.generate();
 			}
@@ -40,7 +43,8 @@ public class TestWSGenerator extends BaseGenerator {
 	 */ 
 	private void generate() {
 		// Info
-				ConsoleUtils.display(">>> Generate Rest test for " +  this.datamodel.get(TagConstant.CURRENT_ENTITY));
+		ConsoleUtils.display(">>> Generate Rest test for " 
+			+  this.datamodel.get(TagConstant.CURRENT_ENTITY));
 		
 		try {			
 			this.makeSourceTest(
@@ -61,15 +65,21 @@ public class TestWSGenerator extends BaseGenerator {
 	/** 
 	 * Make Java Source Code
 	 * 
-	 * @param template Template path file. <br/>For list activity is "TemplateListActivity.java"
+	 * @param template Template path file. 
+	 * <br/>For list activity is "TemplateListActivity.java"
 	 * @param filename
 	 */
-	private void makeSourceTest(final String template, final String filename, final boolean override) {
+	private void makeSourceTest(final String template, 
+			final String filename, 
+			final boolean override) {
 		final String fullFilePath = String.format("%s%s/%s",
 						this.adapter.getTestPath(),
-						PackageUtils.extractPath(String.format(
-								"%s/%s", this.adapter.getSource(), this.localNameSpace)).toLowerCase(),
-						String.format(filename, this.datamodel.get(TagConstant.CURRENT_ENTITY)));
+						PackageUtils.extractPath(String.format("%s/%s",
+								this.adapter.getSource(), 
+								this.localNameSpace)).toLowerCase(),
+						String.format(filename,
+								this.datamodel.get(
+										TagConstant.CURRENT_ENTITY)));
 		
 		final String fullTemplatePath = String.format("%s%s",
 					this.adapter.getTemplateTestsPath(),

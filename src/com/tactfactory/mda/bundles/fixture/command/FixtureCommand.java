@@ -31,13 +31,19 @@ public class FixtureCommand extends BaseCommand {
 	public static final String ACTION_UPDATE = "update";
 
 	//commands
-	public static final String FIXTURE_INIT	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_INIT;
-	public static final String FIXTURE_LOAD	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_LOAD;
-	public static final String FIXTURE_PURGE	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_PURGE;
-	public static final String FIXTURE_UPDATE = BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_UPDATE;
+	public static final String FIXTURE_INIT	= 
+			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_INIT;
+	public static final String FIXTURE_LOAD	= 
+			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_LOAD;
+	public static final String FIXTURE_PURGE	=
+			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_PURGE;
+	public static final String FIXTURE_UPDATE = 
+			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_UPDATE;
 	
 	@Override
-	public void execute(final String action, final String[] args, final String option) {
+	public void execute(final String action, 
+			final String[] args, 
+			final String option) {
 		ConsoleUtils.display("> Fixture Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);
@@ -65,7 +71,8 @@ public class FixtureCommand extends BaseCommand {
 					fixtureMeta.type = format; 
 				}
 			}
-			ApplicationMetadata.INSTANCE.options.put(fixtureMeta.getName(), fixtureMeta);
+			ApplicationMetadata.INSTANCE.options.put(
+					fixtureMeta.getName(), fixtureMeta);
 			new FixtureGenerator(new AndroidAdapter()).init();
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
@@ -99,10 +106,17 @@ public class FixtureCommand extends BaseCommand {
 	@Override
 	public void summary() {
 		ConsoleUtils.display("\n> FIXTURE \n" 
-				+ "\t" + FIXTURE_INIT + "\t => Initialize fixtures, create loaders\n" 
-				+ "\t" + FIXTURE_LOAD + "\t => Load fixtures into the projects (overwrite)\n" 
-				+ "\t" + FIXTURE_PURGE + "\t => Clear fixtures on the projects\n" 
-				+ "\t" + FIXTURE_UPDATE + "\t => Update the fixtures in the project");
+				+ "\t" + FIXTURE_INIT 
+				+ "\t => Initialize fixtures, create loaders\n" 
+				
+				+ "\t" + FIXTURE_LOAD 
+				+ "\t => Load fixtures into the projects (overwrite)\n"
+				
+				+ "\t" + FIXTURE_PURGE 
+				+ "\t => Clear fixtures on the projects\n" 
+				
+				+ "\t" + FIXTURE_UPDATE 
+				+ "\t => Update the fixtures in the project");
 		
 	}
 

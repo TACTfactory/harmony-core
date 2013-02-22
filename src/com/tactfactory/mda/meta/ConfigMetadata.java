@@ -23,7 +23,8 @@ public class ConfigMetadata {
 	 * @param value
 	 * @return the generated ConfigMetadata
 	 */
-	public static ConfigMetadata addConfiguration(final String key, final String value) {		
+	public static ConfigMetadata addConfiguration(final String key,
+			final String value) {		
 		final ConfigMetadata configMeta = new ConfigMetadata();
 		configMeta.key = key;
 		configMeta.value = value;

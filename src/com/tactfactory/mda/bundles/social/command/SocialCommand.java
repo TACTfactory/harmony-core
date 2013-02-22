@@ -29,10 +29,13 @@ public class SocialCommand extends BaseCommand {
 	public static final String ACTION_SOCIAL = "social";
 
 	//commands
-	public static final String GENERATE_SOCIAL	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_SOCIAL;
+	public static final String GENERATE_SOCIAL	=
+			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_SOCIAL;
 
 	@Override
-	public void execute(final String action, final String[] args, final String option) {
+	public void execute(final String action, 
+			final String[] args,
+			final String option) {
 		ConsoleUtils.display("> Social Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);

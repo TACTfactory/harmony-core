@@ -21,7 +21,8 @@ public final class ApplicationMetadata extends BaseMetadata {
 	private static final String PACKAGE_DELIMITER = "\\.";
 	
 	/** Singleton*/
-	public static final ApplicationMetadata INSTANCE = new ApplicationMetadata();
+	public static final ApplicationMetadata INSTANCE =
+			new ApplicationMetadata();
 	
 	/** Android SDK Path*/
 	public static String androidSdkPath;
@@ -30,13 +31,16 @@ public final class ApplicationMetadata extends BaseMetadata {
 	public String projectNameSpace;
 	
 	/** List of Entity of entity class */
-	public Map<String, ClassMetadata> entities = new LinkedHashMap<String, ClassMetadata>();
+	public Map<String, ClassMetadata> entities =
+			new LinkedHashMap<String, ClassMetadata>();
 	
 	/** List of string use in application */
-	public Map<String, TranslationMetadata> translates = new TreeMap<String, TranslationMetadata>();
+	public Map<String, TranslationMetadata> translates =
+			new TreeMap<String, TranslationMetadata>();
 
 	/** List of config use in application */
-	public Map<String, ConfigMetadata> configs = new TreeMap<String, ConfigMetadata>();
+	public Map<String, ConfigMetadata> configs =
+			new TreeMap<String, ConfigMetadata>();
 	
 
 	private ApplicationMetadata() { }
@@ -60,16 +64,35 @@ public final class ApplicationMetadata extends BaseMetadata {
 		// Add root
 		ret.put(TagConstant.PROJECT_NAME, 		this.name);
 		ret.put(TagConstant.PROJECT_PATH, 		this.projectNameSpace);
-		ret.put(TagConstant.PROJECT_NAMESPACE, 	this.projectNameSpace.replaceAll(PATH_DELIMITER, PACKAGE_DELIMITER));
-		ret.put(TagConstant.ENTITY_NAMESPACE, 	this.projectNameSpace.replaceAll(PATH_DELIMITER, PACKAGE_DELIMITER) + "." + adapt.getModel());
-		ret.put(TagConstant.TEST_NAMESPACE, 	this.projectNameSpace.replaceAll(PATH_DELIMITER, PACKAGE_DELIMITER) + "." + adapt.getTest());
-		ret.put(TagConstant.DATA_NAMESPACE, 	this.projectNameSpace.replaceAll(PATH_DELIMITER, PACKAGE_DELIMITER) + "." + adapt.getData());
-		ret.put(TagConstant.SERVICE_NAMESPACE, 	this.projectNameSpace.replaceAll(PATH_DELIMITER, PACKAGE_DELIMITER) + "." + adapt.getService());
-		ret.put(TagConstant.FIXTURE_NAMESPACE, 	this.projectNameSpace.replaceAll(PATH_DELIMITER, PACKAGE_DELIMITER) + "." + adapt.getFixture());
+		ret.put(TagConstant.PROJECT_NAMESPACE, 	
+				this.projectNameSpace.replaceAll(
+						PATH_DELIMITER, 
+						PACKAGE_DELIMITER));
+		ret.put(TagConstant.ENTITY_NAMESPACE, 	
+				this.projectNameSpace.replaceAll(
+						PATH_DELIMITER, 
+						PACKAGE_DELIMITER) + "." + adapt.getModel());
+		ret.put(TagConstant.TEST_NAMESPACE, 	
+				this.projectNameSpace.replaceAll(
+						PATH_DELIMITER, 
+						PACKAGE_DELIMITER) + "." + adapt.getTest());
+		ret.put(TagConstant.DATA_NAMESPACE, 	
+				this.projectNameSpace.replaceAll(
+						PATH_DELIMITER,
+						PACKAGE_DELIMITER) + "." + adapt.getData());
+		ret.put(TagConstant.SERVICE_NAMESPACE, 	
+				this.projectNameSpace.replaceAll(
+						PATH_DELIMITER, 
+						PACKAGE_DELIMITER) + "." + adapt.getService());
+		ret.put(TagConstant.FIXTURE_NAMESPACE, 	
+				this.projectNameSpace.replaceAll(
+						PATH_DELIMITER, 
+						PACKAGE_DELIMITER) + "." + adapt.getFixture());
 
 		ret.put(TagConstant.ENTITIES, 			entitiesMap);
 		
-		ret.put(TagConstant.ANDROID_SDK_DIR, ApplicationMetadata.androidSdkPath);
+		ret.put(TagConstant.ANDROID_SDK_DIR,
+				ApplicationMetadata.androidSdkPath);
 		// SDKDIR Hack
 		final HashMap<String, String> sdkDir = new HashMap<String, String>();
 		sdkDir.put("dir", "$ {sdk.dir}");
@@ -78,7 +101,8 @@ public final class ApplicationMetadata extends BaseMetadata {
 		ret.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
 		
 		// Add Extra bundle
-		final HashMap<String, Object> optionsMap = new HashMap<String, Object>();
+		final HashMap<String, Object> optionsMap =
+				new HashMap<String, Object>();
 		for (final Metadata bm : this.options.values()) {
 			optionsMap.put(bm.getName(), bm.toMap(adapt));
 		}

@@ -43,30 +43,12 @@ public final class WinphoneAdapter extends BaseAdapter {
 	 * 					 java.lang.String)
 	 */
 	@Override
-	public String getNameSpaceEntity(final ClassMetadata cm, final String type) {
+	public String getNameSpaceEntity(final ClassMetadata cm, 
+			final String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/** 
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#
-	 * getViewComponentShow(com.tactfactory.mda.orm.FieldMetadata)
-	 */
-	/*@Override
-	public String getViewComponentShow(FieldMetadata field) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
-
-	/** 
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#
-	 * getViewComponentEdit(com.tactfactory.mda.orm.FieldMetadata)
-	 */
-	/*@Override
-	public String getViewComponentEdit(FieldMetadata field) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
 
 	@Override
 	public String getNativeType(final String type) {

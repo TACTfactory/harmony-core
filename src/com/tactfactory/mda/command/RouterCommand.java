@@ -20,8 +20,10 @@ public class RouterCommand extends BaseCommand {
 	public static final String SUBJECT_DEBUG = "debug";
 	public static final String ACTION_MANIFEST = "manifest";
 	
-	public static final String ROUTER_DEBUG = BUNDLE + SEPARATOR + SUBJECT_DEBUG;
-	public static final String ROUTER_GENERATE_MANIFEST = BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_MANIFEST;
+	public static final String ROUTER_DEBUG = 
+			BUNDLE + SEPARATOR + SUBJECT_DEBUG;
+	public static final String ROUTER_GENERATE_MANIFEST = 
+			BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_MANIFEST;
 	
 	protected void routerDebug() {
 	}
@@ -37,7 +39,9 @@ public class RouterCommand extends BaseCommand {
 	}
 
 	@Override
-	public void execute(final String action, final String[] args, final String option) {
+	public void execute(final String action,
+			final String[] args, 
+			final String option) {
 		// TODO Auto-generated method stub
 		
 	}

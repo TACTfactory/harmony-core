@@ -103,7 +103,8 @@ public class ProjectInitTest extends CommonTest {
 		System.out.println("\nTest Project init iphone");
 		System.out.println(SHARP_DELIMITOR);
 		
-		CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_IOS, null, null);
+		CommonTest.getHarmony().findAndExecute(
+				ProjectCommand.INIT_IOS, null, null);
 		
 		// TODO add asserts (for folder/file exist..)
 	}
@@ -114,7 +115,8 @@ public class ProjectInitTest extends CommonTest {
 		System.out.println("\nTest Project init RIM");
 		System.out.println(SHARP_DELIMITOR);
 		
-		CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_RIM, null, null);
+		CommonTest.getHarmony().findAndExecute(
+				ProjectCommand.INIT_RIM, null, null);
 		
 		// TODO add asserts (for folder/file exist..)
 	}

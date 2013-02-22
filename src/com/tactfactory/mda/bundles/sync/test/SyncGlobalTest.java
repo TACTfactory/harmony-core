@@ -29,6 +29,9 @@ import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.test.CommonTest;
 
 public class SyncGlobalTest extends CommonTest {
+	private static final String SERVICE_PATH = 
+			"android/src/com/tactfactory/mda/test/demact/service/";
+	
 	private static final String POST = "Post";
 	private static final String COMMENT = "Comment";
 	private static final String USER = "User";
@@ -63,15 +66,20 @@ public class SyncGlobalTest extends CommonTest {
 	
 	private static void initAll() {
 		System.out.println("\nTest Orm generate entity");
-		System.out.println("###############################################################################");
+		System.out.println("######################################" 
+				+ "#########################################");
 		
 		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
-		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
-		getHarmony().findAndExecute(OrmCommand.GENERATE_CRUD, new String[] {}, null);
-		getHarmony().findAndExecute(SyncCommand.GENERATE_SERVICE, new String[] {}, null);
+		getHarmony().findAndExecute(
+				OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
+		getHarmony().findAndExecute(
+				OrmCommand.GENERATE_CRUD, new String[] {}, null);
+		getHarmony().findAndExecute(
+				SyncCommand.GENERATE_SERVICE, new String[] {}, null);
 		
-		final SyncCommand command = (SyncCommand) Harmony.instance.getCommand(SyncCommand.class);
+		final SyncCommand command =
+				(SyncCommand) Harmony.instance.getCommand(SyncCommand.class);
 		command.generateMetas();
 	}
 	
@@ -90,9 +98,9 @@ public class SyncGlobalTest extends CommonTest {
 	@Test
 	@Ignore
 	public void hasGlobalService() {
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/service/IDemactSyncListener.java");
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/service/IDemactSyncService.java");
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/service/DemactSyncBinder.java");
+		CommonTest.hasFindFile(SERVICE_PATH + "IDemactSyncListener.java");
+		CommonTest.hasFindFile(SERVICE_PATH + "IDemactSyncService.java");
+		CommonTest.hasFindFile(SERVICE_PATH + "DemactSyncBinder.java");
 	}
 	
 	@Test
@@ -112,39 +120,53 @@ public class SyncGlobalTest extends CommonTest {
 	
 	@Test
 	public void hasPostSyncParameters() {
-		this.hasLevel(ApplicationMetadata.INSTANCE.entities.get(POST), Level.GLOBAL);
-		this.hasMode(ApplicationMetadata.INSTANCE.entities.get(POST), Mode.POOLING);
+		this.hasLevel(ApplicationMetadata.INSTANCE.entities.get(POST),
+				Level.GLOBAL);
+		this.hasMode(ApplicationMetadata.INSTANCE.entities.get(POST), 
+				Mode.POOLING);
 		this.hasPriority(ApplicationMetadata.INSTANCE.entities.get(POST), 1);
 	}
 	
 	@Test
 	public void hasUserSyncParameters() {
-		this.hasLevel(ApplicationMetadata.INSTANCE.entities.get(USER), Level.GLOBAL);
-		this.hasMode(ApplicationMetadata.INSTANCE.entities.get(USER), Mode.REAL_TIME);
+		this.hasLevel(ApplicationMetadata.INSTANCE.entities.get(USER),
+				Level.GLOBAL);
+		this.hasMode(ApplicationMetadata.INSTANCE.entities.get(USER), 
+				Mode.REAL_TIME);
 		this.hasPriority(ApplicationMetadata.INSTANCE.entities.get(USER), 1);
 	}
 	
 	@Test
 	public void hasCommentSyncParameters() {
-		this.hasLevel(ApplicationMetadata.INSTANCE.entities.get(COMMENT), Level.SESSION);
-		this.hasMode(ApplicationMetadata.INSTANCE.entities.get(COMMENT), Mode.REAL_TIME);
-		this.hasPriority(ApplicationMetadata.INSTANCE.entities.get(COMMENT), Priority.LOW);
+		this.hasLevel(ApplicationMetadata.INSTANCE.entities.get(COMMENT), 
+				Level.SESSION);
+		this.hasMode(ApplicationMetadata.INSTANCE.entities.get(COMMENT), 
+				Mode.REAL_TIME);
+		this.hasPriority(ApplicationMetadata.INSTANCE.entities.get(COMMENT), 
+				Priority.LOW);
 	}
 	
 	private void isSync(final ClassMetadata cm) {
-		Assert.assertTrue("Check if sync " + cm.name, cm.options.containsKey(SYNC));
+		Assert.assertTrue(
+				"Check if sync " + cm.name, cm.options.containsKey(SYNC));
 	}
 	
 	private void hasMode(final ClassMetadata cm, final Sync.Mode value) {
-		Assert.assertTrue("Check if Mode of " + cm.name + " is " + value.getValue(), ((SyncMetadata) cm.options.get(SYNC)).mode.equals(value));
+		Assert.assertTrue(
+				"Check if Mode of " + cm.name + " is " + value.getValue(), 
+				((SyncMetadata) cm.options.get(SYNC)).mode.equals(value));
 	}
 	
 	private void hasLevel(final ClassMetadata cm, final Sync.Level value) {
-		Assert.assertTrue("Check if Level of " + cm.name + " is " + value.getValue(), ((SyncMetadata) cm.options.get(SYNC)).level.equals(value));
+		Assert.assertTrue(
+				"Check if Level of " + cm.name + " is " + value.getValue(),
+				((SyncMetadata) cm.options.get(SYNC)).level.equals(value));
 	}
 	
 	private void hasPriority(final ClassMetadata cm, final int value) {
-		Assert.assertTrue("Check if Priority of " + cm.name + " is " + value, ((SyncMetadata) cm.options.get(SYNC)).priority == value);
+		Assert.assertTrue(
+				"Check if Priority of " + cm.name + " is " + value,
+				((SyncMetadata) cm.options.get(SYNC)).priority == value);
 	}
 	
 }

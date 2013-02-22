@@ -50,10 +50,14 @@ public class OrmCommand extends BaseCommand {
 	public static final String ACTION_CRUD = "crud";
 
 	//commands
-	//public static String GENERATE_ENTITY 	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITY;
-	public static final String GENERATE_ENTITIES	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITIES;
-	//public static String GENERATE_FORM 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_FORM;
-	public static final String GENERATE_CRUD 		= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_CRUD;
+	//public static String GENERATE_ENTITY 	=
+	//		BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITY;
+	public static final String GENERATE_ENTITIES	= 
+			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITIES;
+	//public static String GENERATE_FORM 		= 
+	//		BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_FORM;
+	public static final String GENERATE_CRUD 		= 
+			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_CRUD;
 
 	//internal
 	private BaseAdapter adapter = new AndroidAdapter();
@@ -156,7 +160,9 @@ public class OrmCommand extends BaseCommand {
 	}
 
 	@Override
-	public void execute(final String action, final String[] args, final String option) {
+	public void execute(final String action,
+			final String[] args, 
+			final String option) {
 		ConsoleUtils.display("> ORM Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);

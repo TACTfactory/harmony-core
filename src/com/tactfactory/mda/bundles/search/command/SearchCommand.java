@@ -29,10 +29,13 @@ public class SearchCommand  extends BaseCommand {
 	public static final String ACTION_ACTIVITIES = "activities";
 
 	//commands
-	public static final String GENERATE_ACTIVITIES = BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ACTIVITIES;
+	public static final String GENERATE_ACTIVITIES = 
+			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ACTIVITIES;
 
 	@Override
-	public void execute(final String action, final String[] args, final String option) {
+	public void execute(final String action, 
+			final String[] args, 
+			final String option) {
 		ConsoleUtils.display("> Adapters Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);

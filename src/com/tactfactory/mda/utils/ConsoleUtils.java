@@ -23,9 +23,9 @@ import print.color.ColoredPrinter;
 
 public abstract class ConsoleUtils {
 	/** Debug state*/
-	private static boolean debug;
-	private static boolean quiet;
-	private static boolean ansi = true;
+	private static boolean isDebug;
+	private static boolean isQuiet;
+	private static boolean isAnsi = true;
 	private static boolean isConsole;
 	
 	/** Constants */
@@ -37,40 +37,40 @@ public abstract class ConsoleUtils {
 			new ColoredPrinter.Builder(0, false).build();
 	
 	public static boolean isDebug() {
-		return debug;
+		return isDebug;
 	}
 
 	public static void setDebug(final boolean debug) {
-		ConsoleUtils.debug = debug;
+		ConsoleUtils.isDebug = debug;
 	}
 
 	public static boolean isQuiet() {
-		return quiet;
+		return isQuiet;
 	}
 
 	public static void setQuiet(final boolean quiet) {
-		ConsoleUtils.quiet = quiet;
+		ConsoleUtils.isQuiet = quiet;
 	}
 
 	public static boolean isAnsi() {
-		return ansi;
+		return isAnsi;
 	}
 
 	public static void setAnsi(final boolean ansi) {
-		ConsoleUtils.ansi = ansi;
+		ConsoleUtils.isAnsi = ansi;
 	}
 	
 	public static boolean isConsole() {
 		return isConsole;
 	}
 
-	public static void setConsole(final boolean isConsole) {
-		ConsoleUtils.isConsole = isConsole;
+	public static void setConsole(final boolean console) {
+		ConsoleUtils.isConsole = console;
 	}
 	
 	public static void display(final String value) {
-		if (!quiet) {
-			if (ansi) {
+		if (!isQuiet) {
+			if (isAnsi) {
 				cp.println(value);
 				cp.clear();
 			} else {
@@ -80,8 +80,8 @@ public abstract class ConsoleUtils {
 	}
 	
 	public static void displayWarning(final String value) {
-		if (!quiet) {
-			if (ansi) {
+		if (!isQuiet) {
+			if (isAnsi) {
 				cp.println("[WARNING]" + TAB + value + NEWLINE,
 						Attribute.NONE,
 						FColor.YELLOW,
@@ -94,8 +94,8 @@ public abstract class ConsoleUtils {
 	}
 	
 	public static void displayDebug(final String value) {
-		if (!quiet && ConsoleUtils.debug) {
-			if (ansi) {
+		if (!isQuiet && ConsoleUtils.isDebug()) {
+			if (isAnsi) {
 				cp.println("[DEBUG]" + TAB + value + NEWLINE,
 						Attribute.NONE,
 						FColor.BLUE,
@@ -119,14 +119,14 @@ public abstract class ConsoleUtils {
 	}
 	
 	public static void displayError(final Exception value) {
-		if (!quiet) {
+		if (!isQuiet) {
 			String message = 	"[ERROR]" 
 								 + TAB 
 								 + value 
 								 + NEWLINE 
 								 + getStackTrace(value.getStackTrace()) 
 								 + NEWLINE; 
-			if (ansi) {
+			if (isAnsi) {
 				cp.println(message,
 						Attribute.NONE,
 						FColor.RED,
@@ -139,8 +139,8 @@ public abstract class ConsoleUtils {
 	}
 
 	public static void displayLicence(final String value) {
-		if (!quiet) {
-			if (ansi) {
+		if (!isQuiet) {
+			if (isAnsi) {
 				cp.println(value + NEWLINE,
 						Attribute.BOLD,
 						FColor.GREEN,
@@ -274,7 +274,8 @@ public abstract class ConsoleUtils {
 				try {
 					this.processOutput = 
 							new BufferedWriter(
-									new OutputStreamWriter(proc.getOutputStream(),
+									new OutputStreamWriter(
+											proc.getOutputStream(),
 											FileUtils.DEFAULT_ENCODING));
 					this.consoleInput = 
 							new BufferedReader(

@@ -17,8 +17,14 @@ public class SocialGenerator  extends BaseGenerator {
 
 	
 	protected void makeMenu(final boolean override) {
-		final String fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + "menu" + "/" + "SocialMenuWrapper.java";
-		final String fullTemplatePath = this.adapter.getTemplateSourcePath() + "menu/SocialMenuWrapper.java";
+		final String fullFilePath = 
+				this.adapter.getSourcePath() 
+				+ this.appMetas.projectNameSpace 
+				+ "/" + "menu" + "/" 
+				+ "SocialMenuWrapper.java";
+		final String fullTemplatePath = 
+				this.adapter.getTemplateSourcePath() 
+				+ "menu/SocialMenuWrapper.java";
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}

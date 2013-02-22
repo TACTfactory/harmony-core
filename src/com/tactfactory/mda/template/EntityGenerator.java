@@ -128,14 +128,24 @@ public class EntityGenerator extends BaseGenerator {
 			if (!f.internal) {
 				// Getter
 				if (!this.alreadyImplementsGet(f, cm)) { 
-					ConsoleUtils.displayDebug("Add implements getter of " + f.name + " => get" + CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_CAMEL, f.name));
+					ConsoleUtils.displayDebug("Add implements getter of " 
+							+ f.name 
+							+ " => get" 
+							+ CaseFormat.LOWER_CAMEL.to(
+									CaseFormat.UPPER_CAMEL,
+									f.name));
 					
 					this.generateMethod(fileString, f, this.getterTemplate);
 				}
 				
 				// Setter
 				if (!this.alreadyImplementsSet(f, cm)) {
-					ConsoleUtils.displayDebug("Add implements setter of " + f.name + " => set" + CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_CAMEL, f.name));
+					ConsoleUtils.displayDebug("Add implements setter of " 
+							+ f.name 
+							+ " => set" 
+							+ CaseFormat.LOWER_CAMEL.to(
+									CaseFormat.UPPER_CAMEL,
+									f.name));
 					
 					this.generateMethod(fileString, f, this.setterTemplate);
 				}

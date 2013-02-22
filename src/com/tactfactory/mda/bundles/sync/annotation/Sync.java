@@ -112,7 +112,8 @@ public @interface Sync {
 			String realName;
 			Mode ret;
 			if (name.lastIndexOf('.') > 0) {
-				realName = name.substring(name.lastIndexOf('.') + 1); // Take only what comes after the last dot
+				// Take only what comes after the last dot
+				realName = name.substring(name.lastIndexOf('.') + 1); 
 			} else {
 				realName = name;
 			}

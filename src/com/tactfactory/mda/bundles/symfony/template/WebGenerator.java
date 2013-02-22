@@ -11,7 +11,6 @@ package com.tactfactory.mda.bundles.symfony.template;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
@@ -218,7 +217,10 @@ public final class WebGenerator extends BaseGenerator {
 			final StringBuffer sb = FileUtils.fileToStringBuffer(f);
 			if (sb.indexOf(content) == -1) {
 				final BufferedWriter bw = 
-						new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f, true), FileUtils.DEFAULT_ENCODING));
+						new BufferedWriter(
+								new OutputStreamWriter(
+										new FileOutputStream(f, true),
+										FileUtils.DEFAULT_ENCODING));
 				bw.write(content);
 				bw.close();
 			}

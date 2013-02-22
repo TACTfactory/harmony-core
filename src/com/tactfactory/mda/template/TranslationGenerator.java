@@ -124,7 +124,8 @@ public class TranslationGenerator extends BaseGenerator {
 					
 					if (meta1 != null && meta2 != null) {
 						final int groupScore = 
-								meta1.getGroup().getValue() - meta2.getGroup().getValue();
+								meta1.getGroup().getValue() 
+								- meta2.getGroup().getValue();
 						if (groupScore != 0) {
 							return groupScore;
 						}

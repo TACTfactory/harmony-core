@@ -20,7 +20,8 @@ import java.lang.reflect.Field;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
- * To mark a entity for remote/central persistence/access the @Rest annotation is used.
+ * To mark a entity for remote/central 
+ * persistence/access the @Rest annotation is used.
  */
 @Documented
 @Retention(SOURCE)
@@ -58,7 +59,8 @@ public @interface Rest {
 			String realName;
 			Security ret;
 			if (name.lastIndexOf('.') > 0) {
-				realName = name.substring(name.lastIndexOf('.') + 1); // Take only what comes after the last dot
+				// Take only what comes after the last dot
+				realName = name.substring(name.lastIndexOf('.') + 1); 
 			} else {
 				realName = name;
 			}
@@ -84,7 +86,8 @@ public @interface Rest {
 	/**
 	 * The uri for entity
 	 * 
-	 * @return (optional, defaults to entity name) The path route to use for entity.
+	 * @return (optional, defaults to entity name) 
+	 * The path route to use for entity.
 	 * 
 	 */
 	String uri() default "";

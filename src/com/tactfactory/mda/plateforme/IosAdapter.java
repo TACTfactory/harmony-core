@@ -37,10 +37,12 @@ public final class IosAdapter extends BaseAdapter {
 	
 	/** 
 	 * @see com.tactfactory.mda.plateforme.BaseAdapter#
-	 * getNameSpaceEntity(com.tactfactory.mda.orm.ClassMetadata, java.lang.String)
+	 * getNameSpaceEntity(com.tactfactory.mda.orm.ClassMetadata,
+	 * 		java.lang.String)
 	 */
 	@Override
-	public String getNameSpaceEntity(final ClassMetadata cm, final String type) {
+	public String getNameSpaceEntity(final ClassMetadata cm,
+			final String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}

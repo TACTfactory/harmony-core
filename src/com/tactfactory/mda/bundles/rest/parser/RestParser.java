@@ -28,29 +28,34 @@ import com.tactfactory.mda.utils.PackageUtils;
 
 public class RestParser extends BaseParser {
 	private static final String REST = "rest";
-	private static final String ANNOT_REST = PackageUtils.extractNameEntity(Rest.class);
+	private static final String ANNOT_REST = 
+			PackageUtils.extractNameEntity(Rest.class);
 	private static final String ANNOT_REST_SECURITY = "security";
 	private static final String ANNOT_REST_URI = "uri";
 	@Override
-	public void visitClass(final ClassOrInterfaceDeclaration field, final ClassMetadata meta) {
+	public void visitClass(final ClassOrInterfaceDeclaration field, 
+			final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitField(final FieldDeclaration field, final ClassMetadata meta) {
+	public void visitField(final FieldDeclaration field, 
+			final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitMethod(final MethodDeclaration method, final ClassMetadata meta) {
+	public void visitMethod(final MethodDeclaration method,
+			final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitImport(final ImportDeclaration imp, final ClassMetadata meta) {
+	public void visitImport(final ImportDeclaration imp, 
+			final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -62,7 +67,8 @@ public class RestParser extends BaseParser {
 			final RestMetadata rm = new RestMetadata();
 			rm.isEnabled = true;
 			if (fieldAnnot instanceof NormalAnnotationExpr) {
-				final NormalAnnotationExpr norm = (NormalAnnotationExpr) fieldAnnot;
+				final NormalAnnotationExpr norm =
+						(NormalAnnotationExpr) fieldAnnot;
 				final List<MemberValuePair> pairs = norm.getPairs();
 				if (pairs != null) {
 					for (final MemberValuePair pair : pairs) {
@@ -71,7 +77,8 @@ public class RestParser extends BaseParser {
 							String security = "";
 							
 							if (pair.getValue() instanceof StringLiteralExpr) {
-								security = ((StringLiteralExpr) pair.getValue()).getValue();
+								security = ((StringLiteralExpr)
+										pair.getValue()).getValue();
 							} else {
 								security = pair.getValue().toString();
 							}
@@ -81,7 +88,8 @@ public class RestParser extends BaseParser {
 						
 						if (pair.getName().equals(ANNOT_REST_URI)) {
 							if (pair.getValue() instanceof StringLiteralExpr) {
-								rm.uri = ((StringLiteralExpr) pair.getValue()).getValue();
+								rm.uri = ((StringLiteralExpr)
+										pair.getValue()).getValue();
 							} else {
 								rm.uri = pair.getValue().toString();
 							}

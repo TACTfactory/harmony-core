@@ -230,7 +230,11 @@ public class Harmony {
 		String input = null;
 		try {
 			ConsoleUtils.display(promptMessage);
-			final BufferedReader br = new BufferedReader(new InputStreamReader(System.in, FileUtils.DEFAULT_ENCODING));
+			final BufferedReader br = 
+					new BufferedReader(
+							new InputStreamReader(
+									System.in, 
+									FileUtils.DEFAULT_ENCODING));
 
 		
 			input = br.readLine();
@@ -513,7 +517,8 @@ public class Harmony {
 		if (sdkProperties.exists()) {
 			try {
 				final FileInputStream fis = new FileInputStream(sdkProperties);
-				final InputStreamReader isr = new InputStreamReader(fis, FileUtils.DEFAULT_ENCODING);
+				final InputStreamReader isr =
+						new InputStreamReader(fis, FileUtils.DEFAULT_ENCODING);
 				final BufferedReader br = new BufferedReader(isr);
 				String line = br.readLine();
 				while (line != null) {

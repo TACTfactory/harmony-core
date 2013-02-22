@@ -30,10 +30,13 @@ public class RestCommand extends BaseCommand {
 	public static final String ACTION_ADAPTERS = "adapters";
 
 	//commands
-	public static final String GENERATE_ADAPTERS	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ADAPTERS;
+	public static final String GENERATE_ADAPTERS	= 
+			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ADAPTERS;
 
 	@Override
-	public void execute(final String action, final String[] args, final String option) {
+	public void execute(final String action,
+			final String[] args,
+			final String option) {
 		ConsoleUtils.display("> Adapters Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);
@@ -67,7 +70,8 @@ public class RestCommand extends BaseCommand {
 	public void generateMetas() {
 		this.registerParser(new RestParser());
 		super.generateMetas();
-		new RestCompletor().generateApplicationRestMetadata(ApplicationMetadata.INSTANCE);
+		new RestCompletor().generateApplicationRestMetadata(
+				ApplicationMetadata.INSTANCE);
 	}
 	
 	

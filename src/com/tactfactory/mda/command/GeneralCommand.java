@@ -35,7 +35,8 @@ public class GeneralCommand extends BaseCommand {
 	 * Display list of All commands
 	 */
 	public void list() {
-		final Command general = Harmony.instance.getCommand(GeneralCommand.class);
+		final Command general = 
+				Harmony.instance.getCommand(GeneralCommand.class);
 		
 		ConsoleUtils.display("Available Commands:");
 		general.summary();

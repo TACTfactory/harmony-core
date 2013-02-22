@@ -31,8 +31,10 @@ public class ResourceCommand extends BaseCommand {
 	public static final String ACTION_TRANSLATE = "translate";
 
 	//commands
-	public static final String GENERATE_IMAGE 	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_IMAGE;
-	public static final String GENERATE_TRANSLATE	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_TRANSLATE;
+	public static final String GENERATE_IMAGE 	=
+			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_IMAGE;
+	public static final String GENERATE_TRANSLATE	= 
+			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_TRANSLATE;
 
 	//internal
 	private final BaseAdapter adapter = new AndroidAdapter();
@@ -40,12 +42,17 @@ public class ResourceCommand extends BaseCommand {
 	@Override
 	public void summary() {
 		ConsoleUtils.display("\n> " + BUNDLE.toUpperCase() + " \n" 
-				+ "\t" + GENERATE_IMAGE + "\t => Generate all resize of the HD images\n" 
-				+ "\t" + GENERATE_TRANSLATE + "\t => Generate translate\n");
+				+ "\t" + GENERATE_IMAGE 
+				+ "\t => Generate all resize of the HD images\n" 
+				
+				+ "\t" + GENERATE_TRANSLATE 
+				+ "\t => Generate translate\n");
 	}
 
 	@Override
-	public void execute(final String action, final String[] args, final String option) {
+	public void execute(final String action, 
+			final String[] args, 
+			final String option) {
 		ConsoleUtils.display("> Resource Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);

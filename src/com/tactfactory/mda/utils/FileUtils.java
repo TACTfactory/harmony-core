@@ -237,7 +237,8 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		try {
 			result = new ArrayList<String>();
 			in = new DataInputStream(new FileInputStream(file));
-			br = new BufferedReader(new InputStreamReader(in, FileUtils.DEFAULT_ENCODING));
+			br = new BufferedReader(
+					new InputStreamReader(in, FileUtils.DEFAULT_ENCODING));
 			line = br.readLine(); 
 			while (line != null) {
 				result.add(line);

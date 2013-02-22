@@ -417,8 +417,8 @@ public class ProjectCommand extends BaseCommand {
 					new ProjectGenerator(this.adapterWinPhone).removeProject();
 			if (!removedAndroid
 				|| !removedIOS
-				|| ! removedRIM
-				|| !removedWin ) {
+				|| !removedRIM
+				|| !removedWin) {
 				ConsoleUtils.display(ERROR_MSG);
 			}
 		} catch (final Exception e) {

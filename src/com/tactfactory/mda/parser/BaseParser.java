@@ -19,15 +19,19 @@ import com.tactfactory.mda.meta.FieldMetadata;
 
 public abstract class BaseParser {
 
-	public abstract void visitClass(ClassOrInterfaceDeclaration n, ClassMetadata meta);
+	public abstract void visitClass(ClassOrInterfaceDeclaration n, 
+			ClassMetadata meta);
 	
-	public abstract void visitClassAnnotation(ClassMetadata cm, AnnotationExpr fieldAnnot);
+	public abstract void visitClassAnnotation(ClassMetadata cm, 
+			AnnotationExpr fieldAnnot);
 	
 	public abstract void visitField(FieldDeclaration field, ClassMetadata meta);
 	
-	public abstract void visitFieldAnnotation(FieldMetadata field, AnnotationExpr fieldAnnot, ClassMetadata meta);
+	public abstract void visitFieldAnnotation(FieldMetadata field, 
+			AnnotationExpr fieldAnnot, ClassMetadata meta);
 	
-	public abstract void visitMethod(MethodDeclaration method, ClassMetadata meta);
+	public abstract void visitMethod(MethodDeclaration method, 
+			ClassMetadata meta);
 	
 	public abstract void visitImport(ImportDeclaration imp, ClassMetadata meta);
 }

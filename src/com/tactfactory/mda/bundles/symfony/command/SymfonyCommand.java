@@ -37,14 +37,22 @@ public class SymfonyCommand extends BaseCommand {
 	public static final String ACTION_REPOSITORIES = "repositories";
 
 	//commands
-	public static final String PROJECT_INIT = BUNDLE + SEPARATOR + SUBJECT_PROJECT + SEPARATOR + ACTION_INIT;
-	public static final String GENERATE_ENTITIES = BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_ENTITIES;
-	public static final String GENERATE_REPOSITORIES = BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_REPOSITORIES;
-	public static final String INSTALL_SYMFONY = BUNDLE + SEPARATOR + SUBJECT_SYMFONY + SEPARATOR + ACTION_INSTALL;
-	public static final String INSTALL_BUNDLES = BUNDLE + SEPARATOR + SUBJECT_BUNDLES + SEPARATOR + ACTION_INSTALL;
+	public static final String PROJECT_INIT = 
+			BUNDLE + SEPARATOR + SUBJECT_PROJECT + SEPARATOR + ACTION_INIT;
+	public static final String GENERATE_ENTITIES =
+			BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_ENTITIES;
+	public static final String GENERATE_REPOSITORIES =
+			BUNDLE + SEPARATOR + SUBJECT_GENERATE 
+			+ SEPARATOR + ACTION_REPOSITORIES;
+	public static final String INSTALL_SYMFONY = 
+			BUNDLE + SEPARATOR + SUBJECT_SYMFONY + SEPARATOR + ACTION_INSTALL;
+	public static final String INSTALL_BUNDLES = 
+			BUNDLE + SEPARATOR + SUBJECT_BUNDLES + SEPARATOR + ACTION_INSTALL;
 
 	@Override
-	public void execute(final String action, final String[] args, final String option) {
+	public void execute(final String action, 
+			final String[] args, 
+			final String option) {
 		ConsoleUtils.display("> Adapters Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);
@@ -69,7 +77,8 @@ public class SymfonyCommand extends BaseCommand {
 		this.generateMetas();
 		if (ApplicationMetadata.INSTANCE.entities != null) {
 			try {
-				new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).initProject();
+				new WebGenerator(new AndroidAdapter(),
+						new SymfonyAdapter()).initProject();
 			} catch (final Exception e) {
 				// TODO Auto-generated catch block
 				ConsoleUtils.displayError(e);
@@ -85,7 +94,8 @@ public class SymfonyCommand extends BaseCommand {
 		this.generateMetas();
 		if (ApplicationMetadata.INSTANCE.entities != null) {
 			try {
-				new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).generateEntities();
+				new WebGenerator(new AndroidAdapter(),
+						new SymfonyAdapter()).generateEntities();
 			} catch (final Exception e) {
 				// TODO Auto-generated catch block
 				ConsoleUtils.displayError(e);
@@ -101,7 +111,8 @@ public class SymfonyCommand extends BaseCommand {
 		this.generateMetas();
 		if (ApplicationMetadata.INSTANCE.entities != null) {
 			try {
-				new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).generateWebControllers();
+				new WebGenerator(new AndroidAdapter(), 
+						new SymfonyAdapter()).generateWebControllers();
 			} catch (final Exception e) {
 				// TODO Auto-generated catch block
 				ConsoleUtils.displayError(e);
@@ -114,7 +125,8 @@ public class SymfonyCommand extends BaseCommand {
 	 */
 	protected void installSymfony() {
 		try {
-			new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).installSymfony();
+			new WebGenerator(new AndroidAdapter(), 
+					new SymfonyAdapter()).installSymfony();
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
@@ -125,7 +137,8 @@ public class SymfonyCommand extends BaseCommand {
 	 */
 	protected void installBundles() {
 		try {
-			new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).installBundles();
+			new WebGenerator(new AndroidAdapter(),
+					new SymfonyAdapter()).installBundles();
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
@@ -135,7 +148,8 @@ public class SymfonyCommand extends BaseCommand {
 	public void generateMetas() {
 		this.registerParser(new RestParser());
 		super.generateMetas();
-		new RestCompletor().generateApplicationRestMetadata(ApplicationMetadata.INSTANCE);
+		new RestCompletor().generateApplicationRestMetadata(
+				ApplicationMetadata.INSTANCE);
 	}
 	
 	
