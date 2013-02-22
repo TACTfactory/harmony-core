@@ -28,14 +28,12 @@ import java.lang.annotation.Target;
 public @interface JoinColumn {
 	
 	/**
-	 * The JoinColumn name
-	 * @return The JoinColumn name
+	 * The JoinColumn name.
 	 */
 	String name() default "";
 	
 	/**
-	 * The referenced Column name
-	 * @return The referenced Column name
+	 * The referenced Column name.
 	 */
 	String referencedColumnName() default Id.COLUMN_ID;
 }

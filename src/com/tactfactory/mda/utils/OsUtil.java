@@ -1,4 +1,4 @@
-/**
+/** 
  * This file is part of the Harmony package.
  *
  * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
@@ -10,18 +10,30 @@ package com.tactfactory.mda.utils;
 
 import java.io.File;
 
+/**
+ * Utility class for OS manipulations.
+ */
 public abstract class OsUtil {
+	/** Generic constant. */
 	private static final String GENERIC = "generic";
+	
+	/** First drive letter. */
 	private static final char BEGIN = 'c';
+	
+	/** Last drive letter. */
 	private static final char END = 'z';
 
 
-	/** Return Os name */
+	/** Return Os name. 
+	 * @return the OS name
+	 */
 	public static String getOsName() {
 		return System.getProperty("os.name", "unknown");
 	}
 
-	/** Return Platform type (win32, linux, solaris, mac, or generic) */
+	/** Return Platform type (win32, linux, solaris, mac, or generic).
+	 * @return the platform type
+	 */
 	public static String platform() {
 		String ret = GENERIC;
 		final String osname = 
@@ -39,11 +51,18 @@ public abstract class OsUtil {
 	}
 
 	/** warning! only gives JRE architecture, 
-	 * on x64 machine with x86 JRE installed, prints 'x86' */
+	 * on x64 machine with x86 JRE installed, prints 'x86'.
+	 * @return The JRE architecture
+	 */
 	public static String getArch() {
 		return System.getProperty("os.arch", GENERIC);
 	}
 	
+	
+	/**
+	 * Check if system is x64.
+	 * @return True if x64
+	 */
 	public static boolean isX64() {
 		boolean is64bit = false;
 		if (isWindows()) {
@@ -58,25 +77,43 @@ public abstract class OsUtil {
 		return is64bit;
 	}
 	
+	/**
+	 * Check if system is Windows.
+	 * @return true if Windows
+	 */
 	public static boolean isWindows() {
 		return getOsName().toLowerCase().contains("windows");
 	}
 
+	/**
+	 * Check if system is Linux.
+	 * @return true if Linux
+	 */
 	public static boolean isLinux() {
 		return getOsName().toLowerCase().contains("linux");
 	}
 
+	/**
+	 * Check if system is Mac.
+	 * @return true if Mac
+	 */
 	public static boolean isMac() {
 		final String os = getOsName().toLowerCase();
 		return os.startsWith("mac") || os.startsWith("darwin");
 	}
 
+	/**
+	 * Check if system is Solaris.
+	 * @return true if Solaris
+	 */
 	public static boolean isSolaris() {
 		final String os = getOsName().toLowerCase();
 		return os.indexOf("sunos") >= 0;
 	}
 
-	/** return windows system drive */
+	/** return windows system drive.
+	 * @return Windows system drive 
+	 */
 	public static String findWindowsSystemDrive() {
 		String sysdrive = null;
 		if (isWindows() 
@@ -89,7 +126,9 @@ public abstract class OsUtil {
 		return sysdrive;
 	}
 
-	/** return windows system root folder */
+	/** return windows system root folder.
+	 * @return Windows system root folder 
+	 */
 	public static String findWindowsSystemRoot() {
 		String sysRoot = null;
 		if (isWindows()) { 

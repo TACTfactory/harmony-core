@@ -48,14 +48,14 @@ public abstract class BaseAdapter {
 	// Abstract Methods
 	/** Generate platform Namespace
 	 * 
-	 * @param meta Entity to extract the namespace 
+	 * @param cm Entity to extract the namespace 
 	 * @return String Namespace
 	 */
 	public abstract String getNameSpace(ClassMetadata cm, String type);
 	
 	/** Generate platform Namespace
 	 * 
-	 * @param meta Entity to extract the namespace 
+	 * @param cm Entity to extract the namespace 
 	 * @return String Namespace
 	 */
 	public abstract String getNameSpaceEntity(ClassMetadata cm, String type);

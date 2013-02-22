@@ -27,15 +27,13 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface OneToMany {
 	/**
-	 * The Entity targeted by the relation
-	 * @return the entity name
+	 * The Entity targeted by the relation.
 	 */
 	String targetEntity() default "";
 	
 	/**
 	 * The field in the target Entity mapping 
 	 * this relation (for bidirectionnal entities only).
-	 * @return the field name
 	 */
 	String mappedBy() default "";
 }

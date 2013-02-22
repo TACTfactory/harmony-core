@@ -24,7 +24,7 @@ import com.mortennobel.imagescaling.ResampleOp;
  *
  */
 public abstract class ImageUtils {
-	// Thread numbers
+	/** Thread numbers. */
 	private static final int NB_THREAD = 8;
 	
 	/**
@@ -32,7 +32,7 @@ public abstract class ImageUtils {
 	 * @param imageSrc Source image
 	 * @param imageDst Destination file
 	 * @param fraction Ratio for image resizing
-	 * @throws IOException
+	 * @throws IOException If image source doesn't exists
 	 */
 	public static void resize(
 			final File imageSrc,

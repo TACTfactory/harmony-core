@@ -53,11 +53,8 @@ public class SQLiteGenerator extends BaseGenerator {
 	}
 	
 	/** Make Java Source Code
-	 * @param cfg Template engine
 	 * @param template Template path file.
 	 * @param filename
-	 * @throws IOException
-	 * @throws TemplateException
 	 */
 	private void makeSourceData(final String template, 
 			final String filename, 

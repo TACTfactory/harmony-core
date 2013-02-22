@@ -111,13 +111,6 @@ public class Harmony {
 	/** Initialize Harmony 
 	 * @throws Exception */
 	protected final void initialize() throws Exception {
-		// Check project folder
-		if (Strings.isNullOrEmpty(projectFolderPath)) {
-			ConsoleUtils.displayError(
-					new Exception("Project folder undefined"));
-			throw new Exception("Project folder undefined");
-		}
-		
 		ConsoleUtils.display(
 				"Current Working Path: " + new File(".").getCanonicalPath());
 
@@ -418,9 +411,9 @@ public class Harmony {
 	}
 	
 	/**
-	 * Extract Project NameSpace from AndroidManifest file
+	 * Extract Project Name from config file
 	 * 
-	 * @param manifest Manifest File
+	 * @param config Config file
 	 * @return Project Name Space
 	 */
 	public static String getProjectNameFromConfig(final File config) {

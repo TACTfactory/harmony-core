@@ -35,7 +35,6 @@ public class ProjectGenerator extends BaseGenerator {
 		} else if (this.adapter.getPlatform().equals("winphone")) {
 			result = this.makeProjectWinPhone();
 		}
-
 		return result;
 	}
 	

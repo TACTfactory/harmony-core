@@ -21,53 +21,104 @@ import print.color.Ansi.BColor;
 import print.color.Ansi.FColor;
 import print.color.ColoredPrinter;
 
+
+/**
+ * Utility class for console.
+ */
 public abstract class ConsoleUtils {
-	/** Debug state*/
+	
+	/** Debug state. */
 	private static boolean isDebug;
+	
+	/** Quiet state. */
 	private static boolean isQuiet;
+	
+	/** ANSI state (used for colors in console or not). */
 	private static boolean isAnsi = true;
+	
+	/** Console state. */
 	private static boolean isConsole;
 	
-	/** Constants */
+	/** Newline character. */
 	private static final char NEWLINE = '\n';
+	
+	/** Tab character. */
 	private static final char TAB = '\t';
+	
+	/** Sleep Time for bridge threads. */
 	private static final int SLEEP_TIME = 200;
 	
+	/** Printer for colors. */
 	private static ColoredPrinter cp =
 			new ColoredPrinter.Builder(0, false).build();
 	
+	
+	/** Is application in debug mode ?
+	 * @return true if application is in debug mode
+	 */
 	public static boolean isDebug() {
 		return isDebug;
 	}
 
+	/**
+	 * Set application in debug mode.
+	 * @param debug Debug mode
+	 */
 	public static void setDebug(final boolean debug) {
 		ConsoleUtils.isDebug = debug;
 	}
-
+	
+	/** Is application in quiet mode ?
+	 * @return true if application is in quiet mode
+	 */
 	public static boolean isQuiet() {
 		return isQuiet;
 	}
 
+	/**
+	 * Set application in quiet mode.
+	 * @param quiet Quiet mode
+	 */
 	public static void setQuiet(final boolean quiet) {
 		ConsoleUtils.isQuiet = quiet;
 	}
 
+	/** Is application in ANSI mode ?
+	 * @return true if application is in ANSI mode
+	 */
 	public static boolean isAnsi() {
 		return isAnsi;
 	}
 
+	/**
+	 * Set application in ANSI mode.
+	 * @param ansi ANSI mode
+	 */
 	public static void setAnsi(final boolean ansi) {
 		ConsoleUtils.isAnsi = ansi;
 	}
 	
+	/** Is application in console mode ?
+	 * @return true if application is in console mode
+	 */
 	public static boolean isConsole() {
 		return isConsole;
 	}
 
+	/**
+	 * Set application in console mode.
+	 * @param console Console mode
+	 */
 	public static void setConsole(final boolean console) {
 		ConsoleUtils.isConsole = console;
 	}
 	
+	
+	/**
+	 * Display given String to the console.
+	 * (White color)
+	 * @param value The String to display
+	 */
 	public static void display(final String value) {
 		if (!isQuiet) {
 			if (isAnsi) {
@@ -79,6 +130,11 @@ public abstract class ConsoleUtils {
 		}
 	}
 	
+	/**
+	 * Display given String to the console prefixed by [WARNING].
+	 * (Yellow color)
+	 * @param value The String to display
+	 */
 	public static void displayWarning(final String value) {
 		if (!isQuiet) {
 			if (isAnsi) {
@@ -93,6 +149,11 @@ public abstract class ConsoleUtils {
 		}
 	}
 	
+	/**
+	 * Display given String to the console prefixed by [DEBUG].
+	 * (Blue color)
+	 * @param value The String to display
+	 */
 	public static void displayDebug(final String value) {
 		if (!isQuiet && ConsoleUtils.isDebug()) {
 			if (isAnsi) {
@@ -107,6 +168,11 @@ public abstract class ConsoleUtils {
 		}
 	}
 	
+	/**
+	 * Converts a StackTrace to a String.
+	 * @param stackTraceElements 
+	 * @return The StrackTrace
+	 */
 	private static String getStackTrace(
 			final StackTraceElement[] stackTraceElements) {
 		final StringBuilder result = new StringBuilder();
@@ -118,6 +184,11 @@ public abstract class ConsoleUtils {
 		return result.toString();
 	}
 	
+	/**
+	 * Display given Exception to the console prefixed by [ERROR].
+	 * (Red color)
+	 * @param value The Exception to display
+	 */
 	public static void displayError(final Exception value) {
 		if (!isQuiet) {
 			String message = 	"[ERROR]" 
@@ -138,6 +209,11 @@ public abstract class ConsoleUtils {
 		}
 	}
 
+	/**
+	 * Display given String to the console.
+	 * (Green color)
+	 * @param value The String to display
+	 */
 	public static void displayLicence(final String value) {
 		if (!isQuiet) {
 			if (isAnsi) {
@@ -152,7 +228,12 @@ public abstract class ConsoleUtils {
 		}
 	}
 	
-	
+	/**
+	 * Launch the given command.
+	 * 
+	 * @param command The list containing the command and its arguments
+	 * 	to execute
+	 */
 	public static void launchCommand(final List<String> command) {
 		try {
 			final ProcessBuilder pb = new ProcessBuilder(command);
@@ -177,30 +258,55 @@ public abstract class ConsoleUtils {
 		}
 	}
 	
+	/**
+	 * Bridge used for transmitting input and output between an external process
+	 * and the console.
+	 * @author gregg
+	 */
 	protected static class ProcessToConsoleBridge {
+		
+		/** Input thread. */
 		private final InputBridge in;
+		
+		/** Output thread. */
 		private final OutputBridge out;
 		
+		/**
+		 * Constructor.
+		 * @param proc The process to bridge with the console
+		 */
 		public ProcessToConsoleBridge(final Process proc) {
 			this.in = new InputBridge(proc);
 			this.out = new OutputBridge(proc);
 		}
 
+		/** Start the threads. */
 		public final void start() {
 			this.in.start();
 			this.out.start();
 		}
 		
+		/** Stop the threads. */
 		public final void stop() {
 			this.in.terminate();
 			this.out.terminate();
 		}
 		
+		/** Input bridge thread. */
 		private static class InputBridge extends Thread {
+			/** Reader for process input stream. */
 			private BufferedReader processInput;
+			
+			/** Reader for process error stream. */
 			private BufferedReader processError;
+			
+			/** Reader for process input stream. */
 			private boolean isRunning;
 			
+			/**
+			 * Constructor.
+			 * @param proc The process to bridge with the console
+			 */
 			public InputBridge(final Process proc) {
 				super();
 				try {
@@ -252,7 +358,9 @@ public abstract class ConsoleUtils {
 				}
 			}
 			
-
+			/**
+			 * Stop thread.
+			 */
 			public void terminate() {
 				this.isRunning = false;
 			}
@@ -264,11 +372,24 @@ public abstract class ConsoleUtils {
 			}
 		}
 		
+		/**
+		 * Constructor.
+		 * @param proc The process to bridge with the console
+		 */		
 		private static class OutputBridge extends Thread {
+			/** Reader for console input stream. */
 			private BufferedReader consoleInput;
+			
+			/** Writer for console output stream. */
 			private BufferedWriter processOutput;
+			
+			/** Is thread running ? */
 			private boolean isRunning;
 			
+			/**
+			 * Constructor.
+			 * @param proc The process to bridge with the console
+			 */
 			public OutputBridge(final Process proc) {
 				super();
 				try {
@@ -315,6 +436,9 @@ public abstract class ConsoleUtils {
 				}
 			}
 
+			/**
+			 * Stop thread.
+			 */
 			public void terminate() {
 				this.isRunning = false;
 			}

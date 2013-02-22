@@ -53,8 +53,8 @@ public class RestGlobalTest extends CommonTest {
 	
 	private static void initAll() {
 		System.out.println("\nTest Orm generate entity");
-		System.out.println("########################################" +
-				"#######################################");
+		System.out.println("########################################"
+				+ "#######################################");
 		
 		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();

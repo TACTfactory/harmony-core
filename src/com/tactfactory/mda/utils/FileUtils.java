@@ -23,15 +23,22 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
-/** Manipulate File tools */
+/** Manipulate File tools. */
 public abstract class FileUtils extends org.apache.commons.io.FileUtils {
+	/** Default encoding for stream manipulation. */
 	public static final String DEFAULT_ENCODING = "UTF-8";
+	
+	/** Buffer size for file manipulation. */
 	private static final int BUFFER_SIZE = 1024;
+	
+	/** String for debug informations. */
 	private static final String FOLDER 	= "Folder '";
+	
+	/** String for debug informations. */
 	private static final String FILE 	= "File '";
 	
 	/** 
-	 * Create a new file if doesn't exist (and path)
+	 * Create a new file if doesn't exist (and path).
 	 * 
 	 * @param filename Full path of file
 	 * @return File instance 
@@ -58,7 +65,7 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 	}
 	
 	/** 
-	 * Copy file content from srcFile to destFile 
+	 * Copy file content from srcFile to destFile.
 	 *
 	 * @param srcFile Source path
 	 * @param destFile Destination path
@@ -98,7 +105,10 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		}
 	}
 	
-	/** handle folder creation with its parents */
+	/** handle folder creation with its parents.
+	 * @param filename The folder name
+	 * @return The newly created folder
+	 */
 	public static File makeFolder(final String filename) {
 		final File folder = new File(filename);
 
@@ -126,7 +136,11 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		return folder;
 	}
 
-	/** convert file content to a string */
+	/** convert file content to a string.
+	 * 
+	 * @param file The file to open
+	 * @return the String containing the file contents 
+	 */
 	public static String fileToString(final File file) {
 		String result = null;
 		DataInputStream in = null;
@@ -151,7 +165,11 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		return result;
 	}
 
-	/** convert file content to a stringbuffer */
+	/** convert file content to a stringbuffer.
+	 * 
+	 * @param file The File to open
+	 * @return the StringBuffer containing the file's content 
+	 */
 	public static StringBuffer fileToStringBuffer(final File file) {
 		final StringBuffer result = new StringBuffer();
 		String tmp;
@@ -195,7 +213,10 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		return result;
 	}
 	
-	/** write stringbuffer contents to the given file */
+	/** Write StringBuffer contents to the given file.
+	 * @param buff The buffer to write to the file
+	 * @param file The file in which the buffer must be copied
+	 */
 	public static void stringBufferToFile(final StringBuffer buff,
 				final File file)	 {
 		FileOutputStream fos = null;
@@ -226,7 +247,10 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		}
 	}
 	
-	/** convert file content to a string array with each line separated */
+	/** convert file content to a string array with each line separated.
+	 * @param file The File to read
+	 * @return Array of Strings containing the file contents
+	 */
 	public static List<String> fileToStringArray(final File file) {
 		
 		ArrayList<String> result = null;
@@ -262,8 +286,14 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		return result;
 	}
 	
-	/** copy folder content recursively from srcPath to destPath,
-	 * and copy files or not */
+	/** Copy folder content recursively from srcPath to destPath,
+	 * and copy files or not.
+	 * @param srcPath Source folder
+	 * @param destPath Destination folder
+	 * @param makeFiles True if you want to copy files as well
+	 * 
+	 *  @return The newly created folder 
+	 */
 	public static File makeFolderRecursive(final String srcPath,
 			final String destPath,
 			final boolean makeFiles) {
@@ -350,12 +380,20 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		return destFolder;
 	}
 	
-	/** delete a directory with all its files recursively */
+	/** delete a directory with all its files recursively.
+	 * @param dir The folder or file to delete
+	 * @return number of files/folders deleted
+	 */
 	public static int deleteRecursive(final File dir) {
 		return FileUtils.deleteRecursive(dir, 0);
 	}
 	
-	public static int deleteRecursive(final File dir, final int result) {
+	/** delete a directory with all its files recursively.
+	 * @param dir The folder or file to delete
+	 * @param result number of files/folders deleted
+	 * @return number of files deleted
+	 */
+	private static int deleteRecursive(final File dir, final int result) {
 		int ret = result;
 		if (dir.exists()) {
 			if (dir.isDirectory()) {
@@ -423,6 +461,11 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		return ret;
 	}
 	
+	/**
+	 * Tests if file exists.
+	 * @param filename The file name
+	 * @return true if the file exists
+	 */
 	public static boolean exists(final String filename) {
 		final File f = new File(filename);
 		if (f.exists()) {
@@ -437,8 +480,10 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		return f.exists();
 	}
 	
-	/*
+	/**
 	 * Get the extension of a file.
+	 * @param f The file
+	 * @return The file's extension
 	 */  
 	public static String getExtension(final File f) {
 	    String ext = null;
@@ -451,6 +496,13 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 	    return ext;
 	}
 	
+	/**
+	 * Append String to at the end of a file 
+	 * if it doesn't exists in the file yet.
+	 * @param content The content to append
+	 * @param file The file to write to
+	 * @return true if the content has been correctly appended
+	 */
 	public static boolean appendToFile(final String content, final File file) {
 		boolean success = false;
 		final StringBuffer sb = FileUtils.fileToStringBuffer(file);
@@ -464,6 +516,15 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		return success;
 	}
 	
+	
+	/**
+	 * Add String after a given String in the given file.
+	 * (Only if it doesn't already exists in the file)
+	 * @param content The content to append
+	 * @param after The String after which the content must be added
+	 * @param file The file to write to
+	 * @return true if the content has been correctly appended
+	 */
 	public static boolean addToFile(final String content, 
 			final String after,
 			final File file) {

@@ -177,85 +177,53 @@ public @interface Column {
 	/**
 	 * The mapping type to use for the column.
 	 * 
-	 * @return (optional, defaults to "string") 
-	 * The mapping type to use for the column.
-	 * 
 	 * @see com.tactfactory.mda.annotation.Column.Type
 	 */
 	Type type() default Type.STRING;
 			
 	/** 
 	 * The name of the column in the database.
-	 * 
-	 * @return (optional, defaults to field name) 
-	 * The name of the column in the database.
 	 */
 	String name() default "";
 	
 	/**
 	 * The length of the column in the database.
-	 * 
-	 * @return (optional, default 255) 
-	 * The length of the column in the database. 
-	 * (Applies only if a string-valued column is used).
 	 */
 	int length() default 255;
 	
 	/**
 	 * Whether the column is a unique key.
-	 * 
-	 * @return (optional, default FALSE) Whether the column is a unique key.
 	 */
 	boolean unique() default false;
 	
 	/**
-	 * Whether the database column is nullable.
-	 * 
-	 * @return (optional, default FALSE) 
 	 * Whether the database column is nullable.
 	 */
 	boolean nullable() default false;
 	
 	/**
 	 * The precision for a decimal (exact numeric) column.
-	 * 
-	 * @return (optional, default 0) 
-	 * The precision for a decimal (exact numeric) column. 
-	 * (Applies only if a decimal column is used.)
 	 */
 	int precision() default 0;
 	
 	/**
 	 * The scale for a decimal (exact numeric) column.
-	 * 
-	 * @return (optional, default 0) 
-	 * The scale for a decimal (exact numeric) column. 
-	 * (Applies only if a decimal column is used.)
 	 */
 	int scale() default 0;
 	
 	/**
-	 * The database type to use for the column
-	 * 
-	 * @return (optional, defaults to type mapping) 
 	 * The database type to use for the column.
-	 * 
-	 * @see com.tactfactory.mda.plateforme.SqliteAdapter for mapping list
 	 */
 	String columnDefinition() default "";
 	
 	/**
-	 * Hide field in view
-	 * 
-	 * @return (optional, defaults to false) Hide the filed in a view.
+	 * Hide field in view.
 	 */
 	boolean hidden() default false;
 	
 	/**
 	 * (Date, DateTime and Time only)
-	 * Use locale for date
-	 * 
-	 * @return (optional, defaults to true) Adjust date to locale
+	 * Use locale for date.
 	 */
 	boolean locale() default false;
 }

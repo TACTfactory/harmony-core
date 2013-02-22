@@ -84,18 +84,12 @@ public @interface Rest {
 	}
 	
 	/**
-	 * The uri for entity
-	 * 
-	 * @return (optional, defaults to entity name) 
-	 * The path route to use for entity.
-	 * 
+	 * The uri for entity.
 	 */
 	String uri() default "";
 	
 	/**
-	 * The security level
-	 * 
-	 * @return (optional, defaults to none) Security level to use.
+	 * The security level.
 	 */
 	Security security() default Security.NONE;
 }
