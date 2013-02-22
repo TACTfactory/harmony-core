@@ -12,8 +12,17 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 
+/**
+ * Generator class for the project.
+ *
+ */
 public class ProjectGenerator extends BaseGenerator {
 
+	/**
+	 * Constructor.
+	 * @param adapter The adapter to use for the generation.
+	 * @throws Exception 
+	 */
 	public ProjectGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 

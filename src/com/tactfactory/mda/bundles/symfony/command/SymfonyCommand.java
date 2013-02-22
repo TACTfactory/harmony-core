@@ -55,7 +55,7 @@ public class SymfonyCommand extends BaseCommand {
 			final String option) {
 		ConsoleUtils.display("> Adapters Generator");
 
-		this.commandArgs = Console.parseCommandArgs(args);
+		this.setCommandArgs(Console.parseCommandArgs(args));
 		if (action.equals(GENERATE_ENTITIES)) {
 			this.generateEntities();
 		} else if (action.equals(GENERATE_REPOSITORIES)) {

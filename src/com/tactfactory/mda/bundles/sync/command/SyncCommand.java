@@ -40,7 +40,7 @@ public class SyncCommand extends BaseCommand {
 			final String option) {
 		ConsoleUtils.display("> Sync Generator");
 
-		this.commandArgs = Console.parseCommandArgs(args);
+		this.setCommandArgs(Console.parseCommandArgs(args));
 		if (action.equals(GENERATE_SERVICE)) {
 			try {
 				this.generateAdapters();

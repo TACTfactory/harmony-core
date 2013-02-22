@@ -39,54 +39,42 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 @PluginImplementation
 public class OrmCommand extends BaseCommand {
 
-	//bundle name
+	/** Bundle name. */	
 	public static final String BUNDLE = "orm";
+	/** Subject. */
 	public static final String SUBJECT = "generate";
 
-	//actions
+	/** Action entity. */
 	public static final String ACTION_ENTITY = "entity";
+	/** Action entities. */
 	public static final String ACTION_ENTITIES = "entities";
+	/** Action form. */
 	public static final String ACTION_FORM = "form";
+	/** Action crud. */
 	public static final String ACTION_CRUD = "crud";
 
 	//commands
-	//public static String GENERATE_ENTITY 	=
-	//		BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITY;
-	public static final String GENERATE_ENTITIES	= 
-			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITIES;
 	//public static String GENERATE_FORM 		= 
 	//		BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_FORM;
+	//public static String GENERATE_ENTITY 	=
+	//		BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITY;
+	
+	/** Command : ORM:GENERATE:ENTITIES. */
+	public static final String GENERATE_ENTITIES	= 
+			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITIES;
+
+	/** Command : ORM:GENERATE:CRUD. */
 	public static final String GENERATE_CRUD 		= 
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_CRUD;
 
-	//internal
+	/** Adapter. */
 	private BaseAdapter adapter = new AndroidAdapter();
 
-	protected void generateForm() {
-		/*ApplicationMetadata appMetas = this.getMetasFromAll();
-		if (appMetas != null) {
-			this.generateActivitiesForEntities(appMetas, true);
-		}*/
-	}
-
-	/**
-	 * Generate java code files from first parsed Entity.
-	 */
-	protected void generateEntity() {
-		/*ApplicationMetadata appMetas = this.getMetasFromArg();
-		
-		if (appMetas != null) {
-			//this.generateActivitiesForEntities(appMetas, false);
-			this.makeLayoutDatabase(appMetas);
-			this.makeLayoutTestDatabase(appMetas);
-		}*/
-	
-	}
 
 	/**
 	 * Generate java code files from parsed Entities.
 	 */
-	protected void generateEntities() {
+	protected final void generateEntities() {
 		this.generateMetas();
 		
 		if (ApplicationMetadata.INSTANCE.entities != null) {
@@ -99,7 +87,7 @@ public class OrmCommand extends BaseCommand {
 	/**
 	 * Generate Create,Read, Upload, Delete code functions.
 	 */
-	protected void generateCrud() {
+	protected final void generateCrud() {
 		this.generateMetas();
 		if (ApplicationMetadata.INSTANCE.entities != null) {
 			this.makeLayoutUi(true);
@@ -109,7 +97,7 @@ public class OrmCommand extends BaseCommand {
 	/**
 	 * Generate the Persistence part for the given classes.
 	 */
-	protected void makeLayoutDatabase() {
+	protected final void makeLayoutDatabase() {
 		try {
 			new EntityGenerator(this.adapter).generateAll();
 			new ApplicationGenerator(this.adapter).generateApplication();
@@ -125,7 +113,7 @@ public class OrmCommand extends BaseCommand {
 	/**
 	 * Generate Test DB for Entities.
 	 */
-	protected void makeLayoutTestDatabase() {
+	protected final void makeLayoutTestDatabase() {
 		try {
 			new TestDBGenerator(this.adapter).generateAll();
 			
@@ -136,8 +124,9 @@ public class OrmCommand extends BaseCommand {
 	
 	/**
 	 * Generate the GUI part for the given classes.
+	 * @param generateHome True if you want the HomeActivity to be regenerated.
 	 */
-	protected void makeLayoutUi(final boolean generateHome) {
+	protected final void makeLayoutUi(final boolean generateHome) {
 		try {
 			if (generateHome) {
 				new ProjectGenerator(this.adapter).generateHomeActivity();
@@ -151,7 +140,7 @@ public class OrmCommand extends BaseCommand {
 	}
 	
 	@Override
-	public void summary() {
+	public final void summary() {
 		ConsoleUtils.display("\n> ORM \n" 
 				// + "\t" + GENERATE_ENTITY + "\t => Generate Entry\n" 
 				+ "\t" + GENERATE_ENTITIES + "\t => Generate Entries\n" 
@@ -160,12 +149,12 @@ public class OrmCommand extends BaseCommand {
 	}
 
 	@Override
-	public void execute(final String action,
+	public final void execute(final String action,
 			final String[] args, 
 			final String option) {
 		ConsoleUtils.display("> ORM Generator");
 
-		this.commandArgs = Console.parseCommandArgs(args);
+		this.setCommandArgs(Console.parseCommandArgs(args));
 		
 		try {
 			/*if (action.equals(GENERATE_ENTITY)) {
@@ -189,7 +178,7 @@ public class OrmCommand extends BaseCommand {
 	}
 
 	@Override
-	public boolean isAvailableCommand(final String command) {
+	public final boolean isAvailableCommand(final String command) {
 		return  //|| command.equals(GENERATE_ENTITY)	
 				command.equals(GENERATE_ENTITIES) 	
 				//|| command.equals(GENERATE_FORM)		

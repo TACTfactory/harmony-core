@@ -39,68 +39,81 @@ public class ProjectCommand extends BaseCommand {
 	/** Bundle name. */
 	public static final String BUNDLE 		= "project";
 	
+	/** Error Message. */
 	private static final String ERROR_MSG = 
 			"Please check your file browser or file editor and try again...";
 
 	// Actions
+	/** Init action. */
 	public static final String ACTION_INIT 	= "init";
+	/** Remove action. */
 	public static final String ACTION_REMOVE 	= "remove";
 
 	// Commands
+	/** Command : PROJECT:INIT:ANDROID. */
 	public static final String INIT_ANDROID 	= BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_INIT 
 								+ SEPARATOR 
 								+ TargetPlatform.ANDROID.toLowerString();
 	
+	/** Command : PROJECT:INIT:IOS. */
 	public static final String INIT_IOS 		= BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_INIT 
 								+ SEPARATOR 
 								+ TargetPlatform.IPHONE.toLowerString();
 	
+	/** Command : PROJECT:INIT:RIM. */
 	public static final String INIT_RIM 		= BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_INIT 
 								+ SEPARATOR 
 								+ TargetPlatform.RIM.toLowerString();
 	
+	/** Command : PROJECT:INIT:WINPHONE. */
 	public static final String INIT_WINPHONE 	= BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_INIT 
 								+ SEPARATOR 
 								+ TargetPlatform.WINPHONE.toLowerString();
 	
+	/** Command : PROJECT:INIT:ALL. */
 	public static final String INIT_ALL		= BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_INIT 
 								+ SEPARATOR 
 								+ TargetPlatform.ALL.toLowerString();
 
+	/** Command : PROJECT:REMOVE:ANDROID. */
 	public static final String REMOVE_ANDROID = BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_REMOVE 
 								+ SEPARATOR 
 								+ TargetPlatform.ANDROID.toLowerString();
 	
+	/** Command : PROJECT:REMOVE:IOS. */
 	public static final String REMOVE_IOS 	= BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_REMOVE 
 								+ SEPARATOR 
 								+ TargetPlatform.IPHONE.toLowerString();
 	
+	/** Command : PROJECT:REMOVE:RIM. */
 	public static final String REMOVE_RIM 	= BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_REMOVE 
 								+ SEPARATOR 
 								+ TargetPlatform.RIM.toLowerString();
 	
+	/** Command : PROJECT:REMOVE:WINPHONE. */
 	public static final String REMOVE_WINPHONE = BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_REMOVE 
 								+ SEPARATOR 
 								+ TargetPlatform.WINPHONE.toLowerString();
 	
+	/** Command : PROJECT:REMOVE:ALL. */
 	public static final String REMOVE_ALL 	= BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_REMOVE 
@@ -108,12 +121,19 @@ public class ProjectCommand extends BaseCommand {
 								+ TargetPlatform.ALL.toLowerString();
 
 	// Internal	
+	/** Android adapter. */
 	private final BaseAdapter adapterAndroid = new AndroidAdapter();
+	/** iOS adapter. */
 	private final BaseAdapter adapterIOS = new IosAdapter();
+	/** RIM adapter. */
 	private final BaseAdapter adapterRIM = new RimAdapter();
+	/** Windows Phone adapter. */
 	private final BaseAdapter adapterWinPhone = new WinphoneAdapter();
 
+	/** Has user confirmed ? */
 	private boolean userHasConfirmed = false;
+	
+	/** Is project initialized ? */
 	private boolean isProjectInit = false;
 
 	/**
@@ -125,28 +145,28 @@ public class ProjectCommand extends BaseCommand {
 				ConsoleUtils.display(">> Project Parameters");
 
 				//Project Name
-				if (!this.commandArgs.containsKey("name")) {
+				if (!this.getCommandArgs().containsKey("name")) {
 					Harmony.initProjectName();
 				} else {
 					ApplicationMetadata.INSTANCE.name =
-							this.commandArgs.get("name");
+							this.getCommandArgs().get("name");
 				}
 					
 				//Project NameSpace
-				if (!this.commandArgs.containsKey("namespace")) {
+				if (!this.getCommandArgs().containsKey("namespace")) {
 					Harmony.initProjectNameSpace();
 				} else {
 					ApplicationMetadata.INSTANCE.projectNameSpace = 
-							this.commandArgs.get("namespace")
+							this.getCommandArgs().get("namespace")
 								.replaceAll("\\.", "/");
 				}
 					
 				//Android sdk path
-				if (!this.commandArgs.containsKey("androidsdk")) {
+				if (!this.getCommandArgs().containsKey("androidsdk")) {
 					Harmony.initProjectAndroidSdkPath();
 				} else {
 					ApplicationMetadata.androidSdkPath =
-							this.commandArgs.get("androidsdk");
+							this.getCommandArgs().get("androidsdk");
 				}
 					
 				ConsoleUtils.displayDebug("Project Name: "	 
@@ -168,7 +188,7 @@ public class ProjectCommand extends BaseCommand {
 						ApplicationMetadata.INSTANCE.name 				= "";
 						ApplicationMetadata.INSTANCE.projectNameSpace 	= "";
 						ApplicationMetadata.androidSdkPath 			= "";
-						this.commandArgs.clear();
+						this.getCommandArgs().clear();
 					}
 				} else {
 					this.userHasConfirmed = true;
@@ -466,7 +486,7 @@ public class ProjectCommand extends BaseCommand {
 	public final void execute(final String action,
 			final String[] args, 
 			final String option) {
-		this.commandArgs = Console.parseCommandArgs(args);
+		this.setCommandArgs(Console.parseCommandArgs(args));
 		
 		if (action.equals(INIT_ANDROID)) {
 			this.initAndroid();

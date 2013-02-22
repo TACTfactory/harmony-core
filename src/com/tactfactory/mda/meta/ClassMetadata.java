@@ -56,7 +56,7 @@ public class ClassMetadata extends BaseMetadata {
 	public List<String> imports = new ArrayList<String>();
 	
 	/** Add Component String of field. */
-	public void makeString(final String componentName) {
+	public final void makeString(final String componentName) {
 		final String key = this.name.toLowerCase() 
 				+ "_" + componentName.toLowerCase(Locale.ENGLISH);
 		TranslationMetadata.addDefaultTranslation(key, this.name, Group.MODEL);
@@ -69,7 +69,7 @@ public class ClassMetadata extends BaseMetadata {
 	 * @return the map
 	 */
 	@Override
-	public Map<String, Object> toMap(final BaseAdapter adapter) {
+	public final Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		
 		model.put(TagConstant.SPACE,			this.space);

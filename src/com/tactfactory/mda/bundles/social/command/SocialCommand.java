@@ -38,7 +38,7 @@ public class SocialCommand extends BaseCommand {
 			final String option) {
 		ConsoleUtils.display("> Social Generator");
 
-		this.commandArgs = Console.parseCommandArgs(args);
+		this.setCommandArgs(Console.parseCommandArgs(args));
 		if (action.equals(GENERATE_SOCIAL)) {
 			try {
 				this.generateAdapters();

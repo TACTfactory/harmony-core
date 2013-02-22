@@ -46,7 +46,7 @@ public class FixtureCommand extends BaseCommand {
 			final String option) {
 		ConsoleUtils.display("> Fixture Generator");
 
-		this.commandArgs = Console.parseCommandArgs(args);
+		this.setCommandArgs(Console.parseCommandArgs(args));
 		if (action.equals(FIXTURE_INIT)) {
 			this.init();
 		} else if (action.equals(FIXTURE_LOAD)) {
@@ -65,8 +65,8 @@ public class FixtureCommand extends BaseCommand {
 			final FixtureMetadata fixtureMeta = new FixtureMetadata();
 			//TODO : get type by user input
 			fixtureMeta.type = "yml";
-			if (this.commandArgs.containsKey("format")) {
-				final String format = this.commandArgs.get("format");
+			if (this.getCommandArgs().containsKey("format")) {
+				final String format = this.getCommandArgs().get("format");
 				if (format.equals("xml") || format.equals("yml")) {
 					fixtureMeta.type = format; 
 				}

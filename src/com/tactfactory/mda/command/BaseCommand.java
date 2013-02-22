@@ -24,12 +24,17 @@ import com.tactfactory.mda.utils.ConsoleUtils;
  * Common Command structure.
  */
 public abstract class BaseCommand implements Command {
+	/** Registered parsers for the global parser. */
 	private ArrayList<BaseParser> registeredParsers 
 			= new ArrayList<BaseParser>();
 	
+	/** Command separator. */
 	protected static final String SEPARATOR = ":";
 	
-	protected HashMap<String, String> commandArgs;
+	/** Command arguments. */
+	private HashMap<String, String> commandArgs;
+	
+	/** Parser. */
 	private JavaModelParser javaModelParser;
 	
 	/**
@@ -71,7 +76,27 @@ public abstract class BaseCommand implements Command {
 		}
 	}
 	
+	/**
+	 * Register a parser to the global parser.
+	 * @param parser The parser to register.
+	 */
 	public final void registerParser(final BaseParser parser) {
 		this.registeredParsers.add(parser);
+	}
+	
+	/**
+	 * Set the command arguments.
+	 * @param args The arguments.
+	 */
+	protected final void setCommandArgs(final HashMap<String, String> args) {
+		this.commandArgs = args;
+	}
+	
+	/**
+	 * Get the command arguments.
+	 * @return The arguments.
+	 */
+	protected final HashMap<String, String> getCommandArgs() {
+		return this.commandArgs;
 	}
 }

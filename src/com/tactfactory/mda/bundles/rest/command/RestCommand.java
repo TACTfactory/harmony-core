@@ -39,7 +39,7 @@ public class RestCommand extends BaseCommand {
 			final String option) {
 		ConsoleUtils.display("> Adapters Generator");
 
-		this.commandArgs = Console.parseCommandArgs(args);
+		this.setCommandArgs(Console.parseCommandArgs(args));
 		if (action.equals(GENERATE_ADAPTERS)) {
 			try {
 				this.generateAdapters();
