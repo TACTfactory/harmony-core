@@ -79,7 +79,8 @@ public class SyncGlobalTest extends CommonTest {
 				SyncCommand.GENERATE_SERVICE, new String[] {}, null);
 		
 		final SyncCommand command =
-				(SyncCommand) Harmony.instance.getCommand(SyncCommand.class);
+				(SyncCommand) Harmony.getInstance().getCommand(
+						SyncCommand.class);
 		command.generateMetas();
 	}
 	

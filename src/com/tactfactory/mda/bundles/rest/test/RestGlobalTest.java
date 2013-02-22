@@ -66,7 +66,8 @@ public class RestGlobalTest extends CommonTest {
 				RestCommand.GENERATE_ADAPTERS, new String[] {}, null);
 				
 		final RestCommand command = 
-				(RestCommand) Harmony.instance.getCommand(RestCommand.class);
+				(RestCommand) Harmony.getInstance().getCommand(
+						RestCommand.class);
 		command.generateMetas();	
 	}
 	

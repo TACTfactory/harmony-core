@@ -80,7 +80,8 @@ public class OrmInitEntitiesTest extends CommonTest {
 				new String[] {}, 
 				null);
 		final OrmCommand command = 
-				(OrmCommand) Harmony.instance.getCommand(OrmCommand.class);
+				(OrmCommand) Harmony.getInstance().getCommand(
+						OrmCommand.class);
 
 		command.generateMetas();
 		
