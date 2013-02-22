@@ -45,8 +45,8 @@ public abstract class ${project_name?cap_first}MenuBase {
 		
 		this.fragment	= fragment;
 		this.context 	= context;
-		this.menus.put(SEARCH, new SearchMenuWrapper());
-		this.menus.put(SHARE, new SocialMenuWrapper());
+		//this.menus.put(SEARCH, new SearchMenuWrapper());
+		//this.menus.put(SHARE, new SocialMenuWrapper());
 	}
 	
 	/** Initialize Menu component */

@@ -11,35 +11,33 @@ package com.tactfactory.mda.test.orm;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.test.CommonTest;
 
+/**
+ * Entities updates test class.
+ *
+ */
 public class OrmUpdateEntitiesTest extends CommonTest {
 	
 	/**
-	 * @throws java.lang.Exception
+	 * Initialization.
+	 * @throws Exception 
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {
 		CommonTest.setUpBefore();
 		initAll();
 	}
-	
-	/**
-	 * @throws java.lang.Exception
-	 */
+
 	@Before
 	@Override
 	public final void setUp() throws Exception {
 		super.setUp();
 	}
 
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@After
 	@Override
 	public final void tearDown() throws Exception {
@@ -48,6 +46,9 @@ public class OrmUpdateEntitiesTest extends CommonTest {
 		//TODO : enable !! FileUtils.deleteRecursive(dirproj);
 	}
 	
+	/**
+	 * Generate the entities.
+	 */
 	private static void initAll() {
 		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
@@ -58,10 +59,5 @@ public class OrmUpdateEntitiesTest extends CommonTest {
 		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES,
 				new String[] {},
 				null);
-	}
-	
-	@Test
-	public void all() {
-		
 	}
 }

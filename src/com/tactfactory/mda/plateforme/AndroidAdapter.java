@@ -58,17 +58,17 @@ public final class AndroidAdapter extends BaseAdapter {
 	public AndroidAdapter() {
 		super();
 		// Structure
-		this.project	= "project";
-		this.platform	= "android";
-		this.resource 	= "res";
-		this.assets 	= "assets";
-		this.source 	= "src";
-		this.libs		= "libs";
-		this.test		= "test";
-		this.testLibs	= "libs";
-		this.harmony 	= "harmony";
-		this.widget		= "widget";
-		this.util		= "util";
+		this.setProject("project");
+		this.setPlatform("android");
+		this.setResource("res");
+		this.setAssets("assets");
+		this.setSource("src");
+		this.setLibs("libs");
+		this.setTest("test");
+		this.setTestLibs("libs");
+		this.setHarmony("harmony");
+		this.setWidget("widget");
+		this.setUtil("util");
 		
 		// MVC
 		//this.model 		= "entity";
@@ -78,10 +78,10 @@ public final class AndroidAdapter extends BaseAdapter {
 		//this.provider		= "provider";
 		
 		// File
-		this.manifest 	= "AndroidManifest.xml";
-		this.strings	= "strings.xml";
-		this.home		= "HomeActivity.java";
-		this.configs	= "configs.xml";
+		this.setManifest("AndroidManifest.xml");
+		this.setStrings("strings.xml");
+		this.setHome("HomeActivity.java");
+		this.setConfigs("configs.xml");
 	}
  
 	@Override

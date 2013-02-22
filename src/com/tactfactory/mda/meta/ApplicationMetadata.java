@@ -95,7 +95,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 				ApplicationMetadata.androidSdkPath);
 		// SDKDIR Hack
 		final HashMap<String, String> sdkDir = new HashMap<String, String>();
-		sdkDir.put("dir", "$ {sdk.dir}");
+		sdkDir.put("dir", "${sdk.dir}");
 		ret.put(TagConstant.ANT_ANDROID_SDK_DIR, sdkDir);
 		ret.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
 		ret.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");

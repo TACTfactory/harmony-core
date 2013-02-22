@@ -21,9 +21,9 @@ public final class WinphoneAdapter extends BaseAdapter {
 	 */
 	public WinphoneAdapter() {
 		super();
-		this.platform	= "winphone";
-		this.resource 	= "res";
-		this.source 	= "src";
+		this.setPlatform("winphone");
+		this.setResource("res");
+		this.setSource("src");
 	}
 
 	@Override

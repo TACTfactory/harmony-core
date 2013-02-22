@@ -18,10 +18,10 @@ public final class IosAdapter extends BaseAdapter {
 	 */
 	public IosAdapter()	 {
 		super();
-		this.project	= "project";
-		this.platform	= "ios";
-		this.resource 	= "res";
-		this.source 	= "src";
+		this.setProject("project");
+		this.setPlatform("ios");
+		this.setResource("res");
+		this.setSource("src");
 	}
 
  

@@ -21,38 +21,26 @@ import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.test.CommonTest;
 import com.tactfactory.mda.utils.FileUtils;
 
-/**
- *
+/** 
+ * Test class for project initialization.
  */
 public class ProjectInitTest extends CommonTest {
-	private static final  String SHARP_DELIMITOR = 
-			  "#################" 
-			 + "#################" 
-			 + "#################" 
-			 + "#################" 
-			 + "#########";
-
 	
 	/**
-	 * @throws java.lang.Exception
+	 * Initialization of the test.
+	 * @throws Exception 
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {
 		CommonTest.setUpBefore();
 	}
 
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@Before
 	@Override
 	public final void setUp() throws Exception {
 		super.setUp();
 	}
 
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@After
 	@Override
 	public final void tearDown() throws Exception {
@@ -64,6 +52,9 @@ public class ProjectInitTest extends CommonTest {
 		FileUtils.deleteRecursive(dirproj);
 	}
 	
+	/**
+	 * Test the initialization of the android project.
+	 */
 	@Test
  	public final void initAndroid() {
 		System.out.println("\nTest Project init Android");
@@ -96,7 +87,10 @@ public class ProjectInitTest extends CommonTest {
 		CommonTest.hasFindFile("android/res/values/configs.xml");
 		CommonTest.hasFindFile("android/res/values/strings.xml");
 	}
-
+	
+	/**
+	 * Test the initialization of the iPhone project.
+	 */
 	@Ignore
 	@Test
 	public final void initIphone() {
@@ -109,6 +103,9 @@ public class ProjectInitTest extends CommonTest {
 		// TODO add asserts (for folder/file exist..)
 	}
 	
+	/**
+	 * Test the initialization of the RIM project.
+	 */	
 	@Ignore
 	@Test
 	public final void initRim() {
@@ -121,6 +118,9 @@ public class ProjectInitTest extends CommonTest {
 		// TODO add asserts (for folder/file exist..)
 	}
 	
+	/**
+	 * Test the initialization of the Windows Phone project.
+	 */
 	@Ignore
 	@Test
 	public final void initWinphone() {

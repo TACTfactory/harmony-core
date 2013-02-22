@@ -18,9 +18,9 @@ public final class RimAdapter extends BaseAdapter {
 	 */
 	public RimAdapter() {
 		super();
-		this.platform	= "rim";
-		this.resource 	= "res";
-		this.source 	= "src";
+		this.setPlatform("rim");
+		this.setResource("res");
+		this.setSource("src");
 	}
  
 	@Override

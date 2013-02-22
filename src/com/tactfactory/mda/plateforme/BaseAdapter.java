@@ -16,59 +16,59 @@ import com.tactfactory.mda.meta.ClassMetadata;
 public abstract class BaseAdapter {	
 	// Structure
 	/** Project path. */
-	protected String project;
+	private String project;
 	/** Platform path. */
-	protected String platform;
+	private String platform;
 	/** Resources path. */
-	protected String resource;
+	private String resource;
 	/** Assets path. */
-	protected String assets;
-	/** Soruce path. */
-	protected String source;
+	private String assets;
+	/** Source path. */
+	private String source;
 	/** Libs path. */
-	protected String libs;
+	private String libs;
 	/** Tests path. */
-	protected String test;
+	private String test;
 	/** Tests libraries path. */
-	protected String testLibs;
+	private String testLibs;
 	/** Harmony path. */
-	protected String harmony;
+	private String harmony;
 	/** Widgets path. */
-	protected String widget;
+	private String widget;
 	/** Utility classes path. */
-	protected String util;
+	private String util;
 
 	// MVC
 	/** Models path. */
-	protected String model		= "entity";
+	private String model		= "entity";
 	/** Views path. */
-	protected String view 		= "layout";
+	private String view 		= "layout";
 	/** Values path. */
-	protected String values		= "values";
+	private String values		= "values";
 	/** Controllers path. */
-	protected String controller = "view";
+	private String controller = "view";
 	/** Data path. */
-	protected String data		= "data";
+	private String data		= "data";
 	/** Providers path. */
-	protected String provider	= "provider";
+	private String provider	= "provider";
 	/** Common path. */
-	protected String common		= "common";
+	private String common		= "common";
 	/** Services path. */
-	protected String service	= "service";
+	private String service	= "service";
 	/** Fixtures path. */
-	protected String fixture 	= "fixture";
+	private String fixture 	= "fixture";
 	/** Criterias path. */
-	protected String criterias  = "criterias"; 
+	private String criterias  = "criterias"; 
 	
 	// File
 	/** Manifest path. */
-	protected String manifest;
+	private String manifest;
 	/** Home path. */
-	protected String home;
+	private String home;
 	/** Strings path. */
-	protected String strings;
+	private String strings;
 	/** Configs path. */
-	protected String configs;
+	private String configs;
 	
 	// Abstract Methods
 	/** Generate platform Namespace.
@@ -809,8 +809,15 @@ public abstract class BaseAdapter {
 	/**
 	 * @return the configs.xml
 	 */
-	private Object getConfigs() {
+	public String getConfigs() {
 		return this.configs;
+	}
+	
+	/**
+	 * @param config The config.
+	 */
+	public void setConfigs(String config) {
+		this.configs = config;
 	}
 
 	/**
