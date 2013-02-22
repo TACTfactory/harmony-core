@@ -50,7 +50,7 @@ public abstract class BaseGenerator {
 	 * @throws Exception 
 	 */
 	public BaseGenerator(final BaseAdapter adapt) throws Exception {
-		if (adapter == null) {
+		if (adapt == null) {
 			throw new Exception("No adapter define.");
 		}
 		
