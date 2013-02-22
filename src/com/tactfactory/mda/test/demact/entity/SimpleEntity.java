@@ -15,7 +15,7 @@ import com.tactfactory.mda.annotation.GeneratedValue;
 import com.tactfactory.mda.annotation.Id;
 import com.tactfactory.mda.bundles.rest.annotation.Rest;
 
-/** Simple entity containing only an id 
+/** Simple entity containing only an id.
  * (For test purposes only)
  * @author gregg
  *
@@ -26,6 +26,6 @@ public class SimpleEntity {
 	@Id
     @Column(type = Type.INTEGER, hidden = true)
     @GeneratedValue(strategy = "IDENTITY")
-    protected int id;
+	private int id;
 
 }

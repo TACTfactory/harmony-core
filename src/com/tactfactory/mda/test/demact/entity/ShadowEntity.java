@@ -9,7 +9,7 @@
 package com.tactfactory.mda.test.demact.entity;
 
 /**
- * Empty entity for test puposes only
+ * Empty entity for test puposes only.
  * @author gregg
  */
 public class ShadowEntity {

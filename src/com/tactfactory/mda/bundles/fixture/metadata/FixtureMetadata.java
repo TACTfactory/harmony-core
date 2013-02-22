@@ -13,12 +13,12 @@ import java.util.HashMap;
 import com.tactfactory.mda.meta.BaseMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 
-public class FixtureMetadata extends BaseMetadata{
-	private final static String NAME = "fixture"; 
+public class FixtureMetadata extends BaseMetadata {
+	private static final String NAME = "fixture"; 
 	public boolean enabled = true;
 	public String type;
 	
-	public FixtureMetadata(){
+	public FixtureMetadata() {
 		super();
 		this.name = NAME;
 	}
@@ -31,19 +31,19 @@ public class FixtureMetadata extends BaseMetadata{
 		return model;
 	}
 
-	public boolean getEnabled(){
+	public boolean getEnabled() {
 		return this.enabled;
 	}
 	
-	public void setEnabled(final boolean enabled){
+	public void setEnabled(final boolean enabled) {
 		this.enabled = enabled;
 	}
 	
-	public String getType(){
+	public String getType() {
 		return this.type;
 	}
 	
-	public void setType(final String type){
+	public void setType(final String type) {
 		this.type = type;
 	}
 }

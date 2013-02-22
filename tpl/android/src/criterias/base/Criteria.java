@@ -14,7 +14,7 @@ public class Criteria implements Serializable, ICriteria{
 	 */
 	@Override
 	public String toSQLiteString(){
-		return "("+key +" "+ type.getSQL() +" "+ value+")";
+		return "("+key +" "+ type.getSQL() +" '"+ value+"')";
 	}
 	
 	public String getKey(){

@@ -39,11 +39,11 @@ public @interface Rest {
 			this.value = value;
 		}
 		
-		public int getValue(){
+		public int getValue() {
 			return this.value;
 		}
 		
-		public static Security fromValue(final int value){
+		public static Security fromValue(final int value) {
 			Security ret = null;
 				for (final Security type : Security.values()) {
 					if (value == type.value) {
@@ -54,17 +54,20 @@ public @interface Rest {
 			return ret;
 		}
 		
-		public static Security fromName(String name){
+		public static Security fromName(final String name) {
+			String realName;
 			Security ret;
-			if (name.lastIndexOf('.')>0) {
-				name = name.substring(name.lastIndexOf('.')+1); // Take only what comes after the last dot
+			if (name.lastIndexOf('.') > 0) {
+				realName = name.substring(name.lastIndexOf('.') + 1); // Take only what comes after the last dot
+			} else {
+				realName = name;
 			}
-			ConsoleUtils.displayDebug("Searching for Security : "+name);
+			ConsoleUtils.displayDebug("Searching for Security : " + realName);
 			try {
-				final Field field = Security.class.getField(name);	
+				final Field field = Security.class.getField(realName);	
 				if (field.isEnumConstant()) {
-					ConsoleUtils.displayDebug("Found Security : "+name);
-					ret = (Security)field.get(Security.class);
+					ConsoleUtils.displayDebug("Found Security : " + realName);
+					ret = (Security) field.get(Security.class);
 				} else {
 					ret = null;
 				}

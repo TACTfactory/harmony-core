@@ -11,73 +11,44 @@ package com.tactfactory.mda;
 import com.google.common.base.Strings;
 
 public enum TargetPlatform {
-	ALL		(0),
-	WEB 	(1005),
-	ANDROID (2004),
-	IPHONE 	(3005),
-	IPAD	(3105),
-	RIM		(4006),
-	WINPHONE(5007);
-	
-	private static final String STRING_ALL 		= "all";
-	private static final String STRING_WEB 		= "web";
-	private static final String STRING_ANDROID	= "android";
-	private static final String STRING_IPHONE 	= "iphone";
-	private static final String STRING_IPAD 	= "ipad";
-	private static final String STRING_RIM 		= "rim";
-	private static final String STRING_WINPHONE = "winphone";
+	ALL		(0, 	"all"),
+	WEB 	(1005, 	"web"),
+	ANDROID (2004, 	"android"),
+	IPHONE 	(3005, 	"iphone"),
+	IPAD	(3105, 	"ipad"),
+	RIM		(4006, 	"rim"),
+	WINPHONE(5007, 	"winphone");
 
 	private final int value;
-	TargetPlatform (final int value) {
+	private final String str;
+	TargetPlatform(final int value, final String str) {
 		this.value = value;
+		this.str = str;
 	}
 	public int getValue() {
 		return this.value;
 	}
 	
-	public String toLowerString() {
-		String result = STRING_ALL;
-		
-		switch (this.value) {
-		case 1005:
-			result = STRING_WEB;
-			break;
-		case 2004:
-			result = STRING_ANDROID;
-			break;
-		case 3005:
-			result = STRING_IPHONE;
-			break;
-		case 3105:
-			result = STRING_IPAD;
-			break;
-		case 4006:
-			result = STRING_RIM;
-			break;
-		case 5007:
-			result = STRING_WINPHONE;
-			break;
-		default:
-			break;
-		}
-		
-		
-		return result;
+	public String toLowerString() {		
+		return this.str;
 	}
 	
 	public static TargetPlatform parse(final String target) {
 		TargetPlatform result = TargetPlatform.ALL;
 		
 		if (!Strings.isNullOrEmpty(target)) {
-			if (target.equalsIgnoreCase(STRING_ANDROID)){
+			if (target.equalsIgnoreCase(
+					TargetPlatform.ANDROID.toLowerString())) {
 				result = TargetPlatform.ANDROID;
 			} else
 				
-			if (target.equalsIgnoreCase(STRING_IPHONE)) {
+			if (target.equalsIgnoreCase(
+					TargetPlatform.IPHONE.toLowerString())) {
 				result = TargetPlatform.IPHONE;
 			} else 
 				
-			if (target.equalsIgnoreCase(STRING_WEB)) {
+			if (target.equalsIgnoreCase(
+					TargetPlatform.WEB.toLowerString())) {
 				result = TargetPlatform.WEB;
 			}
 		}

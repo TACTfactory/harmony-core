@@ -21,42 +21,42 @@ import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 @PluginImplementation
-public class SymfonyCommand extends BaseCommand{
+public class SymfonyCommand extends BaseCommand {
 	
 	//bundle name
-	public final static String BUNDLE = "web";
-	public final static String SUBJECT_SYMFONY = "symfony";
-	public final static String SUBJECT_BUNDLES = "bundles";
-	public final static String SUBJECT_PROJECT = "project";
-	public final static String SUBJECT_GENERATE = "generate";
+	public static final String BUNDLE = "web";
+	public static final String SUBJECT_SYMFONY = "symfony";
+	public static final String SUBJECT_BUNDLES = "bundles";
+	public static final String SUBJECT_PROJECT = "project";
+	public static final String SUBJECT_GENERATE = "generate";
 
 	//actions
-	public final static String ACTION_INSTALL = "install";
-	public final static String ACTION_INIT = "init";
-	public final static String ACTION_ENTITIES = "entities";
-	public final static String ACTION_REPOSITORIES = "repositories";
+	public static final String ACTION_INSTALL = "install";
+	public static final String ACTION_INIT = "init";
+	public static final String ACTION_ENTITIES = "entities";
+	public static final String ACTION_REPOSITORIES = "repositories";
 
 	//commands
-	public final static String PROJECT_INIT = BUNDLE + SEPARATOR + SUBJECT_PROJECT + SEPARATOR + ACTION_INIT;
-	public final static String GENERATE_ENTITIES = BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_ENTITIES;
-	public final static String GENERATE_REPOSITORIES = BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_REPOSITORIES;
-	public final static String INSTALL_SYMFONY = BUNDLE + SEPARATOR + SUBJECT_SYMFONY + SEPARATOR + ACTION_INSTALL;
-	public final static String INSTALL_BUNDLES = BUNDLE + SEPARATOR + SUBJECT_BUNDLES + SEPARATOR + ACTION_INSTALL;
+	public static final String PROJECT_INIT = BUNDLE + SEPARATOR + SUBJECT_PROJECT + SEPARATOR + ACTION_INIT;
+	public static final String GENERATE_ENTITIES = BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_ENTITIES;
+	public static final String GENERATE_REPOSITORIES = BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_REPOSITORIES;
+	public static final String INSTALL_SYMFONY = BUNDLE + SEPARATOR + SUBJECT_SYMFONY + SEPARATOR + ACTION_INSTALL;
+	public static final String INSTALL_BUNDLES = BUNDLE + SEPARATOR + SUBJECT_BUNDLES + SEPARATOR + ACTION_INSTALL;
 
 	@Override
 	public void execute(final String action, final String[] args, final String option) {
 		ConsoleUtils.display("> Adapters Generator");
 
 		this.commandArgs = Console.parseCommandArgs(args);
-		if (action.equals(GENERATE_ENTITIES)){
+		if (action.equals(GENERATE_ENTITIES)) {
 			this.generateEntities();
-		} else if (action.equals(GENERATE_REPOSITORIES)){
+		} else if (action.equals(GENERATE_REPOSITORIES)) {
 			this.generateWebRepositories();
-		} else if (action.equals(PROJECT_INIT)){
+		} else if (action.equals(PROJECT_INIT)) {
 			this.initProject();
-		} else if (action.equals(INSTALL_BUNDLES)){
+		} else if (action.equals(INSTALL_BUNDLES)) {
 			this.installBundles();
-		} else if (action.equals(INSTALL_SYMFONY)){
+		} else if (action.equals(INSTALL_SYMFONY)) {
 			this.installSymfony();
 		}
 	}
@@ -67,7 +67,7 @@ public class SymfonyCommand extends BaseCommand{
 	protected void initProject() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities!=null){
+		if (ApplicationMetadata.INSTANCE.entities != null) {
 			try {
 				new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).initProject();
 			} catch (final Exception e) {
@@ -83,7 +83,7 @@ public class SymfonyCommand extends BaseCommand{
 	protected void generateEntities() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities!=null){
+		if (ApplicationMetadata.INSTANCE.entities != null) {
 			try {
 				new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).generateEntities();
 			} catch (final Exception e) {
@@ -99,7 +99,7 @@ public class SymfonyCommand extends BaseCommand{
 	protected void generateWebRepositories() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities!=null){
+		if (ApplicationMetadata.INSTANCE.entities != null) {
 			try {
 				new WebGenerator(new AndroidAdapter(), new SymfonyAdapter()).generateWebControllers();
 			} catch (final Exception e) {
@@ -132,7 +132,7 @@ public class SymfonyCommand extends BaseCommand{
 	}
 	
 	@Override
-	public void generateMetas(){
+	public void generateMetas() {
 		this.registerParser(new RestParser());
 		super.generateMetas();
 		new RestCompletor().generateApplicationRestMetadata(ApplicationMetadata.INSTANCE);
@@ -142,22 +142,23 @@ public class SymfonyCommand extends BaseCommand{
 
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> REST \n" +
-				"\t" + INSTALL_SYMFONY + "\t => Install symfony\n"+
-				"\t" + INSTALL_BUNDLES + "\t => Install the needed bundles\n"+
-				"\t" + PROJECT_INIT + "\t => Init symfony project\n"+
-				"\t" + GENERATE_ENTITIES + "\t => Generate Web Entities\n"+
-				"\t" + GENERATE_REPOSITORIES + "\t => Generate Web Repositories");
+		ConsoleUtils.display("\n> REST \n" 
+				+ "\t" + INSTALL_SYMFONY + "\t => Install symfony\n" 
+				+ "\t" + INSTALL_BUNDLES + "\t => Install the needed bundles\n" 
+				+ "\t" + PROJECT_INIT + "\t => Init symfony project\n" 
+				+ "\t" + GENERATE_ENTITIES + "\t => Generate Web Entities\n" 
+				+ "\t" + GENERATE_REPOSITORIES 
+							+ "\t => Generate Web Repositories");
 		
 	}
 
 	@Override
 	public boolean isAvailableCommand(final String command) {
-		return  command.equals(PROJECT_INIT)||
-				command.equals(INSTALL_BUNDLES)||
-				command.equals(INSTALL_SYMFONY)||
-				command.equals(GENERATE_ENTITIES)||
-				command.equals(GENERATE_REPOSITORIES);
+		return  command.equals(PROJECT_INIT) 
+				|| command.equals(INSTALL_BUNDLES) 
+				|| command.equals(INSTALL_SYMFONY) 
+				|| command.equals(GENERATE_ENTITIES) 
+				|| command.equals(GENERATE_REPOSITORIES);
 	}
 
 }

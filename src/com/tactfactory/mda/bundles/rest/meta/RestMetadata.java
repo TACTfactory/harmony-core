@@ -14,8 +14,8 @@ import com.tactfactory.mda.bundles.rest.annotation.Rest.Security;
 import com.tactfactory.mda.meta.BaseMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 
-public class RestMetadata extends BaseMetadata{	
-	private final static String NAME = "rest";
+public class RestMetadata extends BaseMetadata {	
+	private static final String NAME = "rest";
 	public boolean isEnabled = false;
 	public Security security = Security.NONE;
 	public String uri;

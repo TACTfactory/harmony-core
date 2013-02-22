@@ -22,14 +22,24 @@ import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.test.CommonTest;
 
 public class OrmInitEntitiesTest extends CommonTest {
-	static ClassMetadata userMeta = null, postMeta = null, commentMeta = null;
-	private final static String CREATED_AT = "createdAt";
-	private final static String SERIALIZABLE = "Serializable";
-	private final static String LASTNAME = "lastname";
-	private final static String PASSWORD = "password";
-	private final static String FIRSTNAME = "firstname";
-	private final static String LOGIN = "login";
-	private final static String MSG_CHECK_IF_FIELD = "Check if field ";
+	private static ClassMetadata userMeta = null;
+	private static ClassMetadata postMeta = null;
+	private static ClassMetadata commentMeta = null;
+	private static final String CREATED_AT = "createdAt";
+	private static final String SERIALIZABLE = "Serializable";
+	private static final String LASTNAME = "lastname";
+	private static final String PASSWORD = "password";
+	private static final String FIRSTNAME = "firstname";
+	private static final String LOGIN = "login";
+	private static final String MSG_CHECK_IF_FIELD = "Check if field ";
+	
+	private static final int DEFAULT_SIZE = 255;
+	
+	private static final String ENTITY_PATH = 
+			"android/src/com/tactfactory/mda/test/demact/entity/";
+	
+	private static final String DATA_PATH = 
+			"android/src/com/tactfactory/mda/test/demact/data/";
 	
 	/**
 	 * @throws java.lang.Exception
@@ -45,7 +55,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 */
 	@Before
 	@Override
-	public void setUp() throws Exception {
+	public final void setUp() throws Exception {
 		super.setUp();
 	}
 
@@ -54,22 +64,28 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 */
 	@After
 	@Override
-	public void tearDown() throws Exception {
+	public final void tearDown() throws Exception {
 		super.tearDown();
 	}
 	
 	private static void initAll() {
 		System.out.println("\nTest Orm generate entity");
-		System.out.println("###############################################################################");
+		System.out.println(
+				"########################################"
+				 + "######################################");
 
-		harmony.findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
-		harmony.findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[]{}, null);
-		final OrmCommand command = (OrmCommand) Harmony.instance.getCommand(OrmCommand.class);
+		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES,
+				new String[] {}, 
+				null);
+		final OrmCommand command = 
+				(OrmCommand) Harmony.instance.getCommand(OrmCommand.class);
 
 		command.generateMetas();
 		
-		for (final ClassMetadata classMetadata : ApplicationMetadata.INSTANCE.entities.values()) {
+		for (final ClassMetadata classMetadata
+				: ApplicationMetadata.INSTANCE.entities.values()) {
 			if (classMetadata.name.equals("User")) {
 				userMeta = classMetadata;
 			}
@@ -85,7 +101,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	}
 	
 	//@Test
-	public void all() {		
+	public final void all() {		
 		// Check Model Decoration
 		// User
 		this.hasUserEntity();
@@ -123,18 +139,18 @@ public class OrmInitEntitiesTest extends CommonTest {
 	
 	//// POST ////
 	@Test
-	public void hasPostEntity() {
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/entity/Post.java");
+	public final void hasPostEntity() {
+		CommonTest.hasFindFile(ENTITY_PATH + "Post.java");
 		Assert.assertNotNull("Post no parsed !", postMeta);
 	}
 	
 	@Test
-	public void hasPostImplement() {
+	public final void hasPostImplement() {
 		this.hasImplement(postMeta, SERIALIZABLE);
 	}
 	
 	@Test
-	public void hasPostImport() {
+	public final void hasPostImport() {
 		this.hasImport(postMeta, SERIALIZABLE);
 		this.hasImport(postMeta, "ArrayList");
 		this.hasImport(postMeta, "DateTime");
@@ -142,12 +158,12 @@ public class OrmInitEntitiesTest extends CommonTest {
 	}
 	
 	@Test
-	public void hasPostId() {
+	public final void hasPostId() {
 		this.hasId(postMeta, "id");
 	}
 	
 	@Test
-	public void hasPostColumn() {
+	public final void hasPostColumn() {
 		this.hasColumn(postMeta, "id");
 		this.hasColumn(postMeta, "title");
 		this.hasColumn(postMeta, "content");
@@ -161,31 +177,31 @@ public class OrmInitEntitiesTest extends CommonTest {
 	
 	//// COMMENT ////
 	@Test
-	public void hasCommentEntity() {		
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/entity/Comment.java");
+	public final void hasCommentEntity() {		
+		CommonTest.hasFindFile(ENTITY_PATH + "Comment.java");
 		Assert.assertNotNull("Comment no parsed !", commentMeta);
 	}
 	
 	@Test
-	public void hasCommentImplement() {
+	public final void hasCommentImplement() {
 		this.hasImplement(commentMeta, SERIALIZABLE);
 		//TODO add test this.hasExtend(commentMeta, "EntityBase");
 	}
 	
 	@Test
-	public void hasCommentImport() {
+	public final void hasCommentImport() {
 		this.hasImport(commentMeta, SERIALIZABLE);
 		this.hasImport(commentMeta, "DateTime");
 		this.hasImport(commentMeta, "Entity");
 	}
 	
 	@Test
-	public void hasCommentId() {
+	public final void hasCommentId() {
 		this.hasId(commentMeta, "id");
 	}
 	
 	@Test
-	public void hasCommentColumn() {
+	public final void hasCommentColumn() {
 		this.hasColumn(commentMeta, "id");
 		this.hasColumn(commentMeta, "content");
 		this.hasColumn(commentMeta, "owner");
@@ -196,18 +212,18 @@ public class OrmInitEntitiesTest extends CommonTest {
 	
 	//// USER ////
 	@Test
-	public void hasUserEntity() {
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/entity/User.java");
+	public final void hasUserEntity() {
+		CommonTest.hasFindFile(ENTITY_PATH + "User.java");
 		Assert.assertNotNull("User no parsed !", userMeta);
 	}
 	
 	@Test
-	public void hasUserImplement() {
+	public final void hasUserImplement() {
 		this.hasImplement(userMeta, SERIALIZABLE);
 	}
 	
 	@Test
-	public void hasUserImport() {
+	public final void hasUserImport() {
 		this.hasImport(userMeta, SERIALIZABLE);
 		this.hasImport(userMeta, "DateTime");
 		this.hasImport(userMeta, "Entity");
@@ -215,12 +231,12 @@ public class OrmInitEntitiesTest extends CommonTest {
 	}
 	
 	@Test
-	public void hasUserId() {
+	public final void hasUserId() {
 		this.hasId(userMeta, "id");
 	}
 	
 	@Test
-	public void hasUserColumn() {
+	public final void hasUserColumn() {
 		this.hasColumn(userMeta, "id");
 		this.hasColumn(userMeta, LOGIN);
 		this.hasColumn(userMeta, PASSWORD);
@@ -230,7 +246,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	}
 	
 	@Test
-	public void hasUserFieldAnnotations(){
+	public final void hasUserFieldAnnotations() {
 		this.isFieldNullable(userMeta, "id", false);
 		this.isFieldNullable(userMeta, LOGIN, false);
 		this.isFieldNullable(userMeta, PASSWORD, false);
@@ -254,34 +270,35 @@ public class OrmInitEntitiesTest extends CommonTest {
 		
 		
 		this.isFieldLength(userMeta, "id", Integer.MAX_VALUE);
-		this.isFieldLength(userMeta, LOGIN, 255);
-		this.isFieldLength(userMeta, PASSWORD, 255);
-		this.isFieldLength(userMeta, FIRSTNAME, 255);
-		this.isFieldLength(userMeta, LASTNAME, 255);
+		this.isFieldLength(userMeta, LOGIN, DEFAULT_SIZE);
+		this.isFieldLength(userMeta, PASSWORD, DEFAULT_SIZE);
+		this.isFieldLength(userMeta, FIRSTNAME, DEFAULT_SIZE);
+		this.isFieldLength(userMeta, LASTNAME, DEFAULT_SIZE);
 		this.isFieldLength(userMeta, CREATED_AT, Integer.MAX_VALUE);
 	}
 	
 	//// REPOSITORY POST ////
 	@Test
-	public void hasPostRepository() {
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/PostSQLiteAdapter.java");
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/base/PostSQLiteAdapterBase.java");
+	public final void hasPostRepository() {
+		CommonTest.hasFindFile(DATA_PATH + "PostSQLiteAdapter.java");
+		CommonTest.hasFindFile(DATA_PATH + "base/PostSQLiteAdapterBase.java");
 	}
 	
 	
 	//// REPOSITORY COMMENT ////
 	@Test
-	public void hasCommentRepository() {
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/CommentSQLiteAdapter.java");
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/base/CommentSQLiteAdapterBase.java");
+	public final void hasCommentRepository() {
+		CommonTest.hasFindFile(DATA_PATH + "CommentSQLiteAdapter.java");
+		CommonTest.hasFindFile(DATA_PATH 
+				 + "base/CommentSQLiteAdapterBase.java");
 	}
 	
 	
 	//// REPOSITORY USER ////
 	@Test
-	public void hasUserRepository() {
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/UserSQLiteAdapter.java");
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/base/UserSQLiteAdapterBase.java");
+	public final void hasUserRepository() {
+		CommonTest.hasFindFile(DATA_PATH + "UserSQLiteAdapter.java");
+		CommonTest.hasFindFile(DATA_PATH + "base/UserSQLiteAdapterBase.java");
 	}
 	
 	
@@ -301,43 +318,49 @@ public class OrmInitEntitiesTest extends CommonTest {
 	/**
 	 * @param userMeta
 	 */
-	private void hasColumn(final ClassMetadata userMeta, final String value) {
-		Assert.assertTrue("Check if column " + value, userMeta.fields.containsKey(value));
+	private void hasColumn(final ClassMetadata meta, final String value) {
+		Assert.assertTrue("Check if column " + value,
+				meta.fields.containsKey(value));
 	}
 
 	/**
 	 * @param userMeta
 	 */
-	private void hasId(final ClassMetadata userMeta, final String value) {
-		Assert.assertTrue("Check if key " + value, userMeta.ids.containsKey(value));
+	private void hasId(final ClassMetadata meta, final String value) {
+		Assert.assertTrue("Check if key " + value,
+				meta.ids.containsKey(value));
 	}
 
 	/**
 	 * @param userMeta
 	 */
-	private void hasImport(final ClassMetadata userMeta, final String value) {
-		Assert.assertTrue("Check if import " + value, userMeta.imports.contains(value));
+	private void hasImport(final ClassMetadata meta, final String value) {
+		Assert.assertTrue("Check if import " + value,
+				meta.imports.contains(value));
 	}
 
 	/**
 	 * @param userMeta
 	 */
-	private void hasImplement(final ClassMetadata userMeta, final String value) {
-		Assert.assertTrue("Check if implement " + value, userMeta.implementTypes.contains(value));
+	private void hasImplement(final ClassMetadata meta, final String value) {
+		Assert.assertTrue("Check if implement " + value,
+				meta.implementTypes.contains(value));
 	}
 	
 	/**
 	 * @param classMeta
 	 * @param fieldName
 	 */
-	private void isFieldNullable(final ClassMetadata classMeta, final String fieldName, final boolean nullable) {
+	private void isFieldNullable(final ClassMetadata classMeta,
+			final String fieldName,
+			final boolean nullable) {
 		if (nullable) {
 			Assert.assertTrue(
-					MSG_CHECK_IF_FIELD +fieldName +" is nullable",
+					MSG_CHECK_IF_FIELD + fieldName + " is nullable",
 					classMeta.fields.get(fieldName).nullable);
 		} else {
 			Assert.assertFalse(
-					MSG_CHECK_IF_FIELD +fieldName +" is nullable",
+					MSG_CHECK_IF_FIELD + fieldName + " is nullable",
 					classMeta.fields.get(fieldName).nullable);
 		}
 	}
@@ -346,11 +369,15 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 * @param classMeta
 	 * @param fieldName
 	 */
-	private void isFieldUnique(final ClassMetadata classMeta, final String fieldName, final boolean unique){
+	private void isFieldUnique(final ClassMetadata classMeta,
+			final String fieldName,
+			final boolean unique) {
 		if (unique) {
-			Assert.assertTrue(MSG_CHECK_IF_FIELD +fieldName +" is unique", classMeta.fields.get(fieldName).unique);
+			Assert.assertTrue(MSG_CHECK_IF_FIELD + fieldName + " is unique",
+					classMeta.fields.get(fieldName).unique);
 		} else {
-			Assert.assertFalse(MSG_CHECK_IF_FIELD +fieldName +" is unique", classMeta.fields.get(fieldName).unique);
+			Assert.assertFalse(MSG_CHECK_IF_FIELD + fieldName + " is unique",
+					classMeta.fields.get(fieldName).unique);
 		}
 	}
 	
@@ -358,15 +385,20 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 * @param classMeta
 	 * @param fieldName
 	 */
-	private void hasFieldColumnName(final ClassMetadata classMeta, final String fieldName, final String name){
-		Assert.assertEquals(classMeta.fields.get(fieldName).columnName,name);
+	private void hasFieldColumnName(final ClassMetadata classMeta, 
+			final String fieldName, 
+			final String name) {
+		Assert.assertEquals(classMeta.fields.get(fieldName).columnName, name);
 	}
 	
 	/**
 	 * @param classMeta
 	 * @param fieldName
 	 */
-	private void isFieldLength(final ClassMetadata classMeta, final String fieldName, final int length){
-		Assert.assertEquals(classMeta.fields.get(fieldName).length,Integer.valueOf(length));
+	private void isFieldLength(final ClassMetadata classMeta,
+			final String fieldName,
+			final int length) {
+		Assert.assertEquals(classMeta.fields.get(fieldName).length,
+				Integer.valueOf(length));
 	}
 }

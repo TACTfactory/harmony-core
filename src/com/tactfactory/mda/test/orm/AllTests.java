@@ -13,7 +13,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 /**
- * All tests related to ORM initialization and generation
+ * All tests related to ORM initialization and generation.
  * @author gregg
  *
  */

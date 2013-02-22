@@ -13,59 +13,61 @@ import com.tactfactory.mda.annotation.Table;
 @Table
 @Entity
 public class Job {
+	private static final int STRING_LENGTH = 4000;
+	
     @Id
-    @Column()					// type="integer",
-    @GeneratedValue(strategy="IDENTITY")
-    protected int id;
+    @Column()					// typ ="integer",
+    @GeneratedValue(strategy = "IDENTITY")
+    private int id;
 
-    @ManyToOne() 				// targetEntity="Category"
-    @JoinColumn(name="category_id", referencedColumnName="id")
-    protected Category category;
+    @ManyToOne() 				// targetEntit ="Category"
+    @JoinColumn(name = "category_id", referencedColumnName = "id")
+    private Category category;
 
-    @Column()					// type="string", length=255
-    protected String type;
+    @Column()					// typ ="string", lengt =255
+    private String type;
 
-    @Column(nullable=true)		// type="string", length=255
-    protected String company;
+    @Column(nullable = true)		// typ ="string", lengt =255
+    private String company;
 
-    @Column()					// type="string", length=255
-    protected String logo;
+    @Column()					// typ ="string", lengt =255
+    private String logo;
 
-    @Column(nullable=true)		// type="string", length=255 
-    protected String url;
+    @Column(nullable = true)		// typ ="string", lengt =255 
+    private String url;
 
-    @Column(nullable=true)		// type="string", length=255
-    protected String position;
+    @Column(nullable = true)		// typ ="string", lengt =255
+    private String position;
 
-    @Column()					// type="string", length=255
-    protected String location;
+    @Column()					// typ ="string", lengt =255
+    private String location;
 
-    @Column(length=4000)		// type="string",
-    protected String description;
+    @Column(length = STRING_LENGTH)		// typ ="string",
+    private String description;
 
-    @Column(length=4000, name="how_to_apply")	// type="string", 
-    protected String howToApply;
+    @Column(length = STRING_LENGTH, name = "how_to_apply")	// typ ="string", 
+    private String howToApply;
 
-    @Column(unique=true)		// type="string", length="255", 
-    protected String token;
+    @Column(unique = true)		// typ ="string", lengt ="255", 
+    private String token;
 
-    @Column(name="is_public")	// type="boolean", 
-    protected boolean isPublic;
+    @Column(name = "is_public")	// typ ="boolean", 
+    private boolean isPublic;
 
-    @Column(name="is_activated")// type="boolean", 
-    protected boolean isActivated;
+    @Column(name = "is_activated")// typ ="boolean", 
+    private boolean isActivated;
 
-    @Column()					// type="string", length="255"
-    protected String email;
+    @Column()					// typ ="string", lengt ="255"
+    private String email;
 
-    @Column(name="created_at")	// type="datetime",
-    protected Date createdAt;
+    @Column(name = "created_at")	// typ ="datetime",
+    private Date createdAt;
 
-    @Column(name="updated_at")	// type="datetime", 
-    protected Date updatedAt;
+    @Column(name = "updated_at")	// typ ="datetime", 
+    private Date updatedAt;
 
-    @Column(name="expires_at")	// type="datetime", 
-    protected Date expiresAt;
+    @Column(name = "expires_at")	// typ ="datetime", 
+    private Date expiresAt;
 
     /**
 	 * @return the id

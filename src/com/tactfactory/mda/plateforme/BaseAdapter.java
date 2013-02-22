@@ -89,28 +89,28 @@ public abstract class BaseAdapter {
 	// Utils
 
 	public final String getTemplateProjectPath() {
-		return String.format("%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getProject() );
+		return String.format("%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getProject());
 	}
 	
 	public final String getLibsPath() {
-		return String.format("%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getLibs() );
+		return String.format("%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getLibs());
 	}
 	
 	public final String getTestPath() {
-		return String.format("%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getTest() );
+		return String.format("%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getTest());
 	}
 	
 	public final String getTestLibsPath() {
-		return String.format("%s/%s/%s/%s", Harmony.PATH_PROJECT, this.getPlatform(), this.getTest(), this.getTestLibs() );
+		return String.format("%s/%s/%s/%s", Harmony.PATH_PROJECT, this.getPlatform(), this.getTest(), this.getTestLibs());
 	}
 	
 	public final String getSourcePath() {
-		return String.format("%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getSource() );
+		return String.format("%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getSource());
 	}
 	
 	public final String getWidgetPath() {
 		return String.format("%s/%s/%s/%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getSource(), 
-				ApplicationMetadata.INSTANCE.projectNameSpace, this.getHarmony(), this.getWidget() );
+				ApplicationMetadata.INSTANCE.projectNameSpace, this.getHarmony(), this.getWidget());
 	}
 	
 	public final String getUtilPath() {
@@ -124,126 +124,126 @@ public abstract class BaseAdapter {
 	}
 	
 	public final String getTemplateWidgetPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getWidget() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getWidget());
 	}
 	
 	public final String getTemplateUtilPath() {
-		return String.format("%s/%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getHarmony(), this.getUtil() );
+		return String.format("%s/%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getHarmony(), this.getUtil());
 	}	
 	
 	public final String getTemplateSourcePath() {
-		return String.format("%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource() );
+		return String.format("%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource());
 	}
 	
 	public final String getTemplateSourceControlerPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getController() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getController());
 	}
 	
 	public final String getTemplateSourceServicePath() {
-		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getService() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getService());
 	}
 	
 	public final String getTemplateSourceEntityBasePath() {
-		return String.format("%s/%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getModel(), "base" );
+		return String.format("%s/%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getModel(), "base");
 	}
 	
 	public final String getTemplateSourceProviderPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getProvider() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getProvider());
 	}
 	
 	public final String getTemplateSourceCriteriasPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getCriterias() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getCriterias());
 	}
 	
 	public final String getTemplateSourceFixturePath() {
-		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getFixture() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getFixture());
 	}
 
 	
 	public final String getTemplateSourceCommonPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getCommon() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getCommon());
 	}
 	
 	public final String getRessourcePath() {
-		return String.format("%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getResource() );
+		return String.format("%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getResource());
 	}
 	
 	public final String getAssetsPath() {
-		return String.format("%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getAssets() );
+		return String.format("%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getAssets());
 	}
 	
 	public final String getTemplateRessourcePath() {
-		return String.format("%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getResource() );
+		return String.format("%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getResource());
 	}
 	
 	public final String getRessourceLayoutPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getResource(), this.getView() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getResource(), this.getView());
 	}
 	
 	public final String getTemplateRessourceLayoutPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getResource(), this.getView() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getResource(), this.getView());
 	}
 
 	public final String getRessourceValuesPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getResource(), this.getValues() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_PROJECT, this.getPlatform(), this.getResource(), this.getValues());
 	}
 	
 	public final String getTemplateRessourceValuesPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getResource(), this.getValues() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getResource(), this.getValues());
 	}
 
 	public final String getManifestPathFile() {
-		return String.format("%s/%s/%s", Harmony.PATH_PROJECT, this.getPlatform(), this.getManifest() );
+		return String.format("%s/%s/%s", Harmony.PATH_PROJECT, this.getPlatform(), this.getManifest());
 	}
 	
 	public final String getTemplateManifestPathFile() {
-		return String.format("%s/%s/%s/%s", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getProject(), this.getManifest() );
+		return String.format("%s/%s/%s/%s", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getProject(), this.getManifest());
 	}
 
 	public final String getHomeActivityPathFile() {
-		return String.format("%s/%s/%s/%s/%s", Harmony.PATH_PROJECT, this.getPlatform(), this.getSource(), ApplicationMetadata.INSTANCE.projectNameSpace, this.getHome() );
+		return String.format("%s/%s/%s/%s/%s", Harmony.PATH_PROJECT, this.getPlatform(), this.getSource(), ApplicationMetadata.INSTANCE.projectNameSpace, this.getHome());
 	}
 	
 	public final String getTemplateHomeActivityPathFile() {
-		return String.format("%s/%s/%s/%s", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getHome() );
+		return String.format("%s/%s/%s/%s", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getSource(), this.getHome());
 	}
 
 	public final String getStringsPathFile() {
 		return String.format("%s/%s/%s/%s/%s", Harmony.PATH_PROJECT, this.getPlatform(),
-											this.getResource(), this.getValues(), this.getStrings() );
+											this.getResource(), this.getValues(), this.getStrings());
 	}
 	
 	public final String getTemplateStringsPathFile() {
 		return String.format("%s/%s/%s/%s/%s", Harmony.PATH_TEMPLATE, this.getPlatform(),
-											this.getResource(), this.getValues(), this.getStrings() );
+											this.getResource(), this.getValues(), this.getStrings());
 	}
 	
 	public final String getConfigsPathFile() {
 		return String.format("%s/%s/%s/%s/%s", Harmony.PATH_PROJECT, this.getPlatform(),
-											this.getResource(), this.getValues(), this.getConfigs() );
+											this.getResource(), this.getValues(), this.getConfigs());
 	}
 
 	public final String getTemplateConfigsPathFile() {
 		return String.format("%s/%s/%s/%s/%s", Harmony.PATH_TEMPLATE, this.getPlatform(),
-											this.getResource(), this.getValues(), this.getConfigs() );
+											this.getResource(), this.getValues(), this.getConfigs());
 	}
 	
 	public final String getTemplateTestsPath() {
-		return String.format("%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getTest() );
+		return String.format("%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getTest());
 	}
 	
 	public final String getTemplateTestProjectPath() {
-		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getTest(), this.getProject() );
+		return String.format("%s/%s/%s/%s/", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getTest(), this.getProject());
 	}
 	
 	public final String getStringsTestPathFile() {
 		return String.format("%s/%s/%s/%s/%s/%s", Harmony.PATH_PROJECT, this.getPlatform(), this.getTest(),
-											this.getResource(), this.getValues(), this.getStrings() );
+											this.getResource(), this.getValues(), this.getStrings());
 	}
 	
 	public final String getTemplateStringsTestPathFile() {
-		return String.format("%s/%s/%s/%s/%s/%s", Harmony.PATH_TEMPLATE, this.getPlatform(),this.getTest(),
-											this.getResource(), this.getValues(), this.getStrings() );
+		return String.format("%s/%s/%s/%s/%s/%s", Harmony.PATH_TEMPLATE, this.getPlatform(), this.getTest(),
+											this.getResource(), this.getValues(), this.getStrings());
 	}
 	
 	public final String getSourceDataNameSpace() {

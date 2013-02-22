@@ -6,8 +6,8 @@ import ${curr.namespace}.R;
 import ${project_namespace}.harmony.view.HarmonyFragment;
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 
-import ${curr.namespace}.criterias.${curr.name?cap_first}Criterias ;
-import ${curr.namespace}.criterias.base.Criteria.Type ;
+import ${curr.namespace}.criterias.${curr.name?cap_first}Criterias;
+import ${curr.namespace}.criterias.base.Criteria.Type;
 
 import android.os.Bundle;
 import android.content.Intent;

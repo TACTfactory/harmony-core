@@ -19,17 +19,17 @@ import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 @PluginImplementation
-public class SocialCommand extends BaseCommand{
+public class SocialCommand extends BaseCommand {
 	
 	//bundle name
-	public final static String BUNDLE = "social";
-	public final static String SUBJECT = "generate";
+	public static final String BUNDLE = "social";
+	public static final String SUBJECT = "generate";
 
 	//actions
-	public final static String ACTION_SOCIAL = "social";
+	public static final String ACTION_SOCIAL = "social";
 
 	//commands
-	public final static String GENERATE_SOCIAL	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_SOCIAL;
+	public static final String GENERATE_SOCIAL	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_SOCIAL;
 
 	@Override
 	public void execute(final String action, final String[] args, final String option) {
@@ -52,7 +52,7 @@ public class SocialCommand extends BaseCommand{
 	protected void generateAdapters() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities!=null){
+		if (ApplicationMetadata.INSTANCE.entities != null) {
 			try {
 				new SocialGenerator(new AndroidAdapter()).generateMenu();
 			} catch (final Exception e) {
@@ -63,7 +63,7 @@ public class SocialCommand extends BaseCommand{
 	}
 	
 	@Override
-	public void generateMetas(){
+	public void generateMetas() {
 		this.registerParser(new SocialParser());
 		super.generateMetas();
 	}
@@ -72,8 +72,8 @@ public class SocialCommand extends BaseCommand{
 
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> Social \n" +
-				"\t" + GENERATE_SOCIAL + "\t => Generate Social");
+		ConsoleUtils.display("\n> Social \n" 
+				+ "\t" + GENERATE_SOCIAL + "\t => Generate Social");
 		
 	}
 

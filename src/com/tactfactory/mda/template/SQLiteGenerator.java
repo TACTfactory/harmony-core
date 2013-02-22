@@ -14,19 +14,20 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
 public class SQLiteGenerator extends BaseGenerator {
-	protected String localNameSpace;
+	private String localNameSpace;
 
 	public SQLiteGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
 		this.datamodel = this.appMetas.toMap(this.adapter);
-		this.localNameSpace = this.appMetas.projectNameSpace+"/"+this.adapter.getData();
+		this.localNameSpace = 
+				this.appMetas.projectNameSpace + "/" + this.adapter.getData();
 	}
 
 	/**
 	 * Generate Database Interface Source Code
 	 */
-	public void generateDatabase() {
+	public final void generateDatabase() {
 		// Info
 		ConsoleUtils.display(">> Generate Database");
 		
@@ -58,14 +59,22 @@ public class SQLiteGenerator extends BaseGenerator {
 	 * @throws IOException
 	 * @throws TemplateException
 	 */
-	private void makeSourceData(final String template, final String filename, final boolean override) {
+	private void makeSourceData(final String template, 
+			final String filename, 
+			final boolean override) {
 		
 		final String fullFilePath = String.format("%s%s/%s",
 						this.adapter.getSourcePath(),
-						PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
-						String.format(filename, CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, this.appMetas.name)));
+						PackageUtils.extractPath(this.localNameSpace)
+							.toLowerCase(),
+						String.format(filename,
+								CaseFormat.LOWER_CAMEL.to(
+										CaseFormat.UPPER_CAMEL,
+										this.appMetas.name)));
 		
-		final String fullTemplatePath = this.adapter.getTemplateSourceProviderPath().substring(1) + template;
+		final String fullTemplatePath =
+				this.adapter.getTemplateSourceProviderPath().substring(1) 
+				+ template;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}

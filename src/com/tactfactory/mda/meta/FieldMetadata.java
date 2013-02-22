@@ -32,9 +32,6 @@ public class FieldMetadata extends BaseMetadata {
 	/** Field database type */
 	public String columnDefinition;
 	
-	/** Field optional */
-	public Map<String, BaseMetadata> options = new HashMap<String, BaseMetadata>(); // (Not use...) for extra option of all bundle!
-	
 	/** Relation mapped to this field*/
 	public RelationMetadata relation;
 	
@@ -50,12 +47,6 @@ public class FieldMetadata extends BaseMetadata {
 	public boolean id;
 	
 	
-	/** GUI show field type */
-	public String customShowType;
-	
-	/** GUI edit field type */
-	public String customEditType;
-	
 	/** Is field hidden ? */
 	public boolean internal = false;
 	
@@ -63,16 +54,12 @@ public class FieldMetadata extends BaseMetadata {
 		super();
 		this.owner = owner;
 	}
-	
-	/** Customize edit and show GUI field */
-	/*public void customize(BaseAdapter adapter) {
-		this.customShowType = adapter.getViewComponentShow(this);
-		this.customEditType = adapter.getViewComponentEdit(this);
-	}*/
+
 	
 	/** Add Component String of field */
-	public void makeString(final String componentName) {
-		final String key = this.owner.name.toLowerCase() + "_" + this.name.toLowerCase();
+	public final void makeString(final String componentName) {
+		final String key = 
+				this.owner.name.toLowerCase() + "_" + this.name.toLowerCase();
 		final boolean isDate = this.type.equals(Type.DATE.getValue());
 		final boolean isTime = this.type.equals(Type.TIME.getValue());
 		final boolean isDateTime = this.type.equals(Type.DATETIME.getValue());
@@ -83,20 +70,24 @@ public class FieldMetadata extends BaseMetadata {
 			if (isDate || isDateTime) {
 				TranslationMetadata.addDefaultTranslation(
 						String.format(formatKey, key, Type.DATE.getValue()),
-						String.format(formatTitle , this.name, Type.DATE.getValue()), 
+						String.format(formatTitle,
+								this.name,
+								Type.DATE.getValue()), 
 						Group.MODEL);
 			} 
 			
 			if (isTime || isDateTime) {
 				TranslationMetadata.addDefaultTranslation(
 						String.format(formatKey, key, Type.TIME.getValue()),
-						String.format(formatTitle , this.name, Type.TIME.getValue()), 
+						String.format(formatTitle,
+								this.name,
+								Type.TIME.getValue()), 
 						Group.MODEL);
 			} 
 		} 
 		
 		TranslationMetadata.addDefaultTranslation(
-					key + "_"+ componentName.toLowerCase(Locale.ENGLISH),
+					key + "_" + componentName.toLowerCase(Locale.ENGLISH),
 					this.name, 
 					Group.MODEL);
 	}
@@ -106,7 +97,8 @@ public class FieldMetadata extends BaseMetadata {
 	 * @return the map
 	 */
 	@Override
-	public Map<String, Object> toMap(final BaseAdapter adapter){
+
+	public final Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		
 		model.put(TagConstant.NAME, 		this.name);
@@ -116,27 +108,20 @@ public class FieldMetadata extends BaseMetadata {
 		model.put(TagConstant.HIDDEN, 		this.hidden);
 		model.put(TagConstant.ID, 		    this.id);
 
-		//model.put(TagConstant.FIELD_CUSTOM_EDIT, 	this.customEditType);
-		//model.put(TagConstant.FIELD_CUSTOM_SHOW, 	this.customShowType);
 		
-		model.put(TagConstant.SCHEMA, 		SqliteAdapter.generateStructure(this.name,
-																			this.columnDefinition, 
-																			this.length, 
-																			this.scale, 
-																			this.precision, 
-																			this.id, 
-																			this.unique, 
-																			this.nullable));
+		model.put(TagConstant.SCHEMA,
+				SqliteAdapter.generateStructure(this));
 		model.put(TagConstant.INTERNAL, 	this.internal);
 		model.put(TagConstant.IS_LOCALE, 	this.isLocale);
 		model.put(TagConstant.NULLABLE,		this.nullable);
 		
-		if (this.relation!=null){
+		if (this.relation != null) {
 			model.put(TagConstant.RELATION, this.relation.toMap(adapter));
 		}
 		
-		final HashMap<String, Object> optionsModel = new HashMap<String, Object>();
-		for (final BaseMetadata bm : this.options.values()){
+		final HashMap<String, Object> optionsModel =
+				new HashMap<String, Object>();
+		for (final Metadata bm : this.options.values()) {
 			optionsModel.put(bm.getName(), bm.toMap(adapter));
 		}
 		model.put(TagConstant.OPTIONS, optionsModel);
