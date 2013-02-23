@@ -10,6 +10,7 @@ package com.tactfactory.mda.utils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -161,6 +162,30 @@ public abstract class ConsoleUtils {
 
 			final ProcessToConsoleBridge bridge = 
 					new ProcessToConsoleBridge(exec);
+			bridge.start();
+			try {
+				exec.waitFor();
+			} catch (final InterruptedException e) {
+				// TODO Auto-generated catch block
+				ConsoleUtils.displayError(e);
+			}
+			
+			bridge.stop();
+			
+		} catch (final IOException e) {
+			// TODO Auto-generated catch block
+			ConsoleUtils.displayError(e);
+		}
+	}
+	
+	public static void launchCommand(final List<String> command, String commandPath){
+		try {
+			ProcessBuilder pb = new ProcessBuilder(command);
+			pb = pb.directory(new File(commandPath));
+			final Process exec = pb.start();
+			
+
+			final ProcessToConsoleBridge bridge = new ProcessToConsoleBridge(exec);
 			bridge.start();
 			try {
 				exec.waitFor();
