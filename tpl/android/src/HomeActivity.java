@@ -9,7 +9,7 @@ import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}ListAct
 	</#list>
 </#if>
 
-import ${project_namespace}.HarmonyFragmentActivity;
+import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 
 import android.content.Intent;
 import android.os.Bundle;

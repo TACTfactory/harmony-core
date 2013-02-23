@@ -7,9 +7,7 @@ import ${project_namespace}.criterias.base.*;
 public class ${curr.name?cap_first}Criterias extends CriteriasBase{
 	public static final String _PARCELABLE = "${curr.name?uncap_first}CriteriaPARCEL";
 
-	
 	public ${curr.name?cap_first}Criterias(GroupType type){super(type);}
-		
 	
 	@Override
 	public boolean validCriteria(Criteria c) {

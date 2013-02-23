@@ -23,11 +23,26 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.Comparator;
+import java.util.List;
+
+import org.jdom2.Document;
+import org.jdom2.Element;
+import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
+import org.jdom2.input.SAXBuilder;
+import org.jdom2.output.Format;
+import org.jdom2.output.XMLOutputter;
+
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.meta.TranslationMetadata;
 import com.tactfactory.mda.meta.TranslationMetadata.Group;
 import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.template.ActivityGenerator;
 import com.tactfactory.mda.template.BaseGenerator;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.template.TranslationGenerator;

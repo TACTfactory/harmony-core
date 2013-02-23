@@ -87,14 +87,16 @@ public class ProjectGenerator extends BaseGenerator {
 
 		super.makeSource(fullTemplatePath, fullFilePath, true);
 	}
-
+	
 	/**
+<<<<<<< HEAD
 	 * Make Android Project Structure.
 	 * @return success to make the platform project folder
+=======
+	 * Create Android project folders
+>>>>>>> 93a5585de48cf4e97a607f16603fe24b8dc4670c
 	 */
-	protected final boolean makeProjectAndroid() {
-		boolean result = false;
-
+	private void createFolders() {
 		// create project name space folders
 		FileUtils.makeFolder(this.adapter.getSourcePath() 
 				+ this.appMetas.projectNameSpace.replaceAll("\\.", "/"));
@@ -111,8 +113,12 @@ public class ProjectGenerator extends BaseGenerator {
 		
 		// create libs folder
 		FileUtils.makeFolder(this.adapter.getLibsPath());
-		
-
+	}
+	
+	/**
+	 * Make Android sources project File
+	 */
+	private void makeSources() {
 		// create HomeActivity.java 
 		super.makeSource(this.adapter.getHomeActivityPathFile(),
 				this.adapter.getTemplateHomeActivityPathFile(),
@@ -144,78 +150,82 @@ public class ProjectGenerator extends BaseGenerator {
 		
 		// create HarmonyFragmentActivity
 		super.makeSource(
-
-				this.adapter.getTemplateSourcePath() 
-					+ "harmony/view/HarmonyFragmentActivity.java",
-				"./app/android/src/" 
-					+ this.appMetas.projectNameSpace 
-					+ "/harmony/view/" 
-					+ "HarmonyFragmentActivity.java",
-				false);
+			this.adapter.getTemplateSourcePath() 
+			+ "harmony/view/HarmonyFragmentActivity.java",
+			this.adapter.getSourcePath()
+			+ this.appMetas.projectNameSpace 
+			+ "/harmony/view/" 
+			+ "HarmonyFragmentActivity.java",
+			false);
 		
 		// create HarmonyFragment
 		super.makeSource(
-				this.adapter.getTemplateSourcePath() 
-					+ "harmony/view/HarmonyFragment.java",
-				"./app/android/src/" 
-					+ this.appMetas.projectNameSpace 
-					+ "/harmony/view/" 
-					+ "HarmonyFragment.java",
-				false);
+			this.adapter.getTemplateSourcePath() 
+			+ "harmony/view/HarmonyFragment.java",
+			this.adapter.getSourcePath()
+			+ this.appMetas.projectNameSpace 
+			+ "/harmony/view/" 
+			+ "HarmonyFragment.java",
+			false);
 		
 		// create HarmonyListFragment
 		super.makeSource(
-				this.adapter.getTemplateSourcePath()
-					+ "harmony/view/HarmonyListFragment.java",
-				"./app/android/src/" 
-					+ this.appMetas.projectNameSpace 
-					+ "/harmony/view/" 
-					+ "HarmonyListFragment.java",
-				false);
+			this.adapter.getTemplateSourcePath()
+			+ "harmony/view/HarmonyListFragment.java",
+			this.adapter.getSourcePath()
+			+ this.appMetas.projectNameSpace 
+			+ "/harmony/view/" 
+			+ "HarmonyListFragment.java",
+			false);
 		
 		// create ProjectMenuBase
 		super.makeSource(
-				this.adapter.getTemplateSourcePath() 
-					+ "menu/TemplateMenuBase.java",
-				"./app/android/src/" 
-					+ this.appMetas.projectNameSpace 
-					+ "/menu/" 
-					+ CaseFormat.LOWER_CAMEL.to(
-							CaseFormat.UPPER_CAMEL,
-							this.appMetas.name) 
-					+ "MenuBase.java",
-				false);
+			this.adapter.getTemplateSourcePath() 
+			+ "menu/TemplateMenuBase.java",
+			this.adapter.getMenuPath()
+			+ this.appMetas.projectNameSpace 
+			+ "/menu/" 
+			+ CaseFormat.LOWER_CAMEL.to(
+					CaseFormat.UPPER_CAMEL,
+					this.appMetas.name) 
+			+ "MenuBase.java",
+			false);
 		
 		// create ProjectMenu
 		super.makeSource(
-				this.adapter.getTemplateSourcePath() + "menu/TemplateMenu.java",
-				"./app/android/src/"
-						+ this.appMetas.projectNameSpace 
-						+ "/menu/" 
-						+ CaseFormat.LOWER_CAMEL.to(
-								CaseFormat.UPPER_CAMEL, 
-								this.appMetas.name) 
-						+ "Menu.java",
-				false);
+			this.adapter.getTemplateSourcePath() 
+			+ "menu/TemplateMenu.java",
+			this.adapter.getMenuPath()
+			+ this.appMetas.projectNameSpace 
+			+ "/menu/" 
+			+ CaseFormat.LOWER_CAMEL.to(
+					CaseFormat.UPPER_CAMEL, 
+					this.appMetas.name) 
+			+ "Menu.java",
+			false);
 		
-		// create ProjectMenu
+		// create MenuWrapper
 		super.makeSource(
-				this.adapter.getTemplateSourcePath() 
-					+ "menu/MenuWrapperBase.java",
-				"./app/android/src/" 
-					+ this.appMetas.projectNameSpace 
-					+ "/menu/" + "MenuWrapperBase.java",
-				false);
-
+			this.adapter.getTemplateSourcePath() 
+			+ "menu/MenuWrapperBase.java",
+			this.adapter.getMenuPath() + "MenuWrapperBase.java",
+			false);
+	}
+	
+	/**
+	 * Add Android libs project File
+	 */
+	private void addLibs() {
 		// copy libraries
 		this.updateLibrary("joda-time-2.1.jar");
 		this.updateLibrary("guava-12.0.jar");
 		this.updateLibrary("jsr305.jar");
 		
 		/// copy sherlock library
-
 		//TODO test if git is install
+		String pathSherlock = String.format("%s%s", this.adapter.getLibsPath(), "sherlock");
 		final ArrayList<String> command = new ArrayList<String>();
+		
 		// Command/Tools
 		command.add("git");
 		
@@ -226,15 +236,61 @@ public class ProjectGenerator extends BaseGenerator {
 		command.add("https://github.com/JakeWharton/ActionBarSherlock.git");
 		
 		// Command destination folder
-		command.add("app/android/libs/sherlock");
+		command.add(
+				String.format("%s%s", this.adapter.getLibsPath(), "sherlock"));
 		
 		ConsoleUtils.launchCommand(command);
 		command.clear();
-		command.add("cd");
-		command.add("app/android/libs/sherlock");
-		ConsoleUtils.launchCommand(command);
+
+		/*command.add("git");
+		command.add("init");
+		//ConsoleUtils.launchCommand(command, "/home/yo/git/Harmony/app/Android/libs/sherlock");
+		ConsoleUtils.launchCommand(command, pathSherlock);
 		command.clear();
+		
 		command.add("git");
+		command.add("remote");
+		command.add("add");
+		command.add("-t");
+		command.add("master");
+		command.add("origin");
+		command.add("https://github.com/JakeWharton/ActionBarSherlock.git");
+		ConsoleUtils.launchCommand(command, pathSherlock);
+		command.clear();
+		
+		command.add("git");
+		command.add("config");
+		command.add("core.sparsecheckout");
+		command.add("true");
+		ConsoleUtils.launchCommand(command, pathSherlock);
+		command.clear();
+
+		command.add("echo");
+		command.add("library/");
+		command.add(">");
+		command.add(".git/info/sparse-checkout");
+		ConsoleUtils.launchCommand(command, pathSherlock);
+		command.clear();
+
+		command.add("git");
+		command.add("fetch");
+		command.add("--depth=1");
+		command.add("origin");
+		command.add("master");
+		ConsoleUtils.launchCommand(command, pathSherlock);
+		command.clear();
+		
+		command.add("git");
+		command.add("pull");
+		command.add("origin");
+		command.add("master");
+		ConsoleUtils.launchCommand(command, pathSherlock);
+		command.clear();*/
+
+		//delete samples
+		command.add("git");
+		command.add(String.format("%s%s/%s", "--git-dir=", pathSherlock, ".git"));
+		command.add(String.format("%s%s", "--work-tree=", pathSherlock));
 		command.add("checkout");
 		command.add("4.2.0");
 		ConsoleUtils.launchCommand(command);
@@ -247,7 +303,19 @@ public class ProjectGenerator extends BaseGenerator {
 				new File(String.format("%s/%s", 
 						this.adapter.getLibsPath(), 
 						"harmony.jar")));
+	}
+
+	/**
+	 * Make Android Project Structure
+	 * @return success to make the platform project folder
+	 */
+	protected final boolean makeProjectAndroid(){
+		boolean result = false;
 		
+		this.createFolders();
+		this.makeSources();
+		this.addLibs();
+
 		// copy utils
 		this.updateUtil("DateUtils.java");
 
