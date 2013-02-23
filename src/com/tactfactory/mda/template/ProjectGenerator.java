@@ -214,89 +214,8 @@ public class ProjectGenerator extends BaseGenerator {
 		this.updateLibrary("guava-12.0.jar");
 		this.updateLibrary("jsr305.jar");
 		
-		/// copy sherlock library
-		//TODO test if git is install
-		String pathSherlock = String.format("%s%s", 
-				this.adapter.getLibsPath(), 
-				"sherlock");
-		final ArrayList<String> command = new ArrayList<String>();
-		
-		// Command/Tools
-		command.add("git");
-		
-		// Command action
-		command.add("clone");
-		
-		// command depot
-		command.add("https://github.com/JakeWharton/ActionBarSherlock.git");
-		
-		// Command destination folder
-		command.add(pathSherlock);
-		
-		ConsoleUtils.launchCommand(command);
-		command.clear();
-
-		/*command.add("git");
-		command.add("init");
-		//ConsoleUtils.launchCommand(command, "/home/yo/git/Harmony/app/Android/libs/sherlock");
-		ConsoleUtils.launchCommand(command, pathSherlock);
-		command.clear();
-		
-		command.add("git");
-		command.add("remote");
-		command.add("add");
-		command.add("-t");
-		command.add("master");
-		command.add("origin");
-		command.add("https://github.com/JakeWharton/ActionBarSherlock.git");
-		ConsoleUtils.launchCommand(command, pathSherlock);
-		command.clear();
-		
-		command.add("git");
-		command.add("config");
-		command.add("core.sparsecheckout");
-		command.add("true");
-		ConsoleUtils.launchCommand(command, pathSherlock);
-		command.clear();
-
-		command.add("echo");
-		command.add("library/");
-		command.add(">");
-		command.add(".git/info/sparse-checkout");
-		ConsoleUtils.launchCommand(command, pathSherlock);
-		command.clear();
-
-		command.add("git");
-		command.add("fetch");
-		command.add("--depth=1");
-		command.add("origin");
-		command.add("master");
-		ConsoleUtils.launchCommand(command, pathSherlock);
-		command.clear();
-		
-		command.add("git");
-		command.add("pull");
-		command.add("origin");
-		command.add("master");
-		ConsoleUtils.launchCommand(command, pathSherlock);
-		command.clear();*/
-
-		//delete samples
-		command.add("git");
-		command.add(String.format("%s%s/%s", "--git-dir=", pathSherlock, ".git"));
-		command.add(String.format("%s%s", "--work-tree=", pathSherlock));
-		command.add("checkout");
-		command.add("4.2.0");
-		ConsoleUtils.launchCommand(command);
-		command.clear();
-		
-		//make build sherlock
-		command.add(String.format("%s/%s", ApplicationMetadata.androidSdkPath, "tools/android" ));
-		command.add("update");
-		command.add("project");
-		command.add("--path");
-		command.add(".");
-		ConsoleUtils.launchCommand(command);
+		/// copy sherlock library		
+		this.installAndroidSherlockLib();
 		
 		/// copy Harmony library
 		FileUtils.copyfile(
@@ -306,6 +225,97 @@ public class ProjectGenerator extends BaseGenerator {
 				new File(String.format("%s/%s", 
 						this.adapter.getLibsPath(), 
 						"harmony.jar")));
+	}
+
+	/**
+	 * @param pathSherlock
+	 */
+	private void installAndroidSherlockLib() {
+		//TODO test if git is install
+		String pathSherlock = String.format("%s%s", 
+				this.adapter.getLibsPath(), 
+				"sherlock");
+		
+		if (!FileUtils.exists(pathSherlock)) {
+			final ArrayList<String> command = new ArrayList<String>();
+			
+			// Command/Tools
+			command.add("git");
+			
+			// Command action
+			command.add("clone");
+			
+			// command depot
+			command.add("https://github.com/JakeWharton/ActionBarSherlock.git");
+			
+			// Command destination folder
+			command.add(pathSherlock);
+			
+			ConsoleUtils.launchCommand(command);
+			command.clear();
+	
+			/*command.add("git");
+			command.add("init");
+			//ConsoleUtils.launchCommand(command, "/home/yo/git/Harmony/app/Android/libs/sherlock");
+			ConsoleUtils.launchCommand(command, pathSherlock);
+			command.clear();
+			
+			command.add("git");
+			command.add("remote");
+			command.add("add");
+			command.add("-t");
+			command.add("master");
+			command.add("origin");
+			command.add("https://github.com/JakeWharton/ActionBarSherlock.git");
+			ConsoleUtils.launchCommand(command, pathSherlock);
+			command.clear();
+			
+			command.add("git");
+			command.add("config");
+			command.add("core.sparsecheckout");
+			command.add("true");
+			ConsoleUtils.launchCommand(command, pathSherlock);
+			command.clear();
+	
+			command.add("echo");
+			command.add("library/");
+			command.add(">");
+			command.add(".git/info/sparse-checkout");
+			ConsoleUtils.launchCommand(command, pathSherlock);
+			command.clear();
+	
+			command.add("git");
+			command.add("fetch");
+			command.add("--depth=1");
+			command.add("origin");
+			command.add("master");
+			ConsoleUtils.launchCommand(command, pathSherlock);
+			command.clear();
+			
+			command.add("git");
+			command.add("pull");
+			command.add("origin");
+			command.add("master");
+			ConsoleUtils.launchCommand(command, pathSherlock);
+			command.clear();*/
+	
+			//delete samples
+			command.add("git");
+			command.add(String.format("%s%s/%s", "--git-dir=", pathSherlock, ".git"));
+			command.add(String.format("%s%s", "--work-tree=", pathSherlock));
+			command.add("checkout");
+			command.add("4.2.0");
+			ConsoleUtils.launchCommand(command);
+			command.clear();
+			
+			//make build sherlock
+			command.add(String.format("%s/%s", ApplicationMetadata.androidSdkPath, "tools/android" ));
+			command.add("update");
+			command.add("project");
+			command.add("--path");
+			command.add(".");
+			ConsoleUtils.launchCommand(command);
+		}
 	}
 
 	/**

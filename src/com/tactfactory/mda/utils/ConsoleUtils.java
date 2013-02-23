@@ -234,56 +234,44 @@ public abstract class ConsoleUtils {
 	 * @param command The list containing the command and its arguments
 	 * 	to execute
 	 */
-	public static void launchCommand(final List<String> command) {
-		try {
-			final ProcessBuilder pb = new ProcessBuilder(command);
-			final Process exec = pb.start();
-			
-
-			final ProcessToConsoleBridge bridge = 
-					new ProcessToConsoleBridge(exec);
-			bridge.start();
-			try {
-				exec.waitFor();
-			} catch (final InterruptedException e) {
-				// TODO Auto-generated catch block
-				ConsoleUtils.displayError(e);
-			}
-			
-			bridge.stop();
-			
-		} catch (final IOException e) {
-			// TODO Auto-generated catch block
-			ConsoleUtils.displayError(e);
-		}
+	public static Exception launchCommand(final List<String> command) {
+		return launchCommand(command, null);
 	}
 	
 	/**
 	 * Bridge used for transmitting input and output between an external process
 	 * and the console.
 	 */
-	public static void launchCommand(final List<String> command, String commandPath){
+	public static Exception launchCommand(final List<String> command, String commandPath){
+		Exception result = null;
+		
 		try {
 			ProcessBuilder pb = new ProcessBuilder(command);
-			pb = pb.directory(new File(commandPath));
-			final Process exec = pb.start();
 			
-
-			final ProcessToConsoleBridge bridge = new ProcessToConsoleBridge(exec);
+			if (commandPath != null) {
+				pb = pb.directory(new File(commandPath));
+			}
+			
+			final Process exec = pb.start();
+			final ProcessToConsoleBridge bridge = 
+					new ProcessToConsoleBridge(exec);
+			
 			bridge.start();
 			try {
 				exec.waitFor();
 			} catch (final InterruptedException e) {
-				// TODO Auto-generated catch block
+				result = e;
 				ConsoleUtils.displayError(e);
 			}
 			
 			bridge.stop();
 			
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
+			result = e;
 			ConsoleUtils.displayError(e);
 		}
+		
+		return result;
 	}
 
 	protected static class ProcessToConsoleBridge {
