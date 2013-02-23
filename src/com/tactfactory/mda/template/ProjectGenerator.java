@@ -313,7 +313,7 @@ public class ProjectGenerator extends BaseGenerator {
 			command.add("update");
 			command.add("project");
 			command.add("--path");
-			command.add(".");
+			command.add(pathSherlock + "/library");
 			ConsoleUtils.launchCommand(command);
 		}
 	}
