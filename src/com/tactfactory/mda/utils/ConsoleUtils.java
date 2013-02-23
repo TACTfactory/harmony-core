@@ -244,6 +244,7 @@ public abstract class ConsoleUtils {
 	 */
 	public static Exception launchCommand(final List<String> command, String commandPath){
 		Exception result = null;
+		ConsoleUtils.displayDebug(commandPath + command.toString());
 		
 		try {
 			ProcessBuilder pb = new ProcessBuilder(command);
