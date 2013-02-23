@@ -13,8 +13,6 @@ import java.util.Map;
 
 /**
  * Base Metadata class.
- * @author gregg
- *
  */
 public abstract class BaseMetadata implements Metadata {
 	/** Component name. */

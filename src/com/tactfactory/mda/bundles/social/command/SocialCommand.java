@@ -20,8 +20,6 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
  * Social Bundle command class.
- * @author gregg
- *
  */
 @PluginImplementation
 public class SocialCommand extends BaseCommand {

@@ -18,8 +18,6 @@ import com.tactfactory.mda.template.TagConstant;
 
 /**
  * Rest metadata at application level.
- * @author gregg
- *
  */
 public class ApplicationRestMetadata extends BaseMetadata {
 	/** Bundle name. */

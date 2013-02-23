@@ -10,8 +10,6 @@ package com.tactfactory.mda.meta;
 
 /**
  * Configuration Metadata.
- * @author gregg
- *
  */
 public class ConfigMetadata {
 	/** Identify configuration resource. */

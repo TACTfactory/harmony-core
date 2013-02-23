@@ -17,8 +17,6 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
  * SQliteAdapter.
- * @author gregg
- *
  */
 public abstract class SqliteAdapter {
 	/** Prefix for column name generation. */
@@ -135,8 +133,6 @@ public abstract class SqliteAdapter {
 	
 	/**
 	 * SQLite Reserved keywords.
-	 * @author gregg
-	 *
 	 */
 	public static enum Keywords {
 		ABORT,

@@ -18,8 +18,6 @@ import com.tactfactory.mda.template.TagConstant;
 
 /**
  * Application Metadata.
- * @author gregg
- *
  */
 public final class ApplicationMetadata extends BaseMetadata {
 	/** Path delimiter. */

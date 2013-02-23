@@ -15,8 +15,6 @@ import com.tactfactory.mda.utils.PackageUtils;
 
 /**
  * SQLite Adapters generator.
- * @author gregg
- *
  */
 public class SQLiteAdapterGenerator extends BaseGenerator {	
 	/** The local name space. */

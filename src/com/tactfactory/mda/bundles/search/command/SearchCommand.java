@@ -20,8 +20,6 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
  * Search Bundle command class.
- * @author gregg
- *
  */
 @PluginImplementation
 public class SearchCommand  extends BaseCommand {

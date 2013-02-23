@@ -42,8 +42,6 @@ import freemarker.template.TemplateException;
 
 /**
  * Generate the CRUD activities.
- * @author gregg
- *
  */
 public class ActivityGenerator extends BaseGenerator {
 	/** "template". */

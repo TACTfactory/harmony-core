@@ -22,8 +22,6 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
  * Sync bundle commands.
- * @author gregg
- *
  */
 @PluginImplementation
 public class SyncCommand extends BaseCommand {

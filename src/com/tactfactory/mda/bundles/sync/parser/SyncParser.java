@@ -29,8 +29,6 @@ import com.tactfactory.mda.utils.PackageUtils;
 
 /**
  * Parser for Sync annotations.
- * @author gregg
- *
  */
 public class SyncParser extends BaseParser {
 	/** Bundle name. */

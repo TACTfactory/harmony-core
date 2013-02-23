@@ -15,8 +15,6 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 
 /**
  * Metadata for Fixture bundle.
- * @author gregg
- *
  */
 public class FixtureMetadata extends BaseMetadata {
 	/** Bundle name. */

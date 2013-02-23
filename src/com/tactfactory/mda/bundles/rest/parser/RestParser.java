@@ -28,8 +28,6 @@ import com.tactfactory.mda.utils.PackageUtils;
 
 /**
  * Parser for Rest bundle.
- * @author gregg
- *
  */
 public class RestParser extends BaseParser {
 	/** Bundle name. */

@@ -18,8 +18,6 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation used to define a ManyToOne relation (N-1).
- * @author gregg
- *
  */
 @Documented
 @Retention(SOURCE)

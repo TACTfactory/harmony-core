@@ -20,8 +20,6 @@ import com.tactfactory.mda.meta.FieldMetadata;
 /**
  * Base Parser.
  * Extend this parser if you want to parse new annotations.
- * @author gregg
- *
  */
 public abstract class BaseParser {
 

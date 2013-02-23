@@ -21,8 +21,6 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
  * Command class for rest bundle.
- * @author gregg
- *
  */
 @PluginImplementation
 public class RestCommand extends BaseCommand {

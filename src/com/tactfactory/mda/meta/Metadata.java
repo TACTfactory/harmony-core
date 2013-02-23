@@ -14,8 +14,6 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 
 /**
  * Defines the Metadatas class which will be used by Freemarker.
- * @author gregg
- *
  */
 public interface Metadata {
 

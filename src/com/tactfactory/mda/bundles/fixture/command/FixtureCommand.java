@@ -20,8 +20,6 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
  * Fixture bundle command class.
- * @author gregg
- *
  */
 @PluginImplementation
 public class FixtureCommand extends BaseCommand {

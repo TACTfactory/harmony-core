@@ -226,8 +226,6 @@ public class ClassCompletor {
 	
 	/**
 	 * Relation Constraint Exception. 
-	 * @author gregg
-	 *
 	 */
 	@SuppressWarnings("serial")
 	public static class ConstraintException extends Exception {

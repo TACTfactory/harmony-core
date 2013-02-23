@@ -15,8 +15,6 @@ import org.junit.runners.Suite.SuiteClasses;
 
 /**
  * All Harmony tests.
- * @author gregg
- *
  */
 @RunWith(Suite.class)
 @SuiteClasses({ 

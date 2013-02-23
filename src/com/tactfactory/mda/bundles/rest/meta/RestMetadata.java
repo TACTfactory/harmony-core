@@ -16,8 +16,6 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 
 /**
  * Metadata for Bundle Rest.
- * @author gregg
- *
  */
 public class RestMetadata extends BaseMetadata {
 	/** Bundle name. */

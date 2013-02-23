@@ -19,8 +19,6 @@ import com.tactfactory.mda.template.TagConstant;
 
 /**
  * Social metadata at application level.
- * @author gregg
- *
  */
 public class ApplicationSocialMetadata extends BaseMetadata {
 	/** Bundle name. */
