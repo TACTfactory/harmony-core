@@ -17,9 +17,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Annotation used to define a OneToMany relation (1-N)
- * @author gregg
- *
+ * Annotation used to define a OneToMany relation (1-N).
  */
 @Documented
 @Retention(SOURCE)
@@ -27,15 +25,13 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface OneToMany {
 	/**
-	 * The Entity targeted by the relation
-	 * @return the entity name
+	 * The Entity targeted by the relation.
 	 */
 	String targetEntity() default "";
 	
 	/**
 	 * The field in the target Entity mapping 
 	 * this relation (for bidirectionnal entities only).
-	 * @return the field name
 	 */
 	String mappedBy() default "";
 }

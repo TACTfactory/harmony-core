@@ -1,6 +1,6 @@
 /**
  * This file is part of the Harmony package.
- *
+ * 
  * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -14,9 +14,7 @@ import org.junit.runners.Suite.SuiteClasses;
 
 
 /**
- * All Harmony tests
- * @author gregg
- *
+ * All Harmony tests.
  */
 @RunWith(Suite.class)
 @SuiteClasses({ 

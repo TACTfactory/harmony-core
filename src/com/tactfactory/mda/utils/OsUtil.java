@@ -1,4 +1,4 @@
-/**
+/** 
  * This file is part of the Harmony package.
  *
  * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
@@ -10,18 +10,30 @@ package com.tactfactory.mda.utils;
 
 import java.io.File;
 
+/**
+ * Utility class for OS manipulations.
+ */
 public abstract class OsUtil {
+	/** Generic constant. */
 	private static final String GENERIC = "generic";
+	
+	/** First drive letter. */
 	private static final char BEGIN = 'c';
+	
+	/** Last drive letter. */
 	private static final char END = 'z';
 
 
-	/** Return Os name */
+	/** Return Os name. 
+	 * @return the OS name
+	 */
 	public static String getOsName() {
 		return System.getProperty("os.name", "unknown");
 	}
 
-	/** Return Platform type (win32, linux, solaris, mac, or generic) */
+	/** Return Platform type (win32, linux, solaris, mac, or generic).
+	 * @return the platform type
+	 */
 	public static String platform() {
 		String ret = GENERIC;
 		final String osname = 
@@ -39,11 +51,18 @@ public abstract class OsUtil {
 	}
 
 	/** warning! only gives JRE architecture, 
-	 * on x64 machine with x86 JRE installed, prints 'x86' */
+	 * on x64 machine with x86 JRE installed, prints 'x86'.
+	 * @return The JRE architecture
+	 */
 	public static String getArch() {
 		return System.getProperty("os.arch", GENERIC);
 	}
 	
+	
+	/**
+	 * Check if system is x64.
+	 * @return True if x64
+	 */
 	public static boolean isX64() {
 		boolean is64bit = false;
 		if (isWindows()) {
@@ -58,25 +77,43 @@ public abstract class OsUtil {
 		return is64bit;
 	}
 	
+	/**
+	 * Check if system is Windows.
+	 * @return true if Windows
+	 */
 	public static boolean isWindows() {
 		return getOsName().toLowerCase().contains("windows");
 	}
 
+	/**
+	 * Check if system is Linux.
+	 * @return true if Linux
+	 */
 	public static boolean isLinux() {
 		return getOsName().toLowerCase().contains("linux");
 	}
 
+	/**
+	 * Check if system is Mac.
+	 * @return true if Mac
+	 */
 	public static boolean isMac() {
 		final String os = getOsName().toLowerCase();
 		return os.startsWith("mac") || os.startsWith("darwin");
 	}
 
+	/**
+	 * Check if system is Solaris.
+	 * @return true if Solaris
+	 */
 	public static boolean isSolaris() {
 		final String os = getOsName().toLowerCase();
 		return os.indexOf("sunos") >= 0;
 	}
 
-	/** return windows system drive */
+	/** return windows system drive.
+	 * @return Windows system drive 
+	 */
 	public static String findWindowsSystemDrive() {
 		String sysdrive = null;
 		if (isWindows() 
@@ -89,7 +126,9 @@ public abstract class OsUtil {
 		return sysdrive;
 	}
 
-	/** return windows system root folder */
+	/** return windows system root folder.
+	 * @return Windows system root folder 
+	 */
 	public static String findWindowsSystemRoot() {
 		String sysRoot = null;
 		if (isWindows()) { 
@@ -289,7 +328,8 @@ public abstract class OsUtil {
 // os.nam = "Windows 95" "windows 95"
 // os.arc = "Pentium" "pentium"
 // os.versio = "4.0" "4.0"
-// java.vendo = "Netscape Communications Corporation""netscape communications corporation"
+// java.vendo = "Netscape Communications Corporation"
+// "netscape communications corporation"
 // java.class.versio = "45.3" "45.3"
 // java.versio = "1.02" "1.02"
 // file.separato = "/" "/"
@@ -442,7 +482,8 @@ public abstract class OsUtil {
 // os.nam = "Mac OS" "mac os"
 // os.arc = "PowerPC" "powerpc"
 // os.versio = "7.5" "7.5"
-// java.vendo = "Netscape Communications Corporation""netscape communications corporation"
+// java.vendo = "Netscape Communications Corporation"
+// "netscape communications corporation"
 // java.class.versio = "45.3" "45.3"
 // java.versio = "1.1.2" "1.1.2"
 // file.separato = "/" "/"
@@ -454,7 +495,8 @@ public abstract class OsUtil {
 // OS: MacOS version 8.1
 // Processor: PowerPC 750 (?)
 // VM: Microsoft Virtual Machine
-// Notes: Obtained in Internet Explorer 4.01 (PowerPC) with "Java virtual Machine"
+// Notes: Obtained in Internet Explorer 4.01 (PowerPC) 
+// with "Java virtual Machine"
 // pop-up preference set to "Microsoft Virtual Machine".
 // Contributor: DG
 //
@@ -473,7 +515,8 @@ public abstract class OsUtil {
 // OS: MacOS version 8.1
 // Processor: PowerPC 750 (?)
 // VM: Apple MRJ
-// Notes: Obtained in Internet Explorer 4.01 (PowerPC) with "Java virtual Machine"
+// Notes: Obtained in Internet Explorer 4.01 (PowerPC) 
+// with "Java virtual Machine"
 // pop-up preference set to "Apple MRJ".
 // Contributor: DG
 //
@@ -490,7 +533,7 @@ public abstract class OsUtil {
 //
 //
 //
-// --------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 //
 //
 // Linux VMs
@@ -507,7 +550,8 @@ public abstract class OsUtil {
 // os.nam = "Linux" "linux"
 // os.arc = "x86" "x86"
 // os.versio = "2.0.31" "2.0.31"
-// java.vendo = "Sun Microsystems Inc., ported by Randy Chapman and Steve Byrne""sun microsystems inc., ported by randy
+// java.vendo = "Sun Microsystems Inc., ported by Randy Chapman and Steve Byrne"
+// "sun microsystems inc., ported by randy
 // chapman and steve byrne"
 // java.class.versio = "45.3" "45.3"
 // java.versio = "1.1.6" "1.1.6"
@@ -524,7 +568,7 @@ public abstract class OsUtil {
 //
 //
 //
-// --------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 //
 //
 // Solaris
@@ -639,7 +683,7 @@ public abstract class OsUtil {
 //
 //
 //
-// --------------------------------------------------------------------------------
+// ---------------------------------------------------------------------------
 //
 //
 // OS/2
@@ -771,8 +815,8 @@ public abstract class OsUtil {
 // OS: FreeBSD 2.2.2
 // Processor: Intel Pentium
 // VM: FreeBSD port of JDK1.0.2 (Jeff Hsu?)
-// Notes: This is actually for FreeBSD with the JDK 1.0.2. It probably says Solaris
-// since it was a really early port.
+// Notes: This is actually for FreeBSD with the JDK 1.0.2.
+// It probably says Solaris since it was a really early port.
 // Contributor: CA
 //
 // os.nam = "Solaris" "solaris"
@@ -796,7 +840,8 @@ public abstract class OsUtil {
 // os.nam = "FreeBSD" "freebsd"
 // os.arc = "x86" "x86"
 // os.versio = "2.2.2-RELEASE" "2.2.2-release"
-// java.vendo = "Sun Microsystems Inc., port by java-port@FreeBSD.org""sun microsystems inc., port by
+// java.vendo = "Sun Microsystems Inc., port by java-port@FreeBSD.org"
+// "sun microsystems inc., port by
 // java-port@freebsd.org"
 // java.class.versio = "45.3" "45.3"
 // java.versio = "1.1.6" "1.1.6"
@@ -845,7 +890,7 @@ public abstract class OsUtil {
 //
 //
 //
-// --------------------------------------------------------------------------------
+// ----------------------------------------------------------------------------
 //
 //
 // Other Platforms

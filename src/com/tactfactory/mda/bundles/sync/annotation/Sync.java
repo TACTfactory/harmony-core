@@ -30,7 +30,7 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 @Inherited
 public @interface Sync {
 	
-	/** Synchronization level */
+	/** Synchronization level. */
 	public enum Level {
 		GLOBAL(0),
 		SESSION(1);
@@ -82,7 +82,7 @@ public @interface Sync {
 		}
 	}
 	
-	/** Mode of trigger for synchronization */
+	/** Mode of trigger for synchronization. */
 	public enum Mode {
 		POOLING(1),
 		REAL_TIME(2),
@@ -112,7 +112,8 @@ public @interface Sync {
 			String realName;
 			Mode ret;
 			if (name.lastIndexOf('.') > 0) {
-				realName = name.substring(name.lastIndexOf('.') + 1); // Take only what comes after the last dot
+				// Take only what comes after the last dot
+				realName = name.substring(name.lastIndexOf('.') + 1); 
 			} else {
 				realName = name;
 			}
@@ -135,7 +136,7 @@ public @interface Sync {
 		}
 	}
 	
-	/** Priority level */
+	/** Priority level. */
 	public static class Priority {
 		public static final int NORMALE = 5;
 		public static final int HIGH = 0;

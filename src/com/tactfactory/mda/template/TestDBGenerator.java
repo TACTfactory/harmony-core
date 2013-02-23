@@ -13,14 +13,27 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
+/**
+ * Database tests generator.
+ *
+ */
 public class TestDBGenerator extends BaseGenerator {
+	/** Local name space. */
 	private String localNameSpace;
 	
+	/**
+	 * Constructor.
+	 * @param adapter The adapter to use
+	 * @throws Exception 
+	 */
 	public TestDBGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
+	/**
+	 * Generate all tests.
+	 */
 	public final void generateAll() {
 		ConsoleUtils.display(">> Generate Repository test...");
 		
@@ -38,7 +51,7 @@ public class TestDBGenerator extends BaseGenerator {
 	}
 	
 	/**  
-	 * Generate DataBase Test  
+	 * Generate DataBase Test.
 	 */ 
 	private void generate() {
 		// Info
@@ -62,11 +75,12 @@ public class TestDBGenerator extends BaseGenerator {
 	}
 	
 	/** 
-	 * Make Java Source Code
+	 * Make Java Source Code.
 	 * 
 	 * @param template Template path file. 
 	 * <br/>For list activity is "TemplateListActivity.java"
-	 * @param filename
+	 * @param filename Destination file name
+	 * @param override True if must overwrite file.
 	 */
 	private void makeSourceTest(final String template, 
 			final String filename,
@@ -89,7 +103,7 @@ public class TestDBGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Initialize Test Android Project folders and files
+	 * Initialize Test Android Project folders and files.
 	 * @return success of Test Android project initialization
 	 */
 	public final boolean initTestAndroid() {

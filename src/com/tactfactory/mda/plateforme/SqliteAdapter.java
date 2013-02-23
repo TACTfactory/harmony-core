@@ -15,10 +15,20 @@ import com.tactfactory.mda.annotation.Column.Type;
 import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
+/**
+ * SQliteAdapter.
+ */
 public abstract class SqliteAdapter {
+	/** Prefix for column name generation. */
 	private static final String PREFIX = "COL_";
+	/** Suffix for column name generation. */
 	private static final String SUFFIX = "_ID";
 
+	/**
+	 * Generate field's structure for database creation schema.
+	 * @param fm The field
+	 * @return The field's structure
+	 */
 	public static String generateStructure(final FieldMetadata fm) {
 		
 		final StringBuilder builder = new StringBuilder();
@@ -66,6 +76,11 @@ public abstract class SqliteAdapter {
 		return builder.toString();
 	}
 
+	/**
+	 * Generate the column type for a given harmony type.
+	 * @param fieldType The harmony type of a field.
+	 * @return The columnType for SQLite
+	 */
 	public static String generateColumnType(final String fieldType) {
 		String type = fieldType;
 		if (type.equals(Column.Type.STRING.getValue()) 
@@ -85,14 +100,29 @@ public abstract class SqliteAdapter {
 		return type;
 	}
 
+	/** 
+	 * Generate a column name.
+	 * @param fieldName The original field's name
+	 * @return the generated column name
+	 */
 	public static String generateColumnName(final String fieldName) {
 		return PREFIX + fieldName.toUpperCase();
 	}
 	
+	/** 
+	 * Generate a relation column name.
+	 * @param fieldName The original field's name
+	 * @return the generated column name
+	 */
 	public static String generateRelationColumnName(final String fieldName) {
 		return PREFIX + fieldName.toUpperCase() + SUFFIX;
 	}
 	
+	/** 
+	 * Generate a column definition.
+	 * @param type The original field's type
+	 * @return the generated column definition
+	 */
 	public static String generateColumnDefinition(final String type) {
 		String ret = type;
 		if (type.equals("int")) {
@@ -101,6 +131,9 @@ public abstract class SqliteAdapter {
 		return ret;
 	}
 	
+	/**
+	 * SQLite Reserved keywords.
+	 */
 	public static enum Keywords {
 		ABORT,
 		ACTION,
@@ -224,6 +257,11 @@ public abstract class SqliteAdapter {
 		WHEN,
 		WHERE;
 		
+		/**
+		 * Tests if the given String is a reserverd SQLite keyword.
+		 * @param name The string
+		 * @return True if it is
+		 */
 		public static boolean exists(final String name) {
 			boolean exists = false;
 			try {

@@ -1,4 +1,4 @@
-/**
+/** 
  * This file is part of the Harmony package.
  *
  * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
@@ -14,8 +14,6 @@ import org.junit.runners.Suite.SuiteClasses;
 
 /**
  * All tests related to ORM initialization and generation.
- * @author gregg
- *
  */
 @RunWith(Suite.class)
 @SuiteClasses({

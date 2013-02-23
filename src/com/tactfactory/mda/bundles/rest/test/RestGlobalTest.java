@@ -16,13 +16,24 @@ import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.test.CommonTest;
 
+/**
+ * Tests for Rest bundle generation.
+ */
 public class RestGlobalTest extends CommonTest {
+	/** Data path. */
+	private static final String DATA_PATH = 
+			"android/src/com/tactfactory/mda/test/demact/data/";
+	
+	/** Post entity name. */
 	private static final String POST = "Post";
+	/** Comment entity name. */
 	private static final String COMMENT = "Comment";
+	/** User entity name. */
 	private static final String USER = "User";
+	/** Rest bundle name. */
 	private static final String REST = "rest";
 	/**
-	 * @throws java.lang.Exception
+	 * @throws java.lang.Exception 
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {
@@ -30,40 +41,48 @@ public class RestGlobalTest extends CommonTest {
 		initAll();
 	}
 	
-	/**
-	 * @throws java.lang.Exception
-	 */
+
 	@Before
 	@Override
-	public void setUp() throws Exception {
+	public final void setUp() throws Exception {
 		super.setUp();
 	}
 
-	/**
-	 * @throws java.lang.Exception
-	 */
+
 	@After
 	@Override
-	public void tearDown() throws Exception {
+	public final void tearDown() throws Exception {
 		super.tearDown();
 	}
 	
+	/**
+	 * Test initialization.
+	 */
 	private static void initAll() {
 		System.out.println("\nTest Orm generate entity");
-		System.out.println("###############################################################################");
+		System.out.println("########################################"
+				+ "#######################################");
 		
 		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
-		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
-		getHarmony().findAndExecute(OrmCommand.GENERATE_CRUD, new String[] {}, null);
-		getHarmony().findAndExecute(RestCommand.GENERATE_ADAPTERS, new String[] {}, null);
+		getHarmony().findAndExecute(
+				OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
+		getHarmony().findAndExecute(
+				OrmCommand.GENERATE_CRUD, new String[] {}, null);
+		getHarmony().findAndExecute(
+				RestCommand.GENERATE_ADAPTERS, new String[] {}, null);
 				
-		final RestCommand command = (RestCommand) Harmony.instance.getCommand(RestCommand.class);
+		final RestCommand command = 
+				(RestCommand) Harmony.getInstance().getCommand(
+						RestCommand.class);
 		command.generateMetas();	
 	}
 	
 	//@Test
-	public void all() {		
+	/**
+	 * Launch all tests.
+	 */
+	public final void all() {		
 		this.hasGlobalAbstractWebServiceAdapters();
 		this.hasPostWebServiceAdapters();
 		this.hasUserWebServiceAdapters();
@@ -79,70 +98,127 @@ public class RestGlobalTest extends CommonTest {
 		this.isUserRest();
 	}
 	
+	/**
+	 * Tests if global web service adapter has been generated.
+	 */
 	@Test
-	public void hasGlobalAbstractWebServiceAdapters() {
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/base/WebServiceClientAdapterBase.java");
+	public final void hasGlobalAbstractWebServiceAdapters() {
+		CommonTest.hasFindFile(
+				DATA_PATH + "base/WebServiceClientAdapterBase.java");
 	}
 	
 	////WEB SERVICE ADAPTERS POST ////
+	/**
+	 * Tests if post web service adapter has been generated.
+	 */
 	@Test
-	public void hasPostWebServiceAdapters() {
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/PostWebServiceClientAdapter.java");
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/base/PostWebServiceClientAdapterBase.java");
+	public final void hasPostWebServiceAdapters() {
+		CommonTest.hasFindFile(
+				DATA_PATH + "PostWebServiceClientAdapter.java");
+		CommonTest.hasFindFile(
+				DATA_PATH + "base/PostWebServiceClientAdapterBase.java");
 	}
 	
 	////WEB SERVICE ADAPTERS USER ////
+	/**
+	 * Tests if user web service adapter has been generated.
+	 */
 	@Test
-	public void hasUserWebServiceAdapters() {
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/UserWebServiceClientAdapter.java");
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/data/base/UserWebServiceClientAdapterBase.java");
+	public final void hasUserWebServiceAdapters() {
+		CommonTest.hasFindFile(
+				DATA_PATH + "UserWebServiceClientAdapter.java");
+		CommonTest.hasFindFile(
+				DATA_PATH + "base/UserWebServiceClientAdapterBase.java");
 	}
 	
+	/**
+	 * Tests if user is rest enabled.
+	 */
 	@Test
-	public void isUserRest() {
+	public final void isUserRest() {
 		this.isRest(ApplicationMetadata.INSTANCE.entities.get(USER));
 	}
 	
+	/**
+	 * Tests if comment is rest enabled.
+	 */
 	@Test
-	public void isCommentRest() {
+	public final void isCommentRest() {
 		this.isRest(ApplicationMetadata.INSTANCE.entities.get(COMMENT));
 	}
 	
+	/**
+	 * Tests if post is rest enabled.
+	 */
 	@Test
-	public void isPostRest() {
+	public final void isPostRest() {
 		this.isRest(ApplicationMetadata.INSTANCE.entities.get(POST));
 	}
 	
+	/**
+	 * Tests if post URI is "Post".
+	 */
 	@Test
-	public void hasPostUri() {
+	public final void hasPostUri() {
 		this.hasUri(ApplicationMetadata.INSTANCE.entities.get(POST), POST);
 	}
 	
+	/**
+	 * Tests if user URI is "user-uri".
+	 */
 	@Test
-	public void hasUserUri() {
-		this.hasUri(ApplicationMetadata.INSTANCE.entities.get(USER), "user-uri");
+	public final void hasUserUri() {
+		this.hasUri(ApplicationMetadata.INSTANCE.entities.get(USER), 
+				"user-uri");
 	}
 	
+	/**
+	 * Tests if post security is None.
+	 */
 	@Test
-	public void hasPostSecurity() {
-		this.hasSecurity(ApplicationMetadata.INSTANCE.entities.get(POST), Rest.Security.NONE);
+	public final void hasPostSecurity() {
+		this.hasSecurity(ApplicationMetadata.INSTANCE.entities.get(POST),
+				Rest.Security.NONE);
 	}
 	
+	/**
+	 * Tests if user security is Session.
+	 */
 	@Test
-	public void hasUserSecurity() {
-		this.hasSecurity(ApplicationMetadata.INSTANCE.entities.get(USER), Rest.Security.SESSION);
+	public final void hasUserSecurity() {
+		this.hasSecurity(ApplicationMetadata.INSTANCE.entities.get(USER),
+				Rest.Security.SESSION);
 	}
 	
+	/**
+	 * Tests if given entity is rest enabled.
+	 * @param cm The given entity
+	 */
 	private void isRest(final ClassMetadata cm) {
-		Assert.assertTrue("Check if rest " + cm.name, cm.options.containsKey(REST));
+		Assert.assertTrue("Check if rest " + cm.name,
+				cm.options.containsKey(REST));
 	}
 	
+	/**
+	 * Tests if given entity has the given uri.
+	 * @param cm The given entity
+	 * @param value The given uri
+	 */
 	private void hasUri(final ClassMetadata cm, final String value) {
-		Assert.assertTrue("Check if URI of " + cm.name + " is " + value, ((RestMetadata) cm.options.get(REST)).uri.equals(value));
+		Assert.assertTrue("Check if URI of " + cm.name + " is " + value, 
+				((RestMetadata) cm.options.get(REST)).uri.equals(value));
 	}
 	
-	private void hasSecurity(final ClassMetadata cm, final Rest.Security value) {
-		Assert.assertTrue("Check if SECURITY of " + cm.name + " is " + value.getValue(), ((RestMetadata) cm.options.get(REST)).security.equals(value));
+	/**
+	 * Tests if given entity has the given security.
+	 * @param cm The given entity
+	 * @param value The given security
+	 */
+	private void hasSecurity(final ClassMetadata cm,
+			final Rest.Security value) {
+		Assert.assertTrue(
+				"Check if SECURITY of " + cm.name + " is " + value.getValue(), 
+				((RestMetadata) cm.options.get(REST)).security.equals(value));
 	}
 	
 }

@@ -20,7 +20,8 @@ import java.lang.reflect.Field;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
- * To mark a entity for remote/central persistence/access the @Rest annotation is used.
+ * To mark a entity for remote/central 
+ * persistence/access the @Rest annotation is used.
  */
 @Documented
 @Retention(SOURCE)
@@ -28,21 +29,37 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 @Inherited
 public @interface Rest {
 	
-	/** Security access of REST query */
+	/** Security access of REST query. */
 	public enum Security {
+		/** No Security. */
 		NONE(0),
+		/** Session Security. */
 		SESSION(1);
 		
+		/** Security id. */
 		private int value;
 		
-		private Security(final int value) {
-			this.value = value;
+		/** 
+		 * Constructor.
+		 * @param v Security id.
+		 */
+		private Security(final int v) {
+			this.value = v;
 		}
 		
+		/**
+		 * Get Security id.
+		 * @return The security id
+		 */
 		public int getValue() {
 			return this.value;
 		}
 		
+		/**
+		 * Retrieve Security from given id.
+		 * @param value The id
+		 * @return The found Security. Null if no Security found.
+		 */
 		public static Security fromValue(final int value) {
 			Security ret = null;
 				for (final Security type : Security.values()) {
@@ -54,11 +71,17 @@ public @interface Rest {
 			return ret;
 		}
 		
+		/**
+		 * Retrieves the Security by its enum name. (reflection)
+		 * @param name The Security enum name.
+		 * @return The security
+		 */
 		public static Security fromName(final String name) {
 			String realName;
 			Security ret;
 			if (name.lastIndexOf('.') > 0) {
-				realName = name.substring(name.lastIndexOf('.') + 1); // Take only what comes after the last dot
+				// Take only what comes after the last dot
+				realName = name.substring(name.lastIndexOf('.') + 1); 
 			} else {
 				realName = name;
 			}
@@ -82,17 +105,12 @@ public @interface Rest {
 	}
 	
 	/**
-	 * The uri for entity
-	 * 
-	 * @return (optional, defaults to entity name) The path route to use for entity.
-	 * 
+	 * The uri for entity.
 	 */
 	String uri() default "";
 	
 	/**
-	 * The security level
-	 * 
-	 * @return (optional, defaults to none) Security level to use.
+	 * The security level.
 	 */
 	Security security() default Security.NONE;
 }

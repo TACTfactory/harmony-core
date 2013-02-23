@@ -19,24 +19,34 @@ import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
+/**
+ * Command class for rest bundle.
+ */
 @PluginImplementation
 public class RestCommand extends BaseCommand {
 	
 	//bundle name
+	/** Bundle name. */
 	public static final String BUNDLE = "rest";
+	/** Generation subject. */
 	public static final String SUBJECT = "generate";
 
 	//actions
+	/** Adapters action. */
 	public static final String ACTION_ADAPTERS = "adapters";
 
 	//commands
-	public static final String GENERATE_ADAPTERS	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ADAPTERS;
+	/** Command: REST:GENERATE:ADAPTERS.*/
+	public static final String GENERATE_ADAPTERS	= 
+			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ADAPTERS;
 
 	@Override
-	public void execute(final String action, final String[] args, final String option) {
+	public final void execute(final String action,
+			final String[] args,
+			final String option) {
 		ConsoleUtils.display("> Adapters Generator");
 
-		this.commandArgs = Console.parseCommandArgs(args);
+		this.setCommandArgs(Console.parseCommandArgs(args));
 		if (action.equals(GENERATE_ADAPTERS)) {
 			try {
 				this.generateAdapters();
@@ -48,9 +58,9 @@ public class RestCommand extends BaseCommand {
 	}
 	
 	/**
-	 * Generate java code files from parsed Entities
+	 * Generate java code files from parsed Entities.
 	 */
-	protected void generateAdapters() {
+	protected final void generateAdapters() {
 
 		this.generateMetas();
 		if (ApplicationMetadata.INSTANCE.entities != null) {
@@ -64,23 +74,24 @@ public class RestCommand extends BaseCommand {
 	}
 	
 	@Override
-	public void generateMetas() {
+	public final void generateMetas() {
 		this.registerParser(new RestParser());
 		super.generateMetas();
-		new RestCompletor().generateApplicationRestMetadata(ApplicationMetadata.INSTANCE);
+		new RestCompletor().generateApplicationRestMetadata(
+				ApplicationMetadata.INSTANCE);
 	}
 	
 	
 
 	@Override
-	public void summary() {
+	public final void summary() {
 		ConsoleUtils.display("\n> REST \n" 
 				+ "\t" + GENERATE_ADAPTERS + "\t => Generate Adapters");
 		
 	}
 
 	@Override
-	public boolean isAvailableCommand(final String command) {
+	public final boolean isAvailableCommand(final String command) {
 		return command.equals(GENERATE_ADAPTERS);
 	}
 

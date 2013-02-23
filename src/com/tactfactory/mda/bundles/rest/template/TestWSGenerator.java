@@ -15,20 +15,36 @@ import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
+/**
+ * WebService tests generator.
+ *
+ */
 public class TestWSGenerator extends BaseGenerator {
+	/** Local name space. */
 	private String localNameSpace;
 	
+	/**
+	 * Constructor. 
+	 * @param adapter The adapter to use.
+	 * @throws Exception 
+	 */
 	public TestWSGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
-	public void generateAll() {
+	/**
+	 * Generate all tests.
+	 */
+	public final void generateAll() {
 		ConsoleUtils.display(">> Generate Rest test...");
 		
 		for (final ClassMetadata cm : this.appMetas.entities.values()) {
-			if (cm.options.containsKey("rest") && !cm.internal && !cm.fields.isEmpty()) {
-				this.localNameSpace = this.adapter.getNameSpace(cm, this.adapter.getTest());
+			if (cm.options.containsKey("rest") 
+					&& !cm.internal 
+					&& !cm.fields.isEmpty()) {
+				this.localNameSpace = 
+						this.adapter.getNameSpace(cm, this.adapter.getTest());
 				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
 				this.generate();
 			}
@@ -36,11 +52,12 @@ public class TestWSGenerator extends BaseGenerator {
 	}
 	
 	/**  
-	 * Generate Rest Test  
+	 * Generate Rest Test. 
 	 */ 
 	private void generate() {
 		// Info
-				ConsoleUtils.display(">>> Generate Rest test for " +  this.datamodel.get(TagConstant.CURRENT_ENTITY));
+		ConsoleUtils.display(">>> Generate Rest test for " 
+			+  this.datamodel.get(TagConstant.CURRENT_ENTITY));
 		
 		try {			
 			this.makeSourceTest(
@@ -59,17 +76,24 @@ public class TestWSGenerator extends BaseGenerator {
 	}
 	
 	/** 
-	 * Make Java Source Code
+	 * Make Java Source Code.
 	 * 
-	 * @param template Template path file. <br/>For list activity is "TemplateListActivity.java"
-	 * @param filename
+	 * @param template Template path file. 
+	 * <br/>For list activity is "TemplateListActivity.java"
+	 * @param filename Destination file name.
+	 * @param override True if must overwrite file.
 	 */
-	private void makeSourceTest(final String template, final String filename, final boolean override) {
+	private void makeSourceTest(final String template, 
+			final String filename, 
+			final boolean override) {
 		final String fullFilePath = String.format("%s%s/%s",
 						this.adapter.getTestPath(),
-						PackageUtils.extractPath(String.format(
-								"%s/%s", this.adapter.getSource(), this.localNameSpace)).toLowerCase(),
-						String.format(filename, this.datamodel.get(TagConstant.CURRENT_ENTITY)));
+						PackageUtils.extractPath(String.format("%s/%s",
+								this.adapter.getSource(), 
+								this.localNameSpace)).toLowerCase(),
+						String.format(filename,
+								this.datamodel.get(
+										TagConstant.CURRENT_ENTITY)));
 		
 		final String fullTemplatePath = String.format("%s%s",
 					this.adapter.getTemplateTestsPath(),

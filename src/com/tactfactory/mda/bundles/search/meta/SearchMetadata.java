@@ -13,10 +13,16 @@ import java.util.HashMap;
 import com.tactfactory.mda.meta.BaseMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 
-public class SearchMetadata extends BaseMetadata {	
+/**
+ * Search Bundle Metadata.
+ */
+public class SearchMetadata extends BaseMetadata {
+	/** Bundle name. */
 	private static final String NAME = "search";
 	
-	
+	/**
+	 * Constructor.
+	 */
 	public SearchMetadata() {
 		super();
 		this.name = NAME;
@@ -24,7 +30,7 @@ public class SearchMetadata extends BaseMetadata {
 	
 	
 	@Override
-	public HashMap<String, Object> toMap(final BaseAdapter adapter) {
+	public final HashMap<String, Object> toMap(final BaseAdapter adapter) {
 		final HashMap<String, Object> ret = new HashMap<String, Object>();
 		
 		return ret;

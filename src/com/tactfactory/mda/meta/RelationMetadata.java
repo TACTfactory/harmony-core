@@ -16,32 +16,33 @@ import java.util.Map;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
-/** Entity relation Metadata*/
+/** Entity relation Metadata. */
 public class RelationMetadata extends BaseMetadata {
 
-	/** The type of relation */
+	/** The type of relation. */
 	public String type;
 	
-	/** The entity's field which will be used for the relation*/
+	/** The entity's field which will be used for the relation. */
 	public String field;
 	
-	/** The related entity */
+	/** The related entity. */
 	public String entityRef;
 	
-	/** The related entity's field which will be used for the relation*/
+	/** The related entity's field which will be used for the relation. */
 	public List<String> fieldRef = new ArrayList<String>();
 
-	/** Inversed by (in case of OneToMany)*/
+	/** Inversed by (in case of OneToMany). */
 	public String mappedBy;
 	
-	/** Inversed by (in case of ManyToOne)*/
+	/** Inversed by (in case of ManyToOne). */
 	public String inversedBy;
 
-	/** Name of the join table used to join ManyToMany relations*/
+	/** Name of the join table used to join ManyToMany relations. */
 	public String joinTable;
 	
 	/**
-	 * Transform the relation to a field of map of strings
+	 * Transform the relation to a field of map of strings.
+	 * @param adapter The adapter to use.
 	 * @return the generated HashMap
 	 */
 	@Override

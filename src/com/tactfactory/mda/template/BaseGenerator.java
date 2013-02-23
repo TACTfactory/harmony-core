@@ -24,31 +24,49 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
+/**
+ * Base Generator.
+ */
 public abstract class BaseGenerator {
-	protected ApplicationMetadata appMetas;	// Meta-models
-	protected BaseAdapter adapter;			// Platform adapter
+	// Meta-models
+	/** The application metadata. */
+	protected ApplicationMetadata appMetas;	
+	
+	// Platform adapter
+	/** The used adapter. */
+	protected BaseAdapter adapter;
+	/** The datamodel. */
 	protected Map<String, Object> datamodel;
 	
-	protected Configuration cfg = new Configuration();	// Config
+	// Config
+	/** The freemarker configuration. */
+	protected Configuration cfg = new Configuration();	
 
-	public BaseGenerator(final BaseAdapter adapter) throws Exception {
-		if (adapter == null) {
+	/**
+	 * Constructor.
+	 * @param adapt The adapter to use
+	 * @throws Exception 
+	 */
+	public BaseGenerator(final BaseAdapter adapt) throws Exception {
+		if (adapt == null) {
 			throw new Exception("No adapter define.");
 		}
 		
-		this.appMetas		= ApplicationMetadata.INSTANCE;	// FIXME Clone object tree
-		this.adapter	= adapter;
+		// FIXME Clone object tree
+		this.appMetas		= ApplicationMetadata.INSTANCE;	
+		this.adapter	= adapt;
 		
 		this.cfg.setDirectoryForTemplateLoading(new File(Harmony.PATH_BASE));
 	}
 	
 	/** 
-	 * Make Java Source Code
+	 * Make Java Source Code.
 	 * 
 	 * @param templatePath Template path file. 
 	 * 		For list activity is "TemplateListActivity.java"
-	 * @param generatePath
-	 * @param override
+	 * @param generatePath The destination file path
+	 * @param override True for recreating the file. 
+	 * 			False for not writing anything if the file already exists. 
 	 */
 	protected void makeSource(final String templatePath,
 			final String generatePath,
@@ -58,13 +76,17 @@ public abstract class BaseGenerator {
 			
 			try {
 				// Debug Log
-				ConsoleUtils.displayDebug("Generate Source : " + generateFile.getPath()); 
+				ConsoleUtils.displayDebug("Generate Source : " 
+						+ generateFile.getPath()); 
 				
 				// Create
 				final Template tpl = this.cfg.getTemplate(templatePath);
 				
 				// Write and close
-				final OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(generateFile), FileUtils.DEFAULT_ENCODING);
+				final OutputStreamWriter output =
+						new OutputStreamWriter(
+								new FileOutputStream(generateFile), 
+								FileUtils.DEFAULT_ENCODING);
 				tpl.process(this.datamodel, output);
 				output.flush();
 				output.close();
@@ -80,25 +102,30 @@ public abstract class BaseGenerator {
 	}
 	
 	/** 
-	 * Append Source Code to existing file
+	 * Append Source Code to existing file.
 	 * 
 	 * @param templatePath Template path file. 
 	 * 			For list activity is "TemplateListActivity.java"
-	 * @param generatePath
+	 * @param generatePath Destination file.
 	 */
-	protected void appendSource(final String templatePath, final String generatePath) {
+	protected void appendSource(final String templatePath, 
+			final String generatePath) {
 		if (FileUtils.exists(generatePath)) {
 			final File generateFile = new File(generatePath);
 			
 			try {
 				// Debug Log
-				ConsoleUtils.displayDebug("Append Source : " + generateFile.getPath()); 
+				ConsoleUtils.displayDebug("Append Source : "
+						+ generateFile.getPath()); 
 				
 				// Create
 				final Template tpl = this.cfg.getTemplate(templatePath);
 				
 				// Write and close
-				final OutputStreamWriter output = new OutputStreamWriter(new FileOutputStream(generateFile, true), FileUtils.DEFAULT_ENCODING);
+				final OutputStreamWriter output = 
+						new OutputStreamWriter(
+								new FileOutputStream(generateFile, true),
+								FileUtils.DEFAULT_ENCODING);
 				tpl.process(this.datamodel, output);
 				output.flush();
 				output.close();
@@ -115,23 +142,33 @@ public abstract class BaseGenerator {
 	
 	
 	/**
-	 * Update Libs
+	 * Update Libs.
+	 * @param libName The library name
 	 */
 	protected void updateLibrary(final String libName) {
-		final File dest = new File(String.format("%s/%s", this.adapter.getLibsPath(), libName));
+		final File dest = new File(
+				String.format("%s/%s", this.adapter.getLibsPath(), libName));
 		
 		if (!dest.exists()) {
 			FileUtils.copyfile(
-					new File(String.format("%s/%s", Harmony.PATH_LIBS, libName)),
+					new File(String.format("%s/%s", 
+							Harmony.PATH_LIBS, libName)),
 					dest);
 		}
 	}
 	
 	/**
-	 * Generate Utils
+	 * Generate Utils.
+	 * @param utilName The utility class name
 	 */
 	protected void updateUtil(final String utilName) {		
-		this.makeSource(String.format("%s%s", this.adapter.getTemplateUtilPath(), utilName), 
-				String.format("%s%s", this.adapter.getUtilPath(), utilName), false);
+		this.makeSource(
+				String.format("%s%s", 
+						this.adapter.getTemplateUtilPath(), 
+						utilName), 
+				String.format("%s%s", 
+						this.adapter.getUtilPath(),
+						utilName), 
+				false);
 	}
 }

@@ -18,31 +18,58 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.ImageUtils;
 
-/** Google Android Adapter of project structure */
+/** Google Android Adapter of project structure. */
 public final class AndroidAdapter extends BaseAdapter {
+	/** Ratio for HD images resizing. */
 	private static final float HD_RATIO = 0.75f;
+	
+	/** Ratio for MD images resizing. */
 	private static final float MD_RATIO = 0.50f;
+	
+	/** Ratio for LD images resizing. */
 	private static final float LD_RATIO = 0.375f;
 	
+	/** Float type. */
 	private static final String FLOAT = "float";
+	
+	/** String type. */
 	private static final String STR = "String";
+	
+	/** Int type. */
 	private static final String INT = "int";
+	
+	/** DateTime type. */
 	private static final String DATETIME = "DateTime";
+	
+	/**
+	 * FilenameFilter for images.
+	 */
+	private final FilenameFilter filter = new FilenameFilter() {
+	    @Override
+		public boolean accept(final File dir, final String name) {
+	        return	name.endsWith(".png") 
+	        		|| name.endsWith(".jpg");
+	    }
+	};
 
+	/**
+	 * Constructor.
+	 */
 	public AndroidAdapter() {
 		super();
 		// Structure
-		this.project	= "project";
-		this.platform	= "android";
-		this.resource 	= "res";
-		this.assets 	= "assets";
-		this.source 	= "src";
-		this.libs		= "libs";
-		this.test		= "test";
-		this.testLibs	= "libs";
-		this.harmony 	= "harmony";
-		this.widget		= "widget";
-		this.util		= "util";
+		this.setProject("project");
+		this.setPlatform("android");
+		this.setResource("res");
+		this.setAssets("assets");
+		this.setSource("src");
+		this.setLibs("libs");
+		this.setTest("test");
+		this.setTestLibs("libs");
+		this.setHarmony("harmony");
+		this.setWidget("widget");
+		this.setUtil("util");
+		this.setMenu("menu");
 		
 		// MVC
 		//this.model 		= "entity";
@@ -52,17 +79,12 @@ public final class AndroidAdapter extends BaseAdapter {
 		//this.provider		= "provider";
 		
 		// File
-		this.manifest 	= "AndroidManifest.xml";
-		this.strings	= "strings.xml";
-		this.home		= "HomeActivity.java";
-		this.configs	= "configs.xml";
+		this.setManifest("AndroidManifest.xml");
+		this.setStrings("strings.xml");
+		this.setHome("HomeActivity.java");
+		this.setConfigs("configs.xml");
 	}
-
-	/** 
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#
-	 * getNameSpaceEntity(com.tactfactory.mda.orm.ClassMetadata,
-	 * 			 java.lang.String)
-	 */
+ 
 	@Override
 	public String getNameSpaceEntity(final ClassMetadata cm, 
 			final String type) {
@@ -148,13 +170,7 @@ public final class AndroidAdapter extends BaseAdapter {
 		return ret;
 	}
 	
-	private final FilenameFilter filter = new FilenameFilter() {
-	    @Override
-		public boolean accept(final File dir, final String name) {
-	        return	name.endsWith(".png") 
-	        		|| name.endsWith(".jpg");
-	    }
-	};
+
 	
 	@Override
 	public void resizeImage() {

@@ -4,7 +4,7 @@ package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
 
-import ${project_namespace}.HarmonyFragmentActivity;
+import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 
 import android.os.Bundle;
 

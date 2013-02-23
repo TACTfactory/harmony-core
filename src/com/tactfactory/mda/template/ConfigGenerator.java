@@ -28,15 +28,25 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 
+/**
+ * Configuration generator.
+ *
+ */
 public class ConfigGenerator extends BaseGenerator {
+	/** Constant for String "name". */
 	private static final String NAME = "name";
 
+	/**
+	 * Constructor.
+	 * @param adapter The adapter to use
+	 * @throws Exception 
+	 */
 	public ConfigGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 	}
 
 	/**
-	 * Update XML Strings
+	 * Update XML Strings.
 	 */
 	public final void generateConfigXml() {		
 		ConsoleUtils.display(">> Generate config string...");

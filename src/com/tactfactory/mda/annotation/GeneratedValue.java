@@ -16,15 +16,24 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
+/**
+ * Interface for generated value.
+ *
+ */
 @Documented
 @Retention(SOURCE)
 @Target(FIELD)
 @Inherited
 public @interface GeneratedValue {
+	/** Auto mode. */
 	String MODE_AUTO = "AUTO";
+	/** No generated value. */
 	String MODE_NONE = "NONE";
+	/** Sequence mode. */
 	String MODE_SEQUENCE = "SEQUENCE";
+	/** Identity mode. */
 	String MODE_IDENTITY = "IDENTITY";
 	
+	/** Used strategy. Defaults to Auto mode. */
 	String strategy() default MODE_AUTO;
 }

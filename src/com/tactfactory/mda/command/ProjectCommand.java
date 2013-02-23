@@ -25,7 +25,7 @@ import com.tactfactory.mda.template.ProjectGenerator;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
- * Project Structure Generator
+ * Project Structure Generator.
  * 
  * can :
  * <ul>
@@ -36,71 +36,84 @@ import com.tactfactory.mda.utils.ConsoleUtils;
  */
 @PluginImplementation
 public class ProjectCommand extends BaseCommand {
-	/** Bundle name */
+	/** Bundle name. */
 	public static final String BUNDLE 		= "project";
 	
+	/** Error Message. */
 	private static final String ERROR_MSG = 
 			"Please check your file browser or file editor and try again...";
 
 	// Actions
+	/** Init action. */
 	public static final String ACTION_INIT 	= "init";
+	/** Remove action. */
 	public static final String ACTION_REMOVE 	= "remove";
 
 	// Commands
+	/** Command : PROJECT:INIT:ANDROID. */
 	public static final String INIT_ANDROID 	= BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_INIT 
 								+ SEPARATOR 
 								+ TargetPlatform.ANDROID.toLowerString();
 	
+	/** Command : PROJECT:INIT:IOS. */
 	public static final String INIT_IOS 		= BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_INIT 
 								+ SEPARATOR 
 								+ TargetPlatform.IPHONE.toLowerString();
 	
+	/** Command : PROJECT:INIT:RIM. */
 	public static final String INIT_RIM 		= BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_INIT 
 								+ SEPARATOR 
 								+ TargetPlatform.RIM.toLowerString();
 	
+	/** Command : PROJECT:INIT:WINPHONE. */
 	public static final String INIT_WINPHONE 	= BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_INIT 
 								+ SEPARATOR 
 								+ TargetPlatform.WINPHONE.toLowerString();
 	
+	/** Command : PROJECT:INIT:ALL. */
 	public static final String INIT_ALL		= BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_INIT 
 								+ SEPARATOR 
 								+ TargetPlatform.ALL.toLowerString();
 
+	/** Command : PROJECT:REMOVE:ANDROID. */
 	public static final String REMOVE_ANDROID = BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_REMOVE 
 								+ SEPARATOR 
 								+ TargetPlatform.ANDROID.toLowerString();
 	
+	/** Command : PROJECT:REMOVE:IOS. */
 	public static final String REMOVE_IOS 	= BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_REMOVE 
 								+ SEPARATOR 
 								+ TargetPlatform.IPHONE.toLowerString();
 	
+	/** Command : PROJECT:REMOVE:RIM. */
 	public static final String REMOVE_RIM 	= BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_REMOVE 
 								+ SEPARATOR 
 								+ TargetPlatform.RIM.toLowerString();
 	
+	/** Command : PROJECT:REMOVE:WINPHONE. */
 	public static final String REMOVE_WINPHONE = BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_REMOVE 
 								+ SEPARATOR 
 								+ TargetPlatform.WINPHONE.toLowerString();
 	
+	/** Command : PROJECT:REMOVE:ALL. */
 	public static final String REMOVE_ALL 	= BUNDLE 
 								+ SEPARATOR 
 								+ ACTION_REMOVE 
@@ -108,16 +121,23 @@ public class ProjectCommand extends BaseCommand {
 								+ TargetPlatform.ALL.toLowerString();
 
 	// Internal	
+	/** Android adapter. */
 	private final BaseAdapter adapterAndroid = new AndroidAdapter();
+	/** iOS adapter. */
 	private final BaseAdapter adapterIOS = new IosAdapter();
+	/** RIM adapter. */
 	private final BaseAdapter adapterRIM = new RimAdapter();
+	/** Windows Phone adapter. */
 	private final BaseAdapter adapterWinPhone = new WinphoneAdapter();
 
+	/** Has user confirmed ? */
 	private boolean userHasConfirmed = false;
+	
+	/** Is project initialized ? */
 	private boolean isProjectInit = false;
 
 	/**
-	 * Init Project Parameters (project name, namespace, android sdk path)
+	 * Init Project Parameters (project name, namespace, android sdk path).
 	 */
 	public final void initProjectParam() {
 		if (!this.isProjectInit) {
@@ -125,28 +145,28 @@ public class ProjectCommand extends BaseCommand {
 				ConsoleUtils.display(">> Project Parameters");
 
 				//Project Name
-				if (!this.commandArgs.containsKey("name")) {
+				if (!this.getCommandArgs().containsKey("name")) {
 					Harmony.initProjectName();
 				} else {
 					ApplicationMetadata.INSTANCE.name =
-							this.commandArgs.get("name");
+							this.getCommandArgs().get("name");
 				}
 					
 				//Project NameSpace
-				if (!this.commandArgs.containsKey("namespace")) {
+				if (!this.getCommandArgs().containsKey("namespace")) {
 					Harmony.initProjectNameSpace();
 				} else {
 					ApplicationMetadata.INSTANCE.projectNameSpace = 
-							this.commandArgs.get("namespace")
+							this.getCommandArgs().get("namespace")
 								.replaceAll("\\.", "/");
 				}
 					
 				//Android sdk path
-				if (!this.commandArgs.containsKey("androidsdk")) {
+				if (!this.getCommandArgs().containsKey("androidsdk")) {
 					Harmony.initProjectAndroidSdkPath();
 				} else {
 					ApplicationMetadata.androidSdkPath =
-							this.commandArgs.get("androidsdk");
+							this.getCommandArgs().get("androidsdk");
 				}
 					
 				ConsoleUtils.displayDebug("Project Name: "	 
@@ -168,7 +188,7 @@ public class ProjectCommand extends BaseCommand {
 						ApplicationMetadata.INSTANCE.name 				= "";
 						ApplicationMetadata.INSTANCE.projectNameSpace 	= "";
 						ApplicationMetadata.androidSdkPath 			= "";
-						this.commandArgs.clear();
+						this.getCommandArgs().clear();
 					}
 				} else {
 					this.userHasConfirmed = true;
@@ -181,7 +201,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Initialize Android Project folders and files
+	 * Initialize Android Project folders and files.
 	 * @return success of Android project initialization
 	 */
 	public final boolean initAndroid() {
@@ -209,7 +229,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Initialize IOS Project folders and files
+	 * Initialize IOS Project folders and files.
 	 * @return success of IOS project initialization
 	 */
 	public final boolean initIOS() {
@@ -234,7 +254,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Initialize RIM Project folders and files
+	 * Initialize RIM Project folders and files.
 	 * @return success of RIM project initialization
 	 */
 	public final boolean initRIM() {
@@ -259,7 +279,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Initialize Windows Phone Project folders and files
+	 * Initialize Windows Phone Project folders and files.
 	 * @return success of Windows Phone project initialization
 	 */
 	public final boolean initWinPhone() {
@@ -284,7 +304,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Initialize all project platforms
+	 * Initialize all project platforms.
 	 */
 	public final void initAll() {
 		ConsoleUtils.display("> Init All Projects");
@@ -297,7 +317,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Remove Android project folder
+	 * Remove Android project folder.
 	 */
 	public final void removeAndroid() {
 		if (!this.userHasConfirmed) {
@@ -322,7 +342,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Remove IOS project folder
+	 * Remove IOS project folder.
 	 */
 	public final void removeIOS() {
 		if (!this.userHasConfirmed) {
@@ -345,7 +365,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Remove RIM project folder
+	 * Remove RIM project folder.
 	 */
 	public final void removeRIM() {
 		if (!this.userHasConfirmed) {
@@ -371,7 +391,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Remove Windows Phone project folder
+	 * Remove Windows Phone project folder.
 	 */
 	public final void removeWinPhone() {
 		if (!this.userHasConfirmed) {
@@ -393,7 +413,7 @@ public class ProjectCommand extends BaseCommand {
 	}
 
 	/**
-	 * Remove all project platforms
+	 * Remove all project platforms.
 	 */
 	public final void removeAll() {
 		if (!this.userHasConfirmed) {
@@ -417,8 +437,8 @@ public class ProjectCommand extends BaseCommand {
 					new ProjectGenerator(this.adapterWinPhone).removeProject();
 			if (!removedAndroid
 				|| !removedIOS
-				|| ! removedRIM
-				|| !removedWin ) {
+				|| !removedRIM
+				|| !removedWin) {
 				ConsoleUtils.display(ERROR_MSG);
 			}
 		} catch (final Exception e) {
@@ -428,7 +448,6 @@ public class ProjectCommand extends BaseCommand {
 		}
 	}
 
-	/** @see BaseCommand#summary() */
 	@Override
 	public final void summary() {
 		ConsoleUtils.display("\n> PROJECT \n"  
@@ -463,12 +482,11 @@ public class ProjectCommand extends BaseCommand {
 				+ "\t => Remove All project directories\n");
 	}
 
-	/** @see BaseCommand#execute(String, String[], String) */
 	@Override
 	public final void execute(final String action,
 			final String[] args, 
 			final String option) {
-		this.commandArgs = Console.parseCommandArgs(args);
+		this.setCommandArgs(Console.parseCommandArgs(args));
 		
 		if (action.equals(INIT_ANDROID)) {
 			this.initAndroid();
@@ -511,7 +529,6 @@ public class ProjectCommand extends BaseCommand {
 		}
 	}
 
-	/** @see BaseCommand#isAvailableCommand(String) */
 	@Override
 	@Capabilities
 	public final boolean isAvailableCommand(final String command) {

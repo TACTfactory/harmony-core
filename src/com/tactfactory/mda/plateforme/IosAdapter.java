@@ -18,29 +18,22 @@ public final class IosAdapter extends BaseAdapter {
 	 */
 	public IosAdapter()	 {
 		super();
-		this.project	= "project";
-		this.platform	= "ios";
-		this.resource 	= "res";
-		this.source 	= "src";
+		this.setProject("project");
+		this.setPlatform("ios");
+		this.setResource("res");
+		this.setSource("src");
 	}
 
-
-	/**
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#
-	 * getNameSpace(com.tactfactory.mda.orm.ClassMetadata, java.lang.String)
-	 */
+ 
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
-	/** 
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#
-	 * getNameSpaceEntity(com.tactfactory.mda.orm.ClassMetadata, java.lang.String)
-	 */
 	@Override
-	public String getNameSpaceEntity(final ClassMetadata cm, final String type) {
+	public String getNameSpaceEntity(final ClassMetadata cm,
+			final String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}

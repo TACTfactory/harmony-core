@@ -1,4 +1,4 @@
-/**
+/** 
  * This file is part of the Harmony package.
  *
  * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
@@ -14,22 +14,38 @@ import java.util.HashMap;
 import com.google.common.base.Strings;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
-/** Harmony console class*/
+/** Harmony console class. */
 public abstract class Console extends Harmony {
+	/** NB Required commands constant. */
 	private static final int REQUIRED_COMMANDS = 3;
+	
+	/** Harmony version. */
 	protected static final String HARMONY_VERSION = 
 			"Harmony version " + Harmony.VERSION + "\n";
+	
+	/** Argument prefix. */
 	protected static final String ARGUMENT_PREFIX = "--";
+	
+	/** Short argument prefix. */
 	protected static final String ARGUMENT_PREFIX_SHORT = "-";
+	
+	/** Argument affectation. */
 	protected static final String ARGUMENT_AFFECT = "=";
 	
+	/** Possible options. */
 	protected static enum Option {
 		//name		Internal	Short	Help message
+		/** Help command. */
 		HELP		("help",	"h",	"Display this help message."),
+		/** Quiet command. */
 		QUIET		("quiet",	"q",	"Do not output any message."),
+		/** Verbose command. */
 		VERBOSE		("verbose",	"v",	"Increase verbosity of messages."),
+		/** Show version Command. */
 		VERSION		("version",	"V",	"Display this application version."),
+		/** ANSI command. */
 		ANSI		("ansi",	null,	"Force ANSI output."),
+		/** No-ANSI command. */
 		NO_ANSI		("no-ansi",	null,	"Disable ANSI output.");
 		
 		// "\t--no-interaction -n Do not ask any interactive question.\n" + 
@@ -37,16 +53,27 @@ public abstract class Console extends Harmony {
 		// "\t--env\t\t -e The Environment name.\n" + 
 		// "\t--no-debug \t    Switches off debug mode.\n\n"
 		
+		/** Option full name. */
 		private String fullName;
+		
+		/** Option short name. */
 		private String shortName;
+		
+		/** Option description. */
 		private String description;
 		
-		private Option(final String fullName, 
-				final String shortName, 
-				final String description) {
-			this.fullName = fullName;
-			this.shortName = shortName;
-			this.description = description;
+		/**
+		 * Constructor.
+		 * @param fName The option full name
+		 * @param sName The option short name
+		 * @param desc The option description
+		 */
+		private Option(final String fName, 
+				final String sName, 
+				final String desc) {
+			this.fullName = fName;
+			this.shortName = sName;
+			this.description = desc;
 		}
 		
 		@Override
@@ -69,10 +96,20 @@ public abstract class Console extends Harmony {
 			return result.toString();
 		}
 	
+		/**
+		 * Check if given command exists.
+		 * @param value The name of the command
+		 * @return True if it exists
+		 */
 		public boolean equal(final String value) {
 			return value.equals(this.shortName) || value.equals(this.fullName);
 		}
 		
+		/**
+		 * Get option from its full name.
+		 * @param value The full name
+		 * @return The option
+		 */
 		public static Option fromFullName(final String value) {
 			Option ret = null;
 			if (value != null) {
@@ -86,6 +123,11 @@ public abstract class Console extends Harmony {
 			return ret;
 		}
 		
+		/**
+		 * Get option from its short name.
+		 * @param value The short name
+		 * @return The option
+		 */
 		public static Option fromShortName(final String value) {
 			Option ret = null;
 			if (value != null) {
@@ -100,8 +142,8 @@ public abstract class Console extends Harmony {
 		}
 	}
 	
-	/** Extract command line parameters for java core
-	 * @param args
+	/** Extract command line parameters for java core.
+	 * @param args The arguments
 	 * @throws Exception 
 	 */
 	public static void main(final String[] args) throws Exception {
@@ -143,10 +185,10 @@ public abstract class Console extends Harmony {
 		}
 	}
 
-	/**
-	 * @param args
-	 * @param commandArgs
-	 * @return
+	/** Extract command line parameter at given position for java core.
+	 * @param args The arguments
+	 * @param currentPosition The argument position
+	 * @return the argument
 	 */
 	private static String[] extractCommandArgument(final String[] args,
 				final int currentPosition) {
@@ -163,10 +205,10 @@ public abstract class Console extends Harmony {
 	}
 
 	/**
-	 * @param args
-	 * @param command
-	 * @param currentPosition
-	 * @return
+	 * Extract the command from the given args.
+	 * @param args The arguments
+	 * @param currentPosition The current position
+	 * @return The command
 	 */
 	private static String extractCommand(final String[] args,
 			final int currentPosition) {
@@ -184,7 +226,9 @@ public abstract class Console extends Harmony {
 	}
 
 	/**
-	 * @param args
+	 * Extract the option from the given arguments.
+	 * @param args The arguments
+	 * @return The new current position
 	 */
 	private static int extractOptions(final String[] args) {
 		int currentPosition = 0;
@@ -235,7 +279,9 @@ public abstract class Console extends Harmony {
 		return currentPosition;
 	}
 	
-	/** Constructor */
+	/** Constructor. 
+	 * @throws Exception Bootstrap failure
+	 */
 	public Console() throws Exception {
 		super();
 		// Extend bootstrap
@@ -243,7 +289,7 @@ public abstract class Console extends Harmony {
 	}
 	
 	/**
-	 * Extract commandArgs and put them in an HashMap
+	 * Extract commandArgs and put them in an HashMap.
 	 * 
 	 * @param args String array of command arguments with their identifier
 	 * @return HashMap<String, String> arguments

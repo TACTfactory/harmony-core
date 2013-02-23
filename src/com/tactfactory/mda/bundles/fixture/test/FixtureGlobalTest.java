@@ -25,68 +25,81 @@ import com.tactfactory.mda.test.CommonTest;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 
+/**
+ * Test class for Fixtures generation and loading.
+ */
 public class FixtureGlobalTest extends CommonTest {
+	/** Fixture path. */
+	private static final String FIXTURE_PATH = 
+			"android/src/com/tactfactory/mda/test/demact/fixture/";
 	
 	/**
-	 * @throws java.lang.Exception
+	 * @throws java.lang.Exception 
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {
 		CommonTest.setUpBefore();
 		initAll();
 	}
-	
-	/**
-	 * @throws java.lang.Exception
-	 */
+
 	@Before
 	@Override
-	public void setUp() throws Exception {
+	public final void setUp() throws Exception {
 		super.setUp();
 	}
 
-	/**
-	 * @throws java.lang.Exception
-	 */
 	@After
 	@Override
-	public void tearDown() throws Exception {
+	public final void tearDown() throws Exception {
 		super.tearDown();
 	}
 	
+	/**
+	 * Initialize the tests.
+	 */
 	private static void initAll() {
 		System.out.println("\nTest Orm generate entity");
-		System.out.println("###############################################################################");
+		System.out.println("######################################" 
+				+ "#########################################");
 		
 		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
-		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
-		getHarmony().findAndExecute(OrmCommand.GENERATE_CRUD, new String[] {}, null);
-		getHarmony().findAndExecute(RestCommand.GENERATE_ADAPTERS, new String[] {}, null);
-		getHarmony().findAndExecute(SyncCommand.GENERATE_SERVICE, new String[] {}, null);
-		getHarmony().findAndExecute(FixtureCommand.FIXTURE_INIT, new String[] {"--forma =xml"}, null);
+		getHarmony().findAndExecute(
+				OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
+		getHarmony().findAndExecute(
+				OrmCommand.GENERATE_CRUD, new String[] {}, null);
+		getHarmony().findAndExecute(
+				RestCommand.GENERATE_ADAPTERS, new String[] {}, null);
+		getHarmony().findAndExecute(
+				SyncCommand.GENERATE_SERVICE, new String[] {}, null);
+		getHarmony().findAndExecute(
+				FixtureCommand.FIXTURE_INIT,
+				new String[] {"--format=xml"},
+				null);
 	}
 	
-	//@Test
-	public void all() {
-			
-	}
-	
+	/**
+	 * Tests if loaders are generated.
+	 */
 	@Test
-	public void hasFixtureLoaders() {
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/UserDataLoader.java");
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/CommentDataLoader.java");
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/PostDataLoader.java");
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/ViewComponentDataLoader.java");
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/FixtureBase.java");
-		CommonTest.hasFindFile("android/src/com/tactfactory/mda/test/demact/fixture/DataManager.java");
+	public final void hasFixtureLoaders() {
+		CommonTest.hasFindFile(FIXTURE_PATH + "UserDataLoader.java");
+		CommonTest.hasFindFile(FIXTURE_PATH + "CommentDataLoader.java");
+		CommonTest.hasFindFile(FIXTURE_PATH + "PostDataLoader.java");
+		CommonTest.hasFindFile(FIXTURE_PATH + "ViewComponentDataLoader.java");
+		CommonTest.hasFindFile(FIXTURE_PATH + "FixtureBase.java");
+		CommonTest.hasFindFile(FIXTURE_PATH + "DataManager.java");
 	}
 	
+	/**
+	 * Tests if XML Fixtures have really been loaded.
+	 */
 	@Test
-	public void hasFixturesXml() {
+	public final void hasFixturesXml() {
 		// Copy fixture files
 		copyFixturesXml();
-		CommonTest.getHarmony().findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[] {}, null);
+		CommonTest.getHarmony().findAndExecute(
+				FixtureCommand.FIXTURE_LOAD, new String[] {}, null);
 				
 		CommonTest.hasFindFile("android/assets/app/User.xml");
 		CommonTest.hasFindFile("android/assets/app/Comment.xml");
@@ -99,15 +112,21 @@ public class FixtureGlobalTest extends CommonTest {
 		CommonTest.hasFindFile("android/assets/test/ViewComponent.xml");
 	}
 	
+	/**
+	 * Tests if YML Fixtures have really been loaded.
+	 */
 	@Test
-	public void hasFixturesYml() {
+	public final void hasFixturesYml() {
 		//Purge & init
-		CommonTest.getHarmony().findAndExecute(FixtureCommand.FIXTURE_PURGE, new String[] {}, null);
-		CommonTest.getHarmony().findAndExecute(FixtureCommand.FIXTURE_INIT, new String[] {}, null);
+		CommonTest.getHarmony().findAndExecute(
+				FixtureCommand.FIXTURE_PURGE, new String[] {}, null);
+		CommonTest.getHarmony().findAndExecute(
+				FixtureCommand.FIXTURE_INIT, new String[] {}, null);
 		
 		// Copy fixture files
 		copyFixturesYml();
-		CommonTest.getHarmony().findAndExecute(FixtureCommand.FIXTURE_LOAD, new String[] {}, null);
+		CommonTest.getHarmony().findAndExecute(
+				FixtureCommand.FIXTURE_LOAD, new String[] {}, null);
 		
 		CommonTest.hasFindFile("android/assets/app/User.yml");
 		CommonTest.hasFindFile("android/assets/app/Comment.yml");
@@ -120,10 +139,17 @@ public class FixtureGlobalTest extends CommonTest {
 		CommonTest.hasFindFile("android/assets/test/ViewComponent.yml");
 	}
 
-	
-	protected static void copyFixturesXml() {
-		final String pathNameSpace = ApplicationMetadata.INSTANCE.projectNameSpace.replaceAll("\\.", "/");
-		final String srcDir = String.format("src/%s/%s/%s/", pathNameSpace, "fixture", "xml");
+	/**
+	 * Copy XML fixtures in test project.
+	 */
+	protected static final void copyFixturesXml() {
+		final String pathNameSpace = 
+				ApplicationMetadata.INSTANCE.projectNameSpace.replaceAll(
+						"\\.", "/");
+		final String srcDir = String.format("src/%s/%s/%s/",
+				pathNameSpace,
+				"fixture",
+				"xml");
 
 		String destDir = String.format("fixtures/app/");
 		System.out.println(destDir);
@@ -137,9 +163,17 @@ public class FixtureGlobalTest extends CommonTest {
 		}
 	}
 	
-	protected static void copyFixturesYml() {
-		final String pathNameSpace = ApplicationMetadata.INSTANCE.projectNameSpace.replaceAll("\\.", "/");
-		final String srcDir = String.format("src/%s/%s/%s/", pathNameSpace, "fixture", "yml");
+	/**
+	 * Copy YML fixtures in test project.
+	 */
+	protected static final void copyFixturesYml() {
+		final String pathNameSpace = 
+				ApplicationMetadata.INSTANCE.projectNameSpace.replaceAll(
+						"\\.", "/");
+		final String srcDir = String.format("src/%s/%s/%s/",
+				pathNameSpace,
+				"fixture",
+				"yml");
 
 		String destDir = String.format("fixtures/app/");
 		System.out.println(destDir);

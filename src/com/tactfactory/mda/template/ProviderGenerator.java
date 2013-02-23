@@ -31,10 +31,21 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
+/**
+ * The provider generator.
+ *
+ */
 public class ProviderGenerator extends BaseGenerator {
+	/** The local name space. */
 	private String localNameSpace;
+	/** The provider name. */
 	private String nameProvider;
 	
+	/**
+	 * Constructor.
+	 * @param adapter The adapter to use.
+	 * @throws Exception 
+	 */
 	public ProviderGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
@@ -52,12 +63,15 @@ public class ProviderGenerator extends BaseGenerator {
 		this.datamodel.put(TagConstant.LOCAL_NAMESPACE, this.localNameSpace);
 	}
 	
+	/**
+	 * Generate the provider.
+	 */
 	public final void generateProvider() {
 		try {
 			this.makeSourceProvider("TemplateProvider.java",
 					this.nameProvider + ".java");
 			
-			this.updateManifest(this.nameProvider);
+			this.updateManifest();
 			
 			TranslationMetadata.addDefaultTranslation(
 					"uri_not_supported", 
@@ -79,11 +93,11 @@ public class ProviderGenerator extends BaseGenerator {
 	}
 	
 	/** 
-	 * Make Java Source Code
+	 * Make Java Source Code.
 	 * 
 	 * @param template Template path file. 
 	 * <br/>For list activity is "TemplateListActivity.java"
-	 * @param filename
+	 * @param filename The destination file name
 	 */
 	private void makeSourceProvider(final String template, 
 			final String filename) {
@@ -101,15 +115,13 @@ public class ProviderGenerator extends BaseGenerator {
 		super.makeSource(fullTemplatePath, fullFilePath, false);
 	}
 
-	/**  Update Android Manifest
-	 * @param nameProvider 
-	 * 
-	 * @param classFile
+	/**  
+	 * Update Android Manifest. 
 	 */
-	private void updateManifest(final String nameProvider) {
+	private void updateManifest() {
 		final String pathRelatif = String.format("%s.%s",
 				this.localNameSpace, 
-				nameProvider);
+				this.nameProvider);
 
 		// Debug Log
 		ConsoleUtils.displayDebug("Update Manifest : " + pathRelatif);

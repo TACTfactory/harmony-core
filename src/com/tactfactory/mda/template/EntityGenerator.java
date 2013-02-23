@@ -1,4 +1,4 @@
-/**
+/** 
  * This file is part of the Harmony package.
  *
  * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
@@ -26,12 +26,24 @@ import com.tactfactory.mda.utils.FileUtils;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
+/**
+ * Entity Generator.
+ * Used to decorate or generate entities.
+ */
 public class EntityGenerator extends BaseGenerator {
+	/** remove HARD CODED String. */
 	private String getterTemplate = "itemGetter.java";
+	
+	/** remove HARD CODED String. */
 	private String setterTemplate = "itemSetter.java";
 	
+	/** Entities folder. */
 	private String entityFolder;
 	
+	/** Constructor.
+	 * @param adapter Adapter used by this generator
+	 * @throws Exception 
+	 */
 	public EntityGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 
@@ -73,7 +85,7 @@ public class EntityGenerator extends BaseGenerator {
 	
 	
 	/**
-	 * Implements serializable in the class if it doesn't already
+	 * Implements serializable in the class if it doesn't already.
 	 * @param fileString The stringbuffer containing the class java code
 	 * @param cm The Metadata containing the infos on the java class
 	 */
@@ -94,7 +106,7 @@ public class EntityGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Import serializable in the class if it doesn't already
+	 * Import serializable in the class if it doesn't already.
 	 * @param fileString The stringbuffer containing the class java code
 	 * @param cm The Metadata containing the infos on the java class
 	 */
@@ -116,7 +128,7 @@ public class EntityGenerator extends BaseGenerator {
 	
 	
 	/**
-	 * Generate the necessary getters and setters for the class
+	 * Generate the necessary getters and setters for the class.
 	 * @param fileString The stringbuffer containing the class java code
 	 * @param cm The Metadata containing the infos on the java class
 	 */
@@ -128,14 +140,24 @@ public class EntityGenerator extends BaseGenerator {
 			if (!f.internal) {
 				// Getter
 				if (!this.alreadyImplementsGet(f, cm)) { 
-					ConsoleUtils.displayDebug("Add implements getter of " + f.name + " => get" + CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_CAMEL, f.name));
+					ConsoleUtils.displayDebug("Add implements getter of " 
+							+ f.name 
+							+ " => get" 
+							+ CaseFormat.LOWER_CAMEL.to(
+									CaseFormat.UPPER_CAMEL,
+									f.name));
 					
 					this.generateMethod(fileString, f, this.getterTemplate);
 				}
 				
 				// Setter
 				if (!this.alreadyImplementsSet(f, cm)) {
-					ConsoleUtils.displayDebug("Add implements setter of " + f.name + " => set" + CaseFormat.UPPER_CAMEL.to(CaseFormat.UPPER_CAMEL, f.name));
+					ConsoleUtils.displayDebug("Add implements setter of " 
+							+ f.name 
+							+ " => set" 
+							+ CaseFormat.LOWER_CAMEL.to(
+									CaseFormat.UPPER_CAMEL,
+									f.name));
 					
 					this.generateMethod(fileString, f, this.setterTemplate);
 				}
@@ -145,7 +167,7 @@ public class EntityGenerator extends BaseGenerator {
 	
 	
 	/**
-	 * Generate a get or set method following the given template
+	 * Generate a get or set method following the given template.
 	 * @param fileString The stringbuffer containing the class java code
 	 * @param f The concerned field
 	 * @param templateName The template file name
@@ -179,8 +201,9 @@ public class EntityGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Check if the class implements the class Serializable
+	 * Check if the class implements the class Serializable.
 	 * @param cm The Metadata containing the infos on the java class
+	 * @return True if it already implements serializable
 	 */
 	protected final boolean alreadyImplementsSerializable(
 			final ClassMetadata cm) {
@@ -197,9 +220,10 @@ public class EntityGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Check if the class already has a getter for the given field
+	 * Check if the class already has a getter for the given field.
 	 * @param fm The Metadata of the field
 	 * @param cm The Metadata containing the infos on the java class
+	 * @return True if it already has getter for this field
 	 */
 	protected final boolean alreadyImplementsGet(final FieldMetadata fm,
 			final ClassMetadata cm) {
@@ -228,9 +252,10 @@ public class EntityGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Check if the class already has a setter for the given field
+	 * Check if the class already has a setter for the given field.
 	 * @param fm The Metadata of the field
 	 * @param cm The Metadata containing the infos on the java class
+	 * @return True if it already has setter for this field
 	 */
 	protected final boolean alreadyImplementsSet(final FieldMetadata fm, 
 			final ClassMetadata cm) {
@@ -257,8 +282,9 @@ public class EntityGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Check if the class already imports Serializable
+	 * Check if the class already imports Serializable.
 	 * @param cm The Metadata containing the infos on the java class
+	 * @return True if it already imports serializable
 	 */
 	protected final boolean alreadyImportsSerializable(final ClassMetadata cm) {
 		boolean ret = false;

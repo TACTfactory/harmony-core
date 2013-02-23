@@ -13,9 +13,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 /**
- * All tests related to Sync generation
- * @author gregg
- *
+ * All tests related to Sync generation.
  */
 @RunWith(Suite.class)
 @SuiteClasses({

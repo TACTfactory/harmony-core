@@ -13,9 +13,19 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
+/**
+ * SQLite Generator.
+ *
+ */
 public class SQLiteGenerator extends BaseGenerator {
+	/** Local name space. */
 	private String localNameSpace;
 
+	/**
+	 * Constructor.
+	 * @param adapter The adapter to use
+	 * @throws Exception 
+	 */
 	public SQLiteGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
@@ -25,7 +35,7 @@ public class SQLiteGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Generate Database Interface Source Code
+	 * Generate Database Interface Source Code.
 	 */
 	public final void generateDatabase() {
 		// Info
@@ -52,12 +62,10 @@ public class SQLiteGenerator extends BaseGenerator {
 		}
 	}
 	
-	/** Make Java Source Code
-	 * @param cfg Template engine
+	/** Make Java Source Code.
 	 * @param template Template path file.
-	 * @param filename
-	 * @throws IOException
-	 * @throws TemplateException
+	 * @param filename The destination file.
+	 * @param override True if must overwrite file.
 	 */
 	private void makeSourceData(final String template, 
 			final String filename, 

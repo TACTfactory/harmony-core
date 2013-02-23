@@ -11,15 +11,22 @@ package com.tactfactory.mda.meta;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Base Metadata class.
+ */
 public abstract class BaseMetadata implements Metadata {
-	/** Component name */
+	/** Component name. */
 	public String name;
 	
-	/** List of bundles Metadata */
+	/** List of bundles Metadata. */
 	public Map<String, Metadata> options =
 			new LinkedHashMap<String, Metadata>();
 	
-	public String getName() {
+	/** 
+	 * Get Metadata option name.
+	 * @return The option name 
+	 */
+	public final String getName() {
 		return this.name;
 	}
 	

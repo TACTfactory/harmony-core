@@ -10,8 +10,6 @@ package com.tactfactory.mda.command;
 
 /**
  * FOS Bundle Commands.
- * @author gregg
- *
  */
 public class FosCommand extends BaseCommand {
 
@@ -23,7 +21,7 @@ public class FosCommand extends BaseCommand {
 
 	/**
 	 * Activate bundle.
-	 * @param login
+	 * @param login 
 	 */
 	public void fosUserActivate(final String login) {
 	}
@@ -41,15 +39,15 @@ public class FosCommand extends BaseCommand {
 	}
 
 	/**
-	 * Remote a user
-	 * @param role
+	 * Remote a user.
+	 * @param role 
 	 */
 	public void fosUserDemote(final Object role) {
 	}
 
 	/**
-	 * Promote a user
-	 * @param role
+	 * Promote a user.
+	 * @param role 
 	 */
 	public void fosUserPromote(final Object role) {
 	}

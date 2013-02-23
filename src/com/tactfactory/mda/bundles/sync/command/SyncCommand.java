@@ -20,24 +20,34 @@ import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
+/**
+ * Sync bundle commands.
+ */
 @PluginImplementation
 public class SyncCommand extends BaseCommand {
 	
 	//bundle name
+	/**	Bundle name. */
 	public static final String BUNDLE = "sync";
+	/**	Subject. */
 	public static final String SUBJECT = "generate";
 
 	//actions
+	/**	Service action. */
 	public static final String ACTION_SERVICE = "service";
 
 	//commands
-	public static final String GENERATE_SERVICE	= BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_SERVICE;
+	/**	Command : SYNC:GENERATE:SERVICE. */
+	public static final String GENERATE_SERVICE	=
+			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_SERVICE;
 
 	@Override
-	public void execute(final String action, final String[] args, final String option) {
+	public final void execute(final String action,
+			final String[] args, 
+			final String option) {
 		ConsoleUtils.display("> Sync Generator");
 
-		this.commandArgs = Console.parseCommandArgs(args);
+		this.setCommandArgs(Console.parseCommandArgs(args));
 		if (action.equals(GENERATE_SERVICE)) {
 			try {
 				this.generateAdapters();
@@ -49,9 +59,9 @@ public class SyncCommand extends BaseCommand {
 	}
 	
 	/**
-	 * Generate java code files from parsed Entities
+	 * Generate java code files from parsed Entities.
 	 */
-	protected void generateAdapters() {
+	protected final void generateAdapters() {
 		//Harmony.metas.entities = getMetasFromAll();
 		this.generateMetas();
 		if (ApplicationMetadata.INSTANCE.entities != null) {
@@ -66,24 +76,25 @@ public class SyncCommand extends BaseCommand {
 	}
 	
 	@Override
-	public void generateMetas() {
+	public final void generateMetas() {
 		this.registerParser(new RestParser());
 		this.registerParser(new SyncParser());
 		super.generateMetas();
-		new RestCompletor().generateApplicationRestMetadata(ApplicationMetadata.INSTANCE);
+		new RestCompletor().generateApplicationRestMetadata(
+				ApplicationMetadata.INSTANCE);
 	}
 	
 	
 
 	@Override
-	public void summary() {
+	public final void summary() {
 		ConsoleUtils.display("\n> SYNC \n" 
 				+ "\t" + GENERATE_SERVICE + "\t => Generate Adapters");
 		
 	}
 
 	@Override
-	public boolean isAvailableCommand(final String command) {
+	public final boolean isAvailableCommand(final String command) {
 		return command.equals(GENERATE_SERVICE);
 	}
 }

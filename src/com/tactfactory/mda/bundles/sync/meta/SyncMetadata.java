@@ -16,19 +16,29 @@ import com.tactfactory.mda.meta.BaseMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
+/**
+ * MetaData for Sync description.
+ */
 public class SyncMetadata extends BaseMetadata {
+	/** Bundle name. */
 	private static final String NAME = "sync";
 	
+	/** Sync level. */
 	public Level level = Level.GLOBAL;
+	/** Sync Mode. */
 	public Mode mode = Mode.POOLING;
+	/** Sync Priority. */
 	public int priority = 1;
 	
+	/**
+	 * Constructor.
+	 */
 	public SyncMetadata() {
 		super();
 		this.name = NAME;
 	}
 	@Override
-	public HashMap<String, Object> toMap(final BaseAdapter adapter) {
+	public final HashMap<String, Object> toMap(final BaseAdapter adapter) {
 		final HashMap<String, Object> model = new HashMap<String, Object>();
 		model.put(TagConstant.LEVEL, this.level.getValue());
 		model.put(TagConstant.MODE, this.mode.getValue());

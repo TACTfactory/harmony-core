@@ -21,10 +21,20 @@ import com.tactfactory.mda.utils.FileUtils;
  *
  */
 public abstract class CommonTest {
+	/** Console delimiter for tests. */
+	protected static final String SHARP_DELIMITOR = 
+			  "#################" 
+			 + "#################" 
+			 + "#################" 
+			 + "#################" 
+			 + "#########";
+	
+	/** Harmony instance. */
 	private static Harmony harmony; 
 
 	/**
-	 * @throws java.lang.Exception
+	 * Initialization.
+	 * @throws Exception 
 	 */
 	public static void setUpBefore() throws Exception {
 		// Base configs
@@ -57,23 +67,31 @@ public abstract class CommonTest {
 	}
 
 	/**
-	 * @throws java.lang.Exception
+	 * Initialization.
+	 * @throws Exception 
 	 */
 	public void setUp() throws Exception {
 		
 	}
 	
 	/**
-	 * @throws java.lang.Exception
+	 * Test clean.
+	 * @throws Exception 
 	 */
 	public void tearDown() throws Exception {
 		
 	}
 	
+	/** Get Harmony instance.
+	 * @return The Harmony instance
+	 */
 	public static Harmony getHarmony() {
 		return harmony;
 	}
 	
+	/**
+	 * Copy the test entities in the test project. 
+	 */
 	protected static void makeEntities() {
 		final String pathNameSpace = 
 				ApplicationMetadata.INSTANCE.projectNameSpace.replaceAll("\\.",
@@ -97,6 +115,10 @@ public abstract class CommonTest {
 		}
 	}
 	
+	/**
+	 * Test if file exists.
+	 * @param fileName The file name
+	 */
 	protected static void hasFindFile(final String fileName) {
 		final File file = 
 				new File(

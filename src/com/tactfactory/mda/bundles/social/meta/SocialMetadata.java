@@ -14,17 +14,26 @@ import java.util.Map;
 import com.tactfactory.mda.meta.BaseMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 
-public class SocialMetadata extends BaseMetadata {	
+/**
+ * Social metadata.
+ *
+ */
+public class SocialMetadata extends BaseMetadata {
+	/** Bundle name. */
 	private static final String NAME = "social";
+	/** Is Social enabled ? */
 	public boolean isEnabled = false;
 	
+	/** 
+	 * Constructor.
+	 */
 	public SocialMetadata() {
 		super();
 		this.name = NAME;
 	}
 	
 	@Override
-	public Map<String, Object> toMap(final BaseAdapter adapter) {
+	public final Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> ret = new HashMap<String, Object>();
 		
 		ret.put("isEnabled", this.isEnabled);

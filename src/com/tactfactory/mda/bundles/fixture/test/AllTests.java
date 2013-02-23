@@ -13,9 +13,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 /**
- * All the tests related to the Fixture generation and loading
- * @author gregg
- *
+ * All the tests related to the Fixture generation and loading.
  */
 @RunWith(Suite.class)
 @SuiteClasses({

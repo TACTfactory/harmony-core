@@ -8,22 +8,25 @@
  */
 package com.tactfactory.mda.meta;
 
-
+/**
+ * Configuration Metadata.
+ */
 public class ConfigMetadata {
-	/** Identify configuration resource */
+	/** Identify configuration resource. */
 	public String key;
 	
-	/** Value of configuration resource */
+	/** Value of configuration resource. */
 	public String value;
 	
 	/**
-	 * Insert to meta a new resource configuration
+	 * Insert to meta a new resource configuration.
 	 * 
-	 * @param key
-	 * @param value
+	 * @param key Configuration Key
+	 * @param value Configuration String
 	 * @return the generated ConfigMetadata
 	 */
-	public static ConfigMetadata addConfiguration(final String key, final String value) {		
+	public static ConfigMetadata addConfiguration(final String key,
+			final String value) {		
 		final ConfigMetadata configMeta = new ConfigMetadata();
 		configMeta.key = key;
 		configMeta.value = value;

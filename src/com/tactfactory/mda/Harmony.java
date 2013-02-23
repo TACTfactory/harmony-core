@@ -40,51 +40,60 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 import com.tactfactory.mda.utils.OsUtil;
 
-/** Harmony main class */
+/** Harmony main class. */
 public class Harmony {
 	
-	/** Harmony version */
+	/** Harmony version. */
 	public static final String VERSION = "0.4.0-DEV";
 	
-	/** Singleton of console */
-	public static Harmony instance;
+	/** Singleton of console. */
+	private static Harmony instance;
 		
-	/** Path of Harmony base */
+	/** Path of Harmony base. */
 	public static final String PATH_BASE = "./";
 	
-	/** Path of project ( app folder in Harmony root) */
+	/** Path of project ( app folder in Harmony root). */
 	public static final String PATH_PROJECT = PATH_BASE + "app";
 	
-	/** Path of templates */
+	/** Path of templates. */
 	public static final String PATH_TEMPLATE = PATH_BASE + "tpl";
 	
-	/** Path of harmony.jar */
+	/** Path of harmony.jar. */
 	public static final String PATH_HARMONY = PATH_BASE + "vendor/tact-core";
 	
-	/** Path of libs */
+	/** Path of libs. */
 	public static final String PATH_LIBS = PATH_HARMONY + "/lib";
 	
-	/** Project space */
+	/** Project space. */
 	private static String projectFolderPath = "android";
 	
-	/** Delimiter */
+	/** Delimiter. */
 	private static final String DELIMITER = "/";
 	
-	/** Android SDK version */
+	/** Android SDK version. */
 	private static String androidSdkVersion;
 
-	/** Symfony path */
+	/** Symfony path. */
 	public static final String SYMFONY_PATH = "D:/Site/wamp/www/Symfony";
 	
+	/** Default project name. */
 	private static final String DEFAULT_PROJECT_NAME = "demact";
+	
+	/** Default project NameSpace. */
 	private static final String DEFAULT_PROJECT_NAMESPACE = 
 			"com.tactfactory.mda.test.demact";
 	
+	/** PluginManager. */
 	private final PluginManager pluginManager =
 			PluginManagerFactory.createPluginManager(new JSPFProperties());
+	
+	/** Bootstrap. */
 	private final Map<Class<?>, Command> bootstrap = 
 			new HashMap<Class<?>, Command>();
 
+	/** Constructor.
+	 * @throws Exception PluginManager failure
+	 */
 	public Harmony() throws Exception {
 		//final JSPFProperties props =;
 		/* props.setProperty(PluginManager.class, "cache.enabled", "true");
@@ -108,16 +117,10 @@ public class Harmony {
 		Harmony.instance = this;
 	}
 
-	/** Initialize Harmony 
-	 * @throws Exception */
+	/** Initialize Harmony. 
+	 * @throws Exception 
+	 */
 	protected final void initialize() throws Exception {
-		// Check project folder
-		if (Strings.isNullOrEmpty(projectFolderPath)) {
-			ConsoleUtils.displayError(
-					new Exception("Project folder undefined"));
-			throw new Exception("Project folder undefined");
-		}
-		
 		ConsoleUtils.display(
 				"Current Working Path: " + new File(".").getCanonicalPath());
 
@@ -174,7 +177,7 @@ public class Harmony {
 	}
 	
 	/**
-	 * Select the proper command class
+	 * Select the proper command class.
 	 * 
 	 * @param commandName Class command name
 	 * @return BaseCommand object
@@ -183,12 +186,17 @@ public class Harmony {
 		return this.bootstrap.get(commandName);
 	}
 	
+	/**
+	 * Get all command class.
+	 * 
+	 * @return The command class
+	 */
 	public final Collection<Command> getCommands() {
 		return this.bootstrap.values();
 	}
 
 	/**
-	 * Check and launch command in proper command class
+	 * Check and launch command in proper command class.
 	 * 
 	 * @param action Command to execute
 	 * @param args Commands arguments
@@ -221,7 +229,7 @@ public class Harmony {
 	}
 
 	/**
-	 * Generic user console prompt
+	 * Generic user console prompt.
 	 * 
 	 * @param promptMessage message to display
 	 * @return input user input
@@ -230,7 +238,11 @@ public class Harmony {
 		String input = null;
 		try {
 			ConsoleUtils.display(promptMessage);
-			final BufferedReader br = new BufferedReader(new InputStreamReader(System.in, FileUtils.DEFAULT_ENCODING));
+			final BufferedReader br = 
+					new BufferedReader(
+							new InputStreamReader(
+									System.in, 
+									FileUtils.DEFAULT_ENCODING));
 
 		
 			input = br.readLine();
@@ -242,7 +254,7 @@ public class Harmony {
 	}
 
 	/**
-	 * Prompt Project Name to the user
+	 * Prompt Project Name to the user.
 	 */
 	public static void initProjectName() {
 		if (Strings.isNullOrEmpty(ApplicationMetadata.INSTANCE.name)) {
@@ -260,7 +272,7 @@ public class Harmony {
 	}
 	
 	/**
-	 * Prompt Project Name Space to the user
+	 * Prompt Project Name Space to the user.
 	 */
 	public static void initProjectNameSpace() {
 		if (Strings.isNullOrEmpty(
@@ -307,7 +319,7 @@ public class Harmony {
 	}
 
 	/**
-	 * Prompt Project Android SDK Path to the user
+	 * Prompt Project Android SDK Path to the user.
 	 */
 	public static void initProjectAndroidSdkPath() {
 		if (Strings.isNullOrEmpty(ApplicationMetadata.androidSdkPath)) {
@@ -378,7 +390,7 @@ public class Harmony {
 	}
 	
 	/**
-	 * Extract Project NameSpace from AndroidManifest file
+	 * Extract Project NameSpace from AndroidManifest file.
 	 * 
 	 * @param manifest Manifest File
 	 * @return Project Name Space
@@ -414,9 +426,9 @@ public class Harmony {
 	}
 	
 	/**
-	 * Extract Project NameSpace from AndroidManifest file
+	 * Extract Project Name from config file.
 	 * 
-	 * @param manifest Manifest File
+	 * @param config Config file
 	 * @return Project Name Space
 	 */
 	public static String getProjectNameFromConfig(final File config) {
@@ -456,7 +468,7 @@ public class Harmony {
 	}
 	
 	/**
-	 * Extract Android SDK Path from .properties file
+	 * Extract Android SDK Path from .properties file.
 	 * 
 	 * @param fileProp .properties File
 	 * @return Android SDK Path
@@ -485,7 +497,7 @@ public class Harmony {
 	}
 	
 	/**
-	 * Extract Android SDK Path from .properties file
+	 * Extract Android SDK Path from .properties file.
 	 * 
 	 * @param filePath .properties File path
 	 * @return Android SDK Path
@@ -500,7 +512,7 @@ public class Harmony {
 	}
 	
 	/**
-	 * Extract Android SDK Path from local.properties file
+	 * Extract Android SDK Path from local.properties file.
 	 * 
 	 * @param sdkPath The sdk path
 	 * @return Android SDK Path
@@ -513,7 +525,8 @@ public class Harmony {
 		if (sdkProperties.exists()) {
 			try {
 				final FileInputStream fis = new FileInputStream(sdkProperties);
-				final InputStreamReader isr = new InputStreamReader(fis, FileUtils.DEFAULT_ENCODING);
+				final InputStreamReader isr =
+						new InputStreamReader(fis, FileUtils.DEFAULT_ENCODING);
 				final BufferedReader br = new BufferedReader(isr);
 				String line = br.readLine();
 				while (line != null) {
@@ -530,11 +543,27 @@ public class Harmony {
 		return result;
 	}
 	
+	/**
+	 * Get the android SDK version.
+	 * @return the android SDK version
+	 */
 	public static final String getAndroidSDKVersion() {
 		return androidSdkVersion;
 	}
 	
+	/**
+	 * Get the android project folder.
+	 * @return the android project folder
+	 */
 	public static final String getProjectFolder() {
 		return projectFolderPath;
+	}
+	
+	/**
+	 * Get the Harmony instance.
+	 * @return the Harmony instance
+	 */
+	public static final Harmony getInstance() {
+		return instance;
 	}
 }

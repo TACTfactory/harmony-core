@@ -14,48 +14,27 @@ import com.tactfactory.mda.meta.ClassMetadata;
 public final class RimAdapter extends BaseAdapter {
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public RimAdapter() {
 		super();
-		this.platform	= "rim";
-		this.resource 	= "res";
-		this.source 	= "src";
+		this.setPlatform("rim");
+		this.setResource("res");
+		this.setSource("src");
 	}
-
-	/** 
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter
-	 * #getNameSpace(com.tactfactory.mda.orm.ClassMetadata, java.lang.String)
-	 */
+ 
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	/** 
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter
-	 * #getNameSpaceEntity(com.tactfactory.mda.orm.ClassMetadata, java.lang.String)
-	 */
+
 	@Override
-	public String getNameSpaceEntity(final ClassMetadata cm, final String type) {
+	public String getNameSpaceEntity(final ClassMetadata cm, 
+			final String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-
-	/*@Override
-	public String getViewComponentShow(FieldMetadata field) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
-
-
-	/*@Override
-	public String getViewComponentEdit(FieldMetadata field) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
 
 	@Override
 	public String getNativeType(final String type) {

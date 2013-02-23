@@ -17,8 +17,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Annotation used to define an Id
- * @author gregg
+ * Annotation used to define an Id.
  *
  */
 @Documented
@@ -26,6 +25,6 @@ import java.lang.annotation.Target;
 @Target(FIELD)
 @Inherited
 public @interface Id {
-	/** ID Column */
+	/** ID Column. */
 	String COLUMN_ID = "_id";
 }

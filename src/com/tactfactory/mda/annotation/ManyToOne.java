@@ -17,9 +17,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Annotation used to define a ManyToOne relation (N-1)
- * @author gregg
- *
+ * Annotation used to define a ManyToOne relation (N-1).
  */
 @Documented
 @Retention(SOURCE)
@@ -27,15 +25,13 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface ManyToOne {
 	/**
-	 * The Entity targeted by the relation (auto-generated)
-	 * @return the entity name
+	 * The Entity targeted by the relation (auto-generated).
 	 */
 	String targetEntity() default "";
 	
 
 	/**
-	 * The field in the target entity inversed by this relation
-	 * @return the field name
+	 * The field in the target entity inversed by this relation.
 	 */
 	String inversedBy() default "";
 }

@@ -21,8 +21,8 @@ import com.actionbarsherlock.internal.view.menu.ActionMenuItem;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-import ${project_namespace}.HarmonyFragmentActivity;
-import ${project_namespace}.HarmonyListFragment;
+import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
+import ${project_namespace}.harmony.view.HarmonyListFragment;
 
 <#list search_entities as entity>
 import ${entity.controller_namespace}.${entity.name?cap_first}ListFragment;

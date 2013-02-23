@@ -21,36 +21,48 @@ import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.parser.BaseParser;
 import com.tactfactory.mda.utils.PackageUtils;
 
+/**
+ * Parser for social annotation.
+ *
+ */
 public class SocialParser extends BaseParser {
+	/** Bundle name. */ 
 	private static final String SOCIAL = "social";
-	private static final String ANNOT_SOCIAL = PackageUtils.extractNameEntity(Social.class);
+	/** Social Annotation name. */
+	private static final String ANNOT_SOCIAL =
+			PackageUtils.extractNameEntity(Social.class);
 	
 	@Override
-	public void visitClass(final ClassOrInterfaceDeclaration field, final ClassMetadata meta) {
+	public void visitClass(final ClassOrInterfaceDeclaration field, 
+			final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitField(final FieldDeclaration field, final ClassMetadata meta) {
+	
+	public void visitField(final FieldDeclaration field,
+			final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitMethod(final MethodDeclaration method, final ClassMetadata meta) {
+	public void visitMethod(final MethodDeclaration method, 
+			final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitImport(final ImportDeclaration imp, final ClassMetadata meta) {
+	public void visitImport(final ImportDeclaration imp,
+			final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitClassAnnotation(final ClassMetadata cm,
+	public final void visitClassAnnotation(final ClassMetadata cm,
 			final AnnotationExpr fieldAnnot) {
 		if (fieldAnnot.getName().toString().equals(ANNOT_SOCIAL)) {
 			final SocialMetadata rm = new SocialMetadata();

@@ -3,22 +3,19 @@
 package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
-import ${project_namespace}.HarmonyFragment;
-import ${project_namespace}.HarmonyFragmentActivity;
+import ${project_namespace}.harmony.view.HarmonyFragment;
+import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 
 import ${curr.namespace}.criterias.${curr.name?cap_first}Criterias;
 import ${curr.namespace}.criterias.base.Criteria.Type;
 
 import android.os.Bundle;
-
 import android.content.Intent;
-
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
-
 import android.widget.*;
 
 

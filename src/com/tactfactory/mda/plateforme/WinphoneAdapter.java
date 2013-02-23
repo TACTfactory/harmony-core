@@ -7,7 +7,7 @@
  * file that was distributed with this source code.
  */
 package com.tactfactory.mda.plateforme;
-
+ 
 import com.tactfactory.mda.meta.ClassMetadata;
 
 /** 
@@ -17,56 +17,28 @@ import com.tactfactory.mda.meta.ClassMetadata;
 public final class WinphoneAdapter extends BaseAdapter {
 
 	/**
-	 * Constructor
+	 * Constructor.
 	 */
 	public WinphoneAdapter() {
 		super();
-		this.platform	= "winphone";
-		this.resource 	= "res";
-		this.source 	= "src";
+		this.setPlatform("winphone");
+		this.setResource("res");
+		this.setSource("src");
 	}
 
-	/** 
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter
-	 * #getNameSpace(com.tactfactory.mda.orm.ClassMetadata,
-	 * 				 java.lang.String)
-	 */
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	/**
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter
-	 * #getNameSpaceEntity(com.tactfactory.mda.orm.ClassMetadata,
-	 * 					 java.lang.String)
-	 */
+
 	@Override
-	public String getNameSpaceEntity(final ClassMetadata cm, final String type) {
+	public String getNameSpaceEntity(final ClassMetadata cm, 
+			final String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
-	/** 
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#
-	 * getViewComponentShow(com.tactfactory.mda.orm.FieldMetadata)
-	 */
-	/*@Override
-	public String getViewComponentShow(FieldMetadata field) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
-
-	/** 
-	 * @see com.tactfactory.mda.plateforme.BaseAdapter#
-	 * getViewComponentEdit(com.tactfactory.mda.orm.FieldMetadata)
-	 */
-	/*@Override
-	public String getViewComponentEdit(FieldMetadata field) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
 
 	@Override
 	public String getNativeType(final String type) {

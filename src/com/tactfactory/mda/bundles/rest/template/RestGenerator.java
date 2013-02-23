@@ -19,14 +19,25 @@ import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.template.TranslationGenerator;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
+/**
+ * Generator for bundle Rest.
+ */
 public class RestGenerator extends BaseGenerator {
 
+	/**
+	 * Constructor.
+	 * @param adapter The used adapter.
+	 * @throws Exception 
+	 */
 	public RestGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
-	public void generateAll() {
+	/**
+	 * Generates everything.
+	 */
+	public final void generateAll() {
 		this.generateWSAdapter();
 		try {
 			new TestWSGenerator(this.adapter).generateAll();
@@ -36,13 +47,19 @@ public class RestGenerator extends BaseGenerator {
 		}
 	}
 	
-	protected void generateWSAdapter() {
+	/**
+	 * Generate WebService Adapter.
+	 */
+	protected final void generateWSAdapter() {
 		this.updateLibrary("httpmime-4.1.1.jar");
 		
-		TranslationMetadata.addDefaultTranslation("common_network_error", "Connection error", Group.COMMON);
+		TranslationMetadata.addDefaultTranslation(
+				"common_network_error", "Connection error", Group.COMMON);
 		
-		ConfigMetadata.addConfiguration("rest_url_prod", "https://domain.tlk:443/");
-		ConfigMetadata.addConfiguration("rest_url_dev", "https://dev.domain.tlk:443/");
+		ConfigMetadata.addConfiguration(
+				"rest_url_prod", "https://domain.tlk:443/");
+		ConfigMetadata.addConfiguration(
+				"rest_url_dev", "https://dev.domain.tlk:443/");
 		ConfigMetadata.addConfiguration("rest_check_ssl", "true");
 		ConfigMetadata.addConfiguration("rest_ssl", "ca.cert");
 		
@@ -81,9 +98,17 @@ public class RestGenerator extends BaseGenerator {
 	}
 		
 	@Override
-	protected void makeSource(final String templateName, final String fileName, final boolean override) {
-		final String fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + this.adapter.getData() + "/" + fileName;
-		final String fullTemplatePath = this.adapter.getTemplateSourceProviderPath().substring(1) + templateName;
+	protected final void makeSource(final String templateName, 
+			final String fileName, 
+			final boolean override) {
+		final String fullFilePath = 
+				this.adapter.getSourcePath() 
+				+ this.appMetas.projectNameSpace 
+				+ "/" + this.adapter.getData() + "/"
+				+ fileName;
+		final String fullTemplatePath = 
+				this.adapter.getTemplateSourceProviderPath().substring(1) 
+				+ templateName;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}

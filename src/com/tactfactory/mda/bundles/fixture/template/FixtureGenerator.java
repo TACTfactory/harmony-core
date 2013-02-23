@@ -21,19 +21,32 @@ import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 
+/**
+ * Fixture bundle generator.
+ */
 public class FixtureGenerator extends BaseGenerator {
 
+	/**
+	 * Constructor.
+	 * @param adapter The adapter to use.
+	 * @throws Exception 
+	 */
 	public FixtureGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		this.datamodel = this.appMetas.toMap(this.adapter);
 	}
 	
-	public void load() {
+	/**
+	 * Load the fixtures.
+	 */
+	public final void load() {
 		final File fixtAppSrc = new File("fixtures/app");
 		final File fixtTestSrc = new File("fixtures/test");
 		if (fixtAppSrc.exists()) {
-			final File fixtAppDest = new File(this.adapter.getAssetsPath() + "/app");
-			final File fixtTestDest = new File(this.adapter.getAssetsPath() + "/test");
+			final File fixtAppDest = 
+					new File(this.adapter.getAssetsPath() + "/app");
+			final File fixtTestDest = 
+					new File(this.adapter.getAssetsPath() + "/test");
 			if (!fixtAppDest.exists()) {
 				fixtAppDest.mkdir();
 			}
@@ -44,24 +57,33 @@ public class FixtureGenerator extends BaseGenerator {
 				final FileFilter ff = new FileFilter() {
 					@Override
 					public boolean accept(final File arg0) {
-						return arg0.getPath().endsWith(".xml") || arg0.getPath().endsWith(".yml"); 
+						return arg0.getPath().endsWith(".xml")
+								|| arg0.getPath().endsWith(".yml"); 
 					}
 				};
 				FileUtils.copyDirectory(fixtAppSrc, fixtAppDest, ff);
-				ConsoleUtils.displayDebug("Copying fixtures/app into " + fixtAppDest.getPath());
+				ConsoleUtils.displayDebug(
+						"Copying fixtures/app into " + fixtAppDest.getPath());
 				FileUtils.copyDirectory(fixtTestSrc, fixtTestDest, ff);
-				ConsoleUtils.displayDebug("Copying fixtures/test into " + fixtTestDest.getPath());
+				ConsoleUtils.displayDebug(
+						"Copying fixtures/test into " + fixtTestDest.getPath());
 			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);
 			}
 		} else {
-			ConsoleUtils.displayError(new Exception("You must init the fixtures before loading them. Use the command orm:fixture:init."));
+			ConsoleUtils.displayError(new Exception(
+					"You must init the fixtures before loading them."
+					+ " Use the command orm:fixture:init."));
 		}
 	}
 	
-	public void init() {
+	/**
+	 * Generate the loaders and the base fixtures.
+	 */
+	public final void init() {
 		 try {
-			 final String fixtureType = ((FixtureMetadata) this.appMetas.options.get("fixture")).type;
+			 final String fixtureType = ((FixtureMetadata) 
+							 this.appMetas.options.get("fixture")).type;
 			 
 			 //Copy JDOM Library
 			this.updateLibrary("jdom-2.0.2.jar");
@@ -78,8 +100,13 @@ public class FixtureGenerator extends BaseGenerator {
 			for (final ClassMetadata cm : this.appMetas.entities.values()) {
 				if (cm.fields.size() > 0) {
 					this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
-					this.makeSource("TemplateDataLoader.java", cm.name + "DataLoader.java", true);
-					this.makeBaseFixture("TemplateFixture." + fixtureType, cm.name + "." + fixtureType, false);
+					this.makeSource("TemplateDataLoader.java",
+							cm.name + "DataLoader.java",
+							true);
+					this.makeBaseFixture("TemplateFixture." 
+							+ fixtureType, cm.name 
+							+ "." 
+							+ fixtureType, false);
 				}
 			}
 		} catch (final Exception e) {
@@ -87,7 +114,10 @@ public class FixtureGenerator extends BaseGenerator {
 		}
 	}
 	
-	public void purge() {
+	/**
+	 * Delete the existing fixtures.
+	 */
+	public final void purge() {
 		for (final ClassMetadata cm : this.appMetas.entities.values()) {
 			this.removeSource(cm.name + ".xml");
 			this.removeSource(cm.name + ".yml");
@@ -96,26 +126,52 @@ public class FixtureGenerator extends BaseGenerator {
 	}
 	
 	@Override
-	protected void makeSource(final String templateName, final String fileName, final boolean override) {
-		final String fullFilePath = this.adapter.getSourcePath() + this.appMetas.projectNameSpace + "/" + this.adapter.getFixture() + "/" + fileName;
-		final String fullTemplatePath = this.adapter.getTemplateSourceFixturePath().substring(1) + templateName;
+	protected final void makeSource(final String templateName,
+			final String fileName, 
+			final boolean override) {
+		final String fullFilePath = 
+				this.adapter.getSourcePath() 
+				+ this.appMetas.projectNameSpace
+				+ "/" + this.adapter.getFixture() + "/" 
+				+ fileName;
+		
+		final String fullTemplatePath = 
+				this.adapter.getTemplateSourceFixturePath().substring(1) 
+				+ templateName;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 	
-	protected void removeSource(final String fileName) {
-		final String fullFilePath = this.adapter.getAssetsPath() + "/" + fileName;
+	/**
+	 * Delete file in assets directory.
+	 * @param fileName The filename.
+	 */
+	protected final void removeSource(final String fileName) {
+		final String fullFilePath = 
+				this.adapter.getAssetsPath() + "/" + fileName;
 		final File f = new File(fullFilePath);
 		f.delete();
 	}
 	
-	protected void makeBaseFixture(final String templateName, final String fileName, final boolean override) {
+	/**
+	 * Make base fixture.
+	 * @param templateName The template name.
+	 * @param fileName The destination file name.
+	 * @param override True for overwrite existing fixture.
+	 */
+	protected final void makeBaseFixture(final String templateName,
+			final String fileName, 
+			final boolean override) {
 		String fullFilePath = "fixtures/app/" + fileName;
-		String fullTemplatePath = this.adapter.getTemplateSourceFixturePath().substring(1) + templateName;
+		String fullTemplatePath = 
+				this.adapter.getTemplateSourceFixturePath().substring(1) 
+				+ templateName;
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 		
 		fullFilePath = "fixtures/test/" + fileName;
-		fullTemplatePath = this.adapter.getTemplateSourceFixturePath().substring(1) + templateName;
+		fullTemplatePath =
+				this.adapter.getTemplateSourceFixturePath().substring(1)
+				+ templateName;
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 }

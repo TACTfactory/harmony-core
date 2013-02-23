@@ -17,9 +17,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Annotation for defining OneToOne relations (1-1)
- * @author gregg
- *
+ * Annotation for defining OneToOne relations (1-1).
  */
 @Documented
 @Retention(SOURCE)
@@ -27,17 +25,17 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface OneToOne {
 	/**
-	 * The Entity targeted by the relation
+	 * The Entity targeted by the relation.
 	 */
 	String targetEntity() default "";
 	
 	/**
-	 * The field which map this relation
+	 * The field which map this relation.
 	 */
 	String mappedBy() default "";
 	
 	/**
-	 * The field which inverse this relation
+	 * The field which inverse this relation.
 	 */
 	String inversedBy() default "";
 	

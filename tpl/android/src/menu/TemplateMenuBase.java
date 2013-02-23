@@ -10,16 +10,11 @@
  **************************************************************************/
 package ${project_namespace}.menu;
 
-import com.actionbarsherlock.internal.view.menu.ActionMenuItem;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import com.actionbarsherlock.widget.ShareActionProvider;
-
-import ${project_namespace}.HarmonyFragmentActivity;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
 
@@ -45,8 +40,8 @@ public abstract class ${project_name?cap_first}MenuBase {
 		
 		this.fragment	= fragment;
 		this.context 	= context;
-		this.menus.put(SEARCH, new SearchMenuWrapper());
-		this.menus.put(SHARE, new SocialMenuWrapper());
+		//this.menus.put(SEARCH, new SearchMenuWrapper());
+		//this.menus.put(SHARE, new SocialMenuWrapper());
 	}
 	
 	/** Initialize Menu component */

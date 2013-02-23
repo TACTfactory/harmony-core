@@ -17,9 +17,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
 /**
- * Annotation defining a ManyToMany relation (N-N)
- * @author gregg
- *
+ * Annotation defining a ManyToMany relation (N-N).
  */
 @Documented
 @Retention(SOURCE)
@@ -27,7 +25,7 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface ManyToMany {
 	/**
-	 * Entity targeted by this relation (auto-generated)
+	 * Entity targeted by this relation (auto-generated).
 	 */
 	String targetEntity() default "";
 	

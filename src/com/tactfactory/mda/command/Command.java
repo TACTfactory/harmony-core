@@ -13,8 +13,6 @@ import net.xeoh.plugins.base.Plugin;
 
 /**
  * Interface defining the commmands class for all bundles.
- * @author gregg
- *
  */
 public interface Command extends Plugin {
 	

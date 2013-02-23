@@ -11,10 +11,10 @@ package com.tactfactory.mda.bundles.symfony.template;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.bundles.symfony.adapter.SymfonyAdapter;
@@ -25,17 +25,34 @@ import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
 
+/**
+ * Symfony generator.
+ */
 public final class WebGenerator extends BaseGenerator {
+	/** PHP Command. */
 	private static final String PHP = "php";
 	
+	/** Symfony entities generation command code. */
 	private static final int GENERATE_ENTITIES	= 0x00;
+	/** Symfony installation command code. */
 	private static final int INSTALL_SYMFONY	= 0x01;
+	/** Needed Symfony bundles command code. */
 	private static final int INSTALL_BUNDLES	= 0x02;
+	/** Symfony project initialization command code. */
 	private static final int INIT_PROJECT 		= 0x03;
 	
+	/** Symfony adapter. */
 	private final SymfonyAdapter symfonyAdapter;
+	
+	/** Project name. */
 	private final String projectName;
 		
+	/**
+	 * Constructor.
+	 * @param adapter The adapter.
+	 * @param sAdapter The Symfony adapter. 
+	 * @throws Exception 
+	 */
 	public WebGenerator(final BaseAdapter adapter,
 			final SymfonyAdapter sAdapter) throws Exception {
 		super(adapter);
@@ -45,6 +62,9 @@ public final class WebGenerator extends BaseGenerator {
 								CaseFormat.UPPER_CAMEL, this.appMetas.name);
 	}
 	
+	/**
+	 * Generate the symfony entities.
+	 */
 	public void generateEntities() {
 		String fullFilePath = 
 				this.symfonyAdapter.getWebBundleYmlEntitiesPath(
@@ -92,6 +112,9 @@ public final class WebGenerator extends BaseGenerator {
 		}
 	}
 	
+	/**
+	 * Generate the Symfony sync controllers.
+	 */
 	public void generateWebControllers() {
 		final String fullFilePath = 
 				this.symfonyAdapter.getWebControllerPath(
@@ -120,6 +143,9 @@ public final class WebGenerator extends BaseGenerator {
 		}
 	}
 	
+	/**
+	 * Install symfony.
+	 */
 	public void installSymfony() {
 		
 		// Copy composer.phar :
@@ -131,6 +157,9 @@ public final class WebGenerator extends BaseGenerator {
 		ConsoleUtils.launchCommand(this.getCommand(INSTALL_SYMFONY));
 	}
 	
+	/**
+	 * Install FOSRestBundle & dependencies for Symfony.
+	 */
 	public void installBundles() {
 		
 		//Copy composer.json to symfony's path
@@ -162,10 +191,17 @@ public final class WebGenerator extends BaseGenerator {
 				this.symfonyAdapter.getWebPath() + "app/AppKernel.php");
 	}
 	
+	/**
+	 * Initialize the Symfony project.
+	 */
 	public void initProject() {
 		ConsoleUtils.launchCommand(this.getCommand(INIT_PROJECT));
 	}
 	
+	/**
+	 * Make a symfony entity.
+	 * @param entityName The entity name.
+	 */
 	protected void makeEntity(final String entityName) {
 		final String fullFilePath = 
 				this.symfonyAdapter.getWebBundleYmlEntitiesPath(
@@ -179,6 +215,10 @@ public final class WebGenerator extends BaseGenerator {
 		super.makeSource(fullTemplatePath, fullFilePath, true);
 	}
 	
+	/**
+	 * Make the entity's sync controller.
+	 * @param entityName The entity name.
+	 */
 	protected void makeController(final String entityName) {
 		String fullFilePath = 
 				this.symfonyAdapter.getWebControllerPath(
@@ -198,6 +238,11 @@ public final class WebGenerator extends BaseGenerator {
 		super.appendSource(fullTemplatePath, fullFilePath);
 	}
 	
+	/**
+	 * Copy a file.
+	 * @param srcPath Source file.
+	 * @param destPath Destination file.
+	 */
 	protected void copyFile(final String srcPath, final String destPath) {
 		File srcFile;
 		File destDir;
@@ -212,13 +257,21 @@ public final class WebGenerator extends BaseGenerator {
 		
 	}
 	
+	/**
+	 * Append content to file.
+	 * @param content The content to add.
+	 * @param filePath The file to modify.
+	 */
 	protected void addToFile(final String content, final String filePath) {
 		try {
 			final File f = new File(filePath);
 			final StringBuffer sb = FileUtils.fileToStringBuffer(f);
 			if (sb.indexOf(content) == -1) {
 				final BufferedWriter bw = 
-						new BufferedWriter(new OutputStreamWriter(new FileOutputStream(f, true), FileUtils.DEFAULT_ENCODING));
+						new BufferedWriter(
+								new OutputStreamWriter(
+										new FileOutputStream(f, true),
+										FileUtils.DEFAULT_ENCODING));
 				bw.write(content);
 				bw.close();
 			}
@@ -227,6 +280,12 @@ public final class WebGenerator extends BaseGenerator {
 		}
 	}
 	
+	/**
+	 * Add content to a file after the given string.
+	 * @param content The content to add
+	 * @param after The String to add the content after
+	 * @param filePath The file to modify
+	 */
 	protected void addAfter(final String content,
 			final String after, 
 			final String filePath) {
@@ -234,8 +293,13 @@ public final class WebGenerator extends BaseGenerator {
 		FileUtils.addToFile(content, after, file);
 	}
 	
-	private ArrayList<String> getCommand(final int command) {
-		ArrayList<String> commandArgs = new ArrayList<String>();
+	/**
+	 * Get the command corresponding to the given command number.
+	 * @param command The command number.
+	 * @return The command.
+	 */
+	private List<String> getCommand(final int command) {
+		List<String> commandArgs = new ArrayList<String>();
 		switch (command) {
 			case INSTALL_SYMFONY:
 				// PHP command

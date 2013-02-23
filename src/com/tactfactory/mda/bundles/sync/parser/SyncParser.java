@@ -27,26 +27,38 @@ import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.parser.BaseParser;
 import com.tactfactory.mda.utils.PackageUtils;
 
+/**
+ * Parser for Sync annotations.
+ */
 public class SyncParser extends BaseParser {
+	/** Bundle name. */
 	private static final String SYNC = "sync";
-	private static final String ANNOT_SYNC = PackageUtils.extractNameEntity(Sync.class);
+	/** Sync annotation name. */
+	private static final String ANNOT_SYNC = 
+			PackageUtils.extractNameEntity(Sync.class);
+	/** Sync argument Level name. */
 	private static final String ANNOT_SYNC_LEVEL = "level";
+	/** Sync argument Mode name. */
 	private static final String ANNOT_SYNC_MODE = "mode";
+	/** Sync argument Priority name. */
 	private static final String ANNOT_SYNC_PRIORITY = "priority";
 
 	@Override
-	public void visitClass(final ClassOrInterfaceDeclaration n, final ClassMetadata meta) {
+	public void visitClass(final ClassOrInterfaceDeclaration n,
+			final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitClassAnnotation(final ClassMetadata cm, final AnnotationExpr fieldAnnot) {
+	public final void visitClassAnnotation(final ClassMetadata cm,
+			final AnnotationExpr fieldAnnot) {
 		if (fieldAnnot.getName().toString().equals(ANNOT_SYNC)) {
 			// Parse Sync arguments
 			final SyncMetadata sm = new SyncMetadata();
 			if (fieldAnnot instanceof NormalAnnotationExpr) {
-				final NormalAnnotationExpr norm = (NormalAnnotationExpr) fieldAnnot;
+				final NormalAnnotationExpr norm =
+						(NormalAnnotationExpr) fieldAnnot;
 				final List<MemberValuePair> pairs = norm.getPairs();
 				for (final MemberValuePair pair : pairs) {
 					if (pair.getName().equals(ANNOT_SYNC_PRIORITY)) {
@@ -54,11 +66,16 @@ public class SyncParser extends BaseParser {
 						int priority  = 0;
 						
 						if (pair.getValue() instanceof IntegerLiteralExpr) {
-							priority = Integer.parseInt(((IntegerLiteralExpr) pair.getValue()).getValue());
-						} else if (pair.getValue() instanceof StringLiteralExpr) {
-							priority = Sync.Priority.fromName(((StringLiteralExpr) pair.getValue()).getValue());
+							priority = Integer.parseInt(((IntegerLiteralExpr) 
+									pair.getValue()).getValue());
+						} else if (pair.getValue() 
+								instanceof StringLiteralExpr) {
+							priority = Sync.Priority.fromName(
+									((StringLiteralExpr) 
+											pair.getValue()).getValue());
 						} else {
-							priority = Sync.Priority.fromName(pair.getValue().toString());
+							priority = Sync.Priority.fromName(
+									pair.getValue().toString());
 						}
 						
 						sm.priority = priority;
@@ -67,7 +84,8 @@ public class SyncParser extends BaseParser {
 					if (pair.getName().equals(ANNOT_SYNC_MODE)) {
 						String mode = "";
 						if (pair.getValue() instanceof StringLiteralExpr) {
-							mode = ((StringLiteralExpr) pair.getValue()).getValue();
+							mode = ((StringLiteralExpr) 
+									pair.getValue()).getValue();
 						} else {
 							mode = pair.getValue().toString();
 						}
@@ -77,7 +95,8 @@ public class SyncParser extends BaseParser {
 					if (pair.getName().equals(ANNOT_SYNC_LEVEL)) {
 						String level = "";
 						if (pair.getValue() instanceof StringLiteralExpr) {
-							level = ((StringLiteralExpr) pair.getValue()).getValue();
+							level = ((StringLiteralExpr) 
+									pair.getValue()).getValue();
 						} else {
 							level = pair.getValue().toString();
 						}
@@ -119,7 +138,8 @@ public class SyncParser extends BaseParser {
 	}
 
 	@Override
-	public void visitField(final FieldDeclaration field, final ClassMetadata meta) {
+	public void visitField(final FieldDeclaration field,
+			final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -132,13 +152,15 @@ public class SyncParser extends BaseParser {
 	}
 
 	@Override
-	public void visitMethod(final MethodDeclaration method, final ClassMetadata meta) {
+	public void visitMethod(final MethodDeclaration method, 
+			final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void visitImport(final ImportDeclaration imp, final ClassMetadata meta) {
+	public void visitImport(final ImportDeclaration imp, 
+			final ClassMetadata meta) {
 		// TODO Auto-generated method stub
 		
 	}

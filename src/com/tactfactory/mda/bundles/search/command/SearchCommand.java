@@ -18,24 +18,34 @@ import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
+/**
+ * Search Bundle command class.
+ */
 @PluginImplementation
 public class SearchCommand  extends BaseCommand {
 	
 	//bundle name
+	/** Bundle name. */
 	public static final String BUNDLE = "search";
+	/** Generate subject. */
 	public static final String SUBJECT = "generate";
 
 	//actions
+	/** Activities action. */
 	public static final String ACTION_ACTIVITIES = "activities";
 
 	//commands
-	public static final String GENERATE_ACTIVITIES = BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ACTIVITIES;
+	/** Command: SEARCH:GENERATE:ACTIVITIES.*/
+	public static final String GENERATE_ACTIVITIES = 
+			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ACTIVITIES;
 
 	@Override
-	public void execute(final String action, final String[] args, final String option) {
+	public final void execute(final String action, 
+			final String[] args, 
+			final String option) {
 		ConsoleUtils.display("> Adapters Generator");
 
-		this.commandArgs = Console.parseCommandArgs(args);
+		this.setCommandArgs(Console.parseCommandArgs(args));
 		if (action.equals(GENERATE_ACTIVITIES)) {
 			try {
 				this.generateLoaders();
@@ -47,9 +57,9 @@ public class SearchCommand  extends BaseCommand {
 	}
 	
 	/**
-	 * Generate java code files from parsed Entities
+	 * Generate java code files from parsed Entities.
 	 */
-	protected void generateLoaders() {
+	protected final void generateLoaders() {
 
 		this.generateMetas();
 		if (ApplicationMetadata.INSTANCE.entities != null) {
@@ -63,7 +73,7 @@ public class SearchCommand  extends BaseCommand {
 	}
 	
 	@Override
-	public void generateMetas() {
+	public final void generateMetas() {
 		this.registerParser(new SearchParser());
 		super.generateMetas();
 		//new SearchCompletor().generateApplicationRestMetadata(Harmony.metas);
@@ -72,14 +82,14 @@ public class SearchCommand  extends BaseCommand {
 	
 
 	@Override
-	public void summary() {
+	public final void summary() {
 		ConsoleUtils.display("\n> Search \n" 
 				+ "\t" + GENERATE_ACTIVITIES + "\t => Generate Activities");
 		
 	}
 
 	@Override
-	public boolean isAvailableCommand(final String command) {
+	public final boolean isAvailableCommand(final String command) {
 		return command.equals(GENERATE_ACTIVITIES);
 	}
 
