@@ -8,6 +8,7 @@ import java.util.ArrayList;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.Harmony;
+import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.FileUtils;
@@ -89,12 +90,7 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 	
 	/**
-<<<<<<< HEAD
-	 * Make Android Project Structure.
-	 * @return success to make the platform project folder
-=======
 	 * Create Android project folders
->>>>>>> 93a5585de48cf4e97a607f16603fe24b8dc4670c
 	 */
 	private void createFolders() {
 		// create project name space folders
@@ -183,8 +179,7 @@ public class ProjectGenerator extends BaseGenerator {
 			this.adapter.getTemplateSourcePath() 
 			+ "menu/TemplateMenuBase.java",
 			this.adapter.getMenuPath()
-			+ this.appMetas.projectNameSpace 
-			+ "/menu/" 
+
 			+ CaseFormat.LOWER_CAMEL.to(
 					CaseFormat.UPPER_CAMEL,
 					this.appMetas.name) 
@@ -195,9 +190,7 @@ public class ProjectGenerator extends BaseGenerator {
 		super.makeSource(
 			this.adapter.getTemplateSourcePath() 
 			+ "menu/TemplateMenu.java",
-			this.adapter.getMenuPath()
-			+ this.appMetas.projectNameSpace 
-			+ "/menu/" 
+			this.adapter.getMenuPath() 
 			+ CaseFormat.LOWER_CAMEL.to(
 					CaseFormat.UPPER_CAMEL, 
 					this.appMetas.name) 
@@ -223,7 +216,9 @@ public class ProjectGenerator extends BaseGenerator {
 		
 		/// copy sherlock library
 		//TODO test if git is install
-		String pathSherlock = String.format("%s%s", this.adapter.getLibsPath(), "sherlock");
+		String pathSherlock = String.format("%s%s", 
+				this.adapter.getLibsPath(), 
+				"sherlock");
 		final ArrayList<String> command = new ArrayList<String>();
 		
 		// Command/Tools
@@ -236,8 +231,7 @@ public class ProjectGenerator extends BaseGenerator {
 		command.add("https://github.com/JakeWharton/ActionBarSherlock.git");
 		
 		// Command destination folder
-		command.add(
-				String.format("%s%s", this.adapter.getLibsPath(), "sherlock"));
+		command.add(pathSherlock);
 		
 		ConsoleUtils.launchCommand(command);
 		command.clear();
@@ -293,6 +287,15 @@ public class ProjectGenerator extends BaseGenerator {
 		command.add(String.format("%s%s", "--work-tree=", pathSherlock));
 		command.add("checkout");
 		command.add("4.2.0");
+		ConsoleUtils.launchCommand(command);
+		command.clear();
+		
+		//make build sherlock
+		command.add(String.format("%s/%s", ApplicationMetadata.androidSdkPath, "tools/android" ));
+		command.add("update");
+		command.add("project");
+		command.add("--path");
+		command.add(".");
 		ConsoleUtils.launchCommand(command);
 		
 		/// copy Harmony library
