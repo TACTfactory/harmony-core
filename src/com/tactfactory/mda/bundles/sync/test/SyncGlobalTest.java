@@ -120,7 +120,7 @@ public class SyncGlobalTest extends CommonTest {
 	 */
 	@Test
 	public final void isUserSync() {
-		this.isSync(ApplicationMetadata.INSTANCE.entities.get(USER));
+		this.isSync(ApplicationMetadata.INSTANCE.getEntities().get(USER));
 	}
 	
 	/**
@@ -128,7 +128,7 @@ public class SyncGlobalTest extends CommonTest {
 	 */
 	@Test
 	public final void isCommentSync() {
-		this.isSync(ApplicationMetadata.INSTANCE.entities.get(COMMENT));
+		this.isSync(ApplicationMetadata.INSTANCE.getEntities().get(COMMENT));
 	}
 	
 	/**
@@ -136,7 +136,7 @@ public class SyncGlobalTest extends CommonTest {
 	 */
 	@Test
 	public final void isPostSync() {
-		this.isSync(ApplicationMetadata.INSTANCE.entities.get(POST));
+		this.isSync(ApplicationMetadata.INSTANCE.getEntities().get(POST));
 	}
 	
 	/**
@@ -144,11 +144,12 @@ public class SyncGlobalTest extends CommonTest {
 	 */
 	@Test
 	public final void hasPostSyncParameters() {
-		this.hasLevel(ApplicationMetadata.INSTANCE.entities.get(POST),
+		this.hasLevel(ApplicationMetadata.INSTANCE.getEntities().get(POST),
 				Level.GLOBAL);
-		this.hasMode(ApplicationMetadata.INSTANCE.entities.get(POST), 
+		this.hasMode(ApplicationMetadata.INSTANCE.getEntities().get(POST), 
 				Mode.POOLING);
-		this.hasPriority(ApplicationMetadata.INSTANCE.entities.get(POST), 1);
+		this.hasPriority(
+				ApplicationMetadata.INSTANCE.getEntities().get(POST), 1);
 	}
 	
 	/**
@@ -156,11 +157,12 @@ public class SyncGlobalTest extends CommonTest {
 	 */
 	@Test
 	public final void hasUserSyncParameters() {
-		this.hasLevel(ApplicationMetadata.INSTANCE.entities.get(USER),
+		this.hasLevel(ApplicationMetadata.INSTANCE.getEntities().get(USER),
 				Level.GLOBAL);
-		this.hasMode(ApplicationMetadata.INSTANCE.entities.get(USER), 
+		this.hasMode(ApplicationMetadata.INSTANCE.getEntities().get(USER), 
 				Mode.REAL_TIME);
-		this.hasPriority(ApplicationMetadata.INSTANCE.entities.get(USER), 1);
+		this.hasPriority(
+				ApplicationMetadata.INSTANCE.getEntities().get(USER), 1);
 	}
 	
 	/**
@@ -168,11 +170,12 @@ public class SyncGlobalTest extends CommonTest {
 	 */
 	@Test
 	public final void hasCommentSyncParameters() {
-		this.hasLevel(ApplicationMetadata.INSTANCE.entities.get(COMMENT), 
+		this.hasLevel(ApplicationMetadata.INSTANCE.getEntities().get(COMMENT), 
 				Level.SESSION);
-		this.hasMode(ApplicationMetadata.INSTANCE.entities.get(COMMENT), 
+		this.hasMode(ApplicationMetadata.INSTANCE.getEntities().get(COMMENT), 
 				Mode.REAL_TIME);
-		this.hasPriority(ApplicationMetadata.INSTANCE.entities.get(COMMENT), 
+		this.hasPriority(
+				ApplicationMetadata.INSTANCE.getEntities().get(COMMENT), 
 				Priority.LOW);
 	}
 	
@@ -182,7 +185,8 @@ public class SyncGlobalTest extends CommonTest {
 	 */
 	private void isSync(final ClassMetadata cm) {
 		Assert.assertTrue(
-				"Check if sync " + cm.name, cm.options.containsKey(SYNC));
+				"Check if sync " + cm.getName(),
+				cm.getOptions().containsKey(SYNC));
 	}
 	
 	/**
@@ -192,8 +196,9 @@ public class SyncGlobalTest extends CommonTest {
 	 */
 	private void hasMode(final ClassMetadata cm, final Sync.Mode value) {
 		Assert.assertTrue(
-				"Check if Mode of " + cm.name + " is " + value.getValue(), 
-				((SyncMetadata) cm.options.get(SYNC)).mode.equals(value));
+				"Check if Mode of " + cm.getName() + " is " + value.getValue(), 
+				((SyncMetadata) cm.getOptions().get(SYNC))
+					.getMode().equals(value));
 	}
 	
 	/**
@@ -203,8 +208,9 @@ public class SyncGlobalTest extends CommonTest {
 	 */
 	private void hasLevel(final ClassMetadata cm, final Sync.Level value) {
 		Assert.assertTrue(
-				"Check if Level of " + cm.name + " is " + value.getValue(),
-				((SyncMetadata) cm.options.get(SYNC)).level.equals(value));
+				"Check if Level of " + cm.getName() + " is " + value.getValue(),
+				((SyncMetadata) cm.getOptions()
+						.get(SYNC)).getLevel().equals(value));
 	}
 	
 	/**
@@ -214,8 +220,9 @@ public class SyncGlobalTest extends CommonTest {
 	 */
 	private void hasPriority(final ClassMetadata cm, final int value) {
 		Assert.assertTrue(
-				"Check if Priority of " + cm.name + " is " + value,
-				((SyncMetadata) cm.options.get(SYNC)).priority == value);
+				"Check if Priority of " + cm.getName() + " is " + value,
+				((SyncMetadata) cm.getOptions().get(SYNC)).getPriority() 
+				== value);
 	}
 	
 }

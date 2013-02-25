@@ -28,7 +28,7 @@ public class TestDBGenerator extends BaseGenerator {
 	 */
 	public TestDBGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
-		this.datamodel = this.appMetas.toMap(this.adapter);
+		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 	}
 	
 	/**
@@ -39,11 +39,14 @@ public class TestDBGenerator extends BaseGenerator {
 		
 		this.initTestAndroid();
 	
-		for (final ClassMetadata cm : this.appMetas.entities.values()) {
-			if (!cm.internal && !cm.fields.isEmpty()) {
+		for (final ClassMetadata cm 
+				: this.getAppMetas().getEntities().values()) {
+			if (!cm.isInternal() && !cm.getFields().isEmpty()) {
 				this.localNameSpace =
-						this.adapter.getNameSpace(cm, this.adapter.getTest());
-				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
+						this.getAdapter().getNameSpace(
+								cm, this.getAdapter().getTest());
+				this.getDatamodel().put(TagConstant.CURRENT_ENTITY,
+						cm.getName());
 				this.generate();
 			}
 		}
@@ -56,7 +59,8 @@ public class TestDBGenerator extends BaseGenerator {
 	private void generate() {
 		// Info
 				ConsoleUtils.display(">>> Generate Repository test for " 
-							+ this.datamodel.get(TagConstant.CURRENT_ENTITY));
+							+ this.getDatamodel().get(
+									TagConstant.CURRENT_ENTITY));
 		
 		try {			
 			this.makeSourceTest(
@@ -86,17 +90,17 @@ public class TestDBGenerator extends BaseGenerator {
 			final String filename,
 			final boolean override) {
 		final String fullFilePath = String.format("%s%s/%s",
-						this.adapter.getTestPath(),
+						this.getAdapter().getTestPath(),
 						PackageUtils.extractPath(
 								String.format("%s/%s",
-										this.adapter.getSource(),
+										this.getAdapter().getSource(),
 										this.localNameSpace)).toLowerCase(),
 						String.format(filename,
-								this.datamodel.get(
+								this.getDatamodel().get(
 										TagConstant.CURRENT_ENTITY)));
 		
 		final String fullTemplatePath = String.format("%s%s",
-					this.adapter.getTemplateTestsPath(),
+					this.getAdapter().getTemplateTestsPath(),
 					template);
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
@@ -112,7 +116,7 @@ public class TestDBGenerator extends BaseGenerator {
 		boolean result = false;
 
 		try {
-			if (new TestProjectGenerator(this.adapter).makeProject()) {
+			if (new TestProjectGenerator(this.getAdapter()).makeProject()) {
 				ConsoleUtils.displayDebug("Init Test Android Project Success!");
 				
 				result = true;

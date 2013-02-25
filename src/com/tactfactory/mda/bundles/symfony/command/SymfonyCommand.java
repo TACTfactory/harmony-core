@@ -96,7 +96,7 @@ public class SymfonyCommand extends BaseCommand {
 	protected final void initProject() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities != null) {
+		if (ApplicationMetadata.INSTANCE.getEntities() != null) {
 			try {
 				new WebGenerator(new AndroidAdapter(),
 						new SymfonyAdapter()).initProject();
@@ -113,7 +113,7 @@ public class SymfonyCommand extends BaseCommand {
 	protected final void generateEntities() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities != null) {
+		if (ApplicationMetadata.INSTANCE.getEntities() != null) {
 			try {
 				new WebGenerator(new AndroidAdapter(),
 						new SymfonyAdapter()).generateEntities();
@@ -130,7 +130,7 @@ public class SymfonyCommand extends BaseCommand {
 	protected final void generateWebRepositories() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities != null) {
+		if (ApplicationMetadata.INSTANCE.getEntities() != null) {
 			try {
 				new WebGenerator(new AndroidAdapter(), 
 						new SymfonyAdapter()).generateWebControllers();

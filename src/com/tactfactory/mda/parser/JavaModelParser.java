@@ -117,7 +117,7 @@ public class JavaModelParser {
 	/** Entity files path. */
 	private final String entityPath = 
 			this.adapter.getSourcePath() 
-			+ ApplicationMetadata.INSTANCE.projectNameSpace
+			+ ApplicationMetadata.INSTANCE.getProjectNameSpace()
 				.replaceAll("\\.", "/") 
 			+ PATH_ENTITY;
 	
@@ -234,10 +234,10 @@ public class JavaModelParser {
 				mclass.getPackage().getName().toString());
 		if (!Strings.isNullOrEmpty(spackage)) {
 			final ClassMetadata meta = new ClassMetadata();
-			meta.space = spackage;
+			meta.setSpace(spackage);
 			
 			new ClassVisitor().visit(mclass, meta);
-			if (!Strings.isNullOrEmpty(meta.name)) {
+			if (!Strings.isNullOrEmpty(meta.getName())) {
 				new ImportVisitor().visit(mclass, meta);
 				new FieldVisitor().visit(mclass, meta);
 				new MethodVisitor().visit(mclass, meta);
@@ -274,27 +274,28 @@ public class JavaModelParser {
 					final String annotationType = 
 							annotationExpr.getName().toString();
 					if (annotationType.equals(FILTER_ENTITY)) {
-						meta.name = PackageUtils.extractNameEntity(n.getName());
+						meta.setName(
+								PackageUtils.extractNameEntity(n.getName()));
 						
 						// Check reserved keywords
-						SqliteAdapter.Keywords.exists(meta.name);
+						SqliteAdapter.Keywords.exists(meta.getName());
 						
 						// Debug Log
 						ConsoleUtils.displayDebug("Entity : " 
-								+ meta.space 
+								+ meta.getSpace() 
 								+ ".entity." 
-								+  meta.name);
+								+  meta.getName());
 						
 						//break;
 					}
 				}
 				
-				if (!Strings.isNullOrEmpty(meta.name)) {
+				if (!Strings.isNullOrEmpty(meta.getName())) {
 					// Get list of Implement type
 					final List<ClassOrInterfaceType> impls = n.getImplements();
 					if (impls != null) {
 						for (final ClassOrInterfaceType impl : impls) {
-							meta.implementTypes.add(impl.getName());
+							meta.getImplementTypes().add(impl.getName());
 							
 							// Debug Log
 							ConsoleUtils.displayDebug("\tImplement : " 
@@ -306,7 +307,7 @@ public class JavaModelParser {
 					final List<ClassOrInterfaceType> exts = n.getExtends();
 					if (exts != null) {
 						for (final ClassOrInterfaceType ext : exts) {			
-							meta.extendType = ext.getName();		
+							meta.setExtendType(ext.getName());		
 							
 							// Debug Log
 							ConsoleUtils.displayDebug("\tExtend : " 
@@ -348,24 +349,25 @@ public class JavaModelParser {
 				// General (required !)
 				final FieldMetadata fieldMeta = new FieldMetadata(meta);
 			
-				fieldMeta.type = Type.toTypeString(field.getType().toString());
+				fieldMeta.setType(
+						Type.toTypeString(field.getType().toString()));
 				
 				// Java types Date and Time are deprecated in Harmony
-				if (fieldMeta.type.equalsIgnoreCase("date") 
-						|| fieldMeta.type.equalsIgnoreCase("time")) {
+				if (fieldMeta.getType().equalsIgnoreCase("date") 
+						|| fieldMeta.getType().equalsIgnoreCase("time")) {
 					ConsoleUtils.displayWarning(
 							"You should use DateTime java type instead of " 
-							+ fieldMeta.type
+							+ fieldMeta.getType()
 							+ ". Errors may occur.");
 				}
 				//fieldMeta.isFinal = ModifierSet.isFinal(field.getModifiers());
 				// FIXME not manage multi-variable
-				fieldMeta.name = 
-						field.getVariables().get(0).getId().getName(); 
-				fieldMeta.columnName = fieldMeta.name;
+				fieldMeta.setName(
+						field.getVariables().get(0).getId().getName()); 
+				fieldMeta.setColumnName(fieldMeta.getName());
 
 				// Set defaults values
-				fieldMeta.hidden = false;
+				fieldMeta.setHidden(false);
 								
 				// Database definitions
 				final RelationMetadata rel = new RelationMetadata();
@@ -399,7 +401,7 @@ public class JavaModelParser {
 							|| annotationType.equals(FILTER_ONE2MANY)	
 							|| annotationType.equals(FILTER_MANY2ONE)	
 							|| annotationType.equals(FILTER_MANY2MANY)) {
-						rel.type = annotationType;
+						rel.setType(annotationType);
 					}
 					
 					this.loadAttributes(rel,
@@ -408,67 +410,67 @@ public class JavaModelParser {
 							annotationType);
 					
 					// Set default values for type if type is recognized
-					final Type type = Type.fromName(fieldMeta.type);
+					final Type type = Type.fromName(fieldMeta.getType());
 					if (type != null) {
-						fieldMeta.type = type.getValue();
-						if (fieldMeta.nullable == null) {
-							fieldMeta.nullable = type.isNullable();
+						fieldMeta.setType(type.getValue());
+						if (fieldMeta.isNullable() == null) {
+							fieldMeta.setNullable(type.isNullable());
 						}
-						if (fieldMeta.unique == null) {
-							fieldMeta.unique = type.isUnique();
+						if (fieldMeta.isUnique() == null) {
+							fieldMeta.setUnique(type.isUnique());
 						}
-						if (fieldMeta.length == null) {
-							fieldMeta.length = type.getLength();
+						if (fieldMeta.getLength() == null) {
+							fieldMeta.setLength(type.getLength());
 						}
-						if (fieldMeta.precision == null) {
-							fieldMeta.precision = type.getPrecision();
+						if (fieldMeta.getPrecision() == null) {
+							fieldMeta.setPrecision(type.getPrecision());
 						}
-						if (fieldMeta.scale == null) {
-							fieldMeta.scale = type.getScale();
+						if (fieldMeta.getScale() == null) {
+							fieldMeta.setScale(type.getScale());
 						}
-						if (fieldMeta.isLocale == null) {
-							fieldMeta.isLocale = type.isLocale();
+						if (fieldMeta.isLocale() == null) {
+							fieldMeta.setIsLocale(type.isLocale());
 						}
 					}
 				}
 				
 				// ID relation
 				if (isId) {
-					fieldMeta.id = true;
-					meta.ids.put(fieldMeta.name, fieldMeta);
+					fieldMeta.setId(true);
+					meta.getIds().put(fieldMeta.getName(), fieldMeta);
 				}
 	
 				// Object relation
 				if (isRelation) {
-					rel.field = fieldMeta.name;
-					rel.entityRef = PackageUtils.extractClassNameFromArray(
-							field.getType().toString());
-					fieldMeta.relation = rel;
-					meta.relations.put(fieldMeta.name, fieldMeta);
+					rel.setField(fieldMeta.getName());
+					rel.setEntityRef(PackageUtils.extractClassNameFromArray(
+							field.getType().toString()));
+					fieldMeta.setRelation(rel);
+					meta.getRelations().put(fieldMeta.getName(), fieldMeta);
 				}
 
 				// Adjust databases column definition
-				if (Strings.isNullOrEmpty(fieldMeta.columnDefinition)) {
-					fieldMeta.columnDefinition = 
+				if (Strings.isNullOrEmpty(fieldMeta.getColumnDefinition())) {
+					fieldMeta.setColumnDefinition(
 							SqliteAdapter.generateColumnDefinition(
-									fieldMeta.type);
+									fieldMeta.getType()));
 				}
-				fieldMeta.columnDefinition = 
+				fieldMeta.setColumnDefinition(
 						SqliteAdapter.generateColumnType(
-								fieldMeta.columnDefinition);
+								fieldMeta.getColumnDefinition()));
 				
 				// Add to meta dictionary
 				if (isId || isColumn || isRelation) {
-					meta.fields.put(fieldMeta.name, fieldMeta);
+					meta.getFields().put(fieldMeta.getName(), fieldMeta);
 				}
 				
 				// Check SQLite reserved keywords
-				SqliteAdapter.Keywords.exists(fieldMeta.name);
-				if (!fieldMeta.name.equals(fieldMeta.columnName)) {
-					SqliteAdapter.Keywords.exists(fieldMeta.columnName);
+				SqliteAdapter.Keywords.exists(fieldMeta.getName());
+				if (!fieldMeta.getName().equals(fieldMeta.getColumnName())) {
+					SqliteAdapter.Keywords.exists(fieldMeta.getColumnName());
 				}
-				SqliteAdapter.Keywords.exists(fieldMeta.columnDefinition);
-				SqliteAdapter.Keywords.exists(fieldMeta.type);
+				SqliteAdapter.Keywords.exists(fieldMeta.getColumnDefinition());
+				SqliteAdapter.Keywords.exists(fieldMeta.getType());
 			}
 					
 		}
@@ -500,19 +502,19 @@ public class JavaModelParser {
 							if (mvp.getName().equals("nullable")  
 									&& mvp.getValue().toString()
 												.equals("true")) {
-								fieldMeta.nullable = true;
+								fieldMeta.setNullable(true);
 							} else 
 								
 							// set name
 							if (mvp.getName().equals("name")) {
 								if (mvp.getValue() 
 										instanceof StringLiteralExpr) {
-									fieldMeta.columnName = 
+									fieldMeta.setColumnName(
 											((StringLiteralExpr)
-													mvp.getValue()).getValue();
+													mvp.getValue()).getValue());
 								} else {
-									fieldMeta.columnName = 
-											mvp.getValue().toString();
+									fieldMeta.setColumnName(
+											mvp.getValue().toString());
 								}
 							} else 
 								
@@ -520,31 +522,31 @@ public class JavaModelParser {
 							if (mvp.getName().equals("unique")  
 									&& mvp.getValue().toString()
 											.equals("true")) {
-								fieldMeta.unique = true;
+								fieldMeta.setUnique(true);
 							} else 
 								
 							// set length
 							if (mvp.getName().equals("length")) {
-								fieldMeta.length = Integer.parseInt(
-										mvp.getValue().toString());
+								fieldMeta.setLength(Integer.parseInt(
+										mvp.getValue().toString()));
 							} else 
 								
 							// set precision
 							if (mvp.getName().equals("precision")) {
-								fieldMeta.precision = Integer.parseInt(
-										mvp.getValue().toString());
+								fieldMeta.setPrecision(Integer.parseInt(
+										mvp.getValue().toString()));
 							} else 
 								
 							// set scale
 							if (mvp.getName().equals("scale")) {
-								fieldMeta.scale = Integer.parseInt(
-										mvp.getValue().toString());
+								fieldMeta.setScale(Integer.parseInt(
+										mvp.getValue().toString()));
 							} else
 								
 							// set scale
 							if (mvp.getName().equals("locale")) {
-								fieldMeta.isLocale = Boolean.parseBoolean(
-										mvp.getValue().toString());
+								fieldMeta.setIsLocale(Boolean.parseBoolean(
+										mvp.getValue().toString()));
 							} else 
 								
 							// set column definition
@@ -560,19 +562,20 @@ public class JavaModelParser {
 									type = mvp.getValue().toString();
 								}
 								
-								fieldMeta.type = Type.fromName(type).getValue();
+								fieldMeta.setType(
+										Type.fromName(type).getValue());
 							} else
 								
 							// set scale
 							if (mvp.getName().equals("columnDefinition")) {
 								if (mvp.getValue() 
 										instanceof StringLiteralExpr) {
-									fieldMeta.columnDefinition = 
+									fieldMeta.setColumnDefinition(
 											((StringLiteralExpr) 
-													mvp.getValue()).getValue();
+													mvp.getValue()).getValue());
 								} else {
-									fieldMeta.columnDefinition = 
-											mvp.getValue().toString();
+									fieldMeta.setColumnDefinition(
+											mvp.getValue().toString());
 								}
 							} else 
 						
@@ -580,28 +583,28 @@ public class JavaModelParser {
 							if (mvp.getName().equals("hidden") 
 									&& mvp.getValue().toString()
 											.equals("true")) {
-								fieldMeta.hidden = true;
+								fieldMeta.setHidden(true);
 							}
 							
 						} else
 						
 						if (annotationType.equals(FILTER_JOINCOLUMN)) {
 							if (mvp.getName().equals("name")) {
-								rel.name = ((StringLiteralExpr) 
-										mvp.getValue()).getValue();
+								rel.setName(((StringLiteralExpr) 
+										mvp.getValue()).getValue());
 							}
 						} else
 							
 						if (annotationType.equals(FILTER_ONE2MANY)) {
 							if (mvp.getName().equals("mappedBy")) {
-								rel.mappedBy = ((StringLiteralExpr) 
-										mvp.getValue()).getValue();
+								rel.setMappedBy(((StringLiteralExpr) 
+										mvp.getValue()).getValue());
 							}
 						} else
 						
 						if (annotationType.equals(FILTER_MANY2ONE)) {
 							if (mvp.getName().equals("inversedBy")) {
-								rel.inversedBy = mvp.getValue().toString();
+								rel.setInversedBy(mvp.getValue().toString());
 							}
 						}
 					}	
@@ -626,7 +629,7 @@ public class JavaModelParser {
 				isId = true;
 				
 				// Debug Log
-				ConsoleUtils.displayDebug("\tID : " + fieldMeta.name);
+				ConsoleUtils.displayDebug("\tID : " + fieldMeta.getName());
 			}
 			
 			return isId;
@@ -656,8 +659,9 @@ public class JavaModelParser {
 					type = "Join Column";
 				}
 				
-				ConsoleUtils.displayDebug("\t" + type + " : " + fieldMeta.name
-						+ " type of " + fieldMeta.type);
+				ConsoleUtils.displayDebug(
+						"\t" + type + " : " + fieldMeta.getName()
+						+ " type of " + fieldMeta.getType());
 			}
 			
 			return isColumn;
@@ -686,9 +690,9 @@ public class JavaModelParser {
 				ConsoleUtils.displayDebug("\tRelation " 
 						+ annotationType 
 						+ " : " 
-						+ fieldMeta.name 
+						+ fieldMeta.getName() 
 						+ " type of " 
-						+ fieldMeta.type);
+						+ fieldMeta.getType());
 			}
 			
 			return isRelation;
@@ -710,28 +714,29 @@ public class JavaModelParser {
 	    	}
 			
 			final MethodMetadata methodMeta = new MethodMetadata();
-			methodMeta.name = method.getName();
-			methodMeta.type = method.getType().toString(); 
-			methodMeta.isFinal = ModifierSet.isFinal(method.getModifiers());
+			methodMeta.setName(method.getName());
+			methodMeta.setType(method.getType().toString()); 
+			methodMeta.setFinal(ModifierSet.isFinal(method.getModifiers()));
 			
 			// Add Parameters
 			final List<Parameter> parameters = method.getParameters();
 			if (parameters != null) {
 				for (final Parameter param : parameters) {
-					methodMeta.argumentsTypes.add(param.getType().toString());
+					methodMeta.getArgumentsTypes().add(
+							param.getType().toString());
 				}
 			}
 			
-			meta.methods.add(methodMeta);
+			meta.getMethods().add(methodMeta);
 			
 			// Debug Log
 			if (ConsoleUtils.isDebug()) {
 				final StringBuilder builder = new StringBuilder(
 						String.format("\tMethod : %s %s(", 
-								methodMeta.type, methodMeta.name));
+								methodMeta.getType(), methodMeta.getName()));
 				
-				for (final String args : methodMeta.argumentsTypes) {
-					if (!args.equals(methodMeta.argumentsTypes.get(0))) {
+				for (final String args : methodMeta.getArgumentsTypes()) {
+					if (!args.equals(methodMeta.getArgumentsTypes().get(0))) {
 						builder.append(", ");
 					}
 					
@@ -760,7 +765,7 @@ public class JavaModelParser {
 	    	}
 	    	
 			final String impName = imp.getName().getName();
-			meta.imports.add(impName);
+			meta.getImports().add(impName);
 			
 			// Debug Log
 			ConsoleUtils.displayDebug("\tImport : " + impName);

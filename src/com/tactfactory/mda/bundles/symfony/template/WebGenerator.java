@@ -56,10 +56,11 @@ public final class WebGenerator extends BaseGenerator {
 	public WebGenerator(final BaseAdapter adapter,
 			final SymfonyAdapter sAdapter) throws Exception {
 		super(adapter);
-		this.datamodel = this.appMetas.toMap(this.adapter);
+		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 		this.symfonyAdapter = sAdapter;
 		this.projectName = CaseFormat.LOWER_CAMEL.to(
-								CaseFormat.UPPER_CAMEL, this.appMetas.name);
+								CaseFormat.UPPER_CAMEL, 
+								this.getAppMetas().getName());
 	}
 	
 	/**
@@ -87,10 +88,13 @@ public final class WebGenerator extends BaseGenerator {
 		super.makeSource(fullTemplatePath, fullFilePath, true);
 		
 		// Generate yml descriptor files
-		for (final ClassMetadata cm : this.appMetas.entities.values()) {
-			if (cm.options.containsKey("rest") && cm.fields.size() > 0) {
-				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
-				this.makeEntity(cm.name);
+		for (final ClassMetadata cm 
+				: this.getAppMetas().getEntities().values()) {
+			if (cm.getOptions().containsKey("rest") 
+					&& cm.getFields().size() > 0) {
+				this.getDatamodel().put(
+						TagConstant.CURRENT_ENTITY, cm.getName());
+				this.makeEntity(cm.getName());
 			}
 		}		
 		
@@ -98,14 +102,16 @@ public final class WebGenerator extends BaseGenerator {
 		ConsoleUtils.launchCommand(this.getCommand(GENERATE_ENTITIES));
 		
 		// Add inheritance in php entities
-		for (final ClassMetadata cm : this.appMetas.entities.values()) {
-			if (cm.options.containsKey("rest") && cm.fields.size() > 0) {
+		for (final ClassMetadata cm 
+				: this.getAppMetas().getEntities().values()) {
+			if (cm.getOptions().containsKey("rest") 
+					&& cm.getFields().size() > 0) {
 				final String content = " extends EntityBase";
-				final String after = "class " + cm.name;
+				final String after = "class " + cm.getName();
 				final String filePath = 
 						this.symfonyAdapter.getWebEntitiesPath(
 								this.projectName) 
-						 + cm.name 
+						 + cm.getName() 
 						 + ".php";
 				this.addAfter(content, after, filePath);
 			}
@@ -129,16 +135,19 @@ public final class WebGenerator extends BaseGenerator {
 		final String routingPath = 
 				this.symfonyAdapter.getWebPath() + "app/config/routing.yml";
 		final String content = 
-				this.appMetas.name 
+				this.getAppMetas().getName() 
 				 + "_rest_default:\n    type:     rest\n    resource: "
 				 + this.projectName
 				 + "\\ApiBundle\\Controller\\RestDefaultController\n\n";
 		this.addToFile(content, routingPath);
 		
-		for (final ClassMetadata cm : this.appMetas.entities.values()) {
-			if (cm.options.containsKey("rest") && cm.fields.size() > 0) {
-				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
-				this.makeController(cm.name);
+		for (final ClassMetadata cm 
+				: this.getAppMetas().getEntities().values()) {
+			if (cm.getOptions().containsKey("rest") 
+					&& cm.getFields().size() > 0) {
+				this.getDatamodel().put(
+						TagConstant.CURRENT_ENTITY, cm.getName());
+				this.makeController(cm.getName());
 			}
 		}
 	}

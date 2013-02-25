@@ -21,18 +21,18 @@ public class RestMetadata extends BaseMetadata {
 	/** Bundle name. */
 	private static final String NAME = "rest";
 	/** Bundle enable state. */
-	public boolean isEnabled = false;
+	private boolean isEnabled = false;
 	/** Security level. */
-	public Security security = Security.NONE;
+	private Security security = Security.NONE;
 	/** URI. */
-	public String uri;
+	private String uri;
 	
 	/**
 	 * Constructor.
 	 */
 	public RestMetadata() {
 		super();
-		this.name = NAME;
+		this.setName(NAME);
 	}
 	
 	
@@ -45,5 +45,53 @@ public class RestMetadata extends BaseMetadata {
 		ret.put("security", this.security.getValue());
 		
 		return ret;
+	}
+
+
+	/**
+	 * @return the isEnabled
+	 */
+	public final boolean isEnabled() {
+		return isEnabled;
+	}
+
+
+	/**
+	 * @param isEnabled the isEnabled to set
+	 */
+	public final void setEnabled(final boolean isEnabled) {
+		this.isEnabled = isEnabled;
+	}
+
+
+	/**
+	 * @return the security
+	 */
+	public final Security getSecurity() {
+		return security;
+	}
+
+
+	/**
+	 * @param security the security to set
+	 */
+	public final void setSecurity(final Security security) {
+		this.security = security;
+	}
+
+
+	/**
+	 * @return the uri
+	 */
+	public final String getUri() {
+		return uri;
+	}
+
+
+	/**
+	 * @param uri the uri to set
+	 */
+	public final void setUri(final String uri) {
+		this.uri = uri;
 	}
 }

@@ -80,14 +80,14 @@ public class FixtureCommand extends BaseCommand {
 			this.generateMetas();
 			final FixtureMetadata fixtureMeta = new FixtureMetadata();
 			//TODO : get type by user input
-			fixtureMeta.type = "yml";
+			fixtureMeta.setType("yml");
 			if (this.getCommandArgs().containsKey("format")) {
 				final String format = this.getCommandArgs().get("format");
 				if (format.equals("xml") || format.equals("yml")) {
-					fixtureMeta.type = format; 
+					fixtureMeta.setType(format); 
 				}
 			}
-			ApplicationMetadata.INSTANCE.options.put(
+			ApplicationMetadata.INSTANCE.getOptions().put(
 					fixtureMeta.getName(), fixtureMeta);
 			new FixtureGenerator(new AndroidAdapter()).init();
 		} catch (final Exception e) {

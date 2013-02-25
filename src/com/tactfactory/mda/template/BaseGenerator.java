@@ -30,17 +30,73 @@ import freemarker.template.TemplateException;
 public abstract class BaseGenerator {
 	// Meta-models
 	/** The application metadata. */
-	protected ApplicationMetadata appMetas;	
+	private ApplicationMetadata appMetas;	
 	
 	// Platform adapter
 	/** The used adapter. */
-	protected BaseAdapter adapter;
+	private BaseAdapter adapter;
 	/** The datamodel. */
-	protected Map<String, Object> datamodel;
+	private Map<String, Object> datamodel;
 	
 	// Config
 	/** The freemarker configuration. */
-	protected Configuration cfg = new Configuration();	
+	private Configuration cfg = new Configuration();	
+
+	/**
+	 * @return the appMetas
+	 */
+	public final ApplicationMetadata getAppMetas() {
+		return appMetas;
+	}
+
+	/**
+	 * @param appMetas the appMetas to set
+	 */
+	public final void setAppMetas(final ApplicationMetadata appMetas) {
+		this.appMetas = appMetas;
+	}
+
+	/**
+	 * @return the adapter
+	 */
+	public final BaseAdapter getAdapter() {
+		return adapter;
+	}
+
+	/**
+	 * @param adapter the adapter to set
+	 */
+	public final void setAdapter(final BaseAdapter adapter) {
+		this.adapter = adapter;
+	}
+
+	/**
+	 * @return the datamodel
+	 */
+	public final Map<String, Object> getDatamodel() {
+		return datamodel;
+	}
+
+	/**
+	 * @param datamodel the datamodel to set
+	 */
+	public final void setDatamodel(final Map<String, Object> datamodel) {
+		this.datamodel = datamodel;
+	}
+
+	/**
+	 * @return the cfg
+	 */
+	public final Configuration getCfg() {
+		return cfg;
+	}
+
+	/**
+	 * @param cfg the cfg to set
+	 */
+	public final void setCfg(final Configuration cfg) {
+		this.cfg = cfg;
+	}
 
 	/**
 	 * Constructor.
@@ -53,7 +109,7 @@ public abstract class BaseGenerator {
 		}
 		
 		// FIXME Clone object tree
-		this.appMetas		= ApplicationMetadata.INSTANCE;	
+		this.appMetas	= ApplicationMetadata.INSTANCE;	
 		this.adapter	= adapt;
 		
 		this.cfg.setDirectoryForTemplateLoading(new File(Harmony.PATH_BASE));

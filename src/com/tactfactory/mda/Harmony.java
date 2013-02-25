@@ -126,7 +126,7 @@ public class Harmony {
 
 		// Check name space
 		if (Strings.isNullOrEmpty(
-				ApplicationMetadata.INSTANCE.projectNameSpace)) {
+				ApplicationMetadata.INSTANCE.getProjectNameSpace())) {
 			
 			// get project namespace and project name from AndroidManifest.xml
 			final File manifest = new File(String.format("%s/%s/%s",
@@ -140,11 +140,11 @@ public class Harmony {
 					"/res/values/configs.xml")); //FIXME path by adapter
 			
 			if (manifest.exists()) {
-				ApplicationMetadata.INSTANCE.projectNameSpace =
-						Harmony.getNameSpaceFromManifest(manifest);				
+				ApplicationMetadata.INSTANCE.setProjectNameSpace(
+						Harmony.getNameSpaceFromManifest(manifest));
 
-				ApplicationMetadata.INSTANCE.name =
-						Harmony.getProjectNameFromConfig(config);
+				ApplicationMetadata.INSTANCE.setName(
+						Harmony.getProjectNameFromConfig(config));
 			}
 			
 
@@ -153,25 +153,28 @@ public class Harmony {
 					Harmony.projectFolderPath, 
 					"local.properties");
 			
-			ApplicationMetadata.androidSdkPath = 
-					Harmony.getSdkDirFromPropertiesFile(projectProp);			
+			ApplicationMetadata.setAndroidSdkPath(
+					Harmony.getSdkDirFromPropertiesFile(projectProp));
 			Harmony.androidSdkVersion =
-					getAndroidSdkVersion(ApplicationMetadata.androidSdkPath);
+					getAndroidSdkVersion(
+							ApplicationMetadata.getAndroidSdkPath());
 		} else {
 			final String[] projectNameSpaceData =
-					ApplicationMetadata.INSTANCE.projectNameSpace
+					ApplicationMetadata.INSTANCE.getProjectNameSpace()
 							.split(DELIMITER);
-			ApplicationMetadata.INSTANCE.name = 
-					projectNameSpaceData[projectNameSpaceData.length - 1];
+			ApplicationMetadata.INSTANCE.setName(
+					projectNameSpaceData[projectNameSpaceData.length - 1]);
 		}
 		
 		// Debug Log
 		ConsoleUtils.display(
-				"Current Project : " + ApplicationMetadata.INSTANCE.name + "\n" 
+				"Current Project : " + ApplicationMetadata.INSTANCE.getName() 
+					+ "\n" 
 				+ "Current NameSpace : " 
-						+ ApplicationMetadata.INSTANCE.projectNameSpace + "\n" 
+						+ ApplicationMetadata.INSTANCE.getProjectNameSpace()
+						+ "\n" 
 				+ "Current Android SDK Path : "
-						+ ApplicationMetadata.androidSdkPath + "\n" 
+						+ ApplicationMetadata.getAndroidSdkPath() + "\n" 
 				+ "Current Android SDK Revision : "
 						+ Harmony.androidSdkVersion);
 	}
@@ -257,16 +260,16 @@ public class Harmony {
 	 * Prompt Project Name to the user.
 	 */
 	public static void initProjectName() {
-		if (Strings.isNullOrEmpty(ApplicationMetadata.INSTANCE.name)) {
+		if (Strings.isNullOrEmpty(ApplicationMetadata.INSTANCE.getName())) {
 			final String projectName = 
 					Harmony.getUserInput("Please enter your Project Name ["
 						+ DEFAULT_PROJECT_NAME 
 						+ "]:");
 			
 			if (Strings.isNullOrEmpty(projectName)) {
-				ApplicationMetadata.INSTANCE.name = DEFAULT_PROJECT_NAME;
+				ApplicationMetadata.INSTANCE.setName(DEFAULT_PROJECT_NAME);
 			} else {
-				ApplicationMetadata.INSTANCE.name = projectName;
+				ApplicationMetadata.INSTANCE.setName(projectName);
 			}
 		}
 	}
@@ -276,7 +279,7 @@ public class Harmony {
 	 */
 	public static void initProjectNameSpace() {
 		if (Strings.isNullOrEmpty(
-				ApplicationMetadata.INSTANCE.projectNameSpace)) {
+				ApplicationMetadata.INSTANCE.getProjectNameSpace())) {
 			boolean good = false;
 			
 			while (!good) {
@@ -287,22 +290,22 @@ public class Harmony {
 										+ "]:");
 				
 				if (Strings.isNullOrEmpty(projectNameSpace)) {
-					ApplicationMetadata.INSTANCE.projectNameSpace 
-						= DEFAULT_PROJECT_NAMESPACE
-								.replaceAll("\\.", DELIMITER);
+					ApplicationMetadata.INSTANCE.setProjectNameSpace(
+						DEFAULT_PROJECT_NAMESPACE
+								.replaceAll("\\.", DELIMITER));
 					good = true;
 					
 				} else {
 					if (projectNameSpace.toLowerCase(Locale.ENGLISH)
-							.endsWith(ApplicationMetadata.INSTANCE.name
+							.endsWith(ApplicationMetadata.INSTANCE.getName()
 									.toLowerCase())) {
 						
 						String namespaceForm = 
 								"^(((([a-z0-9_] +)\\.)*)([a-z0-9_] +))$";
 						
 						if (Pattern.matches(namespaceForm, projectNameSpace)) {
-							ApplicationMetadata.INSTANCE.projectNameSpace 
-								= projectNameSpace.replaceAll("\\.", DELIMITER);
+							ApplicationMetadata.INSTANCE.setProjectNameSpace(
+								projectNameSpace.replaceAll("\\.", DELIMITER));
 							good = true;
 						} else {
 							ConsoleUtils.display(
@@ -322,42 +325,43 @@ public class Harmony {
 	 * Prompt Project Android SDK Path to the user.
 	 */
 	public static void initProjectAndroidSdkPath() {
-		if (Strings.isNullOrEmpty(ApplicationMetadata.androidSdkPath)) {
+		if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
 			final String sdkPath = 
 					Harmony.getUserInput("Please enter AndroidSDK " 
 							+ "full path [/root/android-sdk/]:");
 			
 			if (!Strings.isNullOrEmpty(sdkPath)) {
-				ApplicationMetadata.androidSdkPath = sdkPath;
+				ApplicationMetadata.setAndroidSdkPath(sdkPath);
 				Harmony.androidSdkVersion 
-					= getAndroidSdkVersion(ApplicationMetadata.androidSdkPath);
+					= getAndroidSdkVersion(
+							ApplicationMetadata.getAndroidSdkPath());
 			} else {
 				String osMessage = "Detected OS: ";
 				
 				if (OsUtil.isWindows()) {
 					if (OsUtil.isX64()) {
 						osMessage += "Windows x64";
-						ApplicationMetadata.androidSdkPath = String.format(
+						ApplicationMetadata.setAndroidSdkPath(String.format(
 								"%s/%s/",
 								"C:/Program Files", 
-								"android-sdk");
+								"android-sdk"));
 						
 					} else if (!OsUtil.isX64()) {
 						osMessage += "Windows x86";
-						ApplicationMetadata.androidSdkPath = 
+						ApplicationMetadata.setAndroidSdkPath(
 								String.format("%s/%s/", 
 										"C:/Program Files (x86)", 
-										"android-sdk");
+										"android-sdk"));
 					} else {
 						osMessage += "Windows x??";
-						ApplicationMetadata.androidSdkPath = 
+						ApplicationMetadata.setAndroidSdkPath(
 								String.format("%s/%s/", 
 										"C:/Program Files", 
-										"android-sdk");
+										"android-sdk"));
 					}
 				} else if (OsUtil.isLinux()) {
 					osMessage += "Linux";
-					ApplicationMetadata.androidSdkPath = "/opt/android-sdk/";
+					ApplicationMetadata.setAndroidSdkPath("/opt/android-sdk/");
 				}
 				
 				// Debug Log

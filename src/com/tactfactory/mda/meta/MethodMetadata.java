@@ -21,13 +21,13 @@ import com.tactfactory.mda.template.TagConstant;
  */
 public class MethodMetadata extends BaseMetadata {	
 	/** Return type. */
-	public String type;
+	private String type;
 	
 	/** Arguments types. */
-	public List<String> argumentsTypes = new ArrayList<String>();
+	private List<String> argumentsTypes = new ArrayList<String>();
 	
 	/** Final. */
-	public boolean isFinal;
+	private boolean isFinal;
 
 	@Override
 	public final Map<String, Object> toMap(final BaseAdapter adapter) {
@@ -36,5 +36,47 @@ public class MethodMetadata extends BaseMetadata {
 		map.put("isFinal", this.isFinal);
 		map.put("args", this.argumentsTypes);
 		return map;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public final String getType() {
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public final void setType(final String type) {
+		this.type = type;
+	}
+
+	/**
+	 * @return the argumentsTypes
+	 */
+	public final List<String> getArgumentsTypes() {
+		return argumentsTypes;
+	}
+
+	/**
+	 * @param argumentsTypes the argumentsTypes to set
+	 */
+	public final void setArgumentsTypes(final List<String> argumentsTypes) {
+		this.argumentsTypes = argumentsTypes;
+	}
+
+	/**
+	 * @return the isFinal
+	 */
+	public final boolean isFinal() {
+		return isFinal;
+	}
+
+	/**
+	 * @param isFinal the isFinal to set
+	 */
+	public final void setFinal(final boolean isFinal) {
+		this.isFinal = isFinal;
 	}
 }

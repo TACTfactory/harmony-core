@@ -60,7 +60,7 @@ public class TranslationGenerator extends BaseGenerator {
 			// Make engine
 			final SAXBuilder builder = new SAXBuilder();		
 			final File xmlFile = 
-					FileUtils.makeFile(this.adapter.getStringsPathFile());
+					FileUtils.makeFile(this.getAdapter().getStringsPathFile());
 			
 			// Load XML File
 			final Document doc = builder.build(xmlFile);
@@ -74,7 +74,7 @@ public class TranslationGenerator extends BaseGenerator {
 					rootNode.getNamespace("android");	
 
 			for (final TranslationMetadata translationMeta 
-					: this.appMetas.translates.values()) {
+					: this.getAppMetas().getTranslates().values()) {
 				Element findTranslation = null;
 				
 				// Debug Log
@@ -128,11 +128,13 @@ public class TranslationGenerator extends BaseGenerator {
 					final String metaName1 = o1.getAttributeValue(NAME, ns);
 					final String metaName2 = o2.getAttributeValue(NAME, ns);
 					final TranslationMetadata meta1 =
-							TranslationGenerator.this.appMetas.translates.get(
-									metaName1);
+							TranslationGenerator.this.getAppMetas()
+							.getTranslates()
+							.get(metaName1);
 					final TranslationMetadata meta2 = 
-							TranslationGenerator.this.appMetas.translates.get(
-									metaName2);
+							TranslationGenerator.this.getAppMetas()
+							.getTranslates()
+							.get(metaName2);
 					
 					if (meta1 != null && meta2 != null) {
 						final int groupScore = 

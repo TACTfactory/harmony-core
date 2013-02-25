@@ -64,7 +64,7 @@ public class SyncCommand extends BaseCommand {
 	protected final void generateAdapters() {
 		//Harmony.metas.entities = getMetasFromAll();
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities != null) {
+		if (ApplicationMetadata.INSTANCE.getEntities() != null) {
 			try {
 				new SyncGenerator(new AndroidAdapter()).generateAll();
 			} catch (final Exception e) {

@@ -21,42 +21,42 @@ import com.tactfactory.mda.template.TagConstant;
 /** Entity field metadata. */
 public class FieldMetadata extends BaseMetadata {
 	/** Owner. */
-	public ClassMetadata owner;
+	private ClassMetadata owner;
 	
 	/** Field type. */
-	public String type;
+	private String type;
 	
 	/** Column name. */
-	public String columnName;
+	private String columnName;
 	
 	/** Field database type. */
-	public String columnDefinition;
+	private String columnDefinition;
 	
 	/** Relation mapped to this field. */
-	public RelationMetadata relation;
+	private RelationMetadata relation;
 	
 	/** Field nullability. */
-	public Boolean nullable;
+	private Boolean nullable;
 	/** Field unicity. */
-	public Boolean unique;
+	private Boolean unique;
 	/** Field locality. */
-	public Boolean isLocale;
+	private Boolean isLocale;
 	
 	/** Field length. */
-	public Integer length;
+	private Integer length;
 	/** Field precision. */
-	public Integer precision;
+	private Integer precision;
 	/** Field scale. */
-	public Integer scale;
+	private Integer scale;
 	
 	/** Is Field hidden ? */
-	public boolean hidden;
+	private boolean hidden;
 	/** Is field ID ? */
-	public boolean id;
+	private boolean id;
 	
 	
 	/** Is field internal ? */
-	public boolean internal = false;
+	private boolean internal = false;
 	
 	/**
 	 * Constructor.
@@ -73,7 +73,9 @@ public class FieldMetadata extends BaseMetadata {
 	 */
 	public final void makeString(final String componentName) {
 		final String key = 
-				this.owner.name.toLowerCase() + "_" + this.name.toLowerCase();
+				this.owner.getName().toLowerCase() 
+				+ "_" 
+				+ this.getName().toLowerCase();
 		final boolean isDate = this.type.equals(Type.DATE.getValue());
 		final boolean isTime = this.type.equals(Type.TIME.getValue());
 		final boolean isDateTime = this.type.equals(Type.DATETIME.getValue());
@@ -85,7 +87,7 @@ public class FieldMetadata extends BaseMetadata {
 				TranslationMetadata.addDefaultTranslation(
 						String.format(formatKey, key, Type.DATE.getValue()),
 						String.format(formatTitle,
-								this.name,
+								this.getName(),
 								Type.DATE.getValue()), 
 						Group.MODEL);
 			} 
@@ -94,7 +96,7 @@ public class FieldMetadata extends BaseMetadata {
 				TranslationMetadata.addDefaultTranslation(
 						String.format(formatKey, key, Type.TIME.getValue()),
 						String.format(formatTitle,
-								this.name,
+								this.getName(),
 								Type.TIME.getValue()), 
 						Group.MODEL);
 			} 
@@ -102,7 +104,7 @@ public class FieldMetadata extends BaseMetadata {
 		
 		TranslationMetadata.addDefaultTranslation(
 					key + "_" + componentName.toLowerCase(Locale.ENGLISH),
-					this.name, 
+					this.getName(), 
 					Group.MODEL);
 	}
 	
@@ -115,7 +117,7 @@ public class FieldMetadata extends BaseMetadata {
 	public final Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		
-		model.put(TagConstant.NAME, 		this.name);
+		model.put(TagConstant.NAME, 		this.getName());
 		model.put(TagConstant.TYPE, 		this.type);
 		model.put(TagConstant.FIELD_NAME, 	this.columnName);
 		model.put(TagConstant.FIELD_DEF, 	this.columnDefinition);
@@ -135,11 +137,235 @@ public class FieldMetadata extends BaseMetadata {
 		
 		final HashMap<String, Object> optionsModel =
 				new HashMap<String, Object>();
-		for (final Metadata bm : this.options.values()) {
+		for (final Metadata bm : this.getOptions().values()) {
 			optionsModel.put(bm.getName(), bm.toMap(adapter));
 		}
 		model.put(TagConstant.OPTIONS, optionsModel);
 		
 		return model;
+	}
+
+
+	/**
+	 * @return the owner
+	 */
+	public final ClassMetadata getOwner() {
+		return owner;
+	}
+
+
+	/**
+	 * @param owner the owner to set
+	 */
+	public final void setOwner(final ClassMetadata owner) {
+		this.owner = owner;
+	}
+
+
+	/**
+	 * @return the type
+	 */
+	public final String getType() {
+		return type;
+	}
+
+
+	/**
+	 * @param type the type to set
+	 */
+	public final void setType(final String type) {
+		this.type = type;
+	}
+
+
+	/**
+	 * @return the columnName
+	 */
+	public final String getColumnName() {
+		return columnName;
+	}
+
+
+	/**
+	 * @param columnName the columnName to set
+	 */
+	public final void setColumnName(final String columnName) {
+		this.columnName = columnName;
+	}
+
+
+	/**
+	 * @return the columnDefinition
+	 */
+	public final String getColumnDefinition() {
+		return columnDefinition;
+	}
+
+
+	/**
+	 * @param columnDefinition the columnDefinition to set
+	 */
+	public final void setColumnDefinition(final String columnDefinition) {
+		this.columnDefinition = columnDefinition;
+	}
+
+
+	/**
+	 * @return the relation
+	 */
+	public final RelationMetadata getRelation() {
+		return relation;
+	}
+
+
+	/**
+	 * @param relation the relation to set
+	 */
+	public final void setRelation(final RelationMetadata relation) {
+		this.relation = relation;
+	}
+
+
+	/**
+	 * @return the nullable
+	 */
+	public final Boolean isNullable() {
+		return nullable;
+	}
+
+
+	/**
+	 * @param nullable the nullable to set
+	 */
+	public final void setNullable(final Boolean nullable) {
+		this.nullable = nullable;
+	}
+
+
+	/**
+	 * @return the unique
+	 */
+	public final Boolean isUnique() {
+		return unique;
+	}
+
+
+	/**
+	 * @param unique the unique to set
+	 */
+	public final void setUnique(final Boolean unique) {
+		this.unique = unique;
+	}
+
+
+	/**
+	 * @return the isLocale
+	 */
+	public final Boolean isLocale() {
+		return isLocale;
+	}
+
+
+	/**
+	 * @param isLocale the isLocale to set
+	 */
+	public final void setIsLocale(final Boolean isLocale) {
+		this.isLocale = isLocale;
+	}
+
+
+	/**
+	 * @return the length
+	 */
+	public final Integer getLength() {
+		return length;
+	}
+
+
+	/**
+	 * @param length the length to set
+	 */
+	public final void setLength(final Integer length) {
+		this.length = length;
+	}
+
+
+	/**
+	 * @return the precision
+	 */
+	public final Integer getPrecision() {
+		return precision;
+	}
+
+
+	/**
+	 * @param precision the precision to set
+	 */
+	public final void setPrecision(final Integer precision) {
+		this.precision = precision;
+	}
+
+
+	/**
+	 * @return the scale
+	 */
+	public final Integer getScale() {
+		return scale;
+	}
+
+
+	/**
+	 * @param scale the scale to set
+	 */
+	public final void setScale(final Integer scale) {
+		this.scale = scale;
+	}
+
+
+	/**
+	 * @return the hidden
+	 */
+	public final boolean isHidden() {
+		return hidden;
+	}
+
+
+	/**
+	 * @param hidden the hidden to set
+	 */
+	public final void setHidden(final boolean hidden) {
+		this.hidden = hidden;
+	}
+
+
+	/**
+	 * @return the id
+	 */
+	public final boolean isId() {
+		return id;
+	}
+
+
+	/**
+	 * @param id the id to set
+	 */
+	public final void setId(final boolean id) {
+		this.id = id;
+	}
+
+
+	/**
+	 * @return the internal
+	 */
+	public final boolean isInternal() {
+		return internal;
+	}
+
+
+	/**
+	 * @param internal the internal to set
+	 */
+	public final void setInternal(final boolean internal) {
+		this.internal = internal;
 	}
 }

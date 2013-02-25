@@ -71,7 +71,7 @@ public class SearchParser  extends BaseParser {
 
 		if (fieldAnnot.getName().toString().equals(ANNOT_SEARCHABLE)) {
 			final SearchMetadata sm = new SearchMetadata();
-			field.options.put(SEARCH, sm);
+			field.getOptions().put(SEARCH, sm);
 		}
 		
 	}

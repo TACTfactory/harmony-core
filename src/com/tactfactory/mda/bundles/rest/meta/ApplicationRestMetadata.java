@@ -23,7 +23,7 @@ public class ApplicationRestMetadata extends BaseMetadata {
 	/** Bundle name. */
 	private static final String NAME = "rest";
 	/** Rest entities. */
-	public LinkedHashMap<String, ClassMetadata> entities = 
+	private LinkedHashMap<String, ClassMetadata> entities = 
 			new LinkedHashMap<String, ClassMetadata>();
 	
 	/**
@@ -31,7 +31,7 @@ public class ApplicationRestMetadata extends BaseMetadata {
 	 */
 	public ApplicationRestMetadata() {
 		super();
-		this.name = NAME;
+		this.setName(NAME);
 	}
 	
 	@Override

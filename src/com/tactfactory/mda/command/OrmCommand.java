@@ -77,7 +77,7 @@ public class OrmCommand extends BaseCommand {
 	protected final void generateEntities() {
 		this.generateMetas();
 		
-		if (ApplicationMetadata.INSTANCE.entities != null) {
+		if (ApplicationMetadata.INSTANCE.getEntities() != null) {
 			this.makeLayoutDatabase();
 			this.makeLayoutTestDatabase();
 		}
@@ -89,7 +89,7 @@ public class OrmCommand extends BaseCommand {
 	 */
 	protected final void generateCrud() {
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities != null) {
+		if (ApplicationMetadata.INSTANCE.getEntities() != null) {
 			this.makeLayoutUi(true);
 		}
 	}
