@@ -57,8 +57,9 @@ public class SearchGenerator  extends BaseGenerator {
 	 * Generate all activities.
 	 */
 	public final void generateAll() {
-		this.datamodel = this.appMetas.toMap(this.adapter);
-		for (final ClassMetadata cm : this.appMetas.entities.values()) {
+		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
+		for (final ClassMetadata cm 
+				: this.getAppMetas().getEntities().values()) {
 			if (this.isClassSearchable(cm)) {
 				this.generateActivity(cm);
 			}
@@ -72,30 +73,30 @@ public class SearchGenerator  extends BaseGenerator {
 	private void generateActivity(final ClassMetadata cm) {
 		this.makeSource(cm, 
 				"TemplateSearchActivity.java", 
-				cm.name + "SearchActivity.java", 
+				cm.getName() + "SearchActivity.java", 
 				false);
 		this.makeSource(cm, 
 				"TemplateSearchFragment.java",
-				cm.name + "SearchFragment.java", 
+				cm.getName() + "SearchFragment.java", 
 				false);
 		
 		this.makeLayout(cm, 
 				"activity_template_search.xml",
-				"activity_" + cm.name.toLowerCase() + "_search.xml",
+				"activity_" + cm.getName().toLowerCase() + "_search.xml",
 				false);
 		this.makeLayout(cm, 
 				"fragment_template_search.xml", 
-				"fragment_" + cm.name.toLowerCase() + "_search.xml",
+				"fragment_" + cm.getName().toLowerCase() + "_search.xml",
 				false);
 		
 		TranslationMetadata.addDefaultTranslation(
 				"common_search", "Search", Group.COMMON);
 		
-		this.updateManifest("SearchActivity", cm.name);
+		this.updateManifest("SearchActivity", cm.getName());
 		
 		this.generateMenu();
 		try {
-			new TranslationGenerator(this.adapter).generateStringsXml();
+			new TranslationGenerator(this.getAdapter()).generateStringsXml();
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			ConsoleUtils.displayError(e);
@@ -116,8 +117,8 @@ public class SearchGenerator  extends BaseGenerator {
 	 */
 	private boolean isClassSearchable(final ClassMetadata cm) {
 		boolean isSearchable = false;
-		for (final FieldMetadata fm : cm.fields.values()) {
-			if (fm.options.containsKey("search")) {
+		for (final FieldMetadata fm : cm.getFields().values()) {
+			if (fm.getOptions().containsKey("search")) {
 				isSearchable = true;
 			}
 		}
@@ -136,18 +137,18 @@ public class SearchGenerator  extends BaseGenerator {
 			final String fileName, 
 			final boolean override) {
 		
-		this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
+		this.getDatamodel().put(TagConstant.CURRENT_ENTITY, cm.getName());
 		final String fullFilePath = 
-				this.adapter.getSourcePath()
-				+ PackageUtils.extractPath(this.adapter.getNameSpace(
+				this.getAdapter().getSourcePath()
+				+ PackageUtils.extractPath(this.getAdapter().getNameSpace(
 						cm, 
-						this.adapter.getController())
+						this.getAdapter().getController())
 				+ "." 
 				+ cm.getName().toLowerCase())
 				+ "/" 
 				+ fileName;
 		final String fullTemplatePath = 
-				this.adapter.getTemplateSourceControlerPath().substring(1) 
+				this.getAdapter().getTemplateSourceControlerPath().substring(1) 
 				+ templateName;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
@@ -159,13 +160,13 @@ public class SearchGenerator  extends BaseGenerator {
 	 */
 	protected final void makeMenu(final boolean override) {
 		final String fullFilePath = 
-				this.adapter.getSourcePath()
-				+ this.appMetas.projectNameSpace 
+				this.getAdapter().getSourcePath()
+				+ this.getAppMetas().getProjectNameSpace() 
 				+ "/" + "menu" + "/"
 				+ "SearchMenuWrapper.java";
 		
 		final String fullTemplatePath =
-				this.adapter.getTemplateSourcePath()
+				this.getAdapter().getTemplateSourcePath()
 				+ "menu/SearchMenuWrapper.java";
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
@@ -182,12 +183,12 @@ public class SearchGenerator  extends BaseGenerator {
 			final String templateName, 
 			final String fileName,
 			final boolean override) {
-		this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
+		this.getDatamodel().put(TagConstant.CURRENT_ENTITY, cm.getName());
 		final String fullFilePath = String.format("%s/%s", 
-				this.adapter.getRessourceLayoutPath(),
+				this.getAdapter().getRessourceLayoutPath(),
 				fileName);
 		final String fullTemplatePath = String.format("%s/%s",
-				this.adapter.getTemplateRessourceLayoutPath().substring(1),
+				this.getAdapter().getTemplateRessourceLayoutPath().substring(1),
 				templateName);
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
@@ -203,7 +204,7 @@ public class SearchGenerator  extends BaseGenerator {
 			final String entityName) {
 		String realClassFile = entityName + classFile;
 		final String pathRelatif = String.format(".%s.%s.%s",
-				this.adapter.getController(), 
+				this.getAdapter().getController(), 
 				entityName.toLowerCase(), 
 				realClassFile);
 
@@ -213,7 +214,7 @@ public class SearchGenerator  extends BaseGenerator {
 		try {
 			final SAXBuilder builder = new SAXBuilder();		// Make engine
 			final File xmlFile =
-					FileUtils.makeFile(this.adapter.getManifestPathFile());
+					FileUtils.makeFile(this.getAdapter().getManifestPathFile());
 			final Document doc = builder.build(xmlFile); 	// Load XML File
 			// Load Root element
 			final Element rootNode = doc.getRootElement(); 			

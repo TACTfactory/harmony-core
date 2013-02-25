@@ -31,7 +31,7 @@ public class RestGenerator extends BaseGenerator {
 	 */
 	public RestGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
-		this.datamodel = this.appMetas.toMap(this.adapter);
+		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 	}
 	
 	/**
@@ -40,7 +40,7 @@ public class RestGenerator extends BaseGenerator {
 	public final void generateAll() {
 		this.generateWSAdapter();
 		try {
-			new TestWSGenerator(this.adapter).generateAll();
+			new TestWSGenerator(this.getAdapter()).generateAll();
 			
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
@@ -75,22 +75,25 @@ public class RestGenerator extends BaseGenerator {
 				"RestClient.java",
 				true);
 		
-		for (final ClassMetadata cm : this.appMetas.entities.values()) {
-			if (cm.options.get("rest") != null) {
-				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
+		for (final ClassMetadata cm 
+				: this.getAppMetas().getEntities().values()) {
+			if (cm.getOptions().get("rest") != null) {
+				this.getDatamodel().put(
+						TagConstant.CURRENT_ENTITY, cm.getName());
 				this.makeSource(
 						"base/TemplateWebServiceClientAdapterBase.java", 
-						"base/" + cm.name + "WebServiceClientAdapterBase.java", 
+						"base/" + cm.getName() 
+							+ "WebServiceClientAdapterBase.java", 
 						true);
 				this.makeSource(
 						"TemplateWebServiceClientAdapter.java", 
-						cm.name + "WebServiceClientAdapter.java", 
+						cm.getName() + "WebServiceClientAdapter.java", 
 						true);
 			}
 		}	
 		try {
-			new TranslationGenerator(this.adapter).generateStringsXml();
-			new ConfigGenerator(this.adapter).generateConfigXml();
+			new TranslationGenerator(this.getAdapter()).generateStringsXml();
+			new ConfigGenerator(this.getAdapter()).generateConfigXml();
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			ConsoleUtils.displayError(e);
@@ -102,12 +105,12 @@ public class RestGenerator extends BaseGenerator {
 			final String fileName, 
 			final boolean override) {
 		final String fullFilePath = 
-				this.adapter.getSourcePath() 
-				+ this.appMetas.projectNameSpace 
-				+ "/" + this.adapter.getData() + "/"
+				this.getAdapter().getSourcePath() 
+				+ this.getAppMetas().getProjectNameSpace() 
+				+ "/" + this.getAdapter().getData() + "/"
 				+ fileName;
 		final String fullTemplatePath = 
-				this.adapter.getTemplateSourceProviderPath().substring(1) 
+				this.getAdapter().getTemplateSourceProviderPath().substring(1) 
 				+ templateName;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);

@@ -20,16 +20,16 @@ public class FixtureMetadata extends BaseMetadata {
 	/** Bundle name. */
 	private static final String NAME = "fixture";
 	/** Fixture enabled state. */
-	public boolean enabled = true;
+	private boolean enabled = true;
 	/** Fixture type (xml, yml). */
-	public String type;
+	private String type;
 	
 	/**
 	 * Constructor.
 	 */
 	public FixtureMetadata() {
 		super();
-		this.name = NAME;
+		this.setName(NAME);
 	}
 	
 	@Override
@@ -38,5 +38,33 @@ public class FixtureMetadata extends BaseMetadata {
 			model.put("enabled", this.enabled);
 			model.put("type", this.type);
 		return model;
+	}
+
+	/**
+	 * @return the enabled
+	 */
+	public final boolean isEnabled() {
+		return enabled;
+	}
+
+	/**
+	 * @param enabled the enabled to set
+	 */
+	public final void setEnabled(final boolean enabled) {
+		this.enabled = enabled;
+	}
+
+	/**
+	 * @return the type
+	 */
+	public final String getType() {
+		return type;
+	}
+
+	/**
+	 * @param type the type to set
+	 */
+	public final void setType(final String type) {
+		this.type = type;
 	}
 }

@@ -136,7 +136,7 @@ public class RestGlobalTest extends CommonTest {
 	 */
 	@Test
 	public final void isUserRest() {
-		this.isRest(ApplicationMetadata.INSTANCE.entities.get(USER));
+		this.isRest(ApplicationMetadata.INSTANCE.getEntities().get(USER));
 	}
 	
 	/**
@@ -144,7 +144,7 @@ public class RestGlobalTest extends CommonTest {
 	 */
 	@Test
 	public final void isCommentRest() {
-		this.isRest(ApplicationMetadata.INSTANCE.entities.get(COMMENT));
+		this.isRest(ApplicationMetadata.INSTANCE.getEntities().get(COMMENT));
 	}
 	
 	/**
@@ -152,7 +152,7 @@ public class RestGlobalTest extends CommonTest {
 	 */
 	@Test
 	public final void isPostRest() {
-		this.isRest(ApplicationMetadata.INSTANCE.entities.get(POST));
+		this.isRest(ApplicationMetadata.INSTANCE.getEntities().get(POST));
 	}
 	
 	/**
@@ -160,7 +160,7 @@ public class RestGlobalTest extends CommonTest {
 	 */
 	@Test
 	public final void hasPostUri() {
-		this.hasUri(ApplicationMetadata.INSTANCE.entities.get(POST), POST);
+		this.hasUri(ApplicationMetadata.INSTANCE.getEntities().get(POST), POST);
 	}
 	
 	/**
@@ -168,7 +168,7 @@ public class RestGlobalTest extends CommonTest {
 	 */
 	@Test
 	public final void hasUserUri() {
-		this.hasUri(ApplicationMetadata.INSTANCE.entities.get(USER), 
+		this.hasUri(ApplicationMetadata.INSTANCE.getEntities().get(USER), 
 				"user-uri");
 	}
 	
@@ -177,7 +177,7 @@ public class RestGlobalTest extends CommonTest {
 	 */
 	@Test
 	public final void hasPostSecurity() {
-		this.hasSecurity(ApplicationMetadata.INSTANCE.entities.get(POST),
+		this.hasSecurity(ApplicationMetadata.INSTANCE.getEntities().get(POST),
 				Rest.Security.NONE);
 	}
 	
@@ -186,7 +186,7 @@ public class RestGlobalTest extends CommonTest {
 	 */
 	@Test
 	public final void hasUserSecurity() {
-		this.hasSecurity(ApplicationMetadata.INSTANCE.entities.get(USER),
+		this.hasSecurity(ApplicationMetadata.INSTANCE.getEntities().get(USER),
 				Rest.Security.SESSION);
 	}
 	
@@ -195,8 +195,8 @@ public class RestGlobalTest extends CommonTest {
 	 * @param cm The given entity
 	 */
 	private void isRest(final ClassMetadata cm) {
-		Assert.assertTrue("Check if rest " + cm.name,
-				cm.options.containsKey(REST));
+		Assert.assertTrue("Check if rest " + cm.getName(),
+				cm.getOptions().containsKey(REST));
 	}
 	
 	/**
@@ -205,8 +205,9 @@ public class RestGlobalTest extends CommonTest {
 	 * @param value The given uri
 	 */
 	private void hasUri(final ClassMetadata cm, final String value) {
-		Assert.assertTrue("Check if URI of " + cm.name + " is " + value, 
-				((RestMetadata) cm.options.get(REST)).uri.equals(value));
+		Assert.assertTrue("Check if URI of " + cm.getName() + " is " + value, 
+				((RestMetadata) cm.getOptions().get(REST)).getUri()
+					.equals(value));
 	}
 	
 	/**
@@ -217,8 +218,12 @@ public class RestGlobalTest extends CommonTest {
 	private void hasSecurity(final ClassMetadata cm,
 			final Rest.Security value) {
 		Assert.assertTrue(
-				"Check if SECURITY of " + cm.name + " is " + value.getValue(), 
-				((RestMetadata) cm.options.get(REST)).security.equals(value));
+				"Check if SECURITY of " 
+						+ cm.getName() 
+						+ " is " 
+						+ value.getValue(), 
+				((RestMetadata) cm.getOptions().get(REST))
+					.getSecurity().equals(value));
 	}
 	
 }

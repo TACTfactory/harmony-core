@@ -144,7 +144,7 @@ public class FixtureGlobalTest extends CommonTest {
 	 */
 	protected static final void copyFixturesXml() {
 		final String pathNameSpace = 
-				ApplicationMetadata.INSTANCE.projectNameSpace.replaceAll(
+				ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll(
 						"\\.", "/");
 		final String srcDir = String.format("src/%s/%s/%s/",
 				pathNameSpace,
@@ -168,7 +168,7 @@ public class FixtureGlobalTest extends CommonTest {
 	 */
 	protected static final void copyFixturesYml() {
 		final String pathNameSpace = 
-				ApplicationMetadata.INSTANCE.projectNameSpace.replaceAll(
+				ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll(
 						"\\.", "/");
 		final String srcDir = String.format("src/%s/%s/%s/",
 				pathNameSpace,

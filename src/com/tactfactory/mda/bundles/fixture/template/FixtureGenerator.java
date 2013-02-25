@@ -33,7 +33,7 @@ public class FixtureGenerator extends BaseGenerator {
 	 */
 	public FixtureGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
-		this.datamodel = this.appMetas.toMap(this.adapter);
+		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 	}
 	
 	/**
@@ -44,9 +44,9 @@ public class FixtureGenerator extends BaseGenerator {
 		final File fixtTestSrc = new File("fixtures/test");
 		if (fixtAppSrc.exists()) {
 			final File fixtAppDest = 
-					new File(this.adapter.getAssetsPath() + "/app");
+					new File(this.getAdapter().getAssetsPath() + "/app");
 			final File fixtTestDest = 
-					new File(this.adapter.getAssetsPath() + "/test");
+					new File(this.getAdapter().getAssetsPath() + "/test");
 			if (!fixtAppDest.exists()) {
 				fixtAppDest.mkdir();
 			}
@@ -83,7 +83,8 @@ public class FixtureGenerator extends BaseGenerator {
 	public final void init() {
 		 try {
 			 final String fixtureType = ((FixtureMetadata) 
-							 this.appMetas.options.get("fixture")).type;
+							 this.getAppMetas().getOptions()
+							 	.get("fixture")).getType();
 			 
 			 //Copy JDOM Library
 			this.updateLibrary("jdom-2.0.2.jar");
@@ -94,19 +95,20 @@ public class FixtureGenerator extends BaseGenerator {
 			this.makeSource("DataManager.java", "DataManager.java", true);
 			
 			//Update SQLiteOpenHelper
-			new SQLiteGenerator(this.adapter).generateDatabase();
+			new SQLiteGenerator(this.getAdapter()).generateDatabase();
 			
 			//Create each entity's data loader
-			for (final ClassMetadata cm : this.appMetas.entities.values()) {
-				if (cm.fields.size() > 0) {
-					this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
+			for (final ClassMetadata cm 
+					: this.getAppMetas().getEntities().values()) {
+				if (cm.getFields().size() > 0) {
+					this.getDatamodel().put(TagConstant.CURRENT_ENTITY,
+							cm.getName());
 					this.makeSource("TemplateDataLoader.java",
-							cm.name + "DataLoader.java",
+							cm.getName() + "DataLoader.java",
 							true);
-					this.makeBaseFixture("TemplateFixture." 
-							+ fixtureType, cm.name 
-							+ "." 
-							+ fixtureType, false);
+					this.makeBaseFixture("TemplateFixture." + fixtureType, 
+							cm.getName() + "." + fixtureType, 
+							false);
 				}
 			}
 		} catch (final Exception e) {
@@ -118,9 +120,10 @@ public class FixtureGenerator extends BaseGenerator {
 	 * Delete the existing fixtures.
 	 */
 	public final void purge() {
-		for (final ClassMetadata cm : this.appMetas.entities.values()) {
-			this.removeSource(cm.name + ".xml");
-			this.removeSource(cm.name + ".yml");
+		for (final ClassMetadata cm 
+				: this.getAppMetas().getEntities().values()) {
+			this.removeSource(cm.getName() + ".xml");
+			this.removeSource(cm.getName() + ".yml");
 		}
 		
 	}
@@ -130,13 +133,13 @@ public class FixtureGenerator extends BaseGenerator {
 			final String fileName, 
 			final boolean override) {
 		final String fullFilePath = 
-				this.adapter.getSourcePath() 
-				+ this.appMetas.projectNameSpace
-				+ "/" + this.adapter.getFixture() + "/" 
+				this.getAdapter().getSourcePath() 
+				+ this.getAppMetas().getProjectNameSpace()
+				+ "/" + this.getAdapter().getFixture() + "/" 
 				+ fileName;
 		
 		final String fullTemplatePath = 
-				this.adapter.getTemplateSourceFixturePath().substring(1) 
+				this.getAdapter().getTemplateSourceFixturePath().substring(1) 
 				+ templateName;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
@@ -148,7 +151,7 @@ public class FixtureGenerator extends BaseGenerator {
 	 */
 	protected final void removeSource(final String fileName) {
 		final String fullFilePath = 
-				this.adapter.getAssetsPath() + "/" + fileName;
+				this.getAdapter().getAssetsPath() + "/" + fileName;
 		final File f = new File(fullFilePath);
 		f.delete();
 	}
@@ -164,13 +167,13 @@ public class FixtureGenerator extends BaseGenerator {
 			final boolean override) {
 		String fullFilePath = "fixtures/app/" + fileName;
 		String fullTemplatePath = 
-				this.adapter.getTemplateSourceFixturePath().substring(1) 
+				this.getAdapter().getTemplateSourceFixturePath().substring(1) 
 				+ templateName;
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 		
 		fullFilePath = "fixtures/test/" + fileName;
 		fullTemplatePath =
-				this.adapter.getTemplateSourceFixturePath().substring(1)
+				this.getAdapter().getTemplateSourceFixturePath().substring(1)
 				+ templateName;
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}

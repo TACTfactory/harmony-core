@@ -24,45 +24,46 @@ import com.tactfactory.mda.template.TagConstant;
 public class ClassMetadata extends BaseMetadata {
 
 	/** Used for join tables (ManyToMany relations). */
-	public boolean internal = false;
+	private boolean internal = false;
 	
 	/** Namespace of entity class. */
-	public String space = "";
+	private String space = "";
 
 	/** List of fields of entity class. */
-	public Map<String, FieldMetadata> fields = 
+	private Map<String, FieldMetadata> fields = 
 			new LinkedHashMap<String, FieldMetadata>();
 
 	/** List of ids of entity class. */
-	public Map<String, FieldMetadata> ids = 
+	private Map<String, FieldMetadata> ids = 
 			new LinkedHashMap<String, FieldMetadata>();
 	
 	/** List of relations of entity class. */
-	public Map<String, FieldMetadata> relations =
+	private Map<String, FieldMetadata> relations =
 			new LinkedHashMap<String, FieldMetadata>();
 		
 	/** Class inherited by the entity class or null if none. */
-	public String extendType;
+	private String extendType;
 	
 	/** Implemented class list of the entity class. */
-	public List<String> implementTypes = 
+	private List<String> implementTypes = 
 			new ArrayList<String>();
 	
 	/** Implemented class list of the entity class. */
-	public List<MethodMetadata> methods = 
+	private List<MethodMetadata> methods = 
 			new ArrayList<MethodMetadata>();
 
 	/** Imports of the class. */
-	public List<String> imports = new ArrayList<String>();
+	private List<String> imports = new ArrayList<String>();
 	
 	/** 
 	 * Add Component String of field. 
 	 * @param componentName Component name
 	 */
 	public final void makeString(final String componentName) {
-		final String key = this.name.toLowerCase() 
+		final String key = this.getName().toLowerCase() 
 				+ "_" + componentName.toLowerCase(Locale.ENGLISH);
-		TranslationMetadata.addDefaultTranslation(key, this.name, Group.MODEL);
+		TranslationMetadata.addDefaultTranslation(
+				key, this.getName(), Group.MODEL);
 	}
 
 	
@@ -77,7 +78,7 @@ public class ClassMetadata extends BaseMetadata {
 		
 		model.put(TagConstant.SPACE,			this.space);
 		//model.put(TagConstant.PROJECT_NAME,		Harmony.metas.name);
-		model.put(TagConstant.NAME,				this.name);
+		model.put(TagConstant.NAME,				this.getName());
 		model.put(TagConstant.EXTENDS,			this.extendType);
 		model.put(TagConstant.CONTROLLER_NAMESPACE, 
 				adapter.getNameSpaceEntity(this, adapter.getController()));
@@ -98,7 +99,7 @@ public class ClassMetadata extends BaseMetadata {
 		}
 		
 		final Map<String, Object> optionsModel = new HashMap<String, Object>();
-		for (final Metadata option : this.options.values()) {
+		for (final Metadata option : this.getOptions().values()) {
 			optionsModel.put(option.getName(), option.toMap(adapter));
 		}
 		model.put(TagConstant.OPTIONS, optionsModel);
@@ -106,6 +107,150 @@ public class ClassMetadata extends BaseMetadata {
 		return model;
 	}
 	
+	/**
+	 * @return the internal
+	 */
+	public final boolean isInternal() {
+		return internal;
+	}
+
+
+	/**
+	 * @param internal the internal to set
+	 */
+	public final void setInternal(final boolean internal) {
+		this.internal = internal;
+	}
+
+
+	/**
+	 * @return the space
+	 */
+	public final String getSpace() {
+		return space;
+	}
+
+
+	/**
+	 * @param space the space to set
+	 */
+	public final void setSpace(final String space) {
+		this.space = space;
+	}
+
+
+	/**
+	 * @return the fields
+	 */
+	public final Map<String, FieldMetadata> getFields() {
+		return fields;
+	}
+
+
+	/**
+	 * @param fields the fields to set
+	 */
+	public final void setFields(final Map<String, FieldMetadata> fields) {
+		this.fields = fields;
+	}
+
+
+	/**
+	 * @return the ids
+	 */
+	public final Map<String, FieldMetadata> getIds() {
+		return ids;
+	}
+
+
+	/**
+	 * @param ids the ids to set
+	 */
+	public final void setIds(final Map<String, FieldMetadata> ids) {
+		this.ids = ids;
+	}
+
+
+	/**
+	 * @return the relations
+	 */
+	public final Map<String, FieldMetadata> getRelations() {
+		return relations;
+	}
+
+
+	/**
+	 * @param relations the relations to set
+	 */
+	public final void setRelations(final Map<String, FieldMetadata> relations) {
+		this.relations = relations;
+	}
+
+
+	/**
+	 * @return the extendType
+	 */
+	public final String getExtendType() {
+		return extendType;
+	}
+
+
+	/**
+	 * @param extendType the extendType to set
+	 */
+	public final void setExtendType(final String extendType) {
+		this.extendType = extendType;
+	}
+
+
+	/**
+	 * @return the implementTypes
+	 */
+	public final List<String> getImplementTypes() {
+		return implementTypes;
+	}
+
+
+	/**
+	 * @param implementTypes the implementTypes to set
+	 */
+	public final void setImplementTypes(final List<String> implementTypes) {
+		this.implementTypes = implementTypes;
+	}
+
+
+	/**
+	 * @return the methods
+	 */
+	public final List<MethodMetadata> getMethods() {
+		return methods;
+	}
+
+
+	/**
+	 * @param methods the methods to set
+	 */
+	public final void setMethods(final List<MethodMetadata> methods) {
+		this.methods = methods;
+	}
+
+
+	/**
+	 * @return the imports
+	 */
+	public final List<String> getImports() {
+		return imports;
+	}
+
+
+	/**
+	 * @param imports the imports to set
+	 */
+	public final void setImports(final List<String> imports) {
+		this.imports = imports;
+	}
+
+
 	/**
 	 * Build a map from a collection of fields.
 	 * @param c The collection of fields
@@ -125,7 +270,7 @@ public class ClassMetadata extends BaseMetadata {
 			subField = field.toMap(adapter);
 			
 			// Add field translate
-			if (!field.internal && !field.hidden) {
+			if (!field.isInternal() && !field.isHidden()) {
 				field.makeString("label");
 			}
 			

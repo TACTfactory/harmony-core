@@ -62,7 +62,7 @@ public class SearchCommand  extends BaseCommand {
 	protected final void generateLoaders() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities != null) {
+		if (ApplicationMetadata.INSTANCE.getEntities() != null) {
 			try {
 				new SearchGenerator(new AndroidAdapter()).generateAll();
 			} catch (final Exception e) {

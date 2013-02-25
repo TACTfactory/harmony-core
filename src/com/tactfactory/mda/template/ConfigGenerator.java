@@ -55,7 +55,7 @@ public class ConfigGenerator extends BaseGenerator {
 			// Make engine
 			final SAXBuilder builder = new SAXBuilder();		
 			final File xmlFile = 
-					FileUtils.makeFile(this.adapter.getConfigsPathFile());
+					FileUtils.makeFile(this.getAdapter().getConfigsPathFile());
 			
 			// Load XML File
 			final Document doc = builder.build(xmlFile);
@@ -67,11 +67,12 @@ public class ConfigGenerator extends BaseGenerator {
 			final Namespace ns = rootNode.getNamespace("android");	
 
 			for (final ConfigMetadata configMeta 
-					: this.appMetas.configs.values()) {
+					: this.getAppMetas().getConfigs().values()) {
 				Element findConfig = null;
 				
 				// Debug Log
-				ConsoleUtils.displayDebug("Update config : " + configMeta.key);
+				ConsoleUtils.displayDebug(
+						"Update config : " + configMeta.getKey());
 				
 				// Find String Node
 				final List<Element> configs = 
@@ -80,7 +81,8 @@ public class ConfigGenerator extends BaseGenerator {
 				for (final Element configXml : configs) {
 					if (configXml.hasAttributes() 
 							&& configXml.getAttributeValue(NAME, ns)
-								.equals(configMeta.key)) {	// Load name value
+								.equals(configMeta.getKey())) {	
+						// Load name value
 						findConfig = configXml;
 						
 						break;
@@ -93,13 +95,13 @@ public class ConfigGenerator extends BaseGenerator {
 					findConfig = new Element("string");
 					
 					// Add name to element
-					findConfig.setAttribute(NAME, configMeta.key, ns);
+					findConfig.setAttribute(NAME, configMeta.getKey(), ns);
 					
-					findConfig.setText(configMeta.value); // Set values
+					findConfig.setText(configMeta.getValue()); // Set values
 					
 					rootNode.addContent(findConfig);
 				} else {
-					configMeta.value = findConfig.getText();
+					configMeta.setValue(findConfig.getText());
 				}
 			}
 			

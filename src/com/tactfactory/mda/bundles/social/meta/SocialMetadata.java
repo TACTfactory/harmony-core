@@ -22,14 +22,14 @@ public class SocialMetadata extends BaseMetadata {
 	/** Bundle name. */
 	private static final String NAME = "social";
 	/** Is Social enabled ? */
-	public boolean isEnabled = false;
+	private boolean isEnabled = false;
 	
 	/** 
 	 * Constructor.
 	 */
 	public SocialMetadata() {
 		super();
-		this.name = NAME;
+		this.setName(NAME);
 	}
 	
 	@Override
@@ -40,4 +40,20 @@ public class SocialMetadata extends BaseMetadata {
 		
 		return ret;
 	}
+
+	/**
+	 * @return the isEnabled
+	 */
+	public final boolean isEnabled() {
+		return isEnabled;
+	}
+
+	/**
+	 * @param isEnabled the isEnabled to set
+	 */
+	public final void setEnabled(final boolean isEnabled) {
+		this.isEnabled = isEnabled;
+	}
+	
+	
 }

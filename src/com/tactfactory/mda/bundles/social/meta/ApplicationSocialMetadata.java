@@ -24,7 +24,7 @@ public class ApplicationSocialMetadata extends BaseMetadata {
 	/** Bundle name. */
 	private static final String NAME = "social";
 	/** Social entities. */
-	public Map<String, ClassMetadata> entities =
+	private Map<String, ClassMetadata> entities =
 			new LinkedHashMap<String, ClassMetadata>();
 	
 	/**
@@ -32,7 +32,7 @@ public class ApplicationSocialMetadata extends BaseMetadata {
 	 */
 	public ApplicationSocialMetadata() {
 		super();
-		this.name = NAME;
+		this.setName(NAME);
 	}
 	
 	@Override

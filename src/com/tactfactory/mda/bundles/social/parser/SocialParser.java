@@ -66,8 +66,8 @@ public class SocialParser extends BaseParser {
 			final AnnotationExpr fieldAnnot) {
 		if (fieldAnnot.getName().toString().equals(ANNOT_SOCIAL)) {
 			final SocialMetadata rm = new SocialMetadata();
-			rm.isEnabled = true;
-			cm.options.put(SOCIAL, rm);
+			rm.setEnabled(true);
+			cm.getOptions().put(SOCIAL, rm);
 		}
 		
 	}

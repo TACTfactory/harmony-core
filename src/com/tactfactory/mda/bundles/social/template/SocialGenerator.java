@@ -22,7 +22,7 @@ public class SocialGenerator  extends BaseGenerator {
 	 * Generate the social menu. 
 	 */
 	public final void generateMenu() {
-		this.datamodel = this.appMetas.toMap(this.adapter);
+		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 		this.makeMenu(true);
 	}
 
@@ -32,12 +32,12 @@ public class SocialGenerator  extends BaseGenerator {
 	 */
 	protected final void makeMenu(final boolean override) {
 		final String fullFilePath = 
-				this.adapter.getSourcePath() 
-				+ this.appMetas.projectNameSpace 
+				this.getAdapter().getSourcePath() 
+				+ this.getAppMetas().getProjectNameSpace() 
 				+ "/" + "menu" + "/" 
 				+ "SocialMenuWrapper.java";
 		final String fullTemplatePath = 
-				this.adapter.getTemplateSourcePath() 
+				this.getAdapter().getTemplateSourcePath() 
 				+ "menu/SocialMenuWrapper.java";
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);

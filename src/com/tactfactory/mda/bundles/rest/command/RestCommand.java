@@ -63,7 +63,7 @@ public class RestCommand extends BaseCommand {
 	protected final void generateAdapters() {
 
 		this.generateMetas();
-		if (ApplicationMetadata.INSTANCE.entities != null) {
+		if (ApplicationMetadata.INSTANCE.getEntities() != null) {
 			try {
 				new RestGenerator(new AndroidAdapter()).generateAll();
 			} catch (final Exception e) {

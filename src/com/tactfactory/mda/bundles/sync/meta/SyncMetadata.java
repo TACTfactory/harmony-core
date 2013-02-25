@@ -24,18 +24,18 @@ public class SyncMetadata extends BaseMetadata {
 	private static final String NAME = "sync";
 	
 	/** Sync level. */
-	public Level level = Level.GLOBAL;
+	private Level level = Level.GLOBAL;
 	/** Sync Mode. */
-	public Mode mode = Mode.POOLING;
+	private Mode mode = Mode.POOLING;
 	/** Sync Priority. */
-	public int priority = 1;
+	private int priority = 1;
 	
 	/**
 	 * Constructor.
 	 */
 	public SyncMetadata() {
 		super();
-		this.name = NAME;
+		this.setName(NAME);
 	}
 	@Override
 	public final HashMap<String, Object> toMap(final BaseAdapter adapter) {
@@ -44,6 +44,42 @@ public class SyncMetadata extends BaseMetadata {
 		model.put(TagConstant.MODE, this.mode.getValue());
 		model.put(TagConstant.PRIORITY, this.priority);
 		return model;
+	}
+	/**
+	 * @return the level
+	 */
+	public final Level getLevel() {
+		return level;
+	}
+	/**
+	 * @param level the level to set
+	 */
+	public final void setLevel(final Level level) {
+		this.level = level;
+	}
+	/**
+	 * @return the mode
+	 */
+	public final Mode getMode() {
+		return mode;
+	}
+	/**
+	 * @param mode the mode to set
+	 */
+	public final void setMode(final Mode mode) {
+		this.mode = mode;
+	}
+	/**
+	 * @return the priority
+	 */
+	public final int getPriority() {
+		return priority;
+	}
+	/**
+	 * @param priority the priority to set
+	 */
+	public final void setPriority(final int priority) {
+		this.priority = priority;
 	}
 
 }

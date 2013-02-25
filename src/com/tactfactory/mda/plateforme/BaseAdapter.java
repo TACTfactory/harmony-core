@@ -167,7 +167,7 @@ public abstract class BaseAdapter {
 				Harmony.PATH_PROJECT, 
 				this.getPlatform(), 
 				this.getSource(), 
-				ApplicationMetadata.INSTANCE.projectNameSpace, 
+				ApplicationMetadata.INSTANCE.getProjectNameSpace(), 
 				this.getHarmony(), 
 				this.getWidget());
 	}
@@ -181,7 +181,7 @@ public abstract class BaseAdapter {
 				Harmony.PATH_PROJECT, 
 				this.getPlatform(), 
 				this.getSource(), 
-				ApplicationMetadata.INSTANCE.projectNameSpace, 
+				ApplicationMetadata.INSTANCE.getProjectNameSpace(), 
 				this.getHarmony(),
 				this.getUtil());
 	}
@@ -195,7 +195,7 @@ public abstract class BaseAdapter {
 				Harmony.PATH_PROJECT, 
 				this.getPlatform(), 
 				this.getSource(), 
-				ApplicationMetadata.INSTANCE.projectNameSpace, 
+				ApplicationMetadata.INSTANCE.getProjectNameSpace(), 
 				this.getMenu());
 	}
 	
@@ -433,7 +433,7 @@ public abstract class BaseAdapter {
 				Harmony.PATH_PROJECT,
 				this.getPlatform(),
 				this.getSource(), 
-				ApplicationMetadata.INSTANCE.projectNameSpace, 
+				ApplicationMetadata.INSTANCE.getProjectNameSpace(), 
 				this.getHome());
 	}
 	

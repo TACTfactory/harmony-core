@@ -72,14 +72,16 @@ public class ActivityGenerator extends BaseGenerator {
 		this(adapter, true);
 		
 		// Make entities
-		for (final ClassMetadata meta : this.appMetas.entities.values()) {
-			if (!meta.fields.isEmpty() && !meta.internal) {
+		for (final ClassMetadata meta 
+				: this.getAppMetas().getEntities().values()) {
+			if (!meta.getFields().isEmpty() && !meta.isInternal()) {
 				// copy Widget
 				if (this.isDate && this.isTime) {
 					break;
 				} else {
-					for (final FieldMetadata field : meta.fields.values()) {
-						final String type = field.type;
+					for (final FieldMetadata field 
+							: meta.getFields().values()) {
+						final String type = field.getType();
 						if (!this.isDate && (
 								type.equals(Type.DATE.getValue())  
 								|| type.equals(Type.DATETIME.getValue()))) {
@@ -108,7 +110,8 @@ public class ActivityGenerator extends BaseGenerator {
 		super(adapter);
 
 		this.isWritable = writable;
-		this.datamodel = ApplicationMetadata.INSTANCE.toMap(this.adapter);
+		this.setDatamodel(
+				ApplicationMetadata.INSTANCE.toMap(this.getAdapter()));
 	}
 	
 	/**
@@ -117,13 +120,15 @@ public class ActivityGenerator extends BaseGenerator {
 	public final void generateAll() {
 		ConsoleUtils.display(">> Generate CRUD view...");
 
-		for (final ClassMetadata cm : this.appMetas.entities.values()) {
-			if (!cm.internal && !cm.fields.isEmpty()) {
+		for (final ClassMetadata cm 
+				: this.getAppMetas().getEntities().values()) {
+			if (!cm.isInternal() && !cm.getFields().isEmpty()) {
 				cm.makeString("label");
-				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.getName());
+				this.getDatamodel().put(
+						TagConstant.CURRENT_ENTITY, cm.getName());
 				this.localNameSpace = 
-						this.adapter.getNameSpace(cm, 
-								this.adapter.getController())
+						this.getAdapter().getNameSpace(cm, 
+								this.getAdapter().getController())
 						+ "." 
 						+ cm.getName().toLowerCase(Locale.ENGLISH);
 				this.generateAllAction(cm.getName());
@@ -191,7 +196,7 @@ public class ActivityGenerator extends BaseGenerator {
 					entityName + " is loading&#8230;",
 					Group.MODEL);
 		
-			new TranslationGenerator(this.adapter).generateStringsXml();
+			new TranslationGenerator(this.getAdapter()).generateStringsXml();
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
@@ -354,12 +359,12 @@ public class ActivityGenerator extends BaseGenerator {
 	private void makeSourceControler(final String template,
 			final String filename) {
 		final String fullFilePath = String.format("%s%s/%s",
-						this.adapter.getSourcePath(),
+						this.getAdapter().getSourcePath(),
 						PackageUtils.extractPath(this.localNameSpace)
 							.toLowerCase(Locale.ENGLISH),
 						filename);
 		final String fullTemplatePath = String.format("%s%s",
-				this.adapter.getTemplateSourceControlerPath(),
+				this.getAdapter().getTemplateSourceControlerPath(),
 				template);
 		
 		super.makeSource(fullTemplatePath, fullFilePath, false);
@@ -377,10 +382,10 @@ public class ActivityGenerator extends BaseGenerator {
 	private void makeResourceLayout(final String template, 
 			final String filename) {
 		final String fullFilePath = String.format("%s/%s", 
-									this.adapter.getRessourceLayoutPath(),
+									this.getAdapter().getRessourceLayoutPath(),
 									filename);
 		final String fullTemplatePath = String.format("%s/%s",
-				this.adapter.getTemplateRessourceLayoutPath().substring(1),
+				this.getAdapter().getTemplateRessourceLayoutPath().substring(1),
 				template);
 		
 		super.makeSource(fullTemplatePath, fullFilePath, false);
@@ -395,7 +400,7 @@ public class ActivityGenerator extends BaseGenerator {
 	public final void makeManifest(final Configuration cfg) 
 			throws IOException, TemplateException {
 		final File file = 
-				FileUtils.makeFile(this.adapter.getManifestPathFile());
+				FileUtils.makeFile(this.getAdapter().getManifestPathFile());
 
 		// Debug Log
 		ConsoleUtils.displayDebug(
@@ -403,12 +408,12 @@ public class ActivityGenerator extends BaseGenerator {
 
 		// Create
 		final Template tpl = cfg.getTemplate(
-				this.adapter.getTemplateManifestPathFile());
+				this.getAdapter().getTemplateManifestPathFile());
 		final OutputStreamWriter output = 
 				new OutputStreamWriter(
 						new FileOutputStream(file), 
 						FileUtils.DEFAULT_ENCODING);
-		tpl.process(this.datamodel, output);
+		tpl.process(this.getDatamodel(), output);
 		output.flush();
 		output.close();
 	}
@@ -421,7 +426,7 @@ public class ActivityGenerator extends BaseGenerator {
 	private void updateManifest(final String classF, final String entityName) {
 		String classFile = entityName + classF;
 		final String pathRelatif = String.format(".%s.%s.%s",
-				this.adapter.getController(), 
+				this.getAdapter().getController(), 
 				entityName.toLowerCase(Locale.ENGLISH), 
 				classFile);
 
@@ -432,7 +437,7 @@ public class ActivityGenerator extends BaseGenerator {
 			// Make engine
 			final SAXBuilder builder = new SAXBuilder();		
 			final File xmlFile = FileUtils.makeFile(
-					this.adapter.getManifestPathFile());
+					this.getAdapter().getManifestPathFile());
 			
 			// Load XML File
 			final Document doc = builder.build(xmlFile); 	
@@ -510,7 +515,8 @@ public class ActivityGenerator extends BaseGenerator {
 
 					
 					data.append(
-							this.appMetas.projectNameSpace.replace('/', '.'));
+							this.getAppMetas().getProjectNameSpace()
+								.replace('/', '.'));
 					data.append('.');
 					data.append(entityName);
 					
@@ -556,11 +562,11 @@ public class ActivityGenerator extends BaseGenerator {
 			final String layoutName) {
 		super.makeSource(
 				String.format("%s%s", 
-						this.adapter.getTemplateWidgetPath(), 
+						this.getAdapter().getTemplateWidgetPath(), 
 						widgetName), 
 						
 				String.format("%s%s", 
-						this.adapter.getWidgetPath(),
+						this.getAdapter().getWidgetPath(),
 						widgetName), 
 				false);
 		this.makeResourceLayout(layoutName, layoutName);

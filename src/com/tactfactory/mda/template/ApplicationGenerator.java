@@ -30,13 +30,15 @@ public class ApplicationGenerator extends BaseGenerator {
 	public ApplicationGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
-		this.localNameSpace = this.appMetas.projectNameSpace.replace('/', '.');
+		this.localNameSpace = 
+				this.getAppMetas().getProjectNameSpace().replace('/', '.');
 		this.applicationName = 
 				CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
-						this.appMetas.name);
+						this.getAppMetas().getName());
 		
-		this.datamodel = this.appMetas.toMap(this.adapter);
-		this.datamodel.put(TagConstant.LOCAL_NAMESPACE, this.localNameSpace);
+		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
+		this.getDatamodel().put(
+				TagConstant.LOCAL_NAMESPACE, this.localNameSpace);
 		
 	}
 	
@@ -60,12 +62,12 @@ public class ApplicationGenerator extends BaseGenerator {
 			final String fileName, 
 			final boolean override) {
 		final String fullFilePath = String.format("%s%s/%s",
-				this.adapter.getSourcePath(),
+				this.getAdapter().getSourcePath(),
 				PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
 				fileName);
 
 		final String fullTemplatePath = String.format("%s%s",
-				this.adapter.getTemplateSourcePath() ,
+				this.getAdapter().getTemplateSourcePath() ,
 				templateName);
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);

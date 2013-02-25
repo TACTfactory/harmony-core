@@ -13,10 +13,10 @@ package com.tactfactory.mda.meta;
  */
 public class ConfigMetadata {
 	/** Identify configuration resource. */
-	public String key;
+	private String key;
 	
 	/** Value of configuration resource. */
-	public String value;
+	private String value;
 	
 	/**
 	 * Insert to meta a new resource configuration.
@@ -31,8 +31,37 @@ public class ConfigMetadata {
 		configMeta.key = key;
 		configMeta.value = value;
 		
-		ApplicationMetadata.INSTANCE.configs.put(configMeta.key, configMeta);
+		ApplicationMetadata.INSTANCE.getConfigs().put(
+				configMeta.key, configMeta);
 		
 		return configMeta;
+	}
+
+	/**
+	 * @return the key
+	 */
+	public final String getKey() {
+		return key;
+	}
+
+	/**
+	 * @param key the key to set
+	 */
+	public final void setKey(final String key) {
+		this.key = key;
+	}
+
+	/**
+	 * @return the value
+	 */
+	public final String getValue() {
+		return value;
+	}
+
+	/**
+	 * @param value the value to set
+	 */
+	public final void setValue(final String value) {
+		this.value = value;
 	}
 }
