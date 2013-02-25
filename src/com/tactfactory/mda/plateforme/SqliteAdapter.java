@@ -139,6 +139,7 @@ public abstract class SqliteAdapter {
 	 *
 	 */
 	public static enum Keywords {
+		// CHECKSTYLE:OFF
 		ABORT,
 		ACTION,
 		ADD,
@@ -260,7 +261,7 @@ public abstract class SqliteAdapter {
 		VIRTUAL,
 		WHEN,
 		WHERE;
-		
+		// CHECKSTYLE:ON
 		/**
 		 * Tests if the given String is a reserverd SQLite keyword.
 		 * @param name The string
