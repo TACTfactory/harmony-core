@@ -239,16 +239,16 @@ public class ProjectGenerator extends BaseGenerator {
 		if (!FileUtils.exists(pathSherlock)) {
 			final ArrayList<String> command = new ArrayList<String>();
 			
-			// Command/Tools
+			// command/Tools
 			command.add("git");
 			
-			// Command action
+			// command action
 			command.add("clone");
 			
 			// command depot
 			command.add("https://github.com/JakeWharton/ActionBarSherlock.git");
 			
-			// Command destination folder
+			// command destination folder
 			command.add(pathSherlock);
 			
 			ConsoleUtils.launchCommand(command);
@@ -299,8 +299,8 @@ public class ProjectGenerator extends BaseGenerator {
 			command.add("master");
 			ConsoleUtils.launchCommand(command, pathSherlock);
 			command.clear();*/
-	
-			//delete samples
+			
+			// command git checkout
 			command.add("git");
 			command.add(String.format(
 					"%s%s/%s", "--git-dir=", pathSherlock, ".git"));
@@ -310,6 +310,10 @@ public class ProjectGenerator extends BaseGenerator {
 			ConsoleUtils.launchCommand(command);
 			command.clear();
 			
+			// delete samples
+			FileUtils.deleteRecursive(
+					new File(String.format("%s/%s", pathSherlock, "samples")));
+
 			//make build sherlock
 			command.add(String.format("%s/%s", 
 					ApplicationMetadata.androidSdkPath, 
