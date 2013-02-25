@@ -18,8 +18,6 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation defining the JoinColumn.
- * @author gregg
- *
  */
 @Documented
 @Retention(SOURCE)

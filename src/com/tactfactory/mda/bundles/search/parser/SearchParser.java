@@ -23,8 +23,6 @@ import com.tactfactory.mda.utils.PackageUtils;
 
 /**
  * Parser for Search Bundle.
- * @author gregg
- *
  */
 public class SearchParser  extends BaseParser {
 	/** Bundle name. */

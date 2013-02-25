@@ -30,8 +30,6 @@ import com.tactfactory.mda.test.CommonTest;
 
 /**
  * Tests for Sync bundle.
- * @author gregg
- *
  */
 public class SyncGlobalTest extends CommonTest {
 	/** Service path. */

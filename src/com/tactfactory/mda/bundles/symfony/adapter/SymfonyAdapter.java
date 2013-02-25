@@ -12,8 +12,6 @@ import com.tactfactory.mda.Harmony;
 
 /**
  * Symfony Adapter.
- * @author gregg
- *
  */
 public class SymfonyAdapter {
 	/** Web server root. */

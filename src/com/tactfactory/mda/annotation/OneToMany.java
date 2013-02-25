@@ -18,8 +18,6 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation used to define a OneToMany relation (1-N).
- * @author gregg
- *
  */
 @Documented
 @Retention(SOURCE)

@@ -17,8 +17,6 @@ import com.tactfactory.mda.bundles.rest.annotation.Rest;
 
 /** Simple entity containing only an id.
  * (For test purposes only)
- * @author gregg
- *
  */
 @Entity
 @Rest()

@@ -18,8 +18,6 @@ import com.tactfactory.mda.template.TagConstant;
 
 /**
  * Metadatas representing a Method.
- * @author gregg
- *
  */
 public class MethodMetadata extends BaseMetadata {	
 	/** Return type. */

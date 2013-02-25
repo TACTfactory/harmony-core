@@ -23,8 +23,6 @@ import com.tactfactory.mda.utils.FileUtils;
 
 /**
  * Fixture bundle generator.
- * @author gregg
- *
  */
 public class FixtureGenerator extends BaseGenerator {
 

@@ -35,8 +35,6 @@ import com.tactfactory.mda.utils.FileUtils;
 
 /**
  * Generator for Sync.
- * @author gregg
- *
  */
 public class SyncGenerator extends BaseGenerator {
 

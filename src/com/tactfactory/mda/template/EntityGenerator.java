@@ -29,8 +29,6 @@ import freemarker.template.TemplateException;
 /**
  * Entity Generator.
  * Used to decorate or generate entities.
- * @author gregg
- *
  */
 public class EntityGenerator extends BaseGenerator {
 	/** remove HARD CODED String. */

@@ -18,8 +18,6 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation defining a ManyToMany relation (N-N).
- * @author gregg
- *
  */
 @Documented
 @Retention(SOURCE)

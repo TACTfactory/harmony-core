@@ -26,8 +26,6 @@ import freemarker.template.TemplateException;
 
 /**
  * Base Generator.
- * @author gregg
- *
  */
 public abstract class BaseGenerator {
 	// Meta-models

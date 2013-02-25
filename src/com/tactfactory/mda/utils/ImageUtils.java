@@ -20,8 +20,6 @@ import com.mortennobel.imagescaling.ResampleOp;
 
 /**
  * Images utility class.
- * @author gregg
- *
  */
 public abstract class ImageUtils {
 	/** Thread numbers. */

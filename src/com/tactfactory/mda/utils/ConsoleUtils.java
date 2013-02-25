@@ -10,6 +10,7 @@ package com.tactfactory.mda.utils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -20,7 +21,6 @@ import print.color.Ansi.Attribute;
 import print.color.Ansi.BColor;
 import print.color.Ansi.FColor;
 import print.color.ColoredPrinter;
-
 
 /**
  * Utility class for console.
@@ -234,35 +234,47 @@ public abstract class ConsoleUtils {
 	 * @param command The list containing the command and its arguments
 	 * 	to execute
 	 */
-	public static void launchCommand(final List<String> command) {
+	public static Exception launchCommand(final List<String> command) {
+		return launchCommand(command, null);
+	}
+	
+	/**
+	 * Bridge used for transmitting input and output between an external process
+	 * and the console.
+	 */
+	public static Exception launchCommand(final List<String> command, String commandPath){
+		Exception result = null;
+		ConsoleUtils.displayDebug(commandPath + command.toString());
+		
 		try {
-			final ProcessBuilder pb = new ProcessBuilder(command);
-			final Process exec = pb.start();
+			ProcessBuilder pb = new ProcessBuilder(command);
 			
-
+			if (commandPath != null) {
+				pb = pb.directory(new File(commandPath));
+			}
+			
+			final Process exec = pb.start();
 			final ProcessToConsoleBridge bridge = 
 					new ProcessToConsoleBridge(exec);
+			
 			bridge.start();
 			try {
 				exec.waitFor();
 			} catch (final InterruptedException e) {
-				// TODO Auto-generated catch block
+				result = e;
 				ConsoleUtils.displayError(e);
 			}
 			
 			bridge.stop();
 			
 		} catch (final IOException e) {
-			// TODO Auto-generated catch block
+			result = e;
 			ConsoleUtils.displayError(e);
 		}
+		
+		return result;
 	}
-	
-	/**
-	 * Bridge used for transmitting input and output between an external process
-	 * and the console.
-	 * @author gregg
-	 */
+
 	protected static class ProcessToConsoleBridge {
 		
 		/** Input thread. */

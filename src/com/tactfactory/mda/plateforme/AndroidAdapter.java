@@ -69,6 +69,7 @@ public final class AndroidAdapter extends BaseAdapter {
 		this.setHarmony("harmony");
 		this.setWidget("widget");
 		this.setUtil("util");
+		this.setMenu("menu");
 		
 		// MVC
 		//this.model 		= "entity";

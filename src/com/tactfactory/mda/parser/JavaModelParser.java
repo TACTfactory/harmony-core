@@ -55,8 +55,6 @@ import com.tactfactory.mda.utils.PackageUtils;
 
 /**
  * Parses a group of java files.
- * @author Gregg Cesarine
- *
  */
 public class JavaModelParser {
 	/** Extension. */
@@ -251,8 +249,6 @@ public class JavaModelParser {
 	
 	/**
 	 * JavaParser Class Visitor.
-	 * @author gregg
-	 *
 	 */
 	private class ClassVisitor extends VoidVisitorAdapter<ClassMetadata> {
 		
@@ -333,8 +329,6 @@ public class JavaModelParser {
 
 	/**
 	 * JavaParser Field Visitor.
-	 * @author gregg
-	 *
 	 */
 	public class FieldVisitor extends VoidVisitorAdapter<ClassMetadata> {
 		
@@ -703,8 +697,6 @@ public class JavaModelParser {
 	
 	/**
 	 * JavaParser Method Visitor.
-	 * @author gregg
-	 *
 	 */
 	private class MethodVisitor extends VoidVisitorAdapter<ClassMetadata> {
 		
@@ -755,8 +747,6 @@ public class JavaModelParser {
 	
 	/**
 	 * JavaParser import Visitor.
-	 * @author gregg
-	 *
 	 */
 	private class ImportVisitor extends VoidVisitorAdapter<ClassMetadata> {
 		

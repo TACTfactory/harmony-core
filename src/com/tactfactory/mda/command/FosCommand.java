@@ -10,8 +10,6 @@ package com.tactfactory.mda.command;
 
 /**
  * FOS Bundle Commands.
- * @author gregg
- *
  */
 public class FosCommand extends BaseCommand {
 

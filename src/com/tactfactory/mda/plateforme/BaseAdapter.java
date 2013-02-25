@@ -70,6 +70,8 @@ public abstract class BaseAdapter {
 	/** Configs path. */
 	private String configs;
 	
+	private String menu;
+	
 	// Abstract Methods
 	/** 
 	 * Generate platform Namespace.
@@ -181,6 +183,16 @@ public abstract class BaseAdapter {
 				ApplicationMetadata.INSTANCE.projectNameSpace, 
 				this.getHarmony(),
 				this.getUtil());
+	}
+	
+	
+	public final String getMenuPath() {
+		return String.format("%s/%s/%s/%s/%s/",
+				Harmony.PATH_PROJECT, 
+				this.getPlatform(), 
+				this.getSource(), 
+				ApplicationMetadata.INSTANCE.projectNameSpace, 
+				this.getMenu() );
 	}
 	
 	/**
@@ -898,6 +910,20 @@ public abstract class BaseAdapter {
 	 */
 	public void setUtil(final String util) {
 		this.util = util;
+	}
+
+	/**
+	 * @return the menu
+	 */
+	public String getMenu() {
+		return this.menu;
+	}
+
+	/**
+	 * @param menu the menu to set
+	 */
+	public void setMenu(String menu) {
+		this.menu = menu;
 	}
 
 }

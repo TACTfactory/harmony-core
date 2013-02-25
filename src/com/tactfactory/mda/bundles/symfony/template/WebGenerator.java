@@ -27,8 +27,6 @@ import com.tactfactory.mda.utils.FileUtils;
 
 /**
  * Symfony generator.
- * @author gregg
- *
  */
 public final class WebGenerator extends BaseGenerator {
 	/** PHP Command. */

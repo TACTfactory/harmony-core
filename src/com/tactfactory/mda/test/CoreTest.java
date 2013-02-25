@@ -20,8 +20,6 @@ import com.tactfactory.mda.command.ProjectCommand;
 
 /**
  * Test class for the Harmony core.
- * @author gregg
- *
  */
 public class CoreTest extends CommonTest {
 	

@@ -18,7 +18,6 @@ import java.lang.annotation.Target;
 
 /**
  * Annotation used to define an Id.
- * @author gregg
  *
  */
 @Documented

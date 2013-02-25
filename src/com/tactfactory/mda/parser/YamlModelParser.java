@@ -21,8 +21,6 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 /**
  * YamlModelParser.
  * Parser for Yaml model description files
- * @author gregg
- *
  */
 public class YamlModelParser {
 	

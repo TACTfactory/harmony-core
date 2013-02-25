@@ -14,8 +14,6 @@ import org.junit.runners.Suite.SuiteClasses;
 
 /**
  * All tests related to ORM initialization and generation.
- * @author gregg
- *
  */
 @RunWith(Suite.class)
 @SuiteClasses({

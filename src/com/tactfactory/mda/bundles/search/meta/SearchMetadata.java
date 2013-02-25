@@ -15,8 +15,6 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 
 /**
  * Search Bundle Metadata.
- * @author gregg
- *
  */
 public class SearchMetadata extends BaseMetadata {
 	/** Bundle name. */

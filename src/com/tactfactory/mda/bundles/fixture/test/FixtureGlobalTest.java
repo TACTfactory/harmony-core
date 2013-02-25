@@ -27,8 +27,6 @@ import com.tactfactory.mda.utils.FileUtils;
 
 /**
  * Test class for Fixtures generation and loading.
- * @author gregg
- *
  */
 public class FixtureGlobalTest extends CommonTest {
 	/** Fixture path. */

@@ -14,8 +14,6 @@ import com.tactfactory.mda.meta.ClassMetadata;
 
 /**
  * Completor for rest bundle.
- * @author gregg
- *
  */
 public class RestCompletor {
 	

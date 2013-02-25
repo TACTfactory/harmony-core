@@ -18,8 +18,6 @@ import com.tactfactory.mda.template.TagConstant;
 
 /**
  * MetaData for Sync description.
- * @author gregg
- *
  */
 public class SyncMetadata extends BaseMetadata {
 	/** Bundle name. */

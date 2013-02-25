@@ -22,8 +22,6 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
  * Symfony command class.
- * @author gregg
- *
  */
 @PluginImplementation
 public class SymfonyCommand extends BaseCommand {

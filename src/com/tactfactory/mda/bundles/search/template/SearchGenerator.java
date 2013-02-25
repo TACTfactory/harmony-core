@@ -37,7 +37,6 @@ import com.tactfactory.mda.utils.PackageUtils;
 
 /**
  * Generator for Search Bundle.
- * @author gregg
  *
  */
 public class SearchGenerator  extends BaseGenerator {

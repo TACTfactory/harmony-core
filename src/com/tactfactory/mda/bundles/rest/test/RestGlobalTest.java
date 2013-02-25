@@ -18,8 +18,6 @@ import com.tactfactory.mda.test.CommonTest;
 
 /**
  * Tests for Rest bundle generation.
- * @author gregg
- *
  */
 public class RestGlobalTest extends CommonTest {
 	/** Data path. */

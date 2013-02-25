@@ -21,8 +21,6 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 
 /**
  * Generator for bundle Rest.
- * @author gregg
- *
  */
 public class RestGenerator extends BaseGenerator {
 
