@@ -30,7 +30,7 @@ import com.tactfactory.mda.bundles.sync.annotation.Sync.Mode;
 @Rest(security = Rest.Security.SESSION, uri = "user-uri")
 @Sync(mode = Mode.REAL_TIME)
 @Social
-public class User implements Cloneable, Serializable {
+public class User extends Object implements Cloneable, Serializable {
 	private static final long serialVersionUID = 7032873279928549706L;
 
 	@Id
