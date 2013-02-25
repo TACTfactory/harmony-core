@@ -32,18 +32,35 @@ public @interface Sync {
 	
 	/** Synchronization level. */
 	public enum Level {
+		/** Global synchronization level. */
 		GLOBAL(0),
+		/** Session synchronization level. */
 		SESSION(1);
 		
+		/** Synchronization level ID. */
 		private int value;
+		
+		/**
+		 * Constructor.
+		 * @param value Level ID
+		 */
 		private Level(final int value) {
 			this.value = value;
 		}
 		
+		/**
+		 * Get the Sync level ID.
+		 * @return the sync level id.
+		 */
 		public int getValue() {
 			return this.value;
 		}
 		
+		/**
+		 * Get the sync level corresponding to the given ID.
+		 * @param value the id
+		 * @return The sync level
+		 */
 		public static Level fromValue(final int value) {
 			Level ret = null;
 			for (final Level type : Level.values()) {
@@ -55,6 +72,11 @@ public @interface Sync {
 			return ret;
 		}
 		
+		/**
+		 * Get the sync level by its name.
+		 * @param name The level name
+		 * @return The level
+		 */
 		public static Level fromName(final String name) {
 			String realName;
 			Level ret;
@@ -84,19 +106,37 @@ public @interface Sync {
 	
 	/** Mode of trigger for synchronization. */
 	public enum Mode {
+		/** Pooling sync mode.*/
 		POOLING(1),
+		/** Real time sync mode.*/
 		REAL_TIME(2),
+		/** Push sync mode.*/
 		PUSH(3);
 		
+		/** Sync mode ID.*/
 		private int value;
+		
+		/**
+		 * Constructor.
+		 * @param value The Sync mode ID.
+		 */
 		private Mode(final int value) {
 			this.value = value;
 		}
 		
+		/**
+		 * Get the sync mode ID.
+		 * @return The id
+		 */
 		public int getValue() {
 			return this.value;
 		}
 		
+		/**
+		 * Get the sync mode by its ID.
+		 * @param value The id
+		 * @return The sync mode
+		 */
 		public static Mode fromValue(final int value) {
 			Mode ret = null;
 			for (final Mode type : Mode.values()) {
@@ -108,6 +148,11 @@ public @interface Sync {
 			return ret;
 		}
 		
+		/**
+		 * Get the sync mode by its name.
+		 * @param name The name
+		 * @return The found sync mode. Null if nothing found.
+		 */
 		public static Mode fromName(final String name) {
 			String realName;
 			Mode ret;
@@ -138,10 +183,18 @@ public @interface Sync {
 	
 	/** Priority level. */
 	public static class Priority {
+		/** Normal Priority (5). */
 		public static final int NORMALE = 5;
+		/** High Priority (0). */
 		public static final int HIGH = 0;
+		/** Low Priority (9). */
 		public static final int LOW = 9;
 		
+		/**
+		 * Get the priority by its name.
+		 * @param name The priority name 
+		 * @return The priority
+		 */
 		public static int fromName(final String name) {
 			String realName;
 			int ret = 0;

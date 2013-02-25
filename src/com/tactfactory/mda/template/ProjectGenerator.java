@@ -90,7 +90,7 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Create Android project folders
+	 * Create Android project folders.
 	 */
 	private void createFolders() {
 		// create project name space folders
@@ -112,7 +112,7 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Make Android sources project File
+	 * Make Android sources project File.
 	 */
 	private void makeSources() {
 		// create HomeActivity.java 
@@ -206,7 +206,7 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Add Android libs project File
+	 * Add Android libs project File.
 	 */
 	private void addLibs() {
 		// copy libraries
@@ -256,7 +256,8 @@ public class ProjectGenerator extends BaseGenerator {
 	
 			/*command.add("git");
 			command.add("init");
-			//ConsoleUtils.launchCommand(command, "/home/yo/git/Harmony/app/Android/libs/sherlock");
+			//ConsoleUtils.launchCommand(
+			  		command, "/home/yo/git/Harmony/app/Android/libs/sherlock");
 			ConsoleUtils.launchCommand(command, pathSherlock);
 			command.clear();
 			
@@ -301,7 +302,8 @@ public class ProjectGenerator extends BaseGenerator {
 	
 			//delete samples
 			command.add("git");
-			command.add(String.format("%s%s/%s", "--git-dir=", pathSherlock, ".git"));
+			command.add(String.format(
+					"%s%s/%s", "--git-dir=", pathSherlock, ".git"));
 			command.add(String.format("%s%s", "--work-tree=", pathSherlock));
 			command.add("checkout");
 			command.add("4.2.0");
@@ -309,7 +311,9 @@ public class ProjectGenerator extends BaseGenerator {
 			command.clear();
 			
 			//make build sherlock
-			command.add(String.format("%s/%s", ApplicationMetadata.androidSdkPath, "tools/android" ));
+			command.add(String.format("%s/%s", 
+					ApplicationMetadata.androidSdkPath, 
+					"tools/android"));
 			command.add("update");
 			command.add("project");
 			command.add("--path");
@@ -319,10 +323,10 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Make Android Project Structure
+	 * Make Android Project Structure.
 	 * @return success to make the platform project folder
 	 */
-	protected final boolean makeProjectAndroid(){
+	protected final boolean makeProjectAndroid() {
 		boolean result = false;
 		
 		this.createFolders();
