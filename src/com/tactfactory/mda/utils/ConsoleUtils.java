@@ -233,6 +233,8 @@ public abstract class ConsoleUtils {
 	 * 
 	 * @param command The list containing the command and its arguments
 	 * 	to execute
+	 * @return The exception throwed by the launched command.
+	 * null if everything has gone well
 	 */
 	public static Exception launchCommand(final List<String> command) {
 		return launchCommand(command, null);
@@ -241,8 +243,14 @@ public abstract class ConsoleUtils {
 	/**
 	 * Bridge used for transmitting input and output between an external process
 	 * and the console.
+	 * @param command The list containing the command and its arguments 
+	 * to execute
+	 * @param commandPath The path where to launch the command
+	 * @return The exception throwed by the launched command.
+	 * null if everything has gone well
 	 */
-	public static Exception launchCommand(final List<String> command, String commandPath){
+	public static Exception launchCommand(
+			final List<String> command, final String commandPath) {
 		Exception result = null;
 		ConsoleUtils.displayDebug(commandPath + command.toString());
 		
@@ -275,6 +283,9 @@ public abstract class ConsoleUtils {
 		return result;
 	}
 
+	/**
+	 * Bridge between a process output/input and the console.
+	 */
 	protected static class ProcessToConsoleBridge {
 		
 		/** Input thread. */
