@@ -27,6 +27,8 @@ import java.lang.reflect.Field;
 @Target(FIELD)
 @Inherited
 public @interface Column {
+	/** Default field length. */
+	int DEFAULT_LENGTH = 255;
 	
 	/**
 	 * Mapping Type defines the mapping between a Java type and an SQL type.
@@ -270,7 +272,7 @@ public @interface Column {
 	/**
 	 * The length of the column in the database.
 	 */
-	int length() default 255;
+	int length() default DEFAULT_LENGTH;
 	
 	/**
 	 * Whether the column is a unique key.

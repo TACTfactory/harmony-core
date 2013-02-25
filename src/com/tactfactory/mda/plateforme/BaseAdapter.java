@@ -70,6 +70,7 @@ public abstract class BaseAdapter {
 	/** Configs path. */
 	private String configs;
 	
+	/** Menu path. */
 	private String menu;
 	
 	// Abstract Methods
@@ -185,14 +186,17 @@ public abstract class BaseAdapter {
 				this.getUtil());
 	}
 	
-	
+	/**
+	 * Get the project's menu path.
+	 * @return The menu path
+	 */
 	public final String getMenuPath() {
 		return String.format("%s/%s/%s/%s/%s/",
 				Harmony.PATH_PROJECT, 
 				this.getPlatform(), 
 				this.getSource(), 
 				ApplicationMetadata.INSTANCE.projectNameSpace, 
-				this.getMenu() );
+				this.getMenu());
 	}
 	
 	/**
@@ -831,7 +835,7 @@ public abstract class BaseAdapter {
 	/**
 	 * @param config The config.
 	 */
-	public void setConfigs(String config) {
+	public void setConfigs(final String config) {
 		this.configs = config;
 	}
 
@@ -922,7 +926,7 @@ public abstract class BaseAdapter {
 	/**
 	 * @param menu the menu to set
 	 */
-	public void setMenu(String menu) {
+	public void setMenu(final String menu) {
 		this.menu = menu;
 	}
 

@@ -9,4 +9,10 @@
 		files="com[\\/]tactfactory[\\/]mda[\\/]test[\\/]demact[\\/]"/>
     <suppress 	checks="." 
 		files="com[\\/]tactfactory[\\/]mda[\\/]test[\\/]jobeet[\\/]"/>
+    <suppress 	checks="DesignForExtension"
+		files="BaseAdapter.java"/>
+    <suppress 	checks="DesignForExtension"
+		files="BaseGenerator.java"/>
+    <suppress 	checks="DesignForExtension"
+		files="BaseCommand.java"/>
 </suppressions>
