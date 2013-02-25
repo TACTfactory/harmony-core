@@ -16,10 +16,10 @@ import java.util.Map;
  */
 public abstract class BaseMetadata implements Metadata {
 	/** Component name. */
-	public String name;
+	private String name;
 	
 	/** List of bundles Metadata. */
-	public Map<String, Metadata> options =
+	private Map<String, Metadata> options =
 			new LinkedHashMap<String, Metadata>();
 	
 	/** 
@@ -28,6 +28,27 @@ public abstract class BaseMetadata implements Metadata {
 	 */
 	public final String getName() {
 		return this.name;
+	}
+
+	/**
+	 * @return the options
+	 */
+	public final Map<String, Metadata> getOptions() {
+		return options;
+	}
+
+	/**
+	 * @param options the options to set
+	 */
+	public final void setOptions(final Map<String, Metadata> options) {
+		this.options = options;
+	}
+
+	/**
+	 * @param name the name to set
+	 */
+	public final void setName(final String name) {
+		this.name = name;
 	}
 	
 }

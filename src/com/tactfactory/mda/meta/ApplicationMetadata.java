@@ -30,21 +30,21 @@ public final class ApplicationMetadata extends BaseMetadata {
 			new ApplicationMetadata();
 	
 	/** Android SDK Path. */
-	public static String androidSdkPath;
+	private static String androidSdkPath;
 	
 	/** Project NameSpace (com/tactfactory/mda/test/demact). */
-	public String projectNameSpace;
+	private String projectNameSpace;
 	
 	/** List of Entity of entity class. */
-	public Map<String, ClassMetadata> entities =
+	private Map<String, ClassMetadata> entities =
 			new LinkedHashMap<String, ClassMetadata>();
 	
 	/** List of string use in application. */
-	public Map<String, TranslationMetadata> translates =
+	private Map<String, TranslationMetadata> translates =
 			new TreeMap<String, TranslationMetadata>();
 
 	/** List of config use in application. */
-	public Map<String, ConfigMetadata> configs =
+	private Map<String, ConfigMetadata> configs =
 			new TreeMap<String, ConfigMetadata>();
 	
 
@@ -53,6 +53,77 @@ public final class ApplicationMetadata extends BaseMetadata {
 	 */
 	private ApplicationMetadata() { }
 	
+	/**
+	 * @return the androidSdkPath
+	 */
+	public static String getAndroidSdkPath() {
+		return androidSdkPath;
+	}
+
+	/**
+	 * @param androidSdkPath the androidSdkPath to set
+	 */
+	public static void setAndroidSdkPath(final String androidSdkPath) {
+		ApplicationMetadata.androidSdkPath = androidSdkPath;
+	}
+
+	/**
+	 * @return the projectNameSpace
+	 */
+	public String getProjectNameSpace() {
+		return projectNameSpace;
+	}
+
+	/**
+	 * @param projectNameSpace the projectNameSpace to set
+	 */
+	public void setProjectNameSpace(final String projectNameSpace) {
+		this.projectNameSpace = projectNameSpace;
+	}
+
+	/**
+	 * @return the entities
+	 */
+	public Map<String, ClassMetadata> getEntities() {
+		return entities;
+	}
+
+	/**
+	 * @param entities the entities to set
+	 */
+	public void setEntities(final Map<String, ClassMetadata> entities) {
+		this.entities = entities;
+	}
+
+	/**
+	 * @return the translates
+	 */
+	public Map<String, TranslationMetadata> getTranslates() {
+		return translates;
+	}
+
+	/**
+	 * @param translates the translates to set
+	 */
+	public void setTranslates(
+			final Map<String, TranslationMetadata> translates) {
+		this.translates = translates;
+	}
+
+	/**
+	 * @return the configs
+	 */
+	public Map<String, ConfigMetadata> getConfigs() {
+		return configs;
+	}
+
+	/**
+	 * @param configs the configs to set
+	 */
+	public void setConfigs(final Map<String, ConfigMetadata> configs) {
+		this.configs = configs;
+	}
+
 	/**
 	 * Transform the application to a map given an adapter.
 	 * @param adapt The adapter used to customize the fields
@@ -65,12 +136,12 @@ public final class ApplicationMetadata extends BaseMetadata {
 		
 		// Make Map for entities
 		for (final ClassMetadata cm : this.entities.values()) {
-			entitiesMap.put(cm.name, cm.toMap(adapt));
+			entitiesMap.put(cm.getName(), cm.toMap(adapt));
 			cm.makeString("label");
 		}
 		
 		// Add root
-		ret.put(TagConstant.PROJECT_NAME, 		this.name);
+		ret.put(TagConstant.PROJECT_NAME, 		this.getName());
 		ret.put(TagConstant.PROJECT_PATH, 		this.projectNameSpace);
 		ret.put(TagConstant.PROJECT_NAMESPACE, 	
 				this.projectNameSpace.replaceAll(
@@ -111,7 +182,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 		// Add Extra bundle
 		final HashMap<String, Object> optionsMap =
 				new HashMap<String, Object>();
-		for (final Metadata bm : this.options.values()) {
+		for (final Metadata bm : this.getOptions().values()) {
 			optionsMap.put(bm.getName(), bm.toMap(adapt));
 		}
 		ret.put(TagConstant.OPTIONS, optionsMap);

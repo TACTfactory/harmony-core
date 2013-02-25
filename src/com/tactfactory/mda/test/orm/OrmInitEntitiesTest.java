@@ -109,16 +109,16 @@ public class OrmInitEntitiesTest extends CommonTest {
 		command.generateMetas();
 		
 		for (final ClassMetadata classMetadata
-				: ApplicationMetadata.INSTANCE.entities.values()) {
-			if (classMetadata.name.equals("User")) {
+				: ApplicationMetadata.INSTANCE.getEntities().values()) {
+			if (classMetadata.getName().equals("User")) {
 				userMeta = classMetadata;
 			}
 			
-			if (classMetadata.name.equals("Post")) {
+			if (classMetadata.getName().equals("Post")) {
 				postMeta = classMetadata;
 			}
 			
-			if (classMetadata.name.equals("Comment")) {
+			if (classMetadata.getName().equals("Comment")) {
 				commentMeta = classMetadata;
 			}
 		}
@@ -368,7 +368,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 */
 	private void hasColumn(final ClassMetadata meta, final String value) {
 		Assert.assertTrue("Check if column " + value,
-				meta.fields.containsKey(value));
+				meta.getFields().containsKey(value));
 	}
 
 	/**
@@ -378,7 +378,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 */
 	private void hasId(final ClassMetadata meta, final String value) {
 		Assert.assertTrue("Check if key " + value,
-				meta.ids.containsKey(value));
+				meta.getIds().containsKey(value));
 	}
 
 	/**
@@ -388,7 +388,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 */
 	private void hasImport(final ClassMetadata meta, final String value) {
 		Assert.assertTrue("Check if import " + value,
-				meta.imports.contains(value));
+				meta.getImports().contains(value));
 	}
 
 	/**
@@ -398,7 +398,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 */
 	private void hasImplement(final ClassMetadata meta, final String value) {
 		Assert.assertTrue("Check if implement " + value,
-				meta.implementTypes.contains(value));
+				meta.getImplementTypes().contains(value));
 	}
 	
 	/**
@@ -413,11 +413,11 @@ public class OrmInitEntitiesTest extends CommonTest {
 		if (nullable) {
 			Assert.assertTrue(
 					MSG_CHECK_IF_FIELD + fieldName + " is nullable",
-					classMeta.fields.get(fieldName).nullable);
+					classMeta.getFields().get(fieldName).isNullable());
 		} else {
 			Assert.assertFalse(
 					MSG_CHECK_IF_FIELD + fieldName + " is nullable",
-					classMeta.fields.get(fieldName).nullable);
+					classMeta.getFields().get(fieldName).isNullable());
 		}
 	}
 	
@@ -432,10 +432,10 @@ public class OrmInitEntitiesTest extends CommonTest {
 			final boolean unique) {
 		if (unique) {
 			Assert.assertTrue(MSG_CHECK_IF_FIELD + fieldName + " is unique",
-					classMeta.fields.get(fieldName).unique);
+					classMeta.getFields().get(fieldName).isUnique());
 		} else {
 			Assert.assertFalse(MSG_CHECK_IF_FIELD + fieldName + " is unique",
-					classMeta.fields.get(fieldName).unique);
+					classMeta.getFields().get(fieldName).isUnique());
 		}
 	}
 	
@@ -448,7 +448,8 @@ public class OrmInitEntitiesTest extends CommonTest {
 	private void hasFieldColumnName(final ClassMetadata classMeta, 
 			final String fieldName, 
 			final String name) {
-		Assert.assertEquals(classMeta.fields.get(fieldName).columnName, name);
+		Assert.assertEquals(
+				classMeta.getFields().get(fieldName).getColumnName(), name);
 	}
 	
 	/**
@@ -460,7 +461,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	private void isFieldLength(final ClassMetadata classMeta,
 			final String fieldName,
 			final int length) {
-		Assert.assertEquals(classMeta.fields.get(fieldName).length,
+		Assert.assertEquals(classMeta.getFields().get(fieldName).getLength(),
 				Integer.valueOf(length));
 	}
 }

@@ -90,13 +90,13 @@ public final class AndroidAdapter extends BaseAdapter {
 			final String type) {
 		return String.format("%s.%s", 
 				this.getNameSpace(cm, type),
-				cm.name.toLowerCase());
+				cm.getName().toLowerCase());
 	}
 
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
 		return String.format("%s.%s", 
-				cm.space,
+				cm.getSpace(),
 				type);
 	}
 

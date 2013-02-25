@@ -43,23 +43,23 @@ public abstract class CommonTest {
 		ConsoleUtils.setDebug(true);
 		
 		// Project test config
-		ApplicationMetadata.INSTANCE.name = "demact";
-		ApplicationMetadata.INSTANCE.projectNameSpace 
-				= "com/tactfactory/mda/test/demact";
+		ApplicationMetadata.INSTANCE.setName("demact");
+		ApplicationMetadata.INSTANCE.setProjectNameSpace(
+				"com/tactfactory/mda/test/demact");
 		
-		if (ApplicationMetadata.androidSdkPath == null 
-				|| ApplicationMetadata.androidSdkPath.isEmpty()) {
+		if (ApplicationMetadata.getAndroidSdkPath() == null 
+				|| ApplicationMetadata.getAndroidSdkPath().isEmpty()) {
 			final String localProp = 
 					String.format("%s/%s/%s",
 							Harmony.PATH_PROJECT, 
 							Harmony.getProjectFolder(), 
 							"local.properties");
 			
-			ApplicationMetadata.androidSdkPath = 
-					Harmony.getSdkDirFromPropertiesFile(localProp);
-			if (ApplicationMetadata.androidSdkPath == null) {
-				ApplicationMetadata.androidSdkPath =
-						"/opt/android-sdk-linux_86/";
+			ApplicationMetadata.setAndroidSdkPath(
+					Harmony.getSdkDirFromPropertiesFile(localProp));
+			if (ApplicationMetadata.getAndroidSdkPath() == null) {
+				ApplicationMetadata.setAndroidSdkPath(
+						"/opt/android-sdk-linux_86/");
 			}
 		}
 		
@@ -94,8 +94,8 @@ public abstract class CommonTest {
 	 */
 	protected static void makeEntities() {
 		final String pathNameSpace = 
-				ApplicationMetadata.INSTANCE.projectNameSpace.replaceAll("\\.",
-						"/");
+				ApplicationMetadata.INSTANCE.getProjectNameSpace()
+					.replaceAll("\\.", "/");
 		final String srcDir = 
 				String.format("src/%s/%s/", 
 						pathNameSpace, 

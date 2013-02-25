@@ -106,7 +106,7 @@ public class TranslationMetadata {
 		translateMeta.group = group;
 		translateMeta.i18n.put(Locale.getDefault(), defaultValue);
 		
-		ApplicationMetadata.INSTANCE.translates.put(translateMeta.key,
+		ApplicationMetadata.INSTANCE.getTranslates().put(translateMeta.key,
 				translateMeta);
 		
 		return translateMeta;

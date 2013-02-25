@@ -27,7 +27,7 @@ public class ProjectGenerator extends BaseGenerator {
 	public ProjectGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 
-		this.datamodel = this.appMetas.toMap(this.adapter);
+		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 	}
 
 	/**
@@ -36,13 +36,13 @@ public class ProjectGenerator extends BaseGenerator {
 	 */
 	public final boolean makeProject() {
 		boolean result = false;
-		if (this.adapter.getPlatform().equals("android")) {
+		if (this.getAdapter().getPlatform().equals("android")) {
 			result = this.makeProjectAndroid();
-		} else if (this.adapter.getPlatform().equals("ios")) {
+		} else if (this.getAdapter().getPlatform().equals("ios")) {
 			result = this.makeProjectIOS();
-		} else if (this.adapter.getPlatform().equals("rim")) {
+		} else if (this.getAdapter().getPlatform().equals("rim")) {
 			result = this.makeProjectRIM();
-		} else if (this.adapter.getPlatform().equals("winphone")) {
+		} else if (this.getAdapter().getPlatform().equals("winphone")) {
 			result = this.makeProjectWinPhone();
 		}
 		return result;
@@ -57,7 +57,7 @@ public class ProjectGenerator extends BaseGenerator {
 		final File dirproj = new File(
 				String.format("%s/%s/",
 						Harmony.PATH_PROJECT, 
-						this.adapter.getPlatform()));
+						this.getAdapter().getPlatform()));
 		
 		final int removeResult = FileUtils.deleteRecursive(dirproj);
 
@@ -65,11 +65,11 @@ public class ProjectGenerator extends BaseGenerator {
 			result = true;
 			
 			ConsoleUtils.displayDebug(
-					"Project " + this.adapter.getPlatform() + " removed!");
+					"Project " + this.getAdapter().getPlatform() + " removed!");
 		} else {
 			ConsoleUtils.displayError(
 					new Exception("Remove Project "
-							+ this.adapter.getPlatform() 
+							+ this.getAdapter().getPlatform() 
 							+ " return " + removeResult 
 							+ " errors...\n"));
 		}
@@ -82,9 +82,10 @@ public class ProjectGenerator extends BaseGenerator {
 	public final void generateHomeActivity() {
 		ConsoleUtils.display(">> Generate HomeView & Strings...");
 
-		final String fullFilePath = this.adapter.getHomeActivityPathFile();
+		final String fullFilePath = this.getAdapter().getHomeActivityPathFile();
 		final String fullTemplatePath = 
-				this.adapter.getTemplateHomeActivityPathFile().substring(1);
+				this.getAdapter().getTemplateHomeActivityPathFile()
+					.substring(1);
 
 		super.makeSource(fullTemplatePath, fullFilePath, true);
 	}
@@ -94,21 +95,24 @@ public class ProjectGenerator extends BaseGenerator {
 	 */
 	private void createFolders() {
 		// create project name space folders
-		FileUtils.makeFolder(this.adapter.getSourcePath() 
-				+ this.appMetas.projectNameSpace.replaceAll("\\.", "/"));
+		FileUtils.makeFolder(this.getAdapter().getSourcePath() 
+				+ this.getAppMetas().getProjectNameSpace()
+					.replaceAll("\\.", "/"));
 
 		// create empty package entity
-		FileUtils.makeFolder(this.adapter.getSourcePath() 
-				+ this.appMetas.projectNameSpace.replaceAll("\\.", "/") 
+		FileUtils.makeFolder(this.getAdapter().getSourcePath() 
+				+ this.getAppMetas().getProjectNameSpace()
+					.replaceAll("\\.", "/") 
 				+ "/entity/");
 		
 		// create util folder
-		FileUtils.makeFolder(this.adapter.getSourcePath() 
-				+ this.appMetas.projectNameSpace.replaceAll("\\.", "/") 
+		FileUtils.makeFolder(this.getAdapter().getSourcePath() 
+				+ this.getAppMetas().getProjectNameSpace()
+					.replaceAll("\\.", "/") 
 				+ "/harmony/util/");
 		
 		// create libs folder
-		FileUtils.makeFolder(this.adapter.getLibsPath());
+		FileUtils.makeFolder(this.getAdapter().getLibsPath());
 	}
 	
 	/**
@@ -116,92 +120,94 @@ public class ProjectGenerator extends BaseGenerator {
 	 */
 	private void makeSources() {
 		// create HomeActivity.java 
-		super.makeSource(this.adapter.getHomeActivityPathFile(),
-				this.adapter.getTemplateHomeActivityPathFile(),
+		super.makeSource(this.getAdapter().getHomeActivityPathFile(),
+				this.getAdapter().getTemplateHomeActivityPathFile(),
 				false);
 
 		// create configs.xml
 		super.makeSource(
-				this.adapter.getTemplateRessourceValuesPath() + "configs.xml",
-				this.adapter.getRessourceValuesPath() + "configs.xml",
+				this.getAdapter().getTemplateRessourceValuesPath() 
+					+ "configs.xml",
+				this.getAdapter().getRessourceValuesPath() + "configs.xml",
 				false);
 
 		// create strings.xml
 		super.makeSource(
-				this.adapter.getTemplateStringsPathFile(),
-				this.adapter.getStringsPathFile(),
+				this.getAdapter().getTemplateStringsPathFile(),
+				this.getAdapter().getStringsPathFile(),
 				false);
 		
 		// create configs.xml
 		super.makeSource(
-				this.adapter.getTemplateRessourceValuesPath() + "styles.xml",
-				this.adapter.getRessourceValuesPath() + "styles.xml",
+				this.getAdapter().getTemplateRessourceValuesPath() 
+					+ "styles.xml",
+				this.getAdapter().getRessourceValuesPath() + "styles.xml",
 				false);
 
 		// create main.xml
 		super.makeSource(
-				this.adapter.getTemplateRessourceLayoutPath() + "main.xml",
-				this.adapter.getRessourceLayoutPath() + "main.xml",
+				this.getAdapter().getTemplateRessourceLayoutPath() + "main.xml",
+				this.getAdapter().getRessourceLayoutPath() + "main.xml",
 				false);
 		
 		// create HarmonyFragmentActivity
 		super.makeSource(
-			this.adapter.getTemplateSourcePath() 
+			this.getAdapter().getTemplateSourcePath() 
 			+ "harmony/view/HarmonyFragmentActivity.java",
-			this.adapter.getSourcePath()
-			+ this.appMetas.projectNameSpace 
+			this.getAdapter().getSourcePath()
+			+ this.getAppMetas().getProjectNameSpace() 
 			+ "/harmony/view/" 
 			+ "HarmonyFragmentActivity.java",
 			false);
 		
 		// create HarmonyFragment
 		super.makeSource(
-			this.adapter.getTemplateSourcePath() 
+			this.getAdapter().getTemplateSourcePath() 
 			+ "harmony/view/HarmonyFragment.java",
-			this.adapter.getSourcePath()
-			+ this.appMetas.projectNameSpace 
+			this.getAdapter().getSourcePath()
+			+ this.getAppMetas().getProjectNameSpace() 
 			+ "/harmony/view/" 
 			+ "HarmonyFragment.java",
 			false);
 		
 		// create HarmonyListFragment
 		super.makeSource(
-			this.adapter.getTemplateSourcePath()
+			this.getAdapter().getTemplateSourcePath()
 			+ "harmony/view/HarmonyListFragment.java",
-			this.adapter.getSourcePath()
-			+ this.appMetas.projectNameSpace 
+			this.getAdapter().getSourcePath()
+			+ this.getAppMetas().getProjectNameSpace() 
 			+ "/harmony/view/" 
 			+ "HarmonyListFragment.java",
 			false);
 		
 		// create ProjectMenuBase
 		super.makeSource(
-			this.adapter.getTemplateSourcePath() 
+			this.getAdapter().getTemplateSourcePath() 
 			+ "menu/TemplateMenuBase.java",
-			this.adapter.getMenuPath()
+			this.getAdapter().getMenuPath()
 
 			+ CaseFormat.LOWER_CAMEL.to(
 					CaseFormat.UPPER_CAMEL,
-					this.appMetas.name) 
+					this.getAppMetas().getName()) 
 			+ "MenuBase.java",
 			false);
 		
 		// create ProjectMenu
 		super.makeSource(
-			this.adapter.getTemplateSourcePath() 
+			this.getAdapter().getTemplateSourcePath() 
 			+ "menu/TemplateMenu.java",
-			this.adapter.getMenuPath() 
+			this.getAdapter().getMenuPath() 
 			+ CaseFormat.LOWER_CAMEL.to(
 					CaseFormat.UPPER_CAMEL, 
-					this.appMetas.name) 
+					this.getAppMetas().getName()) 
 			+ "Menu.java",
 			false);
 		
 		// create MenuWrapper
 		super.makeSource(
-			this.adapter.getTemplateSourcePath() 
+			this.getAdapter().getTemplateSourcePath() 
 			+ "menu/MenuWrapperBase.java",
-			this.adapter.getMenuPath() + "MenuWrapperBase.java",
+			this.getAdapter().getMenuPath() + "MenuWrapperBase.java",
 			false);
 	}
 	
@@ -223,7 +229,7 @@ public class ProjectGenerator extends BaseGenerator {
 						Harmony.PATH_HARMONY, 
 						"harmony.jar")),
 				new File(String.format("%s/%s", 
-						this.adapter.getLibsPath(), 
+						this.getAdapter().getLibsPath(), 
 						"harmony.jar")));
 	}
 
@@ -233,7 +239,7 @@ public class ProjectGenerator extends BaseGenerator {
 	private void installAndroidSherlockLib() {
 		//TODO test if git is install
 		String pathSherlock = String.format("%s%s", 
-				this.adapter.getLibsPath(), 
+				this.getAdapter().getLibsPath(), 
 				"sherlock");
 		
 		if (!FileUtils.exists(pathSherlock)) {
@@ -312,7 +318,7 @@ public class ProjectGenerator extends BaseGenerator {
 			
 			//make build sherlock
 			command.add(String.format("%s/%s", 
-					ApplicationMetadata.androidSdkPath, 
+					ApplicationMetadata.getAndroidSdkPath(), 
 					"tools/android"));
 			command.add("update");
 			command.add("project");
@@ -337,18 +343,19 @@ public class ProjectGenerator extends BaseGenerator {
 		this.updateUtil("DateUtils.java");
 
 		// Update newly created files with datamodel
-		final File dirTpl = new File(this.adapter.getTemplateProjectPath());
+		final File dirTpl = 
+				new File(this.getAdapter().getTemplateProjectPath());
 		if (dirTpl.exists() && dirTpl.listFiles().length != 0) {
 			result = true;
 			
 			for (int i = 0; i < dirTpl.listFiles().length; i++) {
 				if (dirTpl.listFiles()[i].isFile()) {
 					super.makeSource(
-							this.adapter.getTemplateProjectPath() 
+							this.getAdapter().getTemplateProjectPath() 
 								+ dirTpl.listFiles()[i].getName(),
 							String.format("%s/%s/",
 									Harmony.PATH_PROJECT, 
-									this.adapter.getPlatform()) 
+									this.getAdapter().getPlatform()) 
 										+ dirTpl.listFiles()[i].getName(),
 							false);
 				}
@@ -367,11 +374,11 @@ public class ProjectGenerator extends BaseGenerator {
 		final File dirProj = FileUtils.makeFolderRecursive(
 				String.format("%s/%s/%s/",
 						Harmony.PATH_TEMPLATE ,
-						this.adapter.getPlatform(), 
-						this.adapter.getProject()),
+						this.getAdapter().getPlatform(), 
+						this.getAdapter().getProject()),
 				String.format("%s/%s/",
 						Harmony.PATH_PROJECT, 
-						this.adapter.getPlatform()),
+						this.getAdapter().getPlatform()),
 				true);
 		
 		if (dirProj.exists() && dirProj.listFiles().length != 0) {

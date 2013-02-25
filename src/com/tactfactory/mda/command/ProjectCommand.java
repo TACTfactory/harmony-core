@@ -148,33 +148,33 @@ public class ProjectCommand extends BaseCommand {
 				if (!this.getCommandArgs().containsKey("name")) {
 					Harmony.initProjectName();
 				} else {
-					ApplicationMetadata.INSTANCE.name =
-							this.getCommandArgs().get("name");
+					ApplicationMetadata.INSTANCE.setName(
+							this.getCommandArgs().get("name"));
 				}
 					
 				//Project NameSpace
 				if (!this.getCommandArgs().containsKey("namespace")) {
 					Harmony.initProjectNameSpace();
 				} else {
-					ApplicationMetadata.INSTANCE.projectNameSpace = 
+					ApplicationMetadata.INSTANCE.setProjectNameSpace(
 							this.getCommandArgs().get("namespace")
-								.replaceAll("\\.", "/");
+								.replaceAll("\\.", "/"));
 				}
 					
 				//Android sdk path
 				if (!this.getCommandArgs().containsKey("androidsdk")) {
 					Harmony.initProjectAndroidSdkPath();
 				} else {
-					ApplicationMetadata.androidSdkPath =
-							this.getCommandArgs().get("androidsdk");
+					ApplicationMetadata.setAndroidSdkPath(
+							this.getCommandArgs().get("androidsdk"));
 				}
 					
 				ConsoleUtils.displayDebug("Project Name: "	 
-							+ ApplicationMetadata.INSTANCE.name
+							+ ApplicationMetadata.INSTANCE.getName()
 						 + "\nProject NameSpace: "			 
-							+ ApplicationMetadata.INSTANCE.projectNameSpace
+							+ ApplicationMetadata.INSTANCE.getProjectNameSpace()
 						 + "\nAndroid SDK Path: "			 
-							+ ApplicationMetadata.androidSdkPath);
+							+ ApplicationMetadata.getAndroidSdkPath());
 
 				// Confirmation
 				if (ConsoleUtils.isConsole()) {
@@ -185,9 +185,9 @@ public class ProjectCommand extends BaseCommand {
 					if (!accept.contains("n")) {
 						this.userHasConfirmed 			= true;
 					} else {
-						ApplicationMetadata.INSTANCE.name 				= "";
-						ApplicationMetadata.INSTANCE.projectNameSpace 	= "";
-						ApplicationMetadata.androidSdkPath 			= "";
+						ApplicationMetadata.INSTANCE.setName("");
+						ApplicationMetadata.INSTANCE.setProjectNameSpace("");
+						ApplicationMetadata.setAndroidSdkPath("");
 						this.getCommandArgs().clear();
 					}
 				} else {

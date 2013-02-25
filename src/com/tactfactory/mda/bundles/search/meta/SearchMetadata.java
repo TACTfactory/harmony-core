@@ -25,7 +25,7 @@ public class SearchMetadata extends BaseMetadata {
 	 */
 	public SearchMetadata() {
 		super();
-		this.name = NAME;
+		this.setName(NAME);
 	}
 	
 	

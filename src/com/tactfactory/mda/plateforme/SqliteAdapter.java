@@ -33,41 +33,42 @@ public abstract class SqliteAdapter {
 		
 		final StringBuilder builder = new StringBuilder();
 		builder.append(' ');
-		builder.append(fm.type.toLowerCase());
-		if (fm.id) {
+		builder.append(fm.getType().toLowerCase());
+		if (fm.isId()) {
 			builder.append(" PRIMARY KEY");
-			if (fm.type.equals("integer")) {
+			if (fm.getType().equals("integer")) {
 				builder.append(" AUTOINCREMENT");
 			}
 		} else {
 		
 			// Set Length
-			final Type fieldType = Type.fromName(fm.type);
+			final Type fieldType = Type.fromName(fm.getType());
 			if (fieldType != null) {
-				if (fm.length != null && fm.length != fieldType.getLength()) {
+				if (fm.getLength() != null 
+						&& fm.getLength() != fieldType.getLength()) {
 					builder.append('(');
-					builder.append(fm.length);
+					builder.append(fm.getLength());
 					builder.append(')');
-				} else if (fm.precision != null 
-						&& fm.precision != fieldType.getPrecision()) {
+				} else if (fm.getPrecision() != null 
+						&& fm.getPrecision() != fieldType.getPrecision()) {
 					builder.append('(');
-					builder.append(fm.precision);
-					if (fm.scale != null 
-							&& fm.scale != fieldType.getScale()) {
+					builder.append(fm.getPrecision());
+					if (fm.getScale() != null 
+							&& fm.getScale() != fieldType.getScale()) {
 						builder.append(',');
-						builder.append(fm.scale);
+						builder.append(fm.getScale());
 					}
 					builder.append(')');
 				}
 			}
 			
 			// Set Unique
-			if (fm.unique != null && fm.unique) {
+			if (fm.isUnique() != null && fm.isUnique()) {
 				builder.append(" UNIQUE");
 			}
 			
 			// Set Nullable
-			if (fm.nullable == null || !fm.nullable) {
+			if (fm.isNullable() == null || !fm.isNullable()) {
 				builder.append(" NOT NULL");
 			}
 		}

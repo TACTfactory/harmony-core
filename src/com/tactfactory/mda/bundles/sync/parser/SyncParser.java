@@ -78,7 +78,7 @@ public class SyncParser extends BaseParser {
 									pair.getValue().toString());
 						}
 						
-						sm.priority = priority;
+						sm.setPriority(priority);
 					} else
 					
 					if (pair.getName().equals(ANNOT_SYNC_MODE)) {
@@ -89,7 +89,7 @@ public class SyncParser extends BaseParser {
 						} else {
 							mode = pair.getValue().toString();
 						}
-						sm.mode = Sync.Mode.fromName(mode);
+						sm.setMode(Sync.Mode.fromName(mode));
 					}
 					
 					if (pair.getName().equals(ANNOT_SYNC_LEVEL)) {
@@ -100,40 +100,40 @@ public class SyncParser extends BaseParser {
 						} else {
 							level = pair.getValue().toString();
 						}
-						sm.level = Sync.Level.fromName(level);
+						sm.setLevel(Sync.Level.fromName(level));
 					}
 				}
 			}
-			cm.options.put(SYNC, sm);
+			cm.getOptions().put(SYNC, sm);
 			
 			// Update fields of entity (fields of extends base)
 			final FieldMetadata serverId = new FieldMetadata(cm);
-			serverId.name = "serverId";
-			serverId.columnName = "serverId";
-			serverId.type = "integer";
-			serverId.columnDefinition = "integer";
-			serverId.hidden = true;
-			serverId.nullable = true;
-			cm.fields.put(serverId.name, serverId);
+			serverId.setName("serverId");
+			serverId.setColumnName("serverId");
+			serverId.setType("integer");
+			serverId.setColumnDefinition("integer");
+			serverId.setHidden(true);
+			serverId.setNullable(true);
+			cm.getFields().put(serverId.getName(), serverId);
 			
 			final FieldMetadata syncDtag = new FieldMetadata(cm);
-			syncDtag.name = "sync_dtag";
-			syncDtag.columnName = "sync_dtag";
-			syncDtag.type = "boolean";
-			syncDtag.columnDefinition = "boolean";
-			syncDtag.hidden = true;
-			syncDtag.nullable = false;
-			cm.fields.put(syncDtag.name, syncDtag);
+			syncDtag.setName("sync_dtag");
+			syncDtag.setColumnName("sync_dtag");
+			syncDtag.setType("boolean");
+			syncDtag.setColumnDefinition("boolean");
+			syncDtag.setHidden(true);
+			syncDtag.setNullable(false);
+			cm.getFields().put(syncDtag.getName(), syncDtag);
 			
 			final FieldMetadata syncUDate = new FieldMetadata(cm);
-			syncUDate.name = "sync_uDate";
-			syncUDate.columnName = "sync_uDate";
-			syncUDate.type = "datetime";
-			syncUDate.columnDefinition = "datetime";
-			syncUDate.hidden = true;
-			syncUDate.nullable = true;
-			syncUDate.isLocale = true;
-			cm.fields.put(syncUDate.name, syncUDate);
+			syncUDate.setName("sync_uDate");
+			syncUDate.setColumnName("sync_uDate");
+			syncUDate.setType("datetime");
+			syncUDate.setColumnDefinition("datetime");
+			syncUDate.setHidden(true);
+			syncUDate.setNullable(true);
+			syncUDate.setIsLocale(true);
+			cm.getFields().put(syncUDate.getName(), syncUDate);
 		}
 	}
 

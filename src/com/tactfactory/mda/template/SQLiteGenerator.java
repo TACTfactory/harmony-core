@@ -29,9 +29,10 @@ public class SQLiteGenerator extends BaseGenerator {
 	public SQLiteGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
-		this.datamodel = this.appMetas.toMap(this.adapter);
+		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 		this.localNameSpace = 
-				this.appMetas.projectNameSpace + "/" + this.adapter.getData();
+				this.getAppMetas().getProjectNameSpace() 
+				+ "/" + this.getAdapter().getData();
 	}
 
 	/**
@@ -72,16 +73,16 @@ public class SQLiteGenerator extends BaseGenerator {
 			final boolean override) {
 		
 		final String fullFilePath = String.format("%s%s/%s",
-						this.adapter.getSourcePath(),
+						this.getAdapter().getSourcePath(),
 						PackageUtils.extractPath(this.localNameSpace)
 							.toLowerCase(),
 						String.format(filename,
 								CaseFormat.LOWER_CAMEL.to(
 										CaseFormat.UPPER_CAMEL,
-										this.appMetas.name)));
+										this.getAppMetas().getName())));
 		
 		final String fullTemplatePath =
-				this.adapter.getTemplateSourceProviderPath().substring(1) 
+				this.getAdapter().getTemplateSourceProviderPath().substring(1) 
 				+ template;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);

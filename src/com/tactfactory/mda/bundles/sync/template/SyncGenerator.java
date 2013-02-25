@@ -51,7 +51,7 @@ public class SyncGenerator extends BaseGenerator {
 	 * Generate sync for all entities.
 	 */
 	public final void generateAll() {
-		this.datamodel = this.appMetas.toMap(this.adapter);
+		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 		this.generateSync();
 	}
 	
@@ -62,11 +62,12 @@ public class SyncGenerator extends BaseGenerator {
 		// Add internet permission to manifest :
 		this.addPermissionManifest("android.permission.INTERNET");
 		// EntityBase.java
-		String fullFilePath = this.adapter.getSourcePath() 
-				+ this.appMetas.projectNameSpace.replaceAll("\\.", "/") 
+		String fullFilePath = this.getAdapter().getSourcePath() 
+				+ this.getAppMetas().getProjectNameSpace()
+					.replaceAll("\\.", "/") 
 				+ "/entity/base/EntityBase.java";
 		String fullTemplatePath = 
-				this.adapter.getTemplateSourceEntityBasePath().substring(1)
+				this.getAdapter().getTemplateSourceEntityBasePath().substring(1)
 				+ "EntityBase.java";
 		
 		super.makeSource(fullTemplatePath, fullFilePath, true);
@@ -76,7 +77,7 @@ public class SyncGenerator extends BaseGenerator {
 				"TemplateSyncService.java", 
 				String.format("%sSyncService.java",
 						CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
-								this.appMetas.name)),
+								this.getAppMetas().getName())),
 				true);
 		
 		// TemplateSyncThread.java
@@ -84,41 +85,42 @@ public class SyncGenerator extends BaseGenerator {
 				"TemplateSyncThread.java", 
 				String.format("%sSyncThread.java",
 						CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, 
-								this.appMetas.name)),
+								this.getAppMetas().getName())),
 				true);
 		
 		// SyncClientAdapterBase
-		fullFilePath = this.adapter.getSourcePath() 
-				+ this.appMetas.projectNameSpace 
-				+ "/" + this.adapter.getData() 
+		fullFilePath = this.getAdapter().getSourcePath() 
+				+ this.getAppMetas().getProjectNameSpace() 
+				+ "/" + this.getAdapter().getData() 
 				+ "/" + "base/SyncClientAdapterBase.java";
 		fullTemplatePath = 
-				this.adapter.getTemplateSourceProviderPath().substring(1) 
+				this.getAdapter().getTemplateSourceProviderPath().substring(1) 
 				+ "base/SyncClientAdapterBase.java";
 		
 		super.makeSource(fullTemplatePath, fullFilePath, true);
 		
-		fullFilePath = this.adapter.getSourcePath() 
-				+ this.appMetas.projectNameSpace 
-				+ "/" + this.adapter.getData() 
+		fullFilePath = this.getAdapter().getSourcePath() 
+				+ this.getAppMetas().getProjectNameSpace() 
+				+ "/" + this.getAdapter().getData() 
 				+ "/" + "base/SyncSQLiteAdapterBase.java";
 		fullTemplatePath = 
-				this.adapter.getTemplateSourceProviderPath().substring(1) 
+				this.getAdapter().getTemplateSourceProviderPath().substring(1) 
 				+ "base/SyncSQLiteAdapterBase.java";
 		
 		super.makeSource(fullTemplatePath, fullFilePath, true);
 		
 		
-		for (final ClassMetadata cm : this.appMetas.entities.values()) {
-			if (cm.options.containsKey("sync")) {
+		for (final ClassMetadata cm 
+				: this.getAppMetas().getEntities().values()) {
+			if (cm.getOptions().containsKey("sync")) {
 				this.addInheritance(cm);
 			}
 		}
 		
 		try {
-			new ApplicationGenerator(this.adapter).generateApplication();
-			new SQLiteAdapterGenerator(this.adapter).generateAll();
-			new RestGenerator(this.adapter).generateAll();
+			new ApplicationGenerator(this.getAdapter()).generateApplication();
+			new SQLiteAdapterGenerator(this.getAdapter()).generateAll();
+			new RestGenerator(this.getAdapter()).generateAll();
 			
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
@@ -131,13 +133,13 @@ public class SyncGenerator extends BaseGenerator {
 			final String fileName, 
 			final boolean override) {
 		final String fullFilePath = 
-				this.adapter.getSourcePath() 
-				+ this.appMetas.projectNameSpace
-				+ "/" + this.adapter.getService() 
+				this.getAdapter().getSourcePath() 
+				+ this.getAppMetas().getProjectNameSpace()
+				+ "/" + this.getAdapter().getService() 
 				+ "/" + fileName;
 		
 		final String fullTemplatePath = 
-				this.adapter.getTemplateSourceServicePath().substring(1)
+				this.getAdapter().getTemplateSourceServicePath().substring(1)
 				+ templateName;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
@@ -148,10 +150,11 @@ public class SyncGenerator extends BaseGenerator {
 	 * @param cm The entity metadata
 	 */
 	private void addInheritance(final ClassMetadata cm) {
-		final String entityName = cm.name;
+		final String entityName = cm.getName();
 		final File entityFile = 
-				new File(this.adapter.getSourcePath() 
-						+ this.appMetas.projectNameSpace.replaceAll("\\.", "/") 
+				new File(this.getAdapter().getSourcePath() 
+						+ this.getAppMetas().getProjectNameSpace()
+							.replaceAll("\\.", "/") 
 						+ "/entity/" + entityName + ".java");
 		final StringBuffer sb = FileUtils.fileToStringBuffer(entityFile);
 		final String extendsString = " extends EntityBase";
@@ -160,12 +163,13 @@ public class SyncGenerator extends BaseGenerator {
 				this.indexOf(sb, classDeclaration, false)
 				+ classDeclaration.length();
 		
-		if (cm.extendType != null) { 	// Entity already extends something
-			final String extendedClass = cm.extendType;
+		if (cm.getExtendType() != null) { 	// Entity already extends something
+			final String extendedClass = cm.getExtendType();
 			// Extended class is already Entity Base, do nothing
 			if (!extendedClass.equals("EntityBase")) { 				
 				// Extended class is not an entity, warn the user
-				if (!this.appMetas.entities.containsKey(extendedClass)) { 		
+				if (!this.getAppMetas().getEntities()
+						.containsKey(extendedClass)) {
 					ConsoleUtils.displayError(new Exception(
 							"The entity "
 							+ entityName 
@@ -174,10 +178,11 @@ public class SyncGenerator extends BaseGenerator {
 				} else {
 					// Get extended entity
 					final ClassMetadata extendedCm = 
-							this.appMetas.entities.get(extendedClass); 
+							this.getAppMetas().getEntities()
+								.get(extendedClass); 
 					// Extended class is an entity but which is not syncable,
 					// warn the user
-					if (!extendedCm.options.containsKey("sync")) {				
+					if (!extendedCm.getOptions().containsKey("sync")) {
 						ConsoleUtils.displayError(new Exception(
 								"The entity " 
 						+ entityName 
@@ -188,13 +193,13 @@ public class SyncGenerator extends BaseGenerator {
 		} else {				// Entity doesn't extend anything
 			sb.insert(aClassDefinitionIndex, extendsString);
 			// Add import EntityBase if it doesn't exist yet
-			if (!cm.imports.contains("EntityBase")) { 
+			if (!cm.getImports().contains("EntityBase")) { 
 				final int packageIndex = this.indexOf(sb, "package", false);
 				final int lineAfterPackageIndex = 
 						sb.indexOf("\n", packageIndex) + 1;
 				sb.insert(lineAfterPackageIndex, 
 						String.format("%nimport %s.base.EntityBase;%n", 
-								this.datamodel.get(
+								this.getDatamodel().get(
 										TagConstant.ENTITY_NAMESPACE)));
 				
 			}
@@ -270,7 +275,7 @@ public class SyncGenerator extends BaseGenerator {
 			
 			// Load XML File
 			final File xmlFile = 
-					FileUtils.makeFile(this.adapter.getManifestPathFile());
+					FileUtils.makeFile(this.getAdapter().getManifestPathFile());
 			
 			final Document doc = builder.build(xmlFile); 	
 			

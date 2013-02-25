@@ -72,7 +72,7 @@ public class RestParser extends BaseParser {
 			final AnnotationExpr fieldAnnot) {
 		if (fieldAnnot.getName().toString().equals(ANNOT_REST)) {
 			final RestMetadata rm = new RestMetadata();
-			rm.isEnabled = true;
+			rm.setEnabled(true);
 			if (fieldAnnot instanceof NormalAnnotationExpr) {
 				final NormalAnnotationExpr norm =
 						(NormalAnnotationExpr) fieldAnnot;
@@ -90,21 +90,21 @@ public class RestParser extends BaseParser {
 								security = pair.getValue().toString();
 							}
 							
-							rm.security = Rest.Security.fromName(security);
+							rm.setSecurity(Rest.Security.fromName(security));
 						} else
 						
 						if (pair.getName().equals(ANNOT_REST_URI)) {
 							if (pair.getValue() instanceof StringLiteralExpr) {
-								rm.uri = ((StringLiteralExpr)
-										pair.getValue()).getValue();
+								rm.setUri(((StringLiteralExpr)
+										pair.getValue()).getValue());
 							} else {
-								rm.uri = pair.getValue().toString();
+								rm.setUri(pair.getValue().toString());
 							}
 						}
 					}
 				}
 			}
-			cm.options.put(REST, rm);
+			cm.getOptions().put(REST, rm);
 		}
 		
 	}

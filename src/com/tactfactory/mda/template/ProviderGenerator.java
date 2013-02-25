@@ -51,16 +51,17 @@ public class ProviderGenerator extends BaseGenerator {
 		
 		this.nameProvider = 
 				CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, 
-						this.appMetas.name + "Provider");
+						this.getAppMetas().getName() + "Provider");
 		this.localNameSpace = 
-				this.appMetas.projectNameSpace.replace('/', '.') 
+				this.getAppMetas().getProjectNameSpace().replace('/', '.') 
 				+ "." 
-				+ this.adapter.getProvider();
+				+ this.getAdapter().getProvider();
 		
 
-		this.datamodel = this.appMetas.toMap(this.adapter);
+		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 
-		this.datamodel.put(TagConstant.LOCAL_NAMESPACE, this.localNameSpace);
+		this.getDatamodel().put(
+				TagConstant.LOCAL_NAMESPACE, this.localNameSpace);
 	}
 	
 	/**
@@ -79,14 +80,16 @@ public class ProviderGenerator extends BaseGenerator {
 					Group.PROVIDER);
 			TranslationMetadata.addDefaultTranslation(
 					"app_provider_name", 
-					"Provider of " + this.appMetas.name, 
+					"Provider of " + this.getAppMetas().getName(), 
 					Group.PROVIDER);
 			TranslationMetadata.addDefaultTranslation(
 					"app_provider_description", 
-					"Provider of " + this.appMetas.name + " for acces to data", 
+					"Provider of "
+						+ this.getAppMetas().getName() 
+						+ " for acces to data", 
 					Group.PROVIDER);
 			
-			new TranslationGenerator(this.adapter).generateStringsXml();
+			new TranslationGenerator(this.getAdapter()).generateStringsXml();
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
@@ -103,13 +106,13 @@ public class ProviderGenerator extends BaseGenerator {
 			final String filename) {
 		
 		final String fullFilePath = String.format("%s%s/%s",
-						this.adapter.getSourcePath(),
+						this.getAdapter().getSourcePath(),
 						PackageUtils.extractPath(this.localNameSpace)
 							.toLowerCase(),
 						filename);
 		
 		final String fullTemplatePath = String.format("%s%s",
-				this.adapter.getTemplateSourceProviderPath(),
+				this.getAdapter().getTemplateSourceProviderPath(),
 				template);
 		
 		super.makeSource(fullTemplatePath, fullFilePath, false);
@@ -130,7 +133,7 @@ public class ProviderGenerator extends BaseGenerator {
 			// Make engine
 			final SAXBuilder builder = new SAXBuilder();		
 			final File xmlFile 
-				= FileUtils.makeFile(this.adapter.getManifestPathFile());
+				= FileUtils.makeFile(this.getAdapter().getManifestPathFile());
 			
 			// Load XML File
 			final Document doc = builder.build(xmlFile);
@@ -176,11 +179,15 @@ public class ProviderGenerator extends BaseGenerator {
 
 				// Set values
 				findProvider.setAttribute("authorities", 	
-						this.appMetas.projectNameSpace.replace('/', '.'), ns);
+						this.getAppMetas().getProjectNameSpace()
+							.replace('/', '.'),
+						ns);
 				findProvider.setAttribute("label", 			
-						"@string/app_provider_name", ns);
+						"@string/app_provider_name",
+						ns);
 				findProvider.setAttribute("description", 	
-						"@string/app_provider_description", ns);
+						"@string/app_provider_description",
+						ns);
 				
 				// Clean code
 				applicationNode.sortChildren(new Comparator<Element>() {

@@ -28,7 +28,7 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 	public SQLiteAdapterGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		
-		this.datamodel = this.appMetas.toMap(this.adapter);
+		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 	}
 	
 	/**
@@ -37,11 +37,13 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 	public final void generateAll() {
 		ConsoleUtils.display(">> Generate Adapter...");
 		
-		for (final ClassMetadata cm : this.appMetas.entities.values()) {
-			if (!cm.fields.isEmpty()) {
-				this.localNameSpace = 
-						this.adapter.getNameSpace(cm, this.adapter.getData());
-				this.datamodel.put(TagConstant.CURRENT_ENTITY, cm.name);
+		for (final ClassMetadata cm 
+				: this.getAppMetas().getEntities().values()) {
+			if (!cm.getFields().isEmpty()) {
+				this.localNameSpace = this.getAdapter().getNameSpace(
+						cm, this.getAdapter().getData());
+				this.getDatamodel().put(
+						TagConstant.CURRENT_ENTITY, cm.getName());
 				this.generate();
 			}
 		}
@@ -64,7 +66,7 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 	private void generate() {
 		// Info
 		ConsoleUtils.display(">>> Generate Adapter for " 
-				+ this.datamodel.get(TagConstant.CURRENT_ENTITY));
+				+ this.getDatamodel().get(TagConstant.CURRENT_ENTITY));
 		
 		try {
 			this.makeSourceControler(
@@ -81,7 +83,7 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		
 		// Info
 		ConsoleUtils.display(">>> Generate Criterias for "
-				+ this.datamodel.get(TagConstant.CURRENT_ENTITY));
+				+ this.getDatamodel().get(TagConstant.CURRENT_ENTITY));
 		try {
 			this.makeSourceCriteria(
 					"TemplateCriterias.java", 
@@ -104,13 +106,13 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 			final String filename, 
 			final boolean override) {
 		final String fullFilePath = String.format("%s%s/%s",
-				this.adapter.getSourcePath(),
+				this.getAdapter().getSourcePath(),
 				PackageUtils.extractPath(this.localNameSpace).toLowerCase(),
 				String.format(filename,
-						this.datamodel.get(TagConstant.CURRENT_ENTITY)));
+						this.getDatamodel().get(TagConstant.CURRENT_ENTITY)));
 		
 		final String fullTemplatePath =
-				this.adapter.getTemplateSourceProviderPath().substring(1) 
+				this.getAdapter().getTemplateSourceProviderPath().substring(1) 
 				+ template;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
@@ -128,14 +130,14 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 			final String filename, 
 			final boolean override) {
 		final String fullFilePath = String.format("%s%s/%s/%s",
-				this.adapter.getSourcePath(),
-				this.appMetas.projectNameSpace,
-				this.adapter.getCriterias(),
+				this.getAdapter().getSourcePath(),
+				this.getAppMetas().getProjectNameSpace(),
+				this.getAdapter().getCriterias(),
 				String.format(filename, 
-						this.datamodel.get(TagConstant.CURRENT_ENTITY)));
+						this.getDatamodel().get(TagConstant.CURRENT_ENTITY)));
 		
 		final String fullTemplatePath = 
-				this.adapter.getTemplateSourceCriteriasPath().substring(1) 
+				this.getAdapter().getTemplateSourceCriteriasPath().substring(1) 
 				+ template;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
