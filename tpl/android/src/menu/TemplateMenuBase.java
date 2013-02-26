@@ -66,7 +66,12 @@ public abstract class ${project_name?cap_first}MenuBase {
 	/** Update Menu component */
 	public void updateMenu(Menu menu) {
 		int currentClass = this.context.getClass().hashCode();
-		int currentFragment = this.fragment.getClass().hashCode();
+		int currentFragment;
+		if(this.fragment!=null) {
+			currentFragment = this.fragment.getClass().hashCode();
+		} else {
+			currentFragment = -1;
+		}
 		
 		for (int i=0; i<this.menus.size();i++){
 			this.menus.valueAt(i).updateMenu(menu, currentClass, currentFragment, this.context);
