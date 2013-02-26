@@ -59,7 +59,12 @@ public class SearchMenuWrapper extends MenuWrapperBase{
 	@Override
 	protected boolean dispatch(MenuItem item, Context ctx, Fragment fragment) {
 		int currentActivityHashCode = ctx.getClass().hashCode();
-		int currentFragmentHashCode = fragment.getClass().hashCode();
+		int currentFragmentHashCode;
+		if (fragment!=null) {
+			currentFragmentHashCode = fragment.getClass().hashCode();
+		} else {
+			currentFragmentHashCode = -1;
+		}
 		
 		Intent intent = null;
 		

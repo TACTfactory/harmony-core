@@ -31,7 +31,7 @@ import com.tactfactory.mda.template.BaseGenerator;
 import com.tactfactory.mda.template.SQLiteAdapterGenerator;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 
 /**
  * Generator for Sync.
@@ -156,17 +156,27 @@ public class SyncGenerator extends BaseGenerator {
 						+ this.getAppMetas().getProjectNameSpace()
 							.replaceAll("\\.", "/") 
 						+ "/entity/" + entityName + ".java");
-		final StringBuffer sb = FileUtils.fileToStringBuffer(entityFile);
+		final StringBuffer sb = TactFileUtils.fileToStringBuffer(entityFile);
 		final String extendsString = " extends EntityBase";
 		final String classDeclaration = "class " + entityName;
 		final int aClassDefinitionIndex = 
 				this.indexOf(sb, classDeclaration, false)
 				+ classDeclaration.length();
 		
-		if (cm.getExtendType() != null) { 	// Entity already extends something
+		if (cm.getExtendType() != null) {
+			// Entity already extends something
 			final String extendedClass = cm.getExtendType();
 			// Extended class is already Entity Base, do nothing
 			if (!extendedClass.equals("EntityBase")) { 				
+				
+				if (extendedClass.trim().equalsIgnoreCase("Object")) {
+					final int objectIndex = this.indexOf(
+							sb, "Object", aClassDefinitionIndex, false);
+					sb.replace(objectIndex, 
+							objectIndex + "Object".length(), 
+							"EntityBase");
+					//FileUtils.stringBufferToFile(sb, entityFile);
+				} else
 				// Extended class is not an entity, warn the user
 				if (!this.getAppMetas().getEntities()
 						.containsKey(extendedClass)) {
@@ -192,19 +202,20 @@ public class SyncGenerator extends BaseGenerator {
 			}
 		} else {				// Entity doesn't extend anything
 			sb.insert(aClassDefinitionIndex, extendsString);
-			// Add import EntityBase if it doesn't exist yet
-			if (!cm.getImports().contains("EntityBase")) { 
-				final int packageIndex = this.indexOf(sb, "package", false);
-				final int lineAfterPackageIndex = 
-						sb.indexOf("\n", packageIndex) + 1;
-				sb.insert(lineAfterPackageIndex, 
-						String.format("%nimport %s.base.EntityBase;%n", 
-								this.getDatamodel().get(
-										TagConstant.ENTITY_NAMESPACE)));
-				
-			}
-			FileUtils.stringBufferToFile(sb, entityFile);
 		}
+		
+		// Add import EntityBase if it doesn't exist yet
+		if (!cm.getImports().contains("EntityBase")) { 
+			final int packageIndex = this.indexOf(sb, "package", false);
+			final int lineAfterPackageIndex = 
+					sb.indexOf("\n", packageIndex) + 1;
+			sb.insert(lineAfterPackageIndex, 
+					String.format("%nimport %s.base.EntityBase;%n", 
+							this.getDatamodel().get(
+									TagConstant.ENTITY_NAMESPACE)));
+			
+		}
+		TactFileUtils.stringBufferToFile(sb, entityFile);
 	}
 	
 	/**
@@ -275,7 +286,8 @@ public class SyncGenerator extends BaseGenerator {
 			
 			// Load XML File
 			final File xmlFile = 
-					FileUtils.makeFile(this.getAdapter().getManifestPathFile());
+					TactFileUtils.makeFile(
+							this.getAdapter().getManifestPathFile());
 			
 			final Document doc = builder.build(xmlFile); 	
 			
@@ -316,7 +328,7 @@ public class SyncGenerator extends BaseGenerator {
 				xmlOutput.output(doc, 
 						new OutputStreamWriter(
 								new FileOutputStream(xmlFile.getAbsoluteFile()),
-								FileUtils.DEFAULT_ENCODING));
+								TactFileUtils.DEFAULT_ENCODING));
 			}
 		} catch (final JDOMException e) {
 			ConsoleUtils.displayError(e);

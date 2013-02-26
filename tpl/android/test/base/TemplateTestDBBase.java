@@ -76,6 +76,9 @@ import ${fixture_namespace}.DataManager;
 
 import java.util.ArrayList;
 
+import com.tactfactory.mda.test.demact.entity.Post;
+import com.tactfactory.mda.test.demact.fixture.PostDataLoader;
+
 import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
 
 import android.content.Context;
@@ -116,9 +119,9 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		${entityName?uncap_first}Loader.load(manager);
 		</#list>
 		
-		ArrayList<${curr.name?cap_first}> entities = this.adapter.getAll();
+		ArrayList<${curr.name?cap_first}> entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.${curr.name?uncap_first}s.values());
 		if (entities.size()>0){
-			this.entity = entities.get(TestUtils.generateRandomInt(0,entities.size()));
+			this.entity = entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}
 	}
 

@@ -23,7 +23,7 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.BaseGenerator;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 
 /**
  * Symfony generator.
@@ -182,11 +182,11 @@ public final class WebGenerator extends BaseGenerator {
 		final File configTplFile = 
 				new File(this.symfonyAdapter.getWebTemplateConfigPath()
 						 + "config.yml");
-		final StringBuffer sb = FileUtils.fileToStringBuffer(configTplFile);
+		final StringBuffer sb = TactFileUtils.fileToStringBuffer(configTplFile);
 		final File configFile = 
 				new File(this.symfonyAdapter.getWebPath()
 						 + "app/config/config.yml");
-		FileUtils.appendToFile(sb.toString(), configFile);
+		TactFileUtils.appendToFile(sb.toString(), configFile);
 		
 		final String restBundleLoad =
 				"\n\t\tnew FOS\\RestBundle\\FOSRestBundle(), ";
@@ -258,7 +258,7 @@ public final class WebGenerator extends BaseGenerator {
 		try {
 			destDir = new File(destPath);
 			srcFile = new File(srcPath);
-			FileUtils.copyFileToDirectory(srcFile, destDir);
+			TactFileUtils.copyFileToDirectory(srcFile, destDir);
 		} catch (final IOException e) {
 			// TODO Auto-generated catch block
 			ConsoleUtils.displayError(e);
@@ -274,13 +274,13 @@ public final class WebGenerator extends BaseGenerator {
 	protected void addToFile(final String content, final String filePath) {
 		try {
 			final File f = new File(filePath);
-			final StringBuffer sb = FileUtils.fileToStringBuffer(f);
+			final StringBuffer sb = TactFileUtils.fileToStringBuffer(f);
 			if (sb.indexOf(content) == -1) {
 				final BufferedWriter bw = 
 						new BufferedWriter(
 								new OutputStreamWriter(
 										new FileOutputStream(f, true),
-										FileUtils.DEFAULT_ENCODING));
+										TactFileUtils.DEFAULT_ENCODING));
 				bw.write(content);
 				bw.close();
 			}
@@ -299,7 +299,7 @@ public final class WebGenerator extends BaseGenerator {
 			final String after, 
 			final String filePath) {
 		final File file = new File(filePath);
-		FileUtils.addToFile(content, after, file);
+		TactFileUtils.addToFile(content, after, file);
 	}
 	
 	/**

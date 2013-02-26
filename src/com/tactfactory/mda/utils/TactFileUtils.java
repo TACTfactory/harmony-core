@@ -23,8 +23,10 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.FileUtils;
+
 /** Manipulate File tools. */
-public abstract class FileUtils extends org.apache.commons.io.FileUtils {
+public abstract class TactFileUtils extends FileUtils {
 	/** Default encoding for stream manipulation. */
 	public static final String DEFAULT_ENCODING = "UTF-8";
 	
@@ -73,23 +75,21 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 	public static void copyfile(final File srcFile, final File destFile) {
 		final byte[] buf = new byte[BUFFER_SIZE];
 		int len;
-		
+		InputStream in = null;
+		OutputStream out = null;
 		try {
-			final InputStream in = new FileInputStream(srcFile);
+			in = new FileInputStream(srcFile);
 
 			// For Append the file.
 			// OutputStream out = new FileOutputStream(f2, true);
 
 			// For Overwrite the file.
-			final OutputStream out = new FileOutputStream(destFile);
+			out = new FileOutputStream(destFile);
 			len = in.read(buf);
 			while (len > 0) {
 				out.write(buf, 0, len);
 				len = in.read(buf);
 			}
-			
-			in.close();
-			out.close();
 			
 			// Debug Log
 			ConsoleUtils.displayDebug("File "
@@ -102,6 +102,18 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 			
 		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);
+			
+		} finally {
+			try {
+				if (in != null) {
+					in.close();
+				}
+				if (out != null) {
+					out.close();
+				}
+			} catch (final IOException e) {
+				ConsoleUtils.displayError(e);
+			}
 		}
 	}
 	
@@ -149,7 +161,7 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 			final byte[] buffer = new byte[(int) file.length()];
 			in = new DataInputStream(new FileInputStream(file));
 			in.readFully(buffer);
-			result = new String(buffer, FileUtils.DEFAULT_ENCODING);
+			result = new String(buffer, TactFileUtils.DEFAULT_ENCODING);
 		} catch (final IOException e) {
 			throw new RuntimeException("IO problem in fileToString",
 					e);
@@ -180,7 +192,7 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		BufferedReader br = null;
 		try {
 			fis = new FileInputStream(file);
-			in = new InputStreamReader(fis, FileUtils.DEFAULT_ENCODING);
+			in = new InputStreamReader(fis, TactFileUtils.DEFAULT_ENCODING);
 			br = new BufferedReader(in);
 			while (true) {
 				tmp = br.readLine();
@@ -224,7 +236,7 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 		BufferedWriter bw = null;
 		try {
 			fos = new FileOutputStream(file);
-			out = new OutputStreamWriter(fos, FileUtils.DEFAULT_ENCODING);
+			out = new OutputStreamWriter(fos, TactFileUtils.DEFAULT_ENCODING);
 			bw = new BufferedWriter(out);
 			bw.write(buff.toString());
 
@@ -262,7 +274,7 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 			result = new ArrayList<String>();
 			in = new DataInputStream(new FileInputStream(file));
 			br = new BufferedReader(
-					new InputStreamReader(in, FileUtils.DEFAULT_ENCODING));
+					new InputStreamReader(in, TactFileUtils.DEFAULT_ENCODING));
 			line = br.readLine(); 
 			while (line != null) {
 				result.add(line);
@@ -345,7 +357,7 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 					    				 + "' creation error...");
 					    	}
 					    }
-						FileUtils.makeFolderRecursive(
+						TactFileUtils.makeFolderRecursive(
 								String.format("%s%s/",
 										srcPath,
 										tplFile.getName()),
@@ -354,10 +366,10 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 										tmpFile.getName()),
 								false);
 					} else if (tplFile.isFile() && makeFiles) {
-						tmpFile = FileUtils.makeFile(destPath
+						tmpFile = TactFileUtils.makeFile(destPath
 								 + tplFile.getName());
 						if (tmpFile.exists()) {
-			    			FileUtils.copyfile(tplFile, tmpFile);
+			    			TactFileUtils.copyfile(tplFile, tmpFile);
 			    			ConsoleUtils.displayDebug(FILE
 			    					 + tplFile.getName() 
 			    					 + "' created...");
@@ -385,7 +397,7 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 	 * @return number of files/folders deleted
 	 */
 	public static int deleteRecursive(final File dir) {
-		return FileUtils.deleteRecursive(dir, 0);
+		return TactFileUtils.deleteRecursive(dir, 0);
 	}
 	
 	/** delete a directory with all its files recursively.
@@ -400,7 +412,7 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 				//it's a directory, list files and call deleteDir on a dir
 				for (final File f : dir.listFiles()) {
 					if (f.isDirectory()) {
-						ret = FileUtils.deleteRecursive(f, ret);
+						ret = TactFileUtils.deleteRecursive(f, ret);
 					} else {
 						if (f.delete()) {
 							ConsoleUtils.displayDebug(FILE
@@ -505,12 +517,12 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 	 */
 	public static boolean appendToFile(final String content, final File file) {
 		boolean success = false;
-		final StringBuffer sb = FileUtils.fileToStringBuffer(file);
+		final StringBuffer sb = TactFileUtils.fileToStringBuffer(file);
 		//If content doesn't exists in the file yet
 		if (sb.indexOf(content) == -1) {
 			final int offset = sb.length(); 
 			sb.insert(offset, content);
-			FileUtils.stringBufferToFile(sb, file);
+			TactFileUtils.stringBufferToFile(sb, file);
 			success = true;
 		}
 		return success;
@@ -529,12 +541,12 @@ public abstract class FileUtils extends org.apache.commons.io.FileUtils {
 			final String after,
 			final File file) {
 		boolean success = false;
-		final StringBuffer sb = FileUtils.fileToStringBuffer(file);
+		final StringBuffer sb = TactFileUtils.fileToStringBuffer(file);
 		//If content doesn't exists in the file yet
 		if (sb.indexOf(content) == -1) {
 			final int offset = sb.indexOf(after) + after.length();
 			sb.insert(offset, content);
-			FileUtils.stringBufferToFile(sb, file);
+			TactFileUtils.stringBufferToFile(sb, file);
 			success = true;
 		}
 		return success;
