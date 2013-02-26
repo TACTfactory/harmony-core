@@ -31,7 +31,7 @@ import com.tactfactory.mda.template.BaseGenerator;
 import com.tactfactory.mda.template.SQLiteAdapterGenerator;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 
 /**
  * Generator for Sync.
@@ -156,7 +156,7 @@ public class SyncGenerator extends BaseGenerator {
 						+ this.getAppMetas().getProjectNameSpace()
 							.replaceAll("\\.", "/") 
 						+ "/entity/" + entityName + ".java");
-		final StringBuffer sb = FileUtils.fileToStringBuffer(entityFile);
+		final StringBuffer sb = TactFileUtils.fileToStringBuffer(entityFile);
 		final String extendsString = " extends EntityBase";
 		final String classDeclaration = "class " + entityName;
 		final int aClassDefinitionIndex = 
@@ -215,7 +215,7 @@ public class SyncGenerator extends BaseGenerator {
 									TagConstant.ENTITY_NAMESPACE)));
 			
 		}
-		FileUtils.stringBufferToFile(sb, entityFile);
+		TactFileUtils.stringBufferToFile(sb, entityFile);
 	}
 	
 	/**
@@ -286,7 +286,8 @@ public class SyncGenerator extends BaseGenerator {
 			
 			// Load XML File
 			final File xmlFile = 
-					FileUtils.makeFile(this.getAdapter().getManifestPathFile());
+					TactFileUtils.makeFile(
+							this.getAdapter().getManifestPathFile());
 			
 			final Document doc = builder.build(xmlFile); 	
 			
@@ -327,7 +328,7 @@ public class SyncGenerator extends BaseGenerator {
 				xmlOutput.output(doc, 
 						new OutputStreamWriter(
 								new FileOutputStream(xmlFile.getAbsoluteFile()),
-								FileUtils.DEFAULT_ENCODING));
+								TactFileUtils.DEFAULT_ENCODING));
 			}
 		} catch (final JDOMException e) {
 			ConsoleUtils.displayError(e);

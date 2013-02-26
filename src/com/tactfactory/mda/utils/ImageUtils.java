@@ -52,7 +52,7 @@ public abstract class ImageUtils {
 			
 			ImageIO.write(
 					imageResize, 
-					FileUtils.getExtension(imageDst),
+					TactFileUtils.getExtension(imageDst),
 					imageDst);
 		}
 	}

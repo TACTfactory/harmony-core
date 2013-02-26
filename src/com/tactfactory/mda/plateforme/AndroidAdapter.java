@@ -15,7 +15,7 @@ import java.io.IOException;
 import com.tactfactory.mda.annotation.Column;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 import com.tactfactory.mda.utils.ImageUtils;
 
 /** Google Android Adapter of project structure. */
@@ -190,9 +190,9 @@ public final class AndroidAdapter extends BaseAdapter {
 		if (imageDirectoryXHD.exists() 
 				&& imageDirectoryXHD.listFiles().length > 0) {
 			final File[] imagesFiles = imageDirectoryXHD.listFiles(this.filter);
-			FileUtils.makeFolder(imageDirectoryHD.getAbsolutePath());
-			FileUtils.makeFolder(imageDirectoryMD.getAbsolutePath());
-			FileUtils.makeFolder(imageDirectoryLD.getAbsolutePath());
+			TactFileUtils.makeFolder(imageDirectoryHD.getAbsolutePath());
+			TactFileUtils.makeFolder(imageDirectoryMD.getAbsolutePath());
+			TactFileUtils.makeFolder(imageDirectoryLD.getAbsolutePath());
 			
 			for (final File imageXHD : imagesFiles) {
 				try {

@@ -11,7 +11,7 @@ import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 
 /**
  * Generator class for the project.
@@ -59,7 +59,7 @@ public class ProjectGenerator extends BaseGenerator {
 						Harmony.PATH_PROJECT, 
 						this.getAdapter().getPlatform()));
 		
-		final int removeResult = FileUtils.deleteRecursive(dirproj);
+		final int removeResult = TactFileUtils.deleteRecursive(dirproj);
 
 		if (removeResult == 0) {
 			result = true;
@@ -95,24 +95,24 @@ public class ProjectGenerator extends BaseGenerator {
 	 */
 	private void createFolders() {
 		// create project name space folders
-		FileUtils.makeFolder(this.getAdapter().getSourcePath() 
+		TactFileUtils.makeFolder(this.getAdapter().getSourcePath() 
 				+ this.getAppMetas().getProjectNameSpace()
 					.replaceAll("\\.", "/"));
 
 		// create empty package entity
-		FileUtils.makeFolder(this.getAdapter().getSourcePath() 
+		TactFileUtils.makeFolder(this.getAdapter().getSourcePath() 
 				+ this.getAppMetas().getProjectNameSpace()
 					.replaceAll("\\.", "/") 
 				+ "/entity/");
 		
 		// create util folder
-		FileUtils.makeFolder(this.getAdapter().getSourcePath() 
+		TactFileUtils.makeFolder(this.getAdapter().getSourcePath() 
 				+ this.getAppMetas().getProjectNameSpace()
 					.replaceAll("\\.", "/") 
 				+ "/harmony/util/");
 		
 		// create libs folder
-		FileUtils.makeFolder(this.getAdapter().getLibsPath());
+		TactFileUtils.makeFolder(this.getAdapter().getLibsPath());
 	}
 	
 	/**
@@ -224,7 +224,7 @@ public class ProjectGenerator extends BaseGenerator {
 		this.installAndroidSherlockLib();
 		
 		/// copy Harmony library
-		FileUtils.copyfile(
+		TactFileUtils.copyfile(
 				new File(String.format("%s/%s", 
 						Harmony.PATH_HARMONY, 
 						"harmony.jar")),
@@ -242,7 +242,7 @@ public class ProjectGenerator extends BaseGenerator {
 				this.getAdapter().getLibsPath(), 
 				"sherlock");
 		
-		if (!FileUtils.exists(pathSherlock)) {
+		if (!TactFileUtils.exists(pathSherlock)) {
 			final ArrayList<String> command = new ArrayList<String>();
 			
 			// command/Tools
@@ -317,7 +317,7 @@ public class ProjectGenerator extends BaseGenerator {
 			command.clear();
 			
 			// delete samples
-			FileUtils.deleteRecursive(
+			TactFileUtils.deleteRecursive(
 					new File(String.format("%s/%s", pathSherlock, "samples")));
 
 			//make build sherlock
@@ -375,7 +375,7 @@ public class ProjectGenerator extends BaseGenerator {
 	protected final boolean makeProjectIOS() {
 		boolean result = false;
 		//Generate base folders & files
-		final File dirProj = FileUtils.makeFolderRecursive(
+		final File dirProj = TactFileUtils.makeFolderRecursive(
 				String.format("%s/%s/%s/",
 						Harmony.PATH_TEMPLATE ,
 						this.getAdapter().getPlatform(), 
