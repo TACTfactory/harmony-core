@@ -19,7 +19,6 @@ import com.tactfactory.mda.annotation.GeneratedValue;
 import com.tactfactory.mda.annotation.Id;
 import com.tactfactory.mda.annotation.Table;
 import com.tactfactory.mda.bundles.rest.annotation.Rest;
-import com.tactfactory.mda.bundles.search.annotation.Searchable;
 import com.tactfactory.mda.bundles.social.annotation.Social;
 import com.tactfactory.mda.bundles.sync.annotation.Sync;
 import com.tactfactory.mda.bundles.sync.annotation.Sync.Mode;
@@ -39,7 +38,6 @@ public class User extends Object implements Cloneable, Serializable {
     private int id;
 
 	@Column(type = Type.LOGIN)
-	@Searchable
     private String login;
 	
 	@Column(type = Type.PASSWORD)

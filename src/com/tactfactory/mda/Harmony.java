@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +25,8 @@ import net.xeoh.plugins.base.impl.PluginManagerFactory;
 import net.xeoh.plugins.base.util.JSPFProperties;
 import net.xeoh.plugins.base.util.PluginManagerUtil;
 
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -102,9 +103,14 @@ public final class Harmony {
 		props.setProperty(PluginManager.class, "cache.mode",    "weak"); 
 		props.setProperty(PluginManager.class, "cache.file",    "jspf.cache");*/
 		
-		//this.pluginManager;
-		this.pluginManager.addPluginsFrom(new URI("classpath://*"));
-		this.pluginManager.addPluginsFrom(new File("vendor/").toURI());
+		File pluginBaseDirectory = new File("vendor/");
+		Collection<File> plugins = TactFileUtils.listFiles(pluginBaseDirectory,
+				FileFilterUtils.suffixFileFilter(".jar"), 
+				TrueFileFilter.INSTANCE);
+		for (File plugin : plugins) {
+			this.pluginManager.addPluginsFrom(
+					plugin.toURI());
+		}
 		
 		final PluginManagerUtil pmu = new PluginManagerUtil(this.pluginManager);
 		final Collection<Command> commands = pmu.getPlugins(Command.class);
