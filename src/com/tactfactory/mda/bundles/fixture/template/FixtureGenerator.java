@@ -130,8 +130,13 @@ public class FixtureGenerator extends BaseGenerator {
 	public final void purge() {
 		for (final ClassMetadata cm 
 				: this.getAppMetas().getEntities().values()) {
-			this.removeSource(cm.getName() + ".xml");
-			this.removeSource(cm.getName() + ".yml");
+			if (cm.getFields().size() > 0) {
+				this.removeSource("app/" + cm.getName() + ".xml");
+				this.removeSource("app/" + cm.getName() + ".yml");
+				
+				this.removeSource("test/" + cm.getName() + ".xml");
+				this.removeSource("test/" + cm.getName() + ".yml");
+			}
 		}
 		
 	}
@@ -159,12 +164,15 @@ public class FixtureGenerator extends BaseGenerator {
 	 */
 	protected final void removeSource(final String fileName) {
 		final String fullFilePath = 
-				this.getAdapter().getAssetsPath() + "/" + fileName;
+				this.getAdapter().getAssetsPath() + fileName;
 		final File f = new File(fullFilePath);
-		if (!f.delete()) {
-			ConsoleUtils.displayError(
-					new Exception("Couldn't delete file "
-							+ f.getAbsolutePath()));
+		
+		if (f.exists()) {
+			if (!f.delete()) {
+				ConsoleUtils.displayError(
+						new Exception("Couldn't delete file "
+								+ f.getPath()));
+			}
 		}
 	}
 	
