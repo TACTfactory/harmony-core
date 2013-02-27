@@ -18,15 +18,10 @@ import com.tactfactory.mda.annotation.Entity;
 import com.tactfactory.mda.annotation.GeneratedValue;
 import com.tactfactory.mda.annotation.Id;
 import com.tactfactory.mda.annotation.Table;
-import com.tactfactory.mda.bundles.rest.annotation.Rest;
-import com.tactfactory.mda.bundles.sync.annotation.Sync;
-import com.tactfactory.mda.bundles.sync.annotation.Sync.Mode;
 
 //All annotation with forced value/parameter
 @Table(name = "local_user")
 @Entity
-@Rest(security = Rest.Security.SESSION, uri = "user-uri")
-@Sync(mode = Mode.REAL_TIME)
 public class User extends Object implements Cloneable, Serializable {
 	private static final long serialVersionUID = 7032873279928549706L;
 

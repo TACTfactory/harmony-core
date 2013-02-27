@@ -13,13 +13,11 @@ import com.tactfactory.mda.annotation.Column.Type;
 import com.tactfactory.mda.annotation.Entity;
 import com.tactfactory.mda.annotation.GeneratedValue;
 import com.tactfactory.mda.annotation.Id;
-import com.tactfactory.mda.bundles.rest.annotation.Rest;
 
 /** Simple entity containing only an id.
  * (For test purposes only)
  */
 @Entity
-@Rest()
 public class SimpleEntity {
 	@Id
     @Column(type = Type.INTEGER, hidden = true)
