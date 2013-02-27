@@ -62,7 +62,6 @@
     <target name="clean"
         description="Delete temporary folders">
         <delete dir="${build.rel-dir}" failonerror="false" deleteonexit="true" />
-        <delete dir="${dist.rel-dir}" failonerror="false" deleteonexit="true" />
     	<delete dir="${tmp.rel-dir}" failonerror="false" deleteonexit="true" />
     </target>
     
