@@ -26,7 +26,6 @@ import net.xeoh.plugins.base.util.JSPFProperties;
 import net.xeoh.plugins.base.util.PluginManagerUtil;
 
 import org.apache.commons.io.filefilter.FileFilterUtils;
-import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -106,7 +105,8 @@ public final class Harmony {
 		File pluginBaseDirectory = new File("vendor/");
 		Collection<File> plugins = TactFileUtils.listFiles(pluginBaseDirectory,
 				FileFilterUtils.suffixFileFilter(".jar"), 
-				TrueFileFilter.INSTANCE);
+				FileFilterUtils.notFileFilter( 
+						FileFilterUtils.nameFileFilter("lib")));
 		for (File plugin : plugins) {
 			this.pluginManager.addPluginsFrom(
 					plugin.toURI());
