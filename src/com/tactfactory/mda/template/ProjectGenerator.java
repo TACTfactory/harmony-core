@@ -119,11 +119,6 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Make Android sources project File.
 	 */
 	private void makeSources() {
-		// create HomeActivity.java 
-		super.makeSource(this.getAdapter().getHomeActivityPathFile(),
-				this.getAdapter().getTemplateHomeActivityPathFile(),
-				false);
-
 		// create configs.xml
 		super.makeSource(
 				this.getAdapter().getTemplateRessourceValuesPath() 

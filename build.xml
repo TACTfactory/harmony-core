@@ -55,7 +55,6 @@
         <mkdir dir="${build.rel-dir}"/>
         <mkdir dir="${dist.rel-dir}"/>
         <mkdir dir="${dist.rel-dir}/${lib.rel-dir}"/>
-        <mkdir dir="${app.rel-dir}"/>
     	<mkdir dir="${tmp.rel-dir}"/>
     </target>
 
@@ -316,7 +315,7 @@
 	<target name="post_build" depends="compile"
         description="Build the project">
 		<!-- build a temporary lib dir, and flatten out the jars into one folder -->
-		<copy todir="${dist.rel-dir}/${lib.rel-dir}" flatten="true">
+		<copy todir="../../${lib.rel-dir}" flatten="true">
 		  <fileset dir="${lib.rel-dir}">
 		    <include name="*.jar"/>
 		  </fileset>
@@ -355,7 +354,7 @@
 		        <flattenmapper />
 		 
 		        <!-- add lib/ prefix -->
-		        <globmapper from="*" to="../../lib/*" />
+		        <globmapper from="*" to="lib/*" />
 		      </chainedmapper>
 		    </mapper>
 		 
@@ -363,7 +362,7 @@
 		 
 		      <!-- lib.home contains all jar files, in several subdirectories -->
 		      <fileset dir="${lib.rel-dir}">
-		        <include name="**/*.jar" />
+		        <include name="*.jar" />
 		      </fileset>
 		    </path>
 		  </pathconvert>

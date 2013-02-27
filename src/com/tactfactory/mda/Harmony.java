@@ -52,17 +52,17 @@ public class Harmony {
 	/** Path of Harmony base. */
 	public static final String PATH_BASE = "./";
 	
-	/** Path of project ( app folder in Harmony root). */
+	/** Path of project (app folder in Harmony root). */
 	public static final String PATH_PROJECT = PATH_BASE + "app";
-	
-	/** Path of templates. */
-	public static final String PATH_TEMPLATE = PATH_BASE + "tpl";
 	
 	/** Path of harmony.jar. */
 	public static final String PATH_HARMONY = PATH_BASE + "vendor/tact-core";
 	
 	/** Path of libs. */
 	public static final String PATH_LIBS = PATH_HARMONY + "/lib";
+	
+	/** Path of templates. */
+	public static final String PATH_TEMPLATE = PATH_HARMONY + "/tpl";
 	
 	/** Project space. */
 	private static String projectFolderPath = "android";
@@ -301,7 +301,7 @@ public class Harmony {
 									.toLowerCase())) {
 						
 						String namespaceForm = 
-								"^(((([a-z0-9_] +)\\.)*)([a-z0-9_] +))$";
+								"^(((([a-z0-9_]+)\\.)*)([a-z0-9_]+))$";
 						
 						if (Pattern.matches(namespaceForm, projectNameSpace)) {
 							ApplicationMetadata.INSTANCE.setProjectNameSpace(
@@ -484,13 +484,13 @@ public class Harmony {
 			final List<String> lines = FileUtils.fileToStringArray(fileProp);
 			
 			for (int i = 0; i < lines.size(); i++) {
-				if (lines.get(i).startsWith("sdk.di =")) {
+				if (lines.get(i).startsWith("sdk.dir=")) {
 					if (lines.get(i).contains(TagConstant.ANDROID_SDK_DIR)) {
 						ConsoleUtils.displayWarning(
 								"Android SDK Dir not defined," 
 								+ " please init project...");
 					} else {
-						result = lines.get(i).replace("sdk.di =", "");
+						result = lines.get(i).replace("sdk.dir=", "");
 					}
 					break;
 				}
