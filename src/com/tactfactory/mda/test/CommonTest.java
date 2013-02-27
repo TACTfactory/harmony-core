@@ -125,7 +125,7 @@ public abstract class CommonTest {
 				String.format("%s/android/test/%s", 
 						Harmony.PATH_PROJECT, 
 						libPath);
-		FileUtils.copyfile(new File(srcDir), new File(destDir));
+		TactFileUtils.copyfile(new File(srcDir), new File(destDir));
 	}
 	
 	/**
