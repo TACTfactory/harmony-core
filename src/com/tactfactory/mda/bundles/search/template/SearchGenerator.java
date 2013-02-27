@@ -32,7 +32,7 @@ import com.tactfactory.mda.template.BaseGenerator;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.template.TranslationGenerator;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
 /**
@@ -214,7 +214,8 @@ public class SearchGenerator  extends BaseGenerator {
 		try {
 			final SAXBuilder builder = new SAXBuilder();		// Make engine
 			final File xmlFile =
-					FileUtils.makeFile(this.getAdapter().getManifestPathFile());
+					TactFileUtils.makeFile(
+							this.getAdapter().getManifestPathFile());
 			final Document doc = builder.build(xmlFile); 	// Load XML File
 			// Load Root element
 			final Element rootNode = doc.getRootElement(); 			
@@ -291,7 +292,7 @@ public class SearchGenerator  extends BaseGenerator {
 			xmlOutput.setFormat(Format.getPrettyFormat());				
 			xmlOutput.output(doc, new OutputStreamWriter(
 					new FileOutputStream(xmlFile.getAbsoluteFile()), 
-					FileUtils.DEFAULT_ENCODING));
+					TactFileUtils.DEFAULT_ENCODING));
 		} catch (final IOException io) {
 			ConsoleUtils.displayError(io);
 		} catch (final JDOMException e) {

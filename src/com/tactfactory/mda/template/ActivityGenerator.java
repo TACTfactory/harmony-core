@@ -33,7 +33,7 @@ import com.tactfactory.mda.meta.TranslationMetadata;
 import com.tactfactory.mda.meta.TranslationMetadata.Group;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
 import freemarker.template.Configuration;
@@ -400,7 +400,7 @@ public class ActivityGenerator extends BaseGenerator {
 	public final void makeManifest(final Configuration cfg) 
 			throws IOException, TemplateException {
 		final File file = 
-				FileUtils.makeFile(this.getAdapter().getManifestPathFile());
+				TactFileUtils.makeFile(this.getAdapter().getManifestPathFile());
 
 		// Debug Log
 		ConsoleUtils.displayDebug(
@@ -412,7 +412,7 @@ public class ActivityGenerator extends BaseGenerator {
 		final OutputStreamWriter output = 
 				new OutputStreamWriter(
 						new FileOutputStream(file), 
-						FileUtils.DEFAULT_ENCODING);
+						TactFileUtils.DEFAULT_ENCODING);
 		tpl.process(this.getDatamodel(), output);
 		output.flush();
 		output.close();
@@ -436,7 +436,7 @@ public class ActivityGenerator extends BaseGenerator {
 		try {
 			// Make engine
 			final SAXBuilder builder = new SAXBuilder();		
-			final File xmlFile = FileUtils.makeFile(
+			final File xmlFile = TactFileUtils.makeFile(
 					this.getAdapter().getManifestPathFile());
 			
 			// Load XML File
@@ -545,7 +545,7 @@ public class ActivityGenerator extends BaseGenerator {
 			xmlOutput.output(doc,
 							new OutputStreamWriter(
 								new FileOutputStream(xmlFile.getAbsoluteFile()),
-								FileUtils.DEFAULT_ENCODING));
+								TactFileUtils.DEFAULT_ENCODING));
 		} catch (final IOException io) {
 			ConsoleUtils.displayError(io);
 		} catch (final JDOMException e) {

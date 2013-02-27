@@ -279,15 +279,7 @@
 			classpath="${env.PMD_HOME}/lib/pmd-5.0.2.jar"
 			classname="net.sourceforge.pmd.ant.PMDTask" />
 		<pmd shortFilenames="true">
-			<ruleset>java-basic</ruleset> 
-			<ruleset>java-braces</ruleset> 
-			<ruleset>java-codesize</ruleset> 
-			<ruleset>java-clone</ruleset> 
-			<ruleset>java-controversial</ruleset> 
-			<ruleset>java-javabeans</ruleset> 
-			<!--ruleset>java-coupling</ruleset> 
-			<ruleset>java-design</ruleset--> 
-			<ruleset>java-strings</ruleset> 
+			<ruleset>${env.PMD_HOME}/rules.xml</ruleset>
 			<!--formatter type="html" toFile="pmd_report.html" linkPrefix="http://pmd.sourceforge.net/xref/" /-->
 			<formatter type="xml" toFile="pmd.xml"/>
 			<fileset dir="${src.rel-dir}">

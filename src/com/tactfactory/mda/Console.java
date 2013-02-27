@@ -15,7 +15,7 @@ import com.google.common.base.Strings;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 /** Harmony console class. */
-public abstract class Console extends Harmony {
+public abstract class Console /*extends Harmony*/ {
 	/** NB Required commands constant. */
 	private static final int REQUIRED_COMMANDS = 3;
 	
@@ -179,7 +179,7 @@ public abstract class Console extends Harmony {
 
 			
 			// Harmony command launch
-			final Harmony harmony = new Harmony();
+			final Harmony harmony = Harmony.getInstance();
 			harmony.initialize();
 			harmony.findAndExecute(command, commandArgs, commandOption);
 		}

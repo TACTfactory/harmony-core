@@ -336,11 +336,11 @@ public abstract class ConsoleUtils {
 					this.processInput = 
 							new BufferedReader(
 									new InputStreamReader(proc.getInputStream(),
-											FileUtils.DEFAULT_ENCODING));
+											TactFileUtils.DEFAULT_ENCODING));
 					this.processError = 
 							new BufferedReader(
 									new InputStreamReader(proc.getErrorStream(),
-											FileUtils.DEFAULT_ENCODING));
+											TactFileUtils.DEFAULT_ENCODING));
 				} catch (UnsupportedEncodingException e) {
 					ConsoleUtils.displayError(e);
 				}
@@ -420,11 +420,11 @@ public abstract class ConsoleUtils {
 							new BufferedWriter(
 									new OutputStreamWriter(
 											proc.getOutputStream(),
-											FileUtils.DEFAULT_ENCODING));
+											TactFileUtils.DEFAULT_ENCODING));
 					this.consoleInput = 
 							new BufferedReader(
 									new InputStreamReader(System.in,
-											FileUtils.DEFAULT_ENCODING));
+											TactFileUtils.DEFAULT_ENCODING));
 				} catch (UnsupportedEncodingException e) {
 					ConsoleUtils.displayError(e);
 				}

@@ -21,7 +21,7 @@ import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.meta.MethodMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -69,18 +69,18 @@ public class EntityGenerator extends BaseGenerator {
 			
 			ConsoleUtils.display(">>> Decorate " + cm.getName());
 			
-			final File entityFile = FileUtils.getFile(filepath);
+			final File entityFile = TactFileUtils.getFile(filepath);
 			if (entityFile.exists()) {
 				// Load the file once in a String buffer
 				final StringBuffer fileString = 
-						FileUtils.fileToStringBuffer(entityFile); 
+						TactFileUtils.fileToStringBuffer(entityFile); 
 				
 				this.addImplementsSerializable(fileString, cm);
 				this.addImportSerializable(fileString, cm);
 				this.generateGetterAndSetters(fileString, cm);
 				
 				 // After treatment on entity, write it in the original file
-				FileUtils.stringBufferToFile(fileString, entityFile);
+				TactFileUtils.stringBufferToFile(fileString, entityFile);
 			}
 		}
 	}

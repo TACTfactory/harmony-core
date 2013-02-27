@@ -16,7 +16,7 @@ import com.google.common.base.Strings;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 
 /**
  *
@@ -64,7 +64,7 @@ public abstract class CommonTest {
 			}
 		}
 		
-		harmony = new Harmony();
+		harmony = Harmony.getInstance();
 	}
 
 	/**
@@ -110,7 +110,7 @@ public abstract class CommonTest {
 		System.out.println(destDir);
 		
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
-		FileUtils.makeFolderRecursive(srcDir, destDir, true);
+		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
 		if (new File(destDir + "Post.java").exists()) {
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");
 		}

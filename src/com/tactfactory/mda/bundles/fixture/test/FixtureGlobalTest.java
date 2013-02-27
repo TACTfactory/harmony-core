@@ -23,7 +23,7 @@ import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.test.CommonTest;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 
 /**
  * Test class for Fixtures generation and loading.
@@ -155,9 +155,9 @@ public class FixtureGlobalTest extends CommonTest {
 		System.out.println(destDir);
 		
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
-		FileUtils.makeFolderRecursive(srcDir, destDir, true);
+		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
 		destDir = String.format("fixtures/test/");
-		FileUtils.makeFolderRecursive(srcDir, destDir, true);
+		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
 		if (new File(destDir + "Post.xml").exists()) {
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");
 		}
@@ -179,9 +179,9 @@ public class FixtureGlobalTest extends CommonTest {
 		System.out.println(destDir);
 		
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
-		FileUtils.makeFolderRecursive(srcDir, destDir, true);
+		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
 		destDir = String.format("fixtures/test/");
-		FileUtils.makeFolderRecursive(srcDir, destDir, true);
+		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
 		if (new File(destDir + "Post.yml").exists()) {
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");
 		}
