@@ -22,7 +22,7 @@
 	<property name="lib.rel-dir" value="lib" />
 	<property name="ant-lib.rel-dir" value="${lib.rel-dir}/ant" />
 	<property name="tmp.rel-dir" value="tmp" />
-	<property name="dist.rel-dir" value="vendor/tact-core" />
+	<property name="dist.rel-dir" value="./" />
 	<property name="sherlock.rel-dir" value="sherlock-4.2" />
 	<property name="doc.rel-dir" value="${dist.rel-dir}/javadoc" />
 	<property name="jar.rel-file" value="${dist.rel-dir}/${ant.project.name}.jar" />
