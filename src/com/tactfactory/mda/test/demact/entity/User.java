@@ -19,8 +19,6 @@ import com.tactfactory.mda.annotation.GeneratedValue;
 import com.tactfactory.mda.annotation.Id;
 import com.tactfactory.mda.annotation.Table;
 import com.tactfactory.mda.bundles.rest.annotation.Rest;
-import com.tactfactory.mda.bundles.search.annotation.Searchable;
-import com.tactfactory.mda.bundles.social.annotation.Social;
 import com.tactfactory.mda.bundles.sync.annotation.Sync;
 import com.tactfactory.mda.bundles.sync.annotation.Sync.Mode;
 
@@ -29,8 +27,7 @@ import com.tactfactory.mda.bundles.sync.annotation.Sync.Mode;
 @Entity
 @Rest(security = Rest.Security.SESSION, uri = "user-uri")
 @Sync(mode = Mode.REAL_TIME)
-@Social
-public class User implements Cloneable, Serializable {
+public class User extends Object implements Cloneable, Serializable {
 	private static final long serialVersionUID = 7032873279928549706L;
 
 	@Id
@@ -39,7 +36,6 @@ public class User implements Cloneable, Serializable {
     private int id;
 
 	@Column(type = Type.LOGIN)
-	@Searchable
     private String login;
 	
 	@Column(type = Type.PASSWORD)

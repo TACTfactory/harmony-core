@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +25,8 @@ import net.xeoh.plugins.base.impl.PluginManagerFactory;
 import net.xeoh.plugins.base.util.JSPFProperties;
 import net.xeoh.plugins.base.util.PluginManagerUtil;
 
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -37,11 +38,11 @@ import com.tactfactory.mda.command.GeneralCommand;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 import com.tactfactory.mda.utils.OsUtil;
 
 /** Harmony main class. */
-public class Harmony {
+public final class Harmony {
 	
 	/** Harmony version. */
 	public static final String VERSION = "0.4.0-DEV";
@@ -94,7 +95,7 @@ public class Harmony {
 	/** Constructor.
 	 * @throws Exception PluginManager failure
 	 */
-	public Harmony() throws Exception {
+	private Harmony() throws Exception {
 		//final JSPFProperties props =;
 		/* props.setProperty(PluginManager.class, "cache.enabled", "true");
 		
@@ -102,9 +103,14 @@ public class Harmony {
 		props.setProperty(PluginManager.class, "cache.mode",    "weak"); 
 		props.setProperty(PluginManager.class, "cache.file",    "jspf.cache");*/
 		
-		//this.pluginManager;
-		this.pluginManager.addPluginsFrom(new URI("classpath://*"));
-		this.pluginManager.addPluginsFrom(new File("vendor/").toURI());
+		File pluginBaseDirectory = new File("vendor/");
+		Collection<File> plugins = TactFileUtils.listFiles(pluginBaseDirectory,
+				FileFilterUtils.suffixFileFilter(".jar"), 
+				TrueFileFilter.INSTANCE);
+		for (File plugin : plugins) {
+			this.pluginManager.addPluginsFrom(
+					plugin.toURI());
+		}
 		
 		final PluginManagerUtil pmu = new PluginManagerUtil(this.pluginManager);
 		final Collection<Command> commands = pmu.getPlugins(Command.class);
@@ -116,11 +122,26 @@ public class Harmony {
 		Locale.setDefault(Locale.US);
 		Harmony.instance = this;
 	}
+	
+	/**
+	 * Get Harmony instance (Singleton).
+	 * @return The harmony instance
+	 */
+	public static Harmony getInstance() {
+		if (Harmony.instance == null) {
+			try {
+				new Harmony();
+			} catch (Exception e) {
+				ConsoleUtils.displayError(e);
+			}
+		}
+		return Harmony.instance;
+	}
 
 	/** Initialize Harmony. 
 	 * @throws Exception 
 	 */
-	protected final void initialize() throws Exception {
+	protected void initialize() throws Exception {
 		ConsoleUtils.display(
 				"Current Working Path: " + new File(".").getCanonicalPath());
 
@@ -185,7 +206,7 @@ public class Harmony {
 	 * @param commandName Class command name
 	 * @return BaseCommand object
 	 */
-	public final Command getCommand(final Class<?> commandName) {
+	public Command getCommand(final Class<?> commandName) {
 		return this.bootstrap.get(commandName);
 	}
 	
@@ -194,7 +215,7 @@ public class Harmony {
 	 * 
 	 * @return The command class
 	 */
-	public final Collection<Command> getCommands() {
+	public Collection<Command> getCommands() {
 		return this.bootstrap.values();
 	}
 
@@ -205,7 +226,7 @@ public class Harmony {
 	 * @param args Commands arguments
 	 * @param option Console option (ANSI, Debug, ...)
 	 */
-	public final void findAndExecute(final String action,
+	public void findAndExecute(final String action,
 			final String[] args,
 			final String option) {
 		boolean isfindAction = false;
@@ -245,7 +266,7 @@ public class Harmony {
 					new BufferedReader(
 							new InputStreamReader(
 									System.in, 
-									FileUtils.DEFAULT_ENCODING));
+									TactFileUtils.DEFAULT_ENCODING));
 
 		
 			input = br.readLine();
@@ -481,7 +502,8 @@ public class Harmony {
 		String result = null;
 		
 		if (fileProp.exists()) {
-			final List<String> lines = FileUtils.fileToStringArray(fileProp);
+			final List<String> lines = 
+					TactFileUtils.fileToStringArray(fileProp);
 			
 			for (int i = 0; i < lines.size(); i++) {
 				if (lines.get(i).startsWith("sdk.dir=")) {
@@ -530,7 +552,8 @@ public class Harmony {
 			try {
 				final FileInputStream fis = new FileInputStream(sdkProperties);
 				final InputStreamReader isr =
-						new InputStreamReader(fis, FileUtils.DEFAULT_ENCODING);
+						new InputStreamReader(fis, 
+								TactFileUtils.DEFAULT_ENCODING);
 				final BufferedReader br = new BufferedReader(isr);
 				String line = br.readLine();
 				while (line != null) {
@@ -551,7 +574,7 @@ public class Harmony {
 	 * Get the android SDK version.
 	 * @return the android SDK version
 	 */
-	public static final String getAndroidSDKVersion() {
+	public static String getAndroidSDKVersion() {
 		return androidSdkVersion;
 	}
 	
@@ -559,15 +582,7 @@ public class Harmony {
 	 * Get the android project folder.
 	 * @return the android project folder
 	 */
-	public static final String getProjectFolder() {
+	public static String getProjectFolder() {
 		return projectFolderPath;
-	}
-	
-	/**
-	 * Get the Harmony instance.
-	 * @return the Harmony instance
-	 */
-	public static final Harmony getInstance() {
-		return instance;
 	}
 }

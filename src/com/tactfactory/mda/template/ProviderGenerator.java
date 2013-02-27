@@ -28,7 +28,7 @@ import com.tactfactory.mda.meta.TranslationMetadata;
 import com.tactfactory.mda.meta.TranslationMetadata.Group;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
 /**
@@ -133,7 +133,8 @@ public class ProviderGenerator extends BaseGenerator {
 			// Make engine
 			final SAXBuilder builder = new SAXBuilder();		
 			final File xmlFile 
-				= FileUtils.makeFile(this.getAdapter().getManifestPathFile());
+				= TactFileUtils.makeFile(
+						this.getAdapter().getManifestPathFile());
 			
 			// Load XML File
 			final Document doc = builder.build(xmlFile);
@@ -207,7 +208,7 @@ public class ProviderGenerator extends BaseGenerator {
 			xmlOutput.output(doc,
 					new OutputStreamWriter(
 							new FileOutputStream(xmlFile.getAbsoluteFile()),
-									FileUtils.DEFAULT_ENCODING));
+									TactFileUtils.DEFAULT_ENCODING));
 		} catch (final IOException io) {
 			ConsoleUtils.displayError(io);
 		} catch (final JDOMException e) {

@@ -18,7 +18,7 @@ import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;
@@ -127,8 +127,8 @@ public abstract class BaseGenerator {
 	protected void makeSource(final String templatePath,
 			final String generatePath,
 			final boolean override) {
-		if (!FileUtils.exists(generatePath) || override) {
-			final File generateFile = FileUtils.makeFile(generatePath);
+		if (!TactFileUtils.exists(generatePath) || override) {
+			final File generateFile = TactFileUtils.makeFile(generatePath);
 			
 			try {
 				// Debug Log
@@ -142,7 +142,7 @@ public abstract class BaseGenerator {
 				final OutputStreamWriter output =
 						new OutputStreamWriter(
 								new FileOutputStream(generateFile), 
-								FileUtils.DEFAULT_ENCODING);
+								TactFileUtils.DEFAULT_ENCODING);
 				tpl.process(this.datamodel, output);
 				output.flush();
 				output.close();
@@ -166,7 +166,7 @@ public abstract class BaseGenerator {
 	 */
 	protected void appendSource(final String templatePath, 
 			final String generatePath) {
-		if (FileUtils.exists(generatePath)) {
+		if (TactFileUtils.exists(generatePath)) {
 			final File generateFile = new File(generatePath);
 			
 			try {
@@ -181,7 +181,7 @@ public abstract class BaseGenerator {
 				final OutputStreamWriter output = 
 						new OutputStreamWriter(
 								new FileOutputStream(generateFile, true),
-								FileUtils.DEFAULT_ENCODING);
+								TactFileUtils.DEFAULT_ENCODING);
 				tpl.process(this.datamodel, output);
 				output.flush();
 				output.close();
@@ -206,7 +206,7 @@ public abstract class BaseGenerator {
 				String.format("%s/%s", this.adapter.getLibsPath(), libName));
 		
 		if (!dest.exists()) {
-			FileUtils.copyfile(
+			TactFileUtils.copyfile(
 					new File(String.format("%s/%s", 
 							Harmony.PATH_LIBS, libName)),
 					dest);

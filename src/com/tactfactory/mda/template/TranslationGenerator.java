@@ -27,7 +27,7 @@ import org.jdom2.output.XMLOutputter;
 import com.tactfactory.mda.meta.TranslationMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 
 /**
  * Strings and config generator.
@@ -60,7 +60,8 @@ public class TranslationGenerator extends BaseGenerator {
 			// Make engine
 			final SAXBuilder builder = new SAXBuilder();		
 			final File xmlFile = 
-					FileUtils.makeFile(this.getAdapter().getStringsPathFile());
+					TactFileUtils.makeFile(
+							this.getAdapter().getStringsPathFile());
 			
 			// Load XML File
 			final Document doc = builder.build(xmlFile);
@@ -158,7 +159,7 @@ public class TranslationGenerator extends BaseGenerator {
 					new OutputStreamWriter(
 							new FileOutputStream(
 									xmlFile.getAbsoluteFile()),
-									FileUtils.DEFAULT_ENCODING));
+									TactFileUtils.DEFAULT_ENCODING));
 			
 		} catch (final IOException io) {
 			ConsoleUtils.displayError(io);
