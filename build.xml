@@ -216,7 +216,7 @@
 	    <findbugs home="${env.FINDBUGS_HOME}"
 	    	workHard="true"
 	    	output="xml:withMessages"
-	        outputFile="findbugs.xml"
+	        outputFile="${tmp.rel-dir}/findbugs.xml"
 	    	jvmargs="-Xmx1024m" >
 	    	<auxClasspath refid="project.classpath" />
 	    	<sourcePath path="${src.rel-dir}" />
@@ -224,9 +224,9 @@
 	    </findbugs>
 		
 		<!-- Report -->
-		<xslt in="findbugs.xml"
+		<xslt in="${tmp.rel-dir}/findbugs.xml"
         	style="${env.FINDBUGS_HOME}/src/xsl/fancy.xsl"
-        	out="findbugs-default.html"
+        	out="${tmp.rel-dir}/findbugs-default.html"
         />
 	</target>
 	
@@ -247,13 +247,13 @@
         <checkstyle config="${env.CHECKSTYLE_HOME}/sun_checks.xml"
                     failureProperty="checkstyle.failure"
                     failOnViolation="false" >
-            <formatter type="xml" tofile="checkstyle_report.xml" />
+            <formatter type="xml" tofile="${tmp.rel-dir}/checkstyle_report.xml" />
             <fileset dir="${src.rel-dir}" includes="**/*.java" />
         </checkstyle>
 
 		<!-- Report -->
-        <xslt in="checkstyle_report.xml"
-               out="checkstyle_report.html"
+        <xslt in="${tmp.rel-dir}/checkstyle_report.xml"
+               out="${tmp.rel-dir}/checkstyle_report.html"
                style="${env.CHECKSTYLE_HOME}/contrib/checkstyle-noframes.xsl"
         />
 	</target>
@@ -281,7 +281,7 @@
 		<pmd shortFilenames="true">
 			<ruleset>${env.PMD_HOME}/rules.xml</ruleset>
 			<!--formatter type="html" toFile="pmd_report.html" linkPrefix="http://pmd.sourceforge.net/xref/" /-->
-			<formatter type="xml" toFile="pmd.xml"/>
+			<formatter type="xml" toFile="${tmp.rel-dir}/pmd.xml"/>
 			<fileset dir="${src.rel-dir}">
 				<include name="**/*.java"/>
 				<exclude name="**/*Test*"/>
