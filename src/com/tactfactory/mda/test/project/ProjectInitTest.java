@@ -60,6 +60,7 @@ public class ProjectInitTest extends CommonTest {
 		System.out.println("\nTest Project init Android");
 		System.out.println(SHARP_DELIMITOR);
 		
+		// Generate Project
 		CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID,
 				null,
 				null);
