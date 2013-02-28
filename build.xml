@@ -398,11 +398,7 @@
 	
 	<target name="emma"> <!-- enable code coverage -->
         <property name="emma.enabled" value="true" />
-        <property name="emma.filter" value="
-        	-android.support.v4.*, 
-        	-com.actionbarsherlock.*, 
-        	-com.tactfactory.mda.test.demact.view.*,
-        	-com.tactfactory.mda.test.demact.menu.*" />
+        <property name="emma.filter" value="" />
         <mkdir dir="${emma.instr-dir}" />        
     </target>
 </project>
