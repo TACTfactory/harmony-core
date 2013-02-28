@@ -105,7 +105,7 @@ public final class Harmony {
 		File pluginBaseDirectory = new File("vendor/");
 		Collection<File> plugins = TactFileUtils.listFiles(pluginBaseDirectory,
 				FileFilterUtils.suffixFileFilter(".jar"), 
-				FileFilterUtils.notFileFilter( 
+				FileFilterUtils.notFileFilter(
 						FileFilterUtils.nameFileFilter("lib")));
 		for (File plugin : plugins) {
 			this.pluginManager.addPluginsFrom(
