@@ -97,8 +97,9 @@ public abstract class CommonTest {
 		final String pathNameSpace = 
 				ApplicationMetadata.INSTANCE.getProjectNameSpace()
 					.replaceAll("\\.", "/");
+
 		String srcDir = 
-				String.format("src/%s/%s/", 
+				String.format("vendor/tact-core/src/%s/%s/", 
 						pathNameSpace, 
 						"entity");
 		String destDir = 

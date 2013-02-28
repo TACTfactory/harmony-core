@@ -13,7 +13,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.URI;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +25,7 @@ import net.xeoh.plugins.base.impl.PluginManagerFactory;
 import net.xeoh.plugins.base.util.JSPFProperties;
 import net.xeoh.plugins.base.util.PluginManagerUtil;
 
+import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -52,17 +52,17 @@ public final class Harmony {
 	/** Path of Harmony base. */
 	public static final String PATH_BASE = "./";
 	
-	/** Path of project ( app folder in Harmony root). */
+	/** Path of project (app folder in Harmony root). */
 	public static final String PATH_PROJECT = PATH_BASE + "app";
-	
-	/** Path of templates. */
-	public static final String PATH_TEMPLATE = PATH_BASE + "tpl";
 	
 	/** Path of harmony.jar. */
 	public static final String PATH_HARMONY = PATH_BASE + "vendor/tact-core";
 	
 	/** Path of libs. */
 	public static final String PATH_LIBS = PATH_HARMONY + "/lib";
+	
+	/** Path of templates. */
+	public static final String PATH_TEMPLATE = PATH_HARMONY + "/tpl";
 	
 	/** Project space. */
 	private static String projectFolderPath = "android";
@@ -102,9 +102,15 @@ public final class Harmony {
 		props.setProperty(PluginManager.class, "cache.mode",    "weak"); 
 		props.setProperty(PluginManager.class, "cache.file",    "jspf.cache");*/
 		
-		//this.pluginManager;
-		this.pluginManager.addPluginsFrom(new URI("classpath://*"));
-		this.pluginManager.addPluginsFrom(new File("vendor/").toURI());
+		File pluginBaseDirectory = new File("vendor/");
+		Collection<File> plugins = TactFileUtils.listFiles(pluginBaseDirectory,
+				FileFilterUtils.suffixFileFilter(".jar"), 
+				FileFilterUtils.notFileFilter(
+						FileFilterUtils.nameFileFilter("lib")));
+		for (File plugin : plugins) {
+			this.pluginManager.addPluginsFrom(
+					plugin.toURI());
+		}
 		
 		final PluginManagerUtil pmu = new PluginManagerUtil(this.pluginManager);
 		final Collection<Command> commands = pmu.getPlugins(Command.class);
@@ -316,7 +322,7 @@ public final class Harmony {
 									.toLowerCase())) {
 						
 						String namespaceForm = 
-								"^(((([a-z0-9_] +)\\.)*)([a-z0-9_] +))$";
+								"^(((([a-z0-9_]+)\\.)*)([a-z0-9_]+))$";
 						
 						if (Pattern.matches(namespaceForm, projectNameSpace)) {
 							ApplicationMetadata.INSTANCE.setProjectNameSpace(
@@ -500,13 +506,13 @@ public final class Harmony {
 					TactFileUtils.fileToStringArray(fileProp);
 			
 			for (int i = 0; i < lines.size(); i++) {
-				if (lines.get(i).startsWith("sdk.di =")) {
+				if (lines.get(i).startsWith("sdk.dir=")) {
 					if (lines.get(i).contains(TagConstant.ANDROID_SDK_DIR)) {
 						ConsoleUtils.displayWarning(
 								"Android SDK Dir not defined," 
 								+ " please init project...");
 					} else {
-						result = lines.get(i).replace("sdk.di =", "");
+						result = lines.get(i).replace("sdk.dir=", "");
 					}
 					break;
 				}

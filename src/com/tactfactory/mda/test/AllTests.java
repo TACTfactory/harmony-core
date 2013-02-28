@@ -20,10 +20,8 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({ 
 	com.tactfactory.mda.test.CoreTest.class,
 	com.tactfactory.mda.test.project.AllTests.class, 
-	com.tactfactory.mda.test.orm.AllTests.class,
-	com.tactfactory.mda.bundles.rest.test.AllTests.class,
-	com.tactfactory.mda.bundles.sync.test.AllTests.class,
-	com.tactfactory.mda.bundles.fixture.test.AllTests.class })
+	com.tactfactory.mda.test.orm.AllTests.class })
+
 public class AllTests {
 
 }
