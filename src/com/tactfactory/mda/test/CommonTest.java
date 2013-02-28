@@ -12,10 +12,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import com.google.common.base.Strings;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 
 /**
  *
@@ -63,7 +64,7 @@ public abstract class CommonTest {
 			}
 		}
 		
-		harmony = new Harmony();
+		harmony = Harmony.getInstance();
 	}
 
 	/**
@@ -96,11 +97,11 @@ public abstract class CommonTest {
 		final String pathNameSpace = 
 				ApplicationMetadata.INSTANCE.getProjectNameSpace()
 					.replaceAll("\\.", "/");
-		final String srcDir = 
+		String srcDir = 
 				String.format("src/%s/%s/", 
 						pathNameSpace, 
 						"entity");
-		final String destDir = 
+		String destDir = 
 				String.format("%s/android/src/%s/%s/", 
 						Harmony.PATH_PROJECT, 
 						pathNameSpace, 
@@ -109,10 +110,22 @@ public abstract class CommonTest {
 		System.out.println(destDir);
 		
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
-		FileUtils.makeFolderRecursive(srcDir, destDir, true);
+		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
 		if (new File(destDir + "Post.java").exists()) {
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");
 		}
+		
+		// Copy artefact for agregate CI result
+		final String libPath = "libs/harmony.jar";
+		srcDir = 
+				String.format("%s/android/%s", 
+						Harmony.PATH_PROJECT, 
+						libPath);
+		destDir = 
+				String.format("%s/android/test/%s", 
+						Harmony.PATH_PROJECT, 
+						libPath);
+		TactFileUtils.copyfile(new File(srcDir), new File(destDir));
 	}
 	
 	/**

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="demact-test" default="help">
-
-    <property name="reports.dir" value="tmp" />
+	<property name="reports.dir" value="tmp" />
     <property name="tested.manifest.package" value="${project_namespace}" />
 
     <!-- The local.properties file is created and updated by the 'android' tool.
@@ -98,5 +97,4 @@
 			<arg value="tmp/junit-report.xml" />
    		</exec>
 	</target>
-
 </project>

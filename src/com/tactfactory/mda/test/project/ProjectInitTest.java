@@ -19,7 +19,7 @@ import org.junit.Test;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.test.CommonTest;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 
 /** 
  * Test class for project initialization.
@@ -49,7 +49,7 @@ public class ProjectInitTest extends CommonTest {
 		final File dirproj = 
 				new File(String.format("%s/android",
 						Harmony.PATH_PROJECT));
-		FileUtils.deleteRecursive(dirproj);
+		TactFileUtils.deleteRecursive(dirproj);
 	}
 	
 	/**
@@ -60,6 +60,7 @@ public class ProjectInitTest extends CommonTest {
 		System.out.println("\nTest Project init Android");
 		System.out.println(SHARP_DELIMITOR);
 		
+		// Generate Project
 		CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID,
 				null,
 				null);

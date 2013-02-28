@@ -26,7 +26,7 @@ import org.jdom2.output.XMLOutputter;
 import com.tactfactory.mda.meta.ConfigMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 
 /**
  * Configuration generator.
@@ -55,7 +55,8 @@ public class ConfigGenerator extends BaseGenerator {
 			// Make engine
 			final SAXBuilder builder = new SAXBuilder();		
 			final File xmlFile = 
-					FileUtils.makeFile(this.getAdapter().getConfigsPathFile());
+					TactFileUtils.makeFile(
+							this.getAdapter().getConfigsPathFile());
 			
 			// Load XML File
 			final Document doc = builder.build(xmlFile);
@@ -125,7 +126,7 @@ public class ConfigGenerator extends BaseGenerator {
 					new OutputStreamWriter(
 							new FileOutputStream(
 									xmlFile.getAbsoluteFile()),
-									FileUtils.DEFAULT_ENCODING));
+									TactFileUtils.DEFAULT_ENCODING));
 			
 		} catch (final IOException io) {
 			ConsoleUtils.displayError(io);

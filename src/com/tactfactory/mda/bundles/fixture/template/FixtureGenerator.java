@@ -19,7 +19,7 @@ import com.tactfactory.mda.template.BaseGenerator;
 import com.tactfactory.mda.template.SQLiteGenerator;
 import com.tactfactory.mda.template.TagConstant;
 import com.tactfactory.mda.utils.ConsoleUtils;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 
 /**
  * Fixture bundle generator.
@@ -48,10 +48,18 @@ public class FixtureGenerator extends BaseGenerator {
 			final File fixtTestDest = 
 					new File(this.getAdapter().getAssetsPath() + "/test");
 			if (!fixtAppDest.exists()) {
-				fixtAppDest.mkdir();
+				if (!fixtAppDest.mkdir()) {
+					ConsoleUtils.displayError(
+							new Exception("Couldn't create folder "
+									+ fixtAppDest.getAbsolutePath()));
+				}
 			}
 			if (!fixtTestDest.exists()) {
-				fixtTestDest.mkdir();
+				if (!fixtTestDest.mkdir()) {
+					ConsoleUtils.displayError(
+							new Exception("Couldn't create folder "
+									+ fixtTestDest.getAbsolutePath()));
+				}
 			}
 			try {
 				final FileFilter ff = new FileFilter() {
@@ -61,10 +69,10 @@ public class FixtureGenerator extends BaseGenerator {
 								|| arg0.getPath().endsWith(".yml"); 
 					}
 				};
-				FileUtils.copyDirectory(fixtAppSrc, fixtAppDest, ff);
+				TactFileUtils.copyDirectory(fixtAppSrc, fixtAppDest, ff);
 				ConsoleUtils.displayDebug(
 						"Copying fixtures/app into " + fixtAppDest.getPath());
-				FileUtils.copyDirectory(fixtTestSrc, fixtTestDest, ff);
+				TactFileUtils.copyDirectory(fixtTestSrc, fixtTestDest, ff);
 				ConsoleUtils.displayDebug(
 						"Copying fixtures/test into " + fixtTestDest.getPath());
 			} catch (final IOException e) {
@@ -122,8 +130,13 @@ public class FixtureGenerator extends BaseGenerator {
 	public final void purge() {
 		for (final ClassMetadata cm 
 				: this.getAppMetas().getEntities().values()) {
-			this.removeSource(cm.getName() + ".xml");
-			this.removeSource(cm.getName() + ".yml");
+			if (cm.getFields().size() > 0) {
+				this.removeSource("app/" + cm.getName() + ".xml");
+				this.removeSource("app/" + cm.getName() + ".yml");
+				
+				this.removeSource("test/" + cm.getName() + ".xml");
+				this.removeSource("test/" + cm.getName() + ".yml");
+			}
 		}
 		
 	}
@@ -151,9 +164,16 @@ public class FixtureGenerator extends BaseGenerator {
 	 */
 	protected final void removeSource(final String fileName) {
 		final String fullFilePath = 
-				this.getAdapter().getAssetsPath() + "/" + fileName;
+				this.getAdapter().getAssetsPath() + fileName;
 		final File f = new File(fullFilePath);
-		f.delete();
+		
+		if (f.exists()) {
+			if (!f.delete()) {
+				ConsoleUtils.displayError(
+						new Exception("Couldn't delete file "
+								+ f.getPath()));
+			}
+		}
 	}
 	
 	/**

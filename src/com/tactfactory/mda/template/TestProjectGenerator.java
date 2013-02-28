@@ -7,7 +7,7 @@ import java.io.File;
 
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.plateforme.BaseAdapter;
-import com.tactfactory.mda.utils.FileUtils;
+import com.tactfactory.mda.utils.TactFileUtils;
 
 /**
  * Test project generator.
@@ -57,7 +57,7 @@ public class TestProjectGenerator extends BaseGenerator {
 		// + Harmony.projectNameSpace.replaceAll("\\.", "/"));
 
 		// create libs folder
-		FileUtils.makeFolder(this.getAdapter().getTestLibsPath());
+		TactFileUtils.makeFolder(this.getAdapter().getTestLibsPath());
 				
 		// create strings.xml
 		super.makeSource(
@@ -99,7 +99,7 @@ public class TestProjectGenerator extends BaseGenerator {
 		boolean result = false;
 		
 		//Generate base folders & files
-		final File dirProj = FileUtils.makeFolderRecursive(
+		final File dirProj = TactFileUtils.makeFolderRecursive(
 				String.format("%s/%s/%s/",
 						Harmony.PATH_TEMPLATE,
 						this.getAdapter().getPlatform(),
@@ -147,7 +147,7 @@ public class TestProjectGenerator extends BaseGenerator {
 				libName));
 		
 		if (!dest.exists()) {
-			FileUtils.copyfile(
+			TactFileUtils.copyfile(
 					new File(String.format("%s/%s", 
 							Harmony.PATH_LIBS,
 							libName)),
