@@ -88,6 +88,27 @@
     -->
     <!-- version-tag: 1 -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
+	
+	<target name="run-tests" depends="-install-tested-project, install"
+	            description="Runs tests from the package defined in test.package property">
+	    <echo>Running tests ...</echo>
+	    <exec executable="${adb}" failonerror="true" outputproperty="tests.output">
+	        <arg value="shell" />
+	        <arg value="am" />
+	        <arg value="instrument" />
+	        <arg value="-w" />
+	        <arg value="-e" />
+	        <arg value="coverage" />
+	        <arg value="@{emma.enabled}" />
+	        <arg value="${manifest.package}/${test.runner}" />
+	    </exec>
+	    <echo message="${tests.output}"/>
+	    <fail message="Tests failed!!!">
+	         <condition>
+	             <contains string="${tests.output}" substring="FAILURES" />
+	         </condition>
+	    </fail>
+	</target>
 
     <target name="test-report">
     	<echo>Downloading XML test report...</echo>
