@@ -136,7 +136,8 @@ public abstract class BaseGenerator {
 						+ generateFile.getPath()); 
 				
 				// Create
-				final Template tpl = this.cfg.getTemplate(templatePath);
+				final Template tpl = 
+						this.cfg.getTemplate(templatePath + ".ftl");
 				
 				// Write and close
 				final OutputStreamWriter output =

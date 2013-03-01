@@ -12,7 +12,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
-import com.google.common.base.Strings;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.utils.ConsoleUtils;
