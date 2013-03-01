@@ -207,6 +207,7 @@ public abstract class ConsoleUtils {
 				System.out.println(message);
 			}
 		}
+		
 	}
 
 	/**
