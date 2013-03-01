@@ -98,7 +98,7 @@ public abstract class CommonTest {
 					.replaceAll("\\.", "/");
 
 		String srcDir = 
-				String.format("vendor/tact-core/src/%s/%s/", 
+				String.format(Harmony.PATH_HARMONY+"/src/%s/%s/", 
 						pathNameSpace, 
 						"entity");
 		String destDir = 
