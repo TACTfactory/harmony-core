@@ -50,10 +50,10 @@ public final class Harmony {
 	private static Harmony instance;
 		
 	/** Path of Harmony base. */
-	public static final String PATH_BASE = "./";
+	public static String PATH_BASE = "./";
 	
 	/** Path of project (app folder in Harmony root). */
-	public static final String PATH_PROJECT = PATH_BASE + "app";
+	public static String PATH_PROJECT = PATH_BASE + "app";
 	
 	/** Path of harmony.jar. */
 	public static String PATH_HARMONY =  
@@ -112,9 +112,38 @@ public final class Harmony {
 			PATH_HARMONY = new File(PATH_HARMONY).getParentFile().toString();
 		}
 		
+		boolean isValidDir = false;
+		File workingDir = new File(PATH_BASE);
+		for (File dir : workingDir.listFiles()) {
+			if (dir.getPath().endsWith("app")) {
+				isValidDir = true;
+			}
+		}
 		
+		if (!isValidDir) {
+			File newWorkingDir = 
+					new File(PATH_HARMONY).getParentFile().getParentFile();
+			for (File dir : newWorkingDir.listFiles()) {
+				if (dir.getPath().endsWith("app")) {
+					isValidDir = true;
+				}
+			}
+			
+			if (isValidDir) {
+				PATH_BASE = TactFileUtils.absoluteToRelativePath(
+						newWorkingDir.getPath().toString()).substring(5);
+			}
+		}
+		
+		if (!isValidDir) {
+			ConsoleUtils.displayError(new Exception(
+					"INVALID FOLDERS TREE. APP FOLDER MISSING."));
+			System.exit(-1);
+		} 
+		
+		PATH_PROJECT = PATH_BASE + "app";
 		PATH_TEMPLATE = TactFileUtils.absoluteToRelativePath(
-				PATH_HARMONY + "/tpl");
+				PATH_HARMONY + "/tpl", PATH_BASE);
 		PATH_LIBS = PATH_HARMONY + "/lib";
 		
 		File pluginBaseDirectory = new File(PATH_HARMONY);
