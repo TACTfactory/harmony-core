@@ -84,7 +84,16 @@ public class TestProjectGenerator extends BaseGenerator {
 							this.getAdapter().getTemplateTestProjectPath() 
 							 + dirTpl.listFiles()[i].getName();
 					
-					super.makeSource(fullTemplatePath, fullFilePath, false);
+					super.makeSource(
+							fullTemplatePath.substring(
+									0,
+									fullTemplatePath.length() 
+										- ".ftl".length()),
+							fullFilePath.substring(
+									0,
+									fullFilePath.length() 
+										- ".ftl".length()),
+								false);
 				}
 			}
 		}

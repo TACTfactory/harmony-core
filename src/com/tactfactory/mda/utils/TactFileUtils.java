@@ -551,4 +551,15 @@ public abstract class TactFileUtils extends FileUtils {
 		}
 		return success;
 	}
+	
+	/**
+	 * Converts an absolute path to a path relative to working dir.
+	 * @param absolute The absolute path
+	 * @return The relative path
+	 */
+	public static String absoluteToRelativePath(final String absolute) {
+		File abs = new File(absolute);
+		File workingDir = new File(".");
+		return workingDir.toURI().relativize(abs.toURI()).toString();
+	}
 }

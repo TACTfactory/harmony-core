@@ -84,8 +84,7 @@ public class ProjectGenerator extends BaseGenerator {
 
 		final String fullFilePath = this.getAdapter().getHomeActivityPathFile();
 		final String fullTemplatePath = 
-				this.getAdapter().getTemplateHomeActivityPathFile()
-					.substring(1);
+				this.getAdapter().getTemplateHomeActivityPathFile();
 
 		super.makeSource(fullTemplatePath, fullFilePath, true);
 	}
@@ -354,13 +353,18 @@ public class ProjectGenerator extends BaseGenerator {
 			
 			for (int i = 0; i < dirTpl.listFiles().length; i++) {
 				if (dirTpl.listFiles()[i].isFile()) {
+					String tplPath = this.getAdapter().getTemplateProjectPath() 
+							+ dirTpl.listFiles()[i].getName();
+					String srcPath = String.format("%s/%s/",
+							Harmony.PATH_PROJECT, 
+							this.getAdapter().getPlatform()) 
+								+ dirTpl.listFiles()[i].getName(); 
+					
+					tplPath = tplPath.substring(0, tplPath.length() - 4);
+					srcPath = srcPath.substring(0, srcPath.length() - 4);
 					super.makeSource(
-							this.getAdapter().getTemplateProjectPath() 
-								+ dirTpl.listFiles()[i].getName(),
-							String.format("%s/%s/",
-									Harmony.PATH_PROJECT, 
-									this.getAdapter().getPlatform()) 
-										+ dirTpl.listFiles()[i].getName(),
+							tplPath,
+							srcPath,
 							false);
 				}
 			}

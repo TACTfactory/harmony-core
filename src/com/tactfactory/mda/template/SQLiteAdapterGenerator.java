@@ -112,7 +112,7 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 						this.getDatamodel().get(TagConstant.CURRENT_ENTITY)));
 		
 		final String fullTemplatePath =
-				this.getAdapter().getTemplateSourceProviderPath().substring(1) 
+				this.getAdapter().getTemplateSourceProviderPath()
 				+ template;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
@@ -137,7 +137,7 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 						this.getDatamodel().get(TagConstant.CURRENT_ENTITY)));
 		
 		final String fullTemplatePath = 
-				this.getAdapter().getTemplateSourceCriteriasPath().substring(1) 
+				this.getAdapter().getTemplateSourceCriteriasPath() 
 				+ template;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);

@@ -82,7 +82,7 @@ public class SQLiteGenerator extends BaseGenerator {
 										this.getAppMetas().getName())));
 		
 		final String fullTemplatePath =
-				this.getAdapter().getTemplateSourceProviderPath().substring(1) 
+				this.getAdapter().getTemplateSourceProviderPath() 
 				+ template;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);

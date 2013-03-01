@@ -12,7 +12,6 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
-import com.google.common.base.Strings;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.utils.ConsoleUtils;
@@ -99,7 +98,7 @@ public abstract class CommonTest {
 					.replaceAll("\\.", "/");
 
 		String srcDir = 
-				String.format("vendor/tact-core/src/%s/%s/", 
+				String.format(Harmony.PATH_HARMONY+"/src/%s/%s/", 
 						pathNameSpace, 
 						"entity");
 		String destDir = 

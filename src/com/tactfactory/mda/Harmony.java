@@ -56,13 +56,20 @@ public final class Harmony {
 	public static final String PATH_PROJECT = PATH_BASE + "app";
 	
 	/** Path of harmony.jar. */
-	public static final String PATH_HARMONY = PATH_BASE + "vendor/tact-core";
+	public static String PATH_HARMONY =  
+			Harmony.class
+			.getProtectionDomain()
+			.getCodeSource()
+			.getLocation()
+			.toString()
+			.substring(5); // Ommit "file:"
+	//PATH_BASE + "vendor/tact-core";
 	
 	/** Path of libs. */
-	public static final String PATH_LIBS = PATH_HARMONY + "/lib";
+	public static String PATH_LIBS = PATH_HARMONY + "/lib";
 	
 	/** Path of templates. */
-	public static final String PATH_TEMPLATE = PATH_HARMONY + "/tpl";
+	public static String PATH_TEMPLATE = PATH_HARMONY + "/tpl";
 	
 	/** Project space. */
 	private static String projectFolderPath = "android";
@@ -101,8 +108,19 @@ public final class Harmony {
 		//optional
 		props.setProperty(PluginManager.class, "cache.mode",    "weak"); 
 		props.setProperty(PluginManager.class, "cache.file",    "jspf.cache");*/
+		if (PATH_HARMONY.endsWith("bin/")) {
+			PATH_HARMONY = new File(PATH_HARMONY).getParentFile().toString();
+		}
 		
-		File pluginBaseDirectory = new File("vendor/");
+		
+		PATH_TEMPLATE = TactFileUtils.absoluteToRelativePath(
+				PATH_HARMONY + "/tpl");
+		PATH_LIBS = PATH_HARMONY + "/lib";
+		
+		File pluginBaseDirectory = new File(PATH_HARMONY);
+		pluginBaseDirectory = 
+				pluginBaseDirectory.getParentFile().getParentFile();		
+		//pluginBaseDirectory = new File(PATH_HARMONY);
 		Collection<File> plugins = TactFileUtils.listFiles(pluginBaseDirectory,
 				FileFilterUtils.suffixFileFilter(".jar"), 
 				FileFilterUtils.notFileFilter(
