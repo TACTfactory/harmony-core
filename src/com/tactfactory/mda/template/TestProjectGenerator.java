@@ -67,7 +67,8 @@ public class TestProjectGenerator extends BaseGenerator {
 		this.updateLibrary("android-junit-report-1.5.8.jar");
 		
 		final File dirTpl = 
-				new File(this.getAdapter().getTemplateTestProjectPath());
+				new File(Harmony.PATH_BASE 
+						+ this.getAdapter().getTemplateTestProjectPath());
 
 		// Update newly created files with datamodel
 		if (dirTpl.exists() && dirTpl.listFiles().length != 0) {
