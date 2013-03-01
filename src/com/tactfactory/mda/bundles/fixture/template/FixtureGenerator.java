@@ -152,7 +152,7 @@ public class FixtureGenerator extends BaseGenerator {
 				+ fileName;
 		
 		final String fullTemplatePath = 
-				this.getAdapter().getTemplateSourceFixturePath().substring(1) 
+				this.getAdapter().getTemplateSourceFixturePath() 
 				+ templateName;
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
@@ -187,13 +187,13 @@ public class FixtureGenerator extends BaseGenerator {
 			final boolean override) {
 		String fullFilePath = "fixtures/app/" + fileName;
 		String fullTemplatePath = 
-				this.getAdapter().getTemplateSourceFixturePath().substring(1) 
+				this.getAdapter().getTemplateSourceFixturePath()
 				+ templateName;
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 		
 		fullFilePath = "fixtures/test/" + fileName;
 		fullTemplatePath =
-				this.getAdapter().getTemplateSourceFixturePath().substring(1)
+				this.getAdapter().getTemplateSourceFixturePath()
 				+ templateName;
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
