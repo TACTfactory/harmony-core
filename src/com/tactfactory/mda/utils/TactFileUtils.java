@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -558,11 +559,8 @@ public abstract class TactFileUtils extends FileUtils {
 	 * @return The relative path
 	 */
 	public static String absoluteToRelativePath(final String absolute) {
-		File abs = new File(absolute);
-		File workingDir = new File(".");
-		return workingDir.toURI().relativize(abs.toURI()).toString();
+		return absoluteToRelativePath(absolute, ".");
 	}
-	
 	
 	/**
 	 * Converts an absolute path to a path relative to working dir.
@@ -572,8 +570,22 @@ public abstract class TactFileUtils extends FileUtils {
 	 */
 	public static String absoluteToRelativePath(
 			final String absolute, final String relative) {
+		String result = ".";
+		
 		File abs = new File(absolute);
 		File workingDir = new File(relative);
-		return workingDir.toURI().relativize(abs.toURI()).toString();
+		
+		URI resultString = workingDir.toURI().relativize(abs.toURI());
+		
+		if (!resultString.toString().equals("")) {
+			result = resultString.toString();
+		}
+		
+		if (result.startsWith("file")) {
+			result = result.substring(5);
+			
+		}
+		
+		return result;
 	}
 }
