@@ -67,7 +67,7 @@ public class TestProjectGenerator extends BaseGenerator {
 		this.updateLibrary("android-junit-report-1.5.8.jar");
 		
 		final File dirTpl = 
-				new File(Harmony.PATH_HARMONY + "/"
+				new File(Harmony.getHarmonyPath() + "/"
 						+ this.getAdapter().getTemplateTestProjectPath());
 
 		// Update newly created files with datamodel
@@ -76,7 +76,7 @@ public class TestProjectGenerator extends BaseGenerator {
 			for (int i = 0; i < dirTpl.listFiles().length; i++) {
 				if (dirTpl.listFiles()[i].isFile()) {
 					final String fullFilePath = String.format("%s/%s/%s/%s", 
-							Harmony.PATH_PROJECT, 
+							Harmony.getProjectPath(), 
 							this.getAdapter().getPlatform(), 
 							this.getAdapter().getTest(),
 							dirTpl.listFiles()[i].getName());
@@ -111,11 +111,11 @@ public class TestProjectGenerator extends BaseGenerator {
 		//Generate base folders & files
 		final File dirProj = TactFileUtils.makeFolderRecursive(
 				String.format("%s/%s/%s/",
-						Harmony.PATH_TEMPLATE,
+						Harmony.getTemplatesPath(),
 						this.getAdapter().getPlatform(),
 						this.getAdapter().getProject()),
 				String.format("%s/%s/", 
-						Harmony.PATH_PROJECT, 
+						Harmony.getProjectPath(), 
 						this.getAdapter().getPlatform()),
 				true);
 		
@@ -159,7 +159,7 @@ public class TestProjectGenerator extends BaseGenerator {
 		if (!dest.exists()) {
 			TactFileUtils.copyfile(
 					new File(String.format("%s/%s", 
-							Harmony.PATH_LIBS,
+							Harmony.getLibsPath(),
 							libName)),
 					dest);
 		}

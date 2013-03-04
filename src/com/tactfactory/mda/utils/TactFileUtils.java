@@ -415,11 +415,7 @@ public abstract class TactFileUtils extends FileUtils {
 					if (f.isDirectory()) {
 						ret = TactFileUtils.deleteRecursive(f, ret);
 					} else {
-						if (f.delete()) {
-							/*ConsoleUtils.displayDebug(FILE
-									 + f.getPath()
-									 + "' deleted."); */
-						} else {
+						if (!f.delete()) {
 							ret++;
 							
 							ConsoleUtils.displayWarning(FILE
@@ -581,8 +577,8 @@ public abstract class TactFileUtils extends FileUtils {
 			result = resultString.toString();
 		}
 		
-		if (result.startsWith("file")) {
-			result = result.substring(5);
+		if (result.startsWith("file:")) {
+			result = result.substring("file:".length());
 			
 		}
 		

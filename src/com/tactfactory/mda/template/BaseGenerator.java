@@ -112,7 +112,8 @@ public abstract class BaseGenerator {
 		this.appMetas	= ApplicationMetadata.INSTANCE;	
 		this.adapter	= adapt;
 		
-		this.cfg.setDirectoryForTemplateLoading(new File(Harmony.PATH_BASE + "/vendor/tact-core"));
+		this.cfg.setDirectoryForTemplateLoading(
+				new File(Harmony.getPathBase() + "/vendor/tact-core"));
 	}
 	
 	/** 
@@ -207,7 +208,7 @@ public abstract class BaseGenerator {
 		if (!dest.exists()) {
 			TactFileUtils.copyfile(
 					new File(String.format("%s/%s", 
-							Harmony.PATH_LIBS, libName)),
+							Harmony.getLibsPath(), libName)),
 					dest);
 		}
 	}

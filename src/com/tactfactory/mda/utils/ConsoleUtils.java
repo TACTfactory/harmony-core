@@ -370,7 +370,9 @@ public abstract class ConsoleUtils {
 						}
 						if (this.processError.ready()) {
 							final String error = this.processError.readLine();
-							if (error != null && !error.isEmpty() && !"Note: checking out '4.2.0'.".equals(error)) {
+							if (error != null && !error.isEmpty() 
+									&& !"Note: checking out '4.2.0'."
+									.equals(error)) {
 								ConsoleUtils.displayError(new Exception(error));
 							}
 						}

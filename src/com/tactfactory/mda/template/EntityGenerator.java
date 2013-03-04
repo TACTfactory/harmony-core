@@ -189,7 +189,7 @@ public class EntityGenerator extends BaseGenerator {
 			final Template tpl = this.getCfg().getTemplate(
 					String.format("%s%s",
 							this.getAdapter().getTemplateSourceCommonPath(),
-							templateName+".ftl"));
+							templateName + ".ftl"));
 			// Load template file in engine
 			
 			tpl.process(map, writer);

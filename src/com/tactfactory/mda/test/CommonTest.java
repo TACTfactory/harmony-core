@@ -53,7 +53,7 @@ public abstract class CommonTest {
 		if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
 			final String localProp = 
 					String.format("%s/%s/%s",
-							Harmony.PATH_PROJECT, 
+							Harmony.getProjectPath(), 
 							Harmony.getProjectFolder(), 
 							"local.properties");
 
@@ -99,12 +99,12 @@ public abstract class CommonTest {
 					.replaceAll("\\.", "/");
 
 		String srcDir = 
-				String.format(Harmony.PATH_HARMONY+"/src/%s/%s/", 
+				String.format(Harmony.getHarmonyPath() + "/src/%s/%s/", 
 						pathNameSpace, 
 						"entity");
 		String destDir = 
 				String.format("%s/android/src/%s/%s/", 
-						Harmony.PATH_PROJECT, 
+						Harmony.getProjectPath(), 
 						pathNameSpace, 
 						"entity");
 
@@ -120,11 +120,11 @@ public abstract class CommonTest {
 		final String libPath = "harmony.jar";
 		srcDir = 
 				String.format("%s/vendor/tact-core/%s", 
-						Harmony.PATH_BASE, 
+						Harmony.getPathBase(), 
 						libPath);
 		destDir = 
 				String.format("%s/android/test/libs/%s", 
-						Harmony.PATH_PROJECT, 
+						Harmony.getProjectPath(), 
 						libPath);
 		TactFileUtils.copyfile(new File(srcDir), new File(destDir));
 	}
@@ -137,7 +137,7 @@ public abstract class CommonTest {
 		final File file = 
 				new File(
 					String.format("%s/%s",
-						Harmony.PATH_PROJECT, 
+						Harmony.getProjectPath(), 
 						fileName));
 
 		assertTrue(file.exists());
