@@ -112,7 +112,7 @@ public abstract class BaseGenerator {
 		this.appMetas	= ApplicationMetadata.INSTANCE;	
 		this.adapter	= adapt;
 		
-		this.cfg.setDirectoryForTemplateLoading(new File(Harmony.PATH_BASE));
+		this.cfg.setDirectoryForTemplateLoading(new File(Harmony.PATH_BASE + "/vendor/tact-core"));
 	}
 	
 	/** 
@@ -133,7 +133,7 @@ public abstract class BaseGenerator {
 			try {
 				// Debug Log
 				ConsoleUtils.displayDebug("Generate Source : " 
-						+ generateFile.getPath()); 
+						+ generateFile.getCanonicalPath()); 
 				
 				// Create
 				final Template tpl = 
@@ -150,9 +150,7 @@ public abstract class BaseGenerator {
 				
 			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);
-				ConsoleUtils.displayError(e);
 			} catch (final TemplateException e) {
-				ConsoleUtils.displayError(e);
 				ConsoleUtils.displayError(e);
 			}
 		}

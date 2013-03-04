@@ -12,6 +12,7 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import com.google.common.base.Strings;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.utils.ConsoleUtils;
@@ -47,23 +48,22 @@ public abstract class CommonTest {
 		ApplicationMetadata.INSTANCE.setProjectNameSpace(
 				"com/tactfactory/mda/test/demact");
 		
-		if (ApplicationMetadata.getAndroidSdkPath() == null 
-				|| ApplicationMetadata.getAndroidSdkPath().isEmpty()) {
+		harmony = Harmony.getInstance();
+		
+		if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
 			final String localProp = 
 					String.format("%s/%s/%s",
 							Harmony.PATH_PROJECT, 
 							Harmony.getProjectFolder(), 
 							"local.properties");
 			
-			ApplicationMetadata.setAndroidSdkPath(
-					Harmony.getSdkDirFromPropertiesFile(localProp));
+			ApplicationMetadata.setAndroidSdkPath("/home/micky/Applications/eclipse/android-sdk");
+					//Harmony.getSdkDirFromPropertiesFile(localProp));
 			if (ApplicationMetadata.getAndroidSdkPath() == null) {
 				ApplicationMetadata.setAndroidSdkPath(
 						"/opt/android-sdk-linux_86/");
 			}
 		}
-		
-		harmony = Harmony.getInstance();
 	}
 
 	/**
@@ -116,13 +116,13 @@ public abstract class CommonTest {
 		}
 		
 		// Copy artefact for agregate CI result
-		final String libPath = "libs/harmony.jar";
+		final String libPath = "harmony.jar";
 		srcDir = 
-				String.format("%s/android/%s", 
-						Harmony.PATH_PROJECT, 
+				String.format("%s/vendor/tact-core/%s", 
+						Harmony.PATH_BASE, 
 						libPath);
 		destDir = 
-				String.format("%s/android/test/%s", 
+				String.format("%s/android/test/libs/%s", 
 						Harmony.PATH_PROJECT, 
 						libPath);
 		TactFileUtils.copyfile(new File(srcDir), new File(destDir));

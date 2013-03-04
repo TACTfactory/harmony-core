@@ -416,9 +416,9 @@ public abstract class TactFileUtils extends FileUtils {
 						ret = TactFileUtils.deleteRecursive(f, ret);
 					} else {
 						if (f.delete()) {
-							ConsoleUtils.displayDebug(FILE
+							/*ConsoleUtils.displayDebug(FILE
 									 + f.getPath()
-									 + "' deleted.");
+									 + "' deleted."); */
 						} else {
 							ret++;
 							

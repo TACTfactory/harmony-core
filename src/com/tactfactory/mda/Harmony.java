@@ -85,7 +85,7 @@ public final class Harmony {
 			"com.tactfactory.mda.test.demact";
 	
 	/** Path of project (app folder in Harmony root). */
-	public static String PATH_PROJECT;		// /app/
+	public static String PATH_PROJECT = "";	// /app/
 	
 	/** Path of bundles */
 	private static String PATH_BUNDLES;		// /vendor/**/*.jar
@@ -127,8 +127,9 @@ public final class Harmony {
 			PATH_BUNDLES = PATH_BASE + "/vendor";
 		}
 		
-		PATH_TEMPLATE 	= TactFileUtils.absoluteToRelativePath(
-				PATH_HARMONY + "/tpl", PATH_BASE);
+		PATH_TEMPLATE 	= "tpl/";
+				//TactFileUtils.absoluteToRelativePath(
+				//PATH_BASE + "tpl", PATH_BASE);
 		
 		this.loadPlugins(new File(PATH_BUNDLES));
 	
@@ -155,7 +156,7 @@ public final class Harmony {
 		
 		if (baseDir != null) {
 			// Transform PATH_BASE !!!
-			PATH_BASE = baseDir.getPath().toString();
+			PATH_BASE = baseDir.getPath().toString() + "/";
 		} else {
 			// For any other case
 			ConsoleUtils.displayError(new Exception(

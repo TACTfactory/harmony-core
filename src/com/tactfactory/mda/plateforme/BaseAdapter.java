@@ -394,7 +394,7 @@ public abstract class BaseAdapter {
 	 * @return The resources values' templates path
 	 */
 	public final String getTemplateRessourceValuesPath() {
-		return String.format("%s/%s/%s/%s/", 
+		return String.format("%s%s/%s/%s/", 
 				Harmony.PATH_TEMPLATE, 
 				this.getPlatform(), 
 				this.getResource(),

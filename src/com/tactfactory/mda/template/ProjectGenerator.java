@@ -226,7 +226,7 @@ public class ProjectGenerator extends BaseGenerator {
 		TactFileUtils.copyfile(
 				new File(String.format("%s/%s", 
 						Harmony.PATH_HARMONY, 
-						"harmony.jar")),
+						"vendor/tact-core/harmony.jar")),
 				new File(String.format("%s/%s", 
 						this.getAdapter().getLibsPath(), 
 						"harmony.jar")));
@@ -347,8 +347,8 @@ public class ProjectGenerator extends BaseGenerator {
 
 		// Update newly created files with datamodel
 		final File dirTpl = 
-				new File(Harmony.PATH_BASE 
-						+ this.getAdapter().getTemplateProjectPath());
+				new File( Harmony.PATH_BASE + "vendor/tact-core/" + 
+						this.getAdapter().getTemplateProjectPath());
 		if (dirTpl.exists() && dirTpl.listFiles().length != 0) {
 			result = true;
 			

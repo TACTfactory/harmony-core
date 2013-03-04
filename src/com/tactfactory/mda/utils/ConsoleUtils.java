@@ -17,6 +17,8 @@ import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import com.google.common.base.Strings;
+
 import print.color.Ansi.Attribute;
 import print.color.Ansi.BColor;
 import print.color.Ansi.FColor;
@@ -253,7 +255,12 @@ public abstract class ConsoleUtils {
 	public static Exception launchCommand(
 			final List<String> command, final String commandPath) {
 		Exception result = null;
-		ConsoleUtils.displayDebug(commandPath + command.toString());
+		String commandPathDisplay = "";
+		if (!Strings.isNullOrEmpty(commandPath)) {
+			commandPathDisplay = commandPath; 
+		}
+		
+		ConsoleUtils.displayDebug(commandPathDisplay + command.toString());
 		
 		try {
 			ProcessBuilder pb = new ProcessBuilder(command);
@@ -363,7 +370,7 @@ public abstract class ConsoleUtils {
 						}
 						if (this.processError.ready()) {
 							final String error = this.processError.readLine();
-							if (error != null && !error.isEmpty()) {
+							if (error != null && !error.isEmpty() && !"Note: checking out '4.2.0'.".equals(error)) {
 								ConsoleUtils.displayError(new Exception(error));
 							}
 						}
