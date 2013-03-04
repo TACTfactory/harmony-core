@@ -112,7 +112,8 @@ public abstract class BaseGenerator {
 		this.appMetas	= ApplicationMetadata.INSTANCE;	
 		this.adapter	= adapt;
 		
-		this.cfg.setDirectoryForTemplateLoading(new File(Harmony.PATH_BASE));
+		this.cfg.setDirectoryForTemplateLoading(
+				new File(Harmony.getPathBase() + "/vendor/tact-core"));
 	}
 	
 	/** 
@@ -133,10 +134,11 @@ public abstract class BaseGenerator {
 			try {
 				// Debug Log
 				ConsoleUtils.displayDebug("Generate Source : " 
-						+ generateFile.getPath()); 
+						+ generateFile.getCanonicalPath()); 
 				
 				// Create
-				final Template tpl = this.cfg.getTemplate(templatePath);
+				final Template tpl = 
+						this.cfg.getTemplate(templatePath + ".ftl");
 				
 				// Write and close
 				final OutputStreamWriter output =
@@ -149,9 +151,7 @@ public abstract class BaseGenerator {
 				
 			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);
-				ConsoleUtils.displayError(e);
 			} catch (final TemplateException e) {
-				ConsoleUtils.displayError(e);
 				ConsoleUtils.displayError(e);
 			}
 		}
@@ -208,7 +208,7 @@ public abstract class BaseGenerator {
 		if (!dest.exists()) {
 			TactFileUtils.copyfile(
 					new File(String.format("%s/%s", 
-							Harmony.PATH_LIBS, libName)),
+							Harmony.getLibsPath(), libName)),
 					dest);
 		}
 	}

@@ -14,6 +14,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -26,6 +27,8 @@ import net.xeoh.plugins.base.impl.PluginManagerFactory;
 import net.xeoh.plugins.base.util.JSPFProperties;
 import net.xeoh.plugins.base.util.PluginManagerUtil;
 
+import org.apache.commons.io.filefilter.FileFilterUtils;
+import org.apache.commons.io.filefilter.IOFileFilter;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
@@ -50,19 +53,17 @@ public final class Harmony {
 	private static Harmony instance;
 		
 	/** Path of Harmony base. */
-	public static final String PATH_BASE = "./";
+	private static String pathBase = "./";
 	
-	/** Path of project ( app folder in Harmony root). */
-	public static final String PATH_PROJECT = PATH_BASE + "app";
-	
-	/** Path of templates. */
-	public static final String PATH_TEMPLATE = PATH_BASE + "tpl";
-	
-	/** Path of harmony.jar. */
-	public static final String PATH_HARMONY = PATH_BASE + "vendor/tact-core";
-	
-	/** Path of libs. */
-	public static final String PATH_LIBS = PATH_HARMONY + "/lib";
+	/** Path of harmony.jar. or Binary */
+	private static String harmonyPath =  
+			Harmony.class
+			.getProtectionDomain()
+			.getCodeSource()
+			.getLocation()
+			.toString()
+			.substring("file:".length()); // Ommit "file:"
+	//PATH_BASE + "vendor/tact-core";
 	
 	/** Project space. */
 	private static String projectFolderPath = "android";
@@ -83,6 +84,18 @@ public final class Harmony {
 	private static final String DEFAULT_PROJECT_NAMESPACE = 
 			"com.tactfactory.mda.test.demact";
 	
+	/** Path of project (app folder in Harmony root). */
+	private static String projectPath = "";	// /app/
+	
+	/** Path of bundles. */
+	private static String bundlesPath;		// /vendor/**/*.jar
+	
+	/** Path of libraries. */
+	private static String libsPath;		// /vendor/**/lib/
+	
+	/** Path of templates. */
+	private static String templatesPath;	// /vendor/**/tpl/
+	
 	/** PluginManager. */
 	private final PluginManager pluginManager =
 			PluginManagerFactory.createPluginManager(new JSPFProperties());
@@ -94,7 +107,69 @@ public final class Harmony {
 	/** Constructor.
 	 * @throws Exception PluginManager failure
 	 */
-	private Harmony() throws Exception {
+	private Harmony() throws Exception {		
+		// Clean binary case (for /bin and /vendor/**/bin)
+		if (harmonyPath.endsWith("bin/")) {
+			bundlesPath = harmonyPath;
+			harmonyPath = new File(harmonyPath).getParentFile().toString();
+		}
+		
+		if (harmonyPath.endsWith("harmony.jar")) {
+			harmonyPath = new File(harmonyPath).getParentFile().toString();
+		}
+		
+		this.detectBasePath();
+		
+		projectPath 	= pathBase + "app";
+		libsPath 		= pathBase + "/lib";
+		
+		if (Strings.isNullOrEmpty(bundlesPath)) {
+			bundlesPath = pathBase + "/vendor";
+		}
+		
+		templatesPath 	= "tpl/";
+				//TactFileUtils.absoluteToRelativePath(
+				//PATH_BASE + "tpl", PATH_BASE);
+		
+		this.loadPlugins(new File(bundlesPath));
+	
+		Locale.setDefault(Locale.US);
+		Harmony.instance = this;
+	}
+
+	/**
+	 * 
+	 */
+	private void detectBasePath() {
+		// For root case
+		File baseDir = this.detectAppTree(new File(harmonyPath));
+		ConsoleUtils.displayDebug("Detect app on " + harmonyPath);
+		
+		// For vendor/tact-core case
+		if (baseDir == null) {
+			File predictiveBaseDir = 
+					new File(harmonyPath).getParentFile().getParentFile();
+			ConsoleUtils.displayDebug(
+					"Detect app on " + predictiveBaseDir.getAbsolutePath());
+			
+			baseDir = this.detectAppTree(predictiveBaseDir);
+		}
+		
+		if (baseDir != null) {
+			// Transform PATH_BASE !!!
+			pathBase = baseDir.getPath().toString() + "/";
+		} else {
+			// For any other case
+			ConsoleUtils.displayError(new Exception(
+					"INVALID FOLDERS TREE. APP FOLDER MISSING."));
+			System.exit(-1);
+		}
+	}
+
+	/**
+	 * @param pluginBaseDirectory 
+	 */
+	private void loadPlugins(final File pluginBaseDirectory) {
 		//final JSPFProperties props =;
 		/* props.setProperty(PluginManager.class, "cache.enabled", "true");
 		
@@ -102,20 +177,66 @@ public final class Harmony {
 		props.setProperty(PluginManager.class, "cache.mode",    "weak"); 
 		props.setProperty(PluginManager.class, "cache.file",    "jspf.cache");*/
 		
-		//this.pluginManager;
-		this.pluginManager.addPluginsFrom(new URI("classpath://*"));
-		this.pluginManager.addPluginsFrom(new File("vendor/").toURI());
+		// Filters
+		final IOFileFilter includeFilter = 
+				FileFilterUtils.suffixFileFilter(".jar");
+		final IOFileFilter excludeFilter = 
+				FileFilterUtils.notFileFilter(
+							FileFilterUtils.nameFileFilter("lib"));
 		
+		// Check list of Bundles .jar
+		Collection<File> plugins = TactFileUtils.listFiles(
+				pluginBaseDirectory,
+				includeFilter, 
+				excludeFilter);
+		
+		ConsoleUtils.displayDebug("Load plugins from classpath");
+		try {
+			this.pluginManager.addPluginsFrom(new URI("classpath://*"));
+		} catch (URISyntaxException e) {
+			ConsoleUtils.displayError(e);
+		}
+		
+		// Add Bundles to Plugin Manager
+		for (File plugin : plugins) {
+			if (!plugin.getName().equals("harmony.jar")) {
+				ConsoleUtils.displayDebug(
+						"Load plugins from " + plugin.getName());
+				this.pluginManager.addPluginsFrom(plugin.toURI());
+			}
+		}
+		
+		// Process extensions commands
 		final PluginManagerUtil pmu = new PluginManagerUtil(this.pluginManager);
 		final Collection<Command> commands = pmu.getPlugins(Command.class);
 		
+		// Bootstrap all commands
 		for (final Command command : commands) {
 			this.bootstrap.put(command.getClass(), command);
 		}
-	
-		Locale.setDefault(Locale.US);
-		Harmony.instance = this;
 	}
+	
+	/**
+	 * Check if the given folder contains the App folder.
+	 * @param checkPath The path to check.
+	 * @return The path if App was found, null if not.
+	 */
+	private File detectAppTree(final File checkPath) {
+		File result = null;
+		File[] list = checkPath.listFiles();
+		
+		if (list != null) {
+			for (File dir : list) {
+				if (dir.getPath().endsWith("app")) {
+					result = checkPath;
+					break;
+				}
+			}
+		}
+		
+		return result;
+	}
+	
 	
 	/**
 	 * Get Harmony instance (Singleton).
@@ -145,12 +266,12 @@ public final class Harmony {
 			
 			// get project namespace and project name from AndroidManifest.xml
 			final File manifest = new File(String.format("%s/%s/%s",
-					Harmony.PATH_PROJECT,
+					projectPath,
 					Harmony.projectFolderPath,
 					"AndroidManifest.xml"));
 			
 			final File config = new File(String.format("%s/%s/%s",
-					Harmony.PATH_PROJECT,
+					projectPath,
 					Harmony.projectFolderPath, 
 					"/res/values/configs.xml")); //FIXME path by adapter
 			
@@ -162,9 +283,8 @@ public final class Harmony {
 						Harmony.getProjectNameFromConfig(config));
 			}
 			
-
 			final String projectProp = String.format("%s/%s/%s",
-					Harmony.PATH_PROJECT, 
+					projectPath,
 					Harmony.projectFolderPath, 
 					"local.properties");
 			
@@ -316,7 +436,7 @@ public final class Harmony {
 									.toLowerCase())) {
 						
 						String namespaceForm = 
-								"^(((([a-z0-9_] +)\\.)*)([a-z0-9_] +))$";
+								"^(((([a-z0-9_]+)\\.)*)([a-z0-9_]+))$";
 						
 						if (Pattern.matches(namespaceForm, projectNameSpace)) {
 							ApplicationMetadata.INSTANCE.setProjectNameSpace(
@@ -500,13 +620,13 @@ public final class Harmony {
 					TactFileUtils.fileToStringArray(fileProp);
 			
 			for (int i = 0; i < lines.size(); i++) {
-				if (lines.get(i).startsWith("sdk.di =")) {
+				if (lines.get(i).startsWith("sdk.dir=")) {
 					if (lines.get(i).contains(TagConstant.ANDROID_SDK_DIR)) {
 						ConsoleUtils.displayWarning(
 								"Android SDK Dir not defined," 
 								+ " please init project...");
 					} else {
-						result = lines.get(i).replace("sdk.di =", "");
+						result = lines.get(i).replace("sdk.dir=", "");
 					}
 					break;
 				}
@@ -579,4 +699,48 @@ public final class Harmony {
 	public static String getProjectFolder() {
 		return projectFolderPath;
 	}
+	
+	/**
+	 * Get the android project path.
+	 * @return the android project path
+	 */
+	public static String getProjectPath() {
+		return projectPath;
+	}
+	
+	/**
+	 * Get the harmony base path.
+	 * @return the harmony base path
+	 */
+	public static String getPathBase() {
+		return pathBase;
+	}
+	
+	/**
+	 * Get the harmony path.
+	 * @return the harmony path
+	 */
+	public static String getHarmonyPath() {
+		return harmonyPath;
+	}
+	
+	
+	/**
+	 * Get the libraries path.
+	 * @return the libraries path
+	 */
+	public static String getLibsPath() {
+		return libsPath;
+	}
+	
+	
+	/**
+	 * Get the templates path.
+	 * @return the template path
+	 */
+	public static String getTemplatesPath() {
+		return templatesPath;
+	}
+	
+	
 }

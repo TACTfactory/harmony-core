@@ -19,19 +19,10 @@ import com.tactfactory.mda.annotation.GeneratedValue;
 import com.tactfactory.mda.annotation.Id;
 import com.tactfactory.mda.annotation.ManyToOne;
 import com.tactfactory.mda.annotation.Table;
-import com.tactfactory.mda.bundles.rest.annotation.Rest;
-import com.tactfactory.mda.bundles.rest.annotation.Rest.Security;
-import com.tactfactory.mda.bundles.sync.annotation.Sync;
-import com.tactfactory.mda.bundles.sync.annotation.Sync.Level;
-import com.tactfactory.mda.bundles.sync.annotation.Sync.Mode;
 
 // Annotation with default and forced value/parameter
 @Table
 @Entity
-@Rest(security = Security.SESSION)
-@Sync(level = Level.SESSION,
-	mode = Mode.REAL_TIME,
-	priority = Sync.Priority.LOW)
 @SuppressWarnings(value = "serial")
 public class Comment implements Serializable { //TODO extends EntityBase {
 	

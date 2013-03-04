@@ -20,6 +20,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -414,11 +415,7 @@ public abstract class TactFileUtils extends FileUtils {
 					if (f.isDirectory()) {
 						ret = TactFileUtils.deleteRecursive(f, ret);
 					} else {
-						if (f.delete()) {
-							ConsoleUtils.displayDebug(FILE
-									 + f.getPath()
-									 + "' deleted.");
-						} else {
+						if (!f.delete()) {
 							ret++;
 							
 							ConsoleUtils.displayWarning(FILE
@@ -550,5 +547,41 @@ public abstract class TactFileUtils extends FileUtils {
 			success = true;
 		}
 		return success;
+	}
+	
+	/**
+	 * Converts an absolute path to a path relative to working dir.
+	 * @param absolute The absolute path
+	 * @return The relative path
+	 */
+	public static String absoluteToRelativePath(final String absolute) {
+		return absoluteToRelativePath(absolute, ".");
+	}
+	
+	/**
+	 * Converts an absolute path to a path relative to working dir.
+	 * @param absolute The absolute path
+	 * @param relative The relative path to use
+	 * @return The relative path
+	 */
+	public static String absoluteToRelativePath(
+			final String absolute, final String relative) {
+		String result = ".";
+		
+		File abs = new File(absolute);
+		File workingDir = new File(relative);
+		
+		URI resultString = workingDir.toURI().relativize(abs.toURI());
+		
+		if (!resultString.toString().equals("")) {
+			result = resultString.toString();
+		}
+		
+		if (result.startsWith("file:")) {
+			result = result.substring("file:".length());
+			
+		}
+		
+		return result;
 	}
 }

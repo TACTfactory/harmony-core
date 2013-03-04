@@ -385,7 +385,7 @@ public class ActivityGenerator extends BaseGenerator {
 									this.getAdapter().getRessourceLayoutPath(),
 									filename);
 		final String fullTemplatePath = String.format("%s/%s",
-				this.getAdapter().getTemplateRessourceLayoutPath().substring(1),
+				this.getAdapter().getTemplateRessourceLayoutPath(),
 				template);
 		
 		super.makeSource(fullTemplatePath, fullFilePath, false);

@@ -56,7 +56,7 @@ public class ProjectGenerator extends BaseGenerator {
 		boolean result = false;
 		final File dirproj = new File(
 				String.format("%s/%s/",
-						Harmony.PATH_PROJECT, 
+						Harmony.getProjectPath(), 
 						this.getAdapter().getPlatform()));
 		
 		final int removeResult = TactFileUtils.deleteRecursive(dirproj);
@@ -84,8 +84,7 @@ public class ProjectGenerator extends BaseGenerator {
 
 		final String fullFilePath = this.getAdapter().getHomeActivityPathFile();
 		final String fullTemplatePath = 
-				this.getAdapter().getTemplateHomeActivityPathFile()
-					.substring(1);
+				this.getAdapter().getTemplateHomeActivityPathFile();
 
 		super.makeSource(fullTemplatePath, fullFilePath, true);
 	}
@@ -120,10 +119,10 @@ public class ProjectGenerator extends BaseGenerator {
 	 */
 	private void makeSources() {
 		// create HomeActivity.java 
-		super.makeSource(this.getAdapter().getHomeActivityPathFile(),
-				this.getAdapter().getTemplateHomeActivityPathFile(),
+		super.makeSource(this.getAdapter().getTemplateHomeActivityPathFile(),
+				this.getAdapter().getHomeActivityPathFile(),
 				false);
-
+		
 		// create configs.xml
 		super.makeSource(
 				this.getAdapter().getTemplateRessourceValuesPath() 
@@ -226,8 +225,8 @@ public class ProjectGenerator extends BaseGenerator {
 		/// copy Harmony library
 		TactFileUtils.copyfile(
 				new File(String.format("%s/%s", 
-						Harmony.PATH_HARMONY, 
-						"harmony.jar")),
+						Harmony.getHarmonyPath(), 
+						"/harmony.jar")), 
 				new File(String.format("%s/%s", 
 						this.getAdapter().getLibsPath(), 
 						"harmony.jar")));
@@ -348,19 +347,27 @@ public class ProjectGenerator extends BaseGenerator {
 
 		// Update newly created files with datamodel
 		final File dirTpl = 
-				new File(this.getAdapter().getTemplateProjectPath());
+				new File(Harmony.getHarmonyPath() + "/"
+						+ this.getAdapter().getTemplateProjectPath());
 		if (dirTpl.exists() && dirTpl.listFiles().length != 0) {
 			result = true;
 			
 			for (int i = 0; i < dirTpl.listFiles().length; i++) {
 				if (dirTpl.listFiles()[i].isFile()) {
+					String tplPath = this.getAdapter().getTemplateProjectPath() 
+							+ dirTpl.listFiles()[i].getName();
+					String srcPath = String.format("%s/%s/",
+							Harmony.getProjectPath(), 
+							this.getAdapter().getPlatform()) 
+								+ dirTpl.listFiles()[i].getName(); 
+					
+					tplPath = tplPath.substring(0, tplPath.length() 
+							- ".ftl".length());
+					srcPath = srcPath.substring(0, srcPath.length() 
+							- ".ftl".length());
 					super.makeSource(
-							this.getAdapter().getTemplateProjectPath() 
-								+ dirTpl.listFiles()[i].getName(),
-							String.format("%s/%s/",
-									Harmony.PATH_PROJECT, 
-									this.getAdapter().getPlatform()) 
-										+ dirTpl.listFiles()[i].getName(),
+							tplPath,
+							srcPath,
 							false);
 				}
 			}
@@ -377,11 +384,11 @@ public class ProjectGenerator extends BaseGenerator {
 		//Generate base folders & files
 		final File dirProj = TactFileUtils.makeFolderRecursive(
 				String.format("%s/%s/%s/",
-						Harmony.PATH_TEMPLATE ,
+						Harmony.getTemplatesPath(),
 						this.getAdapter().getPlatform(), 
 						this.getAdapter().getProject()),
 				String.format("%s/%s/",
-						Harmony.PATH_PROJECT, 
+						Harmony.getProjectPath(), 
 						this.getAdapter().getPlatform()),
 				true);
 		

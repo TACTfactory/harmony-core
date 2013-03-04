@@ -16,8 +16,6 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tactfactory.mda.bundles.fixture.command.FixtureCommand;
-import com.tactfactory.mda.bundles.rest.command.RestCommand;
-import com.tactfactory.mda.bundles.sync.command.SyncCommand;
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.meta.ApplicationMetadata;
@@ -68,10 +66,6 @@ public class FixtureGlobalTest extends CommonTest {
 				OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
 		getHarmony().findAndExecute(
 				OrmCommand.GENERATE_CRUD, new String[] {}, null);
-		getHarmony().findAndExecute(
-				RestCommand.GENERATE_ADAPTERS, new String[] {}, null);
-		getHarmony().findAndExecute(
-				SyncCommand.GENERATE_SERVICE, new String[] {}, null);
 		getHarmony().findAndExecute(
 				FixtureCommand.FIXTURE_INIT,
 				new String[] {"--format=xml"},

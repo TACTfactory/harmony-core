@@ -22,7 +22,7 @@
 	<property name="lib.rel-dir" value="lib" />
 	<property name="ant-lib.rel-dir" value="${lib.rel-dir}/ant" />
 	<property name="tmp.rel-dir" value="tmp" />
-	<property name="dist.rel-dir" value="vendor/tact-core" />
+	<property name="dist.rel-dir" value="./" />
 	<property name="sherlock.rel-dir" value="sherlock-4.2" />
 	<property name="doc.rel-dir" value="${dist.rel-dir}/javadoc" />
 	<property name="jar.rel-file" value="${dist.rel-dir}/${ant.project.name}.jar" />
@@ -55,14 +55,12 @@
         <mkdir dir="${build.rel-dir}"/>
         <mkdir dir="${dist.rel-dir}"/>
         <mkdir dir="${dist.rel-dir}/${lib.rel-dir}"/>
-        <mkdir dir="${app.rel-dir}"/>
     	<mkdir dir="${tmp.rel-dir}"/>
     </target>
 
     <target name="clean"
         description="Delete temporary folders">
         <delete dir="${build.rel-dir}" failonerror="false" deleteonexit="true" />
-        <delete dir="${dist.rel-dir}" failonerror="false" deleteonexit="true" />
     	<delete dir="${tmp.rel-dir}" failonerror="false" deleteonexit="true" />
     </target>
     
@@ -309,7 +307,7 @@
 	<target name="post_build" depends="compile"
         description="Build the project">
 		<!-- build a temporary lib dir, and flatten out the jars into one folder -->
-		<copy todir="${dist.rel-dir}/${lib.rel-dir}" flatten="true">
+		<copy todir="../../${lib.rel-dir}" flatten="true">
 		  <fileset dir="${lib.rel-dir}">
 		    <include name="*.jar"/>
 		  </fileset>
@@ -348,7 +346,7 @@
 		        <flattenmapper />
 		 
 		        <!-- add lib/ prefix -->
-		        <globmapper from="*" to="../../lib/*" />
+		        <globmapper from="*" to="lib/*" />
 		      </chainedmapper>
 		    </mapper>
 		 
@@ -356,7 +354,7 @@
 		 
 		      <!-- lib.home contains all jar files, in several subdirectories -->
 		      <fileset dir="${lib.rel-dir}">
-		        <include name="**/*.jar" />
+		        <include name="*.jar" />
 		      </fileset>
 		    </path>
 		  </pathconvert>

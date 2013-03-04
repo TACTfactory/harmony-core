@@ -48,23 +48,23 @@ public abstract class CommonTest {
 		ApplicationMetadata.INSTANCE.setProjectNameSpace(
 				"com/tactfactory/mda/test/demact");
 		
-		if (ApplicationMetadata.getAndroidSdkPath() == null 
-				|| ApplicationMetadata.getAndroidSdkPath().isEmpty()) {
+		harmony = Harmony.getInstance();
+		
+		if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
 			final String localProp = 
 					String.format("%s/%s/%s",
-							Harmony.PATH_PROJECT, 
+							Harmony.getProjectPath(), 
 							Harmony.getProjectFolder(), 
 							"local.properties");
-			
+
 			ApplicationMetadata.setAndroidSdkPath(
+					//"/home/micky/Applications/eclipse/android-sdk");
 					Harmony.getSdkDirFromPropertiesFile(localProp));
 			if (ApplicationMetadata.getAndroidSdkPath() == null) {
 				ApplicationMetadata.setAndroidSdkPath(
 						"/opt/android-sdk-linux_86/");
 			}
 		}
-		
-		harmony = Harmony.getInstance();
 	}
 
 	/**
@@ -97,13 +97,14 @@ public abstract class CommonTest {
 		final String pathNameSpace = 
 				ApplicationMetadata.INSTANCE.getProjectNameSpace()
 					.replaceAll("\\.", "/");
+
 		String srcDir = 
-				String.format("src/%s/%s/", 
+				String.format(Harmony.getHarmonyPath() + "/src/%s/%s/", 
 						pathNameSpace, 
 						"entity");
 		String destDir = 
 				String.format("%s/android/src/%s/%s/", 
-						Harmony.PATH_PROJECT, 
+						Harmony.getProjectPath(), 
 						pathNameSpace, 
 						"entity");
 
@@ -116,14 +117,14 @@ public abstract class CommonTest {
 		}
 		
 		// Copy artefact for agregate CI result
-		final String libPath = "libs/harmony.jar";
+		final String libPath = "harmony.jar";
 		srcDir = 
-				String.format("%s/android/%s", 
-						Harmony.PATH_PROJECT, 
+				String.format("%s/vendor/tact-core/%s", 
+						Harmony.getPathBase(), 
 						libPath);
 		destDir = 
-				String.format("%s/android/test/%s", 
-						Harmony.PATH_PROJECT, 
+				String.format("%s/android/test/libs/%s", 
+						Harmony.getProjectPath(), 
 						libPath);
 		TactFileUtils.copyfile(new File(srcDir), new File(destDir));
 	}
@@ -136,7 +137,7 @@ public abstract class CommonTest {
 		final File file = 
 				new File(
 					String.format("%s/%s",
-						Harmony.PATH_PROJECT, 
+						Harmony.getProjectPath(), 
 						fileName));
 
 		assertTrue(file.exists());

@@ -21,14 +21,10 @@ import com.tactfactory.mda.annotation.Id;
 import com.tactfactory.mda.annotation.ManyToOne;
 import com.tactfactory.mda.annotation.OneToMany;
 import com.tactfactory.mda.annotation.Table;
-import com.tactfactory.mda.bundles.rest.annotation.Rest;
-import com.tactfactory.mda.bundles.sync.annotation.Sync;
 
 // All annotation with default value/parameter
 @Table
 @Entity
-@Rest
-@Sync
 public class Post implements Serializable {
 	private static final long serialVersionUID = -6549779793416923128L;
 
