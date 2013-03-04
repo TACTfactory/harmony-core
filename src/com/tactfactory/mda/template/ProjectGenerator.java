@@ -226,7 +226,7 @@ public class ProjectGenerator extends BaseGenerator {
 		TactFileUtils.copyfile(
 				new File(String.format("%s/%s", 
 						Harmony.PATH_HARMONY, 
-						"vendor/tact-core/harmony.jar")),
+						"/harmony.jar")), 
 				new File(String.format("%s/%s", 
 						this.getAdapter().getLibsPath(), 
 						"harmony.jar")));

@@ -56,7 +56,7 @@ public abstract class CommonTest {
 							Harmony.PATH_PROJECT, 
 							Harmony.getProjectFolder(), 
 							"local.properties");
-			
+
 			ApplicationMetadata.setAndroidSdkPath(
 					//"/home/micky/Applications/eclipse/android-sdk");
 					Harmony.getSdkDirFromPropertiesFile(localProp));
