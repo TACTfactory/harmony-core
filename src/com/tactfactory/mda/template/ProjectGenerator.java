@@ -347,8 +347,8 @@ public class ProjectGenerator extends BaseGenerator {
 
 		// Update newly created files with datamodel
 		final File dirTpl = 
-				new File( Harmony.PATH_BASE + "vendor/tact-core/" + 
-						this.getAdapter().getTemplateProjectPath());
+				new File(Harmony.PATH_HARMONY + "/"
+						+ this.getAdapter().getTemplateProjectPath());
 		if (dirTpl.exists() && dirTpl.listFiles().length != 0) {
 			result = true;
 			
