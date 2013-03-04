@@ -48,7 +48,7 @@ public class ProjectInitTest extends CommonTest {
 		
 		final File dirproj = 
 				new File(String.format("%s/android",
-						Harmony.PATH_PROJECT));
+						Harmony.getProjectPath()));
 		TactFileUtils.deleteRecursive(dirproj);
 	}
 	

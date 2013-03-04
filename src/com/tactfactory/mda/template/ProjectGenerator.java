@@ -56,7 +56,7 @@ public class ProjectGenerator extends BaseGenerator {
 		boolean result = false;
 		final File dirproj = new File(
 				String.format("%s/%s/",
-						Harmony.PATH_PROJECT, 
+						Harmony.getProjectPath(), 
 						this.getAdapter().getPlatform()));
 		
 		final int removeResult = TactFileUtils.deleteRecursive(dirproj);
@@ -225,7 +225,7 @@ public class ProjectGenerator extends BaseGenerator {
 		/// copy Harmony library
 		TactFileUtils.copyfile(
 				new File(String.format("%s/%s", 
-						Harmony.PATH_HARMONY, 
+						Harmony.getHarmonyPath(), 
 						"/harmony.jar")), 
 				new File(String.format("%s/%s", 
 						this.getAdapter().getLibsPath(), 
@@ -347,7 +347,7 @@ public class ProjectGenerator extends BaseGenerator {
 
 		// Update newly created files with datamodel
 		final File dirTpl = 
-				new File(Harmony.PATH_HARMONY + "/"
+				new File(Harmony.getHarmonyPath() + "/"
 						+ this.getAdapter().getTemplateProjectPath());
 		if (dirTpl.exists() && dirTpl.listFiles().length != 0) {
 			result = true;
@@ -357,12 +357,14 @@ public class ProjectGenerator extends BaseGenerator {
 					String tplPath = this.getAdapter().getTemplateProjectPath() 
 							+ dirTpl.listFiles()[i].getName();
 					String srcPath = String.format("%s/%s/",
-							Harmony.PATH_PROJECT, 
+							Harmony.getProjectPath(), 
 							this.getAdapter().getPlatform()) 
 								+ dirTpl.listFiles()[i].getName(); 
 					
-					tplPath = tplPath.substring(0, tplPath.length() - 4);
-					srcPath = srcPath.substring(0, srcPath.length() - 4);
+					tplPath = tplPath.substring(0, tplPath.length() 
+							- ".ftl".length());
+					srcPath = srcPath.substring(0, srcPath.length() 
+							- ".ftl".length());
 					super.makeSource(
 							tplPath,
 							srcPath,
@@ -382,11 +384,11 @@ public class ProjectGenerator extends BaseGenerator {
 		//Generate base folders & files
 		final File dirProj = TactFileUtils.makeFolderRecursive(
 				String.format("%s/%s/%s/",
-						Harmony.PATH_TEMPLATE ,
+						Harmony.getTemplatesPath(),
 						this.getAdapter().getPlatform(), 
 						this.getAdapter().getProject()),
 				String.format("%s/%s/",
-						Harmony.PATH_PROJECT, 
+						Harmony.getProjectPath(), 
 						this.getAdapter().getPlatform()),
 				true);
 		
