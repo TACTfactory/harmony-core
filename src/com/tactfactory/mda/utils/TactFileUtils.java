@@ -298,6 +298,7 @@ public abstract class TactFileUtils extends FileUtils {
 		}
 		return result;
 	}
+
 	
 	/** Copy folder content recursively from srcPath to destPath,
 	 * and copy files or not.
@@ -310,87 +311,46 @@ public abstract class TactFileUtils extends FileUtils {
 	public static File makeFolderRecursive(final String srcPath,
 			final String destPath,
 			final boolean makeFiles) {
-		final File destFolder = new File(destPath);
-		final File tplFolder = new File(srcPath);
-		final File[] tplFiles = tplFolder.listFiles();
-		File tmpFile = null;
-		boolean success = false;
-
-		if (!tplFolder.isDirectory()) {
-			ConsoleUtils.display("Folder src '" 
-						 + srcPath 
-						 + "' is not a folder");
-		} else if (tplFiles == null || tplFiles.length == 0) {
-			ConsoleUtils.display("No items inside '" 
-							 + srcPath 
-							 + "'");
-		} else {
-			success = destFolder.mkdirs();
-			if (destFolder.exists()) {
-				if (success) {
-					ConsoleUtils.display(FOLDER
-							 + destFolder.getName()
-							 + "' did not exists and was created.");
-				} else {
-					ConsoleUtils.display(FOLDER
-							 + destFolder.getName()
-							 + "' already exists...");
+		File srcDir = new File(srcPath);
+		File destDir = null;
+		if (srcDir.exists() && srcDir.isDirectory()) {
+			 destDir = new File(destPath);
+			 destDir = TactFileUtils.makeFoldersRecursive(srcDir, 
+						destDir, 
+						makeFiles);
+		}
+		return destDir;
+	}
+	
+	/** Copy folder content recursively from srcPath to destPath,
+	 * and copy files or not.
+	 * @param srcPath Source folder
+	 * @param destPath Destination folder
+	 * @param makeFiles True if you want to copy files as well
+	 * 
+	 *  @return The newly created folder 
+	 */
+	private static File makeFoldersRecursive(final File srcDir,
+			final File destDir,
+			final boolean makeFiles) {
+		
+		TactFileUtils.ensureFolderExistence(destDir);
+		File[] files = srcDir.listFiles();
+		if (files.length != 0) {
+			for (File f : files) {
+				File destFile = new File(destDir.getAbsolutePath()
+						+ "/" + f.getName());
+				if (makeFiles && f.isFile()) {
+					TactFileUtils.copyfile(f, destFile);
+				} else 
+				if (f.isDirectory()) {
+					TactFileUtils.makeFoldersRecursive(f,
+							destFile, makeFiles);
 				}
-				for (final File tplFile : tplFiles) {
-					if (tplFile.isDirectory())	 {
-						tmpFile = new File(destPath
-                                + tplFile.getName()
-								 + "/");
-						success = tmpFile.mkdir(); 
-					    if (success) {
-					    	ConsoleUtils.displayDebug(FOLDER
-					    			 + tmpFile.getName()
-					    			 + "' did not exists and was created...");
-					    } else {
-					        // Folder already exists
-					    	if (tmpFile.exists()) {
-					    		ConsoleUtils.display(FOLDER
-					    				 + tmpFile.getName()
-					    				 + "' already exists...");
-					    	} else {
-					    		ConsoleUtils.display(FOLDER
-					    				 + tmpFile.getName()
-					    				 + "' creation error...");
-					    	}
-					    }
-						TactFileUtils.makeFolderRecursive(
-								String.format("%s%s/",
-										srcPath,
-										tplFile.getName()),
-								String.format("%s%s/",
-										destPath, 
-										tmpFile.getName()),
-								false);
-					} else if (tplFile.isFile() && makeFiles) {
-						tmpFile = TactFileUtils.makeFile(destPath
-								 + tplFile.getName());
-						if (tmpFile.exists()) {
-			    			TactFileUtils.copyfile(tplFile, tmpFile);
-			    			ConsoleUtils.displayDebug(FILE
-			    					 + tplFile.getName() 
-			    					 + "' created...");
-						} else {
-							ConsoleUtils.displayError(
-									new Exception(
-											FILE 
-											 + tplFile.getName()
-											 + "' creation error..."));
-						}
-					}
-				}
-			} else {
-				ConsoleUtils.displayError(
-						new Exception(FOLDER
-								 + destFolder.getName()
-								 + "' creation Error..."));
 			}
 		}
-		return destFolder;
+		
+		return destDir;
 	}
 	
 	/** delete a directory with all its files recursively.
@@ -401,6 +361,17 @@ public abstract class TactFileUtils extends FileUtils {
 		return TactFileUtils.deleteRecursive(dir, 0);
 	}
 	
+	/**
+	 * Create a folder if it does not exists yet.
+	 * @return true if the folder exists after this operation.
+	 */
+	public static boolean ensureFolderExistence(File f) {
+		if (!f.exists()) {
+			f.mkdir();
+		}
+		return f.exists();
+	}
+		
 	/** delete a directory with all its files recursively.
 	 * @param dir The folder or file to delete
 	 * @param result number of files/folders deleted
