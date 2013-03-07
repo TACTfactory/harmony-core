@@ -222,9 +222,10 @@
 	    </findbugs>
 		
 		<!-- Report -->
-		<xslt in="${tmp.rel-dir}/findbugs.xml"
-        	style="${env.FINDBUGS_HOME}/src/xsl/fancy.xsl"
-        	out="${tmp.rel-dir}/findbugs-default.html"
+		<xslt 
+			in="${tmp.rel-dir}/findbugs.xml"
+        	out="${tmp.rel-dir}/findbugs.html"
+			style="${env.FINDBUGS_HOME}/src/xsl/fancy.xsl"
         />
 	</target>
 	
@@ -250,9 +251,10 @@
         </checkstyle>
 
 		<!-- Report -->
-        <xslt in="${tmp.rel-dir}/checkstyle_report.xml"
-               out="${tmp.rel-dir}/checkstyle_report.html"
-               style="${env.CHECKSTYLE_HOME}/contrib/checkstyle-noframes.xsl"
+        <xslt 
+        	in="${tmp.rel-dir}/checkstyle_report.xml"
+            out="${tmp.rel-dir}/checkstyle_report.html"
+            style="${env.CHECKSTYLE_HOME}/contrib/checkstyle-noframes.xsl"
         />
 	</target>
 	
@@ -278,7 +280,6 @@
 			classname="net.sourceforge.pmd.ant.PMDTask" />
 		<pmd shortFilenames="true">
 			<ruleset>${env.PMD_HOME}/rules.xml</ruleset>
-			<!--formatter type="html" toFile="pmd_report.html" linkPrefix="http://pmd.sourceforge.net/xref/" /-->
 			<formatter type="xml" toFile="${tmp.rel-dir}/pmd.xml"/>
 			<fileset dir="${src.rel-dir}">
 				<include name="**/*.java"/>
@@ -286,7 +287,30 @@
 			</fileset>
 		</pmd>
 		
+		<taskdef name="cpd" 
+			classpathref="pmd.classpath"
+			classpath="${env.PMD_HOME}/lib/pmd-5.0.2.jar"
+			classname="net.sourceforge.pmd.cpd.CPDTask" />
+	    <cpd 
+	    	minimumTokenCount="100" 
+	    	language="java" 
+	    	format="xml" 
+	    	outputFile="${tmp.rel-dir}/cpd.xml">
+	        <fileset dir="${src.rel-dir}">
+	            <include name="**/*.java"/>
+	        	<exclude name="**/*Test*"/>
+	        </fileset>
+	    </cpd>
+		
 		<!-- Report -->
+		<xslt 
+			in="${tmp.rel-dir}/pmd.xml" 
+			out="${tmp.rel-dir}/pmd.html"
+			style="${env.PMD_HOME}/etc/xslt/pmd-report.xslt" />
+		<xslt 
+			in="${tmp.rel-dir}/cpd.xml" 
+			out="${tmp.rel-dir}/cpd.html"
+			style="${env.PMD_HOME}/etc/xslt/cpdhtml.xslt" />
 	</target>
 	
 	<target name="run-jdepend" depends="compile-tests"
