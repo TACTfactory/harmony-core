@@ -53,7 +53,7 @@ public final class Harmony {
 	private static Harmony instance;
 		
 	/** Path of Harmony base. */
-	private static String pathBase = "./";
+	private static String pathBase = new File("./").getAbsolutePath();
 	
 	/** Path of harmony.jar. or Binary */
 	private static String harmonyPath =  
@@ -110,7 +110,7 @@ public final class Harmony {
 	private Harmony() throws Exception {		
 		// Clean binary case (for /bin and /vendor/**/bin)
 		if (harmonyPath.endsWith("bin/")) {
-			bundlesPath = harmonyPath;
+			//bundlesPath = harmonyPath;
 			harmonyPath = new File(harmonyPath).getParentFile().toString();
 		}
 		
@@ -120,11 +120,11 @@ public final class Harmony {
 		
 		this.detectBasePath();
 		
-		projectPath 	= pathBase + "app";
-		libsPath 		= pathBase + "/lib";
+		projectPath 	= pathBase + "app/";
+		libsPath 		= pathBase + "lib/";
 		
 		if (Strings.isNullOrEmpty(bundlesPath)) {
-			bundlesPath = pathBase + "/vendor";
+			bundlesPath = pathBase + "vendor/";
 		}
 		
 		templatesPath 	= "tpl/";

@@ -19,9 +19,8 @@
         "jms/security-extra-bundle": "1.4.*@dev",
         "jms/di-extra-bundle": "1.3.*@dev",
         "kriswallsmith/assetic": "1.1.*@dev",
-        "friendsofsymfony/rest-bundle": "dev-master",
-	"jms/serializer-bundle": "1.0.*@dev",
-	"jms/serializer": "1.0.*@dev"
+        "friendsofsymfony/rest-bundle": "0.8.*@dev",
+	"jms/serializer-bundle": "0.9.*@dev"
     },
     "scripts": {
         "post-install-cmd": [
