@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="demact-test" default="help">
+<project name="${project_name}-test" default="help">
 	<property name="reports.dir" value="tmp" />
     <property name="tested.manifest.package" value="${project_namespace}" />
 
