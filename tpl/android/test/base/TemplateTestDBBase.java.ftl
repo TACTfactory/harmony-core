@@ -76,9 +76,6 @@ import ${fixture_namespace}.DataManager;
 
 import java.util.ArrayList;
 
-import com.tactfactory.mda.test.demact.entity.Post;
-import com.tactfactory.mda.test.demact.fixture.PostDataLoader;
-
 import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
 
 import android.content.Context;
