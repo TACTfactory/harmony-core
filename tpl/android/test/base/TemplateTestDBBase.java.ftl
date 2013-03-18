@@ -202,14 +202,18 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.name?uncap_first}Adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.ctx);
 		${field.name?uncap_first}Adapter.open(this.db);
 		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = ${field.name?uncap_first}Adapter.getAll();
-		${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
+		if (!${field.name?uncap_first}s.isEmpty()) {
+			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
+		}
 					<#else>
 		${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.name?uncap_first}Adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.ctx);
 		${field.name?uncap_first}Adapter.open(this.db);
 		ArrayList<${field.relation.targetEntity?cap_first}> all${field.name?cap_first}s = ${field.name?uncap_first}Adapter.getAll();
 		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
-		${field.name?uncap_first}s.add(all${field.name?cap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
-		${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s);			
+		if (!${field.name?uncap_first}s.isEmpty()) {
+			${field.name?uncap_first}s.add(all${field.name?cap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
+			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s);
+		}			
 					</#if>
 				</#if>
 			</#if>
