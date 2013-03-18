@@ -33,10 +33,10 @@ public abstract class SqliteAdapter {
 		
 		final StringBuilder builder = new StringBuilder();
 		builder.append(' ');
-		builder.append(fm.getType().toLowerCase());
+		builder.append(fm.getColumnDefinition().toLowerCase());
 		if (fm.isId()) {
 			builder.append(" PRIMARY KEY");
-			if (fm.getType().equals("integer")) {
+			if (fm.getColumnDefinition().equals("integer")) {
 				builder.append(" AUTOINCREMENT");
 			}
 		} else {
