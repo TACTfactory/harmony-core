@@ -4,7 +4,7 @@
 		<id>0</id>
 		<string>String</string>
 		<text>Texte</text>
-		<datetime>2012-01-01 00:00</datetime>
+		<dateTime>2012-01-01 00:00</datetime>
 		<date>2012-01-01</date>
 		<time>00:00</time>
 		<login>VC1 login</login>
@@ -19,7 +19,7 @@
 		<id>0</id>
 		<string>Dupond</string>
 		<text>Dupont</text>
-		<datetime>2012-01-01 00:00</datetime>
+		<dateTime>2012-01-01 00:00</datetime>
 		<date>2012-01-01</date>
 		<time>00:00</time>
 		<login>VC2 login</login>
@@ -34,7 +34,7 @@
 		<id>0</id>
 		<string>Dupond</string>
 		<text>Dupont</text>
-		<datetime>2012-01-01 00:00</datetime>
+		<dateTime>2012-01-01 00:00</datetime>
 		<date>2012-01-01</date>
 		<time>00:00</time>
 		<login>VC3 login</login>

@@ -88,7 +88,7 @@ public class FixtureGenerator extends BaseGenerator {
 	/**
 	 * Generate the loaders and the base fixtures.
 	 */
-	public final void init() {
+	public final void init(boolean force) {
 		 try {
 			 final String fixtureType = ((FixtureMetadata) 
 							 this.getAppMetas().getOptions()
@@ -99,8 +99,8 @@ public class FixtureGenerator extends BaseGenerator {
 			this.updateLibrary("snakeyaml-1.10-android.jar");
 			
 			//Create base classes for Fixtures loaders
-			this.makeSource("FixtureBase.java", "FixtureBase.java", true);
-			this.makeSource("DataManager.java", "DataManager.java", true);
+			this.makeSource("FixtureBase.java", "FixtureBase.java", force);
+			this.makeSource("DataManager.java", "DataManager.java", force);
 			
 			//Update SQLiteOpenHelper
 			new SQLiteGenerator(this.getAdapter()).generateDatabase();
@@ -113,7 +113,7 @@ public class FixtureGenerator extends BaseGenerator {
 							cm.getName());
 					this.makeSource("TemplateDataLoader.java",
 							cm.getName() + "DataLoader.java",
-							true);
+							force);
 					this.makeBaseFixture("TemplateFixture." + fixtureType, 
 							cm.getName() + "." + fixtureType, 
 							false);

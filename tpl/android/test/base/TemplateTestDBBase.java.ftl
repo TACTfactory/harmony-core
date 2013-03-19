@@ -76,9 +76,6 @@ import ${fixture_namespace}.DataManager;
 
 import java.util.ArrayList;
 
-import com.tactfactory.mda.test.demact.entity.Post;
-import com.tactfactory.mda.test.demact.fixture.PostDataLoader;
-
 import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
 
 import android.content.Context;
@@ -109,7 +106,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		
 		this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
 		this.db = this.adapter.open();
-		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
+		//${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
 		this.db.beginTransaction();
 		
 		DataManager manager = new DataManager(this.ctx, this.db);
@@ -205,14 +202,18 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.name?uncap_first}Adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.ctx);
 		${field.name?uncap_first}Adapter.open(this.db);
 		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = ${field.name?uncap_first}Adapter.getAll();
-		${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
+		if (!${field.name?uncap_first}s.isEmpty()) {
+			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
+		}
 					<#else>
 		${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.name?uncap_first}Adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.ctx);
 		${field.name?uncap_first}Adapter.open(this.db);
 		ArrayList<${field.relation.targetEntity?cap_first}> all${field.name?cap_first}s = ${field.name?uncap_first}Adapter.getAll();
 		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
-		${field.name?uncap_first}s.add(all${field.name?cap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
-		${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s);			
+		if (!all${field.name?uncap_first}s.isEmpty()) {
+			${field.name?uncap_first}s.add(all${field.name?cap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
+			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s);
+		}			
 					</#if>
 				</#if>
 			</#if>

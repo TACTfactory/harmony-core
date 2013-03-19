@@ -27,7 +27,7 @@ import com.tactfactory.mda.annotation.Table;
 public class Comment implements Serializable { //TODO extends EntityBase {
 	
 	@Id
-    @Column(type = Type.INTEGER, hidden = true)
+    @Column(type = Type.INTEGER)
     @GeneratedValue(strategy = "IDENTITY")
     private int id;
 

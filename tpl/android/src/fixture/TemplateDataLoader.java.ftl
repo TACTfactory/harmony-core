@@ -39,6 +39,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import java.util.List;
+import android.util.Log;
 <#elseif fixtureType=="yml">
 	<#if (hasTime)>
 import ${project_namespace}.harmony.util.DateUtils;

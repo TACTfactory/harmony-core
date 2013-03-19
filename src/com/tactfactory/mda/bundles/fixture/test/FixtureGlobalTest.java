@@ -15,6 +15,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.bundles.fixture.command.FixtureCommand;
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
@@ -140,7 +141,7 @@ public class FixtureGlobalTest extends CommonTest {
 		final String pathNameSpace = 
 				ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll(
 						"\\.", "/");
-		final String srcDir = String.format("src/%s/%s/%s/",
+		final String srcDir = Harmony.getHarmonyPath()+String.format("/src/%s/%s/%s",
 				pathNameSpace,
 				"fixture",
 				"xml");
@@ -164,7 +165,7 @@ public class FixtureGlobalTest extends CommonTest {
 		final String pathNameSpace = 
 				ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll(
 						"\\.", "/");
-		final String srcDir = String.format("src/%s/%s/%s/",
+		final String srcDir =  Harmony.getHarmonyPath() + String.format("/src/%s/%s/%s",
 				pathNameSpace,
 				"fixture",
 				"yml");

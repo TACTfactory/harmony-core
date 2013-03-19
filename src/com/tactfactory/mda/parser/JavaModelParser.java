@@ -409,10 +409,17 @@ public class JavaModelParser {
 							annotationExpr, 
 							annotationType);
 					
+					// Adjust databases column definition
+					if (Strings.isNullOrEmpty(fieldMeta.getColumnDefinition())) {
+						fieldMeta.setColumnDefinition(
+								SqliteAdapter.generateColumnDefinition(
+										fieldMeta.getType()));
+					}
+					
 					// Set default values for type if type is recognized
-					final Type type = Type.fromName(fieldMeta.getType());
+					final Type type = Type.fromName(fieldMeta.getColumnDefinition());
 					if (type != null) {
-						fieldMeta.setType(type.getValue());
+						fieldMeta.setColumnDefinition(type.getValue());
 						if (fieldMeta.isNullable() == null) {
 							fieldMeta.setNullable(type.isNullable());
 						}
@@ -449,12 +456,11 @@ public class JavaModelParser {
 					meta.getRelations().put(fieldMeta.getName(), fieldMeta);
 				}
 
-				// Adjust databases column definition
-				if (Strings.isNullOrEmpty(fieldMeta.getColumnDefinition())) {
-					fieldMeta.setColumnDefinition(
-							SqliteAdapter.generateColumnDefinition(
-									fieldMeta.getType()));
+				if (fieldMeta.getType().equalsIgnoreCase("DateTime") 
+						&& fieldMeta.getColumnDefinition() != null) {
+					fieldMeta.setType(fieldMeta.getColumnDefinition());
 				}
+				
 				fieldMeta.setColumnDefinition(
 						SqliteAdapter.generateColumnType(
 								fieldMeta.getColumnDefinition()));
@@ -562,7 +568,7 @@ public class JavaModelParser {
 									type = mvp.getValue().toString();
 								}
 								
-								fieldMeta.setType(
+								fieldMeta.setColumnDefinition(
 										Type.fromName(type).getValue());
 							} else
 								

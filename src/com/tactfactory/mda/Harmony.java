@@ -743,4 +743,11 @@ public final class Harmony {
 	}
 	
 	
+	/**
+	 * Get the templates path.
+	 * @return the template path
+	 */
+	public static String getProjectFolderPath() {
+		return projectFolderPath;
+	}
 }

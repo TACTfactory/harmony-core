@@ -19,7 +19,7 @@
 	<Comment id="Comment3">
 		<id>2</id>
 		<content>Commentaire 3</content>
-		<owner>Tryphon</owner>
+		<owner>Tournesol</owner>
 		<post>Post3</post>
 		<createdAt>2012-01-01 00:00</createdAt>
 		<validate>false</validate>
