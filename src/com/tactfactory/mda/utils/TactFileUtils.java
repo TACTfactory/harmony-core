@@ -11,6 +11,7 @@ package com.tactfactory.mda.utils;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -297,6 +298,43 @@ public abstract class TactFileUtils extends FileUtils {
 			}
 		}
 		return result;
+	}
+	
+	/** convert file content to a string array with each line separated.
+	 * @param file The File to read
+	 * @return Array of Strings containing the file contents
+	 */
+	public static void stringArrayToFile(final List<String> strings,
+			final File file) {
+		
+		DataOutputStream out = null;
+		BufferedWriter br = null;
+
+		try {
+			out = new DataOutputStream(new FileOutputStream(file));
+			br = new BufferedWriter(
+					new OutputStreamWriter(out,
+							TactFileUtils.DEFAULT_ENCODING));
+
+			for (String s : strings) {
+				br.write(s);
+				br.write('\n');
+			}
+		} catch (final IOException e) {
+			throw new RuntimeException("IO problem in fileToString",
+					e);
+		} finally {
+			try {
+				if (br != null) {
+					br.close();
+				}
+				if (out != null) {
+					out.close();
+				}
+			} catch (final IOException e) { 
+				ConsoleUtils.displayError(e);
+			}
+		}
 	}
 	
 	/** Copy folder content recursively from srcPath to destPath,

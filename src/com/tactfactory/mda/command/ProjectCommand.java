@@ -8,7 +8,6 @@
  */
 package com.tactfactory.mda.command;
 
-import net.xeoh.plugins.base.annotations.Capabilities;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;
@@ -48,6 +47,12 @@ public class ProjectCommand extends BaseCommand {
 	public static final String ACTION_INIT 	= "init";
 	/** Remove action. */
 	public static final String ACTION_REMOVE 	= "remove";
+	/** Update action. */
+	public static final String ACTION_UPDATE 	= "update";
+	
+	// Subjects
+	/** SDK_PATH Subject */
+	public static final String SUBJECT_SDK_PATH = "sdk-path";
 
 	// Commands
 	/** Command : PROJECT:INIT:ANDROID. */
@@ -119,6 +124,13 @@ public class ProjectCommand extends BaseCommand {
 								+ ACTION_REMOVE 
 								+ SEPARATOR 
 								+ TargetPlatform.ALL.toLowerString();
+	
+	/** Command : PROJECT:UPDATE:SDK-PATH. */
+	public static final String UPDATE_SDK = BUNDLE 
+								+ SEPARATOR 
+								+ ACTION_UPDATE 
+								+ SEPARATOR 
+								+ SUBJECT_SDK_PATH;
 
 	// Internal	
 	/** Android adapter. */
@@ -479,7 +491,10 @@ public class ProjectCommand extends BaseCommand {
 				+ "\t => Remove Windows Phone project directory\n"
 				
 				+ "\t" + REMOVE_ALL
-				+ "\t => Remove All project directories\n");
+				+ "\t => Remove All project directories\n"
+				
+				+ "\t" + UPDATE_SDK
+				+ "\t => Update the SDK Path\n");
 	}
 
 	@Override
@@ -526,11 +541,16 @@ public class ProjectCommand extends BaseCommand {
 
 		if (action.equals(REMOVE_ALL)) {
 			this.removeAll();
+		} else
+			
+		if (action.equals(UPDATE_SDK)) {
+			ApplicationMetadata.setAndroidSdkPath("");
+			Harmony.initProjectAndroidSdkPath();
+			ProjectGenerator.updateSDKPath();
 		}
 	}
 
 	@Override
-	@Capabilities
 	public final boolean isAvailableCommand(final String command) {
 		return  command.equals(INIT_ANDROID) 
 				|| command.equals(INIT_IOS) 
@@ -541,6 +561,7 @@ public class ProjectCommand extends BaseCommand {
 				|| command.equals(REMOVE_IOS) 
 				//|| command.equals(REMOVE_RIM)
 				//|| command.equals(REMOVE_WINPHONE) 
-				|| command.equals(REMOVE_ALL);
+				|| command.equals(REMOVE_ALL)
+				|| command.equals(UPDATE_SDK);
 	}
 }

@@ -5,6 +5,7 @@ package com.tactfactory.mda.template;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.Harmony;
@@ -417,5 +418,28 @@ public class ProjectGenerator extends BaseGenerator {
 		final boolean result = false;
 
 		return result;
+	}
+	
+	public static final void updateSDKPath() {
+		final File fileProp = new File(
+				String.format("%s/%s/%s",
+						Harmony.getProjectPath(),
+						Harmony.getProjectFolderPath(), 
+						"local.properties"));
+		
+		if (fileProp.exists()) {
+			final List<String> lines = 
+					TactFileUtils.fileToStringArray(fileProp);
+			
+			for (int i = 0; i < lines.size(); i++) {
+				if (lines.get(i).startsWith("sdk.dir=")) {
+					lines.set(i, "sdk.dir="
+				+ ApplicationMetadata.getAndroidSdkPath());
+					break;
+				}
+			}
+			
+			TactFileUtils.stringArrayToFile(lines, fileProp);
+		}
 	}
 }
