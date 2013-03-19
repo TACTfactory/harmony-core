@@ -106,7 +106,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		
 		this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
 		this.db = this.adapter.open();
-		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
+		//${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
 		this.db.beginTransaction();
 		
 		DataManager manager = new DataManager(this.ctx, this.db);
@@ -210,7 +210,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		${field.name?uncap_first}Adapter.open(this.db);
 		ArrayList<${field.relation.targetEntity?cap_first}> all${field.name?cap_first}s = ${field.name?uncap_first}Adapter.getAll();
 		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
-		if (!${field.name?uncap_first}s.isEmpty()) {
+		if (!all${field.name?uncap_first}s.isEmpty()) {
 			${field.name?uncap_first}s.add(all${field.name?cap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
 			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s);
 		}			
