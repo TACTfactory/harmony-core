@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.bundles.fixture.test;
+package com.tactfactory.mda.fixture.test;
 
 import java.io.File;
 
@@ -16,9 +16,9 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tactfactory.mda.Harmony;
-import com.tactfactory.mda.bundles.fixture.command.FixtureCommand;
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
+import com.tactfactory.mda.fixture.command.FixtureCommand;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.test.CommonTest;
 import com.tactfactory.mda.utils.ConsoleUtils;

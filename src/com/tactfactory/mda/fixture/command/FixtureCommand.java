@@ -6,14 +6,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.bundles.fixture.command;
+package com.tactfactory.mda.fixture.command;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;
-import com.tactfactory.mda.bundles.fixture.metadata.FixtureMetadata;
-import com.tactfactory.mda.bundles.fixture.template.FixtureGenerator;
 import com.tactfactory.mda.command.BaseCommand;
+import com.tactfactory.mda.fixture.metadata.FixtureMetadata;
+import com.tactfactory.mda.fixture.template.FixtureGenerator;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
