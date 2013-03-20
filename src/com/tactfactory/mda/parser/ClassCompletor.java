@@ -121,7 +121,11 @@ public class ClassCompletor {
 								newField.getName(), newField);
 					}
 					rel.setMappedBy(newField.getName());
+				} else { // Set inversedBy in mapping field
+					FieldMetadata mappFm = entityRef.getFields().get(rel.getMappedBy());
+					mappFm.getRelation().setInversedBy(fm.getName());
 				}
+				
 				
 			}
 			if ("ManyToMany".equals(rel.getType())) {

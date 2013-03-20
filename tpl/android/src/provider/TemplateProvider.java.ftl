@@ -10,6 +10,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
 
@@ -77,10 +78,16 @@ public class ${project_name?cap_first}Provider extends ContentProvider {
 				R.string.uri_not_supported);
 		
 		try {
+		<#assign firstGo = true />
 		<#list entities?values as entity>
 			<#if (entity.fields?size>0) >
 			this.dbAdapter${entity.name?cap_first} = new ${entity.name?cap_first}SQLiteAdapter(this.mContext);
-			this.dbAdapter${entity.name?cap_first}.open();
+				<#if (firstGo)>
+			SQLiteDatabase db = this.dbAdapter${entity.name?cap_first}.open();
+				<#assign firstGo = false />
+				<#else>
+			this.dbAdapter${entity.name?cap_first}.open(db);
+				</#if>
 			</#if>
 		</#list>
 		} catch (Exception e){

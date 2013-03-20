@@ -136,42 +136,46 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	/** Test case Create Entity */
 	public void testCreate() {
 		int result = -1;
-		${curr.name?cap_first} ${curr.name?uncap_first} = this.generateRandom();
-		
-
-		result = (int)this.adapter.insert(${curr.name?uncap_first});
-
-		Assert.assertTrue(result >= 0);
+		if (this.entity != null) {
+			${curr.name?cap_first} ${curr.name?uncap_first} = this.generateRandom();
+			
+	
+			result = (int)this.adapter.insert(${curr.name?uncap_first});
+	
+			Assert.assertTrue(result >= 0);
+		}
 	}
 	
 	/** Test case Read Entity */
 	public void testRead() {
 		${curr.name?cap_first} result = null;
-		if (this.entity!=null){
-			result = this.adapter.getByID(this.entity.getId()); // TODO Generate by @Id annotation 
+		if (this.entity != null) {
+			result = this.adapter.getByID(this.entity.getId()); // TODO Generate by @Id annotation
+			
+			equals(result, this.entity); 
 		}
-		equals(result, this.entity);
 	}
 	
 	/** Test case Update Entity */
 	public void testUpdate() {
 		int result = -1;
-		if (this.entity!=null){
+		if (this.entity != null) {
 			${curr.name?cap_first} ${curr.name?uncap_first} = generateRandom();
 			${curr.name?uncap_first}.setId(this.entity.getId()); // TODO Generate by @Id annotation 
 		
 			result = (int)this.adapter.update(${curr.name?uncap_first});
+			
+			Assert.assertTrue(result >= 0);
 		}
-		Assert.assertTrue(result >= 0);
 	}
 	
 	/** Test case Update Entity */
 	public void testDelete() {
 		int result = -1; 
-		if (this.entity!=null){
+		if (this.entity != null) {
 			result = (int)this.adapter.remove(this.entity.getId());
+			Assert.assertTrue(result >= 0);
 		}
-		Assert.assertTrue(result >= 0);
 	}
 	
 	private ${curr.name?cap_first} generateRandom(){

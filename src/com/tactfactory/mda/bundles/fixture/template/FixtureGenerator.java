@@ -88,7 +88,7 @@ public class FixtureGenerator extends BaseGenerator {
 	/**
 	 * Generate the loaders and the base fixtures.
 	 */
-	public final void init(boolean force) {
+	public final void init(final boolean force) {
 		 try {
 			 final String fixtureType = ((FixtureMetadata) 
 							 this.getAppMetas().getOptions()
