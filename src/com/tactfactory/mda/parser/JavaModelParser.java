@@ -410,14 +410,16 @@ public class JavaModelParser {
 							annotationType);
 					
 					// Adjust databases column definition
-					if (Strings.isNullOrEmpty(fieldMeta.getColumnDefinition())) {
+					if (Strings.isNullOrEmpty(
+							fieldMeta.getColumnDefinition())) {
 						fieldMeta.setColumnDefinition(
 								SqliteAdapter.generateColumnDefinition(
 										fieldMeta.getType()));
 					}
 					
 					// Set default values for type if type is recognized
-					final Type type = Type.fromName(fieldMeta.getColumnDefinition());
+					final Type type = Type.fromName(
+							fieldMeta.getColumnDefinition());
 					if (type != null) {
 						fieldMeta.setColumnDefinition(type.getValue());
 						if (fieldMeta.isNullable() == null) {

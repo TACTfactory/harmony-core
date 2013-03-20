@@ -6,13 +6,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.bundles.fixture.template;
+package com.tactfactory.mda.fixture.template;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 
-import com.tactfactory.mda.bundles.fixture.metadata.FixtureMetadata;
+import com.tactfactory.mda.fixture.metadata.FixtureMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.BaseGenerator;
@@ -87,8 +87,9 @@ public class FixtureGenerator extends BaseGenerator {
 	
 	/**
 	 * Generate the loaders and the base fixtures.
+	 * @param force True if you want to overwrite the fixture loaders.
 	 */
-	public final void init(boolean force) {
+	public final void init(final boolean force) {
 		 try {
 			 final String fixtureType = ((FixtureMetadata) 
 							 this.getAppMetas().getOptions()

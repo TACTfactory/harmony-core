@@ -136,42 +136,46 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	/** Test case Create Entity */
 	public void testCreate() {
 		int result = -1;
-		${curr.name?cap_first} ${curr.name?uncap_first} = this.generateRandom();
-		
-
-		result = (int)this.adapter.insert(${curr.name?uncap_first});
-
-		Assert.assertTrue(result >= 0);
+		if (this.entity != null) {
+			${curr.name?cap_first} ${curr.name?uncap_first} = this.generateRandom();
+			
+	
+			result = (int)this.adapter.insert(${curr.name?uncap_first});
+	
+			Assert.assertTrue(result >= 0);
+		}
 	}
 	
 	/** Test case Read Entity */
 	public void testRead() {
 		${curr.name?cap_first} result = null;
-		if (this.entity!=null){
-			result = this.adapter.getByID(this.entity.getId()); // TODO Generate by @Id annotation 
+		if (this.entity != null) {
+			result = this.adapter.getByID(this.entity.getId()); // TODO Generate by @Id annotation
+			
+			equals(result, this.entity); 
 		}
-		equals(result, this.entity);
 	}
 	
 	/** Test case Update Entity */
 	public void testUpdate() {
 		int result = -1;
-		if (this.entity!=null){
+		if (this.entity != null) {
 			${curr.name?cap_first} ${curr.name?uncap_first} = generateRandom();
 			${curr.name?uncap_first}.setId(this.entity.getId()); // TODO Generate by @Id annotation 
 		
 			result = (int)this.adapter.update(${curr.name?uncap_first});
+			
+			Assert.assertTrue(result >= 0);
 		}
-		Assert.assertTrue(result >= 0);
 	}
 	
 	/** Test case Update Entity */
 	public void testDelete() {
 		int result = -1; 
-		if (this.entity!=null){
+		if (this.entity != null) {
 			result = (int)this.adapter.remove(this.entity.getId());
+			Assert.assertTrue(result >= 0);
 		}
-		Assert.assertTrue(result >= 0);
 	}
 	
 	private ${curr.name?cap_first} generateRandom(){
@@ -210,7 +214,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		${field.name?uncap_first}Adapter.open(this.db);
 		ArrayList<${field.relation.targetEntity?cap_first}> all${field.name?cap_first}s = ${field.name?uncap_first}Adapter.getAll();
 		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
-		if (!all${field.name?uncap_first}s.isEmpty()) {
+		if (!all${field.name?cap_first}s.isEmpty()) {
 			${field.name?uncap_first}s.add(all${field.name?cap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
 			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s);
 		}			

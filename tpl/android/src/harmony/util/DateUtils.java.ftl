@@ -5,6 +5,7 @@ import java.text.ParseException;
 import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.ISODateTimeFormat;
+import org.joda.time.LocalDateTime;
 
 import android.util.Log;
 
@@ -101,7 +102,7 @@ public class DateUtils extends android.text.format.DateUtils{
 		DateTime dt = null;
 		
 		try {
-			dt = new DateTime(ISODateTimeFormat.dateTimeNoMillis().parseDateTime(dateTime));
+			dt = new DateTime(ISODateTimeFormat.dateTime().parseDateTime(dateTime));
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, e.getMessage());
 		}
@@ -137,6 +138,25 @@ public class DateUtils extends android.text.format.DateUtils{
 		
 		try {
 			dt = new DateTime(DateTimeFormat.forPattern(pattern).parseDateTime(dateTime));
+		} catch (IllegalArgumentException e) {
+			Log.e(TAG, e.getMessage());
+		}
+		
+		return dt;
+	}
+	
+	/**
+	 * Convert a string to a locale datetime thanks to the given pattern
+	 * @param pattern The datetime pattern (ex. "dd-mm-yyyy" or "yyyy-MM-dd hh:mm")
+	 * @param dateTime date string
+	 * @return datetime
+	 */
+	public static DateTime formatLocalPattern(String pattern, String dateTime){
+		DateTime dt = null;
+		
+		try {
+			LocalDateTime tmp = DateTimeFormat.forPattern(pattern).parseLocalDateTime(dateTime);
+			dt = DateUtils.formatLocalISOStringToDateTime(tmp.toString());
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, e.getMessage());
 		}
