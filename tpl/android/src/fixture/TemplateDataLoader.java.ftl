@@ -102,11 +102,11 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 									<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
 							${curr.name?uncap_first}.set${field.name?cap_first}(Integer.parseInt(element.getChildText("${field.name?uncap_first}")));
 									<#elseif field.type=="date">
-							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternDate, element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.format<#if field.is_locale>Local</#if>Pattern(patternDate, element.getChildText("${field.name?uncap_first}")));
 									<#elseif field.type=="datetime">
-							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternDateTime, element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.format<#if field.is_locale>Local</#if>Pattern(patternDateTime, element.getChildText("${field.name?uncap_first}")));
 									<#elseif field.type=="time">
-							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternTime, element.getChildText("${field.name?uncap_first}")));
+							${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.format<#if field.is_locale>Local</#if>Pattern(patternTime, element.getChildText("${field.name?uncap_first}")));
 									<#elseif field.type=="boolean">
 							${curr.name?uncap_first}.set${field.name?cap_first}(Boolean.parseBoolean(element.getChildText("${field.name?uncap_first}")));		
 									<#else>
