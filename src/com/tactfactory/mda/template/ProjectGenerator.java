@@ -420,6 +420,10 @@ public class ProjectGenerator extends BaseGenerator {
 		return result;
 	}
 	
+	/**
+	 * Updates the local.properties SDK Path with the SDK Path stored
+	 * in the ApplicationMetadata.
+	 */
 	public static final void updateSDKPath() {
 		final File fileProp = new File(
 				String.format("%s/%s/%s",

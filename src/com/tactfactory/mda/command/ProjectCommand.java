@@ -51,7 +51,7 @@ public class ProjectCommand extends BaseCommand {
 	public static final String ACTION_UPDATE 	= "update";
 	
 	// Subjects
-	/** SDK_PATH Subject */
+	/** SDK_PATH Subject. */
 	public static final String SUBJECT_SDK_PATH = "sdk-path";
 
 	// Commands

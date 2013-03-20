@@ -141,10 +141,11 @@ public class FixtureGlobalTest extends CommonTest {
 		final String pathNameSpace = 
 				ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll(
 						"\\.", "/");
-		final String srcDir = Harmony.getHarmonyPath()+String.format("/src/%s/%s/%s",
-				pathNameSpace,
-				"fixture",
-				"xml");
+		final String srcDir = 
+				Harmony.getHarmonyPath() + String.format("/src/%s/%s/%s",
+						pathNameSpace,
+						"fixture",
+						"xml");
 
 		String destDir = String.format("fixtures/app/");
 		System.out.println(destDir);
@@ -165,10 +166,11 @@ public class FixtureGlobalTest extends CommonTest {
 		final String pathNameSpace = 
 				ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll(
 						"\\.", "/");
-		final String srcDir =  Harmony.getHarmonyPath() + String.format("/src/%s/%s/%s",
-				pathNameSpace,
-				"fixture",
-				"yml");
+		final String srcDir =  
+				Harmony.getHarmonyPath() + String.format("/src/%s/%s/%s",
+					pathNameSpace,
+					"fixture",
+					"yml");
 
 		String destDir = String.format("fixtures/app/");
 		System.out.println(destDir);

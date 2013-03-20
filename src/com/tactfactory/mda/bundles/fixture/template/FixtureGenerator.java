@@ -87,6 +87,7 @@ public class FixtureGenerator extends BaseGenerator {
 	
 	/**
 	 * Generate the loaders and the base fixtures.
+	 * @param force True if you want to overwrite the fixture loaders.
 	 */
 	public final void init(final boolean force) {
 		 try {

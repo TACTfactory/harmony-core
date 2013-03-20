@@ -67,8 +67,7 @@ public class ClassCompletor {
 				isRecursive = true;
 			}
 			
-			this.checkRelationIntegrity(fm);
-			
+			this.checkRelationIntegrity(fm);	
 			if (rel.getFieldRef().isEmpty()) {
 				final ClassMetadata cmRef = this.metas.get(targetEntity);
 				final ArrayList<FieldMetadata> ids =
@@ -122,7 +121,8 @@ public class ClassCompletor {
 					}
 					rel.setMappedBy(newField.getName());
 				} else { // Set inversedBy in mapping field
-					FieldMetadata mappFm = entityRef.getFields().get(rel.getMappedBy());
+					FieldMetadata mappFm = 
+							entityRef.getFields().get(rel.getMappedBy());
 					mappFm.getRelation().setInversedBy(fm.getName());
 				}
 				

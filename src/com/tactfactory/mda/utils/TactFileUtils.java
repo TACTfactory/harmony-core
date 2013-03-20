@@ -301,8 +301,8 @@ public abstract class TactFileUtils extends FileUtils {
 	}
 	
 	/** convert file content to a string array with each line separated.
+	 * @param strings The lines to copy to the file
 	 * @param file The File to read
-	 * @return Array of Strings containing the file contents
 	 */
 	public static void stringArrayToFile(final List<String> strings,
 			final File file) {
