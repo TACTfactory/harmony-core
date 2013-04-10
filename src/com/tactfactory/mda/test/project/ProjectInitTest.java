@@ -16,9 +16,12 @@ import org.junit.BeforeClass;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import sun.misc.Cleaner;
+
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.test.CommonTest;
+import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.TactFileUtils;
 
 /** 
@@ -45,10 +48,9 @@ public class ProjectInitTest extends CommonTest {
 	@Override
 	public final void tearDown() throws Exception {
 		super.tearDown();
-		
-		final File dirproj = 
-				new File(String.format("%s/android",
-						Harmony.getProjectPath()));
+
+		ConsoleUtils.display("################################  Cleaner !! ################################");
+		final File dirproj = new File(Harmony.getProjectAndroidPath());
 		TactFileUtils.deleteRecursive(dirproj);
 	}
 	

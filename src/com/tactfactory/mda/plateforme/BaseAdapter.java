@@ -46,19 +46,19 @@ public abstract class BaseAdapter {
 	/** Values path. */
 	private String values		= "values";
 	/** Controllers path. */
-	private String controller = "view";
+	private String controller 	= "view";
 	/** Data path. */
-	private String data		= "data";
+	private String data			= "data";
 	/** Providers path. */
-	private String provider	= "provider";
+	private String provider		= "provider";
 	/** Common path. */
 	private String common		= "common";
 	/** Services path. */
-	private String service	= "service";
+	private String service		= "service";
 	/** Fixtures path. */
-	private String fixture 	= "fixture";
+	private String fixture 		= "fixture";
 	/** Criterias path. */
-	private String criterias  = "criterias"; 
+	private String criterias  	= "criterias"; 
 	
 	// File
 	/** Manifest path. */

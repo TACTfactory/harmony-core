@@ -226,8 +226,8 @@ public class ProjectGenerator extends BaseGenerator {
 		/// copy Harmony library
 		TactFileUtils.copyfile(
 				new File(String.format("%s/%s", 
-						Harmony.getHarmonyPath(), 
-						"/harmony.jar")), 
+						Harmony.getBundlePath(), 
+						"tact-core/harmony.jar")), 
 				new File(String.format("%s/%s", 
 						this.getAdapter().getLibsPath(), 
 						"harmony.jar")));
@@ -348,9 +348,9 @@ public class ProjectGenerator extends BaseGenerator {
 
 		// Update newly created files with datamodel
 		final File dirTpl = 
-				new File(Harmony.getHarmonyPath() + "/"
+				new File(Harmony.getBundlePath() + "tact-core/"
 						+ this.getAdapter().getTemplateProjectPath());
-		if (dirTpl.exists() && dirTpl.listFiles().length != 0) {
+		if (dirTpl.exists() && dirTpl.listFiles().length > 0) {
 			result = true;
 			
 			for (int i = 0; i < dirTpl.listFiles().length; i++) {
@@ -426,9 +426,8 @@ public class ProjectGenerator extends BaseGenerator {
 	 */
 	public static final void updateSDKPath() {
 		final File fileProp = new File(
-				String.format("%s/%s/%s",
-						Harmony.getProjectPath(),
-						Harmony.getProjectFolderPath(), 
+				String.format("%s/%s",
+						Harmony.getProjectAndroidPath(), 
 						"local.properties"));
 		
 		if (fileProp.exists()) {

@@ -14,6 +14,7 @@ import java.io.File;
 
 import com.google.common.base.Strings;
 import com.tactfactory.mda.Harmony;
+import com.tactfactory.mda.ProjectDiscover;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.TactFileUtils;
@@ -52,14 +53,13 @@ public abstract class CommonTest {
 		
 		if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
 			final String localProp = 
-					String.format("%s/%s/%s",
-							Harmony.getProjectPath(), 
-							Harmony.getProjectFolder(), 
+					String.format("%s/%s",
+							Harmony.getProjectAndroidPath(), 
 							"local.properties");
 
 			ApplicationMetadata.setAndroidSdkPath(
-					//"/home/micky/Applications/eclipse/android-sdk");
-					Harmony.getSdkDirFromPropertiesFile(localProp));
+					ProjectDiscover.getSdkDirFromPropertiesFile(localProp));
+			
 			if (ApplicationMetadata.getAndroidSdkPath() == null) {
 				ApplicationMetadata.setAndroidSdkPath(
 						"/opt/android-sdk-linux_86/");
@@ -99,12 +99,13 @@ public abstract class CommonTest {
 					.replaceAll("\\.", "/");
 
 		String srcDir = 
-				String.format(Harmony.getHarmonyPath() + "/src/%s/%s/", 
+				String.format("%s/tact-core/src/%s/%s/",
+						Harmony.getBundlePath(),
 						pathNameSpace, 
 						"entity");
 		String destDir = 
-				String.format("%s/android/src/%s/%s/", 
-						Harmony.getProjectPath(), 
+				String.format("%s/src/%s/%s/", 
+						Harmony.getProjectAndroidPath(), 
 						pathNameSpace, 
 						"entity");
 
@@ -119,12 +120,12 @@ public abstract class CommonTest {
 		// Copy artefact for agregate CI result
 		final String libPath = "harmony.jar";
 		srcDir = 
-				String.format("%s/vendor/tact-core/%s", 
-						Harmony.getPathBase(), 
+				String.format("%s/tact-core/%s", 
+						Harmony.getBundlePath(), 
 						libPath);
 		destDir = 
-				String.format("%s/android/test/libs/%s", 
-						Harmony.getProjectPath(), 
+				String.format("%s/test/libs/%s", 
+						Harmony.getProjectAndroidPath(), 
 						libPath);
 		TactFileUtils.copyfile(new File(srcDir), new File(destDir));
 	}

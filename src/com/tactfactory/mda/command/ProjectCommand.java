@@ -11,7 +11,7 @@ package com.tactfactory.mda.command;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;
-import com.tactfactory.mda.Harmony;
+import com.tactfactory.mda.ProjectDiscover;
 import com.tactfactory.mda.TargetPlatform;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
@@ -149,7 +149,7 @@ public class ProjectCommand extends BaseCommand {
 	private boolean isProjectInit = false;
 
 	/**
-	 * Init Project Parameters (project name, namespace, android sdk path).
+	 * Initialize Project Parameters (project name, namespace, android sdk path).
 	 */
 	public final void initProjectParam() {
 		if (!this.isProjectInit) {
@@ -158,7 +158,7 @@ public class ProjectCommand extends BaseCommand {
 
 				//Project Name
 				if (!this.getCommandArgs().containsKey("name")) {
-					Harmony.initProjectName();
+					ProjectDiscover.initProjectName();
 				} else {
 					ApplicationMetadata.INSTANCE.setName(
 							this.getCommandArgs().get("name"));
@@ -166,7 +166,7 @@ public class ProjectCommand extends BaseCommand {
 					
 				//Project NameSpace
 				if (!this.getCommandArgs().containsKey("namespace")) {
-					Harmony.initProjectNameSpace();
+					ProjectDiscover.initProjectNameSpace();
 				} else {
 					ApplicationMetadata.INSTANCE.setProjectNameSpace(
 							this.getCommandArgs().get("namespace")
@@ -175,13 +175,13 @@ public class ProjectCommand extends BaseCommand {
 					
 				//Android sdk path
 				if (!this.getCommandArgs().containsKey("androidsdk")) {
-					Harmony.initProjectAndroidSdkPath();
+					ProjectDiscover.initProjectAndroidSdkPath();
 				} else {
 					ApplicationMetadata.setAndroidSdkPath(
 							this.getCommandArgs().get("androidsdk"));
 				}
 					
-				ConsoleUtils.displayDebug("Project Name: "	 
+				ConsoleUtils.display("Project Name: "	 
 							+ ApplicationMetadata.INSTANCE.getName()
 						 + "\nProject NameSpace: "			 
 							+ ApplicationMetadata.INSTANCE.getProjectNameSpace()
@@ -191,7 +191,7 @@ public class ProjectCommand extends BaseCommand {
 				// Confirmation
 				if (ConsoleUtils.isConsole()) {
 					final String accept =
-							Harmony.getUserInput("Use below given parameters "
+							ConsoleUtils.getUserInput("Use below given parameters "
 									 + "to process files? (y/n) ");
 					
 					if (!accept.contains("n")) {
@@ -334,7 +334,7 @@ public class ProjectCommand extends BaseCommand {
 	public final void removeAndroid() {
 		if (!this.userHasConfirmed) {
 			final String accept = 
-					Harmony.getUserInput("Are you sure to Delete "
+					ConsoleUtils.getUserInput("Are you sure to Delete "
 							 + "Android Project? (y/n) ");
 			
 			if (accept.contains("n")) {
@@ -359,7 +359,7 @@ public class ProjectCommand extends BaseCommand {
 	public final void removeIOS() {
 		if (!this.userHasConfirmed) {
 			final String accept = 
-					Harmony.getUserInput("Are you sure to Delete "
+					ConsoleUtils.getUserInput("Are you sure to Delete "
 							+ "Apple iOS Project? (y/n) ");
 			
 			if (accept.contains("n")) { return; }
@@ -382,7 +382,7 @@ public class ProjectCommand extends BaseCommand {
 	public final void removeRIM() {
 		if (!this.userHasConfirmed) {
 			final String accept =
-					Harmony.getUserInput(
+					ConsoleUtils.getUserInput(
 							"Are you sure to Delete"
 							+ " BlackBerry Rim Project? (y/n)");
 			
@@ -407,7 +407,7 @@ public class ProjectCommand extends BaseCommand {
 	 */
 	public final void removeWinPhone() {
 		if (!this.userHasConfirmed) {
-			final String accept = Harmony.getUserInput(
+			final String accept = ConsoleUtils.getUserInput(
 					"Are you sure to Delete Windows Phone Project? (y/n) ");
 			
 			if (accept.contains("n")) { return; }
@@ -430,7 +430,7 @@ public class ProjectCommand extends BaseCommand {
 	public final void removeAll() {
 		if (!this.userHasConfirmed) {
 			final String accept = 
-					Harmony.getUserInput(
+					ConsoleUtils.getUserInput(
 							"Are you sure to Delete All Projects? (y/n) ");
 			
 			if (accept.contains("n")) { return; }
@@ -545,7 +545,7 @@ public class ProjectCommand extends BaseCommand {
 			
 		if (action.equals(UPDATE_SDK)) {
 			ApplicationMetadata.setAndroidSdkPath("");
-			Harmony.initProjectAndroidSdkPath();
+			ProjectDiscover.initProjectAndroidSdkPath();
 			ProjectGenerator.updateSDKPath();
 		}
 	}

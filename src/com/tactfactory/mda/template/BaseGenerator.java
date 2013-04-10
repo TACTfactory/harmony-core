@@ -113,7 +113,7 @@ public abstract class BaseGenerator {
 		this.adapter	= adapt;
 		
 		this.cfg.setDirectoryForTemplateLoading(
-				new File(Harmony.getPathBase() + "/vendor/tact-core"));
+				new File(Harmony.getRootPath() + "/vendor/tact-core"));
 	}
 	
 	/** 

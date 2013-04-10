@@ -42,20 +42,23 @@ public class FixtureGenerator extends BaseGenerator {
 	public final void load() {
 		final File fixtAppSrc = new File("fixtures/app");
 		final File fixtTestSrc = new File("fixtures/test");
+		
 		if (fixtAppSrc.exists()) {
 			final File fixtAppDest = 
 					new File(this.getAdapter().getAssetsPath() + "/app");
+			
 			final File fixtTestDest = 
 					new File(this.getAdapter().getAssetsPath() + "/test");
+			
 			if (!fixtAppDest.exists()) {
-				if (!fixtAppDest.mkdir()) {
+				if (!fixtAppDest.mkdirs()) {
 					ConsoleUtils.displayError(
 							new Exception("Couldn't create folder "
 									+ fixtAppDest.getAbsolutePath()));
 				}
 			}
 			if (!fixtTestDest.exists()) {
-				if (!fixtTestDest.mkdir()) {
+				if (!fixtTestDest.mkdirs()) {
 					ConsoleUtils.displayError(
 							new Exception("Couldn't create folder "
 									+ fixtTestDest.getAbsolutePath()));

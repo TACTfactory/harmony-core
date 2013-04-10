@@ -142,7 +142,8 @@ public class FixtureGlobalTest extends CommonTest {
 				ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll(
 						"\\.", "/");
 		final String srcDir = 
-				Harmony.getHarmonyPath() + String.format("/src/%s/%s/%s",
+				String.format("%s/tact-core/src/%s/%s/%s",
+						Harmony.getBundlePath(),
 						pathNameSpace,
 						"fixture",
 						"xml");
@@ -166,8 +167,10 @@ public class FixtureGlobalTest extends CommonTest {
 		final String pathNameSpace = 
 				ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll(
 						"\\.", "/");
+		
 		final String srcDir =  
-				Harmony.getHarmonyPath() + String.format("/src/%s/%s/%s",
+				String.format("%s/tact-core/src/%s/%s/%s",
+					Harmony.getBundlePath(),
 					pathNameSpace,
 					"fixture",
 					"yml");
