@@ -446,4 +446,15 @@ public class ProjectGenerator extends BaseGenerator {
 			TactFileUtils.stringArrayToFile(lines, fileProp);
 		}
 	}
+
+	public final void updateDependencies() {
+		try {
+			/** Only Android is handled for now
+				Create libs folder if it doesn't exists*/
+			TactFileUtils.makeFolder(this.getAdapter().getLibsPath());
+			this.addLibs();
+		} catch (Exception e) {
+			ConsoleUtils.displayError(e);
+		}
+	}
 }
