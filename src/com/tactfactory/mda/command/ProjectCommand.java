@@ -53,6 +53,8 @@ public class ProjectCommand extends BaseCommand {
 	// Subjects
 	/** SDK_PATH Subject. */
 	public static final String SUBJECT_SDK_PATH = "sdk-path";
+	/** Dependencies Subject*/
+	public static final String SUBJECT_DEPENDENCIES = "dependencies";
 
 	// Commands
 	/** Command : PROJECT:INIT:ANDROID. */
@@ -131,6 +133,12 @@ public class ProjectCommand extends BaseCommand {
 								+ ACTION_UPDATE 
 								+ SEPARATOR 
 								+ SUBJECT_SDK_PATH;
+	/** Command : PROJECT:UPDATE:DEPENDENCIES. */
+	public static final String UPDATE_DEPENDENCIES = BUNDLE 
+								+ SEPARATOR 
+								+ ACTION_UPDATE 
+								+ SEPARATOR 
+								+ SUBJECT_DEPENDENCIES;
 
 	// Internal	
 	/** Android adapter. */
@@ -494,7 +502,10 @@ public class ProjectCommand extends BaseCommand {
 				+ "\t => Remove All project directories\n"
 				
 				+ "\t" + UPDATE_SDK
-				+ "\t => Update the SDK Path\n");
+				+ "\t => Update the SDK Path\n"
+				
+				+ "\t" + UPDATE_DEPENDENCIES
+				+ "\t => Update the dependencies from an existing project\n");
 	}
 
 	@Override
@@ -547,6 +558,14 @@ public class ProjectCommand extends BaseCommand {
 			ApplicationMetadata.setAndroidSdkPath("");
 			Harmony.initProjectAndroidSdkPath();
 			ProjectGenerator.updateSDKPath();
+		} else
+			
+		if (action.equals(UPDATE_DEPENDENCIES)) {
+			try {
+				new ProjectGenerator(this.adapterAndroid).updateDependencies();
+			} catch (Exception e) {
+				ConsoleUtils.displayError(e);
+			}
 		}
 	}
 
@@ -562,6 +581,7 @@ public class ProjectCommand extends BaseCommand {
 				//|| command.equals(REMOVE_RIM)
 				//|| command.equals(REMOVE_WINPHONE) 
 				|| command.equals(REMOVE_ALL)
-				|| command.equals(UPDATE_SDK);
+				|| command.equals(UPDATE_SDK)
+				|| command.equals(UPDATE_DEPENDENCIES);
 	}
 }
