@@ -16,7 +16,7 @@ public final class Context {
 	private static String projectBaseFolder = "android" + DELIMITER;
 	
 	/** Path of Harmony base. */
-	private static String basePath = new File("./").getAbsolutePath(); // /
+	private String basePath = new File("./").getAbsolutePath(); // /
 	
 	/** Path of harmony.jar. or Binary */
 	private static String harmonyPath =  
@@ -68,19 +68,18 @@ public final class Context {
 		File baseDir = this.detectAppTree(new File(harmonyPath));
 		
 		// Clean binary case (for /bin and /vendor/**/bin)
-		if (baseDir == null && harmonyPath.endsWith("bin/") ) {
+		if (baseDir == null && harmonyPath.endsWith("bin/")) {
 			File predictiveBaseDir = new File(harmonyPath).getParentFile();
 			
 			ConsoleUtils.displayDebug("Eclipse Mode : " + harmonyPath);
 			baseDir = this.detectAppTree(predictiveBaseDir);
 		}
 		
-		// For debug
-		//harmonyPath = "/home/micky/TACTfactory/projects/tact-mda/vendor/tact-core/harmony.jar";
-		//baseDir = null;
-		
 		if (baseDir == null && harmonyPath.endsWith("harmony.jar")) {
-			File predictiveBaseDir = new File(harmonyPath).getParentFile().getParentFile().getParentFile();
+			File predictiveBaseDir = new File(harmonyPath)
+					.getParentFile()
+					.getParentFile()
+					.getParentFile();
 			
 			ConsoleUtils.displayDebug("Console Mode : " + harmonyPath);
 			baseDir = this.detectAppTree(predictiveBaseDir);
@@ -98,7 +97,7 @@ public final class Context {
 		
 		if (baseDir != null) {
 			// Transform PATH_BASE !!!
-			basePath = baseDir.getPath().toString() + "/";
+			this.basePath = baseDir.getPath().toString() + "/";
 		} else {
 			// For any other case
 			ConsoleUtils.displayError(new Exception(
@@ -109,12 +108,12 @@ public final class Context {
 		ConsoleUtils.displayDebug("Detect app on " + basePath);
 		
 		// Set Path
-		this.projectPath 		= basePath + projectForlder;
+		this.projectPath 		= this.basePath + projectForlder;
 		this.projectBasePath	= this.projectPath + projectBaseFolder;
-		this.libraryPath 		= basePath + libraryFolder;
+		this.libraryPath 		= this.basePath + libraryFolder;
 		
 		if (Strings.isNullOrEmpty(bundlePath)) { // TODO check why..
-			this.bundlePath = basePath + bundleFolder;
+			this.bundlePath 	= this.basePath + bundleFolder;
 		}
 		
 		//TODO remove by bundle path
@@ -128,7 +127,7 @@ public final class Context {
 	 * @return the executePath
 	 */
 	public String getBasePath() {
-		return basePath;
+		return this.basePath;
 	}
 
 	/** Get project path <br/>

@@ -12,9 +12,9 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import net.xeoh.plugins.base.PluginManager;
 import net.xeoh.plugins.base.impl.PluginManagerFactory;
@@ -38,7 +38,7 @@ public final class Harmony {
 	public static final String VERSION = "0.4.0-DEV";
 	
 	/** Singleton of console. */
-	private static volatile Harmony instance;
+	private static Harmony instance;
 	
 	/**
 	 * Get Harmony instance (Singleton).
@@ -60,7 +60,7 @@ public final class Harmony {
 	
 	/** Bootstrap. */
 	private final Map<Class<?>, Command> bootstrap = 
-			new HashMap<Class<?>, Command>();
+			new ConcurrentHashMap<Class<?>, Command>();
 
 	/** Constructor.
 	 * @throws Exception PluginManager failure

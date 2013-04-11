@@ -50,20 +50,18 @@ public class FixtureGenerator extends BaseGenerator {
 			final File fixtTestDest = 
 					new File(this.getAdapter().getAssetsPath() + "/test");
 			
-			if (!fixtAppDest.exists()) {
-				if (!fixtAppDest.mkdirs()) {
-					ConsoleUtils.displayError(
-							new Exception("Couldn't create folder "
-									+ fixtAppDest.getAbsolutePath()));
-				}
+			if (!fixtAppDest.exists() && !fixtAppDest.mkdirs()) {
+				ConsoleUtils.displayError(
+						new Exception("Couldn't create folder "
+								+ fixtAppDest.getAbsolutePath()));
 			}
-			if (!fixtTestDest.exists()) {
-				if (!fixtTestDest.mkdirs()) {
-					ConsoleUtils.displayError(
-							new Exception("Couldn't create folder "
-									+ fixtTestDest.getAbsolutePath()));
-				}
+		
+			if (!fixtTestDest.exists() && !fixtTestDest.mkdirs()) {
+				ConsoleUtils.displayError(
+						new Exception("Couldn't create folder "
+								+ fixtTestDest.getAbsolutePath()));
 			}
+			
 			try {
 				final FileFilter ff = new FileFilter() {
 					@Override
@@ -72,12 +70,15 @@ public class FixtureGenerator extends BaseGenerator {
 								|| arg0.getPath().endsWith(".yml"); 
 					}
 				};
+				
 				TactFileUtils.copyDirectory(fixtAppSrc, fixtAppDest, ff);
 				ConsoleUtils.displayDebug(
 						"Copying fixtures/app into " + fixtAppDest.getPath());
+				
 				TactFileUtils.copyDirectory(fixtTestSrc, fixtTestDest, ff);
 				ConsoleUtils.displayDebug(
 						"Copying fixtures/test into " + fixtTestDest.getPath());
+				
 			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);
 			}
@@ -171,12 +172,10 @@ public class FixtureGenerator extends BaseGenerator {
 				this.getAdapter().getAssetsPath() + fileName;
 		final File f = new File(fullFilePath);
 		
-		if (f.exists()) {
-			if (!f.delete()) {
-				ConsoleUtils.displayError(
-						new Exception("Couldn't delete file "
-								+ f.getPath()));
-			}
+		if (f.exists() && !f.delete()) {
+			ConsoleUtils.displayError(
+					new Exception("Couldn't delete file "
+							+ f.getPath()));
 		}
 	}
 	

@@ -91,7 +91,7 @@ public class ProjectDiscover {
 		result = getSdkDirFromPropertiesFile(fileProp);
 		
 		if (result != null) {
-			androidSdkVersion = setAndroidSdkPath(result.toString());
+			androidSdkVersion = setAndroidSdkPath(result);
 		}
 		
 		return result;

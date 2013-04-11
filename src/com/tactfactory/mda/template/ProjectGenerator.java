@@ -259,52 +259,6 @@ public class ProjectGenerator extends BaseGenerator {
 			
 			ConsoleUtils.launchCommand(command);
 			command.clear();
-	
-			/*command.add("git");
-			command.add("init");
-			//ConsoleUtils.launchCommand(
-			  		command, "/home/yo/git/Harmony/app/Android/libs/sherlock");
-			ConsoleUtils.launchCommand(command, pathSherlock);
-			command.clear();
-			
-			command.add("git");
-			command.add("remote");
-			command.add("add");
-			command.add("-t");
-			command.add("master");
-			command.add("origin");
-			command.add("https://github.com/JakeWharton/ActionBarSherlock.git");
-			ConsoleUtils.launchCommand(command, pathSherlock);
-			command.clear();
-			
-			command.add("git");
-			command.add("config");
-			command.add("core.sparsecheckout");
-			command.add("true");
-			ConsoleUtils.launchCommand(command, pathSherlock);
-			command.clear();
-	
-			command.add("echo");
-			command.add("library/");
-			command.add(">");
-			command.add(".git/info/sparse-checkout");
-			ConsoleUtils.launchCommand(command, pathSherlock);
-			command.clear();
-	
-			command.add("git");
-			command.add("fetch");
-			command.add("--depth=1");
-			command.add("origin");
-			command.add("master");
-			ConsoleUtils.launchCommand(command, pathSherlock);
-			command.clear();
-			
-			command.add("git");
-			command.add("pull");
-			command.add("origin");
-			command.add("master");
-			ConsoleUtils.launchCommand(command, pathSherlock);
-			command.clear();*/
 			
 			// command git checkout
 			command.add("git");
