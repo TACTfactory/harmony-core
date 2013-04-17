@@ -160,7 +160,7 @@
 			</else>
 		</if>
 
-        <junit haltonfailure="no" fork="yes">
+        <junit haltonfailure="no" ><!--  fork="yes"-->
             <!-- <if condition="${emma.enabled}">
 	            <then> -->
 		            <jvmarg value="-Demma.coverage.out.file=${emma.out-dir}/coverage.emma" />
