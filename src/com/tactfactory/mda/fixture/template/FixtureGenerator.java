@@ -106,6 +106,7 @@ public class FixtureGenerator extends BaseGenerator {
 			//Create base classes for Fixtures loaders
 			this.makeSource("FixtureBase.java", "FixtureBase.java", force);
 			this.makeSource("DataManager.java", "DataManager.java", force);
+			this.makeSource("DataLoader.java", "DataLoader.java", force);
 			
 			//Update SQLiteOpenHelper
 			new SQLiteGenerator(this.getAdapter()).generateDatabase();

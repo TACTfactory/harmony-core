@@ -403,7 +403,7 @@ public abstract class TactFileUtils extends FileUtils {
 								String.format("%s%s/",
 										destPath, 
 										tmpFile.getName()),
-								false);
+								makeFiles);
 					} else if (tplFile.isFile() && makeFiles) {
 						tmpFile = TactFileUtils.makeFile(destPath
 								 + tplFile.getName());

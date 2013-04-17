@@ -69,10 +69,9 @@ import ${data_namespace}.${relation.relation.targetEntity?cap_first}SQLiteAdapte
 	</#if>
 </#list>
 
-<#list orderedEntities as entityName>
-import ${fixture_namespace}.${entityName}DataLoader;
-</#list>
-import ${fixture_namespace}.DataManager;
+
+import ${fixture_namespace}.${curr.name?cap_first}DataLoader;
+import ${fixture_namespace}.DataLoader;
 
 import java.util.ArrayList;
 
@@ -109,14 +108,11 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		//${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
 		this.db.beginTransaction();
 		
-		DataManager manager = new DataManager(this.ctx, this.db);
-		<#list orderedEntities as entityName>
-		${entityName}DataLoader ${entityName?uncap_first}Loader = new ${entityName}DataLoader(this.ctx);
-		${entityName?uncap_first}Loader.getModelFixtures(${entityName?cap_first}DataLoader.MODE_TEST);
-		${entityName?uncap_first}Loader.load(manager);
-		</#list>
+		DataLoader dataLoader = new DataLoader(this.ctx);
+		dataLoader.loadData(this.db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
 		
-		ArrayList<${curr.name?cap_first}> entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.${curr.name?uncap_first}s.values());
+		
+		ArrayList<${curr.name?cap_first}> entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).items.values());
 		if (entities.size()>0){
 			this.entity = entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}
