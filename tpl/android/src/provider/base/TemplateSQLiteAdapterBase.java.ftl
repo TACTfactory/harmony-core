@@ -219,8 +219,14 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 			${t}result.set${field.name?cap_first}(c.getInt(index));
 				<#elseif (field.type == "float")>
 			${t}result.set${field.name?cap_first}(c.getFloat(index));
-				<#else>
+				<#elseif (field.type?lower_case=="string")>
 			${t}result.set${field.name?cap_first}(c.getString(index)); 
+				<#else>
+					<#if field.columnDefinition?lower_case=="integer" || field.columnDefinition?lower_case=="int">
+			${t}result.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(c.getInt(index))); 
+					<#else>
+			${t}result.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(c.getString(index))); 
+					</#if>
 				</#if>
 			<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 			${t}${field.type} ${field.name} = new ${field.type}();

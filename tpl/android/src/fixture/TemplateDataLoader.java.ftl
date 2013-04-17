@@ -94,8 +94,14 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 			${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.format<#if field.is_locale>Local</#if>Pattern(patternTime, element.getChildText("${field.name?uncap_first}")));
 					<#elseif field.type=="boolean">
 			${curr.name?uncap_first}.set${field.name?cap_first}(Boolean.parseBoolean(element.getChildText("${field.name?uncap_first}")));		
-					<#else>
+					<#elseif field.type?lower_case=="string">
 			${curr.name?uncap_first}.set${field.name?cap_first}(element.getChildText("${field.name?uncap_first}"));
+					<#else>
+						<#if field.columnDefinition?lower_case=="integer" || field.columnDefinition?lower_case=="int">
+			${curr.name?uncap_first}.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(Integer.parseInt(element.getChildText("${field.name?uncap_first}"))));
+						<#else>
+			${curr.name?uncap_first}.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(element.getChildText("${field.name?uncap_first}")));
+						</#if>
 					</#if>
 				<#else>
 					<#if (field.relation.type=="OneToOne")>
@@ -123,7 +129,7 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 			}	
 					<#else>
 			ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
-			List<Element> ${field.relation.targetEntity?uncap_first}sMap = element.getChildren("${field.name?uncap_first}");
+			List<Element> ${field.relation.targetEntity?uncap_first}sMap = element.getChild("${field.name?uncap_first}").getChildren();
 			for (Element ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap){
 				if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.containsKey(${field.relation.targetEntity?uncap_first}Name.getText()))
 					${field.relation.targetEntity?uncap_first}s.add(${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).getModelFixture(${field.relation.targetEntity?uncap_first}Name.getText()));
