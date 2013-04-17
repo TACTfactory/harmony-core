@@ -72,17 +72,22 @@ import ${curr.namespace}.harmony.util.DateUtils;
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 </#if>
-<#if sync>
-	<#assign extend="SyncSQLiteAdapterBase<"+curr.name+">" />
+<#if curr.internal?? && curr.internal=='true'>
+	<#assign extendType = "Void" />
 <#else>
-	<#assign extend="SQLiteAdapterBase<"+curr.name+">" />
+	<#assign extendType = curr.name />
+</#if>
+<#if sync>
+	<#assign extend="SyncSQLiteAdapterBase<"+extendType+">" />
+<#else>
+	<#assign extend="SQLiteAdapterBase<"+extendType+">" />
 </#if>
 /** ${curr.name} adapter database abstract class <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
  * You should edit ${curr.name}Adapter class instead of this one or you will lose all your modifications.</i></b>
  */
 public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
-	private static final String TAG = "${curr.name}DBAdapter";
+	protected static final String TAG = "${curr.name}DBAdapter";
 	
 	/** Table name of SQLite database */
 	public static final String TABLE_NAME = "${curr.name}";
@@ -214,8 +219,14 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 			${t}result.set${field.name?cap_first}(c.getInt(index));
 				<#elseif (field.type == "float")>
 			${t}result.set${field.name?cap_first}(c.getFloat(index));
-				<#else>
+				<#elseif (field.type?lower_case=="string")>
 			${t}result.set${field.name?cap_first}(c.getString(index)); 
+				<#else>
+					<#if field.columnDefinition?lower_case=="integer" || field.columnDefinition?lower_case=="int">
+			${t}result.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(c.getInt(index))); 
+					<#else>
+			${t}result.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(c.getString(index))); 
+					</#if>
 				</#if>
 			<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 			${t}${field.type} ${field.name} = new ${field.type}();
@@ -547,7 +558,6 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 	 * param item The ${curr.name} entity to persist 
 	 * return Id of the ${curr.name} entity
 	 */
-	@Override
 	public long insert(int ${curr.relations[0].name?lower_case}, int ${curr.relations[1].name?lower_case}) {
 		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
@@ -574,13 +584,13 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 	public ArrayList<${curr.relations[0].relation.targetEntity}> getBy${curr.relations[1].relation.targetEntity}(int ${curr.relations[1].name}){
 		String whereClause = ${alias(curr.relations[1].name)}+"=?";
 		String whereArg = String.valueOf(${curr.relations[1].name});
-		Cursor c = getCursor(whereClause, new String[]{whereArg});
+		Cursor c = this.query(this.getCols(), whereClause, new String[]{whereArg}, null, null, null);
 		${curr.relations[0].relation.targetEntity}SQLiteAdapter adapt = new ${curr.relations[0].relation.targetEntity}SQLiteAdapter(this.context);
 		adapt.open(this.mDatabase);
 		ArrayList<${curr.relations[0].relation.targetEntity}> ret = new ArrayList<${curr.relations[0].relation.targetEntity}>();
 
 		while (c.moveToNext()){
-			ret.add(adapt.getByID(c.getInt( c.getColumnIndexOrThrow(${alias(relations[0].name)}) )));
+			ret.add(adapt.getByID(c.getInt( c.getColumnIndexOrThrow(${alias(curr.relations[0].name)}) )));
 		}
 		return ret;
 	}
@@ -589,13 +599,13 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 	public ArrayList<${curr.relations[1].relation.targetEntity}> getBy${curr.relations[0].relation.targetEntity}(int ${curr.relations[0].name}){
 		String whereClause = ${alias(curr.relations[0].name)}+"=?";
 		String whereArg = String.valueOf(${curr.relations[0].name});
-		Cursor c = getCursor(whereClause, new String[]{whereArg});
+		Cursor c = this.query(this.getCols(), whereClause, new String[]{whereArg}, null, null, null);
 		${curr.relations[1].relation.targetEntity}SQLiteAdapter adapt = new ${curr.relations[1].relation.targetEntity}SQLiteAdapter(this.context);
 		adapt.open(this.mDatabase);
 		ArrayList<${curr.relations[1].relation.targetEntity}> ret = new ArrayList<${curr.relations[1].relation.targetEntity}>();
 
 		while (c.moveToNext()){
-			ret.add(adapt.getByID(c.getInt( c.getColumnIndexOrThrow(${alias(relations[1].name)}) )));
+			ret.add(adapt.getByID(c.getInt( c.getColumnIndexOrThrow(${alias(curr.relations[1].name)}) )));
 		}
 		return ret;
 	}

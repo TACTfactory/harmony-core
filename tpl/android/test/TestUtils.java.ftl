@@ -3,7 +3,6 @@ package ${test_namespace};
 import java.util.Random;
 
 import org.joda.time.DateTime;
-import org.joda.time.format.DateTimeFormat;
 
 public abstract class TestUtils{
 

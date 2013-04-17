@@ -9,7 +9,7 @@ import java.util.HashMap;
 
 import ${data_namespace}.base.SQLiteAdapterBase;
 <#list entities?values as entity>
-	<#if (entity.fields?size>0)>
+	<#if ((entity.fields?size>0) && !(entity.internal?? && entity.internal=='true'))>
 import ${data_namespace}.${entity.name?cap_first}SQLiteAdapter;
 import ${project_namespace}.entity.${entity.name?cap_first};
 	</#if>
@@ -24,7 +24,7 @@ public class DataManager {
 	public DataManager(Context ctx, SQLiteDatabase db){
 		this.db = db;
 		<#list entities?values as entity>
-			<#if (entity.fields?size>0)>
+			<#if ((entity.fields?size>0) && !(entity.internal?? && entity.internal=='true'))>
 		this.adapters.put("${entity.name}", new ${entity.name?cap_first}SQLiteAdapter(ctx));
 		this.adapters.get("${entity.name}").open(this.db);		
 			</#if>
@@ -44,7 +44,7 @@ public class DataManager {
     	this.beginTransaction();
     	
     	<#list entities?values as entity>
-    		<#if (entity.fields?size>0) && (entity.ids?size>0)>
+    		<#if ((entity.fields?size>0) && (entity.ids?size>0) && !(entity.internal?? && entity.internal=='true'))>
     	if (nameClass.equals("${entity.name}")){
         	ret = ((${entity.name}SQLiteAdapter)this.adapters.get(nameClass)).query(id);
     	}
@@ -89,7 +89,7 @@ public class DataManager {
     	this.beginTransaction();
     	try {
     	<#list entities?values as entity>
-    		<#if (entity.fields?size>0 && entity.ids?size>0)>
+    		<#if ((entity.fields?size>0 && entity.ids?size>0) && !(entity.internal?? && entity.internal=='true'))>
     		if (object instanceof ${entity.name}){
     			((${entity.name}SQLiteAdapter)this.adapters.get("${entity.name}")).remove(((${entity.name})object).getId());
     		}

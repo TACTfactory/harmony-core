@@ -175,16 +175,8 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	<#if options.fixture?? && options.fixture.enabled>
 	//@SuppressWarnings("rawtypes")
 	private void loadData(SQLiteDatabase db){
-		// Sample of data
-		DataManager manager = new DataManager(this.context, db);
-		
-		<#assign entitiesOrder = orderEntitiesByRelation() />
-		<#list entitiesOrder as entityName>
-			<#assign entity = entities[entityName]>
-			<#if (entity.fields?size>0)>
-		${callLoader(entity)}
-			</#if>
-		</#list>
+		DataLoader dl = new DataLoader(this.context);
+		dl.loadData(db, DataLoader.MODE_APP);
 	}
 	</#if>
 	

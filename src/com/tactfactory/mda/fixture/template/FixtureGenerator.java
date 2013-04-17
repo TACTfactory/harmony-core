@@ -106,6 +106,7 @@ public class FixtureGenerator extends BaseGenerator {
 			//Create base classes for Fixtures loaders
 			this.makeSource("FixtureBase.java", "FixtureBase.java", force);
 			this.makeSource("DataManager.java", "DataManager.java", force);
+			this.makeSource("DataLoader.java", "DataLoader.java", force);
 			
 			//Update SQLiteOpenHelper
 			new SQLiteGenerator(this.getAdapter()).generateDatabase();
@@ -113,7 +114,7 @@ public class FixtureGenerator extends BaseGenerator {
 			//Create each entity's data loader
 			for (final ClassMetadata cm 
 					: this.getAppMetas().getEntities().values()) {
-				if (cm.getFields().size() > 0) {
+				if (cm.getFields().size() > 0 && !cm.isInternal()) {
 					this.getDatamodel().put(TagConstant.CURRENT_ENTITY,
 							cm.getName());
 					this.makeSource("TemplateDataLoader.java",

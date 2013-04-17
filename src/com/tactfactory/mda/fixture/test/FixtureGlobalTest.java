@@ -69,7 +69,7 @@ public class FixtureGlobalTest extends CommonTest {
 				OrmCommand.GENERATE_CRUD, new String[] {}, null);
 		getHarmony().findAndExecute(
 				FixtureCommand.FIXTURE_INIT,
-				new String[] {"--format=xml"},
+				new String[] {"--format=xml", "--force=true"},
 				null);
 	}
 	
@@ -116,7 +116,7 @@ public class FixtureGlobalTest extends CommonTest {
 		CommonTest.getHarmony().findAndExecute(
 				FixtureCommand.FIXTURE_PURGE, new String[] {}, null);
 		CommonTest.getHarmony().findAndExecute(
-				FixtureCommand.FIXTURE_INIT, new String[] {}, null);
+				FixtureCommand.FIXTURE_INIT, new String[] {"--format=yml", "--force=true"}, null);
 		
 		// Copy fixture files
 		copyFixturesYml();
@@ -146,18 +146,14 @@ public class FixtureGlobalTest extends CommonTest {
 						Harmony.getBundlePath(),
 						pathNameSpace,
 						"fixture",
-						"xml");
+						"xml/");
 
-		String destDir = String.format("fixtures/app/");
-		System.out.println(destDir);
+		String destDir = String.format("fixtures/");
 		
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
-		destDir = String.format("fixtures/test/");
-		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
-		if (new File(destDir + "Post.xml").exists()) {
-			ConsoleUtils.displayDebug("Entity is copy to generated package !");
-		}
+		//destDir = String.format("fixtures/test/");
+		//TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
 	}
 	
 	/**
@@ -173,17 +169,11 @@ public class FixtureGlobalTest extends CommonTest {
 					Harmony.getBundlePath(),
 					pathNameSpace,
 					"fixture",
-					"yml");
+					"yml/");
 
-		String destDir = String.format("fixtures/app/");
-		System.out.println(destDir);
+		String destDir = String.format("fixtures/");
 		
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
-		destDir = String.format("fixtures/test/");
-		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
-		if (new File(destDir + "Post.yml").exists()) {
-			ConsoleUtils.displayDebug("Entity is copy to generated package !");
-		}
 	}
 }
