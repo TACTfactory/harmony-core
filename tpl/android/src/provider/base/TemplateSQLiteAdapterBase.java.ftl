@@ -169,7 +169,9 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 		result.put(${alias(field.name)}, 			${m.typeToParser("item", field)} );				
 			<#else>
 				<#if (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
-		result.put(${alias(field.name)}, 			String.valueOf(item.get${field.name?cap_first}().getId()) );
+		if (${alias(field.name)} != null) {
+			result.put(${alias(field.name)}, 			String.valueOf(item.get${field.name?cap_first}().getId()) );
+		}
 				</#if>
 			</#if>
 		<#else>
