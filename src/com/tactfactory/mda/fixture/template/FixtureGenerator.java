@@ -99,9 +99,15 @@ public class FixtureGenerator extends BaseGenerator {
 							 this.getAppMetas().getOptions()
 							 	.get("fixture")).getType();
 			 
+			 FixtureMetadata meta = 
+					 (FixtureMetadata)this.getAppMetas().getOptions().get(
+							 FixtureMetadata.NAME);
 			 //Copy JDOM Library
-			this.updateLibrary("jdom-2.0.2.jar");
-			this.updateLibrary("snakeyaml-1.10-android.jar");
+			if (meta.getType().equals("xml")) {
+				this.updateLibrary("jdom-2.0.2.jar");	
+			} else {
+				this.updateLibrary("snakeyaml-1.10-android.jar");
+			}
 			
 			//Create base classes for Fixtures loaders
 			this.makeSource("FixtureBase.java", "FixtureBase.java", force);
