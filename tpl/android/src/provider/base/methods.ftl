@@ -9,6 +9,8 @@
 		<#return "String.valueOf("+className?lower_case+".is"+field.name?cap_first+"())"/>
 	<#elseif (field.type == "int" || field.type == "integer")>
 		<#return className?lower_case+".get"+field.name?cap_first+"()"/>
+	<#elseif (field.type == "string")>
+		<#return className?lower_case+".get"+field.name?cap_first+"()"/>
 	<#else>
 		<#return "String.valueOf("+className?lower_case+".get"+field.name?cap_first+"())"/>
 	</#if>

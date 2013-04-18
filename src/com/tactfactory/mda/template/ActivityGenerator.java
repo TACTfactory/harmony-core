@@ -25,7 +25,6 @@ import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
-import com.sun.xml.internal.ws.util.StringUtils;
 import com.tactfactory.mda.annotation.Column.Type;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;

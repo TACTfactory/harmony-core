@@ -181,7 +181,7 @@ public class ProviderGenerator extends BaseGenerator {
 				// Set values
 				findProvider.setAttribute("authorities", 	
 						this.getAppMetas().getProjectNameSpace()
-							.replace('/', '.'),
+							.replace('/', '.') + "provider",
 						ns);
 				findProvider.setAttribute("label", 			
 						"@string/app_provider_name",
