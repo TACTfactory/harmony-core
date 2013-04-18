@@ -153,15 +153,25 @@ public final class Harmony {
 			}
 			
 			// get project name from configs.xml 
-			final File config = new File(String.format("%s/%s",
+			/*final File config = new File(String.format("%s/%s",
 					this.context.getProjectAndroidPath(),
 					"/res/values/configs.xml"));		//FIXME path by adapter
 			
 			if (config.exists()) {
 				ApplicationMetadata.INSTANCE.setName(
 						ProjectDiscover.getProjectNameFromConfig(config));
-			}
+			}*/
+			// TODO MATCH : Voir avec Mickael pertinence d'utiliser le build.xml
+			// pour récupérer le project name
+			final File config = new File(String.format("%s/%s",
+					this.context.getProjectAndroidPath(),
+					"build.xml"));
 			
+			if (config.exists()) {
+				ApplicationMetadata.INSTANCE.setName(
+						ProjectDiscover.getProjectNameFromConfig(config));
+			}
+					
 			// get SDK from local.properties
 			final String projectProp = String.format("%s/%s",
 					this.context.getProjectAndroidPath(),
