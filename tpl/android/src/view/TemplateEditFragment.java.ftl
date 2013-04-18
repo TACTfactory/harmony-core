@@ -436,6 +436,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 
 			if (result == 0) {
 				HarmonyFragmentActivity activity = (HarmonyFragmentActivity) this.context;
+				activity.setResult(HarmonyFragmentActivity.RESULT_OK);
 				activity.finish();
 			} else {
 				AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
