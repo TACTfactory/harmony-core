@@ -18,7 +18,7 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
  */
 public class FixtureMetadata extends BaseMetadata {
 	/** Bundle name. */
-	private static final String NAME = "fixture";
+	public static final String NAME = "fixture";
 	/** Fixture enabled state. */
 	private boolean enabled = true;
 	/** Fixture type (xml, yml). */

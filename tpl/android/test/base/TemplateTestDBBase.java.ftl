@@ -105,7 +105,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		
 		this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
 		this.db = this.adapter.open();
-		//${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
+		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
 		this.db.beginTransaction();
 		
 		DataLoader dataLoader = new DataLoader(this.ctx);
@@ -174,7 +174,13 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		}
 	}
 	
-	private ${curr.name?cap_first} generateRandom(){
+	// If you have enums, you may have to override this method to generate the random enums values
+	/**
+	 * Generate a random entity
+	 * 
+	 * @return The randomly generated entity
+	 */
+	protected ${curr.name?cap_first} generateRandom(){
 		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
 		
 		<#list curr.fields as field>
@@ -196,6 +202,12 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomTime());
 					<#elseif field.type=="datetime">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDateTime());
+					<#else>
+						<#if (field.columnDefinition=="integer" || field.columnDefinition=="int")>
+		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(TestUtils.generateRandomInt(0,100)));
+						<#else>
+		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(TestUtils.generateRandomString()));		
+						</#if>
 					</#if>
 				<#else>
 					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
@@ -231,21 +243,22 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 			<#if !field.internal>
 				<#if !field.relation??>
 					<#if field.type=="int" || field.type=="integer" || field.type=="long" || field.type=="double" || field.type=="float" || field.type=="zipcode" || field.type=="ean">
-			Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}()==${curr.name?uncap_first}2.get${field.name?cap_first}());
+			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
 					<#elseif field.type=="boolean">
-			Assert.assertTrue(${curr.name?uncap_first}1.is${field.name?cap_first}()==${curr.name?uncap_first}2.is${field.name?cap_first}());		
+			Assert.assertEquals(${curr.name?uncap_first}1.is${field.name?cap_first}(), ${curr.name?uncap_first}2.is${field.name?cap_first}());		
 					<#elseif field.type=="date" || field.type=="time" || field.type=="datetime">
-			Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().equals(${curr.name?uncap_first}2.get${field.name?cap_first}()));
+			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
 					<#else>
-			Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().equals(${curr.name?uncap_first}2.get${field.name?cap_first}()));
+			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
 					</#if>
 				<#else>
 					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
-			Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().getId()==${curr.name?uncap_first}2.get${field.name?cap_first}().getId());
+			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().getId(),
+					${curr.name?uncap_first}2.get${field.name?cap_first}().getId());
 					<#else>
 			for (int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
-				Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).getId()
-							== ${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).getId());
+				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).getId(),
+							${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).getId());
 			}
 					</#if>
 				</#if>

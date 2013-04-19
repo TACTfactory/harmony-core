@@ -70,7 +70,9 @@ public class ProviderGenerator extends BaseGenerator {
 	public final void generateProvider() {
 		try {
 			this.makeSourceProvider("TemplateProvider.java",
-					this.nameProvider + ".java");
+					this.nameProvider + ".java", false);
+			this.makeSourceProvider("TemplateProviderBase.java",
+					this.nameProvider + "Base.java", true);
 			
 			this.updateManifest();
 			
@@ -103,7 +105,7 @@ public class ProviderGenerator extends BaseGenerator {
 	 * @param filename The destination file name
 	 */
 	private void makeSourceProvider(final String template, 
-			final String filename) {
+			final String filename, final boolean overwrite) {
 		
 		final String fullFilePath = String.format("%s%s/%s",
 						this.getAdapter().getSourcePath(),
@@ -115,7 +117,7 @@ public class ProviderGenerator extends BaseGenerator {
 				this.getAdapter().getTemplateSourceProviderPath(),
 				template);
 		
-		super.makeSource(fullTemplatePath, fullFilePath, false);
+		super.makeSource(fullTemplatePath, fullFilePath, overwrite);
 	}
 
 	/**  
@@ -181,7 +183,7 @@ public class ProviderGenerator extends BaseGenerator {
 				// Set values
 				findProvider.setAttribute("authorities", 	
 						this.getAppMetas().getProjectNameSpace()
-							.replace('/', '.'),
+							.replace('/', '.') + "provider",
 						ns);
 				findProvider.setAttribute("label", 			
 						"@string/app_provider_name",

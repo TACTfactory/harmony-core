@@ -217,7 +217,7 @@ public class ProjectDiscover {
 	 * @return Project Name Space
 	 */
 	public static String getProjectNameFromConfig(final File config) {
-		String projname = null;
+		/*String projname = null;
 		SAXBuilder builder;
 		Document doc;
 		
@@ -240,6 +240,30 @@ public class ProjectDiscover {
 					}
 					
 				}
+			} catch (final JDOMException e) {
+				// TODO Auto-generated catch block
+				ConsoleUtils.displayError(e);
+			} catch (final IOException e) {
+				// TODO Auto-generated catch block
+				ConsoleUtils.displayError(e);
+			}
+		}
+		
+		return projname;*/
+		// TODO MATCH : Voir avec Mickael pertinence d'utiliser le build.xml
+		String projname = null;
+		SAXBuilder builder;
+		Document doc;
+		
+		if (config.exists()) {
+			// Make engine
+			builder = new SAXBuilder();	
+			try {
+				// Load XML File
+				doc = builder.build(config);			
+				// Load Root element
+				final Element rootNode = doc.getRootElement(); 			
+				projname = rootNode.getAttribute("name").getValue();
 			} catch (final JDOMException e) {
 				// TODO Auto-generated catch block
 				ConsoleUtils.displayError(e);

@@ -96,6 +96,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 <#list curr.fields as field>
 	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 	public static final String ${alias(field.name)} = "${field.columnName}";
+	public static final String ALIASED_${alias(field.name)} = TABLE_NAME + "." + ${alias(field.name)};
 	</#if>
 </#list>
 	
@@ -161,15 +162,17 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 	 * @param ${curr.name?lower_case} ${curr.name} entity object
 	 * @return ContentValues object
 	 */
-	public static ContentValues ${curr.name?lower_case}ToContentValues(${curr.name} ${curr.name?lower_case}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {		
+	public static ContentValues itemToContentValues(${curr.name} item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {		
 		ContentValues result = new ContentValues();		
 	<#list curr.fields as field>
 		<#if (!field.internal)>
 			<#if (!field.relation??)>
-		result.put(${alias(field.name)}, 			${m.typeToParser(curr.name, field)} );				
+		result.put(${alias(field.name)}, 			${m.typeToParser("item", field)} );				
 			<#else>
 				<#if (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
-		result.put(${alias(field.name)}, 			String.valueOf(${curr.name?lower_case}.get${field.name?cap_first}().getId()) );
+		if (${alias(field.name)} != null) {
+			result.put(${alias(field.name)}, 			String.valueOf(item.get${field.name?cap_first}().getId()) );
+		}
 				</#if>
 			</#if>
 		<#else>
@@ -343,7 +346,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
-		ContentValues values = ${curr.name}SQLiteAdapterBase.${curr.name?lower_case}ToContentValues(item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
+		ContentValues values = ${curr.name}SQLiteAdapterBase.itemToContentValues(item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 	<#list curr.ids as id>
 		values.remove(${alias(id.name)});
 	</#list>
@@ -392,7 +395,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
 		
-		ContentValues values = ${curr.name}SQLiteAdapterBase.${curr.name?lower_case}ToContentValues(item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);	
+		ContentValues values = ${curr.name}SQLiteAdapterBase.itemToContentValues(item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);	
 		String whereClause = <#list curr.ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list curr.ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, </#if></#list>};
 		
@@ -418,7 +421,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
 
-		ContentValues values = ${curr.name}SQLiteAdapterBase.${curr.name?lower_case}ToContentValues(item<#list curr.relations as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>, ${relation.relation.targetEntity?lower_case}_id<#else>, 0</#if></#if></#list>);	
+		ContentValues values = ${curr.name}SQLiteAdapterBase.itemToContentValues(item<#list curr.relations as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>, ${relation.relation.targetEntity?lower_case}_id<#else>, 0</#if></#if></#list>);	
 		String whereClause = <#list curr.ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = new String[] {<#list curr.ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, </#if></#list>};
 
@@ -441,7 +444,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
-		ContentValues values = ${curr.name}SQLiteAdapterBase.${curr.name?lower_case}ToContentValues(item<#list curr.relations as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>, ${relation.relation.targetEntity?lower_case}_id<#else>, 0</#if></#if></#list>);
+		ContentValues values = ${curr.name}SQLiteAdapterBase.itemToContentValues(item<#list curr.relations as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>, ${relation.relation.targetEntity?lower_case}_id<#else>, 0</#if></#if></#list>);
 	<#list curr.ids as id>
 		values.remove(${alias(id.name)});
 	</#list>

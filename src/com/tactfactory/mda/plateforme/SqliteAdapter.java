@@ -33,7 +33,7 @@ public abstract class SqliteAdapter {
 		
 		final StringBuilder builder = new StringBuilder();
 		builder.append(' ');
-		builder.append(fm.getColumnDefinition().toLowerCase());
+		builder.append(generateColumnType(fm.getColumnDefinition()));
 		if (fm.isId()) {
 			builder.append(" PRIMARY KEY");
 			if (fm.getColumnDefinition().equals("integer")) {
@@ -86,17 +86,18 @@ public abstract class SqliteAdapter {
 		String type = fieldType;
 		if (type.equals(Column.Type.STRING.getValue()) 
 			|| type.equals(Column.Type.TEXT.getValue()) 
-			|| type.equals(Column.Type.LOGIN.getValue())) {
+			|| type.equals(Column.Type.LOGIN.getValue())
+			|| type.equals(Column.Type.PHONE.getValue())) {
 			type = "VARCHAR";
 		} else
 			
 		if (type.equals(Column.Type.PASSWORD.getValue())) {
 			type = "VARCHAR";
-		} /*else
+		} else
 			
 		if (type.equals(Column.Type.DATETIME.getValue())) {
-			//type = "VARCHAR";
-		}*/
+			type = "VARCHAR";
+		}
 
 		return type;
 	}

@@ -13,8 +13,6 @@ public class ${curr.name}EditActivity extends HarmonyFragmentActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.activity_${curr.name?lower_case}_edit);
-
-        this.setResult(0);
         
         // Google Analytics
         //GoogleAnalyticsSessionManager.getInstance(getApplication()).incrementActivityCount();
