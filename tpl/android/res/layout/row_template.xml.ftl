@@ -41,13 +41,13 @@
 		android:layout_height="wrap_content"
 		android:layout_alignParentRight="true"
 		android:layout_centerVertical="true"
-		android:text="Supprimer" />
+		android:text="@string/common_delete" />
 	<Button
 		android:id="@+id/row_${curr.name?lower_case}_edit_btn"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_toLeftOf="@id/row_${curr.name?lower_case}_delete_btn"
 		android:layout_centerVertical="true"
-		android:text="Editer" />
+		android:text="@string/common_edit" />
 
 </RelativeLayout>
