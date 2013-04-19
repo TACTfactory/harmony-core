@@ -8,10 +8,27 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+<#if fixtureType=="xml">
+	<#if (hasTime || hasDate || hasDateTime)>
+import ${project_namespace}.harmony.util.DateUtils;
+	</#if>
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+<#elseif fixtureType=="yml">
+	<#if (hasTime)>
+import ${project_namespace}.harmony.util.DateUtils;
+	</#if>
+	<#if (hasTime || hasDate || hasDateTime)>
+import java.util.Date;
+import org.joda.time.DateTime;
+	</#if>
+import org.yaml.snakeyaml.Yaml;
+import java.util.Map;
+
+</#if>
+
 
 import android.util.Log;
 
