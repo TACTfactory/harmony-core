@@ -12,7 +12,6 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import ${project_namespace}.criterias.base.Criteria;
 import ${project_namespace}.criterias.base.CriteriasBase;
 
 public abstract class SQLiteAdapterBase<T>{
@@ -177,7 +176,6 @@ public abstract class SQLiteAdapterBase<T>{
 	 * @return Comment entity
 	 */
 	public abstract T cursorToItem(Cursor c);
-	
 
 	/** Insert a Comment entity into database
 	 * 
