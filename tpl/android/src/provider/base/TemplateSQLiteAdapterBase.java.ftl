@@ -96,6 +96,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 <#list curr.fields as field>
 	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 	public static final String ${alias(field.name)} = "${field.columnName}";
+	public static final String ALIASED_${alias(field.name)} = TABLE_NAME + "." + ${alias(field.name)};
 	</#if>
 </#list>
 	
