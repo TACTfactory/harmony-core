@@ -88,7 +88,7 @@ public class ProviderGenerator extends BaseGenerator {
 					"app_provider_description", 
 					"Provider of "
 						+ this.getAppMetas().getName() 
-						+ " for acces to data", 
+						+ " to access data", 
 					Group.PROVIDER);
 			
 			new TranslationGenerator(this.getAdapter()).generateStringsXml();

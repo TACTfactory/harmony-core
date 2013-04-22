@@ -25,6 +25,7 @@
 		android:id="@+id/row_${m_id}"
 	    	android:layout_width="match_parent"
 	    	android:layout_height="wrap_content"
+		android:textIsSelectable="true"
 				</#if>
 				<#if (!lastFieldName??)>
 	        android:layout_alignParentTop="true" />
