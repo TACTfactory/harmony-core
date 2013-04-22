@@ -29,6 +29,7 @@
 		android:id="@+id/${m_id}"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
+	    android:textIsSelectable="true"
 		</#if>
 	    android:layout_below="@+id/${m_id_label}" />
 		<#assign lastField="${m_id}" />
