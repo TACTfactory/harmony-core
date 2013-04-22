@@ -269,9 +269,11 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
 		result.set${relation.name?cap_first}(${relation.relation.joinTable?lower_case}Adapter.getBy${curr.name}(result.getId())); // relation.relation.inversedBy?cap_first
 				<#else>
-		${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
-		${relation.name?uncap_first}Adapter.open(this.mDatabase);
-		result.set${relation.name?cap_first}(${relation.name?uncap_first}Adapter.getByID(result.get${relation.name?cap_first}().getId())); // relation.relation.inversedBy?cap_first		
+		if (result.get${relation.name?cap_first}() != null) {
+			${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
+			${relation.name?uncap_first}Adapter.open(this.mDatabase);
+			result.set${relation.name?cap_first}(${relation.name?uncap_first}Adapter.getByID(result.get${relation.name?cap_first}().getId()));
+		}
 				</#if>
 			</#if>
 		</#list>
