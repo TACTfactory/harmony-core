@@ -53,6 +53,7 @@
 <#assign orderedEntities = orderEntitiesByRelation() />
 package ${curr.test_namespace}.base;
 
+import ${project_namespace}.provider.${project_name?cap_first}Provider;
 import ${curr.test_namespace}.*;
 
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
@@ -77,8 +78,12 @@ import java.util.ArrayList;
 
 import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
 
+import android.content.ContentResolver;
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 import android.test.AndroidTestCase;
 
 import junit.framework.Assert;
@@ -87,13 +92,16 @@ import junit.framework.Assert;
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
  * You should edit ${curr.name}TestDB class instead of this one or you will lose all your modifications.</i></b>
  */
-public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
+public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 	protected Context ctx;
 
 	protected ${curr.name}SQLiteAdapter adapter;
 
 	protected SQLiteDatabase db;
 	protected ${curr.name} entity;
+	protected ContentResolver provider;
+
+	private ArrayList<${curr.name}> entities;
 
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
@@ -111,10 +119,16 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		DataLoader dataLoader = new DataLoader(this.ctx);
 		dataLoader.loadData(this.db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
 		
-		ArrayList<${curr.name?cap_first}> entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).items.values());
-		if (entities.size()>0){
-			this.entity = entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
+		this.db.setTransactionSuccessful();
+		this.db.endTransaction();
+		this.adapter.close();		
+		
+		this.entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).items.values());
+		if (this.entities.size()>0){
+			this.entity = this.entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}
+		
+		this.provider = this.getContext().getContentResolver();
 	}
 
 	/* (non-Javadoc)
@@ -123,31 +137,66 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 		
-		this.db.endTransaction();
+		this.db = this.adapter.open();
+		this.db.beginTransaction();
 		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
+		this.db.setTransactionSuccessful();
+		this.db.endTransaction();
 		this.adapter.close();
 	}
 	
 	/** Test case Create Entity */
 	public void testCreate() {
-		int result = -1;
+		Uri result = null;
 		if (this.entity != null) {
-			${curr.name?cap_first} ${curr.name?uncap_first} = this.generateRandom();
+			${curr.name} ${curr.name?uncap_first} = this.generateRandom();
+
+			try {
+				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first});
+				values.remove(${curr.name}SQLiteAdapter.COL_ID);
+				result = this.provider.insert(${project_name?cap_first}Provider.${curr.name?upper_case}_URI, values);
 			
-	
-			result = (int)this.adapter.insert(${curr.name?uncap_first});
-	
-			Assert.assertTrue(result >= 0);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		
+			Assert.assertNotNull(result);
+			Assert.assertTrue(Integer.valueOf(result.getEncodedPath().substring(result.getEncodedPath().lastIndexOf("/")+1)) > 0);
 		}
 	}
 	
 	/** Test case Read Entity */
 	public void testRead() {
-		${curr.name?cap_first} result = null;
+		${curr.name} result = null;
+
 		if (this.entity != null) {
-			result = this.adapter.getByID(this.entity.getId()); // TODO Generate by @Id annotation
-			
-			equals(result, this.entity); 
+			try {
+				Cursor c = this.provider.query(Uri.parse(${project_name?cap_first}Provider.${curr.name?upper_case}_URI + "/" + this.entity.getId()), this.adapter.getCols(), null, null, null);
+				c.moveToFirst();
+				result = this.adapter.cursorToItem(c);
+				c.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		
+			${curr.name}TestProviderBase.equals(this.entity, result);
+		}
+	}
+
+	/** Test case ReadAll Entity */
+	public void testReadAll() {
+		ArrayList<${curr.name}> result = null;
+		try {
+			Cursor c = this.provider.query(${project_name?cap_first}Provider.${curr.name?upper_case}_URI, this.adapter.getCols(), null, null, null);
+			result = this.adapter.cursorToItems(c);
+			c.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Assert.assertNotNull(result);
+		if (result != null) {
+			Assert.assertEquals(result.size(), this.entities.size());
 		}
 	}
 	
@@ -155,21 +204,80 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	public void testUpdate() {
 		int result = -1;
 		if (this.entity != null) {
-			${curr.name?cap_first} ${curr.name?uncap_first} = generateRandom();
-			${curr.name?uncap_first}.setId(this.entity.getId()); // TODO Generate by @Id annotation 
-		
-			result = (int)this.adapter.update(${curr.name?uncap_first});
+			${curr.name} ${curr.name?uncap_first} = this.generateRandom();
+
+			try {
+				${curr.name?uncap_first}.setId(this.entity.getId());
 			
+				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first});
+				result = this.provider.update(
+					Uri.parse(${project_name?cap_first}Provider.${curr.name?upper_case}_URI 
+						+ "/" 
+						+ ${curr.name?uncap_first}.getId()), 
+					values, 
+					null, 
+					null);
+			
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		
 			Assert.assertTrue(result >= 0);
 		}
 	}
+
+	/** Test case UpdateAll Entity */
+	public void testUpdateAll() {
+		int result = -1;
+		if (this.entities.size() > 0) {
+			${curr.name} ${curr.name?uncap_first} = this.generateRandom();
+
+			try {
+				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first});
+				values.remove(${curr.name}SQLiteAdapter.COL_ID);
+				<#list curr.fields as field>
+					<#if field.unique?? && field.unique>
+				values.remove(${curr.name}SQLiteAdapter.COL_${field.name?upper_case});
+					</#if>
+				</#list>
+			
+				result = this.provider.update(${project_name?cap_first}Provider.${curr.name?upper_case}_URI, values, null, null);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		
+			Assert.assertEquals(result, this.entities.size());
+		}
+	}
 	
-	/** Test case Update Entity */
+	/** Test case Delete Entity */
 	public void testDelete() {
-		int result = -1; 
+		int result = -1;
 		if (this.entity != null) {
-			result = (int)this.adapter.remove(this.entity.getId());
+			try {
+				result = this.provider.delete(Uri.parse(${project_name?cap_first}Provider.${curr.name?upper_case}_URI + "/" + this.entity.getId()), null, null);
+			
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			Assert.assertTrue(result >= 0);
+		}
+
+	}
+	
+	/** Test case DeleteAll Entity */
+	public void testDeleteAll() {
+		int result = -1;
+		if (this.entities.size() > 0) {
+
+			try {
+				result = this.provider.delete(${project_name?cap_first}Provider.${curr.name?upper_case}_URI, null, null);
+			
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		
+			Assert.assertEquals(result, this.entities.size());
 		}
 	}
 	
@@ -211,15 +319,13 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 				<#else>
 					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 		${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.name?uncap_first}Adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.ctx);
-		${field.name?uncap_first}Adapter.open(this.db);
-		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = ${field.name?uncap_first}Adapter.getAll();
+		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = ${field.name?uncap_first}Adapter.cursorToItems(this.provider.query(${project_name?cap_first}Provider.${field.relation.targetEntity?upper_case}_URI, ${field.name?uncap_first}Adapter.getCols(), null, null, null));//= ${field.name?uncap_first}Adapter.getAll();
 		if (!${field.name?uncap_first}s.isEmpty()) {
 			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
 		}
 					<#else>
 		${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.name?uncap_first}Adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.ctx);
-		${field.name?uncap_first}Adapter.open(this.db);
-		ArrayList<${field.relation.targetEntity?cap_first}> all${field.name?cap_first}s = ${field.name?uncap_first}Adapter.getAll();
+		ArrayList<${field.relation.targetEntity?cap_first}> all${field.name?cap_first}s = ${field.name?uncap_first}Adapter.cursorToItems(this.provider.query(${project_name?cap_first}Provider.${field.relation.targetEntity?upper_case}_URI, ${field.name?uncap_first}Adapter.getCols(), null, null, null));//= ${field.name?uncap_first}Adapter.getAll();
 		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
 		if (!all${field.name?cap_first}s.isEmpty()) {
 			${field.name?uncap_first}s.add(all${field.name?cap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
