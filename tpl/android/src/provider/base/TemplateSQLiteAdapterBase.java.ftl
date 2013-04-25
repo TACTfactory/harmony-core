@@ -367,15 +367,16 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 		<#elseif (relation.relation.type=="OneToMany")>
 			${relation.relation.targetEntity}SQLiteAdapterBase ${relation.name?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
 			${relation.name?uncap_first}Adapter.open(this.mDatabase);
-			for (${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()){
-			<#if (relation.relation.mappedBy?? && !getMappedField(relation).internal)>
-				${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
-				${relation.name?uncap_first}Adapter.update(${relation.relation.targetEntity?lower_case});
-			<#else>
-				${relation.name?uncap_first}Adapter.updateWith${curr.name?cap_first}${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}, newid);
-			</#if>
+			if (item.get${relation.name?cap_first}() != null) {
+				for (${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()) {
+				<#if (relation.relation.mappedBy?? && !getMappedField(relation).internal)>
+					${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
+					${relation.name?uncap_first}Adapter.insertOrUpdate(${relation.relation.targetEntity?lower_case});
+				<#else>
+					${relation.name?uncap_first}Adapter.insertOrUpdateWith${curr.name?cap_first}${relation.name?cap_first}(${relation.relation.targetEntity?lower_case}, newid);
+				</#if>
+				}
 			}
-		
 		</#if>
 	</#list>
 		
@@ -383,6 +384,30 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 		} else {
 			return -1;
 		}
+	}
+
+
+	/** Either insert or update a ${curr.name} entity into database whether
+	 * it already exists or not.
+	 * 
+	 * @param item The ${curr.name} entity to persist 
+	 * @return 1 if everything went well, 0 otherwise
+	 */
+	public int insertOrUpdate(${curr.name} item) {
+		int result = 0;
+		<#assign id = curr.ids[0] />
+		if (this.getByID(item.get${id.name?cap_first}()) != null) {
+			// Item already exists => update it
+			result = this.update(item);
+		} else {
+			// Item doesn't exist => create it
+			long id = this.insert(item);
+			if (id != 0) {
+				result = 1;
+			}
+		}
+
+		return result;
 	}
 	
 	/** Update a ${curr.name} entity into database 
@@ -432,6 +457,30 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 			<#else>
 		throw new UnsupportedOperationException("Method not implemented yet.");
 			</#if>
+	}
+
+
+	/** Either insert or update a ${curr.name} entity into database whether
+	 * it already exists or not.
+	 * 
+	 * @param item The ${curr.name} entity to persist 
+	 * @return 1 if everything went well, 0 otherwise
+	 */
+	public int insertOrUpdateWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(${curr.name} item, int ${relation.relation.targetEntity?lower_case}_id) {
+		int result = 0;
+		<#assign id = curr.ids[0] />
+		if (this.getByID(item.get${id.name?cap_first}()) != null) {
+			// Item already exists => update it
+			result = this.updateWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(item, ${relation.relation.targetEntity?lower_case}_id);
+		} else {
+			// Item doesn't exist => create it
+			long id = this.insertWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(item, ${relation.relation.targetEntity?lower_case}_id);
+			if (id != 0) {
+				result = 1;
+			}
+		}
+
+		return result;
 	}
 
 	
