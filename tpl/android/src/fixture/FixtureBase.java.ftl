@@ -119,7 +119,7 @@ public abstract class FixtureBase<T> {
 			ret = assetManager.open(entityName+".xml");
 		} catch (IOException e){
 			// TODO Auto-generated method stub
-			Log.e(TAG, e.getMessage());
+			Log.w(TAG, "No " + entityName + " fixture file found.");
 		}
 		return ret;
 	}
@@ -132,7 +132,7 @@ public abstract class FixtureBase<T> {
 			ret = assetManager.open(entityName+".yml");
 		} catch (IOException e){
 			// TODO Auto-generated method stub
-			Log.e(TAG, e.getMessage());
+			Log.w(TAG, "No " + entityName + " fixture file found.");
 		}
 		return ret;
 	}
