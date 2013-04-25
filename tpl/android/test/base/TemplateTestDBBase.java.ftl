@@ -88,12 +88,12 @@ import junit.framework.Assert;
  * You should edit ${curr.name}TestDB class instead of this one or you will lose all your modifications.</i></b>
  */
 public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
-	private Context ctx;
+	protected Context ctx;
 
-	private ${curr.name}SQLiteAdapter adapter;
+	protected ${curr.name}SQLiteAdapter adapter;
 
-	private SQLiteDatabase db;
-	private ${curr.name} entity;
+	protected SQLiteDatabase db;
+	protected ${curr.name} entity;
 
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
@@ -252,15 +252,19 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
 					</#if>
 				<#else>
+			if (${curr.name?uncap_first}1.get${field.name?cap_first}() != null 
+					&& ${curr.name?uncap_first}2.get${field.name?cap_first}() != null) {
 					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
-			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().getId(),
-					${curr.name?uncap_first}2.get${field.name?cap_first}().getId());
+				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().getId(),
+						${curr.name?uncap_first}2.get${field.name?cap_first}().getId());
+
 					<#else>
-			for (int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
-				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).getId(),
-							${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).getId());
-			}
+				for (int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
+					Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).getId(),
+								${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).getId());
+				}
 					</#if>
+			}
 				</#if>
 			</#if>
 		</#list>
