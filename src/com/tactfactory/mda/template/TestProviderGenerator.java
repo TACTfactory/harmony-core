@@ -1,11 +1,3 @@
-/**
- * This file is part of the Harmony package.
- *
- * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
- *
- * For the full copyright and license information, please view the LICENSE
- * file that was distributed with this source code.
- */
 package com.tactfactory.mda.template;
 
 import com.tactfactory.mda.meta.ClassMetadata;
@@ -13,11 +5,7 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
-/**
- * Database tests generator.
- *
- */
-public class TestDBGenerator extends BaseGenerator {
+public class TestProviderGenerator extends BaseGenerator {
 	/** Local name space. */
 	private String localNameSpace;
 	
@@ -26,7 +14,7 @@ public class TestDBGenerator extends BaseGenerator {
 	 * @param adapter The adapter to use
 	 * @throws Exception 
 	 */
-	public TestDBGenerator(final BaseAdapter adapter) throws Exception {
+	public TestProviderGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 	}
@@ -35,9 +23,7 @@ public class TestDBGenerator extends BaseGenerator {
 	 * Generate all tests.
 	 */
 	public final void generateAll() {
-		ConsoleUtils.display(">> Generate Repository test...");
-		
-		this.initTestAndroid();
+		ConsoleUtils.display(">> Generate Provider test...");
 	
 		for (final ClassMetadata cm 
 				: this.getAppMetas().getEntities().values()) {
@@ -50,7 +36,6 @@ public class TestDBGenerator extends BaseGenerator {
 				this.generate();
 			}
 		}
-		this.makeSourceTest("utils/TestUtils.java", "utils/TestUtils.java", false);
 	}
 	
 	/**  
@@ -58,29 +43,19 @@ public class TestDBGenerator extends BaseGenerator {
 	 */ 
 	private void generate() {
 		// Info
-				ConsoleUtils.display(">>> Generate Repository test for " 
+				ConsoleUtils.display(">>> Generate Providers test for " 
 							+ this.getDatamodel().get(
 									TagConstant.CURRENT_ENTITY));
 		
 		try {			
 			this.makeSourceTest(
-					"base/TemplateTestDBBase.java", 
-					"base/%sTestDBBase.java",
+					"base/TemplateTestProviderBase.java", 
+					"base/%sTestProviderBase.java",
 					true);
 			
 			this.makeSourceTest(
-					"TemplateTestDB.java", 
-					"%sTestDB.java",
-					false);
-			
-			this.makeSourceTest(
-					"utils/base/TemplateUtilsBase.java", 
-					"utils/base/%sUtilsBase.java",
-					true);
-			
-			this.makeSourceTest(
-					"utils/TemplateUtils.java", 
-					"utils/%sUtils.java",
+					"TemplateTestProvider.java", 
+					"%sTestProvider.java",
 					false);
 
 		} catch (final Exception e) {
@@ -114,29 +89,5 @@ public class TestDBGenerator extends BaseGenerator {
 					template);
 		
 		super.makeSource(fullTemplatePath, fullFilePath, override);
-	}
-	
-	/**
-	 * Initialize Test Android Project folders and files.
-	 * @return success of Test Android project initialization
-	 */
-	public final boolean initTestAndroid() {
-		ConsoleUtils.display("> Init Test Project Google Android");
-
-		boolean result = false;
-
-		try {
-			if (new TestProjectGenerator(this.getAdapter()).makeProject()) {
-				ConsoleUtils.displayDebug("Init Test Android Project Success!");
-				
-				result = true;
-			} else {
-				ConsoleUtils.displayError(
-						new Exception("Init Test Android Project Fail!"));
-			}
-		} catch (final Exception e) {
-			ConsoleUtils.displayError(e);
-		}
-		return result;
 	}
 }
