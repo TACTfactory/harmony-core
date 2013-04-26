@@ -1,80 +1,16 @@
 <#assign curr = entities[current_entity] />
-<#function hasOnlyRecursiveRelations entity>
-	<#list entity.relations as relation>
-		<#if relation.relation.targetEntity!=entity.name> 
-			<#return false>
-		</#if>
-	</#list>
-	<#return true>
-</#function>
-<#function getZeroRelationsEntities>
-	<#assign ret = [] />
-	<#list entities?values as entity>
-		<#if (entity.fields?size!=0 && hasOnlyRecursiveRelations(entity))>
-			<#assign ret = ret + [entity.name]>
-		</#if>
-	</#list>
-	<#return ret />
-</#function>
-<#function isInArray array val>
-	<#list array as val_ref>
-		<#if val_ref==val>
-			<#return true />
-		</#if>
-	</#list>
-	<#return false />
-</#function>
-<#function isOnlyDependantOf entity entity_list>
-	<#list entity.relations as rel>
-		<#if rel.relation.type=="ManyToOne">
-			<#if !isInArray(entity_list, rel.relation.targetEntity)>
-				<#return false />
-			</#if>
-		</#if>	
-	</#list>
-	<#return true />
-</#function>
-<#function orderEntitiesByRelation>
-	<#assign ret = getZeroRelationsEntities() />
-	<#assign maxLoop = entities?size />
-	<#list 1..maxLoop as i>
-		<#list entities?values as entity>	
-			<#if (entity.fields?size>0)>
-				<#if !isInArray(ret, entity.name)>
-					<#if isOnlyDependantOf(entity, ret)>
-						<#assign ret = ret + [entity.name] />
-					</#if>
-				</#if>
-			</#if>
-		</#list>
-	</#list>
-	<#return ret>
-</#function>
-<#assign orderedEntities = orderEntitiesByRelation() />
 package ${curr.test_namespace}.base;
 
 import ${project_namespace}.provider.${project_name?cap_first}Provider;
-import ${curr.test_namespace}.*;
 
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
-
-<#assign importList = [] />
-<#list curr.relations as relation>
-	<#if !relation.internal>
-		<#if !isInArray(importList, relation.relation.targetEntity)>
-import ${curr.namespace}.entity.${relation.relation.targetEntity?cap_first};
-import ${data_namespace}.${relation.relation.targetEntity?cap_first}SQLiteAdapter;
-			<#assign importList = importList + [relation.relation.targetEntity] />
-		</#if>
-	</#if>
-</#list>
-
 
 import ${fixture_namespace}.${curr.name?cap_first}DataLoader;
 import ${fixture_namespace}.DataLoader;
 
 import java.util.ArrayList;
+import ${curr.test_namespace}.utils.*;
 
 import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
 
@@ -149,7 +85,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 	public void testCreate() {
 		Uri result = null;
 		if (this.entity != null) {
-			${curr.name} ${curr.name?uncap_first} = this.generateRandom();
+			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
 
 			try {
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first});
@@ -179,7 +115,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 				e.printStackTrace();
 			}
 		
-			${curr.name}TestProviderBase.equals(this.entity, result);
+			${curr.name}Utils.equals(this.entity, result);
 		}
 	}
 
@@ -204,7 +140,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 	public void testUpdate() {
 		int result = -1;
 		if (this.entity != null) {
-			${curr.name} ${curr.name?uncap_first} = this.generateRandom();
+			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
 
 			try {
 				${curr.name?uncap_first}.setId(this.entity.getId());
@@ -230,7 +166,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 	public void testUpdateAll() {
 		int result = -1;
 		if (this.entities.size() > 0) {
-			${curr.name} ${curr.name?uncap_first} = this.generateRandom();
+			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
 
 			try {
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first});
@@ -279,102 +215,5 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 		
 			Assert.assertEquals(result, this.entities.size());
 		}
-	}
-	
-	// If you have enums, you may have to override this method to generate the random enums values
-	/**
-	 * Generate a random entity
-	 * 
-	 * @return The randomly generated entity
-	 */
-	protected ${curr.name?cap_first} generateRandom(){
-		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
-		
-		<#list curr.fields as field>
-			<#if !field.internal>
-				<#if !field.relation??>
-					<#if field.type=="string" || field.type=="text" || field.type=="phone" || field.type=="login" || field.type=="password">
-		${curr.name?uncap_first}.set${field.name?cap_first}("${field.name?uncap_first}_"+TestUtils.generateRandomString(10));
-					<#elseif field.type=="int" || field.type=="zipcode" || field.type=="ean">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomInt(0,100));
-					<#elseif field.type=="boolean">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomBool());
-					<#elseif field.type=="double">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDouble(0,100));
-					<#elseif field.type=="float">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomFloat(0,100));
-					<#elseif field.type=="date">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDate());
-					<#elseif field.type=="time">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomTime());
-					<#elseif field.type=="datetime">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDateTime());
-					<#else>
-						<#if (field.columnDefinition=="integer" || field.columnDefinition=="int")>
-		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(TestUtils.generateRandomInt(0,100)));
-						<#else>
-		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(TestUtils.generateRandomString()));		
-						</#if>
-					</#if>
-				<#else>
-					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
-		${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.name?uncap_first}Adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.ctx);
-		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = ${field.name?uncap_first}Adapter.cursorToItems(this.provider.query(${project_name?cap_first}Provider.${field.relation.targetEntity?upper_case}_URI, ${field.name?uncap_first}Adapter.getCols(), null, null, null));//= ${field.name?uncap_first}Adapter.getAll();
-		if (!${field.name?uncap_first}s.isEmpty()) {
-			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
-		}
-					<#else>
-		${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.name?uncap_first}Adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.ctx);
-		ArrayList<${field.relation.targetEntity?cap_first}> all${field.name?cap_first}s = ${field.name?uncap_first}Adapter.cursorToItems(this.provider.query(${project_name?cap_first}Provider.${field.relation.targetEntity?upper_case}_URI, ${field.name?uncap_first}Adapter.getCols(), null, null, null));//= ${field.name?uncap_first}Adapter.getAll();
-		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
-		if (!all${field.name?cap_first}s.isEmpty()) {
-			${field.name?uncap_first}s.add(all${field.name?cap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
-			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s);
-		}			
-					</#if>
-				</#if>
-			</#if>
-		</#list>
-		
-		return ${curr.name?uncap_first};
-	}
-	
-	public static boolean equals(${curr.name?cap_first} ${curr.name?uncap_first}1, ${curr.name?cap_first} ${curr.name?uncap_first}2){
-		boolean ret = true;
-		Assert.assertNotNull(${curr.name?uncap_first}1);
-		Assert.assertNotNull(${curr.name?uncap_first}2);
-		if (${curr.name?uncap_first}1!=null && ${curr.name?uncap_first}2 !=null){
-		<#list curr.fields as field>
-			<#if !field.internal>
-				<#if !field.relation??>
-					<#if field.type=="int" || field.type=="integer" || field.type=="long" || field.type=="double" || field.type=="float" || field.type=="zipcode" || field.type=="ean">
-			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
-					<#elseif field.type=="boolean">
-			Assert.assertEquals(${curr.name?uncap_first}1.is${field.name?cap_first}(), ${curr.name?uncap_first}2.is${field.name?cap_first}());		
-					<#elseif field.type=="date" || field.type=="time" || field.type=="datetime">
-			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
-					<#else>
-			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
-					</#if>
-				<#else>
-			if (${curr.name?uncap_first}1.get${field.name?cap_first}() != null 
-					&& ${curr.name?uncap_first}2.get${field.name?cap_first}() != null) {
-					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
-				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().getId(),
-						${curr.name?uncap_first}2.get${field.name?cap_first}().getId());
-
-					<#else>
-				for (int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
-					Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).getId(),
-								${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).getId());
-				}
-					</#if>
-			}
-				</#if>
-			</#if>
-		</#list>
-		}
-		
-		return ret;
 	}
 }

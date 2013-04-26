@@ -50,7 +50,7 @@ public class TestDBGenerator extends BaseGenerator {
 				this.generate();
 			}
 		}
-		this.makeSourceTest("TestUtils.java", "TestUtils.java", true);
+		this.makeSourceTest("utils/TestUtils.java", "utils/TestUtils.java", false);
 	}
 	
 	/**  
@@ -71,6 +71,16 @@ public class TestDBGenerator extends BaseGenerator {
 			this.makeSourceTest(
 					"TemplateTestDB.java", 
 					"%sTestDB.java",
+					false);
+			
+			this.makeSourceTest(
+					"utils/base/TemplateUtilsBase.java", 
+					"utils/base/%sUtilsBase.java",
+					true);
+			
+			this.makeSourceTest(
+					"utils/TemplateUtils.java", 
+					"utils/%sUtils.java",
 					false);
 
 		} catch (final Exception e) {

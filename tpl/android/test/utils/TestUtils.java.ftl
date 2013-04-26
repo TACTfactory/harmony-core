@@ -1,4 +1,4 @@
-package ${test_namespace};
+package ${test_namespace}.utils;
 
 import java.util.Random;
 

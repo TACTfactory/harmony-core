@@ -43,7 +43,7 @@ public class TestProviderGenerator extends BaseGenerator {
 	 */ 
 	private void generate() {
 		// Info
-				ConsoleUtils.display(">>> Generate Repository test for " 
+				ConsoleUtils.display(">>> Generate Providers test for " 
 							+ this.getDatamodel().get(
 									TagConstant.CURRENT_ENTITY));
 		
