@@ -176,7 +176,13 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	//@SuppressWarnings("rawtypes")
 	private void loadData(SQLiteDatabase db){
 		DataLoader dl = new DataLoader(this.context);
-		dl.loadData(db, DataLoader.MODE_APP);
+		
+		int mode = DataLoader.MODE_APP;
+		if (${project_name?cap_first}Application.DEBUG) {
+			mode = DataLoader.MODE_APP | DataLoader.MODE_DEBUG;
+		}
+
+		dl.loadData(db, mode);
 	}
 	</#if>
 	
