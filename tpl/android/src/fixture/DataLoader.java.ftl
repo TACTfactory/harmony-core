@@ -96,6 +96,9 @@ public class DataLoader {
 			if (this.isType(modes, MODE_APP)) {
 				dataLoader.getModelFixtures(MODE_APP);
 			}
+			if (this.isType(modes, MODE_DEBUG)) {
+				dataLoader.getModelFixtures(MODE_DEBUG);
+			}
 			if (this.isType(modes, MODE_TEST)) {
 				dataLoader.getModelFixtures(MODE_TEST);
 			}

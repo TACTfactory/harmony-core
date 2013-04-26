@@ -8,10 +8,17 @@ import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+<#if fixtureType=="xml">
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
+<#elseif fixtureType=="yml">
+import org.yaml.snakeyaml.Yaml;
+import java.util.Map;
+
+</#if>
+
 
 import android.util.Log;
 
@@ -112,7 +119,7 @@ public abstract class FixtureBase<T> {
 			ret = assetManager.open(entityName+".xml");
 		} catch (IOException e){
 			// TODO Auto-generated method stub
-			Log.e(TAG, e.getMessage());
+			Log.w(TAG, "No " + entityName + " fixture file found.");
 		}
 		return ret;
 	}
@@ -125,7 +132,7 @@ public abstract class FixtureBase<T> {
 			ret = assetManager.open(entityName+".yml");
 		} catch (IOException e){
 			// TODO Auto-generated method stub
-			Log.e(TAG, e.getMessage());
+			Log.w(TAG, "No " + entityName + " fixture file found.");
 		}
 		return ret;
 	}
