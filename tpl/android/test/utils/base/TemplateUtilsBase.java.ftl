@@ -105,13 +105,13 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 				<#else>
 			if (${curr.name?uncap_first}1.get${field.name?cap_first}() != null 
 					&& ${curr.name?uncap_first}2.get${field.name?cap_first}() != null) {
-				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().size(), 
-					${curr.name?uncap_first}2.get${field.name?cap_first}().size());
 					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().getId(),
 						${curr.name?uncap_first}2.get${field.name?cap_first}().getId());
 
 					<#else>
+				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().size(), 
+					${curr.name?uncap_first}2.get${field.name?cap_first}().size());
 				for (int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
 					Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).getId(),
 								${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).getId());
