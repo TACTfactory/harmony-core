@@ -53,4 +53,7 @@
 # Flurry
 #-dontwarn com.flurry.**
 
+# JDom2
+-keep class org.jdom2.**
+
 -target 1.6

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<Post id="Post1">
+		<id>0</id>
+		<title>Post 1</title>
+		<content>Je dirais meme plus...</content>
+		<categories>Radotage</categories>
+		<owner>Dupond</owner>
+		<comments></comments>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<updatedAt>2012-01-01 00:00</updatedAt>
+		<expiresAt>2012-01-01 00:00</expiresAt>
+	</Post>
+	<Post id="Post2">
+		<id>0</id>
+		<title>Post 2</title>
+		<content>Bachibouzouk</content>
+		<categories>Insulte</categories>
+		<owner>Haddock</owner>
+		<comments></comments>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<updatedAt>2012-01-01 00:00</updatedAt>
+		<expiresAt>2012-01-01 00:00</expiresAt>
+	</Post>
+	<Post id="Post3">
+		<id>0</id>
+		<title>Post 3</title>
+		<content>Mais oui, c'est une gymnote...</content>
+		<categories>Fait scientifique</categories>
+		<owner>Tournesol</owner>
+		<comments></comments>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<updatedAt>2012-01-01 00:00</updatedAt>
+		<expiresAt>2012-01-01 00:00</expiresAt>
+	</Post>
+</list>

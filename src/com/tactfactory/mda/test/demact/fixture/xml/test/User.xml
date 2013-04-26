@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<User id="TEST - Dupond">
+		<id>0</id>
+		<firstname>TEST - Dupond</firstname>
+		<lastname>TEST - Dupont</lastname>
+		<login>TEST - dup</login>
+		<password>TEST - password</password>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<birthdate>2012-01-01</birthdate>
+	</User>
+	<User id="TEST - Haddock">
+		<id>1</id>
+		<firstname>TEST - Haddock</firstname>
+		<lastname>TEST - Archibald</lastname>
+		<login>TEST - had</login>
+		<password>TEST - password</password>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<birthdate>2012-01-01</birthdate>
+	</User>
+	<User id="TEST - Tournesol">
+		<id>2</id>
+		<firstname>TEST - Tournesol</firstname>
+		<lastname>TEST - Tryphon</lastname>
+		<login>TEST - tou</login>
+		<password>TEST - password</password>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<birthdate>2012-01-01</birthdate>
+	</User>
+</list>

@@ -7,7 +7,7 @@
 		<login>dup</login>
 		<password>password</password>
 		<createdAt>2012-01-01 00:00</createdAt>
-		<birthdate>2012-01-01 00:00</birthdate>
+		<birthdate>2012-01-01</birthdate>
 	</User>
 	<User id="Haddock">
 		<id>1</id>
@@ -16,7 +16,7 @@
 		<login>had</login>
 		<password>password</password>
 		<createdAt>2012-01-01 00:00</createdAt>
-		<birthdate>2012-01-01 00:00</birthdate>
+		<birthdate>2012-01-01</birthdate>
 	</User>
 	<User id="Tournesol">
 		<id>2</id>
@@ -25,6 +25,6 @@
 		<login>tou</login>
 		<password>password</password>
 		<createdAt>2012-01-01 00:00</createdAt>
-		<birthdate>2012-01-01 00:00</birthdate>
+		<birthdate>2012-01-01</birthdate>
 	</User>
 </list>

@@ -6,14 +6,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.bundles.fixture.command;
+package com.tactfactory.mda.fixture.command;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;
-import com.tactfactory.mda.bundles.fixture.metadata.FixtureMetadata;
-import com.tactfactory.mda.bundles.fixture.template.FixtureGenerator;
 import com.tactfactory.mda.command.BaseCommand;
+import com.tactfactory.mda.fixture.metadata.FixtureMetadata;
+import com.tactfactory.mda.fixture.template.FixtureGenerator;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
@@ -87,9 +87,17 @@ public class FixtureCommand extends BaseCommand {
 					fixtureMeta.setType(format); 
 				}
 			}
+			boolean force = false;
+			if (this.getCommandArgs().containsKey("force")) {
+				final String bool = this.getCommandArgs().get("force");
+				if (bool.equals("true")) {
+					force = true;
+				}
+			}
 			ApplicationMetadata.INSTANCE.getOptions().put(
 					fixtureMeta.getName(), fixtureMeta);
-			new FixtureGenerator(new AndroidAdapter()).init();
+			
+			new FixtureGenerator(new AndroidAdapter()).init(force);
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			ConsoleUtils.displayError(e);
@@ -132,7 +140,11 @@ public class FixtureCommand extends BaseCommand {
 	public final void summary() {
 		ConsoleUtils.display("\n> FIXTURE \n" 
 				+ "\t" + FIXTURE_INIT 
-				+ "\t => Initialize fixtures, create loaders\n" 
+				+ "\t => Initialize fixtures, create loaders\n"
+				+ "\t\t use --format=(xml|yml) "
+				+ "to specify a format (default : yml)\n"
+				+ "\t\t use --force=(true|false) "
+				+ "to overwrite existing fixture loaders (default : false)\n"
 				
 				+ "\t" + FIXTURE_LOAD 
 				+ "\t => Load fixtures into the projects (overwrite)\n"

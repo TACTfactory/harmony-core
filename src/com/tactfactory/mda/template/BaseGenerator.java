@@ -113,7 +113,7 @@ public abstract class BaseGenerator {
 		this.adapter	= adapt;
 		
 		this.cfg.setDirectoryForTemplateLoading(
-				new File(Harmony.getPathBase() + "/vendor/tact-core"));
+				new File(Harmony.getRootPath() + "/vendor/tact-core"));
 	}
 	
 	/** 
@@ -175,7 +175,8 @@ public abstract class BaseGenerator {
 						+ generateFile.getPath()); 
 				
 				// Create
-				final Template tpl = this.cfg.getTemplate(templatePath);
+				final Template tpl = 
+						this.cfg.getTemplate(templatePath + ".ftl");
 				
 				// Write and close
 				final OutputStreamWriter output = 

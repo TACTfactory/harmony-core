@@ -69,15 +69,11 @@ import ${data_namespace}.${relation.relation.targetEntity?cap_first}SQLiteAdapte
 	</#if>
 </#list>
 
-<#list orderedEntities as entityName>
-import ${fixture_namespace}.${entityName}DataLoader;
-</#list>
-import ${fixture_namespace}.DataManager;
+
+import ${fixture_namespace}.${curr.name?cap_first}DataLoader;
+import ${fixture_namespace}.DataLoader;
 
 import java.util.ArrayList;
-
-import com.tactfactory.mda.test.demact.entity.Post;
-import com.tactfactory.mda.test.demact.fixture.PostDataLoader;
 
 import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
 
@@ -92,12 +88,12 @@ import junit.framework.Assert;
  * You should edit ${curr.name}TestDB class instead of this one or you will lose all your modifications.</i></b>
  */
 public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
-	private Context ctx;
+	protected Context ctx;
 
-	private ${curr.name}SQLiteAdapter adapter;
+	protected ${curr.name}SQLiteAdapter adapter;
 
-	private SQLiteDatabase db;
-	private ${curr.name} entity;
+	protected SQLiteDatabase db;
+	protected ${curr.name} entity;
 
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
@@ -112,14 +108,11 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
 		this.db.beginTransaction();
 		
-		DataManager manager = new DataManager(this.ctx, this.db);
-		<#list orderedEntities as entityName>
-		${entityName}DataLoader ${entityName?uncap_first}Loader = new ${entityName}DataLoader(this.ctx);
-		${entityName?uncap_first}Loader.getModelFixtures(${entityName?cap_first}DataLoader.MODE_TEST);
-		${entityName?uncap_first}Loader.load(manager);
-		</#list>
+		DataLoader dataLoader = new DataLoader(this.ctx);
+		dataLoader.loadData(this.db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
 		
-		ArrayList<${curr.name?cap_first}> entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.${curr.name?uncap_first}s.values());
+		
+		ArrayList<${curr.name?cap_first}> entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).items.values());
 		if (entities.size()>0){
 			this.entity = entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}
@@ -139,45 +132,55 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 	/** Test case Create Entity */
 	public void testCreate() {
 		int result = -1;
-		${curr.name?cap_first} ${curr.name?uncap_first} = this.generateRandom();
-		
-
-		result = (int)this.adapter.insert(${curr.name?uncap_first});
-
-		Assert.assertTrue(result >= 0);
+		if (this.entity != null) {
+			${curr.name?cap_first} ${curr.name?uncap_first} = this.generateRandom();
+			
+	
+			result = (int)this.adapter.insert(${curr.name?uncap_first});
+	
+			Assert.assertTrue(result >= 0);
+		}
 	}
 	
 	/** Test case Read Entity */
 	public void testRead() {
 		${curr.name?cap_first} result = null;
-		if (this.entity!=null){
-			result = this.adapter.getByID(this.entity.getId()); // TODO Generate by @Id annotation 
+		if (this.entity != null) {
+			result = this.adapter.getByID(this.entity.getId()); // TODO Generate by @Id annotation
+			
+			equals(result, this.entity); 
 		}
-		equals(result, this.entity);
 	}
 	
 	/** Test case Update Entity */
 	public void testUpdate() {
 		int result = -1;
-		if (this.entity!=null){
+		if (this.entity != null) {
 			${curr.name?cap_first} ${curr.name?uncap_first} = generateRandom();
 			${curr.name?uncap_first}.setId(this.entity.getId()); // TODO Generate by @Id annotation 
 		
 			result = (int)this.adapter.update(${curr.name?uncap_first});
+			
+			Assert.assertTrue(result >= 0);
 		}
-		Assert.assertTrue(result >= 0);
 	}
 	
 	/** Test case Update Entity */
 	public void testDelete() {
 		int result = -1; 
-		if (this.entity!=null){
+		if (this.entity != null) {
 			result = (int)this.adapter.remove(this.entity.getId());
+			Assert.assertTrue(result >= 0);
 		}
-		Assert.assertTrue(result >= 0);
 	}
 	
-	private ${curr.name?cap_first} generateRandom(){
+	// If you have enums, you may have to override this method to generate the random enums values
+	/**
+	 * Generate a random entity
+	 * 
+	 * @return The randomly generated entity
+	 */
+	protected ${curr.name?cap_first} generateRandom(){
 		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
 		
 		<#list curr.fields as field>
@@ -199,20 +202,30 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomTime());
 					<#elseif field.type=="datetime">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDateTime());
+					<#else>
+						<#if (field.columnDefinition=="integer" || field.columnDefinition=="int")>
+		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(TestUtils.generateRandomInt(0,100)));
+						<#else>
+		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(TestUtils.generateRandomString()));		
+						</#if>
 					</#if>
 				<#else>
 					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 		${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.name?uncap_first}Adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.ctx);
 		${field.name?uncap_first}Adapter.open(this.db);
 		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = ${field.name?uncap_first}Adapter.getAll();
-		${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
+		if (!${field.name?uncap_first}s.isEmpty()) {
+			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
+		}
 					<#else>
 		${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.name?uncap_first}Adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.ctx);
 		${field.name?uncap_first}Adapter.open(this.db);
 		ArrayList<${field.relation.targetEntity?cap_first}> all${field.name?cap_first}s = ${field.name?uncap_first}Adapter.getAll();
 		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
-		${field.name?uncap_first}s.add(all${field.name?cap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
-		${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s);			
+		if (!all${field.name?cap_first}s.isEmpty()) {
+			${field.name?uncap_first}s.add(all${field.name?cap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
+			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s);
+		}			
 					</#if>
 				</#if>
 			</#if>
@@ -230,23 +243,28 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 			<#if !field.internal>
 				<#if !field.relation??>
 					<#if field.type=="int" || field.type=="integer" || field.type=="long" || field.type=="double" || field.type=="float" || field.type=="zipcode" || field.type=="ean">
-			Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}()==${curr.name?uncap_first}2.get${field.name?cap_first}());
+			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
 					<#elseif field.type=="boolean">
-			Assert.assertTrue(${curr.name?uncap_first}1.is${field.name?cap_first}()==${curr.name?uncap_first}2.is${field.name?cap_first}());		
+			Assert.assertEquals(${curr.name?uncap_first}1.is${field.name?cap_first}(), ${curr.name?uncap_first}2.is${field.name?cap_first}());		
 					<#elseif field.type=="date" || field.type=="time" || field.type=="datetime">
-			Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().equals(${curr.name?uncap_first}2.get${field.name?cap_first}()));
+			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
 					<#else>
-			Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().equals(${curr.name?uncap_first}2.get${field.name?cap_first}()));
+			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
 					</#if>
 				<#else>
+			if (${curr.name?uncap_first}1.get${field.name?cap_first}() != null 
+					&& ${curr.name?uncap_first}2.get${field.name?cap_first}() != null) {
 					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
-			Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().getId()==${curr.name?uncap_first}2.get${field.name?cap_first}().getId());
+				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().getId(),
+						${curr.name?uncap_first}2.get${field.name?cap_first}().getId());
+
 					<#else>
-			for (int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
-				Assert.assertTrue(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).getId()
-							== ${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).getId());
-			}
+				for (int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
+					Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).getId(),
+								${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).getId());
+				}
 					</#if>
+			}
 				</#if>
 			</#if>
 		</#list>

@@ -132,7 +132,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		String oldVersion = getVersion(ctx);
 		String currentVersion = ctx.getString(R.string.app_version);
 		
-		return (oldVersion.equals(currentVersion));
+		return oldVersion.equals(currentVersion);
 	}
 	/** Save if a new version is install
 	 * 

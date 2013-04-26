@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.bundles.fixture.test;
+package com.tactfactory.mda.fixture.test;
 
 import java.io.File;
 
@@ -15,9 +15,10 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
-import com.tactfactory.mda.bundles.fixture.command.FixtureCommand;
+import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
+import com.tactfactory.mda.fixture.command.FixtureCommand;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.test.CommonTest;
 import com.tactfactory.mda.utils.ConsoleUtils;
@@ -68,7 +69,7 @@ public class FixtureGlobalTest extends CommonTest {
 				OrmCommand.GENERATE_CRUD, new String[] {}, null);
 		getHarmony().findAndExecute(
 				FixtureCommand.FIXTURE_INIT,
-				new String[] {"--format=xml"},
+				new String[] {"--format=xml", "--force=true"},
 				null);
 	}
 	
@@ -115,7 +116,7 @@ public class FixtureGlobalTest extends CommonTest {
 		CommonTest.getHarmony().findAndExecute(
 				FixtureCommand.FIXTURE_PURGE, new String[] {}, null);
 		CommonTest.getHarmony().findAndExecute(
-				FixtureCommand.FIXTURE_INIT, new String[] {}, null);
+				FixtureCommand.FIXTURE_INIT, new String[] {"--format=yml", "--force=true"}, null);
 		
 		// Copy fixture files
 		copyFixturesYml();
@@ -140,21 +141,19 @@ public class FixtureGlobalTest extends CommonTest {
 		final String pathNameSpace = 
 				ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll(
 						"\\.", "/");
-		final String srcDir = String.format("src/%s/%s/%s/",
-				pathNameSpace,
-				"fixture",
-				"xml");
+		final String srcDir = 
+				String.format("%s/tact-core/src/%s/%s/%s",
+						Harmony.getBundlePath(),
+						pathNameSpace,
+						"fixture",
+						"xml/");
 
-		String destDir = String.format("fixtures/app/");
-		System.out.println(destDir);
+		String destDir = String.format("fixtures/");
 		
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
-		destDir = String.format("fixtures/test/");
-		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
-		if (new File(destDir + "Post.xml").exists()) {
-			ConsoleUtils.displayDebug("Entity is copy to generated package !");
-		}
+		//destDir = String.format("fixtures/test/");
+		//TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
 	}
 	
 	/**
@@ -164,20 +163,17 @@ public class FixtureGlobalTest extends CommonTest {
 		final String pathNameSpace = 
 				ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll(
 						"\\.", "/");
-		final String srcDir = String.format("src/%s/%s/%s/",
-				pathNameSpace,
-				"fixture",
-				"yml");
+		
+		final String srcDir =  
+				String.format("%s/tact-core/src/%s/%s/%s",
+					Harmony.getBundlePath(),
+					pathNameSpace,
+					"fixture",
+					"yml/");
 
-		String destDir = String.format("fixtures/app/");
-		System.out.println(destDir);
+		String destDir = String.format("fixtures/");
 		
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
-		destDir = String.format("fixtures/test/");
-		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
-		if (new File(destDir + "Post.yml").exists()) {
-			ConsoleUtils.displayDebug("Entity is copy to generated package !");
-		}
 	}
 }

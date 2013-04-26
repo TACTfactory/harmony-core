@@ -55,10 +55,13 @@ Thumbs.db
 .settings/*
 /lint.xml
 
-#.classpath
+.classpath
 .project
 local.properties
 .svn
+
+# Libs Sherlock #
+/libs/sherlock/*
 
 # Custom rules #
 ################

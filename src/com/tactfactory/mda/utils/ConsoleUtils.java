@@ -54,6 +54,7 @@ public abstract class ConsoleUtils {
 	private static ColoredPrinter cp =
 			new ColoredPrinter.Builder(0, false).build();
 	
+	// Getter/Setter
 	
 	/** Is application in debug mode ?
 	 * @return true if application is in debug mode
@@ -115,6 +116,7 @@ public abstract class ConsoleUtils {
 		ConsoleUtils.isConsole = console;
 	}
 	
+	// DISPLAY MODE
 	
 	/**
 	 * Display given String to the console.
@@ -169,23 +171,7 @@ public abstract class ConsoleUtils {
 			}
 		}
 	}
-	
-	/**
-	 * Converts a StackTrace to a String.
-	 * @param stackTraceElements 
-	 * @return The StrackTrace
-	 */
-	private static String getStackTrace(
-			final StackTraceElement[] stackTraceElements) {
-		final StringBuilder result = new StringBuilder();
 
-		for (final StackTraceElement stackTraceElement : stackTraceElements) {
-			result.append(stackTraceElement.toString()).append(NEWLINE);
-		}
-		
-		return result.toString();
-	}
-	
 	/**
 	 * Display given Exception to the console prefixed by [ERROR].
 	 * (Red color)
@@ -230,6 +216,24 @@ public abstract class ConsoleUtils {
 			}
 		}
 	}
+	
+	/**
+	 * Converts a StackTrace to a String.
+	 * @param stackTraceElements 
+	 * @return The StrackTrace
+	 */
+	private static String getStackTrace(
+			final StackTraceElement[] stackTraceElements) {
+		final StringBuilder result = new StringBuilder();
+
+		for (final StackTraceElement stackTraceElement : stackTraceElements) {
+			result.append(stackTraceElement.toString()).append(NEWLINE);
+		}
+		
+		return result.toString();
+	}
+	
+	// LAUNCHER MODE
 	
 	/**
 	 * Launch the given command.
@@ -290,11 +294,38 @@ public abstract class ConsoleUtils {
 		
 		return result;
 	}
+	
+	// CONSOLE MODE
 
+	/**
+	 * Generic user console prompt.
+	 * 
+	 * @param promptMessage message to display
+	 * @return input user input
+	 */
+	public static String getUserInput(final String promptMessage) {
+		String input = null;
+		try {
+			ConsoleUtils.display(promptMessage);
+			final BufferedReader br = 
+					new BufferedReader(
+							new InputStreamReader(
+									System.in, 
+									TactFileUtils.DEFAULT_ENCODING));
+
+		
+			input = br.readLine();
+		} catch (final IOException e) {
+			ConsoleUtils.displayError(e);
+		}
+		
+		return input;
+	}
+	
 	/**
 	 * Bridge between a process output/input and the console.
 	 */
-	protected static class ProcessToConsoleBridge {
+	private static class ProcessToConsoleBridge {
 		
 		/** Input thread. */
 		private final InputBridge in;

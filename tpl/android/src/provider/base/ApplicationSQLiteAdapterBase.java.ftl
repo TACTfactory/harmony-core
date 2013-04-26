@@ -12,13 +12,14 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import ${project_namespace}.criterias.base.Criteria;
 import ${project_namespace}.criterias.base.CriteriasBase;
 
 public abstract class SQLiteAdapterBase<T>{
 
 	/** Table name of SQLite database */
+	public static String DB_NAME = "database.sqlite";
 	public static String TAG = "${project_name?cap_first}SQLiteAdapterBase";
+
 	
 	// Database tools
 	protected Context context;
@@ -34,7 +35,7 @@ public abstract class SQLiteAdapterBase<T>{
 		this.context = ctx;
 		this.mBaseHelper = new ${project_name?cap_first}SQLiteOpenHelper(
 				ctx, 
-				"database.sqlite", 
+				DB_NAME, 
 				null,
 				1);
 		
@@ -175,7 +176,6 @@ public abstract class SQLiteAdapterBase<T>{
 	 * @return Comment entity
 	 */
 	public abstract T cursorToItem(Cursor c);
-	
 
 	/** Insert a Comment entity into database
 	 * 

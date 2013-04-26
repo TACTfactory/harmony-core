@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.bundles.fixture.metadata;
+package com.tactfactory.mda.fixture.metadata;
 
 import java.util.HashMap;
 
@@ -18,7 +18,7 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
  */
 public class FixtureMetadata extends BaseMetadata {
 	/** Bundle name. */
-	private static final String NAME = "fixture";
+	public static final String NAME = "fixture";
 	/** Fixture enabled state. */
 	private boolean enabled = true;
 	/** Fixture type (xml, yml). */

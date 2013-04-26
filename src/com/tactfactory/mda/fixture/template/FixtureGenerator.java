@@ -6,13 +6,13 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.bundles.fixture.template;
+package com.tactfactory.mda.fixture.template;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 
-import com.tactfactory.mda.bundles.fixture.metadata.FixtureMetadata;
+import com.tactfactory.mda.fixture.metadata.FixtureMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.BaseGenerator;
@@ -42,25 +42,26 @@ public class FixtureGenerator extends BaseGenerator {
 	public final void load() {
 		final File fixtAppSrc = new File("fixtures/app");
 		final File fixtTestSrc = new File("fixtures/test");
+		
 		if (fixtAppSrc.exists()) {
 			final File fixtAppDest = 
 					new File(this.getAdapter().getAssetsPath() + "/app");
+			
 			final File fixtTestDest = 
 					new File(this.getAdapter().getAssetsPath() + "/test");
-			if (!fixtAppDest.exists()) {
-				if (!fixtAppDest.mkdir()) {
-					ConsoleUtils.displayError(
-							new Exception("Couldn't create folder "
-									+ fixtAppDest.getAbsolutePath()));
-				}
+			
+			if (!fixtAppDest.exists() && !fixtAppDest.mkdirs()) {
+				ConsoleUtils.displayError(
+						new Exception("Couldn't create folder "
+								+ fixtAppDest.getAbsolutePath()));
 			}
-			if (!fixtTestDest.exists()) {
-				if (!fixtTestDest.mkdir()) {
-					ConsoleUtils.displayError(
-							new Exception("Couldn't create folder "
-									+ fixtTestDest.getAbsolutePath()));
-				}
+		
+			if (!fixtTestDest.exists() && !fixtTestDest.mkdirs()) {
+				ConsoleUtils.displayError(
+						new Exception("Couldn't create folder "
+								+ fixtTestDest.getAbsolutePath()));
 			}
+			
 			try {
 				final FileFilter ff = new FileFilter() {
 					@Override
@@ -69,12 +70,15 @@ public class FixtureGenerator extends BaseGenerator {
 								|| arg0.getPath().endsWith(".yml"); 
 					}
 				};
+				
 				TactFileUtils.copyDirectory(fixtAppSrc, fixtAppDest, ff);
 				ConsoleUtils.displayDebug(
 						"Copying fixtures/app into " + fixtAppDest.getPath());
+				
 				TactFileUtils.copyDirectory(fixtTestSrc, fixtTestDest, ff);
 				ConsoleUtils.displayDebug(
 						"Copying fixtures/test into " + fixtTestDest.getPath());
+				
 			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);
 			}
@@ -87,20 +91,28 @@ public class FixtureGenerator extends BaseGenerator {
 	
 	/**
 	 * Generate the loaders and the base fixtures.
+	 * @param force True if you want to overwrite the fixture loaders.
 	 */
-	public final void init() {
+	public final void init(final boolean force) {
 		 try {
 			 final String fixtureType = ((FixtureMetadata) 
 							 this.getAppMetas().getOptions()
 							 	.get("fixture")).getType();
 			 
+			 FixtureMetadata meta = 
+					 (FixtureMetadata)this.getAppMetas().getOptions().get(
+							 FixtureMetadata.NAME);
 			 //Copy JDOM Library
-			this.updateLibrary("jdom-2.0.2.jar");
-			this.updateLibrary("snakeyaml-1.10-android.jar");
+			if (meta.getType().equals("xml")) {
+				this.updateLibrary("jdom-2.0.2.jar");	
+			} else {
+				this.updateLibrary("snakeyaml-1.10-android.jar");
+			}
 			
 			//Create base classes for Fixtures loaders
-			this.makeSource("FixtureBase.java", "FixtureBase.java", true);
-			this.makeSource("DataManager.java", "DataManager.java", true);
+			this.makeSource("FixtureBase.java", "FixtureBase.java", force);
+			this.makeSource("DataManager.java", "DataManager.java", force);
+			this.makeSource("DataLoader.java", "DataLoader.java", force);
 			
 			//Update SQLiteOpenHelper
 			new SQLiteGenerator(this.getAdapter()).generateDatabase();
@@ -108,12 +120,12 @@ public class FixtureGenerator extends BaseGenerator {
 			//Create each entity's data loader
 			for (final ClassMetadata cm 
 					: this.getAppMetas().getEntities().values()) {
-				if (cm.getFields().size() > 0) {
+				if (cm.getFields().size() > 0 && !cm.isInternal()) {
 					this.getDatamodel().put(TagConstant.CURRENT_ENTITY,
 							cm.getName());
 					this.makeSource("TemplateDataLoader.java",
 							cm.getName() + "DataLoader.java",
-							true);
+							force);
 					this.makeBaseFixture("TemplateFixture." + fixtureType, 
 							cm.getName() + "." + fixtureType, 
 							false);
@@ -167,12 +179,10 @@ public class FixtureGenerator extends BaseGenerator {
 				this.getAdapter().getAssetsPath() + fileName;
 		final File f = new File(fullFilePath);
 		
-		if (f.exists()) {
-			if (!f.delete()) {
-				ConsoleUtils.displayError(
-						new Exception("Couldn't delete file "
-								+ f.getPath()));
-			}
+		if (f.exists() && !f.delete()) {
+			ConsoleUtils.displayError(
+					new Exception("Couldn't delete file "
+							+ f.getPath()));
 		}
 	}
 	

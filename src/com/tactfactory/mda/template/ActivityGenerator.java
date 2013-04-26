@@ -178,7 +178,7 @@ public class ActivityGenerator extends BaseGenerator {
 				TranslationMetadata.addDefaultTranslation(
 						entityName.toLowerCase(Locale.ENGLISH) 
 							+ "_progress_save_message", 
-						entityName + " is saving to database&#8230;",
+						entityName + " is saving to database…",
 						Group.MODEL);
 			}
 	
@@ -193,7 +193,7 @@ public class ActivityGenerator extends BaseGenerator {
 			TranslationMetadata.addDefaultTranslation(
 					entityName.toLowerCase(Locale.ENGLISH) 
 						+ "_progress_load_message", 
-					entityName + " is loading&#8230;",
+					entityName + " is loading…",
 					Group.MODEL);
 		
 			new TranslationGenerator(this.getAdapter()).generateStringsXml();
@@ -269,10 +269,9 @@ public class ActivityGenerator extends BaseGenerator {
 
 		this.updateManifest("ShowActivity", entityName);
 		
-
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_load", 
-				entityName + " loading error&#8230;",
+				entityName + " loading error…",
 				Group.MODEL);
 	}
 
@@ -308,7 +307,7 @@ public class ActivityGenerator extends BaseGenerator {
 		
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_edit", 
-				entityName + " edition error&#8230;",
+				entityName + " edition error…;",
 				Group.MODEL);
 				
 	}
@@ -346,7 +345,7 @@ public class ActivityGenerator extends BaseGenerator {
 		
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_create", 
-				entityName + " creation error&#8230;",
+				entityName + " creation error…;",
 				Group.MODEL);
 	}
 

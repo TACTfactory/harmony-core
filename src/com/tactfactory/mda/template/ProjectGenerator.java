@@ -5,6 +5,7 @@ package com.tactfactory.mda.template;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.Harmony;
@@ -225,8 +226,8 @@ public class ProjectGenerator extends BaseGenerator {
 		/// copy Harmony library
 		TactFileUtils.copyfile(
 				new File(String.format("%s/%s", 
-						Harmony.getHarmonyPath(), 
-						"/harmony.jar")), 
+						Harmony.getBundlePath(), 
+						"tact-core/harmony.jar")), 
 				new File(String.format("%s/%s", 
 						this.getAdapter().getLibsPath(), 
 						"harmony.jar")));
@@ -258,52 +259,6 @@ public class ProjectGenerator extends BaseGenerator {
 			
 			ConsoleUtils.launchCommand(command);
 			command.clear();
-	
-			/*command.add("git");
-			command.add("init");
-			//ConsoleUtils.launchCommand(
-			  		command, "/home/yo/git/Harmony/app/Android/libs/sherlock");
-			ConsoleUtils.launchCommand(command, pathSherlock);
-			command.clear();
-			
-			command.add("git");
-			command.add("remote");
-			command.add("add");
-			command.add("-t");
-			command.add("master");
-			command.add("origin");
-			command.add("https://github.com/JakeWharton/ActionBarSherlock.git");
-			ConsoleUtils.launchCommand(command, pathSherlock);
-			command.clear();
-			
-			command.add("git");
-			command.add("config");
-			command.add("core.sparsecheckout");
-			command.add("true");
-			ConsoleUtils.launchCommand(command, pathSherlock);
-			command.clear();
-	
-			command.add("echo");
-			command.add("library/");
-			command.add(">");
-			command.add(".git/info/sparse-checkout");
-			ConsoleUtils.launchCommand(command, pathSherlock);
-			command.clear();
-	
-			command.add("git");
-			command.add("fetch");
-			command.add("--depth=1");
-			command.add("origin");
-			command.add("master");
-			ConsoleUtils.launchCommand(command, pathSherlock);
-			command.clear();
-			
-			command.add("git");
-			command.add("pull");
-			command.add("origin");
-			command.add("master");
-			ConsoleUtils.launchCommand(command, pathSherlock);
-			command.clear();*/
 			
 			// command git checkout
 			command.add("git");
@@ -347,9 +302,9 @@ public class ProjectGenerator extends BaseGenerator {
 
 		// Update newly created files with datamodel
 		final File dirTpl = 
-				new File(Harmony.getHarmonyPath() + "/"
+				new File(Harmony.getBundlePath() + "tact-core/"
 						+ this.getAdapter().getTemplateProjectPath());
-		if (dirTpl.exists() && dirTpl.listFiles().length != 0) {
+		if (dirTpl.exists() && dirTpl.listFiles().length > 0) {
 			result = true;
 			
 			for (int i = 0; i < dirTpl.listFiles().length; i++) {
@@ -417,5 +372,42 @@ public class ProjectGenerator extends BaseGenerator {
 		final boolean result = false;
 
 		return result;
+	}
+	
+	/**
+	 * Updates the local.properties SDK Path with the SDK Path stored
+	 * in the ApplicationMetadata.
+	 */
+	public static final void updateSDKPath() {
+		final File fileProp = new File(
+				String.format("%s/%s",
+						Harmony.getProjectAndroidPath(), 
+						"local.properties"));
+		
+		if (fileProp.exists()) {
+			final List<String> lines = 
+					TactFileUtils.fileToStringArray(fileProp);
+			
+			for (int i = 0; i < lines.size(); i++) {
+				if (lines.get(i).startsWith("sdk.dir=")) {
+					lines.set(i, "sdk.dir="
+				+ ApplicationMetadata.getAndroidSdkPath());
+					break;
+				}
+			}
+			
+			TactFileUtils.stringArrayToFile(lines, fileProp);
+		}
+	}
+
+	public final void updateDependencies() {
+		try {
+			/** Only Android is handled for now
+				Create libs folder if it doesn't exists*/
+			TactFileUtils.makeFolder(this.getAdapter().getLibsPath());
+			this.addLibs();
+		} catch (Exception e) {
+			ConsoleUtils.displayError(e);
+		}
 	}
 }

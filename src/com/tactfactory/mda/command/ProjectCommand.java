@@ -8,11 +8,10 @@
  */
 package com.tactfactory.mda.command;
 
-import net.xeoh.plugins.base.annotations.Capabilities;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.mda.Console;
-import com.tactfactory.mda.Harmony;
+import com.tactfactory.mda.ProjectDiscover;
 import com.tactfactory.mda.TargetPlatform;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
@@ -48,6 +47,14 @@ public class ProjectCommand extends BaseCommand {
 	public static final String ACTION_INIT 	= "init";
 	/** Remove action. */
 	public static final String ACTION_REMOVE 	= "remove";
+	/** Update action. */
+	public static final String ACTION_UPDATE 	= "update";
+	
+	// Subjects
+	/** SDK_PATH Subject. */
+	public static final String SUBJECT_SDK_PATH = "sdk-path";
+	/** Dependencies Subject*/
+	public static final String SUBJECT_DEPENDENCIES = "dependencies";
 
 	// Commands
 	/** Command : PROJECT:INIT:ANDROID. */
@@ -119,6 +126,19 @@ public class ProjectCommand extends BaseCommand {
 								+ ACTION_REMOVE 
 								+ SEPARATOR 
 								+ TargetPlatform.ALL.toLowerString();
+	
+	/** Command : PROJECT:UPDATE:SDK-PATH. */
+	public static final String UPDATE_SDK = BUNDLE 
+								+ SEPARATOR 
+								+ ACTION_UPDATE 
+								+ SEPARATOR 
+								+ SUBJECT_SDK_PATH;
+	/** Command : PROJECT:UPDATE:DEPENDENCIES. */
+	public static final String UPDATE_DEPENDENCIES = BUNDLE 
+								+ SEPARATOR 
+								+ ACTION_UPDATE 
+								+ SEPARATOR 
+								+ SUBJECT_DEPENDENCIES;
 
 	// Internal	
 	/** Android adapter. */
@@ -137,7 +157,7 @@ public class ProjectCommand extends BaseCommand {
 	private boolean isProjectInit = false;
 
 	/**
-	 * Init Project Parameters (project name, namespace, android sdk path).
+	 * Initialize Project Parameters (project name, namespace, android sdk path).
 	 */
 	public final void initProjectParam() {
 		if (!this.isProjectInit) {
@@ -146,7 +166,7 @@ public class ProjectCommand extends BaseCommand {
 
 				//Project Name
 				if (!this.getCommandArgs().containsKey("name")) {
-					Harmony.initProjectName();
+					ProjectDiscover.initProjectName();
 				} else {
 					ApplicationMetadata.INSTANCE.setName(
 							this.getCommandArgs().get("name"));
@@ -154,7 +174,7 @@ public class ProjectCommand extends BaseCommand {
 					
 				//Project NameSpace
 				if (!this.getCommandArgs().containsKey("namespace")) {
-					Harmony.initProjectNameSpace();
+					ProjectDiscover.initProjectNameSpace();
 				} else {
 					ApplicationMetadata.INSTANCE.setProjectNameSpace(
 							this.getCommandArgs().get("namespace")
@@ -163,13 +183,13 @@ public class ProjectCommand extends BaseCommand {
 					
 				//Android sdk path
 				if (!this.getCommandArgs().containsKey("androidsdk")) {
-					Harmony.initProjectAndroidSdkPath();
+					ProjectDiscover.initProjectAndroidSdkPath();
 				} else {
 					ApplicationMetadata.setAndroidSdkPath(
 							this.getCommandArgs().get("androidsdk"));
 				}
 					
-				ConsoleUtils.displayDebug("Project Name: "	 
+				ConsoleUtils.display("Project Name: "	 
 							+ ApplicationMetadata.INSTANCE.getName()
 						 + "\nProject NameSpace: "			 
 							+ ApplicationMetadata.INSTANCE.getProjectNameSpace()
@@ -179,7 +199,7 @@ public class ProjectCommand extends BaseCommand {
 				// Confirmation
 				if (ConsoleUtils.isConsole()) {
 					final String accept =
-							Harmony.getUserInput("Use below given parameters "
+							ConsoleUtils.getUserInput("Use below given parameters "
 									 + "to process files? (y/n) ");
 					
 					if (!accept.contains("n")) {
@@ -322,7 +342,7 @@ public class ProjectCommand extends BaseCommand {
 	public final void removeAndroid() {
 		if (!this.userHasConfirmed) {
 			final String accept = 
-					Harmony.getUserInput("Are you sure to Delete "
+					ConsoleUtils.getUserInput("Are you sure to Delete "
 							 + "Android Project? (y/n) ");
 			
 			if (accept.contains("n")) {
@@ -347,7 +367,7 @@ public class ProjectCommand extends BaseCommand {
 	public final void removeIOS() {
 		if (!this.userHasConfirmed) {
 			final String accept = 
-					Harmony.getUserInput("Are you sure to Delete "
+					ConsoleUtils.getUserInput("Are you sure to Delete "
 							+ "Apple iOS Project? (y/n) ");
 			
 			if (accept.contains("n")) { return; }
@@ -370,7 +390,7 @@ public class ProjectCommand extends BaseCommand {
 	public final void removeRIM() {
 		if (!this.userHasConfirmed) {
 			final String accept =
-					Harmony.getUserInput(
+					ConsoleUtils.getUserInput(
 							"Are you sure to Delete"
 							+ " BlackBerry Rim Project? (y/n)");
 			
@@ -395,7 +415,7 @@ public class ProjectCommand extends BaseCommand {
 	 */
 	public final void removeWinPhone() {
 		if (!this.userHasConfirmed) {
-			final String accept = Harmony.getUserInput(
+			final String accept = ConsoleUtils.getUserInput(
 					"Are you sure to Delete Windows Phone Project? (y/n) ");
 			
 			if (accept.contains("n")) { return; }
@@ -418,7 +438,7 @@ public class ProjectCommand extends BaseCommand {
 	public final void removeAll() {
 		if (!this.userHasConfirmed) {
 			final String accept = 
-					Harmony.getUserInput(
+					ConsoleUtils.getUserInput(
 							"Are you sure to Delete All Projects? (y/n) ");
 			
 			if (accept.contains("n")) { return; }
@@ -479,7 +499,13 @@ public class ProjectCommand extends BaseCommand {
 				+ "\t => Remove Windows Phone project directory\n"
 				
 				+ "\t" + REMOVE_ALL
-				+ "\t => Remove All project directories\n");
+				+ "\t => Remove All project directories\n"
+				
+				+ "\t" + UPDATE_SDK
+				+ "\t => Update the SDK Path\n"
+				
+				+ "\t" + UPDATE_DEPENDENCIES
+				+ "\t => Update the dependencies from an existing project\n");
 	}
 
 	@Override
@@ -526,11 +552,24 @@ public class ProjectCommand extends BaseCommand {
 
 		if (action.equals(REMOVE_ALL)) {
 			this.removeAll();
+		} else
+			
+		if (action.equals(UPDATE_SDK)) {
+			ApplicationMetadata.setAndroidSdkPath("");
+			ProjectDiscover.initProjectAndroidSdkPath();
+			ProjectGenerator.updateSDKPath();
+		} else
+			
+		if (action.equals(UPDATE_DEPENDENCIES)) {
+			try {
+				new ProjectGenerator(this.adapterAndroid).updateDependencies();
+			} catch (Exception e) {
+				ConsoleUtils.displayError(e);
+			}
 		}
 	}
 
 	@Override
-	@Capabilities
 	public final boolean isAvailableCommand(final String command) {
 		return  command.equals(INIT_ANDROID) 
 				|| command.equals(INIT_IOS) 
@@ -541,6 +580,8 @@ public class ProjectCommand extends BaseCommand {
 				|| command.equals(REMOVE_IOS) 
 				//|| command.equals(REMOVE_RIM)
 				//|| command.equals(REMOVE_WINPHONE) 
-				|| command.equals(REMOVE_ALL);
+				|| command.equals(REMOVE_ALL)
+				|| command.equals(UPDATE_SDK)
+				|| command.equals(UPDATE_DEPENDENCIES);
 	}
 }

@@ -8,6 +8,8 @@
  */
 package com.tactfactory.mda.test.project;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.File;
 
 import org.junit.After;
@@ -17,8 +19,12 @@ import org.junit.Ignore;
 import org.junit.Test;
 
 import com.tactfactory.mda.Harmony;
+import com.tactfactory.mda.ProjectDiscover;
 import com.tactfactory.mda.command.ProjectCommand;
+import com.tactfactory.mda.meta.ApplicationMetadata;
+import com.tactfactory.mda.template.ProjectGenerator;
 import com.tactfactory.mda.test.CommonTest;
+import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.TactFileUtils;
 
 /** 
@@ -45,10 +51,9 @@ public class ProjectInitTest extends CommonTest {
 	@Override
 	public final void tearDown() throws Exception {
 		super.tearDown();
-		
-		final File dirproj = 
-				new File(String.format("%s/android",
-						Harmony.getProjectPath()));
+
+		ConsoleUtils.display("################################  Cleaner !! ################################");
+		final File dirproj = new File(Harmony.getProjectAndroidPath());
 		TactFileUtils.deleteRecursive(dirproj);
 	}
 	
@@ -87,7 +92,27 @@ public class ProjectInitTest extends CommonTest {
 		CommonTest.hasFindFile("android/res/values");
 		CommonTest.hasFindFile("android/res/values/configs.xml");
 		CommonTest.hasFindFile("android/res/values/strings.xml");
+		
+		
+		System.out.println("\nTest Update SDK Path");
+		System.out.println(SHARP_DELIMITOR);
+		
+		String newSdkPath = "test-sdkpath/";
+		ApplicationMetadata.setAndroidSdkPath(newSdkPath);
+		ProjectGenerator.updateSDKPath();
+		
+
+		final String localProp = 
+				String.format("%s/%s",
+						Harmony.getProjectAndroidPath(), 
+						"local.properties");
+		assertEquals(ProjectDiscover.getSdkDirFromPropertiesFile(localProp),
+				newSdkPath);
+		
+		ApplicationMetadata.setAndroidSdkPath("/opt/android-sdk-linux_86/");
+		ProjectGenerator.updateSDKPath();
 	}
+		
 	
 	/**
 	 * Test the initialization of the iPhone project.
