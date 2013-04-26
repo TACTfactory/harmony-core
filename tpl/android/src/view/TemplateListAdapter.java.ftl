@@ -7,8 +7,10 @@ import ${curr.namespace}.R;
 import java.util.List;
 
 import android.content.Context;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.*;
 
@@ -25,13 +27,16 @@ import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
 import ${curr.namespace}.entity.${curr.name};
 
-public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}> {
+public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}> 
+		implements OnClickListener {
 	private final LayoutInflater mInflater;
+	private final ${curr.name?cap_first}ListFragment fragment;
 
-	public ${curr.name}ListAdapter(Context context) {
+	public ${curr.name}ListAdapter(Context context, ${curr.name?cap_first}ListFragment fragment) {
 		super(context, R.layout.row_${curr.name?lower_case});
 
 		this.mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.fragment = fragment;
 	}
 
 	/** Set Array of ${curr.name}
@@ -71,6 +76,14 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}> {
 					</#if>
 				</#if>
 			</#list>
+
+			// Set onClickListeners for edit and delete buttons
+			holder.editButton = (Button) convertView.findViewById(R.id.row_${curr.name?lower_case}_edit_btn);
+			holder.editButton.setOnClickListener(this);
+			holder.editButton.setTag(position);
+			holder.deleteButton = (Button) convertView.findViewById(R.id.row_${curr.name?lower_case}_delete_btn);
+			holder.deleteButton.setOnClickListener(this);
+			holder.deleteButton.setTag(position);
 			
 			convertView.setTag(holder);
 		} else {
@@ -97,6 +110,8 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}> {
 				</#if>
 			</#if>
 		</#list>
+		protected Button editButton;
+		protected Button deleteButton;
 
 		/** Populate row with a ${curr.name}
 		 * 
@@ -117,6 +132,21 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}> {
 					</#if>
 				</#if>
 			</#list>
+
+/*			this.editButton.setTag(model);
+			this.deleteButton.setTag(model);*/
+		}
+	}
+
+	@Override 
+	public void onClick(View v) {
+		switch (v.getId()) {
+			case R.id.row_${curr.name?lower_case}_edit_btn:
+				this.fragment.onClickEdit((Integer) v.getTag());
+				break;
+			case R.id.row_${curr.name?lower_case}_delete_btn:
+				this.fragment.onClickDelete((Integer) v.getTag());
+				break;
 		}
 	}
 }
