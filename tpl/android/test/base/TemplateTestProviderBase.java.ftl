@@ -88,7 +88,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
 
 			try {
-				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first});
+				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				values.remove(${curr.name}SQLiteAdapter.COL_ID);
 				result = this.provider.insert(${project_name?cap_first}Provider.${curr.name?upper_case}_URI, values);
 			
@@ -145,7 +145,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 			try {
 				${curr.name?uncap_first}.setId(this.entity.getId());
 			
-				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first});
+				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				result = this.provider.update(
 					Uri.parse(${project_name?cap_first}Provider.${curr.name?upper_case}_URI 
 						+ "/" 
@@ -169,7 +169,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
 
 			try {
-				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first});
+				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				values.remove(${curr.name}SQLiteAdapter.COL_ID);
 				<#list curr.fields as field>
 					<#if field.unique?? && field.unique>
