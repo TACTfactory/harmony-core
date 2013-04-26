@@ -166,7 +166,9 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
 		}
 		
-		this.getContext().getContentResolver().notifyChange(uri, null);
+		if (result > 0) {
+			this.getContext().getContentResolver().notifyChange(uri, null);
+		}
 		return result;
 	}
 	
@@ -229,7 +231,6 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
 		}
 
-		result.setNotificationUri(getContext().getContentResolver(), uri);
 		return result;
 	}
 
@@ -264,7 +265,9 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
 		}
 		
-		getContext().getContentResolver().notifyChange(uri, null);
+		if (result > 0) {
+			getContext().getContentResolver().notifyChange(uri, null);
+		}
 		return result;
 	}
 	

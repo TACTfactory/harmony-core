@@ -83,6 +83,8 @@ public abstract class TagConstant {
 	public static final String IDS = "ids";
 	/** Constant for hidden field. */
 	public static final String HIDDEN = "hidden";
+	/** Constant for unique field. */
+	public static final String UNIQUE = "unique";
 	/** Constant for locale field. */
 	public static final String IS_LOCALE = "is_locale";
 	/** Constant for internal field. */

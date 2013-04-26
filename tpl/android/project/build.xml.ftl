@@ -86,78 +86,85 @@
     -->
     <!-- version-tag: 1 -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
-    
-    <target name="run-findbugs" depends="jar"
-	description="Run code analysis over code to check for problems.">
 
-	<!-- Fail this target if FindBugs is not installed. -->
-	<available file="${env.FINDBUGS_HOME}/lib/findbugs.jar" 
-			property="findbugs.available" />
-		<fail unless="findbugs.available"
-			message="Error: FINDBUGS_HOME not set or findbugs.jar not found." />
+    <property name="android-jar" value="${sdk.dir}/platforms/android-14/android.jar" />    
+    <property name="tmp.rel-dir" value="tmp" />
+	<path id="findbugs.dir.jars">
+	<fileset dir="${r"${env.FINDBUGS_HOME}"}/lib">
+	    <include name="*.jar" />
+	</fileset>
+    </path>
+    <path id="classpath">
+	<fileset dir="${r"${jar.libs.dir}"}">
+	    <include name="*.jar" />
+	</fileset>
+	<pathelement path="${r"${android-jar}"}" />
+	<pathelement path="${r"${jar.libs.dir}"}/sherlock/library/bin/classes.jar" />
+	<pathelement path="${r"${jar.libs.dir}"}/sherlock/library/libs/android-support-v4.jar" />
+    </path>
 	
-		<!-- Run this target if FindBugs is installed. -->
-		<taskdef name="findbugs" 
-			classpath="${env.FINDBUGS_HOME}/lib/findbugs-ant.jar"
-			classname="edu.umd.cs.findbugs.anttask.FindBugsTask" />
-	    <findbugs home="${env.FINDBUGS_HOME}"
-	    	workHard="true"
-	    	output="xml:withMessages"
-	        outputFile="${tmp.rel-dir}/findbugs.xml"
-	    	jvmargs="-Xmx1024m" >
-	    	<auxClasspath refid="project.classpath" />
-	    	<sourcePath path="${src.rel-dir}" />
-	    	<class location="${jar.rel-file}" />
-	    </findbugs>
-		
-		<!-- Report -->
+<!-- basic -->
+    <target name="init">
+        <mkdir dir="${r"${out.dir}"}"/>
+    	<mkdir dir="${r"${tmp.rel-dir}"}"/>
+    </target>
+
+
+	<target name="run-findbugs" depends="init">
+	    <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" description="classes+findbugs=magic" classpathref="findbugs.dir.jars"/> 
+		<findbugs home="${r"${env.FINDBUGS_HOME}"}"  output="xml"  outputFile="${r"${tmp.rel-dir}"}/findbugs.xml"  onlyAnalyze="com.tactfactory.*">
+			<sourcePath path="${r"${source.dir}"}" />
+			<class location="${r"${out.dir}"}" />
+			<auxClasspath refid="classpath" /> <!-- so we dont get hundrets of "The following classes needed for analysis were missing" warnings. -->
+		</findbugs>
 		<xslt 
-			in="${tmp.rel-dir}/findbugs.xml"
-	       	out="${tmp.rel-dir}/findbugs.html"
-			style="${env.FINDBUGS_HOME}/src/xsl/fancy.xsl"
+			in="${r"${tmp.rel-dir}"}/findbugs.xml"
+	   	    	out="${r"${tmp.rel-dir}"}/findbugs.html"
+			style="${r"${env.FINDBUGS_HOME}"}/src/xsl/fancy.xsl"
 	       />
-	</target>
+	</target>    
+
 	
-	<target name="run-checkstyle" depends="compile-tests" 
+	<target name="run-checkstyle" depends="init"
 		description="Report of code convention violations.">
 		
 		<!-- Fail this target if CheckStyle is not installed. -->
-	       <available file="${env.CHECKSTYLE_HOME}/checkstyle-5.6-all.jar"
+	       <available file="${r"${env.CHECKSTYLE_HOME}"}/checkstyle-5.6-all.jar"
 			property="checkstyle.available"/>
 	       <fail unless="checkstyle.available"
 	       	message="Error: CHECKSTYLE_HOME not set or checkstyle-5.6-all.jar not found." />
 	       
 		<!-- Run this target if CheckStyle is installed. -->
 		<taskdef resource="checkstyletask.properties"
-	       	classpath="${env.CHECKSTYLE_HOME}/checkstyle-5.6-all.jar" />
+	       	classpath="${r"${env.CHECKSTYLE_HOME}"}/checkstyle-5.6-all.jar" />
 	
 	       <!-- run analysis-->
-	       <checkstyle config="${env.CHECKSTYLE_HOME}/sun_checks.xml"
+	       <checkstyle config="${r"${env.CHECKSTYLE_HOME}"}/sun_checks.xml"
 	                   failureProperty="checkstyle.failure"
 	                   failOnViolation="false" >
-	           <formatter type="xml" tofile="${tmp.rel-dir}/checkstyle_report.xml" />
-	           <fileset dir="${src.rel-dir}" includes="**/*.java" />
+	           <formatter type="xml" tofile="${r"${tmp.rel-dir}"}/checkstyle-result.xml" />
+	           <fileset dir="${r"${source.dir}"}" includes="${project_path}/**/*.java" />
 	       </checkstyle>
 	
 		<!-- Report -->
 	       <xslt 
-	       	in="${tmp.rel-dir}/checkstyle_report.xml"
-	           out="${tmp.rel-dir}/checkstyle_report.html"
-	           style="${env.CHECKSTYLE_HOME}/contrib/checkstyle-noframes.xsl"
+	       	in="${r"${tmp.rel-dir}"}/checkstyle-result.xml"
+	           out="${r"${tmp.rel-dir}"}/checkstyle-result.html"
+	           style="${r"${env.CHECKSTYLE_HOME}"}/contrib/checkstyle-noframes.xsl"
 	       />
 	</target>
 	
-	<target name="run-pmd" depends="compile-tests"
+	<target name="run-pmd" depends="init"
 		description="Run pmd">
 		
 		<!-- Fail this target if Pmd is not installed. -->
-		<available file="${env.PMD_HOME}/lib/pmd-5.0.2.jar" 
+		<available file="${r"${env.PMD_HOME}"}/lib/pmd-5.0.2.jar" 
 			property="pmd.available" />
 		<fail unless="pmd.available"
 			message="Error: PMD_HOME not set or pmd-5.0.2.jar not found." />
 		
 		<path id="pmd.classpath">
-	    	<fileset dir="${env.PMD_HOME}/lib/">
+	    	<fileset dir="${r"${env.PMD_HOME}"}/lib/">
 	            <include name="**/*.jar" />
 	        </fileset>
 	    </path>
@@ -165,12 +172,12 @@
 		<!-- Run this target if Pmd is installed. -->
 		<taskdef name="pmd" 
 			classpathref="pmd.classpath"
-			classpath="${env.PMD_HOME}/lib/pmd-5.0.2.jar"
+			classpath="${r"${env.PMD_HOME}"}/lib/pmd-5.0.2.jar"
 			classname="net.sourceforge.pmd.ant.PMDTask" />
 		<pmd shortFilenames="true">
-			<ruleset>${env.PMD_HOME}/rules.xml</ruleset>
-			<formatter type="xml" toFile="${tmp.rel-dir}/pmd.xml"/>
-			<fileset dir="${src.rel-dir}">
+			<ruleset>${r"${env.PMD_HOME}"}/rules.xml</ruleset>
+			<formatter type="xml" toFile="${r"${tmp.rel-dir}"}/pmd.xml"/>
+			<fileset dir="${r"${source.dir}"}">
 				<include name="**/*.java"/>
 				<exclude name="**/*Test*"/>
 			</fileset>
@@ -178,14 +185,14 @@
 		
 		<taskdef name="cpd" 
 			classpathref="pmd.classpath"
-			classpath="${env.PMD_HOME}/lib/pmd-5.0.2.jar"
+			classpath="${r"${env.PMD_HOME}"}/lib/pmd-5.0.2.jar"
 			classname="net.sourceforge.pmd.cpd.CPDTask" />
 	    <cpd 
 	    	minimumTokenCount="100" 
 	    	language="java" 
 	    	format="xml" 
-	    	outputFile="${tmp.rel-dir}/cpd.xml">
-	        <fileset dir="${src.rel-dir}">
+	    	outputFile="${r"${tmp.rel-dir}"}/cpd.xml">
+	        <fileset dir="${r"${source.dir}"}">
 	            <include name="**/*.java"/>
 	        	<exclude name="**/*Test*"/>
 	        </fileset>
@@ -193,26 +200,13 @@
 		
 		<!-- Report -->
 		<xslt 
-			in="${tmp.rel-dir}/pmd.xml" 
-			out="${tmp.rel-dir}/pmd.html"
-			style="${env.PMD_HOME}/etc/xslt/pmd-report.xslt" />
+			in="${r"${tmp.rel-dir}"}/pmd.xml" 
+			out="${r"${tmp.rel-dir}"}/pmd.html"
+			style="${r"${env.PMD_HOME}"}/etc/xslt/pmd-report.xslt" />
 		<xslt 
-			in="${tmp.rel-dir}/cpd.xml" 
-			out="${tmp.rel-dir}/cpd.html"
-			style="${env.PMD_HOME}/etc/xslt/cpdhtml.xslt" />
-	</target>
-	
-	<target name="run-jdepend" depends="compile-tests"
-		description="Run jdepend">
-		<jdepend outputfile="docs/jdepend.xml" fork="yes" format="xml">
-		    <sourcespath>
-		        <pathelement location="${src.rel-dir}"/>
-		    </sourcespath>
-		    <classpath refid="project.classpath" />
-		        <!--pathelement location="classes"/>
-		        <pathelement location="/usr/share/java/jdepend-2.9.jar"/>
-		    </classpath-->
-		</jdepend>
+			in="${r"${tmp.rel-dir}"}/cpd.xml" 
+			out="${r"${tmp.rel-dir}"}/cpd.html"
+			style="${r"${env.PMD_HOME}"}/etc/xslt/cpdhtml.xslt" />
 	</target>
 	
 	<target name="reports" depends="run-checkstyle,run-findbugs,run-pmd" />

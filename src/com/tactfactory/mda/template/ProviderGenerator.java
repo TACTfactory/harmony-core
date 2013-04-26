@@ -88,10 +88,11 @@ public class ProviderGenerator extends BaseGenerator {
 					"app_provider_description", 
 					"Provider of "
 						+ this.getAppMetas().getName() 
-						+ " for acces to data", 
+						+ " to access data", 
 					Group.PROVIDER);
 			
 			new TranslationGenerator(this.getAdapter()).generateStringsXml();
+			new TestProviderGenerator(this.getAdapter()).generateAll();
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
@@ -183,7 +184,7 @@ public class ProviderGenerator extends BaseGenerator {
 				// Set values
 				findProvider.setAttribute("authorities", 	
 						this.getAppMetas().getProjectNameSpace()
-							.replace('/', '.') + "provider",
+							.replace('/', '.') + ".provider",
 						ns);
 				findProvider.setAttribute("label", 			
 						"@string/app_provider_name",
