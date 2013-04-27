@@ -30,8 +30,6 @@
 	<property name="compile.debug" value="true" />
 	<property name="compile.debuglevel" value="lines,vars,source" />
 	
-	<property file="ant.properties" />
-	
 	<!-- jar file from where the tasks are loaded -->
     <path id="android.antlibs">
         <pathelement path="${ant-lib.rel-dir}/anttasks.jar" />
@@ -42,7 +40,7 @@
     
 	<!-- project classpath -->
 
-	<path id="project.classpath">
+	<path id="project.classpath" cache="true">
 		<!-- compiled classes -->
 		<pathelement location="${build.rel-dir}" />
 		<!-- libraries -->
@@ -58,9 +56,13 @@
         <mkdir dir="${dist.rel-dir}/${lib.rel-dir}"/>
     	<mkdir dir="${tmp.rel-dir}"/>
     </target>
-
+<property file="ant.properties" />
     <target name="clean"
         description="Delete temporary folders">
+    	<echo>basedir: ${basedir}</echo>
+    	<echo>test: ${test.runner}</echo>
+    	<echo>filter: ${emma.filter}</echo>
+    	
         <delete dir="${build.rel-dir}" failonerror="false" deleteonexit="true" />
     	<delete dir="${tmp.rel-dir}" failonerror="false" deleteonexit="true" />
     </target>
@@ -141,7 +143,10 @@
 				</emma>
 				
 		    	<path id="emma.test.classpath">
+					
 					<pathelement location="${emma.instr-dir}"/>
+					<path refid="project.classpath"/>
+<!-- 					<pathelement location="${build.rel-dir}"/>					 -->
 					<pathelement location="${emma.dir}"/>
 					<fileset dir="${emma.dir}">
 						<include name="*.jar" />
@@ -194,7 +199,7 @@
 					         and individually overridden for each report type:
 					    -->
 					    <xml outfile="${emma.out-dir}/coverage.xml"/>
-<!-- 					    <html outfile="${emma.out-dir}/coverage.html" /> -->
+					    <html outfile="${emma.out-dir}/coverage.html" />
 				    </report>
 				</emma>
 			</then>
@@ -422,8 +427,9 @@
 	</path>
 	
 	<target name="emma"> <!-- enable code coverage -->
-        <property name="emma.enabled" value="true" />      
-        <property name="emma.filter" value="" /> 
+        <property name="emma.enabled" value="true" />
+        <property name="emma.filter" value="" />        
         <mkdir dir="${emma.instr-dir}" />        
-    </target>
+    </target>    
+    
 </project>
