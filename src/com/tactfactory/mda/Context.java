@@ -89,9 +89,25 @@ public final class Context {
 		// For vendor/tact-core case
 		if (baseDir == null) {
 			File predictiveBaseDir = 
-					new File(harmonyPath).getParentFile().getParentFile();
+					new File(harmonyPath)
+						.getParentFile()
+						.getParentFile()
+						.getParentFile();
 			
 			ConsoleUtils.displayDebug("Other Mode : " + harmonyPath);
+			baseDir = this.detectAppTree(predictiveBaseDir);
+		}
+		
+		//For Emma
+		if (baseDir == null) {
+			File predictiveBaseDir = 
+					new File(harmonyPath)
+						.getParentFile()
+						.getParentFile()
+						.getParentFile()
+						.getParentFile();
+			
+			ConsoleUtils.displayDebug("Emma Mode : " + harmonyPath);
 			baseDir = this.detectAppTree(predictiveBaseDir);
 		}
 		

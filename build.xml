@@ -25,11 +25,12 @@
 	<property name="dist.rel-dir" value="./" />
 	<property name="sherlock.rel-dir" value="sherlock-4.2" />
 	<property name="doc.rel-dir" value="${dist.rel-dir}/javadoc" />
-	<property name="jar.rel-file" value="${dist.rel-dir}/${ant.project.name}.jar" />
-	
+	<property name="jar.rel-file" value="${dist.rel-dir}/${ant.project.name}.jar" />	
 		
 	<property name="compile.debug" value="true" />
 	<property name="compile.debuglevel" value="lines,vars,source" />
+	
+	<property file="ant.properties" />
 	
 	<!-- jar file from where the tasks are loaded -->
     <path id="android.antlibs">
@@ -135,7 +136,7 @@
 				         destdir="${emma.instr-dir}"
 				         metadatafile="${emma.out-dir}/metadata.emma"
 				         merge="true">
-				        <filter value="${emma.filter}" />
+ 				        <filter value="${emma.filter}"/>
 				    </instr>
 				</emma>
 				
@@ -160,7 +161,7 @@
 			</else>
 		</if>
 
-        <junit haltonfailure="no" ><!--  fork="yes"-->
+        <junit haltonfailure="no" fork="yes">
             <!-- <if condition="${emma.enabled}">
 	            <then> -->
 		            <jvmarg value="-Demma.coverage.out.file=${emma.out-dir}/coverage.emma" />
@@ -171,6 +172,7 @@
       		
             <classpath refid="${test.classpath.id}" />
             <formatter type="xml" />
+            <formatter classname="org.apache.tools.ant.taskdefs.optional.junit.TearDownOnVmCrash" usefile="false"/>
         	<test name="com.tactfactory.mda.test.AllTests" todir="${tmp.rel-dir}/"/>
         </junit>
         
@@ -192,6 +194,7 @@
 					         and individually overridden for each report type:
 					    -->
 					    <xml outfile="${emma.out-dir}/coverage.xml"/>
+<!-- 					    <html outfile="${emma.out-dir}/coverage.html" /> -->
 				    </report>
 				</emma>
 			</then>
@@ -419,8 +422,8 @@
 	</path>
 	
 	<target name="emma"> <!-- enable code coverage -->
-        <property name="emma.enabled" value="true" />
-        <property name="emma.filter" value="" />
+        <property name="emma.enabled" value="true" />      
+        <property name="emma.filter" value="" /> 
         <mkdir dir="${emma.instr-dir}" />        
     </target>
 </project>
