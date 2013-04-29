@@ -1,34 +1,34 @@
 Post:
-   Post1:
+   TEST - Post1:
       id: 0
-      title: "Post 1"
-      content: "Je dirais meme plus..."
-      categories: "Radotage"
-      owner: Dupond
+      title: "TEST - Post 1"
+      content: "TEST - Je dirais meme plus..."
+      categories: "TEST - Radotage"
+      owner: TEST - Dupond
       comments: 
-         comment : Comment1
+         comment : TEST - Comment1
       createdAt: 2001-12-15 2:59:43.10
       updatedAt: 2001-12-15 2:59:43.10
       expiresAt: 2001-12-15 2:59:43.10
-   Post2:
+   TEST - Post2:
       id: 0
-      title: "Post 2"
-      content: "Bachibouzouk"
-      categories: "Insulte"
-      owner: Haddock
+      title: "TEST - Post 2"
+      content: "TEST - Bachibouzouk"
+      categories: "TEST - Insulte"
+      owner: TEST - Haddock
       comments: 
-         comment : Comment2
+         comment : TEST - Comment2
       createdAt: 2001-12-15 2:59:43.10
       updatedAt: 2001-12-15 2:59:43.10
       expiresAt: 2001-12-15 2:59:43.10
-   Post3:
+   TEST - Post3:
       id: 0
-      title: "Post 3"
-      content: "Mais oui, c'est un gymnote..."
-      categories: "Fait scientifique"
-      owner: Tournesol
+      title: "TEST - Post 3"
+      content: "TEST - Mais oui, c'est un gymnote..."
+      categories: "TEST - Fait scientifique"
+      owner: TEST - Tournesol
       comments: 
-         comment : Comment3
+         comment : TEST - Comment3
       createdAt: 2001-12-15 2:59:43.10
       updatedAt: 2001-12-15 2:59:43.10
       expiresAt: 2001-12-15 2:59:43.10

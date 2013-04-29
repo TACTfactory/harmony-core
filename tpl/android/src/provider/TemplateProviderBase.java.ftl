@@ -71,7 +71,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	
 	@Override
 	public boolean onCreate() {
-		boolean result = false;
+		boolean result = true;
 		
 		this.mContext = getContext();
 		URI_NOT_SUPPORTED = this.getContext().getString(
@@ -96,11 +96,11 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 		
 		<#list entities?values as entity>
 			<#if (entity.fields?size>0) >
-        result = (this.dbAdapter${entity.name?cap_first} != null);
+		result = result && (this.dbAdapter${entity.name?cap_first} != null);
         	</#if>
         </#list>
         
-        return result;
+		return result;
 	}
 	
 	@Override

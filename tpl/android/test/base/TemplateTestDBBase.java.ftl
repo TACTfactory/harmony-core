@@ -29,6 +29,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 
 	protected SQLiteDatabase db;
 	protected ${curr.name} entity;
+	protected DataLoader dataLoader;
 
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
@@ -43,8 +44,8 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
 		this.db.beginTransaction();
 		
-		DataLoader dataLoader = new DataLoader(this.ctx);
-		dataLoader.loadData(this.db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
+		this.dataLoader = new DataLoader(this.ctx);
+		this.dataLoader.loadData(this.db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
 		
 		ArrayList<${curr.name?cap_first}> entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).items.values());
 		if (entities.size()>0){
@@ -60,6 +61,7 @@ public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
 		
 		this.db.endTransaction();
 		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
+		this.dataLoader.clean();
 		this.adapter.close();
 	}
 	
