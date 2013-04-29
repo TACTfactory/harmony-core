@@ -75,14 +75,15 @@ public abstract class FixtureBase<T> {
 		InputStream inputStream = this.getYml(
 					DataLoader.getPathToFixtures(mode) 
 					+ this.getFixtureFileName());
-
-		Map<?, ?> map = (Map<?, ?>) yaml.load(inputStream);
-		if (map != null && map.containsKey(this.getFixtureFileName())){
-			Map<?, ?> listEntities = (Map<?, ?>) map.get(this.getFixtureFileName());
-			if (listEntities!=null){
-				for (Object name : listEntities.keySet()) {
-					Map<?, ?> currEntity = (Map<?, ?>) listEntities.get(name);
-					this.items.put((String) name, this.extractItem(currEntity));
+		if (inputStream != null) {
+			Map<?, ?> map = (Map<?, ?>) yaml.load(inputStream);
+			if (map != null && map.containsKey(this.getFixtureFileName())){
+				Map<?, ?> listEntities = (Map<?, ?>) map.get(this.getFixtureFileName());
+				if (listEntities!=null){
+					for (Object name : listEntities.keySet()) {
+						Map<?, ?> currEntity = (Map<?, ?>) listEntities.get(name);
+						this.items.put((String) name, this.extractItem(currEntity));
+					}
 				}
 			}
 		}

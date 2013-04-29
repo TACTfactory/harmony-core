@@ -36,6 +36,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 	protected SQLiteDatabase db;
 	protected ${curr.name} entity;
 	protected ContentResolver provider;
+	protected DataLoader dataLoader;
 
 	private ArrayList<${curr.name}> entities;
 
@@ -52,15 +53,15 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
 		this.db.beginTransaction();
 		
-		DataLoader dataLoader = new DataLoader(this.ctx);
-		dataLoader.loadData(this.db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
+		this.dataLoader = new DataLoader(this.ctx);
+		this.dataLoader.loadData(this.db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
 		
 		this.db.setTransactionSuccessful();
 		this.db.endTransaction();
 		this.adapter.close();		
 		
 		this.entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).items.values());
-		if (this.entities.size()>0){
+		if (this.entities.size()>0) {
 			this.entity = this.entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}
 		
@@ -76,6 +77,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 		this.db = this.adapter.open();
 		this.db.beginTransaction();
 		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
+		this.dataLoader.clean();
 		this.db.setTransactionSuccessful();
 		this.db.endTransaction();
 		this.adapter.close();
