@@ -74,12 +74,11 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 	}
 
 	
+	<#if fixtureType=="xml">
 	@Override
 	protected ${curr.name} extractItem(Element element) {
 		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
-	
 		
-	<#if fixtureType=="xml">
 		<#list curr.fields as field>
 			<#if (!field.internal)>
 		if (element.getChildText("${field.name?uncap_first}")!=null){
@@ -142,7 +141,8 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 		</#list>
 
 	<#elseif fixtureType=="yml">
-		Map<?, ?> columns = (Map<?, ?>) listEntities.get(name);
+	@Override
+	protected ${curr.name} extractItem(Map<?, ?> columns) {
 		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
 		<#list curr.fields as field>
 			<#if (!field.internal)>
@@ -167,13 +167,13 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 					</#if>
 				<#else>
 					<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">
-			${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.get((String)columns.get("${field.name?uncap_first}")));
+			${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.get((String)columns.get("${field.name?uncap_first}")));
 					<#else>
 			ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
 			Map<?, ?> ${field.relation.targetEntity?uncap_first}sMap = (Map<?, ?>)columns.get("${field.name?uncap_first}");
 			for (Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()){
-				if (${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.containsKey((String)${field.relation.targetEntity?uncap_first}Name))
-					${field.relation.targetEntity?uncap_first}s.add(${field.relation.targetEntity?cap_first}DataLoader.${field.relation.targetEntity?uncap_first}s.get((String)${field.relation.targetEntity?uncap_first}Name));
+				if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.containsKey((String)${field.relation.targetEntity?uncap_first}Name))
+					${field.relation.targetEntity?uncap_first}s.add(${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.get((String)${field.relation.targetEntity?uncap_first}Name));
 			}
 			${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first}s);		
 					</#if>

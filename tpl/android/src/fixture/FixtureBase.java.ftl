@@ -81,7 +81,8 @@ public abstract class FixtureBase<T> {
 			Map<?, ?> listEntities = (Map<?, ?>) map.get(this.getFixtureFileName());
 			if (listEntities!=null){
 				for (Object name : listEntities.keySet()) {
-					this.items.put((String)element.getAttributeValue("id"), this.extractItem(element));
+					Map<?, ?> currEntity = (Map<?, ?>) listEntities.get(name);
+					this.items.put((String) name, this.extractItem(currEntity));
 				}
 			}
 		}
@@ -98,7 +99,11 @@ public abstract class FixtureBase<T> {
 		return this.items.get(id);
 	}
 
+	<#if (fixtureType=="xml")>
 	protected abstract T extractItem(Element element);
+	<#else>
+	protected abstract T extractItem(Map<?, ?> columns);
+	</#if>
 
 	/**
 	 * Get the order of this fixture
