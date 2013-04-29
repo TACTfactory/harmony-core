@@ -22,6 +22,7 @@
 	<property name="lib.rel-dir" value="lib" />
 	<property name="ant-lib.rel-dir" value="${lib.rel-dir}/ant" />
 	<property name="tmp.rel-dir" value="tmp" />
+	<property name="fixtures.rel-dir" value="fixtures" />
 	<property name="dist.rel-dir" value="./" />
 	<property name="sherlock.rel-dir" value="sherlock-4.2" />
 	<property name="doc.rel-dir" value="${dist.rel-dir}/javadoc" />
@@ -59,12 +60,9 @@
 <property file="ant.properties" />
     <target name="clean"
         description="Delete temporary folders">
-    	<echo>basedir: ${basedir}</echo>
-    	<echo>test: ${test.runner}</echo>
-    	<echo>filter: ${emma.filter}</echo>
-    	
-        <delete dir="${build.rel-dir}" failonerror="false" deleteonexit="true" />
-    	<delete dir="${tmp.rel-dir}" failonerror="false" deleteonexit="true" />
+        <delete dir="../../${build.rel-dir}" failonerror="false" deleteonexit="true" />
+    	<delete dir="../../${tmp.rel-dir}" failonerror="false" deleteonexit="true" />
+    	<delete dir="../../${fixtures.rel-dir}" failonerror="false" deleteonexit="true" />
     </target>
     
     <!-- javadoc -->
