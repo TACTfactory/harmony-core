@@ -7,9 +7,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 <#list curr.fields as field>
+	<#if (!field.internal && !field.hidden)>
 	<#assign m_id="${currname?lower_case}_${field.name?lower_case}" />
 	<#assign m_id_label="${m_id}_label" />
-	<#if (!field.internal && !field.hidden)>
 		<#if (!field.relation??)>
     <TextView 
     	android:id="@+id/${m_id_label}"
