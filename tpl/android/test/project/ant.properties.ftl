@@ -17,4 +17,3 @@
 
 tested.project.dir=../
 test.runner=com.zutubi.android.junitreport.JUnitReportTestRunner
-emma.filter="-android.support.v4.*, -com.actionbarsherlock.*, -com.tactfactory.mda.test.demact.view.*, -com.tactfactory.mda.test.demact.menu.*"
