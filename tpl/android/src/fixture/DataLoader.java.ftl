@@ -117,4 +117,10 @@ public class DataLoader {
 	public static String getPathToFixtures(int mode) {
 		return fixtureFolders.get(mode);
 	}
+
+	public void clean() {
+		for (FixtureBase<?> dataLoader: this.dataLoaders) {
+			dataLoader.items.clear();
+		}
+	}
 }

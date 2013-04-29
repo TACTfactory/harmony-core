@@ -31,6 +31,16 @@ import android.content.Context;
 	</#if>
 </#list>
 
+<#assign hasLocaleTime = false />
+<#list curr.fields as field>
+	<#if field.is_locale?? && field.is_locale>
+		<#assign hasLocaleTime = true />
+	</#if>
+</#list>
+<#if hasLocaleTime>
+import org.joda.time.DateTimeZone;
+</#if>
+
 import ${project_namespace}.entity.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -155,9 +165,9 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 					<#elseif field.type=="float">
 			${curr.name?uncap_first}.set${field.name?cap_first}(((Double)columns.get("${field.name?uncap_first}")).floatValue());
 					<#elseif field.type=="date">
-			${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
+			${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))<#if field.is_locale>, DateTimeZone.UTC</#if>));
 					<#elseif field.type=="datetime">		
-			${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))));
+			${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))<#if field.is_locale>, DateTimeZone.UTC</#if>));
 					<#elseif field.type=="time">
 			${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternTime,(String)columns.get("${field.name?uncap_first}")));
 					<#elseif field.type=="boolean">
@@ -166,8 +176,21 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 			${curr.name?uncap_first}.set${field.name?cap_first}((String)columns.get("${field.name?uncap_first}"));
 					</#if>
 				<#else>
-					<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">
-			${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.get((String)columns.get("${field.name?uncap_first}")));
+					<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">			
+			${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} = ${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.get((String)columns.get("${field.name?uncap_first}"));
+			if (${field.relation.targetEntity?uncap_first} != null) {
+				${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first});
+						<#if field.relation.inversedBy??>
+							<#assign invField = getInversingField(field) />
+				ArrayList<${curr.name?cap_first}> ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s = ${field.relation.targetEntity?uncap_first}.get${invField.name?cap_first}();
+				if (${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s == null) {
+					${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s = new ArrayList<${curr.name?cap_first}>();
+				}							
+				${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s.add(${curr.name?uncap_first});
+				${field.relation.targetEntity?uncap_first}.set${invField.name?cap_first}(${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s);
+						</#if>
+			}
+
 					<#else>
 			ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
 			Map<?, ?> ${field.relation.targetEntity?uncap_first}sMap = (Map<?, ?>)columns.get("${field.name?uncap_first}");

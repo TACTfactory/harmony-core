@@ -1,34 +1,34 @@
 Post:
-   Post1:
+   DEBUG - Post1:
       id: 0
-      title: "Post 1"
-      content: "Je dirais meme plus..."
-      categories: "Radotage"
-      owner: Dupond
+      title: "DEBUG - Post 1"
+      content: "DEBUG - Je dirais meme plus..."
+      categories: "DEBUG - Radotage"
+      owner: DEBUG - Dupond
       comments: 
-         comment : Comment1
+         comment : DEBUG - Comment1
       createdAt: 2001-12-15 2:59:43.10
       updatedAt: 2001-12-15 2:59:43.10
       expiresAt: 2001-12-15 2:59:43.10
-   Post2:
+   DEBUG - Post2:
       id: 0
-      title: "Post 2"
-      content: "Bachibouzouk"
-      categories: "Insulte"
-      owner: Haddock
+      title: "DEBUG - Post 2"
+      content: "DEBUG - Bachibouzouk"
+      categories: "DEBUG - Insulte"
+      owner: DEBUG - Haddock
       comments: 
-         comment : Comment2
+         comment : DEBUG - Comment2
       createdAt: 2001-12-15 2:59:43.10
       updatedAt: 2001-12-15 2:59:43.10
       expiresAt: 2001-12-15 2:59:43.10
-   Post3:
+   DEBUG - Post3:
       id: 0
-      title: "Post 3"
-      content: "Mais oui, c'est un gymnote..."
-      categories: "Fait scientifique"
-      owner: Tournesol
+      title: "DEBUG - Post 3"
+      content: "DEBUG - Mais oui, c'est un gymnote..."
+      categories: "DEBUG - Fait scientifique"
+      owner: DEBUG - Tournesol
       comments: 
-         comment : Comment3
+         comment : DEBUG - Comment3
       createdAt: 2001-12-15 2:59:43.10
       updatedAt: 2001-12-15 2:59:43.10
       expiresAt: 2001-12-15 2:59:43.10

@@ -39,6 +39,9 @@ public class FixtureGlobalTest extends CommonTest {
 	public static void setUpBefore() throws Exception {
 		CommonTest.setUpBefore();
 		initAll();
+
+		final File dirfixtures = new File("fixtures/");
+		TactFileUtils.deleteRecursive(dirfixtures);
 	}
 
 	@Before

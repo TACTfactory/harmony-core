@@ -1,22 +1,22 @@
 Comment:
-   Comment1:
+   DEBUG - Comment1:
       id: 0
-      content: "Commentaire 1"
-      owner: Dupond
-      post: Post1
+      content: "DEBUG - Commentaire 1"
+      owner: DEBUG - Dupond
+      post: DEBUG - Post1
       createdAt: 2001-12-15 2:59:43.10
       validate: true
-   Comment2:
+   DEBUG - Comment2:
       id: 1
-      content: "Commentaire 2"
-      owner: Haddock
-      post: Post2
+      content: "DEBUG - Commentaire 2"
+      owner: DEBUG - Haddock
+      post: DEBUG - Post2
       createdAt: 2001-12-15 2:59:43.10
       validate: true
-   Comment3:
+   DEBUG - Comment3:
       id: 2
-      content: "Commentaire 3"
-      owner: Tournesol
-      post: Post3
+      content: "DEBUG - Commentaire 3"
+      owner: DEBUG - Tournesol
+      post: DEBUG - Post3
       createdAt: 2001-12-15 2:59:43.10
       validate: false

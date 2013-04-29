@@ -1,43 +1,43 @@
 ViewComponent:
-   VC1:
+   DEBUG - VC1:
       id: 0
-      string: "VC1 String"
-      text: "VC1 Text"
+      string: "DEBUG - VC1 String"
+      text: "DEBUG - VC1 Text"
       dateTime: 2001-12-15 2:59:43.10
       date: 2012-01-01
       time: 00:00
-      login: "VC1 login"
-      password: "VC1 password"
-      email: "user1@vc1.com"
-      phone: "VC1-060101"
-      city: "VC1 City"
+      login: "DEBUG - VC1 login"
+      password: "DEBUG - VC1 password"
+      email: "DEBUG - user1@vc1.com"
+      phone: "DEBUG - VC1-060101"
+      city: "DEBUG - VC1 City"
       zipcode: 01000
-      country: "VC1 Country"
-   VC2:
+      country: "DEBUG - VC1 Country"
+   DEBUG - VC2:
       id: 0
-      string: "VC2 String"
-      text: "VC2 Text"
+      string: "DEBUG - VC2 String"
+      text: "DEBUG - VC2 Text"
       dateTime: 2001-12-15 2:59:43.10
       date: 2012-01-01
       time: 00:00
-      login: "VC2 login"
-      password: "VC2 password"
-      email: "user2@vc2.com"
-      phone: "VC2-060202"
-      city: "VC2 City"
+      login: "DEBUG - VC2 login"
+      password: "DEBUG - VC2 password"
+      email: "DEBUG - user2@vc2.com"
+      phone: "DEBUG - VC2-060202"
+      city: "DEBUG - VC2 City"
       zipcode: 02000
-      country: "VC2 Country"
-   VC3:
+      country: "DEBUG - VC2 Country"
+   DEBUG - VC3:
       id: 0
-      string: "VC3 String"
-      text: "VC3 Text"
+      string: "DEBUG - VC3 String"
+      text: "DEBUG - VC3 Text"
       dateTime: 2001-12-15 2:59:43.10
       date: 2012-01-01
       time: 00:00
-      login: "VC3 login"
-      password: "VC3 password"
-      email: "user3@vc3.com"
-      phone: "VC3-060303"
-      city: "VC3 City"
+      login: "DEBUG - VC3 login"
+      password: "DEBUG - VC3 password"
+      email: "DEBUG - user3@vc3.com"
+      phone: "DEBUG - VC3-060303"
+      city: "DEBUG - VC3 City"
       zipcode: 03000
-      country: "VC3 Country"
+      country: "DEBUG - VC3 Country"
