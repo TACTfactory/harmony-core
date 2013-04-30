@@ -217,7 +217,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 			i++;
 		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
-		builder.setTitle("Select ${relation.name}")
+		builder.setTitle(R.string.${curr.name?lower_case}_${relation.name?uncap_first}_dialog_title)
 				.setMultiChoiceItems(listAdapter, checks, new DialogInterface.OnMultiChoiceClickListener(){
 					public void onClick(DialogInterface dialog, int which, boolean isChecked){
 						${curr.name}CreateFragment.this.checked${relation.name?cap_first}[which] = isChecked;
@@ -245,7 +245,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 			i++;
 		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
-		builder.setTitle("Select ${relation.name}")
+		builder.setTitle(R.string.${curr.name?lower_case}_${relation.name?uncap_first}_dialog_title)
 				.setSingleChoiceItems(listAdapter, 0, new DialogInterface.OnClickListener(){
 					public void onClick(DialogInterface dialog, int id){
 						//${curr.name}CreateFragment.this.selected${relation.name?cap_first} = Integer.parseInt(listAdapter[id]);
@@ -416,11 +416,10 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 				${curr.name?lower_case}Adapter.insert(this.entity);
 
 				db.setTransactionSuccessful();
+				result = 0;
 			} finally {
 				db.endTransaction();
 				${curr.name?lower_case}Adapter.close();
-
-				result = 0;
 			}
 
 			return result;
