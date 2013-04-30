@@ -215,7 +215,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 			i++;
 		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
-		builder.setTitle("Select ${relation.name}")
+		builder.setTitle(R.string.${curr.name?lower_case}_${relation.name?uncap_first}_dialog_title)
 				.setMultiChoiceItems(listAdapter, checks, new DialogInterface.OnMultiChoiceClickListener(){
 					public void onClick(DialogInterface dialog, int which, boolean isChecked){
 						${curr.name}EditFragment.this.checked${relation.name?cap_first}[which] = isChecked;
@@ -243,7 +243,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 			i++;
 		}
 		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
-		builder.setTitle("Select ${relation.name}")
+		builder.setTitle(R.string.${curr.name?lower_case}_${relation.name?uncap_first}_dialog_title)
 				.setSingleChoiceItems(listAdapter, 0, new DialogInterface.OnClickListener(){
 					public void onClick(DialogInterface dialog, int id){
 						${curr.name}EditFragment.this.selected${relation.name?cap_first} = id;
