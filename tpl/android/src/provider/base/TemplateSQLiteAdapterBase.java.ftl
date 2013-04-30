@@ -208,7 +208,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 					<#if field.is_locale>
 			${t}final DateTime dt${field.name?cap_first} = DateUtils.formatLocalISOStringToDateTime(cursor.getString(index) );	
 					<#else>
-			${t}DateTime dt${field.name?cap_first} = DateUtils.formatISOStringToDateTime(cursor.getString(index) );	
+			${t}final DateTime dt${field.name?cap_first} = DateUtils.formatISOStringToDateTime(cursor.getString(index) );	
 					</#if>
 				${t}if (dt${field.name?cap_first} != null) {
 					${t}result.set${field.name?cap_first}(dt${field.name?cap_first});
@@ -295,7 +295,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 	 */
 	 public ArrayList<${curr.name}> getBy${relation.name?cap_first}(final int ${relation.name?lower_case}Id){
 		final Cursor cursor = this.query(COLS, ${alias(relation.name)}+"=?", new String[]{Integer.toString(${relation.name?lower_case}Id)}, null, null, null);
-		ArrayList<${curr.name}> result = this.cursorToItems(cursor);
+		final ArrayList<${curr.name}> result = this.cursorToItems(cursor);
 		cursor.close();
 		
 		return result;
@@ -304,7 +304,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 			<#elseif (relation.relation.type=="ManyToMany")>	<#--
 	public ArrayList<${curr.name}> getBy${relation.name?cap_first}(int ${relation.name?lower_case}Id){
 		final Cursor cursor = this.getCursor(${alias(relation.name)}+"=?", new String[]{Integer.toString(${relation.name?lower_case}Id)});
-		ArrayList<${curr.name}> result = this.cursorToItems(cursor);
+		final ArrayList<${curr.name}> result = this.cursorToItems(cursor);
 		cursor.close();
 		
 		return result;
@@ -594,7 +594,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 	}
 	
 
-	public int delete(int id){
+	public int delete(final int id){
 		<#if curr.ids?size==0>
 			throw new UnsupportedOperationException("Method not implemented yet.");
 		<#else>
@@ -635,7 +635,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 	<#--/** Find & read ${curr.name} by ${curr.relations[0].name}v*/
 	public ArrayList<${curr.relations[0].relation.targetEntity}> getBy${curr.relations[1].relation.targetEntity?cap_first}(int ${curr.relations[1].name?lower_case}){
 		Cursor cursor = this.getCursor(${alias(curr.relations[1].name)}+"=?", new String[]{${curr.relations[1].name?lower_case}+""});
-		ArrayList<${curr.name}> result = this.cursorToItems(cursor);
+		final ArrayList<${curr.name}> result = this.cursorToItems(cursor);
 		cursor.close();
 		
 		return result;
@@ -647,7 +647,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 		Cursor cursor = this.query(this.getCols(), whereClause, new String[]{whereArg}, null, null, null);
 		${curr.relations[0].relation.targetEntity}SQLiteAdapter adapt = new ${curr.relations[0].relation.targetEntity}SQLiteAdapter(this.context);
 		adapt.open(this.mDatabase);
-		ArrayList<${curr.relations[0].relation.targetEntity}> ret = new ArrayList<${curr.relations[0].relation.targetEntity}>();
+		final ArrayList<${curr.relations[0].relation.targetEntity}> ret = new ArrayList<${curr.relations[0].relation.targetEntity}>();
 
 		while (cursor.moveToNext()){
 			ret.add(adapt.getByID(cursor.getInt( cursor.getColumnIndexOrThrow(${alias(curr.relations[0].name)}) )));
@@ -662,7 +662,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend}{
 		Cursor cursor = this.query(this.getCols(), whereClause, new String[]{whereArg}, null, null, null);
 		${curr.relations[1].relation.targetEntity}SQLiteAdapter adapt = new ${curr.relations[1].relation.targetEntity}SQLiteAdapter(this.context);
 		adapt.open(this.mDatabase);
-		ArrayList<${curr.relations[1].relation.targetEntity}> ret = new ArrayList<${curr.relations[1].relation.targetEntity}>();
+		final ArrayList<${curr.relations[1].relation.targetEntity}> ret = new ArrayList<${curr.relations[1].relation.targetEntity}>();
 
 		while (cursor.moveToNext()){
 			ret.add(adapt.getByID(cursor.getInt( cursor.getColumnIndexOrThrow(${alias(curr.relations[1].name)}) )));

@@ -74,8 +74,9 @@ public abstract class SQLiteAdapterBase<T>{
 	
 	
 	protected Cursor getAllCursor() {
-		if (${project_name?cap_first}Application.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG) {
 			Log.d(TAG, "Get all entities");
+		}
 		
 		return this.query(this.getCols(), null, null, null, null, null);
 	}
@@ -124,9 +125,9 @@ public abstract class SQLiteAdapterBase<T>{
 	 * @return List of Comment entities
 	 */
 	public List<T> getAll() {
-		Cursor c = this.getAllCursor();
-		ArrayList<T> result = this.cursorToItems(c);
-		c.close();
+		Cursor cursor = this.getAllCursor();
+		ArrayList<T> result = this.cursorToItems(cursor);
+		cursor.close();
 		
 		
 		return result;
@@ -137,14 +138,17 @@ public abstract class SQLiteAdapterBase<T>{
 	 * @return List of T entities
 	 */
 	public List<T> getAll(CriteriasBase crits) {
+		List<T> result; 
+		
 		if (crits == null || crits.isEmpty()){
-			return this.getAll();
+			result = this.getAll();
 		} else {
-			Cursor c = this.mDatabase.rawQuery("SELECT * FROM "+this.getTableName()+" WHERE "+crits.toSQLiteString(), null);
-			ArrayList<T> result = this.cursorToItems(c);
-			c.close();
-			return result;
+			final Cursor cursor = this.mDatabase.rawQuery("SELECT * FROM "+this.getTableName()+" WHERE "+crits.toSQLiteString(), null);
+			result = this.cursorToItems(cursor);
+			cursor.close();
 		}	
+		
+		return result;
 	}
 	
 	/** Convert Cursor of database to Array of Comment entity
@@ -152,20 +156,20 @@ public abstract class SQLiteAdapterBase<T>{
 	 * @param c Cursor object
 	 * @return Array of Comment entity
 	 */
-	public ArrayList<T> cursorToItems(Cursor c) {
-		ArrayList<T> result = new ArrayList<T>(c.getCount());
+	public ArrayList<T> cursorToItems(final Cursor cursor) {
+		final ArrayList<T> result = new ArrayList<T>(cursor.getCount());
 
-		if (c.getCount() != 0) {
-			c.moveToFirst();
+		if (cursor.getCount() != 0) {
+			cursor.moveToFirst();
 			
 			T item;
 			do {
 				item = this.cursorToItem(c);
 				result.add(item);
-			} while (c.moveToNext());
+			} while (cursor.moveToNext());
 			
 			//if (DemactApplication.DEBUG)
-			//	Log.d(TAG, "Read DB(" + TABLE_NAME + ") count : " + c.getCount() );
+			//	Log.d(TAG, "Read DB(" + TABLE_NAME + ") count : " + cursor.getCount() );
 		}
 
 		return result;

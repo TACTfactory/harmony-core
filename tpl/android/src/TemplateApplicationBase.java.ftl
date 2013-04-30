@@ -72,7 +72,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	/**
 	 * 
 	 */
-	public static String getUDID(Context context){
+	public static String getUDID(final Context context){
 		String udid = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
 		
 		// for emulator
@@ -82,7 +82,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		
 		// for google bug, android < 2.3 (many device)
 		if (udid.equals("9774d56d682e549c")) {
-			TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+			final TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
 			udid = telephonyManager.getDeviceId();
 		}
 		
@@ -109,8 +109,8 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	 * @param ctx
 	 * @return the version number
 	 */
-	public static String getVersion(Context ctx) {
-		SharedPreferences settings = ctx.getSharedPreferences(
+	public static String getVersion(final Context ctx) {
+		final SharedPreferences settings = ctx.getSharedPreferences(
 				${project_name?cap_first}ApplicationBase.PREFS_PUBL, Context.MODE_WORLD_READABLE);
 		
 		return settings.getString(
@@ -121,9 +121,9 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	 * @param ctx
 	 * @return true if same version
 	 */
-	public static boolean isGoodVersion(Context ctx) {
-		String oldVersion = getVersion(ctx);
-		String currentVersion = ctx.getString(R.string.app_version);
+	public static boolean isGoodVersion(final Context ctx) {
+		final String oldVersion = getVersion(ctx);
+		final String currentVersion = ctx.getString(R.string.app_version);
 		
 		return oldVersion.equals(currentVersion);
 	}
@@ -131,12 +131,12 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	 * 
 	 * @param ctx
 	 */
-	public static void setVersion(Context ctx) {
-		SharedPreferences settings = ctx.getSharedPreferences(
+	public static void setVersion(final Context ctx) {
+		final SharedPreferences settings = ctx.getSharedPreferences(
 				${project_name?cap_first}ApplicationBase.PREFS_PUBL, Context.MODE_WORLD_READABLE);
 		
-		String currentVersion = ctx.getString(R.string.app_version);
-	    SharedPreferences.Editor editor = settings.edit();
+		final String currentVersion = ctx.getString(R.string.app_version);
+	    final SharedPreferences.Editor editor = settings.edit();
 	    editor.putString(${project_name?cap_first}ApplicationBase.PREFS_VERS, currentVersion);
 		
 	    // Commit the edits!
@@ -149,9 +149,9 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	 * @param ctx
 	 * @return true if have a network
 	 */
-	public static boolean isNetworkAvailable(Context ctx) {
-	    ConnectivityManager connectivityManager = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
-	    NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	public static boolean isNetworkAvailable(final Context ctx) {
+	    final ConnectivityManager connectivityManager = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    final NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 	    return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
 	}
 	

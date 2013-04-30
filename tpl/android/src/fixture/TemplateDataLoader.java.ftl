@@ -151,8 +151,8 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 
 	<#elseif fixtureType=="yml">
 	@Override
-	protected ${curr.name} extractItem(Map<?, ?> columns) {
-		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
+	protected ${curr.name} extractItem(final Map<?, ?> columns) {
+		final ${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
 		<#list curr.fields as field>
 			<#if (!field.internal)>
 		if (columns.get("${field.name?uncap_first}")!=null){
@@ -176,7 +176,7 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 					</#if>
 				<#else>
 					<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">			
-			${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} = ${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.get((String)columns.get("${field.name?uncap_first}"));
+			final ${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} = ${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.get((String)columns.get("${field.name?uncap_first}"));
 			if (${field.relation.targetEntity?uncap_first} != null) {
 				${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first});
 						<#if field.relation.inversedBy??>
