@@ -25,15 +25,15 @@ public class Criteria implements Serializable, ICriteria{
 		return this.value;
 	}
 	
-	public void setKey(String key){
+	public void setKey(final String key){
 		this.key = key;
 	}
 	
-	public void addValue(String value){
+	public void addValue(final String value){
 		this.value = value;
 	}
 	
-	public void setType(Type type){
+	public void setType(final Type type){
 		this.type = type;
 	}
 	
@@ -52,7 +52,7 @@ public class Criteria implements Serializable, ICriteria{
 		
 		private String sql;
 		
-		private Type(String sql){
+		private Type(final String sql){
 			this.sql = sql;
 		}
 		
@@ -63,26 +63,37 @@ public class Criteria implements Serializable, ICriteria{
 	
 
 	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Criteria other = (Criteria) obj;
-		if (key == null) {
-			if (other.key != null)
-				return false;
-		} else if (!key.equals(other.key))
-			return false;
-		if (type != other.type)
-			return false;
-		if (value == null) {
-			if (other.value != null)
-				return false;
-		} else if (!value.equals(other.value))
-			return false;
-		return true;
+	public boolean equals(final Object obj) {
+		boolean result = true;
+	
+		if (obj == null) {
+			result = false;
+		}
+		else if (getClass() != obj.getClass()) {
+			result = false;
+		}
+		
+		if (result) {
+			final Criteria other = (Criteria) obj;
+			if (key == null) {
+				if (other.key != null) {
+					result = false;
+				}
+			} else if (!key.equals(other.key)) {
+				result = false;
+			}
+			else if (type != other.type) {
+				result = false;
+			}
+			else if (value == null) {
+				if (other.value != null) {
+					result = false;
+				}
+			} else if (!value.equals(other.value)) {
+				result = false;
+			}
+		}
+	
+		return result;
 	}
 }

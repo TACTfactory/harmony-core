@@ -54,15 +54,16 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	
 	// Static constructor
 	static {
-		if (${project_name?cap_first}Application.DEBUG)
+		if (${project_name?cap_first}Application.DEBUG) {
 			Log.d(TAG, "Initialize Provider...");
+		}
 		
 		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 		<#list entities?values as entity>
 			<#if (entity.fields?size>0) >
 		
 		// ${entity.name} URI mapping
-		String ${entity.name?lower_case}Type 		= "${entity.name?lower_case}";
+		final String ${entity.name?lower_case}Type 		= "${entity.name?lower_case}";
 		${entity.name?upper_case}_URI	= generateUri(${entity.name?lower_case}Type);
 		uriMatcher.addURI(authority, ${entity.name?lower_case}Type, 			${entity.name?upper_case}_ALL);
 		uriMatcher.addURI(authority, ${entity.name?lower_case}Type + "/#", 	${entity.name?upper_case}_ONE);
@@ -105,13 +106,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 	
 	@Override
-	protected void finalize() throws Throwable {
-			//this.doUnbindService();
-			super.finalize();
-	}
-	
-	@Override
-	public String getType(Uri uri) {
+	public String getType(final Uri uri) {
 		String result = null;
 		final String single = "vnc.android.cursor.item/" + authority + ".";
 		final String collection = "vnc.android.cursor.collection/" + authority + ".";
@@ -138,7 +133,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 	
 	@Override
-	public int delete(Uri uri, String selection, String[] selectionArgs) {
+	public int delete(final Uri uri, final String selection, final String[] selectionArgs) {
 		int result = 0;
 		int id = 0;
 		this.db.beginTransaction();
@@ -180,7 +175,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 	
 	@Override
-	public Uri insert(Uri uri, ContentValues values) {
+	public Uri insert(final Uri uri, final ContentValues values) {
 		Uri result = null;
 		long id = 0;
 
