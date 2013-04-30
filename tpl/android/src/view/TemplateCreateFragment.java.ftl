@@ -416,11 +416,10 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 				${curr.name?lower_case}Adapter.insert(this.entity);
 
 				db.setTransactionSuccessful();
+				result = 0;
 			} finally {
 				db.endTransaction();
 				${curr.name?lower_case}Adapter.close();
-
-				result = 0;
 			}
 
 			return result;

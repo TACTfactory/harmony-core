@@ -417,11 +417,10 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 				${curr.name?lower_case}Adapter.update(this.entity);
 
 				db.setTransactionSuccessful();
+				result = 0;
 			} finally {
 				db.endTransaction();
 				${curr.name?lower_case}Adapter.close();
-
-				result = 0;
 			}
 
 			return result;
