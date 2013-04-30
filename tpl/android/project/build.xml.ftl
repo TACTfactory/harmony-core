@@ -139,7 +139,7 @@
 	       	classpath="${r"${env.CHECKSTYLE_HOME}"}/checkstyle-5.6-all.jar" />
 	
 	       <!-- run analysis-->
-	       <checkstyle config="${r"${env.CHECKSTYLE_HOME}"}/sun_checks.xml"
+	       <checkstyle config="checkstyle_rules.xml"
 	                   failureProperty="checkstyle.failure"
 	                   failOnViolation="false" >
 	           <formatter type="xml" tofile="${r"${tmp.rel-dir}"}/checkstyle-result.xml" />
