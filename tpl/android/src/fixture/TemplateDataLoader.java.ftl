@@ -192,10 +192,11 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 
 					<#else>
 			ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
-			Map<?, ?> ${field.relation.targetEntity?uncap_first}sMap = (Map<?, ?>)columns.get("${field.name?uncap_first}");
-			for (Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()){
-				if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.containsKey((String)${field.relation.targetEntity?uncap_first}Name))
+			final Map<?, ?> ${field.relation.targetEntity?uncap_first}sMap = (Map<?, ?>)columns.get("${field.name?uncap_first}");
+			for (final Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()){
+				if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.containsKey((String)${field.relation.targetEntity?uncap_first}Name)) {
 					${field.relation.targetEntity?uncap_first}s.add(${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.get((String)${field.relation.targetEntity?uncap_first}Name));
+				}
 			}
 			${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first}s);		
 					</#if>
