@@ -164,7 +164,7 @@ public abstract class SQLiteAdapterBase<T>{
 			
 			T item;
 			do {
-				item = this.cursorToItem(c);
+				item = this.cursorToItem(cursor);
 				result.add(item);
 			} while (cursor.moveToNext());
 			
