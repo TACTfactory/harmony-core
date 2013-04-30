@@ -274,6 +274,10 @@ public class ProjectGenerator extends BaseGenerator {
 			TactFileUtils.deleteRecursive(
 					new File(String.format("%s/%s", pathSherlock, "samples")));
 
+			String srcPath = Harmony.getTemplatesPath() + "/android/libs/sherlock_ant.properties.xml";
+			String destPath = pathSherlock + "/library/ant.properties.xml";
+			this.makeSource(srcPath, destPath, false);
+			
 			//make build sherlock
 			command.add(String.format("%s/%s", 
 					ApplicationMetadata.getAndroidSdkPath(), 

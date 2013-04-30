@@ -48,6 +48,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	protected ${entity.name?cap_first}SQLiteAdapter dbAdapter${entity.name?cap_first};
 		</#if>
 	</#list>
+	protected SQLiteDatabase db;
 	
 	protected Context mContext;
 	
@@ -83,10 +84,10 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			<#if (entity.fields?size>0) >
 			this.dbAdapter${entity.name?cap_first} = new ${entity.name?cap_first}SQLiteAdapter(this.mContext);
 				<#if (firstGo)>
-			SQLiteDatabase db = this.dbAdapter${entity.name?cap_first}.open();
+			this.db = this.dbAdapter${entity.name?cap_first}.open();
 				<#assign firstGo = false />
 				<#else>
-			this.dbAdapter${entity.name?cap_first}.open(db);
+			this.dbAdapter${entity.name?cap_first}.open(this.db);
 				</#if>
 			</#if>
 		</#list>
@@ -140,30 +141,36 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
 		int result = 0;
 		int id = 0;
-		
-		switch (uriMatcher.match(uri)) {
+		this.db.beginTransaction();
+		try {
+			switch (uriMatcher.match(uri)) {
 		<#list entities?values as entity>
 			<#if (entity.fields?size>0) >
 		
-		// ${entity.name}
-		case ${entity.name?upper_case}_ONE:
-			try {
-				id = Integer.parseInt(uri.getPathSegments().get(1));
-				result = this.dbAdapter${entity.name?cap_first}.delete(id);
-			} catch (Exception e) {
-				throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
-			}
-			break;
-		case ${entity.name?upper_case}_ALL:
-			result = this.dbAdapter${entity.name?cap_first}.delete(
-						selection, 
-						selectionArgs);
-			break;
+			// ${entity.name}
+			case ${entity.name?upper_case}_ONE:
+				try {
+					id = Integer.parseInt(uri.getPathSegments().get(1));
+					result = this.dbAdapter${entity.name?cap_first}.delete(id);
+				} catch (Exception e) {
+					throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
+				}
+				break;
+			case ${entity.name?upper_case}_ALL:
+				result = this.dbAdapter${entity.name?cap_first}.delete(
+							selection, 
+							selectionArgs);
+				break;
 			</#if>
 		</#list>
 		
-		default:
-			throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
+			default:
+				throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
+			}
+
+			this.db.setTransactionSuccessful();
+		} finally {
+			this.db.endTransaction();
 		}
 		
 		if (result > 0) {
@@ -177,24 +184,31 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 		Uri result = null;
 		long id = 0;
 
-		switch (uriMatcher.match(uri)) {
+		this.db.beginTransaction();
+		try {
+
+			switch (uriMatcher.match(uri)) {
 		<#list entities?values as entity>
 			<#if (entity.fields?size>0) >
 		
-		// ${entity.name}
-		case ${entity.name?upper_case}_ALL:
-			id = this.dbAdapter${entity.name?cap_first}.insert(null, values);
+			// ${entity.name}
+			case ${entity.name?upper_case}_ALL:
+				id = this.dbAdapter${entity.name?cap_first}.insert(null, values);
 			
-			if (id > 0) {
-				result = ContentUris.withAppendedId(${project_name?cap_first}ProviderBase.${entity.name?upper_case}_URI, id);
-				getContext().getContentResolver().notifyChange(result, null);
-			}
-			break;
+				if (id > 0) {
+					result = ContentUris.withAppendedId(${project_name?cap_first}ProviderBase.${entity.name?upper_case}_URI, id);
+					getContext().getContentResolver().notifyChange(result, null);
+				}
+				break;
 			</#if>
 		</#list>
 		
-		default:
-			throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
+			default:
+				throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
+			}
+			this.db.setTransactionSuccessful();
+		} finally {
+			this.db.endTransaction();
 		}
 
 		return result;
@@ -205,30 +219,38 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			String[] selectionArgs, String sortOrder) {
 		Cursor result = null;
 		int id = 0;
+
+		this.db.beginTransaction();
+		try {
 		
-		switch (uriMatcher.match(uri)) {
+			switch (uriMatcher.match(uri)) {
 		<#list entities?values as entity>
 			<#if (entity.fields?size>0) >
 		
-		// ${entity.name}
-		case ${entity.name?upper_case}_ONE:
-			id = Integer.parseInt(uri.getPathSegments().get(1));
-			result = this.dbAdapter${entity.name?cap_first}.query(id);
-			break;
-		case ${entity.name?upper_case}_ALL:
-			result = this.dbAdapter${entity.name?cap_first}.query(
-						projection, 
-						selection,
-						selectionArgs, 
-						sortOrder,
-						null,
-						null);
-			break;
+			// ${entity.name}
+			case ${entity.name?upper_case}_ONE:
+				id = Integer.parseInt(uri.getPathSegments().get(1));
+				result = this.dbAdapter${entity.name?cap_first}.query(id);
+				break;
+			case ${entity.name?upper_case}_ALL:
+				result = this.dbAdapter${entity.name?cap_first}.query(
+							projection, 
+							selection,
+							selectionArgs, 
+							sortOrder,
+							null,
+							null);
+				break;
 			</#if>
 		</#list>
 		
-		default:
-			throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
+			default:
+				throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
+			}
+
+			this.db.setTransactionSuccessful();
+		} finally {
+			this.db.endTransaction();
 		}
 
 		return result;
@@ -240,29 +262,36 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 		int result = 0;
 		String id;
 		
-		switch (uriMatcher.match(uri)) {
+		this.db.beginTransaction();
+		try {
+
+			switch (uriMatcher.match(uri)) {
 		<#list entities?values as entity>
 			<#if (entity.fields?size>0) >
 		
-		// ${entity.name}
-		case ${entity.name?upper_case}_ONE:
-			id = uri.getPathSegments().get(1);
-			result = this.dbAdapter${entity.name?cap_first}.update(
-					values, 
-					${entity.name?cap_first}SQLiteAdapter.COL_ID + " = " + id, 
-					selectionArgs);
-			break;
-		case ${entity.name?upper_case}_ALL:
-			result = this.dbAdapter${entity.name?cap_first}.update(
+			// ${entity.name}
+			case ${entity.name?upper_case}_ONE:
+				id = uri.getPathSegments().get(1);
+				result = this.dbAdapter${entity.name?cap_first}.update(
 						values, 
-						selection, 
+						${entity.name?cap_first}SQLiteAdapter.COL_ID + " = " + id, 
 						selectionArgs);
-			break;
+				break;
+			case ${entity.name?upper_case}_ALL:
+				result = this.dbAdapter${entity.name?cap_first}.update(
+							values, 
+							selection, 
+							selectionArgs);
+				break;
 			</#if>
 		</#list>
 		
-		default:
-			throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
+			default:
+				throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
+			}
+			this.db.setTransactionSuccessful();
+		} finally {
+			this.db.endTransaction();
 		}
 		
 		if (result > 0) {
