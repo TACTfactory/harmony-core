@@ -7,8 +7,11 @@ import ${curr.namespace}.R;
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import ${project_namespace}.harmony.view.HarmonyFragment;
 
+import ${project_namespace}.provider.${project_name?cap_first}Provider;
+
 import android.os.Bundle;
 import android.os.AsyncTask;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
@@ -380,7 +383,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 	public static class CreateTask extends AsyncTask<Void, Void, Integer> {
 		protected final Context context;
 		protected final ${curr.name}CreateFragment fragment;
-		protected final ${curr.name} entity;
+		protected ${curr.name} entity;
 		protected String errorMsg;
 		protected ProgressDialog progress;
 
@@ -409,7 +412,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 
-			${curr.name}SQLiteAdapter ${curr.name?lower_case}Adapter = new ${curr.name}SQLiteAdapter(context);
+			/*${curr.name}SQLiteAdapter ${curr.name?lower_case}Adapter = new ${curr.name}SQLiteAdapter(context);
 			SQLiteDatabase db = ${curr.name?lower_case}Adapter.open();
 			db.beginTransaction();
 			try {
@@ -420,6 +423,18 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 				db.endTransaction();
 				${curr.name?lower_case}Adapter.close();
 
+				result = 0;
+			}*/
+			ContentResolver prov = this.fragment.getActivity().getContentResolver();
+			Bundle b = new Bundle();
+			b.putSerializable("${curr.name?cap_first}", this.entity);
+			Bundle ret = 
+					prov.call(DemactProvider.${curr.name?upper_case}_URI, 
+							DemactProvider.METHOD_INSERT_${curr.name?upper_case}, 
+							null,
+							b);
+			if (ret.containsKey("${curr.name?cap_first}")) {
+				this.entity = (${curr.name?cap_first}) ret.getSerializable("${curr.name?cap_first}");
 				result = 0;
 			}
 

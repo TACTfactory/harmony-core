@@ -4,6 +4,8 @@ import ${project_namespace}.data.*;
 import ${project_namespace}.R;
 import ${project_namespace}.${project_name?cap_first}Application;
 
+import ${entity_namespace}.*;
+
 import android.content.ContentProvider;
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -12,6 +14,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 
 public class ${project_name?cap_first}ProviderBase extends ContentProvider {
@@ -32,6 +35,28 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	<#list entities?values as entity>
 		<#if (entity.fields?size>0) >
 	public	  static Uri ${entity.name?upper_case}_URI;
+		</#if>
+	</#list>
+
+	// Public methods names	
+	<#list entities?values as entity>			
+		<#if (entity.fields?size>0) >
+	public static final String METHOD_INSERT_${entity.name?upper_case} = "insert${entity.name?cap_first}";
+		</#if>
+	</#list>
+	<#list entities?values as entity>			
+		<#if (entity.fields?size>0) >
+	public static final String METHOD_UPDATE_${entity.name?upper_case} = "update${entity.name?cap_first}";
+		</#if>
+	</#list>
+	<#list entities?values as entity>			
+		<#if (entity.fields?size>0) >
+	public static final String METHOD_DELETE_${entity.name?upper_case} = "delete${entity.name?cap_first}";
+		</#if>
+	</#list>
+	<#list entities?values as entity>			
+		<#if (entity.fields?size>0) >
+	public static final String METHOD_QUERY_${entity.name?upper_case} = "query${entity.name?cap_first}";
 		</#if>
 	</#list>
 	
@@ -310,4 +335,116 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	public static final Uri generateUri() {
 		return Uri.parse("content://" + authority );
 	}
+
+	/* (non-Javadoc)
+	 * @see android.content.ContentProvider#call(java.lang.String, java.lang.String, android.os.Bundle)
+	 */
+	@Override
+	public Bundle call(String method, String arg, Bundle extras) {
+		<#list entities?values as entity>			
+			<#if (entity.fields?size>0) >
+		if (method.equals(METHOD_INSERT_${entity.name?upper_case})) {
+			return this.insert${entity.name?cap_first}(arg, extras);
+		} else
+		if (method.equals(METHOD_DELETE_${entity.name?upper_case})) {
+			return this.delete${entity.name?cap_first}(arg, extras);
+		} else
+		if (method.equals(METHOD_UPDATE_${entity.name?upper_case})) {
+			return this.update${entity.name?cap_first}(arg, extras);
+		} else
+		if (method.equals(METHOD_QUERY_${entity.name?upper_case})) {
+			return this.query${entity.name?cap_first}(arg, extras);
+		} else
+		
+			</#if>
+		</#list>
+		{
+			return super.call(method, arg, extras);
+		}
+	}
+
+	<#list entities?values as entity>		
+		<#if (entity.fields?size>0) >
+	public Bundle insert${entity.name?cap_first}(String arg, Bundle extras) {
+		${entity.name?cap_first} item = (${entity.name?cap_first}) extras.getSerializable("${entity.name?cap_first}");
+		this.db.beginTransaction();
+		try {
+			item.setId((int) this.dbAdapter${entity.name?cap_first}.insert(item));
+			this.db.setTransactionSuccessful();
+		} catch(Exception e) {
+			Log.e(TAG, "Error while inserting ${entity.name?cap_first} into database : " + e.getMessage());
+			item = null;
+		} finally {
+			this.db.endTransaction();
+		}
+		
+		Bundle result = new Bundle();
+		if (item != null) {
+			result.putSerializable("${entity.name?cap_first}", item);
+		}
+		return result;
+	}
+
+	public Bundle delete${entity.name?cap_first}(String arg, Bundle extras) {
+		${entity.name?cap_first} item = (${entity.name?cap_first}) extras.getSerializable("${entity.name?cap_first}");
+		this.db.beginTransaction();
+		try {
+			this.dbAdapter${entity.name?cap_first}.delete(item);
+			this.db.setTransactionSuccessful();
+		} catch(Exception e) {
+			Log.e(TAG, "Error while inserting ${entity.name?cap_first} into database : " + e.getMessage());
+			item = null;
+		} finally {
+			this.db.endTransaction();
+		}
+		
+		Bundle result = new Bundle();
+		if (item != null) {
+			result.putSerializable("${entity.name?cap_first}", item);
+		}
+		return result;
+	}
+
+	public Bundle update${entity.name?cap_first}(String arg, Bundle extras) {
+		${entity.name?cap_first} item = (${entity.name?cap_first}) extras.getSerializable("${entity.name?cap_first}");
+		this.db.beginTransaction();
+		try {
+			this.dbAdapter${entity.name?cap_first}.update(item);
+			this.db.setTransactionSuccessful();
+		} catch(Exception e) {
+			Log.e(TAG, "Error while inserting ${entity.name?cap_first} into database : " + e.getMessage());
+			item = null;
+		} finally {
+			this.db.endTransaction();
+		}
+		
+		Bundle result = new Bundle();
+		if (item != null) {
+			result.putSerializable("${entity.name?cap_first}", item);
+		}
+		return result;
+	}
+
+	public Bundle query${entity.name?cap_first}(String arg, Bundle extras) {
+		${entity.name?cap_first} item = (${entity.name?cap_first}) extras.getSerializable("${entity.name?cap_first}");
+		this.db.beginTransaction();
+		try {
+			this.dbAdapter${entity.name?cap_first}.getByID(item.getId());
+			this.db.setTransactionSuccessful();
+		} catch(Exception e) {
+			Log.e(TAG, "Error while inserting ${entity.name?cap_first} into database : " + e.getMessage());
+			item = null;
+		} finally {
+			this.db.endTransaction();
+		}
+		
+		Bundle result = new Bundle();
+		if (item != null) {
+			result.putSerializable("${entity.name?cap_first}", item);
+		}
+		return result;
+	}
+	
+		</#if>
+	</#list>
 }
