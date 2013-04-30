@@ -56,32 +56,31 @@ import java.util.Map;
 import ${curr.namespace}.entity.${curr.name};
 
 public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?cap_first}> {
-	private static String TAG = "${curr.name?cap_first}DataLoader";
-	private static String NAME = "${curr.name}";
+	private static final String NAME = "${curr.name}";
 	
 	private static ${curr.name?cap_first}DataLoader instance;
 	
 	
-	public static ${curr.name?cap_first}DataLoader getInstance(Context context) {
+	public static ${curr.name?cap_first}DataLoader getInstance(final Context context) {
 		if (instance == null) {
 			instance = new ${curr.name?cap_first}DataLoader(context); 
 		}
 		return instance;
 	}
 	
-	private ${curr.name?cap_first}DataLoader(Context context){
+	private ${curr.name?cap_first}DataLoader(final Context context){
 		super(context);
 	}
 
 	
 	<#if fixtureType=="xml">
 	@Override
-	protected ${curr.name} extractItem(Element element) {
-		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
+	protected ${curr.name} extractItem(final Element element) {
+		final ${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
 		
 		<#list curr.fields as field>
 			<#if (!field.internal)>
-		if (element.getChildText("${field.name?uncap_first}")!=null){
+		if (element.getChildText("${field.name?uncap_first}") != null) {
 				<#if !field.relation??>
 					<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
 			${curr.name?uncap_first}.set${field.name?cap_first}(Integer.parseInt(element.getChildText("${field.name?uncap_first}")));
@@ -186,8 +185,8 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 		return ${curr.name?uncap_first};
 	}
 	@Override
-	public void load(DataManager manager) {
-		for (${curr.name?cap_first} ${curr.name?uncap_first} : this.items.values()) {
+	public void load(final DataManager manager) {
+		for (final ${curr.name?cap_first} ${curr.name?uncap_first} : this.items.values()) {
 			${curr.name?uncap_first}.setId(manager.persist(${curr.name?uncap_first}));
 		}
 		manager.flush();

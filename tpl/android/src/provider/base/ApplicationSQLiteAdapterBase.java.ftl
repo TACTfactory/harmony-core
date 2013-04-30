@@ -11,6 +11,7 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import ${project_namespace}.criterias.base.CriteriasBase;
 
@@ -122,7 +123,7 @@ public abstract class SQLiteAdapterBase<T>{
 	 * 
 	 * @return List of Comment entities
 	 */
-	public ArrayList<T> getAll() {
+	public List<T> getAll() {
 		Cursor c = this.getAllCursor();
 		ArrayList<T> result = this.cursorToItems(c);
 		c.close();
@@ -135,7 +136,7 @@ public abstract class SQLiteAdapterBase<T>{
 	 * @param crits The criterias to use for the request
 	 * @return List of T entities
 	 */
-	public ArrayList<T> getAll(CriteriasBase crits) {
+	public List<T> getAll(CriteriasBase crits) {
 		if (crits == null || crits.isEmpty()){
 			return this.getAll();
 		} else {

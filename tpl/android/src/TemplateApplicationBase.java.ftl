@@ -18,7 +18,6 @@ import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.content.SharedPreferences;
-import android.content.SharedPreferences.Editor;
 
 <#if (sync)>
 import ${project_namespace}.harmony.util.DateUtils;
@@ -99,12 +98,6 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	private static String deviceID;
 	public static String getAndroidID() {
 		return deviceID;
-	}
-	
-	/** Called when the application is destroyed. */
-	@Override
-	public void onTerminate() {
-		super.onTerminate();
 	}
 	
 	/*** Application ***/

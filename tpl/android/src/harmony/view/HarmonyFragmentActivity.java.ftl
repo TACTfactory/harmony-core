@@ -18,16 +18,22 @@ public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
 	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
+		boolean result = true;
+		
 		menu.clear();
 		
 		try {
 			${project_name?cap_first}Menu.getInstance(this).updateMenu(menu, this);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			result = false;
 		}
 		
-		return super.onPrepareOptionsMenu(menu);
+		if(result) {
+			result = super.onPrepareOptionsMenu(menu);
+		}
+		
+		return result;
 	}
 
 	/* (non-Javadoc)
@@ -35,12 +41,15 @@ public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		boolean result;
 		try {
-			return ${project_name?cap_first}Menu.getInstance(this).dispatch(item, this);
+			result = ${project_name?cap_first}Menu.getInstance(this).dispatch(item, this);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			result = false;
 		}
+		
+		return result;
 	}
 
 	/* (non-Javadoc)

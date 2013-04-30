@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.tactfactory.mda.meta.ClassMetadata;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import ${data_namespace}.base.SQLiteAdapterBase;
 <#list entities?values as entity>
@@ -16,12 +17,12 @@ import ${project_namespace}.entity.${entity.name?cap_first};
 </#list>
 
 public class DataManager {
-	protected HashMap<String, SQLiteAdapterBase<?>> adapters = new HashMap<String, SQLiteAdapterBase<?>>();
+	protected Map<String, SQLiteAdapterBase<?>> adapters = new HashMap<String, SQLiteAdapterBase<?>>();
 	protected boolean isSuccessfull = true;
 	protected boolean isInInternalTransaction = false;
 	protected SQLiteDatabase db;
 	
-	public DataManager(Context ctx, SQLiteDatabase db){
+	public DataManager(final Context ctx, final SQLiteDatabase db){
 		this.db = db;
 		<#list entities?values as entity>
 			<#if ((entity.fields?size>0) && !(entity.internal?? && entity.internal=='true'))>
@@ -39,7 +40,7 @@ public class DataManager {
      * @param id
      * @return object
      */
-    public Object find(String nameClass, int id) {
+    public Object find(final String nameClass, final int id) {
     	Object ret = null;
     	this.beginTransaction();
     	
@@ -65,17 +66,21 @@ public class DataManager {
      * @param object $object The instance to make managed and persistent.
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public int persist(Object object) {
+    public int persist(final Object object) {
+    	int result;
+    
     	this.beginTransaction();
     	try {
-    		SQLiteAdapterBase adapter = this.getRepository(object);
+    		final SQLiteAdapterBase adapter = this.getRepository(object);
     			
-    		return (int)adapter.insert(object);
+    		result = (int) adapter.insert(object);
     	} catch (Exception ex) {
     		ex.printStackTrace();
     		this.isSuccessfull = false;
+    		result = 0;
     	}    	
-    	return 0;
+    	
+    	return result;
     }
 
     /**
@@ -85,7 +90,7 @@ public class DataManager {
      *
      * @param object $object The object instance to remove.
      */
-    public void remove(Object object) {
+    public void remove(final Object object) {
     	this.beginTransaction();
     	try {
     	<#list entities?values as entity>
@@ -150,9 +155,10 @@ public class DataManager {
      * database.
      */
     public void flush() {
-    	if (this.isInInternalTransaction){
-    		if (this.isSuccessfull)
+    	if (this.isInInternalTransaction) {
+    		if (this.isSuccessfull) {
     			this.db.setTransactionSuccessful();
+    		}
     		this.db.endTransaction();
     		this.isInInternalTransaction = false;
     	}
@@ -164,7 +170,7 @@ public class DataManager {
      * @param className $className
      * @return \Doctrine\Common\Persistence\ObjectRepository
      */
-    public SQLiteAdapterBase<?> getRepository(String className) {
+    public SQLiteAdapterBase<?> getRepository(final String className) {
     	return this.adapters.get(className);
     }
     
@@ -175,8 +181,8 @@ public class DataManager {
      * @param o object
      * @return \Doctrine\Common\Persistence\ObjectRepository
      */
-	private SQLiteAdapterBase<?> getRepository(Object o) {
-		String className = o.getClass().getSimpleName();
+	private SQLiteAdapterBase<?> getRepository(final Object o) {
+		final String className = o.getClass().getSimpleName();
 	
 		return this.getRepository(className);
 	}
@@ -190,7 +196,7 @@ public class DataManager {
      * @param className $className
      * @return \Doctrine\Common\Persistence\Mapping\ClassMetadata
      */
-    public ClassMetadata getClassMetadata(String className) {
+    public ClassMetadata getClassMetadata(final String className) {
     	return null;
     }
 
@@ -201,7 +207,7 @@ public class DataManager {
      * @param object $object
      * @return bool
      */
-    public boolean contains(Object object) {
+    public boolean contains(final Object object) {
     	return false;
     }
     
