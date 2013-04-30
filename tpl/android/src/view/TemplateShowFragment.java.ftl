@@ -66,7 +66,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
      * 
      * param view The layout inflating
      */
-    protected void initializeComponent(View view) {
+    protected void initializeComponent(final View view) {
 	<#foreach field in curr.fields>
 		<#if (!field.internal && !field.hidden)>
 			<#if (field.type=="boolean")>
@@ -128,9 +128,9 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {    	
     	// Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_${curr.name?lower_case}_show, container, false);
+        final View view = inflater.inflate(R.layout.fragment_${curr.name?lower_case}_show, container, false);
 
-        Intent intent =  getActivity().getIntent();
+        final Intent intent =  getActivity().getIntent();
         this.model = (${curr.name?cap_first}) intent.getSerializableExtra("${curr.name}");
         		
         this.initializeComponent(view);
@@ -146,7 +146,8 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		protected String errorMsg;
 		protected ProgressDialog progress;
 
-		public LoadTask(${curr.name}ShowFragment fragment, ${curr.name} entity) {
+		public LoadTask(final ${curr.name}ShowFragment fragment, final ${curr.name} entity) {
+			super();
 			this.fragment = fragment;
 			this.context = fragment.getActivity();
 			this.entity = entity;
@@ -171,8 +172,8 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 
-			${curr.name}SQLiteAdapter ${curr.name?lower_case}Adapter = new ${curr.name}SQLiteAdapter(context);
-			SQLiteDatabase db = ${curr.name?lower_case}Adapter.open();
+			final ${curr.name}SQLiteAdapter ${curr.name?lower_case}Adapter = new ${curr.name}SQLiteAdapter(context);
+			final SQLiteDatabase db = ${curr.name?lower_case}Adapter.open();
 			db.beginTransaction();
 			try {
 				this.entity = ${curr.name?lower_case}Adapter.getByID(<#if (curr.ids?size>0)>this.entity.getId()</#if>);
@@ -199,7 +200,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 				this.fragment.model = this.entity;
 				this.fragment.loadData();
 			} else {
-				AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
+				final AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
 				builder.setIcon(0);
 				builder.setMessage(this.context.getString(R.string.${curr.name?lower_case}_error_load));
 				builder.setPositiveButton(

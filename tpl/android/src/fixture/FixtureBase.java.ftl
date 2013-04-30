@@ -133,7 +133,7 @@ public abstract class FixtureBase<T> {
 	}
 	<#elseif (fixtureType=="yml")>
 	// Retrieve an xml file from the assets
-	public InputStream getYml(String entityName){
+	public InputStream getYml(final String entityName){
 		AssetManager assetManager = this.context.getAssets();
 		InputStream ret = null;
 		try {
