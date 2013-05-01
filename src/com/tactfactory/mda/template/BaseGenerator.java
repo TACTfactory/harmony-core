@@ -20,6 +20,9 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.TactFileUtils;
 
+import freemarker.cache.FileTemplateLoader;
+import freemarker.cache.MultiTemplateLoader;
+import freemarker.cache.TemplateLoader;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
@@ -112,8 +115,20 @@ public abstract class BaseGenerator {
 		this.appMetas	= ApplicationMetadata.INSTANCE;	
 		this.adapter	= adapt;
 		
-		this.cfg.setDirectoryForTemplateLoading(
+		//this.cfg.setDirectoryForTemplateLoading(
+		//		new File(Harmony.getRootPath() + "/vendor/tact-core"));
+		
+		Object[] files = Harmony.getTemplateFolders().values().toArray();
+		TemplateLoader[] loaders = new TemplateLoader[files.length+1];
+		for (int i = 0; i < files.length; i++) {
+			FileTemplateLoader ftl = new FileTemplateLoader((File) files[i]);
+			loaders[i] = ftl;
+		}
+		loaders[files.length] = new FileTemplateLoader(
 				new File(Harmony.getRootPath() + "/vendor/tact-core"));
+		MultiTemplateLoader mtl = new MultiTemplateLoader(loaders);
+
+		cfg.setTemplateLoader(mtl);  
 	}
 	
 	/** 
