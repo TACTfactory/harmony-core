@@ -2,6 +2,7 @@ package ${project_namespace}.criterias.base;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import ${project_namespace}.criterias.base.Criteria.Type;
 
@@ -10,23 +11,26 @@ import ${project_namespace}.criterias.base.Criteria.Type;
  */
 public abstract class CriteriasBase implements Serializable, ICriteria{
 	private GroupType type;
-	private ArrayList<ICriteria> arr = new ArrayList<ICriteria>(); 
+	private List<ICriteria> arr = new ArrayList<ICriteria>(); 
 	 
-	public CriteriasBase(GroupType type){
+	public CriteriasBase(final GroupType type){
 		this.type = type;
 	}
 		
 	public String toSQLiteString(){
-		String ret = "(";
-		for (int i=0;i<this.arr.size();i++){
-			ICriteria crit = this.arr.get(i);
-			ret+=crit.toSQLiteString();
+		StringBuilder ret = new StringBuilder("(");
+		
+		for (int i=0; i<this.arr.size(); i++) {
+			final ICriteria crit = this.arr.get(i);
+			ret.append(crit.toSQLiteString());
 			if (i!=this.arr.size()-1){
-				ret+=" "+type.getSqlType()+" ";
+				ret.append(" ");
+				ret.append(type.getSqlType());
+				ret.append(" ");
 			}
 		}
-		ret+=")";
-		return ret;
+		ret.append(")");
+		return ret.toString();
 	}
 	
 	/**
@@ -41,13 +45,17 @@ public abstract class CriteriasBase implements Serializable, ICriteria{
 	 * @param c The criteria to add
 	 * @return True if the criterias is valid and doesn't exists yet
 	 */
-	public boolean add(Criteria c){
-		if (this.validCriteria(c) && !this.arr.contains(c)){
-			arr.add(c);
-			return true;
+	public boolean add(final Criteria crit){
+		boolean result;
+	
+		if (this.validCriteria(crit) && !this.arr.contains(crit)){
+			arr.add(crit);
+			result = true;
 		} else {
-			return false;
+			result = false;
 		}
+		
+		return result;
 	}
 	
 	/**
@@ -57,13 +65,13 @@ public abstract class CriteriasBase implements Serializable, ICriteria{
 	 * @param type The type of criteria (can be Equals, Superior, etc.)
 	 * @return True if the criterias is valid and doesn't exists yet
 	 */
-	public boolean add(String key, String value, Type type){
-		Criteria c = new Criteria();
-		c.setKey(key);
-		c.addValue(value);
-		c.setType(type);
+	public boolean add(final String key, final String value, final Type type){
+		final Criteria criteria = new Criteria();
+		criteria.setKey(key);
+		criteria.addValue(value);
+		criteria.setType(type);
 		
-		return this.add(c);
+		return this.add(criteria);
 	}
 	
 	/**
@@ -72,7 +80,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria{
 	 * @param value The value 
 	 * @return True if the criterias is valid and doesn't exists yet
 	 */
-	public boolean add(String key, String value){
+	public boolean add(final String key, final String value){
 		return this.add(key,value,Type.EQUALS);
 	}
 	
@@ -82,7 +90,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria{
 		
 		private String sql;
 		
-		private GroupType(String sql){
+		private GroupType(final String sql){
 			this.sql = sql;
 		}
 		

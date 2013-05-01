@@ -11,7 +11,7 @@ public class ${curr.name}SQLiteAdapter extends ${curr.name}SQLiteAdapterBase {
 	 * Constructor
 	 * @param ctx context
 	 */
-	public ${curr.name}SQLiteAdapter(Context ctx) {
+	public ${curr.name}SQLiteAdapter(final Context ctx) {
 		super(ctx);
 	}
 }

@@ -41,11 +41,15 @@ public class FixtureGenerator extends BaseGenerator {
 	 */
 	public final void load() {
 		final File fixtAppSrc = new File("fixtures/app");
+		final File fixtDebugSrc = new File("fixtures/debug");
 		final File fixtTestSrc = new File("fixtures/test");
 		
 		if (fixtAppSrc.exists()) {
 			final File fixtAppDest = 
 					new File(this.getAdapter().getAssetsPath() + "/app");
+			
+			final File fixtDebugDest = 
+					new File(this.getAdapter().getAssetsPath() + "/debug");
 			
 			final File fixtTestDest = 
 					new File(this.getAdapter().getAssetsPath() + "/test");
@@ -54,6 +58,12 @@ public class FixtureGenerator extends BaseGenerator {
 				ConsoleUtils.displayError(
 						new Exception("Couldn't create folder "
 								+ fixtAppDest.getAbsolutePath()));
+			}
+			
+			if (!fixtDebugDest.exists() && !fixtDebugDest.mkdirs()) {
+				ConsoleUtils.displayError(
+						new Exception("Couldn't create folder "
+								+ fixtDebugDest.getAbsolutePath()));
 			}
 		
 			if (!fixtTestDest.exists() && !fixtTestDest.mkdirs()) {
@@ -74,6 +84,10 @@ public class FixtureGenerator extends BaseGenerator {
 				TactFileUtils.copyDirectory(fixtAppSrc, fixtAppDest, ff);
 				ConsoleUtils.displayDebug(
 						"Copying fixtures/app into " + fixtAppDest.getPath());
+				
+				TactFileUtils.copyDirectory(fixtDebugSrc, fixtDebugDest, ff);
+				ConsoleUtils.displayDebug(
+						"Copying fixtures/debug into " + fixtDebugDest.getPath());
 				
 				TactFileUtils.copyDirectory(fixtTestSrc, fixtTestDest, ff);
 				ConsoleUtils.displayDebug(

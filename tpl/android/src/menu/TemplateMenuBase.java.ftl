@@ -22,7 +22,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	public final static int SHARE			= 1;
 	public final static int SEARCH			= 2;
 	
-	SparseArray<MenuWrapperBase> menus = new SparseArray<MenuWrapperBase>();
+	protected SparseArray<MenuWrapperBase> menus = new SparseArray<MenuWrapperBase>();
 	
 	protected Context context;
 	protected Fragment fragment;
@@ -30,13 +30,14 @@ public abstract class ${project_name?cap_first}MenuBase {
 	
 	protected Menu menu;
 	
-	protected ${project_name?cap_first}MenuBase(Context context) throws Exception {
+	protected ${project_name?cap_first}MenuBase(final Context context) throws Exception {
 		this(context, null);
 	}
 	
-	protected ${project_name?cap_first}MenuBase(Context context, Fragment fragment) throws Exception {
-		if (context == null)
+	protected ${project_name?cap_first}MenuBase(final Context context, final Fragment fragment) throws Exception {
+		if (context == null) {
 			throw new Exception("Unable to Initialise Menu Helper with no context");
+		}
 		
 		this.fragment	= fragment;
 		this.context 	= context;
@@ -45,7 +46,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	}
 	
 	/** Initialize Menu component */
-	private void initializeMenu(Menu menu) {
+	private void initializeMenu(final Menu menu) {
 		this.menu = menu;
 		
 		for (int i=0; i<this.menus.size();i++){
@@ -55,17 +56,18 @@ public abstract class ${project_name?cap_first}MenuBase {
 	}
 	
 	/** Update Menu component */
-	public void updateMenu(Menu menu, Context context) {
-		if (context != null)
+	public void updateMenu(final Menu menu, final Context context) {
+		if (context != null) {
 			this.context = context;
+		}
 
 		this.initializeMenu(menu);
 		this.updateMenu(menu);
 	}
 	
 	/** Update Menu component */
-	public void updateMenu(Menu menu) {
-		int currentClass = this.context.getClass().hashCode();
+	public void updateMenu(final Menu menu) {
+		final int currentClass = this.context.getClass().hashCode();
 		int currentFragment;
 		if(this.fragment!=null) {
 			currentFragment = this.fragment.getClass().hashCode();
@@ -79,15 +81,16 @@ public abstract class ${project_name?cap_first}MenuBase {
 	}
 	
 	/** Call intent associate to menu item selected*/
-	public boolean dispatch(MenuItem item, Context context) {
-		if (context != null)
+	public boolean dispatch(final MenuItem item, final Context context) {
+		if (context != null) {
 			this.context = context;
+		}
 		
 		return this.dispatch(item);
 	}
 	
 	/** Call intent associate to menu item selected*/
-	private boolean dispatch(MenuItem item) {
+	private boolean dispatch(final MenuItem item) {
 		return this.menus.get(item.getItemId()).dispatch(item, this.context, this.fragment);
 	}
 	
@@ -96,17 +99,19 @@ public abstract class ${project_name?cap_first}MenuBase {
 	}
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data, Context context, Fragment fragment){
-		if (context != null)
+		if (context != null) {
 			this.context = context;
+		}
 		
-		if (fragment != null)
+		if (fragment != null) {
 			this.fragment = fragment;
+		}
 		
 		this.onActivityResult(requestCode, resultCode, data);
 	}
 	
 	private void onActivityResult(int requestCode, int resultCode, Intent data){
-		for (int i=0; i<this.menus.size();i++){
+		for (int i=0; i < this.menus.size(); i++) {
 			this.menus.valueAt(i).onActivityResult(requestCode, resultCode, data, this.context, this.fragment);
 		}
 	}

@@ -116,18 +116,6 @@ public abstract class CommonTest {
 		if (new File(destDir + "Post.java").exists()) {
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");
 		}
-		
-		// Copy artefact for agregate CI result
-		final String libPath = "harmony.jar";
-		srcDir = 
-				String.format("%s/tact-core/%s", 
-						Harmony.getBundlePath(), 
-						libPath);
-		destDir = 
-				String.format("%s/test/libs/%s", 
-						Harmony.getProjectAndroidPath(), 
-						libPath);
-		TactFileUtils.copyfile(new File(srcDir), new File(destDir));
 	}
 	
 	/**

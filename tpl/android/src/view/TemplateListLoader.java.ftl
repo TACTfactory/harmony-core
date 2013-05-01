@@ -17,11 +17,11 @@ import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
  */
 public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> {
 	
-	private ${curr.name?cap_first}Criterias criterias = null;
+	private ${curr.name?cap_first}Criterias criterias;
 	private List<${curr.name}> m${curr.name}s;
 	private Context context;
 
-	public ${curr.name}ListLoader(Context context, ${curr.name?cap_first}Criterias crit) {
+	public ${curr.name}ListLoader(final Context context, final ${curr.name?cap_first}Criterias crit) {
 		super(context);
 		this.context = context;
 		this.criterias = crit;
@@ -38,8 +38,8 @@ public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> 
 
 		// TODO Query of data
 
-		${curr.name}SQLiteAdapter adapter = new ${curr.name}SQLiteAdapter(context);
-		SQLiteDatabase db = adapter.open();
+		final ${curr.name}SQLiteAdapter adapter = new ${curr.name}SQLiteAdapter(context);
+		final SQLiteDatabase db = adapter.open();
 		try {
 			db.beginTransaction();
 			result = adapter.getAll(this.criterias);
@@ -66,15 +66,14 @@ public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> 
 	 * here just adds a little more logic.
 	 */
 	@Override 
-	public void deliverResult(List<${curr.name}> items) {
-		if (this.isReset()) {
+	public void deliverResult(final List<${curr.name}> items) {
+		if (this.isReset() && items != null) {
 			// An async query came in while the loader is stopped.  We
 			// don't need the result.
-			if (items != null) {
-				this.onReleaseResources(items);
-			}
+			
+			this.onReleaseResources(items);
 		}
-		List<${curr.name}> oldItems = items;
+		final List<${curr.name}> oldItems = items;
 		this.m${curr.name}s = items;
 
 		if (this.isStarted()) {

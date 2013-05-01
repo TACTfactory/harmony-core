@@ -6,6 +6,7 @@ import android.content.res.AssetManager;
 import java.io.InputStream;
 import java.io.IOException;
 import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.List;
 
 <#if fixtureType=="xml">
@@ -31,15 +32,15 @@ public abstract class FixtureBase<T> {
 	protected String patternDate = "yyyy-MM-dd";
 	protected String patternTime = "HH:mm";
 	
-	public LinkedHashMap<String, T> items = new LinkedHashMap<String, T>();
+	public Map<String, T> items = new LinkedHashMap<String, T>();
 
-	public FixtureBase(Context context){
+	public FixtureBase(final Context context){
 		this.context = context;
 	}
 	/**
      	* Load the fixtures for the current model.
     	 */
-	public void getModelFixtures(int mode) {
+	public void getModelFixtures(final int mode) {
 <#if fixtureType == "xml">
 		// XML Loader
 		try {
@@ -71,17 +72,20 @@ public abstract class FixtureBase<T> {
 		}
 <#elseif fixtureType == "yml">
 		// YAML Loader
-		Yaml yaml = new Yaml();
-		InputStream inputStream = this.getYml(
+		final Yaml yaml = new Yaml();
+		final InputStream inputStream = this.getYml(
 					DataLoader.getPathToFixtures(mode) 
 					+ this.getFixtureFileName());
 
-		Map<?, ?> map = (Map<?, ?>) yaml.load(inputStream);
-		if (map != null && map.containsKey(this.getFixtureFileName())){
-			Map<?, ?> listEntities = (Map<?, ?>) map.get(this.getFixtureFileName());
-			if (listEntities!=null){
-				for (Object name : listEntities.keySet()) {
-					this.items.put((String)element.getAttributeValue("id"), this.extractItem(element));
+		if (inputStream != null) {
+			final Map<?, ?> map = (Map<?, ?>) yaml.load(inputStream);
+			if (map != null && map.containsKey(this.getFixtureFileName())){
+				final Map<?, ?> listEntities = (Map<?, ?>) map.get(this.getFixtureFileName());
+				if (listEntities!=null){
+					for (final Object name : listEntities.keySet()) {
+						final Map<?, ?> currEntity = (Map<?, ?>) listEntities.get(name);
+						this.items.put((String) name, this.extractItem(currEntity));
+					}
 				}
 			}
 		}
@@ -94,11 +98,15 @@ public abstract class FixtureBase<T> {
 	public abstract void load(DataManager manager);
 	
 	
-	public T getModelFixture(String id) {
+	public T getModelFixture(final String id) {
 		return this.items.get(id);
 	}
 
+	<#if (fixtureType=="xml")>
 	protected abstract T extractItem(Element element);
+	<#else>
+	protected abstract T extractItem(Map<?, ?> columns);
+	</#if>
 
 	/**
 	 * Get the order of this fixture
@@ -112,8 +120,8 @@ public abstract class FixtureBase<T> {
 
 	<#if (fixtureType=="xml")>
 	// Retrieve an xml file from the assets
-	public InputStream getXml(String entityName){
-		AssetManager assetManager = this.context.getAssets();
+	public InputStream getXml(final String entityName){
+		final AssetManager assetManager = this.context.getAssets();
 		InputStream ret = null;
 		try {
 			ret = assetManager.open(entityName+".xml");
@@ -125,7 +133,7 @@ public abstract class FixtureBase<T> {
 	}
 	<#elseif (fixtureType=="yml")>
 	// Retrieve an xml file from the assets
-	public InputStream getYml(String entityName){
+	public InputStream getYml(final String entityName){
 		AssetManager assetManager = this.context.getAssets();
 		InputStream ret = null;
 		try {

@@ -52,19 +52,19 @@
 <#assign orderedEntities = orderEntitiesByRelation() />
 package ${fixture_namespace};
 
-
 import java.util.ArrayList;
+import java.util.List;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.SparseArray;
 
 public class DataLoader {
-	public static int MODE_TEST 	= Integer.parseInt("0001", 2);
-	public static int MODE_APP 	= Integer.parseInt("0010", 2);
-	public static int MODE_DEBUG 	= Integer.parseInt("0100", 2);
+	public static final int MODE_TEST 	= Integer.parseInt("0001", 2);
+	public static final int MODE_APP 	= Integer.parseInt("0010", 2);
+	public static final int MODE_DEBUG 	= Integer.parseInt("0100", 2);
 	
-	private ArrayList<FixtureBase<?>> dataLoaders;
+	private List<FixtureBase<?>> dataLoaders;
 	private static SparseArray<String> fixtureFolders;
 	private Context ctx;
 
@@ -78,7 +78,7 @@ public class DataLoader {
 		fixtureFolders.put(MODE_TEST, "test/");
 	}
 	
-	public DataLoader(Context ctx) {
+	public DataLoader(final Context ctx) {
 		this.ctx = ctx;
 		this.dataLoaders = new ArrayList<FixtureBase<?>>();
 		<#list orderedEntities as entityName>
@@ -89,12 +89,15 @@ public class DataLoader {
 		</#list>
 	}
 	
-	public void loadData(SQLiteDatabase db, int modes){
-		DataManager manager = new DataManager(this.ctx, db);
+	public void loadData(final SQLiteDatabase db, final int modes){
+		final DataManager manager = new DataManager(this.ctx, db);
 		
-		for(FixtureBase<?> dataLoader : this.dataLoaders) {
+		for(final FixtureBase<?> dataLoader : this.dataLoaders) {
 			if (this.isType(modes, MODE_APP)) {
 				dataLoader.getModelFixtures(MODE_APP);
+			}
+			if (this.isType(modes, MODE_DEBUG)) {
+				dataLoader.getModelFixtures(MODE_DEBUG);
 			}
 			if (this.isType(modes, MODE_TEST)) {
 				dataLoader.getModelFixtures(MODE_TEST);
@@ -103,15 +106,25 @@ public class DataLoader {
 		}
 	}
 	
-	private boolean isType(int modes, int mode) {
+	private boolean isType(final int modes, final int mode) {
+		boolean result;
+		
 		if ((modes & mode) == mode) {
-			return true;
+			result = true;
 		} else {
-			return false;
+			result = false;
 		}
+		
+		return result;
 	}
 	
-	public static String getPathToFixtures(int mode) {
+	public static String getPathToFixtures(final int mode) {
 		return fixtureFolders.get(mode);
+	}
+
+	public void clean() {
+		for (FixtureBase<?> dataLoader: this.dataLoaders) {
+			dataLoader.items.clear();
+		}
 	}
 }

@@ -144,6 +144,43 @@ public class ActivityGenerator extends BaseGenerator {
 			this.updateWidget("CustomTimePickerDialog.java",
 					"dialog_time_picker.xml");
 		}
+		
+		// create HarmonyFragmentActivity
+		super.makeSource(
+			this.getAdapter().getTemplateSourcePath() 
+			+ "harmony/view/DeletableList.java",
+			this.getAdapter().getSourcePath()
+			+ this.getAppMetas().getProjectNameSpace() 
+			+ "/harmony/view/" 
+			+ "DeletableList.java",
+			false);
+		
+		this.makeResourceLayout("dialog_delete_confirmation.xml", 
+				"dialog_delete_confirmation.xml");
+		
+		// create HarmonyFragment
+		super.makeSource(
+			this.getAdapter().getTemplateSourcePath() 
+			+ "harmony/view/DeleteDialog.java",
+			this.getAdapter().getSourcePath()
+			+ this.getAppMetas().getProjectNameSpace() 
+			+ "/harmony/view/" 
+			+ "DeleteDialog.java",
+			false);
+		
+		TranslationMetadata.addDefaultTranslation("dialog_delete_title", 
+				"Delete", 
+				Group.COMMON);
+		
+		TranslationMetadata.addDefaultTranslation("dialog_delete_message", 
+				"Are you sure you want to delete this item ?", 
+				Group.COMMON);
+		
+		try {
+			new TranslationGenerator(this.getAdapter()).generateStringsXml();
+		} catch (Exception e) {
+			ConsoleUtils.displayError(e);
+		}
 	}
 	
 	/** 
@@ -168,6 +205,11 @@ public class ActivityGenerator extends BaseGenerator {
 				TranslationMetadata.addDefaultTranslation(
 						"common_edit",
 						"Edit",
+						Group.COMMON);
+				
+				TranslationMetadata.addDefaultTranslation(
+						"common_delete",
+						"Del",
 						Group.COMMON);
 				
 				TranslationMetadata.addDefaultTranslation(
@@ -343,9 +385,23 @@ public class ActivityGenerator extends BaseGenerator {
 
 		this.updateManifest("CreateActivity", entityName);
 		
+		ClassMetadata cm = this.getAppMetas().getEntities().get(entityName);
+		
+		for (FieldMetadata fm : cm.getFields().values()) {
+			if (!fm.isInternal() && !fm.isHidden() && fm.getRelation() != null) {
+				TranslationMetadata.addDefaultTranslation(
+						entityName.toLowerCase(Locale.ENGLISH) 
+							+ "_" 
+							+ fm.getName().toLowerCase(Locale.ENGLISH) 
+							+ "_dialog_title", 
+						"Select " + fm.getName(),
+						Group.MODEL);
+			}
+		}
+		
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_create", 
-				entityName + " creation error…;",
+				entityName + " creation error…",
 				Group.MODEL);
 	}
 

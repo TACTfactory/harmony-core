@@ -92,6 +92,7 @@ public class ProviderGenerator extends BaseGenerator {
 					Group.PROVIDER);
 			
 			new TranslationGenerator(this.getAdapter()).generateStringsXml();
+			new TestProviderGenerator(this.getAdapter()).generateAll();
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}

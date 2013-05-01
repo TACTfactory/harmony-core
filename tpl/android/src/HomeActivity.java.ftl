@@ -26,7 +26,7 @@ public class HomeActivity extends HarmonyFragmentActivity
 	{
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.main);
-		LinearLayout homeLayout = (LinearLayout) findViewById(R.id.homeLayout);
+		final LinearLayout homeLayout = (LinearLayout) findViewById(R.id.homeLayout);
 
 		// Base buttons
 		<#if (entities??)>
