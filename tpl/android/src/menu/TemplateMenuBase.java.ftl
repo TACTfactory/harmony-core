@@ -34,7 +34,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 		this(context, null);
 	}
 	
-	protected ${project_name?cap_first}MenuBase(final Context context, this Fragment fragment) throws Exception {
+	protected ${project_name?cap_first}MenuBase(final Context context, final Fragment fragment) throws Exception {
 		if (context == null) {
 			throw new Exception("Unable to Initialise Menu Helper with no context");
 		}
