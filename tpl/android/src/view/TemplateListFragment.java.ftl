@@ -104,7 +104,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 			crit = (${curr.name?cap_first}Criterias)bundle.get(${curr.name?cap_first}Criterias._PARCELABLE);
 		}
 			
-		return new ${curr.name?cap_first}ListLoader(getActivity(), crit );
+		return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
 	}
 
 	/** (non-Javadoc)

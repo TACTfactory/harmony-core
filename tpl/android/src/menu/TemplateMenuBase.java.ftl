@@ -19,8 +19,8 @@ import android.support.v4.app.Fragment;
 import android.util.SparseArray;
 
 public abstract class ${project_name?cap_first}MenuBase {
-	public final static int SHARE			= 1;
-	public final static int SEARCH			= 2;
+	public static final int SHARE			= 1;
+	public static final int SEARCH			= 2;
 	
 	protected SparseArray<MenuWrapperBase> menus = new SparseArray<MenuWrapperBase>();
 	

@@ -16,7 +16,6 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 <#elseif fixtureType=="yml">
 import org.yaml.snakeyaml.Yaml;
-import java.util.Map;
 
 </#if>
 

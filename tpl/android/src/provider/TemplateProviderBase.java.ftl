@@ -303,6 +303,6 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 	
 	public static final Uri generateUri() {
-		return Uri.parse("content://" + authority );
+		return Uri.parse("content://" + authority);
 	}
 }

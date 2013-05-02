@@ -32,8 +32,8 @@ import org.joda.time.DateTime;
  * 
  */
 public abstract class ${project_name?cap_first}ApplicationBase extends Application {
-	private final static String TAG = "${project_name?cap_first}";
-	private volatile static ${project_name?cap_first}ApplicationBase singleton;
+	private static final String TAG = "${project_name?cap_first}";
+	private static volatile ${project_name?cap_first}ApplicationBase singleton;
 	private static DateFormat df;
 	private static DateFormat tf;
 	<#if (sync)>

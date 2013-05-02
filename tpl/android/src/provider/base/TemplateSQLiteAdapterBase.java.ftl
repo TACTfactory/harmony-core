@@ -148,7 +148,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 		
 	/** Constructor
 	 * 
-	 * @param ctx context
+	 * @param cursortx context
 	 */
 	public ${curr.name}SQLiteAdapterBase(final Context ctx) {	
 		super(ctx);
@@ -158,7 +158,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	// Converters
 	/** Convert ${curr.name} entity to Content Values for database
 	 * 
-	 * @param ${curr.name?lower_case} ${curr.name} entity object
+	 * @param item ${curr.name} entity object
 	 * @return ContentValues object
 	 */
 	public ContentValues itemToContentValues(final ${curr.name} item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {		
@@ -166,11 +166,11 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	<#list curr.fields as field>
 		<#if (!field.internal)>
 			<#if (!field.relation??)>
-		result.put(${alias(field.name)}, 			${m.typeToParser("item", field)} );				
+		result.put(${alias(field.name)}, 			${m.typeToParser("item", field)});				
 			<#else>
 				<#if (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 		if (item.get${field.name?cap_first}() != null) {
-			result.put(${alias(field.name)}, 			String.valueOf(item.get${field.name?cap_first}().getId()) );
+			result.put(${alias(field.name)}, 			String.valueOf(item.get${field.name?cap_first}().getId()));
 		}
 				</#if>
 			</#if>
@@ -185,7 +185,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	
 	/** Convert Cursor of database to ${curr.name} entity
 	 * 
-	 * @param c Cursor object
+	 * @param cursor Cursor object
 	 * @return ${curr.name} entity
 	 */
 	public ${curr.name} cursorToItem(final Cursor cursor) {
@@ -206,9 +206,9 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 				<#if ((field.type == "date") || (field.type == "datetime") || (field.type == "time"))> 
 			
 					<#if field.is_locale>
-			${t}final DateTime dt${field.name?cap_first} = DateUtils.formatLocalISOStringToDateTime(cursor.getString(index) );	
+			${t}final DateTime dt${field.name?cap_first} = DateUtils.formatLocalISOStringToDateTime(cursor.getString(index));	
 					<#else>
-			${t}final DateTime dt${field.name?cap_first} = DateUtils.formatISOStringToDateTime(cursor.getString(index) );	
+			${t}final DateTime dt${field.name?cap_first} = DateUtils.formatISOStringToDateTime(cursor.getString(index));	
 					</#if>
 				${t}if (dt${field.name?cap_first} != null) {
 					${t}result.set${field.name?cap_first}(dt${field.name?cap_first});
@@ -599,7 +599,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 			throw new UnsupportedOperationException("Method not implemented yet.");
 		<#else>
 		return this.delete(
-				COL_ID+" = ?",
+				COL_ID + " = ?",
 				new String[]{String.valueOf(id)});
 		</#if>
 	}

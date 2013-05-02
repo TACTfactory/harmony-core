@@ -35,7 +35,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	
 	/**
 	 * Test if the given criteria is valid
-	 * @param The criteria to test
+	 * @param c The criteria to test
 	 * @return true if the criteria is valid
 	 */
 	public abstract boolean validCriteria(Criteria c);

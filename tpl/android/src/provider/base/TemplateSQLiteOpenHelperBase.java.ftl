@@ -118,10 +118,10 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 			/// Create Schema
 	<#list entities?values as entity>
 		<#if (entity.fields?? && (entity.fields?size>0))>
-			db.execSQL( ${entity.name}SQLiteAdapter.getSchema() );
+			db.execSQL( ${entity.name}SQLiteAdapter.getSchema());
 			<#list entity["relations"] as relation>
 				<#if (relation.type=="ManyToMany")>
-			db.execSQL( ${entity.name}SQLiteAdapter.get${relation.name?cap_first}RelationSchema() );
+			db.execSQL( ${entity.name}SQLiteAdapter.get${relation.name?cap_first}RelationSchema());
 				</#if>
 			</#list>
 		</#if>
@@ -156,8 +156,8 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 		}
 		
 		//if (SqliteAdapter.BASE_VERSION < 0) {
-			Log.i(TAG, "Upgrading database from version " + oldVersion + 
-					   " to " + newVersion + ", which will destroy all old data");
+			Log.i(TAG, "Upgrading database from version " + oldVersion 
+					   + " to " + newVersion + ", which will destroy all old data");
 		
 		final String command = "DROP TABLE IF EXISTS "; 
 		

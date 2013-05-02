@@ -30,7 +30,7 @@ public abstract class SQLiteAdapterBase<T> {
 	
 	/** Constructor
 	 * 
-	 * @param ctx context
+	 * @param cursortx context
 	 */
 	protected SQLiteAdapterBase(Context ctx) {	
 		this.context = ctx;
@@ -134,7 +134,7 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	/** Read All T entities given some criterias
-	 * @param crits The criterias to use for the request
+	 * @param cursorrits The criterias to use for the request
 	 * @return List of T entities
 	 */
 	public List<T> getAll(CriteriasBase crits) {
@@ -153,7 +153,7 @@ public abstract class SQLiteAdapterBase<T> {
 	
 	/** Convert Cursor of database to Array of Comment entity
 	 * 
-	 * @param c Cursor object
+	 * @param cursor Cursor object
 	 * @return Array of Comment entity
 	 */
 	public ArrayList<T> cursorToItems(final Cursor cursor) {
@@ -177,7 +177,7 @@ public abstract class SQLiteAdapterBase<T> {
 	
 	/** Convert Cursor of database to Comment entity
 	 * 
-	 * @param c Cursor object
+	 * @param cursor Cursor object
 	 * @return Comment entity
 	 */
 	public abstract T cursorToItem(Cursor c);

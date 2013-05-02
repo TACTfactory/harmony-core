@@ -17,8 +17,14 @@ import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.content.DialogInterface;
 import android.database.sqlite.SQLiteDatabase;
-import android.app.*;
-import android.widget.*;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.DatePicker;
+import android.widget.EditText;
+import android.widget.TimePicker;
 
 
 <#assign importDate=false />

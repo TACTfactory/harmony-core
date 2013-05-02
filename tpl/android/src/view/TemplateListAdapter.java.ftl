@@ -12,7 +12,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.widget.*;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.TextView;
+
 
 <#assign importDate=false />
 <#list curr.fields as field>
@@ -116,7 +120,7 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 
 		/** Populate row with a ${curr.name}
 		 * 
-		 * @param item ${curr.name} data
+		 * @param model ${curr.name} data
 		 */
 		public void populate(final ${curr.name} model) {
 			<#list curr.fields as field>
@@ -130,7 +134,7 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 			${m.setAdapterLoader(field)}
 						</#if>
 					<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
-			this.${field.name}View.setText(String.valueOf(model.get${field.name?cap_first}().getId()) );	
+			this.${field.name}View.setText(String.valueOf(model.get${field.name?cap_first}().getId()));	
 					</#if>
 				</#if>
 			</#list>
