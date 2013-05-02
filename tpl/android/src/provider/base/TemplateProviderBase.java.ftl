@@ -34,7 +34,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	protected SQLiteDatabase db;
 	
 	protected Context mContext;
-		
+
 	@Override
 	public boolean onCreate() {
 		boolean result = true;
@@ -56,7 +56,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 				</#if>
 			</#if>
 		</#list>
-		} catch (Exception e){
+		} catch (Exception e) {
 			Log.e(TAG, e.getMessage());
 			result = false;
 		}
@@ -65,13 +65,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 	
 	@Override
-	protected void finalize() throws Throwable {
-			//this.doUnbindService();
-			super.finalize();
-	}
-	
-	@Override
-	public String getType(Uri uri) {
+	public String getType(final Uri uri) {
 		String result = null;
 		final String single = "vnc.android.cursor.item/" + authority + ".";
 		final String collection = "vnc.android.cursor.collection/" + authority + ".";
@@ -98,7 +92,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 	
 	@Override
-	public int delete(Uri uri, String selection, String[] selectionArgs) {
+	public int delete(final Uri uri, final String selection, final String[] selectionArgs) {
 		int result = 0;
 		this.db.beginTransaction();
 		try {
@@ -136,7 +130,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 	
 	@Override
-	public Uri insert(Uri uri, ContentValues values) {
+	public Uri insert(final Uri uri, final ContentValues values) {
 		Uri result = null;
 
 		this.db.beginTransaction();
@@ -259,7 +253,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 	
 	public static final Uri generateUri() {
-		return Uri.parse("content://" + authority );
+		return Uri.parse("content://" + authority);
 	}
 
 	/* (non-Javadoc)

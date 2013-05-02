@@ -12,12 +12,10 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.nio.charset.Charset;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-import org.apache.commons.io.Charsets;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;

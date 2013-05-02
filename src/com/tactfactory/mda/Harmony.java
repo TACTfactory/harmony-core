@@ -12,6 +12,7 @@ import java.io.File;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -35,7 +36,7 @@ import com.tactfactory.mda.utils.TactFileUtils;
 public final class Harmony {
 	
 	/** Harmony version. */
-	public static final String VERSION = "0.4.0-DEV";
+	public static final String VERSION = "0.5.0-DEV";
 	
 	/** Singleton of console. */
 	private static Harmony instance;
@@ -61,6 +62,9 @@ public final class Harmony {
 	/** Bootstrap. */
 	private final Map<Class<?>, Command> bootstrap = 
 			new ConcurrentHashMap<Class<?>, Command>();
+	
+	/** Template folders */
+	final Map<String, File> templateFolders = new HashMap<String, File>();
 
 	/** Constructor.
 	 * @throws Exception PluginManager failure
@@ -76,19 +80,17 @@ public final class Harmony {
 	 * @param pluginBaseDirectory 
 	 */
 	private void loadPlugins(final File pluginBaseDirectory) {
-		/** PluginManager. */
-		final PluginManager pluginManager =
-				PluginManagerFactory.createPluginManager(new JSPFProperties());
-		
 		// Cache
-		/*
 		final JSPFProperties props = new JSPFProperties();
-		props.setProperty(PluginManager.class, "cache.enabled", "true");
+		/*props.setProperty(PluginManager.class, "cache.enabled", "true");
 		
 		//optional
 		props.setProperty(PluginManager.class, "cache.mode",    "weak"); 
-		props.setProperty(PluginManager.class, "cache.file",    "jspf.cache");
-		*/
+		props.setProperty(PluginManager.class, "cache.file",    "jspf.cache");*/
+		
+		/** PluginManager. */
+		final PluginManager pluginManager =
+				PluginManagerFactory.createPluginManager(props);
 		
 		// Filters
 		final IOFileFilter includeFilter = 
@@ -110,12 +112,20 @@ public final class Harmony {
 			ConsoleUtils.displayError(e);
 		}
 		
-		// Add Bundles to Plugin Manager
+		// Add Bundles to Plugin Manager &  foldertemplate
 		for (File plugin : plugins) {
 			if (!plugin.getName().equals("harmony.jar")) {
+				// Load bundles
 				ConsoleUtils.displayDebug(
 						"Load plugins from " + plugin.getName());
 				pluginManager.addPluginsFrom(plugin.toURI());
+				
+				// Template bundles
+				File templateFolderFile = 
+						plugin.getParentFile().getAbsoluteFile();
+				this.templateFolders.put(plugin.getName(), templateFolderFile);
+				ConsoleUtils.displayDebug(
+						"Load templates from " + templateFolderFile);
 			}
 		}
 		
@@ -348,4 +358,10 @@ public final class Harmony {
 		return getInstance().context.getTemplatesPath();
 	}
 	
+	/**
+	 * @return the templateFolders
+	 */
+	public static Map<String, File> getTemplateFolders() {
+		return getInstance().templateFolders;
+	}
 }

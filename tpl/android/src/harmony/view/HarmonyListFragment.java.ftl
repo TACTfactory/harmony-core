@@ -48,12 +48,15 @@ implements LoaderManager.LoaderCallbacks<List<T>>{
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		boolean result;
 		try {
-			return ${project_name?cap_first}Menu.getInstance(this.getActivity(), this).dispatch(item, this.getActivity());
+			result = ${project_name?cap_first}Menu.getInstance(this.getActivity(), this).dispatch(item, this.getActivity());
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			result = false;
 		}
+		
+		return result;
 	}
 
 	/* (non-Javadoc)

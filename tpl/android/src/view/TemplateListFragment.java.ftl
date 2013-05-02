@@ -36,9 +36,9 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	implements DeletableList {
 
 	// Recall internal address (Hack Micky)
-	static final int INTERNAL_EMPTY_ID = 0x00ff0001;
-	static final int INTERNAL_PROGRESS_CONTAINER_ID = 0x00ff0002;
-	static final int INTERNAL_LIST_CONTAINER_ID = 0x00ff0003;
+	protected static final int INTERNAL_EMPTY_ID = 0x00ff0001;
+	protected static final int INTERNAL_PROGRESS_CONTAINER_ID = 0x00ff0002;
+	protected static final int INTERNAL_LIST_CONTAINER_ID = 0x00ff0003;
 
 	protected ${curr.name}ListAdapter mAdapter;
 	protected static ${curr.name}ListFragment instance;
@@ -47,9 +47,9 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	 * @see android.support.v4.app.ListFragment#onCreateView(adroid.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
 	 */
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		//inflater.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
-		View view = inflater.inflate(R.layout.fragment_${curr.name?lower_case}_list, null);
+		final View view = inflater.inflate(R.layout.fragment_${curr.name?lower_case}_list, null);
 
 		this.initializeHackCustomList(view);
 
@@ -87,7 +87,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	 */
 	@Override 
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		${curr.name} item = (${curr.name}) l.getItemAtPosition(position);
+		final ${curr.name} item = (${curr.name}) l.getItemAtPosition(position);
 
 		final Intent intent = new Intent(getActivity(), ${curr.name}ShowActivity.class);
 		intent.putExtra("${curr.name}", item);
@@ -101,11 +101,11 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	@Override 
 	public Loader<List<${curr.name}>> onCreateLoader(int id, Bundle bundle) { 
 		${curr.name?cap_first}Criterias crit = null;
-		if (bundle!=null){
-			crit = (${curr.name?cap_first}Criterias)bundle.get(${curr.name?cap_first}Criterias._PARCELABLE);
+		if (bundle != null) {
+			crit = (${curr.name?cap_first}Criterias) bundle.get(${curr.name?cap_first}Criterias._PARCELABLE);
 		}
 			
-		return new ${curr.name?cap_first}ListLoader(getActivity(), crit );
+		return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
 	}
 
 	/** (non-Javadoc)
@@ -137,38 +137,38 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	 * 
 	 * @param rootView
 	 */
-	private void initializeHackCustomList(View rootView) {
+	private void initializeHackCustomList(final View rootView) {
 		// HACK Micky : Map component support ListFragment
 		// Progress
-		LinearLayout progressLayout = (LinearLayout) rootView.findViewById(R.id.${curr.name?lower_case}ProgressLayout);
+		final LinearLayout progressLayout = (LinearLayout) rootView.findViewById(R.id.${curr.name?lower_case}ProgressLayout);
 		progressLayout.setId(INTERNAL_PROGRESS_CONTAINER_ID);
 
 		// Empty
-		TextView emptyText = (TextView) rootView.findViewById(android.R.id.empty);
+		final TextView emptyText = (TextView) rootView.findViewById(android.R.id.empty);
 		emptyText.setId(INTERNAL_EMPTY_ID);
 
 		// ListContainer
-		RelativeLayout listContainer = (RelativeLayout) rootView.findViewById(R.id.${curr.name?lower_case}ListContainer);
+		final RelativeLayout listContainer = (RelativeLayout) rootView.findViewById(R.id.${curr.name?lower_case}ListContainer);
 		listContainer.setId(INTERNAL_LIST_CONTAINER_ID);
 		// END HACK
 	}
 
 
-	protected void onClickEdit(int position) {
-		${curr.name} item = this.mAdapter.getItem(position);
+	protected void onClickEdit(final int position) {
+		final ${curr.name} item = this.mAdapter.getItem(position);
 		final Intent intent = new Intent(getActivity(), ${curr.name}EditActivity.class);
 		intent.putExtra("${curr.name}", item);
 
-		this.getActivity().startActivityForResult(intent,0);
+		this.getActivity().startActivityForResult(intent, 0);
 	}	
 	
 	
-	protected void onClickDelete(int position) {
+	protected void onClickDelete(final int position) {
 		new DeleteDialog(this.getActivity(), this, position).show();
 	}
 
-	public void delete(int position) {
-		${curr.name?cap_first} item = this.mAdapter.getItem(position);
+	public void delete(final int position) {
+		final ${curr.name?cap_first} item = this.mAdapter.getItem(position);
 		new DeleteTask(this.getActivity(), item).execute();
 	}
 
@@ -176,7 +176,8 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		private Context context;
 		private ${curr.name?cap_first} item;
 		
-		public DeleteTask(Context context, ${curr.name?cap_first} item) {
+		public DeleteTask(final Context context, final ${curr.name?cap_first} item) {
+			super();
 			this.context = context;
 			this.item = item;
 		}
@@ -195,6 +196,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 							b);
 
 			result = ret.getInt("result",  0); 
+
 			return result;
 		}
 		

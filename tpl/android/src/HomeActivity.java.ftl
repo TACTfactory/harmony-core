@@ -26,7 +26,7 @@ public class HomeActivity extends HarmonyFragmentActivity
 	{
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.main);
-		LinearLayout homeLayout = (LinearLayout) findViewById(R.id.homeLayout);
+		final LinearLayout homeLayout = (LinearLayout) findViewById(R.id.homeLayout);
 
 		// Base buttons
 		<#if (entities??)>
@@ -38,7 +38,7 @@ public class HomeActivity extends HarmonyFragmentActivity
 		${entity.name}CreateButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(HomeActivity.this,${entity.name}CreateActivity.class);
+				Intent intent = new Intent(HomeActivity.this, ${entity.name}CreateActivity.class);
 				HomeActivity.this.startActivity(intent);
 			}
 		});
@@ -50,7 +50,7 @@ public class HomeActivity extends HarmonyFragmentActivity
 		${entity.name}ListButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent(HomeActivity.this,${entity.name}ListActivity.class);
+				Intent intent = new Intent(HomeActivity.this, ${entity.name}ListActivity.class);
 				HomeActivity.this.startActivity(intent);
 			}
 		});

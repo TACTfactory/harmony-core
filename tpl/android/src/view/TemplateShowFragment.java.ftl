@@ -18,9 +18,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.*;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 import android.content.ContentResolver;
+import android.widget.CheckBox;
+import android.widget.TextView;
+
 
 <#assign importDate=false />
 <#list curr.fields as field>
@@ -68,7 +70,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
      * 
      * param view The layout inflating
      */
-    protected void initializeComponent(View view) {
+    protected void initializeComponent(final View view) {
 	<#foreach field in curr.fields>
 		<#if (!field.internal && !field.hidden)>
 			<#if (field.type=="boolean")>
@@ -92,7 +94,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		    	(field.type!="ean") && 
 		    	(field.type!="zipcode") && 
 		    	(field.type!="float"))>
-		if (this.model.get${field.name?cap_first}()!=null) {
+		if (this.model.get${field.name?cap_first}() != null) {
 					<#if (field.type=="datetime" || field.type=="date" || field.type=="time")>
 						<#if (field.type=="datetime")>
 			this.${field.name}View.setText(DateUtils.formatDateTimeToString(model.get${field.name?cap_first}()));
@@ -114,8 +116,8 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}().getId())); 
 			<#else>
 		String ${field.name}Value = "";
-		for (${field.relation.targetEntity} item : this.model.get${field.name?cap_first}()){
-			${field.name}Value+=item.getId()+",";
+		for (${field.relation.targetEntity} item : this.model.get${field.name?cap_first}()) {
+			${field.name}Value += item.getId() + ",";
 		}
 		this.${field.name}View.setText(${field.name}Value);
 			</#if>
@@ -130,9 +132,9 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {    	
     	// Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_${curr.name?lower_case}_show, container, false);
+        final View view = inflater.inflate(R.layout.fragment_${curr.name?lower_case}_show, container, false);
 
-        Intent intent =  getActivity().getIntent();
+        final Intent intent =  getActivity().getIntent();
         this.model = (${curr.name?cap_first}) intent.getSerializableExtra("${curr.name}");
         		
         this.initializeComponent(view);
@@ -148,7 +150,8 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		protected String errorMsg;
 		protected ProgressDialog progress;
 
-		public LoadTask(${curr.name}ShowFragment fragment, ${curr.name} entity) {
+		public LoadTask(final ${curr.name}ShowFragment fragment, final ${curr.name} entity) {
+			super();
 			this.fragment = fragment;
 			this.context = fragment.getActivity();
 			this.entity = entity;
@@ -172,7 +175,6 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		@Override
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
-
 			
 			ContentResolver prov = this.context.getContentResolver();
 			Bundle b = new Bundle();
@@ -203,7 +205,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 				this.fragment.model = this.entity;
 				this.fragment.loadData();
 			} else {
-				AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
+				final AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
 				builder.setIcon(0);
 				builder.setMessage(this.context.getString(R.string.${curr.name?lower_case}_error_load));
 				builder.setPositiveButton(

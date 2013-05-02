@@ -88,10 +88,10 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	// Android's default system path of the database.
 	private static String DB_PATH;	
 	private static String DB_NAME;
-	private static boolean assetsExist = false;
+	private static boolean assetsExist;
 	
-	public ${project_name?cap_first}SQLiteOpenHelperBase(Context context, String name,
-			CursorFactory factory, int version) {
+	public ${project_name?cap_first}SQLiteOpenHelperBase(final Context context, final String name,
+			final CursorFactory factory, final int version) {
 		super(context, name, factory, version);
 		this.context = context;
 		DB_NAME = name;
@@ -109,25 +109,26 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate(android.database.sqlite.SQLiteDatabase)
 	 */
 	@Override
-	public void onCreate(SQLiteDatabase db) {
-		if (${project_name?cap_first}Application.DEBUG)
+	public void onCreate(final SQLiteDatabase db) {
+		if (${project_name?cap_first}Application.DEBUG) {
 			Log.d(TAG, "Create database..");
+		}
 		
 		if (!assetsExist) {
 			/// Create Schema
 	<#list entities?values as entity>
 		<#if (entity.fields?? && (entity.fields?size>0))>
-			db.execSQL( ${entity.name}SQLiteAdapter.getSchema() );
+			db.execSQL( ${entity.name}SQLiteAdapter.getSchema());
 			<#list entity["relations"] as relation>
 				<#if (relation.type=="ManyToMany")>
-			db.execSQL( ${entity.name}SQLiteAdapter.get${relation.name?cap_first}RelationSchema() );
+			db.execSQL( ${entity.name}SQLiteAdapter.get${relation.name?cap_first}RelationSchema());
 				</#if>
 			</#list>
 		</#if>
 	</#list>
 	
 	<#if options.fixture?? && options.fixture.enabled>
-		this.loadData(db);
+			this.loadData(db);
 	</#if>
 		}
 		
@@ -137,7 +138,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	 * Clear the database given in parameters
 	 * @param db The database to clear
 	 */
-	public static void clearDatabase(SQLiteDatabase db){
+	public static void clearDatabase(final SQLiteDatabase db) {
 		<#list entities?values as entity>
 			<#if (entity.fields?? && (entity.fields?size>0))>
 		db.delete(${entity.name?cap_first}SQLiteAdapter.TABLE_NAME, null, null);	
@@ -149,20 +150,23 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	 * @see android.database.sqlite.SQLiteOpenHelper#onUpgrade(android.database.sqlite.SQLiteDatabase, int, int)
 	 */
 	@Override
-	public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-		if (${project_name?cap_first}Application.DEBUG)
+	public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
+		if (${project_name?cap_first}Application.DEBUG) {
 			Log.d(TAG, "Update database..");
+		}
 		
 		//if (SqliteAdapter.BASE_VERSION < 0) {
-			Log.i(TAG, "Upgrading database from version " + oldVersion + 
-					   " to " + newVersion + ", which will destroy all old data");
+			Log.i(TAG, "Upgrading database from version " + oldVersion 
+					   + " to " + newVersion + ", which will destroy all old data");
+		
+		final String command = "DROP TABLE IF EXISTS "; 
 		
 		<#list entities?values as entity>
 			<#if (entity.fields?? && (entity.fields?size>0))>
-			db.execSQL("DROP TABLE IF EXISTS "+ ${entity.name}SQLiteAdapter.TABLE_NAME);
+			db.execSQL(command + ${entity.name}SQLiteAdapter.TABLE_NAME);
 				<#list entity['relations'] as relation>
 					<#if (relation.type=="ManyToMany")>
-			db.execSQL("DROP TABLE IF EXISTS "+${entity.name}SQLiteAdapter.RELATION_${relation.name?upper_case}_TABLE_NAME );
+			db.execSQL(command + ${entity.name}SQLiteAdapter.RELATION_${relation.name?upper_case}_TABLE_NAME );
 					</#if>
 				</#list>
 			</#if>
@@ -174,15 +178,15 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	
 	<#if options.fixture?? && options.fixture.enabled>
 	//@SuppressWarnings("rawtypes")
-	private void loadData(SQLiteDatabase db){
-		DataLoader dl = new DataLoader(this.context);
+	private void loadData(final SQLiteDatabase db) {
+		final DataLoader dataLoader = new DataLoader(this.context);
 		
 		int mode = DataLoader.MODE_APP;
 		if (${project_name?cap_first}Application.DEBUG) {
 			mode = DataLoader.MODE_APP | DataLoader.MODE_DEBUG;
 		}
 
-		dl.loadData(db, mode);
+		dataLoader.loadData(db, mode);
 	}
 	</#if>
 	
@@ -191,7 +195,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	 * database.
 	 * */
 	public void createDataBase() throws IOException {
-		if (assetsExist && !checkDataBase()){
+		if (assetsExist && !checkDataBase()) {
 			// By calling this method and empty database will be created into
 			// the default system path
 			// so we're gonna be able to overwrite that database with ours
@@ -213,23 +217,26 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	 * @return true if it exists, false if it doesn't
 	 */
 	private boolean checkDataBase() {
+		boolean result;
 
 		SQLiteDatabase checkDB = null;
 		try {
-			String myPath = DB_PATH + DB_NAME;
+			final String myPath = DB_PATH + DB_NAME;
 			// NOTE : the system throw error message : "Database is locked" when
 			// the Database is not found (incorrect path)
 			checkDB = SQLiteDatabase.openDatabase(myPath, null,
 					SQLiteDatabase.OPEN_READONLY);
+			result = true;
 		} catch (SQLiteException e) {
 			// database doesn't exist yet.
+			result = false;
 		}
 
 		if (checkDB != null) {
 			checkDB.close();
 		}
 
-		return checkDB != null ? true : false;
+		return result;
 	}
 
 	/**
@@ -240,19 +247,20 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	private void copyDataBase() throws IOException {
 
 		// Open your local db as the input stream
-		InputStream myInput = this.context.getAssets().open(DB_NAME);
+		final InputStream myInput = this.context.getAssets().open(DB_NAME);
 		
 		// Path to the just created empty db
-		String outFileName = DB_PATH + DB_NAME;
+		final String outFileName = DB_PATH + DB_NAME;
 
 		// Open the empty db as the output stream
-		OutputStream myOutput = new FileOutputStream(outFileName);
+		final OutputStream myOutput = new FileOutputStream(outFileName);
 
 		// transfer bytes from the inputfile to the outputfile
-		byte[] buffer = new byte[1024];
-		int length;
-		while ((length = myInput.read(buffer)) > 0) {
+		final byte[] buffer = new byte[1024];
+		int length = myInput.read(buffer);
+		while (length > 0) {
 			myOutput.write(buffer, 0, length);
+			length = myInput.read(buffer);
 		}
 
 		// Close the streams

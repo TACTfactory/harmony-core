@@ -66,32 +66,31 @@ import java.util.Map;
 import ${curr.namespace}.entity.${curr.name};
 
 public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?cap_first}> {
-	private static String TAG = "${curr.name?cap_first}DataLoader";
-	private static String NAME = "${curr.name}";
+	private static final String NAME = "${curr.name}";
 	
 	private static ${curr.name?cap_first}DataLoader instance;
 	
 	
-	public static ${curr.name?cap_first}DataLoader getInstance(Context context) {
+	public static ${curr.name?cap_first}DataLoader getInstance(final Context context) {
 		if (instance == null) {
 			instance = new ${curr.name?cap_first}DataLoader(context); 
 		}
 		return instance;
 	}
 	
-	private ${curr.name?cap_first}DataLoader(Context context){
+	private ${curr.name?cap_first}DataLoader(final Context context) {
 		super(context);
 	}
 
 	
 	<#if fixtureType=="xml">
 	@Override
-	protected ${curr.name} extractItem(Element element) {
-		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
+	protected ${curr.name} extractItem(final Element element) {
+		final ${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
 		
 		<#list curr.fields as field>
 			<#if (!field.internal)>
-		if (element.getChildText("${field.name?uncap_first}")!=null){
+		if (element.getChildText("${field.name?uncap_first}") != null) {
 				<#if !field.relation??>
 					<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
 			${curr.name?uncap_first}.set${field.name?cap_first}(Integer.parseInt(element.getChildText("${field.name?uncap_first}")));
@@ -139,7 +138,7 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 					<#else>
 			ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
 			List<Element> ${field.relation.targetEntity?uncap_first}sMap = element.getChild("${field.name?uncap_first}").getChildren();
-			for (Element ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap){
+			for (Element ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap) {
 				if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.containsKey(${field.relation.targetEntity?uncap_first}Name.getText()))
 					${field.relation.targetEntity?uncap_first}s.add(${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).getModelFixture(${field.relation.targetEntity?uncap_first}Name.getText()));
 			}
@@ -152,32 +151,32 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 
 	<#elseif fixtureType=="yml">
 	@Override
-	protected ${curr.name} extractItem(Map<?, ?> columns) {
-		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
+	protected ${curr.name} extractItem(final Map<?, ?> columns) {
+		final ${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
 		<#list curr.fields as field>
 			<#if (!field.internal)>
-		if (columns.get("${field.name?uncap_first}")!=null){
+		if (columns.get("${field.name?uncap_first}") != null) {
 				<#if !field.relation??>
 					<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
-			${curr.name?uncap_first}.set${field.name?cap_first}((Integer)columns.get("${field.name?uncap_first}"));
+			${curr.name?uncap_first}.set${field.name?cap_first}((Integer) columns.get("${field.name?uncap_first}"));
 					<#elseif field.type=="double">
-			${curr.name?uncap_first}.set${field.name?cap_first}((Double)columns.get("${field.name?uncap_first}"));
+			${curr.name?uncap_first}.set${field.name?cap_first}((Double) columns.get("${field.name?uncap_first}"));
 					<#elseif field.type=="float">
-			${curr.name?uncap_first}.set${field.name?cap_first}(((Double)columns.get("${field.name?uncap_first}")).floatValue());
+			${curr.name?uncap_first}.set${field.name?cap_first}(((Double) columns.get("${field.name?uncap_first}")).floatValue());
 					<#elseif field.type=="date">
-			${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))<#if field.is_locale>, DateTimeZone.UTC</#if>));
+			${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date) columns.get("${field.name?uncap_first}"))<#if field.is_locale>, DateTimeZone.UTC</#if>));
 					<#elseif field.type=="datetime">		
-			${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date)columns.get("${field.name?uncap_first}"))<#if field.is_locale>, DateTimeZone.UTC</#if>));
+			${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date) columns.get("${field.name?uncap_first}"))<#if field.is_locale>, DateTimeZone.UTC</#if>));
 					<#elseif field.type=="time">
-			${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternTime,(String)columns.get("${field.name?uncap_first}")));
+			${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternTime,(String) columns.get("${field.name?uncap_first}")));
 					<#elseif field.type=="boolean">
-			${curr.name?uncap_first}.set${field.name?cap_first}((Boolean)columns.get("${field.name?uncap_first}"));		
+			${curr.name?uncap_first}.set${field.name?cap_first}((Boolean) columns.get("${field.name?uncap_first}"));		
 					<#else>
-			${curr.name?uncap_first}.set${field.name?cap_first}((String)columns.get("${field.name?uncap_first}"));
+			${curr.name?uncap_first}.set${field.name?cap_first}((String) columns.get("${field.name?uncap_first}"));
 					</#if>
 				<#else>
 					<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">			
-			${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} = ${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.get((String)columns.get("${field.name?uncap_first}"));
+			final ${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} = ${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.get((String) columns.get("${field.name?uncap_first}"));
 			if (${field.relation.targetEntity?uncap_first} != null) {
 				${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first});
 						<#if field.relation.inversedBy??>
@@ -193,10 +192,11 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 
 					<#else>
 			ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
-			Map<?, ?> ${field.relation.targetEntity?uncap_first}sMap = (Map<?, ?>)columns.get("${field.name?uncap_first}");
-			for (Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()){
-				if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.containsKey((String)${field.relation.targetEntity?uncap_first}Name))
+			final Map<?, ?> ${field.relation.targetEntity?uncap_first}sMap = (Map<?, ?>) columns.get("${field.name?uncap_first}");
+			for (final Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()) {
+				if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.containsKey((String)${field.relation.targetEntity?uncap_first}Name)) {
 					${field.relation.targetEntity?uncap_first}s.add(${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.get((String)${field.relation.targetEntity?uncap_first}Name));
+				}
 			}
 			${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first}s);		
 					</#if>
@@ -209,8 +209,8 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 		return ${curr.name?uncap_first};
 	}
 	@Override
-	public void load(DataManager manager) {
-		for (${curr.name?cap_first} ${curr.name?uncap_first} : this.items.values()) {
+	public void load(final DataManager manager) {
+		for (final ${curr.name?cap_first} ${curr.name?uncap_first} : this.items.values()) {
 			${curr.name?uncap_first}.setId(manager.persist(${curr.name?uncap_first}));
 		}
 		manager.flush();
@@ -222,7 +222,7 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 	 * @return The order
 	 */
 	@Override
-	public int getOrder(){
+	public int getOrder() {
 		return 0;
 	}
 

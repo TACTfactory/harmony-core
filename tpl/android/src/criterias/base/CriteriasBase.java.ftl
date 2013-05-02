@@ -2,36 +2,40 @@ package ${project_namespace}.criterias.base;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 import ${project_namespace}.criterias.base.Criteria.Type;
 
 /** CriteriasBase. 
  *	An array of Criteria and CriteriasBase. Used for db requests.   
  */
-public abstract class CriteriasBase implements Serializable, ICriteria{
+public abstract class CriteriasBase implements Serializable, ICriteria {
 	private GroupType type;
-	private ArrayList<ICriteria> arr = new ArrayList<ICriteria>(); 
+	private List<ICriteria> arr = new ArrayList<ICriteria>(); 
 	 
-	public CriteriasBase(GroupType type){
+	public CriteriasBase(final GroupType type) {
 		this.type = type;
 	}
 		
-	public String toSQLiteString(){
-		String ret = "(";
-		for (int i=0;i<this.arr.size();i++){
-			ICriteria crit = this.arr.get(i);
-			ret+=crit.toSQLiteString();
-			if (i!=this.arr.size()-1){
-				ret+=" "+type.getSqlType()+" ";
+	public String toSQLiteString() {
+		StringBuilder ret = new StringBuilder("(");
+		
+		for (int i = 0; i < this.arr.size(); i++) {
+			final ICriteria crit = this.arr.get(i);
+			ret.append(crit.toSQLiteString());
+			if (i != this.arr.size() - 1) {
+				ret.append(" ");
+				ret.append(type.getSqlType());
+				ret.append(" ");
 			}
 		}
-		ret+=")";
-		return ret;
+		ret.append(")");
+		return ret.toString();
 	}
 	
 	/**
 	 * Test if the given criteria is valid
-	 * @param The criteria to test
+	 * @param c The criteria to test
 	 * @return true if the criteria is valid
 	 */
 	public abstract boolean validCriteria(Criteria c);
@@ -41,13 +45,17 @@ public abstract class CriteriasBase implements Serializable, ICriteria{
 	 * @param c The criteria to add
 	 * @return True if the criterias is valid and doesn't exists yet
 	 */
-	public boolean add(Criteria c){
-		if (this.validCriteria(c) && !this.arr.contains(c)){
-			arr.add(c);
-			return true;
+	public boolean add(final Criteria crit) {
+		boolean result;
+	
+		if (this.validCriteria(crit) && !this.arr.contains(crit)) {
+			arr.add(crit);
+			result = true;
 		} else {
-			return false;
+			result = false;
 		}
+		
+		return result;
 	}
 	
 	/**
@@ -57,13 +65,13 @@ public abstract class CriteriasBase implements Serializable, ICriteria{
 	 * @param type The type of criteria (can be Equals, Superior, etc.)
 	 * @return True if the criterias is valid and doesn't exists yet
 	 */
-	public boolean add(String key, String value, Type type){
-		Criteria c = new Criteria();
-		c.setKey(key);
-		c.addValue(value);
-		c.setType(type);
+	public boolean add(final String key, final String value, final Type type) {
+		final Criteria criteria = new Criteria();
+		criteria.setKey(key);
+		criteria.addValue(value);
+		criteria.setType(type);
 		
-		return this.add(c);
+		return this.add(criteria);
 	}
 	
 	/**
@@ -72,24 +80,24 @@ public abstract class CriteriasBase implements Serializable, ICriteria{
 	 * @param value The value 
 	 * @return True if the criterias is valid and doesn't exists yet
 	 */
-	public boolean add(String key, String value){
-		return this.add(key,value,Type.EQUALS);
+	public boolean add(final String key, final String value) {
+		return this.add(key, value, Type.EQUALS);
 	}
 	
-	public enum GroupType{
+	public enum GroupType {
 		AND("AND"),
 		OR("OR");
 		
 		private String sql;
 		
-		private GroupType(String sql){
+		private GroupType(final String sql) {
 			this.sql = sql;
 		}
 		
-		public String getSqlType(){return this.sql;}
+		public String getSqlType() { return this.sql; }
 	}
 	
-	public boolean isEmpty(){
+	public boolean isEmpty() {
 		return this.arr.isEmpty();
 	}
 }
