@@ -17,23 +17,13 @@ import android.util.Log;
 public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	protected static String TAG = "${project_name?cap_first}Provider";
 	protected String URI_NOT_SUPPORTED;
-	
-	// Internal code
-	<#assign id = 0 /> 
-	<#list entities?values as entity>
-		<#if (entity.fields?size>0) >
-	protected static final int ${entity.name?upper_case}_ALL 		= ${id + 0};
-	protected static final int ${entity.name?upper_case}_ONE 		= ${id + 1};
-		<#assign id = id + 10 /> 
-		</#if>
-	</#list>
-	
+
 	// Tools / Common
 	public    static Integer baseVersion = 0;
 	public    static String baseName = "";
 	protected static String item;
 	protected static String authority = "${project_namespace}.provider";
-	protected static UriMatcher uriMatcher;
+	protected static UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 	
 	// Adapter to SQLite
 	<#list entities?values as entity>
@@ -44,23 +34,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	protected SQLiteDatabase db;
 	
 	protected Context mContext;
-	
-	// Static constructor
-	static {
-		if (${project_name?cap_first}Application.DEBUG)
-			Log.d(TAG, "Initialize Provider...");
 		
-		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-		<#list entities?values as entity>
-			<#if (entity.fields?size>0) >
-		
-		// ${entity.name} URI mapping
-		//uriMatcher.addURI(authority, ${entity.name?cap_first}ProviderAdapter.${entity.name?uncap_first}Type, 			${entity.name?upper_case}_ALL);
-		//uriMatcher.addURI(authority, ${entity.name?cap_first}ProviderAdapter.${entity.name?uncap_first}Type + "/#", 	${entity.name?upper_case}_ONE);
-			</#if>
-		</#list>
-	}
-	
 	@Override
 	public boolean onCreate() {
 		boolean result = true;
@@ -107,10 +81,10 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			<#if (entity.fields?size>0) >
 		
 		// ${entity.name} type mapping
-		case ${entity.name?upper_case}_ONE:
+		case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ONE:
 			result = single + "${entity.name?lower_case}";
 			break;
-		case ${entity.name?upper_case}_ALL:
+		case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ALL:
 			result = collection + "${entity.name?lower_case}";
 			break;
 			</#if>
@@ -133,14 +107,14 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			<#if (entity.fields?size>0) >
 		
 			// ${entity.name}
-			case ${entity.name?upper_case}_ONE:
+			case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ONE:
 				try {
 					result = this.${entity.name?uncap_first}Provider.delete(uri, selection, selectionArgs);
 				} catch (Exception e) {
 					throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
 				}
 				break;
-			case ${entity.name?upper_case}_ALL:
+			case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ALL:
 				result = this.${entity.name?uncap_first}Provider.delete(uri, selection, selectionArgs);
 				break;
 			</#if>
@@ -173,7 +147,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			<#if (entity.fields?size>0) >
 		
 			// ${entity.name}
-			case ${entity.name?upper_case}_ALL:
+			case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ALL:
 				result = this.${entity.name?uncap_first}Provider.insert(uri, values);
 				break;
 			</#if>
@@ -206,14 +180,14 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			<#if (entity.fields?size>0) >
 		
 			// ${entity.name}
-			case ${entity.name?upper_case}_ONE:
+			case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ONE:
 				result = this.${entity.name?uncap_first}Provider.query(uri, 
 					projection, 
 					selection, 
 					selectionArgs, 
 					sortOrder);
 				break;
-			case ${entity.name?upper_case}_ALL:
+			case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ALL:
 				result = this.${entity.name?uncap_first}Provider.query(uri, 
 					projection, 
 					selection, 
@@ -248,13 +222,13 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			<#if (entity.fields?size>0) >
 		
 			// ${entity.name}
-			case ${entity.name?upper_case}_ONE:
+			case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ONE:
 				result = this.${entity.name?uncap_first}Provider.update(uri,
 					values,
 					selection,
 					selectionArgs);
 				break;
-			case ${entity.name?upper_case}_ALL:
+			case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ALL:
 				result = this.${entity.name?uncap_first}Provider.update(uri,
 					values,
 					selection,

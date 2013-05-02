@@ -66,14 +66,20 @@ public class ProviderGenerator extends BaseGenerator {
 	}
 	
 	public final void generateProviderAdapters() {
+		int providerId = 0;
 		for (ClassMetadata cm : this.getAppMetas().getEntities().values()) {
 			if (!cm.getFields().isEmpty()) {
+				
 				this.getDatamodel().put(
 						TagConstant.CURRENT_ENTITY, cm.getName());
+				this.getDatamodel().put(
+						TagConstant.PROVIDER_ID, providerId);
 				this.makeSourceProvider("TemplateProviderAdapter.java",
 						cm.getName() + "ProviderAdapter.java", false);
 				this.makeSourceProvider("base/TemplateProviderAdapterBase.java",
 						"base/" + cm.getName() + "ProviderAdapterBase.java", true);
+				
+				providerId += 10;
 			}
 		}
 	}

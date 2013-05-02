@@ -103,4 +103,6 @@ public abstract class TagConstant {
 	public static final String ID = "id";
 	/** Constant for nullable field. */
 	public static final String NULLABLE = "nullable";
+	/** Constant for provider id. */
+	public static final String PROVIDER_ID = "provider_id";
 }

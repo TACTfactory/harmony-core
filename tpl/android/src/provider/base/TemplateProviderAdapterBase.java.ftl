@@ -25,10 +25,13 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase extends Provider
 	public static final String METHOD_DELETE_${curr.name?upper_case} = "delete${curr.name?cap_first}";
 	public static final String METHOD_QUERY_${curr.name?upper_case} = "query${curr.name?cap_first}";
 
+	protected static final int ${curr.name?upper_case}_ALL 		= ${provider_id};
+	protected static final int ${curr.name?upper_case}_ONE 		= ${provider_id + 1};
+
 	static {
 		${curr.name?upper_case}_URI = ${project_name?cap_first}Provider.generateUri(${curr.name?uncap_first}Type);
-		${project_name?cap_first}Provider.getUriMatcher().addURI(${project_name?cap_first}Provider.authority, ${curr.name?uncap_first}Type, 		${project_name?cap_first}Provider.${curr.name?upper_case}_ALL);
-		${project_name?cap_first}Provider.getUriMatcher().addURI(${project_name?cap_first}Provider.authority, ${curr.name?uncap_first}Type + "/#", 	${project_name?cap_first}Provider.${curr.name?upper_case}_ONE);
+		${project_name?cap_first}Provider.getUriMatcher().addURI(${project_name?cap_first}Provider.authority, ${curr.name?uncap_first}Type, 		${curr.name?upper_case}_ALL);
+		${project_name?cap_first}Provider.getUriMatcher().addURI(${project_name?cap_first}Provider.authority, ${curr.name?uncap_first}Type + "/#", 	${curr.name?upper_case}_ONE);
 	}
 
 	public ${curr.name?cap_first}ProviderAdapterBase(Context context, SQLiteDatabase db) {
@@ -44,7 +47,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase extends Provider
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher().match(uri);
 		int result = -1;
 		switch (matchedUri) {
-			case ${project_name?cap_first}ProviderBase.${curr.name?upper_case}_ONE:
+			case ${curr.name?upper_case}_ONE:
 				int id = Integer.parseInt(uri.getPathSegments().get(1));
 				selection = ${curr.name?cap_first}SQLiteAdapter.COL_ID + " = ?";
 				selectionArgs = new String[1];
@@ -53,7 +56,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase extends Provider
 						selection, 
 						selectionArgs);
 				break;
-			case ${project_name?cap_first}ProviderBase.${curr.name?upper_case}_ALL:
+			case ${curr.name?upper_case}_ALL:
 				result = this.adapter.delete(
 							selection, 
 							selectionArgs);
@@ -67,7 +70,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase extends Provider
 		Uri result = null;
 		int id = 0;
 		switch (matchedUri) {
-			case ${project_name?cap_first}ProviderBase.${curr.name?upper_case}_ALL:
+			case ${curr.name?upper_case}_ALL:
 				id = (int) this.adapter.insert(null, values);
 				if (id > 0) {
 					result = ContentUris.withAppendedId(${curr.name?upper_case}_URI, id);
@@ -84,7 +87,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase extends Provider
 		int id = 0;
 
 		switch (matchedUri) {
-			case ${project_name?cap_first}ProviderBase.${curr.name?upper_case}_ONE:
+			case ${curr.name?upper_case}_ONE:
 				id = Integer.parseInt(uri.getPathSegments().get(1));
 				selection = ${curr.name?cap_first}SQLiteAdapter.COL_ID + " = ?";
 				selectionArgs = new String[1];
@@ -98,7 +101,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase extends Provider
 							null,
 							null);
 				break;
-			case ${project_name?cap_first}ProviderBase.${curr.name?upper_case}_ALL:
+			case ${curr.name?upper_case}_ALL:
 				result = this.adapter.query(
 							projection, 
 							selection,
@@ -117,14 +120,14 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase extends Provider
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher().match(uri);
 		int result = -1;
 		switch (matchedUri) {
-			case ${project_name?cap_first}ProviderBase.${curr.name?upper_case}_ONE:
+			case ${curr.name?upper_case}_ONE:
 				String id = uri.getPathSegments().get(1);
 				result = this.adapter.update(
 						values, 
 						${curr.name?cap_first}SQLiteAdapter.COL_ID + " = " + id, 
 						selectionArgs);
 				break;
-			case ${project_name?cap_first}ProviderBase.${curr.name?upper_case}_ALL:
+			case ${curr.name?upper_case}_ALL:
 				result = this.adapter.update(
 							values, 
 							selection, 
