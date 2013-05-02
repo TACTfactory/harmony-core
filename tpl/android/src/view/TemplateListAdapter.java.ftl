@@ -47,7 +47,7 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 		this.clear();
 
 		if (data != null) {
-			for (${curr.name} item : data) {
+			for (final ${curr.name} item : data) {
 				this.add(item);
 			}
 		}
@@ -90,9 +90,10 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 			holder = (ViewHolder) convertView.getTag();
 		}
 
-		${curr.name} item = getItem(position);
-		if ( item != null && holder != null)
+		final ${curr.name} item = getItem(position);
+		if ( item != null && holder != null) {
 			holder.populate(item);
+		}
 
 		return convertView;
 	}
@@ -117,13 +118,14 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 		 * 
 		 * @param item ${curr.name} data
 		 */
-		public void populate(${curr.name} model) {
+		public void populate(final ${curr.name} model) {
 			<#list curr.fields as field>
 				<#if (!field.internal && !field.hidden)>
 					<#if (!field.relation??)>
 						<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
-			if (model.get${field.name?cap_first}()!=null)
+			if (model.get${field.name?cap_first}()!=null) {
 				${m.setAdapterLoader(field)}
+			}
 						<#else>
 			${m.setAdapterLoader(field)}
 						</#if>

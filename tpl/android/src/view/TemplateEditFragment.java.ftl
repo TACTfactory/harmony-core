@@ -131,17 +131,17 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 		        DateTime dt = new DateTime();
 		        
 				if (!TextUtils.isEmpty(${curr.name}EditFragment.this.${field.name}DateView.getText())){
-					String strInputDate = ${curr.name}EditFragment.this.${field.name}DateView.getText().toString();
+					final String strInputDate = ${curr.name}EditFragment.this.${field.name}DateView.getText().toString();
 					dt = DateUtils.formatStringToDate(strInputDate);
 				}
 				
-			    CustomDatePickerDialog ${field.name}Dpd = new CustomDatePickerDialog(getActivity(), dt, R.string.${curr.name?lower_case}_${field.name?lower_case}_date_title);
+			    final CustomDatePickerDialog ${field.name}Dpd = new CustomDatePickerDialog(getActivity(), dt, R.string.${curr.name?lower_case}_${field.name?lower_case}_date_title);
 			    ${field.name}Dpd.setPositiveButton(getActivity().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						DatePicker dp = ((CustomDatePickerDialog) dialog).getDatePicker();
-						DateTime date = new DateTime(dp.getYear(), dp.getMonth() + 1, dp.getDayOfMonth(), 0, 0);
+						final DatePicker dp = ((CustomDatePickerDialog) dialog).getDatePicker();
+						final DateTime date = new DateTime(dp.getYear(), dp.getMonth() + 1, dp.getDayOfMonth(), 0, 0);
 						${curr.name}EditFragment.this.${field.name}DateView.setText(DateUtils.formatDateToString(date));
 					}
 				});
@@ -157,17 +157,17 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 				DateTime dt = new DateTime(); 
 		        
 				if (!TextUtils.isEmpty(${curr.name}EditFragment.this.${field.name}TimeView.getText())){
-					String strInputDate = ${curr.name}EditFragment.this.${field.name}TimeView.getText().toString();
+					final String strInputDate = ${curr.name}EditFragment.this.${field.name}TimeView.getText().toString();
 					dt = DateUtils.formatStringToTime(strInputDate);
 				}
 				
-			    CustomTimePickerDialog ${field.name}Tpd = new CustomTimePickerDialog(getActivity(), dt, 
+			    final CustomTimePickerDialog ${field.name}Tpd = new CustomTimePickerDialog(getActivity(), dt, 
 			    		android.text.format.DateFormat.is24HourFormat(getActivity()), R.string.${curr.name?lower_case}_${field.name?lower_case}_time_title);
 			    ${field.name}Tpd.setPositiveButton(getActivity().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
 					
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						TimePicker tp = ((CustomTimePickerDialog) dialog).getTimePicker();
+						final TimePicker tp = ((CustomTimePickerDialog) dialog).getTimePicker();
 						
 						DateTime date = new DateTime(0);
 						date = new DateTime(date.getYear(), date.getDayOfMonth(), date.getDayOfMonth(), 
@@ -204,17 +204,17 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 	/** Initialize dialog
 	 * 
 	 */		<#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
-	protected void init${relation.name?cap_first}Dialog(List<${relation.relation.targetEntity}> list){
+	protected void init${relation.name?cap_first}Dialog(final List<${relation.relation.targetEntity}> list){
 		String[] listAdapter = new String[list.size()];
 		boolean[] checks = new boolean[list.size()];
 		this.checked${relation.name?cap_first} = new boolean[list.size()];
 		int i=0;
-		for (${relation.relation.targetEntity} item : list){
+		for (final ${relation.relation.targetEntity} item : list){
 			listAdapter[i] = String.valueOf(item.getId());
 			checks[i] = false;
 			i++;
 		}
-		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+		final AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
 		builder.setTitle(R.string.${curr.name?lower_case}_${relation.name?uncap_first}_dialog_title)
 				.setMultiChoiceItems(listAdapter, checks, new DialogInterface.OnMultiChoiceClickListener(){
 					public void onClick(DialogInterface dialog, int which, boolean isChecked){
@@ -235,14 +235,14 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 		${relation.name}Dialog = builder.create();
 	}
 			<#else>
-	protected void init${relation.name?cap_first}Dialog(List<${relation.relation.targetEntity}> list){
+	protected void init${relation.name?cap_first}Dialog(final List<${relation.relation.targetEntity}> list){
 		String[] listAdapter = new String[list.size()];
 		int i=0;
-		for (${relation.relation.targetEntity} item : list){
+		for (final ${relation.relation.targetEntity} item : list){
 			listAdapter[i] = String.valueOf(item.getId());
 			i++;
 		}
-		AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+		final AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
 		builder.setTitle(R.string.${curr.name?lower_case}_${relation.name?uncap_first}_dialog_title)
 				.setSingleChoiceItems(listAdapter, 0, new DialogInterface.OnClickListener(){
 					public void onClick(DialogInterface dialog, int id){
@@ -296,7 +296,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 		${m.setLoader(field)}
 				</#if>
 			<#else>
-		${field.relation.targetEntity}SQLiteAdapter ${field.name}Adapter = new ${field.relation.targetEntity}SQLiteAdapter(getActivity());
+		final ${field.relation.targetEntity}SQLiteAdapter ${field.name}Adapter = new ${field.relation.targetEntity}SQLiteAdapter(getActivity());
 		${field.name}Adapter.open();
 		this.${field.name}List = ${field.name}Adapter.getAll();
 		${field.name}Adapter.close();
@@ -313,25 +313,27 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 			<#if !field.relation??>
 				<#if field.type!="boolean">
 					<#if field.type=="date" || field.type=="datetime">
-			if (!TextUtils.isEmpty(this.${field.name}DateView.getEditableText()))
+			if (!TextUtils.isEmpty(this.${field.name}DateView.getEditableText())) {
 						<#elseif field.type=="time" || field.type=="datetime">
-			if (!TextUtils.isEmpty(this.${field.name}TimeView.getEditableText()))
+			if (!TextUtils.isEmpty(this.${field.name}TimeView.getEditableText())) {
 						<#else>
-			if (!TextUtils.isEmpty(this.${field.name}View.getEditableText()))
+			if (!TextUtils.isEmpty(this.${field.name}View.getEditableText())) {
 					</#if>
 			${m.setSaver(field)}
+			}
 				<#else>
 		${m.setSaver(field)}
 				</#if>
 			<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
-		${field.relation.targetEntity} tmp${field.name?cap_first} = new ${field.relation.targetEntity?cap_first}();
+		final ${field.relation.targetEntity} tmp${field.name?cap_first} = new ${field.relation.targetEntity?cap_first}();
 		tmp${field.name?cap_first}.setId(this.selected${field.name?cap_first});
 		this.model.set${field.name?cap_first}(tmp${field.name?cap_first});
 			<#else>
 		ArrayList<${field.relation.targetEntity}> tmp${field.name?cap_first}List = new ArrayList<${field.relation.targetEntity?cap_first}>();
-		for (int i=0; i<this.checked${field.name?cap_first}.length; i++){
-			if (this.checked${field.name?cap_first}[i])
+		for (int i = 0; i<this.checked${field.name?cap_first}.length; i++) {
+			if (this.checked${field.name?cap_first}[i]) {
 				tmp${field.name?cap_first}List.add(this.${field.name}List.get(i));
+			}
 		}
 		
 		this.model.set${field.name?cap_first}(tmp${field.name?cap_first}List);
@@ -356,9 +358,9 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {    	
 		// Inflate the layout for this fragment
-		View view = inflater.inflate(R.layout.fragment_${curr.name?lower_case}_edit, container, false);
+		final View view = inflater.inflate(R.layout.fragment_${curr.name?lower_case}_edit, container, false);
 
-		Intent intent =  getActivity().getIntent();
+		final Intent intent =  getActivity().getIntent();
 		this.model = (${curr.name}) intent.getSerializableExtra("${curr.name}");
 		
 		this.initializeComponent(view);
@@ -385,7 +387,8 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 		protected String errorMsg;
 		protected ProgressDialog progress;
 
-		public EditTask(${curr.name}EditFragment fragment, ${curr.name} entity) {
+		public EditTask(final ${curr.name}EditFragment fragment, final ${curr.name} entity) {
+			super();
 			this.fragment = fragment;
 			this.context = fragment.getActivity();
 			this.entity = entity;
@@ -410,8 +413,8 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 
-			${curr.name}SQLiteAdapter ${curr.name?lower_case}Adapter = new ${curr.name}SQLiteAdapter(context);
-			SQLiteDatabase db = ${curr.name?lower_case}Adapter.open();
+			final ${curr.name}SQLiteAdapter ${curr.name?lower_case}Adapter = new ${curr.name}SQLiteAdapter(context);
+			final SQLiteDatabase db = ${curr.name?lower_case}Adapter.open();
 			db.beginTransaction();
 			try {
 				${curr.name?lower_case}Adapter.update(this.entity);
@@ -434,11 +437,11 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 			super.onPostExecute(result);
 
 			if (result == 0) {
-				HarmonyFragmentActivity activity = (HarmonyFragmentActivity) this.context;
+				final HarmonyFragmentActivity activity = (HarmonyFragmentActivity) this.context;
 				activity.setResult(HarmonyFragmentActivity.RESULT_OK);
 				activity.finish();
 			} else {
-				AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
+				final AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
 				builder.setIcon(0);
 				builder.setMessage(this.context.getString(R.string.${curr.name?lower_case}_error_create));
 				builder.setPositiveButton(
