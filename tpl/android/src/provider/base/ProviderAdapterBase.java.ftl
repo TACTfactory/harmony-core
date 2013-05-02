@@ -17,7 +17,8 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 
 	protected Bundle insert(String arg, Bundle extras) {
 		long newId = -1;
-		T item = (T) extras.getSerializable("T");
+		@SuppressWarnings("unchecked")
+		T item = (T) extras.getSerializable(this.getItemKey());
 		this.db.beginTransaction();
 		try {
 			newId = this.adapter.insert(item);
@@ -34,7 +35,8 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 
 	public Bundle delete(String arg, Bundle extras) {
 		int adaptResult = 0;
-		T item = (T) extras.getSerializable("T");
+		@SuppressWarnings("unchecked")
+		T item = (T) extras.getSerializable(this.getItemKey());
 		this.db.beginTransaction();
 		try {
 			adaptResult = this.adapter.delete(item);
@@ -52,7 +54,8 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 
 	public Bundle update(String arg, Bundle extras) {
 		int adaptResult = 0;
-		T item = (T) extras.getSerializable("T");
+		@SuppressWarnings("unchecked")
+		T item = (T) extras.getSerializable(this.getItemKey());
 		this.db.beginTransaction();
 		try {
 			adaptResult = this.adapter.update(item);
@@ -83,7 +86,7 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 		
 		Bundle result = new Bundle();
 		if (itemList != null) {
-			result.putSerializable("Ts", itemList);
+			result.putSerializable(this.getItemKey(), itemList);
 		}
 		return result;
 	}
@@ -91,4 +94,6 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 	public SQLiteDatabase getDb() {
 		return this.db;
 	}
+
+	public abstract String getItemKey();
 }

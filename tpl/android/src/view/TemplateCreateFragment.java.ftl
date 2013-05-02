@@ -412,31 +412,17 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 
-			/*${curr.name}SQLiteAdapter ${curr.name?lower_case}Adapter = new ${curr.name}SQLiteAdapter(context);
-			SQLiteDatabase db = ${curr.name?lower_case}Adapter.open();
-			db.beginTransaction();
-			try {
-				${curr.name?lower_case}Adapter.insert(this.entity);
-
-				db.setTransactionSuccessful();
-			} finally {
-				db.endTransaction();
-				${curr.name?lower_case}Adapter.close();
-
-				result = 0;
-			}*/
 			ContentResolver prov = this.fragment.getActivity().getContentResolver();
 			Bundle b = new Bundle();
-			b.putSerializable("${curr.name?cap_first}", this.entity);
+			b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, this.entity);
 			Bundle ret = 
 					prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
 							${curr.name?cap_first}ProviderAdapter.METHOD_INSERT_${curr.name?upper_case}, 
 							null,
 							b);
-			if (ret.containsKey("${curr.name?cap_first}")) {
-				this.entity = (${curr.name?cap_first}) ret.getSerializable("${curr.name?cap_first}");
-				result = 0;
-			}
+
+			result = (int) ret.getLong("result",  -1); 
+			this.entity.setId((int) result);
 
 			return result;
 		}

@@ -7,10 +7,11 @@ import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
 import ${data_namespace}.${curr.name?cap_first}SQLiteAdapter;
 import ${project_namespace}.harmony.view.DeletableList;
 import ${project_namespace}.harmony.view.DeleteDialog;
+import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -184,18 +185,16 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		protected Integer doInBackground(Void... params) {
 			int result = -1;
 			
-			${curr.name?cap_first}SQLiteAdapter ${curr.name?uncap_first}Adapter = new ${curr.name?cap_first}SQLiteAdapter(this.context);
-			SQLiteDatabase db = ${curr.name?uncap_first}Adapter.open();
-			db.beginTransaction();
-			
-			try {
-				result = ${curr.name?uncap_first}Adapter.delete(item.getId());
+			ContentResolver prov = this.context.getContentResolver();
+			Bundle b = new Bundle();
+			b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, this.item);
+			Bundle ret = 
+					prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
+							${curr.name?cap_first}ProviderAdapter.METHOD_DELETE_${curr.name?upper_case}, 
+							null,
+							b);
 
-				db.setTransactionSuccessful();
-			} finally {
-				db.endTransaction();
-				${curr.name?uncap_first}Adapter.close();
-			}
+			result = ret.getInt("result",  0); 
 			return result;
 		}
 		

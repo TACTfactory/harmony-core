@@ -279,7 +279,11 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			return this.${entity.name?uncap_first}Provider.update(arg, extras);
 		} else
 		if (method.equals(${entity.name?cap_first}ProviderAdapter.METHOD_QUERY_${entity.name?upper_case})) {
-			return this.${entity.name?uncap_first}Provider.queryAll(arg, extras);
+			if (extras.containsKey("id")) {
+				return this.${entity.name?uncap_first}Provider.query(arg, extras);
+			} else {
+				return this.${entity.name?uncap_first}Provider.queryAll(arg, extras);	
+			}
 		} else
 		
 			</#if>

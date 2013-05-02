@@ -4,12 +4,13 @@ package ${curr.controller_namespace};
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.ContentResolver;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
 
-import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
+import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
 
 /**
@@ -37,26 +38,16 @@ public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> 
 		List<${curr.name}> result = new ArrayList<${curr.name}>();
 
 		// TODO Query of data
-
-		${curr.name}SQLiteAdapter adapter = new ${curr.name}SQLiteAdapter(context);
-		SQLiteDatabase db = adapter.open();
-		try {
-			db.beginTransaction();
-			result = adapter.getAll(this.criterias);
-
-			db.setTransactionSuccessful();
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			db.endTransaction();
-			adapter.close();
-		}
-
-		// Sort the list.
-
-		// Done!
+		ContentResolver prov = this.getContext().getContentResolver();
+		Bundle b = new Bundle();
+		b.putSerializable("crits", this.criterias);
+		Bundle provResult = prov.call(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
+				${curr.name}ProviderAdapter.METHOD_QUERY_${curr.name?upper_case},
+				null,
+				b);
+		
+		result = (List<${curr.name}>) provResult.getSerializable(${curr.name}ProviderAdapter.ITEM_KEY);
+		
 		return result;
 	}
 

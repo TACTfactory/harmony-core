@@ -12,11 +12,14 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Bundle;
 
 public abstract class ${curr.name?cap_first}ProviderAdapterBase extends ProviderAdapterBase<${curr.name?cap_first}> {
 	protected static String TAG = "${curr.name?cap_first}ProviderAdapter";
 
 	public	  static Uri ${curr.name?upper_case}_URI;
+
+	public static String ITEM_KEY = "${curr.name?cap_first}";
 
 	protected static final String ${curr.name?uncap_first}Type = "${curr.name?lower_case}";
 
@@ -137,5 +140,18 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase extends Provider
 		return result;
 	}
 
+	@Override
+	public String getItemKey() {
+		return ITEM_KEY;
+	}
+
+	public Bundle query(String arg, Bundle extras) {
+		Bundle result = new Bundle();
+
+		${curr.name?cap_first} ${curr.name?uncap_first} = ((${curr.name?cap_first}SQLiteAdapter) this.adapter).getByID(extras.getInt("id"));
+		result.putSerializable(ITEM_KEY, ${curr.name?uncap_first});
+
+		return result;
+	}
 }
 

@@ -19,6 +19,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.*;
+import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
+import android.content.ContentResolver;
 
 <#assign importDate=false />
 <#list curr.fields as field>
@@ -171,17 +173,19 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 
-			${curr.name}SQLiteAdapter ${curr.name?lower_case}Adapter = new ${curr.name}SQLiteAdapter(context);
-			SQLiteDatabase db = ${curr.name?lower_case}Adapter.open();
-			db.beginTransaction();
-			try {
-				this.entity = ${curr.name?lower_case}Adapter.getByID(<#if (curr.ids?size>0)>this.entity.getId()</#if>);
+			
+			ContentResolver prov = this.context.getContentResolver();
+			Bundle b = new Bundle();
+			b.putSerializable("id", this.entity.getId());
+			Bundle ret = 
+					prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
+							${curr.name?cap_first}ProviderAdapter.METHOD_QUERY_${curr.name?upper_case}, 
+							null,
+							b);
 
-				db.setTransactionSuccessful();
-			} finally {
-				db.endTransaction();
-				${curr.name?lower_case}Adapter.close();
-
+			this.entity = (${curr.name?cap_first}) ret.getSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY); 
+			
+			if (this.entity != null) {
 				result = 0;
 			}
 
