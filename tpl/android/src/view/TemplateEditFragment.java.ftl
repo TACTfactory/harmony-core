@@ -420,7 +420,6 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 		@Override
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
-
 			ContentResolver prov = this.context.getContentResolver();
 			Bundle b = new Bundle();
 			b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, this.entity);

@@ -185,7 +185,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		@Override
 		protected Integer doInBackground(Void... params) {
 			int result = -1;
-			
+
 			ContentResolver prov = this.context.getContentResolver();
 			Bundle b = new Bundle();
 			b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, this.item);
@@ -196,6 +196,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 							b);
 
 			result = ret.getInt("result",  0); 
+
 
 			return result;
 		}
