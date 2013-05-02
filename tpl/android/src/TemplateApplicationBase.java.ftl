@@ -70,7 +70,8 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	}
 
 	/**
-	 * 
+	 * Get the device's UDID.
+	 * @return A String containing the UDID
 	 */
 	public static String getUDID(final Context context) {
 		String udid = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
@@ -89,6 +90,10 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		return udid;
 	}
 	
+	/**
+	 * Get the singleton
+	 * @return The singleton of the application
+	 */ 
 	public static Context getApplication() {
 		return singleton;
 	}
@@ -155,10 +160,18 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	    return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
 	}
 	
+	/**
+	 * Get the Date Format
+	 * @return the DateFormat
+	 */
 	public static DateFormat getDateFormat() {
 		return df;
 	}
 	
+	/**
+	 * Get the Time Format
+	 * @return the TimeFormat
+	 */
 	public static DateFormat getTimeFormat() {
 		return tf;
 	}

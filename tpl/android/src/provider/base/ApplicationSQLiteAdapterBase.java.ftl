@@ -17,7 +17,7 @@ import ${project_namespace}.criterias.base.CriteriasBase;
 
 public abstract class SQLiteAdapterBase<T> {
 
-	/** Table name of SQLite database */
+	/** Table name of SQLite database. */
 	public static String DB_NAME = "database.sqlite";
 	public static String TAG = "${project_name?cap_first}SQLiteAdapterBase";
 
@@ -28,7 +28,7 @@ public abstract class SQLiteAdapterBase<T> {
 	protected ${project_name?cap_first}SQLiteOpenHelper mBaseHelper;
 	
 	
-	/** Constructor
+	/** Constructor.
 	 * 
 	 * @param ctx context
 	 */
@@ -48,7 +48,7 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	
-	/** Initialize and open database
+	/** Initialize and open database.
 	 * 
 	 * @return Open database
 	 */
@@ -57,7 +57,7 @@ public abstract class SQLiteAdapterBase<T> {
 		return this.mDatabase;
 	}
 	
-	/** Initialize and open database
+	/** Initialize and open database.
 	 * 
 	 * @return Open database
 	 */
@@ -66,7 +66,7 @@ public abstract class SQLiteAdapterBase<T> {
 		return this.mDatabase;
 	}
 
-	/** Close database */
+	/** Close database. */
 	public void close() {
 		mDatabase.close();
 	}
@@ -120,7 +120,7 @@ public abstract class SQLiteAdapterBase<T> {
 	protected abstract String[] getCols();
 	
 		
-	/** Read All Comments entities
+	/** Read All Comments entities.
 	 * 
 	 * @return List of Comment entities
 	 */
@@ -133,7 +133,7 @@ public abstract class SQLiteAdapterBase<T> {
 		return result;
 	}
 	
-	/** Read All T entities given some criterias
+	/** Read All T entities given some criterias.
 	 * @param crits The criterias to use for the request
 	 * @return List of T entities
 	 */
@@ -151,7 +151,7 @@ public abstract class SQLiteAdapterBase<T> {
 		return result;
 	}
 	
-	/** Convert Cursor of database to Array of Comment entity
+	/** Convert Cursor of database to Array of Comment entity.
 	 * 
 	 * @param cursor Cursor object
 	 * @return Array of Comment entity
@@ -175,21 +175,21 @@ public abstract class SQLiteAdapterBase<T> {
 		return result;
 	}
 	
-	/** Convert Cursor of database to Comment entity
+	/** Convert Cursor of database to Comment entity.
 	 * 
 	 * @param cursor Cursor object
 	 * @return Comment entity
 	 */
 	public abstract T cursorToItem(Cursor c);
 
-	/** Insert a Comment entity into database
+	/** Insert a Comment entity into database.
 	 * 
 	 * @param item The Comment entity to persist 
 	 * @return Id of the Comment entity
 	 */
 	public abstract long insert(T item);
 	
-	/** Update a Comment entity into database 
+	/** Update a Comment entity into database.
 	 * 
 	 * @param item The Comment entity to persist
 	 * @return 

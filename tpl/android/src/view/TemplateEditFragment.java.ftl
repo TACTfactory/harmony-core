@@ -84,10 +84,10 @@ import java.util.List;
  * @see android.app.Fragment
  */
 public class ${curr.name}EditFragment extends HarmonyFragment implements OnClickListener {
-	/* Model data */
+	/** Model data */
 	protected ${curr.name} model = new ${curr.name}();
 
-	/* curr.fields View */
+	/** curr.fields View */
 	<#list curr.fields as field>
 		<#if (!field.internal && !field.hidden)>
 			<#if (!field.relation??)>
@@ -115,8 +115,6 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 			</#if>
 		</#if>
 	</#list>
-
-	
 	protected Button saveButton;
 
 	/** Initialize view of curr.fields.
@@ -209,7 +207,8 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 		<#if !relation.internal && !relation.hidden>
 	/** Initialize dialog.
 	 * 
-	 */		<#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
+	 */		
+	 <#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
 	protected void init${relation.name?cap_first}Dialog(final List<${relation.relation.targetEntity}> list) {
 		String[] listAdapter = new String[list.size()];
 		boolean[] checks = new boolean[list.size()];
@@ -269,11 +268,18 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 		${relation.name}Dialog = builder.create();
 	} 
 	 		</#if>
-	
+	/**
+	 * Called when the user clicks on cancel.
+	 * 
+	 */
 	protected void onCancel${relation.name?cap_first}() {
 		//TODO : Don't change the list
 	}
 	
+	/**
+	 * Called when the user clicks on ${relation.name?cap_first} button.
+	 * It shows the dedicated dialog.
+	 */
 	protected void onClick${relation.name?cap_first}Button(View v) {
 		${relation.name}Dialog.show();
 	}
@@ -385,17 +391,24 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 			new EditTask(this, this.model).execute();
 		}
 	}
-
+	
+	/**
+	 * This class will update the entity into the DB.
+	 * It runs asynchronously and shows a progressDialog
+	 */
 	public static class EditTask extends AsyncTask<Void, Void, Integer> {
 		protected final Context context;
-		protected final ${curr.name}EditFragment fragment;
 		protected final ${curr.name} entity;
 		protected String errorMsg;
 		protected ProgressDialog progress;
 
+		/**
+		 * Constructor of the task.
+		 * @param entity The entity to insert in the DB
+		 * @param fragment The parent fragment from where the aSyncTask is called 
+		 */
 		public EditTask(final ${curr.name}EditFragment fragment, final ${curr.name} entity) {
 			super();
-			this.fragment = fragment;
 			this.context = fragment.getActivity();
 			this.entity = entity;
 		}

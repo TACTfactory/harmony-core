@@ -21,6 +21,9 @@ public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> 
 	private List<${curr.name}> m${curr.name}s;
 	private Context context;
 
+	/**
+	 * Constructor.
+	 */
 	public ${curr.name}ListLoader(final Context context, final ${curr.name?cap_first}Criterias crit) {
 		super(context);
 		this.context = context;

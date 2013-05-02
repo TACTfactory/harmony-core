@@ -31,8 +31,15 @@ import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
 import ${curr.namespace}.entity.${curr.name};
 
+/**
+ * List adapter for ${curr.name} entity.
+ */ 
 public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}> 
 		implements OnClickListener {
+		
+	/**
+	 * View & layoutInflater to populate
+	 */
 	private final LayoutInflater mInflater;
 	private final ${curr.name?cap_first}ListFragment fragment;
 
@@ -143,7 +150,10 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 			this.deleteButton.setTag(model);*/
 		}
 	}
-
+	/**
+	* Called when the user clicks on an element.
+	* @see android.app.OnClickListener#onClick
+	*/
 	@Override 
 	public void onClick(View v) {
 		switch (v.getId()) {

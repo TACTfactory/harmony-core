@@ -84,10 +84,10 @@ import java.util.List;
  * @see android.app.Fragment
  */
 public class ${curr.name}CreateFragment extends HarmonyFragment implements OnClickListener {
-	/* Model data */
+	/** Model data. */
 	protected ${curr.name} model = new ${curr.name}();
 
-	/* Fields View */
+	/** Fields View. */
 	<#list curr.fields as field>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
@@ -115,7 +115,6 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 			</#if>
 		</#if>
 	</#list>
-
 	protected Button saveButton;
 
 	/** Initialize view of fields. 
@@ -271,11 +270,18 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		${relation.name}Dialog = builder.create();
 	} 
 	 		</#if>
-	
+	/**
+	 * Called when the user clicks on cancel.
+	 * 
+	 */
 	protected void onCancel${relation.name?cap_first}() {
 		//TODO : Don't change the list
 	}
 	
+	/**
+	 * Called when the user clicks on ${relation.name?cap_first} button.
+	 * It shows the dedicated dialog.
+	 */
 	protected void onClick${relation.name?cap_first}Button(View v) {
 		${relation.name}Dialog.show();
 	}
@@ -384,22 +390,29 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 			new CreateTask(this, this.model).execute();
 		}
 	}
-
+	
+	/**
+	 * This class will save the entity into the DB.
+	 * It runs asynchronously and shows a progressDialog
+	 */
 	public static class CreateTask extends AsyncTask<Void, Void, Integer> {
-		protected final Context context;
-		protected final ${curr.name}CreateFragment fragment;
-		protected final ${curr.name} entity;
-		protected String errorMsg;
-		protected ProgressDialog progress;
+		private final Context context;
+		private final ${curr.name} entity;
+		private String errorMsg;
+		private ProgressDialog progress;
 
+		/**
+		 * Constructor of the task.
+		 * @param entity The entity to insert in the DB
+		 * @param fragment The parent fragment from where the aSyncTask is called 
+		 */
 		public CreateTask(final ${curr.name}CreateFragment fragment, final ${curr.name} entity) {
 			super();
-			this.fragment = fragment;
 			this.context = fragment.getActivity();
 			this.entity = entity;
 		}
 
-		/* (non-Javadoc)
+		/* (non-Javadoc).
 		 * @see android.os.AsyncTask#onPreExecute()
 		 */
 		@Override
@@ -411,7 +424,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 					this.context.getString(R.string.${curr.name?lower_case}_progress_save_message));
 		}
 
-		/* (non-Javadoc)
+		/* (non-Javadoc).
 		 * @see android.os.AsyncTask#doInBackground(Params[])
 		 */
 		@Override
@@ -434,7 +447,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 			return result;
 		}
 
-		/* (non-Javadoc)
+		/* (non-Javadoc).
 		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
 		 */
 		@Override
