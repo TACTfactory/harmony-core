@@ -36,7 +36,7 @@ public abstract class SqliteAdapter {
 		builder.append(generateColumnType(fm.getColumnDefinition()));
 		if (fm.isId()) {
 			builder.append(" PRIMARY KEY");
-			if (fm.getColumnDefinition().equals("INTEGER")) {
+			if (fm.getColumnDefinition().equalsIgnoreCase("INTEGER")) {
 				builder.append(" AUTOINCREMENT");
 			}
 		} else {
