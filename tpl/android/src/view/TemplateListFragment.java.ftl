@@ -101,7 +101,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	public Loader<List<${curr.name}>> onCreateLoader(int id, Bundle bundle) { 
 		${curr.name?cap_first}Criterias crit = null;
 		if (bundle != null) {
-			crit = (${curr.name?cap_first}Criterias)bundle.get(${curr.name?cap_first}Criterias._PARCELABLE);
+			crit = (${curr.name?cap_first}Criterias) bundle.get(${curr.name?cap_first}Criterias._PARCELABLE);
 		}
 			
 		return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
@@ -158,7 +158,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		final Intent intent = new Intent(getActivity(), ${curr.name}EditActivity.class);
 		intent.putExtra("${curr.name}", item);
 
-		this.getActivity().startActivityForResult(intent,0);
+		this.getActivity().startActivityForResult(intent, 0);
 	}	
 	
 	

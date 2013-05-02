@@ -59,8 +59,8 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		Log.i(TAG, "Starting application...");
 		
 		deviceID = getUDID(this);
-		df = android.text.format.DateFormat.getDateFormat((Context)singleton);
-		tf = android.text.format.DateFormat.getTimeFormat((Context)singleton);
+		df = android.text.format.DateFormat.getDateFormat((Context) singleton);
+		tf = android.text.format.DateFormat.getTimeFormat((Context) singleton);
 		
 		// Manage unmanaged error of application
 		//Thread.setDefaultUncaughtExceptionHandler(
@@ -82,7 +82,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		
 		// for google bug, android < 2.3 (many device)
 		if (udid.equals("9774d56d682e549c")) {
-			final TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+			final TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 			udid = telephonyManager.getDeviceId();
 		}
 		

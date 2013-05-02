@@ -259,7 +259,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 				}).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 		            @Override
 		            public void onClick(DialogInterface dialog, int id) {
-		            	${curr.name}CreateFragment.this.selected${relation.name?cap_first} = Integer.parseInt(listAdapter[((AlertDialog)dialog).getListView().getCheckedItemPosition()]);
+		            	${curr.name}CreateFragment.this.selected${relation.name?cap_first} = Integer.parseInt(listAdapter[((AlertDialog) dialog).getListView().getCheckedItemPosition()]);
 		            }
 		        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 		            @Override

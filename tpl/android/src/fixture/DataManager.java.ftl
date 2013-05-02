@@ -47,7 +47,7 @@ public class DataManager {
     	<#list entities?values as entity>
     		<#if ((entity.fields?size>0) && (entity.ids?size>0) && !(entity.internal?? && entity.internal=='true'))>
     	if (nameClass.equals("${entity.name}")) {
-        	ret = ((${entity.name}SQLiteAdapter)this.adapters.get(nameClass)).query(id);
+        	ret = ((${entity.name}SQLiteAdapter) this.adapters.get(nameClass)).query(id);
     	}
     		</#if>
     	</#list>
@@ -96,7 +96,7 @@ public class DataManager {
     	<#list entities?values as entity>
     		<#if ((entity.fields?size>0 && entity.ids?size>0) && !(entity.internal?? && entity.internal=='true'))>
     		if (object instanceof ${entity.name}) {
-    			((${entity.name}SQLiteAdapter)this.adapters.get("${entity.name}")).remove(((${entity.name})object).getId());
+    			((${entity.name}SQLiteAdapter) this.adapters.get("${entity.name}")).remove(((${entity.name})object).getId());
     		}
     		</#if>
     	</#list>

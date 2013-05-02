@@ -81,7 +81,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	 * @return True if the criterias is valid and doesn't exists yet
 	 */
 	public boolean add(final String key, final String value) {
-		return this.add(key,value,Type.EQUALS);
+		return this.add(key, value, Type.EQUALS);
 	}
 	
 	public enum GroupType {

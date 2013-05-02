@@ -77,9 +77,9 @@ import org.joda.time.format.ISODateTimeFormat;
 	<#assign extendType = curr.name />
 </#if>
 <#if sync>
-	<#assign extend="SyncSQLiteAdapterBase<" +extendType+">" />
+	<#assign extend="SyncSQLiteAdapterBase<" +extendType+ ">" />
 <#else>
-	<#assign extend="SQLiteAdapterBase<" +extendType+">" />
+	<#assign extend="SQLiteAdapterBase<" +extendType+ ">" />
 </#if>
 /** ${curr.name} adapter database abstract class <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
@@ -126,7 +126,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 <#list curr.fields as field>
 	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 		<#if (lastLine??)>${lastLine},"</#if>
-		<#assign lastLine=" + " +alias(field.name)+"	+ \"" +field.schema />
+		<#assign lastLine=" + " + alias(field.name) + "	+ \"" + field.schema />
 	</#if>
 </#list>
 		${lastLine}<#if hasRelationOrIds()>,</#if>"
@@ -134,7 +134,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	<#list curr.relations as relation>
 		<#if (relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne")>
 			<#if (lastRelation??)>${lastRelation},"</#if>
-			<#assign lastRelation=" +\"FOREIGN KEY(\" +" +alias(relation.name)+" +\") REFERENCES \" +" +relation.relation.targetEntity+"SQLiteAdapter.TABLE_NAME+\" (\" +" +relation.relation.targetEntity+"SQLiteAdapter." +alias(relation.relation.field_ref[0])+" +\")">
+			<#assign lastRelation=" +\"FOREIGN KEY(\" + " + alias(relation.name) + " +\") REFERENCES \" + " + relation.relation.targetEntity + "SQLiteAdapter.TABLE_NAME+\" (\" + " + relation.relation.targetEntity + "SQLiteAdapter." + alias(relation.relation.field_ref[0]) + " +\")">
 		</#if>
 	</#list>
 		<#if (lastRelation??)>${lastRelation}<#if (curr.ids?size>1)>,</#if>"</#if>
@@ -634,7 +634,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	
 	<#--/** Find & read ${curr.name} by ${curr.relations[0].name}v*/
 	public ArrayList<${curr.relations[0].relation.targetEntity}> getBy${curr.relations[1].relation.targetEntity?cap_first}(int ${curr.relations[1].name?lower_case}) {
-		Cursor cursor = this.getCursor(${alias(curr.relations[1].name)} + "=?", new String[]{${curr.relations[1].name?lower_case}+""});
+		Cursor cursor = this.getCursor(${alias(curr.relations[1].name)} + "=?", new String[]{${curr.relations[1].name?lower_case}+ ""});
 		final ArrayList<${curr.name}> result = this.cursorToItems(cursor);
 		cursor.close();
 		
