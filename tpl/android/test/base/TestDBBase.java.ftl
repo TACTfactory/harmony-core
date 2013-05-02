@@ -15,7 +15,7 @@ import android.test.mock.MockContentResolver;
  */
 public abstract class TestDBBase extends AndroidTestCase {
 	private final static String CONTEXT_PREFIX = ".test";
-	private final static String PROVIDER_AUTHORITY = "com.tactfactory.${project_name?lower_case}.provider";
+	private final static String PROVIDER_AUTHORITY = "${project_namespace}.provider";
 	private final static Class<? extends ContentProvider> PROVIDER_CLASS = ${project_name?cap_first}Provider.class;
 	
 	private Context baseContext;

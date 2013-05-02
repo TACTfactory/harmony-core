@@ -1,7 +1,7 @@
 <#assign curr = entities[current_entity] />
 package ${curr.test_namespace}.base;
 
-import ${project_namespace}.provider.${project_name?cap_first}Provider;
+import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
@@ -20,7 +20,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.test.AndroidTestCase;
 
 import junit.framework.Assert;
 
@@ -92,7 +91,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			try {
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				values.remove(${curr.name}SQLiteAdapter.COL_ID);
-				result = this.provider.insert(${project_name?cap_first}Provider.${curr.name?upper_case}_URI, values);
+				result = this.provider.insert(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, values);
 			
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -109,7 +108,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 		if (this.entity != null) {
 			try {
-				Cursor c = this.provider.query(Uri.parse(${project_name?cap_first}Provider.${curr.name?upper_case}_URI + "/" + this.entity.getId()), this.adapter.getCols(), null, null, null);
+				Cursor c = this.provider.query(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.getId()), this.adapter.getCols(), null, null, null);
 				c.moveToFirst();
 				result = this.adapter.cursorToItem(c);
 				c.close();
@@ -125,7 +124,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	public void testReadAll() {
 		ArrayList<${curr.name}> result = null;
 		try {
-			Cursor c = this.provider.query(${project_name?cap_first}Provider.${curr.name?upper_case}_URI, this.adapter.getCols(), null, null, null);
+			Cursor c = this.provider.query(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, this.adapter.getCols(), null, null, null);
 			result = this.adapter.cursorToItems(c);
 			c.close();
 		} catch (Exception e) {
@@ -149,7 +148,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				result = this.provider.update(
-					Uri.parse(${project_name?cap_first}Provider.${curr.name?upper_case}_URI 
+					Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI 
 						+ "/" 
 						+ ${curr.name?uncap_first}.getId()), 
 					values, 
@@ -179,7 +178,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 					</#if>
 				</#list>
 			
-				result = this.provider.update(${project_name?cap_first}Provider.${curr.name?upper_case}_URI, values, null, null);
+				result = this.provider.update(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, values, null, null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -193,7 +192,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		int result = -1;
 		if (this.entity != null) {
 			try {
-				result = this.provider.delete(Uri.parse(${project_name?cap_first}Provider.${curr.name?upper_case}_URI + "/" + this.entity.getId()), null, null);
+				result = this.provider.delete(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.getId()), null, null);
 			
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -209,7 +208,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		if (this.entities.size() > 0) {
 
 			try {
-				result = this.provider.delete(${project_name?cap_first}Provider.${curr.name?upper_case}_URI, null, null);
+				result = this.provider.delete(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, null, null);
 			
 			} catch (Exception e) {
 				e.printStackTrace();

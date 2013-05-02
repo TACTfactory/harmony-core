@@ -1,5 +1,7 @@
 package ${local_namespace};
 
+import ${local_namespace}.base.${project_name?cap_first}ProviderBase;
+
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.net.Uri;

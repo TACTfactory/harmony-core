@@ -51,6 +51,7 @@ public class TestDBGenerator extends BaseGenerator {
 			}
 		}
 		this.makeSourceTest("utils/TestUtils.java", "utils/TestUtils.java", false);
+		this.makeSourceTest("base/TestDBBase.java", "base/TestDBBase.java", true);
 	}
 	
 	/**  

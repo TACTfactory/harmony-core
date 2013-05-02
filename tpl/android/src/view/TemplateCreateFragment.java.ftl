@@ -7,7 +7,7 @@ import ${curr.namespace}.R;
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import ${project_namespace}.harmony.view.HarmonyFragment;
 
-import ${project_namespace}.provider.${project_name?cap_first}Provider;
+import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
@@ -429,8 +429,8 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 			Bundle b = new Bundle();
 			b.putSerializable("${curr.name?cap_first}", this.entity);
 			Bundle ret = 
-					prov.call(DemactProvider.${curr.name?upper_case}_URI, 
-							DemactProvider.METHOD_INSERT_${curr.name?upper_case}, 
+					prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
+							${curr.name?cap_first}ProviderAdapter.METHOD_INSERT_${curr.name?upper_case}, 
 							null,
 							b);
 			if (ret.containsKey("${curr.name?cap_first}")) {

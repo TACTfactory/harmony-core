@@ -114,8 +114,8 @@ public abstract class SQLiteAdapterBase<T>{
 				whereArgs);
 	}
 	
-	protected abstract String getTableName();
-	protected abstract String[] getCols();
+	public abstract String getTableName();
+	public abstract String[] getCols();
 	
 		
 	/** Read All Comments entities
