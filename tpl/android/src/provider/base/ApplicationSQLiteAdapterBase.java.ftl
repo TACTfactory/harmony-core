@@ -30,7 +30,7 @@ public abstract class SQLiteAdapterBase<T> {
 	
 	/** Constructor
 	 * 
-	 * @param cursortx context
+	 * @param ctx context
 	 */
 	protected SQLiteAdapterBase(Context ctx) {	
 		this.context = ctx;
@@ -134,7 +134,7 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	/** Read All T entities given some criterias
-	 * @param cursorrits The criterias to use for the request
+	 * @param crits The criterias to use for the request
 	 * @return List of T entities
 	 */
 	public List<T> getAll(CriteriasBase crits) {
