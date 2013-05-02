@@ -118,7 +118,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 			/// Create Schema
 	<#list entities?values as entity>
 		<#if (entity.fields?? && (entity.fields?size>0))>
-			db.execSQL( ${entity.name}SQLiteAdapter.getSchema());
+			db.execSQL(${entity.name}SQLiteAdapter.getSchema());
 			<#list entity["relations"] as relation>
 				<#if (relation.type=="ManyToMany")>
 			db.execSQL( ${entity.name}SQLiteAdapter.get${relation.name?cap_first}RelationSchema());
@@ -135,7 +135,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	}
 	
 	/**
-	 * Clear the database given in parameters
+	 * Clear the database given in parameters.
 	 * @param db The database to clear
 	 */
 	public static void clearDatabase(final SQLiteDatabase db) {

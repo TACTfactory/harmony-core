@@ -7,8 +7,16 @@ import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 
 import android.os.Bundle;
 
+/** ${curr.name} edit Activity.
+ * 
+ * @see android.app.Activity
+ */
 public class ${curr.name}EditActivity extends HarmonyFragmentActivity {
 
+	/**
+	* Called when the Activity is created.
+	* @see android.app.Activity#onCreate
+	*/
 	@Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,6 +26,10 @@ public class ${curr.name}EditActivity extends HarmonyFragmentActivity {
         //GoogleAnalyticsSessionManager.getInstance(getApplication()).incrementActivityCount();
 	}
 	
+	/**
+	 * Called when the Activity is destroyed
+	 * @see android.app.Activity#onDestroy
+	 */
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();

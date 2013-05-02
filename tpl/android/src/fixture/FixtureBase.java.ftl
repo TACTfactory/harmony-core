@@ -37,8 +37,8 @@ public abstract class FixtureBase<T> {
 		this.context = context;
 	}
 	/**
-     	* Load the fixtures for the current model.
-    	 */
+     * Load the fixtures for the current model.
+     */
 	public void getModelFixtures(final int mode) {
 <#if fixtureType == "xml">
 		// XML Loader
@@ -92,7 +92,7 @@ public abstract class FixtureBase<T> {
 	}
 
 	/**
-	 * Load data fixtures
+	 * Load data fixtures.
 	 */
 	public abstract void load(DataManager manager);
 	
@@ -108,7 +108,7 @@ public abstract class FixtureBase<T> {
 	</#if>
 
 	/**
-	 * Get the order of this fixture
+	 * Get the order of this fixture.
 	 * 
 	 * @return index order
 	 */

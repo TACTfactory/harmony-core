@@ -9,7 +9,7 @@ public class Criteria implements Serializable, ICriteria {
 	private Type type = Type.EQUALS;
 
 	/**
-	 *  Convert the criteria to an SQLite String
+	 *  Convert the criteria to an SQLite String.
 	 * @return The SQLite String representation of the criteria. ex : "(price > 15.0)" 
 	 */
 	@Override
