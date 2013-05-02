@@ -15,7 +15,7 @@ public class ${project_name?cap_first}Menu extends ${project_name?cap_first}Menu
 		super(context, fragment);
 	}
 
-	/** Get unique instance */
+	/** Get unique instance. */
 	public static final synchronized ${project_name?cap_first}Menu getInstance(final Context context) throws Exception {
 		return getInstance(context, null);
 	}

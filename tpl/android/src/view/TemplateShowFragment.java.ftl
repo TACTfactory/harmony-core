@@ -47,9 +47,9 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
 	</#if>
 </#list>
 
-/** ${curr.name} show fragment
+/** ${curr.name} show fragment.
  * 
- * see android.app.Fragment
+ * @see android.app.Fragment
  */
 public class ${curr.name}ShowFragment extends HarmonyFragment {
 	/* Model data */
@@ -66,7 +66,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 	</#if>
 </#list>
     
-    /** Initialize view of curr.fields 
+    /** Initialize view of curr.fields.
      * 
      * param view The layout inflating
      */
@@ -83,7 +83,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 	</#foreach>
     }
     
-    /** Load data from model to fields view */
+    /** Load data from model to fields view. */
     public void loadData() {
     <#foreach field in curr.fields>
 		<#if (!field.internal && !field.hidden)>
@@ -142,14 +142,23 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
         
         return view;
     }
-
+	
+	/**
+	 * This class will find the entity into the DB.
+	 * It runs asynchronously and shows a progressDialog
+	 */
 	public static class LoadTask extends AsyncTask<Void, Void, Integer> {
-		protected final Context context;
-		protected final ${curr.name}ShowFragment fragment;
-		protected ${curr.name} entity;
-		protected String errorMsg;
-		protected ProgressDialog progress;
+		private final Context context;
+		private final ${curr.name}ShowFragment fragment;
+		private ${curr.name} entity;
+		private String errorMsg;
+		private ProgressDialog progress;
 
+		/**
+		 * Constructor of the task.
+		 * @param entity The entity to find in the DB
+		 * @param fragment The parent fragment from where the aSyncTask is called 
+		 */
 		public LoadTask(final ${curr.name}ShowFragment fragment, final ${curr.name} entity) {
 			super();
 			this.fragment = fragment;

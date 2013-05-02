@@ -14,7 +14,7 @@ import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
 
 /**
- * ${curr.name} Loader
+ * ${curr.name} Loader.
  */
 public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> {
 	
@@ -22,6 +22,9 @@ public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> 
 	private List<${curr.name}> m${curr.name}s;
 	private Context context;
 
+	/**
+	 * Constructor.
+	 */
 	public ${curr.name}ListLoader(final Context context, final ${curr.name?cap_first}Criterias crit) {
 		super(context);
 		this.context = context;

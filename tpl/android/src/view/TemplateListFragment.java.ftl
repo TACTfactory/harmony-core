@@ -30,20 +30,28 @@ import ${project_namespace}.harmony.view.HarmonyListFragment;
 
 import ${curr.namespace}.R;
 import ${curr.namespace}.entity.${curr.name};
-import ${curr.namespace}.view.${curr.name?lower_case}.${curr.name}ListLoader;
 
+/** ${curr.name} list fragment.
+ * 
+ * @see android.app.Fragment
+ */
 public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}> 
 	implements DeletableList {
 
-	// Recall internal address (Hack Micky)
+	/**
+	 * Recall internal address (Hack Micky).
+	 */
 	protected static final int INTERNAL_EMPTY_ID = 0x00ff0001;
 	protected static final int INTERNAL_PROGRESS_CONTAINER_ID = 0x00ff0002;
 	protected static final int INTERNAL_LIST_CONTAINER_ID = 0x00ff0003;
 
+	/**
+	 * The adapter which handles list population 
+	 */
 	protected ${curr.name}ListAdapter mAdapter;
 	protected static ${curr.name}ListFragment instance;
 
-	/** (non-Javadoc)
+	/** (non-Javadoc).
 	 * @see android.support.v4.app.ListFragment#onCreateView(adroid.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
 	 */
 	@Override
@@ -56,7 +64,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		return view;
 	}
 
-	/** (non-Javadoc)
+	/** (non-Javadoc).
 	 * @see android.support.v4.app.ListFragment#onActivityCreated(android.os.Bundle)
 	 */
 	@Override 
@@ -82,7 +90,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		getLoaderManager().initLoader(0, null, this);
 	}
 
-	/** (non-Javadoc)
+	/** (non-Javadoc).
 	 * @see android.support.v4.app.ListFragment#onListItemClick(android.widget.ListView, android.view.View, int, long)
 	 */
 	@Override 
@@ -95,7 +103,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		this.startActivity(intent);
 	}
 
-	/** (non-Javadoc)
+	/** (non-Javadoc).
 	 * @see android.support.v4.app.LoaderManager#onCreateLoader(int, android.os.Bundle)
 	 */
 	@Override 
@@ -108,7 +116,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
 	}
 
-	/** (non-Javadoc)
+	/** (non-Javadoc).
 	 * @see android.support.v4.app.LoaderManager#onLoadFinished()
 	 */
 	@Override 
@@ -124,7 +132,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		}
 	}
 
-	/** (non-Javadoc)
+	/** (non-Javadoc).
 	 * @see android.support.v4.app.LoaderManager#onLoaderReset()
 	 */
 	@Override 
@@ -133,7 +141,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		this.mAdapter.setData(null);
 	}
 
-	/** Initialize Custom List Fragment
+	/** Initialize Custom List Fragment.
 	 * 
 	 * @param rootView
 	 */
@@ -153,7 +161,9 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		// END HACK
 	}
 
-
+	/**
+	 * Calls the ${curr.name}EditActivity. 
+	 */
 	protected void onClickEdit(final int position) {
 		final ${curr.name} item = this.mAdapter.getItem(position);
 		final Intent intent = new Intent(getActivity(), ${curr.name}EditActivity.class);
@@ -162,26 +172,43 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		this.getActivity().startActivityForResult(intent, 0);
 	}	
 	
-	
+	/**
+	 * Shows a confirmation dialog.
+	 */
 	protected void onClickDelete(final int position) {
 		new DeleteDialog(this.getActivity(), this, position).show();
 	}
 
+	/**
+	 * Creates an aSyncTask to delete the row.
+	 */
 	public void delete(final int position) {
 		final ${curr.name?cap_first} item = this.mAdapter.getItem(position);
 		new DeleteTask(this.getActivity(), item).execute();
 	}
 
+	/**
+	 * This class will remove the entity into the DB.
+	 * It runs asynchronously.
+	 */
 	private class DeleteTask extends AsyncTask<Void, Void, Integer> {
 		private Context context;
 		private ${curr.name?cap_first} item;
 		
+		/**
+		 * Constructor of the task.
+		 * @param item The entity to remove from DB
+		 * @param context A context to build ${curr.name?cap_first}SQLiteAdapter
+		 */
 		public DeleteTask(final Context context, final ${curr.name?cap_first} item) {
 			super();
 			this.context = context;
 			this.item = item;
 		}
 
+		/* (non-Javadoc).
+		 * @see android.os.AsyncTask#doInBackground(Params[])
+		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
 			int result = -1;
@@ -201,6 +228,9 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 			return result;
 		}
 		
+		/* (non-Javadoc).
+		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
+		 */
 		@Override
 		protected void onPostExecute(Integer result) {
 			if (result > 0) {
