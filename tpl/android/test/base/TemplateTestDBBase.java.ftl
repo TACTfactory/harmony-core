@@ -22,7 +22,7 @@ import junit.framework.Assert;
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
  * You should edit ${curr.name}TestDB class instead of this one or you will lose all your modifications.</i></b>
  */
-public abstract class ${curr.name}TestDBBase extends AndroidTestCase {
+public abstract class ${curr.name}TestDBBase extends TestDBBase {
 	protected Context ctx;
 
 	protected ${curr.name}SQLiteAdapter adapter;
