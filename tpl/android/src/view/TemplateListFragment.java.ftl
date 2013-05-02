@@ -29,7 +29,6 @@ import ${project_namespace}.harmony.view.HarmonyListFragment;
 
 import ${curr.namespace}.R;
 import ${curr.namespace}.entity.${curr.name};
-import ${curr.namespace}.view.${curr.name?lower_case}.${curr.name}ListLoader;
 
 public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}> 
 	implements DeletableList {
@@ -42,7 +41,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	protected ${curr.name}ListAdapter mAdapter;
 	protected static ${curr.name}ListFragment instance;
 
-	/** (non-Javadoc)
+	/** (non-Javadoc).
 	 * @see android.support.v4.app.ListFragment#onCreateView(adroid.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
 	 */
 	@Override
@@ -55,7 +54,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		return view;
 	}
 
-	/** (non-Javadoc)
+	/** (non-Javadoc).
 	 * @see android.support.v4.app.ListFragment#onActivityCreated(android.os.Bundle)
 	 */
 	@Override 
@@ -81,7 +80,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		getLoaderManager().initLoader(0, null, this);
 	}
 
-	/** (non-Javadoc)
+	/** (non-Javadoc).
 	 * @see android.support.v4.app.ListFragment#onListItemClick(android.widget.ListView, android.view.View, int, long)
 	 */
 	@Override 
@@ -94,7 +93,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		this.startActivity(intent);
 	}
 
-	/** (non-Javadoc)
+	/** (non-Javadoc).
 	 * @see android.support.v4.app.LoaderManager#onCreateLoader(int, android.os.Bundle)
 	 */
 	@Override 
@@ -107,7 +106,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
 	}
 
-	/** (non-Javadoc)
+	/** (non-Javadoc).
 	 * @see android.support.v4.app.LoaderManager#onLoadFinished()
 	 */
 	@Override 
@@ -123,7 +122,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		}
 	}
 
-	/** (non-Javadoc)
+	/** (non-Javadoc).
 	 * @see android.support.v4.app.LoaderManager#onLoaderReset()
 	 */
 	@Override 
@@ -132,7 +131,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		this.mAdapter.setData(null);
 	}
 
-	/** Initialize Custom List Fragment
+	/** Initialize Custom List Fragment.
 	 * 
 	 * @param rootView
 	 */

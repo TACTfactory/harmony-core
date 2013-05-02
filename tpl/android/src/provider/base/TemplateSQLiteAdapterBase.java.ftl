@@ -81,14 +81,14 @@ import org.joda.time.format.ISODateTimeFormat;
 <#else>
 	<#assign extend="SQLiteAdapterBase<" +extendType+ ">" />
 </#if>
-/** ${curr.name} adapter database abstract class <br/>
+/** ${curr.name} adapter database abstract class. <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
  * You should edit ${curr.name}Adapter class instead of this one or you will lose all your modifications.</i></b>
  */
 public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	protected static final String TAG = "${curr.name}DBAdapter";
 	
-	/** Table name of SQLite database */
+	/** Table name of SQLite database. */
 	public static final String TABLE_NAME = "${curr.name}";
 	
 	// Columns constants fields mapping
@@ -99,7 +99,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	</#if>
 </#list>
 	
-	/** Global Fields */
+	/** Global Fields. */
 	public static final String[] COLS = new String[] {
 <#assign firstFieldDone=false />
 <#list curr.fields as field>
@@ -116,7 +116,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 		return COLS;
 	}
 
-	/** Generate Entity Table Schema
+	/** Generate Entity Table Schema.
 	 * 
 	 * @return "SQL query : CREATE TABLE..."
 	 */
@@ -134,7 +134,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	<#list curr.relations as relation>
 		<#if (relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne")>
 			<#if (lastRelation??)>${lastRelation},"</#if>
-			<#assign lastRelation=" +\"FOREIGN KEY(\" + " + alias(relation.name) + " +\") REFERENCES \" + " + relation.relation.targetEntity + "SQLiteAdapter.TABLE_NAME+\" (\" + " + relation.relation.targetEntity + "SQLiteAdapter." + alias(relation.relation.field_ref[0]) + " +\")">
+			<#assign lastRelation=" + \"FOREIGN KEY(\" + " + alias(relation.name) + " + \") REFERENCES \" + " + relation.relation.targetEntity + "SQLiteAdapter.TABLE_NAME + \" (\" + " + relation.relation.targetEntity + "SQLiteAdapter." + alias(relation.relation.field_ref[0]) + " + \")">
 		</#if>
 	</#list>
 		<#if (lastRelation??)>${lastRelation}<#if (curr.ids?size>1)>,</#if>"</#if>
@@ -146,9 +146,9 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	}
 	
 		
-	/** Constructor
+	/** Constructor.
 	 * 
-	 * @param cursortx context
+	 * @param ctx context
 	 */
 	public ${curr.name}SQLiteAdapterBase(final Context ctx) {	
 		super(ctx);
@@ -156,7 +156,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	
 <#if (curr.internal!="true")>
 	// Converters
-	/** Convert ${curr.name} entity to Content Values for database
+	/** Convert ${curr.name} entity to Content Values for database.
 	 * 
 	 * @param item ${curr.name} entity object
 	 * @return ContentValues object
@@ -183,7 +183,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 		return result;
 	}
 	
-	/** Convert Cursor of database to ${curr.name} entity
+	/** Convert Cursor of database to ${curr.name} entity.
 	 * 
 	 * @param cursor Cursor object
 	 * @return ${curr.name} entity
@@ -216,7 +216,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 				${t}result.set${field.name?cap_first}(new DateTime());
 			${t}}
 				<#elseif (field.type == "boolean")>
-			${t}result.set${field.name?cap_first}  (cursor.getString(index).equals("true"));
+			${t}result.set${field.name?cap_first}(cursor.getString(index).equals("true"));
 				<#elseif (field.type == "int" || field.type == "integer" || field.type == "ean" || field.type == "zipcode")>
 			${t}result.set${field.name?cap_first}(cursor.getInt(index));
 				<#elseif (field.type == "float")>
@@ -246,7 +246,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	}
 	
 	//// CRUD Entity ////
-	/** Find & read ${curr.name} by id in database
+	/** Find & read ${curr.name} by id in database.
 	 * 
 	 * @param id Identify of ${curr.name}
 	 * @return ${curr.name} entity
@@ -289,7 +289,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	<#if (curr.relations??)>
 		<#list curr.relations as relation>
 			<#if (relation.relation.type=="ManyToOne" | relation.relation.type=="OneToOne")>
-	/** Find & read ${curr.name} by ${relation.name} 
+	/** Find & read ${curr.name} by ${relation.name}.
 	 * 
 	 * @return List of ${curr.name} entities
 	 */
@@ -314,7 +314,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 		</#list>
 	</#if>
 	
-	/** Read All ${curr.name}s entities
+	/** Read All ${curr.name}s entities.
 	 * 
 	 * @return List of ${curr.name} entities
 	 */
@@ -339,7 +339,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	}
 
 	
-	/** Insert a ${curr.name} entity into database
+	/** Insert a ${curr.name} entity into database.
 	 * 
 	 * @param item The ${curr.name} entity to persist 
 	 * @return Id of the ${curr.name} entity
@@ -392,7 +392,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	}
 
 
-	/** Either insert or update a ${curr.name} entity into database whether
+	/** Either insert or update a ${curr.name} entity into database whether.
 	 * it already exists or not.
 	 * 
 	 * @param item The ${curr.name} entity to persist 
@@ -415,7 +415,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 		return result;
 	}
 	
-	/** Update a ${curr.name} entity into database 
+	/** Update a ${curr.name} entity into database.
 	 * 
 	 * @param item The ${curr.name} entity to persist
 	 * @return 
@@ -442,7 +442,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	<#list curr.relations as relation>
 		<#if (relation.relation.type=="ManyToOne" && relation.internal)>
 			
-	/** Update a ${curr.name} entity into database 
+	/** Update a ${curr.name} entity into database.
 	 * 
 	 * @param item The ${curr.name} entity to persist
 	 * @return 
@@ -466,7 +466,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	}
 
 
-	/** Either insert or update a ${curr.name} entity into database whether
+	/** Either insert or update a ${curr.name} entity into database whether.
 	 * it already exists or not.
 	 * 
 	 * @param item The ${curr.name} entity to persist 
@@ -490,7 +490,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	}
 
 	
-	/** Insert a ${curr.name} entity into database
+	/** Insert a ${curr.name} entity into database.
 	 * 
 	 * @param item The ${curr.name} entity to persist 
 	 * @return Id of the ${curr.name} entity
@@ -535,7 +535,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 		</#if>
 	</#list>
 	
-	/** Delete a ${curr.name} entity of database
+	/** Delete a ${curr.name} entity of database.
 	 * 
 	 * @param id Identify the ${curr.name} entity to delete
 	 * @return
@@ -549,7 +549,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 		final String whereClause = <#list curr.ids as id> ${alias(id.name)} + "=? <#if (id_has_next)>AND </#if>"</#list>;
 		final String[] whereArgs = new String[] {<#list curr.ids as id>String.valueOf(${id.name}) <#if (id_has_next)>, </#if></#list>};
 		
-		return this.delete( 
+		return this.delete(
 				whereClause, 
 				whereArgs);
 	<#else>
@@ -613,7 +613,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 
 	</#list>-->
 		
-	/** Insert a ${curr.name} entity into database
+	/** Insert a ${curr.name} entity into database.
 	 * 
 	 * param item The ${curr.name} entity to persist 
 	 * return Id of the ${curr.name} entity

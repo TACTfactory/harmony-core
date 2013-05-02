@@ -39,11 +39,11 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 	public ${curr.name}ListAdapter(Context context, ${curr.name?cap_first}ListFragment fragment) {
 		super(context, R.layout.row_${curr.name?lower_case});
 
-		this.mInflater = (LayoutInflater)context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 		this.fragment = fragment;
 	}
 
-	/** Set Array of ${curr.name}
+	/** Set Array of ${curr.name}.
 	 * 
 	 * @param data the array
 	 */
@@ -57,7 +57,7 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 		}
 	}
 
-	/** (non-Javadoc)
+	/** (non-Javadoc).
 	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
 	 */
 	@Override 
@@ -95,14 +95,14 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 		}
 
 		final ${curr.name} item = getItem(position);
-		if ( item != null && holder != null) {
+		if (item != null && holder != null) {
 			holder.populate(item);
 		}
 
 		return convertView;
 	}
 
-	/** Holder row */
+	/** Holder row. */
 	private static class ViewHolder {
 		<#list curr.fields as field>
 			<#if (!field.hidden && !field.internal)>
@@ -118,7 +118,7 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 		protected Button editButton;
 		protected Button deleteButton;
 
-		/** Populate row with a ${curr.name}
+		/** Populate row with a ${curr.name}.
 		 * 
 		 * @param model ${curr.name} data
 		 */
@@ -152,6 +152,8 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 				break;
 			case R.id.row_${curr.name?lower_case}_delete_btn:
 				this.fragment.onClickDelete((Integer) v.getTag());
+				break;
+			default:
 				break;
 		}
 	}

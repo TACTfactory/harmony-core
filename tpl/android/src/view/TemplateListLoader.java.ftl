@@ -13,7 +13,7 @@ import ${curr.namespace}.entity.${curr.name};
 import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
 
 /**
- * ${curr.name} Loader
+ * ${curr.name} Loader.
  */
 public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> {
 	

@@ -79,7 +79,7 @@ import java.util.ArrayList;
 <#if (mustImportList)>
 import java.util.List;
 </#if>
-/** ${curr.name} create fragment
+/** ${curr.name} create fragment.
  * 
  * @see android.app.Fragment
  */
@@ -118,7 +118,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 
 	protected Button saveButton;
 
-	/** Initialize view of fields 
+	/** Initialize view of fields. 
 	 * 
 	 * @param view The layout inflating
 	 */
@@ -208,7 +208,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 	
 	<#list curr.relations as relation>
 		<#if !relation.internal && !relation.hidden>
-	/** Initialize dialog
+	/** Initialize dialog.
 	 * 
 	 */		
 <#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
@@ -282,7 +282,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		</#if>
 	</#list>
 
-	/** Load data from model to fields view */
+	/** Load data from model to fields view. */
 	public void loadData() {
 		<#foreach field in curr.fields>						
 		<#if !field.internal && !field.hidden>
@@ -315,7 +315,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		</#foreach>
 	}
 	
-	/** Save data from fields view to model */
+	/** Save data from fields view to model. */
 	public void saveData() {
 		<#foreach field in curr.fields>
 		<#if !field.internal && !field.hidden>
@@ -352,7 +352,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 
 	}
 
-	/** Check data is valid
+	/** Check data is valid.
 	 * 
 	 * @return true if valid
 	 */
@@ -375,7 +375,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 	}
 
 	/** 
-	 * @see android.view.View.OnClickListener#onClick(android.view.View)
+	 * @see android.view.View.OnClickListener#onClick(android.view.View).
 	 */
 	@Override
 	public void onClick(View v) {

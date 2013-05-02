@@ -79,7 +79,7 @@ import java.util.ArrayList;
 import java.util.List;
 </#if>
 
-/** ${curr.name} create fragment
+/** ${curr.name} create fragment.
  * 
  * @see android.app.Fragment
  */
@@ -119,7 +119,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 	
 	protected Button saveButton;
 
-	/** Initialize view of curr.fields 
+	/** Initialize view of curr.fields.
 	 * 
 	 * @param view The layout inflating
 	 */
@@ -207,7 +207,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 	
 	<#list curr.relations as relation>
 		<#if !relation.internal && !relation.hidden>
-	/** Initialize dialog
+	/** Initialize dialog.
 	 * 
 	 */		<#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
 	protected void init${relation.name?cap_first}Dialog(final List<${relation.relation.targetEntity}> list) {
@@ -280,7 +280,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 		</#if>
 	</#list>
 
-	/** Load data from model to curr.fields view */
+	/** Load data from model to curr.fields view. */
 	public void loadData() {
 		<#foreach field in curr.fields>						
 		<#if !field.internal && !field.hidden>
@@ -312,7 +312,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 		</#foreach>
 	}
 	
-	/** Save data from curr.fields view to model */
+	/** Save data from curr.fields view to model. */
 	public void saveData() {
 		<#foreach field in curr.fields>
 		<#if !field.internal && !field.hidden>
@@ -336,7 +336,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 		this.model.set${field.name?cap_first}(tmp${field.name?cap_first});
 			<#else>
 		ArrayList<${field.relation.targetEntity}> tmp${field.name?cap_first}List = new ArrayList<${field.relation.targetEntity?cap_first}>();
-		for (int i = 0; i <this.checked${field.name?cap_first}.length; i++) {
+		for (int i = 0; i < this.checked${field.name?cap_first}.length; i++) {
 			if (this.checked${field.name?cap_first}[i]) {
 				tmp${field.name?cap_first}List.add(this.${field.name}List.get(i));
 			}
@@ -349,7 +349,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 
 	}
 
-	/** Check data is valid
+	/** Check data is valid.
 	 * 
 	 * @return true if valid
 	 */
@@ -376,7 +376,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 	}
 
 	/** 
-	 * @see android.view.View.OnClickListener#onClick(android.view.View)
+	 * @see android.view.View.OnClickListener#onClick(android.view.View).
 	 */
 	@Override
 	public void onClick(View v) {

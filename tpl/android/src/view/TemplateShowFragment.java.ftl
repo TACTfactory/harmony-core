@@ -45,7 +45,7 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
 	</#if>
 </#list>
 
-/** ${curr.name} show fragment
+/** ${curr.name} show fragment.
  * 
  * see android.app.Fragment
  */
@@ -64,7 +64,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 	</#if>
 </#list>
     
-    /** Initialize view of curr.fields 
+    /** Initialize view of curr.fields.
      * 
      * param view The layout inflating
      */
@@ -81,7 +81,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 	</#foreach>
     }
     
-    /** Load data from model to fields view */
+    /** Load data from model to fields view. */
     public void loadData() {
     <#foreach field in curr.fields>
 		<#if (!field.internal && !field.hidden)>

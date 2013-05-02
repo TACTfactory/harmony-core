@@ -18,12 +18,10 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-public class HomeActivity extends HarmonyFragmentActivity
-{
+public class HomeActivity extends HarmonyFragmentActivity {
 	/** Called when the activity is first created. */
 	@Override
-	public void onCreate(Bundle savedInstanceState)
-	{
+	public void onCreate(Bundle savedInstanceState)	{
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.main);
 		final LinearLayout homeLayout = (LinearLayout) findViewById(R.id.homeLayout);

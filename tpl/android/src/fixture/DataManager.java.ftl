@@ -96,7 +96,7 @@ public class DataManager {
     	<#list entities?values as entity>
     		<#if ((entity.fields?size>0 && entity.ids?size>0) && !(entity.internal?? && entity.internal=='true'))>
     		if (object instanceof ${entity.name}) {
-    			((${entity.name}SQLiteAdapter) this.adapters.get("${entity.name}")).remove(((${entity.name})object).getId());
+    			((${entity.name}SQLiteAdapter) this.adapters.get("${entity.name}")).remove(((${entity.name}) object).getId());
     		}
     		</#if>
     	</#list>
@@ -176,7 +176,7 @@ public class DataManager {
     
     
     /**
-     * Gets the repository for a given object
+     * Gets the repository for a given object.
      *
      * @param o object
      * @return \Doctrine\Common\Persistence\ObjectRepository
