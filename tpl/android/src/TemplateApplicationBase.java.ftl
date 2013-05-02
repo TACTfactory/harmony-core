@@ -25,9 +25,9 @@ import org.joda.time.DateTime;
 </#if>
 
 /** 
- * Common all life data/service
+ * Common all life data/service.
  * 
- * b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
+ * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
  * You should edit ${project_name?cap_first}Application class instead of this one or you will lose all your modifications.</i></b>
  * 
  */
@@ -70,7 +70,8 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	}
 
 	/**
-	 * 
+	 * Get the device's UDID.
+	 * @return A String containing the UDID
 	 */
 	public static String getUDID(final Context context) {
 		String udid = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
@@ -89,22 +90,26 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		return udid;
 	}
 	
+	/**
+	 * Get the singleton
+	 * @return The singleton of the application
+	 */ 
 	public static Context getApplication() {
 		return singleton;
 	}
 	
 	
-	/** UUID equivalent */
+	/** UUID equivalent. */
 	private static String deviceID;
 	public static String getAndroidID() {
 		return deviceID;
 	}
 	
-	/*** Application ***/
+	/*** Application. ***/
 	private static final String PREFS_PUBL = "puapsd"; // Public Application Shared Data
 	private static final String PREFS_VERS = "version";
 	
-	/** Get Application Version
+	/** Get Application Version.
 	 * 
 	 * @param ctx
 	 * @return the version number
@@ -116,7 +121,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		return settings.getString(
 				${project_name?cap_first}ApplicationBase.PREFS_VERS, "");
 	}
-	/** Check if is a new version of Application
+	/** Check if is a new version of Application.
 	 * 
 	 * @param ctx
 	 * @return true if same version
@@ -127,7 +132,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		
 		return oldVersion.equals(currentVersion);
 	}
-	/** Save if a new version is install
+	/** Save if a new version is install.
 	 * 
 	 * @param ctx
 	 */
@@ -144,7 +149,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	}	
 
 	
-	/** Check if Network is available
+	/** Check if Network is available.
 	 * 
 	 * @param ctx
 	 * @return true if have a network
@@ -155,10 +160,18 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	    return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
 	}
 	
+	/**
+	 * Get the Date Format
+	 * @return the DateFormat
+	 */
 	public static DateFormat getDateFormat() {
 		return df;
 	}
 	
+	/**
+	 * Get the Time Format
+	 * @return the TimeFormat
+	 */
 	public static DateFormat getTimeFormat() {
 		return tf;
 	}

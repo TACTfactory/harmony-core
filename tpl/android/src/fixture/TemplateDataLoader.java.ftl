@@ -168,7 +168,7 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 					<#elseif field.type=="datetime">		
 			${curr.name?uncap_first}.set${field.name?cap_first}(new DateTime(((Date) columns.get("${field.name?uncap_first}"))<#if field.is_locale>, DateTimeZone.UTC</#if>));
 					<#elseif field.type=="time">
-			${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternTime,(String) columns.get("${field.name?uncap_first}")));
+			${curr.name?uncap_first}.set${field.name?cap_first}(DateUtils.formatPattern(patternTime, (String) columns.get("${field.name?uncap_first}")));
 					<#elseif field.type=="boolean">
 			${curr.name?uncap_first}.set${field.name?cap_first}((Boolean) columns.get("${field.name?uncap_first}"));		
 					<#else>
@@ -194,8 +194,8 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 			ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
 			final Map<?, ?> ${field.relation.targetEntity?uncap_first}sMap = (Map<?, ?>) columns.get("${field.name?uncap_first}");
 			for (final Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()) {
-				if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.containsKey((String)${field.relation.targetEntity?uncap_first}Name)) {
-					${field.relation.targetEntity?uncap_first}s.add(${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.get((String)${field.relation.targetEntity?uncap_first}Name));
+				if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.containsKey((String) ${field.relation.targetEntity?uncap_first}Name)) {
+					${field.relation.targetEntity?uncap_first}s.add(${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.get((String) ${field.relation.targetEntity?uncap_first}Name));
 				}
 			}
 			${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first}s);		

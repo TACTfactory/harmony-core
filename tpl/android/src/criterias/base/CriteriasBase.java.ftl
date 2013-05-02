@@ -34,14 +34,14 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	}
 	
 	/**
-	 * Test if the given criteria is valid
+	 * Test if the given criteria is valid.
 	 * @param c The criteria to test
 	 * @return true if the criteria is valid
 	 */
 	public abstract boolean validCriteria(Criteria c);
 	
 	/**
-	 * Adds a criteria of form : (key TYPE value)
+	 * Adds a criteria of form : (key TYPE value).
 	 * @param c The criteria to add
 	 * @return True if the criterias is valid and doesn't exists yet
 	 */
@@ -59,7 +59,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	}
 	
 	/**
-	 * Add a criteria of form : (key TYPE value)
+	 * Add a criteria of form : (key TYPE value).
 	 * @param key The db column 
 	 * @param value The value
 	 * @param type The type of criteria (can be Equals, Superior, etc.)
@@ -75,7 +75,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	}
 	
 	/**
-	 * Add a criteria of form : (key EQUALS value)
+	 * Add a criteria of form : (key EQUALS value).
 	 * @param key The db column 
 	 * @param value The value 
 	 * @return True if the criterias is valid and doesn't exists yet

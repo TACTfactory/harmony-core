@@ -45,7 +45,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 		//this.menus.put(SHARE, new SocialMenuWrapper());
 	}
 	
-	/** Initialize Menu component */
+	/** Initialize Menu component. */
 	private void initializeMenu(final Menu menu) {
 		this.menu = menu;
 		
@@ -55,7 +55,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 		
 	}
 	
-	/** Update Menu component */
+	/** Update Menu component. */
 	public void updateMenu(final Menu menu, final Context context) {
 		if (context != null) {
 			this.context = context;
@@ -65,7 +65,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 		this.updateMenu(menu);
 	}
 	
-	/** Update Menu component */
+	/** Update Menu component. */
 	public void updateMenu(final Menu menu) {
 		final int currentClass = this.context.getClass().hashCode();
 		int currentFragment;
@@ -80,7 +80,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 		}
 	}
 	
-	/** Call intent associate to menu item selected*/
+	/** Call intent associate to menu item selected.*/
 	public boolean dispatch(final MenuItem item, final Context context) {
 		if (context != null) {
 			this.context = context;
@@ -89,7 +89,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 		return this.dispatch(item);
 	}
 	
-	/** Call intent associate to menu item selected*/
+	/** Call intent associate to menu item selected.*/
 	private boolean dispatch(final MenuItem item) {
 		return this.menus.get(item.getItemId()).dispatch(item, this.context, this.fragment);
 	}
