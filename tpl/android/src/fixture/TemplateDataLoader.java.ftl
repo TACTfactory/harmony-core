@@ -78,7 +78,7 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 		return instance;
 	}
 	
-	private ${curr.name?cap_first}DataLoader(final Context context){
+	private ${curr.name?cap_first}DataLoader(final Context context) {
 		super(context);
 	}
 
@@ -138,7 +138,7 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 					<#else>
 			ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
 			List<Element> ${field.relation.targetEntity?uncap_first}sMap = element.getChild("${field.name?uncap_first}").getChildren();
-			for (Element ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap){
+			for (Element ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap) {
 				if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.containsKey(${field.relation.targetEntity?uncap_first}Name.getText()))
 					${field.relation.targetEntity?uncap_first}s.add(${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).getModelFixture(${field.relation.targetEntity?uncap_first}Name.getText()));
 			}
@@ -155,7 +155,7 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 		final ${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
 		<#list curr.fields as field>
 			<#if (!field.internal)>
-		if (columns.get("${field.name?uncap_first}")!=null){
+		if (columns.get("${field.name?uncap_first}") != null) {
 				<#if !field.relation??>
 					<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
 			${curr.name?uncap_first}.set${field.name?cap_first}((Integer)columns.get("${field.name?uncap_first}"));
@@ -193,7 +193,7 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 					<#else>
 			ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = new ArrayList<${field.relation.targetEntity?cap_first}>();
 			final Map<?, ?> ${field.relation.targetEntity?uncap_first}sMap = (Map<?, ?>)columns.get("${field.name?uncap_first}");
-			for (final Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()){
+			for (final Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()) {
 				if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.containsKey((String)${field.relation.targetEntity?uncap_first}Name)) {
 					${field.relation.targetEntity?uncap_first}s.add(${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.get((String)${field.relation.targetEntity?uncap_first}Name));
 				}
@@ -222,7 +222,7 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 	 * @return The order
 	 */
 	@Override
-	public int getOrder(){
+	public int getOrder() {
 		return 0;
 	}
 

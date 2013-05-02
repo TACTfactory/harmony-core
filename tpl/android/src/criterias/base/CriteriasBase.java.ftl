@@ -9,21 +9,21 @@ import ${project_namespace}.criterias.base.Criteria.Type;
 /** CriteriasBase. 
  *	An array of Criteria and CriteriasBase. Used for db requests.   
  */
-public abstract class CriteriasBase implements Serializable, ICriteria{
+public abstract class CriteriasBase implements Serializable, ICriteria {
 	private GroupType type;
 	private List<ICriteria> arr = new ArrayList<ICriteria>(); 
 	 
-	public CriteriasBase(final GroupType type){
+	public CriteriasBase(final GroupType type) {
 		this.type = type;
 	}
 		
-	public String toSQLiteString(){
+	public String toSQLiteString() {
 		StringBuilder ret = new StringBuilder("(");
 		
-		for (int i=0; i<this.arr.size(); i++) {
+		for (int i = 0; i < this.arr.size(); i++) {
 			final ICriteria crit = this.arr.get(i);
 			ret.append(crit.toSQLiteString());
-			if (i!=this.arr.size()-1){
+			if (i != this.arr.size() - 1) {
 				ret.append(" ");
 				ret.append(type.getSqlType());
 				ret.append(" ");
@@ -45,10 +45,10 @@ public abstract class CriteriasBase implements Serializable, ICriteria{
 	 * @param c The criteria to add
 	 * @return True if the criterias is valid and doesn't exists yet
 	 */
-	public boolean add(final Criteria crit){
+	public boolean add(final Criteria crit) {
 		boolean result;
 	
-		if (this.validCriteria(crit) && !this.arr.contains(crit)){
+		if (this.validCriteria(crit) && !this.arr.contains(crit)) {
 			arr.add(crit);
 			result = true;
 		} else {
@@ -65,7 +65,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria{
 	 * @param type The type of criteria (can be Equals, Superior, etc.)
 	 * @return True if the criterias is valid and doesn't exists yet
 	 */
-	public boolean add(final String key, final String value, final Type type){
+	public boolean add(final String key, final String value, final Type type) {
 		final Criteria criteria = new Criteria();
 		criteria.setKey(key);
 		criteria.addValue(value);
@@ -80,24 +80,24 @@ public abstract class CriteriasBase implements Serializable, ICriteria{
 	 * @param value The value 
 	 * @return True if the criterias is valid and doesn't exists yet
 	 */
-	public boolean add(final String key, final String value){
+	public boolean add(final String key, final String value) {
 		return this.add(key,value,Type.EQUALS);
 	}
 	
-	public enum GroupType{
+	public enum GroupType {
 		AND("AND"),
 		OR("OR");
 		
 		private String sql;
 		
-		private GroupType(final String sql){
+		private GroupType(final String sql) {
 			this.sql = sql;
 		}
 		
-		public String getSqlType(){return this.sql;}
+		public String getSqlType() { return this.sql; }
 	}
 	
-	public boolean isEmpty(){
+	public boolean isEmpty() {
 		return this.arr.isEmpty();
 	}
 }

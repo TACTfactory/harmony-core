@@ -89,7 +89,7 @@ public class DataLoader {
 		</#list>
 	}
 	
-	public void loadData(final SQLiteDatabase db, final int modes){
+	public void loadData(final SQLiteDatabase db, final int modes) {
 		final DataManager manager = new DataManager(this.ctx, db);
 		
 		for(final FixtureBase<?> dataLoader : this.dataLoaders) {

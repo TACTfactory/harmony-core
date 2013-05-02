@@ -49,7 +49,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		preferences = this.getSharedPreferences(
 				"${project_name?uncap_first}", Context.MODE_PRIVATE);
 		
-		if (!preferences.contains("lastSyncDate")){
+		if (!preferences.contains("lastSyncDate")) {
 			// TODO: First Sync
 			
 			${project_name?cap_first}ApplicationBase.setLastSyncDate(new DateTime().minusWeeks(1));
@@ -72,7 +72,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	/**
 	 * 
 	 */
-	public static String getUDID(final Context context){
+	public static String getUDID(final Context context) {
 		String udid = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
 		
 		// for emulator
@@ -168,7 +168,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		return DateUtils.formatISOStringToDateTime(preferences.getString("lastSyncDate", null));
 	}
 	
-	public static void setLastSyncDate(DateTime dt){
+	public static void setLastSyncDate(DateTime dt) {
 		Editor edit = preferences.edit();
 		edit.putString("lastSyncDate", dt.toString());
 		edit.commit();

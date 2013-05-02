@@ -34,7 +34,7 @@ public abstract class FixtureBase<T> {
 	
 	public Map<String, T> items = new LinkedHashMap<String, T>();
 
-	public FixtureBase(final Context context){
+	public FixtureBase(final Context context) {
 		this.context = context;
 	}
 	/**
@@ -50,7 +50,7 @@ public abstract class FixtureBase<T> {
 			InputStream xmlStream = this.getXml(
 					DataLoader.getPathToFixtures(mode) 
 					+ this.getFixtureFileName());
-			if (xmlStream != null){
+			if (xmlStream != null) {
 				Document doc = (Document) builder.build(xmlStream); 	// Load XML File
 				final Element rootNode = doc.getRootElement(); 			// Load Root element
 				//final Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
@@ -79,9 +79,9 @@ public abstract class FixtureBase<T> {
 
 		if (inputStream != null) {
 			final Map<?, ?> map = (Map<?, ?>) yaml.load(inputStream);
-			if (map != null && map.containsKey(this.getFixtureFileName())){
+			if (map != null && map.containsKey(this.getFixtureFileName())) {
 				final Map<?, ?> listEntities = (Map<?, ?>) map.get(this.getFixtureFileName());
-				if (listEntities!=null){
+				if (listEntities != null) {
 					for (final Object name : listEntities.keySet()) {
 						final Map<?, ?> currEntity = (Map<?, ?>) listEntities.get(name);
 						this.items.put((String) name, this.extractItem(currEntity));
@@ -120,12 +120,12 @@ public abstract class FixtureBase<T> {
 
 	<#if (fixtureType=="xml")>
 	// Retrieve an xml file from the assets
-	public InputStream getXml(final String entityName){
+	public InputStream getXml(final String entityName) {
 		final AssetManager assetManager = this.context.getAssets();
 		InputStream ret = null;
 		try {
-			ret = assetManager.open(entityName+".xml");
-		} catch (IOException e){
+			ret = assetManager.open(entityName + ".xml");
+		} catch (IOException e) {
 			// TODO Auto-generated method stub
 			Log.w(TAG, "No " + entityName + " fixture file found.");
 		}
@@ -133,12 +133,12 @@ public abstract class FixtureBase<T> {
 	}
 	<#elseif (fixtureType=="yml")>
 	// Retrieve an xml file from the assets
-	public InputStream getYml(final String entityName){
+	public InputStream getYml(final String entityName) {
 		AssetManager assetManager = this.context.getAssets();
 		InputStream ret = null;
 		try {
-			ret = assetManager.open(entityName+".yml");
-		} catch (IOException e){
+			ret = assetManager.open(entityName + ".yml");
+		} catch (IOException e) {
 			// TODO Auto-generated method stub
 			Log.w(TAG, "No " + entityName + " fixture file found.");
 		}

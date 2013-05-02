@@ -15,7 +15,7 @@ import java.util.List;
 
 import ${project_namespace}.criterias.base.CriteriasBase;
 
-public abstract class SQLiteAdapterBase<T>{
+public abstract class SQLiteAdapterBase<T> {
 
 	/** Table name of SQLite database */
 	public static String DB_NAME = "database.sqlite";
@@ -83,7 +83,7 @@ public abstract class SQLiteAdapterBase<T>{
 	
 	
 
-	public Cursor query(String[] projection, String whereClause, String[] whereArgs, String groupBy, String having, String orderBy){
+	public Cursor query(String[] projection, String whereClause, String[] whereArgs, String groupBy, String having, String orderBy) {
 		return this.mDatabase.query(
 				this.getTableName(),
 				projection,
@@ -94,21 +94,21 @@ public abstract class SQLiteAdapterBase<T>{
 				orderBy);
 	}
 	
-	public long insert(String nullColumnHack, ContentValues item){
+	public long insert(String nullColumnHack, ContentValues item) {
 		return this.mDatabase.insert(
 				this.getTableName(),
 				nullColumnHack,
 				item);
 	}
 	
-	public int delete(String whereClause, String[] whereArgs){
+	public int delete(String whereClause, String[] whereArgs) {
 		return this.mDatabase.delete(
 				this.getTableName(),
 				whereClause,
 				whereArgs);
 	}
 	
-	public int update(ContentValues item, String whereClause, String[] whereArgs){
+	public int update(ContentValues item, String whereClause, String[] whereArgs) {
 		return this.mDatabase.update(
 				this.getTableName(),
 				item,
@@ -140,10 +140,10 @@ public abstract class SQLiteAdapterBase<T>{
 	public List<T> getAll(CriteriasBase crits) {
 		List<T> result; 
 		
-		if (crits == null || crits.isEmpty()){
+		if (crits == null || crits.isEmpty()) {
 			result = this.getAll();
 		} else {
-			final Cursor cursor = this.mDatabase.rawQuery("SELECT * FROM "+this.getTableName()+" WHERE "+crits.toSQLiteString(), null);
+			final Cursor cursor = this.mDatabase.rawQuery("SELECT * FROM " + this.getTableName() + " WHERE " + crits.toSQLiteString(), null);
 			result = this.cursorToItems(cursor);
 			cursor.close();
 		}	

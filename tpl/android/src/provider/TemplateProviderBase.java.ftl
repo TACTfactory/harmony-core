@@ -92,7 +92,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 				</#if>
 			</#if>
 		</#list>
-		} catch (Exception e){
+		} catch (Exception e) {
 			Log.e(TAG, e.getMessage());
 		}
 		

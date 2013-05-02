@@ -49,7 +49,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	private void initializeMenu(final Menu menu) {
 		this.menu = menu;
 		
-		for (int i=0; i<this.menus.size();i++){
+		for (int i = 0; i < this.menus.size();i++) {
 			this.menus.valueAt(i).initializeMenu(menu);
 		}
 		
@@ -69,13 +69,13 @@ public abstract class ${project_name?cap_first}MenuBase {
 	public void updateMenu(final Menu menu) {
 		final int currentClass = this.context.getClass().hashCode();
 		int currentFragment;
-		if(this.fragment!=null) {
+		if(this.fragment != null) {
 			currentFragment = this.fragment.getClass().hashCode();
 		} else {
 			currentFragment = -1;
 		}
 		
-		for (int i=0; i<this.menus.size();i++){
+		for (int i = 0; i < this.menus.size();i++) {
 			this.menus.valueAt(i).updateMenu(menu, currentClass, currentFragment, this.context);
 		}
 	}
@@ -94,11 +94,11 @@ public abstract class ${project_name?cap_first}MenuBase {
 		return this.menus.get(item.getItemId()).dispatch(item, this.context, this.fragment);
 	}
 	
-	public void onActivityResult(int requestCode, int resultCode, Intent data, Context context){
+	public void onActivityResult(int requestCode, int resultCode, Intent data, Context context) {
 		this.onActivityResult(requestCode, resultCode, data, context, null);
 	}
 	
-	public void onActivityResult(int requestCode, int resultCode, Intent data, Context context, Fragment fragment){
+	public void onActivityResult(int requestCode, int resultCode, Intent data, Context context, Fragment fragment) {
 		if (context != null) {
 			this.context = context;
 		}
@@ -110,8 +110,8 @@ public abstract class ${project_name?cap_first}MenuBase {
 		this.onActivityResult(requestCode, resultCode, data);
 	}
 	
-	private void onActivityResult(int requestCode, int resultCode, Intent data){
-		for (int i=0; i < this.menus.size(); i++) {
+	private void onActivityResult(int requestCode, int resultCode, Intent data) {
+		for (int i = 0; i < this.menus.size(); i++) {
 			this.menus.valueAt(i).onActivityResult(requestCode, resultCode, data, this.context, this.fragment);
 		}
 	}
