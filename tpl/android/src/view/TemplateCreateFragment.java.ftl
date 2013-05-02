@@ -387,6 +387,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		protected ProgressDialog progress;
 
 		public CreateTask(final ${curr.name}CreateFragment fragment, final ${curr.name} entity) {
+			super();
 			this.fragment = fragment;
 			this.context = fragment.getActivity();
 			this.entity = entity;
