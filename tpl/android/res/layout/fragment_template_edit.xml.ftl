@@ -67,21 +67,25 @@
 		android:id="@+id/${m_id}"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-		    	<#if (field.type == "text")>
+			<#if (field.harmony_type??)>
+			    	<#if (field.type == "text")>
 	    android:inputType="textCapWords|textAutoComplete|textMultiLine"
-		    	<#elseif (field.type=="password")>
+			    	<#elseif (field.type=="password")>
 	    android:inputType="textPassword"
-		    	<#elseif (field.type=="email")>
+			    	<#elseif (field.type=="email")>
 	    android:inputType="textEmailAddress"
-			    <#elseif (field.type=="phone")>
+				<#elseif (field.type=="phone")>
 	    android:inputType="phone"
-		    	<#elseif (field.type=="zipcode")>
+			    	<#elseif (field.type=="zipcode")>
 	    android:inputType="textPostalAddress"
-		    	<#elseif (field.type=="integer" || field.type=="int" || field.type=="ean")>
+			    	<#elseif (field.type=="integer" || field.type=="int" || field.type=="ean")>
 	    android:inputType="number"
-			    <#elseif (field.type=="float")>
+				<#elseif (field.type=="float")>
 	    android:inputType="numberDecimal"
-			    <#else>
+				<#else>
+	    android:inputType="text"
+				</#if>
+			<#else>
 	    android:inputType="text"
 		    	</#if>
 		android:layout_below="@+id/${m_id_label}" />

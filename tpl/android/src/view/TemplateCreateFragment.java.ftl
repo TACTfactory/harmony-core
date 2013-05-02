@@ -1,5 +1,5 @@
 <#assign curr = entities[current_entity] />
-<#import "methods.tpl" as m />
+<#import "methods.ftl" as m />
 package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
