@@ -46,7 +46,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	 * @see android.support.v4.app.ListFragment#onCreateView(adroid.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
 	 */
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
+	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 		//inflater.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE); 
 		final View view = inflater.inflate(R.layout.fragment_${curr.name?lower_case}_list, null);
 
@@ -100,11 +100,11 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	@Override 
 	public Loader<List<${curr.name}>> onCreateLoader(int id, Bundle bundle) { 
 		${curr.name?cap_first}Criterias crit = null;
-		if (bundle!=null){
-			crit = (${curr.name?cap_first}Criterias)bundle.get(${curr.name?cap_first}Criterias._PARCELABLE);
+		if (bundle != null) {
+			crit = (${curr.name?cap_first}Criterias) bundle.get(${curr.name?cap_first}Criterias._PARCELABLE);
 		}
 			
-		return new ${curr.name?cap_first}ListLoader(getActivity(), crit );
+		return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
 	}
 
 	/** (non-Javadoc)
@@ -158,7 +158,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		final Intent intent = new Intent(getActivity(), ${curr.name}EditActivity.class);
 		intent.putExtra("${curr.name}", item);
 
-		this.getActivity().startActivityForResult(intent,0);
+		this.getActivity().startActivityForResult(intent, 0);
 	}	
 	
 	

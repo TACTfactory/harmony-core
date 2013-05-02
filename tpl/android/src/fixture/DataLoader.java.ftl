@@ -89,10 +89,10 @@ public class DataLoader {
 		</#list>
 	}
 	
-	public void loadData(final SQLiteDatabase db, final int modes){
+	public void loadData(final SQLiteDatabase db, final int modes) {
 		final DataManager manager = new DataManager(this.ctx, db);
 		
-		for(final FixtureBase<?> dataLoader : this.dataLoaders) {
+		for (final FixtureBase<?> dataLoader : this.dataLoaders) {
 			if (this.isType(modes, MODE_APP)) {
 				dataLoader.getModelFixtures(MODE_APP);
 			}

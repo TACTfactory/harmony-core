@@ -118,10 +118,10 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 			/// Create Schema
 	<#list entities?values as entity>
 		<#if (entity.fields?? && (entity.fields?size>0))>
-			db.execSQL( ${entity.name}SQLiteAdapter.getSchema() );
+			db.execSQL( ${entity.name}SQLiteAdapter.getSchema());
 			<#list entity["relations"] as relation>
 				<#if (relation.type=="ManyToMany")>
-			db.execSQL( ${entity.name}SQLiteAdapter.get${relation.name?cap_first}RelationSchema() );
+			db.execSQL( ${entity.name}SQLiteAdapter.get${relation.name?cap_first}RelationSchema());
 				</#if>
 			</#list>
 		</#if>
@@ -138,7 +138,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	 * Clear the database given in parameters
 	 * @param db The database to clear
 	 */
-	public static void clearDatabase(final SQLiteDatabase db){
+	public static void clearDatabase(final SQLiteDatabase db) {
 		<#list entities?values as entity>
 			<#if (entity.fields?? && (entity.fields?size>0))>
 		db.delete(${entity.name?cap_first}SQLiteAdapter.TABLE_NAME, null, null);	
@@ -156,8 +156,8 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 		}
 		
 		//if (SqliteAdapter.BASE_VERSION < 0) {
-			Log.i(TAG, "Upgrading database from version " + oldVersion + 
-					   " to " + newVersion + ", which will destroy all old data");
+			Log.i(TAG, "Upgrading database from version " + oldVersion 
+					   + " to " + newVersion + ", which will destroy all old data");
 		
 		final String command = "DROP TABLE IF EXISTS "; 
 		
@@ -178,7 +178,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	
 	<#if options.fixture?? && options.fixture.enabled>
 	//@SuppressWarnings("rawtypes")
-	private void loadData(final SQLiteDatabase db){
+	private void loadData(final SQLiteDatabase db) {
 		final DataLoader dataLoader = new DataLoader(this.context);
 		
 		int mode = DataLoader.MODE_APP;
@@ -195,7 +195,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	 * database.
 	 * */
 	public void createDataBase() throws IOException {
-		if (assetsExist && !checkDataBase()){
+		if (assetsExist && !checkDataBase()) {
 			// By calling this method and empty database will be created into
 			// the default system path
 			// so we're gonna be able to overwrite that database with ours

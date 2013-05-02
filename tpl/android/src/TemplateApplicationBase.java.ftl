@@ -32,8 +32,8 @@ import org.joda.time.DateTime;
  * 
  */
 public abstract class ${project_name?cap_first}ApplicationBase extends Application {
-	private final static String TAG = "${project_name?cap_first}";
-	private volatile static ${project_name?cap_first}ApplicationBase singleton;
+	private static final String TAG = "${project_name?cap_first}";
+	private static volatile ${project_name?cap_first}ApplicationBase singleton;
 	private static DateFormat df;
 	private static DateFormat tf;
 	<#if (sync)>
@@ -49,7 +49,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		preferences = this.getSharedPreferences(
 				"${project_name?uncap_first}", Context.MODE_PRIVATE);
 		
-		if (!preferences.contains("lastSyncDate")){
+		if (!preferences.contains("lastSyncDate")) {
 			// TODO: First Sync
 			
 			${project_name?cap_first}ApplicationBase.setLastSyncDate(new DateTime().minusWeeks(1));
@@ -59,8 +59,8 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		Log.i(TAG, "Starting application...");
 		
 		deviceID = getUDID(this);
-		df = android.text.format.DateFormat.getDateFormat((Context)singleton);
-		tf = android.text.format.DateFormat.getTimeFormat((Context)singleton);
+		df = android.text.format.DateFormat.getDateFormat((Context) singleton);
+		tf = android.text.format.DateFormat.getTimeFormat((Context) singleton);
 		
 		// Manage unmanaged error of application
 		//Thread.setDefaultUncaughtExceptionHandler(
@@ -72,7 +72,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	/**
 	 * 
 	 */
-	public static String getUDID(final Context context){
+	public static String getUDID(final Context context) {
 		String udid = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
 		
 		// for emulator
@@ -82,7 +82,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		
 		// for google bug, android < 2.3 (many device)
 		if (udid.equals("9774d56d682e549c")) {
-			final TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+			final TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
 			udid = telephonyManager.getDeviceId();
 		}
 		
@@ -168,7 +168,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		return DateUtils.formatISOStringToDateTime(preferences.getString("lastSyncDate", null));
 	}
 	
-	public static void setLastSyncDate(DateTime dt){
+	public static void setLastSyncDate(DateTime dt) {
 		Editor edit = preferences.edit();
 		edit.putString("lastSyncDate", dt.toString());
 		edit.commit();

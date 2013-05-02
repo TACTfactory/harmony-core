@@ -22,7 +22,7 @@ public class DataManager {
 	protected boolean isInInternalTransaction = false;
 	protected SQLiteDatabase db;
 	
-	public DataManager(final Context ctx, final SQLiteDatabase db){
+	public DataManager(final Context ctx, final SQLiteDatabase db) {
 		this.db = db;
 		<#list entities?values as entity>
 			<#if ((entity.fields?size>0) && !(entity.internal?? && entity.internal=='true'))>
@@ -46,8 +46,8 @@ public class DataManager {
     	
     	<#list entities?values as entity>
     		<#if ((entity.fields?size>0) && (entity.ids?size>0) && !(entity.internal?? && entity.internal=='true'))>
-    	if (nameClass.equals("${entity.name}")){
-        	ret = ((${entity.name}SQLiteAdapter)this.adapters.get(nameClass)).query(id);
+    	if (nameClass.equals("${entity.name}")) {
+        	ret = ((${entity.name}SQLiteAdapter) this.adapters.get(nameClass)).query(id);
     	}
     		</#if>
     	</#list>
@@ -95,8 +95,8 @@ public class DataManager {
     	try {
     	<#list entities?values as entity>
     		<#if ((entity.fields?size>0 && entity.ids?size>0) && !(entity.internal?? && entity.internal=='true'))>
-    		if (object instanceof ${entity.name}){
-    			((${entity.name}SQLiteAdapter)this.adapters.get("${entity.name}")).remove(((${entity.name})object).getId());
+    		if (object instanceof ${entity.name}) {
+    			((${entity.name}SQLiteAdapter) this.adapters.get("${entity.name}")).remove(((${entity.name})object).getId());
     		}
     		</#if>
     	</#list>
@@ -211,9 +211,9 @@ public class DataManager {
     	return false;
     }
     
-    private void beginTransaction(){    	
+    private void beginTransaction() {    	
     	// If we are not already in a transaction, begin it
-    	if (!this.isInInternalTransaction){
+    	if (!this.isInInternalTransaction) {
     		this.db.beginTransaction();
     		this.isSuccessfull = true;
     		this.isInInternalTransaction = true;
