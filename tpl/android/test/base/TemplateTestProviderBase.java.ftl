@@ -22,13 +22,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.test.AndroidTestCase;
 import junit.framework.Assert;
 
 /** ${curr.name} database test abstract class <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
  * You should edit ${curr.name}TestDB class instead of this one or you will lose all your modifications.</i></b>
  */
-public abstract class ${curr.name}TestProviderBase /*TestDBBase*/ AndroidTestCase {
+public abstract class ${curr.name}TestProviderBase extends /*TestDBBase*/ AndroidTestCase {
 	protected Context ctx;
 
 	protected ${curr.name}SQLiteAdapter adapter;
