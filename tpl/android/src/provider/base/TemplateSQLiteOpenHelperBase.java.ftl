@@ -78,10 +78,13 @@ import ${fixture_namespace}.*;
 
 
 /**
- * This class makes it easy for ContentProvider implementations to defer opening and upgrading the database until first use, to avoid blocking application startup with long-running database upgrades.
+ * This class makes it easy for ContentProvider implementations to defer <br />
+ * opening and upgrading the database until first use, to avoid blocking <br />
+ * application startup with long-running database upgrades.
  * @see android.database.sqlite.SQLiteOpenHelper
  */
-public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHelper {
+public class ${project_name?cap_first}SQLiteOpenHelperBase 
+										extends SQLiteOpenHelper {
 	protected String TAG = "DatabaseHelper";
 	protected Context context;
 	
@@ -95,8 +98,8 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	/**
 	 * Constructor.
 	 */
-	public ${project_name?cap_first}SQLiteOpenHelperBase(final Context context, final String name,
-			final CursorFactory factory, final int version) {
+	public ${project_name?cap_first}SQLiteOpenHelperBase(final Context context, 
+			final String name, final CursorFactory factory, final int version) {
 		super(context, name, factory, version);
 		this.context = context;
 		DB_NAME = name;
@@ -111,7 +114,8 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	}
 
 	/**
-	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate(android.database.sqlite.SQLiteDatabase)
+	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate <br />
+	 * (android.database.sqlite.SQLiteDatabase)
 	 */
 	@Override
 	public void onCreate(final SQLiteDatabase db) {
@@ -126,7 +130,8 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 			db.execSQL(${entity.name}SQLiteAdapter.getSchema());
 			<#list entity["relations"] as relation>
 				<#if (relation.type=="ManyToMany")>
-			db.execSQL( ${entity.name}SQLiteAdapter.get${relation.name?cap_first}RelationSchema());
+			db.execSQL(${entity.name}SQLiteAdapter
+					.get${relation.name?cap_first}RelationSchema());
 				</#if>
 			</#list>
 		</#if>
@@ -152,10 +157,12 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	}
 
 	/**
-	 * @see android.database.sqlite.SQLiteOpenHelper#onUpgrade(android.database.sqlite.SQLiteDatabase, int, int)
+	 * @see android.database.sqlite.SQLiteOpenHelper#onUpgrade <br />
+	 * (android.database.sqlite.SQLiteDatabase, int, int)
 	 */
 	@Override
-	public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
+	public void onUpgrade(final SQLiteDatabase db, final int oldVersion, 
+			final int newVersion) {
 		if (${project_name?cap_first}Application.DEBUG) {
 			Log.d(TAG, "Update database..");
 		}
@@ -171,7 +178,8 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 			db.execSQL(command + ${entity.name}SQLiteAdapter.TABLE_NAME);
 				<#list entity['relations'] as relation>
 					<#if (relation.type=="ManyToMany")>
-			db.execSQL(command + ${entity.name}SQLiteAdapter.RELATION_${relation.name?upper_case}_TABLE_NAME );
+			db.execSQL(command 
+					+ ${entity.name}SQLiteAdapter.RELATION_${relation.name?upper_case}_TABLE_NAME);
 					</#if>
 				</#list>
 			</#if>

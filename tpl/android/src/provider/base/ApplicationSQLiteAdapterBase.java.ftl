@@ -83,14 +83,20 @@ public abstract class SQLiteAdapterBase<T> {
 			Log.d(TAG, "Get all entities");
 		}
 		
-		return this.query(this.getCols(), null, null, null, null, null);
+		return this.query(this.getCols(), 
+				null, 
+				null, 
+				null, 
+				null, 
+				null);
 	}
 	
 	/**
 	 * Send a query to the DB
 	 * @return A cursor pointing to the result of the query
 	 */
-	public Cursor query(String[] projection, String whereClause, String[] whereArgs, String groupBy, String having, String orderBy) {
+	public Cursor query(String[] projection, String whereClause, String[] whereArgs, 
+			String groupBy, String having, String orderBy) {
 		return this.mDatabase.query(
 				this.getTableName(),
 				projection,
@@ -162,7 +168,10 @@ public abstract class SQLiteAdapterBase<T> {
 		if (crits == null || crits.isEmpty()) {
 			result = this.getAll();
 		} else {
-			final Cursor cursor = this.mDatabase.rawQuery("SELECT * FROM " + this.getTableName() + " WHERE " + crits.toSQLiteString(), null);
+			final Cursor cursor = this.mDatabase.rawQuery("SELECT * FROM " 
+						+ this.getTableName() + " WHERE " 
+						+ crits.toSQLiteString(), 
+						null);
 			result = this.cursorToItems(cursor);
 			cursor.close();
 		}	
@@ -188,7 +197,7 @@ public abstract class SQLiteAdapterBase<T> {
 			} while (cursor.moveToNext());
 			
 			//if (DemactApplication.DEBUG)
-			//	Log.d(TAG, "Read DB(" + TABLE_NAME + ") count : " + cursor.getCount() );
+			//Log.d(TAG, "Read DB(" + TABLE_NAME + ") count : " + cursor.getCount() );
 		}
 
 		return result;

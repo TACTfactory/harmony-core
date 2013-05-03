@@ -9,7 +9,8 @@ import android.net.Uri;
 /**
  * ${project_name?cap_first}Provider to handle DB operations.
  */
-public class ${project_name?cap_first}Provider extends ${project_name?cap_first}ProviderBase {
+public class ${project_name?cap_first}Provider 
+				extends ${project_name?cap_first}ProviderBase {
 	
 	/**
 	 * Deletes matching tokens with the given URI.
