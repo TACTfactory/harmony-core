@@ -198,7 +198,9 @@
 					         can be inherited from the parent <report>
 					         and individually overridden for each report type:
 					    -->
-					    <xml outfile="${emma.out-dir}/coverage.xml"/>
+					    <xml outfile="${emma.out-dir}/coverage.xml"
+						columns="name,class,method,block,line" 
+                              			sort="+line, +name"/>
 					    <html outfile="${emma.out-dir}/coverage.html" />
 				    </report>
 				</emma>
