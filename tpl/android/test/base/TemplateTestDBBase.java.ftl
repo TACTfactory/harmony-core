@@ -44,6 +44,7 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 		this.db.beginTransaction();
 		
 		this.dataLoader = new DataLoader(this.ctx);
+		this.dataLoader.clean();
 		this.dataLoader.loadData(this.db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
 		
 		ArrayList<${curr.name?cap_first}> entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).items.values());

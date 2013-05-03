@@ -54,6 +54,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		this.db.beginTransaction();
 		
 		this.dataLoader = new DataLoader(this.ctx);
+		this.dataLoader.clean();
 		this.dataLoader.loadData(this.db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
 		
 		this.db.setTransactionSuccessful();
