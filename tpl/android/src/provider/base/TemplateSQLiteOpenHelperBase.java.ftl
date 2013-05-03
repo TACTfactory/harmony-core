@@ -196,7 +196,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	 */
 	private void loadData(final SQLiteDatabase db) {
 		final DataLoader dataLoader = new DataLoader(this.context);
-
+		dataLoader.clean();
 		int mode = DataLoader.MODE_APP;
 		if (${project_name?cap_first}Application.DEBUG) {
 			mode = DataLoader.MODE_APP | DataLoader.MODE_DEBUG;
