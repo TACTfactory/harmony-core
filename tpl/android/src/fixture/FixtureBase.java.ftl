@@ -22,7 +22,9 @@ import org.yaml.snakeyaml.Yaml;
 
 import android.util.Log;
 
-
+/**
+ * FixtureBase.
+ */
 public abstract class FixtureBase<T> {	
 	private static String TAG = "FixtureBase";
 	protected Context context;
@@ -33,6 +35,9 @@ public abstract class FixtureBase<T> {
 	
 	public Map<String, T> items = new LinkedHashMap<String, T>();
 
+	/**
+	 * Constructor.
+	 */
 	public FixtureBase(final Context context) {
 		this.context = context;
 	}
@@ -96,7 +101,9 @@ public abstract class FixtureBase<T> {
 	 */
 	public abstract void load(DataManager manager);
 	
-	
+	/**
+	 * Return the fixture with the given ID
+	 */
 	public T getModelFixture(final String id) {
 		return this.items.get(id);
 	}
@@ -118,7 +125,9 @@ public abstract class FixtureBase<T> {
 	}
 
 	<#if (fixtureType=="xml")>
-	// Retrieve an xml file from the assets
+	/** Retrieve an xml file from the assets.
+	 * 
+	 */
 	public InputStream getXml(final String entityName) {
 		final AssetManager assetManager = this.context.getAssets();
 		InputStream ret = null;
@@ -131,7 +140,9 @@ public abstract class FixtureBase<T> {
 		return ret;
 	}
 	<#elseif (fixtureType=="yml")>
-	// Retrieve an xml file from the assets
+	/** Retrieve an xml file from the assets.
+	 * 
+	 */
 	public InputStream getYml(final String entityName) {
 		AssetManager assetManager = this.context.getAssets();
 		InputStream ret = null;

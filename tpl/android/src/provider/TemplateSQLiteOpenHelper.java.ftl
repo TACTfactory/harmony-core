@@ -10,6 +10,9 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
  */
 public class ${project_name?cap_first}SQLiteOpenHelper extends ${project_name?cap_first}SQLiteOpenHelperBase {
 
+	/**
+	 * Constructor.
+	 */
 	public ${project_name?cap_first}SQLiteOpenHelper(final Context context, final String name,
 			final CursorFactory factory, final int version) {
 		super(context, name, factory, version);

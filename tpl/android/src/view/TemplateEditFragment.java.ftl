@@ -86,10 +86,10 @@ import java.util.List;
  * @see android.app.Fragment
  */
 public class ${curr.name}EditFragment extends HarmonyFragment implements OnClickListener {
-	/** Model data */
+	/** Model data. */
 	protected ${curr.name} model = new ${curr.name}();
 
-	/** curr.fields View */
+	/** curr.fields View. */
 	<#list curr.fields as field>
 		<#if (!field.internal && !field.hidden)>
 			<#if (!field.relation??)>

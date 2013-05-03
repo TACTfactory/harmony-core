@@ -15,6 +15,9 @@ import java.util.List;
 
 import ${project_namespace}.criterias.base.CriteriasBase;
 
+/** SQLiteAdapterBase<T>.
+ * 	This is the base SQLiteAdapter
+ */
 public abstract class SQLiteAdapterBase<T> {
 
 	/** Table name of SQLite database. */
@@ -22,7 +25,7 @@ public abstract class SQLiteAdapterBase<T> {
 	public static String TAG = "${project_name?cap_first}SQLiteAdapterBase";
 
 	
-	// Database tools
+	/** Database tools */
 	protected Context context;
 	protected SQLiteDatabase mDatabase;
 	protected ${project_name?cap_first}SQLiteOpenHelper mBaseHelper;
@@ -71,8 +74,10 @@ public abstract class SQLiteAdapterBase<T> {
 		mDatabase.close();
 	}
 	
-	
-	
+	/**
+	 * Get all entities from the DB
+	 * @return A cursor pointing to all entities
+	 */
 	protected Cursor getAllCursor() {
 		if (${project_name?cap_first}Application.DEBUG) {
 			Log.d(TAG, "Get all entities");
@@ -81,8 +86,10 @@ public abstract class SQLiteAdapterBase<T> {
 		return this.query(this.getCols(), null, null, null, null, null);
 	}
 	
-	
-
+	/**
+	 * Send a query to the DB
+	 * @return A cursor pointing to the result of the query
+	 */
 	public Cursor query(String[] projection, String whereClause, String[] whereArgs, String groupBy, String having, String orderBy) {
 		return this.mDatabase.query(
 				this.getTableName(),
@@ -94,6 +101,10 @@ public abstract class SQLiteAdapterBase<T> {
 				orderBy);
 	}
 	
+	/**
+	 * Insert a new entity into the DB
+	 * @return the id of the inserted entity
+	 */
 	public long insert(String nullColumnHack, ContentValues item) {
 		return this.mDatabase.insert(
 				this.getTableName(),
@@ -101,6 +112,10 @@ public abstract class SQLiteAdapterBase<T> {
 				item);
 	}
 	
+	/**
+	 * Delete the entities matching with query from the DB
+	 * @return how many token deleted
+	 */
 	public int delete(String whereClause, String[] whereArgs) {
 		return this.mDatabase.delete(
 				this.getTableName(),
@@ -108,6 +123,10 @@ public abstract class SQLiteAdapterBase<T> {
 				whereArgs);
 	}
 	
+	/**
+	 * Updates the entities from the DB matching with the query
+	 * @return How many tokens updated
+	 */
 	public int update(ContentValues item, String whereClause, String[] whereArgs) {
 		return this.mDatabase.update(
 				this.getTableName(),

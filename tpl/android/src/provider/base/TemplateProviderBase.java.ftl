@@ -13,19 +13,26 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
-
+/**
+ * ${project_name?cap_first}ProviderBase.
+ */
 public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	protected static String TAG = "${project_name?cap_first}Provider";
 	protected String URI_NOT_SUPPORTED;
+	
+	/** Tools / Common.
+	 * 
+	 */
 
-	// Tools / Common
 	public    static Integer baseVersion = 0;
 	public    static String baseName = "";
 	protected static String item;
 	protected static String authority = "${project_namespace}.provider";
 	protected static UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 	
-	// Adapter to SQLite
+	/** Adapter to SQLite
+	 * 
+	 */
 	<#list entities?values as entity>
 		<#if (entity.fields?size>0) >
 	protected ${entity.name?cap_first}ProviderAdapter ${entity.name?uncap_first}Provider;
@@ -64,6 +71,10 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 		return result;
 	}
 	
+	/**
+	 * Get the entity from the URI.
+	 * @return A String representing the entity name 
+	 */
 	@Override
 	public String getType(final Uri uri) {
 		String result = null;
@@ -91,6 +102,10 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 		return result;
 	}
 	
+	/**
+	 * Deletes matching tokens with the given URI.
+	 * @return The number of tokens deleted
+	 */
 	@Override
 	public int delete(final Uri uri, final String selection, final String[] selectionArgs) {
 		int result = 0;
@@ -129,6 +144,10 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 		return result;
 	}
 	
+	/**
+	 * Insert ContentValues with the given URI.
+	 * @return The URI to the inserted ContentValue
+	 */
 	@Override
 	public Uri insert(final Uri uri, final ContentValues values) {
 		Uri result = null;
@@ -160,7 +179,11 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 
 		return result;
 	}
-
+	
+	/**
+	 * Query the table given by the uri parameter.
+	 * @return A Cursor pointing to the result of the query
+	 */
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
@@ -202,7 +225,11 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 
 		return result;
 	}
-
+	
+	/**
+	 * Update the given URI with the new ContentValues.
+	 * @return The number of token updated
+	 */
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
@@ -245,13 +272,18 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 		return result;
 	}
 	
-	// Utils function
 	//-------------------------------------------------------------------------
 	
+	/** Utils function.
+	 * 
+	 */	
 	public static final Uri generateUri(String typePath) {
 		return Uri.parse("content://" + authority + "/" + typePath);
 	}
 	
+	/** Utils function.
+	 * 
+	 */
 	public static final Uri generateUri() {
 		return Uri.parse("content://" + authority);
 	}

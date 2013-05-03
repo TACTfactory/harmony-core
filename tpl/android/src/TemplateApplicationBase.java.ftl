@@ -105,7 +105,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		return deviceID;
 	}
 	
-	/*** Application. ***/
+	/** Application. */
 	private static final String PREFS_PUBL = "puapsd"; // Public Application Shared Data
 	private static final String PREFS_VERS = "version";
 	
@@ -177,10 +177,18 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	}
 		
 	<#if (sync)>
+	/**
+	 * Get the last sync date.
+	 * @return A DateTime representing the last sync date
+	 */
 	public static DateTime getLastSyncDate() {
 		return DateUtils.formatISOStringToDateTime(preferences.getString("lastSyncDate", null));
 	}
 	
+	/**
+	 * Set the last sync date.
+	 * @param dt DateTime representing the last sync date to set
+	 */
 	public static void setLastSyncDate(DateTime dt) {
 		Editor edit = preferences.edit();
 		edit.putString("lastSyncDate", dt.toString());

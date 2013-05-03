@@ -9,7 +9,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 /**
- * This class will display ${curr.name} entities in a list 
+ * This class will display ${curr.name} entities in a list.
  */
 public class ${curr.name}ListActivity extends HarmonyFragmentActivity {
 

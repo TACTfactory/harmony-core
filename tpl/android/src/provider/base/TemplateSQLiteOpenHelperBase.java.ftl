@@ -85,11 +85,16 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	protected String TAG = "DatabaseHelper";
 	protected Context context;
 	
-	// Android's default system path of the database.
+	/** Android's default system path of the database.
+	 * 
+	 */
 	private static String DB_PATH;	
 	private static String DB_NAME;
 	private static boolean assetsExist;
 	
+	/**
+	 * Constructor.
+	 */
 	public ${project_name?cap_first}SQLiteOpenHelperBase(final Context context, final String name,
 			final CursorFactory factory, final int version) {
 		super(context, name, factory, version);
@@ -178,9 +183,13 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	
 	<#if options.fixture?? && options.fixture.enabled>
 	//@SuppressWarnings("rawtypes")
+	/**
+	 * Loads data from the fixture files.
+	 * @param db The database to populate with fixtures
+	 */
 	private void loadData(final SQLiteDatabase db) {
 		final DataLoader dataLoader = new DataLoader(this.context);
-		
+
 		int mode = DataLoader.MODE_APP;
 		if (${project_name?cap_first}Application.DEBUG) {
 			mode = DataLoader.MODE_APP | DataLoader.MODE_DEBUG;

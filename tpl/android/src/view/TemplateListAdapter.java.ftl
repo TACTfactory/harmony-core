@@ -38,7 +38,7 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 		implements OnClickListener {
 		
 	/**
-	 * View & layoutInflater to populate
+	 * View & layoutInflater to populate.
 	 */
 	private final LayoutInflater mInflater;
 	private final ${curr.name?cap_first}ListFragment fragment;

@@ -2,7 +2,7 @@ package ${local_namespace};
 
 import android.content.Context;
 
-/** ${name} contract */
+/** ${name} contract. */
 public final class ${name}Contract {
 	//public static final String AUTHORITY = "com.android.contacts";
 	

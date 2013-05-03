@@ -13,23 +13,30 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	private GroupType type;
 	private List<ICriteria> arr = new ArrayList<ICriteria>(); 
 	 
+	/**
+	 * Constructor.
+	 */
 	public CriteriasBase(final GroupType type) {
 		this.type = type;
 	}
 		
+	/**
+	 * Convert the criteria to a SQLite String.
+	 * @return The SQLite String representation of the criteria. ex : "(price > 15.0)" 
+	 */
 	public String toSQLiteString() {
-		StringBuilder ret = new StringBuilder("(");
+		StringBuilder ret = new StringBuilder('(');
 		
 		for (int i = 0; i < this.arr.size(); i++) {
 			final ICriteria crit = this.arr.get(i);
 			ret.append(crit.toSQLiteString());
 			if (i != this.arr.size() - 1) {
-				ret.append(" ");
+				ret.append(' ');
 				ret.append(type.getSqlType());
-				ret.append(" ");
+				ret.append(' ');
 			}
 		}
-		ret.append(")");
+		ret.append(')');
 		return ret.toString();
 	}
 	
@@ -84,19 +91,31 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 		return this.add(key, value, Type.EQUALS);
 	}
 	
+	/**
+	 * Enum GroupType.
+	 */
 	public enum GroupType {
 		AND("AND"),
 		OR("OR");
 		
 		private String sql;
 		
+		/**
+		 * Constructor.
+		 */
 		private GroupType(final String sql) {
 			this.sql = sql;
 		}
 		
+		/**
+		 * Get the SQL String transcryption.
+		 */
 		public String getSqlType() { return this.sql; }
 	}
 	
+	/**
+	 * Checks if the List is empty.
+	 */
 	public boolean isEmpty() {
 		return this.arr.isEmpty();
 	}

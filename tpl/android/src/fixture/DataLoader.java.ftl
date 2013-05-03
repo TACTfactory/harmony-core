@@ -59,6 +59,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.SparseArray;
 
+/**
+ * DataLoader for fixture purpose.
+ */
 public class DataLoader {
 	public static final int MODE_TEST 	= Integer.parseInt("0001", 2);
 	public static final int MODE_APP 	= Integer.parseInt("0010", 2);
@@ -68,7 +71,9 @@ public class DataLoader {
 	private static SparseArray<String> fixtureFolders;
 	private Context ctx;
 
-	
+	/**
+	 * Static constructor.
+	 */
 	static {
 		fixtureFolders = new SparseArray<String>();
 		
@@ -78,6 +83,9 @@ public class DataLoader {
 		fixtureFolders.put(MODE_TEST, "test/");
 	}
 	
+	/**
+	 * Constructor.
+	 */
 	public DataLoader(final Context ctx) {
 		this.ctx = ctx;
 		this.dataLoaders = new ArrayList<FixtureBase<?>>();
@@ -89,6 +97,9 @@ public class DataLoader {
 		</#list>
 	}
 	
+	/**
+	 * LoadData from fixtures.
+	 */
 	public void loadData(final SQLiteDatabase db, final int modes) {
 		final DataManager manager = new DataManager(this.ctx, db);
 		
@@ -106,6 +117,9 @@ public class DataLoader {
 		}
 	}
 	
+	/**
+	 * isType.
+	 */
 	private boolean isType(final int modes, final int mode) {
 		boolean result;
 		
@@ -118,10 +132,17 @@ public class DataLoader {
 		return result;
 	}
 	
+	/**
+	 * Get path to fixtures. 
+	 * @return A String representing the path to fixtures
+	 */
 	public static String getPathToFixtures(final int mode) {
 		return fixtureFolders.get(mode);
 	}
 
+	/**
+	 * Clean dataLoaders.
+	 */
 	public void clean() {
 		for (FixtureBase<?> dataLoader: this.dataLoaders) {
 			dataLoader.items.clear();
