@@ -45,7 +45,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	protected static final int INTERNAL_LIST_CONTAINER_ID = 0x00ff0003;
 
 	/**
-	 * The adapter which handles list population 
+	 * The adapter which handles list population.
 	 */
 	protected ${curr.name}ListAdapter mAdapter;
 	protected static ${curr.name}ListFragment instance;

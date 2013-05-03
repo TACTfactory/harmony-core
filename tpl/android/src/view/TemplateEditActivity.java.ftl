@@ -27,7 +27,7 @@ public class ${curr.name}EditActivity extends HarmonyFragmentActivity {
 	}
 	
 	/**
-	 * Called when the Activity is destroyed
+	 * Called when the Activity is destroyed.
 	 * @see android.app.Activity#onDestroy
 	 */
 	@Override

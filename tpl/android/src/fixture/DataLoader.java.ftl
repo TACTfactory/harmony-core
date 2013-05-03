@@ -98,7 +98,7 @@ public class DataLoader {
 	}
 	
 	/**
-	 * LoadData from fixtures
+	 * LoadData from fixtures.
 	 */
 	public void loadData(final SQLiteDatabase db, final int modes) {
 		final DataManager manager = new DataManager(this.ctx, db);

@@ -111,7 +111,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	};
 	
 	/**
-	 * Get the table name used in DB for your ${curr.name} entity
+	 * Get the table name used in DB for your ${curr.name} entity.
 	 * @return A String showing the table name
 	 */
 	public String getTableName() {
@@ -601,7 +601,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	
 	/**
 	 * Query the DB to find a ${curr.name} entity.
-	 * @param The id of the entity to get from the DB
+	 * @param id The id of the entity to get from the DB
 	 * @return The cursor pointing to the query's result 
 	 */
 	public Cursor query(final int id) {
