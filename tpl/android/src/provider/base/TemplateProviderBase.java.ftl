@@ -1,17 +1,17 @@
-package ${local_namespace};
+package ${local_namespace}.base;
 
-import ${project_namespace}.data.*;
+import ${local_namespace}.*;
 import ${project_namespace}.R;
 import ${project_namespace}.${project_name?cap_first}Application;
 
 import android.content.ContentProvider;
-import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.Bundle;
 import android.util.Log;
 /**
  * ${project_name?cap_first}ProviderBase.
@@ -20,73 +20,28 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	protected static String TAG = "${project_name?cap_first}Provider";
 	protected String URI_NOT_SUPPORTED;
 	
-	/** Internal code.
-	 * 
-	 */
-	<#assign id = 0 /> 
-	<#list entities?values as entity>
-		<#if (entity.fields?size>0) >
-	protected static final int ${entity.name?upper_case}_ALL 		= ${id + 0};
-	protected static final int ${entity.name?upper_case}_ONE 		= ${id + 1};
-		<#assign id = id + 10 /> 
-		</#if>
-	</#list>
-	
-	/** Public URI (by Entity).
-	 * 
-	 */
-	<#list entities?values as entity>
-		<#if (entity.fields?size>0) >
-	public	  static Uri ${entity.name?upper_case}_URI;
-		</#if>
-	</#list>
-	
 	/** Tools / Common.
 	 * 
 	 */
+
 	public    static Integer baseVersion = 0;
 	public    static String baseName = "";
 	protected static String item;
 	protected static String authority = "${project_namespace}.provider";
-	protected static UriMatcher uriMatcher;
+	protected static UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 	
 	/** Adapter to SQLite
 	 * 
 	 */
 	<#list entities?values as entity>
 		<#if (entity.fields?size>0) >
-	protected ${entity.name?cap_first}SQLiteAdapter dbAdapter${entity.name?cap_first};
+	protected ${entity.name?cap_first}ProviderAdapter ${entity.name?uncap_first}Provider;
 		</#if>
 	</#list>
 	protected SQLiteDatabase db;
 	
 	protected Context mContext;
-	
-	/** Static constructor.
-	 * 
-	 */
-	static {
-		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Initialize Provider...");
-		}
-		
-		uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
-		<#list entities?values as entity>
-			<#if (entity.fields?size>0) >
-		
-		// ${entity.name} URI mapping
-		final String ${entity.name?lower_case}Type 		= "${entity.name?lower_case}";
-		${entity.name?upper_case}_URI	= generateUri(${entity.name?lower_case}Type);
-		uriMatcher.addURI(authority, ${entity.name?lower_case}Type, 			${entity.name?upper_case}_ALL);
-		uriMatcher.addURI(authority, ${entity.name?lower_case}Type + "/#", 	${entity.name?upper_case}_ONE);
-			</#if>
-		</#list>
-	}
-	
-	/**
-	* Called when the ContentProvider is created.
-	* @see android.content.ContentProvider#onCreate
-	*/
+
 	@Override
 	public boolean onCreate() {
 		boolean result = true;
@@ -99,25 +54,20 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 		<#assign firstGo = true />
 		<#list entities?values as entity>
 			<#if (entity.fields?size>0) >
-			this.dbAdapter${entity.name?cap_first} = new ${entity.name?cap_first}SQLiteAdapter(this.mContext);
 				<#if (firstGo)>
-			this.db = this.dbAdapter${entity.name?cap_first}.open();
-				<#assign firstGo = false />
+			this.${entity.name?uncap_first}Provider = new ${entity.name?cap_first}ProviderAdapter(this.mContext);
+			this.db = this.${entity.name?uncap_first}Provider.getDb();
+					<#assign firstGo = false />
 				<#else>
-			this.dbAdapter${entity.name?cap_first}.open(this.db);
+			this.${entity.name?uncap_first}Provider = new ${entity.name?cap_first}ProviderAdapter(this.mContext, this.db);
 				</#if>
 			</#if>
 		</#list>
 		} catch (Exception e) {
 			Log.e(TAG, e.getMessage());
+			result = false;
 		}
 		
-		<#list entities?values as entity>
-			<#if (entity.fields?size>0) >
-		result = result && (this.dbAdapter${entity.name?cap_first} != null);
-        	</#if>
-        </#list>
-        
 		return result;
 	}
 	
@@ -136,10 +86,10 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			<#if (entity.fields?size>0) >
 		
 		// ${entity.name} type mapping
-		case ${entity.name?upper_case}_ONE:
+		case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ONE:
 			result = single + "${entity.name?lower_case}";
 			break;
-		case ${entity.name?upper_case}_ALL:
+		case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ALL:
 			result = collection + "${entity.name?lower_case}";
 			break;
 			</#if>
@@ -159,7 +109,6 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	@Override
 	public int delete(final Uri uri, final String selection, final String[] selectionArgs) {
 		int result = 0;
-		int id = 0;
 		this.db.beginTransaction();
 		try {
 			switch (uriMatcher.match(uri)) {
@@ -167,18 +116,15 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			<#if (entity.fields?size>0) >
 		
 			// ${entity.name}
-			case ${entity.name?upper_case}_ONE:
+			case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ONE:
 				try {
-					id = Integer.parseInt(uri.getPathSegments().get(1));
-					result = this.dbAdapter${entity.name?cap_first}.delete(id);
+					result = this.${entity.name?uncap_first}Provider.delete(uri, selection, selectionArgs);
 				} catch (Exception e) {
 					throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
 				}
 				break;
-			case ${entity.name?upper_case}_ALL:
-				result = this.dbAdapter${entity.name?cap_first}.delete(
-							selection, 
-							selectionArgs);
+			case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ALL:
+				result = this.${entity.name?uncap_first}Provider.delete(uri, selection, selectionArgs);
 				break;
 			</#if>
 		</#list>
@@ -205,7 +151,6 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	@Override
 	public Uri insert(final Uri uri, final ContentValues values) {
 		Uri result = null;
-		long id = 0;
 
 		this.db.beginTransaction();
 		try {
@@ -215,13 +160,8 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			<#if (entity.fields?size>0) >
 		
 			// ${entity.name}
-			case ${entity.name?upper_case}_ALL:
-				id = this.dbAdapter${entity.name?cap_first}.insert(null, values);
-			
-				if (id > 0) {
-					result = ContentUris.withAppendedId(${project_name?cap_first}ProviderBase.${entity.name?upper_case}_URI, id);
-					getContext().getContentResolver().notifyChange(result, null);
-				}
+			case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ALL:
+				result = this.${entity.name?uncap_first}Provider.insert(uri, values);
 				break;
 			</#if>
 		</#list>
@@ -232,6 +172,9 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			this.db.setTransactionSuccessful();
 		} finally {
 			this.db.endTransaction();
+		}
+		if (result != null) {
+			this.getContext().getContentResolver().notifyChange(result, null);
 		}
 
 		return result;
@@ -245,7 +188,6 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 		Cursor result = null;
-		int id = 0;
 
 		this.db.beginTransaction();
 		try {
@@ -255,18 +197,19 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			<#if (entity.fields?size>0) >
 		
 			// ${entity.name}
-			case ${entity.name?upper_case}_ONE:
-				id = Integer.parseInt(uri.getPathSegments().get(1));
-				result = this.dbAdapter${entity.name?cap_first}.query(id);
+			case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ONE:
+				result = this.${entity.name?uncap_first}Provider.query(uri, 
+					projection, 
+					selection, 
+					selectionArgs, 
+					sortOrder);
 				break;
-			case ${entity.name?upper_case}_ALL:
-				result = this.dbAdapter${entity.name?cap_first}.query(
-							projection, 
-							selection,
-							selectionArgs, 
-							sortOrder,
-							null,
-							null);
+			case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ALL:
+				result = this.${entity.name?uncap_first}Provider.query(uri, 
+					projection, 
+					selection, 
+					selectionArgs, 
+					sortOrder);
 				break;
 			</#if>
 		</#list>
@@ -291,7 +234,6 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
 		int result = 0;
-		String id;
 		
 		this.db.beginTransaction();
 		try {
@@ -301,18 +243,17 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			<#if (entity.fields?size>0) >
 		
 			// ${entity.name}
-			case ${entity.name?upper_case}_ONE:
-				id = uri.getPathSegments().get(1);
-				result = this.dbAdapter${entity.name?cap_first}.update(
-						values, 
-						${entity.name?cap_first}SQLiteAdapter.COL_ID + " = " + id, 
-						selectionArgs);
+			case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ONE:
+				result = this.${entity.name?uncap_first}Provider.update(uri,
+					values,
+					selection,
+					selectionArgs);
 				break;
-			case ${entity.name?upper_case}_ALL:
-				result = this.dbAdapter${entity.name?cap_first}.update(
-							values, 
-							selection, 
-							selectionArgs);
+			case ${entity.name?cap_first}ProviderAdapter.${entity.name?upper_case}_ALL:
+				result = this.${entity.name?uncap_first}Provider.update(uri,
+					values,
+					selection,
+					selectionArgs);
 				break;
 			</#if>
 		</#list>
@@ -345,5 +286,40 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	 */
 	public static final Uri generateUri() {
 		return Uri.parse("content://" + authority);
+	}
+
+	/* (non-Javadoc)
+	 * @see android.content.ContentProvider#call(java.lang.String, java.lang.String, android.os.Bundle)
+	 */
+	@Override
+	public Bundle call(String method, String arg, Bundle extras) {
+		<#list entities?values as entity>			
+			<#if (entity.fields?size>0) >
+		if (method.equals(${entity.name?cap_first}ProviderAdapter.METHOD_INSERT_${entity.name?upper_case})) {
+			return this.${entity.name?uncap_first}Provider.insert(arg, extras);
+		} else
+		if (method.equals(${entity.name?cap_first}ProviderAdapter.METHOD_DELETE_${entity.name?upper_case})) {
+			return this.${entity.name?uncap_first}Provider.delete(arg, extras);
+		} else
+		if (method.equals(${entity.name?cap_first}ProviderAdapter.METHOD_UPDATE_${entity.name?upper_case})) {
+			return this.${entity.name?uncap_first}Provider.update(arg, extras);
+		} else
+		if (method.equals(${entity.name?cap_first}ProviderAdapter.METHOD_QUERY_${entity.name?upper_case})) {
+			if (extras.containsKey("id")) {
+				return this.${entity.name?uncap_first}Provider.query(arg, extras);
+			} else {
+				return this.${entity.name?uncap_first}Provider.queryAll(arg, extras);	
+			}
+		} else
+		
+			</#if>
+		</#list>
+		{
+			return super.call(method, arg, extras);
+		}
+	}
+
+	public static UriMatcher getUriMatcher() {
+		return uriMatcher;
 	}
 }

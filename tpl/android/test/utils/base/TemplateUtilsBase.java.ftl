@@ -58,10 +58,10 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 					<#elseif field.type=="datetime">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDateTime());
 					<#else>
-						<#if (field.columnDefinition=="integer" || field.columnDefinition=="int")>
+						<#if (field.columnDefinition?lower_case=="integer" || field.columnDefinition?lower_case=="int")>
 		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(TestUtils.generateRandomInt(0,100)));
 						<#else>
-		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(TestUtils.generateRandomString()));		
+		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(TestUtils.generateRandomString(10)));		
 						</#if>
 					</#if>
 				<#else>
