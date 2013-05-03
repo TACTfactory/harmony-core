@@ -22,6 +22,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 
+import android.test.AndroidTestCase;
 import junit.framework.Assert;
 
 /** ${curr.name} database test abstract class <br/>

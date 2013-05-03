@@ -58,11 +58,14 @@ import java.util.List;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.SparseArray;
+import android.util.Log;
 
 /**
  * DataLoader for fixture purpose.
  */
 public class DataLoader {
+	protected static final String TAG = "DataLoader";
+
 	public static final int MODE_TEST 	= Integer.parseInt("0001", 2);
 	public static final int MODE_APP 	= Integer.parseInt("0010", 2);
 	public static final int MODE_DEBUG 	= Integer.parseInt("0100", 2);
@@ -101,16 +104,24 @@ public class DataLoader {
 	 * LoadData from fixtures.
 	 */
 	public void loadData(final SQLiteDatabase db, final int modes) {
+		Log.i(TAG, "Initializing fixtures.");
 		final DataManager manager = new DataManager(this.ctx, db);
-		
 		for (final FixtureBase<?> dataLoader : this.dataLoaders) {
+			Log.d(TAG, "Loading xxx fixtures");
+
 			if (this.isType(modes, MODE_APP)) {
+				Log.d(TAG, "Loading APP fixtures");
+
 				dataLoader.getModelFixtures(MODE_APP);
 			}
 			if (this.isType(modes, MODE_DEBUG)) {
+				Log.d(TAG, "Loading DEBUG fixtures");
+
 				dataLoader.getModelFixtures(MODE_DEBUG);
 			}
 			if (this.isType(modes, MODE_TEST)) {
+				Log.d(TAG, "Loading TEST fixtures");
+
 				dataLoader.getModelFixtures(MODE_TEST);
 			}
 			dataLoader.load(manager);

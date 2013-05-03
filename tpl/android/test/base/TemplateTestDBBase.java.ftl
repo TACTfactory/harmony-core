@@ -14,6 +14,7 @@ import ${curr.test_namespace}.utils.*;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+import android.test.AndroidTestCase;
 
 import junit.framework.Assert;
 
