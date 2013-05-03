@@ -14,7 +14,7 @@ import android.test.mock.MockContentResolver;
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony.</i></b>
  */
 public abstract class TestDBBase extends AndroidTestCase {
-	private final static String CONTEXT_PREFIX = ".test";
+	private final static String CONTEXT_PREFIX = "test.";
 	private final static String PROVIDER_AUTHORITY = "${project_namespace}.provider";
 	private final static Class<? extends ContentProvider> PROVIDER_CLASS = ${project_name?cap_first}Provider.class;
 	
