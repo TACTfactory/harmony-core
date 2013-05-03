@@ -413,7 +413,7 @@ public class JavaModelParser {
 					if (Strings.isNullOrEmpty(
 							fieldMeta.getColumnDefinition())) {
 						fieldMeta.setColumnDefinition(
-								SqliteAdapter.generateColumnDefinition(
+								SqliteAdapter.generateColumnType(
 										fieldMeta.getType()));
 					}
 					
@@ -439,6 +439,25 @@ public class JavaModelParser {
 						}
 						if (fieldMeta.isLocale() == null) {
 							fieldMeta.setIsLocale(type.isLocale());
+						}
+					} else {
+						if (fieldMeta.isNullable() == null) {
+							fieldMeta.setNullable(false);
+						}
+						if (fieldMeta.isUnique() == null) {
+							fieldMeta.setUnique(false);
+						}
+						if (fieldMeta.getLength() == null) {
+							fieldMeta.setLength(255);
+						}
+						if (fieldMeta.getPrecision() == null) {
+							fieldMeta.setPrecision(255);
+						}
+						if (fieldMeta.getScale() == null) {
+							fieldMeta.setScale(255);
+						}
+						if (fieldMeta.isLocale() == null) {
+							fieldMeta.setIsLocale(false);
 						}
 					}
 				}
@@ -569,7 +588,7 @@ public class JavaModelParser {
 								} else {
 									type = mvp.getValue().toString();
 								}
-								
+								fieldMeta.setHarmonyType(Type.fromName(type).getValue());
 								fieldMeta.setColumnDefinition(
 										Type.fromName(type).getValue());
 							} else
