@@ -434,7 +434,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 
-			ContentResolver prov = this.fragment.getActivity().getContentResolver();
+			ContentResolver prov = this.context.getContentResolver();
 			Bundle b = new Bundle();
 			b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, this.entity);
 			Bundle ret = 
