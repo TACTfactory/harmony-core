@@ -135,15 +135,15 @@ public abstract class SQLiteAdapterBase<T> {
 				whereArgs);
 	}
 	
-	protected abstract String getTableName();
-	protected abstract String[] getCols();
+	public abstract String getTableName();
+	public abstract String[] getCols();
 	
 		
 	/** Read All Comments entities.
 	 * 
 	 * @return List of Comment entities
 	 */
-	public List<T> getAll() {
+	public ArrayList<T> getAll() {
 		Cursor cursor = this.getAllCursor();
 		ArrayList<T> result = this.cursorToItems(cursor);
 		cursor.close();
@@ -156,8 +156,8 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @param crits The criterias to use for the request
 	 * @return List of T entities
 	 */
-	public List<T> getAll(CriteriasBase crits) {
-		List<T> result; 
+	public ArrayList<T> getAll(CriteriasBase crits) {
+		ArrayList<T> result; 
 		
 		if (crits == null || crits.isEmpty()) {
 			result = this.getAll();

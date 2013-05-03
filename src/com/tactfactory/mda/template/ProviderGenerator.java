@@ -24,6 +24,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 import com.google.common.base.CaseFormat;
+import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.meta.TranslationMetadata;
 import com.tactfactory.mda.meta.TranslationMetadata.Group;
 import com.tactfactory.mda.plateforme.BaseAdapter;
@@ -64,6 +65,25 @@ public class ProviderGenerator extends BaseGenerator {
 				TagConstant.LOCAL_NAMESPACE, this.localNameSpace);
 	}
 	
+	public final void generateProviderAdapters() {
+		int providerId = 0;
+		for (ClassMetadata cm : this.getAppMetas().getEntities().values()) {
+			if (!cm.getFields().isEmpty()) {
+				
+				this.getDatamodel().put(
+						TagConstant.CURRENT_ENTITY, cm.getName());
+				this.getDatamodel().put(
+						TagConstant.PROVIDER_ID, providerId);
+				this.makeSourceProvider("TemplateProviderAdapter.java",
+						cm.getName() + "ProviderAdapter.java", false);
+				this.makeSourceProvider("base/TemplateProviderAdapterBase.java",
+						"base/" + cm.getName() + "ProviderAdapterBase.java", true);
+				
+				providerId += 10;
+			}
+		}
+	}
+	
 	/**
 	 * Generate the provider.
 	 */
@@ -71,8 +91,12 @@ public class ProviderGenerator extends BaseGenerator {
 		try {
 			this.makeSourceProvider("TemplateProvider.java",
 					this.nameProvider + ".java", false);
-			this.makeSourceProvider("TemplateProviderBase.java",
-					this.nameProvider + "Base.java", true);
+			this.makeSourceProvider("base/TemplateProviderBase.java",
+					"base/" + this.nameProvider + "Base.java", true);
+			this.makeSourceProvider("base/ProviderAdapterBase.java",
+					"base/ProviderAdapterBase.java", true);
+			
+			this.generateProviderAdapters();
 			
 			this.updateManifest();
 			

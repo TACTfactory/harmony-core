@@ -6,6 +6,8 @@ import ${curr.namespace}.R;
 
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import ${project_namespace}.harmony.view.HarmonyFragment;
+import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
+import android.content.ContentResolver;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
@@ -431,19 +433,16 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 		@Override
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
+			ContentResolver prov = this.context.getContentResolver();
+			Bundle b = new Bundle();
+			b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, this.entity);
+			Bundle ret = 
+					prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
+							${curr.name?cap_first}ProviderAdapter.METHOD_UPDATE_${curr.name?upper_case}, 
+							null,
+							b);
 
-			final ${curr.name}SQLiteAdapter ${curr.name?lower_case}Adapter = new ${curr.name}SQLiteAdapter(context);
-			final SQLiteDatabase db = ${curr.name?lower_case}Adapter.open();
-			db.beginTransaction();
-			try {
-				${curr.name?lower_case}Adapter.update(this.entity);
-
-				db.setTransactionSuccessful();
-				result = 0;
-			} finally {
-				db.endTransaction();
-				${curr.name?lower_case}Adapter.close();
-			}
+			result = ret.getInt("result",  0); 
 
 			return result;
 		}
@@ -455,7 +454,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment implements OnClick
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 
-			if (result == 0) {
+			if (result > 0) {
 				final HarmonyFragmentActivity activity = (HarmonyFragmentActivity) this.context;
 				activity.setResult(HarmonyFragmentActivity.RESULT_OK);
 				activity.finish();
