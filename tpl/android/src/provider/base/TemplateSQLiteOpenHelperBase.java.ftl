@@ -82,7 +82,7 @@ import ${fixture_namespace}.*;
  * @see android.database.sqlite.SQLiteOpenHelper
  */
 public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHelper {
-	protected String TAG = "DatabaseHelper";
+	protected static final String TAG = "DatabaseHelper";
 	protected Context context;
 	
 	/** Android's default system path of the database.
