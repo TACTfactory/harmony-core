@@ -115,14 +115,16 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	 */
 	@Override
 	public void onCreate(final SQLiteDatabase db) {
-		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Create database..");
-		}
+		Log.i(TAG, "Create database..");
 		
 		if (!assetsExist) {
 			/// Create Schema
 	<#list entities?values as entity>
 		<#if (entity.fields?? && (entity.fields?size>0))>
+			if (${project_name?cap_first}Application.DEBUG) {
+				Log.d(TAG, "Creating schema : ${entity.name}");
+			}
+
 			db.execSQL(${entity.name}SQLiteAdapter.getSchema());
 			<#list entity["relations"] as relation>
 				<#if (relation.type=="ManyToMany")>
@@ -131,7 +133,6 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 			</#list>
 		</#if>
 	</#list>
-	
 	<#if options.fixture?? && options.fixture.enabled>
 			this.loadData(db);
 	</#if>
@@ -144,6 +145,8 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	 * @param db The database to clear
 	 */
 	public static void clearDatabase(final SQLiteDatabase db) {
+		Log.i(TAG, "Clearing database...");
+
 		<#list entities?values as entity>
 			<#if (entity.fields?? && (entity.fields?size>0))>
 		db.delete(${entity.name?cap_first}SQLiteAdapter.TABLE_NAME, null, null);	
@@ -156,18 +159,22 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	 */
 	@Override
 	public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
-		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Update database..");
-		}
+		Log.i(TAG, "Update database..");
 		
 		//if (SqliteAdapter.BASE_VERSION < 0) {
-			Log.i(TAG, "Upgrading database from version " + oldVersion 
+		if (${project_name?cap_first}Application.DEBUG) {
+			Log.d(TAG, "Upgrading database from version " + oldVersion 
 					   + " to " + newVersion + ", which will destroy all old data");
+		}
 		
 		final String command = "DROP TABLE IF EXISTS "; 
 		
 		<#list entities?values as entity>
 			<#if (entity.fields?? && (entity.fields?size>0))>
+			if (${project_name?cap_first}Application.DEBUG) {
+				Log.d(TAG, "Dropping ${entity.name} database...");
+			}
+
 			db.execSQL(command + ${entity.name}SQLiteAdapter.TABLE_NAME);
 				<#list entity['relations'] as relation>
 					<#if (relation.type=="ManyToMany")>
