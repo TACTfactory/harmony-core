@@ -16,12 +16,18 @@ import ${project_namespace}.entity.${entity.name?cap_first};
 	</#if>
 </#list>
 
+/**
+ * DataManager.
+ */
 public class DataManager {
 	protected Map<String, SQLiteAdapterBase<?>> adapters = new HashMap<String, SQLiteAdapterBase<?>>();
 	protected boolean isSuccessfull = true;
 	protected boolean isInInternalTransaction = false;
 	protected SQLiteDatabase db;
 	
+	/**
+	 * Constructor.
+	 */
 	public DataManager(final Context ctx, final SQLiteDatabase db) {
 		this.db = db;
 		<#list entities?values as entity>
@@ -211,6 +217,9 @@ public class DataManager {
     	return false;
     }
     
+    /**
+     * Called before any transaction to open the DB
+     */
     private void beginTransaction() {    	
     	// If we are not already in a transaction, begin it
     	if (!this.isInInternalTransaction) {

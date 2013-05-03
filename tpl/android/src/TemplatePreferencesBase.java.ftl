@@ -6,7 +6,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public abstract class ${project_name?cap_first}Preferences {
-	// Constants
+	/** Constants
+	 *
+	 */
 	private static final String shareName = "sharedata";
 	//private static final String sync_last = "sync_last"
 	

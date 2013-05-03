@@ -7,6 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
+/**
+ * MenuWrapperBase.
+ */
 public abstract class MenuWrapperBase {
 	protected abstract void initializeMenu(Menu menu);
 	protected abstract void updateMenu(Menu menu, int currentActivityHashCode, int currentFragmentHashCode, Context context);

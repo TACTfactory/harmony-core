@@ -43,7 +43,6 @@ public class DeleteDialog extends AlertDialog implements DialogInterface.OnClick
 	}
 
 	/** Set a listener to be invoked when the positive button of the dialog is pressed. 
-	 * @param text The text to display in the positive button
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setPositiveButton(int resId, DialogInterface.OnClickListener listener){
