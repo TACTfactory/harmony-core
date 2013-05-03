@@ -25,7 +25,7 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@+id/${m_id_label}" />
-	    	<#elseif (field.type=="datetime" || field.type=="date" || field.type=="time")>
+	    		<#elseif (field.type=="datetime" || field.type=="date" || field.type=="time")>
 	<LinearLayout
         android:id="@+id/${m_id}"
         android:layout_width="match_parent"
@@ -33,60 +33,64 @@
         android:layout_below="@+id/${m_id_label}"
         android:animateLayoutChanges="false"
         android:orientation="horizontal" >
-				<#if (field.type=="datetime" || field.type=="date")>
+			<#if (field.type=="datetime" || field.type=="date")>
         <EditText
             android:id="@+id/${m_id}_date"
             android:layout_height="wrap_content"
-            		<#if (field.type=="datetime")>
+            			<#if (field.type=="datetime")>
             android:layout_width="0px"
             android:paddingRight="4dp"
             android:layout_weight="7"
-            		<#else>
+            			<#else>
             android:layout_width="match_parent"	
-            		</#if>
+            			</#if>
             android:focusable="false"
             android:singleLine="true"
             style="@style/TextAppearance.Edit_Spinner" />
-				</#if>
-				<#if (field.type=="datetime" || field.type=="time")>
+			</#if>
+			<#if (field.type=="datetime" || field.type=="time")>
         <EditText
             android:id="@+id/${m_id}_time"
             android:layout_height="wrap_content"
-            		<#if (field.type=="datetime")>
+            			<#if (field.type=="datetime")>
             android:layout_width="0px"
             android:layout_weight="4"
-            		<#else>
+            			<#else>
             android:layout_width="match_parent"	
-            		</#if>
+            			</#if>
             android:focusable="false"
             style="@style/TextAppearance.Edit_Spinner" />
-            	</#if>
+            		</#if>
     </LinearLayout>
-			<#else>
+		<#else>
     <EditText
 		android:id="@+id/${m_id}"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
-		    	<#if (field.type == "text")>
+			<#if (field.harmony_type??)>
+			    	<#if (field.harmony_type == "text")>
 	    android:inputType="textCapWords|textAutoComplete|textMultiLine"
-		    	<#elseif (field.type=="password")>
+			    	<#elseif (field.harmony_type=="password")>
 	    android:inputType="textPassword"
-		    	<#elseif (field.type=="email")>
+			    	<#elseif (field.harmony_type=="email")>
 	    android:inputType="textEmailAddress"
-		    	<#elseif (field.type=="phone")>
+			    	<#elseif (field.harmony_type=="phone")>
 	    android:inputType="phone"
-		    	<#elseif (field.type=="zipcode")>
+			    	<#elseif (field.harmony_type=="zipcode")>
 	    android:inputType="textPostalAddress"
-		    	<#elseif (field.type=="integer" || field.type=="int" || field.type=="ean")>
+			    	<#elseif (field.harmony_type=="integer" || field.harmony_type=="int" || field.harmony_type=="ean")>
 	    android:inputType="number"
-			    <#elseif (field.type=="float")>
+				<#elseif (field.harmony_type=="float")>
 	    android:inputType="numberDecimal"
-			    <#else>
+				<#else>
 	    android:inputType="text"
-		    	</#if>
-		android:layout_below="@+id/${m_id_label}" />
+				</#if>
+			<#else>
+	    android:inputType="text"
 			</#if>
-			<#assign lastField="${m_id}" />
+		android:layout_below="@+id/${m_id_label}" />
+		</#if>
+		<#assign lastField="${m_id}" />
 		<#else>
     <TextView 
     	android:id="@+id/${m_id_label}"
