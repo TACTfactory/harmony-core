@@ -65,12 +65,17 @@ import java.util.Map;
 
 import ${curr.namespace}.entity.${curr.name};
 
+/**
+ * ${curr.name?cap_first}DataLoader.
+ */
 public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?cap_first}> {
 	private static final String NAME = "${curr.name}";
 	
 	private static ${curr.name?cap_first}DataLoader instance;
 	
-	
+	/**
+	 * Get the ${curr.name?cap_first}DataLoader singleton.
+	 */
 	public static ${curr.name?cap_first}DataLoader getInstance(final Context context) {
 		if (instance == null) {
 			instance = new ${curr.name?cap_first}DataLoader(context); 
@@ -78,12 +83,19 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 		return instance;
 	}
 	
+	/**
+	 * Constructor.
+	 */
 	private ${curr.name?cap_first}DataLoader(final Context context) {
 		super(context);
 	}
 
 	
 	<#if fixtureType=="xml">
+	/**
+	 * Extract an entity from a fixture element (XML).
+	 * @return A ${curr.name} entity
+	 */
 	@Override
 	protected ${curr.name} extractItem(final Element element) {
 		final ${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
@@ -150,6 +162,10 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 		</#list>
 
 	<#elseif fixtureType=="yml">
+	/**
+	 * Extract an entity from a fixture element (YML).
+	 * @return A ${curr.name} entity
+	 */
 	@Override
 	protected ${curr.name} extractItem(final Map<?, ?> columns) {
 		final ${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
@@ -208,6 +224,9 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 
 		return ${curr.name?uncap_first};
 	}
+	/**
+	 * Loads ${curr.name?cap_first}s into the DataManager
+	 */
 	@Override
 	public void load(final DataManager manager) {
 		for (final ${curr.name?cap_first} ${curr.name?uncap_first} : this.items.values()) {
@@ -226,7 +245,10 @@ public class ${curr.name?cap_first}DataLoader extends FixtureBase<${curr.name?ca
 		return 0;
 	}
 
-
+	/**
+	 * Get the fixture file name.
+	 * @return A String representing the file name 
+	 */
 	@Override
 	public String getFixtureFileName() {
 		return NAME;

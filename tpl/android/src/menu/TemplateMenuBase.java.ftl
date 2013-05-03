@@ -18,6 +18,9 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
 
+/**
+ * ${project_name?cap_first}MenuBase.
+ */
 public abstract class ${project_name?cap_first}MenuBase {
 	public static final int SHARE			= 1;
 	public static final int SEARCH			= 2;
@@ -30,10 +33,16 @@ public abstract class ${project_name?cap_first}MenuBase {
 	
 	protected Menu menu;
 	
+	/**
+	 * Constructor.
+	 */
 	protected ${project_name?cap_first}MenuBase(final Context context) throws Exception {
 		this(context, null);
 	}
 	
+	/**
+	 * Constructor.
+	 */
 	protected ${project_name?cap_first}MenuBase(final Context context, final Fragment fragment) throws Exception {
 		if (context == null) {
 			throw new Exception("Unable to Initialise Menu Helper with no context");
@@ -94,10 +103,18 @@ public abstract class ${project_name?cap_first}MenuBase {
 		return this.menus.get(item.getItemId()).dispatch(item, this.context, this.fragment);
 	}
 	
+	/**
+	 * Called when an activity you launched exits.
+	 * @see android.app.Activity#onActivityResult
+	 */
 	public void onActivityResult(int requestCode, int resultCode, Intent data, Context context) {
 		this.onActivityResult(requestCode, resultCode, data, context, null);
 	}
 	
+	/**
+	 * Called when an activity you launched exits.
+	 * @see android.app.Activity#onActivityResult
+	 */
 	public void onActivityResult(int requestCode, int resultCode, Intent data, Context context, Fragment fragment) {
 		if (context != null) {
 			this.context = context;
@@ -110,6 +127,10 @@ public abstract class ${project_name?cap_first}MenuBase {
 		this.onActivityResult(requestCode, resultCode, data);
 	}
 	
+	/**
+	 * Called when an activity you launched exits.
+	 * @see android.app.Activity#onActivityResult
+	 */
 	private void onActivityResult(int requestCode, int resultCode, Intent data) {
 		for (int i = 0; i < this.menus.size(); i++) {
 			this.menus.valueAt(i).onActivityResult(requestCode, resultCode, data, this.context, this.fragment);
