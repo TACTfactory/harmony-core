@@ -114,6 +114,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	 * @param ctx
 	 * @return the version number
 	 */
+	@SuppressWarnings("deprecation")
 	public static String getVersion(final Context ctx) {
 		final SharedPreferences settings = ctx.getSharedPreferences(
 				${project_name?cap_first}ApplicationBase.PREFS_PUBL, Context.MODE_WORLD_READABLE);
@@ -136,6 +137,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	 * 
 	 * @param ctx
 	 */
+	@SuppressWarnings("deprecation")
 	public static void setVersion(final Context ctx) {
 		final SharedPreferences settings = ctx.getSharedPreferences(
 				${project_name?cap_first}ApplicationBase.PREFS_PUBL, Context.MODE_WORLD_READABLE);
