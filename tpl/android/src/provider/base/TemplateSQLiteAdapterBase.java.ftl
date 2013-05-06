@@ -333,7 +333,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		<#list curr.relations as relation>
 			<#if (relation.relation.type=="ManyToOne" | relation.relation.type=="OneToOne")>
 	/** Find & read ${curr.name} by ${relation.name}.
-	 * 
+	 * @param ${relation.name?lower_case}Id ${relation.name?lower_case}Id
 	 * @return List of ${curr.name} entities
 	 */
 	 public ArrayList<${curr.name}> getBy${relation.name?cap_first}(final int ${relation.name?lower_case}Id) {
@@ -350,7 +350,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 
 			<#elseif (relation.relation.type=="ManyToMany")>	<#--
 	/** Find & read ${curr.name} by ${relation.name}.
-	 * 
+	 * @param ${relation.name?lower_case}Id ${relation.name?lower_case}Id
 	 * @return List of ${curr.name} entities
 	 */
 	public ArrayList<${curr.name}> getBy${relation.name?cap_first}(int ${relation.name?lower_case}Id) {
@@ -478,7 +478,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	/** Update a ${curr.name} entity into database.
 	 * 
 	 * @param item The ${curr.name} entity to persist
-	 * @return 
+	 * @return count of updated entities
 	 */
 	public int update(final ${curr.name} item) {
 	<#if (curr.ids?size>0)>
@@ -510,7 +510,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	/** Update a ${curr.name} entity into database.
 	 * 
 	 * @param item The ${curr.name} entity to persist
-	 * @return 
+	 * @return count of updated entities
 	 */
 	public int updateWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(
 					${curr.name} item, int ${relation.relation.targetEntity?lower_case}_id) {
@@ -620,7 +620,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	/** Delete a ${curr.name} entity of database.
 	 * 
 	 * @param id Identify the ${curr.name} entity to delete
-	 * @return
+	 * @return count of updated entities
 	 */
 	public int remove(<#list curr.ids as id>final ${m.javaType(id.type)} ${id.name}<#if (id_has_next)>
 			,</#if></#list>) {
@@ -647,6 +647,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	/**
 	 * Deletes the given entity.
 	 * @param ${curr.name?uncap_first} The entity to delete
+	 * @return count of updated entities
 	 */
 	public int delete(final ${curr.name?cap_first} ${curr.name?uncap_first}) {
 		return this.delete(${curr.name?uncap_first}.getId());
@@ -654,6 +655,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	
 	/**
 	 *  Internal Cursor.
+	 *  @param ${id.name} ${id.name}
+	 *  @return A Cursor pointing to ${id.name}
 	 */
 	protected Cursor getSingleCursor(<#list curr.ids as id>final ${m.javaType(id.type)} ${id.name}<#if id_has_next>
 										,</#if></#list>) {
@@ -721,7 +724,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 <#if (curr.internal=="true")>
 	<#--<#list curr.relations as relation>
 	/**
-	 * 
+	 * get${relation.type}s.
+	 * @param id id
+	 * @return ArrayList of ${relation.type} matching id
 	 */
 	public ArrayList<${relation.type}> get${relation.type}s(final int id) {
 		final ${relation.type}SQLiteAdapter adapt = 
@@ -733,8 +738,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		
 	/** Insert a ${curr.name} entity into database.
 	 * 
-	 * param item The ${curr.name} entity to persist 
-	 * return Id of the ${curr.name} entity
+	 * @param ${curr.relations[0].name?lower_case} ${curr.relations[0].name?lower_case}
+	 * @param ${curr.relations[1].name?lower_case} ${curr.relations[1].name?lower_case}
+	 * @return Id of the ${curr.name} entity
 	 */
 	public long insert(int ${curr.relations[0].name?lower_case}, 
 						int ${curr.relations[1].name?lower_case}) {
@@ -753,7 +759,10 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				values);
 	}
 	
-	<#--/** Find & read ${curr.name} by ${curr.relations[0].name}.*/
+	<#--/** Find & read ${curr.name} by ${curr.relations[0].name}.
+	* @param ${curr.relations[1].name?lower_case} ${curr.relations[1].name?lower_case}
+	* @return ArrayList of ${curr.relations[0].relation.targetEntity} matching ${curr.relations[1].name?lower_case}
+	*/
 	public ArrayList<${curr.relations[0].relation.targetEntity}> getBy${curr.relations[1].relation.targetEntity?cap_first}(
 			int ${curr.relations[1].name?lower_case}) {
 		Cursor cursor = this.getCursor(${alias(curr.relations[1].name)} 
@@ -763,7 +772,10 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		
 		return result;
 	}-->
-	/** Find & read ${curr.name} by ${curr.relations[0].name}.*/ 
+	/** Find & read ${curr.name} by ${curr.relations[0].name}.
+     * @param ${curr.relations[1].name?lower_case} ${curr.relations[1].name?lower_case}
+	 * @return ArrayList of ${curr.relations[0].relation.targetEntity} matching ${curr.relations[1].name?lower_case}
+	 */ 
 	public ArrayList<${curr.relations[0].relation.targetEntity}> getBy${curr.relations[1].relation.targetEntity}(
 			int ${curr.relations[1].name}) {
 		String whereClause = ${alias(curr.relations[1].name)} + "=?";
@@ -788,7 +800,10 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		return ret;
 	}
 
-	/** Find & read ${curr.name} by ${curr.relations[0].name}v*/
+	/** Find & read ${curr.name} by ${curr.relations[0].name}
+     * @param ${curr.relations[0].name?lower_case} ${curr.relations[1].name?lower_case}
+	 * @return ArrayList of ${curr.relations[1].relation.targetEntity} matching ${curr.relations[0].name?lower_case}
+	 */ 
 	public ArrayList<${curr.relations[1].relation.targetEntity}> getBy${curr.relations[0].relation.targetEntity}(
 			int ${curr.relations[0].name}) {
 		String whereClause = ${alias(curr.relations[0].name)}+ "=?";

@@ -9,12 +9,19 @@ import ${data_namespace}.base.SQLiteAdapterBase;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
-
+/**
+ * ProviderAdapterBase<T extends Serializable>.
+ */
 public abstract class ProviderAdapterBase<T extends Serializable> {
 	public static final String TAG = "ProviderAdapterBase<T>";
 	protected SQLiteAdapterBase<T> adapter;
 	protected SQLiteDatabase db;
 
+	/**
+	 * Insert Bundle into the database.
+	 * @param arg Argument
+	 * @param extras The Bundle to insert
+	 */
 	protected Bundle insert(String arg, Bundle extras) {
 		long newId = -1;
 		@SuppressWarnings("unchecked")
@@ -34,6 +41,11 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 		return result;
 	}
 
+	/**
+	 * Delete Bundle into the database.
+	 * @param arg Argument
+	 * @param extras The Bundle to delete
+	 */
 	public Bundle delete(String arg, Bundle extras) {
 		int adaptResult = 0;
 		@SuppressWarnings("unchecked")
@@ -54,6 +66,11 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 		return result;
 	}
 
+	/**
+	 * Update Bundle into the database.
+	 * @param arg Argument
+	 * @param extras The Bundle to update
+	 */
 	public Bundle update(String arg, Bundle extras) {
 		int adaptResult = 0;
 		@SuppressWarnings("unchecked")
@@ -74,6 +91,11 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 		return result;
 	}
 
+	/**
+	 * QueryAll.
+	 * @param arg Argument
+	 * @param extras Bundle
+	 */
 	public Bundle queryAll(String arg, Bundle extras) {
 		CriteriasBase crits = null;
 		if (extras != null) {
@@ -98,9 +120,17 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 		return result;
 	}
 
+	/**
+	 * Get database.
+	 * @return database
+	 */
 	public SQLiteDatabase getDb() {
 		return this.db;
 	}
 
+	/**
+	 * Get the itemKey.
+	 * @return A String representing the key
+	 */
 	public abstract String getItemKey();
 }

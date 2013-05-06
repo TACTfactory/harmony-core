@@ -23,7 +23,9 @@ import android.widget.LinearLayout;
  * @see android.app.Activity
  */
 public class HomeActivity extends HarmonyFragmentActivity {
-	/** Called when the activity is first created. */
+	/** Called when the activity is first created.
+	 * @see android.app.Activity#onCreate
+	 */
 	@Override
 	public void onCreate(Bundle savedInstanceState)	{
 		super.onCreate(savedInstanceState);

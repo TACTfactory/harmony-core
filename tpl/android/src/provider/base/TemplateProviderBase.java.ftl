@@ -23,7 +23,6 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	/** Tools / Common.
 	 * 
 	 */
-
 	public    static Integer baseVersion = 0;
 	public    static String baseName = "";
 	protected static String item;
@@ -44,6 +43,10 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	
 	protected Context mContext;
 
+	/**
+	 * Called when the contentProvider is first created.
+	 * @return true if everything goes well, false otherwise
+	 */
 	@Override
 	public boolean onCreate() {
 		boolean result = true;
@@ -79,6 +82,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	
 	/**
 	 * Get the entity from the URI.
+	 * @param uri URI
 	 * @return A String representing the entity name 
 	 */
 	@Override
@@ -113,8 +117,11 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 	
 	/**
-	 * Deletes matching tokens with the given URI.
-	 * @return The number of tokens deleted
+	 * Delete the entities matching with uri from the DB.
+	 * @param uri URI
+	 * @param selection SELECT clause for SQL
+	 * @param selectionArgs SELECT arguments for SQL
+	 * @return how many token deleted
 	 */
 	@Override
 	public int delete(final Uri uri, final String selection, 
@@ -162,8 +169,10 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 	
 	/**
-	 * Insert ContentValues with the given URI.
-	 * @return The URI to the inserted ContentValue
+	 * Insert the entities matching with uri from the DB.
+	 * @param uri URI
+	 * @param values ContentValues to insert
+	 * @return how many token inserted
 	 */
 	@Override
 	public Uri insert(final Uri uri, final ContentValues values) {
@@ -200,8 +209,13 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 	
 	/**
-	 * Query the table given by the uri parameter.
-	 * @return A Cursor pointing to the result of the query
+	 * Send a query to the DB.
+	 * @param uri URI
+	 * @param projection Columns to work with
+	 * @param selection SELECT clause for SQL
+	 * @param selectionArgs SELECT arguments for SQL
+	 * @param sortOrder ORDER BY clause
+	 * @return A cursor pointing to the result of the query
 	 */
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
@@ -248,8 +262,12 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 	
 	/**
-	 * Update the given URI with the new ContentValues.
-	 * @return The number of token updated
+	 * Update the entities matching with uri from the DB.
+	 * @param uri URI
+	 * @param values ContentValues to update
+	 * @param selection SELECT clause for SQL
+	 * @param selectionArgs SELECT arguments for SQL
+	 * @return how many token update
 	 */
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,
@@ -298,14 +316,15 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	//-------------------------------------------------------------------------
 	
 	/** Utils function.
-	 * 
+	 * @param typePath Path to type
+	 * @return generated URI
 	 */	
 	public static final Uri generateUri(String typePath) {
 		return Uri.parse("content://" + authority + "/" + typePath);
 	}
 	
 	/** Utils function.
-	 * 
+	 * @return generated URI
 	 */
 	public static final Uri generateUri() {
 		return Uri.parse("content://" + authority);
@@ -350,6 +369,10 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 		}
 	}
 
+	/**
+	 * Get URI Matcher
+	 * @return the uriMatcher
+	 */
 	public static UriMatcher getUriMatcher() {
 		return uriMatcher;
 	}

@@ -15,8 +15,8 @@ import java.util.List;
 
 import ${project_namespace}.criterias.base.CriteriasBase;
 
-/** SQLiteAdapterBase<T>.
- * 	This is the base SQLiteAdapter
+/**
+ * 	This is the base SQLiteAdapter.
  */
 public abstract class SQLiteAdapterBase<T> {
 
@@ -25,7 +25,7 @@ public abstract class SQLiteAdapterBase<T> {
 	public static String TAG = "${project_name?cap_first}SQLiteAdapterBase";
 
 	
-	/** Database tools */
+	/** Database tools. */
 	protected Context context;
 	protected SQLiteDatabase mDatabase;
 	protected ${project_name?cap_first}SQLiteOpenHelper mBaseHelper;
@@ -61,7 +61,7 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	/** Initialize and open database.
-	 * 
+	 * @param db database
 	 * @return Open database
 	 */
 	public SQLiteDatabase open(SQLiteDatabase db) {
@@ -75,7 +75,7 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	/**
-	 * Get all entities from the DB
+	 * Get all entities from the DB.
 	 * @return A cursor pointing to all entities
 	 */
 	protected Cursor getAllCursor() {
@@ -92,7 +92,12 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	/**
-	 * Send a query to the DB
+	 * Send a query to the DB.
+	 * @param projection Columns to work with
+	 * @param whereClause WHERE clause for SQL
+	 * @param whereArgs WHERE arguments for SQL
+	 * @param having HAVING clause
+	 * @param orderBy ORDER BY clause
 	 * @return A cursor pointing to the result of the query
 	 */
 	public Cursor query(String[] projection, 
@@ -112,7 +117,9 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	/**
-	 * Insert a new entity into the DB
+	 * Insert a new entity into the DB.
+	 * @param nullColumnHack nullColumnHack
+	 * @param item The ContentValues to insert
 	 * @return the id of the inserted entity
 	 */
 	public long insert(String nullColumnHack, ContentValues item) {
@@ -123,7 +130,9 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	/**
-	 * Delete the entities matching with query from the DB
+	 * Delete the entities matching with query from the DB.
+	 * @param whereClause WHERE clause for SQL
+	 * @param whereArgs WHERE arguments for SQL
 	 * @return how many token deleted
 	 */
 	public int delete(String whereClause, String[] whereArgs) {
@@ -134,7 +143,10 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	/**
-	 * Updates the entities from the DB matching with the query
+	 * Updates the entities from the DB matching with the query.
+	 * @param item The ContentValues to be updated
+	 * @param whereClause WHERE clause for SQL
+	 * @param whereArgs WHERE arguments for SQL
 	 * @return How many tokens updated
 	 */
 	public int update(ContentValues item, String whereClause, 
@@ -146,7 +158,13 @@ public abstract class SQLiteAdapterBase<T> {
 				whereArgs);
 	}
 	
+	/**
+	 * Get the table Name.
+	 */
 	public abstract String getTableName();
+	/**
+	 * Get the table's columns
+	 */
 	public abstract String[] getCols();
 	
 		
@@ -226,9 +244,14 @@ public abstract class SQLiteAdapterBase<T> {
 	/** Update a Comment entity into database.
 	 * 
 	 * @param item The Comment entity to persist
-	 * @return 
+	 * @return The count of updated entities  
 	 */
 	public abstract int update(T item);
 	
+	/** Delete a Comment entity into database.
+	 * 
+	 * @param item The Comment entity to persist
+	 * @return The count of deleted entities
+	 */
 	public abstract int delete(T item);
 }

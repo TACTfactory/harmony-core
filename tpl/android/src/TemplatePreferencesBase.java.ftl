@@ -14,6 +14,7 @@ public abstract class ${project_name?cap_first}Preferences {
 	
 	/**
 	 * Constructor
+	 * @param context context
 	 */
 	public ${project_name?cap_first}Preferences(Context context) {
 		this.settings = context.getSharedPreferences(

@@ -76,6 +76,7 @@ public class ${curr.name?cap_first}DataLoader
 	
 	/**
 	 * Get the ${curr.name?cap_first}DataLoader singleton.
+	 * @param context The context
 	 */
 	public static ${curr.name?cap_first}DataLoader getInstance(
 											final Context context) {
@@ -87,6 +88,7 @@ public class ${curr.name?cap_first}DataLoader
 	
 	/**
 	 * Constructor.
+	 * @param context The context
 	 */
 	private ${curr.name?cap_first}DataLoader(final Context context) {
 		super(context);
@@ -96,6 +98,7 @@ public class ${curr.name?cap_first}DataLoader
 	<#if fixtureType=="xml">
 	/**
 	 * Extract an entity from a fixture element (XML).
+	 * @param element The element to be extracted
 	 * @return A ${curr.name} entity
 	 */
 	@Override
@@ -204,6 +207,7 @@ public class ${curr.name?cap_first}DataLoader
 	<#elseif fixtureType=="yml">
 	/**
 	 * Extract an entity from a fixture element (YML).
+	 * @param columns Columns to extract
 	 * @return A ${curr.name} entity
 	 */
 	@Override
@@ -291,6 +295,7 @@ public class ${curr.name?cap_first}DataLoader
 	}
 	/**
 	 * Loads ${curr.name?cap_first}s into the DataManager
+	 * @param manager The DataManager
 	 */
 	@Override
 	public void load(final DataManager manager) {

@@ -43,7 +43,9 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	private static SharedPreferences preferences;
 	</#if>
 	
-	/** Called when the application is first created. */
+	/** Called when the application is first created. 
+	 * @see android.app.Activity#onCreate
+	 */
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -106,7 +108,9 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	}
 	
 	
-	/** UUID equivalent. */
+	/** UUID equivalent. 
+	 * @return UUID equivalent 
+	 */
 	private static String deviceID;
 	public static String getAndroidID() {
 		return deviceID;

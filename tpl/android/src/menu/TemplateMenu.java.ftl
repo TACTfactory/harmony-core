@@ -13,6 +13,7 @@ public class ${project_name?cap_first}Menu
 	
 	/**
 	 * Constructor.
+	 * @param context The Context
 	 */
 	public ${project_name?cap_first}Menu(final Context context) throws Exception {
 		super(context);
@@ -20,19 +21,28 @@ public class ${project_name?cap_first}Menu
 
 	/**
 	 * Constructor.
+	 * @param context The context
+	 * @param fragment The parent fragment
 	 */
 	public ${project_name?cap_first}Menu(final Context context, 
 						final Fragment fragment) throws Exception {
 		super(context, fragment);
 	}
 
-	/** Get unique instance. */
+	/** Get unique instance.
+	 * @param context The context 
+	 * @return ${project_name?cap_first}Menu instance
+	 */
 	public static final synchronized ${project_name?cap_first}Menu getInstance(
 						final Context context) throws Exception {
 		return getInstance(context, null);
 	}
 	
-	/** Get unique instance. */
+	/** Get unique instance.
+	 * @param context The context 
+	 * @param fragment The parent fragment
+	 * @return ${project_name?cap_first}Menu instance
+	 */
 	public static final synchronized ${project_name?cap_first}Menu getInstance(
 			final Context context, final Fragment fragment) throws Exception {
 		if (singleton == null) {

@@ -15,6 +15,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	 
 	/**
 	 * Constructor.
+	 * @param type The Criteria's GroupType
 	 */
 	public CriteriasBase(final GroupType type) {
 		this.type = type;
@@ -103,6 +104,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 		
 		/**
 		 * Constructor.
+		 * @param sql The SQL version of the Enum
 		 */
 		private GroupType(final String sql) {
 			this.sql = sql;
@@ -110,12 +112,14 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 		
 		/**
 		 * Get the SQL String transcryption.
+		 * @return The SQL version of the Enum
 		 */
 		public String getSqlType() { return this.sql; }
 	}
 	
 	/**
 	 * Checks if the List is empty.
+	 * @return true if the List is empty, false otherwise
 	 */
 	public boolean isEmpty() {
 		return this.arr.isEmpty();

@@ -97,6 +97,10 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	
 	/**
 	 * Constructor.
+	 * @param context Context
+	 * @param name name
+	 * @param factory factory
+	 * @param version version
 	 */
 	public ${project_name?cap_first}SQLiteOpenHelperBase(final Context context, 
 		   final String name, final CursorFactory factory, final int version) {
@@ -219,7 +223,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	/**
 	 * Creates a empty database on the system and rewrites it with your own
 	 * database.
-	 * */
+	 */
 	public void createDataBase() throws IOException {
 		if (assetsExist && !checkDataBase()) {
 			// By calling this method and empty database will be created into

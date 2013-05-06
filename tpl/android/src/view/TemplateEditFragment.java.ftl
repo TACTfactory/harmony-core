@@ -243,7 +243,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 	<#list curr.relations as relation>
 		<#if !relation.internal && !relation.hidden>
 	/** Initialize dialog.
-	 * 
+	 * @param list list 
 	 */		
 	 <#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
 	protected void init${relation.name?cap_first}Dialog(

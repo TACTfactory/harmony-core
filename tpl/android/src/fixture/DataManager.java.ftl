@@ -28,6 +28,8 @@ public class DataManager {
 	
 	/**
 	 * Constructor.
+	 * @param ctx The context
+	 * @param db The DB to work in
 	 */
 	public DataManager(final Context ctx, final SQLiteDatabase db) {
 		this.db = db;
@@ -76,6 +78,7 @@ public class DataManager {
      * objects to the persist operation.
      *
      * @param object $object The instance to make managed and persistent.
+     * @return Count of objects entered into the DB
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public int persist(final Object object) {

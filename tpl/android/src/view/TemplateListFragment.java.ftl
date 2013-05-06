@@ -181,6 +181,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 
 	/**
 	 * Calls the ${curr.name}EditActivity. 
+	 * @param position position 
 	 */
 	protected void onClickEdit(final int position) {
 		final ${curr.name} item = this.mAdapter.getItem(position);
@@ -193,6 +194,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	
 	/**
 	 * Shows a confirmation dialog.
+	 * @param position position  
 	 */
 	protected void onClickDelete(final int position) {
 		new DeleteDialog(this.getActivity(), this, position).show();
@@ -200,6 +202,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 
 	/**
 	 * Creates an aSyncTask to delete the row.
+	 * @param position position  
 	 */
 	public void delete(final int position) {
 		final ${curr.name?cap_first} item = this.mAdapter.getItem(position);

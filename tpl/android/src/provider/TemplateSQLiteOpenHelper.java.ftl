@@ -15,6 +15,10 @@ public class ${project_name?cap_first}SQLiteOpenHelper
 
 	/**
 	 * Constructor.
+	 * @param context context
+	 * @param name name
+	 * @param factory factory
+	 * @param version version
 	 */
 	public ${project_name?cap_first}SQLiteOpenHelper(final Context context, 
 		   final String name, final CursorFactory factory, final int version) {
