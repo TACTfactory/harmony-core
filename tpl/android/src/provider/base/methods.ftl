@@ -3,7 +3,7 @@
 		<#if field.is_locale>
 			<#return className?lower_case+".get"+field.name?cap_first+"().toLocalDateTime().toString()" />	
 		<#else>
-			<#return className?lower_case+".get"+field.name?cap_first+"().toString(ISODateTimeFormat.dateTime().withZoneUTC())" />
+			<#return className?lower_case+".get"+field.name?cap_first+"().toString(ISODateTimeFormat.dateTime())" />
 		</#if>
 	<#elseif (field.type == "boolean")>
 		<#return "String.valueOf("+className?lower_case+".is"+field.name?cap_first+"())"/>

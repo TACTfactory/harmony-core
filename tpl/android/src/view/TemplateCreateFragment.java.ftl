@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -56,7 +55,6 @@ import ${curr.namespace}.harmony.widget.CustomTimePickerDialog;
 	
 import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
-import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 <#assign mustImportArrayList=false />
 <#assign mustImportList=false />
@@ -66,8 +64,8 @@ import ${curr.namespace}.entity.${curr.name};
 		<#assign mustImportList=true />
 		<#if (!m.isInArray(import_array, relation.relation.targetEntity))>
 			<#assign import_array = import_array + [relation.relation.targetEntity] />
-import ${curr.namespace}.data.${relation.relation.targetEntity}SQLiteAdapter;
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
+import ${project_namespace}.provider.${relation.relation.targetEntity?cap_first}ProviderAdapter;
 			<#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
 				<#assign mustImportArrayList=true />
 			</#if>
@@ -261,31 +259,27 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		final AlertDialog.Builder builder = 
 				new AlertDialog.Builder(this.getActivity());
 		builder.setTitle(R.string.${curr.name?lower_case}_${relation.name?uncap_first}_dialog_title)
-				.setMultiChoiceItems(listAdapter, 
-						checks, 
-						new DialogInterface.OnMultiChoiceClickListener() {
-							public void onClick(DialogInterface dialog, 
-									int which, boolean isChecked) {
-								${curr.name}CreateFragment.this
-									.checked${relation.name?cap_first}[which] = 
-											isChecked;
-							}
-				}).setPositiveButton("Ok", 
-						new DialogInterface.OnClickListener() {
-				            @Override
-				            public void onClick(DialogInterface dialog,
-				            		int id) {
-				            	//${curr.name}CreateFragment.this
-				            	//.onOk${relation.name?cap_first}();
-				            }
-		        }).setNegativeButton("Cancel", 
-		        			new DialogInterface.OnClickListener() {
-					            @Override
-					            public void onClick(DialogInterface dialog, 
-					            		int id) {
-					            	${curr.name}CreateFragment.this
-					            		.onCancel${relation.name?cap_first}();
-					            }
+				.setMultiChoiceItems(listAdapter, checks, 
+							  new DialogInterface.OnMultiChoiceClickListener() {
+					public void onClick(DialogInterface dialog, int which, 
+															boolean isChecked) {
+						${curr.name}CreateFragment.this
+						  .checked${relation.name?cap_first}[which] = isChecked;
+					}
+				}).setPositiveButton(android.R.string.ok, 
+										 new DialogInterface.OnClickListener() {
+		            @Override
+		            public void onClick(DialogInterface dialog, int id) {
+		            	//${curr.name}CreateFragment.this
+		            	//.onOk${relation.name?cap_first}();
+		            }
+		        }).setNegativeButton(android.R.string.cancel, 
+		        						 new DialogInterface.OnClickListener() {
+		            @Override
+		            public void onClick(DialogInterface dialog, int id) {
+		            	${curr.name}CreateFragment.this
+		            					  .onCancel${relation.name?cap_first}();
+		            }
 		        });
 		
 		${relation.name}Dialog = builder.create();
@@ -302,33 +296,29 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		final AlertDialog.Builder builder = 
 				new AlertDialog.Builder(this.getActivity());
 		builder.setTitle(R.string.${curr.name?lower_case}_${relation.name?uncap_first}_dialog_title)
-				.setSingleChoiceItems(listAdapter, 
-						0, 
-						new DialogInterface.OnClickListener() {
-							public void onClick(DialogInterface dialog, 
-									int id) {
-								//${curr.name}CreateFragment.this
-								//.selected${relation.name?cap_first}
-								//= Integer.parseInt(listAdapter[id]);
-							}
-				}).setPositiveButton("Ok", 
-						new DialogInterface.OnClickListener() {
-				            @Override
-				            public void onClick(DialogInterface dialog,
-				            		int id) {
-				            	${curr.name}CreateFragment.this
-				            		.selected${relation.name?cap_first} = 
-				            		Integer.parseInt(
-				            				listAdapter[((AlertDialog) dialog).getListView().getCheckedItemPosition()]);
-				            }
-		        }).setNegativeButton("Cancel", 
-		        		new DialogInterface.OnClickListener() {
-				            @Override
-				            public void onClick(DialogInterface dialog, 
-				            		int id) {
-				            	${curr.name}CreateFragment.this
-				            		.onCancel${relation.name?cap_first}();
-				            }
+				.setSingleChoiceItems(listAdapter, 0, 
+										 new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog, int id) {
+						//${curr.name}CreateFragment.this
+						//.selected${relation.name?cap_first} = 
+						// Integer.parseInt(listAdapter[id]);
+					}
+				}).setPositiveButton(android.R.string.ok, 
+										 new DialogInterface.OnClickListener() {
+		            @Override
+		            public void onClick(DialogInterface dialog, int id) {
+		            	${curr.name}CreateFragment.this
+		            		.selected${relation.name?cap_first} = 
+		            			Integer.parseInt(
+		            					listAdapter[((AlertDialog) dialog).getListView().getCheckedItemPosition()]);
+		            }
+		        }).setNegativeButton(android.R.string.cancel, 
+		        						 new DialogInterface.OnClickListener() {
+		            @Override
+		            public void onClick(DialogInterface dialog, int id) {
+		            	${curr.name}CreateFragment.this
+		            					  .onCancel${relation.name?cap_first}();
+		            }
 		        });
 		
 		${relation.name}Dialog = builder.create();
@@ -354,6 +344,10 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 
 	/** Load data from model to fields view. */
 	public void loadData() {
+		<#if (import_array?size > 0)>
+		ContentResolver prov = this.getActivity().getContentResolver();
+		</#if>
+
 		<#foreach field in curr.fields>						
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
@@ -378,12 +372,16 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		${m.setLoader(field)}
 				</#if>
 			<#else>
-		final ${field.relation.targetEntity}SQLiteAdapter ${field.name}Adapter = 
-				new ${field.relation.targetEntity}SQLiteAdapter(getActivity());
-		${field.name}Adapter.open();
-		this.${field.name}List = ${field.name}Adapter.getAll();
-		${field.name}Adapter.close();
-		init${field.name?cap_first}Dialog(${field.name}List);
+		Bundle ${field.name}ResultBundle = 
+				prov.call(${field.relation.targetEntity}ProviderAdapter.${field.relation.targetEntity?upper_case}_URI,
+				${field.relation.targetEntity}ProviderAdapter.METHOD_QUERY_${field.relation.targetEntity?upper_case},
+				null,
+				null);
+		
+		this.${field.name}List = 
+				(List<${field.relation.targetEntity}>) ${field.name}ResultBundle
+				.getSerializable(${field.relation.targetEntity}ProviderAdapter.ITEM_KEY);
+		init${field.name?cap_first}Dialog(this.${field.name}List);
 			</#if>
 		</#if>
 		
@@ -537,10 +535,9 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
-
-			if (result == 0) {
+			if (result >= 0) {
 				final HarmonyFragmentActivity activity = 
-						(HarmonyFragmentActivity) this.context;
+										 (HarmonyFragmentActivity) this.context;
 				activity.finish();
 			} else {
 				final AlertDialog.Builder builder = 

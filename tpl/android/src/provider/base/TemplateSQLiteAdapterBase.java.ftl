@@ -416,7 +416,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			newid = (int) this.insert(
 					null, 
 					values);
-	
+			
+			item.setId( (int) newid); 
 	<#list curr.relations as relation>
 		<#if (relation.relation.type=="ManyToMany")>
 			
