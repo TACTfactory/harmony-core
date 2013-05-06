@@ -46,7 +46,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	/**
 	 * Constructor.
 	 * @param context context
-	 * @param frangment parent fragment
+	 * @param fragment parent fragment
 	 */
 	protected ${project_name?cap_first}MenuBase(final Context context, 
 								final Fragment fragment) throws Exception {

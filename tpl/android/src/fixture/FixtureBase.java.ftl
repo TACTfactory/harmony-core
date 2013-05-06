@@ -24,6 +24,7 @@ import android.util.Log;
 
 /**
  * FixtureBase.
+ * @param <T> Fixture
  */
 public abstract class FixtureBase<T> {	
 	private static String TAG = "FixtureBase";

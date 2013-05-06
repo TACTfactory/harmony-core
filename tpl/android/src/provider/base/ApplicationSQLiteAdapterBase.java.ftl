@@ -16,7 +16,8 @@ import java.util.List;
 import ${project_namespace}.criterias.base.CriteriasBase;
 
 /**
- * 	This is the base SQLiteAdapter.
+ * This is the base SQLiteAdapter.
+ * @param <T> Type
  */
 public abstract class SQLiteAdapterBase<T> {
 

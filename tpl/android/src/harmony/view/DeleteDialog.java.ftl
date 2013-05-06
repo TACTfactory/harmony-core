@@ -59,7 +59,7 @@ public class DeleteDialog extends AlertDialog
 	
 	/** Set a listener to be invoked when the negative button of the dialog is
 	 * pressed. 
-	 * @param text The text to display in the negative button
+	 * @param resId ressource ID
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setNegativeButton(int resId, 
@@ -78,6 +78,8 @@ public class DeleteDialog extends AlertDialog
 				
 			case BUTTON_NEGATIVE:
 				this.dismiss();
+				break;
+			default:
 				break;
 		}
 	}

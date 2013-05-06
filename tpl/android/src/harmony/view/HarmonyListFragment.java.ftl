@@ -14,7 +14,7 @@ import ${project_namespace}.menu.${project_name?cap_first}Menu;
 
 /**
  * @author yo
- *
+ * @param <T> Type to show
  */
 public abstract class HarmonyListFragment<T> extends SherlockListFragment 
 implements LoaderManager.LoaderCallbacks<List<T> > {

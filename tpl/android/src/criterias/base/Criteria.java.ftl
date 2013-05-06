@@ -108,8 +108,7 @@ public class Criteria implements Serializable, ICriteria {
 	
 		if (obj == null) {
 			result = false;
-		}
-		else if (getClass() != obj.getClass()) {
+		} else if (getClass() != obj.getClass()) {
 			result = false;
 		}
 		
@@ -121,11 +120,9 @@ public class Criteria implements Serializable, ICriteria {
 				}
 			} else if (!key.equals(other.key)) {
 				result = false;
-			}
-			else if (type != other.type) {
+			} else if (type != other.type) {
 				result = false;
-			}
-			else if (value == null) {
+			} else if (value == null) {
 				if (other.value != null) {
 					result = false;
 				}

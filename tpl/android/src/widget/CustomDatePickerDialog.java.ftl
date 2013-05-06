@@ -15,7 +15,7 @@ import android.view.View;
 import android.widget.DatePicker;
 import android.widget.DatePicker.OnDateChangedListener;
 
-/** CustomDatePickerDialog widget class
+/** CustomDatePickerDialog widget class.
  *  A simple AlertDialog containing an DatePicker.
  */
 public class CustomDatePickerDialog extends AlertDialog {
@@ -28,7 +28,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 	private int monthOfYear;
 	private int dayOfMonth;
 
-	/** Constructor
+	/** Constructor.
 	 * @param context The context the dialog is to run in.
 	 * @param date The initial date of the dialog.
 	 * @param title The text of the title.
@@ -39,7 +39,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 		this.initializeDatePickerDialog(context, date, title, null, null);
 	}
 	
-	/** Constructor
+	/** Constructor.
 	 * @param context The context the dialog is to run in.
 	 * @param date The initial date of the dialog.
 	 * @param titleId The resource id of the title.
@@ -51,7 +51,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 						 context, date, context.getString(titleId), null, null);
 	}
 
-	/** Constructor
+	/** Constructor.
 	 * @param context The context the dialog is to run in.
 	 * @param date The initial date of the dialog.
 	 * @param title The text of the title.
@@ -65,7 +65,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 		this.initializeDatePickerDialog(context, date, title, minDate, maxDate);
 	}
 	
-	/** Constructor
+	/** Constructor.
 	 * @param context The context the dialog is to run in.
 	 * @param date The initial date of the dialog.
 	 * @param titleId The resource id of the title.
@@ -80,7 +80,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 								  context.getString(titleId), minDate, maxDate);
 	}
 	
-	/** DatePicker dialog initialisation
+	/** DatePicker dialog initialisation.
 	 * @param context The context the dialog is to run in.
 	 * @param date The initial date of the dialog.
 	 * @param title The text of the title.

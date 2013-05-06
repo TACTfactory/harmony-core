@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.util.Log;
 /**
  * ProviderAdapterBase<T extends Serializable>.
+ * @param <T> must extends Serializable
  */
 public abstract class ProviderAdapterBase<T extends Serializable> {
 	public static final String TAG = "ProviderAdapterBase<T>";
@@ -21,6 +22,7 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 	 * Insert Bundle into the database.
 	 * @param arg Argument
 	 * @param extras The Bundle to insert
+	 * @return The updated Bundle containing the new id
 	 */
 	protected Bundle insert(String arg, Bundle extras) {
 		long newId = -1;
@@ -45,6 +47,7 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 	 * Delete Bundle into the database.
 	 * @param arg Argument
 	 * @param extras The Bundle to delete
+	 * @return The updated Bundle containing how many updated fields
 	 */
 	public Bundle delete(String arg, Bundle extras) {
 		int adaptResult = 0;
@@ -69,7 +72,8 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 	/**
 	 * Update Bundle into the database.
 	 * @param arg Argument
-	 * @param extras The Bundle to update
+	 * @param extras The Bundle to update.
+	 * @return The updated Bundle containing how many updated fields
 	 */
 	public Bundle update(String arg, Bundle extras) {
 		int adaptResult = 0;
@@ -95,6 +99,7 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 	 * QueryAll.
 	 * @param arg Argument
 	 * @param extras Bundle
+	 * @return The updated Bundle containing a list a of items
 	 */
 	public Bundle queryAll(String arg, Bundle extras) {
 		CriteriasBase crits = null;

@@ -343,7 +343,6 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 				.METHOD_INSERT_${entity.name?upper_case})) {
 			result = this.${entity.name?uncap_first}Provider.insert(arg, extras);
 		}
-			
 		else if (method.equals(${entity.name?cap_first}ProviderAdapter
 				.METHOD_DELETE_${entity.name?upper_case})) {
 			result = this.${entity.name?uncap_first}Provider.delete(arg, extras);

@@ -51,7 +51,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	
 	/**
 	 * Adds a criteria of form : (key TYPE value).
-	 * @param c The criteria to add
+	 * @param crit The criteria to add
 	 * @return True if the criterias is valid and doesn't exists yet
 	 */
 	public boolean add(final Criteria crit) {

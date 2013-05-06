@@ -706,8 +706,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	}
 	
 	/**
-	 * Deletes the given entity
-	 * @param The ID of the entity to delete
+	 * Deletes the given entity.
+	 * @param id The ID of the entity to delete
 	 * @return the number of token deleted
 	 */
 	public int delete(final int id) {
