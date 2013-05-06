@@ -10,7 +10,8 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
  * application startup with long-running database upgrades.
  * @see android.database.sqlite.SQLiteOpenHelper
  */
-public class ${project_name?cap_first}SQLiteOpenHelper extends ${project_name?cap_first}SQLiteOpenHelperBase {
+public class ${project_name?cap_first}SQLiteOpenHelper 
+					extends ${project_name?cap_first}SQLiteOpenHelperBase {
 
 	/**
 	 * Constructor.

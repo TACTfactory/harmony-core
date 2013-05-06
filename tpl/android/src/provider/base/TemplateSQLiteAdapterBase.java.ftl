@@ -177,7 +177,8 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	 * @param item ${curr.name} entity object
 	 * @return ContentValues object
 	 */
-	public ContentValues itemToContentValues(final ${curr.name} item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {		
+	public ContentValues itemToContentValues(final ${curr.name} item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 
+				int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {		
 		final ContentValues result = new ContentValues();		
 	<#list curr.fields as field>
 		<#if (!field.internal)>
@@ -282,9 +283,11 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	 * @param id Identify of ${curr.name}
 	 * @return ${curr.name} entity
 	 */
-	public ${curr.name} getByID(<#list curr.ids as id>final ${m.javaType(id.type)} ${id.name}<#if (id_has_next)>,</#if></#list>) {
+	public ${curr.name} getByID(<#list curr.ids as id>final ${m.javaType(id.type)} ${id.name}<#if (id_has_next)>
+							,</#if></#list>) {
 	<#if (curr.ids?size>0)>
-		final Cursor cursor = this.getSingleCursor(<#list curr.ids as id>${id.name}<#if (id_has_next)>,</#if></#list>);
+		final Cursor cursor = this.getSingleCursor(<#list curr.ids as id>${id.name}<#if (id_has_next)>,
+										</#if></#list>);
 		if (cursor.getCount() != 0) {
 			cursor.moveToFirst();
 		}
@@ -507,15 +510,18 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	 * @param item The ${curr.name} entity to persist
 	 * @return 
 	 */
-	public int updateWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(${curr.name} item, int ${relation.relation.targetEntity?lower_case}_id) {
+	public int updateWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(
+					${curr.name} item, int ${relation.relation.targetEntity?lower_case}_id) {
 			<#if (curr.ids?size>0)>
 		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Update DB(" + TABLE_NAME + ")");
 
 		ContentValues values = 
-				this.itemToContentValues(item<#list curr.relations as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>, ${relation.relation.targetEntity?lower_case}_id<#else>, 0</#if></#if></#list>);	
+				this.itemToContentValues(item<#list curr.relations as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>, 
+							${relation.relation.targetEntity?lower_case}_id<#else>, 0</#if></#if></#list>);	
 		String whereClause = 
-				<#list curr.ids as id> ${alias(id.name)} + "=? <#if id_has_next>AND </#if>"</#list>;
+				<#list curr.ids as id> ${alias(id.name)} 
+				+ "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = 
 				new String[] {<#list curr.ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>,
 				</#if></#list>};
@@ -536,7 +542,8 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	 * @param item The ${curr.name} entity to persist 
 	 * @return 1 if everything went well, 0 otherwise
 	 */
-	public int insertOrUpdateWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(${curr.name} item, int ${relation.relation.targetEntity?lower_case}_id) {
+	public int insertOrUpdateWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(
+			${curr.name} item, int ${relation.relation.targetEntity?lower_case}_id) {
 		int result = 0;
 		<#assign id = curr.ids[0] />
 		if (this.getByID(item.get${id.name?cap_first}()) != null) {
@@ -561,7 +568,8 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	 * @param item The ${curr.name} entity to persist 
 	 * @return Id of the ${curr.name} entity
 	 */
-	public long insertWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(${curr.name} item, int ${relation.relation.targetEntity?lower_case}_id) {
+	public long insertWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(
+			${curr.name} item, int ${relation.relation.targetEntity?lower_case}_id) {
 		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
@@ -612,7 +620,8 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	 * @param id Identify the ${curr.name} entity to delete
 	 * @return
 	 */
-	public int remove(<#list curr.ids as id>final ${m.javaType(id.type)} ${id.name}<#if (id_has_next)>,</#if></#list>) {
+	public int remove(<#list curr.ids as id>final ${m.javaType(id.type)} ${id.name}<#if (id_has_next)>
+			,</#if></#list>) {
 	<#if (curr.ids?size>0)>
 		if (${project_name?cap_first}Application.DEBUG) {
 			Log.d(TAG, "Delete DB(" + TABLE_NAME 
@@ -644,7 +653,8 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	/**
 	 *  Internal Cursor.
 	 */
-	protected Cursor getSingleCursor(<#list curr.ids as id>final ${m.javaType(id.type)} ${id.name}<#if id_has_next>,</#if></#list>) {
+	protected Cursor getSingleCursor(<#list curr.ids as id>final ${m.javaType(id.type)} ${id.name}<#if id_has_next>
+										,</#if></#list>) {
 	<#if (curr.ids?size>0)>
 		if (${project_name?cap_first}Application.DEBUG) {
 			Log.d(TAG, "Get entities id : " + <#list curr.ids as id>${id.name}<#if id_has_next> 
@@ -663,7 +673,8 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 				null, 
 				null);
 	<#else>
-		throw new UnsupportedOperationException("Method not implemented yet.");
+		throw new UnsupportedOperationException(
+				"Method not implemented yet.");
 	</#if>
 	}
 	
@@ -676,7 +687,8 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	 */
 	public Cursor query(final int id) {
 		<#if curr.ids?size==0>
-			throw new UnsupportedOperationException("Method not implemented yet.");
+			throw new UnsupportedOperationException(
+					"Method not implemented yet.");
 		<#else>
 		return this.query(
 				COLS,
@@ -695,7 +707,8 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	 */
 	public int delete(final int id) {
 		<#if curr.ids?size==0>
-			throw new UnsupportedOperationException("Method not implemented yet.");
+			throw new UnsupportedOperationException(
+					"Method not implemented yet.");
 		<#else>
 		return this.delete(
 				COL_ID + " = ?",
@@ -721,7 +734,8 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	 * param item The ${curr.name} entity to persist 
 	 * return Id of the ${curr.name} entity
 	 */
-	public long insert(int ${curr.relations[0].name?lower_case}, int ${curr.relations[1].name?lower_case}) {
+	public long insert(int ${curr.relations[0].name?lower_case}, 
+						int ${curr.relations[1].name?lower_case}) {
 		if (${project_name?cap_first}Application.DEBUG)
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		
@@ -738,7 +752,8 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	}
 	
 	<#--/** Find & read ${curr.name} by ${curr.relations[0].name}.*/
-	public ArrayList<${curr.relations[0].relation.targetEntity}> getBy${curr.relations[1].relation.targetEntity?cap_first}(int ${curr.relations[1].name?lower_case}) {
+	public ArrayList<${curr.relations[0].relation.targetEntity}> getBy${curr.relations[1].relation.targetEntity?cap_first}(
+			int ${curr.relations[1].name?lower_case}) {
 		Cursor cursor = this.getCursor(${alias(curr.relations[1].name)} 
 					+ "=?", new String[]{${curr.relations[1].name?lower_case}+ ""});
 		final ArrayList<${curr.name}> result = this.cursorToItems(cursor);
@@ -747,7 +762,8 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 		return result;
 	}-->
 	/** Find & read ${curr.name} by ${curr.relations[0].name}.*/ 
-	public ArrayList<${curr.relations[0].relation.targetEntity}> getBy${curr.relations[1].relation.targetEntity}(int ${curr.relations[1].name}) {
+	public ArrayList<${curr.relations[0].relation.targetEntity}> getBy${curr.relations[1].relation.targetEntity}(
+			int ${curr.relations[1].name}) {
 		String whereClause = ${alias(curr.relations[1].name)} + "=?";
 		String whereArg = String.valueOf(${curr.relations[1].name});
 		Cursor cursor = this.query(this.getCols(), 
@@ -763,13 +779,16 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 				new ArrayList<${curr.relations[0].relation.targetEntity}>();
 
 		while (cursor.moveToNext()) {
-			ret.add(adapt.getByID(cursor.getInt(cursor.getColumnIndexOrThrow(${alias(curr.relations[0].name)}))));
+			ret.add(adapt.getByID(cursor.getInt(
+					cursor.getColumnIndexOrThrow(
+							${alias(curr.relations[0].name)}))));
 		}
 		return ret;
 	}
 
 	/** Find & read ${curr.name} by ${curr.relations[0].name}v*/
-	public ArrayList<${curr.relations[1].relation.targetEntity}> getBy${curr.relations[0].relation.targetEntity}(int ${curr.relations[0].name}) {
+	public ArrayList<${curr.relations[1].relation.targetEntity}> getBy${curr.relations[0].relation.targetEntity}(
+			int ${curr.relations[0].name}) {
 		String whereClause = ${alias(curr.relations[0].name)}+ "=?";
 		String whereArg = String.valueOf(${curr.relations[0].name});
 		Cursor cursor = this.query(this.getCols(), 

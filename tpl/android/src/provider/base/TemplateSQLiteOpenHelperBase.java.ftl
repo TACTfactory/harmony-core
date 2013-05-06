@@ -99,7 +99,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	 * Constructor.
 	 */
 	public ${project_name?cap_first}SQLiteOpenHelperBase(final Context context, 
-			final String name, final CursorFactory factory, final int version) {
+		   final String name, final CursorFactory factory, final int version) {
 		super(context, name, factory, version);
 		this.context = context;
 		DB_NAME = name;
@@ -154,7 +154,9 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 
 		<#list entities?values as entity>
 			<#if (entity.fields?? && (entity.fields?size>0))>
-		db.delete(${entity.name?cap_first}SQLiteAdapter.TABLE_NAME, null, null);	
+		db.delete(${entity.name?cap_first}SQLiteAdapter.TABLE_NAME, 
+				null, 
+				null);	
 			</#if>
 		</#list>
 	}
@@ -170,7 +172,8 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		//if (SqliteAdapter.BASE_VERSION < 0) {
 		if (${project_name?cap_first}Application.DEBUG) {
 			Log.d(TAG, "Upgrading database from version " + oldVersion 
-					   + " to " + newVersion + ", which will destroy all old data");
+					   + " to " + newVersion 
+					   + ", which will destroy all old data");
 		}
 		
 		final String command = "DROP TABLE IF EXISTS "; 
@@ -245,8 +248,8 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		SQLiteDatabase checkDB = null;
 		try {
 			final String myPath = DB_PATH + DB_NAME;
-			// NOTE : the system throw error message : "Database is locked" when
-			// the Database is not found (incorrect path)
+			// NOTE : the system throw error message : "Database is locked" 
+			// when the Database is not found (incorrect path)
 			checkDB = SQLiteDatabase.openDatabase(myPath, null,
 					SQLiteDatabase.OPEN_READONLY);
 			result = true;

@@ -20,7 +20,8 @@ import ${project_namespace}.entity.${entity.name?cap_first};
  * DataManager.
  */
 public class DataManager {
-	protected Map<String, SQLiteAdapterBase<?>> adapters = new HashMap<String, SQLiteAdapterBase<?>>();
+	protected Map<String, SQLiteAdapterBase<?>> adapters = 
+			new HashMap<String, SQLiteAdapterBase<?>>();
 	protected boolean isSuccessfull = true;
 	protected boolean isInInternalTransaction = false;
 	protected SQLiteDatabase db;
@@ -32,8 +33,9 @@ public class DataManager {
 		this.db = db;
 		<#list entities?values as entity>
 			<#if ((entity.fields?size>0) && !(entity.internal?? && entity.internal=='true'))>
-		this.adapters.put("${entity.name}", new ${entity.name?cap_first}SQLiteAdapter(ctx));
-		this.adapters.get("${entity.name}").open(this.db);		
+		this.adapters.put("${entity.name}", 
+				new ${entity.name?cap_first}SQLiteAdapter(ctx));
+		this.adapters.get("${entity.name}").open(this.db);
 			</#if>
 		</#list>
 	}
@@ -53,7 +55,8 @@ public class DataManager {
     	<#list entities?values as entity>
     		<#if ((entity.fields?size>0) && (entity.ids?size>0) && !(entity.internal?? && entity.internal=='true'))>
     	if (nameClass.equals("${entity.name}")) {
-        	ret = ((${entity.name}SQLiteAdapter) this.adapters.get(nameClass)).query(id);
+        	ret = ((${entity.name}SQLiteAdapter) 
+        							   this.adapters.get(nameClass)).query(id);
     	}
     		</#if>
     	</#list>
@@ -64,10 +67,12 @@ public class DataManager {
     /**
      * Tells the ObjectManager to make an instance managed and persistent.
      *
-     * The object will be entered into the database as a result of the flush operation.
+     * The object will be entered into the database as a result of the <br />
+     * flush operation.
      *
-     * NOTE: The persist operation always considers objects that are not yet known to
-     * this ObjectManager as NEW. Do not pass detached objects to the persist operation.
+     * NOTE: The persist operation always considers objects that are not<br />
+     * yet known to this ObjectManager as NEW. Do not pass detached <br />
+     * objects to the persist operation.
      *
      * @param object $object The instance to make managed and persistent.
      */
@@ -92,7 +97,8 @@ public class DataManager {
     /**
      * Removes an object instance.
      *
-     * A removed object will be removed from the database as a result of the flush operation.
+     * A removed object will be removed from the database as a result of <br />
+     * the flush operation.
      *
      * @param object $object The object instance to remove.
      */
@@ -102,7 +108,9 @@ public class DataManager {
     	<#list entities?values as entity>
     		<#if ((entity.fields?size>0 && entity.ids?size>0) && !(entity.internal?? && entity.internal=='true'))>
     		if (object instanceof ${entity.name}) {
-    			((${entity.name}SQLiteAdapter) this.adapters.get("${entity.name}")).remove(((${entity.name}) object).getId());
+    			((${entity.name}SQLiteAdapter) 
+    					this.adapters.get("${entity.name}"))
+    						.remove(((${entity.name}) object).getId());
     		}
     		</#if>
     	</#list>
@@ -156,9 +164,9 @@ public class DataManager {
 //    }
 
     /**
-     * Flushes all changes to objects that have been queued up to now to the database.
-     * This effectively synchronizes the in-memory state of managed objects with the
-     * database.
+     * Flushes all changes to objects that have been queued up to now to <br />
+     * the database. This effectively synchronizes the in-memory state of<br />
+     * managed objects with the database.
      */
     public void flush() {
     	if (this.isInInternalTransaction) {
@@ -196,8 +204,8 @@ public class DataManager {
     /**
      * Returns the ClassMetadata descriptor for a class.
      *
-     * The class name must be the fully-qualified class name without a leading backslash
-     * (as it is returned by get_class($obj)).
+     * The class name must be the fully-qualified class name without a <br />
+     * leading backslash (as it is returned by get_class($obj)).
      *
      * @param className $className
      * @return \Doctrine\Common\Persistence\Mapping\ClassMetadata

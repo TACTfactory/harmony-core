@@ -25,7 +25,8 @@ public abstract class ${project_name?cap_first}MenuBase {
 	public static final int SHARE			= 1;
 	public static final int SEARCH			= 2;
 	
-	protected SparseArray<MenuWrapperBase> menus = new SparseArray<MenuWrapperBase>();
+	protected SparseArray<MenuWrapperBase> menus = 
+					new SparseArray<MenuWrapperBase>();
 	
 	protected Context context;
 	protected Fragment fragment;
@@ -36,16 +37,19 @@ public abstract class ${project_name?cap_first}MenuBase {
 	/**
 	 * Constructor.
 	 */
-	protected ${project_name?cap_first}MenuBase(final Context context) throws Exception {
+	protected ${project_name?cap_first}MenuBase(final Context context) 
+														throws Exception {
 		this(context, null);
 	}
 	
 	/**
 	 * Constructor.
 	 */
-	protected ${project_name?cap_first}MenuBase(final Context context, final Fragment fragment) throws Exception {
+	protected ${project_name?cap_first}MenuBase(final Context context, 
+								final Fragment fragment) throws Exception {
 		if (context == null) {
-			throw new Exception("Unable to Initialise Menu Helper with no context");
+			throw new Exception(
+					"Unable to Initialise Menu Helper with no context");
 		}
 		
 		this.fragment	= fragment;
@@ -85,7 +89,8 @@ public abstract class ${project_name?cap_first}MenuBase {
 		}
 		
 		for (int i = 0; i < this.menus.size(); i++) {
-			this.menus.valueAt(i).updateMenu(menu, currentClass, currentFragment, this.context);
+			this.menus.valueAt(i).updateMenu(menu, currentClass, currentFragment,
+					this.context);
 		}
 	}
 	
@@ -100,14 +105,16 @@ public abstract class ${project_name?cap_first}MenuBase {
 	
 	/** Call intent associate to menu item selected.*/
 	private boolean dispatch(final MenuItem item) {
-		return this.menus.get(item.getItemId()).dispatch(item, this.context, this.fragment);
+		return this.menus.get(item.getItemId()).dispatch(item, this.context, 
+				this.fragment);
 	}
 	
 	/**
 	 * Called when an activity you launched exits.
 	 * @see android.app.Activity#onActivityResult
 	 */
-	public void onActivityResult(int requestCode, int resultCode, Intent data, Context context) {
+	public void onActivityResult(int requestCode, int resultCode, Intent data,
+															 Context context) {
 		this.onActivityResult(requestCode, resultCode, data, context, null);
 	}
 	
@@ -115,7 +122,8 @@ public abstract class ${project_name?cap_first}MenuBase {
 	 * Called when an activity you launched exits.
 	 * @see android.app.Activity#onActivityResult
 	 */
-	public void onActivityResult(int requestCode, int resultCode, Intent data, Context context, Fragment fragment) {
+	public void onActivityResult(int requestCode, int resultCode, Intent data, 
+										  Context context, Fragment fragment) {
 		if (context != null) {
 			this.context = context;
 		}
@@ -131,9 +139,14 @@ public abstract class ${project_name?cap_first}MenuBase {
 	 * Called when an activity you launched exits.
 	 * @see android.app.Activity#onActivityResult
 	 */
-	private void onActivityResult(int requestCode, int resultCode, Intent data) {
+	private void onActivityResult(int requestCode, int resultCode,
+															     Intent data) {
 		for (int i = 0; i < this.menus.size(); i++) {
-			this.menus.valueAt(i).onActivityResult(requestCode, resultCode, data, this.context, this.fragment);
+			this.menus.valueAt(i).onActivityResult(requestCode, 
+					resultCode, 
+					data, 
+					this.context, 
+					this.fragment);
 		}
 	}
 }

@@ -22,7 +22,8 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 		
 	/**
 	 * Convert the criteria to a SQLite String.
-	 * @return The SQLite String representation of the criteria. ex : "(price > 15.0)" 
+	 * @return The SQLite String representation of the criteria. ex : <br />
+	 * "(price > 15.0)" 
 	 */
 	public String toSQLiteString() {
 		StringBuilder ret = new StringBuilder('(');
