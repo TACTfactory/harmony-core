@@ -163,7 +163,7 @@ public abstract class SQLiteAdapterBase<T> {
 	 */
 	public abstract String getTableName();
 	/**
-	 * Get the table's columns
+	 * Get the table's columns.
 	 */
 	public abstract String[] getCols();
 	

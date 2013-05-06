@@ -11,12 +11,12 @@ import android.util.Log;
 
 import ${project_namespace}.${project_name?cap_first}Application;
 
-/** Utils for date manipulation */
+/** Utils for date manipulation. */
 public class DateUtils extends android.text.format.DateUtils{
 	private static final String TAG = "DateUtils";
 	
 	/**
-	 * Convert date to Android string date format
+	 * Convert date to Android string date format.
 	 * @param date to convert
 	 * @return string date with Android date format
 	 */
@@ -26,7 +26,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	}
 	
 	/**
-	 * Convert date to Android string time format
+	 * Convert date to Android string time format.
 	 * @param date to convert
 	 * @return string time with Android time format
 	 */
@@ -36,7 +36,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	}
 	
 	/**
-	 * Convert datetime to Android string date + time format
+	 * Convert datetime to Android string date + time format.
 	 * @param date to convert
 	 * @return string datetime with Android date + time format
 	 */
@@ -47,7 +47,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	}
 	
 	/**
-	 * Convert Android String date format to datetime
+	 * Convert Android String date format to datetime.
 	 * @param date Android string date format to convert
 	 * @return datetime
 	 */
@@ -57,7 +57,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	}
 	
 	/**
-	 * Convert Android String time format to datetime
+	 * Convert Android String time format to datetime.
 	 * @param time Android string time format to convert
 	 * @return datetime
 	 */
@@ -67,7 +67,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	}
 	
 	/**
-	 * Convert Android String date and time format to datetime
+	 * Convert Android String date and time format to datetime.
 	 * @param date Android string date format to convert
 	 * @param time Android string time format to convert
 	 * @return datetime
@@ -86,7 +86,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	}
 	
 	/**
-	 * Convert String date with dateformat to datetime
+	 * Convert String date with dateformat to datetime.
 	 * @param dateFormat date format of datetime
 	 * @param dateTime string datetime to convert
 	 * @return datetime
@@ -105,7 +105,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	}
 	
 	/**
-	 * Convert ISO8601 string date to datetime
+	 * Convert ISO8601 string date to datetime.
 	 * @param dateTime ISO8601 string date
 	 * @return datetime
 	 */
@@ -123,7 +123,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	}
 	
 	/**
-	 * Convert ISO8601 string localdate to datetime
+	 * Convert ISO8601 string localdate to datetime.
 	 * @param dateTime ISO8601 string localdate
 	 * @return datetime
 	 */
@@ -141,7 +141,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	}
 	
 	/**
-	 * Convert a string to a datetime thanks to the given pattern
+	 * Convert a string to a datetime thanks to the given pattern.
 	 * @param pattern The datetime pattern (ex. "dd-mm-yyyy" or "yyyy-MM-dd 
 	 * hh:mm")
 	 * @param dateTime date string
@@ -161,7 +161,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	}
 	
 	/**
-	 * Convert a string to a locale datetime thanks to the given pattern
+	 * Convert a string to a locale datetime thanks to the given pattern.
 	 * @param pattern The datetime pattern (ex. "dd-mm-yyyy" or "yyyy-MM-dd 
 	 * hh:mm")
 	 * @param dateTime date string

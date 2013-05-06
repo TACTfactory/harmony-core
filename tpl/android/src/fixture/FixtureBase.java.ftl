@@ -115,7 +115,7 @@ public abstract class FixtureBase<T> {
 	public abstract void load(DataManager manager);
 	
 	/**
-	 * Return the fixture with the given ID
+	 * Return the fixture with the given ID.
 	 * @param id The fixture id as String
 	 * @return fixtures with the given ID
 	 */

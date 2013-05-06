@@ -294,7 +294,7 @@ public class ${curr.name?cap_first}DataLoader
 		return ${curr.name?uncap_first};
 	}
 	/**
-	 * Loads ${curr.name?cap_first}s into the DataManager
+	 * Loads ${curr.name?cap_first}s into the DataManager.
 	 * @param manager The DataManager
 	 */
 	@Override

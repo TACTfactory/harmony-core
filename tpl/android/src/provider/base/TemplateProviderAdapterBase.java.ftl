@@ -208,7 +208,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	}
 	
 	/**
-	 * Get the item Key
+	 * Get the item Key.
 	 * @return the item key
 	 */
 	@Override

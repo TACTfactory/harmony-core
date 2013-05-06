@@ -31,7 +31,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	protected static UriMatcher uriMatcher = 
 			new UriMatcher(UriMatcher.NO_MATCH);
 	
-	/** Adapter to SQLite
+	/** Adapter to SQLite.
 	 * 
 	 */
 	<#list entities?values as entity>
@@ -370,7 +370,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 
 	/**
-	 * Get URI Matcher
+	 * Get URI Matcher.
 	 * @return the uriMatcher
 	 */
 	public static UriMatcher getUriMatcher() {

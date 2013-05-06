@@ -233,7 +233,7 @@ public class DataManager {
     }
     
     /**
-     * Called before any transaction to open the DB
+     * Called before any transaction to open the DB.
      */
     private void beginTransaction() {    	
     	// If we are not already in a transaction, begin it
