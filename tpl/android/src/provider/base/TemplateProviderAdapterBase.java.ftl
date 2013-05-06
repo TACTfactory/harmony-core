@@ -131,7 +131,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				break;
 			default:
 				result = null;
-				break
+				break;
 		}
 		return result;
 	}
