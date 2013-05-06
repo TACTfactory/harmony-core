@@ -37,7 +37,7 @@ public class TestDBGenerator extends BaseGenerator {
 	public final void generateAll() {
 		ConsoleUtils.display(">> Generate Repository test...");
 		
-		this.initTestAndroid();
+		//this.initTestAndroid();
 	
 		for (final ClassMetadata cm 
 				: this.getAppMetas().getEntities().values()) {
