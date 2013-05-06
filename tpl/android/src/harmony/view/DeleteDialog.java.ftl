@@ -10,7 +10,8 @@ import android.widget.TextView;
 
 import ${project_namespace}.R;
 
-public class DeleteDialog extends AlertDialog implements DialogInterface.OnClickListener {
+public class DeleteDialog extends AlertDialog 
+									implements DialogInterface.OnClickListener {
 	private DeletableList fragment;
 	private int id;
 	
@@ -30,10 +31,13 @@ public class DeleteDialog extends AlertDialog implements DialogInterface.OnClick
 		this.setIcon(0);
 		
 		LayoutInflater inflater = getLayoutInflater();
-		View alertDialogView = inflater.inflate(R.layout.dialog_delete_confirmation, null);	
+		View alertDialogView = 
+					inflater.inflate(R.layout.dialog_delete_confirmation, null);	
 		
-		((TextView) alertDialogView.findViewById(R.id.dialog_delete_confirmation_text)).setText(
-				this.getContext().getString(R.string.dialog_delete_message));
+		((TextView) alertDialogView.findViewById(
+								 R.id.dialog_delete_confirmation_text)).setText(
+				   this.getContext().getString(R.string.dialog_delete_message));
+		
 		this.setView(alertDialogView);
 		
 		this.setPositiveButton(android.R.string.ok, this);
@@ -42,20 +46,24 @@ public class DeleteDialog extends AlertDialog implements DialogInterface.OnClick
 		super.onCreate(savedInstanceState);
 	}
 
-	/** Set a listener to be invoked when the positive button of the dialog is pressed. 
+	/** Set a listener to be invoked when the positive button of the dialog is 
+	 * pressed. 
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
-	public void setPositiveButton(int resId, DialogInterface.OnClickListener listener){
+	public void setPositiveButton(int resId, 
+									  DialogInterface.OnClickListener listener){
 		this.setButton(AlertDialog.BUTTON_POSITIVE,
 				this.getContext().getString(resId), 
 				listener);
 	}
 	
-	/** Set a listener to be invoked when the negative button of the dialog is pressed. 
+	/** Set a listener to be invoked when the negative button of the dialog is
+	 * pressed. 
 	 * @param text The text to display in the negative button
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
-	public void setNegativeButton(int resId, DialogInterface.OnClickListener listener){
+	public void setNegativeButton(int resId, 
+									  DialogInterface.OnClickListener listener){
 		this.setButton(AlertDialog.BUTTON_NEGATIVE, 
 				this.getContext().getString(resId), 
 				listener);

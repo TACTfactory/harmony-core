@@ -49,21 +49,28 @@ public abstract class FixtureBase<T> {
 		// XML Loader
 		try {
 			//String currentDir = new File(".").getAbsolutePath();
-
-			SAXBuilder builder = new SAXBuilder();		// Make engine
+			
+			// Make engine
+			SAXBuilder builder = new SAXBuilder();
 			InputStream xmlStream = this.getXml(
 					DataLoader.getPathToFixtures(mode) 
 					+ this.getFixtureFileName());
 			if (xmlStream != null) {
-				Document doc = (Document) builder.build(xmlStream); 	// Load XML File
-				final Element rootNode = doc.getRootElement(); 			// Load Root element
-				//final Namespace ns = rootNode.getNamespace("android");	// Load Name space (required for manipulate attributes)
+				// Load XML File
+				Document doc = (Document) builder.build(xmlStream);
+				// Load Root element
+				final Element rootNode = doc.getRootElement();
+				// Load Name space (required for manipulate attributes)
+				//final Namespace ns = rootNode.getNamespace("android");
 
 				// Find Application Node
-				List<Element> entities = rootNode.getChildren(this.getFixtureFileName()); 	// Find a element
+			 	// Find an element
+				List<Element> entities = rootNode.getChildren(
+											this.getFixtureFileName());
 				if (entities != null) {
 					for (Element element : entities) {
-						this.items.put((String)element.getAttributeValue("id"), this.extractItem(element));
+						this.items.put((String)element.getAttributeValue("id"), 
+								this.extractItem(element));
 					}
 				}
 			}
@@ -84,11 +91,14 @@ public abstract class FixtureBase<T> {
 		if (inputStream != null) {
 			final Map<?, ?> map = (Map<?, ?>) yaml.load(inputStream);
 			if (map != null && map.containsKey(this.getFixtureFileName())) {
-				final Map<?, ?> listEntities = (Map<?, ?>) map.get(this.getFixtureFileName());
+				final Map<?, ?> listEntities = (Map<?, ?>) map.get(
+						this.getFixtureFileName());
 				if (listEntities != null) {
 					for (final Object name : listEntities.keySet()) {
-						final Map<?, ?> currEntity = (Map<?, ?>) listEntities.get(name);
-						this.items.put((String) name, this.extractItem(currEntity));
+						final Map<?, ?> currEntity = 
+								(Map<?, ?>) listEntities.get(name);
+						this.items.put((String) name, 
+								this.extractItem(currEntity));
 					}
 				}
 			}

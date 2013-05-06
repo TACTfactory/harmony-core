@@ -10,7 +10,8 @@ public class Criteria implements Serializable, ICriteria {
 
 	/**
 	 * Convert the criteria to a SQLite String.
-	 * @return The SQLite String representation of the criteria. ex : "(price > 15.0)" 
+	 * @return The SQLite String representation of the criteria. ex : <br />
+	 * "(price > 15.0)" 
 	 */
 	@Override
 	public String toSQLiteString() {

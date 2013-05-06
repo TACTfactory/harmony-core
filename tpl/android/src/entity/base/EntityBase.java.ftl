@@ -33,5 +33,7 @@ public class EntityBase implements Cloneable, Serializable {
 	public boolean isSync_dtag(){ return this.sync_dtag;}
 	public void setSync_dtag(boolean dtag){ this.sync_dtag = dtag;}
 	public DateTime getSync_uDate(){ return this.sync_uDate;}
-	public void setSync_uDate(DateTime sync_uDate){ this.sync_uDate = sync_uDate;}
+	public void setSync_uDate(DateTime sync_uDate){ 
+		this.sync_uDate = sync_uDate;
+	}
 }

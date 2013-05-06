@@ -23,7 +23,8 @@ public class ${curr.name}EditActivity extends HarmonyFragmentActivity {
         this.setContentView(R.layout.activity_${curr.name?lower_case}_edit);
         
         // Google Analytics
-        //GoogleAnalyticsSessionManager.getInstance(getApplication()).incrementActivityCount();
+        //GoogleAnalyticsSessionManager.getInstance(getApplication())
+        //	.incrementActivityCount();
 	}
 	
 	/**

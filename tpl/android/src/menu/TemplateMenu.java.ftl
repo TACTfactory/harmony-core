@@ -6,7 +6,8 @@ import android.support.v4.app.Fragment;
 /**
  * ${project_name?cap_first}Menu.
  */
-public class ${project_name?cap_first}Menu extends ${project_name?cap_first}MenuBase {
+public class ${project_name?cap_first}Menu 
+				extends ${project_name?cap_first}MenuBase {
 
 	private static volatile ${project_name?cap_first}Menu singleton;
 	
@@ -20,17 +21,20 @@ public class ${project_name?cap_first}Menu extends ${project_name?cap_first}Menu
 	/**
 	 * Constructor.
 	 */
-	public ${project_name?cap_first}Menu(final Context context, final Fragment fragment) throws Exception {
+	public ${project_name?cap_first}Menu(final Context context, 
+						final Fragment fragment) throws Exception {
 		super(context, fragment);
 	}
 
 	/** Get unique instance. */
-	public static final synchronized ${project_name?cap_first}Menu getInstance(final Context context) throws Exception {
+	public static final synchronized ${project_name?cap_first}Menu getInstance(
+						final Context context) throws Exception {
 		return getInstance(context, null);
 	}
 	
 	/** Get unique instance. */
-	public static final synchronized ${project_name?cap_first}Menu getInstance(final Context context, final Fragment fragment) throws Exception {
+	public static final synchronized ${project_name?cap_first}Menu getInstance(
+			final Context context, final Fragment fragment) throws Exception {
 		if (singleton == null) {
 			singleton = new ${project_name?cap_first}Menu(context, fragment);
 		}  else {

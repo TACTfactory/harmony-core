@@ -5,7 +5,8 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class ${project_name?cap_first}Preferences extends ${project_name?cap_first}PreferencesBase {
+public class ${project_name?cap_first}Preferences 
+						extends ${project_name?cap_first}PreferencesBase {
 	/** Constants
 	 *
 	 */

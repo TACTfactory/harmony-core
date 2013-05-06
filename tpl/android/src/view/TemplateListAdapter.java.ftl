@@ -43,10 +43,12 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 	private final LayoutInflater mInflater;
 	private final ${curr.name?cap_first}ListFragment fragment;
 
-	public ${curr.name}ListAdapter(Context context, ${curr.name?cap_first}ListFragment fragment) {
+	public ${curr.name}ListAdapter(Context context, 
+			${curr.name?cap_first}ListFragment fragment) {
 		super(context, R.layout.row_${curr.name?lower_case});
 
-		this.mInflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+		this.mInflater = (LayoutInflater) context.getSystemService(
+									Context.LAYOUT_INFLATER_SERVICE);
 		this.fragment = fragment;
 	}
 
@@ -65,34 +67,47 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 	}
 
 	/** (non-Javadoc).
-	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
+	 * @see android.widget.ArrayAdapter#getView(int, android.view.View,
+	 *  android.view.ViewGroup)
 	 */
 	@Override 
-	public View getView(int position, View convertView, ViewGroup parent) {
+	public View getView(int position, 
+			View convertView, ViewGroup parent) {
 		ViewHolder holder;
 
 		if (convertView == null) {
-			convertView = this.mInflater.inflate(R.layout.row_${curr.name?lower_case}, parent, false);
+			convertView = this.mInflater.inflate(
+					R.layout.row_${curr.name?lower_case}, 
+					parent, 
+					false);
 
 			holder = new ViewHolder();
 			<#list curr.fields as field>
 				<#if (!field.internal && !field.hidden)>
 					<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>  
 						<#if (field.type=="boolean")>
-			holder.${field.name}View = (CheckBox) convertView.findViewById(R.id.row_${curr.name?lower_case}_${field.name?lower_case});
+			holder.${field.name}View = 
+				(CheckBox) convertView.findViewById(
+						R.id.row_${curr.name?lower_case}_${field.name?lower_case});
 			holder.${field.name}View.setEnabled(false);
 						<#else>
-			holder.${field.name}View = (TextView) convertView.findViewById(R.id.row_${curr.name?lower_case}_${field.name?lower_case});			
+			holder.${field.name}View = 
+				(TextView) convertView.findViewById(
+						R.id.row_${curr.name?lower_case}_${field.name?lower_case});			
 						</#if>
 					</#if>
 				</#if>
 			</#list>
 
 			// Set onClickListeners for edit and delete buttons
-			holder.editButton = (Button) convertView.findViewById(R.id.row_${curr.name?lower_case}_edit_btn);
+			holder.editButton = 
+				(Button) convertView.findViewById(
+						R.id.row_${curr.name?lower_case}_edit_btn);
 			holder.editButton.setOnClickListener(this);
 			holder.editButton.setTag(position);
-			holder.deleteButton = (Button) convertView.findViewById(R.id.row_${curr.name?lower_case}_delete_btn);
+			holder.deleteButton = 
+				(Button) convertView.findViewById(
+						R.id.row_${curr.name?lower_case}_delete_btn);
 			holder.deleteButton.setOnClickListener(this);
 			holder.deleteButton.setTag(position);
 			
@@ -141,7 +156,8 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 			${m.setAdapterLoader(field)}
 						</#if>
 					<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
-			this.${field.name}View.setText(String.valueOf(model.get${field.name?cap_first}().getId()));	
+			this.${field.name}View.setText(
+					String.valueOf(model.get${field.name?cap_first}().getId()));	
 					</#if>
 				</#if>
 			</#list>

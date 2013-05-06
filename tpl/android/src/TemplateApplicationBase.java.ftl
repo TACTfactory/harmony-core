@@ -27,11 +27,14 @@ import org.joda.time.DateTime;
 /** 
  * Common all life data/service.
  * 
- * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
- * You should edit ${project_name?cap_first}Application class instead of this one or you will lose all your modifications.</i></b>
+ * <b><i>This class will be overwrited whenever you regenerate the project with 
+ * Harmony. 
+ * You should edit ${project_name?cap_first}Application class instead of this 
+ * one or you will lose all your modifications.</i></b>
  * 
  */
-public abstract class ${project_name?cap_first}ApplicationBase extends Application {
+public abstract class ${project_name?cap_first}ApplicationBase
+														   extends Application {
 	private static final String TAG = "${project_name?cap_first}";
 	private static volatile ${project_name?cap_first}ApplicationBase singleton;
 	private static DateFormat df;
@@ -52,7 +55,8 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		if (!preferences.contains("lastSyncDate")) {
 			// TODO: First Sync
 			
-			${project_name?cap_first}ApplicationBase.setLastSyncDate(new DateTime().minusWeeks(1));
+			${project_name?cap_first}ApplicationBase.setLastSyncDate(
+												  new DateTime().minusWeeks(1));
 		}
 		</#if>
 		singleton = this;
@@ -74,7 +78,8 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	 * @return A String containing the UDID
 	 */
 	public static String getUDID(final Context context) {
-		String udid = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+		String udid = Secure.getString(context.getContentResolver(), 
+															 Secure.ANDROID_ID);
 		
 		// for emulator
 		if (udid == null) {
@@ -83,7 +88,9 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		
 		// for google bug, android < 2.3 (many device)
 		if (udid.equals("9774d56d682e549c")) {
-			final TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+			final TelephonyManager telephonyManager = 
+					(TelephonyManager) context.getSystemService(
+													 Context.TELEPHONY_SERVICE);
 			udid = telephonyManager.getDeviceId();
 		}
 		
@@ -106,7 +113,8 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	}
 	
 	/** Application. */
-	private static final String PREFS_PUBL = "puapsd"; // Public Application Shared Data
+	// Public Application Shared Data
+	private static final String PREFS_PUBL = "puapsd"; 
 	private static final String PREFS_VERS = "version";
 	
 	/** Get Application Version.
@@ -116,7 +124,8 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	 */
 	public static String getVersion(final Context ctx) {
 		final SharedPreferences settings = ctx.getSharedPreferences(
-				${project_name?cap_first}ApplicationBase.PREFS_PUBL, Context.MODE_WORLD_READABLE);
+				${project_name?cap_first}ApplicationBase.PREFS_PUBL, 
+												   Context.MODE_WORLD_READABLE);
 		
 		return settings.getString(
 				${project_name?cap_first}ApplicationBase.PREFS_VERS, "");
@@ -138,11 +147,13 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	 */
 	public static void setVersion(final Context ctx) {
 		final SharedPreferences settings = ctx.getSharedPreferences(
-				${project_name?cap_first}ApplicationBase.PREFS_PUBL, Context.MODE_WORLD_READABLE);
+				${project_name?cap_first}ApplicationBase.PREFS_PUBL, 
+												   Context.MODE_WORLD_READABLE);
 		
 		final String currentVersion = ctx.getString(R.string.app_version);
 	    final SharedPreferences.Editor editor = settings.edit();
-	    editor.putString(${project_name?cap_first}ApplicationBase.PREFS_VERS, currentVersion);
+	    editor.putString(${project_name?cap_first}ApplicationBase.PREFS_VERS, 
+	    														currentVersion);
 		
 	    // Commit the edits!
 	    editor.commit();
@@ -155,8 +166,11 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	 * @return true if have a network
 	 */
 	public static boolean isNetworkAvailable(final Context ctx) {
-	    final ConnectivityManager connectivityManager = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
-	    final NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    final ConnectivityManager connectivityManager = 
+	    		(ConnectivityManager) ctx.getSystemService(
+	    										  Context.CONNECTIVITY_SERVICE);
+	    final NetworkInfo activeNetworkInfo = 
+	    							 connectivityManager.getActiveNetworkInfo();
 	    return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
 	}
 	
@@ -182,7 +196,8 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 	 * @return A DateTime representing the last sync date
 	 */
 	public static DateTime getLastSyncDate() {
-		return DateUtils.formatISOStringToDateTime(preferences.getString("lastSyncDate", null));
+		return DateUtils.formatISOStringToDateTime(
+				preferences.getString("lastSyncDate", null));
 	}
 	
 	/**

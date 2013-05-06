@@ -24,7 +24,8 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 			newId = this.adapter.insert(item);
 			this.db.setTransactionSuccessful();
 		} catch(Exception e) {
-			Log.e(TAG, "Error while inserting T into database : " + e.getMessage());
+			Log.e(TAG, "Error while inserting T into database : " 
+						+ e.getMessage());
 		} finally {
 			this.db.endTransaction();
 		}
@@ -42,7 +43,8 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 			adaptResult = this.adapter.delete(item);
 			this.db.setTransactionSuccessful();
 		} catch(Exception e) {
-			Log.e(TAG, "Error while inserting T into database : " + e.getMessage());
+			Log.e(TAG, "Error while inserting T into database : " 
+						+ e.getMessage());
 		} finally {
 			this.db.endTransaction();
 		}
@@ -61,7 +63,8 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 			adaptResult = this.adapter.update(item);
 			this.db.setTransactionSuccessful();
 		} catch(Exception e) {
-			Log.e(TAG, "Error while inserting T into database : " + e.getMessage());
+			Log.e(TAG, "Error while inserting T into database : " 
+						+ e.getMessage());
 		} finally {
 			this.db.endTransaction();
 		}
@@ -82,7 +85,8 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 			itemList = this.adapter.getAll(crits);
 			this.db.setTransactionSuccessful();
 		} catch(Exception e) {
-			Log.e(TAG, "Error while inserting T into database : " + e.getMessage());
+			Log.e(TAG, "Error while inserting T into database : " 
+						+ e.getMessage());
 		} finally {
 			this.db.endTransaction();
 		}

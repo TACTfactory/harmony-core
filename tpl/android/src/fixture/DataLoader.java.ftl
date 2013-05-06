@@ -95,7 +95,8 @@ public class DataLoader {
 		<#list orderedEntities as entityName>
 			<#assign entity = entities[entityName] />
 			<#if (!(entity.internal?? && entity.internal=='true') && (entity.fields?size>0))>
-		this.dataLoaders.add(${entity.name}DataLoader.getInstance(this.ctx));
+		this.dataLoaders.add(
+				${entity.name}DataLoader.getInstance(this.ctx));
 			</#if>
 		</#list>
 	}
