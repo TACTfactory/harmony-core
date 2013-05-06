@@ -460,7 +460,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
 
-			if (result == 0) {
+			if (result >= 0) {
 				final HarmonyFragmentActivity activity = (HarmonyFragmentActivity) this.context;
 				activity.finish();
 			} else {
