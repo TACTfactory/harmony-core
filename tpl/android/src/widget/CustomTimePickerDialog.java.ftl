@@ -12,7 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.TimePicker;
 
-/** CustomTimePickerDialog widget class
+/** CustomTimePickerDialog widget class.
  *  A simple AlertDialog containing an TimePicker.
  */
 public class CustomTimePickerDialog extends AlertDialog {
@@ -23,7 +23,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 	private int minute;
 	private boolean is24HourView;
 
-	/** Constructor
+	/** Constructor.
 	 * @param context The context the dialog is to run in.
 	 * @param date The initial time of the dialog.
 	 * @param is24HourView Whether this is a 24 hour view, or AM/PM. 
@@ -36,7 +36,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 		this.initializeTimePickerDialog(context, date, is24HourView, title);
 	}
 	
-	/** Constructor
+	/** Constructor.
 	 * @param context The context the dialog is to run in.
 	 * @param date The initial time of the dialog.
 	 * @param is24HourView Whether this is a 24 hour view, or AM/PM. 
@@ -50,7 +50,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 													context.getString(titleId));
 	}
 	
-	/** TimePicker dialog initialisation
+	/** TimePicker dialog initialisation.
 	 * @param context The context the dialog is to run in.
 	 * @param date The initial time of the dialog.
 	 * @param is24HourView Whether this is a 24 hour view, or AM/PM. 
@@ -103,7 +103,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setPositiveButton(CharSequence text, 
-									  DialogInterface.OnClickListener listener){
+									  DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_POSITIVE, text, listener);
 	}
 	
@@ -113,7 +113,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setNegativeButton(CharSequence text,
-									  DialogInterface.OnClickListener listener){
+									  DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_NEGATIVE, text, listener);
 	}
 	
@@ -124,7 +124,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setPositiveButton(int textId, 
-									  DialogInterface.OnClickListener listener){
+									  DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_POSITIVE, this.ctx.getString(textId), 
 																	  listener);
 	}
@@ -136,7 +136,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setNegativeButton(int textId, 
-									  DialogInterface.OnClickListener listener){
+									  DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_NEGATIVE, this.ctx.getString(textId),
 																	  listener);
 	}

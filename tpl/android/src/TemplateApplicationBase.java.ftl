@@ -43,7 +43,9 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	private static SharedPreferences preferences;
 	</#if>
 	
-	/** Called when the application is first created. */
+	/** Called when the application is first created. 
+	 * @see android.app.Activity#onCreate
+	 */
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -98,7 +100,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	}
 	
 	/**
-	 * Get the singleton
+	 * Get the singleton.
 	 * @return The singleton of the application
 	 */ 
 	public static Context getApplication() {
@@ -106,7 +108,9 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	}
 	
 	
-	/** UUID equivalent. */
+	/** UUID equivalent. 
+	 * @return UUID equivalent 
+	 */
 	private static String deviceID;
 	public static String getAndroidID() {
 		return deviceID;
@@ -175,7 +179,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	}
 	
 	/**
-	 * Get the Date Format
+	 * Get the Date Format.
 	 * @return the DateFormat
 	 */
 	public static DateFormat getDateFormat() {
@@ -183,7 +187,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	}
 	
 	/**
-	 * Get the Time Format
+	 * Get the Time Format.
 	 * @return the TimeFormat
 	 */
 	public static DateFormat getTimeFormat() {

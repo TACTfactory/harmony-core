@@ -243,7 +243,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	<#list curr.relations as relation>
 		<#if !relation.internal && !relation.hidden>
 	/** Initialize dialog.
-	 * 
+	 * @param list list
 	 */		
 <#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
 	protected void init${relation.name?cap_first}Dialog(final List<${relation.relation.targetEntity}> list) {
@@ -335,6 +335,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	/**
 	 * Called when the user clicks on ${relation.name?cap_first} button.
 	 * It shows the dedicated dialog.
+	 * @param v View 
 	 */
 	protected void onClick${relation.name?cap_first}Button(View v) {
 		${relation.name}Dialog.show();

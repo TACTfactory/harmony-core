@@ -68,7 +68,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
     
     /** Initialize view of curr.fields.
      * 
-     * param view The layout inflating
+     * @param view The layout inflating
      */
     protected void initializeComponent(final View view) {
 	<#foreach field in curr.fields>

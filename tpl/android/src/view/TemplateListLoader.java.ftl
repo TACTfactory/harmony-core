@@ -25,6 +25,8 @@ public class ${curr.name}ListLoader
 
 	/**
 	 * Constructor.
+	 * @param context context 
+	 * @param crit ${curr.name?cap_first}Criterias
 	 */
 	public ${curr.name}ListLoader(final Context context, 
 					final ${curr.name?cap_first}Criterias crit) {

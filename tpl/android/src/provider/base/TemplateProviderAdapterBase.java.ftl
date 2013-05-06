@@ -14,6 +14,9 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 
+/**
+ * ${curr.name?cap_first}ProviderAdapterBase.
+ */
 public abstract class ${curr.name?cap_first}ProviderAdapterBase 
 				extends ProviderAdapterBase<${curr.name?cap_first}> {
 	protected static String TAG = "${curr.name?cap_first}ProviderAdapter";
@@ -39,6 +42,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	protected static final int ${curr.name?upper_case}_ONE = 
 			${provider_id + 1};
 
+	/**
+	 * Static constructor. 
+	 */
 	static {
 		${curr.name?upper_case}_URI = 
 				${project_name?cap_first}Provider.generateUri(
@@ -52,9 +58,15 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				${curr.name?uncap_first}Type + "/#",
 				${curr.name?upper_case}_ONE);
 	}
-
+	
+	/**
+	 * Constructor.
+	 * @param context context
+	 * @param db database
+	 */
 	public ${curr.name?cap_first}ProviderAdapterBase(Context context, 
 					SQLiteDatabase db) {
+		super();
 		this.adapter = new ${curr.name?cap_first}SQLiteAdapter(context);
 		if (db != null) {
 			this.db = this.adapter.open(db);
@@ -63,6 +75,13 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		}
 	}
 
+	/**
+	 * Delete the entities matching with uri from the DB.
+	 * @param uri URI
+	 * @param selection SELECT clause for SQL
+	 * @param selectionArgs SELECT arguments for SQL
+	 * @return how many token deleted
+	 */
 	public int delete(Uri uri, String selection, String[] selectionArgs) {
 		int matchedUri = ${project_name?cap_first}ProviderBase
 					.getUriMatcher().match(uri);
@@ -83,10 +102,19 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							selection, 
 							selectionArgs);
 				break;
+			default:
+				result = -1;
+				break;
 		}
 		return result;
 	}
 
+	/**
+	 * Insert the entities matching with uri from the DB.
+	 * @param uri URI
+	 * @param values ContentValues to insert
+	 * @return how many token inserted
+	 */
 	public Uri insert(Uri uri, ContentValues values) {
 		int matchedUri = ${project_name?cap_first}ProviderBase
 				.getUriMatcher().match(uri);
@@ -101,10 +129,22 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							id);
 				}
 				break;
+			default:
+				result = null;
+				break;
 		}
 		return result;
 	}
 
+	/**
+	 * Send a query to the DB.
+	 * @param uri URI
+	 * @param projection Columns to work with
+	 * @param selection SELECT clause for SQL
+	 * @param selectionArgs SELECT arguments for SQL
+	 * @param sortOrder ORDER BY clause
+	 * @return A cursor pointing to the result of the query
+	 */
 	public Cursor query(Uri uri, String[] projection, String selection,
 			String[] selectionArgs, String sortOrder) {
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher()
@@ -137,11 +177,22 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							null,
 							null);
 				break;
+			default:
+				result = null;
+				break;
 		}
 
 		return result;
 	}
 
+	/**
+	 * Update the entities matching with uri from the DB.
+	 * @param uri URI
+	 * @param values ContentValues to update
+	 * @param selection SELECT clause for SQL
+	 * @param selectionArgs SELECT arguments for SQL
+	 * @return how many token update
+	 */
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher()
@@ -162,15 +213,28 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							selection, 
 							selectionArgs);
 				break;
+			default:
+				result = -1;
+				break;
 		}
 		return result;
 	}
-
+	
+	/**
+	 * Get the item Key.
+	 * @return the item key
+	 */
 	@Override
 	public String getItemKey() {
 		return ITEM_KEY;
 	}
 
+	/**
+	 * Send a query to the DB.
+	 * @param arg Argument
+	 * @param extras Bundle to get
+	 * @return A cursor pointing to the result of the query
+	 */
 	public Bundle query(String arg, Bundle extras) {
 		Bundle result = new Bundle();
 

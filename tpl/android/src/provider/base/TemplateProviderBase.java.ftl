@@ -23,7 +23,6 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	/** Tools / Common.
 	 * 
 	 */
-
 	public    static Integer baseVersion = 0;
 	public    static String baseName = "";
 	protected static String item;
@@ -32,7 +31,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	protected static UriMatcher uriMatcher = 
 			new UriMatcher(UriMatcher.NO_MATCH);
 	
-	/** Adapter to SQLite
+	/** Adapter to SQLite.
 	 * 
 	 */
 	<#list entities?values as entity>
@@ -44,6 +43,10 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	
 	protected Context mContext;
 
+	/**
+	 * Called when the contentProvider is first created.
+	 * @return true if everything goes well, false otherwise
+	 */
 	@Override
 	public boolean onCreate() {
 		boolean result = true;
@@ -79,6 +82,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	
 	/**
 	 * Get the entity from the URI.
+	 * @param uri URI
 	 * @return A String representing the entity name 
 	 */
 	@Override
@@ -113,8 +117,11 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 	
 	/**
-	 * Deletes matching tokens with the given URI.
-	 * @return The number of tokens deleted
+	 * Delete the entities matching with uri from the DB.
+	 * @param uri URI
+	 * @param selection SELECT clause for SQL
+	 * @param selectionArgs SELECT arguments for SQL
+	 * @return how many token deleted
 	 */
 	@Override
 	public int delete(final Uri uri, final String selection, 
@@ -162,8 +169,10 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 	
 	/**
-	 * Insert ContentValues with the given URI.
-	 * @return The URI to the inserted ContentValue
+	 * Insert the entities matching with uri from the DB.
+	 * @param uri URI
+	 * @param values ContentValues to insert
+	 * @return how many token inserted
 	 */
 	@Override
 	public Uri insert(final Uri uri, final ContentValues values) {
@@ -200,8 +209,13 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 	
 	/**
-	 * Query the table given by the uri parameter.
-	 * @return A Cursor pointing to the result of the query
+	 * Send a query to the DB.
+	 * @param uri URI
+	 * @param projection Columns to work with
+	 * @param selection SELECT clause for SQL
+	 * @param selectionArgs SELECT arguments for SQL
+	 * @param sortOrder ORDER BY clause
+	 * @return A cursor pointing to the result of the query
 	 */
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
@@ -248,8 +262,12 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 	
 	/**
-	 * Update the given URI with the new ContentValues.
-	 * @return The number of token updated
+	 * Update the entities matching with uri from the DB.
+	 * @param uri URI
+	 * @param values ContentValues to update
+	 * @param selection SELECT clause for SQL
+	 * @param selectionArgs SELECT arguments for SQL
+	 * @return how many token update
 	 */
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,
@@ -298,14 +316,15 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	//-------------------------------------------------------------------------
 	
 	/** Utils function.
-	 * 
+	 * @param typePath Path to type
+	 * @return generated URI
 	 */	
 	public static final Uri generateUri(String typePath) {
 		return Uri.parse("content://" + authority + "/" + typePath);
 	}
 	
 	/** Utils function.
-	 * 
+	 * @return generated URI
 	 */
 	public static final Uri generateUri() {
 		return Uri.parse("content://" + authority);
@@ -317,39 +336,44 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	 */
 	@Override
 	public Bundle call(String method, String arg, Bundle extras) {
+		Bundle result = null;
 		<#list entities?values as entity>			
 			<#if (entity.fields?size>0) >
 		if (method.equals(${entity.name?cap_first}ProviderAdapter
 				.METHOD_INSERT_${entity.name?upper_case})) {
-			return this.${entity.name?uncap_first}Provider.insert(arg, extras);
+			result = this.${entity.name?uncap_first}Provider.insert(arg, extras);
 		}
-			
 		else if (method.equals(${entity.name?cap_first}ProviderAdapter
 				.METHOD_DELETE_${entity.name?upper_case})) {
-			return this.${entity.name?uncap_first}Provider.delete(arg, extras);
+			result = this.${entity.name?uncap_first}Provider.delete(arg, extras);
 		}
 		else if (method.equals(${entity.name?cap_first}ProviderAdapter
 				.METHOD_UPDATE_${entity.name?upper_case})) {
-			return this.${entity.name?uncap_first}Provider.update(arg, extras);
+			result = this.${entity.name?uncap_first}Provider.update(arg, extras);
 		} else
 		if (method.equals(
 				${entity.name?cap_first}ProviderAdapter.METHOD_QUERY_${entity.name?upper_case})) {
 			if (extras != null && extras.containsKey("id")) {
-				return this.${entity.name?uncap_first}Provider.query(arg, 
+				result = this.${entity.name?uncap_first}Provider.query(arg, 
 																		extras);
 			} else {
-				return this.${entity.name?uncap_first}Provider.queryAll(arg, 
+				result = this.${entity.name?uncap_first}Provider.queryAll(arg, 
 						extras);	
 			}
 		} else
-		
 			</#if>
 		</#list>
 		{
-			return super.call(method, arg, extras);
+			result = super.call(method, arg, extras);
 		}
+		
+		return result;
 	}
 
+	/**
+	 * Get URI Matcher.
+	 * @return the uriMatcher
+	 */
 	public static UriMatcher getUriMatcher() {
 		return uriMatcher;
 	}

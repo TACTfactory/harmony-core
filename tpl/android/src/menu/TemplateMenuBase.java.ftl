@@ -36,6 +36,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	
 	/**
 	 * Constructor.
+	 * @param context context
 	 */
 	protected ${project_name?cap_first}MenuBase(final Context context) 
 														throws Exception {
@@ -44,6 +45,8 @@ public abstract class ${project_name?cap_first}MenuBase {
 	
 	/**
 	 * Constructor.
+	 * @param context context
+	 * @param fragment parent fragment
 	 */
 	protected ${project_name?cap_first}MenuBase(final Context context, 
 								final Fragment fragment) throws Exception {
@@ -58,7 +61,9 @@ public abstract class ${project_name?cap_first}MenuBase {
 		//this.menus.put(SHARE, new SocialMenuWrapper());
 	}
 	
-	/** Initialize Menu component. */
+	/** Initialize Menu component. 
+	 * @param menu menu
+	 */
 	private void initializeMenu(final Menu menu) {
 		this.menu = menu;
 		
@@ -68,7 +73,10 @@ public abstract class ${project_name?cap_first}MenuBase {
 		
 	}
 	
-	/** Update Menu component. */
+	/** Update Menu component.  
+	 * @param menu menu
+	 * @param context context
+	 */
 	public void updateMenu(final Menu menu, final Context context) {
 		if (context != null) {
 			this.context = context;
@@ -78,7 +86,9 @@ public abstract class ${project_name?cap_first}MenuBase {
 		this.updateMenu(menu);
 	}
 	
-	/** Update Menu component. */
+	/** Update Menu component. 
+	 * @param menu menu 
+	 */
 	public void updateMenu(final Menu menu) {
 		final int currentClass = this.context.getClass().hashCode();
 		int currentFragment;
@@ -96,7 +106,10 @@ public abstract class ${project_name?cap_first}MenuBase {
 		}
 	}
 	
-	/** Call intent associate to menu item selected.*/
+	/** Call intent associate to menu item selected.
+	 * @param item item
+	 * @param context context 
+	 */
 	public boolean dispatch(final MenuItem item, final Context context) {
 		if (context != null) {
 			this.context = context;
@@ -105,7 +118,9 @@ public abstract class ${project_name?cap_first}MenuBase {
 		return this.dispatch(item);
 	}
 	
-	/** Call intent associate to menu item selected.*/
+	/** Call intent associate to menu item selected.
+	 * @param item item 
+	 */
 	private boolean dispatch(final MenuItem item) {
 		return this.menus.get(item.getItemId()).dispatch(item, this.context, 
 				this.fragment);

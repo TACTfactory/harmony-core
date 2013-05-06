@@ -15,6 +15,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	 
 	/**
 	 * Constructor.
+	 * @param type The Criteria's GroupType
 	 */
 	public CriteriasBase(final GroupType type) {
 		this.type = type;
@@ -26,7 +27,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	 * "(price > 15.0)" 
 	 */
 	public String toSQLiteString() {
-		StringBuilder ret = new StringBuilder('(');
+		StringBuilder ret = new StringBuilder("(");
 		
 		for (int i = 0; i < this.arr.size(); i++) {
 			final ICriteria crit = this.arr.get(i);
@@ -50,7 +51,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	
 	/**
 	 * Adds a criteria of form : (key TYPE value).
-	 * @param c The criteria to add
+	 * @param crit The criteria to add
 	 * @return True if the criterias is valid and doesn't exists yet
 	 */
 	public boolean add(final Criteria crit) {
@@ -103,6 +104,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 		
 		/**
 		 * Constructor.
+		 * @param sql The SQL version of the Enum
 		 */
 		private GroupType(final String sql) {
 			this.sql = sql;
@@ -110,12 +112,14 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 		
 		/**
 		 * Get the SQL String transcryption.
+		 * @return The SQL version of the Enum
 		 */
 		public String getSqlType() { return this.sql; }
 	}
 	
 	/**
 	 * Checks if the List is empty.
+	 * @return true if the List is empty, false otherwise
 	 */
 	public boolean isEmpty() {
 		return this.arr.isEmpty();

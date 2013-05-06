@@ -14,10 +14,10 @@ import ${project_namespace}.menu.${project_name?cap_first}Menu;
 
 /**
  * @author yo
- *
+ * @param <T> Type to show
  */
 public abstract class HarmonyListFragment<T> extends SherlockListFragment 
-implements LoaderManager.LoaderCallbacks<List<T>>{
+implements LoaderManager.LoaderCallbacks<List<T> > {
 	
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onCreate(android.os.Bundle)
@@ -71,7 +71,7 @@ implements LoaderManager.LoaderCallbacks<List<T>>{
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		try {
-			${project_name?cap_first}Menu.getInstance(this.getActivity(),this)
+			${project_name?cap_first}Menu.getInstance(this.getActivity(), this)
 			.onActivityResult(requestCode, resultCode, data, this.getActivity(),
 			this);
 		} catch (Exception e) {

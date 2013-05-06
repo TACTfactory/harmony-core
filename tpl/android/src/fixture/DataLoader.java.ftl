@@ -88,6 +88,7 @@ public class DataLoader {
 	
 	/**
 	 * Constructor.
+	 * @param ctx The context
 	 */
 	public DataLoader(final Context ctx) {
 		this.ctx = ctx;
@@ -103,6 +104,8 @@ public class DataLoader {
 	
 	/**
 	 * LoadData from fixtures.
+	 * @param db The DB to work in
+	 * @param modes Mode
 	 */
 	public void loadData(final SQLiteDatabase db, final int modes) {
 		Log.i(TAG, "Initializing fixtures.");
@@ -131,6 +134,8 @@ public class DataLoader {
 	
 	/**
 	 * isType.
+	 * @param modes Modes
+	 * @param mode Mode
 	 */
 	private boolean isType(final int modes, final int mode) {
 		boolean result;
@@ -145,7 +150,8 @@ public class DataLoader {
 	}
 	
 	/**
-	 * Get path to fixtures. 
+	 * Get path to fixtures.
+	 * @param mode Mode 
 	 * @return A String representing the path to fixtures
 	 */
 	public static String getPathToFixtures(final int mode) {

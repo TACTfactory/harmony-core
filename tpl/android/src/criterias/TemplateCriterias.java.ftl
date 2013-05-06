@@ -13,6 +13,7 @@ public class ${curr.name?cap_first}Criterias extends CriteriasBase {
 
 	/**
 	 * Constructor.
+	 * @param type The Criteria's GroupType
 	 */
 	public ${curr.name?cap_first}Criterias(final GroupType type) { 
 		super(type); 
@@ -20,6 +21,7 @@ public class ${curr.name?cap_first}Criterias extends CriteriasBase {
 	
 	/**
 	 * Checks if the given Criteria is valid.
+	 * @param crit The Criteria to validate
 	 */
 	@Override
 	public boolean validCriteria(final Criteria crit) {

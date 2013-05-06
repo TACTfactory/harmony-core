@@ -6,6 +6,9 @@ public class ${project_name?cap_first}Application extends ${project_name?cap_fir
 	// this file is just generate at first time, and never override...
 	
 	// on release mode use BuildConfig.DEBUG;
+	/**
+	 * DEBUG.
+	 */ 
 	public static final boolean DEBUG = true; 
 	
 }

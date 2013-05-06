@@ -24,6 +24,7 @@ import android.util.Log;
 
 /**
  * FixtureBase.
+ * @param <T> Fixture
  */
 public abstract class FixtureBase<T> {	
 	private static String TAG = "FixtureBase";
@@ -37,12 +38,14 @@ public abstract class FixtureBase<T> {
 
 	/**
 	 * Constructor.
+	 * @param context The context
 	 */
 	public FixtureBase(final Context context) {
 		this.context = context;
 	}
 	/**
      * Load the fixtures for the current model.
+     * @param mode Mode
      */
 	public void getModelFixtures(final int mode) {
 <#if fixtureType == "xml">
@@ -108,11 +111,14 @@ public abstract class FixtureBase<T> {
 
 	/**
 	 * Load data fixtures.
+	 * @param manager The DataManager
 	 */
 	public abstract void load(DataManager manager);
 	
 	/**
-	 * Return the fixture with the given ID
+	 * Return the fixture with the given ID.
+	 * @param id The fixture id as String
+	 * @return fixtures with the given ID
 	 */
 	public T getModelFixture(final String id) {
 		return this.items.get(id);
@@ -136,7 +142,8 @@ public abstract class FixtureBase<T> {
 
 	<#if (fixtureType=="xml")>
 	/** Retrieve an xml file from the assets.
-	 * 
+	 * @param entityName The entity name
+	 * @return The InputStream corresponding to the entity
 	 */
 	public InputStream getXml(final String entityName) {
 		final AssetManager assetManager = this.context.getAssets();
@@ -151,7 +158,8 @@ public abstract class FixtureBase<T> {
 	}
 	<#elseif (fixtureType=="yml")>
 	/** Retrieve an xml file from the assets.
-	 * 
+	 * @param entityName The entity name
+	 * @return The InputStream corresponding to the entity
 	 */
 	public InputStream getYml(final String entityName) {
 		AssetManager assetManager = this.context.getAssets();
