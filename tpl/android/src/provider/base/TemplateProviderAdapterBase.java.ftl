@@ -101,6 +101,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							selection, 
 							selectionArgs);
 				break;
+			default:
+				result = -1;
+				break;
 		}
 		return result;
 	}
@@ -125,6 +128,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							id);
 				}
 				break;
+			default:
+				result = null;
+				break
 		}
 		return result;
 	}
@@ -170,6 +176,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							null,
 							null);
 				break;
+			default:
+				result = null;
+				break;
 		}
 
 		return result;
@@ -202,6 +211,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							values, 
 							selection, 
 							selectionArgs);
+				break;
+			default:
+				result = -1;
 				break;
 		}
 		return result;
