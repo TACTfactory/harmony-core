@@ -17,7 +17,7 @@ import ${project_namespace}.menu.${project_name?cap_first}Menu;
  *
  */
 public abstract class HarmonyListFragment<T> extends SherlockListFragment 
-implements LoaderManager.LoaderCallbacks<List<T>>{
+implements LoaderManager.LoaderCallbacks<List<T>> {
 	
 	/* (non-Javadoc)
 	 * @see android.support.v4.app.Fragment#onCreate(android.os.Bundle)

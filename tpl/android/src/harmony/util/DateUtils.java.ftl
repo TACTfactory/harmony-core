@@ -12,7 +12,7 @@ import android.util.Log;
 import ${project_namespace}.${project_name?cap_first}Application;
 
 /** Utils for date manipulation. */
-public class DateUtils extends android.text.format.DateUtils{
+public class DateUtils extends android.text.format.DateUtils {
 	private static final String TAG = "DateUtils";
 	
 	/**
@@ -20,7 +20,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @param date to convert
 	 * @return string date with Android date format
 	 */
-	public static String formatDateToString(DateTime date){
+	public static String formatDateToString(DateTime date) {
 		return ${project_name?cap_first}Application.getDateFormat()
 														 .format(date.toDate());
 	}
@@ -30,7 +30,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @param date to convert
 	 * @return string time with Android time format
 	 */
-	public static String formatTimeToString(DateTime date){
+	public static String formatTimeToString(DateTime date) {
 		return ${project_name?cap_first}Application.getTimeFormat()
 														 .format(date.toDate());
 	}
@@ -40,7 +40,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @param date to convert
 	 * @return string datetime with Android date + time format
 	 */
-	public static String formatDateTimeToString(DateTime date){
+	public static String formatDateTimeToString(DateTime date) {
 		return String.format("%s %s", 
 				formatDateToString(date), 
 				formatTimeToString(date));
@@ -51,7 +51,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @param date Android string date format to convert
 	 * @return datetime
 	 */
-	public static DateTime formatStringToDate(String date){
+	public static DateTime formatStringToDate(String date) {
 		return formatStringToDateTime(${project_name?cap_first}Application
 														.getDateFormat(), date);
 	}
@@ -61,7 +61,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @param time Android string time format to convert
 	 * @return datetime
 	 */
-	public static DateTime formatStringToTime(String time){
+	public static DateTime formatStringToTime(String time) {
 		return formatStringToDateTime(${project_name?cap_first}Application
 														.getTimeFormat(), time);
 	}
@@ -72,7 +72,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @param time Android string time format to convert
 	 * @return datetime
 	 */
-	public static DateTime formatStringToDateTime(String date, String time){
+	public static DateTime formatStringToDateTime(String date, String time) {
 		DateTime dt = formatStringToDate(date);
 		DateTime t = formatStringToTime(time);
 		
@@ -92,7 +92,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @return datetime
 	 */
 	public static DateTime formatStringToDateTime(
-							  java.text.DateFormat dateFormat, String dateTime){
+							  java.text.DateFormat dateFormat, String dateTime) {
 		DateTime dt = null;
 		
 		try {
@@ -109,7 +109,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @param dateTime ISO8601 string date
 	 * @return datetime
 	 */
-	public static DateTime formatISOStringToDateTime(String dateTime){
+	public static DateTime formatISOStringToDateTime(String dateTime) {
 		DateTime dt = null;
 		
 		try {
@@ -127,7 +127,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @param dateTime ISO8601 string localdate
 	 * @return datetime
 	 */
-	public static DateTime formatLocalISOStringToDateTime(String dateTime){
+	public static DateTime formatLocalISOStringToDateTime(String dateTime) {
 		DateTime dt = null;
 		
 		try {
@@ -147,7 +147,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @param dateTime date string
 	 * @return datetime
 	 */
-	public static DateTime formatPattern(String pattern, String dateTime){
+	public static DateTime formatPattern(String pattern, String dateTime) {
 		DateTime dt = null;
 		
 		try {
@@ -167,7 +167,7 @@ public class DateUtils extends android.text.format.DateUtils{
 	 * @param dateTime date string
 	 * @return datetime
 	 */
-	public static DateTime formatLocalPattern(String pattern, String dateTime){
+	public static DateTime formatLocalPattern(String pattern, String dateTime) {
 		DateTime dt = null;
 		
 		try {

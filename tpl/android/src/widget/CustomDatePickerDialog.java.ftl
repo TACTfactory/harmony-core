@@ -144,7 +144,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 			}
 		});
 		
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB){
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
 			if (minDate != null) {
 				this.datePicker.setMinDate(minDate.getMillis());
 			}
@@ -172,7 +172,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setPositiveButton(CharSequence text, 
-									  DialogInterface.OnClickListener listener){
+									  DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_POSITIVE, text, listener);
 	}
 	
@@ -182,7 +182,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setNegativeButton(CharSequence text, 
-									  DialogInterface.OnClickListener listener){
+									  DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_NEGATIVE, text, listener);
 	}
 	
@@ -193,7 +193,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setPositiveButton(int textId, 
-									  DialogInterface.OnClickListener listener){
+									  DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_POSITIVE, this.ctx.getString(textId),
 																	  listener);
 	}
@@ -205,7 +205,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setNegativeButton(int textId, 
-									  DialogInterface.OnClickListener listener){
+									  DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_NEGATIVE, this.ctx.getString(textId), 
 																	  listener);
 	}

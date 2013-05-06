@@ -51,7 +51,7 @@ public class DeleteDialog extends AlertDialog
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setPositiveButton(int resId, 
-									  DialogInterface.OnClickListener listener){
+									 DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_POSITIVE,
 				this.getContext().getString(resId), 
 				listener);
@@ -63,7 +63,7 @@ public class DeleteDialog extends AlertDialog
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setNegativeButton(int resId, 
-									  DialogInterface.OnClickListener listener){
+									 DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_NEGATIVE, 
 				this.getContext().getString(resId), 
 				listener);
