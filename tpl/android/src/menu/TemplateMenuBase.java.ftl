@@ -1,3 +1,6 @@
+<#function menuAlias menuName>
+	<#return menuName?replace("MenuWrapper", "", 'i')?upper_case />
+</#function>
 /**************************************************************************
  * ${project_name?cap_first}MenuBase.java, Android
  * 
@@ -22,8 +25,13 @@ import android.util.SparseArray;
  * ${project_name?cap_first}MenuBase.
  */
 public abstract class ${project_name?cap_first}MenuBase {
-	public static final int SHARE			= 1;
-	public static final int SEARCH			= 2;
+	<#assign idMenu = 1 />
+	<#if menus??>
+		<#list menus as menu>
+	public static final int ${menuAlias(menu)} = 0x${idMenu};	
+			<#assign idMenu = idMenu + 1 />
+		</#list>
+	</#if>
 	
 	protected SparseArray<MenuWrapperBase> menus = new SparseArray<MenuWrapperBase>();
 	
@@ -50,8 +58,11 @@ public abstract class ${project_name?cap_first}MenuBase {
 		
 		this.fragment	= fragment;
 		this.context 	= context;
-		//this.menus.put(SEARCH, new SearchMenuWrapper());
-		//this.menus.put(SHARE, new SocialMenuWrapper());
+		<#if menus??>
+			<#list menus as menu>
+		this.menus.put(${menuAlias(menu)}, new ${menu}());	
+			</#list>
+		</#if>
 	}
 	
 	/** Initialize Menu component. */
