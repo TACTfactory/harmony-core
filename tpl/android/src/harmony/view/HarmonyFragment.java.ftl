@@ -66,7 +66,7 @@ public abstract class HarmonyFragment extends SherlockFragment {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		try {
-			${project_name?cap_first}Menu.getInstance(this.getActivity(),this)
+			${project_name?cap_first}Menu.getInstance(this.getActivity(), this)
 			.onActivityResult(requestCode, resultCode, data, this.getActivity(), 
 			this);
 		} catch (Exception e) {

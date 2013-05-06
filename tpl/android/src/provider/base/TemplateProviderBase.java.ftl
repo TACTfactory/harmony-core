@@ -361,7 +361,6 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 						extras);	
 			}
 		} else
-		
 			</#if>
 		</#list>
 		{

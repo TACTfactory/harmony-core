@@ -125,7 +125,11 @@ public class CustomDatePickerDialog extends AlertDialog {
 											  int monthOfYear, int dayOfMonth) {
 				if (!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)) {
 					DateTime newDate = 
-						    new DateTime(year, monthOfYear + 1, dayOfMonth,0,0);
+						    new DateTime(year, 
+						    		monthOfYear + 1, 
+						    		dayOfMonth, 
+						    		0, 
+						    		0);
 			
 					if (minDate != null && minDate.isAfter(newDate)) {
 						view.init(
