@@ -230,12 +230,12 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 					public void onClick(DialogInterface dialog, int which, boolean isChecked) {
 						${curr.name}CreateFragment.this.checked${relation.name?cap_first}[which] = isChecked;
 					}
-				}).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				}).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 		            @Override
 		            public void onClick(DialogInterface dialog, int id) {
 		            	//${curr.name}CreateFragment.this.onOk${relation.name?cap_first}();
 		            }
-		        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		        }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 		            @Override
 		            public void onClick(DialogInterface dialog, int id) {
 		            	${curr.name}CreateFragment.this.onCancel${relation.name?cap_first}();
@@ -258,12 +258,12 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 					public void onClick(DialogInterface dialog, int id) {
 						//${curr.name}CreateFragment.this.selected${relation.name?cap_first} = Integer.parseInt(listAdapter[id]);
 					}
-				}).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+				}).setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
 		            @Override
 		            public void onClick(DialogInterface dialog, int id) {
 		            	${curr.name}CreateFragment.this.selected${relation.name?cap_first} = Integer.parseInt(listAdapter[((AlertDialog) dialog).getListView().getCheckedItemPosition()]);
 		            }
-		        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+		        }).setNegativeButton(android.R.string.cancel, new DialogInterface.OnClickListener() {
 		            @Override
 		            public void onClick(DialogInterface dialog, int id) {
 		            	${curr.name}CreateFragment.this.onCancel${relation.name?cap_first}();
