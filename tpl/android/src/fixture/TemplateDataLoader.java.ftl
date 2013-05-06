@@ -246,7 +246,8 @@ public class ${curr.name?cap_first}DataLoader
 					<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">			
 			final ${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} = 
 					${field.relation.targetEntity?cap_first}DataLoader.getInstance(
-							this.context).items.get((String) columns.get("${field.name?uncap_first}"));
+							this.context).items.get(
+									(String) columns.get("${field.name?uncap_first}"));
 			if (${field.relation.targetEntity?uncap_first} != null) {
 				${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first});
 						<#if field.relation.inversedBy??>

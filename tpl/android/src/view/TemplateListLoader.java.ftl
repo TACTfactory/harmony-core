@@ -16,7 +16,8 @@ import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
 /**
  * ${curr.name} Loader.
  */
-public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> {
+public class ${curr.name}ListLoader 
+				extends AsyncTaskLoader<List<${curr.name}>> {
 	
 	private ${curr.name?cap_first}Criterias criterias;
 	private List<${curr.name}> m${curr.name}s;
@@ -25,7 +26,8 @@ public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> 
 	/**
 	 * Constructor.
 	 */
-	public ${curr.name}ListLoader(final Context context, final ${curr.name?cap_first}Criterias crit) {
+	public ${curr.name}ListLoader(final Context context, 
+					final ${curr.name?cap_first}Criterias crit) {
 		super(context);
 		this.context = context;
 		this.criterias = crit;
@@ -49,7 +51,8 @@ public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> 
 				null,
 				b);
 		
-		result = (List<${curr.name}>) provResult.getSerializable(${curr.name}ProviderAdapter.ITEM_KEY);
+		result = (List<${curr.name}>) provResult.getSerializable(
+									${curr.name}ProviderAdapter.ITEM_KEY);
 		
 		return result;
 	}
@@ -131,8 +134,8 @@ public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> 
 		// Ensure the loader is stopped
 		this.onStopLoading();
 
-		// At this point we can release the resources associated with '${curr.name}'
-		// if needed.
+		// At this point we can release the resources associated with 
+		// '${curr.name}' if needed.
 		if (this.m${curr.name}s != null) {
 			this.onReleaseResources(this.m${curr.name}s);
 			this.m${curr.name}s = null;

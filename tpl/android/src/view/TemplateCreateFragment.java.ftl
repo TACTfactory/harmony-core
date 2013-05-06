@@ -86,7 +86,8 @@ import java.util.List;
  * 
  * @see android.app.Fragment
  */
-public class ${curr.name}CreateFragment extends HarmonyFragment implements OnClickListener {
+public class ${curr.name}CreateFragment extends HarmonyFragment 
+									implements OnClickListener {
 	/** Model data. */
 	protected ${curr.name} model = new ${curr.name}();
 
@@ -129,28 +130,45 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 			<#if !field.internal && !field.hidden>
 				<#if !field.relation??>
 					<#if field.type=="boolean">
-		this.${field.name}View = (CheckBox) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
+		this.${field.name}View = 
+				(CheckBox) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 					<#elseif field.type=="datetime" || field.type=="date" || field.type=="time">
 						<#if field.type == "date" || field.type == "datetime">
 						
-		this.${field.name}DateView = (EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_date);			
+		this.${field.name}DateView = 
+			(EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_date);			
 		this.${field.name}DateView.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 		        DateTime dt = new DateTime();
 
-		        final String ${field.name}Date = ${curr.name}CreateFragment.this.${field.name}DateView.getText().toString();
+		        final String ${field.name}Date = 
+		        		${curr.name}CreateFragment.this
+		        		.${field.name}DateView.getText().toString();
 				if (!TextUtils.isEmpty(${field.name}Date)) {
-					final String strInputDate = ${field.name}Date;
+					final String strInputDate = 
+							${field.name}Date;
 					dt = DateUtils.formatStringToDate(strInputDate);
 				}
 				
-			    final CustomDatePickerDialog ${field.name}Dpd = new CustomDatePickerDialog(getActivity(), dt, R.string.${curr.name?lower_case}_${field.name?lower_case}_date_title);
-			    ${field.name}Dpd.setPositiveButton(getActivity().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+			    final CustomDatePickerDialog ${field.name}Dpd = 
+			    		new CustomDatePickerDialog(getActivity(), 
+			    				dt, 
+			    				R.string.${curr.name?lower_case}_${field.name?lower_case}_date_title);
+			    ${field.name}Dpd.setPositiveButton(getActivity().getString(android.R.string.ok), 
+			    		new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						final DatePicker dp = ((CustomDatePickerDialog) dialog).getDatePicker();
-						final DateTime date = new DateTime(dp.getYear(), dp.getMonth() + 1, dp.getDayOfMonth(), 0, 0);
-						${curr.name}CreateFragment.this.${field.name}DateView.setText(DateUtils.formatDateToString(date));
+						final DatePicker dp = 
+							((CustomDatePickerDialog) dialog).getDatePicker();
+						final DateTime date = 
+							new DateTime(dp.getYear(), 
+									dp.getMonth() + 1, 
+									dp.getDayOfMonth(), 
+									0, 
+									0);
+						${curr.name}CreateFragment.this
+							.${field.name}DateView.setText(
+									DateUtils.formatDateToString(date));
 					}
 				});
 
@@ -160,29 +178,42 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 						</#if>
 						<#if field.type == "time" || field.type == "datetime">
 						
-		this.${field.name}TimeView = (EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_time);
+		this.${field.name}TimeView = 
+			(EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_time);
 		this.${field.name}TimeView.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				DateTime dt = new DateTime(); 
 				
-				final String ${field.name}Time = ${curr.name}CreateFragment.this.${field.name}TimeView.getText().toString();
+				final String ${field.name}Time = 
+						${curr.name}CreateFragment.this.${field.name}TimeView.getText().toString();
 				if (!TextUtils.isEmpty(${field.name}Time)) {
 					final String strInputTime = ${field.name}Time;
 					dt = DateUtils.formatStringToTime(strInputTime);
 				}
 				
-			    final CustomTimePickerDialog ${field.name}Tpd = new CustomTimePickerDialog(getActivity(), dt, 
-			    		android.text.format.DateFormat.is24HourFormat(getActivity()), R.string.${curr.name?lower_case}_${field.name?lower_case}_time_title);
-			    ${field.name}Tpd.setPositiveButton(getActivity().getString(android.R.string.ok), new DialogInterface.OnClickListener() {
+			    final CustomTimePickerDialog ${field.name}Tpd =
+			    		new CustomTimePickerDialog(getActivity(), 
+			    		dt, 
+			    		android.text.format.DateFormat.is24HourFormat(getActivity()), 
+			    		R.string.${curr.name?lower_case}_${field.name?lower_case}_time_title);
+			    ${field.name}Tpd.setPositiveButton(getActivity().getString(
+			    										   android.R.string.ok), 
+			    					new DialogInterface.OnClickListener() {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
-						final TimePicker tp = ((CustomTimePickerDialog) dialog).getTimePicker();
+						final TimePicker tp = 
+							((CustomTimePickerDialog) dialog).getTimePicker();
 						
 						DateTime date = new DateTime(0);
-						date = new DateTime(date.getYear(), date.getDayOfMonth(), date.getDayOfMonth(), 
-								tp.getCurrentHour(), tp.getCurrentMinute());
+						date = new DateTime(date.getYear(), 
+								date.getDayOfMonth(), 
+								date.getDayOfMonth(), 
+								tp.getCurrentHour(), 
+								tp.getCurrentMinute());
 
-						${curr.name}CreateFragment.this.${field.name}TimeView.setText(DateUtils.formatTimeToString(date));
+						${curr.name}CreateFragment.this
+							.${field.name}TimeView.setText(
+									DateUtils.formatTimeToString(date));
 					}
 				});
 
@@ -191,10 +222,12 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		});
 						</#if>
 					<#else>
-		this.${field.name}View = (EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
+		this.${field.name}View = 
+			(EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 					</#if>
 				<#else>
-		this.${field.name}Button = (Button) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_button);
+		this.${field.name}Button = 
+			(Button) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_button);
 		this.${field.name}Button.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
 				onClick${field.name?cap_first}Button(v);
@@ -204,7 +237,8 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 			</#if>
 		</#foreach>
 		
-		this.saveButton = (Button) view.findViewById(R.id.${curr.name?lower_case}_btn_save);
+		this.saveButton = 
+			(Button) view.findViewById(R.id.${curr.name?lower_case}_btn_save);
 		this.saveButton.setOnClickListener(this);
 	}
 	
@@ -224,50 +258,77 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 			checks[i] = false;
 			i++;
 		}
-		final AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+		final AlertDialog.Builder builder = 
+				new AlertDialog.Builder(this.getActivity());
 		builder.setTitle(R.string.${curr.name?lower_case}_${relation.name?uncap_first}_dialog_title)
-				.setMultiChoiceItems(listAdapter, checks, new DialogInterface.OnMultiChoiceClickListener() {
-					public void onClick(DialogInterface dialog, int which, boolean isChecked) {
-						${curr.name}CreateFragment.this.checked${relation.name?cap_first}[which] = isChecked;
-					}
-				}).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-		            @Override
-		            public void onClick(DialogInterface dialog, int id) {
-		            	//${curr.name}CreateFragment.this.onOk${relation.name?cap_first}();
-		            }
-		        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-		            @Override
-		            public void onClick(DialogInterface dialog, int id) {
-		            	${curr.name}CreateFragment.this.onCancel${relation.name?cap_first}();
-		            }
+				.setMultiChoiceItems(listAdapter, 
+						checks, 
+						new DialogInterface.OnMultiChoiceClickListener() {
+							public void onClick(DialogInterface dialog, 
+									int which, boolean isChecked) {
+								${curr.name}CreateFragment.this
+									.checked${relation.name?cap_first}[which] = 
+											isChecked;
+							}
+				}).setPositiveButton("Ok", 
+						new DialogInterface.OnClickListener() {
+				            @Override
+				            public void onClick(DialogInterface dialog,
+				            		int id) {
+				            	//${curr.name}CreateFragment.this
+				            	//.onOk${relation.name?cap_first}();
+				            }
+		        }).setNegativeButton("Cancel", 
+		        			new DialogInterface.OnClickListener() {
+					            @Override
+					            public void onClick(DialogInterface dialog, 
+					            		int id) {
+					            	${curr.name}CreateFragment.this
+					            		.onCancel${relation.name?cap_first}();
+					            }
 		        });
 		
 		${relation.name}Dialog = builder.create();
 	}
 			<#else>
-	protected void init${relation.name?cap_first}Dialog(final List<${relation.relation.targetEntity}> list) {
+	protected void init${relation.name?cap_first}Dialog(
+			final List<${relation.relation.targetEntity}> list) {
 		final String[] listAdapter = new String[list.size()];
 		int i = 0;
 		for (final ${relation.relation.targetEntity} item : list) {
 			listAdapter[i] = String.valueOf(item.getId());
 			i++;
 		}
-		final AlertDialog.Builder builder = new AlertDialog.Builder(this.getActivity());
+		final AlertDialog.Builder builder = 
+				new AlertDialog.Builder(this.getActivity());
 		builder.setTitle(R.string.${curr.name?lower_case}_${relation.name?uncap_first}_dialog_title)
-				.setSingleChoiceItems(listAdapter, 0, new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						//${curr.name}CreateFragment.this.selected${relation.name?cap_first} = Integer.parseInt(listAdapter[id]);
-					}
-				}).setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-		            @Override
-		            public void onClick(DialogInterface dialog, int id) {
-		            	${curr.name}CreateFragment.this.selected${relation.name?cap_first} = Integer.parseInt(listAdapter[((AlertDialog) dialog).getListView().getCheckedItemPosition()]);
-		            }
-		        }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-		            @Override
-		            public void onClick(DialogInterface dialog, int id) {
-		            	${curr.name}CreateFragment.this.onCancel${relation.name?cap_first}();
-		            }
+				.setSingleChoiceItems(listAdapter, 
+						0, 
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog, 
+									int id) {
+								//${curr.name}CreateFragment.this
+								//.selected${relation.name?cap_first}
+								//= Integer.parseInt(listAdapter[id]);
+							}
+				}).setPositiveButton("Ok", 
+						new DialogInterface.OnClickListener() {
+				            @Override
+				            public void onClick(DialogInterface dialog,
+				            		int id) {
+				            	${curr.name}CreateFragment.this
+				            		.selected${relation.name?cap_first} = 
+				            		Integer.parseInt(
+				            				listAdapter[((AlertDialog) dialog).getListView().getCheckedItemPosition()]);
+				            }
+		        }).setNegativeButton("Cancel", 
+		        		new DialogInterface.OnClickListener() {
+				            @Override
+				            public void onClick(DialogInterface dialog, 
+				            		int id) {
+				            	${curr.name}CreateFragment.this
+				            		.onCancel${relation.name?cap_first}();
+				            }
 		        });
 		
 		${relation.name}Dialog = builder.create();
@@ -300,10 +361,14 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		if (this.model.get${field.name?cap_first}() != null) {
 					<#if field.type=="datetime" || field.type=="date" || field.type=="time">
 						<#if field.type=="datetime" || field.type=="date">
-			this.${field.name}DateView.setText(DateUtils.formatDateToString(this.model.get${field.name?cap_first}()));
+			this.${field.name}DateView.setText(
+					DateUtils.formatDateToString(
+							this.model.get${field.name?cap_first}()));
 						</#if>
 						<#if field.type=="datetime" || field.type=="time">
-			this.${field.name}TimeView.setText(DateUtils.formatTimeToString(this.model.get${field.name?cap_first}()));
+			this.${field.name}TimeView.setText(
+					DateUtils.formatTimeToString(
+							this.model.get${field.name?cap_first}()));
 						</#if>
 					<#else>
 			${m.setLoader(field)}			
@@ -313,7 +378,8 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		${m.setLoader(field)}
 				</#if>
 			<#else>
-		final ${field.relation.targetEntity}SQLiteAdapter ${field.name}Adapter = new ${field.relation.targetEntity}SQLiteAdapter(getActivity());
+		final ${field.relation.targetEntity}SQLiteAdapter ${field.name}Adapter = 
+				new ${field.relation.targetEntity}SQLiteAdapter(getActivity());
 		${field.name}Adapter.open();
 		this.${field.name}List = ${field.name}Adapter.getAll();
 		${field.name}Adapter.close();
@@ -343,18 +409,23 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		${m.setSaver(field)}
 				</#if>
 			<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
-		final ${field.relation.targetEntity} tmp${field.name?cap_first} = new ${field.relation.targetEntity?cap_first}();
+		final ${field.relation.targetEntity} tmp${field.name?cap_first} = 
+					new ${field.relation.targetEntity?cap_first}();
 		tmp${field.name?cap_first}.setId(this.selected${field.name?cap_first});
-		this.model.set${field.name?cap_first}(tmp${field.name?cap_first});
+		this.model.set${field.name?cap_first}(
+				tmp${field.name?cap_first});
 			<#else>
-		ArrayList<${field.relation.targetEntity}> tmp${field.name?cap_first}List = new ArrayList<${field.relation.targetEntity?cap_first}>();
+		ArrayList<${field.relation.targetEntity}> tmp${field.name?cap_first}List =
+				new ArrayList<${field.relation.targetEntity?cap_first}>();
 		for (int i = 0; i < this.checked${field.name?cap_first}.length; i++) {
 			if (this.checked${field.name?cap_first}[i]) {
-				tmp${field.name?cap_first}List.add(this.${field.name}List.get(i));
+				tmp${field.name?cap_first}List.add(
+						this.${field.name}List.get(i));
 			}
 		}
 		
-		this.model.set${field.name?cap_first}(tmp${field.name?cap_first}List);
+		this.model.set${field.name?cap_first}(
+				tmp${field.name?cap_first}List);
 			</#if>
 		</#if>	
 		</#foreach>
@@ -371,12 +442,18 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 
 	/** Sets up the UI.
 	 * 
-	 * @see android.support.v4.app.Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)
+	 * @see android.support.v4.app.Fragment#onCreateView(
+	 * LayoutInflater, ViewGroup, Bundle)
 	 */
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {    	
+	public View onCreateView(LayoutInflater inflater, 
+			ViewGroup container, 
+			Bundle savedInstanceState) {    	
 		// Inflate the layout for this fragment
-		final View view = inflater.inflate(R.layout.fragment_${curr.name?lower_case}_create, container, false);
+		final View view = inflater.inflate(
+				R.layout.fragment_${curr.name?lower_case}_create, 
+				container, 
+				false);
 
 		this.initializeComponent(view);
 		this.loadData();
@@ -407,9 +484,11 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		/**
 		 * Constructor of the task.
 		 * @param entity The entity to insert in the DB
-		 * @param fragment The parent fragment from where the aSyncTask is called 
+		 * @param fragment The parent fragment from where the aSyncTask is 
+		 * called 
 		 */
-		public CreateTask(final ${curr.name}CreateFragment fragment, final ${curr.name} entity) {
+		public CreateTask(final ${curr.name}CreateFragment fragment, 
+				final ${curr.name} entity) {
 			super();
 			this.context = fragment.getActivity();
 			this.entity = entity;
@@ -423,8 +502,10 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 			super.onPreExecute();
 
 			this.progress = ProgressDialog.show(context,
-					this.context.getString(R.string.${curr.name?lower_case}_progress_save_title),
-					this.context.getString(R.string.${curr.name?lower_case}_progress_save_message));
+					this.context.getString(
+							R.string.${curr.name?lower_case}_progress_save_title),
+					this.context.getString(
+							R.string.${curr.name?lower_case}_progress_save_message));
 		}
 
 		/* (non-Javadoc).
@@ -436,7 +517,8 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 
 			ContentResolver prov = this.context.getContentResolver();
 			Bundle b = new Bundle();
-			b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, this.entity);
+			b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, 
+					this.entity);
 			Bundle ret = 
 					prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
 							${curr.name?cap_first}ProviderAdapter.METHOD_INSERT_${curr.name?upper_case}, 
@@ -457,16 +539,21 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 			super.onPostExecute(result);
 
 			if (result == 0) {
-				final HarmonyFragmentActivity activity = (HarmonyFragmentActivity) this.context;
+				final HarmonyFragmentActivity activity = 
+						(HarmonyFragmentActivity) this.context;
 				activity.finish();
 			} else {
-				final AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
+				final AlertDialog.Builder builder = 
+						new AlertDialog.Builder(this.context);
 				builder.setIcon(0);
-				builder.setMessage(this.context.getString(R.string.${curr.name?lower_case}_error_create));
+				builder.setMessage(
+						this.context.getString(
+								R.string.${curr.name?lower_case}_error_create));
 				builder.setPositiveButton(
 						this.context.getString(android.R.string.yes), 
 						new Dialog.OnClickListener() {
-							public void onClick(DialogInterface dialog, int which) {
+							public void onClick(DialogInterface dialog, 
+									int which) {
 
 							}
 						});

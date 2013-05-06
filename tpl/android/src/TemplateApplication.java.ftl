@@ -5,6 +5,7 @@ public class ${project_name?cap_first}Application extends ${project_name?cap_fir
 	// Override or Create your custom method for your application
 	// this file is just generate at first time, and never override...
 	
-	public static final boolean DEBUG = true; // on release mode use BuildConfig.DEBUG;
+	// on release mode use BuildConfig.DEBUG;
+	public static final boolean DEBUG = true; 
 	
 }

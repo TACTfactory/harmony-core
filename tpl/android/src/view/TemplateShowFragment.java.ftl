@@ -74,10 +74,14 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 	<#foreach field in curr.fields>
 		<#if (!field.internal && !field.hidden)>
 			<#if (field.type=="boolean")>
-		this.${field.name}View = (CheckBox) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
+		this.${field.name}View = 
+			(CheckBox) view.findViewById(
+					R.id.${curr.name?lower_case}_${field.name?lower_case});
 		this.${field.name}View.setEnabled(false);
 			<#else>
-		this.${field.name}View = (TextView) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});			
+		this.${field.name}View = 
+			(TextView) view.findViewById(
+					R.id.${curr.name?lower_case}_${field.name?lower_case});			
 			</#if>
 		</#if>
 	</#foreach>
@@ -97,13 +101,19 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		if (this.model.get${field.name?cap_first}() != null) {
 					<#if (field.type=="datetime" || field.type=="date" || field.type=="time")>
 						<#if (field.type=="datetime")>
-			this.${field.name}View.setText(DateUtils.formatDateTimeToString(model.get${field.name?cap_first}()));
+			this.${field.name}View.setText(
+					DateUtils.formatDateTimeToString(
+							model.get${field.name?cap_first}()));
 						</#if>
 						<#if (field.type=="date")>
-			this.${field.name}View.setText(DateUtils.formatDateToString(model.get${field.name?cap_first}()));
+			this.${field.name}View.setText(
+					DateUtils.formatDateToString(
+							model.get${field.name?cap_first}()));
 						</#if>
 						<#if (field.type=="time")>
-			this.${field.name}View.setText(DateUtils.formatTimeToString(model.get${field.name?cap_first}()));					
+			this.${field.name}View.setText(
+					DateUtils.formatTimeToString(
+							model.get${field.name?cap_first}()));					
 						</#if>
 					<#else>
 			${m.setLoader(field)}
@@ -113,7 +123,8 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		${m.setLoader(field)}
 				</#if>
 			<#elseif (field.relation.type=="OneToOne" || field.relation.type=="ManyToOne")>
-		this.${field.name}View.setText(String.valueOf(this.model.get${field.name?cap_first}().getId())); 
+		this.${field.name}View.setText(
+				String.valueOf(this.model.get${field.name?cap_first}().getId())); 
 			<#else>
 		String ${field.name}Value = "";
 		for (${field.relation.targetEntity} item : this.model.get${field.name?cap_first}()) {
@@ -127,15 +138,22 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
     
     /** Sets up the UI.
 	 * 
-	 * see android.support.v4.app.Fragment#onCreateView(LayoutInflater, ViewGroup, Bundle)
+	 * @see android.support.v4.app.Fragment#onCreateView
+	 * (LayoutInflater, ViewGroup, Bundle)
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {    	
+    public View onCreateView(LayoutInflater inflater, 
+    						   ViewGroup container, Bundle savedInstanceState) {
     	// Inflate the layout for this fragment
-        final View view = inflater.inflate(R.layout.fragment_${curr.name?lower_case}_show, container, false);
+        final View view = 
+        		inflater.inflate(
+        				R.layout.fragment_${curr.name?lower_case}_show, 
+        				container, 
+        				false);
 
         final Intent intent =  getActivity().getIntent();
-        this.model = (${curr.name?cap_first}) intent.getSerializableExtra("${curr.name}");
+        this.model = (${curr.name?cap_first}) intent.getSerializableExtra(
+        													"${curr.name}");
         		
         this.initializeComponent(view);
         new LoadTask(this, this.model).execute();
@@ -157,9 +175,11 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		/**
 		 * Constructor of the task.
 		 * @param entity The entity to find in the DB
-		 * @param fragment The parent fragment from where the aSyncTask is called 
+		 * @param fragment The parent fragment from where the aSyncTask is 
+		 * called 
 		 */
-		public LoadTask(final ${curr.name}ShowFragment fragment, final ${curr.name} entity) {
+		public LoadTask(final ${curr.name}ShowFragment fragment, 
+												final ${curr.name} entity) {
 			super();
 			this.fragment = fragment;
 			this.context = fragment.getActivity();
@@ -174,8 +194,10 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 			super.onPreExecute();
 
 			this.progress = ProgressDialog.show(context,
-					this.context.getString(R.string.${curr.name?lower_case}_progress_load_title),
-					this.context.getString(R.string.${curr.name?lower_case}_progress_load_message));
+					this.context.getString(
+						R.string.${curr.name?lower_case}_progress_load_title),
+					this.context.getString(
+						R.string.${curr.name?lower_case}_progress_load_message));
 		}
 
 		/* (non-Javadoc)
@@ -194,7 +216,8 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 							null,
 							b);
 
-			this.entity = (${curr.name?cap_first}) ret.getSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY); 
+			this.entity = (${curr.name?cap_first}) ret.getSerializable(
+					${curr.name?cap_first}ProviderAdapter.ITEM_KEY); 
 			
 			if (this.entity != null) {
 				result = 0;
@@ -214,13 +237,17 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 				this.fragment.model = this.entity;
 				this.fragment.loadData();
 			} else {
-				final AlertDialog.Builder builder = new AlertDialog.Builder(this.context);
+				final AlertDialog.Builder builder = 
+						new AlertDialog.Builder(this.context);
 				builder.setIcon(0);
-				builder.setMessage(this.context.getString(R.string.${curr.name?lower_case}_error_load));
+				builder.setMessage(
+						this.context.getString(
+								R.string.${curr.name?lower_case}_error_load));
 				builder.setPositiveButton(
 						this.context.getString(android.R.string.yes), 
 						new Dialog.OnClickListener() {
-							public void onClick(DialogInterface dialog, int which) {
+							public void onClick(DialogInterface dialog, 
+																	int which) {
 
 							}
 						});

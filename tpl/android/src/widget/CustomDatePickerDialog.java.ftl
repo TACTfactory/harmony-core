@@ -47,7 +47,8 @@ public class CustomDatePickerDialog extends AlertDialog {
 	public CustomDatePickerDialog(Context context, DateTime date, int titleId) {
 		super(context);
 		
-		this.initializeDatePickerDialog(context, date, context.getString(titleId), null, null);
+		this.initializeDatePickerDialog(
+						 context, date, context.getString(titleId), null, null);
 	}
 
 	/** Constructor
@@ -57,7 +58,8 @@ public class CustomDatePickerDialog extends AlertDialog {
 	 * @param minDate The minimum date of the dialog.
 	 * @param maxDate The maximum date of the dialog.
 	 */
-	public CustomDatePickerDialog(Context context, DateTime date, String title, final DateTime minDate, final DateTime maxDate) {
+	public CustomDatePickerDialog(Context context, DateTime date, String title,
+							   final DateTime minDate, final DateTime maxDate) {
 		super(context);
 		
 		this.initializeDatePickerDialog(context, date, title, minDate, maxDate);
@@ -70,10 +72,12 @@ public class CustomDatePickerDialog extends AlertDialog {
 	 * @param minDate The minimum date of the dialog.
 	 * @param maxDate The maximum date of the dialog.
 	 */
-	public CustomDatePickerDialog(Context context, DateTime date, int titleId, final DateTime minDate, final DateTime maxDate) {
+	public CustomDatePickerDialog(Context context, DateTime date, int titleId, 
+							   final DateTime minDate, final DateTime maxDate) {
 		super(context);
 		
-		this.initializeDatePickerDialog(context, date, context.getString(titleId), minDate, maxDate);
+		this.initializeDatePickerDialog(context, date, 
+								  context.getString(titleId), minDate, maxDate);
 	}
 	
 	/** DatePicker dialog initialisation
@@ -83,7 +87,8 @@ public class CustomDatePickerDialog extends AlertDialog {
 	 * @param minDate The minimum date of the dialog.
 	 * @param maxDate The maximum date of the dialog.
 	 */
-	private void initializeDatePickerDialog(Context context, DateTime date, String title, DateTime minDate, DateTime maxDate) {
+	private void initializeDatePickerDialog(Context context, DateTime date,
+	                         String title, DateTime minDate, DateTime maxDate) {
 		this.ctx = context;
 		this.title = title;
 		this.minDate = minDate;
@@ -104,16 +109,23 @@ public class CustomDatePickerDialog extends AlertDialog {
 		this.setIcon(0);
 		
 		LayoutInflater inflater = getLayoutInflater();
-		View alertDialogView = inflater.inflate(R.layout.dialog_date_picker, null);	
+		View alertDialogView = inflater.inflate(R.layout.dialog_date_picker, 
+												null);	
 		this.setView(alertDialogView);
 		
-		this.datePicker = (DatePicker) alertDialogView.findViewById(R.id.dialog_pick_date);
-		this.datePicker.init(year, monthOfYear, dayOfMonth, new OnDateChangedListener() {
+		this.datePicker = (DatePicker) alertDialogView.findViewById(
+														R.id.dialog_pick_date);
+		this.datePicker.init(year, 
+							 monthOfYear,
+							 dayOfMonth, 
+							 new OnDateChangedListener() {
 			
 			@Override
-			public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+			public void onDateChanged(DatePicker view, int year, 
+											  int monthOfYear, int dayOfMonth) {
 				if (!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)) {
-					DateTime newDate = new DateTime(year, monthOfYear + 1, dayOfMonth,0,0);
+					DateTime newDate = 
+						    new DateTime(year, monthOfYear + 1, dayOfMonth,0,0);
 			
 					if (minDate != null && minDate.isAfter(newDate)) {
 						view.init(
@@ -142,7 +154,8 @@ public class CustomDatePickerDialog extends AlertDialog {
 			}
 		}
 		
-		this.setNegativeButton(this.ctx.getString(android.R.string.cancel), new DialogInterface.OnClickListener() {
+		this.setNegativeButton(this.ctx.getString(android.R.string.cancel), 
+										 new DialogInterface.OnClickListener() {
 			
 			@Override
 			public void onClick(DialogInterface dialog, int which) {
@@ -153,36 +166,48 @@ public class CustomDatePickerDialog extends AlertDialog {
 		super.onCreate(savedInstanceState);
 	}
 
-	/** Set a listener to be invoked when the positive button of the dialog is pressed. 
+	/** Set a listener to be invoked when the positive button of the dialog is 
+	 * pressed. 
 	 * @param text The text to display in the positive button
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
-	public void setPositiveButton(CharSequence text, DialogInterface.OnClickListener listener){
+	public void setPositiveButton(CharSequence text, 
+									  DialogInterface.OnClickListener listener){
 		this.setButton(AlertDialog.BUTTON_POSITIVE, text, listener);
 	}
 	
-	/** Set a listener to be invoked when the negative button of the dialog is pressed. 
+	/** Set a listener to be invoked when the negative button of the dialog is 
+	 * pressed. 
 	 * @param text The text to display in the negative button
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
-	public void setNegativeButton(CharSequence text, DialogInterface.OnClickListener listener){
+	public void setNegativeButton(CharSequence text, 
+									  DialogInterface.OnClickListener listener){
 		this.setButton(AlertDialog.BUTTON_NEGATIVE, text, listener);
 	}
 	
-	/** Set a listener to be invoked when the positive button of the dialog is pressed. 
-	 * @param textId The resource id of the text to display in the positive button
+	/** Set a listener to be invoked when the positive button of the dialog is 
+	 * pressed. 
+	 * @param textId The resource id of the text to display in the positive 
+	 * button
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
-	public void setPositiveButton(int textId, DialogInterface.OnClickListener listener){
-		this.setButton(AlertDialog.BUTTON_POSITIVE, this.ctx.getString(textId), listener);
+	public void setPositiveButton(int textId, 
+									  DialogInterface.OnClickListener listener){
+		this.setButton(AlertDialog.BUTTON_POSITIVE, this.ctx.getString(textId),
+																	  listener);
 	}
 	
-	/** Set a listener to be invoked when the negative button of the dialog is pressed. 
-	 * @param textId The resource id of the text to display in the negative button
+	/** Set a listener to be invoked when the negative button of the dialog is 
+	 * pressed. 
+	 * @param textId The resource id of the text to display in the negative 
+	 * button
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
-	public void setNegativeButton(int textId, DialogInterface.OnClickListener listener){
-		this.setButton(AlertDialog.BUTTON_NEGATIVE, this.ctx.getString(textId), listener);
+	public void setNegativeButton(int textId, 
+									  DialogInterface.OnClickListener listener){
+		this.setButton(AlertDialog.BUTTON_NEGATIVE, this.ctx.getString(textId), 
+																	  listener);
 	}
 	
 	/** Gets the DatePicker contained in this dialog.

@@ -89,7 +89,9 @@ public abstract class ${project_name?cap_first}MenuBase {
 		}
 		
 		for (int i = 0; i < this.menus.size(); i++) {
-			this.menus.valueAt(i).updateMenu(menu, currentClass, currentFragment,
+			this.menus.valueAt(i).updateMenu(menu, 
+					currentClass, 
+					currentFragment,
 					this.context);
 		}
 	}

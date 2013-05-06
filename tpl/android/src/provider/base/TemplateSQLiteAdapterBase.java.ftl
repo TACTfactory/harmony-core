@@ -86,7 +86,8 @@ import org.joda.time.format.ISODateTimeFormat;
  * with Harmony. You should edit ${curr.name}Adapter class instead of this<br/>
  * one or you will lose all your modifications.</i></b>
  */
-public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
+public abstract class ${curr.name}SQLiteAdapterBase 
+									extends ${extend} {
 	protected static final String TAG = "${curr.name}DBAdapter";
 	
 	/** Table name of SQLite database. */
@@ -178,7 +179,7 @@ public abstract class ${curr.name}SQLiteAdapterBase extends ${extend} {
 	 * @return ContentValues object
 	 */
 	public ContentValues itemToContentValues(final ${curr.name} item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 
-				int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {		
+				int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
 		final ContentValues result = new ContentValues();		
 	<#list curr.fields as field>
 		<#if (!field.internal)>

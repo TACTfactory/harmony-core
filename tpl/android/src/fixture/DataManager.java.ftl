@@ -42,7 +42,8 @@ public class DataManager {
 	/**
      * Finds a object by its identifier.
      *
-     * This is just a convenient shortcut for getRepository($className)->find($id).
+     * This is just a convenient shortcut for getRepository($className)
+     * ->find($id).
      *
      * @param nameClass
      * @param id
@@ -122,7 +123,8 @@ public class DataManager {
 //    /**
 //     * Merges the state of a detached object into the persistence context
 //     * of this ObjectManager and returns the managed copy of the object.
-//     * The object passed to merge will not become associated/managed with this ObjectManager.
+//     * The object passed to merge will not become associated/managed with 
+//	   * this ObjectManager.
 //     *
 //     * @param object $object
 //     */
@@ -134,7 +136,8 @@ public class DataManager {
 //     * Clears the ObjectManager. All objects that are currently managed
 //     * by this ObjectManager become detached.
 //     *
-//     * @param objectName $objectName if given, only objects of this type will get detached
+//     * @param objectName $objectName if given, only objects of this type will
+//     * get detached
 //     */
 //    public void clear(String objectName) {
 //    	
@@ -143,9 +146,10 @@ public class DataManager {
 //    /**
 //     * Detaches an object from the ObjectManager, causing a managed object to
 //     * become detached. Unflushed changes made to the object if any
-//     * (including removal of the object), will not be synchronized to the database.
-//     * Objects which previously referenced the detached object will continue to
-//     * reference it.
+//     * (including removal of the object), will not be synchronized to the 
+//     * database.
+//     * Objects which previously referenced the detached object will continue 
+//     * to reference it.
 //     *
 //     * @param object $object The object to detach.
 //     */
