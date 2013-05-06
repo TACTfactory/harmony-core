@@ -19,7 +19,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
 import android.content.DialogInterface;
-import android.database.sqlite.SQLiteDatabase;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
@@ -56,7 +55,6 @@ import ${curr.namespace}.harmony.widget.CustomTimePickerDialog;
 	
 import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
-import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 <#assign mustImportArrayList=false />
 <#assign mustImportList=false />
@@ -66,8 +64,8 @@ import ${curr.namespace}.entity.${curr.name};
 		<#assign mustImportList=true />
 		<#if (!m.isInArray(import_array, relation.relation.targetEntity))>
 			<#assign import_array = import_array + [relation.relation.targetEntity] />
-import ${curr.namespace}.data.${relation.relation.targetEntity}SQLiteAdapter;
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
+import ${project_namespace}.provider.${relation.relation.targetEntity?cap_first}ProviderAdapter;
 			<#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
 				<#assign mustImportArrayList=true />
 			</#if>
@@ -293,6 +291,10 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 
 	/** Load data from model to fields view. */
 	public void loadData() {
+		<#if (import_array?size > 0)>
+		ContentResolver prov = this.getActivity().getContentResolver();
+		</#if>
+
 		<#foreach field in curr.fields>						
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
@@ -313,11 +315,13 @@ public class ${curr.name}CreateFragment extends HarmonyFragment implements OnCli
 		${m.setLoader(field)}
 				</#if>
 			<#else>
-		final ${field.relation.targetEntity}SQLiteAdapter ${field.name}Adapter = new ${field.relation.targetEntity}SQLiteAdapter(getActivity());
-		${field.name}Adapter.open();
-		this.${field.name}List = ${field.name}Adapter.getAll();
-		${field.name}Adapter.close();
-		init${field.name?cap_first}Dialog(${field.name}List);
+		Bundle ${field.name}ResultBundle = prov.call(${field.relation.targetEntity}ProviderAdapter.${field.relation.targetEntity?upper_case}_URI,
+				${field.relation.targetEntity}ProviderAdapter.METHOD_QUERY_${field.relation.targetEntity?upper_case},
+				null,
+				null);
+		
+		this.${field.name}List = (List<${field.relation.targetEntity}>) ${field.name}ResultBundle.getSerializable(${field.relation.targetEntity}ProviderAdapter.ITEM_KEY);
+		init${field.name?cap_first}Dialog(this.${field.name}List);
 			</#if>
 		</#if>
 		

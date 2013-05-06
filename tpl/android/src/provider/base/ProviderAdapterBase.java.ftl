@@ -72,7 +72,10 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 	}
 
 	public Bundle queryAll(String arg, Bundle extras) {
-		CriteriasBase crits = (CriteriasBase) extras.getSerializable("crits");
+		CriteriasBase crits = null;
+		if (extras != null) {
+			crits = (CriteriasBase) extras.getSerializable("crits");
+		}
 		ArrayList<T> itemList = null;
 		this.db.beginTransaction();
 		try {
