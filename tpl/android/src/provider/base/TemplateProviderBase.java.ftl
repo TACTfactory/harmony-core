@@ -336,36 +336,39 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	 */
 	@Override
 	public Bundle call(String method, String arg, Bundle extras) {
+		Bundle result = null;
 		<#list entities?values as entity>			
 			<#if (entity.fields?size>0) >
 		if (method.equals(${entity.name?cap_first}ProviderAdapter
 				.METHOD_INSERT_${entity.name?upper_case})) {
-			return this.${entity.name?uncap_first}Provider.insert(arg, extras);
+			result = this.${entity.name?uncap_first}Provider.insert(arg, extras);
 		}
 			
 		else if (method.equals(${entity.name?cap_first}ProviderAdapter
 				.METHOD_DELETE_${entity.name?upper_case})) {
-			return this.${entity.name?uncap_first}Provider.delete(arg, extras);
+			result = this.${entity.name?uncap_first}Provider.delete(arg, extras);
 		}
 		else if (method.equals(${entity.name?cap_first}ProviderAdapter
 				.METHOD_UPDATE_${entity.name?upper_case})) {
-			return this.${entity.name?uncap_first}Provider.update(arg, extras);
+			result = this.${entity.name?uncap_first}Provider.update(arg, extras);
 		} else
 		if (method.equals(
 				${entity.name?cap_first}ProviderAdapter.METHOD_QUERY_${entity.name?upper_case})) {
 			if (extras != null && extras.containsKey("id")) {
-				return this.${entity.name?uncap_first}Provider.query(arg, 
+				result = this.${entity.name?uncap_first}Provider.query(arg, 
 																		extras);
 			} else {
-				return this.${entity.name?uncap_first}Provider.queryAll(arg, 
+				result = this.${entity.name?uncap_first}Provider.queryAll(arg, 
 						extras);	
 			}
 		} else
 			</#if>
 		</#list>
 		{
-			return super.call(method, arg, extras);
+			result = super.call(method, arg, extras);
 		}
+		
+		return result;
 	}
 
 	/**

@@ -27,7 +27,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	 * "(price > 15.0)" 
 	 */
 	public String toSQLiteString() {
-		StringBuilder ret = new StringBuilder('(');
+		StringBuilder ret = new StringBuilder("(");
 		
 		for (int i = 0; i < this.arr.size(); i++) {
 			final ICriteria crit = this.arr.get(i);
