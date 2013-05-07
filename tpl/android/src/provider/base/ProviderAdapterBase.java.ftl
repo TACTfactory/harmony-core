@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import ${project_namespace}.criterias.base.CriteriasBase;
 import ${data_namespace}.base.SQLiteAdapterBase;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
@@ -16,10 +17,21 @@ import android.util.Log;
 public abstract class ProviderAdapterBase<T extends Serializable> {
 	/** TAG for debug purpose. */ 
 	public static final String TAG = "ProviderAdapterBase<T>";
+	/** Context. */
+	protected Context ctx;
 	/** SQLiteAdapterBase. */
 	protected SQLiteAdapterBase<T> adapter;
 	/** database. */
 	protected SQLiteDatabase db;
+
+	/**
+	 * Provider Adapter Base constructor.
+	 * @param Context The context.
+	 */
+	public ProviderAdapterBase(Context context) {
+		this.ctx = context;
+	}
+
 
 	/**
 	 * Insert Bundle into the database.
