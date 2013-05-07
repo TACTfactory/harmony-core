@@ -125,7 +125,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		${curr.name?cap_first}Criterias crit = null;
 		if (bundle != null) {
 			crit = (${curr.name?cap_first}Criterias) bundle.get(
-						${curr.name?cap_first}Criterias._PARCELABLE);
+						${curr.name?cap_first}Criterias.PARCELABLE);
 		}
 			
 		return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
