@@ -93,6 +93,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	<#list curr.fields as field>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
+	/** ${field.name} View. */
 				<#if field.type=="boolean">
 	protected CheckBox ${field.name}View;
 				<#elseif field.type=="datetime" || field.type=="date" || field.type=="time">
@@ -117,6 +118,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			</#if>
 		</#if>
 	</#list>
+	/** Save button. */
 	protected Button saveButton;
 
 	/** Initialize view of fields. 
@@ -475,7 +477,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	 * It runs asynchronously and shows a progressDialog
 	 */
 	public static class CreateTask extends AsyncTask<Void, Void, Integer> {
-		private final Context context;
+		private final Context ctx;
 		private final ${curr.name} entity;
 		private String errorMsg;
 		private ProgressDialog progress;
@@ -489,7 +491,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		public CreateTask(final ${curr.name}CreateFragment fragment, 
 				final ${curr.name} entity) {
 			super();
-			this.context = fragment.getActivity();
+			this.ctx = fragment.getActivity();
 			this.entity = entity;
 		}
 
@@ -500,10 +502,10 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		protected void onPreExecute() {
 			super.onPreExecute();
 
-			this.progress = ProgressDialog.show(context,
-					this.context.getString(
+			this.progress = ProgressDialog.show(ctx,
+					this.ctx.getString(
 							R.string.${curr.name?lower_case}_progress_save_title),
-					this.context.getString(
+					this.ctx.getString(
 							R.string.${curr.name?lower_case}_progress_save_message));
 		}
 
@@ -514,7 +516,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 
-			ContentResolver prov = this.context.getContentResolver();
+			ContentResolver prov = this.ctx.getContentResolver();
 			Bundle b = new Bundle();
 			b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, 
 					this.entity);
@@ -538,17 +540,17 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			super.onPostExecute(result);
 			if (result >= 0) {
 				final HarmonyFragmentActivity activity = 
-										 (HarmonyFragmentActivity) this.context;
+										 (HarmonyFragmentActivity) this.ctx;
 				activity.finish();
 			} else {
 				final AlertDialog.Builder builder = 
-						new AlertDialog.Builder(this.context);
+						new AlertDialog.Builder(this.ctx);
 				builder.setIcon(0);
 				builder.setMessage(
-						this.context.getString(
+						this.ctx.getString(
 								R.string.${curr.name?lower_case}_error_create));
 				builder.setPositiveButton(
-						this.context.getString(android.R.string.yes), 
+						this.ctx.getString(android.R.string.yes), 
 						new Dialog.OnClickListener() {
 							public void onClick(DialogInterface dialog, 
 									int which) {

@@ -12,16 +12,24 @@ import ${project_namespace}.R;
 
 public class DeleteDialog extends AlertDialog 
 									implements DialogInterface.OnClickListener {
+	/** A fragment which implements DeletableList. */
 	private DeletableList fragment;
+	/** DeleteDialog ID. */
 	private int id;
 	
-	public DeleteDialog(Context context, DeletableList fragment, int id) {
-		super(context);
+	/**
+	 * Constructor.
+	 * @param ctx context
+	 * @param fragment fragment
+	 * @param id id
+	 */
+	public DeleteDialog(Context ctx, DeletableList fragment, int id) {
+		super(ctx);
 		this.fragment = fragment;
 		this.id = id;
 	}
 	
-	/* (non-Javadoc)
+	/* (non-Javadoc).
 	 * @see android.app.AlertDialog#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -69,6 +77,7 @@ public class DeleteDialog extends AlertDialog
 				listener);
 	}
 	
+	/** Called when user clicks. */
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		switch (which) {

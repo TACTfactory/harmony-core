@@ -27,21 +27,27 @@ import android.util.Log;
  * @param <T> Fixture
  */
 public abstract class FixtureBase<T> {	
+	/** TAG for debug purpose. */
 	private static String TAG = "FixtureBase";
-	protected Context context;
+	/** Context. */
+	protected Context ctx;
 
+	/** Date + time pattern. */
 	protected String patternDateTime = "yyyy-MM-dd HH:mm";
+	/** Date pattern. */
 	protected String patternDate = "yyyy-MM-dd";
+	/** Time pattern. */
 	protected String patternTime = "HH:mm";
 	
+	/** Link an ID and its entity. */
 	public Map<String, T> items = new LinkedHashMap<String, T>();
 
 	/**
 	 * Constructor.
-	 * @param context The context
+	 * @param ctx The context
 	 */
-	public FixtureBase(final Context context) {
-		this.context = context;
+	public FixtureBase(final Context ctx) {
+		this.ctx = ctx;
 	}
 	/**
      * Load the fixtures for the current model.
@@ -146,7 +152,7 @@ public abstract class FixtureBase<T> {
 	 * @return The InputStream corresponding to the entity
 	 */
 	public InputStream getXml(final String entityName) {
-		final AssetManager assetManager = this.context.getAssets();
+		final AssetManager assetManager = this.ctx.getAssets();
 		InputStream ret = null;
 		try {
 			ret = assetManager.open(entityName + ".xml");
@@ -162,7 +168,7 @@ public abstract class FixtureBase<T> {
 	 * @return The InputStream corresponding to the entity
 	 */
 	public InputStream getYml(final String entityName) {
-		AssetManager assetManager = this.context.getAssets();
+		AssetManager assetManager = this.ctx.getAssets();
 		InputStream ret = null;
 		try {
 			ret = assetManager.open(entityName + ".yml");

@@ -5,9 +5,13 @@ import java.io.Serializable;
 import org.joda.time.DateTime;
 
 public class EntityBase implements Cloneable, Serializable {
+	/** Server ID. */
 	public Integer serverId;
+	/** Entity ID. */
 	public int id;
+	/** sync_dtag. */
 	public boolean	sync_dtag = false;
+	/** sync_date. */
 	public DateTime 	sync_uDate = new DateTime();
 	
 	

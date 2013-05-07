@@ -15,13 +15,13 @@ public abstract class MenuWrapperBase {
 	protected abstract void updateMenu(Menu menu, 
 										int currentActivityHashCode, 
 										int currentFragmentHashCode, 
-										Context context);
+										Context ctx);
 	protected abstract boolean dispatch(MenuItem item, 
 										 Context ctx, 
 									     Fragment fragment);
 	protected abstract void onActivityResult(int requestCode, 
 										      int resultCode, 
 											  Intent data, 
-											  Context context, 
+											  Context ctx, 
 											  Fragment fragment);
 }

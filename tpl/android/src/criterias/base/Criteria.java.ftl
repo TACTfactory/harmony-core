@@ -4,8 +4,11 @@ import java.io.Serializable;
 
 /** Criteria. Criteria used for some db requests.*/
 public class Criteria implements Serializable, ICriteria {
+	/** Criteria key. */
 	private String key;
+	/** Criteria value. */
 	private String value;
+	/** Criteria Type. */
 	private Type type = Type.EQUALS;
 
 	/**

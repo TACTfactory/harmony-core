@@ -13,6 +13,7 @@ import ${project_namespace}.${project_name?cap_first}Application;
 
 /** Utils for date manipulation. */
 public class DateUtils extends android.text.format.DateUtils {
+	/** TAG for debug purpose. */
 	private static final String TAG = "DateUtils";
 	
 	/**

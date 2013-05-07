@@ -88,6 +88,8 @@ import org.joda.time.format.ISODateTimeFormat;
  */
 public abstract class ${curr.name}SQLiteAdapterBase 
 									extends ${extend} {
+	
+	/** TAG for debug purpose. */									
 	protected static final String TAG = "${curr.name}DBAdapter";
 	
 	/** Table name of SQLite database. */
@@ -98,8 +100,10 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 <#list curr.fields as field>
 	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
+	/** ${field.columnName}. */
 	public static final String ${alias(field.name)} = 
 			"${field.columnName}";
+	/** Alias. */
 	public static final String ALIASED_${alias(field.name)} = 
 			TABLE_NAME + "." + ${alias(field.name)};
 	</#if>
@@ -300,13 +304,13 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			<#if (!relation.internal)>
 				<#if (relation.relation.type=="OneToMany")>
 		final ${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter = 
-				new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
+				new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 		${relation.name?uncap_first}Adapter.open(this.mDatabase);
 		result.set${relation.name?cap_first}(${relation.name?uncap_first}Adapter
 					.getBy${relation.relation.mappedBy?cap_first}(result.getId())); // relation.relation.inversedBy?cap_first
 				<#elseif (relation.relation.type=="ManyToMany")>
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter = 
-				new ${relation.relation.joinTable}SQLiteAdapter(this.context);
+				new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
 		result.set${relation.name?cap_first}(
 					${relation.relation.joinTable?lower_case}Adapter.getBy${curr.name}(
@@ -314,7 +318,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				<#else>
 		if (result.get${relation.name?cap_first}() != null) {
 			final ${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter = 
-					new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
+					new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 			${relation.name?uncap_first}Adapter.open(this.mDatabase);
 			result.set${relation.name?cap_first}(
 					${relation.name?uncap_first}Adapter.getByID(
@@ -378,7 +382,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		<#list curr.relations as relation>
 			<#if (relation.relation.type=="OneToMany")>
 		${relation.relation.targetEntity}SQLiteAdapter adapt${relation.relation.targetEntity} = 
-				new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
+				new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 		adapt${relation.relation.targetEntity}.open(this.mDatabase);
 		for (${curr.name} ${curr.name?lower_case} : result) {
 			${curr.name?lower_case}.set${relation.name?cap_first}(
@@ -422,7 +426,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		<#if (relation.relation.type=="ManyToMany")>
 			
 			${relation.relation.joinTable}SQLiteAdapterBase ${relation.name?uncap_first}Adapter = 
-					new ${relation.relation.joinTable}SQLiteAdapter(this.context);
+					new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 			${relation.name?uncap_first}Adapter.open(this.mDatabase);
 			for (${relation.relation.targetEntity?cap_first} i : item.get${relation.name?cap_first}()) {
 				${relation.name?uncap_first}Adapter.insert(newid, 
@@ -430,7 +434,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			}
 		<#elseif (relation.relation.type=="OneToMany")>
 			${relation.relation.targetEntity}SQLiteAdapterBase ${relation.name?uncap_first}Adapter = 
-					new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
+					new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 			${relation.name?uncap_first}Adapter.open(this.mDatabase);
 			if (item.get${relation.name?cap_first}() != null) {
 				for (${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()) {
@@ -589,13 +593,13 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		<#if (relation.relation.type=="ManyToMany")>
 			
 		${relation.relation.joinTable}SQLiteAdapter ${relation.name?uncap_first}Adapter = 
-				new ${relation.relation.joinTable}SQLiteAdapter(this.context);
+				new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 		for (${relation.relation.targetEntity?cap_first} i : item.get${relation.name?cap_first}()) {
 			${relation.name?uncap_first}Adapter.insert(newid, i.get${relation.relation.field_ref[0]?cap_first}());
 		}
 		<#elseif (relation.relation.type=="OneToMany")>
 		${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter = 
-				new ${relation.relation.targetEntity}SQLiteAdapter(this.context);
+				new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 		${relation.name?uncap_first}Adapter.open(this.mDatabase);
 		for (${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()) {
 			<#if (relation.relation.mappedBy?? && !getMappedField(relation).internal)>
@@ -730,7 +734,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public ArrayList<${relation.type}> get${relation.type}s(final int id) {
 		final ${relation.type}SQLiteAdapter adapt = 
-				new ${relation.type}SQLiteAdapter(this.context);
+				new ${relation.type}SQLiteAdapter(this.ctx);
 		return adapt.getBy${curr.name}(id);
 	}
 
@@ -787,7 +791,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				null, 
 				null);
 		${curr.relations[0].relation.targetEntity}SQLiteAdapter adapt = 
-				new ${curr.relations[0].relation.targetEntity}SQLiteAdapter(this.context);
+				new ${curr.relations[0].relation.targetEntity}SQLiteAdapter(this.ctx);
 		adapt.open(this.mDatabase);
 		final ArrayList<${curr.relations[0].relation.targetEntity}> ret = 
 				new ArrayList<${curr.relations[0].relation.targetEntity}>();
@@ -815,7 +819,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				null, 
 				null);
 		${curr.relations[1].relation.targetEntity}SQLiteAdapter adapt = 
-				new ${curr.relations[1].relation.targetEntity}SQLiteAdapter(this.context);
+				new ${curr.relations[1].relation.targetEntity}SQLiteAdapter(this.ctx);
 		adapt.open(this.mDatabase);
 		final ArrayList<${curr.relations[1].relation.targetEntity}> ret = 
 				new ArrayList<${curr.relations[1].relation.targetEntity}>();

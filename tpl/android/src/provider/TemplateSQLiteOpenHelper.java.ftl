@@ -15,14 +15,14 @@ public class ${project_name?cap_first}SQLiteOpenHelper
 
 	/**
 	 * Constructor.
-	 * @param context context
+	 * @param ctx context
 	 * @param name name
 	 * @param factory factory
 	 * @param version version
 	 */
-	public ${project_name?cap_first}SQLiteOpenHelper(final Context context, 
+	public ${project_name?cap_first}SQLiteOpenHelper(final Context ctx, 
 		   final String name, final CursorFactory factory, final int version) {
-		super(context, name, factory, version);
+		super(ctx, name, factory, version);
 	}
 
 }

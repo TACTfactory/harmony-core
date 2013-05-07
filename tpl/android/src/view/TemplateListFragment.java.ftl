@@ -42,13 +42,16 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	 * Recall internal address (Hack Micky).
 	 */
 	protected static final int INTERNAL_EMPTY_ID = 0x00ff0001;
+	/** progress container ID. */
 	protected static final int INTERNAL_PROGRESS_CONTAINER_ID = 0x00ff0002;
+	/** list container ID. */
 	protected static final int INTERNAL_LIST_CONTAINER_ID = 0x00ff0003;
 
 	/**
 	 * The adapter which handles list population.
 	 */
 	protected ${curr.name}ListAdapter mAdapter;
+	/** ${curr.name}ListFragment instance. */
 	protected static ${curr.name}ListFragment instance;
 
 	/** (non-Javadoc).
@@ -214,18 +217,18 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	 * It runs asynchronously.
 	 */
 	private class DeleteTask extends AsyncTask<Void, Void, Integer> {
-		private Context context;
+		private Context ctx;
 		private ${curr.name?cap_first} item;
 		
 		/**
 		 * Constructor of the task.
 		 * @param item The entity to remove from DB
-		 * @param context A context to build ${curr.name?cap_first}SQLiteAdapter
+		 * @param ctx A context to build ${curr.name?cap_first}SQLiteAdapter
 		 */
-		public DeleteTask(final Context context, 
+		public DeleteTask(final Context ctx, 
 								final ${curr.name?cap_first} item) {
 			super();
-			this.context = context;
+			this.ctx = ctx;
 			this.item = item;
 		}
 
@@ -236,7 +239,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		protected Integer doInBackground(Void... params) {
 			int result = -1;
 
-			ContentResolver prov = this.context.getContentResolver();
+			ContentResolver prov = this.ctx.getContentResolver();
 			Bundle b = new Bundle();
 			b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, 
 					this.item);
