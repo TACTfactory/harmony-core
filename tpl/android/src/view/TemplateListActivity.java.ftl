@@ -23,7 +23,8 @@ public class ${curr.name}ListActivity extends HarmonyFragmentActivity {
 		this.setContentView(R.layout.activity_${curr.name?lower_case}_list);
 
 		// Google Analytics
-		//GoogleAnalyticsSessionManager.getInstance(getApplication()).incrementActivityCount();
+		//GoogleAnalyticsSessionManager.getInstance(getApplication())
+		//.incrementActivityCount();
 	}
 
 	/**
@@ -44,13 +45,17 @@ public class ${curr.name}ListActivity extends HarmonyFragmentActivity {
 	* @see android.app.Activity#onActivityResult
 	*/
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+	public void onActivityResult(int requestCode, int resultCode, 
+													Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode <= 0xFFFF) {
 			switch(requestCode) {
 				default:
-					final ${curr.name}ListFragment fragment = (${curr.name}ListFragment)  getSupportFragmentManager().findFragmentById(R.id.fragment);
-					fragment.getLoaderManager().restartLoader(0, null, fragment);
+					final ${curr.name}ListFragment fragment = 
+						(${curr.name}ListFragment) getSupportFragmentManager()
+											  .findFragmentById(R.id.fragment);
+					fragment.getLoaderManager()
+							.restartLoader(0, null, fragment);
 					break;
 			}
 		}

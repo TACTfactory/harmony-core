@@ -15,18 +15,20 @@ import java.util.List;
 
 import ${project_namespace}.criterias.base.CriteriasBase;
 
-/** SQLiteAdapterBase<T>.
- * 	This is the base SQLiteAdapter
+/**
+ * This is the base SQLiteAdapter.
+ * @param <T> Type
  */
 public abstract class SQLiteAdapterBase<T> {
 
 	/** Table name of SQLite database. */
 	public static String DB_NAME = "database.sqlite";
+	/** TAG for debug purpose. */
 	public static String TAG = "${project_name?cap_first}SQLiteAdapterBase";
 
 	
-	/** Database tools */
-	protected Context context;
+	/** Database tools. */
+	protected Context ctx;
 	protected SQLiteDatabase mDatabase;
 	protected ${project_name?cap_first}SQLiteOpenHelper mBaseHelper;
 	
@@ -36,7 +38,7 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @param ctx context
 	 */
 	protected SQLiteAdapterBase(Context ctx) {	
-		this.context = ctx;
+		this.ctx = ctx;
 		this.mBaseHelper = new ${project_name?cap_first}SQLiteOpenHelper(
 				ctx, 
 				DB_NAME, 
@@ -61,7 +63,7 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	/** Initialize and open database.
-	 * 
+	 * @param db database
 	 * @return Open database
 	 */
 	public SQLiteDatabase open(SQLiteDatabase db) {
@@ -75,7 +77,7 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	/**
-	 * Get all entities from the DB
+	 * Get all entities from the DB.
 	 * @return A cursor pointing to all entities
 	 */
 	protected Cursor getAllCursor() {
@@ -83,14 +85,29 @@ public abstract class SQLiteAdapterBase<T> {
 			Log.d(TAG, "Get all entities");
 		}
 		
-		return this.query(this.getCols(), null, null, null, null, null);
+		return this.query(this.getCols(), 
+				null, 
+				null, 
+				null, 
+				null, 
+				null);
 	}
 	
 	/**
-	 * Send a query to the DB
+	 * Send a query to the DB.
+	 * @param projection Columns to work with
+	 * @param whereClause WHERE clause for SQL
+	 * @param whereArgs WHERE arguments for SQL
+	 * @param having HAVING clause
+	 * @param orderBy ORDER BY clause
 	 * @return A cursor pointing to the result of the query
 	 */
-	public Cursor query(String[] projection, String whereClause, String[] whereArgs, String groupBy, String having, String orderBy) {
+	public Cursor query(String[] projection, 
+								String whereClause, 
+								String[] whereArgs, 
+								String groupBy, 
+								String having, 
+								String orderBy) {
 		return this.mDatabase.query(
 				this.getTableName(),
 				projection,
@@ -102,7 +119,9 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	/**
-	 * Insert a new entity into the DB
+	 * Insert a new entity into the DB.
+	 * @param nullColumnHack nullColumnHack
+	 * @param item The ContentValues to insert
 	 * @return the id of the inserted entity
 	 */
 	public long insert(String nullColumnHack, ContentValues item) {
@@ -113,7 +132,9 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	/**
-	 * Delete the entities matching with query from the DB
+	 * Delete the entities matching with query from the DB.
+	 * @param whereClause WHERE clause for SQL
+	 * @param whereArgs WHERE arguments for SQL
 	 * @return how many token deleted
 	 */
 	public int delete(String whereClause, String[] whereArgs) {
@@ -124,10 +145,14 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	/**
-	 * Updates the entities from the DB matching with the query
+	 * Updates the entities from the DB matching with the query.
+	 * @param item The ContentValues to be updated
+	 * @param whereClause WHERE clause for SQL
+	 * @param whereArgs WHERE arguments for SQL
 	 * @return How many tokens updated
 	 */
-	public int update(ContentValues item, String whereClause, String[] whereArgs) {
+	public int update(ContentValues item, String whereClause, 
+											String[] whereArgs) {
 		return this.mDatabase.update(
 				this.getTableName(),
 				item,
@@ -135,7 +160,13 @@ public abstract class SQLiteAdapterBase<T> {
 				whereArgs);
 	}
 	
+	/**
+	 * Get the table Name.
+	 */
 	public abstract String getTableName();
+	/**
+	 * Get the table's columns.
+	 */
 	public abstract String[] getCols();
 	
 		
@@ -162,7 +193,10 @@ public abstract class SQLiteAdapterBase<T> {
 		if (crits == null || crits.isEmpty()) {
 			result = this.getAll();
 		} else {
-			final Cursor cursor = this.mDatabase.rawQuery("SELECT * FROM " + this.getTableName() + " WHERE " + crits.toSQLiteString(), null);
+			final Cursor cursor = this.mDatabase.rawQuery("SELECT * FROM " 
+						+ this.getTableName() + " WHERE " 
+						+ crits.toSQLiteString(), 
+						null);
 			result = this.cursorToItems(cursor);
 			cursor.close();
 		}	
@@ -188,7 +222,8 @@ public abstract class SQLiteAdapterBase<T> {
 			} while (cursor.moveToNext());
 			
 			//if (DemactApplication.DEBUG)
-			//	Log.d(TAG, "Read DB(" + TABLE_NAME + ") count : " + cursor.getCount() );
+			//Log.d(TAG, "Read DB(" + TABLE_NAME + ") count : " 
+		    //			+ cursor.getCount() );
 		}
 
 		return result;
@@ -211,9 +246,14 @@ public abstract class SQLiteAdapterBase<T> {
 	/** Update a Comment entity into database.
 	 * 
 	 * @param item The Comment entity to persist
-	 * @return 
+	 * @return The count of updated entities  
 	 */
 	public abstract int update(T item);
 	
+	/** Delete a Comment entity into database.
+	 * 
+	 * @param item The Comment entity to persist
+	 * @return The count of deleted entities
+	 */
 	public abstract int delete(T item);
 }

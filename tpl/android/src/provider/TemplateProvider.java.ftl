@@ -9,10 +9,14 @@ import android.net.Uri;
 /**
  * ${project_name?cap_first}Provider to handle DB operations.
  */
-public class ${project_name?cap_first}Provider extends ${project_name?cap_first}ProviderBase {
+public class ${project_name?cap_first}Provider 
+				extends ${project_name?cap_first}ProviderBase {
 	
 	/**
 	 * Deletes matching tokens with the given URI.
+	 * @param uri URI
+	 * @param selection SELECT clause for SQL
+	 * @param selectionArgs SELECT arguments for SQL
 	 * @return The number of tokens deleted
 	 */
 	@Override
@@ -28,6 +32,8 @@ public class ${project_name?cap_first}Provider extends ${project_name?cap_first}
 
 	/**
 	 * Insert ContentValues with the given URI.
+	 * @param uri URI
+	 * @param values ContentValues to insert
 	 * @return The URI to the inserted ContentValue
 	 */
 	@Override
@@ -45,7 +51,12 @@ public class ${project_name?cap_first}Provider extends ${project_name?cap_first}
 
 	/**
 	 * Query the table given by the uri parameter.
-	 * @return A Cursor pointing to the result of the query
+	 * @param uri URI
+	 * @param projection Columns to work with
+	 * @param selection SELECT clause for SQL
+	 * @param selectionArgs SELECT arguments for SQL
+	 * @param sortOrder ORDER BY clause
+	 * @return A cursor pointing to the result of the query
 	 */
 	@Override
 	public Cursor query(Uri uri, String[] projection, String selection,
@@ -66,8 +77,12 @@ public class ${project_name?cap_first}Provider extends ${project_name?cap_first}
 		return result;
 	}
 	/**
-	 * Update the given URI with the new ContentValues.
-	 * @return The number of token updated
+	 * Update the entities matching with uri from the DB.
+	 * @param uri URI
+	 * @param values ContentValues to update
+	 * @param selection SELECT clause for SQL
+	 * @param selectionArgs SELECT arguments for SQL
+	 * @return how many token update
 	 */
 	@Override
 	public int update(Uri uri, ContentValues values, String selection,

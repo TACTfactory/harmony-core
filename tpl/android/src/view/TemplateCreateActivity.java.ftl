@@ -24,7 +24,8 @@ public class ${curr.name}CreateActivity extends HarmonyFragmentActivity {
         this.setContentView(R.layout.activity_${curr.name?lower_case}_create);
   
         // Google Analytics
-        //GoogleAnalyticsSessionManager.getInstance(getApplication()).incrementActivityCount();
+        //GoogleAnalyticsSessionManager.getInstance(getApplication())
+        //        	.incrementActivityCount();
 	}
 
 	/**

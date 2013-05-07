@@ -4,13 +4,17 @@ import java.io.Serializable;
 
 /** Criteria. Criteria used for some db requests.*/
 public class Criteria implements Serializable, ICriteria {
+	/** Criteria key. */
 	private String key;
+	/** Criteria value. */
 	private String value;
+	/** Criteria Type. */
 	private Type type = Type.EQUALS;
 
 	/**
 	 * Convert the criteria to a SQLite String.
-	 * @return The SQLite String representation of the criteria. ex : "(price > 15.0)" 
+	 * @return The SQLite String representation of the criteria. ex : <br />
+	 * "(price > 15.0)" 
 	 */
 	@Override
 	public String toSQLiteString() {
@@ -19,6 +23,7 @@ public class Criteria implements Serializable, ICriteria {
 	
 	/**
 	 * Get the Criteria key.
+	 * @return The Criteria's key
 	 */
 	public String getKey() {
 		return this.key;
@@ -26,6 +31,7 @@ public class Criteria implements Serializable, ICriteria {
 	
 	/**
 	 * Get the Criteria value.
+	 * @return The Criteria's value
 	 */
 	public String getValue() {
 		return this.value;
@@ -33,6 +39,7 @@ public class Criteria implements Serializable, ICriteria {
 	
 	/**
 	 * Set the Criteria key.
+	 * @param key The new key to set
 	 */
 	public void setKey(final String key) {
 		this.key = key;
@@ -40,6 +47,7 @@ public class Criteria implements Serializable, ICriteria {
 	
 	/**
 	 * Set the Criteria value.
+	 * @param value The new value to set
 	 */
 	public void addValue(final String value) {
 		this.value = value;
@@ -47,6 +55,7 @@ public class Criteria implements Serializable, ICriteria {
 	
 	/**
 	 * Set the Criteria Type.
+	 * @param type The new Type to set
 	 */
 	public void setType(final Type type) {
 		this.type = type;
@@ -54,6 +63,7 @@ public class Criteria implements Serializable, ICriteria {
 	
 	/**
 	 * Get the Criteria Type.
+	 * @return The Criteria's type
 	 */
 	public Type getType() {
 		return this.type;
@@ -75,6 +85,7 @@ public class Criteria implements Serializable, ICriteria {
 		
 		/**
 		 * Constructor.
+		 * @param sql The SQL version of the Enum
 		 */
 		private Type(final String sql) {
 			this.sql = sql;
@@ -82,6 +93,7 @@ public class Criteria implements Serializable, ICriteria {
 		
 		/**
 		 * Get the SQL String transcryption.
+		 * @return The SQL version of the Enum
 		 */
 		public String getSQL() {
 			return this.sql;
@@ -90,6 +102,8 @@ public class Criteria implements Serializable, ICriteria {
 	
 	/**
 	 * Equals function.
+	 * @param obj The Object to compare with
+	 * @return true if objects are the same, otherwise false
 	 */
 	@Override
 	public boolean equals(final Object obj) {
@@ -97,8 +111,7 @@ public class Criteria implements Serializable, ICriteria {
 	
 		if (obj == null) {
 			result = false;
-		}
-		else if (getClass() != obj.getClass()) {
+		} else if (getClass() != obj.getClass()) {
 			result = false;
 		}
 		
@@ -110,11 +123,9 @@ public class Criteria implements Serializable, ICriteria {
 				}
 			} else if (!key.equals(other.key)) {
 				result = false;
-			}
-			else if (type != other.type) {
+			} else if (type != other.type) {
 				result = false;
-			}
-			else if (value == null) {
+			} else if (value == null) {
 				if (other.value != null) {
 					result = false;
 				}

@@ -10,17 +10,35 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
-
+/**
+ * ProviderAdapterBase<T extends Serializable>.
+ * @param <T> must extends Serializable
+ */
 public abstract class ProviderAdapterBase<T extends Serializable> {
+	/** TAG for debug purpose. */ 
 	public static final String TAG = "ProviderAdapterBase<T>";
+	/** Context. */
 	protected Context ctx;
+	/** SQLiteAdapterBase. */
 	protected SQLiteAdapterBase<T> adapter;
+	/** database. */
 	protected SQLiteDatabase db;
 
+	/**
+	 * Provider Adapter Base constructor.
+	 * @param Context The context.
+	 */
 	public ProviderAdapterBase(Context context) {
 		this.ctx = context;
 	}
 
+
+	/**
+	 * Insert Bundle into the database.
+	 * @param arg Argument
+	 * @param extras The Bundle to insert
+	 * @return The updated Bundle containing the new id
+	 */
 	protected Bundle insert(String arg, Bundle extras) {
 		long newId = -1;
 		@SuppressWarnings("unchecked")
@@ -30,7 +48,8 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 			newId = this.adapter.insert(item);
 			this.db.setTransactionSuccessful();
 		} catch(Exception e) {
-			Log.e(TAG, "Error while inserting T into database : " + e.getMessage());
+			Log.e(TAG, "Error while inserting T into database : " 
+						+ e.getMessage());
 		} finally {
 			this.db.endTransaction();
 		}
@@ -39,6 +58,12 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 		return result;
 	}
 
+	/**
+	 * Delete Bundle into the database.
+	 * @param arg Argument
+	 * @param extras The Bundle to delete
+	 * @return The updated Bundle containing how many updated fields
+	 */
 	public Bundle delete(String arg, Bundle extras) {
 		int adaptResult = 0;
 		@SuppressWarnings("unchecked")
@@ -48,7 +73,8 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 			adaptResult = this.adapter.delete(item);
 			this.db.setTransactionSuccessful();
 		} catch(Exception e) {
-			Log.e(TAG, "Error while inserting T into database : " + e.getMessage());
+			Log.e(TAG, "Error while inserting T into database : " 
+						+ e.getMessage());
 		} finally {
 			this.db.endTransaction();
 		}
@@ -58,6 +84,12 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 		return result;
 	}
 
+	/**
+	 * Update Bundle into the database.
+	 * @param arg Argument
+	 * @param extras The Bundle to update.
+	 * @return The updated Bundle containing how many updated fields
+	 */
 	public Bundle update(String arg, Bundle extras) {
 		int adaptResult = 0;
 		@SuppressWarnings("unchecked")
@@ -67,7 +99,8 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 			adaptResult = this.adapter.update(item);
 			this.db.setTransactionSuccessful();
 		} catch(Exception e) {
-			Log.e(TAG, "Error while inserting T into database : " + e.getMessage());
+			Log.e(TAG, "Error while inserting T into database : " 
+						+ e.getMessage());
 		} finally {
 			this.db.endTransaction();
 		}
@@ -77,6 +110,12 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 		return result;
 	}
 
+	/**
+	 * QueryAll.
+	 * @param arg Argument
+	 * @param extras Bundle
+	 * @return The updated Bundle containing a list a of items
+	 */
 	public Bundle queryAll(String arg, Bundle extras) {
 		CriteriasBase crits = null;
 		if (extras != null) {
@@ -88,7 +127,8 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 			itemList = this.adapter.getAll(crits);
 			this.db.setTransactionSuccessful();
 		} catch(Exception e) {
-			Log.e(TAG, "Error while inserting T into database : " + e.getMessage());
+			Log.e(TAG, "Error while inserting T into database : " 
+						+ e.getMessage());
 		} finally {
 			this.db.endTransaction();
 		}
@@ -100,9 +140,17 @@ public abstract class ProviderAdapterBase<T extends Serializable> {
 		return result;
 	}
 
+	/**
+	 * Get database.
+	 * @return database
+	 */
 	public SQLiteDatabase getDb() {
 		return this.db;
 	}
 
+	/**
+	 * Get the itemKey.
+	 * @return A String representing the key
+	 */
 	public abstract String getItemKey();
 }

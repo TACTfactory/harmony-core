@@ -64,14 +64,20 @@ import android.util.Log;
  * DataLoader for fixture purpose.
  */
 public class DataLoader {
+	/** TAG for debug purpose */
 	protected static final String TAG = "DataLoader";
 
+	/** Test mode. */
 	public static final int MODE_TEST 	= Integer.parseInt("0001", 2);
+	/** Application mode. */
 	public static final int MODE_APP 	= Integer.parseInt("0010", 2);
+	/** Debug mode. */
 	public static final int MODE_DEBUG 	= Integer.parseInt("0100", 2);
-	
+	/** List of DataLoaders. */ 
 	private List<FixtureBase<?>> dataLoaders;
+	/** List of Fixture folders. */ 
 	private static SparseArray<String> fixtureFolders;
+	/** Context. */
 	private Context ctx;
 
 	/**
@@ -88,6 +94,7 @@ public class DataLoader {
 	
 	/**
 	 * Constructor.
+	 * @param ctx The context
 	 */
 	public DataLoader(final Context ctx) {
 		this.ctx = ctx;
@@ -95,13 +102,16 @@ public class DataLoader {
 		<#list orderedEntities as entityName>
 			<#assign entity = entities[entityName] />
 			<#if (!(entity.internal?? && entity.internal=='true') && (entity.fields?size>0))>
-		this.dataLoaders.add(${entity.name}DataLoader.getInstance(this.ctx));
+		this.dataLoaders.add(
+				${entity.name}DataLoader.getInstance(this.ctx));
 			</#if>
 		</#list>
 	}
 	
 	/**
 	 * LoadData from fixtures.
+	 * @param db The DB to work in
+	 * @param modes Mode
 	 */
 	public void loadData(final SQLiteDatabase db, final int modes) {
 		Log.i(TAG, "Initializing fixtures.");
@@ -130,6 +140,8 @@ public class DataLoader {
 	
 	/**
 	 * isType.
+	 * @param modes Modes
+	 * @param mode Mode
 	 */
 	private boolean isType(final int modes, final int mode) {
 		boolean result;
@@ -144,7 +156,8 @@ public class DataLoader {
 	}
 	
 	/**
-	 * Get path to fixtures. 
+	 * Get path to fixtures.
+	 * @param mode Mode 
 	 * @return A String representing the path to fixtures
 	 */
 	public static String getPathToFixtures(final int mode) {
