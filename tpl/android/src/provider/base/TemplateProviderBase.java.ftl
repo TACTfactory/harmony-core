@@ -20,7 +20,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	/** TAG for debug purpose. */
 	protected static String TAG = "${project_name?cap_first}Provider";
 	/** Uri not supported. */
-	protected String URI_NOT_SUPPORTED;
+	protected static String URI_NOT_SUPPORTED;
 	
 	/** Tools / Common.
 	 * 
