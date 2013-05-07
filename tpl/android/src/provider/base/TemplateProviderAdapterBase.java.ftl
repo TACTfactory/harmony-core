@@ -38,6 +38,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase extends Provider
 	}
 
 	public ${curr.name?cap_first}ProviderAdapterBase(Context context, SQLiteDatabase db) {
+		super(context);
 		this.adapter = new ${curr.name?cap_first}SQLiteAdapter(context);
 		if (db != null) {
 			this.db = this.adapter.open(db);

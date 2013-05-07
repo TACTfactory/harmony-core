@@ -6,14 +6,20 @@ import java.util.ArrayList;
 import ${project_namespace}.criterias.base.CriteriasBase;
 import ${data_namespace}.base.SQLiteAdapterBase;
 
+import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.util.Log;
 
 public abstract class ProviderAdapterBase<T extends Serializable> {
 	public static final String TAG = "ProviderAdapterBase<T>";
+	protected Context ctx;
 	protected SQLiteAdapterBase<T> adapter;
 	protected SQLiteDatabase db;
+
+	public ProviderAdapterBase(Context context) {
+		this.ctx = context;
+	}
 
 	protected Bundle insert(String arg, Bundle extras) {
 		long newId = -1;

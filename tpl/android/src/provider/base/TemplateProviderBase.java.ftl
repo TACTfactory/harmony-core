@@ -27,7 +27,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	public    static Integer baseVersion = 0;
 	public    static String baseName = "";
 	protected static String item;
-	protected static String authority = "${project_namespace}.provider";
+	public static String authority = "${project_namespace}.provider";
 	protected static UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 	
 	/** Adapter to SQLite
