@@ -54,7 +54,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	/** ${curr.name}ListFragment instance. */
 	protected static ${curr.name}ListFragment instance;
 
-	/** (non-Javadoc).
+	/**
 	 * @see android.support.v4.app.ListFragment#onCreateView(
 	 * adroid.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
 	 */
@@ -72,7 +72,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		return view;
 	}
 
-	/** (non-Javadoc).
+	/**
 	 * @see android.support.v4.app.ListFragment#onActivityCreated(android.os.
 	 * Bundle)
 	 */
@@ -101,7 +101,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		getLoaderManager().initLoader(0, null, this);
 	}
 
-	/** (non-Javadoc).
+	/**
 	 * @see android.support.v4.app.ListFragment#onListItemClick(
 	 * android.widget.ListView, android.view.View, int, long)
 	 */
@@ -116,7 +116,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		this.startActivity(intent);
 	}
 
-	/** (non-Javadoc).
+	/**
 	 * @see android.support.v4.app.LoaderManager#onCreateLoader(int, 
 	 * android.os.Bundle)
 	 */
@@ -131,7 +131,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
 	}
 
-	/** (non-Javadoc).
+	/**
 	 * @see android.support.v4.app.LoaderManager#onLoadFinished()
 	 */
 	@Override 
@@ -148,7 +148,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		}
 	}
 
-	/** (non-Javadoc).
+	/**
 	 * @see android.support.v4.app.LoaderManager#onLoaderReset()
 	 */
 	@Override 
@@ -232,7 +232,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 			this.item = item;
 		}
 
-		/* (non-Javadoc).
+		/**
 		 * @see android.os.AsyncTask#doInBackground(Params[])
 		 */
 		@Override
@@ -255,7 +255,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 			return result;
 		}
 		
-		/* (non-Javadoc).
+		/**
 		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
 		 */
 		@Override

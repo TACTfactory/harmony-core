@@ -22,9 +22,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	/** Uri not supported. */
 	protected String URI_NOT_SUPPORTED;
 	
-	/** Tools / Common.
-	 * 
-	 */
+	/* Tools / Common. */
 	/** Base version. */
 	public    static Integer baseVersion = 0;
 	/** Base name. */
@@ -337,7 +335,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 		return Uri.parse("content://" + authority);
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see android.content.ContentProvider#call<br />
 	 * (java.lang.String, java.lang.String, android.os.Bundle)
 	 */

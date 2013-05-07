@@ -106,7 +106,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 		this.dayOfMonth = date.getDayOfMonth();
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see android.app.AlertDialog#onCreate(android.os.Bundle)
 	 */
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
