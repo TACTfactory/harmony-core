@@ -2,13 +2,15 @@
 package ${project_namespace}.criterias;
 
 import ${data_namespace}.${curr.name?cap_first}SQLiteAdapter;
-import ${project_namespace}.criterias.base.*;
+import ${project_namespace}.criterias.base.CriteriasBase;
+import ${project_namespace}.criterias.base.Criteria;
 
 /**
  * ${curr.name?cap_first}Criterias.
  */
 public class ${curr.name?cap_first}Criterias extends CriteriasBase {
-	public static final String _PARCELABLE = 
+	/** String to parcel ${curr.name?uncap_first}Criteria. */
+	public static final String PARCELABLE = 
 			"${curr.name?uncap_first}CriteriaPARCEL";
 
 	/**

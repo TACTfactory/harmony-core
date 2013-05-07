@@ -10,8 +10,10 @@ import ${project_namespace}.criterias.base.Criteria.Type;
  *	An array of Criteria and CriteriasBase. Used for db requests.   
  */
 public abstract class CriteriasBase implements Serializable, ICriteria {
+	/** Criteria GroupType. */ 
 	private GroupType type;
-	private List<ICriteria> arr = new ArrayList<ICriteria>(); 
+	/** Array of ICriteria. */
+	private List<ICriteria> criterias = new ArrayList<ICriteria>(); 
 	 
 	/**
 	 * Constructor.
@@ -29,10 +31,10 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	public String toSQLiteString() {
 		StringBuilder ret = new StringBuilder("(");
 		
-		for (int i = 0; i < this.arr.size(); i++) {
-			final ICriteria crit = this.arr.get(i);
+		for (int i = 0; i < this.criterias.size(); i++) {
+			final ICriteria crit = this.criterias.get(i);
 			ret.append(crit.toSQLiteString());
-			if (i != this.arr.size() - 1) {
+			if (i != this.criterias.size() - 1) {
 				ret.append(' ');
 				ret.append(type.getSqlType());
 				ret.append(' ');
@@ -57,8 +59,8 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	public boolean add(final Criteria crit) {
 		boolean result;
 	
-		if (this.validCriteria(crit) && !this.arr.contains(crit)) {
-			arr.add(crit);
+		if (this.validCriteria(crit) && !this.criterias.contains(crit)) {
+			criterias.add(crit);
 			result = true;
 		} else {
 			result = false;
@@ -122,6 +124,6 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	 * @return true if the List is empty, false otherwise
 	 */
 	public boolean isEmpty() {
-		return this.arr.isEmpty();
+		return this.criterias.isEmpty();
 	}
 }

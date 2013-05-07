@@ -19,26 +19,37 @@ import android.os.Bundle;
  */
 public abstract class ${curr.name?cap_first}ProviderAdapterBase 
 				extends ProviderAdapterBase<${curr.name?cap_first}> {
+	
+	/** TAG for debug purpose. */
 	protected static String TAG = "${curr.name?cap_first}ProviderAdapter";
 
+	/** ${curr.name?upper_case}_URI. */
 	public	  static Uri ${curr.name?upper_case}_URI;
 
+	/** ${curr.name?cap_first} key */
 	public static String ITEM_KEY = "${curr.name?cap_first}";
 
+	/** ${curr.name?uncap_first} type. */
 	protected static final String ${curr.name?uncap_first}Type = 
 			"${curr.name?lower_case}";
 
+	/** ${curr.name?upper_case} Insert method name. */
 	public static final String METHOD_INSERT_${curr.name?upper_case} = 
 			"insert${curr.name?cap_first}";
+	/** ${curr.name?upper_case} Update method name. */
 	public static final String METHOD_UPDATE_${curr.name?upper_case} = 
 			"update${curr.name?cap_first}";
+	/** ${curr.name?upper_case} Delete method name. */
 	public static final String METHOD_DELETE_${curr.name?upper_case} = 
 			"delete${curr.name?cap_first}";
+	/** ${curr.name?upper_case} Query method name. */
 	public static final String METHOD_QUERY_${curr.name?upper_case} = 
 			"query${curr.name?cap_first}";
 
+	/** ${curr.name?upper_case}_ALL. */
 	protected static final int ${curr.name?upper_case}_ALL = 
 			${provider_id};
+	/** ${curr.name?upper_case}_ONE. */		
 	protected static final int ${curr.name?upper_case}_ONE = 
 			${provider_id + 1};
 
@@ -61,13 +72,13 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	
 	/**
 	 * Constructor.
-	 * @param context context
+	 * @param ctx context
 	 * @param db database
 	 */
-	public ${curr.name?cap_first}ProviderAdapterBase(Context context, 
+	public ${curr.name?cap_first}ProviderAdapterBase(Context ctx, 
 					SQLiteDatabase db) {
-		super();
-		this.adapter = new ${curr.name?cap_first}SQLiteAdapter(context);
+		super(ctx);
+		this.adapter = new ${curr.name?cap_first}SQLiteAdapter(ctx);
 		if (db != null) {
 			this.db = this.adapter.open(db);
 		} else {

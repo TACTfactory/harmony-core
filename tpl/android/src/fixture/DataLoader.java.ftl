@@ -64,14 +64,20 @@ import android.util.Log;
  * DataLoader for fixture purpose.
  */
 public class DataLoader {
+	/** TAG for debug purpose */
 	protected static final String TAG = "DataLoader";
 
+	/** Test mode. */
 	public static final int MODE_TEST 	= Integer.parseInt("0001", 2);
+	/** Application mode. */
 	public static final int MODE_APP 	= Integer.parseInt("0010", 2);
+	/** Debug mode. */
 	public static final int MODE_DEBUG 	= Integer.parseInt("0100", 2);
-	
+	/** List of DataLoaders. */ 
 	private List<FixtureBase<?>> dataLoaders;
+	/** List of Fixture folders. */ 
 	private static SparseArray<String> fixtureFolders;
+	/** Context. */
 	private Context ctx;
 
 	/**

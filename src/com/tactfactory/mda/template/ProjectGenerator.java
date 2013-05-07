@@ -7,7 +7,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
@@ -180,35 +179,11 @@ public class ProjectGenerator extends BaseGenerator {
 			+ "HarmonyListFragment.java",
 			false);
 		
-		// create ProjectMenuBase
-		super.makeSource(
-			this.getAdapter().getTemplateSourcePath() 
-			+ "menu/TemplateMenuBase.java",
-			this.getAdapter().getMenuPath()
-
-			+ CaseFormat.LOWER_CAMEL.to(
-					CaseFormat.UPPER_CAMEL,
-					this.getAppMetas().getName()) 
-			+ "MenuBase.java",
-			false);
-		
-		// create ProjectMenu
-		super.makeSource(
-			this.getAdapter().getTemplateSourcePath() 
-			+ "menu/TemplateMenu.java",
-			this.getAdapter().getMenuPath() 
-			+ CaseFormat.LOWER_CAMEL.to(
-					CaseFormat.UPPER_CAMEL, 
-					this.getAppMetas().getName()) 
-			+ "Menu.java",
-			false);
-		
-		// create MenuWrapper
-		super.makeSource(
-			this.getAdapter().getTemplateSourcePath() 
-			+ "menu/MenuWrapperBase.java",
-			this.getAdapter().getMenuPath() + "MenuWrapperBase.java",
-			false);
+		try {
+			new MenuGenerator(this.getAdapter()).generateMenu();
+		} catch (Exception e) {
+			ConsoleUtils.displayError(e);
+		}
 	}
 	
 	/**

@@ -16,49 +16,55 @@ import android.widget.TimePicker;
  *  A simple AlertDialog containing an TimePicker.
  */
 public class CustomTimePickerDialog extends AlertDialog {
+	/** Context. */
 	private Context ctx;
+	/** time picker. */
 	private TimePicker timePicker;
+	/** title. */
 	private String title;
+	/** hour of the day. */
 	private int hourOfDay;
+	/** minute. */
 	private int minute;
+	/** is 24 hour. */
 	private boolean is24HourView;
 
 	/** Constructor.
-	 * @param context The context the dialog is to run in.
+	 * @param ctx The context the dialog is to run in.
 	 * @param date The initial time of the dialog.
 	 * @param is24HourView Whether this is a 24 hour view, or AM/PM. 
 	 * @param title The text of the title.
 	 */
-	public CustomTimePickerDialog(Context context, DateTime date, 
+	public CustomTimePickerDialog(Context ctx, DateTime date, 
 										   boolean is24HourView, String title) {
-		super(context);
+		super(ctx);
 		
-		this.initializeTimePickerDialog(context, date, is24HourView, title);
+		this.initializeTimePickerDialog(ctx, date, is24HourView, title);
 	}
 	
 	/** Constructor.
-	 * @param context The context the dialog is to run in.
+	 * @param ctx The context the dialog is to run in.
 	 * @param date The initial time of the dialog.
 	 * @param is24HourView Whether this is a 24 hour view, or AM/PM. 
 	 * @param titleId The resource id of the title.
 	 */
-	public CustomTimePickerDialog(Context context, DateTime date, 
+	public CustomTimePickerDialog(Context ctx, DateTime date, 
 											boolean is24HourView, int titleId) {
-		super(context);
+		super(ctx);
 		
-		this.initializeTimePickerDialog(context, date, is24HourView, 
-													context.getString(titleId));
+		this.initializeTimePickerDialog(ctx, date, is24HourView, 
+													ctx.getString(titleId));
 	}
 	
 	/** TimePicker dialog initialisation.
-	 * @param context The context the dialog is to run in.
+	 * @param ctx The context the dialog is to run in.
 	 * @param date The initial time of the dialog.
 	 * @param is24HourView Whether this is a 24 hour view, or AM/PM. 
 	 * @param title The text of the title.
 	 */
-	private void initializeTimePickerDialog(Context context, DateTime date, 	
+	private void initializeTimePickerDialog(Context ctx, DateTime date, 	
 										   boolean is24HourView, String title) {
-		this.ctx = context;
+		this.ctx = ctx;
 		this.title = title;
 		this.hourOfDay = date.getHourOfDay();
 		this.minute = date.getMinuteOfHour();

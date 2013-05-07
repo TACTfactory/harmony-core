@@ -7,6 +7,7 @@ import java.io.File;
 
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.utils.LibraryUtils;
 import com.tactfactory.mda.utils.TactFileUtils;
 
 /**
@@ -64,7 +65,9 @@ public class TestProjectGenerator extends BaseGenerator {
 				this.getAdapter().getTemplateStringsTestPathFile(), 
 				this.getAdapter().getStringsTestPathFile(), false);
 		
-		this.updateLibrary("android-junit-report-1.5.8.jar");
+		LibraryUtils.addLibraryToTestProject(
+				this.getAdapter(),
+				"android-junit-report-1.5.8.jar");
 		
 		final File dirTpl = 
 				new File(Harmony.getBundlePath() + "tact-core/"

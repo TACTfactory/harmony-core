@@ -6,7 +6,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public abstract class ${project_name?cap_first}Preferences {
-	/** Constants
+	/** Constants.
 	 *
 	 */
 	private static final String shareName = "sharedata";
@@ -14,10 +14,10 @@ public abstract class ${project_name?cap_first}Preferences {
 	
 	/**
 	 * Constructor
-	 * @param context context
+	 * @param ctx context
 	 */
-	public ${project_name?cap_first}Preferences(Context context) {
-		this.settings = context.getSharedPreferences(
+	public ${project_name?cap_first}Preferences(Context ctx) {
+		this.settings = ctx.getSharedPreferences(
 				shareName, Context.MODE_PRIVATE);
 	}
 	

@@ -35,11 +35,16 @@ import org.joda.time.DateTime;
  */
 public abstract class ${project_name?cap_first}ApplicationBase
 														   extends Application {
+	/** TAG for debug purpose. */
 	private static final String TAG = "${project_name?cap_first}";
+	/** Singleton. */
 	private static volatile ${project_name?cap_first}ApplicationBase singleton;
-	private static DateFormat df;
-	private static DateFormat tf;
+	/** Date format. */
+	private static DateFormat dateFormat;
+	/** Time format. */
+	private static DateFormat timeFormat;
 	<#if (sync)>
+	/** Preferences. */
 	private static SharedPreferences preferences;
 	</#if>
 	
@@ -65,8 +70,8 @@ public abstract class ${project_name?cap_first}ApplicationBase
 		Log.i(TAG, "Starting application...");
 		
 		deviceID = getUDID(this);
-		df = android.text.format.DateFormat.getDateFormat((Context) singleton);
-		tf = android.text.format.DateFormat.getTimeFormat((Context) singleton);
+		dateFormat = android.text.format.DateFormat.getDateFormat((Context) singleton);
+		timeFormat = android.text.format.DateFormat.getTimeFormat((Context) singleton);
 		
 		// Manage unmanaged error of application
 		//Thread.setDefaultUncaughtExceptionHandler(
@@ -79,8 +84,8 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 * Get the device's UDID.
 	 * @return A String containing the UDID
 	 */
-	public static String getUDID(final Context context) {
-		String udid = Secure.getString(context.getContentResolver(), 
+	public static String getUDID(final Context ctx) {
+		String udid = Secure.getString(ctx.getContentResolver(), 
 															 Secure.ANDROID_ID);
 		
 		// for emulator
@@ -91,7 +96,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 		// for google bug, android < 2.3 (many device)
 		if (udid.equals("9774d56d682e549c")) {
 			final TelephonyManager telephonyManager = 
-					(TelephonyManager) context.getSystemService(
+					(TelephonyManager) ctx.getSystemService(
 													 Context.TELEPHONY_SERVICE);
 			udid = telephonyManager.getDeviceId();
 		}
@@ -126,6 +131,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 * @param ctx
 	 * @return the version number
 	 */
+	@SuppressWarnings("deprecation")
 	public static String getVersion(final Context ctx) {
 		final SharedPreferences settings = ctx.getSharedPreferences(
 				${project_name?cap_first}ApplicationBase.PREFS_PUBL, 
@@ -149,6 +155,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 * 
 	 * @param ctx
 	 */
+	@SuppressWarnings("deprecation")
 	public static void setVersion(final Context ctx) {
 		final SharedPreferences settings = ctx.getSharedPreferences(
 				${project_name?cap_first}ApplicationBase.PREFS_PUBL, 
@@ -183,7 +190,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 * @return the DateFormat
 	 */
 	public static DateFormat getDateFormat() {
-		return df;
+		return dateFormat;
 	}
 	
 	/**
@@ -191,7 +198,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 * @return the TimeFormat
 	 */
 	public static DateFormat getTimeFormat() {
-		return tf;
+		return timeFormat;
 	}
 		
 	<#if (sync)>
@@ -206,11 +213,11 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	
 	/**
 	 * Set the last sync date.
-	 * @param dt DateTime representing the last sync date to set
+	 * @param dateTime DateTime representing the last sync date to set
 	 */
-	public static void setLastSyncDate(DateTime dt) {
+	public static void setLastSyncDate(DateTime dateTime) {
 		Editor edit = preferences.edit();
-		edit.putString("lastSyncDate", dt.toString());
+		edit.putString("lastSyncDate", dateTime.toString());
 		edit.commit();
 	}
 	</#if>

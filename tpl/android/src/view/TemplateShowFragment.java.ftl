@@ -58,6 +58,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 	/* curr.fields View */
 <#list curr.fields as field>
 	<#if (!field.internal && !field.hidden)>
+	/** ${field.name} View. */
 		<#if (field.type=="boolean")>
 	protected CheckBox ${field.name}View;
 		<#else>
@@ -166,7 +167,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 	 * It runs asynchronously and shows a progressDialog
 	 */
 	public static class LoadTask extends AsyncTask<Void, Void, Integer> {
-		private final Context context;
+		private final Context ctx;
 		private final ${curr.name}ShowFragment fragment;
 		private ${curr.name} entity;
 		private String errorMsg;
@@ -182,7 +183,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 												final ${curr.name} entity) {
 			super();
 			this.fragment = fragment;
-			this.context = fragment.getActivity();
+			this.ctx = fragment.getActivity();
 			this.entity = entity;
 		}
 
@@ -193,10 +194,10 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		protected void onPreExecute() {
 			super.onPreExecute();
 
-			this.progress = ProgressDialog.show(context,
-					this.context.getString(
+			this.progress = ProgressDialog.show(ctx,
+					this.ctx.getString(
 						R.string.${curr.name?lower_case}_progress_load_title),
-					this.context.getString(
+					this.ctx.getString(
 						R.string.${curr.name?lower_case}_progress_load_message));
 		}
 
@@ -207,7 +208,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 			
-			ContentResolver prov = this.context.getContentResolver();
+			ContentResolver prov = this.ctx.getContentResolver();
 			Bundle b = new Bundle();
 			b.putSerializable("id", this.entity.getId());
 			Bundle ret = 
@@ -238,13 +239,13 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 				this.fragment.loadData();
 			} else {
 				final AlertDialog.Builder builder = 
-						new AlertDialog.Builder(this.context);
+						new AlertDialog.Builder(this.ctx);
 				builder.setIcon(0);
 				builder.setMessage(
-						this.context.getString(
+						this.ctx.getString(
 								R.string.${curr.name?lower_case}_error_load));
 				builder.setPositiveButton(
-						this.context.getString(android.R.string.yes), 
+						this.ctx.getString(android.R.string.yes), 
 						new Dialog.OnClickListener() {
 							public void onClick(DialogInterface dialog, 
 																	int which) {
