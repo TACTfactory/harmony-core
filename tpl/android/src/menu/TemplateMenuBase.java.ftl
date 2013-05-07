@@ -73,7 +73,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 		}
 		
 		this.fragment	= fragment;
-		this.ctx 	= context;
+		this.ctx 	= ctx;
 		<#if menus??>
 			<#list menus as menu>
 		this.menus.put(${menuAlias(menu)}, new ${menu}());	
