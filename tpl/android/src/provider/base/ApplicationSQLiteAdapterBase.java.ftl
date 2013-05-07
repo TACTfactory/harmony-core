@@ -28,7 +28,7 @@ public abstract class SQLiteAdapterBase<T> {
 
 	
 	/** Database tools. */
-	protected Context context;
+	protected Context ctx;
 	protected SQLiteDatabase mDatabase;
 	protected ${project_name?cap_first}SQLiteOpenHelper mBaseHelper;
 	
@@ -38,7 +38,7 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @param ctx context
 	 */
 	protected SQLiteAdapterBase(Context ctx) {	
-		this.context = ctx;
+		this.ctx = ctx;
 		this.mBaseHelper = new ${project_name?cap_first}SQLiteOpenHelper(
 				ctx, 
 				DB_NAME, 

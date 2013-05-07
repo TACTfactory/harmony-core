@@ -19,12 +19,12 @@ public class DeleteDialog extends AlertDialog
 	
 	/**
 	 * Constructor.
-	 * @param context context
+	 * @param ctx context
 	 * @param fragment fragment
 	 * @param id id
 	 */
-	public DeleteDialog(Context context, DeletableList fragment, int id) {
-		super(context);
+	public DeleteDialog(Context ctx, DeletableList fragment, int id) {
+		super(ctx);
 		this.fragment = fragment;
 		this.id = id;
 	}

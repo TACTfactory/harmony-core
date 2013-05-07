@@ -1,6 +1,6 @@
 <#function callLoader entity>
 	<#assign ret="//Load "+entity.name+" fixtures\r\t\t" /> 
-	<#assign ret=ret+entity.name?cap_first+"DataLoader "+entity.name?uncap_first+"Loader = new "+entity.name?cap_first+"DataLoader(this.context);\r\t\t" />
+	<#assign ret=ret+entity.name?cap_first+"DataLoader "+entity.name?uncap_first+"Loader = new "+entity.name?cap_first+"DataLoader(this.ctx);\r\t\t" />
 	<#assign ret=ret+entity.name?uncap_first+"Loader.getModelFixtures("+entity.name?cap_first+"DataLoader.MODE_BASE);\r\t\t" />
 	<#assign ret=ret+entity.name?uncap_first+"Loader.load(manager);\r\r" />
 	<#return ret />
@@ -88,7 +88,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	/** TAG for debug purpose. */
 	protected static final String TAG = "DatabaseHelper";
 	/** Context. */
-	protected Context context;
+	protected Context ctx;
 	
 	/** Android's default system path of the database.
 	 * 
@@ -101,20 +101,20 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	
 	/**
 	 * Constructor.
-	 * @param context Context
+	 * @param ctx Context
 	 * @param name name
 	 * @param factory factory
 	 * @param version version
 	 */
-	public ${project_name?cap_first}SQLiteOpenHelperBase(final Context context, 
+	public ${project_name?cap_first}SQLiteOpenHelperBase(final Context ctx, 
 		   final String name, final CursorFactory factory, final int version) {
-		super(context, name, factory, version);
-		this.context = context;
+		super(ctx, name, factory, version);
+		this.ctx = ctx;
 		DB_NAME = name;
-		DB_PATH = context.getDatabasePath(DB_NAME).getAbsolutePath();
+		DB_PATH = ctx.getDatabasePath(DB_NAME).getAbsolutePath();
 		
 		try {
-			this.context.getAssets().open(DB_NAME);
+			this.ctx.getAssets().open(DB_NAME);
 			assetsExist = true;
 		} catch (IOException e) {
 			assetsExist = false;
@@ -213,7 +213,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	 * @param db The database to populate with fixtures
 	 */
 	private void loadData(final SQLiteDatabase db) {
-		final DataLoader dataLoader = new DataLoader(this.context);
+		final DataLoader dataLoader = new DataLoader(this.ctx);
 		dataLoader.clean();
 		int mode = DataLoader.MODE_APP;
 		if (${project_name?cap_first}Application.DEBUG) {
@@ -281,7 +281,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	private void copyDataBase() throws IOException {
 
 		// Open your local db as the input stream
-		final InputStream myInput = this.context.getAssets().open(DB_NAME);
+		final InputStream myInput = this.ctx.getAssets().open(DB_NAME);
 		
 		// Path to the just created empty db
 		final String outFileName = DB_PATH + DB_NAME;

@@ -72,13 +72,13 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	
 	/**
 	 * Constructor.
-	 * @param context context
+	 * @param ctx context
 	 * @param db database
 	 */
-	public ${curr.name?cap_first}ProviderAdapterBase(Context context, 
+	public ${curr.name?cap_first}ProviderAdapterBase(Context ctx, 
 					SQLiteDatabase db) {
 		super();
-		this.adapter = new ${curr.name?cap_first}SQLiteAdapter(context);
+		this.adapter = new ${curr.name?cap_first}SQLiteAdapter(ctx);
 		if (db != null) {
 			this.db = this.adapter.open(db);
 		} else {

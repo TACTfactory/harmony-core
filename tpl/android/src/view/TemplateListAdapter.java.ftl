@@ -46,14 +46,14 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 
 	/** 
 	 * Constructor.
-	 * @param context context
+	 * @param ctx context
 	 * @param fragment fragment
 	 */
-	public ${curr.name}ListAdapter(Context context, 
+	public ${curr.name}ListAdapter(Context ctx, 
 			${curr.name?cap_first}ListFragment fragment) {
-		super(context, R.layout.row_${curr.name?lower_case});
+		super(ctx, R.layout.row_${curr.name?lower_case});
 
-		this.mInflater = (LayoutInflater) context.getSystemService(
+		this.mInflater = (LayoutInflater) ctx.getSystemService(
 									Context.LAYOUT_INFLATER_SERVICE);
 		this.fragment = fragment;
 	}

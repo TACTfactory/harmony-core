@@ -78,22 +78,22 @@ public class ${curr.name?cap_first}DataLoader
 	
 	/**
 	 * Get the ${curr.name?cap_first}DataLoader singleton.
-	 * @param context The context
+	 * @param ctx The context
 	 */
 	public static ${curr.name?cap_first}DataLoader getInstance(
-											final Context context) {
+											final Context ctx) {
 		if (instance == null) {
-			instance = new ${curr.name?cap_first}DataLoader(context); 
+			instance = new ${curr.name?cap_first}DataLoader(ctx); 
 		}
 		return instance;
 	}
 	
 	/**
 	 * Constructor.
-	 * @param context The context
+	 * @param ctx The context
 	 */
-	private ${curr.name?cap_first}DataLoader(final Context context) {
-		super(context);
+	private ${curr.name?cap_first}DataLoader(final Context ctx) {
+		super(ctx);
 	}
 
 	
@@ -156,7 +156,7 @@ public class ${curr.name?cap_first}DataLoader
 					<#if (field.relation.type=="OneToOne")>
 			${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} = 
 					${field.relation.targetEntity?cap_first}DataLoader.getInstance(
-							this.context).getModelFixture(
+							this.ctx).getModelFixture(
 									element.getChildText("${field.name?uncap_first}"));
 			if (${field.relation.targetEntity?uncap_first} != null) {
 				${curr.name?uncap_first}.set${field.name?cap_first}(
@@ -170,7 +170,7 @@ public class ${curr.name?cap_first}DataLoader
 					<#elseif (field.relation.type=="ManyToOne")>
 			${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} = 
 					${field.relation.targetEntity?cap_first}DataLoader.getInstance(
-							this.context).getModelFixture(element.getChildText("${field.name?uncap_first}"));
+							this.ctx).getModelFixture(element.getChildText("${field.name?uncap_first}"));
 			if (${field.relation.targetEntity?uncap_first} != null) {
 				${curr.name?uncap_first}.set${field.name?cap_first}(
 						${field.relation.targetEntity?uncap_first});
@@ -192,10 +192,10 @@ public class ${curr.name?cap_first}DataLoader
 			List<Element> ${field.relation.targetEntity?uncap_first}sMap = 
 					element.getChild("${field.name?uncap_first}").getChildren();
 			for (Element ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap) {
-				if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.context).items.containsKey(${field.relation.targetEntity?uncap_first}Name.getText()))
+				if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.ctx).items.containsKey(${field.relation.targetEntity?uncap_first}Name.getText()))
 					${field.relation.targetEntity?uncap_first}s.add(
 							${field.relation.targetEntity?cap_first}DataLoader.getInstance(
-									this.context).getModelFixture(
+									this.ctx).getModelFixture(
 											${field.relation.targetEntity?uncap_first}Name.getText()));
 			}
 			${curr.name?uncap_first}.set${field.name?cap_first}(
@@ -252,7 +252,7 @@ public class ${curr.name?cap_first}DataLoader
 					<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">			
 			final ${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} = 
 					${field.relation.targetEntity?cap_first}DataLoader.getInstance(
-							this.context).items.get(
+							this.ctx).items.get(
 									(String) columns.get("${field.name?uncap_first}"));
 			if (${field.relation.targetEntity?uncap_first} != null) {
 				${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first});
@@ -277,11 +277,11 @@ public class ${curr.name?cap_first}DataLoader
 					(Map<?, ?>) columns.get("${field.name?uncap_first}");
 			for (final Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()) {
 				if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(
-						this.context).items.containsKey(
+						this.ctx).items.containsKey(
 								(String) ${field.relation.targetEntity?uncap_first}Name)) {
 					${field.relation.targetEntity?uncap_first}s.add(
 							${field.relation.targetEntity?cap_first}DataLoader.getInstance(
-									this.context).items.get((String) ${field.relation.targetEntity?uncap_first}Name));
+									this.ctx).items.get((String) ${field.relation.targetEntity?uncap_first}Name));
 				}
 			}
 			${curr.name?uncap_first}.set${field.name?cap_first}(

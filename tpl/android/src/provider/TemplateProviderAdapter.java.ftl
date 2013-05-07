@@ -14,20 +14,20 @@ public class ${curr.name?cap_first}ProviderAdapter
 	
 	/**
 	 * Constructor.
-	 * @param context context
+	 * @param ctx context
 	 */
-	public ${curr.name?cap_first}ProviderAdapter(Context context) {
-		this(context, null);
+	public ${curr.name?cap_first}ProviderAdapter(Context ctx) {
+		this(ctx, null);
 	}
 
 	/**
 	 * Constructor.
-	 * @param context context
+	 * @param ctx context
 	 * @param db database
 	 */
-	public ${curr.name?cap_first}ProviderAdapter(Context context, 
+	public ${curr.name?cap_first}ProviderAdapter(Context ctx, 
 							SQLiteDatabase db) {
-		super(context, db);
+		super(ctx, db);
 	}
 }
 

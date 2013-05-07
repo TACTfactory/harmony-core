@@ -37,67 +37,67 @@ public class CustomDatePickerDialog extends AlertDialog {
 	private int dayOfMonth;
 
 	/** Constructor.
-	 * @param context The context the dialog is to run in.
+	 * @param ctx The context the dialog is to run in.
 	 * @param date The initial date of the dialog.
 	 * @param title The text of the title.
 	 */
-	public CustomDatePickerDialog(Context context, DateTime date, String title) {
-		super(context);
+	public CustomDatePickerDialog(Context ctx, DateTime date, String title) {
+		super(ctx);
 		
-		this.initializeDatePickerDialog(context, date, title, null, null);
+		this.initializeDatePickerDialog(ctx, date, title, null, null);
 	}
 	
 	/** Constructor.
-	 * @param context The context the dialog is to run in.
+	 * @param ctx The context the dialog is to run in.
 	 * @param date The initial date of the dialog.
 	 * @param titleId The resource id of the title.
 	 */
-	public CustomDatePickerDialog(Context context, DateTime date, int titleId) {
-		super(context);
+	public CustomDatePickerDialog(Context ctx, DateTime date, int titleId) {
+		super(ctx);
 		
 		this.initializeDatePickerDialog(
-						 context, date, context.getString(titleId), null, null);
+						 ctx, date, ctx.getString(titleId), null, null);
 	}
 
 	/** Constructor.
-	 * @param context The context the dialog is to run in.
+	 * @param ctx The context the dialog is to run in.
 	 * @param date The initial date of the dialog.
 	 * @param title The text of the title.
 	 * @param minDate The minimum date of the dialog.
 	 * @param maxDate The maximum date of the dialog.
 	 */
-	public CustomDatePickerDialog(Context context, DateTime date, String title,
+	public CustomDatePickerDialog(Context ctx, DateTime date, String title,
 							   final DateTime minDate, final DateTime maxDate) {
-		super(context);
+		super(ctx);
 		
-		this.initializeDatePickerDialog(context, date, title, minDate, maxDate);
+		this.initializeDatePickerDialog(ctx, date, title, minDate, maxDate);
 	}
 	
 	/** Constructor.
-	 * @param context The context the dialog is to run in.
+	 * @param ctx The context the dialog is to run in.
 	 * @param date The initial date of the dialog.
 	 * @param titleId The resource id of the title.
 	 * @param minDate The minimum date of the dialog.
 	 * @param maxDate The maximum date of the dialog.
 	 */
-	public CustomDatePickerDialog(Context context, DateTime date, int titleId, 
+	public CustomDatePickerDialog(Context ctx, DateTime date, int titleId, 
 							   final DateTime minDate, final DateTime maxDate) {
-		super(context);
+		super(ctx);
 		
-		this.initializeDatePickerDialog(context, date, 
-								  context.getString(titleId), minDate, maxDate);
+		this.initializeDatePickerDialog(ctx, date, 
+								  ctx.getString(titleId), minDate, maxDate);
 	}
 	
 	/** DatePicker dialog initialisation.
-	 * @param context The context the dialog is to run in.
+	 * @param ctx The context the dialog is to run in.
 	 * @param date The initial date of the dialog.
 	 * @param title The text of the title.
 	 * @param minDate The minimum date of the dialog.
 	 * @param maxDate The maximum date of the dialog.
 	 */
-	private void initializeDatePickerDialog(Context context, DateTime date,
+	private void initializeDatePickerDialog(Context ctx, DateTime date,
 	                         String title, DateTime minDate, DateTime maxDate) {
-		this.ctx = context;
+		this.ctx = ctx;
 		this.title = title;
 		this.minDate = minDate;
 		this.maxDate = maxDate;

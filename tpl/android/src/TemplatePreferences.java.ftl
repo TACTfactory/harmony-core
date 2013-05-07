@@ -15,8 +15,8 @@ public class ${project_name?cap_first}Preferences
 	/** Common
 	 *
 	 */
-	public ${project_name?cap_first}Preferences(Context context) {
-		this.settings = context.getSharedPreferences(
+	public ${project_name?cap_first}Preferences(Context ctx) {
+		this.settings = ctx.getSharedPreferences(
 				shareName, Context.MODE_PRIVATE);
 	}
 	

@@ -30,7 +30,7 @@ public abstract class FixtureBase<T> {
 	/** TAG for debug purpose. */
 	private static String TAG = "FixtureBase";
 	/** Context. */
-	protected Context context;
+	protected Context ctx;
 
 	/** Date + time pattern. */
 	protected String patternDateTime = "yyyy-MM-dd HH:mm";
@@ -44,10 +44,10 @@ public abstract class FixtureBase<T> {
 
 	/**
 	 * Constructor.
-	 * @param context The context
+	 * @param ctx The context
 	 */
-	public FixtureBase(final Context context) {
-		this.context = context;
+	public FixtureBase(final Context ctx) {
+		this.ctx = ctx;
 	}
 	/**
      * Load the fixtures for the current model.
@@ -152,7 +152,7 @@ public abstract class FixtureBase<T> {
 	 * @return The InputStream corresponding to the entity
 	 */
 	public InputStream getXml(final String entityName) {
-		final AssetManager assetManager = this.context.getAssets();
+		final AssetManager assetManager = this.ctx.getAssets();
 		InputStream ret = null;
 		try {
 			ret = assetManager.open(entityName + ".xml");
@@ -168,7 +168,7 @@ public abstract class FixtureBase<T> {
 	 * @return The InputStream corresponding to the entity
 	 */
 	public InputStream getYml(final String entityName) {
-		AssetManager assetManager = this.context.getAssets();
+		AssetManager assetManager = this.ctx.getAssets();
 		InputStream ret = null;
 		try {
 			ret = assetManager.open(entityName + ".yml");

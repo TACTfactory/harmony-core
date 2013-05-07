@@ -23,17 +23,17 @@ public class ${curr.name}ListLoader
 	/** m${curr.name}s list. */
 	private List<${curr.name}> m${curr.name}s;
 	/** Context. */
-	private Context context;
+	private Context ctx;
 
 	/**
 	 * Constructor.
-	 * @param context context 
+	 * @param ctx context
 	 * @param crit ${curr.name?cap_first}Criterias
 	 */
-	public ${curr.name}ListLoader(final Context context, 
+	public ${curr.name}ListLoader(final Context ctx, 
 					final ${curr.name?cap_first}Criterias crit) {
-		super(context);
-		this.context = context;
+		super(ctx);
+		this.ctx = ctx;
 		this.criterias = crit;
 	}
 
