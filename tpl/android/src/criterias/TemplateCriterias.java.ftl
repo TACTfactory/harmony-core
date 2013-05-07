@@ -9,7 +9,7 @@ import ${project_namespace}.criterias.base.*;
  */
 public class ${curr.name?cap_first}Criterias extends CriteriasBase {
 	/** String to parcel ${curr.name?uncap_first}Criteria. */
-	public static final String _PARCELABLE = 
+	public static final String PARCELABLE = 
 			"${curr.name?uncap_first}CriteriaPARCEL";
 
 	/**
