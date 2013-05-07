@@ -19,7 +19,7 @@ import ${project_namespace}.menu.${project_name?cap_first}Menu;
 public abstract class HarmonyListFragment<T> extends SherlockListFragment 
 implements LoaderManager.LoaderCallbacks<List<T> > {
 	
-	/** (non-Javadoc).
+	/* (non-Javadoc).
 	 * @see android.support.v4.app.Fragment#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -28,7 +28,7 @@ implements LoaderManager.LoaderCallbacks<List<T> > {
 		this.setHasOptionsMenu(true);
 	}
 
-	/** (non-Javadoc).
+	/* (non-Javadoc).
 	 * @see com.actionbarsherlock.app.SherlockFragment#onPrepareOptionsMenu
 	 * (com.actionbarsherlock.view.Menu)
 	 */
@@ -45,7 +45,7 @@ implements LoaderManager.LoaderCallbacks<List<T> > {
 		}
 	}
 
-	/** (non-Javadoc).
+	/* (non-Javadoc).
 	 * @see com.actionbarsherlock.app.SherlockFragment#onOptionsItemSelected
 	 * (com.actionbarsherlock.view.MenuItem)
 	 */
@@ -64,7 +64,7 @@ implements LoaderManager.LoaderCallbacks<List<T> > {
 		return result;
 	}
 
-	/** (non-Javadoc).
+	/* (non-Javadoc).
 	 * @see android.support.v4.app.Fragment#onActivityResult
 	 * (int, int, android.content.Intent)
 	 */

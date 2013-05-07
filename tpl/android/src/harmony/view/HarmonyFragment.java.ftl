@@ -14,7 +14,7 @@ import ${project_namespace}.menu.${project_name?cap_first}Menu;
  */
 public abstract class HarmonyFragment extends SherlockFragment {
 	
-	/** (non-Javadoc).
+	/* (non-Javadoc).
 	 * @see android.support.v4.app.Fragment#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -23,7 +23,7 @@ public abstract class HarmonyFragment extends SherlockFragment {
 		this.setHasOptionsMenu(true);
 	}
 
-	/** (non-Javadoc).
+	/* (non-Javadoc).
 	 * @see com.actionbarsherlock.app.SherlockFragment#onPrepareOptionsMenu
 	 * (com.actionbarsherlock.view.Menu)
 	 */
@@ -40,7 +40,7 @@ public abstract class HarmonyFragment extends SherlockFragment {
 		}
 	}
 
-	/** (non-Javadoc).
+	/* (non-Javadoc).
 	 * @see com.actionbarsherlock.app.SherlockFragment#onOptionsItemSelected
 	 * (com.actionbarsherlock.view.MenuItem)
 	 */
@@ -59,7 +59,7 @@ public abstract class HarmonyFragment extends SherlockFragment {
 		return result;
 	}
 
-	/** (non-Javadoc).
+	/* (non-Javadoc).
 	 * @see android.support.v4.app.Fragment#onActivityResult
 	 * (int, int, android.content.Intent)
 	 */

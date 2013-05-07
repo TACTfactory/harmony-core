@@ -13,7 +13,7 @@ import ${project_namespace}.menu.${project_name?cap_first}Menu;
  */
 public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
 
-	/** (non-Javadoc).
+	/* (non-Javadoc).
 	 * @see com.actionbarsherlock.app.SherlockFragmentActivity
 	 * #onPrepareOptionsMenu(com.actionbarsherlock.view.Menu)
 	 */

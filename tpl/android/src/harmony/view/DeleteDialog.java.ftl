@@ -29,7 +29,7 @@ public class DeleteDialog extends AlertDialog
 		this.id = id;
 	}
 	
-	/** (non-Javadoc).
+	/* (non-Javadoc).
 	 * @see android.app.AlertDialog#onCreate(android.os.Bundle)
 	 */
 	@Override
