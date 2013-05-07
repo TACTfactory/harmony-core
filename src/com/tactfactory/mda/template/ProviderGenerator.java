@@ -74,10 +74,25 @@ public class ProviderGenerator extends BaseGenerator {
 						TagConstant.CURRENT_ENTITY, cm.getName());
 				this.getDatamodel().put(
 						TagConstant.PROVIDER_ID, providerId);
+				
+				// Provider adapters
 				this.makeSourceProvider("TemplateProviderAdapter.java",
 						cm.getName() + "ProviderAdapter.java", false);
 				this.makeSourceProvider("base/TemplateProviderAdapterBase.java",
 						"base/" + cm.getName() + "ProviderAdapterBase.java", true);
+				
+				// Provider utils
+				this.makeSourceProvider(
+						"utils/TemplateProviderUtils.java",
+						"utils/" + cm.getName() + "ProviderUtils.java", 
+						false);
+				this.makeSourceProvider(
+						"utils/base/TemplateProviderUtilsBase.java",
+						"utils/base/" 
+								+ cm.getName() 
+								+ "ProviderUtilsBase.java", 
+						true);
+				
 				
 				providerId += 10;
 			}

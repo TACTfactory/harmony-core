@@ -7,7 +7,7 @@ import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
 import ${data_namespace}.${curr.name?cap_first}SQLiteAdapter;
 import ${project_namespace}.harmony.view.DeletableList;
 import ${project_namespace}.harmony.view.DeleteDialog;
-import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
+import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 
 import android.content.ContentResolver;
 import android.content.Context;
@@ -239,18 +239,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		protected Integer doInBackground(Void... params) {
 			int result = -1;
 
-			ContentResolver prov = this.ctx.getContentResolver();
-			Bundle b = new Bundle();
-			b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, 
-					this.item);
-			Bundle ret = 
-					prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
-							${curr.name?cap_first}ProviderAdapter.METHOD_DELETE_${curr.name?upper_case}, 
-							null,
-							b);
-
-			result = ret.getInt("result",  0); 
-
+			result = ${curr.name?cap_first}ProviderUtils.delete(this.ctx, this.item);
 
 			return result;
 		}

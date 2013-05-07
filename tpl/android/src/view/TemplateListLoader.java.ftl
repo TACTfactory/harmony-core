@@ -12,6 +12,7 @@ import android.support.v4.content.AsyncTaskLoader;
 import ${curr.namespace}.entity.${curr.name};
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
+import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 
 /**
  * ${curr.name} Loader.
@@ -47,7 +48,7 @@ public class ${curr.name}ListLoader
 		List<${curr.name}> result = new ArrayList<${curr.name}>();
 
 		// TODO Query of data
-		ContentResolver prov = this.getContext().getContentResolver();
+		/*ContentResolver prov = this.getContext().getContentResolver();
 		Bundle b = new Bundle();
 		b.putSerializable("crits", this.criterias);
 		Bundle provResult = prov.call(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
@@ -56,7 +57,9 @@ public class ${curr.name}ListLoader
 				b);
 		
 		result = (List<${curr.name}>) provResult.getSerializable(
-									${curr.name}ProviderAdapter.ITEM_KEY);
+									${curr.name}ProviderAdapter.ITEM_KEY);*/
+		result = ${curr.name?cap_first}ProviderUtils.queryAll(
+				this.ctx);
 		
 		return result;
 	}
