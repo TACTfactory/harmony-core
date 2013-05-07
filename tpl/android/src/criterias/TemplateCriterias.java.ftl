@@ -2,7 +2,8 @@
 package ${project_namespace}.criterias;
 
 import ${data_namespace}.${curr.name?cap_first}SQLiteAdapter;
-import ${project_namespace}.criterias.base.*;
+import ${project_namespace}.criterias.base.CriteriasBase;
+import ${project_namespace}.criterias.base.Criteria;
 
 /**
  * ${curr.name?cap_first}Criterias.
