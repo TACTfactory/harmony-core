@@ -134,7 +134,10 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	public int delete(final Uri uri, final String selection, 
 			final String[] selectionArgs) {
 		int result = 0;
-		this.db.beginTransaction();
+		boolean alreadyInTransaction = this.db.inTransaction();
+		if (!alreadyInTransaction) {
+			this.db.beginTransaction();
+		}
 		try {
 			switch (uriMatcher.match(uri)) {
 		<#list entities?values as entity>
@@ -163,10 +166,13 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			default:
 				throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
 			}
-
-			this.db.setTransactionSuccessful();
+			if (!alreadyInTransaction) {
+				this.db.setTransactionSuccessful();
+			}
 		} finally {
-			this.db.endTransaction();
+			if (!alreadyInTransaction) {
+				this.db.endTransaction();
+			}
 		}
 		
 		if (result > 0) {
@@ -185,7 +191,11 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	public Uri insert(final Uri uri, final ContentValues values) {
 		Uri result = null;
 
-		this.db.beginTransaction();
+		boolean alreadyInTransaction = this.db.inTransaction();
+	
+		if (!alreadyInTransaction) {
+			this.db.beginTransaction();
+		}
 		try {
 
 			switch (uriMatcher.match(uri)) {
@@ -204,9 +214,13 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			default:
 				throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
 			}
-			this.db.setTransactionSuccessful();
+			if (!alreadyInTransaction) {
+				this.db.setTransactionSuccessful();
+			}
 		} finally {
-			this.db.endTransaction();
+			if (!alreadyInTransaction) {
+				this.db.endTransaction();
+			}
 		}
 		if (result != null) {
 			this.getContext().getContentResolver().notifyChange(result, null);
@@ -229,7 +243,11 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			String[] selectionArgs, String sortOrder) {
 		Cursor result = null;
 
-		this.db.beginTransaction();
+		boolean alreadyInTransaction = this.db.inTransaction();
+
+		if (!alreadyInTransaction) {
+			this.db.beginTransaction();
+		}
 		try {
 		
 			switch (uriMatcher.match(uri)) {
@@ -259,10 +277,13 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			default:
 				throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
 			}
-
-			this.db.setTransactionSuccessful();
+			if (!alreadyInTransaction) {
+				this.db.setTransactionSuccessful();
+			}
 		} finally {
-			this.db.endTransaction();
+			if (!alreadyInTransaction) {
+				this.db.endTransaction();
+			}
 		}
 
 		return result;
@@ -280,8 +301,12 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	public int update(Uri uri, ContentValues values, String selection,
 			String[] selectionArgs) {
 		int result = 0;
+
+		boolean alreadyInTransaction = this.db.inTransaction();
 		
-		this.db.beginTransaction();
+		if (!alreadyInTransaction) {
+			this.db.beginTransaction();
+		}
 		try {
 
 			switch (uriMatcher.match(uri)) {
@@ -309,9 +334,14 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			default:
 				throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
 			}
-			this.db.setTransactionSuccessful();
+
+			if (!alreadyInTransaction) {
+				this.db.setTransactionSuccessful();
+			}
 		} finally {
-			this.db.endTransaction();
+			if (!alreadyInTransaction) {
+				this.db.endTransaction();
+			}
 		}
 		
 		if (result > 0) {
