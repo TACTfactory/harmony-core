@@ -1,6 +1,7 @@
 package ${project_namespace}.criterias.base;
 
 import java.io.Serializable;
+import android.database.DatabaseUtils;
 
 /** Criteria. Criteria used for some db requests.*/
 public class Criteria implements Serializable, ICriteria {
@@ -18,7 +19,7 @@ public class Criteria implements Serializable, ICriteria {
 	 */
 	@Override
 	public String toSQLiteString() {
-		return "(" + key + " " + type.getSQL() + " '" + value + "')";
+		return "(" + key + " " + type.getSQL() + " " + DatabaseUtils.sqlEscapeString(value) + ")";
 	}
 	
 	/**
