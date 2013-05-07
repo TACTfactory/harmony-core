@@ -283,28 +283,13 @@ public class ProjectGenerator extends BaseGenerator {
 		final File dirTpl = 
 				new File(Harmony.getBundlePath() + "tact-core/"
 						+ this.getAdapter().getTemplateProjectPath());
-		if (dirTpl.exists() && dirTpl.listFiles().length > 0) {
-			result = true;
-			
-			for (int i = 0; i < dirTpl.listFiles().length; i++) {
-				if (dirTpl.listFiles()[i].isFile()) {
-					String tplPath = this.getAdapter().getTemplateProjectPath() 
-							+ dirTpl.listFiles()[i].getName();
-					String srcPath = String.format("%s/%s/",
-							Harmony.getProjectPath(), 
-							this.getAdapter().getPlatform()) 
-								+ dirTpl.listFiles()[i].getName(); 
-					
-					tplPath = tplPath.substring(0, tplPath.length() 
-							- ".ftl".length());
-					srcPath = srcPath.substring(0, srcPath.length() 
-							- ".ftl".length());
-					super.makeSource(
-							tplPath,
-							srcPath,
-							false);
-				}
-			}
+		if (dirTpl.exists() && dirTpl.listFiles().length > 0) {				
+			this.clearProjectSources();
+			this.copyProjectTemplates(dirTpl, null, 
+					Harmony.getProjectPath() 
+						+ File.separator + this.getAdapter().getPlatform(), 
+					this.getAdapter().getTemplateProjectPath());
+			result = true;	
 		}
 		
 		// Make Test project
@@ -315,6 +300,66 @@ public class ProjectGenerator extends BaseGenerator {
 			ConsoleUtils.displayError(e);
 		}
 		return result;
+	}
+	
+	/**
+	 * Delete files that need to be recreated
+	 */
+	private void clearProjectSources() {
+		String projectPath = Harmony.getProjectPath() 
+				+ File.separator + this.getAdapter().getPlatform();
+		
+		File buildRules = new File(projectPath 
+				+ File.separator + "build.rules.xml");
+		
+		if (buildRules.exists()) {
+			buildRules.delete();
+		}
+	}
+	
+	/**
+	 * Copy files with recursive
+	 * @param file File to copy
+	 * @param directory Directory of the file (null if first)
+	 * @param sourcesPath Directory of sources files
+	 * @param templatesPath Directory of templates files
+	 */
+	private void copyProjectTemplates(File file, String directory, 
+			String sourcesPath, String templatesPath) {
+		if (file.isDirectory()) {
+			if (directory == null)
+				directory = "";
+			else
+				directory += File.separator + file.getName();
+			
+			File[] files = file.listFiles();
+			for (File subFile : files) {
+				this.copyProjectTemplates(
+						subFile, 
+						directory,
+						sourcesPath,
+						templatesPath);				
+			}
+		}
+		else {
+			String tplPath = templatesPath
+					+ File.separator + directory
+					+ File.separator + file.getName();
+			
+			String srcPath = sourcesPath
+					+ File.separator + directory
+					+ File.separator + file.getName();
+			
+			tplPath = tplPath.substring(0, tplPath.length() 
+					- ".ftl".length());
+			srcPath = srcPath.substring(0, srcPath.length() 
+					- ".ftl".length());
+			
+			super.makeSource(
+					tplPath,
+					srcPath,
+					false);
+		}
 	}
 
 	/**
