@@ -187,7 +187,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 			this.entity = entity;
 		}
 
-		/* (non-Javadoc)
+		/**
 		 * @see android.os.AsyncTask#onPreExecute()
 		 */
 		@Override
@@ -201,7 +201,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 						R.string.${curr.name?lower_case}_progress_load_message));
 		}
 
-		/* (non-Javadoc)
+		/**
 		 * @see android.os.AsyncTask#doInBackground(Params[])
 		 */
 		@Override
@@ -227,7 +227,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 			return result;
 		}
 
-		/* (non-Javadoc)
+		/**
 		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
 		 */
 		@Override

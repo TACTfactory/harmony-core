@@ -13,7 +13,7 @@ public abstract class ${project_name?cap_first}Preferences {
 	//private static final String sync_last = "sync_last"
 	
 	/**
-	 * Constructor
+	 * Constructor.
 	 * @param ctx context
 	 */
 	public ${project_name?cap_first}Preferences(Context ctx) {
@@ -22,7 +22,7 @@ public abstract class ${project_name?cap_first}Preferences {
 	}
 	
 	/**
-	 * Clear All preferences values
+	 * Clear All preferences values.
 	 */
 	public abstract void ClearPreferences();
 
