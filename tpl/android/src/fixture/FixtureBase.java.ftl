@@ -27,13 +27,19 @@ import android.util.Log;
  * @param <T> Fixture
  */
 public abstract class FixtureBase<T> {	
+	/** TAG for debug purpose. */
 	private static String TAG = "FixtureBase";
+	/** Context. */
 	protected Context context;
 
+	/** Date + time pattern. */
 	protected String patternDateTime = "yyyy-MM-dd HH:mm";
+	/** Date pattern. */
 	protected String patternDate = "yyyy-MM-dd";
+	/** Time pattern. */
 	protected String patternTime = "HH:mm";
 	
+	/** Link an ID and its entity. */
 	public Map<String, T> items = new LinkedHashMap<String, T>();
 
 	/**

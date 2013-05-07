@@ -23,6 +23,7 @@ public abstract class SQLiteAdapterBase<T> {
 
 	/** Table name of SQLite database. */
 	public static String DB_NAME = "database.sqlite";
+	/** TAG for debug purpose. */
 	public static String TAG = "${project_name?cap_first}SQLiteAdapterBase";
 
 	

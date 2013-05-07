@@ -22,16 +22,23 @@ import android.util.SparseArray;
  * ${project_name?cap_first}MenuBase.
  */
 public abstract class ${project_name?cap_first}MenuBase {
+	/** Share value. */
 	public static final int SHARE			= 1;
+	/** Search value. */
 	public static final int SEARCH			= 2;
 	
+	/** Array of MenuWrapperBase. */
 	protected SparseArray<MenuWrapperBase> menus = 
 					new SparseArray<MenuWrapperBase>();
 	
+	/** Context. */
 	protected Context context;
+	/** parent fragment. */
 	protected Fragment fragment;
+	/** Share String*/
 	protected String share;
 	
+	/** Menu. */
 	protected Menu menu;
 	
 	/**

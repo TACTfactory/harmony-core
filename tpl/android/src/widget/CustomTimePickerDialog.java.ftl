@@ -16,11 +16,17 @@ import android.widget.TimePicker;
  *  A simple AlertDialog containing an TimePicker.
  */
 public class CustomTimePickerDialog extends AlertDialog {
+	/** Context. */
 	private Context ctx;
+	/** time picker. */
 	private TimePicker timePicker;
+	/** title. */
 	private String title;
+	/** hour of the day. */
 	private int hourOfDay;
+	/** minute. */
 	private int minute;
+	/** is 24 hour. */
 	private boolean is24HourView;
 
 	/** Constructor.

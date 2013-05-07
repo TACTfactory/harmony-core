@@ -93,6 +93,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	<#list curr.fields as field>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
+	/** ${field.name} View. */
 				<#if field.type=="boolean">
 	protected CheckBox ${field.name}View;
 				<#elseif field.type=="datetime" || field.type=="date" || field.type=="time">
@@ -117,6 +118,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			</#if>
 		</#if>
 	</#list>
+	/** Save button. */
 	protected Button saveButton;
 
 	/** Initialize view of fields. 

@@ -85,14 +85,18 @@ import ${fixture_namespace}.*;
  */
 public class ${project_name?cap_first}SQLiteOpenHelperBase 
 										extends SQLiteOpenHelper {
+	/** TAG for debug purpose. */
 	protected static final String TAG = "DatabaseHelper";
+	/** Context. */
 	protected Context context;
 	
 	/** Android's default system path of the database.
 	 * 
 	 */
-	private static String DB_PATH;	
+	private static String DB_PATH;
+	/** database name. */
 	private static String DB_NAME;
+	/** is assets exist.*/
 	private static boolean assetsExist;
 	
 	/**

@@ -18,9 +18,11 @@ import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
  */
 public class ${curr.name}ListLoader 
 				extends AsyncTaskLoader<List<${curr.name}>> {
-	
+	/** ${curr.name?cap_first}Criterias. */
 	private ${curr.name?cap_first}Criterias criterias;
+	/** m${curr.name}s list. */
 	private List<${curr.name}> m${curr.name}s;
+	/** Context. */
 	private Context context;
 
 	/**

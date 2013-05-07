@@ -70,8 +70,10 @@ import ${curr.namespace}.entity.${curr.name};
  */
 public class ${curr.name?cap_first}DataLoader 
 						extends FixtureBase<${curr.name?cap_first}> {
+	/** ${curr.name?cap_first}DataLoader name. */
 	private static final String NAME = "${curr.name}";
 	
+	/** ${curr.name?cap_first}DataLoader instance (Singleton). */
 	private static ${curr.name?cap_first}DataLoader instance;
 	
 	/**

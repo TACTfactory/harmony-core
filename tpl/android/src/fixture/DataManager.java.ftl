@@ -20,10 +20,14 @@ import ${project_namespace}.entity.${entity.name?cap_first};
  * DataManager.
  */
 public class DataManager {
+	/** HashMap to join Entity Name and its SQLiteAdapterBase. */
 	protected Map<String, SQLiteAdapterBase<?>> adapters = 
 			new HashMap<String, SQLiteAdapterBase<?>>();
+	/** is successfull. */
 	protected boolean isSuccessfull = true;
+	/** is in internal transaction. */
 	protected boolean isInInternalTransaction = false;
+	/** database. */
 	protected SQLiteDatabase db;
 	
 	/**

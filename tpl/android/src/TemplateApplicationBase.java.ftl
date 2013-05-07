@@ -35,11 +35,16 @@ import org.joda.time.DateTime;
  */
 public abstract class ${project_name?cap_first}ApplicationBase
 														   extends Application {
+	/** TAG for debug purpose. */
 	private static final String TAG = "${project_name?cap_first}";
+	/** Singleton. */
 	private static volatile ${project_name?cap_first}ApplicationBase singleton;
+	/** Date format. */
 	private static DateFormat df;
+	/** Time format. */
 	private static DateFormat tf;
 	<#if (sync)>
+	/** Preferences. */
 	private static SharedPreferences preferences;
 	</#if>
 	

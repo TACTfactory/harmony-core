@@ -19,13 +19,21 @@ import android.widget.DatePicker.OnDateChangedListener;
  *  A simple AlertDialog containing an DatePicker.
  */
 public class CustomDatePickerDialog extends AlertDialog {
+	/** Context. */
 	private Context ctx;
+	/** datePicker. */
 	private DatePicker datePicker;
+	/** Title. */
 	private String title;
+	/** minimum date. */
 	private DateTime minDate;
+	/** maximum date. */
 	private DateTime maxDate;
+	/** year. */
 	private int year;
+	/** month of year. */
 	private int monthOfYear;
+	/** day of month. */
 	private int dayOfMonth;
 
 	/** Constructor.

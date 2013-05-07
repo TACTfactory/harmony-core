@@ -41,8 +41,14 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 	 * View & layoutInflater to populate.
 	 */
 	private final LayoutInflater mInflater;
+	/** Fragment to populate. */
 	private final ${curr.name?cap_first}ListFragment fragment;
 
+	/** 
+	 * Constructor.
+	 * @param context context
+	 * @param fragment fragment
+	 */
 	public ${curr.name}ListAdapter(Context context, 
 			${curr.name?cap_first}ListFragment fragment) {
 		super(context, R.layout.row_${curr.name?lower_case});

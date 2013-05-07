@@ -17,17 +17,24 @@ import android.util.Log;
  * ${project_name?cap_first}ProviderBase.
  */
 public class ${project_name?cap_first}ProviderBase extends ContentProvider {
+	/** TAG for debug purpose. */
 	protected static String TAG = "${project_name?cap_first}Provider";
+	/** Uri not supported. */
 	protected String URI_NOT_SUPPORTED;
 	
 	/** Tools / Common.
 	 * 
 	 */
+	/** Base version. */
 	public    static Integer baseVersion = 0;
+	/** Base name. */
 	public    static String baseName = "";
+	/** item. */
 	protected static String item;
+	/** ${project_namespace}.provider authority. */
 	protected static String authority 
 				= "${project_namespace}.provider";
+	/** URI Matcher. */
 	protected static UriMatcher uriMatcher = 
 			new UriMatcher(UriMatcher.NO_MATCH);
 	

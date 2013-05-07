@@ -10,7 +10,9 @@ import ${project_namespace}.criterias.base.Criteria.Type;
  *	An array of Criteria and CriteriasBase. Used for db requests.   
  */
 public abstract class CriteriasBase implements Serializable, ICriteria {
+	/** Criteria GroupType. */ 
 	private GroupType type;
+	/** Array of ICriteria. */
 	private List<ICriteria> arr = new ArrayList<ICriteria>(); 
 	 
 	/**

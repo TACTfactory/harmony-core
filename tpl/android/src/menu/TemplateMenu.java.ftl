@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 public class ${project_name?cap_first}Menu 
 				extends ${project_name?cap_first}MenuBase {
 
+	/** Singleton unique instance. */
 	private static volatile ${project_name?cap_first}Menu singleton;
 	
 	/**

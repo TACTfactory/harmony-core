@@ -14,8 +14,11 @@ import android.util.Log;
  * @param <T> must extends Serializable
  */
 public abstract class ProviderAdapterBase<T extends Serializable> {
+	/** TAG for debug purpose. */ 
 	public static final String TAG = "ProviderAdapterBase<T>";
+	/** SQLiteAdapterBase. */
 	protected SQLiteAdapterBase<T> adapter;
+	/** database. */
 	protected SQLiteDatabase db;
 
 	/**

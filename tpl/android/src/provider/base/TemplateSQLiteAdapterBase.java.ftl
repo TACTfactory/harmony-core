@@ -88,6 +88,8 @@ import org.joda.time.format.ISODateTimeFormat;
  */
 public abstract class ${curr.name}SQLiteAdapterBase 
 									extends ${extend} {
+	
+	/** TAG for debug purpose. */									
 	protected static final String TAG = "${curr.name}DBAdapter";
 	
 	/** Table name of SQLite database. */
@@ -98,8 +100,10 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 <#list curr.fields as field>
 	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
+	/** ${field.columnName}. */
 	public static final String ${alias(field.name)} = 
 			"${field.columnName}";
+	/** Alias. */
 	public static final String ALIASED_${alias(field.name)} = 
 			TABLE_NAME + "." + ${alias(field.name)};
 	</#if>

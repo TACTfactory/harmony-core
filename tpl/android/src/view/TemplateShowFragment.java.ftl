@@ -58,6 +58,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 	/* curr.fields View */
 <#list curr.fields as field>
 	<#if (!field.internal && !field.hidden)>
+	/** ${field.name} View. */
 		<#if (field.type=="boolean")>
 	protected CheckBox ${field.name}View;
 		<#else>

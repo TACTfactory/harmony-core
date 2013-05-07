@@ -42,13 +42,16 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	 * Recall internal address (Hack Micky).
 	 */
 	protected static final int INTERNAL_EMPTY_ID = 0x00ff0001;
+	/** progress container ID. */
 	protected static final int INTERNAL_PROGRESS_CONTAINER_ID = 0x00ff0002;
+	/** list container ID. */
 	protected static final int INTERNAL_LIST_CONTAINER_ID = 0x00ff0003;
 
 	/**
 	 * The adapter which handles list population.
 	 */
 	protected ${curr.name}ListAdapter mAdapter;
+	/** ${curr.name}ListFragment instance. */
 	protected static ${curr.name}ListFragment instance;
 
 	/** (non-Javadoc).
