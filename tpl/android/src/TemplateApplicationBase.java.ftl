@@ -20,7 +20,7 @@ import android.util.Log;
 import android.content.SharedPreferences;
 
 <#if (sync)>
-import ${project_namespace}.harmony.util.DateUtils;(Context)
+import ${project_namespace}.harmony.util.DateUtils;
 import org.joda.time.DateTime;
 </#if>
 
