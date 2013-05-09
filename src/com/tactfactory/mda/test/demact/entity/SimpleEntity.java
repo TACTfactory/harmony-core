@@ -24,4 +24,17 @@ public class SimpleEntity {
     @GeneratedValue(strategy = "IDENTITY")
 	private int id;
 
+	/**
+	 * @return the id
+	 */
+	public final int getId() {
+		return this.id;
+	}
+
+	/**
+	 * @param id the id to set
+	 */
+	public final void setId(final int id) {
+		this.id = id;
+	}
 }

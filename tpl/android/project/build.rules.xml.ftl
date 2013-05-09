@@ -28,13 +28,13 @@
 	<target name="run-findbugs" depends="init">
 	    <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" description="classes+findbugs=magic" classpathref="findbugs.dir.jars"/> 
 		<findbugs home="${r"${env.FINDBUGS_HOME}"}"  
-			output="xml" 
-			outputFile="${r"${tmp.rel-dir}"}/findbugs.xml" 
-			onlyAnalyze="${r"${findbug.analyze.package}"}"
-			excludefilter="./findbugs_excludes.xml">
-				<sourcePath path="${r"${source.dir}"}" />
-				<class location="${r"${out.dir}"}" />
-				<auxClasspath refid="classpath" /> <!-- so we dont get hundrets of "The following classes needed for analysis were missing" warnings. -->
+				output="xml" 
+				outputFile="${r"${tmp.rel-dir}"}/findbugs.xml" 
+				onlyAnalyze="${r"${findbug.analyze.package}"}"
+				excludefilter="./findbugs_excludes.xml">
+			<sourcePath path="${r"${source.dir}"}" />
+			<class location="${r"${out.dir}"}" />
+			<auxClasspath refid="classpath" /> <!-- so we dont get hundrets of "The following classes needed for analysis were missing" warnings. -->
 		</findbugs>
 		<xslt 
 			in="${r"${tmp.rel-dir}"}/findbugs.xml"
