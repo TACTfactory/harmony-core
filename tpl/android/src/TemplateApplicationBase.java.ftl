@@ -20,7 +20,7 @@ import android.util.Log;
 import android.content.SharedPreferences;
 
 <#if (sync)>
-import ${project_namespace}.harmony.util.DateUtils;
+import ${project_namespace}.harmony.util.DateUtils;(Context)
 import org.joda.time.DateTime;
 </#if>
 
@@ -33,8 +33,7 @@ import org.joda.time.DateTime;
  * one or you will lose all your modifications.</i></b>
  * 
  */
-public abstract class ${project_name?cap_first}ApplicationBase
-														   extends Application {
+public abstract class ${project_name?cap_first}ApplicationBase extends Application {
 	/** TAG for debug purpose. */
 	private static final String TAG = "${project_name?cap_first}";
 	/** Singleton. */
@@ -55,29 +54,36 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	public void onCreate() {
 		super.onCreate();
 		
-		<#if (sync)>
-		preferences = this.getSharedPreferences(
-				"${project_name?uncap_first}", Context.MODE_PRIVATE);
-		
-		if (!preferences.contains("lastSyncDate")) {
-			// TODO: First Sync
-			
-			${project_name?cap_first}ApplicationBase.setLastSyncDate(
-												  new DateTime().minusWeeks(1));
-		}
-		</#if>
-		singleton = this;
+		setSingleton(this);
+
 		Log.i(TAG, "Starting application...");
-		
-		deviceID = getUDID(this);
-		dateFormat = android.text.format.DateFormat.getDateFormat((Context) singleton);
-		timeFormat = android.text.format.DateFormat.getTimeFormat((Context) singleton);
 		
 		// Manage unmanaged error of application
 		//Thread.setDefaultUncaughtExceptionHandler(
 		//		new ApplicationCrashHandler(super.getApplicationContext()));
-		
-
+	}
+	
+	private static void setSingleton(${project_name?cap_first}ApplicationBase application) {
+		if (singleton == null) {
+			singleton = application;
+			deviceID = getUDID(application);
+			dateFormat = 
+				android.text.format.DateFormat.getDateFormat(application);
+			timeFormat = 
+				android.text.format.DateFormat.getTimeFormat(application);
+				
+			<#if (sync)>
+			preferences = application.getSharedPreferences(
+					"${project_name?uncap_first}", Context.MODE_PRIVATE);
+			
+			if (!preferences.contains("lastSyncDate")) {
+				// TODO: First Sync
+				
+				${project_name?cap_first}ApplicationBase
+					.setLastSyncDate(new DateTime().minusWeeks(1));
+			}
+			</#if>
+		}
 	}
 
 	/**
@@ -85,8 +91,8 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 * @return A String containing the UDID
 	 */
 	public static String getUDID(final Context ctx) {
-		String udid = Secure.getString(ctx.getContentResolver(), 
-															 Secure.ANDROID_ID);
+		String udid = Secure.getString(
+			ctx.getContentResolver(), Secure.ANDROID_ID);
 		
 		// for emulator
 		if (udid == null) {
@@ -95,9 +101,8 @@ public abstract class ${project_name?cap_first}ApplicationBase
 		
 		// for google bug, android < 2.3 (many device)
 		if (udid.equals("9774d56d682e549c")) {
-			final TelephonyManager telephonyManager = 
-					(TelephonyManager) ctx.getSystemService(
-													 Context.TELEPHONY_SERVICE);
+			final TelephonyManager telephonyManager = (TelephonyManager) 
+				ctx.getSystemService(Context.TELEPHONY_SERVICE);
 			udid = telephonyManager.getDeviceId();
 		}
 		
@@ -135,11 +140,12 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	public static String getVersion(final Context ctx) {
 		final SharedPreferences settings = ctx.getSharedPreferences(
 				${project_name?cap_first}ApplicationBase.PREFS_PUBL, 
-												   Context.MODE_WORLD_READABLE);
+				Context.MODE_WORLD_READABLE);
 		
 		return settings.getString(
 				${project_name?cap_first}ApplicationBase.PREFS_VERS, "");
 	}
+	
 	/** Check if is a new version of Application.
 	 * 
 	 * @param ctx
@@ -151,6 +157,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 		
 		return oldVersion.equals(currentVersion);
 	}
+	
 	/** Save if a new version is install.
 	 * 
 	 * @param ctx
@@ -159,17 +166,17 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	public static void setVersion(final Context ctx) {
 		final SharedPreferences settings = ctx.getSharedPreferences(
 				${project_name?cap_first}ApplicationBase.PREFS_PUBL, 
-												   Context.MODE_WORLD_READABLE);
+				Context.MODE_WORLD_READABLE);
 		
 		final String currentVersion = ctx.getString(R.string.app_version);
 	    final SharedPreferences.Editor editor = settings.edit();
-	    editor.putString(${project_name?cap_first}ApplicationBase.PREFS_VERS, 
-	    														currentVersion);
+	    editor.putString(
+	    	${project_name?cap_first}ApplicationBase.PREFS_VERS, 
+	    	currentVersion);
 		
 	    // Commit the edits!
 	    editor.commit();
-	}	
-
+	}
 	
 	/** Check if Network is available.
 	 * 
@@ -177,11 +184,12 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 * @return true if have a network
 	 */
 	public static boolean isNetworkAvailable(final Context ctx) {
-	    final ConnectivityManager connectivityManager = 
-	    		(ConnectivityManager) ctx.getSystemService(
-	    										  Context.CONNECTIVITY_SERVICE);
-	    final NetworkInfo activeNetworkInfo = 
-	    							 connectivityManager.getActiveNetworkInfo();
+	    final ConnectivityManager connectivityManager = (ConnectivityManager) 
+	    	ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    	
+	    final NetworkInfo activeNetworkInfo = connectivityManager
+	    	.getActiveNetworkInfo();
+	    	
 	    return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
 	}
 	
