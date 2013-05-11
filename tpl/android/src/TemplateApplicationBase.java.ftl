@@ -33,7 +33,9 @@ import org.joda.time.DateTime;
  * one or you will lose all your modifications.</i></b>
  * 
  */
-public abstract class ${project_name?cap_first}ApplicationBase extends Application {
+public abstract class ${project_name?cap_first}ApplicationBase
+	extends Application {
+	
 	/** TAG for debug purpose. */
 	private static final String TAG = "${project_name?cap_first}";
 	/** Singleton. */

@@ -4,4 +4,8 @@
     <Class name="com.tactfactory.mda.Context"/>
     <Bug pattern="DM_EXIT" />
   </Match>
+  <Match>
+    <Class name="com.tactfactory.mda.test.demact.entity.SimpleEntity"/>
+    <Bug pattern="UUF_UNUSED_FIELD" />
+  </Match>
 </FindBugsFilter>
