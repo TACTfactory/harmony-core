@@ -222,10 +222,11 @@
 			classpath="${env.FINDBUGS_HOME}/lib/findbugs-ant.jar"
 			classname="edu.umd.cs.findbugs.anttask.FindBugsTask" />
 	    <findbugs home="${env.FINDBUGS_HOME}"
-	    	workHard="true"
-	    	output="xml:withMessages"
-	        outputFile="${tmp.rel-dir}/findbugs.xml"
-	    	jvmargs="-Xmx1024m" >
+		    	workHard="true"
+		    	output="xml:withMessages"
+		        outputFile="${tmp.rel-dir}/findbugs.xml"
+		        excludefilter="./findbugs_excludes.xml"
+		    	jvmargs="-Xmx1024m" >
 	    	<auxClasspath refid="project.classpath" />
 	    	<sourcePath path="${src.rel-dir}" />
 	    	<class location="${jar.rel-file}" />

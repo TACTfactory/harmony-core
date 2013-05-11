@@ -284,12 +284,13 @@ public class ProjectGenerator extends BaseGenerator {
 				new File(Harmony.getBundlePath() + "tact-core/"
 						+ this.getAdapter().getTemplateProjectPath());
 		if (dirTpl.exists() && dirTpl.listFiles().length > 0) {				
-			this.clearProjectSources();
-			this.copyProjectTemplates(dirTpl, null, 
-					Harmony.getProjectPath() 
-						+ File.separator + this.getAdapter().getPlatform(), 
-					this.getAdapter().getTemplateProjectPath());
-			result = true;	
+			if (this.clearProjectSources()) {
+				this.copyProjectTemplates(dirTpl, null, 
+						Harmony.getProjectPath() 
+							+ File.separator + this.getAdapter().getPlatform(), 
+						this.getAdapter().getTemplateProjectPath());
+				result = true;
+			}
 		}
 		
 		// Make Test project
@@ -299,13 +300,16 @@ public class ProjectGenerator extends BaseGenerator {
 		} catch (Exception e) {
 			ConsoleUtils.displayError(e);
 		}
+		
 		return result;
 	}
 	
 	/**
 	 * Delete files that need to be recreated
 	 */
-	private void clearProjectSources() {
+	private boolean clearProjectSources() {
+		boolean result = true;
+		
 		String projectPath = Harmony.getProjectPath() 
 				+ File.separator + this.getAdapter().getPlatform();
 		
@@ -313,8 +317,10 @@ public class ProjectGenerator extends BaseGenerator {
 				+ File.separator + "build.rules.xml");
 		
 		if (buildRules.exists()) {
-			buildRules.delete();
+			result &= buildRules.delete();
 		}
+		
+		return result;
 	}
 	
 	/**
