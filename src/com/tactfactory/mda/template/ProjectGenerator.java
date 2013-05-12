@@ -283,14 +283,13 @@ public class ProjectGenerator extends BaseGenerator {
 		final File dirTpl = 
 				new File(Harmony.getBundlePath() + "tact-core/"
 						+ this.getAdapter().getTemplateProjectPath());
-		if (dirTpl.exists() && dirTpl.listFiles().length > 0) {				
-			if (this.clearProjectSources()) {
-				this.copyProjectTemplates(dirTpl, null, 
-						Harmony.getProjectPath() 
-							+ File.separator + this.getAdapter().getPlatform(), 
-						this.getAdapter().getTemplateProjectPath());
-				result = true;
-			}
+		if (dirTpl.exists() && dirTpl.listFiles().length > 0 
+				&& this.clearProjectSources()) {
+			this.copyProjectTemplates(dirTpl, null, 
+					Harmony.getProjectPath() 
+						+ File.separator + this.getAdapter().getPlatform(), 
+					this.getAdapter().getTemplateProjectPath());
+			result = true;
 		}
 		
 		// Make Test project
@@ -305,7 +304,8 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Delete files that need to be recreated
+	 * Delete files that need to be recreated.
+	 * @return true if project cleaning successful
 	 */
 	private boolean clearProjectSources() {
 		boolean result = true;
@@ -333,10 +333,12 @@ public class ProjectGenerator extends BaseGenerator {
 	private void copyProjectTemplates(File file, String directory, 
 			String sourcesPath, String templatesPath) {
 		if (file.isDirectory()) {
-			if (directory == null)
+			if (directory == null) {
 				directory = "";
-			else
+			}
+			else {
 				directory += File.separator + file.getName();
+			}
 			
 			File[] files = file.listFiles();
 			for (File subFile : files) {

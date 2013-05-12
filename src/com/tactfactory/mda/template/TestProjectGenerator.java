@@ -74,9 +74,8 @@ public class TestProjectGenerator extends BaseGenerator {
 						+ this.getAdapter().getTemplateTestProjectPath());
 
 		// Update newly created files with datamodel
-		if (dirTpl.exists() && dirTpl.listFiles().length != 0) {
-			result = true;
-			this.clearProjectSources();
+		if (dirTpl.exists() && dirTpl.listFiles().length != 0
+				&& this.clearProjectSources()) {
 			for (int i = 0; i < dirTpl.listFiles().length; i++) {
 				if (dirTpl.listFiles()[i].isFile()) {
 					final String fullFilePath = String.format("%s/%s/%s/%s", 
@@ -101,6 +100,7 @@ public class TestProjectGenerator extends BaseGenerator {
 								false);
 				}
 			}
+			result = true;
 		}
 		return result;
 	}
@@ -151,9 +151,12 @@ public class TestProjectGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Delete files that need to be recreated
+	 * Delete files that need to be recreated.
+	 * @return true if project cleaning successful
 	 */
-	private void clearProjectSources() {
+	private boolean clearProjectSources() {
+		boolean result = true;
+		
 		String projectPath = Harmony.getProjectPath() 
 				+ File.separator + this.getAdapter().getPlatform()
 				+ File.separator + this.getAdapter().getTest();
@@ -162,8 +165,10 @@ public class TestProjectGenerator extends BaseGenerator {
 				+ File.separator + "build.rules.xml");
 		
 		if (buildRules.exists()) {
-			buildRules.delete();
+			result &= buildRules.delete();
 		}
+		
+		return result;
 	}
 	
 	/**
