@@ -312,7 +312,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter = 
 				new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
-		result.set${relation.name?cap_first}(
+		result.set${relation.name?cap_first}( 
 					${relation.relation.joinTable?lower_case}Adapter.getBy${curr.name}(
 							result.getId())); // relation.relation.inversedBy?cap_first
 				<#else>
@@ -831,6 +831,25 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		}
 		return ret;
 	}
-	
+
+	@Override
+	public Void cursorToItem(Cursor c) {
+		return null;
+	}
+
+	@Override
+	public long insert(Void item) {
+		return -1;
+	}
+
+	@Override
+	public int update(Void item) {
+		return 0;
+	}
+
+	@Override
+	public int delete(Void item) {
+		return 0;
+	}
 </#if>
 }

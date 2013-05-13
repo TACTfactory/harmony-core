@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
+import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 import android.content.ContentResolver;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -208,17 +209,9 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 			
-			ContentResolver prov = this.ctx.getContentResolver();
-			Bundle b = new Bundle();
-			b.putSerializable("id", this.entity.getId());
-			Bundle ret = 
-					prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
-							${curr.name?cap_first}ProviderAdapter.METHOD_QUERY_${curr.name?upper_case}, 
-							null,
-							b);
-
-			this.entity = (${curr.name?cap_first}) ret.getSerializable(
-					${curr.name?cap_first}ProviderAdapter.ITEM_KEY); 
+			this.entity = ${curr.name?cap_first}ProviderUtils.query(
+				this.ctx, 
+				this.entity.getId());
 			
 			if (this.entity != null) {
 				result = 0;

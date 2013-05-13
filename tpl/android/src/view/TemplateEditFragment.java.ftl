@@ -6,7 +6,8 @@ import ${curr.namespace}.R;
 
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import ${project_namespace}.harmony.view.HarmonyFragment;
-import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
+
+import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
@@ -524,17 +525,10 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		@Override
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
-			ContentResolver prov = this.ctx.getContentResolver();
-			Bundle b = new Bundle();
-			b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, 
-					this.entity);
-			Bundle ret = 
-					prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
-							${curr.name?cap_first}ProviderAdapter.METHOD_UPDATE_${curr.name?upper_case}, 
-							null,
-							b);
-
-			result = ret.getInt("result",  0); 
+			
+			result = ${curr.name?cap_first}ProviderUtils.update(
+				this.ctx,
+				this.entity);
 
 			return result;
 		}

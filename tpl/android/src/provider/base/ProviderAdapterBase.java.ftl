@@ -1,6 +1,5 @@
 package ${local_namespace}.base;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import ${project_namespace}.criterias.base.CriteriasBase;
@@ -14,7 +13,7 @@ import android.util.Log;
  * ProviderAdapterBase<T extends Serializable>.
  * @param <T> must extends Serializable
  */
-public abstract class ProviderAdapterBase<T extends Serializable> {
+public abstract class ProviderAdapterBase<T> {
 	/** TAG for debug purpose. */ 
 	public static final String TAG = "ProviderAdapterBase<T>";
 	/** Context. */
