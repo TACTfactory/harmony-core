@@ -82,6 +82,16 @@
 	    android:inputType="number"
 				<#elseif (field.harmony_type=="float")>
 	    android:inputType="numberDecimal"
+				<#elseif (field.harmony_type=="long")>
+	    android:inputType="number"
+				<#elseif (field.harmony_type=="double")>
+	    android:inputType="numberDecimal"
+				<#elseif (field.harmony_type=="short")>
+	    android:inputType="number"
+				<#elseif (field.harmony_type=="char")>
+	    android:inputType="text"
+				<#elseif (field.harmony_type=="byte")>
+	    android:inputType="number"
 				<#else>
 	    android:inputType="text"
 				</#if>

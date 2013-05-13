@@ -45,10 +45,22 @@ public @interface Column {
 		BOOLEAN	("boolean", 	null, 	false, 	null, 	null, 	null,	null),
 		/** Integer type. */
 		INTEGER	("integer", 	null, 	true, 	null, 	null, 	null,	null),
+		/** short type. */
+		SHORT	("short", 		null, 	false,	null,	null,	null,	null),
+		/** byte type. */
+		BYTE	("byte", 		null, 	false,	null,	null,	null,	null),
+		/** char type. */
+		CHAR	("char", 		null, 	false,	null,	null,	null,	null),
+		/** char type. */
+		CHARACTER	("character",	null, 	false,	null,	null,	null,	null),
 		/** int type. */
 		INT		("int", 		null, 	false,	null,	null,	null,	null),
+		/** long type. */
+		LONG 	("long", 	null, 	false,	null,	null,	null,	null),
 		/** float type. */
 		FLOAT	("float", 	null, 	false,	null,	null,	null,	null),
+		/** double type. */
+		DOUBLE  ("double", 	null, 	false,	null,	null,	null,	null),
 		/** DateTime type. */
 		DATETIME("datetime", null,	true,	null,	null,	null,	false),
 		/** Date type. */

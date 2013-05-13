@@ -22,11 +22,11 @@ import android.content.Context;
 	</#if>
 </#list>
 <#list curr.fields as field>
-	<#if field.type=="date">
+	<#if field.harmony_type=="date">
 		<#assign hasDate=true />
-	<#elseif field.type=="time">
+	<#elseif field.harmony_type=="time">
 		<#assign hasTime=true />
-	<#elseif field.type="datetime">
+	<#elseif field.harmony_type="datetime">
 		<#assign hasDateTime=true />
 	</#if>
 </#list>
@@ -116,21 +116,23 @@ public class ${curr.name?cap_first}DataLoader
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					Integer.parseInt(element.getChildText(
 							"${field.name?uncap_first}")));
-					<#elseif field.type=="date">
+					<#elseif (field.type?lower_case=="datetime")>
+						<#if field.harmony_type=="date">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					DateUtils.format<#if field.is_locale>Local</#if>Pattern(
 							patternDate, 
 							element.getChildText("${field.name?uncap_first}")));
-					<#elseif field.type=="datetime">
+						<#elseif field.harmony_type=="datetime">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					DateUtils.format<#if field.is_locale>Local</#if>Pattern(
 							patternDateTime, 
 							element.getChildText("${field.name?uncap_first}")));
-					<#elseif field.type=="time">
+						<#elseif field.harmony_type=="time">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					DateUtils.format<#if field.is_locale>Local</#if>Pattern(
 							patternTime, 
 							element.getChildText("${field.name?uncap_first}")));
+						</#if>
 					<#elseif field.type=="boolean">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					Boolean.parseBoolean(
@@ -220,33 +222,43 @@ public class ${curr.name?cap_first}DataLoader
 			<#if (!field.internal)>
 		if (columns.get("${field.name?uncap_first}") != null) {
 				<#if !field.relation??>
-					<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
+					<#if (field.type?lower_case=="int" || field.type?lower_case=="integer" || field.type?lower_case=="zipcode" || field.type?lower_case=="ean")>
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					(Integer) columns.get("${field.name?uncap_first}"));
-					<#elseif field.type=="double">
+					<#elseif field.type?lower_case=="double">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					(Double) columns.get("${field.name?uncap_first}"));
-					<#elseif field.type=="float">
+					<#elseif field.type?lower_case=="float">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					((Double) columns.get("${field.name?uncap_first}")).floatValue());
-					<#elseif field.type=="date">
+					<#elseif field.type?lower_case=="datetime">
+						<#if field.harmony_type=="date">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					new DateTime(((Date) columns.get("${field.name?uncap_first}"))<#if field.is_locale>, 
 							DateTimeZone.UTC</#if>));
-					<#elseif field.type=="datetime">		
+						<#elseif field.harmony_type=="datetime">		
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					new DateTime(((Date) columns.get("${field.name?uncap_first}"))<#if field.is_locale>, 
 							DateTimeZone.UTC</#if>));
-					<#elseif field.type=="time">
+						<#elseif field.harmony_type=="time">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					DateUtils.formatPattern(patternTime, 
 							(String) columns.get("${field.name?uncap_first}")));
-					<#elseif field.type=="boolean">
+						</#if>
+					<#elseif field.type?lower_case=="boolean">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					(Boolean) columns.get("${field.name?uncap_first}"));		
-					<#else>
+					<#elseif (field.type?lower_case == "string")>
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					(String) columns.get("${field.name?uncap_first}"));
+					<#else>
+						<#if (field.harmony_type == "integer" || field.harmony_type == "int")>
+			${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(
+					(Integer) columns.get("${field.name?uncap_first}")));
+						<#else>
+			${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(
+					(String) columns.get("${field.name?uncap_first}")));
+						</#if>
 					</#if>
 				<#else>
 					<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">			

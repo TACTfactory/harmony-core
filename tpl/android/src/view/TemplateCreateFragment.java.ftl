@@ -354,7 +354,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		<#foreach field in curr.fields>						
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
-				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
+				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
 		if (this.model.get${field.name?cap_first}() != null) {
 					<#if field.type=="datetime" || field.type=="date" || field.type=="time">
 						<#if field.type=="datetime" || field.type=="date">
@@ -405,7 +405,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		if (!TextUtils.isEmpty(this.${field.name}View.getEditableText())) {
 					</#if>
 			${m.setSaver(field)}
-			}
+		}
 				<#else>
 		${m.setSaver(field)}
 				</#if>

@@ -68,20 +68,30 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 			<#if (field.harmony_type??)>
-			    	<#if (field.type == "text")>
+			    	<#if (field.harmony_type == "text")>
 	    android:inputType="textCapWords|textAutoComplete|textMultiLine"
-			    	<#elseif (field.type=="password")>
+			    	<#elseif (field.harmony_type=="password")>
 	    android:inputType="textPassword"
-			    	<#elseif (field.type=="email")>
+			    	<#elseif (field.harmony_type=="email")>
 	    android:inputType="textEmailAddress"
-				<#elseif (field.type=="phone")>
+				<#elseif (field.harmony_type=="phone")>
 	    android:inputType="phone"
-			    	<#elseif (field.type=="zipcode")>
+			    	<#elseif (field.harmony_type=="zipcode")>
 	    android:inputType="textPostalAddress"
-			    	<#elseif (field.type=="integer" || field.type=="int" || field.type=="ean")>
+			    	<#elseif (field.harmony_type=="integer" || field.harmony_type=="int" || field.harmony_type=="ean")>
 	    android:inputType="number"
-				<#elseif (field.type=="float")>
+				<#elseif (field.harmony_type=="float")>
 	    android:inputType="numberDecimal"
+				<#elseif (field.harmony_type=="long")>
+	    android:inputType="number"
+				<#elseif (field.harmony_type=="double")>
+	    android:inputType="numberDecimal"
+				<#elseif (field.harmony_type=="short")>
+	    android:inputType="number"
+				<#elseif (field.harmony_type=="char")>
+	    android:inputType="text"
+				<#elseif (field.harmony_type=="byte")>
+	    android:inputType="number"
 				<#else>
 	    android:inputType="text"
 				</#if>

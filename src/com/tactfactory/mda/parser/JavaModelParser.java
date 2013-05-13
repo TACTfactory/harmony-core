@@ -349,7 +349,11 @@ public class JavaModelParser {
 				// General (required !)
 				final FieldMetadata fieldMeta = new FieldMetadata(meta);
 			
+				/*fieldMeta.setType(
+						Type.toTypeString(field.getType().toString()));*/
 				fieldMeta.setType(
+						field.getType().toString());
+				fieldMeta.setHarmonyType(
 						Type.toTypeString(field.getType().toString()));
 				
 				// Java types Date and Time are deprecated in Harmony
@@ -477,10 +481,10 @@ public class JavaModelParser {
 					meta.getRelations().put(fieldMeta.getName(), fieldMeta);
 				}
 
-				if (fieldMeta.getType().equalsIgnoreCase("DateTime") 
+				/*if (fieldMeta.getType().equalsIgnoreCase("DateTime") 
 						&& fieldMeta.getColumnDefinition() != null) {
 					fieldMeta.setType(fieldMeta.getColumnDefinition());
-				}
+				}*/
 				
 				fieldMeta.setColumnDefinition(
 						SqliteAdapter.generateColumnType(
