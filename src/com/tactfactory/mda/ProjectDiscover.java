@@ -143,8 +143,8 @@ public class ProjectDiscover {
 							+ "full path [/root/android-sdk/]:");
 			
 			if (!Strings.isNullOrEmpty(sdkPath)) {
-				ApplicationMetadata.setAndroidSdkPath(sdkPath);
-				androidSdkVersion = ProjectDiscover.setAndroidSdkPath(sdkPath);
+				ApplicationMetadata.setAndroidSdkPath(sdkPath.trim());
+				androidSdkVersion = ProjectDiscover.setAndroidSdkPath(sdkPath.trim());
 			} else {
 				String osMessage = "Detected OS: ";
 				
@@ -287,9 +287,9 @@ public class ProjectDiscover {
 						+ "]:");
 			
 			if (Strings.isNullOrEmpty(projectName)) {
-				ApplicationMetadata.INSTANCE.setName(DEFAULT_PROJECT_NAME);
+				ApplicationMetadata.INSTANCE.setName(DEFAULT_PROJECT_NAME.trim());
 			} else {
-				ApplicationMetadata.INSTANCE.setName(projectName);
+				ApplicationMetadata.INSTANCE.setName(projectName.trim());
 			}
 		}
 	}
@@ -321,7 +321,8 @@ public class ProjectDiscover {
 					
 					if (Pattern.matches(namespaceForm, projectNameSpace)) {
 						ApplicationMetadata.INSTANCE.setProjectNameSpace(
-							projectNameSpace.replaceAll("\\.", Context.DELIMITER));
+							projectNameSpace.replaceAll("\\.", Context.DELIMITER)
+								.trim());
 						good = true;
 					} else {
 						ConsoleUtils.display(
