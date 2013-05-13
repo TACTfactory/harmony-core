@@ -81,17 +81,20 @@ public class ProviderGenerator extends BaseGenerator {
 				this.makeSourceProvider("base/TemplateProviderAdapterBase.java",
 						"base/" + cm.getName() + "ProviderAdapterBase.java", true);
 				
+				
 				// Provider utils
-				this.makeSourceProvider(
-						"utils/TemplateProviderUtils.java",
-						"utils/" + cm.getName() + "ProviderUtils.java", 
-						false);
-				this.makeSourceProvider(
-						"utils/base/TemplateProviderUtilsBase.java",
-						"utils/base/" 
-								+ cm.getName() 
-								+ "ProviderUtilsBase.java", 
-						true);
+				if (!cm.isInternal()) {
+					this.makeSourceProvider(
+							"utils/TemplateProviderUtils.java",
+							"utils/" + cm.getName() + "ProviderUtils.java", 
+							false);
+					this.makeSourceProvider(
+							"utils/base/TemplateProviderUtilsBase.java",
+							"utils/base/" 
+									+ cm.getName() 
+									+ "ProviderUtilsBase.java", 
+							true);
+				}
 				
 				
 				providerId += 10;

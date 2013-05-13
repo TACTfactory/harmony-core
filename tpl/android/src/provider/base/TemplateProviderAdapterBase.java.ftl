@@ -1,10 +1,13 @@
 <#assign curr = entities[current_entity] />
+<#assign internal = false />
+<#if (curr.internal?? && curr.internal == "true")><#assign internal = true /></#if>
 package ${local_namespace}.base;
 
 import ${local_namespace}.${project_name?cap_first}Provider;
 
+<#if (!internal)>
 import ${entity_namespace}.${curr.name};
-import ${data_namespace}.${curr.name}SQLiteAdapter;
+</#if>import ${data_namespace}.${curr.name}SQLiteAdapter;
 
 import android.content.Context;
 import android.content.ContentUris;
@@ -13,12 +16,16 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
+<#assign ext = curr.name?cap_first />
+<#if (internal)>
+	<#assign ext = "Void" />
+</#if>
 
 /**
  * ${curr.name?cap_first}ProviderAdapterBase.
  */
 public abstract class ${curr.name?cap_first}ProviderAdapterBase 
-				extends ProviderAdapterBase<${curr.name?cap_first}> {
+				extends ProviderAdapterBase<${ext}> {
 	
 	/** TAG for debug purpose. */
 	protected static String TAG = "${curr.name?cap_first}ProviderAdapter";
@@ -247,6 +254,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @return A cursor pointing to the result of the query
 	 */
 	public Bundle query(String arg, Bundle extras) {
+		<#if !internal>
 		Bundle result = new Bundle();
 
 		${curr.name?cap_first} ${curr.name?uncap_first} = 
@@ -255,6 +263,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		result.putSerializable(ITEM_KEY, ${curr.name?uncap_first});
 
 		return result;
+		<#else>
+		return null;
+		</#if>
 	}
 }
 

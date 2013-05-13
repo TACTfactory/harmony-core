@@ -8,14 +8,17 @@
 </#function>
 <#assign curr = entities[current_entity] />
 <#assign relation_array = [] />
+<#assign hasRelations = false />
 <#list curr.relations as relation>
-	<#if (relation.relation.type == "OneToMany" || relation.relation.type == "ManyToMany") >
+	<#if (relation.relation.type == "OneToMany") >
+		<#assign hasRelations = true />
 		<#if (!relation_array?seq_contains(relation.relation.targetEntity))>
 			<#assign relation_array = relation_array + [relation.relation.targetEntity] />
 		</#if>
+	<#elseif (relation.relation.type == "ManyToMany") >
+		<#assign hasRelations = true />	
 	</#if>
 </#list>
-<#assign hasRelations = (relation_array?size > 0) />
 package ${project_namespace}.provider.utils.base;
 
 import java.util.ArrayList;
@@ -31,16 +34,16 @@ import android.util.Log;<#else>
 import android.net.Uri;</#if>
 
 import ${data_namespace}.${curr.name}SQLiteAdapter;
-<#list relation_array as relation>
-import ${data_namespace}.${relation}SQLiteAdapter;
-</#list>
+<#list relation_array as relation>import ${data_namespace}.${relation}SQLiteAdapter;</#list>
+<#list curr.relations as relation><#if relation.relation.type=="ManyToMany">import ${data_namespace}.${relation.relation.joinTable}SQLiteAdapter;</#if></#list>
 import ${entity_namespace}.${curr.name};
+<#list curr.relations as relation><#if relation.relation.type=="ManyToMany">import ${entity_namespace}.${relation.relation.targetEntity};</#if></#list>
 import ${project_namespace}.provider.${curr.name}ProviderAdapter;<#if hasRelations>
 <#list relation_array as relation>import ${project_namespace}.provider.${relation}ProviderAdapter;</#list>
 import ${project_namespace}.provider.${project_name?cap_first}Provider;</#if>
+<#list curr.relations as relation><#if relation.relation.type=="ManyToMany">import ${project_namespace}.provider.${relation.relation.joinTable}ProviderAdapter;</#if></#list>
 
-<#list curr.relations as relation><#if !relation_array?seq_contains(relation.relation.targetEntity)>import ${project_namespace}.provider.utils.${relation.relation.targetEntity}ProviderUtils;</#if>
-</#list>
+<#list curr.relations as relation><#if !relation_array?seq_contains(relation.relation.targetEntity)>import ${project_namespace}.provider.utils.${relation.relation.targetEntity}ProviderUtils;</#if></#list>
 
 public class ${curr.name?cap_first}ProviderUtilsBase {
 	public static final String TAG = "${curr.name?cap_first}ProviderUtilBase";
@@ -52,7 +55,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 
 		ContentValues itemValues = adapt.itemToContentValues(item);
 		itemValues.remove(${curr.name?cap_first}SQLiteAdapter.COL_ID);
-		<#if (relation_array?size == 0)> <#-- If there aren't any relations in the application -->
+		<#if (!hasRelations)> <#-- If there aren't any relations in the application -->
 		Uri uri = prov.insert(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI, itemValues);		
 		if (uri != null) {
 			result = 0;
@@ -82,6 +85,19 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 				.withValueBackReference(${relation.relation.targetEntity}SQLiteAdapter.COL_${getMappedField(relation).name?upper_case}, 0)
 				.withSelection(${relation.name}Selection, ${relation.name}SelectionArgs)
 				.build());
+			<#elseif (relation.relation.type == "ManyToMany") >
+		for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
+			ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
+			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID, ${relation.relation.targetEntity?uncap_first}.getId());
+			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID, item.getId());
+			
+			operations.add(ContentProviderOperation.newInsert(
+				${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
+				    .withValues(${relation.relation.targetEntity?uncap_first}Values)
+				    .build());
+			
+		}
+	
 			</#if>
 		</#list>
 
@@ -149,15 +165,28 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 							null);
 			
 			${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapt = new ${relation.relation.targetEntity}SQLiteAdapter(ctx);
-			result.setComments(${relation.name}Adapt.cursorToItems(${relation.name}Cursor));
+			result.set${relation.name?cap_first}(${relation.name}Adapt.cursorToItems(${relation.name}Cursor));
 			${relation.name}Cursor.close();
 				<#elseif (relation.relation.type=="ManyToMany")>
-			${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter = 
-					new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
-			${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
-			result.set${relation.name?cap_first}(
-					${relation.relation.joinTable?lower_case}Adapter.getBy${curr.name}(
-							result.getId())); // relation.relation.inversedBy?cap_first
+			String ${relation.name}Selection = ${relation.relation.joinTable?cap_first}SQLiteAdapter.COL_${curr.name?upper_case}_ID + " = ?";
+			String[] ${relation.name}SelectionArgs = new String[1];
+			${relation.name}SelectionArgs[0] = String.valueOf(id);
+			Cursor ${relation.name}Cursor = 
+					prov.query(${relation.relation.joinTable?cap_first}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI, 
+							${relation.relation.joinTable}SQLiteAdapter.COLS,
+							${relation.name}Selection, 
+							${relation.name}SelectionArgs, 
+							null);
+
+			ArrayList<${relation.relation.targetEntity?cap_first}> ${relation.name}Array = new ArrayList<${relation.relation.targetEntity?cap_first}>();
+			if (${relation.name}Cursor.getCount() > 0) {	
+				int ${relation.name}IdColumnIndex = ${relation.name}Cursor.getColumnIndex(${relation.relation.joinTable?cap_first}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID);
+				while (${relation.name}Cursor.moveToNext()) {
+					int ${relation.name}Id = ${relation.name}Cursor.getInt(${relation.name}IdColumnIndex);
+					${relation.name}Array.add(${relation.relation.targetEntity?cap_first}ProviderUtils.query(ctx, ${relation.name}Id));
+				}
+			}
+			result.set${relation.name?cap_first}(${relation.name}Array);
 				<#else>
 			if (result.get${relation.name?cap_first}() != null) {
 				result.set${relation.name?cap_first}(
