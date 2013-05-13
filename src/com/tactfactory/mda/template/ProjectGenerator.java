@@ -253,6 +253,10 @@ public class ProjectGenerator extends BaseGenerator {
 			String destPath = pathSherlock + "/library/ant.properties";
 			this.makeSource(srcPath, destPath, false);
 			
+			srcPath = Harmony.getTemplatesPath() + "/android/libs/sherlock_.project";
+			destPath = pathSherlock + "/library/.project";
+			this.makeSource(srcPath, destPath, false);
+			
 			//make build sherlock
 			command.add(String.format("%s/%s", 
 					ApplicationMetadata.getAndroidSdkPath(), 
@@ -261,6 +265,8 @@ public class ProjectGenerator extends BaseGenerator {
 			command.add("project");
 			command.add("--path");
 			command.add(pathSherlock + "/library");
+			command.add("--name");
+			command.add(ApplicationMetadata.INSTANCE.getName() + "-abs");
 			ConsoleUtils.launchCommand(command);
 		}
 	}
