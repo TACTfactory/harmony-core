@@ -14,12 +14,9 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.net.URI;
 import java.util.ArrayList;
@@ -27,14 +24,13 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+import com.google.common.io.Files;
+
 /** Manipulate File tools. */
 public abstract class TactFileUtils extends FileUtils {
 	/** Default encoding for stream manipulation. */
 	public static final String DEFAULT_ENCODING = "UTF-8";
-	
-	/** Buffer size for file manipulation. */
-	private static final int BUFFER_SIZE = 1024;
-	
+		
 	/** String for debug informations. */
 	private static final String FOLDER 	= "Folder '";
 	
@@ -75,47 +71,11 @@ public abstract class TactFileUtils extends FileUtils {
 	 * @param destFile Destination path
 	 */
 	public static void copyfile(final File srcFile, final File destFile) {
-		final byte[] buf = new byte[BUFFER_SIZE];
-		int len;
-		InputStream in = null;
-		OutputStream out = null;
 		try {
-			in = new FileInputStream(srcFile);
-
-			// For Append the file.
-			// OutputStream out = new FileOutputStream(f2, true);
-
-			// For Overwrite the file.
-			out = new FileOutputStream(destFile);
-			len = in.read(buf);
-			while (len > 0) {
-				out.write(buf, 0, len);
-				len = in.read(buf);
-			}
-			
-			// Debug Log
-			ConsoleUtils.displayDebug("File "
-						 + srcFile.getName()
-						 + " copied to "
-						 + destFile.getPath());
-			
-		} catch (final FileNotFoundException ex) {
-			ConsoleUtils.displayError(ex);
-			
-		} catch (final IOException e) {
-			ConsoleUtils.displayError(e);
-			
-		} finally {
-			try {
-				if (in != null) {
-					in.close();
-				}
-				if (out != null) {
-					out.close();
-				}
-			} catch (final IOException e) {
-				ConsoleUtils.displayError(e);
-			}
+			Files.copy(srcFile, destFile);
+		} 
+		catch (final IOException e) {
+			ConsoleUtils.displayError(e);			
 		}
 	}
 	

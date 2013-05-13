@@ -71,7 +71,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 		this.is24HourView = is24HourView;
 	}
 
-	/* (non-Javadoc)
+	/**
 	 * @see android.app.AlertDialog#onCreate(android.os.Bundle)
 	 */
 	@Override

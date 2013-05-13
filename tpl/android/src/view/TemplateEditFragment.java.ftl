@@ -505,7 +505,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			this.entity = entity;
 		}
 
-		/* (non-Javadoc)
+		/**
 		 * @see android.os.AsyncTask#onPreExecute()
 		 */
 		@Override
@@ -519,7 +519,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 							R.string.${curr.name?lower_case}_progress_save_message));
 		}
 
-		/* (non-Javadoc)
+		/**
 		 * @see android.os.AsyncTask#doInBackground(Params[])
 		 */
 		@Override
@@ -533,7 +533,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			return result;
 		}
 
-		/* (non-Javadoc)
+		/**
 		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
 		 */
 		@Override

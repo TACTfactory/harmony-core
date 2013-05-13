@@ -72,7 +72,7 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 		}
 	}
 
-	/** (non-Javadoc).
+	/**
 	 * @see android.widget.ArrayAdapter#getView(int, android.view.View,
 	 *  android.view.ViewGroup)
 	 */

@@ -74,8 +74,8 @@ public class TestProjectGenerator extends BaseGenerator {
 						+ this.getAdapter().getTemplateTestProjectPath());
 
 		// Update newly created files with datamodel
-		if (dirTpl.exists() && dirTpl.listFiles().length != 0) {
-			result = true;
+		if (dirTpl.exists() && dirTpl.listFiles().length != 0
+				&& this.clearProjectSources()) {
 			for (int i = 0; i < dirTpl.listFiles().length; i++) {
 				if (dirTpl.listFiles()[i].isFile()) {
 					final String fullFilePath = String.format("%s/%s/%s/%s", 
@@ -100,10 +100,11 @@ public class TestProjectGenerator extends BaseGenerator {
 								false);
 				}
 			}
+			result = true;
 		}
 		return result;
 	}
-
+	
 	/**
 	 * Make IOS Test Project Structure.
 	 * @return success to make the platform test project folder
@@ -147,5 +148,45 @@ public class TestProjectGenerator extends BaseGenerator {
 		final boolean result = false;
 
 		return result;
+	}
+	
+	/**
+	 * Delete files that need to be recreated.
+	 * @return true if project cleaning successful
+	 */
+	private boolean clearProjectSources() {
+		boolean result = true;
+		
+		String projectPath = Harmony.getProjectPath() 
+				+ File.separator + this.getAdapter().getPlatform()
+				+ File.separator + this.getAdapter().getTest();
+		
+		File buildRules = new File(projectPath 
+				+ File.separator + "build.rules.xml");
+		
+		if (buildRules.exists()) {
+			result &= buildRules.delete();
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Update TestLibs.
+	 * @param libName The library name.
+	 */
+	@Override
+	protected final void updateLibrary(final String libName) {
+		final File dest = new File(String.format("%s/%s",
+				this.getAdapter().getTestLibsPath(),
+				libName));
+		
+		if (!dest.exists()) {
+			TactFileUtils.copyfile(
+					new File(String.format("%s/%s", 
+							Harmony.getLibsPath(),
+							libName)),
+					dest);
+		}
 	}
 }
