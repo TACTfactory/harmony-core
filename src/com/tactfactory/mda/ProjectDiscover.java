@@ -315,25 +315,18 @@ public class ProjectDiscover {
 					good = true;
 					
 				} else {
-					if (projectNameSpace.toLowerCase(Locale.ENGLISH)
-							.endsWith(ApplicationMetadata.INSTANCE.getName()
-									.toLowerCase())) {
 						
-						String namespaceForm = 
-								"^(((([a-z0-9_]+)\\.)*)([a-z0-9_]+))$";
-						
-						if (Pattern.matches(namespaceForm, projectNameSpace)) {
-							ApplicationMetadata.INSTANCE.setProjectNameSpace(
-								projectNameSpace.replaceAll("\\.", Context.DELIMITER));
-							good = true;
-						} else {
-							ConsoleUtils.display(
-									"You can't use special characters "
-									+ "except '.' in the NameSpace.");
-						}
+					String namespaceForm = 
+							"^(((([a-z0-9_]+)\\.)*)([a-z0-9_]+))$";
+					
+					if (Pattern.matches(namespaceForm, projectNameSpace)) {
+						ApplicationMetadata.INSTANCE.setProjectNameSpace(
+							projectNameSpace.replaceAll("\\.", Context.DELIMITER));
+						good = true;
 					} else {
 						ConsoleUtils.display(
-								"The NameSpace has to end with Project Name !");
+								"You can't use special characters "
+								+ "except '.' in the NameSpace.");
 					}
 				}
 			}
