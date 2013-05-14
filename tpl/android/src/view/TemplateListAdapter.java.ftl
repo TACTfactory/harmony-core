@@ -21,7 +21,7 @@ import android.widget.TextView;
 <#assign importDate=false />
 <#list curr.fields as field>
 	<#if !field.internal && !field.hidden>
-		<#if (!importDate && (field.type=="date" || field.type=="time" || field.type=="datetime"))>
+		<#if (!importDate && field.type?lower_case=="datetime")>
 			<#assign importDate=true />
 		</#if>
 	</#if>

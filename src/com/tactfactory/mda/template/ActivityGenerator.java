@@ -28,6 +28,7 @@ import org.jdom2.output.XMLOutputter;
 import com.tactfactory.mda.annotation.Column.Type;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.meta.TranslationMetadata;
 import com.tactfactory.mda.meta.TranslationMetadata.Group;
@@ -72,7 +73,7 @@ public class ActivityGenerator extends BaseGenerator {
 		this(adapter, true);
 		
 		// Make entities
-		for (final ClassMetadata meta 
+		for (final EntityMetadata meta 
 				: this.getAppMetas().getEntities().values()) {
 			if (!meta.getFields().isEmpty() && !meta.isInternal()) {
 				// copy Widget
@@ -81,7 +82,7 @@ public class ActivityGenerator extends BaseGenerator {
 				} else {
 					for (final FieldMetadata field 
 							: meta.getFields().values()) {
-						final String type = field.getType();
+						final String type = field.getHarmonyType();
 						if (!this.isDate && (
 								type.equals(Type.DATE.getValue())  
 								|| type.equals(Type.DATETIME.getValue()))) {
@@ -120,7 +121,7 @@ public class ActivityGenerator extends BaseGenerator {
 	public final void generateAll() {
 		ConsoleUtils.display(">> Generate CRUD view...");
 
-		for (final ClassMetadata cm 
+		for (final EntityMetadata cm 
 				: this.getAppMetas().getEntities().values()) {
 			if (!cm.isInternal() && !cm.getFields().isEmpty()) {
 				cm.makeString("label");
@@ -349,7 +350,7 @@ public class ActivityGenerator extends BaseGenerator {
 		
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_edit", 
-				entityName + " edition error…;",
+				entityName + " edition error…",
 				Group.MODEL);
 				
 	}

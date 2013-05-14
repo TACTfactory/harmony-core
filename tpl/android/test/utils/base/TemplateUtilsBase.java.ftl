@@ -41,22 +41,30 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 		<#list curr.fields as field>
 			<#if !field.internal>
 				<#if !field.relation??>
-					<#if field.type=="string" || field.type=="text" || field.type=="phone" || field.type=="login" || field.type=="password">
+					<#if field.type?lower_case=="string">
 		${curr.name?uncap_first}.set${field.name?cap_first}("${field.name?uncap_first}_"+TestUtils.generateRandomString(10));
-					<#elseif field.type=="int" || field.type=="zipcode" || field.type=="ean">
+					<#elseif (field.type?lower_case == "int" || field.type?lower_case == "integer")>
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomInt(0,100));
-					<#elseif field.type=="boolean">
+					<#elseif field.type?lower_case=="boolean">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomBool());
-					<#elseif field.type=="double">
+					<#elseif field.type?lower_case=="double">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDouble(0,100));
-					<#elseif field.type=="float">
+					<#elseif field.type?lower_case=="float">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomFloat(0,100));
-					<#elseif field.type=="date">
+					<#elseif field.type?lower_case=="short">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomShort(0,100));
+					<#elseif field.type?lower_case=="char">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomChar(0,100));
+					<#elseif field.type?lower_case=="byte">
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomByte(0,100));
+					<#elseif field.type?lower_case=="datetime">
+						<#if field.harmony_type?lower_case=="date">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDate());
-					<#elseif field.type=="time">
+						<#elseif field.harmony_type?lower_case=="time">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomTime());
-					<#elseif field.type=="datetime">
+						<#elseif field.harmony_type?lower_case=="datetime">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDateTime());
+						</#if>
 					<#else>
 						<#if (field.columnDefinition?lower_case=="integer" || field.columnDefinition?lower_case=="int")>
 		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(TestUtils.generateRandomInt(0,100)));
@@ -93,11 +101,11 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 		<#list curr.fields as field>
 			<#if !field.internal>
 				<#if !field.relation??>
-					<#if field.type=="int" || field.type=="integer" || field.type=="long" || field.type=="double" || field.type=="float" || field.type=="zipcode" || field.type=="ean">
+					<#if field.type?lower_case=="int" || field.type?lower_case=="integer" || field.type?lower_case=="long" || field.type?lower_case=="double" || field.type?lower_case=="float" || field.type?lower_case=="zipcode" || field.type?lower_case=="ean">
 			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
-					<#elseif field.type=="boolean">
+					<#elseif field.type?lower_case=="boolean">
 			Assert.assertEquals(${curr.name?uncap_first}1.is${field.name?cap_first}(), ${curr.name?uncap_first}2.is${field.name?cap_first}());		
-					<#elseif field.type=="date" || field.type=="time" || field.type=="datetime">
+					<#elseif field.type?lower_case=="date" || field.type?lower_case=="time" || field.type?lower_case=="datetime">
 			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
 					<#else>
 			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());

@@ -17,6 +17,7 @@ import java.util.List;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.meta.MethodMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
@@ -61,7 +62,7 @@ public class EntityGenerator extends BaseGenerator {
 	public final void generateAll() {
 		ConsoleUtils.display(">> Decorate entities...");
 		
-		for (final ClassMetadata cm 
+		for (final EntityMetadata cm 
 				: this.getAppMetas().getEntities().values()) { 
 			final String filepath = String.format("%s/%s",
 					this.entityFolder,
@@ -93,7 +94,7 @@ public class EntityGenerator extends BaseGenerator {
 	 */
 	protected final void addImplementsSerializable(
 			final StringBuffer fileString,
-			final ClassMetadata cm) {
+			final EntityMetadata cm) {
 		if (!this.alreadyImplementsSerializable(cm)) {
 			ConsoleUtils.displayDebug("Add serializable implement");
 			final int firstAccolade = fileString.indexOf(" {");
@@ -209,7 +210,7 @@ public class EntityGenerator extends BaseGenerator {
 	 * @return True if it already implements serializable
 	 */
 	protected final boolean alreadyImplementsSerializable(
-			final ClassMetadata cm) {
+			final EntityMetadata cm) {
 		boolean ret = false;
 		for (final String impl : cm.getImplementTypes()) {
 			if ("Serializable".equals(impl)) {				

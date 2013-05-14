@@ -19,13 +19,13 @@
 	    android:layout_below="@+id/${lastField}"
 		    	</#if>
 	    android:text="@string/${m_id_label}"/>
-			<#if (field.type=="boolean")>
+			<#if (field.type?lower_case=="boolean")>
     <CheckBox
 	    android:id="@+id/${m_id}"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@+id/${m_id_label}" />
-	    		<#elseif (field.type=="datetime" || field.type=="date" || field.type=="time")>
+	    		<#elseif (field.type?lower_case == "datetime")>
 	<LinearLayout
         android:id="@+id/${m_id}"
         android:layout_width="match_parent"
@@ -33,11 +33,11 @@
         android:layout_below="@+id/${m_id_label}"
         android:animateLayoutChanges="false"
         android:orientation="horizontal" >
-			<#if (field.type=="datetime" || field.type=="date")>
+			<#if (field.harmony_type == "datetime" || field.harmony_type == "date")>
         <EditText
             android:id="@+id/${m_id}_date"
             android:layout_height="wrap_content"
-            			<#if (field.type=="datetime")>
+            			<#if (field.harmony_type == "datetime")>
             android:layout_width="0px"
             android:paddingRight="4dp"
             android:layout_weight="7"
@@ -48,11 +48,11 @@
             android:singleLine="true"
             style="@style/TextAppearance.Edit_Spinner" />
 			</#if>
-			<#if (field.type=="datetime" || field.type=="time")>
+			<#if (field.harmony_type == "datetime" || field.harmony_type == "time")>
         <EditText
             android:id="@+id/${m_id}_time"
             android:layout_height="wrap_content"
-            			<#if (field.type=="datetime")>
+            			<#if (field.harmony_type == "datetime")>
             android:layout_width="0px"
             android:layout_weight="4"
             			<#else>

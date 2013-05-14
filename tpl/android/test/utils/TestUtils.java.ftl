@@ -117,7 +117,19 @@ public abstract class TestUtils{
      public static float generateRandomFloat(float min, float max){
     	 return (float)generateRandomDouble(min, max);
      }
+
+     public static short generateRandomShort(){
+    	 return (short) (Math.random() * (Short.MAX_VALUE));
+     }
      
+     public static byte generateRandomByte(){
+    	 return (byte) (Math.random() * (Byte.MAX_VALUE));
+     }
+     
+     public static char generateRandomChar(){
+    	 return (char) (Math.random() * (Character.MAX_VALUE));
+     }
+
      public static boolean generateRandomBool(){
     	 return (Math.random()>0.5);
      }
