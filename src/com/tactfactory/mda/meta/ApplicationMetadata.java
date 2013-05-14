@@ -186,12 +186,28 @@ public final class ApplicationMetadata extends BaseMetadata {
 	@Override
 	public Map<String, Object> toMap(final BaseAdapter adapt) {
 		final Map<String, Object> ret = new HashMap<String, Object>();
+		final Map<String, Object> classesMap = new HashMap<String, Object>();
+		final Map<String, Object> enumsMap = new HashMap<String, Object>();
+		final Map<String, Object> interfacesMap = new HashMap<String, Object>();
 		final Map<String, Object> entitiesMap = new HashMap<String, Object>();
 		
 		// Make Map for entities
-		for (final EntityMetadata cm : this.entities.values()) {
-			entitiesMap.put(cm.getName(), cm.toMap(adapt));
-			cm.makeString("label");
+		for (final ClassMetadata cm : this.classes.values()) {
+			classesMap.put(cm.getName(), cm.toMap(adapt));
+			
+			if (cm instanceof EntityMetadata) {
+				entitiesMap.put(cm.getName(), cm.toMap(adapt));
+				((EntityMetadata) cm).makeString("label");
+			} else
+				
+			if (cm instanceof EnumMetadata) {
+				enumsMap.put(cm.getName(), cm.toMap(adapt));
+			} else
+				
+			if (cm instanceof InterfaceMetadata) {
+				interfacesMap.put(cm.getName(), cm.toMap(adapt));
+			} 
+			
 		}
 		
 		// Add root
@@ -222,7 +238,10 @@ public final class ApplicationMetadata extends BaseMetadata {
 						PATH_DELIMITER, 
 						PACKAGE_DELIMITER) + "." + adapt.getFixture());
 
-		ret.put(TagConstant.ENTITIES, 			entitiesMap);
+		ret.put(TagConstant.CLASSES, 		classesMap);
+		ret.put(TagConstant.ENTITIES, 		entitiesMap);
+		ret.put(TagConstant.ENUMS, 			enumsMap);
+		ret.put(TagConstant.INTERFACES, 	interfacesMap);
 		
 		ret.put(TagConstant.ANDROID_SDK_DIR,
 				ApplicationMetadata.androidSdkPath);

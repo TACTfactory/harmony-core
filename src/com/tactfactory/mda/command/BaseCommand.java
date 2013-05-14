@@ -64,7 +64,7 @@ public abstract class BaseCommand implements Command {
 			}
 	
 			// Generate views from MetaData 
-			if (this.javaModelParser.getMetas().size() > 0) {				
+			/*if (this.javaModelParser.getMetas().size() > 0) {				
 				for (final ClassMetadata meta 
 						: this.javaModelParser.getMetas()) {
 					if (meta instanceof EntityMetadata) {
@@ -74,7 +74,9 @@ public abstract class BaseCommand implements Command {
 				}
 				new ClassCompletor(
 						ApplicationMetadata.INSTANCE.getEntities()).execute();
-			}
+			}*/
+			new ClassCompletor(
+					ApplicationMetadata.INSTANCE.getEntities()).execute();
 		} else {
 			ConsoleUtils.displayWarning("No entities found in entity package!");
 		}

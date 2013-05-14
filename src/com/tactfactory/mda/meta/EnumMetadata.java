@@ -11,7 +11,7 @@ public class EnumMetadata extends ClassMetadata {
 	private String type;
 	
 	/** List of the enum names.*/
-	private ArrayList<String> names = new ArrayList<String>();
+	private ArrayList<String> entries = new ArrayList<String>();
 	
 	/**
 	 * Transform the class to a map given an adapter.
@@ -22,7 +22,7 @@ public class EnumMetadata extends ClassMetadata {
 	public final Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> model = super.toMap(adapter);
 		model.put(TagConstant.TYPE, type);
-		model.put(TagConstant.NAMES, names);
+		model.put(TagConstant.NAMES, entries);
 		return model;
 	}
 	
@@ -43,14 +43,14 @@ public class EnumMetadata extends ClassMetadata {
 	/**
 	 * @return the names
 	 */
-	public final ArrayList<String> getNames() {
-		return names;
+	public final ArrayList<String> getEntries() {
+		return entries;
 	}
 
 	/**
 	 * @param names the names to set
 	 */
-	public final void setNames(final ArrayList<String> names) {
-		this.names = names;
+	public final void setEntries(final ArrayList<String> entries) {
+		this.entries = entries;
 	}
 }

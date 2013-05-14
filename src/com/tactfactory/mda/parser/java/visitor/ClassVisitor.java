@@ -2,6 +2,7 @@ package com.tactfactory.mda.parser.java.visitor;
 
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
+import japa.parser.ast.body.EnumConstantDeclaration;
 import japa.parser.ast.body.EnumDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
@@ -146,12 +147,45 @@ public class ClassVisitor {
     
     public final ClassMetadata visit(final EnumDeclaration n) {
     	
-    	ConsoleUtils.displayDebug("FOUND ENUM " + n.getName());
-    	EnumMetadata enumMetas = new EnumMetadata();
-    	enumMetas.setName(n.getName());
+    	ConsoleUtils.displayDebug("Found enum " + n.getName());
+    	EnumMetadata result = new EnumMetadata();
+    	result.setName(n.getName());
+    	// Check reserved keywords
+		SqliteAdapter.Keywords.exists(result.getName());
+    	
+    	// Get the Enum entries
+    	if (n.getEntries() != null) {
+    		for (EnumConstantDeclaration enumEntry : n.getEntries()) {
+    			result.getEntries().add(enumEntry.getName());
+    		}
+    	}
+    	
+    	// Get list of Members (Methods, Fields, Subclasses, Enums, etc.)
+		List<BodyDeclaration> members = n.getMembers();
+		if (members != null) {
+			for (BodyDeclaration member : members) {
+				// Subclass or Enum
+				if (member instanceof TypeDeclaration) {
+					this.visit((TypeDeclaration) member);
+				} else
+				
+				// Fields
+				if (member instanceof FieldDeclaration) {
+					FieldMetadata fieldMetas = this.fieldVisitor.visit((FieldDeclaration) member, result);
+					if (fieldMetas != null) {
+						result.getFields().put(fieldMetas.getName(), fieldMetas);
+					}
+				} else 
+					
+				// Methods
+				if (member instanceof MethodDeclaration) {
+					result.getMethods().add(this.methodVisitor.visit((MethodDeclaration) member, result));
+				}	
+			}
+		}
     	
     	
-    	return enumMetas;
+    	return result;
     }
     
     public final ClassMetadata visit(final TypeDeclaration n) {

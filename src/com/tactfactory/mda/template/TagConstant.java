@@ -50,7 +50,13 @@ public abstract class TagConstant {
 	
 	//Template annotations
 	/** Constant for entities. */
+	public static final String CLASSES = "classes";
+	/** Constant for entities. */
 	public static final String ENTITIES = "entities";
+	/** Constant for entities. */
+	public static final String ENUMS = "enums";
+	/** Constant for entities. */
+	public static final String INTERFACES = "interfaces";
 	/** Constant for relation target entity. */
 	public static final String ENTITY_REF = "targetEntity";
 	/** Constant for classes fields. */

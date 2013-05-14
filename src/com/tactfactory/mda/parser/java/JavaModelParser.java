@@ -21,6 +21,9 @@ import java.util.List;
 
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.EntityMetadata;
+import com.tactfactory.mda.meta.EnumMetadata;
+import com.tactfactory.mda.meta.InterfaceMetadata;
 import com.tactfactory.mda.parser.BaseParser;
 import com.tactfactory.mda.parser.java.visitor.FileVisitor;
 import com.tactfactory.mda.plateforme.AndroidAdapter;
@@ -164,9 +167,9 @@ public class JavaModelParser {
 	/**
 	 * @return the appMetas
 	 */
-	public final List<ClassMetadata> getMetas() {
+	/*public final List<ClassMetadata> getMetas() {
 		return this.metas;
-	}
+	}*/
 	
 	/**
 	 * Parse the given compilation unit and convert it to a 
@@ -175,6 +178,30 @@ public class JavaModelParser {
 	 */
 	public final void parse(final CompilationUnit mclass, 
 			final ApplicationMetadata appMetas) {
-		this.metas.addAll(this.fileVisitor.visit(mclass));
+		ArrayList<ClassMetadata> classes = this.fileVisitor.visit(mclass); 
+		
+		for (ClassMetadata classMeta : classes) {
+			// Add the Metadata to the general list
+			appMetas.getClasses().put(classMeta.getName(), classMeta);
+			
+			// If it is an entity
+			if (classMeta instanceof EntityMetadata) {
+				appMetas.getEntities().put(
+						classMeta.getName(), (EntityMetadata) classMeta);
+			} else
+				
+			// If it is an enum
+			if (classMeta instanceof EnumMetadata) {
+				appMetas.getEnums().put(
+						classMeta.getName(), (EnumMetadata) classMeta);
+			} else
+				
+			// If it is an interface
+			if (classMeta instanceof InterfaceMetadata) {
+				appMetas.getInterfaces().put(
+						classMeta.getName(), (InterfaceMetadata) classMeta);
+			}
+		}
+		
 	}
 }
