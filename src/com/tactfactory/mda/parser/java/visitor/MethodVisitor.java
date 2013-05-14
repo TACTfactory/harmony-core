@@ -1,0 +1,65 @@
+package com.tactfactory.mda.parser.java.visitor;
+
+import japa.parser.ast.body.MethodDeclaration;
+import japa.parser.ast.body.ModifierSet;
+import japa.parser.ast.body.Parameter;
+
+import java.util.List;
+
+import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.MethodMetadata;
+import com.tactfactory.mda.parser.BaseParser;
+import com.tactfactory.mda.parser.java.JavaModelParser;
+import com.tactfactory.mda.utils.ConsoleUtils;
+
+/**
+ * JavaParser Method Visitor.
+ */
+public class MethodVisitor {
+	
+	public MethodMetadata visit(final MethodDeclaration method,
+			final ClassMetadata meta) {
+    	// Call the parsers which have been registered by the bundle
+    	for (final BaseParser bParser 
+    			: JavaModelParser.bundleParsers) {
+    		bParser.visitMethod(method, meta);
+    	}
+		
+		final MethodMetadata methodMeta = new MethodMetadata();
+		methodMeta.setName(method.getName());
+		methodMeta.setType(method.getType().toString()); 
+		methodMeta.setFinal(ModifierSet.isFinal(method.getModifiers()));
+		
+		// Add Parameters
+		final List<Parameter> parameters = method.getParameters();
+		if (parameters != null) {
+			for (final Parameter param : parameters) {
+				methodMeta.getArgumentsTypes().add(
+						param.getType().toString());
+			}
+		}
+		
+		meta.getMethods().add(methodMeta);
+		
+		// Debug Log
+		if (ConsoleUtils.isDebug()) {
+			final StringBuilder builder = new StringBuilder(
+					String.format("\tMethod : %s %s(", 
+							methodMeta.getType(), methodMeta.getName()));
+			
+			for (final String args : methodMeta.getArgumentsTypes()) {
+				if (!args.equals(methodMeta.getArgumentsTypes().get(0))) {
+					builder.append(", ");
+				}
+				
+				builder.append(String.format("%s", args));
+			}
+				
+			builder.append(')');
+
+			ConsoleUtils.displayDebug(builder.toString());
+		}
+		
+		return methodMeta;
+	}
+}

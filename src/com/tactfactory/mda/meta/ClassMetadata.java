@@ -27,6 +27,9 @@ public class ClassMetadata extends BaseMetadata {
 	private Map<String, FieldMetadata> fields = 
 			new LinkedHashMap<String, FieldMetadata>();
 		
+	/** Implemented class list of the entity class. */
+	private List<String> implementTypes = 
+			new ArrayList<String>();
 
 	/** Namespace of entity class. */
 	private String space = "";
@@ -62,7 +65,6 @@ public class ClassMetadata extends BaseMetadata {
 				adapter.getNameSpace(this, adapter.getTest()));
 		model.put(TagConstant.FIELDS,			
 				this.toFieldArray(this.fields.values(), adapter));
-		model.put(TagConstant.INTERNAL,			"false");
 		
 		final Map<String, Object> optionsModel = new HashMap<String, Object>();
 		for (final Metadata option : this.getOptions().values()) {
@@ -149,6 +151,22 @@ public class ClassMetadata extends BaseMetadata {
 	 */
 	public final void setImports(final List<String> imports) {
 		this.imports = imports;
+	}
+	
+	
+	/**
+	 * @return the implementTypes
+	 */
+	public final List<String> getImplementTypes() {
+		return implementTypes;
+	}
+
+
+	/**
+	 * @param implementTypes the implementTypes to set
+	 */
+	public final void setImplementTypes(final List<String> implementTypes) {
+		this.implementTypes = implementTypes;
 	}
 
 

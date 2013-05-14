@@ -73,6 +73,8 @@ public abstract class TagConstant {
 	public static final String EXTENDS = "extends";
 	/** Constant for name. */
 	public static final String NAME = "name";
+	/** Constant for names. */
+	public static final String NAMES = "names";
 	/** Constant for type. */
 	public static final String TYPE = "type";
 	/** Constant for harmony type. */
@@ -107,4 +109,5 @@ public abstract class TagConstant {
 	public static final String NULLABLE = "nullable";
 	/** Constant for provider id. */
 	public static final String PROVIDER_ID = "provider_id";
+	
 }

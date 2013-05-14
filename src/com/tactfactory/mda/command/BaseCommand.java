@@ -18,7 +18,7 @@ import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.parser.BaseParser;
 import com.tactfactory.mda.parser.ClassCompletor;
-import com.tactfactory.mda.parser.JavaModelParser;
+import com.tactfactory.mda.parser.java.JavaModelParser;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
 /** 
@@ -60,7 +60,7 @@ public abstract class BaseCommand implements Command {
 		if (this.javaModelParser.getEntities().size() > 0) {
 			for (final CompilationUnit mclass 
 					: this.javaModelParser.getEntities()) {
-				this.javaModelParser.parse(mclass);
+				this.javaModelParser.parse(mclass, ApplicationMetadata.INSTANCE);
 			}
 	
 			// Generate views from MetaData 
