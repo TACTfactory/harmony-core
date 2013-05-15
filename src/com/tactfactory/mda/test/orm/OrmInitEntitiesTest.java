@@ -19,6 +19,7 @@ import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.test.CommonTest;
 
 /**
@@ -26,13 +27,13 @@ import com.tactfactory.mda.test.CommonTest;
  */
 public class OrmInitEntitiesTest extends CommonTest {
 	/** User MetaData. */
-	private static ClassMetadata userMeta = null;
+	private static EntityMetadata userMeta = null;
 	
 	/** Post MetaData. */
-	private static ClassMetadata postMeta = null;
+	private static EntityMetadata postMeta = null;
 	
 	/** Comment MetaData. */
-	private static ClassMetadata commentMeta = null;
+	private static EntityMetadata commentMeta = null;
 	
 	/** createdAt field name. */
 	private static final String CREATED_AT = "createdAt";
@@ -108,7 +109,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 
 		command.generateMetas();
 		
-		for (final ClassMetadata classMetadata
+		for (final EntityMetadata classMetadata
 				: ApplicationMetadata.INSTANCE.getEntities().values()) {
 			if (classMetadata.getName().equals("User")) {
 				userMeta = classMetadata;
@@ -376,7 +377,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 * @param meta The class to test
 	 * @param value The name of the id to find
 	 */
-	private void hasId(final ClassMetadata meta, final String value) {
+	private void hasId(final EntityMetadata meta, final String value) {
 		Assert.assertTrue("Check if key " + value,
 				meta.getIds().containsKey(value));
 	}
@@ -396,7 +397,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 * @param meta The class to test
 	 * @param value The name of the implementation to find
 	 */
-	private void hasImplement(final ClassMetadata meta, final String value) {
+	private void hasImplement(final EntityMetadata meta, final String value) {
 		Assert.assertTrue("Check if implement " + value,
 				meta.getImplementTypes().contains(value));
 	}

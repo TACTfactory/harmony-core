@@ -14,6 +14,7 @@ import java.io.IOException;
 
 import com.tactfactory.mda.fixture.metadata.FixtureMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.BaseGenerator;
 import com.tactfactory.mda.template.SQLiteGenerator;
@@ -132,7 +133,7 @@ public class FixtureGenerator extends BaseGenerator {
 			new SQLiteGenerator(this.getAdapter()).generateDatabase();
 			
 			//Create each entity's data loader
-			for (final ClassMetadata cm 
+			for (final EntityMetadata cm 
 					: this.getAppMetas().getEntities().values()) {
 				if (cm.getFields().size() > 0 && !cm.isInternal()) {
 					this.getDatamodel().put(TagConstant.CURRENT_ENTITY,

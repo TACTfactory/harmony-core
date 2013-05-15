@@ -120,7 +120,32 @@ public abstract class SqliteAdapter {
 		
 		if (type.equalsIgnoreCase(Column.Type.FLOAT.getValue())) {
 			type = "FLOAT";
+		} else
+			
+		if (type.equalsIgnoreCase(Column.Type.DOUBLE.getValue())) {
+			type = "DOUBLE";
+		} else
+			
+		if (type.equalsIgnoreCase(Column.Type.SHORT.getValue())) {
+			type = "SHORT";
+		} else
+			
+		if (type.equalsIgnoreCase(Column.Type.LONG.getValue())) {
+			type = "LONG";
+		} else
+			
+		if (type.equalsIgnoreCase(Column.Type.CHAR.getValue())) {
+			type = "STRING";
+		} else
+			
+		if (type.equalsIgnoreCase(Column.Type.BYTE.getValue())) {
+			type = "STRING";
+		} else 
+			
+		if (type.equalsIgnoreCase(Column.Type.CHARACTER.getValue())) {
+			type = "STRING";
 		}
+		
 
 		return type;
 	}

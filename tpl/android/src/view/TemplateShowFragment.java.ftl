@@ -19,6 +19,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
+import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 import android.content.ContentResolver;
 import android.widget.CheckBox;
 import android.widget.TextView;
@@ -27,7 +28,7 @@ import android.widget.TextView;
 <#assign importDate=false />
 <#list curr.fields as field>
 	<#if !field.hidden>
-		<#if (!importDate && (field.type=="date" || field.type=="time" || field.type=="datetime"))>
+		<#if (!importDate && field.type?lower_case=="datetime")>
 			<#assign importDate=true />
 		</#if>
 	</#if>
@@ -93,25 +94,20 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
     <#foreach field in curr.fields>
 		<#if (!field.internal && !field.hidden)>
 			<#if (!field.relation??)>
-		    	<#if ((field.type!="int") && 
-		    	(field.type!="boolean") && 
-		    	(field.type!="long") && 
-		    	(field.type!="ean") && 
-		    	(field.type!="zipcode") && 
-		    	(field.type!="float"))>
+		    	<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
 		if (this.model.get${field.name?cap_first}() != null) {
-					<#if (field.type=="datetime" || field.type=="date" || field.type=="time")>
-						<#if (field.type=="datetime")>
+					<#if (field.type?lower_case == "datetime")>
+						<#if (field.harmony_type == "datetime")>
 			this.${field.name}View.setText(
 					DateUtils.formatDateTimeToString(
 							model.get${field.name?cap_first}()));
 						</#if>
-						<#if (field.type=="date")>
+						<#if (field.harmony_type == "date")>
 			this.${field.name}View.setText(
 					DateUtils.formatDateToString(
 							model.get${field.name?cap_first}()));
 						</#if>
-						<#if (field.type=="time")>
+						<#if (field.harmony_type == "time")>
 			this.${field.name}View.setText(
 					DateUtils.formatTimeToString(
 							model.get${field.name?cap_first}()));					
@@ -208,17 +204,9 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 			
-			ContentResolver prov = this.ctx.getContentResolver();
-			Bundle b = new Bundle();
-			b.putSerializable("id", this.entity.getId());
-			Bundle ret = 
-					prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
-							${curr.name?cap_first}ProviderAdapter.METHOD_QUERY_${curr.name?upper_case}, 
-							null,
-							b);
-
-			this.entity = (${curr.name?cap_first}) ret.getSerializable(
-					${curr.name?cap_first}ProviderAdapter.ITEM_KEY); 
+			this.entity = ${curr.name?cap_first}ProviderUtils.query(
+				this.ctx, 
+				this.entity.getId());
 			
 			if (this.entity != null) {
 				result = 0;

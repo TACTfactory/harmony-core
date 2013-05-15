@@ -23,5 +23,4 @@ public class SimpleEntity {
     @Column(type = Type.INTEGER, hidden = true)
     @GeneratedValue(strategy = "IDENTITY")
 	private int id;
-
 }

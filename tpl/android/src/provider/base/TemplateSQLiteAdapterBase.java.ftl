@@ -33,11 +33,11 @@
 <#assign hasTime=false />
 <#assign hasDate=false />
 <#list curr.fields as field>
-	<#if field.type=="date">
+	<#if field.harmony_type=="date">
 		<#assign hasDate=true />
-	<#elseif field.type=="time">
+	<#elseif field.harmony_type=="time">
 		<#assign hasTime=true />
-	<#elseif field.type="datetime">
+	<#elseif field.harmony_type="datetime">
 		<#assign hasDateTime=true />
 	</#if>
 </#list>
@@ -229,32 +229,53 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			if (!cursor.isNull(index)) {<#assign t="\t" />
 			</#if>
 			<#if (!field.relation??)>
-				<#if ((field.type == "date") || (field.type == "datetime") || (field.type == "time"))> 
+				<#if (field.type?lower_case == "datetime") >
+					<#if ((field.harmony_type == "date") || (field.harmony_type == "datetime") || (field.harmony_type == "time"))> 
 			
-					<#if field.is_locale>
+						<#if field.is_locale>
 			${t}final DateTime dt${field.name?cap_first} = 
 					DateUtils.formatLocalISOStringToDateTime(
 							cursor.getString(index));	
-					<#else>
+						<#else>
 			${t}final DateTime dt${field.name?cap_first} = 
 					DateUtils.formatISOStringToDateTime(
 							cursor.getString(index));	
-					</#if>
+						</#if>
 				${t}if (dt${field.name?cap_first} != null) {
 					${t}result.set${field.name?cap_first}(
 							dt${field.name?cap_first});
 				${t}} else {
 				${t}result.set${field.name?cap_first}(new DateTime());
 			${t}}
-				<#elseif (field.type == "boolean")>
+					</#if>
+				<#elseif (field.type?lower_case == "boolean")>
 			${t}result.set${field.name?cap_first}(
 					cursor.getString(index).equals("true"));
-				<#elseif (field.type == "int" || field.type == "integer" || field.type == "ean" || field.type == "zipcode")>
+				<#elseif (field.type?lower_case == "int" || field.type?lower_case == "integer" || field.type == "ean" || field.type == "zipcode")>
 			${t}result.set${field.name?cap_first}(
 					cursor.getInt(index));
-				<#elseif (field.type == "float")>
+				<#elseif (field.type?lower_case == "float")>
 			${t}result.set${field.name?cap_first}(
 					cursor.getFloat(index));
+				<#elseif (field.type?lower_case == "double")>
+			${t}result.set${field.name?cap_first}(
+					cursor.getDouble(index));
+				<#elseif (field.type?lower_case == "long")>
+			${t}result.set${field.name?cap_first}(
+					cursor.getLong(index));
+				<#elseif (field.type?lower_case == "short")>
+			${t}result.set${field.name?cap_first}(
+					cursor.getShort(index));
+				<#elseif (field.type?lower_case == "char" || field.type?lower_case == "character")>
+			String ${field.name?uncap_first}DB = cursor.getString(index);
+			if (${field.name?uncap_first}DB != null 
+				&& ${field.name?uncap_first}DB.length() > 0) {
+				${t}result.set${field.name?cap_first}(
+					${field.name?uncap_first}DB.charAt(0));
+			}
+				<#elseif (field.type?lower_case == "byte")>
+			${t}result.set${field.name?cap_first}(Byte.valueOf(
+					cursor.getString(index)));
 				<#elseif (field.type?lower_case=="string")>
 			${t}result.set${field.name?cap_first}(
 					cursor.getString(index)); 
@@ -312,7 +333,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter = 
 				new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
-		result.set${relation.name?cap_first}(
+		result.set${relation.name?cap_first}( 
 					${relation.relation.joinTable?lower_case}Adapter.getBy${curr.name}(
 							result.getId())); // relation.relation.inversedBy?cap_first
 				<#else>
@@ -831,6 +852,25 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		}
 		return ret;
 	}
-	
+
+	@Override
+	public Void cursorToItem(Cursor c) {
+		return null;
+	}
+
+	@Override
+	public long insert(Void item) {
+		return -1;
+	}
+
+	@Override
+	public int update(Void item) {
+		return 0;
+	}
+
+	@Override
+	public int delete(Void item) {
+		return 0;
+	}
 </#if>
 }

@@ -15,6 +15,7 @@ import java.util.HashMap;
 
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.parser.BaseParser;
 import com.tactfactory.mda.parser.ClassCompletor;
 import com.tactfactory.mda.parser.JavaModelParser;
@@ -66,8 +67,10 @@ public abstract class BaseCommand implements Command {
 			if (this.javaModelParser.getMetas().size() > 0) {				
 				for (final ClassMetadata meta 
 						: this.javaModelParser.getMetas()) {
-					ApplicationMetadata.INSTANCE.getEntities().put(
-							meta.getName(), meta);
+					if (meta instanceof EntityMetadata) {
+						ApplicationMetadata.INSTANCE.getEntities().put(
+							meta.getName(), (EntityMetadata) meta);
+					}
 				}
 				new ClassCompletor(
 						ApplicationMetadata.INSTANCE.getEntities()).execute();

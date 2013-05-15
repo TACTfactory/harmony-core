@@ -44,6 +44,7 @@ import com.tactfactory.mda.annotation.OneToMany;
 import com.tactfactory.mda.annotation.OneToOne;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.meta.MethodMetadata;
 import com.tactfactory.mda.meta.RelationMetadata;
@@ -233,7 +234,7 @@ public class JavaModelParser {
 		final String spackage = PackageUtils.extractNameSpace(
 				mclass.getPackage().getName().toString());
 		if (!Strings.isNullOrEmpty(spackage)) {
-			final ClassMetadata meta = new ClassMetadata();
+			final EntityMetadata meta = new EntityMetadata();
 			meta.setSpace(spackage);
 			
 			new ClassVisitor().visit(mclass, meta);
@@ -250,18 +251,18 @@ public class JavaModelParser {
 	/**
 	 * JavaParser Class Visitor.
 	 */
-	private class ClassVisitor extends VoidVisitorAdapter<ClassMetadata> {
+	private class ClassVisitor extends VoidVisitorAdapter<EntityMetadata> {
 		
 	    @Override
 	    public final void visit(final ClassOrInterfaceDeclaration n,
-	    		final ClassMetadata meta) {
+	    		final EntityMetadata meta) {
 	    	// Call the parsers which have been registered by the bundle
 	    	for (final BaseParser bParser 
 	    			: JavaModelParser.this.bundleParsers) {
 	    		
 	    		bParser.visitClass(n, meta);
 	    	}
-
+	    	
 	    	final List<AnnotationExpr> classAnnotations = n.getAnnotations();
 			if (classAnnotations != null) {
 				for (final AnnotationExpr annotationExpr : classAnnotations) {
@@ -331,11 +332,11 @@ public class JavaModelParser {
 	/**
 	 * JavaParser Field Visitor.
 	 */
-	public class FieldVisitor extends VoidVisitorAdapter<ClassMetadata> {
+	public class FieldVisitor extends VoidVisitorAdapter<EntityMetadata> {
 		
 		@Override
 		public final void visit(final FieldDeclaration field, 
-				final ClassMetadata meta) {
+				final EntityMetadata meta) {
 	    	// Call the parsers which have been registered by the bundle
 	    	for (final BaseParser bParser 
 	    			: JavaModelParser.this.bundleParsers) {
@@ -349,7 +350,11 @@ public class JavaModelParser {
 				// General (required !)
 				final FieldMetadata fieldMeta = new FieldMetadata(meta);
 			
+				/*fieldMeta.setType(
+						Type.toTypeString(field.getType().toString()));*/
 				fieldMeta.setType(
+						field.getType().toString());
+				fieldMeta.setHarmonyType(
 						Type.toTypeString(field.getType().toString()));
 				
 				// Java types Date and Time are deprecated in Harmony
@@ -477,10 +482,10 @@ public class JavaModelParser {
 					meta.getRelations().put(fieldMeta.getName(), fieldMeta);
 				}
 
-				if (fieldMeta.getType().equalsIgnoreCase("DateTime") 
+				/*if (fieldMeta.getType().equalsIgnoreCase("DateTime") 
 						&& fieldMeta.getColumnDefinition() != null) {
 					fieldMeta.setType(fieldMeta.getColumnDefinition());
-				}
+				}*/
 				
 				fieldMeta.setColumnDefinition(
 						SqliteAdapter.generateColumnType(

@@ -262,6 +262,10 @@ public class ProjectGenerator extends BaseGenerator {
 			String destPath = pathSherlock + "/library/ant.properties";
 			this.makeSource(srcPath, destPath, false);
 			
+			srcPath = Harmony.getTemplatesPath() + "/android/libs/sherlock_.project";
+			destPath = pathSherlock + "/library/.project";
+			this.makeSource(srcPath, destPath, false);
+			
 			//make build sherlock
 			command.add(new File( String.format("%s/%s", 
 					ApplicationMetadata.getAndroidSdkPath(), 
@@ -272,6 +276,8 @@ public class ProjectGenerator extends BaseGenerator {
 			command.add(new File(
 					pathSherlock.getAbsolutePath() + 
 					"/library").getAbsolutePath());
+			command.add("--name");
+			command.add(ApplicationMetadata.INSTANCE.getName() + "-abs");
 			ConsoleUtils.launchCommand(command);
 		}
 	}
@@ -294,13 +300,13 @@ public class ProjectGenerator extends BaseGenerator {
 		final File dirTpl = 
 				new File(Harmony.getBundlePath() + "tact-core/"
 						+ this.getAdapter().getTemplateProjectPath());
-		if (dirTpl.exists() && dirTpl.listFiles().length > 0) {				
-			this.clearProjectSources();
+		if (dirTpl.exists() && dirTpl.listFiles().length > 0 
+				&& this.clearProjectSources()) {
 			this.copyProjectTemplates(dirTpl, null, 
 					Harmony.getProjectPath() 
 						+ File.separator + this.getAdapter().getPlatform(), 
 					this.getAdapter().getTemplateProjectPath());
-			result = true;	
+			result = true;
 		}
 		
 		// Make Test project
@@ -310,13 +316,17 @@ public class ProjectGenerator extends BaseGenerator {
 		} catch (Exception e) {
 			ConsoleUtils.displayError(e);
 		}
+		
 		return result;
 	}
 	
 	/**
-	 * Delete files that need to be recreated
+	 * Delete files that need to be recreated.
+	 * @return true if project cleaning successful
 	 */
-	private void clearProjectSources() {
+	private boolean clearProjectSources() {
+		boolean result = true;
+		
 		String projectPath = Harmony.getProjectPath() 
 				+ File.separator + this.getAdapter().getPlatform();
 		
@@ -324,8 +334,10 @@ public class ProjectGenerator extends BaseGenerator {
 				+ File.separator + "build.rules.xml");
 		
 		if (buildRules.exists()) {
-			buildRules.delete();
+			result &= buildRules.delete();
 		}
+		
+		return result;
 	}
 	
 	/**
@@ -338,10 +350,12 @@ public class ProjectGenerator extends BaseGenerator {
 	private void copyProjectTemplates(File file, String directory, 
 			String sourcesPath, String templatesPath) {
 		if (file.isDirectory()) {
-			if (directory == null)
+			if (directory == null) {
 				directory = "";
-			else
+			}
+			else {
 				directory += File.separator + file.getName();
+			}
 			
 			File[] files = file.listFiles();
 			for (File subFile : files) {

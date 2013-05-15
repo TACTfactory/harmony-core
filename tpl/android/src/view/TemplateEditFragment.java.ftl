@@ -6,7 +6,8 @@ import ${curr.namespace}.R;
 
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import ${project_namespace}.harmony.view.HarmonyFragment;
-import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
+
+import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 
 import android.os.Bundle;
 import android.os.AsyncTask;
@@ -33,11 +34,11 @@ import android.widget.TimePicker;
 <#assign importTime=false />
 <#list curr.fields as field>
 	<#if !field.internal && !field.hidden>
-		<#if (field.type=="date" || field.type=="time" || field.type=="datetime")>
-			<#if ((field.type=="date" || field.type=="datetime") && !importDate)>
+		<#if field.type?lower_case=="datetime">
+			<#if ((field.harmony_type=="date" || field.harmony_type=="datetime") && !importDate)>
 				<#assign importDate=true />
 			</#if>
-			<#if ((field.type=="time" || field.type=="datetime") && !importTime)>
+			<#if ((field.harmony_type=="time" || field.harmony_type=="datetime") && !importTime)>
 				<#assign importTime=true />
 			</#if>
 		</#if>
@@ -95,11 +96,11 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 	/** ${field.name} View. */
 				<#if (field.type=="boolean")>
 	protected CheckBox ${field.name}View;
-				<#elseif (field.type=="datetime" || field.type=="date" || field.type=="time")>
-					<#if (field.type=="datetime" || field.type=="date")>
+				<#elseif field.type?lower_case=="datetime">
+					<#if field.harmony_type=="datetime" || field.harmony_type=="date">
 	protected EditText ${field.name}DateView;
 					</#if>
-					<#if (field.type=="datetime" || field.type=="time")>
+					<#if field.harmony_type=="datetime" || field.harmony_type=="time">
 	protected EditText ${field.name}TimeView;
 					</#if>
 				<#else>
@@ -131,8 +132,8 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 					<#if field.type=="boolean">
 		this.${field.name}View = 
 			(CheckBox) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
-					<#elseif field.type=="datetime" || field.type=="date" || field.type=="time">
-						<#if field.type == "date" || field.type == "datetime">
+					<#elseif field.type?lower_case=="datetime">
+						<#if field.harmony_type == "date" || field.harmony_type == "datetime">
 		this.${field.name}DateView = 
 			(EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_date);			
 		this.${field.name}DateView.setOnClickListener(new OnClickListener() {
@@ -175,7 +176,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			}
 		});			
 						</#if>
-						<#if field.type == "time" || field.type == "datetime">
+						<#if field.harmony_type == "time" || field.harmony_type == "datetime">
 		this.${field.name}TimeView = 
 				(EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_time);
 		this.${field.name}TimeView.setOnClickListener(new OnClickListener() {
@@ -356,15 +357,15 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		<#foreach field in curr.fields>						
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
-				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
+				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
 		if (this.model.get${field.name?cap_first}() != null) {
-					<#if field.type=="datetime" || field.type=="date" || field.type=="time">
-						<#if field.type=="datetime" || field.type=="date">
+					<#if field.type?lower_case=="datetime">
+						<#if field.harmony_type=="datetime" || field.harmony_type=="date">
 			this.${field.name}DateView.setText(
 					DateUtils.formatDateToString(
 							this.model.get${field.name?cap_first}()));
 						</#if>
-						<#if field.type=="datetime" || field.type=="time">
+						<#if field.harmony_type=="datetime" || field.harmony_type=="time">
 			this.${field.name}TimeView.setText(
 					DateUtils.formatTimeToString(
 							this.model.get${field.name?cap_first}()));
@@ -398,19 +399,16 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		<#foreach field in curr.fields>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
-				<#if field.type!="boolean">
-					<#if field.type=="date" || field.type=="datetime">
-			if (!TextUtils.isEmpty(this.${field.name}DateView
-											.getEditableText())) {
-						<#elseif field.type=="time" || field.type=="datetime">
-			if (!TextUtils.isEmpty(this.${field.name}TimeView
-											.getEditableText())) {
-						<#else>
-			if (!TextUtils.isEmpty(this.${field.name}View
-											.getEditableText())) {
+				<#if (field.type?lower_case == "datetime")>
+					<#if field.harmony_type=="date" || field.harmony_type=="datetime">
+		if (!TextUtils.isEmpty(this.${field.name}DateView.getEditableText())) {
+					<#elseif field.harmony_type=="time" || field.harmony_type=="datetime">
+		if (!TextUtils.isEmpty(this.${field.name}TimeView.getEditableText())) {
+					<#else>
+		if (!TextUtils.isEmpty(this.${field.name}View.getEditableText())) {
 					</#if>
 			${m.setSaver(field)}
-			}
+		}
 				<#else>
 		${m.setSaver(field)}
 				</#if>
@@ -524,17 +522,10 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		@Override
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
-			ContentResolver prov = this.ctx.getContentResolver();
-			Bundle b = new Bundle();
-			b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, 
-					this.entity);
-			Bundle ret = 
-					prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
-							${curr.name?cap_first}ProviderAdapter.METHOD_UPDATE_${curr.name?upper_case}, 
-							null,
-							b);
-
-			result = ret.getInt("result",  0); 
+			
+			result = ${curr.name?cap_first}ProviderUtils.update(
+				this.ctx,
+				this.entity);
 
 			return result;
 		}

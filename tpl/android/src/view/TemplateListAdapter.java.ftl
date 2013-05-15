@@ -21,7 +21,7 @@ import android.widget.TextView;
 <#assign importDate=false />
 <#list curr.fields as field>
 	<#if !field.internal && !field.hidden>
-		<#if (!importDate && (field.type=="date" || field.type=="time" || field.type=="datetime"))>
+		<#if (!importDate && field.type?lower_case=="datetime")>
 			<#assign importDate=true />
 		</#if>
 	</#if>
@@ -154,7 +154,7 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 			<#list curr.fields as field>
 				<#if (!field.internal && !field.hidden)>
 					<#if (!field.relation??)>
-						<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float")>
+						<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
 			if (model.get${field.name?cap_first}() != null) {
 				${m.setAdapterLoader(field)}
 			}

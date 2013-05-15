@@ -6,7 +6,6 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.List;
-import java.util.Locale;
 import java.util.regex.Pattern;
 
 import org.jdom2.Document;
@@ -24,15 +23,40 @@ import com.tactfactory.mda.utils.TactFileUtils;
 public class ProjectDiscover {
 	// DEMO/TEST MODE
 	/** Default project name. */
-	private static final String DEFAULT_PROJECT_NAME = "demact";
+	private static String defaultProjectName = "demact";
 	
 	/** Default project NameSpace. */
-	private static final String DEFAULT_PROJECT_NAMESPACE = 
+	private static String defaultProjectNamespace = 
 			"com.tactfactory.mda.test.demact";
+	
+	/** Default project NameSpace. */
+	private static String defaultSDKPath = 
+			"/opt/android-sdk/";
 	
 	/** Android SDK version. */
 	private static String androidSdkVersion;
+	
+	private static String detectedOS = "Unknown";
 
+	{
+		if (OsUtil.isWindows()) {
+			if (OsUtil.isX64()) {
+				detectedOS = "Windows x64";
+				defaultSDKPath = "C:/Program Files/android-sdk";
+				
+			} else if (!OsUtil.isX64()) {
+				detectedOS = "Windows x86";
+				defaultSDKPath = "C:/Program Files (x86)/android-sdk";
+			} else {
+				detectedOS = "Windows x??";
+				defaultSDKPath = "C:/Program Files/android-sdk";
+			}
+		} else if (OsUtil.isLinux()) {
+			detectedOS = "Linux";
+			defaultSDKPath = "/opt/android-sdk/";
+		}
+	}
+	
 	/**
 	 * @param androidSdkVersion the androidSdkVersion to set
 	 */
@@ -73,6 +97,10 @@ public class ProjectDiscover {
 					break;
 				}
 			}
+		}
+		
+		if (result != null) {
+			defaultSDKPath = result;
 		}
 		
 		return result;
@@ -140,37 +168,22 @@ public class ProjectDiscover {
 		if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
 			final String sdkPath = 
 					ConsoleUtils.getUserInput("Please enter AndroidSDK " 
-							+ "full path [/root/android-sdk/]:");
+							+ "full path ["
+							+ defaultSDKPath
+							+ "]:");
 			
 			if (!Strings.isNullOrEmpty(sdkPath)) {
-				ApplicationMetadata.setAndroidSdkPath(sdkPath);
-				androidSdkVersion = ProjectDiscover.setAndroidSdkPath(sdkPath);
-			} else {
-				String osMessage = "Detected OS: ";
+				defaultSDKPath = sdkPath.trim();
 				
-				if (OsUtil.isWindows()) {
-					if (OsUtil.isX64()) {
-						osMessage += "Windows x64";
-						ApplicationMetadata.setAndroidSdkPath(
-								"C:/Program Files/android-sdk");
-						
-					} else if (!OsUtil.isX64()) {
-						osMessage += "Windows x86";
-						ApplicationMetadata.setAndroidSdkPath(
-								"C:/Program Files (x86)/android-sdk");
-					} else {
-						osMessage += "Windows x??";
-						ApplicationMetadata.setAndroidSdkPath(
-								"C:/Program Files/android-sdk");
-					}
-				} else if (OsUtil.isLinux()) {
-					osMessage += "Linux";
-					ApplicationMetadata.setAndroidSdkPath("/opt/android-sdk/");
-				}
+			} else {
+				String osMessage = "Detected OS: " + detectedOS;
 				
 				// Debug Log
 				ConsoleUtils.displayDebug(osMessage);
 			}
+			ApplicationMetadata.setAndroidSdkPath(defaultSDKPath);
+			androidSdkVersion = ProjectDiscover.setAndroidSdkPath(
+					ApplicationMetadata.getAndroidSdkPath());
 		}
 	}
 	
@@ -207,6 +220,10 @@ public class ProjectDiscover {
 			}
 		}
 		
+		if (projectNamespace != null) {
+			defaultProjectNamespace = projectNamespace.trim();
+		}
+		
 		return projectNamespace;
 	}
 	
@@ -217,40 +234,6 @@ public class ProjectDiscover {
 	 * @return Project Name Space
 	 */
 	public static String getProjectNameFromConfig(final File config) {
-		/*String projname = null;
-		SAXBuilder builder;
-		Document doc;
-		
-		if (config.exists()) {
-			// Make engine
-			builder = new SAXBuilder();	
-			try {
-				// Load XML File
-				doc = builder.build(config);			
-				// Load Root element
-				final Element rootNode = doc.getRootElement(); 			
-				// Load Name space (required for manipulate attributes)
-				//Namespace ns = rootNode.getNamespace("android");	
-
-				for (final Element element : rootNode.getChildren("string")) {
-					if (element.getAttribute("name").getValue()
-							.equals("app_name")) {
-						projname = element.getValue();
-						break;
-					}
-					
-				}
-			} catch (final JDOMException e) {
-				// TODO Auto-generated catch block
-				ConsoleUtils.displayError(e);
-			} catch (final IOException e) {
-				// TODO Auto-generated catch block
-				ConsoleUtils.displayError(e);
-			}
-		}
-		
-		return projname;*/
-		// TODO MATCH : Voir avec Mickael pertinence d'utiliser le build.xml
 		String projname = null;
 		SAXBuilder builder;
 		Document doc;
@@ -272,6 +255,9 @@ public class ProjectDiscover {
 				ConsoleUtils.displayError(e);
 			}
 		}
+		if (projname != null) {
+			defaultProjectName = projname.trim();
+		}
 		
 		return projname;
 	}
@@ -283,14 +269,13 @@ public class ProjectDiscover {
 		if (Strings.isNullOrEmpty(ApplicationMetadata.INSTANCE.getName())) {
 			final String projectName = 
 					ConsoleUtils.getUserInput("Please enter your Project Name ["
-						+ DEFAULT_PROJECT_NAME 
+						+ defaultProjectName 
 						+ "]:");
 			
-			if (Strings.isNullOrEmpty(projectName)) {
-				ApplicationMetadata.INSTANCE.setName(DEFAULT_PROJECT_NAME);
-			} else {
-				ApplicationMetadata.INSTANCE.setName(projectName);
+			if (!Strings.isNullOrEmpty(projectName)) {
+				defaultProjectName = projectName.trim();
 			}
+			ApplicationMetadata.INSTANCE.setName(defaultProjectName);
 		}
 	}
 	
@@ -305,38 +290,31 @@ public class ProjectDiscover {
 			while (!good) {
 				final String projectNameSpace = ConsoleUtils.getUserInput(
 								"Please enter your Project NameSpace [" 
-										+ DEFAULT_PROJECT_NAMESPACE
+										+ defaultProjectNamespace
 										+ "]:");
 				
 				if (Strings.isNullOrEmpty(projectNameSpace)) {
-					ApplicationMetadata.INSTANCE.setProjectNameSpace(
-						DEFAULT_PROJECT_NAMESPACE
-								.replaceAll("\\.", Context.DELIMITER));
 					good = true;
 					
 				} else {
-					if (projectNameSpace.toLowerCase(Locale.ENGLISH)
-							.endsWith(ApplicationMetadata.INSTANCE.getName()
-									.toLowerCase())) {
 						
-						String namespaceForm = 
-								"^(((([a-z0-9_]+)\\.)*)([a-z0-9_]+))$";
-						
-						if (Pattern.matches(namespaceForm, projectNameSpace)) {
-							ApplicationMetadata.INSTANCE.setProjectNameSpace(
-								projectNameSpace.replaceAll("\\.", Context.DELIMITER));
-							good = true;
-						} else {
-							ConsoleUtils.display(
-									"You can't use special characters "
-									+ "except '.' in the NameSpace.");
-						}
+					String namespaceForm = 
+							"^(((([a-z0-9_]+)\\.)*)([a-z0-9_]+))$";
+					
+					if (Pattern.matches(namespaceForm, projectNameSpace)) {
+						defaultProjectNamespace = projectNameSpace.trim();
+						good = true;
 					} else {
 						ConsoleUtils.display(
-								"The NameSpace has to end with Project Name !");
+								"You can't use special characters "
+								+ "except '.' in the NameSpace.");
 					}
 				}
 			}
+
+			ApplicationMetadata.INSTANCE.setProjectNameSpace(
+				defaultProjectNamespace.replaceAll("\\.", Context.DELIMITER)
+					.trim());
 		}
 	}
 	
