@@ -11,6 +11,7 @@ import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
+import com.tactfactory.mda.utils.OsUtil;
 import com.tactfactory.mda.utils.TactFileUtils;
 
 /**
@@ -267,9 +268,14 @@ public class ProjectGenerator extends BaseGenerator {
 			this.makeSource(srcPath, destPath, false);
 			
 			//make build sherlock
-			command.add(new File( String.format("%s/%s", 
+			String sdkTools = String.format("%s/%s", 
 					ApplicationMetadata.getAndroidSdkPath(), 
-					"tools/android")).getAbsolutePath() );
+					"tools/android");
+			if (OsUtil.isWindows()) {
+				sdkTools += ".bat";
+			}
+			
+			command.add(new File( sdkTools ).getAbsolutePath());
 			command.add("update");
 			command.add("project");
 			command.add("--path");
