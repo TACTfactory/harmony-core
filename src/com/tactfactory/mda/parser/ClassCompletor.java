@@ -12,7 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.meta.RelationMetadata;
 import com.tactfactory.mda.utils.ConsoleUtils;
@@ -23,17 +23,17 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 public class ClassCompletor {
 	//ArrayList<ClassMetadata> metas_array;
 	/** Class metadata. */
-	private Map<String, ClassMetadata> metas;
+	private Map<String, EntityMetadata> metas;
 	
 	/** Newly created class metadata. */
-	private final Map<String, ClassMetadata> newMetas = 
-			new HashMap<String, ClassMetadata>();
+	private final Map<String, EntityMetadata> newMetas = 
+			new HashMap<String, EntityMetadata>();
 	
 	/**
 	 * Constructor.
 	 * @param entities Entities map.
 	 */
-	public ClassCompletor(final Map<String, ClassMetadata> entities) {
+	public ClassCompletor(final Map<String, EntityMetadata> entities) {
 		this.metas = entities;
 	}
 	
@@ -41,11 +41,11 @@ public class ClassCompletor {
 	 * Complete classes.
 	 */
 	public final void execute() {
-		for (final ClassMetadata cm : this.metas.values()) {
+		for (final EntityMetadata cm : this.metas.values()) {
 			this.updateRelations(cm);
 		}
 		
-		for (final ClassMetadata cm : this.newMetas.values()) {
+		for (final EntityMetadata cm : this.newMetas.values()) {
 			this.metas.put(cm.getName(), cm);
 		}
 	}
@@ -55,7 +55,7 @@ public class ClassCompletor {
 	 * (actually sets the referenced columns for the target entities)
 	 * @param cm The class owning the relations
 	 */
-	private void updateRelations(final ClassMetadata cm) {
+	private void updateRelations(final EntityMetadata cm) {
 		final ArrayList<FieldMetadata> newFields = 
 				new ArrayList<FieldMetadata>();
 		// For each relation in the class
@@ -69,7 +69,7 @@ public class ClassCompletor {
 			
 			this.checkRelationIntegrity(fm);	
 			if (rel.getFieldRef().isEmpty()) {
-				final ClassMetadata cmRef = this.metas.get(targetEntity);
+				final EntityMetadata cmRef = this.metas.get(targetEntity);
 				final ArrayList<FieldMetadata> ids =
 						new ArrayList<FieldMetadata>(cmRef.getIds().values());
 				
@@ -88,7 +88,7 @@ public class ClassCompletor {
 			// set inverse relation if it doesn't exists
 			if ("OneToMany".equals(rel.getType())) { 
 				// Check if relation ManyToOne exists in target entity
-				final ClassMetadata entityRef = 
+				final EntityMetadata entityRef = 
 						this.metas.get(rel.getEntityRef());
 
 				// if it doesn't :
@@ -147,7 +147,7 @@ public class ClassCompletor {
 
 					ConsoleUtils.displayDebug(
 							"Association Table => " + rel.getJoinTable());
-					final ClassMetadata classMeta = new ClassMetadata();
+					final EntityMetadata classMeta = new EntityMetadata();
 					classMeta.setName(rel.getJoinTable());
 					classMeta.setInternal(true);
 					classMeta.setSpace(cm.getSpace());
@@ -190,7 +190,7 @@ public class ClassCompletor {
 					
 					// Complete it !
 				} else if (this.newMetas.containsKey(rel.getJoinTable())) { 
-					final ClassMetadata jtable = 
+					final EntityMetadata jtable = 
 							this.newMetas.get(rel.getJoinTable());
 					final FieldMetadata relation = 
 							jtable.getRelations()
@@ -213,7 +213,7 @@ public class ClassCompletor {
 	 * @return The newly created field.
 	 */
 	private static FieldMetadata generateRefField(final String name, 
-			final ClassMetadata owner) {
+			final EntityMetadata owner) {
 		final FieldMetadata id = new FieldMetadata(owner);
 		id.setColumnDefinition("integer");
 		id.setType("integer");

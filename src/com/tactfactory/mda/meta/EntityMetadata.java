@@ -21,25 +21,34 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
 /** Entity class metadata. */
-public class ClassMetadata extends BaseMetadata {
+public class EntityMetadata extends ClassMetadata {
 
-	/** List of fields of entity class. */
-	private Map<String, FieldMetadata> fields = 
-			new LinkedHashMap<String, FieldMetadata>();
-		
-
-	/** Namespace of entity class. */
-	private String space = "";
+	/** Used for join tables (ManyToMany relations). */
+	private boolean internal = false;
 	
-	/** Class inherited by the entity class or null if none. */
-	private String extendType;
+	/** List of ids of entity class. */
+	private Map<String, FieldMetadata> ids = 
+			new LinkedHashMap<String, FieldMetadata>();
+	
+	/** List of relations of entity class. */
+	private Map<String, FieldMetadata> relations =
+			new LinkedHashMap<String, FieldMetadata>();
 	
 	/** Implemented class list of the entity class. */
-	private List<MethodMetadata> methods = 
-			new ArrayList<MethodMetadata>();
+	private List<String> implementTypes = 
+			new ArrayList<String>();
+	
+	/** 
+	 * Add Component String of field. 
+	 * @param componentName Component name
+	 */
+	public final void makeString(final String componentName) {
+		final String key = this.getName().toLowerCase() 
+				+ "_" + componentName.toLowerCase(Locale.ENGLISH);
+		TranslationMetadata.addDefaultTranslation(
+				key, this.getName(), Group.MODEL);
+	}
 
-	/** Imports of the class. */
-	private List<String> imports = new ArrayList<String>();
 	
 	/**
 	 * Transform the class to a map given an adapter.
@@ -47,22 +56,26 @@ public class ClassMetadata extends BaseMetadata {
 	 * @return the map
 	 */
 	@Override
-	public Map<String, Object> toMap(final BaseAdapter adapter) {
-		final Map<String, Object> model = new HashMap<String, Object>();
+	public final Map<String, Object> toMap(final BaseAdapter adapter) {
+		final Map<String, Object> model = super.toMap(adapter);
 		
-
-		model.put(TagConstant.SPACE,			this.space);
+		//model.put(TagConstant.PROJECT_NAME,		Harmony.metas.name);
 		model.put(TagConstant.NAME,				this.getName());
-		model.put(TagConstant.EXTENDS,			this.extendType);
 		model.put(TagConstant.CONTROLLER_NAMESPACE, 
 				adapter.getNameSpaceEntity(this, adapter.getController()));
 		model.put(TagConstant.DATA_NAMESPACE, 	
 				adapter.getNameSpace(this, adapter.getData()));
 		model.put(TagConstant.TEST_NAMESPACE, 	
 				adapter.getNameSpace(this, adapter.getTest()));
-		model.put(TagConstant.FIELDS,			
-				this.toFieldArray(this.fields.values(), adapter));
+		model.put(TagConstant.IDS,				
+				this.toFieldArray(this.ids.values(), adapter));
+		model.put(TagConstant.RELATIONS,		
+				this.toFieldArray(this.relations.values(), adapter));
 		model.put(TagConstant.INTERNAL,			"false");
+		
+		if (this.internal) {
+			model.put(TagConstant.INTERNAL,		"true");
+		}
 		
 		final Map<String, Object> optionsModel = new HashMap<String, Object>();
 		for (final Metadata option : this.getOptions().values()) {
@@ -72,83 +85,67 @@ public class ClassMetadata extends BaseMetadata {
 		
 		return model;
 	}
-
-	/**
-	 * @return the fields
-	 */
-	public final Map<String, FieldMetadata> getFields() {
-		return fields;
-	}
-
-
-	/**
-	 * @param fields the fields to set
-	 */
-	public final void setFields(final Map<String, FieldMetadata> fields) {
-		this.fields = fields;
-	}
-
-
-	/**
-	 * @return the extendType
-	 */
-	public final String getExtendType() {
-		return extendType;
-	}
-
-
-	/**
-	 * @param extendType the extendType to set
-	 */
-	public final void setExtendType(final String extendType) {
-		this.extendType = extendType;
-	}
-
-	/**
-	 * @return the methods
-	 */
-	public final List<MethodMetadata> getMethods() {
-		return methods;
-	}
-
-
-	/**
-	 * @param methods the methods to set
-	 */
-	public final void setMethods(final List<MethodMetadata> methods) {
-		this.methods = methods;
-	}
-
-
-	/**
-	 * @return the imports
-	 */
-	public final List<String> getImports() {
-		return imports;
-	}
-
-
-	/**
-	 * @return the space
-	 */
-	public final String getSpace() {
-		return space;
-	}
-
-
-	/**
-	 * @param space the space to set
-	 */
-	public final void setSpace(final String space) {
-		this.space = space;
-	}
-	
 	
 	/**
-	 * @param imports the imports to set
+	 * @return the internal
 	 */
-	public final void setImports(final List<String> imports) {
-		this.imports = imports;
+	public final boolean isInternal() {
+		return internal;
+	}
+
+
+	/**
+	 * @param internal the internal to set
+	 */
+	public final void setInternal(final boolean internal) {
+		this.internal = internal;
+	}
+
+	/**
+	 * @return the ids
+	 */
+	public final Map<String, FieldMetadata> getIds() {
+		return ids;
+	}
+
+
+	/**
+	 * @param ids the ids to set
+	 */
+	public final void setIds(final Map<String, FieldMetadata> ids) {
+		this.ids = ids;
+	}
+
+
+	/**
+	 * @return the relations
+	 */
+	public final Map<String, FieldMetadata> getRelations() {
+		return relations;
+	}
+
+
+	/**
+	 * @param relations the relations to set
+	 */
+	public final void setRelations(final Map<String, FieldMetadata> relations) {
+		this.relations = relations;
+	}
+
+
+	/**
+	 * @return the implementTypes
+	 */
+	public final List<String> getImplementTypes() {
+		return implementTypes;
+	}
+
+
+	/**
+	 * @param implementTypes the implementTypes to set
+	 */
+	public final void setImplementTypes(final List<String> implementTypes) {
+		this.implementTypes = implementTypes;
 	}
 
 

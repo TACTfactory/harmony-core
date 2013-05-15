@@ -9,6 +9,7 @@
 package com.tactfactory.mda.template;
 
 import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.PackageUtils;
@@ -39,7 +40,7 @@ public class TestDBGenerator extends BaseGenerator {
 		
 		//this.initTestAndroid();
 	
-		for (final ClassMetadata cm 
+		for (final EntityMetadata cm 
 				: this.getAppMetas().getEntities().values()) {
 			if (!cm.isInternal() && !cm.getFields().isEmpty()) {
 				this.localNameSpace =

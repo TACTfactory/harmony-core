@@ -79,9 +79,9 @@ public class FieldMetadata extends BaseMetadata {
 				this.owner.getName().toLowerCase() 
 				+ "_" 
 				+ this.getName().toLowerCase();
-		final boolean isDate = this.type.equals(Type.DATE.getValue());
-		final boolean isTime = this.type.equals(Type.TIME.getValue());
-		final boolean isDateTime = this.type.equals(Type.DATETIME.getValue());
+		final boolean isDate = this.harmonyType.equals(Type.DATE.getValue());
+		final boolean isTime = this.harmonyType.equals(Type.TIME.getValue());
+		final boolean isDateTime = this.harmonyType.equals(Type.DATETIME.getValue());
 		
 		if (isDate || isDateTime || isTime) {
 			final String formatKey = "%s_%s_title";
