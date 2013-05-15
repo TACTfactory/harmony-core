@@ -36,8 +36,8 @@ public final class ApplicationMetadata extends BaseMetadata {
 	private String projectNameSpace;
 	
 	/** List of Entity of entity class. */
-	private Map<String, ClassMetadata> entities =
-			new LinkedHashMap<String, ClassMetadata>();
+	private Map<String, EntityMetadata> entities =
+			new LinkedHashMap<String, EntityMetadata>();
 	
 	/** List of string use in application. */
 	private Map<String, TranslationMetadata> translates =
@@ -84,14 +84,14 @@ public final class ApplicationMetadata extends BaseMetadata {
 	/**
 	 * @return the entities
 	 */
-	public Map<String, ClassMetadata> getEntities() {
+	public Map<String, EntityMetadata> getEntities() {
 		return entities;
 	}
 
 	/**
 	 * @param entities the entities to set
 	 */
-	public void setEntities(final Map<String, ClassMetadata> entities) {
+	public void setEntities(final Map<String, EntityMetadata> entities) {
 		this.entities = entities;
 	}
 
@@ -135,7 +135,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 		final Map<String, Object> entitiesMap = new HashMap<String, Object>();
 		
 		// Make Map for entities
-		for (final ClassMetadata cm : this.entities.values()) {
+		for (final EntityMetadata cm : this.entities.values()) {
 			entitiesMap.put(cm.getName(), cm.toMap(adapt));
 			cm.makeString("label");
 		}

@@ -1,6 +1,6 @@
 <#function callLoader entity>
 	<#assign ret="//Load "+entity.name+" fixtures\r\t\t" /> 
-	<#assign ret=ret+entity.name?cap_first+"DataLoader "+entity.name?uncap_first+"Loader = new "+entity.name?cap_first+"DataLoader(this.context);\r\t\t" />
+	<#assign ret=ret+entity.name?cap_first+"DataLoader "+entity.name?uncap_first+"Loader = new "+entity.name?cap_first+"DataLoader(this.ctx);\r\t\t" />
 	<#assign ret=ret+entity.name?uncap_first+"Loader.getModelFixtures("+entity.name?cap_first+"DataLoader.MODE_BASE);\r\t\t" />
 	<#assign ret=ret+entity.name?uncap_first+"Loader.load(manager);\r\r" />
 	<#return ret />
@@ -78,27 +78,43 @@ import ${fixture_namespace}.*;
 
 
 /**
- * This class makes it easy for ContentProvider implementations to defer opening and upgrading the database until first use, to avoid blocking application startup with long-running database upgrades.
+ * This class makes it easy for ContentProvider implementations to defer <br />
+ * opening and upgrading the database until first use, to avoid blocking <br />
+ * application startup with long-running database upgrades.
  * @see android.database.sqlite.SQLiteOpenHelper
  */
-public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHelper {
-	protected String TAG = "DatabaseHelper";
-	protected Context context;
+public class ${project_name?cap_first}SQLiteOpenHelperBase 
+										extends SQLiteOpenHelper {
+	/** TAG for debug purpose. */
+	protected static final String TAG = "DatabaseHelper";
+	/** Context. */
+	protected Context ctx;
 	
-	// Android's default system path of the database.
-	private static String DB_PATH;	
+	/** Android's default system path of the database.
+	 * 
+	 */
+	private static String DB_PATH;
+	/** database name. */
 	private static String DB_NAME;
+	/** is assets exist.*/
 	private static boolean assetsExist;
 	
-	public ${project_name?cap_first}SQLiteOpenHelperBase(final Context context, final String name,
-			final CursorFactory factory, final int version) {
-		super(context, name, factory, version);
-		this.context = context;
+	/**
+	 * Constructor.
+	 * @param ctx Context
+	 * @param name name
+	 * @param factory factory
+	 * @param version version
+	 */
+	public ${project_name?cap_first}SQLiteOpenHelperBase(final Context ctx, 
+		   final String name, final CursorFactory factory, final int version) {
+		super(ctx, name, factory, version);
+		this.ctx = ctx;
 		DB_NAME = name;
-		DB_PATH = context.getDatabasePath(DB_NAME).getAbsolutePath();
+		DB_PATH = ctx.getDatabasePath(DB_NAME).getAbsolutePath();
 		
 		try {
-			this.context.getAssets().open(DB_NAME);
+			this.ctx.getAssets().open(DB_NAME);
 			assetsExist = true;
 		} catch (IOException e) {
 			assetsExist = false;
@@ -106,27 +122,30 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	}
 
 	/**
-	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate(android.database.sqlite.SQLiteDatabase)
+	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate <br />
+	 * (android.database.sqlite.SQLiteDatabase)
 	 */
 	@Override
 	public void onCreate(final SQLiteDatabase db) {
-		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Create database..");
-		}
+		Log.i(TAG, "Create database..");
 		
 		if (!assetsExist) {
 			/// Create Schema
 	<#list entities?values as entity>
 		<#if (entity.fields?? && (entity.fields?size>0))>
-			db.execSQL( ${entity.name}SQLiteAdapter.getSchema() );
+			if (${project_name?cap_first}Application.DEBUG) {
+				Log.d(TAG, "Creating schema : ${entity.name}");
+			}
+
+			db.execSQL(${entity.name}SQLiteAdapter.getSchema());
 			<#list entity["relations"] as relation>
 				<#if (relation.type=="ManyToMany")>
-			db.execSQL( ${entity.name}SQLiteAdapter.get${relation.name?cap_first}RelationSchema() );
+			db.execSQL(${entity.name}SQLiteAdapter
+					.get${relation.name?cap_first}RelationSchema());
 				</#if>
 			</#list>
 		</#if>
 	</#list>
-	
 	<#if options.fixture?? && options.fixture.enabled>
 			this.loadData(db);
 	</#if>
@@ -135,38 +154,49 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	}
 	
 	/**
-	 * Clear the database given in parameters
+	 * Clear the database given in parameters.
 	 * @param db The database to clear
 	 */
-	public static void clearDatabase(final SQLiteDatabase db){
+	public static void clearDatabase(final SQLiteDatabase db) {
+		Log.i(TAG, "Clearing database...");
+
 		<#list entities?values as entity>
 			<#if (entity.fields?? && (entity.fields?size>0))>
-		db.delete(${entity.name?cap_first}SQLiteAdapter.TABLE_NAME, null, null);	
+		db.delete(${entity.name?cap_first}SQLiteAdapter.TABLE_NAME, 
+				null, 
+				null);	
 			</#if>
 		</#list>
 	}
 
 	/**
-	 * @see android.database.sqlite.SQLiteOpenHelper#onUpgrade(android.database.sqlite.SQLiteDatabase, int, int)
+	 * @see android.database.sqlite.SQLiteOpenHelper#onUpgrade <br />
+	 * (android.database.sqlite.SQLiteDatabase, int, int)
 	 */
-	@Override
-	public void onUpgrade(final SQLiteDatabase db, final int oldVersion, final int newVersion) {
-		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Update database..");
-		}
+	public void onUpgrade(final SQLiteDatabase db, final int oldVersion, 
+			final int newVersion) {
+		Log.i(TAG, "Update database..");
 		
 		//if (SqliteAdapter.BASE_VERSION < 0) {
-			Log.i(TAG, "Upgrading database from version " + oldVersion + 
-					   " to " + newVersion + ", which will destroy all old data");
+		if (${project_name?cap_first}Application.DEBUG) {
+			Log.d(TAG, "Upgrading database from version " + oldVersion 
+					   + " to " + newVersion 
+					   + ", which will destroy all old data");
+		}
 		
 		final String command = "DROP TABLE IF EXISTS "; 
 		
 		<#list entities?values as entity>
 			<#if (entity.fields?? && (entity.fields?size>0))>
+			if (${project_name?cap_first}Application.DEBUG) {
+				Log.d(TAG, "Dropping ${entity.name} database...");
+			}
+
 			db.execSQL(command + ${entity.name}SQLiteAdapter.TABLE_NAME);
 				<#list entity['relations'] as relation>
 					<#if (relation.type=="ManyToMany")>
-			db.execSQL(command + ${entity.name}SQLiteAdapter.RELATION_${relation.name?upper_case}_TABLE_NAME );
+			db.execSQL(command 
+					+ ${entity.name}SQLiteAdapter.RELATION_${relation.name?upper_case}_TABLE_NAME);
 					</#if>
 				</#list>
 			</#if>
@@ -178,9 +208,13 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	
 	<#if options.fixture?? && options.fixture.enabled>
 	//@SuppressWarnings("rawtypes")
-	private void loadData(final SQLiteDatabase db){
-		final DataLoader dataLoader = new DataLoader(this.context);
-		
+	/**
+	 * Loads data from the fixture files.
+	 * @param db The database to populate with fixtures
+	 */
+	private void loadData(final SQLiteDatabase db) {
+		final DataLoader dataLoader = new DataLoader(this.ctx);
+		dataLoader.clean();
 		int mode = DataLoader.MODE_APP;
 		if (${project_name?cap_first}Application.DEBUG) {
 			mode = DataLoader.MODE_APP | DataLoader.MODE_DEBUG;
@@ -193,9 +227,9 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	/**
 	 * Creates a empty database on the system and rewrites it with your own
 	 * database.
-	 * */
+	 */
 	public void createDataBase() throws IOException {
-		if (assetsExist && !checkDataBase()){
+		if (assetsExist && !checkDataBase()) {
 			// By calling this method and empty database will be created into
 			// the default system path
 			// so we're gonna be able to overwrite that database with ours
@@ -222,8 +256,8 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 		SQLiteDatabase checkDB = null;
 		try {
 			final String myPath = DB_PATH + DB_NAME;
-			// NOTE : the system throw error message : "Database is locked" when
-			// the Database is not found (incorrect path)
+			// NOTE : the system throw error message : "Database is locked" 
+			// when the Database is not found (incorrect path)
 			checkDB = SQLiteDatabase.openDatabase(myPath, null,
 					SQLiteDatabase.OPEN_READONLY);
 			result = true;
@@ -247,7 +281,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHel
 	private void copyDataBase() throws IOException {
 
 		// Open your local db as the input stream
-		final InputStream myInput = this.context.getAssets().open(DB_NAME);
+		final InputStream myInput = this.ctx.getAssets().open(DB_NAME);
 		
 		// Path to the just created empty db
 		final String outFileName = DB_PATH + DB_NAME;

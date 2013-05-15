@@ -7,6 +7,7 @@ import java.io.File;
 
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.plateforme.BaseAdapter;
+import com.tactfactory.mda.utils.LibraryUtils;
 import com.tactfactory.mda.utils.TactFileUtils;
 
 /**
@@ -64,15 +65,17 @@ public class TestProjectGenerator extends BaseGenerator {
 				this.getAdapter().getTemplateStringsTestPathFile(), 
 				this.getAdapter().getStringsTestPathFile(), false);
 		
-		this.updateLibrary("android-junit-report-1.5.8.jar");
+		LibraryUtils.addLibraryToTestProject(
+				this.getAdapter(),
+				"android-junit-report-1.5.8.jar");
 		
 		final File dirTpl = 
 				new File(Harmony.getBundlePath() + "tact-core/"
 						+ this.getAdapter().getTemplateTestProjectPath());
 
 		// Update newly created files with datamodel
-		if (dirTpl.exists() && dirTpl.listFiles().length != 0) {
-			result = true;
+		if (dirTpl.exists() && dirTpl.listFiles().length != 0
+				&& this.clearProjectSources()) {
 			for (int i = 0; i < dirTpl.listFiles().length; i++) {
 				if (dirTpl.listFiles()[i].isFile()) {
 					final String fullFilePath = String.format("%s/%s/%s/%s", 
@@ -97,10 +100,11 @@ public class TestProjectGenerator extends BaseGenerator {
 								false);
 				}
 			}
+			result = true;
 		}
 		return result;
 	}
-
+	
 	/**
 	 * Make IOS Test Project Structure.
 	 * @return success to make the platform test project folder
@@ -143,6 +147,27 @@ public class TestProjectGenerator extends BaseGenerator {
 	private boolean makeTestProjectWinPhone() {
 		final boolean result = false;
 
+		return result;
+	}
+	
+	/**
+	 * Delete files that need to be recreated.
+	 * @return true if project cleaning successful
+	 */
+	private boolean clearProjectSources() {
+		boolean result = true;
+		
+		String projectPath = Harmony.getProjectPath() 
+				+ File.separator + this.getAdapter().getPlatform()
+				+ File.separator + this.getAdapter().getTest();
+		
+		File buildRules = new File(projectPath 
+				+ File.separator + "build.rules.xml");
+		
+		if (buildRules.exists()) {
+			result &= buildRules.delete();
+		}
+		
 		return result;
 	}
 	

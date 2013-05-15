@@ -26,6 +26,9 @@ public class FieldMetadata extends BaseMetadata {
 	/** Field type. */
 	private String type;
 	
+	/** Field harmony type. */
+	private String harmonyType;
+	
 	/** Column name. */
 	private String columnName;
 	
@@ -76,9 +79,9 @@ public class FieldMetadata extends BaseMetadata {
 				this.owner.getName().toLowerCase() 
 				+ "_" 
 				+ this.getName().toLowerCase();
-		final boolean isDate = this.type.equals(Type.DATE.getValue());
-		final boolean isTime = this.type.equals(Type.TIME.getValue());
-		final boolean isDateTime = this.type.equals(Type.DATETIME.getValue());
+		final boolean isDate = this.harmonyType.equals(Type.DATE.getValue());
+		final boolean isTime = this.harmonyType.equals(Type.TIME.getValue());
+		final boolean isDateTime = this.harmonyType.equals(Type.DATETIME.getValue());
 		
 		if (isDate || isDateTime || isTime) {
 			final String formatKey = "%s_%s_title";
@@ -119,6 +122,7 @@ public class FieldMetadata extends BaseMetadata {
 		
 		model.put(TagConstant.NAME, 		this.getName());
 		model.put(TagConstant.TYPE, 		this.type);
+		model.put(TagConstant.HARMONY_TYPE, 		this.harmonyType);
 		model.put(TagConstant.FIELD_NAME, 	this.columnName);
 		model.put(TagConstant.FIELD_DEF, 	this.columnDefinition);
 		model.put(TagConstant.HIDDEN, 		this.hidden);
@@ -368,5 +372,21 @@ public class FieldMetadata extends BaseMetadata {
 	 */
 	public final void setInternal(final boolean internal) {
 		this.internal = internal;
+	}
+
+
+	/**
+	 * @return the harmonyType
+	 */
+	public final String getHarmonyType() {
+		return harmonyType;
+	}
+
+
+	/**
+	 * @param harmonyType the harmonyType to set
+	 */
+	public final void setHarmonyType(final String harmonyType) {
+		this.harmonyType = harmonyType;
 	}
 }

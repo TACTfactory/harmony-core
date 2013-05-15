@@ -198,7 +198,9 @@
 					         can be inherited from the parent <report>
 					         and individually overridden for each report type:
 					    -->
-					    <xml outfile="${emma.out-dir}/coverage.xml"/>
+					    <xml outfile="${emma.out-dir}/coverage.xml"
+						columns="name,class,method,block,line" 
+                              			sort="+line, +name"/>
 					    <html outfile="${emma.out-dir}/coverage.html" />
 				    </report>
 				</emma>
@@ -220,10 +222,11 @@
 			classpath="${env.FINDBUGS_HOME}/lib/findbugs-ant.jar"
 			classname="edu.umd.cs.findbugs.anttask.FindBugsTask" />
 	    <findbugs home="${env.FINDBUGS_HOME}"
-	    	workHard="true"
-	    	output="xml:withMessages"
-	        outputFile="${tmp.rel-dir}/findbugs.xml"
-	    	jvmargs="-Xmx1024m" >
+		    	workHard="true"
+		    	output="xml:withMessages"
+		        outputFile="${tmp.rel-dir}/findbugs.xml"
+		        excludefilter="./findbugs_excludes.xml"
+		    	jvmargs="-Xmx1024m" >
 	    	<auxClasspath refid="project.classpath" />
 	    	<sourcePath path="${src.rel-dir}" />
 	    	<class location="${jar.rel-file}" />

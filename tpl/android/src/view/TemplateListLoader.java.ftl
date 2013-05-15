@@ -4,26 +4,37 @@ package ${curr.controller_namespace};
 import java.util.ArrayList;
 import java.util.List;
 
+import android.content.ContentResolver;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
+import android.os.Bundle;
 import android.support.v4.content.AsyncTaskLoader;
 
-import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
+import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
+import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 
 /**
- * ${curr.name} Loader
+ * ${curr.name} Loader.
  */
-public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> {
-	
+public class ${curr.name}ListLoader 
+				extends AsyncTaskLoader<List<${curr.name}>> {
+	/** ${curr.name?cap_first}Criterias. */
 	private ${curr.name?cap_first}Criterias criterias;
+	/** m${curr.name}s list. */
 	private List<${curr.name}> m${curr.name}s;
-	private Context context;
+	/** Context. */
+	private Context ctx;
 
-	public ${curr.name}ListLoader(final Context context, final ${curr.name?cap_first}Criterias crit) {
-		super(context);
-		this.context = context;
+	/**
+	 * Constructor.
+	 * @param ctx context
+	 * @param crit ${curr.name?cap_first}Criterias
+	 */
+	public ${curr.name}ListLoader(final Context ctx, 
+					final ${curr.name?cap_first}Criterias crit) {
+		super(ctx);
+		this.ctx = ctx;
 		this.criterias = crit;
 	}
 
@@ -34,29 +45,11 @@ public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> 
 	 */
 	@Override 
 	public List<${curr.name}> loadInBackground() {
-		List<${curr.name}> result = new ArrayList<${curr.name}>();
+		List<${curr.name}> result;
 
-		// TODO Query of data
-
-		final ${curr.name}SQLiteAdapter adapter = new ${curr.name}SQLiteAdapter(context);
-		final SQLiteDatabase db = adapter.open();
-		try {
-			db.beginTransaction();
-			result = adapter.getAll(this.criterias);
-
-			db.setTransactionSuccessful();
-
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} finally {
-			db.endTransaction();
-			adapter.close();
-		}
-
-		// Sort the list.
-
-		// Done!
+		result = ${curr.name?cap_first}ProviderUtils.queryAll(
+				this.ctx);
+		
 		return result;
 	}
 
@@ -137,8 +130,8 @@ public class ${curr.name}ListLoader extends AsyncTaskLoader<List<${curr.name}>> 
 		// Ensure the loader is stopped
 		this.onStopLoading();
 
-		// At this point we can release the resources associated with '${curr.name}'
-		// if needed.
+		// At this point we can release the resources associated with 
+		// '${curr.name}' if needed.
 		if (this.m${curr.name}s != null) {
 			this.onReleaseResources(this.m${curr.name}s);
 			this.m${curr.name}s = null;

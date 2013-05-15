@@ -3,28 +3,53 @@ package ${project_namespace}.menu;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
-public class ${project_name?cap_first}Menu extends ${project_name?cap_first}MenuBase {
+/**
+ * ${project_name?cap_first}Menu.
+ */
+public class ${project_name?cap_first}Menu 
+				extends ${project_name?cap_first}MenuBase {
 
-	private volatile static ${project_name?cap_first}Menu singleton;
+	/** Singleton unique instance. */
+	private static volatile ${project_name?cap_first}Menu singleton;
 	
-	public ${project_name?cap_first}Menu(final Context context) throws Exception {
-		super(context);
+	/**
+	 * Constructor.
+	 * @param ctx The Context
+	 */
+	public ${project_name?cap_first}Menu(final Context ctx) throws Exception {
+		super(ctx);
 	}
 
-	public ${project_name?cap_first}Menu(final Context context, final Fragment fragment) throws Exception {
-		super(context, fragment);
+	/**
+	 * Constructor.
+	 * @param ctx The context
+	 * @param fragment The parent fragment
+	 */
+	public ${project_name?cap_first}Menu(final Context ctx, 
+						final Fragment fragment) throws Exception {
+		super(ctx, fragment);
 	}
 
-	/** Get unique instance */
-	public final synchronized static ${project_name?cap_first}Menu getInstance(final Context context) throws Exception {
-		return getInstance(context, null);
+	/** Get unique instance.
+	 * @param ctx The context 
+	 * @return ${project_name?cap_first}Menu instance
+	 */
+	public static final synchronized ${project_name?cap_first}Menu getInstance(
+						final Context ctx) throws Exception {
+		return getInstance(ctx, null);
 	}
 	
-	public final synchronized static ${project_name?cap_first}Menu getInstance(final Context context, final Fragment fragment) throws Exception {
+	/** Get unique instance.
+	 * @param ctx The context 
+	 * @param fragment The parent fragment
+	 * @return ${project_name?cap_first}Menu instance
+	 */
+	public static final synchronized ${project_name?cap_first}Menu getInstance(
+			final Context ctx, final Fragment fragment) throws Exception {
 		if (singleton == null) {
-			singleton = new ${project_name?cap_first}Menu(context, fragment);
+			singleton = new ${project_name?cap_first}Menu(ctx, fragment);
 		}  else {
-			singleton.context = context;
+			singleton.ctx = ctx;
 			singleton.fragment = fragment;
 		}
 			

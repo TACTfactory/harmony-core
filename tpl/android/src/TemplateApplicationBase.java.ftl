@@ -25,55 +25,76 @@ import org.joda.time.DateTime;
 </#if>
 
 /** 
- * Common all life data/service
+ * Common all life data/service.
  * 
- * b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
- * You should edit ${project_name?cap_first}Application class instead of this one or you will lose all your modifications.</i></b>
+ * <b><i>This class will be overwrited whenever you regenerate the project with 
+ * Harmony. 
+ * You should edit ${project_name?cap_first}Application class instead of this 
+ * one or you will lose all your modifications.</i></b>
  * 
  */
-public abstract class ${project_name?cap_first}ApplicationBase extends Application {
-	private final static String TAG = "${project_name?cap_first}";
-	private volatile static ${project_name?cap_first}ApplicationBase singleton;
-	private static DateFormat df;
-	private static DateFormat tf;
+public abstract class ${project_name?cap_first}ApplicationBase
+	extends Application {
+	
+	/** TAG for debug purpose. */
+	private static final String TAG = "${project_name?cap_first}";
+	/** Singleton. */
+	private static volatile ${project_name?cap_first}ApplicationBase singleton;
+	/** Date format. */
+	private static DateFormat dateFormat;
+	/** Time format. */
+	private static DateFormat timeFormat;
 	<#if (sync)>
+	/** Preferences. */
 	private static SharedPreferences preferences;
 	</#if>
 	
-	/** Called when the application is first created. */
+	/** Called when the application is first created. 
+	 * @see android.app.Activity#onCreate
+	 */
 	@Override
 	public void onCreate() {
 		super.onCreate();
 		
-		<#if (sync)>
-		preferences = this.getSharedPreferences(
-				"${project_name?uncap_first}", Context.MODE_PRIVATE);
-		
-		if (!preferences.contains("lastSyncDate")){
-			// TODO: First Sync
-			
-			${project_name?cap_first}ApplicationBase.setLastSyncDate(new DateTime().minusWeeks(1));
-		}
-		</#if>
-		singleton = this;
+		setSingleton(this);
+
 		Log.i(TAG, "Starting application...");
-		
-		deviceID = getUDID(this);
-		df = android.text.format.DateFormat.getDateFormat((Context)singleton);
-		tf = android.text.format.DateFormat.getTimeFormat((Context)singleton);
 		
 		// Manage unmanaged error of application
 		//Thread.setDefaultUncaughtExceptionHandler(
 		//		new ApplicationCrashHandler(super.getApplicationContext()));
-		
-
+	}
+	
+	private static void setSingleton(${project_name?cap_first}ApplicationBase application) {
+		if (singleton == null) {
+			singleton = application;
+			deviceID = getUDID(application);
+			dateFormat = 
+				android.text.format.DateFormat.getDateFormat(application);
+			timeFormat = 
+				android.text.format.DateFormat.getTimeFormat(application);
+				
+			<#if (sync)>
+			preferences = application.getSharedPreferences(
+					"${project_name?uncap_first}", Context.MODE_PRIVATE);
+			
+			if (!preferences.contains("lastSyncDate")) {
+				// TODO: First Sync
+				
+				${project_name?cap_first}ApplicationBase
+					.setLastSyncDate(new DateTime().minusWeeks(1));
+			}
+			</#if>
+		}
 	}
 
 	/**
-	 * 
+	 * Get the device's UDID.
+	 * @return A String containing the UDID
 	 */
-	public static String getUDID(final Context context){
-		String udid = Secure.getString(context.getContentResolver(), Secure.ANDROID_ID);
+	public static String getUDID(final Context ctx) {
+		String udid = Secure.getString(
+			ctx.getContentResolver(), Secure.ANDROID_ID);
 		
 		// for emulator
 		if (udid == null) {
@@ -82,41 +103,52 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		
 		// for google bug, android < 2.3 (many device)
 		if (udid.equals("9774d56d682e549c")) {
-			final TelephonyManager telephonyManager = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
+			final TelephonyManager telephonyManager = (TelephonyManager) 
+				ctx.getSystemService(Context.TELEPHONY_SERVICE);
 			udid = telephonyManager.getDeviceId();
 		}
 		
 		return udid;
 	}
 	
+	/**
+	 * Get the singleton.
+	 * @return The singleton of the application
+	 */ 
 	public static Context getApplication() {
 		return singleton;
 	}
 	
 	
-	/** UUID equivalent */
+	/** UUID equivalent. 
+	 * @return UUID equivalent 
+	 */
 	private static String deviceID;
 	public static String getAndroidID() {
 		return deviceID;
 	}
 	
-	/*** Application ***/
-	private static final String PREFS_PUBL = "puapsd"; // Public Application Shared Data
+	/** Application. */
+	// Public Application Shared Data
+	private static final String PREFS_PUBL = "puapsd"; 
 	private static final String PREFS_VERS = "version";
 	
-	/** Get Application Version
+	/** Get Application Version.
 	 * 
 	 * @param ctx
 	 * @return the version number
 	 */
+	@SuppressWarnings("deprecation")
 	public static String getVersion(final Context ctx) {
 		final SharedPreferences settings = ctx.getSharedPreferences(
-				${project_name?cap_first}ApplicationBase.PREFS_PUBL, Context.MODE_WORLD_READABLE);
+				${project_name?cap_first}ApplicationBase.PREFS_PUBL, 
+				Context.MODE_WORLD_READABLE);
 		
 		return settings.getString(
 				${project_name?cap_first}ApplicationBase.PREFS_VERS, "");
 	}
-	/** Check if is a new version of Application
+	
+	/** Check if is a new version of Application.
 	 * 
 	 * @param ctx
 	 * @return true if same version
@@ -127,50 +159,75 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 		
 		return oldVersion.equals(currentVersion);
 	}
-	/** Save if a new version is install
+	
+	/** Save if a new version is install.
 	 * 
 	 * @param ctx
 	 */
+	@SuppressWarnings("deprecation")
 	public static void setVersion(final Context ctx) {
 		final SharedPreferences settings = ctx.getSharedPreferences(
-				${project_name?cap_first}ApplicationBase.PREFS_PUBL, Context.MODE_WORLD_READABLE);
+				${project_name?cap_first}ApplicationBase.PREFS_PUBL, 
+				Context.MODE_WORLD_READABLE);
 		
 		final String currentVersion = ctx.getString(R.string.app_version);
 	    final SharedPreferences.Editor editor = settings.edit();
-	    editor.putString(${project_name?cap_first}ApplicationBase.PREFS_VERS, currentVersion);
+	    editor.putString(
+	    	${project_name?cap_first}ApplicationBase.PREFS_VERS, 
+	    	currentVersion);
 		
 	    // Commit the edits!
 	    editor.commit();
-	}	
-
+	}
 	
-	/** Check if Network is available
+	/** Check if Network is available.
 	 * 
 	 * @param ctx
 	 * @return true if have a network
 	 */
 	public static boolean isNetworkAvailable(final Context ctx) {
-	    final ConnectivityManager connectivityManager = (ConnectivityManager) ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
-	    final NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+	    final ConnectivityManager connectivityManager = (ConnectivityManager) 
+	    	ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    	
+	    final NetworkInfo activeNetworkInfo = connectivityManager
+	    	.getActiveNetworkInfo();
+	    	
 	    return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
 	}
 	
+	/**
+	 * Get the Date Format.
+	 * @return the DateFormat
+	 */
 	public static DateFormat getDateFormat() {
-		return df;
+		return dateFormat;
 	}
 	
+	/**
+	 * Get the Time Format.
+	 * @return the TimeFormat
+	 */
 	public static DateFormat getTimeFormat() {
-		return tf;
+		return timeFormat;
 	}
 		
 	<#if (sync)>
+	/**
+	 * Get the last sync date.
+	 * @return A DateTime representing the last sync date
+	 */
 	public static DateTime getLastSyncDate() {
-		return DateUtils.formatISOStringToDateTime(preferences.getString("lastSyncDate", null));
+		return DateUtils.formatISOStringToDateTime(
+				preferences.getString("lastSyncDate", null));
 	}
 	
-	public static void setLastSyncDate(DateTime dt){
+	/**
+	 * Set the last sync date.
+	 * @param dateTime DateTime representing the last sync date to set
+	 */
+	public static void setLastSyncDate(DateTime dateTime) {
 		Editor edit = preferences.edit();
-		edit.putString("lastSyncDate", dt.toString());
+		edit.putString("lastSyncDate", dateTime.toString());
 		edit.commit();
 	}
 	</#if>

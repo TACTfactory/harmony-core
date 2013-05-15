@@ -15,4 +15,6 @@
 #  'key.alias' for the name of the key to use.
 # The password will be asked during the build when you use the 'release' target.
 
-emma.filter="-${project_namespace}.view.*, -${project_namespace}.menu.*"
+emma.filter=-${project_namespace}.view.*, -${project_namespace}.menu.*, -${project_namespace}.harmony.*
+findbug.analyze.package=${project_namespace}.*
+checkstyle.includes=${project_path}/**/*.java

@@ -1,7 +1,7 @@
 <#assign curr = entities[current_entity] />
 package ${curr.test_namespace}.base;
 
-import ${project_namespace}.provider.${project_name?cap_first}Provider;
+import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
@@ -20,15 +20,16 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.test.AndroidTestCase;
+import android.os.Bundle;
 
+import android.test.AndroidTestCase;
 import junit.framework.Assert;
 
 /** ${curr.name} database test abstract class <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
  * You should edit ${curr.name}TestDB class instead of this one or you will lose all your modifications.</i></b>
  */
-public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
+public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	protected Context ctx;
 
 	protected ${curr.name}SQLiteAdapter adapter;
@@ -38,7 +39,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 	protected ContentResolver provider;
 	protected DataLoader dataLoader;
 
-	private ArrayList<${curr.name}> entities;
+	protected ArrayList<${curr.name}> entities;
 
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
@@ -54,6 +55,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 		this.db.beginTransaction();
 		
 		this.dataLoader = new DataLoader(this.ctx);
+		this.dataLoader.clean();
 		this.dataLoader.loadData(this.db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
 		
 		this.db.setTransactionSuccessful();
@@ -92,7 +94,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 			try {
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				values.remove(${curr.name}SQLiteAdapter.COL_ID);
-				result = this.provider.insert(${project_name?cap_first}Provider.${curr.name?upper_case}_URI, values);
+				result = this.provider.insert(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, values);
 			
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -109,7 +111,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 
 		if (this.entity != null) {
 			try {
-				Cursor c = this.provider.query(Uri.parse(${project_name?cap_first}Provider.${curr.name?upper_case}_URI + "/" + this.entity.getId()), this.adapter.getCols(), null, null, null);
+				Cursor c = this.provider.query(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.getId()), this.adapter.getCols(), null, null, null);
 				c.moveToFirst();
 				result = this.adapter.cursorToItem(c);
 				c.close();
@@ -125,7 +127,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 	public void testReadAll() {
 		ArrayList<${curr.name}> result = null;
 		try {
-			Cursor c = this.provider.query(${project_name?cap_first}Provider.${curr.name?upper_case}_URI, this.adapter.getCols(), null, null, null);
+			Cursor c = this.provider.query(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, this.adapter.getCols(), null, null, null);
 			result = this.adapter.cursorToItems(c);
 			c.close();
 		} catch (Exception e) {
@@ -149,7 +151,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 			
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				result = this.provider.update(
-					Uri.parse(${project_name?cap_first}Provider.${curr.name?upper_case}_URI 
+					Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI 
 						+ "/" 
 						+ ${curr.name?uncap_first}.getId()), 
 					values, 
@@ -179,7 +181,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 					</#if>
 				</#list>
 			
-				result = this.provider.update(${project_name?cap_first}Provider.${curr.name?upper_case}_URI, values, null, null);
+				result = this.provider.update(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, values, null, null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -193,7 +195,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 		int result = -1;
 		if (this.entity != null) {
 			try {
-				result = this.provider.delete(Uri.parse(${project_name?cap_first}Provider.${curr.name?upper_case}_URI + "/" + this.entity.getId()), null, null);
+				result = this.provider.delete(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.getId()), null, null);
 			
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -209,7 +211,7 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 		if (this.entities.size() > 0) {
 
 			try {
-				result = this.provider.delete(${project_name?cap_first}Provider.${curr.name?upper_case}_URI, null, null);
+				result = this.provider.delete(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, null, null);
 			
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -217,5 +219,120 @@ public abstract class ${curr.name}TestProviderBase extends AndroidTestCase {
 		
 			Assert.assertEquals(result, this.entities.size());
 		}
+	}
+
+	/** Test case Create Entity */
+	public void testCallCreate() {
+		long result = 0;
+		if (this.entity != null) {
+			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
+			ContentResolver prov = this.ctx.getContentResolver();
+			Bundle b = new Bundle();
+			b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, ${curr.name?uncap_first});
+			Bundle ret = 
+					prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
+							${curr.name?cap_first}ProviderAdapter.METHOD_INSERT_${curr.name?upper_case}, 
+							null,
+							b);
+
+			result = ret.getLong("result",  -1); 
+			Assert.assertTrue(result >= 0);
+		}
+	}
+	
+	/** Test case Read Entity */
+	public void testCallRead() {
+		${curr.name} result = null;
+
+		if (this.entity != null) {
+			try {
+				Bundle b = new Bundle();
+				b.putInt("id", this.entity.getId());
+				ContentResolver prov = this.ctx.getContentResolver();
+				Bundle ret = 
+					prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
+						${curr.name?cap_first}ProviderAdapter.METHOD_QUERY_${curr.name?upper_case}, 
+						null,
+						b);			
+				
+				result = (${curr.name}) ret.getSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY);
+
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			${curr.name}Utils.equals(this.entity, result);
+		}
+	}
+
+	/** Test case ReadAll Entity */
+	public void testCallReadAll() {
+		ArrayList<${curr.name}> result = null;
+		try {
+			Bundle b = new Bundle();
+			ContentResolver prov = this.ctx.getContentResolver();
+			Bundle ret = 
+				prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
+					${curr.name?cap_first}ProviderAdapter.METHOD_QUERY_${curr.name?upper_case}, 
+					null,
+					b);			
+			result = (ArrayList<${curr.name}>) ret.getSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Assert.assertNotNull(result);
+		if (result != null) {
+			Assert.assertEquals(result.size(), this.entities.size());
+		}
+	}
+	
+	/** Test case Update Entity */
+	public void testCallUpdate() {
+		int result = -1;
+		if (this.entity != null) {
+			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
+
+			try {
+				${curr.name?uncap_first}.setId(this.entity.getId());
+			
+				ContentResolver prov = this.ctx.getContentResolver();
+				Bundle b = new Bundle();
+				b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, ${curr.name?uncap_first});
+				Bundle ret = 
+						prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
+								${curr.name?cap_first}ProviderAdapter.METHOD_UPDATE_${curr.name?upper_case}, 
+								null,
+								b);
+				result = ret.getInt("result", -1);
+			
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		
+			Assert.assertTrue(result >= 0);
+		}
+	}
+	
+	/** Test case Delete Entity */
+	public void testCallDelete() {
+		int result = -1;
+		if (this.entity != null) {
+			try {
+				ContentResolver prov = this.ctx.getContentResolver();
+				Bundle b = new Bundle();
+				b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, this.entity);
+				Bundle ret = 
+						prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
+								${curr.name?cap_first}ProviderAdapter.METHOD_DELETE_${curr.name?upper_case}, 
+								null,
+								b);
+				result = ret.getInt("result", -1);
+			
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			Assert.assertTrue(result >= 0);
+		}
+
 	}
 }

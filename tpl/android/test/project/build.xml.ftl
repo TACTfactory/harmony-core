@@ -1,8 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="${project_name}-test" default="help">
-	<property name="reports.dir" value="tmp" />
-    <property name="tested.manifest.package" value="${project_namespace}" />
-
     <!-- The local.properties file is created and updated by the 'android' tool.
          It contains the path to the SDK. It should *NOT* be checked into
          Version Control Systems. -->
@@ -87,14 +84,5 @@
     -->
     <!-- version-tag: 1 -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
-
-    <target name="test-report">
-    	<echo>Downloading XML test report...</echo>
-    	<mkdir dir="tmp"/>
-    	<exec executable="${sdk.dir}/platform-tools/adb" failonerror="true">
-			<arg value="pull" />
-			<arg value="/data/data/${project_namespace}/files/junit-report.xml" />
-			<arg value="tmp/junit-report.xml" />
-   		</exec>
-	</target>
+    <import file="./build.rules.xml" />    
 </project>

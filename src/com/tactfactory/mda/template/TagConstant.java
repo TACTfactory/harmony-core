@@ -75,6 +75,8 @@ public abstract class TagConstant {
 	public static final String NAME = "name";
 	/** Constant for type. */
 	public static final String TYPE = "type";
+	/** Constant for harmony type. */
+	public static final String HARMONY_TYPE = "harmony_type";
 	/** Constant for schema. */
 	public static final String SCHEMA = "schema";
 	/** Constant for alias. */
@@ -103,4 +105,6 @@ public abstract class TagConstant {
 	public static final String ID = "id";
 	/** Constant for nullable field. */
 	public static final String NULLABLE = "nullable";
+	/** Constant for provider id. */
+	public static final String PROVIDER_ID = "provider_id";
 }

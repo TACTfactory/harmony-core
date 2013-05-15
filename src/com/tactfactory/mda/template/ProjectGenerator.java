@@ -7,7 +7,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
@@ -180,35 +179,11 @@ public class ProjectGenerator extends BaseGenerator {
 			+ "HarmonyListFragment.java",
 			false);
 		
-		// create ProjectMenuBase
-		super.makeSource(
-			this.getAdapter().getTemplateSourcePath() 
-			+ "menu/TemplateMenuBase.java",
-			this.getAdapter().getMenuPath()
-
-			+ CaseFormat.LOWER_CAMEL.to(
-					CaseFormat.UPPER_CAMEL,
-					this.getAppMetas().getName()) 
-			+ "MenuBase.java",
-			false);
-		
-		// create ProjectMenu
-		super.makeSource(
-			this.getAdapter().getTemplateSourcePath() 
-			+ "menu/TemplateMenu.java",
-			this.getAdapter().getMenuPath() 
-			+ CaseFormat.LOWER_CAMEL.to(
-					CaseFormat.UPPER_CAMEL, 
-					this.getAppMetas().getName()) 
-			+ "Menu.java",
-			false);
-		
-		// create MenuWrapper
-		super.makeSource(
-			this.getAdapter().getTemplateSourcePath() 
-			+ "menu/MenuWrapperBase.java",
-			this.getAdapter().getMenuPath() + "MenuWrapperBase.java",
-			false);
+		try {
+			new MenuGenerator(this.getAdapter()).generateMenu();
+		} catch (Exception e) {
+			ConsoleUtils.displayError(e);
+		}
 	}
 	
 	/**
@@ -274,8 +249,12 @@ public class ProjectGenerator extends BaseGenerator {
 			TactFileUtils.deleteRecursive(
 					new File(String.format("%s/%s", pathSherlock, "samples")));
 
-			String srcPath = Harmony.getTemplatesPath() + "/android/libs/sherlock_ant.properties.xml";
-			String destPath = pathSherlock + "/library/ant.properties.xml";
+			String srcPath = Harmony.getTemplatesPath() + "/android/libs/sherlock_ant.properties";
+			String destPath = pathSherlock + "/library/ant.properties";
+			this.makeSource(srcPath, destPath, false);
+			
+			srcPath = Harmony.getTemplatesPath() + "/android/libs/sherlock_.project";
+			destPath = pathSherlock + "/library/.project";
 			this.makeSource(srcPath, destPath, false);
 			
 			//make build sherlock
@@ -286,6 +265,8 @@ public class ProjectGenerator extends BaseGenerator {
 			command.add("project");
 			command.add("--path");
 			command.add(pathSherlock + "/library");
+			command.add("--name");
+			command.add(ApplicationMetadata.INSTANCE.getName() + "-abs");
 			ConsoleUtils.launchCommand(command);
 		}
 	}
@@ -308,30 +289,91 @@ public class ProjectGenerator extends BaseGenerator {
 		final File dirTpl = 
 				new File(Harmony.getBundlePath() + "tact-core/"
 						+ this.getAdapter().getTemplateProjectPath());
-		if (dirTpl.exists() && dirTpl.listFiles().length > 0) {
+		if (dirTpl.exists() && dirTpl.listFiles().length > 0 
+				&& this.clearProjectSources()) {
+			this.copyProjectTemplates(dirTpl, null, 
+					Harmony.getProjectPath() 
+						+ File.separator + this.getAdapter().getPlatform(), 
+					this.getAdapter().getTemplateProjectPath());
 			result = true;
+		}
+		
+		// Make Test project
+		
+		try {
+			new TestDBGenerator(this.getAdapter()).initTestAndroid();
+		} catch (Exception e) {
+			ConsoleUtils.displayError(e);
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Delete files that need to be recreated.
+	 * @return true if project cleaning successful
+	 */
+	private boolean clearProjectSources() {
+		boolean result = true;
+		
+		String projectPath = Harmony.getProjectPath() 
+				+ File.separator + this.getAdapter().getPlatform();
+		
+		File buildRules = new File(projectPath 
+				+ File.separator + "build.rules.xml");
+		
+		if (buildRules.exists()) {
+			result &= buildRules.delete();
+		}
+		
+		return result;
+	}
+	
+	/**
+	 * Copy files with recursive
+	 * @param file File to copy
+	 * @param directory Directory of the file (null if first)
+	 * @param sourcesPath Directory of sources files
+	 * @param templatesPath Directory of templates files
+	 */
+	private void copyProjectTemplates(File file, String directory, 
+			String sourcesPath, String templatesPath) {
+		if (file.isDirectory()) {
+			if (directory == null) {
+				directory = "";
+			}
+			else {
+				directory += File.separator + file.getName();
+			}
 			
-			for (int i = 0; i < dirTpl.listFiles().length; i++) {
-				if (dirTpl.listFiles()[i].isFile()) {
-					String tplPath = this.getAdapter().getTemplateProjectPath() 
-							+ dirTpl.listFiles()[i].getName();
-					String srcPath = String.format("%s/%s/",
-							Harmony.getProjectPath(), 
-							this.getAdapter().getPlatform()) 
-								+ dirTpl.listFiles()[i].getName(); 
-					
-					tplPath = tplPath.substring(0, tplPath.length() 
-							- ".ftl".length());
-					srcPath = srcPath.substring(0, srcPath.length() 
-							- ".ftl".length());
-					super.makeSource(
-							tplPath,
-							srcPath,
-							false);
-				}
+			File[] files = file.listFiles();
+			for (File subFile : files) {
+				this.copyProjectTemplates(
+						subFile, 
+						directory,
+						sourcesPath,
+						templatesPath);				
 			}
 		}
-		return result;
+		else {
+			String tplPath = templatesPath
+					+ File.separator + directory
+					+ File.separator + file.getName();
+			
+			String srcPath = sourcesPath
+					+ File.separator + directory
+					+ File.separator + file.getName();
+			
+			tplPath = tplPath.substring(0, tplPath.length() 
+					- ".ftl".length());
+			srcPath = srcPath.substring(0, srcPath.length() 
+					- ".ftl".length());
+			
+			super.makeSource(
+					tplPath,
+					srcPath,
+					false);
+		}
 	}
 
 	/**

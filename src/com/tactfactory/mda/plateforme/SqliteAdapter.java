@@ -36,7 +36,7 @@ public abstract class SqliteAdapter {
 		builder.append(generateColumnType(fm.getColumnDefinition()));
 		if (fm.isId()) {
 			builder.append(" PRIMARY KEY");
-			if (fm.getColumnDefinition().equals("integer")) {
+			if (fm.getColumnDefinition().equalsIgnoreCase("INTEGER")) {
 				builder.append(" AUTOINCREMENT");
 			}
 		} else {
@@ -84,20 +84,68 @@ public abstract class SqliteAdapter {
 	 */
 	public static String generateColumnType(final String fieldType) {
 		String type = fieldType;
-		if (type.equals(Column.Type.STRING.getValue()) 
-			|| type.equals(Column.Type.TEXT.getValue()) 
-			|| type.equals(Column.Type.LOGIN.getValue())
-			|| type.equals(Column.Type.PHONE.getValue())) {
+		if (type.equalsIgnoreCase(Column.Type.STRING.getValue()) 
+			|| type.equalsIgnoreCase(Column.Type.TEXT.getValue()) 
+			|| type.equalsIgnoreCase(Column.Type.LOGIN.getValue())
+			|| type.equalsIgnoreCase(Column.Type.PHONE.getValue())
+			|| type.equalsIgnoreCase(Column.Type.PASSWORD.getValue())
+			|| type.equalsIgnoreCase(Column.Type.EMAIL.getValue())
+			|| type.equalsIgnoreCase(Column.Type.CITY.getValue())
+			|| type.equalsIgnoreCase(Column.Type.ZIPCODE.getValue())
+			|| type.equalsIgnoreCase(Column.Type.COUNTRY.getValue())) {
 			type = "VARCHAR";
 		} else
 			
-		if (type.equals(Column.Type.PASSWORD.getValue())) {
-			type = "VARCHAR";
+		if (type.equalsIgnoreCase(Column.Type.DATETIME.getValue())) {
+			type = "DATETIME";
 		} else
 			
-		if (type.equals(Column.Type.DATETIME.getValue())) {
-			type = "VARCHAR";
+		if (type.equalsIgnoreCase(Column.Type.DATE.getValue())) {
+			type = "DATE";
+		} else
+			
+		if (type.equalsIgnoreCase(Column.Type.TIME.getValue())) {
+			type = "DATETIME";
+		} else
+			
+		if (type.equalsIgnoreCase(Column.Type.BOOLEAN.getValue())) {
+			type = "BOOLEAN";
+		} else
+			
+		if (type.equalsIgnoreCase(Column.Type.INTEGER.getValue())
+				|| type.equalsIgnoreCase(Column.Type.INT.getValue())
+				|| type.equalsIgnoreCase(Column.Type.BC_EAN.getValue())) {
+			type = "INTEGER";
+		} else
+		
+		if (type.equalsIgnoreCase(Column.Type.FLOAT.getValue())) {
+			type = "FLOAT";
+		} else
+			
+		if (type.equalsIgnoreCase(Column.Type.DOUBLE.getValue())) {
+			type = "DOUBLE";
+		} else
+			
+		if (type.equalsIgnoreCase(Column.Type.SHORT.getValue())) {
+			type = "SHORT";
+		} else
+			
+		if (type.equalsIgnoreCase(Column.Type.LONG.getValue())) {
+			type = "LONG";
+		} else
+			
+		if (type.equalsIgnoreCase(Column.Type.CHAR.getValue())) {
+			type = "STRING";
+		} else
+			
+		if (type.equalsIgnoreCase(Column.Type.BYTE.getValue())) {
+			type = "STRING";
+		} else 
+			
+		if (type.equalsIgnoreCase(Column.Type.CHARACTER.getValue())) {
+			type = "STRING";
 		}
+		
 
 		return type;
 	}
@@ -127,7 +175,7 @@ public abstract class SqliteAdapter {
 	 */
 	public static String generateColumnDefinition(final String type) {
 		String ret = type;
-		if (type.equals("int")) {
+		if (type.equalsIgnoreCase("int")) {
 			ret = "integer";
 		}
 		return ret;
