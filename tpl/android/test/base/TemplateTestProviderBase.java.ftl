@@ -175,7 +175,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			try {
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				values.remove(${curr.name}SQLiteAdapter.COL_ID);
-				<#list curr.fields as field>
+				<#list curr.fields?values as field>
 					<#if field.unique?? && field.unique>
 				values.remove(${curr.name}SQLiteAdapter.COL_${field.name?upper_case});
 					</#if>

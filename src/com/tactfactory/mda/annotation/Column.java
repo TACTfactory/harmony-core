@@ -67,6 +67,8 @@ public @interface Column {
 		DATE	("date", 	null, 	true,	null,	null,	null,	false),
 		/** Time type. */
 		TIME	("time",		null,	true,	null,	null,	null,	false),
+		/** Enum type. */
+		ENUM	("enum",		null,	false,	null,	null,	null,	null),
 		
 		// EXTEND
 		/** Login type. */

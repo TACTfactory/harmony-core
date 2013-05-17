@@ -36,15 +36,32 @@ public class FileVisitor {
 			for (TypeDeclaration typeDecl : n.getTypes()) {
 				currentClass = this.classVisitor.visit(typeDecl);
 				
-				if (currentClass != null) {
-					currentClass.setImports(importList);
-					currentClass.setSpace(spackage);
-					result.add(currentClass);
-				}
+				this.addClassToList(importList,
+						spackage,
+						result,
+						currentClass);
 			}
 		}
 		
 		return result;
+	}
+	
+	private void addClassToList(ArrayList<String> importList,
+			String spackage,
+			ArrayList<ClassMetadata> list, 
+			ClassMetadata classMetas) {
+		if (classMetas != null) {
+			for (ClassMetadata subClass : classMetas.getSubClasses().values()) {
+				this.addClassToList(importList,
+						spackage,
+						list,
+						subClass);
+			}
+			classMetas.setImports(importList);
+			classMetas.setSpace(spackage);
+			list.add(classMetas);
+		}
+		
 	}
 
 }

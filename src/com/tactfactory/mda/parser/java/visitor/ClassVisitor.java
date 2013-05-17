@@ -9,7 +9,10 @@ import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.type.ClassOrInterfaceType;
+
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.base.Strings;
 import com.tactfactory.mda.annotation.Entity;
@@ -113,12 +116,14 @@ public class ClassVisitor {
 			}
 				
 			// Get list of Members (Methods, Fields, Subclasses, Enums, etc.)
+			Map<String, ClassMetadata> subClasses = new LinkedHashMap<String, ClassMetadata>();
 			List<BodyDeclaration> members = n.getMembers();
 			if (members != null) {
 				for (BodyDeclaration member : members) {
 					// Subclass or Enum
 					if (member instanceof TypeDeclaration) {
-						this.visit((TypeDeclaration) member);
+						ClassMetadata subClass = this.visit((TypeDeclaration) member);
+						subClasses.put(subClass.getName(), subClass);
 					} else
 					
 					// Fields
@@ -140,13 +145,17 @@ public class ClassVisitor {
 						result.getMethods().add(this.methodVisitor.visit((MethodDeclaration) member, result));
 					}	
 				}
+				
+				for (ClassMetadata subClass : subClasses.values()) {
+					subClass.setMotherClass(result.getName());
+				}
+				result.setSubClasses(subClasses);
 			}
 		}
 		return result;
     }
     
-    public final ClassMetadata visit(final EnumDeclaration n) {
-    	
+    public final ClassMetadata visit(final EnumDeclaration n) {		
     	ConsoleUtils.displayDebug("Found enum " + n.getName());
     	EnumMetadata result = new EnumMetadata();
     	result.setName(n.getName());
@@ -173,6 +182,9 @@ public class ClassVisitor {
 				if (member instanceof FieldDeclaration) {
 					FieldMetadata fieldMetas = this.fieldVisitor.visit((FieldDeclaration) member, result);
 					if (fieldMetas != null) {
+						if (fieldMetas.isId()) {
+							result.setIdName(fieldMetas.getName());
+						}
 						result.getFields().put(fieldMetas.getName(), fieldMetas);
 					}
 				} else 

@@ -6,7 +6,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-<#list curr.fields as field>
+<#list curr.fields?values as field>
 	<#if (!field.internal && !field.hidden)>
 	<#assign m_id="${currname?lower_case}_${field.name?lower_case}" />
 	<#assign m_id_label="${m_id}_label" />

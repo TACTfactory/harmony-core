@@ -31,7 +31,7 @@ import android.widget.TimePicker;
 
 <#assign importDate=false />
 <#assign importTime=false />
-<#list curr.fields as field>
+<#list curr.fields?values as field>
 	<#if !field.internal && !field.hidden>
 		<#if field.type?lower_case=="datetime">
 			<#if ((field.harmony_type=="date" || field.harmony_type=="datetime") && !importDate)>
@@ -90,7 +90,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	protected ${curr.name} model = new ${curr.name}();
 
 	/** Fields View. */
-	<#list curr.fields as field>
+	<#list curr.fields?values as field>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 	/** ${field.name} View. */

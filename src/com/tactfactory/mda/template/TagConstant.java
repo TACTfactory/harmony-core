@@ -115,5 +115,7 @@ public abstract class TagConstant {
 	public static final String NULLABLE = "nullable";
 	/** Constant for provider id. */
 	public static final String PROVIDER_ID = "provider_id";
+	/** Constant for mother class. */
+	public static final String MOTHER = "mother";
 	
 }

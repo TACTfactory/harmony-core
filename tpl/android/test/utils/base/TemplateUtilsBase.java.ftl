@@ -38,7 +38,7 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 	public static ${curr.name?cap_first} generateRandom(Context ctx){
 		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
 		
-		<#list curr.fields as field>
+		<#list curr.fields?values as field>
 			<#if !field.internal>
 				<#if !field.relation??>
 					<#if field.type?lower_case=="string">
@@ -65,8 +65,9 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 						<#elseif field.harmony_type?lower_case=="datetime">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDateTime());
 						</#if>
-					<#else>
-						<#if (field.columnDefinition?lower_case=="integer" || field.columnDefinition?lower_case=="int")>
+					<#elseif field.type?lower_case=="enum">
+						<#assign enumType = enums[field.type] />
+						<#if (enumType.fields[0].type?lower_case == "int" || enumType.fields[0].type?lower_case == "integer") >
 		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(TestUtils.generateRandomInt(0,100)));
 						<#else>
 		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(TestUtils.generateRandomString(10)));		
@@ -98,7 +99,7 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 		Assert.assertNotNull(${curr.name?uncap_first}1);
 		Assert.assertNotNull(${curr.name?uncap_first}2);
 		if (${curr.name?uncap_first}1!=null && ${curr.name?uncap_first}2 !=null){
-		<#list curr.fields as field>
+		<#list curr.fields?values as field>
 			<#if !field.internal>
 				<#if !field.relation??>
 					<#if field.type?lower_case=="int" || field.type?lower_case=="integer" || field.type?lower_case=="long" || field.type?lower_case=="double" || field.type?lower_case=="float" || field.type?lower_case=="zipcode" || field.type?lower_case=="ean">

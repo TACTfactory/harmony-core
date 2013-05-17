@@ -21,7 +21,7 @@ import android.content.Context;
 		<#assign isToMany=true />
 	</#if>
 </#list>
-<#list curr.fields as field>
+<#list curr.fields?values as field>
 	<#if field.harmony_type=="date">
 		<#assign hasDate=true />
 	<#elseif field.harmony_type=="time">
@@ -32,7 +32,7 @@ import android.content.Context;
 </#list>
 
 <#assign hasLocaleTime = false />
-<#list curr.fields as field>
+<#list curr.fields?values as field>
 	<#if field.is_locale?? && field.is_locale>
 		<#assign hasLocaleTime = true />
 	</#if>
@@ -108,7 +108,7 @@ public class ${curr.name?cap_first}DataLoader
 		final ${curr.name?cap_first} ${curr.name?uncap_first} = 
 				new ${curr.name?cap_first}();
 		
-		<#list curr.fields as field>
+		<#list curr.fields?values as field>
 			<#if (!field.internal)>
 		if (element.getChildText("${field.name?uncap_first}") != null) {
 				<#if !field.relation??>
@@ -218,7 +218,7 @@ public class ${curr.name?cap_first}DataLoader
 	protected ${curr.name} extractItem(final Map<?, ?> columns) {
 		final ${curr.name?cap_first} ${curr.name?uncap_first} = 
 				new ${curr.name?cap_first}();
-		<#list curr.fields as field>
+		<#list curr.fields?values as field>
 			<#if (!field.internal)>
 		if (columns.get("${field.name?uncap_first}") != null) {
 				<#if !field.relation??>

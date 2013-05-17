@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 
 <#assign importDate=false />
-<#list curr.fields as field>
+<#list curr.fields?values as field>
 	<#if !field.hidden>
 		<#if (!importDate && field.type?lower_case=="datetime")>
 			<#assign importDate=true />
@@ -57,7 +57,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 	protected ${curr.name} model;
 	
 	/* curr.fields View */
-<#list curr.fields as field>
+<#list curr.fields?values as field>
 	<#if (!field.internal && !field.hidden)>
 	/** ${field.name} View. */
 		<#if (field.type=="boolean")>

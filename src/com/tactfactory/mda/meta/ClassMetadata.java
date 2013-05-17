@@ -13,16 +13,20 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
-import com.tactfactory.mda.meta.TranslationMetadata.Group;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
 /** Entity class metadata. */
 public class ClassMetadata extends BaseMetadata {
-
+	/** SubClasses array. */
+	private Map<String, ClassMetadata> subClasses = 
+			new LinkedHashMap<String, ClassMetadata>();
+	
+	/** Mother Class name. */
+	private String motherClass;
+	
 	/** List of fields of entity class. */
 	private Map<String, FieldMetadata> fields = 
 			new LinkedHashMap<String, FieldMetadata>();
@@ -53,7 +57,6 @@ public class ClassMetadata extends BaseMetadata {
 	public Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		
-
 		model.put(TagConstant.SPACE,			this.space);
 		model.put(TagConstant.NAME,				this.getName());
 		model.put(TagConstant.EXTENDS,			this.extendType);
@@ -71,6 +74,10 @@ public class ClassMetadata extends BaseMetadata {
 			optionsModel.put(option.getName(), option.toMap(adapter));
 		}
 		model.put(TagConstant.OPTIONS, optionsModel);
+
+		if (motherClass != null) {
+			model.put(TagConstant.MOTHER, this.motherClass);	
+		}
 		
 		return model;
 	}
@@ -176,11 +183,11 @@ public class ClassMetadata extends BaseMetadata {
 	 * @param adapter The adapter to use.
 	 * @return The fields map.
 	 */
-	private List<Map<String, Object>> toFieldArray(
+	private Map<String, Map<String, Object>> toFieldArray(
 			final Collection<FieldMetadata> c, 
 			final BaseAdapter adapter) {
-		final List<Map<String, Object>> result = 
-				new ArrayList<Map<String, Object>>();
+		final Map<String, Map<String, Object>> result = 
+				new LinkedHashMap<String, Map<String, Object>>();
 		Map<String, Object> subField = null;
 		
 		for (final FieldMetadata field : c) {
@@ -193,9 +200,37 @@ public class ClassMetadata extends BaseMetadata {
 				field.makeString("label");
 			}
 			
-			result.add(subField);
+			result.put(field.getName(), subField);
 		}
 		
 		return result;
+	}
+
+	/**
+	 * @return the motherClass
+	 */
+	public final String getMotherClass() {
+		return motherClass;
+	}
+
+	/**
+	 * @param motherClass the motherClass to set
+	 */
+	public final void setMotherClass(String motherClass) {
+		this.motherClass = motherClass;
+	}
+
+	/**
+	 * @return the subClasses
+	 */
+	public final Map<String, ClassMetadata> getSubClasses() {
+		return subClasses;
+	}
+
+	/**
+	 * @param subClasses the subClasses to set
+	 */
+	public final void setSubClasses(Map<String, ClassMetadata> subClasses) {
+		this.subClasses = subClasses;
 	}	
 }

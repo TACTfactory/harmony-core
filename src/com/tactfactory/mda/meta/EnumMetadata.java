@@ -7,6 +7,9 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
 public class EnumMetadata extends ClassMetadata {
+	/** ID field name. */
+	private String idName;
+	
 	/** Enum type.*/
 	private String type;
 	
@@ -21,6 +24,7 @@ public class EnumMetadata extends ClassMetadata {
 	@Override
 	public final Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> model = super.toMap(adapter);
+		model.put(TagConstant.ID, idName);
 		model.put(TagConstant.TYPE, type);
 		model.put(TagConstant.NAMES, entries);
 		return model;
@@ -52,5 +56,19 @@ public class EnumMetadata extends ClassMetadata {
 	 */
 	public final void setEntries(final ArrayList<String> entries) {
 		this.entries = entries;
+	}
+
+	/**
+	 * @return the idName
+	 */
+	public final String getIdName() {
+		return idName;
+	}
+
+	/**
+	 * @param idName the idName to set
+	 */
+	public final void setIdName(String idName) {
+		this.idName = idName;
 	}
 }
