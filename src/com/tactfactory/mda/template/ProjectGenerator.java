@@ -11,6 +11,7 @@ import com.tactfactory.mda.Harmony;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
+import com.tactfactory.mda.utils.OsUtil;
 import com.tactfactory.mda.utils.TactFileUtils;
 
 /**
@@ -213,11 +214,11 @@ public class ProjectGenerator extends BaseGenerator {
 	 */
 	private void installAndroidSherlockLib() {
 		//TODO test if git is install
-		String pathSherlock = String.format("%s%s", 
+		File pathSherlock = new File(String.format("%s%s", 
 				this.getAdapter().getLibsPath(), 
-				"sherlock");
+				"sherlock"));
 		
-		if (!TactFileUtils.exists(pathSherlock)) {
+		if (!TactFileUtils.exists(pathSherlock.getAbsolutePath())) {
 			final ArrayList<String> command = new ArrayList<String>();
 			
 			// command/Tools
@@ -230,7 +231,7 @@ public class ProjectGenerator extends BaseGenerator {
 			command.add("https://github.com/JakeWharton/ActionBarSherlock.git");
 			
 			// command destination folder
-			command.add(pathSherlock);
+			command.add(pathSherlock.getAbsolutePath());
 			
 			ConsoleUtils.launchCommand(command);
 			command.clear();
@@ -238,8 +239,15 @@ public class ProjectGenerator extends BaseGenerator {
 			// command git checkout
 			command.add("git");
 			command.add(String.format(
-					"%s%s/%s", "--git-dir=", pathSherlock, ".git"));
-			command.add(String.format("%s%s", "--work-tree=", pathSherlock));
+					"%s%s/%s", 
+					"--git-dir=", 
+					pathSherlock.getAbsoluteFile(), 
+					".git"));
+			
+			command.add(String.format("%s%s", 
+					"--work-tree=", 
+					pathSherlock.getAbsolutePath()));
+			
 			command.add("checkout");
 			command.add("4.2.0");
 			ConsoleUtils.launchCommand(command);
@@ -247,7 +255,9 @@ public class ProjectGenerator extends BaseGenerator {
 			
 			// delete samples
 			TactFileUtils.deleteRecursive(
-					new File(String.format("%s/%s", pathSherlock, "samples")));
+					new File(String.format("%s/%s", 
+							pathSherlock.getAbsolutePath(), 
+							"samples")));
 
 			String srcPath = Harmony.getTemplatesPath() + "/android/libs/sherlock_ant.properties";
 			String destPath = pathSherlock + "/library/ant.properties";
@@ -258,13 +268,20 @@ public class ProjectGenerator extends BaseGenerator {
 			this.makeSource(srcPath, destPath, false);
 			
 			//make build sherlock
-			command.add(String.format("%s/%s", 
+			String sdkTools = String.format("%s/%s", 
 					ApplicationMetadata.getAndroidSdkPath(), 
-					"tools/android"));
+					"tools/android");
+			if (OsUtil.isWindows()) {
+				sdkTools += ".bat";
+			}
+			
+			command.add(new File( sdkTools ).getAbsolutePath());
 			command.add("update");
 			command.add("project");
 			command.add("--path");
-			command.add(pathSherlock + "/library");
+			command.add(new File(
+					pathSherlock.getAbsolutePath() + 
+					"/library").getAbsolutePath());
 			command.add("--name");
 			command.add(ApplicationMetadata.INSTANCE.getName() + "-abs");
 			ConsoleUtils.launchCommand(command);
