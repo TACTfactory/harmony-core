@@ -127,7 +127,7 @@
     	<#if (curr.relations?size!=0)>
     	android:layout_below="@+id/${lastField}"
     	<#else>
-    	android:layout_below="@+id/${currname?lower_case}_${curr.fields?last.name?lower_case}"
+    	android:layout_below="@+id/${currname?lower_case}_${curr.fields?values?last.name?lower_case}"
     	</#if>
     	android:text="@string/common_create" />
 </RelativeLayout>

@@ -1,3 +1,23 @@
+<#function getAllMothers tab entity>
+	<#if entity.mother??>
+		<#return (getAllMothers(tab, entities[entity.mother]) + [entity]) />
+	<#else>
+		<#return ([entity]) />		
+	</#if>
+</#function>
+<#function getCompleteNamespace entity>
+	<#assign result = "" />
+	<#assign motherClasses = getAllMothers([], entity) />
+	<#assign cond = true />
+	<#list motherClasses as motherClass>
+		<#assign result = result + motherClass.name />
+		<#if motherClass_has_next>
+			<#assign result = result + "." />
+		</#if>
+	</#list>
+	
+	<#return result>
+</#function>
 <#function isInArray array val>
 	<#list array as val_ref>
 		<#if val_ref==val>
@@ -21,6 +41,12 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity?cap_first};
 import ${fixture_namespace}.${relation.relation.targetEntity?cap_first}DataLoader;
 			<#assign importList = importList + [relation.relation.targetEntity] />
 		</#if>
+	</#if>
+</#list>
+<#list curr.fields?values as field>
+	<#if field.harmony_type?lower_case == "enum">
+		<#assign enumClass = enums[field.type] />
+import ${entity_namespace}.${getCompleteNamespace(enumClass)};
 	</#if>
 </#list>
 <#if (importList?size > 0)>
@@ -65,12 +91,13 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 						<#elseif field.harmony_type?lower_case=="datetime">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDateTime());
 						</#if>
-					<#elseif field.type?lower_case=="enum">
+					<#elseif (field.harmony_type?lower_case == "enum")>
 						<#assign enumType = enums[field.type] />
-						<#if (enumType.fields[0].type?lower_case == "int" || enumType.fields[0].type?lower_case == "integer") >
-		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(TestUtils.generateRandomInt(0,100)));
+						<#assign idEnum = enumType.fields[enumType.id] />
+						<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
+		${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(TestUtils.generateRandomInt(0,100)));
 						<#else>
-		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.name}.${field.type}.fromValue(TestUtils.generateRandomString(10)));		
+		${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(TestUtils.generateRandomString(10)));		
 						</#if>
 					</#if>
 				<#else>

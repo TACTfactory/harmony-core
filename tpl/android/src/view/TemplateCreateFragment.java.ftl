@@ -72,6 +72,12 @@ import ${project_namespace}.provider.${relation.relation.targetEntity?cap_first}
 		</#if>
 	</#if>
 </#list>
+<#list curr.fields?values as field>
+	<#if field.harmony_type?lower_case == "enum">
+		<#assign enumClass = enums[field.type] />
+import ${entity_namespace}.${m.getCompleteNamespace(enumClass)};
+	</#if>
+</#list>
 
 
 <#if (mustImportArrayList)>
@@ -126,7 +132,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	 * @param view The layout inflating
 	 */
 	protected void initializeComponent(final View view) {
-		<#foreach field in curr.fields>
+		<#list curr.fields?values as field>
 			<#if !field.internal && !field.hidden>
 				<#if !field.relation??>
 					<#if field.type=="boolean">
@@ -235,7 +241,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		});
 				</#if>
 			</#if>
-		</#foreach>
+		</#list>
 		
 		this.saveButton = 
 			(Button) view.findViewById(R.id.${curr.name?lower_case}_btn_save);
@@ -351,7 +357,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		ContentResolver prov = this.getActivity().getContentResolver();
 		</#if>
 
-		<#foreach field in curr.fields>						
+		<#list curr.fields?values as field>						
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
@@ -388,12 +394,12 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			</#if>
 		</#if>
 		
-		</#foreach>
+		</#list>
 	}
 	
 	/** Save data from fields view to model. */
 	public void saveData() {
-		<#foreach field in curr.fields>
+		<#list curr.fields?values as field>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if (field.type?lower_case == "datetime")>
@@ -429,7 +435,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 				tmp${field.name?cap_first}List);
 			</#if>
 		</#if>	
-		</#foreach>
+		</#list>
 
 	}
 

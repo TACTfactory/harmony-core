@@ -58,7 +58,6 @@ import ${project_namespace}.harmony.util.DateUtils;
 import java.util.Date;
 import org.joda.time.DateTime;
 	</#if>
-import org.yaml.snakeyaml.Yaml;
 import java.util.Map;
 
 </#if>
@@ -140,16 +139,18 @@ public class ${curr.name?cap_first}DataLoader
 					<#elseif field.type?lower_case=="string">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					element.getChildText("${field.name?uncap_first}"));
-					<#else>
-						<#if field.columnDefinition?lower_case=="integer" || field.columnDefinition?lower_case=="int">
+					<#elseif (field.harmony_type == "enum")>
+						<#assign enumType = enums[field.type] />
+						<#assign idEnum = enumType.fields[enumType.id] />
+						<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
 			${curr.name?uncap_first}.set${field.name?cap_first}(
-					${curr.name}.${field.type}.fromValue(
+					${field.type}.fromValue(
 							Integer.parseInt(
 									element.getChildText(
 											"${field.name?uncap_first}"))));
 						<#else>
 			${curr.name?uncap_first}.set${field.name?cap_first}(
-					${curr.name}.${field.type}.fromValue(
+					${field.type}.fromValue(
 							element.getChildText(
 									"${field.name?uncap_first}")));
 						</#if>
@@ -251,8 +252,10 @@ public class ${curr.name?cap_first}DataLoader
 					<#elseif (field.type?lower_case == "string")>
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					(String) columns.get("${field.name?uncap_first}"));
-					<#else>
-						<#if (field.harmony_type == "integer" || field.harmony_type == "int")>
+					<#elseif (field.harmony_type == "enum")>
+						<#assign enumType = enums[field.type] />
+						<#assign idEnum = enumType.fields[enumType.id] />
+						<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
 			${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(
 					(Integer) columns.get("${field.name?uncap_first}")));
 						<#else>

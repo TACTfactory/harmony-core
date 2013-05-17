@@ -10,7 +10,7 @@
 			<#assign ret=ret+getter />
 		<#elseif (type?lower_case == "int" || type?lower_case == "integer" ||  type?lower_case=="ean" || type?lower_case=="zipcode" || type?lower_case=="float" || type?lower_case == "double" || type?lower_case == "long" || type?lower_case == "char" || type?lower_case == "byte" || type?lower_case == "short" || type?lower_case == "character")>
 			<#assign ret=ret+"String.valueOf("+getter+")" /> 
-		<#else>
+		<#elseif (field.harmony_type?lower_case == "enum")>
 			<#assign ret=ret+getter+".getValue()" /> 
 		</#if>
 		<#assign ret=ret+");" />
@@ -40,7 +40,7 @@
 			<#assign ret=ret+getter />
 		<#elseif  (type?lower_case == "int" || type?lower_case == "integer" || type?lower_case=="ean" || type?lower_case=="zipcode" || type?lower_case=="float" || type?lower_case == "double" || type?lower_case == "long" || type?lower_case == "char" || type?lower_case == "byte" || type?lower_case == "short" || type?lower_case == "character")>
 			<#assign ret=ret+"String.valueOf("+getter+")" />
-		<#else>
+		<#elseif (field.harmony_type?lower_case == "enum")>
 			<#assign ret = ret + getter + ".getValue()" /> 
 		</#if>
 		<#assign ret=ret+");" /> 
@@ -83,8 +83,10 @@
 			<#assign ret=ret+"Byte.parseByte("+getter+")" />
 		<#elseif (type?lower_case=="character")>
 			<#assign ret=ret+getter+".charAt(0)" />
-		<#else>
-			<#if (field.harmony_type?lower_case == "integer" || field.harmony_type?lower_case == "int")>
+		<#elseif (field.harmony_type?lower_case == "enum")>
+			<#assign enumType = enums[field.type] />
+			<#assign idEnum = enumType.fields[enumType.id] />
+			<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
 				<#assign ret=ret+field.type+".fromValue(Integer.parseInt("+getter+"))" />
 			<#else>
 				<#assign ret=ret+field.type+".fromValue("+getter+")" />
@@ -103,4 +105,25 @@
 		</#if>
 	</#list>
 	<#return false />
+</#function>
+
+<#function getAllMothers tab entity>
+	<#if entity.mother??>
+		<#return (getAllMothers(tab, entities[entity.mother]) + [entity]) />
+	<#else>
+		<#return ([entity]) />		
+	</#if>
+</#function>
+<#function getCompleteNamespace entity>
+	<#assign result = "" />
+	<#assign motherClasses = getAllMothers([], entity) />
+	<#assign cond = true />
+	<#list motherClasses as motherClass>
+		<#assign result = result + motherClass.name />
+		<#if motherClass_has_next>
+			<#assign result = result + "." />
+		</#if>
+	</#list>
+	
+	<#return result>
 </#function>
