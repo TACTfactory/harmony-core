@@ -406,64 +406,78 @@ public abstract class TactFileUtils extends FileUtils {
 	 */
 	private static int deleteRecursive(final File dir, final int result) {
 		int ret = result;
-		if (dir.exists()) {
-			if (dir.isDirectory()) {
-				//it's a directory, list files and call deleteDir on a dir
-				for (final File f : dir.listFiles()) {
-					if (f.isDirectory()) {
-						ret = TactFileUtils.deleteRecursive(f, ret);
-					} else {
-						if (!f.delete()) {
-							ret++;
-							
-							ConsoleUtils.displayWarning(FILE
-									 + f.getPath()
-									 + "' delete ERROR!");
+
+		try {
+			if (dir.exists()) {
+				if (dir.isDirectory()) {
+					//it's a directory, list files and call deleteDir on a dir
+					for (final File f : dir.listFiles()) {
+						if (f.isDirectory()) {
+							ret = TactFileUtils.deleteRecursive(f, ret);
+						} else {
+							if (!f.delete()) {
+								ret++;
+								
+								ConsoleUtils.displayWarning(FILE
+										 + f.getPath()
+										 + "' delete ERROR!");
+							}
 						}
 					}
-				}
-				
-				//folder content check, remove folder
-				if (dir.listFiles().length == 0) {
-					if (dir.delete()) {
-						ConsoleUtils.displayDebug(FOLDER
-								 + dir.getPath()
-								 + "' deleted.");
+					
+					//folder content check, remove folder
+					if (dir.listFiles().length == 0) {
+						boolean deleteSuccess = false;
+						deleteSuccess = dir.delete();
+						
+						if (deleteSuccess) {
+							ConsoleUtils.displayDebug(FOLDER
+									 + dir.getPath()
+									 + "' deleted.");
+						} else {
+							ret++;
+							
+							ConsoleUtils.displayWarning(FOLDER
+									 + dir.getPath()
+									 + "' delete ERROR!");
+						}
 					} else {
 						ret++;
 						
 						ConsoleUtils.displayWarning(FOLDER
 								 + dir.getPath()
+								 + "' NOT Empty!");
+					}
+					
+				} else {
+					// it's a file delete simply
+					if (dir.delete()) {
+						ConsoleUtils.displayDebug(FILE
+								 + dir.getPath()
+								 + "' deleted.");
+					} else {
+						ret++;
+	
+						ConsoleUtils.displayWarning(FILE
+								 + dir.getPath()
 								 + "' delete ERROR!");
 					}
-				} else {
-					ret++;
-					
-					ConsoleUtils.displayWarning(FOLDER
-							 + dir.getPath()
-							 + "' NOT Empty!");
 				}
-				
 			} else {
-				// it's a file delete simply
-				if (dir.delete()) {
-					ConsoleUtils.displayDebug(FILE
-							 + dir.getPath()
-							 + "' deleted.");
-				} else {
-					ret++;
-
-					ConsoleUtils.displayWarning(FILE
-							 + dir.getPath()
-							 + "' delete ERROR!");
-				}
+				ret++;
+				
+				ConsoleUtils.displayWarning(FOLDER
+						 + dir.getPath()
+						 + "' doesn't exists!");
 			}
-		} else {
-			ret++;
-			
-			ConsoleUtils.displayWarning(FOLDER
-					 + dir.getPath()
-					 + "' doesn't exists!");
+
+		} catch (SecurityException e) {
+			ConsoleUtils.displayError(e);
+		} catch (NullPointerException e) {
+			ConsoleUtils.displayError(new Exception("Error while deleting " 
+					+ dir.getAbsolutePath()
+					+ ". Check if you have permissions for this file "
+					+ "and if it is not opened by another application"));
 		}
 		return ret;
 	}

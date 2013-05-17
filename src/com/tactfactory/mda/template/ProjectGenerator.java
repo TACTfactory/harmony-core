@@ -28,7 +28,7 @@ public class ProjectGenerator extends BaseGenerator {
 	 */
 	public ProjectGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
-
+		
 		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 	}
 
@@ -66,14 +66,11 @@ public class ProjectGenerator extends BaseGenerator {
 		if (removeResult == 0) {
 			result = true;
 			
-			ConsoleUtils.displayDebug(
+			ConsoleUtils.display(
 					"Project " + this.getAdapter().getPlatform() + " removed!");
 		} else {
-			ConsoleUtils.displayError(
-					new Exception("Remove Project "
-							+ this.getAdapter().getPlatform() 
-							+ " return " + removeResult 
-							+ " errors...\n"));
+			ConsoleUtils.display(
+					"An error has occured while deleting the project.");
 		}
 		return result;
 	}

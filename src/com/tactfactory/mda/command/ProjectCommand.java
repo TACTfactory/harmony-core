@@ -353,9 +353,8 @@ public class ProjectCommand extends BaseCommand {
 		}
 		
 		try {
-			if (!new ProjectGenerator(this.adapterAndroid).removeProject()) {
-				ConsoleUtils.display(ERROR_MSG);
-			}
+			new ProjectGenerator(this.adapterAndroid).removeProject();
+			
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}

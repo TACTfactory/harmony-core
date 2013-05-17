@@ -21,9 +21,8 @@ public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean result = true;
 		
-		menu.clear();
-		
 		try {
+			${project_name?cap_first}Menu.getInstance(this).clear(menu);
 			${project_name?cap_first}Menu.getInstance(this).updateMenu(menu, 
 																		  this);
 		} catch (Exception e) {
