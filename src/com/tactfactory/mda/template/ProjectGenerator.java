@@ -262,9 +262,21 @@ public class ProjectGenerator extends BaseGenerator {
 			ConsoleUtils.displayError(e);
 		}
 	}
+	
+	/**
+	 * Initialize git project.
+	 */
+	private void initGitProject() {
+		final ArrayList<String> command = new ArrayList<String>();
+		File projectFolder = new File(Harmony.getProjectAndroidPath());
+		command.add("git");
+		command.add("init");
+		command.add(projectFolder.getAbsolutePath());
+		ConsoleUtils.launchCommand(command);
+	}
 
 	/**
-	 * @param pathSherlock
+	 * Install Android Sherlock Bar Library.
 	 */
 	private void installAndroidSherlockLib() {
 		//TODO test if git is install
@@ -340,6 +352,20 @@ public class ProjectGenerator extends BaseGenerator {
 			command.add(ApplicationMetadata.INSTANCE.getName() + "-abs");
 			ConsoleUtils.launchCommand(command);
 		}
+		
+		final File projectFolder = new File(Harmony.getProjectAndroidPath());
+		final ArrayList<String> command = new ArrayList<String>();
+		command.add("git");
+		command.add("submodule");
+		command.add("add");
+		// command depot
+		command.add("https://github.com/JakeWharton/ActionBarSherlock.git");
+		command.add(TactFileUtils.absoluteToRelativePath(
+				pathSherlock.getAbsolutePath(),
+				projectFolder.getAbsolutePath()));
+		ConsoleUtils.launchCommand(command, projectFolder.getAbsolutePath());
+			
+		
 	}
 
 	/**
@@ -351,6 +377,7 @@ public class ProjectGenerator extends BaseGenerator {
 		
 		this.createFolders();
 		this.makeSources();
+		this.initGitProject();
 		this.addLibs();
 		this.addBaseDrawables();
 		

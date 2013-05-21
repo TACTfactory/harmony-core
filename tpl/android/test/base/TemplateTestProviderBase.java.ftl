@@ -6,8 +6,10 @@ import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 
+<#if dataLoader?? && dataLoader>
 import ${fixture_namespace}.${curr.name?cap_first}DataLoader;
 import ${fixture_namespace}.DataLoader;
+</#if>
 
 import java.util.ArrayList;
 import ${curr.test_namespace}.utils.*;
@@ -37,7 +39,9 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	protected SQLiteDatabase db;
 	protected ${curr.name} entity;
 	protected ContentResolver provider;
+	<#if dataLoader?? && dataLoader>
 	protected DataLoader dataLoader;
+	</#if>
 
 	protected ArrayList<${curr.name}> entities;
 
@@ -54,19 +58,22 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
 		this.db.beginTransaction();
 		
+		<#if dataLoader?? && dataLoader>
 		this.dataLoader = new DataLoader(this.ctx);
 		this.dataLoader.clean();
 		this.dataLoader.loadData(this.db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
+		</#if>
 		
 		this.db.setTransactionSuccessful();
 		this.db.endTransaction();
 		this.adapter.close();		
 		
+		<#if dataLoader?? && dataLoader>
 		this.entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).items.values());
 		if (this.entities.size()>0) {
 			this.entity = this.entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}
-		
+		</#if>		
 		this.provider = this.getContext().getContentResolver();
 	}
 
@@ -79,7 +86,9 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		this.db = this.adapter.open();
 		this.db.beginTransaction();
 		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
+		<#if dataLoader?? && dataLoader>
 		this.dataLoader.clean();
+		</#if>
 		this.db.setTransactionSuccessful();
 		this.db.endTransaction();
 		this.adapter.close();

@@ -38,9 +38,9 @@ public class HomeActivity extends HarmonyFragmentActivity {
 			<#list entities?values as entity>
 				<#if (entity.fields?? && (entity.fields?size>0) && entity.internal!="true")>
 		// Create ${entity.name}
-		Button ${entity.name}CreateButton = new Button(this);
-		${entity.name}CreateButton.setText("${entity.name}CreateActivity");
-		${entity.name}CreateButton.setOnClickListener(new OnClickListener() {
+		Button ${entity.name?uncap_first}CreateButton = new Button(this);
+		${entity.name?uncap_first}CreateButton.setText("${entity.name}CreateActivity");
+		${entity.name?uncap_first}CreateButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent = 
@@ -49,12 +49,12 @@ public class HomeActivity extends HarmonyFragmentActivity {
 				HomeActivity.this.startActivity(intent);
 			}
 		});
-		homeLayout.addView(${entity.name}CreateButton);
+		homeLayout.addView(${entity.name?uncap_first}CreateButton);
 		
 		// List ${entity.name}
-		Button ${entity.name}ListButton = new Button(this);
-		${entity.name}ListButton.setText("${entity.name}ListActivity");
-		${entity.name}ListButton.setOnClickListener(new OnClickListener() {
+		Button ${entity.name?uncap_first}ListButton = new Button(this);
+		${entity.name?uncap_first}ListButton.setText("${entity.name}ListActivity");
+		${entity.name?uncap_first}ListButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				Intent intent =
@@ -63,7 +63,7 @@ public class HomeActivity extends HarmonyFragmentActivity {
 				HomeActivity.this.startActivity(intent);
 			}
 		});
-		homeLayout.addView(${entity.name}ListButton);
+		homeLayout.addView(${entity.name?uncap_first}ListButton);
 				</#if>
 			</#list>
 		</#if>

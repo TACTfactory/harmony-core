@@ -216,6 +216,8 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 		
 		result = adapt.cursorToItems(cursor);
 		
+		cursor.close();
+
 		return result;
 	}
 
