@@ -17,6 +17,7 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.ActivityGenerator;
 import com.tactfactory.mda.template.ApplicationGenerator;
 import com.tactfactory.mda.template.EntityGenerator;
+import com.tactfactory.mda.template.EnumCompletor;
 import com.tactfactory.mda.template.ProjectGenerator;
 import com.tactfactory.mda.template.ProviderGenerator;
 import com.tactfactory.mda.template.SQLiteAdapterGenerator;
@@ -99,6 +100,7 @@ public class OrmCommand extends BaseCommand {
 	 */
 	protected final void makeLayoutDatabase() {
 		try {
+			new EnumCompletor(this.adapter).generateAll();
 			new EntityGenerator(this.adapter).generateAll();
 			new ApplicationGenerator(this.adapter).generateApplication();
 			new SQLiteAdapterGenerator(this.adapter).generateAll();

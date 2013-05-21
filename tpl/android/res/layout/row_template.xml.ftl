@@ -8,7 +8,7 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:paddingTop="2.5dp" >
-	<#list curr.fields as field>
+	<#list curr.fields?values as field>
 		<#assign m_id="${curr.name?lower_case}_${field.name?lower_case}" />
 		<#assign m_id_label="${m_id}_label" />
 		<#if (!field.internal && !field.hidden)>	

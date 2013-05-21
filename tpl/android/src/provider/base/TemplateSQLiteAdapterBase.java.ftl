@@ -1,6 +1,26 @@
 <#assign curr = entities[current_entity] />
 <#assign sync = curr.options.sync?? />
 <#import "methods.ftl" as m />
+<#function getAllMothers tab entity>
+	<#if entity.mother??>
+		<#return (getAllMothers(tab, entities[entity.mother]) + [entity]) />
+	<#else>
+		<#return ([entity]) />		
+	</#if>
+</#function>
+<#function getCompleteNamespace entity>
+	<#assign result = "" />
+	<#assign motherClasses = getAllMothers([], entity) />
+	<#assign cond = true />
+	<#list motherClasses as motherClass>
+		<#assign result = result + motherClass.name />
+		<#if motherClass_has_next>
+			<#assign result = result + "." />
+		</#if>
+	</#list>
+	
+	<#return result>
+</#function>
 <#function alias name>
 	<#return "COL_" +name?upper_case />
 </#function>
@@ -23,7 +43,7 @@
 </#function>
 <#function getMappedField field>
 	<#assign ref_entity = entities[field.relation.targetEntity] />
-	<#list ref_entity.fields as ref_field>
+	<#list ref_entity.fields?values as ref_field>
 		<#if ref_field.name == field.relation.mappedBy>
 			<#return ref_field />
 		</#if>
@@ -32,7 +52,7 @@
 <#assign hasDateTime=false />
 <#assign hasTime=false />
 <#assign hasDate=false />
-<#list curr.fields as field>
+<#list curr.fields?values as field>
 	<#if field.harmony_type=="date">
 		<#assign hasDate=true />
 	<#elseif field.harmony_type=="time">
@@ -63,6 +83,12 @@ import ${curr.namespace}.entity.${curr.name};
 			<#assign import_array = import_array + [relation.relation.targetEntity] />
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
 		</#if>
+	</#if>
+</#list>
+<#list curr.fields?values as field>
+	<#if field.harmony_type?lower_case == "enum">
+		<#assign enumClass = enums[field.type] />
+import ${entity_namespace}.${getCompleteNamespace(enumClass)};
 	</#if>
 </#list>
 <#if hasDate || hasTime || hasDateTime>
@@ -98,7 +124,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	/** Columns constants fields mapping.
 	 * 
 	 */
-<#list curr.fields as field>
+<#list curr.fields?values as field>
 	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 	/** ${field.columnName}. */
 	public static final String ${alias(field.name)} = 
@@ -112,7 +138,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	/** Global Fields. */
 	public static final String[] COLS = new String[] {
 <#assign firstFieldDone=false />
-<#list curr.fields as field>
+<#list curr.fields?values as field>
 	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 <#if (firstFieldDone)>,</#if>
 		${alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
@@ -141,7 +167,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	public static String getSchema() {
 		return "CREATE TABLE "
 		+ TABLE_NAME	+ " ("
-<#list curr.fields as field>
+<#list curr.fields?values as field>
 	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 		<#if (lastLine??)>${lastLine},"</#if>
 		<#assign lastLine=" + " + alias(field.name) + "	+ \"" + field.schema />
@@ -185,7 +211,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	public ContentValues itemToContentValues(final ${curr.name} item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 
 				int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
 		final ContentValues result = new ContentValues();		
-	<#list curr.fields as field>
+	<#list curr.fields?values as field>
 		<#if (!field.internal)>
 			<#if (!field.relation??)>
 		result.put(${alias(field.name)}, 			
@@ -221,7 +247,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			result = new ${curr.name}();
 			
 			int index;
-	<#list curr.fields as field>
+	<#list curr.fields?values as field>
 		<#if (!field.internal && !(field.relation?? && (field.relation.type=="ManyToMany" || field.relation.type=="OneToMany")))>
 			<#assign t="" />
 			index = cursor.getColumnIndexOrThrow(${alias(field.name)});
@@ -276,16 +302,24 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				<#elseif (field.type?lower_case == "byte")>
 			${t}result.set${field.name?cap_first}(Byte.valueOf(
 					cursor.getString(index)));
-				<#elseif (field.type?lower_case=="string")>
+				<#elseif (field.type?lower_case == "string")>
 			${t}result.set${field.name?cap_first}(
 					cursor.getString(index)); 
-				<#else>
-					<#if field.columnDefinition?lower_case=="integer" || field.columnDefinition?lower_case=="int">
+				<#elseif (field.harmony_type?lower_case == "enum")>
+					<#assign enumType = enums[field.type] />
+					<#if enumType.id??> <#-- If an Id has been declared in the enum -->
+						<#assign idEnum = enumType.fields[enumType.id] />
+						<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
 			${t}result.set${field.name?cap_first}(
-				${curr.name}.${field.type}.fromValue(cursor.getInt(index))); 
-					<#else>
+				${field.type}.fromValue(cursor.getInt(index))); 
+						<#else>
 			${t}result.set${field.name?cap_first}(
-				${curr.name}.${field.type}.fromValue(cursor.getString(index))); 
+				${field.type}.fromValue(cursor.getString(index))); 
+						</#if>
+					<#else> <#-- If not, use the enum name -->
+			${t}result.set${field.name?cap_first}(
+				${field.type}.valueOf(cursor.getString(index))); 	
+
 					</#if>
 				</#if>
 			<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
