@@ -92,13 +92,7 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDateTime());
 						</#if>
 					<#elseif (field.harmony_type?lower_case == "enum")>
-						<#assign enumType = enums[field.type] />
-						<#assign idEnum = enumType.fields[enumType.id] />
-						<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
-		${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(TestUtils.generateRandomInt(0,100)));
-						<#else>
-		${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(TestUtils.generateRandomString(10)));		
-						</#if>
+		${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.values()[TestUtils.generateRandomInt(0,${field.type}.values().length)]);
 					</#if>
 				<#else>
 		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = 

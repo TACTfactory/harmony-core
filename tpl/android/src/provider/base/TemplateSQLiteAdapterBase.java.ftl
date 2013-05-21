@@ -307,13 +307,19 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					cursor.getString(index)); 
 				<#elseif (field.harmony_type?lower_case == "enum")>
 					<#assign enumType = enums[field.type] />
-					<#assign idEnum = enumType.fields[enumType.id] />
-					<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
+					<#if enumType.id??> <#-- If an Id has been declared in the enum -->
+						<#assign idEnum = enumType.fields[enumType.id] />
+						<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
 			${t}result.set${field.name?cap_first}(
 				${field.type}.fromValue(cursor.getInt(index))); 
-					<#else>
+						<#else>
 			${t}result.set${field.name?cap_first}(
 				${field.type}.fromValue(cursor.getString(index))); 
+						</#if>
+					<#else> <#-- If not, use the enum name -->
+			${t}result.set${field.name?cap_first}(
+				${field.type}.valueOf(cursor.getString(index))); 	
+
 					</#if>
 				</#if>
 			<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>

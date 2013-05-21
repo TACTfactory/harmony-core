@@ -11,7 +11,11 @@
 		<#elseif (type?lower_case == "int" || type?lower_case == "integer" ||  type?lower_case=="ean" || type?lower_case=="zipcode" || type?lower_case=="float" || type?lower_case == "double" || type?lower_case == "long" || type?lower_case == "char" || type?lower_case == "byte" || type?lower_case == "short" || type?lower_case == "character")>
 			<#assign ret=ret+"String.valueOf("+getter+")" /> 
 		<#elseif (field.harmony_type?lower_case == "enum")>
-			<#assign ret=ret+getter+".getValue()" /> 
+			<#if (enums[field.type].id??)>
+				<#assign ret=ret+getter+".getValue()" /> 
+			<#else>
+				<#assign ret=ret+getter+".name()" /> 
+			</#if>
 		</#if>
 		<#assign ret=ret+");" />
 	</#if>
@@ -41,7 +45,11 @@
 		<#elseif  (type?lower_case == "int" || type?lower_case == "integer" || type?lower_case=="ean" || type?lower_case=="zipcode" || type?lower_case=="float" || type?lower_case == "double" || type?lower_case == "long" || type?lower_case == "char" || type?lower_case == "byte" || type?lower_case == "short" || type?lower_case == "character")>
 			<#assign ret=ret+"String.valueOf("+getter+")" />
 		<#elseif (field.harmony_type?lower_case == "enum")>
-			<#assign ret = ret + getter + ".getValue()" /> 
+			<#if (enums[field.type].id??)>
+				<#assign ret=ret+getter+".getValue()" /> 
+			<#else>
+				<#assign ret=ret+getter+".name()" /> 
+			</#if>
 		</#if>
 		<#assign ret=ret+");" /> 
 	</#if>
@@ -85,11 +93,15 @@
 			<#assign ret=ret+getter+".charAt(0)" />
 		<#elseif (field.harmony_type?lower_case == "enum")>
 			<#assign enumType = enums[field.type] />
-			<#assign idEnum = enumType.fields[enumType.id] />
-			<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
-				<#assign ret=ret+field.type+".fromValue(Integer.parseInt("+getter+"))" />
+			<#if (enumType.id??)>
+				<#assign idEnum = enumType.fields[enumType.id] />
+				<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
+					<#assign ret=ret+field.type+".fromValue(Integer.parseInt("+getter+"))" />
+				<#else>
+					<#assign ret=ret+field.type+".fromValue("+getter+")" />
+				</#if>
 			<#else>
-				<#assign ret=ret+field.type+".fromValue("+getter+")" />
+		<#assign ret=ret+field.type+".valueOf("+getter+")" />
 			</#if>
 		</#if>
 		<#assign ret=ret+");" />
