@@ -4,6 +4,7 @@
 package com.tactfactory.mda.template;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,7 +28,7 @@ public class ProjectGenerator extends BaseGenerator {
 	 */
 	public ProjectGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
-
+		
 		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 	}
 
@@ -65,14 +66,11 @@ public class ProjectGenerator extends BaseGenerator {
 		if (removeResult == 0) {
 			result = true;
 			
-			ConsoleUtils.displayDebug(
+			ConsoleUtils.display(
 					"Project " + this.getAdapter().getPlatform() + " removed!");
 		} else {
-			ConsoleUtils.displayError(
-					new Exception("Remove Project "
-							+ this.getAdapter().getPlatform() 
-							+ " return " + removeResult 
-							+ " errors...\n"));
+			ConsoleUtils.display(
+					"An error has occured while deleting the project.");
 		}
 		return result;
 	}
@@ -210,6 +208,62 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 
 	/**
+	 * Add base drawables.
+	 */
+	private void addBaseDrawables() {
+		String resourcePath = String.format("%s",
+				this.getAdapter().getRessourcePath());
+		String templateResourcePath =  String.format("%s/%s/%s",
+				Harmony.getBundlePath(),
+				"tact-core",
+				this.getAdapter().getTemplateRessourcePath());
+		
+		try {
+			TactFileUtils.copyDirectory(
+					new File(String.format("%s/%s/", 
+							templateResourcePath,
+							"drawable-hdpi")),
+					new File(String.format("%s/%s/",
+							resourcePath,
+							"drawable-hdpi")));
+			
+			TactFileUtils.copyDirectory(
+					new File(String.format("%s/%s/", 
+							templateResourcePath,
+							"drawable-mdpi")),
+					new File(String.format("%s/%s/",
+							resourcePath,
+							"drawable-mdpi")));
+			
+			TactFileUtils.copyDirectory(
+					new File(String.format("%s/%s/", 
+							templateResourcePath,
+							"drawable-ldpi")),
+					new File(String.format("%s/%s/",
+							resourcePath,
+							"drawable-ldpi")));
+			
+			TactFileUtils.copyDirectory(
+					new File(String.format("%s/%s/", 
+							templateResourcePath,
+							"drawable-xhdpi")),
+					new File(String.format("%s/%s/",
+							resourcePath,
+							"drawable-xhdpi")));
+			
+			TactFileUtils.copyDirectory(
+					new File(String.format("%s/%s/", 
+							templateResourcePath,
+							"drawable-xxhdpi")),
+					new File(String.format("%s/%s/",
+							resourcePath,
+							"drawable-xxhdpi")));
+		} catch (IOException e) {
+			ConsoleUtils.displayError(e);
+		}
+	}
+
+	/**
 	 * @param pathSherlock
 	 */
 	private void installAndroidSherlockLib() {
@@ -298,7 +352,8 @@ public class ProjectGenerator extends BaseGenerator {
 		this.createFolders();
 		this.makeSources();
 		this.addLibs();
-
+		this.addBaseDrawables();
+		
 		// copy utils
 		this.updateUtil("DateUtils.java");
 

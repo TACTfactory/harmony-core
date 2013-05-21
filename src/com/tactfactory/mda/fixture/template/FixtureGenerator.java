@@ -215,8 +215,15 @@ public class FixtureGenerator extends BaseGenerator {
 				this.getAdapter().getTemplateSourceFixturePath()
 				+ templateName;
 		super.makeSource(fullTemplatePath, fullFilePath, override);
-		
+
 		fullFilePath = "fixtures/test/" + fileName;
+		fullTemplatePath =
+				this.getAdapter().getTemplateSourceFixturePath()
+				+ templateName;
+		super.makeSource(fullTemplatePath, fullFilePath, override);
+		
+
+		fullFilePath = "fixtures/debug/" + fileName;
 		fullTemplatePath =
 				this.getAdapter().getTemplateSourceFixturePath()
 				+ templateName;

@@ -164,7 +164,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * 
 	 * @return "SQL query : CREATE TABLE..."
 	 */
-	public static final String getSchema() {
+	public static String getSchema() {
 		return "CREATE TABLE "
 		+ TABLE_NAME	+ " ("
 <#list curr.fields?values as field>

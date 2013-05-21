@@ -76,7 +76,17 @@ public class ClassCompletor {
 				for (int i = 0; i < ids.size(); i++) {
 					rel.getFieldRef().add(ids.get(i).getName());
 				}
-				fm.setColumnDefinition(ids.get(0).getType());
+				if (!ids.isEmpty()) {
+					fm.setColumnDefinition(ids.get(0).getType());
+				} else {
+					ConsoleUtils.displayError(new Exception(
+							"Error while updating relations : "
+							+ " Your entity " + cm.getName() 
+							+ " refers the entity " + cmRef.getName()
+							+ " which has no ID defined."
+							+ " Please add the @Id annotation to one of the fields of " + cmRef.getName()));
+					System.exit(-1);
+				}
 				
 			}
 			
