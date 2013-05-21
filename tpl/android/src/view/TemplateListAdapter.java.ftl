@@ -19,7 +19,7 @@ import android.widget.TextView;
 
 
 <#assign importDate=false />
-<#list curr.fields as field>
+<#list curr.fields?values as field>
 	<#if !field.internal && !field.hidden>
 		<#if (!importDate && field.type?lower_case=="datetime")>
 			<#assign importDate=true />
@@ -88,7 +88,7 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 					false);
 
 			holder = new ViewHolder();
-			<#list curr.fields as field>
+			<#list curr.fields?values as field>
 				<#if (!field.internal && !field.hidden)>
 					<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>  
 						<#if (field.type=="boolean")>
@@ -132,7 +132,7 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 
 	/** Holder row. */
 	private static class ViewHolder {
-		<#list curr.fields as field>
+		<#list curr.fields?values as field>
 			<#if (!field.hidden && !field.internal)>
 				<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>  
 					<#if (field.type=="boolean")>
@@ -151,7 +151,7 @@ public class ${curr.name}ListAdapter extends ArrayAdapter<${curr.name}>
 		 * @param model ${curr.name} data
 		 */
 		public void populate(final ${curr.name} model) {
-			<#list curr.fields as field>
+			<#list curr.fields?values as field>
 				<#if (!field.internal && !field.hidden)>
 					<#if (!field.relation??)>
 						<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
