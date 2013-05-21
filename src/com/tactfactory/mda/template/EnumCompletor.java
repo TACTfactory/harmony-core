@@ -6,6 +6,7 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.meta.EnumMetadata;
 import com.tactfactory.mda.meta.FieldMetadata;
@@ -57,7 +58,7 @@ public class EnumCompletor extends BaseGenerator{
 			if (enumMeta.getIdName() != null) {
 				final String filepath = String.format("%s/%s",
 						this.entityFolder,
-						String.format("%s.java", enumMeta.getName()));
+						String.format("%s.java", this.getOldestMother(enumMeta).getName()));
 				
 				ConsoleUtils.display(">>> Decorate " + enumMeta.getName());
 				
@@ -141,6 +142,11 @@ public class EnumCompletor extends BaseGenerator{
 		return ret;
 	}
 	
+	/**
+	 * Calculate the indentation level of an EnumMetadata.
+	 * @param enumMeta The EnumMetadata
+	 * @return N "\t" appended in a String to get the correct indentation.
+	 */
 	protected final String calculateIndentLevel(EnumMetadata enumMeta) {
 		String result = "";
 		
@@ -151,15 +157,38 @@ public class EnumCompletor extends BaseGenerator{
 		return result;
 	}
 	
-	protected final int nbMotherClass(EnumMetadata enumMeta) {
+	/**
+	 * Get the number of classes above the given class.
+	 * @param classMeta The class
+	 * @return The number of mother classes
+	 */
+	protected final int nbMotherClass(ClassMetadata classMeta) {
 		int result = 1;
-		if (enumMeta.getMotherClass() != null) {
+		if (classMeta.getMotherClass() != null) {
 			return result + this.nbMotherClass(
-					this.getAppMetas().getEnums().get(
-							enumMeta.getMotherClass()));
+					this.getAppMetas().getClasses().get(
+							classMeta.getMotherClass()));
 		} else {
 			return result;
 		}
+	}
+	
+	/** Recursively get the oldest mother of the given ClassMetadata.
+	 * 
+	 * @param classMeta The class metadata
+	 * @return The oldest mother
+	 */
+	protected ClassMetadata getOldestMother(ClassMetadata classMeta) {
+		ClassMetadata result;
+		if (classMeta.getMotherClass() != null) {
+			result = getOldestMother(
+					this.getAppMetas().getClasses().get(
+							classMeta.getMotherClass()));
+		} else {
+			result = classMeta;
+		}
+		
+		return result;
 	}
 	
 	/**
@@ -171,7 +200,8 @@ public class EnumCompletor extends BaseGenerator{
 	protected final void generateMethod(final StringBuffer fileString, 
 			final EnumMetadata enumMeta, 
 			final String templateName) {
-		final int lastAccolade = fileString.lastIndexOf("}");
+		final int insertionIndex = this.getEnumClosingBracketIndex(fileString,
+				enumMeta);
 		
 		final Map<String, Object> map = this.getAppMetas().toMap(this.getAdapter());
 		map.put("indentLevel", this.calculateIndentLevel(enumMeta));
@@ -190,12 +220,58 @@ public class EnumCompletor extends BaseGenerator{
 			
 			tpl.process(map, writer);
 			final StringBuffer getString = writer.getBuffer();
-			fileString.insert(lastAccolade, getString + "\n\n");
+			fileString.insert(insertionIndex, getString + "\n\n");
 			
 		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);
 		} catch (final TemplateException e) {
 			ConsoleUtils.displayError(e);
 		}		
+	}
+	
+	/**
+	 * Get declaration closing bracket of the given EnumMetadata in the given text.
+	 * @param text The text to search in.
+	 * @param enumMeta The enum metadata
+	 * @return The index of the closing bracket in text.
+	 */
+	protected int getEnumClosingBracketIndex(final StringBuffer text,
+			EnumMetadata enumMeta) {
+		
+		int openingBracketIndex;
+		int enumDeclarationIndex = text.indexOf("enum " + enumMeta.getName()); 
+		
+		openingBracketIndex = text.indexOf("{", enumDeclarationIndex);
+		
+		return this.getClosingBracketIndex(text, openingBracketIndex);
+	}
+	
+	/**
+	 * Get closing bracket corresponding to the opening bracket.
+	 * @param text The text to search in.
+	 * @param openingBracketIndex The opening bracket index
+	 * @return The index of the closing bracket in text.
+	 */
+	protected int getClosingBracketIndex(
+			final StringBuffer text, 
+			int openingBracketIndex) {
+		int result = -1;
+		
+		int openedBlockCount = 0;
+		
+		for (int i = openingBracketIndex; i < text.length(); i++) {
+			if (text.charAt(i) == '{') {
+				openedBlockCount++;
+			} else if (text.charAt(i) == '}') {
+				openedBlockCount--;
+			}
+			
+			if (openedBlockCount == 0) {
+				result = i;
+				break;
+			}
+		}
+		
+		return result;
 	}
 }
