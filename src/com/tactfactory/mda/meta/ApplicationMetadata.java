@@ -142,32 +142,33 @@ public final class ApplicationMetadata extends BaseMetadata {
 		
 		// Add root
 		ret.put(TagConstant.PROJECT_NAME, 		this.getName());
-		ret.put(TagConstant.PROJECT_PATH, 		this.projectNameSpace);
-		ret.put(TagConstant.PROJECT_NAMESPACE, 	
-				this.projectNameSpace.replaceAll(
-						PATH_DELIMITER, 
-						PACKAGE_DELIMITER));
-		ret.put(TagConstant.ENTITY_NAMESPACE, 	
-				this.projectNameSpace.replaceAll(
-						PATH_DELIMITER, 
-						PACKAGE_DELIMITER) + "." + adapt.getModel());
-		ret.put(TagConstant.TEST_NAMESPACE, 	
-				this.projectNameSpace.replaceAll(
-						PATH_DELIMITER, 
-						PACKAGE_DELIMITER) + "." + adapt.getTest());
-		ret.put(TagConstant.DATA_NAMESPACE, 	
-				this.projectNameSpace.replaceAll(
-						PATH_DELIMITER,
-						PACKAGE_DELIMITER) + "." + adapt.getData());
-		ret.put(TagConstant.SERVICE_NAMESPACE, 	
-				this.projectNameSpace.replaceAll(
-						PATH_DELIMITER, 
-						PACKAGE_DELIMITER) + "." + adapt.getService());
-		ret.put(TagConstant.FIXTURE_NAMESPACE, 	
-				this.projectNameSpace.replaceAll(
-						PATH_DELIMITER, 
-						PACKAGE_DELIMITER) + "." + adapt.getFixture());
-
+		if (this.projectNameSpace != null) {
+			ret.put(TagConstant.PROJECT_PATH, 		this.projectNameSpace);
+			ret.put(TagConstant.PROJECT_NAMESPACE, 	
+					this.projectNameSpace.replaceAll(
+							PATH_DELIMITER, 
+							PACKAGE_DELIMITER));
+			ret.put(TagConstant.ENTITY_NAMESPACE, 	
+					this.projectNameSpace.replaceAll(
+							PATH_DELIMITER, 
+							PACKAGE_DELIMITER) + "." + adapt.getModel());
+			ret.put(TagConstant.TEST_NAMESPACE, 	
+					this.projectNameSpace.replaceAll(
+							PATH_DELIMITER, 
+							PACKAGE_DELIMITER) + "." + adapt.getTest());
+			ret.put(TagConstant.DATA_NAMESPACE, 	
+					this.projectNameSpace.replaceAll(
+							PATH_DELIMITER,
+							PACKAGE_DELIMITER) + "." + adapt.getData());
+			ret.put(TagConstant.SERVICE_NAMESPACE, 	
+					this.projectNameSpace.replaceAll(
+							PATH_DELIMITER, 
+							PACKAGE_DELIMITER) + "." + adapt.getService());
+			ret.put(TagConstant.FIXTURE_NAMESPACE, 	
+					this.projectNameSpace.replaceAll(
+							PATH_DELIMITER, 
+							PACKAGE_DELIMITER) + "." + adapt.getFixture());
+		}
 		ret.put(TagConstant.ENTITIES, 			entitiesMap);
 		
 		ret.put(TagConstant.ANDROID_SDK_DIR,

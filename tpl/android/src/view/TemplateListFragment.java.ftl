@@ -39,15 +39,6 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	implements DeletableList {
 
 	/**
-	 * Recall internal address (Hack Micky).
-	 */
-	protected static final int INTERNAL_EMPTY_ID = 0x00ff0001;
-	/** progress container ID. */
-	protected static final int INTERNAL_PROGRESS_CONTAINER_ID = 0x00ff0002;
-	/** list container ID. */
-	protected static final int INTERNAL_LIST_CONTAINER_ID = 0x00ff0003;
-
-	/**
 	 * The adapter which handles list population.
 	 */
 	protected ${curr.name}ListAdapter mAdapter;
@@ -67,7 +58,9 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 				inflater.inflate(R.layout.fragment_${curr.name?lower_case}_list, 
 						null);
 
-		this.initializeHackCustomList(view);
+		this.initializeHackCustomList(view,
+				R.id.${curr.name?lower_case}ProgressLayout,
+				R.id.${curr.name?lower_case}ListContainer);
 
 		return view;
 	}
@@ -157,30 +150,6 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		this.mAdapter.setData(null);
 	}
 
-	/** Initialize Custom List Fragment.
-	 * 
-	 * @param rootView
-	 */
-	private void initializeHackCustomList(final View rootView) {
-		// HACK Micky : Map component support ListFragment
-		// Progress
-		final LinearLayout progressLayout = 
-				(LinearLayout) rootView.findViewById(
-						R.id.${curr.name?lower_case}ProgressLayout);
-		progressLayout.setId(INTERNAL_PROGRESS_CONTAINER_ID);
-
-		// Empty
-		final TextView emptyText = 
-				(TextView) rootView.findViewById(android.R.id.empty);
-		emptyText.setId(INTERNAL_EMPTY_ID);
-
-		// ListContainer
-		final RelativeLayout listContainer = 
-				(RelativeLayout) rootView.findViewById(
-						R.id.${curr.name?lower_case}ListContainer);
-		listContainer.setId(INTERNAL_LIST_CONTAINER_ID);
-		// END HACK
-	}
 
 	/**
 	 * Calls the ${curr.name}EditActivity. 
