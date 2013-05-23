@@ -406,7 +406,10 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if (field.type?lower_case == "datetime")>
-					<#if field.harmony_type=="date" || field.harmony_type=="datetime">
+					<#if field.harmony_type=="datetime">
+		if (!TextUtils.isEmpty(this.${field.name}DateView.getEditableText()) 
+			&& !TextUtils.isEmpty(this.${field.name}TimeView.getEditableText())) {
+					<#elseif field.harmony_type=="date">
 		if (!TextUtils.isEmpty(this.${field.name}DateView.getEditableText())) {
 					<#elseif field.harmony_type=="time" || field.harmony_type=="datetime">
 		if (!TextUtils.isEmpty(this.${field.name}TimeView.getEditableText())) {
