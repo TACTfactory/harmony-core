@@ -6,6 +6,7 @@ import ${curr.namespace}.R;
 
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import ${project_namespace}.harmony.view.HarmonyFragment;
+import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
 
 import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 
@@ -55,6 +56,7 @@ import ${curr.namespace}.harmony.widget.CustomTimePickerDialog;
 	
 import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
+import ${curr.namespace}.harmony.widget.ValidationButtons;
 import ${curr.namespace}.entity.${curr.name};
 <#assign mustImportArrayList=false />
 <#assign mustImportList=false />
@@ -91,7 +93,7 @@ import java.util.List;
  * @see android.app.Fragment
  */
 public class ${curr.name}CreateFragment extends HarmonyFragment 
-									implements OnClickListener {
+			implements OnClickListener, OnValidationListener {
 	/** Model data. */
 	protected ${curr.name} model = new ${curr.name}();
 
@@ -125,7 +127,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		</#if>
 	</#list>
 	/** Save button. */
-	protected Button saveButton;
+	protected ValidationButtons validationButtons;
 
 	/** Initialize view of fields. 
 	 * 
@@ -243,9 +245,9 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			</#if>
 		</#list>
 		
-		this.saveButton = 
-			(Button) view.findViewById(R.id.${curr.name?lower_case}_btn_save);
-		this.saveButton.setOnClickListener(this);
+		this.validationButtons = 
+			(ValidationButtons) view.findViewById(R.id.${curr.name?lower_case}_validation);
+		this.validationButtons.setListener(this);
 	}
 	
 	<#list curr.relations as relation>
@@ -561,5 +563,16 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 
 			this.progress.dismiss();
 		}
+	}
+
+	public void onValidationSelected() {
+		if (this.validateData()) {
+			this.saveData();
+			new CreateTask(this, this.model).execute();
+		}
+	}
+
+	public void onCancelSelected() {
+		this.getActivity().finish();
 	}
 }
