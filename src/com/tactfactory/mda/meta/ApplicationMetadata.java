@@ -197,7 +197,9 @@ public final class ApplicationMetadata extends BaseMetadata {
 			
 			if (cm instanceof EntityMetadata) {
 				entitiesMap.put(cm.getName(), cm.toMap(adapt));
-				((EntityMetadata) cm).makeString("label");
+				if (!((EntityMetadata) cm).isInternal()) {
+					((EntityMetadata) cm).makeString("label");
+				}
 			} else
 				
 			if (cm instanceof EnumMetadata) {

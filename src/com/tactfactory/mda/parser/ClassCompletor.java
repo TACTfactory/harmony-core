@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.meta.RelationMetadata;
@@ -47,6 +48,7 @@ public class ClassCompletor {
 		
 		for (final EntityMetadata cm : this.newMetas.values()) {
 			this.metas.put(cm.getName(), cm);
+			ApplicationMetadata.INSTANCE.getClasses().put(cm.getName(), cm);
 		}
 	}
 	
@@ -109,10 +111,11 @@ public class ClassCompletor {
 					newField.setHidden(true);
 					newField.setNullable(fm.isNullable());
 					newField.setInternal(true);
-					newField.setName(cm.getName() + fm.getName() + "_Internal");
+					newField.setName(cm.getName() + fm.getName() + "Internal");
 					newField.setColumnName(
 							cm.getName() + "_" + fm.getName() + "_internal");
 					newField.setType(cm.getName());
+					newField.setHarmonyType("integer");
 					newField.setRelation(new RelationMetadata());
 					newField.getRelation().setEntityRef(cm.getName());
 					for (final FieldMetadata id : cm.getIds().values()) {
@@ -164,6 +167,7 @@ public class ClassCompletor {
 					final FieldMetadata id = new FieldMetadata(classMeta);
 						id.setColumnDefinition("integer");
 						id.setType("integer");
+						id.setHarmonyType("integer");
 						id.setName("id");
 						id.setColumnName(id.getName());
 						id.setId(true);
@@ -227,6 +231,7 @@ public class ClassCompletor {
 		final FieldMetadata id = new FieldMetadata(owner);
 		id.setColumnDefinition("integer");
 		id.setType("integer");
+		id.setHarmonyType("integer");
 		id.setName(name.toLowerCase() + "_id");
 		id.setColumnName(id.getName());
 		return id;

@@ -247,7 +247,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 			ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
 			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID,
 					${relation.relation.targetEntity?uncap_first}.getId());
-			userValues.put(${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID,
+			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID,
 					item.getId());
 			
 			prov.insert(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI,
