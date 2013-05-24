@@ -12,7 +12,7 @@
 			<#assign ret=ret+"String.valueOf("+getter+")" /> 
 		<#elseif (field.harmony_type?lower_case == "enum")>
 			<#if (enums[field.type].id??)>
-				<#assign ret=ret+getter+".getValue()" /> 
+				<#assign ret=ret+"String.valueOf("+getter+".getValue())" /> 
 			<#else>
 				<#assign ret=ret+getter+".name()" /> 
 			</#if>
@@ -46,7 +46,7 @@
 			<#assign ret=ret+"String.valueOf("+getter+")" />
 		<#elseif (field.harmony_type?lower_case == "enum")>
 			<#if (enums[field.type].id??)>
-				<#assign ret=ret+getter+".getValue()" /> 
+				<#assign ret=ret+"String.valueOf("+getter+".getValue())" /> 
 			<#else>
 				<#assign ret=ret+getter+".name()" /> 
 			</#if>
@@ -101,7 +101,7 @@
 					<#assign ret=ret+field.type+".fromValue("+getter+")" />
 				</#if>
 			<#else>
-		<#assign ret=ret+field.type+".valueOf("+getter+")" />
+				<#assign ret=ret+field.type+".valueOf("+getter+")" />
 			</#if>
 		</#if>
 		<#assign ret=ret+");" />

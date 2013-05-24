@@ -1,3 +1,23 @@
+<#function getAllMothers tab entity>
+	<#if entity.mother??>
+		<#return (getAllMothers(tab, entities[entity.mother]) + [entity]) />
+	<#else>
+		<#return ([entity]) />		
+	</#if>
+</#function>
+<#function getCompleteNamespace entity>
+	<#assign result = "" />
+	<#assign motherClasses = getAllMothers([], entity) />
+	<#assign cond = true />
+	<#list motherClasses as motherClass>
+		<#assign result = result + motherClass.name />
+		<#if motherClass_has_next>
+			<#assign result = result + "." />
+		</#if>
+	</#list>
+	
+	<#return result>
+</#function>
 <#function getInversingField field>
 	<#assign entityT = entities[field.relation.targetEntity] />
 	<#list entityT.relations as f>
@@ -59,6 +79,13 @@ import java.util.Date;
 import org.joda.time.DateTime;
 	</#if>
 import java.util.Map;
+
+<#list curr.fields?values as field>
+	<#if field.harmony_type?lower_case == "enum">
+		<#assign enumClass = enums[field.type] />
+import ${entity_namespace}.${getCompleteNamespace(enumClass)};
+	</#if>
+</#list>
 
 </#if>
 
@@ -254,12 +281,17 @@ public class ${curr.name?cap_first}DataLoader
 					(String) columns.get("${field.name?uncap_first}"));
 					<#elseif (field.harmony_type == "enum")>
 						<#assign enumType = enums[field.type] />
-						<#assign idEnum = enumType.fields[enumType.id] />
-						<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
+						<#if (enumType.id??)>
+							<#assign idEnum = enumType.fields[enumType.id] />
+							<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
 			${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(
 					(Integer) columns.get("${field.name?uncap_first}")));
-						<#else>
+							<#else>
 			${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(
+					(String) columns.get("${field.name?uncap_first}")));
+							</#if>
+						<#else>
+			${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.valueOf(
 					(String) columns.get("${field.name?uncap_first}")));
 						</#if>
 					</#if>
