@@ -67,7 +67,7 @@ import ${curr.namespace}.entity.${curr.name};
 		<#if (!m.isInArray(import_array, relation.relation.targetEntity))>
 			<#assign import_array = import_array + [relation.relation.targetEntity] />
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
-import ${project_namespace}.provider.${relation.relation.targetEntity?cap_first}ProviderAdapter;
+import ${project_namespace}.provider.utils.${relation.relation.targetEntity?cap_first}ProviderUtils;
 			<#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
 				<#assign mustImportArrayList=true />
 			</#if>
@@ -358,10 +358,6 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 
 	/** Load data from model to curr.fields view. */
 	public void loadData() {
-		<#if (import_array?size > 0)>
-		ContentResolver prov = this.getActivity().getContentResolver();
-		</#if>
-
 		<#list curr.fields?values as field>						
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
@@ -386,16 +382,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		${m.setLoader(field)}
 				</#if>
 			<#else>
-		Bundle ${field.name}ResultBundle = 
-				prov.call(${field.relation.targetEntity}ProviderAdapter.
-								${field.relation.targetEntity?upper_case}_URI,
-				${field.relation.targetEntity}ProviderAdapter.METHOD_QUERY_${field.relation.targetEntity?upper_case},
-				null,
-				null);
-		
-		this.${field.name}List = 
-				(List<${field.relation.targetEntity}>) ${field.name}ResultBundle
-				.getSerializable(${field.relation.targetEntity}ProviderAdapter.ITEM_KEY);
+		this.${field.name}List = ${field.relation.targetEntity}ProviderUtils.queryAll(this.getActivity());
 		init${field.name?cap_first}Dialog(this.${field.name}List);
 			</#if>
 		</#if>

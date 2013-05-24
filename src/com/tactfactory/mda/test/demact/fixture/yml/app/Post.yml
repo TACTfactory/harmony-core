@@ -3,7 +3,8 @@ Post:
       id: 0
       title: "Post 1"
       content: "Je dirais meme plus..."
-      categories: "Radotage"
+      categories: 
+         category: HiTech
       owner: Dupond
       comments: 
          comment : Comment1
@@ -14,7 +15,8 @@ Post:
       id: 0
       title: "Post 2"
       content: "Bachibouzouk"
-      categories: "Insulte"
+      categories: 
+         category: HiTech
       owner: Haddock
       comments: 
          comment : Comment2
@@ -25,7 +27,8 @@ Post:
       id: 0
       title: "Post 3"
       content: "Mais oui, c'est un gymnote..."
-      categories: "Fait scientifique"
+      categories: 
+         category: HiTech
       owner: Tournesol
       comments: 
          comment : Comment3

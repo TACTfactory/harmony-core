@@ -7,6 +7,7 @@ User:
       password: DEBUG - password
       createdAt: 2001-12-15 2:59:43.10
       birthdate: 2001-12-15 2:59:43.10
+      userGroup: User
    DEBUG - Haddock:
       id: 1
       firstname: DEBUG - Haddock
@@ -15,6 +16,7 @@ User:
       password: DEBUG - password
       createdAt: 2001-12-15 2:59:43.10
       birthdate: 2001-12-15 2:59:43.10
+      userGroup: User
    DEBUG - Tournesol:
       id: 2
       firstname: DEBUG - Tournesol
@@ -23,3 +25,4 @@ User:
       password: DEBUG - password
       createdAt: 2001-12-15 2:59:43.10
       birthdate: 2001-12-15 2:59:43.10
+      userGroup: User
