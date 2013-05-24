@@ -93,7 +93,7 @@ import java.util.List;
  * @see android.app.Fragment
  */
 public class ${curr.name}CreateFragment extends HarmonyFragment 
-			implements OnClickListener, OnValidationListener {
+			implements OnValidationListener {
 	/** Model data. */
 	protected ${curr.name} model = new ${curr.name}();
 
@@ -471,17 +471,6 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		return view;
 	}
 
-	/** 
-	 * @see android.view.View.OnClickListener#onClick(android.view.View).
-	 */
-	@Override
-	public void onClick(View v) {
-		if (this.validateData()) {
-			this.saveData();
-			new CreateTask(this, this.model).execute();
-		}
-	}
-	
 	/**
 	 * This class will save the entity into the DB.
 	 * It runs asynchronously and shows a progressDialog
