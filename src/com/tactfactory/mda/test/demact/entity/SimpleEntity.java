@@ -8,7 +8,7 @@
  */
 package com.tactfactory.mda.test.demact.entity;
 
-import com.tactfactory.mda.annotation.Column;
+import java.io.Serializable;import com.tactfactory.mda.annotation.Column;
 import com.tactfactory.mda.annotation.Column.Type;
 import com.tactfactory.mda.annotation.Entity;
 import com.tactfactory.mda.annotation.GeneratedValue;
@@ -18,9 +18,24 @@ import com.tactfactory.mda.annotation.Id;
  * (For test purposes only)
  */
 @Entity
-public class SimpleEntity {
+public class SimpleEntity implements Serializable {
 	@Id
     @Column(type = Type.INTEGER, hidden = true)
     @GeneratedValue(strategy = "IDENTITY")
 	private int id;
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+	     return this.id;
+	}
+
+
+	/**
+	 * @param value the id to set
+	 */
+	public void setId(final int value) {
+	     this.id = value;
+	}
+
 }

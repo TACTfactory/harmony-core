@@ -52,6 +52,8 @@
 <#assign hasDateTime=false />
 <#assign hasTime=false />
 <#assign hasDate=false />
+<#assign hasInternalFields = false />
+<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)><#assign hasInternalFields = true /></#if></#list>
 <#list curr.fields?values as field>
 	<#if field.harmony_type=="date">
 		<#assign hasDate=true />
@@ -203,6 +205,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	
 <#if (curr.internal!="true")>
 	// Converters
+	<#if (hasInternalFields)>
 	/** Convert ${curr.name} entity to Content Values for database.
 	 * 
 	 * @param item ${curr.name} entity object
@@ -210,6 +213,25 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public ContentValues itemToContentValues(final ${curr.name} item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 
 				int ${relation.relation.targetEntity?lower_case}_id</#if></#list>) {
+		final ContentValues result = this.itemToContentValues(item);		
+	<#list curr.fields?values as field>
+		<#if (field.internal)>
+		result.put(${alias(field.name)},
+				String.valueOf(${field.relation.targetEntity?lower_case}_id));
+		</#if>
+	</#list>
+
+		
+		return result;
+	}
+	</#if>
+
+	/** Convert ${curr.name} entity to Content Values for database.
+	 * 
+	 * @param item ${curr.name} entity object
+	 * @return ContentValues object
+	 */
+	public ContentValues itemToContentValues(final ${curr.name} item) {
 		final ContentValues result = new ContentValues();		
 	<#list curr.fields?values as field>
 		<#if (!field.internal)>
@@ -225,9 +247,6 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		
 				</#if>
 			</#if>
-		<#else>
-		result.put(${alias(field.name)},
-				String.valueOf(${field.relation.targetEntity?lower_case}_id));
 		</#if>
 	</#list>
 
