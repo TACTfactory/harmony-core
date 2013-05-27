@@ -40,7 +40,8 @@ public class TestDBGenerator extends BaseGenerator {
 		ConsoleUtils.display(">> Generate Repository test...");
 		
 		//this.initTestAndroid();
-		this.getDatamodel().put("dataLoader", this.isDataLoaderAlreadyGenerated());
+		this.getDatamodel().put("dataLoader",
+				this.isDataLoaderAlreadyGenerated());
 	
 		for (final EntityMetadata cm 
 				: this.getAppMetas().getEntities().values()) {
@@ -53,8 +54,13 @@ public class TestDBGenerator extends BaseGenerator {
 				this.generate();
 			}
 		}
-		this.makeSourceTest("utils/TestUtils.java", "utils/TestUtils.java", false);
-		this.makeSourceTest("base/TestDBBase.java", "base/TestDBBase.java", true);
+		this.makeSourceTest("utils/TestUtils.java",
+				"utils/TestUtils.java", 
+				false);
+		
+		this.makeSourceTest("base/TestDBBase.java",
+				"base/TestDBBase.java",
+				true);
 	}
 	
 	/**  
@@ -92,8 +98,11 @@ public class TestDBGenerator extends BaseGenerator {
 		}
 	}
 	
+	/**
+	 * Check if the fixture dataloader class has already been generated.
+	 * @return True if it already exists.
+	 */
 	private boolean isDataLoaderAlreadyGenerated() {
-		boolean result = false;
 		String dataLoaderPath = this.getAdapter().getSourcePath() 
 				+ this.getAppMetas().getProjectNameSpace()
 				+ "/" + this.getAdapter().getFixture() + "/" 

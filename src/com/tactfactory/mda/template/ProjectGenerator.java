@@ -325,11 +325,13 @@ public class ProjectGenerator extends BaseGenerator {
 							pathSherlock.getAbsolutePath(), 
 							"samples")));
 
-			String srcPath = Harmony.getTemplatesPath() + "/android/libs/sherlock_ant.properties";
+			String srcPath = Harmony.getTemplatesPath() 
+								+ "/android/libs/sherlock_ant.properties";
 			String destPath = pathSherlock + "/library/ant.properties";
 			this.makeSource(srcPath, destPath, false);
 			
-			srcPath = Harmony.getTemplatesPath() + "/android/libs/sherlock_.project";
+			srcPath = Harmony.getTemplatesPath() 
+							+ "/android/libs/sherlock_.project";
 			destPath = pathSherlock + "/library/.project";
 			this.makeSource(srcPath, destPath, false);
 			
@@ -341,13 +343,13 @@ public class ProjectGenerator extends BaseGenerator {
 				sdkTools += ".bat";
 			}
 			
-			command.add(new File( sdkTools ).getAbsolutePath());
+			command.add(new File(sdkTools).getAbsolutePath());
 			command.add("update");
 			command.add("project");
 			command.add("--path");
 			command.add(new File(
-					pathSherlock.getAbsolutePath() + 
-					"/library").getAbsolutePath());
+					pathSherlock.getAbsolutePath()  
+					+ "/library").getAbsolutePath());
 			command.add("--name");
 			command.add(ApplicationMetadata.INSTANCE.getName() + "-abs");
 			ConsoleUtils.launchCommand(command);
@@ -429,38 +431,40 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Copy files with recursive
+	 * Copy files with recursive.
 	 * @param file File to copy
 	 * @param directory Directory of the file (null if first)
 	 * @param sourcesPath Directory of sources files
 	 * @param templatesPath Directory of templates files
 	 */
-	private void copyProjectTemplates(File file, String directory, 
-			String sourcesPath, String templatesPath) {
+	private void copyProjectTemplates(
+			final File file, 
+			final String directory, 
+			final String sourcesPath, 
+			final String templatesPath) {
+		String folder = directory;
 		if (file.isDirectory()) {
-			if (directory == null) {
-				directory = "";
-			}
-			else {
-				directory += File.separator + file.getName();
+			if (folder == null) {
+				folder = "";
+			} else {
+				folder += File.separator + file.getName();
 			}
 			
 			File[] files = file.listFiles();
 			for (File subFile : files) {
 				this.copyProjectTemplates(
 						subFile, 
-						directory,
+						folder,
 						sourcesPath,
 						templatesPath);				
 			}
-		}
-		else {
+		} else {
 			String tplPath = templatesPath
-					+ File.separator + directory
+					+ File.separator + folder
 					+ File.separator + file.getName();
 			
 			String srcPath = sourcesPath
-					+ File.separator + directory
+					+ File.separator + folder
 					+ File.separator + file.getName();
 			
 			tplPath = tplPath.substring(0, tplPath.length() 
@@ -545,6 +549,10 @@ public class ProjectGenerator extends BaseGenerator {
 		}
 	}
 
+	/**
+	 * Update the project dependencies. 
+	 * (WARNING : ONLY ANDROID IS HANDLED FOR NOW)
+	 */
 	public final void updateDependencies() {
 		try {
 			/** Only Android is handled for now

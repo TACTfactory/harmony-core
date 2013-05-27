@@ -9,11 +9,25 @@ import japa.parser.ast.CompilationUnit;
 import japa.parser.ast.ImportDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
 
+/**
+ * Java file visitor class.
+ */
 public class FileVisitor {
-	private ClassVisitor classVisitor = new ClassVisitor();
-	private ImportVisitor importVisitor = new ImportVisitor();
+	/**
+	 * The class visitor used by this visitor.
+	 */
+	private final ClassVisitor classVisitor = new ClassVisitor();
+	/**
+	 * The import visitor used by this visitor.
+	 */
+	private final ImportVisitor importVisitor = new ImportVisitor();
 	
-	public ArrayList<ClassMetadata> visit(CompilationUnit n) {
+	/**
+	 * Visit a compilation unit (java file).
+	 * @param n The compilation unit to visit.
+	 * @return A list of ClassMetadata extracted from the file.
+	 */
+	public final ArrayList<ClassMetadata> visit(final CompilationUnit n) {
 		final ArrayList<ClassMetadata> result = new ArrayList<ClassMetadata>();
 		final ArrayList<String> importList = new ArrayList<String>();
 
@@ -46,10 +60,18 @@ public class FileVisitor {
 		return result;
 	}
 	
-	private void addClassToList(ArrayList<String> importList,
-			String spackage,
-			ArrayList<ClassMetadata> list, 
-			ClassMetadata classMetas) {
+	/**
+	 * Add a given ClassMetadata and its subclasses to a ClassMetadata list.
+	 * @param importList The import list concerning this class and subclasses
+	 * @param spackage The package of the classes
+	 * @param list The list where to add the classes
+	 * @param classMetas The class to add
+	 */
+	private void addClassToList(
+			final ArrayList<String> importList,
+			final String spackage,
+			final ArrayList<ClassMetadata> list, 
+			final ClassMetadata classMetas) {
 		if (classMetas != null) {
 			for (ClassMetadata subClass : classMetas.getSubClasses().values()) {
 				this.addClassToList(importList,

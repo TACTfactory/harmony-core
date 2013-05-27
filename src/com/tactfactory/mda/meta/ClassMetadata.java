@@ -216,7 +216,7 @@ public class ClassMetadata extends BaseMetadata {
 	/**
 	 * @param motherClass the motherClass to set
 	 */
-	public final void setMotherClass(String motherClass) {
+	public final void setMotherClass(final String motherClass) {
 		this.motherClass = motherClass;
 	}
 
@@ -230,7 +230,8 @@ public class ClassMetadata extends BaseMetadata {
 	/**
 	 * @param subClasses the subClasses to set
 	 */
-	public final void setSubClasses(Map<String, ClassMetadata> subClasses) {
+	public final void setSubClasses(
+			final Map<String, ClassMetadata> subClasses) {
 		this.subClasses = subClasses;
 	}	
 }

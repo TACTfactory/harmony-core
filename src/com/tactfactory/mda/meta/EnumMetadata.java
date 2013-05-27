@@ -6,6 +6,9 @@ import java.util.Map;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.TagConstant;
 
+/**
+ * Enum Metadata.
+ */
 public class EnumMetadata extends ClassMetadata {
 	/** ID field name. */
 	private String idName;
@@ -52,7 +55,7 @@ public class EnumMetadata extends ClassMetadata {
 	}
 
 	/**
-	 * @param names the names to set
+	 * @param entries the entries to set
 	 */
 	public final void setEntries(final ArrayList<String> entries) {
 		this.entries = entries;
@@ -68,7 +71,7 @@ public class EnumMetadata extends ClassMetadata {
 	/**
 	 * @param idName the idName to set
 	 */
-	public final void setIdName(String idName) {
+	public final void setIdName(final String idName) {
 		this.idName = idName;
 	}
 }

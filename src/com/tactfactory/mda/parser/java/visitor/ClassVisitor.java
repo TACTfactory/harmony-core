@@ -35,9 +35,17 @@ public class ClassVisitor {
 	private static final String FILTER_ENTITY	 	= 
 			PackageUtils.extractNameEntity(Entity.class);
 	
+	/** The field visitor used by this visitor. */
 	private final FieldVisitor fieldVisitor = new FieldVisitor();
+	
+	/** The method visitor used by this visitor. */
 	private final MethodVisitor methodVisitor = new MethodVisitor();
 	
+	/**
+	 * Visit a class.
+	 * @param n The class or interface declaration
+	 * @return The ClassMetadata containing the metadata of the visited class
+	 */
     public final ClassMetadata visit(final ClassOrInterfaceDeclaration n) {
     	ClassMetadata result;
     	
@@ -67,7 +75,7 @@ public class ClassVisitor {
 			
 	    	// Call the parsers which have been registered by the bundle
 	    	for (final BaseParser bParser 
-	    			: JavaModelParser.bundleParsers) {
+	    			: JavaModelParser.getBundleParsers()) {
 	    		
 	    		bParser.visitClass(n, result);
 	    	}
@@ -80,7 +88,7 @@ public class ClassVisitor {
 	
 					// Call the bundles class annotations parsers 
 					for (final BaseParser bParser 
-							: JavaModelParser.bundleParsers) {
+							: JavaModelParser.getBundleParsers()) {
 			    		bParser.visitClassAnnotation(result, annotationExpr);
 					}
 					
@@ -118,33 +126,46 @@ public class ClassVisitor {
 			}
 				
 			// Get list of Members (Methods, Fields, Subclasses, Enums, etc.)
-			Map<String, ClassMetadata> subClasses = new LinkedHashMap<String, ClassMetadata>();
+			Map<String, ClassMetadata> subClasses = 
+					new LinkedHashMap<String, ClassMetadata>();
 			List<BodyDeclaration> members = n.getMembers();
 			if (members != null) {
 				for (BodyDeclaration member : members) {
 					// Subclass or Enum
 					if (member instanceof TypeDeclaration) {
-						ClassMetadata subClass = this.visit((TypeDeclaration) member);
+						ClassMetadata subClass = 
+								this.visit((TypeDeclaration) member);
 						subClasses.put(subClass.getName(), subClass);
 					} else
 					
 					// Fields
 					if (member instanceof FieldDeclaration) {
-						FieldMetadata fieldMetas = this.fieldVisitor.visit((FieldDeclaration) member, result);
+						FieldMetadata fieldMetas = this.fieldVisitor.visit(
+										(FieldDeclaration) member,
+										result);
 						if (fieldMetas != null) {
-							result.getFields().put(fieldMetas.getName(), fieldMetas);
+							result.getFields().put(
+									fieldMetas.getName(),
+									fieldMetas);
+							
 							if (fieldMetas.isId()) {
-								((EntityMetadata) result).getIds().put(fieldMetas.getName(), fieldMetas);
+								((EntityMetadata) result).getIds().put(
+										fieldMetas.getName(),
+										fieldMetas);
 							}
 							if (fieldMetas.getRelation() != null) {
-								((EntityMetadata) result).getRelations().put(fieldMetas.getName(), fieldMetas);
+								((EntityMetadata) result).getRelations().put(
+										fieldMetas.getName(), 
+										fieldMetas);
 							}
 						}
 					} else 
 						
 					// Methods
 					if (member instanceof MethodDeclaration) {
-						result.getMethods().add(this.methodVisitor.visit((MethodDeclaration) member, result));
+						result.getMethods().add(this.methodVisitor.visit(
+										(MethodDeclaration) member,
+										result));
 					}	
 				}
 				
@@ -161,6 +182,11 @@ public class ClassVisitor {
 		return result;
     }
     
+    /**
+	 * Visit an enum.
+	 * @param n The enum declaration
+	 * @return The ClassMetadata containing the metadata of the visited enum
+	 */
     public final ClassMetadata visit(final EnumDeclaration n) {		
     	ConsoleUtils.displayDebug("Found enum " + n.getName());
     	EnumMetadata result = new EnumMetadata();
@@ -186,18 +212,24 @@ public class ClassVisitor {
 				
 				// Fields
 				if (member instanceof FieldDeclaration) {
-					FieldMetadata fieldMetas = this.fieldVisitor.visit((FieldDeclaration) member, result);
+					FieldMetadata fieldMetas = this.fieldVisitor.visit(
+							(FieldDeclaration) member, 
+							result);
 					if (fieldMetas != null) {
 						if (fieldMetas.isId()) {
 							result.setIdName(fieldMetas.getName());
 						}
-						result.getFields().put(fieldMetas.getName(), fieldMetas);
+						result.getFields().put(
+								fieldMetas.getName(), 
+								fieldMetas);
 					}
 				} else 
 					
 				// Methods
 				if (member instanceof MethodDeclaration) {
-					result.getMethods().add(this.methodVisitor.visit((MethodDeclaration) member, result));
+					result.getMethods().add(this.methodVisitor.visit(
+							(MethodDeclaration) member,
+							result));
 				}	
 			}
 		}
@@ -206,6 +238,11 @@ public class ClassVisitor {
     	return result;
     }
     
+    /**
+	 * Visit a class.
+	 * @param n The class or interface declaration
+	 * @return The ClassMetadata containing the metadata of the visited class
+	 */
     public final ClassMetadata visit(final TypeDeclaration n) {
     	ClassMetadata result;
     	

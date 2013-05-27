@@ -21,7 +21,6 @@ import com.tactfactory.mda.command.ProjectCommand;
 import com.tactfactory.mda.fixture.command.FixtureCommand;
 import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.test.CommonTest;
-import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.TactFileUtils;
 
 /**
@@ -119,7 +118,9 @@ public class FixtureGlobalTest extends CommonTest {
 		CommonTest.getHarmony().findAndExecute(
 				FixtureCommand.FIXTURE_PURGE, new String[] {}, null);
 		CommonTest.getHarmony().findAndExecute(
-				FixtureCommand.FIXTURE_INIT, new String[] {"--format=yml", "--force=true"}, null);
+				FixtureCommand.FIXTURE_INIT,
+				new String[] {"--format=yml", "--force=true"},
+				null);
 		
 		// Copy fixture files
 		copyFixturesYml();

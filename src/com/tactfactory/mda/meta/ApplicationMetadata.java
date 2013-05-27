@@ -139,42 +139,43 @@ public final class ApplicationMetadata extends BaseMetadata {
 	/**
 	 * @return the classes
 	 */
-	public final Map<String, ClassMetadata> getClasses() {
+	public Map<String, ClassMetadata> getClasses() {
 		return classes;
 	}
 
 	/**
 	 * @param classes the classes to set
 	 */
-	public final void setClasses(Map<String, ClassMetadata> classes) {
+	public void setClasses(final Map<String, ClassMetadata> classes) {
 		this.classes = classes;
 	}
 
 	/**
 	 * @return the enums
 	 */
-	public final Map<String, EnumMetadata> getEnums() {
+	public Map<String, EnumMetadata> getEnums() {
 		return enums;
 	}
 
 	/**
 	 * @param enums the enums to set
 	 */
-	public final void setEnums(Map<String, EnumMetadata> enums) {
+	public void setEnums(final Map<String, EnumMetadata> enums) {
 		this.enums = enums;
 	}
 
 	/**
 	 * @return the interfaces
 	 */
-	public final Map<String, InterfaceMetadata> getInterfaces() {
+	public Map<String, InterfaceMetadata> getInterfaces() {
 		return interfaces;
 	}
 
 	/**
 	 * @param interfaces the interfaces to set
 	 */
-	public final void setInterfaces(Map<String, InterfaceMetadata> interfaces) {
+	public void setInterfaces(
+			final Map<String, InterfaceMetadata> interfaces) {
 		this.interfaces = interfaces;
 	}
 

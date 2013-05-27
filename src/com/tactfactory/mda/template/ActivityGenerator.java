@@ -393,7 +393,9 @@ public class ActivityGenerator extends BaseGenerator {
 		ClassMetadata cm = this.getAppMetas().getEntities().get(entityName);
 		
 		for (FieldMetadata fm : cm.getFields().values()) {
-			if (!fm.isInternal() && !fm.isHidden() && fm.getRelation() != null) {
+			if (!fm.isInternal() 
+					&& !fm.isHidden() 
+					&& fm.getRelation() != null) {
 				TranslationMetadata.addDefaultTranslation(
 						entityName.toLowerCase(Locale.ENGLISH) 
 							+ "_" 
