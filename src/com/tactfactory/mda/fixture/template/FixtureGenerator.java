@@ -19,6 +19,8 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.template.BaseGenerator;
 import com.tactfactory.mda.template.SQLiteGenerator;
 import com.tactfactory.mda.template.TagConstant;
+import com.tactfactory.mda.template.TestDBGenerator;
+import com.tactfactory.mda.template.TestProviderGenerator;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.TactFileUtils;
 
@@ -131,6 +133,8 @@ public class FixtureGenerator extends BaseGenerator {
 			
 			//Update SQLiteOpenHelper
 			new SQLiteGenerator(this.getAdapter()).generateDatabase();
+			new TestDBGenerator(this.getAdapter()).generateAll();
+			new TestProviderGenerator(this.getAdapter()).generateAll();
 			
 			//Create each entity's data loader
 			for (final EntityMetadata cm 

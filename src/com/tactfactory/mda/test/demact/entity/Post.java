@@ -18,6 +18,7 @@ import com.tactfactory.mda.annotation.Column.Type;
 import com.tactfactory.mda.annotation.Entity;
 import com.tactfactory.mda.annotation.GeneratedValue;
 import com.tactfactory.mda.annotation.Id;
+import com.tactfactory.mda.annotation.ManyToMany;
 import com.tactfactory.mda.annotation.ManyToOne;
 import com.tactfactory.mda.annotation.OneToMany;
 import com.tactfactory.mda.annotation.Table;
@@ -39,14 +40,14 @@ public class Post implements Serializable {
 	@Column(length = 40000, type = Type.TEXT)
     private String content;
 	
-	@Column
-	private String categories;
-	
 	@ManyToOne
 	private User owner;
 	
 	@OneToMany(mappedBy = "post")
 	private ArrayList<Comment> comments;
+	
+	@ManyToMany
+	private ArrayList<Category> categories;
 	
 	@Column(name = "created_at")
     private DateTime createdAt;
@@ -175,4 +176,5 @@ public class Post implements Serializable {
 	public final void setExpiresAt(final DateTime expiresAt) {
 		this.expiresAt = expiresAt;
 	}
+
 }

@@ -6,6 +6,7 @@ import ${curr.namespace}.R;
 
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import ${project_namespace}.harmony.view.HarmonyFragment;
+import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
 
 import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 
@@ -55,6 +56,7 @@ import ${curr.namespace}.harmony.widget.CustomTimePickerDialog;
 	
 import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
+import ${curr.namespace}.harmony.widget.ValidationButtons;
 import ${curr.namespace}.entity.${curr.name};
 <#assign mustImportArrayList=false />
 <#assign mustImportList=false />
@@ -65,7 +67,7 @@ import ${curr.namespace}.entity.${curr.name};
 		<#if (!m.isInArray(import_array, relation.relation.targetEntity))>
 			<#assign import_array = import_array + [relation.relation.targetEntity] />
 import ${curr.namespace}.entity.${relation.relation.targetEntity};
-import ${project_namespace}.provider.${relation.relation.targetEntity?cap_first}ProviderAdapter;
+import ${project_namespace}.provider.utils.${relation.relation.targetEntity?cap_first}ProviderUtils;
 			<#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
 				<#assign mustImportArrayList=true />
 			</#if>
@@ -91,7 +93,7 @@ import java.util.List;
  * @see android.app.Fragment
  */
 public class ${curr.name}CreateFragment extends HarmonyFragment 
-									implements OnClickListener {
+			implements OnValidationListener {
 	/** Model data. */
 	protected ${curr.name} model = new ${curr.name}();
 
@@ -125,7 +127,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		</#if>
 	</#list>
 	/** Save button. */
-	protected Button saveButton;
+	protected ValidationButtons validationButtons;
 
 	/** Initialize view of fields. 
 	 * 
@@ -243,9 +245,9 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			</#if>
 		</#list>
 		
-		this.saveButton = 
-			(Button) view.findViewById(R.id.${curr.name?lower_case}_btn_save);
-		this.saveButton.setOnClickListener(this);
+		this.validationButtons = 
+			(ValidationButtons) view.findViewById(R.id.${curr.name?lower_case}_validation);
+		this.validationButtons.setListener(this);
 	}
 	
 	<#list curr.relations as relation>
@@ -266,7 +268,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		}
 		final AlertDialog.Builder builder = 
 				new AlertDialog.Builder(this.getActivity());
-		builder.setTitle(R.string.${curr.name?lower_case}_${relation.name?uncap_first}_dialog_title)
+		builder.setTitle(R.string.${curr.name?lower_case}_${relation.name?lower_case}_dialog_title)
 				.setMultiChoiceItems(listAdapter, checks, 
 							  new DialogInterface.OnMultiChoiceClickListener() {
 					public void onClick(DialogInterface dialog, int which, 
@@ -303,7 +305,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		}
 		final AlertDialog.Builder builder = 
 				new AlertDialog.Builder(this.getActivity());
-		builder.setTitle(R.string.${curr.name?lower_case}_${relation.name?uncap_first}_dialog_title)
+		builder.setTitle(R.string.${curr.name?lower_case}_${relation.name?lower_case}_dialog_title)
 				.setSingleChoiceItems(listAdapter, 0, 
 										 new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
@@ -353,10 +355,6 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 
 	/** Load data from model to fields view. */
 	public void loadData() {
-		<#if (import_array?size > 0)>
-		ContentResolver prov = this.getActivity().getContentResolver();
-		</#if>
-
 		<#list curr.fields?values as field>						
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
@@ -381,15 +379,9 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		${m.setLoader(field)}
 				</#if>
 			<#else>
-		Bundle ${field.name}ResultBundle = 
-				prov.call(${field.relation.targetEntity}ProviderAdapter.${field.relation.targetEntity?upper_case}_URI,
-				${field.relation.targetEntity}ProviderAdapter.METHOD_QUERY_${field.relation.targetEntity?upper_case},
-				null,
-				null);
 		
-		this.${field.name}List = 
-				(List<${field.relation.targetEntity}>) ${field.name}ResultBundle
-				.getSerializable(${field.relation.targetEntity}ProviderAdapter.ITEM_KEY);
+		
+		this.${field.name}List = ${field.relation.targetEntity}ProviderUtils.queryAll(this.getActivity());
 		init${field.name?cap_first}Dialog(this.${field.name}List);
 			</#if>
 		</#if>
@@ -403,9 +395,11 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if (field.type?lower_case == "datetime")>
-					<#if field.harmony_type=="date" || field.harmony_type=="datetime">
+					<#if field.harmony_type=="datetime">
+		if (!TextUtils.isEmpty(this.${field.name}DateView.getEditableText()) && !TextUtils.isEmpty(this.${field.name}TimeView.getEditableText())) {
+					<#elseif field.harmony_type=="date">
 		if (!TextUtils.isEmpty(this.${field.name}DateView.getEditableText())) {
-					<#elseif field.harmony_type=="time" || field.harmony_type=="datetime">
+					<#elseif field.harmony_type=="time">
 		if (!TextUtils.isEmpty(this.${field.name}TimeView.getEditableText())) {
 					<#else>
 		if (!TextUtils.isEmpty(this.${field.name}View.getEditableText())) {
@@ -467,17 +461,6 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		return view;
 	}
 
-	/** 
-	 * @see android.view.View.OnClickListener#onClick(android.view.View).
-	 */
-	@Override
-	public void onClick(View v) {
-		if (this.validateData()) {
-			this.saveData();
-			new CreateTask(this, this.model).execute();
-		}
-	}
-	
 	/**
 	 * This class will save the entity into the DB.
 	 * It runs asynchronously and shows a progressDialog
@@ -559,5 +542,16 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 
 			this.progress.dismiss();
 		}
+	}
+
+	public void onValidationSelected() {
+		if (this.validateData()) {
+			this.saveData();
+			new CreateTask(this, this.model).execute();
+		}
+	}
+
+	public void onCancelSelected() {
+		this.getActivity().finish();
 	}
 }

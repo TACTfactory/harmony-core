@@ -6,11 +6,11 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.mda.test.demact.entity;
+package com.tactfactory.mda.test.demact.entity;import java.io.Serializable;
 
 /**
  * Empty entity for test puposes only.
  */
-public class ShadowEntity {
+public class ShadowEntity implements Serializable {
 
 }

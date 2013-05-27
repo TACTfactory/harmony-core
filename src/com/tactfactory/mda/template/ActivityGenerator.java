@@ -136,6 +136,10 @@ public class ActivityGenerator extends BaseGenerator {
 			}
 		}
 		
+
+		this.updateWidget("ValidationButtons.java", 
+				"widget_validation_buttons.xml");
+		
 		if (this.isDate) {
 			this.updateWidget("CustomDatePickerDialog.java", 
 					"dialog_date_picker.xml");

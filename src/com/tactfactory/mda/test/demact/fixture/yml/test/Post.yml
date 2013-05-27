@@ -3,7 +3,8 @@ Post:
       id: 0
       title: "TEST - Post 1"
       content: "TEST - Je dirais meme plus..."
-      categories: "TEST - Radotage"
+      categories: 
+         category: HiTech
       owner: TEST - Dupond
       comments: 
          comment : TEST - Comment1
@@ -14,7 +15,8 @@ Post:
       id: 0
       title: "TEST - Post 2"
       content: "TEST - Bachibouzouk"
-      categories: "TEST - Insulte"
+      categories: 
+         category: HiTech
       owner: TEST - Haddock
       comments: 
          comment : TEST - Comment2
@@ -25,7 +27,8 @@ Post:
       id: 0
       title: "TEST - Post 3"
       content: "TEST - Mais oui, c'est un gymnote..."
-      categories: "TEST - Fait scientifique"
+      categories: 
+         category: HiTech
       owner: TEST - Tournesol
       comments: 
          comment : TEST - Comment3

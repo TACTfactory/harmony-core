@@ -17,6 +17,7 @@ import com.tactfactory.mda.annotation.Column.Type;
 import com.tactfactory.mda.annotation.Entity;
 import com.tactfactory.mda.annotation.GeneratedValue;
 import com.tactfactory.mda.annotation.Id;
+import com.tactfactory.mda.annotation.ManyToOne;
 import com.tactfactory.mda.annotation.Table;
 
 //All annotation with forced value/parameter
@@ -47,6 +48,9 @@ public class User extends Object implements Cloneable, Serializable {
 	
 	@Column(type = Type.DATE, locale = true)
     private DateTime birthdate;
+	
+	@ManyToOne
+	private UserGroup userGroup;
 
 
 	public User() {
