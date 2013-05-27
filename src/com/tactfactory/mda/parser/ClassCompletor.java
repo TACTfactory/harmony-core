@@ -86,7 +86,8 @@ public class ClassCompletor {
 							+ " Your entity " + cm.getName() 
 							+ " refers the entity " + cmRef.getName()
 							+ " which has no ID defined."
-							+ " Please add the @Id annotation to one of the fields of " + cmRef.getName()));
+							+ " Please add the @Id annotation "
+							+ "to one of the fields of " + cmRef.getName()));
 					System.exit(-1);
 				}
 				

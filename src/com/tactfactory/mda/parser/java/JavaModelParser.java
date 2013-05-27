@@ -55,7 +55,7 @@ public class JavaModelParser {
 			new ArrayList<ClassMetadata>();
 	
 	/** List of all the bundles parsers. */
-	public static final List<BaseParser> bundleParsers = 
+	private static List<BaseParser> bundleParsers = 
 			new ArrayList<BaseParser>();
 	
 	/** Adapter used to retrieves entity files. */
@@ -175,6 +175,7 @@ public class JavaModelParser {
 	 * Parse the given compilation unit and convert it to a 
 	 * ClassMetadata.
 	 * @param mclass The compilation unit
+	 * @param appMetas The metadatas of the application
 	 */
 	public final void parse(final CompilationUnit mclass, 
 			final ApplicationMetadata appMetas) {
@@ -203,5 +204,13 @@ public class JavaModelParser {
 			}
 		}
 		
+	}
+	
+	/**
+	 * Return the list containing the bundle parsers.
+	 * @return The list of bundle parsers.
+	 */
+	public static List<BaseParser> getBundleParsers() {
+		return bundleParsers;
 	}
 }

@@ -90,7 +90,8 @@ public class FixtureGenerator extends BaseGenerator {
 				
 				TactFileUtils.copyDirectory(fixtDebugSrc, fixtDebugDest, ff);
 				ConsoleUtils.displayDebug(
-						"Copying fixtures/debug into " + fixtDebugDest.getPath());
+						"Copying fixtures/debug into " 
+							+ fixtDebugDest.getPath());
 				
 				TactFileUtils.copyDirectory(fixtTestSrc, fixtTestDest, ff);
 				ConsoleUtils.displayDebug(
@@ -117,7 +118,7 @@ public class FixtureGenerator extends BaseGenerator {
 							 	.get("fixture")).getType();
 			 
 			 FixtureMetadata meta = 
-					 (FixtureMetadata)this.getAppMetas().getOptions().get(
+					 (FixtureMetadata) this.getAppMetas().getOptions().get(
 							 FixtureMetadata.NAME);
 			 //Copy JDOM Library
 			if (meta.getType().equals("xml")) {

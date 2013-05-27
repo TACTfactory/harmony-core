@@ -2,7 +2,6 @@ package com.tactfactory.mda.parser.java.visitor;
 
 import japa.parser.ast.ImportDeclaration;
 import japa.parser.ast.visitor.GenericVisitorAdapter;
-import japa.parser.ast.visitor.VoidVisitorAdapter;
 
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.parser.BaseParser;
@@ -12,14 +11,21 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 /**
  * JavaParser import Visitor.
  */
-public class ImportVisitor extends GenericVisitorAdapter<String, ClassMetadata> {
+public class ImportVisitor 
+		extends GenericVisitorAdapter<String, ClassMetadata> {
 	
+	/**
+	 * Visit an import declaration.
+	 * @param imp The import declaration to visit
+	 * @param meta The classAssociated with this import
+	 * @return the import name.  
+	 */
 	@Override
-	public String visit(final ImportDeclaration imp, 
+	public final String visit(final ImportDeclaration imp, 
 			final ClassMetadata meta) {
     	// Call the parsers which have been registered by the bundle
     	for (final BaseParser bParser 
-    			: JavaModelParser.bundleParsers) {
+    			: JavaModelParser.getBundleParsers()) {
     		bParser.visitImport(imp, meta);
     	}
     	

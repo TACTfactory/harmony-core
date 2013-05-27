@@ -20,7 +20,10 @@ import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.OsUtil;
 import com.tactfactory.mda.utils.TactFileUtils;
 
-public class ProjectDiscover {
+/**
+ * Project Discover class.
+ */
+public final class ProjectDiscover {
 	// DEMO/TEST MODE
 	/** Default project name. */
 	private static String defaultProjectName = "demact";
@@ -36,9 +39,15 @@ public class ProjectDiscover {
 	/** Android SDK version. */
 	private static String androidSdkVersion;
 	
+	/** Detected OS name. */
 	private static String detectedOS = "Unknown";
 
-	{
+	/**
+	 * Private constructor.
+	 */
+	private ProjectDiscover() { }
+	
+	static {
 		if (OsUtil.isWindows()) {
 			if (OsUtil.isX64()) {
 				detectedOS = "Windows x64";
@@ -60,7 +69,7 @@ public class ProjectDiscover {
 	/**
 	 * @param androidSdkVersion the androidSdkVersion to set
 	 */
-	public static void setAndroidSdkVersion(String androidSdkVersion) {
+	public static void setAndroidSdkVersion(final String androidSdkVersion) {
 		ProjectDiscover.androidSdkVersion = androidSdkVersion;
 	}
 
@@ -210,7 +219,8 @@ public class ProjectDiscover {
 
 				// Get Name Space from package declaration
 				projectNamespace = rootNode.getAttributeValue("package"); 
-				projectNamespace = projectNamespace.replaceAll("\\.", Context.DELIMITER);
+				projectNamespace = 
+						projectNamespace.replaceAll("\\.", Context.DELIMITER);
 			} catch (final JDOMException e) {
 				// TODO Auto-generated catch block
 				ConsoleUtils.displayError(e);

@@ -7,6 +7,9 @@ import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.PackageUtils;
 
+/**
+ * Generator for provider tests.
+ */
 public class TestProviderGenerator extends BaseGenerator {
 	/** Local name space. */
 	private String localNameSpace;
@@ -27,7 +30,8 @@ public class TestProviderGenerator extends BaseGenerator {
 	public final void generateAll() {
 		ConsoleUtils.display(">> Generate Provider test...");
 	
-		this.getDatamodel().put("dataLoader", this.isDataLoaderAlreadyGenerated());
+		this.getDatamodel().put("dataLoader", 
+				this.isDataLoaderAlreadyGenerated());
 		
 		for (final EntityMetadata cm 
 				: this.getAppMetas().getEntities().values()) {
@@ -42,6 +46,10 @@ public class TestProviderGenerator extends BaseGenerator {
 		}
 	}
 	
+	/**
+	 * Check if the fixture dataloader class has already been generated.
+	 * @return True if it already exists.
+	 */
 	private boolean isDataLoaderAlreadyGenerated() {
 		String dataLoaderPath = this.getAdapter().getSourcePath() 
 				+ this.getAppMetas().getProjectNameSpace()

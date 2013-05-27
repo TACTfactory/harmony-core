@@ -3,13 +3,10 @@ package com.tactfactory.mda.template;
 import java.io.File;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.HashMap;
 import java.util.Map;
 
 import com.tactfactory.mda.meta.ClassMetadata;
-import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.meta.EnumMetadata;
-import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.meta.MethodMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
@@ -18,7 +15,10 @@ import com.tactfactory.mda.utils.TactFileUtils;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-public class EnumCompletor extends BaseGenerator{
+/**
+ * Enum Completor class.
+ */
+public class EnumCompletor extends BaseGenerator {
 	/**
 	 * Java Getter Template.
 	 */
@@ -33,10 +33,10 @@ public class EnumCompletor extends BaseGenerator{
 	private String entityFolder;
 
 	/** Constructor.
-	 * @param adapter Adapter used by this generator
+	 * @param adapt Adapter used by this generator
 	 * @throws Exception 
 	 */
-	public EnumCompletor(BaseAdapter adapt) throws Exception {
+	public EnumCompletor(final BaseAdapter adapt) throws Exception {
 		super(adapt);
 		this.entityFolder = 
 				this.getAdapter().getSourcePath() 
@@ -58,7 +58,8 @@ public class EnumCompletor extends BaseGenerator{
 			if (enumMeta.getIdName() != null) {
 				final String filepath = String.format("%s/%s",
 						this.entityFolder,
-						String.format("%s.java", this.getOldestMother(enumMeta).getName()));
+						String.format("%s.java", 
+								this.getOldestMother(enumMeta).getName()));
 				
 				ConsoleUtils.display(">>> Decorate " + enumMeta.getName());
 				
@@ -82,7 +83,7 @@ public class EnumCompletor extends BaseGenerator{
 	/**
 	 * Implements serializable in the class if it doesn't already.
 	 * @param fileString The stringbuffer containing the class java code
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param enumMeta The Metadata containing the infos on the enum
 	 */
 	protected final void addGetterAndRetriever(
 			final StringBuffer fileString,
@@ -105,14 +106,15 @@ public class EnumCompletor extends BaseGenerator{
 	
 	/**
 	 * Check if the class implements the class Serializable.
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param enumMeta The Metadata containing the infos on the enum
 	 * @return True if it already implements serializable
 	 */
 	protected final boolean alreadyHasGetter(
 			final EnumMetadata enumMeta) {
 		boolean ret = false;
 		for (final MethodMetadata method : enumMeta.getMethods()) {
-			if (method.getName().equals("getValue") && method.getArgumentsTypes().size() == 0) {				
+			if (method.getName().equals("getValue") 
+					&& method.getArgumentsTypes().size() == 0) {				
 				ret = true;
 				ConsoleUtils.displayDebug("Already has getValue() !");
 			}
@@ -123,7 +125,7 @@ public class EnumCompletor extends BaseGenerator{
 	
 	/**
 	 * Check if the class implements the class Serializable.
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param enumMeta The Metadata containing the infos on the enum
 	 * @return True if it already implements serializable
 	 */
 	protected final boolean alreadyHasRetriever(
@@ -147,7 +149,7 @@ public class EnumCompletor extends BaseGenerator{
 	 * @param enumMeta The EnumMetadata
 	 * @return N "\t" appended in a String to get the correct indentation.
 	 */
-	protected final String calculateIndentLevel(EnumMetadata enumMeta) {
+	protected final String calculateIndentLevel(final EnumMetadata enumMeta) {
 		String result = "";
 		
 		for (int i = 0; i < this.nbMotherClass(enumMeta); i++) {
@@ -162,7 +164,7 @@ public class EnumCompletor extends BaseGenerator{
 	 * @param classMeta The class
 	 * @return The number of mother classes
 	 */
-	protected final int nbMotherClass(ClassMetadata classMeta) {
+	protected final int nbMotherClass(final ClassMetadata classMeta) {
 		int result = 1;
 		if (classMeta.getMotherClass() != null) {
 			return result + this.nbMotherClass(
@@ -178,7 +180,8 @@ public class EnumCompletor extends BaseGenerator{
 	 * @param classMeta The class metadata
 	 * @return The oldest mother
 	 */
-	protected ClassMetadata getOldestMother(ClassMetadata classMeta) {
+	protected final ClassMetadata getOldestMother(
+			final ClassMetadata classMeta) {
 		ClassMetadata result;
 		if (classMeta.getMotherClass() != null) {
 			result = getOldestMother(
@@ -194,7 +197,7 @@ public class EnumCompletor extends BaseGenerator{
 	/**
 	 * Generate a get or set method following the given template.
 	 * @param fileString The stringbuffer containing the class java code
-	 * @param f The concerned field
+	 * @param enumMeta The concerned enum
 	 * @param templateName The template file name
 	 */
 	protected final void generateMethod(final StringBuffer fileString, 
@@ -203,11 +206,10 @@ public class EnumCompletor extends BaseGenerator{
 		final int insertionIndex = this.getEnumClosingBracketIndex(fileString,
 				enumMeta);
 		
-		final Map<String, Object> map = this.getAppMetas().toMap(this.getAdapter());
+		final Map<String, Object> map = 
+				this.getAppMetas().toMap(this.getAdapter());
 		map.put("indentLevel", this.calculateIndentLevel(enumMeta));
 		map.put(TagConstant.CURRENT_ENTITY, enumMeta.getName());
-		//map.put("property", enumMeta.getIdName());
-		//map.put("property_type", enumMeta.getFields().get(enumMeta.getIdName()).getType());
 		
 		try {
 			final StringWriter writer = new StringWriter();
@@ -230,13 +232,15 @@ public class EnumCompletor extends BaseGenerator{
 	}
 	
 	/**
-	 * Get declaration closing bracket of the given EnumMetadata in the given text.
+	 * Get declaration closing bracket of 
+	 * the given EnumMetadata in the given text.
 	 * @param text The text to search in.
 	 * @param enumMeta The enum metadata
 	 * @return The index of the closing bracket in text.
 	 */
-	protected int getEnumClosingBracketIndex(final StringBuffer text,
-			EnumMetadata enumMeta) {
+	protected final int getEnumClosingBracketIndex(
+			final StringBuffer text,
+			final EnumMetadata enumMeta) {
 		
 		int openingBracketIndex;
 		int enumDeclarationIndex = text.indexOf("enum " + enumMeta.getName()); 
@@ -252,9 +256,9 @@ public class EnumCompletor extends BaseGenerator{
 	 * @param openingBracketIndex The opening bracket index
 	 * @return The index of the closing bracket in text.
 	 */
-	protected int getClosingBracketIndex(
+	protected final int getClosingBracketIndex(
 			final StringBuffer text, 
-			int openingBracketIndex) {
+			final int openingBracketIndex) {
 		int result = -1;
 		
 		int openedBlockCount = 0;

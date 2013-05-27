@@ -73,8 +73,7 @@ public abstract class TactFileUtils extends FileUtils {
 	public static void copyfile(final File srcFile, final File destFile) {
 		try {
 			Files.copy(srcFile, destFile);
-		} 
-		catch (final IOException e) {
+		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);			
 		}
 	}

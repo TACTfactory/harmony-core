@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.tactfactory.mda.meta.ApplicationMetadata;
-import com.tactfactory.mda.meta.ClassMetadata;
-import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.parser.BaseParser;
 import com.tactfactory.mda.parser.ClassCompletor;
 import com.tactfactory.mda.parser.java.JavaModelParser;
@@ -60,7 +58,9 @@ public abstract class BaseCommand implements Command {
 		if (this.javaModelParser.getEntities().size() > 0) {
 			for (final CompilationUnit mclass 
 					: this.javaModelParser.getEntities()) {
-				this.javaModelParser.parse(mclass, ApplicationMetadata.INSTANCE);
+				this.javaModelParser.parse(
+						mclass, 
+						ApplicationMetadata.INSTANCE);
 			}
 	
 			// TODO : Refactor ClassCompletor

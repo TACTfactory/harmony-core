@@ -5,8 +5,6 @@ import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.expr.MemberValuePair;
 import japa.parser.ast.expr.NormalAnnotationExpr;
 import japa.parser.ast.expr.StringLiteralExpr;
-import japa.parser.ast.visitor.VoidVisitorAdapter;
-
 import java.util.List;
 
 import com.google.common.base.Strings;
@@ -31,6 +29,9 @@ import com.tactfactory.mda.utils.PackageUtils;
  * JavaParser Field Visitor.
  */
 public class FieldVisitor {
+	/** Default length 255. */
+	private static final int DEFAULT_LENGTH = 255;
+	
 	/** Id annotation name. */
 	private static final String FILTER_ID	 		= 
 			PackageUtils.extractNameEntity(Id.class);
@@ -60,13 +61,18 @@ public class FieldVisitor {
 			PackageUtils.extractNameEntity(ManyToMany.class);
 	
 	
-	
+	/**
+	 * Visit a field declaration to extract metadata.
+	 * @param field The field declaration.
+	 * @param classMeta The ClassMetada of the field's class
+	 * @return The FieldMetadata extracted
+	 */
 	public final FieldMetadata visit(final FieldDeclaration field, 
 			final ClassMetadata classMeta) {
 		FieldMetadata result = null;
     	// Call the parsers which have been registered by the bundle
     	for (final BaseParser bParser 
-    			: JavaModelParser.bundleParsers) {
+    			: JavaModelParser.getBundleParsers()) {
     		bParser.visitField(field, classMeta);
     	}
 		
@@ -77,8 +83,6 @@ public class FieldVisitor {
 			// General (required !)
 			result = new FieldMetadata(classMeta);
 		
-			/*result.setType(
-					Type.toTypeString(field.getType().toString()));*/
 			result.setType(
 					field.getType().toString());
 			result.setHarmonyType(
@@ -92,7 +96,6 @@ public class FieldVisitor {
 						+ result.getType()
 						+ ". Errors may occur.");
 			}
-			//result.isFinal = ModifierSet.isFinal(field.getModifiers());
 			// FIXME not manage multi-variable
 			result.setName(
 					field.getVariables().get(0).getId().getName()); 
@@ -114,7 +117,7 @@ public class FieldVisitor {
 				
 
 		    	for (final BaseParser bParser 
-		    			: JavaModelParser.bundleParsers) {
+		    			: JavaModelParser.getBundleParsers()) {
 		    		bParser.visitFieldAnnotation(result,
 		    				annotationExpr,
 		    				classMeta);
@@ -180,13 +183,13 @@ public class FieldVisitor {
 						result.setUnique(false);
 					}
 					if (result.getLength() == null) {
-						result.setLength(255);
+						result.setLength(DEFAULT_LENGTH);
 					}
 					if (result.getPrecision() == null) {
-						result.setPrecision(255);
+						result.setPrecision(DEFAULT_LENGTH);
 					}
 					if (result.getScale() == null) {
-						result.setScale(255);
+						result.setScale(DEFAULT_LENGTH);
 					}
 					if (result.isLocale() == null) {
 						result.setIsLocale(false);
@@ -197,7 +200,6 @@ public class FieldVisitor {
 			// ID relation
 			if (isId) {
 				result.setId(true);
-				//meta.getIds().put(result.getName(), result);
 			}
 
 			// Object relation
@@ -206,13 +208,8 @@ public class FieldVisitor {
 				rel.setEntityRef(PackageUtils.extractClassNameFromArray(
 						field.getType().toString()));
 				result.setRelation(rel);
-				//meta.getRelations().put(result.getName(), result);
 			}
 
-			/*if (result.getType().equalsIgnoreCase("DateTime") 
-					&& result.getColumnDefinition() != null) {
-				result.setType(result.getColumnDefinition());
-			}*/
 			
 			result.setColumnDefinition(
 					SqliteAdapter.generateColumnType(
@@ -322,7 +319,8 @@ public class FieldVisitor {
 							} else {
 								type = mvp.getValue().toString();
 							}
-							result.setHarmonyType(Type.fromName(type).getValue());
+							result.setHarmonyType(
+									Type.fromName(type).getValue());
 							result.setColumnDefinition(
 									Type.fromName(type).getValue());
 						} else

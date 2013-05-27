@@ -17,11 +17,17 @@ import com.tactfactory.mda.utils.ConsoleUtils;
  */
 public class MethodVisitor {
 	
-	public MethodMetadata visit(final MethodDeclaration method,
+	/**
+	 * Visit a method declaration to extract its metadata.
+	 * @param method The method declaration to visit.
+	 * @param meta The metadata of the class containing this method. 
+	 * @return The MethodMetadata extracted
+	 */
+	public final MethodMetadata visit(final MethodDeclaration method,
 			final ClassMetadata meta) {
     	// Call the parsers which have been registered by the bundle
     	for (final BaseParser bParser 
-    			: JavaModelParser.bundleParsers) {
+    			: JavaModelParser.getBundleParsers()) {
     		bParser.visitMethod(method, meta);
     	}
 		
