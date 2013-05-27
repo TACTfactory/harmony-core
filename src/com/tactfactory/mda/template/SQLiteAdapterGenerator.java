@@ -37,13 +37,13 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 	public final void generateAll() {
 		ConsoleUtils.display(">> Generate Adapter...");
 		
-		for (final ClassMetadata cm 
+		for (final ClassMetadata classMeta 
 				: this.getAppMetas().getEntities().values()) {
-			if (!cm.getFields().isEmpty()) {
+			if (!classMeta.getFields().isEmpty()) {
 				this.localNameSpace = this.getAdapter().getNameSpace(
-						cm, this.getAdapter().getData());
+						classMeta, this.getAdapter().getData());
 				this.getDatamodel().put(
-						TagConstant.CURRENT_ENTITY, cm.getName());
+						TagConstant.CURRENT_ENTITY, classMeta.getName());
 				this.generate();
 			}
 		}

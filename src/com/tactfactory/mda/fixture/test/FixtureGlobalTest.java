@@ -152,7 +152,7 @@ public class FixtureGlobalTest extends CommonTest {
 						"fixture",
 						"xml/");
 
-		String destDir = String.format("fixtures/");
+		final String destDir = String.format("fixtures/");
 		
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
@@ -175,7 +175,7 @@ public class FixtureGlobalTest extends CommonTest {
 					"fixture",
 					"yml/");
 
-		String destDir = String.format("fixtures/");
+		final String destDir = String.format("fixtures/");
 		
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);

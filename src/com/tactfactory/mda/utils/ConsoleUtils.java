@@ -267,13 +267,14 @@ public abstract class ConsoleUtils {
 		ConsoleUtils.displayDebug(commandPathDisplay + command.toString());
 		
 		try {
-			ProcessBuilder pb = new ProcessBuilder(command);
+			ProcessBuilder processBuilder = new ProcessBuilder(command);
 			
 			if (commandPath != null) {
-				pb = pb.directory(new File(commandPath));
+				processBuilder = 
+						processBuilder.directory(new File(commandPath));
 			}
 			
-			final Process exec = pb.start();
+			final Process exec = processBuilder.start();
 			final ProcessToConsoleBridge bridge = 
 					new ProcessToConsoleBridge(exec);
 			

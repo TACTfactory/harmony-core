@@ -46,14 +46,15 @@ public class ClassVisitor {
 	 * @param n The class or interface declaration
 	 * @return The ClassMetadata containing the metadata of the visited class
 	 */
-    public final ClassMetadata visit(final ClassOrInterfaceDeclaration n) {
+    public final ClassMetadata visit(
+    		final ClassOrInterfaceDeclaration classDeclaration) {
     	ClassMetadata result;
     	
     	boolean isEntity = false;
     	boolean isInterface = false;
     	
     	// Detect whether we have an interface or an entity
-    	if (n.isInterface()) {
+    	if (classDeclaration.isInterface()) {
     		result = new InterfaceMetadata();
     		isInterface = true;
     	} else {
@@ -62,7 +63,8 @@ public class ClassVisitor {
     	
     	
     	// *** Get the common attributes ***
-    	result.setName(PackageUtils.extractNameEntity(n.getName()));
+    	result.setName(PackageUtils.extractNameEntity(
+    			classDeclaration.getName()));
     	// Debug Log
     	ConsoleUtils.displayDebug("Found class : " +  result.getName());
     	// Check reserved keywords
@@ -77,12 +79,13 @@ public class ClassVisitor {
 	    	for (final BaseParser bParser 
 	    			: JavaModelParser.getBundleParsers()) {
 	    		
-	    		bParser.visitClass(n, result);
+	    		bParser.visitClass(classDeclaration, result);
 	    	}
 	    	
 	    	
 	    	// Parse the annotations
-	    	final List<AnnotationExpr> classAnnotations = n.getAnnotations();
+	    	final List<AnnotationExpr> classAnnotations = 
+	    			classDeclaration.getAnnotations();
 			if (classAnnotations != null) {
 				for (final AnnotationExpr annotationExpr : classAnnotations) {
 	
@@ -102,7 +105,8 @@ public class ClassVisitor {
 			}
 			
 			// Get list of Implement type
-			final List<ClassOrInterfaceType> impls = n.getImplements();
+			final List<ClassOrInterfaceType> impls = 
+					classDeclaration.getImplements();
 			if (impls != null) {
 				for (final ClassOrInterfaceType impl : impls) {
 					result.getImplementTypes().add(impl.getName());
@@ -114,7 +118,8 @@ public class ClassVisitor {
 			}
 			
 			// Get Extend type
-			final List<ClassOrInterfaceType> exts = n.getExtends();
+			final List<ClassOrInterfaceType> exts = 
+					classDeclaration.getExtends();
 			if (exts != null) {
 				for (final ClassOrInterfaceType ext : exts) {			
 					result.setExtendType(ext.getName());		
@@ -126,21 +131,23 @@ public class ClassVisitor {
 			}
 				
 			// Get list of Members (Methods, Fields, Subclasses, Enums, etc.)
-			Map<String, ClassMetadata> subClasses = 
+			final Map<String, ClassMetadata> subClasses = 
 					new LinkedHashMap<String, ClassMetadata>();
-			List<BodyDeclaration> members = n.getMembers();
+			final List<BodyDeclaration> members =
+					classDeclaration.getMembers();
 			if (members != null) {
-				for (BodyDeclaration member : members) {
+				for (final BodyDeclaration member : members) {
 					// Subclass or Enum
 					if (member instanceof TypeDeclaration) {
-						ClassMetadata subClass = 
+						final ClassMetadata subClass = 
 								this.visit((TypeDeclaration) member);
 						subClasses.put(subClass.getName(), subClass);
 					} else
 					
 					// Fields
 					if (member instanceof FieldDeclaration) {
-						FieldMetadata fieldMetas = this.fieldVisitor.visit(
+						final FieldMetadata fieldMetas = 
+								this.fieldVisitor.visit(
 										(FieldDeclaration) member,
 										result);
 						if (fieldMetas != null) {
@@ -169,7 +176,7 @@ public class ClassVisitor {
 					}	
 				}
 				
-				for (ClassMetadata subClass : subClasses.values()) {
+				for (final ClassMetadata subClass : subClasses.values()) {
 					subClass.setMotherClass(result.getName());
 				}
 				result.setSubClasses(subClasses);
@@ -187,24 +194,25 @@ public class ClassVisitor {
 	 * @param n The enum declaration
 	 * @return The ClassMetadata containing the metadata of the visited enum
 	 */
-    public final ClassMetadata visit(final EnumDeclaration n) {		
-    	ConsoleUtils.displayDebug("Found enum " + n.getName());
-    	EnumMetadata result = new EnumMetadata();
-    	result.setName(n.getName());
+    public final ClassMetadata visit(final EnumDeclaration enumDecl) {		
+    	ConsoleUtils.displayDebug("Found enum " + enumDecl.getName());
+    	final EnumMetadata result = new EnumMetadata();
+    	result.setName(enumDecl.getName());
     	// Check reserved keywords
 		SqliteAdapter.Keywords.exists(result.getName());
     	
     	// Get the Enum entries
-    	if (n.getEntries() != null) {
-    		for (EnumConstantDeclaration enumEntry : n.getEntries()) {
+    	if (enumDecl.getEntries() != null) {
+    		for (final EnumConstantDeclaration enumEntry 
+    				: enumDecl.getEntries()) {
     			result.getEntries().add(enumEntry.getName());
     		}
     	}
     	
     	// Get list of Members (Methods, Fields, Subclasses, Enums, etc.)
-		List<BodyDeclaration> members = n.getMembers();
+		final List<BodyDeclaration> members = enumDecl.getMembers();
 		if (members != null) {
-			for (BodyDeclaration member : members) {
+			for (final BodyDeclaration member : members) {
 				// Subclass or Enum
 				if (member instanceof TypeDeclaration) {
 					this.visit((TypeDeclaration) member);
@@ -212,7 +220,7 @@ public class ClassVisitor {
 				
 				// Fields
 				if (member instanceof FieldDeclaration) {
-					FieldMetadata fieldMetas = this.fieldVisitor.visit(
+					final FieldMetadata fieldMetas = this.fieldVisitor.visit(
 							(FieldDeclaration) member, 
 							result);
 					if (fieldMetas != null) {
@@ -243,13 +251,13 @@ public class ClassVisitor {
 	 * @param n The class or interface declaration
 	 * @return The ClassMetadata containing the metadata of the visited class
 	 */
-    public final ClassMetadata visit(final TypeDeclaration n) {
+    public final ClassMetadata visit(final TypeDeclaration type) {
     	ClassMetadata result;
     	
-    	if (n instanceof ClassOrInterfaceDeclaration) {
-    		result = this.visit((ClassOrInterfaceDeclaration) n);
-    	} else if (n instanceof EnumDeclaration) {
-    		result = this.visit((EnumDeclaration) n);
+    	if (type instanceof ClassOrInterfaceDeclaration) {
+    		result = this.visit((ClassOrInterfaceDeclaration) type);
+    	} else if (type instanceof EnumDeclaration) {
+    		result = this.visit((EnumDeclaration) type);
     	} else {
     		result = null;
     	}

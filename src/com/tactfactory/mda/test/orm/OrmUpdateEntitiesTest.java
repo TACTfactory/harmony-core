@@ -61,12 +61,4 @@ public class OrmUpdateEntitiesTest extends CommonTest {
 				new String[] {},
 				null);
 	}
-	
-	/**
-	 * Test All.
-	 */
-	@Test
-	public final void testAll() {
-		
-	}
 }

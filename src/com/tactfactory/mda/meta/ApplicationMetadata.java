@@ -63,7 +63,9 @@ public final class ApplicationMetadata extends BaseMetadata {
 	/**
 	 * Constructor.
 	 */
-	private ApplicationMetadata() { }
+	private ApplicationMetadata() { 
+		super();
+	}
 	
 	/**
 	 * @return the androidSdkPath
