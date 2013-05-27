@@ -42,10 +42,12 @@ public class ClassVisitor {
     	ClassMetadata result;
     	
     	boolean isEntity = false;
+    	boolean isInterface = false;
     	
     	// Detect whether we have an interface or an entity
     	if (n.isInterface()) {
     		result = new InterfaceMetadata();
+    		isInterface = true;
     	} else {
     		result = new EntityMetadata();
     	}
@@ -151,6 +153,10 @@ public class ClassVisitor {
 				}
 				result.setSubClasses(subClasses);
 			}
+		}
+		
+		if (!isEntity && !isInterface) {
+			result = null;
 		}
 		return result;
     }

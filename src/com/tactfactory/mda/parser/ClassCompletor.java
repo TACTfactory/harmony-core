@@ -111,7 +111,7 @@ public class ClassCompletor {
 					newField.setHidden(true);
 					newField.setNullable(fm.isNullable());
 					newField.setInternal(true);
-					newField.setName(cm.getName() + fm.getName() + "Internal");
+					newField.setName(cm.getName() + fm.getName() + "_Internal");
 					newField.setColumnName(
 							cm.getName() + "_" + fm.getName() + "_internal");
 					newField.setType(cm.getName());

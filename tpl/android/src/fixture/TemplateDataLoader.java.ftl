@@ -79,6 +79,7 @@ import java.util.Date;
 import org.joda.time.DateTime;
 	</#if>
 import java.util.Map;
+</#if>
 
 <#list curr.fields?values as field>
 	<#if field.harmony_type?lower_case == "enum">
@@ -86,8 +87,6 @@ import java.util.Map;
 import ${entity_namespace}.${getCompleteNamespace(enumClass)};
 	</#if>
 </#list>
-
-</#if>
 
 import ${curr.namespace}.entity.${curr.name};
 
@@ -168,16 +167,23 @@ public class ${curr.name?cap_first}DataLoader
 					element.getChildText("${field.name?uncap_first}"));
 					<#elseif (field.harmony_type == "enum")>
 						<#assign enumType = enums[field.type] />
-						<#assign idEnum = enumType.fields[enumType.id] />
-						<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
+						<#if (enumType.id??)>
+							<#assign idEnum = enumType.fields[enumType.id] />
+							<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					${field.type}.fromValue(
 							Integer.parseInt(
 									element.getChildText(
 											"${field.name?uncap_first}"))));
-						<#else>
+							<#else>
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					${field.type}.fromValue(
+							element.getChildText(
+									"${field.name?uncap_first}")));
+							</#if>
+						<#else>
+			${curr.name?uncap_first}.set${field.name?cap_first}(
+					${field.type}.valueOf(
 							element.getChildText(
 									"${field.name?uncap_first}")));
 						</#if>
