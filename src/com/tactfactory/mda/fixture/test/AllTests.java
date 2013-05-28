@@ -20,5 +20,5 @@ import org.junit.runners.Suite.SuiteClasses;
 	FixtureGlobalTest.class })
 
 public class AllTests {
-
+	
 }

@@ -167,12 +167,11 @@ public class EnumCompletor extends BaseGenerator {
 	protected final int nbMotherClass(final ClassMetadata classMeta) {
 		int result = 1;
 		if (classMeta.getMotherClass() != null) {
-			return result + this.nbMotherClass(
+			result += this.nbMotherClass(
 					this.getAppMetas().getClasses().get(
 							classMeta.getMotherClass()));
-		} else {
-			return result;
 		}
+		return result;
 	}
 	
 	/** Recursively get the oldest mother of the given ClassMetadata.

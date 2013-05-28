@@ -20,6 +20,9 @@ import com.tactfactory.mda.utils.TactFileUtils;
  *
  */
 public class ProjectGenerator extends BaseGenerator {
+	
+	/** GIT command. */
+	private static final String GIT = "git";
 
 	/**
 	 * Constructor.
@@ -269,7 +272,7 @@ public class ProjectGenerator extends BaseGenerator {
 	private void initGitProject() {
 		final ArrayList<String> command = new ArrayList<String>();
 		File projectFolder = new File(Harmony.getProjectAndroidPath());
-		command.add("git");
+		command.add(GIT);
 		command.add("init");
 		command.add(projectFolder.getAbsolutePath());
 		ConsoleUtils.launchCommand(command);
@@ -288,7 +291,7 @@ public class ProjectGenerator extends BaseGenerator {
 			final ArrayList<String> command = new ArrayList<String>();
 			
 			// command/Tools
-			command.add("git");
+			command.add(GIT);
 			
 			// command action
 			command.add("clone");
@@ -303,7 +306,7 @@ public class ProjectGenerator extends BaseGenerator {
 			command.clear();
 			
 			// command git checkout
-			command.add("git");
+			command.add(GIT);
 			command.add(String.format(
 					"%s%s/%s", 
 					"--git-dir=", 
@@ -357,7 +360,7 @@ public class ProjectGenerator extends BaseGenerator {
 		
 		final File projectFolder = new File(Harmony.getProjectAndroidPath());
 		final ArrayList<String> command = new ArrayList<String>();
-		command.add("git");
+		command.add(GIT);
 		command.add("submodule");
 		command.add("add");
 		// command depot
