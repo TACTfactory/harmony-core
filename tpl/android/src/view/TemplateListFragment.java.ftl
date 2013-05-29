@@ -115,7 +115,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		}
 			
 		//return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
-		return new UserListLoader(this.getActivity(), 
+		return new ${curr.name?cap_first}ListLoader(this.getActivity(), 
 				crit,
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
 				${curr.name?cap_first}SQLiteAdapter.COLS, 

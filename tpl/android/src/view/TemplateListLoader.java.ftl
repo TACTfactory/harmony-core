@@ -1,7 +1,9 @@
 <#assign curr = entities[current_entity] />
 package ${curr.controller_namespace};
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.database.Cursor;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 
@@ -39,6 +41,24 @@ public class ${curr.name}ListLoader
 		this.criterias = criterias;
 	}
 
+	
+	@Override
+	public Cursor loadInBackground() {
+		ContentResolver provider = 
+				this.getContext().getContentResolver();
+		String selection = null;
+		if (this.criterias != null 
+				&& !this.criterias.isEmpty()) {
+			selection = this.criterias.toSQLiteString();
+		}
+		return provider.query(this.getUri(), 
+				null, 
+				selection, 
+				null,
+				null);
+		//return super.loadInBackground();
+	}
+	
 	// /**
 	 // * This is where the bulk of our work is done.  This function is
 	 // * called in a background thread and should generate a new set of
