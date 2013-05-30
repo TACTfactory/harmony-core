@@ -27,17 +27,23 @@ public abstract class SQLiteAdapterBase<T> {
 	public static String TAG = "${project_name?cap_first}SQLiteAdapterBase";
 
 	
-	/** Database tools. */
+	/** Context. */
 	protected Context ctx;
+	/**
+	 * Database.
+	 */
 	protected SQLiteDatabase mDatabase;
+	/**
+	 * Open Helper.
+	 */
 	protected ${project_name?cap_first}SQLiteOpenHelper mBaseHelper;
 	
 	
-	/** Constructor.
-	 * 
+	/**
+	 * Constructor. 
 	 * @param ctx context
 	 */
-	protected SQLiteAdapterBase(Context ctx) {	
+	protected SQLiteAdapterBase(final Context ctx) {	
 		this.ctx = ctx;
 		this.mBaseHelper = new ${project_name?cap_first}SQLiteOpenHelper(
 				ctx, 
@@ -53,8 +59,8 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	
-	/** Initialize and open database.
-	 * 
+	/** 
+	 * Initialize and open database.
 	 * @return Open database
 	 */
 	public SQLiteDatabase open() {
@@ -62,11 +68,12 @@ public abstract class SQLiteAdapterBase<T> {
 		return this.mDatabase;
 	}
 	
-	/** Initialize and open database.
+	/** 
+	 * Initialize and open database.
 	 * @param db database
 	 * @return Open database
 	 */
-	public SQLiteDatabase open(SQLiteDatabase db) {
+	public SQLiteDatabase open(final SQLiteDatabase db) {
 		this.mDatabase = db;
 		return this.mDatabase;
 	}
@@ -102,12 +109,12 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @param orderBy ORDER BY clause
 	 * @return A cursor pointing to the result of the query
 	 */
-	public Cursor query(String[] projection, 
-								String whereClause, 
-								String[] whereArgs, 
-								String groupBy, 
-								String having, 
-								String orderBy) {
+	public Cursor query(final String[] projection, 
+						final String whereClause, 
+						final String[] whereArgs, 
+						final String groupBy, 
+						final String having, 
+						final String orderBy) {
 		return this.mDatabase.query(
 				this.getTableName(),
 				projection,
@@ -124,7 +131,7 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @param item The ContentValues to insert
 	 * @return the id of the inserted entity
 	 */
-	public long insert(String nullColumnHack, ContentValues item) {
+	public long insert(final String nullColumnHack, final ContentValues item) {
 		return this.mDatabase.insert(
 				this.getTableName(),
 				nullColumnHack,
@@ -137,7 +144,7 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @param whereArgs WHERE arguments for SQL
 	 * @return how many token deleted
 	 */
-	public int delete(String whereClause, String[] whereArgs) {
+	public int delete(final String whereClause, final String[] whereArgs) {
 		return this.mDatabase.delete(
 				this.getTableName(),
 				whereClause,
@@ -151,8 +158,8 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @param whereArgs WHERE arguments for SQL
 	 * @return How many tokens updated
 	 */
-	public int update(ContentValues item, String whereClause, 
-											String[] whereArgs) {
+	public int update(final ContentValues item, final String whereClause, 
+												final String[] whereArgs) {
 		return this.mDatabase.update(
 				this.getTableName(),
 				item,
@@ -162,16 +169,18 @@ public abstract class SQLiteAdapterBase<T> {
 	
 	/**
 	 * Get the table Name.
+	 * @return the table name
 	 */
 	public abstract String getTableName();
 	/**
 	 * Get the table's columns.
+	 * @return array of cols
 	 */
 	public abstract String[] getCols();
 	
 		
-	/** Read All Comments entities.
-	 * 
+	/** 
+	 * Read All Comments entities.
 	 * @return List of Comment entities
 	 */
 	public ArrayList<T> getAll() {
@@ -183,11 +192,12 @@ public abstract class SQLiteAdapterBase<T> {
 		return result;
 	}
 	
-	/** Read All T entities given some criterias.
+	/** 
+	 * Read All T entities given some criterias.
 	 * @param crits The criterias to use for the request
 	 * @return List of T entities
 	 */
-	public ArrayList<T> getAll(CriteriasBase crits) {
+	public ArrayList<T> getAll(final CriteriasBase crits) {
 		ArrayList<T> result; 
 		
 		if (crits == null || crits.isEmpty()) {
@@ -204,8 +214,8 @@ public abstract class SQLiteAdapterBase<T> {
 		return result;
 	}
 	
-	/** Convert Cursor of database to Array of Comment entity.
-	 * 
+	/** 
+	 * Convert Cursor of database to Array of Comment entity.
 	 * @param cursor Cursor object
 	 * @return Array of Comment entity
 	 */
@@ -229,31 +239,31 @@ public abstract class SQLiteAdapterBase<T> {
 		return result;
 	}
 	
-	/** Convert Cursor of database to Comment entity.
-	 * 
+	/** 
+	 * Convert Cursor of database to Comment entity.
 	 * @param cursor Cursor object
 	 * @return Comment entity
 	 */
-	public abstract T cursorToItem(Cursor c);
+	public abstract T cursorToItem(final Cursor c);
 
-	/** Insert a Comment entity into database.
-	 * 
+	/** 
+	 * Insert a Comment entity into database.
 	 * @param item The Comment entity to persist 
 	 * @return Id of the Comment entity
 	 */
-	public abstract long insert(T item);
+	public abstract long insert(final T item);
 	
-	/** Update a Comment entity into database.
-	 * 
+	/** 
+	 * Update a Comment entity into database.
 	 * @param item The Comment entity to persist
 	 * @return The count of updated entities  
 	 */
-	public abstract int update(T item);
+	public abstract int update(final T item);
 	
-	/** Delete a Comment entity into database.
-	 * 
+	/** 
+	 * Delete a Comment entity into database.
 	 * @param item The Comment entity to persist
 	 * @return The count of deleted entities
 	 */
-	public abstract int delete(T item);
+	public abstract int delete(final T item);
 }

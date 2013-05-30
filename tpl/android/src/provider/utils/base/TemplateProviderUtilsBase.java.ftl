@@ -55,13 +55,25 @@ import ${project_namespace}.provider.${project_name?cap_first}Provider;</#if>
 <#list curr.relations as relation><#if !relation_array?seq_contains(relation.relation.targetEntity)>import ${project_namespace}.provider.utils.${relation.relation.targetEntity}ProviderUtils;
 </#if></#list>
 
+/**
+ * ${curr.name?cap_first} Provider Utils Base.
+ */
 public class ${curr.name?cap_first}ProviderUtilsBase {
+	/**
+	 * Tag for debug messages.
+	 */
 	public static final String TAG = "${curr.name?cap_first}ProviderUtilBase";
 
 	/** Base operations.*/
 
 	<#if hasInternalFields>
-	public static int insert(Context ctx, ${curr.name} item) {
+	/**
+	 * Insert into DB. 
+	 * @param ctx Context
+	 * @param item ${curr.name} to insert
+	 * @return number of rows affected
+	 */
+	public static int insert(final Context ctx, final ${curr.name} item) {
 		int result = -1;
 		${curr.name?cap_first}SQLiteAdapter adapt = new ${curr.name?cap_first}SQLiteAdapter(ctx);
 		ContentResolver prov = ctx.getContentResolver();
@@ -128,7 +140,15 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 	}
 
 	</#if>
-	public static int insert(Context ctx, ${curr.name?cap_first} item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, int ${relation.name?uncap_first}Id</#if></#list>) {
+	/**
+	 * Insert into DB. 
+	 * @param ctx Context
+	 * @param item ${curr.name} to insert
+	 * @return number of rows affected
+	 */
+	public static int insert(final Context ctx, 
+							 final ${curr.name?cap_first} item
+<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, final int ${relation.name?uncap_first}Id</#if></#list>) {
 		int result = -1;
 		${curr.name?cap_first}SQLiteAdapter adapt = new ${curr.name?cap_first}SQLiteAdapter(ctx);
 		ContentResolver prov = ctx.getContentResolver();
@@ -194,7 +214,14 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 		return result;
 	}
 
-	public static int delete(Context ctx, ${curr.name?cap_first} item) {
+	/**
+	 * Delete from DB.
+	 * @param ctx Context
+	 * @param item ${curr.name?cap_first}
+	 * @return number of row affected 
+	 */
+	public static int delete(final Context ctx, 
+							 final ${curr.name?cap_first} item) {
 		int result = -1;
 		ContentResolver prov = ctx.getContentResolver();
 
@@ -209,8 +236,13 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 		return result;
 	}
 
-	
-	public static ${curr.name?cap_first} query(Context ctx, int id) {
+	/**
+	 * Query the DB.
+	 * @param ctx Context
+	 * @param id The ID
+	 * @return ${curr.name?cap_first}
+	 */
+	public static ${curr.name?cap_first} query(final Context ctx, final int id) {
 		${curr.name?cap_first} result = null;
 		${curr.name?cap_first}SQLiteAdapter adapt = new ${curr.name?cap_first}SQLiteAdapter(ctx);
 		ContentResolver prov = ctx.getContentResolver();
@@ -287,8 +319,12 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 		return result;
 	}
 
-	
-	public static ArrayList<${curr.name}> queryAll(Context ctx) {
+	/**
+	 * Query the DB to get all entities.
+	 * @param ctx Context
+	 * @return ArrayList<${curr.name}>
+	 */
+	public static ArrayList<${curr.name}> queryAll(final Context ctx) {
 		ArrayList<${curr.name}> result = new ArrayList<${curr.name}>();
 		${curr.name}SQLiteAdapter adapt = new ${curr.name}SQLiteAdapter(ctx);
 		ContentResolver prov = ctx.getContentResolver();
@@ -307,7 +343,13 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 	}
 
 	<#if hasInternalFields>
-	public static int update(Context ctx, ${curr.name} item) {
+	/**
+	 * Updates the DB.
+	 * @param ctx Context
+	 * @param item ${curr.name}
+	 * @return number of rows updated
+	 */
+	public static int update(final Context ctx, final ${curr.name} item) {
 		int result = -1;
 		${curr.name}SQLiteAdapter adapt = new ${curr.name}SQLiteAdapter(ctx);
 		ContentResolver prov = ctx.getContentResolver();		
@@ -345,7 +387,14 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 	}
 
 	</#if>
-	public static int update(Context ctx, ${curr.name} item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, int ${relation.name?uncap_first}Id</#if></#list>) {
+	/**
+	 * Updates the DB.
+	 * @param ctx Context
+	 * @param item ${curr.name}
+	 * @return number of rows updated
+	 */
+	public static int update(final Context ctx, final ${curr.name} item
+<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, final int ${relation.name?uncap_first}Id</#if></#list>) {
 		int result = -1;
 		${curr.name}SQLiteAdapter adapt = new ${curr.name}SQLiteAdapter(ctx);
 		ContentResolver prov = ctx.getContentResolver();		
@@ -386,7 +435,13 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 	<#list curr.relations as relation>
 		<#if (!relation.internal)>
 			<#if (relation.relation.type == "ManyToOne" || relation.relation.type == "OneToOne")>
-	public static ${relation.relation.targetEntity?cap_first} getAssociate${relation.name?cap_first}(Context ctx, ${curr.name} item) {		
+	/**
+	 * Get associate ${relation.name?cap_first}.
+	 * @param ctx Context
+	 * @param item ${curr.name}
+	 * @return ${relation.relation.targetEntity?cap_first}
+	 */
+	public static ${relation.relation.targetEntity?cap_first} getAssociate${relation.name?cap_first}(final Context ctx, final ${curr.name} item) {		
 		${relation.relation.targetEntity?cap_first} result;
 		ContentResolver prov = ctx.getContentResolver();
 		Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
@@ -408,7 +463,13 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 		return result;
 	}
 			<#elseif (relation.relation.type == "OneToMany")>
-	public static ArrayList<${relation.relation.targetEntity?cap_first}> getAssociate${relation.name?cap_first}(Context ctx, ${curr.name} item) {	
+	/**
+	 * Get associate ${relation.name?cap_first}.
+	 * @param ctx Context
+	 * @param item ${curr.name}
+	 * @return ${relation.relation.targetEntity?cap_first}
+	 */
+	public static ArrayList<${relation.relation.targetEntity?cap_first}> getAssociate${relation.name?cap_first}(final Context ctx, final ${curr.name} item) {	
 		ArrayList<${relation.relation.targetEntity?cap_first}> result;	
 		ContentResolver prov = ctx.getContentResolver();
 		Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
@@ -425,7 +486,13 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 		return result;
 	}
 			<#elseif (relation.relation.type == "ManyToMany")>
-	public static ArrayList<${relation.relation.targetEntity?cap_first}> getAssociate${relation.name?cap_first}(Context ctx, ${curr.name} item) {		
+	/**
+	 * Get associate ${relation.name?cap_first}.
+	 * @param ctx Context
+	 * @param item ${curr.name}
+	 * @return ${relation.relation.targetEntity?cap_first}
+	 */
+	public static ArrayList<${relation.relation.targetEntity?cap_first}> getAssociate${relation.name?cap_first}(final Context ctx, final ${curr.name} item) {		
 		ArrayList<${relation.relation.targetEntity?cap_first}> result;	
 		ContentResolver prov = ctx.getContentResolver();
 		Cursor ${relation.relation.joinTable?uncap_first}Cursor = prov.query(
