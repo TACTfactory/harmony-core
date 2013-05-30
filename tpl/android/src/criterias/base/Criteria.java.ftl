@@ -1,25 +1,39 @@
 package ${project_namespace}.criterias.base;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+
 import android.database.DatabaseUtils;
+
+import ${project_namespace}.criterias.base.value.CriteriaValue;
 
 /** Criteria. Criteria used for some db requests.*/
 public class Criteria implements Serializable, ICriteria {
 	/** Criteria key. */
 	private String key;
 	/** Criteria value. */
-	private String value;
+	private CriteriaValue value;
 	/** Criteria Type. */
 	private Type type = Type.EQUALS;
 
-	/**
-	 * Convert the criteria to a SQLite String.
-	 * @return The SQLite String representation of the criteria. ex : <br />
-	 * "(price > 15.0)" 
-	 */
+
 	@Override
 	public String toSQLiteString() {
-		return "(" + key + " " + type.getSQL() + " " + DatabaseUtils.sqlEscapeString(value) + ")";
+		return "(" + key + " " + type.getSQL() + " " + DatabaseUtils.sqlEscapeString(value.toSQLiteString()) + ")";
+	}
+
+	@Override
+	public String toSQLiteSelection() {
+		return "(" 
+			+ key + " " 
+			+ this.type.getSQL() + " " 
+			+ this.value.toSQLiteSelection() 
+			+ ")";
+	}
+	
+	@Override
+	public void toSQLiteSelectionArgs(ArrayList<String> array) {
+		value.toSQLiteSelectionArgs(array);
 	}
 	
 	/**
@@ -34,7 +48,7 @@ public class Criteria implements Serializable, ICriteria {
 	 * Get the Criteria value.
 	 * @return The Criteria's value
 	 */
-	public String getValue() {
+	public CriteriaValue getValue() {
 		return this.value;
 	}
 	
@@ -50,7 +64,7 @@ public class Criteria implements Serializable, ICriteria {
 	 * Set the Criteria value.
 	 * @param value The new value to set
 	 */
-	public void addValue(final String value) {
+	public void addValue(final CriteriaValue value) {
 		this.value = value;
 	}
 	

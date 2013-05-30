@@ -1,6 +1,8 @@
 <#assign curr = entities[current_entity] />
 package ${curr.controller_namespace};
 
+import java.util.ArrayList;
+
 import android.content.ContentResolver;
 import android.content.Context;
 import android.database.Cursor;
@@ -8,6 +10,7 @@ import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 
 import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
+import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 
 /**
  * ${curr.name} Loader.
@@ -46,125 +49,20 @@ public class ${curr.name}ListLoader
 	public Cursor loadInBackground() {
 		ContentResolver provider = 
 				this.getContext().getContentResolver();
+		ArrayList<String> array = new ArrayList<String>();
 		String selection = null;
+		String[] selectionArgs = null;
 		if (this.criterias != null 
 				&& !this.criterias.isEmpty()) {
-			selection = this.criterias.toSQLiteString();
+			selection = this.criterias.toSQLiteSelection();
+			this.criterias.toSQLiteSelectionArgs(array);
+			selectionArgs = array.toArray(new String[array.size()]);
 		}
-		return provider.query(this.getUri(), 
-				null, 
-				selection, 
-				null,
-				null);
-		//return super.loadInBackground();
-	}
-	
-	// /**
-	 // * This is where the bulk of our work is done.  This function is
-	 // * called in a background thread and should generate a new set of
-	 // * data to be published by the loader.
-	 // */
-	// @Override 
-	// public List<${curr.name}> loadInBackground() {
-		// List<${curr.name}> result;
-
-		// result = ${curr.name?cap_first}ProviderUtils.queryAll(
-				// this.ctx);
 		
-		// return result;
-	// }
-
-	// /**
-	 // * Called when there is new data to deliver to the client.  The
-	 // * super class will take care of delivering it; the implementation
-	 // * here just adds a little more logic.
-	 // */
-	// @Override 
-	// public void deliverResult(final List<${curr.name}> items) {
-		// if (this.isReset() && items != null) {
-			// // An async query came in while the loader is stopped.  We
-			// // don't need the result.
-			
-			// this.onReleaseResources(items);
-		// }
-		// final List<${curr.name}> oldItems = items;
-		// this.m${curr.name}s = items;
-
-		// if (this.isStarted()) {
-			// // If the Loader is currently started, we can immediately
-			// // deliver its results.
-			// super.deliverResult(items);
-		// }
-
-		// // At this point we can release the resources associated with
-		// // 'oldApps' if needed; now that the new result is delivered we
-		// // know that it is no longer in use.
-		// if (oldItems != null) {
-			// this.onReleaseResources(oldItems);
-		// }
-	// }
-
-	// /**
-	 // * Handles a request to start the Loader.
-	 // */
-	// @Override 
-	// protected void onStartLoading() {
-		// if (this.m${curr.name}s != null) {
-			// // If we currently have a result available, deliver it
-			// // immediately.
-			// this.deliverResult(this.m${curr.name}s);
-		// }
-
-		// if (this.takeContentChanged() || this.m${curr.name}s == null) {
-			// // If the data has changed since the last time it was loaded
-			// // or is not currently available, start a load.
-			// this.forceLoad();
-		// }
-	// }
-
-	// /**
-	 // * Handles a request to stop the Loader.
-	 // */
-	// @Override 
-	// protected void onStopLoading() {
-		// // Attempt to cancel the current load task if possible.
-		// this.cancelLoad();
-	// }
-
-	// /**
-	 // * Handles a request to cancel a load.
-	 // */
-	// @Override 
-	// public void onCanceled(List<${curr.name}> items) {
-		// super.onCanceled(items);
-
-		// this.onReleaseResources(items);
-	// }
-
-	// /**
-	 // * Handles a request to completely reset the Loader.
-	 // */
-	// @Override 
-	// protected void onReset() {
-		// super.onReset();
-
-		// // Ensure the loader is stopped
-		// this.onStopLoading();
-
-		// // At this point we can release the resources associated with 
-		// // '${curr.name}' if needed.
-		// if (this.m${curr.name}s != null) {
-			// this.onReleaseResources(this.m${curr.name}s);
-			// this.m${curr.name}s = null;
-		// }
-	// }
-
-	// /**
-	 // * Helper function to take care of releasing resources associated
-	 // * with an actively loaded data set.
-	 // */
-	// protected void onReleaseResources(List<${curr.name}> messages) {
-		// // For a simple List<> there is nothing to do.  For something
-		// // like a Cursor, we would close it here.
-	// }
+		return provider.query(UserProviderAdapter.USER_URI,
+				null,
+				selection,
+				selectionArgs,
+				null);
+	}
 }
