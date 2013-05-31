@@ -70,7 +70,7 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 					<#if field.type?lower_case=="string">
 		${curr.name?uncap_first}.set${field.name?cap_first}("${field.name?uncap_first}_"+TestUtils.generateRandomString(10));
 					<#elseif (field.type?lower_case == "int" || field.type?lower_case == "integer")>
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomInt(0,100));
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomInt(0,100)<#if (field.id?? && field.id)> + 1</#if>);
 					<#elseif field.type?lower_case=="boolean">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomBool());
 					<#elseif field.type?lower_case=="double">
