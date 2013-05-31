@@ -24,6 +24,7 @@ public class ${curr.name?cap_first}Criterias extends CriteriasBase {
 	/**
 	 * Checks if the given Criteria is valid.
 	 * @param crit The Criteria to validate
+	 * @return true if the criteria is valid
 	 */
 	@Override
 	public boolean validCriteria(final Criteria crit) {

@@ -15,8 +15,8 @@ public interface ICriteria {
 
 	/**
 	 * Convert the criteria to a SQLite Selection String.
-	 * @return The SQLite Selection String representation of the criteria. ex : <br />
-	 * "(price > ?)" 
+	 * @return The SQLite Selection String representation of the criteria.<br />
+	 * ex : "(price > ?)" 
 	 */
 	String toSQLiteSelection();
 

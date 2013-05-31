@@ -19,7 +19,11 @@ public class Criteria implements Serializable, ICriteria {
 
 	@Override
 	public String toSQLiteString() {
-		return "(" + key + " " + type.getSQL() + " " + DatabaseUtils.sqlEscapeString(value.toSQLiteString()) + ")";
+		return "(" 
+		+ key + " " 
+		+ type.getSQL() + " " 
+		+ DatabaseUtils.sqlEscapeString(value.toSQLiteString()) 
+		+ ")";
 	}
 
 	@Override
@@ -32,7 +36,7 @@ public class Criteria implements Serializable, ICriteria {
 	}
 	
 	@Override
-	public void toSQLiteSelectionArgs(ArrayList<String> array) {
+	public void toSQLiteSelectionArgs(final ArrayList<String> array) {
 		value.toSQLiteSelectionArgs(array);
 	}
 	
@@ -88,14 +92,22 @@ public class Criteria implements Serializable, ICriteria {
 	 * Enum Type for SQL purpose.
 	 */
 	public static enum Type {
+		/** Equals "=". */
 		EQUALS("="),
+		/** Greater than ">". */
 		SUPERIOR(">"),
+		/** Smaller than "<". */
 		INFERIOR("<"),
-		INFERIOR_EQUALS(">="),
-		SUPERIOR_EQUALS("<="),
+		/** Inferior or equal "<=". */
+		INFERIOR_EQUALS("<="),
+		/** Superior or equals ">=". */
+		SUPERIOR_EQUALS(">="),
+		/** Like "LIKE". */
 		LIKE("LIKE"),
+		/** IN "IN" (May be used with ArrayValue or SelectValue). */
 		IN("IN");
 		
+		/** SQLite representation of this type. */
 		private String sql;
 		
 		/**

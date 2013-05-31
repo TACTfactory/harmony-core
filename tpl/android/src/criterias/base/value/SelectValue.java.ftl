@@ -5,9 +5,17 @@ import java.util.ArrayList;
 import ${project_namespace}.criterias.base.CriteriasBase;
 
 
+/** A SelectValue is used to query another table in a criteria.
+ * (Use only with IN type criterias)
+ * Example : SELECT * FROM table1 WHERE id IN (
+ *		SELECT refKey FROM refTable WHERE criteria);
+ */ 
 public class SelectValue extends CriteriaValue {
+	/** The table referenced by this SelectValue. */
 	private String refTable;
+	/** The field in refTable that will match this criteria's key. */
 	private String refKey;
+	/** A criteria of the refTable type. */
 	private CriteriasBase criteria;
 	
 	/**
@@ -69,7 +77,7 @@ public class SelectValue extends CriteriaValue {
 	}
 
 	@Override
-	public void toSQLiteSelectionArgs(ArrayList<String> array) {
+	public void toSQLiteSelectionArgs(final ArrayList<String> array) {
 		this.criteria.toSQLiteSelectionArgs(array);
 		
 	}

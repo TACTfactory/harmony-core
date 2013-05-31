@@ -59,7 +59,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	}
 
 	@Override	
-	public void toSQLiteSelectionArgs(ArrayList<String> array) {
+	public void toSQLiteSelectionArgs(final ArrayList<String> array) {
 		
 		for (int i = 0; i < this.criterias.size(); i++) {
 			final ICriteria crit = this.criterias.get(i);
@@ -123,9 +123,12 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	 * Enum GroupType.
 	 */
 	public enum GroupType {
+		/** AND type.*/
 		AND("AND"),
+		/** OR type.*/
 		OR("OR");
 		
+		/** SQLite representation of this type. */
 		private String sql;
 		
 		/**

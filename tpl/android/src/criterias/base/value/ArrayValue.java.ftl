@@ -2,6 +2,10 @@ package ${project_namespace}.criterias.base.value;
 
 import java.util.ArrayList;
 
+/** An array Value.
+ * (Use only with IN type criterias)
+ * Example : SELECT * FROM table1 WHERE id IN (values[1], values[2], values[3]);
+ */ 
 public class ArrayValue extends CriteriaValue {
 	private ArrayList<String> values = new ArrayList<String>();
 	
@@ -9,7 +13,7 @@ public class ArrayValue extends CriteriaValue {
 	public String toSQLiteString() {
 		String valuesString = "(";
 		String delimiter = "";
-		for(String value : this.values) {
+		for(final String value : this.values) {
 			valuesString += delimiter + value;
 			delimiter = ", ";
 		}
@@ -33,7 +37,7 @@ public class ArrayValue extends CriteriaValue {
 	}
 	
 	@Override
-	public void toSQLiteSelectionArgs(ArrayList<String> array) {
+	public void toSQLiteSelectionArgs(final ArrayList<String> array) {
 		array.addAll(this.values);
 	}
  
