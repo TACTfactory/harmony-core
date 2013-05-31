@@ -11,7 +11,6 @@ package com.tactfactory.mda.test.orm;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Test;
 
 import com.tactfactory.mda.command.OrmCommand;
 import com.tactfactory.mda.command.ProjectCommand;
