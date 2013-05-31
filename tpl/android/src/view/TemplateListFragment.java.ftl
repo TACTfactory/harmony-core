@@ -1,30 +1,23 @@
 <#assign curr = entities[current_entity] />
 package ${curr.controller_namespace};
 
-import java.util.List;
-
 import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
 import ${data_namespace}.${curr.name?cap_first}SQLiteAdapter;
+import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 import ${project_namespace}.harmony.view.DeletableList;
 import ${project_namespace}.harmony.view.DeleteDialog;
 import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 
-import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.AdapterView.OnItemLongClickListener;
 
 import ${project_namespace}.harmony.view.HarmonyListFragment;
 
@@ -114,24 +107,34 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	 * android.os.Bundle)
 	 */
 	@Override 
-	public Loader<List<${curr.name}>> onCreateLoader(int id, Bundle bundle) { 
+	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) { 
 		${curr.name?cap_first}Criterias crit = null;
 		if (bundle != null) {
 			crit = (${curr.name?cap_first}Criterias) bundle.get(
 						${curr.name?cap_first}Criterias.PARCELABLE);
 		}
 			
-		return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
+		//return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
+		return new ${curr.name?cap_first}ListLoader(this.getActivity(), 
+				crit,
+				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
+				${curr.name?cap_first}SQLiteAdapter.COLS, 
+				null, 
+				null, 
+				null);
 	}
 
 	/**
 	 * @see android.support.v4.app.LoaderManager#onLoadFinished()
 	 */
 	@Override 
-	public void onLoadFinished(Loader<List<${curr.name}>> loader, 
-											List<${curr.name}> data) {
+	public void onLoadFinished(Loader<Cursor> loader, 
+											Cursor data) {
 		// Set the new data in the adapter.
-		this.mAdapter.setData(data);
+		//this.mAdapter.setData(data);
+		data.setNotificationUri(this.getActivity().getContentResolver(), 
+				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI);
+		this.mAdapter.swapCursor(data);
 
 		// The list should now be shown.
 		if (this.isResumed()) {
@@ -145,9 +148,9 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	 * @see android.support.v4.app.LoaderManager#onLoaderReset()
 	 */
 	@Override 
-	public void onLoaderReset(Loader<List<${curr.name}>> loader) {
+	public void onLoaderReset(Loader<Cursor> loader) {
 		// Clear the data in the adapter.
-		this.mAdapter.setData(null);
+		this.mAdapter.swapCursor(null);
 	}
 
 
@@ -211,19 +214,6 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 			result = ${curr.name?cap_first}ProviderUtils.delete(this.ctx, this.item);
 
 			return result;
-		}
-		
-		/**
-		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-		 */
-		@Override
-		protected void onPostExecute(Integer result) {
-			if (result > 0) {
-				${curr.name?cap_first}ListFragment.this
-					.getLoaderManager().restartLoader(0,
-							null, 
-							${curr.name?cap_first}ListFragment.this);
-			}
 		}
 		
 	}
