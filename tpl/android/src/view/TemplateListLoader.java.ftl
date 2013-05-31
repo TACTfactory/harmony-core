@@ -59,7 +59,7 @@ public class ${curr.name}ListLoader
 			selectionArgs = array.toArray(new String[array.size()]);
 		}
 		
-		return provider.query(UserProviderAdapter.USER_URI,
+		return provider.query(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
 				null,
 				selection,
 				selectionArgs,
