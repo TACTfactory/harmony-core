@@ -370,46 +370,6 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	}
 
 	/**
-	 * @see android.content.ContentProvider#call<br />
-	 * (java.lang.String, java.lang.String, android.os.Bundle)
-	 */
-	@Override
-	public Bundle call(String method, String arg, Bundle extras) {
-		Bundle result = null;
-		<#list entities?values as entity>			
-			<#if (entity.fields?size>0) >
-		if (method.equals(${entity.name?cap_first}ProviderAdapter
-				.METHOD_INSERT_${entity.name?upper_case})) {
-			result = this.${entity.name?uncap_first}Provider.insert(arg, extras);
-		}
-		else if (method.equals(${entity.name?cap_first}ProviderAdapter
-				.METHOD_DELETE_${entity.name?upper_case})) {
-			result = this.${entity.name?uncap_first}Provider.delete(arg, extras);
-		}
-		else if (method.equals(${entity.name?cap_first}ProviderAdapter
-				.METHOD_UPDATE_${entity.name?upper_case})) {
-			result = this.${entity.name?uncap_first}Provider.update(arg, extras);
-		} else
-		if (method.equals(
-				${entity.name?cap_first}ProviderAdapter.METHOD_QUERY_${entity.name?upper_case})) {
-			if (extras != null && extras.containsKey("id")) {
-				result = this.${entity.name?uncap_first}Provider.query(arg, 
-																		extras);
-			} else {
-				result = this.${entity.name?uncap_first}Provider.queryAll(arg, 
-						extras);	
-			}
-		} else
-			</#if>
-		</#list>
-		{
-			result = super.call(method, arg, extras);
-		}
-		
-		return result;
-	}
-
-	/**
 	 * Get URI Matcher.
 	 * @return the uriMatcher
 	 */

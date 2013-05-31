@@ -1,9 +1,8 @@
 package ${project_namespace}.harmony.view;
 
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.database.Cursor;
 import android.support.v4.app.LoaderManager;
 import android.view.View;
 import android.widget.LinearLayout;
@@ -21,7 +20,7 @@ import ${project_namespace}.menu.${project_name?cap_first}Menu;
  * @param <T> Type to show
  */
 public abstract class HarmonyListFragment<T> extends SherlockListFragment 
-implements LoaderManager.LoaderCallbacks<List<T> > {
+implements LoaderManager.LoaderCallbacks<Cursor> {
 	/**
 	 * Recall internal address (Hack Micky).
 	 */
