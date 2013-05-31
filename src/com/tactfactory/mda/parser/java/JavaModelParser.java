@@ -17,6 +17,8 @@ import java.io.FileNotFoundException;
 import java.io.FilenameFilter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import com.tactfactory.mda.meta.ApplicationMetadata;
@@ -100,11 +102,13 @@ public class JavaModelParser {
 	public final void loadEntities() throws Exception {
 		final File dir = new File(this.entityPath);
 		final String[] files = dir.list(this.filter);
+		ArrayList<String> filesNames = new ArrayList<String>(Arrays.asList(files));
+		Collections.sort(filesNames);
 		
 		if (files == null) {
 			throw new Exception("No entity files found!");
 		} else {
-			for (final String filename : files) {
+			for (final String filename : filesNames) {
 				this.parseJavaFile(this.entityPath + filename);
 			}
 		}
