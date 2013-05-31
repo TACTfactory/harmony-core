@@ -12,7 +12,8 @@ import ${project_namespace}.R;
 
 import android.app.Application;
 import android.content.Context;
-import android.net.ConnectivityManager;
+<#if (sync)>import android.content.SharedPreferences.Editor;
+</#if>import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;

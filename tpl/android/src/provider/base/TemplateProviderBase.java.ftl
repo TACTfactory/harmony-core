@@ -46,6 +46,9 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	</#list>
 	protected SQLiteDatabase db;
 	
+	/**
+	 * Context.
+	 */
 	protected Context mContext;
 
 	/**
@@ -237,8 +240,9 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	 * @return A cursor pointing to the result of the query
 	 */
 	@Override
-	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
+	public Cursor query(final Uri uri, final String[] projection, 
+			final String selection, final String[] selectionArgs, 
+			final String sortOrder) {
 		Cursor result = null;
 
 		boolean alreadyInTransaction = this.db.inTransaction();
@@ -296,8 +300,8 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	 * @return how many token update
 	 */
 	@Override
-	public int update(Uri uri, ContentValues values, String selection,
-			String[] selectionArgs) {
+	public int update(final Uri uri, final ContentValues values, 
+				      final String selection, final String[] selectionArgs) {
 		int result = 0;
 
 		boolean alreadyInTransaction = this.db.inTransaction();
@@ -354,7 +358,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	 * @param typePath Path to type
 	 * @return generated URI
 	 */	
-	public static final Uri generateUri(String typePath) {
+	public static final Uri generateUri(final String typePath) {
 		return Uri.parse("content://" + authority + "/" + typePath);
 	}
 	
