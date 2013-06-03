@@ -1,0 +1,11 @@
+UserGroup:
+   User:
+      id: 0
+      name: Utilisateur
+      writePermission: true
+      deletePermission: false
+   Admin:
+      id: 0
+      name: Administrateur
+      writePermission: true
+      deletePermission: true

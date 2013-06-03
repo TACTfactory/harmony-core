@@ -126,7 +126,13 @@ public abstract class ${project_name?cap_first}MenuBase {
 					this.ctx);
 		}
 	}
-	
+
+	public void clear(final Menu menu) {
+		for (int i = 0; i < this.menus.size(); i++) {
+			this.menus.valueAt(i).clear(menu);
+		}
+	}
+
 	/** Call intent associate to menu item selected.
 	 * @param item item
 	 * @param ctx context 

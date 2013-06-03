@@ -8,7 +8,8 @@
  */
 package com.tactfactory.mda.template;
 
-import com.tactfactory.mda.meta.ClassMetadata;
+import java.io.File;
+
 import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
@@ -39,6 +40,8 @@ public class TestDBGenerator extends BaseGenerator {
 		ConsoleUtils.display(">> Generate Repository test...");
 		
 		//this.initTestAndroid();
+		this.getDatamodel().put("dataLoader",
+				this.isDataLoaderAlreadyGenerated());
 	
 		for (final EntityMetadata cm 
 				: this.getAppMetas().getEntities().values()) {
@@ -51,8 +54,13 @@ public class TestDBGenerator extends BaseGenerator {
 				this.generate();
 			}
 		}
-		this.makeSourceTest("utils/TestUtils.java", "utils/TestUtils.java", false);
-		this.makeSourceTest("base/TestDBBase.java", "base/TestDBBase.java", true);
+		this.makeSourceTest("utils/TestUtils.java",
+				"utils/TestUtils.java", 
+				false);
+		
+		this.makeSourceTest("base/TestDBBase.java",
+				"base/TestDBBase.java",
+				true);
 	}
 	
 	/**  
@@ -88,6 +96,20 @@ public class TestDBGenerator extends BaseGenerator {
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
+	}
+	
+	/**
+	 * Check if the fixture dataloader class has already been generated.
+	 * @return True if it already exists.
+	 */
+	private boolean isDataLoaderAlreadyGenerated() {
+		String dataLoaderPath = this.getAdapter().getSourcePath() 
+				+ this.getAppMetas().getProjectNameSpace()
+				+ "/" + this.getAdapter().getFixture() + "/" 
+				+ "DataLoader.java";
+		
+		
+		return new File(dataLoaderPath).exists();
 	}
 	
 	/** 

@@ -73,8 +73,7 @@ public abstract class TactFileUtils extends FileUtils {
 	public static void copyfile(final File srcFile, final File destFile) {
 		try {
 			Files.copy(srcFile, destFile);
-		} 
-		catch (final IOException e) {
+		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);			
 		}
 	}
@@ -117,20 +116,20 @@ public abstract class TactFileUtils extends FileUtils {
 	 */
 	public static String fileToString(final File file) {
 		String result = null;
-		DataInputStream in = null;
+		DataInputStream inStream = null;
 
 		try {
 			final byte[] buffer = new byte[(int) file.length()];
-			in = new DataInputStream(new FileInputStream(file));
-			in.readFully(buffer);
+			inStream = new DataInputStream(new FileInputStream(file));
+			inStream.readFully(buffer);
 			result = new String(buffer, TactFileUtils.DEFAULT_ENCODING);
 		} catch (final IOException e) {
 			throw new RuntimeException("IO problem in fileToString",
 					e);
 		} finally {
 			try {
-				if (in != null) {
-					in.close();
+				if (inStream != null) {
+					inStream.close();
 				}
 			} catch (final IOException e) { 
 				ConsoleUtils.displayError(e);
@@ -147,33 +146,33 @@ public abstract class TactFileUtils extends FileUtils {
 	public static StringBuffer fileToStringBuffer(final File file) {
 		final StringBuffer result = new StringBuffer();
 		String tmp;
-		final String ln = System.getProperty("line.separator");
+		final String lineSeparator = System.getProperty("line.separator");
 		
 		FileInputStream fis = null;
-		InputStreamReader in = null;
-		BufferedReader br = null;
+		InputStreamReader inStream = null;
+		BufferedReader bReader = null;
 		try {
 			fis = new FileInputStream(file);
-			in = new InputStreamReader(fis, TactFileUtils.DEFAULT_ENCODING);
-			br = new BufferedReader(in);
+			inStream = new InputStreamReader(fis, TactFileUtils.DEFAULT_ENCODING);
+			bReader = new BufferedReader(inStream);
 			while (true) {
-				tmp = br.readLine();
+				tmp = bReader.readLine();
 				if (tmp == null) {
 					break;
 				}
 				result.append(tmp);
-				result.append(ln);
+				result.append(lineSeparator);
 			}
 			
 		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);
 		} finally {
 			try {
-				if (br != null) {
-					br.close();
+				if (bReader != null) {
+					bReader.close();
 				}
-				if (in != null) {
-					in.close();
+				if (inStream != null) {
+					inStream.close();
 				}
 				if (fis != null) {
 					fis.close();
@@ -229,29 +228,29 @@ public abstract class TactFileUtils extends FileUtils {
 		
 		ArrayList<String> result = null;
 		String line = null;
-		DataInputStream in = null;
-		BufferedReader br = null;
+		DataInputStream inStream = null;
+		BufferedReader bReader = null;
 
 		try {
 			result = new ArrayList<String>();
-			in = new DataInputStream(new FileInputStream(file));
-			br = new BufferedReader(
-					new InputStreamReader(in, TactFileUtils.DEFAULT_ENCODING));
-			line = br.readLine(); 
+			inStream = new DataInputStream(new FileInputStream(file));
+			bReader = new BufferedReader(
+					new InputStreamReader(inStream, TactFileUtils.DEFAULT_ENCODING));
+			line = bReader.readLine(); 
 			while (line != null) {
 				result.add(line);
-				line = br.readLine();
+				line = bReader.readLine();
 			}
 		} catch (final IOException e) {
 			throw new RuntimeException("IO problem in fileToString",
 					e);
 		} finally {
 			try {
-				if (in != null) {
-					in.close();
+				if (inStream != null) {
+					inStream.close();
 				}
-				if (br != null) {
-					br.close();
+				if (bReader != null) {
+					bReader.close();
 				}
 			} catch (final IOException e) { 
 				ConsoleUtils.displayError(e);
@@ -276,8 +275,8 @@ public abstract class TactFileUtils extends FileUtils {
 					new OutputStreamWriter(out,
 							TactFileUtils.DEFAULT_ENCODING));
 
-			for (String s : strings) {
-				br.write(s);
+			for (final String string : strings) {
+				br.write(string);
 				br.write('\n');
 			}
 		} catch (final IOException e) {
@@ -406,64 +405,78 @@ public abstract class TactFileUtils extends FileUtils {
 	 */
 	private static int deleteRecursive(final File dir, final int result) {
 		int ret = result;
-		if (dir.exists()) {
-			if (dir.isDirectory()) {
-				//it's a directory, list files and call deleteDir on a dir
-				for (final File f : dir.listFiles()) {
-					if (f.isDirectory()) {
-						ret = TactFileUtils.deleteRecursive(f, ret);
-					} else {
-						if (!f.delete()) {
-							ret++;
-							
-							ConsoleUtils.displayWarning(FILE
-									 + f.getPath()
-									 + "' delete ERROR!");
+
+		try {
+			if (dir.exists()) {
+				if (dir.isDirectory()) {
+					//it's a directory, list files and call deleteDir on a dir
+					for (final File file : dir.listFiles()) {
+						if (file.isDirectory()) {
+							ret = TactFileUtils.deleteRecursive(file, ret);
+						} else {
+							if (!file.delete()) {
+								ret++;
+								
+								ConsoleUtils.displayWarning(FILE
+										 + file.getPath()
+										 + "' delete ERROR!");
+							}
 						}
 					}
-				}
-				
-				//folder content check, remove folder
-				if (dir.listFiles().length == 0) {
-					if (dir.delete()) {
-						ConsoleUtils.displayDebug(FOLDER
-								 + dir.getPath()
-								 + "' deleted.");
+					
+					//folder content check, remove folder
+					if (dir.listFiles().length == 0) {
+						boolean deleteSuccess = false;
+						deleteSuccess = dir.delete();
+						
+						if (deleteSuccess) {
+							ConsoleUtils.displayDebug(FOLDER
+									 + dir.getPath()
+									 + "' deleted.");
+						} else {
+							ret++;
+							
+							ConsoleUtils.displayWarning(FOLDER
+									 + dir.getPath()
+									 + "' delete ERROR!");
+						}
 					} else {
 						ret++;
 						
 						ConsoleUtils.displayWarning(FOLDER
 								 + dir.getPath()
+								 + "' NOT Empty!");
+					}
+					
+				} else {
+					// it's a file delete simply
+					if (dir.delete()) {
+						ConsoleUtils.displayDebug(FILE
+								 + dir.getPath()
+								 + "' deleted.");
+					} else {
+						ret++;
+	
+						ConsoleUtils.displayWarning(FILE
+								 + dir.getPath()
 								 + "' delete ERROR!");
 					}
-				} else {
-					ret++;
-					
-					ConsoleUtils.displayWarning(FOLDER
-							 + dir.getPath()
-							 + "' NOT Empty!");
 				}
-				
 			} else {
-				// it's a file delete simply
-				if (dir.delete()) {
-					ConsoleUtils.displayDebug(FILE
-							 + dir.getPath()
-							 + "' deleted.");
-				} else {
-					ret++;
-
-					ConsoleUtils.displayWarning(FILE
-							 + dir.getPath()
-							 + "' delete ERROR!");
-				}
+				ret++;
+				
+				ConsoleUtils.displayWarning(FOLDER
+						 + dir.getPath()
+						 + "' doesn't exists!");
 			}
-		} else {
-			ret++;
-			
-			ConsoleUtils.displayWarning(FOLDER
-					 + dir.getPath()
-					 + "' doesn't exists!");
+
+		} catch (SecurityException e) {
+			ConsoleUtils.displayError(e);
+		} catch (NullPointerException e) {
+			ConsoleUtils.displayError(new Exception("Error while deleting " 
+					+ dir.getAbsolutePath()
+					+ ". Check if you have permissions for this file "
+					+ "and if it is not opened by another application"));
 		}
 		return ret;
 	}
@@ -474,8 +487,8 @@ public abstract class TactFileUtils extends FileUtils {
 	 * @return true if the file exists
 	 */
 	public static boolean exists(final String filename) {
-		final File f = new File(filename);
-		if (f.exists()) {
+		final File file = new File(filename);
+		if (file.exists()) {
 			ConsoleUtils.displayDebug("File "
 					 + filename
 					 + " already exists !");
@@ -484,7 +497,7 @@ public abstract class TactFileUtils extends FileUtils {
 						 + filename
 						 + " doesn't exists !");
 		}
-		return f.exists();
+		return file.exists();
 	}
 	
 	/**
@@ -492,13 +505,13 @@ public abstract class TactFileUtils extends FileUtils {
 	 * @param f The file
 	 * @return The file's extension
 	 */  
-	public static String getExtension(final File f) {
+	public static String getExtension(final File file) {
 	    String ext = null;
-	    final String s = f.getName();
-	    final int i = s.lastIndexOf('.');
+	    final String fileName = file.getName();
+	    final int i = fileName.lastIndexOf('.');
 
-	    if (i > 0 &&  i < s.length() - 1) {
-	        ext = s.substring(i + 1).toLowerCase();
+	    if (i > 0 &&  i < fileName.length() - 1) {
+	        ext = fileName.substring(i + 1).toLowerCase();
 	    }
 	    return ext;
 	}
@@ -512,12 +525,12 @@ public abstract class TactFileUtils extends FileUtils {
 	 */
 	public static boolean appendToFile(final String content, final File file) {
 		boolean success = false;
-		final StringBuffer sb = TactFileUtils.fileToStringBuffer(file);
+		final StringBuffer buffer = TactFileUtils.fileToStringBuffer(file);
 		//If content doesn't exists in the file yet
-		if (sb.indexOf(content) == -1) {
-			final int offset = sb.length(); 
-			sb.insert(offset, content);
-			TactFileUtils.stringBufferToFile(sb, file);
+		if (buffer.indexOf(content) == -1) {
+			final int offset = buffer.length(); 
+			buffer.insert(offset, content);
+			TactFileUtils.stringBufferToFile(buffer, file);
 			success = true;
 		}
 		return success;
@@ -536,12 +549,12 @@ public abstract class TactFileUtils extends FileUtils {
 			final String after,
 			final File file) {
 		boolean success = false;
-		final StringBuffer sb = TactFileUtils.fileToStringBuffer(file);
+		final StringBuffer buffer = TactFileUtils.fileToStringBuffer(file);
 		//If content doesn't exists in the file yet
-		if (sb.indexOf(content) == -1) {
-			final int offset = sb.indexOf(after) + after.length();
-			sb.insert(offset, content);
-			TactFileUtils.stringBufferToFile(sb, file);
+		if (buffer.indexOf(content) == -1) {
+			final int offset = buffer.indexOf(after) + after.length();
+			buffer.insert(offset, content);
+			TactFileUtils.stringBufferToFile(buffer, file);
 			success = true;
 		}
 		return success;
@@ -566,10 +579,10 @@ public abstract class TactFileUtils extends FileUtils {
 			final String absolute, final String relative) {
 		String result = ".";
 		
-		File abs = new File(absolute);
-		File workingDir = new File(relative);
+		final File abs = new File(absolute);
+		final File workingDir = new File(relative);
 		
-		URI resultString = workingDir.toURI().relativize(abs.toURI());
+		final URI resultString = workingDir.toURI().relativize(abs.toURI());
 		
 		if (!resultString.toString().equals("")) {
 			result = resultString.toString();

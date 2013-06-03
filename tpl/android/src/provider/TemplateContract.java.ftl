@@ -13,7 +13,7 @@ public final class ${name}Contract {
 	
 	// Fields
 	<#list fields as field>
-	/** ${field.name} */
+	/** ${field.name}. */
 	public static final String ${field.alias} = "${field.name}";
 	</#list>
 }

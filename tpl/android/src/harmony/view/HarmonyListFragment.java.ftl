@@ -1,10 +1,13 @@
 package ${project_namespace}.harmony.view;
 
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.database.Cursor;
 import android.support.v4.app.LoaderManager;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
@@ -17,8 +20,17 @@ import ${project_namespace}.menu.${project_name?cap_first}Menu;
  * @param <T> Type to show
  */
 public abstract class HarmonyListFragment<T> extends SherlockListFragment 
-implements LoaderManager.LoaderCallbacks<List<T> > {
-	
+implements LoaderManager.LoaderCallbacks<Cursor> {
+	/**
+	 * Recall internal address (Hack Micky).
+	 */
+	protected static final int INTERNAL_EMPTY_ID = 0x00ff0001;
+	/** progress container ID. */
+	protected static final int INTERNAL_PROGRESS_CONTAINER_ID = 0x00ff0002;
+	/** list container ID. */
+	protected static final int INTERNAL_LIST_CONTAINER_ID = 0x00ff0003;
+
+
 	/**
 	 * @see android.support.v4.app.Fragment#onCreate(android.os.Bundle)
 	 */
@@ -79,6 +91,34 @@ implements LoaderManager.LoaderCallbacks<List<T> > {
 		}
 		
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+
+	/** Initialize Custom List Fragment.
+	 * 
+	 * @param rootView
+	 */
+	protected void initializeHackCustomList(final View rootView,
+			int progressLayoutId,
+			int listContainerId) {
+		// HACK Micky : Map component support ListFragment
+		// Progress
+		final LinearLayout progressLayout = 
+				(LinearLayout) rootView.findViewById(
+						progressLayoutId);
+		progressLayout.setId(INTERNAL_PROGRESS_CONTAINER_ID);
+
+		// Empty
+		final TextView emptyText = 
+				(TextView) rootView.findViewById(android.R.id.empty);
+		emptyText.setId(INTERNAL_EMPTY_ID);
+
+		// ListContainer
+		final RelativeLayout listContainer = 
+				(RelativeLayout) rootView.findViewById(
+						listContainerId);
+		listContainer.setId(INTERNAL_LIST_CONTAINER_ID);
+		// END HACK
 	}
 
 }

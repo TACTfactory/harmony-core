@@ -8,15 +8,26 @@ import com.google.common.base.CaseFormat;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 
+/**
+ * The generator class for Menu.
+ */
 public class MenuGenerator extends BaseGenerator {
 
-	public MenuGenerator(BaseAdapter adapt) throws Exception {
+	/**
+	 * Constructor.
+	 * @param adapt The adapter to use
+	 * @throws Exception 
+	 */
+	public MenuGenerator(final BaseAdapter adapt) throws Exception {
 		super(adapt);
 		
 		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 	}
 	
-	public void generateMenu() {
+	/**
+	 * Generate the MenuBase.
+	 */
+	public final void generateMenu() {
 		ConsoleUtils.display("Generating menu...");
 		// create ProjectMenuBase
 		super.makeSource(
@@ -50,7 +61,10 @@ public class MenuGenerator extends BaseGenerator {
 		
 	}
 	
-	public void updateMenu() {
+	/**
+	 * Update the Menu managing class.
+	 */
+	public final void updateMenu() {
 		ConsoleUtils.display("Updating menu...");
 		
 		this.getDatamodel().put("menus", this.getAvailableMenus());
@@ -67,6 +81,10 @@ public class MenuGenerator extends BaseGenerator {
 			true);
 	}
 	
+	/**
+	 * Get the list of all available menus.
+	 * @return A list of the different menu names
+	 */
 	private ArrayList<String> getAvailableMenus() {
 		ArrayList<String> ret = new ArrayList<String>();
 		File menuFolder = new File(this.getAdapter().getMenuPath());
@@ -74,12 +92,13 @@ public class MenuGenerator extends BaseGenerator {
 			File[] files = menuFolder.listFiles(new FileFilter() {
 				
 				@Override
-				public boolean accept(File arg0) {
-					return arg0.getName().contains("MenuWrapper") && !arg0.getName().contains("MenuWrapperBase");
+				public boolean accept(final File arg0) {
+					return arg0.getName().contains("MenuWrapper") 
+							&& !arg0.getName().contains("MenuWrapperBase");
 				}
 			});
 			
-			for( File file : files) {
+			for (File file : files) {
 				ret.add(file.getName().split("\\.")[0]);
 			}
 		}

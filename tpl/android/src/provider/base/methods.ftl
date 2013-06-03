@@ -13,8 +13,12 @@
 		<#return "String.valueOf("+className?lower_case+".get"+field.name?cap_first+"())"/>
 	<#elseif (field.type?lower_case == "string")>
 		<#return className?lower_case+".get"+field.name?cap_first+"()"/>
-	<#else>
-		<#return className?lower_case+".get"+field.name?cap_first+"().getValue()"/>
+	<#elseif (field.harmony_type?lower_case == "enum")>
+		<#if (enums[field.type].id??) >
+			<#return className?lower_case+".get"+field.name?cap_first+"().getValue()"/>
+		<#else>
+			<#return className?lower_case+".get"+field.name?cap_first+"().name()"/>
+		</#if>
 	</#if>
 </#function>
 

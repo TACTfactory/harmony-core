@@ -4,8 +4,10 @@ package ${curr.test_namespace}.base;
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 
+<#if dataLoader?? && dataLoader>
 import ${fixture_namespace}.${curr.name?cap_first}DataLoader;
 import ${fixture_namespace}.DataLoader;
+</#if>
 
 import java.util.ArrayList;
 
@@ -29,7 +31,9 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 
 	protected SQLiteDatabase db;
 	protected ${curr.name} entity;
+	<#if dataLoader?? && dataLoader>
 	protected DataLoader dataLoader;
+	</#if>
 
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
@@ -44,14 +48,17 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
 		this.db.beginTransaction();
 		
+		<#if dataLoader?? && dataLoader>
 		this.dataLoader = new DataLoader(this.ctx);
 		this.dataLoader.clean();
 		this.dataLoader.loadData(this.db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
+
 		
 		ArrayList<${curr.name?cap_first}> entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).items.values());
 		if (entities.size()>0){
 			this.entity = entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}
+		</#if>
 	}
 
 	/* (non-Javadoc)
@@ -62,7 +69,9 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 		
 		this.db.endTransaction();
 		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
+		<#if dataLoader?? && dataLoader>
 		this.dataLoader.clean();
+		</#if>
 		this.adapter.close();
 	}
 	

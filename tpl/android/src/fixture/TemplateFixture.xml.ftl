@@ -3,7 +3,7 @@
 <list>
 	<!--
 	<${curr.name?cap_first} id="">
-		<#list curr.fields as field>
+		<#list curr.fields?values as field>
 			<#if !field.internal>
 		<${field.name}></${field.name}>
 			</#if>

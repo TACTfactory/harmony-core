@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.meta.RelationMetadata;
@@ -21,7 +22,9 @@ import com.tactfactory.mda.utils.ConsoleUtils;
  * with the information it needs from the others ClassMetadatas. */
 
 public class ClassCompletor {
-	//ArrayList<ClassMetadata> metas_array;
+	/** Integer literal. */
+	private static final String TYPE_INTEGER = "integer";
+	
 	/** Class metadata. */
 	private Map<String, EntityMetadata> metas;
 	
@@ -41,12 +44,18 @@ public class ClassCompletor {
 	 * Complete classes.
 	 */
 	public final void execute() {
-		for (final EntityMetadata cm : this.metas.values()) {
-			this.updateRelations(cm);
+		for (final EntityMetadata classMeta : this.metas.values()) {
+			this.updateRelations(classMeta);
 		}
 		
-		for (final EntityMetadata cm : this.newMetas.values()) {
-			this.metas.put(cm.getName(), cm);
+		for (final EntityMetadata classMeta : this.newMetas.values()) {
+			this.metas.put(
+					classMeta.getName(),
+					classMeta);
+			
+			ApplicationMetadata.INSTANCE.getClasses().put(
+					classMeta.getName(), 
+					classMeta);
 		}
 	}
 	
@@ -59,15 +68,15 @@ public class ClassCompletor {
 		final ArrayList<FieldMetadata> newFields = 
 				new ArrayList<FieldMetadata>();
 		// For each relation in the class
-		for (final FieldMetadata fm : cm.getRelations().values()) { 
+		for (final FieldMetadata fieldMeta : cm.getRelations().values()) { 
 			boolean isRecursive = false;
-			final RelationMetadata rel = fm.getRelation();
+			final RelationMetadata rel = fieldMeta.getRelation();
 			final String targetEntity = rel.getEntityRef();
 			if (targetEntity.equals(cm.getName())) {
 				isRecursive = true;
 			}
 			
-			this.checkRelationIntegrity(fm);	
+			this.checkRelationIntegrity(fieldMeta);	
 			if (rel.getFieldRef().isEmpty()) {
 				final EntityMetadata cmRef = this.metas.get(targetEntity);
 				final ArrayList<FieldMetadata> ids =
@@ -76,7 +85,18 @@ public class ClassCompletor {
 				for (int i = 0; i < ids.size(); i++) {
 					rel.getFieldRef().add(ids.get(i).getName());
 				}
-				fm.setColumnDefinition(ids.get(0).getType());
+				if (!ids.isEmpty()) {
+					fieldMeta.setColumnDefinition(ids.get(0).getType());
+				} else {
+					ConsoleUtils.displayError(new Exception(
+							"Error while updating relations : "
+							+ " Your entity " + cm.getName() 
+							+ " refers the entity " + cmRef.getName()
+							+ " which has no ID defined."
+							+ " Please add the @Id annotation "
+							+ "to one of the fields of " + cmRef.getName()));
+					System.exit(-1);
+				}
 				
 			}
 			
@@ -95,23 +115,25 @@ public class ClassCompletor {
 				if (rel.getMappedBy() == null) {
 					// Create it
 					final FieldMetadata newField = new FieldMetadata(cm);
-					newField.setColumnDefinition("integer");
+					newField.setColumnDefinition(TYPE_INTEGER);
 					newField.setHidden(true);
-					newField.setNullable(fm.isNullable());
+					newField.setNullable(fieldMeta.isNullable());
 					newField.setInternal(true);
-					newField.setName(cm.getName() + fm.getName() + "_Internal");
+					newField.setName(cm.getName() + fieldMeta.getName() + "_Internal");
 					newField.setColumnName(
-							cm.getName() + "_" + fm.getName() + "_internal");
+							cm.getName() + "_" + fieldMeta.getName() + "_internal");
 					newField.setType(cm.getName());
+					newField.setHarmonyType(TYPE_INTEGER);
 					newField.setRelation(new RelationMetadata());
 					newField.getRelation().setEntityRef(cm.getName());
-					for (final FieldMetadata id : cm.getIds().values()) {
-						newField.getRelation().getFieldRef().add(id.getName());
+					for (final FieldMetadata idField : cm.getIds().values()) {
+						newField.getRelation().getFieldRef().add(
+								idField.getName());
 					}
 					newField.getRelation().setField(newField.getName());
 					newField.getRelation().setType("ManyToOne");
-					newField.getRelation().setInversedBy(fm.getName());
-					fm.getRelation().setInversedBy(newField.getName());
+					newField.getRelation().setInversedBy(fieldMeta.getName());
+					fieldMeta.getRelation().setInversedBy(newField.getName());
 					if (isRecursive) {
 						newFields.add(newField);
 					} else {
@@ -121,9 +143,9 @@ public class ClassCompletor {
 					}
 					rel.setMappedBy(newField.getName());
 				} else { // Set inversedBy in mapping field
-					FieldMetadata mappFm = 
+					final FieldMetadata mappFm = 
 							entityRef.getFields().get(rel.getMappedBy());
-					mappFm.getRelation().setInversedBy(fm.getName());
+					mappFm.getRelation().setInversedBy(fieldMeta.getName());
 				}
 				
 				
@@ -151,14 +173,15 @@ public class ClassCompletor {
 					classMeta.setName(rel.getJoinTable());
 					classMeta.setInternal(true);
 					classMeta.setSpace(cm.getSpace());
-					final FieldMetadata id = new FieldMetadata(classMeta);
-						id.setColumnDefinition("integer");
-						id.setType("integer");
-						id.setName("id");
-						id.setColumnName(id.getName());
-						id.setId(true);
-						classMeta.getIds().put("id", id);
-						classMeta.getFields().put("id", id);
+					final FieldMetadata idField = new FieldMetadata(classMeta);
+						idField.setColumnDefinition(TYPE_INTEGER);
+						idField.setType(TYPE_INTEGER);
+						idField.setHarmonyType(TYPE_INTEGER);
+						idField.setName("id");
+						idField.setColumnName(idField.getName());
+						idField.setId(true);
+						classMeta.getIds().put("id", idField);
+						classMeta.getFields().put("id", idField);
 						
 					final FieldMetadata ref1 =
 							generateRefField(cm.getName(), cm);
@@ -167,7 +190,7 @@ public class ClassCompletor {
 						for (final FieldMetadata cmid : cm.getIds().values()) {
 							rel1.getFieldRef().add(cmid.getName());
 						}
-						rel1.setInversedBy(fm.getName());
+						rel1.setInversedBy(fieldMeta.getName());
 						rel1.setType("ManyToOne");
 						ref1.setRelation(rel1);
 						
@@ -195,7 +218,7 @@ public class ClassCompletor {
 					final FieldMetadata relation = 
 							jtable.getRelations()
 								.get(cm.getName().toLowerCase() + "_id");
-					relation.getRelation().setInversedBy(fm.getName());
+					relation.getRelation().setInversedBy(fieldMeta.getName());
 				}
 			}
 		}
@@ -214,25 +237,26 @@ public class ClassCompletor {
 	 */
 	private static FieldMetadata generateRefField(final String name, 
 			final EntityMetadata owner) {
-		final FieldMetadata id = new FieldMetadata(owner);
-		id.setColumnDefinition("integer");
-		id.setType("integer");
-		id.setName(name.toLowerCase() + "_id");
-		id.setColumnName(id.getName());
-		return id;
+		final FieldMetadata idField = new FieldMetadata(owner);
+		idField.setColumnDefinition(TYPE_INTEGER);
+		idField.setType(TYPE_INTEGER);
+		idField.setHarmonyType(TYPE_INTEGER);
+		idField.setName(name.toLowerCase() + "_id");
+		idField.setColumnName(idField.getName());
+		return idField;
 	}
 	
 	/**
 	 * Check if field relation is valid.
 	 * @param fm The field metadata of the relation.
 	 */
-	private void checkRelationIntegrity(final FieldMetadata fm) {
-		if (!this.metas.containsKey(fm.getRelation().getEntityRef())) {
+	private void checkRelationIntegrity(final FieldMetadata fieldMeta) {
+		if (!this.metas.containsKey(fieldMeta.getRelation().getEntityRef())) {
 				ConsoleUtils.displayError(new ConstraintException(
 						"Entity " 
-						+ fm.getName() 
+						+ fieldMeta.getName() 
 						+ " refers to the non Entity class " 
-						+ fm.getRelation().getEntityRef()));			
+						+ fieldMeta.getRelation().getEntityRef()));			
 		}
 	}
 	

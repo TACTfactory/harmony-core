@@ -52,7 +52,10 @@ public class ProjectInitTest extends CommonTest {
 	public final void tearDown() throws Exception {
 		super.tearDown();
 
-		ConsoleUtils.display("################################  Cleaner !! ################################");
+		ConsoleUtils.display(
+				  "################################  "
+				+ "Cleaner !! "
+				+ "################################");
 		final File dirproj = new File(Harmony.getProjectAndroidPath());
 		TactFileUtils.deleteRecursive(dirproj);
 	}

@@ -27,7 +27,7 @@ public abstract class ProviderAdapterBase<T> {
 	 * Provider Adapter Base constructor.
 	 * @param Context The context.
 	 */
-	public ProviderAdapterBase(Context context) {
+	public ProviderAdapterBase(final Context context) {
 		this.ctx = context;
 	}
 
@@ -38,7 +38,7 @@ public abstract class ProviderAdapterBase<T> {
 	 * @param extras The Bundle to insert
 	 * @return The updated Bundle containing the new id
 	 */
-	protected Bundle insert(String arg, Bundle extras) {
+	protected Bundle insert(final String arg, final Bundle extras) {
 		long newId = -1;
 		@SuppressWarnings("unchecked")
 		T item = (T) extras.getSerializable(this.getItemKey());
@@ -63,7 +63,7 @@ public abstract class ProviderAdapterBase<T> {
 	 * @param extras The Bundle to delete
 	 * @return The updated Bundle containing how many updated fields
 	 */
-	public Bundle delete(String arg, Bundle extras) {
+	public Bundle delete(final String arg, final Bundle extras) {
 		int adaptResult = 0;
 		@SuppressWarnings("unchecked")
 		T item = (T) extras.getSerializable(this.getItemKey());
@@ -89,7 +89,7 @@ public abstract class ProviderAdapterBase<T> {
 	 * @param extras The Bundle to update.
 	 * @return The updated Bundle containing how many updated fields
 	 */
-	public Bundle update(String arg, Bundle extras) {
+	public Bundle update(final String arg, final Bundle extras) {
 		int adaptResult = 0;
 		@SuppressWarnings("unchecked")
 		T item = (T) extras.getSerializable(this.getItemKey());
@@ -115,7 +115,7 @@ public abstract class ProviderAdapterBase<T> {
 	 * @param extras Bundle
 	 * @return The updated Bundle containing a list a of items
 	 */
-	public Bundle queryAll(String arg, Bundle extras) {
+	public Bundle queryAll(final String arg, final Bundle extras) {
 		CriteriasBase crits = null;
 		if (extras != null) {
 			crits = (CriteriasBase) extras.getSerializable("crits");
