@@ -71,14 +71,6 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		this.makeSourceCriteria(
 				"base/value/SelectValue.java", 
 				"base/value/SelectValue.java", false);
-		
-		ConfigMetadata.addConfiguration("database_version", "1");
-		try {
-			new ConfigGenerator(this.getAdapter()).generateConfigXml();
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			ConsoleUtils.displayError(e);
-		}
 	}
 	
 	/**

@@ -47,13 +47,11 @@ public abstract class SQLiteAdapterBase<T> {
 	 */
 	protected SQLiteAdapterBase(final Context ctx) {	
 		this.ctx = ctx;
-		int databaseVersion = 
-			Integer.parseInt(ctx.getString(R.string.database_version));
 		this.mBaseHelper = new ${project_name?cap_first}SQLiteOpenHelper(
 				ctx, 
 				DB_NAME, 
 				null,
-				databaseVersion);
+				${project_name?cap_first}Application.getVersionCode(ctx));
 		
 		try {
 			this.mBaseHelper.createDataBase();
