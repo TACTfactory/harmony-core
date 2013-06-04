@@ -9,6 +9,7 @@
 package com.tactfactory.mda.template;
 
 import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.ConfigMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.PackageUtils;

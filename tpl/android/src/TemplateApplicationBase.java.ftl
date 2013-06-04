@@ -12,6 +12,8 @@ import ${project_namespace}.R;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
 <#if (sync)>import android.content.SharedPreferences.Editor;
 </#if>import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -232,4 +234,19 @@ public abstract class ${project_name?cap_first}ApplicationBase
 		edit.commit();
 	}
 	</#if>
+
+	public static int getVersionCode(Context ctx) {
+		int result = 1;
+		
+		try {
+			PackageInfo manager = ctx.getPackageManager().getPackageInfo(
+					ctx.getPackageName(), 0);
+			
+			result = manager.versionCode;
+		} catch (NameNotFoundException e) {
+			Log.e(TAG, "Version Code not found : " + e.toString());
+		}
+		
+		return result;
+	}
 }

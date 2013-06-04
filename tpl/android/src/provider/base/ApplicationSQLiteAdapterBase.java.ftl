@@ -1,5 +1,7 @@
 package ${data_namespace}.base;
 
+import ${project_namespace}.R;
+
 import ${data_namespace}.*;
 import ${project_namespace}.${project_name?cap_first}Application;
 
@@ -49,7 +51,7 @@ public abstract class SQLiteAdapterBase<T> {
 				ctx, 
 				DB_NAME, 
 				null,
-				1);
+				${project_name?cap_first}Application.getVersionCode(ctx));
 		
 		try {
 			this.mBaseHelper.createDataBase();

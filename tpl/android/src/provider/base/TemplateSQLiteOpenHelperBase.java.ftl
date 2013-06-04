@@ -176,34 +176,13 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	public void onUpgrade(final SQLiteDatabase db, final int oldVersion, 
 			final int newVersion) {
 		Log.i(TAG, "Update database..");
-		
-		//if (SqliteAdapter.BASE_VERSION < 0) {
+
 		if (${project_name?cap_first}Application.DEBUG) {
 			Log.d(TAG, "Upgrading database from version " + oldVersion 
-					   + " to " + newVersion 
-					   + ", which will destroy all old data");
+					   + " to " + newVersion);
 		}
 		
-		final String command = "DROP TABLE IF EXISTS "; 
-		
-		<#list entities?values as entity>
-			<#if (entity.fields?? && (entity.fields?size>0))>
-			if (${project_name?cap_first}Application.DEBUG) {
-				Log.d(TAG, "Dropping ${entity.name} database...");
-			}
-
-			db.execSQL(command + ${entity.name}SQLiteAdapter.TABLE_NAME);
-				<#list entity['relations'] as relation>
-					<#if (relation.type=="ManyToMany")>
-			db.execSQL(command 
-					+ ${entity.name}SQLiteAdapter.RELATION_${relation.name?upper_case}_TABLE_NAME);
-					</#if>
-				</#list>
-			</#if>
-	    </#list>
-		//}
-		    
-		this.onCreate(db);
+		// TODO : Upgrade your tables !
 	}
 	
 	<#if options.fixture?? && options.fixture.enabled>
