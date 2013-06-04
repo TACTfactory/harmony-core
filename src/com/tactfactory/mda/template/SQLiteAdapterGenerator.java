@@ -9,6 +9,7 @@
 package com.tactfactory.mda.template;
 
 import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.mda.meta.ConfigMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
 import com.tactfactory.mda.utils.PackageUtils;
@@ -70,6 +71,14 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		this.makeSourceCriteria(
 				"base/value/SelectValue.java", 
 				"base/value/SelectValue.java", false);
+		
+		ConfigMetadata.addConfiguration("database_version", "1");
+		try {
+			new ConfigGenerator(this.getAdapter()).generateConfigXml();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			ConsoleUtils.displayError(e);
+		}
 	}
 	
 	/**
