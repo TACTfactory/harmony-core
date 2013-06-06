@@ -146,6 +146,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 			</#list>
 		</#if>
 	</#list>
+			db.execSQL("PRAGMA foreign_keys = ON;");
 	<#if options.fixture?? && options.fixture.enabled>
 			this.loadData(db);
 	</#if>
