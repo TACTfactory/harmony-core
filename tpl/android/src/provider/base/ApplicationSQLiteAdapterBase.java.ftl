@@ -205,10 +205,15 @@ public abstract class SQLiteAdapterBase<T> {
 		if (crits == null || crits.isEmpty()) {
 			result = this.getAll();
 		} else {
-			final Cursor cursor = this.mDatabase.rawQuery("SELECT * FROM " 
-						+ this.getTableName() + " WHERE " 
-						+ crits.toSQLiteString(), 
-						null);
+			ArrayList<String> tmpArray = new ArrayList<String>();
+			crits.toSQLiteSelectionArgs(tmpArray);
+
+			final Cursor cursor = this.query(this.getCols(),
+							crits.toSQLiteSelection(),
+							tmpArray.toArray(new String[tmpArray.size()]),
+							null,
+							null,
+							null);
 			result = this.cursorToItems(cursor);
 			cursor.close();
 		}	

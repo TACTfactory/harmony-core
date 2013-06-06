@@ -184,18 +184,18 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							projection, 
 							selection,
 							selectionArgs, 
-							sortOrder,
 							null,
-							null);
+							null,
+							sortOrder);
 				break;
 			case ${curr.name?upper_case}_ALL:
 				result = this.adapter.query(
 							projection, 
 							selection,
 							selectionArgs, 
-							sortOrder,
 							null,
-							null);
+							null,
+							sortOrder);
 				break;
 			default:
 				result = null;
