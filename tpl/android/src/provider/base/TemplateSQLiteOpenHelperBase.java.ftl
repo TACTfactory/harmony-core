@@ -121,7 +121,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		}
 	}
 
-	/**
+	/*
 	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate <br />
 	 * (android.database.sqlite.SQLiteDatabase)
 	 */
@@ -173,6 +173,9 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	/**
 	 * @see android.database.sqlite.SQLiteOpenHelper#onUpgrade <br />
 	 * (android.database.sqlite.SQLiteDatabase, int, int)
+	 * @param db the database
+	 * @param oldVersion the old version
+	 * @param newVersion the new version
 	 */
 	public void onUpgrade(final SQLiteDatabase db, final int oldVersion, 
 			final int newVersion) {

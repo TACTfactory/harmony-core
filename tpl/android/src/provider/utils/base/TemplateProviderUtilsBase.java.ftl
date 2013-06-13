@@ -100,7 +100,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 		for (int i = 0; i < item.get${relation.name?cap_first}().size(); i++) {
 			${relation.name}SelectionArgs[i] = String.valueOf(item.get${relation.name?cap_first}().get(i).getId());
 			${relation.name}Selection += "? ";
-			if (i != item.get${relation.name?cap_first}().size()-1) {
+			if (i != item.get${relation.name?cap_first}().size() - 1) {
 				 ${relation.name}Selection += ", ";
 			}
 		}
@@ -144,11 +144,12 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 	 * Insert into DB. 
 	 * @param ctx Context
 	 * @param item ${curr.name} to insert
+	 <#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>* @param ${relation.name?uncap_first}Id ${relation.name?uncap_first} Id</#if></#list>
 	 * @return number of rows affected
 	 */
 	public static int insert(final Context ctx, 
-							 final ${curr.name?cap_first} item
-<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, final int ${relation.name?uncap_first}Id</#if></#list>) {
+							 final ${curr.name?cap_first} item <#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, 
+							 final int ${relation.name?uncap_first}Id</#if></#list>) {
 		int result = -1;
 		${curr.name?cap_first}SQLiteAdapter adapt = new ${curr.name?cap_first}SQLiteAdapter(ctx);
 		ContentResolver prov = ctx.getContentResolver();
@@ -391,10 +392,11 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 	 * Updates the DB.
 	 * @param ctx Context
 	 * @param item ${curr.name}
+	 <#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>* @param ${relation.name?uncap_first}Id ${relation.name?uncap_first} Id</#if></#list>
 	 * @return number of rows updated
 	 */
-	public static int update(final Context ctx, final ${curr.name} item
-<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, final int ${relation.name?uncap_first}Id</#if></#list>) {
+	public static int update(final Context ctx, final ${curr.name} item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, 
+							 final int ${relation.name?uncap_first}Id</#if></#list>) {
 		int result = -1;
 		${curr.name}SQLiteAdapter adapt = new ${curr.name}SQLiteAdapter(ctx);
 		ContentResolver prov = ctx.getContentResolver();		

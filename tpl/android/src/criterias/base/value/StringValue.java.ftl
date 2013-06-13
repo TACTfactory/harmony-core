@@ -7,6 +7,9 @@ import java.util.ArrayList;
  * A StringValue is a simple String used for criterias.
  */
 public class StringValue extends CriteriaValue {
+	/**
+	 * List of values.
+	 */
 	private String value;
 	
 	/** 
@@ -14,6 +17,7 @@ public class StringValue extends CriteriaValue {
 	 * @param value The value of this string.
 	 */
 	public StringValue(String value) {
+		super();
 		this.value = value;
 	}
 	

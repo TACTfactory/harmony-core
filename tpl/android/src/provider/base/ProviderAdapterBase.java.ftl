@@ -25,7 +25,7 @@ public abstract class ProviderAdapterBase<T> {
 
 	/**
 	 * Provider Adapter Base constructor.
-	 * @param Context The context.
+	 * @param context The context.
 	 */
 	public ProviderAdapterBase(final Context context) {
 		this.ctx = context;
@@ -46,7 +46,7 @@ public abstract class ProviderAdapterBase<T> {
 		try {
 			newId = this.adapter.insert(item);
 			this.db.setTransactionSuccessful();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			Log.e(TAG, "Error while inserting T into database : " 
 						+ e.getMessage());
 		} finally {
@@ -71,7 +71,7 @@ public abstract class ProviderAdapterBase<T> {
 		try {
 			adaptResult = this.adapter.delete(item);
 			this.db.setTransactionSuccessful();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			Log.e(TAG, "Error while inserting T into database : " 
 						+ e.getMessage());
 		} finally {
@@ -97,7 +97,7 @@ public abstract class ProviderAdapterBase<T> {
 		try {
 			adaptResult = this.adapter.update(item);
 			this.db.setTransactionSuccessful();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			Log.e(TAG, "Error while inserting T into database : " 
 						+ e.getMessage());
 		} finally {
@@ -125,7 +125,7 @@ public abstract class ProviderAdapterBase<T> {
 		try {
 			itemList = this.adapter.getAll(crits);
 			this.db.setTransactionSuccessful();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			Log.e(TAG, "Error while inserting T into database : " 
 						+ e.getMessage());
 		} finally {
