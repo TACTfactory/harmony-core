@@ -96,7 +96,9 @@
 
         <!-- Checks for Size Violations.                    -->
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
-        <module name="LineLength"/>
+        <module name="LineLength">
+		<property name="ignorePattern" value="^import"/>
+	</module>
         <module name="MethodLength"/>
         <module name="ParameterNumber"/>
 
