@@ -136,7 +136,9 @@
 <!--        <module name="DoubleCheckedLocking"/>  -->  <!-- MY FAVOURITE -->
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
-        <module name="HiddenField"/>
+        <module name="HiddenField">
+		<property name="ignoreConstructorParameter" value="true"/>
+	</module>
         <module name="IllegalInstantiation"/>
         <module name="InnerAssignment"/>
         <module name="MagicNumber"/>
