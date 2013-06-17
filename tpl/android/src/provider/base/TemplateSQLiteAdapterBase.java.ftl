@@ -1,5 +1,9 @@
 <#assign curr = entities[current_entity] />
 <#assign sync = curr.options.sync?? />
+<#assign inherited = false />
+<#if (curr.extends?? && entities[curr.extends]??)>
+	<#assign inherited = true />
+</#if>
 <#import "methods.ftl" as m />
 <#function getAllMothers tab entity>
 	<#if entity.mother??>
@@ -191,6 +195,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 <#if (curr.ids?size>1)>
 		+ "PRIMARY KEY (" + <#list curr.ids as id>${alias(id.name)}<#if (id_has_next)> + "," + </#if></#list> + ")"
 </#if>
+<#if (curr.extends??)>
+		+ ", FOREIGN KEY (" + COL_ID + ") REFERENCES " + ${curr.extends}SQLiteAdapter.TABLE_NAME + "(" + ${curr.extends}SQLiteAdapter.COL_ID + ")"
+</#if>
 		+ ");";
 	}
 	
@@ -263,8 +270,12 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		${curr.name} result = null;
 
 		if (cursor.getCount() != 0) {
+			<#if (curr.extends??)>
+			${curr.extends}SQLiteAdapter motherAdapt = new ${curr.extends}SQLiteAdapter(this.ctx);
+			result = new ${curr.name}(motherAdapt.cursorToItem(cursor));			
+			<#else>
 			result = new ${curr.name}();
-			
+			</#if>			
 			int index;
 	<#list curr.fields?values as field>
 		<#if (!field.internal && !(field.relation?? && (field.relation.type=="ManyToMany" || field.relation.type=="OneToMany")))>
@@ -543,6 +554,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return 1 if everything went well, 0 otherwise
 	 */
 	public int insertOrUpdate(final ${curr.name} item) {
+		<#if (curr.ids?? && curr.ids?size > 0)>
 		int result = 0;
 		<#assign id = curr.ids[0] />
 		if (this.getByID(item.get${id.name?cap_first}()) != null) {
@@ -557,6 +569,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		}
 
 		return result;
+		<#else>
+		throw new UnsupportedOperationException("Method not implemented yet.");
+		</#if>
 	}
 	
 	/** 
@@ -744,8 +759,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	
 	/**
 	 *  Internal Cursor.
-	 *  @param ${id.name} ${id.name}
-	 *  @return A Cursor pointing to ${id.name}
+	 *  <#if (curr.ids?? && curr.ids?size > 0)>@param ${id.name} ${id.name}</#if>
+	 *  @return A Cursor 
 	 */
 	protected Cursor getSingleCursor(<#list curr.ids as id>final ${m.javaType(id.type)} ${id.name}<#if id_has_next>
 										,</#if></#list>) {
@@ -793,6 +808,39 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				null);
 		</#if>
 	}
+
+<#if curr.extends??>
+	/**
+	 * Send a query to the DB.
+	 * @param projection Columns to work with
+	 * @param whereClause WHERE clause for SQL
+	 * @param whereArgs WHERE arguments for SQL
+	 * @param having HAVING clause
+	 * @param orderBy ORDER BY clause
+	 * @return A cursor pointing to the result of the query
+	 */
+	public Cursor query(final String[] projection, 
+						final String whereClause, 
+						final String[] whereArgs, 
+						final String groupBy, 
+						final String having, 
+						final String orderBy) {
+		String table = TABLE_NAME + " LEFT OUTER JOIN "
+				+ ${curr.extends?cap_first}SQLiteAdapter.TABLE_NAME + " ON "
+				+ ALIASED_COL_ID 
+				+ " = " 
+				+ ${curr.extends?cap_first}SQLiteAdapter.ALIASED_COL_ID;
+		
+		return this.mDatabase.query(
+				table,
+				projection,
+				whereClause,
+				whereArgs,
+				groupBy,
+				having,
+				orderBy);
+	}
+</#if>
 	
 	/**
 	 * Deletes the given entity.

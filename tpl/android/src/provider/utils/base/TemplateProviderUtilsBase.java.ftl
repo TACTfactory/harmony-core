@@ -27,17 +27,18 @@ import ${project_namespace}.provider.utils.${curr.name}ProviderUtils;
 
 import java.util.ArrayList;
 
-<#if hasRelations>import android.content.ContentProviderOperation;
-</#if>import android.database.Cursor;
+import android.content.ContentProviderOperation;
+import android.database.Cursor;
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;<#if hasRelations>
+import android.content.Context;
 import android.content.OperationApplicationException;
 import android.os.RemoteException;
-import android.util.Log;<#else>
-import android.net.Uri;</#if>
+import android.util.Log;
 
 import ${data_namespace}.${curr.name}SQLiteAdapter;
+<#if curr.extends??>import ${data_namespace}.${curr.extends?cap_first}SQLiteAdapter;
+import ${project_namespace}.provider.${curr.extends?cap_first}ProviderAdapter;</#if>
 <#list relation_array as relation>import ${data_namespace}.${relation}SQLiteAdapter;</#list>
 <#list curr.relations as relation>import ${data_namespace}.${relation.relation.targetEntity}SQLiteAdapter;
 import ${project_namespace}.provider.${relation.relation.targetEntity}ProviderAdapter;
@@ -46,9 +47,9 @@ import ${project_namespace}.provider.${relation.relation.targetEntity}ProviderAd
 import ${entity_namespace}.${curr.name};
 <#list curr.relations as relation><#if !relation.internal>import ${entity_namespace}.${relation.relation.targetEntity};
 </#if></#list>
-import ${project_namespace}.provider.${curr.name}ProviderAdapter;<#if hasRelations>
+import ${project_namespace}.provider.${curr.name}ProviderAdapter;
 <#list relation_array as relation>import ${project_namespace}.provider.${relation}ProviderAdapter;</#list>
-import ${project_namespace}.provider.${project_name?cap_first}Provider;</#if>
+import ${project_namespace}.provider.${project_name?cap_first}Provider;
 <#list curr.relations as relation><#if relation.relation.type=="ManyToMany">import ${project_namespace}.provider.${relation.relation.joinTable}ProviderAdapter;
 </#if></#list>
 
@@ -75,23 +76,29 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 	 */
 	public static int insert(final Context ctx, final ${curr.name} item) {
 		int result = -1;
-		${curr.name?cap_first}SQLiteAdapter adapt = new ${curr.name?cap_first}SQLiteAdapter(ctx);
+		ArrayList<ContentProviderOperation> operations = 
+				new ArrayList<ContentProviderOperation>();
 		ContentResolver prov = ctx.getContentResolver();
+		
+		<#if curr.extends??>
+		${curr.extends?cap_first}SQLiteAdapter motherAdapt = new ${curr.extends?cap_first}SQLiteAdapter(ctx);
+		ContentValues motherValues = motherAdapt.itemToContentValues(item);
+		motherValues.remove(${curr.extends?cap_first}SQLiteAdapter.COL_ID);
+		operations.add(ContentProviderOperation.newInsert(${curr.extends?cap_first}ProviderAdapter.${curr.extends?upper_case}_URI)
+			    .withValues(motherValues)
+			    .build());
+		</#if>
+
+		${curr.name?cap_first}SQLiteAdapter adapt = new ${curr.name?cap_first}SQLiteAdapter(ctx);
+
 
 		ContentValues itemValues = adapt.itemToContentValues(item);
 		itemValues.remove(${curr.name?cap_first}SQLiteAdapter.COL_ID);
-		<#if (!hasRelations)> <#-- If there aren't any relations in the application -->
-		Uri uri = prov.insert(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI, itemValues);		
-		if (uri != null) {
-			result = 0;
-		}
-		<#else>
-		ArrayList<ContentProviderOperation> operations = 
-				new ArrayList<ContentProviderOperation>();
 
 		operations.add(ContentProviderOperation.newInsert(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
-			    .withValues(itemValues)
-			    .build());
+			    .withValues(itemValues)<#if curr.extends??>
+			    .withValueBackReference(${curr.name?cap_first}SQLiteAdapter.COL_ID, 0)
+			    </#if>.build());
 
 		<#list curr.relations as relation>
 			<#if (relation.relation.type == "OneToMany") >
@@ -134,7 +141,6 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 		} catch (OperationApplicationException e) {
 			Log.e(TAG, e.getMessage());
 		}
-		</#if>
 
 		return result;
 	}
@@ -150,23 +156,28 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 							 final ${curr.name?cap_first} item
 <#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, final int ${relation.name?uncap_first}Id</#if></#list>) {
 		int result = -1;
-		${curr.name?cap_first}SQLiteAdapter adapt = new ${curr.name?cap_first}SQLiteAdapter(ctx);
-		ContentResolver prov = ctx.getContentResolver();
-
-		ContentValues itemValues = adapt.itemToContentValues(item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, ${relation.name?uncap_first}Id</#if></#list>);
-		itemValues.remove(${curr.name?cap_first}SQLiteAdapter.COL_ID);
-		<#if (!hasRelations)> <#-- If there aren't any relations in the application -->
-		Uri uri = prov.insert(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI, itemValues);		
-		if (uri != null) {
-			result = 0;
-		}
-		<#else>
 		ArrayList<ContentProviderOperation> operations = 
 				new ArrayList<ContentProviderOperation>();
+		ContentResolver prov = ctx.getContentResolver();
+		
+		<#if curr.extends??>
+		${curr.extends?cap_first}SQLiteAdapter motherAdapt = new ${curr.extends?cap_first}SQLiteAdapter(ctx);
+		ContentValues motherValues = motherAdapt.itemToContentValues(item);
+		motherValues.remove(${curr.extends?cap_first}SQLiteAdapter.COL_ID);
+		operations.add(ContentProviderOperation.newInsert(${curr.extends?cap_first}ProviderAdapter.${curr.extends?upper_case}_URI)
+			    .withValues(motherValues)
+			    .build());
+		</#if>
+
+		${curr.name?cap_first}SQLiteAdapter adapt = new ${curr.name?cap_first}SQLiteAdapter(ctx);
+		ContentValues itemValues = adapt.itemToContentValues(item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, ${relation.name?uncap_first}Id</#if></#list>);
+		itemValues.remove(${curr.name?cap_first}SQLiteAdapter.COL_ID);
 
 		operations.add(ContentProviderOperation.newInsert(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
-			    .withValues(itemValues)
-			    .build());
+			    .withValues(itemValues)<#if curr.extends??>
+			    .withValueBackReference(${curr.name?cap_first}SQLiteAdapter.COL_ID, 0)
+			    </#if>.build());
+
 
 		<#list curr.relations as relation>
 			<#if (relation.relation.type == "OneToMany") >
@@ -209,7 +220,6 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 		} catch (OperationApplicationException e) {
 			Log.e(TAG, e.getMessage());
 		}
-		</#if>
 
 		return result;
 	}
@@ -247,12 +257,12 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 		${curr.name?cap_first}SQLiteAdapter adapt = new ${curr.name?cap_first}SQLiteAdapter(ctx);
 		ContentResolver prov = ctx.getContentResolver();
 
-		String selection = ${curr.name?cap_first}SQLiteAdapter.COL_ID + "= ?";
+		String selection = ${curr.name?cap_first}SQLiteAdapter.ALIASED_COL_ID + "= ?";
 		String[] selectionArgs = new String[1];
 		selectionArgs[0] = String.valueOf(id);
 		
 		Cursor cursor = prov.query(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
-			${curr.name?cap_first}SQLiteAdapter.COLS,
+			null,
 			selection,
 			selectionArgs,
 			null);

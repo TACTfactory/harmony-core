@@ -175,13 +175,13 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		switch (matchedUri) {
 			case ${curr.name?upper_case}_ONE:
 				id = Integer.parseInt(uri.getPathSegments().get(1));
-				selection = ${curr.name?cap_first}SQLiteAdapter.COL_ID 
+				selection = ${curr.name?cap_first}SQLiteAdapter.ALIASED_COL_ID 
 						+ " = ?";
 				selectionArgs = new String[1];
 				selectionArgs[0] = String.valueOf(id);
 				projection = this.adapter.getCols();
 				result = this.adapter.query(
-							projection, 
+							null, 
 							selection,
 							selectionArgs, 
 							sortOrder,
@@ -190,7 +190,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				break;
 			case ${curr.name?upper_case}_ALL:
 				result = this.adapter.query(
-							projection, 
+							null, 
 							selection,
 							selectionArgs, 
 							sortOrder,
