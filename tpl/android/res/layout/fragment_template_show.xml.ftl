@@ -1,4 +1,8 @@
 <#assign curr = entities[current_entity] />
+<#assign fields = curr.fields />
+<#if curr.extends??>
+	<#assign fields = fields + entities[curr.extends].fields />
+</#if>
 <#assign currname=curr.name?lower_case />
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout 
@@ -6,10 +10,11 @@
 	xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-<#list curr.fields?values as field>
+<#list fields?values as field>
 	<#if (!field.internal && !field.hidden)>
 	<#assign m_id="${currname?lower_case}_${field.name?lower_case}" />
 	<#assign m_id_label="${m_id}_label" />
+	<#assign m_string_label="${field.owner?lower_case}_${field.name?lower_case}_label" />
 	<TextView 
 		android:id="@+id/${m_id_label}"
 		android:layout_width="match_parent"
@@ -18,7 +23,7 @@
 		android:layout_below="@+id/${currname?lower_case}_${lastFieldName?lower_case}"
 	    </#if>
 	    <#assign lastFieldName=field.name />
-		android:text="@string/${m_id_label}"/>
+		android:text="@string/${m_string_label}"/>
 		<#if (field.type=="boolean")>
 	<CheckBox
 		android:id="@+id/${m_id}"

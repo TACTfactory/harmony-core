@@ -1,4 +1,8 @@
 <#assign curr = entities[current_entity] />
+<#assign fields = curr.fields />
+<#if curr.extends??>
+	<#assign fields = fields + entities[curr.extends].fields />
+</#if>
 <#import "methods.ftl" as m />
 package ${curr.controller_namespace};
 
@@ -32,7 +36,7 @@ import android.widget.TimePicker;
 
 <#assign importDate=false />
 <#assign importTime=false />
-<#list curr.fields?values as field>
+<#list fields?values as field>
 	<#if !field.internal && !field.hidden>
 		<#if field.type?lower_case=="datetime">
 			<#if ((field.harmony_type=="date" || field.harmony_type=="datetime") && !importDate)>
@@ -74,7 +78,7 @@ import ${project_namespace}.provider.utils.${relation.relation.targetEntity?cap_
 		</#if>
 	</#if>
 </#list>
-<#list curr.fields?values as field>
+<#list fields?values as field>
 	<#if field.harmony_type?lower_case == "enum">
 		<#assign enumClass = enums[field.type] />
 import ${entity_namespace}.${m.getCompleteNamespace(enumClass)};
@@ -98,7 +102,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	protected ${curr.name} model = new ${curr.name}();
 
 	/** Fields View. */
-	<#list curr.fields?values as field>
+	<#list fields?values as field>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 	/** ${field.name} View. */
@@ -134,7 +138,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	 * @param view The layout inflating
 	 */
 	protected void initializeComponent(final View view) {
-		<#list curr.fields?values as field>
+		<#list fields?values as field>
 			<#if !field.internal && !field.hidden>
 				<#if !field.relation??>
 					<#if field.type=="boolean">
@@ -214,7 +218,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 						
 						DateTime date = new DateTime(0);
 						date = new DateTime(date.getYear(), 
-								date.getDayOfMonth(), 
+								date.getMonthOfYear(), 
 								date.getDayOfMonth(), 
 								tp.getCurrentHour(), 
 								tp.getCurrentMinute());
@@ -355,7 +359,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 
 	/** Load data from model to fields view. */
 	public void loadData() {
-		<#list curr.fields?values as field>						
+		<#list fields?values as field>						
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
@@ -391,7 +395,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	
 	/** Save data from fields view to model. */
 	public void saveData() {
-		<#list curr.fields?values as field>
+		<#list fields?values as field>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
 				<#if (field.type?lower_case == "datetime")>

@@ -117,5 +117,7 @@ public abstract class TagConstant {
 	public static final String PROVIDER_ID = "provider_id";
 	/** Constant for mother class. */
 	public static final String MOTHER = "mother";
+	/** Constant for mother class. */
+	public static final String OWNER = "owner";
 	
 }
