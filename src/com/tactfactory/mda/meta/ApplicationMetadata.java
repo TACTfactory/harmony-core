@@ -60,7 +60,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 			new TreeMap<String, ConfigMetadata>();
 	
 	/** String containing the header template for all generated files. */
-	private String headerTemplate;
+	private String headerTemplate = "";
 	
 
 	/**
