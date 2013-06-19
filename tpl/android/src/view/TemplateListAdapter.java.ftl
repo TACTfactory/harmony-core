@@ -1,9 +1,6 @@
 <#assign curr = entities[current_entity] />
 <#import "methods.ftl" as m />
-<#assign fields = curr.fields />
-<#if curr.extends??>
-	<#assign fields = fields + entities[curr.extends].fields />
-</#if>
+<#assign fields = m.getAllFields(curr) />
 package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;

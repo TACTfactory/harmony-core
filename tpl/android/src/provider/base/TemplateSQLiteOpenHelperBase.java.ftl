@@ -121,6 +121,17 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		}
 	}
 
+
+	/* (non-Javadoc)
+	 * @see android.database.sqlite.SQLiteOpenHelper#onOpen(android.database.sqlite.SQLiteDatabase)
+	 */
+	@Override
+	public void onOpen(SQLiteDatabase db) {
+		super.onOpen(db);
+		// Activation of SQLiteConstraints
+		db.execSQL("PRAGMA foreign_keys = ON;");
+	}
+
 	/**
 	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate <br />
 	 * (android.database.sqlite.SQLiteDatabase)

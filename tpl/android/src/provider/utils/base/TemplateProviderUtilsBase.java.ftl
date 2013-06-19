@@ -10,6 +10,11 @@
 <#assign relation_array = [] />
 <#assign hasRelations = false />
 <#assign hasInternalFields = false />
+<#assign inherited = false />
+<#if (curr.extends?? && entities[curr.extends]??)>
+	<#assign extends = curr.extends />
+	<#assign inherited = true />
+</#if>
 <#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)><#assign hasInternalFields = true /></#if></#list>
 <#list curr.relations as relation>
 	<#if (relation.relation.type == "OneToMany") >
@@ -33,6 +38,7 @@ import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.OperationApplicationException;
+import android.net.Uri;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -79,15 +85,6 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 		ArrayList<ContentProviderOperation> operations = 
 				new ArrayList<ContentProviderOperation>();
 		ContentResolver prov = ctx.getContentResolver();
-		
-		<#if curr.extends??>
-		${curr.extends?cap_first}SQLiteAdapter motherAdapt = new ${curr.extends?cap_first}SQLiteAdapter(ctx);
-		ContentValues motherValues = motherAdapt.itemToContentValues(item);
-		motherValues.remove(${curr.extends?cap_first}SQLiteAdapter.COL_ID);
-		operations.add(ContentProviderOperation.newInsert(${curr.extends?cap_first}ProviderAdapter.${curr.extends?upper_case}_URI)
-			    .withValues(motherValues)
-			    .build());
-		</#if>
 
 		${curr.name?cap_first}SQLiteAdapter adapt = new ${curr.name?cap_first}SQLiteAdapter(ctx);
 
@@ -96,9 +93,8 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 		itemValues.remove(${curr.name?cap_first}SQLiteAdapter.COL_ID);
 
 		operations.add(ContentProviderOperation.newInsert(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
-			    .withValues(itemValues)<#if curr.extends??>
-			    .withValueBackReference(${curr.name?cap_first}SQLiteAdapter.COL_ID, 0)
-			    </#if>.build());
+			    .withValues(itemValues)
+			    .build());
 
 		<#list curr.relations as relation>
 			<#if (relation.relation.type == "OneToMany") >
@@ -160,23 +156,14 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 				new ArrayList<ContentProviderOperation>();
 		ContentResolver prov = ctx.getContentResolver();
 		
-		<#if curr.extends??>
-		${curr.extends?cap_first}SQLiteAdapter motherAdapt = new ${curr.extends?cap_first}SQLiteAdapter(ctx);
-		ContentValues motherValues = motherAdapt.itemToContentValues(item);
-		motherValues.remove(${curr.extends?cap_first}SQLiteAdapter.COL_ID);
-		operations.add(ContentProviderOperation.newInsert(${curr.extends?cap_first}ProviderAdapter.${curr.extends?upper_case}_URI)
-			    .withValues(motherValues)
-			    .build());
-		</#if>
 
 		${curr.name?cap_first}SQLiteAdapter adapt = new ${curr.name?cap_first}SQLiteAdapter(ctx);
 		ContentValues itemValues = adapt.itemToContentValues(item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, ${relation.name?uncap_first}Id</#if></#list>);
 		itemValues.remove(${curr.name?cap_first}SQLiteAdapter.COL_ID);
 
 		operations.add(ContentProviderOperation.newInsert(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
-			    .withValues(itemValues)<#if curr.extends??>
-			    .withValueBackReference(${curr.name?cap_first}SQLiteAdapter.COL_ID, 0)
-			    </#if>.build());
+			    .withValues(itemValues)
+			    .build());
 
 
 		<#list curr.relations as relation>
@@ -235,13 +222,13 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 		int result = -1;
 		ContentResolver prov = ctx.getContentResolver();
 
-		String selection = ${curr.name?cap_first}SQLiteAdapter.COL_ID + "= ?";
-		String[] selectionArgs = new String[1];
-		selectionArgs[0] = String.valueOf(item.getId());
-		
-		result = prov.delete(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
-			selection,
-			selectionArgs);
+		Uri uri = Uri.withAppendedPath(
+				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI, 
+				String.valueOf(item.getId()));
+		result = prov.delete(uri,
+			null,
+			null);
+
 
 		return result;
 	}
@@ -364,15 +351,16 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 		${curr.name}SQLiteAdapter adapt = new ${curr.name}SQLiteAdapter(ctx);
 		ContentResolver prov = ctx.getContentResolver();		
 		ContentValues itemValues = adapt.itemToContentValues(item);
+
+		Uri uri = Uri.withAppendedPath(
+				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI, 
+				String.valueOf(item.getId()));
 		
-		String selection = ${curr.name}SQLiteAdapter.COL_ID + "= ?";
-		String[] selectionArgs = new String[1];
-		selectionArgs[0] = String.valueOf(item.getId());
-		
-		result = prov.update(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
+	
+		result = prov.update(uri,
 				itemValues, 
-				selection,
-				selectionArgs);
+				null,
+				null);
 
 		<#list curr.relations as relation>
 			<#if (relation.relation.type == "ManyToMany") >
@@ -403,21 +391,23 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 	 * @param item ${curr.name}
 	 * @return number of rows updated
 	 */
-	public static int update(final Context ctx, final ${curr.name} item
-<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, final int ${relation.name?uncap_first}Id</#if></#list>) {
+	public static int update(final Context ctx, final ${curr.name} item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>,
+			 final int ${relation.name?uncap_first}Id</#if></#list>) {
 		int result = -1;
 		${curr.name}SQLiteAdapter adapt = new ${curr.name}SQLiteAdapter(ctx);
 		ContentResolver prov = ctx.getContentResolver();		
 		ContentValues itemValues = adapt.itemToContentValues(item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, ${relation.name?uncap_first}Id</#if></#list>);
 		
-		String selection = ${curr.name}SQLiteAdapter.COL_ID + "= ?";
-		String[] selectionArgs = new String[1];
-		selectionArgs[0] = String.valueOf(item.getId());
+		Uri uri = Uri.withAppendedPath(
+				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI, 
+				String.valueOf(item.getId()));
 		
-		result = prov.update(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
+	
+		result = prov.update(uri,
 				itemValues, 
-				selection,
-				selectionArgs);
+				null,
+				null);
+
 
 		<#list curr.relations as relation>
 			<#if (relation.relation.type == "ManyToMany") >

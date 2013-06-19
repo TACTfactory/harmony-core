@@ -149,6 +149,15 @@ public abstract class ${curr.name}SQLiteAdapterBase
 <#if (firstFieldDone)>,</#if>
 		${alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
 	};
+
+	/** Global Fields. */
+	public static final String[] ALIASED_COLS = new String[] {
+<#assign firstFieldDone=false />
+<#list curr.fields?values as field>
+	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
+<#if (firstFieldDone)>,</#if>
+		ALIASED_${alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
+	};
 	
 	/**
 	 * Get the table name used in DB for your ${curr.name} entity.
@@ -156,6 +165,18 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public String getTableName() {
 		return TABLE_NAME;
+	}
+
+	public String getJoinedTableName() {
+		String result = TABLE_NAME;
+		<#if inherited?? && inherited>
+		${curr.extends}SQLiteAdapter motherAdapt = new ${curr.extends}SQLiteAdapter(this.ctx);
+		result += " INNER JOIN ";
+		result += motherAdapt.getJoinedTableName();
+		result += " <#if entities[curr.extends].extends??>AND<#else>ON</#if> ";
+		result += ALIASED_COL_ID + " = " + ${curr.extends}SQLiteAdapter.ALIASED_COL_ID;
+		</#if>
+		return result;
 	}
 	
 	/**
@@ -196,7 +217,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		+ "PRIMARY KEY (" + <#list curr.ids as id>${alias(id.name)}<#if (id_has_next)> + "," + </#if></#list> + ")"
 </#if>
 <#if (curr.extends??)>
-		+ ", FOREIGN KEY (" + COL_ID + ") REFERENCES " + ${curr.extends}SQLiteAdapter.TABLE_NAME + "(" + ${curr.extends}SQLiteAdapter.COL_ID + ")"
+		+ ", FOREIGN KEY (" + COL_ID + ") REFERENCES " + ${curr.extends}SQLiteAdapter.TABLE_NAME + "(" + ${curr.extends}SQLiteAdapter.COL_ID + ") ON DELETE CASCADE"
 </#if>
 		+ ");";
 	}
@@ -239,7 +260,11 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return ContentValues object
 	 */
 	public ContentValues itemToContentValues(final ${curr.name} item) {
-		final ContentValues result = new ContentValues();		
+		final ContentValues result = new ContentValues();
+		<#if (curr.extends??)>
+		${curr.extends?cap_first}SQLiteAdapter motherAdapt = new ${curr.extends?cap_first}SQLiteAdapter(this.ctx);
+		result.putAll(motherAdapt.itemToContentValues(item));	
+		</#if>
 	<#list curr.fields?values as field>
 		<#if (!field.internal)>
 			<#if (!field.relation??)>
@@ -260,21 +285,29 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		
 		return result;
 	}
-	
+
 	/** 
 	 * Convert Cursor of database to ${curr.name} entity.
 	 * @param cursor Cursor object
 	 * @return ${curr.name} entity
 	 */
 	public ${curr.name} cursorToItem(final Cursor cursor) {
-		${curr.name} result = null;
-
+		${curr.name} result = new ${curr.name}();
+		this.cursorToItem(cursor, result);
+		return result;
+	}
+	
+	/** 
+	 * Convert Cursor of database to ${curr.name} entity.
+	 * @param cursor Cursor object
+	 * @param item ${curr.name} entity
+	 */
+	public void cursorToItem(final Cursor cursor, final ${curr.name} result) {
 		if (cursor.getCount() != 0) {
 			<#if (curr.extends??)>
 			${curr.extends}SQLiteAdapter motherAdapt = new ${curr.extends}SQLiteAdapter(this.ctx);
-			result = new ${curr.name}(motherAdapt.cursorToItem(cursor));			
-			<#else>
-			result = new ${curr.name}();
+			motherAdapt.cursorToItem(cursor, result);			
+
 			</#if>			
 			int index;
 	<#list curr.fields?values as field>
@@ -363,8 +396,6 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		</#if>
 	</#list>
 		}
-		
-		return result;
 	}
 	
 	//// CRUD Entity ////
@@ -808,39 +839,6 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				null);
 		</#if>
 	}
-
-<#if curr.extends??>
-	/**
-	 * Send a query to the DB.
-	 * @param projection Columns to work with
-	 * @param whereClause WHERE clause for SQL
-	 * @param whereArgs WHERE arguments for SQL
-	 * @param having HAVING clause
-	 * @param orderBy ORDER BY clause
-	 * @return A cursor pointing to the result of the query
-	 */
-	public Cursor query(final String[] projection, 
-						final String whereClause, 
-						final String[] whereArgs, 
-						final String groupBy, 
-						final String having, 
-						final String orderBy) {
-		String table = TABLE_NAME + " LEFT OUTER JOIN "
-				+ ${curr.extends?cap_first}SQLiteAdapter.TABLE_NAME + " ON "
-				+ ALIASED_COL_ID 
-				+ " = " 
-				+ ${curr.extends?cap_first}SQLiteAdapter.ALIASED_COL_ID;
-		
-		return this.mDatabase.query(
-				table,
-				projection,
-				whereClause,
-				whereArgs,
-				groupBy,
-				having,
-				orderBy);
-	}
-</#if>
 	
 	/**
 	 * Deletes the given entity.

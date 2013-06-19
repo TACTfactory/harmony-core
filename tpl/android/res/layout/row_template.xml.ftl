@@ -1,8 +1,6 @@
+<#import "/tpl/android/src/view/methods.ftl" as m />
 <#assign curr = entities[current_entity] />
-<#assign fields = curr.fields />
-<#if curr.extends??>
-	<#assign fields = fields + entities[curr.extends].fields />
-</#if>
+<#assign fields = m.getAllFields(curr) />
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"

@@ -67,6 +67,16 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 		}
 
 	}
+
+	/**
+	 * Converts the criterias to a Selection args String array.
+	 * @return The String[] of selection args
+	 */
+	public String[] toSQLiteSelectionArgs() {
+		ArrayList<String> tmpArray = new ArrayList<String>();
+		this.toSQLiteSelectionArgs(tmpArray);
+		return tmpArray.toArray(new String[tmpArray.size()]);
+	}
 	
 	/**
 	 * Test if the given criteria is valid.

@@ -28,7 +28,7 @@ public class ${curr.name?cap_first}Criterias extends CriteriasBase {
 	 */
 	@Override
 	public boolean validCriteria(final Criteria crit) {
-		boolean result = false;
+		/*boolean result = false;
 	
 		final String key = crit.getKey();
 		final String[] possibleKeys = ${curr.name?cap_first}SQLiteAdapter.COLS;
@@ -39,7 +39,8 @@ public class ${curr.name?cap_first}Criterias extends CriteriasBase {
 			}
 		}
 		
-		return result;
+		return result;*/
+		return true;
 	}
 
 }

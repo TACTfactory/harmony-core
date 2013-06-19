@@ -1,9 +1,6 @@
 <#assign curr = entities[current_entity] />
-<#assign fields = curr.fields />
-<#if curr.extends??>
-	<#assign fields = fields + entities[curr.extends].fields />
-</#if>
 <#import "methods.ftl" as m />
+<#assign fields = m.getAllFields(curr) />
 package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
@@ -165,7 +162,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			    final CustomDatePickerDialog ${field.name}Dpd = 
 			    		new CustomDatePickerDialog(getActivity(), 
 			    				dt, 
-			    				R.string.${curr.name?lower_case}_${field.name?lower_case}_date_title);
+			    				R.string.${field.owner?lower_case}_${field.name?lower_case}_date_title);
 			    ${field.name}Dpd.setPositiveButton(getActivity().getString(android.R.string.ok), 
 			    		new DialogInterface.OnClickListener() {
 					@Override
@@ -207,7 +204,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			    		new CustomTimePickerDialog(getActivity(), 
 			    		dt, 
 			    		android.text.format.DateFormat.is24HourFormat(getActivity()), 
-			    		R.string.${curr.name?lower_case}_${field.name?lower_case}_time_title);
+			    		R.string.${field.owner?lower_case}_${field.name?lower_case}_time_title);
 			    ${field.name}Tpd.setPositiveButton(getActivity().getString(
 			    										   android.R.string.ok), 
 			    					new DialogInterface.OnClickListener() {
@@ -272,7 +269,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		}
 		final AlertDialog.Builder builder = 
 				new AlertDialog.Builder(this.getActivity());
-		builder.setTitle(R.string.${curr.name?lower_case}_${relation.name?lower_case}_dialog_title)
+		builder.setTitle(R.string.${field.owner?lower_case}_${relation.name?lower_case}_dialog_title)
 				.setMultiChoiceItems(listAdapter, checks, 
 							  new DialogInterface.OnMultiChoiceClickListener() {
 					public void onClick(DialogInterface dialog, int which, 
@@ -309,7 +306,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		}
 		final AlertDialog.Builder builder = 
 				new AlertDialog.Builder(this.getActivity());
-		builder.setTitle(R.string.${curr.name?lower_case}_${relation.name?lower_case}_dialog_title)
+		builder.setTitle(R.string.${field.owner?lower_case}_${relation.name?lower_case}_dialog_title)
 				.setSingleChoiceItems(listAdapter, 0, 
 										 new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {

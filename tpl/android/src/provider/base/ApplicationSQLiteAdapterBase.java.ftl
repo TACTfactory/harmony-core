@@ -116,7 +116,7 @@ public abstract class SQLiteAdapterBase<T> {
 						final String having, 
 						final String orderBy) {
 		return this.mDatabase.query(
-				this.getTableName(),
+				this.getJoinedTableName(),
 				projection,
 				whereClause,
 				whereArgs,
@@ -172,6 +172,13 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @return the table name
 	 */
 	public abstract String getTableName();
+
+	/**
+	 * Get the join table Name for inheritance.
+	 * @return the table name joined with its mothers names
+	 */
+	public abstract String getJoinedTableName();
+
 	/**
 	 * Get the table's columns.
 	 * @return array of cols
