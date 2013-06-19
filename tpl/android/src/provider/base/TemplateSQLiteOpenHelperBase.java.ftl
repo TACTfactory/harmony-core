@@ -55,6 +55,7 @@
 	</#list>
 	<#return ret>
 </#function>
+<@header?interpret />
 package ${data_namespace}.base;
 
 import java.io.FileOutputStream;

@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${data_namespace};
 
 import ${data_namespace}.base.${project_name?cap_first}SQLiteOpenHelperBase;

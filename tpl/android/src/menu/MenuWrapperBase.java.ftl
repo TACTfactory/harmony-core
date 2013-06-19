@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${project_namespace}.menu;
 
 import com.actionbarsherlock.view.Menu;
