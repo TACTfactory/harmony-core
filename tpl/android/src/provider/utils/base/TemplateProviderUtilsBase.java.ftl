@@ -43,7 +43,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import ${data_namespace}.${curr.name}SQLiteAdapter;
-<#if curr.extends??>import ${data_namespace}.${curr.extends?cap_first}SQLiteAdapter;
+<#if (inherited)>import ${data_namespace}.${curr.extends?cap_first}SQLiteAdapter;
 import ${project_namespace}.provider.${curr.extends?cap_first}ProviderAdapter;</#if>
 <#list relation_array as relation>import ${data_namespace}.${relation}SQLiteAdapter;</#list>
 <#list curr.relations as relation>import ${data_namespace}.${relation.relation.targetEntity}SQLiteAdapter;

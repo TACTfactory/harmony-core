@@ -271,7 +271,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		}
 		final AlertDialog.Builder builder = new AlertDialog.Builder(
 				this.getActivity());
-		builder.setTitle(R.string.${field.owner?lower_case}_${relation.name?lower_case}_dialog_title)
+		builder.setTitle(R.string.${relation.owner?lower_case}_${relation.name?lower_case}_dialog_title)
 				.setMultiChoiceItems(listAdapter, 
 						checks, 
 							  new DialogInterface.OnMultiChoiceClickListener() {
@@ -313,7 +313,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		}
 		final AlertDialog.Builder builder = 
 				new AlertDialog.Builder(this.getActivity());
-		builder.setTitle(R.string.${field.owner?lower_case}_${relation.name?lower_case}_dialog_title)
+		builder.setTitle(R.string.${relation.owner?lower_case}_${relation.name?lower_case}_dialog_title)
 				.setSingleChoiceItems(listAdapter, 0, 
 										 new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {

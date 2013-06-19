@@ -16,12 +16,14 @@ import java.util.HashMap;
 import java.util.List;
 
 import com.google.common.base.CaseFormat;
+import com.tactfactory.mda.meta.ApplicationMetadata;
 import com.tactfactory.mda.meta.ClassMetadata;
 import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.meta.MethodMetadata;
 import com.tactfactory.mda.plateforme.BaseAdapter;
 import com.tactfactory.mda.utils.ConsoleUtils;
+import com.tactfactory.mda.utils.MetadataUtils;
 import com.tactfactory.mda.utils.TactFileUtils;
 
 import freemarker.template.Template;
@@ -136,11 +138,13 @@ public class EntityGenerator extends BaseGenerator {
 	 * @param cm The Metadata containing the infos on the java class
 	 */
 	protected final void generateGetterAndSetters(final StringBuffer fileString,
-			final ClassMetadata cm) {
+			final EntityMetadata cm) {
 		final Collection<FieldMetadata> fields = cm.getFields().values();
-		
+		boolean childClass = MetadataUtils.inheritsFromEntity(cm,
+				ApplicationMetadata.INSTANCE);
 		for (final FieldMetadata f : fields) {
-			if (!f.isInternal()) {
+			boolean isInheritedId = childClass && cm.getIds().containsKey(f.getName());
+			if (!f.isInternal() && !isInheritedId) {
 				// Getter
 				if (!this.alreadyImplementsGet(f, cm)) { 
 					ConsoleUtils.displayDebug("Add implements getter of " 

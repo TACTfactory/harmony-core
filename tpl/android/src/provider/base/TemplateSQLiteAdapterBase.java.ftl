@@ -216,7 +216,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 <#if (curr.ids?size>1)>
 		+ "PRIMARY KEY (" + <#list curr.ids as id>${alias(id.name)}<#if (id_has_next)> + "," + </#if></#list> + ")"
 </#if>
-<#if (curr.extends??)>
+<#if (inherited)>
 		+ ", FOREIGN KEY (" + COL_ID + ") REFERENCES " + ${curr.extends}SQLiteAdapter.TABLE_NAME + "(" + ${curr.extends}SQLiteAdapter.COL_ID + ") ON DELETE CASCADE"
 </#if>
 		+ ");";
@@ -261,7 +261,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public ContentValues itemToContentValues(final ${curr.name} item) {
 		final ContentValues result = new ContentValues();
-		<#if (curr.extends??)>
+		<#if (inherited)>
 		${curr.extends?cap_first}SQLiteAdapter motherAdapt = new ${curr.extends?cap_first}SQLiteAdapter(this.ctx);
 		result.putAll(motherAdapt.itemToContentValues(item));	
 		</#if>
@@ -304,7 +304,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public void cursorToItem(final Cursor cursor, final ${curr.name} result) {
 		if (cursor.getCount() != 0) {
-			<#if (curr.extends??)>
+			<#if (inherited)>
 			${curr.extends}SQLiteAdapter motherAdapt = new ${curr.extends}SQLiteAdapter(this.ctx);
 			motherAdapt.cursorToItem(cursor, result);			
 

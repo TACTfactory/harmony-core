@@ -17,6 +17,7 @@ import com.tactfactory.mda.meta.EntityMetadata;
 import com.tactfactory.mda.meta.FieldMetadata;
 import com.tactfactory.mda.meta.RelationMetadata;
 import com.tactfactory.mda.utils.ConsoleUtils;
+import com.tactfactory.mda.utils.MetadataUtils;
 
 /** The class ClassCompletor will complete all ClassMetadatas 
  * with the information it needs from the others ClassMetadatas. */
@@ -45,6 +46,7 @@ public class ClassCompletor {
 	 */
 	public final void execute() {
 		for (final EntityMetadata classMeta : this.metas.values()) {
+			this.updateInheritedIds(classMeta);
 			this.updateRelations(classMeta);
 		}
 		
@@ -274,5 +276,19 @@ public class ClassCompletor {
 			super(msg);
 		}
 		
+	}
+	
+	private void updateInheritedIds(final EntityMetadata cm) {
+		// If entity has a mother
+		if (cm.getExtendType() != null) {
+			EntityMetadata mother = MetadataUtils.getTopMostMother(cm,
+					ApplicationMetadata.INSTANCE);
+			for (String idName : mother.getIds().keySet()) {
+				FieldMetadata id = mother.getIds().get(idName);
+				cm.getIds().put(idName, id);
+				cm.getFields().put(idName, id);
+			}
+		} else {
+		}
 	}
 }
