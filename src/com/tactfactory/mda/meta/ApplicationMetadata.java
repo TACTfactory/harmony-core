@@ -59,6 +59,9 @@ public final class ApplicationMetadata extends BaseMetadata {
 	private Map<String, ConfigMetadata> configs =
 			new TreeMap<String, ConfigMetadata>();
 	
+	/** String containing the header template for all generated files. */
+	private String headerTemplate;
+	
 
 	/**
 	 * Constructor.
@@ -267,7 +270,23 @@ public final class ApplicationMetadata extends BaseMetadata {
 			optionsMap.put(bm.getName(), bm.toMap(adapt));
 		}
 		ret.put(TagConstant.OPTIONS, optionsMap);
+		ret.put(TagConstant.HEADER, this.headerTemplate);
 		
 		return ret;
+	}
+	
+
+	/**
+	 * @return the headerTemplate
+	 */
+	public final String getHeaderTemplate() {
+		return headerTemplate;
+	}
+
+	/**
+	 * @param headerTemplate the headerTemplate to set
+	 */
+	public final void setHeaderTemplate(final String headerTemplate) {
+		this.headerTemplate = headerTemplate;
 	}
 }
