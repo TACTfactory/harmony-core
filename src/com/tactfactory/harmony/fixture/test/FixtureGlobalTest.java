@@ -21,7 +21,6 @@ import com.tactfactory.harmony.command.ProjectCommand;
 import com.tactfactory.harmony.fixture.command.FixtureCommand;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.test.CommonTest;
-import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
 /**
@@ -119,7 +118,9 @@ public class FixtureGlobalTest extends CommonTest {
 		CommonTest.getHarmony().findAndExecute(
 				FixtureCommand.FIXTURE_PURGE, new String[] {}, null);
 		CommonTest.getHarmony().findAndExecute(
-				FixtureCommand.FIXTURE_INIT, new String[] {"--format=yml", "--force=true"}, null);
+				FixtureCommand.FIXTURE_INIT,
+				new String[] {"--format=yml", "--force=true"},
+				null);
 		
 		// Copy fixture files
 		copyFixturesYml();
@@ -151,7 +152,7 @@ public class FixtureGlobalTest extends CommonTest {
 						"fixture",
 						"xml/");
 
-		String destDir = String.format("fixtures/");
+		final String destDir = String.format("fixtures/");
 		
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
@@ -174,7 +175,7 @@ public class FixtureGlobalTest extends CommonTest {
 					"fixture",
 					"yml/");
 
-		String destDir = String.format("fixtures/");
+		final String destDir = String.format("fixtures/");
 		
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);

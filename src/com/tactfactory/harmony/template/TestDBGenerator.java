@@ -8,11 +8,12 @@
  */
 package com.tactfactory.harmony.template;
 
-import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.PackageUtils;
+
+import java.io.File;
 
 /**
  * Database tests generator.
@@ -39,6 +40,8 @@ public class TestDBGenerator extends BaseGenerator {
 		ConsoleUtils.display(">> Generate Repository test...");
 		
 		//this.initTestAndroid();
+		this.getDatamodel().put("dataLoader",
+				this.isDataLoaderAlreadyGenerated());
 	
 		for (final EntityMetadata cm 
 				: this.getAppMetas().getEntities().values()) {
@@ -51,8 +54,13 @@ public class TestDBGenerator extends BaseGenerator {
 				this.generate();
 			}
 		}
-		this.makeSourceTest("utils/TestUtils.java", "utils/TestUtils.java", false);
-		this.makeSourceTest("base/TestDBBase.java", "base/TestDBBase.java", true);
+		this.makeSourceTest("utils/TestUtils.java",
+				"utils/TestUtils.java", 
+				false);
+		
+		this.makeSourceTest("base/TestDBBase.java",
+				"base/TestDBBase.java",
+				true);
 	}
 	
 	/**  
@@ -88,6 +96,20 @@ public class TestDBGenerator extends BaseGenerator {
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
+	}
+	
+	/**
+	 * Check if the fixture dataloader class has already been generated.
+	 * @return True if it already exists.
+	 */
+	private boolean isDataLoaderAlreadyGenerated() {
+		String dataLoaderPath = this.getAdapter().getSourcePath() 
+				+ this.getAppMetas().getProjectNameSpace()
+				+ "/" + this.getAdapter().getFixture() + "/" 
+				+ "DataLoader.java";
+		
+		
+		return new File(dataLoaderPath).exists();
 	}
 	
 	/** 

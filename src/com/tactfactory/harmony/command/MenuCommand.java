@@ -7,6 +7,9 @@ import com.tactfactory.harmony.plateforme.AndroidAdapter;
 import com.tactfactory.harmony.template.MenuGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
+/**
+ * Command class for Menu generation.
+ */
 @PluginImplementation
 public class MenuCommand extends BaseCommand {
 
@@ -22,7 +25,10 @@ public class MenuCommand extends BaseCommand {
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_UPDATE;
 	
 	@Override
-	public void execute(String action, String[] args, String option) {
+	public final void execute(
+			final String action, 
+			final String[] args, 
+			final String option) {
 		ConsoleUtils.display("> ORM Generator");
 
 		this.setCommandArgs(Console.parseCommandArgs(args));
@@ -39,13 +45,13 @@ public class MenuCommand extends BaseCommand {
 	}
 
 	@Override
-	public void summary() {
+	public final void summary() {
 		ConsoleUtils.display("\n> MENU \n" 
-				+ "\t" + UPDATE_MENU+ "\t => Update the menu\n"); 		
+				+ "\t" + UPDATE_MENU + "\t => Update the menu\n"); 		
 	}
 
 	@Override
-	public boolean isAvailableCommand(String command) {
+	public final boolean isAvailableCommand(final String command) {
 		boolean result = false;
 		if (UPDATE_MENU.equals(command)) {
 			result = true;

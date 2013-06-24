@@ -52,7 +52,7 @@ public @interface Column {
 		/** char type. */
 		CHAR	("char", 		null, 	false,	null,	null,	null,	null),
 		/** char type. */
-		CHARACTER	("character",	null, 	false,	null,	null,	null,	null),
+		CHARACTER	("character", null, false,	null,	null,	null,	null),
 		/** int type. */
 		INT		("int", 		null, 	false,	null,	null,	null,	null),
 		/** long type. */
@@ -67,6 +67,8 @@ public @interface Column {
 		DATE	("date", 	null, 	true,	null,	null,	null,	false),
 		/** Time type. */
 		TIME	("time",		null,	true,	null,	null,	null,	false),
+		/** Enum type. */
+		ENUM	("enum",		null,	false,	null,	null,	null,	null),
 		
 		// EXTEND
 		/** Login type. */

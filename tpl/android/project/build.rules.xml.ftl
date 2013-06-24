@@ -2,6 +2,7 @@
 <project name="harmony-rules">	    
 	<property name="findbug.analyze.package" value="" />
 	<property name="checkstyle.includes" value="" />
+	<property name="checkstyle.excludes" value="" />
 	<property name="android-jar" value="${sdk.dir}/platforms/android-14/android.jar" />    
     <property name="tmp.rel-dir" value="tmp" />
 	<path id="findbugs.dir.jars">
@@ -62,7 +63,9 @@
 	                   failureProperty="checkstyle.failure"
 	                   failOnViolation="false" >
 	           <formatter type="xml" tofile="${r"${tmp.rel-dir}"}/checkstyle-result.xml" />
-	           <fileset dir="${r"${source.dir}"}" includes="${r"${checkstyle.includes}"}" />
+	           <fileset dir="${r"${source.dir}"}" 
+			includes="${r"${checkstyle.includes}"}"
+			excludes="${r"${checkstyle.excludes}"}" />
 	       </checkstyle>
 	
 		<!-- Report -->

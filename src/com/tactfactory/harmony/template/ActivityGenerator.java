@@ -136,6 +136,10 @@ public class ActivityGenerator extends BaseGenerator {
 			}
 		}
 		
+
+		this.updateWidget("ValidationButtons.java", 
+				"widget_validation_buttons.xml");
+		
 		if (this.isDate) {
 			this.updateWidget("CustomDatePickerDialog.java", 
 					"dialog_date_picker.xml");
@@ -386,10 +390,13 @@ public class ActivityGenerator extends BaseGenerator {
 
 		this.updateManifest("CreateActivity", entityName);
 		
-		ClassMetadata cm = this.getAppMetas().getEntities().get(entityName);
+		final ClassMetadata classMeta = 
+				this.getAppMetas().getEntities().get(entityName);
 		
-		for (FieldMetadata fm : cm.getFields().values()) {
-			if (!fm.isInternal() && !fm.isHidden() && fm.getRelation() != null) {
+		for (final FieldMetadata fm : classMeta.getFields().values()) {
+			if (!fm.isInternal() 
+					&& !fm.isHidden() 
+					&& fm.getRelation() != null) {
 				TranslationMetadata.addDefaultTranslation(
 						entityName.toLowerCase(Locale.ENGLISH) 
 							+ "_" 
@@ -552,7 +559,7 @@ public class ActivityGenerator extends BaseGenerator {
 				final Element filterActivity = 
 						findActivity.getChild("intent-filter");
 				if (filterActivity != null) {
-					StringBuffer data = new StringBuffer();
+					final StringBuffer data = new StringBuffer();
 					String action = "VIEW";
 
 					if (pathRelatif.matches(".*List.*")) {

@@ -5,14 +5,26 @@ import java.io.File;
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
+/**
+ * Context class.
+ */
 public final class Context {
 	/** Delimiter. */
 	public static final String DELIMITER = "/";
 	
+	/** Project folder. */
 	private static String projectForlder	= "app"		+ DELIMITER;
+	
+	/** Library folder. */
 	private static String libraryFolder 	= "lib"		+ DELIMITER;
+	
+	/** Bundle folder. */
 	private static String bundleFolder 		= "vendor"	+ DELIMITER;
+	
+	/** Template folder. */
 	private static String templateFolder 	= "tpl"		+ DELIMITER;
+	
+	/** Project base folder. */
 	private static String projectBaseFolder = "android" + DELIMITER;
 	
 	/** Path of Harmony base. */
@@ -63,6 +75,9 @@ public final class Context {
 	/** Symfony path. */
 	public static final String SYMFONY_PATH = "D:/Site/wamp/www/Symfony";
 	
+	/**
+	 * Contructor.
+	 */
 	public Context() {
 		// For root case
 		File baseDir = this.detectAppTree(new File(harmonyPath));

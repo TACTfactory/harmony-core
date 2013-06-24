@@ -13,7 +13,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 
 import com.tactfactory.harmony.meta.TranslationMetadata.Group;
@@ -22,11 +21,20 @@ import com.tactfactory.harmony.template.TagConstant;
 
 /** Entity class metadata. */
 public class ClassMetadata extends BaseMetadata {
-
+	/** SubClasses array. */
+	private Map<String, ClassMetadata> subClasses = 
+			new LinkedHashMap<String, ClassMetadata>();
+	
+	/** Mother Class name. */
+	private String motherClass;
+	
 	/** List of fields of entity class. */
 	private Map<String, FieldMetadata> fields = 
 			new LinkedHashMap<String, FieldMetadata>();
 		
+	/** Implemented class list of the entity class. */
+	private List<String> implementTypes = 
+			new ArrayList<String>();
 
 	/** Namespace of entity class. */
 	private String space = "";
@@ -50,7 +58,6 @@ public class ClassMetadata extends BaseMetadata {
 	public Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		
-
 		model.put(TagConstant.SPACE,			this.space);
 		model.put(TagConstant.NAME,				this.getName());
 		model.put(TagConstant.EXTENDS,			this.extendType);
@@ -62,13 +69,16 @@ public class ClassMetadata extends BaseMetadata {
 				adapter.getNameSpace(this, adapter.getTest()));
 		model.put(TagConstant.FIELDS,			
 				this.toFieldArray(this.fields.values(), adapter));
-		model.put(TagConstant.INTERNAL,			"false");
 		
 		final Map<String, Object> optionsModel = new HashMap<String, Object>();
 		for (final Metadata option : this.getOptions().values()) {
 			optionsModel.put(option.getName(), option.toMap(adapter));
 		}
 		model.put(TagConstant.OPTIONS, optionsModel);
+
+		if (motherClass != null) {
+			model.put(TagConstant.MOTHER, this.motherClass);	
+		}
 		
 		return model;
 	}
@@ -150,6 +160,22 @@ public class ClassMetadata extends BaseMetadata {
 	public final void setImports(final List<String> imports) {
 		this.imports = imports;
 	}
+	
+	
+	/**
+	 * @return the implementTypes
+	 */
+	public final List<String> getImplementTypes() {
+		return implementTypes;
+	}
+
+
+	/**
+	 * @param implementTypes the implementTypes to set
+	 */
+	public final void setImplementTypes(final List<String> implementTypes) {
+		this.implementTypes = implementTypes;
+	}
 
 
 	/**
@@ -158,11 +184,11 @@ public class ClassMetadata extends BaseMetadata {
 	 * @param adapter The adapter to use.
 	 * @return The fields map.
 	 */
-	private List<Map<String, Object>> toFieldArray(
+	private Map<String, Map<String, Object>> toFieldArray(
 			final Collection<FieldMetadata> c, 
 			final BaseAdapter adapter) {
-		final List<Map<String, Object>> result = 
-				new ArrayList<Map<String, Object>>();
+		final Map<String, Map<String, Object>> result = 
+				new LinkedHashMap<String, Map<String, Object>>();
 		Map<String, Object> subField = null;
 		
 		for (final FieldMetadata field : c) {
@@ -175,9 +201,38 @@ public class ClassMetadata extends BaseMetadata {
 				field.makeString("label");
 			}
 			
-			result.add(subField);
+			result.put(field.getName(), subField);
 		}
 		
 		return result;
+	}
+
+	/**
+	 * @return the motherClass
+	 */
+	public final String getMotherClass() {
+		return motherClass;
+	}
+
+	/**
+	 * @param motherClass the motherClass to set
+	 */
+	public final void setMotherClass(final String motherClass) {
+		this.motherClass = motherClass;
+	}
+
+	/**
+	 * @return the subClasses
+	 */
+	public final Map<String, ClassMetadata> getSubClasses() {
+		return subClasses;
+	}
+
+	/**
+	 * @param subClasses the subClasses to set
+	 */
+	public final void setSubClasses(
+			final Map<String, ClassMetadata> subClasses) {
+		this.subClasses = subClasses;
 	}	
 }

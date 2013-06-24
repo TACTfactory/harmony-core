@@ -7,10 +7,11 @@
  * file that was distributed with this source code.
  */
 package com.tactfactory.harmony.test.demact.entity;
+import java.io.Serializable;
 
 /**
  * Empty entity for test puposes only.
  */
-public class ShadowEntity {
+public class ShadowEntity implements Serializable {
 
 }

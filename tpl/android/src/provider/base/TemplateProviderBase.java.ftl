@@ -41,11 +41,20 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	 */
 	<#list entities?values as entity>
 		<#if (entity.fields?size>0) >
+	/**
+	 * ${entity.name?cap_first} provider adapter. 
+	 */
 	protected ${entity.name?cap_first}ProviderAdapter ${entity.name?uncap_first}Provider;
 		</#if>
 	</#list>
+	/**
+	 * Database.
+	 */
 	protected SQLiteDatabase db;
 	
+	/**
+	 * Context.
+	 */
 	protected Context mContext;
 
 	/**
@@ -237,8 +246,9 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	 * @return A cursor pointing to the result of the query
 	 */
 	@Override
-	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
+	public Cursor query(final Uri uri, final String[] projection, 
+			final String selection, final String[] selectionArgs, 
+			final String sortOrder) {
 		Cursor result = null;
 
 		boolean alreadyInTransaction = this.db.inTransaction();
@@ -296,8 +306,8 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	 * @return how many token update
 	 */
 	@Override
-	public int update(Uri uri, ContentValues values, String selection,
-			String[] selectionArgs) {
+	public int update(final Uri uri, final ContentValues values, 
+				      final String selection, final String[] selectionArgs) {
 		int result = 0;
 
 		boolean alreadyInTransaction = this.db.inTransaction();
@@ -354,7 +364,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	 * @param typePath Path to type
 	 * @return generated URI
 	 */	
-	public static final Uri generateUri(String typePath) {
+	public static final Uri generateUri(final String typePath) {
 		return Uri.parse("content://" + authority + "/" + typePath);
 	}
 	
@@ -363,46 +373,6 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	 */
 	public static final Uri generateUri() {
 		return Uri.parse("content://" + authority);
-	}
-
-	/**
-	 * @see android.content.ContentProvider#call<br />
-	 * (java.lang.String, java.lang.String, android.os.Bundle)
-	 */
-	@Override
-	public Bundle call(String method, String arg, Bundle extras) {
-		Bundle result = null;
-		<#list entities?values as entity>			
-			<#if (entity.fields?size>0) >
-		if (method.equals(${entity.name?cap_first}ProviderAdapter
-				.METHOD_INSERT_${entity.name?upper_case})) {
-			result = this.${entity.name?uncap_first}Provider.insert(arg, extras);
-		}
-		else if (method.equals(${entity.name?cap_first}ProviderAdapter
-				.METHOD_DELETE_${entity.name?upper_case})) {
-			result = this.${entity.name?uncap_first}Provider.delete(arg, extras);
-		}
-		else if (method.equals(${entity.name?cap_first}ProviderAdapter
-				.METHOD_UPDATE_${entity.name?upper_case})) {
-			result = this.${entity.name?uncap_first}Provider.update(arg, extras);
-		} else
-		if (method.equals(
-				${entity.name?cap_first}ProviderAdapter.METHOD_QUERY_${entity.name?upper_case})) {
-			if (extras != null && extras.containsKey("id")) {
-				result = this.${entity.name?uncap_first}Provider.query(arg, 
-																		extras);
-			} else {
-				result = this.${entity.name?uncap_first}Provider.queryAll(arg, 
-						extras);	
-			}
-		} else
-			</#if>
-		</#list>
-		{
-			result = super.call(method, arg, extras);
-		}
-		
-		return result;
 	}
 
 	/**

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import ${project_namespace}.criterias.base.Criteria.Type;
+import ${project_namespace}.criterias.base.value.StringValue;
 
 /** CriteriasBase. 
  *	An array of Criteria and CriteriasBase. Used for db requests.   
@@ -23,11 +24,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 		this.type = type;
 	}
 		
-	/**
-	 * Convert the criteria to a SQLite String.
-	 * @return The SQLite String representation of the criteria. ex : <br />
-	 * "(price > 15.0)" 
-	 */
+	@Override
 	public String toSQLiteString() {
 		StringBuilder ret = new StringBuilder("(");
 		
@@ -42,6 +39,33 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 		}
 		ret.append(')');
 		return ret.toString();
+	}
+
+	@Override
+	public String toSQLiteSelection() {
+		StringBuilder ret = new StringBuilder("(");
+		
+		for (int i = 0; i < this.criterias.size(); i++) {
+			final ICriteria crit = this.criterias.get(i);
+			ret.append(crit.toSQLiteSelection());
+			if (i != this.criterias.size() - 1) {
+				ret.append(' ');
+				ret.append(type.getSqlType());
+				ret.append(' ');
+			}
+		}
+		ret.append(')');
+		return ret.toString();
+	}
+
+	@Override	
+	public void toSQLiteSelectionArgs(final ArrayList<String> array) {
+		
+		for (int i = 0; i < this.criterias.size(); i++) {
+			final ICriteria crit = this.criterias.get(i);
+			crit.toSQLiteSelectionArgs(array);
+		}
+
 	}
 	
 	/**
@@ -79,7 +103,7 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	public boolean add(final String key, final String value, final Type type) {
 		final Criteria criteria = new Criteria();
 		criteria.setKey(key);
-		criteria.addValue(value);
+		criteria.addValue(new StringValue(value));
 		criteria.setType(type);
 		
 		return this.add(criteria);
@@ -99,9 +123,12 @@ public abstract class CriteriasBase implements Serializable, ICriteria {
 	 * Enum GroupType.
 	 */
 	public enum GroupType {
+		/** AND type.*/
 		AND("AND"),
+		/** OR type.*/
 		OR("OR");
 		
+		/** SQLite representation of this type. */
 		private String sql;
 		
 		/**

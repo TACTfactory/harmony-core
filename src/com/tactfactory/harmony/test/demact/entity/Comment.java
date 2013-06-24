@@ -9,6 +9,7 @@
 package com.tactfactory.harmony.test.demact.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import org.joda.time.DateTime;
 
@@ -19,6 +20,7 @@ import com.tactfactory.harmony.annotation.Id;
 import com.tactfactory.harmony.annotation.ManyToOne;
 import com.tactfactory.harmony.annotation.Table;
 import com.tactfactory.harmony.annotation.Column.Type;
+import com.tactfactory.harmony.annotation.OneToMany;
 
 // Annotation with default and forced value/parameter
 @Table
@@ -45,10 +47,103 @@ public class Comment implements Serializable { //TODO extends EntityBase {
 	
 	@Column
 	private boolean validate = false;
+	
+	@OneToMany
+	private ArrayList<CategoryToComment> categories;
 
 	public Comment() {
 		this.id = -1;
     	this.createdAt = new DateTime();
     }
 	
+	/**
+	 * @return the id
+	 */
+	public int getId() {
+	     return this.id;
+	}
+
+
+	/**
+	 * @param value the id to set
+	 */
+	public void setId(final int value) {
+	     this.id = value;
+	}
+
+	/**
+	 * @return the content
+	 */
+	public String getContent() {
+	     return this.content;
+	}
+
+
+	/**
+	 * @param value the content to set
+	 */
+	public void setContent(final String value) {
+	     this.content = value;
+	}
+
+	/**
+	 * @return the owner
+	 */
+	public User getOwner() {
+	     return this.owner;
+	}
+
+
+	/**
+	 * @param value the owner to set
+	 */
+	public void setOwner(final User value) {
+	     this.owner = value;
+	}
+
+	/**
+	 * @return the post
+	 */
+	public Post getPost() {
+	     return this.post;
+	}
+
+
+	/**
+	 * @param value the post to set
+	 */
+	public void setPost(final Post value) {
+	     this.post = value;
+	}
+
+	/**
+	 * @return the createdAt
+	 */
+	public DateTime getCreatedAt() {
+	     return this.createdAt;
+	}
+
+
+	/**
+	 * @param value the createdAt to set
+	 */
+	public void setCreatedAt(final DateTime value) {
+	     this.createdAt = value;
+	}
+
+	/**
+	 * @return the validate
+	 */
+	public boolean isValidate() {
+	     return this.validate;
+	}
+
+
+	/**
+	 * @param value the validate to set
+	 */
+	public void setValidate(final boolean value) {
+	     this.validate = value;
+	}
+
 }

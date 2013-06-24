@@ -20,7 +20,8 @@ public class ${project_name?cap_first}Provider
 	 * @return The number of tokens deleted
 	 */
 	@Override
-	public int delete(Uri uri, String selection, String[] selectionArgs) {
+	public int delete(final Uri uri, final String selection, 
+									 final String[] selectionArgs) {
 		int result = 0;
 		switch (uriMatcher.match(uri)) {
 			default:
@@ -37,7 +38,7 @@ public class ${project_name?cap_first}Provider
 	 * @return The URI to the inserted ContentValue
 	 */
 	@Override
-	public Uri insert(Uri uri, ContentValues values) {
+	public Uri insert(final Uri uri, final ContentValues values) {
 		Uri result = null;
 
 		switch (uriMatcher.match(uri)) {
@@ -59,8 +60,9 @@ public class ${project_name?cap_first}Provider
 	 * @return A cursor pointing to the result of the query
 	 */
 	@Override
-	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
+	public Cursor query(final Uri uri, final String[] projection,
+			final String selection, final String[] selectionArgs,
+			final String sortOrder) {
 
 		Cursor result = null;
 
@@ -85,8 +87,9 @@ public class ${project_name?cap_first}Provider
 	 * @return how many token update
 	 */
 	@Override
-	public int update(Uri uri, ContentValues values, String selection,
-			String[] selectionArgs) {
+	public int update(final Uri uri, final ContentValues values, 
+					  final String selection, 
+					  final String[] selectionArgs) {
 		int result = 0;
 
 		switch (uriMatcher.match(uri)) {

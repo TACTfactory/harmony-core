@@ -12,7 +12,10 @@ import ${project_namespace}.R;
 
 import android.app.Application;
 import android.content.Context;
-import android.net.ConnectivityManager;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager.NameNotFoundException;
+<#if (sync)>import android.content.SharedPreferences.Editor;
+</#if>import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
@@ -37,7 +40,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	extends Application {
 	
 	/** TAG for debug purpose. */
-	private static final String TAG = "${project_name?cap_first}";
+	protected static final String TAG = "${project_name?cap_first}Application";
 	/** Singleton. */
 	private static volatile ${project_name?cap_first}ApplicationBase singleton;
 	/** Date format. */
@@ -115,7 +118,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 * Get the singleton.
 	 * @return The singleton of the application
 	 */ 
-	public static Context getApplication() {
+	public static ${project_name?cap_first}ApplicationBase getApplication() {
 		return singleton;
 	}
 	
@@ -231,4 +234,19 @@ public abstract class ${project_name?cap_first}ApplicationBase
 		edit.commit();
 	}
 	</#if>
+
+	public static int getVersionCode(Context ctx) {
+		int result = 1;
+		
+		try {
+			PackageInfo manager = ctx.getPackageManager().getPackageInfo(
+					ctx.getPackageName(), 0);
+			
+			result = manager.versionCode;
+		} catch (NameNotFoundException e) {
+			Log.e(TAG, "Version Code not found : " + e.toString());
+		}
+		
+		return result;
+	}
 }

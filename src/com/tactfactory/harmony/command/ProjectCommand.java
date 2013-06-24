@@ -53,7 +53,7 @@ public class ProjectCommand extends BaseCommand {
 	// Subjects
 	/** SDK_PATH Subject. */
 	public static final String SUBJECT_SDK_PATH = "sdk-path";
-	/** Dependencies Subject*/
+	/** Dependencies Subject. */
 	public static final String SUBJECT_DEPENDENCIES = "dependencies";
 
 	// Commands
@@ -157,7 +157,8 @@ public class ProjectCommand extends BaseCommand {
 	private boolean isProjectInit;
 
 	/**
-	 * Initialize Project Parameters (project name, namespace, android sdk path).
+	 * Initialize Project Parameters. 
+	 * (project name, namespace, android sdk path)
 	 */
 	public final void initProjectParam() {
 		if (!this.isProjectInit) {
@@ -199,7 +200,8 @@ public class ProjectCommand extends BaseCommand {
 				// Confirmation
 				if (ConsoleUtils.isConsole()) {
 					final String accept =
-							ConsoleUtils.getUserInput("Use below given parameters "
+							ConsoleUtils.getUserInput(
+									"Use below given parameters "
 									 + "to process files? (y/n) ");
 					
 					if (!accept.contains("n")) {
@@ -353,9 +355,8 @@ public class ProjectCommand extends BaseCommand {
 		}
 		
 		try {
-			if (!new ProjectGenerator(this.adapterAndroid).removeProject()) {
-				ConsoleUtils.display(ERROR_MSG);
-			}
+			new ProjectGenerator(this.adapterAndroid).removeProject();
+			
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}

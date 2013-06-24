@@ -17,6 +17,7 @@ import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Entity;
 import com.tactfactory.harmony.annotation.GeneratedValue;
 import com.tactfactory.harmony.annotation.Id;
+import com.tactfactory.harmony.annotation.ManyToMany;
 import com.tactfactory.harmony.annotation.ManyToOne;
 import com.tactfactory.harmony.annotation.OneToMany;
 import com.tactfactory.harmony.annotation.Table;
@@ -39,14 +40,14 @@ public class Post implements Serializable {
 	@Column(length = 40000, type = Type.TEXT)
     private String content;
 	
-	@Column
-	private String categories;
-	
 	@ManyToOne
 	private User owner;
 	
 	@OneToMany(mappedBy = "post")
 	private ArrayList<Comment> comments;
+	
+	@ManyToMany
+	private ArrayList<Category> categories;
 	
 	@Column(name = "created_at")
     private DateTime createdAt;
@@ -175,4 +176,5 @@ public class Post implements Serializable {
 	public final void setExpiresAt(final DateTime expiresAt) {
 		this.expiresAt = expiresAt;
 	}
+
 }

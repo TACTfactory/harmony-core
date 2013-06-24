@@ -4,6 +4,7 @@
 package com.tactfactory.harmony.template;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,6 +20,9 @@ import com.tactfactory.harmony.utils.TactFileUtils;
  *
  */
 public class ProjectGenerator extends BaseGenerator {
+	
+	/** GIT command. */
+	private static final String GIT = "git";
 
 	/**
 	 * Constructor.
@@ -27,7 +31,7 @@ public class ProjectGenerator extends BaseGenerator {
 	 */
 	public ProjectGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
-
+		
 		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 	}
 
@@ -65,14 +69,11 @@ public class ProjectGenerator extends BaseGenerator {
 		if (removeResult == 0) {
 			result = true;
 			
-			ConsoleUtils.displayDebug(
+			ConsoleUtils.display(
 					"Project " + this.getAdapter().getPlatform() + " removed!");
 		} else {
-			ConsoleUtils.displayError(
-					new Exception("Remove Project "
-							+ this.getAdapter().getPlatform() 
-							+ " return " + removeResult 
-							+ " errors...\n"));
+			ConsoleUtils.display(
+					"An error has occured while deleting the project.");
 		}
 		return result;
 	}
@@ -210,7 +211,75 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * @param pathSherlock
+	 * Add base drawables.
+	 */
+	private void addBaseDrawables() {
+		String resourcePath = String.format("%s",
+				this.getAdapter().getRessourcePath());
+		String templateResourcePath =  String.format("%s/%s/%s",
+				Harmony.getBundlePath(),
+				"tact-core",
+				this.getAdapter().getTemplateRessourcePath());
+		
+		try {
+			TactFileUtils.copyDirectory(
+					new File(String.format("%s/%s/", 
+							templateResourcePath,
+							"drawable-hdpi")),
+					new File(String.format("%s/%s/",
+							resourcePath,
+							"drawable-hdpi")));
+			
+			TactFileUtils.copyDirectory(
+					new File(String.format("%s/%s/", 
+							templateResourcePath,
+							"drawable-mdpi")),
+					new File(String.format("%s/%s/",
+							resourcePath,
+							"drawable-mdpi")));
+			
+			TactFileUtils.copyDirectory(
+					new File(String.format("%s/%s/", 
+							templateResourcePath,
+							"drawable-ldpi")),
+					new File(String.format("%s/%s/",
+							resourcePath,
+							"drawable-ldpi")));
+			
+			TactFileUtils.copyDirectory(
+					new File(String.format("%s/%s/", 
+							templateResourcePath,
+							"drawable-xhdpi")),
+					new File(String.format("%s/%s/",
+							resourcePath,
+							"drawable-xhdpi")));
+			
+			TactFileUtils.copyDirectory(
+					new File(String.format("%s/%s/", 
+							templateResourcePath,
+							"drawable-xxhdpi")),
+					new File(String.format("%s/%s/",
+							resourcePath,
+							"drawable-xxhdpi")));
+		} catch (IOException e) {
+			ConsoleUtils.displayError(e);
+		}
+	}
+	
+	/**
+	 * Initialize git project.
+	 */
+	private void initGitProject() {
+		final ArrayList<String> command = new ArrayList<String>();
+		File projectFolder = new File(Harmony.getProjectAndroidPath());
+		command.add(GIT);
+		command.add("init");
+		command.add(projectFolder.getAbsolutePath());
+		ConsoleUtils.launchCommand(command);
+	}
+
+	/**
+	 * Install Android Sherlock Bar Library.
 	 */
 	private void installAndroidSherlockLib() {
 		//TODO test if git is install
@@ -222,7 +291,7 @@ public class ProjectGenerator extends BaseGenerator {
 			final ArrayList<String> command = new ArrayList<String>();
 			
 			// command/Tools
-			command.add("git");
+			command.add(GIT);
 			
 			// command action
 			command.add("clone");
@@ -237,7 +306,7 @@ public class ProjectGenerator extends BaseGenerator {
 			command.clear();
 			
 			// command git checkout
-			command.add("git");
+			command.add(GIT);
 			command.add(String.format(
 					"%s%s/%s", 
 					"--git-dir=", 
@@ -259,11 +328,13 @@ public class ProjectGenerator extends BaseGenerator {
 							pathSherlock.getAbsolutePath(), 
 							"samples")));
 
-			String srcPath = Harmony.getTemplatesPath() + "/android/libs/sherlock_ant.properties";
+			String srcPath = Harmony.getTemplatesPath() 
+								+ "/android/libs/sherlock_ant.properties";
 			String destPath = pathSherlock + "/library/ant.properties";
 			this.makeSource(srcPath, destPath, false);
 			
-			srcPath = Harmony.getTemplatesPath() + "/android/libs/sherlock_.project";
+			srcPath = Harmony.getTemplatesPath() 
+							+ "/android/libs/sherlock_.project";
 			destPath = pathSherlock + "/library/.project";
 			this.makeSource(srcPath, destPath, false);
 			
@@ -275,17 +346,31 @@ public class ProjectGenerator extends BaseGenerator {
 				sdkTools += ".bat";
 			}
 			
-			command.add(new File( sdkTools ).getAbsolutePath());
+			command.add(new File(sdkTools).getAbsolutePath());
 			command.add("update");
 			command.add("project");
 			command.add("--path");
 			command.add(new File(
-					pathSherlock.getAbsolutePath() + 
-					"/library").getAbsolutePath());
+					pathSherlock.getAbsolutePath()  
+					+ "/library").getAbsolutePath());
 			command.add("--name");
 			command.add(ApplicationMetadata.INSTANCE.getName() + "-abs");
 			ConsoleUtils.launchCommand(command);
 		}
+		
+		final File projectFolder = new File(Harmony.getProjectAndroidPath());
+		final ArrayList<String> command = new ArrayList<String>();
+		command.add(GIT);
+		command.add("submodule");
+		command.add("add");
+		// command depot
+		command.add("https://github.com/JakeWharton/ActionBarSherlock.git");
+		command.add(TactFileUtils.absoluteToRelativePath(
+				pathSherlock.getAbsolutePath(),
+				projectFolder.getAbsolutePath()));
+		ConsoleUtils.launchCommand(command, projectFolder.getAbsolutePath());
+			
+		
 	}
 
 	/**
@@ -297,8 +382,10 @@ public class ProjectGenerator extends BaseGenerator {
 		
 		this.createFolders();
 		this.makeSources();
+		this.initGitProject();
 		this.addLibs();
-
+		this.addBaseDrawables();
+		
 		// copy utils
 		this.updateUtil("DateUtils.java");
 
@@ -347,38 +434,40 @@ public class ProjectGenerator extends BaseGenerator {
 	}
 	
 	/**
-	 * Copy files with recursive
+	 * Copy files with recursive.
 	 * @param file File to copy
 	 * @param directory Directory of the file (null if first)
 	 * @param sourcesPath Directory of sources files
 	 * @param templatesPath Directory of templates files
 	 */
-	private void copyProjectTemplates(File file, String directory, 
-			String sourcesPath, String templatesPath) {
+	private void copyProjectTemplates(
+			final File file, 
+			final String directory, 
+			final String sourcesPath, 
+			final String templatesPath) {
+		String folder = directory;
 		if (file.isDirectory()) {
-			if (directory == null) {
-				directory = "";
-			}
-			else {
-				directory += File.separator + file.getName();
+			if (folder == null) {
+				folder = "";
+			} else {
+				folder += File.separator + file.getName();
 			}
 			
 			File[] files = file.listFiles();
 			for (File subFile : files) {
 				this.copyProjectTemplates(
 						subFile, 
-						directory,
+						folder,
 						sourcesPath,
 						templatesPath);				
 			}
-		}
-		else {
+		} else {
 			String tplPath = templatesPath
-					+ File.separator + directory
+					+ File.separator + folder
 					+ File.separator + file.getName();
 			
 			String srcPath = sourcesPath
-					+ File.separator + directory
+					+ File.separator + folder
 					+ File.separator + file.getName();
 			
 			tplPath = tplPath.substring(0, tplPath.length() 
@@ -463,6 +552,10 @@ public class ProjectGenerator extends BaseGenerator {
 		}
 	}
 
+	/**
+	 * Update the project dependencies. 
+	 * (WARNING : ONLY ANDROID IS HANDLED FOR NOW)
+	 */
 	public final void updateDependencies() {
 		try {
 			/** Only Android is handled for now

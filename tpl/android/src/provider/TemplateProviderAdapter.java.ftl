@@ -16,7 +16,7 @@ public class ${curr.name?cap_first}ProviderAdapter
 	 * Constructor.
 	 * @param ctx context
 	 */
-	public ${curr.name?cap_first}ProviderAdapter(Context ctx) {
+	public ${curr.name?cap_first}ProviderAdapter(final Context ctx) {
 		this(ctx, null);
 	}
 
@@ -25,8 +25,8 @@ public class ${curr.name?cap_first}ProviderAdapter
 	 * @param ctx context
 	 * @param db database
 	 */
-	public ${curr.name?cap_first}ProviderAdapter(Context ctx, 
-							SQLiteDatabase db) {
+	public ${curr.name?cap_first}ProviderAdapter(final Context ctx, 
+												 final SQLiteDatabase db) {
 		super(ctx, db);
 	}
 }

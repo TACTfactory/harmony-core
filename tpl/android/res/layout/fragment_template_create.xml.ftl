@@ -6,7 +6,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
-<#list curr.fields as field>
+<#list curr.fields?values as field>
 	<#if (!field.internal && !field.hidden)>
 	<#assign m_id="${currname?lower_case}_${field.name?lower_case}" />
 	<#assign m_id_label="${m_id}_label" />
@@ -120,14 +120,13 @@
 	</#if>
 </#list>
 
-	<Button
-    	android:id="@+id/${currname?lower_case}_btn_save"
+	<${project_namespace}.harmony.widget.ValidationButtons
+    	android:id="@+id/${currname?lower_case}_validation"
     	android:layout_width="match_parent"
     	android:layout_height="wrap_content"
     	<#if (curr.relations?size!=0)>
     	android:layout_below="@+id/${lastField}"
     	<#else>
-    	android:layout_below="@+id/${currname?lower_case}_${curr.fields?last.name?lower_case}"
-    	</#if>
-    	android:text="@string/common_create" />
+    	android:layout_below="@+id/${currname?lower_case}_${curr.fields?values?last.name?lower_case}"
+    	</#if> />
 </RelativeLayout>

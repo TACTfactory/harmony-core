@@ -3,7 +3,8 @@ Post:
       id: 0
       title: "DEBUG - Post 1"
       content: "DEBUG - Je dirais meme plus..."
-      categories: "DEBUG - Radotage"
+      categories: 
+         category: HiTech
       owner: DEBUG - Dupond
       comments: 
          comment : DEBUG - Comment1
@@ -14,7 +15,8 @@ Post:
       id: 0
       title: "DEBUG - Post 2"
       content: "DEBUG - Bachibouzouk"
-      categories: "DEBUG - Insulte"
+      categories: 
+         category: HiTech
       owner: DEBUG - Haddock
       comments: 
          comment : DEBUG - Comment2
@@ -25,7 +27,8 @@ Post:
       id: 0
       title: "DEBUG - Post 3"
       content: "DEBUG - Mais oui, c'est un gymnote..."
-      categories: "DEBUG - Fait scientifique"
+      categories: 
+         category: HiTech
       owner: DEBUG - Tournesol
       comments: 
          comment : DEBUG - Comment3

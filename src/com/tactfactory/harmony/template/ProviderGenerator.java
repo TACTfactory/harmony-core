@@ -24,7 +24,7 @@ import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
 
 import com.google.common.base.CaseFormat;
-import com.tactfactory.harmony.meta.ClassMetadata;
+
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.TranslationMetadata;
 import com.tactfactory.harmony.meta.TranslationMetadata.Group;
@@ -66,6 +66,9 @@ public class ProviderGenerator extends BaseGenerator {
 				TagConstant.LOCAL_NAMESPACE, this.localNameSpace);
 	}
 	
+	/**
+	 * Generate the provider adapters.
+	 */
 	public final void generateProviderAdapters() {
 		int providerId = 0;
 		for (EntityMetadata cm : this.getAppMetas().getEntities().values()) {
@@ -80,7 +83,8 @@ public class ProviderGenerator extends BaseGenerator {
 				this.makeSourceProvider("TemplateProviderAdapter.java",
 						cm.getName() + "ProviderAdapter.java", false);
 				this.makeSourceProvider("base/TemplateProviderAdapterBase.java",
-						"base/" + cm.getName() + "ProviderAdapterBase.java", true);
+						"base/" + cm.getName() + "ProviderAdapterBase.java", 
+						true);
 				
 				
 				// Provider utils
@@ -97,8 +101,8 @@ public class ProviderGenerator extends BaseGenerator {
 							true);
 				}
 				
-				
-				providerId += 10;
+				final int step = 10;
+				providerId += step;
 			}
 		}
 	}
@@ -147,6 +151,7 @@ public class ProviderGenerator extends BaseGenerator {
 	 * @param template Template path file. 
 	 * <br/>For list activity is "TemplateListActivity.java"
 	 * @param filename The destination file name
+	 * @param overwrite True if the method should overwrite all existing files.
 	 */
 	private void makeSourceProvider(final String template, 
 			final String filename, final boolean overwrite) {

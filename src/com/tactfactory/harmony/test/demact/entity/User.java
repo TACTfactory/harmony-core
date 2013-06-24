@@ -16,6 +16,7 @@ import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Entity;
 import com.tactfactory.harmony.annotation.GeneratedValue;
 import com.tactfactory.harmony.annotation.Id;
+import com.tactfactory.harmony.annotation.ManyToOne;
 import com.tactfactory.harmony.annotation.Table;
 import com.tactfactory.harmony.annotation.Column.Type;
 
@@ -47,6 +48,9 @@ public class User extends Object implements Cloneable, Serializable {
 	
 	@Column(type = Type.DATE, locale = true)
     private DateTime birthdate;
+	
+	@ManyToOne
+	private UserGroup userGroup;
 
 
 	public User() {

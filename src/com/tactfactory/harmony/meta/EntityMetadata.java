@@ -10,7 +10,6 @@ package com.tactfactory.harmony.meta;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
@@ -34,10 +33,6 @@ public class EntityMetadata extends ClassMetadata {
 	private Map<String, FieldMetadata> relations =
 			new LinkedHashMap<String, FieldMetadata>();
 	
-	/** Implemented class list of the entity class. */
-	private List<String> implementTypes = 
-			new ArrayList<String>();
-	
 	/** 
 	 * Add Component String of field. 
 	 * @param componentName Component name
@@ -59,29 +54,14 @@ public class EntityMetadata extends ClassMetadata {
 	public final Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> model = super.toMap(adapter);
 		
-		//model.put(TagConstant.PROJECT_NAME,		Harmony.metas.name);
-		model.put(TagConstant.NAME,				this.getName());
-		model.put(TagConstant.CONTROLLER_NAMESPACE, 
-				adapter.getNameSpaceEntity(this, adapter.getController()));
-		model.put(TagConstant.DATA_NAMESPACE, 	
-				adapter.getNameSpace(this, adapter.getData()));
-		model.put(TagConstant.TEST_NAMESPACE, 	
-				adapter.getNameSpace(this, adapter.getTest()));
 		model.put(TagConstant.IDS,				
 				this.toFieldArray(this.ids.values(), adapter));
 		model.put(TagConstant.RELATIONS,		
 				this.toFieldArray(this.relations.values(), adapter));
 		model.put(TagConstant.INTERNAL,			"false");
-		
 		if (this.internal) {
 			model.put(TagConstant.INTERNAL,		"true");
 		}
-		
-		final Map<String, Object> optionsModel = new HashMap<String, Object>();
-		for (final Metadata option : this.getOptions().values()) {
-			optionsModel.put(option.getName(), option.toMap(adapter));
-		}
-		model.put(TagConstant.OPTIONS, optionsModel);
 		
 		return model;
 	}
@@ -132,21 +112,6 @@ public class EntityMetadata extends ClassMetadata {
 		this.relations = relations;
 	}
 
-
-	/**
-	 * @return the implementTypes
-	 */
-	public final List<String> getImplementTypes() {
-		return implementTypes;
-	}
-
-
-	/**
-	 * @param implementTypes the implementTypes to set
-	 */
-	public final void setImplementTypes(final List<String> implementTypes) {
-		this.implementTypes = implementTypes;
-	}
 
 
 	/**

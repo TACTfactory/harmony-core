@@ -19,6 +19,8 @@ import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.template.BaseGenerator;
 import com.tactfactory.harmony.template.SQLiteGenerator;
 import com.tactfactory.harmony.template.TagConstant;
+import com.tactfactory.harmony.template.TestDBGenerator;
+import com.tactfactory.harmony.template.TestProviderGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
@@ -74,7 +76,7 @@ public class FixtureGenerator extends BaseGenerator {
 			}
 			
 			try {
-				final FileFilter ff = new FileFilter() {
+				final FileFilter fileFilter = new FileFilter() {
 					@Override
 					public boolean accept(final File arg0) {
 						return arg0.getPath().endsWith(".xml")
@@ -82,15 +84,16 @@ public class FixtureGenerator extends BaseGenerator {
 					}
 				};
 				
-				TactFileUtils.copyDirectory(fixtAppSrc, fixtAppDest, ff);
+				TactFileUtils.copyDirectory(fixtAppSrc, fixtAppDest, fileFilter);
 				ConsoleUtils.displayDebug(
 						"Copying fixtures/app into " + fixtAppDest.getPath());
 				
-				TactFileUtils.copyDirectory(fixtDebugSrc, fixtDebugDest, ff);
+				TactFileUtils.copyDirectory(fixtDebugSrc, fixtDebugDest, fileFilter);
 				ConsoleUtils.displayDebug(
-						"Copying fixtures/debug into " + fixtDebugDest.getPath());
+						"Copying fixtures/debug into " 
+							+ fixtDebugDest.getPath());
 				
-				TactFileUtils.copyDirectory(fixtTestSrc, fixtTestDest, ff);
+				TactFileUtils.copyDirectory(fixtTestSrc, fixtTestDest, fileFilter);
 				ConsoleUtils.displayDebug(
 						"Copying fixtures/test into " + fixtTestDest.getPath());
 				
@@ -114,8 +117,8 @@ public class FixtureGenerator extends BaseGenerator {
 							 this.getAppMetas().getOptions()
 							 	.get("fixture")).getType();
 			 
-			 FixtureMetadata meta = 
-					 (FixtureMetadata)this.getAppMetas().getOptions().get(
+			final FixtureMetadata meta = 
+					 (FixtureMetadata) this.getAppMetas().getOptions().get(
 							 FixtureMetadata.NAME);
 			 //Copy JDOM Library
 			if (meta.getType().equals("xml")) {
@@ -131,18 +134,21 @@ public class FixtureGenerator extends BaseGenerator {
 			
 			//Update SQLiteOpenHelper
 			new SQLiteGenerator(this.getAdapter()).generateDatabase();
+			new TestDBGenerator(this.getAdapter()).generateAll();
+			new TestProviderGenerator(this.getAdapter()).generateAll();
 			
 			//Create each entity's data loader
-			for (final EntityMetadata cm 
+			for (final EntityMetadata classMeta 
 					: this.getAppMetas().getEntities().values()) {
-				if (cm.getFields().size() > 0 && !cm.isInternal()) {
+				if (classMeta.getFields().size() > 0 
+						&& !classMeta.isInternal()) {
 					this.getDatamodel().put(TagConstant.CURRENT_ENTITY,
-							cm.getName());
+							classMeta.getName());
 					this.makeSource("TemplateDataLoader.java",
-							cm.getName() + "DataLoader.java",
+							classMeta.getName() + "DataLoader.java",
 							force);
 					this.makeBaseFixture("TemplateFixture." + fixtureType, 
-							cm.getName() + "." + fixtureType, 
+							classMeta.getName() + "." + fixtureType, 
 							false);
 				}
 			}
@@ -155,14 +161,14 @@ public class FixtureGenerator extends BaseGenerator {
 	 * Delete the existing fixtures.
 	 */
 	public final void purge() {
-		for (final ClassMetadata cm 
+		for (final ClassMetadata classMeta 
 				: this.getAppMetas().getEntities().values()) {
-			if (cm.getFields().size() > 0) {
-				this.removeSource("app/" + cm.getName() + ".xml");
-				this.removeSource("app/" + cm.getName() + ".yml");
+			if (classMeta.getFields().size() > 0) {
+				this.removeSource("app/" + classMeta.getName() + ".xml");
+				this.removeSource("app/" + classMeta.getName() + ".yml");
 				
-				this.removeSource("test/" + cm.getName() + ".xml");
-				this.removeSource("test/" + cm.getName() + ".yml");
+				this.removeSource("test/" + classMeta.getName() + ".xml");
+				this.removeSource("test/" + classMeta.getName() + ".yml");
 			}
 		}
 		
@@ -192,12 +198,12 @@ public class FixtureGenerator extends BaseGenerator {
 	protected final void removeSource(final String fileName) {
 		final String fullFilePath = 
 				this.getAdapter().getAssetsPath() + fileName;
-		final File f = new File(fullFilePath);
+		final File file = new File(fullFilePath);
 		
-		if (f.exists() && !f.delete()) {
+		if (file.exists() && !file.delete()) {
 			ConsoleUtils.displayError(
 					new Exception("Couldn't delete file "
-							+ f.getPath()));
+							+ file.getPath()));
 		}
 	}
 	
@@ -215,8 +221,15 @@ public class FixtureGenerator extends BaseGenerator {
 				this.getAdapter().getTemplateSourceFixturePath()
 				+ templateName;
 		super.makeSource(fullTemplatePath, fullFilePath, override);
-		
+
 		fullFilePath = "fixtures/test/" + fileName;
+		fullTemplatePath =
+				this.getAdapter().getTemplateSourceFixturePath()
+				+ templateName;
+		super.makeSource(fullTemplatePath, fullFilePath, override);
+		
+
+		fullFilePath = "fixtures/debug/" + fileName;
 		fullTemplatePath =
 				this.getAdapter().getTemplateSourceFixturePath()
 				+ templateName;

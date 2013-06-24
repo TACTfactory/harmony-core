@@ -5,14 +5,19 @@ import java.io.File;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 
+/**
+ * Utility class for libraries.
+ */
 public abstract class LibraryUtils {
 	
 	/**
 	 * Update TestLibs.
+	 * @param adapter The adapter.
 	 * @param libName The library name.
 	 */
-	public static void addLibraryToTestProject(BaseAdapter adapter, 
-			String libName) {
+	public static void addLibraryToTestProject(
+			final BaseAdapter adapter, 
+			final String libName) {
 		
 		final File dest = new File(String.format("%s/%s",
 				adapter.getTestLibsPath(),

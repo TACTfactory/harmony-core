@@ -33,8 +33,8 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	/** ${curr.name?upper_case}_URI. */
 	public	  static Uri ${curr.name?upper_case}_URI;
 
-	/** ${curr.name?cap_first} key */
-	public static String ITEM_KEY = "${curr.name?cap_first}";
+	/** ${curr.name?cap_first} key. */
+	public static final String ITEM_KEY = "${curr.name?cap_first}";
 
 	/** ${curr.name?uncap_first} type. */
 	protected static final String ${curr.name?uncap_first}Type = 
@@ -82,8 +82,8 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param ctx context
 	 * @param db database
 	 */
-	public ${curr.name?cap_first}ProviderAdapterBase(Context ctx, 
-					SQLiteDatabase db) {
+	public ${curr.name?cap_first}ProviderAdapterBase(final Context ctx, 
+													 final SQLiteDatabase db) {
 		super(ctx);
 		this.adapter = new ${curr.name?cap_first}SQLiteAdapter(ctx);
 		if (db != null) {
@@ -100,7 +100,8 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param selectionArgs SELECT arguments for SQL
 	 * @return how many token deleted
 	 */
-	public int delete(Uri uri, String selection, String[] selectionArgs) {
+	public int delete(final Uri uri, String selection, 
+									 String[] selectionArgs) {
 		int matchedUri = ${project_name?cap_first}ProviderBase
 					.getUriMatcher().match(uri);
 		int result = -1;
@@ -133,7 +134,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param values ContentValues to insert
 	 * @return how many token inserted
 	 */
-	public Uri insert(Uri uri, ContentValues values) {
+	public Uri insert(final Uri uri, final ContentValues values) {
 		int matchedUri = ${project_name?cap_first}ProviderBase
 				.getUriMatcher().match(uri);
 		Uri result = null;
@@ -163,8 +164,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param sortOrder ORDER BY clause
 	 * @return A cursor pointing to the result of the query
 	 */
-	public Cursor query(Uri uri, String[] projection, String selection,
-			String[] selectionArgs, String sortOrder) {
+	public Cursor query(final Uri uri, String[] projection, 
+						String selection, String[] selectionArgs, 
+						final String sortOrder) {
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher()
 				.match(uri);
 		Cursor result = null;
@@ -182,18 +184,18 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							projection, 
 							selection,
 							selectionArgs, 
-							sortOrder,
 							null,
-							null);
+							null,
+							sortOrder);
 				break;
 			case ${curr.name?upper_case}_ALL:
 				result = this.adapter.query(
 							projection, 
 							selection,
 							selectionArgs, 
-							sortOrder,
 							null,
-							null);
+							null,
+							sortOrder);
 				break;
 			default:
 				result = null;
@@ -211,8 +213,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param selectionArgs SELECT arguments for SQL
 	 * @return how many token update
 	 */
-	public int update(Uri uri, ContentValues values, String selection,
-			String[] selectionArgs) {
+	public int update(final Uri uri, final ContentValues values, 
+			final String selection,
+			final String[] selectionArgs) {
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher()
 				.match(uri);
 		int result = -1;
@@ -253,7 +256,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param extras Bundle to get
 	 * @return A cursor pointing to the result of the query
 	 */
-	public Bundle query(String arg, Bundle extras) {
+	public Bundle query(final String arg, final Bundle extras) {
 		<#if !internal>
 		Bundle result = new Bundle();
 

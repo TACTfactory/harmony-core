@@ -56,15 +56,16 @@ public final class Harmony {
 		return Harmony.instance;
 	}
 	
-	/** Context of execution */
+	/** Context of execution. */
 	private final Context context = new Context();
 	
 	/** Bootstrap. */
 	private final Map<Class<?>, Command> bootstrap = 
 			new ConcurrentHashMap<Class<?>, Command>();
 	
-	/** Template folders */
-	final Map<String, File> templateFolders = new HashMap<String, File>();
+	/** Template folders. */
+	private final Map<String, File> templateFolders = 
+			new HashMap<String, File>();
 
 	/** Constructor.
 	 * @throws Exception PluginManager failure
@@ -190,7 +191,8 @@ public final class Harmony {
 			
 			if (projectPropFile.exists()) {
 				ApplicationMetadata.setAndroidSdkPath(
-						ProjectDiscover.getSdkDirFromPropertiesFile(projectProp));
+						ProjectDiscover.getSdkDirFromPropertiesFile(
+								projectProp));
 			}
 			
 		} else {
@@ -212,30 +214,6 @@ public final class Harmony {
 				+ "\nCurrent Android SDK Revision : "
 						+ ProjectDiscover.getAndroidSdkVersion());
 	}
-	
-	/**
-	 * Check initialization of project 
-	 * by searching nameSpace in androidmanifest.xml.
-	 *
-	 * @return true if success
-	 */
-	/*public static boolean isProjectInit() {
-		boolean result = false;
-		final File projectFolder = new File(Harmony.projectFolderPath);
-		
-		if (projectFolder.exists() && projectFolder.listFiles().length != 0) {
-			final File manifest = 
-					new File(Harmony.projectFolderPath + "AndroidManifest.xml");
-			final String namespace = ProjectDiscover.getNameSpaceFromManifest(manifest);
-			
-			if (namespace != null && !namespace.equals("${namespace}")) {
-				result = true;
-			}
-		}
-		
-		return result;
-	}*/
-	
 
 	/**
 	 * Check and launch command in proper command class.

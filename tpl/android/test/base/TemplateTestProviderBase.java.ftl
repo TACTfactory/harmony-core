@@ -6,8 +6,10 @@ import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 
+<#if dataLoader?? && dataLoader>
 import ${fixture_namespace}.${curr.name?cap_first}DataLoader;
 import ${fixture_namespace}.DataLoader;
+</#if>
 
 import java.util.ArrayList;
 import ${curr.test_namespace}.utils.*;
@@ -37,7 +39,9 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	protected SQLiteDatabase db;
 	protected ${curr.name} entity;
 	protected ContentResolver provider;
+	<#if dataLoader?? && dataLoader>
 	protected DataLoader dataLoader;
+	</#if>
 
 	protected ArrayList<${curr.name}> entities;
 
@@ -54,19 +58,22 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
 		this.db.beginTransaction();
 		
+		<#if dataLoader?? && dataLoader>
 		this.dataLoader = new DataLoader(this.ctx);
 		this.dataLoader.clean();
 		this.dataLoader.loadData(this.db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
+		</#if>
 		
 		this.db.setTransactionSuccessful();
 		this.db.endTransaction();
 		this.adapter.close();		
 		
+		<#if dataLoader?? && dataLoader>
 		this.entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).items.values());
 		if (this.entities.size()>0) {
 			this.entity = this.entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}
-		
+		</#if>		
 		this.provider = this.getContext().getContentResolver();
 	}
 
@@ -79,7 +86,9 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		this.db = this.adapter.open();
 		this.db.beginTransaction();
 		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
+		<#if dataLoader?? && dataLoader>
 		this.dataLoader.clean();
+		</#if>
 		this.db.setTransactionSuccessful();
 		this.db.endTransaction();
 		this.adapter.close();
@@ -175,7 +184,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			try {
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				values.remove(${curr.name}SQLiteAdapter.COL_ID);
-				<#list curr.fields as field>
+				<#list curr.fields?values as field>
 					<#if field.unique?? && field.unique>
 				values.remove(${curr.name}SQLiteAdapter.COL_${field.name?upper_case});
 					</#if>
@@ -219,120 +228,5 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		
 			Assert.assertEquals(result, this.entities.size());
 		}
-	}
-
-	/** Test case Create Entity */
-	public void testCallCreate() {
-		long result = 0;
-		if (this.entity != null) {
-			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
-			ContentResolver prov = this.ctx.getContentResolver();
-			Bundle b = new Bundle();
-			b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, ${curr.name?uncap_first});
-			Bundle ret = 
-					prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
-							${curr.name?cap_first}ProviderAdapter.METHOD_INSERT_${curr.name?upper_case}, 
-							null,
-							b);
-
-			result = ret.getLong("result",  -1); 
-			Assert.assertTrue(result >= 0);
-		}
-	}
-	
-	/** Test case Read Entity */
-	public void testCallRead() {
-		${curr.name} result = null;
-
-		if (this.entity != null) {
-			try {
-				Bundle b = new Bundle();
-				b.putInt("id", this.entity.getId());
-				ContentResolver prov = this.ctx.getContentResolver();
-				Bundle ret = 
-					prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
-						${curr.name?cap_first}ProviderAdapter.METHOD_QUERY_${curr.name?upper_case}, 
-						null,
-						b);			
-				
-				result = (${curr.name}) ret.getSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY);
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			${curr.name}Utils.equals(this.entity, result);
-		}
-	}
-
-	/** Test case ReadAll Entity */
-	public void testCallReadAll() {
-		ArrayList<${curr.name}> result = null;
-		try {
-			Bundle b = new Bundle();
-			ContentResolver prov = this.ctx.getContentResolver();
-			Bundle ret = 
-				prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
-					${curr.name?cap_first}ProviderAdapter.METHOD_QUERY_${curr.name?upper_case}, 
-					null,
-					b);			
-			result = (ArrayList<${curr.name}>) ret.getSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		Assert.assertNotNull(result);
-		if (result != null) {
-			Assert.assertEquals(result.size(), this.entities.size());
-		}
-	}
-	
-	/** Test case Update Entity */
-	public void testCallUpdate() {
-		int result = -1;
-		if (this.entity != null) {
-			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
-
-			try {
-				${curr.name?uncap_first}.setId(this.entity.getId());
-			
-				ContentResolver prov = this.ctx.getContentResolver();
-				Bundle b = new Bundle();
-				b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, ${curr.name?uncap_first});
-				Bundle ret = 
-						prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
-								${curr.name?cap_first}ProviderAdapter.METHOD_UPDATE_${curr.name?upper_case}, 
-								null,
-								b);
-				result = ret.getInt("result", -1);
-			
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		
-			Assert.assertTrue(result >= 0);
-		}
-	}
-	
-	/** Test case Delete Entity */
-	public void testCallDelete() {
-		int result = -1;
-		if (this.entity != null) {
-			try {
-				ContentResolver prov = this.ctx.getContentResolver();
-				Bundle b = new Bundle();
-				b.putSerializable(${curr.name?cap_first}ProviderAdapter.ITEM_KEY, this.entity);
-				Bundle ret = 
-						prov.call(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
-								${curr.name?cap_first}ProviderAdapter.METHOD_DELETE_${curr.name?upper_case}, 
-								null,
-								b);
-				result = ret.getInt("result", -1);
-			
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			Assert.assertTrue(result >= 0);
-		}
-
 	}
 }

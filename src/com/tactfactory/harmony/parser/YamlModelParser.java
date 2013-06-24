@@ -30,15 +30,15 @@ public class YamlModelParser {
 	 * @param filename The filename to load.
 	 */
     public final void loadEntities(final String filename) {
-    	InputStream in = null;
+    	InputStream inStream = null;
 		try {
-			in = new FileInputStream(filename);
+			inStream = new FileInputStream(filename);
 	        final Yaml yaml = new Yaml();
-	        yaml.load(in);
+	        yaml.load(inStream);
 	        
 	        // TODO parse given Object to CompilationUnit
 	        
-			in.close();
+			inStream.close();
 		} catch (final FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			ConsoleUtils.displayError(e);

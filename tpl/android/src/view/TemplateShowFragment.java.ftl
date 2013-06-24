@@ -26,7 +26,7 @@ import android.widget.TextView;
 
 
 <#assign importDate=false />
-<#list curr.fields as field>
+<#list curr.fields?values as field>
 	<#if !field.hidden>
 		<#if (!importDate && field.type?lower_case=="datetime")>
 			<#assign importDate=true />
@@ -57,7 +57,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 	protected ${curr.name} model;
 	
 	/* curr.fields View */
-<#list curr.fields as field>
+<#list curr.fields?values as field>
 	<#if (!field.internal && !field.hidden)>
 	/** ${field.name} View. */
 		<#if (field.type=="boolean")>
@@ -73,7 +73,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
      * @param view The layout inflating
      */
     protected void initializeComponent(final View view) {
-	<#foreach field in curr.fields>
+	<#list curr.fields?values as field>
 		<#if (!field.internal && !field.hidden)>
 			<#if (field.type=="boolean")>
 		this.${field.name}View = 
@@ -86,12 +86,12 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 					R.id.${curr.name?lower_case}_${field.name?lower_case});			
 			</#if>
 		</#if>
-	</#foreach>
+	</#list>
     }
     
     /** Load data from model to fields view. */
     public void loadData() {
-    <#foreach field in curr.fields>
+    <#list curr.fields?values as field>
 		<#if (!field.internal && !field.hidden)>
 			<#if (!field.relation??)>
 		    	<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
@@ -130,7 +130,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		this.${field.name}View.setText(${field.name}Value);
 			</#if>
 		</#if>
-	</#foreach>
+	</#list>
     }
     
     /** Sets up the UI.

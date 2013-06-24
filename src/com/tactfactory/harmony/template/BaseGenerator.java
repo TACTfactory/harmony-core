@@ -119,7 +119,7 @@ public abstract class BaseGenerator {
 		//		new File(Harmony.getRootPath() + "/vendor/tact-core"));
 		
 		Object[] files = Harmony.getTemplateFolders().values().toArray();
-		TemplateLoader[] loaders = new TemplateLoader[files.length+1];
+		TemplateLoader[] loaders = new TemplateLoader[files.length + 1];
 		for (int i = 0; i < files.length; i++) {
 			FileTemplateLoader ftl = new FileTemplateLoader((File) files[i]);
 			loaders[i] = ftl;

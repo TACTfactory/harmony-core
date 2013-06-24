@@ -1,3 +1,23 @@
+<#function getAllMothers tab entity>
+	<#if entity.mother??>
+		<#return (getAllMothers(tab, entities[entity.mother]) + [entity]) />
+	<#else>
+		<#return ([entity]) />		
+	</#if>
+</#function>
+<#function getCompleteNamespace entity>
+	<#assign result = "" />
+	<#assign motherClasses = getAllMothers([], entity) />
+	<#assign cond = true />
+	<#list motherClasses as motherClass>
+		<#assign result = result + motherClass.name />
+		<#if motherClass_has_next>
+			<#assign result = result + "." />
+		</#if>
+	</#list>
+	
+	<#return result>
+</#function>
 <#function getInversingField field>
 	<#assign entityT = entities[field.relation.targetEntity] />
 	<#list entityT.relations as f>
@@ -21,7 +41,7 @@ import android.content.Context;
 		<#assign isToMany=true />
 	</#if>
 </#list>
-<#list curr.fields as field>
+<#list curr.fields?values as field>
 	<#if field.harmony_type=="date">
 		<#assign hasDate=true />
 	<#elseif field.harmony_type=="time">
@@ -32,7 +52,7 @@ import android.content.Context;
 </#list>
 
 <#assign hasLocaleTime = false />
-<#list curr.fields as field>
+<#list curr.fields?values as field>
 	<#if field.is_locale?? && field.is_locale>
 		<#assign hasLocaleTime = true />
 	</#if>
@@ -58,10 +78,15 @@ import ${project_namespace}.harmony.util.DateUtils;
 import java.util.Date;
 import org.joda.time.DateTime;
 	</#if>
-import org.yaml.snakeyaml.Yaml;
 import java.util.Map;
-
 </#if>
+
+<#list curr.fields?values as field>
+	<#if field.harmony_type?lower_case == "enum">
+		<#assign enumClass = enums[field.type] />
+import ${entity_namespace}.${getCompleteNamespace(enumClass)};
+	</#if>
+</#list>
 
 import ${curr.namespace}.entity.${curr.name};
 
@@ -108,7 +133,7 @@ public class ${curr.name?cap_first}DataLoader
 		final ${curr.name?cap_first} ${curr.name?uncap_first} = 
 				new ${curr.name?cap_first}();
 		
-		<#list curr.fields as field>
+		<#list curr.fields?values as field>
 			<#if (!field.internal)>
 		if (element.getChildText("${field.name?uncap_first}") != null) {
 				<#if !field.relation??>
@@ -140,16 +165,25 @@ public class ${curr.name?cap_first}DataLoader
 					<#elseif field.type?lower_case=="string">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					element.getChildText("${field.name?uncap_first}"));
-					<#else>
-						<#if field.columnDefinition?lower_case=="integer" || field.columnDefinition?lower_case=="int">
+					<#elseif (field.harmony_type == "enum")>
+						<#assign enumType = enums[field.type] />
+						<#if (enumType.id??)>
+							<#assign idEnum = enumType.fields[enumType.id] />
+							<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
 			${curr.name?uncap_first}.set${field.name?cap_first}(
-					${curr.name}.${field.type}.fromValue(
+					${field.type}.fromValue(
 							Integer.parseInt(
 									element.getChildText(
 											"${field.name?uncap_first}"))));
+							<#else>
+			${curr.name?uncap_first}.set${field.name?cap_first}(
+					${field.type}.fromValue(
+							element.getChildText(
+									"${field.name?uncap_first}")));
+							</#if>
 						<#else>
 			${curr.name?uncap_first}.set${field.name?cap_first}(
-					${curr.name}.${field.type}.fromValue(
+					${field.type}.valueOf(
 							element.getChildText(
 									"${field.name?uncap_first}")));
 						</#if>
@@ -218,7 +252,7 @@ public class ${curr.name?cap_first}DataLoader
 	protected ${curr.name} extractItem(final Map<?, ?> columns) {
 		final ${curr.name?cap_first} ${curr.name?uncap_first} = 
 				new ${curr.name?cap_first}();
-		<#list curr.fields as field>
+		<#list curr.fields?values as field>
 			<#if (!field.internal)>
 		if (columns.get("${field.name?uncap_first}") != null) {
 				<#if !field.relation??>
@@ -251,12 +285,19 @@ public class ${curr.name?cap_first}DataLoader
 					<#elseif (field.type?lower_case == "string")>
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					(String) columns.get("${field.name?uncap_first}"));
-					<#else>
-						<#if (field.harmony_type == "integer" || field.harmony_type == "int")>
+					<#elseif (field.harmony_type == "enum")>
+						<#assign enumType = enums[field.type] />
+						<#if (enumType.id??)>
+							<#assign idEnum = enumType.fields[enumType.id] />
+							<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
 			${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(
 					(Integer) columns.get("${field.name?uncap_first}")));
-						<#else>
+							<#else>
 			${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(
+					(String) columns.get("${field.name?uncap_first}")));
+							</#if>
+						<#else>
+			${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.valueOf(
 					(String) columns.get("${field.name?uncap_first}")));
 						</#if>
 					</#if>

@@ -60,21 +60,14 @@ public abstract class BaseCommand implements Command {
 		if (this.javaModelParser.getEntities().size() > 0) {
 			for (final CompilationUnit mclass 
 					: this.javaModelParser.getEntities()) {
-				this.javaModelParser.parse(mclass);
+				this.javaModelParser.parse(
+						mclass, 
+						ApplicationMetadata.INSTANCE);
 			}
 	
-			// Generate views from MetaData 
-			if (this.javaModelParser.getMetas().size() > 0) {				
-				for (final ClassMetadata meta 
-						: this.javaModelParser.getMetas()) {
-					if (meta instanceof EntityMetadata) {
-						ApplicationMetadata.INSTANCE.getEntities().put(
-							meta.getName(), (EntityMetadata) meta);
-					}
-				}
-				new ClassCompletor(
-						ApplicationMetadata.INSTANCE.getEntities()).execute();
-			}
+			// TODO : Refactor ClassCompletor
+			new ClassCompletor(
+					ApplicationMetadata.INSTANCE.getEntities()).execute();
 		} else {
 			ConsoleUtils.displayWarning("No entities found in entity package!");
 		}
