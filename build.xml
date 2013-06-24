@@ -14,8 +14,8 @@
 
 	<!-- default folder location properties -->
 	<property name="src.rel-dir" value="src" />
-	<property name="tests.src.rel-dir" value="src/com/tactfactory/mda/test" />
-	<property name="tests.build.rel-dir" value="bin/com/tactfactory/mda/test" />
+	<property name="tests.src.rel-dir" value="src/com/tactfactory/harmony/test" />
+	<property name="tests.build.rel-dir" value="bin/com/tactfactory/harmony/test" />
 	<!-- <property name="etc.rel-dir" value="etc" /-->
 	<property name="app.rel-dir" value="app" />
 	<property name="build.rel-dir" value="bin" />
@@ -74,7 +74,7 @@
         <echo message="Generating javadocs to directory ${doc.rel-dir}" />
         <delete dir="${doc.rel-dir}" />
         <javadoc destdir="${doc.rel-dir}" sourcepath="" 
-        	excludepackagenames="com.tactfactory.mda.test" 
+        	excludepackagenames="com.tactfactory.harmony.test" 
         	defaultexcludes="yes">
             <fileset dir="${src.rel-dir}" includes="**/*.java"/>
             <classpath refid="project.classpath" />
@@ -94,14 +94,14 @@
     </target>
 
     <target name="compile" depends="init,prepare-resources">
-    <!-- description="Compile source code" excludes="**/com/tactfactory/mda/test/**" -->
+    <!-- description="Compile source code" excludes="**/com/tactfactory/harmony/test/**" -->
         <javac
             srcdir="${src.rel-dir}"
             destdir="${build.rel-dir}"
             debug="${compile.debug}"
             debuglevel="${compile.debuglevel}"
             includeantruntime="false"
-        	excludes="**/com/tactfactory/mda/test/**"
+        	excludes="**/com/tactfactory/harmony/test/**"
         	target="1.6"
         	source="1.6"
         	
@@ -178,7 +178,7 @@
             <classpath refid="${test.classpath.id}" />
             <formatter type="xml" />
             <formatter classname="org.apache.tools.ant.taskdefs.optional.junit.TearDownOnVmCrash" usefile="false"/>
-        	<test name="com.tactfactory.mda.test.AllTests" todir="${tmp.rel-dir}/"/>
+        	<test name="com.tactfactory.harmony.test.AllTests" todir="${tmp.rel-dir}/"/>
         </junit>
         
         <if condition="${emma.enabled}">
@@ -406,7 +406,7 @@
                         includes=""
                         excludes="" /-->
             <manifest>
-	            <attribute name="Main-Class" value="com.tactfactory.mda.Console"/>
+	            <attribute name="Main-Class" value="com.tactfactory.harmony.Console"/>
 	            <attribute name="Class-Path" value="${libs.project}"/>
             </manifest>
             

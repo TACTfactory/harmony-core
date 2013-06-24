@@ -7,6 +7,9 @@ import java.util.ArrayList;
  * Example : SELECT * FROM table1 WHERE id IN (values[1], values[2], values[3]);
  */ 
 public class ArrayValue extends CriteriaValue {
+	/**
+	 * List of values.
+	 */
 	private ArrayList<String> values = new ArrayList<String>();
 	
 	@Override

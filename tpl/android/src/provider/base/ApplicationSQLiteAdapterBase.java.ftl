@@ -1,5 +1,7 @@
 package ${data_namespace}.base;
 
+import ${project_namespace}.R;
+
 import ${data_namespace}.*;
 import ${project_namespace}.${project_name?cap_first}Application;
 
@@ -22,9 +24,9 @@ import ${project_namespace}.criterias.base.CriteriasBase;
 public abstract class SQLiteAdapterBase<T> {
 
 	/** Table name of SQLite database. */
-	public static String DB_NAME = "database.sqlite";
+	public static final String DB_NAME = "database.sqlite";
 	/** TAG for debug purpose. */
-	public static String TAG = "${project_name?cap_first}SQLiteAdapterBase";
+	public static final String TAG = "${project_name?cap_first}SQLiteAdapterBase";
 
 	
 	/** Context. */
@@ -49,7 +51,7 @@ public abstract class SQLiteAdapterBase<T> {
 				ctx, 
 				DB_NAME, 
 				null,
-				1);
+				${project_name?cap_first}Application.getVersionCode(ctx));
 		
 		try {
 			this.mBaseHelper.createDataBase();
@@ -105,6 +107,7 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @param projection Columns to work with
 	 * @param whereClause WHERE clause for SQL
 	 * @param whereArgs WHERE arguments for SQL
+	 * @param groupBy GROUP BY argument for SQL
 	 * @param having HAVING clause
 	 * @param orderBy ORDER BY clause
 	 * @return A cursor pointing to the result of the query
@@ -203,10 +206,15 @@ public abstract class SQLiteAdapterBase<T> {
 		if (crits == null || crits.isEmpty()) {
 			result = this.getAll();
 		} else {
-			final Cursor cursor = this.mDatabase.rawQuery("SELECT * FROM " 
-						+ this.getTableName() + " WHERE " 
-						+ crits.toSQLiteString(), 
-						null);
+			ArrayList<String> tmpArray = new ArrayList<String>();
+			crits.toSQLiteSelectionArgs(tmpArray);
+
+			final Cursor cursor = this.query(this.getCols(),
+							crits.toSQLiteSelection(),
+							tmpArray.toArray(new String[tmpArray.size()]),
+							null,
+							null,
+							null);
 			result = this.cursorToItems(cursor);
 			cursor.close();
 		}	

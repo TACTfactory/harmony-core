@@ -41,9 +41,15 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	 */
 	<#list entities?values as entity>
 		<#if (entity.fields?size>0) >
+	/**
+	 * ${entity.name?cap_first} provider adapter. 
+	 */
 	protected ${entity.name?cap_first}ProviderAdapter ${entity.name?uncap_first}Provider;
 		</#if>
 	</#list>
+	/**
+	 * Database.
+	 */
 	protected SQLiteDatabase db;
 	
 	/**

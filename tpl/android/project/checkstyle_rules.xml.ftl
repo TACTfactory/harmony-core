@@ -96,7 +96,9 @@
 
         <!-- Checks for Size Violations.                    -->
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
-        <module name="LineLength"/>
+        <module name="LineLength">
+		<property name="ignorePattern" value="^import"/>
+	</module>
         <module name="MethodLength"/>
         <module name="ParameterNumber"/>
 
@@ -136,7 +138,10 @@
 <!--        <module name="DoubleCheckedLocking"/>  -->  <!-- MY FAVOURITE -->
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
-        <module name="HiddenField"/>
+        <module name="HiddenField">
+		<property name="ignoreConstructorParameter" value="true"/>
+		<property name="ignoreSetter" value="true"/>
+	</module>
         <module name="IllegalInstantiation"/>
         <module name="InnerAssignment"/>
         <module name="MagicNumber"/>

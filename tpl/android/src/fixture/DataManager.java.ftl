@@ -3,7 +3,7 @@ package ${fixture_namespace};
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.harmony.meta.ClassMetadata;
 
 import java.util.HashMap;
 import java.util.Map;

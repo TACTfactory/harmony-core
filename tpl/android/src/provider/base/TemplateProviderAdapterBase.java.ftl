@@ -33,8 +33,8 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	/** ${curr.name?upper_case}_URI. */
 	public	  static Uri ${curr.name?upper_case}_URI;
 
-	/** ${curr.name?cap_first} key */
-	public static String ITEM_KEY = "${curr.name?cap_first}";
+	/** ${curr.name?cap_first} key. */
+	public static final String ITEM_KEY = "${curr.name?cap_first}";
 
 	/** ${curr.name?uncap_first} type. */
 	protected static final String ${curr.name?uncap_first}Type = 
@@ -184,18 +184,18 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							projection, 
 							selection,
 							selectionArgs, 
-							sortOrder,
 							null,
-							null);
+							null,
+							sortOrder);
 				break;
 			case ${curr.name?upper_case}_ALL:
 				result = this.adapter.query(
 							projection, 
 							selection,
 							selectionArgs, 
-							sortOrder,
 							null,
-							null);
+							null,
+							sortOrder);
 				break;
 			default:
 				result = null;
