@@ -41,7 +41,7 @@
 -dontwarn org.joda.convert.ToString
 
 # Harmony
--dontwarn com.tactfactory.mda.**
+-dontwarn com.tactfactory.harmony.**
 
 # Facebook
 #-keep class com.facebook.** { *; }
