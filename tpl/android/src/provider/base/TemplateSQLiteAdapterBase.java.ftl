@@ -460,7 +460,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return List of ${curr.name} entities
 	 */
 	 public ArrayList<${curr.name}> getBy${relation.name?cap_first}(final int ${relation.name?lower_case}Id) {
-		final Cursor cursor = this.query(COLS, ${alias(relation.name)} + "=?", 
+		final Cursor cursor = this.query(null, ${alias(relation.name)} + "=?", 
 				new String[]{Integer.toString(${relation.name?lower_case}Id)}, 
 				null,
 				null,
@@ -535,11 +535,15 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	<#list curr.ids as id>
 		values.remove(${alias(id.name)});
 	</#list>
-	
+	<#if !inherited>
 		int newid;
-	
+	<#else>
+		${curr.extends}SQLiteAdapter motherAdapt = new ${curr.extends}SQLiteAdapter(this.ctx);
+		motherAdapt.open(this.mDatabase);
+		int newid = (int) motherAdapt.insert(null, values);
+	</#if>
 		if (values.size() != 0) {
-			newid = (int) this.insert(
+			<#if !inherited>newid = (int) </#if>this.insert(
 					null, 
 					values);
 			
@@ -577,6 +581,27 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		return newid;
 	}
 
+	<#if (inherited)>
+	protected ContentValues extractContentValues(ContentValues from) {
+		ContentValues to = new ContentValues();
+		for (String colName : COLS) {
+			if (from.containsKey(colName)) {
+				this.transfer(from, to, colName, false);
+			}
+		}
+		return to;
+	}
+	
+	protected void transfer(ContentValues from, 
+			ContentValues to,
+			String colName,
+			boolean keep) {
+		to.put(colName, from.getAsString(colName));
+		if (!keep) {
+			from.remove(colName);
+		}
+	}
+	</#if>
 
 	/** 
 	 * Either insert or update a ${curr.name} entity into database whether.
@@ -806,12 +831,12 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					 + " id : " + </#if></#list>);
 		}
 		
-		final String whereClause = <#list curr.ids as id> ${alias(id.name)} 
+		final String whereClause = <#list curr.ids as id> ALIASED_${alias(id.name)} 
 					 + "=? <#if id_has_next>AND </#if>"</#list>;
 		final String[] whereArgs = new String[] {<#list curr.ids as id>String.valueOf(${id.name}) <#if id_has_next>, 
 					</#if></#list>};
 		
-		return this.query(COLS, 
+		return this.query(null, 
 				whereClause, 
 				whereArgs, 
 				null, 
@@ -836,8 +861,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					"Method not implemented yet.");
 		<#else>
 		return this.query(
-				COLS,
-				COL_ID + " = ?",
+				null,
+				ALIASED_COL_ID + " = ?",
 				new String[]{String.valueOf(id)},
 				null,
 				null,
@@ -856,7 +881,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					"Method not implemented yet.");
 		<#else>
 		return this.delete(
-				COL_ID + " = ?",
+				ALIASED_COL_ID + " = ?",
 				new String[]{String.valueOf(id)});
 		</#if>
 	}

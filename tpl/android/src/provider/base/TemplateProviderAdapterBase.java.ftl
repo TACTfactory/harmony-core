@@ -234,7 +234,6 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						+ " = ?";
 				selectionArgs = new String[1];
 				selectionArgs[0] = String.valueOf(id);
-				projection = this.adapter.getCols();
 				result = this.adapter.query(
 							projection, 
 							selection,
