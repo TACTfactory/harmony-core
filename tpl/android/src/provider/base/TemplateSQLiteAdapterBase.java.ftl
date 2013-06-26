@@ -540,12 +540,15 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	<#else>
 		${curr.extends}SQLiteAdapter motherAdapt = new ${curr.extends}SQLiteAdapter(this.ctx);
 		motherAdapt.open(this.mDatabase);
+		final ContentValues currentValues = 
+				this.extractContentValues(values);
 		int newid = (int) motherAdapt.insert(null, values);
+		currentValues.put(COL_ID, newid);
 	</#if>
 		if (values.size() != 0) {
 			<#if !inherited>newid = (int) </#if>this.insert(
 					null, 
-					values);
+					<#if inherited>currentValues<#else>values</#if>);
 			
 			item.setId((int) newid); 
 	<#list curr.relations as relation>
@@ -652,10 +655,25 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				new String[] {<#list curr.ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, 
 							  </#if></#list>};
 		
+		<#if (inherited)>
+		final ContentValues currentValues = 
+				this.extractContentValues(values);
+		final ${curr.extends?cap_first}SQLiteAdapter motherAdapt = 
+				new ${curr.extends?cap_first}SQLiteAdapter(this.ctx);
+		motherAdapt.open(this.mDatabase);
+		motherAdapt.update(values, whereClause, whereArgs);
+		
+		return this.update(
+				currentValues, 
+				whereClause, 
+				whereArgs);
+		<#else>
 		return this.update(
 				values, 
 				whereClause, 
 				whereArgs);
+		</#if>
+		
 	<#else>
 		throw new UnsupportedOperationException("Method not implemented yet.");
 	</#if>

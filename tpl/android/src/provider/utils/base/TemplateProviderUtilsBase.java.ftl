@@ -331,7 +331,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 		ContentResolver prov = ctx.getContentResolver();
 		
 		Cursor cursor = prov.query(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
-				${curr.name}SQLiteAdapter.COLS,
+				null,
 				null, 
 				null, 
 				null);

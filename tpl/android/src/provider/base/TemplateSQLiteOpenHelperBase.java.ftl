@@ -128,7 +128,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	public void onOpen(SQLiteDatabase db) {
 		super.onOpen(db);
 		// Activation of SQLiteConstraints
-		db.execSQL("PRAGMA foreign_keys = ON;");
+		//db.execSQL("PRAGMA foreign_keys = ON;");
 	}
 
 	/**
