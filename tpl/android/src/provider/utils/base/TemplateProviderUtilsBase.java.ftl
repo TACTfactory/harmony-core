@@ -98,34 +98,37 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 
 		<#list curr.relations as relation>
 			<#if (relation.relation.type == "OneToMany") >
-		String ${relation.name}Selection = ${relation.relation.targetEntity?cap_first}SQLiteAdapter.COL_ID + " IN (";
-		String[] ${relation.name}SelectionArgs = new String[item.get${relation.name?cap_first}().size()];
-		for (int i = 0; i < item.get${relation.name?cap_first}().size(); i++) {
-			${relation.name}SelectionArgs[i] = String.valueOf(item.get${relation.name?cap_first}().get(i).getId());
-			${relation.name}Selection += "? ";
-			if (i != item.get${relation.name?cap_first}().size() - 1) {
-				 ${relation.name}Selection += ", ";
+		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
+			String ${relation.name}Selection = ${relation.relation.targetEntity?cap_first}SQLiteAdapter.COL_ID + " IN (";
+			String[] ${relation.name}SelectionArgs = new String[item.get${relation.name?cap_first}().size()];
+			for (int i = 0; i < item.get${relation.name?cap_first}().size(); i++) {
+				${relation.name}SelectionArgs[i] = String.valueOf(item.get${relation.name?cap_first}().get(i).getId());
+				${relation.name}Selection += "? ";
+				if (i != item.get${relation.name?cap_first}().size() - 1) {
+					 ${relation.name}Selection += ", ";
+				}
+			}
+			${relation.name}Selection += ")";
+
+			operations.add(ContentProviderOperation.newUpdate(${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
+					.withValueBackReference(${relation.relation.targetEntity}SQLiteAdapter.COL_${getMappedField(relation).name?upper_case}, 0)
+					.withSelection(${relation.name}Selection, ${relation.name}SelectionArgs)
+					.build());
+		}
+			<#elseif (relation.relation.type == "ManyToMany") >
+		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
+			for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
+				ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
+				${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID, ${relation.relation.targetEntity?uncap_first}.getId());
+				${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID, item.getId());
+			
+				operations.add(ContentProviderOperation.newInsert(
+					${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
+					    .withValues(${relation.relation.targetEntity?uncap_first}Values)
+					    .build());
+			
 			}
 		}
-		${relation.name}Selection += ")";
-
-		operations.add(ContentProviderOperation.newUpdate(${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
-				.withValueBackReference(${relation.relation.targetEntity}SQLiteAdapter.COL_${getMappedField(relation).name?upper_case}, 0)
-				.withSelection(${relation.name}Selection, ${relation.name}SelectionArgs)
-				.build());
-			<#elseif (relation.relation.type == "ManyToMany") >
-		for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
-			ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
-			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID, ${relation.relation.targetEntity?uncap_first}.getId());
-			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID, item.getId());
-			
-			operations.add(ContentProviderOperation.newInsert(
-				${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
-				    .withValues(${relation.relation.targetEntity?uncap_first}Values)
-				    .build());
-			
-		}
-	
 			</#if>
 		</#list>
 
