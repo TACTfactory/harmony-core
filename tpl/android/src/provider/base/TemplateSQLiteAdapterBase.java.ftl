@@ -794,14 +794,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	
 	/**
 	 *  Internal Cursor.
-<<<<<<< HEAD
-	 *  <#if (curr.ids?? && curr.ids?size > 0)>@param ${id.name} ${id.name}</#if>
-	 *  @return A Cursor 
-=======
 	 <#list curr.ids as id>* @param ${id.name} ${id.name}<#if (id_has_next)>
 	 </#if></#list>
 	 *  @return A Cursor pointing to ${id.name}
->>>>>>> 049118a09f2ac480022020435fc7686c237990d8
 	 */
 	protected Cursor getSingleCursor(<#list curr.ids as id>final ${m.javaType(id.type)} ${id.name}<#if id_has_next>
 										,</#if></#list>) {

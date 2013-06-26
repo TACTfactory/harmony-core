@@ -121,8 +121,6 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		}
 	}
 
-<<<<<<< HEAD
-
 	/* (non-Javadoc)
 	 * @see android.database.sqlite.SQLiteOpenHelper#onOpen(android.database.sqlite.SQLiteDatabase)
 	 */
@@ -134,9 +132,6 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	}
 
 	/**
-=======
-	/*
->>>>>>> 049118a09f2ac480022020435fc7686c237990d8
 	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate <br />
 	 * (android.database.sqlite.SQLiteDatabase)
 	 */

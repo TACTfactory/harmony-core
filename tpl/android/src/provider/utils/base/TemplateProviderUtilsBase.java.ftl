@@ -393,13 +393,8 @@ public class ${curr.name?cap_first}ProviderUtilsBase {
 	 <#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>* @param ${relation.name?uncap_first}Id ${relation.name?uncap_first} Id</#if></#list>
 	 * @return number of rows updated
 	 */
-<<<<<<< HEAD
-	public static int update(final Context ctx, final ${curr.name} item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>,
-			 final int ${relation.name?uncap_first}Id</#if></#list>) {
-=======
 	public static int update(final Context ctx, final ${curr.name} item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, 
 							 final int ${relation.name?uncap_first}Id</#if></#list>) {
->>>>>>> 049118a09f2ac480022020435fc7686c237990d8
 		int result = -1;
 		${curr.name}SQLiteAdapter adapt = new ${curr.name}SQLiteAdapter(ctx);
 		ContentResolver prov = ctx.getContentResolver();		
