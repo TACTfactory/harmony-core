@@ -28,19 +28,18 @@ public class ${curr.name?cap_first}Criterias extends CriteriasBase {
 	 */
 	@Override
 	public boolean validCriteria(final Criteria crit) {
-		/*boolean result = false;
+		boolean result = true;
 	
-		final String key = crit.getKey();
+		/*final String key = crit.getKey();
 		final String[] possibleKeys = ${curr.name?cap_first}SQLiteAdapter.COLS;
 		for (final String pKey : possibleKeys) {
 			if (key.equals(pKey)) {
 				result = true;
 				break;
 			}
-		}
+		}*/
 		
-		return result;*/
-		return true;
+		return result;
 	}
 
 }
