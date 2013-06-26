@@ -293,14 +293,14 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 				int ${relation.name}IdColumnIndex = ${relation.name}Cursor.getColumnIndex(${relation.relation.joinTable?cap_first}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID);
 				while (${relation.name}Cursor.moveToNext()) {
 					int ${relation.name}Id = ${relation.name}Cursor.getInt(${relation.name}IdColumnIndex);
-					${relation.name}Array.add(${relation.relation.targetEntity?cap_first}ProviderUtils.query(ctx, ${relation.name}Id));
+					${relation.name}Array.add(new ${relation.relation.targetEntity?cap_first}ProviderUtils().query(ctx, ${relation.name}Id));
 				}
 			}
 			result.set${relation.name?cap_first}(${relation.name}Array);
 				<#else>
 			if (result.get${relation.name?cap_first}() != null) {
 				result.set${relation.name?cap_first}(
-					${relation.relation.targetEntity?cap_first}ProviderUtils.query(ctx,
+					new ${relation.relation.targetEntity?cap_first}ProviderUtils().query(ctx,
 							result.get${relation.name?cap_first}().getId()));
 			}
 				</#if>
@@ -308,7 +308,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 			</#if>-->
 			<#if (!relation.internal)>
 				result.set${relation.name?cap_first}(
-					${curr.name}ProviderUtils.getAssociate${relation.name?cap_first}(ctx,
+					new ${curr.name}ProviderUtils().getAssociate${relation.name?cap_first}(ctx,
 							result));
 			</#if>
 		</#list>
