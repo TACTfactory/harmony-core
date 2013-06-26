@@ -18,12 +18,12 @@ import ${entity_namespace}.${curr.name};
 import ${local_namespace}.${extends?cap_first}ProviderAdapter;
 import ${data_namespace}.${extends?cap_first}SQLiteAdapter;
 
-import com.tactfactory.mda.test.demact.criterias.${curr.name}Criterias;
-import com.tactfactory.mda.test.demact.criterias.base.Criteria;
-import com.tactfactory.mda.test.demact.criterias.base.Criteria.Type;
-import com.tactfactory.mda.test.demact.criterias.base.CriteriasBase;
-import com.tactfactory.mda.test.demact.criterias.base.CriteriasBase.GroupType;
-import com.tactfactory.mda.test.demact.criterias.base.value.ArrayValue;
+import ${project_namespace}.criterias.${curr.name}Criterias;
+import ${project_namespace}.criterias.base.Criteria;
+import ${project_namespace}.criterias.base.Criteria.Type;
+import ${project_namespace}.criterias.base.CriteriasBase;
+import ${project_namespace}.criterias.base.CriteriasBase.GroupType;
+import ${project_namespace}.criterias.base.value.ArrayValue;
 </#if>
 
 import android.content.Context;
