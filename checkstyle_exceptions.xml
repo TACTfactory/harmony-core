@@ -6,9 +6,9 @@
 
 <suppressions>
     <suppress 	checks="." 
-		files="com[\\/]tactfactory[\\/]mda[\\/]test[\\/]demact[\\/]"/>
+		files="com[\\/]tactfactory[\\/]harmony[\\/]test[\\/]demact[\\/]"/>
     <suppress 	checks="." 
-		files="com[\\/]tactfactory[\\/]mda[\\/]test[\\/]jobeet[\\/]"/>
+		files="com[\\/]tactfactory[\\/]harmony[\\/]test[\\/]jobeet[\\/]"/>
     <suppress 	checks="DesignForExtension"
 		files="BaseAdapter.java"/>
     <suppress 	checks="DesignForExtension"
