@@ -1,4 +1,5 @@
 <#assign curr = entities[current_entity] />
+<@header?interpret />
 package ${project_namespace}.provider.utils;
 
 import ${project_namespace}.provider.utils.base.${curr.name?cap_first}ProviderUtilsBase;

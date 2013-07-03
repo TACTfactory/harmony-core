@@ -4,6 +4,7 @@
 		<#assign sync=true />
 	</#if>
 </#list>
+<@header?interpret />
 package ${project_namespace};
 
 import java.text.DateFormat;

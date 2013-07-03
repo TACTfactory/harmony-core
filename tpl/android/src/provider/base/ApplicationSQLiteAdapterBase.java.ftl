@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${data_namespace}.base;
 
 import ${project_namespace}.R;

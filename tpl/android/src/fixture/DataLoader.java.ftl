@@ -50,6 +50,7 @@
 	<#return ret>
 </#function>
 <#assign orderedEntities = orderEntitiesByRelation() />
+<@header?interpret />
 package ${fixture_namespace};
 
 import java.util.ArrayList;

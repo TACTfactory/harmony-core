@@ -1,4 +1,5 @@
 <#assign curr = entities[current_entity] />
+<@header?interpret />
 package ${project_namespace}.criterias;
 
 import ${data_namespace}.${curr.name?cap_first}SQLiteAdapter;

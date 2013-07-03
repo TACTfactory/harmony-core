@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${fixture_namespace};
 
 import android.content.Context;

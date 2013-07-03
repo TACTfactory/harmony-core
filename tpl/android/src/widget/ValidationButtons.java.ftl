@@ -1,13 +1,4 @@
-/**************************************************************************
-* ValidationButtons.java, Harmony Android
-*
-* Copyright 2013 Mickael Gaillard / TACTfactory
-* Description : 
-* Author(s)   : Mickael Gaillard <mickael.gaillard@tactfactory.com>
-* Licence     : all right reserved
-* Create      : 2013
-*
-**************************************************************************/
+<@header?interpret />
 package ${project_namespace}.harmony.widget;
 
 import ${project_namespace}.R;
