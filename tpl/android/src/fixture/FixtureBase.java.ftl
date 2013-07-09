@@ -1,4 +1,5 @@
 <#assign fixtureType = options["fixture"].type />
+<@header?interpret />
 package ${fixture_namespace};
 
 import android.content.Context;

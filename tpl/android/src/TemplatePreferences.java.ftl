@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${project_namespace};
 
 import java.util.ArrayList;

@@ -6,6 +6,7 @@
 	<#assign inherited = true />
 </#if>
 <#if (curr.internal?? && curr.internal == "true")><#assign internal = true /></#if>
+<@header?interpret />
 package ${local_namespace}.base;
 
 import ${local_namespace}.${project_name?cap_first}Provider;

@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${project_namespace};
 
 /** Custom ${project_name?cap_first} Application context. */

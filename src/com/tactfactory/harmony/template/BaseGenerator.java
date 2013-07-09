@@ -160,6 +160,8 @@ public abstract class BaseGenerator {
 						new OutputStreamWriter(
 								new FileOutputStream(generateFile), 
 								TactFileUtils.DEFAULT_ENCODING);
+				String fileName = generatePath.split("/")[generatePath.split("/").length-1];
+				this.datamodel.put("fileName", fileName);
 				tpl.process(this.datamodel, output);
 				output.flush();
 				output.close();

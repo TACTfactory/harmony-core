@@ -67,6 +67,7 @@
 		<#assign hasDateTime=true />
 	</#if>
 </#list>
+<@header?interpret />
 package ${data_namespace}.base;
 
 import ${data_namespace}.*;

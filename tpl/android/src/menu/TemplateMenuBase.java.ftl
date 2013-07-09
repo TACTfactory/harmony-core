@@ -1,16 +1,7 @@
 <#function menuAlias menuName>
 	<#return menuName?replace("MenuWrapper", "", 'i')?upper_case />
 </#function>
-/**************************************************************************
- * ${project_name?cap_first}MenuBase.java, Android
- * 
- * Copyright 2012 TACTfactory SARL
- * Description : Global Menu Action of application
- * Author(s)   : Mickael Gaillard <mickael.gaillard@tactfactory.com> ,
- * License     : all right reserved
- * Create      : 2012
- * 
- **************************************************************************/
+<@header?interpret />
 package ${project_namespace}.menu;
 
 import com.actionbarsherlock.view.Menu;

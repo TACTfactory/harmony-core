@@ -1,6 +1,8 @@
 <#assign curr = entities[current_entity] />
 package ${curr.test_namespace}.base;
 
+import android.test.suitebuilder.annotation.SmallTest;
+
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
@@ -51,22 +53,9 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		
-		this.ctx = this.getContext();
+		this.ctx = this.getMockContext();
 		
 		this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
-		this.db = this.adapter.open();
-		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
-		this.db.beginTransaction();
-		
-		<#if dataLoader?? && dataLoader>
-		this.dataLoader = new DataLoader(this.ctx);
-		this.dataLoader.clean();
-		this.dataLoader.loadData(this.db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
-		</#if>
-		
-		this.db.setTransactionSuccessful();
-		this.db.endTransaction();
-		this.adapter.close();		
 		
 		<#if dataLoader?? && dataLoader>
 		this.entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).items.values());
@@ -74,7 +63,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			this.entity = this.entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}
 		</#if>		
-		this.provider = this.getContext().getContentResolver();
+		this.provider = this.getMockContext().getContentResolver();
 	}
 
 	/* (non-Javadoc)
@@ -82,19 +71,10 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	 */
 	protected void tearDown() throws Exception {
 		super.tearDown();
-		
-		this.db = this.adapter.open();
-		this.db.beginTransaction();
-		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
-		<#if dataLoader?? && dataLoader>
-		this.dataLoader.clean();
-		</#if>
-		this.db.setTransactionSuccessful();
-		this.db.endTransaction();
-		this.adapter.close();
 	}
 	
 	/** Test case Create Entity */
+	@SmallTest
 	public void testCreate() {
 		Uri result = null;
 		if (this.entity != null) {
@@ -115,6 +95,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	}
 	
 	/** Test case Read Entity */
+	@SmallTest
 	public void testRead() {
 		${curr.name} result = null;
 
@@ -133,6 +114,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	}
 
 	/** Test case ReadAll Entity */
+	@SmallTest
 	public void testReadAll() {
 		ArrayList<${curr.name}> result = null;
 		try {
@@ -150,6 +132,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	}
 	
 	/** Test case Update Entity */
+	@SmallTest
 	public void testUpdate() {
 		int result = -1;
 		if (this.entity != null) {
@@ -176,6 +159,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	}
 
 	/** Test case UpdateAll Entity */
+	@SmallTest
 	public void testUpdateAll() {
 		int result = -1;
 		if (this.entities.size() > 0) {
@@ -200,6 +184,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	}
 	
 	/** Test case Delete Entity */
+	@SmallTest
 	public void testDelete() {
 		int result = -1;
 		if (this.entity != null) {
@@ -215,6 +200,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	}
 	
 	/** Test case DeleteAll Entity */
+	@SmallTest
 	public void testDeleteAll() {
 		int result = -1;
 		if (this.entities.size() > 0) {

@@ -1,6 +1,8 @@
 <#assign curr = entities[current_entity] />
 package ${curr.test_namespace}.base;
 
+import android.test.suitebuilder.annotation.SmallTest;
+
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 
@@ -41,19 +43,12 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		
-		this.ctx = this.getContext();
+		this.ctx = this.getMockContext();
 		
 		this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
 		this.db = this.adapter.open();
-		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
-		this.db.beginTransaction();
 		
-		<#if dataLoader?? && dataLoader>
-		this.dataLoader = new DataLoader(this.ctx);
-		this.dataLoader.clean();
-		this.dataLoader.loadData(this.db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
-
-		
+		<#if dataLoader?? && dataLoader>		
 		ArrayList<${curr.name?cap_first}> entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).items.values());
 		if (entities.size()>0){
 			this.entity = entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
@@ -65,17 +60,13 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	protected void tearDown() throws Exception {
-		super.tearDown();
 		
-		this.db.endTransaction();
-		${project_name?cap_first}SQLiteOpenHelper.clearDatabase(this.db);
-		<#if dataLoader?? && dataLoader>
-		this.dataLoader.clean();
-		</#if>
 		this.adapter.close();
+		super.tearDown();
 	}
 	
 	/** Test case Create Entity */
+	@SmallTest
 	public void testCreate() {
 		int result = -1;
 		if (this.entity != null) {
@@ -89,6 +80,7 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 	}
 	
 	/** Test case Read Entity */
+	@SmallTest
 	public void testRead() {
 		${curr.name?cap_first} result = null;
 		if (this.entity != null) {
@@ -99,6 +91,7 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 	}
 	
 	/** Test case Update Entity */
+	@SmallTest
 	public void testUpdate() {
 		int result = -1;
 		if (this.entity != null) {
@@ -112,6 +105,7 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 	}
 	
 	/** Test case Update Entity */
+	@SmallTest
 	public void testDelete() {
 		int result = -1; 
 		if (this.entity != null) {

@@ -55,6 +55,7 @@
 	</#list>
 	<#return ret>
 </#function>
+<@header?interpret />
 package ${data_namespace}.base;
 
 import java.io.FileOutputStream;
@@ -70,6 +71,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.test.IsolatedContext;
 import android.util.Log;
 
 <#if options.fixture?? && options.fixture.enabled>
@@ -158,7 +160,9 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	</#list>
 			db.execSQL("PRAGMA foreign_keys = ON;");
 	<#if options.fixture?? && options.fixture.enabled>
-			this.loadData(db);
+			if (!this.ctx.getClass().equals(IsolatedContext.class)) {
+				this.loadData(db);
+			}
 	</#if>
 		}
 		

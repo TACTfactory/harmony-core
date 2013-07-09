@@ -1,4 +1,5 @@
 <#assign curr = entities[current_entity] />
+<@header?interpret />
 package ${curr.data_namespace};
 
 import ${data_namespace}.base.${curr.name}SQLiteAdapterBase;

@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${project_namespace}.harmony.util;
 
 import java.text.ParseException;

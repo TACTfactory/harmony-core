@@ -26,6 +26,7 @@
 		<#assign hasRelations = true />	
 	</#if>
 </#list>
+<@header?interpret />
 package ${project_namespace}.provider.utils.base;
 
 import ${project_namespace}.provider.utils.${curr.name}ProviderUtils;
