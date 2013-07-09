@@ -80,6 +80,8 @@ public class DataLoader {
 	private static SparseArray<String> fixtureFolders;
 	/** Context. */
 	private Context ctx;
+	/** Has the fixtures been loaded yet ? */
+	public static boolean hasFixturesBeenLoaded = false;
 
 	/**
 	 * Static constructor.
@@ -137,6 +139,7 @@ public class DataLoader {
 			}
 			dataLoader.load(manager);
 		}
+		hasFixturesBeenLoaded = true;
 	}
 	
 	/**

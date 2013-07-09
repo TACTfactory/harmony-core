@@ -1,6 +1,14 @@
 package ${project_namespace}.test.base;
 
+import java.io.File;
+import java.io.FilenameFilter;
+
 import ${project_namespace}.provider.${project_name?cap_first}Provider;
+import ${project_namespace}.EpackhygieneApplication;
+import ${project_namespace}.fixture.DataLoader;
+import ${project_namespace}.util.DatabaseUtil;
+import ${data_namespace}.EpackhygieneSQLiteOpenHelper;
+import ${data_namespace}.base.SQLiteAdapterBase;
 
 import android.content.ContentProvider;
 import android.content.Context;
@@ -14,6 +22,10 @@ import android.test.mock.MockContentResolver;
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony.</i></b>
  */
 public abstract class TestDBBase extends AndroidTestCase {
+	private static final String SEPARATOR = "#";
+	private static final String EXTENTION = ".test-cache";
+	private static final long   CACHE_DURACY = 600L;
+
 	private final static String CONTEXT_PREFIX = "test.";
 	private final static String PROVIDER_AUTHORITY = "${project_namespace}.provider";
 	private final static Class<? extends ContentProvider> PROVIDER_CLASS = ${project_name?cap_first}Provider.class;
@@ -81,5 +93,40 @@ public abstract class TestDBBase extends AndroidTestCase {
 	protected void setUp() throws Exception {
 		this.setMockContext();
 		super.setUp();
+
+		String dbPath =  
+				this.getContext().getDatabasePath(SQLiteAdapterBase.DB_NAME)
+					.getAbsolutePath() + ".test";
+				
+		File cacheDbFile = new File(dbPath);
+		
+		if (!cacheDbFile.exists() || !DataLoader.hasFixturesBeenLoaded) {
+			Log.d("TEST", "Create new Database cache");
+			
+			// Create initial database
+			${project_name?cap_first}SQLiteOpenHelper helper = 
+					new ${project_name?cap_first}SQLiteOpenHelper(
+						this.getMockContext(), 
+						SQLiteAdapterBase.DB_NAME, 
+						null,
+						${project_name?cap_first}Application.getVersionCode(
+								this.getMockContext()));
+			
+			SQLiteDatabase db = helper.getWritableDatabase();
+			${project_name?cap_first}SQLiteOpenHelper.clearDatabase(db);
+			
+			db.beginTransaction();
+			DataLoader dataLoader = new DataLoader(this.baseContext);
+			dataLoader.clean();
+			dataLoader.loadData(db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
+			db.setTransactionSuccessful();
+			db.endTransaction();
+			db.close();
+			
+			DatabaseUtil.exportDB(baseContext, cacheDbFile, SQLiteAdapterBase.DB_NAME);
+		} else {
+			Log.d("TEST", "Re use old Database cache");
+			DatabaseUtil.importDB(baseContext, cacheDbFile, SQLiteAdapterBase.DB_NAME, false);
+		}
 	}
 }
