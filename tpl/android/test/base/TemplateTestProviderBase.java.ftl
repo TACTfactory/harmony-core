@@ -51,7 +51,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		
-		this.ctx = this.getContext();
+		this.ctx = this.getMockContext();
 		
 		this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
 		this.db = this.adapter.open();
@@ -74,7 +74,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			this.entity = this.entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}
 		</#if>		
-		this.provider = this.getContext().getContentResolver();
+		this.provider = this.getMockContext().getContentResolver();
 	}
 
 	/* (non-Javadoc)

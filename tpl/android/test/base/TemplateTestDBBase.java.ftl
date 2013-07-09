@@ -41,7 +41,7 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 	protected void setUp() throws Exception {
 		super.setUp();
 		
-		this.ctx = this.getContext();
+		this.ctx = this.getMockContext();
 		
 		this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
 		this.db = this.adapter.open();
