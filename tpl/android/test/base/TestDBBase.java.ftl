@@ -53,7 +53,7 @@ public abstract class TestDBBase extends AndroidTestCase {
 	 * @return MockContext
 	 */
 	protected Context getMockContext() {        
-     		return this.baseContext;
+     		return this.getContext();
 	}
 	
 	/**
@@ -116,17 +116,17 @@ public abstract class TestDBBase extends AndroidTestCase {
 			${project_name?cap_first}SQLiteOpenHelper.clearDatabase(db);
 			
 			db.beginTransaction();
-			DataLoader dataLoader = new DataLoader(this.baseContext);
+			DataLoader dataLoader = new DataLoader(this.getMockContext());
 			dataLoader.clean();
 			dataLoader.loadData(db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
 			db.setTransactionSuccessful();
 			db.endTransaction();
 			db.close();
 			
-			DatabaseUtil.exportDB(baseContext, cacheDbFile, SQLiteAdapterBase.DB_NAME);
+			DatabaseUtil.exportDB(this.getMockContext(), cacheDbFile, SQLiteAdapterBase.DB_NAME);
 		} else {
 			Log.d("TEST", "Re use old Database cache");
-			DatabaseUtil.importDB(baseContext, cacheDbFile, SQLiteAdapterBase.DB_NAME, false);
+			DatabaseUtil.importDB(this.getMockContext(), cacheDbFile, SQLiteAdapterBase.DB_NAME, false);
 		}
 	}
 }
