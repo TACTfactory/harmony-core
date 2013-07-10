@@ -88,6 +88,7 @@ public abstract class TestDBBase extends AndroidTestCase {
 	 * @see junit.framework.TestCase#setUp()
 	 */
 	protected void setUp() throws Exception {
+		${project_name?cap_first}SQLiteOpenHelper.isJUnit = true;
 		this.setMockContext();
 		super.setUp();
 
