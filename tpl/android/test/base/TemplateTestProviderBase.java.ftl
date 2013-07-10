@@ -38,12 +38,8 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 	protected ${curr.name}SQLiteAdapter adapter;
 
-	protected SQLiteDatabase db;
 	protected ${curr.name} entity;
 	protected ContentResolver provider;
-	<#if dataLoader?? && dataLoader>
-	protected DataLoader dataLoader;
-	</#if>
 
 	protected ArrayList<${curr.name}> entities;
 

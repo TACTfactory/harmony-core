@@ -8,18 +8,13 @@ import ${curr.namespace}.entity.${curr.name};
 
 <#if dataLoader?? && dataLoader>
 import ${fixture_namespace}.${curr.name?cap_first}DataLoader;
-import ${fixture_namespace}.DataLoader;
 </#if>
 
 import java.util.ArrayList;
 
 import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
 import ${curr.test_namespace}.utils.*;
-
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.test.AndroidTestCase;
-
 import junit.framework.Assert;
 
 /** ${curr.name} database test abstract class <br/>
@@ -31,12 +26,7 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 
 	protected ${curr.name}SQLiteAdapter adapter;
 
-	protected SQLiteDatabase db;
 	protected ${curr.name} entity;
-	<#if dataLoader?? && dataLoader>
-	protected DataLoader dataLoader;
-	</#if>
-
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
 	 */
@@ -46,7 +36,7 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 		this.ctx = this.getMockContext();
 		
 		this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
-		this.db = this.adapter.open();
+		this.adapter.open();
 		
 		<#if dataLoader?? && dataLoader>		
 		ArrayList<${curr.name?cap_first}> entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).items.values());
@@ -60,8 +50,8 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 	 * @see junit.framework.TestCase#tearDown()
 	 */
 	protected void tearDown() throws Exception {
-		
 		this.adapter.close();
+
 		super.tearDown();
 	}
 	
@@ -71,7 +61,6 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 		int result = -1;
 		if (this.entity != null) {
 			${curr.name?cap_first} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
-			
 	
 			result = (int)this.adapter.insert(${curr.name?uncap_first});
 	

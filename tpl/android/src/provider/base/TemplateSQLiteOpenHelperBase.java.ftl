@@ -86,7 +86,7 @@ import ${fixture_namespace}.*;
  * @see android.database.sqlite.SQLiteOpenHelper
  */
 public class ${project_name?cap_first}SQLiteOpenHelperBase 
-										extends SQLiteOpenHelper {
+						extends SQLiteOpenHelper {
 	/** TAG for debug purpose. */
 	protected static final String TAG = "DatabaseHelper";
 	/** Context. */
@@ -100,6 +100,8 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	private static String DB_NAME;
 	/** is assets exist.*/
 	private static boolean assetsExist;
+	/** Are we in a JUnit context ?*/
+	public static boolean isJUnit = false;
 	
 	/**
 	 * Constructor.
@@ -216,8 +218,9 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		if (${project_name?cap_first}Application.DEBUG) {
 			mode = DataLoader.MODE_APP | DataLoader.MODE_DEBUG;
 		}
-
-		dataLoader.loadData(db, mode);
+		if (!${project_name?cap_first}SQLiteOpenHelper.isJUnit) {
+			dataLoader.loadData(db, mode);
+		}
 	}
 	</#if>
 	
