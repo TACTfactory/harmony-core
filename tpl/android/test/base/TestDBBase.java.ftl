@@ -1,7 +1,6 @@
 package ${project_namespace}.test.base;
 
 import java.io.File;
-import java.io.FilenameFilter;
 
 import ${project_namespace}.provider.${project_name?cap_first}Provider;
 import ${project_namespace}.EpackhygieneApplication;
@@ -12,20 +11,18 @@ import ${data_namespace}.base.SQLiteAdapterBase;
 
 import android.content.ContentProvider;
 import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
 import android.test.AndroidTestCase;
 import android.test.IsolatedContext;
 import android.test.RenamingDelegatingContext;
 import android.test.mock.MockContentResolver;
+import android.util.Log;
 
 
 /** Base test abstract class <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project with Harmony.</i></b>
  */
 public abstract class TestDBBase extends AndroidTestCase {
-	private static final String SEPARATOR = "#";
-	private static final String EXTENTION = ".test-cache";
-	private static final long   CACHE_DURACY = 600L;
-
 	private final static String CONTEXT_PREFIX = "test.";
 	private final static String PROVIDER_AUTHORITY = "${project_namespace}.provider";
 	private final static Class<? extends ContentProvider> PROVIDER_CLASS = ${project_name?cap_first}Provider.class;
