@@ -162,7 +162,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	</#list>
 			db.execSQL("PRAGMA foreign_keys = ON;");
 	<#if options.fixture?? && options.fixture.enabled>
-			if (!this.ctx.getClass().equals(IsolatedContext.class)) {
+			if (!${project_name?cap_first}SQLiteOpenHelper.isJUnit) {
 				this.loadData(db);
 			}
 	</#if>
@@ -218,9 +218,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		if (${project_name?cap_first}Application.DEBUG) {
 			mode = DataLoader.MODE_APP | DataLoader.MODE_DEBUG;
 		}
-		if (!${project_name?cap_first}SQLiteOpenHelper.isJUnit) {
-			dataLoader.loadData(db, mode);
-		}
+		dataLoader.loadData(db, mode);
 	}
 	</#if>
 	
