@@ -1,15 +1,11 @@
-package ${project_namespace}.util;
+package ${project_namespace}.harmony.util;
 
 import java.io.File;
-import java.io.IOException;
 
 import android.content.Context;
 
 import com.google.common.base.Strings;
 import com.google.common.io.Files;
-import ${project_namespace}.R;
-import ${project_namespace}.data.base.SQLiteAdapterBase;
-import ${project_namespace}.util.FolderUtil.Folder;
 
 public class DatabaseUtil {
 	

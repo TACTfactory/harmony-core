@@ -1023,6 +1023,11 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	}
 
 	@Override
+	public ContentValues itemToContentValues(Void item) {
+		return null;
+	}
+
+	@Override
 	public long insert(Void item) {
 		return -1;
 	}

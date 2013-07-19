@@ -198,7 +198,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		 * @param ctx A context to build ${curr.name?cap_first}SQLiteAdapter
 		 */
 		public DeleteTask(final Context ctx, 
-								final ${curr.name?cap_first} item) {
+					final ${curr.name?cap_first} item) {
 			super();
 			this.ctx = ctx;
 			this.item = item;
@@ -211,7 +211,8 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		protected Integer doInBackground(Void... params) {
 			int result = -1;
 
-			result = ${curr.name?cap_first}ProviderUtils.delete(this.ctx, this.item);
+			result = new ${curr.name?cap_first}ProviderUtils()
+					.delete(this.ctx, this.item);
 
 			return result;
 		}

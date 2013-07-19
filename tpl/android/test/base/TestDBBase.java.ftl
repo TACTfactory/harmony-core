@@ -3,10 +3,10 @@ package ${project_namespace}.test.base;
 import java.io.File;
 
 import ${project_namespace}.provider.${project_name?cap_first}Provider;
-import ${project_namespace}.EpackhygieneApplication;
+import ${project_namespace}.${project_name?cap_first}Application;
 import ${project_namespace}.fixture.DataLoader;
-import ${project_namespace}.util.DatabaseUtil;
-import ${data_namespace}.EpackhygieneSQLiteOpenHelper;
+import ${project_namespace}.harmony.util.DatabaseUtil;
+import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
 import ${data_namespace}.base.SQLiteAdapterBase;
 
 import android.content.ContentProvider;

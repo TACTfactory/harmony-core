@@ -205,7 +205,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 			
-			this.entity = ${curr.name?cap_first}ProviderUtils.query(
+			this.entity = new ${curr.name?cap_first}ProviderUtils().query(
 				this.ctx, 
 				this.entity.getId());
 			
