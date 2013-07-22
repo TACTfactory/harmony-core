@@ -166,7 +166,6 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		private final Context ctx;
 		private final ${curr.name}ShowFragment fragment;
 		private ${curr.name} entity;
-		private String errorMsg;
 		private ProgressDialog progress;
 
 		/**

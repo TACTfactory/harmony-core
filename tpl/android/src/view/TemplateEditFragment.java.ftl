@@ -474,7 +474,6 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 	public static class EditTask extends AsyncTask<Void, Void, Integer> {
 		protected final Context ctx;
 		protected final ${curr.name} entity;
-		protected String errorMsg;
 		protected ProgressDialog progress;
 
 		/**
