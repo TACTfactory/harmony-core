@@ -88,6 +88,7 @@ import ${curr.namespace}.entity.${relation.relation.targetEntity};
 		</#if>
 	</#if>
 </#list>
+<#if !(curr.ids?size>0)>import ${project_namespace}.harmony.exception.NotImplementedException;</#if>
 <#list curr.fields?values as field>
 	<#if field.harmony_type?lower_case == "enum">
 		<#assign enumClass = enums[field.type] />
@@ -406,7 +407,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		</#list>
 		return result;
 	<#else>
-		throw new UnsupportedOperationException("Method not implemented yet.");
+		throw new NotImplementedException("An entity with no ID can't implement this method.");
 	</#if>
 	}	
 	
@@ -545,6 +546,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return 1 if everything went well, 0 otherwise
 	 */
 	public int insertOrUpdate(final ${curr.name} item) {
+		<#if (curr.ids?size>0)>
 		int result = 0;
 		<#assign id = curr.ids[0] />
 		if (this.getByID(item.get${id.name?cap_first}()) != null) {
@@ -559,8 +561,11 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		}
 
 		return result;
+		<#else>
+		throw new NotImplementedException("An entity with no ID can't implement this method.");
+		</#if> 
 	}
-	
+
 	/** 
 	 * Update a ${curr.name} entity into database.
 	 * 
@@ -587,7 +592,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				whereClause, 
 				whereArgs);
 	<#else>
-		throw new UnsupportedOperationException("Method not implemented yet.");
+		throw new NotImplementedException("An entity with no ID can't implement this method.");
 	</#if>
 	}
 
@@ -622,7 +627,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				whereClause, 
 				whereArgs);
 			<#else>
-		throw new UnsupportedOperationException("Method not implemented yet.");
+		throw new NotImplementedException("An entity with no ID can't implement this method.");
 			</#if>
 	}
 
@@ -734,7 +739,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				whereClause, 
 				whereArgs);
 	<#else>
-		throw new UnsupportedOperationException("Method not implemented yet.");
+		throw new NotImplementedException("An entity with no ID can't implement this method.");
 	</#if>
 	}
 	
@@ -751,7 +756,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 *  Internal Cursor.
 	 <#list curr.ids as id>* @param ${id.name} ${id.name}<#if (id_has_next)>
 	 </#if></#list>
-	 *  @return A Cursor pointing to ${id.name}
+	 *  @return <#if (curr.ids?size>0)>A Cursor pointing to ${id.name}<#else>Throw a NotImplementedException.</#if>
 	 */
 	protected Cursor getSingleCursor(<#list curr.ids as id>final ${m.javaType(id.type)} ${id.name}<#if id_has_next>
 										,</#if></#list>) {
@@ -773,8 +778,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				null, 
 				null);
 	<#else>
-		throw new UnsupportedOperationException(
-				"Method not implemented yet.");
+		throw new NotImplementedException(
+				"An entity with no ID can't implement this method.");
 	</#if>
 	}
 	
@@ -787,8 +792,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public Cursor query(final int id) {
 		<#if curr.ids?size==0>
-			throw new UnsupportedOperationException(
-					"Method not implemented yet.");
+			throw new NotImplementedException(
+				"An entity with no ID can't implement this method.");
 		<#else>
 		return this.query(
 				COLS,
@@ -807,8 +812,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public int delete(final int id) {
 		<#if curr.ids?size==0>
-			throw new UnsupportedOperationException(
-					"Method not implemented yet.");
+			throw new NotImplementedException(
+				"An entity with no ID can't implement this method.");
 		<#else>
 		return this.delete(
 				COL_ID + " = ?",

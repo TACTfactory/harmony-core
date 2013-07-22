@@ -181,6 +181,16 @@ public class ProjectGenerator extends BaseGenerator {
 			+ "HarmonyListFragment.java",
 			false);
 		
+		// create NotImplementedException
+		super.makeSource(
+			this.getAdapter().getTemplateSourcePath() 
+			+ "harmony/exception/NotImplementedException.java",
+			this.getAdapter().getSourcePath()
+			+ this.getAppMetas().getProjectNameSpace() 
+			+ "/harmony/exception/" 
+			+ "NotImplementedException.java",
+			false);
+		
 		try {
 			new MenuGenerator(this.getAdapter()).generateMenu();
 		} catch (Exception e) {

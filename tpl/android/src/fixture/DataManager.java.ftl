@@ -119,7 +119,7 @@ public class DataManager {
     		if (object instanceof ${entity.name}) {
     			((${entity.name}SQLiteAdapter) 
     					this.adapters.get("${entity.name}"))
-    						.remove(((${entity.name}) object).getId());
+    						.remove(<#list entity.ids as id>((${entity.name}) object).get${id.name?cap_first}()<#if id_has_next>, </#if></#list>);
     		}
     		</#if>
     	</#list>
