@@ -1,5 +1,6 @@
 <#assign curr = entities[current_entity] />
 <#import "methods.ftl" as m />
+<#assign fields = m.getAllFields(curr) />
 package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
@@ -20,7 +21,7 @@ import android.widget.TextView;
 
 
 <#assign importDate=false />
-<#list curr.fields?values as field>
+<#list fields?values as field>
 	<#if !field.internal && !field.hidden>
 		<#if (!importDate && field.type?lower_case=="datetime")>
 			<#assign importDate=true />
@@ -111,7 +112,7 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 					false);
 
 			holder = new ViewHolder();
-			<#list curr.fields?values as field>
+			<#list fields?values as field>
 				<#if (!field.internal && !field.hidden)>
 					<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>  
 						<#if (field.type=="boolean")>
@@ -166,7 +167,7 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 
 	/** Holder row. */
 	private static class ViewHolder {
-		<#list curr.fields?values as field>
+		<#list fields?values as field>
 			<#if (!field.hidden && !field.internal)>
 				<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>  
 					<#if (field.type=="boolean")>
@@ -185,7 +186,7 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 		 * @param model ${curr.name} data
 		 */
 		public void populate(final ${curr.name} model) {
-			<#list curr.fields?values as field>
+			<#list fields?values as field>
 				<#if (!field.internal && !field.hidden)>
 					<#if (!field.relation??)>
 						<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>

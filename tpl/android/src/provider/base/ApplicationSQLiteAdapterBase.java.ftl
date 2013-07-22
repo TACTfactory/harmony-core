@@ -120,7 +120,7 @@ public abstract class SQLiteAdapterBase<T> {
 						final String having, 
 						final String orderBy) {
 		return this.mDatabase.query(
-				this.getTableName(),
+				this.getJoinedTableName(),
 				projection,
 				whereClause,
 				whereArgs,
@@ -176,6 +176,13 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @return the table name
 	 */
 	public abstract String getTableName();
+
+	/**
+	 * Get the join table Name for inheritance.
+	 * @return the table name joined with its mothers names
+	 */
+	public abstract String getJoinedTableName();
+
 	/**
 	 * Get the table's columns.
 	 * @return array of cols
@@ -185,7 +192,7 @@ public abstract class SQLiteAdapterBase<T> {
 		
 	/** 
 	 * Read All Comments entities.
-	 * @return List of Comment entities
+	 * @return List of T entities
 	 */
 	public ArrayList<T> getAll() {
 		Cursor cursor = this.getAllCursor();
@@ -224,9 +231,9 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	/** 
-	 * Convert Cursor of database to Array of Comment entity.
+	 * Convert Cursor of database to Array of T entity.
 	 * @param cursor Cursor object
-	 * @return Array of Comment entity
+	 * @return Array of T entity
 	 */
 	public ArrayList<T> cursorToItems(final Cursor cursor) {
 		final ArrayList<T> result = new ArrayList<T>(cursor.getCount());
@@ -249,29 +256,36 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 	
 	/** 
-	 * Convert Cursor of database to Comment entity.
+	 * Convert Cursor of database to a T entity.
 	 * @param cursor Cursor object
-	 * @return Comment entity
+	 * @return T entity
 	 */
 	public abstract T cursorToItem(final Cursor c);
 
 	/** 
-	 * Insert a Comment entity into database.
-	 * @param item The Comment entity to persist 
-	 * @return Id of the Comment entity
+	 * Convert a T item to a ContentValues for the database.
+	 * @param item The item to convert
+	 * @return The ContentValues
+	 */
+	public abstract ContentValues itemToContentValues(final T item);
+
+	/** 
+	 * Insert a T entity into database.
+	 * @param item The T entity to persist 
+	 * @return Id of the T entity
 	 */
 	public abstract long insert(final T item);
 	
 	/** 
-	 * Update a Comment entity into database.
-	 * @param item The Comment entity to persist
+	 * Update a T entity into database.
+	 * @param item The T entity to persist
 	 * @return The count of updated entities  
 	 */
 	public abstract int update(final T item);
 	
 	/** 
-	 * Delete a Comment entity into database.
-	 * @param item The Comment entity to persist
+	 * Delete a T entity into database.
+	 * @param item The T entity to persist
 	 * @return The count of deleted entities
 	 */
 	public abstract int delete(final T item);

@@ -71,6 +71,11 @@ public class ProviderGenerator extends BaseGenerator {
 	 */
 	public final void generateProviderAdapters() {
 		int providerId = 0;
+		this.makeSourceProvider(
+				"utils/base/ApplicationProviderUtilsBase.java",
+				"utils/base/ProviderUtilsBase.java", 
+				true);
+		
 		for (EntityMetadata cm : this.getAppMetas().getEntities().values()) {
 			if (!cm.getFields().isEmpty()) {
 				
