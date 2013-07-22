@@ -129,6 +129,7 @@ public class FieldMetadata extends BaseMetadata {
 		model.put(TagConstant.HIDDEN, 		this.hidden);
 		model.put(TagConstant.UNIQUE, 		this.unique);
 		model.put(TagConstant.ID, 		    this.id);
+		model.put(TagConstant.OWNER,		this.owner.getName());
 
 		
 		model.put(TagConstant.SCHEMA,
