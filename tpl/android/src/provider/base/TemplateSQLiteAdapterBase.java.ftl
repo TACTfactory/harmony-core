@@ -1,5 +1,9 @@
 <#assign curr = entities[current_entity] />
 <#assign sync = curr.options.sync?? />
+<#assign inherited = false />
+<#if (curr.extends?? && entities[curr.extends]??)>
+	<#assign inherited = true />
+</#if>
 <#import "methods.ftl" as m />
 <#function getAllMothers tab entity>
 	<#if entity.mother??>
@@ -146,6 +150,15 @@ public abstract class ${curr.name}SQLiteAdapterBase
 <#if (firstFieldDone)>,</#if>
 		${alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
 	};
+
+	/** Global Fields. */
+	public static final String[] ALIASED_COLS = new String[] {
+<#assign firstFieldDone=false />
+<#list curr.fields?values as field>
+	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
+<#if (firstFieldDone)>,</#if>
+		ALIASED_${alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
+	};
 	
 	/**
 	 * Get the table name used in DB for your ${curr.name} entity.
@@ -153,6 +166,18 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public String getTableName() {
 		return TABLE_NAME;
+	}
+
+	public String getJoinedTableName() {
+		String result = TABLE_NAME;
+		<#if inherited?? && inherited>
+		${curr.extends}SQLiteAdapter motherAdapt = new ${curr.extends}SQLiteAdapter(this.ctx);
+		result += " INNER JOIN ";
+		result += motherAdapt.getJoinedTableName();
+		result += " <#if entities[curr.extends].extends??>AND<#else>ON</#if> ";
+		result += ALIASED_COL_ID + " = " + ${curr.extends}SQLiteAdapter.ALIASED_COL_ID;
+		</#if>
+		return result;
 	}
 	
 	/**
@@ -191,6 +216,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 </#if>
 <#if (curr.ids?size>1)>
 		+ "PRIMARY KEY (" + <#list curr.ids as id>${alias(id.name)}<#if (id_has_next)> + "," + </#if></#list> + ")"
+</#if>
+<#if (inherited)>
+		+ ", FOREIGN KEY (" + COL_ID + ") REFERENCES " + ${curr.extends}SQLiteAdapter.TABLE_NAME + "(" + ${curr.extends}SQLiteAdapter.COL_ID + ") ON DELETE CASCADE"
 </#if>
 		+ ");";
 	}
@@ -234,7 +262,11 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return ContentValues object
 	 */
 	public ContentValues itemToContentValues(final ${curr.name} item) {
-		final ContentValues result = new ContentValues();		
+		final ContentValues result = new ContentValues();
+		<#if (inherited)>
+		${curr.extends?cap_first}SQLiteAdapter motherAdapt = new ${curr.extends?cap_first}SQLiteAdapter(this.ctx);
+		result.putAll(motherAdapt.itemToContentValues(item));	
+		</#if>
 	<#list curr.fields?values as field>
 		<#if (!field.internal)>
 			<#if (!field.relation??)>
@@ -255,18 +287,30 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		
 		return result;
 	}
-	
+
 	/** 
 	 * Convert Cursor of database to ${curr.name} entity.
 	 * @param cursor Cursor object
 	 * @return ${curr.name} entity
 	 */
 	public ${curr.name} cursorToItem(final Cursor cursor) {
-		${curr.name} result = null;
-
+		${curr.name} result = new ${curr.name}();
+		this.cursorToItem(cursor, result);
+		return result;
+	}
+	
+	/** 
+	 * Convert Cursor of database to ${curr.name} entity.
+	 * @param cursor Cursor object
+	 * @param item ${curr.name} entity
+	 */
+	public void cursorToItem(final Cursor cursor, final ${curr.name} result) {
 		if (cursor.getCount() != 0) {
-			result = new ${curr.name}();
-			
+			<#if (inherited)>
+			${curr.extends}SQLiteAdapter motherAdapt = new ${curr.extends}SQLiteAdapter(this.ctx);
+			motherAdapt.cursorToItem(cursor, result);			
+
+			</#if>			
 			int index;
 	<#list curr.fields?values as field>
 		<#if (!field.internal && !(field.relation?? && (field.relation.type=="ManyToMany" || field.relation.type=="OneToMany")))>
@@ -354,8 +398,6 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		</#if>
 	</#list>
 		}
-		
-		return result;
 	}
 	
 	//// CRUD Entity ////
@@ -419,7 +461,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return List of ${curr.name} entities
 	 */
 	 public ArrayList<${curr.name}> getBy${relation.name?cap_first}(final int ${relation.name?lower_case}Id) {
-		final Cursor cursor = this.query(COLS, ${alias(relation.name)} + "=?", 
+		final Cursor cursor = this.query(null, ${alias(relation.name)} + "=?", 
 				new String[]{Integer.toString(${relation.name?lower_case}Id)}, 
 				null,
 				null,
@@ -494,13 +536,20 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	<#list curr.ids as id>
 		values.remove(${alias(id.name)});
 	</#list>
-	
+	<#if !inherited>
 		int newid;
-	
+	<#else>
+		${curr.extends}SQLiteAdapter motherAdapt = new ${curr.extends}SQLiteAdapter(this.ctx);
+		motherAdapt.open(this.mDatabase);
+		final ContentValues currentValues = 
+				this.extractContentValues(values);
+		int newid = (int) motherAdapt.insert(null, values);
+		currentValues.put(COL_ID, newid);
+	</#if>
 		if (values.size() != 0) {
-			newid = (int) this.insert(
+			<#if !inherited>newid = (int) </#if>this.insert(
 					null, 
-					values);
+					<#if inherited>currentValues<#else>values</#if>);
 			
 			item.setId((int) newid); 
 	<#list curr.relations as relation>
@@ -536,6 +585,27 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		return newid;
 	}
 
+	<#if (inherited)>
+	protected ContentValues extractContentValues(ContentValues from) {
+		ContentValues to = new ContentValues();
+		for (String colName : COLS) {
+			if (from.containsKey(colName)) {
+				this.transfer(from, to, colName, false);
+			}
+		}
+		return to;
+	}
+	
+	protected void transfer(ContentValues from, 
+			ContentValues to,
+			String colName,
+			boolean keep) {
+		to.put(colName, from.getAsString(colName));
+		if (!keep) {
+			from.remove(colName);
+		}
+	}
+	</#if>
 
 	/** 
 	 * Either insert or update a ${curr.name} entity into database whether.
@@ -545,6 +615,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return 1 if everything went well, 0 otherwise
 	 */
 	public int insertOrUpdate(final ${curr.name} item) {
+		<#if (curr.ids?? && curr.ids?size > 0)>
 		int result = 0;
 		<#assign id = curr.ids[0] />
 		if (this.getByID(item.get${id.name?cap_first}()) != null) {
@@ -559,6 +630,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		}
 
 		return result;
+		<#else>
+		throw new UnsupportedOperationException("Method not implemented yet.");
+		</#if>
 	}
 	
 	/** 
@@ -582,10 +656,25 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				new String[] {<#list curr.ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, 
 							  </#if></#list>};
 		
+		<#if (inherited)>
+		final ContentValues currentValues = 
+				this.extractContentValues(values);
+		final ${curr.extends?cap_first}SQLiteAdapter motherAdapt = 
+				new ${curr.extends?cap_first}SQLiteAdapter(this.ctx);
+		motherAdapt.open(this.mDatabase);
+		motherAdapt.update(values, whereClause, whereArgs);
+		
+		return this.update(
+				currentValues, 
+				whereClause, 
+				whereArgs);
+		<#else>
 		return this.update(
 				values, 
 				whereClause, 
 				whereArgs);
+		</#if>
+		
 	<#else>
 		throw new UnsupportedOperationException("Method not implemented yet.");
 	</#if>
@@ -761,12 +850,12 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					 + " id : " + </#if></#list>);
 		}
 		
-		final String whereClause = <#list curr.ids as id> ${alias(id.name)} 
+		final String whereClause = <#list curr.ids as id> ALIASED_${alias(id.name)} 
 					 + "=? <#if id_has_next>AND </#if>"</#list>;
 		final String[] whereArgs = new String[] {<#list curr.ids as id>String.valueOf(${id.name}) <#if id_has_next>, 
 					</#if></#list>};
 		
-		return this.query(COLS, 
+		return this.query(null, 
 				whereClause, 
 				whereArgs, 
 				null, 
@@ -791,8 +880,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					"Method not implemented yet.");
 		<#else>
 		return this.query(
-				COLS,
-				COL_ID + " = ?",
+				null,
+				ALIASED_COL_ID + " = ?",
 				new String[]{String.valueOf(id)},
 				null,
 				null,
@@ -811,7 +900,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					"Method not implemented yet.");
 		<#else>
 		return this.delete(
-				COL_ID + " = ?",
+				ALIASED_COL_ID + " = ?",
 				new String[]{String.valueOf(id)});
 		</#if>
 	}
@@ -930,6 +1019,11 @@ public abstract class ${curr.name}SQLiteAdapterBase
 
 	@Override
 	public Void cursorToItem(Cursor c) {
+		return null;
+	}
+
+	@Override
+	public ContentValues itemToContentValues(Void item) {
 		return null;
 	}
 

@@ -139,3 +139,11 @@
 	
 	<#return result>
 </#function>
+
+<#function getAllFields class>
+	<#assign fields = class.fields />
+	<#if class.extends?? && entities[class.extends]??>
+		<#assign fields = fields + getAllFields(entities[class.extends]) />
+	</#if>
+	<#return fields />
+</#function>

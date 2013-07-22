@@ -1,5 +1,6 @@
 <#assign curr = entities[current_entity] />
 <#import "methods.ftl" as m />
+<#assign fields = m.getAllFields(curr) />
 package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
@@ -26,7 +27,7 @@ import android.widget.TextView;
 
 
 <#assign importDate=false />
-<#list curr.fields?values as field>
+<#list fields?values as field>
 	<#if !field.hidden>
 		<#if (!importDate && field.type?lower_case=="datetime")>
 			<#assign importDate=true />
@@ -57,7 +58,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 	protected ${curr.name} model;
 	
 	/* curr.fields View */
-<#list curr.fields?values as field>
+<#list fields?values as field>
 	<#if (!field.internal && !field.hidden)>
 	/** ${field.name} View. */
 		<#if (field.type=="boolean")>
@@ -73,7 +74,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
      * @param view The layout inflating
      */
     protected void initializeComponent(final View view) {
-	<#list curr.fields?values as field>
+	<#list fields?values as field>
 		<#if (!field.internal && !field.hidden)>
 			<#if (field.type=="boolean")>
 		this.${field.name}View = 
@@ -91,7 +92,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
     
     /** Load data from model to fields view. */
     public void loadData() {
-    <#list curr.fields?values as field>
+    <#list fields?values as field>
 		<#if (!field.internal && !field.hidden)>
 			<#if (!field.relation??)>
 		    	<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
@@ -203,7 +204,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 			
-			this.entity = ${curr.name?cap_first}ProviderUtils.query(
+			this.entity = new ${curr.name?cap_first}ProviderUtils().query(
 				this.ctx, 
 				this.entity.getId());
 			

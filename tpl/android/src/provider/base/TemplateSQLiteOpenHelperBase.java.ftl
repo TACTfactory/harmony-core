@@ -71,6 +71,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.test.IsolatedContext;
 import android.util.Log;
 
 <#if options.fixture?? && options.fixture.enabled>
@@ -85,7 +86,7 @@ import ${fixture_namespace}.*;
  * @see android.database.sqlite.SQLiteOpenHelper
  */
 public class ${project_name?cap_first}SQLiteOpenHelperBase 
-										extends SQLiteOpenHelper {
+						extends SQLiteOpenHelper {
 	/** TAG for debug purpose. */
 	protected static final String TAG = "DatabaseHelper";
 	/** Context. */
@@ -99,6 +100,8 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	private static String DB_NAME;
 	/** is assets exist.*/
 	private static boolean assetsExist;
+	/** Are we in a JUnit context ?*/
+	public static boolean isJUnit = false;
 	
 	/**
 	 * Constructor.
@@ -122,7 +125,17 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		}
 	}
 
-	/*
+	/* (non-Javadoc)
+	 * @see android.database.sqlite.SQLiteOpenHelper#onOpen(android.database.sqlite.SQLiteDatabase)
+	 */
+	@Override
+	public void onOpen(SQLiteDatabase db) {
+		super.onOpen(db);
+		// Activation of SQLiteConstraints
+		//db.execSQL("PRAGMA foreign_keys = ON;");
+	}
+
+	/**
 	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate <br />
 	 * (android.database.sqlite.SQLiteDatabase)
 	 */
@@ -149,7 +162,9 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	</#list>
 			db.execSQL("PRAGMA foreign_keys = ON;");
 	<#if options.fixture?? && options.fixture.enabled>
-			this.loadData(db);
+			if (!${project_name?cap_first}SQLiteOpenHelper.isJUnit) {
+				this.loadData(db);
+			}
 	</#if>
 		}
 		
@@ -203,7 +218,6 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		if (${project_name?cap_first}Application.DEBUG) {
 			mode = DataLoader.MODE_APP | DataLoader.MODE_DEBUG;
 		}
-
 		dataLoader.loadData(db, mode);
 	}
 	</#if>
