@@ -398,6 +398,7 @@ public class ProjectGenerator extends BaseGenerator {
 		
 		// copy utils
 		this.updateUtil("DateUtils.java");
+		this.updateUtil("DatabaseUtil.java");
 
 		// Update newly created files with datamodel
 		final File dirTpl = 

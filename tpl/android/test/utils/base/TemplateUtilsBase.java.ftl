@@ -27,12 +27,19 @@
 	<#return false />
 </#function>
 <#assign curr = entities[current_entity] />
+<#assign inherited = false />
+<#if (curr.extends?? && entities[curr.extends]??)>
+	<#assign inherited = true />
+</#if>
 package ${curr.test_namespace}.utils.base;
 
 import android.content.Context;
 import junit.framework.Assert;
 import ${curr.namespace}.entity.${curr.name};
 import ${curr.test_namespace}.utils.*;
+
+<#if (inherited)>import ${entity_namespace}.${curr.extends};</#if>
+
 <#assign importList = [] />
 <#list curr.relations as relation>
 	<#if !relation.internal>
@@ -63,6 +70,12 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 	 */
 	public static ${curr.name?cap_first} generateRandom(Context ctx){
 		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
+		<#if (inherited)>
+		${curr.extends?cap_first} ${curr.extends?uncap_first} = ${curr.extends?cap_first}Utils.generateRandom(ctx);
+			<#list entities[curr.extends].fields?values as field>
+		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.extends?uncap_first}.<#if field.type?lower_case == "boolean">is<#else>get</#if>${field.name?cap_first}());
+			</#list>
+		</#if>
 		
 		<#list curr.fields?values as field>
 			<#if !field.internal>
