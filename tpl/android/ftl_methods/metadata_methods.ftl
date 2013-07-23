@@ -64,8 +64,8 @@
 </#function>
 
 <#function hasRelations entity>
-	<#return entity.relations?? />
-</#function>
+	<#return (entity.relations?? && entity.relations?size > 0) />
+</#function> 
 
 <#function hasToManyRelations entity>
 	<#list entity.relations as field>

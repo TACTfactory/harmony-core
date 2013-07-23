@@ -126,3 +126,18 @@
 	</#list>
 	<#return false />
 </#function>
+
+<#function shouldImportEditText fieldsArray>
+	<#list fieldsArray as field>
+		<#if !field.internal && !field.hidden 
+			&& (field.type?lower_case == "string"
+				|| field.type?lower_case == "int"
+				|| field.type?lower_case == "double"
+				|| field.type?lower_case == "float"
+				|| field.type?lower_case == "long"
+				|| field.type?lower_case == "int")>
+			<#return true />
+		</#if>
+	</#list>
+	<#return false />
+</#function>

@@ -4,14 +4,15 @@
 <#assign hasDate = MetadataUtils.hasDate(curr) />
 <#assign hasTime = MetadataUtils.hasTime(curr) />
 <#assign hasDateTime = MetadataUtils.hasDateTime(curr) />
-<#assign mustImportArrayList=MetadataUtils.hasToManyRelations(curr) />
-<#assign mustImportList=MetadataUtils.hasRelations(curr) />
+<#assign hasToManyRelation=MetadataUtils.hasToManyRelations(curr) />
+<#assign hasRelation=MetadataUtils.hasRelations(curr) />
 <@header?interpret />
 package ${curr.controller_namespace};
 
-<#if (mustImportArrayList)>
+<#if (hasRelation)>
+	<#if (hasToManyRelation)>
 import java.util.ArrayList;
-</#if><#if (mustImportList)>
+	</#if>
 import java.util.List;
 </#if><#if (hasDate || hasTime || hasDateTime)>
 import org.joda.time.DateTime;
@@ -25,13 +26,13 @@ import android.os.AsyncTask;
 import android.os.Bundle;<#if (hasDate || hasTime || hasDateTime)>
 import android.text.TextUtils;</#if>
 import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Button;<#if ViewUtils.hasTypeBoolean(fields?values)>
+import android.view.View;<#if (hasDate || hasTime || hasDateTime || hasRelation)>
+import android.view.View.OnClickListener;</#if>
+import android.view.ViewGroup;<#if (hasRelation)>
+import android.widget.Button;</#if><#if (ViewUtils.hasTypeBoolean(fields?values))>
 import android.widget.CheckBox;</#if><#if (hasDate || hasDateTime)>
-import android.widget.DatePicker;</#if>
-import android.widget.EditText;<#if (hasTime || hasDateTime)>
+import android.widget.DatePicker;</#if><#if ViewUtils.shouldImportEditText(fields?values)>
+import android.widget.EditText;</#if><#if (hasTime || hasDateTime)>
 import android.widget.TimePicker;</#if>
 
 import ${curr.namespace}.R;
