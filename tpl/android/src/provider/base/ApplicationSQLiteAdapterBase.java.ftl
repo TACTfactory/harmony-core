@@ -1,9 +1,7 @@
 <@header?interpret />
 package ${data_namespace}.base;
 
-import ${project_namespace}.R;
-
-import ${data_namespace}.*;
+import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
 import ${project_namespace}.${project_name?cap_first}Application;
 
 import android.content.ContentValues;
@@ -14,7 +12,6 @@ import android.util.Log;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
 
 import ${project_namespace}.criterias.base.CriteriasBase;
 

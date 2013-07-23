@@ -1,58 +1,16 @@
+<#assign utilityPath = "/tpl/android/ftl_methods/" />
+<#import utilityPath + "methods.ftl" as m />
+<#import utilityPath + "general_methods.ftl" as Utils />
+<#import utilityPath + "naming_methods.ftl" as NamingUtils />
+<#import utilityPath + "metadata_methods.ftl" as MetadataUtils />
+<#import utilityPath + "inheritance_methods.ftl" as InheritanceUtils />
+<#import utilityPath + "import_methods.ftl" as ImportUtils />
 <#assign curr = entities[current_entity] />
 <#assign sync = curr.options.sync?? />
 <#assign inherited = false />
 <#if (curr.extends?? && entities[curr.extends]??)>
 	<#assign inherited = true />
 </#if>
-<#import "methods.ftl" as m />
-<#function getAllMothers tab entity>
-	<#if entity.mother??>
-		<#return (getAllMothers(tab, entities[entity.mother]) + [entity]) />
-	<#else>
-		<#return ([entity]) />		
-	</#if>
-</#function>
-<#function getCompleteNamespace entity>
-	<#assign result = "" />
-	<#assign motherClasses = getAllMothers([], entity) />
-	<#assign cond = true />
-	<#list motherClasses as motherClass>
-		<#assign result = result + motherClass.name />
-		<#if motherClass_has_next>
-			<#assign result = result + "." />
-		</#if>
-	</#list>
-	
-	<#return result>
-</#function>
-<#function alias name>
-	<#return "COL_" +name?upper_case />
-</#function>
-<#function hasRelationOrIds>
-	<#if (curr.ids?size>1)><#return true /></#if>
-	<#list curr.relations as relation>
-		<#if (relation.relation.type!="OneToMany" && relation.relation.type!="ManyToMany")>
-			<#return true />
-		</#if>
-	</#list>
-	<#return false />
-</#function>
-<#function isInArray array var>
-	<#list array as item>
-		<#if (item==var)>
-			<#return true />
-		</#if>
-	</#list>
-	<#return false />
-</#function>
-<#function getMappedField field>
-	<#assign ref_entity = entities[field.relation.targetEntity] />
-	<#list ref_entity.fields?values as ref_field>
-		<#if ref_field.name == field.relation.mappedBy>
-			<#return ref_field />
-		</#if>
-	</#list>
-</#function>
 <#assign hasDateTime=false />
 <#assign hasTime=false />
 <#assign hasDate=false />
@@ -70,9 +28,9 @@
 <@header?interpret />
 package ${data_namespace}.base;
 
-import ${data_namespace}.*;
+
 import java.util.ArrayList;
-import java.util.List;
+
 
 import android.content.ContentValues;
 import android.content.Context;
@@ -83,21 +41,9 @@ import ${project_namespace}.${project_name?cap_first}Application;
 <#if (curr.internal=="false")>
 import ${curr.namespace}.entity.${curr.name};
 </#if>
-<#assign import_array = [curr.name] />
-<#list curr.relations as relation>
-	<#if !relation.internal>
-		<#if (!isInArray(import_array, relation.relation.targetEntity))>
-			<#assign import_array = import_array + [relation.relation.targetEntity] />
-import ${curr.namespace}.entity.${relation.relation.targetEntity};
-		</#if>
-	</#if>
-</#list>
-<#list curr.fields?values as field>
-	<#if field.harmony_type?lower_case == "enum">
-		<#assign enumClass = enums[field.type] />
-import ${entity_namespace}.${getCompleteNamespace(enumClass)};
-	</#if>
-</#list>
+${ImportUtils.importRelatedSQLiteAdapters(curr)}
+${ImportUtils.importRelatedEntities(curr)}
+${ImportUtils.importRelatedEnums(curr)}
 <#if hasDate || hasTime || hasDateTime>
 import ${curr.namespace}.harmony.util.DateUtils;
 import org.joda.time.DateTime;
@@ -134,11 +80,11 @@ public abstract class ${curr.name}SQLiteAdapterBase
 <#list curr.fields?values as field>
 	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 	/** ${field.columnName}. */
-	public static final String ${alias(field.name)} = 
+	public static final String ${NamingUtils.alias(field.name)} = 
 			"${field.columnName}";
 	/** Alias. */
-	public static final String ALIASED_${alias(field.name)} = 
-			TABLE_NAME + "." + ${alias(field.name)};
+	public static final String ALIASED_${NamingUtils.alias(field.name)} = 
+			TABLE_NAME + "." + ${NamingUtils.alias(field.name)};
 	</#if>
 </#list>
 	
@@ -148,7 +94,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 <#list curr.fields?values as field>
 	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 <#if (firstFieldDone)>,</#if>
-		${alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
+		${NamingUtils.alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
 	};
 
 	/** Global Fields. */
@@ -157,7 +103,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 <#list curr.fields?values as field>
 	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 <#if (firstFieldDone)>,</#if>
-		ALIASED_${alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
+		ALIASED_${NamingUtils.alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
 	};
 	
 	/**
@@ -198,24 +144,24 @@ public abstract class ${curr.name}SQLiteAdapterBase
 <#list curr.fields?values as field>
 	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 		<#if (lastLine??)>${lastLine},"</#if>
-		<#assign lastLine=" + " + alias(field.name) + "	+ \"" + field.schema />
+		<#assign lastLine=" + " + NamingUtils.alias(field.name) + "	+ \"" + field.schema />
 	</#if>
 </#list>
-		${lastLine}<#if hasRelationOrIds()>,</#if>"
+		${lastLine}<#if MetadataUtils.hasRelationOrIds(curr)>,</#if>"
 <#if (curr.relations??)>
 	<#list curr.relations as relation>
 		<#if (relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne")>
 			<#if (lastRelation??)>${lastRelation},"</#if>
-			<#assign lastRelation=" + \"FOREIGN KEY(\" + " + alias(relation.name) 
+			<#assign lastRelation=" + \"FOREIGN KEY(\" + " + NamingUtils.alias(relation.name) 
 			+ " + \") REFERENCES \" + " + relation.relation.targetEntity 
 			+ "SQLiteAdapter.TABLE_NAME + \" (\" + " + relation.relation.targetEntity 
-			+ "SQLiteAdapter." + alias(relation.relation.field_ref[0]) + " + \")">
+			+ "SQLiteAdapter." + NamingUtils.alias(relation.relation.field_ref[0]) + " + \")">
 		</#if>
 	</#list>
 		<#if (lastRelation??)>${lastRelation}<#if (curr.ids?size>1)>,</#if>"</#if>
 </#if>
 <#if (curr.ids?size>1)>
-		+ "PRIMARY KEY (" + <#list curr.ids as id>${alias(id.name)}<#if (id_has_next)> + "," + </#if></#list> + ")"
+		+ "PRIMARY KEY (" + <#list curr.ids as id>${NamingUtils.alias(id.name)}<#if (id_has_next)> + "," + </#if></#list> + ")"
 </#if>
 <#if (inherited)>
 		+ ", FOREIGN KEY (" + COL_ID + ") REFERENCES " + ${curr.extends}SQLiteAdapter.TABLE_NAME + "(" + ${curr.extends}SQLiteAdapter.COL_ID + ") ON DELETE CASCADE"
@@ -246,7 +192,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		final ContentValues result = this.itemToContentValues(item);		
 	<#list curr.fields?values as field>
 		<#if (field.internal)>
-		result.put(${alias(field.name)},
+		result.put(${NamingUtils.alias(field.name)},
 				String.valueOf(${field.relation.targetEntity?lower_case}_id));
 		</#if>
 	</#list>
@@ -270,12 +216,12 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	<#list curr.fields?values as field>
 		<#if (!field.internal)>
 			<#if (!field.relation??)>
-		result.put(${alias(field.name)}, 			
+		result.put(${NamingUtils.alias(field.name)}, 			
 				${m.typeToParser("item", field)});				
 			<#else>
 				<#if (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 		if (item.get${field.name?cap_first}() != null) {
-			result.put(${alias(field.name)},
+			result.put(${NamingUtils.alias(field.name)},
 					String.valueOf(item.get${field.name?cap_first}().getId()));
 		}
 		
@@ -315,7 +261,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	<#list curr.fields?values as field>
 		<#if (!field.internal && !(field.relation?? && (field.relation.type=="ManyToMany" || field.relation.type=="OneToMany")))>
 			<#assign t="" />
-			index = cursor.getColumnIndexOrThrow(${alias(field.name)});
+			index = cursor.getColumnIndexOrThrow(${NamingUtils.alias(field.name)});
 			<#if (field.nullable?? && field.nullable)>
 			if (!cursor.isNull(index)) {<#assign t="\t" />
 			</#if>
@@ -461,7 +407,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return List of ${curr.name} entities
 	 */
 	 public ArrayList<${curr.name}> getBy${relation.name?cap_first}(final int ${relation.name?lower_case}Id) {
-		final Cursor cursor = this.query(null, ${alias(relation.name)} + "=?", 
+		final Cursor cursor = this.query(null, ${NamingUtils.alias(relation.name)} + "=?", 
 				new String[]{Integer.toString(${relation.name?lower_case}Id)}, 
 				null,
 				null,
@@ -479,7 +425,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return List of ${curr.name} entities
 	 */
 	public ArrayList<${curr.name}> getBy${relation.name?cap_first}(int ${relation.name?lower_case}Id) {
-		final Cursor cursor = this.getCursor(${alias(relation.name)} + "=?", 
+		final Cursor cursor = this.getCursor(${NamingUtils.alias(relation.name)} + "=?", 
 				new String[]{Integer.toString(${relation.name?lower_case}Id)});
 		final ArrayList<${curr.name}> result = this.cursorToItems(cursor);
 		cursor.close();
@@ -534,7 +480,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		final ContentValues values = 
 				this.itemToContentValues(item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 	<#list curr.ids as id>
-		values.remove(${alias(id.name)});
+		values.remove(${NamingUtils.alias(id.name)});
 	</#list>
 	<#if !inherited>
 		int newid;
@@ -568,7 +514,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			${relation.name?uncap_first}Adapter.open(this.mDatabase);
 			if (item.get${relation.name?cap_first}() != null) {
 				for (${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()) {
-				<#if (relation.relation.mappedBy?? && !getMappedField(relation).internal)>
+				<#if (relation.relation.mappedBy?? && !MetadataUtils.getMappedField(relation).internal)>
 					${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
 					${relation.name?uncap_first}Adapter.insertOrUpdate(${relation.relation.targetEntity?lower_case});
 				<#else>
@@ -650,7 +596,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		final ContentValues values = 
 				this.itemToContentValues(item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);	
 		final String whereClause = 
-				<#list curr.ids as id> ${alias(id.name)} 
+				<#list curr.ids as id> ${NamingUtils.alias(id.name)} 
 				 + "=? <#if id_has_next>AND </#if>"</#list>;
 		final String[] whereArgs = 
 				new String[] {<#list curr.ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, 
@@ -700,7 +646,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				this.itemToContentValues(item<#list curr.relations as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>, 
 							${relation.relation.targetEntity?lower_case}_id<#else>, 0</#if></#if></#list>);	
 		String whereClause = 
-				<#list curr.ids as id> ${alias(id.name)} 
+				<#list curr.ids as id> ${NamingUtils.alias(id.name)} 
 				 + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs = 
 				new String[] {<#list curr.ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>,
@@ -760,7 +706,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				${relation.relation.targetEntity?lower_case}_id<#else>, 
 				0</#if></#if></#list>);
 	<#list curr.ids as id>
-		values.remove(${alias(id.name)});
+		values.remove(${NamingUtils.alias(id.name)});
 	</#list>
 		int newid = (int)this.insert(
 			null, 
@@ -814,7 +760,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					+ " id : " + </#if></#list>);
 		}
 		
-		final String whereClause = <#list curr.ids as id> ${alias(id.name)} 
+		final String whereClause = <#list curr.ids as id> ${NamingUtils.alias(id.name)} 
 					 + "=? <#if (id_has_next)>AND </#if>"</#list>;
 		final String[] whereArgs = new String[] {<#list curr.ids as id>String.valueOf(${id.name}) <#if (id_has_next)>,
 					</#if></#list>};
@@ -850,7 +796,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					 + " id : " + </#if></#list>);
 		}
 		
-		final String whereClause = <#list curr.ids as id> ALIASED_${alias(id.name)} 
+		final String whereClause = <#list curr.ids as id> ALIASED_${NamingUtils.alias(id.name)} 
 					 + "=? <#if id_has_next>AND </#if>"</#list>;
 		final String[] whereArgs = new String[] {<#list curr.ids as id>String.valueOf(${id.name}) <#if id_has_next>, 
 					</#if></#list>};
@@ -934,9 +880,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		}
 		
 		ContentValues values = new ContentValues();
-		values.put(${alias(curr.relations[0].name)}, 
+		values.put(${NamingUtils.alias(curr.relations[0].name)}, 
 				${curr.relations[0].name?lower_case});
-		values.put(${alias(curr.relations[1].name)}, 
+		values.put(${NamingUtils.alias(curr.relations[1].name)}, 
 				${curr.relations[1].name?lower_case});
 		
 		return this.mDatabase.insert(
@@ -952,7 +898,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	*/
 	public ArrayList<${curr.relations[0].relation.targetEntity}> getBy${curr.relations[1].relation.targetEntity?cap_first}(
 			final int ${curr.relations[1].name?lower_case}) {
-		Cursor cursor = this.getCursor(${alias(curr.relations[1].name)} 
+		Cursor cursor = this.getCursor(${NamingUtils.alias(curr.relations[1].name)} 
 					+ "=?", new String[]{${curr.relations[1].name?lower_case}+ ""});
 		final ArrayList<${curr.name}> result = this.cursorToItems(cursor);
 		cursor.close();
@@ -966,7 +912,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */ 
 	public ArrayList<${curr.relations[0].relation.targetEntity}> getBy${curr.relations[1].relation.targetEntity}(
 			final int ${curr.relations[1].name}) {
-		String whereClause = ${alias(curr.relations[1].name)} + "=?";
+		String whereClause = ${NamingUtils.alias(curr.relations[1].name)} + "=?";
 		String whereArg = String.valueOf(${curr.relations[1].name});
 		Cursor cursor = this.query(this.getCols(), 
 				whereClause, 
@@ -983,7 +929,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		while (cursor.moveToNext()) {
 			ret.add(adapt.getByID(cursor.getInt(
 					cursor.getColumnIndexOrThrow(
-							${alias(curr.relations[0].name)}))));
+							${NamingUtils.alias(curr.relations[0].name)}))));
 		}
 		return ret;
 	}
@@ -995,7 +941,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */ 
 	public ArrayList<${curr.relations[1].relation.targetEntity}> getBy${curr.relations[0].relation.targetEntity}(
 			final int ${curr.relations[0].name}) {
-		String whereClause = ${alias(curr.relations[0].name)} + "=?";
+		String whereClause = ${NamingUtils.alias(curr.relations[0].name)} + "=?";
 		String whereArg = String.valueOf(${curr.relations[0].name});
 		Cursor cursor = this.query(this.getCols(), 
 				whereClause, 
@@ -1011,7 +957,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 
 		while (cursor.moveToNext()) {
 			ret.add(adapt.getByID(cursor.getInt(
-					cursor.getColumnIndexOrThrow(${alias(
+					cursor.getColumnIndexOrThrow(${NamingUtils.alias(
 							curr.relations[1].name)}))));
 		}
 		return ret;

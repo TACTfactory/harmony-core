@@ -71,7 +71,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.test.IsolatedContext;
 import android.util.Log;
 
 <#if options.fixture?? && options.fixture.enabled>
