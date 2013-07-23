@@ -12,11 +12,8 @@ import ${project_namespace}.menu.${project_name?cap_first}Menu;
  *
  */
 public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
+	protected static final int SUPPORT_V4_RESULT_HACK = 0xFFFF;
 
-	/**
-	 * @see com.actionbarsherlock.app.SherlockFragmentActivity
-	 * #onPrepareOptionsMenu(com.actionbarsherlock.view.Menu)
-	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean result = true;
@@ -30,17 +27,13 @@ public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
 			result = false;
 		}
 		
-		if(result) {
+		if (result) {
 			result = super.onPrepareOptionsMenu(menu);
 		}
 		
 		return result;
 	}
 
-	/**
-	 * @see com.actionbarsherlock.app.SherlockFragmentActivity
-	 * #onOptionsItemSelected(com.actionbarsherlock.view.MenuItem)
-	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		boolean result;
@@ -55,10 +48,6 @@ public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
 		return result;
 	}
 
-	/**
-	 * @see android.support.v4.app.FragmentActivity#onActivityResult
-	 * (int, int, android.content.Intent)
-	 */
 	@Override
 	protected void onActivityResult(int requestCode, int resultCode, 
 																  Intent data) {

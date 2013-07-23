@@ -29,7 +29,7 @@ import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
  * @see android.app.Fragment
  */
 public class ${curr.name}ShowFragment extends HarmonyFragment {
-	/* Model data */
+	/** Model data. */
 	protected ${curr.name} model;
 	
 	/* curr.fields View */
@@ -109,11 +109,6 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 	</#list>
     }
     
-    /** Sets up the UI.
-	 * 
-	 * @see android.support.v4.app.Fragment#onCreateView
-	 * (LayoutInflater, ViewGroup, Bundle)
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, 
     						   ViewGroup container, Bundle savedInstanceState) {
@@ -139,9 +134,13 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 	 * It runs asynchronously and shows a progressDialog
 	 */
 	public static class LoadTask extends AsyncTask<Void, Void, Integer> {
+		/** AsyncTask's context. */
 		private final Context ctx;
+		/** Associated fragment. */
 		private final ${curr.name}ShowFragment fragment;
+		/** The entity to load. */
 		private ${curr.name} entity;
+		/** Progress dialog. */
 		private ProgressDialog progress;
 
 		/**
@@ -158,9 +157,6 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 			this.entity = entity;
 		}
 
-		/**
-		 * @see android.os.AsyncTask#onPreExecute()
-		 */
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -172,9 +168,6 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 						R.string.${curr.name?lower_case}_progress_load_message));
 		}
 
-		/**
-		 * @see android.os.AsyncTask#doInBackground(Params[])
-		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
@@ -190,9 +183,6 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 			return result;
 		}
 
-		/**
-		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-		 */
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);

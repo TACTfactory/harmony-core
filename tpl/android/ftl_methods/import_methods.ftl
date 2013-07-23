@@ -19,7 +19,11 @@
 
 <#function importRelatedEntities entity>
 	<#assign result = ""/>
-	<#assign import_array = [entity.name] />
+	<#if entity.internal == "true">
+		<#assign import_array = [] />
+	<#else>
+		<#assign import_array = [entity.name] />
+	</#if>
 	<#list entity.relations as relation>
 		<#if !relation.internal>
 			<#if (!Utils.isInArray(import_array, relation.relation.targetEntity))>

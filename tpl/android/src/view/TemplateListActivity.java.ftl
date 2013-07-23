@@ -13,10 +13,6 @@ import android.os.Bundle;
  */
 public class ${curr.name}ListActivity extends HarmonyFragmentActivity {
 
-	/**
-	* Called when the Activity is created.
-	* @see android.app.Activity#onCreate
-	*/
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -27,10 +23,6 @@ public class ${curr.name}ListActivity extends HarmonyFragmentActivity {
 		//.incrementActivityCount();
 	}
 
-	/**
-	* Called when the Activity is destroyed.
-	* @see android.app.Activity.onDestroy
-	*/
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
@@ -40,15 +32,11 @@ public class ${curr.name}ListActivity extends HarmonyFragmentActivity {
         GoogleAnalyticsSessionManager.getInstance().decrementActivityCount();*/
 	}
 
-	/**
-	* Called when the Activity previously launched exits.
-	* @see android.app.Activity#onActivityResult
-	*/
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, 
 													Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
-		if (requestCode <= 0xFFFF) {
+		if (requestCode <= SUPPORT_V4_RESULT_HACK) {
 			switch(requestCode) {
 				default:
 					break;

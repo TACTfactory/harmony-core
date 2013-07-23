@@ -35,9 +35,6 @@ import android.database.Cursor;
 import android.util.Log;
 
 ${ImportUtils.importRelatedSQLiteAdapters(curr)}
-<#if (curr.internal=="false")>
-import ${curr.namespace}.entity.${curr.name};
-</#if>
 ${ImportUtils.importRelatedEntities(curr)}
 ${ImportUtils.importRelatedEnums(curr)}<#if hasDate || hasTime || hasDateTime>import ${curr.namespace}.harmony.util.DateUtils;</#if>
 import ${project_namespace}.${project_name?cap_first}Application;

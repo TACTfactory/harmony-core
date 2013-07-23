@@ -44,13 +44,10 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				extends ProviderAdapterBase<${ext}> {
 	
 	/** TAG for debug purpose. */
-	protected static String TAG = "${curr.name?cap_first}ProviderAdapter";
+	protected static final String TAG = "${curr.name?cap_first}ProviderAdapter";
 
 	/** ${curr.name?upper_case}_URI. */
 	public	  static Uri ${curr.name?upper_case}_URI;
-
-	/** ${curr.name?cap_first} key. */
-	public static final String ITEM_KEY = "${curr.name?cap_first}";
 
 	/** ${curr.name?uncap_first} type. */
 	protected static final String ${curr.name?uncap_first}Type = 
@@ -353,15 +350,6 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				break;
 		}
 		return result;
-	}
-	
-	/**
-	 * Get the item Key.
-	 * @return the item key
-	 */
-	@Override
-	public String getItemKey() {
-		return ITEM_KEY;
 	}
 
 	<#if inherited>

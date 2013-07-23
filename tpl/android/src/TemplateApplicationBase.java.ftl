@@ -9,8 +9,6 @@ package ${project_namespace};
 
 import java.text.DateFormat;
 
-import ${project_namespace}.R;
-
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;

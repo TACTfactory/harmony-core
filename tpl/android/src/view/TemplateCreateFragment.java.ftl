@@ -48,9 +48,8 @@ import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListene
 ${ImportUtils.importRelatedProviderUtils(curr)}
 import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 
-/** ${curr.name} create fragment.
- * 
- * @see android.app.Fragment
+/** 
+ * ${curr.name} create fragment.
  */
 public class ${curr.name}CreateFragment extends HarmonyFragment 
 			implements OnValidationListener {
@@ -61,26 +60,34 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	<#list fields?values as field>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
-	/** ${field.name} View. */
 				<#if field.type=="boolean">
+	/** ${field.name} View. */
 	protected CheckBox ${field.name}View;
 				<#elseif field.type?lower_case=="datetime">
 					<#if field.harmony_type=="datetime" || field.harmony_type=="date">
+	/** ${field.name} Date View. */
 	protected EditText ${field.name}DateView;
 					</#if>
 					<#if field.harmony_type=="datetime" || field.harmony_type=="time">
+	/** ${field.name} Time View. */
 	protected EditText ${field.name}TimeView;
 					</#if>
 				<#else>
+	/** ${field.name} View. */
 	protected EditText ${field.name}View;			
 				</#if>
 			<#else>
+	/** The ${field.name} button. */
 	protected Button ${field.name}Button;
+	/** The ${field.relation.targetEntity} list. */
 	protected List<${field.relation.targetEntity}> ${field.name}List;
+	/** The ${field.name} dialog. */
 	protected Dialog ${field.name}Dialog;
 				<#if field.relation.type=="OneToMany" || field.relation.type=="ManyToMany">
+	/** The array of selected ${field.relation.targetEntity}s. */
 	protected boolean[] checked${field.name?cap_first};
 				<#else>
+	/** The selected ${field.relation.targetEntity}. */
 	protected int selected${field.name?cap_first};
 				</#if>
 			</#if>
@@ -401,11 +408,6 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		return true;
 	}
 
-	/** Sets up the UI.
-	 * 
-	 * @see android.support.v4.app.Fragment#onCreateView(
-	 * LayoutInflater, ViewGroup, Bundle)
-	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, 
 			ViewGroup container, 
@@ -426,8 +428,11 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	 * It runs asynchronously and shows a progressDialog
 	 */
 	public static class CreateTask extends AsyncTask<Void, Void, Integer> {
+		/** AsyncTask's context. */
 		private final Context ctx;
+		/** Entity to persist. */
 		private final ${curr.name} entity;
+		/** Progress Dialog. */
 		private ProgressDialog progress;
 
 		/**
@@ -443,9 +448,6 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			this.entity = entity;
 		}
 
-		/**
-		 * @see android.os.AsyncTask#onPreExecute()
-		 */
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -457,9 +459,6 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 							R.string.${curr.name?lower_case}_progress_save_message));
 		}
 
-		/**
-		 * @see android.os.AsyncTask#doInBackground(Params[])
-		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
@@ -471,9 +470,6 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			return result;
 		}
 
-		/**
-		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-		 */
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
@@ -503,6 +499,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		}
 	}
 
+	@Override
 	public void onValidationSelected() {
 		if (this.validateData()) {
 			this.saveData();
@@ -510,6 +507,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		}
 	}
 
+	@Override
 	public void onCancelSelected() {
 		this.getActivity().finish();
 	}

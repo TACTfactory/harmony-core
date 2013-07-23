@@ -66,9 +66,6 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 		this.fragment = fragment;
 	}
 
-	/* (non-Javadoc)
-	 * @see android.support.v4.widget.SimpleCursorAdapter#swapCursor(android.database.Cursor)
-	 */
 	@Override
 	public Cursor swapCursor(Cursor newCursor) {
 		if (newCursor == this.mCursor) {
@@ -76,14 +73,23 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
         }
         Cursor oldCursor = this.mCursor;
         if (oldCursor != null) {
-            if (this.mChangeObserver != null) oldCursor.unregisterContentObserver(this.mChangeObserver);
-            if (this.mDataSetObserver != null) oldCursor.unregisterDataSetObserver(this.mDataSetObserver);
+	        if (this.mChangeObserver != null) {
+			oldCursor.unregisterContentObserver(this.mChangeObserver);
+		}		
+		if (this.mDataSetObserver != null) {
+			oldCursor.unregisterDataSetObserver(this.mDataSetObserver);
+		}
         }
         mCursor = newCursor;
         if (newCursor != null) {
-            if (this.mChangeObserver != null) newCursor.registerContentObserver(this.mChangeObserver);
-            if (this.mDataSetObserver != null) newCursor.registerDataSetObserver(this.mDataSetObserver);
-            this.mRowIDColumn = newCursor.getColumnIndexOrThrow(${curr.name?cap_first}SQLiteAdapter.COL_ID);
+			if (this.mChangeObserver != null) {
+				newCursor.registerContentObserver(this.mChangeObserver);
+			}
+            if (this.mDataSetObserver != null) {
+				newCursor.registerDataSetObserver(this.mDataSetObserver);
+			}
+            this.mRowIDColumn = newCursor.getColumnIndexOrThrow(
+					${curr.name?cap_first}SQLiteAdapter.COL_ID);
             this.mDataValid = true;
             // notify the observers about the new cursor
             this.notifyDataSetChanged();
@@ -96,10 +102,6 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
         return oldCursor;
 	}
 	
-	/**
-	 * @see android.widget.ArrayAdapter#getView(int, android.view.View,
-	 *  android.view.ViewGroup)
-	 */
 	@Override 
 	public View getView(int position, 
 			View convertView, ViewGroup parent) {
@@ -170,6 +172,7 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 		<#list fields?values as field>
 			<#if (!field.hidden && !field.internal)>
 				<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>  
+		/** ${field.name?cap_first}'s associated view. */
 					<#if (field.type=="boolean")>
 		protected CheckBox ${field.name}View;
 					<#else>
@@ -178,7 +181,9 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 				</#if>
 			</#if>
 		</#list>
+		/** Edit button. */
 		protected Button editButton;
+		/** Delete button. */
 		protected Button deleteButton;
 
 		/** Populate row with a ${curr.name}.
@@ -204,10 +209,7 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 			</#list>
 		}
 	}
-	/**
-	* Called when the user clicks on an element.
-	* @see android.app.OnClickListener#onClick
-	*/
+
 	@Override 
 	public void onClick(View v) {
 		switch (v.getId()) {

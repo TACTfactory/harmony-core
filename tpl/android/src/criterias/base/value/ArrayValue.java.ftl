@@ -17,7 +17,7 @@ public class ArrayValue extends CriteriaValue {
 	public String toSQLiteString() {
 		String valuesString = "(";
 		String delimiter = "";
-		for(final String value : this.values) {
+		for (final String value : this.values) {
 			valuesString += delimiter + value;
 			delimiter = ", ";
 		}

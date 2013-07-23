@@ -63,7 +63,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import ${data_namespace}.*;
+<#list entities?values as entity>
+	<#if (entity.fields?size > 0)>
+import ${data_namespace}.${entity.name?cap_first}SQLiteAdapter;
+	</#if>
+</#list>
 import ${project_namespace}.${project_name?cap_first}Application;
 
 import android.content.Context;

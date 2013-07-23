@@ -14,13 +14,27 @@ import android.widget.FrameLayout;
 public class ValidationButtons extends FrameLayout {
 
 	public interface OnValidationListener {
+		/**
+		 * Called when user clicked the validate button.
+		 */
 		public void onValidationSelected();
 
+		/**
+		 * Called when user clicked the cancel button.
+		 */
 		public void onCancelSelected();
 	}
 
+	/**
+	 * Listener used to notify the user click.
+	 */
 	private OnValidationListener listener;
 
+	/**
+	 * Constructor.
+	 * @param context The context
+	 * @attrs The attribute set
+	 */
 	public ValidationButtons(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
@@ -32,6 +46,10 @@ public class ValidationButtons extends FrameLayout {
 		this.addView(view);
 	}
 
+	/**
+	 * Initialize this views components.
+	 * @param view The view
+	 */
 	private void initializeComponent(View view) {
 		Button bCancel = (Button) view
 				.findViewById(R.id.validation_cancel);
@@ -54,6 +72,10 @@ public class ValidationButtons extends FrameLayout {
 		});
 	}
 
+	/**
+	 * Attach the given listener to the component.
+	 * @param listener The listener to attach
+	 */
 	public void setListener(OnValidationListener listener) {
 		this.listener = listener;
 	}

@@ -31,17 +31,11 @@ import ${curr.namespace}.entity.${curr.name};
 public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	implements DeletableList {
 
-	/**
-	 * The adapter which handles list population.
-	 */
+	/** The adapter which handles list population. */
 	protected ${curr.name}ListAdapter mAdapter;
 	/** ${curr.name}ListFragment instance. */
 	protected static ${curr.name}ListFragment instance;
 
-	/**
-	 * @see android.support.v4.app.ListFragment#onCreateView(
-	 * adroid.view.LayoutInflater, android.view.ViewGroup, android.os.Bundle)
-	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 												   Bundle savedInstanceState) {
@@ -58,10 +52,6 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		return view;
 	}
 
-	/**
-	 * @see android.support.v4.app.ListFragment#onActivityCreated(android.os.
-	 * Bundle)
-	 */
 	@Override 
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
@@ -87,10 +77,6 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		getLoaderManager().initLoader(0, null, this);
 	}
 
-	/**
-	 * @see android.support.v4.app.ListFragment#onListItemClick(
-	 * android.widget.ListView, android.view.View, int, long)
-	 */
 	@Override 
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		final ${curr.name} item = (${curr.name}) l.getItemAtPosition(position);
@@ -102,10 +88,6 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		this.startActivity(intent);
 	}
 
-	/**
-	 * @see android.support.v4.app.LoaderManager#onCreateLoader(int, 
-	 * android.os.Bundle)
-	 */
 	@Override 
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) { 
 		${curr.name?cap_first}Criterias crit = null;
@@ -124,9 +106,6 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 				null);
 	}
 
-	/**
-	 * @see android.support.v4.app.LoaderManager#onLoadFinished()
-	 */
 	@Override 
 	public void onLoadFinished(Loader<Cursor> loader, 
 											Cursor data) {
@@ -144,9 +123,6 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		}
 	}
 
-	/**
-	 * @see android.support.v4.app.LoaderManager#onLoaderReset()
-	 */
 	@Override 
 	public void onLoaderReset(Loader<Cursor> loader) {
 		// Clear the data in the adapter.
@@ -189,7 +165,9 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	 * It runs asynchronously.
 	 */
 	private class DeleteTask extends AsyncTask<Void, Void, Integer> {
+		/** AsyncTask's context. */
 		private Context ctx;
+		/** Entity to delete. */
 		private ${curr.name?cap_first} item;
 		
 		/**
@@ -204,9 +182,6 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 			this.item = item;
 		}
 
-		/**
-		 * @see android.os.AsyncTask#doInBackground(Params[])
-		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
 			int result = -1;
