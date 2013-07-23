@@ -13,16 +13,17 @@ import android.widget.FrameLayout;
 
 public class ValidationButtons extends FrameLayout {
 
+	/** Validation listener. */
 	public interface OnValidationListener {
 		/**
 		 * Called when user clicked the validate button.
 		 */
-		public void onValidationSelected();
+		void onValidationSelected();
 
 		/**
 		 * Called when user clicked the cancel button.
 		 */
-		public void onCancelSelected();
+		void onCancelSelected();
 	}
 
 	/**
@@ -56,8 +57,9 @@ public class ValidationButtons extends FrameLayout {
 		bCancel.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (ValidationButtons.this.listener != null)
+				if (ValidationButtons.this.listener != null) {
 					listener.onCancelSelected();
+				}
 			}
 		});
 
@@ -66,8 +68,9 @@ public class ValidationButtons extends FrameLayout {
 		bValidate.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				if (ValidationButtons.this.listener != null)
+				if (ValidationButtons.this.listener != null) {
 					listener.onValidationSelected();
+				}
 			}
 		});
 	}

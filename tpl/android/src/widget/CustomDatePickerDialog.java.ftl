@@ -68,7 +68,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 	 * @param maxDate The maximum date of the dialog.
 	 */
 	public CustomDatePickerDialog(Context ctx, DateTime date, String title,
-							   final DateTime minDate, final DateTime maxDate) {
+							  final DateTime minDate, final DateTime maxDate) {
 		super(ctx);
 		
 		this.initializeDatePickerDialog(ctx, date, title, minDate, maxDate);
@@ -82,7 +82,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 	 * @param maxDate The maximum date of the dialog.
 	 */
 	public CustomDatePickerDialog(Context ctx, DateTime date, int titleId, 
-							   final DateTime minDate, final DateTime maxDate) {
+							  final DateTime minDate, final DateTime maxDate) {
 		super(ctx);
 		
 		this.initializeDatePickerDialog(ctx, date, 
@@ -131,8 +131,9 @@ public class CustomDatePickerDialog extends AlertDialog {
 			
 			@Override
 			public void onDateChanged(DatePicker view, int year, 
-											  int monthOfYear, int dayOfMonth) {
-				if (!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)) {
+											 int monthOfYear, int dayOfMonth) {
+				if (!(Build.VERSION.SDK_INT 
+						>= Build.VERSION_CODES.HONEYCOMB)) {
 					DateTime newDate = 
 						    new DateTime(year, 
 						    		monthOfYear + 1, 
@@ -185,7 +186,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setPositiveButton(CharSequence text, 
-									  DialogInterface.OnClickListener listener) {
+									 DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_POSITIVE, text, listener);
 	}
 	
@@ -195,7 +196,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setNegativeButton(CharSequence text, 
-									  DialogInterface.OnClickListener listener) {
+									 DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_NEGATIVE, text, listener);
 	}
 	
@@ -206,7 +207,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setPositiveButton(int textId, 
-									  DialogInterface.OnClickListener listener) {
+									 DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_POSITIVE, this.ctx.getString(textId),
 																	  listener);
 	}
@@ -218,7 +219,7 @@ public class CustomDatePickerDialog extends AlertDialog {
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setNegativeButton(int textId, 
-									  DialogInterface.OnClickListener listener) {
+									 DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_NEGATIVE, this.ctx.getString(textId), 
 																	  listener);
 	}

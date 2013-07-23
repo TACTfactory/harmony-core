@@ -41,7 +41,6 @@ import org.joda.time.DateTime;
 </#if>
 import android.content.Context;
 
-import ${curr.namespace}.entity.${curr.name};
 ${ImportUtils.importRelatedEntities(curr)}${ImportUtils.importRelatedEnums(curr)}
 <#if ((fixtureType=="xml" && (hasDate || hasDateTime)) || hasTime)>import ${project_namespace}.harmony.util.DateUtils;</#if>
 

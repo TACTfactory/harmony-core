@@ -5,7 +5,6 @@
 	<#assign ret=ret+entity.name?uncap_first+"Loader.load(manager);\r\r" />
 	<#return ret />
 </#function>
-
 <#function hasOnlyRecursiveRelations entity>
 	<#list entity.relations as relation>
 		<#if relation.relation.targetEntity!=entity.name> 
@@ -63,6 +62,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+<#if options.fixture?? && options.fixture.enabled>import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;</#if>
 <#list entities?values as entity>
 	<#if (entity.fields?size > 0)>
 import ${data_namespace}.${entity.name?cap_first}SQLiteAdapter;
