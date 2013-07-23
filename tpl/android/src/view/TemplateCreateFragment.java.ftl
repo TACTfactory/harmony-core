@@ -1,95 +1,52 @@
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
-<#import "methods.ftl" as m />
-<#assign fields = m.getAllFields(curr) />
+<#assign fields = ViewUtils.getAllFields(curr) />
+<#assign hasDate = MetadataUtils.hasDate(curr) />
+<#assign hasTime = MetadataUtils.hasTime(curr) />
+<#assign hasDateTime = MetadataUtils.hasDateTime(curr) />
+<#assign mustImportArrayList=MetadataUtils.hasToManyRelations(curr) />
+<#assign mustImportList=MetadataUtils.hasRelations(curr) />
 <@header?interpret />
 package ${curr.controller_namespace};
 
-import ${curr.namespace}.R;
-
-import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
-import ${project_namespace}.harmony.view.HarmonyFragment;
-import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
-
-import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
-
-import android.os.Bundle;
-import android.os.AsyncTask;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.content.DialogInterface;
+<#if (mustImportArrayList)>
+import java.util.ArrayList;
+</#if><#if (mustImportList)>
+import java.util.List;
+</#if><#if (hasDate || hasTime || hasDateTime)>
+import org.joda.time.DateTime;
+</#if>
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.TimePicker;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
+import android.os.Bundle;<#if (hasDate || hasTime || hasDateTime)>
+import android.text.TextUtils;</#if>
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.Button;<#if ViewUtils.hasTypeBoolean(fields?values)>
+import android.widget.CheckBox;</#if><#if (hasDate || hasDateTime)>
+import android.widget.DatePicker;</#if>
+import android.widget.EditText;<#if (hasTime || hasDateTime)>
+import android.widget.TimePicker;</#if>
 
+import ${curr.namespace}.R;
+${ImportUtils.importRelatedEntities(curr)}
+${ImportUtils.importRelatedEnums(curr)}import ${curr.namespace}.entity.${curr.name};<#if (hasDate || hasTime || hasDateTime)>
+import ${curr.namespace}.harmony.util.DateUtils;</#if>
+import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
+import ${project_namespace}.harmony.view.HarmonyFragment;<#if (hasDate || hasDateTime)>
+import ${curr.namespace}.harmony.widget.CustomDatePickerDialog;</#if><#if (hasTime || hasDateTime)>
+import ${curr.namespace}.harmony.widget.CustomTimePickerDialog;</#if>
+import ${project_namespace}.harmony.widget.ValidationButtons;
+import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
+${ImportUtils.importRelatedProviderUtils(curr)}
+import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 
-<#assign importDate=false />
-<#assign importTime=false />
-<#list fields?values as field>
-	<#if !field.internal && !field.hidden>
-		<#if field.type?lower_case=="datetime">
-			<#if ((field.harmony_type=="date" || field.harmony_type=="datetime") && !importDate)>
-				<#assign importDate=true />
-			</#if>
-			<#if ((field.harmony_type=="time" || field.harmony_type=="datetime") && !importTime)>
-				<#assign importTime=true />
-			</#if>
-		</#if>
-	</#if>
-</#list>
-<#if (importDate || importTime)>
-import org.joda.time.DateTime;
-
-	<#if (importDate)>
-import ${curr.namespace}.harmony.widget.CustomDatePickerDialog;
-	</#if>
-	<#if (importTime)>
-import ${curr.namespace}.harmony.widget.CustomTimePickerDialog;
-	</#if>
-	
-import ${curr.namespace}.harmony.util.DateUtils;
-</#if>
-import ${curr.namespace}.harmony.widget.ValidationButtons;
-import ${curr.namespace}.entity.${curr.name};
-<#assign mustImportArrayList=false />
-<#assign mustImportList=false />
-<#assign import_array = [] />
-<#list curr.relations as relation>
-	<#if (!relation.internal && !relation.hidden)>
-		<#assign mustImportList=true />
-		<#if (!m.isInArray(import_array, relation.relation.targetEntity))>
-			<#assign import_array = import_array + [relation.relation.targetEntity] />
-import ${curr.namespace}.entity.${relation.relation.targetEntity};
-import ${project_namespace}.provider.utils.${relation.relation.targetEntity?cap_first}ProviderUtils;
-			<#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
-				<#assign mustImportArrayList=true />
-			</#if>
-		</#if>
-	</#if>
-</#list>
-<#list fields?values as field>
-	<#if field.harmony_type?lower_case == "enum">
-		<#assign enumClass = enums[field.type] />
-import ${entity_namespace}.${m.getCompleteNamespace(enumClass)};
-	</#if>
-</#list>
-
-
-<#if (mustImportArrayList)>
-import java.util.ArrayList;
-</#if>
-<#if (mustImportList)>
-import java.util.List;
-</#if>
 /** ${curr.name} create fragment.
  * 
  * @see android.app.Fragment
@@ -374,11 +331,11 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 							this.model.get${field.name?cap_first}()));
 						</#if>
 					<#else>
-			${m.setLoader(field)}			
+			${ViewUtils.setLoader(field)}			
 					</#if>
 		}
 				<#else>
-		${m.setLoader(field)}
+		${ViewUtils.setLoader(field)}
 				</#if>
 			<#else>
 		
@@ -406,10 +363,10 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 					<#else>
 		if (!TextUtils.isEmpty(this.${field.name}View.getEditableText())) {
 					</#if>
-			${m.setSaver(field)}
+			${ViewUtils.setSaver(field)}
 		}
 				<#else>
-		${m.setSaver(field)}
+		${ViewUtils.setSaver(field)}
 				</#if>
 			<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 		final ${field.relation.targetEntity} tmp${field.name?cap_first} = 

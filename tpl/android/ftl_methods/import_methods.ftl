@@ -45,3 +45,15 @@
 	</#list>
 	<#return result />
 </#function>
+
+<#function importRelatedProviderUtils entity>
+	<#assign result = ""/>
+	<#assign import_array = [entity.name] />
+	<#list entity.relations as field>
+		<#if (!Utils.isInArray(import_array, field.type)) >
+			<#assign import_array = import_array + [field.type] />
+			<#assign result = result + "import ${project_namespace}.provider.utils.${field.relation.targetEntity?cap_first}ProviderUtils;\n" />
+		</#if>
+	</#list>
+	<#return result />
+</#function>

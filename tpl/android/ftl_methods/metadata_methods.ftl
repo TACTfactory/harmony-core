@@ -62,3 +62,16 @@
 	</#list>
 	<#return false />
 </#function>
+
+<#function hasRelations entity>
+	<#return entity.relations?? />
+</#function>
+
+<#function hasToManyRelations entity>
+	<#list entity.relations as field>
+		<#if (field.relation.type == "ManyToMany" || field.relation.type == "OneToMany")>
+			<#return true />
+		</#if>
+	</#list>
+	<#return false />
+</#function>

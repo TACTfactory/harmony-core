@@ -4,3 +4,4 @@
 <#import utilityPath + "metadata_methods.ftl" as MetadataUtils />
 <#import utilityPath + "inheritance_methods.ftl" as InheritanceUtils />
 <#import utilityPath + "import_methods.ftl" as ImportUtils />
+<#import utilityPath + "view_methods.ftl" as ViewUtils />
