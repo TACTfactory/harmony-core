@@ -17,3 +17,6 @@
 		<#return ([entity]) />		
 	</#if>
 </#function>
+<#function isExtended entity>
+
+</#function>

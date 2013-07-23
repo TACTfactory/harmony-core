@@ -1,9 +1,6 @@
+<#include utilityPath + "all_imports.ftl" />
 <@header?interpret />
 package ${local_namespace}.base;
-
-import ${local_namespace}.*;
-import ${project_namespace}.R;
-import ${project_namespace}.${project_name?cap_first}Application;
 
 import android.content.ContentProvider;
 import android.content.ContentValues;
@@ -12,8 +9,15 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.os.Bundle;
 import android.util.Log;
+
+import ${project_namespace}.R;
+<#list entities?values as entity>
+	<#if (entity.fields?size > 0)>
+import ${local_namespace}.${entity.name?cap_first}ProviderAdapter;
+	</#if>
+</#list>
+
 /**
  * ${project_name?cap_first}ProviderBase.
  */

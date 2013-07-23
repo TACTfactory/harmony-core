@@ -1,21 +1,31 @@
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
-<#assign internal = false />
+<#assign internal = (curr.internal?? && curr.internal == "true") />
 <#assign inherited = false />
+<#assign ext = curr.name?cap_first />
+<#if (internal)>
+	<#assign ext = "Void" />
+</#if>
 <#if (curr.extends?? && entities[curr.extends]??)>
 	<#assign extends = curr.extends />
 	<#assign inherited = true />
 </#if>
-<#if (curr.internal?? && curr.internal == "true")><#assign internal = true /></#if>
 <@header?interpret />
 package ${local_namespace}.base;
 
-import ${local_namespace}.${project_name?cap_first}Provider;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 
+import ${data_namespace}.${curr.name}SQLiteAdapter;
 <#if (!internal)>
 import ${entity_namespace}.${curr.name};
-</#if>import ${data_namespace}.${curr.name}SQLiteAdapter;
-
+</#if>import ${local_namespace}.${project_name?cap_first}Provider;
 <#if (inherited)>
+
 import ${local_namespace}.${extends?cap_first}ProviderAdapter;
 import ${data_namespace}.${extends?cap_first}SQLiteAdapter;
 
@@ -25,17 +35,6 @@ import ${project_namespace}.criterias.base.Criteria.Type;
 import ${project_namespace}.criterias.base.CriteriasBase;
 import ${project_namespace}.criterias.base.CriteriasBase.GroupType;
 import ${project_namespace}.criterias.base.value.ArrayValue;
-</#if>
-
-import android.content.Context;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
-<#assign ext = curr.name?cap_first />
-<#if (internal)>
-	<#assign ext = "Void" />
 </#if>
 
 /**
