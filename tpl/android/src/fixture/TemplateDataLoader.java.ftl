@@ -64,7 +64,14 @@ import org.joda.time.DateTimeZone;
 
 import ${project_namespace}.entity.*;
 import java.util.ArrayList;
+<#if fixtureType=="xml">
+	<#list curr.relations as relation>
+		<#if relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany">
 import java.util.List;
+		<#break>
+		</#if>
+	</#list>
+</#if>
 
 <#if fixtureType=="xml">
 	<#if (hasTime || hasDate || hasDateTime)>

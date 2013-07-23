@@ -28,27 +28,26 @@
 <@header?interpret />
 package ${data_namespace}.base;
 
-
 import java.util.ArrayList;
 
+<#if hasDate || hasTime || hasDateTime>
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
+</#if>
 
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-import ${project_namespace}.${project_name?cap_first}Application;
+${ImportUtils.importRelatedSQLiteAdapters(curr)}
 <#if (curr.internal=="false")>
 import ${curr.namespace}.entity.${curr.name};
 </#if>
-${ImportUtils.importRelatedSQLiteAdapters(curr)}
 ${ImportUtils.importRelatedEntities(curr)}
-${ImportUtils.importRelatedEnums(curr)}
-<#if hasDate || hasTime || hasDateTime>
-import ${curr.namespace}.harmony.util.DateUtils;
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
-</#if>
+${ImportUtils.importRelatedEnums(curr)}<#if hasDate || hasTime || hasDateTime>import ${curr.namespace}.harmony.util.DateUtils;</#if>
+import ${project_namespace}.${project_name?cap_first}Application;
+
 <#if curr.internal?? && curr.internal=='true'>
 	<#assign extendType = "Void" />
 <#else>
