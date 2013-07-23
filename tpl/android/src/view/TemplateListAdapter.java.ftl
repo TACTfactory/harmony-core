@@ -1,6 +1,6 @@
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
-<#import "methods.ftl" as m />
-<#assign fields = m.getAllFields(curr) />
+<#assign fields = ViewUtils.getAllFields(curr) />
 package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
@@ -15,9 +15,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.TextView;
+import android.widget.Button;<#if (ViewUtils.hasTypeBoolean(fields?values))>
+import android.widget.CheckBox;</#if><#if (ViewUtils.shouldImportEditText(fields?values))>
+import android.widget.TextView;</#if>
 
 
 <#assign importDate=false />
@@ -191,10 +191,10 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 					<#if (!field.relation??)>
 						<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
 			if (model.get${field.name?cap_first}() != null) {
-				${m.setAdapterLoader(field)}
+				${ViewUtils.setAdapterLoader(field)}
 			}
 						<#else>
-			${m.setAdapterLoader(field)}
+			${ViewUtils.setAdapterLoader(field)}
 						</#if>
 					<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 			this.${field.name}View.setText(

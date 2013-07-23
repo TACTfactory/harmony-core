@@ -37,7 +37,7 @@ import android.widget.TimePicker;</#if>
 
 import ${curr.namespace}.R;
 ${ImportUtils.importRelatedEntities(curr)}
-${ImportUtils.importRelatedEnums(curr)}import ${curr.namespace}.entity.${curr.name};<#if (hasDate || hasTime || hasDateTime)>
+${ImportUtils.importRelatedEnums(curr)}<#if (hasDate || hasTime || hasDateTime)>
 import ${curr.namespace}.harmony.util.DateUtils;</#if>
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import ${project_namespace}.harmony.view.HarmonyFragment;<#if (hasDate || hasDateTime)>

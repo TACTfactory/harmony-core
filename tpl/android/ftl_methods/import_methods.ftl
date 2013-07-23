@@ -24,8 +24,32 @@
 		<#if !relation.internal>
 			<#if (!Utils.isInArray(import_array, relation.relation.targetEntity))>
 				<#assign import_array = import_array + [relation.relation.targetEntity] />
-				<#assign result = result + "import ${entity.namespace}.entity.${relation.relation.targetEntity};\n" />
 			</#if>
+		</#if>
+	</#list>
+	<#list import_array as import>
+		<#assign result = result + "import ${entity.namespace}.entity.${import};" />
+		<#if import_has_next>
+			<#assign result = result + "\n" />
+		</#if>
+	</#list>
+	<#return result />
+</#function>
+
+<#function importToManyRelatedEntities entity>
+	<#assign result = ""/>
+	<#assign import_array = [entity.name] />
+	<#list entity.relations as relation>
+		<#if !relation.internal && (relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany") >
+			<#if (!Utils.isInArray(import_array, relation.relation.targetEntity))>
+				<#assign import_array = import_array + [relation.relation.targetEntity] />
+			</#if>
+		</#if>
+	</#list>
+	<#list import_array as import>
+		<#assign result = result + "import ${entity.namespace}.entity.${import};" />
+		<#if import_has_next>
+			<#assign result = result + "\n" />
 		</#if>
 	</#list>
 	<#return result />
