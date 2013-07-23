@@ -121,5 +121,7 @@ public abstract class TagConstant {
 	public static final String OWNER = "owner";
 	/** Constant for files header. */
 	public static final String HEADER = "header";
+	/** Constant for template methods. */
+	public static final String UTILITY_PATH = "utilityPath";
 	
 }

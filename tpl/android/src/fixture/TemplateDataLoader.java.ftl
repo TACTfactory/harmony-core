@@ -1,102 +1,49 @@
-<#function getAllMothers tab entity>
-	<#if entity.mother??>
-		<#return (getAllMothers(tab, entities[entity.mother]) + [entity]) />
-	<#else>
-		<#return ([entity]) />		
-	</#if>
-</#function>
-<#function getCompleteNamespace entity>
-	<#assign result = "" />
-	<#assign motherClasses = getAllMothers([], entity) />
-	<#assign cond = true />
-	<#list motherClasses as motherClass>
-		<#assign result = result + motherClass.name />
-		<#if motherClass_has_next>
-			<#assign result = result + "." />
-		</#if>
-	</#list>
-	
-	<#return result>
-</#function>
-<#function getInversingField field>
-	<#assign entityT = entities[field.relation.targetEntity] />
-	<#list entityT.relations as f>
-		<#if f.name == field.relation.inversedBy>
-			<#return f />
-		</#if>
-	</#list>
-	<#return "">
-</#function>
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
 <#assign fixtureType = options["fixture"].type />
+<#assign hasDate = MetadataUtils.hasDate(curr) />
+<#assign hasTime = MetadataUtils.hasTime(curr) />
+<#assign hasDateTime = MetadataUtils.hasDateTime(curr) />
+<#assign hasLocaleTime = MetadataUtils.hasLocaleTime(curr) />
 <@header?interpret />
 package ${fixture_namespace};
 
-import android.content.Context;
-<#assign isToMany=false />
-<#assign hasDateTime=false />
-<#assign hasTime=false />
-<#assign hasDate=false />
 <#list curr.relations as relation>
-	<#if relation.relation.type=="ManyToMany" || relation.relation.type=="OneToMany">
-		<#assign isToMany=true />
-	</#if>
-</#list>
-<#list curr.fields?values as field>
-	<#if field.harmony_type=="date">
-		<#assign hasDate=true />
-	<#elseif field.harmony_type=="time">
-		<#assign hasTime=true />
-	<#elseif field.harmony_type="datetime">
-		<#assign hasDateTime=true />
-	</#if>
-</#list>
-
-<#assign hasLocaleTime = false />
-<#list curr.fields?values as field>
-	<#if field.is_locale?? && field.is_locale>
-		<#assign hasLocaleTime = true />
-	</#if>
-</#list>
-<#if hasLocaleTime>
-import org.joda.time.DateTimeZone;
-</#if>
-
-import ${project_namespace}.entity.*;
+	<#if relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany" || (relation.relation.type == "ManyToOne" && MetadataUtils.getInversingField(relation)??) >
 import java.util.ArrayList;
-<#if fixtureType=="xml">
-	<#list curr.relations as relation>
-		<#if relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany">
+	<#break>
+	</#if>
+</#list>
+<#list curr.relations as relation>
+	<#if fixtureType=="xml" && (relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany") >
 import java.util.List;
-		<#break>
-		</#if>
-	</#list>
-</#if>
-
-<#if fixtureType=="xml">
-	<#if (hasTime || hasDate || hasDateTime)>
-import ${project_namespace}.harmony.util.DateUtils;
+	<#break>
 	</#if>
-import org.jdom2.Element;
-<#elseif fixtureType=="yml">
-	<#if (hasTime)>
-import ${project_namespace}.harmony.util.DateUtils;
-	</#if>
+</#list>
+<#if fixtureType=="yml">
 	<#if (hasTime || hasDate || hasDateTime)>
 import java.util.Date;
-import org.joda.time.DateTime;
 	</#if>
 import java.util.Map;
 </#if>
 
-<#list curr.fields?values as field>
-	<#if field.harmony_type?lower_case == "enum">
-		<#assign enumClass = enums[field.type] />
-import ${entity_namespace}.${getCompleteNamespace(enumClass)};
+<#if fixtureType=="xml">
+import org.jdom2.Element;
+
+<#elseif fixtureType=="yml">
+	<#if hasLocaleTime>
+import org.joda.time.DateTimeZone;
 	</#if>
-</#list>
+	<#if (hasTime || hasDate || hasDateTime)>
+import org.joda.time.DateTime;
+
+	</#if>
+</#if>
+import android.content.Context;
 
 import ${curr.namespace}.entity.${curr.name};
+${ImportUtils.importRelatedEntities(curr)}${ImportUtils.importRelatedEnums(curr)}
+<#if ((fixtureType=="xml" && (hasDate || hasDateTime)) || hasTime)>import ${project_namespace}.harmony.util.DateUtils;</#if>
 
 /**
  * ${curr.name?cap_first}DataLoader.
@@ -206,7 +153,7 @@ public class ${curr.name?cap_first}DataLoader
 				${curr.name?uncap_first}.set${field.name?cap_first}(
 								${field.relation.targetEntity?uncap_first});
 						<#if field.relation.inversedBy??>
-							<#assign invField = getInversingField(field) />
+							<#assign invField = MetadataUtils.getInversingField(field) />
 				${field.relation.targetEntity?uncap_first}.set${invField.name?cap_first}(
 								${curr.name?uncap_first});
 						</#if>								
@@ -219,7 +166,7 @@ public class ${curr.name?cap_first}DataLoader
 				${curr.name?uncap_first}.set${field.name?cap_first}(
 						${field.relation.targetEntity?uncap_first});
 						<#if field.relation.inversedBy??>
-							<#assign invField = getInversingField(field) />
+							<#assign invField = MetadataUtils.getInversingField(field) />
 				ArrayList<${curr.name?cap_first}> ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s = 
 						${field.relation.targetEntity?uncap_first}.get${invField.name?cap_first}();
 				if (${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s == null) {
@@ -318,7 +265,7 @@ public class ${curr.name?cap_first}DataLoader
 			if (${field.relation.targetEntity?uncap_first} != null) {
 				${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first});
 						<#if field.relation.inversedBy??>
-							<#assign invField = getInversingField(field) />
+							<#assign invField = MetadataUtils.getInversingField(field) />
 				ArrayList<${curr.name?cap_first}> ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s = 
 						${field.relation.targetEntity?uncap_first}.get${invField.name?cap_first}();
 				if (${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s == null) {

@@ -2,13 +2,13 @@
 <@header?interpret />
 package ${fixture_namespace};
 
-import android.content.Context;
-import android.content.res.AssetManager;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedHashMap;
-import java.util.Map;
+<#if fixtureType=="xml">
 import java.util.List;
+</#if>
+import java.util.Map;
 
 <#if fixtureType=="xml">
 import org.jdom2.Document;
@@ -17,10 +17,10 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 <#elseif fixtureType=="yml">
 import org.yaml.snakeyaml.Yaml;
-
 </#if>
 
-
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.util.Log;
 
 /**
