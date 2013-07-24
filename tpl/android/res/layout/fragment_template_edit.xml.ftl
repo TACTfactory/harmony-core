@@ -1,7 +1,7 @@
-<#import "/tpl/android/src/view/methods.ftl" as m />
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
 <#assign currname=curr.name?lower_case />
-<#assign fields = m.getAllFields(curr) />
+<#assign fields = ViewUtils.getAllFields(curr) />
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout 
 	xmlns:android="http://schemas.android.com/apk/res/android"

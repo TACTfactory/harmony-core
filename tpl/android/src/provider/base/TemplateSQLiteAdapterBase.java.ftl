@@ -2,23 +2,15 @@
 <#assign curr = entities[current_entity] />
 <#assign sync = curr.options.sync?? />
 <#assign inherited = false />
-<#if (curr.extends?? && entities[curr.extends]??)>
-	<#assign inherited = true />
-</#if>
+<#if (curr.extends?? && entities[curr.extends]??)><#assign inherited = true /></#if>
 <#assign hasDateTime=false />
 <#assign hasTime=false />
 <#assign hasDate=false />
 <#assign hasInternalFields = false />
 <#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)><#assign hasInternalFields = true /></#if></#list>
-<#list curr.fields?values as field>
-	<#if field.harmony_type=="date">
-		<#assign hasDate=true />
-	<#elseif field.harmony_type=="time">
-		<#assign hasTime=true />
-	<#elseif field.harmony_type="datetime">
-		<#assign hasDateTime=true />
-	</#if>
-</#list>
+<#assign hasDate = MetadataUtils.hasDate(curr) />
+<#assign hasTime = MetadataUtils.hasTime(curr) />
+<#assign hasDateTime = MetadataUtils.hasDateTime(curr) />
 <@header?interpret />
 package ${data_namespace}.base;
 
