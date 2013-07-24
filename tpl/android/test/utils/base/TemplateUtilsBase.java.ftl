@@ -4,6 +4,7 @@
 <#if (curr.extends?? && entities[curr.extends]??)>
 	<#assign inherited = true />
 </#if>
+<@header?interpret />
 package ${curr.test_namespace}.utils.base;
 
 import android.content.Context;

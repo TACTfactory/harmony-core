@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${project_namespace}.provider.utils.base;
 
 import java.util.ArrayList;

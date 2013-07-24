@@ -2,6 +2,7 @@
 <#assign curr = entities[current_entity] />
 <#assign fields = ViewUtils.getAllFields(curr) />
 <#assign importDate = (MetadataUtils.hasDate(curr) || MetadataUtils.hasDateTime(curr) || MetadataUtils.hasTime(curr)) />
+<@header?interpret />
 package ${curr.controller_namespace};
 
 import android.app.AlertDialog;

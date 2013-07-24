@@ -1,4 +1,5 @@
 <#assign curr = entities[current_entity] />
+<@header?interpret />
 package ${curr.controller_namespace};
 
 import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;

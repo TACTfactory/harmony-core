@@ -1,4 +1,5 @@
 <#assign curr = entities[current_entity] />
+<@header?interpret />
 package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;

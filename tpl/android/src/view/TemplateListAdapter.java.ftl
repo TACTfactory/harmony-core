@@ -1,6 +1,7 @@
 <#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
 <#assign fields = ViewUtils.getAllFields(curr) />
+<@header?interpret />
 package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
