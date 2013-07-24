@@ -10,7 +10,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 
-
+/**
+ * Widget for validation. (1 button ok, 1 button cancel)
+ */
 public class ValidationButtons extends FrameLayout {
 
 	/** Validation listener. */
@@ -34,7 +36,7 @@ public class ValidationButtons extends FrameLayout {
 	/**
 	 * Constructor.
 	 * @param context The context
-	 * @attrs The attribute set
+	 * @param attrs The attribute set
 	 */
 	public ValidationButtons(Context context, AttributeSet attrs) {
 		super(context, attrs);

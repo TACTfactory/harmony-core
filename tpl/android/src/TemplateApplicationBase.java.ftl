@@ -187,7 +187,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	
 	/** Check if Network is available.
 	 * 
-	 * @param ctx
+	 * @param ctx The application context
 	 * @return true if have a network
 	 */
 	public static boolean isNetworkAvailable(final Context ctx) {

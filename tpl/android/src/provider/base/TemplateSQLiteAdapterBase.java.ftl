@@ -373,7 +373,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter = 
 				new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
-		result.set${relation.name?cap_first}( 
+		result.set${relation.name?cap_first}(
 					${relation.relation.joinTable?lower_case}Adapter.getBy${curr.name}(
 							result.getId())); // relation.relation.inversedBy?cap_first
 				<#else>
@@ -923,7 +923,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	}
 
 	/** 
-	 * Find & read ${curr.name} by ${curr.relations[0].name}
+	 * Find & read ${curr.name} by ${curr.relations[0].name}.
      * @param ${curr.relations[0].name?lower_case} ${curr.relations[1].name?lower_case}
 	 * @return ArrayList of ${curr.relations[1].relation.targetEntity} matching ${curr.relations[0].name?lower_case}
 	 */ 

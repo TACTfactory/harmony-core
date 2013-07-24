@@ -10,6 +10,9 @@ import android.widget.TextView;
 
 import ${project_namespace}.R;
 
+/** 
+ * Confirmation dialog for entity deletion.
+ */
 public class DeleteDialog extends AlertDialog 
 									implements DialogInterface.OnClickListener {
 	/** A fragment which implements DeletableList. */
@@ -29,9 +32,6 @@ public class DeleteDialog extends AlertDialog
 		this.id = id;
 	}
 	
-	/**
-	 * @see android.app.AlertDialog#onCreate(android.os.Bundle)
-	 */
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		this.setTitle(R.string.dialog_delete_title);
@@ -56,6 +56,7 @@ public class DeleteDialog extends AlertDialog
 
 	/** Set a listener to be invoked when the positive button of the dialog is 
 	 * pressed. 
+	 * @param resId The button text string id.
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setPositiveButton(int resId, 
@@ -77,7 +78,6 @@ public class DeleteDialog extends AlertDialog
 				listener);
 	}
 	
-	/** Called when user clicks. */
 	@Override
 	public void onClick(DialogInterface dialog, int which) {
 		switch (which) {

@@ -4,8 +4,6 @@ package ${fixture_namespace};
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.tactfactory.harmony.meta.ClassMetadata;
-
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,9 +50,9 @@ public class DataManager {
      * This is just a convenient shortcut for getRepository($className)
      * ->find($id).
      *
-     * @param nameClass
-     * @param id
-     * @return object
+     * @param nameClass The class of the object's name
+     * @param id The id of the object
+     * @return The found object
      */
     public Object find(final String nameClass, final int id) {
     	Object ret = null;
@@ -213,18 +211,18 @@ public class DataManager {
 		return this.getRepository(className);
 	}
 
-    /**
-     * Returns the ClassMetadata descriptor for a class.
-     *
-     * The class name must be the fully-qualified class name without a <br />
-     * leading backslash (as it is returned by get_class($obj)).
-     *
-     * @param className $className
-     * @return \Doctrine\Common\Persistence\Mapping\ClassMetadata
-     */
-    public ClassMetadata getClassMetadata(final String className) {
-    	return null;
-    }
+//    /**
+//     * Returns the ClassMetadata descriptor for a class.
+//     *
+//     * The class name must be the fully-qualified class name without a <br />
+//     * leading backslash (as it is returned by get_class($obj)).
+//     *
+//     * @param className $className
+//     * @return \Doctrine\Common\Persistence\Mapping\ClassMetadata
+//     */
+//    public ClassMetadata getClassMetadata(final String className) {
+//    	return null;
+//    }
 
     /**
      * Check if the object is part of the current UnitOfWork and therefore

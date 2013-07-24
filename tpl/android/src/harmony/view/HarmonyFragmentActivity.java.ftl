@@ -8,10 +8,10 @@ import com.actionbarsherlock.view.MenuItem;
 import ${project_namespace}.menu.${project_name?cap_first}Menu;
 
 /**
- * @author yo
- *
+ * Custom FragmentActivity for harmony projects.
  */
 public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
+	/** Hack number for support v4 onActivityResult. */
 	protected static final int SUPPORT_V4_RESULT_HACK = 0xFFFF;
 
 	@Override

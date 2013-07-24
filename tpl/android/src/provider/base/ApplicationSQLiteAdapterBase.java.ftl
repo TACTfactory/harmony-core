@@ -254,7 +254,7 @@ public abstract class SQLiteAdapterBase<T> {
 	
 	/** 
 	 * Convert Cursor of database to a T entity.
-	 * @param cursor Cursor object
+	 * @param c Cursor object
 	 * @return T entity
 	 */
 	public abstract T cursorToItem(final Cursor c);

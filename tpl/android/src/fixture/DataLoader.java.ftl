@@ -65,7 +65,7 @@ import android.util.Log;
  * DataLoader for fixture purpose.
  */
 public class DataLoader {
-	/** TAG for debug purpose */
+	/** TAG for debug purpose. */
 	protected static final String TAG = "DataLoader";
 
 	/** Test mode. */
@@ -146,6 +146,7 @@ public class DataLoader {
 	 * isType.
 	 * @param modes Modes
 	 * @param mode Mode
+	 * @return true if mode
 	 */
 	private boolean isType(final int modes, final int mode) {
 		boolean result;

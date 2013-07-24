@@ -58,6 +58,7 @@ public class ${curr.name?cap_first}DataLoader
 	/**
 	 * Get the ${curr.name?cap_first}DataLoader singleton.
 	 * @param ctx The context
+	 * @return The dataloader instance
 	 */
 	public static ${curr.name?cap_first}DataLoader getInstance(
 											final Context ctx) {

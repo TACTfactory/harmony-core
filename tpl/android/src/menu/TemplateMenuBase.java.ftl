@@ -36,7 +36,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	protected Context ctx;
 	/** parent fragment. */
 	protected Fragment fragment;
-	/** Share String*/
+	/** Share String. */
 	protected String share;
 	
 	/** Menu. */
@@ -45,6 +45,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	/**
 	 * Constructor.
 	 * @param ctx context
+	 * @throws Exception if context is null
 	 */
 	protected ${project_name?cap_first}MenuBase(final Context ctx) 
 														throws Exception {
@@ -55,6 +56,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	 * Constructor.
 	 * @param ctx context
 	 * @param fragment parent fragment
+	 * @throws Exception If context is null
 	 */
 	protected ${project_name?cap_first}MenuBase(final Context ctx, 
 								final Fragment fragment) throws Exception {
@@ -118,6 +120,9 @@ public abstract class ${project_name?cap_first}MenuBase {
 		}
 	}
 
+	/** Clear the menu components.
+	 * @param menu The menu to clear
+	 */
 	public void clear(final Menu menu) {
 		for (int i = 0; i < this.menus.size(); i++) {
 			this.menus.valueAt(i).clear(menu);
@@ -127,6 +132,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	/** Call intent associate to menu item selected.
 	 * @param item item
 	 * @param ctx context 
+	 * @return true if event has been treated
 	 */
 	public boolean dispatch(final MenuItem item, final Context ctx) {
 		if (ctx != null) {
@@ -138,6 +144,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	
 	/** Call intent associate to menu item selected.
 	 * @param item item 
+	 * @return true if event has been treated
 	 */
 	private boolean dispatch(final MenuItem item) {
 		return this.menus.get(item.getItemId()).dispatch(item, this.ctx, 
@@ -147,6 +154,10 @@ public abstract class ${project_name?cap_first}MenuBase {
 	/**
 	 * Called when an activity you launched exits.
 	 * @see android.app.Activity#onActivityResult
+	 * @param requestCode The request code
+	 * @param resultCode The result code
+	 * @param data The intent
+	 * @param ctx The context
 	 */
 	public void onActivityResult(int requestCode, int resultCode, Intent data,
 															 Context ctx) {
@@ -156,6 +167,11 @@ public abstract class ${project_name?cap_first}MenuBase {
 	/**
 	 * Called when an activity you launched exits.
 	 * @see android.app.Activity#onActivityResult
+	 * @param requestCode The request code
+	 * @param resultCode The result code
+	 * @param data The intent
+	 * @param ctx The context
+	 * @param fragment The fragment
 	 */
 	public void onActivityResult(int requestCode, int resultCode, Intent data, 
 										  Context ctx, Fragment fragment) {
@@ -173,6 +189,9 @@ public abstract class ${project_name?cap_first}MenuBase {
 	/**
 	 * Called when an activity you launched exits.
 	 * @see android.app.Activity#onActivityResult
+	 * @param requestCode The request code
+	 * @param resultCode The result code
+	 * @param data The intent
 	 */
 	private void onActivityResult(int requestCode, int resultCode,
 															     Intent data) {

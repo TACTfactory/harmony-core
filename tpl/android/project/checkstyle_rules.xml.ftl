@@ -165,5 +165,8 @@
         <module name="UpperEll"/>
 
     </module>
+	<module name="SuppressionFilter">
+		<property name="file" value="app/android/checkstyle_exclude.xml" />
+	</module>
 
 </module>
