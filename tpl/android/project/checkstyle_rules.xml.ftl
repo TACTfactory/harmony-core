@@ -166,7 +166,7 @@
 
     </module>
 	<module name="SuppressionFilter">
-		<property name="file" value="app/android/checkstyle_exclude.xml" />
+		<property name="file" value="checkstyle_exclude.xml" />
 	</module>
 
 </module>
