@@ -470,7 +470,6 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	public static class CreateTask extends AsyncTask<Void, Void, Integer> {
 		private final Context ctx;
 		private final ${curr.name} entity;
-		private String errorMsg;
 		private ProgressDialog progress;
 
 		/**
