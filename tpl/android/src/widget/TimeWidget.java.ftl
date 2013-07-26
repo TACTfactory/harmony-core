@@ -20,16 +20,34 @@ import ${project_namespace}.R;
 import ${project_namespace}.harmony.util.DateUtils;
 import ${project_namespace}.harmony.util.DateUtils.TimeFormatType;
 
+/**
+ * View for Time selection.
+ */
 public class TimeWidget extends FrameLayout implements OnClickListener {
+	/** Time click listener. */
 	private OnTimeClickListener timeListener;
+	/** Time edit text. */
 	private EditText timeEditText;
+	/** Time format (AM/PM or 24H). */
 	private TimeFormatType timeFormat = TimeFormatType.ANDROID_CONF;
+	/** Title dialog. */
 	private String dialogTitle;
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param context The context
+	 */
 	public TimeWidget(Context context) {
 		this(context, null);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param context The context
+	 * @param attrs The attribute set
+	 */
 	public TimeWidget(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		LayoutInflater inflater = (LayoutInflater) context
@@ -52,6 +70,10 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 		this.timeEditText.setOnClickListener(this);
 	}
 
+	/**
+	 * Initialize this views attribute set.
+	 * @param attrs The attribute set
+	 */
 	private void initializeAttributes(AttributeSet attrs) {
 		TypedArray a = this.getContext().getTheme().obtainStyledAttributes(
 		        attrs,
@@ -134,12 +156,22 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 		
 	}
 	
+	/**
+	 * Set the component time.
+	 *
+	 * @param time The time to set
+	 */
 	public void setTime(DateTime time) {
 		this.timeEditText.setText(DateUtils.formatTimeToString(
 						time,
 						this.timeFormat));
 	}
 	
+	/**
+	 * Get the component time.
+	 *
+     * @return The time
+	 */
 	public DateTime getTime() {
 		DateTime result;
 		if (this.timeEditText.getText().toString().isEmpty()) {
@@ -152,10 +184,19 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 		return result;
 	}
 	
+	/**
+	 * Internal Click Listener for the dialog.
+	 */
 	private class DialogClickListener 
 				implements DialogInterface.OnClickListener {
+		/** The time widget associated to this listener. */
 		private TimeWidget timeWidget;
 
+		/**
+		 * Constructor.
+		 *
+		 * @param timeWidget The timeWidget
+		 */
 		public DialogClickListener(TimeWidget timeWidget) {
 			this.timeWidget = timeWidget;
 		}

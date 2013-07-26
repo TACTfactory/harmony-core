@@ -18,15 +18,32 @@ import android.widget.FrameLayout;
 import ${project_namespace}.R;
 import ${project_namespace}.harmony.util.DateUtils;
 
+/**
+ * View for Date selection.
+ */
 public class DateWidget extends FrameLayout implements OnClickListener {
+	/** Date Click Listener. */
 	private OnDateClickListener dateListener;
+	/** Date Edit Text. */
 	private EditText dateEditText;
+	/** Date dialog title. */
 	private String dialogTitle;
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param context View's context
+	 */
 	public DateWidget(Context context) {
 		this(context, null);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param context View's context
+	 * @param attrs The attribute set
+	 */
 	public DateWidget(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		LayoutInflater inflater = (LayoutInflater) context
@@ -49,6 +66,10 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 		this.dateEditText.setOnClickListener(this);
 	}
 
+	/**
+	 * Initialize this views attribute set.
+	 * @param attrs the attribute set
+	 */
 	private void initializeAttributes(AttributeSet attrs) {
 		TypedArray a = this.getContext().getTheme().obtainStyledAttributes(
 		        attrs,
@@ -97,11 +118,21 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 	    datePicker.setNegativeButton(android.R.string.cancel, listener);
 	    datePicker.show();		
 	}
-	
+		
+	/**
+	 * Set the component date.
+	 *
+	 * @param date The date to set
+	 */
 	public void setDate(DateTime date) {
 		this.dateEditText.setText(DateUtils.formatDateToString(date));
 	}
-	
+		
+	/**
+	 * Get the component date.
+	 *
+	 * @return The date
+	 */
 	public DateTime getDate() {
 		DateTime result;
 		if (this.dateEditText.getText().toString().isEmpty()) {
@@ -113,10 +144,19 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 		return result;
 	}
 	
+	/**
+	 * Internal Click Listener for the dialog.
+	 */
 	private class DialogClickListener 
 				implements DialogInterface.OnClickListener {
+		/** The date widget associated to this listener. */
 		private DateWidget dateWidget;
 
+		/** 
+		 * Constructor.
+		 *
+		 * @param dateWidget The datewidget
+		 */
 		public DialogClickListener(DateWidget dateWidget) {
 			this.dateWidget = dateWidget;
 		}

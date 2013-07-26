@@ -21,19 +21,40 @@ import ${project_namespace}.R;
 import ${project_namespace}.harmony.util.DateUtils;
 import ${project_namespace}.harmony.util.DateUtils.TimeFormatType;
 
+/**
+ * View for DateTime selection.
+ */
 public class DateTimeWidget extends FrameLayout implements OnClickListener {
+	/** Date Click Listener. */
 	private OnDateClickListener dateListener;
+	/** Time Click Listener. */
 	private OnTimeClickListener timeListener;
+	/** Date Edit Text. */
 	private EditText dateEditText;
+	/** Time Edit Text. */
 	private EditText timeEditText;
+	/** Time format (24h or am/pm). */
 	private TimeFormatType timeFormat = TimeFormatType.ANDROID_CONF;
+	/** Date dialog title. */
 	private String dateDialogTitle;
+	/** Time dialog title. */
 	private String timeDialogTitle;
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param context View's context
+	 */
 	public DateTimeWidget(Context context) {
 		this(context, null);
 	}
 
+	/**
+	 * Constructor.
+	 *
+	 * @param context View's context
+	 * @param attrs The attribute set
+	 */
 	public DateTimeWidget(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		LayoutInflater inflater = (LayoutInflater) context
@@ -58,6 +79,10 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 		this.timeEditText.setOnClickListener(this);
 	}
 	
+	/**
+	 * Initialize this views attribute set.
+	 * @param attrs the attribute set
+	 */
 	private void initializeAttributes(AttributeSet attrs) {
 		TypedArray a = this.getContext().getTheme().obtainStyledAttributes(
 		        attrs,
@@ -168,10 +193,20 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 		
 	}
 	
+	/**
+	 * Set the component date.
+	 *
+	 * @param date The date to set
+	 */
 	public void setDate(DateTime date) {
 		this.dateEditText.setText(DateUtils.formatDateToString(date));
 	}
 	
+	/**
+	 * Get the component date.
+	 *
+	 * @return The date
+	 */
 	public DateTime getDate() {
 		DateTime result;
 		if (this.dateEditText.getText().toString().isEmpty()) {
@@ -183,13 +218,22 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 		return result;
 	}
 	
-	
+	/**
+	 * Set the component time.
+	 *
+	 * @param time The time to set
+	 */
 	public void setTime(DateTime time) {
 		this.timeEditText.setText(DateUtils.formatTimeToString(
 						time,
 						this.timeFormat));
 	}
 	
+	/**
+	 * Get the component time.
+	 *
+     * @return The time
+	 */
 	public DateTime getTime() {
 		DateTime result;
 		if (this.timeEditText.getText().toString().isEmpty()) {
@@ -202,6 +246,11 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 		return result;
 	}
 	
+	/**
+	 * Set the component date and time.
+	 *
+	 * @param dateTime The datetime to set
+	 */
 	public void setDateTime(DateTime dateTime) {
 		this.dateEditText.setText(DateUtils.formatDateToString(dateTime));
 		this.timeEditText.setText(
@@ -210,6 +259,11 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 						this.timeFormat));
 	}
 	
+	/**
+	 * Get the component datetime.
+	 *	
+	 * @return The datetime.
+	 */
 	public DateTime getDateTime() {
 		DateTime result;
 		if (this.timeEditText.getText().toString().isEmpty()
@@ -224,10 +278,19 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 		return result;
 	}
 	
+	/**
+	 * Internal Click Listener for the dialog.
+	 */
 	private class DateDialogClickListener 
 				implements DialogInterface.OnClickListener {
+		/** The datetime widget associated to this listener. */
 		private DateTimeWidget dateWidget;
 
+		/** 
+		 * Constructor.
+		 *
+		 * @param dateWidget The datewidget
+		 */
 		public DateDialogClickListener(DateTimeWidget dateWidget) {
 			this.dateWidget = dateWidget;
 		}
@@ -258,11 +321,21 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 			}
 		}
 	}
-	
+
+	/**
+	 * Internal Click Listener for the dialog.
+	 */
 	private class TimeDialogClickListener 
 		implements DialogInterface.OnClickListener {
+		/** The datetime widget associated to this listener. */
 		private DateTimeWidget timeWidget;
 		
+
+		/** 
+		 * Constructor.
+		 *
+		 * @param timeWidget The timeWidget
+		 */
 		public TimeDialogClickListener(DateTimeWidget timeWidget) {
 			this.timeWidget = timeWidget;
 		}
