@@ -20,39 +20,51 @@ import com.tactfactory.harmony.annotation.ManyToOne;
 import com.tactfactory.harmony.annotation.Table;
 import com.tactfactory.harmony.annotation.Column.Type;
 
+/** Test Application entity. */
 //All annotation with forced value/parameter
 @Table(name = "local_user")
 @Entity
 public class User extends Object implements Cloneable, Serializable {
+	/** Serial UID. */
 	private static final long serialVersionUID = 7032873279928549706L;
 
+	/** Entity's technical id. */
 	@Id
     @Column(type = Type.INTEGER, hidden = true)
     @GeneratedValue(strategy = "IDENTITY")
     private int id;
 
+	/** Login. */
 	@Column(type = Type.LOGIN)
     private String login;
 	
+	/** Password. */
 	@Column(type = Type.PASSWORD)
     private String password;
 	
+	/** First name. */
 	@Column(nullable = true)
     private String firstname;
 	
+	/** Last name. */
 	@Column()
     private String lastname;
 	
+	/** Created at.. */
 	@Column(name = "created_at")
     private DateTime createdAt;
 	
+	/** Birthdate. */
 	@Column(type = Type.DATE, locale = true)
     private DateTime birthdate;
 	
+	/** Group this user belong to. */
 	@ManyToOne
 	private UserGroup userGroup;
 
-
+	/**
+	 * Constructor.
+	 */
 	public User() {
 		this.id = -1;
     	this.createdAt = new DateTime();

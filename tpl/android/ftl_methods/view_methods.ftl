@@ -108,40 +108,34 @@
 </#function>
 
 
-<#function isInArray array var>
-	<#list array as item>
-		<#if (item==var)>
-			<#return true />
-		</#if>
-	</#list>
-	<#return false />
-</#function>
-
-<#function getAllMothers tab entity>
-	<#if entity.mother??>
-		<#return (getAllMothers(tab, entities[entity.mother]) + [entity]) />
-	<#else>
-		<#return ([entity]) />		
-	</#if>
-</#function>
-<#function getCompleteNamespace entity>
-	<#assign result = "" />
-	<#assign motherClasses = getAllMothers([], entity) />
-	<#assign cond = true />
-	<#list motherClasses as motherClass>
-		<#assign result = result + motherClass.name />
-		<#if motherClass_has_next>
-			<#assign result = result + "." />
-		</#if>
-	</#list>
-	
-	<#return result>
-</#function>
-
 <#function getAllFields class>
 	<#assign fields = class.fields />
 	<#if class.extends?? && entities[class.extends]??>
 		<#assign fields = fields + getAllFields(entities[class.extends]) />
 	</#if>
 	<#return fields />
+</#function>
+
+<#function hasTypeBoolean fieldsArray>
+	<#list fieldsArray as field>
+		<#if (field.type?lower_case == "boolean" || field.type?lower_case == "bool")>
+			<#return true />
+		</#if>
+	</#list>
+	<#return false />
+</#function>
+
+<#function shouldImportEditText fieldsArray>
+	<#list fieldsArray as field>
+		<#if !field.internal && !field.hidden 
+			&& (field.type?lower_case == "string"
+				|| field.type?lower_case == "int"
+				|| field.type?lower_case == "double"
+				|| field.type?lower_case == "float"
+				|| field.type?lower_case == "long"
+				|| field.type?lower_case == "int")>
+			<#return true />
+		</#if>
+	</#list>
+	<#return false />
 </#function>

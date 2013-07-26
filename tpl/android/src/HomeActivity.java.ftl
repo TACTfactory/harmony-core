@@ -19,14 +19,13 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-/** Home Activity.
+/** 
+ * Home Activity.
  * This is from where you can access to your entities activities by default.
  * @see android.app.Activity
  */
 public class HomeActivity extends HarmonyFragmentActivity {
-	/** Called when the activity is first created.
-	 * @see android.app.Activity#onCreate
-	 */
+
 	@Override
 	public void onCreate(Bundle savedInstanceState)	{
 		super.onCreate(savedInstanceState);

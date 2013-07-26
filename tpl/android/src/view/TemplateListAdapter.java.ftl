@@ -1,6 +1,7 @@
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
-<#import "methods.ftl" as m />
-<#assign fields = m.getAllFields(curr) />
+<#assign fields = ViewUtils.getAllFields(curr) />
+<@header?interpret />
 package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
@@ -15,9 +16,9 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.TextView;
+import android.widget.Button;<#if (ViewUtils.hasTypeBoolean(fields?values))>
+import android.widget.CheckBox;</#if><#if (ViewUtils.shouldImportEditText(fields?values))>
+import android.widget.TextView;</#if>
 
 
 <#assign importDate=false />
@@ -66,9 +67,6 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 		this.fragment = fragment;
 	}
 
-	/* (non-Javadoc)
-	 * @see android.support.v4.widget.SimpleCursorAdapter#swapCursor(android.database.Cursor)
-	 */
 	@Override
 	public Cursor swapCursor(Cursor newCursor) {
 		if (newCursor == this.mCursor) {
@@ -76,14 +74,23 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
         }
         Cursor oldCursor = this.mCursor;
         if (oldCursor != null) {
-            if (this.mChangeObserver != null) oldCursor.unregisterContentObserver(this.mChangeObserver);
-            if (this.mDataSetObserver != null) oldCursor.unregisterDataSetObserver(this.mDataSetObserver);
+	        if (this.mChangeObserver != null) {
+			oldCursor.unregisterContentObserver(this.mChangeObserver);
+		}		
+		if (this.mDataSetObserver != null) {
+			oldCursor.unregisterDataSetObserver(this.mDataSetObserver);
+		}
         }
         mCursor = newCursor;
         if (newCursor != null) {
-            if (this.mChangeObserver != null) newCursor.registerContentObserver(this.mChangeObserver);
-            if (this.mDataSetObserver != null) newCursor.registerDataSetObserver(this.mDataSetObserver);
-            this.mRowIDColumn = newCursor.getColumnIndexOrThrow(${curr.name?cap_first}SQLiteAdapter.COL_ID);
+			if (this.mChangeObserver != null) {
+				newCursor.registerContentObserver(this.mChangeObserver);
+			}
+            if (this.mDataSetObserver != null) {
+				newCursor.registerDataSetObserver(this.mDataSetObserver);
+			}
+            this.mRowIDColumn = newCursor.getColumnIndexOrThrow(
+					${curr.name?cap_first}SQLiteAdapter.COL_ID);
             this.mDataValid = true;
             // notify the observers about the new cursor
             this.notifyDataSetChanged();
@@ -96,10 +103,6 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
         return oldCursor;
 	}
 	
-	/**
-	 * @see android.widget.ArrayAdapter#getView(int, android.view.View,
-	 *  android.view.ViewGroup)
-	 */
 	@Override 
 	public View getView(int position, 
 			View convertView, ViewGroup parent) {
@@ -170,6 +173,7 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 		<#list fields?values as field>
 			<#if (!field.hidden && !field.internal)>
 				<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>  
+		/** ${field.name?cap_first}'s associated view. */
 					<#if (field.type=="boolean")>
 		protected CheckBox ${field.name}View;
 					<#else>
@@ -178,7 +182,9 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 				</#if>
 			</#if>
 		</#list>
+		/** Edit button. */
 		protected Button editButton;
+		/** Delete button. */
 		protected Button deleteButton;
 
 		/** Populate row with a ${curr.name}.
@@ -191,10 +197,10 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 					<#if (!field.relation??)>
 						<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
 			if (model.get${field.name?cap_first}() != null) {
-				${m.setAdapterLoader(field)}
+				${ViewUtils.setAdapterLoader(field)}
 			}
 						<#else>
-			${m.setAdapterLoader(field)}
+			${ViewUtils.setAdapterLoader(field)}
 						</#if>
 					<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 			this.${field.name}View.setText(
@@ -204,10 +210,7 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 			</#list>
 		}
 	}
-	/**
-	* Called when the user clicks on an element.
-	* @see android.app.OnClickListener#onClick
-	*/
+
 	@Override 
 	public void onClick(View v) {
 		switch (v.getId()) {

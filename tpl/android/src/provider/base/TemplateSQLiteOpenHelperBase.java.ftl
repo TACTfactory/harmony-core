@@ -1,59 +1,10 @@
+<#include utilityPath + "all_imports.ftl" />
 <#function callLoader entity>
 	<#assign ret="//Load "+entity.name+" fixtures\r\t\t" /> 
 	<#assign ret=ret+entity.name?cap_first+"DataLoader "+entity.name?uncap_first+"Loader = new "+entity.name?cap_first+"DataLoader(this.ctx);\r\t\t" />
 	<#assign ret=ret+entity.name?uncap_first+"Loader.getModelFixtures("+entity.name?cap_first+"DataLoader.MODE_BASE);\r\t\t" />
 	<#assign ret=ret+entity.name?uncap_first+"Loader.load(manager);\r\r" />
 	<#return ret />
-</#function>
-
-<#function hasOnlyRecursiveRelations entity>
-	<#list entity.relations as relation>
-		<#if relation.relation.targetEntity!=entity.name> 
-			<#return false>
-		</#if>
-	</#list>
-	<#return true>
-</#function>
-<#function getZeroRelationsEntities>
-	<#assign ret = [] />
-	<#list entities?values as entity>
-		<#if hasOnlyRecursiveRelations(entity)>
-			<#assign ret = ret + [entity.name]>
-		</#if>
-	</#list>
-	<#return ret />
-</#function>
-<#function isInArray array val>
-	<#list array as val_ref>
-		<#if val_ref==val>
-			<#return true />
-		</#if>
-	</#list>
-	<#return false />
-</#function>
-<#function isOnlyDependantOf entity entity_list>
-	<#list entity.relations as rel>
-		<#if rel.relation.type=="ManyToOne">
-			<#if !isInArray(entity_list, rel.relation.targetEntity)>
-				<#return false />
-			</#if>
-		</#if>	
-	</#list>
-	<#return true />
-</#function>
-<#function orderEntitiesByRelation>
-	<#assign ret = getZeroRelationsEntities() />
-	<#assign maxLoop = entities?size />
-	<#list 1..maxLoop as i>
-		<#list entities?values as entity>
-			<#if !isInArray(ret, entity.name)>
-				<#if isOnlyDependantOf(entity, ret)>
-					<#assign ret = ret + [entity.name] />
-				</#if>
-			</#if>
-		</#list>
-	</#list>
-	<#return ret>
 </#function>
 <@header?interpret />
 package ${data_namespace}.base;
@@ -63,7 +14,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-import ${data_namespace}.*;
+<#if options.fixture?? && options.fixture.enabled>import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;</#if>
+<#list entities?values as entity>
+	<#if (entity.fields?size > 0)>
+import ${data_namespace}.${entity.name?cap_first}SQLiteAdapter;
+	</#if>
+</#list>
 import ${project_namespace}.${project_name?cap_first}Application;
 
 import android.content.Context;
@@ -71,11 +27,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.test.IsolatedContext;
 import android.util.Log;
 
 <#if options.fixture?? && options.fixture.enabled>
-import ${fixture_namespace}.*;
+import ${fixture_namespace}.DataLoader;
 </#if>
 
 
@@ -125,9 +80,6 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see android.database.sqlite.SQLiteOpenHelper#onOpen(android.database.sqlite.SQLiteDatabase)
-	 */
 	@Override
 	public void onOpen(SQLiteDatabase db) {
 		super.onOpen(db);
@@ -135,10 +87,6 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		//db.execSQL("PRAGMA foreign_keys = ON;");
 	}
 
-	/**
-	 * @see android.database.sqlite.SQLiteOpenHelper#onCreate <br />
-	 * (android.database.sqlite.SQLiteDatabase)
-	 */
 	@Override
 	public void onCreate(final SQLiteDatabase db) {
 		Log.i(TAG, "Create database..");
@@ -186,13 +134,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		</#list>
 	}
 
-	/**
-	 * @see android.database.sqlite.SQLiteOpenHelper#onUpgrade <br />
-	 * (android.database.sqlite.SQLiteDatabase, int, int)
-	 * @param db the database
-	 * @param oldVersion the old version
-	 * @param newVersion the new version
-	 */
+	@Override
 	public void onUpgrade(final SQLiteDatabase db, final int oldVersion, 
 			final int newVersion) {
 		Log.i(TAG, "Update database..");
@@ -225,6 +167,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	/**
 	 * Creates a empty database on the system and rewrites it with your own
 	 * database.
+	 * @throws IOException if error has occured while copying files
 	 */
 	public void createDataBase() throws IOException {
 		if (assetsExist && !checkDataBase()) {
@@ -275,6 +218,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	 * Copies your database from your local assets-folder to the just created
 	 * empty database in the system folder, from where it can be accessed and
 	 * handled. This is done by transfering bytestream.
+	 * @throws IOException if error has occured while copying files
 	 * */
 	private void copyDataBase() throws IOException {
 

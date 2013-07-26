@@ -9,8 +9,6 @@ package ${project_namespace};
 
 import java.text.DateFormat;
 
-import ${project_namespace}.R;
-
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -55,9 +53,6 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	private static SharedPreferences preferences;
 	</#if>
 	
-	/** Called when the application is first created. 
-	 * @see android.app.Activity#onCreate
-	 */
 	@Override
 	public void onCreate() {
 		super.onCreate();
@@ -71,6 +66,10 @@ public abstract class ${project_name?cap_first}ApplicationBase
 		//		new ApplicationCrashHandler(super.getApplicationContext()));
 	}
 	
+	/**
+	 * Set the application singleton.
+	 * @param application The application instance
+	 */
 	private static void setSingleton(${project_name?cap_first}ApplicationBase application) {
 		if (singleton == null) {
 			singleton = application;
@@ -97,6 +96,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 
 	/**
 	 * Get the device's UDID.
+	 * @param ctx The context
 	 * @return A String containing the UDID
 	 */
 	public static String getUDID(final Context ctx) {
@@ -127,25 +127,27 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	}
 	
 	
-	/** UUID equivalent. 
+	/** UUID Equivalent. */
+	private static String deviceID;
+	/** 
+	 * UUID equivalent. 
 	 * @return UUID equivalent 
 	 */
-	private static String deviceID;
 	public static String getAndroidID() {
 		return deviceID;
 	}
 	
 	/** Application. */
-	// Public Application Shared Data
+	/** Public Application Shared Data. */
 	private static final String PREFS_PUBL = "puapsd"; 
+	/** Application version key. */
 	private static final String PREFS_VERS = "version";
 	
 	/** Get Application Version.
 	 * 
-	 * @param ctx
+	 * @param ctx The application context.
 	 * @return the version number
 	 */
-	@SuppressWarnings("deprecation")
 	public static String getVersion(final Context ctx) {
 		final SharedPreferences settings = ctx.getSharedPreferences(
 				${project_name?cap_first}ApplicationBase.PREFS_PUBL, 
@@ -157,7 +159,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	
 	/** Check if is a new version of Application.
 	 * 
-	 * @param ctx
+	 * @param ctx The application context.
 	 * @return true if same version
 	 */
 	public static boolean isGoodVersion(final Context ctx) {
@@ -169,9 +171,8 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	
 	/** Save if a new version is install.
 	 * 
-	 * @param ctx
+	 * @param ctx The application context.
 	 */
-	@SuppressWarnings("deprecation")
 	public static void setVersion(final Context ctx) {
 		final SharedPreferences settings = ctx.getSharedPreferences(
 				${project_name?cap_first}ApplicationBase.PREFS_PUBL, 
@@ -189,7 +190,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	
 	/** Check if Network is available.
 	 * 
-	 * @param ctx
+	 * @param ctx The application context
 	 * @return true if have a network
 	 */
 	public static boolean isNetworkAvailable(final Context ctx) {
@@ -246,7 +247,12 @@ public abstract class ${project_name?cap_first}ApplicationBase
 		edit.commit();
 	}
 	</#if>
-
+	
+	/** 
+	 * Get the application version code.
+	 * @param ctx The context
+	 * @return The application version code
+	 */ 
 	public static int getVersionCode(Context ctx) {
 		int result = 1;
 		
