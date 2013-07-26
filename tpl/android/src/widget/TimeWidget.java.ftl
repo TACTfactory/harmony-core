@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${project_namespace}.harmony.widget;
 
 import org.joda.time.DateTime;
@@ -147,8 +148,10 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 	    				this.dialogTitle);
 	    
 	    DialogClickListener timeListener = new DialogClickListener(this);
-			    timePicker.setPositiveButton(android.R.string.ok, timeListener);
-			    timePicker.setNegativeButton(android.R.string.cancel, timeListener);
+			    timePicker.setPositiveButton(android.R.string.ok, 
+							timeListener);
+			    timePicker.setNegativeButton(android.R.string.cancel, 
+							timeListener);
 			    timePicker.show();
 
 	    timePicker.show();
@@ -249,16 +252,16 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 		/** 
 		 * Called when User click on the Time EditText. 
 		 */
-		public void onClickTimeEditText();
+		void onClickTimeEditText();
 		
 		/** 
 		 * Called when User click on the Time picker dialog's ok button. 
 		 */
-		public void onValidateTime();
+		void onValidateTime();
 		
 		/** 
 		 * Called when User click on the Time picker dialog's cancel button. 
 		 */
-		public void onCancelTime();
+		void onCancelTime();
 	}
 }

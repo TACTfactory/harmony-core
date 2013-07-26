@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${project_namespace}.harmony.widget;
 
 import org.joda.time.DateTime;
@@ -209,17 +210,17 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 		/** 
 		 * Called when User click on the Date EditText. 
 		 */
-		public void onClickDateEditText();
+		void onClickDateEditText();
 		
 		/** 
 		 * Called when User click on the date picker dialog's ok button. 
 		 */
-		public void onValidateDate();
+		void onValidateDate();
 		
 		/** 
 		 * Called when User click on the date picker dialog's cancel button. 
 		 */
-		public void onCancelDate();
+		void onCancelDate();
 	}
 	
 }

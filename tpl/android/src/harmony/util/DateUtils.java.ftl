@@ -17,7 +17,9 @@ public class DateUtils extends android.text.format.DateUtils {
 	/** TAG for debug purpose. */
 	private static final String TAG = "DateUtils";
 
+	/** Internal pattern for AM PM time. */
 	private static final String TIME_AMPM_PATTERN = "hh:mm a";
+	/** Internal pattern for H24 time. */
 	private static final String TIME_24H_PATTERN = "HH:mm";
 
 	/** Time Format type. */
@@ -43,15 +45,17 @@ public class DateUtils extends android.text.format.DateUtils {
 	
 	/**
 	 * Convert date to Android string time format.
-	 * @param date to convert
+	 * @param time Time to convert
 	 * @return string time with Android time format
 	 */
 	public static String formatTimeToString(DateTime time) {
 		String result = null;
 		if (${project_name?cap_first}Application.is24Hour()) {
-			result = time.toString(DateTimeFormat.forPattern(TIME_24H_PATTERN));
+			result = time.toString(
+					DateTimeFormat.forPattern(TIME_24H_PATTERN));
 		} else {
-			result = time.toString(DateTimeFormat.forPattern(TIME_AMPM_PATTERN));
+			result = time.toString(
+					DateTimeFormat.forPattern(TIME_AMPM_PATTERN));
 		}
 		
 		return result;
@@ -59,7 +63,7 @@ public class DateUtils extends android.text.format.DateUtils {
 	
 	/**
 	 * Convert date to Android string time format.
-	 * @param date to convert
+	 * @param time to convert
 	 * @param formatType The time format 
 	 * @return string time with Android time format
 	 */
@@ -68,9 +72,11 @@ public class DateUtils extends android.text.format.DateUtils {
 			TimeFormatType formatType) {
 		String result;
 		if (formatType.equals(TimeFormatType.H24)) {
-			result = time.toString(DateTimeFormat.forPattern(TIME_24H_PATTERN));
+			result = 
+				time.toString(DateTimeFormat.forPattern(TIME_24H_PATTERN));
 		} else if (formatType.equals(TimeFormatType.AMPM)) {
-			result = time.toString(DateTimeFormat.forPattern(TIME_AMPM_PATTERN));
+			result = 
+				time.toString(DateTimeFormat.forPattern(TIME_AMPM_PATTERN));
 		} else if (formatType.equals(TimeFormatType.ANDROID_CONF)) {
 			result = formatTimeToString(time);
 		} else {
@@ -113,16 +119,19 @@ public class DateUtils extends android.text.format.DateUtils {
 	/**
 	 * Convert Android String time format to datetime.
 	 * @param time Android string time format to convert
-	 * @return datetime
+	 * @param formatType The time format type
+	 * @return datetime The parsed datetime
 	 */
 	public static DateTime formatStringToTime(
 			String time, 
 			TimeFormatType formatType) {
 		DateTime result;
 		if (formatType.equals(TimeFormatType.H24)) {
-			result = DateTimeFormat.forPattern(TIME_24H_PATTERN).parseDateTime(time);
+			result = DateTimeFormat.forPattern(TIME_24H_PATTERN).parseDateTime(
+					time);
 		} else if (formatType.equals(TimeFormatType.AMPM)) {
-			result = DateTimeFormat.forPattern(TIME_AMPM_PATTERN).parseDateTime(time);
+			result = DateTimeFormat.forPattern(TIME_AMPM_PATTERN).parseDateTime(
+					time);
 		} else if (formatType.equals(TimeFormatType.ANDROID_CONF)) {
 			result = DateUtils.formatStringToTime(time);
 		} else {
@@ -180,7 +189,7 @@ public class DateUtils extends android.text.format.DateUtils {
 	 * @return datetime
 	 */
 	public static DateTime formatStringToDateTime(
-							  java.text.DateFormat dateFormat, String dateTime) {
+							java.text.DateFormat dateFormat, String dateTime) {
 		DateTime dt = null;
 		
 		try {
