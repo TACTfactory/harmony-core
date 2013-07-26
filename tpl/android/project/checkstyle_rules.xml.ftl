@@ -61,6 +61,11 @@
     <!--   <property name="headerFile" value="${r"${checkstyle.header.file}"}"/> -->
     <!--   <property name="fileExtensions" value="java"/> -->
     <!-- </module> -->
+    <module name="RegexpHeader">
+        <property
+            name="headerFile"
+            value="java.header"/>
+    </module>
 
     <module name="TreeWalker">
 
