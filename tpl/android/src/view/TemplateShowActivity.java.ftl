@@ -1,4 +1,5 @@
 <#assign curr = entities[current_entity] />
+<@header?interpret />
 package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
@@ -13,10 +14,6 @@ import android.os.Bundle;
  */
 public class ${curr.name}ShowActivity extends HarmonyFragmentActivity {
 
-	/**
-	* Called when the Activity is created.
-	* @see android.app.Activity#onCreate
-	*/
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -27,10 +24,6 @@ public class ${curr.name}ShowActivity extends HarmonyFragmentActivity {
 		//.incrementActivityCount();
 	}
 	
-	/**
-	* Called when the Activity is destroyed.
-	* @see android.app.Activity#onDestroy
-	*/
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();

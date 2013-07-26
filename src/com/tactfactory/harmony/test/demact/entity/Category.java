@@ -15,16 +15,20 @@ import com.tactfactory.harmony.annotation.Entity;
 import com.tactfactory.harmony.annotation.Id;
 import com.tactfactory.harmony.annotation.OneToMany;
 
+/** Category class. */
 @Entity
 public class Category {
 
+	/** Entity's technical id. */
 	@Id
 	@Column
 	private int id;
 	
+	/** Name of the category. */
 	@Column
 	private String name;
 	
-	@OneToMany(mappedBy="category")
+	/** List of comments of this category. */
+	@OneToMany(mappedBy = "category")
 	private ArrayList<CategoryToComment> comments;
 }

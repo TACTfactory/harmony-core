@@ -21,6 +21,7 @@ import java.io.Serializable;
  */
 @Entity
 public class SimpleEntity implements Serializable {
+	/** Entity's technical id. */
 	@Id
     @Column(type = Type.INTEGER, hidden = true)
     @GeneratedValue(strategy = "IDENTITY")

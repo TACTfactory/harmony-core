@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${project_namespace}.test.base;
 
 import java.io.File;
