@@ -1,10 +1,13 @@
 package ${project_namespace}.harmony.view;
 
-import java.util.List;
-
 import android.content.Intent;
 import android.os.Bundle;
+import android.database.Cursor;
 import android.support.v4.app.LoaderManager;
+import android.view.View;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
@@ -14,12 +17,21 @@ import ${project_namespace}.menu.${project_name?cap_first}Menu;
 
 /**
  * @author yo
- *
+ * @param <T> Type to show
  */
 public abstract class HarmonyListFragment<T> extends SherlockListFragment 
-implements LoaderManager.LoaderCallbacks<List<T>>{
-	
-	/* (non-Javadoc)
+implements LoaderManager.LoaderCallbacks<Cursor> {
+	/**
+	 * Recall internal address (Hack Micky).
+	 */
+	protected static final int INTERNAL_EMPTY_ID = 0x00ff0001;
+	/** progress container ID. */
+	protected static final int INTERNAL_PROGRESS_CONTAINER_ID = 0x00ff0002;
+	/** list container ID. */
+	protected static final int INTERNAL_LIST_CONTAINER_ID = 0x00ff0003;
+
+
+	/**
 	 * @see android.support.v4.app.Fragment#onCreate(android.os.Bundle)
 	 */
 	@Override
@@ -28,8 +40,9 @@ implements LoaderManager.LoaderCallbacks<List<T>>{
 		this.setHasOptionsMenu(true);
 	}
 
-	/* (non-Javadoc)
-	 * @see com.actionbarsherlock.app.SherlockFragment#onPrepareOptionsMenu(com.actionbarsherlock.view.Menu)
+	/**
+	 * @see com.actionbarsherlock.app.SherlockFragment#onPrepareOptionsMenu
+	 * (com.actionbarsherlock.view.Menu)
 	 */
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
@@ -37,37 +50,75 @@ implements LoaderManager.LoaderCallbacks<List<T>>{
 		menu.clear();
 		
 		try {
-			${project_name?cap_first}Menu.getInstance(this.getActivity(), this).updateMenu(menu, this.getActivity());
+			${project_name?cap_first}Menu.getInstance(this.getActivity(), this)
+										  .updateMenu(menu, this.getActivity());
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.actionbarsherlock.app.SherlockFragment#onOptionsItemSelected(com.actionbarsherlock.view.MenuItem)
+	/**
+	 * @see com.actionbarsherlock.app.SherlockFragment#onOptionsItemSelected
+	 * (com.actionbarsherlock.view.MenuItem)
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		boolean result;
 		try {
-			return ${project_name?cap_first}Menu.getInstance(this.getActivity(), this).dispatch(item, this.getActivity());
+			result = ${project_name?cap_first}Menu.getInstance(
+			this.getActivity(), 
+			this).dispatch(item, this.getActivity());
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			result = false;
 		}
+		
+		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see android.support.v4.app.Fragment#onActivityResult(int, int, android.content.Intent)
+	/**
+	 * @see android.support.v4.app.Fragment#onActivityResult
+	 * (int, int, android.content.Intent)
 	 */
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		try {
-			${project_name?cap_first}Menu.getInstance(this.getActivity(),this).onActivityResult(requestCode, resultCode, data, this.getActivity(), this);
+			${project_name?cap_first}Menu.getInstance(this.getActivity(), this)
+			.onActivityResult(requestCode, resultCode, data, this.getActivity(),
+			this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		
 		super.onActivityResult(requestCode, resultCode, data);
+	}
+
+
+	/** Initialize Custom List Fragment.
+	 * 
+	 * @param rootView
+	 */
+	protected void initializeHackCustomList(final View rootView,
+			int progressLayoutId,
+			int listContainerId) {
+		// HACK Micky : Map component support ListFragment
+		// Progress
+		final LinearLayout progressLayout = 
+				(LinearLayout) rootView.findViewById(
+						progressLayoutId);
+		progressLayout.setId(INTERNAL_PROGRESS_CONTAINER_ID);
+
+		// Empty
+		final TextView emptyText = 
+				(TextView) rootView.findViewById(android.R.id.empty);
+		emptyText.setId(INTERNAL_EMPTY_ID);
+
+		// ListContainer
+		final RelativeLayout listContainer = 
+				(RelativeLayout) rootView.findViewById(
+						listContainerId);
+		listContainer.setId(INTERNAL_LIST_CONTAINER_ID);
+		// END HACK
 	}
 
 }

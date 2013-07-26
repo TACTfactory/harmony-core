@@ -1,4 +1,6 @@
+<#import "/tpl/android/src/view/methods.ftl" as m />
 <#assign curr = entities[current_entity] />
+<#assign fields = m.getAllFields(curr) />
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,7 +10,7 @@
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
     android:paddingTop="2.5dp" >
-	<#list curr.fields as field>
+	<#list fields?values as field>
 		<#assign m_id="${curr.name?lower_case}_${field.name?lower_case}" />
 		<#assign m_id_label="${m_id}_label" />
 		<#if (!field.internal && !field.hidden)>	
@@ -35,4 +37,21 @@
 			</#if>
 		</#if>
 	</#list>
+	<Button
+		android:id="@+id/row_${curr.name?lower_case}_delete_btn"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentRight="true"
+		android:layout_centerVertical="true"
+		android:focusable="false"
+		android:text="@string/common_delete" />
+	<Button
+		android:id="@+id/row_${curr.name?lower_case}_edit_btn"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_toLeftOf="@id/row_${curr.name?lower_case}_delete_btn"
+		android:layout_centerVertical="true"
+		android:focusable="false"
+		android:text="@string/common_edit" />
+
 </RelativeLayout>

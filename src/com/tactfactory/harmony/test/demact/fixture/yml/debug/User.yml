@@ -1,0 +1,28 @@
+User:
+   DEBUG - Dupond:
+      id: 0
+      firstname: DEBUG - Dupond
+      lastname: DEBUG - Dupont
+      login: DEBUG - dup
+      password: DEBUG - password
+      createdAt: 2001-12-15 2:59:43.10
+      birthdate: 2001-12-15 2:59:43.10
+      userGroup: User
+   DEBUG - Haddock:
+      id: 1
+      firstname: DEBUG - Haddock
+      lastname: DEBUG - Archibald
+      login: DEBUG - had
+      password: DEBUG - password
+      createdAt: 2001-12-15 2:59:43.10
+      birthdate: 2001-12-15 2:59:43.10
+      userGroup: User
+   DEBUG - Tournesol:
+      id: 2
+      firstname: DEBUG - Tournesol
+      lastname: DEBUG - Tryphon
+      login: DEBUG - tou
+      password: DEBUG - password
+      createdAt: 2001-12-15 2:59:43.10
+      birthdate: 2001-12-15 2:59:43.10
+      userGroup: User

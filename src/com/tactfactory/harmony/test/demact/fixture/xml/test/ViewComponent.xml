@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<ViewComponent id="TEST - VC1">
+		<id>0</id>
+		<string>TEST - String</string>
+		<text>TEST - Texte</text>
+		<dateTime>2012-01-01 00:00</dateTime>
+		<date>2012-01-01</date>
+		<time>00:00</time>
+		<login>TEST - VC1 login</login>
+		<password>TEST - VC1 password</password>
+		<email>TEST - user1@vc1.com</email>
+		<phone>TEST - VC1-060101</phone>
+		<city>TEST - VC1 city</city>
+		<zipcode>01000</zipcode>
+		<country>TEST - VC1 country</country>
+	</ViewComponent>
+	<ViewComponent id="TEST - VC2">
+		<id>0</id>
+		<string>TEST - Dupond</string>
+		<text>TEST - Dupont</text>
+		<dateTime>2012-01-01 00:00</dateTime>
+		<date>2012-01-01</date>
+		<time>00:00</time>
+		<login>TEST - VC2 login</login>
+		<password>TEST - VC2 password</password>
+		<email>TEST - user2@vc2.com</email>
+		<phone>TEST - VC2-060202</phone>
+		<city>TEST - VC2 city</city>
+		<zipcode>02000</zipcode>
+		<country>TEST - VC2 country</country>
+	</ViewComponent>
+	<ViewComponent id="TEST - VC3">
+		<id>0</id>
+		<string>TEST - Dupond</string>
+		<text>TEST - Dupont</text>
+		<dateTime>2012-01-01 00:00</dateTime>
+		<date>2012-01-01</date>
+		<time>00:00</time>
+		<login>TEST - VC3 login</login>
+		<password>TEST - VC3 password</password>
+		<email>TEST - user3@vc3.com</email>
+		<phone>TEST - VC3-060303</phone>
+		<city>TEST - VC3 city</city>
+		<zipcode>03000</zipcode>
+		<country>TEST - VC3 country</country>
+	</ViewComponent>
+</list>

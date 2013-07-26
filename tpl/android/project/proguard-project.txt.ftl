@@ -41,7 +41,7 @@
 -dontwarn org.joda.convert.ToString
 
 # Harmony
--dontwarn com.tactfactory.mda.**
+-dontwarn com.tactfactory.harmony.**
 
 # Facebook
 #-keep class com.facebook.** { *; }
@@ -52,5 +52,9 @@
 
 # Flurry
 #-dontwarn com.flurry.**
+
+# JDom2
+-keep class org.jdom2.** { *; }
+-dontwarn org.jdom2.**
 
 -target 1.6

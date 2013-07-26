@@ -1,0 +1,28 @@
+User:
+   TEST - Dupond:
+      id: 0
+      firstname: TEST - Dupond
+      lastname: TEST - Dupont
+      login: TEST - dup
+      password: TEST - password
+      createdAt: 2001-12-15 2:59:43.10
+      birthdate: 2001-12-15 2:59:43.10
+      userGroup: User
+   TEST - Haddock:
+      id: 1
+      firstname: TEST - Haddock
+      lastname: TEST - Archibald
+      login: TEST - had
+      password: TEST - password
+      createdAt: 2001-12-15 2:59:43.10
+      birthdate: 2001-12-15 2:59:43.10
+      userGroup: User
+   TEST - Tournesol:
+      id: 2
+      firstname: TEST - Tournesol
+      lastname: TEST - Tryphon
+      login: TEST - tou
+      password: TEST - password
+      createdAt: 2001-12-15 2:59:43.10
+      birthdate: 2001-12-15 2:59:43.10
+      userGroup: User

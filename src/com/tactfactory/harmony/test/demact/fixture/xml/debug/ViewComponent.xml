@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<ViewComponent id="DEBUG - VC1">
+		<id>0</id>
+		<string>DEBUG - String</string>
+		<text>DEBUG - Texte</text>
+		<dateTime>2012-01-01 00:00</dateTime>
+		<date>2012-01-01</date>
+		<time>00:00</time>
+		<login>DEBUG - VC1 login</login>
+		<password>DEBUG - VC1 password</password>
+		<email>DEBUG - user1@vc1.com</email>
+		<phone>DEBUG - VC1-060101</phone>
+		<city>DEBUG - VC1 city</city>
+		<zipcode>01000</zipcode>
+		<country>DEBUG - VC1 country</country>
+	</ViewComponent>
+	<ViewComponent id="DEBUG - VC2">
+		<id>0</id>
+		<string>DEBUG - Dupond</string>
+		<text>DEBUG - Dupont</text>
+		<dateTime>2012-01-01 00:00</dateTime>
+		<date>2012-01-01</date>
+		<time>00:00</time>
+		<login>DEBUG - VC2 login</login>
+		<password>DEBUG - VC2 password</password>
+		<email>DEBUG - user2@vc2.com</email>
+		<phone>DEBUG - VC2-060202</phone>
+		<city>DEBUG - VC2 city</city>
+		<zipcode>02000</zipcode>
+		<country>DEBUG - VC2 country</country>
+	</ViewComponent>
+	<ViewComponent id="DEBUG - VC3">
+		<id>0</id>
+		<string>DEBUG - Dupond</string>
+		<text>DEBUG - Dupont</text>
+		<dateTime>2012-01-01 00:00</dateTime>
+		<date>2012-01-01</date>
+		<time>00:00</time>
+		<login>DEBUG - VC3 login</login>
+		<password>DEBUG - VC3 password</password>
+		<email>DEBUG - user3@vc3.com</email>
+		<phone>DEBUG - VC3-060303</phone>
+		<city>DEBUG - VC3 city</city>
+		<zipcode>03000</zipcode>
+		<country>DEBUG - VC3 country</country>
+	</ViewComponent>
+</list>

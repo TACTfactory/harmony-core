@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${project_namespace};
 
 import java.util.ArrayList;
@@ -5,13 +6,18 @@ import java.util.ArrayList;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-public class ${project_name?cap_first}Preferences extends ${project_name?cap_first}PreferencesBase {
-	// Constants
+public class ${project_name?cap_first}Preferences 
+						extends ${project_name?cap_first}PreferencesBase {
+	/** Constants
+	 *
+	 */
 	private static final String shareName = "sharedata";
 	
-	// Common
-	public ${project_name?cap_first}Preferences(Context context) {
-		this.settings = context.getSharedPreferences(
+	/** Common
+	 *
+	 */
+	public ${project_name?cap_first}Preferences(Context ctx) {
+		this.settings = ctx.getSharedPreferences(
 				shareName, Context.MODE_PRIVATE);
 	}
 	

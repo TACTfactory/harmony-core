@@ -13,43 +13,58 @@ import ${project_namespace}.menu.${project_name?cap_first}Menu;
  */
 public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
 
-	/* (non-Javadoc)
-	 * @see com.actionbarsherlock.app.SherlockFragmentActivity#onPrepareOptionsMenu(com.actionbarsherlock.view.Menu)
+	/**
+	 * @see com.actionbarsherlock.app.SherlockFragmentActivity
+	 * #onPrepareOptionsMenu(com.actionbarsherlock.view.Menu)
 	 */
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
-		menu.clear();
+		boolean result = true;
 		
 		try {
-			${project_name?cap_first}Menu.getInstance(this).updateMenu(menu, this);
+			${project_name?cap_first}Menu.getInstance(this).clear(menu);
+			${project_name?cap_first}Menu.getInstance(this).updateMenu(menu, 
+																		  this);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			result = false;
 		}
 		
-		return super.onPrepareOptionsMenu(menu);
+		if(result) {
+			result = super.onPrepareOptionsMenu(menu);
+		}
+		
+		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.actionbarsherlock.app.SherlockFragmentActivity#onOptionsItemSelected(com.actionbarsherlock.view.MenuItem)
+	/**
+	 * @see com.actionbarsherlock.app.SherlockFragmentActivity
+	 * #onOptionsItemSelected(com.actionbarsherlock.view.MenuItem)
 	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		boolean result;
 		try {
-			return ${project_name?cap_first}Menu.getInstance(this).dispatch(item, this);
+			result = ${project_name?cap_first}Menu.getInstance(this).dispatch(
+																	item, this);
 		} catch (Exception e) {
 			e.printStackTrace();
-			return false;
+			result = false;
 		}
+		
+		return result;
 	}
 
-	/* (non-Javadoc)
-	 * @see android.support.v4.app.FragmentActivity#onActivityResult(int, int, android.content.Intent)
+	/**
+	 * @see android.support.v4.app.FragmentActivity#onActivityResult
+	 * (int, int, android.content.Intent)
 	 */
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+	protected void onActivityResult(int requestCode, int resultCode, 
+																  Intent data) {
 		try {
-			${project_name?cap_first}Menu.getInstance(this).onActivityResult(requestCode, resultCode, data, this);
+			${project_name?cap_first}Menu.getInstance(this).onActivityResult(
+										   requestCode, resultCode, data, this);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

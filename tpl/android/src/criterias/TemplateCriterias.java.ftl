@@ -1,24 +1,46 @@
 <#assign curr = entities[current_entity] />
+<@header?interpret />
 package ${project_namespace}.criterias;
 
 import ${data_namespace}.${curr.name?cap_first}SQLiteAdapter;
-import ${project_namespace}.criterias.base.*;
+import ${project_namespace}.criterias.base.CriteriasBase;
+import ${project_namespace}.criterias.base.Criteria;
 
-public class ${curr.name?cap_first}Criterias extends CriteriasBase{
-	public static final String _PARCELABLE = "${curr.name?uncap_first}CriteriaPARCEL";
+/**
+ * ${curr.name?cap_first}Criterias.
+ */
+public class ${curr.name?cap_first}Criterias extends CriteriasBase {
+	/** String to parcel ${curr.name?uncap_first}Criteria. */
+	public static final String PARCELABLE = 
+			"${curr.name?uncap_first}CriteriaPARCEL";
 
-	public ${curr.name?cap_first}Criterias(GroupType type){super(type);}
+	/**
+	 * Constructor.
+	 * @param type The Criteria's GroupType
+	 */
+	public ${curr.name?cap_first}Criterias(final GroupType type) { 
+		super(type); 
+	}
 	
+	/**
+	 * Checks if the given Criteria is valid.
+	 * @param crit The Criteria to validate
+	 * @return true if the criteria is valid
+	 */
 	@Override
-	public boolean validCriteria(Criteria c) {
-		String key = c.getKey();
-		String[] possibleKeys = ${curr.name?cap_first}SQLiteAdapter.COLS;
-		for (String pKey : possibleKeys){
-			if (key.equals(pKey)){
-				return true;
+	public boolean validCriteria(final Criteria crit) {
+		boolean result = true;
+	
+		/*final String key = crit.getKey();
+		final String[] possibleKeys = ${curr.name?cap_first}SQLiteAdapter.COLS;
+		for (final String pKey : possibleKeys) {
+			if (key.equals(pKey)) {
+				result = true;
+				break;
 			}
-		}
-		return false;
+		}*/
+		
+		return result;
 	}
 
 }

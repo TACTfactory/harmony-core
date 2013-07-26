@@ -1,0 +1,37 @@
+Post:
+   DEBUG - Post1:
+      id: 0
+      title: "DEBUG - Post 1"
+      content: "DEBUG - Je dirais meme plus..."
+      categories: 
+         category: HiTech
+      owner: DEBUG - Dupond
+      comments: 
+         comment : DEBUG - Comment1
+      createdAt: 2001-12-15 2:59:43.10
+      updatedAt: 2001-12-15 2:59:43.10
+      expiresAt: 2001-12-15 2:59:43.10
+   DEBUG - Post2:
+      id: 0
+      title: "DEBUG - Post 2"
+      content: "DEBUG - Bachibouzouk"
+      categories: 
+         category: HiTech
+      owner: DEBUG - Haddock
+      comments: 
+         comment : DEBUG - Comment2
+      createdAt: 2001-12-15 2:59:43.10
+      updatedAt: 2001-12-15 2:59:43.10
+      expiresAt: 2001-12-15 2:59:43.10
+   DEBUG - Post3:
+      id: 0
+      title: "DEBUG - Post 3"
+      content: "DEBUG - Mais oui, c'est un gymnote..."
+      categories: 
+         category: HiTech
+      owner: DEBUG - Tournesol
+      comments: 
+         comment : DEBUG - Comment3
+      createdAt: 2001-12-15 2:59:43.10
+      updatedAt: 2001-12-15 2:59:43.10
+      expiresAt: 2001-12-15 2:59:43.10

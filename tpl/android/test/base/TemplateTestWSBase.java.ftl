@@ -16,7 +16,7 @@ import junit.framework.Assert;
  * 
  * @see android.app.Fragment
  */
-public class ${curr.name}TestWSBase extends AndroidTestCase {
+public class ${curr.name}TestWSBase extends /*TestDBBase*/ AndroidTestCase {
 	private Context ctx;
 	private ${curr.name} model;
 	private ${curr.name}WebServiceClientAdapter web;

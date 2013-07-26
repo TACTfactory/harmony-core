@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<Post id="DEBUG - Post1">
+		<id>0</id>
+		<title>DEBUG - Post 1</title>
+		<content>DEBUG - Je dirais meme plus...</content>
+		<categories>DEBUG - Radotage</categories>
+		<owner>DEBUG - Dupond</owner>
+		<comments></comments>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<updatedAt>2012-01-01 00:00</updatedAt>
+		<expiresAt>2012-01-01 00:00</expiresAt>
+	</Post>
+	<Post id="DEBUG - Post2">
+		<id>0</id>
+		<title>DEBUG - Post 2</title>
+		<content>DEBUG - Bachibouzouk</content>
+		<categories>DEBUG - Insulte</categories>
+		<owner>DEBUG - Haddock</owner>
+		<comments></comments>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<updatedAt>2012-01-01 00:00</updatedAt>
+		<expiresAt>2012-01-01 00:00</expiresAt>
+	</Post>
+	<Post id="DEBUG - Post3">
+		<id>0</id>
+		<title>DEBUG - Post 3</title>
+		<content>DEBUG - Mais oui, c'est une gymnote...</content>
+		<categories>DEBUG - Fait scientifique</categories>
+		<owner>DEBUG - Tournesol</owner>
+		<comments></comments>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<updatedAt>2012-01-01 00:00</updatedAt>
+		<expiresAt>2012-01-01 00:00</expiresAt>
+	</Post>
+</list>

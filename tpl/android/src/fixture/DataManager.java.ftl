@@ -1,52 +1,70 @@
+<@header?interpret />
 package ${fixture_namespace};
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.tactfactory.mda.meta.ClassMetadata;
+import com.tactfactory.harmony.meta.ClassMetadata;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import ${data_namespace}.base.SQLiteAdapterBase;
 <#list entities?values as entity>
-	<#if (entity.fields?size>0)>
+	<#if ((entity.fields?size>0) && !(entity.internal?? && entity.internal=='true'))>
 import ${data_namespace}.${entity.name?cap_first}SQLiteAdapter;
 import ${project_namespace}.entity.${entity.name?cap_first};
 	</#if>
 </#list>
 
+/**
+ * DataManager.
+ */
 public class DataManager {
-	protected HashMap<String, SQLiteAdapterBase<?>> adapters = new HashMap<String, SQLiteAdapterBase<?>>();
+	/** HashMap to join Entity Name and its SQLiteAdapterBase. */
+	protected Map<String, SQLiteAdapterBase<?>> adapters = 
+			new HashMap<String, SQLiteAdapterBase<?>>();
+	/** is successfull. */
 	protected boolean isSuccessfull = true;
+	/** is in internal transaction. */
 	protected boolean isInInternalTransaction = false;
+	/** database. */
 	protected SQLiteDatabase db;
 	
-	public DataManager(Context ctx, SQLiteDatabase db){
+	/**
+	 * Constructor.
+	 * @param ctx The context
+	 * @param db The DB to work in
+	 */
+	public DataManager(final Context ctx, final SQLiteDatabase db) {
 		this.db = db;
 		<#list entities?values as entity>
-			<#if (entity.fields?size>0)>
-		this.adapters.put("${entity.name}", new ${entity.name?cap_first}SQLiteAdapter(ctx));
-		this.adapters.get("${entity.name}").open(this.db);		
+			<#if ((entity.fields?size>0) && !(entity.internal?? && entity.internal=='true'))>
+		this.adapters.put("${entity.name}", 
+				new ${entity.name?cap_first}SQLiteAdapter(ctx));
+		this.adapters.get("${entity.name}").open(this.db);
 			</#if>
 		</#list>
 	}
 	/**
      * Finds a object by its identifier.
      *
-     * This is just a convenient shortcut for getRepository($className)->find($id).
+     * This is just a convenient shortcut for getRepository($className)
+     * ->find($id).
      *
      * @param nameClass
      * @param id
      * @return object
      */
-    public Object find(String nameClass, int id) {
+    public Object find(final String nameClass, final int id) {
     	Object ret = null;
     	this.beginTransaction();
     	
     	<#list entities?values as entity>
-    		<#if (entity.fields?size>0) && (entity.ids?size>0)>
-    	if (nameClass.equals("${entity.name}")){
-        	ret = ((${entity.name}SQLiteAdapter)this.adapters.get(nameClass)).query(id);
+    		<#if ((entity.fields?size>0) && (entity.ids?size>0) && !(entity.internal?? && entity.internal=='true'))>
+    	if (nameClass.equals("${entity.name}")) {
+        	ret = ((${entity.name}SQLiteAdapter) 
+        							   this.adapters.get(nameClass)).query(id);
     	}
     		</#if>
     	</#list>
@@ -57,41 +75,51 @@ public class DataManager {
     /**
      * Tells the ObjectManager to make an instance managed and persistent.
      *
-     * The object will be entered into the database as a result of the flush operation.
+     * The object will be entered into the database as a result of the <br />
+     * flush operation.
      *
-     * NOTE: The persist operation always considers objects that are not yet known to
-     * this ObjectManager as NEW. Do not pass detached objects to the persist operation.
+     * NOTE: The persist operation always considers objects that are not<br />
+     * yet known to this ObjectManager as NEW. Do not pass detached <br />
+     * objects to the persist operation.
      *
      * @param object $object The instance to make managed and persistent.
+     * @return Count of objects entered into the DB
      */
     @SuppressWarnings({ "rawtypes", "unchecked" })
-    public int persist(Object object) {
+    public int persist(final Object object) {
+    	int result;
+    
     	this.beginTransaction();
     	try {
-    		SQLiteAdapterBase adapter = this.getRepository(object);
+    		final SQLiteAdapterBase adapter = this.getRepository(object);
     			
-    		return (int)adapter.insert(object);
+    		result = (int) adapter.insert(object);
     	} catch (Exception ex) {
     		ex.printStackTrace();
     		this.isSuccessfull = false;
+    		result = 0;
     	}    	
-    	return 0;
+    	
+    	return result;
     }
 
     /**
      * Removes an object instance.
      *
-     * A removed object will be removed from the database as a result of the flush operation.
+     * A removed object will be removed from the database as a result of <br />
+     * the flush operation.
      *
      * @param object $object The object instance to remove.
      */
-    public void remove(Object object) {
+    public void remove(final Object object) {
     	this.beginTransaction();
     	try {
     	<#list entities?values as entity>
-    		<#if (entity.fields?size>0 && entity.ids?size>0)>
-    		if (object instanceof ${entity.name}){
-    			((${entity.name}SQLiteAdapter)this.adapters.get("${entity.name}")).remove(((${entity.name})object).getId());
+    		<#if ((entity.fields?size>0 && entity.ids?size>0) && !(entity.internal?? && entity.internal=='true'))>
+    		if (object instanceof ${entity.name}) {
+    			((${entity.name}SQLiteAdapter) 
+    					this.adapters.get("${entity.name}"))
+    						.remove(<#list entity.ids as id>((${entity.name}) object).get${id.name?cap_first}()<#if id_has_next>, </#if></#list>);
     		}
     		</#if>
     	</#list>
@@ -103,7 +131,8 @@ public class DataManager {
 //    /**
 //     * Merges the state of a detached object into the persistence context
 //     * of this ObjectManager and returns the managed copy of the object.
-//     * The object passed to merge will not become associated/managed with this ObjectManager.
+//     * The object passed to merge will not become associated/managed with 
+//	   * this ObjectManager.
 //     *
 //     * @param object $object
 //     */
@@ -115,7 +144,8 @@ public class DataManager {
 //     * Clears the ObjectManager. All objects that are currently managed
 //     * by this ObjectManager become detached.
 //     *
-//     * @param objectName $objectName if given, only objects of this type will get detached
+//     * @param objectName $objectName if given, only objects of this type will
+//     * get detached
 //     */
 //    public void clear(String objectName) {
 //    	
@@ -124,9 +154,10 @@ public class DataManager {
 //    /**
 //     * Detaches an object from the ObjectManager, causing a managed object to
 //     * become detached. Unflushed changes made to the object if any
-//     * (including removal of the object), will not be synchronized to the database.
-//     * Objects which previously referenced the detached object will continue to
-//     * reference it.
+//     * (including removal of the object), will not be synchronized to the 
+//     * database.
+//     * Objects which previously referenced the detached object will continue 
+//     * to reference it.
 //     *
 //     * @param object $object The object to detach.
 //     */
@@ -145,14 +176,15 @@ public class DataManager {
 //    }
 
     /**
-     * Flushes all changes to objects that have been queued up to now to the database.
-     * This effectively synchronizes the in-memory state of managed objects with the
-     * database.
+     * Flushes all changes to objects that have been queued up to now to <br />
+     * the database. This effectively synchronizes the in-memory state of<br />
+     * managed objects with the database.
      */
     public void flush() {
-    	if (this.isInInternalTransaction){
-    		if (this.isSuccessfull)
+    	if (this.isInInternalTransaction) {
+    		if (this.isSuccessfull) {
     			this.db.setTransactionSuccessful();
+    		}
     		this.db.endTransaction();
     		this.isInInternalTransaction = false;
     	}
@@ -164,19 +196,19 @@ public class DataManager {
      * @param className $className
      * @return \Doctrine\Common\Persistence\ObjectRepository
      */
-    public SQLiteAdapterBase<?> getRepository(String className) {
+    public SQLiteAdapterBase<?> getRepository(final String className) {
     	return this.adapters.get(className);
     }
     
     
     /**
-     * Gets the repository for a given object
+     * Gets the repository for a given object.
      *
      * @param o object
      * @return \Doctrine\Common\Persistence\ObjectRepository
      */
-	private SQLiteAdapterBase<?> getRepository(Object o) {
-		String className = o.getClass().getSimpleName();
+	private SQLiteAdapterBase<?> getRepository(final Object o) {
+		final String className = o.getClass().getSimpleName();
 	
 		return this.getRepository(className);
 	}
@@ -184,13 +216,13 @@ public class DataManager {
     /**
      * Returns the ClassMetadata descriptor for a class.
      *
-     * The class name must be the fully-qualified class name without a leading backslash
-     * (as it is returned by get_class($obj)).
+     * The class name must be the fully-qualified class name without a <br />
+     * leading backslash (as it is returned by get_class($obj)).
      *
      * @param className $className
      * @return \Doctrine\Common\Persistence\Mapping\ClassMetadata
      */
-    public ClassMetadata getClassMetadata(String className) {
+    public ClassMetadata getClassMetadata(final String className) {
     	return null;
     }
 
@@ -201,13 +233,16 @@ public class DataManager {
      * @param object $object
      * @return bool
      */
-    public boolean contains(Object object) {
+    public boolean contains(final Object object) {
     	return false;
     }
     
-    private void beginTransaction(){    	
+    /**
+     * Called before any transaction to open the DB.
+     */
+    private void beginTransaction() {    	
     	// If we are not already in a transaction, begin it
-    	if (!this.isInInternalTransaction){
+    	if (!this.isInInternalTransaction) {
     		this.db.beginTransaction();
     		this.isSuccessfull = true;
     		this.isInInternalTransaction = true;
