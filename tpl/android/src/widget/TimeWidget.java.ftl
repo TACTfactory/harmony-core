@@ -2,6 +2,7 @@ package ${project_namespace}.harmony.widget;
 
 import org.joda.time.DateTime;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
@@ -20,6 +21,7 @@ import ${project_namespace}.harmony.util.DateUtils;
 import ${project_namespace}.harmony.util.DateUtils.TimeFormatType;
 
 public class TimeWidget extends FrameLayout implements OnClickListener {
+	private OnTimeClickListener timeListener;
 	private EditText timeEditText;
 	private TimeFormatType timeFormat = TimeFormatType.ANDROID_CONF;
 	private String dialogTitle;
@@ -93,7 +95,10 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 
 	@Override
 	public void onClick(View arg0) {
-		 DateTime dt = new DateTime();
+		if (this.timeListener != null) {
+			this.timeListener.onClickTimeEditText();
+		}
+		DateTime dt = new DateTime();
 
         final String time = 
         		this.timeEditText.getText().toString();
@@ -119,9 +124,10 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 	    				format24H,
 	    				this.dialogTitle);
 	    
-	    timePicker.setPositiveButton(
-	    		getContext().getString(android.R.string.ok), 
-	    		new DialogClickListener(this));
+	    DialogClickListener timeListener = new DialogClickListener(this);
+			    timePicker.setPositiveButton(android.R.string.ok, timeListener);
+			    timePicker.setNegativeButton(android.R.string.cancel, timeListener);
+			    timePicker.show();
 
 	    timePicker.show();
 
@@ -158,13 +164,60 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 		public void onClick(DialogInterface dialog, int which) {
 			final TimePicker tp = 
 					((CustomTimePickerDialog) dialog).getTimePicker();
-			DateTime time = new DateTime(0);
-			time = new DateTime(time.getYear(), 
-					time.getMonthOfYear(), 
-					time.getDayOfMonth(), 
-					tp.getCurrentHour(), 
-					tp.getCurrentMinute());
-			timeWidget.setTime(time);
+			switch (which) {
+				case AlertDialog.BUTTON_POSITIVE :
+					DateTime time = new DateTime(0);
+					time = new DateTime(time.getYear(), 
+						time.getMonthOfYear(), 
+						time.getDayOfMonth(), 
+						tp.getCurrentHour(), 
+						tp.getCurrentMinute());
+					timeWidget.setTime(time);
+					if (TimeWidget.this.timeListener != null) {
+						TimeWidget.this.timeListener.onValidateTime();
+					}
+				break;
+				
+			case AlertDialog.BUTTON_NEGATIVE :
+				if (TimeWidget.this.timeListener != null) {
+					TimeWidget.this.timeListener.onCancelTime();
+				}
+				break;
+			}
 		}
+	}
+	
+	/** 
+	 * Sets an OnTimeClickListener for this view.
+	 *  
+	 * @param listener The listener to set 
+	 */
+	public void setOnTimeClickListener(OnTimeClickListener listener) {
+		this.timeListener = listener;
+	}
+
+	/**
+	 * Remove the current OnTimeClickListener.
+	 */
+	public void removeOnTimeClickListener() {
+		this.timeListener = null;
+	}
+	
+	/** Widget Interface for click events. */
+	public interface OnTimeClickListener {
+		/** 
+		 * Called when User click on the Time EditText. 
+		 */
+		public void onClickTimeEditText();
+		
+		/** 
+		 * Called when User click on the Time picker dialog's ok button. 
+		 */
+		public void onValidateTime();
+		
+		/** 
+		 * Called when User click on the Time picker dialog's cancel button. 
+		 */
+		public void onCancelTime();
 	}
 }

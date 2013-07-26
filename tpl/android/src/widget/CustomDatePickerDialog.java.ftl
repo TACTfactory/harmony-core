@@ -166,15 +166,6 @@ public class CustomDatePickerDialog extends AlertDialog {
 				this.datePicker.setMinDate(maxDate.getMillis());
 			}
 		}
-		
-		this.setNegativeButton(this.ctx.getString(android.R.string.cancel), 
-										 new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				((CustomDatePickerDialog) dialog).hide();
-			}
-		});
 
 		super.onCreate(savedInstanceState);
 	}

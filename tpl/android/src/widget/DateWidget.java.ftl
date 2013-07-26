@@ -2,8 +2,7 @@ package ${project_namespace}.harmony.widget;
 
 import org.joda.time.DateTime;
 
-import ${project_namespace}.R;
-import ${project_namespace}.harmony.util.DateUtils;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
@@ -16,7 +15,11 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
+import ${project_namespace}.R;
+import ${project_namespace}.harmony.util.DateUtils;
+
 public class DateWidget extends FrameLayout implements OnClickListener {
+	private OnDateClickListener dateListener;
 	private EditText dateEditText;
 	private String dialogTitle;
 	
@@ -70,7 +73,10 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 
 	@Override
 	public void onClick(View arg0) {
-		 DateTime dt = new DateTime();
+		if (this.dateListener != null) {
+			this.dateListener.onClickDateEditText();
+		}
+		DateTime dt = new DateTime();
 
         final String createdAtDate = 
         		this.dateEditText.getText().toString();
@@ -80,19 +86,16 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 			dt = DateUtils.formatStringToDate(strInputDate);
 		}
 		
-	    final CustomDatePickerDialog createdAtDpd = 
+	    final CustomDatePickerDialog datePicker = 
 	    		new CustomDatePickerDialog(
 	    				getContext(), 
 	    				dt, 
 	    				this.dialogTitle);
 	    
-	    createdAtDpd.setPositiveButton(
-	    		getContext().getString(android.R.string.ok), 
-	    		new DialogClickListener(this));
-
-	    createdAtDpd.show();
-
-		
+	    DialogClickListener listener = new DialogClickListener(this);
+	    datePicker.setPositiveButton(android.R.string.ok, listener);
+	    datePicker.setNegativeButton(android.R.string.cancel, listener);
+	    datePicker.show();		
 	}
 	
 	public void setDate(DateTime date) {
@@ -120,15 +123,63 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 		
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-			final DatePicker dp = 
-					((CustomDatePickerDialog) dialog).getDatePicker();
-				final DateTime date = 
-					new DateTime(dp.getYear(), 
-							dp.getMonth() + 1, 
-							dp.getDayOfMonth(), 
-							0, 
-							0);
-				dateWidget.setDate(date);
+			switch (which) {
+				case AlertDialog.BUTTON_POSITIVE :
+					final DatePicker dp = 
+						((CustomDatePickerDialog) dialog).getDatePicker();
+					final DateTime date = 
+						new DateTime(dp.getYear(), 
+								dp.getMonth() + 1, 
+								dp.getDayOfMonth(), 
+								0, 
+								0);
+					dateWidget.setDate(date);
+					if (DateWidget.this.dateListener != null) {
+						DateWidget.this.dateListener.onValidateDate();
+					}
+					break;
+					
+				case AlertDialog.BUTTON_NEGATIVE :
+					if (DateWidget.this.dateListener != null) {
+						DateWidget.this.dateListener.onCancelDate();
+					}
+					break;
+			}
 		}
 	}
+
+	/** 
+	 * Sets an OnDateClickListener for this view.
+	 *  
+	 * @param listener The listener to set 
+	 */
+	public void setOnDateClickListener(OnDateClickListener listener) {
+		this.dateListener = listener;
+	}
+	
+	/**
+	 * Remove the current OnDateClickListener.
+	 */
+	public void removeOnDateClickListener() {
+		this.dateListener = null;
+	}
+	
+	/** Widget Interface for click events. */
+	public interface OnDateClickListener {
+		/** 
+		 * Called when User click on the Date EditText. 
+		 */
+		public void onClickDateEditText();
+		
+		/** 
+		 * Called when User click on the date picker dialog's ok button. 
+		 */
+		public void onValidateDate();
+		
+		/** 
+		 * Called when User click on the date picker dialog's cancel button. 
+		 */
+		public void onCancelDate();
+	}
+	
 }

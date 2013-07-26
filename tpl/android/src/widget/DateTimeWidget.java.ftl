@@ -2,6 +2,7 @@ package ${project_namespace}.harmony.widget;
 
 import org.joda.time.DateTime;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
@@ -21,6 +22,8 @@ import ${project_namespace}.harmony.util.DateUtils;
 import ${project_namespace}.harmony.util.DateUtils.TimeFormatType;
 
 public class DateTimeWidget extends FrameLayout implements OnClickListener {
+	private OnDateClickListener dateListener;
+	private OnTimeClickListener timeListener;
 	private EditText dateEditText;
 	private EditText timeEditText;
 	private TimeFormatType timeFormat = TimeFormatType.ANDROID_CONF;
@@ -110,6 +113,9 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 		
 		switch (arg0.getId()) {
 			case R.id.date:	
+				if (this.dateListener != null) {
+					this.dateListener.onClickDateEditText();
+				}
 		        final String date = this.dateEditText.getText().toString();
 		        
 				if (!TextUtils.isEmpty(date)) {
@@ -122,13 +128,16 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 			    				dt, 
 			    				this.dateDialogTitle);
 			    
-			    datePicker.setPositiveButton(
-			    		getContext().getString(android.R.string.ok), 
-			    		new DateDialogClickListener(this));
-		
+			    
+			    DateDialogClickListener listener = new DateDialogClickListener(this);
+			    datePicker.setPositiveButton(android.R.string.ok, listener);
+			    datePicker.setNegativeButton(android.R.string.cancel, listener);
 			    datePicker.show();
 			    break;
 			case R.id.time:
+				if (this.timeListener != null) {
+					this.timeListener.onClickTimeEditText();
+				}
 		        final String time = 
 		        		this.timeEditText.getText().toString();
 				if (!TextUtils.isEmpty(time)) {
@@ -150,10 +159,9 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 			    				format24H,
 			    				this.timeDialogTitle);
 			    
-			    timePicker.setPositiveButton(
-			    		getContext().getString(android.R.string.ok), 
-			    		new TimeDialogClickListener(this));
-		
+			    TimeDialogClickListener timeListener = new TimeDialogClickListener(this);
+			    timePicker.setPositiveButton(android.R.string.ok, timeListener);
+			    timePicker.setNegativeButton(android.R.string.cancel, timeListener);
 			    timePicker.show();
 			    break;
 		}
@@ -226,15 +234,28 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 		
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
-			final DatePicker dp = 
-					((CustomDatePickerDialog) dialog).getDatePicker();
-				final DateTime date = 
-					new DateTime(dp.getYear(), 
-							dp.getMonth() + 1, 
-							dp.getDayOfMonth(), 
-							0, 
-							0);
-				dateWidget.setDate(date);
+			switch (which) {
+				case AlertDialog.BUTTON_POSITIVE :
+					final DatePicker dp = 
+						((CustomDatePickerDialog) dialog).getDatePicker();
+					final DateTime date = 
+						new DateTime(dp.getYear(), 
+								dp.getMonth() + 1, 
+								dp.getDayOfMonth(), 
+								0, 
+								0);
+					dateWidget.setDate(date);
+					if (DateTimeWidget.this.dateListener != null) {
+						DateTimeWidget.this.dateListener.onValidateDate();
+					}
+					break;
+					
+				case AlertDialog.BUTTON_NEGATIVE :
+					if (DateTimeWidget.this.dateListener != null) {
+						DateTimeWidget.this.dateListener.onCancelDate();
+					}
+					break;
+			}
 		}
 	}
 	
@@ -250,14 +271,95 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 		public void onClick(DialogInterface dialog, int which) {
 			final TimePicker tp = 
 					((CustomTimePickerDialog) dialog).getTimePicker();
-			DateTime time = new DateTime(0);
-			time = new DateTime(time.getYear(), 
-					time.getMonthOfYear(), 
-					time.getDayOfMonth(), 
-					tp.getCurrentHour(), 
-					tp.getCurrentMinute());
-			timeWidget.setTime(time);
+			switch (which) {
+				case AlertDialog.BUTTON_POSITIVE :
+					DateTime time = new DateTime(0);
+					time = new DateTime(time.getYear(), 
+						time.getMonthOfYear(), 
+						time.getDayOfMonth(), 
+						tp.getCurrentHour(), 
+						tp.getCurrentMinute());
+					timeWidget.setTime(time);
+					if (DateTimeWidget.this.timeListener != null) {
+						DateTimeWidget.this.timeListener.onValidateTime();
+					}
+				break;
+				
+			case AlertDialog.BUTTON_NEGATIVE :
+				if (DateTimeWidget.this.timeListener != null) {
+					DateTimeWidget.this.timeListener.onCancelTime();
+				}
+				break;
+			}
 		}
+	}
+
+	/** 
+	 * Sets an OnDateClickListener for this view.
+	 *  
+	 * @param listener The listener to set 
+	 */
+	public void setOnDateClickListener(OnDateClickListener listener) {
+		this.dateListener = listener;
+	}
+	
+	/** 
+	 * Sets an OnTimeClickListener for this view.
+	 *  
+	 * @param listener The listener to set 
+	 */
+	public void setOnTimeClickListener(OnTimeClickListener listener) {
+		this.timeListener = listener;
+	}
+	
+	/**
+	 * Remove the current OnDateClickListener.
+	 */
+	public void removeOnDateClickListener() {
+		this.dateListener = null;
+	}
+
+	/**
+	 * Remove the current OnTimeClickListener.
+	 */
+	public void removeOnTimeClickListener() {
+		this.timeListener = null;
+	}
+	
+	/** Widget Interface for click events. */
+	public interface OnDateClickListener {
+		/** 
+		 * Called when User click on the Date EditText. 
+		 */
+		public void onClickDateEditText();
+		
+		/** 
+		 * Called when User click on the date picker dialog's ok button. 
+		 */
+		public void onValidateDate();
+		
+		/** 
+		 * Called when User click on the date picker dialog's cancel button. 
+		 */
+		public void onCancelDate();
+	}
+	
+	/** Widget Interface for click events. */
+	public interface OnTimeClickListener {
+		/** 
+		 * Called when User click on the Time EditText. 
+		 */
+		public void onClickTimeEditText();
+		
+		/** 
+		 * Called when User click on the Time picker dialog's ok button. 
+		 */
+		public void onValidateTime();
+		
+		/** 
+		 * Called when User click on the Time picker dialog's cancel button. 
+		 */
+		public void onCancelTime();
 	}
 }
 

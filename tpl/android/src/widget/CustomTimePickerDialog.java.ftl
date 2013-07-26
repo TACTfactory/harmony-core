@@ -91,15 +91,6 @@ public class CustomTimePickerDialog extends AlertDialog {
 		this.timePicker.setIs24HourView(this.is24HourView);
 		this.timePicker.setCurrentHour(this.hourOfDay);
 		this.timePicker.setCurrentMinute(this.minute);
-		
-		this.setNegativeButton(this.ctx.getString(android.R.string.cancel),
-										 new DialogInterface.OnClickListener() {
-			
-			@Override
-			public void onClick(DialogInterface dialog, int which) {
-				((CustomTimePickerDialog) dialog).hide();
-			}
-		});
 
 		super.onCreate(savedInstanceState);
 	}
