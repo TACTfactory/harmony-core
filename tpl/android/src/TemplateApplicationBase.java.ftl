@@ -48,6 +48,8 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	private static DateFormat dateFormat;
 	/** Time format. */
 	private static DateFormat timeFormat;
+	/** 24HFormat. */
+	private static boolean is24H;
 	<#if (sync)>
 	/** Preferences. */
 	private static SharedPreferences preferences;
@@ -77,7 +79,8 @@ public abstract class ${project_name?cap_first}ApplicationBase
 				android.text.format.DateFormat.getDateFormat(application);
 			timeFormat = 
 				android.text.format.DateFormat.getTimeFormat(application);
-				
+			is24H = 
+				android.text.format.DateFormat.is24HourFormat(application);
 			<#if (sync)>
 			preferences = application.getSharedPreferences(
 					"${project_name?uncap_first}", Context.MODE_PRIVATE);
@@ -213,6 +216,14 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 */
 	public static DateFormat getTimeFormat() {
 		return timeFormat;
+	}
+
+	/**
+	 * Get the 24H format.
+	 * @return true if 24 hour mode. false if am/pm
+	 */
+	public static boolean is24Hour() {
+		return is24H;
 	}
 		
 	<#if (sync)>

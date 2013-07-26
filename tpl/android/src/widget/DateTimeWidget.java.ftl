@@ -2,8 +2,6 @@ package ${project_namespace}.harmony.widget;
 
 import org.joda.time.DateTime;
 
-import ${project_namespace}.R;
-import ${project_namespace}.harmony.util.DateUtils;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
@@ -17,10 +15,15 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TimePicker;
 
+import ${project_namespace}.DemactApplication;
+import ${project_namespace}.R;
+import ${project_namespace}.harmony.util.DateUtils;
+import ${project_namespace}.harmony.util.DateUtils.TimeFormatType;
+
 public class DateTimeWidget extends FrameLayout implements OnClickListener {
 	private EditText dateEditText;
 	private EditText timeEditText;
-	private boolean isFormat24H = false;
+	private TimeFormatType timeFormat = TimeFormatType.ANDROID_CONF;
 	private String dateDialogTitle;
 	private String timeDialogTitle;
 	
@@ -60,9 +63,22 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 
 		   try {
 			   // 24H format
-		       this.isFormat24H = a.getBoolean(
+			   int format24Hid = a.getInt(
 		    		   R.styleable.DateTimeWidget_dateTimeWidget_format24H, 
-		    		   false);
+		    		   2);
+			   switch (format24Hid) {
+				   case 1:
+					   this.timeFormat = TimeFormatType.H24;
+					   break;
+					   
+				   case 2:
+					   this.timeFormat = TimeFormatType.AMPM;
+					   break;
+					   
+				   case 3:
+					   this.timeFormat = TimeFormatType.ANDROID_CONF;
+					   break;
+			   }
 		       
 		       // Date Dialog Title
 		       this.dateDialogTitle = a.getString(
@@ -119,11 +135,19 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 					dt = DateUtils.formatStringToTime(time);
 				}
 				
+				boolean format24H = false;
+				if (this.timeFormat.equals(TimeFormatType.AMPM)) {
+					format24H = false;
+				} else if (this.timeFormat.equals(TimeFormatType.H24)) {
+					format24H = true;
+				} else if (this.timeFormat.equals(TimeFormatType.ANDROID_CONF)) {
+					format24H = DemactApplication.is24Hour();
+				}
 			    final CustomTimePickerDialog timePicker = 
 			    		new CustomTimePickerDialog(
 			    				getContext(), 
 			    				dt,
-			    				this.isFormat24H,
+			    				format24H,
 			    				this.timeDialogTitle);
 			    
 			    timePicker.setPositiveButton(
@@ -153,7 +177,9 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 	
 	
 	public void setTime(DateTime time) {
-		this.timeEditText.setText(DateUtils.formatTimeToString(time));
+		this.timeEditText.setText(DateUtils.formatTimeToString(
+						time,
+						this.timeFormat));
 	}
 	
 	public DateTime getTime() {
@@ -162,14 +188,18 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 			result = null;
 		} else {
 			result = DateUtils.formatStringToTime(
-					this.timeEditText.getText().toString());
+					this.timeEditText.getText().toString(),
+					this.timeFormat);
 		}
 		return result;
 	}
 	
 	public void setDateTime(DateTime dateTime) {
 		this.dateEditText.setText(DateUtils.formatDateToString(dateTime));
-		this.timeEditText.setText(DateUtils.formatTimeToString(dateTime));
+		this.timeEditText.setText(
+				DateUtils.formatTimeToString(
+						dateTime, 
+						this.timeFormat));
 	}
 	
 	public DateTime getDateTime() {
@@ -180,7 +210,8 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 		} else {
 			result = DateUtils.formatStringToDateTime(
 					this.dateEditText.getEditableText().toString(),
-					this.timeEditText.getEditableText().toString());
+					this.timeEditText.getEditableText().toString(),
+					this.timeFormat);
 		}
 		return result;
 	}
