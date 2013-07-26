@@ -293,7 +293,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		<#list fields?values as field>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
-		${m.setSaver(field)}
+		${ViewUtils.setSaver(field)}
 			<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 		final ${field.relation.targetEntity} tmp${field.name?cap_first} = 
 								new ${field.relation.targetEntity?cap_first}();
