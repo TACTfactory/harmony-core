@@ -1,36 +1,10 @@
-<#function getAllMothers tab entity>
-	<#if entity.mother??>
-		<#return (getAllMothers(tab, entities[entity.mother]) + [entity]) />
-	<#else>
-		<#return ([entity]) />		
-	</#if>
-</#function>
-<#function getCompleteNamespace entity>
-	<#assign result = "" />
-	<#assign motherClasses = getAllMothers([], entity) />
-	<#assign cond = true />
-	<#list motherClasses as motherClass>
-		<#assign result = result + motherClass.name />
-		<#if motherClass_has_next>
-			<#assign result = result + "." />
-		</#if>
-	</#list>
-	
-	<#return result>
-</#function>
-<#function isInArray array val>
-	<#list array as val_ref>
-		<#if val_ref==val>
-			<#return true />
-		</#if>
-	</#list>
-	<#return false />
-</#function>
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
 <#assign inherited = false />
 <#if (curr.extends?? && entities[curr.extends]??)>
 	<#assign inherited = true />
 </#if>
+<@header?interpret />
 package ${curr.test_namespace}.utils.base;
 
 import android.content.Context;
@@ -43,7 +17,7 @@ import ${curr.test_namespace}.utils.*;
 <#assign importList = [] />
 <#list curr.relations as relation>
 	<#if !relation.internal>
-		<#if !isInArray(importList, relation.relation.targetEntity)>
+		<#if !Utils.isInArray(importList, relation.relation.targetEntity)>
 import ${curr.namespace}.entity.${relation.relation.targetEntity?cap_first};
 import ${fixture_namespace}.${relation.relation.targetEntity?cap_first}DataLoader;
 			<#assign importList = importList + [relation.relation.targetEntity] />
@@ -53,7 +27,7 @@ import ${fixture_namespace}.${relation.relation.targetEntity?cap_first}DataLoade
 <#list curr.fields?values as field>
 	<#if field.harmony_type?lower_case == "enum">
 		<#assign enumClass = enums[field.type] />
-import ${entity_namespace}.${getCompleteNamespace(enumClass)};
+import ${entity_namespace}.${InheritanceUtils.getCompleteNamespace(enumClass)};
 	</#if>
 </#list>
 <#if (importList?size > 0)>

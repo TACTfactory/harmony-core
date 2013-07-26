@@ -1,98 +1,64 @@
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
-<#import "methods.ftl" as m />
-<#assign fields = m.getAllFields(curr) />
+<#assign fields = ViewUtils.getAllFields(curr) />
+<#assign hasDate = MetadataUtils.hasDate(curr) />
+<#assign hasTime = MetadataUtils.hasTime(curr) />
+<#assign hasDateTime = MetadataUtils.hasDateTime(curr) />
+<#assign hasToManyRelation=MetadataUtils.hasToManyRelations(curr) />
+<#assign hasRelation=MetadataUtils.hasRelations(curr) />
 <@header?interpret />
 package ${curr.controller_namespace};
-
-import ${curr.namespace}.R;
-
-import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
-import ${project_namespace}.harmony.view.HarmonyFragment;
-import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
-
-import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
-
-import android.os.Bundle;
-import android.os.AsyncTask;
-import android.content.ContentResolver;
-import android.content.Context;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.View.OnClickListener;
-import android.content.DialogInterface;
+<#if (hasRelation)>
+	<#if (hasToManyRelation)>
+import java.util.ArrayList;
+	</#if>
+import java.util.List;
+</#if><#if (hasDate || hasTime || hasDateTime)>
+	<#if (hasDate)>
+import ${curr.namespace}.harmony.widget.DateWidget;
+	</#if>
+	<#if (hasTime)>
+import ${curr.namespace}.harmony.widget.TimeWidget;
+	</#if>
+	<#if (hasDateTime)>
+import ${curr.namespace}.harmony.widget.DateTimeWidget;
+	</#if>
+import ${curr.namespace}.harmony.util.DateUtils;
+import org.joda.time.DateTime;
+</#if>
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.widget.Button;
-import android.widget.CheckBox;
-import android.widget.DatePicker;
-import android.widget.EditText;
-import android.widget.TimePicker;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.os.AsyncTask;
+import android.os.Bundle;<#if (hasDate || hasTime || hasDateTime)>
+import android.text.TextUtils;</#if>
+import android.view.LayoutInflater;
+import android.view.View;<#if (hasDate || hasTime || hasDateTime || hasRelation)>
+import android.view.View.OnClickListener;</#if>
+import android.view.ViewGroup;<#if (hasRelation)>
+import android.widget.Button;</#if><#if (ViewUtils.hasTypeBoolean(fields?values))>
+import android.widget.CheckBox;</#if><#if (hasDate || hasDateTime)>
+import android.widget.DatePicker;</#if><#if ViewUtils.shouldImportEditText(fields?values)>
+import android.widget.EditText;</#if><#if (hasTime || hasDateTime)>
+import android.widget.TimePicker;</#if>
 
+import ${curr.namespace}.R;
+${ImportUtils.importRelatedEntities(curr)}
+${ImportUtils.importRelatedEnums(curr)}<#if (hasDate || hasTime || hasDateTime)>
+import ${curr.namespace}.harmony.util.DateUtils;</#if>
+import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
+import ${project_namespace}.harmony.view.HarmonyFragment;<#if (hasDate || hasDateTime)>
+import ${curr.namespace}.harmony.widget.CustomDatePickerDialog;</#if><#if (hasTime || hasDateTime)>
+import ${curr.namespace}.harmony.widget.CustomTimePickerDialog;</#if>
+import ${project_namespace}.harmony.widget.ValidationButtons;
+import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
+${ImportUtils.importRelatedProviderUtils(curr)}
+import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 
-<#assign importDate=false />
-<#assign importTime=false />
-<#list fields?values as field>
-	<#if !field.internal && !field.hidden>
-		<#if field.type?lower_case=="datetime">
-			<#if ((field.harmony_type=="date" || field.harmony_type=="datetime") && !importDate)>
-				<#assign importDate=true />
-			</#if>
-			<#if ((field.harmony_type=="time" || field.harmony_type=="datetime") && !importTime)>
-				<#assign importTime=true />
-			</#if>
-		</#if>
-	</#if>
-</#list>
-<#if (importDate || importTime)>
-import org.joda.time.DateTime;
-
-	<#if (importDate)>
-import ${curr.namespace}.harmony.widget.CustomDatePickerDialog;
-	</#if>
-	<#if (importTime)>
-import ${curr.namespace}.harmony.widget.CustomTimePickerDialog;
-	</#if>
-	
-import ${curr.namespace}.harmony.util.DateUtils;
-</#if>
-import ${curr.namespace}.harmony.widget.ValidationButtons;
-import ${curr.namespace}.entity.${curr.name};
-<#assign mustImportArrayList=false />
-<#assign mustImportList=false />
-<#assign import_array = [] />
-<#list curr.relations as relation>
-	<#if (!relation.internal && !relation.hidden)>
-		<#assign mustImportList=true />
-		<#if (!m.isInArray(import_array, relation.relation.targetEntity))>
-			<#assign import_array = import_array + [relation.relation.targetEntity] />
-import ${curr.namespace}.entity.${relation.relation.targetEntity};
-import ${project_namespace}.provider.utils.${relation.relation.targetEntity?cap_first}ProviderUtils;
-			<#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
-				<#assign mustImportArrayList=true />
-			</#if>
-		</#if>
-	</#if>
-</#list>
-<#list fields?values as field>
-	<#if field.harmony_type?lower_case == "enum">
-		<#assign enumClass = enums[field.type] />
-import ${entity_namespace}.${m.getCompleteNamespace(enumClass)};
-	</#if>
-</#list>
-
-
-<#if (mustImportArrayList)>
-import java.util.ArrayList;
-</#if>
-<#if (mustImportList)>
-import java.util.List;
-</#if>
-/** ${curr.name} create fragment.
- * 
- * @see android.app.Fragment
+/** 
+ * ${curr.name} create fragment.
  */
 public class ${curr.name}CreateFragment extends HarmonyFragment 
 			implements OnValidationListener {
@@ -103,26 +69,36 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	<#list fields?values as field>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
-	/** ${field.name} View. */
 				<#if field.type=="boolean">
+	/** ${field.name} View. */
 	protected CheckBox ${field.name}View;
 				<#elseif field.type?lower_case=="datetime">
-					<#if field.harmony_type=="datetime" || field.harmony_type=="date">
-	protected EditText ${field.name}DateView;
-					</#if>
-					<#if field.harmony_type=="datetime" || field.harmony_type=="time">
-	protected EditText ${field.name}TimeView;
+					<#if (field.harmony_type=="datetime")>
+	/** ${field.name} DateTime View. */
+	protected DateTimeWidget ${field.name}View;
+					<#elseif (field.harmony_type=="date")>
+	/** ${field.name} Date View. */
+	protected DateWidget ${field.name}View;
+					<#elseif (field.harmony_type=="time")>
+	/** ${field.name} Time View. */
+	protected TimeWidget ${field.name}View;
 					</#if>
 				<#else>
+	/** ${field.name} View. */
 	protected EditText ${field.name}View;			
 				</#if>
 			<#else>
+	/** The ${field.name} button. */
 	protected Button ${field.name}Button;
+	/** The ${field.relation.targetEntity} list. */
 	protected List<${field.relation.targetEntity}> ${field.name}List;
+	/** The ${field.name} dialog. */
 	protected Dialog ${field.name}Dialog;
 				<#if field.relation.type=="OneToMany" || field.relation.type=="ManyToMany">
+	/** The array of selected ${field.relation.targetEntity}s. */
 	protected boolean[] checked${field.name?cap_first};
 				<#else>
+	/** The selected ${field.relation.targetEntity}. */
 	protected int selected${field.name?cap_first};
 				</#if>
 			</#if>
@@ -143,93 +119,15 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		this.${field.name}View = 
 				(CheckBox) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 					<#elseif field.type?lower_case == "datetime">
-						<#if field.harmony_type == "date" || field.harmony_type == "datetime">
-						
-		this.${field.name}DateView = 
-			(EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_date);			
-		this.${field.name}DateView.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-		        DateTime dt = new DateTime();
-
-		        final String ${field.name}Date = 
-		        		${curr.name}CreateFragment.this
-		        		.${field.name}DateView.getText().toString();
-				if (!TextUtils.isEmpty(${field.name}Date)) {
-					final String strInputDate = 
-							${field.name}Date;
-					dt = DateUtils.formatStringToDate(strInputDate);
-				}
-				
-			    final CustomDatePickerDialog ${field.name}Dpd = 
-			    		new CustomDatePickerDialog(getActivity(), 
-			    				dt, 
-			    				R.string.${field.owner?lower_case}_${field.name?lower_case}_date_title);
-			    ${field.name}Dpd.setPositiveButton(getActivity().getString(android.R.string.ok), 
-			    		new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						final DatePicker dp = 
-							((CustomDatePickerDialog) dialog).getDatePicker();
-						final DateTime date = 
-							new DateTime(dp.getYear(), 
-									dp.getMonth() + 1, 
-									dp.getDayOfMonth(), 
-									0, 
-									0);
-						${curr.name}CreateFragment.this
-							.${field.name}DateView.setText(
-									DateUtils.formatDateToString(date));
-					}
-				});
-
-			    ${field.name}Dpd.show();
-			}
-		});			
-						</#if>
-						<#if field.harmony_type == "time" || field.harmony_type == "datetime">
-						
-		this.${field.name}TimeView = 
-			(EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_time);
-		this.${field.name}TimeView.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				DateTime dt = new DateTime(); 
-				
-				final String ${field.name}Time = 
-						${curr.name}CreateFragment.this.${field.name}TimeView.getText().toString();
-				if (!TextUtils.isEmpty(${field.name}Time)) {
-					final String strInputTime = ${field.name}Time;
-					dt = DateUtils.formatStringToTime(strInputTime);
-				}
-				
-			    final CustomTimePickerDialog ${field.name}Tpd =
-			    		new CustomTimePickerDialog(getActivity(), 
-			    		dt, 
-			    		android.text.format.DateFormat.is24HourFormat(getActivity()), 
-			    		R.string.${field.owner?lower_case}_${field.name?lower_case}_time_title);
-			    ${field.name}Tpd.setPositiveButton(getActivity().getString(
-			    										   android.R.string.ok), 
-			    					new DialogInterface.OnClickListener() {
-					@Override
-					public void onClick(DialogInterface dialog, int which) {
-						final TimePicker tp = 
-							((CustomTimePickerDialog) dialog).getTimePicker();
-						
-						DateTime date = new DateTime(0);
-						date = new DateTime(date.getYear(), 
-								date.getMonthOfYear(), 
-								date.getDayOfMonth(), 
-								tp.getCurrentHour(), 
-								tp.getCurrentMinute());
-
-						${curr.name}CreateFragment.this
-							.${field.name}TimeView.setText(
-									DateUtils.formatTimeToString(date));
-					}
-				});
-
-			    ${field.name}Tpd.show();
-			}
-		});
+						<#if (field.harmony_type?lower_case == "datetime")>
+		this.${field.name}View = 
+				(DateTimeWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
+						<#elseif (field.harmony_type?lower_case == "date")>
+		this.${field.name}View = 
+				(DateWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
+						<#elseif (field.harmony_type?lower_case == "time")>
+		this.${field.name}View = 
+				(TimeWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 						</#if>
 					<#else>
 		this.${field.name}View = 
@@ -363,22 +261,19 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
 		if (this.model.get${field.name?cap_first}() != null) {
 					<#if field.type?lower_case=="datetime">
-						<#if field.harmony_type=="datetime" || field.harmony_type=="date">
-			this.${field.name}DateView.setText(
-					DateUtils.formatDateToString(
-							this.model.get${field.name?cap_first}()));
-						</#if>
-						<#if field.harmony_type=="datetime" || field.harmony_type=="time">
-			this.${field.name}TimeView.setText(
-					DateUtils.formatTimeToString(
-							this.model.get${field.name?cap_first}()));
+						<#if field.harmony_type=="datetime">
+			this.${field.name}View.setDateTime(this.model.get${field.name?cap_first}());
+						<#elseif (field.harmony_type=="date")>
+			this.${field.name}View.setDate(this.model.get${field.name?cap_first}());
+						<#elseif (field.harmony_type=="time")>
+			this.${field.name}View.setTime(this.model.get${field.name?cap_first}());
 						</#if>
 					<#else>
-			${m.setLoader(field)}			
+			${ViewUtils.setLoader(field)}			
 					</#if>
 		}
 				<#else>
-		${m.setLoader(field)}
+		${ViewUtils.setLoader(field)}
 				</#if>
 			<#else>
 		
@@ -396,21 +291,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		<#list fields?values as field>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
-				<#if (field.type?lower_case == "datetime")>
-					<#if field.harmony_type=="datetime">
-		if (!TextUtils.isEmpty(this.${field.name}DateView.getEditableText()) && !TextUtils.isEmpty(this.${field.name}TimeView.getEditableText())) {
-					<#elseif field.harmony_type=="date">
-		if (!TextUtils.isEmpty(this.${field.name}DateView.getEditableText())) {
-					<#elseif field.harmony_type=="time">
-		if (!TextUtils.isEmpty(this.${field.name}TimeView.getEditableText())) {
-					<#else>
-		if (!TextUtils.isEmpty(this.${field.name}View.getEditableText())) {
-					</#if>
-			${m.setSaver(field)}
-		}
-				<#else>
-		${m.setSaver(field)}
-				</#if>
+		${ViewUtils.setSaver(field)}
 			<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 		final ${field.relation.targetEntity} tmp${field.name?cap_first} = 
 					new ${field.relation.targetEntity?cap_first}();
@@ -443,11 +324,6 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		return true;
 	}
 
-	/** Sets up the UI.
-	 * 
-	 * @see android.support.v4.app.Fragment#onCreateView(
-	 * LayoutInflater, ViewGroup, Bundle)
-	 */
 	@Override
 	public View onCreateView(LayoutInflater inflater, 
 			ViewGroup container, 
@@ -468,8 +344,11 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	 * It runs asynchronously and shows a progressDialog
 	 */
 	public static class CreateTask extends AsyncTask<Void, Void, Integer> {
+		/** AsyncTask's context. */
 		private final Context ctx;
+		/** Entity to persist. */
 		private final ${curr.name} entity;
+		/** Progress Dialog. */
 		private ProgressDialog progress;
 
 		/**
@@ -485,9 +364,6 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			this.entity = entity;
 		}
 
-		/**
-		 * @see android.os.AsyncTask#onPreExecute()
-		 */
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -499,9 +375,6 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 							R.string.${curr.name?lower_case}_progress_save_message));
 		}
 
-		/**
-		 * @see android.os.AsyncTask#doInBackground(Params[])
-		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
@@ -513,9 +386,6 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			return result;
 		}
 
-		/**
-		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-		 */
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);
@@ -545,6 +415,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		}
 	}
 
+	@Override
 	public void onValidationSelected() {
 		if (this.validateData()) {
 			this.saveData();
@@ -552,6 +423,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		}
 	}
 
+	@Override
 	public void onCancelSelected() {
 		this.getActivity().finish();
 	}

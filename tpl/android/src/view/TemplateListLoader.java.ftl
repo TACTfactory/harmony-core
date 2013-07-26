@@ -1,4 +1,5 @@
 <#assign curr = entities[current_entity] />
+<@header?interpret />
 package ${curr.controller_namespace};
 
 import java.util.ArrayList;
@@ -30,17 +31,25 @@ public class ${curr.name}ListLoader
 		super(ctx);
 		this.criterias = crit;
 	}
-	
-	
 
-	public ${curr.name}ListLoader(Context context,
+	/**
+	 * Constructor.
+	 * @param ctx context
+	 * @param criterias ${curr.name?cap_first}Criterias
+	 * @param uri The URI associated with this loader
+	 * @param projection The projection to use
+	 * @param selection The selection
+	 * @param selectionArgs The selection Args
+	 * @param sortOrder The sort order
+	 */
+	public ${curr.name}ListLoader(Context ctx,
 					${curr.name?cap_first}Criterias criterias,
 					Uri uri,
 					String[] projection,
 					String selection,
 					String[] selectionArgs,
 					String sortOrder) {
-		super(context, uri, projection, selection, selectionArgs, sortOrder);
+		super(ctx, uri, projection, selection, selectionArgs, sortOrder);
 		this.criterias = criterias;
 	}
 

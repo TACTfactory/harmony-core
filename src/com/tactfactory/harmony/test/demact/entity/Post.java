@@ -23,42 +23,55 @@ import com.tactfactory.harmony.annotation.OneToMany;
 import com.tactfactory.harmony.annotation.Table;
 import com.tactfactory.harmony.annotation.Column.Type;
 
+/** Test Application entity. */
 // All annotation with default value/parameter
 @Table
 @Entity
 public class Post implements Serializable {
+	/** Serial UID. */
 	private static final long serialVersionUID = -6549779793416923128L;
 
+	/** Entity's technical id. */
 	@Id
     @Column(type = Type.INTEGER, hidden = true)
     @GeneratedValue(strategy = "IDENTITY")
-    private int id;
+	private int id;
 	
+	/** Title of the post. */
 	@Column(unique = true, length = 140)
     private String title;
 	
+	/** Content of the post. */
 	@Column(length = 40000, type = Type.TEXT)
     private String content;
 	
+	/** User who wrote this post. */
 	@ManyToOne
 	private User owner;
 	
+	/** Comments associated with this post. */
 	@OneToMany(mappedBy = "post")
 	private ArrayList<Comment> comments;
 	
+	/** The different categories of this post. */
 	@ManyToMany
 	private ArrayList<Category> categories;
 	
+	/** Creation Date. */
 	@Column(name = "created_at")
     private DateTime createdAt;
 
+	/** Update Date. */
     @Column(name = "updated_at")
     private DateTime updatedAt;
 
+    /** Expiration Date. */
     @Column(name = "expires_at")
     private DateTime expiresAt;
 
-
+    /**
+     * Constructor.
+     */
 	public Post() {
     	this.createdAt = new DateTime();
     	this.updatedAt = new DateTime();

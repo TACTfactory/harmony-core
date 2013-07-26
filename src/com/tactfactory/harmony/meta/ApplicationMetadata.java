@@ -271,6 +271,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 		}
 		ret.put(TagConstant.OPTIONS, optionsMap);
 		ret.put(TagConstant.HEADER, this.headerTemplate);
+		ret.put(TagConstant.UTILITY_PATH, adapt.getTemplateUtilityPath());
 		
 		return ret;
 	}

@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${project_namespace}.harmony.view;
 
 import android.content.Intent;
@@ -9,24 +10,16 @@ import com.actionbarsherlock.view.MenuItem;
 import ${project_namespace}.menu.${project_name?cap_first}Menu;
 
 /**
- * @author yo
- *
+ * Harmony custom Fragment.
  */
 public abstract class HarmonyFragment extends SherlockFragment {
-	
-	/**
-	 * @see android.support.v4.app.Fragment#onCreate(android.os.Bundle)
-	 */
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setHasOptionsMenu(true);
 	}
 
-	/**
-	 * @see com.actionbarsherlock.app.SherlockFragment#onPrepareOptionsMenu
-	 * (com.actionbarsherlock.view.Menu)
-	 */
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
@@ -40,10 +33,6 @@ public abstract class HarmonyFragment extends SherlockFragment {
 		}
 	}
 
-	/**
-	 * @see com.actionbarsherlock.app.SherlockFragment#onOptionsItemSelected
-	 * (com.actionbarsherlock.view.MenuItem)
-	 */
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		boolean result;
@@ -59,10 +48,6 @@ public abstract class HarmonyFragment extends SherlockFragment {
 		return result;
 	}
 
-	/**
-	 * @see android.support.v4.app.Fragment#onActivityResult
-	 * (int, int, android.content.Intent)
-	 */
 	@Override
 	public void onActivityResult(int requestCode, int resultCode, Intent data) {
 		try {

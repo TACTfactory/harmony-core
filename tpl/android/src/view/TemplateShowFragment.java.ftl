@@ -1,60 +1,36 @@
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
-<#import "methods.ftl" as m />
-<#assign fields = m.getAllFields(curr) />
+<#assign fields = ViewUtils.getAllFields(curr) />
+<#assign importDate = (MetadataUtils.hasDate(curr) || MetadataUtils.hasDateTime(curr) || MetadataUtils.hasTime(curr)) />
+<@header?interpret />
 package ${curr.controller_namespace};
 
-import ${curr.namespace}.R;
-
-import ${project_namespace}.harmony.view.HarmonyFragment;
-
-import android.os.AsyncTask;
-import android.os.Bundle;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
+import android.view.ViewGroup;<#if (ViewUtils.hasTypeBoolean(fields?values))>
+import android.widget.CheckBox;</#if><#if (ViewUtils.shouldImportEditText(fields?values))>
+import android.widget.TextView;</#if>
+
+import ${curr.namespace}.R;
+${ImportUtils.importToManyRelatedEntities(curr)}<#if (importDate)>
+import ${curr.namespace}.harmony.util.DateUtils;</#if>
+import ${project_namespace}.harmony.view.HarmonyFragment;
 import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
-import android.content.ContentResolver;
-import android.widget.CheckBox;
-import android.widget.TextView;
-
-
-<#assign importDate=false />
-<#list fields?values as field>
-	<#if !field.hidden>
-		<#if (!importDate && field.type?lower_case=="datetime")>
-			<#assign importDate=true />
-		</#if>
-	</#if>
-</#list>
-<#if (importDate)>
-import ${curr.namespace}.harmony.util.DateUtils;
-</#if>
-import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
-import ${curr.namespace}.entity.${curr.name};
-<#assign import_array = [] />
-<#list curr.relations as relation>
-	<#if (!relation.internal && !relation.hidden && (relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany"))>
-		<#if (!m.isInArray(import_array, relation.relation.targetEntity))>
-			<#assign import_array = import_array + [relation.relation.targetEntity] />
-import ${curr.namespace}.entity.${relation.relation.targetEntity};
-		</#if>
-	</#if>
-</#list>
 
 /** ${curr.name} show fragment.
  * 
  * @see android.app.Fragment
  */
 public class ${curr.name}ShowFragment extends HarmonyFragment {
-	/* Model data */
+	/** Model data. */
 	protected ${curr.name} model;
 	
 	/* curr.fields View */
@@ -114,11 +90,11 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 							model.get${field.name?cap_first}()));					
 						</#if>
 					<#else>
-			${m.setLoader(field)}
+			${ViewUtils.setLoader(field)}
 					</#if>
 		} 
 				<#else>
-		${m.setLoader(field)}
+		${ViewUtils.setLoader(field)}
 				</#if>
 			<#elseif (field.relation.type=="OneToOne" || field.relation.type=="ManyToOne")>
 		this.${field.name}View.setText(
@@ -134,11 +110,6 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 	</#list>
     }
     
-    /** Sets up the UI.
-	 * 
-	 * @see android.support.v4.app.Fragment#onCreateView
-	 * (LayoutInflater, ViewGroup, Bundle)
-     */
     @Override
     public View onCreateView(LayoutInflater inflater, 
     						   ViewGroup container, Bundle savedInstanceState) {
@@ -164,9 +135,13 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 	 * It runs asynchronously and shows a progressDialog
 	 */
 	public static class LoadTask extends AsyncTask<Void, Void, Integer> {
+		/** AsyncTask's context. */
 		private final Context ctx;
+		/** Associated fragment. */
 		private final ${curr.name}ShowFragment fragment;
+		/** The entity to load. */
 		private ${curr.name} entity;
+		/** Progress dialog. */
 		private ProgressDialog progress;
 
 		/**
@@ -183,9 +158,6 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 			this.entity = entity;
 		}
 
-		/**
-		 * @see android.os.AsyncTask#onPreExecute()
-		 */
 		@Override
 		protected void onPreExecute() {
 			super.onPreExecute();
@@ -197,9 +169,6 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 						R.string.${curr.name?lower_case}_progress_load_message));
 		}
 
-		/**
-		 * @see android.os.AsyncTask#doInBackground(Params[])
-		 */
 		@Override
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
@@ -215,9 +184,6 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 			return result;
 		}
 
-		/**
-		 * @see android.os.AsyncTask#onPostExecute(java.lang.Object)
-		 */
 		@Override
 		protected void onPostExecute(Integer result) {
 			super.onPostExecute(result);

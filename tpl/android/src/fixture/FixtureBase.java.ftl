@@ -2,13 +2,13 @@
 <@header?interpret />
 package ${fixture_namespace};
 
-import android.content.Context;
-import android.content.res.AssetManager;
-import java.io.InputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.LinkedHashMap;
-import java.util.Map;
+<#if fixtureType=="xml">
 import java.util.List;
+</#if>
+import java.util.Map;
 
 <#if fixtureType=="xml">
 import org.jdom2.Document;
@@ -17,10 +17,10 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 <#elseif fixtureType=="yml">
 import org.yaml.snakeyaml.Yaml;
-
 </#if>
 
-
+import android.content.Context;
+import android.content.res.AssetManager;
 import android.util.Log;
 
 /**
@@ -29,7 +29,7 @@ import android.util.Log;
  */
 public abstract class FixtureBase<T> {	
 	/** TAG for debug purpose. */
-	private static String TAG = "FixtureBase";
+	private static final String TAG = "FixtureBase";
 	/** Context. */
 	protected Context ctx;
 
@@ -132,8 +132,18 @@ public abstract class FixtureBase<T> {
 	}
 
 	<#if (fixtureType=="xml")>
+	/**
+	 * Transform the xml into an Item of type T.
+	 * @param element The xml representation of the item.
+	 * @return The T item read.
+	 */
 	protected abstract T extractItem(Element element);
 	<#else>
+	/**
+	 * Transform the yml into an Item of type T.
+	 * @param columns The yml representation of the item.
+	 * @return The T item read.
+	 */
 	protected abstract T extractItem(Map<?, ?> columns);
 	</#if>
 
@@ -180,6 +190,10 @@ public abstract class FixtureBase<T> {
 		return ret;
 	}
 	</#if>
-
+	
+	/**
+	 * Returns the fixture file name.
+	 * @return the fixture file name
+	 */
 	protected abstract String getFixtureFileName();
 }

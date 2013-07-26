@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${entity_namespace}.base;
 
 import java.io.Serializable;

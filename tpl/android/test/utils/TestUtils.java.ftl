@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${test_namespace}.utils;
 
 import java.util.Random;

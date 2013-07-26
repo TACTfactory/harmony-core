@@ -1,21 +1,31 @@
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
-<#assign internal = false />
+<#assign internal = (curr.internal?? && curr.internal == "true") />
 <#assign inherited = false />
+<#assign ext = curr.name?cap_first />
+<#if (internal)>
+	<#assign ext = "Void" />
+</#if>
 <#if (curr.extends?? && entities[curr.extends]??)>
 	<#assign extends = curr.extends />
 	<#assign inherited = true />
 </#if>
-<#if (curr.internal?? && curr.internal == "true")><#assign internal = true /></#if>
 <@header?interpret />
 package ${local_namespace}.base;
 
-import ${local_namespace}.${project_name?cap_first}Provider;
+import android.content.ContentUris;
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
 
+import ${data_namespace}.${curr.name}SQLiteAdapter;
 <#if (!internal)>
 import ${entity_namespace}.${curr.name};
-</#if>import ${data_namespace}.${curr.name}SQLiteAdapter;
-
+</#if>import ${local_namespace}.${project_name?cap_first}Provider;
 <#if (inherited)>
+
 import ${local_namespace}.${extends?cap_first}ProviderAdapter;
 import ${data_namespace}.${extends?cap_first}SQLiteAdapter;
 
@@ -27,17 +37,6 @@ import ${project_namespace}.criterias.base.CriteriasBase.GroupType;
 import ${project_namespace}.criterias.base.value.ArrayValue;
 </#if>
 
-import android.content.Context;
-import android.content.ContentUris;
-import android.content.ContentValues;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
-<#assign ext = curr.name?cap_first />
-<#if (internal)>
-	<#assign ext = "Void" />
-</#if>
-
 /**
  * ${curr.name?cap_first}ProviderAdapterBase.
  */
@@ -45,13 +44,10 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				extends ProviderAdapterBase<${ext}> {
 	
 	/** TAG for debug purpose. */
-	protected static String TAG = "${curr.name?cap_first}ProviderAdapter";
+	protected static final String TAG = "${curr.name?cap_first}ProviderAdapter";
 
 	/** ${curr.name?upper_case}_URI. */
 	public	  static Uri ${curr.name?upper_case}_URI;
-
-	/** ${curr.name?cap_first} key. */
-	public static final String ITEM_KEY = "${curr.name?cap_first}";
 
 	/** ${curr.name?uncap_first} type. */
 	protected static final String ${curr.name?uncap_first}Type = 
@@ -354,15 +350,6 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				break;
 		}
 		return result;
-	}
-	
-	/**
-	 * Get the item Key.
-	 * @return the item key
-	 */
-	@Override
-	public String getItemKey() {
-		return ITEM_KEY;
 	}
 
 	<#if inherited>

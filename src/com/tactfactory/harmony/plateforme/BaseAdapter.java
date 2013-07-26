@@ -37,6 +37,8 @@ public abstract class BaseAdapter {
 	private String widget;
 	/** Utility classes path. */
 	private String util;
+	/** Template Utility files path. */
+	private String utilityPath;
 
 	// MVC
 	/** Models path. */
@@ -222,6 +224,17 @@ public abstract class BaseAdapter {
 				this.getSource(), 
 				this.getHarmony(), 
 				this.getUtil());
+	}	
+	
+	/**
+	 * Get the utility classes' templates path.
+	 * @return The utility classes' templates path
+	 */
+	public final String getTemplateUtilityPath() {
+		return String.format("/%s/%s/%s/",
+				Harmony.getTemplatesPath(), 
+				this.getPlatform(), 
+				this.getUtilityPath());
 	}	
 	
 	/**
@@ -928,6 +941,21 @@ public abstract class BaseAdapter {
 	 */
 	public void setMenu(final String menu) {
 		this.menu = menu;
+	}
+	
+
+	/**
+	 * @return the menu
+	 */
+	public String getUtilityPath() {
+		return this.utilityPath;
+	}
+
+	/**
+	 * @param menu the menu to set
+	 */
+	public void setUtilityPath(final String utilityPath) {
+		this.utilityPath = utilityPath;
 	}
 
 }

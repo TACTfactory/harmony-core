@@ -170,5 +170,8 @@
         <module name="UpperEll"/>
 
     </module>
+	<module name="SuppressionFilter">
+		<property name="file" value="checkstyle_exclude.xml" />
+	</module>
 
 </module>

@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${local_namespace};
 
 import android.content.Context;
