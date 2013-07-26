@@ -4,6 +4,7 @@
 <#assign currname=curr.name?lower_case />
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout 
+	xmlns:harmony="http://schemas.android.com/apk/res/${project_namespace}"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -28,44 +29,31 @@
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@+id/${m_id_label}" />
-	    		<#elseif (field.type?lower_case == "datetime")>
-	<LinearLayout
-        android:id="@+id/${m_id}"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+    		<#elseif (field.type?lower_case == "datetime")>
+				<#if (field.harmony_type?lower_case == "datetime")>
+	<${project_namespace}.harmony.widget.DateTimeWidget
+		android:id="@+id/${m_id}"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
         android:layout_below="@+id/${m_id_label}"
-        android:animateLayoutChanges="false"
-        android:orientation="horizontal" >
-			<#if (field.harmony_type == "datetime" || field.harmony_type == "date")>
-        <EditText
-            android:id="@+id/${m_id}_date"
-            android:layout_height="wrap_content"
-            			<#if (field.harmony_type == "datetime")>
-            android:layout_width="0px"
-            android:paddingRight="4dp"
-            android:layout_weight="7"
-            			<#else>
-            android:layout_width="match_parent"	
-            			</#if>
-            android:focusable="false"
-            android:singleLine="true"
-            style="@style/TextAppearance.Edit_Spinner" />
-			</#if>
-			<#if (field.harmony_type == "datetime" || field.harmony_type == "time")>
-        <EditText
-            android:id="@+id/${m_id}_time"
-            android:layout_height="wrap_content"
-            			<#if (field.harmony_type == "datetime")>
-            android:layout_width="0px"
-            android:layout_weight="4"
-            			<#else>
-            android:layout_width="match_parent"	
-            			</#if>
-            android:focusable="false"
-            style="@style/TextAppearance.Edit_Spinner" />
-            		</#if>
-    </LinearLayout>
-		<#else>
+		harmony:dateTimeWidget_dateDialogTitle="@string/${field.owner?lower_case}_${field.name?lower_case}_date_title" 
+		harmony:dateTimeWidget_timeDialogTitle="@string/${field.owner?lower_case}_${field.name?lower_case}_time_title" />
+				<#elseif (field.harmony_type?lower_case == "date")>
+	<${project_namespace}.harmony.widget.DateWidget
+		android:id="@+id/${m_id}"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+        android:layout_below="@+id/${m_id_label}" 
+		harmony:dateWidget_dialogTitle="@string/${field.owner?lower_case}_${field.name?lower_case}_date_title" />
+				<#elseif (field.harmony_type?lower_case == "time")>
+	<${project_namespace}.harmony.widget.TimeWidget
+		android:id="@+id/${m_id}"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+        android:layout_below="@+id/${m_id_label}" 
+		harmony:timeWidget_dialogTitle="@string/${field.owner?lower_case}_${field.name?lower_case}_time_title" />
+				</#if>
+			<#else>
     <EditText
 		android:id="@+id/${m_id}"
 	    android:layout_width="match_parent"

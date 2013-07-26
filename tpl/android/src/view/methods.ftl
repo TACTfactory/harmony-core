@@ -63,13 +63,11 @@
 		<#assign ret=ret+"this."+field.name+"View.isChecked());" />
 	<#elseif (type?lower_case == "datetime")>
 		<#if (field.harmony_type=="date")>
-			<#assign ret=ret+"DateUtils.formatStringToDate(this."+field.name+"DateView.getEditableText().toString()));" />
+			<#assign ret=ret+"this."+field.name+"View.getDate());" />
 		<#elseif (field.harmony_type=="time")>
-			<#assign ret=ret+"DateUtils.formatStringToTime(this."+field.name+"TimeView.getEditableText().toString()));" />
+			<#assign ret=ret+"this."+field.name+"View.getTime());" />
 		<#elseif (field.harmony_type?lower_case=="datetime")>
-			<#assign ret=ret+"DateUtils.formatStringToDateTime(
-				this."+field.name+"DateView.getEditableText().toString(),
-				this."+field.name+"TimeView.getEditableText().toString()));" />
+			<#assign ret=ret+"this."+field.name+"View.getDateTime());" />
 		</#if>
 	<#else>
 		<#assign getter="this."+field.name+"View.getEditableText().toString()" />

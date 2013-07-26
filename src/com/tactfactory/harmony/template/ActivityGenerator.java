@@ -140,14 +140,31 @@ public class ActivityGenerator extends BaseGenerator {
 		this.updateWidget("ValidationButtons.java", 
 				"widget_validation_buttons.xml");
 		
-		if (this.isDate) {
-			this.updateWidget("CustomDatePickerDialog.java", 
-					"dialog_date_picker.xml");
-		}
-		
-		if (this.isTime) {
-			this.updateWidget("CustomTimePickerDialog.java",
-					"dialog_time_picker.xml");
+		if (this.isDate || this.isTime) {
+			this.makeSource(
+					this.getAdapter().getTemplateRessourceValuesPath() 
+							+ "/attrs.xml",
+					this.getAdapter().getRessourceValuesPath() 
+							+ "/attrs.xml",
+					false);
+			if (this.isDate) {
+				this.updateWidget("CustomDatePickerDialog.java", 
+						"dialog_date_picker.xml");
+				this.updateWidget("DateWidget.java", 
+						"widget_date.xml");
+			}
+			
+			if (this.isTime) {
+				this.updateWidget("CustomTimePickerDialog.java",
+						"dialog_time_picker.xml");
+				this.updateWidget("TimeWidget.java", 
+						"widget_time.xml");
+			}
+			
+			if (this.isDate && this.isTime) {
+				this.updateWidget("DateTimeWidget.java", 
+						"widget_datetime.xml");
+			}	
 		}
 		
 		// create HarmonyFragmentActivity

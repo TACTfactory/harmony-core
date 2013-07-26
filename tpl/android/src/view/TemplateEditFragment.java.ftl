@@ -34,12 +34,16 @@ import android.widget.TimePicker;
 
 
 <#assign importDate=false />
+<#assign importDateTime=false />
 <#assign importTime=false />
 <#list fields?values as field>
 	<#if !field.internal && !field.hidden>
 		<#if field.type?lower_case=="datetime">
-			<#if ((field.harmony_type=="date" || field.harmony_type=="datetime") && !importDate)>
+			<#if ((field.harmony_type=="date") && !importDate)>
 				<#assign importDate=true />
+			</#if>
+			<#if ((field.harmony_type=="datetime") && !importDateTime)>
+				<#assign importDateTime=true />
 			</#if>
 			<#if ((field.harmony_type=="time" || field.harmony_type=="datetime") && !importTime)>
 				<#assign importTime=true />
@@ -47,14 +51,17 @@ import android.widget.TimePicker;
 		</#if>
 	</#if>
 </#list>
-<#if (importDate || importTime)>
+<#if (importDate || importTime || importDateTime)>
 import org.joda.time.DateTime;
 
 	<#if (importDate)>
-import ${curr.namespace}.harmony.widget.CustomDatePickerDialog;
+import ${curr.namespace}.harmony.widget.DateWidget;
 	</#if>
 	<#if (importTime)>
-import ${curr.namespace}.harmony.widget.CustomTimePickerDialog;
+import ${curr.namespace}.harmony.widget.TimeWidget;
+	</#if>
+	<#if (importDateTime)>
+import ${curr.namespace}.harmony.widget.DateTimeWidget;
 	</#if>
 import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
@@ -107,11 +114,12 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 				<#if (field.type=="boolean")>
 	protected CheckBox ${field.name}View;
 				<#elseif field.type?lower_case=="datetime">
-					<#if field.harmony_type=="datetime" || field.harmony_type=="date">
-	protected EditText ${field.name}DateView;
-					</#if>
-					<#if field.harmony_type=="datetime" || field.harmony_type=="time">
-	protected EditText ${field.name}TimeView;
+					<#if (field.harmony_type=="datetime")>
+	protected DateTimeWidget ${field.name}View;
+					<#elseif (field.harmony_type=="date")>
+	protected DateWidget ${field.name}View;
+					<#elseif (field.harmony_type=="time")>
+	protected TimeWidget ${field.name}View;
 					</#if>
 				<#else>
 	protected EditText ${field.name}View;			
@@ -142,95 +150,16 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 					<#if field.type=="boolean">
 		this.${field.name}View = 
 			(CheckBox) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
-					<#elseif field.type?lower_case=="datetime">
-						<#if field.harmony_type == "date" || field.harmony_type == "datetime">
-		this.${field.name}DateView = 
-			(EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_date);			
-		this.${field.name}DateView.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-		        DateTime dt = new DateTime();
-		        
-				if (!TextUtils.isEmpty(${curr.name}EditFragment.this
-						.${field.name}DateView.getText())) {
-					final String strInputDate = 
-							${curr.name}EditFragment.this
-								.${field.name}DateView.getText().toString();
-					dt = DateUtils.formatStringToDate(strInputDate);
-				}
-				
-			    final CustomDatePickerDialog ${field.name}Dpd = 
-			    		new CustomDatePickerDialog(getActivity(), 
-			    				dt, 
-			    				R.string.${field.owner?lower_case}_${field.name?lower_case}_date_title);
-			    ${field.name}Dpd.setPositiveButton(
-			    		getActivity().getString(android.R.string.ok),
-			    		new DialogInterface.OnClickListener() {					
-							@Override
-							public void onClick(DialogInterface dialog, 
-									int which) {
-								final DatePicker dp = 
-										((CustomDatePickerDialog) dialog).getDatePicker();
-								final DateTime date = 
-										new DateTime(dp.getYear(), 
-												dp.getMonth() + 1, 
-												dp.getDayOfMonth(), 
-												0, 
-												0);
-								${curr.name}EditFragment.this
-									.${field.name}DateView.setText(
-											DateUtils.formatDateToString(date));
-							}
-				});
-
-			    ${field.name}Dpd.show();
-			}
-		});			
-						</#if>
-						<#if field.harmony_type == "time" || field.harmony_type == "datetime">
-		this.${field.name}TimeView = 
-				(EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_time);
-		this.${field.name}TimeView.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				DateTime dt = new DateTime(); 
-		        
-				if (!TextUtils.isEmpty(${curr.name}EditFragment.this
-							.${field.name}TimeView.getText())) {
-					final String strInputDate = 
-							${curr.name}EditFragment.this
-								.${field.name}TimeView.getText().toString();
-					dt = DateUtils.formatStringToTime(strInputDate);
-				}
-				
-			    final CustomTimePickerDialog ${field.name}Tpd = 
-			    		new CustomTimePickerDialog(getActivity(), 
-			    				dt, 
-			    				android.text.format.DateFormat.is24HourFormat(getActivity()), 
-			    				R.string.${field.owner?lower_case}_${field.name?lower_case}_time_title);
-			    ${field.name}Tpd.setPositiveButton(getActivity().getString(
-			    										   android.R.string.ok), 
-			    		new DialogInterface.OnClickListener() {
-							@Override
-							public void onClick(DialogInterface dialog, 
-															int which) {
-								final TimePicker tp = 
-										((CustomTimePickerDialog) dialog)
-												.getTimePicker();
-								DateTime date = new DateTime(0);
-								date = new DateTime(date.getYear(), 
-										date.getMonthOfYear(), 
-										date.getDayOfMonth(), 
-										tp.getCurrentHour(), 
-										tp.getCurrentMinute());
-		
-								${curr.name}EditFragment.this
-									.${field.name}TimeView.setText(
-											DateUtils.formatTimeToString(date));
-							}
-				});
-
-			    ${field.name}Tpd.show();
-			}
-		});
+					<#elseif field.type?lower_case == "datetime">
+						<#if (field.harmony_type?lower_case == "datetime")>
+		this.${field.name}View = 
+				(DateTimeWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
+						<#elseif (field.harmony_type?lower_case == "date")>
+		this.${field.name}View = 
+				(DateWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
+						<#elseif (field.harmony_type?lower_case == "time")>
+		this.${field.name}View = 
+				(TimeWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 						</#if>
 					<#else>
 		this.${field.name}View = 
@@ -366,15 +295,12 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
 		if (this.model.get${field.name?cap_first}() != null) {
 					<#if field.type?lower_case=="datetime">
-						<#if field.harmony_type=="datetime" || field.harmony_type=="date">
-			this.${field.name}DateView.setText(
-					DateUtils.formatDateToString(
-							this.model.get${field.name?cap_first}()));
-						</#if>
-						<#if field.harmony_type=="datetime" || field.harmony_type=="time">
-			this.${field.name}TimeView.setText(
-					DateUtils.formatTimeToString(
-							this.model.get${field.name?cap_first}()));
+						<#if field.harmony_type=="datetime">
+			this.${field.name}View.setDateTime(this.model.get${field.name?cap_first}());
+						<#elseif (field.harmony_type=="date")>
+			this.${field.name}View.setDate(this.model.get${field.name?cap_first}());
+						<#elseif (field.harmony_type=="time")>
+			this.${field.name}View.setTime(this.model.get${field.name?cap_first}());
 						</#if>
 					<#else>
 			${m.setLoader(field)}			
@@ -396,22 +322,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		<#list fields?values as field>
 		<#if !field.internal && !field.hidden>
 			<#if !field.relation??>
-				<#if (field.type?lower_case == "datetime")>
-					<#if field.harmony_type=="datetime">
-		if (!TextUtils.isEmpty(this.${field.name}DateView.getEditableText()) 
-			&& !TextUtils.isEmpty(this.${field.name}TimeView.getEditableText())) {
-					<#elseif field.harmony_type=="date">
-		if (!TextUtils.isEmpty(this.${field.name}DateView.getEditableText())) {
-					<#elseif field.harmony_type=="time" || field.harmony_type=="datetime">
-		if (!TextUtils.isEmpty(this.${field.name}TimeView.getEditableText())) {
-					<#else>
-		if (!TextUtils.isEmpty(this.${field.name}View.getEditableText())) {
-					</#if>
-			${m.setSaver(field)}
-		}
-				<#else>
 		${m.setSaver(field)}
-				</#if>
 			<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 		final ${field.relation.targetEntity} tmp${field.name?cap_first} = 
 								new ${field.relation.targetEntity?cap_first}();
