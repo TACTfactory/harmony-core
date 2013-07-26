@@ -63,7 +63,7 @@ public abstract class PackageUtils {
 	 */
 	public static String extractClassNameFromArray(final String arrayName) {
 		String cName = arrayName;
-		if (arrayName.indexOf('<') >= 0) {
+		if (arrayName.contains("<")) {
 			cName = arrayName.substring(
 						arrayName.indexOf('<') + 1,
 						arrayName.indexOf('>'));
