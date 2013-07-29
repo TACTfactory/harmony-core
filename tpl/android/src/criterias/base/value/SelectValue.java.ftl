@@ -23,7 +23,7 @@ public class SelectValue extends CriteriaValue {
 	 * @return the refTable
 	 */
 	public final String getRefTable() {
-		return refTable;
+		return this.refTable;
 	}
 
 	/**
@@ -37,7 +37,7 @@ public class SelectValue extends CriteriaValue {
 	 * @return the refKey
 	 */
 	public final String getRefKey() {
-		return refKey;
+		return this.refKey;
 	}
 
 	/**
@@ -51,7 +51,7 @@ public class SelectValue extends CriteriaValue {
 	 * @return the criteria
 	 */
 	public final CriteriasBase getCriteria() {
-		return criteria;
+		return this.criteria;
 	}
 
 	/**

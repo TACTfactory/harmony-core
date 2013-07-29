@@ -19,7 +19,8 @@ import android.widget.DatePicker.OnDateChangedListener;
 /** CustomDatePickerDialog widget class.
  *  A simple AlertDialog containing an DatePicker.
  */
-public class CustomDatePickerDialog extends AlertDialog {
+public class CustomDatePickerDialog extends AlertDialog 
+		implements OnDateChangedListener {
 	/** Context. */
 	private Context ctx;
 	/** datePicker. */
@@ -110,58 +111,29 @@ public class CustomDatePickerDialog extends AlertDialog {
 	@TargetApi(Build.VERSION_CODES.HONEYCOMB)
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		this.setTitle(title);
+		this.setTitle(this.title);
 		this.setCancelable(true);
 		this.setIcon(0);
 		
-		LayoutInflater inflater = getLayoutInflater();
+		LayoutInflater inflater = this.getLayoutInflater();
 		View alertDialogView = inflater.inflate(R.layout.dialog_date_picker, 
 												null);	
 		this.setView(alertDialogView);
 		
 		this.datePicker = (DatePicker) alertDialogView.findViewById(
 														R.id.dialog_pick_date);
-		this.datePicker.init(year, 
-							 monthOfYear,
-							 dayOfMonth, 
-							 new OnDateChangedListener() {
-			
-			@Override
-			public void onDateChanged(DatePicker view, int year, 
-											 int monthOfYear, int dayOfMonth) {
-				if (!(Build.VERSION.SDK_INT 
-						>= Build.VERSION_CODES.HONEYCOMB)) {
-					DateTime newDate = 
-						    new DateTime(year, 
-						    		monthOfYear + 1, 
-						    		dayOfMonth, 
-						    		0, 
-						    		0);
-			
-					if (minDate != null && minDate.isAfter(newDate)) {
-						view.init(
-								minDate.getYear(), 
-								minDate.getMonthOfYear() - 1, 
-								minDate.getDayOfMonth(), this);
-					} else if (maxDate != null && maxDate.isBefore(newDate)) {
-						view.init(
-								maxDate.getYear(), 
-								maxDate.getMonthOfYear() - 1, 
-								maxDate.getDayOfMonth(), this);
-					} else {
-						view.init(year, monthOfYear, dayOfMonth, this);
-					}
-				}
-			}
-		});
+		this.datePicker.init(this.year, 
+							this.monthOfYear,
+							this.dayOfMonth, 
+							this);
 		
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-			if (minDate != null) {
-				this.datePicker.setMinDate(minDate.getMillis());
+			if (this.minDate != null) {
+				this.datePicker.setMinDate(this.minDate.getMillis());
 			}
 
-			if (maxDate != null) {
-				this.datePicker.setMinDate(maxDate.getMillis());
+			if (this.maxDate != null) {
+				this.datePicker.setMinDate(this.maxDate.getMillis());
 			}
 		}
 
@@ -216,6 +188,34 @@ public class CustomDatePickerDialog extends AlertDialog {
 	 * @return the datePicker
 	 */
 	public DatePicker getDatePicker() {
-		return datePicker;
+		return this.datePicker;
+	}
+
+	@Override
+	public void onDateChanged(DatePicker view, int year, 
+									 int monthOfYear, int dayOfMonth) {
+		if (!(Build.VERSION.SDK_INT 
+				>= Build.VERSION_CODES.HONEYCOMB)) {
+			DateTime newDate = 
+				    new DateTime(year, 
+				    		monthOfYear + 1, 
+				    		dayOfMonth, 
+				    		0, 
+				    		0);
+	
+			if (this.minDate != null && this.minDate.isAfter(newDate)) {
+				view.init(
+						this.minDate.getYear(), 
+						this.minDate.getMonthOfYear() - 1, 
+						this.minDate.getDayOfMonth(), this);
+			} else if (this.maxDate != null && this.maxDate.isBefore(newDate)) {
+				view.init(
+						this.maxDate.getYear(), 
+						this.maxDate.getMonthOfYear() - 1, 
+						this.maxDate.getDayOfMonth(), this);
+			} else {
+				view.init(year, monthOfYear, dayOfMonth, this);
+			}
+		}
 	}
 }

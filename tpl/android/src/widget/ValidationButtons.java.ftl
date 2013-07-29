@@ -60,7 +60,7 @@ public class ValidationButtons extends FrameLayout {
 			@Override
 			public void onClick(View v) {
 				if (ValidationButtons.this.listener != null) {
-					listener.onCancelSelected();
+					ValidationButtons.this.listener.onCancelSelected();
 				}
 			}
 		});
@@ -71,7 +71,7 @@ public class ValidationButtons extends FrameLayout {
 			@Override
 			public void onClick(View v) {
 				if (ValidationButtons.this.listener != null) {
-					listener.onValidationSelected();
+					ValidationButtons.this.listener.onValidationSelected();
 				}
 			}
 		});

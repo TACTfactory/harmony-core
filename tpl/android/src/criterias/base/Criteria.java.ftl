@@ -21,16 +21,16 @@ public class Criteria implements Serializable, ICriteria {
 	@Override
 	public String toSQLiteString() {
 		return "(" 
-		+ key + " " 
-		+ type.getSQL() + " " 
-		+ DatabaseUtils.sqlEscapeString(value.toSQLiteString()) 
+		+ this.key + " " 
+		+ this.type.getSQL() + " " 
+		+ DatabaseUtils.sqlEscapeString(this.value.toSQLiteString()) 
 		+ ")";
 	}
 
 	@Override
 	public String toSQLiteSelection() {
 		return "(" 
-			+ key + " " 
+			+ this.key + " " 
 			+ this.type.getSQL() + " " 
 			+ this.value.toSQLiteSelection() 
 			+ ")";
@@ -38,7 +38,7 @@ public class Criteria implements Serializable, ICriteria {
 	
 	@Override
 	public void toSQLiteSelectionArgs(final ArrayList<String> array) {
-		value.toSQLiteSelectionArgs(array);
+		this.value.toSQLiteSelectionArgs(array);
 	}
 	
 	/**
@@ -139,25 +139,25 @@ public class Criteria implements Serializable, ICriteria {
 	
 		if (obj == null) {
 			result = false;
-		} else if (getClass() != obj.getClass()) {
+		} else if (this.getClass() != obj.getClass()) {
 			result = false;
 		}
 		
 		if (result) {
 			final Criteria other = (Criteria) obj;
-			if (key == null) {
+			if (this.key == null) {
 				if (other.key != null) {
 					result = false;
 				}
-			} else if (!key.equals(other.key)) {
+			} else if (!this.key.equals(other.key)) {
 				result = false;
-			} else if (type != other.type) {
+			} else if (this.type != other.type) {
 				result = false;
-			} else if (value == null) {
+			} else if (this.value == null) {
 				if (other.value != null) {
 					result = false;
 				}
-			} else if (!value.equals(other.value)) {
+			} else if (!this.value.equals(other.value)) {
 				result = false;
 			}
 		}
