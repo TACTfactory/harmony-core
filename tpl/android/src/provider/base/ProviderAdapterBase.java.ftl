@@ -1,15 +1,11 @@
 <@header?interpret />
 package ${local_namespace}.base;
 
-import java.util.ArrayList;
+import android.database.sqlite.SQLiteDatabase;
+import android.content.Context;
 
-import ${project_namespace}.criterias.base.CriteriasBase;
 import ${data_namespace}.base.SQLiteAdapterBase;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.Bundle;
-import android.util.Log;
 /**
  * ProviderAdapterBase<T extends Serializable>.
  * @param <T> must extends Serializable

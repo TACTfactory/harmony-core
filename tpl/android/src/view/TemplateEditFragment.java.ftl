@@ -13,7 +13,28 @@ package ${curr.controller_namespace};
 import java.util.ArrayList;
 	</#if>
 import java.util.List;
-</#if><#if (hasDate || hasTime || hasDateTime)>
+</#if>
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;<#if (hasRelation)>
+import android.view.View.OnClickListener;</#if>
+import android.view.ViewGroup;<#if (hasRelation)>
+import android.widget.Button;</#if><#if (ViewUtils.hasTypeBoolean(fields?values))>
+import android.widget.CheckBox;</#if><#if ViewUtils.shouldImportEditText(fields?values)>
+import android.widget.EditText;</#if>
+
+import ${curr.namespace}.R;
+${ImportUtils.importRelatedEntities(curr)}
+${ImportUtils.importRelatedEnums(curr)}
+import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
+import ${project_namespace}.harmony.view.HarmonyFragment;<#if (hasDate || hasTime || hasDateTime)>
 	<#if (hasDate)>
 import ${curr.namespace}.harmony.widget.DateWidget;
 	</#if>
@@ -23,36 +44,7 @@ import ${curr.namespace}.harmony.widget.TimeWidget;
 	<#if (hasDateTime)>
 import ${curr.namespace}.harmony.widget.DateTimeWidget;
 	</#if>
-import ${curr.namespace}.harmony.util.DateUtils;
-import org.joda.time.DateTime;
 </#if>
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.AsyncTask;
-import android.os.Bundle;<#if (hasDate || hasTime || hasDateTime)>
-import android.text.TextUtils;</#if>
-import android.view.LayoutInflater;
-import android.view.View;<#if (hasDate || hasTime || hasDateTime || hasRelation)>
-import android.view.View.OnClickListener;</#if>
-import android.view.ViewGroup;<#if (hasRelation)>
-import android.widget.Button;</#if><#if (ViewUtils.hasTypeBoolean(fields?values))>
-import android.widget.CheckBox;</#if><#if (hasDate || hasDateTime)>
-import android.widget.DatePicker;</#if><#if ViewUtils.shouldImportEditText(fields?values)>
-import android.widget.EditText;</#if><#if (hasTime || hasDateTime)>
-import android.widget.TimePicker;</#if>
-
-import ${curr.namespace}.R;
-${ImportUtils.importRelatedEntities(curr)}
-${ImportUtils.importRelatedEnums(curr)}<#if (hasDate || hasTime || hasDateTime)>
-import ${curr.namespace}.harmony.util.DateUtils;</#if>
-import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
-import ${project_namespace}.harmony.view.HarmonyFragment;<#if (hasDate || hasDateTime)>
-import ${curr.namespace}.harmony.widget.CustomDatePickerDialog;</#if><#if (hasTime || hasDateTime)>
-import ${curr.namespace}.harmony.widget.CustomTimePickerDialog;</#if>
 import ${project_namespace}.harmony.widget.ValidationButtons;
 import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
 ${ImportUtils.importRelatedProviderUtils(curr)}
