@@ -14,6 +14,7 @@ import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.ProjectDiscover;
 import com.tactfactory.harmony.TargetPlatform;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
+import com.tactfactory.harmony.parser.HeaderParser;
 import com.tactfactory.harmony.plateforme.AndroidAdapter;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.plateforme.IosAdapter;
@@ -514,7 +515,7 @@ public class ProjectCommand extends BaseCommand {
 			final String[] args, 
 			final String option) {
 		this.setCommandArgs(Console.parseCommandArgs(args));
-		
+		HeaderParser.parseHeaderFile();
 		if (action.equals(INIT_ANDROID)) {
 			this.initAndroid();
 		} else
