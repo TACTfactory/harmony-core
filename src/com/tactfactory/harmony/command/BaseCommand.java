@@ -16,8 +16,6 @@ import java.util.HashMap;
 
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.meta.ClassMetadata;
-import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.parser.BaseParser;
 import com.tactfactory.harmony.parser.ClassCompletor;
 import com.tactfactory.harmony.parser.JavaModelParser;
