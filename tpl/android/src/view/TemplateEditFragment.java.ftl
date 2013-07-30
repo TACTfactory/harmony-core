@@ -281,7 +281,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		${ViewUtils.setLoader(field)}
 				</#if>
 			<#else>
-		this.${field.name}List = new ${field.relation.targetEntity}ProviderUtils().queryAll(this.getActivity());
+		this.${field.name}List = new ${field.relation.targetEntity}ProviderUtils(this.getActivity()).queryAll();
 		init${field.name?cap_first}Dialog(this.${field.name}List);
 			</#if>
 		</#if>
@@ -385,8 +385,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 			
-			result = new ${curr.name?cap_first}ProviderUtils().update(
-				this.ctx,
+			result = new ${curr.name?cap_first}ProviderUtils(this.ctx).update(
 				this.entity);
 
 			return result;

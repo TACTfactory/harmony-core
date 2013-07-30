@@ -187,8 +187,8 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		protected Integer doInBackground(Void... params) {
 			int result = -1;
 
-			result = new ${curr.name?cap_first}ProviderUtils()
-					.delete(this.ctx, this.item);
+			result = new ${curr.name?cap_first}ProviderUtils(this.ctx)
+					.delete(this.item);
 
 			return result;
 		}
