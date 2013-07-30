@@ -89,6 +89,12 @@ public class DataLoader {
 			}
 			dataLoader.load(manager);
 		}
+
+		// After getting all the informations from the fixture,
+		// serialize the datas.
+		for (final FixtureBase<?> dataLoader : this.dataLoaders) {	
+			dataLoader.backup();
+		}
 		hasFixturesBeenLoaded = true;
 	}
 	

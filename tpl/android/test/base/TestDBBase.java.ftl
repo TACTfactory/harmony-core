@@ -21,12 +21,15 @@ import android.util.Log;
 
 
 /** Base test abstract class <br/>
- * <b><i>This class will be overwrited whenever you regenerate the project with Harmony.</i></b>
+ * <b><i>This class will be overwrited whenever
+ * you regenerate the project with Harmony.</i></b>
  */
 public abstract class TestDBBase extends AndroidTestCase {
 	private final static String CONTEXT_PREFIX = "test.";
-	private final static String PROVIDER_AUTHORITY = "${project_namespace}.provider";
-	private final static Class<? extends ContentProvider> PROVIDER_CLASS = ${project_name?cap_first}Provider.class;
+	private final static String PROVIDER_AUTHORITY =
+					"${project_namespace}.provider";
+	private final static Class<? extends ContentProvider> PROVIDER_CLASS =
+					${project_name?cap_first}Provider.class;
 	
 	private Context baseContext;
 	
@@ -117,15 +120,23 @@ public abstract class TestDBBase extends AndroidTestCase {
 			db.beginTransaction();
 			DataLoader dataLoader = new DataLoader(this.getMockContext());
 			dataLoader.clean();
-			dataLoader.loadData(db, DataLoader.MODE_APP | DataLoader.MODE_DEBUG | DataLoader.MODE_TEST);
+			dataLoader.loadData(db,
+						DataLoader.MODE_APP | 
+						DataLoader.MODE_DEBUG | 
+						DataLoader.MODE_TEST);
 			db.setTransactionSuccessful();
 			db.endTransaction();
 			db.close();
 			
-			DatabaseUtil.exportDB(this.getMockContext(), cacheDbFile, SQLiteAdapterBase.DB_NAME);
+			DatabaseUtil.exportDB(this.getMockContext(), 
+					cacheDbFile, 
+					SQLiteAdapterBase.DB_NAME);
 		} else {
 			Log.d("TEST", "Re use old Database cache");
-			DatabaseUtil.importDB(this.getMockContext(), cacheDbFile, SQLiteAdapterBase.DB_NAME, false);
+			DatabaseUtil.importDB(this.getMockContext(), 
+					cacheDbFile, 
+					SQLiteAdapterBase.DB_NAME,
+					false);
 		}
 	}
 }
