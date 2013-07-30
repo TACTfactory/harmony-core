@@ -20,6 +20,7 @@ import android.net.Uri;
 import android.os.RemoteException;
 import android.util.Log;
 
+import ${project_namespace}.criterias.base.CriteriasBase;
 ${ImportUtils.importRelatedSQLiteAdapters(curr, false)}
 ${ImportUtils.importManyToManyTargetSQLiteAdapters(curr)}
 ${ImportUtils.importRelatedEntities(curr)}
@@ -260,6 +261,29 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 				null,
 				null, 
 				null, 
+				null);
+		
+		result = adapt.cursorToItems(cursor);
+		
+		cursor.close();
+
+		return result;
+	}
+
+	/**
+	 * Query the DB to get the entities filtered by criteria.
+	 * @param criteria
+	 * @return ArrayList<${curr.name}>
+	 */
+	public ArrayList<${curr.name}> query(CriteriasBase<${curr.name}> criteria) {
+		ArrayList<${curr.name}> result = new ArrayList<${curr.name}>();
+		${curr.name}SQLiteAdapter adapt = new ${curr.name}SQLiteAdapter(this.getContext());
+		ContentResolver prov = this.getContext().getContentResolver();
+		
+		Cursor cursor = prov.query(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
+				null,
+				criteria.toSQLiteSelection(), 
+				criteria.toSQLiteSelectionArgs(), 
 				null);
 		
 		result = adapt.cursorToItems(cursor);

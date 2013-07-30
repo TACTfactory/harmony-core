@@ -5,6 +5,9 @@ import java.util.ArrayList;
 
 import android.content.Context;
 
+import ${project_namespace}.criterias.base.CriteriasBase;
+
+
 /**
  * Generic Proxy class for the provider calls.
  * @param <T>	 The entity type
@@ -54,6 +57,13 @@ public abstract class ProviderUtilsBase<T> {
 	 * @return The list of T entities
 	 */
 	public abstract ArrayList<T> queryAll();
+
+	/**
+	 * Query the DB to get the entities filtered by criteria.
+	 * @param criteria
+	 * @return ArrayList<T>
+	 */
+	public abstract ArrayList<T> query(CriteriasBase<T> criteria);
 
 	/** 
 	 * Update a T item through the provider.

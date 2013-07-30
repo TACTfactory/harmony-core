@@ -11,7 +11,7 @@ import ${project_namespace}.criterias.base.value.StringValue;
 /** CriteriasBase. 
  *	An array of Criteria and CriteriasBase. Used for db requests.   
  */
-public abstract class CriteriasBase implements Serializable, ICriteria {
+public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 	/** Criteria GroupType. */ 
 	private GroupType type;
 	/** Array of ICriteria. */
