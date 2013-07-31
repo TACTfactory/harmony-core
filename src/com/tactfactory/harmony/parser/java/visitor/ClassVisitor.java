@@ -158,11 +158,7 @@ public class ClassVisitor {
 								this.fieldVisitor.visit(
 										(FieldDeclaration) member,
 										result);
-						if (fieldMetas != null) {
-							result.getFields().put(
-									fieldMetas.getName(),
-									fieldMetas);
-							
+						if (fieldMetas != null) {							
 							if (fieldMetas.isId()) {
 								((EntityMetadata) result).getIds().put(
 										fieldMetas.getName(),
@@ -235,9 +231,6 @@ public class ClassVisitor {
 						if (fieldMetas.isId()) {
 							result.setIdName(fieldMetas.getName());
 						}
-						result.getFields().put(
-								fieldMetas.getName(), 
-								fieldMetas);
 					}
 				} else 
 					
