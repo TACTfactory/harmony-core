@@ -13,7 +13,6 @@ import ${fixture_namespace}.${curr.name?cap_first}DataLoader;
 
 import java.util.ArrayList;
 
-import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
 import ${curr.test_namespace}.utils.*;
 import android.content.Context;
 import junit.framework.Assert;
@@ -40,7 +39,7 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 		this.adapter.open();
 		
 		<#if dataLoader?? && dataLoader>		
-		ArrayList<${curr.name?cap_first}> entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).items.values());
+		ArrayList<${curr.name?cap_first}> entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).getMap().values());
 		if (entities.size()>0){
 			this.entity = entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}

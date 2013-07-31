@@ -2,8 +2,14 @@
 <@header?interpret />
 package ${fixture_namespace};
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.ObjectInput;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutput;
+import java.io.ObjectOutputStream;
 import java.util.LinkedHashMap;
 <#if fixtureType=="xml">
 import java.util.List;
@@ -41,7 +47,10 @@ public abstract class FixtureBase<T> {
 	protected String patternTime = "HH:mm";
 	
 	/** Link an ID and its entity. */
-	public Map<String, T> items = new LinkedHashMap<String, T>();
+	protected Map<String, T> items = new LinkedHashMap<String, T>();
+
+	/** SerializedBackup. */
+	protected byte[] serializedBackup;
 
 	/**
 	 * Constructor.
@@ -196,4 +205,73 @@ public abstract class FixtureBase<T> {
 	 * @return the fixture file name
 	 */
 	protected abstract String getFixtureFileName();
+
+
+	/**
+	 * Serializes the Map into a byte array for backup purposes.
+	 */
+	public void backup() {
+		ByteArrayOutputStream bos = new ByteArrayOutputStream();
+		ObjectOutput out = null;
+		try {
+		  out = new ObjectOutputStream(bos);   
+		  out.writeObject(this.items);
+		 this.serializedBackup = bos.toByteArray();
+		 
+		} catch (IOException e) {
+			e.printStackTrace();
+		} finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			try {
+				bos.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}	
+	}
+
+
+	/**
+	 * Returns the Map<String, T> loaded from the fixtures.
+	 * @return the Map
+	 */
+	public Map<String, T> getMap() {
+		Map<String, T> result = null;
+		ByteArrayInputStream bis = new ByteArrayInputStream(this.serializedBackup);
+		ObjectInput in = null;
+		try {
+		  in = new ObjectInputStream(bis);
+		  result = (LinkedHashMap<String, T>) in.readObject(); 
+		  
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+		} finally {
+			if (in != null) {
+				try {
+					in.close();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+			try {
+				bis.close();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+
+		return result;
+	}
 }

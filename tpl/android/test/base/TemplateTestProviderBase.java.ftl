@@ -11,23 +11,18 @@ import ${curr.namespace}.entity.${curr.name};
 
 <#if dataLoader?? && dataLoader>
 import ${fixture_namespace}.${curr.name?cap_first}DataLoader;
-import ${fixture_namespace}.DataLoader;
 </#if>
 
 import java.util.ArrayList;
 import ${curr.test_namespace}.utils.*;
 
-import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
 
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.os.Bundle;
 
-import android.test.AndroidTestCase;
 import junit.framework.Assert;
 
 /** ${curr.name} database test abstract class <br/>
@@ -55,7 +50,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
 		
 		<#if dataLoader?? && dataLoader>
-		this.entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).items.values());
+		this.entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).getMap().values());
 		if (this.entities.size()>0) {
 			this.entity = this.entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}
