@@ -184,7 +184,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		            }
 		        });
 		
-		${relation.name}Dialog = builder.create();
+		this.${relation.name}Dialog = builder.create();
 	}
 			<#else>
 	protected void init${relation.name?cap_first}Dialog(
@@ -223,7 +223,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		            }
 		        });
 		
-		${relation.name}Dialog = builder.create();
+		this.${relation.name}Dialog = builder.create();
 	} 
 	 		</#if>
 	/**
@@ -240,7 +240,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	 * @param v View 
 	 */
 	protected void onClick${relation.name?cap_first}Button(View v) {
-		${relation.name}Dialog.show();
+		this.${relation.name}Dialog.show();
 	}
 		</#if>
 	</#list>
@@ -271,7 +271,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		
 		
 		this.${field.name}List = new ${field.relation.targetEntity}ProviderUtils().queryAll(this.getActivity());
-		init${field.name?cap_first}Dialog(this.${field.name}List);
+		this.init${field.name?cap_first}Dialog(this.${field.name}List);
 			</#if>
 		</#if>
 		
@@ -360,7 +360,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		protected void onPreExecute() {
 			super.onPreExecute();
 
-			this.progress = ProgressDialog.show(ctx,
+			this.progress = ProgressDialog.show(this.ctx,
 					this.ctx.getString(
 							R.string.${curr.name?lower_case}_progress_save_title),
 					this.ctx.getString(

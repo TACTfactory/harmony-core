@@ -80,7 +80,7 @@ public abstract class SQLiteAdapterBase<T> {
 
 	/** Close database. */
 	public void close() {
-		mDatabase.close();
+		this.mDatabase.close();
 	}
 	
 	/**
