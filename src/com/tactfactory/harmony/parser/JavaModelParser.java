@@ -52,10 +52,6 @@ public class JavaModelParser {
 	private List<CompilationUnit> entities = 
 			new ArrayList<CompilationUnit>();
 	
-	/** Entity metadatas. */
-	private final List<ClassMetadata> metas =
-			new ArrayList<ClassMetadata>();
-	
 	/** List of all the bundles parsers. */
 	private static List<BaseParser> bundleParsers = 
 			new ArrayList<BaseParser>();

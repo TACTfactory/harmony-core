@@ -15,7 +15,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.tactfactory.harmony.meta.TranslationMetadata.Group;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.template.TagConstant;
 
