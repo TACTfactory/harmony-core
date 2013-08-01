@@ -77,17 +77,17 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 						<#if (field.harmony_type == "datetime")>
 			this.${field.name}View.setText(
 					DateUtils.formatDateTimeToString(
-							model.get${field.name?cap_first}()));
+							this.model.get${field.name?cap_first}()));
 						</#if>
 						<#if (field.harmony_type == "date")>
 			this.${field.name}View.setText(
 					DateUtils.formatDateToString(
-							model.get${field.name?cap_first}()));
+							this.model.get${field.name?cap_first}()));
 						</#if>
 						<#if (field.harmony_type == "time")>
 			this.${field.name}View.setText(
 					DateUtils.formatTimeToString(
-							model.get${field.name?cap_first}()));					
+							this.model.get${field.name?cap_first}()));					
 						</#if>
 					<#else>
 			${ViewUtils.setLoader(field)}
@@ -162,7 +162,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		protected void onPreExecute() {
 			super.onPreExecute();
 
-			this.progress = ProgressDialog.show(ctx,
+			this.progress = ProgressDialog.show(this.ctx,
 					this.ctx.getString(
 						R.string.${curr.name?lower_case}_progress_load_title),
 					this.ctx.getString(

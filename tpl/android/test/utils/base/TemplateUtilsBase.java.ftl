@@ -83,7 +83,7 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 					</#if>
 				<#else>
 		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = 
-			new ArrayList<${field.relation.targetEntity?cap_first}>(${field.relation.targetEntity?cap_first}DataLoader.getInstance(ctx).items.values());
+			new ArrayList<${field.relation.targetEntity?cap_first}>(${field.relation.targetEntity?cap_first}DataLoader.getInstance(ctx).getMap().values());
 					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 		if (!${field.name?uncap_first}s.isEmpty()) {
 			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));

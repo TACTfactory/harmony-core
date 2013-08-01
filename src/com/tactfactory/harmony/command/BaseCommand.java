@@ -10,19 +10,15 @@ package com.tactfactory.harmony.command;
 
 import japa.parser.ast.CompilationUnit;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.meta.ClassMetadata;
-import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.parser.BaseParser;
 import com.tactfactory.harmony.parser.ClassCompletor;
+import com.tactfactory.harmony.parser.HeaderParser;
 import com.tactfactory.harmony.parser.JavaModelParser;
 import com.tactfactory.harmony.utils.ConsoleUtils;
-import com.tactfactory.harmony.utils.TactFileUtils;
 
 /** 
  * Common Command structure.
@@ -46,31 +42,8 @@ public abstract class BaseCommand implements Command {
 	 * You can register your own bundle parsers 
 	 * with the method this.javaModelParser.registerParser() 
 	 */
-	public void generateMetas() {
-		ConsoleUtils.display(">> Search for header.ftl...");
-		// Look in app/android...
-		String headerPath = Harmony.getProjectAndroidPath() + "header.ftl";
-		File appAndroidHeader = new File(headerPath);
-		if (appAndroidHeader.exists()) {
-			ConsoleUtils.display(">>>> header.ftl found in " 
-								+ headerPath 
-								+ ". Skipping...");
-			this.loadHeaderFile(appAndroidHeader);
-		} else {
-			// Look in /...
-			headerPath = Harmony.getRootPath() + "header.ftl";
-			File baseHeader = new File(headerPath);
-			if (baseHeader.exists()) {
-				ConsoleUtils.display(">>>> header.ftl found in " 
-								+ headerPath
-								+ ". Skipping...");
-				this.loadHeaderFile(baseHeader);
-				
-			} else {
-				ConsoleUtils.display(">>>> header.ftl not found. Skipping...");
-			}
-		}
-		
+	public void generateMetas() {		
+		HeaderParser.parseHeaderFile();
 		ConsoleUtils.display(">> Analyse Models...");
 		this.javaModelParser = new JavaModelParser();
 		for (final BaseParser parser : this.registeredParsers) {
@@ -122,10 +95,5 @@ public abstract class BaseCommand implements Command {
 	 */
 	protected final HashMap<String, String> getCommandArgs() {
 		return this.commandArgs;
-	}
-	
-	protected final void loadHeaderFile(File f) {
-		String header = TactFileUtils.fileToStringBuffer(f).toString();
-		ApplicationMetadata.INSTANCE.setHeaderTemplate(header);
 	}
 }

@@ -169,6 +169,8 @@
         <module name="TodoComment"/>
         <module name="UpperEll"/>
 
+		<module name="RequireThisCheck" />
+
     </module>
 	<module name="SuppressionFilter">
 		<property name="file" value="checkstyle_exclude.xml" />

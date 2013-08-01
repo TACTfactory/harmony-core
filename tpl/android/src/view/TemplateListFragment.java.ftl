@@ -98,13 +98,20 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		}
 			
 		//return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
+		if (crit != null) {
 		return new ${curr.name?cap_first}ListLoader(this.getActivity(), 
-				crit,
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
 				${curr.name?cap_first}SQLiteAdapter.COLS, 
-				null, 
-				null, 
+				crit,
 				null);
+		} else {
+			return new ${curr.name?cap_first}ListLoader(this.getActivity(), 
+				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
+				${curr.name?cap_first}SQLiteAdapter.COLS, 
+				null,
+				null,
+				null);
+		}
 	}
 
 	@Override 

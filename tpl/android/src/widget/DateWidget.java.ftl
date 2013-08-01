@@ -174,7 +174,7 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 								dp.getDayOfMonth(), 
 								0, 
 								0);
-					dateWidget.setDate(date);
+					this.dateWidget.setDate(date);
 					if (DateWidget.this.dateListener != null) {
 						DateWidget.this.dateListener.onValidateDate();
 					}
@@ -184,6 +184,8 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 					if (DateWidget.this.dateListener != null) {
 						DateWidget.this.dateListener.onCancelDate();
 					}
+					break;
+				default:
 					break;
 			}
 		}

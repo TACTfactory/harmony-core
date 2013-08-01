@@ -37,7 +37,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 	 * @param title The text of the title.
 	 */
 	public CustomTimePickerDialog(Context ctx, DateTime date, 
-										   boolean is24HourView, String title) {
+										boolean is24HourView, String title) {
 		super(ctx);
 		
 		this.initializeTimePickerDialog(ctx, date, is24HourView, title);
@@ -50,11 +50,11 @@ public class CustomTimePickerDialog extends AlertDialog {
 	 * @param titleId The resource id of the title.
 	 */
 	public CustomTimePickerDialog(Context ctx, DateTime date, 
-											boolean is24HourView, int titleId) {
+										boolean is24HourView, int titleId) {
 		super(ctx);
 		
 		this.initializeTimePickerDialog(ctx, date, is24HourView, 
-													ctx.getString(titleId));
+												ctx.getString(titleId));
 	}
 	
 	/** TimePicker dialog initialisation.
@@ -64,7 +64,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 	 * @param title The text of the title.
 	 */
 	private void initializeTimePickerDialog(Context ctx, DateTime date, 	
-										   boolean is24HourView, String title) {
+										boolean is24HourView, String title) {
 		this.ctx = ctx;
 		this.title = title;
 		this.hourOfDay = date.getHourOfDay();
@@ -74,7 +74,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		this.setTitle(title);
+		this.setTitle(this.title);
 		this.setCancelable(true);
 		this.setIcon(0);
 		
@@ -84,7 +84,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 		this.setView(alertDialogView);
 		
 		this.timePicker = (TimePicker) alertDialogView.findViewById(
-														 R.id.dialog_pick_time);
+													R.id.dialog_pick_time);
 		this.timePicker.setIs24HourView(this.is24HourView);
 		this.timePicker.setCurrentHour(this.hourOfDay);
 		this.timePicker.setCurrentMinute(this.minute);
@@ -98,7 +98,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setPositiveButton(CharSequence text, 
-									  DialogInterface.OnClickListener listener) {
+									DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_POSITIVE, text, listener);
 	}
 	
@@ -108,7 +108,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setNegativeButton(CharSequence text,
-									  DialogInterface.OnClickListener listener) {
+									DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_NEGATIVE, text, listener);
 	}
 	
@@ -119,9 +119,10 @@ public class CustomTimePickerDialog extends AlertDialog {
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setPositiveButton(int textId, 
-									  DialogInterface.OnClickListener listener) {
-		this.setButton(AlertDialog.BUTTON_POSITIVE, this.ctx.getString(textId), 
-																	  listener);
+									DialogInterface.OnClickListener listener) {
+		this.setButton(AlertDialog.BUTTON_POSITIVE,
+						this.ctx.getString(textId), 
+						listener);
 	}
 	
 	/** Set a listener to be invoked when the negative button of the dialog is 
@@ -131,15 +132,16 @@ public class CustomTimePickerDialog extends AlertDialog {
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
 	public void setNegativeButton(int textId, 
-									  DialogInterface.OnClickListener listener) {
-		this.setButton(AlertDialog.BUTTON_NEGATIVE, this.ctx.getString(textId),
-																	  listener);
+									DialogInterface.OnClickListener listener) {
+		this.setButton(AlertDialog.BUTTON_NEGATIVE, 
+						this.ctx.getString(textId),
+						listener);
 	}
 	
 	/** Gets the TimePicker contained in this dialog.
 	 * @return the TimePicker
 	 */
 	public TimePicker getTimePicker() {
-		return timePicker;
+		return this.timePicker;
 	}
 }

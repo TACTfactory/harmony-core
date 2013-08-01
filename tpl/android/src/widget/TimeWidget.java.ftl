@@ -25,6 +25,13 @@ import ${project_namespace}.harmony.util.DateUtils.TimeFormatType;
  * View for Time selection.
  */
 public class TimeWidget extends FrameLayout implements OnClickListener {
+	/** Enum format24h value H24. */
+	private static final int H24_ENUM_CONSTANT = 1;
+	/** Enum format24h value AMPM. */
+	private static final int AM_PM_ENUM_CONSTANT = 2;
+	/** Enum format24h value ANDROID_CONF. */
+	private static final int ANDROID_CONF_ENUM_CONSTANT = 3;
+
 	/** Time click listener. */
 	private OnTimeClickListener timeListener;
 	/** Time edit text. */
@@ -87,17 +94,21 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 		    		   R.styleable.TimeWidget_timeWidget_format24H, 
 		    		   2);
 			   switch (format24Hid) {
-				   case 1:
+					case H24_ENUM_CONSTANT:
 					   this.timeFormat = TimeFormatType.H24;
 					   break;
 					   
-				   case 2:
+					case AM_PM_ENUM_CONSTANT:
 					   this.timeFormat = TimeFormatType.AMPM;
 					   break;
 					   
-				   case 3:
+					case ANDROID_CONF_ENUM_CONSTANT:
 					   this.timeFormat = TimeFormatType.ANDROID_CONF;
 					   break;
+
+					default:
+						this.timeFormat = TimeFormatType.ANDROID_CONF;
+						break;
 			   }
 		       
 		       // Dialog Title
@@ -216,17 +227,19 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 						time.getDayOfMonth(), 
 						tp.getCurrentHour(), 
 						tp.getCurrentMinute());
-					timeWidget.setTime(time);
+					this.timeWidget.setTime(time);
 					if (TimeWidget.this.timeListener != null) {
 						TimeWidget.this.timeListener.onValidateTime();
 					}
 				break;
 				
-			case AlertDialog.BUTTON_NEGATIVE :
-				if (TimeWidget.this.timeListener != null) {
-					TimeWidget.this.timeListener.onCancelTime();
-				}
-				break;
+				case AlertDialog.BUTTON_NEGATIVE :
+					if (TimeWidget.this.timeListener != null) {
+						TimeWidget.this.timeListener.onCancelTime();
+					}
+					break;
+				default:
+					break;
 			}
 		}
 	}

@@ -50,6 +50,6 @@ public class StringValue extends CriteriaValue {
 
 	@Override	
 	public void toSQLiteSelectionArgs(final ArrayList<String> array) {
-		array.add(value);
+		array.add(this.value);
 	}
 }

@@ -26,6 +26,13 @@ import ${project_namespace}.harmony.util.DateUtils.TimeFormatType;
  * View for DateTime selection.
  */
 public class DateTimeWidget extends FrameLayout implements OnClickListener {
+	/** Enum format24h value H24. */
+	private static final int H24_ENUM_CONSTANT = 1;
+	/** Enum format24h value AMPM. */
+	private static final int AM_PM_ENUM_CONSTANT = 2;
+	/** Enum format24h value ANDROID_CONF. */
+	private static final int ANDROID_CONF_ENUM_CONSTANT = 3;
+	
 	/** Date Click Listener. */
 	private OnDateClickListener dateListener;
 	/** Time Click Listener. */
@@ -96,17 +103,21 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 		    		   R.styleable.DateTimeWidget_dateTimeWidget_format24H, 
 		    		   2);
 			   switch (format24Hid) {
-				   case 1:
+					case H24_ENUM_CONSTANT:
 					   this.timeFormat = TimeFormatType.H24;
 					   break;
 					   
-				   case 2:
+					case AM_PM_ENUM_CONSTANT:
 					   this.timeFormat = TimeFormatType.AMPM;
 					   break;
 					   
-				   case 3:
+					case ANDROID_CONF_ENUM_CONSTANT:
 					   this.timeFormat = TimeFormatType.ANDROID_CONF;
 					   break;
+
+					default:
+						this.timeFormat = TimeFormatType.ANDROID_CONF;
+						break;
 			   }
 		       
 		       // Date Dialog Title
@@ -201,6 +212,9 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 							timeListener);
 			    timePicker.show();
 			    break;
+
+			default:
+				break;
 		}
 		
 	}
@@ -319,7 +333,7 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 								dp.getDayOfMonth(), 
 								0, 
 								0);
-					dateWidget.setDate(date);
+					this.dateWidget.setDate(date);
 					if (DateTimeWidget.this.dateListener != null) {
 						DateTimeWidget.this.dateListener.onValidateDate();
 					}
@@ -329,6 +343,8 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 					if (DateTimeWidget.this.dateListener != null) {
 						DateTimeWidget.this.dateListener.onCancelDate();
 					}
+					break;
+				default:
 					break;
 			}
 		}
@@ -364,17 +380,19 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 						time.getDayOfMonth(), 
 						tp.getCurrentHour(), 
 						tp.getCurrentMinute());
-					timeWidget.setTime(time);
+					this.timeWidget.setTime(time);
 					if (DateTimeWidget.this.timeListener != null) {
 						DateTimeWidget.this.timeListener.onValidateTime();
 					}
 				break;
 				
-			case AlertDialog.BUTTON_NEGATIVE :
-				if (DateTimeWidget.this.timeListener != null) {
-					DateTimeWidget.this.timeListener.onCancelTime();
-				}
-				break;
+				case AlertDialog.BUTTON_NEGATIVE :
+					if (DateTimeWidget.this.timeListener != null) {
+						DateTimeWidget.this.timeListener.onCancelTime();
+					}
+					break;
+				default:
+					break;
 			}
 		}
 	}

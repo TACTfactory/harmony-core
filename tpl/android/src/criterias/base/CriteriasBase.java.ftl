@@ -34,7 +34,7 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 			ret.append(crit.toSQLiteString());
 			if (i != this.criterias.size() - 1) {
 				ret.append(' ');
-				ret.append(type.getSqlType());
+				ret.append(this.type.getSqlType());
 				ret.append(' ');
 			}
 		}
@@ -51,7 +51,7 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 			ret.append(crit.toSQLiteSelection());
 			if (i != this.criterias.size() - 1) {
 				ret.append(' ');
-				ret.append(type.getSqlType());
+				ret.append(this.type.getSqlType());
 				ret.append(' ');
 			}
 		}
@@ -95,7 +95,7 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 		boolean result;
 	
 		if (this.validCriteria(crit) && !this.criterias.contains(crit)) {
-			criterias.add(crit);
+			this.criterias.add(crit);
 			result = true;
 		} else {
 			result = false;
