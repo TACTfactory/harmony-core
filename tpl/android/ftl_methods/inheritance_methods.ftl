@@ -17,6 +17,8 @@
 		<#return ([entity]) />		
 	</#if>
 </#function>
-<#function isExtended entity>
 
+<#function isExtended entity>
+	<#return (entity.extends?? && entities[entity.extends]??) />
 </#function>
+
