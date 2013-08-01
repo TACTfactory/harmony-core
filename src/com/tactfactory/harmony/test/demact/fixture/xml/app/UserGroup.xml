@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<UserGroup id="User">
+		  <name>Utilisateur</name>
+		  <writePermission>true</writePermission>
+		  <deletePermission>false</deletePermission>
+	</UserGroup>
+	<UserGroup id="Admin">
+		  <id>0</id>
+		  <name>Administrateur</name>
+		  <writePermission>true</writePermission>
+		  <deletePermission>true</deletePermission>
+	</UserGroup>
+</list>

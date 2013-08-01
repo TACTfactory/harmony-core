@@ -18,5 +18,5 @@
 	</#if>
 </#function>
 <#function isExtended entity>
-
+	<#return (entity.extends?? && entities[entity.extends]??) />
 </#function>

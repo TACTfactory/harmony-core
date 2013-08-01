@@ -1,7 +1,8 @@
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity]>
 ${curr.name}:
 #   ${curr.name}_name:
-<#list curr.fields?values as field>
+<#list ViewUtils.getAllFields(curr)?values as field>
 	<#if !field.internal>
 #      ${field.name}:
 	</#if>

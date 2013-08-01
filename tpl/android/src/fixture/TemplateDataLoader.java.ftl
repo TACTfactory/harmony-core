@@ -84,10 +84,20 @@ public class ${curr.name?cap_first}DataLoader
 	 * @return A ${curr.name} entity
 	 */
 	@Override
-	protected ${curr.name} extractItem(final Element element) {
+	protected ${curr.name} extractItem(final Element element) {	
 		final ${curr.name?cap_first} ${curr.name?uncap_first} = 
-				new ${curr.name?cap_first}();
-		
+				new ${curr.name?cap_first}();		
+
+		return this.extractItem(element, ${curr.name?uncap_first});
+	}
+
+	/**
+	 * Extract an entity from a fixture element (XML).
+	 * @param element The element to be extracted
+	 * @return A ${curr.name} entity
+	 */
+	protected ${curr.name} extractItem(final Element element, 
+								final ${curr.name} ${curr.name?uncap_first}) {
 		<#list curr.fields?values as field>
 			<#if (!field.internal)>
 		if (element.getChildText("${field.name?uncap_first}") != null) {
@@ -195,7 +205,13 @@ public class ${curr.name?cap_first}DataLoader
 				</#if>
 		}
 			</#if>
-		</#list>
+		</#list>	
+		<#if InheritanceUtils.isExtended(curr)>
+		${curr.extends}DataLoader inheritanceDataLoader = 
+				${curr.extends}DataLoader.getInstance(this.ctx);
+		inheritanceDataLoader.extractItem(element, ${curr.name?uncap_first});
+		inheritanceDataLoader.items.put(element.getAttributeValue("id"), ${curr.name?uncap_first});
+		</#if>
 
 	<#elseif fixtureType=="yml">
 	/**
@@ -207,6 +223,20 @@ public class ${curr.name?cap_first}DataLoader
 	protected ${curr.name} extractItem(final Map<?, ?> columns) {
 		final ${curr.name?cap_first} ${curr.name?uncap_first} = 
 				new ${curr.name?cap_first}();
+
+		return this.extractItem(columns, ${curr.name?uncap_first});
+	}
+	/**
+	 * Extract an entity from a fixture element (YML).
+	 * @param columns Columns to extract
+	 * @return A ${curr.name} entity
+	 */
+	protected ${curr.name} extractItem(final Map<?, ?> columns, 
+				${curr.name?cap_first} ${curr.name?uncap_first}) {
+		<#if InheritanceUtils.isExtended(curr)>
+		${curr.extends}DataLoader.getInstance(this.ctx).extractItem(columns, ${curr.name?uncap_first});
+
+		</#if>
 		<#list curr.fields?values as field>
 			<#if (!field.internal)>
 		if (columns.get("${field.name?uncap_first}") != null) {

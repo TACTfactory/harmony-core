@@ -6,6 +6,9 @@
 		<content>Je dirais meme plus...</content>
 		<categories>Radotage</categories>
 		<owner>Dupond</owner>
+		<categories>
+			<category>HiTech</category>
+		</categories>
 		<comments></comments>
 		<createdAt>2012-01-01 00:00</createdAt>
 		<updatedAt>2012-01-01 00:00</updatedAt>
@@ -17,6 +20,9 @@
 		<content>Bachibouzouk</content>
 		<categories>Insulte</categories>
 		<owner>Haddock</owner>
+		<categories>
+			<category>HiTech</category>
+		</categories>
 		<comments></comments>
 		<createdAt>2012-01-01 00:00</createdAt>
 		<updatedAt>2012-01-01 00:00</updatedAt>
@@ -28,6 +34,9 @@
 		<content>Mais oui, c'est une gymnote...</content>
 		<categories>Fait scientifique</categories>
 		<owner>Tournesol</owner>
+		<categories>
+			<category>HiTech</category>
+		</categories>
 		<comments></comments>
 		<createdAt>2012-01-01 00:00</createdAt>
 		<updatedAt>2012-01-01 00:00</updatedAt>
