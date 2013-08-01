@@ -34,7 +34,8 @@ import ${curr.namespace}.R;
 ${ImportUtils.importRelatedEntities(curr)}
 ${ImportUtils.importRelatedEnums(curr)}
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
-import ${project_namespace}.harmony.view.HarmonyFragment;<#if (hasDate || hasTime || hasDateTime)>
+import ${project_namespace}.harmony.view.HarmonyFragment;
+<#if (hasDate || hasTime || hasDateTime)>
 	<#if (hasDate)>
 import ${curr.namespace}.harmony.widget.DateWidget;
 	</#if>
@@ -48,7 +49,6 @@ import ${curr.namespace}.harmony.widget.DateTimeWidget;
 import ${project_namespace}.harmony.widget.ValidationButtons;
 import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
 ${ImportUtils.importRelatedProviderUtils(curr)}
-import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 
 /** ${curr.name} create fragment.
  * 

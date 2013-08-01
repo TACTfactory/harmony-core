@@ -20,19 +20,19 @@ import android.net.Uri;
 import android.os.RemoteException;
 import android.util.Log;
 
-import ${project_namespace}.criterias.base.CriteriasBase;
+${ImportUtils.importRelatedCriterias(curr)}
 ${ImportUtils.importRelatedSQLiteAdapters(curr, false)}
 ${ImportUtils.importManyToManyTargetSQLiteAdapters(curr)}
 ${ImportUtils.importRelatedEntities(curr)}
 ${ImportUtils.importRelatedEnums(curr)}
 ${ImportUtils.importRelatedProviderAdapters(curr, false)}
 import ${project_namespace}.provider.${project_name?cap_first}Provider;
-<#if (curr.relations?? && curr.relations?size>0)>import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;</#if>
 
 /**
  * ${curr.name?cap_first} Provider Utils Base.
  */
-public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<${curr.name?cap_first}> {
+public class ${curr.name?cap_first}ProviderUtilsBase 
+			extends ProviderUtilsBase<${curr.name?cap_first}> {
 	/**
 	 * Tag for debug messages.
 	 */
@@ -60,15 +60,17 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 				new ArrayList<ContentProviderOperation>();
 		ContentResolver prov = this.getContext().getContentResolver();
 
-		${curr.name?cap_first}SQLiteAdapter adapt = new ${curr.name?cap_first}SQLiteAdapter(this.getContext());
+		${curr.name?cap_first}SQLiteAdapter adapt = 
+				new ${curr.name?cap_first}SQLiteAdapter(this.getContext());
 
 
 		ContentValues itemValues = adapt.itemToContentValues(item);
 		itemValues.remove(${curr.name?cap_first}SQLiteAdapter.COL_ID);
 
-		operations.add(ContentProviderOperation.newInsert(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
-			    .withValues(itemValues)
-			    .build());
+		operations.add(ContentProviderOperation.newInsert(
+				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
+						.withValues(itemValues)
+						.build());
 
 		<#list curr.relations as relation>
 			<#if (relation.relation.type == "OneToMany") >
@@ -85,7 +87,10 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 			${relation.name}Selection += ")";
 
 			operations.add(ContentProviderOperation.newUpdate(${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
-					.withValueBackReference(${relation.relation.targetEntity}SQLiteAdapter.COL_${MetadataUtils.getMappedField(relation).name?upper_case}, 0)
+					.withValueBackReference(
+							${relation.relation.targetEntity}SQLiteAdapter
+									.COL_${MetadataUtils.getMappedField(relation).name?upper_case}, 
+							0)
 					.withSelection(${relation.name}Selection, ${relation.name}SelectionArgs)
 					.build());
 		}
@@ -125,8 +130,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 	 <#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>* @param ${relation.name?uncap_first}Id ${relation.name?uncap_first} Id</#if></#list>
 	 * @return number of rows affected
 	 */
-	public int insert(
-							 final ${curr.name?cap_first} item <#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, 
+	public int insert(final ${curr.name?cap_first} item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, 
 							 final int ${relation.name?uncap_first}Id</#if></#list>) {
 		int result = -1;
 		ArrayList<ContentProviderOperation> operations = 
@@ -134,40 +138,57 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 		ContentResolver prov = this.getContext().getContentResolver();
 		
 
-		${curr.name?cap_first}SQLiteAdapter adapt = new ${curr.name?cap_first}SQLiteAdapter(this.getContext());
-		ContentValues itemValues = adapt.itemToContentValues(item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, ${relation.name?uncap_first}Id</#if></#list>);
+		${curr.name?cap_first}SQLiteAdapter adapt =
+				new ${curr.name?cap_first}SQLiteAdapter(this.getContext());
+		ContentValues itemValues = adapt.itemToContentValues(item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>,
+					${relation.name?uncap_first}Id</#if></#list>);
 		itemValues.remove(${curr.name?cap_first}SQLiteAdapter.COL_ID);
 
-		operations.add(ContentProviderOperation.newInsert(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
-			    .withValues(itemValues)
-			    .build());
+		operations.add(ContentProviderOperation.newInsert(
+				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
+			    	.withValues(itemValues)
+			    	.build());
 
 
 		<#list curr.relations as relation>
 			<#if (relation.relation.type == "OneToMany") >
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
-			String ${relation.name}Selection = ${relation.relation.targetEntity?cap_first}SQLiteAdapter.COL_ID + " IN (";
-			String[] ${relation.name}SelectionArgs = new String[item.get${relation.name?cap_first}().size()];
+			${curr.name}Criterias ${curr.name?uncap_first}Crit = 
+						new ${curr.name}Criterias(GroupType.AND);
+			Criteria crit = new Criteria();
+			ArrayValue values = new ArrayValue();
+			crit.setType(Type.IN);
+			crit.setKey(${relation.relation.targetEntity}SQLiteAdapter.COL_ID);
+			crit.addValue(values);
+			${curr.name?uncap_first}Crit.add(crit);
+			
+			
 			for (int i = 0; i < item.get${relation.name?cap_first}().size(); i++) {
-				${relation.name}SelectionArgs[i] = String.valueOf(item.get${relation.name?cap_first}().get(i).getId());
-				${relation.name}Selection += "? ";
-				if (i != item.get${relation.name?cap_first}().size()-1) {
-					 ${relation.name}Selection += ", ";
-				}
+				values.addValue(String.valueOf(
+						item.get${relation.name?cap_first}().get(i).getId()));
 			}
-			${relation.name}Selection += ")";
 
-			operations.add(ContentProviderOperation.newUpdate(${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
-					.withValueBackReference(${relation.relation.targetEntity}SQLiteAdapter.COL_${MetadataUtils.getMappedField(relation).name?upper_case}, 0)
-					.withSelection(${relation.name}Selection, ${relation.name}SelectionArgs)
+			operations.add(ContentProviderOperation.newUpdate(
+					${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
+						.withValueBackReference(
+								${relation.relation.targetEntity?cap_first}SQLiteAdapter
+										.COL_${MetadataUtils.getMappedField(relation).name?upper_case}, 
+								0)
+					.withSelection(
+							${curr.name?uncap_first}Crit.toSQLiteSelection(),
+							${curr.name?uncap_first}Crit.toSQLiteSelectionArgs())
 					.build());
 		}
 			<#elseif (relation.relation.type == "ManyToMany") >
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
 			for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 				ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
-				${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID, ${relation.relation.targetEntity?uncap_first}.getId());
-				${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID, item.getId());
+				${relation.relation.targetEntity?uncap_first}Values.put(
+						${relation.relation.joinTable}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID,
+						${relation.relation.targetEntity?uncap_first}.getId());
+				${relation.relation.targetEntity?uncap_first}Values.put(
+						${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID,
+						item.getId());
 			
 				operations.add(ContentProviderOperation.newInsert(
 					${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
@@ -196,8 +217,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 	 * @param item ${curr.name?cap_first}
 	 * @return number of row affected 
 	 */
-	public int delete(
-							 final ${curr.name?cap_first} item) {
+	public int delete(final ${curr.name?cap_first} item) {
 		int result = -1;
 		ContentResolver prov = this.getContext().getContentResolver();
 
@@ -219,17 +239,20 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 	 */
 	public ${curr.name?cap_first} query(final int id) {
 		${curr.name?cap_first} result = null;
-		${curr.name?cap_first}SQLiteAdapter adapt = new ${curr.name?cap_first}SQLiteAdapter(this.getContext());
+		${curr.name?cap_first}SQLiteAdapter adapt = 
+					new ${curr.name?cap_first}SQLiteAdapter(this.getContext());
 		ContentResolver prov = this.getContext().getContentResolver();
 
-		String selection = ${curr.name?cap_first}SQLiteAdapter.ALIASED_COL_ID + "= ?";
-		String[] selectionArgs = new String[1];
-		selectionArgs[0] = String.valueOf(id);
+		${curr.name}Criterias crits = 
+				new ${curr.name}Criterias(GroupType.AND);
+		crits.add(${curr.name?cap_first}SQLiteAdapter.ALIASED_COL_ID,
+					String.valueOf(id));
 		
-		Cursor cursor = prov.query(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
+		Cursor cursor = prov.query(
+			${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
 			null,
-			selection,
-			selectionArgs,
+			crits.toSQLiteSelection(),
+			crits.toSQLiteSelectionArgs(),
 			null);
 		
 		if (cursor.getCount() > 0) {
@@ -240,7 +263,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 		<#list curr.relations as relation>
 			<#if (!relation.internal)>
 				result.set${relation.name?cap_first}(
-					new ${curr.name}ProviderUtils(this.getContext()).getAssociate${relation.name?cap_first}(result));
+					this.getAssociate${relation.name?cap_first}(result));
 			</#if>
 		</#list>
 		}
@@ -253,11 +276,15 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 	 * @return ArrayList<${curr.name}>
 	 */
 	public ArrayList<${curr.name}> queryAll() {
-		ArrayList<${curr.name}> result = new ArrayList<${curr.name}>();
-		${curr.name}SQLiteAdapter adapt = new ${curr.name}SQLiteAdapter(this.getContext());
-		ContentResolver prov = this.getContext().getContentResolver();
+		ArrayList<${curr.name}> result = 
+					new ArrayList<${curr.name}>();
+		${curr.name}SQLiteAdapter adapt = 
+					new ${curr.name}SQLiteAdapter(this.getContext());
+		ContentResolver prov = 
+					this.getContext().getContentResolver();
 		
-		Cursor cursor = prov.query(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
+		Cursor cursor = prov.query(
+				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
 				null,
 				null, 
 				null, 
@@ -272,15 +299,19 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 
 	/**
 	 * Query the DB to get the entities filtered by criteria.
-	 * @param criteria
+	 * @param criteria The criteria defining the selection and selection args
 	 * @return ArrayList<${curr.name}>
 	 */
-	public ArrayList<${curr.name}> query(CriteriasBase<${curr.name}> criteria) {
-		ArrayList<${curr.name}> result = new ArrayList<${curr.name}>();
-		${curr.name}SQLiteAdapter adapt = new ${curr.name}SQLiteAdapter(this.getContext());
+	public ArrayList<${curr.name}> query(
+				CriteriasBase<${curr.name}> criteria) {
+		ArrayList<${curr.name}> result = 
+					new ArrayList<${curr.name}>();
+		${curr.name}SQLiteAdapter adapt = 
+					new ${curr.name}SQLiteAdapter(this.getContext());
 		ContentResolver prov = this.getContext().getContentResolver();
 		
-		Cursor cursor = prov.query(${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
+		Cursor cursor = prov.query(
+				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
 				null,
 				criteria.toSQLiteSelection(), 
 				criteria.toSQLiteSelectionArgs(), 
@@ -301,7 +332,8 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 	 */
 	public int update(final ${curr.name} item) {
 		int result = -1;
-		${curr.name}SQLiteAdapter adapt = new ${curr.name}SQLiteAdapter(this.getContext());
+		${curr.name}SQLiteAdapter adapt = 
+				new ${curr.name}SQLiteAdapter(this.getContext());
 		ContentResolver prov = this.getContext().getContentResolver();		
 		ContentValues itemValues = adapt.itemToContentValues(item);
 
@@ -347,9 +379,12 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 	public int update(final ${curr.name} item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, 
 							 final int ${relation.name?uncap_first}Id</#if></#list>) {
 		int result = -1;
-		${curr.name}SQLiteAdapter adapt = new ${curr.name}SQLiteAdapter(this.getContext());
+		${curr.name}SQLiteAdapter adapt = 
+				new ${curr.name}SQLiteAdapter(this.getContext());
 		ContentResolver prov = this.getContext().getContentResolver();		
-		ContentValues itemValues = adapt.itemToContentValues(item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>, ${relation.name?uncap_first}Id</#if></#list>);
+		ContentValues itemValues = adapt.itemToContentValues(
+				item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>,
+				${relation.name?uncap_first}Id</#if></#list>);
 		
 		Uri uri = Uri.withAppendedPath(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI, 
@@ -393,7 +428,8 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 	 * @param item ${curr.name}
 	 * @return ${relation.relation.targetEntity?cap_first}
 	 */
-	public ${relation.relation.targetEntity?cap_first} getAssociate${relation.name?cap_first}(final ${curr.name} item) {		
+	public ${relation.relation.targetEntity?cap_first} getAssociate${relation.name?cap_first}(
+			final ${curr.name} item) {		
 		${relation.relation.targetEntity?cap_first} result;
 		ContentResolver prov = this.getContext().getContentResolver();
 		Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
@@ -405,7 +441,8 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 
 		if (${relation.relation.targetEntity?uncap_first}Cursor.getCount() > 0) {
 			${relation.relation.targetEntity?uncap_first}Cursor.moveToFirst();
-			${relation.relation.targetEntity?cap_first}SQLiteAdapter ${relation.relation.targetEntity?uncap_first}Adapt = new ${relation.relation.targetEntity?cap_first}SQLiteAdapter(this.getContext());
+			${relation.relation.targetEntity?cap_first}SQLiteAdapter ${relation.relation.targetEntity?uncap_first}Adapt = 
+					new ${relation.relation.targetEntity?cap_first}SQLiteAdapter(this.getContext());
 			result = ${relation.relation.targetEntity?uncap_first}Adapt.cursorToItem(${relation.relation.targetEntity?uncap_first}Cursor);
 		} else {
 			result = null;
@@ -420,18 +457,22 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 	 * @param item ${curr.name}
 	 * @return ${relation.relation.targetEntity?cap_first}
 	 */
-	public ArrayList<${relation.relation.targetEntity?cap_first}> getAssociate${relation.name?cap_first}(final ${curr.name} item) {	
+	public ArrayList<${relation.relation.targetEntity?cap_first}> getAssociate${relation.name?cap_first}(
+			final ${curr.name} item) {	
 		ArrayList<${relation.relation.targetEntity?cap_first}> result;	
 		ContentResolver prov = this.getContext().getContentResolver();
 		Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
 				${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI, 
 				${relation.relation.targetEntity?cap_first}SQLiteAdapter.COLS,
-				${relation.relation.targetEntity?cap_first}SQLiteAdapter.COL_${relation.relation.mappedBy?upper_case} + "= ?", 
+				${relation.relation.targetEntity?cap_first}SQLiteAdapter.COL_${relation.relation.mappedBy?upper_case} 
+						+ "= ?", 
 				new String[]{String.valueOf(item.getId())}, 
 				null);
 
-		${relation.relation.targetEntity?cap_first}SQLiteAdapter ${relation.relation.targetEntity?uncap_first}Adapt = new ${relation.relation.targetEntity?cap_first}SQLiteAdapter(this.getContext());
-		result = ${relation.relation.targetEntity?uncap_first}Adapt.cursorToItems(${relation.relation.targetEntity?uncap_first}Cursor);
+		${relation.relation.targetEntity?cap_first}SQLiteAdapter ${relation.relation.targetEntity?uncap_first}Adapt = 
+				new ${relation.relation.targetEntity?cap_first}SQLiteAdapter(this.getContext());
+		result = ${relation.relation.targetEntity?uncap_first}Adapt.cursorToItems(
+						${relation.relation.targetEntity?uncap_first}Cursor);
 		${relation.relation.targetEntity?uncap_first}Cursor.close();
 
 		return result;
@@ -442,7 +483,8 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 	 * @param item ${curr.name}
 	 * @return ${relation.relation.targetEntity?cap_first}
 	 */
-	public ArrayList<${relation.relation.targetEntity?cap_first}> getAssociate${relation.name?cap_first}(final ${curr.name} item) {		
+	public ArrayList<${relation.relation.targetEntity?cap_first}> getAssociate${relation.name?cap_first}(
+			final ${curr.name} item) {		
 		ArrayList<${relation.relation.targetEntity?cap_first}> result;	
 		ContentResolver prov = this.getContext().getContentResolver();
 		Cursor ${relation.relation.joinTable?uncap_first}Cursor = prov.query(
@@ -453,33 +495,33 @@ public class ${curr.name?cap_first}ProviderUtilsBase extends ProviderUtilsBase<$
 				null);
 
 		if (${relation.relation.joinTable?uncap_first}Cursor.getCount() > 0) {
-			String selection = ${relation.relation.targetEntity?cap_first}SQLiteAdapter.COL_ID + " IN (";
-			String[] selectionArgs = new String[${relation.relation.joinTable?uncap_first}Cursor.getCount()];
-			
+			${relation.relation.targetEntity}Criterias ${relation.relation.targetEntity?uncap_first}Crits =
+					new ${relation.relation.targetEntity}Criterias(GroupType.AND);
+			Criteria inCrit = new Criteria();
+			ArrayValue arrayValue = new ArrayValue();
+			inCrit.setKey(${relation.relation.targetEntity?cap_first}SQLiteAdapter.COL_ID);
+			inCrit.setType(Type.IN);
+			inCrit.addValue(arrayValue);			
 			
 			while (${relation.relation.joinTable?uncap_first}Cursor.moveToNext()) {
-				int index = ${relation.relation.joinTable?uncap_first}Cursor.getColumnIndex(${relation.relation.joinTable?cap_first}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID);
+				int index = ${relation.relation.joinTable?uncap_first}Cursor.getColumnIndex(
+						${relation.relation.joinTable?cap_first}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID);
 				int ${relation.relation.targetEntity?uncap_first}Id = ${relation.relation.joinTable?uncap_first}Cursor.getInt(index);
 				
-				selection += "?";
-				if (!${relation.relation.joinTable?uncap_first}Cursor.isLast()) {
-					selection += ", ";
-				} else {
-					selection += ")";
-				}
-				selectionArgs[${relation.relation.joinTable?uncap_first}Cursor.getPosition()] = 
-						String.valueOf(${relation.relation.targetEntity?uncap_first}Id);
+				arrayValue.addValue(String.valueOf(
+						${relation.relation.targetEntity?uncap_first}Id));
 			}
 			${relation.relation.joinTable?uncap_first}Cursor.close();
 			Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
 					${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI,
 					${relation.relation.targetEntity?cap_first}SQLiteAdapter.COLS,
-					selection,
-					selectionArgs,
+					${relation.relation.targetEntity?uncap_first}Crits.toSQLiteSelection(),
+					${relation.relation.targetEntity?uncap_first}Crits.toSQLiteSelectionArgs(),
 					null);
 			
 
-			${relation.relation.targetEntity?cap_first}SQLiteAdapter ${relation.relation.targetEntity?uncap_first}Adapt = new ${relation.relation.targetEntity?cap_first}SQLiteAdapter(this.getContext());
+			${relation.relation.targetEntity?cap_first}SQLiteAdapter ${relation.relation.targetEntity?uncap_first}Adapt = 
+					new ${relation.relation.targetEntity?cap_first}SQLiteAdapter(this.getContext());
 			result = ${relation.relation.targetEntity?uncap_first}Adapt.cursorToItems(${relation.relation.targetEntity?uncap_first}Cursor);
 			${relation.relation.targetEntity?uncap_first}Cursor.close();
 		} else {

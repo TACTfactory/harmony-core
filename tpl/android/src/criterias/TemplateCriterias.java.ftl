@@ -5,7 +5,7 @@ package ${project_namespace}.criterias;
 import ${project_namespace}.criterias.base.CriteriasBase;
 import ${project_namespace}.criterias.base.Criteria;
 
-import ${entity_namespace}.${curr.name?cap_first};
+<#if curr.internal?? && curr.internal == "false">import ${entity_namespace}.${curr.name?cap_first};</#if>
 
 /**
  * ${curr.name?cap_first}Criterias.

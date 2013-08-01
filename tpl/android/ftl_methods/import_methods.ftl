@@ -149,3 +149,29 @@
 	</#list>
 	<#return result />
 </#function>
+
+<#function importRelatedCriterias entity>
+	<#assign result = ""/>
+	<#assign import_array = [entity.name + "Criterias"] />
+	<#list entity.relations as relation>
+		<#if relation.relation.type == "ManyToMany">
+			<#if (!Utils.isInArray(import_array, relation.relation.targetEntity + "Criterias"))>
+				<#assign import_array = import_array + [relation.relation.targetEntity + "Criterias"] />	
+			</#if>
+		</#if>
+	</#list>
+	<#if (MetadataUtils.hasOneToManyRelation(entity))>
+		<#assign import_array = import_array + ["base.Criteria"] />
+		<#assign import_array = import_array + ["base.Criteria.Type"] />
+		<#assign import_array = import_array + ["base.value.ArrayValue"] />
+	</#if>
+	<#assign import_array = import_array + ["base.CriteriasBase"] />
+	<#assign import_array = import_array + ["base.CriteriasBase.GroupType"] />
+	<#list import_array as import>
+			<#assign result = result + "import ${project_namespace}.criterias.${import};" />
+		<#if import_has_next>
+			<#assign result = result + "\n" />
+		</#if>
+	</#list>
+	<#return result />
+</#function>
