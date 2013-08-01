@@ -33,7 +33,8 @@ import ${curr.namespace}.R;
 ${ImportUtils.importRelatedEntities(curr)}
 ${ImportUtils.importRelatedEnums(curr)}
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
-import ${project_namespace}.harmony.view.HarmonyFragment;<#if (hasDate || hasTime || hasDateTime)>
+import ${project_namespace}.harmony.view.HarmonyFragment;
+<#if (hasDate || hasTime || hasDateTime)>
 	<#if (hasDate)>
 import ${curr.namespace}.harmony.widget.DateWidget;
 	</#if>
@@ -47,7 +48,6 @@ import ${curr.namespace}.harmony.widget.DateTimeWidget;
 import ${project_namespace}.harmony.widget.ValidationButtons;
 import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
 ${ImportUtils.importRelatedProviderUtils(curr)}
-import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 
 /** 
  * ${curr.name} create fragment.
@@ -268,9 +268,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		${ViewUtils.setLoader(field)}
 				</#if>
 			<#else>
-		
-		
-		this.${field.name}List = new ${field.relation.targetEntity}ProviderUtils().queryAll(this.getActivity());
+		this.${field.name}List = new ${field.relation.targetEntity}ProviderUtils(this.getActivity()).queryAll();
 		this.init${field.name?cap_first}Dialog(this.${field.name}List);
 			</#if>
 		</#if>
@@ -371,9 +369,8 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 
-			result = new ${curr.name?cap_first}ProviderUtils().insert(
-				this.ctx,
-				this.entity);
+			result = new ${curr.name?cap_first}ProviderUtils(this.ctx).insert(
+						this.entity);
 
 			return result;
 		}

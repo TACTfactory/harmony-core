@@ -205,18 +205,15 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @param crits The criterias to use for the request
 	 * @return List of T entities
 	 */
-	public ArrayList<T> getAll(final CriteriasBase crits) {
+	public ArrayList<T> getAll(final CriteriasBase<T> crits) {
 		ArrayList<T> result; 
 		
 		if (crits == null || crits.isEmpty()) {
 			result = this.getAll();
 		} else {
-			ArrayList<String> tmpArray = new ArrayList<String>();
-			crits.toSQLiteSelectionArgs(tmpArray);
-
 			final Cursor cursor = this.query(this.getCols(),
 							crits.toSQLiteSelection(),
-							tmpArray.toArray(new String[tmpArray.size()]),
+							crits.toSQLiteSelectionArgs(),
 							null,
 							null,
 							null);

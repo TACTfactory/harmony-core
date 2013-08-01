@@ -119,3 +119,39 @@
 	</#list>
 	<#return ret>
 </#function>
+
+<#function hasManyToOneRelation entity>
+	<#list entity.relations as relation>
+		<#if relation.relation.type == "ManyToOne">
+			<#return true />
+		</#if>
+	</#list>
+	<#return false />
+</#function>
+
+<#function hasOneToManyRelation entity>
+	<#list entity.relations as relation>
+		<#if relation.relation.type == "OneToMany">
+			<#return true />
+		</#if>
+	</#list>
+	<#return false />
+</#function>
+
+<#function hasManyToManyRelation entity>
+	<#list entity.relations as relation>
+		<#if relation.relation.type == "ManyToMany">
+			<#return true />
+		</#if>
+	</#list>
+	<#return false />
+</#function>
+
+<#function hasOneToOneRelation entity>
+	<#list entity.relations as relation>
+		<#if relation.relation.type == "OneToOne">
+			<#return true />
+		</#if>
+	</#list>
+	<#return false />
+</#function>
