@@ -15,18 +15,16 @@
 package ${data_namespace}.base;
 
 import java.util.ArrayList;
-
 <#if hasDate || hasTime || hasDateTime>
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 </#if>
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-${ImportUtils.importRelatedSQLiteAdapters(curr)}
+${ImportUtils.importRelatedSQLiteAdapters(curr, true, false)}
 ${ImportUtils.importRelatedEntities(curr)}
 ${ImportUtils.importRelatedEnums(curr)}<#if !(curr.ids?size>0)>import ${project_namespace}.harmony.exception.NotImplementedException;</#if>
 <#if hasDate || hasTime || hasDateTime>import ${curr.namespace}.harmony.util.DateUtils;</#if>
