@@ -1,11 +1,12 @@
 <#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
 <#assign fields = ViewUtils.getAllFields(curr) />
-<#assign hasDate = MetadataUtils.hasDate(curr) />
-<#assign hasTime = MetadataUtils.hasTime(curr) />
-<#assign hasDateTime = MetadataUtils.hasDateTime(curr) />
-<#assign hasToManyRelation=MetadataUtils.hasToManyRelations(curr) />
-<#assign hasRelation=MetadataUtils.hasRelations(curr) />
+<#assign relations = ViewUtils.getAllRelations(curr) />
+<#assign hasDate = FieldsUtils.hasDate(fields?values) />
+<#assign hasTime = FieldsUtils.hasTime(fields?values) />
+<#assign hasDateTime = FieldsUtils.hasDateTime(fields?values) />
+<#assign hasToManyRelation=FieldsUtils.hasToManyRelations(fields?values) />
+<#assign hasRelation=FieldsUtils.hasRelations(fields?values) />
 <@header?interpret />
 package ${curr.controller_namespace};
 <#if (hasRelation)>
@@ -31,7 +32,7 @@ import android.widget.CheckBox;</#if><#if ViewUtils.shouldImportEditText(fields?
 import android.widget.EditText;</#if>
 
 import ${curr.namespace}.R;
-${ImportUtils.importRelatedEntities(curr)}
+${ImportUtils.importRelatedEntities(curr, true)}
 ${ImportUtils.importRelatedEnums(curr)}
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import ${project_namespace}.harmony.view.HarmonyFragment;
@@ -48,7 +49,7 @@ import ${curr.namespace}.harmony.widget.DateTimeWidget;
 </#if>
 import ${project_namespace}.harmony.widget.ValidationButtons;
 import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
-${ImportUtils.importRelatedProviderUtils(curr)}
+${ImportUtils.importRelatedProviderUtils(curr, true)}
 
 /** ${curr.name} create fragment.
  * 
@@ -144,7 +145,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		this.validationButtons.setListener(this);
 	}
 	
-	<#list curr.relations as relation>
+	<#list relations as relation>
 		<#if !relation.internal && !relation.hidden>
 	/** Initialize dialog.
 	 * @param list list 

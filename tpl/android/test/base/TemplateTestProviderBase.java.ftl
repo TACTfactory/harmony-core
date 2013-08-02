@@ -8,6 +8,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
+<#if (InheritanceUtils.isExtended(curr))>import ${data_namespace}.${curr.extends}SQLiteAdapter;</#if>
 import ${curr.namespace}.entity.${curr.name};
 
 <#if dataLoader?? && dataLoader>
@@ -163,7 +164,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 				values.remove(${curr.name}SQLiteAdapter.COL_ID);
 				<#list ViewUtils.getAllFields(curr)?values as field>
 					<#if field.unique?? && field.unique>
-				values.remove(${curr.name}SQLiteAdapter.COL_${field.name?upper_case});
+				values.remove(${field.owner}SQLiteAdapter.COL_${field.name?upper_case});
 					</#if>
 				</#list>
 			

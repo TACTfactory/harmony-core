@@ -100,7 +100,7 @@
 		    	<#if (lastField??)>
 	    android:layout_below="@+id/${lastField}"
 		    	</#if>
-	    android:text="@string/${m_id_label}"/>
+	    android:text="@string/${m_string_label}"/>
     <Button
         android:id="@+id/${m_id}_button"
         android:layout_width="match_parent"

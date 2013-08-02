@@ -1,8 +1,6 @@
 <#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
 <#assign sync = curr.options.sync?? />
-<#assign inherited = false />
-<#if (curr.extends?? && entities[curr.extends]??)><#assign inherited = true /></#if>
 <#assign hasDateTime=false />
 <#assign hasTime=false />
 <#assign hasDate=false />
@@ -102,11 +100,11 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public String getJoinedTableName() {
 		String result = TABLE_NAME;
-		<#if inherited?? && inherited>
+		<#if InheritanceUtils.isExtended(curr)>
 		${curr.extends}SQLiteAdapter motherAdapt = new ${curr.extends}SQLiteAdapter(this.ctx);
 		result += " INNER JOIN ";
 		result += motherAdapt.getJoinedTableName();
-		result += " <#if entities[curr.extends].extends??>AND<#else>ON</#if> ";
+		result += " <#if InheritanceUtils.isExtended(entities[curr.extends])>AND<#else>ON</#if> ";
 		result += ALIASED_COL_ID + " = " + ${curr.extends}SQLiteAdapter.ALIASED_COL_ID;
 		</#if>
 		return result;
@@ -149,7 +147,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 <#if (curr.ids?size>1)>
 		+ "PRIMARY KEY (" + <#list curr.ids as id>${NamingUtils.alias(id.name)}<#if (id_has_next)> + "," + </#if></#list> + ")"
 </#if>
-<#if (inherited)>
+<#if (InheritanceUtils.isExtended(curr))>
 		+ ", FOREIGN KEY (" + COL_ID + ") REFERENCES " + ${curr.extends}SQLiteAdapter.TABLE_NAME + "(" + ${curr.extends}SQLiteAdapter.COL_ID + ") ON DELETE CASCADE"
 </#if>
 		+ ");";
@@ -195,7 +193,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public ContentValues itemToContentValues(final ${curr.name} item) {
 		final ContentValues result = new ContentValues();
-		<#if (inherited)>
+		<#if (InheritanceUtils.isExtended(curr))>
 		${curr.extends?cap_first}SQLiteAdapter motherAdapt = new ${curr.extends?cap_first}SQLiteAdapter(this.ctx);
 		result.putAll(motherAdapt.itemToContentValues(item));	
 		</#if>
@@ -238,7 +236,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public void cursorToItem(final Cursor cursor, final ${curr.name} result) {
 		if (cursor.getCount() != 0) {
-			<#if (inherited)>
+			<#if (InheritanceUtils.isExtended(curr))>
 			${curr.extends}SQLiteAdapter motherAdapt = new ${curr.extends}SQLiteAdapter(this.ctx);
 			motherAdapt.cursorToItem(cursor, result);			
 
@@ -468,7 +466,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	<#list curr.ids as id>
 		values.remove(${NamingUtils.alias(id.name)});
 	</#list>
-	<#if !inherited>
+	<#if !InheritanceUtils.isExtended(curr)>
 		int newid;
 	<#else>
 		${curr.extends}SQLiteAdapter motherAdapt = new ${curr.extends}SQLiteAdapter(this.ctx);
@@ -479,9 +477,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		currentValues.put(COL_ID, newid);
 	</#if>
 		if (values.size() != 0) {
-			<#if !inherited>newid = (int) </#if>this.insert(
+			<#if !InheritanceUtils.isExtended(curr)>newid = (int) </#if>this.insert(
 					null, 
-					<#if inherited>currentValues<#else>values</#if>);
+					<#if InheritanceUtils.isExtended(curr)>currentValues<#else>values</#if>);
 			
 			item.setId((int) newid); 
 	<#list curr.relations as relation>
@@ -520,7 +518,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		return newid;
 	}
 
-	<#if (inherited)>
+	<#if (InheritanceUtils.isExtended(curr))>
 	protected ContentValues extractContentValues(ContentValues from) {
 		ContentValues to = new ContentValues();
 		for (String colName : COLS) {
@@ -591,7 +589,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				new String[] {<#list curr.ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, 
 							  </#if></#list>};
 		
-		<#if (inherited)>
+		<#if (InheritanceUtils.isExtended(curr))>
 		final ContentValues currentValues = 
 				this.extractContentValues(values);
 		final ${curr.extends?cap_first}SQLiteAdapter motherAdapt = 
