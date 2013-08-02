@@ -117,7 +117,7 @@ public class ClassCompletor {
 				// if it doesn't :
 				if (rel.getMappedBy() == null) {
 					// Create it
-					final FieldMetadata newField = new FieldMetadata(cm);
+					final FieldMetadata newField = new FieldMetadata(entityRef);
 					newField.setColumnDefinition(TYPE_INTEGER);
 					newField.setHidden(true);
 					newField.setNullable(fieldMeta.isNullable());
@@ -187,7 +187,7 @@ public class ClassCompletor {
 						classMeta.getFields().put("id", idField);
 						
 					final FieldMetadata ref1 =
-							generateRefField(cm.getName(), cm);
+							generateRefField(cm.getName(), classMeta);
 					final RelationMetadata rel1 = new RelationMetadata();
 						rel1.setEntityRef(cm.getName());
 						for (final FieldMetadata cmid : cm.getIds().values()) {
@@ -201,7 +201,7 @@ public class ClassCompletor {
 					classMeta.getRelations().put(ref1.getName(), ref1);
 					
 					final FieldMetadata ref2 = 
-							generateRefField(rel.getEntityRef(), cm);
+							generateRefField(rel.getEntityRef(), classMeta);
 					final RelationMetadata rel2 = new RelationMetadata();
 						rel2.setEntityRef(rel.getEntityRef());
 						rel2.setFieldRef(rel.getFieldRef());

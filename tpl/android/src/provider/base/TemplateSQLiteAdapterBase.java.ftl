@@ -22,7 +22,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.util.Log;
 
-${ImportUtils.importRelatedSQLiteAdapters(curr, true, false)}
+${ImportUtils.importRelatedSQLiteAdapters(curr, true, true)}
 ${ImportUtils.importRelatedEntities(curr)}
 ${ImportUtils.importRelatedEnums(curr)}<#if !(curr.ids?size>0)>import ${project_namespace}.harmony.exception.NotImplementedException;</#if>
 <#if hasDate || hasTime || hasDateTime>import ${curr.namespace}.harmony.util.DateUtils;</#if>
@@ -70,19 +70,19 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	/** Global Fields. */
 	public static final String[] COLS = new String[] {
 <#assign firstFieldDone=false />
-<#list curr.fields?values as field>
+<#list ViewUtils.getAllFields(curr)?values as field>
 	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 <#if (firstFieldDone)>,</#if>
-		${NamingUtils.alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
+		${field.owner?cap_first}SQLiteAdapter.${NamingUtils.alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
 	};
 
 	/** Global Fields. */
 	public static final String[] ALIASED_COLS = new String[] {
 <#assign firstFieldDone=false />
-<#list curr.fields?values as field>
+<#list ViewUtils.getAllFields(curr)?values as field>
 	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 <#if (firstFieldDone)>,</#if>
-		ALIASED_${NamingUtils.alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
+		${field.owner?cap_first}SQLiteAdapter.ALIASED_${NamingUtils.alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
 	};
 	
 	/**
@@ -115,7 +115,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return An array of String representing the columns
 	 */
 	public String[] getCols() {
-		return COLS;
+		return ALIASED_COLS;
 	}
 
 	/** 
@@ -391,7 +391,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return List of ${curr.name} entities
 	 */
 	 public ArrayList<${curr.name}> getBy${relation.name?cap_first}(final int ${relation.name?lower_case}Id) {
-		final Cursor cursor = this.query(null, ${NamingUtils.alias(relation.name)} + "=?", 
+		final Cursor cursor = this.query(ALIASED_COLS,
+				${NamingUtils.alias(relation.name)} + "=?", 
 				new String[]{Integer.toString(${relation.name?lower_case}Id)}, 
 				null,
 				null,
@@ -792,7 +793,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		final String[] whereArgs = new String[] {<#list curr.ids as id>String.valueOf(${id.name}) <#if id_has_next>, 
 					</#if></#list>};
 		
-		return this.query(null, 
+		return this.query(ALIASED_COLS, 
 				whereClause, 
 				whereArgs, 
 				null, 
@@ -817,7 +818,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				"An entity with no ID can't implement this method.");
 		<#else>
 		return this.query(
-				null,
+				ALIASED_COLS,
 				ALIASED_COL_ID + " = ?",
 				new String[]{String.valueOf(id)},
 				null,

@@ -250,7 +250,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		
 		Cursor cursor = prov.query(
 			${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
-			null,
+			${curr.name?cap_first}SQLiteAdapter.ALIASED_COLS,
 			crits.toSQLiteSelection(),
 			crits.toSQLiteSelectionArgs(),
 			null);
@@ -285,7 +285,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		
 		Cursor cursor = prov.query(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
-				null,
+				${curr.name?cap_first}SQLiteAdapter.ALIASED_COLS,
 				null, 
 				null, 
 				null);
@@ -312,7 +312,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		
 		Cursor cursor = prov.query(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
-				null,
+				${curr.name?cap_first}SQLiteAdapter.ALIASED_COLS,
 				criteria.toSQLiteSelection(), 
 				criteria.toSQLiteSelectionArgs(), 
 				null);
@@ -434,7 +434,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		ContentResolver prov = this.getContext().getContentResolver();
 		Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
 				${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI, 
-				${relation.relation.targetEntity?cap_first}SQLiteAdapter.COLS,
+				${relation.relation.targetEntity?cap_first}SQLiteAdapter.ALIASED_COLS,
 				${relation.relation.targetEntity?cap_first}SQLiteAdapter.COL_ID + "= ?", 
 				new String[]{String.valueOf(item.get${relation.name?cap_first}().getId())}, 
 				null);
@@ -463,7 +463,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		ContentResolver prov = this.getContext().getContentResolver();
 		Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
 				${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI, 
-				${relation.relation.targetEntity?cap_first}SQLiteAdapter.COLS,
+				${relation.relation.targetEntity?cap_first}SQLiteAdapter.ALIASED_COLS,
 				${relation.relation.targetEntity?cap_first}SQLiteAdapter.COL_${relation.relation.mappedBy?upper_case} 
 						+ "= ?", 
 				new String[]{String.valueOf(item.getId())}, 
@@ -489,7 +489,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		ContentResolver prov = this.getContext().getContentResolver();
 		Cursor ${relation.relation.joinTable?uncap_first}Cursor = prov.query(
 				${relation.relation.joinTable?cap_first}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI, 
-				${relation.relation.joinTable?cap_first}SQLiteAdapter.COLS,
+				${relation.relation.joinTable?cap_first}SQLiteAdapter.ALIASED_COLS,
 				${relation.relation.joinTable?cap_first}SQLiteAdapter.COL_${curr.name?upper_case}_ID + "= ?", 
 				new String[]{String.valueOf(item.getId())}, 
 				null);
@@ -514,7 +514,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 			${relation.relation.joinTable?uncap_first}Cursor.close();
 			Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
 					${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI,
-					${relation.relation.targetEntity?cap_first}SQLiteAdapter.COLS,
+					${relation.relation.targetEntity?cap_first}SQLiteAdapter.ALIASED_COLS,
 					${relation.relation.targetEntity?uncap_first}Crits.toSQLiteSelection(),
 					${relation.relation.targetEntity?uncap_first}Crits.toSQLiteSelectionArgs(),
 					null);
