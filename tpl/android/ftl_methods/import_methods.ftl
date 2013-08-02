@@ -173,7 +173,7 @@
 			</#if>
 		</#if>
 	</#list>
-	<#if (MetadataUtils.hasOneToManyRelation(entity))>
+	<#if (MetadataUtils.hasToManyRelations(entity))>
 		<#assign import_array = import_array + ["base.Criteria"] />
 		<#assign import_array = import_array + ["base.Criteria.Type"] />
 		<#assign import_array = import_array + ["base.value.ArrayValue"] />

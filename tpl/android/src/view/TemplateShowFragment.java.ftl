@@ -16,8 +16,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;<#if (ViewUtils.hasTypeBoolean(fields?values))>
-import android.widget.CheckBox;</#if><#if (ViewUtils.shouldImportEditText(fields?values))>
-import android.widget.TextView;</#if>
+import android.widget.CheckBox;</#if>
+import android.widget.TextView;
 
 import ${curr.namespace}.R;
 ${ImportUtils.importToManyRelatedEntities(curr)}<#if (importDate)>
