@@ -125,6 +125,35 @@ public abstract class SQLiteAdapterBase<T> {
 				having,
 				orderBy);
 	}
+
+	/**
+	 * Send a query to the DB.
+	 * @param projection Columns to work with
+	 * @param whereClause WHERE clause for SQL
+	 * @param whereArgs WHERE arguments for SQL
+	 * @param groupBy GROUP BY argument for SQL
+	 * @param having HAVING clause
+	 * @param orderBy ORDER BY clause
+	 * @param limit LIMIT clause
+	 * @return A cursor pointing to the result of the query
+	 */
+	public Cursor query(final String[] projection, 
+						final String whereClause, 
+						final String[] whereArgs, 
+						final String groupBy, 
+						final String having, 
+						final String orderBy,
+						final String limit) {
+		return this.mDatabase.query(
+				this.getJoinedTableName(),
+				projection,
+				whereClause,
+				whereArgs,
+				groupBy,
+				having,
+				orderBy,
+				limit);
+	}
 	
 	/**
 	 * Insert a new entity into the DB.
