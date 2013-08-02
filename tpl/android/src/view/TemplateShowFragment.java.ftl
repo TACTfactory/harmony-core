@@ -1,7 +1,7 @@
 <#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
 <#assign fields = ViewUtils.getAllFields(curr) />
-<#assign importDate = (MetadataUtils.hasDate(curr) || MetadataUtils.hasDateTime(curr) || MetadataUtils.hasTime(curr)) />
+<#assign importDate = (FieldsUtils.hasDate(fields?values) || FieldsUtils.hasDateTime(fields?values) || FieldsUtils.hasTime(fields?values)) />
 <@header?interpret />
 package ${curr.controller_namespace};
 

@@ -116,6 +116,14 @@
 	<#return fields />
 </#function>
 
+<#function getAllRelations class>
+	<#assign relations = class.relations />
+	<#if class.extends?? && entities[class.extends]??>
+		<#assign relations = relations + getAllRelations(entities[class.extends]) />
+	</#if>
+	<#return relations />
+</#function>
+
 <#function hasTypeBoolean fieldsArray>
 	<#list fieldsArray as field>
 		<#if (field.type?lower_case == "boolean" || field.type?lower_case == "bool")>
@@ -139,3 +147,4 @@
 	</#list>
 	<#return false />
 </#function>
+

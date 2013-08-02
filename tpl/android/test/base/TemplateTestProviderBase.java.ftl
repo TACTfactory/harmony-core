@@ -1,3 +1,4 @@
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
 <@header?interpret />
 package ${curr.test_namespace}.base;
@@ -7,6 +8,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
+<#if (InheritanceUtils.isExtended(curr))>import ${data_namespace}.${curr.extends}SQLiteAdapter;</#if>
 import ${curr.namespace}.entity.${curr.name};
 
 <#if dataLoader?? && dataLoader>
@@ -93,7 +95,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 		if (this.entity != null) {
 			try {
-				Cursor c = this.provider.query(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.getId()), null, null, null, null);
+				Cursor c = this.provider.query(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.getId()), this.adapter.getCols(), null, null, null);
 				c.moveToFirst();
 				result = this.adapter.cursorToItem(c);
 				c.close();
@@ -160,9 +162,9 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			try {
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				values.remove(${curr.name}SQLiteAdapter.COL_ID);
-				<#list curr.fields?values as field>
+				<#list ViewUtils.getAllFields(curr)?values as field>
 					<#if field.unique?? && field.unique>
-				values.remove(${curr.name}SQLiteAdapter.COL_${field.name?upper_case});
+				values.remove(${field.owner}SQLiteAdapter.COL_${field.name?upper_case});
 					</#if>
 				</#list>
 			
