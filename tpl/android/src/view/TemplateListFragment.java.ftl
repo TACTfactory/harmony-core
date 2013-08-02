@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,7 +85,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 
 		final Intent intent = new Intent(getActivity(), 
 							${curr.name}ShowActivity.class);
-		intent.putExtra("${curr.name}", item);
+		intent.putExtra("${curr.name}", (Parcelable) item);
 
 		this.startActivity(intent);
 	}
@@ -146,7 +147,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		final ${curr.name} item = this.mAdapter.getItem(position);
 		final Intent intent = new Intent(getActivity(), 
 									${curr.name}EditActivity.class);
-		intent.putExtra("${curr.name}", item);
+		intent.putExtra("${curr.name}", (Parcelable) item);
 
 		this.getActivity().startActivityForResult(intent, 0);
 	}	

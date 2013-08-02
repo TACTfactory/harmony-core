@@ -121,7 +121,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
         				false);
 
         final Intent intent =  getActivity().getIntent();
-        this.model = (${curr.name?cap_first}) intent.getSerializableExtra(
+        this.model = (${curr.name?cap_first}) intent.getParcelableExtra(
         													"${curr.name}");
         		
         this.initializeComponent(view);
