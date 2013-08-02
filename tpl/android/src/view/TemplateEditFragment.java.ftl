@@ -30,6 +30,7 @@ import android.view.ViewGroup;<#if (hasRelation)>
 import android.widget.Button;</#if><#if (ViewUtils.hasTypeBoolean(fields?values))>
 import android.widget.CheckBox;</#if><#if ViewUtils.shouldImportEditText(fields?values)>
 import android.widget.EditText;</#if>
+import android.widget.Toast;
 
 import ${curr.namespace}.R;
 ${ImportUtils.importRelatedEntities(curr, true)}
