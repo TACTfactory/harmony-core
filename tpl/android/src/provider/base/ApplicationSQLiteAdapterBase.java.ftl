@@ -188,7 +188,7 @@ public abstract class SQLiteAdapterBase<T> {
 	
 		
 	/** 
-	 * Read All Comments entities.
+	 * Read All T entities.
 	 * @return List of T entities
 	 */
 	public ArrayList<T> getAll() {
