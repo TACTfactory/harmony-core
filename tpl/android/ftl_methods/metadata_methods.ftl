@@ -120,6 +120,20 @@
 	<#return ret>
 </#function>
 
+<#function isPrimitive field>
+	<#if (field.type == "int" ||
+			field.type == "double" ||
+			field.type == "long" ||
+			field.type == "float" ||
+			field.type == "char" ||
+			field.type == "byte" ||
+			field.type == "boolean")>
+		<#return true />
+	<#else>
+		<#return false />
+	</#if>
+</#function>
+
 <#function hasManyToOneRelation entity>
 	<#list entity.relations as relation>
 		<#if relation.relation.type == "ManyToOne">

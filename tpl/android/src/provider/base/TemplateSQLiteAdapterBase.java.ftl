@@ -195,13 +195,20 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		final ContentValues result = new ContentValues();
 		<#if (InheritanceUtils.isExtended(curr))>
 		${curr.extends?cap_first}SQLiteAdapter motherAdapt = new ${curr.extends?cap_first}SQLiteAdapter(this.ctx);
-		result.putAll(motherAdapt.itemToContentValues(item));	
+		result.putAll(motherAdapt.itemToContentValues(item));
 		</#if>
 	<#list curr.fields?values as field>
 		<#if (!field.internal)>
 			<#if (!field.relation??)>
-		result.put(${NamingUtils.alias(field.name)}, 			
-				${m.typeToParser("item", field)});				
+				<#if (MetadataUtils.isPrimitive(field))>
+		result.put(${NamingUtils.alias(field.name)},
+				${m.typeToParser("item", field)});
+				<#else>
+		if (item.get${field.name?cap_first}() != null) {
+			result.put(${NamingUtils.alias(field.name)},
+					${m.typeToParser("item", field)});
+		}
+				</#if>
 			<#else>
 				<#if (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 		if (item.get${field.name?cap_first}() != null) {
