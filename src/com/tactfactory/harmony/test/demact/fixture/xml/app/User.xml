@@ -8,6 +8,7 @@
 		<password>password</password>
 		<createdAt>2012-01-01 00:00</createdAt>
 		<birthdate>2012-01-01</birthdate>
+		<userGroup>User</userGroup>
 	</User>
 	<User id="Haddock">
 		<id>1</id>
@@ -17,6 +18,7 @@
 		<password>password</password>
 		<createdAt>2012-01-01 00:00</createdAt>
 		<birthdate>2012-01-01</birthdate>
+		<userGroup>User</userGroup>
 	</User>
 	<User id="Tournesol">
 		<id>2</id>
@@ -26,5 +28,6 @@
 		<password>password</password>
 		<createdAt>2012-01-01 00:00</createdAt>
 		<birthdate>2012-01-01</birthdate>
+		<userGroup>User</userGroup>
 	</User>
 </list>

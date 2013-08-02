@@ -9,6 +9,9 @@
 	<#else>
 		<#assign import_array = [] />
 	</#if>
+	<#if InheritanceUtils.isExtended(entity)>
+		<#assign import_array = import_array + [entity.extends] />
+	</#if>
 	<#list entity.relations as relation>
 		<#if importInternalsToo || !relation.internal>
 			<#if relation.relation.type == "ManyToMany">
@@ -31,15 +34,20 @@
 	<#return result />
 </#function>
 
-<#function importRelatedEntities entity>
+<#function importRelatedEntities entity useInheritedFieldsToo=false>
 	<#assign result = ""/>
 	<#if entity.internal == "true">
 		<#assign import_array = [] />
 	<#else>
 		<#assign import_array = [entity.name] />
 	</#if>
-	<#list entity.relations as relation>
-		<#if !relation.internal>
+	<#if useInheritedFieldsToo>
+		<#assign fields = ViewUtils.getAllFields(entity)?values />
+	<#else>
+		<#assign fields = entity.relations />
+	</#if>
+	<#list fields as relation>
+		<#if relation.relation?? && !relation.internal>
 			<#if (!Utils.isInArray(import_array, relation.relation.targetEntity))>
 				<#assign import_array = import_array + [relation.relation.targetEntity] />
 			</#if>
@@ -88,11 +96,16 @@
 	<#return result />
 </#function>
 
-<#function importRelatedProviderUtils entity>
+<#function importRelatedProviderUtils entity useInheritedFieldsToo=false>
 	<#assign result = ""/>
 	<#assign import_array = [entity.name] />
-	<#list entity.relations as field>
-		<#if (!Utils.isInArray(import_array, field.relation.targetEntity?cap_first) && !field.internal) >
+	<#if useInheritedFieldsToo>
+		<#assign fields = ViewUtils.getAllFields(entity)?values />
+	<#else>
+		<#assign fields = entity.relations />
+	</#if>
+	<#list fields as field>
+		<#if (field.relation?? && !Utils.isInArray(import_array, field.relation.targetEntity?cap_first) && !field.internal) >
 			<#assign import_array = import_array + [field.relation.targetEntity?cap_first] />
 		</#if>
 	</#list>
