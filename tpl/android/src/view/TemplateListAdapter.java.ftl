@@ -17,8 +17,8 @@ import android.view.ViewGroup;
 import android.support.v4.widget.CursorAdapter;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.widget.Button;<#if (ViewUtils.hasTypeBoolean(fields?values))>
-import android.widget.CheckBox;</#if><#if (ViewUtils.shouldImportEditText(fields?values))>
-import android.widget.TextView;</#if>
+import android.widget.CheckBox;</#if>
+import android.widget.TextView;
 
 
 <#assign importDate=false />

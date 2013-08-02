@@ -17,7 +17,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TimePicker;
 
-import ${project_namespace}.DemactApplication;
+import ${project_namespace}.${project_name?cap_first}Application;
 import ${project_namespace}.R;
 import ${project_namespace}.harmony.util.DateUtils;
 import ${project_namespace}.harmony.util.DateUtils.TimeFormatType;
@@ -195,7 +195,7 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 					format24H = true;
 				} else if (this.timeFormat.equals(
 								TimeFormatType.ANDROID_CONF)) {
-					format24H = DemactApplication.is24Hour();
+					format24H = ${project_name?cap_first}Application.is24Hour();
 				}
 			    final CustomTimePickerDialog timePicker = 
 			    		new CustomTimePickerDialog(

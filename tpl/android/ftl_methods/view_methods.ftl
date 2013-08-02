@@ -141,7 +141,8 @@
 				|| field.type?lower_case == "double"
 				|| field.type?lower_case == "float"
 				|| field.type?lower_case == "long"
-				|| field.type?lower_case == "int")>
+				|| field.type?lower_case == "int"
+				|| field.harmony_type?lower_case == "enum")>
 			<#return true />
 		</#if>
 	</#list>
