@@ -30,6 +30,7 @@ import android.view.ViewGroup;<#if (hasRelation)>
 import android.widget.Button;</#if><#if (ViewUtils.hasTypeBoolean(fields?values))>
 import android.widget.CheckBox;</#if><#if ViewUtils.shouldImportEditText(fields?values)>
 import android.widget.EditText;</#if>
+import android.widget.Toast;
 
 import ${curr.namespace}.R;
 ${ImportUtils.importRelatedEntities(curr, true)}
@@ -316,9 +317,34 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 	 * @return true if valid
 	 */
 	public boolean validateData() {
-		return true;
+		boolean result = true;
+		<#list fields?values as field>
+			<#if !field.internal && !field.hidden>
+				<#if !field.relation??>
+					<#if field.type?lower_case == "datetime">
+						<#if field.harmony_type == "datetime">
+		<#if !field.nullable>result = (result && this.${field.name}View.getDateTime() != null);</#if>
+						<#else>
+		<#if !field.nullable>result = (result && this.${field.name}View.get${field.harmony_type?cap_first}() != null);</#if>
+						</#if>
+					<#else>
+		<#if !field.nullable>result = (result && this.${field.name}View.getText().length() > 0);</#if>
+					</#if>
+				<#else>
+					<#if ((field.relation.type == "ManyToOne") || (field.relation.type == "OneToOne"))>
+		<#if !field.nullable>result = (result && this.selected${field.name?cap_first} != 0);</#if>
+					</#if>
+				</#if>
+		if (result == false) {
+			Toast.makeText(this.getActivity(),
+					R.string.${field.owner?lower_case}_${field.name?lower_case}_invalid_field_error,
+					Toast.LENGTH_SHORT).show();
+			return result;
+		}
+			</#if>
+		</#list>
+		return result;
 	}
-
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
 												Bundle savedInstanceState) {
