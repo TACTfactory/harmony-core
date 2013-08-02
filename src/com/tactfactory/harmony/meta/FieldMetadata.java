@@ -110,6 +110,11 @@ public class FieldMetadata extends BaseMetadata {
 					key + "_" + componentName.toLowerCase(Locale.ENGLISH),
 					this.getName(), 
 					Group.MODEL);
+		
+		TranslationMetadata.addDefaultTranslation(
+				key + "_invalid_field_error",
+				"Field " + this.getName() + " is invalid.",
+				Group.MODEL);
 	}
 	
 	/**
