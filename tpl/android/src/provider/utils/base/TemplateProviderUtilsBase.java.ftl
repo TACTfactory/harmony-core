@@ -501,7 +501,8 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 			ArrayValue arrayValue = new ArrayValue();
 			inCrit.setKey(${relation.relation.targetEntity?cap_first}SQLiteAdapter.COL_ID);
 			inCrit.setType(Type.IN);
-			inCrit.addValue(arrayValue);			
+			inCrit.addValue(arrayValue);
+			${relation.relation.targetEntity?uncap_first}Crits.add(inCrit);
 			
 			while (${relation.relation.joinTable?uncap_first}Cursor.moveToNext()) {
 				int index = ${relation.relation.joinTable?uncap_first}Cursor.getColumnIndex(
