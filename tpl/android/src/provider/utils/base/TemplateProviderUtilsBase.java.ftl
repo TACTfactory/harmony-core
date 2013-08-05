@@ -158,7 +158,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 			Criteria crit = new Criteria();
 			ArrayValue values = new ArrayValue();
 			crit.setType(Type.IN);
-			crit.setKey(${relation.relation.targetEntity}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
+			crit.setKey(${relation.relation.targetEntity}SQLiteAdapter.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
 			crit.addValue(values);
 			${curr.name?uncap_first}Crit.add(crit);
 			
@@ -188,7 +188,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 						${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
 				${relation.relation.targetEntity?uncap_first}Values.put(
 						${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID,
-						item.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
+						item.get${curr.ids[0].name?cap_first}());
 			
 				operations.add(ContentProviderOperation.newInsert(
 					${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
@@ -499,7 +499,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 					new ${relation.relation.targetEntity}Criterias(GroupType.AND);
 			Criteria inCrit = new Criteria();
 			ArrayValue arrayValue = new ArrayValue();
-			inCrit.setKey(${relation.relation.targetEntity?cap_first}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
+			inCrit.setKey(${relation.relation.targetEntity?cap_first}SQLiteAdapter.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
 			inCrit.setType(Type.IN);
 			inCrit.addValue(arrayValue);			
 			
