@@ -729,6 +729,29 @@ public abstract class BaseAdapter {
 				this.getParserBundleTemplates());
 	}
 	
+	/**
+	 * Get the source data namespace.
+	 * @return The source data namespace
+	 */
+	public final String getBundleTemplatePath() {
+		return String.format("%s/%s",
+				Harmony.getTemplatesPath(), 
+				this.getBundleTemplates());
+	}
+	
+	
+	/**
+	 * Get the source data namespace.
+	 * @return The source data namespace
+	 */
+	public final String getBundlePath(
+			String bundleOwnerName,
+			String bundleName) {
+		return String.format("%s/%s/",
+				Harmony.getBundlePath(), 
+				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase());
+	}
+	
 	// Getter and Setter
 	/**
 	 * @return the project

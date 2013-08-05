@@ -1,11 +1,14 @@
 package ${bundle_namespace}.command;
 
+import net.xeoh.plugins.base.annotations.PluginImplementation;
+
 import com.tactfactory.harmony.command.BaseCommand;
 
 /**
  * TODO : Javadoc
  * Default command generated for ${bundle_name} Bundle.
  */
+@PluginImplementation
 public class ${bundle_name?cap_first}Command extends BaseCommand {
 
 	@Override

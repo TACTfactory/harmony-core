@@ -18,9 +18,12 @@ public class BundleGenerator extends BaseGenerator {
 			String bundleName,
 			String bundleNameSpace) {
 		
+		
 		this.generateDataModel(bundleOwnerName,
 				bundleName,
 				bundleNameSpace);
+		
+		this.generateBuildXml(bundleOwnerName, bundleName);
 		
 		this.generateAnnotation(bundleOwnerName,
 				bundleName,
@@ -72,6 +75,20 @@ public class BundleGenerator extends BaseGenerator {
 						+ CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
 								bundleName)
 						+ ".java";
+		
+		this.makeSource(tplPath, genPath, true);
+	}
+	
+	private void generateBuildXml(
+			String bundleOwnerName,
+			String bundleName) {
+		
+		String tplPath = this.getAdapter().getBundleTemplatePath() 
+				+ "/build.xml";
+		String genPath = this.getAdapter().getBundlePath(
+							bundleOwnerName,
+							bundleName) 
+						+ "/build.xml";
 		
 		this.makeSource(tplPath, genPath, true);
 	}
