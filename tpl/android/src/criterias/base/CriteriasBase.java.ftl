@@ -44,19 +44,23 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 
 	@Override
 	public String toSQLiteSelection() {
-		StringBuilder ret = new StringBuilder("(");
+		if (this.criterias.isEmpty()) {
+			return null;
+		} else {
+			StringBuilder ret = new StringBuilder("(");
 		
-		for (int i = 0; i < this.criterias.size(); i++) {
-			final ICriteria crit = this.criterias.get(i);
-			ret.append(crit.toSQLiteSelection());
-			if (i != this.criterias.size() - 1) {
-				ret.append(' ');
-				ret.append(this.type.getSqlType());
-				ret.append(' ');
+			for (int i = 0; i < this.criterias.size(); i++) {
+				final ICriteria crit = this.criterias.get(i);
+				ret.append(crit.toSQLiteSelection());
+				if (i != this.criterias.size() - 1) {
+					ret.append(' ');
+					ret.append(this.type.getSqlType());
+					ret.append(' ');
+				}
 			}
+			ret.append(')');
+			return ret.toString();
 		}
-		ret.append(')');
-		return ret.toString();
 	}
 
 	@Override	
@@ -74,9 +78,13 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 	 * @return The String[] of selection args
 	 */
 	public String[] toSQLiteSelectionArgs() {
-		ArrayList<String> tmpArray = new ArrayList<String>();
-		this.toSQLiteSelectionArgs(tmpArray);
-		return tmpArray.toArray(new String[tmpArray.size()]);
+		if (this.criterias.isEmpty()) {
+			return null;
+		} else {
+			ArrayList<String> tmpArray = new ArrayList<String>();
+			this.toSQLiteSelectionArgs(tmpArray);
+			return tmpArray.toArray(new String[tmpArray.size()]);
+		}
 	}
 	
 	/**
