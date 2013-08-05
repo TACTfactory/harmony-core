@@ -111,6 +111,24 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 		
 		return result;
 	}
+
+	/**
+	 * Adds a criteria of form : (key TYPE value).
+	 * @param crit The criteria to add
+	 * @return True if the criterias is valid and doesn't exists yet
+	 */
+	public boolean add(final ICriteria crit) {
+		boolean result;
+	
+		if (!this.criterias.contains(crit)) {
+			this.criterias.add(crit);
+			result = true;
+		} else {
+			result = false;
+		}
+		
+		return result;
+	}
 	
 	/**
 	 * Add a criteria of form : (key TYPE value).
