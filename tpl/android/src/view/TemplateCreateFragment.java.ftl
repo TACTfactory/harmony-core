@@ -156,7 +156,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		this.checked${relation.name?cap_first} = new boolean[list.size()];
 		int i = 0;
 		for (final ${relation.relation.targetEntity} item : list) {
-			listAdapter[i] = String.valueOf(item.getId());
+			listAdapter[i] = String.valueOf(item.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
 			checks[i] = false;
 			i++;
 		}
@@ -194,7 +194,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		final String[] listAdapter = new String[list.size()];
 		int i = 0;
 		for (final ${relation.relation.targetEntity} item : list) {
-			listAdapter[i] = String.valueOf(item.getId());
+			listAdapter[i] = String.valueOf(item.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
 			i++;
 		}
 		final AlertDialog.Builder builder = 
@@ -287,7 +287,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 		final ${field.relation.targetEntity} tmp${field.name?cap_first} = 
 					new ${field.relation.targetEntity?cap_first}();
-		tmp${field.name?cap_first}.setId(this.selected${field.name?cap_first});
+		tmp${field.name?cap_first}.set${entities[field.relation.targetEntity].ids[0].name?cap_first}(this.selected${field.name?cap_first});
 		this.model.set${field.name?cap_first}(
 				tmp${field.name?cap_first});
 			<#else>

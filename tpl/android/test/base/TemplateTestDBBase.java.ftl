@@ -73,7 +73,7 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 	public void testRead() {
 		${curr.name?cap_first} result = null;
 		if (this.entity != null) {
-			result = this.adapter.getByID(this.entity.getId()); // TODO Generate by @Id annotation
+			result = this.adapter.getByID(this.entity.get${curr.ids[0].name?cap_first}()); // TODO Generate by @Id annotation
 			
 			${curr.name?cap_first}Utils.equals(result, this.entity); 
 		}
@@ -85,7 +85,7 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 		int result = -1;
 		if (this.entity != null) {
 			${curr.name?cap_first} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
-			${curr.name?uncap_first}.setId(this.entity.getId()); // TODO Generate by @Id annotation 
+			${curr.name?uncap_first}.set${curr.ids[0].name?cap_first}(this.entity.get${curr.ids[0].name?cap_first}());
 		
 			result = (int)this.adapter.update(${curr.name?uncap_first});
 			
@@ -98,7 +98,7 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 	public void testDelete() {
 		int result = -1; 
 		if (this.entity != null) {
-			result = (int)this.adapter.remove(this.entity.getId());
+			result = (int)this.adapter.remove(this.entity.get${curr.ids[0].name?cap_first}());
 			Assert.assertTrue(result >= 0);
 		}
 	}

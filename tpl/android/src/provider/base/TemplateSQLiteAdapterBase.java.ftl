@@ -105,7 +105,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		result += " INNER JOIN ";
 		result += motherAdapt.getJoinedTableName();
 		result += " <#if InheritanceUtils.isExtended(entities[curr.extends])>AND<#else>ON</#if> ";
-		result += ALIASED_COL_ID + " = " + ${curr.extends}SQLiteAdapter.ALIASED_COL_ID;
+		result += ALIASED_${NamingUtils.alias(curr.ids[0].name)} + " = " + ${curr.extends}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.ids[0].name)};
 		</#if>
 		return result;
 	}
@@ -148,7 +148,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		+ "PRIMARY KEY (" + <#list curr.ids as id>${NamingUtils.alias(id.name)}<#if (id_has_next)> + "," + </#if></#list> + ")"
 </#if>
 <#if (InheritanceUtils.isExtended(curr))>
-		+ ", FOREIGN KEY (" + COL_ID + ") REFERENCES " + ${curr.extends}SQLiteAdapter.TABLE_NAME + "(" + ${curr.extends}SQLiteAdapter.COL_ID + ") ON DELETE CASCADE"
+		+ ", FOREIGN KEY (" + ${NamingUtils.alias(curr.ids[0].name)} + ") REFERENCES " + ${curr.extends}SQLiteAdapter.TABLE_NAME + "(" + ${curr.extends}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)} + ") ON DELETE CASCADE"
 </#if>
 		+ ");";
 	}
@@ -213,7 +213,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				<#if (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 		if (item.get${field.name?cap_first}() != null) {
 			result.put(${NamingUtils.alias(field.name)},
-					String.valueOf(item.get${field.name?cap_first}().getId()));
+					String.valueOf(item.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}()));
 		}
 		
 				</#if>
@@ -326,7 +326,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				</#if>
 			<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 			${t}final ${field.type} ${field.name} = new ${field.type}();
-			${t}${field.name}.setId(cursor.getInt(index));
+			${t}${field.name}.set${entities[field.relation.targetEntity].ids[0].name?cap_first}(cursor.getInt(index));
 			${t}result.set${field.name?cap_first}(${field.name});	
 			</#if>
 			<#if (field.nullable?? && field.nullable)>
@@ -363,14 +363,14 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 		${relation.name?uncap_first}Adapter.open(this.mDatabase);
 		result.set${relation.name?cap_first}(${relation.name?uncap_first}Adapter
-					.getBy${relation.relation.mappedBy?cap_first}(result.getId()));
+					.getBy${relation.relation.mappedBy?cap_first}(result.get${curr.ids[0].name?cap_first}()));
 				<#elseif (relation.relation.type=="ManyToMany")>
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter = 
 				new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
 		result.set${relation.name?cap_first}(
 					${relation.relation.joinTable?lower_case}Adapter.getBy${curr.name}(
-							result.getId())); // relation.relation.inversedBy?cap_first
+							result.get${curr.ids[0].name?cap_first}())); // relation.relation.inversedBy?cap_first
 				<#else>
 		if (result.get${relation.name?cap_first}() != null) {
 			final ${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter = 
@@ -378,7 +378,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			${relation.name?uncap_first}Adapter.open(this.mDatabase);
 			result.set${relation.name?cap_first}(
 					${relation.name?uncap_first}Adapter.getByID(
-							result.get${relation.name?cap_first}().getId()));
+							result.get${relation.name?cap_first}().get${entities[relation.relation.targetEntity].ids[0].name?cap_first}()));
 		}
 				</#if>
 			</#if>
@@ -447,7 +447,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		for (${curr.name} ${curr.name?lower_case} : result) {
 			${curr.name?lower_case}.set${relation.name?cap_first}(
 					adapt${relation.relation.targetEntity}.getBy${curr.name}(
-							${curr.name?lower_case}.getId())); // relation.relation.inversedBy?cap_first
+							${curr.name?lower_case}.get${curr.ids[0].name?cap_first}())); // relation.relation.inversedBy?cap_first
 		}
 		
 			</#if>
@@ -482,14 +482,14 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		final ContentValues currentValues = 
 				this.extractContentValues(values);
 		int newid = (int) motherAdapt.insert(null, values);
-		currentValues.put(COL_ID, newid);
+		currentValues.put(${NamingUtils.alias(curr.ids[0].name)}, newid);
 	</#if>
 		if (values.size() != 0) {
 			<#if !InheritanceUtils.isExtended(curr)>newid = (int) </#if>this.insert(
 					null, 
 					<#if InheritanceUtils.isExtended(curr)>currentValues<#else>values</#if>);
 			
-			item.setId((int) newid); 
+			item.set${curr.ids[0].name?cap_first}((int) newid); 
 	<#list curr.relations as relation>
 		<#if (relation.relation.type=="ManyToMany")>
 			
@@ -594,7 +594,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				<#list curr.ids as id> ${NamingUtils.alias(id.name)} 
 				 + "=? <#if id_has_next>AND </#if>"</#list>;
 		final String[] whereArgs = 
-				new String[] {<#list curr.ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>, 
+				new String[] {<#list curr.ids as id>String.valueOf(item.get${id.name?cap_first}()) <#if id_has_next>, 
 							  </#if></#list>};
 		
 		<#if (InheritanceUtils.isExtended(curr))>
@@ -777,7 +777,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return count of updated entities
 	 */
 	public int delete(final ${curr.name?cap_first} ${curr.name?uncap_first}) {
-		return this.delete(${curr.name?uncap_first}.getId());
+		return this.delete(${curr.name?uncap_first}.get${curr.ids[0].name?cap_first}());
 	}
 	
 	/**
@@ -826,7 +826,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		<#else>
 		return this.query(
 				ALIASED_COLS,
-				ALIASED_COL_ID + " = ?",
+				ALIASED_${NamingUtils.alias(curr.ids[0].name)} + " = ?",
 				new String[]{String.valueOf(id)},
 				null,
 				null,
@@ -845,7 +845,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				"An entity with no ID can't implement this method.");
 		<#else>
 		return this.delete(
-				ALIASED_COL_ID + " = ?",
+				ALIASED_${NamingUtils.alias(curr.ids[0].name)} + " = ?",
 				new String[]{String.valueOf(id)});
 		</#if>
 	}
