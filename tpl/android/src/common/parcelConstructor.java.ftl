@@ -7,9 +7,13 @@
 		this.${field.name} = in.readInt();
 					<#elseif field.type == "String">
 		this.${field.name} = in.readString();
+					<#elseif field.type?lower_case == "datetime">
+		this.${field.name} = new DateTime(in.readString());
 					</#if>
 				<#else>
-
+					<#if field.relation.type == "OneToOne" || field.relation.type == "ManyToOne">
+		this.set${field.name?cap_first}((${field.type}) in.readParcelable(${field.type}.class.getClassLoader()));
+					</#if>
 				</#if>
 			</#if>
 		</#list>
