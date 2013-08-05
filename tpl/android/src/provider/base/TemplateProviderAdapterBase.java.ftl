@@ -389,5 +389,14 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		return crit;
 	}
 	</#if>
+
+	/**
+	 * Get the entity URI.
+	 * @return The URI
+	 */
+	@Override
+	public Uri getUri() {
+		return ${curr.name?upper_case}_URI;
+	}
 }
 
