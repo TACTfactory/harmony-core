@@ -140,6 +140,8 @@ public class ActivityGenerator extends BaseGenerator {
 		this.updateWidget("ValidationButtons.java", 
 				"widget_validation_buttons.xml");
 		
+		this.updateWidget("PinchZoomImageView.java");
+		
 		if (this.isDate || this.isTime) {
 			this.makeSource(
 					this.getAdapter().getTemplateRessourceValuesPath() 
@@ -649,6 +651,16 @@ public class ActivityGenerator extends BaseGenerator {
 						this.getAdapter().getWidgetPath(),
 						widgetName), 
 				false);
-		this.makeResourceLayout(layoutName, layoutName);
+		if (layoutName != null) {
+			this.makeResourceLayout(layoutName, layoutName);
+		}
+	}
+	
+	/**
+	 * Update Widget.
+	 * @param widgetName The widget name.
+	 */
+	protected final void updateWidget(final String widgetName) {
+		this.updateWidget(widgetName, null);
 	}
 }
