@@ -127,7 +127,8 @@
 			field.type == "float" ||
 			field.type == "char" ||
 			field.type == "byte" ||
-			field.type == "boolean")>
+			field.type == "boolean" ||
+			field.type == "short")>
 		<#return true />
 	<#else>
 		<#return false />

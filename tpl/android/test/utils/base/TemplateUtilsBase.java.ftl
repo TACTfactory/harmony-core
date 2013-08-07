@@ -65,11 +65,11 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 					<#elseif field.type?lower_case=="float">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomFloat(0,100));
 					<#elseif field.type?lower_case=="short">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomShort(0,100));
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomShort());
 					<#elseif field.type?lower_case=="char">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomChar(0,100));
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomChar());
 					<#elseif field.type?lower_case=="byte">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomByte(0,100));
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomByte());
 					<#elseif field.type?lower_case=="datetime">
 						<#if field.harmony_type?lower_case=="date">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDate());
