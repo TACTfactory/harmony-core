@@ -44,19 +44,23 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 
 	@Override
 	public String toSQLiteSelection() {
-		StringBuilder ret = new StringBuilder("(");
+		if (this.criterias.isEmpty()) {
+			return null;
+		} else {
+			StringBuilder ret = new StringBuilder("(");
 		
-		for (int i = 0; i < this.criterias.size(); i++) {
-			final ICriteria crit = this.criterias.get(i);
-			ret.append(crit.toSQLiteSelection());
-			if (i != this.criterias.size() - 1) {
-				ret.append(' ');
-				ret.append(this.type.getSqlType());
-				ret.append(' ');
+			for (int i = 0; i < this.criterias.size(); i++) {
+				final ICriteria crit = this.criterias.get(i);
+				ret.append(crit.toSQLiteSelection());
+				if (i != this.criterias.size() - 1) {
+					ret.append(' ');
+					ret.append(this.type.getSqlType());
+					ret.append(' ');
+				}
 			}
+			ret.append(')');
+			return ret.toString();
 		}
-		ret.append(')');
-		return ret.toString();
 	}
 
 	@Override	
@@ -74,9 +78,13 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 	 * @return The String[] of selection args
 	 */
 	public String[] toSQLiteSelectionArgs() {
-		ArrayList<String> tmpArray = new ArrayList<String>();
-		this.toSQLiteSelectionArgs(tmpArray);
-		return tmpArray.toArray(new String[tmpArray.size()]);
+		if (this.criterias.isEmpty()) {
+			return null;
+		} else {
+			ArrayList<String> tmpArray = new ArrayList<String>();
+			this.toSQLiteSelectionArgs(tmpArray);
+			return tmpArray.toArray(new String[tmpArray.size()]);
+		}
 	}
 	
 	/**
@@ -95,6 +103,24 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 		boolean result;
 	
 		if (this.validCriteria(crit) && !this.criterias.contains(crit)) {
+			this.criterias.add(crit);
+			result = true;
+		} else {
+			result = false;
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Adds a criteria of form : (key TYPE value).
+	 * @param crit The criteria to add
+	 * @return True if the criterias is valid and doesn't exists yet
+	 */
+	public boolean add(final ICriteria crit) {
+		boolean result;
+	
+		if (!this.criterias.contains(crit)) {
 			this.criterias.add(crit);
 			result = true;
 		} else {
