@@ -76,7 +76,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 			try {
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
-				values.remove(${curr.name}SQLiteAdapter.COL_ID);
+				values.remove(${curr.name}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
 				result = this.provider.insert(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, values);
 			
 			} catch (Exception e) {
@@ -95,7 +95,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 		if (this.entity != null) {
 			try {
-				Cursor c = this.provider.query(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.getId()), this.adapter.getCols(), null, null, null);
+				Cursor c = this.provider.query(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.get${curr.ids[0].name?cap_first}()), this.adapter.getCols(), null, null, null);
 				c.moveToFirst();
 				result = this.adapter.cursorToItem(c);
 				c.close();
@@ -133,13 +133,13 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
 
 			try {
-				${curr.name?uncap_first}.setId(this.entity.getId());
+				${curr.name?uncap_first}.set${curr.ids[0].name?cap_first}(this.entity.get${curr.ids[0].name?cap_first}());
 			
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				result = this.provider.update(
 					Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI 
 						+ "/" 
-						+ ${curr.name?uncap_first}.getId()), 
+						+ ${curr.name?uncap_first}.get${curr.ids[0].name?cap_first}()), 
 					values, 
 					null, 
 					null);
@@ -161,7 +161,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 			try {
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
-				values.remove(${curr.name}SQLiteAdapter.COL_ID);
+				values.remove(${curr.name}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
 				<#list ViewUtils.getAllFields(curr)?values as field>
 					<#if field.unique?? && field.unique>
 				values.remove(${field.owner}SQLiteAdapter.COL_${field.name?upper_case});
@@ -183,7 +183,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		int result = -1;
 		if (this.entity != null) {
 			try {
-				result = this.provider.delete(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.getId()), null, null);
+				result = this.provider.delete(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.get${curr.ids[0].name?cap_first}()), null, null);
 			
 			} catch (Exception e) {
 				e.printStackTrace();

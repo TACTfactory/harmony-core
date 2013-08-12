@@ -98,11 +98,11 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 				</#if>
 			<#elseif (field.relation.type=="OneToOne" || field.relation.type=="ManyToOne")>
 		this.${field.name}View.setText(
-				String.valueOf(this.model.get${field.name?cap_first}().getId())); 
+				String.valueOf(this.model.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}())); 
 			<#else>
 		String ${field.name}Value = "";
 		for (${field.relation.targetEntity} item : this.model.get${field.name?cap_first}()) {
-			${field.name}Value += item.getId() + ",";
+			${field.name}Value += item.get${entities[field.relation.targetEntity].ids[0].name?cap_first}() + ",";
 		}
 		this.${field.name}View.setText(${field.name}Value);
 			</#if>
@@ -174,7 +174,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 			Integer result = -1;
 			
 			this.entity = new ${curr.name?cap_first}ProviderUtils(this.ctx).query(
-				this.entity.getId());
+				this.entity.get${curr.ids[0].name?cap_first}());
 			
 			if (this.entity != null) {
 				result = 0;

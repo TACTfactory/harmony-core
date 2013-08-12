@@ -340,7 +340,7 @@ public class ${curr.name?cap_first}DataLoader
 	@Override
 	public void load(final DataManager manager) {
 		for (final ${curr.name?cap_first} ${curr.name?uncap_first} : this.items.values()) {
-			${curr.name?uncap_first}.setId(
+			${curr.name?uncap_first}.set${curr.ids[0].name?cap_first}(
 					manager.persist(${curr.name?uncap_first}));
 		}
 		manager.flush();
