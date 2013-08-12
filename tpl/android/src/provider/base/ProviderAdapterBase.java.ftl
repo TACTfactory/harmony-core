@@ -3,6 +3,7 @@ package ${local_namespace}.base;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.content.Context;
+import android.net.Uri;
 
 import ${data_namespace}.base.SQLiteAdapterBase;
 
@@ -36,4 +37,9 @@ public abstract class ProviderAdapterBase<T> {
 		return this.db;
 	}
 
+	/**
+	 * Get the entity URI.
+	 * @return The URI
+	 */
+	public abstract Uri getUri();
 }
