@@ -5,14 +5,28 @@ import java.util.HashMap;
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 
+/**
+ * Generator for bundles.
+ */
 public class BundleGenerator extends BaseGenerator {	
 	
+	/**
+	 * Constructor.
+	 * @param adapt Adapter
+	 * @throws Exception Exception
+	 */
 	public BundleGenerator(BaseAdapter adapt) throws Exception {
 		super(adapt);
 
 		
 	}
 	
+	/**
+	 * Generate the empty bundle basic files.
+	 * @param bundleOwnerName Owner name
+	 * @param bundleName Bundle name
+	 * @param bundleNameSpace Bundle namespace
+	 */
 	public void generateBundleFiles(
 			String bundleOwnerName,
 			String bundleName,
@@ -45,6 +59,13 @@ public class BundleGenerator extends BaseGenerator {
 				bundleNameSpace);
 	}
 	
+	/**
+	 * Generate the datamodel associated with the bundle generation.
+	 * (different from the mobile project generation)
+	 * @param bundleOwnerName Owner name
+	 * @param bundleName Bundle name
+	 * @param bundleNameSpace Bundle namespace
+	 */
 	private void generateDataModel(
 			String bundleOwnerName,
 			String bundleName,
@@ -55,11 +76,15 @@ public class BundleGenerator extends BaseGenerator {
 		datamodel.put("bundle_name", bundleName);
 		datamodel.put("bundle_owner", bundleOwnerName);
 		
-		
-		
 		this.setDatamodel(datamodel);
 	}
 	
+	/**
+	 * Generate the empty annotation.
+	 * @param bundleOwnerName Owner name
+	 * @param bundleName Bundle name
+	 * @param bundleNameSpace Bundle namespace
+	 */
 	private void generateAnnotation(
 			String bundleOwnerName,
 			String bundleName, 
@@ -79,6 +104,11 @@ public class BundleGenerator extends BaseGenerator {
 		this.makeSource(tplPath, genPath, true);
 	}
 	
+	/**
+	 * Generate the build.xml.	 
+	 * @param bundleOwnerName Owner name
+	 * @param bundleName Bundle name
+	 */
 	private void generateBuildXml(
 			String bundleOwnerName,
 			String bundleName) {
@@ -93,6 +123,12 @@ public class BundleGenerator extends BaseGenerator {
 		this.makeSource(tplPath, genPath, true);
 	}
 	
+	/**
+	 * Generate bundle's parser.
+	 * @param bundleOwnerName Owner name
+	 * @param bundleName Bundle name
+	 * @param bundleNameSpace Bundle namespace
+	 */
 	private void generateParser(
 			String bundleOwnerName,
 			String bundleName, 
@@ -112,6 +148,12 @@ public class BundleGenerator extends BaseGenerator {
 		this.makeSource(tplPath, genPath, true);
 	}
 	
+	/**
+	 * Generate command file for empty bundle.
+	 * @param bundleOwnerName Owner name
+	 * @param bundleName Bundle name
+	 * @param bundleNameSpace Bundle namespace
+	 */
 	private void generateCommand(
 			String bundleOwnerName,
 			String bundleName, 
@@ -131,6 +173,12 @@ public class BundleGenerator extends BaseGenerator {
 		this.makeSource(tplPath, genPath, true);
 	}
 	
+	/** 
+	 * Generate bundle's generator.
+	 * @param bundleOwnerName Owner name
+	 * @param bundleName Bundle name
+	 * @param bundleNameSpace Bundle namespace
+	 */
 	private void generateTemplate(
 			String bundleOwnerName,
 			String bundleName, 
@@ -150,6 +198,12 @@ public class BundleGenerator extends BaseGenerator {
 		this.makeSource(tplPath, genPath, true);
 	}
 	
+	/** 
+	 * Generate Bundle metadata.
+	 * @param bundleOwnerName Owner name
+	 * @param bundleName Bundle name
+	 * @param bundleNameSpace Bundle namespace
+	 */
 	private void generateMeta(
 			String bundleOwnerName,
 			String bundleName, 
