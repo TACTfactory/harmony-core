@@ -8,7 +8,12 @@ import com.tactfactory.harmony.threads.UnpackTGZThread;
 import com.tactfactory.harmony.threads.DownloadFileThread.OnDownloadFinishedListener;
 import com.tactfactory.harmony.threads.UnpackTGZThread.OnUnpackedFinishedListener;
 
+/**
+ * SDK Utils.
+ */
 public class SDKUtils {
+	
+	/** Default Listener for unpacking files. */
 	private static final OnUnpackedFinishedListener unpackListener = 
 			new OnUnpackedFinishedListener() {
 		@Override
@@ -21,6 +26,7 @@ public class SDKUtils {
 		}
 	};
 	
+	/** Default Listener for downloading files. */
 	private static final OnDownloadFinishedListener downListener = 
 			new OnDownloadFinishedListener() {
 		@Override
@@ -32,7 +38,10 @@ public class SDKUtils {
 		}
 	};
 	
-	
+	/**
+	 * Download and install Android SDK to destPath.
+	 * @param destPath The path where to install the android sdk.
+	 */
 	public static void downloadAndInstallAndroidSDK(final String destPath) {
 		try {
 			File destFolder = new File(destPath + "/android-sdk_r22.0.5-linux.tgz");

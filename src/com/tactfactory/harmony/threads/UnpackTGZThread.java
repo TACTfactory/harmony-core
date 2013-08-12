@@ -8,14 +8,33 @@ import org.rauschig.jarchivelib.Archiver;
 import org.rauschig.jarchivelib.ArchiverFactory;
 import org.rauschig.jarchivelib.CompressionType;
 
+/**
+ * Thread used for Unpacking a TGZ file.
+ * Use OnUnpackedFinishedListener to know when the unpack is finished.
+ */
 public class UnpackTGZThread extends Thread {
+	/** Listener for unpacking finish. */
 	public interface OnUnpackedFinishedListener {
+		/** 
+		 * Called when file is unpacked.
+		 * @param unpackedFile The unpacked file.
+		 * @param folder The folder where it has been unpacked.
+		 */
 		public void onUnpackedFinished(File unpackedFile, File folder);
 	}
+	/** File to unpack. */
 	private File file;
+	/** Destination folder. */
 	private File destFile;
+	/** Listener. */
 	private OnUnpackedFinishedListener listener;
 	
+	/**
+	 * Constructor.
+	 * @param listener The listener
+	 * @param filePath The path to the file to unpack.
+	 * @param destPath The destination folder path
+	 */
 	public UnpackTGZThread(
 			OnUnpackedFinishedListener listener,
 			String filePath, 
@@ -29,6 +48,9 @@ public class UnpackTGZThread extends Thread {
 		}
 	}
 	
+	/**
+	 * Called at thread start.
+	 */
 	private void onStart() {
 		System.out.println("Unpacking " + this.file.getName());
 	}
@@ -51,10 +73,9 @@ public class UnpackTGZThread extends Thread {
 		this.onFinished();
 	}
 	
-	public void onProgress(int progress) {
-		System.out.print("\rProgress : " + progress + "%");
-	}
-	
+	/**
+	 * Called when thread is finished.
+	 */
 	private void onFinished() {
 		System.out.println(this.file.getName() 
 				+ " has been unpacked successfully");

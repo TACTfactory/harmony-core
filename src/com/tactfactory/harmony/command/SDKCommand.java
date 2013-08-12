@@ -1,16 +1,13 @@
 package com.tactfactory.harmony.command;
 
-import java.io.File;
-
-import com.tactfactory.harmony.threads.DownloadFileThread;
-import com.tactfactory.harmony.threads.DownloadFileThread.OnDownloadFinishedListener;
-import com.tactfactory.harmony.threads.UnpackTGZThread;
-import com.tactfactory.harmony.threads.UnpackTGZThread.OnUnpackedFinishedListener;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.SDKUtils;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
+/**
+ * Class for SDK commands.
+ */
 @PluginImplementation
 public class SDKCommand extends BaseCommand {
 

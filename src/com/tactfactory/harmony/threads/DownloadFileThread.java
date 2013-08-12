@@ -8,15 +8,34 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+/**
+ * Thread used to download a file from the internet.
+ */
 public class DownloadFileThread extends Thread {
+	/** 
+	 * Download finish listener.
+	 */
 	public interface OnDownloadFinishedListener {
+		/**
+		 * Called when the download is finished.
+		 * @param f The file which has been downloaded.
+		 */
 		public void onDownloadFinished(File f);
 	}
 	
+	/** URL of the file to download. */
 	private String url;
+	/** Destination path. */
 	private String destPath;
+	/** Listener. */
 	private OnDownloadFinishedListener listener;
 	
+	/**
+	 * Constructor.
+	 * @param listener The listener
+	 * @param url The URL of the file to download.
+	 * @param destPath The destination path.
+	 */
 	public DownloadFileThread(OnDownloadFinishedListener listener,
 			String url,
 			String destPath) {
@@ -25,6 +44,7 @@ public class DownloadFileThread extends Thread {
 		this.listener = listener;
 	}
 	
+	/** Called on thread start. */ 
 	private void onStart() {
 		System.out.println("Starting download");
 	}
@@ -81,10 +101,15 @@ public class DownloadFileThread extends Thread {
 		}
 	}
 	
+	/** 
+	 * Called on thread progress.
+	 * @param progress The progress in %.
+	 */
 	public void onProgress(int progress) {
 		System.out.print("\rProgress : " + progress + "%");
 	}
 	
+	/** Called on thread finished. */
 	private void onFinished() {
 		System.out.println("\nDownload successful");
 	}
