@@ -35,6 +35,9 @@ public class OrmInitEntitiesTest extends CommonTest {
 	/** Comment MetaData. */
 	private static EntityMetadata commentMeta = null;
 	
+	/** Comment MetaData. */
+	private static EntityMetadata clientMeta = null;
+	
 	/** createdAt field name. */
 	private static final String CREATED_AT = "createdAt";
 	
@@ -122,6 +125,10 @@ public class OrmInitEntitiesTest extends CommonTest {
 			if (classMetadata.getName().equals("Comment")) {
 				commentMeta = classMetadata;
 			}
+			
+			if (classMetadata.getName().equals("Client")) {
+				clientMeta = classMetadata;
+			}
 		}
 	}
 	
@@ -163,6 +170,22 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.testRepoComment();
 		this.testRepoUser();
 		*/
+	}
+	
+	//// CLIENT ////
+	/** Is Client created and parsed well? */
+	@Test
+	public final void hasClientEntity() {
+		CommonTest.hasFindFile(ENTITY_PATH + "Client.java");
+		Assert.assertNotNull("Client no parsed !", clientMeta);
+	}
+	
+	/** Does Client extends User well? */
+	@Test
+	public final void isClientExtended() {
+		Assert.assertEquals("Client doesn't inherit from User",
+				clientMeta.getExtendType(),
+				"User");
 	}
 	
 	//// POST ////
@@ -321,31 +344,46 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.isFieldLength(userMeta, CREATED_AT, Integer.MAX_VALUE);
 	}
 	
+	////REPOSITORY ////
+	/** Repository creation test. */
+	public final void hasRepository(String entityName) {
+		CommonTest.hasFindFile(DATA_PATH 
+				+ entityName + "SQLiteAdapter.java");
+		
+		CommonTest.hasFindFile(DATA_PATH 
+				+ "base/" + entityName + "SQLiteAdapterBase.java");
+	}
+	
 	//// REPOSITORY POST ////
 	/** Post Repository creation test. */
 	@Test
 	public final void hasPostRepository() {
-		CommonTest.hasFindFile(DATA_PATH + "PostSQLiteAdapter.java");
-		CommonTest.hasFindFile(DATA_PATH + "base/PostSQLiteAdapterBase.java");
+		this.hasRepository("Post");
 	}
+	
+	
 	
 	
 	//// REPOSITORY COMMENT ////
 	/** Comment Repository creation test. */
 	@Test
 	public final void hasCommentRepository() {
-		CommonTest.hasFindFile(DATA_PATH + "CommentSQLiteAdapter.java");
-		CommonTest.hasFindFile(DATA_PATH 
-				 + "base/CommentSQLiteAdapterBase.java");
+		this.hasRepository("Comment");
 	}
 	
 	
-	//// REPOSITORY USER ////
+	////REPOSITORY USER ////
 	/** User Repository creation test. */
 	@Test
 	public final void hasUserRepository() {
-		CommonTest.hasFindFile(DATA_PATH + "UserSQLiteAdapter.java");
-		CommonTest.hasFindFile(DATA_PATH + "base/UserSQLiteAdapterBase.java");
+		this.hasRepository("User");
+	}
+	
+	////REPOSITORY USER ////
+	/** User Repository creation test. */
+	@Test
+	public final void hasClientRepository() {
+		this.hasRepository("Client");
 	}
 	
 	
