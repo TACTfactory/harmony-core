@@ -25,7 +25,7 @@ public class Category {
 	private int id;
 	
 	/** Name of the category. */
-	@Column
+	@Column(defaultValue="Default Category Name")
 	private String name;
 	
 	/** List of comments of this category. */

@@ -309,6 +309,19 @@ public class FieldVisitor {
 									mvp.getValue().toString()));
 						} else
 							
+						if (mvp.getName().equals("defaultValue")) {
+							String defaultValue;
+							if (mvp.getValue() 
+									instanceof StringLiteralExpr) {
+								defaultValue = ((StringLiteralExpr) 
+										mvp.getValue()).getValue();
+							} else {
+								defaultValue = mvp.getValue().toString();
+							}
+							result.setDefaultValue(defaultValue);
+							
+						} else
+							
 						// set scale
 						if (mvp.getName().equals("locale")) {
 							result.setIsLocale(Boolean.parseBoolean(
