@@ -9,10 +9,10 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
  * Class for SDK commands.
  */
 @PluginImplementation
-public class SDKCommand extends BaseCommand {
+public class DependenciesCommand extends BaseCommand {
 
 	/** Bundle name. */
-	public static final String BUNDLE 		= "sdk";
+	public static final String BUNDLE 		= "dependencies";
 	
 	/** Subject name. */
 	public static final String SUBJECT 		= "install";
@@ -37,7 +37,7 @@ public class SDKCommand extends BaseCommand {
 
 	@Override
 	public void summary() {
-		ConsoleUtils.display("\n> ANDROID SDK \n"
+		ConsoleUtils.display("\n> DEPENDENCIES \n"
 				+ "\t" + INSTALL_SDK 
 				+ "\t => Install the android SDK\n");
 	}
