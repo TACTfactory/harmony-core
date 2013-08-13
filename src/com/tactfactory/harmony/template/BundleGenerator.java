@@ -101,7 +101,7 @@ public class BundleGenerator extends BaseGenerator {
 								bundleName)
 						+ ".java";
 		
-		this.makeSource(tplPath, genPath, true);
+		this.makeSource(tplPath, genPath, false);
 	}
 	
 	/**
@@ -120,7 +120,7 @@ public class BundleGenerator extends BaseGenerator {
 							bundleName) 
 						+ "/build.xml";
 		
-		this.makeSource(tplPath, genPath, true);
+		this.makeSource(tplPath, genPath, false);
 	}
 	
 	/**
@@ -145,7 +145,7 @@ public class BundleGenerator extends BaseGenerator {
 								bundleName)
 						+ "Parser.java";
 		
-		this.makeSource(tplPath, genPath, true);
+		this.makeSource(tplPath, genPath, false);
 	}
 	
 	/**
@@ -170,7 +170,7 @@ public class BundleGenerator extends BaseGenerator {
 								bundleName)
 						+ "Command.java";
 		
-		this.makeSource(tplPath, genPath, true);
+		this.makeSource(tplPath, genPath, false);
 	}
 	
 	/** 
@@ -195,7 +195,7 @@ public class BundleGenerator extends BaseGenerator {
 								bundleName)
 						+ "Generator.java";
 		
-		this.makeSource(tplPath, genPath, true);
+		this.makeSource(tplPath, genPath, false);
 	}
 	
 	/** 
@@ -220,6 +220,6 @@ public class BundleGenerator extends BaseGenerator {
 								bundleName)
 						+ "Metadata.java";
 		
-		this.makeSource(tplPath, genPath, true);
+		this.makeSource(tplPath, genPath, false);
 	}
 }
