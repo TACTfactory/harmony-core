@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.template.TagConstant;
 
@@ -272,6 +273,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 		ret.put(TagConstant.OPTIONS, optionsMap);
 		ret.put(TagConstant.HEADER, this.headerTemplate);
 		ret.put(TagConstant.UTILITY_PATH, adapt.getTemplateUtilityPath());
+		ret.put(TagConstant.HARMONY_VERSION, Harmony.VERSION);
 		
 		return ret;
 	}
