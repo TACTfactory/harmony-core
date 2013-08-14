@@ -26,7 +26,7 @@ public abstract class SQLiteAdapterBase<T> {
 	/** TAG for debug purpose. */
 	public static final String TAG = "${project_name?cap_first}SQLiteAdapterBase";
 
-	
+
 	/** Context. */
 	protected Context ctx;
 	/**
@@ -37,29 +37,29 @@ public abstract class SQLiteAdapterBase<T> {
 	 * Open Helper.
 	 */
 	protected ${project_name?cap_first}SQLiteOpenHelper mBaseHelper;
-	
-	
+
+
 	/**
-	 * Constructor. 
+	 * Constructor.
 	 * @param ctx context
 	 */
-	protected SQLiteAdapterBase(final Context ctx) {	
+	protected SQLiteAdapterBase(final Context ctx) {
 		this.ctx = ctx;
 		this.mBaseHelper = new ${project_name?cap_first}SQLiteOpenHelper(
-				ctx, 
-				DB_NAME, 
+				ctx,
+				DB_NAME,
 				null,
 				${project_name?cap_first}Application.getVersionCode(ctx));
-		
+
 		try {
 			this.mBaseHelper.createDataBase();
 		} catch (IOException ioe) {
 			throw new Error("Unable to create database");
 		}
 	}
-	
-	
-	/** 
+
+
+	/**
 	 * Initialize and open database.
 	 * @return Open database
 	 */
@@ -67,8 +67,8 @@ public abstract class SQLiteAdapterBase<T> {
 		this.mDatabase = this.mBaseHelper.getWritableDatabase();
 		return this.mDatabase;
 	}
-	
-	/** 
+
+	/**
 	 * Initialize and open database.
 	 * @param db database
 	 * @return Open database
@@ -82,7 +82,7 @@ public abstract class SQLiteAdapterBase<T> {
 	public void close() {
 		this.mDatabase.close();
 	}
-	
+
 	/**
 	 * Get all entities from the DB.
 	 * @return A cursor pointing to all entities
@@ -91,15 +91,15 @@ public abstract class SQLiteAdapterBase<T> {
 		if (${project_name?cap_first}Application.DEBUG) {
 			Log.d(TAG, "Get all entities");
 		}
-		
-		return this.query(this.getCols(), 
-				null, 
-				null, 
-				null, 
-				null, 
+
+		return this.query(this.getCols(),
+				null,
+				null,
+				null,
+				null,
 				null);
 	}
-	
+
 	/**
 	 * Send a query to the DB.
 	 * @param projection Columns to work with
@@ -110,11 +110,11 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @param orderBy ORDER BY clause
 	 * @return A cursor pointing to the result of the query
 	 */
-	public Cursor query(final String[] projection, 
-						final String whereClause, 
-						final String[] whereArgs, 
-						final String groupBy, 
-						final String having, 
+	public Cursor query(final String[] projection,
+						final String whereClause,
+						final String[] whereArgs,
+						final String groupBy,
+						final String having,
 						final String orderBy) {
 		return this.mDatabase.query(
 				this.getJoinedTableName(),
@@ -137,11 +137,11 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @param limit LIMIT clause
 	 * @return A cursor pointing to the result of the query
 	 */
-	public Cursor query(final String[] projection, 
-						final String whereClause, 
-						final String[] whereArgs, 
-						final String groupBy, 
-						final String having, 
+	public Cursor query(final String[] projection,
+						final String whereClause,
+						final String[] whereArgs,
+						final String groupBy,
+						final String having,
 						final String orderBy,
 						final String limit) {
 		return this.mDatabase.query(
@@ -154,7 +154,7 @@ public abstract class SQLiteAdapterBase<T> {
 				orderBy,
 				limit);
 	}
-	
+
 	/**
 	 * Insert a new entity into the DB.
 	 * @param nullColumnHack nullColumnHack
@@ -167,7 +167,7 @@ public abstract class SQLiteAdapterBase<T> {
 				nullColumnHack,
 				item);
 	}
-	
+
 	/**
 	 * Delete the entities matching with query from the DB.
 	 * @param whereClause WHERE clause for SQL
@@ -180,7 +180,7 @@ public abstract class SQLiteAdapterBase<T> {
 				whereClause,
 				whereArgs);
 	}
-	
+
 	/**
 	 * Updates the entities from the DB matching with the query.
 	 * @param item The ContentValues to be updated
@@ -188,7 +188,7 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @param whereArgs WHERE arguments for SQL
 	 * @return How many tokens updated
 	 */
-	public int update(final ContentValues item, final String whereClause, 
+	public int update(final ContentValues item, final String whereClause,
 												final String[] whereArgs) {
 		return this.mDatabase.update(
 				this.getTableName(),
@@ -196,7 +196,7 @@ public abstract class SQLiteAdapterBase<T> {
 				whereClause,
 				whereArgs);
 	}
-	
+
 	/**
 	 * Get the table Name.
 	 * @return the table name
@@ -214,9 +214,9 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @return array of cols
 	 */
 	public abstract String[] getCols();
-	
-		
-	/** 
+
+
+	/**
 	 * Read All T entities.
 	 * @return List of T entities
 	 */
@@ -224,19 +224,19 @@ public abstract class SQLiteAdapterBase<T> {
 		Cursor cursor = this.getAllCursor();
 		ArrayList<T> result = this.cursorToItems(cursor);
 		cursor.close();
-		
-		
+
+
 		return result;
 	}
-	
-	/** 
+
+	/**
 	 * Read All T entities given some criterias.
 	 * @param crits The criterias to use for the request
 	 * @return List of T entities
 	 */
 	public ArrayList<T> getAll(final CriteriasBase<T> crits) {
-		ArrayList<T> result; 
-		
+		ArrayList<T> result;
+
 		if (crits == null || crits.isEmpty()) {
 			result = this.getAll();
 		} else {
@@ -248,12 +248,12 @@ public abstract class SQLiteAdapterBase<T> {
 							null);
 			result = this.cursorToItems(cursor);
 			cursor.close();
-		}	
-		
+		}
+
 		return result;
 	}
-	
-	/** 
+
+	/**
 	 * Convert Cursor of database to Array of T entity.
 	 * @param cursor Cursor object
 	 * @return Array of T entity
@@ -263,50 +263,50 @@ public abstract class SQLiteAdapterBase<T> {
 
 		if (cursor.getCount() != 0) {
 			cursor.moveToFirst();
-			
+
 			T item;
 			do {
 				item = this.cursorToItem(cursor);
 				result.add(item);
 			} while (cursor.moveToNext());
-			
+
 			//if (DemactApplication.DEBUG)
-			//Log.d(TAG, "Read DB(" + TABLE_NAME + ") count : " 
+			//Log.d(TAG, "Read DB(" + TABLE_NAME + ") count : "
 		    //			+ cursor.getCount() );
 		}
 
 		return result;
 	}
-	
-	/** 
+
+	/**
 	 * Convert Cursor of database to a T entity.
 	 * @param c Cursor object
 	 * @return T entity
 	 */
 	public abstract T cursorToItem(final Cursor c);
 
-	/** 
+	/**
 	 * Convert a T item to a ContentValues for the database.
 	 * @param item The item to convert
 	 * @return The ContentValues
 	 */
 	public abstract ContentValues itemToContentValues(final T item);
 
-	/** 
+	/**
 	 * Insert a T entity into database.
-	 * @param item The T entity to persist 
+	 * @param item The T entity to persist
 	 * @return Id of the T entity
 	 */
 	public abstract long insert(final T item);
-	
-	/** 
+
+	/**
 	 * Update a T entity into database.
 	 * @param item The T entity to persist
-	 * @return The count of updated entities  
+	 * @return The count of updated entities
 	 */
 	public abstract int update(final T item);
-	
-	/** 
+
+	/**
 	 * Delete a T entity into database.
 	 * @param item The T entity to persist
 	 * @return The count of deleted entities

@@ -40,9 +40,9 @@ import ${project_namespace}.criterias.base.value.ArrayValue;
 /**
  * ${curr.name?cap_first}ProviderAdapterBase.
  */
-public abstract class ${curr.name?cap_first}ProviderAdapterBase 
+public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				extends ProviderAdapterBase<${ext}> {
-	
+
 	/** TAG for debug purpose. */
 	protected static final String TAG = "${curr.name?cap_first}ProviderAdapter";
 
@@ -50,52 +50,52 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	public	  static Uri ${curr.name?upper_case}_URI;
 
 	/** ${curr.name?uncap_first} type. */
-	protected static final String ${curr.name?uncap_first}Type = 
+	protected static final String ${curr.name?uncap_first}Type =
 			"${curr.name?lower_case}";
 
 	/** ${curr.name?upper_case} Insert method name. */
-	public static final String METHOD_INSERT_${curr.name?upper_case} = 
+	public static final String METHOD_INSERT_${curr.name?upper_case} =
 			"insert${curr.name?cap_first}";
 	/** ${curr.name?upper_case} Update method name. */
-	public static final String METHOD_UPDATE_${curr.name?upper_case} = 
+	public static final String METHOD_UPDATE_${curr.name?upper_case} =
 			"update${curr.name?cap_first}";
 	/** ${curr.name?upper_case} Delete method name. */
-	public static final String METHOD_DELETE_${curr.name?upper_case} = 
+	public static final String METHOD_DELETE_${curr.name?upper_case} =
 			"delete${curr.name?cap_first}";
 	/** ${curr.name?upper_case} Query method name. */
-	public static final String METHOD_QUERY_${curr.name?upper_case} = 
+	public static final String METHOD_QUERY_${curr.name?upper_case} =
 			"query${curr.name?cap_first}";
 
 	/** ${curr.name?upper_case}_ALL. */
-	protected static final int ${curr.name?upper_case}_ALL = 
+	protected static final int ${curr.name?upper_case}_ALL =
 			${provider_id};
-	/** ${curr.name?upper_case}_ONE. */		
-	protected static final int ${curr.name?upper_case}_ONE = 
+	/** ${curr.name?upper_case}_ONE. */
+	protected static final int ${curr.name?upper_case}_ONE =
 			${provider_id + 1};
 
 	/**
-	 * Static constructor. 
+	 * Static constructor.
 	 */
 	static {
-		${curr.name?upper_case}_URI = 
+		${curr.name?upper_case}_URI =
 				${project_name?cap_first}Provider.generateUri(
 						${curr.name?uncap_first}Type);
 		${project_name?cap_first}Provider.getUriMatcher().addURI(
-				${project_name?cap_first}Provider.authority, 
-				${curr.name?uncap_first}Type, 		
+				${project_name?cap_first}Provider.authority,
+				${curr.name?uncap_first}Type,
 				${curr.name?upper_case}_ALL);
 		${project_name?cap_first}Provider.getUriMatcher().addURI(
-				${project_name?cap_first}Provider.authority, 
+				${project_name?cap_first}Provider.authority,
 				${curr.name?uncap_first}Type + "/#",
 				${curr.name?upper_case}_ONE);
 	}
-	
+
 	/**
 	 * Constructor.
 	 * @param ctx context
 	 * @param db database
 	 */
-	public ${curr.name?cap_first}ProviderAdapterBase(final Context ctx, 
+	public ${curr.name?cap_first}ProviderAdapterBase(final Context ctx,
 													 final SQLiteDatabase db) {
 		super(ctx);
 		this.adapter = new ${curr.name?cap_first}SQLiteAdapter(ctx);
@@ -113,7 +113,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param selectionArgs SELECT arguments for SQL
 	 * @return how many token deleted
 	 */
-	public int delete(final Uri uri, String selection, 
+	public int delete(final Uri uri, String selection,
 									 String[] selectionArgs) {
 		int matchedUri = ${project_name?cap_first}ProviderBase
 					.getUriMatcher().match(uri);
@@ -127,12 +127,12 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				result = this.ctx.getContentResolver().delete(motherUri,
 						selection, selectionArgs);
 				<#else>
-				selection = ${curr.name?cap_first}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)} 
+				selection = ${curr.name?cap_first}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)}
 						+ " = ?";
 				selectionArgs = new String[1];
 				selectionArgs[0] = String.valueOf(id);
 				result = this.adapter.delete(
-						selection, 
+						selection,
 						selectionArgs);
 				</#if>
 				break;
@@ -141,10 +141,10 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				// Query the ids of the changing fields.
 				Cursor idsCursor = this.adapter.query(
 						new String[]{${curr.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.ids[0].name)}},
-						selection, 
-						selectionArgs, 
-						null, 
-						null, 
+						selection,
+						selectionArgs,
+						null,
+						null,
 						null);
 				// If there are ids
 				if (idsCursor.getCount() > 0) {
@@ -153,12 +153,12 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					String[] parentSelectionArgs = parentCrit.toSQLiteSelectionArgs();
 					result = this.ctx.getContentResolver().delete(
 							${curr.extends}ProviderAdapter.${curr.extends?upper_case}_URI,
-							parentSelection, 
+							parentSelection,
 							parentSelectionArgs);
 				}
 				<#else>
 				result = this.adapter.delete(
-							selection, 
+							selection,
 							selectionArgs);
 				</#if>
 				break;
@@ -178,7 +178,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	public Uri insert(final Uri uri, final ContentValues values) {
 		int matchedUri = ${project_name?cap_first}ProviderBase
 				.getUriMatcher().match(uri);
-		<#if inherited>ContentValues ${curr.name?uncap_first}Values = 
+		<#if inherited>ContentValues ${curr.name?uncap_first}Values =
 			this.extractContentValues(values);</#if>
 		Uri result = null;
 		int id = 0;
@@ -186,7 +186,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 			case ${curr.name?upper_case}_ALL:
 				<#if inherited>
 				Uri newUri = this.ctx.getContentResolver().insert(
-						${extends}ProviderAdapter.${extends?upper_case}_URI, 
+						${extends}ProviderAdapter.${extends?upper_case}_URI,
 						values);
 				int newId = Integer.parseInt(newUri.getPathSegments().get(1));
 				${curr.name?uncap_first}Values.put(${curr.name}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)}, newId);
@@ -216,8 +216,8 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param sortOrder ORDER BY clause
 	 * @return A cursor pointing to the result of the query
 	 */
-	public Cursor query(final Uri uri, String[] projection, 
-						String selection, String[] selectionArgs, 
+	public Cursor query(final Uri uri, String[] projection,
+						String selection, String[] selectionArgs,
 						final String sortOrder) {
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher()
 				.match(uri);
@@ -227,23 +227,23 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		switch (matchedUri) {
 			case ${curr.name?upper_case}_ONE:
 				id = Integer.parseInt(uri.getPathSegments().get(1));
-				selection = ${curr.name?cap_first}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.ids[0].name)} 
+				selection = ${curr.name?cap_first}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.ids[0].name)}
 						+ " = ?";
 				selectionArgs = new String[1];
 				selectionArgs[0] = String.valueOf(id);
 				result = this.adapter.query(
-							projection, 
+							projection,
 							selection,
-							selectionArgs, 
+							selectionArgs,
 							null,
 							null,
 							sortOrder);
 				break;
 			case ${curr.name?upper_case}_ALL:
 				result = this.adapter.query(
-							projection, 
+							projection,
 							selection,
-							selectionArgs, 
+							selectionArgs,
 							null,
 							null,
 							sortOrder);
@@ -264,7 +264,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param selectionArgs SELECT arguments for SQL
 	 * @return how many token update
 	 */
-	public int update(final Uri uri, final ContentValues values, 
+	public int update(final Uri uri, final ContentValues values,
 			final String selection,
 			final String[] selectionArgs) {
 		<#if inherited>ContentValues ${curr.name?uncap_first}Values = this.extractContentValues(values);</#if>
@@ -279,18 +279,18 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						String.valueOf(id));
 				result = this.ctx.getContentResolver().update(
 						parentUri,
-						values, 
+						values,
 						null,
 						null);
 				result += this.adapter.update(
-						${curr.name?uncap_first}Values, 
-						${curr.name}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)} + " = ?", 
+						${curr.name?uncap_first}Values,
+						${curr.name}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)} + " = ?",
 						new String[]{String.valueOf(id)});
 				<#else>
 				result = this.adapter.update(
-						values, 
-						${curr.name?cap_first}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)} + " = " 
-						+ id, 
+						values,
+						${curr.name?cap_first}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)} + " = "
+						+ id,
 						selectionArgs);
 				</#if>
 				break;
@@ -299,10 +299,10 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				// Query the ids of the changing fields.
 				Cursor idsCursor = this.adapter.query(
 						new String[]{${curr.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.ids[0].name)}},
-						selection, 
-						selectionArgs, 
-						null, 
-						null, 
+						selection,
+						selectionArgs,
+						null,
+						null,
 						null);
 				// If there are ids
 				if (idsCursor.getCount() > 0) {
@@ -315,33 +315,33 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						String currentSelection = currentCrit.toSQLiteSelection();
 						String[] currentSelectionArgs = currentCrit
 								.toSQLiteSelectionArgs();
-						// Update the current table 
+						// Update the current table
 						result += this.adapter.update(
-								${curr.name?uncap_first}Values, 
-								currentSelection, 
+								${curr.name?uncap_first}Values,
+								currentSelection,
 								currentSelectionArgs);
 					}
 					// If there are still values to be updated in parents
 					if (values.size() > 0) {
 						CriteriasBase parentCrit = this.cursorToIDSelection(
-								idsCursor, 
+								idsCursor,
 								${curr.extends}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
 
 						String parentSelection = parentCrit.toSQLiteSelection();
 						String[] parentSelectionArgs = parentCrit
 								.toSQLiteSelectionArgs();
-						// Update the parents tables 
+						// Update the parents tables
 						result = this.ctx.getContentResolver().update(
 								${curr.extends}ProviderAdapter.${curr.extends?upper_case}_URI,
-								values, 
-								parentSelection, 
+								values,
+								parentSelection,
 								parentSelectionArgs);
 					}
 				}
 				<#else>
 				result = this.adapter.update(
-							values, 
-							selection, 
+							values,
+							selection,
 							selectionArgs);
 				</#if>
 				break;
@@ -362,8 +362,8 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		}
 		return to;
 	}
-	
-	protected void transfer(ContentValues from, 
+
+	protected void transfer(ContentValues from,
 			ContentValues to,
 			String colName,
 			boolean keep) {

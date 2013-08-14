@@ -24,9 +24,9 @@ public class DataLoader {
 	public static final int MODE_APP 	= Integer.parseInt("0010", 2);
 	/** Debug mode. */
 	public static final int MODE_DEBUG 	= Integer.parseInt("0100", 2);
-	/** List of DataLoaders. */ 
+	/** List of DataLoaders. */
 	private List<FixtureBase<?>> dataLoaders;
-	/** List of Fixture folders. */ 
+	/** List of Fixture folders. */
 	private static SparseArray<String> fixtureFolders;
 	/** Context. */
 	private Context ctx;
@@ -38,13 +38,13 @@ public class DataLoader {
 	 */
 	static {
 		fixtureFolders = new SparseArray<String>();
-		
+
 		// Add your own folder and mode here for new fixture cases
 		fixtureFolders.put(MODE_APP, "app/");
 		fixtureFolders.put(MODE_DEBUG, "debug/");
 		fixtureFolders.put(MODE_TEST, "test/");
 	}
-	
+
 	/**
 	 * Constructor.
 	 * @param ctx The context
@@ -60,7 +60,7 @@ public class DataLoader {
 			</#if>
 		</#list>
 	}
-	
+
 	/**
 	 * LoadData from fixtures.
 	 * @param db The DB to work in
@@ -92,12 +92,12 @@ public class DataLoader {
 
 		// After getting all the informations from the fixture,
 		// serialize the datas.
-		for (final FixtureBase<?> dataLoader : this.dataLoaders) {	
+		for (final FixtureBase<?> dataLoader : this.dataLoaders) {
 			dataLoader.backup();
 		}
 		hasFixturesBeenLoaded = true;
 	}
-	
+
 	/**
 	 * isType.
 	 * @param modes Modes
@@ -106,19 +106,19 @@ public class DataLoader {
 	 */
 	private boolean isType(final int modes, final int mode) {
 		boolean result;
-		
+
 		if ((modes & mode) == mode) {
 			result = true;
 		} else {
 			result = false;
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Get path to fixtures.
-	 * @param mode Mode 
+	 * @param mode Mode
 	 * @return A String representing the path to fixtures
 	 */
 	public static String getPathToFixtures(final int mode) {

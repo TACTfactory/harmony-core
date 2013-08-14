@@ -20,27 +20,27 @@ public class Criteria implements Serializable, ICriteria {
 
 	@Override
 	public String toSQLiteString() {
-		return "(" 
-		+ this.key + " " 
-		+ this.type.getSQL() + " " 
-		+ DatabaseUtils.sqlEscapeString(this.value.toSQLiteString()) 
+		return "("
+		+ this.key + " "
+		+ this.type.getSQL() + " "
+		+ DatabaseUtils.sqlEscapeString(this.value.toSQLiteString())
 		+ ")";
 	}
 
 	@Override
 	public String toSQLiteSelection() {
-		return "(" 
-			+ this.key + " " 
-			+ this.type.getSQL() + " " 
-			+ this.value.toSQLiteSelection() 
+		return "("
+			+ this.key + " "
+			+ this.type.getSQL() + " "
+			+ this.value.toSQLiteSelection()
 			+ ")";
 	}
-	
+
 	@Override
 	public void toSQLiteSelectionArgs(final ArrayList<String> array) {
 		this.value.toSQLiteSelectionArgs(array);
 	}
-	
+
 	/**
 	 * Get the Criteria key.
 	 * @return The Criteria's key
@@ -48,7 +48,7 @@ public class Criteria implements Serializable, ICriteria {
 	public String getKey() {
 		return this.key;
 	}
-	
+
 	/**
 	 * Get the Criteria value.
 	 * @return The Criteria's value
@@ -56,7 +56,7 @@ public class Criteria implements Serializable, ICriteria {
 	public CriteriaValue getValue() {
 		return this.value;
 	}
-	
+
 	/**
 	 * Set the Criteria key.
 	 * @param key The new key to set
@@ -64,7 +64,7 @@ public class Criteria implements Serializable, ICriteria {
 	public void setKey(final String key) {
 		this.key = key;
 	}
-	
+
 	/**
 	 * Set the Criteria value.
 	 * @param value The new value to set
@@ -72,7 +72,7 @@ public class Criteria implements Serializable, ICriteria {
 	public void addValue(final CriteriaValue value) {
 		this.value = value;
 	}
-	
+
 	/**
 	 * Set the Criteria Type.
 	 * @param type The new Type to set
@@ -80,7 +80,7 @@ public class Criteria implements Serializable, ICriteria {
 	public void setType(final Type type) {
 		this.type = type;
 	}
-	
+
 	/**
 	 * Get the Criteria Type.
 	 * @return The Criteria's type
@@ -88,7 +88,7 @@ public class Criteria implements Serializable, ICriteria {
 	public Type getType() {
 		return this.type;
 	}
-	
+
 	/**
 	 * Enum Type for SQL purpose.
 	 */
@@ -107,10 +107,10 @@ public class Criteria implements Serializable, ICriteria {
 		LIKE("LIKE"),
 		/** IN "IN" (May be used with ArrayValue or SelectValue). */
 		IN("IN");
-		
+
 		/** SQLite representation of this type. */
 		private String sql;
-		
+
 		/**
 		 * Constructor.
 		 * @param sql The SQL version of the Enum
@@ -118,7 +118,7 @@ public class Criteria implements Serializable, ICriteria {
 		private Type(final String sql) {
 			this.sql = sql;
 		}
-		
+
 		/**
 		 * Get the SQL String transcryption.
 		 * @return The SQL version of the Enum
@@ -127,7 +127,7 @@ public class Criteria implements Serializable, ICriteria {
 			return this.sql;
 		}
 	}
-	
+
 	/**
 	 * Equals function.
 	 * @param obj The Object to compare with
@@ -136,13 +136,13 @@ public class Criteria implements Serializable, ICriteria {
 	@Override
 	public boolean equals(final Object obj) {
 		boolean result = true;
-	
+
 		if (obj == null) {
 			result = false;
 		} else if (this.getClass() != obj.getClass()) {
 			result = false;
 		}
-		
+
 		if (result) {
 			final Criteria other = (Criteria) obj;
 			if (this.key == null) {
@@ -161,7 +161,7 @@ public class Criteria implements Serializable, ICriteria {
 				result = false;
 			}
 		}
-	
+
 		return result;
 	}
 }

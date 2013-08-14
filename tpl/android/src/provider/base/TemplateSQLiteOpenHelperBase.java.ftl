@@ -1,6 +1,6 @@
 <#include utilityPath + "all_imports.ftl" />
 <#function callLoader entity>
-	<#assign ret="//Load "+entity.name+" fixtures\r\t\t" /> 
+	<#assign ret="//Load "+entity.name+" fixtures\r\t\t" />
 	<#assign ret=ret+entity.name?cap_first+"DataLoader "+entity.name?uncap_first+"Loader = new "+entity.name?cap_first+"DataLoader(this.ctx);\r\t\t" />
 	<#assign ret=ret+entity.name?uncap_first+"Loader.getModelFixtures("+entity.name?cap_first+"DataLoader.MODE_BASE);\r\t\t" />
 	<#assign ret=ret+entity.name?uncap_first+"Loader.load(manager);\r\r" />
@@ -40,15 +40,15 @@ import ${fixture_namespace}.DataLoader;
  * application startup with long-running database upgrades.
  * @see android.database.sqlite.SQLiteOpenHelper
  */
-public class ${project_name?cap_first}SQLiteOpenHelperBase 
+public class ${project_name?cap_first}SQLiteOpenHelperBase
 						extends SQLiteOpenHelper {
 	/** TAG for debug purpose. */
 	protected static final String TAG = "DatabaseHelper";
 	/** Context. */
 	protected Context ctx;
-	
+
 	/** Android's default system path of the database.
-	 * 
+	 *
 	 */
 	private static String DB_PATH;
 	/** database name. */
@@ -57,7 +57,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	private static boolean assetsExist;
 	/** Are we in a JUnit context ?*/
 	public static boolean isJUnit = false;
-	
+
 	/**
 	 * Constructor.
 	 * @param ctx Context
@@ -65,13 +65,13 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	 * @param factory factory
 	 * @param version version
 	 */
-	public ${project_name?cap_first}SQLiteOpenHelperBase(final Context ctx, 
+	public ${project_name?cap_first}SQLiteOpenHelperBase(final Context ctx,
 		   final String name, final CursorFactory factory, final int version) {
 		super(ctx, name, factory, version);
 		this.ctx = ctx;
 		DB_NAME = name;
 		DB_PATH = ctx.getDatabasePath(DB_NAME).getAbsolutePath();
-		
+
 		try {
 			this.ctx.getAssets().open(DB_NAME);
 			assetsExist = true;
@@ -90,7 +90,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	@Override
 	public void onCreate(final SQLiteDatabase db) {
 		Log.i(TAG, "Create database..");
-		
+
 		if (!assetsExist) {
 			/// Create Schema
 	<#list entities?values as entity>
@@ -115,9 +115,9 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 			}
 	</#if>
 		}
-		
+
 	}
-	
+
 	/**
 	 * Clear the database given in parameters.
 	 * @param db The database to clear
@@ -127,26 +127,26 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 
 		<#list entities?values as entity>
 			<#if (entity.fields?? && (entity.fields?size>0))>
-		db.delete(${entity.name?cap_first}SQLiteAdapter.TABLE_NAME, 
-				null, 
-				null);	
+		db.delete(${entity.name?cap_first}SQLiteAdapter.TABLE_NAME,
+				null,
+				null);
 			</#if>
 		</#list>
 	}
 
 	@Override
-	public void onUpgrade(final SQLiteDatabase db, final int oldVersion, 
+	public void onUpgrade(final SQLiteDatabase db, final int oldVersion,
 			final int newVersion) {
 		Log.i(TAG, "Update database..");
 
 		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Upgrading database from version " + oldVersion 
+			Log.d(TAG, "Upgrading database from version " + oldVersion
 					   + " to " + newVersion);
 		}
-		
+
 		// TODO : Upgrade your tables !
 	}
-	
+
 	<#if options.fixture?? && options.fixture.enabled>
 	//@SuppressWarnings("rawtypes")
 	/**
@@ -163,7 +163,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		dataLoader.loadData(db, mode);
 	}
 	</#if>
-	
+
 	/**
 	 * Creates a empty database on the system and rewrites it with your own
 	 * database.
@@ -175,20 +175,20 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 			// the default system path
 			// so we're gonna be able to overwrite that database with ours
 			this.getReadableDatabase();
-	
+
 			try {
 				copyDataBase();
-	
+
 			} catch (IOException e) {
 				throw new Error("Error copying database");
 			}
 		}
 	}
-	
+
 	/**
 	 * Check if the database already exist to avoid re-copying the file each
 	 * time you open the application.
-	 * 
+	 *
 	 * @return true if it exists, false if it doesn't
 	 */
 	private boolean checkDataBase() {
@@ -197,7 +197,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		SQLiteDatabase checkDB = null;
 		try {
 			final String myPath = DB_PATH + DB_NAME;
-			// NOTE : the system throw error message : "Database is locked" 
+			// NOTE : the system throw error message : "Database is locked"
 			// when the Database is not found (incorrect path)
 			checkDB = SQLiteDatabase.openDatabase(myPath, null,
 					SQLiteDatabase.OPEN_READONLY);
@@ -224,7 +224,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 
 		// Open your local db as the input stream
 		final InputStream myInput = this.ctx.getAssets().open(DB_NAME);
-		
+
 		// Path to the just created empty db
 		final String outFileName = DB_PATH + DB_NAME;
 

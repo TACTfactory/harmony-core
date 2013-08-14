@@ -25,9 +25,9 @@ public abstract class MenuWrapperBase {
 	 * @param currentFragmentHashCode The current fragment hashcode.
 	 * @param ctx The context
 	 */
-	protected abstract void updateMenu(Menu menu, 
-										int currentActivityHashCode, 
-										int currentFragmentHashCode, 
+	protected abstract void updateMenu(Menu menu,
+										int currentActivityHashCode,
+										int currentFragmentHashCode,
 										Context ctx);
 
 	/**
@@ -38,13 +38,13 @@ public abstract class MenuWrapperBase {
 	 * @param fragment The fragment in which it has been clicked
 	 * @return true if event has been treated
 	 */
-	protected abstract boolean dispatch(MenuItem item, 
-										 Context ctx, 
+	protected abstract boolean dispatch(MenuItem item,
+										 Context ctx,
 									     Fragment fragment);
 
 	/**
 	 * Menu onActivityResult.
-	 * Used when one of your menu call another 
+	 * Used when one of your menu call another
 	 * activity with startActivityOnResult().
 	 * @param requestCode the requestCode
 	 * @param resultCode the resultCode
@@ -52,10 +52,10 @@ public abstract class MenuWrapperBase {
 	 * @param ctx The context
 	 * @param fragment The fragment
 	 */
-	protected abstract void onActivityResult(int requestCode, 
-										      int resultCode, 
-											  Intent data, 
-											  Context ctx, 
+	protected abstract void onActivityResult(int requestCode,
+										      int resultCode,
+											  Intent data,
+											  Context ctx,
 											  Fragment fragment);
 
 

@@ -36,10 +36,10 @@ import ${curr.namespace}.entity.${curr.name};
 
 /**
  * List adapter for ${curr.name} entity.
- */ 
+ */
 public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 		implements OnClickListener {
-		
+
 	/**
 	 * View & layoutInflater to populate.
 	 */
@@ -47,20 +47,20 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 	/** Fragment to populate. */
 	private final ${curr.name?cap_first}ListFragment fragment;
 
-	/** 
+	/**
 	 * Constructor.
 	 * @param ctx context
 	 * @param fragment fragment
 	 */
-	public ${curr.name}ListAdapter(Context ctx, 
+	public ${curr.name}ListAdapter(Context ctx,
 			${curr.name?cap_first}ListFragment fragment) {
-		super(ctx, 
-			R.layout.row_${curr.name?lower_case}, 
-			null, 
-			null, 
-			null, 
+		super(ctx,
+			R.layout.row_${curr.name?lower_case},
+			null,
+			null,
+			null,
 			CursorAdapter.FLAG_REGISTER_CONTENT_OBSERVER);
-			
+
 		this.mAutoRequery = true;
 		this.mInflater = (LayoutInflater) ctx.getSystemService(
 									Context.LAYOUT_INFLATER_SERVICE);
@@ -76,7 +76,7 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
         if (oldCursor != null) {
 	        if (this.mChangeObserver != null) {
 			oldCursor.unregisterContentObserver(this.mChangeObserver);
-		}		
+		}
 		if (this.mDataSetObserver != null) {
 			oldCursor.unregisterDataSetObserver(this.mDataSetObserver);
 		}
@@ -102,46 +102,46 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
         }
         return oldCursor;
 	}
-	
-	@Override 
-	public View getView(int position, 
+
+	@Override
+	public View getView(int position,
 			View convertView, ViewGroup parent) {
 		ViewHolder holder;
 
 		if (convertView == null) {
 			convertView = this.mInflater.inflate(
-					R.layout.row_${curr.name?lower_case}, 
-					parent, 
+					R.layout.row_${curr.name?lower_case},
+					parent,
 					false);
 
 			holder = new ViewHolder();
 			<#list fields?values as field>
 				<#if (!field.internal && !field.hidden)>
-					<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>  
+					<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 						<#if (field.type=="boolean")>
-			holder.${field.name}View = 
+			holder.${field.name}View =
 				(CheckBox) convertView.findViewById(
 						R.id.row_${curr.name?lower_case}_${field.name?lower_case});
 			holder.${field.name}View.setEnabled(false);
 						<#else>
-			holder.${field.name}View = 
+			holder.${field.name}View =
 				(TextView) convertView.findViewById(
-						R.id.row_${curr.name?lower_case}_${field.name?lower_case});			
+						R.id.row_${curr.name?lower_case}_${field.name?lower_case});
 						</#if>
 					</#if>
 				</#if>
 			</#list>
 
 			// Set onClickListeners for edit and delete buttons
-			holder.editButton = 
+			holder.editButton =
 				(Button) convertView.findViewById(
 						R.id.row_${curr.name?lower_case}_edit_btn);
 			holder.editButton.setOnClickListener(this);
-			holder.deleteButton = 
+			holder.deleteButton =
 				(Button) convertView.findViewById(
 						R.id.row_${curr.name?lower_case}_delete_btn);
 			holder.deleteButton.setOnClickListener(this);
-			
+
 			convertView.setTag(holder);
 		} else {
 			holder = (ViewHolder) convertView.getTag();
@@ -151,18 +151,18 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 		if (item != null && holder != null) {
 			holder.populate(item);
 		}
-		
+
 		holder.editButton.setTag(position);
 		holder.deleteButton.setTag(position);
 
 		return convertView;
 	}
-	
+
 	@Override
 	public ${curr.name} getItem(int position) {
 		${curr.name} result = null;
 		this.mCursor.moveToPosition(position);
-		${curr.name}SQLiteAdapter adapter = 
+		${curr.name}SQLiteAdapter adapter =
 				new ${curr.name}SQLiteAdapter(this.mContext);
 		result = adapter.cursorToItem(this.mCursor);
 		return result;
@@ -172,12 +172,12 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 	private static class ViewHolder {
 		<#list fields?values as field>
 			<#if (!field.hidden && !field.internal)>
-				<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>  
+				<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 		/** ${field.name?cap_first}'s associated view. */
 					<#if (field.type=="boolean")>
 		protected CheckBox ${field.name}View;
 					<#else>
-		protected TextView ${field.name}View;			
+		protected TextView ${field.name}View;
 					</#if>
 				</#if>
 			</#if>
@@ -188,7 +188,7 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 		protected Button deleteButton;
 
 		/** Populate row with a ${curr.name}.
-		 * 
+		 *
 		 * @param model ${curr.name} data
 		 */
 		public void populate(final ${curr.name} model) {
@@ -204,14 +204,14 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 						</#if>
 					<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 			this.${field.name}View.setText(
-					String.valueOf(model.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}()));	
+					String.valueOf(model.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}()));
 					</#if>
 				</#if>
 			</#list>
 		}
 	}
 
-	@Override 
+	@Override
 	public void onClick(View v) {
 		switch (v.getId()) {
 			case R.id.row_${curr.name?lower_case}_edit_btn:

@@ -14,7 +14,7 @@
 	<#if entity.mother??>
 		<#return (getAllMothers(tab, entities[entity.mother]) + [entity]) />
 	<#else>
-		<#return ([entity]) />		
+		<#return ([entity]) />
 	</#if>
 </#function>
 

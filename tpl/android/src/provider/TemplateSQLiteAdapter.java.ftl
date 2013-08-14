@@ -7,7 +7,7 @@ import android.content.Context;
 
 /** ${curr.name} adapter database class. */
 public class ${curr.name}SQLiteAdapter extends ${curr.name}SQLiteAdapterBase {
-	
+
 	/**
 	 * Constructor.
 	 * @param ctx context
