@@ -368,10 +368,11 @@ public abstract class TactFileUtils extends FileUtils {
 	 * @return true if the folder exists after this operation.
 	 */
 	public static boolean ensureFolderExistence(File file) {
-		if (!file.exists()) {
-			file.mkdir();
+		boolean result = file.exists();
+		if (!result) {
+			result = file.mkdir();
 		}
-		return file.exists();
+		return result;
 	}
 
 	/** delete a directory with all its files recursively.

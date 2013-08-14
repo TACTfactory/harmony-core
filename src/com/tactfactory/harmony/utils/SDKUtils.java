@@ -23,10 +23,14 @@ public final class SDKUtils {
 			new OnUnpackedFinishedListener() {
 		@Override
 		public void onUnpackedFinished(File unpackedFile, File folder) {
-			unpackedFile.delete();
 			ConsoleUtils.display(
 					"The Android SDK has been successfuly installed into "
 							+ folder.getAbsolutePath());
+			if (!unpackedFile.delete()) {
+				ConsoleUtils.display("Temporary file " 
+						+ unpackedFile.getAbsolutePath() 
+						+ " couldn't be removed. You can remove it manually.");
+			}
 
 		}
 	};
@@ -51,11 +55,15 @@ public final class SDKUtils {
 		try {
 			File destFolder = new File(destPath 
 									+ "/android-sdk_r22.0.5-linux.tgz");
-			destFolder.createNewFile();
+			if (destFolder.createNewFile()) {
 
-			new DownloadFileThread(SDKUtils.DOWNLOAD_DEFAULT_LISTENER,
-				"http://dl.google.com/android/android-sdk_r22.0.5-linux.tgz",
-				destFolder.getAbsolutePath()).start();
+				new DownloadFileThread(SDKUtils.DOWNLOAD_DEFAULT_LISTENER,
+					"http://dl.google.com/android/android-sdk_r22.0.5-linux.tgz",
+					destFolder.getAbsolutePath()).start();
+			} else {
+				ConsoleUtils.displayError(new Exception(
+								"ABORTING : Couldn't create temporary file."));
+			}
 		} catch (IOException e) {
 			ConsoleUtils.displayError(e);
 		}

@@ -158,13 +158,13 @@ public class EnumCompletor extends BaseGenerator {
 	 * @return N "\t" appended in a String to get the correct indentation.
 	 */
 	protected final String calculateIndentLevel(final EnumMetadata enumMeta) {
-		String result = "";
+		StringBuffer buffer = new StringBuffer();
 
 		for (int i = 0; i < this.nbMotherClass(enumMeta); i++) {
-			result += "\t";
+			buffer.append('\t');
 		}
 
-		return result;
+		return buffer.toString();
 	}
 
 	/**

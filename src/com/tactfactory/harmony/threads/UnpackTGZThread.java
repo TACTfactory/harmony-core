@@ -47,7 +47,10 @@ public class UnpackTGZThread extends Thread {
 		this.listener = listener;
 
 		if (!this.destFile.exists()) {
-			this.destFile.mkdir();
+			if (!this.destFile.mkdir()) {
+				ConsoleUtils.displayError(new Exception(
+						"ERROR : Output folder couldn't be created."));
+			}
 		}
 	}
 

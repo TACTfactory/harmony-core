@@ -91,14 +91,15 @@ public class ClassCompletor {
 				if (!ids.isEmpty()) {
 					fieldMeta.setColumnDefinition(ids.get(0).getType());
 				} else {
-					ConsoleUtils.displayError(new Exception(
+					RuntimeException exception = new RuntimeException(
 							"Error while updating relations : "
 							+ " Your entity " + cm.getName()
 							+ " refers the entity " + cmRef.getName()
 							+ " which has no ID defined."
 							+ " Please add the @Id annotation "
-							+ "to one of the fields of " + cmRef.getName()));
-					System.exit(-1);
+							+ "to one of the fields of " + cmRef.getName());
+					ConsoleUtils.displayError(exception);
+					throw exception;
 				}
 
 			}
