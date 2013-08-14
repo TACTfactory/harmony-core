@@ -98,12 +98,12 @@ public abstract class CommonTest {
 				ApplicationMetadata.INSTANCE.getProjectNameSpace()
 					.replaceAll("\\.", "/");
 
-		String srcDir =
+		final String srcDir =
 				String.format("%s/tact-core/src/%s/%s/",
 						Harmony.getBundlePath(),
 						pathNameSpace,
 						"entity");
-		String destDir =
+		final String destDir =
 				String.format("%s/src/%s/%s/",
 						Harmony.getProjectAndroidPath(),
 						pathNameSpace,

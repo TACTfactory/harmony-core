@@ -179,7 +179,7 @@ public abstract class ConsoleUtils {
 	 */
 	public static void displayError(final Exception value) {
 		if (!isQuiet) {
-			String message = 	"[ERROR]"
+			final String message = 	"[ERROR]"
 								 + TAB
 								 + value
 								 + NEWLINE

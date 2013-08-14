@@ -224,9 +224,9 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Add base drawables.
 	 */
 	private void addBaseDrawables() {
-		String resourcePath = String.format("%s",
+		final String resourcePath = String.format("%s",
 				this.getAdapter().getRessourcePath());
-		String templateResourcePath =  String.format("%s/%s/%s",
+		final String templateResourcePath =  String.format("%s/%s/%s",
 				Harmony.getBundlePath(),
 				"tact-core",
 				this.getAdapter().getTemplateRessourcePath());
@@ -281,7 +281,7 @@ public class ProjectGenerator extends BaseGenerator {
 	 */
 	private void initGitProject() {
 		final ArrayList<String> command = new ArrayList<String>();
-		File projectFolder = new File(Harmony.getProjectAndroidPath());
+		final File projectFolder = new File(Harmony.getProjectAndroidPath());
 		command.add(GIT);
 		command.add("init");
 		command.add(projectFolder.getAbsolutePath());
@@ -293,7 +293,7 @@ public class ProjectGenerator extends BaseGenerator {
 	 */
 	private void installAndroidSherlockLib() {
 		//TODO test if git is install
-		File pathSherlock = new File(String.format("%s%s",
+		final File pathSherlock = new File(String.format("%s%s",
 				this.getAdapter().getLibsPath(),
 				"sherlock"));
 
@@ -431,10 +431,10 @@ public class ProjectGenerator extends BaseGenerator {
 	private boolean clearProjectSources() {
 		boolean result = true;
 
-		String projectPath = Harmony.getProjectPath()
+		final String projectPath = Harmony.getProjectPath()
 				+ File.separator + this.getAdapter().getPlatform();
 
-		File buildRules = new File(projectPath
+		final File buildRules = new File(projectPath
 				+ File.separator + "build.rules.xml");
 
 		if (buildRules.exists()) {
@@ -464,7 +464,7 @@ public class ProjectGenerator extends BaseGenerator {
 				folder += File.separator + file.getName();
 			}
 
-			File[] files = file.listFiles();
+			final File[] files = file.listFiles();
 			for (File subFile : files) {
 				this.copyProjectTemplates(
 						subFile,

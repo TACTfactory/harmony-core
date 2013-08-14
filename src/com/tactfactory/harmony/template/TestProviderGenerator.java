@@ -51,7 +51,7 @@ public class TestProviderGenerator extends BaseGenerator {
 	 * @return True if it already exists.
 	 */
 	private boolean isDataLoaderAlreadyGenerated() {
-		String dataLoaderPath = this.getAdapter().getSourcePath()
+		final String dataLoaderPath = this.getAdapter().getSourcePath()
 				+ this.getAppMetas().getProjectNameSpace()
 				+ "/" + this.getAdapter().getFixture() + "/"
 				+ "DataLoader.java";

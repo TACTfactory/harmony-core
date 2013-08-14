@@ -94,8 +94,8 @@ public class MenuGenerator extends BaseGenerator {
 	 * @return A list of the different menu names
 	 */
 	private ArrayList<String> getAvailableMenus() {
-		ArrayList<String> ret = new ArrayList<String>();
-		File menuFolder = new File(this.getAdapter().getMenuPath());
+		final ArrayList<String> ret = new ArrayList<String>();
+		final File menuFolder = new File(this.getAdapter().getMenuPath());
 		if (menuFolder.isDirectory()) {
 			File[] files = menuFolder.listFiles(new FileFilter() {
 

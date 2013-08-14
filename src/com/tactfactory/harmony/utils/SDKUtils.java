@@ -53,12 +53,13 @@ public final class SDKUtils {
 	 */
 	public static void downloadAndInstallAndroidSDK(final String destPath) {
 		try {
-			File destFolder = new File(destPath 
+			final File destFolder = new File(destPath 
 									+ "/android-sdk_r22.0.5-linux.tgz");
 			if (destFolder.createNewFile()) {
 
 				new DownloadFileThread(SDKUtils.DOWNLOAD_DEFAULT_LISTENER,
-					"http://dl.google.com/android/android-sdk_r22.0.5-linux.tgz",
+					"http://dl.google.com/android/"
+							+ "android-sdk_r22.0.5-linux.tgz",
 					destFolder.getAbsolutePath()).start();
 			} else {
 				ConsoleUtils.displayError(new Exception(

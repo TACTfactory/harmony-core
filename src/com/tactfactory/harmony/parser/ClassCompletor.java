@@ -91,7 +91,7 @@ public class ClassCompletor {
 				if (!ids.isEmpty()) {
 					fieldMeta.setColumnDefinition(ids.get(0).getType());
 				} else {
-					RuntimeException exception = new RuntimeException(
+					final RuntimeException exception = new RuntimeException(
 							"Error while updating relations : "
 							+ " Your entity " + cm.getName()
 							+ " refers the entity " + cmRef.getName()
@@ -291,10 +291,10 @@ public class ClassCompletor {
 	private void updateInheritedIds(final EntityMetadata cm) {
 		// If entity has a mother
 		if (cm.getExtendType() != null) {
-			EntityMetadata mother = MetadataUtils.getTopMostMother(cm,
+			final EntityMetadata mother = MetadataUtils.getTopMostMother(cm,
 					ApplicationMetadata.INSTANCE);
 			for (String idName : mother.getIds().keySet()) {
-				FieldMetadata id = mother.getIds().get(idName);
+				final FieldMetadata id = mother.getIds().get(idName);
 				cm.getIds().put(idName, id);
 				cm.getFields().put(idName, id);
 			}

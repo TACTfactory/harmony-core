@@ -118,15 +118,16 @@ public abstract class BaseGenerator {
 		//this.cfg.setDirectoryForTemplateLoading(
 		//		new File(Harmony.getRootPath() + "/vendor/tact-core"));
 
-		Object[] files = Harmony.getTemplateFolders().values().toArray();
-		TemplateLoader[] loaders = new TemplateLoader[files.length + 1];
+		final  Object[] files = Harmony.getTemplateFolders().values().toArray();
+		final  TemplateLoader[] loaders = new TemplateLoader[files.length + 1];
 		for (int i = 0; i < files.length; i++) {
-			FileTemplateLoader ftl = new FileTemplateLoader((File) files[i]);
+			final FileTemplateLoader ftl =
+					new FileTemplateLoader((File) files[i]);
 			loaders[i] = ftl;
 		}
 		loaders[files.length] = new FileTemplateLoader(
 				new File(Harmony.getRootPath() + "/vendor/tact-core"));
-		MultiTemplateLoader mtl = new MultiTemplateLoader(loaders);
+		final MultiTemplateLoader mtl = new MultiTemplateLoader(loaders);
 
 		cfg.setTemplateLoader(mtl);
 	}
@@ -160,7 +161,7 @@ public abstract class BaseGenerator {
 						new OutputStreamWriter(
 								new FileOutputStream(generateFile),
 								TactFileUtils.DEFAULT_ENCODING);
-				String fileName = generatePath.split("/")
+				final String fileName = generatePath.split("/")
 						[generatePath.split("/").length - 1];
 				this.datamodel.put("fileName", fileName);
 				tpl.process(this.datamodel, output);

@@ -97,7 +97,7 @@ public class JavaModelParser {
 	public final void loadEntities() throws Exception {
 		final File dir = new File(this.entityPath);
 		final String[] files = dir.list(this.filter);
-		ArrayList<String> filesNames =
+		final ArrayList<String> filesNames =
 				new ArrayList<String>(Arrays.asList(files));
 		Collections.sort(filesNames);
 
@@ -179,7 +179,7 @@ public class JavaModelParser {
 	 */
 	public final void parse(final CompilationUnit mclass,
 			final ApplicationMetadata appMetas) {
-		ArrayList<ClassMetadata> classes = this.fileVisitor.visit(mclass);
+		final ArrayList<ClassMetadata> classes = this.fileVisitor.visit(mclass);
 
 		for (ClassMetadata classMeta : classes) {
 			// Add the Metadata to the general list

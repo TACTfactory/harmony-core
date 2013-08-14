@@ -312,7 +312,7 @@ public abstract class TactFileUtils extends FileUtils {
 	public static File makeFolderRecursive(final String srcPath,
 			final String destPath,
 			final boolean makeFiles) {
-		File srcDir = new File(srcPath);
+		final File srcDir = new File(srcPath);
 		File destDir = null;
 		if (srcDir.exists() && srcDir.isDirectory()) {
 			 destDir = new File(destPath);
@@ -336,10 +336,10 @@ public abstract class TactFileUtils extends FileUtils {
 			final boolean makeFiles) {
 
 		TactFileUtils.ensureFolderExistence(destDir);
-		File[] files = srcDir.listFiles();
+		final File[] files = srcDir.listFiles();
 		if (files.length != 0) {
 			for (File f : files) {
-				File destFile = new File(destDir.getAbsolutePath()
+				final File destFile = new File(destDir.getAbsolutePath()
 						+ "/" + f.getName());
 				if (makeFiles && f.isFile()) {
 					TactFileUtils.copyfile(f, destFile);

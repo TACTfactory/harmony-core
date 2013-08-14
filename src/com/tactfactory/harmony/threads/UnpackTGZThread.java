@@ -65,7 +65,7 @@ public class UnpackTGZThread extends Thread {
 	 * @see java.lang.Thread#run()
 	 */
 	@Override
-	public void run() {
+	public final void run() {
 		super.run();
 		this.onStart();
 

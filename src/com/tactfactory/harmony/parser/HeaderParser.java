@@ -25,7 +25,7 @@ public final class HeaderParser {
 		ConsoleUtils.display(">> Search for header.ftl...");
 		// Look in app/android...
 		String headerPath = Harmony.getProjectAndroidPath() + "header.ftl";
-		File appAndroidHeader = new File(headerPath);
+		final File appAndroidHeader = new File(headerPath);
 		if (appAndroidHeader.exists()) {
 			ConsoleUtils.display(">>>> header.ftl found in "
 								+ headerPath
@@ -34,7 +34,7 @@ public final class HeaderParser {
 		} else {
 			// Look in /...
 			headerPath = Harmony.getRootPath() + "header.ftl";
-			File baseHeader = new File(headerPath);
+			final File baseHeader = new File(headerPath);
 			if (baseHeader.exists()) {
 				ConsoleUtils.display(">>>> header.ftl found in "
 								+ headerPath
@@ -52,7 +52,7 @@ public final class HeaderParser {
 	 * @param f The file to load
 	 */
 	protected static void loadHeaderFile(File f) {
-		String header = TactFileUtils.fileToStringBuffer(f).toString();
+		final String header = TactFileUtils.fileToStringBuffer(f).toString();
 		ApplicationMetadata.INSTANCE.setHeaderTemplate(header);
 	}
 }

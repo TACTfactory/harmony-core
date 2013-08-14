@@ -55,7 +55,7 @@ public class DownloadFileThread extends Thread {
 	 * @see java.lang.Thread#run()
 	 */
 	@Override
-	public void run() {
+	public final void run() {
 		super.run();
 		this.onStart();
 		
@@ -66,14 +66,14 @@ public class DownloadFileThread extends Thread {
 		URL inUrl;
 		try {
 			inUrl = new URL(this.url);
-			URLConnection connection = inUrl.openConnection();
+			final URLConnection connection = inUrl.openConnection();
 
-			int fileLength = connection.getContentLength();
-			InputStream input = connection.getInputStream();
+			final int fileLength = connection.getContentLength();
+			final InputStream input = connection.getInputStream();
 
-			File f = new File(this.destPath);
+			final File f = new File(this.destPath);
 			output = new FileOutputStream(f);
-			byte[] buffer = new byte[bufferSize];
+			final byte[] buffer = new byte[bufferSize];
 			int read;
 			int totalRead = 0;
 			while ((read = input.read(buffer)) > 0) {
@@ -109,7 +109,7 @@ public class DownloadFileThread extends Thread {
 	 * Called on thread progress.
 	 * @param progress The progress in %.
 	 */
-	public void onProgress(int progress) {
+	private void onProgress(int progress) {
 		System.out.print("\rProgress : " + progress + "%");
 	}
 

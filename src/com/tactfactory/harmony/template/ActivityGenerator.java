@@ -506,7 +506,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @param entityName the entity for which to update the manifest for.
 	 */
 	private void updateManifest(final String classF, final String entityName) {
-		String classFile = entityName + classF;
+		final String classFile = entityName + classF;
 		final String pathRelatif = String.format(".%s.%s.%s",
 				this.getAdapter().getController(),
 				entityName.toLowerCase(Locale.ENGLISH),

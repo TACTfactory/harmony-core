@@ -58,7 +58,7 @@ public class TranslationGenerator extends BaseGenerator {
 
 		for (final TranslationMetadata translationMeta
 				: this.getAppMetas().getTranslates().values()) {
-			Element newNode = new Element("string");
+			final Element newNode = new Element("string");
 
 			// Add name to element
 			newNode.setAttribute(NAME,

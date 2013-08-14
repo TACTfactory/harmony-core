@@ -50,7 +50,7 @@ public class EmptyBundleGenerationTest extends CommonTest {
 	public final void setUp() throws Exception {
 		super.setUp();
 		// Delete bundle folder if exists
-		File existingFolder = new File(String.format("%s/%s-%s",
+		final File existingFolder = new File(String.format("%s/%s-%s",
 						Harmony.getBundlePath(),
 						BUNDLE_OWNER.toLowerCase(),
 						BUNDLE_NAME.toLowerCase()));
@@ -71,7 +71,7 @@ public class EmptyBundleGenerationTest extends CommonTest {
 	 */
 	public final void initAll() {
 		try {
-			BundleGenerator generator = 
+			final BundleGenerator generator = 
 					new BundleGenerator(new AndroidAdapter());
 			generator.generateBundleFiles(
 					BUNDLE_OWNER,

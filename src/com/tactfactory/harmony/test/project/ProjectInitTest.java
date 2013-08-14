@@ -101,7 +101,7 @@ public class ProjectInitTest extends CommonTest {
 		System.out.println("\nTest Update SDK Path");
 		System.out.println(SHARP_DELIMITOR);
 
-		String newSdkPath = "test-sdkpath/";
+		final String newSdkPath = "test-sdkpath/";
 		ApplicationMetadata.setAndroidSdkPath(newSdkPath);
 		ProjectGenerator.updateSDKPath();
 

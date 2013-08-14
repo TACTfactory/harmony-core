@@ -101,7 +101,7 @@ public final class Harmony {
 							FileFilterUtils.nameFileFilter("lib"));
 
 		// Check list of Bundles .jar
-		Collection<File> plugins = TactFileUtils.listFiles(
+		final Collection<File> plugins = TactFileUtils.listFiles(
 				pluginBaseDirectory,
 				includeFilter,
 				excludeFilter);
@@ -122,7 +122,7 @@ public final class Harmony {
 				pluginManager.addPluginsFrom(plugin.toURI());
 
 				// Template bundles
-				File templateFolderFile =
+				final File templateFolderFile =
 						plugin.getParentFile().getAbsoluteFile();
 				this.templateFolders.put(plugin.getName(), templateFolderFile);
 				ConsoleUtils.displayDebug(

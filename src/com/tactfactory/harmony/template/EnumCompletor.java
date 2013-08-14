@@ -158,7 +158,7 @@ public class EnumCompletor extends BaseGenerator {
 	 * @return N "\t" appended in a String to get the correct indentation.
 	 */
 	protected final String calculateIndentLevel(final EnumMetadata enumMeta) {
-		StringBuffer buffer = new StringBuffer();
+		final StringBuffer buffer = new StringBuffer();
 
 		for (int i = 0; i < this.nbMotherClass(enumMeta); i++) {
 			buffer.append('\t');
@@ -250,7 +250,8 @@ public class EnumCompletor extends BaseGenerator {
 			final EnumMetadata enumMeta) {
 
 		int openingBracketIndex;
-		int enumDeclarationIndex = text.indexOf("enum " + enumMeta.getName());
+		final int enumDeclarationIndex =
+				text.indexOf("enum " + enumMeta.getName());
 
 		openingBracketIndex = text.indexOf("{", enumDeclarationIndex);
 
