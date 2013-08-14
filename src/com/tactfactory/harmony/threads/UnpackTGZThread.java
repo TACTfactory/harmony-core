@@ -20,7 +20,7 @@ public class UnpackTGZThread extends Thread {
 		 * @param unpackedFile The unpacked file.
 		 * @param folder The folder where it has been unpacked.
 		 */
-		public void onUnpackedFinished(File unpackedFile, File folder);
+		void onUnpackedFinished(File unpackedFile, File folder);
 	}
 	/** File to unpack. */
 	private File file;
@@ -63,7 +63,9 @@ public class UnpackTGZThread extends Thread {
 		super.run();
 		this.onStart();
 
-		Archiver archiver = ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
+		Archiver archiver = ArchiverFactory.createArchiver(
+				ArchiveFormat.TAR,
+				CompressionType.GZIP);
 		try {
 			archiver.extract(this.file, this.destFile);
 		} catch (IOException e) {

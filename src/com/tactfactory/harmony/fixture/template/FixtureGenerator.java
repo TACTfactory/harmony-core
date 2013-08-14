@@ -32,7 +32,7 @@ public class FixtureGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use.
-	 * @throws Exception
+	 * @throws Exception If adapter is null
 	 */
 	public FixtureGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
@@ -84,16 +84,19 @@ public class FixtureGenerator extends BaseGenerator {
 					}
 				};
 
-				TactFileUtils.copyDirectory(fixtAppSrc, fixtAppDest, fileFilter);
+				TactFileUtils.copyDirectory(
+						fixtAppSrc, fixtAppDest, fileFilter);
 				ConsoleUtils.displayDebug(
 						"Copying fixtures/app into " + fixtAppDest.getPath());
 
-				TactFileUtils.copyDirectory(fixtDebugSrc, fixtDebugDest, fileFilter);
+				TactFileUtils.copyDirectory(
+						fixtDebugSrc, fixtDebugDest, fileFilter);
 				ConsoleUtils.displayDebug(
 						"Copying fixtures/debug into "
 							+ fixtDebugDest.getPath());
 
-				TactFileUtils.copyDirectory(fixtTestSrc, fixtTestDest, fileFilter);
+				TactFileUtils.copyDirectory(
+						fixtTestSrc, fixtTestDest, fileFilter);
 				ConsoleUtils.displayDebug(
 						"Copying fixtures/test into " + fixtTestDest.getPath());
 

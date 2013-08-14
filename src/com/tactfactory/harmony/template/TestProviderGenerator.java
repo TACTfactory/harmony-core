@@ -17,7 +17,7 @@ public class TestProviderGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public TestProviderGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);

@@ -104,7 +104,7 @@ public abstract class BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapt The adapter to use
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public BaseGenerator(final BaseAdapter adapt) throws Exception {
 		if (adapt == null) {
@@ -160,7 +160,8 @@ public abstract class BaseGenerator {
 						new OutputStreamWriter(
 								new FileOutputStream(generateFile),
 								TactFileUtils.DEFAULT_ENCODING);
-				String fileName = generatePath.split("/")[generatePath.split("/").length-1];
+				String fileName = generatePath.split("/")
+						[generatePath.split("/").length - 1];
 				this.datamodel.put("fileName", fileName);
 				tpl.process(this.datamodel, output);
 				output.flush();

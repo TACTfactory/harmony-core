@@ -144,7 +144,7 @@ public abstract class Console /*extends Harmony*/ {
 
 	/** Extract command line parameters for java core.
 	 * @param args The arguments
-	 * @throws Exception
+	 * @throws Exception if current working path is unavailable.
 	 */
 	public static void main(final String[] args) throws Exception {
 		ConsoleUtils.setConsole(true);

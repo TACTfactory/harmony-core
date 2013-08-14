@@ -21,7 +21,7 @@ public class FosCommand extends BaseCommand {
 
 	/**
 	 * Activate bundle.
-	 * @param login
+	 * @param login The login
 	 */
 	public void fosUserActivate(final String login) {
 	}
@@ -40,14 +40,14 @@ public class FosCommand extends BaseCommand {
 
 	/**
 	 * Remote a user.
-	 * @param role
+	 * @param role User's role
 	 */
 	public void fosUserDemote(final Object role) {
 	}
 
 	/**
 	 * Promote a user.
-	 * @param role
+	 * @param role User's role
 	 */
 	public void fosUserPromote(final Object role) {
 	}

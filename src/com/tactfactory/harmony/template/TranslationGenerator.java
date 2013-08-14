@@ -32,7 +32,7 @@ public class TranslationGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use.
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public TranslationGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);

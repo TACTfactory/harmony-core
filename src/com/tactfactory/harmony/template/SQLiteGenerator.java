@@ -24,7 +24,7 @@ public class SQLiteGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public SQLiteGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);

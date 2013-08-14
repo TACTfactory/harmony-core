@@ -31,7 +31,7 @@ public @interface Column {
 	 * Hack for null value in DefaultValue attribute. Null is not a suitable
 	 * value for attribute values in Java...
 	 */
-	public static final String DEFAULT_VALUE_NULL =
+	String DEFAULT_VALUE_NULL =
 			"##hack-harmony-default-default-value##";
 
 	/** Default field length. */

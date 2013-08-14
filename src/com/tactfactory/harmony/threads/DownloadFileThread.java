@@ -20,7 +20,7 @@ public class DownloadFileThread extends Thread {
 		 * Called when the download is finished.
 		 * @param f The file which has been downloaded.
 		 */
-		public void onDownloadFinished(File f);
+		void onDownloadFinished(File f);
 	}
 
 	/** URL of the file to download. */
@@ -56,6 +56,9 @@ public class DownloadFileThread extends Thread {
 	public void run() {
 		super.run();
 		this.onStart();
+		
+		final int bufferSize = 1024;
+		final int percentsMax = 100;
 
 		FileOutputStream output = null;
 		URL inUrl;
@@ -68,13 +71,13 @@ public class DownloadFileThread extends Thread {
 
 			File f = new File(this.destPath);
 			output = new FileOutputStream(f);
-			byte[] buffer = new byte[1024];
+			byte[] buffer = new byte[bufferSize];
 			int read;
 			int totalRead = 0;
 			while ((read = input.read(buffer)) > 0) {
 				output.write(buffer, 0, read);
 				totalRead += (int) read;
-				this.onProgress((totalRead) / (fileLength / 100));
+				this.onProgress((totalRead) / (fileLength / percentsMax));
 			}
 
 			this.onFinished();

@@ -26,7 +26,6 @@ import com.tactfactory.harmony.meta.InterfaceMetadata;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
-import com.tactfactory.harmony.parser.BaseParser;
 import com.tactfactory.harmony.parser.java.visitor.FileVisitor;
 import com.tactfactory.harmony.plateforme.AndroidAdapter;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
@@ -93,12 +92,13 @@ public class JavaModelParser {
 
 	/**
 	 * Load entities files found in entity folder.
-	 * @throws Exception
+	 * @throws Exception if no entity files were found.
 	 */
 	public final void loadEntities() throws Exception {
 		final File dir = new File(this.entityPath);
 		final String[] files = dir.list(this.filter);
-		ArrayList<String> filesNames = new ArrayList<String>(Arrays.asList(files));
+		ArrayList<String> filesNames =
+				new ArrayList<String>(Arrays.asList(files));
 		Collections.sort(filesNames);
 
 		if (files == null) {

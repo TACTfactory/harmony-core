@@ -282,14 +282,14 @@ public final class ApplicationMetadata extends BaseMetadata {
 	/**
 	 * @return the headerTemplate
 	 */
-	public final String getHeaderTemplate() {
+	public String getHeaderTemplate() {
 		return headerTemplate;
 	}
 
 	/**
 	 * @param headerTemplate the headerTemplate to set
 	 */
-	public final void setHeaderTemplate(final String headerTemplate) {
+	public void setHeaderTemplate(final String headerTemplate) {
 		this.headerTemplate = headerTemplate;
 	}
 }

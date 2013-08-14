@@ -219,8 +219,8 @@ public abstract class ConsoleUtils {
 
 	/**
 	 * Converts a StackTrace to a String.
-	 * @param stackTraceElements
-	 * @return The StrackTrace
+	 * @param stackTraceElements The array of stack trace elements
+	 * @return The StrackTrace The flattened stack trace
 	 */
 	private static String getStackTrace(
 			final StackTraceElement[] stackTraceElements) {

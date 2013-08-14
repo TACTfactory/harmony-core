@@ -24,7 +24,7 @@ public class MenuGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapt The adapter to use
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public MenuGenerator(final BaseAdapter adapt) throws Exception {
 		super(adapt);

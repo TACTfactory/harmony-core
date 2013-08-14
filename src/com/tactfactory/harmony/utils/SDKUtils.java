@@ -11,10 +11,15 @@ import com.tactfactory.harmony.threads.UnpackTGZThread.OnUnpackedFinishedListene
 /**
  * SDK Utils.
  */
-public class SDKUtils {
+public final class SDKUtils {
+	
+	/**
+	 * Private constructor.
+	 */
+	private SDKUtils() { }
 
 	/** Default Listener for unpacking files. */
-	private static final OnUnpackedFinishedListener unpackListener =
+	private static final OnUnpackedFinishedListener UNPACK_DEFAULT_LISTENER =
 			new OnUnpackedFinishedListener() {
 		@Override
 		public void onUnpackedFinished(File unpackedFile, File folder) {
@@ -27,11 +32,11 @@ public class SDKUtils {
 	};
 
 	/** Default Listener for downloading files. */
-	private static final OnDownloadFinishedListener downListener =
+	private static final OnDownloadFinishedListener DOWNLOAD_DEFAULT_LISTENER =
 			new OnDownloadFinishedListener() {
 		@Override
 		public void onDownloadFinished(File f) {
-			new UnpackTGZThread(SDKUtils.unpackListener,
+			new UnpackTGZThread(SDKUtils.UNPACK_DEFAULT_LISTENER,
 					f.getAbsolutePath(),
 					f.getParent()).start();
 
@@ -44,10 +49,11 @@ public class SDKUtils {
 	 */
 	public static void downloadAndInstallAndroidSDK(final String destPath) {
 		try {
-			File destFolder = new File(destPath + "/android-sdk_r22.0.5-linux.tgz");
+			File destFolder = new File(destPath 
+									+ "/android-sdk_r22.0.5-linux.tgz");
 			destFolder.createNewFile();
 
-			new DownloadFileThread(SDKUtils.downListener,
+			new DownloadFileThread(SDKUtils.DOWNLOAD_DEFAULT_LISTENER,
 				"http://dl.google.com/android/android-sdk_r22.0.5-linux.tgz",
 				destFolder.getAbsolutePath()).start();
 		} catch (IOException e) {

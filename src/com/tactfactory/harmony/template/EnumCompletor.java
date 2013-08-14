@@ -42,7 +42,7 @@ public class EnumCompletor extends BaseGenerator {
 
 	/** Constructor.
 	 * @param adapt Adapter used by this generator
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public EnumCompletor(final BaseAdapter adapt) throws Exception {
 		super(adapt);

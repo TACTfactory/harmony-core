@@ -16,6 +16,9 @@ import com.tactfactory.harmony.template.BundleGenerator;
 import com.tactfactory.harmony.test.CommonTest;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
+/**
+ * Test class for Empty bundle generation.
+ */
 public class EmptyBundleGenerationTest extends CommonTest {
 	/** Generated Test Bundle name. */
 	private static final String BUNDLE_NAME = "Test";
@@ -34,7 +37,7 @@ public class EmptyBundleGenerationTest extends CommonTest {
 			BUNDLE_NAMESPACE.replace('.', '/'));
 	/**
 	 * Initialization.
-	 * @throws Exception
+	 * @throws Exception if something bad happends.
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {
@@ -68,7 +71,8 @@ public class EmptyBundleGenerationTest extends CommonTest {
 	 */
 	public final void initAll() {
 		try {
-			BundleGenerator generator = new BundleGenerator(new AndroidAdapter());
+			BundleGenerator generator = 
+					new BundleGenerator(new AndroidAdapter());
 			generator.generateBundleFiles(
 					BUNDLE_OWNER,
 					BUNDLE_NAME,

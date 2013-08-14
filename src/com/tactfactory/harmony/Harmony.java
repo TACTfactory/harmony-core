@@ -78,7 +78,7 @@ public final class Harmony {
 	}
 
 	/**
-	 * @param pluginBaseDirectory
+	 * @param pluginBaseDirectory The plugin base directory
 	 */
 	private void loadPlugins(final File pluginBaseDirectory) {
 		// Cache
@@ -142,8 +142,9 @@ public final class Harmony {
 		pluginManager.shutdown();
 	}
 
-	/** Initialize Harmony.
-	 * @throws Exception
+	/** 
+	 * Initialize Harmony.
+	 * @throws Exception if current working path is unavailable.
 	 */
 	public void initialize() throws Exception {
 		ConsoleUtils.display(

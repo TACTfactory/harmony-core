@@ -19,7 +19,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use.
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public TestProjectGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);

@@ -122,9 +122,15 @@ public class ClassCompletor {
 					newField.setHidden(true);
 					newField.setNullable(fieldMeta.isNullable());
 					newField.setInternal(true);
-					newField.setName(cm.getName() + fieldMeta.getName() + "_Internal");
+					newField.setName(
+							cm.getName() 
+							+ fieldMeta.getName() 
+							+ "_Internal");
+					
 					newField.setColumnName(
-							cm.getName() + "_" + fieldMeta.getName() + "_internal");
+							cm.getName() 
+							+ "_" + fieldMeta.getName() 
+							+ "_internal");
 					newField.setType(cm.getName());
 					newField.setHarmonyType(TYPE_INTEGER);
 					newField.setRelation(new RelationMetadata());
@@ -150,8 +156,6 @@ public class ClassCompletor {
 							entityRef.getFields().get(rel.getMappedBy());
 					mappFm.getRelation().setInversedBy(fieldMeta.getName());
 				}
-
-
 			}
 			if ("ManyToMany".equals(rel.getType())) {
 				if (rel.getJoinTable() == null
@@ -251,7 +255,7 @@ public class ClassCompletor {
 
 	/**
 	 * Check if field relation is valid.
-	 * @param fm The field metadata of the relation.
+	 * @param fieldMeta The field metadata of the relation.
 	 */
 	private void checkRelationIntegrity(final FieldMetadata fieldMeta) {
 		if (!this.metas.containsKey(fieldMeta.getRelation().getEntityRef())) {
@@ -279,6 +283,10 @@ public class ClassCompletor {
 
 	}
 
+	/**
+	 * Add the mother ID field to inherited entities.
+	 * @param cm The entity to update
+	 */
 	private void updateInheritedIds(final EntityMetadata cm) {
 		// If entity has a mother
 		if (cm.getExtendType() != null) {
@@ -289,7 +297,6 @@ public class ClassCompletor {
 				cm.getIds().put(idName, id);
 				cm.getFields().put(idName, id);
 			}
-		} else {
 		}
 	}
 }

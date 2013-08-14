@@ -25,7 +25,7 @@ public class ApplicationGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter the adapter to use
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public ApplicationGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);

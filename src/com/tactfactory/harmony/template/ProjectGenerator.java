@@ -27,7 +27,7 @@ public class ProjectGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use for the generation.
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public ProjectGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
