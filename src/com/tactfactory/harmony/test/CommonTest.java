@@ -24,42 +24,42 @@ import com.tactfactory.harmony.utils.TactFileUtils;
  */
 public abstract class CommonTest {
 	/** Console delimiter for tests. */
-	protected static final String SHARP_DELIMITOR = 
-			  "#################" 
-			 + "#################" 
-			 + "#################" 
-			 + "#################" 
+	protected static final String SHARP_DELIMITOR =
+			  "#################"
+			 + "#################"
+			 + "#################"
+			 + "#################"
 			 + "#########";
-	
+
 	/** Harmony instance. */
-	private static Harmony harmony; 
+	private static Harmony harmony;
 
 	/**
 	 * Initialization.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public static void setUpBefore() throws Exception {
 		// Base configs
 		ConsoleUtils.setAnsi(false);
 		ConsoleUtils.setQuiet(false);
 		ConsoleUtils.setDebug(true);
-		
+
 		// Project test config
 		ApplicationMetadata.INSTANCE.setName("demact");
 		ApplicationMetadata.INSTANCE.setProjectNameSpace(
 				"com/tactfactory/harmony/test/demact");
-		
+
 		harmony = Harmony.getInstance();
-		
+
 		if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
-			final String localProp = 
+			final String localProp =
 					String.format("%s/%s",
-							Harmony.getProjectAndroidPath(), 
+							Harmony.getProjectAndroidPath(),
 							"local.properties");
 
 			ApplicationMetadata.setAndroidSdkPath(
 					ProjectDiscover.getSdkDirFromPropertiesFile(localProp));
-			
+
 			if (ApplicationMetadata.getAndroidSdkPath() == null) {
 				ApplicationMetadata.setAndroidSdkPath(
 						"/opt/android-sdk-linux_86/");
@@ -69,64 +69,64 @@ public abstract class CommonTest {
 
 	/**
 	 * Initialization.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public void setUp() throws Exception {
-		
+
 	}
-	
+
 	/**
 	 * Test clean.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public void tearDown() throws Exception {
-		
+
 	}
-	
+
 	/** Get Harmony instance.
 	 * @return The Harmony instance
 	 */
 	public static Harmony getHarmony() {
 		return harmony;
 	}
-	
+
 	/**
-	 * Copy the test entities in the test project. 
+	 * Copy the test entities in the test project.
 	 */
 	protected static void makeEntities() {
-		final String pathNameSpace = 
+		final String pathNameSpace =
 				ApplicationMetadata.INSTANCE.getProjectNameSpace()
 					.replaceAll("\\.", "/");
 
-		String srcDir = 
+		String srcDir =
 				String.format("%s/tact-core/src/%s/%s/",
 						Harmony.getBundlePath(),
-						pathNameSpace, 
+						pathNameSpace,
 						"entity");
-		String destDir = 
-				String.format("%s/src/%s/%s/", 
-						Harmony.getProjectAndroidPath(), 
-						pathNameSpace, 
+		String destDir =
+				String.format("%s/src/%s/%s/",
+						Harmony.getProjectAndroidPath(),
+						pathNameSpace,
 						"entity");
 
 		System.out.println(destDir);
-		
+
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
 		if (new File(destDir + "Post.java").exists()) {
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");
 		}
 	}
-	
+
 	/**
 	 * Test if file exists.
 	 * @param fileName The file name
 	 */
 	protected static void hasFindFile(final String fileName) {
-		final File file = 
+		final File file =
 				new File(
 					String.format("%s/%s",
-						Harmony.getProjectPath(), 
+						Harmony.getProjectPath(),
 						fileName));
 
 		assertTrue(file.exists());

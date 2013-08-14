@@ -28,7 +28,7 @@ import com.tactfactory.harmony.annotation.OneToMany;
 @Entity
 @SuppressWarnings(value = "serial")
 public class Comment implements Serializable { //TODO extends EntityBase {
-	
+
 	/** Entity's technical id. */
 	@Id
     @Column(type = Type.INTEGER)
@@ -38,23 +38,23 @@ public class Comment implements Serializable { //TODO extends EntityBase {
 	/** Content. */
 	@Column(length = 2000, type = Type.TEXT)
     private String content;
-	
+
 	/** Author. */
 	@ManyToOne
 	private User owner;
-	
+
 	/** Post associated. */
 	@ManyToOne
 	private Post post;
-	
+
 	/** Creation date.*/
 	@Column(name = "created_at")	// typ ="datetime",
     private DateTime createdAt;
-	
+
 	/** Is comment validated ?. */
 	@Column
 	private boolean validate = false;
-	
+
 	/** Categories of this comment. */
 	@OneToMany
 	private ArrayList<CategoryToComment> categories;
@@ -66,7 +66,7 @@ public class Comment implements Serializable { //TODO extends EntityBase {
 		this.id = -1;
     	this.createdAt = new DateTime();
     }
-	
+
 	/**
 	 * @return the id
 	 */

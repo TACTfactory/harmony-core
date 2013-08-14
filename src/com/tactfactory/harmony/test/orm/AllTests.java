@@ -1,4 +1,4 @@
-/** 
+/**
  * This file is part of the Harmony package.
  *
  * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>

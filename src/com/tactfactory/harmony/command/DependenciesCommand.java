@@ -13,13 +13,13 @@ public class DependenciesCommand extends BaseCommand {
 
 	/** Bundle name. */
 	public static final String BUNDLE 		= "dependencies";
-	
+
 	/** Subject name. */
 	public static final String SUBJECT 		= "install";
-	
+
 	/** Action name. */
 	public static final String ACTION_SDK	= "sdk";
-	
+
 	/** SDK:INSTALL:SDK. */
 	public static final String INSTALL_SDK	= BUNDLE
 			+ SEPARATOR
@@ -32,13 +32,13 @@ public class DependenciesCommand extends BaseCommand {
 		String sdkPath = ConsoleUtils.getUserInput(
 						"Where do you want to install the Android SDK ?");
 		SDKUtils.downloadAndInstallAndroidSDK(sdkPath);
-			
+
 	}
 
 	@Override
 	public void summary() {
 		ConsoleUtils.display("\n> DEPENDENCIES \n"
-				+ "\t" + INSTALL_SDK 
+				+ "\t" + INSTALL_SDK
 				+ "\t => Install the android SDK\n");
 	}
 

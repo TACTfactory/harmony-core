@@ -25,7 +25,7 @@ public class CategoryToComment {
 	/** The displayed name of the category. */
 	@Column
 	private String displayName;
-	
+
 	/** The category in which this CategoryToComment is. */
 	@ManyToOne(inversedBy="comments")
 	private Category category;

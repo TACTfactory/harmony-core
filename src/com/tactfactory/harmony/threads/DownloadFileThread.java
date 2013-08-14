@@ -12,7 +12,7 @@ import java.net.URLConnection;
  * Thread used to download a file from the internet.
  */
 public class DownloadFileThread extends Thread {
-	/** 
+	/**
 	 * Download finish listener.
 	 */
 	public interface OnDownloadFinishedListener {
@@ -22,14 +22,14 @@ public class DownloadFileThread extends Thread {
 		 */
 		public void onDownloadFinished(File f);
 	}
-	
+
 	/** URL of the file to download. */
 	private String url;
 	/** Destination path. */
 	private String destPath;
 	/** Listener. */
 	private OnDownloadFinishedListener listener;
-	
+
 	/**
 	 * Constructor.
 	 * @param listener The listener
@@ -43,12 +43,12 @@ public class DownloadFileThread extends Thread {
 		this.destPath = destPath;
 		this.listener = listener;
 	}
-	
-	/** Called on thread start. */ 
+
+	/** Called on thread start. */
 	private void onStart() {
 		System.out.println("Starting download");
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Thread#run()
 	 */
@@ -56,16 +56,16 @@ public class DownloadFileThread extends Thread {
 	public void run() {
 		super.run();
 		this.onStart();
-		
+
 		FileOutputStream output = null;
 		URL inUrl;
 		try {
 			inUrl = new URL(this.url);
 			URLConnection connection = inUrl.openConnection();
-			
+
 			int fileLength = connection.getContentLength();
 			InputStream input = connection.getInputStream();
-			
+
 			File f = new File(this.destPath);
 			output = new FileOutputStream(f);
 			byte[] buffer = new byte[1024];
@@ -76,9 +76,9 @@ public class DownloadFileThread extends Thread {
 				totalRead += (int) read;
 				this.onProgress((totalRead) / (fileLength / 100));
 			}
-			
+
 			this.onFinished();
-			
+
 		} catch (MalformedURLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -94,21 +94,21 @@ public class DownloadFileThread extends Thread {
 					e.printStackTrace();
 				}
 			}
-			
+
 			if (this.listener != null) {
 				this.listener.onDownloadFinished(new File(this.destPath));
 			}
 		}
 	}
-	
-	/** 
+
+	/**
 	 * Called on thread progress.
 	 * @param progress The progress in %.
 	 */
 	public void onProgress(int progress) {
 		System.out.print("\rProgress : " + progress + "%");
 	}
-	
+
 	/** Called on thread finished. */
 	private void onFinished() {
 		System.out.println("\nDownload successful");

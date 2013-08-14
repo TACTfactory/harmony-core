@@ -40,15 +40,15 @@ import com.tactfactory.harmony.utils.PackageUtils;
  */
 public class ClassVisitor {
 	/** Entity annotation name. */
-	private static final String FILTER_ENTITY	 	= 
+	private static final String FILTER_ENTITY	 	=
 			PackageUtils.extractNameEntity(Entity.class);
-	
+
 	/** The field visitor used by this visitor. */
 	private final FieldVisitor fieldVisitor = new FieldVisitor();
-	
+
 	/** The method visitor used by this visitor. */
 	private final MethodVisitor methodVisitor = new MethodVisitor();
-	
+
 	/**
 	 * Visit a class.
 	 * @param n The class or interface declaration
@@ -57,10 +57,10 @@ public class ClassVisitor {
     public final ClassMetadata visit(
     		final ClassOrInterfaceDeclaration classDeclaration) {
     	ClassMetadata result;
-    	
+
     	boolean isEntity = false;
     	boolean isInterface = false;
-    	
+
     	// Detect whether we have an interface or an entity
     	if (classDeclaration.isInterface()) {
     		result = new InterfaceMetadata();
@@ -68,8 +68,8 @@ public class ClassVisitor {
     	} else {
     		result = new EntityMetadata();
     	}
-    	
-    	
+
+
     	// *** Get the common attributes ***
     	result.setName(PackageUtils.extractNameEntity(
     			classDeclaration.getName()));
@@ -77,69 +77,69 @@ public class ClassVisitor {
     	ConsoleUtils.displayDebug("Found class : " +  result.getName());
     	// Check reserved keywords
 		SqliteAdapter.Keywords.exists(result.getName());
-		
-		
-    	
+
+
+
 		// If the class has a name
 		if (!Strings.isNullOrEmpty(result.getName())) {
-			
+
 	    	// Call the parsers which have been registered by the bundle
-	    	for (final BaseParser bParser 
+	    	for (final BaseParser bParser
 	    			: JavaModelParser.getBundleParsers()) {
-	    		
+
 	    		bParser.visitClass(classDeclaration, result);
 	    	}
-	    	
-	    	
+
+
 	    	// Parse the annotations
-	    	final List<AnnotationExpr> classAnnotations = 
+	    	final List<AnnotationExpr> classAnnotations =
 	    			classDeclaration.getAnnotations();
 			if (classAnnotations != null) {
 				for (final AnnotationExpr annotationExpr : classAnnotations) {
-	
-					// Call the bundles class annotations parsers 
-					for (final BaseParser bParser 
+
+					// Call the bundles class annotations parsers
+					for (final BaseParser bParser
 							: JavaModelParser.getBundleParsers()) {
 			    		bParser.visitClassAnnotation(result, annotationExpr);
 					}
-					
+
 					// Get annotation Type
-					final String annotationType = 
+					final String annotationType =
 							annotationExpr.getName().toString();
-					
-					// Detect whether class is an entity 
+
+					// Detect whether class is an entity
 					isEntity = isEntity || annotationType.equals(FILTER_ENTITY);
 				}
 			}
-			
+
 			// Get list of Implement type
-			final List<ClassOrInterfaceType> impls = 
+			final List<ClassOrInterfaceType> impls =
 					classDeclaration.getImplements();
 			if (impls != null) {
 				for (final ClassOrInterfaceType impl : impls) {
 					result.getImplementTypes().add(impl.getName());
-					
+
 					// Debug Log
-					ConsoleUtils.displayDebug("\tImplement : " 
+					ConsoleUtils.displayDebug("\tImplement : "
 								+ impl.getName());
 				}
 			}
-			
+
 			// Get Extend type
-			final List<ClassOrInterfaceType> exts = 
+			final List<ClassOrInterfaceType> exts =
 					classDeclaration.getExtends();
 			if (exts != null) {
-				for (final ClassOrInterfaceType ext : exts) {			
-					result.setExtendType(ext.getName());		
-					
+				for (final ClassOrInterfaceType ext : exts) {
+					result.setExtendType(ext.getName());
+
 					// Debug Log
-					ConsoleUtils.displayDebug("\tExtend : " 
+					ConsoleUtils.displayDebug("\tExtend : "
 								+ ext.getName());
 				}
 			}
-				
+
 			// Get list of Members (Methods, Fields, Subclasses, Enums, etc.)
-			final Map<String, ClassMetadata> subClasses = 
+			final Map<String, ClassMetadata> subClasses =
 					new LinkedHashMap<String, ClassMetadata>();
 			final List<BodyDeclaration> members =
 					classDeclaration.getMembers();
@@ -147,18 +147,18 @@ public class ClassVisitor {
 				for (final BodyDeclaration member : members) {
 					// Subclass or Enum
 					if (member instanceof TypeDeclaration) {
-						final ClassMetadata subClass = 
+						final ClassMetadata subClass =
 								this.visit((TypeDeclaration) member);
 						subClasses.put(subClass.getName(), subClass);
 					} else
-					
+
 					// Fields
 					if (member instanceof FieldDeclaration) {
-						final FieldMetadata fieldMetas = 
+						final FieldMetadata fieldMetas =
 								this.fieldVisitor.visit(
 										(FieldDeclaration) member,
 										result);
-						if (fieldMetas != null) {							
+						if (fieldMetas != null) {
 							if (fieldMetas.isId()) {
 								((EntityMetadata) result).getIds().put(
 										fieldMetas.getName(),
@@ -166,53 +166,53 @@ public class ClassVisitor {
 							}
 							if (fieldMetas.getRelation() != null) {
 								((EntityMetadata) result).getRelations().put(
-										fieldMetas.getName(), 
+										fieldMetas.getName(),
 										fieldMetas);
 							}
 						}
-					} else 
-						
+					} else
+
 					// Methods
 					if (member instanceof MethodDeclaration) {
 						result.getMethods().add(this.methodVisitor.visit(
 										(MethodDeclaration) member,
 										result));
-					}	
+					}
 				}
-				
+
 				for (final ClassMetadata subClass : subClasses.values()) {
 					subClass.setMotherClass(result.getName());
 				}
 				result.setSubClasses(subClasses);
 			}
 		}
-		
+
 		if (!isEntity && !isInterface) {
 			result = null;
 		}
 		return result;
     }
-    
+
     /**
 	 * Visit an enum.
 	 * @param n The enum declaration
 	 * @return The ClassMetadata containing the metadata of the visited enum
 	 */
-    public final ClassMetadata visit(final EnumDeclaration enumDecl) {		
+    public final ClassMetadata visit(final EnumDeclaration enumDecl) {
     	ConsoleUtils.displayDebug("Found enum " + enumDecl.getName());
     	final EnumMetadata result = new EnumMetadata();
     	result.setName(enumDecl.getName());
     	// Check reserved keywords
 		SqliteAdapter.Keywords.exists(result.getName());
-    	
+
     	// Get the Enum entries
     	if (enumDecl.getEntries() != null) {
-    		for (final EnumConstantDeclaration enumEntry 
+    		for (final EnumConstantDeclaration enumEntry
     				: enumDecl.getEntries()) {
     			result.getEntries().add(enumEntry.getName());
     		}
     	}
-    	
+
     	// Get list of Members (Methods, Fields, Subclasses, Enums, etc.)
 		final List<BodyDeclaration> members = enumDecl.getMembers();
 		if (members != null) {
@@ -221,32 +221,32 @@ public class ClassVisitor {
 				if (member instanceof TypeDeclaration) {
 					this.visit((TypeDeclaration) member);
 				} else
-				
+
 				// Fields
 				if (member instanceof FieldDeclaration) {
 					final FieldMetadata fieldMetas = this.fieldVisitor.visit(
-							(FieldDeclaration) member, 
+							(FieldDeclaration) member,
 							result);
 					if (fieldMetas != null) {
 						if (fieldMetas.isId()) {
 							result.setIdName(fieldMetas.getName());
 						}
 					}
-				} else 
-					
+				} else
+
 				// Methods
 				if (member instanceof MethodDeclaration) {
 					result.getMethods().add(this.methodVisitor.visit(
 							(MethodDeclaration) member,
 							result));
-				}	
+				}
 			}
 		}
-    	
-    	
+
+
     	return result;
     }
-    
+
     /**
 	 * Visit a class.
 	 * @param n The class or interface declaration
@@ -254,7 +254,7 @@ public class ClassVisitor {
 	 */
     public final ClassMetadata visit(final TypeDeclaration type) {
     	ClassMetadata result;
-    	
+
     	if (type instanceof ClassOrInterfaceDeclaration) {
     		result = this.visit((ClassOrInterfaceDeclaration) type);
     	} else if (type instanceof EnumDeclaration) {
@@ -262,7 +262,7 @@ public class ClassVisitor {
     	} else {
     		result = null;
     	}
-    	
+
     	return result;
     }
 }

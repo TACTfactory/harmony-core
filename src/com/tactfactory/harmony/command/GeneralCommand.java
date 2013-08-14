@@ -28,11 +28,11 @@ public class GeneralCommand extends BaseCommand {
 	 * Display Help Message.
 	 */
 	public final void help() {
-		ConsoleUtils.display("Usage:\n" 
-				+ "\tconsole [--options] command [--parameters]\n" 
-				+ "\nUsage example:\n" 
-				+ "\tconsole --verbose project:init:android --nam =test " 
-				+ "--namespac =com/tact/android/test --sdkdi =/root/android\n" 
+		ConsoleUtils.display("Usage:\n"
+				+ "\tconsole [--options] command [--parameters]\n"
+				+ "\nUsage example:\n"
+				+ "\tconsole --verbose project:init:android --nam =test "
+				+ "--namespac =com/tact/android/test --sdkdi =/root/android\n"
 				+ "\nPlease use 'console list' to display available commands !"
 				);
 	}
@@ -41,34 +41,34 @@ public class GeneralCommand extends BaseCommand {
 	 * Display list of All commands.
 	 */
 	public final void list() {
-		final Command general = 
+		final Command general =
 				Harmony.getInstance().getCommand(GeneralCommand.class);
-		
+
 		ConsoleUtils.display("Available Commands:");
 		general.summary();
-		
+
 		for (final Command baseCommand : Harmony.getInstance().getCommands()) {
 			if (baseCommand != general) {
 				baseCommand.summary();
 			}
 		}
 	}
-	
+
 	@Override
 	public final void summary() {
-		ConsoleUtils.display("\n> General \n" 
-				+ "\t" + HELP + "\t\t\t => Display this help message\n" 
+		ConsoleUtils.display("\n> General \n"
+				+ "\t" + HELP + "\t\t\t => Display this help message\n"
 				+ "\t" + LIST + "\t\t\t => List all commands");
 	}
 
 	@Override
-	public final void execute(final String action, 
-			final String[] args, 
+	public final void execute(final String action,
+			final String[] args,
 			final String option) {
 		if (action.equals(LIST)) {
 			this.list();
 		} else
-			
+
 		if (action.equals(HELP)) {
 			this.help();
 		}

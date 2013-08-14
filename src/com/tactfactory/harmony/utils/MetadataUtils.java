@@ -16,13 +16,13 @@ public abstract class MetadataUtils {
 		result = appMeta.getEntities().containsKey(classMeta.getExtendType());
 		return result;
 	}
-	
-	
+
+
 	public static EntityMetadata getTopMostMother(final EntityMetadata classMeta,
 			final ApplicationMetadata appMeta) {
 		if (appMeta.getEntities().get(classMeta.getExtendType()) != null) {
 			return MetadataUtils.getTopMostMother(
-					appMeta.getEntities().get(classMeta.getExtendType()), 
+					appMeta.getEntities().get(classMeta.getExtendType()),
 					appMeta);
 		} else {
 			return classMeta;

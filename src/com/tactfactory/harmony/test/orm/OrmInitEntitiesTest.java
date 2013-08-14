@@ -28,46 +28,46 @@ import com.tactfactory.harmony.test.CommonTest;
 public class OrmInitEntitiesTest extends CommonTest {
 	/** User MetaData. */
 	private static EntityMetadata userMeta = null;
-	
+
 	/** Post MetaData. */
 	private static EntityMetadata postMeta = null;
-	
+
 	/** Comment MetaData. */
 	private static EntityMetadata commentMeta = null;
-	
+
 	/** Comment MetaData. */
 	private static EntityMetadata clientMeta = null;
-	
+
 	/** createdAt field name. */
 	private static final String CREATED_AT = "createdAt";
-	
+
 	/** Serializable class name. */
 	private static final String SERIALIZABLE = "Serializable";
-	
+
 	/** lastname field name. */
 	private static final String LASTNAME = "lastname";
-	
+
 	/** password field name. */
 	private static final String PASSWORD = "password";
-	
+
 	/** firstname field name. */
 	private static final String FIRSTNAME = "firstname";
-	
+
 	/** login field name. */
 	private static final String LOGIN = "login";
-	
+
 	/** id field name. */
 	private static final String ID = "id";
-	
+
 	/** Debug message. */
 	private static final String MSG_CHECK_IF_FIELD = "Check if field ";
-	
+
 	/** Default fields size. */
 	private static final int DEFAULT_SIZE = 255;
 
 	/** User. */
 	private static final String USER = "User";
-	
+
 	/** Post. */
 	private static final String POST = "Post";
 
@@ -76,18 +76,18 @@ public class OrmInitEntitiesTest extends CommonTest {
 
 	/** Client. */
 	private static final String CLIENT = "Client";
-	
+
 	/** Path of entity folder. */
-	private static final String ENTITY_PATH = 
+	private static final String ENTITY_PATH =
 			"android/src/com/tactfactory/harmony/test/demact/entity/";
-	
+
 	/** Path of data folder. */
-	private static final String DATA_PATH = 
+	private static final String DATA_PATH =
 			"android/src/com/tactfactory/harmony/test/demact/data/";
-	
+
 	/**
 	 * Initialization.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {
@@ -106,7 +106,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	public final void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
+
 	/**
 	 * Initialize everything for the test.
 	 */
@@ -119,39 +119,39 @@ public class OrmInitEntitiesTest extends CommonTest {
 		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
 		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES,
-				new String[] {}, 
+				new String[] {},
 				null);
-		final OrmCommand command = 
+		final OrmCommand command =
 				(OrmCommand) Harmony.getInstance().getCommand(
 						OrmCommand.class);
 
 		command.generateMetas();
-		
+
 		for (final EntityMetadata classMetadata
 				: ApplicationMetadata.INSTANCE.getEntities().values()) {
 			if (classMetadata.getName().equals(USER)) {
 				userMeta = classMetadata;
 			}
-			
+
 			if (classMetadata.getName().equals(POST)) {
 				postMeta = classMetadata;
 			}
-			
+
 			if (classMetadata.getName().equals(COMMENT)) {
 				commentMeta = classMetadata;
 			}
-			
+
 			if (classMetadata.getName().equals(CLIENT)) {
 				clientMeta = classMetadata;
 			}
 		}
 	}
-	
+
 	//@Test
-	/** 
+	/**
 	 * Launch all the tests.
 	 */
-	public final void all() {		
+	public final void all() {
 		// Check Model Decoration
 		// User
 		this.hasUserEntity();
@@ -160,33 +160,33 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.hasUserId();
 		this.hasUserColumn();
 		this.hasUserFieldAnnotations();
-		
+
 		// Post
 		this.hasPostEntity();
 		this.hasPostImplement();
 		this.hasPostImport();
 		this.hasPostId();
 		this.hasPostColumn();
-		
+
 		// Comment
 		this.hasCommentEntity();
 		this.hasCommentImplement();
 		this.hasCommentImport();
 		this.hasCommentId();
 		this.hasCommentColumn();
-		
-		
+
+
 		this.hasUserRepository();
 		this.hasPostRepository();
 		this.hasCommentRepository();
-		
+
 		/* For Yoan
 		this.testRepoPost();
 		this.testRepoComment();
 		this.testRepoUser();
 		*/
 	}
-	
+
 	//// CLIENT ////
 	/** Is Client created and parsed well? */
 	@Test
@@ -194,7 +194,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 		CommonTest.hasFindFile(ENTITY_PATH + CLIENT + ".java");
 		Assert.assertNotNull(CLIENT + " no parsed !", clientMeta);
 	}
-	
+
 	/** Does Client extends User well? */
 	@Test
 	public final void isClientExtended() {
@@ -202,7 +202,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 				clientMeta.getExtendType(),
 				USER);
 	}
-	
+
 	//// POST ////
 	/** Is post created and parsed well. */
 	@Test
@@ -210,13 +210,13 @@ public class OrmInitEntitiesTest extends CommonTest {
 		CommonTest.hasFindFile(ENTITY_PATH + POST + ".java");
 		Assert.assertNotNull(POST + " no parsed !", postMeta);
 	}
-	
+
 	/** Does post implement Serializable ? */
 	@Test
 	public final void hasPostImplement() {
 		this.hasImplement(postMeta, SERIALIZABLE);
 	}
-	
+
 	/** Import tests. */
 	@Test
 	public final void hasPostImport() {
@@ -225,13 +225,13 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.hasImport(postMeta, "DateTime");
 		this.hasImport(postMeta, "Entity");
 	}
-	
+
 	/** ID Test. */
 	@Test
 	public final void hasPostId() {
 		this.hasId(postMeta, ID);
 	}
-	
+
 	/** Fields Test. */
 	@Test
 	public final void hasPostColumn() {
@@ -244,23 +244,23 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.hasColumn(postMeta, "updatedAt");
 		this.hasColumn(postMeta, "expiresAt");
 	}
-	
-	
+
+
 	//// COMMENT ////
 	/** Is comment created and parsed well. */
 	@Test
-	public final void hasCommentEntity() {		
+	public final void hasCommentEntity() {
 		CommonTest.hasFindFile(ENTITY_PATH + COMMENT + ".java");
 		Assert.assertNotNull(COMMENT + " no parsed !", commentMeta);
 	}
-	
+
 	/** Does comment implement Serializable ? */
 	@Test
 	public final void hasCommentImplement() {
 		this.hasImplement(commentMeta, SERIALIZABLE);
 		//TODO add test this.hasExtend(commentMeta, "EntityBase");
 	}
-	
+
 	/** Import tests. */
 	@Test
 	public final void hasCommentImport() {
@@ -268,13 +268,13 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.hasImport(commentMeta, "DateTime");
 		this.hasImport(commentMeta, "Entity");
 	}
-	
+
 	/** ID Test. */
 	@Test
 	public final void hasCommentId() {
 		this.hasId(commentMeta, ID);
 	}
-	
+
 	/** Fields Test. */
 	@Test
 	public final void hasCommentColumn() {
@@ -284,8 +284,8 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.hasColumn(commentMeta, "post");
 		this.hasColumn(commentMeta, CREATED_AT);
 	}
-	
-	
+
+
 	//// USER ////
 	/** Is user created and parsed well. */
 	@Test
@@ -293,13 +293,13 @@ public class OrmInitEntitiesTest extends CommonTest {
 		CommonTest.hasFindFile(ENTITY_PATH + USER + ".java");
 		Assert.assertNotNull(USER + " no parsed !", userMeta);
 	}
-	
+
 	/** Does user implement Serializable ? */
 	@Test
 	public final void hasUserImplement() {
 		this.hasImplement(userMeta, SERIALIZABLE);
 	}
-	
+
 	/** Import tests. */
 	@Test
 	public final void hasUserImport() {
@@ -308,13 +308,13 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.hasImport(userMeta, "Entity");
 		this.hasImport(userMeta, "Type");
 	}
-	
+
 	/** ID Test. */
 	@Test
 	public final void hasUserId() {
 		this.hasId(userMeta, ID);
 	}
-	
+
 	/** Fields Test. */
 	@Test
 	public final void hasUserColumn() {
@@ -325,7 +325,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.hasColumn(userMeta, LASTNAME);
 		this.hasColumn(userMeta, CREATED_AT);
 	}
-	
+
 	/** Annotations Test. */
 	@Test
 	public final void hasUserFieldAnnotations() {
@@ -335,22 +335,22 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.isFieldNullable(userMeta, FIRSTNAME, true);
 		this.isFieldNullable(userMeta, LASTNAME, false);
 		this.isFieldNullable(userMeta, CREATED_AT, false);
-		
+
 		this.isFieldUnique(userMeta, ID, false);
 		this.isFieldUnique(userMeta, LOGIN, true);
 		this.isFieldUnique(userMeta, PASSWORD, false);
 		this.isFieldUnique(userMeta, FIRSTNAME, false);
 		this.isFieldUnique(userMeta, LASTNAME, false);
 		this.isFieldUnique(userMeta, CREATED_AT, false);
-		
+
 		this.hasFieldColumnName(userMeta, ID, ID);
 		this.hasFieldColumnName(userMeta, LOGIN, LOGIN);
 		this.hasFieldColumnName(userMeta, PASSWORD, PASSWORD);
 		this.hasFieldColumnName(userMeta, FIRSTNAME, FIRSTNAME);
 		this.hasFieldColumnName(userMeta, LASTNAME, LASTNAME);
 		this.hasFieldColumnName(userMeta, CREATED_AT, "created_at");
-		
-		
+
+
 		this.isFieldLength(userMeta, ID, Integer.MAX_VALUE);
 		this.isFieldLength(userMeta, LOGIN, DEFAULT_SIZE);
 		this.isFieldLength(userMeta, PASSWORD, DEFAULT_SIZE);
@@ -358,62 +358,62 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.isFieldLength(userMeta, LASTNAME, DEFAULT_SIZE);
 		this.isFieldLength(userMeta, CREATED_AT, Integer.MAX_VALUE);
 	}
-	
+
 	////REPOSITORY ////
 	/** Repository creation test. */
 	public final void hasRepository(String entityName) {
-		CommonTest.hasFindFile(DATA_PATH 
+		CommonTest.hasFindFile(DATA_PATH
 				+ entityName + "SQLiteAdapter.java");
-		
-		CommonTest.hasFindFile(DATA_PATH 
+
+		CommonTest.hasFindFile(DATA_PATH
 				+ "base/" + entityName + "SQLiteAdapterBase.java");
 	}
-	
+
 	//// REPOSITORY POST ////
 	/** Post Repository creation test. */
 	@Test
 	public final void hasPostRepository() {
 		this.hasRepository(POST);
 	}
-	
-	
-	
-	
+
+
+
+
 	//// REPOSITORY COMMENT ////
 	/** Comment Repository creation test. */
 	@Test
 	public final void hasCommentRepository() {
 		this.hasRepository(COMMENT);
 	}
-	
-	
+
+
 	////REPOSITORY USER ////
 	/** User Repository creation test. */
 	@Test
 	public final void hasUserRepository() {
 		this.hasRepository(USER);
 	}
-	
+
 	////REPOSITORY USER ////
 	/** User Repository creation test. */
 	@Test
 	public final void hasClientRepository() {
 		this.hasRepository(CLIENT);
 	}
-	
-	
+
+
 	//// TEST REPOSITORY POST ////
 	//TODO Yoan
-	
-	
+
+
 	//// TEST REPOSITORY COMMENT ////
 	//TODO Yoan
-	
-	
+
+
 	//// TEST REPOSITORY USER ////
 	//TODO Yoan
-	
-	
+
+
 	//// INTERNAL ////
 	/**
 	 * Test if class has field.
@@ -454,7 +454,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 		Assert.assertTrue("Check if implement " + value,
 				meta.getImplementTypes().contains(value));
 	}
-	
+
 	/**
 	 * Test if field nullability.
 	 * @param classMeta The class containing the field.
@@ -474,7 +474,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 					classMeta.getFields().get(fieldName).isNullable());
 		}
 	}
-	
+
 	/**
 	 * Test if field unicity.
 	 * @param classMeta The class containing the field.
@@ -492,20 +492,20 @@ public class OrmInitEntitiesTest extends CommonTest {
 					classMeta.getFields().get(fieldName).isUnique());
 		}
 	}
-	
+
 	/**
 	 * Test field's column name.
 	 * @param classMeta The class containing the field.
 	 * @param fieldName The field name
 	 * @param name The wanted column name
 	 */
-	private void hasFieldColumnName(final ClassMetadata classMeta, 
-			final String fieldName, 
+	private void hasFieldColumnName(final ClassMetadata classMeta,
+			final String fieldName,
 			final String name) {
 		Assert.assertEquals(
 				classMeta.getFields().get(fieldName).getColumnName(), name);
 	}
-	
+
 	/**
 	 * Test field's length.
 	 * @param classMeta The class containing the field.

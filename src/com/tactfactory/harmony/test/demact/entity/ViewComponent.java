@@ -23,17 +23,17 @@ import com.tactfactory.harmony.annotation.Column.Type;
 public class ViewComponent implements Serializable {
 	/** Serial UID. */
 	private static final long serialVersionUID = -6623985483853173832L;
-	
+
 	/** Entity's technical id. */
 	@Id
     @Column(type = Type.INTEGER, hidden = true)
     @GeneratedValue(strategy = "IDENTITY")
 	private int id;
-	
+
 	/** String type. */
 	@Column(type = Type.STRING)
 	private String string;
-	
+
 	/** Text type. */
 	@Column(type = Type.TEXT)
 	private String text;
@@ -41,43 +41,43 @@ public class ViewComponent implements Serializable {
 	/** DateTime type. */
 	@Column(type = Type.DATETIME)
 	private DateTime dateTime;
-	
+
 	/** Date type. */
 	@Column(type = Type.DATE)
 	private DateTime date;
-	
+
 	/** Time type. */
 	@Column(type = Type.TIME)
 	private DateTime time;
-	
+
 	/** Login type. */
 	@Column(type = Type.LOGIN)
 	private String login;
-	
+
 	/** Password type. */
 	@Column(type = Type.PASSWORD)
 	private String password;
-	
+
 	/** EMail type. */
 	@Column(type = Type.EMAIL)
 	private String email;
-	
+
 	/** Phone type. */
 	@Column(type = Type.PHONE)
 	private String phone;
-	
+
 	/** city type. */
 	@Column(type = Type.CITY)
 	private String city;
-	
+
 	/** Zipcode type. */
 	@Column(type = Type.ZIPCODE)
 	private int zipCode;
-	
+
 	/** Country type. */
 	@Column(type = Type.COUNTRY)
 	private String country;
-	
+
 	/**
 	 * @return the id
 	 */

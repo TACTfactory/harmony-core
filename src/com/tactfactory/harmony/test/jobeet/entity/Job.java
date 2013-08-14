@@ -14,7 +14,7 @@ import com.tactfactory.harmony.annotation.Table;
 @Entity
 public class Job {
 	private static final int STRING_LENGTH = 4000;
-	
+
     @Id
     @Column()					// typ ="integer",
     @GeneratedValue(strategy = "IDENTITY")
@@ -33,7 +33,7 @@ public class Job {
     @Column()					// typ ="string", lengt =255
     private String logo;
 
-    @Column(nullable = true)		// typ ="string", lengt =255 
+    @Column(nullable = true)		// typ ="string", lengt =255
     private String url;
 
     @Column(nullable = true)		// typ ="string", lengt =255
@@ -45,16 +45,16 @@ public class Job {
     @Column(length = STRING_LENGTH)		// typ ="string",
     private String description;
 
-    @Column(length = STRING_LENGTH, name = "how_to_apply")	// typ ="string", 
+    @Column(length = STRING_LENGTH, name = "how_to_apply")	// typ ="string",
     private String howToApply;
 
-    @Column(unique = true)		// typ ="string", lengt ="255", 
+    @Column(unique = true)		// typ ="string", lengt ="255",
     private String token;
 
-    @Column(name = "is_public")	// typ ="boolean", 
+    @Column(name = "is_public")	// typ ="boolean",
     private boolean isPublic;
 
-    @Column(name = "is_activated")// typ ="boolean", 
+    @Column(name = "is_activated")// typ ="boolean",
     private boolean isActivated;
 
     @Column()					// typ ="string", lengt ="255"
@@ -63,10 +63,10 @@ public class Job {
     @Column(name = "created_at")	// typ ="datetime",
     private Date createdAt;
 
-    @Column(name = "updated_at")	// typ ="datetime", 
+    @Column(name = "updated_at")	// typ ="datetime",
     private Date updatedAt;
 
-    @Column(name = "expires_at")	// typ ="datetime", 
+    @Column(name = "expires_at")	// typ ="datetime",
     private Date expiresAt;
 
     /**

@@ -7,12 +7,12 @@
  * file that was distributed with this source code.
  */
 package com.tactfactory.harmony.plateforme;
- 
+
 import com.tactfactory.harmony.meta.ClassMetadata;
 
-/** 
+/**
  * Microsoft Adapter of project structure.
- * 
+ *
  */
 public final class WinphoneAdapter extends BaseAdapter {
 
@@ -33,7 +33,7 @@ public final class WinphoneAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public String getNameSpaceEntity(final ClassMetadata cm, 
+	public String getNameSpaceEntity(final ClassMetadata cm,
 			final String type) {
 		// TODO Auto-generated method stub
 		return null;
@@ -49,7 +49,7 @@ public final class WinphoneAdapter extends BaseAdapter {
 	@Override
 	public void resizeImage() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

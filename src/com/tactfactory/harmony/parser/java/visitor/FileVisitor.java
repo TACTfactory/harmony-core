@@ -29,7 +29,7 @@ public class FileVisitor {
 	 * The import visitor used by this visitor.
 	 */
 	private final ImportVisitor importVisitor = new ImportVisitor();
-	
+
 	/**
 	 * Visit a compilation unit (java file).
 	 * @param n The compilation unit to visit.
@@ -42,32 +42,32 @@ public class FileVisitor {
 		// Extract the package
 		final String spackage = PackageUtils.extractNameSpace(
 				n.getPackage().getName().toString());
-		
+
 		// Parse all the imports in this file
 		if (n.getImports() != null) {
 			for (ImportDeclaration importDecl : n.getImports()) {
 				importList.add(this.importVisitor.visit(importDecl, null));
 			}
 		}
-		
-		// Parse all the classes/enums/interfaces in this file 
+
+		// Parse all the classes/enums/interfaces in this file
 		// and add to them the imports and the package name.
 		ClassMetadata currentClass;
-		
+
 		if (n.getTypes() != null) {
 			for (TypeDeclaration typeDecl : n.getTypes()) {
 				currentClass = this.classVisitor.visit(typeDecl);
-				
+
 				this.addClassToList(importList,
 						spackage,
 						result,
 						currentClass);
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Add a given ClassMetadata and its subclasses to a ClassMetadata list.
 	 * @param importList The import list concerning this class and subclasses
@@ -78,7 +78,7 @@ public class FileVisitor {
 	private void addClassToList(
 			final ArrayList<String> importList,
 			final String spackage,
-			final ArrayList<ClassMetadata> list, 
+			final ArrayList<ClassMetadata> list,
 			final ClassMetadata classMetas) {
 		if (classMetas != null) {
 			for (ClassMetadata subClass : classMetas.getSubClasses().values()) {
@@ -91,7 +91,7 @@ public class FileVisitor {
 			classMetas.setSpace(spackage);
 			list.add(classMetas);
 		}
-		
+
 	}
 
 }

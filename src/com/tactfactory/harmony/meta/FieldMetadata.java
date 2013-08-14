@@ -22,48 +22,48 @@ import com.tactfactory.harmony.template.TagConstant;
 public class FieldMetadata extends BaseMetadata {
 	/** Owner. */
 	private ClassMetadata owner;
-	
+
 	/** Field type. */
 	private String type;
-	
+
 	/** Field harmony type. */
 	private String harmonyType;
-	
+
 	/** Column name. */
 	private String columnName;
-	
+
 	/** Field database type. */
 	private String columnDefinition;
-	
+
 	/** Relation mapped to this field. */
 	private RelationMetadata relation;
-	
+
 	/** DefaultValue. */
 	private String defaultValue;
-	
+
 	/** Field nullability. */
 	private Boolean nullable;
 	/** Field unicity. */
 	private Boolean unique;
 	/** Field locality. */
 	private Boolean isLocale;
-	
+
 	/** Field length. */
 	private Integer length;
 	/** Field precision. */
 	private Integer precision;
 	/** Field scale. */
 	private Integer scale;
-	
+
 	/** Is Field hidden ? */
 	private boolean hidden;
 	/** Is field ID ? */
 	private boolean id;
-	
-	
+
+
 	/** Is field internal ? */
 	private boolean internal = false;
-	
+
 	/**
 	 * Constructor.
 	 * @param owner ClassMetadata owning this field.
@@ -73,20 +73,20 @@ public class FieldMetadata extends BaseMetadata {
 		this.owner = owner;
 	}
 
-	
+
 	/** Add Component String of field.
 	 * @param componentName The component name
 	 */
 	public final void makeString(final String componentName) {
-		final String key = 
-				this.owner.getName().toLowerCase() 
-				+ "_" 
+		final String key =
+				this.owner.getName().toLowerCase()
+				+ "_"
 				+ this.getName().toLowerCase();
 		final boolean isDate = this.harmonyType.equals(Type.DATE.getValue());
 		final boolean isTime = this.harmonyType.equals(Type.TIME.getValue());
-		final boolean isDateTime = 
+		final boolean isDateTime =
 				this.harmonyType.equals(Type.DATETIME.getValue());
-		
+
 		if (isDate || isDateTime || isTime) {
 			final String formatKey = "%s_%s_title";
 			final String formatTitle = "Select %s %s";
@@ -95,31 +95,31 @@ public class FieldMetadata extends BaseMetadata {
 						String.format(formatKey, key, Type.DATE.getValue()),
 						String.format(formatTitle,
 								this.getName(),
-								Type.DATE.getValue()), 
+								Type.DATE.getValue()),
 						Group.MODEL);
-			} 
-			
+			}
+
 			if (isTime || isDateTime) {
 				TranslationMetadata.addDefaultTranslation(
 						String.format(formatKey, key, Type.TIME.getValue()),
 						String.format(formatTitle,
 								this.getName(),
-								Type.TIME.getValue()), 
+								Type.TIME.getValue()),
 						Group.MODEL);
-			} 
-		} 
-		
+			}
+		}
+
 		TranslationMetadata.addDefaultTranslation(
 					key + "_" + componentName.toLowerCase(Locale.ENGLISH),
-					this.getName(), 
+					this.getName(),
 					Group.MODEL);
-		
+
 		TranslationMetadata.addDefaultTranslation(
 				key + "_invalid_field_error",
 				"Field " + this.getName() + " is invalid.",
 				Group.MODEL);
 	}
-	
+
 	/**
 	 * Transform the field to a map of strings and a relation map.
 	 * @param adapter The adapter to use.
@@ -128,7 +128,7 @@ public class FieldMetadata extends BaseMetadata {
 	@Override
 	public final Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> model = new HashMap<String, Object>();
-		
+
 		model.put(TagConstant.NAME, 		this.getName());
 		model.put(TagConstant.TYPE, 		this.type);
 		model.put(TagConstant.HARMONY_TYPE, 		this.harmonyType);
@@ -139,28 +139,28 @@ public class FieldMetadata extends BaseMetadata {
 		model.put(TagConstant.ID, 		    this.id);
 		model.put(TagConstant.OWNER,		this.owner.getName());
 
-		
+
 		model.put(TagConstant.SCHEMA,
 				SqliteAdapter.generateStructure(this));
 		model.put(TagConstant.INTERNAL, 	this.internal);
 		model.put(TagConstant.IS_LOCALE, 	this.isLocale);
 		model.put(TagConstant.NULLABLE,		this.nullable);
-		
+
 		if (this.relation != null) {
 			model.put(TagConstant.RELATION, this.relation.toMap(adapter));
 		}
-		
+
 		if (this.defaultValue != null) {
 			model.put(TagConstant.DEFAULT_VALUE, this.defaultValue);
 		}
-		
+
 		final HashMap<String, Object> optionsModel =
 				new HashMap<String, Object>();
 		for (final Metadata bm : this.getOptions().values()) {
 			optionsModel.put(bm.getName(), bm.toMap(adapter));
 		}
 		model.put(TagConstant.OPTIONS, optionsModel);
-		
+
 		return model;
 	}
 

@@ -13,13 +13,13 @@ import com.tactfactory.harmony.annotation.Table;
 @Entity
 public class Category {
     @Id
-    @Column()				
+    @Column()
     @GeneratedValue(strategy = "IDENTITY")
     private int id;
 
     @Column(unique = true)
     private String name;
-    
+
     @ManyToMany()
     private ArrayList<Affiliate> affiliates;
 

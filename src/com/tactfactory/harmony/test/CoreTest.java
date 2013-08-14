@@ -22,10 +22,10 @@ import com.tactfactory.harmony.command.ProjectCommand;
  * Test class for the Harmony core.
  */
 public class CoreTest extends CommonTest {
-	
+
 	/**
 	 * Initialization.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {
@@ -43,14 +43,14 @@ public class CoreTest extends CommonTest {
 	public final void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
+
 	/**
 	 * Tests the plugin loading.
 	 */
 	@Test
 	public final void loadPlugins() {
 		Assert.assertTrue(!CommonTest.getHarmony().getCommands().isEmpty());
-		
+
 		Assert.assertNotNull(
 				CommonTest.getHarmony().getCommand(GeneralCommand.class));
 		Assert.assertNotNull(
@@ -58,19 +58,19 @@ public class CoreTest extends CommonTest {
 		Assert.assertNotNull(
 				CommonTest.getHarmony().getCommand(OrmCommand.class));
 	}
-	
+
 	/**
-	 * List all the available commands. 
+	 * List all the available commands.
 	 */
 	@Test
 	public final void list() {
 		System.out.println("\nTest List bundle/command");
 		System.out.println("########################################"
 				 + "#######################################");
-		
+
 		CommonTest.getHarmony().findAndExecute(GeneralCommand.LIST, null, null);
-	} 
-	
+	}
+
 	/**
 	 * Display Harmony help.
 	 */
@@ -79,7 +79,7 @@ public class CoreTest extends CommonTest {
 		System.out.println("\nTest Help");
 		System.out.println("#######################################"
 				 + "########################################");
-		
+
 		CommonTest.getHarmony().findAndExecute(GeneralCommand.HELP, null, null);
 	}
 }

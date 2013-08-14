@@ -36,27 +36,27 @@ public class Post implements Serializable {
     @Column(type = Type.INTEGER, hidden = true)
     @GeneratedValue(strategy = "IDENTITY")
 	private int id;
-	
+
 	/** Title of the post. */
 	@Column(unique = true, length = 140)
     private String title;
-	
+
 	/** Content of the post. */
 	@Column(length = 40000, type = Type.TEXT)
     private String content;
-	
+
 	/** User who wrote this post. */
 	@ManyToOne
 	private User owner;
-	
+
 	/** Comments associated with this post. */
 	@OneToMany(mappedBy = "post")
 	private ArrayList<Comment> comments;
-	
+
 	/** The different categories of this post. */
 	@ManyToMany
 	private ArrayList<Category> categories;
-	
+
 	/** Creation Date. */
 	@Column(name = "created_at")
     private DateTime createdAt;
@@ -77,7 +77,7 @@ public class Post implements Serializable {
     	this.updatedAt = new DateTime();
     	this.expiresAt = new DateTime();
     }
-	
+
     /**
 	 * @return the id
 	 */

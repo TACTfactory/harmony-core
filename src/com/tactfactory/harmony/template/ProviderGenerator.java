@@ -42,30 +42,30 @@ public class ProviderGenerator extends BaseGenerator {
 	private String localNameSpace;
 	/** The provider name. */
 	private String nameProvider;
-	
+
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	public ProviderGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
-		
-		this.nameProvider = 
-				CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, 
+
+		this.nameProvider =
+				CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
 						this.getAppMetas().getName() + "Provider");
-		this.localNameSpace = 
-				this.getAppMetas().getProjectNameSpace().replace('/', '.') 
-				+ "." 
+		this.localNameSpace =
+				this.getAppMetas().getProjectNameSpace().replace('/', '.')
+				+ "."
 				+ this.getAdapter().getProvider();
-		
+
 
 		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 
 		this.getDatamodel().put(
 				TagConstant.LOCAL_NAMESPACE, this.localNameSpace);
 	}
-	
+
 	/**
 	 * Generate the provider adapters.
 	 */
@@ -73,45 +73,45 @@ public class ProviderGenerator extends BaseGenerator {
 		int providerId = 0;
 		this.makeSourceProvider(
 				"utils/base/ApplicationProviderUtilsBase.java",
-				"utils/base/ProviderUtilsBase.java", 
+				"utils/base/ProviderUtilsBase.java",
 				true);
-		
+
 		for (EntityMetadata cm : this.getAppMetas().getEntities().values()) {
 			if (!cm.getFields().isEmpty()) {
-				
+
 				this.getDatamodel().put(
 						TagConstant.CURRENT_ENTITY, cm.getName());
 				this.getDatamodel().put(
 						TagConstant.PROVIDER_ID, providerId);
-				
+
 				// Provider adapters
 				this.makeSourceProvider("TemplateProviderAdapter.java",
 						cm.getName() + "ProviderAdapter.java", false);
 				this.makeSourceProvider("base/TemplateProviderAdapterBase.java",
-						"base/" + cm.getName() + "ProviderAdapterBase.java", 
+						"base/" + cm.getName() + "ProviderAdapterBase.java",
 						true);
-				
-				
+
+
 				// Provider utils
 				if (!cm.isInternal()) {
 					this.makeSourceProvider(
 							"utils/TemplateProviderUtils.java",
-							"utils/" + cm.getName() + "ProviderUtils.java", 
+							"utils/" + cm.getName() + "ProviderUtils.java",
 							false);
 					this.makeSourceProvider(
 							"utils/base/TemplateProviderUtilsBase.java",
-							"utils/base/" 
-									+ cm.getName() 
-									+ "ProviderUtilsBase.java", 
+							"utils/base/"
+									+ cm.getName()
+									+ "ProviderUtilsBase.java",
 							true);
 				}
-				
+
 				final int step = 10;
 				providerId += step;
 			}
 		}
 	}
-	
+
 	/**
 	 * Generate the provider.
 	 */
@@ -123,63 +123,63 @@ public class ProviderGenerator extends BaseGenerator {
 					"base/" + this.nameProvider + "Base.java", true);
 			this.makeSourceProvider("base/ProviderAdapterBase.java",
 					"base/ProviderAdapterBase.java", true);
-			
+
 			this.generateProviderAdapters();
-			
+
 			this.updateManifest();
-			
+
 			TranslationMetadata.addDefaultTranslation(
-					"uri_not_supported", 
-					"URI not supported", 
+					"uri_not_supported",
+					"URI not supported",
 					Group.PROVIDER);
 			TranslationMetadata.addDefaultTranslation(
-					"app_provider_name", 
-					"Provider of " + this.getAppMetas().getName(), 
+					"app_provider_name",
+					"Provider of " + this.getAppMetas().getName(),
 					Group.PROVIDER);
 			TranslationMetadata.addDefaultTranslation(
-					"app_provider_description", 
+					"app_provider_description",
 					"Provider of "
-						+ this.getAppMetas().getName() 
-						+ " to access data", 
+						+ this.getAppMetas().getName()
+						+ " to access data",
 					Group.PROVIDER);
-			
+
 			new TranslationGenerator(this.getAdapter()).generateStringsXml();
 			new TestProviderGenerator(this.getAdapter()).generateAll();
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
-	
-	/** 
+
+	/**
 	 * Make Java Source Code.
-	 * 
-	 * @param template Template path file. 
+	 *
+	 * @param template Template path file.
 	 * <br/>For list activity is "TemplateListActivity.java"
 	 * @param filename The destination file name
 	 * @param overwrite True if the method should overwrite all existing files.
 	 */
-	private void makeSourceProvider(final String template, 
+	private void makeSourceProvider(final String template,
 			final String filename, final boolean overwrite) {
-		
+
 		final String fullFilePath = String.format("%s%s/%s",
 						this.getAdapter().getSourcePath(),
 						PackageUtils.extractPath(this.localNameSpace)
 							.toLowerCase(),
 						filename);
-		
+
 		final String fullTemplatePath = String.format("%s%s",
 				this.getAdapter().getTemplateSourceProviderPath(),
 				template);
-		
+
 		super.makeSource(fullTemplatePath, fullFilePath, overwrite);
 	}
 
-	/**  
-	 * Update Android Manifest. 
+	/**
+	 * Update Android Manifest.
 	 */
 	private void updateManifest() {
 		final String pathRelatif = String.format("%s.%s",
-				this.localNameSpace, 
+				this.localNameSpace,
 				this.nameProvider);
 
 		// Debug Log
@@ -187,36 +187,36 @@ public class ProviderGenerator extends BaseGenerator {
 
 		try {
 			// Make engine
-			final SAXBuilder builder = new SAXBuilder();		
-			final File xmlFile 
+			final SAXBuilder builder = new SAXBuilder();
+			final File xmlFile
 				= TactFileUtils.makeFile(
 						this.getAdapter().getManifestPathFile());
-			
+
 			// Load XML File
 			final Document doc = builder.build(xmlFile);
-			
+
 			// Load Root element
-			final Element rootNode = doc.getRootElement(); 			
-			
+			final Element rootNode = doc.getRootElement();
+
 			// Load Name space (required for manipulate attributes)
-			final Namespace ns = rootNode.getNamespace("android");	
+			final Namespace ns = rootNode.getNamespace("android");
 
 			// Find Application Node
 			Element findProvider = null;
-			
+
 			// Find a element
-			final Element applicationNode = rootNode.getChild("application"); 	
+			final Element applicationNode = rootNode.getChild("application");
 			if (applicationNode != null) {
 
 				// Find Activity Node
-				final List<Element> providers 
+				final List<Element> providers
 						= applicationNode.getChildren("provider");
-				
+
 				// Find many elements
 				for (final Element provider : providers) {
-					if (provider.hasAttributes() 
+					if (provider.hasAttributes()
 							&& provider.getAttributeValue("name", ns)
-									.equals(pathRelatif)) {	
+									.equals(pathRelatif)) {
 						// Load attribute value
 						findProvider = provider;
 						break;
@@ -227,25 +227,25 @@ public class ProviderGenerator extends BaseGenerator {
 				if (findProvider == null) {
 					// Create new element
 					findProvider = new Element("provider");
-					
+
 					// Add Attributes to element
-					findProvider.setAttribute("name", pathRelatif, ns);	
+					findProvider.setAttribute("name", pathRelatif, ns);
 
 					applicationNode.addContent(findProvider);
 				}
 
 				// Set values
-				findProvider.setAttribute("authorities", 	
+				findProvider.setAttribute("authorities",
 						this.getAppMetas().getProjectNameSpace()
 							.replace('/', '.') + ".provider",
 						ns);
-				findProvider.setAttribute("label", 			
+				findProvider.setAttribute("label",
 						"@string/app_provider_name",
 						ns);
-				findProvider.setAttribute("description", 	
+				findProvider.setAttribute("description",
 						"@string/app_provider_description",
 						ns);
-				
+
 				// Clean code
 				applicationNode.sortChildren(new Comparator<Element>() {
 
@@ -260,7 +260,7 @@ public class ProviderGenerator extends BaseGenerator {
 			final XMLOutputter xmlOutput = new XMLOutputter();
 
 			// Make beautiful file with indent !!!
-			xmlOutput.setFormat(Format.getPrettyFormat());				
+			xmlOutput.setFormat(Format.getPrettyFormat());
 			xmlOutput.output(doc,
 					new OutputStreamWriter(
 							new FileOutputStream(xmlFile.getAbsoluteFile()),

@@ -23,8 +23,8 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  * Parser for Yaml model description files
  */
 public class YamlModelParser {
-	
-	
+
+
 	/**
 	 * Load the entities in the Yaml file <filename>.
 	 * @param filename The filename to load.
@@ -35,9 +35,9 @@ public class YamlModelParser {
 			inStream = new FileInputStream(filename);
 	        final Yaml yaml = new Yaml();
 	        yaml.load(inStream);
-	        
+
 	        // TODO parse given Object to CompilationUnit
-	        
+
 			inStream.close();
 		} catch (final FileNotFoundException e) {
 			// TODO Auto-generated catch block

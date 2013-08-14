@@ -28,11 +28,11 @@ import com.tactfactory.harmony.utils.TactFileUtils;
  */
 public class FixtureGlobalTest extends CommonTest {
 	/** Fixture path. */
-	private static final String FIXTURE_PATH = 
+	private static final String FIXTURE_PATH =
 			"android/src/com/tactfactory/harmony/test/demact/fixture/";
-	
+
 	/**
-	 * @throws java.lang.Exception 
+	 * @throws java.lang.Exception
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {
@@ -54,15 +54,15 @@ public class FixtureGlobalTest extends CommonTest {
 	public final void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
+
 	/**
 	 * Initialize the tests.
 	 */
 	private static void initAll() {
 		System.out.println("\nTest Orm generate entity");
-		System.out.println("######################################" 
+		System.out.println("######################################"
 				+ "#########################################");
-		
+
 		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
 		getHarmony().findAndExecute(
@@ -74,7 +74,7 @@ public class FixtureGlobalTest extends CommonTest {
 				new String[] {"--format=xml", "--force=true"},
 				null);
 	}
-	
+
 	/**
 	 * Tests if loaders are generated.
 	 */
@@ -87,7 +87,7 @@ public class FixtureGlobalTest extends CommonTest {
 		CommonTest.hasFindFile(FIXTURE_PATH + "FixtureBase.java");
 		CommonTest.hasFindFile(FIXTURE_PATH + "DataManager.java");
 	}
-	
+
 	/**
 	 * Tests if XML Fixtures have really been loaded.
 	 */
@@ -97,18 +97,18 @@ public class FixtureGlobalTest extends CommonTest {
 		copyFixturesXml();
 		CommonTest.getHarmony().findAndExecute(
 				FixtureCommand.FIXTURE_LOAD, new String[] {}, null);
-				
+
 		CommonTest.hasFindFile("android/assets/app/User.xml");
 		CommonTest.hasFindFile("android/assets/app/Comment.xml");
 		CommonTest.hasFindFile("android/assets/app/Post.xml");
 		CommonTest.hasFindFile("android/assets/app/ViewComponent.xml");
-		
+
 		CommonTest.hasFindFile("android/assets/test/User.xml");
 		CommonTest.hasFindFile("android/assets/test/Comment.xml");
 		CommonTest.hasFindFile("android/assets/test/Post.xml");
 		CommonTest.hasFindFile("android/assets/test/ViewComponent.xml");
 	}
-	
+
 	/**
 	 * Tests if YML Fixtures have really been loaded.
 	 */
@@ -121,17 +121,17 @@ public class FixtureGlobalTest extends CommonTest {
 				FixtureCommand.FIXTURE_INIT,
 				new String[] {"--format=yml", "--force=true"},
 				null);
-		
+
 		// Copy fixture files
 		copyFixturesYml();
 		CommonTest.getHarmony().findAndExecute(
 				FixtureCommand.FIXTURE_LOAD, new String[] {}, null);
-		
+
 		CommonTest.hasFindFile("android/assets/app/User.yml");
 		CommonTest.hasFindFile("android/assets/app/Comment.yml");
 		CommonTest.hasFindFile("android/assets/app/Post.yml");
 		CommonTest.hasFindFile("android/assets/app/ViewComponent.yml");
-		
+
 		CommonTest.hasFindFile("android/assets/test/User.yml");
 		CommonTest.hasFindFile("android/assets/test/Comment.yml");
 		CommonTest.hasFindFile("android/assets/test/Post.yml");
@@ -142,10 +142,10 @@ public class FixtureGlobalTest extends CommonTest {
 	 * Copy XML fixtures in test project.
 	 */
 	protected static final void copyFixturesXml() {
-		final String pathNameSpace = 
+		final String pathNameSpace =
 				ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll(
 						"\\.", "/");
-		final String srcDir = 
+		final String srcDir =
 				String.format("%s/tact-core/src/%s/%s/%s",
 						Harmony.getBundlePath(),
 						pathNameSpace,
@@ -153,22 +153,22 @@ public class FixtureGlobalTest extends CommonTest {
 						"xml/");
 
 		final String destDir = String.format("fixtures/");
-		
+
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
 		//destDir = String.format("fixtures/test/");
 		//TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
 	}
-	
+
 	/**
 	 * Copy YML fixtures in test project.
 	 */
 	protected static final void copyFixturesYml() {
-		final String pathNameSpace = 
+		final String pathNameSpace =
 				ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll(
 						"\\.", "/");
-		
-		final String srcDir =  
+
+		final String srcDir =
 				String.format("%s/tact-core/src/%s/%s/%s",
 					Harmony.getBundlePath(),
 					pathNameSpace,
@@ -176,7 +176,7 @@ public class FixtureGlobalTest extends CommonTest {
 					"yml/");
 
 		final String destDir = String.format("fixtures/");
-		
+
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
 	}

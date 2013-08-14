@@ -27,14 +27,14 @@ public class RouterCommand extends BaseCommand {
 	public static final String SUBJECT_DEBUG = "debug";
 	/** Manifest action. */
 	public static final String ACTION_MANIFEST = "manifest";
-	
+
 	/** Command : ROUTER:DEBUG. */
-	public static final String ROUTER_DEBUG = 
+	public static final String ROUTER_DEBUG =
 			BUNDLE + SEPARATOR + SUBJECT_DEBUG;
 	/** Command : ROUTER:GENERATE:MANIFEST. */
-	public static final String ROUTER_GENERATE_MANIFEST = 
+	public static final String ROUTER_GENERATE_MANIFEST =
 			BUNDLE + SEPARATOR + SUBJECT_GENERATE + SEPARATOR + ACTION_MANIFEST;
-	
+
 	/**
 	 * Debug routes.
 	 */
@@ -49,17 +49,17 @@ public class RouterCommand extends BaseCommand {
 
 	@Override
 	public final void summary() {
-		ConsoleUtils.display("\n> ROUTER \n" 
-				+ "\t" + ROUTER_DEBUG + "\t\t => List all URI\n" 
+		ConsoleUtils.display("\n> ROUTER \n"
+				+ "\t" + ROUTER_DEBUG + "\t\t => List all URI\n"
 				+ "\t" + ROUTER_GENERATE_MANIFEST + " => Generate Manifest\n");
 	}
 
 	@Override
 	public final void execute(final String action,
-			final String[] args, 
+			final String[] args,
 			final String option) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
