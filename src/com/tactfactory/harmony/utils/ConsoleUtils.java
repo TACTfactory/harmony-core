@@ -28,34 +28,34 @@ import print.color.ColoredPrinter;
  * Utility class for console.
  */
 public abstract class ConsoleUtils {
-	
+
 	/** Debug state. */
 	private static boolean isDebug;
-	
+
 	/** Quiet state. */
 	private static boolean isQuiet;
-	
+
 	/** ANSI state (used for colors in console or not). */
 	private static boolean isAnsi = true;
-	
+
 	/** Console state. */
 	private static boolean isConsole;
-	
+
 	/** Newline character. */
 	private static final char NEWLINE = '\n';
-	
+
 	/** Tab character. */
 	private static final char TAB = '\t';
-	
+
 	/** Sleep Time for bridge threads. */
 	private static final int SLEEP_TIME = 200;
-	
+
 	/** Printer for colors. */
 	private static ColoredPrinter cp =
 			new ColoredPrinter.Builder(0, false).build();
-	
+
 	// Getter/Setter
-	
+
 	/** Is application in debug mode ?
 	 * @return true if application is in debug mode
 	 */
@@ -70,7 +70,7 @@ public abstract class ConsoleUtils {
 	public static void setDebug(final boolean debug) {
 		ConsoleUtils.isDebug = debug;
 	}
-	
+
 	/** Is application in quiet mode ?
 	 * @return true if application is in quiet mode
 	 */
@@ -100,7 +100,7 @@ public abstract class ConsoleUtils {
 	public static void setAnsi(final boolean ansi) {
 		ConsoleUtils.isAnsi = ansi;
 	}
-	
+
 	/** Is application in console mode ?
 	 * @return true if application is in console mode
 	 */
@@ -115,9 +115,9 @@ public abstract class ConsoleUtils {
 	public static void setConsole(final boolean console) {
 		ConsoleUtils.isConsole = console;
 	}
-	
+
 	// DISPLAY MODE
-	
+
 	/**
 	 * Display given String to the console.
 	 * (White color)
@@ -133,7 +133,7 @@ public abstract class ConsoleUtils {
 			}
 		}
 	}
-	
+
 	/**
 	 * Display given String to the console prefixed by [WARNING].
 	 * (Yellow color)
@@ -152,7 +152,7 @@ public abstract class ConsoleUtils {
 			}
 		}
 	}
-	
+
 	/**
 	 * Display given String to the console prefixed by [DEBUG].
 	 * (Blue color)
@@ -179,12 +179,12 @@ public abstract class ConsoleUtils {
 	 */
 	public static void displayError(final Exception value) {
 		if (!isQuiet) {
-			String message = 	"[ERROR]" 
-								 + TAB 
-								 + value 
-								 + NEWLINE 
-								 + getStackTrace(value.getStackTrace()) 
-								 + NEWLINE; 
+			String message = 	"[ERROR]"
+								 + TAB
+								 + value
+								 + NEWLINE
+								 + getStackTrace(value.getStackTrace())
+								 + NEWLINE;
 			if (isAnsi) {
 				cp.println(message,
 						Attribute.NONE,
@@ -195,7 +195,7 @@ public abstract class ConsoleUtils {
 				System.out.println(message);
 			}
 		}
-		
+
 	}
 
 	/**
@@ -216,10 +216,10 @@ public abstract class ConsoleUtils {
 			}
 		}
 	}
-	
+
 	/**
 	 * Converts a StackTrace to a String.
-	 * @param stackTraceElements 
+	 * @param stackTraceElements
 	 * @return The StrackTrace
 	 */
 	private static String getStackTrace(
@@ -229,15 +229,15 @@ public abstract class ConsoleUtils {
 		for (final StackTraceElement stackTraceElement : stackTraceElements) {
 			result.append(stackTraceElement.toString()).append(NEWLINE);
 		}
-		
+
 		return result.toString();
 	}
-	
+
 	// LAUNCHER MODE
-	
+
 	/**
 	 * Launch the given command.
-	 * 
+	 *
 	 * @param command The list containing the command and its arguments
 	 * 	to execute
 	 * @return The exception throwed by the launched command.
@@ -246,11 +246,11 @@ public abstract class ConsoleUtils {
 	public static Exception launchCommand(final List<String> command) {
 		return launchCommand(command, null);
 	}
-	
+
 	/**
 	 * Bridge used for transmitting input and output between an external process
 	 * and the console.
-	 * @param command The list containing the command and its arguments 
+	 * @param command The list containing the command and its arguments
 	 * to execute
 	 * @param commandPath The path where to launch the command
 	 * @return The exception throwed by the launched command.
@@ -261,23 +261,23 @@ public abstract class ConsoleUtils {
 		Exception result = null;
 		String commandPathDisplay = "";
 		if (!Strings.isNullOrEmpty(commandPath)) {
-			commandPathDisplay = commandPath; 
+			commandPathDisplay = commandPath;
 		}
-		
+
 		ConsoleUtils.displayDebug(commandPathDisplay + command.toString());
-		
+
 		try {
 			ProcessBuilder processBuilder = new ProcessBuilder(command);
-			
+
 			if (commandPath != null) {
-				processBuilder = 
+				processBuilder =
 						processBuilder.directory(new File(commandPath));
 			}
-			
+
 			final Process exec = processBuilder.start();
-			final ProcessToConsoleBridge bridge = 
+			final ProcessToConsoleBridge bridge =
 					new ProcessToConsoleBridge(exec);
-			
+
 			bridge.start();
 			try {
 				exec.waitFor();
@@ -285,22 +285,22 @@ public abstract class ConsoleUtils {
 				result = e;
 				ConsoleUtils.displayError(e);
 			}
-			
+
 			bridge.stop();
-			
+
 		} catch (final IOException e) {
 			result = e;
 			ConsoleUtils.displayError(e);
 		}
-		
+
 		return result;
 	}
-	
+
 	// CONSOLE MODE
 
 	/**
 	 * Generic user console prompt.
-	 * 
+	 *
 	 * @param promptMessage message to display
 	 * @return input user input
 	 */
@@ -308,32 +308,32 @@ public abstract class ConsoleUtils {
 		String input = null;
 		try {
 			ConsoleUtils.display(promptMessage);
-			final BufferedReader br = 
+			final BufferedReader br =
 					new BufferedReader(
 							new InputStreamReader(
-									System.in, 
+									System.in,
 									TactFileUtils.DEFAULT_ENCODING));
 
-		
+
 			input = br.readLine();
 		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);
 		}
-		
+
 		return input;
 	}
-	
+
 	/**
 	 * Bridge between a process output/input and the console.
 	 */
 	private static class ProcessToConsoleBridge {
-		
+
 		/** Input thread. */
 		private final InputBridge in;
-		
+
 		/** Output thread. */
 		private final OutputBridge out;
-		
+
 		/**
 		 * Constructor.
 		 * @param proc The process to bridge with the console
@@ -348,24 +348,24 @@ public abstract class ConsoleUtils {
 			this.in.start();
 			this.out.start();
 		}
-		
+
 		/** Stop the threads. */
 		public final void stop() {
 			this.in.terminate();
 			this.out.terminate();
 		}
-		
+
 		/** Input bridge thread. */
 		private static class InputBridge extends Thread {
 			/** Reader for process input stream. */
 			private BufferedReader processInput;
-			
+
 			/** Reader for process error stream. */
 			private BufferedReader processError;
-			
+
 			/** Reader for process input stream. */
 			private boolean isRunning;
-			
+
 			/**
 			 * Constructor.
 			 * @param proc The process to bridge with the console
@@ -373,11 +373,11 @@ public abstract class ConsoleUtils {
 			public InputBridge(final Process proc) {
 				super();
 				try {
-					this.processInput = 
+					this.processInput =
 							new BufferedReader(
 									new InputStreamReader(proc.getInputStream(),
 											TactFileUtils.DEFAULT_ENCODING));
-					this.processError = 
+					this.processError =
 							new BufferedReader(
 									new InputStreamReader(proc.getErrorStream(),
 											TactFileUtils.DEFAULT_ENCODING));
@@ -385,12 +385,12 @@ public abstract class ConsoleUtils {
 					ConsoleUtils.displayError(e);
 				}
 			}
-			
+
 			@Override
 			public void run() {
 				while (this.isRunning) {
 					try {
-						if (!(this.processInput.ready() 
+						if (!(this.processInput.ready()
 								|| this.processError.ready())) {
 							Thread.sleep(SLEEP_TIME);
 						}
@@ -402,7 +402,7 @@ public abstract class ConsoleUtils {
 						}
 						if (this.processError.ready()) {
 							final String error = this.processError.readLine();
-							if (error != null && !error.isEmpty() 
+							if (error != null && !error.isEmpty()
 									&& !"Note: checking out '4.2.0'."
 									.equals(error)) {
 								ConsoleUtils.displayError(new Exception(error));
@@ -422,7 +422,7 @@ public abstract class ConsoleUtils {
 					ConsoleUtils.displayError(e);
 				}
 			}
-			
+
 			/**
 			 * Stop thread.
 			 */
@@ -436,21 +436,21 @@ public abstract class ConsoleUtils {
 				super.start();
 			}
 		}
-		
+
 		/**
 		 * Constructor.
 		 * @param proc The process to bridge with the console
-		 */		
+		 */
 		private static class OutputBridge extends Thread {
 			/** Reader for console input stream. */
 			private BufferedReader consoleInput;
-			
+
 			/** Writer for console output stream. */
 			private BufferedWriter processOutput;
-			
+
 			/** Is thread running ? */
 			private boolean isRunning;
-			
+
 			/**
 			 * Constructor.
 			 * @param proc The process to bridge with the console
@@ -458,12 +458,12 @@ public abstract class ConsoleUtils {
 			public OutputBridge(final Process proc) {
 				super();
 				try {
-					this.processOutput = 
+					this.processOutput =
 							new BufferedWriter(
 									new OutputStreamWriter(
 											proc.getOutputStream(),
 											TactFileUtils.DEFAULT_ENCODING));
-					this.consoleInput = 
+					this.consoleInput =
 							new BufferedReader(
 									new InputStreamReader(System.in,
 											TactFileUtils.DEFAULT_ENCODING));
@@ -471,7 +471,7 @@ public abstract class ConsoleUtils {
 					ConsoleUtils.displayError(e);
 				}
 			}
-			
+
 			@Override
 			public void run() {
 				while (this.isRunning) {
@@ -490,7 +490,7 @@ public abstract class ConsoleUtils {
 					} catch (final InterruptedException e) {
 						ConsoleUtils.displayError(e);
 					}
-					
+
 				}
 				try {
 					this.consoleInput.close();

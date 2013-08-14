@@ -1,4 +1,4 @@
-/** 
+/**
  * This file is part of the Harmony package.
  *
  * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
@@ -16,15 +16,15 @@ import java.io.File;
 public abstract class OsUtil {
 	/** Generic constant. */
 	private static final String GENERIC = "generic";
-	
+
 	/** First drive letter. */
 	private static final char BEGIN = 'c';
-	
+
 	/** Last drive letter. */
 	private static final char END = 'z';
 
 
-	/** Return Os name. 
+	/** Return Os name.
 	 * @return the OS name
 	 */
 	public static String getOsName() {
@@ -36,7 +36,7 @@ public abstract class OsUtil {
 	 */
 	public static String platform() {
 		String ret = GENERIC;
-		final String osname = 
+		final String osname =
 				System.getProperty("os.name", GENERIC).toLowerCase();
 		if (osname.startsWith("windows")) {
 			ret = "win32";
@@ -50,15 +50,15 @@ public abstract class OsUtil {
 		return ret;
 	}
 
-	/** warning! only gives JRE architecture, 
+	/** warning! only gives JRE architecture,
 	 * on x64 machine with x86 JRE installed, prints 'x86'.
 	 * @return The JRE architecture
 	 */
 	public static String getArch() {
 		return System.getProperty("os.arch", GENERIC);
 	}
-	
-	
+
+
 	/**
 	 * Check if system is x64.
 	 * @return True if x64
@@ -76,7 +76,7 @@ public abstract class OsUtil {
 		}
 		return is64bit;
 	}
-	
+
 	/**
 	 * Check if system is Windows.
 	 * @return true if Windows
@@ -112,28 +112,28 @@ public abstract class OsUtil {
 	}
 
 	/** return windows system drive.
-	 * @return Windows system drive 
+	 * @return Windows system drive
 	 */
 	public static String findWindowsSystemDrive() {
 		String sysdrive = null;
-		if (isWindows() 
+		if (isWindows()
 				&& System.getProperty("java.version", "").startsWith("1.5.")) {
-			// System.getEnv(String name) 
+			// System.getEnv(String name)
 			// is deprecated and throws java.lang.Error
 			// in java 1.2 through 1.4. but un-deprecated in 1.5
-			sysdrive = System.getenv("SYSTEMDRIVE");	
+			sysdrive = System.getenv("SYSTEMDRIVE");
 		}
 		return sysdrive;
 	}
 
 	/** return windows system root folder.
-	 * @return Windows system root folder 
+	 * @return Windows system root folder
 	 */
 	public static String findWindowsSystemRoot() {
 		String sysRoot = null;
-		if (isWindows()) { 
+		if (isWindows()) {
 			if (System.getProperty("java.version", "").startsWith("1.5.")) {
-				// System.getEnv(String name) 
+				// System.getEnv(String name)
 				// is deprecated and throws java.lang.Error
 				// in java 1.2 through 1.4. but un-deprecated in 1.5
 				sysRoot = System.getenv("SYSTEMROOT");
@@ -144,7 +144,7 @@ public abstract class OsUtil {
 					if (root.exists() && root.isDirectory()) {
 						sysRoot = root.getAbsolutePath().toString();
 					}
-		
+
 					root = new File(drive + ":\\WINNT");
 					if (root.exists() && root.isDirectory()) {
 						sysRoot = root.getAbsolutePath().toString();
@@ -495,7 +495,7 @@ public abstract class OsUtil {
 // OS: MacOS version 8.1
 // Processor: PowerPC 750 (?)
 // VM: Microsoft Virtual Machine
-// Notes: Obtained in Internet Explorer 4.01 (PowerPC) 
+// Notes: Obtained in Internet Explorer 4.01 (PowerPC)
 // with "Java virtual Machine"
 // pop-up preference set to "Microsoft Virtual Machine".
 // Contributor: DG
@@ -515,7 +515,7 @@ public abstract class OsUtil {
 // OS: MacOS version 8.1
 // Processor: PowerPC 750 (?)
 // VM: Apple MRJ
-// Notes: Obtained in Internet Explorer 4.01 (PowerPC) 
+// Notes: Obtained in Internet Explorer 4.01 (PowerPC)
 // with "Java virtual Machine"
 // pop-up preference set to "Apple MRJ".
 // Contributor: DG
@@ -745,7 +745,7 @@ public abstract class OsUtil {
 //
 // ------------------------------------------------------
 // here are the results for the latest HP-UX JDK (HP-UX 10.20):
-// AS told me (CK) that for HP-UX java.version 
+// AS told me (CK) that for HP-UX java.version
 // will always have the same general format;
 // the letter ( "C" in the sample) might change, and there may or may
 // not be a date after the version number.

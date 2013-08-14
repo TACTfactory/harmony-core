@@ -19,13 +19,13 @@ import com.tactfactory.harmony.template.TagConstant;
 /**
  * Metadatas representing a Method.
  */
-public class MethodMetadata extends BaseMetadata {	
+public class MethodMetadata extends BaseMetadata {
 	/** Return type. */
 	private String type;
-	
+
 	/** Arguments types. */
 	private List<String> argumentsTypes = new ArrayList<String>();
-	
+
 	/** Final. */
 	private boolean isFinal;
 

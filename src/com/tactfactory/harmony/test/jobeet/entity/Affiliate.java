@@ -17,22 +17,22 @@ public class Affiliate {
     @Column()					// typ ="integer",
     @GeneratedValue(strategy = "IDENTITY")
 	private int id;
-	
-	@Column(nullable = true)		// typ ="string", lengt =255 
+
+	@Column(nullable = true)		// typ ="string", lengt =255
 	private String url;
-	
+
 	@Column()					// typ ="string", lengt ="255"
 	private String email;
-	
-	@Column(unique = true)		// typ ="string", lengt ="255", 
+
+	@Column(unique = true)		// typ ="string", lengt ="255",
 	private String token;
-	
-	@Column(name = "is_activated")// typ ="boolean", 
+
+	@Column(name = "is_activated")// typ ="boolean",
 	private boolean isActivated;
-	
+
 	@Column(name = "created_at")	// typ ="datetime",
 	private Date createdAt;
-	
+
 	@ManyToMany()
 	private ArrayList<Category> categories;
 

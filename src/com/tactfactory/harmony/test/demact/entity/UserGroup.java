@@ -20,18 +20,18 @@ public class UserGroup {
 	@Id
 	@Column
 	private int id;
-	
+
 	/** User group's name. */
 	@Column
 	private String name;
-	
+
 	/** Permission to write. */
 	@Column
 	private boolean writePermission;
-	
+
 	/** Permission to delete. */
 	@Column
 	private boolean deletePermission;
-	
-	
+
+
 }

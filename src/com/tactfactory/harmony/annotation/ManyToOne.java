@@ -28,7 +28,7 @@ public @interface ManyToOne {
 	 * The Entity targeted by the relation (auto-generated).
 	 */
 	String targetEntity() default "";
-	
+
 
 	/**
 	 * The field in the target entity inversed by this relation.

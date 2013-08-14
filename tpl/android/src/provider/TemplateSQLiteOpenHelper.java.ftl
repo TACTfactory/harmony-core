@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
  * application startup with long-running database upgrades.
  * @see android.database.sqlite.SQLiteOpenHelper
  */
-public class ${project_name?cap_first}SQLiteOpenHelper 
+public class ${project_name?cap_first}SQLiteOpenHelper
 					extends ${project_name?cap_first}SQLiteOpenHelperBase {
 
 	/**
@@ -21,7 +21,7 @@ public class ${project_name?cap_first}SQLiteOpenHelper
 	 * @param factory factory
 	 * @param version version
 	 */
-	public ${project_name?cap_first}SQLiteOpenHelper(final Context ctx, 
+	public ${project_name?cap_first}SQLiteOpenHelper(final Context ctx,
 		   final String name, final CursorFactory factory, final int version) {
 		super(ctx, name, factory, version);
 	}

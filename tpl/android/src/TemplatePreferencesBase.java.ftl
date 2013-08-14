@@ -12,7 +12,7 @@ public abstract class ${project_name?cap_first}Preferences {
 	 */
 	private static final String shareName = "sharedata";
 	//private static final String sync_last = "sync_last"
-	
+
 	/**
 	 * Constructor.
 	 * @param ctx context
@@ -21,7 +21,7 @@ public abstract class ${project_name?cap_first}Preferences {
 		this.settings = ctx.getSharedPreferences(
 				shareName, Context.MODE_PRIVATE);
 	}
-	
+
 	/**
 	 * Clear All preferences values.
 	 */

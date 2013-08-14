@@ -8,8 +8,8 @@ import com.tactfactory.harmony.plateforme.BaseAdapter;
 /**
  * Generator for bundles.
  */
-public class BundleGenerator extends BaseGenerator {	
-	
+public class BundleGenerator extends BaseGenerator {
+
 	/**
 	 * Constructor.
 	 * @param adapt Adapter
@@ -18,9 +18,9 @@ public class BundleGenerator extends BaseGenerator {
 	public BundleGenerator(BaseAdapter adapt) throws Exception {
 		super(adapt);
 
-		
+
 	}
-	
+
 	/**
 	 * Generate the empty bundle basic files.
 	 * @param bundleOwnerName Owner name
@@ -31,14 +31,14 @@ public class BundleGenerator extends BaseGenerator {
 			String bundleOwnerName,
 			String bundleName,
 			String bundleNameSpace) {
-		
-		
+
+
 		this.generateDataModel(bundleOwnerName,
 				bundleName,
 				bundleNameSpace);
-		
+
 		this.generateBuildXml(bundleOwnerName, bundleName);
-		
+
 		this.generateAnnotation(bundleOwnerName,
 				bundleName,
 				bundleNameSpace);
@@ -58,7 +58,7 @@ public class BundleGenerator extends BaseGenerator {
 				bundleName,
 				bundleNameSpace);
 	}
-	
+
 	/**
 	 * Generate the datamodel associated with the bundle generation.
 	 * (different from the mobile project generation)
@@ -70,15 +70,15 @@ public class BundleGenerator extends BaseGenerator {
 			String bundleOwnerName,
 			String bundleName,
 			String bundleNameSpace) {
-		
+
 		HashMap<String, Object> datamodel = new HashMap<String, Object>();
 		datamodel.put("bundle_namespace", bundleNameSpace);
 		datamodel.put("bundle_name", bundleName);
 		datamodel.put("bundle_owner", bundleOwnerName);
-		
+
 		this.setDatamodel(datamodel);
 	}
-	
+
 	/**
 	 * Generate the empty annotation.
 	 * @param bundleOwnerName Owner name
@@ -87,42 +87,42 @@ public class BundleGenerator extends BaseGenerator {
 	 */
 	private void generateAnnotation(
 			String bundleOwnerName,
-			String bundleName, 
+			String bundleName,
 			String bundleNameSpace) {
-		
-		String tplPath = this.getAdapter().getAnnotationBundleTemplatePath() 
+
+		String tplPath = this.getAdapter().getAnnotationBundleTemplatePath()
 				+ "/TemplateAnnotation.java";
 		String genPath = this.getAdapter().getAnnotationBundlePath(
 							bundleOwnerName,
-							bundleNameSpace, 
-							bundleName) 
-						+ "/" 
+							bundleNameSpace,
+							bundleName)
+						+ "/"
 						+ CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
 								bundleName)
 						+ ".java";
-		
+
 		this.makeSource(tplPath, genPath, false);
 	}
-	
+
 	/**
-	 * Generate the build.xml.	 
+	 * Generate the build.xml.
 	 * @param bundleOwnerName Owner name
 	 * @param bundleName Bundle name
 	 */
 	private void generateBuildXml(
 			String bundleOwnerName,
 			String bundleName) {
-		
-		String tplPath = this.getAdapter().getBundleTemplatePath() 
+
+		String tplPath = this.getAdapter().getBundleTemplatePath()
 				+ "/build.xml";
 		String genPath = this.getAdapter().getBundlePath(
 							bundleOwnerName,
-							bundleName) 
+							bundleName)
 						+ "/build.xml";
-		
+
 		this.makeSource(tplPath, genPath, false);
 	}
-	
+
 	/**
 	 * Generate bundle's parser.
 	 * @param bundleOwnerName Owner name
@@ -131,23 +131,23 @@ public class BundleGenerator extends BaseGenerator {
 	 */
 	private void generateParser(
 			String bundleOwnerName,
-			String bundleName, 
+			String bundleName,
 			String bundleNameSpace) {
-		
-		String tplPath = this.getAdapter().getParserBundleTemplatePath() 
+
+		String tplPath = this.getAdapter().getParserBundleTemplatePath()
 				+ "/TemplateParser.java";
 		String genPath = this.getAdapter().getParserBundlePath(
 							bundleOwnerName,
-							bundleNameSpace, 
-							bundleName) 
-						+ "/" 
+							bundleNameSpace,
+							bundleName)
+						+ "/"
 						+ CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
 								bundleName)
 						+ "Parser.java";
-		
+
 		this.makeSource(tplPath, genPath, false);
 	}
-	
+
 	/**
 	 * Generate command file for empty bundle.
 	 * @param bundleOwnerName Owner name
@@ -156,24 +156,24 @@ public class BundleGenerator extends BaseGenerator {
 	 */
 	private void generateCommand(
 			String bundleOwnerName,
-			String bundleName, 
+			String bundleName,
 			String bundleNameSpace) {
-		
-		String tplPath = this.getAdapter().getCommandBundleTemplatePath() 
+
+		String tplPath = this.getAdapter().getCommandBundleTemplatePath()
 				+ "/TemplateCommand.java";
 		String genPath = this.getAdapter().getCommandBundlePath(
 							bundleOwnerName,
-							bundleNameSpace, 
-							bundleName) 
-						+ "/" 
+							bundleNameSpace,
+							bundleName)
+						+ "/"
 						+ CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
 								bundleName)
 						+ "Command.java";
-		
+
 		this.makeSource(tplPath, genPath, false);
 	}
-	
-	/** 
+
+	/**
 	 * Generate bundle's generator.
 	 * @param bundleOwnerName Owner name
 	 * @param bundleName Bundle name
@@ -181,24 +181,24 @@ public class BundleGenerator extends BaseGenerator {
 	 */
 	private void generateTemplate(
 			String bundleOwnerName,
-			String bundleName, 
+			String bundleName,
 			String bundleNameSpace) {
-		
-		String tplPath = this.getAdapter().getTemplateBundleTemplatePath() 
+
+		String tplPath = this.getAdapter().getTemplateBundleTemplatePath()
 				+ "/TemplateGenerator.java";
 		String genPath = this.getAdapter().getTemplateBundlePath(
 							bundleOwnerName,
-							bundleNameSpace, 
-							bundleName) 
-						+ "/" 
-						+ CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, 
+							bundleNameSpace,
+							bundleName)
+						+ "/"
+						+ CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
 								bundleName)
 						+ "Generator.java";
-		
+
 		this.makeSource(tplPath, genPath, false);
 	}
-	
-	/** 
+
+	/**
 	 * Generate Bundle metadata.
 	 * @param bundleOwnerName Owner name
 	 * @param bundleName Bundle name
@@ -206,20 +206,20 @@ public class BundleGenerator extends BaseGenerator {
 	 */
 	private void generateMeta(
 			String bundleOwnerName,
-			String bundleName, 
+			String bundleName,
 			String bundleNameSpace) {
-		
-		String tplPath = this.getAdapter().getMetaBundleTemplatePath() 
+
+		String tplPath = this.getAdapter().getMetaBundleTemplatePath()
 				+ "/TemplateMetadata.java";
 		String genPath = this.getAdapter().getMetaBundlePath(
 							bundleOwnerName,
-							bundleNameSpace, 
-							bundleName) 
-						+ "/" 
-						+ CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, 
+							bundleNameSpace,
+							bundleName)
+						+ "/"
+						+ CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
 								bundleName)
 						+ "Metadata.java";
-		
+
 		this.makeSource(tplPath, genPath, false);
 	}
 }

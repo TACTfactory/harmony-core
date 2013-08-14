@@ -8,7 +8,7 @@ import org.joda.time.DateTime;
 public abstract class TestUtils{
 
 	private static final Random RANDOM = new Random();
-	
+
      /**
       * <p>Creates a random string based on a variety of options, using
       * supplied source of randomness.</p>
@@ -23,7 +23,7 @@ public abstract class TestUtils{
       * end are chosen.</p>
       *
       * <p>This method accepts a user-supplied {@link Random}
-      * instance to use as a source of randomness. By seeding a single 
+      * instance to use as a source of randomness. By seeding a single
       * {@link Random} instance with a fixed seed and using it for each call,
       * the same random sequence of strings can be generated repeatedly
       * and predictably.</p>
@@ -57,10 +57,10 @@ public abstract class TestUtils{
                  end = Integer.MAX_VALUE;
              }
          }
- 
+
          char[] buffer = new char[count];
          int gap = end - start;
- 
+
          while (count-- != 0) {
              char ch;
              if (chars == null) {
@@ -70,7 +70,7 @@ public abstract class TestUtils{
              }
              if ((letters && Character.isLetter(ch))
                  || (numbers && Character.isDigit(ch))
-                 || (!letters && !numbers)) 
+                 || (!letters && !numbers))
              {
                  if (ch >= 56320 && ch <= 57343) {
                      if (count == 0) {
@@ -102,19 +102,19 @@ public abstract class TestUtils{
          }
          return new String(buffer);
      }
-     
+
      public static String generateRandomString(int length){
     	 return random(length, 0, 0, true, true, null, RANDOM);
      }
-     
+
      public static int generateRandomInt(int min, int max){
     	 return (int)generateRandomDouble(min, max);
      }
-     
+
      public static double generateRandomDouble(double min, double max){
     	 return Math.random()*(max-min)+min;
      }
-     
+
      public static float generateRandomFloat(float min, float max){
     	 return (float)generateRandomDouble(min, max);
      }
@@ -122,11 +122,11 @@ public abstract class TestUtils{
      public static short generateRandomShort(){
     	 return (short) (Math.random() * (Short.MAX_VALUE));
      }
-     
+
      public static byte generateRandomByte(){
     	 return (byte) (Math.random() * (Byte.MAX_VALUE));
      }
-     
+
      public static char generateRandomChar(){
     	 return (char) (Math.random() * (Character.MAX_VALUE));
      }
@@ -134,11 +134,11 @@ public abstract class TestUtils{
      public static boolean generateRandomBool(){
     	 return (Math.random()>0.5);
      }
-     
+
      public static DateTime generateRandomDateTime(){
     	 DateTime date = generateRandomDate();
     	 DateTime time = generateRandomTime();
-    	 
+
     	 return new DateTime(
     			 		date.getYear(),
     			 		date.getMonthOfYear(),
@@ -146,29 +146,29 @@ public abstract class TestUtils{
     			 		time.getHourOfDay(),
     			 		time.getMinuteOfHour());
      }
-     
+
      public static DateTime generateRandomDate(){
     	 int year, month, day;
-    	 
+
     	 year = (int)(Math.random()*200)+1900;
     	 month = (int)(Math.random()*11)+1;
     	 day = (int)(Math.random()*27)+1;
-    	 
+
     	 return new DateTime(year, month, day, 0, 0);
      }
-     
+
      public static DateTime generateRandomTime(){
     	 DateTime dt = new DateTime();
-    	 int hours,minutes; 
-    	 
+    	 int hours,minutes;
+
     	 hours = (int)(Math.random()*23);
     	 minutes = (int)(Math.random()*59);
-    	 
+
     	 return new DateTime(
-		    			 dt.getYear(), 
+		    			 dt.getYear(),
 		    			 dt.getMonthOfYear(),
-		    			 dt.getDayOfMonth(), 
-		    			 hours, 
+		    			 dt.getDayOfMonth(),
+		    			 hours,
 		    			 minutes);
      }
 }

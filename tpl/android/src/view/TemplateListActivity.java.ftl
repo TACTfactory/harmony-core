@@ -34,7 +34,7 @@ public class ${curr.name}ListActivity extends HarmonyFragmentActivity {
 	}
 
 	@Override
-	public void onActivityResult(int requestCode, int resultCode, 
+	public void onActivityResult(int requestCode, int resultCode,
 													Intent data) {
 		super.onActivityResult(requestCode, resultCode, data);
 		if (requestCode <= SUPPORT_V4_RESULT_HACK) {

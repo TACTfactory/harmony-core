@@ -20,13 +20,13 @@ import com.tactfactory.harmony.template.TagConstant;
 public class EnumMetadata extends ClassMetadata {
 	/** ID field name. */
 	private String idName;
-	
+
 	/** Enum type.*/
 	private String type;
-	
+
 	/** List of the enum names.*/
 	private ArrayList<String> entries = new ArrayList<String>();
-	
+
 	/**
 	 * Transform the class to a map given an adapter.
 	 * @param adapter The adapter used to customize the fields
@@ -40,7 +40,7 @@ public class EnumMetadata extends ClassMetadata {
 		model.put(TagConstant.NAMES, entries);
 		return model;
 	}
-	
+
 	/**
 	 * @return the type
 	 */

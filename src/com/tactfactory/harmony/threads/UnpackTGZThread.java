@@ -15,7 +15,7 @@ import org.rauschig.jarchivelib.CompressionType;
 public class UnpackTGZThread extends Thread {
 	/** Listener for unpacking finish. */
 	public interface OnUnpackedFinishedListener {
-		/** 
+		/**
 		 * Called when file is unpacked.
 		 * @param unpackedFile The unpacked file.
 		 * @param folder The folder where it has been unpacked.
@@ -28,7 +28,7 @@ public class UnpackTGZThread extends Thread {
 	private File destFile;
 	/** Listener. */
 	private OnUnpackedFinishedListener listener;
-	
+
 	/**
 	 * Constructor.
 	 * @param listener The listener
@@ -37,24 +37,24 @@ public class UnpackTGZThread extends Thread {
 	 */
 	public UnpackTGZThread(
 			OnUnpackedFinishedListener listener,
-			String filePath, 
+			String filePath,
 			String destPath) {
 		this.file = new File(filePath);
 		this.destFile = new File(destPath);
 		this.listener = listener;
-		
+
 		if (!this.destFile.exists()) {
 			this.destFile.mkdir();
 		}
 	}
-	
+
 	/**
 	 * Called at thread start.
 	 */
 	private void onStart() {
 		System.out.println("Unpacking " + this.file.getName());
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see java.lang.Thread#run()
 	 */
@@ -62,7 +62,7 @@ public class UnpackTGZThread extends Thread {
 	public void run() {
 		super.run();
 		this.onStart();
-		
+
 		Archiver archiver = ArchiverFactory.createArchiver(ArchiveFormat.TAR, CompressionType.GZIP);
 		try {
 			archiver.extract(this.file, this.destFile);
@@ -72,14 +72,14 @@ public class UnpackTGZThread extends Thread {
 		}
 		this.onFinished();
 	}
-	
+
 	/**
 	 * Called when thread is finished.
 	 */
 	private void onFinished() {
-		System.out.println(this.file.getName() 
+		System.out.println(this.file.getName()
 				+ " has been unpacked successfully");
-		
+
 		if (this.listener != null) {
 			this.listener.onUnpackedFinished(this.file, this.destFile);
 		}

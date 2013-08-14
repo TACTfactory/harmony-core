@@ -17,14 +17,14 @@ import com.tactfactory.harmony.test.CommonTest;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
 public class EmptyBundleGenerationTest extends CommonTest {
-	/** Generated Test Bundle name. */ 
+	/** Generated Test Bundle name. */
 	private static final String BUNDLE_NAME = "Test";
 	/** Generated Test Bundle owner. */
 	private static final String BUNDLE_OWNER = "Name";
 	/** Generated Test Bundle namespace. */
-	private static final String BUNDLE_NAMESPACE = 
+	private static final String BUNDLE_NAMESPACE =
 			"com.tactfactory.harmony.bundles.namespace";
-	
+
 	/** Generated Test Bundle path. */
 	private static final String BUNDLE_PATH = String.format(
 			"%s/%s-%s/src/%s",
@@ -34,12 +34,12 @@ public class EmptyBundleGenerationTest extends CommonTest {
 			BUNDLE_NAMESPACE.replace('.', '/'));
 	/**
 	 * Initialization.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {
 		CommonTest.setUpBefore();
-		
+
 	}
 
 	@Before
@@ -62,7 +62,7 @@ public class EmptyBundleGenerationTest extends CommonTest {
 	public final void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
+
 	/**
 	 * Launch bundle generation.
 	 */
@@ -70,10 +70,10 @@ public class EmptyBundleGenerationTest extends CommonTest {
 		try {
 			BundleGenerator generator = new BundleGenerator(new AndroidAdapter());
 			generator.generateBundleFiles(
-					BUNDLE_OWNER, 
-					BUNDLE_NAME, 
+					BUNDLE_OWNER,
+					BUNDLE_NAME,
 					BUNDLE_NAMESPACE);
-			
+
 		} catch (Exception e) {
 			Assert.assertNull(e.getMessage(), e);
 		}
@@ -96,16 +96,16 @@ public class EmptyBundleGenerationTest extends CommonTest {
 				"command/" + BUNDLE_NAME + "Command.java");
 
 	}
-	
+
 	/**
 	 * Test if file exists.
 	 * @param fileName The file name
 	 */
 	protected static void hasFindFile(final String fileName) {
-		final File file = 
+		final File file =
 				new File(
 					String.format("%s/%s",
-							BUNDLE_PATH, 
+							BUNDLE_PATH,
 						fileName));
 
 		assertTrue(file.getAbsolutePath() + " doesn't exist", file.exists());

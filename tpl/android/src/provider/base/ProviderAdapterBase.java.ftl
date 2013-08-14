@@ -12,7 +12,7 @@ import ${data_namespace}.base.SQLiteAdapterBase;
  * @param <T> must extends Serializable
  */
 public abstract class ProviderAdapterBase<T> {
-	/** TAG for debug purpose. */ 
+	/** TAG for debug purpose. */
 	public static final String TAG = "ProviderAdapterBase<T>";
 	/** Context. */
 	protected Context ctx;

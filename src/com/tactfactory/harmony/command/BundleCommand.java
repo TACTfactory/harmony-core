@@ -14,7 +14,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 @PluginImplementation
 public class BundleCommand extends BaseCommand {
 
-	/** Bundle name. */	
+	/** Bundle name. */
 	public static final String BUNDLE = "bundle";
 	/** Subject. */
 	public static final String SUBJECT = "generate";
@@ -24,25 +24,25 @@ public class BundleCommand extends BaseCommand {
 
 	//commands
 	/** Command : BUNDLE:GENERATE:EMPTYBUNDLE. */
-	public static final String GENERATE_EMPTY_BUNDLE = 
+	public static final String GENERATE_EMPTY_BUNDLE =
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_EMPTY_BUNDLE;
 
 	/** Adapter. */
 	private BaseAdapter adapter = new AndroidAdapter();
 
-	
+
 	@Override
 	public void execute(String action, String[] args, String option) {
 		ConsoleUtils.display("> Bundle generator ");
-		
+
 		this.setCommandArgs(Console.parseCommandArgs(args));
-		
+
 		if (GENERATE_EMPTY_BUNDLE.equals(action)) {
 			this.generateEmptyBundle();
 		}
 	}
-	
-	
+
+
 	/**
 	 * Generate an empty bundle.
 	 */
@@ -50,15 +50,15 @@ public class BundleCommand extends BaseCommand {
 		this.generateMetas();
 		// Confirmation
 		if (ConsoleUtils.isConsole()) {
-			final String bundleOwnerName = 
+			final String bundleOwnerName =
 					ConsoleUtils.getUserInput("Bundle's owner ?");
-			
-			final String bundleName = 
+
+			final String bundleName =
 					ConsoleUtils.getUserInput("Name of your Bundle ?");
-			
-			final String bundleNameSpace = 
+
+			final String bundleNameSpace =
 					ConsoleUtils.getUserInput("Namespace of your Bundle ?");
-			
+
 			try {
 				new BundleGenerator(this.adapter).generateBundleFiles(
 						bundleOwnerName,
@@ -75,7 +75,7 @@ public class BundleCommand extends BaseCommand {
 	public void summary() {
 		ConsoleUtils.display(
 				"\n> BUNDLE \n"
-				+ "\t" + GENERATE_EMPTY_BUNDLE + "\t => Generate Empty Bundle\n" 
+				+ "\t" + GENERATE_EMPTY_BUNDLE + "\t => Generate Empty Bundle\n"
 				);
 	}
 

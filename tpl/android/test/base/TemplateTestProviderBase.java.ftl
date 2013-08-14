@@ -28,7 +28,7 @@ import android.net.Uri;
 import junit.framework.Assert;
 
 /** ${curr.name} database test abstract class <br/>
- * <b><i>This class will be overwrited whenever you regenerate the project with Harmony. 
+ * <b><i>This class will be overwrited whenever you regenerate the project with Harmony.
  * You should edit ${curr.name}TestDB class instead of this one or you will lose all your modifications.</i></b>
  */
 public abstract class ${curr.name}TestProviderBase extends TestDBBase {
@@ -46,17 +46,17 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	 */
 	protected void setUp() throws Exception {
 		super.setUp();
-		
+
 		this.ctx = this.getMockContext();
-		
+
 		this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
-		
+
 		<#if dataLoader?? && dataLoader>
 		this.entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).getMap().values());
 		if (this.entities.size()>0) {
 			this.entity = this.entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}
-		</#if>		
+		</#if>
 		this.provider = this.getMockContext().getContentResolver();
 	}
 
@@ -66,7 +66,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
+
 	/** Test case Create Entity */
 	@SmallTest
 	public void testCreate() {
@@ -78,16 +78,16 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				values.remove(${curr.name}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
 				result = this.provider.insert(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, values);
-			
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		
+
 			Assert.assertNotNull(result);
 			Assert.assertTrue(Integer.valueOf(result.getEncodedPath().substring(result.getEncodedPath().lastIndexOf("/")+1)) > 0);
 		}
 	}
-	
+
 	/** Test case Read Entity */
 	@SmallTest
 	public void testRead() {
@@ -102,7 +102,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		
+
 			${curr.name}Utils.equals(this.entity, result);
 		}
 	}
@@ -118,13 +118,13 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		Assert.assertNotNull(result);
 		if (result != null) {
 			Assert.assertEquals(result.size(), this.entities.size());
 		}
 	}
-	
+
 	/** Test case Update Entity */
 	@SmallTest
 	public void testUpdate() {
@@ -134,20 +134,20 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 			try {
 				${curr.name?uncap_first}.set${curr.ids[0].name?cap_first}(this.entity.get${curr.ids[0].name?cap_first}());
-			
+
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				result = this.provider.update(
-					Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI 
-						+ "/" 
-						+ ${curr.name?uncap_first}.get${curr.ids[0].name?cap_first}()), 
-					values, 
-					null, 
+					Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI
+						+ "/"
+						+ ${curr.name?uncap_first}.get${curr.ids[0].name?cap_first}()),
+					values,
+					null,
 					null);
-			
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		
+
 			Assert.assertTrue(result >= 0);
 		}
 	}
@@ -167,16 +167,16 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 				values.remove(${field.owner}SQLiteAdapter.COL_${field.name?upper_case});
 					</#if>
 				</#list>
-			
+
 				result = this.provider.update(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, values, null, null);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		
+
 			Assert.assertEquals(result, this.entities.size());
 		}
 	}
-	
+
 	/** Test case Delete Entity */
 	@SmallTest
 	public void testDelete() {
@@ -184,7 +184,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		if (this.entity != null) {
 			try {
 				result = this.provider.delete(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.get${curr.ids[0].name?cap_first}()), null, null);
-			
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -192,7 +192,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		}
 
 	}
-	
+
 	/** Test case DeleteAll Entity */
 	@SmallTest
 	public void testDeleteAll() {
@@ -201,11 +201,11 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 			try {
 				result = this.provider.delete(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, null, null);
-			
+
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-		
+
 			Assert.assertEquals(result, this.entities.size());
 		}
 	}

@@ -21,10 +21,10 @@ import com.tactfactory.harmony.test.CommonTest;
  *
  */
 public class OrmUpdateEntitiesTest extends CommonTest {
-	
+
 	/**
 	 * Initialization.
-	 * @throws Exception 
+	 * @throws Exception
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {
@@ -42,10 +42,10 @@ public class OrmUpdateEntitiesTest extends CommonTest {
 	@Override
 	public final void tearDown() throws Exception {
 		super.tearDown();
-		
+
 		//TODO : enable !! FileUtils.deleteRecursive(dirproj);
 	}
-	
+
 	/**
 	 * Generate the entities.
 	 */

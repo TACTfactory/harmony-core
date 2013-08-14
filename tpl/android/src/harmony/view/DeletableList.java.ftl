@@ -1,7 +1,7 @@
 <@header?interpret />
 package ${project_namespace}.harmony.view;
 
-/** 
+/**
  * Interface for a list where items can be deleted.
  */
 public interface DeletableList {

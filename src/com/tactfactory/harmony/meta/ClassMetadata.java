@@ -21,33 +21,33 @@ import com.tactfactory.harmony.template.TagConstant;
 /** Entity class metadata. */
 public class ClassMetadata extends BaseMetadata {
 	/** SubClasses array. */
-	private Map<String, ClassMetadata> subClasses = 
+	private Map<String, ClassMetadata> subClasses =
 			new LinkedHashMap<String, ClassMetadata>();
-	
+
 	/** Mother Class name. */
 	private String motherClass;
-	
+
 	/** List of fields of entity class. */
-	private Map<String, FieldMetadata> fields = 
+	private Map<String, FieldMetadata> fields =
 			new LinkedHashMap<String, FieldMetadata>();
-		
+
 	/** Implemented class list of the entity class. */
-	private List<String> implementTypes = 
+	private List<String> implementTypes =
 			new ArrayList<String>();
 
 	/** Namespace of entity class. */
 	private String space = "";
-	
+
 	/** Class inherited by the entity class or null if none. */
 	private String extendType;
-	
+
 	/** Implemented class list of the entity class. */
-	private List<MethodMetadata> methods = 
+	private List<MethodMetadata> methods =
 			new ArrayList<MethodMetadata>();
 
 	/** Imports of the class. */
 	private List<String> imports = new ArrayList<String>();
-	
+
 	/**
 	 * Transform the class to a map given an adapter.
 	 * @param adapter The adapter used to customize the fields
@@ -56,19 +56,19 @@ public class ClassMetadata extends BaseMetadata {
 	@Override
 	public Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> model = new HashMap<String, Object>();
-		
+
 		model.put(TagConstant.SPACE,			this.space);
 		model.put(TagConstant.NAME,				this.getName());
 		model.put(TagConstant.EXTENDS,			this.extendType);
-		model.put(TagConstant.CONTROLLER_NAMESPACE, 
+		model.put(TagConstant.CONTROLLER_NAMESPACE,
 				adapter.getNameSpaceEntity(this, adapter.getController()));
-		model.put(TagConstant.DATA_NAMESPACE, 	
+		model.put(TagConstant.DATA_NAMESPACE,
 				adapter.getNameSpace(this, adapter.getData()));
-		model.put(TagConstant.TEST_NAMESPACE, 	
+		model.put(TagConstant.TEST_NAMESPACE,
 				adapter.getNameSpace(this, adapter.getTest()));
-		model.put(TagConstant.FIELDS,			
+		model.put(TagConstant.FIELDS,
 				this.toFieldArray(this.fields.values(), adapter));
-		
+
 		final Map<String, Object> optionsModel = new HashMap<String, Object>();
 		for (final Metadata option : this.getOptions().values()) {
 			optionsModel.put(option.getName(), option.toMap(adapter));
@@ -76,9 +76,9 @@ public class ClassMetadata extends BaseMetadata {
 		model.put(TagConstant.OPTIONS, optionsModel);
 
 		if (motherClass != null) {
-			model.put(TagConstant.MOTHER, this.motherClass);	
+			model.put(TagConstant.MOTHER, this.motherClass);
 		}
-		
+
 		return model;
 	}
 
@@ -151,16 +151,16 @@ public class ClassMetadata extends BaseMetadata {
 	public final void setSpace(final String space) {
 		this.space = space;
 	}
-	
-	
+
+
 	/**
 	 * @param imports the imports to set
 	 */
 	public final void setImports(final List<String> imports) {
 		this.imports = imports;
 	}
-	
-	
+
+
 	/**
 	 * @return the implementTypes
 	 */
@@ -184,25 +184,25 @@ public class ClassMetadata extends BaseMetadata {
 	 * @return The fields map.
 	 */
 	private Map<String, Map<String, Object>> toFieldArray(
-			final Collection<FieldMetadata> c, 
+			final Collection<FieldMetadata> c,
 			final BaseAdapter adapter) {
-		final Map<String, Map<String, Object>> result = 
+		final Map<String, Map<String, Object>> result =
 				new LinkedHashMap<String, Map<String, Object>>();
 		Map<String, Object> subField = null;
-		
+
 		for (final FieldMetadata field : c) {
 			//field.customize(adapter);
-			
+
 			subField = field.toMap(adapter);
-			
+
 			// Add field translate
 			if (!field.isInternal() && !field.isHidden()) {
 				field.makeString("label");
 			}
-			
+
 			result.put(field.getName(), subField);
 		}
-		
+
 		return result;
 	}
 
@@ -233,5 +233,5 @@ public class ClassMetadata extends BaseMetadata {
 	public final void setSubClasses(
 			final Map<String, ClassMetadata> subClasses) {
 		this.subClasses = subClasses;
-	}	
+	}
 }

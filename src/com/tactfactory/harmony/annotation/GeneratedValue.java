@@ -33,7 +33,7 @@ public @interface GeneratedValue {
 	final static String MODE_SEQUENCE = "SEQUENCE";
 	/** Identity mode. */
 	final static String MODE_IDENTITY = "IDENTITY";
-	
+
 	/** Used strategy. Defaults to Auto mode. */
 	String strategy() default MODE_AUTO;
 }

@@ -18,20 +18,20 @@ public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		boolean result = true;
-		
+
 		try {
 			${project_name?cap_first}Menu.getInstance(this).clear(menu);
-			${project_name?cap_first}Menu.getInstance(this).updateMenu(menu, 
+			${project_name?cap_first}Menu.getInstance(this).updateMenu(menu,
 																		  this);
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = false;
 		}
-		
+
 		if (result) {
 			result = super.onPrepareOptionsMenu(menu);
 		}
-		
+
 		return result;
 	}
 
@@ -45,12 +45,12 @@ public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
 			e.printStackTrace();
 			result = false;
 		}
-		
+
 		return result;
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode, 
+	protected void onActivityResult(int requestCode, int resultCode,
 																  Intent data) {
 		try {
 			${project_name?cap_first}Menu.getInstance(this).onActivityResult(
@@ -58,7 +58,7 @@ public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 

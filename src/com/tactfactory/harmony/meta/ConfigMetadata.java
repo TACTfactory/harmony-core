@@ -14,26 +14,26 @@ package com.tactfactory.harmony.meta;
 public class ConfigMetadata {
 	/** Identify configuration resource. */
 	private String key;
-	
+
 	/** Value of configuration resource. */
 	private String value;
-	
+
 	/**
 	 * Insert to meta a new resource configuration.
-	 * 
+	 *
 	 * @param key Configuration Key
 	 * @param value Configuration String
 	 * @return the generated ConfigMetadata
 	 */
 	public static ConfigMetadata addConfiguration(final String key,
-			final String value) {		
+			final String value) {
 		final ConfigMetadata configMeta = new ConfigMetadata();
 		configMeta.key = key;
 		configMeta.value = value;
-		
+
 		ApplicationMetadata.INSTANCE.getConfigs().put(
 				configMeta.key, configMeta);
-		
+
 		return configMeta;
 	}
 

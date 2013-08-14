@@ -16,7 +16,7 @@
 		<#if importInternalsToo || !relation.internal>
 			<#if relation.relation.type == "ManyToMany">
 				<#if (!Utils.isInArray(import_array, relation.relation.joinTable))>
-					<#assign import_array = import_array + [relation.relation.joinTable] />	
+					<#assign import_array = import_array + [relation.relation.joinTable] />
 				</#if>
 			<#else>
 				<#if (!Utils.isInArray(import_array, relation.relation.targetEntity))>
@@ -125,8 +125,8 @@
 		<#if importInternalsToo || !relation.internal>
 			<#if relation.relation.type == "ManyToMany">
 				<#if (!Utils.isInArray(import_array, relation.relation.joinTable))>
-					<#assign import_array = import_array + [relation.relation.joinTable] />	
-					<#assign import_array = import_array + [relation.relation.targetEntity] />	
+					<#assign import_array = import_array + [relation.relation.joinTable] />
+					<#assign import_array = import_array + [relation.relation.targetEntity] />
 				</#if>
 			<#else>
 				<#if (!Utils.isInArray(import_array, relation.relation.targetEntity))>
@@ -150,7 +150,7 @@
 	<#list entity.relations as relation>
 		<#if relation.relation.type == "ManyToMany">
 			<#if (!Utils.isInArray(import_array, relation.relation.targetEntity))>
-				<#assign import_array = import_array + [relation.relation.targetEntity] />	
+				<#assign import_array = import_array + [relation.relation.targetEntity] />
 			</#if>
 		</#if>
 	</#list>
@@ -169,7 +169,7 @@
 	<#list entity.relations as relation>
 		<#if relation.relation.type == "ManyToMany">
 			<#if (!Utils.isInArray(import_array, relation.relation.targetEntity + "Criterias"))>
-				<#assign import_array = import_array + [relation.relation.targetEntity + "Criterias"] />	
+				<#assign import_array = import_array + [relation.relation.targetEntity + "Criterias"] />
 			</#if>
 		</#if>
 	</#list>

@@ -24,13 +24,13 @@ public final class IosAdapter extends BaseAdapter {
 		this.setSource("src");
 	}
 
- 
+
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
 	public String getNameSpaceEntity(final ClassMetadata cm,
 			final String type) {
@@ -61,7 +61,7 @@ public final class IosAdapter extends BaseAdapter {
 	@Override
 	public void resizeImage() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 }

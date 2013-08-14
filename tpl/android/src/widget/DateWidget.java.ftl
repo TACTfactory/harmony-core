@@ -29,7 +29,7 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 	private EditText dateEditText;
 	/** Date dialog title. */
 	private String dialogTitle;
-	
+
 	/**
 	 * Constructor.
 	 *
@@ -57,7 +57,7 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 		}
 		this.addView(view);
 	}
-	
+
 	/**
 	 * Initialize this views components.
 	 * @param view The view
@@ -80,14 +80,14 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 		   try {
 		       // Dialog Title
 		       this.dialogTitle = a.getString(
-		    		   R.styleable.DateWidget_dateWidget_dialogTitle); 
+		    		   R.styleable.DateWidget_dateWidget_dialogTitle);
 		       if (this.dialogTitle == null) {
 		    	   int rId = a.getResourceId(
 			    		   R.styleable.DateWidget_dateWidget_dialogTitle,
 			    		   0);
 		    	   this.dialogTitle = this.getContext().getString(rId);
 		       }
-		             
+
 		   } finally {
 		       a.recycle();
 		   }
@@ -100,26 +100,26 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 		}
 		DateTime dt = new DateTime();
 
-        final String createdAtDate = 
+        final String createdAtDate =
         		this.dateEditText.getText().toString();
 		if (!TextUtils.isEmpty(createdAtDate)) {
-			final String strInputDate = 
+			final String strInputDate =
 					createdAtDate;
 			dt = DateUtils.formatStringToDate(strInputDate);
 		}
-		
-	    final CustomDatePickerDialog datePicker = 
+
+	    final CustomDatePickerDialog datePicker =
 	    		new CustomDatePickerDialog(
-	    				getContext(), 
-	    				dt, 
+	    				getContext(),
+	    				dt,
 	    				this.dialogTitle);
-	    
+
 	    DialogClickListener listener = new DialogClickListener(this);
 	    datePicker.setPositiveButton(android.R.string.ok, listener);
 	    datePicker.setNegativeButton(android.R.string.cancel, listener);
-	    datePicker.show();		
+	    datePicker.show();
 	}
-		
+
 	/**
 	 * Set the component date.
 	 *
@@ -128,7 +128,7 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 	public void setDate(DateTime date) {
 		this.dateEditText.setText(DateUtils.formatDateToString(date));
 	}
-		
+
 	/**
 	 * Get the component date.
 	 *
@@ -144,16 +144,16 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Internal Click Listener for the dialog.
 	 */
-	private class DialogClickListener 
+	private class DialogClickListener
 				implements DialogInterface.OnClickListener {
 		/** The date widget associated to this listener. */
 		private DateWidget dateWidget;
 
-		/** 
+		/**
 		 * Constructor.
 		 *
 		 * @param dateWidget The datewidget
@@ -161,25 +161,25 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 		public DialogClickListener(DateWidget dateWidget) {
 			this.dateWidget = dateWidget;
 		}
-		
+
 		@Override
 		public void onClick(DialogInterface dialog, int which) {
 			switch (which) {
 				case AlertDialog.BUTTON_POSITIVE :
-					final DatePicker dp = 
+					final DatePicker dp =
 						((CustomDatePickerDialog) dialog).getDatePicker();
-					final DateTime date = 
-						new DateTime(dp.getYear(), 
-								dp.getMonth() + 1, 
-								dp.getDayOfMonth(), 
-								0, 
+					final DateTime date =
+						new DateTime(dp.getYear(),
+								dp.getMonth() + 1,
+								dp.getDayOfMonth(),
+								0,
 								0);
 					this.dateWidget.setDate(date);
 					if (DateWidget.this.dateListener != null) {
 						DateWidget.this.dateListener.onValidateDate();
 					}
 					break;
-					
+
 				case AlertDialog.BUTTON_NEGATIVE :
 					if (DateWidget.this.dateListener != null) {
 						DateWidget.this.dateListener.onCancelDate();
@@ -191,38 +191,38 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 		}
 	}
 
-	/** 
+	/**
 	 * Sets an OnDateClickListener for this view.
-	 *  
-	 * @param listener The listener to set 
+	 *
+	 * @param listener The listener to set
 	 */
 	public void setOnDateClickListener(OnDateClickListener listener) {
 		this.dateListener = listener;
 	}
-	
+
 	/**
 	 * Remove the current OnDateClickListener.
 	 */
 	public void removeOnDateClickListener() {
 		this.dateListener = null;
 	}
-	
+
 	/** Widget Interface for click events. */
 	public interface OnDateClickListener {
-		/** 
-		 * Called when User click on the Date EditText. 
+		/**
+		 * Called when User click on the Date EditText.
 		 */
 		void onClickDateEditText();
-		
-		/** 
-		 * Called when User click on the date picker dialog's ok button. 
+
+		/**
+		 * Called when User click on the date picker dialog's ok button.
 		 */
 		void onValidateDate();
-		
-		/** 
-		 * Called when User click on the date picker dialog's cancel button. 
+
+		/**
+		 * Called when User click on the date picker dialog's cancel button.
 		 */
 		void onCancelDate();
 	}
-	
+
 }

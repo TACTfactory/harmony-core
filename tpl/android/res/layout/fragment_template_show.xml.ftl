@@ -3,7 +3,7 @@
 <#assign fields = ViewUtils.getAllFields(curr) />
 <#assign currname=curr.name?lower_case />
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout 
+<RelativeLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,7 +13,7 @@
 	<#assign m_id="${currname?lower_case}_${field.name?lower_case}" />
 	<#assign m_id_label="${m_id}_label" />
 	<#assign m_string_label="${field.owner?lower_case}_${field.name?lower_case}_label" />
-	<TextView 
+	<TextView
 		android:id="@+id/${m_id_label}"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

@@ -32,7 +32,7 @@
 	</#list>
 </#function>
 
-<#function hasFieldType entity fieldType>	
+<#function hasFieldType entity fieldType>
 	<#list entity.fields?values as field>
 		<#if field.harmony_type?lower_case==fieldType?lower_case>
 			<#return true />
@@ -41,15 +41,15 @@
 	<#return false />
 </#function>
 
-<#function hasTime entity>	
+<#function hasTime entity>
 	<#return hasFieldType(entity, "time") />
 </#function>
 
-<#function hasDate entity>	
+<#function hasDate entity>
 	<#return hasFieldType(entity, "date") />
 </#function>
 
-<#function hasDateTime entity>	
+<#function hasDateTime entity>
 	<#return hasFieldType(entity, "datetime") />
 </#function>
 
@@ -65,7 +65,7 @@
 
 <#function hasRelations entity>
 	<#return (entity.relations?? && entity.relations?size > 0) />
-</#function> 
+</#function>
 
 <#function hasToManyRelations entity>
 	<#list entity.relations as field>
@@ -78,7 +78,7 @@
 
 <#function hasOnlyRecursiveRelations entity>
 	<#list entity.relations as relation>
-		<#if relation.relation.targetEntity!=entity.name> 
+		<#if relation.relation.targetEntity!=entity.name>
 			<#return false>
 		</#if>
 	</#list>
@@ -99,7 +99,7 @@
 			<#if !Utils.isInArray(entity_list, rel.relation.targetEntity)>
 				<#return false />
 			</#if>
-		</#if>	
+		</#if>
 	</#list>
 	<#return true />
 </#function>
@@ -107,7 +107,7 @@
 	<#assign ret = getZeroRelationsEntities() />
 	<#assign maxLoop = entities?size />
 	<#list 1..maxLoop as i>
-		<#list entities?values as entity>	
+		<#list entities?values as entity>
 			<#if (entity.fields?size>0)>
 				<#if !Utils.isInArray(ret, entity.name)>
 					<#if isOnlyDependantOf(entity, ret)>

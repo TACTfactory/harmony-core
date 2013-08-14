@@ -84,5 +84,5 @@
     -->
     <!-- version-tag: 1 -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
-    <import file="./build.rules.xml" />    
+    <import file="./build.rules.xml" />
 </project>

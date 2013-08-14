@@ -33,7 +33,7 @@ import android.util.Log;
  * FixtureBase.
  * @param <T> Fixture
  */
-public abstract class FixtureBase<T> {	
+public abstract class FixtureBase<T> {
 	/** TAG for debug purpose. */
 	private static final String TAG = "FixtureBase";
 	/** Context. */
@@ -45,7 +45,7 @@ public abstract class FixtureBase<T> {
 	protected String patternDate = "yyyy-MM-dd";
 	/** Time pattern. */
 	protected String patternTime = "HH:mm";
-	
+
 	/** Link an ID and its entity. */
 	protected Map<String, T> items = new LinkedHashMap<String, T>();
 
@@ -68,11 +68,11 @@ public abstract class FixtureBase<T> {
 		// XML Loader
 		try {
 			//String currentDir = new File(".").getAbsolutePath();
-			
+
 			// Make engine
 			SAXBuilder builder = new SAXBuilder();
 			InputStream xmlStream = this.getXml(
-					DataLoader.getPathToFixtures(mode) 
+					DataLoader.getPathToFixtures(mode)
 					+ this.getFixtureFileName());
 			if (xmlStream != null) {
 				// Load XML File
@@ -88,7 +88,7 @@ public abstract class FixtureBase<T> {
 											this.getFixtureFileName());
 				if (entities != null) {
 					for (Element element : entities) {
-						this.items.put((String)element.getAttributeValue("id"), 
+						this.items.put((String)element.getAttributeValue("id"),
 								this.extractItem(element));
 					}
 				}
@@ -104,7 +104,7 @@ public abstract class FixtureBase<T> {
 		// YAML Loader
 		final Yaml yaml = new Yaml();
 		final InputStream inputStream = this.getYml(
-					DataLoader.getPathToFixtures(mode) 
+					DataLoader.getPathToFixtures(mode)
 					+ this.getFixtureFileName());
 
 		if (inputStream != null) {
@@ -114,9 +114,9 @@ public abstract class FixtureBase<T> {
 						this.getFixtureFileName());
 				if (listEntities != null) {
 					for (final Object name : listEntities.keySet()) {
-						final Map<?, ?> currEntity = 
+						final Map<?, ?> currEntity =
 								(Map<?, ?>) listEntities.get(name);
-						this.items.put((String) name, 
+						this.items.put((String) name,
 								this.extractItem(currEntity));
 					}
 				}
@@ -130,7 +130,7 @@ public abstract class FixtureBase<T> {
 	 * @param manager The DataManager
 	 */
 	public abstract void load(DataManager manager);
-	
+
 	/**
 	 * Return the fixture with the given ID.
 	 * @param id The fixture id as String
@@ -158,7 +158,7 @@ public abstract class FixtureBase<T> {
 
 	/**
 	 * Get the order of this fixture.
-	 * 
+	 *
 	 * @return index order
 	 */
 	public int getOrder() {
@@ -199,7 +199,7 @@ public abstract class FixtureBase<T> {
 		return ret;
 	}
 	</#if>
-	
+
 	/**
 	 * Returns the fixture file name.
 	 * @return the fixture file name
@@ -214,10 +214,10 @@ public abstract class FixtureBase<T> {
 		ByteArrayOutputStream bos = new ByteArrayOutputStream();
 		ObjectOutput out = null;
 		try {
-		  out = new ObjectOutputStream(bos);   
+		  out = new ObjectOutputStream(bos);
 		  out.writeObject(this.items);
 		 this.serializedBackup = bos.toByteArray();
-		 
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} finally {
@@ -235,7 +235,7 @@ public abstract class FixtureBase<T> {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-		}	
+		}
 	}
 
 
@@ -249,8 +249,8 @@ public abstract class FixtureBase<T> {
 		ObjectInput in = null;
 		try {
 		  in = new ObjectInputStream(bis);
-		  result = (LinkedHashMap<String, T>) in.readObject(); 
-		  
+		  result = (LinkedHashMap<String, T>) in.readObject();
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {

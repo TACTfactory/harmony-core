@@ -16,7 +16,7 @@ import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
- * 
+ *
  *
  */
 @PluginImplementation
@@ -37,31 +37,31 @@ public class ResourceCommand extends BaseCommand {
 	public static final String GENERATE_IMAGE 	=
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_IMAGE;
 	/** Command : RESOURCE:GENERATE:TRANSLATE. */
-	public static final String GENERATE_TRANSLATE	= 
+	public static final String GENERATE_TRANSLATE	=
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_TRANSLATE;
 
 	//internal
 	/** Adapter. */
 	private final BaseAdapter adapter = new AndroidAdapter();
-	
+
 	@Override
 	public final void summary() {
-		ConsoleUtils.display("\n> " + BUNDLE.toUpperCase() + " \n" 
-				+ "\t" + GENERATE_IMAGE 
-				+ "\t => Generate all resize of the HD images\n" 
-				
-				+ "\t" + GENERATE_TRANSLATE 
+		ConsoleUtils.display("\n> " + BUNDLE.toUpperCase() + " \n"
+				+ "\t" + GENERATE_IMAGE
+				+ "\t => Generate all resize of the HD images\n"
+
+				+ "\t" + GENERATE_TRANSLATE
 				+ "\t => Generate translate\n");
 	}
 
 	@Override
-	public final void execute(final String action, 
-			final String[] args, 
+	public final void execute(final String action,
+			final String[] args,
 			final String option) {
 		ConsoleUtils.display("> Resource Generator");
 
 		this.setCommandArgs(Console.parseCommandArgs(args));
-		
+
 		try {
 			if (action.equals(GENERATE_IMAGE)) {
 				this.adapter.resizeImage();

@@ -18,31 +18,31 @@ import java.lang.annotation.Target;
 import java.lang.reflect.Field;
 
 /**
- * To mark a property for 
- * relational persistence the @Column annotation is used. 
- * This annotation usually requires at least 1 attribute to be set, the type. 
+ * To mark a property for
+ * relational persistence the @Column annotation is used.
+ * This annotation usually requires at least 1 attribute to be set, the type.
  */
 @Documented
 @Retention(SOURCE)
 @Target(FIELD)
 @Inherited
 public @interface Column {
-	/** 
+	/**
 	 * Hack for null value in DefaultValue attribute. Null is not a suitable
 	 * value for attribute values in Java...
 	 */
-	public static final String DEFAULT_VALUE_NULL = 
+	public static final String DEFAULT_VALUE_NULL =
 			"##hack-harmony-default-default-value##";
-	
+
 	/** Default field length. */
 	int DEFAULT_LENGTH = 255;
-	
+
 	/**
 	 * Mapping Type defines the mapping between a Java type and an SQL type.
 	 */
 	public enum Type {
 		//Name		Internal	length	null	prec	scale	unique	isLocale
-		
+
 		// BASE
 		/** String type. */
 		STRING	("string", 	255, 	true, 	null, 	null, 	null,	null),
@@ -76,7 +76,7 @@ public @interface Column {
 		TIME	("time",		null,	true,	null,	null,	null,	false),
 		/** Enum type. */
 		ENUM	("enum",		null,	false,	null,	null,	null,	null),
-		
+
 		// EXTEND
 		/** Login type. */
 		LOGIN	("login", 	255, 	false,	null,	null,	true,	null),
@@ -94,29 +94,29 @@ public @interface Column {
 		COUNTRY	("country",	255,	true,	null,	null,	null,	null),
 		/** EAN type. */
 		BC_EAN	("ean",		12,		true,	null,	null,	null,	null);
-		
+
 		/** Type type. */
 		private String type;
-		
+
 		/** Default length. */
 		private int length = Integer.MAX_VALUE;
-		
+
 		/** Default nullability. */
 		private final boolean nullable = false;
-		
+
 		/** Default unicity. */
 		private boolean unique = false;
-		
+
 		/** Is locale by default ? */
 		private boolean isLocale = false;
-		
+
 		//columnDefinition is define by DatabaseAdapter
 		/** Default precision. */
 		private int precision = Integer.MAX_VALUE;
-		
+
 		/** Default scale. */
 		private int scale = Integer.MAX_VALUE;
-		
+
 
 		/**
 		 * Constructor.
@@ -129,14 +129,14 @@ public @interface Column {
 		 * @param isLocale default locality
 		 */
 		private Type(final String value,
-				final Integer length, 
-				final Boolean nullable, 
-				final Integer precision, 
-				final Integer scale, 
+				final Integer length,
+				final Boolean nullable,
+				final Integer precision,
+				final Integer scale,
 				final Boolean unique,
 				final Boolean isLocale) {
 			this.type = value;
-			
+
 			if (length != null) {
 				this.length = length;
 			}
@@ -144,20 +144,20 @@ public @interface Column {
 			if (precision != null) {
 				this.precision  = precision;
 			}
-			
+
 			if (scale != null) {
 				this.scale = scale;
 			}
-			
+
 			if (unique != null) {
 				this.unique = unique;
 			}
-			
+
 			if (isLocale != null) {
 				this.isLocale = isLocale;
 			}
 		}
-		
+
 		/**
 		 * Get the type name.
 		 * @return The type name
@@ -165,7 +165,7 @@ public @interface Column {
 		public String getValue() {
 			return this.type;
 		}
-		
+
 		/**
 		 * Get the type default length.
 		 * @return The type default length
@@ -173,7 +173,7 @@ public @interface Column {
 		public int getLength() {
 			return this.length;
 		}
-		
+
 		/**
 		 * Get the type default nullability.
 		 * @return The type default nullability.
@@ -181,7 +181,7 @@ public @interface Column {
 		public boolean isNullable() {
 			return this.nullable;
 		}
-		
+
 		/**
 		 * Get the type default unicity.
 		 * @return The type default unicity
@@ -189,7 +189,7 @@ public @interface Column {
 		public boolean isUnique() {
 			return this.unique;
 		}
-		
+
 		/**
 		 * Get the type default precision.
 		 * @return The type default precision
@@ -197,7 +197,7 @@ public @interface Column {
 		public int getPrecision() {
 			return this.precision;
 		}
-		
+
 		/**
 		 * Get the type default scale.
 		 * @return The type default scale
@@ -205,7 +205,7 @@ public @interface Column {
 		public int getScale() {
 			return this.scale;
 		}
-		
+
 		/**
 		 * Get the type default isLocale.
 		 * @return The type default isLocale
@@ -213,7 +213,7 @@ public @interface Column {
 		public boolean isLocale() {
 			return this.isLocale;
 		}
-		
+
 		/**
 		 * Get the type by its name if it exists.
 		 * @param value The type name
@@ -225,13 +225,13 @@ public @interface Column {
 				for (final Type type : Type.values()) {
 					if (value.equalsIgnoreCase(type.type)) {
 						ret = type;
-					}    
+					}
 				}
 			}
-			
+
 			return ret;
 		}
-		
+
 		/**
 		 * Get the type by its enum name if it exists.
 		 * @param name The type enum name
@@ -242,26 +242,26 @@ public @interface Column {
 			Type ret;
 			if (name.lastIndexOf('.') > 0) {
 				// Take only what comes after the last dot
-				realName = name.substring(name.lastIndexOf('.') + 1); 
+				realName = name.substring(name.lastIndexOf('.') + 1);
 			} else {
 				realName = name;
 			}
 			try {
-				final Field field = 
-						Type.class.getField(realName.toUpperCase());	
+				final Field field =
+						Type.class.getField(realName.toUpperCase());
 				if (field.isEnumConstant()) {
 					ret = (Type) field.get(Type.class);
 				} else {
-					 ret = null; 
+					 ret = null;
 				}
 			} catch (final NoSuchFieldException e) {
 				ret = null;
 			} catch (final IllegalAccessException e) {
-				ret = null;				
+				ret = null;
 			}
 			return ret;
 		}
-			
+
 		/**
 		 * Format the type name.
 		 * @param name The type name
@@ -277,62 +277,62 @@ public @interface Column {
 		}
 
 	}
-	
+
 	/**
 	 * The mapping type to use for the column.
-	 * 
+	 *
 	 * @see com.tactfactory.harmony.annotation.Column.Type
 	 */
 	Type type() default Type.STRING;
-			
-	/** 
+
+	/**
 	 * The name of the column in the database.
 	 */
 	String name() default "";
-	
+
 	/**
 	 * The length of the column in the database.
 	 */
 	int length() default DEFAULT_LENGTH;
-	
+
 	/**
 	 * Whether the column is a unique key.
 	 */
 	boolean unique() default false;
-	
+
 	/**
 	 * Whether the database column is nullable.
 	 */
 	boolean nullable() default false;
-	
+
 	/**
 	 * The precision for a decimal (exact numeric) column.
 	 */
 	int precision() default 0;
-	
+
 	/**
 	 * The scale for a decimal (exact numeric) column.
 	 */
 	int scale() default 0;
-	
+
 	/**
 	 * The database type to use for the column.
 	 */
 	String columnDefinition() default "";
-	
+
 	/**
 	 * Hide field in view.
 	 */
 	boolean hidden() default false;
-	
+
 	/**
 	 * (Date, DateTime and Time only)
 	 * Use locale for date.
 	 */
 	boolean locale() default false;
-	
+
 	/**
 	 * Default SQL value.
-	 */ 
+	 */
 	String defaultValue() default DEFAULT_VALUE_NULL;
 }
