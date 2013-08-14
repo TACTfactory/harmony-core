@@ -334,5 +334,5 @@ public @interface Column {
 	/**
 	 * Default SQL value.
 	 */ 
-	String defaultValue() default "##hack-harmony-default-default-value##";
+	String defaultValue() default DEFAULT_VALUE_NULL;
 }
