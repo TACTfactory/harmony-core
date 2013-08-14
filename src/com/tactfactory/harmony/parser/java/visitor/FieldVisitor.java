@@ -69,6 +69,43 @@ public class FieldVisitor {
 			PackageUtils.extractNameEntity(ManyToMany.class);
 	
 	
+	/** Column annotation name attribute. */
+	private static final String ATTRIBUTE_NAME = "name"; 
+	
+	/** Column annotation type attribute. */
+	private static final String ATTRIBUTE_TYPE = "type";
+	
+	/** Column annotation nullable attribute. */
+	private static final String ATTRIBUTE_NULLABLE = "nullable";
+	
+	/** Column annotation unique attribute. */
+	private static final String ATTRIBUTE_UNIQUE = "unique";
+	
+	/** Column annotation length attribute. */
+	private static final String ATTRIBUTE_LENGTH = "length";
+	
+	/** Column annotation precision attribute. */
+	private static final String ATTRIBUTE_PRECISION = "precision";
+			
+	/** Column annotation scale attribute. */
+	private static final String ATTRIBUTE_SCALE = "scale";
+	
+	/** Column annotation isLocale attribute. */
+	private static final String ATTRIBUTE_LOCALE = "locale";
+	
+	/** Column annotation hidden attribute. */
+	private static final String ATTRIBUTE_HIDDEN= "hidden";
+	
+	/** Column annotation columnDefinition attribute. */
+	private static final String ATTRIBUTE_COLUMN_DEFINITION = 
+			"columnDefinition";
+	
+	/** Relations annotation mappedBy attribute. */
+	private static final String ATTRIBUTE_MAPPED_BY= "mappedBy";
+	
+	/** Relations annotation inversedBy attribute. */
+	private static final String ATTRIBUTE_INVERSED_BY = "inversedBy";
+	
 	/**
 	 * Visit a field declaration to extract metadata.
 	 * @param field The field declaration.
@@ -265,14 +302,14 @@ public class FieldVisitor {
 					// Argument of Annotation Column
 					if (annotationType.equals(FILTER_COLUMN)) { 
 						// set nullable
-						if (mvp.getName().equals("nullable")  
+						if (mvp.getName().equals(ATTRIBUTE_NULLABLE)  
 								&& mvp.getValue().toString()
-											.equals("true")) {
+											.equals(String.valueOf(true))) {
 							result.setNullable(true);
 						} else 
 							
 						// set name
-						if (mvp.getName().equals("name")) {
+						if (mvp.getName().equals(ATTRIBUTE_NAME)) {
 							if (mvp.getValue() 
 									instanceof StringLiteralExpr) {
 								result.setColumnName(
@@ -285,38 +322,38 @@ public class FieldVisitor {
 						} else 
 							
 						// Set unique 
-						if (mvp.getName().equals("unique")  
+						if (mvp.getName().equals(ATTRIBUTE_UNIQUE)  
 								&& mvp.getValue().toString()
-										.equals("true")) {
+										.equals(String.valueOf(true))) {
 							result.setUnique(true);
 						} else 
 							
 						// set length
-						if (mvp.getName().equals("length")) {
+						if (mvp.getName().equals(ATTRIBUTE_LENGTH)) {
 							result.setLength(Integer.parseInt(
 									mvp.getValue().toString()));
 						} else 
 							
 						// set precision
-						if (mvp.getName().equals("precision")) {
+						if (mvp.getName().equals(ATTRIBUTE_PRECISION)) {
 							result.setPrecision(Integer.parseInt(
 									mvp.getValue().toString()));
 						} else 
 							
 						// set scale
-						if (mvp.getName().equals("scale")) {
+						if (mvp.getName().equals(ATTRIBUTE_SCALE)) {
 							result.setScale(Integer.parseInt(
 									mvp.getValue().toString()));
 						} else
 							
 						// set scale
-						if (mvp.getName().equals("locale")) {
+						if (mvp.getName().equals(ATTRIBUTE_LOCALE)) {
 							result.setIsLocale(Boolean.parseBoolean(
 									mvp.getValue().toString()));
 						} else 
 							
 						// set column definition
-						if (mvp.getName().equals("type")) {
+						if (mvp.getName().equals(ATTRIBUTE_TYPE)) {
 							//TODO : Generate warning if type not recognized
 							String type = "";
 							
@@ -334,7 +371,7 @@ public class FieldVisitor {
 						} else
 							
 						// set scale
-						if (mvp.getName().equals("columnDefinition")) {
+						if (mvp.getName().equals(ATTRIBUTE_COLUMN_DEFINITION)) {
 							if (mvp.getValue() 
 									instanceof StringLiteralExpr) {
 								result.setColumnDefinition(
@@ -347,30 +384,30 @@ public class FieldVisitor {
 						} else 
 					
 						// set if hide column view
-						if (mvp.getName().equals("hidden") 
+						if (mvp.getName().equals(ATTRIBUTE_HIDDEN) 
 								&& mvp.getValue().toString()
-										.equals("true")) {
+										.equals(String.valueOf(true))) {
 							result.setHidden(true);
 						}
 						
 					} else
 					
 					if (annotationType.equals(FILTER_JOINCOLUMN)) {
-						if (mvp.getName().equals("name")) {
+						if (mvp.getName().equals(ATTRIBUTE_NAME)) {
 							rel.setName(((StringLiteralExpr) 
 									mvp.getValue()).getValue());
 						}
 					} else
 						
 					if (annotationType.equals(FILTER_ONE2MANY)) {
-						if (mvp.getName().equals("mappedBy")) {
+						if (mvp.getName().equals(ATTRIBUTE_MAPPED_BY)) {
 							rel.setMappedBy(((StringLiteralExpr) 
 									mvp.getValue()).getValue());
 						}
 					} else
 					
 					if (annotationType.equals(FILTER_MANY2ONE)) {
-						if (mvp.getName().equals("inversedBy")) {
+						if (mvp.getName().equals(ATTRIBUTE_INVERSED_BY)) {
 							rel.setInversedBy(mvp.getValue().toString());
 						}
 					}
