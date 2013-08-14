@@ -65,11 +65,11 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 					<#elseif field.type?lower_case=="float">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomFloat(0,100));
 					<#elseif field.type?lower_case=="short">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomShort(0,100));
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomShort());
 					<#elseif field.type?lower_case=="char">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomChar(0,100));
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomChar());
 					<#elseif field.type?lower_case=="byte">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomByte(0,100));
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomByte());
 					<#elseif field.type?lower_case=="datetime">
 						<#if field.harmony_type?lower_case=="date">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDate());
@@ -123,15 +123,15 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 			if (${curr.name?uncap_first}1.get${field.name?cap_first}() != null 
 					&& ${curr.name?uncap_first}2.get${field.name?cap_first}() != null) {
 					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
-				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().getId(),
-						${curr.name?uncap_first}2.get${field.name?cap_first}().getId());
+				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}(),
+						${curr.name?uncap_first}2.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
 
 					<#else>
 				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().size(), 
 					${curr.name?uncap_first}2.get${field.name?cap_first}().size());
 				for (int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
-					Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).getId(),
-								${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).getId());
+					Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).get${entities[field.relation.targetEntity].ids[0].name?cap_first}(),
+								${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
 				}
 					</#if>
 			}

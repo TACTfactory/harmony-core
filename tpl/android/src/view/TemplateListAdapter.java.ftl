@@ -90,7 +90,7 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 				newCursor.registerDataSetObserver(this.mDataSetObserver);
 			}
             this.mRowIDColumn = newCursor.getColumnIndexOrThrow(
-					${curr.name?cap_first}SQLiteAdapter.COL_ID);
+					${curr.name?cap_first}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
             this.mDataValid = true;
             // notify the observers about the new cursor
             this.notifyDataSetChanged();
@@ -204,7 +204,7 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 						</#if>
 					<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 			this.${field.name}View.setText(
-					String.valueOf(model.get${field.name?cap_first}().getId()));	
+					String.valueOf(model.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}()));	
 					</#if>
 				</#if>
 			</#list>

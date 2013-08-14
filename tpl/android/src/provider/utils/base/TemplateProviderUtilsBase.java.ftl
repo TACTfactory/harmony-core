@@ -65,7 +65,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 
 
 		ContentValues itemValues = adapt.itemToContentValues(item);
-		itemValues.remove(${curr.name?cap_first}SQLiteAdapter.COL_ID);
+		itemValues.remove(${curr.name?cap_first}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
 
 		operations.add(ContentProviderOperation.newInsert(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
@@ -75,10 +75,10 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		<#list curr.relations as relation>
 			<#if (relation.relation.type == "OneToMany") >
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
-			String ${relation.name}Selection = ${relation.relation.targetEntity?cap_first}SQLiteAdapter.COL_ID + " IN (";
+			String ${relation.name}Selection = ${relation.relation.targetEntity?cap_first}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)} + " IN (";
 			String[] ${relation.name}SelectionArgs = new String[item.get${relation.name?cap_first}().size()];
 			for (int i = 0; i < item.get${relation.name?cap_first}().size(); i++) {
-				${relation.name}SelectionArgs[i] = String.valueOf(item.get${relation.name?cap_first}().get(i).getId());
+				${relation.name}SelectionArgs[i] = String.valueOf(item.get${relation.name?cap_first}().get(i).get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
 				${relation.name}Selection += "? ";
 				if (i != item.get${relation.name?cap_first}().size() - 1) {
 					 ${relation.name}Selection += ", ";
@@ -99,7 +99,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 			for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 				ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
 				${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID, ${relation.relation.targetEntity?uncap_first}.getId());
-				${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID, item.getId());
+				${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID, item.get${curr.ids[0].name?cap_first}());
 			
 				operations.add(ContentProviderOperation.newInsert(
 					${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
@@ -142,7 +142,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 				new ${curr.name?cap_first}SQLiteAdapter(this.getContext());
 		ContentValues itemValues = adapt.itemToContentValues(item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>,
 					${relation.name?uncap_first}Id</#if></#list>);
-		itemValues.remove(${curr.name?cap_first}SQLiteAdapter.COL_ID);
+		itemValues.remove(${curr.name?cap_first}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
 
 		operations.add(ContentProviderOperation.newInsert(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
@@ -158,14 +158,14 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 			Criteria crit = new Criteria();
 			ArrayValue values = new ArrayValue();
 			crit.setType(Type.IN);
-			crit.setKey(${relation.relation.targetEntity}SQLiteAdapter.COL_ID);
+			crit.setKey(${relation.relation.targetEntity}SQLiteAdapter.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
 			crit.addValue(values);
 			${curr.name?uncap_first}Crit.add(crit);
 			
 			
 			for (int i = 0; i < item.get${relation.name?cap_first}().size(); i++) {
 				values.addValue(String.valueOf(
-						item.get${relation.name?cap_first}().get(i).getId()));
+						item.get${relation.name?cap_first}().get(i).get${entities[relation.relation.targetEntity].ids[0].name?cap_first}()));
 			}
 
 			operations.add(ContentProviderOperation.newUpdate(
@@ -185,10 +185,10 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 				ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
 				${relation.relation.targetEntity?uncap_first}Values.put(
 						${relation.relation.joinTable}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID,
-						${relation.relation.targetEntity?uncap_first}.getId());
+						${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
 				${relation.relation.targetEntity?uncap_first}Values.put(
 						${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID,
-						item.getId());
+						item.get${curr.ids[0].name?cap_first}());
 			
 				operations.add(ContentProviderOperation.newInsert(
 					${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
@@ -223,7 +223,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 
 		Uri uri = Uri.withAppendedPath(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI, 
-				String.valueOf(item.getId()));
+				String.valueOf(item.get${curr.ids[0].name?cap_first}()));
 		result = prov.delete(uri,
 			null,
 			null);
@@ -245,7 +245,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 
 		${curr.name}Criterias crits = 
 				new ${curr.name}Criterias(GroupType.AND);
-		crits.add(${curr.name?cap_first}SQLiteAdapter.ALIASED_COL_ID,
+		crits.add(${curr.name?cap_first}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.ids[0].name)},
 					String.valueOf(id));
 		
 		Cursor cursor = prov.query(
@@ -339,7 +339,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 
 		Uri uri = Uri.withAppendedPath(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI, 
-				String.valueOf(item.getId()));
+				String.valueOf(item.get${curr.ids[0].name?cap_first}()));
 		
 	
 		result = prov.update(uri,
@@ -351,14 +351,14 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 			<#if (relation.relation.type == "ManyToMany") >
 		prov.delete(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI,
 				${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID + "= ?", 
-				new String[]{String.valueOf(item.getId())});
+				new String[]{String.valueOf(item.get${curr.ids[0].name?cap_first}())});
 		
 		for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 			ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
 			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID,
-					${relation.relation.targetEntity?uncap_first}.getId());
+					${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
 			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID,
-					item.getId());
+					item.get${curr.ids[0].name?cap_first}());
 			
 			prov.insert(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI,
 					${relation.relation.targetEntity?uncap_first}Values);
@@ -388,7 +388,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		
 		Uri uri = Uri.withAppendedPath(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI, 
-				String.valueOf(item.getId()));
+				String.valueOf(item.get${curr.ids[0].name?cap_first}()));
 		
 	
 		result = prov.update(uri,
@@ -401,14 +401,14 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 			<#if (relation.relation.type == "ManyToMany") >
 		prov.delete(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI,
 				${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID + "= ?", 
-				new String[]{String.valueOf(item.getId())});
+				new String[]{String.valueOf(item.get${curr.ids[0].name?cap_first}())});
 		
 		for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 			ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
 			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID,
-					${relation.relation.targetEntity?uncap_first}.getId());
+					${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
 			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID,
-					item.getId());
+					item.get${curr.ids[0].name?cap_first}());
 			
 			prov.insert(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI,
 					${relation.relation.targetEntity?uncap_first}Values);
@@ -435,8 +435,8 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
 				${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI, 
 				${relation.relation.targetEntity?cap_first}SQLiteAdapter.ALIASED_COLS,
-				${relation.relation.targetEntity?cap_first}SQLiteAdapter.COL_ID + "= ?", 
-				new String[]{String.valueOf(item.get${relation.name?cap_first}().getId())}, 
+				${relation.relation.targetEntity?cap_first}SQLiteAdapter.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)} + "= ?", 
+				new String[]{String.valueOf(item.get${relation.name?cap_first}().get${entities[relation.relation.targetEntity].ids[0].name?cap_first}())}, 
 				null);
 
 		if (${relation.relation.targetEntity?uncap_first}Cursor.getCount() > 0) {
@@ -466,7 +466,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 				${relation.relation.targetEntity?cap_first}SQLiteAdapter.ALIASED_COLS,
 				${relation.relation.targetEntity?cap_first}SQLiteAdapter.COL_${relation.relation.mappedBy?upper_case} 
 						+ "= ?", 
-				new String[]{String.valueOf(item.getId())}, 
+				new String[]{String.valueOf(item.get${curr.ids[0].name?cap_first}())}, 
 				null);
 
 		${relation.relation.targetEntity?cap_first}SQLiteAdapter ${relation.relation.targetEntity?uncap_first}Adapt = 
@@ -491,7 +491,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 				${relation.relation.joinTable?cap_first}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI, 
 				${relation.relation.joinTable?cap_first}SQLiteAdapter.ALIASED_COLS,
 				${relation.relation.joinTable?cap_first}SQLiteAdapter.COL_${curr.name?upper_case}_ID + "= ?", 
-				new String[]{String.valueOf(item.getId())}, 
+				new String[]{String.valueOf(item.get${curr.ids[0].name?cap_first}())}, 
 				null);
 
 		if (${relation.relation.joinTable?uncap_first}Cursor.getCount() > 0) {
@@ -499,9 +499,10 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 					new ${relation.relation.targetEntity}Criterias(GroupType.AND);
 			Criteria inCrit = new Criteria();
 			ArrayValue arrayValue = new ArrayValue();
-			inCrit.setKey(${relation.relation.targetEntity?cap_first}SQLiteAdapter.COL_ID);
+			inCrit.setKey(${relation.relation.targetEntity?cap_first}SQLiteAdapter.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
 			inCrit.setType(Type.IN);
-			inCrit.addValue(arrayValue);			
+			inCrit.addValue(arrayValue);
+			${relation.relation.targetEntity?uncap_first}Crits.add(inCrit);
 			
 			while (${relation.relation.joinTable?uncap_first}Cursor.moveToNext()) {
 				int index = ${relation.relation.joinTable?uncap_first}Cursor.getColumnIndex(
