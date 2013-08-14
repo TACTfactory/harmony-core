@@ -56,11 +56,26 @@ public class OrmInitEntitiesTest extends CommonTest {
 	/** login field name. */
 	private static final String LOGIN = "login";
 	
+	/** id field name. */
+	private static final String ID = "id";
+	
 	/** Debug message. */
 	private static final String MSG_CHECK_IF_FIELD = "Check if field ";
 	
 	/** Default fields size. */
 	private static final int DEFAULT_SIZE = 255;
+
+	/** User. */
+	private static final String USER = "User";
+	
+	/** Post. */
+	private static final String POST = "Post";
+
+	/** Comment. */
+	private static final String COMMENT = "Comment";
+
+	/** Client. */
+	private static final String CLIENT = "Client";
 	
 	/** Path of entity folder. */
 	private static final String ENTITY_PATH = 
@@ -114,19 +129,19 @@ public class OrmInitEntitiesTest extends CommonTest {
 		
 		for (final EntityMetadata classMetadata
 				: ApplicationMetadata.INSTANCE.getEntities().values()) {
-			if (classMetadata.getName().equals("User")) {
+			if (classMetadata.getName().equals(USER)) {
 				userMeta = classMetadata;
 			}
 			
-			if (classMetadata.getName().equals("Post")) {
+			if (classMetadata.getName().equals(POST)) {
 				postMeta = classMetadata;
 			}
 			
-			if (classMetadata.getName().equals("Comment")) {
+			if (classMetadata.getName().equals(COMMENT)) {
 				commentMeta = classMetadata;
 			}
 			
-			if (classMetadata.getName().equals("Client")) {
+			if (classMetadata.getName().equals(CLIENT)) {
 				clientMeta = classMetadata;
 			}
 		}
@@ -176,24 +191,24 @@ public class OrmInitEntitiesTest extends CommonTest {
 	/** Is Client created and parsed well? */
 	@Test
 	public final void hasClientEntity() {
-		CommonTest.hasFindFile(ENTITY_PATH + "Client.java");
-		Assert.assertNotNull("Client no parsed !", clientMeta);
+		CommonTest.hasFindFile(ENTITY_PATH + CLIENT + ".java");
+		Assert.assertNotNull(CLIENT + " no parsed !", clientMeta);
 	}
 	
 	/** Does Client extends User well? */
 	@Test
 	public final void isClientExtended() {
-		Assert.assertEquals("Client doesn't inherit from User",
+		Assert.assertEquals(CLIENT + " doesn't inherit from " + USER,
 				clientMeta.getExtendType(),
-				"User");
+				USER);
 	}
 	
 	//// POST ////
 	/** Is post created and parsed well. */
 	@Test
 	public final void hasPostEntity() {
-		CommonTest.hasFindFile(ENTITY_PATH + "Post.java");
-		Assert.assertNotNull("Post no parsed !", postMeta);
+		CommonTest.hasFindFile(ENTITY_PATH + POST + ".java");
+		Assert.assertNotNull(POST + " no parsed !", postMeta);
 	}
 	
 	/** Does post implement Serializable ? */
@@ -214,13 +229,13 @@ public class OrmInitEntitiesTest extends CommonTest {
 	/** ID Test. */
 	@Test
 	public final void hasPostId() {
-		this.hasId(postMeta, "id");
+		this.hasId(postMeta, ID);
 	}
 	
 	/** Fields Test. */
 	@Test
 	public final void hasPostColumn() {
-		this.hasColumn(postMeta, "id");
+		this.hasColumn(postMeta, ID);
 		this.hasColumn(postMeta, "title");
 		this.hasColumn(postMeta, "content");
 		this.hasColumn(postMeta, "owner");
@@ -235,8 +250,8 @@ public class OrmInitEntitiesTest extends CommonTest {
 	/** Is comment created and parsed well. */
 	@Test
 	public final void hasCommentEntity() {		
-		CommonTest.hasFindFile(ENTITY_PATH + "Comment.java");
-		Assert.assertNotNull("Comment no parsed !", commentMeta);
+		CommonTest.hasFindFile(ENTITY_PATH + COMMENT + ".java");
+		Assert.assertNotNull(COMMENT + " no parsed !", commentMeta);
 	}
 	
 	/** Does comment implement Serializable ? */
@@ -257,13 +272,13 @@ public class OrmInitEntitiesTest extends CommonTest {
 	/** ID Test. */
 	@Test
 	public final void hasCommentId() {
-		this.hasId(commentMeta, "id");
+		this.hasId(commentMeta, ID);
 	}
 	
 	/** Fields Test. */
 	@Test
 	public final void hasCommentColumn() {
-		this.hasColumn(commentMeta, "id");
+		this.hasColumn(commentMeta, ID);
 		this.hasColumn(commentMeta, "content");
 		this.hasColumn(commentMeta, "owner");
 		this.hasColumn(commentMeta, "post");
@@ -275,8 +290,8 @@ public class OrmInitEntitiesTest extends CommonTest {
 	/** Is user created and parsed well. */
 	@Test
 	public final void hasUserEntity() {
-		CommonTest.hasFindFile(ENTITY_PATH + "User.java");
-		Assert.assertNotNull("User no parsed !", userMeta);
+		CommonTest.hasFindFile(ENTITY_PATH + USER + ".java");
+		Assert.assertNotNull(USER + " no parsed !", userMeta);
 	}
 	
 	/** Does user implement Serializable ? */
@@ -297,13 +312,13 @@ public class OrmInitEntitiesTest extends CommonTest {
 	/** ID Test. */
 	@Test
 	public final void hasUserId() {
-		this.hasId(userMeta, "id");
+		this.hasId(userMeta, ID);
 	}
 	
 	/** Fields Test. */
 	@Test
 	public final void hasUserColumn() {
-		this.hasColumn(userMeta, "id");
+		this.hasColumn(userMeta, ID);
 		this.hasColumn(userMeta, LOGIN);
 		this.hasColumn(userMeta, PASSWORD);
 		this.hasColumn(userMeta, FIRSTNAME);
@@ -314,21 +329,21 @@ public class OrmInitEntitiesTest extends CommonTest {
 	/** Annotations Test. */
 	@Test
 	public final void hasUserFieldAnnotations() {
-		this.isFieldNullable(userMeta, "id", false);
+		this.isFieldNullable(userMeta, ID, false);
 		this.isFieldNullable(userMeta, LOGIN, false);
 		this.isFieldNullable(userMeta, PASSWORD, false);
 		this.isFieldNullable(userMeta, FIRSTNAME, true);
 		this.isFieldNullable(userMeta, LASTNAME, false);
 		this.isFieldNullable(userMeta, CREATED_AT, false);
 		
-		this.isFieldUnique(userMeta, "id", false);
+		this.isFieldUnique(userMeta, ID, false);
 		this.isFieldUnique(userMeta, LOGIN, true);
 		this.isFieldUnique(userMeta, PASSWORD, false);
 		this.isFieldUnique(userMeta, FIRSTNAME, false);
 		this.isFieldUnique(userMeta, LASTNAME, false);
 		this.isFieldUnique(userMeta, CREATED_AT, false);
 		
-		this.hasFieldColumnName(userMeta, "id", "id");
+		this.hasFieldColumnName(userMeta, ID, ID);
 		this.hasFieldColumnName(userMeta, LOGIN, LOGIN);
 		this.hasFieldColumnName(userMeta, PASSWORD, PASSWORD);
 		this.hasFieldColumnName(userMeta, FIRSTNAME, FIRSTNAME);
@@ -336,7 +351,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 		this.hasFieldColumnName(userMeta, CREATED_AT, "created_at");
 		
 		
-		this.isFieldLength(userMeta, "id", Integer.MAX_VALUE);
+		this.isFieldLength(userMeta, ID, Integer.MAX_VALUE);
 		this.isFieldLength(userMeta, LOGIN, DEFAULT_SIZE);
 		this.isFieldLength(userMeta, PASSWORD, DEFAULT_SIZE);
 		this.isFieldLength(userMeta, FIRSTNAME, DEFAULT_SIZE);
@@ -358,7 +373,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	/** Post Repository creation test. */
 	@Test
 	public final void hasPostRepository() {
-		this.hasRepository("Post");
+		this.hasRepository(POST);
 	}
 	
 	
@@ -368,7 +383,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	/** Comment Repository creation test. */
 	@Test
 	public final void hasCommentRepository() {
-		this.hasRepository("Comment");
+		this.hasRepository(COMMENT);
 	}
 	
 	
@@ -376,14 +391,14 @@ public class OrmInitEntitiesTest extends CommonTest {
 	/** User Repository creation test. */
 	@Test
 	public final void hasUserRepository() {
-		this.hasRepository("User");
+		this.hasRepository(USER);
 	}
 	
 	////REPOSITORY USER ////
 	/** User Repository creation test. */
 	@Test
 	public final void hasClientRepository() {
-		this.hasRepository("Client");
+		this.hasRepository(CLIENT);
 	}
 	
 	
