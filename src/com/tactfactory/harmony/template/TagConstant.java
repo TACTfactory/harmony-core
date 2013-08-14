@@ -113,6 +113,8 @@ public abstract class TagConstant {
 	public static final String ID = "id";
 	/** Constant for nullable field. */
 	public static final String NULLABLE = "nullable";
+	/** Constant for field's default value. */
+	public static final String DEFAULT_VALUE = "defaultValue";
 	/** Constant for provider id. */
 	public static final String PROVIDER_ID = "provider_id";
 	/** Constant for mother class. */

@@ -38,6 +38,9 @@ public class FieldMetadata extends BaseMetadata {
 	/** Relation mapped to this field. */
 	private RelationMetadata relation;
 	
+	/** DefaultValue. */
+	private String defaultValue;
+	
 	/** Field nullability. */
 	private Boolean nullable;
 	/** Field unicity. */
@@ -145,6 +148,10 @@ public class FieldMetadata extends BaseMetadata {
 		
 		if (this.relation != null) {
 			model.put(TagConstant.RELATION, this.relation.toMap(adapter));
+		}
+		
+		if (this.defaultValue != null) {
+			model.put(TagConstant.DEFAULT_VALUE, this.defaultValue);
 		}
 		
 		final HashMap<String, Object> optionsModel =
@@ -395,5 +402,21 @@ public class FieldMetadata extends BaseMetadata {
 	 */
 	public final void setHarmonyType(final String harmonyType) {
 		this.harmonyType = harmonyType;
+	}
+
+
+	/**
+	 * @return the defaultValue
+	 */
+	public final String getDefaultValue() {
+		return defaultValue;
+	}
+
+
+	/**
+	 * @param defaultValue the defaultValue to set
+	 */
+	public final void setDefaultValue(String defaultValue) {
+		this.defaultValue = defaultValue;
 	}
 }

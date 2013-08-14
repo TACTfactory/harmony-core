@@ -27,6 +27,13 @@ import java.lang.reflect.Field;
 @Target(FIELD)
 @Inherited
 public @interface Column {
+	/** 
+	 * Hack for null value in DefaultValue attribute. Null is not a suitable
+	 * value for attribute values in Java...
+	 */
+	public static final String DEFAULT_VALUE_NULL = 
+			"##hack-harmony-default-default-value##";
+	
 	/** Default field length. */
 	int DEFAULT_LENGTH = 255;
 	
@@ -323,4 +330,9 @@ public @interface Column {
 	 * Use locale for date.
 	 */
 	boolean locale() default false;
+	
+	/**
+	 * Default SQL value.
+	 */ 
+	String defaultValue() default DEFAULT_VALUE_NULL;
 }

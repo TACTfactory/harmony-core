@@ -71,6 +71,10 @@ public abstract class SqliteAdapter {
 			if (fm.isNullable() == null || !fm.isNullable()) {
 				builder.append(" NOT NULL");
 			}
+			
+			if (fm.getDefaultValue() != null) {
+				builder.append(" DEFAULT \\\"" + fm.getDefaultValue() + "\\\"");
+			}
 		}
 
 		
