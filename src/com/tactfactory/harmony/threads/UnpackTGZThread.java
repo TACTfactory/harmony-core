@@ -8,6 +8,8 @@ import org.rauschig.jarchivelib.Archiver;
 import org.rauschig.jarchivelib.ArchiverFactory;
 import org.rauschig.jarchivelib.CompressionType;
 
+import com.tactfactory.harmony.utils.ConsoleUtils;
+
 /**
  * Thread used for Unpacking a TGZ file.
  * Use OnUnpackedFinishedListener to know when the unpack is finished.
@@ -36,9 +38,10 @@ public class UnpackTGZThread extends Thread {
 	 * @param destPath The destination folder path
 	 */
 	public UnpackTGZThread(
-			OnUnpackedFinishedListener listener,
-			String filePath,
-			String destPath) {
+			final OnUnpackedFinishedListener listener,
+			final String filePath,
+			final String destPath) {
+		super();
 		this.file = new File(filePath);
 		this.destFile = new File(destPath);
 		this.listener = listener;
@@ -63,14 +66,14 @@ public class UnpackTGZThread extends Thread {
 		super.run();
 		this.onStart();
 
-		Archiver archiver = ArchiverFactory.createArchiver(
+		final Archiver archiver = ArchiverFactory.createArchiver(
 				ArchiveFormat.TAR,
 				CompressionType.GZIP);
 		try {
 			archiver.extract(this.file, this.destFile);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ConsoleUtils.displayError(e);
 		}
 		this.onFinished();
 	}

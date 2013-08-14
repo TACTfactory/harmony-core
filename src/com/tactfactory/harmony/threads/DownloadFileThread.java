@@ -8,6 +8,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import com.tactfactory.harmony.utils.ConsoleUtils;
+
 /**
  * Thread used to download a file from the internet.
  */
@@ -83,21 +85,20 @@ public class DownloadFileThread extends Thread {
 			this.onFinished();
 
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ConsoleUtils.displayError(e);
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ConsoleUtils.displayError(e);
+			
 		} finally {
 			if (output != null) {
 				try {
 					output.close();
+					
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					ConsoleUtils.displayError(e);
 				}
 			}
-
 			if (this.listener != null) {
 				this.listener.onDownloadFinished(new File(this.destPath));
 			}

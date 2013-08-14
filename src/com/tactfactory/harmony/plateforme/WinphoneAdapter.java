@@ -27,13 +27,14 @@ public final class WinphoneAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public String getNameSpace(final ClassMetadata cm, final String type) {
+	public String getNameSpace(final ClassMetadata classMeta,
+			final String type) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public String getNameSpaceEntity(final ClassMetadata cm,
+	public String getNameSpaceEntity(final ClassMetadata classMeta,
 			final String type) {
 		// TODO Auto-generated method stub
 		return null;
