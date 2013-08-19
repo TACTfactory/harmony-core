@@ -88,7 +88,7 @@ public abstract class FixtureBase<T> {
 											this.getFixtureFileName());
 				if (entities != null) {
 					for (Element element : entities) {
-						this.items.put((String)element.getAttributeValue("id"),
+						this.items.put((String) element.getAttributeValue("id"),
 								this.extractItem(element));
 					}
 				}
@@ -245,7 +245,8 @@ public abstract class FixtureBase<T> {
 	 */
 	public Map<String, T> getMap() {
 		Map<String, T> result = null;
-		ByteArrayInputStream bis = new ByteArrayInputStream(this.serializedBackup);
+		ByteArrayInputStream bis = 
+			new ByteArrayInputStream(this.serializedBackup);
 		ObjectInput in = null;
 		try {
 		  in = new ObjectInputStream(bis);

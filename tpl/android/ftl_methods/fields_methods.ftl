@@ -67,3 +67,55 @@
 	</#list>
 	<#return false />
 </#function>
+
+
+
+
+
+
+<#-- Methods used to generate fields extractors, getter, setter, etc... -->
+
+<#-- Generate the getter method call of the given field -->
+<#function generateGetter field>
+	<#if (field.type?lower_case == "boolean")>
+		<#assign prefix = "is" />
+	<#else>
+		<#assign prefix = "get" />
+	</#if>
+	<#return prefix + field.name?cap_first + "()" />
+</#function>
+
+<#-- Generate the getter method call appended to object name -->
+<#function generateCompleteGetter objectName field>
+	<#if (field.type?lower_case == "boolean")>
+		<#assign prefix = "is" />
+	<#else>
+		<#assign prefix = "get" />
+	</#if>
+	<#return objectName + "." + prefix + field.name?cap_first + "()" />
+</#function>
+
+<#-- Generate the getter of the given field, with its converter to string. -->
+<#function generateStringGetter className field>
+	<#if (field.type?lower_case == "datetime")>																		<#-- If datetime -->
+		<#if field.is_locale>
+			<#return generateCompleteGetter(className field) + ".toLocalDateTime().toString()" />
+		<#else>
+			<#return generateCompleteGetter(className field) + ".toString(ISODateTimeFormat.dateTime())" />
+		</#if>
+	<#elseif (field.type?lower_case == "string")>																	<#-- If String (field) -->
+		<#return generateCompleteGetter(className field) + ""/>
+	<#elseif (field.harmony_type?lower_case == "enum")>																<#-- If Enum (field.getValue() || field.name()) -->
+		<#if (enums[field.type].id??) >
+			<#return generateCompleteGetter(className field) + ".getValue()"/>
+		<#else>
+			<#return generateCompleteGetter(className field) + ".name()"/>
+		</#if>
+	<#else>																											<#-- For all other cases (String.valueOf(field)) -->
+		<#return "String.valueOf("+generateCompleteGetter(className field) + ")"/>
+	</#if>
+</#function>
+
+
+
+
