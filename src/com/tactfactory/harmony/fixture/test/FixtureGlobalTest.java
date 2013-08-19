@@ -32,7 +32,7 @@ public class FixtureGlobalTest extends CommonTest {
 			"android/src/com/tactfactory/harmony/test/demact/fixture/";
 
 	/**
-	 * @throws java.lang.Exception
+	 * @throws Exception if something bad happened.
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {

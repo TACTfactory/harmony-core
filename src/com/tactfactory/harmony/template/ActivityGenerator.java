@@ -67,7 +67,7 @@ public class ActivityGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public ActivityGenerator(final BaseAdapter adapter) throws Exception {
 		this(adapter, true);
@@ -104,7 +104,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * Constructor.
 	 * @param adapter The adapter to use.
 	 * @param writable Are the entities writable ? (default to true)
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public ActivityGenerator(final BaseAdapter adapter,
 			final Boolean writable) throws Exception {
@@ -476,8 +476,8 @@ public class ActivityGenerator extends BaseGenerator {
 	/** Make Manifest file.
 	 *
 	 * @param cfg Template engine
-	 * @throws IOException
-	 * @throws TemplateException
+	 * @throws IOException if an IO exception occurred 
+	 * @throws TemplateException If the template generation failed
 	 */
 	public final void makeManifest(final Configuration cfg)
 			throws IOException, TemplateException {
@@ -506,7 +506,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @param entityName the entity for which to update the manifest for.
 	 */
 	private void updateManifest(final String classF, final String entityName) {
-		String classFile = entityName + classF;
+		final String classFile = entityName + classF;
 		final String pathRelatif = String.format(".%s.%s.%s",
 				this.getAdapter().getController(),
 				entityName.toLowerCase(Locale.ENGLISH),

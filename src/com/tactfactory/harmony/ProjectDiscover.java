@@ -193,7 +193,7 @@ public final class ProjectDiscover {
 				defaultSDKPath = sdkPath.trim();
 
 			} else {
-				String osMessage = "Detected OS: " + detectedOS;
+				final String osMessage = "Detected OS: " + detectedOS;
 
 				// Debug Log
 				ConsoleUtils.displayDebug(osMessage);
@@ -316,7 +316,7 @@ public final class ProjectDiscover {
 
 				} else {
 
-					String namespaceForm =
+					final String namespaceForm =
 							"^(((([a-z0-9_]+)\\.)*)([a-z0-9_]+))$";
 
 					if (Pattern.matches(namespaceForm, projectNameSpace)) {

@@ -19,7 +19,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use.
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public TestProjectGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
@@ -157,11 +157,11 @@ public class TestProjectGenerator extends BaseGenerator {
 	private boolean clearProjectSources() {
 		boolean result = true;
 
-		String projectPath = Harmony.getProjectPath()
+		final String projectPath = Harmony.getProjectPath()
 				+ File.separator + this.getAdapter().getPlatform()
 				+ File.separator + this.getAdapter().getTest();
 
-		File buildRules = new File(projectPath
+		final File buildRules = new File(projectPath
 				+ File.separator + "build.rules.xml");
 
 		if (buildRules.exists()) {

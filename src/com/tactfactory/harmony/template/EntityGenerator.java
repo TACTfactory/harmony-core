@@ -45,7 +45,7 @@ public class EntityGenerator extends BaseGenerator {
 
 	/** Constructor.
 	 * @param adapter Adapter used by this generator
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public EntityGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
@@ -140,10 +140,11 @@ public class EntityGenerator extends BaseGenerator {
 	protected final void generateGetterAndSetters(final StringBuffer fileString,
 			final EntityMetadata cm) {
 		final Collection<FieldMetadata> fields = cm.getFields().values();
-		boolean childClass = MetadataUtils.inheritsFromEntity(cm,
+		final boolean childClass = MetadataUtils.inheritsFromEntity(cm,
 				ApplicationMetadata.INSTANCE);
 		for (final FieldMetadata f : fields) {
-			boolean isInheritedId = childClass && cm.getIds().containsKey(f.getName());
+			final boolean isInheritedId = 
+					childClass && cm.getIds().containsKey(f.getName());
 			if (!f.isInternal() && !isInheritedId) {
 				// Getter
 				if (!this.alreadyImplementsGet(f, cm)) {

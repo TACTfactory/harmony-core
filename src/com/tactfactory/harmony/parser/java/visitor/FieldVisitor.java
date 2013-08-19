@@ -94,14 +94,14 @@ public class FieldVisitor {
 	private static final String ATTRIBUTE_LOCALE = "locale";
 
 	/** Column annotation hidden attribute. */
-	private static final String ATTRIBUTE_HIDDEN= "hidden";
+	private static final String ATTRIBUTE_HIDDEN = "hidden";
 
 	/** Column annotation columnDefinition attribute. */
 	private static final String ATTRIBUTE_COLUMN_DEFINITION =
 			"columnDefinition";
 
 	/** Relations annotation mappedBy attribute. */
-	private static final String ATTRIBUTE_MAPPED_BY= "mappedBy";
+	private static final String ATTRIBUTE_MAPPED_BY = "mappedBy";
 
 	/** Relations annotation inversedBy attribute. */
 	private static final String ATTRIBUTE_INVERSED_BY = "inversedBy";
@@ -159,7 +159,6 @@ public class FieldVisitor {
 			for (final AnnotationExpr annotationExpr : fieldAnnotations) {
 				final String annotationType =
 						annotationExpr.getName().toString();
-
 
 		    	for (final BaseParser bParser
 		    			: JavaModelParser.getBundleParsers()) {
@@ -275,7 +274,6 @@ public class FieldVisitor {
 		}
 
 		return result;
-
 	}
 
 	/**

@@ -87,7 +87,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 
 	/**
 	 * Initialization.
-	 * @throws Exception
+	 * @throws Exception if something bad happened.
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {
@@ -360,7 +360,10 @@ public class OrmInitEntitiesTest extends CommonTest {
 	}
 
 	////REPOSITORY ////
-	/** Repository creation test. */
+	/** 
+	 * Repository creation test.
+	 * @param entityName The entity name 
+	 */
 	public final void hasRepository(String entityName) {
 		CommonTest.hasFindFile(DATA_PATH
 				+ entityName + "SQLiteAdapter.java");

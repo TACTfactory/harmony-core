@@ -179,7 +179,7 @@ public abstract class ConsoleUtils {
 	 */
 	public static void displayError(final Exception value) {
 		if (!isQuiet) {
-			String message = 	"[ERROR]"
+			final String message = 	"[ERROR]"
 								 + TAB
 								 + value
 								 + NEWLINE
@@ -219,8 +219,8 @@ public abstract class ConsoleUtils {
 
 	/**
 	 * Converts a StackTrace to a String.
-	 * @param stackTraceElements
-	 * @return The StrackTrace
+	 * @param stackTraceElements The array of stack trace elements
+	 * @return The StrackTrace The flattened stack trace
 	 */
 	private static String getStackTrace(
 			final StackTraceElement[] stackTraceElements) {

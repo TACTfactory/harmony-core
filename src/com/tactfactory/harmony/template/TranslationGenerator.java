@@ -32,7 +32,7 @@ public class TranslationGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use.
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public TranslationGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
@@ -58,7 +58,7 @@ public class TranslationGenerator extends BaseGenerator {
 
 		for (final TranslationMetadata translationMeta
 				: this.getAppMetas().getTranslates().values()) {
-			Element newNode = new Element("string");
+			final Element newNode = new Element("string");
 
 			// Add name to element
 			newNode.setAttribute(NAME,

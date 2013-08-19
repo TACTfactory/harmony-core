@@ -39,7 +39,7 @@ public class ConfigGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public ConfigGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);

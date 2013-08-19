@@ -92,14 +92,15 @@ public final class Context {
 
 		// Clean binary case (for /bin and /vendor/**/bin)
 		if (baseDir == null && harmonyPath.endsWith("bin/")) {
-			File predictiveBaseDir = new File(harmonyPath).getParentFile();
+			final File predictiveBaseDir =
+					new File(harmonyPath).getParentFile();
 
 			ConsoleUtils.displayDebug("Eclipse Mode : " + harmonyPath);
 			baseDir = this.detectAppTree(predictiveBaseDir);
 		}
 
 		if (baseDir == null && harmonyPath.endsWith("harmony.jar")) {
-			File predictiveBaseDir = new File(harmonyPath)
+			final File predictiveBaseDir = new File(harmonyPath)
 					.getParentFile()
 					.getParentFile()
 					.getParentFile();
@@ -111,7 +112,7 @@ public final class Context {
 
 		// For vendor/tact-core case
 		if (baseDir == null) {
-			File predictiveBaseDir =
+			final File predictiveBaseDir =
 					new File(harmonyPath)
 						.getParentFile()
 						.getParentFile()
@@ -123,7 +124,7 @@ public final class Context {
 
 		//For Emma
 		if (baseDir == null) {
-			File predictiveBaseDir =
+			final File predictiveBaseDir =
 					new File(harmonyPath)
 						.getParentFile()
 						.getParentFile()
@@ -220,7 +221,7 @@ public final class Context {
 	 */
 	private File detectAppTree(final File checkPath) {
 		File result = null;
-		File[] list = checkPath.listFiles();
+		final File[] list = checkPath.listFiles();
 
 		if (list != null) {
 			for (File dir : list) {

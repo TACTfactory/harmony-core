@@ -28,22 +28,22 @@ public class DependenciesCommand extends BaseCommand {
 			+ ACTION_SDK;
 
 	@Override
-	public void execute(String action, String[] args, String option) {
-		String sdkPath = ConsoleUtils.getUserInput(
+	public final void execute(String action, String[] args, String option) {
+		final String sdkPath = ConsoleUtils.getUserInput(
 						"Where do you want to install the Android SDK ?");
 		SDKUtils.downloadAndInstallAndroidSDK(sdkPath);
 
 	}
 
 	@Override
-	public void summary() {
+	public final void summary() {
 		ConsoleUtils.display("\n> DEPENDENCIES \n"
 				+ "\t" + INSTALL_SDK
 				+ "\t => Install the android SDK\n");
 	}
 
 	@Override
-	public boolean isAvailableCommand(String command) {
+	public final boolean isAvailableCommand(String command) {
 		return INSTALL_SDK.equals(command);
 	}
 }

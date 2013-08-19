@@ -11,7 +11,8 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-	EmptyBundleGenerationTest.class})
+	EmptyBundleGenerationTest.class })
 
 public class AllTests {
+
 }

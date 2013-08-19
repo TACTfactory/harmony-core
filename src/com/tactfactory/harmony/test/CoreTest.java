@@ -25,7 +25,7 @@ public class CoreTest extends CommonTest {
 
 	/**
 	 * Initialization.
-	 * @throws Exception
+	 * @throws Exception if something bad happened.
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {

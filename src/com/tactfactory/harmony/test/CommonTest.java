@@ -36,7 +36,7 @@ public abstract class CommonTest {
 
 	/**
 	 * Initialization.
-	 * @throws Exception
+	 * @throws Exception if something bad happens
 	 */
 	public static void setUpBefore() throws Exception {
 		// Base configs
@@ -69,7 +69,7 @@ public abstract class CommonTest {
 
 	/**
 	 * Initialization.
-	 * @throws Exception
+	 * @throws Exception if something bad happends.
 	 */
 	public void setUp() throws Exception {
 
@@ -77,7 +77,7 @@ public abstract class CommonTest {
 
 	/**
 	 * Test clean.
-	 * @throws Exception
+	 * @throws Exception if something bad happends.
 	 */
 	public void tearDown() throws Exception {
 
@@ -98,12 +98,12 @@ public abstract class CommonTest {
 				ApplicationMetadata.INSTANCE.getProjectNameSpace()
 					.replaceAll("\\.", "/");
 
-		String srcDir =
+		final String srcDir =
 				String.format("%s/tact-core/src/%s/%s/",
 						Harmony.getBundlePath(),
 						pathNameSpace,
 						"entity");
-		String destDir =
+		final String destDir =
 				String.format("%s/src/%s/%s/",
 						Harmony.getProjectAndroidPath(),
 						pathNameSpace,

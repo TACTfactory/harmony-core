@@ -34,7 +34,7 @@ public class ProjectInitTest extends CommonTest {
 
 	/**
 	 * Initialization of the test.
-	 * @throws Exception
+	 * @throws Exception if something bad happened.
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {
@@ -81,7 +81,8 @@ public class ProjectInitTest extends CommonTest {
 		CommonTest.hasFindFile("android/project.properties");
 
 		CommonTest.hasFindFile("android/src");
-		CommonTest.hasFindFile("android/src/com/tactfactory/harmony/test/demact");
+		CommonTest.hasFindFile(
+				"android/src/com/tactfactory/harmony/test/demact");
 		CommonTest.hasFindFile(
 				"android/src/com/tactfactory/harmony/test/demact/entity");
 		//this.isFindFile("android/res/");
@@ -100,7 +101,7 @@ public class ProjectInitTest extends CommonTest {
 		System.out.println("\nTest Update SDK Path");
 		System.out.println(SHARP_DELIMITOR);
 
-		String newSdkPath = "test-sdkpath/";
+		final String newSdkPath = "test-sdkpath/";
 		ApplicationMetadata.setAndroidSdkPath(newSdkPath);
 		ProjectGenerator.updateSDKPath();
 

@@ -17,7 +17,7 @@ public class TestProviderGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public TestProviderGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
@@ -51,7 +51,7 @@ public class TestProviderGenerator extends BaseGenerator {
 	 * @return True if it already exists.
 	 */
 	private boolean isDataLoaderAlreadyGenerated() {
-		String dataLoaderPath = this.getAdapter().getSourcePath()
+		final String dataLoaderPath = this.getAdapter().getSourcePath()
 				+ this.getAppMetas().getProjectNameSpace()
 				+ "/" + this.getAdapter().getFixture() + "/"
 				+ "DataLoader.java";

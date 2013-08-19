@@ -42,7 +42,7 @@ public class EnumCompletor extends BaseGenerator {
 
 	/** Constructor.
 	 * @param adapt Adapter used by this generator
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public EnumCompletor(final BaseAdapter adapt) throws Exception {
 		super(adapt);
@@ -158,13 +158,13 @@ public class EnumCompletor extends BaseGenerator {
 	 * @return N "\t" appended in a String to get the correct indentation.
 	 */
 	protected final String calculateIndentLevel(final EnumMetadata enumMeta) {
-		String result = "";
+		final StringBuffer buffer = new StringBuffer();
 
 		for (int i = 0; i < this.nbMotherClass(enumMeta); i++) {
-			result += "\t";
+			buffer.append('\t');
 		}
 
-		return result;
+		return buffer.toString();
 	}
 
 	/**
@@ -250,7 +250,8 @@ public class EnumCompletor extends BaseGenerator {
 			final EnumMetadata enumMeta) {
 
 		int openingBracketIndex;
-		int enumDeclarationIndex = text.indexOf("enum " + enumMeta.getName());
+		final int enumDeclarationIndex =
+				text.indexOf("enum " + enumMeta.getName());
 
 		openingBracketIndex = text.indexOf("{", enumDeclarationIndex);
 

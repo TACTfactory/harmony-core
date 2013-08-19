@@ -110,7 +110,9 @@ public abstract class XMLUtils {
 	public static Element findNode(final Element baseNode,
 			final Element newNode,
 			final String id) {
-
+		
+		Element result = null;
+		
 		final List<Element> nodes =
 				baseNode.getChildren(newNode.getName());
 
@@ -120,11 +122,11 @@ public abstract class XMLUtils {
 			if (node.hasAttributes()
 					&&  node.getAttributeValue(id)
 						.equals(newNode.getAttributeValue(id))) {
-				return node;
+				result = node;
 			}
 		}
 
-		return null;
+		return result;
 	}
 }
 
