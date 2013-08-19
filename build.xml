@@ -347,6 +347,12 @@
 		    <include name="*.jar"/>
 		  </fileset>
 		</copy>
+		<copy todir="../../${lib.rel-dir}/ant" flatten="true">
+		  <fileset dir="${lib.rel-dir}/ant" includes="**"/>
+		</copy>
+		<copy todir="../../${lib.rel-dir}/emma" flatten="true">
+		  <fileset dir="${lib.rel-dir}/emma" includes="**"/>
+		</copy>
 		<!--copy todir="${dist.rel-dir}/${lib.rel-dir}/${sherlock.rel-dir}">
 		  <fileset dir="${lib.rel-dir}/${sherlock.rel-dir}"/>
 		</copy-->
