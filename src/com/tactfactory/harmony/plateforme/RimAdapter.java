@@ -22,7 +22,7 @@ public final class RimAdapter extends BaseAdapter {
 		this.setResource("res");
 		this.setSource("src");
 	}
- 
+
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
 		// TODO Auto-generated method stub
@@ -30,7 +30,7 @@ public final class RimAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public String getNameSpaceEntity(final ClassMetadata cm, 
+	public String getNameSpaceEntity(final ClassMetadata cm,
 			final String type) {
 		// TODO Auto-generated method stub
 		return null;
@@ -45,7 +45,7 @@ public final class RimAdapter extends BaseAdapter {
 	@Override
 	public void resizeImage() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 }

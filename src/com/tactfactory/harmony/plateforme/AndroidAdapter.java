@@ -22,32 +22,32 @@ import com.tactfactory.harmony.utils.TactFileUtils;
 public final class AndroidAdapter extends BaseAdapter {
 	/** Ratio for HD images resizing. */
 	private static final float HD_RATIO = 0.75f;
-	
+
 	/** Ratio for MD images resizing. */
 	private static final float MD_RATIO = 0.50f;
-	
+
 	/** Ratio for LD images resizing. */
 	private static final float LD_RATIO = 0.375f;
-	
+
 	/** Float type. */
 	private static final String FLOAT = "float";
-	
+
 	/** String type. */
 	private static final String STR = "String";
-	
+
 	/** Int type. */
 	private static final String INT = "int";
-	
+
 	/** DateTime type. */
 	private static final String DATETIME = "DateTime";
-	
+
 	/**
 	 * FilenameFilter for images.
 	 */
 	private final FilenameFilter filter = new FilenameFilter() {
 	    @Override
 		public boolean accept(final File dir, final String name) {
-	        return	name.endsWith(".png") 
+	        return	name.endsWith(".png")
 	        		|| name.endsWith(".jpg");
 	    }
 	};
@@ -71,32 +71,32 @@ public final class AndroidAdapter extends BaseAdapter {
 		this.setUtil("util");
 		this.setUtilityPath("ftl_methods");
 		this.setMenu("menu");
-		
+
 		// MVC
 		//this.model 		= "entity";
 		//this.view 		= "layout";
 		//this.controller	= "view";
 		//this.data			= "data";
 		//this.provider		= "provider";
-		
+
 		// File
 		this.setManifest("AndroidManifest.xml");
 		this.setStrings("strings.xml");
 		this.setHome("HomeActivity.java");
 		this.setConfigs("configs.xml");
 	}
- 
+
 	@Override
-	public String getNameSpaceEntity(final ClassMetadata cm, 
+	public String getNameSpaceEntity(final ClassMetadata cm,
 			final String type) {
-		return String.format("%s.%s", 
+		return String.format("%s.%s",
 				this.getNameSpace(cm, type),
 				cm.getName().toLowerCase());
 	}
 
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
-		return String.format("%s.%s", 
+		return String.format("%s.%s",
 				cm.getSpace(),
 				type);
 	}
@@ -104,120 +104,120 @@ public final class AndroidAdapter extends BaseAdapter {
 	@Override
 	public String getNativeType(final String type) {
 		String ret = type;
-		
+
 		if (type.equals(Column.Type.STRING.getValue())) {
 			ret = STR;
 		} else
-			
+
 		if (type.equals(Column.Type.TEXT.getValue())) {
-			ret = STR;	
+			ret = STR;
 		} else
-			
+
 		if (type.equals(Column.Type.INTEGER.getValue())) {
 			ret = INT;
 		} else
-			
+
 		if (type.equals(Column.Type.INT.getValue())) {
 			ret = INT;
 		} else
-			
+
 		if (type.equals(Column.Type.FLOAT.getValue())) {
 			ret = FLOAT;
 		} else
-			
+
 		if (type.equals(Column.Type.DATETIME.getValue())) {
 			ret = DATETIME;
 		} else
-			
+
 		if (type.equals(Column.Type.DATE.getValue())) {
 			ret = DATETIME;
 		} else
-			
+
 		if (type.equals(Column.Type.TIME.getValue())) {
 			ret = DATETIME;
 		} else
-			
+
 		if (type.equals(Column.Type.LOGIN.getValue())) {
 			ret = STR;
 		} else
-			
+
 		if (type.equals(Column.Type.PASSWORD.getValue())) {
 			ret = STR;
 		} else
-			
+
 		if (type.equals(Column.Type.EMAIL.getValue())) {
 			ret = STR;
 		} else
-			
+
 		if (type.equals(Column.Type.PHONE.getValue())) {
 			ret = STR;
 		} else
-			
+
 		if (type.equals(Column.Type.CITY.getValue())) {
 			ret = STR;
 		} else
-			
+
 		if (type.equals(Column.Type.ZIPCODE.getValue())) {
 			ret = INT;
 		} else
-			
+
 		if (type.equals(Column.Type.COUNTRY.getValue())) {
 			ret = STR;
 		} else
-			
+
 		if (type.equals(Column.Type.BC_EAN.getValue())) {
 			ret = INT;
 		}
 		return ret;
 	}
-	
 
-	
+
+
 	@Override
 	public void resizeImage() {
-		final File imageDirectoryXHD	
+		final File imageDirectoryXHD
 				= new File(this.getRessourcePath() + "/drawable-xhdpi");
-		final File imageDirectoryHD 
+		final File imageDirectoryHD
 				= new File(this.getRessourcePath() + "/drawable-hdpi");
-		final File imageDirectoryMD 	
+		final File imageDirectoryMD
 				= new File(this.getRessourcePath() + "/drawable-mdpi");
-		final File imageDirectoryLD 	
+		final File imageDirectoryLD
 				= new File(this.getRessourcePath() + "/drawable-ldpi");
-		
+
 		File imageHD;
 		File imageMD;
 		File imageLD;
-		
-		if (imageDirectoryXHD.exists() 
+
+		if (imageDirectoryXHD.exists()
 				&& imageDirectoryXHD.listFiles().length > 0) {
 			final File[] imagesFiles = imageDirectoryXHD.listFiles(this.filter);
 			TactFileUtils.makeFolder(imageDirectoryHD.getAbsolutePath());
 			TactFileUtils.makeFolder(imageDirectoryMD.getAbsolutePath());
 			TactFileUtils.makeFolder(imageDirectoryLD.getAbsolutePath());
-			
+
 			for (final File imageXHD : imagesFiles) {
 				try {
-					imageHD = new File(imageDirectoryHD.getCanonicalPath() 
-							+ "/" 
+					imageHD = new File(imageDirectoryHD.getCanonicalPath()
+							+ "/"
 							+ imageXHD.getName());
-					
-					imageMD = new File(imageDirectoryMD.getCanonicalPath() 
-							+ "/" 
+
+					imageMD = new File(imageDirectoryMD.getCanonicalPath()
+							+ "/"
 							+ imageXHD.getName());
-					
-					imageLD = new File(imageDirectoryLD.getCanonicalPath() 
-							+ "/" 
+
+					imageLD = new File(imageDirectoryLD.getCanonicalPath()
+							+ "/"
 							+ imageXHD.getName());
-						
+
 					ImageUtils.resize(imageXHD, imageHD, HD_RATIO);
 					ImageUtils.resize(imageXHD, imageMD, MD_RATIO);
 					ImageUtils.resize(imageXHD, imageLD, LD_RATIO);
-					
+
 				} catch (final IOException e) {
 					// TODO Auto-generated catch block
 					ConsoleUtils.displayError(e);
 				}
-				
+
 			}
 		}
 	}

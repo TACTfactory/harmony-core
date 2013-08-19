@@ -24,12 +24,12 @@ import java.lang.annotation.Target;
 @Target(FIELD)
 @Inherited
 public @interface JoinColumn {
-	
+
 	/**
 	 * The JoinColumn name.
 	 */
 	String name() default "";
-	
+
 	/**
 	 * The referenced Column name.
 	 */

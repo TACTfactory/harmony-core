@@ -6,13 +6,13 @@ import java.util.ArrayList;
 /** An array Value.
  * (Use only with IN type criterias)
  * Example : SELECT * FROM table1 WHERE id IN (values[1], values[2], values[3]);
- */ 
+ */
 public class ArrayValue extends CriteriaValue {
 	/**
 	 * List of values.
 	 */
 	private ArrayList<String> values = new ArrayList<String>();
-	
+
 	@Override
 	public String toSQLiteString() {
 		String valuesString = "(";
@@ -33,20 +33,20 @@ public class ArrayValue extends CriteriaValue {
 			if (i != this.values.size() - 1) {
 				valuesString += ", ";
 			} else {
-				valuesString += ")";				
+				valuesString += ")";
 			}
 		}
-		
+
 		return valuesString;
 	}
-	
+
 	@Override
 	public void toSQLiteSelectionArgs(final ArrayList<String> array) {
 		array.addAll(this.values);
 	}
- 
-	
-	
+
+
+
 	/**
 	 * Get the Criteria value.
 	 * @return The Criteria's value
@@ -54,8 +54,8 @@ public class ArrayValue extends CriteriaValue {
 	public ArrayList<String> getValues() {
 		return this.values;
 	}
-	
-	
+
+
 	/**
 	 * Set the Criteria value.
 	 * @param value The new value to set

@@ -9,7 +9,7 @@ import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import android.os.Bundle;
 
 /** ${curr.name} show Activity.
- * 
+ *
  * @see android.app.Activity
  */
 public class ${curr.name}ShowActivity extends HarmonyFragmentActivity {
@@ -23,7 +23,7 @@ public class ${curr.name}ShowActivity extends HarmonyFragmentActivity {
 		//GoogleAnalyticsSessionManager.getInstance(getApplication())
 		//.incrementActivityCount();
 	}
-	
+
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();

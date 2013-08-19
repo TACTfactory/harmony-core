@@ -23,11 +23,11 @@ public class Category {
 	@Id
 	@Column
 	private int id;
-	
+
 	/** Name of the category. */
-	@Column
+	@Column(defaultValue="Default Category Name")
 	private String name;
-	
+
 	/** List of comments of this category. */
 	@OneToMany(mappedBy = "category")
 	private ArrayList<CategoryToComment> comments;

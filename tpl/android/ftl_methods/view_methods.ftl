@@ -9,12 +9,12 @@
 		<#if (type?lower_case=="string" || type?lower_case=="email" || type?lower_case=="login" || type?lower_case=="password" || type?lower_case=="city" || type?lower_case=="text" || type?lower_case=="phone" || type?lower_case=="country")>
 			<#assign ret=ret+getter />
 		<#elseif (type?lower_case == "int" || type?lower_case == "integer" ||  type?lower_case=="ean" || type?lower_case=="zipcode" || type?lower_case=="float" || type?lower_case == "double" || type?lower_case == "long" || type?lower_case == "char" || type?lower_case == "byte" || type?lower_case == "short" || type?lower_case == "character")>
-			<#assign ret=ret+"String.valueOf("+getter+")" /> 
+			<#assign ret=ret+"String.valueOf("+getter+")" />
 		<#elseif (field.harmony_type?lower_case == "enum")>
 			<#if (enums[field.type].id??)>
-				<#assign ret=ret+"String.valueOf("+getter+".getValue())" /> 
+				<#assign ret=ret+"String.valueOf("+getter+".getValue())" />
 			<#else>
-				<#assign ret=ret+getter+".name()" /> 
+				<#assign ret=ret+getter+".name()" />
 			</#if>
 		</#if>
 		<#assign ret=ret+");" />
@@ -46,12 +46,12 @@
 			<#assign ret=ret+"String.valueOf("+getter+")" />
 		<#elseif (field.harmony_type?lower_case == "enum")>
 			<#if (enums[field.type].id??)>
-				<#assign ret=ret+"String.valueOf("+getter+".getValue())" /> 
+				<#assign ret=ret+"String.valueOf("+getter+".getValue())" />
 			<#else>
-				<#assign ret=ret+getter+".name()" /> 
+				<#assign ret=ret+getter+".name()" />
 			</#if>
 		</#if>
-		<#assign ret=ret+");" /> 
+		<#assign ret=ret+");" />
 	</#if>
 	<#return ret/>
 </#function>
@@ -135,13 +135,14 @@
 
 <#function shouldImportEditText fieldsArray>
 	<#list fieldsArray as field>
-		<#if !field.internal && !field.hidden 
+		<#if !field.internal && !field.hidden
 			&& (field.type?lower_case == "string"
 				|| field.type?lower_case == "int"
 				|| field.type?lower_case == "double"
 				|| field.type?lower_case == "float"
 				|| field.type?lower_case == "long"
-				|| field.type?lower_case == "int")>
+				|| field.type?lower_case == "int"
+				|| field.harmony_type?lower_case == "enum")>
 			<#return true />
 		</#if>
 	</#list>

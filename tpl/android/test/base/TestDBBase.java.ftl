@@ -30,9 +30,9 @@ public abstract class TestDBBase extends AndroidTestCase {
 					"${project_namespace}.provider";
 	private final static Class<? extends ContentProvider> PROVIDER_CLASS =
 					${project_name?cap_first}Provider.class;
-	
+
 	private Context baseContext;
-	
+
 	/**
 	 * Get the original context
 	 * @return unmocked Context
@@ -40,7 +40,7 @@ public abstract class TestDBBase extends AndroidTestCase {
 	protected Context getBaseContext() {
 		return this.baseContext;
 	}
-	
+
 	/**
 	 * Get the mock for ContentResolver
 	 * @return MockContentResolver
@@ -48,15 +48,15 @@ public abstract class TestDBBase extends AndroidTestCase {
 	protected MockContentResolver getMockContentResolver() {
 		return new MockContentResolver();
 	}
-	
+
 	/**
 	 * Get the mock for Context
 	 * @return MockContext
 	 */
-	protected Context getMockContext() {        
+	protected Context getMockContext() {
      		return this.getContext();
 	}
-	
+
 	/**
 	 * Initialize the mock Context
 	 * @throws Exception
@@ -65,26 +65,26 @@ public abstract class TestDBBase extends AndroidTestCase {
 		if (this.baseContext == null) {
 			this.baseContext = this.getContext();
 		}
-	    
+
 	    ContentProvider provider = PROVIDER_CLASS.newInstance();
 	    MockContentResolver resolver = this.getMockContentResolver();
-        		
-	    RenamingDelegatingContext targetContextWrapper 
+
+	    RenamingDelegatingContext targetContextWrapper
 	    	= new RenamingDelegatingContext(
     			// The context that most methods are delegated to:
-	            this.getMockContext(), 
+	            this.getMockContext(),
 	            // The context that file methods are delegated to:
-	            this.baseContext, 
+	            this.baseContext,
 	            // Prefix database
 	            CONTEXT_PREFIX);
-	    
+
 	    Context context = new IsolatedContext(
-	    		resolver, 
+	    		resolver,
 	    		targetContextWrapper);
-	    
+
 	    provider.attachInfo(context, null);
 		resolver.addProvider(PROVIDER_AUTHORITY, provider);
-	    
+
 	    this.setContext(context);
 	}
 
@@ -96,45 +96,45 @@ public abstract class TestDBBase extends AndroidTestCase {
 		this.setMockContext();
 		super.setUp();
 
-		String dbPath =  
+		String dbPath =
 				this.getContext().getDatabasePath(SQLiteAdapterBase.DB_NAME)
 					.getAbsolutePath() + ".test";
-				
+
 		File cacheDbFile = new File(dbPath);
-		
+
 		if (!cacheDbFile.exists() || !DataLoader.hasFixturesBeenLoaded) {
 			Log.d("TEST", "Create new Database cache");
-			
+
 			// Create initial database
-			${project_name?cap_first}SQLiteOpenHelper helper = 
+			${project_name?cap_first}SQLiteOpenHelper helper =
 					new ${project_name?cap_first}SQLiteOpenHelper(
-						this.getMockContext(), 
-						SQLiteAdapterBase.DB_NAME, 
+						this.getMockContext(),
+						SQLiteAdapterBase.DB_NAME,
 						null,
 						${project_name?cap_first}Application.getVersionCode(
 								this.getMockContext()));
-			
+
 			SQLiteDatabase db = helper.getWritableDatabase();
 			${project_name?cap_first}SQLiteOpenHelper.clearDatabase(db);
-			
+
 			db.beginTransaction();
 			DataLoader dataLoader = new DataLoader(this.getMockContext());
 			dataLoader.clean();
 			dataLoader.loadData(db,
-						DataLoader.MODE_APP | 
-						DataLoader.MODE_DEBUG | 
+						DataLoader.MODE_APP |
+						DataLoader.MODE_DEBUG |
 						DataLoader.MODE_TEST);
 			db.setTransactionSuccessful();
 			db.endTransaction();
 			db.close();
-			
-			DatabaseUtil.exportDB(this.getMockContext(), 
-					cacheDbFile, 
+
+			DatabaseUtil.exportDB(this.getMockContext(),
+					cacheDbFile,
 					SQLiteAdapterBase.DB_NAME);
 		} else {
 			Log.d("TEST", "Re use old Database cache");
-			DatabaseUtil.importDB(this.getMockContext(), 
-					cacheDbFile, 
+			DatabaseUtil.importDB(this.getMockContext(),
+					cacheDbFile,
 					SQLiteAdapterBase.DB_NAME,
 					false);
 		}

@@ -10,9 +10,9 @@ import android.net.Uri;
 /**
  * ${project_name?cap_first}Provider to handle DB operations.
  */
-public class ${project_name?cap_first}Provider 
+public class ${project_name?cap_first}Provider
 				extends ${project_name?cap_first}ProviderBase {
-	
+
 	/**
 	 * Deletes matching tokens with the given URI.
 	 * @param uri URI
@@ -21,7 +21,7 @@ public class ${project_name?cap_first}Provider
 	 * @return The number of tokens deleted
 	 */
 	@Override
-	public int delete(final Uri uri, final String selection, 
+	public int delete(final Uri uri, final String selection,
 									 final String[] selectionArgs) {
 		int result = 0;
 		switch (uriMatcher.match(uri)) {
@@ -70,9 +70,9 @@ public class ${project_name?cap_first}Provider
 		switch (uriMatcher.match(uri)) {
 			default:
 				result = super.query(uri,
-					projection, 
-					selection, 
-					selectionArgs, 
+					projection,
+					selection,
+					selectionArgs,
 					sortOrder);
 				break;
 		}
@@ -88,8 +88,8 @@ public class ${project_name?cap_first}Provider
 	 * @return how many token update
 	 */
 	@Override
-	public int update(final Uri uri, final ContentValues values, 
-					  final String selection, 
+	public int update(final Uri uri, final ContentValues values,
+					  final String selection,
 					  final String[] selectionArgs) {
 		int result = 0;
 

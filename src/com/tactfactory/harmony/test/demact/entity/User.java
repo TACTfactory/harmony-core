@@ -37,27 +37,27 @@ public class User extends Object implements Cloneable, Serializable {
 	/** Login. */
 	@Column(type = Type.LOGIN)
     private String login;
-	
+
 	/** Password. */
 	@Column(type = Type.PASSWORD)
     private String password;
-	
+
 	/** First name. */
 	@Column(nullable = true)
     private String firstname;
-	
+
 	/** Last name. */
 	@Column()
     private String lastname;
-	
+
 	/** Created at.. */
 	@Column(name = "created_at")
     private DateTime createdAt;
-	
+
 	/** Birthdate. */
 	@Column(type = Type.DATE, locale = true)
     private DateTime birthdate;
-	
+
 	/** Group this user belong to. */
 	@ManyToOne
 	private UserGroup userGroup;
@@ -69,7 +69,7 @@ public class User extends Object implements Cloneable, Serializable {
 		this.id = -1;
     	this.createdAt = new DateTime();
     }
-	
+
 	@Override
 	public final User clone() throws CloneNotSupportedException {
 		final User u = (User) super.clone();
@@ -80,10 +80,10 @@ public class User extends Object implements Cloneable, Serializable {
 		u.lastname = this.lastname;
 		u.createdAt = new DateTime(this.createdAt);
 		u.birthdate = new DateTime(this.birthdate);
-		
+
 		return u;
 	}
-	
+
 	/**
 	 * @return the id
 	 */
@@ -167,7 +167,7 @@ public class User extends Object implements Cloneable, Serializable {
 	public final void setCreatedAt(final DateTime createdAt) {
 		this.createdAt = createdAt;
 	}
-	
+
 	/**
 	 * @return the birthdate
 	 */

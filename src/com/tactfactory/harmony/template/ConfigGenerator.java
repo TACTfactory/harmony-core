@@ -39,7 +39,7 @@ public class ConfigGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use
-	 * @throws Exception 
+	 * @throws Exception if adapter is null
 	 */
 	public ConfigGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
@@ -48,44 +48,44 @@ public class ConfigGenerator extends BaseGenerator {
 	/**
 	 * Update XML Strings.
 	 */
-	public final void generateConfigXml() {		
+	public final void generateConfigXml() {
 		ConsoleUtils.display(">> Generate config string...");
-		
+
 		try {
 			// Make engine
-			final SAXBuilder builder = new SAXBuilder();		
-			final File xmlFile = 
+			final SAXBuilder builder = new SAXBuilder();
+			final File xmlFile =
 					TactFileUtils.makeFile(
 							this.getAdapter().getConfigsPathFile());
-			
+
 			// Load XML File
 			final Document doc = builder.build(xmlFile);
-			
+
 			// Load Root element
 			final Element rootNode = doc.getRootElement();
-			
-			// Load Name space (required for manipulate attributes)
-			final Namespace ns = rootNode.getNamespace("android");	
 
-			for (final ConfigMetadata configMeta 
+			// Load Name space (required for manipulate attributes)
+			final Namespace ns = rootNode.getNamespace("android");
+
+			for (final ConfigMetadata configMeta
 					: this.getAppMetas().getConfigs().values()) {
 				Element findConfig = null;
-				
+
 				// Debug Log
 				ConsoleUtils.displayDebug(
 						"Update config : " + configMeta.getKey());
-				
+
 				// Find String Node
-				final List<Element> configs = 
-						rootNode.getChildren("string"); 	
+				final List<Element> configs =
+						rootNode.getChildren("string");
 				// Find many elements
 				for (final Element configXml : configs) {
-					if (configXml.hasAttributes() 
+					if (configXml.hasAttributes()
 							&& configXml.getAttributeValue(NAME, ns)
-								.equals(configMeta.getKey())) {	
+								.equals(configMeta.getKey())) {
 						// Load name value
 						findConfig = configXml;
-						
+
 						break;
 					}
 				}
@@ -94,40 +94,40 @@ public class ConfigGenerator extends BaseGenerator {
 				if (findConfig == null) {
 					// Create new element
 					findConfig = new Element("string");
-					
+
 					// Add name to element
 					findConfig.setAttribute(NAME, configMeta.getKey(), ns);
-					
+
 					findConfig.setText(configMeta.getValue()); // Set values
-					
+
 					rootNode.addContent(findConfig);
 				} else {
 					configMeta.setValue(findConfig.getText());
 				}
 			}
-			
+
 			// Clean code
 			rootNode.sortChildren(new Comparator<Element>() {
-							
+
 				@Override
 				public int compare(final Element o1, final Element o2) {
 					final String metaName1 = o1.getAttributeValue(NAME, ns);
 					final String metaName2 = o2.getAttributeValue(NAME, ns);
-					
+
 					return metaName1.compareToIgnoreCase(metaName2);
 				}
 			});
-			
+
 			// Write to File
 			final XMLOutputter xmlOutput = new XMLOutputter();
 			// Make beautiful file with indent !!!
-			xmlOutput.setFormat(Format.getPrettyFormat());			
-			xmlOutput.output(doc, 
+			xmlOutput.setFormat(Format.getPrettyFormat());
+			xmlOutput.output(doc,
 					new OutputStreamWriter(
 							new FileOutputStream(
 									xmlFile.getAbsoluteFile()),
 									TactFileUtils.DEFAULT_ENCODING));
-			
+
 		} catch (final IOException io) {
 			ConsoleUtils.displayError(io);
 		} catch (final JDOMException e) {

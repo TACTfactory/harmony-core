@@ -31,8 +31,8 @@ public class DateUtils extends android.text.format.DateUtils {
 		/** Format defined in user's Android configuration. */
 		ANDROID_CONF;
 	}
-	
-	
+
+
 	/**
 	 * Convert date to Android string date format.
 	 * @param date to convert
@@ -42,7 +42,7 @@ public class DateUtils extends android.text.format.DateUtils {
 		return ${project_name?cap_first}Application.getDateFormat()
 														 .format(date.toDate());
 	}
-	
+
 	/**
 	 * Convert date to Android string time format.
 	 * @param time Time to convert
@@ -57,25 +57,25 @@ public class DateUtils extends android.text.format.DateUtils {
 			result = time.toString(
 					DateTimeFormat.forPattern(TIME_AMPM_PATTERN));
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Convert date to Android string time format.
 	 * @param time to convert
-	 * @param formatType The time format 
+	 * @param formatType The time format
 	 * @return string time with Android time format
 	 */
-	public static String formatTimeToString( 
+	public static String formatTimeToString(
 			DateTime time,
 			TimeFormatType formatType) {
 		String result;
 		if (formatType.equals(TimeFormatType.H24)) {
-			result = 
+			result =
 				time.toString(DateTimeFormat.forPattern(TIME_24H_PATTERN));
 		} else if (formatType.equals(TimeFormatType.AMPM)) {
-			result = 
+			result =
 				time.toString(DateTimeFormat.forPattern(TIME_AMPM_PATTERN));
 		} else if (formatType.equals(TimeFormatType.ANDROID_CONF)) {
 			result = formatTimeToString(time);
@@ -84,18 +84,18 @@ public class DateUtils extends android.text.format.DateUtils {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Convert datetime to Android string date + time format.
 	 * @param date to convert
 	 * @return string datetime with Android date + time format
 	 */
 	public static String formatDateTimeToString(DateTime date) {
-		return String.format("%s %s", 
-				formatDateToString(date), 
+		return String.format("%s %s",
+				formatDateToString(date),
 				formatTimeToString(date));
 	}
-	
+
 	/**
 	 * Convert Android String date format to datetime.
 	 * @param date Android string date format to convert
@@ -105,7 +105,7 @@ public class DateUtils extends android.text.format.DateUtils {
 		return formatStringToDateTime(${project_name?cap_first}Application
 							.getDateFormat(), date);
 	}
-	
+
 	/**
 	 * Convert Android String time format to datetime.
 	 * @param time Android string time format to convert
@@ -123,7 +123,7 @@ public class DateUtils extends android.text.format.DateUtils {
 	 * @return datetime The parsed datetime
 	 */
 	public static DateTime formatStringToTime(
-			String time, 
+			String time,
 			TimeFormatType formatType) {
 		DateTime result;
 		if (formatType.equals(TimeFormatType.H24)) {
@@ -139,7 +139,7 @@ public class DateUtils extends android.text.format.DateUtils {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Convert Android String date and time format to datetime.
 	 * @param date Android string date format to convert
@@ -149,13 +149,13 @@ public class DateUtils extends android.text.format.DateUtils {
 	public static DateTime formatStringToDateTime(String date, String time) {
 		DateTime dt = formatStringToDate(date);
 		DateTime t = formatStringToTime(time);
-		
+
 		dt = new DateTime(dt.getYear(),
 				dt.getMonthOfYear(),
 				dt.getDayOfMonth(),
 				t.getHourOfDay(),
 				t.getMinuteOfHour());
-		
+
 		return dt;
 	}
 
@@ -167,21 +167,21 @@ public class DateUtils extends android.text.format.DateUtils {
 	 * @return datetime
 	 */
 	public static DateTime formatStringToDateTime(String date,
-			String time, 
+			String time,
 			TimeFormatType timeFormat) {
-		
+
 		DateTime dt = formatStringToDate(date);
 		DateTime t = formatStringToTime(time, timeFormat);
-		
+
 		dt = new DateTime(dt.getYear(),
 				dt.getMonthOfYear(),
 				dt.getDayOfMonth(),
 				t.getHourOfDay(),
 				t.getMinuteOfHour());
-		
+
 		return dt;
 	}
-	
+
 	/**
 	 * Convert String date with dateformat to datetime.
 	 * @param dateFormat date format of datetime
@@ -191,16 +191,16 @@ public class DateUtils extends android.text.format.DateUtils {
 	public static DateTime formatStringToDateTime(
 							java.text.DateFormat dateFormat, String dateTime) {
 		DateTime dt = null;
-		
+
 		try {
 			dt = new DateTime(dateFormat.parse(dateTime).getTime());
 		} catch (ParseException e) {
 			Log.e(TAG, e.getMessage());
 		}
-		
+
 		return dt;
 	}
-	
+
 	/**
 	 * Convert ISO8601 string date to datetime.
 	 * @param dateTime ISO8601 string date
@@ -208,17 +208,17 @@ public class DateUtils extends android.text.format.DateUtils {
 	 */
 	public static DateTime formatISOStringToDateTime(String dateTime) {
 		DateTime dt = null;
-		
+
 		try {
 			dt = new DateTime(
 						  ISODateTimeFormat.dateTime().parseDateTime(dateTime));
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, e.getMessage());
 		}
-		
+
 		return dt;
 	}
-	
+
 	/**
 	 * Convert ISO8601 string localdate to datetime.
 	 * @param dateTime ISO8601 string localdate
@@ -226,47 +226,47 @@ public class DateUtils extends android.text.format.DateUtils {
 	 */
 	public static DateTime formatLocalISOStringToDateTime(String dateTime) {
 		DateTime dt = null;
-		
+
 		try {
 			dt = new DateTime(ISODateTimeFormat.localDateOptionalTimeParser()
 													  .parseDateTime(dateTime));
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, e.getMessage());
 		}
-		
+
 		return dt;
 	}
-	
+
 	/**
 	 * Convert a string to a datetime thanks to the given pattern.
-	 * @param pattern The datetime pattern (ex. "dd-mm-yyyy" or "yyyy-MM-dd 
+	 * @param pattern The datetime pattern (ex. "dd-mm-yyyy" or "yyyy-MM-dd
 	 * hh:mm")
 	 * @param dateTime date string
 	 * @return datetime
 	 */
 	public static DateTime formatPattern(String pattern, String dateTime) {
 		DateTime dt = null;
-		
+
 		try {
 			dt = new DateTime(DateTimeFormat.forPattern(pattern)
 													  .parseDateTime(dateTime));
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, e.getMessage());
 		}
-		
+
 		return dt;
 	}
-	
+
 	/**
 	 * Convert a string to a locale datetime thanks to the given pattern.
-	 * @param pattern The datetime pattern (ex. "dd-mm-yyyy" or "yyyy-MM-dd 
+	 * @param pattern The datetime pattern (ex. "dd-mm-yyyy" or "yyyy-MM-dd
 	 * hh:mm")
 	 * @param dateTime date string
 	 * @return datetime
 	 */
 	public static DateTime formatLocalPattern(String pattern, String dateTime) {
 		DateTime dt = null;
-		
+
 		try {
 			LocalDateTime tmp = DateTimeFormat.forPattern(pattern)
 												  .parseLocalDateTime(dateTime);
@@ -274,7 +274,7 @@ public class DateUtils extends android.text.format.DateUtils {
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, e.getMessage());
 		}
-		
+
 		return dt;
 	}
 }

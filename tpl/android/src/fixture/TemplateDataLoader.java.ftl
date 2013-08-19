@@ -47,14 +47,14 @@ ${ImportUtils.importRelatedEntities(curr)}${ImportUtils.importRelatedEnums(curr)
 /**
  * ${curr.name?cap_first}DataLoader.
  */
-public class ${curr.name?cap_first}DataLoader 
+public class ${curr.name?cap_first}DataLoader
 						extends FixtureBase<${curr.name?cap_first}> {
 	/** ${curr.name?cap_first}DataLoader name. */
 	private static final String NAME = "${curr.name}";
-	
+
 	/** ${curr.name?cap_first}DataLoader instance (Singleton). */
 	private static ${curr.name?cap_first}DataLoader instance;
-	
+
 	/**
 	 * Get the ${curr.name?cap_first}DataLoader singleton.
 	 * @param ctx The context
@@ -63,11 +63,11 @@ public class ${curr.name?cap_first}DataLoader
 	public static ${curr.name?cap_first}DataLoader getInstance(
 											final Context ctx) {
 		if (instance == null) {
-			instance = new ${curr.name?cap_first}DataLoader(ctx); 
+			instance = new ${curr.name?cap_first}DataLoader(ctx);
 		}
 		return instance;
 	}
-	
+
 	/**
 	 * Constructor.
 	 * @param ctx The context
@@ -76,7 +76,7 @@ public class ${curr.name?cap_first}DataLoader
 		super(ctx);
 	}
 
-	
+
 	<#if fixtureType=="xml">
 	/**
 	 * Extract an entity from a fixture element (XML).
@@ -84,9 +84,9 @@ public class ${curr.name?cap_first}DataLoader
 	 * @return A ${curr.name} entity
 	 */
 	@Override
-	protected ${curr.name} extractItem(final Element element) {	
-		final ${curr.name?cap_first} ${curr.name?uncap_first} = 
-				new ${curr.name?cap_first}();		
+	protected ${curr.name} extractItem(final Element element) {
+		final ${curr.name?cap_first} ${curr.name?uncap_first} =
+				new ${curr.name?cap_first}();
 
 		return this.extractItem(element, ${curr.name?uncap_first});
 	}
@@ -96,7 +96,7 @@ public class ${curr.name?cap_first}DataLoader
 	 * @param element The element to be extracted
 	 * @return A ${curr.name} entity
 	 */
-	protected ${curr.name} extractItem(final Element element, 
+	protected ${curr.name} extractItem(final Element element,
 								final ${curr.name} ${curr.name?uncap_first}) {
 		<#list curr.fields?values as field>
 			<#if (!field.internal)>
@@ -110,23 +110,23 @@ public class ${curr.name?cap_first}DataLoader
 						<#if field.harmony_type=="date">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					DateUtils.format<#if field.is_locale>Local</#if>Pattern(
-							patternDate, 
+							patternDate,
 							element.getChildText("${field.name?uncap_first}")));
 						<#elseif field.harmony_type=="datetime">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					DateUtils.format<#if field.is_locale>Local</#if>Pattern(
-							patternDateTime, 
+							patternDateTime,
 							element.getChildText("${field.name?uncap_first}")));
 						<#elseif field.harmony_type=="time">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					DateUtils.format<#if field.is_locale>Local</#if>Pattern(
-							patternTime, 
+							patternTime,
 							element.getChildText("${field.name?uncap_first}")));
 						</#if>
 					<#elseif field.type=="boolean">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					Boolean.parseBoolean(
-							element.getChildText("${field.name?uncap_first}")));		
+							element.getChildText("${field.name?uncap_first}")));
 					<#elseif field.type?lower_case=="string">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					element.getChildText("${field.name?uncap_first}"));
@@ -155,7 +155,7 @@ public class ${curr.name?cap_first}DataLoader
 					</#if>
 				<#else>
 					<#if (field.relation.type=="OneToOne")>
-			${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} = 
+			${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} =
 					${field.relation.targetEntity?cap_first}DataLoader.getInstance(
 							this.ctx).getModelFixture(
 									element.getChildText("${field.name?uncap_first}"));
@@ -166,10 +166,10 @@ public class ${curr.name?cap_first}DataLoader
 							<#assign invField = MetadataUtils.getInversingField(field) />
 				${field.relation.targetEntity?uncap_first}.set${invField.name?cap_first}(
 								${curr.name?uncap_first});
-						</#if>								
+						</#if>
 			}
 					<#elseif (field.relation.type=="ManyToOne")>
-			${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} = 
+			${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} =
 					${field.relation.targetEntity?cap_first}DataLoader.getInstance(
 							this.ctx).getModelFixture(element.getChildText("${field.name?uncap_first}"));
 			if (${field.relation.targetEntity?uncap_first} != null) {
@@ -177,20 +177,20 @@ public class ${curr.name?cap_first}DataLoader
 						${field.relation.targetEntity?uncap_first});
 						<#if field.relation.inversedBy??>
 							<#assign invField = MetadataUtils.getInversingField(field) />
-				ArrayList<${curr.name?cap_first}> ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s = 
+				ArrayList<${curr.name?cap_first}> ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =
 						${field.relation.targetEntity?uncap_first}.get${invField.name?cap_first}();
 				if (${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s == null) {
-					${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s = 
+					${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =
 							new ArrayList<${curr.name?cap_first}>();
-				}							
+				}
 				${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s.add(${curr.name?uncap_first});
 				${field.relation.targetEntity?uncap_first}.set${invField.name?cap_first}(${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s);
 						</#if>
-			}	
+			}
 					<#else>
-			ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = 
+			ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s =
 					new ArrayList<${field.relation.targetEntity?cap_first}>();
-			List<Element> ${field.relation.targetEntity?uncap_first}sMap = 
+			List<Element> ${field.relation.targetEntity?uncap_first}sMap =
 					element.getChild("${field.name?uncap_first}").getChildren();
 			for (Element ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap) {
 				if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.ctx).items.containsKey(${field.relation.targetEntity?uncap_first}Name.getText()))
@@ -200,14 +200,14 @@ public class ${curr.name?cap_first}DataLoader
 											${field.relation.targetEntity?uncap_first}Name.getText()));
 			}
 			${curr.name?uncap_first}.set${field.name?cap_first}(
-					${field.relation.targetEntity?uncap_first}s);		
+					${field.relation.targetEntity?uncap_first}s);
 					</#if>
 				</#if>
 		}
 			</#if>
-		</#list>	
+		</#list>
 		<#if InheritanceUtils.isExtended(curr)>
-		${curr.extends}DataLoader inheritanceDataLoader = 
+		${curr.extends}DataLoader inheritanceDataLoader =
 				${curr.extends}DataLoader.getInstance(this.ctx);
 		inheritanceDataLoader.extractItem(element, ${curr.name?uncap_first});
 		inheritanceDataLoader.items.put(element.getAttributeValue("id"), ${curr.name?uncap_first});
@@ -221,7 +221,7 @@ public class ${curr.name?cap_first}DataLoader
 	 */
 	@Override
 	protected ${curr.name} extractItem(final Map<?, ?> columns) {
-		final ${curr.name?cap_first} ${curr.name?uncap_first} = 
+		final ${curr.name?cap_first} ${curr.name?uncap_first} =
 				new ${curr.name?cap_first}();
 
 		return this.extractItem(columns, ${curr.name?uncap_first});
@@ -231,7 +231,7 @@ public class ${curr.name?cap_first}DataLoader
 	 * @param columns Columns to extract
 	 * @return A ${curr.name} entity
 	 */
-	protected ${curr.name} extractItem(final Map<?, ?> columns, 
+	protected ${curr.name} extractItem(final Map<?, ?> columns,
 				${curr.name?cap_first} ${curr.name?uncap_first}) {
 		<#if InheritanceUtils.isExtended(curr)>
 		${curr.extends}DataLoader.getInstance(this.ctx).extractItem(columns, ${curr.name?uncap_first});
@@ -253,20 +253,20 @@ public class ${curr.name?cap_first}DataLoader
 					<#elseif field.type?lower_case=="datetime">
 						<#if field.harmony_type=="date">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
-					new DateTime(((Date) columns.get("${field.name?uncap_first}"))<#if field.is_locale>, 
+					new DateTime(((Date) columns.get("${field.name?uncap_first}"))<#if field.is_locale>,
 							DateTimeZone.UTC</#if>));
-						<#elseif field.harmony_type=="datetime">		
+						<#elseif field.harmony_type=="datetime">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
-					new DateTime(((Date) columns.get("${field.name?uncap_first}"))<#if field.is_locale>, 
+					new DateTime(((Date) columns.get("${field.name?uncap_first}"))<#if field.is_locale>,
 							DateTimeZone.UTC</#if>));
 						<#elseif field.harmony_type=="time">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
-					DateUtils.formatPattern(patternTime, 
+					DateUtils.formatPattern(patternTime,
 							(String) columns.get("${field.name?uncap_first}")));
 						</#if>
 					<#elseif field.type?lower_case=="boolean">
 			${curr.name?uncap_first}.set${field.name?cap_first}(
-					(Boolean) columns.get("${field.name?uncap_first}"));		
+					(Boolean) columns.get("${field.name?uncap_first}"));
 					<#elseif (field.type?lower_case == "string")>
 			${curr.name?uncap_first}.set${field.name?cap_first}(
 					(String) columns.get("${field.name?uncap_first}"));
@@ -287,8 +287,8 @@ public class ${curr.name?cap_first}DataLoader
 						</#if>
 					</#if>
 				<#else>
-					<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">			
-			final ${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} = 
+					<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">
+			final ${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} =
 					${field.relation.targetEntity?cap_first}DataLoader.getInstance(
 							this.ctx).items.get(
 									(String) columns.get("${field.name?uncap_first}"));
@@ -296,12 +296,12 @@ public class ${curr.name?cap_first}DataLoader
 				${curr.name?uncap_first}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first});
 						<#if field.relation.inversedBy??>
 							<#assign invField = MetadataUtils.getInversingField(field) />
-				ArrayList<${curr.name?cap_first}> ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s = 
+				ArrayList<${curr.name?cap_first}> ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =
 						${field.relation.targetEntity?uncap_first}.get${invField.name?cap_first}();
 				if (${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s == null) {
-					${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s = 
+					${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =
 							new ArrayList<${curr.name?cap_first}>();
-				}							
+				}
 				${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s.add(${curr.name?uncap_first});
 				${field.relation.targetEntity?uncap_first}.set${invField.name?cap_first}(
 						${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s);
@@ -309,9 +309,9 @@ public class ${curr.name?cap_first}DataLoader
 			}
 
 					<#else>
-			ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s = 
+			ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s =
 					new ArrayList<${field.relation.targetEntity?cap_first}>();
-			final Map<?, ?> ${field.relation.targetEntity?uncap_first}sMap = 
+			final Map<?, ?> ${field.relation.targetEntity?uncap_first}sMap =
 					(Map<?, ?>) columns.get("${field.name?uncap_first}");
 			for (final Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()) {
 				if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(
@@ -323,7 +323,7 @@ public class ${curr.name?cap_first}DataLoader
 				}
 			}
 			${curr.name?uncap_first}.set${field.name?cap_first}(
-						${field.relation.targetEntity?uncap_first}s);		
+						${field.relation.targetEntity?uncap_first}s);
 					</#if>
 				</#if>
 		}
@@ -340,12 +340,12 @@ public class ${curr.name?cap_first}DataLoader
 	@Override
 	public void load(final DataManager manager) {
 		for (final ${curr.name?cap_first} ${curr.name?uncap_first} : this.items.values()) {
-			${curr.name?uncap_first}.setId(
+			${curr.name?uncap_first}.set${curr.ids[0].name?cap_first}(
 					manager.persist(${curr.name?uncap_first}));
 		}
 		manager.flush();
 	}
-	
+
 	/**
 	 * Give priority for fixtures insertion in database.
 	 * 0 is the first.
@@ -358,7 +358,7 @@ public class ${curr.name?cap_first}DataLoader
 
 	/**
 	 * Get the fixture file name.
-	 * @return A String representing the file name 
+	 * @return A String representing the file name
 	 */
 	@Override
 	public String getFixtureFileName() {

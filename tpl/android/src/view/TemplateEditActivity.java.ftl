@@ -9,7 +9,7 @@ import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import android.os.Bundle;
 
 /** ${curr.name} edit Activity.
- * 
+ *
  * @see android.app.Activity
  */
 public class ${curr.name}EditActivity extends HarmonyFragmentActivity {
@@ -18,7 +18,7 @@ public class ${curr.name}EditActivity extends HarmonyFragmentActivity {
   	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.activity_${curr.name?lower_case}_edit);
-		
+
 		// Google Analytics
 		//GoogleAnalyticsSessionManager.getInstance(getApplication())
 		//	.incrementActivityCount();
@@ -27,7 +27,7 @@ public class ${curr.name}EditActivity extends HarmonyFragmentActivity {
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-		
+
 		// Google Analytics
 		/*GoogleAnalyticsTracker.getInstance().dispatch();
      		  GoogleAnalyticsSessionManager.getInstance().decrementActivityCount();*/

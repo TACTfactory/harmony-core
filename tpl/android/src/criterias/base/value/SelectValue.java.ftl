@@ -10,7 +10,7 @@ import ${project_namespace}.criterias.base.CriteriasBase;
  * (Use only with IN type criterias)
  * Example : SELECT * FROM table1 WHERE id IN (
  *		SELECT refKey FROM refTable WHERE criteria);
- */ 
+ */
 public class SelectValue extends CriteriaValue {
 	/** The table referenced by this SelectValue. */
 	private String refTable;
@@ -18,7 +18,7 @@ public class SelectValue extends CriteriaValue {
 	private String refKey;
 	/** A criteria of the refTable type. */
 	private CriteriasBase criteria;
-	
+
 	/**
 	 * @return the refTable
 	 */
@@ -63,16 +63,16 @@ public class SelectValue extends CriteriaValue {
 
 	@Override
 	public String toSQLiteString() {
-		return 	"(SELECT " + this.refKey 
-				+ " FROM " + this.refTable 
+		return 	"(SELECT " + this.refKey
+				+ " FROM " + this.refTable
 				+ " WHERE " + this.criteria.toSQLiteString()
 				+ ")";
 	}
 
 	@Override
 	public String toSQLiteSelection() {
-		return 	"(SELECT " + this.refKey 
-				+ " FROM " + this.refTable 
+		return 	"(SELECT " + this.refKey
+				+ " FROM " + this.refTable
 				+ " WHERE " + this.criteria.toSQLiteSelection()
 				+ ")";
 	}
@@ -80,7 +80,7 @@ public class SelectValue extends CriteriaValue {
 	@Override
 	public void toSQLiteSelectionArgs(final ArrayList<String> array) {
 		this.criteria.toSQLiteSelectionArgs(array);
-		
+
 	}
 
 }

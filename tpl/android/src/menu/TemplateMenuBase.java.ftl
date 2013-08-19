@@ -20,74 +20,74 @@ public abstract class ${project_name?cap_first}MenuBase {
 	<#if menus??>
 		<#list menus as menu>
 	/** ${menuAlias(menu)?lower_case?cap_first} value. */
-	public static final int ${menuAlias(menu)} = 0x${idMenu};	
+	public static final int ${menuAlias(menu)} = 0x${idMenu};
 			<#assign idMenu = idMenu + 1 />
 		</#list>
 	</#if>
 
 
 
-	
+
 	/** Array of MenuWrapperBase. */
-	protected SparseArray<MenuWrapperBase> menus = 
+	protected SparseArray<MenuWrapperBase> menus =
 					new SparseArray<MenuWrapperBase>();
-	
+
 	/** Context. */
 	protected Context ctx;
 	/** parent fragment. */
 	protected Fragment fragment;
 	/** Share String. */
 	protected String share;
-	
+
 	/** Menu. */
 	protected Menu menu;
-	
+
 	/**
 	 * Constructor.
 	 * @param ctx context
 	 * @throws Exception if context is null
 	 */
-	protected ${project_name?cap_first}MenuBase(final Context ctx) 
+	protected ${project_name?cap_first}MenuBase(final Context ctx)
 														throws Exception {
 		this(ctx, null);
 	}
-	
+
 	/**
 	 * Constructor.
 	 * @param ctx context
 	 * @param fragment parent fragment
 	 * @throws Exception If context is null
 	 */
-	protected ${project_name?cap_first}MenuBase(final Context ctx, 
+	protected ${project_name?cap_first}MenuBase(final Context ctx,
 								final Fragment fragment) throws Exception {
 		if (ctx == null) {
 			throw new Exception(
 					"Unable to Initialise Menu Helper with no context");
 		}
-		
+
 		this.fragment	= fragment;
 		this.ctx 	= ctx;
 		<#if menus??>
 			<#list menus as menu>
-		this.menus.put(${menuAlias(menu)}, new ${menu}());	
+		this.menus.put(${menuAlias(menu)}, new ${menu}());
 			</#list>
 		</#if>
 
 	}
-	
-	/** Initialize Menu component. 
+
+	/** Initialize Menu component.
 	 * @param menu menu
 	 */
 	private void initializeMenu(final Menu menu) {
 		this.menu = menu;
-		
+
 		for (int i = 0; i < this.menus.size(); i++) {
 			this.menus.valueAt(i).initializeMenu(menu);
 		}
-		
+
 	}
-	
-	/** Update Menu component.  
+
+	/** Update Menu component.
 	 * @param menu menu
 	 * @param ctx context
 	 */
@@ -99,9 +99,9 @@ public abstract class ${project_name?cap_first}MenuBase {
 		this.initializeMenu(menu);
 		this.updateMenu(menu);
 	}
-	
-	/** Update Menu component. 
-	 * @param menu menu 
+
+	/** Update Menu component.
+	 * @param menu menu
 	 */
 	public void updateMenu(final Menu menu) {
 		final int currentClass = this.ctx.getClass().hashCode();
@@ -111,10 +111,10 @@ public abstract class ${project_name?cap_first}MenuBase {
 		} else {
 			currentFragment = -1;
 		}
-		
+
 		for (int i = 0; i < this.menus.size(); i++) {
-			this.menus.valueAt(i).updateMenu(menu, 
-					currentClass, 
+			this.menus.valueAt(i).updateMenu(menu,
+					currentClass,
 					currentFragment,
 					this.ctx);
 		}
@@ -131,26 +131,26 @@ public abstract class ${project_name?cap_first}MenuBase {
 
 	/** Call intent associate to menu item selected.
 	 * @param item item
-	 * @param ctx context 
+	 * @param ctx context
 	 * @return true if event has been treated
 	 */
 	public boolean dispatch(final MenuItem item, final Context ctx) {
 		if (ctx != null) {
 			this.ctx = ctx;
 		}
-		
+
 		return this.dispatch(item);
 	}
-	
+
 	/** Call intent associate to menu item selected.
-	 * @param item item 
+	 * @param item item
 	 * @return true if event has been treated
 	 */
 	private boolean dispatch(final MenuItem item) {
-		return this.menus.get(item.getItemId()).dispatch(item, this.ctx, 
+		return this.menus.get(item.getItemId()).dispatch(item, this.ctx,
 				this.fragment);
 	}
-	
+
 	/**
 	 * Called when an activity you launched exits.
 	 * @see android.app.Activity#onActivityResult
@@ -163,7 +163,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 															 Context ctx) {
 		this.onActivityResult(requestCode, resultCode, data, ctx, null);
 	}
-	
+
 	/**
 	 * Called when an activity you launched exits.
 	 * @see android.app.Activity#onActivityResult
@@ -173,19 +173,19 @@ public abstract class ${project_name?cap_first}MenuBase {
 	 * @param ctx The context
 	 * @param fragment The fragment
 	 */
-	public void onActivityResult(int requestCode, int resultCode, Intent data, 
+	public void onActivityResult(int requestCode, int resultCode, Intent data,
 										  Context ctx, Fragment fragment) {
 		if (ctx != null) {
 			this.ctx = ctx;
 		}
-		
+
 		if (fragment != null) {
 			this.fragment = fragment;
 		}
-		
+
 		this.onActivityResult(requestCode, resultCode, data);
 	}
-	
+
 	/**
 	 * Called when an activity you launched exits.
 	 * @see android.app.Activity#onActivityResult
@@ -196,10 +196,10 @@ public abstract class ${project_name?cap_first}MenuBase {
 	private void onActivityResult(int requestCode, int resultCode,
 															     Intent data) {
 		for (int i = 0; i < this.menus.size(); i++) {
-			this.menus.valueAt(i).onActivityResult(requestCode, 
-					resultCode, 
-					data, 
-					this.ctx, 
+			this.menus.valueAt(i).onActivityResult(requestCode,
+					resultCode,
+					data,
+					this.ctx,
 					this.fragment);
 		}
 	}

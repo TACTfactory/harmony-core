@@ -41,21 +41,21 @@ public class FixtureCommand extends BaseCommand {
 
 	//commands
 	/** Command: ORM:FIXTURE:INIT. */
-	public static final String FIXTURE_INIT	= 
+	public static final String FIXTURE_INIT	=
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_INIT;
 	/** Command: ORM:FIXTURE:LOAD. */
-	public static final String FIXTURE_LOAD	= 
+	public static final String FIXTURE_LOAD	=
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_LOAD;
 	/** Command: ORM:FIXTURE:PURGE. */
 	public static final String FIXTURE_PURGE	=
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_PURGE;
 	/** Command: ORM:FIXTURE:UPDATE. */
-	public static final String FIXTURE_UPDATE = 
+	public static final String FIXTURE_UPDATE =
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_UPDATE;
-	
+
 	@Override
-	public final void execute(final String action, 
-			final String[] args, 
+	public final void execute(final String action,
+			final String[] args,
 			final String option) {
 		ConsoleUtils.display("> Fixture Generator");
 
@@ -69,9 +69,9 @@ public class FixtureCommand extends BaseCommand {
 		} else if (action.equals(FIXTURE_UPDATE)) {
 			this.update();
 		}
-		
+
 	}
-	
+
 	/**
 	 * Init command.
 	 */
@@ -84,7 +84,7 @@ public class FixtureCommand extends BaseCommand {
 			if (this.getCommandArgs().containsKey("format")) {
 				final String format = this.getCommandArgs().get("format");
 				if (format.equals("xml") || format.equals("yml")) {
-					fixtureMeta.setType(format); 
+					fixtureMeta.setType(format);
 				}
 			}
 			boolean force = false;
@@ -96,14 +96,14 @@ public class FixtureCommand extends BaseCommand {
 			}
 			ApplicationMetadata.INSTANCE.getOptions().put(
 					fixtureMeta.getName(), fixtureMeta);
-			
+
 			new FixtureGenerator(new AndroidAdapter()).init(force);
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			ConsoleUtils.displayError(e);
 		}
 	}
-	
+
 	/**
 	 * Load command.
 	 */
@@ -115,7 +115,7 @@ public class FixtureCommand extends BaseCommand {
 			ConsoleUtils.displayError(e);
 		}
 	}
-	
+
 	/**
 	 * Purge command.
 	 */
@@ -128,42 +128,42 @@ public class FixtureCommand extends BaseCommand {
 			ConsoleUtils.displayError(e);
 		}
 	}
-	
+
 	/**
 	 * Update command.
 	 */
 	public final void update() {
-		
+
 	}
 
 	@Override
 	public final void summary() {
-		ConsoleUtils.display("\n> FIXTURE \n" 
-				+ "\t" + FIXTURE_INIT 
+		ConsoleUtils.display("\n> FIXTURE \n"
+				+ "\t" + FIXTURE_INIT
 				+ "\t => Initialize fixtures, create loaders\n"
 				+ "\t\t use --format=(xml|yml) "
 				+ "to specify a format (default : yml)\n"
 				+ "\t\t use --force=(true|false) "
 				+ "to overwrite existing fixture loaders (default : false)\n"
-				
-				+ "\t" + FIXTURE_LOAD 
+
+				+ "\t" + FIXTURE_LOAD
 				+ "\t => Load fixtures into the projects (overwrite)\n"
-				
-				+ "\t" + FIXTURE_PURGE 
-				+ "\t => Clear fixtures on the projects\n" 
-				
-				+ "\t" + FIXTURE_UPDATE 
+
+				+ "\t" + FIXTURE_PURGE
+				+ "\t => Clear fixtures on the projects\n"
+
+				+ "\t" + FIXTURE_UPDATE
 				+ "\t => Update the fixtures in the project");
-		
+
 	}
 
 	@Override
 	public final boolean isAvailableCommand(final String command) {
-		return 	command.equals(FIXTURE_INIT) 
+		return 	command.equals(FIXTURE_INIT)
 				|| command.equals(FIXTURE_LOAD)
 				|| command.equals(FIXTURE_PURGE)
 				|| command.equals(FIXTURE_UPDATE);
-		
+
 	}
 
 }

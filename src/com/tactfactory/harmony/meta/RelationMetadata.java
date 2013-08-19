@@ -21,25 +21,25 @@ public class RelationMetadata extends BaseMetadata {
 
 	/** The type of relation. */
 	private String type;
-	
+
 	/** The entity's field which will be used for the relation. */
 	private String field;
-	
+
 	/** The related entity. */
 	private String entityRef;
-	
+
 	/** The related entity's field which will be used for the relation. */
 	private List<String> fieldRef = new ArrayList<String>();
 
 	/** Inversed by (in case of OneToMany). */
 	private String mappedBy;
-	
+
 	/** Inversed by (in case of ManyToOne). */
 	private String inversedBy;
 
 	/** Name of the join table used to join ManyToMany relations. */
 	private String joinTable;
-	
+
 	/**
 	 * Transform the relation to a field of map of strings.
 	 * @param adapter The adapter to use.
@@ -59,7 +59,7 @@ public class RelationMetadata extends BaseMetadata {
 			model.put("mappedBy", this.mappedBy);
 		}
 		model.put("joinTable", this.joinTable);
-		
+
 		return model;
 	}
 

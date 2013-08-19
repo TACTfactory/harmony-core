@@ -20,7 +20,7 @@ import ${project_namespace}.menu.${project_name?cap_first}Menu;
  * Harmony custom list Fragment.
  * @param <T> Type to show
  */
-public abstract class HarmonyListFragment<T> extends SherlockListFragment 
+public abstract class HarmonyListFragment<T> extends SherlockListFragment
 implements LoaderManager.LoaderCallbacks<Cursor> {
 	/**
 	 * Recall internal address (Hack Micky).
@@ -42,7 +42,7 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 	public void onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
 		menu.clear();
-		
+
 		try {
 			${project_name?cap_first}Menu.getInstance(this.getActivity(), this)
 										  .updateMenu(menu, this.getActivity());
@@ -56,13 +56,13 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 		boolean result;
 		try {
 			result = ${project_name?cap_first}Menu.getInstance(
-			this.getActivity(), 
+			this.getActivity(),
 			this).dispatch(item, this.getActivity());
 		} catch (Exception e) {
 			e.printStackTrace();
 			result = false;
 		}
-		
+
 		return result;
 	}
 
@@ -75,12 +75,12 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
 
-	/** 
+	/**
 	 * Initialize Custom List Fragment.
 	 * @param rootView The rootview
 	 * @param progressLayoutId The Progress Layout id
@@ -91,18 +91,18 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 			int listContainerId) {
 		// HACK Micky : Map component support ListFragment
 		// Progress
-		final LinearLayout progressLayout = 
+		final LinearLayout progressLayout =
 				(LinearLayout) rootView.findViewById(
 						progressLayoutId);
 		progressLayout.setId(INTERNAL_PROGRESS_CONTAINER_ID);
 
 		// Empty
-		final TextView emptyText = 
+		final TextView emptyText =
 				(TextView) rootView.findViewById(android.R.id.empty);
 		emptyText.setId(INTERNAL_EMPTY_ID);
 
 		// ListContainer
-		final RelativeLayout listContainer = 
+		final RelativeLayout listContainer =
 				(RelativeLayout) rootView.findViewById(
 						listContainerId);
 		listContainer.setId(INTERNAL_LIST_CONTAINER_ID);

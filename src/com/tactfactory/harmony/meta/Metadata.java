@@ -18,12 +18,12 @@ import com.tactfactory.harmony.plateforme.BaseAdapter;
 public interface Metadata {
 
 	/** Converts the Metadata to a map usable for Freemaker.
-	 *  
+	 *
 	 * @param adapter The adapter to use for the conversion
 	 * @return The generated map
 	 **/
 	Map<String, Object> toMap(BaseAdapter adapter);
-	
+
 	/**
 	 * The key defining this Metadata in the global map.
 	 * This will be used to call the metadatas in Freemarker templates.

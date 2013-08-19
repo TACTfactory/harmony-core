@@ -51,46 +51,46 @@ public class ActivityGenerator extends BaseGenerator {
 	private static final String TEMPLATE = "Template";
 	/** "name". */
 	private static final String NAME = "name";
-	
+
 	/** The local namespace. */
 	private String localNameSpace;
-	
+
 	/** Are the entities writable ? */
 	private boolean isWritable = true;
-	
-	/** Has the project a date ? */ 
+
+	/** Has the project a date ? */
 	private boolean isDate;
-	
+
 	/** Has the project a time ? */
 	private boolean isTime;
-	
+
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use
-	 * @throws Exception 
+	 * @throws Exception if adapter is null
 	 */
 	public ActivityGenerator(final BaseAdapter adapter) throws Exception {
 		this(adapter, true);
-		
+
 		// Make entities
-		for (final EntityMetadata meta 
+		for (final EntityMetadata meta
 				: this.getAppMetas().getEntities().values()) {
 			if (!meta.getFields().isEmpty() && !meta.isInternal()) {
 				// copy Widget
 				if (this.isDate && this.isTime) {
 					break;
 				} else {
-					for (final FieldMetadata field 
+					for (final FieldMetadata field
 							: meta.getFields().values()) {
 						final String type = field.getHarmonyType();
 						if (!this.isDate && (
-								type.equals(Type.DATE.getValue())  
+								type.equals(Type.DATE.getValue())
 								|| type.equals(Type.DATETIME.getValue()))) {
 							this.isDate = true;
 						}
-						
+
 						if (!this.isTime && (
-								type.equals(Type.TIME.getValue())  
+								type.equals(Type.TIME.getValue())
 								|| type.equals(Type.DATETIME.getValue()))) {
 							this.isTime = true;
 						}
@@ -104,7 +104,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 * Constructor.
 	 * @param adapter The adapter to use.
 	 * @param writable Are the entities writable ? (default to true)
-	 * @throws Exception 
+	 * @throws Exception if adapter is null
 	 */
 	public ActivityGenerator(final BaseAdapter adapter,
 			final Boolean writable) throws Exception {
@@ -114,158 +114,160 @@ public class ActivityGenerator extends BaseGenerator {
 		this.setDatamodel(
 				ApplicationMetadata.INSTANCE.toMap(this.getAdapter()));
 	}
-	
+
 	/**
 	 * Generate all activities for every entity.
 	 */
 	public final void generateAll() {
 		ConsoleUtils.display(">> Generate CRUD view...");
 
-		for (final EntityMetadata cm 
+		for (final EntityMetadata cm
 				: this.getAppMetas().getEntities().values()) {
 			if (!cm.isInternal() && !cm.getFields().isEmpty()) {
 				cm.makeString("label");
 				this.getDatamodel().put(
 						TagConstant.CURRENT_ENTITY, cm.getName());
-				this.localNameSpace = 
-						this.getAdapter().getNameSpace(cm, 
+				this.localNameSpace =
+						this.getAdapter().getNameSpace(cm,
 								this.getAdapter().getController())
-						+ "." 
+						+ "."
 						+ cm.getName().toLowerCase(Locale.ENGLISH);
 				this.generateAllAction(cm.getName());
 			}
 		}
-		
 
-		this.updateWidget("ValidationButtons.java", 
+
+		this.updateWidget("ValidationButtons.java",
 				"widget_validation_buttons.xml");
-		
+
+		this.updateWidget("PinchZoomImageView.java");
+
 		if (this.isDate || this.isTime) {
 			this.makeSource(
-					this.getAdapter().getTemplateRessourceValuesPath() 
+					this.getAdapter().getTemplateRessourceValuesPath()
 							+ "/attrs.xml",
-					this.getAdapter().getRessourceValuesPath() 
+					this.getAdapter().getRessourceValuesPath()
 							+ "/attrs.xml",
 					false);
 			if (this.isDate) {
-				this.updateWidget("CustomDatePickerDialog.java", 
+				this.updateWidget("CustomDatePickerDialog.java",
 						"dialog_date_picker.xml");
-				this.updateWidget("DateWidget.java", 
+				this.updateWidget("DateWidget.java",
 						"widget_date.xml");
 			}
-			
+
 			if (this.isTime) {
 				this.updateWidget("CustomTimePickerDialog.java",
 						"dialog_time_picker.xml");
-				this.updateWidget("TimeWidget.java", 
+				this.updateWidget("TimeWidget.java",
 						"widget_time.xml");
 			}
-			
+
 			if (this.isDate && this.isTime) {
-				this.updateWidget("DateTimeWidget.java", 
+				this.updateWidget("DateTimeWidget.java",
 						"widget_datetime.xml");
-			}	
+			}
 		}
-		
+
 		// create HarmonyFragmentActivity
 		super.makeSource(
-			this.getAdapter().getTemplateSourcePath() 
+			this.getAdapter().getTemplateSourcePath()
 			+ "harmony/view/DeletableList.java",
 			this.getAdapter().getSourcePath()
-			+ this.getAppMetas().getProjectNameSpace() 
-			+ "/harmony/view/" 
+			+ this.getAppMetas().getProjectNameSpace()
+			+ "/harmony/view/"
 			+ "DeletableList.java",
 			false);
-		
-		this.makeResourceLayout("dialog_delete_confirmation.xml", 
+
+		this.makeResourceLayout("dialog_delete_confirmation.xml",
 				"dialog_delete_confirmation.xml");
-		
+
 		// create HarmonyFragment
 		super.makeSource(
-			this.getAdapter().getTemplateSourcePath() 
+			this.getAdapter().getTemplateSourcePath()
 			+ "harmony/view/DeleteDialog.java",
 			this.getAdapter().getSourcePath()
-			+ this.getAppMetas().getProjectNameSpace() 
-			+ "/harmony/view/" 
+			+ this.getAppMetas().getProjectNameSpace()
+			+ "/harmony/view/"
 			+ "DeleteDialog.java",
 			false);
-		
-		TranslationMetadata.addDefaultTranslation("dialog_delete_title", 
-				"Delete", 
+
+		TranslationMetadata.addDefaultTranslation("dialog_delete_title",
+				"Delete",
 				Group.COMMON);
-		
-		TranslationMetadata.addDefaultTranslation("dialog_delete_message", 
-				"Are you sure you want to delete this item ?", 
+
+		TranslationMetadata.addDefaultTranslation("dialog_delete_message",
+				"Are you sure you want to delete this item ?",
 				Group.COMMON);
-		
+
 		try {
 			new TranslationGenerator(this.getAdapter()).generateStringsXml();
 		} catch (Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
-	
-	/** 
-	 * Generate all actions (List, Show, Edit, Create). 
-	 * @param entityName The entity for which to generate the crud. 
+
+	/**
+	 * Generate all actions (List, Show, Edit, Create).
+	 * @param entityName The entity for which to generate the crud.
 	 */
 	public final void generateAllAction(final String entityName) {
 		ConsoleUtils.display(">>> Generate CRUD view for " +  entityName);
-		
+
 		try {
 			if (this.isWritable) {
 				ConsoleUtils.display("   with write actions");
-	
+
 				this.generateCreateAction(entityName);
 				this.generateEditAction(entityName);
-				
+
 				TranslationMetadata.addDefaultTranslation(
 						"common_create",
 						"Create",
 						Group.COMMON);
-				
+
 				TranslationMetadata.addDefaultTranslation(
 						"common_edit",
 						"Edit",
 						Group.COMMON);
-				
+
 				TranslationMetadata.addDefaultTranslation(
 						"common_delete",
 						"Del",
 						Group.COMMON);
-				
+
 				TranslationMetadata.addDefaultTranslation(
-						entityName.toLowerCase(Locale.ENGLISH) 
-							+ "_progress_save_title", 
+						entityName.toLowerCase(Locale.ENGLISH)
+							+ "_progress_save_title",
 						entityName + " save progress",
 						Group.MODEL);
 				TranslationMetadata.addDefaultTranslation(
-						entityName.toLowerCase(Locale.ENGLISH) 
-							+ "_progress_save_message", 
+						entityName.toLowerCase(Locale.ENGLISH)
+							+ "_progress_save_message",
 						entityName + " is saving to database…",
 						Group.MODEL);
 			}
-	
+
 			this.generateShowAction(entityName);
 			this.generateListAction(entityName);
-			
+
 			TranslationMetadata.addDefaultTranslation(
 					entityName.toLowerCase(Locale.ENGLISH)
-						+ "_progress_load_title", 
+						+ "_progress_load_title",
 					entityName + " Loading progress",
 					Group.MODEL);
 			TranslationMetadata.addDefaultTranslation(
-					entityName.toLowerCase(Locale.ENGLISH) 
-						+ "_progress_load_message", 
+					entityName.toLowerCase(Locale.ENGLISH)
+						+ "_progress_load_message",
 					entityName + " is loading…",
 					Group.MODEL);
-		
+
 			new TranslationGenerator(this.getAdapter()).generateStringsXml();
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
-	
+
 	/** List Action.
 	 * @param entityName The entity to generate
 	 * @throws IOException
@@ -277,28 +279,28 @@ public class ActivityGenerator extends BaseGenerator {
 		javas.add("%sListFragment.java");
 		javas.add("%sListAdapter.java");
 		javas.add("%sListLoader.java");
-		
+
 		final ArrayList<String> xmls = new ArrayList<String>();
 		xmls.add("activity_%s_list.xml");
-		xmls.add("fragment_%s_list.xml");		
+		xmls.add("fragment_%s_list.xml");
 		xmls.add("row_%s.xml");
-		
+
 		for (final String java : javas) {
 			this.makeSourceControler(
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
-		
+
 		for (final String xml : xmls) {
 			this.makeResourceLayout(
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
 		}
-		
+
 		this.updateManifest("ListActivity", entityName);
-		
+
 		TranslationMetadata.addDefaultTranslation(
-				entityName.toLowerCase(Locale.ENGLISH) + "_empty_list", 
+				entityName.toLowerCase(Locale.ENGLISH) + "_empty_list",
 				entityName + " list is empty !",
 				Group.MODEL);
 	}
@@ -313,18 +315,18 @@ public class ActivityGenerator extends BaseGenerator {
 		final ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sShowActivity.java");
 		javas.add("%sShowFragment.java");
-		
+
 		final ArrayList<String> xmls = new ArrayList<String>();
 		xmls.add("activity_%s_show.xml");
 		xmls.add("fragment_%s_show.xml");
-		
+
 
 		for (final String java : javas) {
 			this.makeSourceControler(
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
-		
+
 		for (final String xml : xmls) {
 			this.makeResourceLayout(
 					String.format(xml, LOWER_TEMPLATE),
@@ -332,9 +334,9 @@ public class ActivityGenerator extends BaseGenerator {
 		}
 
 		this.updateManifest("ShowActivity", entityName);
-		
+
 		TranslationMetadata.addDefaultTranslation(
-				entityName.toLowerCase(Locale.ENGLISH) + "_error_load", 
+				entityName.toLowerCase(Locale.ENGLISH) + "_error_load",
 				entityName + " loading error…",
 				Group.MODEL);
 	}
@@ -345,22 +347,22 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws TemplateException
 	 */
 	protected final void generateEditAction(final String entityName) {
-		
+
 		final ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sEditActivity.java");
 		javas.add("%sEditFragment.java");
-		
+
 		final ArrayList<String> xmls = new ArrayList<String>();
 		xmls.add("activity_%s_edit.xml");
 		xmls.add("fragment_%s_edit.xml");
-		
+
 
 		for (final String java : javas) {
 			this.makeSourceControler(
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
-		
+
 		for (final String xml : xmls) {
 			this.makeResourceLayout(
 					String.format(xml, LOWER_TEMPLATE),
@@ -368,12 +370,12 @@ public class ActivityGenerator extends BaseGenerator {
 		}
 
 		this.updateManifest("EditActivity", entityName);
-		
+
 		TranslationMetadata.addDefaultTranslation(
-				entityName.toLowerCase(Locale.ENGLISH) + "_error_edit", 
+				entityName.toLowerCase(Locale.ENGLISH) + "_error_edit",
 				entityName + " edition error…",
 				Group.MODEL);
-				
+
 	}
 
 	/** Create Action.
@@ -382,22 +384,22 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @throws TemplateException
 	 */
 	protected final void generateCreateAction(final String entityName) {
-		
+
 		final ArrayList<String> javas = new ArrayList<String>();
 		javas.add("%sCreateActivity.java");
 		javas.add("%sCreateFragment.java");
-		
+
 		final ArrayList<String> xmls = new ArrayList<String>();
 		xmls.add("activity_%s_create.xml");
 		xmls.add("fragment_%s_create.xml");
-		
+
 
 		for (final String java : javas) {
 			this.makeSourceControler(
 					String.format(java, TEMPLATE),
 					String.format(java, entityName));
 		}
-		
+
 		for (final String xml : xmls) {
 			this.makeResourceLayout(
 					String.format(xml, LOWER_TEMPLATE),
@@ -406,33 +408,33 @@ public class ActivityGenerator extends BaseGenerator {
 
 
 		this.updateManifest("CreateActivity", entityName);
-		
-		final ClassMetadata classMeta = 
+
+		final ClassMetadata classMeta =
 				this.getAppMetas().getEntities().get(entityName);
-		
+
 		for (final FieldMetadata fm : classMeta.getFields().values()) {
-			if (!fm.isInternal() 
-					&& !fm.isHidden() 
+			if (!fm.isInternal()
+					&& !fm.isHidden()
 					&& fm.getRelation() != null) {
 				TranslationMetadata.addDefaultTranslation(
-						entityName.toLowerCase(Locale.ENGLISH) 
-							+ "_" 
-							+ fm.getName().toLowerCase(Locale.ENGLISH) 
-							+ "_dialog_title", 
+						entityName.toLowerCase(Locale.ENGLISH)
+							+ "_"
+							+ fm.getName().toLowerCase(Locale.ENGLISH)
+							+ "_dialog_title",
 						"Select " + fm.getName(),
 						Group.MODEL);
 			}
 		}
-		
+
 		TranslationMetadata.addDefaultTranslation(
-				entityName.toLowerCase(Locale.ENGLISH) + "_error_create", 
+				entityName.toLowerCase(Locale.ENGLISH) + "_error_create",
 				entityName + " creation error…",
 				Group.MODEL);
 	}
 
 	/** Make Java Source Code.
-	 * 
-	 * @param template Template path file. 
+	 *
+	 * @param template Template path file.
 	 *		For list activity is "TemplateListActivity.java"
 	 * @param filename The destination file name.
 	 */
@@ -446,40 +448,40 @@ public class ActivityGenerator extends BaseGenerator {
 		final String fullTemplatePath = String.format("%s%s",
 				this.getAdapter().getTemplateSourceControlerPath(),
 				template);
-		
+
 		super.makeSource(fullTemplatePath, fullFilePath, false);
 	}
 
-	/** 
+	/**
 	 * Make Resource file.
-	 * 
+	 *
 	 * @param template Template path file.
-	 * @param filename Resource file. 
-	 * 	prefix is type of view "row_" or "activity_" or "fragment_" with 
-	 *	postfix is type of action and extension file : 
+	 * @param filename Resource file.
+	 * 	prefix is type of view "row_" or "activity_" or "fragment_" with
+	 *	postfix is type of action and extension file :
 	 *		"_list.xml" or "_edit.xml".
 	 */
-	private void makeResourceLayout(final String template, 
+	private void makeResourceLayout(final String template,
 			final String filename) {
-		final String fullFilePath = String.format("%s/%s", 
+		final String fullFilePath = String.format("%s/%s",
 									this.getAdapter().getRessourceLayoutPath(),
 									filename);
 		final String fullTemplatePath = String.format("%s/%s",
 				this.getAdapter().getTemplateRessourceLayoutPath(),
 				template);
-		
+
 		super.makeSource(fullTemplatePath, fullFilePath, false);
 	}
 
 	/** Make Manifest file.
-	 * 
+	 *
 	 * @param cfg Template engine
-	 * @throws IOException 
-	 * @throws TemplateException 
+	 * @throws IOException if an IO exception occurred 
+	 * @throws TemplateException If the template generation failed
 	 */
-	public final void makeManifest(final Configuration cfg) 
+	public final void makeManifest(final Configuration cfg)
 			throws IOException, TemplateException {
-		final File file = 
+		final File file =
 				TactFileUtils.makeFile(this.getAdapter().getManifestPathFile());
 
 		// Debug Log
@@ -489,25 +491,25 @@ public class ActivityGenerator extends BaseGenerator {
 		// Create
 		final Template tpl = cfg.getTemplate(
 				this.getAdapter().getTemplateManifestPathFile());
-		final OutputStreamWriter output = 
+		final OutputStreamWriter output =
 				new OutputStreamWriter(
-						new FileOutputStream(file), 
+						new FileOutputStream(file),
 						TactFileUtils.DEFAULT_ENCODING);
 		tpl.process(this.getDatamodel(), output);
 		output.flush();
 		output.close();
 	}
 
-	/**  
+	/**
 	 * Update Android Manifest.
 	 * @param classF The class file name
 	 * @param entityName the entity for which to update the manifest for.
 	 */
 	private void updateManifest(final String classF, final String entityName) {
-		String classFile = entityName + classF;
+		final String classFile = entityName + classF;
 		final String pathRelatif = String.format(".%s.%s.%s",
-				this.getAdapter().getController(), 
-				entityName.toLowerCase(Locale.ENGLISH), 
+				this.getAdapter().getController(),
+				entityName.toLowerCase(Locale.ENGLISH),
 				classFile);
 
 		// Debug Log
@@ -515,36 +517,36 @@ public class ActivityGenerator extends BaseGenerator {
 
 		try {
 			// Make engine
-			final SAXBuilder builder = new SAXBuilder();		
+			final SAXBuilder builder = new SAXBuilder();
 			final File xmlFile = TactFileUtils.makeFile(
 					this.getAdapter().getManifestPathFile());
-			
+
 			// Load XML File
-			final Document doc = builder.build(xmlFile); 	
-			
+			final Document doc = builder.build(xmlFile);
+
 			// Load Root element
-			final Element rootNode = doc.getRootElement(); 			
-			
+			final Element rootNode = doc.getRootElement();
+
 			// Load Name space (required for manipulate attributes)
-			final Namespace ns = rootNode.getNamespace("android");	
+			final Namespace ns = rootNode.getNamespace("android");
 
 			// Find Application Node
 			Element findActivity = null;
-			
+
 			// Find a element
-			final Element applicationNode = rootNode.getChild("application"); 	
+			final Element applicationNode = rootNode.getChild("application");
 			if (applicationNode != null) {
 
 				// Find Activity Node
-				final List<Element> activities = 
+				final List<Element> activities =
 						applicationNode.getChildren("activity");
-				
+
 				// Find many elements
 				for (final Element activity : activities) {
 					// Load attribute value
-					if (activity.hasAttributes() 
+					if (activity.hasAttributes()
 							&& activity.getAttributeValue(NAME, ns)
-								.equals(pathRelatif)) {	
+								.equals(pathRelatif)) {
 						findActivity = activity;
 						break;
 					}
@@ -553,17 +555,17 @@ public class ActivityGenerator extends BaseGenerator {
 				// If not found Node, create it
 				if (findActivity == null) {
 					// Create new element
-					findActivity = new Element("activity");				
-					
+					findActivity = new Element("activity");
+
 					// Add Attributes to element
-					findActivity.setAttribute(NAME, pathRelatif, ns);	
+					findActivity.setAttribute(NAME, pathRelatif, ns);
 					final Element findFilter = new Element("intent-filter");
 					final Element findAction = new Element("action");
 					final Element findCategory = new Element("category");
 					final Element findData = new Element("data");
 
 					// Add Child element
-					findFilter.addContent(findAction);					
+					findFilter.addContent(findAction);
 					findFilter.addContent(findCategory);
 					findFilter.addContent(findData);
 					findActivity.addContent(findFilter);
@@ -573,7 +575,7 @@ public class ActivityGenerator extends BaseGenerator {
 				// Set values
 				findActivity.setAttribute("label", "@string/app_name", ns);
 				findActivity.setAttribute("exported", "false", ns);
-				final Element filterActivity = 
+				final Element filterActivity =
 						findActivity.getChild("intent-filter");
 				if (filterActivity != null) {
 					final StringBuffer data = new StringBuffer();
@@ -586,20 +588,20 @@ public class ActivityGenerator extends BaseGenerator {
 
 						if (pathRelatif.matches(".*Edit.*")) {
 							action = "EDIT";
-						} else 		
+						} else
 
 						if (pathRelatif.matches(".*Create.*")) {
 							action = "INSERT";
 						}
 					}
 
-					
+
 					data.append(
 							this.getAppMetas().getProjectNameSpace()
 								.replace('/', '.'));
 					data.append('.');
 					data.append(entityName);
-					
+
 					filterActivity.getChild("action").setAttribute(
 							NAME, "android.intent.action." + action, ns);
 					filterActivity.getChild("category").setAttribute(
@@ -607,7 +609,7 @@ public class ActivityGenerator extends BaseGenerator {
 					filterActivity.getChild("data").setAttribute(
 							"mimeType", data.toString(), ns);
 				}
-				
+
 				// Clean code
 				applicationNode.sortChildren(new Comparator<Element>() {
 					@Override
@@ -621,7 +623,7 @@ public class ActivityGenerator extends BaseGenerator {
 			final XMLOutputter xmlOutput = new XMLOutputter();
 
 			// Make beautiful file with indent !!!
-			xmlOutput.setFormat(Format.getPrettyFormat());				
+			xmlOutput.setFormat(Format.getPrettyFormat());
 			xmlOutput.output(doc,
 							new OutputStreamWriter(
 								new FileOutputStream(xmlFile.getAbsoluteFile()),
@@ -632,23 +634,33 @@ public class ActivityGenerator extends BaseGenerator {
 			ConsoleUtils.displayError(e);
 		}
 	}
-	
+
 	/**
 	 * Update Widget.
 	 * @param widgetName The widget name.
 	 * @param layoutName The layout name.
 	 */
-	protected final void updateWidget(final String widgetName, 
+	protected final void updateWidget(final String widgetName,
 			final String layoutName) {
 		super.makeSource(
-				String.format("%s%s", 
-						this.getAdapter().getTemplateWidgetPath(), 
-						widgetName), 
-						
-				String.format("%s%s", 
+				String.format("%s%s",
+						this.getAdapter().getTemplateWidgetPath(),
+						widgetName),
+
+				String.format("%s%s",
 						this.getAdapter().getWidgetPath(),
-						widgetName), 
+						widgetName),
 				false);
-		this.makeResourceLayout(layoutName, layoutName);
+		if (layoutName != null) {
+			this.makeResourceLayout(layoutName, layoutName);
+		}
+	}
+
+	/**
+	 * Update Widget.
+	 * @param widgetName The widget name.
+	 */
+	protected final void updateWidget(final String widgetName) {
+		this.updateWidget(widgetName, null);
 	}
 }

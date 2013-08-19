@@ -38,7 +38,7 @@
 	<#return hasOneToManyRelation(fields) || hasManyToManyRelation(fields) />
 </#function>
 
-<#function hasFieldType fields fieldType>	
+<#function hasFieldType fields fieldType>
 	<#list fields as field>
 		<#if field.harmony_type?lower_case==fieldType?lower_case>
 			<#return true />
@@ -47,23 +47,23 @@
 	<#return false />
 </#function>
 
-<#function hasTime fields>	
+<#function hasTime fields>
 	<#return hasFieldType(fields, "time") />
 </#function>
 
-<#function hasDate fields>	
+<#function hasDate fields>
 	<#return hasFieldType(fields, "date") />
 </#function>
 
-<#function hasDateTime fields>	
+<#function hasDateTime fields>
 	<#return hasFieldType(fields, "datetime") />
 </#function>
 
 <#function hasRelations fields>
 	<#list fields as field>
 		<#if (field.relation??)>
-			<#return true />	
+			<#return true />
 		</#if>
 	</#list>
 	<#return false />
-</#function> 
+</#function>

@@ -27,7 +27,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
  * Project Custom Files Code Generator.
- * 
+ *
  * use Entity files in name space folder
  * it can :
  * <ul>
@@ -40,7 +40,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 @PluginImplementation
 public class OrmCommand extends BaseCommand {
 
-	/** Bundle name. */	
+	/** Bundle name. */
 	public static final String BUNDLE = "orm";
 	/** Subject. */
 	public static final String SUBJECT = "generate";
@@ -55,17 +55,17 @@ public class OrmCommand extends BaseCommand {
 	public static final String ACTION_CRUD = "crud";
 
 	//commands
-	//public static String GENERATE_FORM 		= 
+	//public static String GENERATE_FORM 		=
 	//		BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_FORM;
 	//public static String GENERATE_ENTITY 	=
 	//		BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITY;
-	
+
 	/** Command : ORM:GENERATE:ENTITIES. */
-	public static final String GENERATE_ENTITIES	= 
+	public static final String GENERATE_ENTITIES	=
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_ENTITIES;
 
 	/** Command : ORM:GENERATE:CRUD. */
-	public static final String GENERATE_CRUD 		= 
+	public static final String GENERATE_CRUD 		=
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_CRUD;
 
 	/** Adapter. */
@@ -77,7 +77,7 @@ public class OrmCommand extends BaseCommand {
 	 */
 	protected final void generateEntities() {
 		this.generateMetas();
-		
+
 		if (ApplicationMetadata.INSTANCE.getEntities() != null) {
 			this.makeLayoutDatabase();
 			this.makeLayoutTestDatabase();
@@ -94,7 +94,7 @@ public class OrmCommand extends BaseCommand {
 			this.makeLayoutUi(true);
 		}
 	}
-	
+
 	/**
 	 * Generate the Persistence part for the given classes.
 	 */
@@ -106,24 +106,24 @@ public class OrmCommand extends BaseCommand {
 			new SQLiteAdapterGenerator(this.adapter).generateAll();
 			new SQLiteGenerator(this.adapter).generateDatabase();
 			new ProviderGenerator(this.adapter).generateProvider();
-			
+
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
-	
+
 	/**
 	 * Generate Test DB for Entities.
 	 */
 	protected final void makeLayoutTestDatabase() {
 		try {
 			new TestDBGenerator(this.adapter).generateAll();
-			
+
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
-	
+
 	/**
 	 * Generate the GUI part for the given classes.
 	 * @param generateHome True if you want the HomeActivity to be regenerated.
@@ -133,44 +133,44 @@ public class OrmCommand extends BaseCommand {
 			if (generateHome) {
 				new ProjectGenerator(this.adapter).generateHomeActivity();
 			}
-				
+
 			new ActivityGenerator(this.adapter).generateAll();
-			
+
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
-	
+
 	@Override
 	public final void summary() {
-		ConsoleUtils.display("\n> ORM \n" 
-				// + "\t" + GENERATE_ENTITY + "\t => Generate Entry\n" 
-				+ "\t" + GENERATE_ENTITIES + "\t => Generate Entries\n" 
-				// + "\t" + GENERATE_FORM + "\t => Generate Form\n" 
+		ConsoleUtils.display("\n> ORM \n"
+				// + "\t" + GENERATE_ENTITY + "\t => Generate Entry\n"
+				+ "\t" + GENERATE_ENTITIES + "\t => Generate Entries\n"
+				// + "\t" + GENERATE_FORM + "\t => Generate Form\n"
 				+ "\t" + GENERATE_CRUD + "\t => Generate CRUD");
 	}
 
 	@Override
 	public final void execute(final String action,
-			final String[] args, 
+			final String[] args,
 			final String option) {
 		ConsoleUtils.display("> ORM Generator");
 
 		this.setCommandArgs(Console.parseCommandArgs(args));
-		
+
 		try {
 			/*if (action.equals(GENERATE_ENTITY)) {
 				this.generateEntity();
 			} else*/
-	
+
 			if (action.equals(GENERATE_ENTITIES)) {
 				this.generateEntities();
 			} else
-	
+
 			/*if (action.equals(GENERATE_FORM)) {
 				this.generateForm();
 			} else*/
-	
+
 			if (action.equals(GENERATE_CRUD)) {
 				this.generateCrud();
 			}
@@ -181,9 +181,9 @@ public class OrmCommand extends BaseCommand {
 
 	@Override
 	public final boolean isAvailableCommand(final String command) {
-		return  //|| command.equals(GENERATE_ENTITY)	
-				command.equals(GENERATE_ENTITIES) 	
-				//|| command.equals(GENERATE_FORM)		
+		return  //|| command.equals(GENERATE_ENTITY)
+				command.equals(GENERATE_ENTITIES)
+				//|| command.equals(GENERATE_FORM)
 				|| command.equals(GENERATE_CRUD);
 	}
 }

@@ -20,13 +20,13 @@ public class TranslationMetadata {
 
 	/** Identify string resource. */
 	private String key;
-	
+
 	/** Groups of string resource. */
 	private Group group = Group.NONE;
-	
+
 	/** Translate resources (by Locale). */
 	private HashMap<Locale, String> i18n = new LinkedHashMap<Locale, String>();
-	
+
 	/** Translation group. */
 	public static enum Group {
 		/** No Group. */
@@ -39,10 +39,10 @@ public class TranslationMetadata {
 		PROVIDER(3),
 		/** Service Group. */
 		SERVICE(4);
-		
+
 		/** Group id. */
 		private final int value;
-		
+
 		/**
 		 * Constructor.
 		 * @param v The group id.
@@ -50,7 +50,7 @@ public class TranslationMetadata {
 		private Group(final int v) {
 			this.value = v;
 		}
-		
+
 		/**
 		 * Get the Group id.
 		 * @return The group id.
@@ -58,11 +58,11 @@ public class TranslationMetadata {
 		public int getValue() {
 			return this.value;
 		}
-		
+
 		/**
 		 * Get the Group by its id.
 		 * @param value The id.
-		 * @return The group corresponding to the ID. 
+		 * @return The group corresponding to the ID.
 		 * Null if none is corresponding.
 		 */
 		public static Group fromValue(final int value) {
@@ -70,48 +70,48 @@ public class TranslationMetadata {
 			for (final Group group : Group.values()) {
 				if (value == group.value) {
 					ret = group;
-				}    
+				}
 			}
-			
+
 			return ret;
 		}
 	}
-	
+
 	/**
 	 * Insert to meta a new resource string in the default group (Group.NONE).
-	 * 
+	 *
 	 * @param key The translation key
 	 * @param defaultValue The translation value
 	 * @return the TranslationMetadata generated
 	 */
-	public static TranslationMetadata addDefaultTranslation(final String key, 
-			final String defaultValue) {		
+	public static TranslationMetadata addDefaultTranslation(final String key,
+			final String defaultValue) {
 		return addDefaultTranslation(key, defaultValue, Group.NONE);
 	}
-	
+
 	/**
 	 * Insert to meta a new resource string.
-	 * 
+	 *
 	 * @param key The translation key
 	 * @param defaultValue The translation value
 	 * @param group  The translation group
 	 * @return the TranslationMetadata generated
 	 */
-	
-	public static TranslationMetadata addDefaultTranslation(final String key, 
-			final String defaultValue, 
-			final Group group) {		
+
+	public static TranslationMetadata addDefaultTranslation(final String key,
+			final String defaultValue,
+			final Group group) {
 		final TranslationMetadata translateMeta = new TranslationMetadata();
 		translateMeta.key = key;
 		translateMeta.group = group;
 		translateMeta.i18n.put(Locale.getDefault(), defaultValue);
-		
+
 		ApplicationMetadata.INSTANCE.getTranslates().put(translateMeta.key,
 				translateMeta);
-		
+
 		return translateMeta;
 	}
-	
+
 	/**
 	 * Get the translation key.
 	 * @return the Translation key

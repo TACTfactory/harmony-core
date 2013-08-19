@@ -15,10 +15,10 @@ import net.xeoh.plugins.base.Plugin;
  * Interface defining the commmands class for all bundles.
  */
 public interface Command extends Plugin {
-	
-	/** 
+
+	/**
 	 * Execute specific action.
-	 * 
+	 *
 	 * @param action to realize
 	 * @param args action arguments
 	 * @param option of console
@@ -29,10 +29,10 @@ public interface Command extends Plugin {
 	 * Display Bundle commands summary.
 	 */
 	void summary();
-	
-	/** 
+
+	/**
 	 * Check availability of command.
-	 * 
+	 *
 	 * @param command to check
 	 * @return true if found
 	 */

@@ -26,7 +26,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
  * Project Structure Generator.
- * 
+ *
  * can :
  * <ul>
  * <li>Make a structure</li>
@@ -38,9 +38,9 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 public class ProjectCommand extends BaseCommand {
 	/** Bundle name. */
 	public static final String BUNDLE 		= "project";
-	
+
 	/** Error Message. */
-	private static final String ERROR_MSG = 
+	private static final String ERROR_MSG =
 			"Please check your file browser or file editor and try again...";
 
 	// Actions
@@ -50,7 +50,7 @@ public class ProjectCommand extends BaseCommand {
 	public static final String ACTION_REMOVE 	= "remove";
 	/** Update action. */
 	public static final String ACTION_UPDATE 	= "update";
-	
+
 	// Subjects
 	/** SDK_PATH Subject. */
 	public static final String SUBJECT_SDK_PATH = "sdk-path";
@@ -59,89 +59,89 @@ public class ProjectCommand extends BaseCommand {
 
 	// Commands
 	/** Command : PROJECT:INIT:ANDROID. */
-	public static final String INIT_ANDROID 	= BUNDLE 
-								+ SEPARATOR 
-								+ ACTION_INIT 
-								+ SEPARATOR 
+	public static final String INIT_ANDROID 	= BUNDLE
+								+ SEPARATOR
+								+ ACTION_INIT
+								+ SEPARATOR
 								+ TargetPlatform.ANDROID.toLowerString();
-	
+
 	/** Command : PROJECT:INIT:IOS. */
-	public static final String INIT_IOS 		= BUNDLE 
-								+ SEPARATOR 
-								+ ACTION_INIT 
-								+ SEPARATOR 
+	public static final String INIT_IOS 		= BUNDLE
+								+ SEPARATOR
+								+ ACTION_INIT
+								+ SEPARATOR
 								+ TargetPlatform.IPHONE.toLowerString();
-	
+
 	/** Command : PROJECT:INIT:RIM. */
-	public static final String INIT_RIM 		= BUNDLE 
-								+ SEPARATOR 
-								+ ACTION_INIT 
-								+ SEPARATOR 
+	public static final String INIT_RIM 		= BUNDLE
+								+ SEPARATOR
+								+ ACTION_INIT
+								+ SEPARATOR
 								+ TargetPlatform.RIM.toLowerString();
-	
+
 	/** Command : PROJECT:INIT:WINPHONE. */
-	public static final String INIT_WINPHONE 	= BUNDLE 
-								+ SEPARATOR 
-								+ ACTION_INIT 
-								+ SEPARATOR 
+	public static final String INIT_WINPHONE 	= BUNDLE
+								+ SEPARATOR
+								+ ACTION_INIT
+								+ SEPARATOR
 								+ TargetPlatform.WINPHONE.toLowerString();
-	
+
 	/** Command : PROJECT:INIT:ALL. */
-	public static final String INIT_ALL		= BUNDLE 
-								+ SEPARATOR 
-								+ ACTION_INIT 
-								+ SEPARATOR 
+	public static final String INIT_ALL		= BUNDLE
+								+ SEPARATOR
+								+ ACTION_INIT
+								+ SEPARATOR
 								+ TargetPlatform.ALL.toLowerString();
 
 	/** Command : PROJECT:REMOVE:ANDROID. */
-	public static final String REMOVE_ANDROID = BUNDLE 
-								+ SEPARATOR 
-								+ ACTION_REMOVE 
-								+ SEPARATOR 
+	public static final String REMOVE_ANDROID = BUNDLE
+								+ SEPARATOR
+								+ ACTION_REMOVE
+								+ SEPARATOR
 								+ TargetPlatform.ANDROID.toLowerString();
-	
+
 	/** Command : PROJECT:REMOVE:IOS. */
-	public static final String REMOVE_IOS 	= BUNDLE 
-								+ SEPARATOR 
-								+ ACTION_REMOVE 
-								+ SEPARATOR 
+	public static final String REMOVE_IOS 	= BUNDLE
+								+ SEPARATOR
+								+ ACTION_REMOVE
+								+ SEPARATOR
 								+ TargetPlatform.IPHONE.toLowerString();
-	
+
 	/** Command : PROJECT:REMOVE:RIM. */
-	public static final String REMOVE_RIM 	= BUNDLE 
-								+ SEPARATOR 
-								+ ACTION_REMOVE 
-								+ SEPARATOR 
+	public static final String REMOVE_RIM 	= BUNDLE
+								+ SEPARATOR
+								+ ACTION_REMOVE
+								+ SEPARATOR
 								+ TargetPlatform.RIM.toLowerString();
-	
+
 	/** Command : PROJECT:REMOVE:WINPHONE. */
-	public static final String REMOVE_WINPHONE = BUNDLE 
-								+ SEPARATOR 
-								+ ACTION_REMOVE 
-								+ SEPARATOR 
+	public static final String REMOVE_WINPHONE = BUNDLE
+								+ SEPARATOR
+								+ ACTION_REMOVE
+								+ SEPARATOR
 								+ TargetPlatform.WINPHONE.toLowerString();
-	
+
 	/** Command : PROJECT:REMOVE:ALL. */
-	public static final String REMOVE_ALL 	= BUNDLE 
-								+ SEPARATOR 
-								+ ACTION_REMOVE 
-								+ SEPARATOR 
+	public static final String REMOVE_ALL 	= BUNDLE
+								+ SEPARATOR
+								+ ACTION_REMOVE
+								+ SEPARATOR
 								+ TargetPlatform.ALL.toLowerString();
-	
+
 	/** Command : PROJECT:UPDATE:SDK-PATH. */
-	public static final String UPDATE_SDK = BUNDLE 
-								+ SEPARATOR 
-								+ ACTION_UPDATE 
-								+ SEPARATOR 
+	public static final String UPDATE_SDK = BUNDLE
+								+ SEPARATOR
+								+ ACTION_UPDATE
+								+ SEPARATOR
 								+ SUBJECT_SDK_PATH;
 	/** Command : PROJECT:UPDATE:DEPENDENCIES. */
-	public static final String UPDATE_DEPENDENCIES = BUNDLE 
-								+ SEPARATOR 
-								+ ACTION_UPDATE 
-								+ SEPARATOR 
+	public static final String UPDATE_DEPENDENCIES = BUNDLE
+								+ SEPARATOR
+								+ ACTION_UPDATE
+								+ SEPARATOR
 								+ SUBJECT_DEPENDENCIES;
 
-	// Internal	
+	// Internal
 	/** Android adapter. */
 	private final BaseAdapter adapterAndroid = new AndroidAdapter();
 	/** iOS adapter. */
@@ -153,12 +153,12 @@ public class ProjectCommand extends BaseCommand {
 
 	/** Has user confirmed ? */
 	private boolean userHasConfirmed;
-	
+
 	/** Is project initialized ? */
 	private boolean isProjectInit;
 
 	/**
-	 * Initialize Project Parameters. 
+	 * Initialize Project Parameters.
 	 * (project name, namespace, android sdk path)
 	 */
 	public final void initProjectParam() {
@@ -173,7 +173,7 @@ public class ProjectCommand extends BaseCommand {
 					ApplicationMetadata.INSTANCE.setName(
 							this.getCommandArgs().get("name"));
 				}
-					
+
 				//Project NameSpace
 				if (!this.getCommandArgs().containsKey("namespace")) {
 					ProjectDiscover.initProjectNameSpace();
@@ -182,7 +182,7 @@ public class ProjectCommand extends BaseCommand {
 							this.getCommandArgs().get("namespace")
 								.replaceAll("\\.", "/"));
 				}
-					
+
 				//Android sdk path
 				if (!this.getCommandArgs().containsKey("androidsdk")) {
 					ProjectDiscover.initProjectAndroidSdkPath();
@@ -190,12 +190,12 @@ public class ProjectCommand extends BaseCommand {
 					ApplicationMetadata.setAndroidSdkPath(
 							this.getCommandArgs().get("androidsdk"));
 				}
-					
-				ConsoleUtils.display("Project Name: "	 
+
+				ConsoleUtils.display("Project Name: "
 							+ ApplicationMetadata.INSTANCE.getName()
-						 + "\nProject NameSpace: "			 
+						 + "\nProject NameSpace: "
 							+ ApplicationMetadata.INSTANCE.getProjectNameSpace()
-						 + "\nAndroid SDK Path: "			 
+						 + "\nAndroid SDK Path: "
 							+ ApplicationMetadata.getAndroidSdkPath());
 
 				// Confirmation
@@ -204,7 +204,7 @@ public class ProjectCommand extends BaseCommand {
 							ConsoleUtils.getUserInput(
 									"Use below given parameters "
 									 + "to process files? (y/n) ");
-					
+
 					if (!accept.contains("n")) {
 						this.userHasConfirmed 			= true;
 					} else {
@@ -217,7 +217,7 @@ public class ProjectCommand extends BaseCommand {
 					this.userHasConfirmed = true;
 				}
 			}
-			
+
 			this.userHasConfirmed = false;
 			this.isProjectInit = true;
 		}
@@ -236,7 +236,7 @@ public class ProjectCommand extends BaseCommand {
 		try {
 			if (new ProjectGenerator(this.adapterAndroid).makeProject()) {
 				ConsoleUtils.displayDebug("Init Android Project Success!");
-				
+
 				new ApplicationGenerator(this.adapterAndroid)
 							.generateApplication();
 				result = true;
@@ -247,7 +247,7 @@ public class ProjectCommand extends BaseCommand {
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
-		
+
 		return result;
 	}
 
@@ -260,7 +260,7 @@ public class ProjectCommand extends BaseCommand {
 
 		this.initProjectParam();
 		boolean result = false;
-		
+
 		try {
 			if (new ProjectGenerator(this.adapterIOS).makeProject()) {
 				ConsoleUtils.displayDebug("Init IOS Project Success!");
@@ -272,7 +272,7 @@ public class ProjectCommand extends BaseCommand {
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
-		
+
 		return result;
 	}
 
@@ -285,7 +285,7 @@ public class ProjectCommand extends BaseCommand {
 
 		this.initProjectParam();
 		boolean result = false;
-		
+
 		try {
 			if (new ProjectGenerator(this.adapterRIM).makeProject()) {
 				ConsoleUtils.displayDebug("Init RIM Project Success!");
@@ -297,7 +297,7 @@ public class ProjectCommand extends BaseCommand {
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
-		
+
 		return result;
 	}
 
@@ -310,7 +310,7 @@ public class ProjectCommand extends BaseCommand {
 
 		this.initProjectParam();
 		boolean result = false;
-		
+
 		try {
 			if (new ProjectGenerator(this.adapterWinPhone).makeProject()) {
 				ConsoleUtils.displayDebug("Init WinPhone Project Success!");
@@ -322,7 +322,7 @@ public class ProjectCommand extends BaseCommand {
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
-		
+
 		return result;
 	}
 
@@ -336,7 +336,7 @@ public class ProjectCommand extends BaseCommand {
 		this.initAndroid();
 		this.initIOS();
 		//this.initRIM();
-		//this.initWinPhone();		
+		//this.initWinPhone();
 	}
 
 	/**
@@ -344,20 +344,20 @@ public class ProjectCommand extends BaseCommand {
 	 */
 	public final void removeAndroid() {
 		if (!this.userHasConfirmed) {
-			final String accept = 
+			final String accept =
 					ConsoleUtils.getUserInput("Are you sure to Delete "
 							 + "Android Project? (y/n) ");
-			
+
 			if (accept.contains("n")) {
-				return; 
+				return;
 			}
-			
+
 			this.userHasConfirmed = true;
 		}
-		
+
 		try {
 			new ProjectGenerator(this.adapterAndroid).removeProject();
-			
+
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
@@ -368,15 +368,15 @@ public class ProjectCommand extends BaseCommand {
 	 */
 	public final void removeIOS() {
 		if (!this.userHasConfirmed) {
-			final String accept = 
+			final String accept =
 					ConsoleUtils.getUserInput("Are you sure to Delete "
 							+ "Apple iOS Project? (y/n) ");
-			
+
 			if (accept.contains("n")) { return; }
-			
+
 			this.userHasConfirmed = true;
 		}
-		
+
 		try {
 			if (!new ProjectGenerator(this.adapterIOS).removeProject()) {
 				ConsoleUtils.display(ERROR_MSG);
@@ -395,14 +395,14 @@ public class ProjectCommand extends BaseCommand {
 					ConsoleUtils.getUserInput(
 							"Are you sure to Delete"
 							+ " BlackBerry Rim Project? (y/n)");
-			
-			if (accept.contains("n")) { 
-				return; 
+
+			if (accept.contains("n")) {
+				return;
 			}
-			
+
 			this.userHasConfirmed = true;
 		}
-		
+
 		try {
 			if (!new ProjectGenerator(this.adapterRIM).removeProject()) {
 				ConsoleUtils.display(ERROR_MSG);
@@ -419,12 +419,12 @@ public class ProjectCommand extends BaseCommand {
 		if (!this.userHasConfirmed) {
 			final String accept = ConsoleUtils.getUserInput(
 					"Are you sure to Delete Windows Phone Project? (y/n) ");
-			
+
 			if (accept.contains("n")) { return; }
-			
+
 			this.userHasConfirmed = true;
 		}
-		
+
 		try {
 			if (!new ProjectGenerator(this.adapterWinPhone).removeProject()) {
 				ConsoleUtils.display(ERROR_MSG);
@@ -439,21 +439,21 @@ public class ProjectCommand extends BaseCommand {
 	 */
 	public final void removeAll() {
 		if (!this.userHasConfirmed) {
-			final String accept = 
+			final String accept =
 					ConsoleUtils.getUserInput(
 							"Are you sure to Delete All Projects? (y/n) ");
-			
+
 			if (accept.contains("n")) { return; }
-			
+
 			this.userHasConfirmed = true;
 		}
-		
+
 		try {
-			final boolean removedAndroid = 
+			final boolean removedAndroid =
 					new ProjectGenerator(this.adapterAndroid).removeProject();
 			final boolean removedIOS =
 					new ProjectGenerator(this.adapterIOS).removeProject();
-			final boolean removedRIM = 
+			final boolean removedRIM =
 					new ProjectGenerator(this.adapterRIM).removeProject();
 			final boolean removedWin =
 					new ProjectGenerator(this.adapterWinPhone).removeProject();
@@ -472,47 +472,47 @@ public class ProjectCommand extends BaseCommand {
 
 	@Override
 	public final void summary() {
-		ConsoleUtils.display("\n> PROJECT \n"  
-				+ "\t" + INIT_ANDROID 
+		ConsoleUtils.display("\n> PROJECT \n"
+				+ "\t" + INIT_ANDROID
 				+ "\t => Init Android project directory\n"
-				
-				+ "\t" + INIT_IOS 
-				+ "\t => Init Apple IOS project directory\n"  
-				
+
+				+ "\t" + INIT_IOS
+				+ "\t => Init Apple IOS project directory\n"
+
 				+ "\t" + INIT_RIM
-				+ "\t => Init BlackBerry project directory\n" 
-				
-				+ "\t" + INIT_WINPHONE 
+				+ "\t => Init BlackBerry project directory\n"
+
+				+ "\t" + INIT_WINPHONE
 				+ "\t => Init Windows Phone project directory\n"
-				
-				+ "\t" + INIT_ALL 
-				+ "\t => Init All project directories\n" 
-				
-				+ "\t" + REMOVE_ANDROID 
+
+				+ "\t" + INIT_ALL
+				+ "\t => Init All project directories\n"
+
+				+ "\t" + REMOVE_ANDROID
 				+ "\t => Remove Google Android project directory\n"
-				
-				+ "\t" + REMOVE_IOS 
+
+				+ "\t" + REMOVE_IOS
 				+ "\t => Remove Apple IOS project directory\n"
-				
-				+ "\t" + REMOVE_RIM 
+
+				+ "\t" + REMOVE_RIM
 				+ "\t => Remove BlackBerry project directory\n"
-				
+
 				+ "\t" + REMOVE_WINPHONE
 				+ "\t => Remove Windows Phone project directory\n"
-				
+
 				+ "\t" + REMOVE_ALL
 				+ "\t => Remove All project directories\n"
-				
+
 				+ "\t" + UPDATE_SDK
 				+ "\t => Update the SDK Path\n"
-				
+
 				+ "\t" + UPDATE_DEPENDENCIES
 				+ "\t => Update the dependencies from an existing project\n");
 	}
 
 	@Override
 	public final void execute(final String action,
-			final String[] args, 
+			final String[] args,
 			final String option) {
 		this.setCommandArgs(Console.parseCommandArgs(args));
 		HeaderParser.parseHeaderFile();
@@ -555,13 +555,13 @@ public class ProjectCommand extends BaseCommand {
 		if (action.equals(REMOVE_ALL)) {
 			this.removeAll();
 		} else
-			
+
 		if (action.equals(UPDATE_SDK)) {
 			ApplicationMetadata.setAndroidSdkPath("");
 			ProjectDiscover.initProjectAndroidSdkPath();
 			ProjectGenerator.updateSDKPath();
 		} else
-			
+
 		if (action.equals(UPDATE_DEPENDENCIES)) {
 			try {
 				new ProjectGenerator(this.adapterAndroid).updateDependencies();
@@ -573,15 +573,15 @@ public class ProjectCommand extends BaseCommand {
 
 	@Override
 	public final boolean isAvailableCommand(final String command) {
-		return  command.equals(INIT_ANDROID) 
-				|| command.equals(INIT_IOS) 
-				//|| command.equals(INIT_RIM) 
-				//|| command.equals(INIT_WINPHONE) 
-				|| command.equals(INIT_ALL) 
-				|| command.equals(REMOVE_ANDROID) 
-				|| command.equals(REMOVE_IOS) 
+		return  command.equals(INIT_ANDROID)
+				|| command.equals(INIT_IOS)
+				//|| command.equals(INIT_RIM)
+				//|| command.equals(INIT_WINPHONE)
+				|| command.equals(INIT_ALL)
+				|| command.equals(REMOVE_ANDROID)
+				|| command.equals(REMOVE_IOS)
 				//|| command.equals(REMOVE_RIM)
-				//|| command.equals(REMOVE_WINPHONE) 
+				//|| command.equals(REMOVE_WINPHONE)
 				|| command.equals(REMOVE_ALL)
 				|| command.equals(UPDATE_SDK)
 				|| command.equals(UPDATE_DEPENDENCIES);

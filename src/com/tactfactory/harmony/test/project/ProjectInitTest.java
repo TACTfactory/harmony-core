@@ -27,14 +27,14 @@ import com.tactfactory.harmony.test.CommonTest;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
-/** 
+/**
  * Test class for project initialization.
  */
 public class ProjectInitTest extends CommonTest {
-	
+
 	/**
 	 * Initialization of the test.
-	 * @throws Exception 
+	 * @throws Exception if something bad happened.
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {
@@ -59,7 +59,7 @@ public class ProjectInitTest extends CommonTest {
 		final File dirproj = new File(Harmony.getProjectAndroidPath());
 		TactFileUtils.deleteRecursive(dirproj);
 	}
-	
+
 	/**
 	 * Test the initialization of the android project.
 	 */
@@ -67,56 +67,57 @@ public class ProjectInitTest extends CommonTest {
  	public final void initAndroid() {
 		System.out.println("\nTest Project init Android");
 		System.out.println(SHARP_DELIMITOR);
-		
+
 		// Generate Project
 		CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID,
 				null,
 				null);
-		
+
 		CommonTest.hasFindFile("android/AndroidManifest.xml");
 		CommonTest.hasFindFile("android/build.xml");
 		CommonTest.hasFindFile("android/lint.xml");
 		//this.isFindFile("android/local.properties");
 		CommonTest.hasFindFile("android/proguard-project.txt");
 		CommonTest.hasFindFile("android/project.properties");
-		
+
 		CommonTest.hasFindFile("android/src");
-		CommonTest.hasFindFile("android/src/com/tactfactory/harmony/test/demact");
+		CommonTest.hasFindFile(
+				"android/src/com/tactfactory/harmony/test/demact");
 		CommonTest.hasFindFile(
 				"android/src/com/tactfactory/harmony/test/demact/entity");
 		//this.isFindFile("android/res/");
-		
+
 		CommonTest.hasFindFile("android/libs");
 		//CommonTest.hasFindFile("android/libs/android-support-v4.jar");
 		CommonTest.hasFindFile("android/libs/harmony.jar");
 		CommonTest.hasFindFile("android/libs/joda-time-2.1.jar");
-		
+
 		CommonTest.hasFindFile("android/res");
 		CommonTest.hasFindFile("android/res/values");
 		CommonTest.hasFindFile("android/res/values/configs.xml");
 		CommonTest.hasFindFile("android/res/values/strings.xml");
-		
-		
+
+
 		System.out.println("\nTest Update SDK Path");
 		System.out.println(SHARP_DELIMITOR);
-		
-		String newSdkPath = "test-sdkpath/";
+
+		final String newSdkPath = "test-sdkpath/";
 		ApplicationMetadata.setAndroidSdkPath(newSdkPath);
 		ProjectGenerator.updateSDKPath();
-		
 
-		final String localProp = 
+
+		final String localProp =
 				String.format("%s/%s",
-						Harmony.getProjectAndroidPath(), 
+						Harmony.getProjectAndroidPath(),
 						"local.properties");
 		assertEquals(ProjectDiscover.getSdkDirFromPropertiesFile(localProp),
 				newSdkPath);
-		
+
 		ApplicationMetadata.setAndroidSdkPath("/opt/android-sdk-linux_86/");
 		ProjectGenerator.updateSDKPath();
 	}
-		
-	
+
+
 	/**
 	 * Test the initialization of the iPhone project.
 	 */
@@ -125,28 +126,28 @@ public class ProjectInitTest extends CommonTest {
 	public final void initIphone() {
 		System.out.println("\nTest Project init iphone");
 		System.out.println(SHARP_DELIMITOR);
-		
+
 		CommonTest.getHarmony().findAndExecute(
 				ProjectCommand.INIT_IOS, null, null);
-		
+
 		// TODO add asserts (for folder/file exist..)
 	}
-	
+
 	/**
 	 * Test the initialization of the RIM project.
-	 */	
+	 */
 	@Ignore
 	@Test
 	public final void initRim() {
 		System.out.println("\nTest Project init RIM");
 		System.out.println(SHARP_DELIMITOR);
-		
+
 		CommonTest.getHarmony().findAndExecute(
 				ProjectCommand.INIT_RIM, null, null);
-		
+
 		// TODO add asserts (for folder/file exist..)
 	}
-	
+
 	/**
 	 * Test the initialization of the Windows Phone project.
 	 */
@@ -155,12 +156,12 @@ public class ProjectInitTest extends CommonTest {
 	public final void initWinphone() {
 		System.out.println("\nTest Project init Windows Phone");
 		System.out.println(SHARP_DELIMITOR);
-		
-		
-		CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_WINPHONE, 
-									null, 
+
+
+		CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_WINPHONE,
+									null,
 									null);
-		
+
 		// TODO add asserts (for folder/file exist..)
 	}
 

@@ -20,7 +20,7 @@ import ${project_namespace}.entity.${entity.name?cap_first};
  */
 public class DataManager {
 	/** HashMap to join Entity Name and its SQLiteAdapterBase. */
-	protected Map<String, SQLiteAdapterBase<?>> adapters = 
+	protected Map<String, SQLiteAdapterBase<?>> adapters =
 			new HashMap<String, SQLiteAdapterBase<?>>();
 	/** is successfull. */
 	protected boolean isSuccessfull = true;
@@ -28,7 +28,7 @@ public class DataManager {
 	protected boolean isInInternalTransaction = false;
 	/** database. */
 	protected SQLiteDatabase db;
-	
+
 	/**
 	 * Constructor.
 	 * @param ctx The context
@@ -38,7 +38,7 @@ public class DataManager {
 		this.db = db;
 		<#list entities?values as entity>
 			<#if ((entity.fields?size>0) && !(entity.internal?? && entity.internal=='true'))>
-		this.adapters.put("${entity.name}", 
+		this.adapters.put("${entity.name}",
 				new ${entity.name?cap_first}SQLiteAdapter(ctx));
 		this.adapters.get("${entity.name}").open(this.db);
 			</#if>
@@ -57,16 +57,16 @@ public class DataManager {
     public Object find(final String nameClass, final int id) {
     	Object ret = null;
     	this.beginTransaction();
-    	
+
     	<#list entities?values as entity>
     		<#if ((entity.fields?size>0) && (entity.ids?size>0) && !(entity.internal?? && entity.internal=='true'))>
     	if (nameClass.equals("${entity.name}")) {
-        	ret = ((${entity.name}SQLiteAdapter) 
+        	ret = ((${entity.name}SQLiteAdapter)
         							   this.adapters.get(nameClass)).query(id);
     	}
     		</#if>
     	</#list>
-    	
+
     	return ret;
     }
 
@@ -86,18 +86,18 @@ public class DataManager {
     @SuppressWarnings({ "rawtypes", "unchecked" })
     public int persist(final Object object) {
     	int result;
-    
+
     	this.beginTransaction();
     	try {
     		final SQLiteAdapterBase adapter = this.getRepository(object);
-    			
+
     		result = (int) adapter.insert(object);
     	} catch (Exception ex) {
     		ex.printStackTrace();
     		this.isSuccessfull = false;
     		result = 0;
-    	}    	
-    	
+    	}
+
     	return result;
     }
 
@@ -115,7 +115,7 @@ public class DataManager {
     	<#list entities?values as entity>
     		<#if ((entity.fields?size>0 && entity.ids?size>0) && !(entity.internal?? && entity.internal=='true'))>
     		if (object instanceof ${entity.name}) {
-    			((${entity.name}SQLiteAdapter) 
+    			((${entity.name}SQLiteAdapter)
     					this.adapters.get("${entity.name}"))
     						.remove(<#list entity.ids as id>((${entity.name}) object).get${id.name?cap_first}()<#if id_has_next>, </#if></#list>);
     		}
@@ -123,19 +123,19 @@ public class DataManager {
     	</#list>
     	} catch (Exception ex) {
     		this.isSuccessfull = false;
-    	}   
+    	}
     }
 
 //    /**
 //     * Merges the state of a detached object into the persistence context
 //     * of this ObjectManager and returns the managed copy of the object.
-//     * The object passed to merge will not become associated/managed with 
+//     * The object passed to merge will not become associated/managed with
 //	   * this ObjectManager.
 //     *
 //     * @param object $object
 //     */
 //    public void merge(Object object) {
-//    	
+//
 //    }
 //
 //    /**
@@ -146,21 +146,21 @@ public class DataManager {
 //     * get detached
 //     */
 //    public void clear(String objectName) {
-//    	
+//
 //    }
 //
 //    /**
 //     * Detaches an object from the ObjectManager, causing a managed object to
 //     * become detached. Unflushed changes made to the object if any
-//     * (including removal of the object), will not be synchronized to the 
+//     * (including removal of the object), will not be synchronized to the
 //     * database.
-//     * Objects which previously referenced the detached object will continue 
+//     * Objects which previously referenced the detached object will continue
 //     * to reference it.
 //     *
 //     * @param object $object The object to detach.
 //     */
 //    public void detach(Object object) {
-//    	
+//
 //    }
 //
 //    /**
@@ -170,7 +170,7 @@ public class DataManager {
 //     * @param object $object The object to refresh.
 //     */
 //    public void refresh(Object object) {
-//    	
+//
 //    }
 
     /**
@@ -197,8 +197,8 @@ public class DataManager {
     public SQLiteAdapterBase<?> getRepository(final String className) {
     	return this.adapters.get(className);
     }
-    
-    
+
+
     /**
      * Gets the repository for a given object.
      *
@@ -207,7 +207,7 @@ public class DataManager {
      */
 	private SQLiteAdapterBase<?> getRepository(final Object o) {
 		final String className = o.getClass().getSimpleName();
-	
+
 		return this.getRepository(className);
 	}
 
@@ -234,11 +234,11 @@ public class DataManager {
     public boolean contains(final Object object) {
     	return false;
     }
-    
+
     /**
      * Called before any transaction to open the DB.
      */
-    private void beginTransaction() {    	
+    private void beginTransaction() {
     	// If we are not already in a transaction, begin it
     	if (!this.isInInternalTransaction) {
     		this.db.beginTransaction();

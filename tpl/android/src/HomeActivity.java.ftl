@@ -19,7 +19,7 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.LinearLayout;
 
-/** 
+/**
  * Home Activity.
  * This is from where you can access to your entities activities by default.
  * @see android.app.Activity
@@ -30,7 +30,7 @@ public class HomeActivity extends HarmonyFragmentActivity {
 	public void onCreate(Bundle savedInstanceState)	{
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.main);
-		final LinearLayout homeLayout = 
+		final LinearLayout homeLayout =
 				(LinearLayout) findViewById(R.id.homeLayout);
 
 		// Base buttons
@@ -43,14 +43,14 @@ public class HomeActivity extends HarmonyFragmentActivity {
 		${entity.name?uncap_first}CreateButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent intent = 
-						new Intent(HomeActivity.this, 
+				Intent intent =
+						new Intent(HomeActivity.this,
 								${entity.name}CreateActivity.class);
 				HomeActivity.this.startActivity(intent);
 			}
 		});
 		homeLayout.addView(${entity.name?uncap_first}CreateButton);
-		
+
 		// List ${entity.name}
 		Button ${entity.name?uncap_first}ListButton = new Button(this);
 		${entity.name?uncap_first}ListButton.setText("${entity.name}ListActivity");
@@ -58,7 +58,7 @@ public class HomeActivity extends HarmonyFragmentActivity {
 			@Override
 			public void onClick(View v) {
 				Intent intent =
-						new Intent(HomeActivity.this, 
+						new Intent(HomeActivity.this,
 								${entity.name}ListActivity.class);
 				HomeActivity.this.startActivity(intent);
 			}

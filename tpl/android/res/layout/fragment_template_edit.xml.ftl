@@ -3,7 +3,7 @@
 <#assign currname=curr.name?lower_case />
 <#assign fields = ViewUtils.getAllFields(curr) />
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout 
+<RelativeLayout
 	xmlns:harmony="http://schemas.android.com/apk/res/${project_namespace}"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
@@ -15,7 +15,7 @@
 	<#assign m_id_label="${m_id}_label" />
 	<#assign m_string_label="${field.owner?lower_case}_${field.name?lower_case}_label" />
 		<#if (!field.relation??)>
-   <TextView 
+   <TextView
     	android:id="@+id/${m_id_label}"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
@@ -36,21 +36,21 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
         android:layout_below="@+id/${m_id_label}"
-		harmony:dateTimeWidget_dateDialogTitle="@string/${field.owner?lower_case}_${field.name?lower_case}_date_title" 
+		harmony:dateTimeWidget_dateDialogTitle="@string/${field.owner?lower_case}_${field.name?lower_case}_date_title"
 		harmony:dateTimeWidget_timeDialogTitle="@string/${field.owner?lower_case}_${field.name?lower_case}_time_title" />
 				<#elseif (field.harmony_type?lower_case == "date")>
 	<${project_namespace}.harmony.widget.DateWidget
 		android:id="@+id/${m_id}"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-        android:layout_below="@+id/${m_id_label}" 
+        android:layout_below="@+id/${m_id_label}"
 		harmony:dateWidget_dialogTitle="@string/${field.owner?lower_case}_${field.name?lower_case}_date_title" />
 				<#elseif (field.harmony_type?lower_case == "time")>
 	<${project_namespace}.harmony.widget.TimeWidget
 		android:id="@+id/${m_id}"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-        android:layout_below="@+id/${m_id_label}" 
+        android:layout_below="@+id/${m_id_label}"
 		harmony:timeWidget_dialogTitle="@string/${field.owner?lower_case}_${field.name?lower_case}_time_title" />
 				</#if>
 			<#else>
@@ -93,7 +93,7 @@
 			</#if>
 			<#assign lastField="${m_id}" />
 		<#else>
-    <TextView 
+    <TextView
     	android:id="@+id/${m_id_label}"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"

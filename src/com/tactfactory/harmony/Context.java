@@ -19,39 +19,39 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 public final class Context {
 	/** Delimiter. */
 	public static final String DELIMITER = "/";
-	
+
 	/** Project folder. */
 	private static String projectForlder	= "app"		+ DELIMITER;
-	
+
 	/** Library folder. */
 	private static String libraryFolder 	= "lib"		+ DELIMITER;
-	
+
 	/** Bundle folder. */
 	private static String bundleFolder 		= "vendor"	+ DELIMITER;
-	
+
 	/** Template folder. */
 	private static String templateFolder 	= "tpl"		+ DELIMITER;
-	
+
 	/** Project base folder. */
 	private static String projectBaseFolder = "android" + DELIMITER;
-	
+
 	/** Path of Harmony base. */
 	private String basePath = new File("./").getAbsolutePath(); // /
-	
+
 	/** Path of harmony.jar. or Binary */
-	private static String harmonyPath =  
+	private static String harmonyPath =
 			Harmony.class
 			.getProtectionDomain()
 			.getCodeSource()
 			.getLocation()
 			.toString()
 			.substring("file:".length());
-	
+
 	/** Path of project (app folder in Harmony root).<br/>
 	 * eg. /app/
 	 */
 	private String projectPath = "";
-	
+
 	/** Project space. <br/>
 	 * eg. /app/android/
 	 */
@@ -61,79 +61,80 @@ public final class Context {
 	 * eg. /vendor/
 	 */
 	private String bundlePath;
-	
+
 	/** Path of libraries.<br/>
 	 * eg. /lib/
 	 */
 	private String libraryPath;
-	
+
 	//TODO remove by bundle path
-	
+
 	/** Path of templates.<br/>
 	 * eg. /vendor/../tpl/
 	 */
 	private String templatePath;
-	
+
 	/** Path of sub-libraries.<br/>
 	 * eg. /vendor/../lib/
 	 */
 	//private String librarySubPath;
-	
+
 	// Temporizes...
 	/** Symfony path. */
 	public static final String SYMFONY_PATH = "D:/Site/wamp/www/Symfony";
-	
+
 	/**
 	 * Contructor.
 	 */
 	public Context() {
 		// For root case
 		File baseDir = this.detectAppTree(new File(harmonyPath));
-		
+
 		// Clean binary case (for /bin and /vendor/**/bin)
 		if (baseDir == null && harmonyPath.endsWith("bin/")) {
-			File predictiveBaseDir = new File(harmonyPath).getParentFile();
-			
+			final File predictiveBaseDir =
+					new File(harmonyPath).getParentFile();
+
 			ConsoleUtils.displayDebug("Eclipse Mode : " + harmonyPath);
 			baseDir = this.detectAppTree(predictiveBaseDir);
 		}
-		
+
 		if (baseDir == null && harmonyPath.endsWith("harmony.jar")) {
-			File predictiveBaseDir = new File(harmonyPath)
+			final File predictiveBaseDir = new File(harmonyPath)
 					.getParentFile()
 					.getParentFile()
 					.getParentFile();
-			
+
 			ConsoleUtils.displayDebug("Console Mode : " + harmonyPath);
 			baseDir = this.detectAppTree(predictiveBaseDir);
 		}
-		
-		
+
+
 		// For vendor/tact-core case
 		if (baseDir == null) {
-			File predictiveBaseDir = 
+			final File predictiveBaseDir =
 					new File(harmonyPath)
 						.getParentFile()
 						.getParentFile()
 						.getParentFile();
-			
+
 			ConsoleUtils.displayDebug("Other Mode : " + harmonyPath);
 			baseDir = this.detectAppTree(predictiveBaseDir);
 		}
-		
+
 		//For Emma
 		if (baseDir == null) {
-			File predictiveBaseDir = 
+			final File predictiveBaseDir =
 					new File(harmonyPath)
 						.getParentFile()
 						.getParentFile()
 						.getParentFile()
 						.getParentFile();
-			
+
 			ConsoleUtils.displayDebug("Emma Mode : " + harmonyPath);
 			baseDir = this.detectAppTree(predictiveBaseDir);
 		}
-		
+
 		if (baseDir != null) {
 			// Transform PATH_BASE !!!
 			this.basePath = baseDir.getPath().toString() + "/";
@@ -143,26 +144,26 @@ public final class Context {
 					"INVALID FOLDERS TREE. APP FOLDER MISSING."));
 			System.exit(-1);
 		}
-		
+
 		ConsoleUtils.displayDebug("Detect app on " + basePath);
-		
+
 		// Set Path
 		this.projectPath 		= this.basePath + projectForlder;
 		this.projectBasePath	= this.projectPath + projectBaseFolder;
 		this.libraryPath 		= this.basePath + libraryFolder;
-		
+
 		if (Strings.isNullOrEmpty(bundlePath)) { // TODO check why..
 			this.bundlePath 	= this.basePath + bundleFolder;
 		}
-		
+
 		//TODO remove by bundle path
 		this.templatePath 	= templateFolder;
 				//TactFileUtils.absoluteToRelativePath(
 				//PATH_BASE + templateFolder, PATH_BASE);
 	}
-	
-	
-	/** eg. / 
+
+
+	/** eg. /
 	 * @return the executePath
 	 */
 	public String getBasePath() {
@@ -171,27 +172,27 @@ public final class Context {
 
 	/** Get project path <br/>
 	 * eg. /app/
-	 * 
+	 *
 	 * @return the projectPath
 	 */
 	public String getProjectPath() {
 		return this.projectPath;
 	}
-	
+
 	/** eg. /app/android/
 	 * @return the projectAndroidPath
 	 */
 	public String getProjectAndroidPath() {
 		return this.projectBasePath;
 	}
-	
+
 	/** eg. /vendor/
 	 * @return the bundlePath
 	 */
 	public String getBundlesPath() {
 		return this.bundlePath;
 	}
-	
+
 	/** eg. /vendor/tact-core/ or /bin
 	 * @return the harmonyPath
 	 */
@@ -206,13 +207,13 @@ public final class Context {
 		return this.libraryPath;
 	}
 
-	/** 
+	/**
 	 * @return the templatePath
 	 */
 	public String getTemplatesPath() {
 		return this.templatePath;
 	}
-	
+
 	/**
 	 * Check if the given folder contains the App folder.
 	 * @param checkPath The path to check.
@@ -220,8 +221,8 @@ public final class Context {
 	 */
 	private File detectAppTree(final File checkPath) {
 		File result = null;
-		File[] list = checkPath.listFiles();
-		
+		final File[] list = checkPath.listFiles();
+
 		if (list != null) {
 			for (File dir : list) {
 				if (dir.getPath().endsWith(projectForlder.replace("/", ""))) {
@@ -230,8 +231,8 @@ public final class Context {
 				}
 			}
 		}
-		
+
 		return result;
 	}
-	
+
 }
