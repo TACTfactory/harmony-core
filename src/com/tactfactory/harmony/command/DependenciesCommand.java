@@ -1,7 +1,7 @@
 package com.tactfactory.harmony.command;
 
+import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.utils.ConsoleUtils;
-import com.tactfactory.harmony.utils.AndroidSDKUtils;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
@@ -29,11 +29,13 @@ public class DependenciesCommand extends BaseCommand {
 
 	@Override
 	public void execute(String action, String[] args, String option) {
-		String distantSDKUrl = 
-				AndroidSDKUtils.findLatestSDKToolsLink(AndroidSDKUtils.LINUX);
-		String sdkPath = ConsoleUtils.getUserInput(
-						"Where do you want to install the Android SDK ?");
-		AndroidSDKUtils.downloadAndInstallAndroidSDK(distantSDKUrl, sdkPath);
+		AndroidSDKManager androidSDKManager = new AndroidSDKManager();
+		//String distantSDKUrl = 
+		//		androidSDKManager.findLatestSDKToolsLink(AndroidSDKManager.LINUX);
+		//String sdkPath = ConsoleUtils.getUserInput(
+		//				"Where do you want to install the Android SDK ?");
+		//androidSDKManager.downloadAndInstallAndroidSDK(distantSDKUrl, sdkPath);
+		androidSDKManager.initSDKList();
 		/**
 		ConsoleUtils.display(distantSDKUrl);**/
 

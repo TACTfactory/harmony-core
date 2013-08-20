@@ -268,7 +268,7 @@ public abstract class ConsoleUtils {
 
 		try {
 			ProcessBuilder processBuilder = new ProcessBuilder(command);
-
+			//processBuilder.redirectErrorStream(true);
 			if (commandPath != null) {
 				processBuilder =
 						processBuilder.directory(new File(commandPath));

@@ -1,7 +1,9 @@
-package com.tactfactory.harmony.utils;
+package com.tactfactory.harmony.dependencies.android.sdk;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.List;
 
 import org.jdom2.Document;
@@ -13,11 +15,13 @@ import com.tactfactory.harmony.threads.DownloadFileThread;
 import com.tactfactory.harmony.threads.UnpackThread;
 import com.tactfactory.harmony.threads.DownloadFileThread.OnDownloadFinishedListener;
 import com.tactfactory.harmony.threads.UnpackThread.OnUnpackedFinishedListener;
+import com.tactfactory.harmony.utils.ConsoleUtils;
+import com.tactfactory.harmony.utils.XMLUtils;
 
 /**
- * SDK Utils.
+ * Manager class for Android SDK.
  */
-public class AndroidSDKUtils {
+public class AndroidSDKManager {
 	/** Constant for Windows. */
 	public static final String WINDOWS = "windows";
 	
@@ -26,6 +30,7 @@ public class AndroidSDKUtils {
 	
 	/** Constant for MacOS/X. */
 	public static final String MAC_OSX = "macosx";
+	
 
 	/** Default Listener for unpacking files. */
 	private static final OnUnpackedFinishedListener unpackListener =
@@ -45,7 +50,7 @@ public class AndroidSDKUtils {
 			new OnDownloadFinishedListener() {
 		@Override
 		public void onDownloadFinished(File f) {
-			new UnpackThread(AndroidSDKUtils.unpackListener,
+			new UnpackThread(AndroidSDKManager.unpackListener,
 					f.getAbsolutePath(),
 					f.getParent(),
 					ArchiveFormat.ZIP).start();
@@ -57,14 +62,14 @@ public class AndroidSDKUtils {
 	 * Download and install Android SDK to destPath.
 	 * @param destPath The path where to install the android sdk.
 	 */
-	public static void downloadAndInstallAndroidSDK(final String url,
+	public void downloadAndInstallAndroidSDK(final String url,
 			final String destPath) {
 		String destFileName = url.split("/")[url.split("/").length - 1];
 		try {
 			File destFolder = new File(destPath + "/" + destFileName);
 			destFolder.createNewFile();
 
-			new DownloadFileThread(AndroidSDKUtils.downListener,
+			new DownloadFileThread(AndroidSDKManager.downListener,
 				url,
 				destFolder.getAbsolutePath()).start();
 		} catch (IOException e) {
@@ -77,7 +82,7 @@ public class AndroidSDKUtils {
 	 * Find the latest SDK Tools link.
 	 * @return The latest SDK tools link
 	 */
-	public static String findLatestSDKToolsLink(final String platform) {
+	public String findLatestSDKToolsLink(final String platform) {
 		final String baseUrl = "https://dl-ssl.google.com/android/repository/";
 		String result = null;
 		final String xmlUrl = baseUrl + "repository-8.xml";
@@ -96,5 +101,33 @@ public class AndroidSDKUtils {
 		}
 		
 		return result;
+	}	
+	
+	
+	public void initSDKList() {
+		try {
+			Runtime runtime = Runtime.getRuntime();
+			Process process = 
+					runtime.exec("/home/gregg/aaatoto/tools/android list sdk --extended");
+			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			process.getErrorStream().close();
+			process.getOutputStream().close();
+			
+			StringBuilder builder = new StringBuilder();
+			String line;
+			while ((line = reader.readLine()) != null) {
+				builder.append(line);
+				builder.append("\n");
+			}
+			reader.close();
+			
+			String inputString = builder.toString();
+			AndroidSDKList list = new AndroidSDKList();
+			list.parseString(inputString);
+			ConsoleUtils.display(list.getIdByName("platform-tools") + "");
+			
+		} catch (IOException e) {
+			ConsoleUtils.displayError(e);
+		}
 	}
 }
