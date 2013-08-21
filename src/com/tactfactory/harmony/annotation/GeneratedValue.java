@@ -26,13 +26,13 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface GeneratedValue {
 	/** Auto mode. */
-	String MODE_AUTO = "AUTO";
+	final String MODE_AUTO = "AUTO";
 	/** No generated value. */
-	String MODE_NONE = "NONE";
+	final String MODE_NONE = "NONE";
 	/** Sequence mode. */
-	String MODE_SEQUENCE = "SEQUENCE";
+	final String MODE_SEQUENCE = "SEQUENCE";
 	/** Identity mode. */
-	String MODE_IDENTITY = "IDENTITY";
+	final String MODE_IDENTITY = "IDENTITY";
 
 	/** Used strategy. Defaults to Auto mode. */
 	String strategy() default MODE_AUTO;

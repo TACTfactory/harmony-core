@@ -12,6 +12,11 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 
+import org.junit.Rule;
+import org.junit.rules.TestRule;
+import org.junit.rules.TestWatcher;
+import org.junit.runner.Description;
+
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.ProjectDiscover;
@@ -33,6 +38,33 @@ public abstract class CommonTest {
 
 	/** Harmony instance. */
 	private static Harmony harmony;
+
+	@Rule
+	public TestRule watcher = new TestWatcher() {
+		protected void starting(Description description) {
+			System.out.println(SHARP_DELIMITOR 
+					+ "\n# Starting test: " + description.getMethodName() 
+					+ "\n" +SHARP_DELIMITOR);
+		}
+		
+		@Override
+		protected void failed(Throwable e, Description description) {
+			
+		}
+		
+		@Override
+		protected void succeeded(Description description) {
+			System.out.println("So good !");
+		}
+		
+		@Override
+		protected void finished(Description description) {
+			System.out.println(SHARP_DELIMITOR 
+					+ "\n# Finishing test: " + description.getMethodName() 
+					+ "\n" +SHARP_DELIMITOR + "\n");
+		}
+	};
+	
 
 	/**
 	 * Initialization.

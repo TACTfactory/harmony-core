@@ -26,5 +26,5 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface Id {
 	/** ID Column. */
-	String COLUMN_ID = "_id";
+	final String COLUMN_ID = "_id";
 }
