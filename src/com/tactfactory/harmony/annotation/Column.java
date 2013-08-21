@@ -31,11 +31,11 @@ public @interface Column {
 	 * Hack for null value in DefaultValue attribute. Null is not a suitable
 	 * value for attribute values in Java...
 	 */
-	final String DEFAULT_VALUE_NULL =
+	String DEFAULT_VALUE_NULL =
 			"##hack-harmony-default-default-value##";
 
 	/** Default field length. */
-	final int DEFAULT_LENGTH = 255;
+	int DEFAULT_LENGTH = 255;
 
 	/**
 	 * Mapping Type defines the mapping between a Java type and an SQL type.

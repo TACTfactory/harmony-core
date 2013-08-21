@@ -39,12 +39,15 @@ public abstract class CommonTest {
 	/** Harmony instance. */
 	private static Harmony harmony;
 
+	/**
+	 * Add logger to common test life-cycle
+	 */
 	@Rule
-	public TestRule watcher = new TestWatcher() {
+	private TestRule watcher = new TestWatcher() {
 		protected void starting(Description description) {
 			System.out.println(SHARP_DELIMITOR 
 					+ "\n# Starting test: " + description.getMethodName() 
-					+ "\n" +SHARP_DELIMITOR);
+					+ "\n" + SHARP_DELIMITOR);
 		}
 		
 		@Override
@@ -61,7 +64,7 @@ public abstract class CommonTest {
 		protected void finished(Description description) {
 			System.out.println(SHARP_DELIMITOR 
 					+ "\n# Finishing test: " + description.getMethodName() 
-					+ "\n" +SHARP_DELIMITOR + "\n");
+					+ "\n" + SHARP_DELIMITOR + "\n");
 		}
 	};
 	
