@@ -43,7 +43,7 @@ public abstract class CommonTest {
 	 * Add logger to common test life-cycle
 	 */
 	@Rule
-	private TestRule watcher = new TestWatcher() {
+	public TestRule watcher = new TestWatcher() {
 		protected void starting(Description description) {
 			System.out.println(SHARP_DELIMITOR 
 					+ "\n# Starting test: " + description.getMethodName() 
