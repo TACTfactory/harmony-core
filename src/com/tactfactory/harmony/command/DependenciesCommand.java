@@ -30,12 +30,12 @@ public class DependenciesCommand extends BaseCommand {
 	@Override
 	public void execute(String action, String[] args, String option) {
 		AndroidSDKManager androidSDKManager = new AndroidSDKManager();
-		//String distantSDKUrl = 
-		//		androidSDKManager.findLatestSDKToolsLink(AndroidSDKManager.LINUX);
-		//String sdkPath = ConsoleUtils.getUserInput(
-		//				"Where do you want to install the Android SDK ?");
-		//androidSDKManager.downloadAndInstallAndroidSDK(distantSDKUrl, sdkPath);
-		androidSDKManager.initSDKList();
+		String distantSDKUrl = 
+				androidSDKManager.findLatestSDKToolsLink(AndroidSDKManager.LINUX);
+		String sdkPath = ConsoleUtils.getUserInput(
+					"Where do you want to install the Android SDK ?");
+		androidSDKManager.downloadAndInstallAndroidSDK(distantSDKUrl, sdkPath);
+		//androidSDKManager.initSDKList(sdkPath);
 		/**
 		ConsoleUtils.display(distantSDKUrl);**/
 

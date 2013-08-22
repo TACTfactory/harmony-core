@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
 
 import com.google.common.base.Strings;
@@ -268,7 +269,8 @@ public abstract class ConsoleUtils {
 
 		try {
 			ProcessBuilder processBuilder = new ProcessBuilder(command);
-			//processBuilder.redirectErrorStream(true);
+			
+			processBuilder.redirectErrorStream(true);
 			if (commandPath != null) {
 				processBuilder =
 						processBuilder.directory(new File(commandPath));
@@ -361,7 +363,7 @@ public abstract class ConsoleUtils {
 			private BufferedReader processInput;
 
 			/** Reader for process error stream. */
-			private BufferedReader processError;
+			//private BufferedReader processError;
 
 			/** Reader for process input stream. */
 			private boolean isRunning;
@@ -377,10 +379,10 @@ public abstract class ConsoleUtils {
 							new BufferedReader(
 									new InputStreamReader(proc.getInputStream(),
 											TactFileUtils.DEFAULT_ENCODING));
-					this.processError =
+					/*this.processError =
 							new BufferedReader(
 									new InputStreamReader(proc.getErrorStream(),
-											TactFileUtils.DEFAULT_ENCODING));
+											TactFileUtils.DEFAULT_ENCODING));*/
 				} catch (UnsupportedEncodingException e) {
 					ConsoleUtils.displayError(e);
 				}
@@ -391,7 +393,7 @@ public abstract class ConsoleUtils {
 				while (this.isRunning) {
 					try {
 						if (!(this.processInput.ready()
-								|| this.processError.ready())) {
+								/*| this.processError.ready()*/)) {
 							Thread.sleep(SLEEP_TIME);
 						}
 						if (this.processInput.ready()) {
@@ -400,14 +402,14 @@ public abstract class ConsoleUtils {
 								ConsoleUtils.display(input);
 							}
 						}
-						if (this.processError.ready()) {
+						/*if (this.processError.ready()) {
 							final String error = this.processError.readLine();
 							if (error != null && !error.isEmpty()
 									&& !"Note: checking out '4.2.0'."
 									.equals(error)) {
 								ConsoleUtils.displayError(new Exception(error));
 							}
-						}
+						}*/
 					} catch (final InterruptedException e) {
 						ConsoleUtils.displayError(e);
 					} catch (final IOException e) {
@@ -416,7 +418,7 @@ public abstract class ConsoleUtils {
 				}
 				try {
 					this.processInput.close();
-					this.processError.close();
+					//this.processError.close();
 				} catch (final IOException e) {
 					// TODO Auto-generated catch block
 					ConsoleUtils.displayError(e);
@@ -481,6 +483,7 @@ public abstract class ConsoleUtils {
 							output = this.consoleInput.readLine();
 							if (output != null && !output.isEmpty()) {
 								this.processOutput.write(output);
+								this.processOutput.flush();
 							}
 						} else {
 							Thread.sleep(SLEEP_TIME);

@@ -94,12 +94,14 @@ public class UnpackThread extends Thread {
 			archiver = ArchiverFactory.createArchiver(
 					this.archiveFormat);
 		}
+		
 		try {
 			archiver.extract(this.file, this.destFile);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
 		this.onFinished();
 	}
 

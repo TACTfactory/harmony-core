@@ -37,14 +37,29 @@ public class AndroidSDKList {
 	/**
 	 * Find an id in the list thanks to the given name.
 	 * @param name The name to look for
-	 * @return The id of the item
+	 * @return The id of the item. Null if nothing found
 	 */
-	public int getIdByName(String name) {
-		int result = -1;
+	public String getIdByName(String name) {
+		String result = null;
 		for (AndroidSDKListItem item : this.items) {
 			if (item.getAlternativeId().equals(name)) {
-				result = item.getId();
+				result = String.valueOf(item.getId());
 				break;
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Find an id in the list thanks to the given name.
+	 * @param name The name to look for
+	 * @return The list of ids found. Empty list if none found.
+	 */
+	public ArrayList<String> getIdsLikeName(String name) {
+		ArrayList<String> result = new ArrayList<String>();
+		for (AndroidSDKListItem item : this.items) {
+			if (item.getAlternativeId().contains(name)) {
+				result.add(String.valueOf(item.getId()));
 			}
 		}
 		return result;

@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jdom2.Document;
@@ -11,6 +12,7 @@ import org.jdom2.Element;
 import org.jdom2.Namespace;
 import org.rauschig.jarchivelib.ArchiveFormat;
 
+import com.google.common.base.Joiner;
 import com.tactfactory.harmony.threads.DownloadFileThread;
 import com.tactfactory.harmony.threads.UnpackThread;
 import com.tactfactory.harmony.threads.DownloadFileThread.OnDownloadFinishedListener;
@@ -21,7 +23,17 @@ import com.tactfactory.harmony.utils.XMLUtils;
 /**
  * Manager class for Android SDK.
  */
-public class AndroidSDKManager {
+public class AndroidSDKManager 
+		implements OnUnpackedFinishedListener, OnDownloadFinishedListener {
+	
+	/**  Google SDK download URL. */
+	private static final String SDK_URL = 
+			"https://dl-ssl.google.com/android/repository/";
+	
+	/**  Google SDK download XML repository file. */
+	private static final String XML_REPO_FILE = 
+			"repository-8.xml";
+	
 	/** Constant for Windows. */
 	public static final String WINDOWS = "windows";
 	
@@ -30,33 +42,6 @@ public class AndroidSDKManager {
 	
 	/** Constant for MacOS/X. */
 	public static final String MAC_OSX = "macosx";
-	
-
-	/** Default Listener for unpacking files. */
-	private static final OnUnpackedFinishedListener unpackListener =
-			new OnUnpackedFinishedListener() {
-		@Override
-		public void onUnpackedFinished(File unpackedFile, File folder) {
-			unpackedFile.delete();
-			ConsoleUtils.display(
-					"The Android SDK has been successfuly installed into "
-							+ folder.getAbsolutePath());
-
-		}
-	};
-
-	/** Default Listener for downloading files. */
-	private static final OnDownloadFinishedListener downListener =
-			new OnDownloadFinishedListener() {
-		@Override
-		public void onDownloadFinished(File f) {
-			new UnpackThread(AndroidSDKManager.unpackListener,
-					f.getAbsolutePath(),
-					f.getParent(),
-					ArchiveFormat.ZIP).start();
-
-		}
-	};
 
 	/**
 	 * Download and install Android SDK to destPath.
@@ -69,7 +54,8 @@ public class AndroidSDKManager {
 			File destFolder = new File(destPath + "/" + destFileName);
 			destFolder.createNewFile();
 
-			new DownloadFileThread(AndroidSDKManager.downListener,
+			new DownloadFileThread(
+				this,
 				url,
 				destFolder.getAbsolutePath()).start();
 		} catch (IOException e) {
@@ -83,11 +69,9 @@ public class AndroidSDKManager {
 	 * @return The latest SDK tools link
 	 */
 	public String findLatestSDKToolsLink(final String platform) {
-		final String baseUrl = "https://dl-ssl.google.com/android/repository/";
 		String result = null;
-		final String xmlUrl = baseUrl + "repository-8.xml";
 		
-		Document document = XMLUtils.getRemoteXML(xmlUrl);
+		Document document = XMLUtils.getRemoteXML(SDK_URL + XML_REPO_FILE);
 		Element root = document.getRootElement();
 		Namespace ns = root.getNamespace("sdk");
 		
@@ -96,7 +80,7 @@ public class AndroidSDKManager {
 		
 		for (Element sdkArchive : sdkArchives) {
 			if (sdkArchive.getAttribute("os").getValue().equals(platform)) {
-				result = baseUrl + sdkArchive.getChildText("url",ns);
+				result = SDK_URL + sdkArchive.getChildText("url",ns);
 			}
 		}
 		
@@ -104,11 +88,16 @@ public class AndroidSDKManager {
 	}	
 	
 	
-	public void initSDKList() {
+	public void initSDKList(String sdkPath) {
 		try {
+			File f = new File(sdkPath + "tools/android");
+			// TODO : Set executable permissions for all executable files
+			f.setExecutable(true); 
+			
+			
 			Runtime runtime = Runtime.getRuntime();
 			Process process = 
-					runtime.exec("/home/gregg/aaatoto/tools/android list sdk --extended");
+					runtime.exec(sdkPath + "tools/android list sdk --extended");
 			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
 			process.getErrorStream().close();
 			process.getOutputStream().close();
@@ -124,10 +113,90 @@ public class AndroidSDKManager {
 			String inputString = builder.toString();
 			AndroidSDKList list = new AndroidSDKList();
 			list.parseString(inputString);
-			ConsoleUtils.display(list.getIdByName("platform-tools") + "");
 			
+			String id;
+			ArrayList<String> ids = list.getIdsLikeName("tools");
+			/*id = list.getIdByName("platform-tools");
+			if (id != null) {
+				ids.add(id);
+			}*/
+			id = list.getIdByName("android-17");
+			if (id != null) {
+				ids.add(id);
+			}
+			id = list.getIdByName("android-10");
+			if (id != null) {
+				ids.add(id);
+			}
+			ids.add("extra");
+			
+			
+			
+			this.installSDKDependencies(sdkPath, ids);
 		} catch (IOException e) {
 			ConsoleUtils.displayError(e);
 		}
+	}
+	
+	/**
+	 * Install the given list of SDK dependencies. 
+	 * @param sdkPath The path to the android sdk
+	 * @param dependencyList The dependency list (ids)
+	 */
+	public void installSDKDependencies(
+			String sdkPath, 
+			ArrayList<String> dependencyList) {
+		
+		//try {
+			String commandArgs = Joiner.on(',').join(dependencyList);
+			ArrayList<String> command = new ArrayList<String>();
+			command.add("./android");
+			command.add("update");
+			command.add("sdk");
+			command.add("-t");
+			command.add(commandArgs);
+			command.add("--no-ui");
+			/*ConsoleUtils.display("Executing : " + command);
+			Runtime runtime = Runtime.getRuntime();
+			Process process = 
+					runtime.exec(command);
+			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			process.getErrorStream().close();
+			process.getOutputStream().close();
+			
+			StringBuilder builder = new StringBuilder();
+			String line;
+			while ((line = reader.readLine()) != null) {
+				builder.append(line);
+				builder.append("\n");
+			}
+			reader.close();
+
+			ConsoleUtils.display(builder.toString());*/
+			ConsoleUtils.launchCommand(command, sdkPath + "tools/");
+		/*} catch (IOException e) {
+			ConsoleUtils.displayError(e);
+		}*/
+	}
+
+	@Override
+	public void onDownloadFinished(File f) {
+		new UnpackThread(
+				this,
+				f.getAbsolutePath(),
+				f.getParent(),
+				ArchiveFormat.ZIP).start();
+
+	}
+
+	@Override
+	public void onUnpackedFinished(File unpackedFile, File folder) {
+		unpackedFile.delete();
+		ConsoleUtils.display(
+				"The Android SDK has been successfuly installed into "
+						+ folder.getAbsolutePath());
+		
+		this.initSDKList(folder.getAbsolutePath() + "/");
+		
 	}
 }
