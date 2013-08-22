@@ -15,7 +15,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
-import java.lang.ProcessBuilder.Redirect;
 import java.util.List;
 
 import com.google.common.base.Strings;
@@ -254,7 +253,7 @@ public abstract class ConsoleUtils {
 	 * @param command The list containing the command and its arguments
 	 * to execute
 	 * @param commandPath The path where to launch the command
-	 * @return The exception throwed by the launched command.
+	 * @return The exception threw by the launched command.
 	 * null if everything has gone well
 	 */
 	public static Exception launchCommand(
@@ -323,6 +322,38 @@ public abstract class ConsoleUtils {
 		}
 
 		return input;
+	}
+	
+
+	/**
+	 * Generic user console prompt. 
+	 * Repeat the prompt until user input is valid.
+	 *
+	 * @param promptMessage message to display
+	 * @param All possible valid answers
+	 * @return input user input
+	 */
+	public static String getValidUserInput(final String promptMessage,
+			final String... validAnswers) {
+		boolean validAnswer = false;
+		String result = null;
+		
+		
+		while (!validAnswer) {
+			result = ConsoleUtils.getUserInput(promptMessage);
+			
+			for (String possibleAnswer : validAnswers) {
+				if (result.equals(possibleAnswer)) {
+					validAnswer = true;
+				}
+			}
+			
+			if (!validAnswer) {
+				ConsoleUtils.display("Invalid answer: " + result);
+			}
+		}
+
+		return result;
 	}
 
 	/**
@@ -393,13 +424,22 @@ public abstract class ConsoleUtils {
 				while (this.isRunning) {
 					try {
 						if (!(this.processInput.ready()
-								/*| this.processError.ready()*/)) {
+								/*|| this.processError.ready()*/)) {
 							Thread.sleep(SLEEP_TIME);
 						}
 						if (this.processInput.ready()) {
 							final String input  = this.processInput.readLine();
 							if (input != null && !input.isEmpty()) {
 								ConsoleUtils.display(input);
+
+								// TODO : Remove current hack for install SDK
+								// and find alternative way...
+								if (input.contains("November 13, 2012")) {
+									ConsoleUtils.display(
+											"Do you accept the license "
+											+ "'android-sdk-license-bcbbd656' "
+											+ "[y/n]:");
+								}
 							}
 						}
 						/*if (this.processError.ready()) {

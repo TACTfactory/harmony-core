@@ -51,6 +51,42 @@ public class AndroidSDKManager
 			final String destPath) {
 		String destFileName = url.split("/")[url.split("/").length - 1];
 		try {
+			File destination = new File(destPath);
+			final String yes = "y";
+			final String no = "n";
+			
+			if (!destination.exists()) {	
+				String userInput = ConsoleUtils.getValidUserInput(
+						"Folder " 
+								+ destination.getAbsolutePath()
+								+ " doesn't exists. "
+								+ "Do you want to create it ? [y/n]",
+						yes,
+						no);
+				
+				if (userInput.equals(yes)) {
+					destination.mkdirs();
+				} else {
+					ConsoleUtils.display("Aborting.");
+					return;
+				}
+			} else {
+				String userInput = ConsoleUtils.getValidUserInput(
+						"Folder " 
+								+ destination.getAbsolutePath()
+								+ " already exists. "
+								+ "Are you sure you want to install "
+								+ "in this folder ?"
+								+ " (All existing files will be overwritten)"
+								+ " [y/n]",
+						yes,
+						no);
+				
+				if (userInput.equals(no)) {
+					ConsoleUtils.display("Aborting.");
+					return;
+				}
+			}
 			File destFolder = new File(destPath + "/" + destFileName);
 			destFolder.createNewFile();
 
@@ -87,7 +123,10 @@ public class AndroidSDKManager
 		return result;
 	}	
 	
-	
+	/**
+	 * Init SDK List and install dependencies.
+	 * @param sdkPath The sdk path
+	 */
 	public void initSDKList(String sdkPath) {
 		try {
 			File f = new File(sdkPath + "tools/android");
@@ -156,27 +195,8 @@ public class AndroidSDKManager
 			command.add("-t");
 			command.add(commandArgs);
 			command.add("--no-ui");
-			/*ConsoleUtils.display("Executing : " + command);
-			Runtime runtime = Runtime.getRuntime();
-			Process process = 
-					runtime.exec(command);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-			process.getErrorStream().close();
-			process.getOutputStream().close();
 			
-			StringBuilder builder = new StringBuilder();
-			String line;
-			while ((line = reader.readLine()) != null) {
-				builder.append(line);
-				builder.append("\n");
-			}
-			reader.close();
-
-			ConsoleUtils.display(builder.toString());*/
 			ConsoleUtils.launchCommand(command, sdkPath + "tools/");
-		/*} catch (IOException e) {
-			ConsoleUtils.displayError(e);
-		}*/
 	}
 
 	@Override
