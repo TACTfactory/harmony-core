@@ -27,11 +27,11 @@ public class AndroidSDKManager
 		implements OnUnpackedFinishedListener, OnDownloadFinishedListener {
 	
 	/**  Google SDK download URL. */
-	private static final String SDK_URL = 
+	public static final String SDK_URL = 
 			"https://dl-ssl.google.com/android/repository/";
 	
 	/**  Google SDK download XML repository file. */
-	private static final String XML_REPO_FILE = 
+	public static final String XML_REPO_FILE = 
 			"repository-8.xml";
 	
 	/** Constant for Windows. */
@@ -43,6 +43,20 @@ public class AndroidSDKManager
 	/** Constant for MacOS/X. */
 	public static final String MAC_OSX = "macosx";
 
+	/**
+	 * Install the Android SDK for the given OS to the given path.
+	 * @param OS The OS 
+	 * @param path The path (Can be either "windows", "linux" or "macosx")
+	 * @return True if installed occurred correctly.
+	 */
+	/*public boolean installSDKTo(String OS, String path) {
+		boolean result = false;
+		String distantSDKUrl = this.findLatestSDKToolsLink(OS);
+		this.downloadAndInstallAndroidSDK(distantSDKUrl, path);
+		result = AndroidSDKManager.checkIfAndroidSDKExists(path);
+		return result;
+	}*/
+	
 	/**
 	 * Download and install Android SDK to destPath.
 	 * @param destPath The path where to install the android sdk.
@@ -90,10 +104,11 @@ public class AndroidSDKManager
 			File destFolder = new File(destPath + "/" + destFileName);
 			destFolder.createNewFile();
 
-			new DownloadFileThread(
+			DownloadFileThread thread = new DownloadFileThread(
 				this,
 				url,
-				destFolder.getAbsolutePath()).start();
+				destFolder.getAbsolutePath());
+			thread.start();
 		} catch (IOException e) {
 			ConsoleUtils.displayError(e);
 		}
@@ -218,5 +233,12 @@ public class AndroidSDKManager
 		
 		this.initSDKList(folder.getAbsolutePath() + "/");
 		
+	}
+	
+	public static boolean checkIfAndroidSDKExists(String sdkPath) {
+		boolean result = false;
+		File file = new File(sdkPath + "/tools/android");
+		result = file.exists();
+		return result;
 	}
 }

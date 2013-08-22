@@ -13,6 +13,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.ProjectDiscover;
 import com.tactfactory.harmony.TargetPlatform;
+import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.parser.HeaderParser;
 import com.tactfactory.harmony.plateforme.AndroidAdapter;
@@ -233,22 +234,34 @@ public class ProjectCommand extends BaseCommand {
 		this.initProjectParam();
 		boolean result = false;
 
-		try {
-			if (new ProjectGenerator(this.adapterAndroid).makeProject()) {
-				ConsoleUtils.displayDebug("Init Android Project Success!");
-
-				new ApplicationGenerator(this.adapterAndroid)
-							.generateApplication();
-				result = true;
-			} else {
-				ConsoleUtils.displayError(
-						new Exception("Init Android Project Fail!"));
+		boolean androidSDKExists = AndroidSDKManager.checkIfAndroidSDKExists(
+				ApplicationMetadata.getAndroidSdkPath()); 
+		if (!androidSDKExists) {
+			/*AndroidSDKManager sdkManager = new AndroidSDKManager();
+			androidSDKExists = sdkManager.installSDKTo(AndroidSDKManager.LINUX,
+							ApplicationMetadata.getAndroidSdkPath());*/
+			ConsoleUtils.displayWarning("No SDK found at given path, please "
+					+ "launch command " + DependenciesCommand.INSTALL_SDK + " "
+					+ "to install Android SDK.");
+		} else {
+			try {
+				if (new ProjectGenerator(this.adapterAndroid).makeProject()) {
+					ConsoleUtils.displayDebug("Init Android Project Success!");
+	
+					new ApplicationGenerator(this.adapterAndroid)
+								.generateApplication();
+					result = true;
+				} else {
+					ConsoleUtils.displayError(
+							new Exception("Init Android Project Fail!"));
+				}
+			} catch (final Exception e) {
+				ConsoleUtils.displayError(e);
 			}
-		} catch (final Exception e) {
-			ConsoleUtils.displayError(e);
 		}
-
+		
 		return result;
+			
 	}
 
 	/**
