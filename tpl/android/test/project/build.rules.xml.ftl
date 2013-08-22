@@ -131,4 +131,30 @@
             </else>
         </if>
     </target>
+    
+    <macrodef name="run-tests-helper">
+        <attribute name="emma.enabled" default="false" />
+        <element name="extra-instrument-args" optional="yes" />
+        <sequential>
+            <echo level="info">Running tests...</echo>
+            <exec executable="${r"${adb}"}" failonerror="true" outputproperty="tests.output">
+                <arg line="${r"${adb.device.arg}"}" />
+                <arg value="shell" />
+                <arg value="am" />
+                <arg value="instrument" />
+                <arg value="-w" />
+                <arg value="-e" />
+                <arg value="coverage" />
+                <arg value="@{emma.enabled}" />
+                <extra-instrument-args />
+                <arg value="${r"${project.app.package}"}/${r"${test.runner}"}" />
+            </exec>
+            <echo message="${r"${tests.output}"}"/>
+    		<fail message="Tests failed!!!">
+         		<condition>
+             		<contains string="${r"${tests.output}"}" substring="FAILURES" />
+         		</condition>
+    		</fail>
+        </sequential>
+    </macrodef>
 </project>
