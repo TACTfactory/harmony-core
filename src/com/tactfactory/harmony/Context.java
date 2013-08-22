@@ -11,6 +11,7 @@ package com.tactfactory.harmony;
 import java.io.File;
 
 import com.google.common.base.Strings;
+import com.tactfactory.harmony.dependencies.libraries.LibraryPool;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -19,6 +20,9 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 public final class Context {
 	/** Delimiter. */
 	public static final String DELIMITER = "/";
+	
+	/** Library pool. */
+	private final LibraryPool libPool = new LibraryPool();
 
 	/** Project folder. */
 	private static String projectForlder	= "app"		+ DELIMITER;
@@ -160,6 +164,8 @@ public final class Context {
 		this.templatePath 	= templateFolder;
 				//TactFileUtils.absoluteToRelativePath(
 				//PATH_BASE + templateFolder, PATH_BASE);
+		
+		this.libPool.parseLibraries(new File(this.bundlePath));
 	}
 
 
@@ -212,6 +218,14 @@ public final class Context {
 	 */
 	public String getTemplatesPath() {
 		return this.templatePath;
+	}
+	
+	/**
+	 * @param libraryName The library to get
+	 * @return The library File
+	 */
+	public File getLibrary(String libraryName) {
+		return this.libPool.getLibrary(libraryName);
 	}
 
 	/**

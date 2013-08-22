@@ -182,10 +182,9 @@ public class TestProjectGenerator extends BaseGenerator {
 				libName));
 
 		if (!dest.exists()) {
+			File src = Harmony.getLibrary(libName);
 			TactFileUtils.copyfile(
-					new File(String.format("%s/%s",
-							Harmony.getLibsPath(),
-							libName)),
+					src,
 					dest);
 		}
 	}

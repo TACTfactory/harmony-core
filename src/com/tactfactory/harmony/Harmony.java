@@ -310,6 +310,10 @@ public final class Harmony {
 	public static String getBundlePath() {
 		return getInstance().context.getBundlesPath();
 	}
+	
+	public static File getLibrary(String libraryName) {
+		return getInstance().context.getLibrary(libraryName);
+	}
 
 	/**
 	 * Get the harmony core path.<br/>
