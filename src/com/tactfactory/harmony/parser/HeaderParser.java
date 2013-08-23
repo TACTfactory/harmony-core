@@ -11,7 +11,17 @@ import com.tactfactory.harmony.utils.TactFileUtils;
  * Header.ftl parser.
  */
 public final class HeaderParser {
+	/** Possible position of Header.ftl. (harmony/app/android/) */
+	private static final String ANDROID_FOLDER_HEADER_PATH = 
+			Harmony.getProjectAndroidPath() + "header.ftl";
 	
+	/** Possible position of Header.ftl. (harmony/) */
+	private static final String BASE_FOLDER_HEADER_PATH = 
+			Harmony.getRootPath() + "header.ftl";
+
+	/** Possible position of Header.ftl. (harmony/vendor/tact-core/tpl/) */
+	private static final String TEMPLATE_FOLDER_HEADER_PATH = 
+			Harmony.getRootPath() + "vendor/tact-core/tpl/header.ftl";
 	/**
 	 * Private Constructor.
 	 */
@@ -24,35 +34,44 @@ public final class HeaderParser {
 	public static void parseHeaderFile() {
 		ConsoleUtils.display(">> Search for header.ftl...");
 		// Look in app/android...
-		String headerPath = Harmony.getProjectAndroidPath() + "header.ftl";
-		final File appAndroidHeader = new File(headerPath);
-		if (appAndroidHeader.exists()) {
-			ConsoleUtils.display(">>>> header.ftl found in "
-								+ headerPath
-								+ ".");
-			loadHeaderFile(appAndroidHeader);
+		if (HeaderParser.fileExists(ANDROID_FOLDER_HEADER_PATH)) {
+			HeaderParser.loadHeaderFile(ANDROID_FOLDER_HEADER_PATH);
+			
+		} else if (HeaderParser.fileExists(BASE_FOLDER_HEADER_PATH)) {
+			HeaderParser.loadHeaderFile(BASE_FOLDER_HEADER_PATH);
+			
+		} else if (HeaderParser.fileExists(TEMPLATE_FOLDER_HEADER_PATH)) {
+			HeaderParser.loadHeaderFile(TEMPLATE_FOLDER_HEADER_PATH);
+			
 		} else {
-			// Look in /...
-			headerPath = Harmony.getRootPath() + "header.ftl";
-			final File baseHeader = new File(headerPath);
-			if (baseHeader.exists()) {
-				ConsoleUtils.display(">>>> header.ftl found in "
-								+ headerPath
-								+ ".");
-				loadHeaderFile(baseHeader);
-
-			} else {
-				ConsoleUtils.display(">>>> header.ftl not found. Skipping...");
-			}
+			ConsoleUtils.display(">>>> No header.ftl found... Skipping...");
 		}
+	}
+	
+	/**
+	 * Check if header file exists and notice user if so.
+	 * @param filePath The file path
+	 * @return True if the file has been found
+	 */
+	private static boolean fileExists(String filePath) {
+		File f = new File(filePath);
+		boolean result = f.exists();
+		
+		if (result) {
+			ConsoleUtils.display(
+					">>>> Header.ftl found in " + f.getAbsolutePath());
+		} 
+		
+		return result;
 	}
 
 	/**
 	 * Load header file into the application metadata.
 	 * @param f The file to load
 	 */
-	protected static void loadHeaderFile(File f) {
-		final String header = TactFileUtils.fileToStringBuffer(f).toString();
+	protected static void loadHeaderFile(String f) {
+		final String header = 
+				TactFileUtils.fileToStringBuffer(new File(f)).toString();
 		ApplicationMetadata.INSTANCE.setHeaderTemplate(header);
 	}
 }
