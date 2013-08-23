@@ -11,6 +11,12 @@
 			<arg value="/data/data/${project_namespace}/files/junit-report.xml" />
 			<arg value="tmp/junit-report.xml" />
    		</exec>
+   		
+   		<fail message="Tests failed!!!">
+     		<condition>
+         		<contains string="${r"${tests.output}"}" substring="FAILURES" />
+     		</condition>
+		</fail>
 	</target>
 
     <target name="test" depends="-test-project-check"
@@ -150,11 +156,6 @@
                 <arg value="${r"${project.app.package}"}/${r"${test.runner}"}" />
             </exec>
             <echo message="${r"${tests.output}"}"/>
-    		<fail message="Tests failed!!!">
-         		<condition>
-             		<contains string="${r"${tests.output}"}" substring="FAILURES" />
-         		</condition>
-    		</fail>
         </sequential>
     </macrodef>
 </project>
