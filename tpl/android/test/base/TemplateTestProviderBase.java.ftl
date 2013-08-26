@@ -13,6 +13,9 @@ import ${curr.namespace}.entity.${curr.name};
 
 <#if dataLoader?? && dataLoader>
 import ${fixture_namespace}.${curr.name?cap_first}DataLoader;
+	<#list InheritanceUtils.getAllChildren(curr) as child>
+import ${fixture_namespace}.${child.name?cap_first}DataLoader;
+	</#list>
 </#if>
 
 import java.util.ArrayList;
@@ -41,6 +44,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 	protected ArrayList<${curr.name}> entities;
 
+	protected int nbEntities = 0;
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
 	 */
@@ -56,6 +60,10 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		if (this.entities.size()>0) {
 			this.entity = this.entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}
+
+		<#list InheritanceUtils.getAllChildren(curr) as child>
+		this.nbEntities += ${child.name?cap_first}DataLoader.getInstance(this.ctx).getMap().size();
+		</#list>
 		</#if>
 		this.provider = this.getMockContext().getContentResolver();
 	}
@@ -121,7 +129,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 		Assert.assertNotNull(result);
 		if (result != null) {
-			Assert.assertEquals(result.size(), this.entities.size());
+			Assert.assertEquals(result.size(), this.nbEntities);
 		}
 	}
 
@@ -173,7 +181,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 				e.printStackTrace();
 			}
 
-			Assert.assertEquals(result, this.entities.size());
+			Assert.assertEquals(result, this.nbEntities);
 		}
 	}
 
@@ -206,7 +214,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 				e.printStackTrace();
 			}
 
-			Assert.assertEquals(result, this.entities.size());
+			Assert.assertEquals(result, this.nbEntities);
 		}
 	}
 }
