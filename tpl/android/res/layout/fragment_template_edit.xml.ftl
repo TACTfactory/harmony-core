@@ -114,10 +114,6 @@
 	<${project_namespace}.harmony.widget.ValidationButtons
     	android:id="@+id/${currname?lower_case}_validation"
     	android:layout_width="match_parent"
-    	android:layout_height="wrap_content"
-    	<#if (curr.relations?size!=0)>
-    	android:layout_below="@+id/${lastField}"
-    	<#else>
-    	android:layout_below="@+id/${currname?lower_case}_${fields?values?last.name?lower_case}"
-    	</#if> />
+    	android:layout_height="wrap_content"<#if (FieldsUtils.hasShowableFields(curr.fields?values)) >
+    	android:layout_below="@+id/${lastField}"</#if> />
 </RelativeLayout>

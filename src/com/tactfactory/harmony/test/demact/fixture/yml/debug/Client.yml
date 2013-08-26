@@ -1,0 +1,31 @@
+Client:
+   DEBUG - Client - Dupond:
+      adress: "Address1"
+      id: 0
+      login: "DEBUG - Client - dup"
+      password: "DEBUG - Client - password"
+      firstname: "DEBUG - Client - Dupond"
+      lastname: "DEBUG - Client - Dupont"
+      createdAt: 2012-01-01 00:00:00.00
+      birthdate: 2012-01-01 00:00:00.00
+      userGroup: User
+   DEBUG - Client - Haddock:
+      id: 1
+      firstname: "DEBUG - Client - Haddock"
+      lastname: "DEBUG - Client - Archibald"
+      login: "DEBUG - Client - had"
+      password: "DEBUG - Client - password"
+      createdAt: 2012-01-01 00:00:00.00
+      birthdate: 2012-01-01 00:00:00.00
+      adress: "Address1"
+      userGroup: User
+   DEBUG - Client - Tournesol:
+      id: 2
+      firstname: DEBUG - Client - Tournesol
+      lastname: DEBUG - Client - Tryphon
+      login: DEBUG - Client - tou
+      password: DEBUG - Client - password
+      createdAt: 2001-12-15 2:59:43.10
+      birthdate: 2001-12-15 2:59:43.10
+      userGroup: User
+      adress: "Address1"

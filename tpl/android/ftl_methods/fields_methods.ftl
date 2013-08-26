@@ -69,7 +69,15 @@
 </#function>
 
 
-
+<#function hasShowableFields fields>
+	<#assign result = false />
+	<#list fields as field>
+		<#if (!field.hidden)>
+			<#assign result = true />
+		</#if>
+	</#list>
+	<#return result />
+</#function>
 
 
 
