@@ -243,23 +243,21 @@ public class ProjectCommand extends BaseCommand {
 			ConsoleUtils.displayWarning("No SDK found at given path, please "
 					+ "launch command " + DependenciesCommand.INSTALL_SDK + " "
 					+ "to install Android SDK.");
-		} else {
-			try {
-				if (new ProjectGenerator(this.adapterAndroid).makeProject()) {
-					ConsoleUtils.displayDebug("Init Android Project Success!");
-	
-					new ApplicationGenerator(this.adapterAndroid)
-								.generateApplication();
-					result = true;
-				} else {
-					ConsoleUtils.displayError(
-							new Exception("Init Android Project Fail!"));
-				}
-			} catch (final Exception e) {
-				ConsoleUtils.displayError(e);
+		} 
+		try {
+			if (new ProjectGenerator(this.adapterAndroid).makeProject()) {
+				ConsoleUtils.displayDebug("Init Android Project Success!");
+
+				new ApplicationGenerator(this.adapterAndroid)
+							.generateApplication();
+				result = true;
+			} else {
+				ConsoleUtils.displayError(
+						new Exception("Init Android Project Fail!"));
 			}
+		} catch (final Exception e) {
+			ConsoleUtils.displayError(e);
 		}
-		
 		return result;
 			
 	}
