@@ -269,7 +269,7 @@ public abstract class ConsoleUtils {
 		try {
 			ProcessBuilder processBuilder = new ProcessBuilder(command);
 			
-			processBuilder.redirectErrorStream(true);
+			//processBuilder.redirectErrorStream(true);
 			if (commandPath != null) {
 				processBuilder =
 						processBuilder.directory(new File(commandPath));
@@ -364,6 +364,9 @@ public abstract class ConsoleUtils {
 		/** Input thread. */
 		private final InputBridge in;
 
+		/** Error thread. */
+		private final ErrorBridge error;
+		
 		/** Output thread. */
 		private final OutputBridge out;
 
@@ -374,17 +377,20 @@ public abstract class ConsoleUtils {
 		public ProcessToConsoleBridge(final Process proc) {
 			this.in = new InputBridge(proc);
 			this.out = new OutputBridge(proc);
+			this.error = new ErrorBridge(proc);
 		}
 
 		/** Start the threads. */
 		public final void start() {
 			this.in.start();
+			this.error.start();
 			this.out.start();
 		}
 
 		/** Stop the threads. */
 		public final void stop() {
 			this.in.terminate();
+			this.error.terminate();
 			this.out.terminate();
 		}
 
@@ -392,9 +398,6 @@ public abstract class ConsoleUtils {
 		private static class InputBridge extends Thread {
 			/** Reader for process input stream. */
 			private BufferedReader processInput;
-
-			/** Reader for process error stream. */
-			//private BufferedReader processError;
 
 			/** Reader for process input stream. */
 			private boolean isRunning;
@@ -410,10 +413,6 @@ public abstract class ConsoleUtils {
 							new BufferedReader(
 									new InputStreamReader(proc.getInputStream(),
 											TactFileUtils.DEFAULT_ENCODING));
-					/*this.processError =
-							new BufferedReader(
-									new InputStreamReader(proc.getErrorStream(),
-											TactFileUtils.DEFAULT_ENCODING));*/
 				} catch (UnsupportedEncodingException e) {
 					ConsoleUtils.displayError(e);
 				}
@@ -423,8 +422,7 @@ public abstract class ConsoleUtils {
 			public void run() {
 				while (this.isRunning) {
 					try {
-						if (!(this.processInput.ready()
-								/*|| this.processError.ready()*/)) {
+						if (!this.processInput.ready()) {
 							Thread.sleep(SLEEP_TIME);
 						}
 						if (this.processInput.ready()) {
@@ -442,14 +440,6 @@ public abstract class ConsoleUtils {
 								}
 							}
 						}
-						/*if (this.processError.ready()) {
-							final String error = this.processError.readLine();
-							if (error != null && !error.isEmpty()
-									&& !"Note: checking out '4.2.0'."
-									.equals(error)) {
-								ConsoleUtils.displayError(new Exception(error));
-							}
-						}*/
 					} catch (final InterruptedException e) {
 						ConsoleUtils.displayError(e);
 					} catch (final IOException e) {
@@ -458,7 +448,81 @@ public abstract class ConsoleUtils {
 				}
 				try {
 					this.processInput.close();
-					//this.processError.close();
+				} catch (final IOException e) {
+					// TODO Auto-generated catch block
+					ConsoleUtils.displayError(e);
+				}
+			}
+
+			/**
+			 * Stop thread.
+			 */
+			public void terminate() {
+				this.isRunning = false;
+			}
+
+			@Override
+			public synchronized void start() {
+				this.isRunning = true;
+				super.start();
+			}
+		}
+		
+		/** Error bridge thread. */
+		private static class ErrorBridge extends Thread {
+
+			/** Reader for process error stream. */
+			private BufferedReader processError;
+
+			/** Reader for process input stream. */
+			private boolean isRunning;
+
+			/**
+			 * Constructor.
+			 * @param proc The process to bridge with the console
+			 */
+			public ErrorBridge(final Process proc) {
+				super();
+				try {
+					this.processError =
+							new BufferedReader(
+									new InputStreamReader(proc.getErrorStream(),
+											TactFileUtils.DEFAULT_ENCODING));
+				} catch (UnsupportedEncodingException e) {
+					ConsoleUtils.displayError(e);
+				}
+			}
+
+			@Override
+			public void run() {
+				while (this.isRunning) {
+					try {
+						if (!this.processError.ready()) {
+							Thread.sleep(SLEEP_TIME);
+						}
+						
+						if (this.processError.ready()) {
+							final String error = this.processError.readLine();
+							if (error != null && !error.isEmpty()
+									&& !"Note: checking out '4.2.0'."
+									.equals(error)) {
+								if ("'libs/sherlock' already exists in the index"
+										.equals(error)) {
+									ConsoleUtils.displayWarning(error);
+								} else {
+									ConsoleUtils.displayError(
+											new Exception(error));
+								}
+							}
+						}
+					} catch (final InterruptedException e) {
+						ConsoleUtils.displayError(e);
+					} catch (final IOException e) {
+						ConsoleUtils.displayError(e);
+					}
+				}
+				try {
+					this.processError.close();
 				} catch (final IOException e) {
 					// TODO Auto-generated catch block
 					ConsoleUtils.displayError(e);
