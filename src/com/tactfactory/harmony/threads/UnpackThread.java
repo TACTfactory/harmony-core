@@ -8,6 +8,8 @@ import org.rauschig.jarchivelib.Archiver;
 import org.rauschig.jarchivelib.ArchiverFactory;
 import org.rauschig.jarchivelib.CompressionType;
 
+import com.tactfactory.harmony.utils.ConsoleUtils;
+
 /**
  * Thread used for Unpacking a TGZ file.
  * Use OnUnpackedFinishedListener to know when the unpack is finished.
@@ -20,7 +22,7 @@ public class UnpackThread extends Thread {
 		 * @param unpackedFile The unpacked file.
 		 * @param folder The folder where it has been unpacked.
 		 */
-		public void onUnpackedFinished(File unpackedFile, File folder);
+		void onUnpackedFinished(File unpackedFile, File folder);
 	}
 	/** File to unpack. */
 	private File file;
@@ -60,6 +62,7 @@ public class UnpackThread extends Thread {
 			String destPath,
 			ArchiveFormat archiveFormat,
 			CompressionType compressionType) {
+		super();
 		this.file = new File(filePath);
 		this.destFile = new File(destPath);
 		this.listener = listener;
@@ -67,7 +70,10 @@ public class UnpackThread extends Thread {
 		this.compressionType = compressionType;
 
 		if (!this.destFile.exists()) {
-			this.destFile.mkdir();
+			if (!this.destFile.mkdir()) {
+				ConsoleUtils.displayError(new Exception(
+						"ERROR : Output folder couldn't be created."));
+			}
 		}
 	}
 
@@ -82,7 +88,7 @@ public class UnpackThread extends Thread {
 	 * @see java.lang.Thread#run()
 	 */
 	@Override
-	public void run() {
+	public final void run() {
 		super.run();
 		this.onStart();
 		final Archiver archiver; 
@@ -99,7 +105,7 @@ public class UnpackThread extends Thread {
 			archiver.extract(this.file, this.destFile);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ConsoleUtils.displayError(e);
 		}
 		
 		this.onFinished();

@@ -91,14 +91,15 @@ public class ClassCompletor {
 				if (!ids.isEmpty()) {
 					fieldMeta.setColumnDefinition(ids.get(0).getType());
 				} else {
-					ConsoleUtils.displayError(new Exception(
+					final RuntimeException exception = new RuntimeException(
 							"Error while updating relations : "
 							+ " Your entity " + cm.getName()
 							+ " refers the entity " + cmRef.getName()
 							+ " which has no ID defined."
 							+ " Please add the @Id annotation "
-							+ "to one of the fields of " + cmRef.getName()));
-					System.exit(-1);
+							+ "to one of the fields of " + cmRef.getName());
+					ConsoleUtils.displayError(exception);
+					throw exception;
 				}
 
 			}
@@ -122,9 +123,15 @@ public class ClassCompletor {
 					newField.setHidden(true);
 					newField.setNullable(fieldMeta.isNullable());
 					newField.setInternal(true);
-					newField.setName(cm.getName() + fieldMeta.getName() + "_Internal");
+					newField.setName(
+							cm.getName() 
+							+ fieldMeta.getName() 
+							+ "_Internal");
+					
 					newField.setColumnName(
-							cm.getName() + "_" + fieldMeta.getName() + "_internal");
+							cm.getName() 
+							+ "_" + fieldMeta.getName() 
+							+ "_internal");
 					newField.setType(cm.getName());
 					newField.setHarmonyType(TYPE_INTEGER);
 					newField.setRelation(new RelationMetadata());
@@ -150,8 +157,6 @@ public class ClassCompletor {
 							entityRef.getFields().get(rel.getMappedBy());
 					mappFm.getRelation().setInversedBy(fieldMeta.getName());
 				}
-
-
 			}
 			if ("ManyToMany".equals(rel.getType())) {
 				if (rel.getJoinTable() == null
@@ -251,7 +256,7 @@ public class ClassCompletor {
 
 	/**
 	 * Check if field relation is valid.
-	 * @param fm The field metadata of the relation.
+	 * @param fieldMeta The field metadata of the relation.
 	 */
 	private void checkRelationIntegrity(final FieldMetadata fieldMeta) {
 		if (!this.metas.containsKey(fieldMeta.getRelation().getEntityRef())) {
@@ -279,17 +284,20 @@ public class ClassCompletor {
 
 	}
 
+	/**
+	 * Add the mother ID field to inherited entities.
+	 * @param cm The entity to update
+	 */
 	private void updateInheritedIds(final EntityMetadata cm) {
 		// If entity has a mother
 		if (cm.getExtendType() != null) {
-			EntityMetadata mother = MetadataUtils.getTopMostMother(cm,
+			final EntityMetadata mother = MetadataUtils.getTopMostMother(cm,
 					ApplicationMetadata.INSTANCE);
 			for (String idName : mother.getIds().keySet()) {
-				FieldMetadata id = mother.getIds().get(idName);
+				final FieldMetadata id = mother.getIds().get(idName);
 				cm.getIds().put(idName, id);
 				cm.getFields().put(idName, id);
 			}
-		} else {
 		}
 	}
 }

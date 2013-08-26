@@ -8,6 +8,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
+import com.tactfactory.harmony.utils.ConsoleUtils;
+
 /**
  * Thread used to download a file from the internet.
  */
@@ -20,7 +22,7 @@ public class DownloadFileThread extends Thread {
 		 * Called when the download is finished.
 		 * @param f The file which has been downloaded.
 		 */
-		public void onDownloadFinished(File f);
+		void onDownloadFinished(File f);
 	}
 
 	/** URL of the file to download. */
@@ -53,48 +55,50 @@ public class DownloadFileThread extends Thread {
 	 * @see java.lang.Thread#run()
 	 */
 	@Override
-	public void run() {
+	public final void run() {
 		super.run();
 		this.onStart();
+		
+		final int bufferSize = 1024;
+		final int percentsMax = 100;
 
 		FileOutputStream output = null;
 		URL inUrl;
 		try {
 			inUrl = new URL(this.url);
-			URLConnection connection = inUrl.openConnection();
+			final URLConnection connection = inUrl.openConnection();
 
-			int fileLength = connection.getContentLength();
-			InputStream input = connection.getInputStream();
+			final int fileLength = connection.getContentLength();
+			final InputStream input = connection.getInputStream();
 
-			File f = new File(this.destPath);
+			final File f = new File(this.destPath);
 			output = new FileOutputStream(f);
-			byte[] buffer = new byte[1024];
+			final byte[] buffer = new byte[bufferSize];
 			int read;
 			int totalRead = 0;
 			while ((read = input.read(buffer)) > 0) {
 				output.write(buffer, 0, read);
 				totalRead += (int) read;
-				this.onProgress((totalRead) / (fileLength / 100));
+				this.onProgress((totalRead) / (fileLength / percentsMax));
 			}
 
 			this.onFinished();
 
 		} catch (MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ConsoleUtils.displayError(e);
+			
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			ConsoleUtils.displayError(e);
+			
 		} finally {
 			if (output != null) {
 				try {
 					output.close();
+					
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					ConsoleUtils.displayError(e);
 				}
 			}
-
 			if (this.listener != null) {
 				this.listener.onDownloadFinished(new File(this.destPath));
 			}
@@ -105,7 +109,7 @@ public class DownloadFileThread extends Thread {
 	 * Called on thread progress.
 	 * @param progress The progress in %.
 	 */
-	public void onProgress(int progress) {
+	private void onProgress(int progress) {
 		System.out.print("\rProgress : " + progress + "%");
 	}
 

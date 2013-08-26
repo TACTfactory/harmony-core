@@ -6,3 +6,4 @@
 <#import utilityPath + "import_methods.ftl" as ImportUtils />
 <#import utilityPath + "fields_methods.ftl" as FieldsUtils />
 <#import utilityPath + "view_methods.ftl" as ViewUtils />
+<#import utilityPath + "adapters_methods.ftl" as AdapterUtils />

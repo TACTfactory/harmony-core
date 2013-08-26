@@ -78,7 +78,7 @@ public final class Harmony {
 	}
 
 	/**
-	 * @param pluginBaseDirectory
+	 * @param pluginBaseDirectory The plugin base directory
 	 */
 	private void loadPlugins(final File pluginBaseDirectory) {
 		// Cache
@@ -101,7 +101,7 @@ public final class Harmony {
 							FileFilterUtils.nameFileFilter("lib"));
 
 		// Check list of Bundles .jar
-		Collection<File> plugins = TactFileUtils.listFiles(
+		final Collection<File> plugins = TactFileUtils.listFiles(
 				pluginBaseDirectory,
 				includeFilter,
 				excludeFilter);
@@ -122,7 +122,7 @@ public final class Harmony {
 				pluginManager.addPluginsFrom(plugin.toURI());
 
 				// Template bundles
-				File templateFolderFile =
+				final File templateFolderFile =
 						plugin.getParentFile().getAbsoluteFile();
 				this.templateFolders.put(plugin.getName(), templateFolderFile);
 				ConsoleUtils.displayDebug(
@@ -142,8 +142,9 @@ public final class Harmony {
 		pluginManager.shutdown();
 	}
 
-	/** Initialize Harmony.
-	 * @throws Exception
+	/** 
+	 * Initialize Harmony.
+	 * @throws Exception if current working path is unavailable.
 	 */
 	public void initialize() throws Exception {
 		ConsoleUtils.display(
@@ -308,6 +309,10 @@ public final class Harmony {
 	 */
 	public static String getBundlePath() {
 		return getInstance().context.getBundlesPath();
+	}
+	
+	public static File getLibrary(String libraryName) {
+		return getInstance().context.getLibrary(libraryName);
 	}
 
 	/**

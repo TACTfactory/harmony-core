@@ -25,7 +25,7 @@ public class CoreTest extends CommonTest {
 
 	/**
 	 * Initialization.
-	 * @throws Exception
+	 * @throws Exception if something bad happened.
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {
@@ -65,8 +65,7 @@ public class CoreTest extends CommonTest {
 	@Test
 	public final void list() {
 		System.out.println("\nTest List bundle/command");
-		System.out.println("########################################"
-				 + "#######################################");
+		System.out.println(SHARP_DELIMITOR);
 
 		CommonTest.getHarmony().findAndExecute(GeneralCommand.LIST, null, null);
 	}
@@ -77,8 +76,7 @@ public class CoreTest extends CommonTest {
 	@Test
 	public final void help() {
 		System.out.println("\nTest Help");
-		System.out.println("#######################################"
-				 + "########################################");
+		System.out.println(SHARP_DELIMITOR);
 
 		CommonTest.getHarmony().findAndExecute(GeneralCommand.HELP, null, null);
 	}

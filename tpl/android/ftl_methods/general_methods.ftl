@@ -6,3 +6,13 @@
 	</#list>
 	<#return false />
 </#function>
+
+<#function getIndentString indentLevel = 0>
+	<#assign t = "" />
+	<#if (indentLevel > 0) >
+		<#list 1..indentLevel as x>
+			<#assign t = t + "\t" />
+		</#list> 
+	</#if>
+	<#return t />
+</#function>

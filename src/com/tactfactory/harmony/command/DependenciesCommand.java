@@ -42,14 +42,14 @@ public class DependenciesCommand extends BaseCommand {
 	}
 
 	@Override
-	public void summary() {
+	public final void summary() {
 		ConsoleUtils.display("\n> DEPENDENCIES \n"
 				+ "\t" + INSTALL_SDK
 				+ "\t => Install the android SDK\n");
 	}
 
 	@Override
-	public boolean isAvailableCommand(String command) {
+	public final boolean isAvailableCommand(String command) {
 		return INSTALL_SDK.equals(command);
 	}
 }

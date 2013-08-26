@@ -197,31 +197,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		${curr.extends?cap_first}SQLiteAdapter motherAdapt = new ${curr.extends?cap_first}SQLiteAdapter(this.ctx);
 		result.putAll(motherAdapt.itemToContentValues(item));
 		</#if>
-	<#list curr.fields?values as field>
-		<#if (!field.internal)>
-			<#if (!field.relation??)>
-				<#if (MetadataUtils.isPrimitive(field))>
-		result.put(${NamingUtils.alias(field.name)},
-				${m.typeToParser("item", field)});
-				<#else>
-		if (item.get${field.name?cap_first}() != null) {
-			result.put(${NamingUtils.alias(field.name)},
-					${m.typeToParser("item", field)});
-		}
-				</#if>
-			<#else>
-				<#if (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
-		if (item.get${field.name?cap_first}() != null) {
-			result.put(${NamingUtils.alias(field.name)},
-					String.valueOf(item.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}()));
-		}
 
-				</#if>
-			</#if>
-		</#if>
-	</#list>
-
-
+<#list curr.fields?values as field>${AdapterUtils.itemToContentValuesFieldAdapter("item", field, 2)}</#list>
 		return result;
 	}
 
@@ -249,91 +226,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 
 			</#if>
 			int index;
-	<#list curr.fields?values as field>
-		<#if (!field.internal && !(field.relation?? && (field.relation.type=="ManyToMany" || field.relation.type=="OneToMany")))>
-			<#assign t="" />
-			index = cursor.getColumnIndexOrThrow(${NamingUtils.alias(field.name)});
-			<#if (field.nullable?? && field.nullable)>
-			if (!cursor.isNull(index)) {<#assign t="\t" />
-			</#if>
-			<#if (!field.relation??)>
-				<#if (field.type?lower_case == "datetime") >
-					<#if ((field.harmony_type == "date") || (field.harmony_type == "datetime") || (field.harmony_type == "time"))>
 
-						<#if field.is_locale>
-			${t}final DateTime dt${field.name?cap_first} =
-					DateUtils.formatLocalISOStringToDateTime(
-							cursor.getString(index));
-						<#else>
-			${t}final DateTime dt${field.name?cap_first} =
-					DateUtils.formatISOStringToDateTime(
-							cursor.getString(index));
-						</#if>
-				${t}if (dt${field.name?cap_first} != null) {
-					${t}result.set${field.name?cap_first}(
-							dt${field.name?cap_first});
-				${t}} else {
-				${t}result.set${field.name?cap_first}(new DateTime());
-			${t}}
-					</#if>
-				<#elseif (field.type?lower_case == "boolean")>
-			${t}result.set${field.name?cap_first}(
-					cursor.getString(index).equals("true"));
-				<#elseif (field.type?lower_case == "int" || field.type?lower_case == "integer" || field.type == "ean" || field.type == "zipcode")>
-			${t}result.set${field.name?cap_first}(
-					cursor.getInt(index));
-				<#elseif (field.type?lower_case == "float")>
-			${t}result.set${field.name?cap_first}(
-					cursor.getFloat(index));
-				<#elseif (field.type?lower_case == "double")>
-			${t}result.set${field.name?cap_first}(
-					cursor.getDouble(index));
-				<#elseif (field.type?lower_case == "long")>
-			${t}result.set${field.name?cap_first}(
-					cursor.getLong(index));
-				<#elseif (field.type?lower_case == "short")>
-			${t}result.set${field.name?cap_first}(
-					cursor.getShort(index));
-				<#elseif (field.type?lower_case == "char" || field.type?lower_case == "character")>
-			String ${field.name?uncap_first}DB = cursor.getString(index);
-			if (${field.name?uncap_first}DB != null
-				&& ${field.name?uncap_first}DB.length() > 0) {
-				${t}result.set${field.name?cap_first}(
-					${field.name?uncap_first}DB.charAt(0));
-			}
-				<#elseif (field.type?lower_case == "byte")>
-			${t}result.set${field.name?cap_first}(Byte.valueOf(
-					cursor.getString(index)));
-				<#elseif (field.type?lower_case == "string")>
-			${t}result.set${field.name?cap_first}(
-					cursor.getString(index));
-				<#elseif (field.harmony_type?lower_case == "enum")>
-					<#assign enumType = enums[field.type] />
-					<#if enumType.id??> <#-- If an Id has been declared in the enum -->
-						<#assign idEnum = enumType.fields[enumType.id] />
-						<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
-			${t}result.set${field.name?cap_first}(
-				${field.type}.fromValue(cursor.getInt(index)));
-						<#else>
-			${t}result.set${field.name?cap_first}(
-				${field.type}.fromValue(cursor.getString(index)));
-						</#if>
-					<#else> <#-- If not, use the enum name -->
-			${t}result.set${field.name?cap_first}(
-				${field.type}.valueOf(cursor.getString(index)));
-
-					</#if>
-				</#if>
-			<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
-			${t}final ${field.type} ${field.name} = new ${field.type}();
-			${t}${field.name}.set${entities[field.relation.targetEntity].ids[0].name?cap_first}(cursor.getInt(index));
-			${t}result.set${field.name?cap_first}(${field.name});
-			</#if>
-			<#if (field.nullable?? && field.nullable)>
-			}
-			</#if>
-		</#if>
-	</#list>
+<#list curr.fields?values as field>${AdapterUtils.cursorToItemFieldAdapter("result", field, 3)}</#list>
 		}
 	}
 

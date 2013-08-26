@@ -22,7 +22,6 @@ import org.junit.runners.Suite.SuiteClasses;
 	com.tactfactory.harmony.test.project.AllTests.class,
 	com.tactfactory.harmony.test.orm.AllTests.class,
 	com.tactfactory.harmony.fixture.test.AllTests.class })
-
 public class AllTests {
 
 }

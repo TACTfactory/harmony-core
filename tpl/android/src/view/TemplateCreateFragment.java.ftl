@@ -249,63 +249,12 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 
 	/** Load data from model to fields view. */
 	public void loadData() {
-		<#list fields?values as field>
-		<#if !field.internal && !field.hidden>
-			<#if !field.relation??>
-				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
-		if (this.model.get${field.name?cap_first}() != null) {
-					<#if field.type?lower_case=="datetime">
-						<#if field.harmony_type=="datetime">
-			this.${field.name}View.setDateTime(this.model.get${field.name?cap_first}());
-						<#elseif (field.harmony_type=="date")>
-			this.${field.name}View.setDate(this.model.get${field.name?cap_first}());
-						<#elseif (field.harmony_type=="time")>
-			this.${field.name}View.setTime(this.model.get${field.name?cap_first}());
-						</#if>
-					<#else>
-			${ViewUtils.setLoader(field)}
-					</#if>
-		}
-				<#else>
-		${ViewUtils.setLoader(field)}
-				</#if>
-			<#else>
-		this.${field.name}List = new ${field.relation.targetEntity}ProviderUtils(this.getActivity()).queryAll();
-		this.init${field.name?cap_first}Dialog(this.${field.name}List);
-			</#if>
-		</#if>
-
-		</#list>
+<#list fields?values as field>${AdapterUtils.loadDataCreateFieldAdapter(field, 2)}</#list>
 	}
 
 	/** Save data from fields view to model. */
 	public void saveData() {
-		<#list fields?values as field>
-		<#if !field.internal && !field.hidden>
-			<#if !field.relation??>
-		${ViewUtils.setSaver(field)}
-			<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
-		final ${field.relation.targetEntity} tmp${field.name?cap_first} =
-					new ${field.relation.targetEntity?cap_first}();
-		tmp${field.name?cap_first}.set${entities[field.relation.targetEntity].ids[0].name?cap_first}(this.selected${field.name?cap_first});
-		this.model.set${field.name?cap_first}(
-				tmp${field.name?cap_first});
-			<#else>
-		ArrayList<${field.relation.targetEntity}> tmp${field.name?cap_first}List =
-				new ArrayList<${field.relation.targetEntity?cap_first}>();
-		for (int i = 0; i < this.checked${field.name?cap_first}.length; i++) {
-			if (this.checked${field.name?cap_first}[i]) {
-				tmp${field.name?cap_first}List.add(
-						this.${field.name}List.get(i));
-			}
-		}
-
-		this.model.set${field.name?cap_first}(
-				tmp${field.name?cap_first}List);
-			</#if>
-		</#if>
-		</#list>
-
+<#list fields?values as field>${AdapterUtils.saveDataFieldAdapter(field, 2)}</#list>
 	}
 
 	/** Check data is valid.
@@ -314,31 +263,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	 */
 	public boolean validateData() {
 		boolean result = true;
-		<#list fields?values as field>
-			<#if !field.internal && !field.hidden>
-				<#if !field.relation??>
-					<#if field.type?lower_case == "datetime">
-						<#if field.harmony_type == "datetime">
-		<#if !field.nullable>result = (result && this.${field.name}View.getDateTime() != null);</#if>
-						<#else>
-		<#if !field.nullable>result = (result && this.${field.name}View.get${field.harmony_type?cap_first}() != null);</#if>
-						</#if>
-					<#else>
-		<#if !field.nullable>result = (result && this.${field.name}View.getText().length() > 0);</#if>
-					</#if>
-				<#else>
-					<#if ((field.relation.type == "ManyToOne") || (field.relation.type == "OneToOne"))>
-		<#if !field.nullable>result = (result && this.selected${field.name?cap_first} != 0);</#if>
-					</#if>
-				</#if>
-		if (result == false) {
-			Toast.makeText(this.getActivity(),
-					R.string.${field.owner?lower_case}_${field.name?lower_case}_invalid_field_error,
-					Toast.LENGTH_SHORT).show();
-			return result;
-		}
-			</#if>
-		</#list>
+<#list fields?values as field>${AdapterUtils.validateDataFieldAdapter(field, 2)}</#list>
 		return result;
 	}
 

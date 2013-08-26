@@ -27,7 +27,7 @@ public class BundleGenerator extends BaseGenerator {
 	 * @param bundleName Bundle name
 	 * @param bundleNameSpace Bundle namespace
 	 */
-	public void generateBundleFiles(
+	public final void generateBundleFiles(
 			String bundleOwnerName,
 			String bundleName,
 			String bundleNameSpace) {
@@ -71,7 +71,7 @@ public class BundleGenerator extends BaseGenerator {
 			String bundleName,
 			String bundleNameSpace) {
 
-		HashMap<String, Object> datamodel = new HashMap<String, Object>();
+		final HashMap<String, Object> datamodel = new HashMap<String, Object>();
 		datamodel.put("bundle_namespace", bundleNameSpace);
 		datamodel.put("bundle_name", bundleName);
 		datamodel.put("bundle_owner", bundleOwnerName);
@@ -90,9 +90,10 @@ public class BundleGenerator extends BaseGenerator {
 			String bundleName,
 			String bundleNameSpace) {
 
-		String tplPath = this.getAdapter().getAnnotationBundleTemplatePath()
+		final String tplPath = 
+				this.getAdapter().getAnnotationBundleTemplatePath()
 				+ "/TemplateAnnotation.java";
-		String genPath = this.getAdapter().getAnnotationBundlePath(
+		final String genPath = this.getAdapter().getAnnotationBundlePath(
 							bundleOwnerName,
 							bundleNameSpace,
 							bundleName)
@@ -113,9 +114,9 @@ public class BundleGenerator extends BaseGenerator {
 			String bundleOwnerName,
 			String bundleName) {
 
-		String tplPath = this.getAdapter().getBundleTemplatePath()
+		final String tplPath = this.getAdapter().getBundleTemplatePath()
 				+ "/build.xml";
-		String genPath = this.getAdapter().getBundlePath(
+		final String genPath = this.getAdapter().getBundlePath(
 							bundleOwnerName,
 							bundleName)
 						+ "/build.xml";
@@ -134,9 +135,9 @@ public class BundleGenerator extends BaseGenerator {
 			String bundleName,
 			String bundleNameSpace) {
 
-		String tplPath = this.getAdapter().getParserBundleTemplatePath()
+		final String tplPath = this.getAdapter().getParserBundleTemplatePath()
 				+ "/TemplateParser.java";
-		String genPath = this.getAdapter().getParserBundlePath(
+		final String genPath = this.getAdapter().getParserBundlePath(
 							bundleOwnerName,
 							bundleNameSpace,
 							bundleName)
@@ -159,9 +160,9 @@ public class BundleGenerator extends BaseGenerator {
 			String bundleName,
 			String bundleNameSpace) {
 
-		String tplPath = this.getAdapter().getCommandBundleTemplatePath()
+		final String tplPath = this.getAdapter().getCommandBundleTemplatePath()
 				+ "/TemplateCommand.java";
-		String genPath = this.getAdapter().getCommandBundlePath(
+		final String genPath = this.getAdapter().getCommandBundlePath(
 							bundleOwnerName,
 							bundleNameSpace,
 							bundleName)
@@ -184,9 +185,9 @@ public class BundleGenerator extends BaseGenerator {
 			String bundleName,
 			String bundleNameSpace) {
 
-		String tplPath = this.getAdapter().getTemplateBundleTemplatePath()
+		final String tplPath = this.getAdapter().getTemplateBundleTemplatePath()
 				+ "/TemplateGenerator.java";
-		String genPath = this.getAdapter().getTemplateBundlePath(
+		final String genPath = this.getAdapter().getTemplateBundlePath(
 							bundleOwnerName,
 							bundleNameSpace,
 							bundleName)
@@ -209,9 +210,9 @@ public class BundleGenerator extends BaseGenerator {
 			String bundleName,
 			String bundleNameSpace) {
 
-		String tplPath = this.getAdapter().getMetaBundleTemplatePath()
+		final String tplPath = this.getAdapter().getMetaBundleTemplatePath()
 				+ "/TemplateMetadata.java";
-		String genPath = this.getAdapter().getMetaBundlePath(
+		final String genPath = this.getAdapter().getMetaBundlePath(
 							bundleOwnerName,
 							bundleNameSpace,
 							bundleName)

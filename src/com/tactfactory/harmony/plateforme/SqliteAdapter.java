@@ -31,7 +31,7 @@ public abstract class SqliteAdapter {
 	 */
 	public static String generateStructure(final FieldMetadata fm) {
 
-		final StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder(20);
 		builder.append(' ');
 		builder.append(generateColumnType(fm.getColumnDefinition()));
 		if (fm.isId()) {

@@ -11,6 +11,7 @@ package com.tactfactory.harmony;
 import java.io.File;
 
 import com.google.common.base.Strings;
+import com.tactfactory.harmony.dependencies.libraries.LibraryPool;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -19,6 +20,9 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 public final class Context {
 	/** Delimiter. */
 	public static final String DELIMITER = "/";
+	
+	/** Library pool. */
+	private final LibraryPool libPool = new LibraryPool();
 
 	/** Project folder. */
 	private static String projectForlder	= "app"		+ DELIMITER;
@@ -92,14 +96,15 @@ public final class Context {
 
 		// Clean binary case (for /bin and /vendor/**/bin)
 		if (baseDir == null && harmonyPath.endsWith("bin/")) {
-			File predictiveBaseDir = new File(harmonyPath).getParentFile();
+			final File predictiveBaseDir =
+					new File(harmonyPath).getParentFile();
 
 			ConsoleUtils.displayDebug("Eclipse Mode : " + harmonyPath);
 			baseDir = this.detectAppTree(predictiveBaseDir);
 		}
 
 		if (baseDir == null && harmonyPath.endsWith("harmony.jar")) {
-			File predictiveBaseDir = new File(harmonyPath)
+			final File predictiveBaseDir = new File(harmonyPath)
 					.getParentFile()
 					.getParentFile()
 					.getParentFile();
@@ -111,7 +116,7 @@ public final class Context {
 
 		// For vendor/tact-core case
 		if (baseDir == null) {
-			File predictiveBaseDir =
+			final File predictiveBaseDir =
 					new File(harmonyPath)
 						.getParentFile()
 						.getParentFile()
@@ -123,7 +128,7 @@ public final class Context {
 
 		//For Emma
 		if (baseDir == null) {
-			File predictiveBaseDir =
+			final File predictiveBaseDir =
 					new File(harmonyPath)
 						.getParentFile()
 						.getParentFile()
@@ -159,6 +164,8 @@ public final class Context {
 		this.templatePath 	= templateFolder;
 				//TactFileUtils.absoluteToRelativePath(
 				//PATH_BASE + templateFolder, PATH_BASE);
+		
+		this.libPool.parseLibraries(new File(this.bundlePath));
 	}
 
 
@@ -212,6 +219,14 @@ public final class Context {
 	public String getTemplatesPath() {
 		return this.templatePath;
 	}
+	
+	/**
+	 * @param libraryName The library to get
+	 * @return The library File
+	 */
+	public File getLibrary(String libraryName) {
+		return this.libPool.getLibrary(libraryName);
+	}
 
 	/**
 	 * Check if the given folder contains the App folder.
@@ -220,7 +235,7 @@ public final class Context {
 	 */
 	private File detectAppTree(final File checkPath) {
 		File result = null;
-		File[] list = checkPath.listFiles();
+		final File[] list = checkPath.listFiles();
 
 		if (list != null) {
 			for (File dir : list) {

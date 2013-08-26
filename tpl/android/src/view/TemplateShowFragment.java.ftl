@@ -68,46 +68,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 
     /** Load data from model to fields view. */
     public void loadData() {
-    <#list fields?values as field>
-		<#if (!field.internal && !field.hidden)>
-			<#if (!field.relation??)>
-		    	<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
-		if (this.model.get${field.name?cap_first}() != null) {
-					<#if (field.type?lower_case == "datetime")>
-						<#if (field.harmony_type == "datetime")>
-			this.${field.name}View.setText(
-					DateUtils.formatDateTimeToString(
-							this.model.get${field.name?cap_first}()));
-						</#if>
-						<#if (field.harmony_type == "date")>
-			this.${field.name}View.setText(
-					DateUtils.formatDateToString(
-							this.model.get${field.name?cap_first}()));
-						</#if>
-						<#if (field.harmony_type == "time")>
-			this.${field.name}View.setText(
-					DateUtils.formatTimeToString(
-							this.model.get${field.name?cap_first}()));
-						</#if>
-					<#else>
-			${ViewUtils.setLoader(field)}
-					</#if>
-		}
-				<#else>
-		${ViewUtils.setLoader(field)}
-				</#if>
-			<#elseif (field.relation.type=="OneToOne" || field.relation.type=="ManyToOne")>
-		this.${field.name}View.setText(
-				String.valueOf(this.model.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}()));
-			<#else>
-		String ${field.name}Value = "";
-		for (${field.relation.targetEntity} item : this.model.get${field.name?cap_first}()) {
-			${field.name}Value += item.get${entities[field.relation.targetEntity].ids[0].name?cap_first}() + ",";
-		}
-		this.${field.name}View.setText(${field.name}Value);
-			</#if>
-		</#if>
-	</#list>
+<#list fields?values as field>${AdapterUtils.loadDataShowFieldAdapter(field, 2)}</#list>
     }
 
     @Override

@@ -46,7 +46,7 @@ public class ProviderGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use.
-	 * @throws Exception
+	 * @throws Exception if adapter is null
 	 */
 	public ProviderGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);

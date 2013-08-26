@@ -51,7 +51,7 @@ public class ClassVisitor {
 
 	/**
 	 * Visit a class.
-	 * @param n The class or interface declaration
+	 * @param classDeclaration The class or interface declaration
 	 * @return The ClassMetadata containing the metadata of the visited class
 	 */
     public final ClassMetadata visit(
@@ -195,7 +195,7 @@ public class ClassVisitor {
 
     /**
 	 * Visit an enum.
-	 * @param n The enum declaration
+	 * @param enumDecl The enum declaration
 	 * @return The ClassMetadata containing the metadata of the visited enum
 	 */
     public final ClassMetadata visit(final EnumDeclaration enumDecl) {
@@ -249,7 +249,7 @@ public class ClassVisitor {
 
     /**
 	 * Visit a class.
-	 * @param n The class or interface declaration
+	 * @param type The type declaration
 	 * @return The ClassMetadata containing the metadata of the visited class
 	 */
     public final ClassMetadata visit(final TypeDeclaration type) {

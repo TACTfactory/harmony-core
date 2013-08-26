@@ -153,7 +153,8 @@ public abstract class TactFileUtils extends FileUtils {
 		BufferedReader bReader = null;
 		try {
 			fis = new FileInputStream(file);
-			inStream = new InputStreamReader(fis, TactFileUtils.DEFAULT_ENCODING);
+			inStream = new InputStreamReader(
+					fis, TactFileUtils.DEFAULT_ENCODING);
 			bReader = new BufferedReader(inStream);
 			while (true) {
 				tmp = bReader.readLine();
@@ -235,7 +236,10 @@ public abstract class TactFileUtils extends FileUtils {
 			result = new ArrayList<String>();
 			inStream = new DataInputStream(new FileInputStream(file));
 			bReader = new BufferedReader(
-					new InputStreamReader(inStream, TactFileUtils.DEFAULT_ENCODING));
+					new InputStreamReader(
+							inStream, 
+							TactFileUtils.DEFAULT_ENCODING));
+			
 			line = bReader.readLine();
 			while (line != null) {
 				result.add(line);
@@ -308,7 +312,7 @@ public abstract class TactFileUtils extends FileUtils {
 	public static File makeFolderRecursive(final String srcPath,
 			final String destPath,
 			final boolean makeFiles) {
-		File srcDir = new File(srcPath);
+		final File srcDir = new File(srcPath);
 		File destDir = null;
 		if (srcDir.exists() && srcDir.isDirectory()) {
 			 destDir = new File(destPath);
@@ -321,8 +325,8 @@ public abstract class TactFileUtils extends FileUtils {
 
 	/** Copy folder content recursively from srcPath to destPath,
 	 * and copy files or not.
-	 * @param srcPath Source folder
-	 * @param destPath Destination folder
+	 * @param srcDir Source folder
+	 * @param destDir Destination folder
 	 * @param makeFiles True if you want to copy files as well
 	 *
 	 *  @return The newly created folder
@@ -332,10 +336,10 @@ public abstract class TactFileUtils extends FileUtils {
 			final boolean makeFiles) {
 
 		TactFileUtils.ensureFolderExistence(destDir);
-		File[] files = srcDir.listFiles();
+		final File[] files = srcDir.listFiles();
 		if (files.length != 0) {
 			for (File f : files) {
-				File destFile = new File(destDir.getAbsolutePath()
+				final File destFile = new File(destDir.getAbsolutePath()
 						+ "/" + f.getName());
 				if (makeFiles && f.isFile()) {
 					TactFileUtils.copyfile(f, destFile);
@@ -360,13 +364,15 @@ public abstract class TactFileUtils extends FileUtils {
 
 	/**
 	 * Create a folder if it does not exists yet.
+	 * @param file The file to create.
 	 * @return true if the folder exists after this operation.
 	 */
-	public static boolean ensureFolderExistence(File f) {
-		if (!f.exists()) {
-			f.mkdir();
+	public static boolean ensureFolderExistence(File file) {
+		boolean result = file.exists();
+		if (!result) {
+			result = file.mkdir();
 		}
-		return f.exists();
+		return result;
 	}
 
 	/** delete a directory with all its files recursively.
@@ -473,7 +479,7 @@ public abstract class TactFileUtils extends FileUtils {
 
 	/**
 	 * Get the extension of a file.
-	 * @param f The file
+	 * @param file The file
 	 * @return The file's extension
 	 */
 	public static String getExtension(final File file) {

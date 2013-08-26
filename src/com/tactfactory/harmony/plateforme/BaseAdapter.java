@@ -40,20 +40,20 @@ public abstract class BaseAdapter {
 	private String util;
 	/** Template Utility files path. */
 	private String utilityPath;
-	/**	Bundle template files path */
+	/**	Bundle template files path. */
 	private String bundleTemplates = "bundle";
 
 
 	// Bundles
-	/**	Bundle template files path */
+	/**	Bundle template files path. */
 	private String annotationsBundleTemplates = "annotation";
-	/**	Bundle template files path */
+	/**	Bundle template files path. */
 	private String templateBundleTemplates = "template";
-	/**	Bundle template files path */
+	/**	Bundle template files path. */
 	private String parserBundleTemplates = "parser";
-	/**	Bundle template files path */
+	/**	Bundle template files path. */
 	private String metaBundleTemplates = "meta";
-	/**	Bundle template files path */
+	/**	Bundle template files path. */
 	private String commandBundleTemplates = "command";
 
 	// MVC
@@ -608,6 +608,9 @@ public abstract class BaseAdapter {
 
 	/**
 	 * Get the source data namespace.
+	 * @param bundleOwnerName The bundle owner name
+	 * @param bundleNamespace The bundle namespace
+	 * @param bundleName The bundle name
 	 * @return The source data namespace
 	 */
 	public final String getAnnotationBundlePath(
@@ -635,6 +638,9 @@ public abstract class BaseAdapter {
 
 	/**
 	 * Get the source data namespace.
+	 * @param bundleOwnerName The bundle owner name
+	 * @param bundleNamespace The bundle namespace
+	 * @param bundleName The bundle name
 	 * @return The source data namespace
 	 */
 	public final String getCommandBundlePath(
@@ -662,6 +668,9 @@ public abstract class BaseAdapter {
 
 	/**
 	 * Get the source data namespace.
+	 * @param bundleOwnerName The bundle owner name
+	 * @param bundleNamespace The bundle namespace
+	 * @param bundleName The bundle name
 	 * @return The source data namespace
 	 */
 	public final String getMetaBundlePath(
@@ -689,6 +698,9 @@ public abstract class BaseAdapter {
 
 	/**
 	 * Get the source data namespace.
+	 * @param bundleOwnerName The bundle owner name
+	 * @param bundleNamespace The bundle namespace
+	 * @param bundleName The bundle name
 	 * @return The source data namespace
 	 */
 	public final String getTemplateBundlePath(
@@ -716,6 +728,9 @@ public abstract class BaseAdapter {
 
 	/**
 	 * Get the source data namespace.
+	 * @param bundleOwnerName The bundle owner name
+	 * @param bundleNamespace The bundle namespace
+	 * @param bundleName The bundle name
 	 * @return The source data namespace
 	 */
 	public final String getParserBundlePath(
@@ -742,6 +757,8 @@ public abstract class BaseAdapter {
 
 	/**
 	 * Get the source data namespace.
+	 * @param bundleOwnerName The bundle owner name
+	 * @param bundleName The bundle name
 	 * @return The source data namespace
 	 */
 	public final String getBundlePath(
@@ -1119,14 +1136,14 @@ public abstract class BaseAdapter {
 
 
 	/**
-	 * @return the menu
+	 * @return the utility path
 	 */
 	public String getUtilityPath() {
 		return this.utilityPath;
 	}
 
 	/**
-	 * @param menu the menu to set
+	 * @param utilityPath The utility path to set
 	 */
 	public void setUtilityPath(final String utilityPath) {
 		this.utilityPath = utilityPath;
@@ -1171,7 +1188,8 @@ public abstract class BaseAdapter {
 	/**
 	 * @param templateBundleTemplates the templateBundleTemplates to set
 	 */
-	public final void setTemplateBundleTemplates(String templateBundleTemplates) {
+	public final void setTemplateBundleTemplates(
+			String templateBundleTemplates) {
 		this.templateBundleTemplates = templateBundleTemplates;
 	}
 
