@@ -98,12 +98,16 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
 			for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 				ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
-				${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID, ${relation.relation.targetEntity?uncap_first}.getId());
-				${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID, item.get${curr.ids[0].name?cap_first}());
+				${relation.relation.targetEntity?uncap_first}Values.put(
+						${relation.relation.joinTable}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID,
+						${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
 
 				operations.add(ContentProviderOperation.newInsert(
 					${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
 					    .withValues(${relation.relation.targetEntity?uncap_first}Values)
+					    .withValueBackReference(
+								${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID,
+					    		0)
 					    .build());
 
 			}
@@ -186,13 +190,13 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 				${relation.relation.targetEntity?uncap_first}Values.put(
 						${relation.relation.joinTable}SQLiteAdapter.COL_${relation.relation.targetEntity?upper_case}_ID,
 						${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
-				${relation.relation.targetEntity?uncap_first}Values.put(
-						${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID,
-						item.get${curr.ids[0].name?cap_first}());
 
 				operations.add(ContentProviderOperation.newInsert(
 					${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
 					    .withValues(${relation.relation.targetEntity?uncap_first}Values)
+					    .withValueBackReference(
+								${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID,
+					    		0)
 					    .build());
 
 			}
