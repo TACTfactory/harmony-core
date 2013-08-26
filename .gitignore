@@ -9,6 +9,7 @@
 /doc/internal/*
 /doc/stats/*
 /doc/API/*
+/javadoc
 
 /.classpath
 /.project
