@@ -101,13 +101,13 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		if (crit != null) {
 		return new ${curr.name?cap_first}ListLoader(this.getActivity(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
-				${curr.name?cap_first}SQLiteAdapter.COLS,
+				${curr.name?cap_first}SQLiteAdapter.ALIASED_COLS,
 				crit,
 				null);
 		} else {
 			return new ${curr.name?cap_first}ListLoader(this.getActivity(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
-				${curr.name?cap_first}SQLiteAdapter.COLS,
+				${curr.name?cap_first}SQLiteAdapter.ALIASED_COLS,
 				null,
 				null,
 				null);
