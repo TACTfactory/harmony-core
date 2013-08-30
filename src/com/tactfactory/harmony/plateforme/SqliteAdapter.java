@@ -73,7 +73,7 @@ public abstract class SqliteAdapter {
 			}
 
 			if (fm.getDefaultValue() != null) {
-				builder.append(" DEFAULT \\\"" + fm.getDefaultValue() + "\\\"");
+				builder.append(" DEFAULT '" + fm.getDefaultValue() + "'");
 			}
 		}
 
