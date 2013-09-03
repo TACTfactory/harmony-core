@@ -197,6 +197,26 @@ public abstract class ConsoleUtils {
 		}
 
 	}
+	
+	/**
+	 * Display given String to the console prefixed by [ERROR].
+	 * (Red color)
+	 * @param value The String to display
+	 */
+	public static void displayError(final String value) {
+		if (!isQuiet) {
+			if (isAnsi) {
+				cp.println("[DEBUG]" + TAB + value + NEWLINE,
+						Attribute.NONE,
+						FColor.RED,
+						BColor.BLACK);
+				cp.clear();
+			} else {
+				System.out.println("[DEBUG]" + TAB + value);
+			}
+		}
+
+	}
 
 	/**
 	 * Display given String to the console.
