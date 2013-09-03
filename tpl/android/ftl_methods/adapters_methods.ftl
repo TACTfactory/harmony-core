@@ -230,6 +230,10 @@
 		<#if !field.relation??>
 			<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(Integer.parseInt(${NamingUtils.fixtureParsedAlias(field)}));"/>
+			<#elseif (field.type?lower_case=="float")>
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(Float.parseFloat(${NamingUtils.fixtureParsedAlias(field)}));"/>
+			<#elseif (field.type?lower_case=="double")>
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(Double.parseDouble(${NamingUtils.fixtureParsedAlias(field)}));"/>
 			<#elseif (field.type?lower_case=="datetime")>
 					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
 					<#if field.is_locale>
