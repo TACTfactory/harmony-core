@@ -133,7 +133,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 * UUID equivalent.
 	 * @return UUID equivalent
 	 */
-	public static String getAndroidID() {
+	public static String getUDID() {
 		return deviceID;
 	}
 
