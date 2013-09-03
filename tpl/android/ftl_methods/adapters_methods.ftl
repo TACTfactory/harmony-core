@@ -256,7 +256,7 @@
 					<#assign idEnum = enumType.fields[enumType.id] />
 					<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
 						<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${field.type}.fromValue(" />
-						<#assign result = result + "${tab}				Integer.parseInt(${NamingUtils.fixtureParsedAlias(field)}));" />
+						<#assign result = result + "${tab}				Integer.parseInt(${NamingUtils.fixtureParsedAlias(field)})));" />
 					<#else>
 						<#assign result = result + "${tab}${objectName}.set${field.name?cap_first}(${field.type}.fromValue(" />
 						<#assign result = result + "${tab}				${NamingUtils.fixtureParsedAlias(field)}));" />
