@@ -13,7 +13,7 @@
 	<#list fields?values as field>
 		<#assign m_id="${curr.name?lower_case}_${field.name?lower_case}" />
 		<#assign m_id_label="${m_id}_label" />
-		<#if (!field.internal && !field.hidden)>	
+		<#if (!field.internal && !field.hidden)>
 			<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 				<#if (field.type=="boolean")>
 	    <CheckBox

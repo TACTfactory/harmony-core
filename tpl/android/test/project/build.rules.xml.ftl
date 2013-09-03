@@ -11,9 +11,15 @@
 			<arg value="/data/data/${project_namespace}/files/junit-report.xml" />
 			<arg value="tmp/junit-report.xml" />
    		</exec>
+   		
+   		<fail message="Tests failed!!!">
+     		<condition>
+         		<contains string="${r"${tests.output}"}" substring="FAILURES" />
+     		</condition>
+		</fail>
 	</target>
 
-    <target name="test" depends="-test-project-check" 
+    <target name="test" depends="-test-project-check"
                 description="Runs tests from the package defined in test.package property">
         <property name="test.runner" value="android.test.InstrumentationTestRunner" />
 
@@ -22,17 +28,17 @@
             <property name="tested.project.absolute.dir" location="${r"${tested.project.dir}"}" />
 
             <!-- Application package of the tested project extracted from its manifest file -->
-            <xpath input="${r"${tested.project.absolute.dir}"}/AndroidManifest.xml" 
+            <xpath input="${r"${tested.project.absolute.dir}"}/AndroidManifest.xml"
                     expression="/manifest/@package" output="tested.project.app.package" />
 
             <if condition="${r"${emma.enabled}"}">
                 <then>
-                    <getprojectpaths projectPath="${r"${tested.project.absolute.dir}"}" 
-                            binOut="tested.project.out.absolute.dir" 
+                    <getprojectpaths projectPath="${r"${tested.project.absolute.dir}"}"
+                            binOut="tested.project.out.absolute.dir"
                             srcOut="tested.project.source.absolute.dir" />
 
-                    <getlibpath projectPath="${r"${tested.project.absolute.dir}"}" 
-                            libraryFolderPathOut="tested.project.lib.source.path" 
+                    <getlibpath projectPath="${r"${tested.project.absolute.dir}"}"
+                            libraryFolderPathOut="tested.project.lib.source.path"
                             leaf="@{source.dir}" />
 
                 </then>
@@ -49,7 +55,7 @@
                     <property name="tested.project.source.absolute.dir" value="${r"${source.absolute.dir}"}" />
 
                     <getlibpath
-                            libraryFolderPathOut="tested.project.lib.source.path" 
+                            libraryFolderPathOut="tested.project.lib.source.path"
                             leaf="@{source.dir}" />
 
                 </then>
@@ -58,7 +64,7 @@
         </else>
         </if>
 
-        <property name="emma.dump.file" 
+        <property name="emma.dump.file"
                 value="/data/data/${r"${tested.project.app.package}"}/coverage.ec" />
 
         <if condition="${r"${emma.enabled}"}">
@@ -100,7 +106,7 @@
                 <echo level="info">Extracting coverage report...</echo>
                 <emma>
                     <property name="report.html.out.encoding" value="UTF-8" />
-                    <report sourcepath="${r"${tested.project.source.absolute.dir}"}:${r"${tested.project.lib.source.path.value}"}" 
+                    <report sourcepath="${r"${tested.project.source.absolute.dir}"}:${r"${tested.project.lib.source.path.value}"}"
                             verbosity="${r"${verbosity}"}">
                         <!-- TODO: report.dir or something like should be introduced if necessary -->
                         <infileset file="${r"${out.absolute.dir}"}/coverage.ec" />
@@ -108,8 +114,8 @@
                         <!-- TODO: reports in other, indicated by user formats -->
                         <html outfile="${r"${out.absolute.dir}"}/coverage.html" />
                         <txt outfile="${r"${out.absolute.dir}"}/coverage.txt" />
-                        <xml outfile="${r"${out.absolute.dir}"}/coverage.xml" 
-                            columns="name,class,method,block,line" 
+                        <xml outfile="${r"${out.absolute.dir}"}/coverage.xml"
+                            columns="name,class,method,block,line"
                               sort="+line, +name"/>
                    </report>
                 </emma>
@@ -131,4 +137,25 @@
             </else>
         </if>
     </target>
+    
+    <macrodef name="run-tests-helper">
+        <attribute name="emma.enabled" default="false" />
+        <element name="extra-instrument-args" optional="yes" />
+        <sequential>
+            <echo level="info">Running tests...</echo>
+            <exec executable="${r"${adb}"}" failonerror="true" outputproperty="tests.output">
+                <arg line="${r"${adb.device.arg}"}" />
+                <arg value="shell" />
+                <arg value="am" />
+                <arg value="instrument" />
+                <arg value="-w" />
+                <arg value="-e" />
+                <arg value="coverage" />
+                <arg value="@{emma.enabled}" />
+                <extra-instrument-args />
+                <arg value="${r"${project.app.package}"}/${r"${test.runner}"}" />
+            </exec>
+            <echo message="${r"${tests.output}"}"/>
+        </sequential>
+    </macrodef>
 </project>

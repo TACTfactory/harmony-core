@@ -24,27 +24,27 @@ public class EntityMetadata extends ClassMetadata {
 
 	/** Used for join tables (ManyToMany relations). */
 	private boolean internal = false;
-	
+
 	/** List of ids of entity class. */
-	private Map<String, FieldMetadata> ids = 
+	private Map<String, FieldMetadata> ids =
 			new LinkedHashMap<String, FieldMetadata>();
-	
+
 	/** List of relations of entity class. */
 	private Map<String, FieldMetadata> relations =
 			new LinkedHashMap<String, FieldMetadata>();
-	
-	/** 
-	 * Add Component String of field. 
+
+	/**
+	 * Add Component String of field.
 	 * @param componentName Component name
 	 */
 	public final void makeString(final String componentName) {
-		final String key = this.getName().toLowerCase() 
+		final String key = this.getName().toLowerCase()
 				+ "_" + componentName.toLowerCase(Locale.ENGLISH);
 		TranslationMetadata.addDefaultTranslation(
 				key, this.getName(), Group.MODEL);
 	}
 
-	
+
 	/**
 	 * Transform the class to a map given an adapter.
 	 * @param adapter The adapter used to customize the fields
@@ -53,19 +53,19 @@ public class EntityMetadata extends ClassMetadata {
 	@Override
 	public final Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> model = super.toMap(adapter);
-		
-		model.put(TagConstant.IDS,				
+
+		model.put(TagConstant.IDS,
 				this.toFieldArray(this.ids.values(), adapter));
-		model.put(TagConstant.RELATIONS,		
+		model.put(TagConstant.RELATIONS,
 				this.toFieldArray(this.relations.values(), adapter));
 		model.put(TagConstant.INTERNAL,			"false");
 		if (this.internal) {
 			model.put(TagConstant.INTERNAL,		"true");
 		}
-		
+
 		return model;
 	}
-	
+
 	/**
 	 * @return the internal
 	 */
@@ -121,25 +121,25 @@ public class EntityMetadata extends ClassMetadata {
 	 * @return The fields map.
 	 */
 	private List<Map<String, Object>> toFieldArray(
-			final Collection<FieldMetadata> c, 
+			final Collection<FieldMetadata> c,
 			final BaseAdapter adapter) {
-		final List<Map<String, Object>> result = 
+		final List<Map<String, Object>> result =
 				new ArrayList<Map<String, Object>>();
 		Map<String, Object> subField = null;
-		
+
 		for (final FieldMetadata field : c) {
 			//field.customize(adapter);
-			
+
 			subField = field.toMap(adapter);
-			
+
 			// Add field translate
 			if (!field.isInternal() && !field.isHidden()) {
 				field.makeString("label");
 			}
-			
+
 			result.add(subField);
 		}
-		
+
 		return result;
-	}	
+	}
 }

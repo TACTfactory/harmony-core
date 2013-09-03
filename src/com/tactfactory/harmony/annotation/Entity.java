@@ -18,7 +18,7 @@ import java.lang.annotation.Target;
 
 /**
  * In order to mark a class for object-relational
- * persistence it needs to be designated as an entity. 
+ * persistence it needs to be designated as an entity.
  * This can be done through the @Entity marker annotation.
  */
 @Documented

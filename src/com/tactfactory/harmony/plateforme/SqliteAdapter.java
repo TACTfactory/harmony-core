@@ -30,8 +30,8 @@ public abstract class SqliteAdapter {
 	 * @return The field's structure
 	 */
 	public static String generateStructure(final FieldMetadata fm) {
-		
-		final StringBuilder builder = new StringBuilder();
+
+		final StringBuilder builder = new StringBuilder(20);
 		builder.append(' ');
 		builder.append(generateColumnType(fm.getColumnDefinition()));
 		if (fm.isId()) {
@@ -40,20 +40,20 @@ public abstract class SqliteAdapter {
 				builder.append(" AUTOINCREMENT");
 			}
 		} else {
-		
+
 			// Set Length
 			final Type fieldType = Type.fromName(fm.getType());
 			if (fieldType != null) {
-				if (fm.getLength() != null 
+				if (fm.getLength() != null
 						&& fm.getLength() != fieldType.getLength()) {
 					builder.append('(');
 					builder.append(fm.getLength());
 					builder.append(')');
-				} else if (fm.getPrecision() != null 
+				} else if (fm.getPrecision() != null
 						&& fm.getPrecision() != fieldType.getPrecision()) {
 					builder.append('(');
 					builder.append(fm.getPrecision());
-					if (fm.getScale() != null 
+					if (fm.getScale() != null
 							&& fm.getScale() != fieldType.getScale()) {
 						builder.append(',');
 						builder.append(fm.getScale());
@@ -61,19 +61,23 @@ public abstract class SqliteAdapter {
 					builder.append(')');
 				}
 			}
-			
+
 			// Set Unique
 			if (fm.isUnique() != null && fm.isUnique()) {
 				builder.append(" UNIQUE");
 			}
-			
+
 			// Set Nullable
 			if (fm.isNullable() == null || !fm.isNullable()) {
 				builder.append(" NOT NULL");
 			}
+
+			if (fm.getDefaultValue() != null) {
+				builder.append(" DEFAULT '" + fm.getDefaultValue() + "'");
+			}
 		}
 
-		
+
 		return builder.toString();
 	}
 
@@ -84,8 +88,8 @@ public abstract class SqliteAdapter {
 	 */
 	public static String generateColumnType(final String fieldType) {
 		String type = fieldType;
-		if (type.equalsIgnoreCase(Column.Type.STRING.getValue()) 
-			|| type.equalsIgnoreCase(Column.Type.TEXT.getValue()) 
+		if (type.equalsIgnoreCase(Column.Type.STRING.getValue())
+			|| type.equalsIgnoreCase(Column.Type.TEXT.getValue())
 			|| type.equalsIgnoreCase(Column.Type.LOGIN.getValue())
 			|| type.equalsIgnoreCase(Column.Type.PHONE.getValue())
 			|| type.equalsIgnoreCase(Column.Type.PASSWORD.getValue())
@@ -95,62 +99,62 @@ public abstract class SqliteAdapter {
 			|| type.equalsIgnoreCase(Column.Type.COUNTRY.getValue())) {
 			type = "VARCHAR";
 		} else
-			
+
 		if (type.equalsIgnoreCase(Column.Type.DATETIME.getValue())) {
 			type = "DATETIME";
 		} else
-			
+
 		if (type.equalsIgnoreCase(Column.Type.DATE.getValue())) {
 			type = "DATE";
 		} else
-			
+
 		if (type.equalsIgnoreCase(Column.Type.TIME.getValue())) {
 			type = "DATETIME";
 		} else
-			
+
 		if (type.equalsIgnoreCase(Column.Type.BOOLEAN.getValue())) {
 			type = "BOOLEAN";
 		} else
-			
+
 		if (type.equalsIgnoreCase(Column.Type.INTEGER.getValue())
 				|| type.equalsIgnoreCase(Column.Type.INT.getValue())
 				|| type.equalsIgnoreCase(Column.Type.BC_EAN.getValue())) {
 			type = "INTEGER";
 		} else
-		
+
 		if (type.equalsIgnoreCase(Column.Type.FLOAT.getValue())) {
 			type = "FLOAT";
 		} else
-			
+
 		if (type.equalsIgnoreCase(Column.Type.DOUBLE.getValue())) {
 			type = "DOUBLE";
 		} else
-			
+
 		if (type.equalsIgnoreCase(Column.Type.SHORT.getValue())) {
 			type = "SHORT";
 		} else
-			
+
 		if (type.equalsIgnoreCase(Column.Type.LONG.getValue())) {
 			type = "LONG";
 		} else
-			
+
 		if (type.equalsIgnoreCase(Column.Type.CHAR.getValue())) {
 			type = "STRING";
 		} else
-			
+
 		if (type.equalsIgnoreCase(Column.Type.BYTE.getValue())) {
 			type = "STRING";
-		} else 
-			
+		} else
+
 		if (type.equalsIgnoreCase(Column.Type.CHARACTER.getValue())) {
 			type = "STRING";
 		}
-		
+
 
 		return type;
 	}
 
-	/** 
+	/**
 	 * Generate a column name.
 	 * @param fieldName The original field's name
 	 * @return the generated column name
@@ -158,8 +162,8 @@ public abstract class SqliteAdapter {
 	public static String generateColumnName(final String fieldName) {
 		return PREFIX + fieldName.toUpperCase();
 	}
-	
-	/** 
+
+	/**
 	 * Generate a relation column name.
 	 * @param fieldName The original field's name
 	 * @return the generated column name
@@ -167,8 +171,8 @@ public abstract class SqliteAdapter {
 	public static String generateRelationColumnName(final String fieldName) {
 		return PREFIX + fieldName.toUpperCase() + SUFFIX;
 	}
-	
-	/** 
+
+	/**
 	 * Generate a column definition.
 	 * @param type The original field's type
 	 * @return the generated column definition
@@ -180,7 +184,7 @@ public abstract class SqliteAdapter {
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * SQLite Reserved keywords.
 	 */
@@ -316,11 +320,11 @@ public abstract class SqliteAdapter {
 		public static boolean exists(final String name) {
 			boolean exists = false;
 			try {
-				final Field field = 
-						Keywords.class.getField(name.toUpperCase());	
+				final Field field =
+						Keywords.class.getField(name.toUpperCase());
 				if (field.isEnumConstant()) {
 					ConsoleUtils.displayWarning(
-							name 
+							name
 							 + " is a reserved SQLite keyword."
 							 + " You may have problems with"
 							 + " your database schema.");
@@ -333,6 +337,6 @@ public abstract class SqliteAdapter {
 			}
 			return exists;
 		}
-		
+
 	}
 }

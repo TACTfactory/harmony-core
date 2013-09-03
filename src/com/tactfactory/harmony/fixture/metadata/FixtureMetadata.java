@@ -24,7 +24,7 @@ public class FixtureMetadata extends BaseMetadata {
 	private boolean enabled = true;
 	/** Fixture type (xml, yml). */
 	private String type;
-	
+
 	/**
 	 * Constructor.
 	 */
@@ -32,7 +32,7 @@ public class FixtureMetadata extends BaseMetadata {
 		super();
 		this.setName(NAME);
 	}
-	
+
 	@Override
 	public final Map<String, Object> toMap(final BaseAdapter adapter) {
 		final Map<String, Object> model = new HashMap<String, Object>();

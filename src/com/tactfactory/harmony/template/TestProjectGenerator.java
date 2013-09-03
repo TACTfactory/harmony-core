@@ -19,7 +19,7 @@ public class TestProjectGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use.
-	 * @throws Exception 
+	 * @throws Exception if adapter is null
 	 */
 	public TestProjectGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
@@ -54,22 +54,22 @@ public class TestProjectGenerator extends BaseGenerator {
 		boolean result = false;
 
 		// create project name space folders
-		//FileUtils.makeFolder(this.getAdapter().getSourcePath() 
+		//FileUtils.makeFolder(this.getAdapter().getSourcePath()
 		// + Harmony.projectNameSpace.replaceAll("\\.", "/"));
 
 		// create libs folder
 		TactFileUtils.makeFolder(this.getAdapter().getTestLibsPath());
-				
+
 		// create strings.xml
 		super.makeSource(
-				this.getAdapter().getTemplateStringsTestPathFile(), 
+				this.getAdapter().getTemplateStringsTestPathFile(),
 				this.getAdapter().getStringsTestPathFile(), false);
-		
+
 		LibraryUtils.addLibraryToTestProject(
 				this.getAdapter(),
 				"android-junit-report-1.5.8.jar");
-		
-		final File dirTpl = 
+
+		final File dirTpl =
 				new File(Harmony.getBundlePath() + "tact-core/"
 						+ this.getAdapter().getTemplateTestProjectPath());
 
@@ -78,24 +78,24 @@ public class TestProjectGenerator extends BaseGenerator {
 				&& this.clearProjectSources()) {
 			for (int i = 0; i < dirTpl.listFiles().length; i++) {
 				if (dirTpl.listFiles()[i].isFile()) {
-					final String fullFilePath = String.format("%s/%s/%s/%s", 
-							Harmony.getProjectPath(), 
-							this.getAdapter().getPlatform(), 
+					final String fullFilePath = String.format("%s/%s/%s/%s",
+							Harmony.getProjectPath(),
+							this.getAdapter().getPlatform(),
 							this.getAdapter().getTest(),
 							dirTpl.listFiles()[i].getName());
-					
-					final String fullTemplatePath = 
-							this.getAdapter().getTemplateTestProjectPath() 
+
+					final String fullTemplatePath =
+							this.getAdapter().getTemplateTestProjectPath()
 							 + dirTpl.listFiles()[i].getName();
-					
+
 					super.makeSource(
 							fullTemplatePath.substring(
 									0,
-									fullTemplatePath.length() 
+									fullTemplatePath.length()
 										- ".ftl".length()),
 							fullFilePath.substring(
 									0,
-									fullFilePath.length() 
+									fullFilePath.length()
 										- ".ftl".length()),
 								false);
 				}
@@ -104,25 +104,25 @@ public class TestProjectGenerator extends BaseGenerator {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Make IOS Test Project Structure.
 	 * @return success to make the platform test project folder
 	 */
 	private boolean makeTestProjectIOS() {
 		boolean result = false;
-		
+
 		//Generate base folders & files
 		final File dirProj = TactFileUtils.makeFolderRecursive(
 				String.format("%s/%s/%s/",
 						Harmony.getTemplatesPath(),
 						this.getAdapter().getPlatform(),
 						this.getAdapter().getProject()),
-				String.format("%s/%s/", 
-						Harmony.getProjectPath(), 
+				String.format("%s/%s/",
+						Harmony.getProjectPath(),
 						this.getAdapter().getPlatform()),
 				true);
-		
+
 		if (dirProj.exists() && dirProj.listFiles().length != 0) {
 			result = true;
 		}
@@ -149,28 +149,28 @@ public class TestProjectGenerator extends BaseGenerator {
 
 		return result;
 	}
-	
+
 	/**
 	 * Delete files that need to be recreated.
 	 * @return true if project cleaning successful
 	 */
 	private boolean clearProjectSources() {
 		boolean result = true;
-		
-		String projectPath = Harmony.getProjectPath() 
+
+		final String projectPath = Harmony.getProjectPath()
 				+ File.separator + this.getAdapter().getPlatform()
 				+ File.separator + this.getAdapter().getTest();
-		
-		File buildRules = new File(projectPath 
+
+		final File buildRules = new File(projectPath
 				+ File.separator + "build.rules.xml");
-		
+
 		if (buildRules.exists()) {
 			result &= buildRules.delete();
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Update TestLibs.
 	 * @param libName The library name.
@@ -180,12 +180,11 @@ public class TestProjectGenerator extends BaseGenerator {
 		final File dest = new File(String.format("%s/%s",
 				this.getAdapter().getTestLibsPath(),
 				libName));
-		
+
 		if (!dest.exists()) {
+			File src = Harmony.getLibrary(libName);
 			TactFileUtils.copyfile(
-					new File(String.format("%s/%s", 
-							Harmony.getLibsPath(),
-							libName)),
+					src,
 					dest);
 		}
 	}

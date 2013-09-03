@@ -14,7 +14,7 @@
 	<#if entity.mother??>
 		<#return (getAllMothers(tab, entities[entity.mother]) + [entity]) />
 	<#else>
-		<#return ([entity]) />		
+		<#return ([entity]) />
 	</#if>
 </#function>
 
@@ -22,3 +22,12 @@
 	<#return (entity.extends?? && entities[entity.extends]??) />
 </#function>
 
+<#function getAllChildren curr>
+	<#assign result = [curr]>
+	<#list entities?values as entity>
+		<#if (entity.extends?? && entity.extends == curr.name)>
+			<#assign result = result + [entity] />
+		</#if>
+	</#list>
+	<#return result />
+</#function>

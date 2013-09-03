@@ -24,14 +24,14 @@ public class SQLiteGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use
-	 * @throws Exception 
+	 * @throws Exception if adapter is null
 	 */
 	public SQLiteGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
-		
+
 		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
-		this.localNameSpace = 
-				this.getAppMetas().getProjectNameSpace() 
+		this.localNameSpace =
+				this.getAppMetas().getProjectNameSpace()
 				+ "/" + this.getAdapter().getData();
 	}
 
@@ -41,37 +41,37 @@ public class SQLiteGenerator extends BaseGenerator {
 	public final void generateDatabase() {
 		// Info
 		ConsoleUtils.display(">> Generate Database");
-		
-		try {			
+
+		try {
 			this.makeSourceData(
-					"TemplateSQLiteOpenHelper.java", 
+					"TemplateSQLiteOpenHelper.java",
 					"%sSQLiteOpenHelper.java",
 					false);
-			
+
 			this.makeSourceData(
-					"base/TemplateSQLiteOpenHelperBase.java", 
+					"base/TemplateSQLiteOpenHelperBase.java",
 					"base/%sSQLiteOpenHelperBase.java",
 					true);
-			
+
 			this.makeSourceData(
-					"base/ApplicationSQLiteAdapterBase.java", 
+					"base/ApplicationSQLiteAdapterBase.java",
 					"base/SQLiteAdapterBase.java",
 					true);
-			
+
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
-	
+
 	/** Make Java Source Code.
 	 * @param template Template path file.
 	 * @param filename The destination file.
 	 * @param override True if must overwrite file.
 	 */
-	private void makeSourceData(final String template, 
-			final String filename, 
+	private void makeSourceData(final String template,
+			final String filename,
 			final boolean override) {
-		
+
 		final String fullFilePath = String.format("%s%s/%s",
 						this.getAdapter().getSourcePath(),
 						PackageUtils.extractPath(this.localNameSpace)
@@ -80,11 +80,11 @@ public class SQLiteGenerator extends BaseGenerator {
 								CaseFormat.LOWER_CAMEL.to(
 										CaseFormat.UPPER_CAMEL,
 										this.getAppMetas().getName())));
-		
+
 		final String fullTemplatePath =
-				this.getAdapter().getTemplateSourceProviderPath() 
+				this.getAdapter().getTemplateSourceProviderPath()
 				+ template;
-		
+
 		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 }

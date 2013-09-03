@@ -10,12 +10,12 @@ package com.tactfactory.harmony.template;
 
 /**
  * Tag Constants for Freemarker templates.
- * 
+ *
  *
  */
 public abstract class TagConstant {
 	//Project markers
-	
+
 	/** Constant for project path. */
 	public static final String PROJECT_PATH = "project_path";
 	/** Constant for project namespace. */
@@ -38,16 +38,16 @@ public abstract class TagConstant {
 	public static final String FIXTURE_NAMESPACE = "fixture_namespace";
 	/** Constant for android sdk dir. */
 	public static final String ANDROID_SDK_DIR = "sdk_dir";
-	
+
 	// Ant markers
 	/** Constant for ant sdk dir. */
 	public static final String ANT_ANDROID_SDK_DIR = "sdk";
 	/** Constant for ant out classes absolute directory. */
 	public static final String OUT_CLASSES_ABS_DIR = "out_classes_absolute_dir";
 	/** Constant for ant out dex input absolute directory. */
-	public static final String OUT_DEX_INPUT_ABS_DIR = 
+	public static final String OUT_DEX_INPUT_ABS_DIR =
 			"out_dex_input_absolute_dir";
-	
+
 	//Template annotations
 	/** Constant for entities. */
 	public static final String CLASSES = "classes";
@@ -113,6 +113,8 @@ public abstract class TagConstant {
 	public static final String ID = "id";
 	/** Constant for nullable field. */
 	public static final String NULLABLE = "nullable";
+	/** Constant for field's default value. */
+	public static final String DEFAULT_VALUE = "defaultValue";
 	/** Constant for provider id. */
 	public static final String PROVIDER_ID = "provider_id";
 	/** Constant for mother class. */
@@ -123,5 +125,7 @@ public abstract class TagConstant {
 	public static final String HEADER = "header";
 	/** Constant for template methods. */
 	public static final String UTILITY_PATH = "utilityPath";
-	
+	/** Constant for harmony version. */
+	public static final String HARMONY_VERSION = "harmony_version";
+
 }

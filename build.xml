@@ -340,16 +340,7 @@
 	<!-- build -->
 
 	<target name="post_build" depends="compile"
-        description="Build the project">
-		<!-- build a temporary lib dir, and flatten out the jars into one folder -->
-		<copy todir="../../${lib.rel-dir}" flatten="true">
-		  <fileset dir="${lib.rel-dir}">
-		    <include name="*.jar"/>
-		  </fileset>
-		</copy>
-		<!--copy todir="${dist.rel-dir}/${lib.rel-dir}/${sherlock.rel-dir}">
-		  <fileset dir="${lib.rel-dir}/${sherlock.rel-dir}"/>
-		</copy-->
+        description="Build the project">		
         <delete dir="${build.rel-dir}" failonerror="false" deleteonexit="true" />
     </target>
 

@@ -1,4 +1,4 @@
-/** 
+/**
  * This file is part of the Harmony package.
  *
  * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
@@ -32,10 +32,10 @@ public enum TargetPlatform {
 
 	/** Value. */
 	private final int value;
-	
+
 	/** Platform name. */
 	private final String str;
-	
+
 	/**
 	 * Constructor.
 	 * @param v The value
@@ -45,7 +45,7 @@ public enum TargetPlatform {
 		this.value = v;
 		this.str = s;
 	}
-	
+
 	/**
 	 * Get the platform value.
 	 * @return the value
@@ -53,15 +53,15 @@ public enum TargetPlatform {
 	public int getValue() {
 		return this.value;
 	}
-	
+
 	/**
 	 * Get the platform name.
 	 * @return the platform name
 	 */
-	public String toLowerString() {		
+	public String toLowerString() {
 		return this.str;
 	}
-	
+
 	/**
 	 * Parses a target to get the correct platform.
 	 * @param target The target to parse
@@ -69,24 +69,24 @@ public enum TargetPlatform {
 	 */
 	public static TargetPlatform parse(final String target) {
 		TargetPlatform result = TargetPlatform.ALL;
-		
+
 		if (!Strings.isNullOrEmpty(target)) {
 			if (target.equalsIgnoreCase(
 					TargetPlatform.ANDROID.toLowerString())) {
 				result = TargetPlatform.ANDROID;
 			} else
-				
+
 			if (target.equalsIgnoreCase(
 					TargetPlatform.IPHONE.toLowerString())) {
 				result = TargetPlatform.IPHONE;
-			} else 
-				
+			} else
+
 			if (target.equalsIgnoreCase(
 					TargetPlatform.WEB.toLowerString())) {
 				result = TargetPlatform.WEB;
 			}
 		}
-		
+
 		return result;
 	}
 }

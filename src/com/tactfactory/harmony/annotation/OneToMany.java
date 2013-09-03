@@ -28,9 +28,9 @@ public @interface OneToMany {
 	 * The Entity targeted by the relation.
 	 */
 	String targetEntity() default "";
-	
+
 	/**
-	 * The field in the target Entity mapping 
+	 * The field in the target Entity mapping
 	 * this relation (for bidirectionnal entities only).
 	 */
 	String mappedBy() default "";

@@ -14,12 +14,12 @@ public class EntityBase implements Cloneable, Serializable {
 	public boolean	sync_dtag = false;
 	/** sync_date. */
 	public DateTime 	sync_uDate = new DateTime();
-	
-	
-	
+
+
+
 	/**
 	 * @see java.lang.Object#clone()
-	 * @return A new EntityBase which is the same 
+	 * @return A new EntityBase which is the same
 	 */
 	@Override
 	public EntityBase clone() throws CloneNotSupportedException {
@@ -28,10 +28,10 @@ public class EntityBase implements Cloneable, Serializable {
 		entity.serverId = this.serverId;
 		entity.sync_dtag = this.sync_dtag;
 		entity.sync_uDate = new DateTime(this.sync_uDate);
-		
+
 		return entity;
 	}
-	
+
 	/**
 	 * Get the EntityBase id.
 	 * @return The EntityBase id
@@ -71,7 +71,7 @@ public class EntityBase implements Cloneable, Serializable {
 	 * Set the EntityBase uDate.
 	 * @param sync_uDate The EntityBase uDate
 	 */
-	public void setSync_uDate(DateTime sync_uDate){ 
+	public void setSync_uDate(DateTime sync_uDate){
 		this.sync_uDate = sync_uDate;
 	}
 }

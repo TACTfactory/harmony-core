@@ -10,9 +10,9 @@ import ${local_namespace}.base.${curr.name?cap_first}ProviderAdapterBase;
 /**
  * ${curr.name?cap_first}ProviderAdapter.
  */
-public class ${curr.name?cap_first}ProviderAdapter 
+public class ${curr.name?cap_first}ProviderAdapter
 					extends ${curr.name?cap_first}ProviderAdapterBase {
-	
+
 	/**
 	 * Constructor.
 	 * @param ctx context
@@ -26,7 +26,7 @@ public class ${curr.name?cap_first}ProviderAdapter
 	 * @param ctx context
 	 * @param db database
 	 */
-	public ${curr.name?cap_first}ProviderAdapter(final Context ctx, 
+	public ${curr.name?cap_first}ProviderAdapter(final Context ctx,
 												 final SQLiteDatabase db) {
 		super(ctx, db);
 	}

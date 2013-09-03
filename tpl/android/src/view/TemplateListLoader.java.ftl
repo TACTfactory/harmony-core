@@ -11,7 +11,7 @@ import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
 /**
  * ${curr.name} Loader.
  */
-public class ${curr.name}ListLoader 
+public class ${curr.name}ListLoader
 				extends CursorLoader {
 
 	/**
@@ -19,7 +19,7 @@ public class ${curr.name}ListLoader
 	 * @param ctx context
 	 * @param crit ${curr.name?cap_first}Criterias
 	 */
-	public ${curr.name}ListLoader(final Context ctx, 
+	public ${curr.name}ListLoader(final Context ctx,
 					final ${curr.name?cap_first}Criterias crit) {
 		super(ctx);
 	}

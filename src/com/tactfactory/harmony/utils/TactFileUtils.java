@@ -30,25 +30,25 @@ import com.google.common.io.Files;
 public abstract class TactFileUtils extends FileUtils {
 	/** Default encoding for stream manipulation. */
 	public static final String DEFAULT_ENCODING = "UTF-8";
-		
+
 	/** String for debug informations. */
 	private static final String FOLDER 	= "Folder '";
-	
+
 	/** String for debug informations. */
 	private static final String FILE 	= "File '";
-	
-	/** 
+
+	/**
 	 * Create a new file if doesn't exist (and path).
-	 * 
+	 *
 	 * @param filename Full path of file
-	 * @return File instance 
+	 * @return File instance
 	 */
 	public static File makeFile(final String filename) {
 		final File file = new File(filename);
-		
+
 		final File parent = file.getParentFile();
 		if (!parent.exists() && !parent.mkdirs()) {
-			final IllegalStateException exception = 
+			final IllegalStateException exception =
 					new IllegalStateException(
 							"Couldn't create dir: " + parent);
 			ConsoleUtils.displayError(exception);
@@ -63,8 +63,8 @@ public abstract class TactFileUtils extends FileUtils {
 		}
 		return file;
 	}
-	
-	/** 
+
+	/**
 	 * Copy file content from srcFile to destFile.
 	 *
 	 * @param srcFile Source path
@@ -74,10 +74,10 @@ public abstract class TactFileUtils extends FileUtils {
 		try {
 			Files.copy(srcFile, destFile);
 		} catch (final IOException e) {
-			ConsoleUtils.displayError(e);			
+			ConsoleUtils.displayError(e);
 		}
 	}
-	
+
 	/** handle folder creation with its parents.
 	 * @param filename The folder name
 	 * @return The newly created folder
@@ -105,14 +105,14 @@ public abstract class TactFileUtils extends FileUtils {
 	    				 + "' creation error...");
 	    	}
 	    }
-		
+
 		return folder;
 	}
 
 	/** convert file content to a string.
-	 * 
+	 *
 	 * @param file The file to open
-	 * @return the String containing the file contents 
+	 * @return the String containing the file contents
 	 */
 	public static String fileToString(final File file) {
 		String result = null;
@@ -131,7 +131,7 @@ public abstract class TactFileUtils extends FileUtils {
 				if (inStream != null) {
 					inStream.close();
 				}
-			} catch (final IOException e) { 
+			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);
 			}
 		}
@@ -139,21 +139,22 @@ public abstract class TactFileUtils extends FileUtils {
 	}
 
 	/** convert file content to a stringbuffer.
-	 * 
+	 *
 	 * @param file The File to open
-	 * @return the StringBuffer containing the file's content 
+	 * @return the StringBuffer containing the file's content
 	 */
 	public static StringBuffer fileToStringBuffer(final File file) {
 		final StringBuffer result = new StringBuffer();
 		String tmp;
 		final String lineSeparator = System.getProperty("line.separator");
-		
+
 		FileInputStream fis = null;
 		InputStreamReader inStream = null;
 		BufferedReader bReader = null;
 		try {
 			fis = new FileInputStream(file);
-			inStream = new InputStreamReader(fis, TactFileUtils.DEFAULT_ENCODING);
+			inStream = new InputStreamReader(
+					fis, TactFileUtils.DEFAULT_ENCODING);
 			bReader = new BufferedReader(inStream);
 			while (true) {
 				tmp = bReader.readLine();
@@ -163,7 +164,7 @@ public abstract class TactFileUtils extends FileUtils {
 				result.append(tmp);
 				result.append(lineSeparator);
 			}
-			
+
 		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);
 		} finally {
@@ -181,11 +182,11 @@ public abstract class TactFileUtils extends FileUtils {
 				ConsoleUtils.displayError(e);
 			}
 		}
-		
-		
+
+
 		return result;
 	}
-	
+
 	/** Write StringBuffer contents to the given file.
 	 * @param buff The buffer to write to the file
 	 * @param file The file in which the buffer must be copied
@@ -219,13 +220,13 @@ public abstract class TactFileUtils extends FileUtils {
 			}
 		}
 	}
-	
+
 	/** convert file content to a string array with each line separated.
 	 * @param file The File to read
 	 * @return Array of Strings containing the file contents
 	 */
 	public static List<String> fileToStringArray(final File file) {
-		
+
 		ArrayList<String> result = null;
 		String line = null;
 		DataInputStream inStream = null;
@@ -235,8 +236,11 @@ public abstract class TactFileUtils extends FileUtils {
 			result = new ArrayList<String>();
 			inStream = new DataInputStream(new FileInputStream(file));
 			bReader = new BufferedReader(
-					new InputStreamReader(inStream, TactFileUtils.DEFAULT_ENCODING));
-			line = bReader.readLine(); 
+					new InputStreamReader(
+							inStream, 
+							TactFileUtils.DEFAULT_ENCODING));
+			
+			line = bReader.readLine();
 			while (line != null) {
 				result.add(line);
 				line = bReader.readLine();
@@ -252,20 +256,20 @@ public abstract class TactFileUtils extends FileUtils {
 				if (bReader != null) {
 					bReader.close();
 				}
-			} catch (final IOException e) { 
+			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);
 			}
 		}
 		return result;
 	}
-	
+
 	/** convert file content to a string array with each line separated.
 	 * @param strings The lines to copy to the file
 	 * @param file The File to read
 	 */
 	public static void stringArrayToFile(final List<String> strings,
 			final File file) {
-		
+
 		DataOutputStream out = null;
 		BufferedWriter br = null;
 
@@ -290,66 +294,66 @@ public abstract class TactFileUtils extends FileUtils {
 				if (out != null) {
 					out.close();
 				}
-			} catch (final IOException e) { 
+			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);
 			}
 		}
 	}
 
-	
+
 	/** Copy folder content recursively from srcPath to destPath,
 	 * and copy files or not.
 	 * @param srcPath Source folder
 	 * @param destPath Destination folder
 	 * @param makeFiles True if you want to copy files as well
-	 * 
-	 *  @return The newly created folder 
+	 *
+	 *  @return The newly created folder
 	 */
 	public static File makeFolderRecursive(final String srcPath,
 			final String destPath,
 			final boolean makeFiles) {
-		File srcDir = new File(srcPath);
+		final File srcDir = new File(srcPath);
 		File destDir = null;
 		if (srcDir.exists() && srcDir.isDirectory()) {
 			 destDir = new File(destPath);
-			 destDir = TactFileUtils.makeFoldersRecursive(srcDir, 
-						destDir, 
+			 destDir = TactFileUtils.makeFoldersRecursive(srcDir,
+						destDir,
 						makeFiles);
 		}
 		return destDir;
 	}
-	
+
 	/** Copy folder content recursively from srcPath to destPath,
 	 * and copy files or not.
-	 * @param srcPath Source folder
-	 * @param destPath Destination folder
+	 * @param srcDir Source folder
+	 * @param destDir Destination folder
 	 * @param makeFiles True if you want to copy files as well
-	 * 
-	 *  @return The newly created folder 
+	 *
+	 *  @return The newly created folder
 	 */
 	private static File makeFoldersRecursive(final File srcDir,
 			final File destDir,
 			final boolean makeFiles) {
-		
+
 		TactFileUtils.ensureFolderExistence(destDir);
-		File[] files = srcDir.listFiles();
+		final File[] files = srcDir.listFiles();
 		if (files.length != 0) {
 			for (File f : files) {
-				File destFile = new File(destDir.getAbsolutePath()
+				final File destFile = new File(destDir.getAbsolutePath()
 						+ "/" + f.getName());
 				if (makeFiles && f.isFile()) {
 					TactFileUtils.copyfile(f, destFile);
-				} else 
+				} else
 				if (f.isDirectory()) {
 					TactFileUtils.makeFoldersRecursive(f,
 							destFile, makeFiles);
 				}
 			}
 		}
-		
+
 		return destDir;
 	}
-	
+
 	/** delete a directory with all its files recursively.
 	 * @param dir The folder or file to delete
 	 * @return number of files/folders deleted
@@ -357,18 +361,20 @@ public abstract class TactFileUtils extends FileUtils {
 	public static int deleteRecursive(final File dir) {
 		return TactFileUtils.deleteRecursive(dir, 0);
 	}
-	
+
 	/**
 	 * Create a folder if it does not exists yet.
+	 * @param file The file to create.
 	 * @return true if the folder exists after this operation.
 	 */
-	public static boolean ensureFolderExistence(File f) {
-		if (!f.exists()) {
-			f.mkdir();
+	public static boolean ensureFolderExistence(File file) {
+		boolean result = file.exists();
+		if (!result) {
+			result = file.mkdir();
 		}
-		return f.exists();
+		return result;
 	}
-		
+
 	/** delete a directory with all its files recursively.
 	 * @param dir The folder or file to delete
 	 * @param result number of files/folders deleted
@@ -387,38 +393,38 @@ public abstract class TactFileUtils extends FileUtils {
 						} else {
 							if (!file.delete()) {
 								ret++;
-								
+
 								ConsoleUtils.displayWarning(FILE
 										 + file.getPath()
 										 + "' delete ERROR!");
 							}
 						}
 					}
-					
+
 					//folder content check, remove folder
 					if (dir.listFiles().length == 0) {
 						boolean deleteSuccess = false;
 						deleteSuccess = dir.delete();
-						
+
 						if (deleteSuccess) {
 							ConsoleUtils.displayDebug(FOLDER
 									 + dir.getPath()
 									 + "' deleted.");
 						} else {
 							ret++;
-							
+
 							ConsoleUtils.displayWarning(FOLDER
 									 + dir.getPath()
 									 + "' delete ERROR!");
 						}
 					} else {
 						ret++;
-						
+
 						ConsoleUtils.displayWarning(FOLDER
 								 + dir.getPath()
 								 + "' NOT Empty!");
 					}
-					
+
 				} else {
 					// it's a file delete simply
 					if (dir.delete()) {
@@ -427,7 +433,7 @@ public abstract class TactFileUtils extends FileUtils {
 								 + "' deleted.");
 					} else {
 						ret++;
-	
+
 						ConsoleUtils.displayWarning(FILE
 								 + dir.getPath()
 								 + "' delete ERROR!");
@@ -435,7 +441,7 @@ public abstract class TactFileUtils extends FileUtils {
 				}
 			} else {
 				ret++;
-				
+
 				ConsoleUtils.displayWarning(FOLDER
 						 + dir.getPath()
 						 + "' doesn't exists!");
@@ -444,14 +450,14 @@ public abstract class TactFileUtils extends FileUtils {
 		} catch (SecurityException e) {
 			ConsoleUtils.displayError(e);
 		} catch (NullPointerException e) {
-			ConsoleUtils.displayError(new Exception("Error while deleting " 
+			ConsoleUtils.displayError(new Exception("Error while deleting "
 					+ dir.getAbsolutePath()
 					+ ". Check if you have permissions for this file "
 					+ "and if it is not opened by another application"));
 		}
 		return ret;
 	}
-	
+
 	/**
 	 * Tests if file exists.
 	 * @param filename The file name
@@ -463,19 +469,19 @@ public abstract class TactFileUtils extends FileUtils {
 			ConsoleUtils.displayDebug("File "
 					 + filename
 					 + " already exists !");
-		} else { 
+		} else {
 			ConsoleUtils.displayDebug("File "
 						 + filename
 						 + " doesn't exists !");
 		}
 		return file.exists();
 	}
-	
+
 	/**
 	 * Get the extension of a file.
-	 * @param f The file
+	 * @param file The file
 	 * @return The file's extension
-	 */  
+	 */
 	public static String getExtension(final File file) {
 	    String ext = null;
 	    final String fileName = file.getName();
@@ -486,9 +492,9 @@ public abstract class TactFileUtils extends FileUtils {
 	    }
 	    return ext;
 	}
-	
+
 	/**
-	 * Append String to at the end of a file 
+	 * Append String to at the end of a file
 	 * if it doesn't exists in the file yet.
 	 * @param content The content to append
 	 * @param file The file to write to
@@ -499,15 +505,15 @@ public abstract class TactFileUtils extends FileUtils {
 		final StringBuffer buffer = TactFileUtils.fileToStringBuffer(file);
 		//If content doesn't exists in the file yet
 		if (buffer.indexOf(content) == -1) {
-			final int offset = buffer.length(); 
+			final int offset = buffer.length();
 			buffer.insert(offset, content);
 			TactFileUtils.stringBufferToFile(buffer, file);
 			success = true;
 		}
 		return success;
 	}
-	
-	
+
+
 	/**
 	 * Add String after a given String in the given file.
 	 * (Only if it doesn't already exists in the file)
@@ -516,7 +522,7 @@ public abstract class TactFileUtils extends FileUtils {
 	 * @param file The file to write to
 	 * @return true if the content has been correctly appended
 	 */
-	public static boolean addToFile(final String content, 
+	public static boolean addToFile(final String content,
 			final String after,
 			final File file) {
 		boolean success = false;
@@ -530,7 +536,7 @@ public abstract class TactFileUtils extends FileUtils {
 		}
 		return success;
 	}
-	
+
 	/**
 	 * Converts an absolute path to a path relative to working dir.
 	 * @param absolute The absolute path
@@ -539,7 +545,7 @@ public abstract class TactFileUtils extends FileUtils {
 	public static String absoluteToRelativePath(final String absolute) {
 		return absoluteToRelativePath(absolute, ".");
 	}
-	
+
 	/**
 	 * Converts an absolute path to a path relative to working dir.
 	 * @param absolute The absolute path
@@ -549,21 +555,21 @@ public abstract class TactFileUtils extends FileUtils {
 	public static String absoluteToRelativePath(
 			final String absolute, final String relative) {
 		String result = ".";
-		
+
 		final File abs = new File(absolute);
 		final File workingDir = new File(relative);
-		
+
 		final URI resultString = workingDir.toURI().relativize(abs.toURI());
-		
+
 		if (!resultString.toString().equals("")) {
 			result = resultString.toString();
 		}
-		
+
 		if (result.startsWith("file:")) {
 			result = result.substring("file:".length());
-			
+
 		}
-		
+
 		return result;
 	}
 }

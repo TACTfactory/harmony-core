@@ -30,6 +30,7 @@ import android.view.ViewGroup;<#if (hasRelation)>
 import android.widget.Button;</#if><#if (ViewUtils.hasTypeBoolean(fields?values))>
 import android.widget.CheckBox;</#if><#if ViewUtils.shouldImportEditText(fields?values)>
 import android.widget.EditText;</#if>
+import android.widget.Toast;
 
 import ${curr.namespace}.R;
 ${ImportUtils.importRelatedEntities(curr, true)}
@@ -52,10 +53,10 @@ import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListene
 ${ImportUtils.importRelatedProviderUtils(curr, true)}
 
 /** ${curr.name} create fragment.
- * 
+ *
  * @see android.app.Fragment
  */
-public class ${curr.name}EditFragment extends HarmonyFragment 
+public class ${curr.name}EditFragment extends HarmonyFragment
 			implements OnValidationListener {
 	/** Model data. */
 	protected ${curr.name} model = new ${curr.name}();
@@ -80,7 +81,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 					</#if>
 				<#else>
 	/** ${field.name} View. */
-	protected EditText ${field.name}View;			
+	protected EditText ${field.name}View;
 				</#if>
 			<#else>
 	/** The ${field.name} button. */
@@ -103,7 +104,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 	protected ValidationButtons validationButtons;;
 
 	/** Initialize view of curr.fields.
-	 * 
+	 *
 	 * @param view The layout inflating
 	 */
 	protected void initializeComponent(View view) {
@@ -111,25 +112,25 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			<#if !field.internal && !field.hidden>
 				<#if !field.relation??>
 					<#if field.type=="boolean">
-		this.${field.name}View = 
+		this.${field.name}View =
 			(CheckBox) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 					<#elseif field.type?lower_case == "datetime">
 						<#if (field.harmony_type?lower_case == "datetime")>
-		this.${field.name}View = 
+		this.${field.name}View =
 				(DateTimeWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 						<#elseif (field.harmony_type?lower_case == "date")>
-		this.${field.name}View = 
+		this.${field.name}View =
 				(DateWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 						<#elseif (field.harmony_type?lower_case == "time")>
-		this.${field.name}View = 
+		this.${field.name}View =
 				(TimeWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 						</#if>
 					<#else>
-		this.${field.name}View = 
+		this.${field.name}View =
 				(EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 					</#if>
 				<#else>
-		this.${field.name}Button = 
+		this.${field.name}Button =
 				(Button) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_button);
 		this.${field.name}Button.setOnClickListener(new OnClickListener() {
 			public void onClick(View v) {
@@ -139,17 +140,17 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 				</#if>
 			</#if>
 		</#list>
-		
-		this.validationButtons = 
+
+		this.validationButtons =
 			(ValidationButtons) view.findViewById(R.id.${curr.name?lower_case}_validation);
 		this.validationButtons.setListener(this);
 	}
-	
+
 	<#list relations as relation>
 		<#if !relation.internal && !relation.hidden>
 	/** Initialize dialog.
-	 * @param list list 
-	 */		
+	 * @param list list
+	 */
 	 <#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
 	protected void init${relation.name?cap_first}Dialog(
 					final List<${relation.relation.targetEntity}> list) {
@@ -158,24 +159,24 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		this.checked${relation.name?cap_first} = new boolean[list.size()];
 		int i = 0;
 		for (final ${relation.relation.targetEntity} item : list) {
-			listAdapter[i] = String.valueOf(item.getId());
+			listAdapter[i] = String.valueOf(item.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
 			checks[i] = false;
 			i++;
 		}
 		final AlertDialog.Builder builder = new AlertDialog.Builder(
 				this.getActivity());
 		builder.setTitle(R.string.${relation.owner?lower_case}_${relation.name?lower_case}_dialog_title)
-				.setMultiChoiceItems(listAdapter, 
-						checks, 
+				.setMultiChoiceItems(listAdapter,
+						checks,
 							  new DialogInterface.OnMultiChoiceClickListener() {
 								public void onClick(
-										DialogInterface dialog, 
+										DialogInterface dialog,
 										int which, boolean isChecked) {
 									${curr.name}EditFragment.this
 									.checked${relation.name?cap_first}[which] =
 																	  isChecked;
 								}
-				}).setPositiveButton(android.R.string.ok, 
+				}).setPositiveButton(android.R.string.ok,
 								 new DialogInterface.OnClickListener() {
 								 	@Override
 								    public void onClick(
@@ -184,7 +185,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 								       			 //${curr.name}EditFragment.this
 								 			//.onOk${relation.name?cap_first}();
 								    }
-		        }).setNegativeButton(android.R.string.cancel, 
+		        }).setNegativeButton(android.R.string.cancel,
 		        						 new DialogInterface.OnClickListener() {
 		            @Override
 		            public void onClick(DialogInterface dialog, int id) {
@@ -192,7 +193,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		            					  .onCancel${relation.name?cap_first}();
 		            }
 		        });
-		
+
 		this.${relation.name}Dialog = builder.create();
 	}
 			<#else>
@@ -201,26 +202,26 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		String[] listAdapter = new String[list.size()];
 		int i = 0;
 		for (final ${relation.relation.targetEntity} item : list) {
-			listAdapter[i] = String.valueOf(item.getId());
+			listAdapter[i] = String.valueOf(item.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
 			i++;
 		}
-		final AlertDialog.Builder builder = 
+		final AlertDialog.Builder builder =
 				new AlertDialog.Builder(this.getActivity());
 		builder.setTitle(R.string.${relation.owner?lower_case}_${relation.name?lower_case}_dialog_title)
-				.setSingleChoiceItems(listAdapter, 0, 
+				.setSingleChoiceItems(listAdapter, 0,
 										 new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog, int id) {
 						${curr.name}EditFragment.this.
 										selected${relation.name?cap_first} = id;
 					}
-				}).setPositiveButton(android.R.string.ok, 
+				}).setPositiveButton(android.R.string.ok,
 										 new DialogInterface.OnClickListener() {
 		            @Override
 		            public void onClick(DialogInterface dialog, int id) {
 		            	//${curr.name}EditFragment.this
 		            	//.onOk${relation.name?cap_first}();
 		            }
-		        }).setNegativeButton(android.R.string.cancel, 
+		        }).setNegativeButton(android.R.string.cancel,
 		        						 new DialogInterface.OnClickListener() {
 		            @Override
 		            public void onClick(DialogInterface dialog, int id) {
@@ -228,18 +229,18 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		            				  this.onCancel${relation.name?cap_first}();
 		            }
 		        });
-		
+
 		this.${relation.name}Dialog = builder.create();
-	} 
+	}
 	 		</#if>
 	/**
 	 * Called when the user clicks on cancel.
-	 * 
+	 *
 	 */
 	protected void onCancel${relation.name?cap_first}() {
 		//TODO : Don't change the list
 	}
-	
+
 	/**
 	 * Called when the user clicks on ${relation.name?cap_first} button.
 	 * It shows the dedicated dialog.
@@ -253,91 +254,42 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 
 	/** Load data from model to curr.fields view. */
 	public void loadData() {
-		<#list fields?values as field>						
-		<#if !field.internal && !field.hidden>
-			<#if !field.relation??>
-				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
-		if (this.model.get${field.name?cap_first}() != null) {
-					<#if field.type?lower_case=="datetime">
-						<#if field.harmony_type=="datetime">
-			this.${field.name}View.setDateTime(this.model.get${field.name?cap_first}());
-						<#elseif (field.harmony_type=="date")>
-			this.${field.name}View.setDate(this.model.get${field.name?cap_first}());
-						<#elseif (field.harmony_type=="time")>
-			this.${field.name}View.setTime(this.model.get${field.name?cap_first}());
-						</#if>
-					<#else>
-			${ViewUtils.setLoader(field)}			
-					</#if>
-		}
-				<#else>
-		${ViewUtils.setLoader(field)}
-				</#if>
-			<#else>
-		this.${field.name}List = new ${field.relation.targetEntity}ProviderUtils(this.getActivity()).queryAll();
-		this.init${field.name?cap_first}Dialog(this.${field.name}List);
-			</#if>
-		</#if>
-		</#list>
+<#list fields?values as field>${AdapterUtils.loadDataCreateFieldAdapter(field, 2)}</#list>
 	}
-	
+
 	/** Save data from curr.fields view to model. */
 	public void saveData() {
-		<#list fields?values as field>
-		<#if !field.internal && !field.hidden>
-			<#if !field.relation??>
-		${ViewUtils.setSaver(field)}
-			<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
-		final ${field.relation.targetEntity} tmp${field.name?cap_first} = 
-								new ${field.relation.targetEntity?cap_first}();
-		tmp${field.name?cap_first}.setId(
-				this.selected${field.name?cap_first});
-		this.model.set${field.name?cap_first}(
-				tmp${field.name?cap_first});
-			<#else>
-		ArrayList<${field.relation.targetEntity}> tmp${field.name?cap_first}List = 
-					new ArrayList<${field.relation.targetEntity?cap_first}>();
-		for (int i = 0; i < this.checked${field.name?cap_first}.length; i++) {
-			if (this.checked${field.name?cap_first}[i]) {
-				tmp${field.name?cap_first}List.add(
-						this.${field.name}List.get(i));
-			}
-		}
-		
-		this.model.set${field.name?cap_first}(tmp${field.name?cap_first}List);
-			</#if>
-		</#if>	
-		</#list>
-
+<#list fields?values as field>${AdapterUtils.saveDataFieldAdapter(field, 2)}</#list>
 	}
 
 	/** Check data is valid.
-	 * 
+	 *
 	 * @return true if valid
 	 */
 	public boolean validateData() {
-		return true;
+		boolean result = true;
+<#list fields?values as field>${AdapterUtils.validateDataFieldAdapter(field, 2)}</#list>
+		return result;
 	}
-
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 												Bundle savedInstanceState) {
 		// Inflate the layout for this fragment
-		final View view = 
-				inflater.inflate(R.layout.fragment_${curr.name?lower_case}_edit, 
-						container, 
+		final View view =
+				inflater.inflate(R.layout.fragment_${curr.name?lower_case}_edit,
+						container,
 						false);
 
 		final Intent intent =  getActivity().getIntent();
-		this.model = 
+		this.model =
 				(${curr.name}) intent.getSerializableExtra("${curr.name}");
-		
+
 		this.initializeComponent(view);
 		this.loadData();
-		
+
 		return view;
 	}
-	
+
 	/**
 	 * This class will update the entity into the DB.
 	 * It runs asynchronously and shows a progressDialog
@@ -353,10 +305,10 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		/**
 		 * Constructor of the task.
 		 * @param entity The entity to insert in the DB
-		 * @param fragment The parent fragment from where the aSyncTask is 
-		 * called 
+		 * @param fragment The parent fragment from where the aSyncTask is
+		 * called
 		 */
-		public EditTask(final ${curr.name}EditFragment fragment, 
+		public EditTask(final ${curr.name}EditFragment fragment,
 												final ${curr.name} entity) {
 			super();
 			this.ctx = fragment.getActivity();
@@ -377,7 +329,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		@Override
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
-			
+
 			result = new ${curr.name?cap_first}ProviderUtils(this.ctx).update(
 				this.entity);
 
@@ -389,20 +341,20 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			super.onPostExecute(result);
 
 			if (result > 0) {
-				final HarmonyFragmentActivity activity = 
+				final HarmonyFragmentActivity activity =
 						(HarmonyFragmentActivity) this.ctx;
 				activity.setResult(HarmonyFragmentActivity.RESULT_OK);
 				activity.finish();
 			} else {
-				final AlertDialog.Builder builder = 
+				final AlertDialog.Builder builder =
 						new AlertDialog.Builder(this.ctx);
 				builder.setIcon(0);
 				builder.setMessage(this.ctx.getString(
 						R.string.${curr.name?lower_case}_error_create));
 				builder.setPositiveButton(
-						this.ctx.getString(android.R.string.yes), 
+						this.ctx.getString(android.R.string.yes),
 						new Dialog.OnClickListener() {
-							public void onClick(DialogInterface dialog, 
+							public void onClick(DialogInterface dialog,
 																int which) {
 
 							}

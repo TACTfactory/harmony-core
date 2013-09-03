@@ -1,6 +1,6 @@
 /**
  * This file is part of the Harmony package.
- * 
+ *
  * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
  *
  * For the full copyright and license information, please view the LICENSE
@@ -17,12 +17,11 @@ import org.junit.runners.Suite.SuiteClasses;
  * All Harmony tests.
  */
 @RunWith(Suite.class)
-@SuiteClasses({ 
+@SuiteClasses({
 	com.tactfactory.harmony.test.CoreTest.class,
-	com.tactfactory.harmony.test.project.AllTests.class, 
-	com.tactfactory.harmony.test.orm.AllTests.class, 
+	com.tactfactory.harmony.test.project.AllTests.class,
+	com.tactfactory.harmony.test.orm.AllTests.class,
 	com.tactfactory.harmony.fixture.test.AllTests.class })
-
 public class AllTests {
 
 }

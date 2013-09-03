@@ -39,7 +39,7 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 	// If you have enums, you may have to override this method to generate the random enums values
 	/**
 	 * Generate a random entity
-	 * 
+	 *
 	 * @return The randomly generated entity
 	 */
 	public static ${curr.name?cap_first} generateRandom(Context ctx){
@@ -50,7 +50,7 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.extends?uncap_first}.<#if field.type?lower_case == "boolean">is<#else>get</#if>${field.name?cap_first}());
 			</#list>
 		</#if>
-		
+
 		<#list curr.fields?values as field>
 			<#if !field.internal>
 				<#if !field.relation??>
@@ -65,11 +65,11 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 					<#elseif field.type?lower_case=="float">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomFloat(0,100));
 					<#elseif field.type?lower_case=="short">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomShort(0,100));
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomShort());
 					<#elseif field.type?lower_case=="char">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomChar(0,100));
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomChar());
 					<#elseif field.type?lower_case=="byte">
-		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomByte(0,100));
+		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomByte());
 					<#elseif field.type?lower_case=="datetime">
 						<#if field.harmony_type?lower_case=="date">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDate());
@@ -82,7 +82,7 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 		${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.values()[TestUtils.generateRandomInt(0,${field.type}.values().length)]);
 					</#if>
 				<#else>
-		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s = 
+		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s =
 			new ArrayList<${field.relation.targetEntity?cap_first}>(${field.relation.targetEntity?cap_first}DataLoader.getInstance(ctx).getMap().values());
 					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 		if (!${field.name?uncap_first}s.isEmpty()) {
@@ -93,15 +93,15 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 		if (!${field.name?uncap_first}s.isEmpty()) {
 			related${field.name?cap_first}s.add(${field.name?uncap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
 			${curr.name?uncap_first}.set${field.name?cap_first}(related${field.name?cap_first}s);
-		}			
+		}
 					</#if>
 				</#if>
 			</#if>
 		</#list>
-		
+
 		return ${curr.name?uncap_first};
 	}
-	
+
 	public static boolean equals(${curr.name?cap_first} ${curr.name?uncap_first}1, ${curr.name?cap_first} ${curr.name?uncap_first}2){
 		boolean ret = true;
 		Assert.assertNotNull(${curr.name?uncap_first}1);
@@ -113,25 +113,25 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 					<#if field.type?lower_case=="int" || field.type?lower_case=="integer" || field.type?lower_case=="long" || field.type?lower_case=="double" || field.type?lower_case=="float" || field.type?lower_case=="zipcode" || field.type?lower_case=="ean">
 			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
 					<#elseif field.type?lower_case=="boolean">
-			Assert.assertEquals(${curr.name?uncap_first}1.is${field.name?cap_first}(), ${curr.name?uncap_first}2.is${field.name?cap_first}());		
+			Assert.assertEquals(${curr.name?uncap_first}1.is${field.name?cap_first}(), ${curr.name?uncap_first}2.is${field.name?cap_first}());
 					<#elseif field.type?lower_case=="date" || field.type?lower_case=="time" || field.type?lower_case=="datetime">
 			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
 					<#else>
 			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
 					</#if>
 				<#else>
-			if (${curr.name?uncap_first}1.get${field.name?cap_first}() != null 
+			if (${curr.name?uncap_first}1.get${field.name?cap_first}() != null
 					&& ${curr.name?uncap_first}2.get${field.name?cap_first}() != null) {
 					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
-				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().getId(),
-						${curr.name?uncap_first}2.get${field.name?cap_first}().getId());
+				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}(),
+						${curr.name?uncap_first}2.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
 
 					<#else>
-				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().size(), 
+				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().size(),
 					${curr.name?uncap_first}2.get${field.name?cap_first}().size());
 				for (int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
-					Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).getId(),
-								${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).getId());
+					Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).get${entities[field.relation.targetEntity].ids[0].name?cap_first}(),
+								${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
 				}
 					</#if>
 			}
@@ -139,7 +139,7 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 			</#if>
 		</#list>
 		}
-		
+
 		return ret;
 	}
 }

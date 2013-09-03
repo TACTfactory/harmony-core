@@ -38,7 +38,7 @@
 	<#return hasOneToManyRelation(fields) || hasManyToManyRelation(fields) />
 </#function>
 
-<#function hasFieldType fields fieldType>	
+<#function hasFieldType fields fieldType>
 	<#list fields as field>
 		<#if field.harmony_type?lower_case==fieldType?lower_case>
 			<#return true />
@@ -47,23 +47,83 @@
 	<#return false />
 </#function>
 
-<#function hasTime fields>	
+<#function hasTime fields>
 	<#return hasFieldType(fields, "time") />
 </#function>
 
-<#function hasDate fields>	
+<#function hasDate fields>
 	<#return hasFieldType(fields, "date") />
 </#function>
 
-<#function hasDateTime fields>	
+<#function hasDateTime fields>
 	<#return hasFieldType(fields, "datetime") />
 </#function>
 
 <#function hasRelations fields>
 	<#list fields as field>
 		<#if (field.relation??)>
-			<#return true />	
+			<#return true />
 		</#if>
 	</#list>
 	<#return false />
-</#function> 
+</#function>
+
+
+<#function hasShowableFields fields>
+	<#assign result = false />
+	<#list fields as field>
+		<#if (!field.hidden)>
+			<#assign result = true />
+		</#if>
+	</#list>
+	<#return result />
+</#function>
+
+
+
+<#-- Methods used to generate fields extractors, getter, setter, etc... -->
+
+<#-- Generate the getter method call of the given field -->
+<#function generateGetter field>
+	<#if (field.type?lower_case == "boolean")>
+		<#assign prefix = "is" />
+	<#else>
+		<#assign prefix = "get" />
+	</#if>
+	<#return prefix + field.name?cap_first + "()" />
+</#function>
+
+<#-- Generate the getter method call appended to object name -->
+<#function generateCompleteGetter objectName field>
+	<#if (field.type?lower_case == "boolean")>
+		<#assign prefix = "is" />
+	<#else>
+		<#assign prefix = "get" />
+	</#if>
+	<#return objectName + "." + prefix + field.name?cap_first + "()" />
+</#function>
+
+<#-- Generate the getter of the given field, with its converter to string. -->
+<#function generateStringGetter className field>
+	<#if (field.type?lower_case == "datetime")>																		<#-- If datetime -->
+		<#if field.is_locale>
+			<#return generateCompleteGetter(className field) + ".toLocalDateTime().toString()" />
+		<#else>
+			<#return generateCompleteGetter(className field) + ".toString(ISODateTimeFormat.dateTime())" />
+		</#if>
+	<#elseif (field.type?lower_case == "string")>																	<#-- If String (field) -->
+		<#return generateCompleteGetter(className field) + ""/>
+	<#elseif (field.harmony_type?lower_case == "enum")>																<#-- If Enum (field.getValue() || field.name()) -->
+		<#if (enums[field.type].id??) >
+			<#return generateCompleteGetter(className field) + ".getValue()"/>
+		<#else>
+			<#return generateCompleteGetter(className field) + ".name()"/>
+		</#if>
+	<#else>																											<#-- For all other cases (String.valueOf(field)) -->
+		<#return "String.valueOf("+generateCompleteGetter(className field) + ")"/>
+	</#if>
+</#function>
+
+
+
+

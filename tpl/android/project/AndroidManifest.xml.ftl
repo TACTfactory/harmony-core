@@ -3,11 +3,11 @@
       package="${project_namespace}"
       android:versionCode="1"
       android:versionName="@string/app_version">
-    <uses-sdk 
-    	android:minSdkVersion="7" 
+    <uses-sdk
+    	android:minSdkVersion="7"
     	android:targetSdkVersion="17" />
-    <application 
-    	android:label="@string/app_name" 
+    <application
+    	android:label="@string/app_name"
     	android:name=".${project_name?cap_first}Application"
     	android:allowBackup="true"
     	android:theme="@style/Theme.Sherlock">

@@ -23,12 +23,12 @@ import com.tactfactory.harmony.test.CommonTest;
  */
 public class OrmInitViewTest extends CommonTest {
 	/** Path to the generated view folder. */
-	private static final String VIEW_PATH = 
+	private static final String VIEW_PATH =
 			"android/src/com/tactfactory/harmony/test/demact/view/";
-	
+
 	/**
 	 * Initialization.
-	 * @throws Exception 
+	 * @throws Exception if something bad happened.
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws Exception {
@@ -47,17 +47,17 @@ public class OrmInitViewTest extends CommonTest {
 	public final void tearDown() throws Exception {
 		super.tearDown();
 	}
-	
+
 	/**
 	 * Initialize everything needed for the test.
 	 */
 	private static void initAll() {
 		System.out.println("\nTest Orm generate View");
-		System.out.println("###############" 
-				 + "##############" 
+		System.out.println("###############"
+				 + "##############"
 				 + "##############"
 				 + "##################################");
-		
+
 		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
 		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES,
@@ -66,7 +66,7 @@ public class OrmInitViewTest extends CommonTest {
 		getHarmony().findAndExecute(
 				OrmCommand.GENERATE_CRUD, new String[] {}, null);
 	}
-	
+
 	/**
 	 * Launch all the tests.
 	 */
@@ -76,33 +76,33 @@ public class OrmInitViewTest extends CommonTest {
 		this.viewPostEdit();
 		this.viewPostList();
 		this.viewPostShow();
-		
+
 		this.viewCommentCreate();
 		this.viewCommentEdit();
 		this.viewCommentList();
 		this.viewCommentShow();
-		
+
 		this.viewUserCreate();
 		this.viewUserEdit();
 		this.viewUserList();
 		this.viewUserShow();
-		
+
 		this.ressourcePostCreate();
 		this.ressourcePostEdit();
 		this.ressourcePostList();
 		this.ressourcePostShow();
-		
+
 		this.ressourceCommentCreate();
 		this.ressourceCommentEdit();
 		this.ressourceCommentList();
 		this.ressourceCommentShow();
-		
+
 		this.ressourceUserCreate();
 		this.ressourceUserEdit();
 		this.ressourceUserList();
 		this.ressourceUserShow();
 	}
-	
+
 	/**
 	 * Post Create activity test.
 	 */
@@ -111,7 +111,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile(VIEW_PATH + "post/PostCreateActivity.java");
 		CommonTest.hasFindFile(VIEW_PATH + "post/PostCreateFragment.java");
 	}
-	
+
 	/**
 	 * Post Edit activity test.
 	 */
@@ -120,7 +120,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile(VIEW_PATH + "post/PostEditActivity.java");
 		CommonTest.hasFindFile(VIEW_PATH + "post/PostEditFragment.java");
 	}
-	
+
 	/**
 	 * Post List activity test.
 	 */
@@ -131,7 +131,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile(VIEW_PATH + "post/PostListAdapter.java");
 		CommonTest.hasFindFile(VIEW_PATH + "post/PostListLoader.java");
 	}
-	
+
 	/**
 	 * Post Show activity test.
 	 */
@@ -140,7 +140,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile(VIEW_PATH + "post/PostShowActivity.java");
 		CommonTest.hasFindFile(VIEW_PATH + "post/PostShowFragment.java");
 	}
-	
+
 	/**
 	 * Comment Create activity test.
 	 */
@@ -151,7 +151,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile(
 				VIEW_PATH + "comment/CommentCreateFragment.java");
 	}
-	
+
 	/**
 	 * Comment Edit activity test.
 	 */
@@ -160,7 +160,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile(VIEW_PATH + "comment/CommentEditActivity.java");
 		CommonTest.hasFindFile(VIEW_PATH + "comment/CommentEditFragment.java");
 	}
-	
+
 	/**
 	 * Comment List activity test.
 	 */
@@ -171,7 +171,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile(VIEW_PATH + "comment/CommentListAdapter.java");
 		CommonTest.hasFindFile(VIEW_PATH + "comment/CommentListLoader.java");
 	}
-	
+
 	/**
 	 * Comment Show activity test.
 	 */
@@ -180,7 +180,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile(VIEW_PATH + "comment/CommentShowActivity.java");
 		CommonTest.hasFindFile(VIEW_PATH + "comment/CommentShowFragment.java");
 	}
-	
+
 	/**
 	 * User Create activity test.
 	 */
@@ -189,7 +189,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile(VIEW_PATH + "user/UserCreateActivity.java");
 		CommonTest.hasFindFile(VIEW_PATH + "user/UserCreateFragment.java");
 	}
-	
+
 	/**
 	 * User Edit activity test.
 	 */
@@ -198,7 +198,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile(VIEW_PATH + "user/UserEditActivity.java");
 		CommonTest.hasFindFile(VIEW_PATH + "user/UserEditFragment.java");
 	}
-	
+
 	/**
 	 * User List activity test.
 	 */
@@ -209,7 +209,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile(VIEW_PATH + "user/UserListAdapter.java");
 		CommonTest.hasFindFile(VIEW_PATH + "user/UserListLoader.java");
 	}
-	
+
 	/**
 	 * User Show activity test.
 	 */
@@ -218,7 +218,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile(VIEW_PATH + "user/UserShowActivity.java");
 		CommonTest.hasFindFile(VIEW_PATH + "user/UserShowFragment.java");
 	}
-	
+
 	/**
 	 * Post Create layout test.
 	 */
@@ -227,7 +227,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile("android/res/layout/activity_post_create.xml");
 		CommonTest.hasFindFile("android/res/layout/fragment_post_create.xml");
 	}
-	
+
 	/**
 	 * Post Edit layout test.
 	 */
@@ -236,7 +236,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile("android/res/layout/activity_post_edit.xml");
 		CommonTest.hasFindFile("android/res/layout/fragment_post_edit.xml");
 	}
-	
+
 	/**
 	 * Post List layout test.
 	 */
@@ -246,7 +246,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile("android/res/layout/fragment_post_list.xml");
 		CommonTest.hasFindFile("android/res/layout/row_post.xml");
 	}
-	
+
 	/**
 	 * Post Show layout test.
 	 */
@@ -255,7 +255,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile("android/res/layout/activity_post_show.xml");
 		CommonTest.hasFindFile("android/res/layout/fragment_post_show.xml");
 	}
-	
+
 	/**
 	 * Comment Create layout test.
 	 */
@@ -266,7 +266,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile(
 				"android/res/layout/fragment_comment_create.xml");
 	}
-	
+
 	/**
 	 * Comment Edit layout test.
 	 */
@@ -275,7 +275,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile("android/res/layout/activity_comment_edit.xml");
 		CommonTest.hasFindFile("android/res/layout/fragment_comment_edit.xml");
 	}
-	
+
 	/**
 	 * Comment List layout test.
 	 */
@@ -285,7 +285,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile("android/res/layout/fragment_comment_list.xml");
 		CommonTest.hasFindFile("android/res/layout/row_comment.xml");
 	}
-	
+
 	/**
 	 * Comment Show layout test.
 	 */
@@ -294,7 +294,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile("android/res/layout/activity_comment_show.xml");
 		CommonTest.hasFindFile("android/res/layout/fragment_comment_show.xml");
 	}
-	
+
 	/**
 	 * User Create layout test.
 	 */
@@ -303,7 +303,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile("android/res/layout/activity_user_create.xml");
 		CommonTest.hasFindFile("android/res/layout/fragment_user_create.xml");
 	}
-	
+
 	/**
 	 * User Edit layout test.
 	 */
@@ -312,7 +312,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile("android/res/layout/activity_user_edit.xml");
 		CommonTest.hasFindFile("android/res/layout/fragment_user_edit.xml");
 	}
-	
+
 	/**
 	 * User List layout test.
 	 */
@@ -322,7 +322,7 @@ public class OrmInitViewTest extends CommonTest {
 		CommonTest.hasFindFile("android/res/layout/fragment_user_list.xml");
 		CommonTest.hasFindFile("android/res/layout/row_user.xml");
 	}
-	
+
 	/**
 	 * User Show layout test.
 	 */

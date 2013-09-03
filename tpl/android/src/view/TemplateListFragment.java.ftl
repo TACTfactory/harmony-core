@@ -27,7 +27,7 @@ import ${curr.namespace}.R;
 import ${curr.namespace}.entity.${curr.name};
 
 /** ${curr.name} list fragment.
- * 
+ *
  * @see android.app.Fragment
  */
 public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
@@ -39,12 +39,12 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	protected static ${curr.name}ListFragment instance;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container, 
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 												   Bundle savedInstanceState) {
 		//inflater.getContext().getSystemService(
-		//Context.LAYOUT_INFLATER_SERVICE); 
-		final View view = 
-				inflater.inflate(R.layout.fragment_${curr.name?lower_case}_list, 
+		//Context.LAYOUT_INFLATER_SERVICE);
+		final View view =
+				inflater.inflate(R.layout.fragment_${curr.name?lower_case}_list,
 						null);
 
 		this.initializeHackCustomList(view,
@@ -54,7 +54,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		return view;
 	}
 
-	@Override 
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
@@ -72,55 +72,55 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		this.setListAdapter(this.mAdapter);
 
 		// Start out with a progress indicator.
-		this.setListShown(false); 
+		this.setListShown(false);
 
 		// Prepare the loader.  Either re-connect with an existing one,
 		// or start a new one.
 		getLoaderManager().initLoader(0, null, this);
 	}
 
-	@Override 
+	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		final ${curr.name} item = (${curr.name}) l.getItemAtPosition(position);
 
-		final Intent intent = new Intent(getActivity(), 
+		final Intent intent = new Intent(getActivity(),
 							${curr.name}ShowActivity.class);
 		intent.putExtra("${curr.name}", (Parcelable) item);
 
 		this.startActivity(intent);
 	}
 
-	@Override 
-	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) { 
+	@Override
+	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
 		${curr.name?cap_first}Criterias crit = null;
 		if (bundle != null) {
 			crit = (${curr.name?cap_first}Criterias) bundle.get(
 						${curr.name?cap_first}Criterias.PARCELABLE);
 		}
-			
+
 		//return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
 		if (crit != null) {
-		return new ${curr.name?cap_first}ListLoader(this.getActivity(), 
-				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
-				${curr.name?cap_first}SQLiteAdapter.COLS, 
+		return new ${curr.name?cap_first}ListLoader(this.getActivity(),
+				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
+				${curr.name?cap_first}SQLiteAdapter.ALIASED_COLS,
 				crit,
 				null);
 		} else {
-			return new ${curr.name?cap_first}ListLoader(this.getActivity(), 
-				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, 
-				${curr.name?cap_first}SQLiteAdapter.COLS, 
+			return new ${curr.name?cap_first}ListLoader(this.getActivity(),
+				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
+				${curr.name?cap_first}SQLiteAdapter.ALIASED_COLS,
 				null,
 				null,
 				null);
 		}
 	}
 
-	@Override 
-	public void onLoadFinished(Loader<Cursor> loader, 
+	@Override
+	public void onLoadFinished(Loader<Cursor> loader,
 											Cursor data) {
 		// Set the new data in the adapter.
 		//this.mAdapter.setData(data);
-		data.setNotificationUri(this.getActivity().getContentResolver(), 
+		data.setNotificationUri(this.getActivity().getContentResolver(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI);
 		this.mAdapter.swapCursor(data);
 
@@ -132,7 +132,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		}
 	}
 
-	@Override 
+	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
 		// Clear the data in the adapter.
 		this.mAdapter.swapCursor(null);
@@ -140,21 +140,21 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 
 
 	/**
-	 * Calls the ${curr.name}EditActivity. 
-	 * @param position position 
+	 * Calls the ${curr.name}EditActivity.
+	 * @param position position
 	 */
 	protected void onClickEdit(final int position) {
 		final ${curr.name} item = this.mAdapter.getItem(position);
-		final Intent intent = new Intent(getActivity(), 
+		final Intent intent = new Intent(getActivity(),
 									${curr.name}EditActivity.class);
 		intent.putExtra("${curr.name}", (Parcelable) item);
 
 		this.getActivity().startActivityForResult(intent, 0);
-	}	
-	
+	}
+
 	/**
 	 * Shows a confirmation dialog.
-	 * @param position position  
+	 * @param position position
 	 */
 	protected void onClickDelete(final int position) {
 		new DeleteDialog(this.getActivity(), this, position).show();
@@ -162,7 +162,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 
 	/**
 	 * Creates an aSyncTask to delete the row.
-	 * @param position position  
+	 * @param position position
 	 */
 	public void delete(final int position) {
 		final ${curr.name?cap_first} item = this.mAdapter.getItem(position);
@@ -178,13 +178,13 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 		private Context ctx;
 		/** Entity to delete. */
 		private ${curr.name?cap_first} item;
-		
+
 		/**
 		 * Constructor of the task.
 		 * @param item The entity to remove from DB
 		 * @param ctx A context to build ${curr.name?cap_first}SQLiteAdapter
 		 */
-		public DeleteTask(final Context ctx, 
+		public DeleteTask(final Context ctx,
 					final ${curr.name?cap_first} item) {
 			super();
 			this.ctx = ctx;
@@ -200,7 +200,7 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 
 			return result;
 		}
-		
+
 	}
 
 

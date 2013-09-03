@@ -33,37 +33,37 @@ public class CustomTimePickerDialog extends AlertDialog {
 	/** Constructor.
 	 * @param ctx The context the dialog is to run in.
 	 * @param date The initial time of the dialog.
-	 * @param is24HourView Whether this is a 24 hour view, or AM/PM. 
+	 * @param is24HourView Whether this is a 24 hour view, or AM/PM.
 	 * @param title The text of the title.
 	 */
-	public CustomTimePickerDialog(Context ctx, DateTime date, 
+	public CustomTimePickerDialog(Context ctx, DateTime date,
 										boolean is24HourView, String title) {
 		super(ctx);
-		
+
 		this.initializeTimePickerDialog(ctx, date, is24HourView, title);
 	}
-	
+
 	/** Constructor.
 	 * @param ctx The context the dialog is to run in.
 	 * @param date The initial time of the dialog.
-	 * @param is24HourView Whether this is a 24 hour view, or AM/PM. 
+	 * @param is24HourView Whether this is a 24 hour view, or AM/PM.
 	 * @param titleId The resource id of the title.
 	 */
-	public CustomTimePickerDialog(Context ctx, DateTime date, 
+	public CustomTimePickerDialog(Context ctx, DateTime date,
 										boolean is24HourView, int titleId) {
 		super(ctx);
-		
-		this.initializeTimePickerDialog(ctx, date, is24HourView, 
+
+		this.initializeTimePickerDialog(ctx, date, is24HourView,
 												ctx.getString(titleId));
 	}
-	
+
 	/** TimePicker dialog initialisation.
 	 * @param ctx The context the dialog is to run in.
 	 * @param date The initial time of the dialog.
-	 * @param is24HourView Whether this is a 24 hour view, or AM/PM. 
+	 * @param is24HourView Whether this is a 24 hour view, or AM/PM.
 	 * @param title The text of the title.
 	 */
-	private void initializeTimePickerDialog(Context ctx, DateTime date, 	
+	private void initializeTimePickerDialog(Context ctx, DateTime date,
 										boolean is24HourView, String title) {
 		this.ctx = ctx;
 		this.title = title;
@@ -77,12 +77,12 @@ public class CustomTimePickerDialog extends AlertDialog {
 		this.setTitle(this.title);
 		this.setCancelable(true);
 		this.setIcon(0);
-		
+
 		LayoutInflater inflater = getLayoutInflater();
-		View alertDialogView = inflater.inflate(R.layout.dialog_time_picker, 
-												null);	
+		View alertDialogView = inflater.inflate(R.layout.dialog_time_picker,
+												null);
 		this.setView(alertDialogView);
-		
+
 		this.timePicker = (TimePicker) alertDialogView.findViewById(
 													R.id.dialog_pick_time);
 		this.timePicker.setIs24HourView(this.is24HourView);
@@ -92,18 +92,18 @@ public class CustomTimePickerDialog extends AlertDialog {
 		super.onCreate(savedInstanceState);
 	}
 
-	/** Set a listener to be invoked when the positive button of the dialog is 
-	 * pressed. 
+	/** Set a listener to be invoked when the positive button of the dialog is
+	 * pressed.
 	 * @param text The text to display in the positive button
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
-	public void setPositiveButton(CharSequence text, 
+	public void setPositiveButton(CharSequence text,
 									DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_POSITIVE, text, listener);
 	}
-	
-	/** Set a listener to be invoked when the negative button of the dialog is 
-	 * pressed. 
+
+	/** Set a listener to be invoked when the negative button of the dialog is
+	 * pressed.
 	 * @param text The text to display in the negative button
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
@@ -111,33 +111,33 @@ public class CustomTimePickerDialog extends AlertDialog {
 									DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_NEGATIVE, text, listener);
 	}
-	
-	/** Set a listener to be invoked when the positive button of the dialog is 
-	 * pressed. 
-	 * @param textId The resource id of the text to display in the positive 
+
+	/** Set a listener to be invoked when the positive button of the dialog is
+	 * pressed.
+	 * @param textId The resource id of the text to display in the positive
 	 * button
 	 * @param listener The DialogInterface.OnClickListener to use.
 	 */
-	public void setPositiveButton(int textId, 
+	public void setPositiveButton(int textId,
 									DialogInterface.OnClickListener listener) {
 		this.setButton(AlertDialog.BUTTON_POSITIVE,
-						this.ctx.getString(textId), 
-						listener);
-	}
-	
-	/** Set a listener to be invoked when the negative button of the dialog is 
-	 * pressed. 
-	 * @param textId The resource id of the text to display in the negative 
-	 * button
-	 * @param listener The DialogInterface.OnClickListener to use.
-	 */
-	public void setNegativeButton(int textId, 
-									DialogInterface.OnClickListener listener) {
-		this.setButton(AlertDialog.BUTTON_NEGATIVE, 
 						this.ctx.getString(textId),
 						listener);
 	}
-	
+
+	/** Set a listener to be invoked when the negative button of the dialog is
+	 * pressed.
+	 * @param textId The resource id of the text to display in the negative
+	 * button
+	 * @param listener The DialogInterface.OnClickListener to use.
+	 */
+	public void setNegativeButton(int textId,
+									DialogInterface.OnClickListener listener) {
+		this.setButton(AlertDialog.BUTTON_NEGATIVE,
+						this.ctx.getString(textId),
+						listener);
+	}
+
 	/** Gets the TimePicker contained in this dialog.
 	 * @return the TimePicker
 	 */

@@ -32,7 +32,7 @@ public class TranslationGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use.
-	 * @throws Exception 
+	 * @throws Exception if adapter is null
 	 */
 	public TranslationGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
@@ -42,33 +42,33 @@ public class TranslationGenerator extends BaseGenerator {
 	 * Update XML Strings.
 	 */
 	public final void generateStringsXml() {
-		
+
 		ConsoleUtils.display(">> Generate translate string...");
-		
+
 		final Document doc = XMLUtils.openXMLFile(
 				this.getAdapter().getStringsPathFile());
-		
-		// Load Root element
-		final Element rootNode = 
-				doc.getRootElement(); 			
-		
-		// Load Name space (required for manipulate attributes)
-		final Namespace ns = 
-				rootNode.getNamespace("android");	
 
-		for (final TranslationMetadata translationMeta 
+		// Load Root element
+		final Element rootNode =
+				doc.getRootElement();
+
+		// Load Name space (required for manipulate attributes)
+		final Namespace ns =
+				rootNode.getNamespace("android");
+
+		for (final TranslationMetadata translationMeta
 				: this.getAppMetas().getTranslates().values()) {
-			Element newNode = new Element("string");
-			
+			final Element newNode = new Element("string");
+
 			// Add name to element
 			newNode.setAttribute(NAME,
 					translationMeta.getKey(),
 					ns);
-			
+
 			// Set values
 			newNode.setText(
 					translationMeta.getI18n().get(
-							Locale.getDefault())); 
+							Locale.getDefault()));
 
 			// If not found Node, create it
 			if (!XMLUtils.addValue(newNode, NAME, rootNode)) {
@@ -76,7 +76,7 @@ public class TranslationGenerator extends BaseGenerator {
 						newNode.getText());
 			}
 		}
-		
+
 		// Clean code
 		rootNode.sortChildren(new Comparator<Element>() {
 
@@ -88,24 +88,24 @@ public class TranslationGenerator extends BaseGenerator {
 						TranslationGenerator.this.getAppMetas()
 						.getTranslates()
 						.get(metaName1);
-				final TranslationMetadata meta2 = 
+				final TranslationMetadata meta2 =
 						TranslationGenerator.this.getAppMetas()
 						.getTranslates()
 						.get(metaName2);
-				
+
 				if (meta1 != null && meta2 != null) {
-					final int groupScore = 
-							meta1.getGroup().getValue() 
+					final int groupScore =
+							meta1.getGroup().getValue()
 							- meta2.getGroup().getValue();
 					if (groupScore != 0) {
 						return groupScore;
 					}
 				}
-				
+
 				return metaName1.compareToIgnoreCase(metaName2);
 			}
 		});
-		
+
 		XMLUtils.writeXMLToFile(doc, this.getAdapter().getStringsPathFile());
 	}
 }

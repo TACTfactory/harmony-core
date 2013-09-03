@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
+import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.template.TagConstant;
 
@@ -24,33 +25,33 @@ public final class ApplicationMetadata extends BaseMetadata {
 	private static final String PATH_DELIMITER = "/";
 	/** Package delimiter. */
 	private static final String PACKAGE_DELIMITER = "\\.";
-	
+
 	/** Singleton. */
 	public static final ApplicationMetadata INSTANCE =
 			new ApplicationMetadata();
-	
+
 	/** Android SDK Path. */
 	private static String androidSdkPath;
-	
+
 	/** Project NameSpace (com/tactfactory/harmony/test/demact). */
 	private String projectNameSpace;
-	
+
 	/** List of Entity of entity class. */
 	private Map<String, ClassMetadata> classes =
 			new LinkedHashMap<String, ClassMetadata>();
-	
+
 	/** List of Entity of entity class. */
 	private Map<String, EnumMetadata> enums =
 			new LinkedHashMap<String, EnumMetadata>();
-	
+
 	/** List of Entity of entity class. */
 	private Map<String, InterfaceMetadata> interfaces =
 			new LinkedHashMap<String, InterfaceMetadata>();
-	
+
 	/** List of Entity of entity class. */
 	private Map<String, EntityMetadata> entities =
 			new LinkedHashMap<String, EntityMetadata>();
-	
+
 	/** List of string use in application. */
 	private Map<String, TranslationMetadata> translates =
 			new TreeMap<String, TranslationMetadata>();
@@ -58,18 +59,18 @@ public final class ApplicationMetadata extends BaseMetadata {
 	/** List of config use in application. */
 	private Map<String, ConfigMetadata> configs =
 			new TreeMap<String, ConfigMetadata>();
-	
+
 	/** String containing the header template for all generated files. */
 	private String headerTemplate = "";
-	
+
 
 	/**
 	 * Constructor.
 	 */
-	private ApplicationMetadata() { 
+	private ApplicationMetadata() {
 		super();
 	}
-	
+
 	/**
 	 * @return the androidSdkPath
 	 */
@@ -196,28 +197,28 @@ public final class ApplicationMetadata extends BaseMetadata {
 		final Map<String, Object> enumsMap = new HashMap<String, Object>();
 		final Map<String, Object> interfacesMap = new HashMap<String, Object>();
 		final Map<String, Object> entitiesMap = new HashMap<String, Object>();
-		
+
 		// Make Map for entities
 		for (final ClassMetadata cm : this.classes.values()) {
 			classesMap.put(cm.getName(), cm.toMap(adapt));
-			
+
 			if (cm instanceof EntityMetadata) {
 				entitiesMap.put(cm.getName(), cm.toMap(adapt));
 				if (!((EntityMetadata) cm).isInternal()) {
 					((EntityMetadata) cm).makeString("label");
 				}
 			} else
-				
+
 			if (cm instanceof EnumMetadata) {
 				enumsMap.put(cm.getName(), cm.toMap(adapt));
 			} else
-				
+
 			if (cm instanceof InterfaceMetadata) {
 				interfacesMap.put(cm.getName(), cm.toMap(adapt));
-			} 
-			
+			}
+
 		}
-		
+
 		// Add root
 		ret.put(TagConstant.PROJECT_NAME, 		this.getName());
 
@@ -225,35 +226,35 @@ public final class ApplicationMetadata extends BaseMetadata {
 		ret.put(TagConstant.ENTITIES, 		entitiesMap);
 		ret.put(TagConstant.ENUMS, 			enumsMap);
 		ret.put(TagConstant.INTERFACES, 	interfacesMap);
-		
+
 		if (this.projectNameSpace != null) {
 			ret.put(TagConstant.PROJECT_PATH, 		this.projectNameSpace);
-			ret.put(TagConstant.PROJECT_NAMESPACE, 	
+			ret.put(TagConstant.PROJECT_NAMESPACE,
 					this.projectNameSpace.replaceAll(
-							PATH_DELIMITER, 
+							PATH_DELIMITER,
 							PACKAGE_DELIMITER));
-			ret.put(TagConstant.ENTITY_NAMESPACE, 	
+			ret.put(TagConstant.ENTITY_NAMESPACE,
 					this.projectNameSpace.replaceAll(
-							PATH_DELIMITER, 
+							PATH_DELIMITER,
 							PACKAGE_DELIMITER) + "." + adapt.getModel());
-			ret.put(TagConstant.TEST_NAMESPACE, 	
+			ret.put(TagConstant.TEST_NAMESPACE,
 					this.projectNameSpace.replaceAll(
-							PATH_DELIMITER, 
+							PATH_DELIMITER,
 							PACKAGE_DELIMITER) + "." + adapt.getTest());
-			ret.put(TagConstant.DATA_NAMESPACE, 	
+			ret.put(TagConstant.DATA_NAMESPACE,
 					this.projectNameSpace.replaceAll(
 							PATH_DELIMITER,
 							PACKAGE_DELIMITER) + "." + adapt.getData());
-			ret.put(TagConstant.SERVICE_NAMESPACE, 	
+			ret.put(TagConstant.SERVICE_NAMESPACE,
 					this.projectNameSpace.replaceAll(
-							PATH_DELIMITER, 
+							PATH_DELIMITER,
 							PACKAGE_DELIMITER) + "." + adapt.getService());
-			ret.put(TagConstant.FIXTURE_NAMESPACE, 	
+			ret.put(TagConstant.FIXTURE_NAMESPACE,
 					this.projectNameSpace.replaceAll(
-							PATH_DELIMITER, 
+							PATH_DELIMITER,
 							PACKAGE_DELIMITER) + "." + adapt.getFixture());
 		}
-		
+
 		ret.put(TagConstant.ANDROID_SDK_DIR,
 				ApplicationMetadata.androidSdkPath);
 		// SDKDIR Hack
@@ -262,7 +263,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 		ret.put(TagConstant.ANT_ANDROID_SDK_DIR, sdkDir);
 		ret.put(TagConstant.OUT_CLASSES_ABS_DIR, "CLASSPATHDIR/");
 		ret.put(TagConstant.OUT_DEX_INPUT_ABS_DIR, "DEXINPUTDIR/");
-		
+
 		// Add Extra bundle
 		final HashMap<String, Object> optionsMap =
 				new HashMap<String, Object>();
@@ -272,22 +273,23 @@ public final class ApplicationMetadata extends BaseMetadata {
 		ret.put(TagConstant.OPTIONS, optionsMap);
 		ret.put(TagConstant.HEADER, this.headerTemplate);
 		ret.put(TagConstant.UTILITY_PATH, adapt.getTemplateUtilityPath());
-		
+		ret.put(TagConstant.HARMONY_VERSION, Harmony.VERSION);
+
 		return ret;
 	}
-	
+
 
 	/**
 	 * @return the headerTemplate
 	 */
-	public final String getHeaderTemplate() {
+	public String getHeaderTemplate() {
 		return headerTemplate;
 	}
 
 	/**
 	 * @param headerTemplate the headerTemplate to set
 	 */
-	public final void setHeaderTemplate(final String headerTemplate) {
+	public void setHeaderTemplate(final String headerTemplate) {
 		this.headerTemplate = headerTemplate;
 	}
 }

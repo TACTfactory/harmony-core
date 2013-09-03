@@ -26,7 +26,6 @@ import com.tactfactory.harmony.meta.InterfaceMetadata;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
-import com.tactfactory.harmony.parser.BaseParser;
 import com.tactfactory.harmony.parser.java.visitor.FileVisitor;
 import com.tactfactory.harmony.plateforme.AndroidAdapter;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
@@ -38,34 +37,34 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 public class JavaModelParser {
 	/** Java file parser. */
 	private FileVisitor fileVisitor = new FileVisitor();
-	
+
 	/** Extension. */
 	private static final String FILE_EXT =
 			".java";
-	
+
 	/** Entity path. */
-	private static final String PATH_ENTITY = 
+	private static final String PATH_ENTITY =
 			"/entity/";
-	
+
 
 	/** Entities compilations units (used by JavaParser). */
-	private List<CompilationUnit> entities = 
+	private List<CompilationUnit> entities =
 			new ArrayList<CompilationUnit>();
-	
+
 	/** List of all the bundles parsers. */
-	private static List<BaseParser> bundleParsers = 
+	private static List<BaseParser> bundleParsers =
 			new ArrayList<BaseParser>();
-	
+
 	/** Adapter used to retrieves entity files. */
 	private final BaseAdapter adapter = new AndroidAdapter();
-	
+
 	/** Entity files path. */
-	private final String entityPath = 
-			this.adapter.getSourcePath() 
+	private final String entityPath =
+			this.adapter.getSourcePath()
 			+ ApplicationMetadata.INSTANCE.getProjectNameSpace()
-				.replaceAll("\\.", "/") 
+				.replaceAll("\\.", "/")
 			+ PATH_ENTITY;
-	
+
 	/** Filter for java files only. */
 	private final FilenameFilter filter = new FilenameFilter() {
 	    @Override
@@ -73,7 +72,7 @@ public class JavaModelParser {
 	        return name.endsWith(FILE_EXT);
 	    }
 	};
-	
+
 	/**
 	 * Register a parser to the general parser.
 	 * @param parser The parser to register.
@@ -81,26 +80,27 @@ public class JavaModelParser {
 	public final void registerParser(final BaseParser parser) {
 		bundleParsers.add(parser);
 	}
-	
+
 	/**
 	 * Load entity from one specified file.
-	 * 
+	 *
 	 * @param filename or path to file to parse
 	 */
 	public final void loadEntity(final String filename) {
 		this.parseJavaFile(filename);
 	}
-	
+
 	/**
 	 * Load entities files found in entity folder.
-	 * @throws Exception 
+	 * @throws Exception if no entity files were found.
 	 */
 	public final void loadEntities() throws Exception {
 		final File dir = new File(this.entityPath);
 		final String[] files = dir.list(this.filter);
-		ArrayList<String> filesNames = new ArrayList<String>(Arrays.asList(files));
+		final ArrayList<String> filesNames =
+				new ArrayList<String>(Arrays.asList(files));
 		Collections.sort(filesNames);
-		
+
 		if (files == null) {
 			throw new Exception("No entity files found!");
 		} else {
@@ -112,18 +112,18 @@ public class JavaModelParser {
 
 	/**
 	 * Parse java file to load entities parameters.
-	 * 
+	 *
 	 * @param filename or path to the java file to parse
 	 */
 	private void parseJavaFile(final String filename) {
         FileInputStream in = null;
         CompilationUnit cu = null;
-        
+
         if (new File(filename).exists()) {
 			try {
 				// creates an input stream for the file to be parsed
 				in = new FileInputStream(filename);
-	
+
 	            // parse the file
 				cu = JavaParser.parse(in);
 	        } catch (final ParseException e) {
@@ -141,7 +141,7 @@ public class JavaModelParser {
 					ConsoleUtils.displayError(e);
 				}
 	        }
-			
+
 			if (cu != null) {
 				this.entities.add(cu);
 			}
@@ -163,49 +163,49 @@ public class JavaModelParser {
 	public final void setEntities(final List<CompilationUnit> entities) {
 		this.entities = entities;
 	}
-	
+
 	/**
 	 * @return the appMetas
 	 */
 	/*public final List<ClassMetadata> getMetas() {
 		return this.metas;
 	}*/
-	
+
 	/**
-	 * Parse the given compilation unit and convert it to a 
+	 * Parse the given compilation unit and convert it to a
 	 * ClassMetadata.
 	 * @param mclass The compilation unit
 	 * @param appMetas The metadatas of the application
 	 */
-	public final void parse(final CompilationUnit mclass, 
+	public final void parse(final CompilationUnit mclass,
 			final ApplicationMetadata appMetas) {
-		ArrayList<ClassMetadata> classes = this.fileVisitor.visit(mclass); 
-		
+		final ArrayList<ClassMetadata> classes = this.fileVisitor.visit(mclass);
+
 		for (ClassMetadata classMeta : classes) {
 			// Add the Metadata to the general list
 			appMetas.getClasses().put(classMeta.getName(), classMeta);
-			
+
 			// If it is an entity
 			if (classMeta instanceof EntityMetadata) {
 				appMetas.getEntities().put(
 						classMeta.getName(), (EntityMetadata) classMeta);
 			} else
-				
+
 			// If it is an enum
 			if (classMeta instanceof EnumMetadata) {
 				appMetas.getEnums().put(
 						classMeta.getName(), (EnumMetadata) classMeta);
 			} else
-				
+
 			// If it is an interface
 			if (classMeta instanceof InterfaceMetadata) {
 				appMetas.getInterfaces().put(
 						classMeta.getName(), (InterfaceMetadata) classMeta);
 			}
 		}
-		
+
 	}
-	
+
 	/**
 	 * Return the list containing the bundle parsers.
 	 * @return The list of bundle parsers.

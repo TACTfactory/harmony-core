@@ -35,18 +35,18 @@ public final class ProjectDiscover {
 	// DEMO/TEST MODE
 	/** Default project name. */
 	private static String defaultProjectName = "demact";
-	
+
 	/** Default project NameSpace. */
-	private static String defaultProjectNamespace = 
+	private static String defaultProjectNamespace =
 			"com.tactfactory.harmony.test.demact";
-	
+
 	/** Default project NameSpace. */
-	private static String defaultSDKPath = 
+	private static String defaultSDKPath =
 			"/opt/android-sdk/";
-	
+
 	/** Android SDK version. */
 	private static String androidSdkVersion;
-	
+
 	/** Detected OS name. */
 	private static String detectedOS = "Unknown";
 
@@ -54,13 +54,13 @@ public final class ProjectDiscover {
 	 * Private constructor.
 	 */
 	private ProjectDiscover() { }
-	
+
 	static {
 		if (OsUtil.isWindows()) {
 			if (OsUtil.isX64()) {
 				detectedOS = "Windows x64";
 				defaultSDKPath = "C:/Program Files/android-sdk";
-				
+
 			} else if (!OsUtil.isX64()) {
 				detectedOS = "Windows x86";
 				defaultSDKPath = "C:/Program Files (x86)/android-sdk";
@@ -73,7 +73,7 @@ public final class ProjectDiscover {
 			defaultSDKPath = "/opt/android-sdk/";
 		}
 	}
-	
+
 	/**
 	 * @param androidSdkVersion the androidSdkVersion to set
 	 */
@@ -87,26 +87,26 @@ public final class ProjectDiscover {
 	public static String getAndroidSdkVersion() {
 		return androidSdkVersion;
 	}
-	
+
 
 	/**
 	 * Extract Android SDK Path from .properties file.
-	 * 
+	 *
 	 * @param fileProp .properties File
 	 * @return Android SDK Path
 	 */
 	public static String getSdkDirFromPropertiesFile(final File fileProp) {
 		String result = null;
-		
+
 		if (fileProp.exists()) {
-			final List<String> lines = 
+			final List<String> lines =
 					TactFileUtils.fileToStringArray(fileProp);
-			
+
 			for (int i = 0; i < lines.size(); i++) {
 				if (lines.get(i).startsWith("sdk.dir=")) {
 					if (lines.get(i).contains(TagConstant.ANDROID_SDK_DIR)) {
 						ConsoleUtils.displayWarning(
-								"Android SDK Dir not defined," 
+								"Android SDK Dir not defined,"
 								+ " please init project...");
 					} else {
 						result = lines.get(i).replace("sdk.dir=", "");
@@ -115,57 +115,57 @@ public final class ProjectDiscover {
 				}
 			}
 		}
-		
+
 		if (result != null) {
 			defaultSDKPath = result;
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Extract Android SDK Path from .properties file.
-	 * 
+	 *
 	 * @param filePath .properties File path
 	 * @return Android SDK Path
 	 */
 	public static String getSdkDirFromPropertiesFile(final String filePath) {
 		String result = null;
-		
+
 		final File fileProp = new File(filePath);
 		result = getSdkDirFromPropertiesFile(fileProp);
-		
+
 		if (result != null) {
 			androidSdkVersion = setAndroidSdkPath(result);
 		}
-		
+
 		return result;
 	}
-	
+
 	/**
 	 * Extract Android SDK Path from local.properties file.
-	 * 
+	 *
 	 * @param sdkPath The sdk path
 	 * @return Android SDK Path
 	 */
 	public static String setAndroidSdkPath(final String sdkPath) {
 		String result = null;
-		
-		final File sdkProperties = 
+
+		final File sdkProperties =
 				new File(sdkPath + "/tools/source.properties");
-		
+
 		if (sdkProperties.exists()) {
 			try {
 				final FileInputStream fis = new FileInputStream(sdkProperties);
 				final InputStreamReader isr =
-						new InputStreamReader(fis, 
+						new InputStreamReader(fis,
 								TactFileUtils.DEFAULT_ENCODING);
 				final BufferedReader br = new BufferedReader(isr);
 				String line = br.readLine();
 				while (line != null) {
 					if (line.startsWith("Pkg.Revision")) {
 						result = line.substring(line.lastIndexOf('=') + 1);
-						
+
 						break;
 					}
 					line = br.readLine();
@@ -177,24 +177,24 @@ public final class ProjectDiscover {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Prompt Project Android SDK Path to the user.
 	 */
 	public static void initProjectAndroidSdkPath() {
 		if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
-			final String sdkPath = 
-					ConsoleUtils.getUserInput("Please enter AndroidSDK " 
+			final String sdkPath =
+					ConsoleUtils.getUserInput("Please enter AndroidSDK "
 							+ "full path ["
 							+ defaultSDKPath
 							+ "]:");
-			
+
 			if (!Strings.isNullOrEmpty(sdkPath)) {
 				defaultSDKPath = sdkPath.trim();
-				
+
 			} else {
-				String osMessage = "Detected OS: " + detectedOS;
-				
+				final String osMessage = "Detected OS: " + detectedOS;
+
 				// Debug Log
 				ConsoleUtils.displayDebug(osMessage);
 			}
@@ -203,10 +203,10 @@ public final class ProjectDiscover {
 					ApplicationMetadata.getAndroidSdkPath());
 		}
 	}
-	
+
 	/**
 	 * Extract Project NameSpace from AndroidManifest file.
-	 * 
+	 *
 	 * @param manifest Manifest File
 	 * @return Project Name Space
 	 */
@@ -214,20 +214,20 @@ public final class ProjectDiscover {
 		String projectNamespace = null;
 		SAXBuilder builder;
 		Document doc;
-		
+
 		if (manifest.exists()) {
 			// Make engine
 			builder = new SAXBuilder();
 			try {
 				// Load XML File
 				doc = builder.build(manifest);
-				
+
 				// Load Root element
 				final Element rootNode = doc.getRootElement();
 
 				// Get Name Space from package declaration
-				projectNamespace = rootNode.getAttributeValue("package"); 
-				projectNamespace = 
+				projectNamespace = rootNode.getAttributeValue("package");
+				projectNamespace =
 						projectNamespace.replaceAll("\\.", Context.DELIMITER);
 			} catch (final JDOMException e) {
 				// TODO Auto-generated catch block
@@ -237,17 +237,17 @@ public final class ProjectDiscover {
 				ConsoleUtils.displayError(e);
 			}
 		}
-		
+
 		if (projectNamespace != null) {
 			defaultProjectNamespace = projectNamespace.trim();
 		}
-		
+
 		return projectNamespace;
 	}
-	
+
 	/**
 	 * Extract Project Name from configuration file.
-	 * 
+	 *
 	 * @param config Configuration file
 	 * @return Project Name Space
 	 */
@@ -255,15 +255,15 @@ public final class ProjectDiscover {
 		String projname = null;
 		SAXBuilder builder;
 		Document doc;
-		
+
 		if (config.exists()) {
 			// Make engine
-			builder = new SAXBuilder();	
+			builder = new SAXBuilder();
 			try {
 				// Load XML File
-				doc = builder.build(config);			
+				doc = builder.build(config);
 				// Load Root element
-				final Element rootNode = doc.getRootElement(); 			
+				final Element rootNode = doc.getRootElement();
 				projname = rootNode.getAttribute("name").getValue();
 			} catch (final JDOMException e) {
 				// TODO Auto-generated catch block
@@ -276,27 +276,27 @@ public final class ProjectDiscover {
 		if (projname != null) {
 			defaultProjectName = projname.trim();
 		}
-		
+
 		return projname;
 	}
-	
+
 	/**
 	 * Prompt Project Name to the user.
 	 */
 	public static void initProjectName() {
 		if (Strings.isNullOrEmpty(ApplicationMetadata.INSTANCE.getName())) {
-			final String projectName = 
+			final String projectName =
 					ConsoleUtils.getUserInput("Please enter your Project Name ["
-						+ defaultProjectName 
+						+ defaultProjectName
 						+ "]:");
-			
+
 			if (!Strings.isNullOrEmpty(projectName)) {
 				defaultProjectName = projectName.trim();
 			}
 			ApplicationMetadata.INSTANCE.setName(defaultProjectName);
 		}
 	}
-	
+
 	/**
 	 * Prompt Project Name Space to the user.
 	 */
@@ -304,21 +304,21 @@ public final class ProjectDiscover {
 		if (Strings.isNullOrEmpty(
 				ApplicationMetadata.INSTANCE.getProjectNameSpace())) {
 			boolean good = false;
-			
+
 			while (!good) {
 				final String projectNameSpace = ConsoleUtils.getUserInput(
-								"Please enter your Project NameSpace [" 
+								"Please enter your Project NameSpace ["
 										+ defaultProjectNamespace
 										+ "]:");
-				
+
 				if (Strings.isNullOrEmpty(projectNameSpace)) {
 					good = true;
-					
+
 				} else {
-						
-					String namespaceForm = 
+
+					final String namespaceForm =
 							"^(((([a-z0-9_]+)\\.)*)([a-z0-9_]+))$";
-					
+
 					if (Pattern.matches(namespaceForm, projectNameSpace)) {
 						defaultProjectNamespace = projectNameSpace.trim();
 						good = true;
@@ -335,5 +335,5 @@ public final class ProjectDiscover {
 					.trim());
 		}
 	}
-	
+
 }

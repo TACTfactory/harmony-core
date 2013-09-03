@@ -12,17 +12,17 @@ import ${project_namespace}.criterias.base.Criteria;
  */
 public class ${curr.name?cap_first}Criterias extends CriteriasBase<#if curr.internal?? && curr.internal == "false"><${curr.name?cap_first}></#if> {
 	/** String to parcel ${curr.name?uncap_first}Criteria. */
-	public static final String PARCELABLE = 
+	public static final String PARCELABLE =
 			"${curr.name?uncap_first}CriteriaPARCEL";
 
 	/**
 	 * Constructor.
 	 * @param type The Criteria's GroupType
 	 */
-	public ${curr.name?cap_first}Criterias(final GroupType type) { 
-		super(type); 
+	public ${curr.name?cap_first}Criterias(final GroupType type) {
+		super(type);
 	}
-	
+
 	/**
 	 * Checks if the given Criteria is valid.
 	 * @param crit The Criteria to validate
@@ -31,7 +31,7 @@ public class ${curr.name?cap_first}Criterias extends CriteriasBase<#if curr.inte
 	@Override
 	public boolean validCriteria(final Criteria crit) {
 		boolean result = true;
-		
+
 		return result;
 	}
 

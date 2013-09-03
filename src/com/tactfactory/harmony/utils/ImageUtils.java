@@ -24,7 +24,7 @@ import com.mortennobel.imagescaling.ResampleOp;
 public abstract class ImageUtils {
 	/** Thread numbers. */
 	private static final int NB_THREAD = 8;
-	
+
 	/**
 	 * Resize a image given a ratio.
 	 * @param imageSrc Source image
@@ -35,23 +35,23 @@ public abstract class ImageUtils {
 	public static void resize(
 			final File imageSrc,
 			final File imageDst,
-			final float fraction) 
+			final float fraction)
 					throws IOException {
-		
+
 		if (!imageDst.exists()) {
 			final ResampleOp resampleOp = new ResampleOp(
 						DimensionConstrain.createRelativeDimension(fraction));
-			
+
 			resampleOp.setFilter(
 					ResampleFilters.getBiCubicHighFreqResponse());
 			resampleOp.setNumberOfThreads(NB_THREAD);
-			
+
 			final BufferedImage image = ImageIO.read(imageSrc);
-			final BufferedImage imageResize = 
+			final BufferedImage imageResize =
 					resampleOp.filter(image, null);
-			
+
 			ImageIO.write(
-					imageResize, 
+					imageResize,
 					TactFileUtils.getExtension(imageDst),
 					imageDst);
 		}

@@ -9,7 +9,7 @@ import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import android.os.Bundle;
 
 /** ${curr.name} create Activity.
- * 
+ *
  * @see android.app.Activity
  */
 public class ${curr.name}CreateActivity extends HarmonyFragmentActivity {

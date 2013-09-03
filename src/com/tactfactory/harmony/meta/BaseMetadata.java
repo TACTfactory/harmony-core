@@ -17,14 +17,14 @@ import java.util.Map;
 public abstract class BaseMetadata implements Metadata {
 	/** Component name. */
 	private String name;
-	
+
 	/** List of bundles Metadata. */
 	private Map<String, Metadata> options =
 			new LinkedHashMap<String, Metadata>();
-	
-	/** 
+
+	/**
 	 * Get Metadata option name.
-	 * @return The option name 
+	 * @return The option name
 	 */
 	public final String getName() {
 		return this.name;
@@ -50,5 +50,5 @@ public abstract class BaseMetadata implements Metadata {
 	public final void setName(final String name) {
 		this.name = name;
 	}
-	
+
 }
