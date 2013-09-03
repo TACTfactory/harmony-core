@@ -82,7 +82,7 @@ public class ProviderGenerator extends BaseGenerator {
 						TagConstant.CURRENT_ENTITY, cm.getName());
 				this.getDatamodel().put(
 						TagConstant.PROVIDER_ID, 
-						this.generateProviderUriId(cm));
+						ProviderGenerator.generateProviderUriId(cm));
 
 				// Provider adapters
 				this.makeSourceProvider("TemplateProviderAdapter.java",
@@ -269,7 +269,7 @@ public class ProviderGenerator extends BaseGenerator {
 		}
 	}
 	
-	public int generateProviderUriId(EntityMetadata em) {
+	public static int generateProviderUriId(EntityMetadata em) {
 		int result = 0;
 		result = Math.abs(em.getName().hashCode());
 		return result;
