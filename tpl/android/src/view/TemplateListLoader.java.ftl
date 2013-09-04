@@ -19,8 +19,9 @@ public class ${curr.name}ListLoader
 	 * @param ctx context
 	 * @param crit ${curr.name?cap_first}Criterias
 	 */
-	public ${curr.name}ListLoader(final Context ctx,
-					final ${curr.name?cap_first}Criterias crit) {
+	public ${curr.name}ListLoader(
+			final Context ctx,
+			final ${curr.name?cap_first}Criterias crit) {
 		super(ctx);
 	}
 
@@ -33,7 +34,8 @@ public class ${curr.name}ListLoader
 	 * @param selectionArgs The selection Args
 	 * @param sortOrder The sort order
 	 */
-	public ${curr.name}ListLoader(Context ctx,
+	public ${curr.name}ListLoader(
+					Context ctx,
 					Uri uri,
 					String[] projection,
 					String selection,
@@ -55,7 +57,8 @@ public class ${curr.name}ListLoader
 	 * @param criterias ${curr.name?cap_first}Criterias
 	 * @param sortOrder The sort order
 	 */
-	public ${curr.name}ListLoader(Context ctx,
+	public ${curr.name}ListLoader(
+					Context ctx,
 					Uri uri,
 					String[] projection,
 					${curr.name?cap_first}Criterias criterias,

@@ -29,7 +29,8 @@ import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
  *
  * @see android.app.Fragment
  */
-public class ${curr.name}ShowFragment extends HarmonyFragment {
+public class ${curr.name}ShowFragment 
+		extends HarmonyFragment {
 	/** Model data. */
 	protected ${curr.name} model;
 
@@ -72,8 +73,11 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater,
-    						   ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(
+			LayoutInflater inflater,
+			ViewGroup container,
+			Bundle savedInstanceState) {
+
     	// Inflate the layout for this fragment
         final View view =
         		inflater.inflate(
@@ -112,7 +116,7 @@ public class ${curr.name}ShowFragment extends HarmonyFragment {
 		 * called
 		 */
 		public LoadTask(final ${curr.name}ShowFragment fragment,
-												final ${curr.name} entity) {
+					final ${curr.name} entity) {
 			super();
 			this.fragment = fragment;
 			this.ctx = fragment.getActivity();

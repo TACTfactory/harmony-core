@@ -37,7 +37,8 @@ import ${curr.namespace}.entity.${curr.name};
 /**
  * List adapter for ${curr.name} entity.
  */
-public class ${curr.name}ListAdapter extends SimpleCursorAdapter
+public class ${curr.name}ListAdapter
+		extends SimpleCursorAdapter
 		implements OnClickListener {
 
 	/**
@@ -104,8 +105,10 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 	}
 
 	@Override
-	public View getView(int position,
-			View convertView, ViewGroup parent) {
+	public View getView(
+			int position,
+			View convertView, 
+			ViewGroup parent) {
 		ViewHolder holder;
 
 		if (convertView == null) {
@@ -192,7 +195,7 @@ public class ${curr.name}ListAdapter extends SimpleCursorAdapter
 		 * @param model ${curr.name} data
 		 */
 		public void populate(final ${curr.name} model) {
-<#list fields?values as field>${AdapterUtils.populateViewHolderFieldAdapter(field, 2)}</#list>
+<#list fields?values as field>${AdapterUtils.populateViewHolderFieldAdapter(field, 3)}</#list>
 		}
 	}
 

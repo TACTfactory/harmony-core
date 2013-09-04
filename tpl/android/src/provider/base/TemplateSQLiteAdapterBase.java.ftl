@@ -45,7 +45,7 @@ import ${project_namespace}.${project_name?cap_first}Application;
  * one or you will lose all your modifications.</i></b>
  */
 public abstract class ${curr.name}SQLiteAdapterBase
-									extends ${extend} {
+						extends ${extend} {
 
 	/** TAG for debug purpose. */
 	protected static final String TAG = "${curr.name}DBAdapter";

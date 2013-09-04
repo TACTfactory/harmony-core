@@ -12,7 +12,8 @@ import android.os.Bundle;
  *
  * @see android.app.Activity
  */
-public class ${curr.name}ShowActivity extends HarmonyFragmentActivity {
+public class ${curr.name}ShowActivity 
+		extends HarmonyFragmentActivity {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
