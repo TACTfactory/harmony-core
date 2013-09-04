@@ -30,8 +30,9 @@ import ${curr.namespace}.entity.${curr.name};
  *
  * @see android.app.Fragment
  */
-public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
-	implements DeletableList {
+public class ${curr.name}ListFragment
+		extends HarmonyListFragment<${curr.name}>
+		implements DeletableList {
 
 	/** The adapter which handles list population. */
 	protected ${curr.name}ListAdapter mAdapter;
@@ -39,8 +40,11 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	protected static ${curr.name}ListFragment instance;
 
 	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-												   Bundle savedInstanceState) {
+	public View onCreateView(
+			LayoutInflater inflater,
+			ViewGroup container,
+			Bundle savedInstanceState) {
+
 		//inflater.getContext().getSystemService(
 		//Context.LAYOUT_INFLATER_SERVICE);
 		final View view =
@@ -116,8 +120,10 @@ public class ${curr.name}ListFragment extends HarmonyListFragment<${curr.name}>
 	}
 
 	@Override
-	public void onLoadFinished(Loader<Cursor> loader,
-											Cursor data) {
+	public void onLoadFinished(
+			Loader<Cursor> loader,
+			Cursor data) {
+
 		// Set the new data in the adapter.
 		//this.mAdapter.setData(data);
 		data.setNotificationUri(this.getActivity().getContentResolver(),

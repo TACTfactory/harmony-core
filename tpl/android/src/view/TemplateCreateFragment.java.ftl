@@ -268,7 +268,8 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	}
 
 	@Override
-	public View onCreateView(LayoutInflater inflater,
+	public View onCreateView(
+			LayoutInflater inflater,
 			ViewGroup container,
 			Bundle savedInstanceState) {
 		// Inflate the layout for this fragment

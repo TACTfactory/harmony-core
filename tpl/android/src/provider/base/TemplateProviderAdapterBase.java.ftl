@@ -95,8 +95,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param ctx context
 	 * @param db database
 	 */
-	public ${curr.name?cap_first}ProviderAdapterBase(final Context ctx,
-													 final SQLiteDatabase db) {
+	public ${curr.name?cap_first}ProviderAdapterBase(
+				final Context ctx,
+				final SQLiteDatabase db) {
 		super(ctx);
 		this.adapter = new ${curr.name?cap_first}SQLiteAdapter(ctx);
 		if (db != null) {
@@ -113,8 +114,11 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param selectionArgs SELECT arguments for SQL
 	 * @return how many token deleted
 	 */
-	public int delete(final Uri uri, String selection,
-									 String[] selectionArgs) {
+	public int delete(
+			final Uri uri,
+			String selection,
+			String[] selectionArgs) {
+
 		int matchedUri = ${project_name?cap_first}ProviderBase
 					.getUriMatcher().match(uri);
 		int result = -1;
@@ -216,9 +220,12 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param sortOrder ORDER BY clause
 	 * @return A cursor pointing to the result of the query
 	 */
-	public Cursor query(final Uri uri, String[] projection,
-						String selection, String[] selectionArgs,
+	public Cursor query(final Uri uri,
+						String[] projection,
+						String selection,
+						String[] selectionArgs,
 						final String sortOrder) {
+
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher()
 				.match(uri);
 		Cursor result = null;
@@ -264,9 +271,12 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param selectionArgs SELECT arguments for SQL
 	 * @return how many token update
 	 */
-	public int update(final Uri uri, final ContentValues values,
+	public int update(
+			final Uri uri,
+			final ContentValues values,
 			final String selection,
 			final String[] selectionArgs) {
+
 		<#if inherited>ContentValues ${curr.name?uncap_first}Values = this.extractContentValues(values);</#if>
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher()
 				.match(uri);
