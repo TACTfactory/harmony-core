@@ -8,6 +8,7 @@
  */
 package com.tactfactory.harmony.parser.java.visitor;
 
+import japa.parser.ast.body.ConstructorDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.ModifierSet;
 import japa.parser.ast.body.Parameter;
@@ -23,7 +24,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 /**
  * JavaParser Method Visitor.
  */
-public class MethodVisitor {
+public class ConstructorVisitor {
 
 	/**
 	 * Visit a method declaration to extract its metadata.
@@ -31,21 +32,20 @@ public class MethodVisitor {
 	 * @param meta The metadata of the class containing this method.
 	 * @return The MethodMetadata extracted
 	 */
-	public final MethodMetadata visit(final MethodDeclaration method,
+	public final MethodMetadata visit(final ConstructorDeclaration constructor,
 			final ClassMetadata meta) {
     	// Call the parsers which have been registered by the bundle
-    	for (final BaseParser bParser
+    	/*for (final BaseParser bParser
     			: JavaModelParser.getBundleParsers()) {
     		bParser.visitMethod(method, meta);
-    	}
+    	}*/
 
 		final MethodMetadata methodMeta = new MethodMetadata();
-		methodMeta.setName(method.getName());
-		methodMeta.setType(method.getType().toString());
-		methodMeta.setFinal(ModifierSet.isFinal(method.getModifiers()));
+		methodMeta.setName(constructor.getName());
+		methodMeta.setFinal(ModifierSet.isFinal(constructor.getModifiers()));
 
 		// Add Parameters
-		final List<Parameter> parameters = method.getParameters();
+		final List<Parameter> parameters = constructor.getParameters();
 		if (parameters != null) {
 			for (final Parameter param : parameters) {
 				methodMeta.getArgumentsTypes().add(

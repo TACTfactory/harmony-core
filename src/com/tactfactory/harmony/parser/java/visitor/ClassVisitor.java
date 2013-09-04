@@ -10,6 +10,7 @@ package com.tactfactory.harmony.parser.java.visitor;
 
 import japa.parser.ast.body.BodyDeclaration;
 import japa.parser.ast.body.ClassOrInterfaceDeclaration;
+import japa.parser.ast.body.ConstructorDeclaration;
 import japa.parser.ast.body.EnumConstantDeclaration;
 import japa.parser.ast.body.EnumDeclaration;
 import japa.parser.ast.body.FieldDeclaration;
@@ -48,6 +49,9 @@ public class ClassVisitor {
 
 	/** The method visitor used by this visitor. */
 	private final MethodVisitor methodVisitor = new MethodVisitor();
+	
+	/** The constructor visitor used by this visitor. */
+	private final ConstructorVisitor constructorVisitor = new ConstructorVisitor();
 
 	/**
 	 * Visit a class.
@@ -176,6 +180,13 @@ public class ClassVisitor {
 					if (member instanceof MethodDeclaration) {
 						result.getMethods().add(this.methodVisitor.visit(
 										(MethodDeclaration) member,
+										result));
+					} else
+						
+					// Constructors
+					if (member instanceof ConstructorDeclaration) {
+						result.getMethods().add(this.constructorVisitor.visit(
+										(ConstructorDeclaration) member,
 										result));
 					}
 				}

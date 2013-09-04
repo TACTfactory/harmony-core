@@ -14,6 +14,7 @@ import java.io.StringWriter;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
@@ -39,7 +40,21 @@ public class EntityGenerator extends BaseGenerator {
 
 	/** remove HARD CODED String. */
 	private String setterTemplate = "itemSetter.java";
-
+	
+	/** remove HARD CODED String. */
+	private String writeToParcelTemplate = "writeToParcel.java";
+	
+	/** remove HARD CODED String. */
+	private String parcelConstructorTemplate = "parcelConstructor.java";
+	
+	/** remove HARD CODED String. */
+	private String defaultConstructorTemplate = "defaultConstructor.java";
+	
+	/** remove HARD CODED String. */
+	private String parcelableCreatorTemplate = "parcelable.creator.java";
+	
+	/** remove HARD CODED String. */
+	private String describeContentsTemplate = "describeContents.java";
 	/** Entities folder. */
 	private String entityFolder;
 
@@ -49,9 +64,10 @@ public class EntityGenerator extends BaseGenerator {
 	 */
 	public EntityGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
+		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
+		this.entityFolder = 
+				this.getAdapter().getSourcePath() 
 
-		this.entityFolder =
-				this.getAdapter().getSourcePath()
 				+ this.getAppMetas()
 					.getProjectNameSpace().replaceAll("\\.", "/")
 				+ "/entity/";
@@ -69,25 +85,50 @@ public class EntityGenerator extends BaseGenerator {
 			final String filepath = String.format("%s/%s",
 					this.entityFolder,
 					String.format("%s.java", cm.getName()));
-
+			
+			this.getDatamodel().put(TagConstant.CURRENT_ENTITY, cm.getName());
+			
 			ConsoleUtils.display(">>> Decorate " + cm.getName());
 
 			final File entityFile = TactFileUtils.getFile(filepath);
 			if (entityFile.exists()) {
 				// Load the file once in a String buffer
-				final StringBuffer fileString =
+				final StringBuffer fileString = 
 						TactFileUtils.fileToStringBuffer(entityFile);
-
+				this.implementEmptyConstructor(fileString, cm);
 				this.addImplementsSerializable(fileString, cm);
 				this.addImportSerializable(fileString, cm);
 				this.generateGetterAndSetters(fileString, cm);
-
+				this.implementParcelable(fileString, cm);
+				
 				 // After treatment on entity, write it in the original file
 				TactFileUtils.stringBufferToFile(fileString, entityFile);
 			}
 		}
 	}
 
+	/**
+	 * Implements serializable in the class if it doesn't already.
+	 * @param fileString The stringbuffer containing the class java code
+	 * @param cm The Metadata containing the infos on the java class
+	 */
+	protected final void addImplements(
+			final StringBuffer fileString,
+			final EntityMetadata cm,
+			final String className) {
+		if (!this.alreadyImplementsClass(cm, className)) {
+			ConsoleUtils.displayDebug("Add " + className + " implement");
+			final int firstAccolade = fileString.indexOf(" {");
+			
+			// Class already implements an interface which is not the class
+			if (cm.getImplementTypes().size() > 0) { 
+				fileString.insert(firstAccolade, ", " + className);
+			} else {
+				fileString.insert(firstAccolade, " implements " + className);
+			}		
+			cm.getImplementTypes().add(className);
+		}
+	}
 
 	/**
 	 * Implements serializable in the class if it doesn't already.
@@ -97,19 +138,20 @@ public class EntityGenerator extends BaseGenerator {
 	protected final void addImplementsSerializable(
 			final StringBuffer fileString,
 			final EntityMetadata cm) {
-		if (!this.alreadyImplementsSerializable(cm)) {
-			ConsoleUtils.displayDebug("Add serializable implement");
-			final int firstAccolade = fileString.indexOf(" {");
-
-			// Class already implements an interface which is not Serializable
-			if (cm.getImplementTypes().size() > 0) {
-				fileString.insert(firstAccolade, ", Serializable");
-			} else {
-				fileString.insert(firstAccolade, " implements Serializable");
-			}
-		}
+		this.addImplements(fileString, cm, "Serializable");
 	}
-
+	
+	/**
+	 * Implements Parcelable in the class if it doesn't already.
+	 * @param fileString The stringbuffer containing the class java code
+	 * @param cm The Metadata containing the infos on the java class
+	 */
+	protected final void addImplementsParcelable(
+			final StringBuffer fileString,
+			final EntityMetadata cm) {
+		this.addImplements(fileString, cm, "Parcelable");
+	}
+	
 	/**
 	 * Import serializable in the class if it doesn't already.
 	 * @param fileString The stringbuffer containing the class java code
@@ -117,8 +159,30 @@ public class EntityGenerator extends BaseGenerator {
 	 */
 	protected final void addImportSerializable(final StringBuffer fileString,
 			final ClassMetadata cm) {
-		if (!this.alreadyImportsSerializable(cm)) {
-			ConsoleUtils.displayDebug("Add serializable import");
+		this.addImport(fileString, cm, "Serializable", "java.io.Serializable");
+	}
+	
+	/**
+	 * Import parcelable in the class if it doesn't already.
+	 * @param fileString The stringbuffer containing the class java code
+	 * @param cm The Metadata containing the infos on the java class
+	 */
+	protected final void addImportParcelable(final StringBuffer fileString,
+			final ClassMetadata cm) {
+		this.addImport(fileString, cm, "Parcelable", "android.os.Parcelable");
+	}
+	
+	/**
+	 * Import serializable in the class if it doesn't already.
+	 * @param fileString The stringbuffer containing the class java code
+	 * @param cm The Metadata containing the infos on the java class
+	 */
+	protected final void addImport(final StringBuffer fileString,
+			final ClassMetadata cm,
+			final String className,
+			final String classPackage) {
+		if (!this.alreadyImportsClass(cm, className)) {
+			ConsoleUtils.displayDebug("Add " + className + " import");
 			int insertPos;
 
 			if (cm.getImports().size() > 0) {
@@ -126,8 +190,9 @@ public class EntityGenerator extends BaseGenerator {
 			} else {
 				insertPos = fileString.indexOf(";") + 1;
 			}
-
-			fileString.insert(insertPos, "\rimport java.io.Serializable;\r");
+			fileString.insert(
+					insertPos, 
+					"\rimport " + classPackage + ";\r");
 		}
 	}
 
@@ -208,6 +273,28 @@ public class EntityGenerator extends BaseGenerator {
 			ConsoleUtils.displayError(e);
 		}
 	}
+	
+	/**
+	 * Checks if given class already implements given class
+	 * @param cm The class to check
+	 * @param className The interface name 
+	 * @return
+	 */
+	protected final boolean alreadyImplementsClass(final EntityMetadata cm,
+			String className) {
+		boolean ret = false;
+		for (final String impl : cm.getImplementTypes()) {
+			if (className.equals(impl)) {				
+				ret = true;
+				
+				ConsoleUtils.displayDebug(
+						"Already implements " + className + " !");
+
+			}
+		}
+
+		return ret;
+	}
 
 	/**
 	 * Check if the class implements the class Serializable.
@@ -216,18 +303,19 @@ public class EntityGenerator extends BaseGenerator {
 	 */
 	protected final boolean alreadyImplementsSerializable(
 			final EntityMetadata cm) {
-		boolean ret = false;
-		for (final String impl : cm.getImplementTypes()) {
-			if ("Serializable".equals(impl)) {
-				ret = true;
-
-				ConsoleUtils.displayDebug("Already implements Serializable !");
-			}
-		}
-
-		return ret;
+		return this.alreadyImplementsClass(cm, "Serializable");
 	}
-
+	
+	/**
+	 * Check if the class implements the class Parcelable.
+	 * @param cm The Metadata containing the infos on the java class
+	 * @return True if it already implements parcelable
+	 */
+	protected final boolean alreadyImplementsParcelable(
+			final EntityMetadata cm) {
+		return this.alreadyImplementsClass(cm, "Parcelable");
+	}
+	
 	/**
 	 * Check if the class already has a getter for the given field.
 	 * @param fm The Metadata of the field
@@ -291,21 +379,125 @@ public class EntityGenerator extends BaseGenerator {
 		}
 
 		return result;
+	}	
+	
+	/**
+	 * Check if the class already has a getter for the given field.
+	 * @param fm The Metadata of the field
+	 * @param cm The Metadata containing the infos on the java class
+	 * @return True if it already has getter for this field
+	 */
+	protected final boolean alreadyImplementsDefaultConstructor(
+			final ClassMetadata cm) {
+		boolean ret = false;
+		
+		for (final MethodMetadata m : cm.getMethods()) {
+			if (m.getName().equals(cm.getName()) 
+					&& m.getArgumentsTypes().size() == 0) {
+				ret = true;
+				
+				ConsoleUtils.displayDebug("Already implements " 
+						+ "empty constructor");
+			}
+		}
+					
+		return ret;
 	}
+	
+	/**
+	 * Check if the class already imports Serializable.
+	 * @param cm The Metadata containing the infos on the java class
+	 * @return True if it already imports serializable
+	 */
+	protected final boolean alreadyImportsClass(final ClassMetadata cm,
+			String className) {
+		boolean ret = false;
+		for (final String imp : cm.getImports()) {
+			if (className.equals(imp)) {
+				ret = true;
+			}
+		}
 
+		return ret;
+	}
+	
 	/**
 	 * Check if the class already imports Serializable.
 	 * @param cm The Metadata containing the infos on the java class
 	 * @return True if it already imports serializable
 	 */
 	protected final boolean alreadyImportsSerializable(final ClassMetadata cm) {
-		boolean ret = false;
-		for (final String imp : cm.getImports()) {
-			if ("Serializable".equals(imp)) {
-				ret = true;
-			}
+		return this.alreadyImportsClass(cm, "Serializable");
+	}
+	
+	/**
+	 * Check if the class already imports Parcelable.
+	 * @param cm The Metadata containing the infos on the java class
+	 * @return True if it already imports Parcelable
+	 */
+	protected final boolean alreadyImportsParcelable(final ClassMetadata cm) {
+		return this.alreadyImportsClass(cm, "Parcelable");
+	}
+	
+	/**
+	 * Implement all methods needed by parcelable.
+	 * @param fileString The string buffer representation of the file 
+	 * @param cm The classmetadata
+	 */
+	protected void implementParcelable(StringBuffer fileString,
+			final EntityMetadata cm) {
+		if (!this.alreadyImplementsParcelable(cm)) {
+			this.addImplementsParcelable(fileString, cm);
+			this.addImportParcelable(fileString, cm);
+			this.addImport(fileString, cm, "Parcel", "android.os.Parcel");
+			this.generateMethod(fileString, this.parcelConstructorTemplate);
+			this.generateMethod(fileString, this.writeToParcelTemplate);
+			this.generateMethod(fileString, this.describeContentsTemplate);
+			this.generateMethod(fileString, this.parcelableCreatorTemplate);
 		}
-
-		return ret;
+	}
+	
+	/**
+	 * Generate a get or set method following the given template.
+	 * @param fileString The stringbuffer containing the class java code
+	 * @param templateName The template file name
+	 */
+	protected final void generateMethod(final StringBuffer fileString, 
+			final String templateName) {
+		final int lastAccolade = fileString.lastIndexOf("}");
+		
+		final Map<String, Object> map = this.getDatamodel();
+		
+		try {
+			final StringWriter writer = new StringWriter();
+			
+			final Template tpl = this.getCfg().getTemplate(
+					String.format("%s%s",
+							this.getAdapter().getTemplateSourceCommonPath(),
+							templateName + ".ftl"));
+			// Load template file in engine
+			
+			tpl.process(map, writer);
+			final StringBuffer getString = writer.getBuffer();
+			fileString.insert(lastAccolade, getString + "\n\n");
+			
+		} catch (final IOException e) {
+			ConsoleUtils.displayError(e);
+		} catch (final TemplateException e) {
+			ConsoleUtils.displayError(e);
+		}		
+	}
+	
+	/**
+	 * Implement an empty contructor if it doesn't already exists.
+	 * @param fileString The string buffer representing the file
+	 * @param cm The classMetadata
+	 */
+	protected final void implementEmptyConstructor(
+			final StringBuffer fileString,
+			final ClassMetadata cm) {
+		if (!this.alreadyImplementsDefaultConstructor(cm)) {
+			this.generateMethod(fileString, this.defaultConstructorTemplate);
+		}
 	}
 }
