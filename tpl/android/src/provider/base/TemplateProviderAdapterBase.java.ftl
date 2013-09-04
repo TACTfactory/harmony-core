@@ -68,10 +68,10 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 
 	/** ${curr.name?upper_case}_ALL. */
 	protected static final int ${curr.name?upper_case}_ALL =
-			${provider_id};
+			${provider_id?c};
 	/** ${curr.name?upper_case}_ONE. */
 	protected static final int ${curr.name?upper_case}_ONE =
-			${provider_id + 1};
+			${(provider_id + 1)?c};
 
 	/**
 	 * Static constructor.

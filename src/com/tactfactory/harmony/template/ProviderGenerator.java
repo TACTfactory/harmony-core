@@ -70,7 +70,6 @@ public class ProviderGenerator extends BaseGenerator {
 	 * Generate the provider adapters.
 	 */
 	public final void generateProviderAdapters() {
-		int providerId = 0;
 		this.makeSourceProvider(
 				"utils/base/ApplicationProviderUtilsBase.java",
 				"utils/base/ProviderUtilsBase.java",
@@ -82,7 +81,8 @@ public class ProviderGenerator extends BaseGenerator {
 				this.getDatamodel().put(
 						TagConstant.CURRENT_ENTITY, cm.getName());
 				this.getDatamodel().put(
-						TagConstant.PROVIDER_ID, providerId);
+						TagConstant.PROVIDER_ID, 
+						ProviderGenerator.generateProviderUriId(cm));
 
 				// Provider adapters
 				this.makeSourceProvider("TemplateProviderAdapter.java",
@@ -105,9 +105,6 @@ public class ProviderGenerator extends BaseGenerator {
 									+ "ProviderUtilsBase.java",
 							true);
 				}
-
-				final int step = 10;
-				providerId += step;
 			}
 		}
 	}
@@ -270,5 +267,11 @@ public class ProviderGenerator extends BaseGenerator {
 		} catch (final JDOMException e) {
 			ConsoleUtils.displayError(e);
 		}
+	}
+	
+	public static int generateProviderUriId(EntityMetadata em) {
+		int result = 0;
+		result = Math.abs(em.getName().hashCode());
+		return result;
 	}
 }
