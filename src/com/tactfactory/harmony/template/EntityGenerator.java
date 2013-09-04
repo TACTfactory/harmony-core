@@ -95,9 +95,7 @@ public class EntityGenerator extends BaseGenerator {
 				// Load the file once in a String buffer
 				final StringBuffer fileString = 
 						TactFileUtils.fileToStringBuffer(entityFile);
-				if (!this.alreadyImplementsDefaultConstructor(cm)) {
-					this.implementEmptyConstructor(fileString, cm);
-				}
+				this.implementEmptyConstructor(fileString, cm);
 				this.addImplementsSerializable(fileString, cm);
 				this.addImportSerializable(fileString, cm);
 				this.generateGetterAndSetters(fileString, cm);
@@ -275,6 +273,13 @@ public class EntityGenerator extends BaseGenerator {
 			ConsoleUtils.displayError(e);
 		}
 	}
+	
+	/**
+	 * Checks if given class already implements given class
+	 * @param cm The class to check
+	 * @param className The interface name 
+	 * @return
+	 */
 	protected final boolean alreadyImplementsClass(final EntityMetadata cm,
 			String className) {
 		boolean ret = false;
@@ -434,6 +439,11 @@ public class EntityGenerator extends BaseGenerator {
 		return this.alreadyImportsClass(cm, "Parcelable");
 	}
 	
+	/**
+	 * Implement all methods needed by parcelable.
+	 * @param fileString The string buffer representation of the file 
+	 * @param cm The classmetadata
+	 */
 	protected void implementParcelable(StringBuffer fileString,
 			final EntityMetadata cm) {
 		if (!this.alreadyImplementsParcelable(cm)) {
@@ -478,6 +488,11 @@ public class EntityGenerator extends BaseGenerator {
 		}		
 	}
 	
+	/**
+	 * Implement an empty contructor if it doesn't already exists.
+	 * @param fileString The string buffer representing the file
+	 * @param cm The classMetadata
+	 */
 	protected final void implementEmptyConstructor(
 			final StringBuffer fileString,
 			final ClassMetadata cm) {
