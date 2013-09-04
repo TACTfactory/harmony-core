@@ -1,4 +1,7 @@
 <#assign curr = entities[current_entity] />
+	/**
+	 * Parcelable creator.
+	 */
 	public static final Parcelable.Creator<${curr.name?cap_first}> CREATOR
 	    = new Parcelable.Creator<${curr.name?cap_first}>() {
 		public ${curr.name?cap_first} createFromParcel(Parcel in) {

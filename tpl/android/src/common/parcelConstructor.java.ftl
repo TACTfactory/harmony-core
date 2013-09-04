@@ -4,15 +4,24 @@
 			<#if !field.internal>
 				<#if !field.relation??>
 					<#if field.type == "int" || field.type == "Integer">
-		this.${field.name} = in.readInt();
+		this.set${field.name?cap_first}(in.readInt());
 					<#elseif field.type == "String">
-		this.${field.name} = in.readString();
+		this.set${field.name?cap_first}(in.readString());
 					<#elseif field.type?lower_case == "datetime">
-		this.${field.name} = new DateTime(in.readString());
+		this.set${field.name?cap_first}(new DateTime(in.readString()));
 					</#if>
 				<#else>
 					<#if field.relation.type == "OneToOne" || field.relation.type == "ManyToOne">
 		this.set${field.name?cap_first}((${field.type}) in.readParcelable(${field.type}.class.getClassLoader()));
+					<#else>
+		int nb${field.name?cap_first} = in.readInt();
+		if (nb${field.name?cap_first} > -1) {
+			ArrayList<${field.relation.targetEntity}> items = new ArrayList<${field.relation.targetEntity}>();
+			for (int i = 0; i < nb${field.name?cap_first}; i++) {
+				items.add((${field.relation.targetEntity}) in.readParcelable(${field.relation.targetEntity}.class.getClassLoader()));
+			}
+			this.set${field.name?cap_first}(items);
+		}
 					</#if>
 				</#if>
 			</#if>

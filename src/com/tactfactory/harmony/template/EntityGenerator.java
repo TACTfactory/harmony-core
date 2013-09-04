@@ -94,8 +94,10 @@ public class EntityGenerator extends BaseGenerator {
 			if (entityFile.exists()) {
 				// Load the file once in a String buffer
 				final StringBuffer fileString = 
-						TactFileUtils.fileToStringBuffer(entityFile); 
-				this.implementEmptyConstructor(fileString, cm);
+						TactFileUtils.fileToStringBuffer(entityFile);
+				if (!this.alreadyImplementsDefaultConstructor(cm)) {
+					this.implementEmptyConstructor(fileString, cm);
+				}
 				this.addImplementsSerializable(fileString, cm);
 				this.addImportSerializable(fileString, cm);
 				this.generateGetterAndSetters(fileString, cm);
