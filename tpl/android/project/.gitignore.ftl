@@ -61,7 +61,15 @@ local.properties
 .svn
 
 # Libs Sherlock #
+#################
 /libs/sherlock/*
+
+# Gradle #
+##########
+/build
+/.gradle
+/.idea
+*.iml
 
 # Custom rules #
 ################
