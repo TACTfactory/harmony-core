@@ -10,8 +10,10 @@ package com.tactfactory.harmony.plateforme;
 
 import java.lang.reflect.Field;
 
+import com.google.common.base.Strings;
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Column.Type;
+import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
@@ -33,7 +35,10 @@ public abstract class SqliteAdapter {
 
 		final StringBuilder builder = new StringBuilder(20);
 		builder.append(' ');
-		builder.append(generateColumnType(fm.getColumnDefinition()));
+		/*if (Strings.isNullOrEmpty(fm.getColumnDefinition())) {
+			fm.setColumnDefinition(generateColumnType(fm));
+		}*/
+		builder.append(fm.getColumnDefinition());
 		if (fm.isId()) {
 			builder.append(" PRIMARY KEY");
 			if (fm.getColumnDefinition().equalsIgnoreCase("INTEGER")) {
@@ -86,8 +91,21 @@ public abstract class SqliteAdapter {
 	 * @param fieldType The harmony type of a field.
 	 * @return The columnType for SQLite
 	 */
-	public static String generateColumnType(final String fieldType) {
-		String type = fieldType;
+	public static String generateColumnType(final FieldMetadata field) {
+		String type;
+		if (Strings.isNullOrEmpty(field.getHarmonyType())) {
+			
+			if (field.getHarmonyType().equals(Column.Type.ENUM.getValue())) {	
+				type =	ApplicationMetadata.INSTANCE.getEnums().get(
+						field.getType()).getType();
+			} else {
+				type = field.getHarmonyType();
+			}
+			
+		} else {
+			type = field.getType();
+		}
+		
 		if (type.equalsIgnoreCase(Column.Type.STRING.getValue())
 			|| type.equalsIgnoreCase(Column.Type.TEXT.getValue())
 			|| type.equalsIgnoreCase(Column.Type.LOGIN.getValue())
@@ -148,6 +166,8 @@ public abstract class SqliteAdapter {
 
 		if (type.equalsIgnoreCase(Column.Type.CHARACTER.getValue())) {
 			type = "STRING";
+		} else {
+			ConsoleUtils.display("No type found for " + type);
 		}
 
 

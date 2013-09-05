@@ -12,10 +12,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.google.common.base.Strings;
+import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.meta.RelationMetadata;
+import com.tactfactory.harmony.plateforme.SqliteAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.MetadataUtils;
 
@@ -49,6 +52,7 @@ public class ClassCompletor {
 		for (final EntityMetadata classMeta : this.metas.values()) {
 			this.updateInheritedIds(classMeta);
 			this.updateRelations(classMeta);
+			this.updateColumnDefinition(classMeta);
 		}
 
 		for (final EntityMetadata classMeta : this.newMetas.values()) {
@@ -297,6 +301,63 @@ public class ClassCompletor {
 				final FieldMetadata id = mother.getIds().get(idName);
 				cm.getIds().put(idName, id);
 				cm.getFields().put(idName, id);
+			}
+		}
+	}
+	
+	private void updateColumnDefinition(final EntityMetadata entity) {
+		for (FieldMetadata field : entity.getFields().values()) {
+			// Get column definition if non existent
+			if (Strings.isNullOrEmpty(field.getColumnDefinition())) {
+				field.setColumnDefinition(
+						SqliteAdapter.generateColumnType(field));
+			}
+			
+			// Warn the user if the column definition is a reserved keyword
+			SqliteAdapter.Keywords.exists(field.getColumnDefinition());
+			
+			// Set default values for type if type is recognized
+			final Type type = Type.fromName(
+					field.getColumnDefinition());
+			if (type != null) {
+				field.setColumnDefinition(type.getValue());
+				if (field.isNullable() == null) {
+					field.setNullable(type.isNullable());
+				}
+				if (field.isUnique() == null) {
+					field.setUnique(type.isUnique());
+				}
+				if (field.getLength() == null) {
+					field.setLength(type.getLength());
+				}
+				if (field.getPrecision() == null) {
+					field.setPrecision(type.getPrecision());
+				}
+				if (field.getScale() == null) {
+					field.setScale(type.getScale());
+				}
+				if (field.isLocale() == null) {
+					field.setIsLocale(type.isLocale());
+				}
+			} else {
+				if (field.isNullable() == null) {
+					field.setNullable(false);
+				}
+				if (field.isUnique() == null) {
+					field.setUnique(false);
+				}
+				if (field.getLength() == null) {
+					field.setLength(null);
+				}
+				if (field.getPrecision() == null) {
+					field.setPrecision(null);
+				}
+				if (field.getScale() == null) {
+					field.setScale(null);
+				}
+				if (field.isLocale() == null) {
+					field.setIsLocale(false);
+				}
 			}
 		}
 	}
