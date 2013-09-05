@@ -120,7 +120,7 @@
 			<#return generateCompleteGetter(className field) + ".name()"/>
 		</#if>
 	<#else>																											<#-- For all other cases (String.valueOf(field)) -->
-		<#return "String.valueOf("+generateCompleteGetter(className field) + ")"/>
+		<#return generateCompleteGetter(className field) + ""/>
 	</#if>
 </#function>
 
