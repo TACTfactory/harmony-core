@@ -28,7 +28,7 @@ import com.tactfactory.harmony.utils.MetadataUtils;
 
 public class ClassCompletor {
 	/** Integer literal. */
-	private static final String TYPE_INTEGER = "integer";
+	private static final String TYPE_INTEGER = "INTEGER";
 
 	/** Class metadata. */
 	private Map<String, EntityMetadata> metas;
@@ -93,7 +93,7 @@ public class ClassCompletor {
 					rel.getFieldRef().add(ids.get(i).getName());
 				}
 				if (!ids.isEmpty()) {
-					fieldMeta.setColumnDefinition(ids.get(0).getType());
+					//fieldMeta.setColumnDefinition(ids.get(0).getColumnDefinition());
 				} else {
 					final RuntimeException exception = new RuntimeException(
 							"Error while updating relations : "
@@ -311,6 +311,9 @@ public class ClassCompletor {
 			if (Strings.isNullOrEmpty(field.getColumnDefinition())) {
 				field.setColumnDefinition(
 						SqliteAdapter.generateColumnType(field));
+				ConsoleUtils.display("###*****#######))))))))) New column def = " + field.getColumnDefinition() +" for " + field.getName());
+			} else {
+				ConsoleUtils.display("###*****#######))))))))) Already have column def = " + field.getColumnDefinition() +" for " + field.getName());
 			}
 			
 			// Warn the user if the column definition is a reserved keyword
@@ -320,7 +323,7 @@ public class ClassCompletor {
 			final Type type = Type.fromName(
 					field.getColumnDefinition());
 			if (type != null) {
-				field.setColumnDefinition(type.getValue());
+				//field.setColumnDefinition(type.getValue());
 				if (field.isNullable() == null) {
 					field.setNullable(type.isNullable());
 				}

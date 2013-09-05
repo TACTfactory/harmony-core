@@ -333,8 +333,8 @@ public class FieldVisitor {
 							}
 							result.setHarmonyType(
 									Type.fromName(type).getValue());
-							result.setColumnDefinition(
-									Type.fromName(type).getValue());
+							/*result.setColumnDefinition(
+									Type.fromName(type).getValue());*/
 						} else
 
 						// set scale

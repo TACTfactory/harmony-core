@@ -9,11 +9,14 @@
 package com.tactfactory.harmony.plateforme;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
+import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
@@ -103,7 +106,16 @@ public abstract class SqliteAdapter {
 			}
 			
 		} else {
-			type = field.getType();
+			if(field.getRelation() != null) {
+				EntityMetadata relatedEntity = 
+						ApplicationMetadata.INSTANCE.getEntities().get(
+								field.getRelation().getEntityRef());
+				ArrayList<FieldMetadata> ids = new ArrayList<FieldMetadata>(
+						relatedEntity.getIds().values());
+				type = SqliteAdapter.generateColumnType(ids.get(0));
+			} else {
+				type = field.getType();
+			}
 		}
 		
 		if (type.equalsIgnoreCase(Column.Type.STRING.getValue())
