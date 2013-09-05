@@ -320,8 +320,15 @@ public class ClassCompletor {
 			SqliteAdapter.Keywords.exists(field.getColumnDefinition());
 			
 			// Set default values for type if type is recognized
-			final Type type = Type.fromName(
-					field.getColumnDefinition());
+			final Type type;
+			if (field.getHarmonyType() != null) {
+				type = Type.fromName(
+						field.getHarmonyType());
+			} else {
+				type = Type.fromName(
+						field.getColumnDefinition());
+			}
+			
 			if (type != null) {
 				//field.setColumnDefinition(type.getValue());
 				if (field.isNullable() == null) {
