@@ -133,20 +133,20 @@ public abstract class CommonTest {
 				ApplicationMetadata.INSTANCE.getProjectNameSpace()
 					.replaceAll("\\.", "/");
 
-		final String srcDir =
-				String.format("%s/tact-core/src/%s/%s/",
+		String srcDir = 
+				String.format("%s/tact-core/resources/%s/%s/",
 						Harmony.getBundlePath(),
-						pathNameSpace,
+						pathNameSpace, 
 						"entity");
-		final String destDir =
-				String.format("%s/src/%s/%s/",
-						Harmony.getProjectAndroidPath(),
-						pathNameSpace,
+		
+		String destDir = 
+				String.format("%s/src/%s/%s/", 
+						Harmony.getProjectAndroidPath(), 
+						pathNameSpace, 
 						"entity");
 
 		System.out.println(destDir);
 
-		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
 		if (new File(destDir + "Post.java").exists()) {
 			ConsoleUtils.displayDebug("Entity is copy to generated package !");
