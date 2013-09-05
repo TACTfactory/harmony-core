@@ -63,9 +63,9 @@ public abstract class SqliteAdapter {
 			}
 
 			// Set Unique
-			if (fm.isUnique() != null && fm.isUnique()) {
+			/*if (fm.isUnique() != null && fm.isUnique()) {
 				builder.append(" UNIQUE");
-			}
+			}*/
 
 			// Set Nullable
 			if (fm.isNullable() == null || !fm.isNullable()) {
