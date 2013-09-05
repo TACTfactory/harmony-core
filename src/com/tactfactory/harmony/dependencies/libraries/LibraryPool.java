@@ -20,7 +20,8 @@ public class LibraryPool {
 			//return pathname.isDirectory() 
 			//		|| pathname.getName().endsWith(".jar");
 			return pathname.isDirectory()
-					|| pathname.getAbsolutePath().contains("lib/");
+					|| (pathname.getAbsolutePath().lastIndexOf("lib/")
+							> pathname.getAbsolutePath().lastIndexOf("vendor/"));
 		}
 	};
 	/** Map of all the libraries <FileName, File>. */
@@ -49,7 +50,7 @@ public class LibraryPool {
 				}
 			} else if (file.isFile()) {
 				String path = file.getAbsolutePath();
-				String fileName = path.substring(path.indexOf("lib/") + 4);
+				String fileName = path.substring(path.lastIndexOf("lib/") + 4);
 				if (this.pool.get(fileName) != null) {
 					ConsoleUtils.displayWarning(
 							"The library " 
