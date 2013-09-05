@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.harmony.fixture.test;
+package com.tactfactory.harmony.test.fixture;
 
 import java.io.File;
 
@@ -145,12 +145,13 @@ public class FixtureGlobalTest extends CommonTest {
 		final String pathNameSpace =
 				ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll(
 						"\\.", "/");
-		final String srcDir =
-				String.format("%s/tact-core/src/%s/%s/%s",
+		
+		String srcDir = 
+				String.format("%s/tact-core/resources/%s/%s/%s/",
 						Harmony.getBundlePath(),
-						pathNameSpace,
+						pathNameSpace, 
 						"fixture",
-						"xml/");
+						"xml");
 
 		final String destDir = String.format("fixtures/");
 
@@ -167,13 +168,13 @@ public class FixtureGlobalTest extends CommonTest {
 		final String pathNameSpace =
 				ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll(
 						"\\.", "/");
-
-		final String srcDir =
-				String.format("%s/tact-core/src/%s/%s/%s",
-					Harmony.getBundlePath(),
-					pathNameSpace,
-					"fixture",
-					"yml/");
+		
+		String srcDir = 
+				String.format("%s/tact-core/resources/%s/%s/%s/",
+						Harmony.getBundlePath(),
+						pathNameSpace, 
+						"fixture",
+						"yml");
 
 		final String destDir = String.format("fixtures/");
 
