@@ -150,6 +150,11 @@ public abstract class ${curr.name}SQLiteAdapterBase
 <#if (InheritanceUtils.isExtended(curr))>
 		+ ", FOREIGN KEY (" + ${NamingUtils.alias(curr.ids[0].name)} + ") REFERENCES " + ${curr.extends}SQLiteAdapter.TABLE_NAME + "(" + ${curr.extends}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)} + ") ON DELETE CASCADE"
 </#if>
+<#list curr.fields?values as field>
+	<#if (field.unique?? && field.unique)>
+		+ ", UNIQUE(" + ${NamingUtils.alias(field.name)} + ")"
+	</#if>
+</#list>
 		+ ");";
 	}
 
