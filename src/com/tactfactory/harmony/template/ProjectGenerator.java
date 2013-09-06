@@ -206,18 +206,10 @@ public class ProjectGenerator extends BaseGenerator {
 		this.updateLibrary("joda-time-2.1.jar");
 		this.updateLibrary("guava-12.0.jar");
 		this.updateLibrary("jsr305.jar");
+		this.updateLibrary("core-annotations.jar");
 
 		/// copy sherlock library
 		this.installAndroidSherlockLib();
-
-		/// copy Harmony library
-		TactFileUtils.copyfile(
-				new File(String.format("%s/%s",
-						Harmony.getBundlePath(),
-						"tact-core/harmony.jar")),
-				new File(String.format("%s/%s",
-						this.getAdapter().getLibsPath(),
-						"harmony.jar")));
 	}
 
 	/**

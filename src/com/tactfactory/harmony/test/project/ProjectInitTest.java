@@ -89,7 +89,7 @@ public class ProjectInitTest extends CommonTest {
 
 		CommonTest.hasFindFile("android/libs");
 		//CommonTest.hasFindFile("android/libs/android-support-v4.jar");
-		CommonTest.hasFindFile("android/libs/harmony.jar");
+		CommonTest.hasFindFile("android/libs/core-annotations.jar");
 		CommonTest.hasFindFile("android/libs/joda-time-2.1.jar");
 
 		CommonTest.hasFindFile("android/res");

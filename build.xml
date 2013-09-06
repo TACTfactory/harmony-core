@@ -26,7 +26,8 @@
 	<property name="dist.rel-dir" value="./" />
 	<property name="sherlock.rel-dir" value="sherlock-4.2" />
 	<property name="doc.rel-dir" value="${dist.rel-dir}/javadoc" />
-	<property name="jar.rel-file" value="${dist.rel-dir}/${ant.project.name}.jar" />	
+	<property name="jar.rel-file" value="${dist.rel-dir}/${ant.project.name}.jar" />
+	<property name="jar-annotations.rel-file" value="${dist.rel-dir}/lib/core-annotations.jar" />
 		
 	<property name="compile.debug" value="true" />
 	<property name="compile.debuglevel" value="lines,vars,source" />
@@ -402,6 +403,21 @@
             </manifest>
             
         </jar>
+        <jar destfile="${jar-annotations.rel-file}" compress="true" filesetmanifest="merge">
+			<zipfileset dir="${build.rel-dir}" includes="**/com/tactfactory/harmony/annotation/**"/>
+			<!-- zipfileset dir="${lib.rel-dir}"
+			prefix="${lib.rel-dir}"
+			includes=""
+			excludes="" />
+			<zipfileset dir="tpl"
+			prefix="tpl"
+			includes=""
+			excludes="" /-->
+			<manifest>
+				<attribute name="Class-Path" value="${libs.project}" />
+			</manifest>
+
+		</jar>
     </target>
     
     <!-- emma -->   
