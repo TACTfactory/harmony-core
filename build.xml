@@ -179,7 +179,7 @@
             <classpath refid="${test.classpath.id}" />
             <formatter type="xml" />
             <formatter classname="org.apache.tools.ant.taskdefs.optional.junit.TearDownOnVmCrash" usefile="false"/>
-        	<test name="com.tactfactory.harmony.test.AllTests" todir="${tmp.rel-dir}/"/>
+        	<test name="com.tactfactory.harmony.test.AllTests" todir="${tmp.rel-dir}/" failureproperty="tests.failure"/>
         </junit>
         
         <if condition="${emma.enabled}">
@@ -207,6 +207,12 @@
 				</emma>
 			</then>
 		</if>
+		
+		<fail message="Tests failed!!!">
+			<condition>
+				<isset property="tests.failure" />
+			</condition>
+		</fail>
     </target>
 	
 	<target name="run-findbugs" depends="compile-tests"
