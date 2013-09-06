@@ -250,6 +250,8 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	/** Load data from model to fields view. */
 	public void loadData() {
 <#list fields?values as field>${AdapterUtils.loadDataCreateFieldAdapter(field, 2)}</#list>
+
+<#if hasRelation>		new LoadTask(this).execute();</#if>
 	}
 
 	/** Save data from fields view to model. */
@@ -357,6 +359,89 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			this.progress.dismiss();
 		}
 	}
+
+<#if hasRelation>
+	/**
+	 * This class will save the entity into the DB.
+	 * It runs asynchronously and shows a progressDialog
+	 */
+	public class LoadTask extends AsyncTask<Void, Void, Void> {
+		/** AsyncTask's context. */
+		private final Context ctx;
+		/** Progress Dialog. */
+		private ProgressDialog progress;
+		/** Fragment. */
+		private ${curr.name}CreateFragment fragment;
+
+		/**
+		 * Constructor of the task.
+		 * @param entity The entity to insert in the DB
+		 * @param fragment The parent fragment from where the aSyncTask is
+		 * called
+		 */
+		public LoadTask(final ${curr.name}CreateFragment fragment) {
+			super();
+			this.ctx = fragment.getActivity();
+			this.fragment = fragment;
+		}
+
+		@Override
+		protected void onPreExecute() {
+			super.onPreExecute();
+
+			this.progress = ProgressDialog.show(this.ctx,
+					this.ctx.getString(
+							R.string.${curr.name?lower_case}_progress_load_relations_title),
+					this.ctx.getString(
+							R.string.${curr.name?lower_case}_progress_load_relations_message));
+		}
+
+		@Override
+		protected Void doInBackground(Void... params) {
+			<#list relations as field>
+				<#if !field.internal && !field.hidden>
+			this.fragment.${field.name}List = 
+				new ${field.relation.targetEntity}ProviderUtils(this.ctx).queryAll();
+				</#if>
+			</#list>
+			return null;
+		}
+
+		@Override
+		protected void onPostExecute(Void result) {
+			super.onPostExecute(result);
+			<#list relations as field>
+				<#if !field.internal && !field.hidden>
+			this.fragment.init${field.name?cap_first}Dialog(
+					this.fragment.${field.name}List);
+				</#if>
+			</#list>
+			/*if (result >= 0) {
+				final HarmonyFragmentActivity activity =
+										 (HarmonyFragmentActivity) this.ctx;
+				activity.finish();
+			} else {
+				final AlertDialog.Builder builder =
+						new AlertDialog.Builder(this.ctx);
+				builder.setIcon(0);
+				builder.setMessage(
+						this.ctx.getString(
+								R.string.${curr.name?lower_case}_error_create));
+				builder.setPositiveButton(
+						this.ctx.getString(android.R.string.yes),
+						new Dialog.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int which) {
+
+							}
+						});
+				builder.show();
+			}*/
+
+			this.progress.dismiss();
+		}
+	}
+</#if>
 
 	@Override
 	public void onValidationSelected() {
