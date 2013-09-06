@@ -189,56 +189,12 @@ public class FieldVisitor {
 						annotationType);
 
 				// Adjust databases column definition
-				if (Strings.isNullOrEmpty(
+				/*if (Strings.isNullOrEmpty(
 						result.getColumnDefinition())) {
 					result.setColumnDefinition(
 							SqliteAdapter.generateColumnType(
 									result.getType()));
-				}
-
-				// Set default values for type if type is recognized
-				final Type type = Type.fromName(
-						result.getColumnDefinition());
-				if (type != null) {
-					result.setColumnDefinition(type.getValue());
-					if (result.isNullable() == null) {
-						result.setNullable(type.isNullable());
-					}
-					if (result.isUnique() == null) {
-						result.setUnique(type.isUnique());
-					}
-					if (result.getLength() == null) {
-						result.setLength(type.getLength());
-					}
-					if (result.getPrecision() == null) {
-						result.setPrecision(type.getPrecision());
-					}
-					if (result.getScale() == null) {
-						result.setScale(type.getScale());
-					}
-					if (result.isLocale() == null) {
-						result.setIsLocale(type.isLocale());
-					}
-				} else {
-					if (result.isNullable() == null) {
-						result.setNullable(false);
-					}
-					if (result.isUnique() == null) {
-						result.setUnique(false);
-					}
-					if (result.getLength() == null) {
-						result.setLength(DEFAULT_LENGTH);
-					}
-					if (result.getPrecision() == null) {
-						result.setPrecision(DEFAULT_LENGTH);
-					}
-					if (result.getScale() == null) {
-						result.setScale(DEFAULT_LENGTH);
-					}
-					if (result.isLocale() == null) {
-						result.setIsLocale(false);
-					}
-				}
+				}*/
 			}
 
 			// ID relation
@@ -255,9 +211,9 @@ public class FieldVisitor {
 			}
 
 
-			result.setColumnDefinition(
+			/*result.setColumnDefinition(
 					SqliteAdapter.generateColumnType(
-							result.getColumnDefinition()));
+							result.getColumnDefinition()));*/
 
 			// Add to meta dictionary
 			if (isId || isColumn || isRelation) {
@@ -269,7 +225,7 @@ public class FieldVisitor {
 			if (!result.getName().equals(result.getColumnName())) {
 				SqliteAdapter.Keywords.exists(result.getColumnName());
 			}
-			SqliteAdapter.Keywords.exists(result.getColumnDefinition());
+			//SqliteAdapter.Keywords.exists(result.getColumnDefinition());
 			SqliteAdapter.Keywords.exists(result.getType());
 		}
 
@@ -377,8 +333,8 @@ public class FieldVisitor {
 							}
 							result.setHarmonyType(
 									Type.fromName(type).getValue());
-							result.setColumnDefinition(
-									Type.fromName(type).getValue());
+							/*result.setColumnDefinition(
+									Type.fromName(type).getValue());*/
 						} else
 
 						// set scale
