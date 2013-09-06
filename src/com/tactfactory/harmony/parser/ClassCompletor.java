@@ -311,9 +311,6 @@ public class ClassCompletor {
 			if (Strings.isNullOrEmpty(field.getColumnDefinition())) {
 				field.setColumnDefinition(
 						SqliteAdapter.generateColumnType(field));
-				ConsoleUtils.display("###*****#######))))))))) New column def = " + field.getColumnDefinition() +" for " + field.getName());
-			} else {
-				ConsoleUtils.display("###*****#######))))))))) Already have column def = " + field.getColumnDefinition() +" for " + field.getName());
 			}
 			
 			// Warn the user if the column definition is a reserved keyword
