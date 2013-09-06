@@ -403,9 +403,6 @@
 				<#else>
 		<#assign result = result + "${tab}${ViewUtils.setLoader(field)}" />
 				</#if>
-			<#else>
-		<#assign result = result + "${tab}this.${field.name}List = new ${field.relation.targetEntity}ProviderUtils(this.getActivity()).queryAll();" />
-		<#assign result = result + "${tab}this.init${field.name?cap_first}Dialog(this.${field.name}List);" />
 			</#if>
 		</#if>
 	<#return result/>

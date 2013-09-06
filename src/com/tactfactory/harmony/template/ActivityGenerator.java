@@ -235,6 +235,18 @@ public class ActivityGenerator extends BaseGenerator {
 						"common_delete",
 						"Del",
 						Group.COMMON);
+				
+				TranslationMetadata.addDefaultTranslation(
+						entityName.toLowerCase(Locale.ENGLISH)
+							+ "_progress_load_relations_title",
+						entityName + " related entities loading",
+						Group.MODEL);
+				
+				TranslationMetadata.addDefaultTranslation(
+						entityName.toLowerCase(Locale.ENGLISH)
+							+ "_progress_load_relations_message",
+						entityName + " related entities are loading...",
+						Group.MODEL);
 
 				TranslationMetadata.addDefaultTranslation(
 						entityName.toLowerCase(Locale.ENGLISH)
