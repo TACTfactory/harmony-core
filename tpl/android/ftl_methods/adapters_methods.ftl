@@ -66,7 +66,7 @@
 				</#if>
 			<#elseif (field.type?lower_case == "boolean")>
 				<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
-				<#assign result = result + "${tab}		cursor.getString(index).equals(String.valueOf(true)));\n"/>
+				<#assign result = result + "${tab}		cursor.getInt(index) == 1);\n"/>
 			<#elseif (field.type?lower_case == "int" || field.type?lower_case == "integer" || field.type == "ean" || field.type == "zipcode")>
 				<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
 				<#assign result = result + "${tab}		cursor.getInt(index));\n"/>
