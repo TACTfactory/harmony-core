@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
@@ -82,13 +83,30 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Generate HomeActivity File and merge it with datamodel.
 	 */
 	public final void generateHomeActivity() {
+		String projectName = ApplicationMetadata.INSTANCE.getName();
 		ConsoleUtils.display(">> Generate HomeView & Strings...");
 
-		final String fullFilePath = this.getAdapter().getHomeActivityPathFile();
-		final String fullTemplatePath =
+		String fullFilePath = this.getAdapter().getHomeActivityPathFile();
+		String fullTemplatePath =
 				this.getAdapter().getTemplateHomeActivityPathFile();
 
 		super.makeSource(fullTemplatePath, fullFilePath, true);
+		
+		fullFilePath = this.getAdapter().getSourcePath()
+				+ ApplicationMetadata.INSTANCE.getProjectNameSpace()
+				+ "/navigation/" 
+				+ CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, projectName)
+				+ "Navigation.java";
+		fullTemplatePath = this.getAdapter().getTemplateSourcePath()
+				+ "/navigation/TemplateNavigation.java";
+
+		super.makeSource(fullTemplatePath, fullFilePath, true);
+		
+		// create main.xml
+		super.makeSource(
+				this.getAdapter().getTemplateRessourceLayoutPath() + "main.xml",
+				this.getAdapter().getRessourceLayoutPath() + "main.xml",
+				true);
 	}
 
 	/**
