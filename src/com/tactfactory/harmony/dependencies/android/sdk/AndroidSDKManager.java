@@ -13,11 +13,13 @@ import org.jdom2.Namespace;
 import org.rauschig.jarchivelib.ArchiveFormat;
 
 import com.google.common.base.Joiner;
+import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.threads.DownloadFileThread;
 import com.tactfactory.harmony.threads.UnpackThread;
 import com.tactfactory.harmony.threads.DownloadFileThread.OnDownloadFinishedListener;
 import com.tactfactory.harmony.threads.UnpackThread.OnUnpackedFinishedListener;
 import com.tactfactory.harmony.utils.ConsoleUtils;
+import com.tactfactory.harmony.utils.TactFileUtils;
 import com.tactfactory.harmony.utils.XMLUtils;
 
 /**
@@ -240,5 +242,29 @@ public class AndroidSDKManager
 		File file = new File(sdkPath + "/tools/android");
 		result = file.exists();
 		return result;
+	}
+	
+	public static void copySupportV4Into(String destFolder) {
+		// Replace android support v4 with the one from android sdk.
+		File sdkFolder = new File(ApplicationMetadata.getAndroidSdkPath());
+		if (sdkFolder.exists()) {
+			File supportV4SDK = 
+					new File(sdkFolder.getAbsolutePath() 
+							+ "/extras/android/compatibility/v4/"
+							+ "android-support-v4.jar");
+			
+			File supportV4Menu = 
+					new File(destFolder + "android-support-v4.jar");
+			
+			if (supportV4SDK.exists()) {
+				TactFileUtils.copyfile(supportV4SDK, supportV4Menu);
+				ConsoleUtils.display("Support V4 copied successfuly.");
+			} else {
+				ConsoleUtils.displayWarning(
+						"SDK extras : android-support-v4 not found.");
+			}
+		} else {
+			ConsoleUtils.displayWarning("SDK not found.");
+		}
 	}
 }

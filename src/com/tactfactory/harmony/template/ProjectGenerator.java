@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.tactfactory.harmony.Harmony;
+import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -358,6 +359,11 @@ public class ProjectGenerator extends BaseGenerator {
 			command.add("--name");
 			command.add(ApplicationMetadata.INSTANCE.getName() + "-abs");
 			ConsoleUtils.launchCommand(command);
+
+			
+			AndroidSDKManager.copySupportV4Into(
+					this.getAdapter().getLibsPath() 
+							+ "sherlock/library/libs/");
 		}
 
 		final File projectFolder = new File(Harmony.getProjectAndroidPath());
