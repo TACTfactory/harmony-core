@@ -244,6 +244,10 @@ public class AndroidSDKManager
 		return result;
 	}
 	
+	/**
+	 * Copy support v4 jar into the given folder.
+	 * @param destFolder The folder where to copy the support v4 library
+	 */
 	public static void copySupportV4Into(String destFolder) {
 		// Replace android support v4 with the one from android sdk.
 		File sdkFolder = new File(ApplicationMetadata.getAndroidSdkPath());
