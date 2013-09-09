@@ -83,22 +83,11 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Generate HomeActivity File and merge it with datamodel.
 	 */
 	public final void generateHomeActivity() {
-		String projectName = ApplicationMetadata.INSTANCE.getName();
 		ConsoleUtils.display(">> Generate HomeView & Strings...");
 
 		String fullFilePath = this.getAdapter().getHomeActivityPathFile();
 		String fullTemplatePath =
 				this.getAdapter().getTemplateHomeActivityPathFile();
-
-		super.makeSource(fullTemplatePath, fullFilePath, true);
-		
-		fullFilePath = this.getAdapter().getSourcePath()
-				+ ApplicationMetadata.INSTANCE.getProjectNameSpace()
-				+ "/navigation/" 
-				+ CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, projectName)
-				+ "Navigation.java";
-		fullTemplatePath = this.getAdapter().getTemplateSourcePath()
-				+ "/navigation/TemplateNavigation.java";
 
 		super.makeSource(fullTemplatePath, fullFilePath, true);
 		
