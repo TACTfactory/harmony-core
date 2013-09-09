@@ -175,6 +175,19 @@ public abstract class BaseAdapter {
 				this.getPlatform(),
 				this.getSource());
 	}
+	
+	/**
+	 * Get the sources path.
+	 * @return The sources path
+	 */
+	public final String getSourceControllerPath() {
+		return String.format("%s/%s/%s/%s/%s/",
+				Harmony.getProjectPath(),
+				this.getPlatform(),
+				this.getSource(),
+				ApplicationMetadata.INSTANCE.getProjectNameSpace(),
+				this.getController());
+	}
 
 	/**
 	 * Get the widgets path.
