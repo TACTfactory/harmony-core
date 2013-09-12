@@ -162,7 +162,10 @@ public class EntityGenerator extends BaseGenerator {
 	 */
 	protected final void addImportSerializable(final StringBuffer fileString,
 			final ClassMetadata classMeta) {
-		this.addImport(fileString, classMeta, "Serializable", "java.io.Serializable");
+		this.addImport(fileString,
+				classMeta,
+				"Serializable",
+				"java.io.Serializable");
 	}
 	
 	/**
@@ -172,7 +175,10 @@ public class EntityGenerator extends BaseGenerator {
 	 */
 	protected final void addImportParcelable(final StringBuffer fileString,
 			final ClassMetadata classMeta) {
-		this.addImport(fileString, classMeta, "Parcelable", "android.os.Parcelable");
+		this.addImport(fileString,
+				classMeta,
+				"Parcelable",
+				"android.os.Parcelable");
 	}
 	
 	/**

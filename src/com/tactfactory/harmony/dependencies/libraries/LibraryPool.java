@@ -32,7 +32,7 @@ public class LibraryPool {
 	 * @param fileName The filename of the library
 	 * @return The library File
 	 */
-	public File getLibrary(final String fileName) {
+	public final File getLibrary(final String fileName) {
 		return this.pool.get(fileName);
 	}
 	
@@ -41,7 +41,7 @@ public class LibraryPool {
 	 * order to fill the pool.
 	 * @param file The folder to parse
 	 */
-	public void parseLibraries(final File file) {
+	public final void parseLibraries(final File file) {
 		if (file.exists()) {
 			if (file.isDirectory()) {
 				final File[] files = file.listFiles(this.filter);

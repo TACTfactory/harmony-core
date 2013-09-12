@@ -28,7 +28,7 @@ public class DependenciesCommand extends BaseCommand {
 			+ ACTION_SDK;
 
 	@Override
-	public void execute(final String action,
+	public final void execute(final String action,
 			final String[] args,
 			final String option) {
 		final AndroidSDKManager androidSDKManager = new AndroidSDKManager();
