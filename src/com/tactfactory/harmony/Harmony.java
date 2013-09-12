@@ -9,8 +9,6 @@
 package com.tactfactory.harmony;
 
 import java.io.File;
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Locale;
@@ -66,6 +64,11 @@ public final class Harmony {
 	/** Template folders. */
 	private final Map<String, File> templateFolders =
 			new HashMap<String, File>();
+	
+
+	/** Template folders. */
+	private final Map<Class<?>, String> commandBundleFolders =
+			new HashMap<Class<?>, String>();
 
 	/** Constructor.
 	 * @throws Exception PluginManager failure
@@ -90,8 +93,8 @@ public final class Harmony {
 		props.setProperty(PluginManager.class, "cache.file",    "jspf.cache");*/
 
 		/** PluginManager. */
-		final PluginManager pluginManager =
-				PluginManagerFactory.createPluginManager(props);
+		PluginManager pluginManager = null;
+				
 
 		// Filters
 		final IOFileFilter includeFilter =
@@ -106,40 +109,40 @@ public final class Harmony {
 				includeFilter,
 				excludeFilter);
 
-		ConsoleUtils.displayDebug("Load plugins from classpath");
-		try {
-			pluginManager.addPluginsFrom(new URI("classpath://*"));
-		} catch (URISyntaxException e) {
-			ConsoleUtils.displayError(e);
-		}
-
 		// Add Bundles to Plugin Manager &  foldertemplate
 		for (File plugin : plugins) {
-			if (!plugin.getName().equals("harmony.jar")) {
-				// Load bundles
-				ConsoleUtils.displayDebug(
-						"Load plugins from " + plugin.getName());
-				pluginManager.addPluginsFrom(plugin.toURI());
+			
+			pluginManager = PluginManagerFactory.createPluginManager(props);
+			
+			// Load bundles
+			ConsoleUtils.displayDebug(
+					"Load plugins from " + plugin.getName());
+			pluginManager.addPluginsFrom(plugin.toURI());
+			
+			// Template bundles
+			final File templateFolderFile =
+					plugin.getParentFile().getAbsoluteFile();
+			this.templateFolders.put(plugin.getName(), templateFolderFile);
+			ConsoleUtils.displayDebug(
+					"Load templates from " + templateFolderFile);
+		
+			
+			// Process extensions commands
+			final PluginManagerUtil pmu = new PluginManagerUtil(pluginManager);
+			final Collection<Command> commands = pmu.getPlugins(Command.class);
 
-				// Template bundles
-				final File templateFolderFile =
-						plugin.getParentFile().getAbsoluteFile();
-				this.templateFolders.put(plugin.getName(), templateFolderFile);
-				ConsoleUtils.displayDebug(
-						"Load templates from " + templateFolderFile);
+			// Bootstrap all commands
+			for (final Command command : commands) {
+				this.bootstrap.put(command.getClass(), command);
+				this.commandBundleFolders.put(command.getClass(), 
+						templateFolderFile.getAbsolutePath());
 			}
+			
+			pluginManager.shutdown();
 		}
 
-		// Process extensions commands
-		final PluginManagerUtil pmu = new PluginManagerUtil(pluginManager);
-		final Collection<Command> commands = pmu.getPlugins(Command.class);
+		
 
-		// Bootstrap all commands
-		for (final Command command : commands) {
-			this.bootstrap.put(command.getClass(), command);
-		}
-
-		pluginManager.shutdown();
 	}
 
 	/** 
@@ -231,6 +234,10 @@ public final class Harmony {
 		// Select Action and launch
 		for (final Command baseCommand : this.bootstrap.values()) {
 			if (baseCommand.isAvailableCommand(action)) {
+				Context.setCurrentBundleFolder(
+						this.commandBundleFolders.get(baseCommand.getClass()) 
+						+ "/");
+				
 				baseCommand.execute(action, args, option);
 				isfindAction = true;
 			}
