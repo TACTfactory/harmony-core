@@ -16,16 +16,26 @@
 	<property name="src.rel-dir" value="src" />
 	<!-- <property name="etc.rel-dir" value="etc" /-->
 	<property name="build.rel-dir" value="bin" />
-	<property name="lib.rel-dir" value="../../lib" />
-	<property name="ant-lib.rel-dir" value="${r"${lib.rel-dir}"}/ant" />
+	<property name="core-lib.rel-dir" value="../tact-core/lib" />
+	<property name="lib.rel-dir" value="lib" />
+	<property name="ant-lib.rel-dir" value="${r"${core-lib.rel-dir}"}/ant" />
 	<property name="tmp.rel-dir" value="tmp" />
 	<property name="dist.rel-dir" value="./" />
 	<property name="doc.rel-dir" value="${r"${dist.rel-dir}"}/javadoc" />
 	<property name="jar.rel-file" value="${r"${dist.rel-dir}"}/${r"${ant.project.name}"}.jar" />
+	<property name="jar-annotations.rel-file" value="${r"${dist.rel-dir}"}/lib/${r"${ant.project.name}"}-annotations.jar" />
 
 
 	<property name="compile.debug" value="true" />
 	<property name="compile.debuglevel" value="lines,vars,source" />
+
+	<!-- jar file from where the tasks are loaded -->
+    <path id="android.antlibs">
+        <pathelement path="${r"${ant-lib.rel-dir}"}/anttasks.jar" />
+    </path>
+
+    <!-- Custom tasks -->
+    <taskdef resource="anttasks.properties" classpathref="android.antlibs" />
 
 	<path id="project.classpath">
 		<pathelement location="../tact-core/harmony.jar" />
@@ -91,17 +101,103 @@
 		</javac>
 	</target>
 
-	<target name="run-tests" depends="compile-tests" description="Run tests">
-		<property name="test.classpath.id" value="project.classpath" />
+	<target name="run-tests" depends="compile-tests" 
+		description="Run tests">
+
+		<if condition="${r"${emma.enabled}"}">
+            <then>
+		    	<emma enabled="${r"${emma.enabled}"}" >
+				    <instr instrpathref="emma.coverage.classes"
+				         destdir="${r"${emma.instr-dir}"}"
+				         metadatafile="${r"${emma.out-dir}"}/metadata.emma"
+				         merge="true">
+ 				        <filter value="${r"${emma.filter}"}"/>
+				    </instr>
+				</emma>
+				
+		    	<path id="emma.test.classpath">
+					
+					<pathelement location="${r"${emma.instr-dir}"}"/>
+					<path refid="project.classpath"/>
+<!-- 					<pathelement location="${r"${build.rel-dir}"}"/>					 -->
+					<pathelement location="${r"${emma.dir}"}"/>
+					<fileset dir="${r"${emma.dir}"}">
+						<include name="*.jar" />
+					</fileset>
+					<fileset dir="${r"${lib.rel-dir}"}">
+						<include name="*.jar" />
+					</fileset>
+					<fileset dir="${r"${dist.rel-dir}"}">
+						<include name="*.jar" />
+					</fileset>
+				</path>
+				
+		    	<property name="test.classpath.id" value="emma.test.classpath" />
+			</then>
+			<else>
+			    <property name="test.classpath.id" value="project.classpath" />
+			</else>
+		</if>
 
 		<junit haltonfailure="no" fork="yes">
+            <!-- <if condition="${r"${emma.enabled}"}">
+	            <then> -->
+		            <jvmarg value="-Demma.coverage.out.file=${r"${emma.out-dir}"}/coverage.emma" />
+					<jvmarg value="-Demma.coverage.out.merge=false" />
+					<!-- <jvmarg value="-XX:-UseSplitVerifier" /> -->
+           		<!-- </then>
+      		</if>	 -->	
+
 			<classpath refid="${r"${test.classpath.id}"}" />
 			<formatter type="xml" />
-			<test name="${bundle_namespace}.tests.AllTests" todir="${r"${tmp.rel-dir}"}/" />
+            <formatter classname="org.apache.tools.ant.taskdefs.optional.junit.TearDownOnVmCrash" usefile="false"/>
+			<test name="${bundle_namespace}.tests.AllTests" todir="${r"${tmp.rel-dir}"}/" failureproperty="tests.failure" />
 		</junit>
-	</target>
 
-	<target name="run-findbugs" depends="jar" description="Run code analysis over code to check for problems.">
+ 		<if condition="${r"${emma.enabled}"}">
+            <then>
+		        <emma enabled="${r"${emma.enabled}"}" >
+				    <report sourcepath="src">
+					    <!-- collect all EMMA data dumps (metadata and runtime)
+					         [this can be done via nested <fileset> fileset elements
+					         or <file> elements pointing to a single file]:
+					    -->
+					    <fileset dir="${r"${emma.out-dir}"}" >
+					        <include name="*.emma" />
+					    </fileset>
+					    
+					    <!-- for every type of report desired, configure a nested
+					         element; various report parameters
+					         can be inherited from the parent <report>
+					         and individually overridden for each report type:
+					    -->
+					    <xml outfile="${r"${emma.out-dir}"}/coverage.xml"
+						columns="name,class,method,block,line" 
+                              			sort="+line, +name"/>
+					    <html outfile="${r"${emma.out-dir}"}/coverage.html" />
+				    </report>
+				</emma>
+			</then>
+		</if>
+		
+        <fail message="Tests failed!!!">
+       		<condition>
+       		    <isset property="tests.failure" />
+       		</condition>
+   		</fail>
+	</target>
+    
+<!-- 	<target name="run-tests" depends="compile-tests" description="Run tests"> -->
+<!-- 		<property name="test.classpath.id" value="project.classpath" /> -->
+
+<!-- 		<junit haltonfailure="no" fork="yes"> -->
+<!-- 			<classpath refid="${r"${test.classpath.id}"}" /> -->
+<!-- 			<formatter type="xml" /> -->
+<!-- 			<test name="com.tactfactory.harmony.bundles.rest.test.AllTests" todir="${r"${tmp.rel-dir}"}/" /> -->
+<!-- 		</junit> -->
+<!-- 	</target> -->
+
+	<target name="run-findbugs" depends="compile-tests" description="Run code analysis over code to check for problems.">
 
 		<!-- Fail this target if FindBugs is not installed. -->
 		<available file="${r"${env.FINDBUGS_HOME}"}/lib/findbugs.jar" property="findbugs.available" />
@@ -225,6 +321,21 @@
 		</pathconvert>
 		<jar destfile="${r"${jar.rel-file}"}" compress="true" filesetmanifest="merge">
 			<zipfileset dir="${r"${build.rel-dir}"}" includes="" excludes="" />
+			<!-- zipfileset dir="${r"${lib.rel-dir}"}"
+			prefix="${r"${lib.rel-dir}"}"
+			includes=""
+			excludes="" />
+			<zipfileset dir="tpl"
+			prefix="tpl"
+			includes=""
+			excludes="" /-->
+			<manifest>
+				<attribute name="Class-Path" value="${r"${libs.project}"}" />
+			</manifest>
+
+		</jar>
+		<jar destfile="${r"${jar-annotations.rel-file}"}" compress="true" filesetmanifest="merge">
+			<zipfileset dir="${r"${build.rel-dir}"}" includes="**/${bundle_namespace?replace(".","/")}/annotation/**"/>
 			<!-- zipfileset dir="${r"${lib.rel-dir}"}"
 			prefix="${r"${lib.rel-dir}"}"
 			includes=""
