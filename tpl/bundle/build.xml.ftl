@@ -52,6 +52,7 @@
 		<mkdir dir="${r"${build.rel-dir}"}" />
 		<mkdir dir="${r"${dist.rel-dir}"}" />
 		<mkdir dir="${r"${tmp.rel-dir}"}" />
+		<mkdir dir="${r"${lib.rel-dir}"}" />
 	</target>
 
 	<target name="clean" description="Delete temporary folders">
