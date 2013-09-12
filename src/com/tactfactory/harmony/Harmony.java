@@ -66,7 +66,7 @@ public final class Harmony {
 			new HashMap<String, File>();
 	
 
-	/** Template folders. */
+	/** Command classes associated to bundle folder. */
 	private final Map<Class<?>, String> commandBundleFolders =
 			new HashMap<Class<?>, String>();
 
@@ -111,7 +111,7 @@ public final class Harmony {
 
 		// Add Bundles to Plugin Manager &  foldertemplate
 		for (File plugin : plugins) {
-			
+			// TODO : clean plugin manager mechanic for folders
 			pluginManager = PluginManagerFactory.createPluginManager(props);
 			
 			// Load bundles
