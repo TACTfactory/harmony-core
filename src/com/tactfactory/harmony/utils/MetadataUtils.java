@@ -16,8 +16,9 @@ public abstract class MetadataUtils {
 	 * @param appMeta The application metadata
 	 * @return True if inheritance found, false otherwise
 	 */
-	public static final boolean inheritsFromEntity(ClassMetadata classMeta,
-			ApplicationMetadata appMeta) {
+	public static final boolean inheritsFromEntity(
+			final ClassMetadata classMeta,
+			final ApplicationMetadata appMeta) {
 		boolean result = false;
 		result = appMeta.getEntities().containsKey(classMeta.getExtendType());
 		return result;

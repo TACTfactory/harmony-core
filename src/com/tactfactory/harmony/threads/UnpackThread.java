@@ -40,12 +40,13 @@ public class UnpackThread extends Thread {
 	 * @param listener The listener
 	 * @param filePath The path to the file to unpack.
 	 * @param destPath The destination folder path
+	 * @param archiveFormat The archive format
 	 */
 	public UnpackThread(
-			OnUnpackedFinishedListener listener,
-			String filePath,
-			String destPath,
-			ArchiveFormat archiveFormat) {
+			final OnUnpackedFinishedListener listener,
+			final String filePath,
+			final String destPath,
+			final ArchiveFormat archiveFormat) {
 		
 		this(listener, filePath, destPath, archiveFormat, null);
 	}
@@ -55,13 +56,15 @@ public class UnpackThread extends Thread {
 	 * @param listener The listener
 	 * @param filePath The path to the file to unpack.
 	 * @param destPath The destination folder path
+	 * @param archiveFormat The archive format
+	 * @param compressionType The compression type (can be null)
 	 */
 	public UnpackThread(
-			OnUnpackedFinishedListener listener,
-			String filePath,
-			String destPath,
-			ArchiveFormat archiveFormat,
-			CompressionType compressionType) {
+			final OnUnpackedFinishedListener listener,
+			final String filePath,
+			final String destPath,
+			final ArchiveFormat archiveFormat,
+			final CompressionType compressionType) {
 		super();
 		this.file = new File(filePath);
 		this.destFile = new File(destPath);

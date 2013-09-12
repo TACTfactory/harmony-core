@@ -92,9 +92,8 @@ public class ClassCompletor {
 				for (int i = 0; i < ids.size(); i++) {
 					rel.getFieldRef().add(ids.get(i).getName());
 				}
-				if (!ids.isEmpty()) {
-					//fieldMeta.setColumnDefinition(ids.get(0).getColumnDefinition());
-				} else {
+				
+				if (ids.isEmpty()) {
 					final RuntimeException exception = new RuntimeException(
 							"Error while updating relations : "
 							+ " Your entity " + cm.getName()
@@ -305,8 +304,13 @@ public class ClassCompletor {
 		}
 	}
 	
+	/**
+	 * Update fields column definition.
+	 * 
+	 * @param entity The entity in which to complete fields
+	 */
 	private void updateColumnDefinition(final EntityMetadata entity) {
-		for (FieldMetadata field : entity.getFields().values()) {
+		for (final FieldMetadata field : entity.getFields().values()) {
 			// Get column definition if non existent
 			if (Strings.isNullOrEmpty(field.getColumnDefinition())) {
 				field.setColumnDefinition(

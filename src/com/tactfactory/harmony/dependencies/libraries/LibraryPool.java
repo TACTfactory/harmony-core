@@ -16,12 +16,12 @@ public class LibraryPool {
 	private final FileFilter filter = new FileFilter() {
 		
 		@Override
-		public boolean accept(File pathname) {
+		public boolean accept(final File pathname) {
 			//return pathname.isDirectory() 
 			//		|| pathname.getName().endsWith(".jar");
 			return pathname.isDirectory()
 					|| (pathname.getAbsolutePath().lastIndexOf("lib/")
-							> pathname.getAbsolutePath().lastIndexOf("vendor/"));
+						> pathname.getAbsolutePath().lastIndexOf("vendor/"));
 		}
 	};
 	/** Map of all the libraries <FileName, File>. */
@@ -32,7 +32,7 @@ public class LibraryPool {
 	 * @param fileName The filename of the library
 	 * @return The library File
 	 */
-	public File getLibrary(String fileName) {
+	public final File getLibrary(final String fileName) {
 		return this.pool.get(fileName);
 	}
 	
@@ -41,16 +41,17 @@ public class LibraryPool {
 	 * order to fill the pool.
 	 * @param file The folder to parse
 	 */
-	public void parseLibraries(File file) {
+	public final void parseLibraries(final File file) {
 		if (file.exists()) {
 			if (file.isDirectory()) {
-				File[] files = file.listFiles(this.filter);
+				final File[] files = file.listFiles(this.filter);
 				for (File f : files) {
 					this.parseLibraries(f);
 				}
 			} else if (file.isFile()) {
-				String path = file.getAbsolutePath();
-				String fileName = path.substring(path.lastIndexOf("lib/") + 4);
+				final String path = file.getAbsolutePath();
+				final String fileName = path.substring(path.lastIndexOf("lib/") 
+						+ "lib/".length());
 				if (this.pool.get(fileName) != null) {
 					ConsoleUtils.displayWarning(
 							"The library " 

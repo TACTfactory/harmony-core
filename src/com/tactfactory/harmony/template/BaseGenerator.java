@@ -183,7 +183,7 @@ public abstract class BaseGenerator {
 	 * 			For list activity is "TemplateListActivity.java"
 	 * @param generatePath Destination file.
 	 */
-	protected void appendSource(final String templatePath,
+	protected final void appendSource(final String templatePath,
 			final String generatePath) {
 		if (TactFileUtils.exists(generatePath)) {
 			final File generateFile = new File(generatePath);

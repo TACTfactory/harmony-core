@@ -269,7 +269,12 @@ public class ProviderGenerator extends BaseGenerator {
 		}
 	}
 	
-	public static int generateProviderUriId(EntityMetadata em) {
+	/**
+	 * Generate a provider uri ID.
+	 * @param em The entity metadata
+	 * @return The provider uri ID
+	 */
+	public static int generateProviderUriId(final EntityMetadata em) {
 		int result = 0;
 		result = Math.abs(em.getName().hashCode());
 		return result;

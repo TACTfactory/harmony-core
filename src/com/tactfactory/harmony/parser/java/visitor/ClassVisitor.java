@@ -51,7 +51,8 @@ public class ClassVisitor {
 	private final MethodVisitor methodVisitor = new MethodVisitor();
 	
 	/** The constructor visitor used by this visitor. */
-	private final ConstructorVisitor constructorVisitor = new ConstructorVisitor();
+	private final ConstructorVisitor constructorVisitor = 
+			new ConstructorVisitor();
 
 	/**
 	 * Visit a class.

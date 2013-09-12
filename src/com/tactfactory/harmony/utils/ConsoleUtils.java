@@ -350,7 +350,7 @@ public abstract class ConsoleUtils {
 	 * Repeat the prompt until user input is valid.
 	 *
 	 * @param promptMessage message to display
-	 * @param All possible valid answers
+	 * @param validAnswers All possible valid answers
 	 * @return input user input
 	 */
 	public static String getValidUserInput(final String promptMessage,
@@ -526,7 +526,8 @@ public abstract class ConsoleUtils {
 							if (error != null && !error.isEmpty()
 									&& !"Note: checking out '4.2.0'."
 									.equals(error)) {
-								if ("'libs/sherlock' already exists in the index"
+								if (("'libs/sherlock' already "
+										+ "exists in the index")
 										.equals(error)) {
 									ConsoleUtils.displayWarning(error);
 								} else {
