@@ -11,7 +11,6 @@ import java.util.List;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
-import org.jdom2.JDOMFactory;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -152,7 +151,7 @@ public abstract class XMLUtils {
 		
 		
 		
-		return result ;
+		return result;
 	}
 }
 

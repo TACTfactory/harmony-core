@@ -224,7 +224,7 @@ public final class Context {
 	 * @param libraryName The library to get
 	 * @return The library File
 	 */
-	public File getLibrary(String libraryName) {
+	public File getLibrary(final String libraryName) {
 		return this.libPool.getLibrary(libraryName);
 	}
 

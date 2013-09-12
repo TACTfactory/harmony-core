@@ -9,26 +9,23 @@
 package com.tactfactory.harmony.parser.java.visitor;
 
 import japa.parser.ast.body.ConstructorDeclaration;
-import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.ModifierSet;
 import japa.parser.ast.body.Parameter;
 
 import java.util.List;
 
-import com.tactfactory.harmony.parser.JavaModelParser;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.MethodMetadata;
-import com.tactfactory.harmony.parser.BaseParser;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
- * JavaParser Method Visitor.
+ * JavaParser Constructor Visitor.
  */
 public class ConstructorVisitor {
 
 	/**
-	 * Visit a method declaration to extract its metadata.
-	 * @param method The method declaration to visit.
+	 * Visit a constructor declaration to extract its metadata.
+	 * @param constructor The constructor declaration to visit.
 	 * @param meta The metadata of the class containing this method.
 	 * @return The MethodMetadata extracted
 	 */

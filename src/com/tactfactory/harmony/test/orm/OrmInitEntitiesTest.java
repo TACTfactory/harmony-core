@@ -364,7 +364,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	 * Repository creation test.
 	 * @param entityName The entity name 
 	 */
-	public final void hasRepository(String entityName) {
+	public final void hasRepository(final String entityName) {
 		CommonTest.hasFindFile(DATA_PATH
 				+ entityName + "SQLiteAdapter.java");
 

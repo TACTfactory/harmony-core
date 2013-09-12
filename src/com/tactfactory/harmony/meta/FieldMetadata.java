@@ -416,7 +416,7 @@ public class FieldMetadata extends BaseMetadata {
 	/**
 	 * @param defaultValue the defaultValue to set
 	 */
-	public final void setDefaultValue(String defaultValue) {
+	public final void setDefaultValue(final String defaultValue) {
 		this.defaultValue = defaultValue;
 	}
 }

@@ -53,9 +53,9 @@ public final class HeaderParser {
 	 * @param filePath The file path
 	 * @return True if the file has been found
 	 */
-	private static boolean fileExists(String filePath) {
-		File f = new File(filePath);
-		boolean result = f.exists();
+	private static boolean fileExists(final String filePath) {
+		final File f = new File(filePath);
+		final boolean result = f.exists();
 		
 		if (result) {
 			ConsoleUtils.display(
@@ -69,7 +69,7 @@ public final class HeaderParser {
 	 * Load header file into the application metadata.
 	 * @param f The file to load
 	 */
-	protected static void loadHeaderFile(String f) {
+	protected static void loadHeaderFile(final String f) {
 		final String header = 
 				TactFileUtils.fileToStringBuffer(new File(f)).toString();
 		ApplicationMetadata.INSTANCE.setHeaderTemplate(header);

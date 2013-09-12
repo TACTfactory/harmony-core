@@ -15,7 +15,6 @@ import japa.parser.ast.expr.NormalAnnotationExpr;
 import japa.parser.ast.expr.StringLiteralExpr;
 import java.util.List;
 
-import com.google.common.base.Strings;
 import com.tactfactory.harmony.parser.JavaModelParser;
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Id;

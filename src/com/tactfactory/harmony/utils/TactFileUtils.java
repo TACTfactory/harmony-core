@@ -367,7 +367,7 @@ public abstract class TactFileUtils extends FileUtils {
 	 * @param file The file to create.
 	 * @return true if the folder exists after this operation.
 	 */
-	public static boolean ensureFolderExistence(File file) {
+	public static boolean ensureFolderExistence(final File file) {
 		boolean result = file.exists();
 		if (!result) {
 			result = file.mkdir();

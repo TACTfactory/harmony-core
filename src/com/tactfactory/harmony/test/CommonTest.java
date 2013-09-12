@@ -40,28 +40,29 @@ public abstract class CommonTest {
 	private static Harmony harmony;
 
 	/**
-	 * Add logger to common test life-cycle
+	 * Add logger to common test life-cycle.
 	 */
 	@Rule
-	public TestRule watcher = new TestWatcher() {
-		protected void starting(Description description) {
+	public final TestRule watcher = new TestWatcher() {
+		protected void starting(final Description description) {
 			System.out.println(SHARP_DELIMITOR 
 					+ "\n# Starting test: " + description.getMethodName() 
 					+ "\n" + SHARP_DELIMITOR);
 		}
 		
 		@Override
-		protected void failed(Throwable e, Description description) {
+		protected void failed(final Throwable e,
+				final Description description) {
 			
 		}
 		
 		@Override
-		protected void succeeded(Description description) {
+		protected void succeeded(final Description description) {
 			System.out.println("So good !");
 		}
 		
 		@Override
-		protected void finished(Description description) {
+		protected void finished(final Description description) {
 			System.out.println(SHARP_DELIMITOR 
 					+ "\n# Finishing test: " + description.getMethodName() 
 					+ "\n" + SHARP_DELIMITOR + "\n");
@@ -133,13 +134,13 @@ public abstract class CommonTest {
 				ApplicationMetadata.INSTANCE.getProjectNameSpace()
 					.replaceAll("\\.", "/");
 
-		String srcDir = 
+		final String srcDir = 
 				String.format("%s/tact-core/resources/%s/%s/",
 						Harmony.getBundlePath(),
 						pathNameSpace, 
 						"entity");
 		
-		String destDir = 
+		final String destDir = 
 				String.format("%s/src/%s/%s/", 
 						Harmony.getProjectAndroidPath(), 
 						pathNameSpace, 

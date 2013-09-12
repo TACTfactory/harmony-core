@@ -311,7 +311,12 @@ public final class Harmony {
 		return getInstance().context.getBundlesPath();
 	}
 	
-	public static File getLibrary(String libraryName) {
+	/**
+	 * Get library identified by given name.
+	 * @param libraryName The library name
+	 * @return The library file
+	 */
+	public static File getLibrary(final String libraryName) {
 		return getInstance().context.getLibrary(libraryName);
 	}
 

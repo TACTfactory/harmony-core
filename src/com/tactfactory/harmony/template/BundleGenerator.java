@@ -15,7 +15,7 @@ public class BundleGenerator extends BaseGenerator {
 	 * @param adapt Adapter
 	 * @throws Exception Exception
 	 */
-	public BundleGenerator(BaseAdapter adapt) throws Exception {
+	public BundleGenerator(final BaseAdapter adapt) throws Exception {
 		super(adapt);
 
 
@@ -28,9 +28,9 @@ public class BundleGenerator extends BaseGenerator {
 	 * @param bundleNameSpace Bundle namespace
 	 */
 	public final void generateBundleFiles(
-			String bundleOwnerName,
-			String bundleName,
-			String bundleNameSpace) {
+			final String bundleOwnerName,
+			final String bundleName,
+			final String bundleNameSpace) {
 
 
 		this.generateDataModel(bundleOwnerName,
@@ -67,9 +67,9 @@ public class BundleGenerator extends BaseGenerator {
 	 * @param bundleNameSpace Bundle namespace
 	 */
 	private void generateDataModel(
-			String bundleOwnerName,
-			String bundleName,
-			String bundleNameSpace) {
+			final String bundleOwnerName,
+			final String bundleName,
+			final String bundleNameSpace) {
 
 		final HashMap<String, Object> datamodel = new HashMap<String, Object>();
 		datamodel.put("bundle_namespace", bundleNameSpace);
@@ -86,9 +86,9 @@ public class BundleGenerator extends BaseGenerator {
 	 * @param bundleNameSpace Bundle namespace
 	 */
 	private void generateAnnotation(
-			String bundleOwnerName,
-			String bundleName,
-			String bundleNameSpace) {
+			final String bundleOwnerName,
+			final String bundleName,
+			final String bundleNameSpace) {
 
 		final String tplPath = 
 				this.getAdapter().getAnnotationBundleTemplatePath()
@@ -111,8 +111,8 @@ public class BundleGenerator extends BaseGenerator {
 	 * @param bundleName Bundle name
 	 */
 	private void generateBuildXml(
-			String bundleOwnerName,
-			String bundleName) {
+			final String bundleOwnerName,
+			final String bundleName) {
 
 		final String tplPath = this.getAdapter().getBundleTemplatePath()
 				+ "/build.xml";
@@ -131,9 +131,9 @@ public class BundleGenerator extends BaseGenerator {
 	 * @param bundleNameSpace Bundle namespace
 	 */
 	private void generateParser(
-			String bundleOwnerName,
-			String bundleName,
-			String bundleNameSpace) {
+			final String bundleOwnerName,
+			final String bundleName,
+			final String bundleNameSpace) {
 
 		final String tplPath = this.getAdapter().getParserBundleTemplatePath()
 				+ "/TemplateParser.java";
@@ -156,9 +156,9 @@ public class BundleGenerator extends BaseGenerator {
 	 * @param bundleNameSpace Bundle namespace
 	 */
 	private void generateCommand(
-			String bundleOwnerName,
-			String bundleName,
-			String bundleNameSpace) {
+			final String bundleOwnerName,
+			final String bundleName,
+			final String bundleNameSpace) {
 
 		final String tplPath = this.getAdapter().getCommandBundleTemplatePath()
 				+ "/TemplateCommand.java";
@@ -181,9 +181,9 @@ public class BundleGenerator extends BaseGenerator {
 	 * @param bundleNameSpace Bundle namespace
 	 */
 	private void generateTemplate(
-			String bundleOwnerName,
-			String bundleName,
-			String bundleNameSpace) {
+			final String bundleOwnerName,
+			final String bundleName,
+			final String bundleNameSpace) {
 
 		final String tplPath = this.getAdapter().getTemplateBundleTemplatePath()
 				+ "/TemplateGenerator.java";
@@ -206,9 +206,9 @@ public class BundleGenerator extends BaseGenerator {
 	 * @param bundleNameSpace Bundle namespace
 	 */
 	private void generateMeta(
-			String bundleOwnerName,
-			String bundleName,
-			String bundleNameSpace) {
+			final String bundleOwnerName,
+			final String bundleName,
+			final String bundleNameSpace) {
 
 		final String tplPath = this.getAdapter().getMetaBundleTemplatePath()
 				+ "/TemplateMetadata.java";

@@ -32,7 +32,9 @@ public class BundleCommand extends BaseCommand {
 
 
 	@Override
-	public final void execute(String action, String[] args, String option) {
+	public final void execute(final String action,
+			final String[] args,
+			final String option) {
 		ConsoleUtils.display("> Bundle generator ");
 
 		this.setCommandArgs(Console.parseCommandArgs(args));
@@ -80,7 +82,7 @@ public class BundleCommand extends BaseCommand {
 	}
 
 	@Override
-	public final boolean isAvailableCommand(String command) {
+	public final boolean isAvailableCommand(final String command) {
 		return GENERATE_EMPTY_BUNDLE.equals(command);
 	}
 

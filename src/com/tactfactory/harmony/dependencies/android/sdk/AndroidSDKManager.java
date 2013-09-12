@@ -61,9 +61,11 @@ public class AndroidSDKManager
 	
 	/**
 	 * Download and install Android SDK to destPath.
+	 * 
+	 * @param url The url of the android sdk
 	 * @param destPath The path where to install the android sdk.
 	 */
-	public void downloadAndInstallAndroidSDK(final String url,
+	public final void downloadAndInstallAndroidSDK(final String url,
 			final String destPath) {
 		String destFileName = url.split("/")[url.split("/").length - 1];
 		try {
@@ -119,9 +121,11 @@ public class AndroidSDKManager
 	
 	/**
 	 * Find the latest SDK Tools link.
+	 * 
+	 * @param platform The user platform
 	 * @return The latest SDK tools link
 	 */
-	public String findLatestSDKToolsLink(final String platform) {
+	public final String findLatestSDKToolsLink(final String platform) {
 		String result = null;
 		
 		Document document = XMLUtils.getRemoteXML(SDK_URL + XML_REPO_FILE);
@@ -129,11 +133,12 @@ public class AndroidSDKManager
 		Namespace ns = root.getNamespace("sdk");
 		
 		Element sdkTool = root.getChild("tool", ns);
-		List<Element> sdkArchives = sdkTool.getChild("archives", ns).getChildren();
+		List<Element> sdkArchives = 
+				sdkTool.getChild("archives", ns).getChildren();
 		
 		for (Element sdkArchive : sdkArchives) {
 			if (sdkArchive.getAttribute("os").getValue().equals(platform)) {
-				result = SDK_URL + sdkArchive.getChildText("url",ns);
+				result = SDK_URL + sdkArchive.getChildText("url", ns);
 			}
 		}
 		
@@ -144,21 +149,22 @@ public class AndroidSDKManager
 	 * Init SDK List and install dependencies.
 	 * @param sdkPath The sdk path
 	 */
-	public void initSDKList(String sdkPath) {
+	public final void initSDKList(final String sdkPath) {
 		try {
-			File f = new File(sdkPath + "tools/android");
+			final File f = new File(sdkPath + "tools/android");
 			// TODO : Set executable permissions for all executable files
 			f.setExecutable(true); 
 			
 			
-			Runtime runtime = Runtime.getRuntime();
-			Process process = 
+			final Runtime runtime = Runtime.getRuntime();
+			final Process process = 
 					runtime.exec(sdkPath + "tools/android list sdk --extended");
-			BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+			final BufferedReader reader = new BufferedReader(
+					new InputStreamReader(process.getInputStream()));
 			process.getErrorStream().close();
 			process.getOutputStream().close();
 			
-			StringBuilder builder = new StringBuilder();
+			final StringBuilder builder = new StringBuilder();
 			String line;
 			while ((line = reader.readLine()) != null) {
 				builder.append(line);
@@ -166,12 +172,12 @@ public class AndroidSDKManager
 			}
 			reader.close();
 			
-			String inputString = builder.toString();
-			AndroidSDKList list = new AndroidSDKList();
+			final String inputString = builder.toString();
+			final AndroidSDKList list = new AndroidSDKList();
 			list.parseString(inputString);
 			
 			String id;
-			ArrayList<String> ids = list.getIdsLikeName("tools");
+			final ArrayList<String> ids = list.getIdsLikeName("tools");
 			/*id = list.getIdByName("platform-tools");
 			if (id != null) {
 				ids.add(id);
@@ -199,25 +205,25 @@ public class AndroidSDKManager
 	 * @param sdkPath The path to the android sdk
 	 * @param dependencyList The dependency list (ids)
 	 */
-	public void installSDKDependencies(
-			String sdkPath, 
-			ArrayList<String> dependencyList) {
+	public final void installSDKDependencies(
+			final String sdkPath, 
+			final ArrayList<String> dependencyList) {
 		
 		//try {
-			String commandArgs = Joiner.on(',').join(dependencyList);
-			ArrayList<String> command = new ArrayList<String>();
-			command.add("./android");
-			command.add("update");
-			command.add("sdk");
-			command.add("-t");
-			command.add(commandArgs);
-			command.add("--no-ui");
-			
-			ConsoleUtils.launchCommand(command, sdkPath + "tools/");
+		final String commandArgs = Joiner.on(',').join(dependencyList);
+		final ArrayList<String> command = new ArrayList<String>();
+		command.add("./android");
+		command.add("update");
+		command.add("sdk");
+		command.add("-t");
+		command.add(commandArgs);
+		command.add("--no-ui");
+		
+		ConsoleUtils.launchCommand(command, sdkPath + "tools/");
 	}
 
 	@Override
-	public void onDownloadFinished(File f) {
+	public final void onDownloadFinished(final File f) {
 		new UnpackThread(
 				this,
 				f.getAbsolutePath(),
@@ -227,7 +233,8 @@ public class AndroidSDKManager
 	}
 
 	@Override
-	public void onUnpackedFinished(File unpackedFile, File folder) {
+	public final void onUnpackedFinished(final File unpackedFile,
+			final File folder) {
 		unpackedFile.delete();
 		ConsoleUtils.display(
 				"The Android SDK has been successfuly installed into "
@@ -237,9 +244,14 @@ public class AndroidSDKManager
 		
 	}
 	
-	public static boolean checkIfAndroidSDKExists(String sdkPath) {
+	/**
+	 * Check if sdk exists at given path.
+	 * @param sdkPath The supposed sdk path
+	 * @return True if exists. false otherwise
+	 */
+	public final static boolean checkIfAndroidSDKExists(final String sdkPath) {
 		boolean result = false;
-		File file = new File(sdkPath + "/tools/android");
+		final File file = new File(sdkPath + "/tools/android");
 		result = file.exists();
 		return result;
 	}
@@ -248,16 +260,17 @@ public class AndroidSDKManager
 	 * Copy support v4 jar into the given folder.
 	 * @param destFolder The folder where to copy the support v4 library
 	 */
-	public static void copySupportV4Into(String destFolder) {
+	public final static void copySupportV4Into(final String destFolder) {
 		// Replace android support v4 with the one from android sdk.
-		File sdkFolder = new File(ApplicationMetadata.getAndroidSdkPath());
+		final File sdkFolder = 
+				new File(ApplicationMetadata.getAndroidSdkPath());
 		if (sdkFolder.exists()) {
-			File supportV4SDK = 
+			final File supportV4SDK = 
 					new File(sdkFolder.getAbsolutePath() 
 							+ "/extras/android/compatibility/v4/"
 							+ "android-support-v4.jar");
 			
-			File supportV4Menu = 
+			final File supportV4Menu = 
 					new File(destFolder + "android-support-v4.jar");
 			
 			if (supportV4SDK.exists()) {

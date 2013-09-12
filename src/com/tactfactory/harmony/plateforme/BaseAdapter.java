@@ -627,9 +627,9 @@ public abstract class BaseAdapter {
 	 * @return The source data namespace
 	 */
 	public final String getAnnotationBundlePath(
-			String bundleOwnerName,
-			String bundleNamespace,
-			String bundleName) {
+			final String bundleOwnerName,
+			final String bundleNamespace,
+			final String bundleName) {
 		return String.format("%s/%s/src/%s/%s",
 				Harmony.getBundlePath(),
 				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
@@ -657,9 +657,9 @@ public abstract class BaseAdapter {
 	 * @return The source data namespace
 	 */
 	public final String getCommandBundlePath(
-			String bundleOwnerName,
-			String bundleNamespace,
-			String bundleName) {
+			final String bundleOwnerName,
+			final String bundleNamespace,
+			final String bundleName) {
 		return String.format("%s/%s/src/%s/%s",
 				Harmony.getBundlePath(),
 				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
@@ -687,9 +687,9 @@ public abstract class BaseAdapter {
 	 * @return The source data namespace
 	 */
 	public final String getMetaBundlePath(
-			String bundleOwnerName,
-			String bundleNamespace,
-			String bundleName) {
+			final String bundleOwnerName,
+			final String bundleNamespace,
+			final String bundleName) {
 		return String.format("%s/%s/src/%s/%s",
 				Harmony.getBundlePath(),
 				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
@@ -717,9 +717,9 @@ public abstract class BaseAdapter {
 	 * @return The source data namespace
 	 */
 	public final String getTemplateBundlePath(
-			String bundleOwnerName,
-			String bundleNamespace,
-			String bundleName) {
+			final String bundleOwnerName,
+			final String bundleNamespace,
+			final String bundleName) {
 		return String.format("%s/%s/src/%s/%s",
 				Harmony.getBundlePath(),
 				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
@@ -747,9 +747,9 @@ public abstract class BaseAdapter {
 	 * @return The source data namespace
 	 */
 	public final String getParserBundlePath(
-			String bundleOwnerName,
-			String bundleNamespace,
-			String bundleName) {
+			final String bundleOwnerName,
+			final String bundleNamespace,
+			final String bundleName) {
 		return String.format("%s/%s/src/%s/%s",
 				Harmony.getBundlePath(),
 				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
@@ -775,8 +775,8 @@ public abstract class BaseAdapter {
 	 * @return The source data namespace
 	 */
 	public final String getBundlePath(
-			String bundleOwnerName,
-			String bundleName) {
+			final String bundleOwnerName,
+			final String bundleName) {
 		return String.format("%s/%s/",
 				Harmony.getBundlePath(),
 				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase());
@@ -1045,14 +1045,14 @@ public abstract class BaseAdapter {
 	/**
 	 * @return the configs.xml
 	 */
-	public String getConfigs() {
+	public final String getConfigs() {
 		return this.configs;
 	}
 
 	/**
 	 * @param config The config.
 	 */
-	public void setConfigs(final String config) {
+	public final void setConfigs(final String config) {
 		this.configs = config;
 	}
 
@@ -1066,84 +1066,84 @@ public abstract class BaseAdapter {
 	/**
 	 * @return the test
 	 */
-	public String getTest() {
+	public final String getTest() {
 		return this.test;
 	}
 
 	/**
 	 * @param test the test to set
 	 */
-	public void setTest(final String test) {
+	public final void setTest(final String test) {
 		this.test = test;
 	}
 
 	/**
 	 * @return the testLibs
 	 */
-	public String getTestLibs() {
+	public final String getTestLibs() {
 		return this.testLibs;
 	}
 
 	/**
 	 * @param testLibs the testLibs to set
 	 */
-	public void setTestLibs(final String testLibs) {
+	public final void setTestLibs(final String testLibs) {
 		this.testLibs = testLibs;
 	}
 
 	/**
 	 * @return the harmony
 	 */
-	public String getHarmony() {
+	public final String getHarmony() {
 		return this.harmony;
 	}
 
 	/**
 	 * @param harmony the harmony to set
 	 */
-	public void setHarmony(final String harmony) {
+	public final void setHarmony(final String harmony) {
 		this.harmony = harmony;
 	}
 
 	/**
 	 * @return the widget
 	 */
-	public String getWidget() {
+	public final String getWidget() {
 		return this.widget;
 	}
 
 	/**
 	 * @param widget the widget to set
 	 */
-	public void setWidget(final String widget) {
+	public final void setWidget(final String widget) {
 		this.widget = widget;
 	}
 
 	/**
 	 * @return the util
 	 */
-	public String getUtil() {
+	public final String getUtil() {
 		return this.util;
 	}
 
 	/**
 	 * @param util the util to set
 	 */
-	public void setUtil(final String util) {
+	public final void setUtil(final String util) {
 		this.util = util;
 	}
 
 	/**
 	 * @return the menu
 	 */
-	public String getMenu() {
+	public final String getMenu() {
 		return this.menu;
 	}
 
 	/**
 	 * @param menu the menu to set
 	 */
-	public void setMenu(final String menu) {
+	public final void setMenu(final String menu) {
 		this.menu = menu;
 	}
 
@@ -1151,14 +1151,14 @@ public abstract class BaseAdapter {
 	/**
 	 * @return the utility path
 	 */
-	public String getUtilityPath() {
+	public final String getUtilityPath() {
 		return this.utilityPath;
 	}
 
 	/**
 	 * @param utilityPath The utility path to set
 	 */
-	public void setUtilityPath(final String utilityPath) {
+	public final void setUtilityPath(final String utilityPath) {
 		this.utilityPath = utilityPath;
 	}
 
@@ -1172,7 +1172,8 @@ public abstract class BaseAdapter {
 	/**
 	 * @param bundleTemplates the bundleTemplates to set
 	 */
-	public final void setBundleTemplates(String bundleTemplates) {
+	public final void setBundleTemplates(
+			final String bundleTemplates) {
 		this.bundleTemplates = bundleTemplates;
 	}
 
@@ -1187,7 +1188,7 @@ public abstract class BaseAdapter {
 	 * @param annotationsBundleTemplates the annotationsBundleTemplates to set
 	 */
 	public final void setAnnotationsBundleTemplates(
-			String annotationsBundleTemplates) {
+			final String annotationsBundleTemplates) {
 		this.annotationsBundleTemplates = annotationsBundleTemplates;
 	}
 
@@ -1202,7 +1203,7 @@ public abstract class BaseAdapter {
 	 * @param templateBundleTemplates the templateBundleTemplates to set
 	 */
 	public final void setTemplateBundleTemplates(
-			String templateBundleTemplates) {
+			final String templateBundleTemplates) {
 		this.templateBundleTemplates = templateBundleTemplates;
 	}
 
@@ -1216,7 +1217,8 @@ public abstract class BaseAdapter {
 	/**
 	 * @param parserBundleTemplates the parserBundleTemplates to set
 	 */
-	public final void setParserBundleTemplates(String parserBundleTemplates) {
+	public final void setParserBundleTemplates(
+			final String parserBundleTemplates) {
 		this.parserBundleTemplates = parserBundleTemplates;
 	}
 
@@ -1230,7 +1232,8 @@ public abstract class BaseAdapter {
 	/**
 	 * @param metaBundleTemplates the metaBundleTemplates to set
 	 */
-	public final void setMetaBundleTemplates(String metaBundleTemplates) {
+	public final void setMetaBundleTemplates(
+			final String metaBundleTemplates) {
 		this.metaBundleTemplates = metaBundleTemplates;
 	}
 
@@ -1244,7 +1247,8 @@ public abstract class BaseAdapter {
 	/**
 	 * @param commandBundleTemplates the commandBundleTemplates to set
 	 */
-	public final void setCommandBundleTemplates(String commandBundleTemplates) {
+	public final void setCommandBundleTemplates(
+			final String commandBundleTemplates) {
 		this.commandBundleTemplates = commandBundleTemplates;
 	}
 

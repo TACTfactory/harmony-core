@@ -15,7 +15,6 @@ import com.google.common.base.Strings;
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -91,7 +90,7 @@ public abstract class SqliteAdapter {
 
 	/**
 	 * Generate the column type for a given harmony type.
-	 * @param fieldType The harmony type of a field.
+	 * @param field The harmony type of a field.
 	 * @return The columnType for SQLite
 	 */
 	public static String generateColumnType(final FieldMetadata field) {
@@ -106,7 +105,7 @@ public abstract class SqliteAdapter {
 			}
 			
 		} else {
-			if(field.getRelation() != null) {
+			if (field.getRelation() != null) {
 				EntityMetadata relatedEntity = 
 						ApplicationMetadata.INSTANCE.getEntities().get(
 								field.getRelation().getEntityRef());

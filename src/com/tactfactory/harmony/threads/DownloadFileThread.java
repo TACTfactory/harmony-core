@@ -38,9 +38,9 @@ public class DownloadFileThread extends Thread {
 	 * @param url The URL of the file to download.
 	 * @param destPath The destination path.
 	 */
-	public DownloadFileThread(OnDownloadFinishedListener listener,
-			String url,
-			String destPath) {
+	public DownloadFileThread(final OnDownloadFinishedListener listener,
+			final String url,
+			final String destPath) {
 		this.url = url;
 		this.destPath = destPath;
 		this.listener = listener;
@@ -109,7 +109,7 @@ public class DownloadFileThread extends Thread {
 	 * Called on thread progress.
 	 * @param progress The progress in %.
 	 */
-	private void onProgress(int progress) {
+	private void onProgress(final int progress) {
 		System.out.print("\rProgress : " + progress + "%");
 	}
 

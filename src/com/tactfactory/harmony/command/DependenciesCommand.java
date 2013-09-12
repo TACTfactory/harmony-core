@@ -28,11 +28,13 @@ public class DependenciesCommand extends BaseCommand {
 			+ ACTION_SDK;
 
 	@Override
-	public void execute(String action, String[] args, String option) {
-		AndroidSDKManager androidSDKManager = new AndroidSDKManager();
-		String distantSDKUrl = 
-				androidSDKManager.findLatestSDKToolsLink(AndroidSDKManager.LINUX);
-		String sdkPath = ConsoleUtils.getUserInput(
+	public void execute(final String action,
+			final String[] args,
+			final String option) {
+		final AndroidSDKManager androidSDKManager = new AndroidSDKManager();
+		final String distantSDKUrl = androidSDKManager.findLatestSDKToolsLink(
+						AndroidSDKManager.LINUX);
+		final String sdkPath = ConsoleUtils.getUserInput(
 					"Where do you want to install the Android SDK ?");
 		androidSDKManager.downloadAndInstallAndroidSDK(distantSDKUrl, sdkPath);
 		//androidSDKManager.initSDKList(sdkPath);
@@ -49,7 +51,7 @@ public class DependenciesCommand extends BaseCommand {
 	}
 
 	@Override
-	public final boolean isAvailableCommand(String command) {
+	public final boolean isAvailableCommand(final String command) {
 		return INSTALL_SDK.equals(command);
 	}
 }

@@ -33,10 +33,10 @@ public class AndroidSDKListItem {
 	 * @param description Description
 	 */
 	public AndroidSDKListItem(
-			int id,
-			String alternativeId,
-			String type,
-			String description) {
+			final int id,
+			final String alternativeId,
+			final String type,
+			final String description) {
 		
 		this.id = id;
 		this.alternativeId = alternativeId;
@@ -48,7 +48,7 @@ public class AndroidSDKListItem {
 	 * Parse the given String to build this item.
 	 * @param listItemString The string to parse
 	 */
-	public void parseString(String listItemString) {
+	public void parseString(final String listItemString) {
 		int start;
 		int end;
 		
@@ -62,7 +62,7 @@ public class AndroidSDKListItem {
 		end = listItemString.indexOf('\"', start);
 		this.alternativeId = listItemString.substring(start, end).trim();
 		
-		start = listItemString.indexOf("Type:") + 5;
+		start = listItemString.indexOf("Type:") + "Type:".length();
 		end = listItemString.indexOf('\n', start);
 		this.type = listItemString.substring(start, end).trim();
 		
@@ -73,7 +73,7 @@ public class AndroidSDKListItem {
 
 	@Override
 	public String toString() {
-		StringBuilder builder = new StringBuilder();
+		final StringBuilder builder = new StringBuilder();
 		builder.append("Id: ");
 		builder.append(this.id);
 		builder.append('\n');
