@@ -179,6 +179,15 @@ public class ProjectGenerator extends BaseGenerator {
 			+ "/harmony/view/"
 			+ "HarmonyFragmentActivity.java",
 			false);
+		
+		super.makeSource(
+			this.getAdapter().getTemplateSourcePath()
+			+ "harmony/view/HarmonyGridFragment.java",
+			this.getAdapter().getSourcePath()
+			+ this.getAppMetas().getProjectNameSpace()
+			+ "/harmony/view/"
+			+ "HarmonyGridFragment.java",
+			false);
 
 		// create HarmonyFragment
 		super.makeSource(
