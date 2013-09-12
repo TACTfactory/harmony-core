@@ -86,7 +86,9 @@ public class EntityGenerator extends BaseGenerator {
 					this.entityFolder,
 					String.format("%s.java", classMeta.getName()));
 			
-			this.getDatamodel().put(TagConstant.CURRENT_ENTITY, classMeta.getName());
+			this.getDatamodel().put(
+					TagConstant.CURRENT_ENTITY,
+					classMeta.getName());
 			
 			ConsoleUtils.display(">>> Decorate " + classMeta.getName());
 
@@ -110,7 +112,7 @@ public class EntityGenerator extends BaseGenerator {
 	/**
 	 * Implements serializable in the class if it doesn't already.
 	 * @param fileString The stringbuffer containing the class java code
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param classMeta The Metadata containing the infos on the java class
 	 * @param className the name of the class to implement
 	 */
 	protected final void addImplements(
@@ -134,18 +136,18 @@ public class EntityGenerator extends BaseGenerator {
 	/**
 	 * Implements serializable in the class if it doesn't already.
 	 * @param fileString The stringbuffer containing the class java code
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param classMeta The Metadata containing the infos on the java class
 	 */
 	protected final void addImplementsSerializable(
 			final StringBuffer fileString,
-			final EntityMetadata cm) {
-		this.addImplements(fileString, cm, "Serializable");
+			final EntityMetadata classMeta) {
+		this.addImplements(fileString, classMeta, "Serializable");
 	}
 	
 	/**
 	 * Implements Parcelable in the class if it doesn't already.
 	 * @param fileString The stringbuffer containing the class java code
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param classMeta The Metadata containing the infos on the java class
 	 */
 	protected final void addImplementsParcelable(
 			final StringBuffer fileString,
@@ -156,39 +158,39 @@ public class EntityGenerator extends BaseGenerator {
 	/**
 	 * Import serializable in the class if it doesn't already.
 	 * @param fileString The stringbuffer containing the class java code
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param classMeta The Metadata containing the infos on the java class
 	 */
 	protected final void addImportSerializable(final StringBuffer fileString,
-			final ClassMetadata cm) {
-		this.addImport(fileString, cm, "Serializable", "java.io.Serializable");
+			final ClassMetadata classMeta) {
+		this.addImport(fileString, classMeta, "Serializable", "java.io.Serializable");
 	}
 	
 	/**
 	 * Import parcelable in the class if it doesn't already.
 	 * @param fileString The stringbuffer containing the class java code
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param classMeta The Metadata containing the infos on the java class
 	 */
 	protected final void addImportParcelable(final StringBuffer fileString,
-			final ClassMetadata cm) {
-		this.addImport(fileString, cm, "Parcelable", "android.os.Parcelable");
+			final ClassMetadata classMeta) {
+		this.addImport(fileString, classMeta, "Parcelable", "android.os.Parcelable");
 	}
 	
 	/**
 	 * Import serializable in the class if it doesn't already.
 	 * @param fileString The stringbuffer containing the class java code
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param classMeta The Metadata containing the infos on the java class
 	 * @param className The name of the class to import
 	 * @param classPackage The package of the class to import
 	 */
 	protected final void addImport(final StringBuffer fileString,
-			final ClassMetadata cm,
+			final ClassMetadata classMeta,
 			final String className,
 			final String classPackage) {
-		if (!this.alreadyImportsClass(cm, className)) {
+		if (!this.alreadyImportsClass(classMeta, className)) {
 			ConsoleUtils.displayDebug("Add " + className + " import");
 			int insertPos;
 
-			if (cm.getImports().size() > 0) {
+			if (classMeta.getImports().size() > 0) {
 				insertPos = fileString.indexOf("import");
 			} else {
 				insertPos = fileString.indexOf(";") + 1;
@@ -203,7 +205,7 @@ public class EntityGenerator extends BaseGenerator {
 	/**
 	 * Generate the necessary getters and setters for the class.
 	 * @param fileString The stringbuffer containing the class java code
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param classMeta The Metadata containing the infos on the java class
 	 */
 	protected final void generateGetterAndSetters(final StringBuffer fileString,
 			final EntityMetadata classMeta) {
@@ -280,7 +282,7 @@ public class EntityGenerator extends BaseGenerator {
 	
 	/**
 	 * Checks if given class already implements given class.
-	 * @param cm The class to check
+	 * @param classMeta The class to check
 	 * @param className The interface name 
 	 * @return True if already implements
 	 */
@@ -303,7 +305,7 @@ public class EntityGenerator extends BaseGenerator {
 
 	/**
 	 * Check if the class implements the class Serializable.
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param classMeta The Metadata containing the infos on the java class
 	 * @return True if it already implements serializable
 	 */
 	protected final boolean alreadyImplementsSerializable(
@@ -313,7 +315,7 @@ public class EntityGenerator extends BaseGenerator {
 	
 	/**
 	 * Check if the class implements the class Parcelable.
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param classMeta The Metadata containing the infos on the java class
 	 * @return True if it already implements parcelable
 	 */
 	protected final boolean alreadyImplementsParcelable(
@@ -323,8 +325,8 @@ public class EntityGenerator extends BaseGenerator {
 	
 	/**
 	 * Check if the class already has a getter for the given field.
-	 * @param fm The Metadata of the field
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param fieldMeta The Metadata of the field
+	 * @param classMeta The Metadata containing the infos on the java class
 	 * @return True if it already has getter for this field
 	 */
 	protected final boolean alreadyImplementsGet(final FieldMetadata fieldMeta,
@@ -357,8 +359,8 @@ public class EntityGenerator extends BaseGenerator {
 
 	/**
 	 * Check if the class already has a setter for the given field.
-	 * @param fm The Metadata of the field
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param fieldMeta The Metadata of the field
+	 * @param classMeta The Metadata containing the infos on the java class
 	 * @return True if it already has setter for this field
 	 */
 	protected final boolean alreadyImplementsSet(
@@ -374,7 +376,8 @@ public class EntityGenerator extends BaseGenerator {
 			if (method.getName().equals("set" + capitalizedName)
 					&& method.getArgumentsTypes().size() == 1
 					&& method.getArgumentsTypes().get(0).equals(
-							this.getAdapter().getNativeType(fieldMeta.getType()))) {
+							this.getAdapter().getNativeType(
+									fieldMeta.getType()))) {
 				result = true;
 
 				ConsoleUtils.displayDebug("Already implements setter of "
@@ -389,7 +392,7 @@ public class EntityGenerator extends BaseGenerator {
 	
 	/**
 	 * Check if the class already has a getter for the given field.
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param classMeta The Metadata containing the infos on the java class
 	 * @return True if it already has getter for this field
 	 */
 	protected final boolean alreadyImplementsDefaultConstructor(
@@ -411,7 +414,7 @@ public class EntityGenerator extends BaseGenerator {
 	
 	/**
 	 * Check if the class already imports the given class.
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param classMeta The Metadata containing the infos on the java class
 	 * @param className the name of the class
 	 * @return True if it already imports serializable
 	 */
@@ -429,7 +432,7 @@ public class EntityGenerator extends BaseGenerator {
 	
 	/**
 	 * Check if the class already imports Serializable.
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param classMeta The Metadata containing the infos on the java class
 	 * @return True if it already imports serializable
 	 */
 	protected final boolean alreadyImportsSerializable(
@@ -439,7 +442,7 @@ public class EntityGenerator extends BaseGenerator {
 	
 	/**
 	 * Check if the class already imports Parcelable.
-	 * @param cm The Metadata containing the infos on the java class
+	 * @param classMeta The Metadata containing the infos on the java class
 	 * @return True if it already imports Parcelable
 	 */
 	protected final boolean alreadyImportsParcelable(
@@ -450,7 +453,7 @@ public class EntityGenerator extends BaseGenerator {
 	/**
 	 * Implement all methods needed by parcelable.
 	 * @param fileString The string buffer representation of the file 
-	 * @param cm The classmetadata
+	 * @param classMeta The classmetadata
 	 */
 	protected final void implementParcelable(
 			final StringBuffer fileString,
@@ -458,7 +461,8 @@ public class EntityGenerator extends BaseGenerator {
 		if (!this.alreadyImplementsParcelable(classMeta)) {
 			this.addImplementsParcelable(fileString, classMeta);
 			this.addImportParcelable(fileString, classMeta);
-			this.addImport(fileString, classMeta, "Parcel", "android.os.Parcel");
+			this.addImport(
+					fileString, classMeta, "Parcel", "android.os.Parcel");
 			this.generateMethod(fileString, this.parcelConstructorTemplate);
 			this.generateMethod(fileString, this.writeToParcelTemplate);
 			this.generateMethod(fileString, this.describeContentsTemplate);
@@ -500,7 +504,7 @@ public class EntityGenerator extends BaseGenerator {
 	/**
 	 * Implement an empty contructor if it doesn't already exists.
 	 * @param fileString The string buffer representing the file
-	 * @param cm The classMetadata
+	 * @param classMeta The classMetadata
 	 */
 	protected final void implementEmptyConstructor(
 			final StringBuffer fileString,

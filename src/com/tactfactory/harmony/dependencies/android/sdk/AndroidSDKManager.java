@@ -249,7 +249,7 @@ public class AndroidSDKManager
 	 * @param sdkPath The supposed sdk path
 	 * @return True if exists. false otherwise
 	 */
-	public final static boolean checkIfAndroidSDKExists(final String sdkPath) {
+	public static final boolean checkIfAndroidSDKExists(final String sdkPath) {
 		boolean result = false;
 		final File file = new File(sdkPath + "/tools/android");
 		result = file.exists();
@@ -260,7 +260,7 @@ public class AndroidSDKManager
 	 * Copy support v4 jar into the given folder.
 	 * @param destFolder The folder where to copy the support v4 library
 	 */
-	public final static void copySupportV4Into(final String destFolder) {
+	public static final void copySupportV4Into(final String destFolder) {
 		// Replace android support v4 with the one from android sdk.
 		final File sdkFolder = 
 				new File(ApplicationMetadata.getAndroidSdkPath());
