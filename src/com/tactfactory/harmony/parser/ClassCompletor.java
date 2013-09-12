@@ -310,7 +310,7 @@ public class ClassCompletor {
 	 * @param entity The entity in which to complete fields
 	 */
 	private void updateColumnDefinition(final EntityMetadata entity) {
-		for (FieldMetadata field : entity.getFields().values()) {
+		for (final FieldMetadata field : entity.getFields().values()) {
 			// Get column definition if non existent
 			if (Strings.isNullOrEmpty(field.getColumnDefinition())) {
 				field.setColumnDefinition(
