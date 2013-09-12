@@ -38,6 +38,9 @@ public final class Context {
 
 	/** Project base folder. */
 	private static String projectBaseFolder = "android" + DELIMITER;
+	
+	/** Current bundle folder. */
+	private static String currentBundleFolder;
 
 	/** Path of Harmony base. */
 	private String basePath = new File("./").getAbsolutePath(); // /
@@ -247,6 +250,22 @@ public final class Context {
 		}
 
 		return result;
+	}
+	
+	/**
+	 * Sets the current bundle folder.
+	 * @param folder The folder path
+	 */
+	public static void setCurrentBundleFolder(String folder) {
+		currentBundleFolder = folder;
+	}
+	
+	/**
+	 * Sets the current bundle folder.
+	 * @return the current bundle folder path
+	 */
+	public static String getCurrentBundleFolder() {
+		return currentBundleFolder;
 	}
 
 }
