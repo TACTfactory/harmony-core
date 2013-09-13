@@ -121,7 +121,7 @@ public class EntityGenerator extends BaseGenerator {
 			final String className) {
 		if (!this.alreadyImplementsClass(classMeta, className)) {
 			ConsoleUtils.displayDebug("Add " + className + " implement");
-			final int firstAccolade = fileString.indexOf(" {");
+			final int firstAccolade = fileString.indexOf("{");
 			
 			// Class already implements an interface which is not the class
 			if (classMeta.getImplementTypes().size() > 0) { 
