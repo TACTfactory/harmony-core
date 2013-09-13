@@ -346,6 +346,23 @@ public final class Harmony {
 	}
 
 	/**
+	 * Get current bundle path.
+	 * @return The current bundle path
+	 */
+	public static String getCurrentBundlePath() {
+		return Context.getCurrentBundleFolder();
+	}
+
+	/**
+	 * Gets the path of the given command.
+	 * @param command The command
+	 * @return The path
+	 */
+	public static String getCommandPath(Class<? extends Command> command) {
+		return getInstance().commandBundleFolders.get(command);
+	}
+	
+	/**
 	 * Get the templates path.
 	 * @return the template path
 	 */
