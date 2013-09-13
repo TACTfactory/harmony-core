@@ -2,6 +2,7 @@
 package ${project_namespace}.harmony.util;
 
 import java.text.ParseException;
+import java.util.TimeZone;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
