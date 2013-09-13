@@ -151,7 +151,7 @@
 			<classpath refid="${r"${test.classpath.id}"}" />
 			<formatter type="xml" />
             <formatter classname="org.apache.tools.ant.taskdefs.optional.junit.TearDownOnVmCrash" usefile="false"/>
-			<test name="${bundle_namespace}.tests.AllTests" todir="${r"${tmp.rel-dir}"}/" failureproperty="tests.failure" />
+			<test name="${bundle_namespace}.test.AllTests" todir="${r"${tmp.rel-dir}"}/" failureproperty="tests.failure" />
 		</junit>
 
  		<if condition="${r"${emma.enabled}"}">
