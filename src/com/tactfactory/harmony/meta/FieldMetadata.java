@@ -82,33 +82,36 @@ public class FieldMetadata extends BaseMetadata {
 				this.owner.getName().toLowerCase()
 				+ "_"
 				+ this.getName().toLowerCase();
-		final boolean isDate = this.harmonyType.equals(Type.DATE.getValue());
-		final boolean isTime = this.harmonyType.equals(Type.TIME.getValue());
-		final boolean isDateTime =
-				this.harmonyType.equals(Type.DATETIME.getValue());
-
-		if (isDate || isDateTime || isTime) {
-			final String formatKey = "%s_%s_title";
-			final String formatTitle = "Select %s %s";
-			if (isDate || isDateTime) {
-				TranslationMetadata.addDefaultTranslation(
-						String.format(formatKey, key, Type.DATE.getValue()),
-						String.format(formatTitle,
-								this.getName(),
-								Type.DATE.getValue()),
-						Group.MODEL);
-			}
-
-			if (isTime || isDateTime) {
-				TranslationMetadata.addDefaultTranslation(
-						String.format(formatKey, key, Type.TIME.getValue()),
-						String.format(formatTitle,
-								this.getName(),
-								Type.TIME.getValue()),
-						Group.MODEL);
+		
+		if (this.harmonyType != null) {
+			final boolean isDate = this.harmonyType.equals(Type.DATE.getValue());
+			final boolean isTime = this.harmonyType.equals(Type.TIME.getValue());
+			final boolean isDateTime =
+					this.harmonyType.equals(Type.DATETIME.getValue());
+	
+			if (isDate || isDateTime || isTime) {
+				final String formatKey = "%s_%s_title";
+				final String formatTitle = "Select %s %s";
+				if (isDate || isDateTime) {
+					TranslationMetadata.addDefaultTranslation(
+							String.format(formatKey, key, Type.DATE.getValue()),
+							String.format(formatTitle,
+									this.getName(),
+									Type.DATE.getValue()),
+							Group.MODEL);
+				}
+	
+				if (isTime || isDateTime) {
+					TranslationMetadata.addDefaultTranslation(
+							String.format(formatKey, key, Type.TIME.getValue()),
+							String.format(formatTitle,
+									this.getName(),
+									Type.TIME.getValue()),
+							Group.MODEL);
+				}
 			}
 		}
-
+		
 		TranslationMetadata.addDefaultTranslation(
 					key + "_" + componentName.toLowerCase(Locale.ENGLISH),
 					this.getName(),

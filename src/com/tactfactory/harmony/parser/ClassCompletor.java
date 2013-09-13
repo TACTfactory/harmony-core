@@ -15,7 +15,9 @@ import java.util.Map;
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
+import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
+import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.meta.RelationMetadata;
 import com.tactfactory.harmony.plateforme.SqliteAdapter;
@@ -32,6 +34,9 @@ public class ClassCompletor {
 
 	/** Class metadata. */
 	private Map<String, EntityMetadata> metas;
+	
+	/** Class metadata. */
+	private Map<String, EnumMetadata> enumMetas;
 
 	/** Newly created class metadata. */
 	private final Map<String, EntityMetadata> newMetas =
@@ -41,8 +46,10 @@ public class ClassCompletor {
 	 * Constructor.
 	 * @param entities Entities map.
 	 */
-	public ClassCompletor(final Map<String, EntityMetadata> entities) {
+	public ClassCompletor(final Map<String, EntityMetadata> entities,
+			final Map<String, EnumMetadata> enums) {
 		this.metas = entities;
+		this.enumMetas = enums;
 	}
 
 	/**
@@ -53,6 +60,10 @@ public class ClassCompletor {
 			this.updateInheritedIds(classMeta);
 			this.updateRelations(classMeta);
 			this.updateColumnDefinition(classMeta);
+		}
+		
+		for (final EnumMetadata enumMeta : this.enumMetas.values()) {
+			this.updateColumnDefinition(enumMeta);
 		}
 
 		for (final EntityMetadata classMeta : this.newMetas.values()) {
@@ -309,7 +320,7 @@ public class ClassCompletor {
 	 * 
 	 * @param entity The entity in which to complete fields
 	 */
-	private void updateColumnDefinition(final EntityMetadata entity) {
+	private void updateColumnDefinition(final ClassMetadata entity) {
 		for (final FieldMetadata field : entity.getFields().values()) {
 			// Get column definition if non existent
 			if (Strings.isNullOrEmpty(field.getColumnDefinition())) {
@@ -368,6 +379,14 @@ public class ClassCompletor {
 				}
 				if (field.isLocale() == null) {
 					field.setIsLocale(false);
+				}
+			}
+			
+			if (Strings.isNullOrEmpty(field.getHarmonyType())) {
+				if (type != null) {
+					field.setHarmonyType(type.getValue());
+				} else {
+					field.setHarmonyType(field.getType());
 				}
 			}
 		}
