@@ -13,17 +13,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Locale;
-
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.Namespace;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
 
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
@@ -49,8 +39,6 @@ public class ActivityGenerator extends BaseGenerator {
 	private static final String LOWER_TEMPLATE = "template";
 	/** "Template". */
 	private static final String TEMPLATE = "Template";
-	/** "name". */
-	private static final String NAME = "name";
 
 	/** The local namespace. */
 	private String localNameSpace;
@@ -518,133 +506,9 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @param entityName the entity for which to update the manifest for.
 	 */
 	private void updateManifest(final String classF, final String entityName) {
-		final String classFile = entityName + classF;
-		final String pathRelatif = String.format(".%s.%s.%s",
-				this.getAdapter().getController(),
-				entityName.toLowerCase(Locale.ENGLISH),
-				classFile);
-
-		// Debug Log
-		ConsoleUtils.displayDebug("Update Manifest : " + pathRelatif);
-
-		try {
-			// Make engine
-			final SAXBuilder builder = new SAXBuilder();
-			final File xmlFile = TactFileUtils.makeFile(
-					this.getAdapter().getManifestPathFile());
-
-			// Load XML File
-			final Document doc = builder.build(xmlFile);
-
-			// Load Root element
-			final Element rootNode = doc.getRootElement();
-
-			// Load Name space (required for manipulate attributes)
-			final Namespace ns = rootNode.getNamespace("android");
-
-			// Find Application Node
-			Element findActivity = null;
-
-			// Find a element
-			final Element applicationNode = rootNode.getChild("application");
-			if (applicationNode != null) {
-
-				// Find Activity Node
-				final List<Element> activities =
-						applicationNode.getChildren("activity");
-
-				// Find many elements
-				for (final Element activity : activities) {
-					// Load attribute value
-					if (activity.hasAttributes()
-							&& activity.getAttributeValue(NAME, ns)
-								.equals(pathRelatif)) {
-						findActivity = activity;
-						break;
-					}
-				}
-
-				// If not found Node, create it
-				if (findActivity == null) {
-					// Create new element
-					findActivity = new Element("activity");
-
-					// Add Attributes to element
-					findActivity.setAttribute(NAME, pathRelatif, ns);
-					final Element findFilter = new Element("intent-filter");
-					final Element findAction = new Element("action");
-					final Element findCategory = new Element("category");
-					final Element findData = new Element("data");
-
-					// Add Child element
-					findFilter.addContent(findAction);
-					findFilter.addContent(findCategory);
-					findFilter.addContent(findData);
-					findActivity.addContent(findFilter);
-					applicationNode.addContent(findActivity);
-				}
-
-				// Set values
-				findActivity.setAttribute("label", "@string/app_name", ns);
-				findActivity.setAttribute("exported", "false", ns);
-				final Element filterActivity =
-						findActivity.getChild("intent-filter");
-				if (filterActivity != null) {
-					final StringBuffer data = new StringBuffer();
-					String action = "VIEW";
-
-					if (pathRelatif.matches(".*List.*")) {
-						data.append("vnd.android.cursor.collection/");
-					} else {
-						data.append("vnd.android.cursor.item/");
-
-						if (pathRelatif.matches(".*Edit.*")) {
-							action = "EDIT";
-						} else
-
-						if (pathRelatif.matches(".*Create.*")) {
-							action = "INSERT";
-						}
-					}
-
-
-					data.append(
-							this.getAppMetas().getProjectNameSpace()
-								.replace('/', '.'));
-					data.append('.');
-					data.append(entityName);
-
-					filterActivity.getChild("action").setAttribute(
-							NAME, "android.intent.action." + action, ns);
-					filterActivity.getChild("category").setAttribute(
-							NAME, "android.intent.category.DEFAULT", ns);
-					filterActivity.getChild("data").setAttribute(
-							"mimeType", data.toString(), ns);
-				}
-
-				// Clean code
-				applicationNode.sortChildren(new Comparator<Element>() {
-					@Override
-					public int compare(final Element o1, final Element o2) {
-						return o1.getName().compareToIgnoreCase(o2.getName());
-					}
-				});
-			}
-
-			// Write to File
-			final XMLOutputter xmlOutput = new XMLOutputter();
-
-			// Make beautiful file with indent !!!
-			xmlOutput.setFormat(Format.getPrettyFormat());
-			xmlOutput.output(doc,
-							new OutputStreamWriter(
-								new FileOutputStream(xmlFile.getAbsoluteFile()),
-								TactFileUtils.DEFAULT_ENCODING));
-		} catch (final IOException io) {
-			ConsoleUtils.displayError(io);
-		} catch (final JDOMException e) {
-			ConsoleUtils.displayError(e);
-		}
+		ManifestUpdater updater = new ManifestUpdater(this.getAdapter());
+		updater.addActivity(this.getAppMetas().getProjectNameSpace(),
+				classF, entityName);
 	}
 
 	/**
