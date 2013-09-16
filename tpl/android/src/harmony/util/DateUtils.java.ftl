@@ -2,6 +2,7 @@
 package ${project_namespace}.harmony.util;
 
 import java.text.ParseException;
+import java.util.TimeZone;
 
 import org.joda.time.DateTime;
 import org.joda.time.LocalDateTime;
@@ -38,9 +39,13 @@ public class DateUtils extends android.text.format.DateUtils {
 	 * @param date to convert
 	 * @return string date with Android date format
 	 */
-	public static String formatDateToString(DateTime date) {
-		return ${project_name?cap_first}Application.getDateFormat()
-														 .format(date.toDate());
+	public static String formatDateToString(DateTime date) { 
+		TimeZone tz = date.getZone().toTimeZone();
+		java.text.DateFormat df = ${project_name?cap_first}Application.getDateFormat();
+		
+		df.setTimeZone(tz);
+
+		return df.format(date.toDate());
 	}
 
 	/**
