@@ -149,10 +149,10 @@
 					<#assign result = result + "${tab}			(String) columns.get(${NamingUtils.fixtureAlias(field)})));" />
 				<#else>
 					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-					<#assign result = result + "${tab}		new DateTime(((Date) columns.get(${NamingUtils.fixtureAlias(field)}))" />
-					<#if field.is_locale>
+					<#assign result = result + "${tab}		((DateTime) columns.get(${NamingUtils.fixtureAlias(field)})" />
+					<#--if field.is_locale>
 						<#assign result = result + ",${tab}				DateTimeZone.UTC" />
-					</#if>
+					</#if-->
 					<#assign result = result + "));" />
 				</#if>
 			<#elseif field.type?lower_case=="boolean">
