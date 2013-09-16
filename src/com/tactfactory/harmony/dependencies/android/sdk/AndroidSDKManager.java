@@ -265,16 +265,24 @@ public class AndroidSDKManager
 		final File sdkFolder = 
 				new File(ApplicationMetadata.getAndroidSdkPath());
 		if (sdkFolder.exists()) {
-			final File supportV4SDK = 
+			final File supportV4SDKOld = 
 					new File(sdkFolder.getAbsolutePath() 
 							+ "/extras/android/compatibility/v4/"
+							+ "android-support-v4.jar");
+			
+			final File supportV4SDKNew = 
+					new File(sdkFolder.getAbsolutePath() 
+							+ "/extras/android/support/v4/"
 							+ "android-support-v4.jar");
 			
 			final File supportV4Menu = 
 					new File(destFolder + "android-support-v4.jar");
 			
-			if (supportV4SDK.exists()) {
-				TactFileUtils.copyfile(supportV4SDK, supportV4Menu);
+			if (supportV4SDKNew.exists()) {
+				TactFileUtils.copyfile(supportV4SDKNew, supportV4Menu);
+				ConsoleUtils.display("Support V4 copied successfuly.");
+			} else if (supportV4SDKOld.exists()) {
+				TactFileUtils.copyfile(supportV4SDKOld, supportV4Menu);
 				ConsoleUtils.display("Support V4 copied successfuly.");
 			} else {
 				ConsoleUtils.displayWarning(
