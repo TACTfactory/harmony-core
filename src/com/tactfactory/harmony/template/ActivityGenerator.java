@@ -51,6 +51,8 @@ public class ActivityGenerator extends BaseGenerator {
 
 	/** Has the project a time ? */
 	private boolean isTime;
+	
+	private ManifestUpdater manifestUpdater;
 
 	/**
 	 * Constructor.
@@ -59,7 +61,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 */
 	public ActivityGenerator(final BaseAdapter adapter) throws Exception {
 		this(adapter, true);
-
+		this.manifestUpdater = new ManifestUpdater(this.getAdapter());
 		// Make entities
 		for (final EntityMetadata meta
 				: this.getAppMetas().getEntities().values()) {
@@ -193,6 +195,8 @@ public class ActivityGenerator extends BaseGenerator {
 		} catch (Exception e) {
 			ConsoleUtils.displayError(e);
 		}
+		
+		this.manifestUpdater.saveManifest();
 	}
 
 	/**
@@ -297,7 +301,10 @@ public class ActivityGenerator extends BaseGenerator {
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
 		}
 
-		this.updateManifest("ListActivity", entityName);
+		this.manifestUpdater.addActivity(
+				this.getAppMetas().getProjectNameSpace(),
+				"ListActivity",
+				entityName);
 
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_empty_list",
@@ -333,7 +340,10 @@ public class ActivityGenerator extends BaseGenerator {
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
 		}
 
-		this.updateManifest("ShowActivity", entityName);
+		this.manifestUpdater.addActivity(
+				this.getAppMetas().getProjectNameSpace(),
+				"ShowActivity",
+				entityName);
 
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_load",
@@ -369,7 +379,11 @@ public class ActivityGenerator extends BaseGenerator {
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
 		}
 
-		this.updateManifest("EditActivity", entityName);
+		this.manifestUpdater.addActivity(
+				this.getAppMetas().getProjectNameSpace(),
+				"EditActivity",
+				entityName);
+		//this.updateManifest("EditActivity", entityName);
 
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_edit",
@@ -407,7 +421,11 @@ public class ActivityGenerator extends BaseGenerator {
 		}
 
 
-		this.updateManifest("CreateActivity", entityName);
+		this.manifestUpdater.addActivity(
+				this.getAppMetas().getProjectNameSpace(),
+				"CreateActivity",
+				entityName);
+		//this.updateManifest("CreateActivity", entityName);
 
 		final ClassMetadata classMeta =
 				this.getAppMetas().getEntities().get(entityName);
@@ -505,11 +523,9 @@ public class ActivityGenerator extends BaseGenerator {
 	 * @param classF The class file name
 	 * @param entityName the entity for which to update the manifest for.
 	 */
-	private void updateManifest(final String classF, final String entityName) {
-		ManifestUpdater updater = new ManifestUpdater(this.getAdapter());
-		updater.addActivity(this.getAppMetas().getProjectNameSpace(),
-				classF, entityName);
-	}
+	//private void updateManifest(final String classF, final String entityName) {
+		
+	//}
 
 	/**
 	 * Update Widget.

@@ -28,6 +28,8 @@ public class ManifestUpdater {
 	private static final String ACTION_EDIT = "EDIT";
 	private static final String ACTION_INSERT = "INSERT";
 	
+	private static final String NAMESPACE_ANDROID = "android";
+	
 	private final static Comparator<Element> ABC_COMPARATOR =
 			new Comparator<Element>() {
 				@Override
@@ -36,10 +38,13 @@ public class ManifestUpdater {
 				}
 			};
 	
+			
+	private Document docXml;
 	private BaseAdapter adapter;
 	
 	public ManifestUpdater(final BaseAdapter adapter) {
 		this.adapter = adapter;
+		this.docXml = XMLUtils.openXMLFile(this.adapter.getManifestPathFile());
 	}
 	/**
 	 * Update Android Manifest.
@@ -60,15 +65,12 @@ public class ManifestUpdater {
 		// Debug Log
 		ConsoleUtils.displayDebug("Update Manifest : " + pathRelatif);
 		
-		// Load XML File
-		final Document doc = XMLUtils.openXMLFile(
-				this.adapter.getManifestPathFile());
 
 		// Load Root element
-		final Element rootNode = doc.getRootElement();
+		final Element rootNode = this.docXml.getRootElement();
 
 		// Load Name space (required for manipulate attributes)
-		final Namespace ns = rootNode.getNamespace("android");
+		final Namespace ns = rootNode.getNamespace(NAMESPACE_ANDROID);
 
 		// Find Application Node
 		Element findActivity = null;
@@ -77,21 +79,8 @@ public class ManifestUpdater {
 		final Element applicationNode = 
 				rootNode.getChild(ELEMENT_APPLICATION);
 		if (applicationNode != null) {
-
-			// Find Activity Node
-			final List<Element> activities =
-					applicationNode.getChildren(ELEMENT_ACTIVITY);
-
-			// Find many elements
-			for (final Element activity : activities) {
-				// Load attribute value
-				if (activity.hasAttributes()
-						&& activity.getAttributeValue(ATTRIBUTE_NAME, ns)
-							.equals(pathRelatif)) {
-					findActivity = activity;
-					break;
-				}
-			}
+			
+			findActivity = this.findActivityNamed(pathRelatif, ns);
 
 			// If not found Node, create it
 			if (findActivity == null) {
@@ -169,17 +158,40 @@ public class ManifestUpdater {
 			// Clean code
 			applicationNode.sortChildren(ABC_COMPARATOR);
 		}
-
-		// Write XML to file.
-		XMLUtils.writeXMLToFile(doc, this.adapter.getManifestPathFile());
 	}
 	
-	public List<Element> getActivities(Document xmlDocument) {
+	private List<Element> getActivities() {
 		List<Element> result = null;
 		Element appNode = 
-				xmlDocument.getRootElement().getChild(ELEMENT_APPLICATION);
+				this.docXml.getRootElement().getChild(ELEMENT_APPLICATION);
 		result = appNode.getChildren(ELEMENT_ACTIVITY);
 		return result;
+	}
+	
+	private Element findActivityNamed(
+			String name,
+			Namespace namespace) {
+		Element result = null;
+		List<Element> activities = this.getActivities();
+		
+		for (final Element activity : activities) {
+			// Load attribute value
+			if (activity.hasAttributes()
+					&& activity.getAttributeValue(ATTRIBUTE_NAME, namespace)
+						.equals(name)) {
+				result = activity;
+				break;
+			}
+		}
+		
+		return result;
+	}
+	
+	public void saveManifest() {
+		// Write XML to file.
+		XMLUtils.writeXMLToFile(
+				this.docXml,
+				this.adapter.getManifestPathFile());
 	}
 }
 
