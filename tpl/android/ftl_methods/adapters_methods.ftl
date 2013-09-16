@@ -331,12 +331,12 @@
 		<#if !field.nullable>
 			<#if !field.relation??>
 				<#if field.type?lower_case == "datetime">
-					<#if field.harmony_type == "datetime">
+					<#if (field.harmony_type) == "datetime">
 						<#assign result = result + "${tab}result = (result && this.${field.name}View.getDateTime() != null);" />
 					<#else>
 						<#assign result = result + "${tab}result = (result && this.${field.name}View.get${field.harmony_type?cap_first}() != null);" />
 					</#if>
-				<#else>
+				<#elseif (field.harmony_type?lower_case != "enum")>
 						<#assign result = result + "${tab}result = (result && this.${field.name}View.getText().length() > 0);" />
 				</#if>
 			<#else>
@@ -431,6 +431,8 @@
 		<#assign result = result + "${tab}			DateUtils.formatTimeToString(" />
 		<#assign result = result + "${tab}					this.model.get${field.name?cap_first}()));" />
 						</#if>
+					<#elseif (field.harmony_type?lower_case == "enum")>
+		<#assign result = result + "${tab}	this.${field.name}View.setText(this.model.get${field.name?cap_first}().toString());" />
 					<#else>
 		<#assign result = result + "${tab}	${ViewUtils.setLoader(field)}" />
 					</#if>
