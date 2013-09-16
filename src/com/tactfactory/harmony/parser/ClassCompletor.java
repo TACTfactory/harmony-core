@@ -338,7 +338,7 @@ public class ClassCompletor {
 						field.getHarmonyType());
 			} else {
 				type = Type.fromName(
-						field.getColumnDefinition());
+						field.getType());
 			}
 			
 			if (type != null) {
