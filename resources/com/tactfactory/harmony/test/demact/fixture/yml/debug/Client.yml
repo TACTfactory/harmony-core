@@ -9,6 +9,7 @@ Client:
       createdAt: 2012-01-01 00:00:00.00
       birthdate: 2012-01-01 00:00:00.00
       userGroup: User
+      title: 0
    DEBUG - Client - Haddock:
       id: 1
       firstname: "DEBUG - Client - Haddock"
@@ -19,6 +20,7 @@ Client:
       birthdate: 2012-01-01 00:00:00.00
       adress: "Address1"
       userGroup: User
+      title: 0
    DEBUG - Client - Tournesol:
       id: 2
       firstname: DEBUG - Client - Tournesol
@@ -29,3 +31,4 @@ Client:
       birthdate: 2001-12-15 2:59:43.10
       userGroup: User
       adress: "Address1"
+      title: 2

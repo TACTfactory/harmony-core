@@ -8,6 +8,7 @@ User:
       createdAt: 2001-12-15 2:59:43.10
       birthdate: 2001-12-15 2:59:43.10
       userGroup: User
+      title: 2
    TEST - Haddock:
       id: 1
       firstname: TEST - Haddock
@@ -17,6 +18,7 @@ User:
       createdAt: 2001-12-15 2:59:43.10
       birthdate: 2001-12-15 2:59:43.10
       userGroup: User
+      title: 0
    TEST - Tournesol:
       id: 2
       firstname: TEST - Tournesol
@@ -26,3 +28,4 @@ User:
       createdAt: 2001-12-15 2:59:43.10
       birthdate: 2001-12-15 2:59:43.10
       userGroup: User
+      title: 1
