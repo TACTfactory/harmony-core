@@ -164,7 +164,19 @@ public abstract class CommonTest {
 					String.format("%s/%s",
 						Harmony.getProjectPath(),
 						fileName));
-
-		assertTrue(file.exists());
+		ConsoleUtils.display("Testing existence of " + file.getAbsolutePath());
+		assertTrue(file.getAbsolutePath() + " does not exist", file.exists());
+	}
+	
+	/**
+	 * Clean the /android/ folder.
+	 */
+	protected static void cleanAndroidFolder() {
+		ConsoleUtils.display(
+				  "################################  "
+				+ "Clean Android Folder !! "
+				+ "################################");
+		final File dirproj = new File(Harmony.getProjectAndroidPath());
+		TactFileUtils.deleteRecursive(dirproj);
 	}
 }
