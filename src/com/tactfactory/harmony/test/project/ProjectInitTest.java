@@ -51,13 +51,6 @@ public class ProjectInitTest extends CommonTest {
 	@Override
 	public final void tearDown() throws Exception {
 		super.tearDown();
-
-		ConsoleUtils.display(
-				  "################################  "
-				+ "Cleaner !! "
-				+ "################################");
-		final File dirproj = new File(Harmony.getProjectAndroidPath());
-		TactFileUtils.deleteRecursive(dirproj);
 	}
 
 	/**
@@ -65,6 +58,7 @@ public class ProjectInitTest extends CommonTest {
 	 */
 	@Test
  	public final void initAndroid() {
+		CommonTest.cleanAndroidFolder();
 		System.out.println("\nTest Project init Android");
 		System.out.println(SHARP_DELIMITOR);
 
@@ -73,6 +67,7 @@ public class ProjectInitTest extends CommonTest {
 				null,
 				null);
 
+		
 		CommonTest.hasFindFile("android/AndroidManifest.xml");
 		CommonTest.hasFindFile("android/build.xml");
 		CommonTest.hasFindFile("android/lint.xml");
@@ -121,7 +116,7 @@ public class ProjectInitTest extends CommonTest {
 	/**
 	 * Test the initialization of the iPhone project.
 	 */
-	@Ignore
+	/*@Ignore
 	@Test
 	public final void initIphone() {
 		System.out.println("\nTest Project init iphone");
@@ -131,12 +126,12 @@ public class ProjectInitTest extends CommonTest {
 				ProjectCommand.INIT_IOS, null, null);
 
 		// TODO add asserts (for folder/file exist..)
-	}
+	}*/
 
 	/**
 	 * Test the initialization of the RIM project.
 	 */
-	@Ignore
+	/*@Ignore
 	@Test
 	public final void initRim() {
 		System.out.println("\nTest Project init RIM");
@@ -146,12 +141,12 @@ public class ProjectInitTest extends CommonTest {
 				ProjectCommand.INIT_RIM, null, null);
 
 		// TODO add asserts (for folder/file exist..)
-	}
+	}*/
 
 	/**
 	 * Test the initialization of the Windows Phone project.
 	 */
-	@Ignore
+	/*@Ignore
 	@Test
 	public final void initWinphone() {
 		System.out.println("\nTest Project init Windows Phone");
@@ -163,6 +158,6 @@ public class ProjectInitTest extends CommonTest {
 									null);
 
 		// TODO add asserts (for folder/file exist..)
-	}
+	}*/
 
 }
