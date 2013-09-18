@@ -3,6 +3,8 @@ package ${project_namespace}.harmony.util;
 
 import java.text.ParseException;
 import java.util.TimeZone;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
@@ -23,6 +25,20 @@ public class DateUtils extends android.text.format.DateUtils {
 	private static final String TIME_AMPM_PATTERN = "hh:mm a";
 	/** Internal pattern for H24 time. */
 	private static final String TIME_24H_PATTERN = "HH:mm";
+
+	/** Regexp Date for YAML. */
+	private static final String REGEXP_YAML_DATE = 
+			"([0-9][0-9][0-9][0-9])"
+			+ "-([0-9][0-9]?)"
+			+ "-([0-9][0-9]?)";
+	
+	/** Regexp Time for YAML. */
+	private static final String REGEXP_YAML_TIME = 
+			"([Tt]|[ \\t]+)([0-9][0-9])?"
+			+ ":([0-9][0-9])"
+			+ ":([0-9][0-9])"
+			+ "(\\.[0-9]*)?"
+			+ "(([ \\t]*)Z|[-+][0-9][0-9]?(:[0-9][0-9])?)?";
 
 	/** Time Format type. */
 	public enum TimeFormatType {
@@ -260,6 +276,85 @@ public class DateUtils extends android.text.format.DateUtils {
 		}
 
 		return dt;
+	}
+
+	/**
+	 * Convert Yaml string date/time to datetime.
+	 * @param dateTime yaml string date/time
+	 * @return datetime the datetime
+	 */
+	public static DateTime formatYAMLStringToDateTime(String dateTime) {
+		DateTime dt = null;
+		DateTime date = null;
+		DateTime time = null;
+		DateTime defaultDt = new DateTime(DateTimeZone.UTC);
+		
+		Matcher match = Pattern.compile(REGEXP_YAML_DATE).matcher(dateTime);
+		
+		if (match.find()) {
+			int year = Integer.parseInt(match.group(1));
+			int month = Integer.parseInt(match.group(2));
+			int day = Integer.parseInt(match.group(3));
+			
+			date = new DateTime(
+					year,
+					month,
+					day,
+					defaultDt.getHourOfDay(),
+					defaultDt.getMinuteOfHour(),
+					defaultDt.getSecondOfMinute());
+		} else {
+			date = new DateTime(0);
+		}
+		
+		Matcher matchTime = Pattern.compile(REGEXP_YAML_TIME).matcher(dateTime);
+		
+		if (matchTime.find()) {
+			int hour = Integer.parseInt(matchTime.group(2));
+			int minute = Integer.parseInt(matchTime.group(3));
+			int second = Integer.parseInt(matchTime.group(4));
+			int millis = Integer.parseInt(matchTime.group(5).substring(1));
+			String timeZoneString = matchTime.group(6);
+			DateTimeZone timeZone;
+			if (timeZoneString == null) {
+				timeZone = DateTimeZone.UTC;
+			} else {
+				timeZone = DateTimeZone.forID(timeZoneString);
+			}
+			time = new DateTime(
+					defaultDt.getYear(),
+					defaultDt.getMonthOfYear(),
+					defaultDt.getDayOfMonth(),
+					hour,
+					minute,
+					second,
+					millis,
+					timeZone);
+		} else {
+			time = new DateTime(defaultDt);
+		}
+		
+		dt = DateUtils.merge(date, time);
+		return dt;
+	}
+	
+	/**
+	 * Merge two DateTime reprensenting a date and a time.
+	 * 
+	 * @param date The date
+	 * @param time The time
+	 *
+	 * @return The merged date time
+	 */
+	public static DateTime merge(DateTime date, DateTime time) {
+		return new DateTime(date.getYear(),
+				date.getMonthOfYear(),
+				date.getDayOfMonth(),
+				time.getHourOfDay(),
+				time.getMinuteOfHour(),
+				time.getSecondOfMinute(),
+				time.getMillisOfSecond(),
+				time.getZone());
 	}
 
 	/**

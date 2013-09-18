@@ -145,11 +145,12 @@
 			<#elseif field.type?lower_case=="datetime">
 				<#if (field.harmony_type == "time")>
 					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-					<#assign result = result + "${tab}		DateUtils.formatISOStringToTime(" />
+					<#assign result = result + "${tab}		DateUtils.formatYAMLStringToDateTime(" />
 					<#assign result = result + "${tab}			(String) columns.get(${NamingUtils.fixtureAlias(field)})));" />
 				<#else>
 					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-					<#assign result = result + "${tab}		new DateTime((Date) columns.get(${NamingUtils.fixtureAlias(field)})" />
+					<#assign result = result + "${tab}		DateUtils.formatYAMLStringToDateTime(" />
+					<#assign result = result + "${tab}			(String) columns.get(${NamingUtils.fixtureAlias(field)})" />
 					<#--if field.is_locale>
 						<#assign result = result + ",${tab}				DateTimeZone.UTC" />
 					</#if-->
