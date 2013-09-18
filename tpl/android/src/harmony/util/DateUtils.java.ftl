@@ -216,8 +216,8 @@ public class DateUtils extends android.text.format.DateUtils {
 		DateTime dt = null;
 
 		try {
-			dt = new DateTime(
-						  ISODateTimeFormat.dateTime().parseDateTime(dateTime));
+			dt = ISODateTimeFormat.dateTime()
+					.withOffsetParsed().parseDateTime(dateTime);
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, e.getMessage());
 		}
@@ -253,8 +253,8 @@ public class DateUtils extends android.text.format.DateUtils {
 		DateTime dt = null;
 
 		try {
-			dt = new DateTime(ISODateTimeFormat.localDateOptionalTimeParser()
-													  .parseDateTime(dateTime));
+			dt = ISODateTimeFormat.localDateOptionalTimeParser()
+					.parseDateTime(dateTime);
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, e.getMessage());
 		}
@@ -273,8 +273,7 @@ public class DateUtils extends android.text.format.DateUtils {
 		DateTime dt = null;
 
 		try {
-			dt = new DateTime(DateTimeFormat.forPattern(pattern)
-													  .parseDateTime(dateTime));
+			dt = DateTimeFormat.forPattern(pattern).parseDateTime(dateTime);
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, e.getMessage());
 		}
@@ -294,7 +293,7 @@ public class DateUtils extends android.text.format.DateUtils {
 
 		try {
 			LocalDateTime tmp = DateTimeFormat.forPattern(pattern)
-												  .parseLocalDateTime(dateTime);
+					.parseLocalDateTime(dateTime);
 			dt = DateUtils.formatLocalISOStringToDateTime(tmp.toString());
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, e.getMessage());
