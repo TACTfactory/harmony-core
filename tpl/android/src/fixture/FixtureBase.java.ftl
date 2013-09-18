@@ -25,13 +25,7 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 <#elseif fixtureType=="yml">
-import org.joda.time.DateTime;
-import org.joda.time.DateTimeZone;
 import org.yaml.snakeyaml.Yaml;
-import org.yaml.snakeyaml.constructor.Constructor;
-import org.yaml.snakeyaml.nodes.Node;
-import org.yaml.snakeyaml.nodes.ScalarNode;
-import org.yaml.snakeyaml.nodes.Tag;
 </#if>
 
 import android.content.Context;
@@ -60,10 +54,6 @@ public abstract class FixtureBase<T> {
 
 	/** SerializedBackup. */
 	protected byte[] serializedBackup;
-
-<#if (fixtureType == "yml")>	/** Joda DateTime Yaml Constructor. */
-	private final static JodaTimeImplicitContructor JODA_YAML_CONSTRUCTOR =
-			new JodaTimeImplicitContructor();</#if>
 
 	/**
 	 * Constructor.
@@ -115,7 +105,7 @@ public abstract class FixtureBase<T> {
 		}
 <#elseif fixtureType == "yml">
 		// YAML Loader
-		final Yaml yaml = new Yaml(JODA_YAML_CONSTRUCTOR);
+		final Yaml yaml = new Yaml();
 		final InputStream inputStream = this.getYml(
 					DataLoader.getPathToFixtures(mode)
 					+ this.getFixtureFileName());
@@ -288,78 +278,4 @@ public abstract class FixtureBase<T> {
 
 		return result;
 	}
-
-	<#if fixtureType=="yml">
-	/**
-	 * Class for parsing Joda's DateTime in Yaml.
-	 */
-	private static class JodaTimeImplicitContructor extends Constructor {
-		/**
-		 * Constructor.
-		 */
-	    public JodaTimeImplicitContructor() {
-	        this.yamlConstructors.put(Tag.TIMESTAMP, new ConstructJodaTimestamp());
-	    }
-
-	    /**
-	     * Joda Time Stamp Construct.
-	     */
-	    private class ConstructJodaTimestamp extends ConstructYamlTimestamp {
-	    	/**
-	    	 * Construct.
-	    	 * @param node the node
-	    	 * @return the constructed object 
-	    	 */
-	        public Object construct(Node node) {
-	        	// Detect timezone
-	        	String value = ((ScalarNode) node).getValue();
-	        	DateTimeZone timeZone = DateTimeZone.UTC;
-	        	       	
-	        	int timeIndex = indexOf(value, 'T', 't', ' ');
-	        	if (timeIndex > -1) {
-	        		int timeZoneIndex = indexOf(value, timeIndex, '+', '-');
-	        		if (timeZoneIndex > -1) {
-	        			timeZone = DateTimeZone.forID(
-		        				value.substring(timeZoneIndex));
-			        }
-	        	}
-	        	
-	            Date date = (Date) super.construct(node);
-	            return new DateTime(date, timeZone);
-	        }
-	        
-	        /**
-	         * Returns the index of the first found character.
-	         * 
-	         * @param container The string
-	         * @param chars The chars to find
-	         * 
-	         * @return The index of the first found char in container
-	         */
-	        private int indexOf(String container, char... chars) {
-	        	return this.indexOf(container, 0, chars);
-	        }
-	        
-	        /**
-	         * Returns the index of the first found character after the given
-	         * position.
-	         * 
-	         * @param container The string
-	         * @param start the position to start the parse
-	         * @param chars The chars to find
-	         * 
-	         * @return The index of the first found char in container
-	         */
-	        private int indexOf(String container, int start, char... chars) {
-	        	for (char c : chars) {
-	        		int index = container.indexOf(c, start);
-	        		if (index > -1) {
-	        			return index;
-	        		}
-	        	}
-	        	return -1;
-	        }
-	    }
-	}
-	</#if>
 }

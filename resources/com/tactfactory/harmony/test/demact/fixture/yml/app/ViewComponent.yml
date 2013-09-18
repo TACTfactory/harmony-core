@@ -5,7 +5,7 @@ ViewComponent:
       text: "VC1 Text"
       dateTime: 2001-12-15 2:59:43.10
       date: 2012-01-01
-      time: 00:00
+      time: "00:00:00"
       login: "VC1 login"
       password: "VC1 password"
       email: "user1@vc1.com"
@@ -19,7 +19,7 @@ ViewComponent:
       text: "VC2 Text"
       dateTime: 2001-12-15 2:59:43.10
       date: 2012-01-01
-      time: 00:00
+      time: "00:00:00"
       login: "VC2 login"
       password: "VC2 password"
       email: "user2@vc2.com"
@@ -33,7 +33,7 @@ ViewComponent:
       text: "VC3 Text"
       dateTime: 2001-12-15 2:59:43.10
       date: 2012-01-01
-      time: 00:00
+      time: "00:00:00"
       login: "VC3 login"
       password: "VC3 password"
       email: "user3@vc3.com"

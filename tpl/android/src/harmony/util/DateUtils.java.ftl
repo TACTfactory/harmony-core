@@ -5,6 +5,7 @@ import java.text.ParseException;
 import java.util.TimeZone;
 
 import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.ISODateTimeFormat;
@@ -57,10 +58,10 @@ public class DateUtils extends android.text.format.DateUtils {
 		String result = null;
 		if (${project_name?cap_first}Application.is24Hour()) {
 			result = time.toString(
-					DateTimeFormat.forPattern(TIME_24H_PATTERN));
+					DateTimeFormat.forPattern(TIME_24H_PATTERN).withZone(DateTimeZone.getDefault()));
 		} else {
 			result = time.toString(
-					DateTimeFormat.forPattern(TIME_AMPM_PATTERN));
+					DateTimeFormat.forPattern(TIME_AMPM_PATTERN).withZone(DateTimeZone.getDefault()));
 		}
 
 		return result;
@@ -78,10 +79,10 @@ public class DateUtils extends android.text.format.DateUtils {
 		String result;
 		if (formatType.equals(TimeFormatType.H24)) {
 			result =
-				time.toString(DateTimeFormat.forPattern(TIME_24H_PATTERN));
+				time.toString(DateTimeFormat.forPattern(TIME_24H_PATTERN).withZone(DateTimeZone.getDefault()));
 		} else if (formatType.equals(TimeFormatType.AMPM)) {
 			result =
-				time.toString(DateTimeFormat.forPattern(TIME_AMPM_PATTERN));
+				time.toString(DateTimeFormat.forPattern(TIME_AMPM_PATTERN).withZone(DateTimeZone.getDefault()));
 		} else if (formatType.equals(TimeFormatType.ANDROID_CONF)) {
 			result = formatTimeToString(time);
 		} else {
@@ -217,6 +218,25 @@ public class DateUtils extends android.text.format.DateUtils {
 		try {
 			dt = new DateTime(
 						  ISODateTimeFormat.dateTime().parseDateTime(dateTime));
+		} catch (IllegalArgumentException e) {
+			Log.e(TAG, e.getMessage());
+		}
+
+		return dt;
+	}
+
+	
+	/**
+	 * Convert ISO8601 string date to datetime.
+	 * @param dateTime ISO8601 string date
+	 * @return datetime
+	 */
+	public static DateTime formatISOStringToTime(String time) {
+		DateTime dt = null;
+
+		try {
+			dt = new DateTime(
+						  ISODateTimeFormat.timeParser().withOffsetParsed().parseDateTime(time));
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, e.getMessage());
 		}
