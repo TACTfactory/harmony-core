@@ -84,7 +84,7 @@
 <#function importRelatedEnums entity>
 	<#assign result = ""/>
 	<#assign import_array = [entity.name] />
-	<#list entity.fields?values as field>
+	<#list ViewUtils.getAllFields(entity)?values as field>
 		<#if field.harmony_type?lower_case == "enum">
 			<#if (!Utils.isInArray(import_array, field.type)) >
 				<#assign import_array = import_array + [field.type] />

@@ -53,6 +53,12 @@
         android:layout_below="@+id/${m_id_label}"
 		harmony:timeWidget_dialogTitle="@string/${field.owner?lower_case}_${field.name?lower_case}_time_title" />
 				</#if>
+			<#elseif (field.harmony_type?lower_case == "enum")>
+	<${project_namespace}.harmony.widget.EnumSpinner
+		android:id="@+id/${m_id}"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+        android:layout_below="@+id/${m_id_label}" />
 			<#else>
     <EditText
 		android:id="@+id/${m_id}"

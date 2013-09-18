@@ -62,6 +62,9 @@ public class User extends Object implements Cloneable, Serializable {
 	@ManyToOne
 	private UserGroup userGroup;
 
+	@Column(type = Type.ENUM)
+	private Title title;
+
 	/**
 	 * Constructor.
 	 */

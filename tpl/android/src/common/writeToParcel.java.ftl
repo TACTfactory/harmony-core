@@ -14,6 +14,18 @@
 		} else {
 			dest.writeString(null);
 		}
+					<#elseif (field.harmony_type?lower_case == "enum")>
+						<#assign enumType = enums[field.type] />
+						<#if enumType.id??>
+							<#assign idEnum = enumType.fields[enumType.id] />
+							<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
+		dest.writeInt(this.get${field.name?cap_first}().getValue());
+							<#else>
+		dest.writeString(this.get${field.name?cap_first}().getValue());
+							</#if>
+						<#else>
+		dest.writeString(this.get${field.name?cap_first}().name());
+						</#if>
 					</#if>
 				<#else>
 					<#if field.relation.type == "OneToOne" || field.relation.type == "ManyToOne">
