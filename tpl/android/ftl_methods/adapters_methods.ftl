@@ -143,19 +143,10 @@
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
 				<#assign result = result + "${tab}		((Double) columns.get(${NamingUtils.fixtureAlias(field)})).floatValue());" />
 			<#elseif field.type?lower_case=="datetime">
-				<#if (field.harmony_type == "time")>
-					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-					<#assign result = result + "${tab}		DateUtils.formatYAMLStringToDateTime(" />
-					<#assign result = result + "${tab}			(String) columns.get(${NamingUtils.fixtureAlias(field)})));" />
-				<#else>
-					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-					<#assign result = result + "${tab}		DateUtils.formatYAMLStringToDateTime(" />
-					<#assign result = result + "${tab}			(String) columns.get(${NamingUtils.fixtureAlias(field)})" />
-					<#--if field.is_locale>
-						<#assign result = result + ",${tab}				DateTimeZone.UTC" />
-					</#if-->
-					<#assign result = result + "));" />
-				</#if>
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+				<#assign result = result + "${tab}		DateUtils.formatYAMLStringToDateTime(" />
+				<#assign result = result + "${tab}			(String) columns.get(${NamingUtils.fixtureAlias(field)})" />
+				<#assign result = result + "));" />
 			<#elseif field.type?lower_case=="boolean">
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
 				<#assign result = result + "${tab}		(Boolean) columns.get(${NamingUtils.fixtureAlias(field)}));" />
@@ -237,18 +228,7 @@
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(Double.parseDouble(${NamingUtils.fixtureParsedAlias(field)}));"/>
 			<#elseif (field.type?lower_case=="datetime")>
 					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-					<#if field.is_locale>
-						<#assign result = result + "${tab}		DateUtils.formatLocalPattern(" />
-					<#else>
-						<#assign result = result + "${tab}		DateUtils.formatPattern(" />
-					</#if>
-					<#if field.harmony_type=="date">
-						<#assign result = result + "${tab}				patternDate," />
-					<#elseif field.harmony_type=="datetime">
-						<#assign result = result + "${tab}				patternDateTime," />
-					<#elseif field.harmony_type=="time">
-						<#assign result = result + "${tab}				patternTime," />
-					</#if>
+					<#assign result = result + "${tab}		DateUtils.formatXMLStringToDateTime(" />
 					<#assign result = result + "${tab}				${NamingUtils.fixtureParsedAlias(field)}));" />
 			<#elseif field.type=="boolean">
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />

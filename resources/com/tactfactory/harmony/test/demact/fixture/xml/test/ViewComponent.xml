@@ -4,9 +4,9 @@
 		<id>0</id>
 		<string>TEST - String</string>
 		<text>TEST - Texte</text>
-		<dateTime>2012-01-01 00:00</dateTime>
+		<dateTime>2012-01-01T00:00:00</dateTime>
 		<date>2012-01-01</date>
-		<time>00:00</time>
+		<time>00:00:00</time>
 		<login>TEST - VC1 login</login>
 		<password>TEST - VC1 password</password>
 		<email>TEST - user1@vc1.com</email>
@@ -19,9 +19,9 @@
 		<id>0</id>
 		<string>TEST - Dupond</string>
 		<text>TEST - Dupont</text>
-		<dateTime>2012-01-01 00:00</dateTime>
+		<dateTime>2012-01-01T00:00:00</dateTime>
 		<date>2012-01-01</date>
-		<time>00:00</time>
+		<time>00:00:00</time>
 		<login>TEST - VC2 login</login>
 		<password>TEST - VC2 password</password>
 		<email>TEST - user2@vc2.com</email>
@@ -34,9 +34,9 @@
 		<id>0</id>
 		<string>TEST - Dupond</string>
 		<text>TEST - Dupont</text>
-		<dateTime>2012-01-01 00:00</dateTime>
+		<dateTime>2012-01-01T00:00:00</dateTime>
 		<date>2012-01-01</date>
-		<time>00:00</time>
+		<time>00:00:00</time>
 		<login>TEST - VC3 login</login>
 		<password>TEST - VC3 password</password>
 		<email>TEST - user3@vc3.com</email>

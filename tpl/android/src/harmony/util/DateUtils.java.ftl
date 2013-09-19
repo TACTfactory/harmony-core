@@ -40,6 +40,24 @@ public class DateUtils extends android.text.format.DateUtils {
 			+ "(\\.[0-9]*)?"
 			+ "(([ \\t]*)Z|[-+][0-9][0-9]?(:[0-9][0-9])?)?";
 
+
+	/** Regexp Date for XML. */
+	private static final String REGEXP_XML_DATE = 
+			"([0-9][0-9][0-9][0-9])"
+			+ "-([0-9][0-9])"
+			+ "-([0-9][0-9])";
+	
+	/** Regexp Time for XML. */
+	private static final String REGEXP_XML_TIME = 
+			"([Tt]|[ \\t]+)([0-9][0-9])?"
+			+ ":([0-9][0-9])"
+			+ ":([0-9][0-9])"
+			+ "(\\.[0-9]*)?";
+	
+	/** Regexp TimeZone for XML. */
+	private static final String REGEXP_XML_TIMEZONE =
+			 "(Z|[-+][0-9][0-9]:[0-9][0-9])";
+
 	/** Time Format type. */
 	public enum TimeFormatType {
 		/** 24h format. */
@@ -313,7 +331,13 @@ public class DateUtils extends android.text.format.DateUtils {
 			int hour = Integer.parseInt(matchTime.group(2));
 			int minute = Integer.parseInt(matchTime.group(3));
 			int second = Integer.parseInt(matchTime.group(4));
-			int millis = Integer.parseInt(matchTime.group(5).substring(1));
+			String millisString = matchTime.group(5);
+			int millis;
+			if (millisString != null) {
+				millis = Integer.parseInt(millisString.substring(1));
+			} else {
+				millis = 0;
+			}
 			String timeZoneString = matchTime.group(6);
 			DateTimeZone timeZone;
 			if (timeZoneString == null) {
@@ -330,6 +354,78 @@ public class DateUtils extends android.text.format.DateUtils {
 					second,
 					millis,
 					timeZone);
+		} else {
+			time = new DateTime(defaultDt);
+		}
+		
+		dt = DateUtils.merge(date, time);
+		return dt;
+	}
+
+	/**
+	 * Convert XML string date/time to datetime.
+	 * @param dateTime XML string date/time
+	 * @return datetime the datetime
+	 */
+	public static DateTime formatXMLStringToDateTime(String dateTime) {
+		DateTime dt = null;
+		DateTime date = null;
+		DateTime time = null;
+		DateTime defaultDt;
+		
+		Matcher matchTimeZone = 
+				Pattern.compile(REGEXP_XML_TIMEZONE).matcher(dateTime);
+		
+		if (matchTimeZone.find()) {
+			String timeZoneString = matchTimeZone.group(1);
+			defaultDt = new DateTime(0, DateTimeZone.forID(timeZoneString));
+		} else {
+			defaultDt = new DateTime(0, DateTimeZone.UTC);
+		}
+		
+		Matcher matchTime = Pattern.compile(REGEXP_XML_TIME).matcher(dateTime);
+		
+		Matcher match = Pattern.compile(REGEXP_XML_DATE).matcher(dateTime);
+		
+		if (match.find()) {
+			int year = Integer.parseInt(match.group(1));
+			int month = Integer.parseInt(match.group(2));
+			int day = Integer.parseInt(match.group(3));
+			
+			date = new DateTime(
+					year,
+					month,
+					day,
+					defaultDt.getHourOfDay(),
+					defaultDt.getMinuteOfHour(),
+					defaultDt.getSecondOfMinute(),
+					defaultDt.getZone());
+		} else {
+			date = new DateTime(defaultDt);
+		}
+		
+		
+		if (matchTime.find()) {
+			int hour = Integer.parseInt(matchTime.group(2));
+			int minute = Integer.parseInt(matchTime.group(3));
+			int second = Integer.parseInt(matchTime.group(4));
+			String millisString = matchTime.group(5);
+			int millis;
+			if (millisString != null) {
+				millis = Integer.parseInt(millisString.substring(1));
+			} else {
+				millis = 0;
+			}
+			
+			time = new DateTime(
+					defaultDt.getYear(),
+					defaultDt.getMonthOfYear(),
+					defaultDt.getDayOfMonth(),
+					hour,
+					minute,
+					second,
+					millis,
+					defaultDt.getZone());
 		} else {
 			time = new DateTime(defaultDt);
 		}

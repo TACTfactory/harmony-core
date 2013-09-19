@@ -106,8 +106,6 @@ public final class ${curr.name?cap_first}DataLoader
 		${curr.extends}DataLoader inheritanceDataLoader =
 				${curr.extends}DataLoader.getInstance(this.ctx);
 		inheritanceDataLoader.extractItem(element, ${curr.name?uncap_first});
-		inheritanceDataLoader.items.put(element.getAttributeValue("id"), 
-			${curr.name?uncap_first});
 		</#if>
 
 	<#elseif fixtureType=="yml">
