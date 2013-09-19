@@ -106,11 +106,7 @@
 <#-- Generate the getter of the given field, with its converter to string. -->
 <#function generateStringGetter className field>
 	<#if (field.type?lower_case == "datetime")>																		<#-- If datetime -->
-		<#if field.is_locale>
-			<#return generateCompleteGetter(className field) + ".toLocalDateTime().toString()" />
-		<#else>
-			<#return generateCompleteGetter(className field) + ".toString(ISODateTimeFormat.dateTime())" />
-		</#if>
+		<#return generateCompleteGetter(className field) + ".toString(ISODateTimeFormat.dateTime())" />
 	<#elseif (field.type?lower_case == "string")>																	<#-- If String (field) -->
 		<#return generateCompleteGetter(className field) + ""/>
 	<#elseif (field.harmony_type?lower_case == "enum")>																<#-- If Enum (field.getValue() || field.name()) -->

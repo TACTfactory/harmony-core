@@ -48,15 +48,9 @@
 			<#if (field.type?lower_case == "datetime") >
 				<#if ((field.harmony_type == "date") || (field.harmony_type == "datetime") || (field.harmony_type == "time"))>
 
-					<#if field.is_locale>
-						<#assign result = result + "${tab}${localTab}final DateTime dt${field.name?cap_first} =\n"/>
-						<#assign result = result + "${tab}		DateUtils.formatLocalISOStringToDateTime(\n"/>
-						<#assign result = result + "${tab}				cursor.getString(index));\n"/>
-					<#else>
-						<#assign result = result + "${tab}${localTab}final DateTime dt${field.name?cap_first} =\n"/>
-						<#assign result = result + "${tab}		DateUtils.formatISOStringToDateTime(\n"/>
-						<#assign result = result + "${tab}				cursor.getString(index));\n"/>
-					</#if>
+					<#assign result = result + "${tab}${localTab}final DateTime dt${field.name?cap_first} =\n"/>
+					<#assign result = result + "${tab}		DateUtils.formatISOStringToDateTime(\n"/>
+					<#assign result = result + "${tab}				cursor.getString(index));\n"/>
 					<#assign result = result + "${tab}${localTab}if (dt${field.name?cap_first} != null) {\n"/>
 					<#assign result = result + "${tab}${localTab}		result.set${field.name?cap_first}(\n"/>
 					<#assign result = result + "${tab}				dt${field.name?cap_first});\n"/>

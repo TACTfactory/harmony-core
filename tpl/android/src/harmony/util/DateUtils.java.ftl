@@ -34,7 +34,7 @@ public class DateUtils extends android.text.format.DateUtils {
 	
 	/** Regexp Time for YAML. */
 	private static final String REGEXP_YAML_TIME = 
-			"([Tt]|[ \\t]+)([0-9][0-9])?"
+			"([Tt]|[ \\t]+)([0-9][0-9]?)"
 			+ ":([0-9][0-9])"
 			+ ":([0-9][0-9])"
 			+ "(\\.[0-9]*)?"
@@ -49,7 +49,7 @@ public class DateUtils extends android.text.format.DateUtils {
 	
 	/** Regexp Time for XML. */
 	private static final String REGEXP_XML_TIME = 
-			"([Tt]|[ \\t]+)([0-9][0-9])?"
+			"([Tt]|[ \\t]+)([0-9][0-9]?)"
 			+ ":([0-9][0-9])"
 			+ ":([0-9][0-9])"
 			+ "(\\.[0-9]*)?";
@@ -71,14 +71,29 @@ public class DateUtils extends android.text.format.DateUtils {
 
 	/**
 	 * Convert date to Android string date format.
+	 *
 	 * @param date to convert
+	 *
 	 * @return string date with Android date format
 	 */
-	public static String formatDateToString(DateTime date) { 
-		TimeZone tz = date.getZone().toTimeZone();
-		java.text.DateFormat df = ${project_name?cap_first}Application.getDateFormat();
+	public static String formatDateToString(DateTime date) {
+		return DateUtils.formatDateToString(date, false);
+	}
+
+	/**
+	 * Convert date to Android string date format.
+	 *
+	 * @param date to convert
+	 * @param local should the date be displayed as a local datetime
+	 *
+	 * @return string date with Android date format
+	 */
+	public static String formatDateToString(DateTime date, boolean local) {
+		java.text.DateFormat df = DemactApplication.getDateFormat();
 		
-		df.setTimeZone(tz);
+		if (local) {
+			df.setTimeZone(date.getZone().toTimeZone());
+		}
 
 		return df.format(date.toDate());
 	}

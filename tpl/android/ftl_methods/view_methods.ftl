@@ -28,14 +28,17 @@
 	<#if (type?lower_case=="boolean")>
 		<#assign ret=ret+".setChecked(model.is"+field.name?cap_first+"());" />
 	<#elseif (type?lower_case=="datetime" || type?lower_case=="date" || type?lower_case=="time")>
+		<#if (field.is_locale)>
+			<#assign localParam = ", true" />
+		<#else>
+			<#assign localParam = "" />
+		</#if>
 		<#if (field.harmony_type=="datetime")>
-			<#assign ret=ret+".setText(DateUtils.formatDateTimeToString(model.get"+field.name?cap_first+"()));" />
-		</#if>
-		<#if (field.harmony_type=="date")>
-			<#assign ret=ret+".setText(DateUtils.formatDateToString(model.get"+field.name?cap_first+"()));" />
-		</#if>
-		<#if (field.harmony_type=="time")>
-			<#assign ret=ret+".setText(DateUtils.formatTimeToString(model.get"+field.name?cap_first+"()));" />
+			<#assign ret=ret+".setText(DateUtils.formatDateTimeToString(model.get"+field.name?cap_first+"()${localParam}));" />
+		<#elseif (field.harmony_type=="date")>
+			<#assign ret=ret+".setText(DateUtils.formatDateToString(model.get"+field.name?cap_first+"()${localParam}));" />
+		<#elseif (field.harmony_type=="time")>
+			<#assign ret=ret+".setText(DateUtils.formatTimeToString(model.get"+field.name?cap_first+"()${localParam}));" />
 		</#if>
 	<#else>
 		<#assign getter="model.get"+field.name?cap_first+"()" />
