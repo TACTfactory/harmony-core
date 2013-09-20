@@ -85,13 +85,8 @@ public class ${curr.name}ListFragment
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		final ${curr.name} item = (${curr.name}) l.getItemAtPosition(position);
-
-		final Intent intent = new Intent(getActivity(),
-							${curr.name}ShowActivity.class);
-		intent.putExtra("${curr.name}", (Parcelable) item);
-
-		this.startActivity(intent);
+		super.onListItemClick(l, v, position, id);
+		/* Do click action inside your fragment here. */
 	}
 
 	@Override

@@ -4,7 +4,8 @@ package ${curr.controller_namespace};
 
 import ${curr.namespace}.R;
 
-import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
+import ${project_namespace}.harmony.view.HarmonyListActivity;
+import ${project_namespace}.entity.${curr.name};
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,7 +13,7 @@ import android.os.Bundle;
 /**
  * This class will display ${curr.name} entities in a list.
  */
-public class ${curr.name}ListActivity extends HarmonyFragmentActivity {
+public class ${curr.name}ListActivity extends HarmonyListActivity<${curr.name}> {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -47,4 +48,8 @@ public class ${curr.name}ListActivity extends HarmonyFragmentActivity {
 		}
 	}
 
+	@Override	
+	public Class<?> getShowActivity() {
+		return ${curr.name}ShowActivity.class;
+	}
 }

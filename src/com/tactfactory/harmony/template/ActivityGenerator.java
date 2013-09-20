@@ -298,6 +298,9 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("fragment_%s_list.xml");
 		xmls.add("row_%s.xml");
 
+		final ArrayList<String> largeXmls = new ArrayList<String>();
+		largeXmls.add("activity_%s_list.xml");
+
 		for (final String java : javas) {
 			this.makeSourceControler(
 					String.format(java, TEMPLATE),
@@ -309,7 +312,15 @@ public class ActivityGenerator extends BaseGenerator {
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
 		}
+		
+		for (final String largeXml : largeXmls) {
+			this.makeLargeResourceLayout(
+					String.format(largeXml, LOWER_TEMPLATE),
+					String.format(largeXml, entityName.toLowerCase(Locale.ENGLISH)));
+		}
 
+		
+		
 		this.updateManifest("ListActivity", entityName);
 
 		TranslationMetadata.addDefaultTranslation(
@@ -481,6 +492,27 @@ public class ActivityGenerator extends BaseGenerator {
 									filename);
 		final String fullTemplatePath = String.format("%s/%s",
 				this.getAdapter().getTemplateRessourceLayoutPath(),
+				template);
+
+		super.makeSource(fullTemplatePath, fullFilePath, false);
+	}
+	
+	/**
+	 * Make Large Resource file.
+	 *
+	 * @param template Template path file.
+	 * @param filename Resource file.
+	 * 	prefix is type of view "row_" or "activity_" or "fragment_" with
+	 *	postfix is type of action and extension file :
+	 *		"_list.xml" or "_edit.xml".
+	 */
+	private void makeLargeResourceLayout(final String template,
+			final String filename) {
+		final String fullFilePath = String.format("%s/%s",
+									this.getAdapter().getRessourceLargeLayoutPath(),
+									filename);
+		final String fullTemplatePath = String.format("%s/%s",
+				this.getAdapter().getTemplateRessourceLargeLayoutPath(),
 				template);
 
 		super.makeSource(fullTemplatePath, fullFilePath, false);

@@ -90,7 +90,10 @@ public class ${curr.name}ShowFragment
         													"${curr.name}");
 
         this.initializeComponent(view);
-        new LoadTask(this, this.model).execute();
+		if (this.model != null) {
+			this.loadData();
+	        new LoadTask(this, this.model).execute();
+		}
 
         return view;
     }
