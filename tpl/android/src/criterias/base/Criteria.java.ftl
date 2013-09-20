@@ -4,6 +4,8 @@ package ${project_namespace}.criterias.base;
 import java.io.Serializable;
 import java.util.ArrayList;
 
+import com.google.common.base.Joiner;
+import com.google.common.collect.ObjectArrays;
 import android.database.DatabaseUtils;
 
 import ${project_namespace}.criterias.base.value.CriteriaValue;
@@ -64,6 +66,74 @@ public class Criteria implements Serializable, ICriteria {
 	public void setKey(final String key) {
 		this.key = key;
 	}
+
+	/**
+	 * Set the Criteria key with a datetime function.
+	 *
+	 * @param key The new key to set
+	 * @param options The options of the datetime function
+	 */
+	public void setDateTimeKey(final String key,
+			final String... options) {
+		this.setMethodKey("datetime",
+				ObjectArrays.concat(key, options));
+	}
+	
+	/**
+	 * Set the Criteria key with a date function.
+	 *
+	 * @param key The new key to set
+	 * @param options The options of the date function
+	 */
+	public void setDateKey(final String key,
+			final String... options) {
+		
+		this.setMethodKey("date",
+				ObjectArrays.concat(key, options));
+	}
+	
+	/**
+	 * Set the Criteria key with a time function.
+	 *
+	 * @param key The new key to set
+	 * @param options The options of the time function
+	 */	
+	public void setTimeKey(final String key,
+			final String... options) {
+		
+		this.setMethodKey("time",
+				ObjectArrays.concat(key, options));
+	}
+	
+	/**
+	 * Set the Criteria key with a strtf function.
+	 *
+	 * @param format The strtf format
+	 * @param key The new key to set
+	 * @param options The options of the strtf function
+	 */
+	public void setStrtfKey(final String format,
+			final String key,
+			final String... options) {
+		
+		this.setMethodKey("strtf",
+				ObjectArrays.concat(format, ObjectArrays.concat(key, options)));
+	}
+	
+	/**
+	 * Set the Criteria key as a sqlite method.
+	 *
+	 * @param methodName the sqlite method name
+	 * @param options The options of the sqlite method
+	 */
+	public void setMethodKey(final String methodName,
+			final String... options) {
+		
+		this.key = methodName + "(";
+		this.key += Joiner.on(", ").skipNulls().join(options);
+		this.key += ")";
+	}
+
 
 	/**
 	 * Set the Criteria value.
