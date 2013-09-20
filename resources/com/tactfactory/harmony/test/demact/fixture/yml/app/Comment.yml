@@ -4,19 +4,19 @@ Comment:
       content: "Commentaire 1"
       owner: Dupond
       post: Post1
-      createdAt: 2001-12-15 2:59:43.10
+      createdAt: "2001-12-15 2:59:43.10"
       validate: true
    Comment2:
       id: 1
       content: "Commentaire 2"
       owner: Haddock
       post: Post2
-      createdAt: 2001-12-15 2:59:43.10
+      createdAt: "2001-12-15 2:59:43.10"
       validate: true
    Comment3:
       id: 2
       content: "Commentaire 3"
       owner: Tournesol
       post: Post3
-      createdAt: 2001-12-15 2:59:43.10
+      createdAt: "2001-12-15 2:59:43.10"
       validate: false

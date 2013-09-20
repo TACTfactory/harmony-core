@@ -219,7 +219,7 @@ public class ProjectGenerator extends BaseGenerator {
 	 */
 	private void addLibs() {
 		// copy libraries
-		this.updateLibrary("joda-time-2.1.jar");
+		this.updateLibrary("joda-time-2.3.jar");
 		this.updateLibrary("guava-12.0.jar");
 		this.updateLibrary("jsr305.jar");
 		this.updateLibrary("core-annotations.jar");

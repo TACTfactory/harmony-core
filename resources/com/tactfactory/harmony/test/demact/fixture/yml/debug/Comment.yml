@@ -4,19 +4,19 @@ Comment:
       content: "DEBUG - Commentaire 1"
       owner: DEBUG - Dupond
       post: DEBUG - Post1
-      createdAt: 2001-12-15 2:59:43.10
+      createdAt: "2001-12-15 2:59:43.10"
       validate: true
    DEBUG - Comment2:
       id: 1
       content: "DEBUG - Commentaire 2"
       owner: DEBUG - Haddock
       post: DEBUG - Post2
-      createdAt: 2001-12-15 2:59:43.10
+      createdAt: "2001-12-15 2:59:43.10"
       validate: true
    DEBUG - Comment3:
       id: 2
       content: "DEBUG - Commentaire 3"
       owner: DEBUG - Tournesol
       post: DEBUG - Post3
-      createdAt: 2001-12-15 2:59:43.10
+      createdAt: "2001-12-15 2:59:43.10"
       validate: false

@@ -22,7 +22,12 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 <#elseif fixtureType=="yml">
+import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
+import org.yaml.snakeyaml.constructor.Constructor;
+import org.yaml.snakeyaml.nodes.Tag;
+import org.yaml.snakeyaml.representer.Representer;
+import org.yaml.snakeyaml.resolver.Resolver;
 </#if>
 
 import android.content.Context;
@@ -102,7 +107,12 @@ public abstract class FixtureBase<T> {
 		}
 <#elseif fixtureType == "yml">
 		// YAML Loader
-		final Yaml yaml = new Yaml();
+		final Yaml yaml = new Yaml(
+				new Constructor(),
+				new Representer(),
+				new DumperOptions(),
+				new CustomResolver());
+
 		final InputStream inputStream = this.getYml(
 					DataLoader.getPathToFixtures(mode)
 					+ this.getFixtureFileName());
@@ -275,4 +285,24 @@ public abstract class FixtureBase<T> {
 
 		return result;
 	}
+	<#if (fixtureType=="yml")>
+	/**
+	 * CustomResolver not resolving timestamps.
+	 */
+	public class CustomResolver extends Resolver {
+
+	    /*
+	     * Do not resolve timestamp.
+	     */
+	    protected void addImplicitResolvers() {
+	        addImplicitResolver(Tag.BOOL, BOOL, "yYnNtTfFoO");
+	        addImplicitResolver(Tag.INT, INT, "-+0123456789");
+	        addImplicitResolver(Tag.FLOAT, FLOAT, "-+0123456789.");
+	        addImplicitResolver(Tag.MERGE, MERGE, "<");
+	        addImplicitResolver(Tag.NULL, NULL, "~nN\0");
+	        addImplicitResolver(Tag.NULL, EMPTY, null);
+	        addImplicitResolver(Tag.VALUE, VALUE, "=");
+	    }
+	}
+	</#if>
 }

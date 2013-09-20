@@ -5,8 +5,8 @@ User:
       lastname: DEBUG - Dupont
       login: DEBUG - dup
       password: DEBUG - password
-      createdAt: 2001-12-15 2:59:43.10
-      birthdate: 2001-12-15 2:59:43.10
+      createdAt: "2001-12-15 2:59:43.10"
+      birthdate: "2001-12-15 2:59:43.10"
       userGroup: User
       title: 0
    DEBUG - Haddock:
@@ -15,8 +15,8 @@ User:
       lastname: DEBUG - Archibald
       login: DEBUG - had
       password: DEBUG - password
-      createdAt: 2001-12-15 2:59:43.10
-      birthdate: 2001-12-15 2:59:43.10
+      createdAt: "2001-12-15 2:59:43.10"
+      birthdate: "2001-12-15 2:59:43.10"
       userGroup: User
       title: 1
    DEBUG - Tournesol:
@@ -25,7 +25,7 @@ User:
       lastname: DEBUG - Tryphon
       login: DEBUG - tou
       password: DEBUG - password
-      createdAt: 2001-12-15 2:59:43.10
-      birthdate: 2001-12-15 2:59:43.10
+      createdAt: "2001-12-15 2:59:43.10"
+      birthdate: "2001-12-15 2:59:43.10"
       userGroup: User
       title: 1

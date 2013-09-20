@@ -6,8 +6,8 @@ Client:
       password: "DEBUG - Client - password"
       firstname: "DEBUG - Client - Dupond"
       lastname: "DEBUG - Client - Dupont"
-      createdAt: 2012-01-01 00:00:00.00
-      birthdate: 2012-01-01 00:00:00.00
+      createdAt: "2012-01-01 00:00:00.00"
+      birthdate: "2012-01-01 00:00:00.00"
       userGroup: User
       title: 0
    DEBUG - Client - Haddock:
@@ -16,8 +16,8 @@ Client:
       lastname: "DEBUG - Client - Archibald"
       login: "DEBUG - Client - had"
       password: "DEBUG - Client - password"
-      createdAt: 2012-01-01 00:00:00.00
-      birthdate: 2012-01-01 00:00:00.00
+      createdAt: "2012-01-01 00:00:00.00"
+      birthdate: "2012-01-01 00:00:00.00"
       adress: "Address1"
       userGroup: User
       title: 0
@@ -27,8 +27,8 @@ Client:
       lastname: DEBUG - Client - Tryphon
       login: DEBUG - Client - tou
       password: DEBUG - Client - password
-      createdAt: 2001-12-15 2:59:43.10
-      birthdate: 2001-12-15 2:59:43.10
+      createdAt: "2001-12-15 2:59:43.10"
+      birthdate: "2001-12-15 2:59:43.10"
       userGroup: User
       adress: "Address1"
       title: 2

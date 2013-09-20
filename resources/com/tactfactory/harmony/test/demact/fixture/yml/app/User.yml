@@ -5,8 +5,8 @@ User:
       lastname: Dupont
       login: dup
       password: password
-      createdAt: 2001-12-15 2:59:43.10
-      birthdate: 2001-12-15 2:59:43.10
+      createdAt: 2001-12-15 00:00:00+02:00
+      birthdate: 2001-12-15 00:00:00+02:00
       userGroup: User
       title: 1
    Haddock:
@@ -15,8 +15,8 @@ User:
       lastname: Archibald
       login: had
       password: password
-      createdAt: 2001-12-15 2:59:43.10
-      birthdate: 2001-12-15 2:59:43.10
+      createdAt: 2001-12-15 00:00:00+05:00
+      birthdate: 2001-12-15 00:00:00+05:00
       userGroup: User
       title: 1
    Tournesol:
@@ -25,7 +25,7 @@ User:
       lastname: Tryphon
       login: tou
       password: password
-      createdAt: 2001-12-15 2:59:43.10
-      birthdate: 2001-12-15 2:59:43.10
+      createdAt: 2001-12-15 00:00:00-02:00
+      birthdate: 2001-12-15 00:00:00-02:00
       userGroup: Admin
       title: 1

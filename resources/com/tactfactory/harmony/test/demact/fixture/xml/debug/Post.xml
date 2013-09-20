@@ -7,9 +7,9 @@
 		<categories>DEBUG - Radotage</categories>
 		<owner>DEBUG - Dupond</owner>
 		<comments></comments>
-		<createdAt>2012-01-01 00:00</createdAt>
-		<updatedAt>2012-01-01 00:00</updatedAt>
-		<expiresAt>2012-01-01 00:00</expiresAt>
+		<createdAt>2012-01-01T00:00:00</createdAt>
+		<updatedAt>2012-01-01T00:00:00</updatedAt>
+		<expiresAt>2012-01-01T00:00:00</expiresAt>
 	</Post>
 	<Post id="DEBUG - Post2">
 		<id>0</id>
@@ -18,9 +18,9 @@
 		<categories>DEBUG - Insulte</categories>
 		<owner>DEBUG - Haddock</owner>
 		<comments></comments>
-		<createdAt>2012-01-01 00:00</createdAt>
-		<updatedAt>2012-01-01 00:00</updatedAt>
-		<expiresAt>2012-01-01 00:00</expiresAt>
+		<createdAt>2012-01-01T00:00:00</createdAt>
+		<updatedAt>2012-01-01T00:00:00</updatedAt>
+		<expiresAt>2012-01-01T00:00:00</expiresAt>
 	</Post>
 	<Post id="DEBUG - Post3">
 		<id>0</id>
@@ -29,8 +29,8 @@
 		<categories>DEBUG - Fait scientifique</categories>
 		<owner>DEBUG - Tournesol</owner>
 		<comments></comments>
-		<createdAt>2012-01-01 00:00</createdAt>
-		<updatedAt>2012-01-01 00:00</updatedAt>
-		<expiresAt>2012-01-01 00:00</expiresAt>
+		<createdAt>2012-01-01T00:00:00</createdAt>
+		<updatedAt>2012-01-01T00:00:00</updatedAt>
+		<expiresAt>2012-01-01T00:00:00</expiresAt>
 	</Post>
 </list>
