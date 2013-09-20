@@ -3,7 +3,6 @@ package ${project_namespace}.harmony.util;
 
 import java.text.ParseException;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -107,11 +106,11 @@ public class DateUtils extends android.text.format.DateUtils {
 	public static String formatTimeToString(DateTime time) {
 		String result = null;
 		if (${project_name?cap_first}Application.is24Hour()) {
-			result = time.toString(
-					DateTimeFormat.forPattern(TIME_24H_PATTERN).withZone(DateTimeZone.getDefault()));
+			result = time.toString(DateTimeFormat.forPattern(TIME_24H_PATTERN)
+					.withZone(DateTimeZone.getDefault()));
 		} else {
-			result = time.toString(
-					DateTimeFormat.forPattern(TIME_AMPM_PATTERN).withZone(DateTimeZone.getDefault()));
+			result = time.toString(DateTimeFormat.forPattern(TIME_AMPM_PATTERN)
+					.withZone(DateTimeZone.getDefault()));
 		}
 
 		return result;
@@ -129,10 +128,12 @@ public class DateUtils extends android.text.format.DateUtils {
 		String result;
 		if (formatType.equals(TimeFormatType.H24)) {
 			result =
-				time.toString(DateTimeFormat.forPattern(TIME_24H_PATTERN).withZone(DateTimeZone.getDefault()));
+				time.toString(DateTimeFormat.forPattern(TIME_24H_PATTERN)
+						.withZone(DateTimeZone.getDefault()));
 		} else if (formatType.equals(TimeFormatType.AMPM)) {
 			result =
-				time.toString(DateTimeFormat.forPattern(TIME_AMPM_PATTERN).withZone(DateTimeZone.getDefault()));
+				time.toString(DateTimeFormat.forPattern(TIME_AMPM_PATTERN)
+						.withZone(DateTimeZone.getDefault()));
 		} else if (formatType.equals(TimeFormatType.ANDROID_CONF)) {
 			result = formatTimeToString(time);
 		} else {
@@ -285,8 +286,8 @@ public class DateUtils extends android.text.format.DateUtils {
 		DateTime dt = null;
 
 		try {
-			dt = new DateTime(
-						  ISODateTimeFormat.timeParser().withOffsetParsed().parseDateTime(time));
+			dt = ISODateTimeFormat.timeParser().withOffsetParsed()
+					.parseDateTime(time);
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, e.getMessage());
 		}
