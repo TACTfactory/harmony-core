@@ -2,6 +2,7 @@
 package ${project_namespace}.harmony.util;
 
 import java.text.ParseException;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -473,18 +474,32 @@ public class DateUtils extends android.text.format.DateUtils {
 	 * @param pattern The datetime pattern (ex. "dd-mm-yyyy" or "yyyy-MM-dd
 	 * hh:mm")
 	 * @param dateTime date string
+	 * @param dateTime locale Locale
 	 * @return datetime
 	 */
-	public static DateTime formatPattern(String pattern, String dateTime) {
+	public static DateTime formatPattern(
+			String pattern, String dateTime, Locale locale) {
 		DateTime dt = null;
 
 		try {
-			dt = DateTimeFormat.forPattern(pattern).parseDateTime(dateTime);
+			dt = DateTimeFormat.forPattern(pattern)
+					.withLocale(locale).parseDateTime(dateTime);
 		} catch (IllegalArgumentException e) {
 			Log.e(TAG, e.getMessage());
 		}
 
 		return dt;
+	}
+
+	/**
+	 * Convert a string to a datetime thanks to the given pattern.
+	 * @param pattern The datetime pattern (ex. "dd-mm-yyyy" or "yyyy-MM-dd
+	 * hh:mm")
+	 * @param dateTime date string
+	 * @return datetime
+	 */
+	public static DateTime formatPattern(String pattern, String dateTime) {
+		return formatPattern(pattern, dateTime, Locale.getDefault());
 	}
 
 	/**
