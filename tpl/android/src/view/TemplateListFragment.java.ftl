@@ -131,6 +131,8 @@ public class ${curr.name}ListFragment
 		} else {
 			this.setListShownNoAnimation(true);
 		}
+
+		super.onLoadFinished(loader, data);
 	}
 
 	@Override

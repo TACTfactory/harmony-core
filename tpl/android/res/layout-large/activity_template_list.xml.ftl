@@ -15,13 +15,10 @@
         tools:layout="@layout/fragment_${curr.name?lower_case}_list" >
     </fragment>
 
-	<fragment
+	<FrameLayout
         android:id="@+id/fragment_show"
-        android:name="${curr.controller_namespace}.${curr.name}ShowFragment"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-		android:layout_toRightOf="@id/fragment_list"
-        tools:layout="@layout/fragment_${curr.name?lower_case}_show" >
-    </fragment>
+		android:layout_toRightOf="@id/fragment_list"/>
 
 </RelativeLayout>
