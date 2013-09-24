@@ -8,7 +8,7 @@
         <item name="android:paddingRight">12dp</item>
     </style>
 	
-	<style name="PinnedTheme" parent="@android:style/Theme.Holo.Light.DarkActionBar">        
+	<style name="PinnedTheme" parent="Theme.Sherlock.Light.DarkActionBar">        
         <item name="android:textColorPrimary">@color/primary_text_color</item>
         <item name="android:textColorSecondary">@color/secondary_text_color</item>
 <!--         <item name="android:listViewStyle">@android:style/Widget.Holo.Light.ListView</item> -->

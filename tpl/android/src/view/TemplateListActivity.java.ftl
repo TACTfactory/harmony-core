@@ -120,4 +120,13 @@ public class ${curr.name}ListActivity
 			}
 		}
 	}
+
+	/**
+	 * Is the activity in dual fragment mode (tablet) ?
+	 *
+	 * @return true if dual mode
+	 */
+	public boolean isDualMode() {
+		return this.dualMode;
+	}
 }

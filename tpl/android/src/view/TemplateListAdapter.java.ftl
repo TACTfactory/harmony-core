@@ -103,10 +103,15 @@ public class ${curr.name}ListAdapter
     protected View bindView(View itemView, int partition, ${curr.name} item, int position) {
     	final ViewHolder view;
     	
-    	if (itemView != null)    	
+    	if (itemView != null) {
     		view = (ViewHolder) itemView;
-    	else
+    	} else {
     		view = new ViewHolder(this.getContext());
+		}
+
+    	if (!((${curr.name}ListActivity) this.getContext()).isDualMode()) {
+    		view.setActivatedStateSupported(false);
+		}
     	
     	view.populate(item);
         this.bindSectionHeaderAndDivider(view, position);

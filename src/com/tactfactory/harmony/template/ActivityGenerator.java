@@ -193,6 +193,21 @@ public class ActivityGenerator extends BaseGenerator {
 
 		this.makeSource(
 				this.getAdapter().getTemplateRessourcePath()
+						+ "/color-xlarge/primary_text_color.xml",
+				this.getAdapter().getRessourcePath()
+						+ "/color-xlarge/primary_text_color.xml",
+				false);
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourcePath()
+						+ "/color-xlarge/secondary_text_color.xml",
+				this.getAdapter().getRessourcePath()
+						+ "/color-xlarge/secondary_text_color.xml",
+				false);
+		
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourcePath()
 						+ "/drawable/list_item_activated_background.xml",
 				this.getAdapter().getRessourcePath()
 						+ "/drawable/list_item_activated_background.xml",

@@ -137,8 +137,11 @@ public class ${curr.name}ListFragment
 		this.setListAdapter(this.mAdapter);
 		
     	//((PinnedHeaderListView)this.getListView()).setH
-    	
-        ComponentUtils.configureVerticalScrollbar(this.getListView(), View.SCROLLBAR_POSITION_LEFT);
+    	if (((${curr.name}ListActivity) this.getActivity()).isDualMode()) {
+	        ComponentUtils.configureVerticalScrollbar(
+							this.getListView(),
+							View.SCROLLBAR_POSITION_LEFT);
+		}
 
 		// The list should now be shown.
 		if (this.isResumed()) {

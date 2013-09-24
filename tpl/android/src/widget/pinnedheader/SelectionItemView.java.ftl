@@ -22,7 +22,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.AbsListView.SelectionBoundsAdjuster;
 
-public class SelectionItemView extends ViewGroup implements SelectionBoundsAdjuster {
+public class SelectionItemView extends ViewGroup /*implements SelectionBoundsAdjuster */{
 		
 	// Will be used with adjustListItemSelectionBounds().
 	private int mSelectionBoundsMarginLeft;
@@ -343,13 +343,13 @@ public class SelectionItemView extends ViewGroup implements SelectionBoundsAdjus
         return view != null && view.getVisibility() == View.VISIBLE;
     }
 	
-	@Override
+	/*@Override
 	public void adjustListItemSelectionBounds(Rect bounds) {
 		bounds.top += mBoundsWithoutHeader.top;
 	    bounds.bottom = bounds.top + mBoundsWithoutHeader.height();
 	    bounds.left += mSelectionBoundsMarginLeft;
 	    bounds.right -= mSelectionBoundsMarginRight;
-	}
+	}*/
 	
 	private TruncateAt getTextEllipsis() {
         return TruncateAt.MARQUEE;
