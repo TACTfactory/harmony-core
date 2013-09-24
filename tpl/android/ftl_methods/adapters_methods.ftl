@@ -446,7 +446,7 @@
 				<#assign result = result + "${tab}${ViewUtils.setAdapterLoader(field)}" />
 			</#if>
 		<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
-			<#assign result = result + "${tab}this.${field.name}View.setText(" />
+			<#assign result = result + "${tab}${field.name}View.setText(" />
 			<#assign result = result + "${tab}		String.valueOf(model.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}()));" />
 		</#if>
 	</#if>

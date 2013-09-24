@@ -2,12 +2,17 @@
 <@header?interpret />
 package ${curr.controller_namespace};
 
+import java.util.ArrayList;
+
 import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
 import ${data_namespace}.${curr.name?cap_first}SQLiteAdapter;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
+import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 import ${project_namespace}.harmony.view.DeletableList;
 import ${project_namespace}.harmony.view.DeleteDialog;
-import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
+import ${project_namespace}.harmony.view.HarmonyListFragment;
+import ${project_namespace}.harmony.widget.pinnedheader.headerlist.PinnedHeaderListView;
+import ${project_namespace}.harmony.widget.pinnedheader.util.ComponentUtils;
 
 import android.content.Context;
 import android.content.Intent;
@@ -21,7 +26,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import ${project_namespace}.harmony.view.HarmonyListFragment;
 
 import ${curr.namespace}.R;
 import ${curr.namespace}.entity.${curr.name};
@@ -72,8 +76,8 @@ public class ${curr.name}ListFragment
 		//this.setHasOptionsMenu(true);
 
 		// Create an empty adapter we will use to display the loaded data.
+		((PinnedHeaderListView)this.getListView()).setPinnedHeaderEnabled(true);
 		this.mAdapter = new ${curr.name}ListAdapter(this.getActivity(), this);
-		this.setListAdapter(this.mAdapter);
 
 		// Start out with a progress indicator.
 		this.setListShown(false);
@@ -123,7 +127,18 @@ public class ${curr.name}ListFragment
 		//this.mAdapter.setData(data);
 		data.setNotificationUri(this.getActivity().getContentResolver(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI);
-		this.mAdapter.swapCursor(data);
+
+		//this.mAdapter.swapCursor(data);
+		ArrayList<${curr.name}> users = new ${curr.name}SQLiteAdapter(this.getActivity()).cursorToItems(data);
+		this.mAdapter.clear();
+		this.mAdapter.setData(new ${curr.name}ListAdapter.${curr.name}SectionIndexer(users));
+		this.mAdapter.setPinnedPartitionHeadersEnabled(true);
+		this.mAdapter.setSectionHeaderDisplayEnabled(true);
+		this.setListAdapter(this.mAdapter);
+		
+    	//((PinnedHeaderListView)this.getListView()).setH
+    	
+        ComponentUtils.configureVerticalScrollbar(this.getListView(), View.SCROLLBAR_POSITION_LEFT);
 
 		// The list should now be shown.
 		if (this.isResumed()) {
@@ -138,7 +153,8 @@ public class ${curr.name}ListFragment
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
 		// Clear the data in the adapter.
-		this.mAdapter.swapCursor(null);
+		//this.mAdapter.swapCursor(null);
+		this.mAdapter.clear();
 	}
 
 

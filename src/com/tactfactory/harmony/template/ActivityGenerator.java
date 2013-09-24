@@ -142,14 +142,64 @@ public class ActivityGenerator extends BaseGenerator {
 
 		this.updateWidget("PinchZoomImageView.java");
 		this.updateWidget("EnumSpinner.java");
+		this.updateWidget("pinnedheader/AutoScrollListView.java");
+		this.updateWidget("pinnedheader/SelectionItemView.java");
+		this.updateWidget("pinnedheader/headerlist/HeaderAdapter.java");
+		this.updateWidget("pinnedheader/headerlist/HeaderSectionIndexer.java");
+		this.updateWidget("pinnedheader/headerlist/ListPinnedHeaderView.java",
+				"directory_header.xml");
+		this.updateWidget("pinnedheader/headerlist/PinnedHeaderListView.java");
+		this.updateWidget("pinnedheader/util/ComponentUtils.java");
+		
+		this.makeSource(
+				this.getAdapter().getTemplateRessourceValuesPath()
+						+ "/attrs.xml",
+				this.getAdapter().getRessourceValuesPath()
+						+ "/attrs.xml",
+				false);
 
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourceValuesPath()
+						+ "/dimens.xml",
+				this.getAdapter().getRessourceValuesPath()
+						+ "/dimens.xml",
+				false);
+		
+
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourceValuesPath()
+						+ "/styles.xml",
+				this.getAdapter().getRessourceValuesPath()
+						+ "/styles.xml",
+				false);
+		
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourcePath()
+						+ "/color/primary_text_color.xml",
+				this.getAdapter().getRessourcePath()
+						+ "/color/primary_text_color.xml",
+				false);
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourcePath()
+						+ "/color/secondary_text_color.xml",
+				this.getAdapter().getRessourcePath()
+						+ "/color/secondary_text_color.xml",
+				false);
+		
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourcePath()
+						+ "/drawable/list_item_activated_background.xml",
+				this.getAdapter().getRessourcePath()
+						+ "/drawable/list_item_activated_background.xml",
+				false);
+
+		
 		if (this.isDate || this.isTime) {
-			this.makeSource(
-					this.getAdapter().getTemplateRessourceValuesPath()
-							+ "/attrs.xml",
-					this.getAdapter().getRessourceValuesPath()
-							+ "/attrs.xml",
-					false);
 			if (this.isDate) {
 				this.updateWidget("CustomDatePickerDialog.java",
 						"dialog_date_picker.xml");

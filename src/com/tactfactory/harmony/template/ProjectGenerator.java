@@ -288,6 +288,16 @@ public class ProjectGenerator extends BaseGenerator {
 					new File(String.format("%s/%s/",
 							resourcePath,
 							"drawable-xxhdpi")));
+			
+
+
+			TactFileUtils.copyDirectory(
+					new File(String.format("%s/%s/",
+							templateResourcePath,
+							"drawable-xlarge")),
+					new File(String.format("%s/%s/",
+							resourcePath,
+							"drawable-xlarge")));
 		} catch (IOException e) {
 			ConsoleUtils.displayError(e);
 		}
