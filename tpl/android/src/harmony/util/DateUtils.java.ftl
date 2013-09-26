@@ -89,7 +89,7 @@ public class DateUtils extends android.text.format.DateUtils {
 	 * @return string date with Android date format
 	 */
 	public static String formatDateToString(DateTime date, boolean local) {
-		java.text.DateFormat df = DemactApplication.getDateFormat();
+		java.text.DateFormat df = ${project_name?cap_first}Application.getDateFormat();
 		
 		if (local) {
 			df.setTimeZone(date.getZone().toTimeZone());
