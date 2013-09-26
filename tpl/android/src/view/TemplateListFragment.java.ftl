@@ -8,19 +8,12 @@ import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
 import ${data_namespace}.${curr.name?cap_first}SQLiteAdapter;
 import ${project_namespace}.menu.CrudCreateMenuWrapper.CrudCreateMenuInterface;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
-import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
-import ${project_namespace}.harmony.view.DeletableList;
-import ${project_namespace}.harmony.view.DeleteDialog;
 import ${project_namespace}.harmony.view.HarmonyListFragment;
 import ${project_namespace}.harmony.widget.pinnedheader.headerlist.PinnedHeaderListView;
-import ${project_namespace}.harmony.widget.pinnedheader.util.ComponentUtils;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -140,13 +133,6 @@ public class ${curr.name}ListFragment
 
 		if (this.getListAdapter() == null) {
 			this.setListAdapter(this.mAdapter);
-		}
-		
-    	//((PinnedHeaderListView)this.getListView()).setH
-    	if (((${curr.name}ListActivity) this.getActivity()).isDualMode()) {
-	        ComponentUtils.configureVerticalScrollbar(
-							this.getListView(),
-							View.SCROLLBAR_POSITION_LEFT);
 		}
 
 		// The list should now be shown.

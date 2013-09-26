@@ -245,16 +245,6 @@ public class ActivityGenerator extends BaseGenerator {
 			}
 		}
 
-		// create HarmonyFragmentActivity
-		super.makeSource(
-			this.getAdapter().getTemplateSourcePath()
-			+ "harmony/view/DeletableList.java",
-			this.getAdapter().getSourcePath()
-			+ this.getAppMetas().getProjectNameSpace()
-			+ "/harmony/view/"
-			+ "DeletableList.java",
-			false);
-
 		this.makeResourceLayout("dialog_delete_confirmation.xml",
 				"dialog_delete_confirmation.xml");
 

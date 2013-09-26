@@ -6,15 +6,13 @@ import ${curr.namespace}.R;
 
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import ${project_namespace}.harmony.view.HarmonyListFragment;
+import ${project_namespace}.harmony.widget.pinnedheader.util.ComponentUtils;
 import ${project_namespace}.entity.${curr.name};
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.View;
-import android.widget.FrameLayout;
 import android.widget.ListView;
 
 /**
@@ -47,6 +45,11 @@ public class ${curr.name}ListActivity
 			this.dualMode = true;
 			this.listFragment.setRetainInstance(true);
 			this.detailFragment.setRetainInstance(true);
+
+			
+	        ComponentUtils.configureVerticalScrollbar(
+							this.listFragment.getListView(),
+							View.SCROLLBAR_POSITION_LEFT);
 		}
 	}
 
