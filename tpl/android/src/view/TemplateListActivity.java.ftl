@@ -45,6 +45,8 @@ public class ${curr.name}ListActivity
 		
 		if (this.detailFragment != null) {
 			this.dualMode = true;
+			this.listFragment.setRetainInstance(true);
+			this.detailFragment.setRetainInstance(true);
 		}
 	}
 

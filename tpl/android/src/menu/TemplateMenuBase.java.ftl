@@ -146,7 +146,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	 * @return true if event has been treated
 	 */
 	private boolean dispatch(final MenuItem item) {
-		return this.menus.get(item.getItemId()).dispatch(item, this.ctx,
+		return this.menus.get(item.getGroupId()).dispatch(item, this.ctx,
 				this.fragment);
 	}
 

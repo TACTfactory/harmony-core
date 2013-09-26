@@ -5,6 +5,7 @@ package ${curr.controller_namespace};
 import ${curr.namespace}.R;
 
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
+import ${project_namespace}.view.${curr.name?lower_case}.${curr.name}ShowFragment.DeleteCallback;
 
 import android.os.Bundle;
 
@@ -13,7 +14,8 @@ import android.os.Bundle;
  * @see android.app.Activity
  */
 public class ${curr.name}ShowActivity 
-		extends HarmonyFragmentActivity {
+		extends HarmonyFragmentActivity 
+		implements DeleteCallback {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -32,5 +34,10 @@ public class ${curr.name}ShowActivity
 		// Google Analytics
 		/*GoogleAnalyticsTracker.getInstance().dispatch();
         GoogleAnalyticsSessionManager.getInstance().decrementActivityCount();*/
+	}
+
+	@Override
+	public void onItemDeleted() {
+		this.finish();
 	}
 }

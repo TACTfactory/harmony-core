@@ -24,6 +24,7 @@ import android.widget.TextView;
 import ${curr.namespace}.R;
 ${ImportUtils.importToManyRelatedEntities(curr)}<#if (importDate)>
 import ${curr.namespace}.harmony.util.DateUtils;</#if>
+import ${project_namespace}.harmony.view.DeleteDialog;
 import ${project_namespace}.harmony.view.HarmonyFragment;
 import ${project_namespace}.menu.CrudEditDeleteMenuWrapper.CrudEditDeleteMenuInterface;
 import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
@@ -34,9 +35,13 @@ import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
  */
 public class ${curr.name}ShowFragment
 		extends HarmonyFragment
-		implements CrudEditDeleteMenuInterface {
+		implements CrudEditDeleteMenuInterface,
+				DeleteDialog.DeleteDialogCallback {
 	/** Model data. */
 	protected ${curr.name} model;
+
+	/** DeleteCallback. */
+	protected DeleteCallback deleteCallback;
 
 	/* curr.fields View */
 <#list fields?values as field>
@@ -109,8 +114,11 @@ public class ${curr.name}ShowFragment
         				R.layout.fragment_${curr.name?lower_case}_show,
         				container,
         				false);
-
         
+        if (this.getActivity() instanceof DeleteCallback) {
+        	this.deleteCallback = (DeleteCallback) this.getActivity();
+        }
+
         this.initializeComponent(view);
         
         final Intent intent =  getActivity().getIntent();
@@ -235,18 +243,23 @@ public class ${curr.name}ShowFragment
 	 */
 	@Override
 	public void onClickDelete() {
-		//int position = ((${curr.name}ListAdapter) this.getListAdapter()).getPosition(item);
-		//new DeleteDialog(this.getActivity(), this, position).show();
-		new DeleteTask(this.getActivity(), this.model).execute();
+		new DeleteDialog(this.getActivity(), this).show();
 	}
 
-	/**
-	 * Creates an aSyncTask to delete the row.
-	 * @param position position
-	 */
-	public void delete(final int position) {
-		//final ${curr.name?cap_first} item = this.mAdapter.getItem(position);
-		//new DeleteTask(this.getActivity(), item).execute();
+	@Override
+	public void onDeleteDialogClose(boolean ok) {
+		if (ok) {
+			new DeleteTask(this.getActivity(), this.model).execute();
+		}
+	}
+	
+	/** 
+	 * Called when delete task is done.
+	 */	
+	public void onPostDelete() {
+		if (this.deleteCallback != null) {
+			this.deleteCallback.onItemDeleted();
+		}
 	}
 
 	/**
@@ -281,6 +294,24 @@ public class ${curr.name}ShowFragment
 			return result;
 		}
 
+		@Override
+		protected void onPostExecute(Integer result) {
+			if (result >= 0) {
+				${curr.name}ShowFragment.this.onPostDelete();
+			}
+			super.onPostExecute(result);
+		}
+		
+		
+
+	}
+	
+	/**
+	 * Callback for item deletion.
+	 */ 
+	public interface DeleteCallback {
+		/** Called when current item has been deleted. */
+		public void onItemDeleted();
 	}
 }
 
