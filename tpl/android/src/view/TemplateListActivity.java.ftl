@@ -25,9 +25,11 @@ public class ${curr.name}ListActivity
 		implements HarmonyListFragment.OnClickCallback,
 				HarmonyListFragment.OnLoadCallback {
 
-	protected HarmonyListFragment<?> listFragment;
-	protected FrameLayout detailFragmentContainer;
+	protected ${curr.name}ListFragment listFragment;
+	protected ${curr.name}ShowFragment detailFragment;
 	protected boolean dualMode;
+	private int lastSelectedItemPosition = 0;
+	private ${curr.name} lastSelectedItem;
 	
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -35,12 +37,13 @@ public class ${curr.name}ListActivity
 		super.onPostCreate(savedInstanceState);
 
 		
-		this.detailFragmentContainer = (FrameLayout) this.findViewById(R.id.fragment_show);
-		this.listFragment = 
-				(HarmonyListFragment<?>) this.getSupportFragmentManager()
-						.findFragmentById(R.id.fragment_list);
+		this.detailFragment = (${curr.name}ShowFragment) 
+						this.getSupportFragmentManager().findFragmentById(R.id.fragment_show);
+
+		this.listFragment = (${curr.name}ListFragment)
+						this.getSupportFragmentManager().findFragmentById(R.id.fragment_list);
 		
-		if (this.detailFragmentContainer != null) {
+		if (this.detailFragment != null) {
 			this.dualMode = true;
 		}
 	}
@@ -80,43 +83,49 @@ public class ${curr.name}ListActivity
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		final ${curr.name} item = (${curr.name}) l.getItemAtPosition(position);
+			this.lastSelectedItemPosition = position;
+		
 		if (this.dualMode) {
-			this.listFragment.getListView().setItemChecked(position, true);
-			this.loadDetailFragment(item, false);
-			
+			this.selectListItem(this.lastSelectedItemPosition);
 		} else {
 			final Intent intent = new Intent(this, ${curr.name}ShowActivity.class);
+			final ${curr.name} item = (${curr.name}) l.getItemAtPosition(position);
 			intent.putExtra("${curr.name}", (Parcelable) item);
 			this.startActivity(intent);
 		}
 	}
 
-	private void loadDetailFragment(${curr.name} item, boolean firstLoad) {
-		this.getIntent().putExtra("${curr.name}", (Parcelable)item);
-		
-		Fragment frag = Fragment.instantiate(this,
-				${curr.name}ShowFragment.class.getName(),
-				null);
-		
-		FragmentTransaction trans = 
-				this.getSupportFragmentManager().beginTransaction();
-		if (firstLoad) {
-			trans.add(R.id.fragment_show, frag);
+
+	private void loadDetailFragment(${curr.name} item) {
+		this.detailFragment.update(item);
+	}
+
+	private void selectListItem(int listPosition) {
+		int listSize = this.listFragment.getListAdapter().getCount();
+		if (listSize > 0) {
+			if (listPosition >= listSize) {
+				listPosition = listSize - 1;
+			} else if (listPosition < 0) {
+				listPosition = 0;
+			}
+			this.listFragment.getListView().setItemChecked(listPosition, true);
+			${curr.name} item = (${curr.name}) 
+					this.listFragment.getListAdapter().getItem(listPosition);
+			this.lastSelectedItem = item;
+			this.loadDetailFragment(item);
 		} else {
-			trans.replace(R.id.fragment_show, frag);
+			this.loadDetailFragment(null);
 		}
-		trans.commitAllowingStateLoss();
 	}
 
 	@Override
 	public void onListLoaded() {
 		if (this.dualMode) {
-			if (this.listFragment.getListAdapter().getCount() > 0) {
-				this.listFragment.getListView().setItemChecked(0, true);
-				${curr.name} item = (${curr.name}) 
-						this.listFragment.getListAdapter().getItem(0);
-				this.loadDetailFragment(item, true);
+			int newPosition = ((${curr.name}ListAdapter)this.listFragment.getListAdapter()).getPosition(this.lastSelectedItem);
+			if (newPosition < 0) {
+				this.selectListItem(this.lastSelectedItemPosition);
+			} else {				
+				this.selectListItem(newPosition);
 			}
 		}
 	}

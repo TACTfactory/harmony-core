@@ -5,6 +5,7 @@
 	xmlns:tools="http://schemas.android.com/tools"
 	android:orientation="vertical"
 	android:layout_width="fill_parent"
+	android:background="@drawable/list_background_holo"
 	android:layout_height="fill_parent" >
 	<RelativeLayout
 	    android:id="@+id/${curr.name?lower_case}ListContainer"
@@ -13,7 +14,7 @@
 		<TextView
 		    android:id="@android:id/empty"
 		    android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
+			android:layout_height="match_parent"
 			android:padding="10dp"
 			android:gravity="center"
 			android:text="@string/${curr.name?lower_case}_empty_list" />
@@ -22,7 +23,7 @@
 			android:isScrollContainer="true"
 			android:scrollbars="vertical"
 			android:layout_width="fill_parent"
-			android:layout_height="wrap_content"
+			android:layout_height="match_parent"
 			android:layout_marginBottom="8dp"
 			android:paddingBottom="8dp"
 			android:clickable="true"

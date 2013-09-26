@@ -212,6 +212,16 @@ public class ActivityGenerator extends BaseGenerator {
 				this.getAdapter().getRessourcePath()
 						+ "/drawable/list_item_activated_background.xml",
 				false);
+		
+
+		try {
+			MenuGenerator menuGenerator = new MenuGenerator(this.getAdapter());
+			menuGenerator.generateMenu("CrudCreate");
+			menuGenerator.generateMenu("CrudEditDelete");
+			menuGenerator.updateMenu();
+		} catch (Exception e) {
+			
+		}
 
 		
 		if (this.isDate || this.isTime) {

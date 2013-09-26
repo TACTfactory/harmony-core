@@ -62,7 +62,7 @@ public abstract class BaseAdapter {
 	/** Views path. */
 	private String view 		= "layout";
 	/** Views path. */
-	private String largeView 		= "layout-large";
+	private String largeView 		= "layout-xlarge";
 	/** Values path. */
 	private String values		= "values";
 	/** Controllers path. */

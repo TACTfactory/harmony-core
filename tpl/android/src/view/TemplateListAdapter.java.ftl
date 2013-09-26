@@ -38,8 +38,6 @@ import ${curr.namespace}.entity.${curr.name};
 public class ${curr.name}ListAdapter
 		extends HeaderAdapter<${curr.name}>
 		implements PinnedHeaderAdapter {
-
-
 	/**
 	 * Constructor.
 	 * @param ctx context
@@ -51,7 +49,7 @@ public class ${curr.name}ListAdapter
 	}
 
 	/** Holder row. */
-	private static class ViewHolder extends SelectionItemView {
+	private class ViewHolder extends SelectionItemView {
 
 		public ViewHolder(Context context) {
 			this(context, null);
@@ -83,6 +81,7 @@ public class ${curr.name}ListAdapter
 					</#if>
 				</#if>
 			</#list>
+
 <#list fields?values as field>${AdapterUtils.populateViewHolderFieldAdapter(field, 3)}</#list>
 		}
 	}
@@ -118,4 +117,17 @@ public class ${curr.name}ListAdapter
         
         return view;
     }
+
+	@Override
+	public int getPosition(${curr.name} item) {
+		int result = -1;
+		if (item != null) {
+			for (int i = 0; i < this.getCount(); i++) {
+				if (item.get${curr.ids[0].name?cap_first}() == this.getItem(i).get${curr.ids[0].name?cap_first}()) {
+					result = i;
+				}
+			}
+		}
+		return result;
+	}
 }

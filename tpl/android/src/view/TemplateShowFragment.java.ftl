@@ -13,24 +13,28 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;<#if (ViewUtils.hasTypeBoolean(fields?values))>
 import android.widget.CheckBox;</#if>
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import ${curr.namespace}.R;
 ${ImportUtils.importToManyRelatedEntities(curr)}<#if (importDate)>
 import ${curr.namespace}.harmony.util.DateUtils;</#if>
 import ${project_namespace}.harmony.view.HarmonyFragment;
+import ${project_namespace}.menu.CrudEditDeleteMenuWrapper.CrudEditDeleteMenuInterface;
 import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 
 /** ${curr.name} show fragment.
  *
  * @see android.app.Fragment
  */
-public class ${curr.name}ShowFragment 
-		extends HarmonyFragment {
+public class ${curr.name}ShowFragment
+		extends HarmonyFragment
+		implements CrudEditDeleteMenuInterface {
 	/** Model data. */
 	protected ${curr.name} model;
 
@@ -45,6 +49,11 @@ public class ${curr.name}ShowFragment
 		</#if>
 	</#if>
 </#list>
+	/** Data layout. */
+	protected RelativeLayout dataLayout;
+	/** Text view for no ${curr.name}. */
+	protected TextView emptyText;
+
 
     /** Initialize view of curr.fields.
      *
@@ -65,11 +74,27 @@ public class ${curr.name}ShowFragment
 			</#if>
 		</#if>
 	</#list>
+
+		this.dataLayout =
+				(RelativeLayout) view.findViewById(
+						R.id.${curr.name?lower_case}_data_layout);
+		this.emptyText =
+				(TextView) view.findViewById(
+						R.id.${curr.name?lower_case}_empty);
     }
 
     /** Load data from model to fields view. */
     public void loadData() {
+    	if (this.model != null) {
+
+    		this.dataLayout.setVisibility(View.VISIBLE);
+    		this.emptyText.setVisibility(View.GONE);
+
 <#list fields?values as field>${AdapterUtils.loadDataShowFieldAdapter(field, 2)}</#list>
+		} else {
+    		this.dataLayout.setVisibility(View.GONE);
+    		this.emptyText.setVisibility(View.VISIBLE);
+    	}
     }
 
     @Override
@@ -85,17 +110,28 @@ public class ${curr.name}ShowFragment
         				container,
         				false);
 
-        final Intent intent =  getActivity().getIntent();
-        this.model = (${curr.name?cap_first}) intent.getParcelableExtra(
-        													"${curr.name}");
-
+        
         this.initializeComponent(view);
-		if (this.model != null) {
-			this.loadData();
-	        new LoadTask(this, this.model).execute();
-		}
+        
+        final Intent intent =  getActivity().getIntent();
+        this.update((${curr.name}) intent.getParcelableExtra("${curr.name}"));
 
         return view;
+    }
+
+	/**
+	 * Updates the view with the given data.
+	 *
+	 * @param item The ${curr.name} to get the data from.
+	 */
+	public void update(${curr.name} item) {
+    	this.model = item;
+    	
+		this.loadData();
+		
+		if (this.model != null) {
+	        new LoadTask(this, this.model).execute();
+		}
     }
 
 	/**
@@ -179,4 +215,72 @@ public class ${curr.name}ShowFragment
 			this.progress.dismiss();
 		}
 	}
+
+	/**
+	 * Calls the ${curr.name}EditActivity.
+	 * @param position position
+	 */
+	@Override
+	public void onClickEdit() {
+		final Intent intent = new Intent(getActivity(),
+									${curr.name}EditActivity.class);
+		intent.putExtra("${curr.name}", (Parcelable) this.model);
+
+		this.getActivity().startActivity(intent);
+	}
+
+	/**
+	 * Shows a confirmation dialog.
+	 * @param position position
+	 */
+	@Override
+	public void onClickDelete() {
+		//int position = ((${curr.name}ListAdapter) this.getListAdapter()).getPosition(item);
+		//new DeleteDialog(this.getActivity(), this, position).show();
+		new DeleteTask(this.getActivity(), this.model).execute();
+	}
+
+	/**
+	 * Creates an aSyncTask to delete the row.
+	 * @param position position
+	 */
+	public void delete(final int position) {
+		//final ${curr.name?cap_first} item = this.mAdapter.getItem(position);
+		//new DeleteTask(this.getActivity(), item).execute();
+	}
+
+	/**
+	 * This class will remove the entity into the DB.
+	 * It runs asynchronously.
+	 */
+	private class DeleteTask extends AsyncTask<Void, Void, Integer> {
+		/** AsyncTask's context. */
+		private Context ctx;
+		/** Entity to delete. */
+		private ${curr.name?cap_first} item;
+
+		/**
+		 * Constructor of the task.
+		 * @param item The entity to remove from DB
+		 * @param ctx A context to build ${curr.name?cap_first}SQLiteAdapter
+		 */
+		public DeleteTask(final Context ctx,
+					final ${curr.name?cap_first} item) {
+			super();
+			this.ctx = ctx;
+			this.item = item;
+		}
+
+		@Override
+		protected Integer doInBackground(Void... params) {
+			int result = -1;
+
+			result = new ${curr.name?cap_first}ProviderUtils(this.ctx)
+					.delete(this.item);
+
+			return result;
+		}
+
+	}
 }
+

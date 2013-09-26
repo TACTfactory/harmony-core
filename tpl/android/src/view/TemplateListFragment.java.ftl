@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
 import ${data_namespace}.${curr.name?cap_first}SQLiteAdapter;
+import ${project_namespace}.menu.CrudCreateMenuWrapper.CrudCreateMenuInterface;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 import ${project_namespace}.harmony.view.DeletableList;
@@ -36,7 +37,7 @@ import ${curr.namespace}.entity.${curr.name};
  */
 public class ${curr.name}ListFragment
 		extends HarmonyListFragment<${curr.name}>
-		implements DeletableList {
+		implements CrudCreateMenuInterface {
 
 	/** The adapter which handles list population. */
 	protected ${curr.name}ListAdapter mAdapter;
@@ -76,7 +77,7 @@ public class ${curr.name}ListFragment
 		//this.setHasOptionsMenu(true);
 
 		// Create an empty adapter we will use to display the loaded data.
-		((PinnedHeaderListView)this.getListView()).setPinnedHeaderEnabled(true);
+		((PinnedHeaderListView)this.getListView()).setPinnedHeaderEnabled(false);
 		this.mAdapter = new ${curr.name}ListAdapter(this.getActivity(), this);
 
 		// Start out with a progress indicator.
@@ -130,11 +131,16 @@ public class ${curr.name}ListFragment
 
 		//this.mAdapter.swapCursor(data);
 		ArrayList<${curr.name}> users = new ${curr.name}SQLiteAdapter(this.getActivity()).cursorToItems(data);
-		this.mAdapter.clear();
+		this.mAdapter.setNotifyOnChange(false);
 		this.mAdapter.setData(new ${curr.name}ListAdapter.${curr.name}SectionIndexer(users));
-		this.mAdapter.setPinnedPartitionHeadersEnabled(true);
-		this.mAdapter.setSectionHeaderDisplayEnabled(true);
-		this.setListAdapter(this.mAdapter);
+		this.mAdapter.setNotifyOnChange(true);
+		this.mAdapter.notifyDataSetChanged();
+		this.mAdapter.setPinnedPartitionHeadersEnabled(false);
+		this.mAdapter.setSectionHeaderDisplayEnabled(false);
+
+		if (this.getListAdapter() == null) {
+			this.setListAdapter(this.mAdapter);
+		}
 		
     	//((PinnedHeaderListView)this.getListView()).setH
     	if (((${curr.name}ListActivity) this.getActivity()).isDualMode()) {
@@ -160,70 +166,10 @@ public class ${curr.name}ListFragment
 		this.mAdapter.clear();
 	}
 
-
-	/**
-	 * Calls the ${curr.name}EditActivity.
-	 * @param position position
-	 */
-	protected void onClickEdit(final int position) {
-		final ${curr.name} item = this.mAdapter.getItem(position);
-		final Intent intent = new Intent(getActivity(),
-									${curr.name}EditActivity.class);
-		intent.putExtra("${curr.name}", (Parcelable) item);
-
-		this.getActivity().startActivityForResult(intent, 0);
+	@Override
+	public void onClickAdd() {
+		Intent intent = new Intent(this.getActivity(), ${curr.name}CreateActivity.class);
+		this.startActivity(intent);
 	}
-
-	/**
-	 * Shows a confirmation dialog.
-	 * @param position position
-	 */
-	protected void onClickDelete(final int position) {
-		new DeleteDialog(this.getActivity(), this, position).show();
-	}
-
-	/**
-	 * Creates an aSyncTask to delete the row.
-	 * @param position position
-	 */
-	public void delete(final int position) {
-		final ${curr.name?cap_first} item = this.mAdapter.getItem(position);
-		new DeleteTask(this.getActivity(), item).execute();
-	}
-
-	/**
-	 * This class will remove the entity into the DB.
-	 * It runs asynchronously.
-	 */
-	private class DeleteTask extends AsyncTask<Void, Void, Integer> {
-		/** AsyncTask's context. */
-		private Context ctx;
-		/** Entity to delete. */
-		private ${curr.name?cap_first} item;
-
-		/**
-		 * Constructor of the task.
-		 * @param item The entity to remove from DB
-		 * @param ctx A context to build ${curr.name?cap_first}SQLiteAdapter
-		 */
-		public DeleteTask(final Context ctx,
-					final ${curr.name?cap_first} item) {
-			super();
-			this.ctx = ctx;
-			this.item = item;
-		}
-
-		@Override
-		protected Integer doInBackground(Void... params) {
-			int result = -1;
-
-			result = new ${curr.name?cap_first}ProviderUtils(this.ctx)
-					.delete(this.item);
-
-			return result;
-		}
-
-	}
-
 
 }
