@@ -20,14 +20,9 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.AbsListView.SelectionBoundsAdjuster;
 
-public class SelectionItemView extends ViewGroup /*implements SelectionBoundsAdjuster */{
-		
-	// Will be used with adjustListItemSelectionBounds().
-	private int mSelectionBoundsMarginLeft;
-	private int mSelectionBoundsMarginRight;
-	
+public class SelectionItemView extends ViewGroup {
+
 	// Horizontal divider between contact views.
     private boolean mHorizontalDividerVisible;
     private Drawable mHorizontalDividerDrawable;
@@ -343,14 +338,6 @@ public class SelectionItemView extends ViewGroup /*implements SelectionBoundsAdj
         return view != null && view.getVisibility() == View.VISIBLE;
     }
 	
-	/*@Override
-	public void adjustListItemSelectionBounds(Rect bounds) {
-		bounds.top += mBoundsWithoutHeader.top;
-	    bounds.bottom = bounds.top + mBoundsWithoutHeader.height();
-	    bounds.left += mSelectionBoundsMarginLeft;
-	    bounds.right -= mSelectionBoundsMarginRight;
-	}*/
-	
 	private TruncateAt getTextEllipsis() {
         return TruncateAt.MARQUEE;
     }
@@ -371,10 +358,5 @@ public class SelectionItemView extends ViewGroup /*implements SelectionBoundsAdj
         } else {
             textView.setText(text);
         }
-    }
-	
-	public void setSelectionBoundsHorizontalMargin(int left, int right) {
-        mSelectionBoundsMarginLeft = left;
-        mSelectionBoundsMarginRight = right;
     }
 }
