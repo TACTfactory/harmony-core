@@ -10,6 +10,10 @@
 				<#assign result = result + "${t}if (${FieldsUtils.generateCompleteGetter(\"item\", field)} != null) {\n" />
 				<#assign result = result + "${t}	result.put(${NamingUtils.alias(field.name)},\n"/>
 				<#assign result = result + "${t}		${FieldsUtils.generateStringGetter(\"item\", field)});\n"/>
+				<#if (field.nullable)>
+					<#assign result = result + "${t}} else {\n"/>
+					<#assign result = result + "${t}	result.put(${NamingUtils.alias(field.name)}, (String) null);\n"/>
+				</#if>
 				<#assign result = result + "${t}}\n\n"/>
 			</#if>
 		<#else>
@@ -17,6 +21,10 @@
 				<#assign result = result + "${t}if (${FieldsUtils.generateCompleteGetter(\"item\", field)} != null) {\n"/>
 				<#assign result = result + "${t}	result.put(${NamingUtils.alias(field.name)},\n"/>
 				<#assign result = result + "${t}		item.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}());\n"/>
+				<#if (field.nullable)>
+					<#assign result = result + "${t}} else {\n"/>
+					<#assign result = result + "${t}	result.put(${NamingUtils.alias(field.name)}, (String) null);\n"/>
+				</#if>
 				<#assign result = result + "${t}}\n\n"/>
 			</#if>
 		</#if>
