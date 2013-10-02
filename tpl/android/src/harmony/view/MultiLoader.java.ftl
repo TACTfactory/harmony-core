@@ -55,7 +55,7 @@ public class MultiLoader<T> implements LoaderManager.LoaderCallbacks<Cursor> {
 	public void onLoaderReset(Loader<Cursor> arg0) {
 		Uri uri = ((CursorLoader) arg0).getUri();
 		if (this.uriMap.containsKey(uri)) {
-			this.uriMap.get(uri).onLoadComplete(null);
+			this.uriMap.get(uri).onLoaderReset();
 		}
 	}
 	
@@ -71,5 +71,6 @@ public class MultiLoader<T> implements LoaderManager.LoaderCallbacks<Cursor> {
 	
 	public interface UriLoadedCallback {
 		public void onLoadComplete(Cursor c);
+		public void onLoaderReset();
 	}
 }

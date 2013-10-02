@@ -274,6 +274,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				<#else>
 					<#if relation.relation.type == "ManyToMany">
 				${relation.relation.joinTable}SQLiteAdapter ${relation.name}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
+				${relation.name}Adapter.open(this.getDb());
 				result = ${relation.name}Adapter.getBy${curr.name}(id);
 					<#else>
 				${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);

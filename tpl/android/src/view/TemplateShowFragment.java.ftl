@@ -153,6 +153,11 @@ public class ${curr.name}ShowFragment
 				public void onLoadComplete(Cursor c) {
 					${curr.name}ShowFragment.this.on${curr.name}Loaded(c);
 				}
+
+				@Override
+				public void onLoaderReset() {
+
+				}
 			});
 			<#list curr.relations as relation>
 				<#if !relation.internal>
@@ -163,10 +168,15 @@ public class ${curr.name}ShowFragment
 				public void onLoadComplete(Cursor c) {
 					${curr.name}ShowFragment.this.on${relation.name?cap_first}Loaded(c);
 				}
+
+				@Override
+				public void onLoaderReset() {
+
+				}
 			});
 				</#if>
 			</#list>
-
+			loader.init();
 		}
     }
 
@@ -177,6 +187,7 @@ public class ${curr.name}ShowFragment
 						c,
 						this.model);
 		}
+		this.loadData();
 	}
 	<#list curr.relations as relation>
 		<#if !relation.internal>
@@ -191,6 +202,7 @@ public class ${curr.name}ShowFragment
 		<#else>
 		this.model.set${relation.name?cap_first}(
 				new ${relation.relation.targetEntity}SQLiteAdapter(getActivity()).cursorToItems(c));
+		this.loadData();
 		</#if>
 	}
 		</#if>
