@@ -28,7 +28,7 @@ public class MultiLoader<T> implements LoaderManager.LoaderCallbacks<Cursor> {
 	
 	public void init() {
 		for(int  i = 0; i < this.uriMap.size(); i++) {
-			this.fragment.getLoaderManager().initLoader(i, null, this);
+			this.fragment.getLoaderManager().restartLoader(i, null, this);
 		}
 	}
 	
