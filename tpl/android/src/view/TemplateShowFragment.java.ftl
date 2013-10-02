@@ -187,23 +187,29 @@ public class ${curr.name}ShowFragment
 						c,
 						this.model);
 		}
-		this.loadData();
 	}
 	<#list curr.relations as relation>
 		<#if !relation.internal>
 	public void on${relation.name?cap_first}Loaded(Cursor c) {
+		if (this.model != null) {
+			if (c != null) {
 		<#if relation.relation.type == "ManyToOne" || relation.relation.type == "OneToOne">
-		if (c.getCount() > 0) {
-			c.moveToFirst();
-			this.model.set${relation.name?cap_first}(
-					new ${relation.relation.targetEntity}SQLiteAdapter(getActivity()).cursorToItem(c));
-			this.loadData();
-		}
+				if (c.getCount() > 0) {
+					c.moveToFirst();
+					this.model.set${relation.name?cap_first}(
+							new ${relation.relation.targetEntity}SQLiteAdapter(getActivity()).cursorToItem(c));
+					this.loadData();
+			}
 		<#else>
-		this.model.set${relation.name?cap_first}(
-				new ${relation.relation.targetEntity}SQLiteAdapter(getActivity()).cursorToItems(c));
-		this.loadData();
+				this.model.set${relation.name?cap_first}(
+						new ${relation.relation.targetEntity}SQLiteAdapter(getActivity()).cursorToItems(c));
+					this.loadData();
 		</#if>
+			} else {
+				this.model.set${relation.name?cap_first}(null);
+					this.loadData();
+			}
+		}
 	}
 		</#if>
 	</#list>
