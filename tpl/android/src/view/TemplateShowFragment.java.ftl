@@ -5,12 +5,10 @@
 <@header?interpret />
 package ${curr.controller_namespace};
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
@@ -22,12 +20,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import ${curr.namespace}.R;
+${ImportUtils.importRelatedSQLiteAdapters(curr, false, true)}
 ${ImportUtils.importToManyRelatedEntities(curr)}<#if (importDate)>
 import ${curr.namespace}.harmony.util.DateUtils;</#if>
 import ${project_namespace}.harmony.view.DeleteDialog;
 import ${project_namespace}.harmony.view.HarmonyFragment;
+import ${project_namespace}.harmony.view.MultiLoader;
+import ${project_namespace}.harmony.view.MultiLoader.UriLoadedCallback;
 import ${project_namespace}.menu.CrudEditDeleteMenuWrapper.CrudEditDeleteMenuInterface;
 import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
+import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 
 /** ${curr.name} show fragment.
  *
@@ -138,91 +140,61 @@ public class ${curr.name}ShowFragment
 		this.loadData();
 		
 		if (this.model != null) {
-	        new LoadTask(this, this.model).execute();
+			MultiLoader<${curr.name}> loader = 
+					new MultiLoader<${curr.name}>(this, this.model);
+			String baseUri = 
+					${curr.name}ProviderAdapter.${curr.name?upper_case}_URI 
+					+ "/" 
+					+ this.model.get${curr.ids[0].name?cap_first}();
+
+			loader.addUri(Uri.parse(baseUri), new UriLoadedCallback() {
+
+				@Override
+				public void onLoadComplete(Cursor c) {
+					${curr.name}ShowFragment.this.on${curr.name}Loaded(c);
+				}
+			});
+			<#list curr.relations as relation>
+				<#if !relation.internal>
+			loader.addUri(Uri.parse(baseUri + "/${relation.name?lower_case}"), 
+					new UriLoadedCallback() {
+
+				@Override
+				public void onLoadComplete(Cursor c) {
+					${curr.name}ShowFragment.this.on${relation.name?cap_first}Loaded(c);
+				}
+			});
+				</#if>
+			</#list>
+
 		}
     }
 
-	/**
-	 * This class will find the entity into the DB.
-	 * It runs asynchronously and shows a progressDialog
-	 */
-	public static class LoadTask extends AsyncTask<Void, Void, Integer> {
-		/** AsyncTask's context. */
-		private final Context ctx;
-		/** Associated fragment. */
-		private final ${curr.name}ShowFragment fragment;
-		/** The entity to load. */
-		private ${curr.name} entity;
-		/** Progress dialog. */
-		private ProgressDialog progress;
-
-		/**
-		 * Constructor of the task.
-		 * @param entity The entity to find in the DB
-		 * @param fragment The parent fragment from where the aSyncTask is
-		 * called
-		 */
-		public LoadTask(final ${curr.name}ShowFragment fragment,
-					final ${curr.name} entity) {
-			super();
-			this.fragment = fragment;
-			this.ctx = fragment.getActivity();
-			this.entity = entity;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-
-			this.progress = ProgressDialog.show(this.ctx,
-					this.ctx.getString(
-						R.string.${curr.name?lower_case}_progress_load_title),
-					this.ctx.getString(
-						R.string.${curr.name?lower_case}_progress_load_message));
-		}
-
-		@Override
-		protected Integer doInBackground(Void... params) {
-			Integer result = -1;
-
-			this.entity = new ${curr.name?cap_first}ProviderUtils(this.ctx).query(
-				this.entity.get${curr.ids[0].name?cap_first}());
-
-			if (this.entity != null) {
-				result = 0;
-			}
-
-			return result;
-		}
-
-		@Override
-		protected void onPostExecute(Integer result) {
-			super.onPostExecute(result);
-
-			if (result == 0) {
-				this.fragment.model = this.entity;
-				this.fragment.loadData();
-			} else {
-				final AlertDialog.Builder builder =
-						new AlertDialog.Builder(this.ctx);
-				builder.setIcon(0);
-				builder.setMessage(
-						this.ctx.getString(
-								R.string.${curr.name?lower_case}_error_load));
-				builder.setPositiveButton(
-						this.ctx.getString(android.R.string.yes),
-						new Dialog.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-																	int which) {
-
-							}
-						});
-				builder.show();
-			}
-
-			this.progress.dismiss();
+	public void on${curr.name}Loaded(Cursor c) {
+		if (c.getCount() > 0) {
+			c.moveToFirst();
+			new ${curr.name}SQLiteAdapter(getActivity()).cursorToItem(
+						c,
+						this.model);
 		}
 	}
+	<#list curr.relations as relation>
+		<#if !relation.internal>
+	public void on${relation.name?cap_first}Loaded(Cursor c) {
+		<#if relation.relation.type == "ManyToOne" || relation.relation.type == "OneToOne">
+		if (c.getCount() > 0) {
+			c.moveToFirst();
+			this.model.set${relation.name?cap_first}(
+					new ${relation.relation.targetEntity}SQLiteAdapter(getActivity()).cursorToItem(c));
+			this.loadData();
+		}
+		<#else>
+		this.model.set${relation.name?cap_first}(
+				new ${relation.relation.targetEntity}SQLiteAdapter(getActivity()).cursorToItems(c));
+		</#if>
+	}
+		</#if>
+	</#list>
 
 	/**
 	 * Calls the ${curr.name}EditActivity.

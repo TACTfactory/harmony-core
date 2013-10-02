@@ -36,6 +36,7 @@ import ${project_namespace}.criterias.base.CriteriasBase;
 import ${project_namespace}.criterias.base.CriteriasBase.GroupType;
 import ${project_namespace}.criterias.base.value.ArrayValue;
 </#if>
+${ImportUtils.importRelatedSQLiteAdapters(curr, false, true)}
 
 /**
  * ${curr.name?cap_first}ProviderAdapterBase.
@@ -53,25 +54,22 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	protected static final String ${curr.name?uncap_first}Type =
 			"${curr.name?lower_case}";
 
-	/** ${curr.name?upper_case} Insert method name. */
-	public static final String METHOD_INSERT_${curr.name?upper_case} =
-			"insert${curr.name?cap_first}";
-	/** ${curr.name?upper_case} Update method name. */
-	public static final String METHOD_UPDATE_${curr.name?upper_case} =
-			"update${curr.name?cap_first}";
-	/** ${curr.name?upper_case} Delete method name. */
-	public static final String METHOD_DELETE_${curr.name?upper_case} =
-			"delete${curr.name?cap_first}";
-	/** ${curr.name?upper_case} Query method name. */
-	public static final String METHOD_QUERY_${curr.name?upper_case} =
-			"query${curr.name?cap_first}";
-
 	/** ${curr.name?upper_case}_ALL. */
 	protected static final int ${curr.name?upper_case}_ALL =
 			${provider_id?c};
 	/** ${curr.name?upper_case}_ONE. */
 	protected static final int ${curr.name?upper_case}_ONE =
 			${(provider_id + 1)?c};
+
+	<#assign provider_id = provider_id + 2 />
+	<#list curr.relations as relation>
+		<#if !relation.internal>
+	/** ${curr.name?upper_case}_${relation.name?upper_case}. */
+	protected static final int ${curr.name?upper_case}_${relation.name?upper_case} =
+			${(provider_id)?c};
+	<#assign provider_id = provider_id + 1 />
+		</#if>
+	</#list>
 
 	/**
 	 * Static constructor.
@@ -88,6 +86,14 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				${project_name?cap_first}Provider.authority,
 				${curr.name?uncap_first}Type + "/#",
 				${curr.name?upper_case}_ONE);
+		<#list curr.relations as relation>
+			<#if !relation.internal>
+		${project_name?cap_first}Provider.getUriMatcher().addURI(
+				${project_name?cap_first}Provider.authority,
+				${curr.name?uncap_first}Type + "/#/${relation.name?lower_case}",
+				${curr.name?upper_case}_${relation.name?upper_case});
+			</#if>
+		</#list>
 	}
 
 	/**
@@ -229,23 +235,16 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher()
 				.match(uri);
 		Cursor result = null;
+		<#if MetadataUtils.hasToOneRelations(curr)>
+		Cursor ${curr.name?uncap_first}Cursor;
+		</#if>
 		int id = 0;
 
 		switch (matchedUri) {
 			case ${curr.name?upper_case}_ONE:
-				id = Integer.parseInt(uri.getPathSegments().get(1));
-				selection = ${curr.name?cap_first}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.ids[0].name)}
-						+ " = ?";
-				selectionArgs = new String[1];
-				selectionArgs[0] = String.valueOf(id);
-				result = this.adapter.query(
-							projection,
-							selection,
-							selectionArgs,
-							null,
-							null,
-							sortOrder);
+				result = this.queryById(uri.getPathSegments().get(1));
 				break;
+
 			case ${curr.name?upper_case}_ALL:
 				result = this.adapter.query(
 							projection,
@@ -255,6 +254,41 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							null,
 							sortOrder);
 				break;
+			
+			<#list curr.relations as relation>
+				<#if !relation.internal>
+			case ${curr.name?upper_case}_${relation.name?upper_case}:
+				id = Integer.parseInt(uri.getPathSegments().get(1));
+				<#if relation.relation.type == "OneToOne" || relation.relation.type == "ManyToOne">
+				${curr.name?uncap_first}Cursor = this.queryById(uri.getPathSegments().get(1));
+				
+				if (${curr.name?uncap_first}Cursor.getCount() > 0) {
+					${curr.name?uncap_first}Cursor.moveToFirst();
+					int ${relation.name?uncap_first}Id = ${curr.name?uncap_first}Cursor.getInt(${curr.name?uncap_first}Cursor.getColumnIndex(
+									${curr.name}SQLiteAdapter.COL_${relation.name?upper_case}));
+					
+					${relation.relation.targetEntity}SQLiteAdapter ${relation.relation.targetEntity?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
+					${relation.relation.targetEntity?uncap_first}Adapter.open(this.getDb());
+					result = ${relation.relation.targetEntity?uncap_first}Adapter.query(${relation.name?uncap_first}Id);
+				}
+				<#else>
+					<#if relation.relation.type == "ManyToMany">
+				${relation.relation.joinTable}SQLiteAdapter ${relation.name}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
+				result = ${relation.name}Adapter.getBy${curr.name}(id);
+					<#else>
+				${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
+				${relation.name}Adapter.open(this.getDb());
+					<#if relation.relation.inversedBy??>
+				result = ${relation.name}Adapter.getBy${relation.relation.inversedBy?cap_first}(id);
+					<#else>
+				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id);
+					</#if>
+					</#if>
+				</#if>
+				break;
+
+				</#if>
+			</#list>
 			default:
 				result = null;
 				break;
@@ -407,6 +441,21 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	@Override
 	public Uri getUri() {
 		return ${curr.name?upper_case}_URI;
+	}
+
+	private Cursor queryById(String id) {
+		Cursor result = null;
+		String selection = ${curr.name}SQLiteAdapter.ALIASED_COL_ID
+						+ " = ?";
+		String[] selectionArgs = new String[]{id};
+		result = this.adapter.query(
+					${curr.name}SQLiteAdapter.ALIASED_COLS,
+					selection,
+					selectionArgs,
+					null,
+					null,
+					null);
+		return result;
 	}
 }
 

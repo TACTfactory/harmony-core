@@ -284,6 +284,18 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 					selectionArgs,
 					sortOrder);
 				break;
+			<#list entity.relations as relation>
+				<#if !relation.internal>
+			case ${entity.name?cap_first}ProviderAdapter
+							.${entity.name?upper_case}_${relation.name?upper_case}:
+				result = this.${entity.name?uncap_first}Provider.query(uri,
+					projection,
+					selection,
+					selectionArgs,
+					sortOrder);
+				break;
+				</#if>
+			</#list>
 			</#if>
 		</#list>
 
