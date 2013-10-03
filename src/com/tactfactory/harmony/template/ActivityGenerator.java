@@ -382,7 +382,6 @@ public class ActivityGenerator extends BaseGenerator {
 				this.getAppMetas().getProjectNameSpace(),
 				"EditActivity",
 				entityName);
-		//this.updateManifest("EditActivity", entityName);
 
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_edit",
@@ -418,7 +417,6 @@ public class ActivityGenerator extends BaseGenerator {
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
 		}
-
 
 		this.manifestUpdater.addActivity(
 				this.getAppMetas().getProjectNameSpace(),
