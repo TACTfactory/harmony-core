@@ -11,27 +11,49 @@ import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
+/**
+ * Manifest update.
+ */
 public class ManifestUpdater extends XmlManager {
+	/** Application Element. */
 	private static final String ELEMENT_APPLICATION = "application";
+	/** Activity Element. */
 	private static final String ELEMENT_ACTIVITY = "activity";
+	/** Intent filter Element. */
 	private static final String ELEMENT_INTENT_FILTER = "intent-filter";
+	/** Action Element. */
 	private static final String ELEMENT_ACTION = "action";
+	/** Category Element. */
 	private static final String ELEMENT_CATEGORY = "category";
+	/** Data Element. */
 	private static final String ELEMENT_DATA = "data";
+	/** Permission Element. */
 	private static final String ELEMENT_PERMISSION = "uses-permission";
+	/** Service Element. */
 	private static final String ELEMENT_SERVICE = "service";
 	
+	/** name attribute. */
 	private static final String ATTRIBUTE_NAME = "name";
+	/** label attribute. */
 	private static final String ATTRIBUTE_LABEL = "label";
+	/** exported attribute. */
 	private static final String ATTRIBUTE_EXPORTED = "exported";
+	/** mimeType attribute. */
 	private static final String ATTRIBUTE_MIME_TYPE = "mimeType";
 	
+	/** View Action.*/
 	private static final String ACTION_VIEW = "VIEW";
+	/** Edit Action.*/
 	private static final String ACTION_EDIT = "EDIT";
+	/** Insert Action.*/
 	private static final String ACTION_INSERT = "INSERT";
 	
+	/** Android Namespace. */
 	private static final String NAMESPACE_ANDROID = "android";
 	
+	/**
+	 * Comparator used to order elements by alphabetical order.
+	 */
 	private final static Comparator<Element> ABC_COMPARATOR =
 			new Comparator<Element>() {
 				@Override
@@ -40,6 +62,10 @@ public class ManifestUpdater extends XmlManager {
 				}
 			};
 	
+	/**
+	 * Constructor.
+	 * @param adapter The adapter
+	 */
 	public ManifestUpdater(final BaseAdapter adapter) {
 		super(adapter, adapter.getManifestPathFile());
 	}
@@ -157,6 +183,10 @@ public class ManifestUpdater extends XmlManager {
 		}
 	}
 	
+	/**
+	 * Get the activities.
+	 * @return The list of activities.
+	 */
 	private List<Element> getActivities() {
 		List<Element> result = null;
 		Element appNode = 
@@ -165,6 +195,12 @@ public class ManifestUpdater extends XmlManager {
 		return result;
 	}
 	
+	/**
+	 * Find the activity named "name"
+	 * @param name The name
+	 * @param namespace The namespace
+	 * @return The found activity. null if none found.
+	 */
 	private Element findActivityNamed(
 			String name,
 			Namespace namespace) {
@@ -204,6 +240,10 @@ public class ManifestUpdater extends XmlManager {
 		return rootElement;
 	}	
 	
+	/**
+	 * Add a permission to manifest.
+	 * @param permission The permission name
+	 */
 	public void addPermission(final String permission) {
 		// Load Root element
 		final Element rootNode = this.getDocument().getRootElement();
@@ -225,6 +265,11 @@ public class ManifestUpdater extends XmlManager {
 		}
 	}
 	
+	/**
+	 * Adds a service to the manifest.
+	 * @param serviceName The service name
+	 * @param label The service label
+	 */
 	public void addService(final String serviceName, final String label) {
 		// Load Root element
 		final Element rootNode = this.getDocument().getRootElement();
@@ -251,6 +296,7 @@ public class ManifestUpdater extends XmlManager {
 	 * Various available permissions for Android.
 	 */
 	public static class Permissions {
+		// CHECKSTYLE: OFF
 		public static final String ACCESS_CHECKIN_PROPERTIES = "android.permission.ACCESS_CHECKIN_PROPERTIES";
 		public static final String ACCESS_COARSE_LOCATION = "android.permission.ACCESS_COARSE_LOCATION";
 		public static final String ACCESS_FINE_LOCATION = "android.permission.ACCESS_FINE_LOCATION";
@@ -385,6 +431,7 @@ public class ManifestUpdater extends XmlManager {
 		public static final String WRITE_SOCIAL_STREAM = "android.permission.WRITE_SOCIAL_STREAM";
 		public static final String WRITE_SYNC_SETTINGS = "android.permission.WRITE_SYNC_SETTINGS";
 		public static final String WRITE_USER_DICTIONARY = "android.permission.WRITE_USER_DICTIONARY";
+		// CHECKSTYLE: ON
 	}
 }
 
