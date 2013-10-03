@@ -5,11 +5,11 @@
 		<#if (!field.relation??)>
 			<#if (MetadataUtils.isPrimitive(field))>
 				<#assign result = result + "${t}result.put(${NamingUtils.alias(field.name)},\n" />
-				<#assign result = result + "${t}	${FieldsUtils.generateStringGetter(\"item\", field)});\n\n"/>
+				<#assign result = result + "${t}	String.valueOf(${FieldsUtils.generateStringGetter(\"item\", field)}));\n\n"/>
 			<#else>
 				<#assign result = result + "${t}if (${FieldsUtils.generateCompleteGetter(\"item\", field)} != null) {\n" />
 				<#assign result = result + "${t}	result.put(${NamingUtils.alias(field.name)},\n"/>
-				<#assign result = result + "${t}		${FieldsUtils.generateStringGetter(\"item\", field)});\n"/>
+				<#assign result = result + "${t}		String.valueOf(${FieldsUtils.generateStringGetter(\"item\", field)}));\n"/>
 				<#assign result = result + "${t}}\n\n"/>
 			</#if>
 		<#else>

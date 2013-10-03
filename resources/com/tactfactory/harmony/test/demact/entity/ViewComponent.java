@@ -78,6 +78,38 @@ public class ViewComponent implements Serializable {
 	@Column(type = Type.COUNTRY)
 	private String country;
 
+	/** Byte field. */
+	@Column(type = Type.BYTE)
+	private byte byteField;
+
+	/** char field. */
+	@Column(type = Type.CHAR)
+	private char charField;
+
+	/** short field. */
+	@Column(type = Type.SHORT)
+	private char shortField;
+
+	/** character field. */
+	@Column(type = Type.CHARACTER)
+	private Character character;
+
+	/** character field. */
+	@Column(type = Type.ENUM)
+	private Choice choice;
+
+	public enum Choice {
+		CHOICE_1(0),
+		CHOICE_2(1);
+
+		@Id
+		private int id;
+
+		private Choice(int id) {
+			this.id = id;
+		}
+	}
+
 	/**
 	 * @return the id
 	 */
