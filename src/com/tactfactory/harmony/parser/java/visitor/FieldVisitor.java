@@ -129,8 +129,8 @@ public class FieldVisitor {
 
 			result.setType(
 					field.getType().toString());
-			result.setHarmonyType(
-					Type.toTypeString(field.getType().toString()));
+			/*result.setHarmonyType(
+					Type.toTypeString(field.getType().toString()));*/
 
 			// Java types Date and Time are deprecated in Harmony
 			if (result.getType().equalsIgnoreCase("date")

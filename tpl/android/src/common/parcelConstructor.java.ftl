@@ -9,6 +9,21 @@
 		this.set${field.name?cap_first}(in.readString());
 					<#elseif field.type?lower_case == "datetime">
 		this.set${field.name?cap_first}(new DateTime(in.readString()));
+					<#elseif (field.harmony_type?lower_case == "enum")>
+		int ${field.name}Bool = in.readInt();
+		if (${field.name}Bool == 1) {
+						<#assign enumType = enums[field.type] />
+						<#if enumType.id??>
+							<#assign idEnum = enumType.fields[enumType.id] />
+							<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
+			this.set${field.name?cap_first}(${field.type}.fromValue(in.readInt()));
+							<#else>
+			this.set${field.name?cap_first}(${field.type}.fromValue(in.readString()));
+							</#if>
+						<#else>
+			this.set${field.name?cap_first}(${field.type}.fromValue(in.readString()));
+						</#if>
+		}
 					</#if>
 				<#else>
 					<#if field.relation.type == "OneToOne" || field.relation.type == "ManyToOne">

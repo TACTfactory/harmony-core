@@ -8,9 +8,9 @@ Post:
       owner: TEST - Dupond
       comments: 
          comment : TEST - Comment1
-      createdAt: 2001-12-15 2:59:43.10
-      updatedAt: 2001-12-15 2:59:43.10
-      expiresAt: 2001-12-15 2:59:43.10
+      createdAt: "2001-12-15 2:59:43.10"
+      updatedAt: "2001-12-15 2:59:43.10"
+      expiresAt: "2001-12-15 2:59:43.10"
    TEST - Post2:
       id: 0
       title: "TEST - Post 2"
@@ -20,9 +20,9 @@ Post:
       owner: TEST - Haddock
       comments: 
          comment : TEST - Comment2
-      createdAt: 2001-12-15 2:59:43.10
-      updatedAt: 2001-12-15 2:59:43.10
-      expiresAt: 2001-12-15 2:59:43.10
+      createdAt: "2001-12-15 2:59:43.10"
+      updatedAt: "2001-12-15 2:59:43.10"
+      expiresAt: "2001-12-15 2:59:43.10"
    TEST - Post3:
       id: 0
       title: "TEST - Post 3"
@@ -32,6 +32,6 @@ Post:
       owner: TEST - Tournesol
       comments: 
          comment : TEST - Comment3
-      createdAt: 2001-12-15 2:59:43.10
-      updatedAt: 2001-12-15 2:59:43.10
-      expiresAt: 2001-12-15 2:59:43.10
+      createdAt: "2001-12-15 2:59:43.10"
+      updatedAt: "2001-12-15 2:59:43.10"
+      expiresAt: "2001-12-15 2:59:43.10"

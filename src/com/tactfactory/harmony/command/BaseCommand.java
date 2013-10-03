@@ -67,7 +67,8 @@ public abstract class BaseCommand implements Command {
 
 			// TODO : Refactor ClassCompletor
 			new ClassCompletor(
-					ApplicationMetadata.INSTANCE.getEntities()).execute();
+					ApplicationMetadata.INSTANCE.getEntities(),
+					ApplicationMetadata.INSTANCE.getEnums()).execute();
 		} else {
 			ConsoleUtils.displayWarning("No entities found in entity package!");
 		}

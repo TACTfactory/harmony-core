@@ -47,7 +47,8 @@ import ${curr.namespace}.harmony.widget.TimeWidget;
 	<#if (hasDateTime)>
 import ${curr.namespace}.harmony.widget.DateTimeWidget;
 	</#if>
-</#if>
+</#if><#if (ViewUtils.hasTypeEnum(fields?values))>
+import ${project_namespace}.harmony.widget.EnumSpinner;</#if>
 import ${project_namespace}.harmony.widget.ValidationButtons;
 import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
 ${ImportUtils.importRelatedProviderUtils(curr, true)}
@@ -79,6 +80,9 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 	/** ${field.name} Time View. */
 	protected TimeWidget ${field.name}View;
 					</#if>
+				<#elseif field.harmony_type?lower_case == "enum">
+	/** ${field.name} View. */
+	protected EnumSpinner ${field.name}View;
 				<#else>
 	/** ${field.name} View. */
 	protected EditText ${field.name}View;
@@ -125,6 +129,10 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		this.${field.name}View =
 				(TimeWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 						</#if>
+					<#elseif field.harmony_type?lower_case == "enum">
+		this.${field.name}View =
+			(EnumSpinner) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
+		this.${field.name}View.setEnum(${field.type}.class);
 					<#else>
 		this.${field.name}View =
 				(EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});

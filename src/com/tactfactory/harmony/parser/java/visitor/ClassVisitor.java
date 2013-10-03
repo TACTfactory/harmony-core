@@ -27,6 +27,7 @@ import com.google.common.base.Strings;
 import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.meta.InterfaceMetadata;
 import com.tactfactory.harmony.parser.JavaModelParser;
+import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.annotation.Entity;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
@@ -255,7 +256,12 @@ public class ClassVisitor {
 			}
 		}
 
-
+		if (!Strings.isNullOrEmpty(result.getIdName())) {
+			result.setType(
+					result.getFields().get(result.getIdName()).getType());
+		} else {
+			result.setType(Type.STRING.getValue());
+		}
     	return result;
     }
 

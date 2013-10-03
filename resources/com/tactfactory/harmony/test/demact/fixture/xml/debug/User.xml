@@ -6,9 +6,10 @@
 		<lastname>DEBUG - Dupont</lastname>
 		<login>DEBUG - dup</login>
 		<password>DEBUG - password</password>
-		<createdAt>2012-01-01 00:00</createdAt>
+		<createdAt>2012-01-01T00:00:00</createdAt>
 		<birthdate>2012-01-01</birthdate>
 		<userGroup>User</userGroup>
+		<title>0</title>
 	</User>
 	<User id="DEBUG - Haddock">
 		<id>1</id>
@@ -16,9 +17,10 @@
 		<lastname>DEBUG - Archibald</lastname>
 		<login>DEBUG - had</login>
 		<password>DEBUG - password</password>
-		<createdAt>2012-01-01 00:00</createdAt>
+		<createdAt>2012-01-01T00:00:00</createdAt>
 		<birthdate>2012-01-01</birthdate>
 		<userGroup>User</userGroup>
+		<title>0</title>
 	</User>
 	<User id="DEBUG - Tournesol">
 		<id>2</id>
@@ -26,8 +28,9 @@
 		<lastname>DEBUG - Tryphon</lastname>
 		<login>DEBUG - tou</login>
 		<password>DEBUG - password</password>
-		<createdAt>2012-01-01 00:00</createdAt>
+		<createdAt>2012-01-01T00:00:00</createdAt>
 		<birthdate>2012-01-01</birthdate>
 		<userGroup>User</userGroup>
+		<title>0</title>
 	</User>
 </list>

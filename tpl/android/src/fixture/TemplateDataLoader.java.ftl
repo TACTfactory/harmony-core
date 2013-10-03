@@ -42,7 +42,7 @@ import org.joda.time.DateTime;
 import android.content.Context;
 
 ${ImportUtils.importRelatedEntities(curr)}${ImportUtils.importRelatedEnums(curr)}
-<#if ((fixtureType=="xml" && (hasDate || hasDateTime)) || hasTime)>import ${project_namespace}.harmony.util.DateUtils;</#if>
+<#if (hasDate || hasDateTime || hasTime)>import ${project_namespace}.harmony.util.DateUtils;</#if>
 
 /**
  * ${curr.name?cap_first}DataLoader.
@@ -106,8 +106,6 @@ public final class ${curr.name?cap_first}DataLoader
 		${curr.extends}DataLoader inheritanceDataLoader =
 				${curr.extends}DataLoader.getInstance(this.ctx);
 		inheritanceDataLoader.extractItem(element, ${curr.name?uncap_first});
-		inheritanceDataLoader.items.put(element.getAttributeValue("id"), 
-			${curr.name?uncap_first});
 		</#if>
 
 	<#elseif fixtureType=="yml">

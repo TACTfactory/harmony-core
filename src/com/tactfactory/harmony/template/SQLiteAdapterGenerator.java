@@ -70,6 +70,13 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		this.makeSourceCriteria(
 				"base/value/SelectValue.java",
 				"base/value/SelectValue.java", false);
+		this.makeSourceCriteria(
+				"base/value/MethodValue.java",
+				"base/value/MethodValue.java", false);
+		this.makeSourceCriteria(
+				"base/value/DateTimeValue.java",
+				"base/value/DateTimeValue.java", false);
+		
 	}
 
 	/**

@@ -16,6 +16,7 @@ import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
+import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
@@ -37,9 +38,6 @@ public abstract class SqliteAdapter {
 
 		final StringBuilder builder = new StringBuilder(20);
 		builder.append(' ');
-		/*if (Strings.isNullOrEmpty(fm.getColumnDefinition())) {
-			fm.setColumnDefinition(generateColumnType(fm));
-		}*/
 		builder.append(fm.getColumnDefinition());
 		if (fm.isId()) {
 			builder.append(" PRIMARY KEY");
@@ -95,11 +93,13 @@ public abstract class SqliteAdapter {
 	 */
 	public static String generateColumnType(final FieldMetadata field) {
 		String type;
-		if (Strings.isNullOrEmpty(field.getHarmonyType())) {
+		if (!Strings.isNullOrEmpty(field.getHarmonyType())) {
 			
-			if (field.getHarmonyType().equals(Column.Type.ENUM.getValue())) {	
-				type =	ApplicationMetadata.INSTANCE.getEnums().get(
-						field.getType()).getType();
+			if (field.getHarmonyType().equals(Column.Type.ENUM.getValue())) {
+				EnumMetadata enumMeta = 
+						ApplicationMetadata.INSTANCE.getEnums().get(
+								field.getType());
+				type =	enumMeta.getType();
 			} else {
 				type = field.getHarmonyType();
 			}
@@ -180,8 +180,7 @@ public abstract class SqliteAdapter {
 		} else {
 			ConsoleUtils.display("No type found for " + type);
 		}
-
-
+		
 		return type;
 	}
 

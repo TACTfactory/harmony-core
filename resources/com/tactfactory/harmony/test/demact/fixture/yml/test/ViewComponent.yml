@@ -3,9 +3,9 @@ ViewComponent:
       id: 0
       string: "TEST - VC1 String"
       text: "TEST - VC1 Text"
-      dateTime: 2001-12-15 2:59:43.10
-      date: 2012-01-01
-      time: 00:00
+      dateTime: "2001-12-15 2:59:43.10"
+      date: "2012-01-01"
+      time: "12:00:00+02:00"
       login: "TEST - VC1 login"
       password: "TEST - VC1 password"
       email: "TEST - user1@TEST - VC1.com"
@@ -17,9 +17,9 @@ ViewComponent:
       id: 0
       string: "TEST - VC2 String"
       text: "TEST - VC2 Text"
-      dateTime: 2001-12-15 2:59:43.10
-      date: 2012-01-01
-      time: 00:00
+      dateTime: "2001-12-15 2:59:43.10"
+      date: "2012-01-01"
+      time: "12:00:00"
       login: "TEST - VC2 login"
       password: "TEST - VC2 password"
       email: "TEST - user2@TEST - VC2.com"
@@ -31,9 +31,9 @@ ViewComponent:
       id: 0
       string: "TEST - VC3 String"
       text: "TEST - VC3 Text"
-      dateTime: 2001-12-15 2:59:43.10
-      date: 2012-01-01
-      time: 00:00
+      dateTime: "2001-12-15 2:59:43.10"
+      date: "2012-01-01"
+      time: "12:00:00-02:00"
       login: "TEST - VC3 login"
       password: "TEST - VC3 password"
       email: "TEST - user3@TEST - VC3.com"

@@ -131,6 +131,7 @@ public class ActivityGenerator extends BaseGenerator {
 				"widget_validation_buttons.xml");
 
 		this.updateWidget("PinchZoomImageView.java");
+		this.updateWidget("EnumSpinner.java");
 
 		if (this.isDate || this.isTime) {
 			this.makeSource(

@@ -4,9 +4,9 @@
 		<id>0</id>
 		<string>DEBUG - String</string>
 		<text>DEBUG - Texte</text>
-		<dateTime>2012-01-01 00:00</dateTime>
+		<dateTime>2012-01-01T00:00:00</dateTime>
 		<date>2012-01-01</date>
-		<time>00:00</time>
+		<time>00:00:00</time>
 		<login>DEBUG - VC1 login</login>
 		<password>DEBUG - VC1 password</password>
 		<email>DEBUG - user1@vc1.com</email>
@@ -19,9 +19,9 @@
 		<id>0</id>
 		<string>DEBUG - Dupond</string>
 		<text>DEBUG - Dupont</text>
-		<dateTime>2012-01-01 00:00</dateTime>
+		<dateTime>2012-01-01T00:00:00</dateTime>
 		<date>2012-01-01</date>
-		<time>00:00</time>
+		<time>00:00:00</time>
 		<login>DEBUG - VC2 login</login>
 		<password>DEBUG - VC2 password</password>
 		<email>DEBUG - user2@vc2.com</email>
@@ -34,9 +34,9 @@
 		<id>0</id>
 		<string>DEBUG - Dupond</string>
 		<text>DEBUG - Dupont</text>
-		<dateTime>2012-01-01 00:00</dateTime>
+		<dateTime>2012-01-01T00:00:00</dateTime>
 		<date>2012-01-01</date>
-		<time>00:00</time>
+		<time>00:00:00</time>
 		<login>DEBUG - VC3 login</login>
 		<password>DEBUG - VC3 password</password>
 		<email>DEBUG - user3@vc3.com</email>

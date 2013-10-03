@@ -48,15 +48,9 @@
 			<#if (field.type?lower_case == "datetime") >
 				<#if ((field.harmony_type == "date") || (field.harmony_type == "datetime") || (field.harmony_type == "time"))>
 
-					<#if field.is_locale>
-						<#assign result = result + "${tab}${localTab}final DateTime dt${field.name?cap_first} =\n"/>
-						<#assign result = result + "${tab}		DateUtils.formatLocalISOStringToDateTime(\n"/>
-						<#assign result = result + "${tab}				cursor.getString(index));\n"/>
-					<#else>
-						<#assign result = result + "${tab}${localTab}final DateTime dt${field.name?cap_first} =\n"/>
-						<#assign result = result + "${tab}		DateUtils.formatISOStringToDateTime(\n"/>
-						<#assign result = result + "${tab}				cursor.getString(index));\n"/>
-					</#if>
+					<#assign result = result + "${tab}${localTab}final DateTime dt${field.name?cap_first} =\n"/>
+					<#assign result = result + "${tab}		DateUtils.formatISOStringToDateTime(\n"/>
+					<#assign result = result + "${tab}				cursor.getString(index));\n"/>
 					<#assign result = result + "${tab}${localTab}if (dt${field.name?cap_first} != null) {\n"/>
 					<#assign result = result + "${tab}${localTab}		result.set${field.name?cap_first}(\n"/>
 					<#assign result = result + "${tab}				dt${field.name?cap_first});\n"/>
@@ -143,18 +137,10 @@
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
 				<#assign result = result + "${tab}		((Double) columns.get(${NamingUtils.fixtureAlias(field)})).floatValue());" />
 			<#elseif field.type?lower_case=="datetime">
-				<#if (field.harmony_type == "time")>
-					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-					<#assign result = result + "${tab}		DateUtils.formatPattern(patternTime," />
-					<#assign result = result + "${tab}			(String) columns.get(${NamingUtils.fixtureAlias(field)})));" />
-				<#else>
-					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-					<#assign result = result + "${tab}		new DateTime(((Date) columns.get(${NamingUtils.fixtureAlias(field)}))" />
-					<#if field.is_locale>
-						<#assign result = result + ",${tab}				DateTimeZone.UTC" />
-					</#if>
-					<#assign result = result + "));" />
-				</#if>
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+				<#assign result = result + "${tab}		DateUtils.formatYAMLStringToDateTime(" />
+				<#assign result = result + "${tab}			(String) columns.get(${NamingUtils.fixtureAlias(field)})" />
+				<#assign result = result + "));" />
 			<#elseif field.type?lower_case=="boolean">
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
 				<#assign result = result + "${tab}		(Boolean) columns.get(${NamingUtils.fixtureAlias(field)}));" />
@@ -236,18 +222,7 @@
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(Double.parseDouble(${NamingUtils.fixtureParsedAlias(field)}));"/>
 			<#elseif (field.type?lower_case=="datetime")>
 					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-					<#if field.is_locale>
-						<#assign result = result + "${tab}		DateUtils.formatLocalPattern(" />
-					<#else>
-						<#assign result = result + "${tab}		DateUtils.formatPattern(" />
-					</#if>
-					<#if field.harmony_type=="date">
-						<#assign result = result + "${tab}				patternDate," />
-					<#elseif field.harmony_type=="datetime">
-						<#assign result = result + "${tab}				patternDateTime," />
-					<#elseif field.harmony_type=="time">
-						<#assign result = result + "${tab}				patternTime," />
-					</#if>
+					<#assign result = result + "${tab}		DateUtils.formatXMLStringToDateTime(" />
 					<#assign result = result + "${tab}				${NamingUtils.fixtureParsedAlias(field)}));" />
 			<#elseif field.type=="boolean">
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
@@ -331,12 +306,12 @@
 		<#if !field.nullable>
 			<#if !field.relation??>
 				<#if field.type?lower_case == "datetime">
-					<#if field.harmony_type == "datetime">
+					<#if (field.harmony_type) == "datetime">
 						<#assign result = result + "${tab}result = (result && this.${field.name}View.getDateTime() != null);" />
 					<#else>
 						<#assign result = result + "${tab}result = (result && this.${field.name}View.get${field.harmony_type?cap_first}() != null);" />
 					</#if>
-				<#else>
+				<#elseif (field.harmony_type?lower_case != "enum")>
 						<#assign result = result + "${tab}result = (result && this.${field.name}View.getText().length() > 0);" />
 				</#if>
 			<#else>
@@ -431,6 +406,8 @@
 		<#assign result = result + "${tab}			DateUtils.formatTimeToString(" />
 		<#assign result = result + "${tab}					this.model.get${field.name?cap_first}()));" />
 						</#if>
+					<#elseif (field.harmony_type?lower_case == "enum")>
+		<#assign result = result + "${tab}	this.${field.name}View.setText(this.model.get${field.name?cap_first}().toString());" />
 					<#else>
 		<#assign result = result + "${tab}	${ViewUtils.setLoader(field)}" />
 					</#if>
