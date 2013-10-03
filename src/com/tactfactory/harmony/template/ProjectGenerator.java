@@ -8,10 +8,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tactfactory.harmony.Context;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.template.androidxml.StylesFile;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.OsUtil;
 import com.tactfactory.harmony.utils.TactFileUtils;
@@ -145,12 +147,9 @@ public class ProjectGenerator extends BaseGenerator {
 				this.getAdapter().getStringsPathFile(),
 				false);
 
-		// create configs.xml
-		super.makeSource(
-				this.getAdapter().getTemplateRessourceValuesPath()
-					+ "styles.xml",
-				this.getAdapter().getRessourceValuesPath() + "styles.xml",
-				false);
+		StylesFile.mergeFromTo(this.getAdapter(),
+				Context.getCurrentBundleFolder() + this.getAdapter().getTemplateRessourceValuesPath() + "/styles.xml",
+				this.getAdapter().getRessourceValuesPath() + "/styles.xml");
 
 		// create main.xml
 		super.makeSource(

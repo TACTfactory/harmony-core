@@ -8,13 +8,11 @@
  */
 package com.tactfactory.harmony.template;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.Locale;
 
+import com.tactfactory.harmony.Context;
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
@@ -23,12 +21,10 @@ import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.meta.TranslationMetadata;
 import com.tactfactory.harmony.meta.TranslationMetadata.Group;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.template.androidxml.AttrsFile;
+import com.tactfactory.harmony.template.androidxml.ManifestUpdater;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.PackageUtils;
-import com.tactfactory.harmony.utils.TactFileUtils;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 /**
@@ -134,12 +130,14 @@ public class ActivityGenerator extends BaseGenerator {
 		this.updateWidget("EnumSpinner.java");
 
 		if (this.isDate || this.isTime) {
-			this.makeSource(
-					this.getAdapter().getTemplateRessourceValuesPath()
-							+ "/attrs.xml",
-					this.getAdapter().getRessourceValuesPath()
-							+ "/attrs.xml",
-					false);
+			
+			AttrsFile.mergeFromTo(this.getAdapter(),
+					Context.getCurrentBundleFolder() 
+						+ this.getAdapter().getTemplateRessourceValuesPath() 
+						+ "/attrs.xml",
+					this.getAdapter().getRessourceValuesPath() 
+						+ "/attrs.xml");
+			
 			if (this.isDate) {
 				this.updateWidget("CustomDatePickerDialog.java",
 						"dialog_date_picker.xml");
@@ -197,7 +195,7 @@ public class ActivityGenerator extends BaseGenerator {
 			ConsoleUtils.displayError(e);
 		}
 		
-		this.manifestUpdater.saveManifest();
+		this.manifestUpdater.save();
 	}
 
 	/**
@@ -426,7 +424,6 @@ public class ActivityGenerator extends BaseGenerator {
 				this.getAppMetas().getProjectNameSpace(),
 				"CreateActivity",
 				entityName);
-		//this.updateManifest("CreateActivity", entityName);
 
 		final ClassMetadata classMeta =
 				this.getAppMetas().getEntities().get(entityName);
@@ -491,42 +488,6 @@ public class ActivityGenerator extends BaseGenerator {
 
 		super.makeSource(fullTemplatePath, fullFilePath, false);
 	}
-
-	/** Make Manifest file.
-	 *
-	 * @param cfg Template engine
-	 * @throws IOException if an IO exception occurred 
-	 * @throws TemplateException If the template generation failed
-	 */
-	public final void makeManifest(final Configuration cfg)
-			throws IOException, TemplateException {
-		final File file =
-				TactFileUtils.makeFile(this.getAdapter().getManifestPathFile());
-
-		// Debug Log
-		ConsoleUtils.displayDebug(
-				"Generate Manifest : " + file.getAbsoluteFile());
-
-		// Create
-		final Template tpl = cfg.getTemplate(
-				this.getAdapter().getTemplateManifestPathFile());
-		final OutputStreamWriter output =
-				new OutputStreamWriter(
-						new FileOutputStream(file),
-						TactFileUtils.DEFAULT_ENCODING);
-		tpl.process(this.getDatamodel(), output);
-		output.flush();
-		output.close();
-	}
-
-	/**
-	 * Update Android Manifest.
-	 * @param classF The class file name
-	 * @param entityName the entity for which to update the manifest for.
-	 */
-	//private void updateManifest(final String classF, final String entityName) {
-		
-	//}
 
 	/**
 	 * Update Widget.

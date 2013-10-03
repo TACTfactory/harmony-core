@@ -1,17 +1,17 @@
-package com.tactfactory.harmony.template;
+package com.tactfactory.harmony.template.androidxml;
 
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
 
-import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
+
+import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
-import com.tactfactory.harmony.utils.XMLUtils;
 
-public class ManifestUpdater {
+public class ManifestUpdater extends XmlManager {
 	private static final String ELEMENT_APPLICATION = "application";
 	private static final String ELEMENT_ACTIVITY = "activity";
 	private static final String ELEMENT_INTENT_FILTER = "intent-filter";
@@ -38,13 +38,8 @@ public class ManifestUpdater {
 				}
 			};
 	
-			
-	private Document docXml;
-	private BaseAdapter adapter;
-	
 	public ManifestUpdater(final BaseAdapter adapter) {
-		this.adapter = adapter;
-		this.docXml = XMLUtils.openXMLFile(this.adapter.getManifestPathFile());
+		super(adapter, adapter.getManifestPathFile());
 	}
 	/**
 	 * Update Android Manifest.
@@ -58,7 +53,7 @@ public class ManifestUpdater {
 		
 		final String classFile = entityName + classF;
 		final String pathRelatif = String.format(".%s.%s.%s",
-				this.adapter.getController(),
+				this.getAdapter().getController(),
 				entityName.toLowerCase(Locale.ENGLISH),
 				classFile);
 
@@ -67,7 +62,7 @@ public class ManifestUpdater {
 		
 
 		// Load Root element
-		final Element rootNode = this.docXml.getRootElement();
+		final Element rootNode = this.getDocument().getRootElement();
 
 		// Load Name space (required for manipulate attributes)
 		final Namespace ns = rootNode.getNamespace(NAMESPACE_ANDROID);
@@ -163,7 +158,7 @@ public class ManifestUpdater {
 	private List<Element> getActivities() {
 		List<Element> result = null;
 		Element appNode = 
-				this.docXml.getRootElement().getChild(ELEMENT_APPLICATION);
+				this.getDocument().getRootElement().getChild(ELEMENT_APPLICATION);
 		result = appNode.getChildren(ELEMENT_ACTIVITY);
 		return result;
 	}
@@ -186,12 +181,25 @@ public class ManifestUpdater {
 		
 		return result;
 	}
-	
-	public void saveManifest() {
-		// Write XML to file.
-		XMLUtils.writeXMLToFile(
-				this.docXml,
-				this.adapter.getManifestPathFile());
-	}
+	@Override
+	protected Element getDefaultRoot() {
+		Namespace androidNs = Namespace.getNamespace(
+				"android", 
+				"http://schemas.android.com/apk/res/android"); 
+		Element rootElement = new Element("manifest");
+		rootElement.addNamespaceDeclaration(androidNs);
+		rootElement.setAttribute(
+				"package",
+				ApplicationMetadata.INSTANCE.getProjectNameSpace());
+		
+		rootElement.setAttribute("versionCode",
+				"1",
+				androidNs);
+		
+		rootElement.setAttribute("versionName",
+				"@string/app_version",
+				androidNs);
+		return rootElement;
+	}	
 }
 
