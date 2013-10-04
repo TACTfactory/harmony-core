@@ -88,7 +88,7 @@ public class ViewComponent implements Serializable {
 
 	/** short field. */
 	@Column(type = Type.SHORT)
-	private char shortField;
+	private short shortField;
 
 	/** character field. */
 	@Column(type = Type.CHARACTER)

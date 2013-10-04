@@ -5,11 +5,11 @@
 		<#if (!field.relation??)>
 			<#if (MetadataUtils.isPrimitive(field))>
 				<#assign result = result + "${t}result.put(${NamingUtils.alias(field.name)},\n" />
-				<#assign result = result + "${t}	String.valueOf(${FieldsUtils.generateStringGetter(\"item\", field)}));\n\n"/>
+				<#assign result = result + "${t}	${FieldsUtils.generateStringGetter(\"item\", field)});\n\n"/>
 			<#else>
 				<#assign result = result + "${t}if (${FieldsUtils.generateCompleteGetter(\"item\", field)} != null) {\n" />
 				<#assign result = result + "${t}	result.put(${NamingUtils.alias(field.name)},\n"/>
-				<#assign result = result + "${t}		String.valueOf(${FieldsUtils.generateStringGetter(\"item\", field)}));\n"/>
+				<#assign result = result + "${t}		${FieldsUtils.generateStringGetter(\"item\", field)});\n"/>
 				<#assign result = result + "${t}}\n\n"/>
 			</#if>
 		<#else>
@@ -147,6 +147,15 @@
 			<#elseif (field.type?lower_case == "string")>
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
 				<#assign result = result + "${tab}		(String) columns.get(${NamingUtils.fixtureAlias(field)}));" />
+			<#elseif (field.type?lower_case == "short")>
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+				<#assign result = result + "${tab}		((Integer) columns.get(${NamingUtils.fixtureAlias(field)})).shortValue());" />
+			<#elseif (field.type?lower_case == "char" || field.type?lower_case == "character")>
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+				<#assign result = result + "${tab}		((String) columns.get(${NamingUtils.fixtureAlias(field)})).charAt(0));" />
+			<#elseif (field.type?lower_case == "byte")>
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+				<#assign result = result + "${tab}		((Integer) columns.get(${NamingUtils.fixtureAlias(field)})).byteValue());" />
 			<#elseif (field.harmony_type == "enum")>
 				<#assign enumType = enums[field.type] />
 				<#if (enumType.id??)>
