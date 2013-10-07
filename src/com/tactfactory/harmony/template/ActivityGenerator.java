@@ -171,6 +171,13 @@ public class ActivityGenerator extends BaseGenerator {
 		}
 
 		// create HarmonyFragmentActivity
+		this.updateWidget("MultiEntityWidget.java",
+				"widget_multi_entity.xml");
+		this.updateWidget("SingleEntityWidget.java",
+				"widget_single_entity.xml");
+
+		
+		// create HarmonyFragmentActivity
 		super.makeSource(
 			this.getAdapter().getTemplateSourcePath()
 			+ "harmony/view/DeletableList.java",

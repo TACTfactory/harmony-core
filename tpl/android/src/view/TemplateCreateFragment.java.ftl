@@ -10,10 +10,7 @@
 <@header?interpret />
 package ${curr.controller_namespace};
 <#if (hasRelation)>
-	<#if (hasToManyRelation)>
 import java.util.ArrayList;
-	</#if>
-import java.util.List;
 </#if>
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -46,7 +43,9 @@ import ${curr.namespace}.harmony.widget.TimeWidget;
 	<#if (hasDateTime)>
 import ${curr.namespace}.harmony.widget.DateTimeWidget;
 	</#if>
-</#if><#if (ViewUtils.hasTypeEnum(fields?values))>
+</#if>
+import ${project_namespace}.harmony.widget.MultiEntityWidget;
+import ${project_namespace}.harmony.widget.SingleEntityWidget;<#if (ViewUtils.hasTypeEnum(fields?values))>
 import ${project_namespace}.harmony.widget.EnumSpinner;</#if>
 import ${project_namespace}.harmony.widget.ValidationButtons;
 import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
@@ -86,18 +85,16 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	protected EditText ${field.name}View;
 				</#if>
 			<#else>
-	/** The ${field.name} button. */
-	protected Button ${field.name}Button;
-	/** The ${field.relation.targetEntity} list. */
-	protected List<${field.relation.targetEntity}> ${field.name}List;
-	/** The ${field.name} dialog. */
-	protected Dialog ${field.name}Dialog;
 				<#if field.relation.type=="OneToMany" || field.relation.type=="ManyToMany">
-	/** The array of selected ${field.relation.targetEntity}s. */
-	protected boolean[] checked${field.name?cap_first};
+	/** The ${field.name} chooser component. */
+	protected MultiEntityWidget ${field.name}Widget;
+	/** The ${field.name} Adapter. */
+	protected MultiEntityWidget.EntityAdapter<${field.relation.targetEntity}> ${field.name}Adapter;
 				<#else>
-	/** The selected ${field.relation.targetEntity}. */
-	protected int selected${field.name?cap_first};
+	/** The ${field.name} chooser component. */
+	protected SingleEntityWidget ${field.name}Widget;
+	/** The ${field.name} Adapter. */
+	protected SingleEntityWidget.EntityAdapter<${field.relation.targetEntity}> ${field.name}Adapter;
 				</#if>
 			</#if>
 		</#if>
@@ -136,13 +133,27 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			(EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 					</#if>
 				<#else>
-		this.${field.name}Button =
-			(Button) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_button);
-		this.${field.name}Button.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				onClick${field.name?cap_first}Button(v);
+					<#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
+		this.${field.name}Adapter = new MultiEntityWidget.EntityAdapter<${field.relation.targetEntity}>() {
+			@Override
+			public String entityToString(${field.relation.targetEntity} item) {
+				return String.valueOf(item.get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
 			}
-		});
+		};
+		this.${field.name}Widget =
+			(MultiEntityWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_button);
+		this.${field.name}Widget.setAdapter(this.${field.name}Adapter);
+					<#else>
+		this.${field.name}Adapter = new SingleEntityWidget.EntityAdapter<${field.relation.targetEntity}>() {
+			@Override
+			public String entityToString(${field.relation.targetEntity} item) {
+				return String.valueOf(item.get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
+			}
+		};
+		this.${field.name}Widget =
+			(SingleEntityWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_button);
+		this.${field.name}Widget.setAdapter(this.${field.name}Adapter);
+					</#if>
 				</#if>
 			</#if>
 		</#list>
@@ -151,109 +162,6 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			(ValidationButtons) view.findViewById(R.id.${curr.name?lower_case}_validation);
 		this.validationButtons.setListener(this);
 	}
-
-	<#list relations as relation>
-		<#if !relation.internal && !relation.hidden>
-	/** Initialize dialog.
-	 * @param list list
-	 */
-<#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
-	protected void init${relation.name?cap_first}Dialog(final List<${relation.relation.targetEntity}> list) {
-		String[] listAdapter = new String[list.size()];
-		boolean[] checks = new boolean[list.size()];
-		this.checked${relation.name?cap_first} = new boolean[list.size()];
-		int i = 0;
-		for (final ${relation.relation.targetEntity} item : list) {
-			listAdapter[i] = String.valueOf(item.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
-			checks[i] = false;
-			i++;
-		}
-		final AlertDialog.Builder builder =
-				new AlertDialog.Builder(this.getActivity());
-		builder.setTitle(R.string.${relation.owner?lower_case}_${relation.name?lower_case}_dialog_title)
-				.setMultiChoiceItems(listAdapter, checks,
-							  new DialogInterface.OnMultiChoiceClickListener() {
-					public void onClick(DialogInterface dialog, int which,
-															boolean isChecked) {
-						${curr.name}CreateFragment.this
-						  .checked${relation.name?cap_first}[which] = isChecked;
-					}
-				}).setPositiveButton(android.R.string.ok,
-										 new DialogInterface.OnClickListener() {
-		            @Override
-		            public void onClick(DialogInterface dialog, int id) {
-		            	//${curr.name}CreateFragment.this
-		            	//.onOk${relation.name?cap_first}();
-		            }
-		        }).setNegativeButton(android.R.string.cancel,
-		        						 new DialogInterface.OnClickListener() {
-		            @Override
-		            public void onClick(DialogInterface dialog, int id) {
-		            	${curr.name}CreateFragment.this
-		            					  .onCancel${relation.name?cap_first}();
-		            }
-		        });
-
-		this.${relation.name}Dialog = builder.create();
-	}
-			<#else>
-	protected void init${relation.name?cap_first}Dialog(
-			final List<${relation.relation.targetEntity}> list) {
-		final String[] listAdapter = new String[list.size()];
-		int i = 0;
-		for (final ${relation.relation.targetEntity} item : list) {
-			listAdapter[i] = String.valueOf(item.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
-			i++;
-		}
-		final AlertDialog.Builder builder =
-				new AlertDialog.Builder(this.getActivity());
-		builder.setTitle(R.string.${relation.owner?lower_case}_${relation.name?lower_case}_dialog_title)
-				.setSingleChoiceItems(listAdapter, 0,
-										 new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						//${curr.name}CreateFragment.this
-						//.selected${relation.name?cap_first} =
-						// Integer.parseInt(listAdapter[id]);
-					}
-				}).setPositiveButton(android.R.string.ok,
-										 new DialogInterface.OnClickListener() {
-		            @Override
-		            public void onClick(DialogInterface dialog, int id) {
-		            	${curr.name}CreateFragment.this
-		            		.selected${relation.name?cap_first} =
-		            			Integer.parseInt(
-		            					listAdapter[((AlertDialog) dialog).getListView().getCheckedItemPosition()]);
-		            }
-		        }).setNegativeButton(android.R.string.cancel,
-		        						 new DialogInterface.OnClickListener() {
-		            @Override
-		            public void onClick(DialogInterface dialog, int id) {
-		            	${curr.name}CreateFragment.this
-		            					  .onCancel${relation.name?cap_first}();
-		            }
-		        });
-
-		this.${relation.name}Dialog = builder.create();
-	}
-	 		</#if>
-	/**
-	 * Called when the user clicks on cancel.
-	 *
-	 */
-	protected void onCancel${relation.name?cap_first}() {
-		//TODO : Don't change the list
-	}
-
-	/**
-	 * Called when the user clicks on ${relation.name?cap_first} button.
-	 * It shows the dedicated dialog.
-	 * @param v View
-	 */
-	protected void onClick${relation.name?cap_first}Button(View v) {
-		this.${relation.name}Dialog.show();
-	}
-		</#if>
-	</#list>
 
 	/** Load data from model to fields view. */
 	public void loadData() {
@@ -380,6 +288,12 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		private ProgressDialog progress;
 		/** Fragment. */
 		private ${curr.name}CreateFragment fragment;
+		<#list relations as relation>
+			<#if !relation.internal && !relation.hidden>
+		/** ${relation.name} list. */
+		private ArrayList<${relation.relation.targetEntity}> ${relation.name}List;
+			</#if>
+		</#list>
 
 		/**
 		 * Constructor of the task.
@@ -408,7 +322,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		protected Void doInBackground(Void... params) {
 			<#list relations as field>
 				<#if !field.internal && !field.hidden>
-			this.fragment.${field.name}List = 
+			this.${field.name}List = 
 				new ${field.relation.targetEntity}ProviderUtils(this.ctx).queryAll();
 				</#if>
 			</#list>
@@ -420,32 +334,9 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			super.onPostExecute(result);
 			<#list relations as field>
 				<#if !field.internal && !field.hidden>
-			this.fragment.init${field.name?cap_first}Dialog(
-					this.fragment.${field.name}List);
+			this.fragment.${field.name}Adapter.loadData(this.${field.name}List);
 				</#if>
 			</#list>
-			/*if (result >= 0) {
-				final HarmonyFragmentActivity activity =
-										 (HarmonyFragmentActivity) this.ctx;
-				activity.finish();
-			} else {
-				final AlertDialog.Builder builder =
-						new AlertDialog.Builder(this.ctx);
-				builder.setIcon(0);
-				builder.setMessage(
-						this.ctx.getString(
-								R.string.${curr.name?lower_case}_error_create));
-				builder.setPositiveButton(
-						this.ctx.getString(android.R.string.yes),
-						new Dialog.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
-
-							}
-						});
-				builder.show();
-			}*/
-
 			this.progress.dismiss();
 		}
 	}
