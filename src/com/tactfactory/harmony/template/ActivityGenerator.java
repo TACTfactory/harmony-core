@@ -232,6 +232,12 @@ public class ActivityGenerator extends BaseGenerator {
 			}
 		}
 
+		// create HarmonyFragmentActivity
+		this.updateWidget("MultiEntityWidget.java",
+				"widget_multi_entity.xml");
+		this.updateWidget("SingleEntityWidget.java",
+				"widget_single_entity.xml");
+
 		this.makeResourceLayout("dialog_delete_confirmation.xml",
 				"dialog_delete_confirmation.xml");
 

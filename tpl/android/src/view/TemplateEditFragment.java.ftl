@@ -10,10 +10,7 @@
 <@header?interpret />
 package ${curr.controller_namespace};
 <#if (hasRelation)>
-	<#if (hasToManyRelation)>
 import java.util.ArrayList;
-	</#if>
-import java.util.List;
 </#if>
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -21,13 +18,15 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteException;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.View;<#if (hasRelation)>
-import android.view.View.OnClickListener;</#if>
-import android.view.ViewGroup;<#if (hasRelation)>
-import android.widget.Button;</#if><#if (ViewUtils.hasTypeBoolean(fields?values))>
+import android.view.View;
+import android.view.ViewGroup;<#if (ViewUtils.hasTypeBoolean(fields?values))>
 import android.widget.CheckBox;</#if><#if ViewUtils.shouldImportEditText(fields?values)>
 import android.widget.EditText;</#if>
 import android.widget.Toast;
@@ -47,11 +46,32 @@ import ${curr.namespace}.harmony.widget.TimeWidget;
 	<#if (hasDateTime)>
 import ${curr.namespace}.harmony.widget.DateTimeWidget;
 	</#if>
-</#if><#if (ViewUtils.hasTypeEnum(fields?values))>
+</#if>
+import ${project_namespace}.harmony.widget.MultiEntityWidget;
+import ${project_namespace}.harmony.widget.SingleEntityWidget;<#if (ViewUtils.hasTypeEnum(fields?values))>
 import ${project_namespace}.harmony.widget.EnumSpinner;</#if>
 import ${project_namespace}.harmony.widget.ValidationButtons;
 import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
+<#list relations as relation>
+	<#if (!relation.internal && !relation.hidden)>
+		<#if (relation.relation.type == "ManyToMany")>
+import ${data_namespace}.${relation.relation.joinTable}SQLiteAdapter;
+import ${project_namespace}.provider.${relation.relation.joinTable}ProviderAdapter;
+		<#else>
+import ${data_namespace}.${relation.relation.targetEntity}SQLiteAdapter;
+import ${project_namespace}.provider.${relation.relation.targetEntity}ProviderAdapter;
+		</#if>
+	</#if>
+</#list>
+import ${project_namespace}.provider.${curr.name}ProviderAdapter;
 ${ImportUtils.importRelatedProviderUtils(curr, true)}
+<#list relations as field>
+	<#if !field.internal && !field.hidden>
+		<#if (field.relation.type == "ManyToMany") || (field.relation.type == "OneToMany" && MetadataUtils.getInversingField(field).internal)>
+import ${project_namespace}.data.${field.relation.targetEntity}SQLiteAdapter;
+		</#if>
+	</#if>
+</#list>
 
 /** ${curr.name} create fragment.
  *
@@ -88,18 +108,16 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 	protected EditText ${field.name}View;
 				</#if>
 			<#else>
-	/** The ${field.name} button. */
-	protected Button ${field.name}Button;
-	/** The ${field.relation.targetEntity} list. */
-	protected List<${field.relation.targetEntity}> ${field.name}List;
-	/** The ${field.name} dialog. */
-	protected Dialog ${field.name}Dialog;
 				<#if field.relation.type=="OneToMany" || field.relation.type=="ManyToMany">
-	/** The array of selected ${field.relation.targetEntity}s. */
-	protected boolean[] checked${field.name?cap_first};
+	/** The ${field.name} chooser component. */
+	protected MultiEntityWidget ${field.name}Widget;
+	/** The ${field.name} Adapter. */
+	protected MultiEntityWidget.EntityAdapter<${field.relation.targetEntity}> ${field.name}Adapter;
 				<#else>
-	/** The selected ${field.relation.targetEntity}. */
-	protected int selected${field.name?cap_first};
+	/** The ${field.name} chooser component. */
+	protected SingleEntityWidget ${field.name}Widget;
+	/** The ${field.name} Adapter. */
+	protected SingleEntityWidget.EntityAdapter<${field.relation.targetEntity}> ${field.name}Adapter;
 				</#if>
 			</#if>
 		</#if>
@@ -138,13 +156,27 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 				(EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 					</#if>
 				<#else>
-		this.${field.name}Button =
-				(Button) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_button);
-		this.${field.name}Button.setOnClickListener(new OnClickListener() {
-			public void onClick(View v) {
-				onClick${field.name?cap_first}Button(v);
+					<#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
+		this.${field.name}Adapter = new MultiEntityWidget.EntityAdapter<${field.relation.targetEntity}>() {
+			@Override
+			public String entityToString(${field.relation.targetEntity} item) {
+				return String.valueOf(item.get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
 			}
-		});
+		};
+		this.${field.name}Widget =
+			(MultiEntityWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_button);
+		this.${field.name}Widget.setAdapter(this.${field.name}Adapter);
+					<#else>
+		this.${field.name}Adapter = new SingleEntityWidget.EntityAdapter<${field.relation.targetEntity}>() {
+			@Override
+			public String entityToString(${field.relation.targetEntity} item) {
+				return String.valueOf(item.get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
+			}
+		};
+		this.${field.name}Widget =
+			(SingleEntityWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_button);
+		this.${field.name}Widget.setAdapter(this.${field.name}Adapter);
+					</#if>
 				</#if>
 			</#if>
 		</#list>
@@ -153,112 +185,6 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			(ValidationButtons) view.findViewById(R.id.${curr.name?lower_case}_validation);
 		this.validationButtons.setListener(this);
 	}
-
-	<#list relations as relation>
-		<#if !relation.internal && !relation.hidden>
-	/** Initialize dialog.
-	 * @param list list
-	 */
-	 <#if relation.relation.type=="OneToMany" || relation.relation.type=="ManyToMany">
-	protected void init${relation.name?cap_first}Dialog(
-					final List<${relation.relation.targetEntity}> list) {
-		String[] listAdapter = new String[list.size()];
-		boolean[] checks = new boolean[list.size()];
-		this.checked${relation.name?cap_first} = new boolean[list.size()];
-		int i = 0;
-		for (final ${relation.relation.targetEntity} item : list) {
-			listAdapter[i] = String.valueOf(item.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
-			checks[i] = false;
-			i++;
-		}
-		final AlertDialog.Builder builder = new AlertDialog.Builder(
-				this.getActivity());
-		builder.setTitle(R.string.${relation.owner?lower_case}_${relation.name?lower_case}_dialog_title)
-				.setMultiChoiceItems(listAdapter,
-						checks,
-							  new DialogInterface.OnMultiChoiceClickListener() {
-								public void onClick(
-										DialogInterface dialog,
-										int which, boolean isChecked) {
-									${curr.name}EditFragment.this
-									.checked${relation.name?cap_first}[which] =
-																	  isChecked;
-								}
-				}).setPositiveButton(android.R.string.ok,
-								 new DialogInterface.OnClickListener() {
-								 	@Override
-								    public void onClick(
-								    		DialogInterface dialog,
-								          				   int id) {
-								       			 //${curr.name}EditFragment.this
-								 			//.onOk${relation.name?cap_first}();
-								    }
-		        }).setNegativeButton(android.R.string.cancel,
-		        						 new DialogInterface.OnClickListener() {
-		            @Override
-		            public void onClick(DialogInterface dialog, int id) {
-		            	${curr.name}EditFragment.this
-		            					  .onCancel${relation.name?cap_first}();
-		            }
-		        });
-
-		this.${relation.name}Dialog = builder.create();
-	}
-			<#else>
-	protected void init${relation.name?cap_first}Dialog(
-			final List<${relation.relation.targetEntity}> list) {
-		String[] listAdapter = new String[list.size()];
-		int i = 0;
-		for (final ${relation.relation.targetEntity} item : list) {
-			listAdapter[i] = String.valueOf(item.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
-			i++;
-		}
-		final AlertDialog.Builder builder =
-				new AlertDialog.Builder(this.getActivity());
-		builder.setTitle(R.string.${relation.owner?lower_case}_${relation.name?lower_case}_dialog_title)
-				.setSingleChoiceItems(listAdapter, 0,
-										 new DialogInterface.OnClickListener() {
-					public void onClick(DialogInterface dialog, int id) {
-						${curr.name}EditFragment.this.
-										selected${relation.name?cap_first} = id;
-					}
-				}).setPositiveButton(android.R.string.ok,
-										 new DialogInterface.OnClickListener() {
-		            @Override
-		            public void onClick(DialogInterface dialog, int id) {
-		            	//${curr.name}EditFragment.this
-		            	//.onOk${relation.name?cap_first}();
-		            }
-		        }).setNegativeButton(android.R.string.cancel,
-		        						 new DialogInterface.OnClickListener() {
-		            @Override
-		            public void onClick(DialogInterface dialog, int id) {
-		            	${curr.name}EditFragment.
-		            				  this.onCancel${relation.name?cap_first}();
-		            }
-		        });
-
-		this.${relation.name}Dialog = builder.create();
-	}
-	 		</#if>
-	/**
-	 * Called when the user clicks on cancel.
-	 *
-	 */
-	protected void onCancel${relation.name?cap_first}() {
-		//TODO : Don't change the list
-	}
-
-	/**
-	 * Called when the user clicks on ${relation.name?cap_first} button.
-	 * It shows the dedicated dialog.
-	 * @param v The button view
-	 */
-	protected void onClick${relation.name?cap_first}Button(View v) {
-		this.${relation.name}Dialog.show();
-	}
-		</#if>
-	</#list>
 
 	/** Load data from model to curr.fields view. */
 	public void loadData() {
@@ -343,8 +269,12 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		protected Integer doInBackground(Void... params) {
 			Integer result = -1;
 
-			result = new ${curr.name?cap_first}ProviderUtils(this.ctx).update(
-				this.entity);
+			try {
+				result = new ${curr.name?cap_first}ProviderUtils(this.ctx).update(
+					this.entity);
+			} catch (SQLiteException e) {
+				Log.e("${curr.name}EditFragment", e.getMessage());
+			}
 
 			return result;
 		}
@@ -392,6 +322,16 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		private ProgressDialog progress;
 		/** Fragment. */
 		private ${curr.name}EditFragment fragment;
+		<#list relations as relation>
+			<#if !relation.internal && !relation.hidden>
+		/** ${relation.name} list. */
+		private ArrayList<${relation.relation.targetEntity}> ${relation.name}List;
+				<#if relation.relation.type == "ManyToMany" || (relation.relation.type == "OneToMany" && MetadataUtils.getInversingField(relation).internal) >
+	/** ${relation.name} list. */
+		private ArrayList<${relation.relation.targetEntity}> associated${relation.name?cap_first}List;
+				</#if>
+			</#if>
+		</#list>
 
 		/**
 		 * Constructor of the task.
@@ -420,8 +360,36 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		protected Void doInBackground(Void... params) {
 			<#list relations as field>
 				<#if !field.internal && !field.hidden>
-			this.fragment.${field.name}List = 
+			this.${field.name}List = 
 				new ${field.relation.targetEntity}ProviderUtils(this.ctx).queryAll();
+					<#if (field.relation.type == "ManyToMany") || (field.relation.type == "OneToMany" && MetadataUtils.getInversingField(field).internal)>
+			Uri ${field.name}Uri = ${curr.name}ProviderAdapter.${curr.name?upper_case}_URI;
+			${field.name}Uri = Uri.withAppendedPath(${field.name}Uri, 
+									String.valueOf(this.fragment.model.get${curr.ids[0].name?cap_first}()));
+			${field.name}Uri = Uri.withAppendedPath(${field.name}Uri, "${field.name}");
+			Cursor ${field.name}Cursor = 
+					this.ctx.getContentResolver().query(
+							${field.name}Uri,
+							new String[]{${field.relation.targetEntity}SQLiteAdapter.ALIASED_COL_ID},
+							null,
+							null, 
+							null);
+			
+			if (${field.name}Cursor != null && ${field.name}Cursor.getCount() > 0) {
+				this.associated${field.name?cap_first}List = new ArrayList<${field.relation.targetEntity}>();
+				while (${field.name}Cursor.moveToNext()) {
+					int ${field.name}Id = ${field.name}Cursor.getInt(
+							${field.name}Cursor.getColumnIndex(
+									${field.relation.targetEntity}SQLiteAdapter.COL_ID));
+					for (${field.relation.targetEntity} categories : this.categoriesList) {
+						if (${field.name}.getId() == ${field.name}Id) {
+							this.associated${field.name?cap_first}List.add(${field.name});
+						}
+					}
+				}
+				${field.name}Cursor.close();
+			}
+					</#if>
 				</#if>
 			</#list>
 			return null;
@@ -432,31 +400,12 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			super.onPostExecute(result);
 			<#list relations as field>
 				<#if !field.internal && !field.hidden>
-			this.fragment.init${field.name?cap_first}Dialog(
-					this.fragment.${field.name}List);
+					<#if (field.relation.type == "ManyToMany") || (field.relation.type == "OneToMany" && MetadataUtils.getInversingField(field).internal)>
+			this.fragment.model.set${field.name?cap_first}(this.associated${field.name?cap_first}List);
+					</#if>
+			this.fragment.on${field.name?cap_first}Loaded(this.${field.name}List);
 				</#if>
 			</#list>
-			/*if (result >= 0) {
-				final HarmonyFragmentActivity activity =
-										 (HarmonyFragmentActivity) this.ctx;
-				activity.finish();
-			} else {
-				final AlertDialog.Builder builder =
-						new AlertDialog.Builder(this.ctx);
-				builder.setIcon(0);
-				builder.setMessage(
-						this.ctx.getString(
-								R.string.${curr.name?lower_case}_error_create));
-				builder.setPositiveButton(
-						this.ctx.getString(android.R.string.yes),
-						new Dialog.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-									int which) {
-
-							}
-						});
-				builder.show();
-			}*/
 
 			this.progress.dismiss();
 		}
@@ -475,4 +424,38 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 	public void onCancelSelected() {
 		this.getActivity().finish();
 	}
+
+<#list relations as relation>
+	<#if !relation.internal && !relation.hidden>
+	/**
+	 * Called when ${relation.name} have been loaded.
+	 */
+	protected void on${relation.name?cap_first}Loaded(ArrayList<${relation.relation.targetEntity}> items) {
+		this.${relation.name}Adapter.loadData(items);
+		<#if (relation.relation.type == "OneToMany")>
+			<#if (MetadataUtils.getInversingField(relation).internal)>
+		this.${relation.name}Adapter.setCheckedItems(this.model.get${relation.name?cap_first}());
+			<#else>
+		ArrayList<${relation.relation.targetEntity}> modelItems = new ArrayList<${relation.relation.targetEntity}>();
+		for (${relation.relation.targetEntity} item : items) {
+			if (item.get${MetadataUtils.getInversingField(relation).name?cap_first}().getId() == this.model.getId()) {
+				modelItems.add(item);
+				this.${relation.name}Adapter.checkItem(item, true);
+			}
+		}
+		this.model.set${relation.name?cap_first}(modelItems);
+			</#if>
+		<#elseif (relation.relation.type == "ManyToMany") >
+		this.${relation.name}Adapter.setCheckedItems(this.model.get${relation.name?cap_first}());
+		<#else>
+		
+		for (${relation.relation.targetEntity} item : items) {
+			if (item.getId() == this.model.get${relation.name?cap_first}().getId()) {
+				this.${relation.name}Adapter.selectItem(item);
+			}
+		}
+		</#if>
+	}
+	</#if>
+</#list>
 }

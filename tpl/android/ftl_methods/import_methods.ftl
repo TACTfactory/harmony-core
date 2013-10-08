@@ -166,11 +166,10 @@
 	<#assign result = ""/>
 	<#assign import_array = [entity.name + "Criterias"] />
 	<#list entity.relations as relation>
-		<#if relation.relation.type == "ManyToMany">
 			<#if (!Utils.isInArray(import_array, relation.relation.targetEntity + "Criterias"))>
 				<#assign import_array = import_array + [relation.relation.targetEntity + "Criterias"] />
 			</#if>
-		</#if>
+
 	</#list>
 	<#if (MetadataUtils.hasToManyRelations(entity))>
 		<#assign import_array = import_array + ["base.Criteria"] />

@@ -107,11 +107,19 @@
 	    android:layout_below="@+id/${lastField}"
 		    	</#if>
 	    android:text="@string/${m_string_label}"/>
-    <Button
+			<#if !(field.relation.type == "ManyToMany" || field.relation.type == "OneToMany")>
+    <${project_namespace}.harmony.widget.SingleEntityWidget
         android:id="@+id/${m_id}_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 	    android:layout_below="@+id/${m_id_label}" />
+			<#else>
+    <${project_namespace}.harmony.widget.MultiEntityWidget
+        android:id="@+id/${m_id}_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+	    android:layout_below="@+id/${m_id_label}" />
+			</#if>
 			<#assign lastField="${m_id}_button" />
 		</#if>
 	</#if>

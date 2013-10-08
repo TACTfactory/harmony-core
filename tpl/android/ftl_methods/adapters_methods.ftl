@@ -333,7 +333,9 @@
 				</#if>
 			<#else>
 				<#if ((field.relation.type == "ManyToOne") || (field.relation.type == "OneToOne"))>
-					<#assign result = result + "${tab}result = (result && this.selected${field.name?cap_first} != 0);" />
+					<#assign result = result + "${tab}result = (result && this.${field.name}Adapter.getSelectedItem() != null);" />
+				<#else>
+					<#assign result = result + "${tab}result = (result && this.${field.name}Adapter.getCheckedItems().size() > 0);" />
 				</#if>
 			</#if>
 			<#assign result = result + "${tab}if (result == false) {" />
@@ -354,20 +356,9 @@
 		<#if !field.relation??>
 			<#assign result = result + "${tab}${ViewUtils.setSaver(field)}\n" />
 		<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
-			<#assign result = result + "${tab}final ${field.relation.targetEntity} tmp${field.name?cap_first} =" />
-			<#assign result = result + "${tab}	new ${field.relation.targetEntity?cap_first}();" />
-			<#assign result = result + "${tab}tmp${field.name?cap_first}.set${entities[field.relation.targetEntity].ids[0].name?cap_first}(this.selected${field.name?cap_first});" />
-			<#assign result = result + "${tab}this.model.set${field.name?cap_first}(tmp${field.name?cap_first});\n" />
+			<#assign result = result + "${tab}this.model.set${field.name?cap_first}(this.${field.name}Adapter.getSelectedItem());\n" />
 		<#else>
-			<#assign result = result + "${tab}ArrayList<${field.relation.targetEntity}> tmp${field.name?cap_first}List =" />
-			<#assign result = result + "${tab}	new ArrayList<${field.relation.targetEntity?cap_first}>();" />
-			<#assign result = result + "${tab}for (int i = 0; i < this.checked${field.name?cap_first}.length; i++) {" />
-			<#assign result = result + "${tab}	if (this.checked${field.name?cap_first}[i]) {" />
-			<#assign result = result + "${tab}		tmp${field.name?cap_first}List.add(" />
-			<#assign result = result + "${tab}			this.${field.name}List.get(i));" />
-			<#assign result = result + "${tab}	}" />
-			<#assign result = result + "${tab}}" />
-			<#assign result = result + "${tab}this.model.set${field.name?cap_first}(tmp${field.name?cap_first}List);\n" />
+			<#assign result = result + "${tab}this.model.set${field.name?cap_first}(this.${field.name}Adapter.getCheckedItems());\n" />
 		</#if>
 	</#if>
 	<#return result/>
