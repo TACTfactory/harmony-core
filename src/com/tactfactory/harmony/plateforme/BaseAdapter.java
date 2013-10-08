@@ -61,6 +61,8 @@ public abstract class BaseAdapter {
 	private String model		= "entity";
 	/** Views path. */
 	private String view 		= "layout";
+	/** Views path. */
+	private String largeView 		= "layout-xlarge";
 	/** Values path. */
 	private String values		= "values";
 	/** Controllers path. */
@@ -406,6 +408,18 @@ public abstract class BaseAdapter {
 				this.getResource(),
 				this.getView());
 	}
+	
+	/**
+	 * Get the resource's layouts path.
+	 * @return The resource's layouts path
+	 */
+	public final String getRessourceLargeLayoutPath() {
+		return String.format("%s/%s/%s/%s/",
+				Harmony.getProjectPath(),
+				this.getPlatform(),
+				this.getResource(),
+				this.getLargeView());
+	}
 
 	/**
 	 * Get the resources' layouts' templates path.
@@ -417,6 +431,19 @@ public abstract class BaseAdapter {
 				this.getPlatform(),
 				this.getResource(),
 				this.getView());
+	}
+
+	
+	/**
+	 * Get the resources' layouts' templates path.
+	 * @return The resources' layouts' templates path
+	 */
+	public final String getTemplateRessourceLargeLayoutPath() {
+		return String.format("%s/%s/%s/%s/",
+				Harmony.getTemplatesPath(),
+				this.getPlatform(),
+				this.getResource(),
+				this.getLargeView());
 	}
 
 	/**
@@ -829,6 +856,13 @@ public abstract class BaseAdapter {
 	 */
 	public final String getView() {
 		return this.view;
+	}
+	
+	/**
+	 * @return the large view
+	 */
+	public final String getLargeView() {
+		return this.largeView;
 	}
 
 	/**

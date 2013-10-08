@@ -142,14 +142,89 @@ public class ActivityGenerator extends BaseGenerator {
 
 		this.updateWidget("PinchZoomImageView.java");
 		this.updateWidget("EnumSpinner.java");
+		this.updateWidget("pinnedheader/AutoScrollListView.java");
+		this.updateWidget("pinnedheader/SelectionItemView.java");
+		this.updateWidget("pinnedheader/headerlist/HeaderAdapter.java");
+		this.updateWidget("pinnedheader/headerlist/HeaderSectionIndexer.java");
+		this.updateWidget("pinnedheader/headerlist/ListPinnedHeaderView.java",
+				"directory_header.xml");
+		this.updateWidget("pinnedheader/headerlist/PinnedHeaderListView.java");
+		this.updateWidget("pinnedheader/util/ComponentUtils.java");
+		
+		this.makeSource(
+				this.getAdapter().getTemplateRessourceValuesPath()
+						+ "/attrs.xml",
+				this.getAdapter().getRessourceValuesPath()
+						+ "/attrs.xml",
+				false);
 
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourceValuesPath()
+						+ "/dimens.xml",
+				this.getAdapter().getRessourceValuesPath()
+						+ "/dimens.xml",
+				false);
+		
+
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourceValuesPath()
+						+ "/styles.xml",
+				this.getAdapter().getRessourceValuesPath()
+						+ "/styles.xml",
+				false);
+		
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourcePath()
+						+ "/color/primary_text_color.xml",
+				this.getAdapter().getRessourcePath()
+						+ "/color/primary_text_color.xml",
+				false);
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourcePath()
+						+ "/color/secondary_text_color.xml",
+				this.getAdapter().getRessourcePath()
+						+ "/color/secondary_text_color.xml",
+				false);
+		
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourcePath()
+						+ "/color-xlarge/primary_text_color.xml",
+				this.getAdapter().getRessourcePath()
+						+ "/color-xlarge/primary_text_color.xml",
+				false);
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourcePath()
+						+ "/color-xlarge/secondary_text_color.xml",
+				this.getAdapter().getRessourcePath()
+						+ "/color-xlarge/secondary_text_color.xml",
+				false);
+		
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourcePath()
+						+ "/drawable/list_item_activated_background.xml",
+				this.getAdapter().getRessourcePath()
+						+ "/drawable/list_item_activated_background.xml",
+				false);
+		
+
+		try {
+			MenuGenerator menuGenerator = new MenuGenerator(this.getAdapter());
+			menuGenerator.generateMenu("CrudCreate");
+			menuGenerator.generateMenu("CrudEditDelete");
+			menuGenerator.updateMenu();
+		} catch (Exception e) {
+			
+		}
+
+		
 		if (this.isDate || this.isTime) {
-			this.makeSource(
-					this.getAdapter().getTemplateRessourceValuesPath()
-							+ "/attrs.xml",
-					this.getAdapter().getRessourceValuesPath()
-							+ "/attrs.xml",
-					false);
 			if (this.isDate) {
 				this.updateWidget("CustomDatePickerDialog.java",
 						"dialog_date_picker.xml");
@@ -169,16 +244,6 @@ public class ActivityGenerator extends BaseGenerator {
 						"widget_datetime.xml");
 			}
 		}
-
-		// create HarmonyFragmentActivity
-		super.makeSource(
-			this.getAdapter().getTemplateSourcePath()
-			+ "harmony/view/DeletableList.java",
-			this.getAdapter().getSourcePath()
-			+ this.getAppMetas().getProjectNameSpace()
-			+ "/harmony/view/"
-			+ "DeletableList.java",
-			false);
 
 		this.makeResourceLayout("dialog_delete_confirmation.xml",
 				"dialog_delete_confirmation.xml");
@@ -298,6 +363,9 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("fragment_%s_list.xml");
 		xmls.add("row_%s.xml");
 
+		final ArrayList<String> largeXmls = new ArrayList<String>();
+		largeXmls.add("activity_%s_list.xml");
+
 		for (final String java : javas) {
 			this.makeSourceControler(
 					String.format(java, TEMPLATE),
@@ -309,7 +377,15 @@ public class ActivityGenerator extends BaseGenerator {
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
 		}
+		
+		for (final String largeXml : largeXmls) {
+			this.makeLargeResourceLayout(
+					String.format(largeXml, LOWER_TEMPLATE),
+					String.format(largeXml, entityName.toLowerCase(Locale.ENGLISH)));
+		}
 
+		
+		
 		this.updateManifest("ListActivity", entityName);
 
 		TranslationMetadata.addDefaultTranslation(
@@ -481,6 +557,27 @@ public class ActivityGenerator extends BaseGenerator {
 									filename);
 		final String fullTemplatePath = String.format("%s/%s",
 				this.getAdapter().getTemplateRessourceLayoutPath(),
+				template);
+
+		super.makeSource(fullTemplatePath, fullFilePath, false);
+	}
+	
+	/**
+	 * Make Large Resource file.
+	 *
+	 * @param template Template path file.
+	 * @param filename Resource file.
+	 * 	prefix is type of view "row_" or "activity_" or "fragment_" with
+	 *	postfix is type of action and extension file :
+	 *		"_list.xml" or "_edit.xml".
+	 */
+	private void makeLargeResourceLayout(final String template,
+			final String filename) {
+		final String fullFilePath = String.format("%s/%s",
+									this.getAdapter().getRessourceLargeLayoutPath(),
+									filename);
+		final String fullTemplatePath = String.format("%s/%s",
+				this.getAdapter().getTemplateRessourceLargeLayoutPath(),
 				template);
 
 		super.makeSource(fullTemplatePath, fullFilePath, false);

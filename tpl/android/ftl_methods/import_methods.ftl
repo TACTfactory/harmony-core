@@ -18,10 +18,9 @@
 				<#if (!Utils.isInArray(import_array, relation.relation.joinTable))>
 					<#assign import_array = import_array + [relation.relation.joinTable] />
 				</#if>
-			<#else>
-				<#if (!Utils.isInArray(import_array, relation.relation.targetEntity))>
-					<#assign import_array = import_array + [relation.relation.targetEntity] />
-				</#if>
+			</#if>
+			<#if (!Utils.isInArray(import_array, relation.relation.targetEntity))>
+				<#assign import_array = import_array + [relation.relation.targetEntity] />
 			</#if>
 		</#if>
 	</#list>

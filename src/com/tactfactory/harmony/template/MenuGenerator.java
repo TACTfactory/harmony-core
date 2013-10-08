@@ -112,5 +112,14 @@ public class MenuGenerator extends BaseGenerator {
 		}
 		return ret;
 	}
+	
+	public void generateMenu(String menuName) {
+		// create MenuWrapper
+				super.makeSource(
+					this.getAdapter().getTemplateSourcePath()
+					+ "menu/" + menuName + "MenuWrapper.java",
+					this.getAdapter().getMenuPath() + menuName + "MenuWrapper.java",
+					true);
+	}
 
 }
