@@ -31,6 +31,8 @@ public class AttrsFile extends XmlManager {
 	
 	/** List of styleable items. */
 	protected ArrayList<Styleable> styleables = new ArrayList<Styleable>();
+	/** List of styleable items. */
+	protected ArrayList<Styleable.Attr> attrs = new ArrayList<Styleable.Attr>();
 	
 	/**
 	 * Constructor. 
@@ -46,6 +48,11 @@ public class AttrsFile extends XmlManager {
 		List<Element> styleables = root.getChildren(ELEMENT_STYLEABLE);
 		for (Element styleable : styleables) {
 			this.styleables.add(new Styleable(styleable));
+		}
+		
+		List<Element> attrs = root.getChildren(ELEMENT_ATTR);
+		for (Element attr : attrs) {
+			this.attrs.add(new Styleable.Attr(attr));
 		}
 	}
 
@@ -64,9 +71,20 @@ public class AttrsFile extends XmlManager {
 	 * @param styleable The styleable to add
 	 */
 	public void addStyleable(Styleable styleable) {
-		if (getStyleable(styleable.getName()) == null) {
+		if (this.getStyleable(styleable.getName()) == null) {
 			this.styleables.add(styleable);
 			this.getDocument().getRootElement().addContent(styleable.getElement());
+		}
+	}
+	
+	/**
+	 * Add a attr if none with he same name exists.
+	 * @param attr The attr to add
+	 */
+	public void addAttr(Styleable.Attr attr) {
+		if (this.getAttr(attr.getName()) == null) {
+			this.attrs.add(attr);
+			this.getDocument().getRootElement().addContent(attr.getElement());
 		}
 	}
 	
@@ -83,16 +101,36 @@ public class AttrsFile extends XmlManager {
 			}
 		}
 		return result;
+	}	
+	
+	/**
+	 * Gets the attr named name
+	 * @param name The name of the attr
+	 * @return The attr
+	 */
+	public Styleable.Attr getAttr(String name) {
+		Styleable.Attr result = null;
+		for (Styleable.Attr attr : this.attrs) {
+			if (attr.getName().equals(name)) {
+				result = attr;
+			}
+		}
+		return result;
 	}
 	
 	/**
 	 * Merge another AttrsFile into this one.
 	 * @param attrs The other AttrsFile
 	 */
-	public void mergeFrom(AttrsFile attrs) {
-		ArrayList<Styleable> styles = attrs.styleables;
+	public void mergeFrom(AttrsFile attrsFile) {
+		ArrayList<Styleable> styles = attrsFile.styleables;
 		for (Styleable style : styles) {
 			this.addStyleable(style.clone());
+		}
+		
+		ArrayList<Styleable.Attr> attrs = attrsFile.attrs;
+		for (Styleable.Attr attr : attrs) {
+			this.addAttr(attr.clone());
 		}
 	}
 
@@ -191,7 +229,7 @@ public class AttrsFile extends XmlManager {
 		/**
 		 * Class representing an android Attr xml item.
 		 */
-		public class Attr {
+		public static class Attr {
 			/** Associated element. */
 			private Element element;
 			/** Attr's name. */
@@ -232,7 +270,7 @@ public class AttrsFile extends XmlManager {
 				
 
 				for(Enum enu : this.enums.values()) {
-					result.enums.put(enu.getName(), enu.clone());
+					result.setEnum(enu.clone());
 				}
 				
 				return result;
@@ -291,6 +329,13 @@ public class AttrsFile extends XmlManager {
 			 */
 			public Element getElement() {
 				return this.element;
+			}
+			
+			public void setEnum(Enum e) {
+				if (!this.enums.containsKey(e.getName())) {
+					this.enums.put(e.getName(), e);
+					this.element.addContent(e.getElement());
+				}
 			}
 			
 			/**
