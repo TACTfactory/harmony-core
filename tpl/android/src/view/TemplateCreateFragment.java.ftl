@@ -20,6 +20,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -297,7 +298,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	 * This class will save the entity into the DB.
 	 * It runs asynchronously and shows a progressDialog
 	 */
-	public static class CreateTask extends AsyncTask<Void, Void, Integer> {
+	public static class CreateTask extends AsyncTask<Void, Void, Uri> {
 		/** AsyncTask's context. */
 		private final Context ctx;
 		/** Entity to persist. */
@@ -330,8 +331,8 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		}
 
 		@Override
-		protected Integer doInBackground(Void... params) {
-			Integer result = -1;
+		protected Uri doInBackground(Void... params) {
+			Uri result = null;
 
 			result = new ${curr.name?cap_first}ProviderUtils(this.ctx).insert(
 						this.entity);
@@ -340,9 +341,9 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		}
 
 		@Override
-		protected void onPostExecute(Integer result) {
+		protected void onPostExecute(Uri result) {
 			super.onPostExecute(result);
-			if (result >= 0) {
+			if (result != null) {
 				final HarmonyFragmentActivity activity =
 										 (HarmonyFragmentActivity) this.ctx;
 				activity.finish();
