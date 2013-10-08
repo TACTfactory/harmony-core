@@ -66,7 +66,7 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomFloat(0,100));
 					<#elseif field.type?lower_case=="short">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomShort());
-					<#elseif field.type?lower_case=="char">
+					<#elseif field.type?lower_case=="char" || field.type?lower_case=="character">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomChar());
 					<#elseif field.type?lower_case=="byte">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomByte());

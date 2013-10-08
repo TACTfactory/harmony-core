@@ -155,6 +155,15 @@
 			<#elseif (field.type?lower_case == "string")>
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
 				<#assign result = result + "${tab}		(String) columns.get(${NamingUtils.fixtureAlias(field)}));" />
+			<#elseif (field.type?lower_case == "short")>
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+				<#assign result = result + "${tab}		((Integer) columns.get(${NamingUtils.fixtureAlias(field)})).shortValue());" />
+			<#elseif (field.type?lower_case == "char" || field.type?lower_case == "character")>
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+				<#assign result = result + "${tab}		((String) columns.get(${NamingUtils.fixtureAlias(field)})).charAt(0));" />
+			<#elseif (field.type?lower_case == "byte")>
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+				<#assign result = result + "${tab}		((Integer) columns.get(${NamingUtils.fixtureAlias(field)})).byteValue());" />
 			<#elseif (field.harmony_type == "enum")>
 				<#assign enumType = enums[field.type] />
 				<#if (enumType.id??)>
