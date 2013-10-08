@@ -23,6 +23,7 @@ import com.tactfactory.harmony.meta.TranslationMetadata.Group;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.template.androidxml.AttrsFile;
 import com.tactfactory.harmony.template.androidxml.ManifestUpdater;
+import com.tactfactory.harmony.template.androidxml.StylesFile;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.PackageUtils;
 import freemarker.template.TemplateException;
@@ -137,28 +138,27 @@ public class ActivityGenerator extends BaseGenerator {
 		this.updateWidget("pinnedheader/headerlist/PinnedHeaderListView.java");
 		this.updateWidget("pinnedheader/util/ComponentUtils.java");
 		
-		this.makeSource(
-				this.getAdapter().getTemplateRessourceValuesPath()
-						+ "/attrs.xml",
-				this.getAdapter().getRessourceValuesPath()
-						+ "/attrs.xml",
-				false);
 
-
-		this.makeSource(
-				this.getAdapter().getTemplateRessourceValuesPath()
-						+ "/dimens.xml",
-				this.getAdapter().getRessourceValuesPath()
-						+ "/dimens.xml",
-				false);
+		AttrsFile.mergeFromTo(this.getAdapter(),
+				Context.getCurrentBundleFolder() 
+					+ this.getAdapter().getTemplateRessourceValuesPath() 
+					+ "/attrs.xml",
+				this.getAdapter().getRessourceValuesPath() 
+					+ "/attrs.xml");
+		StylesFile.mergeFromTo(this.getAdapter(),
+				Context.getCurrentBundleFolder() 
+					+ this.getAdapter().getTemplateRessourceValuesPath() 
+					+ "/styles.xml",
+				this.getAdapter().getRessourceValuesPath() 
+					+ "/styles.xml");
 		
 
 
 		this.makeSource(
 				this.getAdapter().getTemplateRessourceValuesPath()
-						+ "/styles.xml",
+						+ "/dimens.xml",
 				this.getAdapter().getRessourceValuesPath()
-						+ "/styles.xml",
+						+ "/dimens.xml",
 				false);
 		
 
@@ -211,12 +211,6 @@ public class ActivityGenerator extends BaseGenerator {
 
 		
 		if (this.isDate || this.isTime) {	
-			AttrsFile.mergeFromTo(this.getAdapter(),
-					Context.getCurrentBundleFolder() 
-						+ this.getAdapter().getTemplateRessourceValuesPath() 
-						+ "/attrs.xml",
-					this.getAdapter().getRessourceValuesPath() 
-						+ "/attrs.xml");
 		
 			if (this.isDate) {
 				this.updateWidget("CustomDatePickerDialog.java",

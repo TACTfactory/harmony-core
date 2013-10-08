@@ -278,7 +278,12 @@ public class AttrsFile extends XmlManager {
 			 */
 			public void setFormat(String format) {
 				this.format = format;
-				this.element.setAttribute(ATTRIBUTE_FORMAT, format);
+				
+				if (format != null) {
+					this.element.setAttribute(ATTRIBUTE_FORMAT, format);
+				} else {
+					this.element.removeAttribute(ATTRIBUTE_FORMAT);
+				}
 			}
 			
 			/**
