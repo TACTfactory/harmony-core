@@ -20,6 +20,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteException;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -62,7 +63,15 @@ import ${project_namespace}.provider.${relation.relation.targetEntity}ProviderAd
 		</#if>
 	</#if>
 </#list>
+import ${project_namespace}.provider.${curr.name}ProviderAdapter;
 ${ImportUtils.importRelatedProviderUtils(curr, true)}
+<#list relations as field>
+	<#if !field.internal && !field.hidden>
+		<#if (field.relation.type == "ManyToMany") || (field.relation.type == "OneToMany" && MetadataUtils.getInversingField(field).internal)>
+import ${project_namespace}.data.${field.relation.targetEntity}SQLiteAdapter;
+		</#if>
+	</#if>
+</#list>
 
 /** ${curr.name} create fragment.
  *
@@ -353,47 +362,33 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 				<#if !field.internal && !field.hidden>
 			this.${field.name}List = 
 				new ${field.relation.targetEntity}ProviderUtils(this.ctx).queryAll();
-					<#if field.relation.type == "ManyToMany">
-			Cursor ${field.relation.joinTable?uncap_first}Cursor = 
+					<#if (field.relation.type == "ManyToMany") || (field.relation.type == "OneToMany" && MetadataUtils.getInversingField(field).internal)>
+			Uri ${field.name}Uri = ${curr.name}ProviderAdapter.${curr.name?upper_case}_URI;
+			${field.name}Uri = Uri.withAppendedPath(${field.name}Uri, 
+									String.valueOf(this.fragment.model.get${curr.ids[0].name?cap_first}()));
+			${field.name}Uri = Uri.withAppendedPath(${field.name}Uri, "${field.name}");
+			Cursor ${field.name}Cursor = 
 					this.ctx.getContentResolver().query(
-							${field.relation.joinTable}ProviderAdapter.${field.relation.joinTable?upper_case}_URI, 
-							new String[]{${field.relation.joinTable}SQLiteAdapter.ALIASED_COL_${field.relation.targetEntity?upper_case}_ID},
-							${field.relation.joinTable}SQLiteAdapter.ALIASED_COL_${curr.name?upper_case}_ID + " = ?",
-							new String[]{""+ this.fragment.model.get${curr.ids[0].name?cap_first}()}, 
+							${field.name}Uri,
+							new String[]{${field.relation.targetEntity}SQLiteAdapter.ALIASED_COL_ID},
+							null,
+							null, 
 							null);
 			
-			if (${field.relation.joinTable?uncap_first}Cursor != null && ${field.relation.joinTable?uncap_first}Cursor.getCount() > 0) {
+			if (${field.name}Cursor != null && ${field.name}Cursor.getCount() > 0) {
 				this.associated${field.name?cap_first}List = new ArrayList<${field.relation.targetEntity}>();
-				while (${field.relation.joinTable?uncap_first}Cursor.moveToNext()) {
-					int ${field.name}Id = ${field.relation.joinTable?uncap_first}Cursor.getInt(
-							${field.relation.joinTable?uncap_first}Cursor.getColumnIndex(
-									${field.relation.joinTable}SQLiteAdapter.COL_${field.relation.targetEntity?upper_case}_ID));
-					for (${field.relation.targetEntity} ${field.name} : this.${field.name}List) {
-						if (${field.name}.getId() == ${field.name}Id) {
-							this.associated${field.name?cap_first}List.add(${field.name});
-						}
-					}
-				}
-			}
-					<#elseif (field.relation.type == "OneToMany" && MetadataUtils.getInversingField(field).internal)>
-			Cursor ${field.relation.targetEntity?uncap_first}Cursor =
-					this.ctx.getContentResolver().query(
-						${field.relation.targetEntity}ProviderAdapter.${field.relation.targetEntity?upper_case}_URI,
-						new String[]{${field.relation.targetEntity}SQLiteAdapter.ALIASED_COL_ID},
-						${field.relation.targetEntity}SQLiteAdapter.ALIASED_COL_${MetadataUtils.getInversingField(field).name?upper_case} + " = ?",
-						new String[]{String.valueOf(this.fragment.model.getId())},
-						null);
-			if (${field.relation.targetEntity?uncap_first}Cursor != null && ${field.relation.targetEntity?uncap_first}Cursor.getCount() > 0) {
-				while (${field.relation.targetEntity?uncap_first}Cursor.moveToNext()) {
-					int ${field.name}Id = ${field.relation.targetEntity?uncap_first}Cursor.getInt(${field.relation.targetEntity?uncap_first}Cursor.getColumnIndex(${field.relation.targetEntity}SQLiteAdapter.COL_ID));
+				while (${field.name}Cursor.moveToNext()) {
+					int ${field.name}Id = ${field.name}Cursor.getInt(
+							${field.name}Cursor.getColumnIndex(
+									${field.relation.targetEntity}SQLiteAdapter.COL_ID));
 					for (${field.relation.targetEntity} categories : this.categoriesList) {
 						if (${field.name}.getId() == ${field.name}Id) {
 							this.associated${field.name?cap_first}List.add(${field.name});
 						}
 					}
 				}
+				${field.name}Cursor.close();
 			}
-
 					</#if>
 				</#if>
 			</#list>
