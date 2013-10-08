@@ -8,10 +8,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tactfactory.harmony.Context;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.template.androidxml.StylesFile;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.OsUtil;
 import com.tactfactory.harmony.utils.TactFileUtils;
@@ -145,12 +147,9 @@ public class ProjectGenerator extends BaseGenerator {
 				this.getAdapter().getStringsPathFile(),
 				false);
 
-		// create configs.xml
-		super.makeSource(
-				this.getAdapter().getTemplateRessourceValuesPath()
-					+ "styles.xml",
-				this.getAdapter().getRessourceValuesPath() + "styles.xml",
-				false);
+		StylesFile.mergeFromTo(this.getAdapter(),
+				Context.getCurrentBundleFolder() + this.getAdapter().getTemplateRessourceValuesPath() + "/styles.xml",
+				this.getAdapter().getRessourceValuesPath() + "/styles.xml");
 
 		// create main.xml
 		super.makeSource(
@@ -160,13 +159,22 @@ public class ProjectGenerator extends BaseGenerator {
 
 		// create HarmonyFragmentActivity
 		super.makeSource(
-			this.getAdapter().getTemplateSourcePath()
-			+ "harmony/view/HarmonyFragmentActivity.java",
-			this.getAdapter().getSourcePath()
-			+ this.getAppMetas().getProjectNameSpace()
-			+ "/harmony/view/"
-			+ "HarmonyFragmentActivity.java",
-			false);
+				this.getAdapter().getTemplateSourcePath()
+				+ "harmony/view/HarmonyFragmentActivity.java",
+				this.getAdapter().getSourcePath()
+				+ this.getAppMetas().getProjectNameSpace()
+				+ "/harmony/view/"
+				+ "HarmonyFragmentActivity.java",
+				false);
+		
+		super.makeSource(
+				this.getAdapter().getTemplateSourcePath()
+				+ "harmony/view/MultiLoader.java",
+				this.getAdapter().getSourcePath()
+				+ this.getAppMetas().getProjectNameSpace()
+				+ "/harmony/view/"
+				+ "MultiLoader.java",
+				false);
 		
 		super.makeSource(
 			this.getAdapter().getTemplateSourcePath()
@@ -279,6 +287,16 @@ public class ProjectGenerator extends BaseGenerator {
 					new File(String.format("%s/%s/",
 							resourcePath,
 							"drawable-xxhdpi")));
+			
+
+
+			TactFileUtils.copyDirectory(
+					new File(String.format("%s/%s/",
+							templateResourcePath,
+							"drawable-xlarge")),
+					new File(String.format("%s/%s/",
+							resourcePath,
+							"drawable-xlarge")));
 		} catch (IOException e) {
 			ConsoleUtils.displayError(e);
 		}

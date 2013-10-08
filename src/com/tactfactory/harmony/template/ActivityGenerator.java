@@ -8,23 +8,11 @@
  */
 package com.tactfactory.harmony.template;
 
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStreamWriter;
 import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
 import java.util.Locale;
 
-import org.jdom2.Document;
-import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.Namespace;
-import org.jdom2.input.SAXBuilder;
-import org.jdom2.output.Format;
-import org.jdom2.output.XMLOutputter;
-
+import com.tactfactory.harmony.Context;
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
@@ -33,12 +21,11 @@ import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.meta.TranslationMetadata;
 import com.tactfactory.harmony.meta.TranslationMetadata.Group;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.template.androidxml.AttrsFile;
+import com.tactfactory.harmony.template.androidxml.ManifestUpdater;
+import com.tactfactory.harmony.template.androidxml.StylesFile;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.PackageUtils;
-import com.tactfactory.harmony.utils.TactFileUtils;
-
-import freemarker.template.Configuration;
-import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 /**
@@ -49,8 +36,6 @@ public class ActivityGenerator extends BaseGenerator {
 	private static final String LOWER_TEMPLATE = "template";
 	/** "Template". */
 	private static final String TEMPLATE = "Template";
-	/** "name". */
-	private static final String NAME = "name";
 
 	/** The local namespace. */
 	private String localNameSpace;
@@ -63,6 +48,8 @@ public class ActivityGenerator extends BaseGenerator {
 
 	/** Has the project a time ? */
 	private boolean isTime;
+	
+	private ManifestUpdater manifestUpdater;
 
 	/**
 	 * Constructor.
@@ -71,7 +58,7 @@ public class ActivityGenerator extends BaseGenerator {
 	 */
 	public ActivityGenerator(final BaseAdapter adapter) throws Exception {
 		this(adapter, true);
-
+		this.manifestUpdater = new ManifestUpdater(this.getAdapter());
 		// Make entities
 		for (final EntityMetadata meta
 				: this.getAppMetas().getEntities().values()) {
@@ -142,14 +129,89 @@ public class ActivityGenerator extends BaseGenerator {
 
 		this.updateWidget("PinchZoomImageView.java");
 		this.updateWidget("EnumSpinner.java");
+		this.updateWidget("pinnedheader/AutoScrollListView.java");
+		this.updateWidget("pinnedheader/SelectionItemView.java");
+		this.updateWidget("pinnedheader/headerlist/HeaderAdapter.java");
+		this.updateWidget("pinnedheader/headerlist/HeaderSectionIndexer.java");
+		this.updateWidget("pinnedheader/headerlist/ListPinnedHeaderView.java",
+				"directory_header.xml");
+		this.updateWidget("pinnedheader/headerlist/PinnedHeaderListView.java");
+		this.updateWidget("pinnedheader/util/ComponentUtils.java");
+		
 
-		if (this.isDate || this.isTime) {
-			this.makeSource(
-					this.getAdapter().getTemplateRessourceValuesPath()
-							+ "/attrs.xml",
-					this.getAdapter().getRessourceValuesPath()
-							+ "/attrs.xml",
-					false);
+		AttrsFile.mergeFromTo(this.getAdapter(),
+				Context.getCurrentBundleFolder() 
+					+ this.getAdapter().getTemplateRessourceValuesPath() 
+					+ "/attrs.xml",
+				this.getAdapter().getRessourceValuesPath() 
+					+ "/attrs.xml");
+		StylesFile.mergeFromTo(this.getAdapter(),
+				Context.getCurrentBundleFolder() 
+					+ this.getAdapter().getTemplateRessourceValuesPath() 
+					+ "/styles.xml",
+				this.getAdapter().getRessourceValuesPath() 
+					+ "/styles.xml");
+		
+
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourceValuesPath()
+						+ "/dimens.xml",
+				this.getAdapter().getRessourceValuesPath()
+						+ "/dimens.xml",
+				false);
+		
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourcePath()
+						+ "/color/primary_text_color.xml",
+				this.getAdapter().getRessourcePath()
+						+ "/color/primary_text_color.xml",
+				false);
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourcePath()
+						+ "/color/secondary_text_color.xml",
+				this.getAdapter().getRessourcePath()
+						+ "/color/secondary_text_color.xml",
+				false);
+		
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourcePath()
+						+ "/color-xlarge/primary_text_color.xml",
+				this.getAdapter().getRessourcePath()
+						+ "/color-xlarge/primary_text_color.xml",
+				false);
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourcePath()
+						+ "/color-xlarge/secondary_text_color.xml",
+				this.getAdapter().getRessourcePath()
+						+ "/color-xlarge/secondary_text_color.xml",
+				false);
+		
+
+		this.makeSource(
+				this.getAdapter().getTemplateRessourcePath()
+						+ "/drawable/list_item_activated_background.xml",
+				this.getAdapter().getRessourcePath()
+						+ "/drawable/list_item_activated_background.xml",
+				false);
+		
+
+		try {
+			MenuGenerator menuGenerator = new MenuGenerator(this.getAdapter());
+			menuGenerator.generateMenu("CrudCreate");
+			menuGenerator.generateMenu("CrudEditDelete");
+			menuGenerator.updateMenu();
+		} catch (Exception e) {
+			
+		}
+
+		
+		if (this.isDate || this.isTime) {	
+		
 			if (this.isDate) {
 				this.updateWidget("CustomDatePickerDialog.java",
 						"dialog_date_picker.xml");
@@ -175,17 +237,6 @@ public class ActivityGenerator extends BaseGenerator {
 				"widget_multi_entity.xml");
 		this.updateWidget("SingleEntityWidget.java",
 				"widget_single_entity.xml");
-
-		
-		// create HarmonyFragmentActivity
-		super.makeSource(
-			this.getAdapter().getTemplateSourcePath()
-			+ "harmony/view/DeletableList.java",
-			this.getAdapter().getSourcePath()
-			+ this.getAppMetas().getProjectNameSpace()
-			+ "/harmony/view/"
-			+ "DeletableList.java",
-			false);
 
 		this.makeResourceLayout("dialog_delete_confirmation.xml",
 				"dialog_delete_confirmation.xml");
@@ -213,6 +264,8 @@ public class ActivityGenerator extends BaseGenerator {
 		} catch (Exception e) {
 			ConsoleUtils.displayError(e);
 		}
+		
+		this.manifestUpdater.save();
 	}
 
 	/**
@@ -305,6 +358,9 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("fragment_%s_list.xml");
 		xmls.add("row_%s.xml");
 
+		final ArrayList<String> largeXmls = new ArrayList<String>();
+		largeXmls.add("activity_%s_list.xml");
+
 		for (final String java : javas) {
 			this.makeSourceControler(
 					String.format(java, TEMPLATE),
@@ -316,8 +372,17 @@ public class ActivityGenerator extends BaseGenerator {
 					String.format(xml, LOWER_TEMPLATE),
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
 		}
+		
+		for (final String largeXml : largeXmls) {
+			this.makeLargeResourceLayout(
+					String.format(largeXml, LOWER_TEMPLATE),
+					String.format(largeXml, entityName.toLowerCase(Locale.ENGLISH)));
+		}
 
-		this.updateManifest("ListActivity", entityName);
+		this.manifestUpdater.addActivity(
+				this.getAppMetas().getProjectNameSpace(),
+				"ListActivity",
+				entityName);
 
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_empty_list",
@@ -353,7 +418,10 @@ public class ActivityGenerator extends BaseGenerator {
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
 		}
 
-		this.updateManifest("ShowActivity", entityName);
+		this.manifestUpdater.addActivity(
+				this.getAppMetas().getProjectNameSpace(),
+				"ShowActivity",
+				entityName);
 
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_load",
@@ -389,7 +457,10 @@ public class ActivityGenerator extends BaseGenerator {
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
 		}
 
-		this.updateManifest("EditActivity", entityName);
+		this.manifestUpdater.addActivity(
+				this.getAppMetas().getProjectNameSpace(),
+				"EditActivity",
+				entityName);
 
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_edit",
@@ -426,8 +497,10 @@ public class ActivityGenerator extends BaseGenerator {
 					String.format(xml, entityName.toLowerCase(Locale.ENGLISH)));
 		}
 
-
-		this.updateManifest("CreateActivity", entityName);
+		this.manifestUpdater.addActivity(
+				this.getAppMetas().getProjectNameSpace(),
+				"CreateActivity",
+				entityName);
 
 		final ClassMetadata classMeta =
 				this.getAppMetas().getEntities().get(entityName);
@@ -492,167 +565,26 @@ public class ActivityGenerator extends BaseGenerator {
 
 		super.makeSource(fullTemplatePath, fullFilePath, false);
 	}
-
-	/** Make Manifest file.
-	 *
-	 * @param cfg Template engine
-	 * @throws IOException if an IO exception occurred 
-	 * @throws TemplateException If the template generation failed
-	 */
-	public final void makeManifest(final Configuration cfg)
-			throws IOException, TemplateException {
-		final File file =
-				TactFileUtils.makeFile(this.getAdapter().getManifestPathFile());
-
-		// Debug Log
-		ConsoleUtils.displayDebug(
-				"Generate Manifest : " + file.getAbsoluteFile());
-
-		// Create
-		final Template tpl = cfg.getTemplate(
-				this.getAdapter().getTemplateManifestPathFile());
-		final OutputStreamWriter output =
-				new OutputStreamWriter(
-						new FileOutputStream(file),
-						TactFileUtils.DEFAULT_ENCODING);
-		tpl.process(this.getDatamodel(), output);
-		output.flush();
-		output.close();
-	}
-
+	
 	/**
-	 * Update Android Manifest.
-	 * @param classF The class file name
-	 * @param entityName the entity for which to update the manifest for.
+	 * Make Large Resource file.
+	 *
+	 * @param template Template path file.
+	 * @param filename Resource file.
+	 * 	prefix is type of view "row_" or "activity_" or "fragment_" with
+	 *	postfix is type of action and extension file :
+	 *		"_list.xml" or "_edit.xml".
 	 */
-	private void updateManifest(final String classF, final String entityName) {
-		final String classFile = entityName + classF;
-		final String pathRelatif = String.format(".%s.%s.%s",
-				this.getAdapter().getController(),
-				entityName.toLowerCase(Locale.ENGLISH),
-				classFile);
+	private void makeLargeResourceLayout(final String template,
+			final String filename) {
+		final String fullFilePath = String.format("%s/%s",
+									this.getAdapter().getRessourceLargeLayoutPath(),
+									filename);
+		final String fullTemplatePath = String.format("%s/%s",
+				this.getAdapter().getTemplateRessourceLargeLayoutPath(),
+				template);
 
-		// Debug Log
-		ConsoleUtils.displayDebug("Update Manifest : " + pathRelatif);
-
-		try {
-			// Make engine
-			final SAXBuilder builder = new SAXBuilder();
-			final File xmlFile = TactFileUtils.makeFile(
-					this.getAdapter().getManifestPathFile());
-
-			// Load XML File
-			final Document doc = builder.build(xmlFile);
-
-			// Load Root element
-			final Element rootNode = doc.getRootElement();
-
-			// Load Name space (required for manipulate attributes)
-			final Namespace ns = rootNode.getNamespace("android");
-
-			// Find Application Node
-			Element findActivity = null;
-
-			// Find a element
-			final Element applicationNode = rootNode.getChild("application");
-			if (applicationNode != null) {
-
-				// Find Activity Node
-				final List<Element> activities =
-						applicationNode.getChildren("activity");
-
-				// Find many elements
-				for (final Element activity : activities) {
-					// Load attribute value
-					if (activity.hasAttributes()
-							&& activity.getAttributeValue(NAME, ns)
-								.equals(pathRelatif)) {
-						findActivity = activity;
-						break;
-					}
-				}
-
-				// If not found Node, create it
-				if (findActivity == null) {
-					// Create new element
-					findActivity = new Element("activity");
-
-					// Add Attributes to element
-					findActivity.setAttribute(NAME, pathRelatif, ns);
-					final Element findFilter = new Element("intent-filter");
-					final Element findAction = new Element("action");
-					final Element findCategory = new Element("category");
-					final Element findData = new Element("data");
-
-					// Add Child element
-					findFilter.addContent(findAction);
-					findFilter.addContent(findCategory);
-					findFilter.addContent(findData);
-					findActivity.addContent(findFilter);
-					applicationNode.addContent(findActivity);
-				}
-
-				// Set values
-				findActivity.setAttribute("label", "@string/app_name", ns);
-				findActivity.setAttribute("exported", "false", ns);
-				final Element filterActivity =
-						findActivity.getChild("intent-filter");
-				if (filterActivity != null) {
-					final StringBuffer data = new StringBuffer();
-					String action = "VIEW";
-
-					if (pathRelatif.matches(".*List.*")) {
-						data.append("vnd.android.cursor.collection/");
-					} else {
-						data.append("vnd.android.cursor.item/");
-
-						if (pathRelatif.matches(".*Edit.*")) {
-							action = "EDIT";
-						} else
-
-						if (pathRelatif.matches(".*Create.*")) {
-							action = "INSERT";
-						}
-					}
-
-
-					data.append(
-							this.getAppMetas().getProjectNameSpace()
-								.replace('/', '.'));
-					data.append('.');
-					data.append(entityName);
-
-					filterActivity.getChild("action").setAttribute(
-							NAME, "android.intent.action." + action, ns);
-					filterActivity.getChild("category").setAttribute(
-							NAME, "android.intent.category.DEFAULT", ns);
-					filterActivity.getChild("data").setAttribute(
-							"mimeType", data.toString(), ns);
-				}
-
-				// Clean code
-				applicationNode.sortChildren(new Comparator<Element>() {
-					@Override
-					public int compare(final Element o1, final Element o2) {
-						return o1.getName().compareToIgnoreCase(o2.getName());
-					}
-				});
-			}
-
-			// Write to File
-			final XMLOutputter xmlOutput = new XMLOutputter();
-
-			// Make beautiful file with indent !!!
-			xmlOutput.setFormat(Format.getPrettyFormat());
-			xmlOutput.output(doc,
-							new OutputStreamWriter(
-								new FileOutputStream(xmlFile.getAbsoluteFile()),
-								TactFileUtils.DEFAULT_ENCODING));
-		} catch (final IOException io) {
-			ConsoleUtils.displayError(io);
-		} catch (final JDOMException e) {
-			ConsoleUtils.displayError(e);
-		}
+		super.makeSource(fullTemplatePath, fullFilePath, false);
 	}
 
 	/**

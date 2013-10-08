@@ -4,6 +4,7 @@ package ${project_namespace}.menu;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -16,7 +17,10 @@ public abstract class MenuWrapperBase {
 	 * Menu initialization.
 	 * @param menu The menu object
 	 */
-	protected abstract void initializeMenu(Menu menu);
+	protected abstract void initializeMenu(Menu menu,
+			Activity activity,
+			Fragment fragment,
+			Context ctx);
 
 	/**
 	 * Menu update.
@@ -26,8 +30,8 @@ public abstract class MenuWrapperBase {
 	 * @param ctx The context
 	 */
 	protected abstract void updateMenu(Menu menu,
-										int currentActivityHashCode,
-										int currentFragmentHashCode,
+										Activity activity,
+										Fragment fragment,
 										Context ctx);
 
 	/**
@@ -63,5 +67,8 @@ public abstract class MenuWrapperBase {
 	 * Menu clear.
 	 * @param menu The menu object
 	 */
-	protected abstract void clear(Menu menu);
+	protected abstract void clear(Menu menu,
+			Activity activity,
+			Fragment fragment,
+			Context ctx);
 }

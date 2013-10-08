@@ -10,7 +10,7 @@
     	android:label="@string/app_name"
     	android:name=".${project_name?cap_first}Application"
     	android:allowBackup="true"
-    	android:theme="@style/Theme.Sherlock">
+    	android:theme="@style/PinnedTheme">
         <activity android:name=".HomeActivity"
                   android:label="@string/app_name">
             <intent-filter>

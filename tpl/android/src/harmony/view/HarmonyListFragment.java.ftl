@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.database.Cursor;
 import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -30,12 +32,21 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 	protected static final int INTERNAL_PROGRESS_CONTAINER_ID = 0x00ff0002;
 	/** list container ID. */
 	protected static final int INTERNAL_LIST_CONTAINER_ID = 0x00ff0003;
-
+	/** OnClickCallBack for activity. */
+	protected OnClickCallback clickCallback;
+	/** OnLoadCallBack for activity. */
+	protected OnLoadCallback loadCallback;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setHasOptionsMenu(true);
+		if (this.getActivity() instanceof OnClickCallback) {
+			this.clickCallback = (OnClickCallback) this.getActivity();
+		}
+		if (this.getActivity() instanceof OnLoadCallback) {
+			this.loadCallback = (OnLoadCallback) this.getActivity();
+		}
 	}
 
 	@Override
@@ -109,4 +120,24 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 		// END HACK
 	}
 
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		super.onListItemClick(l, v, position, id);
+		if (this.clickCallback != null) {
+			this.clickCallback.onListItemClick(l, v, position, id);
+		}
+	}
+
+	@Override
+	public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
+		this.loadCallback.onListLoaded();
+	}
+
+	public interface OnClickCallback {
+		public void onListItemClick(ListView l, View v, int position, long id);
+	}
+
+	public interface OnLoadCallback {
+		public void onListLoaded();
+	}
 }

@@ -109,6 +109,8 @@
 		<#return generateCompleteGetter(className field) + ".toString(ISODateTimeFormat.dateTime())" />
 	<#elseif (field.type?lower_case == "string")>																	<#-- If String (field) -->
 		<#return generateCompleteGetter(className field) + ""/>
+	<#elseif (field.type?lower_case == "boolean")>																	<#-- If boolean (field) -->
+		<#return generateCompleteGetter(className field) + ""/>
 	<#elseif (field.harmony_type?lower_case == "enum")>																<#-- If Enum (field.getValue() || field.name()) -->
 		<#if (enums[field.type].id??) >
 			<#return generateCompleteGetter(className field) + ".getValue()"/>
@@ -116,7 +118,7 @@
 			<#return generateCompleteGetter(className field) + ".name()"/>
 		</#if>
 	<#else>																											<#-- For all other cases (String.valueOf(field)) -->
-		<#return generateCompleteGetter(className field) + ""/>
+		<#return "String.valueOf(" + generateCompleteGetter(className field) + ")" />
 	</#if>
 </#function>
 

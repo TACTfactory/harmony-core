@@ -12,7 +12,6 @@ import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}ListAct
 	</#list>
 </#if>
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;

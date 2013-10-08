@@ -10,6 +10,10 @@
 				<#assign result = result + "${t}if (${FieldsUtils.generateCompleteGetter(\"item\", field)} != null) {\n" />
 				<#assign result = result + "${t}	result.put(${NamingUtils.alias(field.name)},\n"/>
 				<#assign result = result + "${t}		${FieldsUtils.generateStringGetter(\"item\", field)});\n"/>
+				<#if (field.nullable)>
+					<#assign result = result + "${t}} else {\n"/>
+					<#assign result = result + "${t}	result.put(${NamingUtils.alias(field.name)}, (String) null);\n"/>
+				</#if>
 				<#assign result = result + "${t}}\n\n"/>
 			</#if>
 		<#else>
@@ -17,6 +21,10 @@
 				<#assign result = result + "${t}if (${FieldsUtils.generateCompleteGetter(\"item\", field)} != null) {\n"/>
 				<#assign result = result + "${t}	result.put(${NamingUtils.alias(field.name)},\n"/>
 				<#assign result = result + "${t}		item.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}());\n"/>
+				<#if (field.nullable)>
+					<#assign result = result + "${t}} else {\n"/>
+					<#assign result = result + "${t}	result.put(${NamingUtils.alias(field.name)}, (String) null);\n"/>
+				</#if>
 				<#assign result = result + "${t}}\n\n"/>
 			</#if>
 		</#if>
@@ -147,6 +155,15 @@
 			<#elseif (field.type?lower_case == "string")>
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
 				<#assign result = result + "${tab}		(String) columns.get(${NamingUtils.fixtureAlias(field)}));" />
+			<#elseif (field.type?lower_case == "short")>
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+				<#assign result = result + "${tab}		((Integer) columns.get(${NamingUtils.fixtureAlias(field)})).shortValue());" />
+			<#elseif (field.type?lower_case == "char" || field.type?lower_case == "character")>
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+				<#assign result = result + "${tab}		((String) columns.get(${NamingUtils.fixtureAlias(field)})).charAt(0));" />
+			<#elseif (field.type?lower_case == "byte")>
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+				<#assign result = result + "${tab}		((Integer) columns.get(${NamingUtils.fixtureAlias(field)})).byteValue());" />
 			<#elseif (field.harmony_type == "enum")>
 				<#assign enumType = enums[field.type] />
 				<#if (enumType.id??)>
@@ -406,15 +423,19 @@
 				<#else>
 		<#assign result = result + "${tab}${ViewUtils.setLoader(field)}" />
 				</#if>
-			<#elseif (field.relation.type=="OneToOne" || field.relation.type=="ManyToOne")>
-		<#assign result = result + "${tab}this.${field.name}View.setText(" />
-		<#assign result = result + "${tab}		String.valueOf(this.model.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}()));" />
 			<#else>
-		<#assign result = result + "${tab}String ${field.name}Value = \"\";" />
-		<#assign result = result + "${tab}for (${field.relation.targetEntity} item : this.model.get${field.name?cap_first}()) {" />
-		<#assign result = result + "${tab}	${field.name}Value += item.get${entities[field.relation.targetEntity].ids[0].name?cap_first}() + \",\";" />
+		<#assign result = result + "${tab}if (this.model.get${field.name?cap_first}() != null) {" />
+				<#if (field.relation.type=="OneToOne" || field.relation.type=="ManyToOne")>
+		<#assign result = result + "${tab}	this.${field.name}View.setText(" />
+		<#assign result = result + "${tab}			String.valueOf(this.model.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}()));" />
+				<#else>
+		<#assign result = result + "${tab}	String ${field.name}Value = \"\";" />
+		<#assign result = result + "${tab}	for (${field.relation.targetEntity} item : this.model.get${field.name?cap_first}()) {" />
+		<#assign result = result + "${tab}		${field.name}Value += item.get${entities[field.relation.targetEntity].ids[0].name?cap_first}() + \",\";" />
+		<#assign result = result + "${tab}	}" />
+		<#assign result = result + "${tab}	this.${field.name}View.setText(${field.name}Value);" />
+				</#if>
 		<#assign result = result + "${tab}}" />
-		<#assign result = result + "${tab}this.${field.name}View.setText(${field.name}Value);" />
 			</#if>
 		</#if>
 	<#return result/>
@@ -433,7 +454,7 @@
 				<#assign result = result + "${tab}${ViewUtils.setAdapterLoader(field)}" />
 			</#if>
 		<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
-			<#assign result = result + "${tab}this.${field.name}View.setText(" />
+			<#assign result = result + "${tab}${field.name}View.setText(" />
 			<#assign result = result + "${tab}		String.valueOf(model.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}()));" />
 		</#if>
 	</#if>

@@ -26,7 +26,7 @@
 
 <#function setAdapterLoader field>
 	<#assign type=field.type />
-	<#assign ret="this."+field.name+"View" />
+	<#assign ret=""+field.name+"View" />
 	<#if (type?lower_case=="boolean")>
 		<#assign ret=ret+".setChecked(model.is"+field.name?cap_first+"());" />
 	<#elseif (type?lower_case=="datetime" || type?lower_case=="date" || type?lower_case=="time")>

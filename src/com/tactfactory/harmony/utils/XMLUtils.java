@@ -45,6 +45,36 @@ public abstract class XMLUtils {
 
 		return doc;
 	}
+	
+
+	/**
+	 * Open an XML file.
+	 * @param fileName The name of the file.
+	 * @return The openened Document object. Or null if nothing found.
+	 */
+	public static Document openXML(final String fileName) {
+		Document doc = null;
+
+		try {
+			// Make engine
+			final SAXBuilder builder = new SAXBuilder();
+			final File xmlFile = new File(fileName);
+					
+			if (!xmlFile.exists()) {
+				doc = new Document();
+			} else {
+				// Load XML File
+				doc = builder.build(xmlFile);
+			}
+
+		} catch (JDOMException e) {
+			ConsoleUtils.displayError(e);
+		} catch (IOException e) {
+			ConsoleUtils.displayError(e);
+		}
+
+		return doc;
+	}
 
 	/**
 	 * Write an XML Document to the given file.

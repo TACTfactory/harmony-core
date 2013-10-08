@@ -13,6 +13,11 @@ ViewComponent:
       city: "DEBUG - VC1 City"
       zipcode: 01000
       country: "DEBUG - VC1 Country"
+      byteField: 5
+      charField: "a"
+      shortField: 1
+      character: "A"
+      choice: 0
    DEBUG - VC2:
       id: 0
       string: "DEBUG - VC2 String"
@@ -27,6 +32,11 @@ ViewComponent:
       city: "DEBUG - VC2 City"
       zipcode: 02000
       country: "DEBUG - VC2 Country"
+      byteField: 5
+      charField: "a"
+      shortField: 1
+      character: "A"
+      choice: 0
    DEBUG - VC3:
       id: 0
       string: "DEBUG - VC3 String"
@@ -41,3 +51,8 @@ ViewComponent:
       city: "DEBUG - VC3 City"
       zipcode: 03000
       country: "DEBUG - VC3 Country"
+      byteField: 5
+      charField: "a"
+      shortField: 1
+      character: "A"
+      choice: 0

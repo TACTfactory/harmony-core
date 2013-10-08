@@ -5,34 +5,45 @@
 <@header?interpret />
 package ${curr.controller_namespace};
 
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;<#if (ViewUtils.hasTypeBoolean(fields?values))>
 import android.widget.CheckBox;</#if>
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import ${curr.namespace}.R;
+${ImportUtils.importRelatedSQLiteAdapters(curr, false, true)}
 ${ImportUtils.importToManyRelatedEntities(curr)}<#if (importDate)>
 import ${curr.namespace}.harmony.util.DateUtils;</#if>
+import ${project_namespace}.harmony.view.DeleteDialog;
 import ${project_namespace}.harmony.view.HarmonyFragment;
+import ${project_namespace}.harmony.view.MultiLoader;
+import ${project_namespace}.harmony.view.MultiLoader.UriLoadedCallback;
+import ${project_namespace}.menu.CrudEditDeleteMenuWrapper.CrudEditDeleteMenuInterface;
 import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
+import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 
 /** ${curr.name} show fragment.
  *
  * @see android.app.Fragment
  */
-public class ${curr.name}ShowFragment 
-		extends HarmonyFragment {
+public class ${curr.name}ShowFragment
+		extends HarmonyFragment
+		implements CrudEditDeleteMenuInterface,
+				DeleteDialog.DeleteDialogCallback {
 	/** Model data. */
 	protected ${curr.name} model;
+
+	/** DeleteCallback. */
+	protected DeleteCallback deleteCallback;
 
 	/* curr.fields View */
 <#list fields?values as field>
@@ -45,6 +56,11 @@ public class ${curr.name}ShowFragment
 		</#if>
 	</#if>
 </#list>
+	/** Data layout. */
+	protected RelativeLayout dataLayout;
+	/** Text view for no ${curr.name}. */
+	protected TextView emptyText;
+
 
     /** Initialize view of curr.fields.
      *
@@ -65,11 +81,27 @@ public class ${curr.name}ShowFragment
 			</#if>
 		</#if>
 	</#list>
+
+		this.dataLayout =
+				(RelativeLayout) view.findViewById(
+						R.id.${curr.name?lower_case}_data_layout);
+		this.emptyText =
+				(TextView) view.findViewById(
+						R.id.${curr.name?lower_case}_empty);
     }
 
     /** Load data from model to fields view. */
     public void loadData() {
+    	if (this.model != null) {
+
+    		this.dataLayout.setVisibility(View.VISIBLE);
+    		this.emptyText.setVisibility(View.GONE);
+
 <#list fields?values as field>${AdapterUtils.loadDataShowFieldAdapter(field, 2)}</#list>
+		} else {
+    		this.dataLayout.setVisibility(View.GONE);
+    		this.emptyText.setVisibility(View.VISIBLE);
+    	}
     }
 
     @Override
@@ -84,96 +116,192 @@ public class ${curr.name}ShowFragment
         				R.layout.fragment_${curr.name?lower_case}_show,
         				container,
         				false);
-
-        final Intent intent =  getActivity().getIntent();
-        this.model = (${curr.name?cap_first}) intent.getParcelableExtra(
-        													"${curr.name}");
+        
+        if (this.getActivity() instanceof DeleteCallback) {
+        	this.deleteCallback = (DeleteCallback) this.getActivity();
+        }
 
         this.initializeComponent(view);
-        new LoadTask(this, this.model).execute();
+        
+        final Intent intent =  getActivity().getIntent();
+        this.update((${curr.name}) intent.getParcelableExtra("${curr.name}"));
 
         return view;
     }
 
 	/**
-	 * This class will find the entity into the DB.
-	 * It runs asynchronously and shows a progressDialog
+	 * Updates the view with the given data.
+	 *
+	 * @param item The ${curr.name} to get the data from.
 	 */
-	public static class LoadTask extends AsyncTask<Void, Void, Integer> {
+	public void update(${curr.name} item) {
+    	this.model = item;
+    	
+		this.loadData();
+		
+		if (this.model != null) {
+			MultiLoader<${curr.name}> loader = 
+					new MultiLoader<${curr.name}>(this, this.model);
+			String baseUri = 
+					${curr.name}ProviderAdapter.${curr.name?upper_case}_URI 
+					+ "/" 
+					+ this.model.get${curr.ids[0].name?cap_first}();
+
+			loader.addUri(Uri.parse(baseUri), new UriLoadedCallback() {
+
+				@Override
+				public void onLoadComplete(Cursor c) {
+					${curr.name}ShowFragment.this.on${curr.name}Loaded(c);
+				}
+
+				@Override
+				public void onLoaderReset() {
+
+				}
+			});
+			<#list curr.relations as relation>
+				<#if !relation.internal>
+			loader.addUri(Uri.parse(baseUri + "/${relation.name?lower_case}"), 
+					new UriLoadedCallback() {
+
+				@Override
+				public void onLoadComplete(Cursor c) {
+					${curr.name}ShowFragment.this.on${relation.name?cap_first}Loaded(c);
+				}
+
+				@Override
+				public void onLoaderReset() {
+
+				}
+			});
+				</#if>
+			</#list>
+			loader.init();
+		}
+    }
+
+	public void on${curr.name}Loaded(Cursor c) {
+		if (c.getCount() > 0) {
+			c.moveToFirst();
+			new ${curr.name}SQLiteAdapter(getActivity()).cursorToItem(
+						c,
+						this.model);
+		}
+	}
+	<#list curr.relations as relation>
+		<#if !relation.internal>
+	public void on${relation.name?cap_first}Loaded(Cursor c) {
+		if (this.model != null) {
+			if (c != null) {
+		<#if relation.relation.type == "ManyToOne" || relation.relation.type == "OneToOne">
+				if (c.getCount() > 0) {
+					c.moveToFirst();
+					this.model.set${relation.name?cap_first}(
+							new ${relation.relation.targetEntity}SQLiteAdapter(getActivity()).cursorToItem(c));
+					this.loadData();
+			}
+		<#else>
+				this.model.set${relation.name?cap_first}(
+						new ${relation.relation.targetEntity}SQLiteAdapter(getActivity()).cursorToItems(c));
+					this.loadData();
+		</#if>
+			} else {
+				this.model.set${relation.name?cap_first}(null);
+					this.loadData();
+			}
+		}
+	}
+		</#if>
+	</#list>
+
+	/**
+	 * Calls the ${curr.name}EditActivity.
+	 * @param position position
+	 */
+	@Override
+	public void onClickEdit() {
+		final Intent intent = new Intent(getActivity(),
+									${curr.name}EditActivity.class);
+		intent.putExtra("${curr.name}", (Parcelable) this.model);
+
+		this.getActivity().startActivity(intent);
+	}
+
+	/**
+	 * Shows a confirmation dialog.
+	 * @param position position
+	 */
+	@Override
+	public void onClickDelete() {
+		new DeleteDialog(this.getActivity(), this).show();
+	}
+
+	@Override
+	public void onDeleteDialogClose(boolean ok) {
+		if (ok) {
+			new DeleteTask(this.getActivity(), this.model).execute();
+		}
+	}
+	
+	/** 
+	 * Called when delete task is done.
+	 */	
+	public void onPostDelete() {
+		if (this.deleteCallback != null) {
+			this.deleteCallback.onItemDeleted();
+		}
+	}
+
+	/**
+	 * This class will remove the entity into the DB.
+	 * It runs asynchronously.
+	 */
+	private class DeleteTask extends AsyncTask<Void, Void, Integer> {
 		/** AsyncTask's context. */
-		private final Context ctx;
-		/** Associated fragment. */
-		private final ${curr.name}ShowFragment fragment;
-		/** The entity to load. */
-		private ${curr.name} entity;
-		/** Progress dialog. */
-		private ProgressDialog progress;
+		private Context ctx;
+		/** Entity to delete. */
+		private ${curr.name?cap_first} item;
 
 		/**
 		 * Constructor of the task.
-		 * @param entity The entity to find in the DB
-		 * @param fragment The parent fragment from where the aSyncTask is
-		 * called
+		 * @param item The entity to remove from DB
+		 * @param ctx A context to build ${curr.name?cap_first}SQLiteAdapter
 		 */
-		public LoadTask(final ${curr.name}ShowFragment fragment,
-					final ${curr.name} entity) {
+		public DeleteTask(final Context ctx,
+					final ${curr.name?cap_first} item) {
 			super();
-			this.fragment = fragment;
-			this.ctx = fragment.getActivity();
-			this.entity = entity;
-		}
-
-		@Override
-		protected void onPreExecute() {
-			super.onPreExecute();
-
-			this.progress = ProgressDialog.show(this.ctx,
-					this.ctx.getString(
-						R.string.${curr.name?lower_case}_progress_load_title),
-					this.ctx.getString(
-						R.string.${curr.name?lower_case}_progress_load_message));
+			this.ctx = ctx;
+			this.item = item;
 		}
 
 		@Override
 		protected Integer doInBackground(Void... params) {
-			Integer result = -1;
+			int result = -1;
 
-			this.entity = new ${curr.name?cap_first}ProviderUtils(this.ctx).query(
-				this.entity.get${curr.ids[0].name?cap_first}());
-
-			if (this.entity != null) {
-				result = 0;
-			}
+			result = new ${curr.name?cap_first}ProviderUtils(this.ctx)
+					.delete(this.item);
 
 			return result;
 		}
 
 		@Override
 		protected void onPostExecute(Integer result) {
-			super.onPostExecute(result);
-
-			if (result == 0) {
-				this.fragment.model = this.entity;
-				this.fragment.loadData();
-			} else {
-				final AlertDialog.Builder builder =
-						new AlertDialog.Builder(this.ctx);
-				builder.setIcon(0);
-				builder.setMessage(
-						this.ctx.getString(
-								R.string.${curr.name?lower_case}_error_load));
-				builder.setPositiveButton(
-						this.ctx.getString(android.R.string.yes),
-						new Dialog.OnClickListener() {
-							public void onClick(DialogInterface dialog,
-																	int which) {
-
-							}
-						});
-				builder.show();
+			if (result >= 0) {
+				${curr.name}ShowFragment.this.onPostDelete();
 			}
-
-			this.progress.dismiss();
+			super.onPostExecute(result);
 		}
+		
+		
+
+	}
+	
+	/**
+	 * Callback for item deletion.
+	 */ 
+	public interface DeleteCallback {
+		/** Called when current item has been deleted. */
+		public void onItemDeleted();
 	}
 }
+
