@@ -2,26 +2,24 @@
 <@header?interpret />
 package ${curr.controller_namespace};
 
+import java.util.ArrayList;
+
 import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
 import ${data_namespace}.${curr.name?cap_first}SQLiteAdapter;
+import ${project_namespace}.menu.CrudCreateMenuWrapper.CrudCreateMenuInterface;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
-import ${project_namespace}.harmony.view.DeletableList;
-import ${project_namespace}.harmony.view.DeleteDialog;
-import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
+import ${project_namespace}.harmony.view.HarmonyListFragment;
+import ${project_namespace}.harmony.widget.pinnedheader.headerlist.PinnedHeaderListView;
 
-import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-import ${project_namespace}.harmony.view.HarmonyListFragment;
 
 import ${curr.namespace}.R;
 import ${curr.namespace}.entity.${curr.name};
@@ -32,7 +30,7 @@ import ${curr.namespace}.entity.${curr.name};
  */
 public class ${curr.name}ListFragment
 		extends HarmonyListFragment<${curr.name}>
-		implements DeletableList {
+		implements CrudCreateMenuInterface {
 
 	/** The adapter which handles list population. */
 	protected ${curr.name}ListAdapter mAdapter;
@@ -72,8 +70,8 @@ public class ${curr.name}ListFragment
 		//this.setHasOptionsMenu(true);
 
 		// Create an empty adapter we will use to display the loaded data.
+		((PinnedHeaderListView)this.getListView()).setPinnedHeaderEnabled(false);
 		this.mAdapter = new ${curr.name}ListAdapter(this.getActivity(), this);
-		this.setListAdapter(this.mAdapter);
 
 		// Start out with a progress indicator.
 		this.setListShown(false);
@@ -85,13 +83,8 @@ public class ${curr.name}ListFragment
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		final ${curr.name} item = (${curr.name}) l.getItemAtPosition(position);
-
-		final Intent intent = new Intent(getActivity(),
-							${curr.name}ShowActivity.class);
-		intent.putExtra("${curr.name}", (Parcelable) item);
-
-		this.startActivity(intent);
+		super.onListItemClick(l, v, position, id);
+		/* Do click action inside your fragment here. */
 	}
 
 	@Override
@@ -128,7 +121,19 @@ public class ${curr.name}ListFragment
 		//this.mAdapter.setData(data);
 		data.setNotificationUri(this.getActivity().getContentResolver(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI);
-		this.mAdapter.swapCursor(data);
+
+		//this.mAdapter.swapCursor(data);
+		ArrayList<${curr.name}> users = new ${curr.name}SQLiteAdapter(this.getActivity()).cursorToItems(data);
+		this.mAdapter.setNotifyOnChange(false);
+		this.mAdapter.setData(new ${curr.name}ListAdapter.${curr.name}SectionIndexer(users));
+		this.mAdapter.setNotifyOnChange(true);
+		this.mAdapter.notifyDataSetChanged();
+		this.mAdapter.setPinnedPartitionHeadersEnabled(false);
+		this.mAdapter.setSectionHeaderDisplayEnabled(false);
+
+		if (this.getListAdapter() == null) {
+			this.setListAdapter(this.mAdapter);
+		}
 
 		// The list should now be shown.
 		if (this.isResumed()) {
@@ -136,78 +141,21 @@ public class ${curr.name}ListFragment
 		} else {
 			this.setListShownNoAnimation(true);
 		}
+
+		super.onLoadFinished(loader, data);
 	}
 
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
 		// Clear the data in the adapter.
-		this.mAdapter.swapCursor(null);
+		//this.mAdapter.swapCursor(null);
+		this.mAdapter.clear();
 	}
 
-
-	/**
-	 * Calls the ${curr.name}EditActivity.
-	 * @param position position
-	 */
-	protected void onClickEdit(final int position) {
-		final ${curr.name} item = this.mAdapter.getItem(position);
-		final Intent intent = new Intent(getActivity(),
-									${curr.name}EditActivity.class);
-		intent.putExtra("${curr.name}", (Parcelable) item);
-
-		this.getActivity().startActivityForResult(intent, 0);
+	@Override
+	public void onClickAdd() {
+		Intent intent = new Intent(this.getActivity(), ${curr.name}CreateActivity.class);
+		this.startActivity(intent);
 	}
-
-	/**
-	 * Shows a confirmation dialog.
-	 * @param position position
-	 */
-	protected void onClickDelete(final int position) {
-		new DeleteDialog(this.getActivity(), this, position).show();
-	}
-
-	/**
-	 * Creates an aSyncTask to delete the row.
-	 * @param position position
-	 */
-	public void delete(final int position) {
-		final ${curr.name?cap_first} item = this.mAdapter.getItem(position);
-		new DeleteTask(this.getActivity(), item).execute();
-	}
-
-	/**
-	 * This class will remove the entity into the DB.
-	 * It runs asynchronously.
-	 */
-	private class DeleteTask extends AsyncTask<Void, Void, Integer> {
-		/** AsyncTask's context. */
-		private Context ctx;
-		/** Entity to delete. */
-		private ${curr.name?cap_first} item;
-
-		/**
-		 * Constructor of the task.
-		 * @param item The entity to remove from DB
-		 * @param ctx A context to build ${curr.name?cap_first}SQLiteAdapter
-		 */
-		public DeleteTask(final Context ctx,
-					final ${curr.name?cap_first} item) {
-			super();
-			this.ctx = ctx;
-			this.item = item;
-		}
-
-		@Override
-		protected Integer doInBackground(Void... params) {
-			int result = -1;
-
-			result = new ${curr.name?cap_first}ProviderUtils(this.ctx)
-					.delete(this.item);
-
-			return result;
-		}
-
-	}
-
 
 }

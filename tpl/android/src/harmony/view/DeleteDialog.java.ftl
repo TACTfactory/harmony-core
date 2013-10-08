@@ -17,20 +17,16 @@ import ${project_namespace}.R;
 public class DeleteDialog extends AlertDialog
 									implements DialogInterface.OnClickListener {
 	/** A fragment which implements DeletableList. */
-	private DeletableList fragment;
-	/** DeleteDialog ID. */
-	private int id;
-
+	private DeleteDialogCallback callback;
 	/**
 	 * Constructor.
 	 * @param ctx context
 	 * @param fragment fragment
 	 * @param id id
 	 */
-	public DeleteDialog(Context ctx, DeletableList fragment, int id) {
+	public DeleteDialog(Context ctx, DeleteDialogCallback callback) {
 		super(ctx);
-		this.fragment = fragment;
-		this.id = id;
+		this.callback = callback;
 	}
 
 	@Override
@@ -83,14 +79,26 @@ public class DeleteDialog extends AlertDialog
 	public void onClick(DialogInterface dialog, int which) {
 		switch (which) {
 			case BUTTON_POSITIVE:
-				this.fragment.delete(this.id);
+				this.callback.onDeleteDialogClose(true);
 				break;
 
 			case BUTTON_NEGATIVE:
-				this.dismiss();
+				this.callback.onDeleteDialogClose(false);
 				break;
 			default:
 				break;
 		}
+	}
+	
+	/**
+	 * Delete dialog callback.
+	 */
+	public interface DeleteDialogCallback {
+		/**
+	 	 * Called when dialog is closed.
+		 * 
+		 * @param ok True if user clicked ok. False otherwise.
+	 	 */
+		public void onDeleteDialogClose(boolean ok);
 	}
 }

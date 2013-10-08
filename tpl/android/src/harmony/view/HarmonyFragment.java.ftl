@@ -23,9 +23,10 @@ public abstract class HarmonyFragment extends SherlockFragment {
 	@Override
 	public void onPrepareOptionsMenu(Menu menu) {
 		super.onPrepareOptionsMenu(menu);
-		menu.clear();
 
 		try {
+			${project_name?cap_first}Menu.getInstance(this.getActivity(), this)
+											.clear(menu);
 			${project_name?cap_first}Menu.getInstance(this.getActivity(), this)
 										  .updateMenu(menu, this.getActivity());
 		} catch (Exception e) {

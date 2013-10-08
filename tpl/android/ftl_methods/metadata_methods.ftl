@@ -76,6 +76,15 @@
 	<#return false />
 </#function>
 
+<#function hasToOneRelations entity>
+	<#list entity.relations as field>
+		<#if (field.relation.type == "ManyToOne" || field.relation.type == "OneToOne")>
+			<#return true />
+		</#if>
+	</#list>
+	<#return false />
+</#function>
+
 <#function hasOnlyRecursiveRelations entity>
 	<#list entity.relations as relation>
 		<#if relation.relation.targetEntity!=entity.name>

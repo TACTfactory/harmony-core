@@ -7,6 +7,7 @@ package ${project_namespace}.menu;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -82,7 +83,10 @@ public abstract class ${project_name?cap_first}MenuBase {
 		this.menu = menu;
 
 		for (int i = 0; i < this.menus.size(); i++) {
-			this.menus.valueAt(i).initializeMenu(menu);
+			this.menus.valueAt(i).initializeMenu(menu,
+					(Activity) this.ctx,
+					this.fragment,
+					this.ctx);
 		}
 
 	}
@@ -104,18 +108,10 @@ public abstract class ${project_name?cap_first}MenuBase {
 	 * @param menu menu
 	 */
 	public void updateMenu(final Menu menu) {
-		final int currentClass = this.ctx.getClass().hashCode();
-		int currentFragment;
-		if (this.fragment != null) {
-			currentFragment = this.fragment.getClass().hashCode();
-		} else {
-			currentFragment = -1;
-		}
-
 		for (int i = 0; i < this.menus.size(); i++) {
 			this.menus.valueAt(i).updateMenu(menu,
-					currentClass,
-					currentFragment,
+					(Activity) this.ctx,
+					this.fragment,
 					this.ctx);
 		}
 	}
@@ -125,7 +121,10 @@ public abstract class ${project_name?cap_first}MenuBase {
 	 */
 	public void clear(final Menu menu) {
 		for (int i = 0; i < this.menus.size(); i++) {
-			this.menus.valueAt(i).clear(menu);
+			this.menus.valueAt(i).clear(menu,
+					(Activity) this.ctx,
+					this.fragment,
+					this.ctx);
 		}
 	}
 
@@ -147,7 +146,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	 * @return true if event has been treated
 	 */
 	private boolean dispatch(final MenuItem item) {
-		return this.menus.get(item.getItemId()).dispatch(item, this.ctx,
+		return this.menus.get(item.getGroupId()).dispatch(item, this.ctx,
 				this.fragment);
 	}
 

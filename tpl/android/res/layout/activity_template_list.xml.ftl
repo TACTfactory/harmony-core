@@ -8,7 +8,7 @@
     android:orientation="vertical" >
 
     <fragment
-        android:id="@+id/fragment"
+        android:id="@+id/fragment_list"
         android:name="${curr.controller_namespace}.${curr.name}ListFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
