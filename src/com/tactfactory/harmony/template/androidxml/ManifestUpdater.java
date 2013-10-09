@@ -277,8 +277,9 @@ public class ManifestUpdater extends XmlManager {
 
 		// Load Name space (required for manipulate attributes)
 		final Namespace ns = rootNode.getNamespace(NAMESPACE_ANDROID);
+		final Element appElem = rootNode.getChild(ELEMENT_APPLICATION);
 		boolean setService = true;
-		for (Element elem : rootNode.getChildren(ELEMENT_SERVICE)) {
+		for (Element elem : appElem.getChildren(ELEMENT_SERVICE)) {
 			if (elem.getAttributeValue(ATTRIBUTE_NAME, ns).equals(serviceName)) {
 				setService = false;
 				break;
@@ -289,7 +290,7 @@ public class ManifestUpdater extends XmlManager {
 			final Element permissionElem = new Element(ELEMENT_SERVICE);
 			permissionElem.setAttribute(ATTRIBUTE_NAME, serviceName, ns);
 			permissionElem.setAttribute(ATTRIBUTE_LABEL, label, ns);
-			rootNode.addContent(permissionElem);
+			appElem.addContent(permissionElem);
 		}
 	}
 	
@@ -302,11 +303,12 @@ public class ManifestUpdater extends XmlManager {
 		
 		// Load Root element
 		final Element rootNode = this.getDocument().getRootElement();
+		final Element appElem = rootNode.getChild(ELEMENT_APPLICATION);
 
 		// Load Name space (required for manipulate attributes)
 		final Namespace ns = rootNode.getNamespace(NAMESPACE_ANDROID);
 		
-		for (Element elem : rootNode.getChildren(ELEMENT_SERVICE)) {
+		for (Element elem : appElem.getChildren(ELEMENT_SERVICE)) {
 			result.add(elem.getAttributeValue(ATTRIBUTE_NAME, ns));
 		}
 		
