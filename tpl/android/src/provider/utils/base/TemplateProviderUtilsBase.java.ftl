@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
 import android.database.Cursor;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -336,6 +338,8 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 	 */
 	public int update(final ${curr.name} item) {
 		int result = -1;
+		ArrayList<ContentProviderOperation> operations =
+				new ArrayList<ContentProviderOperation>();
 		${curr.name}SQLiteAdapter adapt =
 				new ${curr.name}SQLiteAdapter(this.getContext());
 		ContentResolver prov = this.getContext().getContentResolver();
@@ -346,16 +350,64 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 				String.valueOf(item.get${curr.ids[0].name?cap_first}()));
 
 
-		result = prov.update(uri,
-				itemValues,
-				null,
-				null);
+		operations.add(ContentProviderOperation.newUpdate(uri)
+				.withValues(itemValues)
+				.build());
 
 		<#list curr.relations as relation>
-			<#if (relation.relation.type == "ManyToMany") >
-		prov.delete(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI,
-				${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID + "= ?",
-				new String[]{String.valueOf(item.get${curr.ids[0].name?cap_first}())});
+			<#if (relation.relation.type == "OneToMany")>
+		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
+			// Set new ${relation.name} for ${curr.name}
+			${relation.relation.targetEntity}Criterias ${relation.name}Crit =
+						new ${relation.relation.targetEntity}Criterias(GroupType.AND);
+			Criteria crit = new Criteria();
+			ArrayValue values = new ArrayValue();
+			crit.setType(Type.IN);
+			crit.setKey(${relation.relation.targetEntity}SQLiteAdapter.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
+			crit.addValue(values);
+			${relation.name}Crit.add(crit);
+
+
+			for (int i = 0; i < item.get${relation.name?cap_first}().size(); i++) {
+				values.addValue(String.valueOf(
+						item.get${relation.name?cap_first}().get(i).get${entities[relation.relation.targetEntity].ids[0].name?cap_first}()));
+			}
+
+			operations.add(ContentProviderOperation.newUpdate(
+					${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
+						.withValue(
+								${relation.relation.targetEntity?cap_first}SQLiteAdapter
+										.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
+								item.get${curr.ids[0].name?cap_first}())
+					.withSelection(
+							${relation.name}Crit.toSQLiteSelection(),
+							${relation.name}Crit.toSQLiteSelectionArgs())
+					.build());
+
+			// Remove old associated ${relation.name}
+			crit.setType(Type.NOT_IN);
+			${relation.name}Crit.add(${relation.relation.targetEntity}SQLiteAdapter.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
+					String.valueOf(item.getId()),
+					Type.EQUALS);
+			
+
+			operations.add(ContentProviderOperation.newUpdate(
+					${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
+						.withValue(
+								${relation.relation.targetEntity}SQLiteAdapter
+										.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
+								null)
+					.withSelection(
+							${relation.name}Crit.toSQLiteSelection(),
+							${relation.name}Crit.toSQLiteSelectionArgs())
+					.build());
+		}
+
+			<#elseif (relation.relation.type == "ManyToMany") >
+		operations.add(ContentProviderOperation.newDelete(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
+				.withSelection(${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID + "= ?",
+								new String[]{String.valueOf(item.get${curr.ids[0].name?cap_first}())})
+				.build());
 
 		for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 			ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
@@ -364,11 +416,21 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID,
 					item.get${curr.ids[0].name?cap_first}());
 
-			prov.insert(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI,
-					${relation.relation.targetEntity?uncap_first}Values);
+			operations.add(ContentProviderOperation.newInsert(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
+					.withValues(${relation.relation.targetEntity?uncap_first}Values)
+					.build());
 		}
 			</#if>
 		</#list>
+
+		try {
+			ContentProviderResult[] results = prov.applyBatch(DemactProvider.authority, operations);
+			result = results[0].count;
+		} catch (RemoteException e) {
+			Log.e(TAG, e.getMessage());
+		} catch (OperationApplicationException e) {
+			Log.e(TAG, e.getMessage());
+		}
 
 		return result;
 	}
@@ -383,6 +445,8 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 	public int update(final ${curr.name} item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>,
 							 final int ${relation.name?uncap_first}Id</#if></#list>) {
 		int result = -1;
+		ArrayList<ContentProviderOperation> operations =
+				new ArrayList<ContentProviderOperation>();
 		${curr.name}SQLiteAdapter adapt =
 				new ${curr.name}SQLiteAdapter(this.getContext());
 		ContentResolver prov = this.getContext().getContentResolver();
@@ -395,17 +459,65 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 				String.valueOf(item.get${curr.ids[0].name?cap_first}()));
 
 
-		result = prov.update(uri,
-				itemValues,
-				null,
-				null);
+		operations.add(ContentProviderOperation.newUpdate(uri)
+				.withValues(itemValues)
+				.build());
 
 
 		<#list curr.relations as relation>
-			<#if (relation.relation.type == "ManyToMany") >
-		prov.delete(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI,
-				${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID + "= ?",
-				new String[]{String.valueOf(item.get${curr.ids[0].name?cap_first}())});
+			<#if (relation.relation.type == "OneToMany")>
+		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
+			// Set new ${relation.name} for ${curr.name}
+			${relation.relation.targetEntity}Criterias ${relation.name}Crit =
+						new ${relation.relation.targetEntity}Criterias(GroupType.AND);
+			Criteria crit = new Criteria();
+			ArrayValue values = new ArrayValue();
+			crit.setType(Type.IN);
+			crit.setKey(${relation.relation.targetEntity}SQLiteAdapter.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
+			crit.addValue(values);
+			${relation.name}Crit.add(crit);
+
+
+			for (int i = 0; i < item.get${relation.name?cap_first}().size(); i++) {
+				values.addValue(String.valueOf(
+						item.get${relation.name?cap_first}().get(i).get${entities[relation.relation.targetEntity].ids[0].name?cap_first}()));
+			}
+
+			operations.add(ContentProviderOperation.newUpdate(
+					${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
+						.withValue(
+								${relation.relation.targetEntity?cap_first}SQLiteAdapter
+										.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
+								item.get${curr.ids[0].name?cap_first}())
+					.withSelection(
+							${relation.name}Crit.toSQLiteSelection(),
+							${relation.name}Crit.toSQLiteSelectionArgs())
+					.build());
+
+			// Remove old associated ${relation.name}
+			crit.setType(Type.NOT_IN);
+			${relation.name}Crit.add(${relation.relation.targetEntity}SQLiteAdapter.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
+					String.valueOf(item.getId()),
+					Type.EQUALS);
+			
+
+			operations.add(ContentProviderOperation.newUpdate(
+					${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
+						.withValue(
+								${relation.relation.targetEntity}SQLiteAdapter
+										.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
+								null)
+					.withSelection(
+							${relation.name}Crit.toSQLiteSelection(),
+							${relation.name}Crit.toSQLiteSelectionArgs())
+					.build());
+		}
+
+			<#elseif (relation.relation.type == "ManyToMany") >
+		operations.add(ContentProviderOperation.newDelete(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
+				.withSelection(${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID + "= ?",
+								new String[]{String.valueOf(item.get${curr.ids[0].name?cap_first}())})
+				.build());
 
 		for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 			ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
@@ -414,11 +526,21 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}SQLiteAdapter.COL_${curr.name?upper_case}_ID,
 					item.get${curr.ids[0].name?cap_first}());
 
-			prov.insert(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI,
-					${relation.relation.targetEntity?uncap_first}Values);
+			operations.add(ContentProviderOperation.newInsert(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
+					.withValues(${relation.relation.targetEntity?uncap_first}Values)
+					.build());
 		}
 			</#if>
 		</#list>
+
+		try {
+			ContentProviderResult[] results = prov.applyBatch(DemactProvider.authority, operations);
+			result = results[0].count;
+		} catch (RemoteException e) {
+			Log.e(TAG, e.getMessage());
+		} catch (OperationApplicationException e) {
+			Log.e(TAG, e.getMessage());
+		}
 
 		return result;
 	}

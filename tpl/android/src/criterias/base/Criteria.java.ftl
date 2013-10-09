@@ -176,7 +176,9 @@ public class Criteria implements Serializable, ICriteria {
 		/** Like "LIKE". */
 		LIKE("LIKE"),
 		/** IN "IN" (May be used with ArrayValue or SelectValue). */
-		IN("IN");
+		IN("IN"),
+		/** NOT IN "NOT IN" (May be used with ArrayValue or SelectValue). */
+		NOT_IN("NOT IN");
 
 		/** SQLite representation of this type. */
 		private String sql;
