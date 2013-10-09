@@ -127,5 +127,7 @@ public abstract class TagConstant {
 	public static final String UTILITY_PATH = "utilityPath";
 	/** Constant for harmony version. */
 	public static final String HARMONY_VERSION = "harmony_version";
+	/** Constant for services. */
+	public static final String SERVICES = "services";
 
 }

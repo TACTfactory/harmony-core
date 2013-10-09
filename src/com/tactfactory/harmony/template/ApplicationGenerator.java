@@ -8,8 +8,11 @@
  */
 package com.tactfactory.harmony.template;
 
+import java.util.List;
+
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.template.androidxml.ManifestUpdater;
 import com.tactfactory.harmony.utils.PackageUtils;
 
 /**
@@ -40,6 +43,8 @@ public class ApplicationGenerator extends BaseGenerator {
 		this.getDatamodel().put(
 				TagConstant.LOCAL_NAMESPACE, this.localNameSpace);
 
+		List<String> services = new ManifestUpdater(adapter).getServices();
+		this.getDatamodel().put(TagConstant.SERVICES, services);
 	}
 
 	/**

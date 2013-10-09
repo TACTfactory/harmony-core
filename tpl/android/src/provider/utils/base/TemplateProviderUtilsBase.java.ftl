@@ -12,6 +12,8 @@ package ${project_namespace}.provider.utils.base;
 
 import java.util.ArrayList;
 
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.database.Cursor;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
@@ -51,14 +53,9 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 
 	/** Base operations.*/
 
-	<#if hasInternalFields>
-	/**
-	 * Insert into DB.
-	 * @param item ${curr.name} to insert
-	 * @return number of rows affected
-	 */
-	public int insert(final ${curr.name} item) {
-		int result = -1;
+	@Override
+	public Uri insert(final ${curr.name} item) {
+		Uri result = null;
 		ArrayList<ContentProviderOperation> operations =
 				new ArrayList<ContentProviderOperation>();
 		ContentResolver prov = this.getContext().getContentResolver();
@@ -119,8 +116,11 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		</#list>
 
 		try {
-			prov.applyBatch(${project_name?cap_first}Provider.authority, operations);
-			result = 0;
+			ContentProviderResult[] results = 
+					prov.applyBatch(${project_name?cap_first}Provider.authority, operations);
+			if (results[0] != null) {
+				result = results[0].uri;
+			}
 		} catch (RemoteException e) {
 			Log.e(TAG, e.getMessage());
 		} catch (OperationApplicationException e) {
@@ -130,7 +130,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		return result;
 	}
 
-	</#if>
+	<#if hasInternalFields>
 	/**
 	 * Insert into DB.
 	 * @param item ${curr.name} to insert
@@ -218,6 +218,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 
 		return result;
 	}
+	</#if>
 
 	/**
 	 * Delete from DB.

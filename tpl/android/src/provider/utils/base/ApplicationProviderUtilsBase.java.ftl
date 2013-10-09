@@ -2,6 +2,7 @@
 package ${project_namespace}.provider.utils.base;
 
 import java.util.ArrayList;
+import android.net.Uri;
 
 import android.content.Context;
 
@@ -30,9 +31,9 @@ public abstract class ProviderUtilsBase<T> {
 	/**
 	 * Send the item of type T to the content provider of the application.
 	 * @param item The item
-	 * @return 0 if everything went well. -1 otherwise.
+	 * @return The Uri
 	 */
-	public abstract int insert(final T item);
+	public abstract Uri insert(final T item);
 
 	/**
 	 * Delete the item of type T from the content provider of the application.
