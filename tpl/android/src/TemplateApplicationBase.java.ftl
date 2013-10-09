@@ -8,9 +8,19 @@
 package ${project_namespace};
 
 import java.text.DateFormat;
+<#if (services?size > 0)>
+import java.util.ArrayList;
+import java.util.List;
+</#if>
 
 import android.app.Application;
+<#if (services?size > 0)>
+import android.app.Service;
+</#if>
 import android.content.Context;
+<#if (services?size > 0)>
+import android.content.Intent;
+</#if>
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager.NameNotFoundException;
 <#if (sync)>import android.content.SharedPreferences.Editor;
@@ -25,6 +35,10 @@ import android.content.SharedPreferences;
 import ${project_namespace}.harmony.util.DateUtils;
 import org.joda.time.DateTime;
 </#if>
+
+<#list services as service>
+import ${service};
+</#list>
 
 /**
  * Common all life data/service.
@@ -48,6 +62,10 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	private static DateFormat timeFormat;
 	/** 24HFormat. */
 	private static boolean is24H;
+	<#if (services?size > 0)>
+	/** Services binded. */
+	private boolean isServicesBinded = false;
+	</#if>
 	<#if (sync)>
 	/** Preferences. */
 	private static SharedPreferences preferences;
@@ -58,14 +76,74 @@ public abstract class ${project_name?cap_first}ApplicationBase
 		super.onCreate();
 
 		setSingleton(this);
-
+		
+		<#if (services?size > 0)>
+		this.doBindServices();
+		
+		</#if>
 		Log.i(TAG, "Starting application...");
 
 		// Manage unmanaged error of application
 		//Thread.setDefaultUncaughtExceptionHandler(
 		//		new ApplicationCrashHandler(super.getApplicationContext()));
 	}
-
+	
+	<#if (services?size > 0)>
+	@Override
+	protected final void finalize() throws Throwable {
+		this.doUnbindServices();
+		
+		super.finalize();
+	}
+	
+	/**
+	 * Bind all services to the application.
+	 */
+	private void doBindServices() {
+		Log.i(TAG, "Bind Services.");
+		
+		if (!this.isServicesBinded) {
+			for (Class<? extends Service> service : this.getServices()) {
+				Intent intent = new Intent(this, service);
+				this.startService(intent);
+			}
+			
+			this.isServicesBinded = true;
+		}
+	}
+	
+	/**
+	 * Unbind all services to the application.
+	 */
+	private void doUnbindServices() {
+		Log.i(TAG, "Unbind Services.");
+		
+		if (this.isServicesBinded) {
+			for (Class<? extends Service> service : this.getServices()) {
+				Intent intent = new Intent(this, service);
+				this.stopService(intent);
+			}
+			
+			this.isServicesBinded = false;
+		}
+	}
+	
+	/**
+	 * Get Services.
+	 */
+	protected List<Class<? extends Service>> getServices() {
+		List<Class<? extends Service>> result
+			= new ArrayList<Class<? extends Service>>();
+		
+		<#list services as service>
+			<#assign serviceSplit= service?split(".")/>
+		result.add(${serviceSplit[serviceSplit?size - 1]}.class);
+		</#list>
+		
+		return result;
+	}
+	
+	</#if>
 	/**
 	 * Set the application singleton.
 	 * @param application The application instance
