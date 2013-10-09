@@ -12,7 +12,7 @@
 	<#if InheritanceUtils.isExtended(entity)>
 		<#assign import_array = import_array + [entity.extends] />
 	</#if>
-	<#list entity.relations as relation>
+	<#list ViewUtils.getAllRelations(entity) as relation>
 		<#if importInternalsToo || !relation.internal>
 			<#if relation.relation.type == "ManyToMany">
 				<#if (!Utils.isInArray(import_array, relation.relation.joinTable))>
@@ -43,7 +43,7 @@
 	<#if useInheritedFieldsToo>
 		<#assign fields = ViewUtils.getAllFields(entity)?values />
 	<#else>
-		<#assign fields = entity.relations />
+		<#assign fields = ViewUtils.getAllRelations(entity) />
 	</#if>
 	<#list fields as relation>
 		<#if relation.relation?? && !relation.internal>
@@ -64,7 +64,7 @@
 <#function importToManyRelatedEntities entity>
 	<#assign result = ""/>
 	<#assign import_array = [entity.name] />
-	<#list entity.relations as relation>
+	<#list ViewUtils.getAllRelations(entity) as relation>
 		<#if !relation.internal && (relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany") >
 			<#if (!Utils.isInArray(import_array, relation.relation.targetEntity))>
 				<#assign import_array = import_array + [relation.relation.targetEntity] />
@@ -101,7 +101,7 @@
 	<#if useInheritedFieldsToo>
 		<#assign fields = ViewUtils.getAllFields(entity)?values />
 	<#else>
-		<#assign fields = entity.relations />
+		<#assign fields = ViewUtils.getAllRelations(entity) />
 	</#if>
 	<#list fields as field>
 		<#if (field.relation?? && !Utils.isInArray(import_array, field.relation.targetEntity?cap_first) && !field.internal) >
@@ -120,7 +120,7 @@
 <#function importRelatedProviderAdapters entity importInternalsToo=true>
 	<#assign result = ""/>
 	<#assign import_array = [entity.name] />
-	<#list entity.relations as relation>
+	<#list ViewUtils.getAllRelations(entity) as relation>
 		<#if importInternalsToo || !relation.internal>
 			<#if relation.relation.type == "ManyToMany">
 				<#if (!Utils.isInArray(import_array, relation.relation.joinTable))>
@@ -146,7 +146,7 @@
 <#function importManyToManyTargetSQLiteAdapters entity>
 	<#assign result = ""/>
 	<#assign import_array = [] />
-	<#list entity.relations as relation>
+	<#list ViewUtils.getAllRelations(entity) as relation>
 		<#if relation.relation.type == "ManyToMany">
 			<#if (!Utils.isInArray(import_array, relation.relation.targetEntity))>
 				<#assign import_array = import_array + [relation.relation.targetEntity] />
@@ -165,7 +165,7 @@
 <#function importRelatedCriterias entity>
 	<#assign result = ""/>
 	<#assign import_array = [entity.name + "Criterias"] />
-	<#list entity.relations as relation>
+	<#list ViewUtils.getAllRelations(entity) as relation>
 			<#if (!Utils.isInArray(import_array, relation.relation.targetEntity + "Criterias"))>
 				<#assign import_array = import_array + [relation.relation.targetEntity + "Criterias"] />
 			</#if>
