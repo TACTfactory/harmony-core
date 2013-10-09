@@ -123,6 +123,8 @@ public class ActivityGenerator extends BaseGenerator {
 			}
 		}
 
+		this.updateLibrary("universal-image-loader-1.8.6-with-sources.jar");
+		this.updateWidget("ProgressImageLoaderListener.java");
 
 		this.updateWidget("ValidationButtons.java",
 				"widget_validation_buttons.xml");
