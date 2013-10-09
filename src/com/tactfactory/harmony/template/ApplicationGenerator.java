@@ -44,7 +44,7 @@ public class ApplicationGenerator extends BaseGenerator {
 				TagConstant.LOCAL_NAMESPACE, this.localNameSpace);
 
 		List<String> services = new ManifestUpdater(adapter).getServices();
-		this.getDatamodel().put("services", services);
+		this.getDatamodel().put(TagConstant.SERVICES, services);
 	}
 
 	/**
