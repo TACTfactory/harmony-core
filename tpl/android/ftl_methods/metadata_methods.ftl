@@ -7,9 +7,14 @@
 	</#list>
 </#function>
 
-<#function hasRelationOrIds entity>
+<#function hasRelationOrIds entity withInheritedFields = true>
 	<#if (entity.ids?size>1)><#return true /></#if>
-	<#list ViewUtils.getAllRelations(entity) as relation>
+	<#if withInheritedFields>
+		<#assign relations = ViewUtils.getAllRelations(entity) />
+	<#else>
+		<#assign relations = entity.relations />
+	</#if>
+	<#list relations as relation>
 		<#if (relation.relation.type!="OneToMany" && relation.relation.type!="ManyToMany")>
 			<#return true />
 		</#if>
