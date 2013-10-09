@@ -1,5 +1,6 @@
 package com.tactfactory.harmony.template.androidxml;
 
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -290,6 +291,26 @@ public class ManifestUpdater extends XmlManager {
 			permissionElem.setAttribute(ATTRIBUTE_LABEL, label, ns);
 			rootNode.addContent(permissionElem);
 		}
+	}
+	
+	/**
+	 * Get all services from the manifest.
+	 * @return List of service name.
+	 */
+	public List<String> getServices() {
+		List<String> result = new ArrayList<String>();
+		
+		// Load Root element
+		final Element rootNode = this.getDocument().getRootElement();
+
+		// Load Name space (required for manipulate attributes)
+		final Namespace ns = rootNode.getNamespace(NAMESPACE_ANDROID);
+		
+		for (Element elem : rootNode.getChildren(ELEMENT_SERVICE)) {
+			result.add(elem.getAttributeValue(ATTRIBUTE_NAME, ns));
+		}
+		
+		return result;
 	}
 	
 	/**
