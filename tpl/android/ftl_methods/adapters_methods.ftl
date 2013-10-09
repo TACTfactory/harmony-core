@@ -246,6 +246,14 @@
 				<#assign result = result + "${tab}		Boolean.parseBoolean(${NamingUtils.fixtureParsedAlias(field)}));" />
 			<#elseif field.type?lower_case=="string">
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${NamingUtils.fixtureParsedAlias(field)});" />
+			<#elseif (field.type?lower_case == "short")>
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+				<#assign result = result + "${tab}		Integer.valueOf(${NamingUtils.fixtureParsedAlias(field)}).shortValue());" />
+			<#elseif (field.type?lower_case == "char" || field.type?lower_case == "character")>
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${NamingUtils.fixtureParsedAlias(field)}.charAt(0));" />
+			<#elseif (field.type?lower_case == "byte")>
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+				<#assign result = result + "${tab}		Integer.valueOf(${NamingUtils.fixtureParsedAlias(field)}).byteValue());" />
 			<#elseif (field.harmony_type == "enum")>
 				<#assign enumType = enums[field.type] />
 				<#if (enumType.id??)>
