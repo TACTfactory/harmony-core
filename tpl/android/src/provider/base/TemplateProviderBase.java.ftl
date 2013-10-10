@@ -2,6 +2,8 @@
 <@header?interpret />
 package ${local_namespace}.base;
 
+import java.util.ArrayList;
+
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
@@ -28,12 +30,6 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	protected static String URI_NOT_SUPPORTED;
 
 	/* Tools / Common. */
-	/** Base version. */
-	public    static Integer baseVersion = 0;
-	/** Base name. */
-	public    static String baseName = "";
-	/** item. */
-	protected static String item;
 	/** ${project_namespace}.provider authority. */
 	public static String authority
 				= "${project_namespace}.provider";
@@ -41,17 +37,8 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	protected static UriMatcher uriMatcher =
 			new UriMatcher(UriMatcher.NO_MATCH);
 
-	/** Adapter to SQLite.
-	 *
-	 */
-	<#list entities?values as entity>
-		<#if (entity.fields?size>0) >
-	/**
-	 * ${entity.name?cap_first} provider adapter.
-	 */
-	protected ${entity.name?cap_first}ProviderAdapter ${entity.name?uncap_first}Provider;
-		</#if>
-	</#list>
+	/** List of all the provider adapters. */
+	protected ArrayList<ProviderAdapterBase<?>> providerAdapters;
 	/**
 	 * Database.
 	 */
@@ -75,19 +62,21 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 				R.string.uri_not_supported);
 
 		try {
+			this.providerAdapters = new ArrayList<ProviderAdapterBase<?>>();
 		<#assign firstGo = true />
 		<#list entities?values as entity>
 			<#if (entity.fields?size>0) >
 				<#if (firstGo)>
-			this.${entity.name?uncap_first}Provider =
-			new ${entity.name?cap_first}ProviderAdapter(this.mContext);
-			this.db = this.${entity.name?uncap_first}Provider.getDb();
+			${entity.name?cap_first}ProviderAdapter ${entity.name?uncap_first}ProviderAdapter =
+				new ${entity.name?cap_first}ProviderAdapter(this.mContext);
+			this.db = ${entity.name?uncap_first}ProviderAdapter.getDb();			
+			this.providerAdapters.add(${entity.name?uncap_first}ProviderAdapter);
 					<#assign firstGo = false />
 				<#else>
-			this.${entity.name?uncap_first}Provider =
-			new ${entity.name?cap_first}ProviderAdapter(
-					this.mContext,
-					this.db);
+			this.providerAdapters.add(
+					new ${entity.name?cap_first}ProviderAdapter(
+						this.mContext,
+						this.db));
 				</#if>
 			</#if>
 		</#list>
@@ -107,32 +96,21 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	@Override
 	public String getType(final Uri uri) {
 		String result = null;
-		final String single =
-				"vnc.android.cursor.item/" + authority + ".";
-		final String collection =
-				"vnc.android.cursor.collection/" + authority + ".";
-
-		switch (uriMatcher.match(uri)) {
-		<#list entities?values as entity>
-			<#if (entity.fields?size>0) >
-
-		// ${entity.name} type mapping
-		case ${entity.name?cap_first}ProviderAdapter
-									.${entity.name?upper_case}_ONE:
-			result = single + "${entity.name?lower_case}";
-			break;
-		case ${entity.name?cap_first}ProviderAdapter
-									.${entity.name?upper_case}_ALL:
-			result = collection + "${entity.name?lower_case}";
-			break;
-			</#if>
-		</#list>
-
-		default:
-			throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
+		boolean matched = false;
+		
+		for (ProviderAdapterBase<?> adapter : this.providerAdapters) {
+			if (adapter.match(uri)) {
+				result = adapter.getType(uri);
+				matched = true;
+				break;
+			}
 		}
 
-		return result;
+		if (!matched) {
+			throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
+		} else {
+			return result;
+		}
 	}
 
 	/**
@@ -146,51 +124,32 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	public int delete(final Uri uri, final String selection,
 			final String[] selectionArgs) {
 		int result = 0;
+		boolean matched = false;
 		boolean alreadyInTransaction = this.db.inTransaction();
 		if (!alreadyInTransaction) {
 			this.db.beginTransaction();
 		}
-		try {
-			switch (uriMatcher.match(uri)) {
-		<#list entities?values as entity>
-			<#if (entity.fields?size>0) >
-
-			// ${entity.name}
-			case ${entity.name?cap_first}ProviderAdapter
-								.${entity.name?upper_case}_ONE:
-				try {
-					result = this.${entity.name?uncap_first}Provider.delete(uri,
-							selection,
-							selectionArgs);
-				} catch (Exception e) {
-					throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
-				}
+		
+		for (ProviderAdapterBase<?> adapter : this.providerAdapters) {
+			if (adapter.match(uri)) {
+				result = adapter.delete(uri, selection, selectionArgs);
+				matched = true;
 				break;
-			case ${entity.name?cap_first}ProviderAdapter
-								.${entity.name?upper_case}_ALL:
-				result = this.${entity.name?uncap_first}Provider.delete(uri,
-							selection,
-							selectionArgs);
-				break;
-			</#if>
-		</#list>
-
-			default:
-				throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
-			}
-			if (!alreadyInTransaction) {
-				this.db.setTransactionSuccessful();
-			}
-		} finally {
-			if (!alreadyInTransaction) {
-				this.db.endTransaction();
 			}
 		}
-
-		if (result > 0) {
-			this.getContext().getContentResolver().notifyChange(uri, null);
+		
+		if (!alreadyInTransaction) {
+			this.db.setTransactionSuccessful();
 		}
-		return result;
+		
+		if (!matched) {
+			throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
+		} else {
+			if (result > 0) {
+				this.getContext().getContentResolver().notifyChange(uri, null);
+			}
+			return result;		
+		}
 	}
 
 	/**
@@ -202,43 +161,32 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	@Override
 	public Uri insert(final Uri uri, final ContentValues values) {
 		Uri result = null;
-
+		boolean matched = false;
 		boolean alreadyInTransaction = this.db.inTransaction();
-
 		if (!alreadyInTransaction) {
 			this.db.beginTransaction();
 		}
-		try {
-
-			switch (uriMatcher.match(uri)) {
-		<#list entities?values as entity>
-			<#if (entity.fields?size>0) >
-
-			// ${entity.name}
-			case ${entity.name?cap_first}ProviderAdapter
-									.${entity.name?upper_case}_ALL:
-				result = this.${entity.name?uncap_first}Provider.insert(uri,
-						values);
+		
+		for (ProviderAdapterBase<?> adapter : this.providerAdapters) {
+			if (adapter.match(uri)) {
+				result = adapter.insert(uri, values);
+				matched = true;
 				break;
-			</#if>
-		</#list>
-
-			default:
-				throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
-			}
-			if (!alreadyInTransaction) {
-				this.db.setTransactionSuccessful();
-			}
-		} finally {
-			if (!alreadyInTransaction) {
-				this.db.endTransaction();
 			}
 		}
-		if (result != null) {
-			this.getContext().getContentResolver().notifyChange(result, null);
+		
+		if (!alreadyInTransaction) {
+			this.db.setTransactionSuccessful();
 		}
-
-		return result;
+		
+		if (!matched) {
+			throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
+		} else {
+			if (result != null) {
+				this.getContext().getContentResolver().notifyChange(uri, null);
+			}
+			return result;		
+		}
 	}
 
 	/**
@@ -255,63 +203,34 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			final String selection, final String[] selectionArgs,
 			final String sortOrder) {
 		Cursor result = null;
-
+		boolean matched = false;
 		boolean alreadyInTransaction = this.db.inTransaction();
-
 		if (!alreadyInTransaction) {
 			this.db.beginTransaction();
 		}
-		try {
+		
+		for (ProviderAdapterBase<?> adapter : this.providerAdapters) {
+			if (adapter.match(uri)) {
+				result = adapter.query(uri,
+							projection,
+							selection,
+							selectionArgs,
+							sortOrder);
 
-			switch (uriMatcher.match(uri)) {
-		<#list entities?values as entity>
-			<#if (entity.fields?size>0) >
-
-			// ${entity.name}
-			case ${entity.name?cap_first}ProviderAdapter
-							.${entity.name?upper_case}_ONE:
-				result = this.${entity.name?uncap_first}Provider.query(uri,
-					projection,
-					selection,
-					selectionArgs,
-					sortOrder);
+				matched = true;
 				break;
-			case ${entity.name?cap_first}ProviderAdapter
-							.${entity.name?upper_case}_ALL:
-				result = this.${entity.name?uncap_first}Provider.query(uri,
-					projection,
-					selection,
-					selectionArgs,
-					sortOrder);
-				break;
-			<#list entity.relations as relation>
-				<#if !relation.internal>
-			case ${entity.name?cap_first}ProviderAdapter
-							.${entity.name?upper_case}_${relation.name?upper_case}:
-				result = this.${entity.name?uncap_first}Provider.query(uri,
-					projection,
-					selection,
-					selectionArgs,
-					sortOrder);
-				break;
-				</#if>
-			</#list>
-			</#if>
-		</#list>
-
-			default:
-				throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
-			}
-			if (!alreadyInTransaction) {
-				this.db.setTransactionSuccessful();
-			}
-		} finally {
-			if (!alreadyInTransaction) {
-				this.db.endTransaction();
 			}
 		}
-
-		return result;
+		
+		if (!alreadyInTransaction) {
+			this.db.setTransactionSuccessful();
+		}
+		
+		if (!matched) {
+			throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
+		} else {
+			return result;		
+		}
 	}
 
 	/**
@@ -326,53 +245,36 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	public int update(final Uri uri, final ContentValues values,
 				      final String selection, final String[] selectionArgs) {
 		int result = 0;
-
+		boolean matched = false;
 		boolean alreadyInTransaction = this.db.inTransaction();
-
 		if (!alreadyInTransaction) {
 			this.db.beginTransaction();
 		}
-		try {
+		
+		for (ProviderAdapterBase<?> adapter : this.providerAdapters) {
+			if (adapter.match(uri)) {
+				result = adapter.update(uri,
+							values,
+							selection,
+							selectionArgs);
 
-			switch (uriMatcher.match(uri)) {
-		<#list entities?values as entity>
-			<#if (entity.fields?size>0) >
-
-			// ${entity.name}
-			case ${entity.name?cap_first}ProviderAdapter
-							.${entity.name?upper_case}_ONE:
-				result = this.${entity.name?uncap_first}Provider.update(uri,
-					values,
-					selection,
-					selectionArgs);
+				matched = true;
 				break;
-			case ${entity.name?cap_first}ProviderAdapter
-							.${entity.name?upper_case}_ALL:
-				result = this.${entity.name?uncap_first}Provider.update(uri,
-					values,
-					selection,
-					selectionArgs);
-				break;
-			</#if>
-		</#list>
-
-			default:
-				throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
-			}
-
-			if (!alreadyInTransaction) {
-				this.db.setTransactionSuccessful();
-			}
-		} finally {
-			if (!alreadyInTransaction) {
-				this.db.endTransaction();
 			}
 		}
-
-		if (result > 0) {
-			getContext().getContentResolver().notifyChange(uri, null);
+		
+		if (!alreadyInTransaction) {
+			this.db.setTransactionSuccessful();
 		}
-		return result;
+		
+		if (!matched) {
+			throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
+		} else {
+			if (result > 0) {
+				this.getContext().getContentResolver().notifyChange(uri, null);
+			}
+			return result;		
+		}
 	}
 
 	//-------------------------------------------------------------------------
