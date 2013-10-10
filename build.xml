@@ -411,6 +411,7 @@
         </jar>
         <jar destfile="${jar-annotations.rel-file}" compress="true" filesetmanifest="merge">
 			<zipfileset dir="${build.rel-dir}" includes="**/com/tactfactory/harmony/annotation/**"/>
+			<zipfileset dir="${src.rel-dir}" includes="**/com/tactfactory/harmony/annotation/**"/>
 			<!-- zipfileset dir="${lib.rel-dir}"
 			prefix="${lib.rel-dir}"
 			includes=""
