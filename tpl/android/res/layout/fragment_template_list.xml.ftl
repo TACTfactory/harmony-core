@@ -24,8 +24,6 @@
 			android:scrollbars="vertical"
 			android:layout_width="fill_parent"
 			android:layout_height="match_parent"
-			android:layout_marginBottom="8dp"
-			android:paddingBottom="8dp"
 			android:clickable="true"
 			android:drawSelectorOnTop="false"
 			android:fadingEdge="none"
