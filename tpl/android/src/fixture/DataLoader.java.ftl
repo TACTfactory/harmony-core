@@ -54,7 +54,7 @@ public class DataLoader {
 		this.dataLoaders = new ArrayList<FixtureBase<?>>();
 		<#list orderedEntities as entityName>
 			<#assign entity = entities[entityName] />
-			<#if (!(entity.internal?? && entity.internal=='true') && (entity.fields?size>0))>
+			<#if (!(entity.internal) && (entity.fields?size>0))>
 		this.dataLoaders.add(
 				${entity.name}DataLoader.getInstance(this.ctx));
 			</#if>
