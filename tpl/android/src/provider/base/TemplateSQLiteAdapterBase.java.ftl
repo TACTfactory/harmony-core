@@ -141,7 +141,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		<#assign lastLine=" + " + NamingUtils.alias(field.name) + "	+ \"" + field.schema />
 	</#if>
 </#list>
-		${lastLine}<#if MetadataUtils.hasRelationOrIds(curr)>,</#if>"
+		${lastLine}<#if MetadataUtils.hasRelationOrIds(curr, false)>,</#if>"
 <#if (curr.relations??)>
 	<#list curr.relations as relation>
 		<#if (relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne")>

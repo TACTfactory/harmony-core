@@ -7,9 +7,14 @@
 	</#list>
 </#function>
 
-<#function hasRelationOrIds entity>
+<#function hasRelationOrIds entity withInheritedFields = true>
 	<#if (entity.ids?size>1)><#return true /></#if>
-	<#list entity.relations as relation>
+	<#if withInheritedFields>
+		<#assign relations = ViewUtils.getAllRelations(entity) />
+	<#else>
+		<#assign relations = entity.relations />
+	</#if>
+	<#list relations as relation>
 		<#if (relation.relation.type!="OneToMany" && relation.relation.type!="ManyToMany")>
 			<#return true />
 		</#if>
@@ -64,11 +69,11 @@
 </#function>
 
 <#function hasRelations entity>
-	<#return (entity.relations?? && entity.relations?size > 0) />
+	<#return (ViewUtils.getAllRelations(entity)?? && ViewUtils.getAllRelations(entity)?size > 0) />
 </#function>
 
 <#function hasToManyRelations entity>
-	<#list entity.relations as field>
+	<#list ViewUtils.getAllRelations(entity) as field>
 		<#if (field.relation.type == "ManyToMany" || field.relation.type == "OneToMany")>
 			<#return true />
 		</#if>
@@ -77,7 +82,7 @@
 </#function>
 
 <#function hasToOneRelations entity>
-	<#list entity.relations as field>
+	<#list ViewUtils.getAllRelations(entity) as field>
 		<#if (field.relation.type == "ManyToOne" || field.relation.type == "OneToOne")>
 			<#return true />
 		</#if>
@@ -86,7 +91,7 @@
 </#function>
 
 <#function hasOnlyRecursiveRelations entity>
-	<#list entity.relations as relation>
+	<#list ViewUtils.getAllRelations(entity) as relation>
 		<#if relation.relation.targetEntity!=entity.name>
 			<#return false>
 		</#if>
@@ -103,7 +108,7 @@
 	<#return ret />
 </#function>
 <#function isOnlyDependantOf entity entity_list>
-	<#list entity.relations as rel>
+	<#list ViewUtils.getAllRelations(entity) as rel>
 		<#if rel.relation.type=="ManyToOne">
 			<#if !Utils.isInArray(entity_list, rel.relation.targetEntity)>
 				<#return false />
@@ -145,7 +150,7 @@
 </#function>
 
 <#function hasManyToOneRelation entity>
-	<#list entity.relations as relation>
+	<#list ViewUtils.getAllRelations(entity) as relation>
 		<#if relation.relation.type == "ManyToOne">
 			<#return true />
 		</#if>
@@ -154,7 +159,7 @@
 </#function>
 
 <#function hasOneToManyRelation entity>
-	<#list entity.relations as relation>
+	<#list ViewUtils.getAllRelations(entity) as relation>
 		<#if relation.relation.type == "OneToMany">
 			<#return true />
 		</#if>
@@ -163,7 +168,7 @@
 </#function>
 
 <#function hasManyToManyRelation entity>
-	<#list entity.relations as relation>
+	<#list ViewUtils.getAllRelations(entity) as relation>
 		<#if relation.relation.type == "ManyToMany">
 			<#return true />
 		</#if>
@@ -172,7 +177,7 @@
 </#function>
 
 <#function hasOneToOneRelation entity>
-	<#list entity.relations as relation>
+	<#list ViewUtils.getAllRelations(entity) as relation>
 		<#if relation.relation.type == "OneToOne">
 			<#return true />
 		</#if>
