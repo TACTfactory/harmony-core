@@ -20,7 +20,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
 import ${data_namespace}.${curr.name}SQLiteAdapter;
-<#if (!internal)>
+<#if (!curr.internal)>
 import ${entity_namespace}.${curr.name};
 </#if>import ${local_namespace}.${project_name?cap_first}Provider;
 <#if (inherited)>
