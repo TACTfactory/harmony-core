@@ -35,7 +35,7 @@
 
 <#function importRelatedEntities entity useInheritedFieldsToo=false>
 	<#assign result = ""/>
-	<#if entity.internal == "true">
+	<#if entity.internal>
 		<#assign import_array = [] />
 	<#else>
 		<#assign import_array = [entity.name] />

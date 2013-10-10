@@ -36,8 +36,6 @@ import com.tactfactory.harmony.utils.PackageUtils;
  * JavaParser Field Visitor.
  */
 public class FieldVisitor {
-	/** Default length 255. */
-	private static final int DEFAULT_LENGTH = 255;
 
 	/** Id annotation name. */
 	private static final String FILTER_ID	 		=

@@ -4,7 +4,7 @@
 <#assign hasRelations = false />
 <#assign hasInternalFields = false />
 <#assign inherited = false />
-<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)><#assign hasInternalFields = true /></#if></#list>
+<#list curr.relations as relation><#if (relation.internal)><#assign hasInternalFields = true /></#if></#list>
 <@header?interpret />
 package ${project_namespace}.provider.utils.base;
 
@@ -132,10 +132,10 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 	/**
 	 * Insert into DB.
 	 * @param item ${curr.name} to insert
-	 <#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>* @param ${relation.name?uncap_first}Id ${relation.name?uncap_first} Id</#if></#list>
+	 <#list curr.relations as relation><#if (relation.internal)>* @param ${relation.name?uncap_first}Id ${relation.name?uncap_first} Id</#if></#list>
 	 * @return number of rows affected
 	 */
-	public int insert(final ${curr.name?cap_first} item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>,
+	public int insert(final ${curr.name?cap_first} item<#list curr.relations as relation><#if (relation.internal)>,
 							 final int ${relation.name?uncap_first}Id</#if></#list>) {
 		int result = -1;
 		ArrayList<ContentProviderOperation> operations =
@@ -145,7 +145,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 
 		${curr.name?cap_first}SQLiteAdapter adapt =
 				new ${curr.name?cap_first}SQLiteAdapter(this.getContext());
-		ContentValues itemValues = adapt.itemToContentValues(item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>,
+		ContentValues itemValues = adapt.itemToContentValues(item<#list curr.relations as relation><#if (relation.internal)>,
 					${relation.name?uncap_first}Id</#if></#list>);
 		itemValues.remove(${curr.name?cap_first}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
 
@@ -439,10 +439,10 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 	/**
 	 * Updates the DB.
 	 * @param item ${curr.name}
-	 <#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>* @param ${relation.name?uncap_first}Id ${relation.name?uncap_first} Id</#if></#list>
+	 <#list curr.relations as relation><#if (relation.internal)>* @param ${relation.name?uncap_first}Id ${relation.name?uncap_first} Id</#if></#list>
 	 * @return number of rows updated
 	 */
-	public int update(final ${curr.name} item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>,
+	public int update(final ${curr.name} item<#list curr.relations as relation><#if (relation.internal)>,
 							 final int ${relation.name?uncap_first}Id</#if></#list>) {
 		int result = -1;
 		ArrayList<ContentProviderOperation> operations =
@@ -451,7 +451,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 				new ${curr.name}SQLiteAdapter(this.getContext());
 		ContentResolver prov = this.getContext().getContentResolver();
 		ContentValues itemValues = adapt.itemToContentValues(
-				item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>,
+				item<#list curr.relations as relation><#if (relation.internal)>,
 				${relation.name?uncap_first}Id</#if></#list>);
 
 		Uri uri = Uri.withAppendedPath(
