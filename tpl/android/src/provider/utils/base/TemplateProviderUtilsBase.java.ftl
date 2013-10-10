@@ -1,10 +1,12 @@
 <#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
+<#assign fields = ViewUtils.getAllFields(curr) />
+<#assign relations = ViewUtils.getAllRelations(curr) />
 <#assign relation_array = [] />
 <#assign hasRelations = false />
 <#assign hasInternalFields = false />
 <#assign inherited = false />
-<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)><#assign hasInternalFields = true /></#if></#list>
+<#list relations as relation><#if (relation.internal?? && relation.internal==true)><#assign hasInternalFields = true /></#if></#list>
 <@header?interpret />
 package ${project_namespace}.provider.utils.base;
 
@@ -70,7 +72,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 						.withValues(itemValues)
 						.build());
 
-		<#list curr.relations as relation>
+		<#list relations as relation>
 			<#if (relation.relation.type == "OneToMany") >
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
 			String ${relation.name}Selection = ${relation.relation.targetEntity?cap_first}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)} + " IN (";
@@ -132,10 +134,10 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 	/**
 	 * Insert into DB.
 	 * @param item ${curr.name} to insert
-	 <#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>* @param ${relation.name?uncap_first}Id ${relation.name?uncap_first} Id</#if></#list>
+	 <#list relations as relation><#if (relation.internal?? && relation.internal==true)>* @param ${relation.name?uncap_first}Id ${relation.name?uncap_first} Id</#if></#list>
 	 * @return number of rows affected
 	 */
-	public int insert(final ${curr.name?cap_first} item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>,
+	public int insert(final ${curr.name?cap_first} item<#list relations as relation><#if (relation.internal?? && relation.internal==true)>,
 							 final int ${relation.name?uncap_first}Id</#if></#list>) {
 		int result = -1;
 		ArrayList<ContentProviderOperation> operations =
@@ -145,7 +147,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 
 		${curr.name?cap_first}SQLiteAdapter adapt =
 				new ${curr.name?cap_first}SQLiteAdapter(this.getContext());
-		ContentValues itemValues = adapt.itemToContentValues(item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>,
+		ContentValues itemValues = adapt.itemToContentValues(item<#list relations as relation><#if (relation.internal?? && relation.internal==true)>,
 					${relation.name?uncap_first}Id</#if></#list>);
 		itemValues.remove(${curr.name?cap_first}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
 
@@ -155,7 +157,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 			    	.build());
 
 
-		<#list curr.relations as relation>
+		<#list relations as relation>
 			<#if (relation.relation.type == "OneToMany") >
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
 			${curr.name}Criterias ${curr.name?uncap_first}Crit =
@@ -266,7 +268,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 			result = adapt.cursorToItem(cursor);
 			cursor.close();
 
-		<#list curr.relations as relation>
+		<#list relations as relation>
 			<#if (!relation.internal)>
 				result.set${relation.name?cap_first}(
 					this.getAssociate${relation.name?cap_first}(result));
@@ -354,7 +356,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 				.withValues(itemValues)
 				.build());
 
-		<#list curr.relations as relation>
+		<#list relations as relation>
 			<#if (relation.relation.type == "OneToMany")>
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
 			// Set new ${relation.name} for ${curr.name}
@@ -439,10 +441,10 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 	/**
 	 * Updates the DB.
 	 * @param item ${curr.name}
-	 <#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>* @param ${relation.name?uncap_first}Id ${relation.name?uncap_first} Id</#if></#list>
+	 <#list relations as relation><#if (relation.internal?? && relation.internal==true)>* @param ${relation.name?uncap_first}Id ${relation.name?uncap_first} Id</#if></#list>
 	 * @return number of rows updated
 	 */
-	public int update(final ${curr.name} item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>,
+	public int update(final ${curr.name} item<#list relations as relation><#if (relation.internal?? && relation.internal==true)>,
 							 final int ${relation.name?uncap_first}Id</#if></#list>) {
 		int result = -1;
 		ArrayList<ContentProviderOperation> operations =
@@ -451,7 +453,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 				new ${curr.name}SQLiteAdapter(this.getContext());
 		ContentResolver prov = this.getContext().getContentResolver();
 		ContentValues itemValues = adapt.itemToContentValues(
-				item<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)>,
+				item<#list relations as relation><#if (relation.internal?? && relation.internal==true)>,
 				${relation.name?uncap_first}Id</#if></#list>);
 
 		Uri uri = Uri.withAppendedPath(
@@ -464,7 +466,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 				.build());
 
 
-		<#list curr.relations as relation>
+		<#list relations as relation>
 			<#if (relation.relation.type == "OneToMany")>
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
 			// Set new ${relation.name} for ${curr.name}
@@ -545,8 +547,8 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		return result;
 	}
 
-	<#if (curr.relations?size>0)>/** Relations operations. */</#if>
-	<#list curr.relations as relation>
+	<#if (relations?size>0)>/** Relations operations. */</#if>
+	<#list relations as relation>
 		<#if (!relation.internal)>
 			<#if (relation.relation.type == "ManyToOne" || relation.relation.type == "OneToOne")>
 	/**
