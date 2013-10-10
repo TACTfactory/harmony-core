@@ -37,6 +37,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	protected static UriMatcher uriMatcher =
 			new UriMatcher(UriMatcher.NO_MATCH);
 
+	/** List of all the provider adapters. */
 	protected ArrayList<ProviderAdapterBase<?>> providerAdapters;
 	/**
 	 * Database.
