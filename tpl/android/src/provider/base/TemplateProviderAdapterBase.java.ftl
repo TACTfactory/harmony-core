@@ -20,7 +20,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
-import ${data_namespace}.${curr.name}SQLiteAdapter;
 <#if (!internal)>
 import ${entity_namespace}.${curr.name};
 </#if>import ${local_namespace}.${project_name?cap_first}Provider;
@@ -111,15 +110,47 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		} else {
 			this.db = this.adapter.open();
 		}
+
+		this.uriIds.add(${curr.name?upper_case}_ALL);
+		this.uriIds.add(${curr.name?upper_case}_ONE);
+		<#list curr.relations as relation>
+			<#if !relation.internal>
+		this.uriIds.add(${curr.name?upper_case}_${relation.name?upper_case});
+			</#if>
+		</#list>
 	}
 
-	/**
-	 * Delete the entities matching with uri from the DB.
-	 * @param uri URI
-	 * @param selection SELECT clause for SQL
-	 * @param selectionArgs SELECT arguments for SQL
-	 * @return how many token deleted
-	 */
+	@Override
+	public String getType(final Uri uri) {
+		String result = null;
+		final String single =
+				"vnc.android.cursor.item/" + ${project_name?cap_first}Provider.authority + ".";
+		final String collection =
+				"vnc.android.cursor.collection/" + ${project_name?cap_first}Provider.authority + ".";
+
+		int matchedUri = ${project_name?cap_first}ProviderBase
+				.getUriMatcher().match(uri);
+
+		switch (matchedUri) {
+			case ${curr.name?upper_case}_ONE:
+				result = single + "${curr.name?lower_case}";
+				break;
+			case ${curr.name?upper_case}_ALL:
+				result = collection + "${curr.name?lower_case}";
+				break;
+			<#list curr.relations as relation>
+				<#if !relation.internal>
+			case ${curr.name?upper_case}_${relation.name?upper_case}:
+				result = <#if relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany">collection<#else>single</#if> + "${curr.name?lower_case}";
+				break;
+				</#if>
+			</#list>
+		}
+
+		return result;
+	}
+
+	@Override
 	public int delete(
 			final Uri uri,
 			String selection,
@@ -178,13 +209,8 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		}
 		return result;
 	}
-
-	/**
-	 * Insert the entities matching with uri from the DB.
-	 * @param uri URI
-	 * @param values ContentValues to insert
-	 * @return how many token inserted
-	 */
+	
+	@Override
 	public Uri insert(final Uri uri, final ContentValues values) {
 		int matchedUri = ${project_name?cap_first}ProviderBase
 				.getUriMatcher().match(uri);
@@ -217,15 +243,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		return result;
 	}
 
-	/**
-	 * Send a query to the DB.
-	 * @param uri URI
-	 * @param projection Columns to work with
-	 * @param selection SELECT clause for SQL
-	 * @param selectionArgs SELECT arguments for SQL
-	 * @param sortOrder ORDER BY clause
-	 * @return A cursor pointing to the result of the query
-	 */
+	@Override
 	public Cursor query(final Uri uri,
 						String[] projection,
 						String selection,
@@ -298,14 +316,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		return result;
 	}
 
-	/**
-	 * Update the entities matching with uri from the DB.
-	 * @param uri URI
-	 * @param values ContentValues to update
-	 * @param selection SELECT clause for SQL
-	 * @param selectionArgs SELECT arguments for SQL
-	 * @return how many token update
-	 */
+	@Override
 	public int update(
 			final Uri uri,
 			final ContentValues values,
