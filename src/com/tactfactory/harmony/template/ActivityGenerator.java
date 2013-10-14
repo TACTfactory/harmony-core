@@ -22,6 +22,7 @@ import com.tactfactory.harmony.meta.TranslationMetadata;
 import com.tactfactory.harmony.meta.TranslationMetadata.Group;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.template.androidxml.AttrsFile;
+import com.tactfactory.harmony.template.androidxml.DimensFile;
 import com.tactfactory.harmony.template.androidxml.ManifestUpdater;
 import com.tactfactory.harmony.template.androidxml.StylesFile;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -159,12 +160,12 @@ public class ActivityGenerator extends BaseGenerator {
 		
 
 
-		this.makeSource(
-				this.getAdapter().getTemplateRessourceValuesPath()
-						+ "/dimens.xml",
+		DimensFile.mergeFromTo(this.getAdapter(),
+				Context.getCurrentBundleFolder() 
+					+ this.getAdapter().getTemplateRessourceValuesPath()
+					+ "dimens.xml",
 				this.getAdapter().getRessourceValuesPath()
-						+ "/dimens.xml",
-				false);
+					+ "dimens.xml");
 		
 
 		this.makeSource(
