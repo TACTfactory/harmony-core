@@ -17,6 +17,8 @@ import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.expr.AnnotationExpr;
+import japa.parser.ast.expr.MemberValuePair;
+import japa.parser.ast.expr.NormalAnnotationExpr;
 import japa.parser.ast.type.ClassOrInterfaceType;
 
 import java.util.LinkedHashMap;
@@ -44,6 +46,9 @@ public class ClassVisitor {
 	/** Entity annotation name. */
 	private static final String FILTER_ENTITY	 	=
 			PackageUtils.extractNameEntity(Entity.class);
+	
+	/** Column annotation hidden attribute. */
+	private static final String ATTRIBUTE_HIDDEN = "hidden";
 
 	/** The field visitor used by this visitor. */
 	private final FieldVisitor fieldVisitor = new FieldVisitor();
@@ -114,7 +119,26 @@ public class ClassVisitor {
 							annotationExpr.getName().toString();
 
 					// Detect whether class is an entity
-					isEntity = isEntity || annotationType.equals(FILTER_ENTITY);
+					if (annotationType.equals(FILTER_ENTITY)) {
+						isEntity = true;
+						
+						if (annotationExpr instanceof NormalAnnotationExpr) {
+							NormalAnnotationExpr annot = (NormalAnnotationExpr)
+									annotationExpr;
+							List<MemberValuePair> pairs = annot.getPairs();
+							
+							for (MemberValuePair pair : pairs) {
+								if (ATTRIBUTE_HIDDEN.equals(pair.getName())) {
+									
+									((EntityMetadata) result).setHidden(
+											pair.getValue().toString()
+											.equals(String.valueOf(true)));
+								}
+							}
+						}
+					}
+					
+					
 				}
 			}
 

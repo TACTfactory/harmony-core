@@ -32,6 +32,9 @@ public class EntityMetadata extends ClassMetadata {
 	/** List of relations of entity class. */
 	private Map<String, FieldMetadata> relations =
 			new LinkedHashMap<String, FieldMetadata>();
+	
+	/** Is entity hidden ? */
+	private boolean hidden = false;
 
 	/**
 	 * Add Component String of field.
@@ -58,10 +61,8 @@ public class EntityMetadata extends ClassMetadata {
 				this.toFieldArray(this.ids.values(), adapter));
 		model.put(TagConstant.RELATIONS,
 				this.toFieldArray(this.relations.values(), adapter));
-		model.put(TagConstant.INTERNAL,			"false");
-		if (this.internal) {
-			model.put(TagConstant.INTERNAL,		"true");
-		}
+		model.put(TagConstant.INTERNAL,	this.internal);
+		model.put(TagConstant.HIDDEN, this.hidden);
 
 		return model;
 	}
@@ -88,6 +89,19 @@ public class EntityMetadata extends ClassMetadata {
 		return ids;
 	}
 
+	/**
+	 * @param hidden the hidden to set 
+	 */
+	public final void setHidden(final boolean hidden) {
+		this.hidden = hidden;
+	}
+	
+	/**
+	 * @return hidden
+	 */
+	public final boolean isHidden() {
+		return this.hidden;
+	}
 
 	/**
 	 * @param ids the ids to set

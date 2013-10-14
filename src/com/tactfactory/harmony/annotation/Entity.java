@@ -26,5 +26,8 @@ import java.lang.annotation.Target;
 @Target(TYPE)
 @Inherited
 public @interface Entity {
-
+	/**
+	 * No views generated for this entity.
+	 */
+	boolean hidden() default false;
 }

@@ -5,7 +5,7 @@
 <#assign hasTime=false />
 <#assign hasDate=false />
 <#assign hasInternalFields = false />
-<#list curr.relations as relation><#if (relation.internal?? && relation.internal==true)><#assign hasInternalFields = true /></#if></#list>
+<#list curr.relations as relation><#if (relation.internal)><#assign hasInternalFields = true /></#if></#list>
 <#assign hasDate = MetadataUtils.hasDate(curr) />
 <#assign hasTime = MetadataUtils.hasTime(curr) />
 <#assign hasDateTime = MetadataUtils.hasDateTime(curr) />
@@ -27,7 +27,7 @@ ${ImportUtils.importRelatedEntities(curr)}
 ${ImportUtils.importRelatedEnums(curr)}<#if !(curr.ids?size>0)>import ${project_namespace}.harmony.exception.NotImplementedException;</#if>
 <#if hasDate || hasTime || hasDateTime>import ${curr.namespace}.harmony.util.DateUtils;</#if>
 import ${project_namespace}.${project_name?cap_first}Application;
-<#if curr.internal?? && curr.internal=='true'>
+<#if (curr.internal)>
 	<#assign extendType = "Void" />
 <#else>
 	<#assign extendType = curr.name />
@@ -38,7 +38,7 @@ import ${project_namespace}.${project_name?cap_first}Application;
 	<#assign extend="SQLiteAdapterBase<" +extendType+ ">" />
 </#if>
 
-<#if curr.internal=="true">
+<#if curr.internal>
 import ${project_namespace}.criterias.${curr.relations[0].relation.targetEntity}Criterias;
 import ${project_namespace}.criterias.${curr.relations[1].relation.targetEntity}Criterias;
 import ${project_namespace}.criterias.${curr.name}Criterias;
@@ -177,7 +177,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		super(ctx);
 	}
 
-<#if (curr.internal!="true")>
+<#if (!curr.internal)>
 	// Converters
 	<#if (hasInternalFields)>
 	/** Convert ${curr.name} entity to Content Values for database.
@@ -756,7 +756,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		</#if>
 	}
 
-<#if (curr.internal=="true")>
+<#if (curr.internal)>
 	<#--<#list curr.relations as relation>
 	/**
 	 * get${relation.type}s.

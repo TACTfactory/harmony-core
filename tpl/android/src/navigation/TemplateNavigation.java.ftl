@@ -4,7 +4,7 @@ package ${project_namespace}.navigation;
 import ${project_namespace}.R;
 <#if (entities??)>
 	<#list entities?values as entity>
-		<#if (entity.fields?? && (entity.fields?size>0) && entity.internal!="true")>
+		<#if (entity.fields?? && (entity.fields?size>0) && !entity.internal)>
 import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}CreateActivity;
 import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}ListActivity;
 		</#if>
@@ -55,7 +55,7 @@ public class ${project_name?cap_first}Navigation implements OnClickListener {
 		// Base buttons
 		<#if (entities??)>
 			<#list entities?values as entity>
-				<#if (entity.fields?? && (entity.fields?size>0) && entity.internal!="true")>
+				<#if (entity.fields?? && (entity.fields?size>0) && !entity.internal)>
 		// Create ${entity.name}
 		this.container.findViewById(R.id.${entity.name?lower_case}_create_button).setOnClickListener(this);
 
@@ -72,7 +72,7 @@ public class ${project_name?cap_first}Navigation implements OnClickListener {
 		Intent intent = null;
 		switch (v.getId()) {
 			<#list entities?values as entity>
-				<#if (entity.fields?? && (entity.fields?size>0) && entity.internal!="true")>
+				<#if (entity.fields?? && (entity.fields?size>0) && !entity.internal)>
 			case R.id.${entity.name?lower_case}_create_button:
 				intent = new Intent(this.context, ${entity.name}CreateActivity.class);
 				break;

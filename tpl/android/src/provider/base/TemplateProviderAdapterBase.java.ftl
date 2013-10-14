@@ -1,9 +1,8 @@
 <#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
-<#assign internal = (curr.internal?? && curr.internal == "true") />
 <#assign inherited = false />
 <#assign ext = curr.name?cap_first />
-<#if (internal)>
+<#if (curr.internal)>
 	<#assign ext = "Void" />
 </#if>
 <#if (curr.extends?? && entities[curr.extends]??)>
@@ -20,7 +19,8 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
-<#if (!internal)>
+import ${data_namespace}.${curr.name}SQLiteAdapter;
+<#if (!curr.internal)>
 import ${entity_namespace}.${curr.name};
 </#if>import ${local_namespace}.${project_name?cap_first}Provider;
 <#if (inherited)>
