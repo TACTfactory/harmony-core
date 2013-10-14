@@ -106,30 +106,38 @@ public abstract class BaseGenerator {
 	 * @param adapt The adapter to use
 	 * @throws Exception if adapter is null
 	 */
-	public BaseGenerator(final BaseAdapter adapt) throws Exception {
+	public BaseGenerator(final BaseAdapter adapt) {
 		if (adapt == null) {
-			throw new Exception("No adapter define.");
+			throw new RuntimeException("No adapter define.");
 		}
 
-		// FIXME Clone object tree
-		this.appMetas	= ApplicationMetadata.INSTANCE;
-		this.adapter	= adapt;
+		try {
+			// FIXME Clone object tree
+			this.appMetas	= ApplicationMetadata.INSTANCE;
+			this.adapter	= adapt;
+	
+			//this.cfg.setDirectoryForTemplateLoading(
+			//		new File(Harmony.getRootPath() + "/vendor/tact-core"));
+	
+			final  Object[] files = 
+					Harmony.getTemplateFolders().values().toArray();
+			final  TemplateLoader[] loaders = 
+					new TemplateLoader[files.length + 1];
+			for (int i = 0; i < files.length; i++) {
+				final FileTemplateLoader ftl =
+						new FileTemplateLoader((File) files[i]);
+				loaders[i] = ftl;
+			}
+				loaders[files.length] = new FileTemplateLoader(
+						new File(Harmony.getRootPath() + "/vendor/tact-core"));
+			final MultiTemplateLoader mtl = new MultiTemplateLoader(loaders);
+	
+			this.cfg.setTemplateLoader(mtl);
 
-		//this.cfg.setDirectoryForTemplateLoading(
-		//		new File(Harmony.getRootPath() + "/vendor/tact-core"));
-
-		final  Object[] files = Harmony.getTemplateFolders().values().toArray();
-		final  TemplateLoader[] loaders = new TemplateLoader[files.length + 1];
-		for (int i = 0; i < files.length; i++) {
-			final FileTemplateLoader ftl =
-					new FileTemplateLoader((File) files[i]);
-			loaders[i] = ftl;
+		} catch (IOException e) {
+			throw new RuntimeException("Error with template loading : " 
+						+ e.getMessage());
 		}
-		loaders[files.length] = new FileTemplateLoader(
-				new File(Harmony.getRootPath() + "/vendor/tact-core"));
-		final MultiTemplateLoader mtl = new MultiTemplateLoader(loaders);
-
-		cfg.setTemplateLoader(mtl);
 	}
 
 	/**
