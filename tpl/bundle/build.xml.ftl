@@ -337,6 +337,7 @@
 		</jar>
 		<jar destfile="${r"${jar-annotations.rel-file}"}" compress="true" filesetmanifest="merge">
 			<zipfileset dir="${r"${build.rel-dir}"}" includes="**/${bundle_namespace?replace(".","/")}/annotation/**"/>
+			<zipfileset dir="${r"${src.rel-dir}"}" includes="**/${bundle_namespace?replace(".","/")}/annotation/**"/>
 			<!-- zipfileset dir="${r"${lib.rel-dir}"}"
 			prefix="${r"${lib.rel-dir}"}"
 			includes=""
