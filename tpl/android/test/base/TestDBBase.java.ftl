@@ -31,6 +31,7 @@ public abstract class TestDBBase extends AndroidTestCase {
 	private final static Class<? extends ContentProvider> PROVIDER_CLASS =
 					${project_name?cap_first}Provider.class;
 
+	private static Context context = null;
 	private Context baseContext;
 
 	/**
@@ -54,7 +55,7 @@ public abstract class TestDBBase extends AndroidTestCase {
 	 * @return MockContext
 	 */
 	protected Context getMockContext() {
-     		return this.getContext();
+			return this.getContext();
 	}
 
 	/**
@@ -66,26 +67,28 @@ public abstract class TestDBBase extends AndroidTestCase {
 			this.baseContext = this.getContext();
 		}
 
-	    ContentProvider provider = PROVIDER_CLASS.newInstance();
-	    MockContentResolver resolver = this.getMockContentResolver();
+		if (context == null) {
+			ContentProvider provider = PROVIDER_CLASS.newInstance();
+			MockContentResolver resolver = this.getMockContentResolver();
+	
+			RenamingDelegatingContext targetContextWrapper
+				= new RenamingDelegatingContext(
+					// The context that most methods are delegated to:
+					this.getMockContext(),
+					// The context that file methods are delegated to:
+					this.baseContext,
+					// Prefix database
+					CONTEXT_PREFIX);
+	
+			context = new IsolatedContext(
+					resolver,
+					targetContextWrapper);
+	
+			provider.attachInfo(context, null);
+			resolver.addProvider(PROVIDER_AUTHORITY, provider);
+		}
 
-	    RenamingDelegatingContext targetContextWrapper
-	    	= new RenamingDelegatingContext(
-    			// The context that most methods are delegated to:
-	            this.getMockContext(),
-	            // The context that file methods are delegated to:
-	            this.baseContext,
-	            // Prefix database
-	            CONTEXT_PREFIX);
-
-	    Context context = new IsolatedContext(
-	    		resolver,
-	    		targetContextWrapper);
-
-	    provider.attachInfo(context, null);
-		resolver.addProvider(PROVIDER_AUTHORITY, provider);
-
-	    this.setContext(context);
+		this.setContext(context);
 	}
 
 	/* (non-Javadoc)
