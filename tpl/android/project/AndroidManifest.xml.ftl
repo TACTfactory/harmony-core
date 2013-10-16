@@ -9,8 +9,7 @@
     <application
     	android:label="@string/app_name"
     	android:name=".${project_name?cap_first}Application"
-    	android:allowBackup="true"
-    	android:theme="@style/PinnedTheme">
+    	android:allowBackup="true">
         <activity android:name=".HomeActivity"
                   android:label="@string/app_name">
             <intent-filter>

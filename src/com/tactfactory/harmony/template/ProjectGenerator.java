@@ -140,7 +140,7 @@ public class ProjectGenerator extends BaseGenerator {
 					+ "configs.xml",
 				this.getAdapter().getRessourceValuesPath() + "configs.xml",
 				false);
-
+		
 		// create strings.xml
 		super.makeSource(
 				this.getAdapter().getTemplateStringsPathFile(),

@@ -41,6 +41,8 @@ public class ManifestUpdater extends XmlManager {
 	private static final String ATTRIBUTE_EXPORTED = "exported";
 	/** mimeType attribute. */
 	private static final String ATTRIBUTE_MIME_TYPE = "mimeType";
+	/** theme attribute. */
+	private static final String ATTRIBUTE_THEME = "theme";
 	
 	/** View Action.*/
 	private static final String ACTION_VIEW = "VIEW";
@@ -264,6 +266,17 @@ public class ManifestUpdater extends XmlManager {
 			permissionElem.setAttribute(ATTRIBUTE_NAME, permission, ns);
 			rootNode.addContent(permissionElem);
 		}
+	}
+	
+	/**
+	 * Sets the application-level theme.
+	 * @param theme The theme to set
+	 */
+	public void setApplicationTheme(String theme) {
+		final Element rootNode = this.getDocument().getRootElement();
+		final Namespace ns = rootNode.getNamespace(NAMESPACE_ANDROID);
+		final Element appElem = rootNode.getChild(ELEMENT_APPLICATION);
+		appElem.setAttribute(ATTRIBUTE_THEME, theme, ns);
 	}
 	
 	/**

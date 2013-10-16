@@ -158,7 +158,7 @@ public class ActivityGenerator extends BaseGenerator {
 				this.getAdapter().getRessourceValuesPath() 
 					+ "/styles.xml");
 		
-
+		this.manifestUpdater.setApplicationTheme("@style/PinnedTheme");
 
 		DimensFile.mergeFromTo(this.getAdapter(),
 				Context.getCurrentBundleFolder() 
