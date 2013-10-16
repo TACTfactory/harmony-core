@@ -1,7 +1,7 @@
 package ${project_namespace}.harmony.widget;
 
 import java.util.List;
-import com.tactfactory.harmony.test.demact.R;
+import ${project_namespace}.R;
 
 import android.app.AlertDialog;
 import android.content.Context;
