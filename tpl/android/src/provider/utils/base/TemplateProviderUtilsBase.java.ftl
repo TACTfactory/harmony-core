@@ -426,7 +426,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		</#list>
 
 		try {
-			ContentProviderResult[] results = prov.applyBatch(DemactProvider.authority, operations);
+			ContentProviderResult[] results = prov.applyBatch(${project_name?cap_first}Provider.authority, operations);
 			result = results[0].count;
 		} catch (RemoteException e) {
 			Log.e(TAG, e.getMessage());

@@ -147,10 +147,6 @@ public class ProjectGenerator extends BaseGenerator {
 				this.getAdapter().getStringsPathFile(),
 				false);
 
-		StylesFile.mergeFromTo(this.getAdapter(),
-				Context.getCurrentBundleFolder() + this.getAdapter().getTemplateRessourceValuesPath() + "/styles.xml",
-				this.getAdapter().getRessourceValuesPath() + "/styles.xml");
-
 		// create main.xml
 		super.makeSource(
 				this.getAdapter().getTemplateRessourceLayoutPath() + "main.xml",
