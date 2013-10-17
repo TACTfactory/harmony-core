@@ -1,11 +1,10 @@
 <#assign curr = entities[current_entity] />
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<FrameLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:layout_height="match_parent">
 
     <fragment
         android:id="@+id/fragment"
@@ -15,4 +14,4 @@
         tools:layout="@layout/fragment_${curr.name?lower_case}_show" >
     </fragment>
 
-</ScrollView>
+</FrameLayout>
