@@ -51,31 +51,31 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		ConsoleUtils.display(">> Generate CriteriaBase...");
 		this.makeSourceCriteria(
 				"base/Criteria.java",
-				"base/Criteria.java", false);
+				"base/Criteria.java", true);
 		this.makeSourceCriteria(
 				"base/CriteriasBase.java",
 				"base/CriteriasBase.java", true);
 		this.makeSourceCriteria(
 				"base/ICriteria.java",
-				"base/ICriteria.java", false);
+				"base/ICriteria.java", true);
 		this.makeSourceCriteria(
 				"base/value/CriteriaValue.java",
-				"base/value/CriteriaValue.java", false);
+				"base/value/CriteriaValue.java", true);
 		this.makeSourceCriteria(
 				"base/value/StringValue.java",
-				"base/value/StringValue.java", false);
+				"base/value/StringValue.java", true);
 		this.makeSourceCriteria(
 				"base/value/ArrayValue.java",
-				"base/value/ArrayValue.java", false);
+				"base/value/ArrayValue.java", true);
 		this.makeSourceCriteria(
 				"base/value/SelectValue.java",
-				"base/value/SelectValue.java", false);
+				"base/value/SelectValue.java", true);
 		this.makeSourceCriteria(
 				"base/value/MethodValue.java",
-				"base/value/MethodValue.java", false);
+				"base/value/MethodValue.java", true);
 		this.makeSourceCriteria(
 				"base/value/DateTimeValue.java",
-				"base/value/DateTimeValue.java", false);
+				"base/value/DateTimeValue.java", true);
 		
 	}
 
