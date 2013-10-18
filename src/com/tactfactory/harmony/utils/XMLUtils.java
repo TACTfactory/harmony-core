@@ -4,16 +4,20 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
 
+import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
+import org.jdom2.output.support.AbstractXMLOutputProcessor;
+import org.jdom2.output.support.FormatStack;
 
 /**
  * Utility class for manipulating XML files.
@@ -89,7 +93,8 @@ public abstract class XMLUtils {
 			// Write to File
 			final XMLOutputter xmlOutput = new XMLOutputter();
 			// Make beautiful file with indent !!!
-			xmlOutput.setFormat(Format.getPrettyFormat());
+			xmlOutput.setFormat(Format.getPrettyFormat().setIndent("\t"));
+			xmlOutput.setXMLOutputProcessor(new TactXMLOutputter());
 			xmlOutput.output(doc,
 					new OutputStreamWriter(
 							new FileOutputStream(
@@ -182,6 +187,31 @@ public abstract class XMLUtils {
 		
 		
 		return result;
+	}
+	
+	public static class TactXMLOutputter extends AbstractXMLOutputProcessor {
+		
+		@Override
+		protected void printAttribute(final Writer out, final FormatStack fstack,
+				final Attribute attribute) throws IOException {
+
+			if (!attribute.isSpecified() && fstack.isSpecifiedAttributesOnly()) {
+				return;
+			}
+			if (attribute.getParent().getAttributes().size() > 1) {
+				write(out, fstack.getLineSeparator());
+				write(out, fstack.getLevelIndent() + fstack.getIndent());
+			} else {
+				write(out, " ");
+			}
+			write(out, attribute.getQualifiedName());
+			write(out, "=");
+
+			write(out, "\"");
+			attributeEscapedEntitiesFilter(out, fstack, attribute.getValue());
+			write(out, "\"");
+		}
+		
 	}
 }
 
