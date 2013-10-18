@@ -186,6 +186,7 @@ public class ${curr.name}ShowFragment
 			new ${curr.name}SQLiteAdapter(getActivity()).cursorToItem(
 						c,
 						this.model);
+			this.loadData();
 		}
 	}
 	<#list curr.relations as relation>
