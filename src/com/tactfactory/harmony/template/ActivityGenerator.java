@@ -128,12 +128,12 @@ public class ActivityGenerator extends BaseGenerator {
 		}
 
 		this.updateLibrary("universal-image-loader-1.8.6-with-sources.jar");
+		this.updateLibrary("ImageViewTouch.jar");
 		this.updateWidget("ProgressImageLoaderListener.java");
 
 		this.updateWidget("ValidationButtons.java",
 				"widget_validation_buttons.xml");
 
-		this.updateWidget("PinchZoomImageView.java");
 		this.updateWidget("EnumSpinner.java");
 		this.updateWidget("pinnedheader/AutoScrollListView.java");
 		this.updateWidget("pinnedheader/SelectionItemView.java");
