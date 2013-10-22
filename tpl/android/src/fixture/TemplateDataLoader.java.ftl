@@ -103,8 +103,8 @@ public final class ${curr.name?cap_first}DataLoader
 								final ${curr.name} ${curr.name?uncap_first}) {
 <#list curr.fields?values as field>${AdapterUtils.xmlExtractFieldAdapter(curr.name?uncap_first, field, curr, 2)}</#list>
 		<#if InheritanceUtils.isExtended(curr)>
-		${curr.extends}DataLoader inheritanceDataLoader =
-				${curr.extends}DataLoader.getInstance(this.ctx);
+		${curr.inheritance.superclass}DataLoader inheritanceDataLoader =
+				${curr.inheritance.superclass}DataLoader.getInstance(this.ctx);
 		inheritanceDataLoader.extractItem(element, ${curr.name?uncap_first});
 		</#if>
 
@@ -129,7 +129,7 @@ public final class ${curr.name?cap_first}DataLoader
 	protected ${curr.name} extractItem(final Map<?, ?> columns,
 				${curr.name?cap_first} ${curr.name?uncap_first}) {
 		<#if InheritanceUtils.isExtended(curr)>
-		${curr.extends}DataLoader.getInstance(this.ctx).extractItem(columns, ${curr.name?uncap_first});
+		${curr.inheritance.superclass}DataLoader.getInstance(this.ctx).extractItem(columns, ${curr.name?uncap_first});
 
 		</#if>
 <#list curr.fields?values as field>${AdapterUtils.ymlExtractFieldAdapter(curr.name?uncap_first, field, curr, 2)}</#list>

@@ -13,17 +13,22 @@ import java.io.Serializable;
 import org.joda.time.DateTime;
 
 import com.tactfactory.harmony.annotation.Column;
+import com.tactfactory.harmony.annotation.DiscriminatorColumn;
 import com.tactfactory.harmony.annotation.Entity;
 import com.tactfactory.harmony.annotation.GeneratedValue;
 import com.tactfactory.harmony.annotation.Id;
+import com.tactfactory.harmony.annotation.InheritanceType;
 import com.tactfactory.harmony.annotation.ManyToOne;
 import com.tactfactory.harmony.annotation.Table;
 import com.tactfactory.harmony.annotation.Column.Type;
+import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
 
 /** Test Application entity. */
 //All annotation with forced value/parameter
 @Table(name = "local_user")
 @Entity
+@InheritanceType(InheritanceMode.SINGLE_TAB)
+@DiscriminatorColumn(name="type", type="varchar")
 public class User extends Object implements Cloneable, Serializable {
 	/** Serial UID. */
 	private static final long serialVersionUID = 7032873279928549706L;

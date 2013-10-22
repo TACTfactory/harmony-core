@@ -19,7 +19,7 @@
 </#function>
 
 <#function isExtended entity>
-	<#return (entity.extends?? && entities[entity.extends]??) />
+	<#return (entity.inheritance?? && entities[entity.inheritance.superclass]??) />
 </#function>
 
 <#function getAllChildren curr>

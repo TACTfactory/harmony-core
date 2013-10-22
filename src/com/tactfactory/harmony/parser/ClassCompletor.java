@@ -304,7 +304,7 @@ public class ClassCompletor {
 	 */
 	private void updateInheritedIds(final EntityMetadata cm) {
 		// If entity has a mother
-		if (cm.getExtendType() != null) {
+		if (cm.getInheritance() != null && cm.getInheritance().getSuperclass() != null) {
 			final EntityMetadata mother = MetadataUtils.getTopMostMother(cm,
 					ApplicationMetadata.INSTANCE);
 			for (String idName : mother.getIds().keySet()) {

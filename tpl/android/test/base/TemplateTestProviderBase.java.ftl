@@ -8,7 +8,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
-<#if (InheritanceUtils.isExtended(curr))>import ${data_namespace}.${curr.extends}SQLiteAdapter;</#if>
+<#if (InheritanceUtils.isExtended(curr))>import ${data_namespace}.${curr.inheritance.superclass}SQLiteAdapter;</#if>
 import ${curr.namespace}.entity.${curr.name};
 
 <#if dataLoader?? && dataLoader>

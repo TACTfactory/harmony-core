@@ -81,7 +81,8 @@ public class FileVisitor {
 			final ArrayList<ClassMetadata> list,
 			final ClassMetadata classMetas) {
 		if (classMetas != null) {
-			for (ClassMetadata subClass : classMetas.getSubClasses().values()) {
+			for (ClassMetadata subClass : 
+				classMetas.getInnerClasses().values()) {
 				this.addClassToList(importList,
 						spackage,
 						list,

@@ -111,11 +111,11 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	public String getJoinedTableName() {
 		String result = TABLE_NAME;
 		<#if InheritanceUtils.isExtended(curr)>
-		${curr.extends}SQLiteAdapter motherAdapt = new ${curr.extends}SQLiteAdapter(this.ctx);
+		${curr.inheritance.superclass}SQLiteAdapter motherAdapt = new ${curr.inheritance.superclass}SQLiteAdapter(this.ctx);
 		result += " INNER JOIN ";
 		result += motherAdapt.getJoinedTableName();
-		result += " <#if InheritanceUtils.isExtended(entities[curr.extends])>AND<#else>ON</#if> ";
-		result += ALIASED_${NamingUtils.alias(curr.ids[0].name)} + " = " + ${curr.extends}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.ids[0].name)};
+		result += " <#if InheritanceUtils.isExtended(entities[curr.inheritance.superclass])>AND<#else>ON</#if> ";
+		result += ALIASED_${NamingUtils.alias(curr.ids[0].name)} + " = " + ${curr.inheritance.superclass}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.ids[0].name)};
 		</#if>
 		return result;
 	}
@@ -158,7 +158,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		+ "PRIMARY KEY (" + <#list curr.ids as id>${NamingUtils.alias(id.name)}<#if (id_has_next)> + "," + </#if></#list> + ")"
 </#if>
 <#if (InheritanceUtils.isExtended(curr))>
-		+ ", FOREIGN KEY (" + ${NamingUtils.alias(curr.ids[0].name)} + ") REFERENCES " + ${curr.extends}SQLiteAdapter.TABLE_NAME + "(" + ${curr.extends}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)} + ") ON DELETE CASCADE"
+		+ ", FOREIGN KEY (" + ${NamingUtils.alias(curr.ids[0].name)} + ") REFERENCES " + ${curr.inheritance.superclass}SQLiteAdapter.TABLE_NAME + "(" + ${curr.inheritance.superclass}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)} + ") ON DELETE CASCADE"
 </#if>
 <#list curr.fields?values as field>
 	<#if (field.unique?? && field.unique)>
@@ -209,7 +209,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	public ContentValues itemToContentValues(final ${curr.name} item) {
 		final ContentValues result = new ContentValues();
 		<#if (InheritanceUtils.isExtended(curr))>
-		${curr.extends?cap_first}SQLiteAdapter motherAdapt = new ${curr.extends?cap_first}SQLiteAdapter(this.ctx);
+		${curr.inheritance.superclass?cap_first}SQLiteAdapter motherAdapt = new ${curr.inheritance.superclass?cap_first}SQLiteAdapter(this.ctx);
 		result.putAll(motherAdapt.itemToContentValues(item));
 		</#if>
 
@@ -236,7 +236,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	public void cursorToItem(final Cursor cursor, final ${curr.name} result) {
 		if (cursor.getCount() != 0) {
 			<#if (InheritanceUtils.isExtended(curr))>
-			${curr.extends}SQLiteAdapter motherAdapt = new ${curr.extends}SQLiteAdapter(this.ctx);
+			${curr.inheritance.superclass}SQLiteAdapter motherAdapt = new ${curr.inheritance.superclass}SQLiteAdapter(this.ctx);
 			motherAdapt.cursorToItem(cursor, result);
 
 			</#if>
@@ -383,7 +383,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	<#if !InheritanceUtils.isExtended(curr)>
 		int newid;
 	<#else>
-		${curr.extends}SQLiteAdapter motherAdapt = new ${curr.extends}SQLiteAdapter(this.ctx);
+		${curr.inheritance.superclass}SQLiteAdapter motherAdapt = new ${curr.inheritance.superclass}SQLiteAdapter(this.ctx);
 		motherAdapt.open(this.mDatabase);
 		final ContentValues currentValues =
 				this.extractContentValues(values);
@@ -506,8 +506,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		<#if (InheritanceUtils.isExtended(curr))>
 		final ContentValues currentValues =
 				this.extractContentValues(values);
-		final ${curr.extends?cap_first}SQLiteAdapter motherAdapt =
-				new ${curr.extends?cap_first}SQLiteAdapter(this.ctx);
+		final ${curr.inheritance.superclass?cap_first}SQLiteAdapter motherAdapt =
+				new ${curr.inheritance.superclass?cap_first}SQLiteAdapter(this.ctx);
 		motherAdapt.open(this.mDatabase);
 		motherAdapt.update(values, whereClause, whereArgs);
 
