@@ -75,8 +75,6 @@ public abstract class TagConstant {
 	public static final String RELATION_TYPE = "relation_type";
 	/** Constant for namespace. */
 	public static final String SPACE = "namespace";
-	/** Constant for entity inheritance. */
-	public static final String EXTENDS = "extends";
 	/** Constant for name. */
 	public static final String NAME = "name";
 	/** Constant for names. */
@@ -140,5 +138,9 @@ public abstract class TagConstant {
 			"discriminatorIdentifier";
 	/** Constant for inheritance. */
 	public static final String INHERITANCE = "inheritance";
+	/** Constant for outer class. */
+	public static final String OUTER_CLASS = "outerClass";
+	/** Constant for inner classes. */
+	public static final String INNER_CLASSES = "innerclasses";
 
 }

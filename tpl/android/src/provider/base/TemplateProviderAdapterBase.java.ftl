@@ -5,8 +5,8 @@
 <#if (curr.internal)>
 	<#assign ext = "Void" />
 </#if>
-<#if (curr.extends?? && entities[curr.extends]??)>
-	<#assign extends = curr.extends />
+<#if (curr.inheritance?? && entities[curr.inheritance.superclass]??)>
+	<#assign extends = curr.inheritance.superclass />
 	<#assign inherited = true />
 </#if>
 <@header?interpret />
@@ -189,11 +189,11 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						null);
 				// If there are ids
 				if (idsCursor.getCount() > 0) {
-					CriteriasBase parentCrit = this.cursorToIDSelection(idsCursor, ${curr.extends}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.ids[0].name)});
+					CriteriasBase parentCrit = this.cursorToIDSelection(idsCursor, ${curr.inheritance.superclass}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.ids[0].name)});
 					String parentSelection = parentCrit.toSQLiteSelection();
 					String[] parentSelectionArgs = parentCrit.toSQLiteSelectionArgs();
 					result = this.ctx.getContentResolver().delete(
-							${curr.extends}ProviderAdapter.${curr.extends?upper_case}_URI,
+							${curr.inheritance.superclass}ProviderAdapter.${curr.inheritance.superclass?upper_case}_URI,
 							parentSelection,
 							parentSelectionArgs);
 				}
@@ -381,14 +381,14 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					if (values.size() > 0) {
 						CriteriasBase parentCrit = this.cursorToIDSelection(
 								idsCursor,
-								${curr.extends}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
+								${curr.inheritance.superclass}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
 
 						String parentSelection = parentCrit.toSQLiteSelection();
 						String[] parentSelectionArgs = parentCrit
 								.toSQLiteSelectionArgs();
 						// Update the parents tables
 						result = this.ctx.getContentResolver().update(
-								${curr.extends}ProviderAdapter.${curr.extends?upper_case}_URI,
+								${curr.inheritance.superclass}ProviderAdapter.${curr.inheritance.superclass?upper_case}_URI,
 								values,
 								parentSelection,
 								parentSelectionArgs);

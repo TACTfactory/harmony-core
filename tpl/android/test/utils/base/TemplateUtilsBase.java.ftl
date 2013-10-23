@@ -1,7 +1,7 @@
 <#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
 <#assign inherited = false />
-<#if (curr.extends?? && entities[curr.extends]??)>
+<#if (curr.inheritance?? && entities[curr.inheritance.superclass]??)>
 	<#assign inherited = true />
 </#if>
 <@header?interpret />
@@ -12,7 +12,7 @@ import junit.framework.Assert;
 import ${curr.namespace}.entity.${curr.name};
 import ${curr.test_namespace}.utils.*;
 
-<#if (inherited)>import ${entity_namespace}.${curr.extends};</#if>
+<#if (inherited)>import ${entity_namespace}.${curr.inheritance.superclass};</#if>
 
 <#assign importList = [] />
 <#list curr.relations as relation>
@@ -45,9 +45,9 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 	public static ${curr.name?cap_first} generateRandom(Context ctx){
 		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
 		<#if (inherited)>
-		${curr.extends?cap_first} ${curr.extends?uncap_first} = ${curr.extends?cap_first}Utils.generateRandom(ctx);
-			<#list entities[curr.extends].fields?values as field>
-		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.extends?uncap_first}.<#if field.type?lower_case == "boolean">is<#else>get</#if>${field.name?cap_first}());
+		${curr.inheritance.superclass?cap_first} ${curr.inheritance.superclass?uncap_first} = ${curr.inheritance.superclass?cap_first}Utils.generateRandom(ctx);
+			<#list entities[curr.inheritance.superclass].fields?values as field>
+		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.inheritance.superclass?uncap_first}.<#if field.type?lower_case == "boolean">is<#else>get</#if>${field.name?cap_first}());
 			</#list>
 		</#if>
 

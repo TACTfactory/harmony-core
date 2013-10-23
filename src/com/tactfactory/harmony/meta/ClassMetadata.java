@@ -76,6 +76,7 @@ public class ClassMetadata extends BaseMetadata {
 		model.put(TagConstant.OPTIONS, optionsModel);
 
 		model.put(TagConstant.INHERITANCE, this.inheritanceMeta);
+		model.put(TagConstant.OUTER_CLASS, this.outerClass);
 
 		return model;
 	}
