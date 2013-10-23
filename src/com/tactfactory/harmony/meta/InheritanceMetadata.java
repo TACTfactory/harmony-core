@@ -21,7 +21,7 @@ public class InheritanceMetadata extends BaseMetadata {
 	public Map<String, Object> toMap(BaseAdapter adapter) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put(TagConstant.INHERITANCE_TYPE,
-				this.type);
+				this.type.getValue());
 		
 		result.put(TagConstant.DISCRIMINATOR_COLUMN,
 				this.discriminorColumn);

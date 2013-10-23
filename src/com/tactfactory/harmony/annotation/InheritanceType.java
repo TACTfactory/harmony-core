@@ -26,12 +26,22 @@ public @interface InheritanceType {
 		 * Joined inheritance : One table for every entity. OneToOne relation
 		 * to bind them. (Default)
 		 */
-		JOINED,
+		JOINED("Joined"),
 		/** 
 		 * SingleTab inheritance : One table for each entity. Discriminator
 		 * column to distinguish type.
 		 */
-		SINGLE_TAB;
+		SINGLE_TAB("SingleTab");
+		
+		private String value;
+		
+		private InheritanceMode(String value) {
+			this.value = value;
+		}
+		
+		public String getValue() {
+			return this.value;
+		}
 	}
 	/**
 	 * The inheritance mode.

@@ -9,6 +9,9 @@
 <#assign hasDate = MetadataUtils.hasDate(curr) />
 <#assign hasTime = MetadataUtils.hasTime(curr) />
 <#assign hasDateTime = MetadataUtils.hasDateTime(curr) />
+<#assign singleTabInheritance = (curr.inheritance?? && curr.inheritance.inheritanceType == "SingleTab") />
+<#assign joinedInheritance = (curr.inheritance?? && curr.inheritance.inheritanceType == "Joined") />
+<#assign isTopMostSuperClass = (curr.inheritance?? && !curr.inheritance.superclass??) />
 <@header?interpret />
 package ${data_namespace}.base;
 
@@ -76,6 +79,14 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			TABLE_NAME + "." + ${NamingUtils.alias(field.name)};
 	</#if>
 </#list>
+<#if (singleTabInheritance && isTopMostSuperClass)>
+	/** userGroup. */
+	public static final String ${NamingUtils.alias(curr.inheritance.discriminatorColumn)} = 
+			"${curr.inheritance.discriminatorColumn}";
+	/** Alias. */
+	public static final String ALIASED_${NamingUtils.alias(curr.inheritance.discriminatorColumn)} = 
+			TABLE_NAME + "." + ${NamingUtils.alias(curr.inheritance.discriminatorColumn)};
+</#if>
 
 	/** Global Fields. */
 	public static final String[] COLS = new String[] {
@@ -110,7 +121,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public String getJoinedTableName() {
 		String result = TABLE_NAME;
-		<#if InheritanceUtils.isExtended(curr)>
+		<#if (joinedInheritance)>
 		${curr.inheritance.superclass}SQLiteAdapter motherAdapt = new ${curr.inheritance.superclass}SQLiteAdapter(this.ctx);
 		result += " INNER JOIN ";
 		result += motherAdapt.getJoinedTableName();
