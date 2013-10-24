@@ -23,6 +23,7 @@ import print.color.Ansi.Attribute;
 import print.color.Ansi.BColor;
 import print.color.Ansi.FColor;
 import print.color.ColoredPrinter;
+import print.color.ColoredPrinterWIN;
 
 /**
  * Utility class for console.
@@ -52,7 +53,7 @@ public abstract class ConsoleUtils {
 
 	/** Printer for colors. */
 	private static ColoredPrinter cp =
-			new ColoredPrinter.Builder(0, false).build();
+			new ColoredPrinter(new ColoredPrinterWIN.Builder(0, false).build());
 
 	// Getter/Setter
 
