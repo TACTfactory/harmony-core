@@ -149,7 +149,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			<#assign lastRelation=" + \"FOREIGN KEY(\" + " + NamingUtils.alias(relation.name)
 			+ " + \") REFERENCES \" \n\t\t\t + " + relation.relation.targetEntity
 			+ "SQLiteAdapter.TABLE_NAME \n\t\t\t\t+ \" (\" + " + relation.relation.targetEntity
-			+ "SQLiteAdapter." + NamingUtils.alias(relation.relation.field_ref[0]) + " + \")">
+			+ "SQLiteAdapter." + NamingUtils.alias(relation.relation.field_ref[0].name) + " + \")">
 		</#if>
 	</#list>
 		<#if (lastRelation??)>${lastRelation}<#if (curr.ids?size>1)>,</#if>"</#if>
@@ -404,7 +404,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			${relation.name?uncap_first}Adapter.open(this.mDatabase);
 			for (${relation.relation.targetEntity?cap_first} i : item.get${relation.name?cap_first}()) {
 				${relation.name?uncap_first}Adapter.insert(newid,
-						i.get${relation.relation.field_ref[0]?cap_first}());
+						i.get${relation.relation.field_ref[0].name?cap_first}());
 			}
 		<#elseif (relation.relation.type=="OneToMany")>
 			${relation.relation.targetEntity}SQLiteAdapterBase ${relation.name?uncap_first}Adapter =
@@ -622,7 +622,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		${relation.relation.joinTable}SQLiteAdapter ${relation.name?uncap_first}Adapter =
 				new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 		for (${relation.relation.targetEntity?cap_first} i : item.get${relation.name?cap_first}()) {
-			${relation.name?uncap_first}Adapter.insert(newid, i.get${relation.relation.field_ref[0]?cap_first}());
+			${relation.name?uncap_first}Adapter.insert(newid, i.get${relation.relation.field_ref[0].name?cap_first}());
 		}
 		<#elseif (relation.relation.type=="OneToMany")>
 		${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter =
@@ -810,9 +810,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 
 		Cursor ret = null;
 		${curr.name}Criterias crit = new ${curr.name}Criterias(GroupType.AND);
-		crit.add(ALIASED_COL_${leftRelation.relation.targetEntity?upper_case}_ID, String.valueOf(${leftRelation.relation.targetEntity?lower_case}_id), Type.EQUALS);
+		crit.add(ALIASED_${NamingUtils.alias(leftRelation.name)}, String.valueOf(${leftRelation.name}), Type.EQUALS);
 		SelectValue value = new SelectValue();
-		value.setRefKey(ALIASED_COL_${rightRelation.relation.targetEntity?upper_case}_ID);
+		value.setRefKey(ALIASED_${NamingUtils.alias(rightRelation.name)});
 		value.setRefTable(TABLE_NAME);
 		value.setCriteria(crit);
 		${rightRelation.relation.targetEntity}Criterias ${rightRelation.relation.targetEntity?lower_case}Crit = new ${rightRelation.relation.targetEntity}Criterias(GroupType.AND);
