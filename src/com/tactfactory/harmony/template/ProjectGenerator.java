@@ -22,9 +22,6 @@ import com.tactfactory.harmony.utils.TactFileUtils;
  */
 public class ProjectGenerator extends BaseGenerator {
 
-	/** GIT command. */
-	private static final String GIT = "git";
-
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use for the generation.
@@ -227,7 +224,34 @@ public class ProjectGenerator extends BaseGenerator {
 		this.updateLibrary("core-annotations.jar");
 
 		/// copy sherlock library
-		this.installAndroidSherlockLib();
+		//this.installAndroidSherlockLib();
+		
+
+		String pathLib = new File(String.format("%s%s",
+				this.getAdapter().getLibsPath(),
+				"sherlock")).getAbsolutePath();
+		List<File> filesToDelete = new ArrayList<File>();
+		filesToDelete.add(new File(String.format("%s/%s",
+							pathLib,
+							"samples")));
+		
+		this.installGitLibrary("https://github.com/JakeWharton/ActionBarSherlock.git",
+				pathLib,
+				"4.2.0",
+				ApplicationMetadata.INSTANCE.getName() + "-abs",
+				filesToDelete,
+				pathLib + "/library",
+				true);
+		
+		String srcPath = Harmony.getTemplatesPath()
+							+ "/android/libs/sherlock_ant.properties";
+		String destPath = pathLib + "/library/" + "ant.properties";
+		this.makeSource(srcPath, destPath, false);
+
+		srcPath = Harmony.getTemplatesPath()
+						+ "/android/libs/sherlock_.project";
+		destPath = pathLib + "/library/" + ".project";
+		this.makeSource(srcPath, destPath, false);
 	}
 
 	/**
@@ -306,106 +330,6 @@ public class ProjectGenerator extends BaseGenerator {
 		command.add("init");
 		command.add(projectFolder.getAbsolutePath());
 		ConsoleUtils.launchCommand(command);
-	}
-
-	/**
-	 * Install Android Sherlock Bar Library.
-	 */
-	private void installAndroidSherlockLib() {
-		//TODO test if git is install
-		final File pathSherlock = new File(String.format("%s%s",
-				this.getAdapter().getLibsPath(),
-				"sherlock"));
-
-		if (!TactFileUtils.exists(pathSherlock.getAbsolutePath())) {
-			final ArrayList<String> command = new ArrayList<String>();
-
-			// command/Tools
-			command.add(GIT);
-
-			// command action
-			command.add("clone");
-
-			// command depot
-			command.add("https://github.com/JakeWharton/ActionBarSherlock.git");
-
-			// command destination folder
-			command.add(pathSherlock.getAbsolutePath());
-
-			ConsoleUtils.launchCommand(command);
-			command.clear();
-
-			// command git checkout
-			command.add(GIT);
-			command.add(String.format(
-					"%s%s/%s",
-					"--git-dir=",
-					pathSherlock.getAbsoluteFile(),
-					".git"));
-
-			command.add(String.format("%s%s",
-					"--work-tree=",
-					pathSherlock.getAbsolutePath()));
-
-			command.add("checkout");
-			command.add("4.2.0");
-			ConsoleUtils.launchCommand(command);
-			command.clear();
-
-			// delete samples
-			TactFileUtils.deleteRecursive(
-					new File(String.format("%s/%s",
-							pathSherlock.getAbsolutePath(),
-							"samples")));
-
-			String srcPath = Harmony.getTemplatesPath()
-								+ "/android/libs/sherlock_ant.properties";
-			String destPath = pathSherlock + "/library/ant.properties";
-			this.makeSource(srcPath, destPath, false);
-
-			srcPath = Harmony.getTemplatesPath()
-							+ "/android/libs/sherlock_.project";
-			destPath = pathSherlock + "/library/.project";
-			this.makeSource(srcPath, destPath, false);
-
-			//make build sherlock
-			String sdkTools = String.format("%s/%s",
-					ApplicationMetadata.getAndroidSdkPath(),
-					"tools/android");
-			if (OsUtil.isWindows()) {
-				sdkTools += ".bat";
-			}
-
-			command.add(new File(sdkTools).getAbsolutePath());
-			command.add("update");
-			command.add("project");
-			command.add("--path");
-			command.add(new File(
-					pathSherlock.getAbsolutePath()
-					+ "/library").getAbsolutePath());
-			command.add("--name");
-			command.add(ApplicationMetadata.INSTANCE.getName() + "-abs");
-			ConsoleUtils.launchCommand(command);
-
-			
-			AndroidSDKManager.copySupportV4Into(
-					this.getAdapter().getLibsPath() 
-							+ "sherlock/library/libs/");
-		}
-
-		final File projectFolder = new File(Harmony.getProjectAndroidPath());
-		final ArrayList<String> command = new ArrayList<String>();
-		command.add(GIT);
-		command.add("submodule");
-		command.add("add");
-		// command depot
-		command.add("https://github.com/JakeWharton/ActionBarSherlock.git");
-		command.add(TactFileUtils.absoluteToRelativePath(
-				pathSherlock.getAbsolutePath(),
-				projectFolder.getAbsolutePath()));
-		ConsoleUtils.launchCommand(command, projectFolder.getAbsolutePath());
-
-
 	}
 
 	/**
