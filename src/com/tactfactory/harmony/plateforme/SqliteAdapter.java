@@ -106,9 +106,7 @@ public abstract class SqliteAdapter {
 			
 		} else {
 			if (field.getRelation() != null) {
-				EntityMetadata relatedEntity = 
-						ApplicationMetadata.INSTANCE.getEntities().get(
-								field.getRelation().getEntityRef());
+				EntityMetadata relatedEntity = field.getRelation().getEntityRef();
 				ArrayList<FieldMetadata> ids = new ArrayList<FieldMetadata>(
 						relatedEntity.getIds().values());
 				type = SqliteAdapter.generateColumnType(ids.get(0));

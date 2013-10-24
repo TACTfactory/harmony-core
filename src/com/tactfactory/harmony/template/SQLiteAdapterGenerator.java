@@ -40,8 +40,10 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		for (final ClassMetadata classMeta
 				: this.getAppMetas().getEntities().values()) {
 			if (!classMeta.getFields().isEmpty()) {
-				this.localNameSpace = this.getAdapter().getNameSpace(
-						classMeta, this.getAdapter().getData());
+				this.localNameSpace = 
+						this.getAppMetas().getProjectNameSpace().replace('/', '.')
+						+ "."
+						+ this.getAdapter().getData();
 				this.getDatamodel().put(
 						TagConstant.CURRENT_ENTITY, classMeta.getName());
 				this.generate();

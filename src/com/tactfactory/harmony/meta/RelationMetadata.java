@@ -8,9 +8,7 @@
  */
 package com.tactfactory.harmony.meta;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import com.tactfactory.harmony.plateforme.BaseAdapter;
@@ -26,16 +24,13 @@ public class RelationMetadata extends BaseMetadata {
 	private String field;
 
 	/** The related entity. */
-	private String entityRef;
-
-	/** The related entity's field which will be used for the relation. */
-	private List<String> fieldRef = new ArrayList<String>();
+	private EntityMetadata entityRef;
 
 	/** Inversed by (in case of OneToMany). */
-	private String mappedBy;
+	private FieldMetadata mappedBy;
 
 	/** Inversed by (in case of ManyToOne). */
-	private String inversedBy;
+	private FieldMetadata inversedBy;
 
 	/** Name of the join table used to join ManyToMany relations. */
 	private String joinTable;
@@ -50,13 +45,13 @@ public class RelationMetadata extends BaseMetadata {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put(TagConstant.NAME, this.getName());
 		model.put(TagConstant.TYPE, this.type);
-		model.put(TagConstant.FIELD_REF, this.fieldRef);
-		model.put(TagConstant.ENTITY_REF, this.entityRef);
+		model.put(TagConstant.ENTITY_REF, this.entityRef.getName());
+		model.put(TagConstant.FIELD_REF, this.entityRef.getIds().values());
 		if (this.inversedBy != null) {
-			model.put("inversedBy", this.inversedBy);
+			model.put("inversedBy", this.inversedBy.getName());
 		}
 		if (this.mappedBy != null) {
-			model.put("mappedBy", this.mappedBy);
+			model.put("mappedBy", this.mappedBy.getName());
 		}
 		model.put("joinTable", this.joinTable);
 
@@ -94,56 +89,42 @@ public class RelationMetadata extends BaseMetadata {
 	/**
 	 * @return the entityRef
 	 */
-	public final String getEntityRef() {
-		return entityRef;
+	public final EntityMetadata getEntityRef() {
+		return this.entityRef;
 	}
 
 	/**
 	 * @param entityRef the entityRef to set
 	 */
-	public final void setEntityRef(final String entityRef) {
+	public final void setEntityRef(final EntityMetadata entityRef) {
 		this.entityRef = entityRef;
-	}
-
-	/**
-	 * @return the fieldRef
-	 */
-	public final List<String> getFieldRef() {
-		return fieldRef;
-	}
-
-	/**
-	 * @param fieldRef the fieldRef to set
-	 */
-	public final void setFieldRef(final List<String> fieldRef) {
-		this.fieldRef = fieldRef;
 	}
 
 	/**
 	 * @return the mappedBy
 	 */
-	public final String getMappedBy() {
+	public final FieldMetadata getMappedBy() {
 		return mappedBy;
 	}
 
 	/**
 	 * @param mappedBy the mappedBy to set
 	 */
-	public final void setMappedBy(final String mappedBy) {
+	public final void setMappedBy(final FieldMetadata mappedBy) {
 		this.mappedBy = mappedBy;
 	}
 
 	/**
 	 * @return the inversedBy
 	 */
-	public final String getInversedBy() {
+	public final FieldMetadata getInversedBy() {
 		return inversedBy;
 	}
 
 	/**
 	 * @param inversedBy the inversedBy to set
 	 */
-	public final void setInversedBy(final String inversedBy) {
+	public final void setInversedBy(final FieldMetadata inversedBy) {
 		this.inversedBy = inversedBy;
 	}
 

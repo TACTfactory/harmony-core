@@ -36,6 +36,7 @@ import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
 import com.tactfactory.harmony.annotation.Entity;
 import com.tactfactory.harmony.annotation.InheritanceType;
+import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
@@ -85,19 +86,24 @@ public class ClassVisitor {
 
     	boolean isEntity = false;
     	boolean isInterface = false;
-
-    	// Detect whether we have an interface or an entity
-    	if (classDeclaration.isInterface()) {
-    		result = new InterfaceMetadata();
-    		isInterface = true;
+    	
+    	String classname = PackageUtils.extractNameEntity(
+    			classDeclaration.getName());
+    	
+    	if (ApplicationMetadata.INSTANCE.getClasses().containsKey(classname)) {
+    		result = ApplicationMetadata.INSTANCE.getClasses().get(classname);
     	} else {
-    		result = new EntityMetadata();
+	    	// Detect whether we have an interface or an entity
+	    	if (classDeclaration.isInterface()) {
+	    		result = new InterfaceMetadata();
+	    		isInterface = true;
+	    	} else {
+	    		result = new EntityMetadata();
+	    	}
+	    	result.setName(PackageUtils.extractNameEntity(
+	    			classDeclaration.getName()));
     	}
-
-
-    	// *** Get the common attributes ***
-    	result.setName(PackageUtils.extractNameEntity(
-    			classDeclaration.getName()));
+    	
     	// Debug Log
     	ConsoleUtils.displayDebug("Found class : " +  result.getName());
     	// Check reserved keywords

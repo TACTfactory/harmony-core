@@ -67,7 +67,6 @@ public class EntityGenerator extends BaseGenerator {
 		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 		this.entityFolder = 
 				this.getAdapter().getSourcePath() 
-
 				+ this.getAppMetas()
 					.getProjectNameSpace().replaceAll("\\.", "/")
 				+ "/entity/";
@@ -93,6 +92,10 @@ public class EntityGenerator extends BaseGenerator {
 			ConsoleUtils.display(">>> Decorate " + classMeta.getName());
 
 			final File entityFile = TactFileUtils.getFile(filepath);
+			if (entityFile.getAbsolutePath().contains("Category")) {
+				int i =0;
+				i++;
+			}
 			if (entityFile.exists()) {
 				// Load the file once in a String buffer
 				final StringBuffer fileString = 

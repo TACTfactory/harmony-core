@@ -116,7 +116,9 @@ public abstract class CommonTest {
 	 * @throws Exception if something bad happends.
 	 */
 	public void tearDown() throws Exception {
-
+		ApplicationMetadata.INSTANCE.getClasses().clear();
+		ApplicationMetadata.INSTANCE.getEntities().clear();
+		ApplicationMetadata.INSTANCE.getEnums().clear();
 	}
 
 	/** Get Harmony instance.

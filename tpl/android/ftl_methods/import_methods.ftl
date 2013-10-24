@@ -53,7 +53,7 @@
 		</#if>
 	</#list>
 	<#list import_array as import>
-		<#assign result = result + "import ${entity.namespace}.entity.${import};" />
+		<#assign result = result + "import ${entity_namespace}.${import};" />
 		<#if import_has_next>
 			<#assign result = result + "\n" />
 		</#if>

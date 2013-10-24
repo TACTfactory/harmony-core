@@ -2,6 +2,7 @@
 <#assign curr = entities[current_entity] />
 <#assign inherited = false />
 <#assign ext = curr.name?cap_first />
+<#assign hasIds = (curr.ids?? && curr.ids?size > 0) />
 <#if (curr.internal)>
 	<#assign ext = "Void" />
 </#if>
@@ -56,6 +57,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	/** ${curr.name?upper_case}_ALL. */
 	protected static final int ${curr.name?upper_case}_ALL =
 			${provider_id?c};
+	<#if (hasIds)>
 	/** ${curr.name?upper_case}_ONE. */
 	protected static final int ${curr.name?upper_case}_ONE =
 			${(provider_id + 1)?c};
@@ -69,6 +71,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	<#assign provider_id = provider_id + 1 />
 		</#if>
 	</#list>
+	</#if>
 
 	/**
 	 * Static constructor.
@@ -81,6 +84,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				${project_name?cap_first}Provider.authority,
 				${curr.name?uncap_first}Type,
 				${curr.name?upper_case}_ALL);
+		<#if (hasIds)>
 		${project_name?cap_first}Provider.getUriMatcher().addURI(
 				${project_name?cap_first}Provider.authority,
 				${curr.name?uncap_first}Type + "/#",
@@ -93,6 +97,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				${curr.name?upper_case}_${relation.name?upper_case});
 			</#if>
 		</#list>
+		</#if>
 	}
 
 	/**
@@ -112,12 +117,14 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		}
 
 		this.uriIds.add(${curr.name?upper_case}_ALL);
+		<#if (hasIds)>
 		this.uriIds.add(${curr.name?upper_case}_ONE);
 		<#list curr.relations as relation>
 			<#if !relation.internal>
 		this.uriIds.add(${curr.name?upper_case}_${relation.name?upper_case});
 			</#if>
 		</#list>
+		</#if>
 	}
 
 	@Override
@@ -132,11 +139,12 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				.getUriMatcher().match(uri);
 
 		switch (matchedUri) {
-			case ${curr.name?upper_case}_ONE:
-				result = single + "${curr.name?lower_case}";
-				break;
 			case ${curr.name?upper_case}_ALL:
 				result = collection + "${curr.name?lower_case}";
+				break;
+		<#if (hasIds)>
+			case ${curr.name?upper_case}_ONE:
+				result = single + "${curr.name?lower_case}";
 				break;
 			<#list curr.relations as relation>
 				<#if !relation.internal>
@@ -145,6 +153,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				break;
 				</#if>
 			</#list>
+		</#if>
 		}
 
 		return result;
@@ -160,6 +169,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					.getUriMatcher().match(uri);
 		int result = -1;
 		switch (matchedUri) {
+			<#if (hasIds)>
 			case ${curr.name?upper_case}_ONE:
 				int id = Integer.parseInt(uri.getPathSegments().get(1));
 				<#if inherited>
@@ -177,6 +187,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						selectionArgs);
 				</#if>
 				break;
+			</#if>
 			case ${curr.name?upper_case}_ALL:
 				<#if inherited>
 				// Query the ids of the changing fields.
@@ -259,10 +270,6 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		int id = 0;
 
 		switch (matchedUri) {
-			case ${curr.name?upper_case}_ONE:
-				result = this.queryById(uri.getPathSegments().get(1));
-				break;
-
 			case ${curr.name?upper_case}_ALL:
 				result = this.adapter.query(
 							projection,
@@ -271,6 +278,10 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							null,
 							null,
 							sortOrder);
+				break;
+			<#if (hasIds)>
+			case ${curr.name?upper_case}_ONE:
+				result = this.queryById(uri.getPathSegments().get(1));
 				break;
 			
 			<#list curr.relations as relation>
@@ -308,6 +319,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 
 				</#if>
 			</#list>
+			</#if>
 			default:
 				result = null;
 				break;
@@ -328,6 +340,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				.match(uri);
 		int result = -1;
 		switch (matchedUri) {
+			<#if (hasIds)>
 			case ${curr.name?upper_case}_ONE:
 				String id = uri.getPathSegments().get(1);
 				<#if inherited>
@@ -350,6 +363,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						selectionArgs);
 				</#if>
 				break;
+			</#if>
 			case ${curr.name?upper_case}_ALL:
 				<#if inherited>
 				// Query the ids of the changing fields.
@@ -446,6 +460,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	}
 	</#if>
 
+
 	/**
 	 * Get the entity URI.
 	 * @return The URI
@@ -455,6 +470,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		return ${curr.name?upper_case}_URI;
 	}
 
+	<#if (hasIds)>
 	private Cursor queryById(String id) {
 		Cursor result = null;
 		String selection = ${curr.name}SQLiteAdapter.ALIASED_COL_ID
@@ -469,5 +485,6 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					null);
 		return result;
 	}
+	</#if>
 }
 
