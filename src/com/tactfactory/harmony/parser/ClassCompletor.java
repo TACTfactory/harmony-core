@@ -12,15 +12,11 @@ import java.util.Map;
 
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.annotation.Column.Type;
-import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
-import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
-import com.tactfactory.harmony.meta.InheritanceMetadata;
 import com.tactfactory.harmony.plateforme.SqliteAdapter;
-import com.tactfactory.harmony.utils.MetadataUtils;
 
 
 /** The class ClassCompletor will complete all ClassMetadatas
@@ -49,71 +45,11 @@ public class ClassCompletor {
 	 */
 	public final void execute() {
 		for (final EntityMetadata classMeta : this.metas.values()) {
-			this.completeInheritanceHierarchies(classMeta);
-			this.completeInheritanceData(classMeta);
-			this.updateInheritedIds(classMeta);
 			this.updateColumnDefinition(classMeta);
 		}
 		
 		for (final EnumMetadata enumMeta : this.enumMetas.values()) {
 			this.updateColumnDefinition(enumMeta);
-		}
-	}
-
-	/**
-	 * Add the mother ID field to inherited entities.
-	 * @param cm The entity to update
-	 */
-	private void updateInheritedIds(final EntityMetadata cm) {
-		// If entity has a mother
-		if (cm.getInheritance() != null && cm.getInheritance().getSuperclass() != null && cm.getInheritance().getType().equals(InheritanceMode.JOINED)) {
-			final EntityMetadata mother = MetadataUtils.getTopMostMother(cm,
-					ApplicationMetadata.INSTANCE);
-			for (String idName : mother.getIds().keySet()) {
-				final FieldMetadata id = mother.getIds().get(idName);
-				cm.getIds().put(idName, id);
-				cm.getFields().put(idName, id);
-			}
-		}
-	}
-	
-
-	/**
-	 * Add the mother ID field to inherited entities.
-	 * @param cm The entity to update
-	 */
-	private void completeInheritanceHierarchies(final EntityMetadata cm) {
-		// If entity has a mother
-		if (cm.getInheritance() != null){
-			if (cm.getInheritance().getSuperclass() != null) {
-				final ClassMetadata mother = ApplicationMetadata.INSTANCE.getClasses().get(cm.getInheritance().getSuperclass());
-				if (mother.getInheritance() == null) {
-					mother.setInheritance(new InheritanceMetadata());
-				}
-				
-				mother.getInheritance().getSubclasses().put(cm.getName(), cm.getName());
-			} else {
-				for (String childName : cm.getInheritance().getSubclasses().values()) {
-					ApplicationMetadata.INSTANCE.getClasses().get(childName).getInheritance().setSuperclass(cm.getName());
-				}
-			}
-		}
-	}
-	
-	private void completeInheritanceData(final ClassMetadata cm) {
-		// If topmost superclass ?
-		if (cm.getInheritance() != null) {
-			if (cm.getInheritance().getSuperclass() == null && ApplicationMetadata.INSTANCE.getEntities().containsKey(cm.getInheritance().getSuperclass()) && cm.getInheritance().getType() != null) {
-				
-				cm.getInheritance().setType(InheritanceMode.JOINED);
-			}
-			for (String childName : cm.getInheritance().getSubclasses().values()) {
-				ClassMetadata child = 
-						ApplicationMetadata.INSTANCE.getClasses().get(childName);
-				child.getInheritance().setType(cm.getInheritance().getType());
-				
-				this.completeInheritanceData(child);
-			}
 		}
 	}
 	

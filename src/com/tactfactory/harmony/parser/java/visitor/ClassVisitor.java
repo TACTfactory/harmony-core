@@ -155,7 +155,9 @@ public class ClassVisitor {
 				}
 	    	}
 	    	
-	    	this.loadInheritanceData(result, classDeclaration);
+	    	if (isEntity) {
+	    		this.loadInheritanceData((EntityMetadata) result, classDeclaration);
+	    	}
 
 
 			// Get list of Implement type
@@ -325,23 +327,57 @@ public class ClassVisitor {
     	return result;
     }
     
-    private void loadInheritanceData(ClassMetadata classMeta,
+    private void loadInheritanceData(EntityMetadata classMeta,
     		ClassOrInterfaceDeclaration classDecl) {
     	AnnotationExpr inheritanceTypeAnnot =
     			this.annotationMap.get(ANNOTATION_INHERITANCE_TYPE);
-    	
-    	InheritanceMetadata inheritanceMeta = null;
-    	
+    	boolean inherits = false;
+    	InheritanceMetadata inheritanceMeta;
+    	if (classMeta.getInheritance() != null) {
+    		inheritanceMeta = classMeta.getInheritance();
+    	} else {
+    		inheritanceMeta = new InheritanceMetadata();
+    	}
     	
     	if (classDecl.getExtends() != null) {
-    		inheritanceMeta = new InheritanceMetadata();
-    		inheritanceMeta.setSuperclass(classDecl.getExtends().get(0).getName());
+    		inherits = true;
+    		// TODO : check if extends is a entity ?
+    		InheritanceMode mode = null;
+    		String superClassName = classDecl.getExtends().get(0).getName();
+    		EntityMetadata superclass;
+    		if (ApplicationMetadata.INSTANCE.getEntities().containsKey(superClassName)) {
+    			 superclass = 
+    					 ApplicationMetadata.INSTANCE.getEntities().get(
+    							 superClassName); 
+    			if (superclass.getInheritance() == null) {
+     				superclass.setInheritance(new InheritanceMetadata());
+     				superclass.getInheritance().getSubclasses().put(
+     						classMeta.getName(),
+     						classMeta);
+     			} else {
+     				mode = superclass.getInheritance().getType();
+     			}
+    			
+    		} else {
+    			superclass = new EntityMetadata();
+    			superclass.setName(superClassName);
+    			if (superclass.getInheritance() == null) {
+    				superclass.setInheritance(new InheritanceMetadata());
+    			}
+    			superclass.getInheritance().getSubclasses().put(
+    					classMeta.getName(),
+    					classMeta);
+    		}
+
+    		inheritanceMeta.setSuperclass(superclass);
+    		if (mode != null) {
+    			inheritanceMeta.setType(mode);
+    		}
+    		
     	} 
     	
     	if (inheritanceTypeAnnot != null) {
-    		if (inheritanceMeta == null) {
-    			inheritanceMeta = new InheritanceMetadata();
-    		}
+    		inherits = true;
     		// Get mode
     		InheritanceMode mode = null;
     		String modeName = null;
@@ -367,11 +403,23 @@ public class ClassVisitor {
     		} else {
     			mode = InheritanceMode.JOINED;
     		}
-    		
+
+    		// Propagate type to subclasses
     		inheritanceMeta.setType(mode);
+    		this.propagateModeToSubclasses(inheritanceMeta);
     		
     	}
     	
-    	classMeta.setInheritance(inheritanceMeta);
+    	if (inherits) {
+    		classMeta.setInheritance(inheritanceMeta);
+    	}
+    }
+    
+    private void propagateModeToSubclasses(InheritanceMetadata inheritanceMeta) {
+		// Propagate type to subclasses
+		for (EntityMetadata subclass : inheritanceMeta.getSubclasses().values()) {
+			subclass.getInheritance().setType(inheritanceMeta.getType());
+			this.propagateModeToSubclasses(subclass.getInheritance());
+		}
     }
 }
