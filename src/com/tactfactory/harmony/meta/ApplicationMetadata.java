@@ -16,6 +16,7 @@ import java.util.TreeMap;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.template.TagConstant;
+import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
  * Application Metadata.
@@ -291,5 +292,19 @@ public final class ApplicationMetadata extends BaseMetadata {
 	 */
 	public void setHeaderTemplate(final String headerTemplate) {
 		this.headerTemplate = headerTemplate;
+	}
+	
+	public EntityMetadata enforceExistingEntity(String entityName) {
+		EntityMetadata result = null;
+		if (!this.entities.containsKey(entityName))  {
+			EntityMetadata newClass = new EntityMetadata();
+			newClass.setName(entityName);
+			this.entities.put(entityName, newClass);
+			this.classes.put(entityName, newClass);
+		}
+		result = this.entities.get(entityName);
+		
+		
+		return result;
 	}
 }
