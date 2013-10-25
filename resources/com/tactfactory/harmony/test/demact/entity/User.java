@@ -27,9 +27,9 @@ import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
 //All annotation with forced value/parameter
 @Table(name = "local_user")
 @Entity
-@InheritanceType(InheritanceMode.SINGLE_TAB)
+@InheritanceType(InheritanceMode.JOINED)
 @DiscriminatorColumn(name="type", type="varchar")
-public class User extends Object implements Cloneable, Serializable {
+public class User implements Cloneable, Serializable {
 	/** Serial UID. */
 	private static final long serialVersionUID = 7032873279928549706L;
 

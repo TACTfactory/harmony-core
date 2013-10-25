@@ -374,12 +374,12 @@ public class ClassVisitor {
 
     		inheritanceMeta.setSuperclass(superclass);
     		if (mode != null) {
-    			if (mode.equals(InheritanceMode.JOINED)) {
+    			/*if (mode.equals(InheritanceMode.JOINED)) {
     				for (FieldMetadata id : superclass.getIds().values()) {
     					classMeta.getFields().put(id.getName(), id);
     					classMeta.getIds().put(id.getName(), id);
     				}
-    			}
+    			}*/
     			inheritanceMeta.setType(mode);
     		}
     		
@@ -427,12 +427,12 @@ public class ClassVisitor {
     private void propagateModeToSubclasses(EntityMetadata classMeta) {
 		// Propagate type to subclasses
 		for (EntityMetadata subclass : classMeta.getInheritance().getSubclasses().values()) {
-			if (classMeta.getInheritance().getType().equals(InheritanceMode.JOINED)) {
+			/*if (classMeta.getInheritance().getType().equals(InheritanceMode.JOINED)) {
 				for (FieldMetadata id : classMeta.getIds().values()) {
 					subclass.getFields().put(id.getName(), id);
 					subclass.getIds().put(id.getName(), id);
 				}
-			}
+			}*/
 			subclass.getInheritance().setType(classMeta.getInheritance().getType());
 			this.propagateModeToSubclasses(classMeta);
 		}

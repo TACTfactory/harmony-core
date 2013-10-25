@@ -7,7 +7,6 @@
 <#import utilityPath + "fields_methods.ftl" as FieldsUtils />
 <#import utilityPath + "view_methods.ftl" as ViewUtils />
 <#import utilityPath + "adapters_methods.ftl" as AdapterUtils />
-
 <#if current_entity??>
 	<#assign curr = entities[current_entity] />
 	<#assign singleTabInheritance = (curr.inheritance?? && curr.inheritance.inheritanceType?? && curr.inheritance.inheritanceType == "SingleTab") />
