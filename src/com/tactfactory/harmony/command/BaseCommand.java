@@ -43,6 +43,9 @@ public abstract class BaseCommand implements Command {
 	 * with the method this.javaModelParser.registerParser()
 	 */
 	public void generateMetas() {
+		ApplicationMetadata.INSTANCE.getClasses().clear();
+		ApplicationMetadata.INSTANCE.getEntities().clear();
+		ApplicationMetadata.INSTANCE.getEnums().clear();
 		HeaderParser.parseHeaderFile();
 		ConsoleUtils.display(">> Analyse Models...");
 		this.javaModelParser = new JavaModelParser();
