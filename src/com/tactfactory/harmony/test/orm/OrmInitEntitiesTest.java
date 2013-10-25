@@ -199,7 +199,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	@Test
 	public final void isClientExtended() {
 		Assert.assertEquals(CLIENT + " doesn't inherit from " + USER,
-				clientMeta.getInheritance().getSuperclass(),
+				clientMeta.getInheritance().getSuperclass().getName(),
 				USER);
 	}
 

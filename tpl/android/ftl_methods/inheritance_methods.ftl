@@ -18,7 +18,7 @@
 	</#if>
 </#function>
 
-<#function isExtended entity>
+<#function isExtended entity >
 	<#return (entity.inheritance?? && entities[entity.inheritance.superclass]??) />
 </#function>
 

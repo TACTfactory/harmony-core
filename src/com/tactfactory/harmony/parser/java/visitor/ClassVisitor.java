@@ -339,11 +339,13 @@ public class ClassVisitor {
     		inheritanceMeta = new InheritanceMetadata();
     	}
     	
-    	if (classDecl.getExtends() != null) {
+    	if (classDecl.getExtends() != null
+    			&& classDecl.getExtends().get(0).getName() != "Object") {
     		inherits = true;
     		// TODO : check if extends is a entity ?
     		InheritanceMode mode = null;
     		String superClassName = classDecl.getExtends().get(0).getName();
+    		
     		EntityMetadata superclass;
     		if (ApplicationMetadata.INSTANCE.getEntities().containsKey(superClassName)) {
     			 superclass = 
@@ -371,6 +373,12 @@ public class ClassVisitor {
 
     		inheritanceMeta.setSuperclass(superclass);
     		if (mode != null) {
+    			if (mode.equals(InheritanceMode.JOINED)) {
+    				for (FieldMetadata id : superclass.getIds().values()) {
+    					classMeta.getFields().put(id.getName(), id);
+    					classMeta.getIds().put(id.getName(), id);
+    				}
+    			}
     			inheritanceMeta.setType(mode);
     		}
     		
@@ -406,20 +414,26 @@ public class ClassVisitor {
 
     		// Propagate type to subclasses
     		inheritanceMeta.setType(mode);
-    		this.propagateModeToSubclasses(inheritanceMeta);
     		
     	}
     	
     	if (inherits) {
     		classMeta.setInheritance(inheritanceMeta);
+    		this.propagateModeToSubclasses(classMeta);
     	}
     }
     
-    private void propagateModeToSubclasses(InheritanceMetadata inheritanceMeta) {
+    private void propagateModeToSubclasses(EntityMetadata classMeta) {
 		// Propagate type to subclasses
-		for (EntityMetadata subclass : inheritanceMeta.getSubclasses().values()) {
-			subclass.getInheritance().setType(inheritanceMeta.getType());
-			this.propagateModeToSubclasses(subclass.getInheritance());
+		for (EntityMetadata subclass : classMeta.getInheritance().getSubclasses().values()) {
+			if (classMeta.getInheritance().getType().equals(InheritanceMode.JOINED)) {
+				for (FieldMetadata id : classMeta.getIds().values()) {
+					subclass.getFields().put(id.getName(), id);
+					subclass.getIds().put(id.getName(), id);
+				}
+			}
+			subclass.getInheritance().setType(classMeta.getInheritance().getType());
+			this.propagateModeToSubclasses(classMeta);
 		}
     }
 }
