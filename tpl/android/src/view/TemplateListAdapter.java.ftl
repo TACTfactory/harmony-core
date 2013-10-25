@@ -123,7 +123,7 @@ public class ${curr.name}ListAdapter
 		int result = -1;
 		if (item != null) {
 			for (int i = 0; i < this.getCount(); i++) {
-				if (item.get${curr.ids[0].name?cap_first}() == this.getItem(i).get${curr.ids[0].name?cap_first}()) {
+				if (item.get${curr_ids[0].name?cap_first}() == this.getItem(i).get${curr_ids[0].name?cap_first}()) {
 					result = i;
 				}
 			}

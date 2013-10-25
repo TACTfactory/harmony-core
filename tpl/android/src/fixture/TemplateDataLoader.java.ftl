@@ -52,7 +52,7 @@ public final class ${curr.name?cap_first}DataLoader
 	/** ${curr.name?cap_first}DataLoader name. */
 	private static final String FILE_NAME = "${curr.name}";
 
-<#list curr.fields?values as field>${AdapterUtils.fixtureConstantsFieldAdapter(field, 1)}</#list>
+<#list curr_fields as field>${AdapterUtils.fixtureConstantsFieldAdapter(field, 1)}</#list>
 
 	/** ${curr.name?cap_first}DataLoader instance (Singleton). */
 	private static ${curr.name?cap_first}DataLoader instance;
@@ -101,10 +101,10 @@ public final class ${curr.name?cap_first}DataLoader
 	 */
 	protected ${curr.name} extractItem(final Element element,
 								final ${curr.name} ${curr.name?uncap_first}) {
-<#list curr.fields?values as field>${AdapterUtils.xmlExtractFieldAdapter(curr.name?uncap_first, field, curr, 2)}</#list>
+<#list curr_fields as field>${AdapterUtils.xmlExtractFieldAdapter(curr.name?uncap_first, field, curr, 2)}</#list>
 		<#if InheritanceUtils.isExtended(curr)>
-		${curr.inheritance.superclass}DataLoader inheritanceDataLoader =
-				${curr.inheritance.superclass}DataLoader.getInstance(this.ctx);
+		${curr.inheritance.superclass.name}DataLoader inheritanceDataLoader =
+				${curr.inheritance.superclass.name}DataLoader.getInstance(this.ctx);
 		inheritanceDataLoader.extractItem(element, ${curr.name?uncap_first});
 		</#if>
 
@@ -129,10 +129,10 @@ public final class ${curr.name?cap_first}DataLoader
 	protected ${curr.name} extractItem(final Map<?, ?> columns,
 				${curr.name?cap_first} ${curr.name?uncap_first}) {
 		<#if InheritanceUtils.isExtended(curr)>
-		${curr.inheritance.superclass}DataLoader.getInstance(this.ctx).extractItem(columns, ${curr.name?uncap_first});
+		${curr.inheritance.superclass.name}DataLoader.getInstance(this.ctx).extractItem(columns, ${curr.name?uncap_first});
 
 		</#if>
-<#list curr.fields?values as field>${AdapterUtils.ymlExtractFieldAdapter(curr.name?uncap_first, field, curr, 2)}</#list>
+<#list curr_fields as field>${AdapterUtils.ymlExtractFieldAdapter(curr.name?uncap_first, field, curr, 2)}</#list>
 	</#if>
 
 		return ${curr.name?uncap_first};
@@ -144,7 +144,7 @@ public final class ${curr.name?cap_first}DataLoader
 	@Override
 	public void load(final DataManager manager) {
 		for (final ${curr.name?cap_first} ${curr.name?uncap_first} : this.items.values()) {
-			${curr.name?uncap_first}.set${curr.ids[0].name?cap_first}(
+			${curr.name?uncap_first}.set${curr_ids[0].name?cap_first}(
 					manager.persist(${curr.name?uncap_first}));
 		}
 		manager.flush();

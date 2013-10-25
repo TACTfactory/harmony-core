@@ -19,13 +19,13 @@
 </#function>
 
 <#function isExtended entity >
-	<#return (entity.inheritance?? && entities[entity.inheritance.superclass]??) />
+	<#return (entity.inheritance?? && entity.inheritance.superclass?? && entities[entity.inheritance.superclass.name]??) />
 </#function>
 
 <#function getAllChildren curr>
 	<#assign result = [curr]>
 	<#list entities?values as entity>
-		<#if (entity.inheritance?? && entity.inheritance.superclass == curr.name)>
+		<#if (entity.inheritance?? && entity.inheritance.superclass.name == curr.name)>
 			<#assign result = result + [entity] />
 		</#if>
 	</#list>

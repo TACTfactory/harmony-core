@@ -7,3 +7,16 @@
 <#import utilityPath + "fields_methods.ftl" as FieldsUtils />
 <#import utilityPath + "view_methods.ftl" as ViewUtils />
 <#import utilityPath + "adapters_methods.ftl" as AdapterUtils />
+
+<#if current_entity??>
+	<#assign curr = entities[current_entity] />
+	<#assign singleTabInheritance = (curr.inheritance?? && curr.inheritance.inheritanceType?? && curr.inheritance.inheritanceType == "SingleTab") />
+	<#assign joinedInheritance = (curr.inheritance?? && curr.inheritance.superclass?? && !singleTabInheritance) />
+	<#if joinedInheritance>
+		<#assign curr_ids = entities[curr.inheritance.superclass.name].ids />
+		<#assign curr_fields = curr.fields?values + entities[curr.inheritance.superclass.name].ids />
+	<#else>
+		<#assign curr_ids = curr.ids />
+		<#assign curr_fields = curr.fields?values />
+	</#if>
+</#if>

@@ -335,6 +335,7 @@ public class ClassVisitor {
     	InheritanceMetadata inheritanceMeta;
     	if (classMeta.getInheritance() != null) {
     		inheritanceMeta = classMeta.getInheritance();
+    		inherits = true;
     	} else {
     		inheritanceMeta = new InheritanceMetadata();
     	}
