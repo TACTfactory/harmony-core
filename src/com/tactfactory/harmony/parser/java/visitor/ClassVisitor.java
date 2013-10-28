@@ -33,7 +33,9 @@ import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.meta.InterfaceMetadata;
 import com.tactfactory.harmony.parser.JavaModelParser;
 import com.tactfactory.harmony.annotation.Column.Type;
+import com.tactfactory.harmony.annotation.DiscriminatorColumn;
 import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
+import com.tactfactory.harmony.annotation.DiscriminatorIdentifier;
 import com.tactfactory.harmony.annotation.Entity;
 import com.tactfactory.harmony.annotation.InheritanceType;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
@@ -53,15 +55,27 @@ public class ClassVisitor {
 	/** Entity annotation name. */
 	private static final String ANNOTATION_ENTITY	 	=
 			PackageUtils.extractNameEntity(Entity.class);
-	
+
 	private static final String ANNOTATION_INHERITANCE_TYPE	=
 			PackageUtils.extractNameEntity(InheritanceType.class);
+
+	private static final String ANNOTATION_DISCRIMINATOR_COLUMN =
+			PackageUtils.extractNameEntity(DiscriminatorColumn.class);
+	
+	private static final String ANNOTATION_DISCRIMINATOR_IDENTIFIER =
+			PackageUtils.extractNameEntity(DiscriminatorIdentifier.class);
 	
 	/** Column annotation hidden attribute. */
 	private static final String ATTRIBUTE_HIDDEN = "hidden";
 	
 	/** Column annotation hidden attribute. */
 	private static final String ATTRIBUTE_VALUE = "value";
+	
+	/** Column annotation name attribute. */
+	private static final String ATTRIBUTE_NAME = "name";
+	
+	/** Column annotation type attribute. */
+	private static final String ATTRIBUTE_TYPE = "type";
 
 	/** The field visitor used by this visitor. */
 	private final FieldVisitor fieldVisitor = new FieldVisitor();
@@ -331,6 +345,11 @@ public class ClassVisitor {
     		ClassOrInterfaceDeclaration classDecl) {
     	AnnotationExpr inheritanceTypeAnnot =
     			this.annotationMap.get(ANNOTATION_INHERITANCE_TYPE);
+    	AnnotationExpr discriminatorAnnot =
+    			this.annotationMap.get(ANNOTATION_DISCRIMINATOR_COLUMN);
+    	AnnotationExpr discriminatorIdentifier =
+    			this.annotationMap.get(ANNOTATION_DISCRIMINATOR_IDENTIFIER);
+    	
     	boolean inherits = false;
     	InheritanceMetadata inheritanceMeta;
     	if (classMeta.getInheritance() != null) {
@@ -370,16 +389,11 @@ public class ClassVisitor {
     			superclass.getInheritance().getSubclasses().put(
     					classMeta.getName(),
     					classMeta);
+    			ApplicationMetadata.INSTANCE.getEntities().put(superClassName, superclass);
     		}
 
     		inheritanceMeta.setSuperclass(superclass);
     		if (mode != null) {
-    			/*if (mode.equals(InheritanceMode.JOINED)) {
-    				for (FieldMetadata id : superclass.getIds().values()) {
-    					classMeta.getFields().put(id.getName(), id);
-    					classMeta.getIds().put(id.getName(), id);
-    				}
-    			}*/
     			inheritanceMeta.setType(mode);
     		}
     		
@@ -416,6 +430,36 @@ public class ClassVisitor {
     		// Propagate type to subclasses
     		inheritanceMeta.setType(mode);
     		
+
+			String type = Type.STRING.getValue();
+			String columnName = "inheritance_type";
+			String name = "discriminatorColumn";
+			
+    		if (discriminatorAnnot != null) {
+    			if (inheritanceTypeAnnot instanceof NormalAnnotationExpr) {
+    				
+    				List<MemberValuePair> pairs = 
+    						((NormalAnnotationExpr) inheritanceTypeAnnot)
+    								.getPairs();
+    				
+    				for (MemberValuePair pair : pairs) {
+    					if (ATTRIBUTE_NAME.equals(pair.getName())) {
+    						columnName = pair.getValue().toString();
+    					} else if (ATTRIBUTE_TYPE.equals(pair.getName())) {
+    						type = pair.getValue().toString();
+    					}
+    				}
+    				
+    			}
+    		} 
+    		
+			FieldMetadata discriminatorColumn = 
+					new FieldMetadata(classMeta);
+			discriminatorColumn.setType(type);
+			discriminatorColumn.setColumnName(columnName);
+			discriminatorColumn.setName(name);
+			discriminatorColumn.setNullable(true);
+			inheritanceMeta.setDiscriminorColumn(discriminatorColumn);
     	}
     	
     	if (inherits) {
@@ -427,14 +471,8 @@ public class ClassVisitor {
     private void propagateModeToSubclasses(EntityMetadata classMeta) {
 		// Propagate type to subclasses
 		for (EntityMetadata subclass : classMeta.getInheritance().getSubclasses().values()) {
-			/*if (classMeta.getInheritance().getType().equals(InheritanceMode.JOINED)) {
-				for (FieldMetadata id : classMeta.getIds().values()) {
-					subclass.getFields().put(id.getName(), id);
-					subclass.getIds().put(id.getName(), id);
-				}
-			}*/
 			subclass.getInheritance().setType(classMeta.getInheritance().getType());
-			this.propagateModeToSubclasses(classMeta);
+			this.propagateModeToSubclasses(subclass);
 		}
     }
 }

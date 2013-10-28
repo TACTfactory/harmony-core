@@ -9,7 +9,7 @@ import com.tactfactory.harmony.template.TagConstant;
 
 public class InheritanceMetadata extends BaseMetadata {
 	private InheritanceMode type;
-	private String discriminorColumn;
+	private FieldMetadata discriminorColumn;
 	private String discriminorIdentifier;
 	private EntityMetadata superclass;
 	/** Map to evolve easily to Map<String, ClassMetadata>. */
@@ -20,17 +20,25 @@ public class InheritanceMetadata extends BaseMetadata {
 	@Override
 	public Map<String, Object> toMap(BaseAdapter adapter) {
 		Map<String, Object> result = new HashMap<String, Object>();
-		result.put(TagConstant.INHERITANCE_TYPE,
+		if (this.type != null) {
+			result.put(TagConstant.INHERITANCE_TYPE,
 				this.type.getValue());
+		}
 		
-		result.put(TagConstant.DISCRIMINATOR_COLUMN,
-				this.discriminorColumn);
+		if (this.discriminorColumn != null) {
+			result.put(TagConstant.DISCRIMINATOR_COLUMN,
+					this.discriminorColumn.toMap(adapter));
+		}
 		
 		result.put(TagConstant.DISCRIMINATOR_IDENTIFIER,
 				this.discriminorIdentifier);
 		
-		result.put(TagConstant.SUPERCLASS, this.superclass.getName());
-		result.put(TagConstant.SUBCLASSES, this.subclasses.values());
+		if (this.superclass != null) {
+			result.put(TagConstant.SUPERCLASS, this.superclass.toMap(adapter));
+		}
+		if (this.subclasses != null) {
+			result.put(TagConstant.SUBCLASSES, this.subclasses.values());
+		}
 		return result;
 	}
 
@@ -53,7 +61,7 @@ public class InheritanceMetadata extends BaseMetadata {
 	/**
 	 * @return the discriminorColumn
 	 */
-	public final String getDiscriminorColumn() {
+	public final FieldMetadata getDiscriminorColumn() {
 		return discriminorColumn;
 	}
 
@@ -61,7 +69,7 @@ public class InheritanceMetadata extends BaseMetadata {
 	/**
 	 * @param discriminorColumn the discriminorColumn to set
 	 */
-	public final void setDiscriminorColumn(String discriminorColumn) {
+	public final void setDiscriminorColumn(FieldMetadata discriminorColumn) {
 		this.discriminorColumn = discriminorColumn;
 	}
 

@@ -64,7 +64,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 
 
 		ContentValues itemValues = adapt.itemToContentValues(item);
-		itemValues.remove(${curr.name?cap_first}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)});
+		itemValues.remove(${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)});
 
 		operations.add(ContentProviderOperation.newInsert(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
@@ -148,7 +148,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 				new ${curr.name?cap_first}SQLiteAdapter(this.getContext());
 		ContentValues itemValues = adapt.itemToContentValues(item<#list relations as relation><#if (relation.internal)>,
 					${relation.name?uncap_first}Id</#if></#list>);
-		itemValues.remove(${curr.name?cap_first}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)});
+		itemValues.remove(${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)});
 
 		operations.add(ContentProviderOperation.newInsert(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
@@ -252,7 +252,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 
 		${curr.name}Criterias crits =
 				new ${curr.name}Criterias(GroupType.AND);
-		crits.add(${curr.name?cap_first}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr_ids[0].name)},
+		crits.add(${curr_ids[0].owner}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr_ids[0].name)},
 					String.valueOf(id));
 
 		Cursor cursor = prov.query(

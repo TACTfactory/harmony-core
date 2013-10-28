@@ -1,7 +1,7 @@
 <#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
 <#assign inherited = false />
-<#if (joinedInheritance || singleTabInheritance)>
+<#if ((joinedInheritance || singleTabInheritance) && curr.inheritance.superclass??) >
 	<#assign inherited = true />
 </#if>
 <@header?interpret />

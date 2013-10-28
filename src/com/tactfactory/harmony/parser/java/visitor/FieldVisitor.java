@@ -254,7 +254,6 @@ public class FieldVisitor {
 			}
 			SqliteAdapter.Keywords.exists(result.getType());
 		}
-
 		return result;
 	}
 

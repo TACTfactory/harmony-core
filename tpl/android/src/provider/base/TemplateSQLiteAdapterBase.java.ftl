@@ -58,7 +58,10 @@ import ${project_namespace}.criterias.base.value.SelectValue;
  */
 public abstract class ${curr.name}SQLiteAdapterBase
 						extends ${extend} {
-	<#if joinedInheritance || singleTabInheritance>
+	<#if (singleTabInheritance && !isTopMostSuperClass)>
+	public static final String DISCRIMINATOR_IDENTIFIER = "${curr.name}";
+	</#if>
+	<#if ((joinedInheritance || singleTabInheritance) && curr.inheritance.superclass??)>
 	/** Mother Adapter. */
 	private final ${curr.inheritance.superclass.name}SQLiteAdapter motherAdapter;
 	</#if>
@@ -67,7 +70,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	protected static final String TAG = "${curr.name}DBAdapter";
 
 	/** Table name of SQLite database. */
-	public static final String TABLE_NAME = "${curr.name}";
+	public static final String TABLE_NAME = <#if singleTabInheritance && !isTopMostSuperClass>${curr.inheritance.superclass.name}SQLiteAdapter.TABLE_NAME<#else>"${curr.name}"</#if>;
 
 	/**
 	 *  Columns constants fields mapping.
@@ -84,11 +87,11 @@ public abstract class ${curr.name}SQLiteAdapterBase
 </#list>
 <#if (singleTabInheritance && isTopMostSuperClass)>
 	/** userGroup. */
-	public static final String ${NamingUtils.alias(curr.inheritance.discriminatorColumn)} = 
-			"${curr.inheritance.discriminatorColumn}";
+	public static final String ${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)} = 
+			"${curr.inheritance.discriminatorColumn.columnName}";
 	/** Alias. */
-	public static final String ALIASED_${NamingUtils.alias(curr.inheritance.discriminatorColumn)} = 
-			TABLE_NAME + "." + ${NamingUtils.alias(curr.inheritance.discriminatorColumn)};
+	public static final String ALIASED_${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)} = 
+			TABLE_NAME + "." + ${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)};
 </#if>
 
 	/** Global Fields. */
@@ -98,6 +101,12 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 <#if (firstFieldDone)>,</#if>
 		${field.owner?cap_first}SQLiteAdapter.${NamingUtils.alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
+<#if singleTabInheritance && !isTopMostSuperClass>
+	<#list curr.inheritance.superclass.fields?values as field>
+		<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
+	<#if (firstFieldDone)>,</#if>
+		${field.owner?cap_first}SQLiteAdapter.${NamingUtils.alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
+</#if>
 	};
 
 	/** Global Fields. */
@@ -147,15 +156,21 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return "SQL query : CREATE TABLE..."
 	 */
 	public static String getSchema() {
+<#if (singleTabInheritance && !isTopMostSuperClass)>
+		return ""
+<#else>
 		return "CREATE TABLE "
 		+ TABLE_NAME	+ " ("
+</#if>
 <#list curr_fields as field>
 	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 		<#if (lastLine??)>${lastLine},"</#if>
 		<#assign lastLine=" + " + NamingUtils.alias(field.name) + "	+ \"" + field.schema />
 	</#if>
 </#list>
-		${lastLine}<#if MetadataUtils.hasRelationOrIds(curr, false)>,</#if>"
+		${lastLine}<#if (singleTabInheritance && isTopMostSuperClass)>,"
+		+ ${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)} + " ${curr.inheritance.discriminatorColumn.schema}<#if (curr.inheritance.subclasses?size > 0)>,</#if>"<#elseif MetadataUtils.hasRelationOrIds(curr, false)>,"<#else>"</#if>
+		<#if (singleTabInheritance)><#list curr.inheritance.subclasses as subclass>+ ${subclass.name}SQLiteAdapter.getSchema()<#if subclass_has_next || MetadataUtils.hasRelationOrIds(curr, false)> + ","</#if></#list></#if>
 <#if (curr.relations??)>
 	<#list curr.relations as relation>
 		<#if (relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne")>
@@ -171,7 +186,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 <#if (curr_ids?size>1)>
 		+ "PRIMARY KEY (" + <#list curr_ids as id>${NamingUtils.alias(id.name)}<#if (id_has_next)> + "," + </#if></#list> + ")"
 </#if>
-<#if (InheritanceUtils.isExtended(curr))>
+<#if (joinedInheritance)>
 		+ ", FOREIGN KEY (" + ${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)} + ") REFERENCES " + ${curr.inheritance.superclass.name}SQLiteAdapter.TABLE_NAME + "(" + ${curr.inheritance.superclass.name}SQLiteAdapter.${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)} + ") ON DELETE CASCADE"
 </#if>
 <#list curr_fields as field>
@@ -179,9 +194,13 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		+ ", UNIQUE(" + ${NamingUtils.alias(field.name)} + ")"
 	</#if>
 </#list>
+<#if !(singleTabInheritance && !isTopMostSuperClass)>
 		+ ");";
+<#else>
+;
+</#if>
 	}
-	<#if joinedInheritance || singleTabInheritance>
+	<#if ((joinedInheritance || singleTabInheritance) && curr.inheritance.superclass??)>
 	@Override
 	public SQLiteDatabase open() {
 		SQLiteDatabase db = super.open();
@@ -201,7 +220,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public ${curr.name}SQLiteAdapterBase(final Context ctx) {
 		super(ctx);
-		<#if joinedInheritance || singleTabInheritance>
+		<#if ((joinedInheritance || singleTabInheritance) && curr.inheritance.superclass??)>
 		this.motherAdapter = new ${curr.inheritance.superclass.name}SQLiteAdapter(ctx);
 		</#if>
 	}
@@ -224,8 +243,6 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				String.valueOf(${field.relation.targetEntity?lower_case}Id));
 		</#if>
 	</#list>
-
-
 		return result;
 	}
 	</#if>
@@ -242,6 +259,10 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		</#if>
 
 <#list curr_fields as field>${AdapterUtils.itemToContentValuesFieldAdapter("item", field, 2)}</#list>
+
+		<#if (singleTabInheritance && !isTopMostSuperClass)>
+		result.put(${curr.inheritance.superclass.name}SQLiteAdapter.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)}, DISCRIMINATOR_IDENTIFIER);
+		</#if>
 		return result;
 	}
 
@@ -390,6 +411,18 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		return result;
 	}
 
+	<#if (singleTabInheritance && !isTopMostSuperClass)>
+	@Override
+	protected Cursor getAllCursor() {
+		return this.query(ALIASED_COLS,
+				${curr.inheritance.superclass.name}SQLiteAdapter.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?",
+				new String[]{DISCRIMINATOR_IDENTIFIER},
+				null,
+				null,
+				null);
+	}
+	</#if>
+
 
 	/**
 	 * Insert a ${curr.name} entity into database.
@@ -404,6 +437,12 @@ public abstract class ${curr.name}SQLiteAdapterBase
 
 		final ContentValues values =
 				this.itemToContentValues(item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
+	<#if (singleTabInheritance && !isTopMostSuperClass)>
+	<#list curr_ids as id>
+		values.remove(${id.owner?cap_first}SQLiteAdapter.${NamingUtils.alias(id.name)});
+		long newid = this.motherAdapter.insert(null, values);
+	</#list>		
+	<#else>
 	<#list curr_ids as id>
 		values.remove(${NamingUtils.alias(id.name)});
 	</#list>
@@ -454,7 +493,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		} else {
 			newid = -1;
 		}
-
+	</#if>
 		return newid;
 	}
 
@@ -522,6 +561,19 @@ public abstract class ${curr.name}SQLiteAdapterBase
 
 		final ContentValues values =
 				this.itemToContentValues(item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
+		<#if (singleTabInheritance && !isTopMostSuperClass)>
+		final String whereClause =
+				<#list curr_ids as id> ${id.owner}SQLiteAdapter.${NamingUtils.alias(id.name)}
+				 + "=? <#if id_has_next>AND </#if>"</#list>
+				 + " AND "
+				 + ${curr.inheritance.superclass.name}SQLiteAdapter.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
+		final String[] whereArgs =
+				new String[] {<#list curr_ids as id>String.valueOf(item.get${id.name?cap_first}()),
+</#list>
+								DISCRIMINATOR_IDENTIFIER};
+		
+		return this.motherAdapter.update(values, whereClause, whereArgs);
+		<#else>
 		final String whereClause =
 				<#list curr_ids as id> ${NamingUtils.alias(id.name)}
 				 + "=? <#if id_has_next>AND </#if>"</#list>;
@@ -532,7 +584,6 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		<#if (InheritanceUtils.isExtended(curr))>
 		final ContentValues currentValues =
 				this.extractContentValues(values);
-		this.motherAdapter.open(this.mDatabase);
 		this.motherAdapter.update(values, whereClause, whereArgs);
 
 		return this.update(
@@ -545,7 +596,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				whereClause,
 				whereArgs);
 		</#if>
-
+		</#if>
 	<#else>
 		throw new NotImplementedException("An entity with no ID can't implement this method.");
 	</#if>
@@ -688,6 +739,20 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					+ " id : " + </#if></#list>);
 		}
 
+		<#if (singleTabInheritance && !isTopMostSuperClass)>
+		final String whereClause = <#list curr_ids as id> ${id.owner}SQLiteAdapter.${NamingUtils.alias(id.name)}
+					 + "=? <#if (id_has_next)>AND </#if>"</#list>
+					 + " AND " + ${curr.inheritance.superclass.name}SQLiteAdapter.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
+
+		final String[] whereArgs = new String[] {<#list curr_ids as id>String.valueOf(${id.name}),
+</#list>
+					 DISCRIMINATOR_IDENTIFIER};
+
+		return this.motherAdapter.delete(
+				whereClause,
+				whereArgs);
+		<#else>
+		
 		final String whereClause = <#list curr_ids as id> ${NamingUtils.alias(id.name)}
 					 + "=? <#if (id_has_next)>AND </#if>"</#list>;
 		final String[] whereArgs = new String[] {<#list curr_ids as id>String.valueOf(${id.name}) <#if (id_has_next)>,
@@ -696,6 +761,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		return this.delete(
 				whereClause,
 				whereArgs);
+		</#if>
 	<#else>
 		throw new NotImplementedException("An entity with no ID can't implement this method.");
 	</#if>
@@ -725,6 +791,22 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					 + " id : " + </#if></#list>);
 		}
 
+		<#if (singleTabInheritance && !isTopMostSuperClass)>
+		final String whereClause = <#list curr_ids as id> ${id.owner}SQLiteAdapter.${NamingUtils.alias(id.name)}
+					 + "=? <#if (id_has_next)>AND </#if>"</#list>
+					 + " AND " + ${curr.inheritance.superclass.name}SQLiteAdapter.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
+
+		final String[] whereArgs = new String[] {<#list curr_ids as id>String.valueOf(${id.name}),
+</#list>
+					 DISCRIMINATOR_IDENTIFIER};
+
+		return this.motherAdapter.query(ALIASED_COLS,
+				whereClause,
+				whereArgs,
+				null,
+				null,
+				null);
+		<#else>
 		final String whereClause = <#list curr_ids as id> ALIASED_${NamingUtils.alias(id.name)}
 					 + "=? <#if id_has_next>AND </#if>"</#list>;
 		final String[] whereArgs = new String[] {<#list curr_ids as id>String.valueOf(${id.name}) <#if id_has_next>,
@@ -736,6 +818,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				null,
 				null,
 				null);
+		</#if>
 	<#else>
 		throw new NotImplementedException(
 				"An entity with no ID can't implement this method.");
@@ -754,6 +837,16 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			throw new NotImplementedException(
 				"An entity with no ID can't implement this method.");
 		<#else>
+			<#if (singleTabInheritance && !isTopMostSuperClass)>
+		return this.motherAdapter.query(
+				ALIASED_COLS,
+				${curr_ids[0].owner}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr_ids[0].name)} + " = ?"
+					+ " AND " + ${curr.inheritance.superclass.name}SQLiteAdapter.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?",
+				new String[]{String.valueOf(id), DISCRIMINATOR_IDENTIFIER},
+				null,
+				null,
+				null);
+			<#else>
 		return this.query(
 				ALIASED_COLS,
 				ALIASED_${NamingUtils.alias(curr_ids[0].name)} + " = ?",
@@ -761,6 +854,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				null,
 				null,
 				null);
+			</#if>
 		</#if>
 	}
 
@@ -774,9 +868,16 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			throw new NotImplementedException(
 				"An entity with no ID can't implement this method.");
 		<#else>
+			<#if (singleTabInheritance && !isTopMostSuperClass)>
+		return this.delete(
+				${curr_ids[0].owner}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr_ids[0].name)} + " = ?"
+					+ " AND " + ${curr.inheritance.superclass.name}SQLiteAdapter.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?",
+				new String[]{String.valueOf(id), DISCRIMINATOR_IDENTIFIER});				
+			<#else>
 		return this.delete(
 				ALIASED_${NamingUtils.alias(curr_ids[0].name)} + " = ?",
 				new String[]{String.valueOf(id)});
+			</#if>
 		</#if>
 	}
 
