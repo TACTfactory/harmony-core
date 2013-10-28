@@ -20,12 +20,12 @@ import com.tactfactory.harmony.template.TagConstant;
 
 /** Entity class metadata. */
 public class ClassMetadata extends BaseMetadata {
-	/** SubClasses array. */
-	private Map<String, ClassMetadata> subClasses =
+	/** InnerClasses array. */
+	private Map<String, ClassMetadata> innerClasses =
 			new LinkedHashMap<String, ClassMetadata>();
-
-	/** Mother Class name. */
-	private String motherClass;
+	
+	/** Outerclass. */
+	private String outerClass;
 
 	/** List of fields of entity class. */
 	private Map<String, FieldMetadata> fields =
@@ -38,15 +38,16 @@ public class ClassMetadata extends BaseMetadata {
 	/** Namespace of entity class. */
 	private String space = "";
 
-	/** Class inherited by the entity class or null if none. */
-	private String extendType;
-
 	/** Implemented class list of the entity class. */
 	private List<MethodMetadata> methods =
 			new ArrayList<MethodMetadata>();
 
 	/** Imports of the class. */
 	private List<String> imports = new ArrayList<String>();
+	
+	/** Inheritance mode if any. */
+	private InheritanceMetadata inheritanceMeta;
+
 
 	/**
 	 * Transform the class to a map given an adapter.
@@ -59,7 +60,6 @@ public class ClassMetadata extends BaseMetadata {
 
 		model.put(TagConstant.SPACE,			this.space);
 		model.put(TagConstant.NAME,				this.getName());
-		model.put(TagConstant.EXTENDS,			this.extendType);
 		model.put(TagConstant.CONTROLLER_NAMESPACE,
 				adapter.getNameSpaceEntity(this, adapter.getController()));
 		model.put(TagConstant.DATA_NAMESPACE,
@@ -75,9 +75,10 @@ public class ClassMetadata extends BaseMetadata {
 		}
 		model.put(TagConstant.OPTIONS, optionsModel);
 
-		if (motherClass != null) {
-			model.put(TagConstant.MOTHER, this.motherClass);
+		if (this.inheritanceMeta != null) {
+			model.put(TagConstant.INHERITANCE, this.inheritanceMeta.toMap(adapter));
 		}
+		model.put(TagConstant.OUTER_CLASS, this.outerClass);
 
 		return model;
 	}
@@ -95,22 +96,6 @@ public class ClassMetadata extends BaseMetadata {
 	 */
 	public final void setFields(final Map<String, FieldMetadata> fields) {
 		this.fields = fields;
-	}
-
-
-	/**
-	 * @return the extendType
-	 */
-	public final String getExtendType() {
-		return extendType;
-	}
-
-
-	/**
-	 * @param extendType the extendType to set
-	 */
-	public final void setExtendType(final String extendType) {
-		this.extendType = extendType;
 	}
 
 	/**
@@ -207,31 +192,40 @@ public class ClassMetadata extends BaseMetadata {
 	}
 
 	/**
-	 * @return the motherClass
+	 * @return the innerClasses
 	 */
-	public final String getMotherClass() {
-		return motherClass;
+	public final Map<String, ClassMetadata> getInnerClasses() {
+		return innerClasses;
 	}
 
 	/**
-	 * @param motherClass the motherClass to set
+	 * @param innerClasses the innerClasses to set
 	 */
-	public final void setMotherClass(final String motherClass) {
-		this.motherClass = motherClass;
+	public final void setInnerClasses(
+			final Map<String, ClassMetadata> innerClasses) {
+		this.innerClasses = innerClasses;
+	}
+	
+	public final void setInheritance(
+			final InheritanceMetadata inheritanceMeta) {
+		this.inheritanceMeta = inheritanceMeta;
+	}
+	
+	public final InheritanceMetadata getInheritance() {
+		return this.inheritanceMeta;
 	}
 
 	/**
-	 * @return the subClasses
+	 * @return the outerClass
 	 */
-	public final Map<String, ClassMetadata> getSubClasses() {
-		return subClasses;
+	public final String getOuterClass() {
+		return outerClass;
 	}
 
 	/**
-	 * @param subClasses the subClasses to set
+	 * @param outerClass the outerClass to set
 	 */
-	public final void setSubClasses(
-			final Map<String, ClassMetadata> subClasses) {
-		this.subClasses = subClasses;
+	public final void setOuterClass(String outerClass) {
+		this.outerClass = outerClass;
 	}
 }

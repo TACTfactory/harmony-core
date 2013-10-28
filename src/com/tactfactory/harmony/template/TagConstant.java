@@ -75,8 +75,6 @@ public abstract class TagConstant {
 	public static final String RELATION_TYPE = "relation_type";
 	/** Constant for namespace. */
 	public static final String SPACE = "namespace";
-	/** Constant for entity inheritance. */
-	public static final String EXTENDS = "extends";
 	/** Constant for name. */
 	public static final String NAME = "name";
 	/** Constant for names. */
@@ -117,8 +115,10 @@ public abstract class TagConstant {
 	public static final String DEFAULT_VALUE = "defaultValue";
 	/** Constant for provider id. */
 	public static final String PROVIDER_ID = "provider_id";
-	/** Constant for mother class. */
-	public static final String MOTHER = "mother";
+	/** Constant for superclass. */
+	public static final String SUPERCLASS = "superclass";
+	/** Constant for subclasses. */
+	public static final String SUBCLASSES = "subclasses";
 	/** Constant for mother class. */
 	public static final String OWNER = "owner";
 	/** Constant for files header. */
@@ -129,5 +129,18 @@ public abstract class TagConstant {
 	public static final String HARMONY_VERSION = "harmony_version";
 	/** Constant for services. */
 	public static final String SERVICES = "services";
+	/** Constant for inheritance type. */
+	public static final String INHERITANCE_TYPE = "inheritanceType";
+	/** Constant for discriminator column. */
+	public static final String DISCRIMINATOR_COLUMN = "discriminatorColumn";
+	/** Constant for discriminator identifier. */
+	public static final String DISCRIMINATOR_IDENTIFIER =
+			"discriminatorIdentifier";
+	/** Constant for inheritance. */
+	public static final String INHERITANCE = "inheritance";
+	/** Constant for outer class. */
+	public static final String OUTER_CLASS = "outerClass";
+	/** Constant for inner classes. */
+	public static final String INNER_CLASSES = "innerclasses";
 
 }

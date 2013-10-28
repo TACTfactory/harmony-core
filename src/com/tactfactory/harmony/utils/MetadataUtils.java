@@ -20,7 +20,10 @@ public abstract class MetadataUtils {
 			final ClassMetadata classMeta,
 			final ApplicationMetadata appMeta) {
 		boolean result = false;
-		result = appMeta.getEntities().containsKey(classMeta.getExtendType());
+		if (classMeta.getInheritance() != null) {
+			result = appMeta.getEntities().containsKey(
+					classMeta.getInheritance().getSuperclass());
+		}
 		return result;
 	}
 
@@ -34,10 +37,15 @@ public abstract class MetadataUtils {
 	public static EntityMetadata getTopMostMother(
 			final EntityMetadata classMeta,
 			final ApplicationMetadata appMeta) {
-		if (appMeta.getEntities().get(classMeta.getExtendType()) != null) {
-			return MetadataUtils.getTopMostMother(
-					appMeta.getEntities().get(classMeta.getExtendType()),
-					appMeta);
+		if (classMeta.getInheritance() != null) {
+			if (appMeta.getEntities().get(
+					classMeta.getInheritance().getSuperclass()) != null) {
+				return MetadataUtils.getTopMostMother(
+						appMeta.getEntities().get(classMeta.getInheritance().getSuperclass()),
+						appMeta);
+			} else {
+				return classMeta;
+			}
 		} else {
 			return classMeta;
 		}

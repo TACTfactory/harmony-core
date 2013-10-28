@@ -1,6 +1,6 @@
 <#function getCompleteNamespace entity>
 	<#assign result = "" />
-	<#assign motherClasses = getAllMothers([], entity) />
+	<#assign motherClasses = getAllOuter([], entity) />
 	<#assign cond = true />
 	<#list motherClasses as motherClass>
 		<#assign result = result + motherClass.name />
@@ -10,22 +10,22 @@
 	</#list>
 	<#return result>
 </#function>
-<#function getAllMothers tab entity>
-	<#if entity.mother??>
-		<#return (getAllMothers(tab, entities[entity.mother]) + [entity]) />
+<#function getAllOuter tab entity>
+	<#if entity.outerClass??>
+		<#return (getAllOuter(tab, entities[entity.outerClass]) + [entity]) />
 	<#else>
 		<#return ([entity]) />
 	</#if>
 </#function>
 
-<#function isExtended entity>
-	<#return (entity.extends?? && entities[entity.extends]??) />
+<#function isExtended entity >
+	<#return (entity.inheritance?? && entity.inheritance.superclass?? && entities[entity.inheritance.superclass.name]??) />
 </#function>
 
 <#function getAllChildren curr>
 	<#assign result = [curr]>
 	<#list entities?values as entity>
-		<#if (entity.extends?? && entity.extends == curr.name)>
+		<#if (entity.inheritance?? && entity.inheritance.superclass?? && entity.inheritance.superclass.name == curr.name)>
 			<#assign result = result + [entity] />
 		</#if>
 	</#list>

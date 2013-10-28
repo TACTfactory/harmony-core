@@ -1,5 +1,4 @@
 <#include utilityPath + "all_imports.ftl" />
-<#assign curr = entities[current_entity] />
 <@header?interpret />
 package ${curr.test_namespace}.base;
 
@@ -8,7 +7,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
-<#if (InheritanceUtils.isExtended(curr))>import ${data_namespace}.${curr.extends}SQLiteAdapter;</#if>
+<#if (InheritanceUtils.isExtended(curr))>import ${data_namespace}.${curr.inheritance.superclass.name}SQLiteAdapter;</#if>
 import ${curr.namespace}.entity.${curr.name};
 
 <#if dataLoader?? && dataLoader>
@@ -84,7 +83,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 			try {
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
-				values.remove(${curr.name}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
+				values.remove(${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)});
 				result = this.provider.insert(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, values);
 
 			} catch (Exception e) {
@@ -103,7 +102,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 		if (this.entity != null) {
 			try {
-				Cursor c = this.provider.query(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.get${curr.ids[0].name?cap_first}()), this.adapter.getCols(), null, null, null);
+				Cursor c = this.provider.query(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.get${curr_ids[0].name?cap_first}()), this.adapter.getCols(), null, null, null);
 				c.moveToFirst();
 				result = this.adapter.cursorToItem(c);
 				c.close();
@@ -141,13 +140,13 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
 
 			try {
-				${curr.name?uncap_first}.set${curr.ids[0].name?cap_first}(this.entity.get${curr.ids[0].name?cap_first}());
+				${curr.name?uncap_first}.set${curr_ids[0].name?cap_first}(this.entity.get${curr_ids[0].name?cap_first}());
 
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				result = this.provider.update(
 					Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI
 						+ "/"
-						+ ${curr.name?uncap_first}.get${curr.ids[0].name?cap_first}()),
+						+ ${curr.name?uncap_first}.get${curr_ids[0].name?cap_first}()),
 					values,
 					null,
 					null);
@@ -169,7 +168,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 			try {
 				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
-				values.remove(${curr.name}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
+				values.remove(${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)});
 				<#list ViewUtils.getAllFields(curr)?values as field>
 					<#if field.unique?? && field.unique>
 				values.remove(${field.owner}SQLiteAdapter.COL_${field.name?upper_case});
@@ -191,7 +190,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		int result = -1;
 		if (this.entity != null) {
 			try {
-				result = this.provider.delete(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.get${curr.ids[0].name?cap_first}()), null, null);
+				result = this.provider.delete(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.get${curr_ids[0].name?cap_first}()), null, null);
 
 			} catch (Exception e) {
 				e.printStackTrace();

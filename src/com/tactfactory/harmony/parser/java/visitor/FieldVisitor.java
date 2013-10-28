@@ -108,9 +108,11 @@ public class FieldVisitor {
 	/** Relations annotation inversedBy attribute. */
 	private static final String ATTRIBUTE_INVERSED_BY = "inversedBy";
 	
+	/** The project entities metadata. */
 	private Map<String, EntityMetadata> projectEntities = 
 			ApplicationMetadata.INSTANCE.getEntities();
 	
+	/** The project classes metadata. */
 	private Map<String, ClassMetadata> projectClasses = 
 			ApplicationMetadata.INSTANCE.getClasses();
 	
@@ -254,7 +256,6 @@ public class FieldVisitor {
 			}
 			SqliteAdapter.Keywords.exists(result.getType());
 		}
-
 		return result;
 	}
 
@@ -397,8 +398,11 @@ public class FieldVisitor {
 							String fieldName = ((StringLiteralExpr)
 									mvp.getValue()).getValue();
 							FieldMetadata fieldRef;
-							if (rel.getEntityRef().getFields().containsKey(fieldName)) {
-								fieldRef = rel.getEntityRef().getFields().get(fieldName);
+							if (rel.getEntityRef().getFields().containsKey(
+									fieldName)) {
+								fieldRef = 
+										rel.getEntityRef().getFields().get(
+												fieldName);
 							} else {
 								RelationMetadata inversingRel = 
 										new RelationMetadata();
@@ -418,8 +422,10 @@ public class FieldVisitor {
 							String fieldName = ((StringLiteralExpr)
 									mvp.getValue()).getValue();
 							FieldMetadata fieldRef;
-							if (rel.getEntityRef().getFields().containsKey(fieldName)) {
-								fieldRef = rel.getEntityRef().getFields().get(fieldName);
+							if (rel.getEntityRef().getFields().containsKey(
+									fieldName)) {
+								fieldRef = rel.getEntityRef().getFields().get(
+										fieldName);
 							} else {
 								RelationMetadata inversingRel = 
 										new RelationMetadata();

@@ -174,10 +174,10 @@ public class EnumCompletor extends BaseGenerator {
 	 */
 	protected final int nbMotherClass(final ClassMetadata classMeta) {
 		int result = 1;
-		if (classMeta.getMotherClass() != null) {
+		if (classMeta.getOuterClass() != null) {
 			result += this.nbMotherClass(
 					this.getAppMetas().getClasses().get(
-							classMeta.getMotherClass()));
+							classMeta.getOuterClass()));
 		}
 		return result;
 	}
@@ -190,10 +190,10 @@ public class EnumCompletor extends BaseGenerator {
 	protected final ClassMetadata getOldestMother(
 			final ClassMetadata classMeta) {
 		ClassMetadata result;
-		if (classMeta.getMotherClass() != null) {
+		if (classMeta.getOuterClass() != null) {
 			result = getOldestMother(
 					this.getAppMetas().getClasses().get(
-							classMeta.getMotherClass()));
+							classMeta.getOuterClass()));
 		} else {
 			result = classMeta;
 		}

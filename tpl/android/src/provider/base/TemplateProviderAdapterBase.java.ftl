@@ -1,14 +1,9 @@
 <#include utilityPath + "all_imports.ftl" />
-<#assign curr = entities[current_entity] />
-<#assign inherited = false />
+<#assign inherited = joinedInheritance || singleTabInheritance && curr.inheritance.superclass?? />
 <#assign ext = curr.name?cap_first />
-<#assign hasIds = (curr.ids?? && curr.ids?size > 0) />
+<#assign hasIds = (curr_ids?? && curr_ids?size > 0) />
 <#if (curr.internal)>
 	<#assign ext = "Void" />
-</#if>
-<#if (curr.extends?? && entities[curr.extends]??)>
-	<#assign extends = curr.extends />
-	<#assign inherited = true />
 </#if>
 <@header?interpret />
 package ${local_namespace}.base;
@@ -26,8 +21,8 @@ import ${entity_namespace}.${curr.name};
 </#if>import ${local_namespace}.${project_name?cap_first}Provider;
 <#if (inherited)>
 
-import ${local_namespace}.${extends?cap_first}ProviderAdapter;
-import ${data_namespace}.${extends?cap_first}SQLiteAdapter;
+import ${local_namespace}.${curr.inheritance.superclass.name?cap_first}ProviderAdapter;
+import ${data_namespace}.${curr.inheritance.superclass.name?cap_first}SQLiteAdapter;
 
 import ${project_namespace}.criterias.${curr.name}Criterias;
 import ${project_namespace}.criterias.base.Criteria;
@@ -35,6 +30,9 @@ import ${project_namespace}.criterias.base.Criteria.Type;
 import ${project_namespace}.criterias.base.CriteriasBase;
 import ${project_namespace}.criterias.base.CriteriasBase.GroupType;
 import ${project_namespace}.criterias.base.value.ArrayValue;
+	<#if singleTabInheritance>
+import com.google.common.collect.ObjectArrays;
+	</#if>
 </#if>
 ${ImportUtils.importRelatedSQLiteAdapters(curr, false, true)}
 
@@ -172,13 +170,13 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 			<#if (hasIds)>
 			case ${curr.name?upper_case}_ONE:
 				int id = Integer.parseInt(uri.getPathSegments().get(1));
-				<#if inherited>
+				<#if inherited && joinedInheritance>
 				Uri motherUri = Uri.withAppendedPath(
-						${extends?cap_first}ProviderAdapter.${extends?upper_case}_URI, String.valueOf(id));
+						${curr.inheritance.superclass.name?cap_first}ProviderAdapter.${curr.inheritance.superclass.name?upper_case}_URI, String.valueOf(id));
 				result = this.ctx.getContentResolver().delete(motherUri,
 						selection, selectionArgs);
 				<#else>
-				selection = ${curr.name?cap_first}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)}
+				selection = ${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)}
 						+ " = ?";
 				selectionArgs = new String[1];
 				selectionArgs[0] = String.valueOf(id);
@@ -190,9 +188,10 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 			</#if>
 			case ${curr.name?upper_case}_ALL:
 				<#if inherited>
+					<#if joinedInheritance>
 				// Query the ids of the changing fields.
 				Cursor idsCursor = this.adapter.query(
-						new String[]{${curr.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.ids[0].name)}},
+						new String[]{${curr_ids[0].owner}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr_ids[0].name)}},
 						selection,
 						selectionArgs,
 						null,
@@ -200,14 +199,31 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						null);
 				// If there are ids
 				if (idsCursor.getCount() > 0) {
-					CriteriasBase parentCrit = this.cursorToIDSelection(idsCursor, ${curr.extends}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.ids[0].name)});
+					CriteriasBase parentCrit = this.cursorToIDSelection(idsCursor, ${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr_ids[0].name)});
 					String parentSelection = parentCrit.toSQLiteSelection();
 					String[] parentSelectionArgs = parentCrit.toSQLiteSelectionArgs();
 					result = this.ctx.getContentResolver().delete(
-							${curr.extends}ProviderAdapter.${curr.extends?upper_case}_URI,
+							${curr.inheritance.superclass.name}ProviderAdapter.${curr.inheritance.superclass.name?upper_case}_URI,
 							parentSelection,
 							parentSelectionArgs);
 				}
+					<#else>
+				if (selection == null || selection.length() < 1) {
+					selection = 
+						${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
+					selectionArgs = new String[]{${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER};
+				} else {
+					selection += " AND " 
+							+ ${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)}
+							+ " = ?";
+					selectionArgs = ObjectArrays.concat(selectionArgs,
+							${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER);
+				}
+
+				result = this.adapter.delete(
+							selection,
+							selectionArgs);
+					</#if>
 				<#else>
 				result = this.adapter.delete(
 							selection,
@@ -225,18 +241,18 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	public Uri insert(final Uri uri, final ContentValues values) {
 		int matchedUri = ${project_name?cap_first}ProviderBase
 				.getUriMatcher().match(uri);
-		<#if inherited>ContentValues ${curr.name?uncap_first}Values =
+		<#if inherited && joinedInheritance>ContentValues ${curr.name?uncap_first}Values =
 			this.extractContentValues(values);</#if>
 		Uri result = null;
 		int id = 0;
 		switch (matchedUri) {
 			case ${curr.name?upper_case}_ALL:
-				<#if inherited>
+				<#if inherited && joinedInheritance>
 				Uri newUri = this.ctx.getContentResolver().insert(
-						${extends}ProviderAdapter.${extends?upper_case}_URI,
+						${curr.inheritance.superclass.name}ProviderAdapter.${curr.inheritance.superclass.name?upper_case}_URI,
 						values);
 				int newId = Integer.parseInt(newUri.getPathSegments().get(1));
-				${curr.name?uncap_first}Values.put(${curr.name}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)}, newId);
+				${curr.name?uncap_first}Values.put(${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)}, newId);
 				id = (int) this.adapter.insert(null, ${curr.name?uncap_first}Values);
 				<#else>
 				id = (int) this.adapter.insert(null, values);
@@ -270,7 +286,21 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		int id = 0;
 
 		switch (matchedUri) {
+
 			case ${curr.name?upper_case}_ALL:
+				<#if inherited && singleTabInheritance>
+				if (selection == null || selection.length() < 1) {
+					selection = 
+						${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
+					selectionArgs = new String[]{${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER};
+				} else {
+					selection += " AND " 
+							+ ${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)}
+							+ " = ?";
+					selectionArgs = ObjectArrays.concat(selectionArgs,
+							${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER);
+				}
+				</#if>
 				result = this.adapter.query(
 							projection,
 							selection,
@@ -332,10 +362,10 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	public int update(
 			final Uri uri,
 			final ContentValues values,
-			final String selection,
-			final String[] selectionArgs) {
+			String selection,
+			String[] selectionArgs) {
 
-		<#if inherited>ContentValues ${curr.name?uncap_first}Values = this.extractContentValues(values);</#if>
+		<#if inherited && joinedInheritance>ContentValues ${curr.name?uncap_first}Values = this.extractContentValues(values);</#if>
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher()
 				.match(uri);
 		int result = -1;
@@ -344,7 +374,8 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 			case ${curr.name?upper_case}_ONE:
 				String id = uri.getPathSegments().get(1);
 				<#if inherited>
-				Uri parentUri = Uri.withAppendedPath(${extends?cap_first}ProviderAdapter.${extends?upper_case}_URI,
+					<#if joinedInheritance>
+				Uri parentUri = Uri.withAppendedPath(${curr.inheritance.superclass.name?cap_first}ProviderAdapter.${curr.inheritance.superclass.name?upper_case}_URI,
 						String.valueOf(id));
 				result = this.ctx.getContentResolver().update(
 						parentUri,
@@ -353,12 +384,19 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						null);
 				result += this.adapter.update(
 						${curr.name?uncap_first}Values,
-						${curr.name}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)} + " = ?",
+						${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)} + " = ?",
 						new String[]{String.valueOf(id)});
+					<#else>
+				result = this.adapter.update(
+						values,
+						${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)} + " = ?"
+							+ " AND " + ${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?",
+						new String[]{id, ${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER});
+					</#if>
 				<#else>
 				result = this.adapter.update(
 						values,
-						${curr.name?cap_first}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)} + " = "
+						${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)} + " = "
 						+ id,
 						selectionArgs);
 				</#if>
@@ -366,9 +404,10 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 			</#if>
 			case ${curr.name?upper_case}_ALL:
 				<#if inherited>
+					<#if joinedInheritance>
 				// Query the ids of the changing fields.
 				Cursor idsCursor = this.adapter.query(
-						new String[]{${curr.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.ids[0].name)}},
+						new String[]{${curr_ids[0].owner}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr_ids[0].name)}},
 						selection,
 						selectionArgs,
 						null,
@@ -380,7 +419,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					if (${curr.name?uncap_first}Values.size() > 0) {
 						CriteriasBase currentCrit = this.cursorToIDSelection(
 								idsCursor,
-								${curr.name}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
+								${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)});
 
 						String currentSelection = currentCrit.toSQLiteSelection();
 						String[] currentSelectionArgs = currentCrit
@@ -395,19 +434,37 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					if (values.size() > 0) {
 						CriteriasBase parentCrit = this.cursorToIDSelection(
 								idsCursor,
-								${curr.extends}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)});
+								${curr.inheritance.superclass.name}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)});
 
 						String parentSelection = parentCrit.toSQLiteSelection();
 						String[] parentSelectionArgs = parentCrit
 								.toSQLiteSelectionArgs();
 						// Update the parents tables
 						result = this.ctx.getContentResolver().update(
-								${curr.extends}ProviderAdapter.${curr.extends?upper_case}_URI,
+								${curr.inheritance.superclass.name}ProviderAdapter.${curr.inheritance.superclass.name?upper_case}_URI,
 								values,
 								parentSelection,
 								parentSelectionArgs);
 					}
 				}
+					<#else>
+				if (selection == null || selection.length() < 1) {
+					selection = 
+						${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
+					selectionArgs = new String[]{${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER};
+				} else {
+					selection += " AND " 
+							+ ${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)}
+							+ " = ?";
+					selectionArgs = ObjectArrays.concat(selectionArgs,
+							${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER);
+				}
+				
+				result = this.adapter.update(
+							values,
+							selection,
+							selectionArgs);
+					</#if>
 				<#else>
 				result = this.adapter.update(
 							values,
@@ -422,7 +479,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		return result;
 	}
 
-	<#if inherited>
+	<#if inherited && joinedInheritance>
 	protected ContentValues extractContentValues(ContentValues from) {
 		ContentValues to = new ContentValues();
 		for (String colName : ${curr.name}SQLiteAdapter.COLS) {
@@ -452,7 +509,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		cursor.moveToFirst();
 		do {
 			inArray.addValue(cursor.getString(
-				cursor.getColumnIndex(${curr.name}SQLiteAdapter.${NamingUtils.alias(curr.ids[0].name)})));
+				cursor.getColumnIndex(${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)})));
 		} while (cursor.moveToNext());
 		inCrit.addValue(inArray);
 		crit.add(inCrit);
@@ -473,9 +530,15 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	<#if (hasIds)>
 	private Cursor queryById(String id) {
 		Cursor result = null;
-		String selection = ${curr.name}SQLiteAdapter.ALIASED_COL_ID
+		String selection = ${curr_ids[0].owner}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr_ids[0].name)}
 						+ " = ?";
+		<#if inherited && singleTabInheritance>
+		selection += " AND " + ${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
+		String[] selectionArgs = new String[]{id, ${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER};
+		<#else>
 		String[] selectionArgs = new String[]{id};
+		</#if>
+
 		result = this.adapter.query(
 					${curr.name}SQLiteAdapter.ALIASED_COLS,
 					selection,

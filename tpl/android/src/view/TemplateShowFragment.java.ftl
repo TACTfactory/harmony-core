@@ -145,7 +145,7 @@ public class ${curr.name}ShowFragment
 			String baseUri = 
 					${curr.name}ProviderAdapter.${curr.name?upper_case}_URI 
 					+ "/" 
-					+ this.model.get${curr.ids[0].name?cap_first}();
+					+ this.model.get${curr_ids[0].name?cap_first}();
 
 			loader.addUri(Uri.parse(baseUri), new UriLoadedCallback() {
 

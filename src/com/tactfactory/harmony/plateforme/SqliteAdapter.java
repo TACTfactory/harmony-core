@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Column.Type;
+import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
@@ -71,9 +72,17 @@ public abstract class SqliteAdapter {
 			/*if (fm.isUnique() != null && fm.isUnique()) {
 				builder.append(" UNIQUE");
 			}*/
-
+			
+			boolean isSingleTabInherited = 
+					fm.getOwner().getInheritance() != null 
+					&& fm.getOwner().getInheritance().getType() 
+									== InheritanceMode.SINGLE_TAB
+					&& fm.getOwner().getInheritance().getSuperclass() != null;
+			
+			
 			// Set Nullable
-			if (fm.isNullable() == null || !fm.isNullable()) {
+			if ((fm.isNullable() == null || !fm.isNullable())
+					&& !isSingleTabInherited) {
 				builder.append(" NOT NULL");
 			}
 

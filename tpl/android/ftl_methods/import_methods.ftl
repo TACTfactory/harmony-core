@@ -10,7 +10,12 @@
 		<#assign import_array = [] />
 	</#if>
 	<#if InheritanceUtils.isExtended(entity)>
-		<#assign import_array = import_array + [entity.extends] />
+		<#assign import_array = import_array + [entity.inheritance.superclass.name] />
+	</#if>
+	<#if entity.inheritance?? && entity.inheritance.subclasses??>
+		<#list entity.inheritance.subclasses as subclass>
+			<#assign import_array = import_array + [subclass.name] />
+		</#list>
 	</#if>
 	<#list ViewUtils.getAllRelations(entity) as relation>
 		<#if importInternalsToo || !relation.internal>

@@ -17,10 +17,14 @@ import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.expr.AnnotationExpr;
+import japa.parser.ast.expr.FieldAccessExpr;
 import japa.parser.ast.expr.MemberValuePair;
 import japa.parser.ast.expr.NormalAnnotationExpr;
+import japa.parser.ast.expr.SingleMemberAnnotationExpr;
+import japa.parser.ast.expr.StringLiteralExpr;
 import japa.parser.ast.type.ClassOrInterfaceType;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,11 +34,16 @@ import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.meta.InterfaceMetadata;
 import com.tactfactory.harmony.parser.JavaModelParser;
 import com.tactfactory.harmony.annotation.Column.Type;
+import com.tactfactory.harmony.annotation.DiscriminatorColumn;
+import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
+import com.tactfactory.harmony.annotation.DiscriminatorIdentifier;
 import com.tactfactory.harmony.annotation.Entity;
+import com.tactfactory.harmony.annotation.InheritanceType;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
+import com.tactfactory.harmony.meta.InheritanceMetadata;
 import com.tactfactory.harmony.parser.BaseParser;
 import com.tactfactory.harmony.plateforme.SqliteAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -45,11 +54,29 @@ import com.tactfactory.harmony.utils.PackageUtils;
  */
 public class ClassVisitor {
 	/** Entity annotation name. */
-	private static final String FILTER_ENTITY	 	=
+	private static final String ANNOTATION_ENTITY	 	=
 			PackageUtils.extractNameEntity(Entity.class);
+
+	private static final String ANNOTATION_INHERITANCE_TYPE	=
+			PackageUtils.extractNameEntity(InheritanceType.class);
+
+	private static final String ANNOTATION_DISCRIMINATOR_COLUMN =
+			PackageUtils.extractNameEntity(DiscriminatorColumn.class);
+	
+	private static final String ANNOTATION_DISCRIMINATOR_IDENTIFIER =
+			PackageUtils.extractNameEntity(DiscriminatorIdentifier.class);
 	
 	/** Column annotation hidden attribute. */
 	private static final String ATTRIBUTE_HIDDEN = "hidden";
+	
+	/** Column annotation hidden attribute. */
+	private static final String ATTRIBUTE_VALUE = "value";
+	
+	/** Column annotation name attribute. */
+	private static final String ATTRIBUTE_NAME = "name";
+	
+	/** Column annotation type attribute. */
+	private static final String ATTRIBUTE_TYPE = "type";
 
 	/** The field visitor used by this visitor. */
 	private final FieldVisitor fieldVisitor = new FieldVisitor();
@@ -60,6 +87,8 @@ public class ClassVisitor {
 	/** The constructor visitor used by this visitor. */
 	private final ConstructorVisitor constructorVisitor = 
 			new ConstructorVisitor();
+	
+	private Map<String, AnnotationExpr> annotationMap;
 
 	/**
 	 * Visit a class.
@@ -107,46 +136,46 @@ public class ClassVisitor {
 	    		bParser.visitClass(classDeclaration, result);
 	    	}
 
-
 	    	// Parse the annotations
-	    	final List<AnnotationExpr> classAnnotations =
-	    			classDeclaration.getAnnotations();
-			if (classAnnotations != null) {
-				for (final AnnotationExpr annotationExpr : classAnnotations) {
-
-					// Call the bundles class annotations parsers
+	    	this.annotationMap = this.getAnnotMap(classDeclaration);
+	    	
+	    	// TODO : adapt bundles code !
+			// Call the bundles class annotations parsers
+	    	if (classDeclaration.getAnnotations() != null) {
+		    	for (AnnotationExpr annotationExpr 
+		    			: classDeclaration.getAnnotations()) {
 					for (final BaseParser bParser
 							: JavaModelParser.getBundleParsers()) {
 			    		bParser.visitClassAnnotation(result, annotationExpr);
 					}
-
-					// Get annotation Type
-					final String annotationType =
-							annotationExpr.getName().toString();
-
-					// Detect whether class is an entity
-					if (annotationType.equals(FILTER_ENTITY)) {
-						isEntity = true;
-						
-						if (annotationExpr instanceof NormalAnnotationExpr) {
-							NormalAnnotationExpr annot = (NormalAnnotationExpr)
-									annotationExpr;
-							List<MemberValuePair> pairs = annot.getPairs();
+		    	}
+	    	}
+	    	
+	    	AnnotationExpr entityAnnot = 
+	    			this.annotationMap.get(ANNOTATION_ENTITY);
+	    	if (entityAnnot != null) {
+	    		isEntity = true;
+				
+				if (entityAnnot instanceof NormalAnnotationExpr) {
+					List<MemberValuePair> pairs = ((NormalAnnotationExpr)
+							entityAnnot).getPairs();
+					for (MemberValuePair pair : pairs) {
+						if (ATTRIBUTE_HIDDEN.equals(pair.getName())) {
 							
-							for (MemberValuePair pair : pairs) {
-								if (ATTRIBUTE_HIDDEN.equals(pair.getName())) {
-									
-									((EntityMetadata) result).setHidden(
-											pair.getValue().toString()
-											.equals(String.valueOf(true)));
-								}
-							}
+							((EntityMetadata) result).setHidden(
+									pair.getValue().toString()
+									.equals(String.valueOf(true)));
 						}
 					}
-					
-					
 				}
-			}
+	    	}
+	    	
+	    	if (isEntity) {
+	    		this.loadInheritanceData(
+	    				(EntityMetadata) result, 
+	    				classDeclaration);
+	    	}
+
 
 			// Get list of Implement type
 			final List<ClassOrInterfaceType> impls =
@@ -158,19 +187,6 @@ public class ClassVisitor {
 					// Debug Log
 					ConsoleUtils.displayDebug("\tImplement : "
 								+ impl.getName());
-				}
-			}
-
-			// Get Extend type
-			final List<ClassOrInterfaceType> exts =
-					classDeclaration.getExtends();
-			if (exts != null) {
-				for (final ClassOrInterfaceType ext : exts) {
-					result.setExtendType(ext.getName());
-
-					// Debug Log
-					ConsoleUtils.displayDebug("\tExtend : "
-								+ ext.getName());
 				}
 			}
 
@@ -224,9 +240,9 @@ public class ClassVisitor {
 				}
 
 				for (final ClassMetadata subClass : subClasses.values()) {
-					subClass.setMotherClass(result.getName());
+					subClass.setOuterClass(result.getName());
 				}
-				result.setSubClasses(subClasses);
+				result.setInnerClasses(subClasses);
 			}
 		}
 
@@ -312,5 +328,199 @@ public class ClassVisitor {
     	}
 
     	return result;
+    }
+    
+    /**
+     * Transform the class declaration to an annotation map
+     * @param classDecl The class declaration
+     * @return A map <Annotation name, annotation>
+     */
+    private Map<String, AnnotationExpr> getAnnotMap(
+    		ClassOrInterfaceDeclaration classDecl) {
+    	
+    	Map<String, AnnotationExpr> result = 
+    			new HashMap<String, AnnotationExpr>();
+    	if (classDecl.getAnnotations() != null) {
+	    	for (AnnotationExpr annot : classDecl.getAnnotations()) {
+	    		result.put(annot.getName().toString(), annot);
+	    	}
+    	}
+    	
+    	return result;
+    }
+    
+    /**
+     * Loads the inheritance data for the given entity.
+     * @param classMeta The metadata of the entity
+     * @param classDecl The class declaration
+     */
+    private void loadInheritanceData(EntityMetadata classMeta,
+    		ClassOrInterfaceDeclaration classDecl) {
+    	AnnotationExpr inheritanceTypeAnnot =
+    			this.annotationMap.get(ANNOTATION_INHERITANCE_TYPE);
+    	AnnotationExpr discriminatorAnnot =
+    			this.annotationMap.get(ANNOTATION_DISCRIMINATOR_COLUMN);
+    	AnnotationExpr discriminatorIdentifier =
+    			this.annotationMap.get(ANNOTATION_DISCRIMINATOR_IDENTIFIER);
+    	
+    	boolean inherits = false;
+    	InheritanceMetadata inheritanceMeta;
+    	if (classMeta.getInheritance() != null) {
+    		inheritanceMeta = classMeta.getInheritance();
+    		inherits = true;
+    	} else {
+    		inheritanceMeta = new InheritanceMetadata();
+    	}
+    	
+    	if (classDecl.getExtends() != null
+    			&& classDecl.getExtends().get(0).getName() != "Object") {
+    		inherits = true;
+    		// TODO : check if extends is a entity ?
+    		InheritanceMode mode = null;
+    		String superClassName = classDecl.getExtends().get(0).getName();
+    		
+    		EntityMetadata superclass;
+    		if (ApplicationMetadata.INSTANCE.getEntities().containsKey(
+    				superClassName)) {
+    			 superclass = 
+    					 ApplicationMetadata.INSTANCE.getEntities().get(
+    							 superClassName); 
+    			if (superclass.getInheritance() == null) {
+     				superclass.setInheritance(new InheritanceMetadata());
+     				superclass.getInheritance().getSubclasses().put(
+     						classMeta.getName(),
+     						classMeta);
+     			} else {
+     				mode = superclass.getInheritance().getType();
+     			}
+    			
+    		} else {
+    			superclass = new EntityMetadata();
+    			superclass.setName(superClassName);
+    			if (superclass.getInheritance() == null) {
+    				superclass.setInheritance(new InheritanceMetadata());
+    			}
+    			superclass.getInheritance().getSubclasses().put(
+    					classMeta.getName(),
+    					classMeta);
+    			ApplicationMetadata.INSTANCE.getEntities().put(
+    					superClassName, superclass);
+    		}
+
+    		inheritanceMeta.setSuperclass(superclass);
+    		if (mode != null) {
+    			inheritanceMeta.setType(mode);
+    		}
+    		
+    		String discriminatorIdentifierValue = classMeta.getName();
+    		if (discriminatorIdentifier instanceof NormalAnnotationExpr) {
+				List<MemberValuePair> pairs = 
+						((NormalAnnotationExpr) discriminatorIdentifier)
+								.getPairs();
+				
+				for (MemberValuePair pair : pairs) {
+					if (ATTRIBUTE_VALUE.equals(pair.getName())) {
+						discriminatorIdentifierValue = 
+								pair.getValue().toString();
+					}
+				}
+			} else if (discriminatorIdentifier 
+					instanceof SingleMemberAnnotationExpr){
+				SingleMemberAnnotationExpr annot = 
+						(SingleMemberAnnotationExpr) discriminatorIdentifier;
+				discriminatorIdentifierValue = 
+						((FieldAccessExpr) annot.getMemberValue()).getField();
+			}
+    		inheritanceMeta.setDiscriminorIdentifier(
+    				discriminatorIdentifierValue);
+    	} 
+    	
+    	if (inheritanceTypeAnnot != null) {
+    		inherits = true;
+    		// Get mode
+    		InheritanceMode mode = null;
+    		String modeName = null;
+    		if (inheritanceTypeAnnot instanceof NormalAnnotationExpr) {
+				List<MemberValuePair> pairs = 
+						((NormalAnnotationExpr) inheritanceTypeAnnot)
+								.getPairs();
+				
+				for (MemberValuePair pair : pairs) {
+					if (ATTRIBUTE_VALUE.equals(pair.getName())) {
+						modeName = pair.getValue().toString();
+					}
+				}
+			} else if (inheritanceTypeAnnot 
+					instanceof SingleMemberAnnotationExpr){
+				SingleMemberAnnotationExpr annot = 
+						(SingleMemberAnnotationExpr) inheritanceTypeAnnot;
+				modeName = 
+						((FieldAccessExpr) annot.getMemberValue()).getField();
+			}
+    		
+    		if (modeName != null) {
+    			mode = InheritanceMode.valueOf(modeName);
+    		} else {
+    			mode = InheritanceMode.JOINED;
+    		}
+
+    		// Propagate type to subclasses
+    		inheritanceMeta.setType(mode);
+    		
+
+			String type = "VARCHAR";
+			String columnName = "inheritance_type";
+			String name = "discriminatorColumn";
+			
+    		if (discriminatorAnnot != null) {
+    			if (discriminatorAnnot instanceof NormalAnnotationExpr) {
+    				
+    				List<MemberValuePair> pairs = 
+    						((NormalAnnotationExpr) discriminatorAnnot)
+    								.getPairs();
+    				
+    				for (MemberValuePair pair : pairs) {
+    					if (ATTRIBUTE_NAME.equals(pair.getName())) {
+    						columnName = ((StringLiteralExpr) 
+    										pair.getValue()).getValue();
+    					} else if (ATTRIBUTE_TYPE.equals(pair.getName())) {
+    						type = ((StringLiteralExpr) 
+    								pair.getValue()).getValue();
+    					}
+    				}
+    				
+    			}
+    		} 
+    		
+			FieldMetadata discriminatorColumn = 
+					new FieldMetadata(classMeta);
+			discriminatorColumn.setType(type);
+			discriminatorColumn.setColumnDefinition(type);
+			discriminatorColumn.setColumnName(columnName);
+			discriminatorColumn.setName(name);
+			discriminatorColumn.setNullable(true);
+			inheritanceMeta.setDiscriminorColumn(discriminatorColumn);
+    	}
+    	
+    	if (inherits) {
+    		classMeta.setInheritance(inheritanceMeta);
+    		this.propagateModeToSubclasses(classMeta);
+    	}
+    }
+    
+    /** 
+     * Propagates the inheritance mode to the subclasses. 
+     *
+     * @param classMeta the entity to propagate the mode.
+     */
+    private void propagateModeToSubclasses(EntityMetadata classMeta) {
+		// Propagate type to subclasses
+		for (EntityMetadata subclass 
+				: classMeta.getInheritance().getSubclasses().values()) {
+			
+			subclass.getInheritance().setType(
+					classMeta.getInheritance().getType());
+			this.propagateModeToSubclasses(subclass);
+		}
     }
 }

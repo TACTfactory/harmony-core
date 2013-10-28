@@ -113,16 +113,16 @@
 
 <#function getAllFields class>
 	<#assign fields = class.fields />
-	<#if class.extends?? && entities[class.extends]??>
-		<#assign fields = fields + getAllFields(entities[class.extends]) />
+	<#if class.inheritance?? && class.inheritance.superclass?? && entities[class.inheritance.superclass.name]??>
+		<#assign fields = fields + getAllFields(entities[class.inheritance.superclass.name]) />
 	</#if>
 	<#return fields />
 </#function>
 
 <#function getAllRelations class>
 	<#assign relations = class.relations />
-	<#if class.extends?? && entities[class.extends]??>
-		<#assign relations = relations + getAllRelations(entities[class.extends]) />
+	<#if class.inheritance?? && class.inheritance.superclass?? && entities[class.inheritance.superclass.name]??>
+		<#assign relations = relations + getAllRelations(entities[class.inheritance.superclass.name]) />
 	</#if>
 	<#return relations />
 </#function>
