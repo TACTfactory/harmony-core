@@ -21,6 +21,7 @@ import japa.parser.ast.expr.FieldAccessExpr;
 import japa.parser.ast.expr.MemberValuePair;
 import japa.parser.ast.expr.NormalAnnotationExpr;
 import japa.parser.ast.expr.SingleMemberAnnotationExpr;
+import japa.parser.ast.expr.StringLiteralExpr;
 import japa.parser.ast.type.ClassOrInterfaceType;
 
 import java.util.HashMap;
@@ -170,7 +171,9 @@ public class ClassVisitor {
 	    	}
 	    	
 	    	if (isEntity) {
-	    		this.loadInheritanceData((EntityMetadata) result, classDeclaration);
+	    		this.loadInheritanceData(
+	    				(EntityMetadata) result, 
+	    				classDeclaration);
 	    	}
 
 
@@ -327,6 +330,11 @@ public class ClassVisitor {
     	return result;
     }
     
+    /**
+     * Transform the class declaration to an annotation map
+     * @param classDecl The class declaration
+     * @return A map <Annotation name, annotation>
+     */
     private Map<String, AnnotationExpr> getAnnotMap(
     		ClassOrInterfaceDeclaration classDecl) {
     	
@@ -341,6 +349,11 @@ public class ClassVisitor {
     	return result;
     }
     
+    /**
+     * Loads the inheritance data for the given entity.
+     * @param classMeta The metadata of the entity
+     * @param classDecl The class declaration
+     */
     private void loadInheritanceData(EntityMetadata classMeta,
     		ClassOrInterfaceDeclaration classDecl) {
     	AnnotationExpr inheritanceTypeAnnot =
@@ -367,7 +380,8 @@ public class ClassVisitor {
     		String superClassName = classDecl.getExtends().get(0).getName();
     		
     		EntityMetadata superclass;
-    		if (ApplicationMetadata.INSTANCE.getEntities().containsKey(superClassName)) {
+    		if (ApplicationMetadata.INSTANCE.getEntities().containsKey(
+    				superClassName)) {
     			 superclass = 
     					 ApplicationMetadata.INSTANCE.getEntities().get(
     							 superClassName); 
@@ -389,7 +403,8 @@ public class ClassVisitor {
     			superclass.getInheritance().getSubclasses().put(
     					classMeta.getName(),
     					classMeta);
-    			ApplicationMetadata.INSTANCE.getEntities().put(superClassName, superclass);
+    			ApplicationMetadata.INSTANCE.getEntities().put(
+    					superClassName, superclass);
     		}
 
     		inheritanceMeta.setSuperclass(superclass);
@@ -397,6 +412,27 @@ public class ClassVisitor {
     			inheritanceMeta.setType(mode);
     		}
     		
+    		String discriminatorIdentifierValue = classMeta.getName();
+    		if (discriminatorIdentifier instanceof NormalAnnotationExpr) {
+				List<MemberValuePair> pairs = 
+						((NormalAnnotationExpr) discriminatorIdentifier)
+								.getPairs();
+				
+				for (MemberValuePair pair : pairs) {
+					if (ATTRIBUTE_VALUE.equals(pair.getName())) {
+						discriminatorIdentifierValue = 
+								pair.getValue().toString();
+					}
+				}
+			} else if (discriminatorIdentifier 
+					instanceof SingleMemberAnnotationExpr){
+				SingleMemberAnnotationExpr annot = 
+						(SingleMemberAnnotationExpr) discriminatorIdentifier;
+				discriminatorIdentifierValue = 
+						((FieldAccessExpr) annot.getMemberValue()).getField();
+			}
+    		inheritanceMeta.setDiscriminorIdentifier(
+    				discriminatorIdentifierValue);
     	} 
     	
     	if (inheritanceTypeAnnot != null) {
@@ -418,7 +454,8 @@ public class ClassVisitor {
 					instanceof SingleMemberAnnotationExpr){
 				SingleMemberAnnotationExpr annot = 
 						(SingleMemberAnnotationExpr) inheritanceTypeAnnot;
-				modeName = ((FieldAccessExpr) annot.getMemberValue()).getField();
+				modeName = 
+						((FieldAccessExpr) annot.getMemberValue()).getField();
 			}
     		
     		if (modeName != null) {
@@ -431,22 +468,24 @@ public class ClassVisitor {
     		inheritanceMeta.setType(mode);
     		
 
-			String type = Type.STRING.getValue();
+			String type = "VARCHAR";
 			String columnName = "inheritance_type";
 			String name = "discriminatorColumn";
 			
     		if (discriminatorAnnot != null) {
-    			if (inheritanceTypeAnnot instanceof NormalAnnotationExpr) {
+    			if (discriminatorAnnot instanceof NormalAnnotationExpr) {
     				
     				List<MemberValuePair> pairs = 
-    						((NormalAnnotationExpr) inheritanceTypeAnnot)
+    						((NormalAnnotationExpr) discriminatorAnnot)
     								.getPairs();
     				
     				for (MemberValuePair pair : pairs) {
     					if (ATTRIBUTE_NAME.equals(pair.getName())) {
-    						columnName = pair.getValue().toString();
+    						columnName = ((StringLiteralExpr) 
+    										pair.getValue()).getValue();
     					} else if (ATTRIBUTE_TYPE.equals(pair.getName())) {
-    						type = pair.getValue().toString();
+    						type = ((StringLiteralExpr) 
+    								pair.getValue()).getValue();
     					}
     				}
     				
@@ -456,6 +495,7 @@ public class ClassVisitor {
 			FieldMetadata discriminatorColumn = 
 					new FieldMetadata(classMeta);
 			discriminatorColumn.setType(type);
+			discriminatorColumn.setColumnDefinition(type);
 			discriminatorColumn.setColumnName(columnName);
 			discriminatorColumn.setName(name);
 			discriminatorColumn.setNullable(true);
@@ -468,10 +508,18 @@ public class ClassVisitor {
     	}
     }
     
+    /** 
+     * Propagates the inheritance mode to the subclasses. 
+     *
+     * @param classMeta the entity to propagate the mode.
+     */
     private void propagateModeToSubclasses(EntityMetadata classMeta) {
 		// Propagate type to subclasses
-		for (EntityMetadata subclass : classMeta.getInheritance().getSubclasses().values()) {
-			subclass.getInheritance().setType(classMeta.getInheritance().getType());
+		for (EntityMetadata subclass 
+				: classMeta.getInheritance().getSubclasses().values()) {
+			
+			subclass.getInheritance().setType(
+					classMeta.getInheritance().getType());
 			this.propagateModeToSubclasses(subclass);
 		}
     }

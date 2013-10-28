@@ -59,7 +59,7 @@ import ${project_namespace}.criterias.base.value.SelectValue;
 public abstract class ${curr.name}SQLiteAdapterBase
 						extends ${extend} {
 	<#if (singleTabInheritance && !isTopMostSuperClass)>
-	public static final String DISCRIMINATOR_IDENTIFIER = "${curr.name}";
+	public static final String DISCRIMINATOR_IDENTIFIER = "${curr.inheritance.discriminatorIdentifier}";
 	</#if>
 	<#if ((joinedInheritance || singleTabInheritance) && curr.inheritance.superclass??)>
 	/** Mother Adapter. */
