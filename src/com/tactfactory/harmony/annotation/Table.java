@@ -31,4 +31,6 @@ public @interface Table {
 	 * The table name.
 	 */
 	String name() default "";
+	
+	Index[] indexes() default {};
 }
