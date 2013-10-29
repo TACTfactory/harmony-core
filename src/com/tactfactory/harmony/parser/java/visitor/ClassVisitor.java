@@ -372,8 +372,7 @@ public class ClassVisitor {
     		inheritanceMeta = new InheritanceMetadata();
     	}
     	
-    	if (classDecl.getExtends() != null
-    			&& classDecl.getExtends().get(0).getName() != "Object") {
+    	if (classDecl.getExtends() != null) {
     		inherits = true;
     		// TODO : check if extends is a entity ?
     		InheritanceMode mode = null;
