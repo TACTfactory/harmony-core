@@ -195,10 +195,14 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	</#if>
 </#list>
 <#if !(singleTabInheritance && !isTopMostSuperClass)>
-		+ ");";
-<#else>
-;
+		+ ");"
 </#if>
+<#if (curr.indexes?? && curr.indexes?size > 0)>
+	<#list curr.indexes?keys as indexKey>
+		+ "CREATE UNIQUE INDEX IF NOT EXISTS ${indexKey} ON ${curr.name}(<#list curr.indexes[indexKey] as indexColumn>${indexColumn}<#if indexColumn_has_next>, </#if></#list>);"
+	</#list>
+</#if>
+;
 	}
 	<#if ((joinedInheritance || singleTabInheritance) && curr.inheritance.superclass??)>
 	@Override

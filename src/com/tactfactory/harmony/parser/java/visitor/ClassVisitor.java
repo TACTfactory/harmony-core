@@ -17,6 +17,8 @@ import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.body.MethodDeclaration;
 import japa.parser.ast.body.TypeDeclaration;
 import japa.parser.ast.expr.AnnotationExpr;
+import japa.parser.ast.expr.ArrayInitializerExpr;
+import japa.parser.ast.expr.Expression;
 import japa.parser.ast.expr.FieldAccessExpr;
 import japa.parser.ast.expr.MemberValuePair;
 import japa.parser.ast.expr.NormalAnnotationExpr;
@@ -24,6 +26,7 @@ import japa.parser.ast.expr.SingleMemberAnnotationExpr;
 import japa.parser.ast.expr.StringLiteralExpr;
 import japa.parser.ast.type.ClassOrInterfaceType;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -38,7 +41,9 @@ import com.tactfactory.harmony.annotation.DiscriminatorColumn;
 import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
 import com.tactfactory.harmony.annotation.DiscriminatorIdentifier;
 import com.tactfactory.harmony.annotation.Entity;
+import com.tactfactory.harmony.annotation.Index;
 import com.tactfactory.harmony.annotation.InheritanceType;
+import com.tactfactory.harmony.annotation.Table;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
@@ -56,6 +61,12 @@ public class ClassVisitor {
 	/** Entity annotation name. */
 	private static final String ANNOTATION_ENTITY	 	=
 			PackageUtils.extractNameEntity(Entity.class);
+	
+	private static final String ANNOTATION_TABLE 		=
+			PackageUtils.extractNameEntity(Table.class);
+	
+	private static final String ANNOTATION_INDEX 		=
+			PackageUtils.extractNameEntity(Index.class);
 
 	private static final String ANNOTATION_INHERITANCE_TYPE	=
 			PackageUtils.extractNameEntity(InheritanceType.class);
@@ -74,6 +85,12 @@ public class ClassVisitor {
 	
 	/** Column annotation name attribute. */
 	private static final String ATTRIBUTE_NAME = "name";
+	
+	/** Column annotation indexes attribute. */
+	private static final String ATTRIBUTE_INDEXES = "indexes";
+	
+	/** Column annotation columns attribute. */
+	private static final String ATTRIBUTE_COLUMNS = "columns";
 	
 	/** Column annotation type attribute. */
 	private static final String ATTRIBUTE_TYPE = "type";
@@ -168,6 +185,10 @@ public class ClassVisitor {
 						}
 					}
 				}
+	    	}
+	    	
+	    	if (result instanceof EntityMetadata) {
+	    		this.parseTableAnnotation((EntityMetadata) result);
 	    	}
 	    	
 	    	if (isEntity) {
@@ -520,6 +541,76 @@ public class ClassVisitor {
 			subclass.getInheritance().setType(
 					classMeta.getInheritance().getType());
 			this.propagateModeToSubclasses(subclass);
+		}
+    }
+    
+    /**
+     * Parse the table annotation.
+     * 
+     * @param classMeta The class to complete
+     */
+    private void parseTableAnnotation(EntityMetadata classMeta) {
+    	AnnotationExpr tableAnnot = 
+    			this.annotationMap.get(ANNOTATION_TABLE);
+    	if (tableAnnot != null) {
+    		if (tableAnnot instanceof NormalAnnotationExpr) {
+    			List<MemberValuePair> pairs = 
+    					((NormalAnnotationExpr) tableAnnot).getPairs();
+    			for (MemberValuePair pair : pairs) {
+    				if (ATTRIBUTE_INDEXES.equals(pair.getName())) {
+    					this.parseIndexes(
+    							classMeta,
+    							(ArrayInitializerExpr) pair.getValue());
+    					
+    				}
+    			}
+    		}
+    	}
+    }
+    
+    /**
+     * Parse the indexes array.
+     * 
+     * @param classMeta The class to complete
+     * @param indexesArray The indexes array
+     */
+    private void parseIndexes(EntityMetadata classMeta,
+    		ArrayInitializerExpr indexesArray) {
+		for (Expression indexExpr : indexesArray.getValues()) {
+			if (indexExpr instanceof AnnotationExpr) {
+				this.parseIndexAnnotation(
+						classMeta, 
+						(AnnotationExpr) indexExpr);
+			}
+		}
+    }
+    
+    /**
+     * Parse an index annotation and put it into the metadata of the class.
+     * 
+     * @param classMeta The class metadata to complete
+     * @param indexAnnot The index annotation
+     */
+    private void parseIndexAnnotation(EntityMetadata classMeta, 
+    		AnnotationExpr indexAnnot) {
+    	String indexName = null;
+		ArrayList<String> columns = new ArrayList<String>();
+		List<MemberValuePair> indexPairs = 
+						((NormalAnnotationExpr) indexAnnot).getPairs();
+		for (MemberValuePair indexPair : indexPairs) {
+			if (ATTRIBUTE_NAME.equals(indexPair.getName())) {
+				indexName = 
+						((StringLiteralExpr) indexPair.getValue()).getValue();
+			} else if (ATTRIBUTE_COLUMNS.equals(indexPair.getName())) {
+				ArrayInitializerExpr colArray = 
+						((ArrayInitializerExpr) indexPair.getValue());
+				for (Expression columnExpr : colArray.getValues()) {
+					columns.add(((StringLiteralExpr) columnExpr).getValue());
+				}
+			}
+		}	
+		if (indexName != null) {
+			classMeta.addIndex(indexName, columns);
 		}
     }
 }

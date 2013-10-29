@@ -33,6 +33,11 @@ public class EntityMetadata extends ClassMetadata {
 	private Map<String, FieldMetadata> relations =
 			new LinkedHashMap<String, FieldMetadata>();
 	
+	/** List of indexes of entity. */
+	private Map<String, ArrayList<String>> indexes =
+			new LinkedHashMap<String, ArrayList<String>>();
+	
+	
 	/** Is entity hidden ? */
 	private boolean hidden = false;
 
@@ -63,6 +68,7 @@ public class EntityMetadata extends ClassMetadata {
 				this.toFieldArray(this.relations.values(), adapter));
 		model.put(TagConstant.INTERNAL,	this.internal);
 		model.put(TagConstant.HIDDEN, this.hidden);
+		model.put(TagConstant.INDEXES, this.indexes);
 
 		return model;
 	}
@@ -155,5 +161,10 @@ public class EntityMetadata extends ClassMetadata {
 		}
 
 		return result;
+	}
+
+
+	public void addIndex(String indexName, ArrayList<String> columns) {
+		this.indexes.put(indexName, columns);
 	}
 }

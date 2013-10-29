@@ -89,6 +89,8 @@ public abstract class TagConstant {
 	public static final String ALIAS = "alias";
 	/** Constant for entitiesids. */
 	public static final String IDS = "ids";
+	/** Constant for indexes. */
+	public static final String INDEXES = "indexes";
 	/** Constant for hidden field. */
 	public static final String HIDDEN = "hidden";
 	/** Constant for unique field. */
