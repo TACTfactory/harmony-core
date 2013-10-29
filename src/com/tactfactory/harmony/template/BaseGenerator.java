@@ -263,6 +263,17 @@ public abstract class BaseGenerator {
 				false);
 	}
 	
+	/**
+	 * Install an android project library from git.
+	 * @param url The url of the git repository.
+	 * @param pathLib The folder path where the repo should be downloaded
+	 * @param versionTag The tag/commit/branch you want to checkout
+	 * @param libName The library name (ie. demact-abs)
+	 * @param filesToDelete The list of files/folders to delete (samples, etc.)
+	 * @param libraryProjectPath The library project path inside the downloaded
+	 * 				folder
+	 * @param isSupportV4Dependant true if the library is supportv4 dependent
+	 */
 	protected void installGitLibrary(String url,
 			String pathLib,
 			String versionTag,
