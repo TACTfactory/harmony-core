@@ -90,7 +90,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	
 	<#if (services?size > 0)>
 	@Override
-	protected final void finalize() throws Throwable {
+	protected void finalize() throws Throwable {
 		this.doUnbindServices();
 		
 		super.finalize();
