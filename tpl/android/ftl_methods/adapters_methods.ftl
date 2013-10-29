@@ -327,7 +327,7 @@
 <#function validateDataFieldAdapter field indentLevel = 0>
 	<#assign result = "" />
 	<#assign tab = "\n" + Utils.getIndentString(indentLevel) />
-	<#if !field.internal && !field.hidden>
+	<#if !field.internal && !field.hidden && field.type?lower_case != "boolean">
 		<#if !field.nullable>
 			<#if !field.relation??>
 				<#if field.type?lower_case == "datetime">
