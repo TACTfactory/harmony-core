@@ -37,6 +37,10 @@ public class EntityMetadata extends ClassMetadata {
 	private Map<String, ArrayList<String>> indexes =
 			new LinkedHashMap<String, ArrayList<String>>();
 	
+	/** List of orderBys of entity. */
+	private Map<String, String> orders =
+			new LinkedHashMap<String, String>();
+	
 	
 	/** Is entity hidden ? */
 	private boolean hidden = false;
@@ -69,6 +73,7 @@ public class EntityMetadata extends ClassMetadata {
 		model.put(TagConstant.INTERNAL,	this.internal);
 		model.put(TagConstant.HIDDEN, this.hidden);
 		model.put(TagConstant.INDEXES, this.indexes);
+		model.put(TagConstant.ORDERS, this.orders);
 
 		return model;
 	}
@@ -124,15 +129,12 @@ public class EntityMetadata extends ClassMetadata {
 		return relations;
 	}
 
-
 	/**
 	 * @param relations the relations to set
 	 */
 	public final void setRelations(final Map<String, FieldMetadata> relations) {
 		this.relations = relations;
 	}
-
-
 
 	/**
 	 * Build a map from a collection of fields.
@@ -163,8 +165,21 @@ public class EntityMetadata extends ClassMetadata {
 		return result;
 	}
 
-
+	/**
+	 * Add an index constraint to this entity. 
+	 * @param indexName The index name
+	 * @param columns The columns of this index
+	 */
 	public void addIndex(String indexName, ArrayList<String> columns) {
 		this.indexes.put(indexName, columns);
+	}
+
+	/**
+	 * Add an order constraint to this entity.
+	 * @param columnName The column name
+	 * @param order The order (ASC || DESC)
+	 */
+	public void addOrder(String columnName, String order) {
+		this.orders.put(columnName, order);
 	}
 }

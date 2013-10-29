@@ -94,6 +94,12 @@ public class ${curr.name}ListFragment
 			crit = (${curr.name?cap_first}Criterias) bundle.get(
 						${curr.name?cap_first}Criterias.PARCELABLE);
 		}
+		<#if (curr.orders?? && curr.orders?size > 0) >
+		String orderBy = "";
+			<#list curr.orders?keys as orderKey>
+		orderBy += "${orderKey} ${curr.orders[orderKey]}<#if orderKey_has_next> AND </#if>";
+			</#list>
+		</#if>
 
 		//return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
 		if (crit != null) {
@@ -101,14 +107,14 @@ public class ${curr.name}ListFragment
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
 				${curr.name?cap_first}SQLiteAdapter.ALIASED_COLS,
 				crit,
-				null);
+				<#if (curr.orders?? && curr.orders?size > 0) >orderBy<#else>null</#if>);
 		} else {
 			return new ${curr.name?cap_first}ListLoader(this.getActivity(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
 				${curr.name?cap_first}SQLiteAdapter.ALIASED_COLS,
 				null,
 				null,
-				null);
+				<#if (curr.orders?? && curr.orders?size > 0) >orderBy<#else>null</#if>);
 		}
 	}
 
