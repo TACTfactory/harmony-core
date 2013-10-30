@@ -334,15 +334,19 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					<#if relation.relation.type == "ManyToMany">
 				${relation.relation.joinTable}SQLiteAdapter ${relation.name}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 				${relation.name}Adapter.open(this.getDb());
-				result = ${relation.name}Adapter.getBy${curr.name}(id);
+						<#if (relation.relation.orders?? && relation.relation.orders?size > 0) >
+				result = ${relation.name}Adapter.getBy${curr.name}(id, "<#list relation.relation.orders?keys as orderKey>${orderKey} ${relation.relation.orders[orderKey]}<#if orderKey_has_next> AND </#if></#list>");
+						<#else>
+				result = ${relation.name}Adapter.getBy${curr.name}(id, null);
+						</#if>
 					<#else>
 				${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 				${relation.name}Adapter.open(this.getDb());
-					<#if relation.relation.inversedBy??>
-				result = ${relation.name}Adapter.getBy${relation.relation.inversedBy?cap_first}(id);
-					<#else>
-				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id);
-					</#if>
+						<#if (relation.relation.orders?? && relation.relation.orders?size > 0) >
+				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id, "<#list relation.relation.orders?keys as orderKey>${orderKey} ${relation.relation.orders[orderKey]}<#if orderKey_has_next> AND </#if></#list>");
+						<#else>
+				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id, null);
+						</#if>
 					</#if>
 				</#if>
 				break;

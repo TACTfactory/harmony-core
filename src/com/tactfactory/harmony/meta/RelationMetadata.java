@@ -9,6 +9,7 @@
 package com.tactfactory.harmony.meta;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.tactfactory.harmony.plateforme.BaseAdapter;
@@ -35,6 +36,10 @@ public class RelationMetadata extends BaseMetadata {
 	/** Name of the join table used to join ManyToMany relations. */
 	private String joinTable;
 
+	/** List of orderBys of entity. */
+	private Map<String, String> orders =
+			new LinkedHashMap<String, String>();
+	
 	/**
 	 * Transform the relation to a field of map of strings.
 	 * @param adapter The adapter to use.
@@ -54,6 +59,7 @@ public class RelationMetadata extends BaseMetadata {
 			model.put("mappedBy", this.mappedBy.getName());
 		}
 		model.put("joinTable", this.joinTable);
+		model.put(TagConstant.ORDERS, this.orders);
 
 		return model;
 	}
@@ -140,5 +146,15 @@ public class RelationMetadata extends BaseMetadata {
 	 */
 	public final void setJoinTable(final String joinTable) {
 		this.joinTable = joinTable;
+	}
+	
+
+	/**
+	 * Add an order constraint to this entity.
+	 * @param columnName The column name
+	 * @param order The order (ASC || DESC)
+	 */
+	public void addOrder(String columnName, String order) {
+		this.orders.put(columnName, order);
 	}
 }

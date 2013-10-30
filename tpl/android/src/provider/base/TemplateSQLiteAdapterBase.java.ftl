@@ -324,14 +324,14 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 		${relation.name?uncap_first}Adapter.open(this.mDatabase);
 		Cursor ${relation.name?lower_case}Cursor = ${relation.name?uncap_first}Adapter
-					.getBy${relation.relation.mappedBy?cap_first}(result.get${curr_ids[0].name?cap_first}());
+					.getBy${relation.relation.mappedBy?cap_first}(result.get${curr_ids[0].name?cap_first}(), null);
 		result.set${relation.name?cap_first}(${relation.name?uncap_first}Adapter.cursorToItems(${relation.name?lower_case}Cursor));
 				<#elseif (relation.relation.type=="ManyToMany")>
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter =
 				new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
 		Cursor ${relation.name?lower_case}Cursor = ${relation.relation.joinTable?lower_case}Adapter.getBy${curr.name}(
-							result.get${curr_ids[0].name?cap_first}());
+							result.get${curr_ids[0].name?cap_first}(), null);
 		result.set${relation.name?cap_first}(new ${relation.relation.targetEntity}SQLiteAdapter(ctx).cursorToItems(${relation.name?lower_case}Cursor));
 				<#else>
 		if (result.get${relation.name?cap_first}() != null) {
@@ -359,13 +359,13 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @param ${relation.name?lower_case}Id ${relation.name?lower_case}Id
 	 * @return List of ${curr.name} entities
 	 */
-	 public Cursor getBy${relation.name?cap_first}(final int ${relation.name?lower_case}Id) {
+	 public Cursor getBy${relation.name?cap_first}(final int ${relation.name?lower_case}Id, String orderBy) {
 		final Cursor cursor = this.query(ALIASED_COLS,
 				${NamingUtils.alias(relation.name)} + "=?",
 				new String[]{Integer.toString(${relation.name?lower_case}Id)},
 				null,
 				null,
-				null);
+				orderBy);
 
 		return cursor;
 	 }
@@ -935,7 +935,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return ArrayList of ${rightRelation.relation.targetEntity} matching ${leftRelation.name?lower_case}
 	 */
 	public Cursor getBy${leftRelation.relation.targetEntity}(
-			final int ${leftRelation.name}) {
+			final int ${leftRelation.name},
+			final String orderBy) {
 
 		Cursor ret = null;
 		${curr.name}Criterias crit = new ${curr.name}Criterias(GroupType.AND);
@@ -957,7 +958,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				${rightRelation.relation.targetEntity?lower_case}Crit.toSQLiteSelectionArgs(),
 				null,
 				null,
-				null);
+				orderBy);
 		return ret;
 	}
 	<#assign leftRelation = curr.relations[1] />

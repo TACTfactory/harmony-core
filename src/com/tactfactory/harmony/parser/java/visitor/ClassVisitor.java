@@ -115,6 +115,7 @@ public class ClassVisitor {
 	private final ConstructorVisitor constructorVisitor = 
 			new ConstructorVisitor();
 	
+	/** Annotation map for this class. */
 	private Map<String, AnnotationExpr> annotationMap;
 
 	/**
