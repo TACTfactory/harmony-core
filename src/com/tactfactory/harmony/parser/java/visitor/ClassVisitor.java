@@ -43,6 +43,7 @@ import com.tactfactory.harmony.annotation.DiscriminatorIdentifier;
 import com.tactfactory.harmony.annotation.Entity;
 import com.tactfactory.harmony.annotation.Index;
 import com.tactfactory.harmony.annotation.InheritanceType;
+import com.tactfactory.harmony.annotation.OrderBys;
 import com.tactfactory.harmony.annotation.Table;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
@@ -73,9 +74,12 @@ public class ClassVisitor {
 
 	private static final String ANNOTATION_DISCRIMINATOR_COLUMN =
 			PackageUtils.extractNameEntity(DiscriminatorColumn.class);
-	
+
 	private static final String ANNOTATION_DISCRIMINATOR_IDENTIFIER =
 			PackageUtils.extractNameEntity(DiscriminatorIdentifier.class);
+	
+	private static final String ANNOTATION_ORDER_BYS=
+			PackageUtils.extractNameEntity(OrderBys.class);
 	
 	/** Column annotation hidden attribute. */
 	private static final String ATTRIBUTE_HIDDEN = "hidden";
@@ -85,6 +89,12 @@ public class ClassVisitor {
 	
 	/** Column annotation name attribute. */
 	private static final String ATTRIBUTE_NAME = "name";
+	
+	/** Column annotation column name attribute. */
+	private static final String ATTRIBUTE_COLUMN_NAME = "columnName";
+	
+	/** Column annotation order attribute. */
+	private static final String ATTRIBUTE_ORDER = "order";
 	
 	/** Column annotation indexes attribute. */
 	private static final String ATTRIBUTE_INDEXES = "indexes";
@@ -105,6 +115,7 @@ public class ClassVisitor {
 	private final ConstructorVisitor constructorVisitor = 
 			new ConstructorVisitor();
 	
+	/** Annotation map for this class. */
 	private Map<String, AnnotationExpr> annotationMap;
 
 	/**
@@ -187,14 +198,12 @@ public class ClassVisitor {
 				}
 	    	}
 	    	
-	    	if (result instanceof EntityMetadata) {
-	    		this.parseTableAnnotation((EntityMetadata) result);
-	    	}
-	    	
 	    	if (isEntity) {
 	    		this.loadInheritanceData(
 	    				(EntityMetadata) result, 
 	    				classDeclaration);
+	    		this.parseTableAnnotation((EntityMetadata) result);
+	    		this.parseOrderBysAnnotation((EntityMetadata) result);
 	    	}
 
 
@@ -544,6 +553,27 @@ public class ClassVisitor {
 		}
     }
     
+
+    /**
+     * Parse the table annotation.
+     * 
+     * @param classMeta The class to complete
+     */
+    private void parseOrderBysAnnotation(EntityMetadata classMeta) {
+    	AnnotationExpr orderBysAnnot = 
+    			this.annotationMap.get(ANNOTATION_ORDER_BYS);
+    	if (orderBysAnnot != null) {
+    		if (orderBysAnnot instanceof SingleMemberAnnotationExpr) {
+    			Expression memberValue = ((SingleMemberAnnotationExpr)
+    						orderBysAnnot).getMemberValue();
+				this.parseOrderByArray(
+						classMeta,
+						(ArrayInitializerExpr) memberValue);
+
+    		}
+    	}
+    }
+    
     /**
      * Parse the table annotation.
      * 
@@ -611,6 +641,49 @@ public class ClassVisitor {
 		}	
 		if (indexName != null) {
 			classMeta.addIndex(indexName, columns);
+		}
+    }
+    
+    /**
+     * Parse the indexes array.
+     * 
+     * @param classMeta The class to complete
+     * @param indexesArray The indexes array
+     */
+    private void parseOrderByArray(EntityMetadata classMeta,
+    		ArrayInitializerExpr orderByArray) {
+    	for (Expression orderByAnnot : orderByArray.getValues()) {
+			if (orderByAnnot instanceof AnnotationExpr) {
+				this.parseOrderByAnnotation(
+						classMeta, 
+						(AnnotationExpr) orderByAnnot);
+			}
+		}
+    }
+    
+    /**
+     * Parse an index annotation and put it into the metadata of the class.
+     * 
+     * @param classMeta The class metadata to complete
+     * @param indexAnnot The index annotation
+     */
+    private void parseOrderByAnnotation(EntityMetadata classMeta, 
+    		AnnotationExpr orderByAnnot) {
+    	String columnName = null;
+		String order = null;
+		List<MemberValuePair> indexPairs = 
+						((NormalAnnotationExpr) orderByAnnot).getPairs();
+		for (MemberValuePair indexPair : indexPairs) {
+			if (ATTRIBUTE_COLUMN_NAME.equals(indexPair.getName())) {
+				columnName = 
+						((StringLiteralExpr) indexPair.getValue()).getValue();
+			} else if (ATTRIBUTE_ORDER.equals(indexPair.getName())) {
+				order = 
+						((StringLiteralExpr) indexPair.getValue()).getValue();
+			}
+		}	
+		if (columnName != null) {
+			classMeta.addOrder(columnName, order);
 		}
     }
 }

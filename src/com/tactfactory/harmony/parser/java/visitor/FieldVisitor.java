@@ -10,9 +10,14 @@ package com.tactfactory.harmony.parser.java.visitor;
 
 import japa.parser.ast.body.FieldDeclaration;
 import japa.parser.ast.expr.AnnotationExpr;
+import japa.parser.ast.expr.ArrayInitializerExpr;
+import japa.parser.ast.expr.Expression;
 import japa.parser.ast.expr.MemberValuePair;
 import japa.parser.ast.expr.NormalAnnotationExpr;
+import japa.parser.ast.expr.SingleMemberAnnotationExpr;
 import japa.parser.ast.expr.StringLiteralExpr;
+
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +29,7 @@ import com.tactfactory.harmony.annotation.ManyToMany;
 import com.tactfactory.harmony.annotation.ManyToOne;
 import com.tactfactory.harmony.annotation.OneToMany;
 import com.tactfactory.harmony.annotation.OneToOne;
+import com.tactfactory.harmony.annotation.OrderBys;
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
@@ -70,6 +76,8 @@ public class FieldVisitor {
 	private static final String FILTER_MANY2MANY 	=
 			PackageUtils.extractNameEntity(ManyToMany.class);
 
+	private static final String ANNOTATION_ORDER_BYS=
+			PackageUtils.extractNameEntity(OrderBys.class);
 
 	/** Column annotation name attribute. */
 	private static final String ATTRIBUTE_NAME = "name";
@@ -97,6 +105,12 @@ public class FieldVisitor {
 
 	/** Column annotation hidden attribute. */
 	private static final String ATTRIBUTE_HIDDEN = "hidden";
+	
+	/** Column annotation column name attribute. */
+	private static final String ATTRIBUTE_COLUMN_NAME = "columnName";
+	
+	/** Column annotation order attribute. */
+	private static final String ATTRIBUTE_ORDER = "order";
 
 	/** Column annotation columnDefinition attribute. */
 	private static final String ATTRIBUTE_COLUMN_DEFINITION =
@@ -116,6 +130,9 @@ public class FieldVisitor {
 	private Map<String, ClassMetadata> projectClasses = 
 			ApplicationMetadata.INSTANCE.getClasses();
 	
+	/** Annotation map for this field. */
+	private Map<String, AnnotationExpr> annotationMap;
+	
 	/**
 	 * Visit a field declaration to extract metadata.
 	 * @param field The field declaration.
@@ -125,6 +142,8 @@ public class FieldVisitor {
 	public final FieldMetadata visit(final FieldDeclaration field,
 			final ClassMetadata classMeta) {
 		FieldMetadata result = null;
+		
+		this.annotationMap = this.getAnnotMap(field);
     	// Call the parsers which have been registered by the bundle
     	for (final BaseParser bParser
     			: JavaModelParser.getBundleParsers()) {
@@ -238,8 +257,12 @@ public class FieldVisitor {
 						&& rel.getMappedBy() == null) {
 					this.createMappingField(result);
 				} else if (rel.getType().equals("ManyToMany")) {
-					// TODO create JoinTable, etc.
 					this.createJoinTable(result);
+				}
+				
+				if (rel.getType().equals("OneToMany") ||
+						rel.getType().equals("ManyToMany")) {
+					this.parseOrderBysAnnotation(rel);
 				}
 			}
 
@@ -656,5 +679,86 @@ public class FieldVisitor {
 		
 		return mappingField;
 	}
+	
+    /**
+     * Transform the class declaration to an annotation map
+     * @param classDecl The class declaration
+     * @return A map <Annotation name, annotation>
+     */
+    private Map<String, AnnotationExpr> getAnnotMap(
+    		FieldDeclaration fieldDecl) {
+    	
+    	Map<String, AnnotationExpr> result = 
+    			new HashMap<String, AnnotationExpr>();
+    	if (fieldDecl.getAnnotations() != null) {
+	    	for (AnnotationExpr annot : fieldDecl.getAnnotations()) {
+	    		result.put(annot.getName().toString(), annot);
+	    	}
+    	}
+    	
+    	return result;
+    }    
+    /**
+     * Parse the indexes array.
+     * 
+     * @param classMeta The class to complete
+     * @param indexesArray The indexes array
+     */
+    private void parseOrderByArray(RelationMetadata relationMeta,
+    		ArrayInitializerExpr orderByArray) {
+    	for (Expression orderByAnnot : orderByArray.getValues()) {
+			if (orderByAnnot instanceof AnnotationExpr) {
+				this.parseOrderByAnnotation(
+						relationMeta, 
+						(AnnotationExpr) orderByAnnot);
+			}
+		}
+    }
+    
+    /**
+     * Parse an index annotation and put it into the metadata of the class.
+     * 
+     * @param classMeta The class metadata to complete
+     * @param indexAnnot The index annotation
+     */
+    private void parseOrderByAnnotation(RelationMetadata relationMeta, 
+    		AnnotationExpr orderByAnnot) {
+    	String columnName = null;
+		String order = null;
+		List<MemberValuePair> indexPairs = 
+						((NormalAnnotationExpr) orderByAnnot).getPairs();
+		for (MemberValuePair indexPair : indexPairs) {
+			if (ATTRIBUTE_COLUMN_NAME.equals(indexPair.getName())) {
+				columnName = 
+						((StringLiteralExpr) indexPair.getValue()).getValue();
+			} else if (ATTRIBUTE_ORDER.equals(indexPair.getName())) {
+				order = 
+						((StringLiteralExpr) indexPair.getValue()).getValue();
+			}
+		}	
+		if (columnName != null) {
+			relationMeta.addOrder(columnName, order);
+		}
+    }
+    
+    /**
+     * Parse the table annotation.
+     * 
+     * @param classMeta The class to complete
+     */
+    private void parseOrderBysAnnotation(RelationMetadata relationMeta) {
+    	AnnotationExpr orderBysAnnot = 
+    			this.annotationMap.get(ANNOTATION_ORDER_BYS);
+    	if (orderBysAnnot != null) {
+    		if (orderBysAnnot instanceof SingleMemberAnnotationExpr) {
+    			Expression memberValue = ((SingleMemberAnnotationExpr)
+    						orderBysAnnot).getMemberValue();
+				this.parseOrderByArray(
+						relationMeta,
+						(ArrayInitializerExpr) memberValue);
+
+    		}
+    	}
+    }
 }
 	
