@@ -66,7 +66,7 @@ import ${project_namespace}.provider.${relation.relation.targetEntity}ProviderAd
 import ${project_namespace}.provider.${curr.name}ProviderAdapter;
 ${ImportUtils.importRelatedProviderUtils(curr, true)}
 <#list relations as field>
-	<#if !field.internal && !field.hidden>
+	<#if (!field.internal && !field.hidden && field.writable)>
 		<#if (field.relation.type == "ManyToMany") || (field.relation.type == "OneToMany" && MetadataUtils.getInversingField(field).internal)>
 import ${project_namespace}.data.${field.relation.targetEntity}SQLiteAdapter;
 		</#if>
@@ -84,7 +84,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 
 	/** curr.fields View. */
 	<#list fields?values as field>
-		<#if (!field.internal && !field.hidden)>
+		<#if (!field.internal && !field.hidden && field.writable)>
 			<#if (!field.relation??)>
 				<#if (field.type=="boolean")>
 	/** ${field.name} View. */
@@ -131,7 +131,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 	 */
 	protected void initializeComponent(View view) {
 		<#list fields?values as field>
-			<#if !field.internal && !field.hidden>
+			<#if (!field.internal && !field.hidden && field.writable)>
 				<#if !field.relation??>
 					<#if field.type=="boolean">
 		this.${field.name}View =
@@ -359,7 +359,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		@Override
 		protected Void doInBackground(Void... params) {
 			<#list relations as field>
-				<#if !field.internal && !field.hidden>
+				<#if (!field.internal && !field.hidden && field.writable)>
 			this.${field.name}List = 
 				new ${field.relation.targetEntity}ProviderUtils(this.ctx).queryAll();
 					<#if (field.relation.type == "ManyToMany") || (field.relation.type == "OneToMany" && MetadataUtils.getInversingField(field).internal)>
@@ -399,7 +399,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 			<#list relations as field>
-				<#if !field.internal && !field.hidden>
+				<#if (!field.internal && !field.hidden && field.writable)>
 					<#if (field.relation.type == "ManyToMany") || (field.relation.type == "OneToMany" && MetadataUtils.getInversingField(field).internal)>
 			this.fragment.model.set${field.name?cap_first}(this.associated${field.name?cap_first}List);
 					</#if>

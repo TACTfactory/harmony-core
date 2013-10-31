@@ -39,8 +39,7 @@ public class EntityMetadata extends ClassMetadata {
 	
 	/** List of orderBys of entity. */
 	private Map<String, String> orders =
-			new LinkedHashMap<String, String>();
-	
+			new LinkedHashMap<String, String>();	
 	
 	/** Is entity hidden ? */
 	private boolean hidden = false;

@@ -62,7 +62,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 
 	/** Fields View. */
 	<#list fields?values as field>
-		<#if !field.internal && !field.hidden>
+		<#if (!field.internal && !field.hidden && field.writable)>
 			<#if !field.relation??>
 				<#if field.type=="boolean">
 	/** ${field.name} View. */
@@ -109,7 +109,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	 */
 	protected void initializeComponent(final View view) {
 		<#list fields?values as field>
-			<#if !field.internal && !field.hidden>
+			<#if (!field.internal && !field.hidden && field.writable)>
 				<#if !field.relation??>
 					<#if field.type=="boolean">
 		this.${field.name}View =
@@ -322,7 +322,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		@Override
 		protected Void doInBackground(Void... params) {
 			<#list relations as field>
-				<#if !field.internal && !field.hidden>
+				<#if (!field.internal && !field.hidden && field.writable)>
 			this.${field.name}List = 
 				new ${field.relation.targetEntity}ProviderUtils(this.ctx).queryAll();
 				</#if>
@@ -334,7 +334,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		protected void onPostExecute(Void result) {
 			super.onPostExecute(result);
 			<#list relations as field>
-				<#if !field.internal && !field.hidden>
+				<#if (!field.internal && !field.hidden && field.writable)>
 			this.fragment.${field.name}Adapter.loadData(this.${field.name}List);
 				</#if>
 			</#list>
