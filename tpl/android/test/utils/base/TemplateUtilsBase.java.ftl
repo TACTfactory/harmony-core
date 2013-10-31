@@ -108,7 +108,7 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 		Assert.assertNotNull(${curr.name?uncap_first}2);
 		if (${curr.name?uncap_first}1!=null && ${curr.name?uncap_first}2 !=null){
 		<#list curr.fields?values as field>
-			<#if !field.internal>
+			<#if !field.internal && !field.columnResult>
 				<#if !field.relation??>
 					<#if field.type?lower_case=="int" || field.type?lower_case=="integer" || field.type?lower_case=="long" || field.type?lower_case=="double" || field.type?lower_case=="float" || field.type?lower_case=="zipcode" || field.type?lower_case=="ean">
 			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
