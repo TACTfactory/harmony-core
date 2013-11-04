@@ -37,6 +37,20 @@ public class LibraryPool {
 	}
 	
 	/**
+	 * Finds the library license file (.txt) associated to the library.
+	 * @param libName The library name
+	 * @return The library license file
+	 */
+	public final File findLibraryLicense(final String libName) {
+		for (String fileName : this.pool.keySet()) {
+			if (fileName.startsWith(libName) && fileName.endsWith(".txt")) {
+				return this.pool.get(fileName);
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 * Parse the given file to find all the available libraries in 
 	 * order to fill the pool.
 	 * @param file The folder to parse
