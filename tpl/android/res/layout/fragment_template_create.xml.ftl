@@ -10,7 +10,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 <#list fields?values as field>
-	<#if (!field.internal && !field.hidden)>
+	<#if (!field.internal && !field.hidden && field.writable)>
 	<#assign m_id="${currname?lower_case}_${field.name?lower_case}" />
 	<#assign m_id_label="${m_id}_label" />
 	<#assign m_string_label="${field.owner?lower_case}_${field.name?lower_case}_label" />

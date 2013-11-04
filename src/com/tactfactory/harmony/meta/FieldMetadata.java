@@ -64,6 +64,15 @@ public class FieldMetadata extends BaseMetadata {
 	/** Is field internal ? */
 	private boolean internal = false;
 
+	/** Is field static ? */
+	private boolean isStatic = false;
+	
+	/** Is field a column result ? */
+	private boolean columnResult = false;
+	
+	/** Is field a writable field ? */
+	private boolean writable = true;
+
 	/**
 	 * Constructor.
 	 * @param owner ClassMetadata owning this field.
@@ -148,7 +157,10 @@ public class FieldMetadata extends BaseMetadata {
 		model.put(TagConstant.INTERNAL, 	this.internal);
 		model.put(TagConstant.IS_LOCALE, 	this.isLocale);
 		model.put(TagConstant.NULLABLE,		this.nullable);
-
+		model.put(TagConstant.STATIC,		this.isStatic);
+		model.put(TagConstant.COLUMN_RESULT, this.columnResult);
+		model.put(TagConstant.WRITABLE, this.writable);
+		
 		if (this.relation != null) {
 			model.put(TagConstant.RELATION, this.relation.toMap(adapter));
 		}
@@ -421,5 +433,29 @@ public class FieldMetadata extends BaseMetadata {
 	 */
 	public final void setDefaultValue(final String defaultValue) {
 		this.defaultValue = defaultValue;
+	}
+	
+	/**
+	 * @param isStatic Is static ?
+	 */
+	public final void setStatic(final boolean isStatic) {
+		this.isStatic = isStatic;
+	}
+	
+	/**
+	 * @param columnResult Is this field a column result ?
+	 */
+	public final void setColumnResult(final boolean columnResult) {
+		this.columnResult = columnResult;
+		if (columnResult) {
+			this.setWritable(false);
+		}
+	}
+	
+	/**
+	 * @param writable Is this field writable ?
+	 */
+	public final void setWritable(final boolean writable) {
+		this.writable = writable;
 	}
 }

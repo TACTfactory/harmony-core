@@ -95,6 +95,8 @@ public abstract class TagConstant {
 	public static final String ORDERS = "orders";
 	/** Constant for hidden field. */
 	public static final String HIDDEN = "hidden";
+	/** Constant for static field. */
+	public static final String STATIC = "static";
 	/** Constant for unique field. */
 	public static final String UNIQUE = "unique";
 	/** Constant for locale field. */
@@ -146,5 +148,9 @@ public abstract class TagConstant {
 	public static final String OUTER_CLASS = "outerClass";
 	/** Constant for inner classes. */
 	public static final String INNER_CLASSES = "innerclasses";
+	/** Constant for column results. */
+	public static final String COLUMN_RESULT = "columnResult";
+	/** Constant for writable. */
+	public static final String WRITABLE = "writable";
 
 }

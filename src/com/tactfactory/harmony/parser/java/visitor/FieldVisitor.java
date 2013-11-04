@@ -9,6 +9,7 @@
 package com.tactfactory.harmony.parser.java.visitor;
 
 import japa.parser.ast.body.FieldDeclaration;
+import japa.parser.ast.body.ModifierSet;
 import japa.parser.ast.expr.AnnotationExpr;
 import japa.parser.ast.expr.ArrayInitializerExpr;
 import japa.parser.ast.expr.Expression;
@@ -23,6 +24,7 @@ import java.util.Map;
 
 import com.tactfactory.harmony.parser.JavaModelParser;
 import com.tactfactory.harmony.annotation.Column;
+import com.tactfactory.harmony.annotation.ColumnResult;
 import com.tactfactory.harmony.annotation.Id;
 import com.tactfactory.harmony.annotation.JoinColumn;
 import com.tactfactory.harmony.annotation.ManyToMany;
@@ -75,7 +77,12 @@ public class FieldVisitor {
 	/** ManyToMany annotation name. */
 	private static final String FILTER_MANY2MANY 	=
 			PackageUtils.extractNameEntity(ManyToMany.class);
+	
+	/** ColumnResult annotation name. */
+	private static final String FILTER_COLUMNRESULT 	=
+			PackageUtils.extractNameEntity(ColumnResult.class);
 
+	/** OrderBys annotation. */
 	private static final String ANNOTATION_ORDER_BYS=
 			PackageUtils.extractNameEntity(OrderBys.class);
 
@@ -105,7 +112,7 @@ public class FieldVisitor {
 
 	/** Column annotation hidden attribute. */
 	private static final String ATTRIBUTE_HIDDEN = "hidden";
-	
+
 	/** Column annotation column name attribute. */
 	private static final String ATTRIBUTE_COLUMN_NAME = "columnName";
 	
@@ -157,8 +164,7 @@ public class FieldVisitor {
 			// General (required !)
 			// FIXME not manage multi-variable
 			String fieldName = field.getVariables().get(0).getId().getName();
-
-
+			
 			if (classMeta.getFields().containsKey(fieldName)) {
 				result = classMeta.getFields().get(fieldName);
 			} else {
@@ -168,6 +174,7 @@ public class FieldVisitor {
 			result.setInternal(false);
 			
 			result.setType(field.getType().toString());
+			result.setStatic(ModifierSet.isStatic(field.getModifiers()));
 
 			// Java types Date and Time are deprecated in Harmony
 			if (result.getType().equalsIgnoreCase("date")
@@ -227,6 +234,10 @@ public class FieldVisitor {
 						|| annotationType.equals(FILTER_MANY2ONE)
 						|| annotationType.equals(FILTER_MANY2MANY)) {
 					rel.setType(annotationType);
+				}
+				
+				if (annotationType.equals(FILTER_COLUMNRESULT)) {
+					result.setColumnResult(true);
 				}
 
 				this.loadAttributes(rel,
@@ -462,7 +473,14 @@ public class FieldVisitor {
 							}
 							rel.setInversedBy(fieldRef);
 						}
-					}
+					} else
+						if (annotationType.equals(FILTER_COLUMNRESULT)) {
+							if (mvp.getName().equals(ATTRIBUTE_COLUMN_NAME)) {
+								String command = ((StringLiteralExpr)
+										mvp.getValue()).getValue();
+								result.setColumnName(command);
+							}
+						}
 				}
 			}
 		}
@@ -505,7 +523,8 @@ public class FieldVisitor {
 		boolean isColumn = old;
 
 		if (annotationType.equals(FILTER_COLUMN)
-			|| annotationType.equals(FILTER_JOINCOLUMN)) {
+			|| annotationType.equals(FILTER_JOINCOLUMN)
+			|| annotationType.equals(FILTER_COLUMNRESULT)) {
 
 			isColumn = true;
 

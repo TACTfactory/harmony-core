@@ -13,6 +13,7 @@ import java.io.Serializable;
 import org.joda.time.DateTime;
 
 import com.tactfactory.harmony.annotation.Column;
+import com.tactfactory.harmony.annotation.ColumnResult;
 import com.tactfactory.harmony.annotation.DiscriminatorColumn;
 import com.tactfactory.harmony.annotation.Entity;
 import com.tactfactory.harmony.annotation.GeneratedValue;
@@ -69,6 +70,9 @@ public class User implements Cloneable, Serializable {
 
 	@Column(type = Type.ENUM)
 	private Title title;
+
+	@ColumnResult(columnName="firstname || ' ' || lastname")
+	private String fullName;
 
 	/**
 	 * Constructor.

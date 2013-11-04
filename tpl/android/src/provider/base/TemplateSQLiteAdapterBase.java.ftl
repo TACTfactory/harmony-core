@@ -82,7 +82,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			"${field.columnName}";
 	/** Alias. */
 	public static final String ALIASED_${NamingUtils.alias(field.name)} =
-			TABLE_NAME + "." + ${NamingUtils.alias(field.name)};
+			<#if !field.columnResult>TABLE_NAME + "." + </#if>${NamingUtils.alias(field.name)};
 	</#if>
 </#list>
 <#if (singleTabInheritance && isTopMostSuperClass)>
@@ -163,7 +163,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		+ TABLE_NAME	+ " ("
 </#if>
 <#list curr_fields as field>
-	<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
+	<#if (!field.columnResult && (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")))>
 		<#if (lastLine??)>${lastLine},"</#if>
 		<#assign lastLine=" + " + NamingUtils.alias(field.name) + "	+ \"" + field.schema />
 	</#if>

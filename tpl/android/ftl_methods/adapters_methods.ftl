@@ -1,7 +1,7 @@
 <#function itemToContentValuesFieldAdapter objectName field indentLevel = 0>
 	<#assign t = Utils.getIndentString(indentLevel) />
 	<#assign result = "" />
-	<#if (!field.internal)>
+	<#if (!field.internal && field.writable)>
 		<#if (!field.relation??)>
 			<#if (MetadataUtils.isPrimitive(field))>
 				<#assign result = result + "${t}result.put(${NamingUtils.alias(field.name)},\n" />
@@ -327,7 +327,7 @@
 <#function validateDataFieldAdapter field indentLevel = 0>
 	<#assign result = "" />
 	<#assign tab = "\n" + Utils.getIndentString(indentLevel) />
-	<#if !field.internal && !field.hidden && field.type?lower_case != "boolean">
+	<#if !field.internal && !field.hidden && field.type?lower_case != "boolean" && field.writable>
 		<#if !field.nullable>
 			<#if !field.relation??>
 				<#if field.type?lower_case == "datetime">
@@ -360,7 +360,7 @@
 <#function saveDataFieldAdapter field indentLevel = 0>
 	<#assign result = "" />
 	<#assign tab = "\n" + Utils.getIndentString(indentLevel) />
-	<#if !field.internal && !field.hidden>
+	<#if !field.internal && !field.hidden && field.writable>
 		<#if !field.relation??>
 			<#assign result = result + "${tab}${ViewUtils.setSaver(field)}\n" />
 		<#elseif field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
@@ -375,7 +375,7 @@
 <#function loadDataCreateFieldAdapter field indentLevel = 0>
 	<#assign result = "" />
 	<#assign tab = "\n" + Utils.getIndentString(indentLevel) />
-	<#if !field.internal && !field.hidden>
+	<#if !field.internal && !field.hidden && field.writable>
 			<#if !field.relation??>
 				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
 		<#assign result = result + "${tab}if (this.model.get${field.name?cap_first}() != null) {" />
