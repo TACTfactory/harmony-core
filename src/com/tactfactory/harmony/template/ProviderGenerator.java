@@ -76,7 +76,7 @@ public class ProviderGenerator extends BaseGenerator {
 				true);
 
 		for (EntityMetadata cm : this.getAppMetas().getEntities().values()) {
-			if (!cm.getFields().isEmpty()) {
+			if (cm.hasFields()) {
 
 				this.getDatamodel().put(
 						TagConstant.CURRENT_ENTITY, cm.getName());

@@ -63,7 +63,7 @@ public class ActivityGenerator extends BaseGenerator {
 		// Make entities
 		for (final EntityMetadata meta
 				: this.getAppMetas().getEntities().values()) {
-			if (!meta.getFields().isEmpty() && !meta.isInternal()) {
+			if (meta.hasFields() && !meta.isInternal()) {
 				// copy Widget
 				if (this.isDate && this.isTime) {
 					break;

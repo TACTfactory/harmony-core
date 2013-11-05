@@ -143,7 +143,7 @@ public class FixtureGenerator extends BaseGenerator {
 			//Create each entity's data loader
 			for (final EntityMetadata classMeta
 					: this.getAppMetas().getEntities().values()) {
-				if (classMeta.getFields().size() > 0
+				if (classMeta.hasFields()
 						&& !classMeta.isInternal()) {
 					this.getDatamodel().put(TagConstant.CURRENT_ENTITY,
 							classMeta.getName());
