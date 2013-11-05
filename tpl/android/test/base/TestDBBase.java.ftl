@@ -82,7 +82,13 @@ public abstract class TestDBBase extends AndroidTestCase {
 	
 			context = new IsolatedContext(
 					resolver,
-					targetContextWrapper);
+					targetContextWrapper) {
+						@Override
+						public Object getSystemService(String name) {
+								return TestDBBase.this
+										.baseContext.getSystemService(name);
+						}
+					};
 	
 			provider.attachInfo(context, null);
 			resolver.addProvider(PROVIDER_AUTHORITY, provider);
