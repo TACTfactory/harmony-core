@@ -16,7 +16,7 @@ import java.io.OutputStream;
 
 <#if options.fixture?? && options.fixture.enabled>import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;</#if>
 <#list entities?values as entity>
-	<#if (entity.fields?size > 0)>
+	<#if (entity.fields?size>0 || entity.inheritance?? || entity.inheritance??)>
 import ${data_namespace}.${entity.name?cap_first}SQLiteAdapter;
 	</#if>
 </#list>
@@ -94,7 +94,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		if (!assetsExist) {
 			/// Create Schema
 	<#list entities?values as entity>
-		<#if (entity.fields?? && (entity.fields?size>0) && !(entity.inheritance?? && entity.inheritance.inheritanceType?? && entity.inheritance.inheritanceType == "SingleTab" && entity.inheritance.superclass??))>
+		<#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !(entity.inheritance?? && entity.inheritance.inheritanceType?? && entity.inheritance.inheritanceType == "SingleTab" && entity.inheritance.superclass??))>
 			if (${project_name?cap_first}Application.DEBUG) {
 				Log.d(TAG, "Creating schema : ${entity.name}");
 			}
@@ -126,7 +126,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		Log.i(TAG, "Clearing database...");
 
 		<#list entities?values as entity>
-			<#if (entity.fields?? && (entity.fields?size>0))>
+			<#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??))>
 		db.delete(${entity.name?cap_first}SQLiteAdapter.TABLE_NAME,
 				null,
 				null);

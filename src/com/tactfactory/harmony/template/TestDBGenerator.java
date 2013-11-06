@@ -45,7 +45,7 @@ public class TestDBGenerator extends BaseGenerator {
 
 		for (final EntityMetadata cm
 				: this.getAppMetas().getEntities().values()) {
-			if (!cm.isInternal() && !cm.getFields().isEmpty()) {
+			if (!cm.isInternal() && cm.hasFields()) {
 				this.localNameSpace =
 						this.getAdapter().getNameSpace(
 								cm, this.getAdapter().getTest());

@@ -181,4 +181,25 @@ public class EntityMetadata extends ClassMetadata {
 	public void addOrder(String columnName, String order) {
 		this.orders.put(columnName, order);
 	}
+	
+
+	/**
+	 * Tells if this entitymetadata has fields. (either by itself or by its
+	 * superclasses)
+	 * @return True if has fields
+	 */
+	public final boolean hasFields() {
+		boolean result = false;
+		if (!this.getFields().isEmpty()) {
+			result = true;
+		} else {
+			InheritanceMetadata inheritance = this.getInheritance();
+			if (inheritance != null
+					&& inheritance.getSuperclass() != null) {
+				result = inheritance.getSuperclass().hasFields();
+			}
+		}
+			
+		return result;
+	}
 }

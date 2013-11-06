@@ -15,7 +15,7 @@ import android.util.Log;
 
 import ${project_namespace}.R;
 <#list entities?values as entity>
-	<#if (entity.fields?size > 0)>
+	<#if (entity.fields?size > 0 || entity.inheritance??)>
 import ${local_namespace}.${entity.name?cap_first}ProviderAdapter;
 		<#if (entity.options.sync??)>
 import ${local_namespace}.${entity.name?cap_first}SyncProviderAdapter;
@@ -68,7 +68,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			this.providerAdapters = new ArrayList<ProviderAdapterBase<?>>();
 		<#assign firstGo = true />
 		<#list entities?values as entity>
-			<#if (entity.fields?size>0) >
+			<#if (entity.fields?size>0 || entity.inheritance??) >
 				<#if (firstGo)>
 			${entity.name?cap_first}ProviderAdapter ${entity.name?uncap_first}ProviderAdapter =
 				new ${entity.name?cap_first}ProviderAdapter(this.mContext);
