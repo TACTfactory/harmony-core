@@ -66,7 +66,7 @@ public class EntityMetadata extends ClassMetadata {
 		final Map<String, Object> model = super.toMap(adapter);
 
 		model.put(TagConstant.IDS,
-				this.toFieldArray(this.ids.values(), adapter));
+				this.toFieldArray(this.getIds().values(), adapter));
 		model.put(TagConstant.RELATIONS,
 				this.toFieldArray(this.relations.values(), adapter));
 		model.put(TagConstant.INTERNAL,	this.internal);
