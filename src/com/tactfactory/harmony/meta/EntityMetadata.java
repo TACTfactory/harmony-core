@@ -184,11 +184,11 @@ public class EntityMetadata extends ClassMetadata {
 	
 
 	/**
-	 * Tells if this entitymetadata has fields (either by itself or by its
+	 * Tells if this entitymetadata has fields. (either by itself or by its
 	 * superclasses)
 	 * @return True if has fields
 	 */
-	public boolean hasFields() {
+	public final boolean hasFields() {
 		boolean result = false;
 		if (!this.getFields().isEmpty()) {
 			result = true;

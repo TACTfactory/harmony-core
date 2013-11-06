@@ -8,9 +8,7 @@
  */
 package com.tactfactory.harmony.template;
 
-import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
-import com.tactfactory.harmony.meta.InheritanceMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.PackageUtils;
@@ -43,7 +41,8 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 				: this.getAppMetas().getEntities().values()) {
 			if (classMeta.hasFields()) {
 				this.localNameSpace = 
-						this.getAppMetas().getProjectNameSpace().replace('/', '.')
+						this.getAppMetas().getProjectNameSpace().replace(
+								'/', '.')
 						+ "."
 						+ this.getAdapter().getData();
 				this.getDatamodel().put(
