@@ -974,7 +974,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		value.setCriteria(crit);
 		${rightRelation.relation.targetEntity}Criterias ${rightRelation.relation.targetEntity?lower_case}Crit = new ${rightRelation.relation.targetEntity}Criterias(GroupType.AND);
 		Criteria ${rightRelation.relation.targetEntity?lower_case}SelectCrit = new Criteria();
-		${rightRelation.relation.targetEntity?lower_case}SelectCrit.setKey(CategorySQLiteAdapter.ALIASED_COL_ID);
+		${rightRelation.relation.targetEntity?lower_case}SelectCrit.setKey(${rightRelation.relation.targetEntity}SQLiteAdapter.ALIASED_COL_ID);
 		${rightRelation.relation.targetEntity?lower_case}SelectCrit.setType(Type.IN);
 		${rightRelation.relation.targetEntity?lower_case}SelectCrit.addValue(value);
 		${rightRelation.relation.targetEntity?lower_case}Crit.add(${rightRelation.relation.targetEntity?lower_case}SelectCrit);
