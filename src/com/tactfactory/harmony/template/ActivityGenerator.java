@@ -112,7 +112,7 @@ public class ActivityGenerator extends BaseGenerator {
 		for (final EntityMetadata cm
 				: this.getAppMetas().getEntities().values()) {
 			if (!cm.isInternal() 
-					&& !cm.getFields().isEmpty() 
+					&& cm.hasFields()
 					&& !cm.isHidden()) {
 				
 				cm.makeString("label");
