@@ -97,7 +97,8 @@ public class EntityMetadata extends ClassMetadata {
 	 */
 	public final Map<String, FieldMetadata> getIds() {
 		// TODO : check if hack is valid ?
-		if (this.ids.isEmpty() && this.getInheritance() != null) {
+		if (this.ids.isEmpty() && this.getInheritance() != null
+				&& this.getInheritance().getSuperclass() != null) {
 			return this.getInheritance().getSuperclass().getIds();
 		} else {
 			return ids;
