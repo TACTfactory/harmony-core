@@ -8,6 +8,9 @@
 <@header?interpret />
 package ${local_namespace}.base;
 
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
+
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -162,7 +165,10 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 			final Uri uri,
 			String selection,
 			String[] selectionArgs) {
-
+		<#if (curr.options.sync??)>
+		ContentValues deleteCv = new ContentValues();
+		deleteCv.put(${curr.name}SQLiteAdapter.COL_SYNC_DTAG, 1);
+		</#if>
 		int matchedUri = ${project_name?cap_first}ProviderBase
 					.getUriMatcher().match(uri);
 		int result = -1;
@@ -180,9 +186,16 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						+ " = ?";
 				selectionArgs = new String[1];
 				selectionArgs[0] = String.valueOf(id);
+					<#if (curr.options.sync??)>
+				result = this.adapter.update(
+						deleteCv,
+						selection,
+						selectionArgs);
+					<#else>
 				result = this.adapter.delete(
 						selection,
 						selectionArgs);
+					</#if>
 				</#if>
 				break;
 			</#if>
@@ -219,15 +232,28 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					selectionArgs = ObjectArrays.concat(selectionArgs,
 							${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER);
 				}
-
+						<#if (curr.options.sync??)>
+				result = this.adapter.update(
+							deleteCv,
+							selection,
+							selectionArgs);
+						<#else>
+				result = this.adapter.delete(
+							selection,
+							selectionArgs);
+						</#if>
+					</#if>
+				<#else>				
+					<#if (curr.options.sync??)>
+				result = this.adapter.update(
+							deleteCv,
+							selection,
+							selectionArgs);
+					<#else>
 				result = this.adapter.delete(
 							selection,
 							selectionArgs);
 					</#if>
-				<#else>
-				result = this.adapter.delete(
-							selection,
-							selectionArgs);
 				</#if>
 				break;
 			default:
@@ -291,14 +317,17 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				<#if inherited && singleTabInheritance>
 				if (selection == null || selection.length() < 1) {
 					selection = 
-						${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
-					selectionArgs = new String[]{${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER};
+						${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?"<#if (curr.options.sync??)>
+								+ " AND " + ${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_COL_SYNC_DTAG + " = ?"</#if>;
+					selectionArgs = new String[]{${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER<#if (curr.options.sync??)>, "0"</#if>};
 				} else {
 					selection += " AND " 
 							+ ${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)}
-							+ " = ?";
+							+ " = ?"<#if (curr.options.sync??)>
+							+ " AND " + ${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_COL_SYNC_DTAG 
+							+ " = ?"</#if>;
 					selectionArgs = ObjectArrays.concat(selectionArgs,
-							${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER);
+							${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER<#if (curr.options.sync??)>, "0"</#if>);
 				}
 				</#if>
 				result = this.adapter.query(
@@ -368,7 +397,8 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 			final ContentValues values,
 			String selection,
 			String[] selectionArgs) {
-
+		<#if (curr.options.sync??)>values.put(${curr.name}SQLiteAdapter.COL_SYNC_UDATE,
+					new DateTime().toString(ISODateTimeFormat.dateTime()));</#if>
 		<#if inherited && joinedInheritance>ContentValues ${curr.name?uncap_first}Values = this.extractContentValues(values);</#if>
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher()
 				.match(uri);
@@ -536,11 +566,13 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		Cursor result = null;
 		String selection = ${curr_ids[0].owner}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr_ids[0].name)}
 						+ " = ?";
+		<#if curr.options.sync??>
+		selection += " AND " + ${curr.name}SQLiteAdapter.ALIASED_COL_SYNC_DTAG + " = ?";</#if>
 		<#if inherited && singleTabInheritance>
 		selection += " AND " + ${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
-		String[] selectionArgs = new String[]{id, ${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER};
+		String[] selectionArgs = new String[]{id<#if (curr.options.sync??)>, "0"</#if>, ${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER};
 		<#else>
-		String[] selectionArgs = new String[]{id};
+		String[] selectionArgs = new String[]{id<#if (curr.options.sync??)>, "0"</#if>};
 		</#if>
 
 		result = this.adapter.query(

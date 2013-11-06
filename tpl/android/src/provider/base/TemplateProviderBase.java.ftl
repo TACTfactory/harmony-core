@@ -17,6 +17,9 @@ import ${project_namespace}.R;
 <#list entities?values as entity>
 	<#if (entity.fields?size > 0)>
 import ${local_namespace}.${entity.name?cap_first}ProviderAdapter;
+		<#if (entity.options.sync??)>
+import ${local_namespace}.${entity.name?cap_first}SyncProviderAdapter;
+		</#if>
 	</#if>
 </#list>
 
@@ -75,6 +78,12 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 				<#else>
 			this.providerAdapters.add(
 					new ${entity.name?cap_first}ProviderAdapter(
+						this.mContext,
+						this.db));
+				</#if>
+				<#if (entity.options.sync??)>
+			this.providerAdapters.add(
+					new ${entity.name?cap_first}SyncProviderAdapter(
 						this.mContext,
 						this.db));
 				</#if>

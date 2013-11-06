@@ -606,18 +606,6 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	</#if>
 	}
 
-
-	<#if sync>
-	@Override
-	public int update(ContentValues values,
-				String whereClause,
-				String[] whereArgs) {
-		values.put(COL_SYNC_UDATE, 
-				new DateTime().toString(ISODateTimeFormat.dateTime()));
-		return super.update(values, whereClause, whereArgs);
-	}
-	</#if>
-
 	<#list curr.relations as relation>
 		<#if (relation.relation.type=="ManyToOne" && relation.internal)>
 
