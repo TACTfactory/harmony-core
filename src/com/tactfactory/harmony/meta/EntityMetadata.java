@@ -66,7 +66,7 @@ public class EntityMetadata extends ClassMetadata {
 		final Map<String, Object> model = super.toMap(adapter);
 
 		model.put(TagConstant.IDS,
-				this.toFieldArray(this.ids.values(), adapter));
+				this.toFieldArray(this.getIds().values(), adapter));
 		model.put(TagConstant.RELATIONS,
 				this.toFieldArray(this.relations.values(), adapter));
 		model.put(TagConstant.INTERNAL,	this.internal);
@@ -96,7 +96,15 @@ public class EntityMetadata extends ClassMetadata {
 	 * @return the ids
 	 */
 	public final Map<String, FieldMetadata> getIds() {
-		return ids;
+		// TODO : check if hack is valid ?
+		Map<String, FieldMetadata> result;
+		if (this.ids.isEmpty() && this.getInheritance() != null
+				&& this.getInheritance().getSuperclass() != null) {
+			result = this.getInheritance().getSuperclass().getIds();
+		} else {
+			result = ids;
+		}
+		return result;
 	}
 
 	/**
