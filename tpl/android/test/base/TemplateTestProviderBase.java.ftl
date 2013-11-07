@@ -155,7 +155,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 				e.printStackTrace();
 			}
 
-			Assert.assertTrue(result >= 0);
+			Assert.assertTrue(result > 0);
 		}
 	}
 
