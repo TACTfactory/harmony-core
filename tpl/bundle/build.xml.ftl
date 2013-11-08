@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="${bundle_name?lower_case}-bundle" default="buildall">
+<project name="bundle-${bundle_name?lower_case}" default="buildall">
 	<description>
 		Harmony Bundle ${bundle_name?cap_first} build file.
 	</description>

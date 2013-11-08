@@ -38,6 +38,8 @@ public class BundleGenerator extends BaseGenerator {
 				bundleNameSpace);
 
 		this.generateBuildXml(bundleOwnerName, bundleName);
+		
+		this.generateGitIgnore(bundleOwnerName, bundleName);
 
 		this.generateAnnotation(bundleOwnerName,
 				bundleName,
@@ -120,6 +122,25 @@ public class BundleGenerator extends BaseGenerator {
 							bundleOwnerName,
 							bundleName)
 						+ "/build.xml";
+
+		this.makeSource(tplPath, genPath, false);
+	}
+	
+	/**
+	 * Generate the .gitignore.
+	 * @param bundleOwnerName Owner name
+	 * @param bundleName Bundle name
+	 */
+	private void generateGitIgnore(
+			final String bundleOwnerName,
+			final String bundleName) {
+
+		final String tplPath = this.getAdapter().getBundleTemplatePath()
+				+ "/.gitignore";
+		final String genPath = this.getAdapter().getBundlePath(
+							bundleOwnerName,
+							bundleName)
+						+ "/.gitignore";
 
 		this.makeSource(tplPath, genPath, false);
 	}
