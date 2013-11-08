@@ -122,7 +122,7 @@
 	<#assign maxLoop = entities?size />
 	<#list 1..maxLoop as i>
 		<#list entities?values as entity>
-			<#if (entity.fields?size>0)>
+			<#if (entity.fields?size>0 || entity.inheritance??)>
 				<#if !Utils.isInArray(ret, entity.name)>
 					<#if isOnlyDependantOf(entity, ret)>
 						<#assign ret = ret + [entity.name] />
