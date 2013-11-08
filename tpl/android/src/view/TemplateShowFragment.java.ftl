@@ -223,7 +223,9 @@ public class ${curr.name}ShowFragment
 	public void onClickEdit() {
 		final Intent intent = new Intent(getActivity(),
 									${curr.name}EditActivity.class);
-		intent.putExtra("${curr.name}", (Parcelable) this.model);
+		Bundle extras = new Bundle();
+		extras.putParcelable("${curr.name}", this.model);
+		intent.putExtras(extras);
 
 		this.getActivity().startActivity(intent);
 	}
