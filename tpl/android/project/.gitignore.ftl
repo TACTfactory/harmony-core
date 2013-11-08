@@ -71,5 +71,9 @@ local.properties
 /.idea
 *.iml
 
+# Harmony Backup #
+##################
+.*.back
+
 # Custom rules #
 ################
