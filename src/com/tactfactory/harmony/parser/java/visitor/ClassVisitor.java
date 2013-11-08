@@ -242,9 +242,7 @@ public class ClassVisitor {
 										result);
 						if (fieldMetas != null) {
 							if (fieldMetas.isId()) {
-								((EntityMetadata) result).getIds().put(
-										fieldMetas.getName(),
-										fieldMetas);
+								((EntityMetadata) result).addId(fieldMetas);
 							}
 							if (fieldMetas.getRelation() != null) {
 								((EntityMetadata) result).getRelations().put(

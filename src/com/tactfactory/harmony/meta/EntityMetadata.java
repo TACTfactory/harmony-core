@@ -106,6 +106,13 @@ public class EntityMetadata extends ClassMetadata {
 		}
 		return result;
 	}
+	
+	/**
+	 * Add an id to the entity.
+	 */
+	public final void addId(FieldMetadata id) {
+		this.ids.put(id.getName(), id);
+	}
 
 	/**
 	 * @param hidden the hidden to set 
