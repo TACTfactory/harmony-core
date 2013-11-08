@@ -163,6 +163,7 @@ public abstract class BaseGenerator {
 			final File generateFile = TactFileUtils.makeFile(generatePath);
 
 			try {
+				String oldFile = TactFileUtils.fileToString(generateFile);
 				// Debug Log
 				ConsoleUtils.displayDebug("Generate Source : "
 						+ generateFile.getCanonicalPath());
@@ -182,7 +183,10 @@ public abstract class BaseGenerator {
 				tpl.process(this.datamodel, output);
 				output.flush();
 				output.close();
-
+				
+				if (oldFile != null && !oldFile.isEmpty()) {
+					this.backupIfNeeded(generateFile, oldFile);
+				}
 			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);
 			} catch (final TemplateException e) {
@@ -353,5 +357,21 @@ public abstract class BaseGenerator {
 				pathLib,
 				projectFolder.getAbsolutePath()));
 		ConsoleUtils.launchCommand(command, projectFolder.getAbsolutePath());
+	}
+	
+	/** 
+	 * Backup the given file if its old content is not the same.
+	 * @param file The file to backup
+	 * @param oldContent Its old content
+	 */
+	private void backupIfNeeded(final File file, final String oldContent) {
+		String newContent = TactFileUtils.fileToString(file);
+		
+		if (!newContent.equals(oldContent)) {
+			String backupFileName = "." + file.getName() + ".back"; 
+			TactFileUtils.stringBufferToFile(
+					new StringBuffer(oldContent), 
+					new File(file.getParent() + "/" + backupFileName));
+		}
 	}
 }
