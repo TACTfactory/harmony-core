@@ -10,6 +10,8 @@
 /doc/stats/*
 /doc/API/*
 
+/javadoc
+
 /.classpath
 /.project
 /local.properties
