@@ -326,6 +326,15 @@ public final class Harmony {
 	public static File getLibrary(final String libraryName) {
 		return getInstance().context.getLibrary(libraryName);
 	}
+	
+	/**
+	 * Get library license identified by given library name.
+	 * @param libraryName The library name
+	 * @return The library license file
+	 */
+	public static File getLibraryLicense(final String libraryName) {
+		return getInstance().context.getLibraryLicense(libraryName);
+	}
 
 	/**
 	 * Get the harmony core path.<br/>

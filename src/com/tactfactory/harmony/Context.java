@@ -230,6 +230,14 @@ public final class Context {
 	public File getLibrary(final String libraryName) {
 		return this.libPool.getLibrary(libraryName);
 	}
+	
+	/**
+	 * @param libraryName The library to get
+	 * @return The library license File
+	 */
+	public File getLibraryLicense(final String libraryName) {
+		return this.libPool.findLibraryLicense(libraryName);
+	}
 
 	/**
 	 * Check if the given folder contains the App folder.
