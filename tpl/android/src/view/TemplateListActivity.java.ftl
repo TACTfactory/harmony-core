@@ -95,7 +95,9 @@ public class ${curr.name}ListActivity
 		} else {
 			final Intent intent = new Intent(this, ${curr.name}ShowActivity.class);
 			final ${curr.name} item = (${curr.name}) l.getItemAtPosition(position);
-			intent.putExtra("${curr.name}", (Parcelable) item);
+			Bundle extras = new Bundle();
+			extras.putParcelable("${curr.name}", item);
+			intent.putExtras(extras);
 			this.startActivity(intent);
 		}
 	}

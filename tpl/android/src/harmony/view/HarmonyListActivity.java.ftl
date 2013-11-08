@@ -48,7 +48,9 @@ public abstract class HarmonyListActivity<T extends Parcelable>
 		} else {
 			final Intent intent = new Intent(this,
 			this.getShowActivity());
-			intent.putExtra(item.getClass().getSimpleName(), (Parcelable) item);
+			Bundle extras = new Bundle();
+			extras.putParcelable(item.getClass().getSimpleName(), item);
+			intent.putExtras(extras);
 			this.startActivity(intent);
 		}
 	}
