@@ -11,7 +11,6 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;<#if (ViewUtils.hasTypeBoolean(fields?values))>
@@ -20,7 +19,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import ${curr.namespace}.R;
-${ImportUtils.importRelatedSQLiteAdapters(curr, false, true)}
+${ImportUtils.importRelatedSQLiteAdapters(curr, false, true, false)}
 ${ImportUtils.importToManyRelatedEntities(curr)}<#if (importDate)>
 import ${curr.namespace}.harmony.util.DateUtils;</#if>
 import ${project_namespace}.harmony.view.DeleteDialog;
@@ -180,6 +179,11 @@ public class ${curr.name}ShowFragment
 		}
     }
 
+	/**
+	 * Called when the entity has been loaded.
+	 * 
+	 * @param c The cursor of this entity
+	 */
 	public void on${curr.name}Loaded(Cursor c) {
 		if (c.getCount() > 0) {
 			c.moveToFirst();
@@ -191,6 +195,11 @@ public class ${curr.name}ShowFragment
 	}
 	<#list curr.relations as relation>
 		<#if !relation.internal>
+	/**
+	 * Called when the relation has been loaded.
+	 * 
+	 * @param c The cursor of this relation
+	 */
 	public void on${relation.name?cap_first}Loaded(Cursor c) {
 		if (this.model != null) {
 			if (c != null) {
@@ -217,7 +226,6 @@ public class ${curr.name}ShowFragment
 
 	/**
 	 * Calls the ${curr.name}EditActivity.
-	 * @param position position
 	 */
 	@Override
 	public void onClickEdit() {
@@ -232,7 +240,6 @@ public class ${curr.name}ShowFragment
 
 	/**
 	 * Shows a confirmation dialog.
-	 * @param position position
 	 */
 	@Override
 	public void onClickDelete() {
@@ -304,7 +311,7 @@ public class ${curr.name}ShowFragment
 	 */ 
 	public interface DeleteCallback {
 		/** Called when current item has been deleted. */
-		public void onItemDeleted();
+		void onItemDeleted();
 	}
 }
 

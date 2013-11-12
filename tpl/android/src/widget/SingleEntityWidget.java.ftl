@@ -14,16 +14,33 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-public class SingleEntityWidget extends FrameLayout implements OnClickListener, DialogInterface.OnClickListener {
+/**
+ * The single entity widget.
+ */
+public class SingleEntityWidget 
+		extends FrameLayout 
+		implements OnClickListener,
+				DialogInterface.OnClickListener {
+	/** Clickable edit text. */
 	private EditText entityEditText;
+	/** Title of the dialog. */
 	private String title;
+	/** Alert dialog. */
 	private AlertDialog dialog;
+	/** Entity Adapter. */
 	private EntityAdapter<?> adapter;
 	
+	/** Constructor.
+	 * @param context The context
+	 */
 	public SingleEntityWidget(Context context) {
 		this(context, null);
 	}
 	
+	/** Constructor.
+	 * @param context The context
+	 * @param attrs Attribute set
+	 */
 	public SingleEntityWidget(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		LayoutInflater inflater = (LayoutInflater) context
@@ -34,15 +51,26 @@ public class SingleEntityWidget extends FrameLayout implements OnClickListener, 
 		this.addView(view);
 	}
 	
+	/** Set the adapter of the widget.
+	 * @param adapter The entity adapter
+	 */
 	public void setAdapter(EntityAdapter<?> adapter) {
 		this.adapter = adapter;
 		this.adapter.setWidget(this);
 	}
 
+	/**
+	 * Set the title of the dialog.
+	 * @param title The title
+	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
+	/**
+	 * Set the title of the dialog.
+	 * @param titleId The title resource id
+	 */
 	public void setTitle(int titleId) {
 		this.title = this.getContext().getString(titleId);
 	}
@@ -58,6 +86,12 @@ public class SingleEntityWidget extends FrameLayout implements OnClickListener, 
 		//this.recreateDialog(this.title, this.getStrings(), this.checkedItems);
 	}
 	
+	/**
+	 * Recreates the dialog.
+	 *
+	 * @param displayedStrings The displayed strings
+	 * @param selectedPosition The selected positions
+	 */
 	private void recreateDialog(String[] displayedStrings, int selectedPosition) {
 		final AlertDialog.Builder builder =
 				new AlertDialog.Builder(this.getContext());
@@ -83,22 +117,45 @@ public class SingleEntityWidget extends FrameLayout implements OnClickListener, 
 		
 	}
 	
+	/**
+	 * Refresh the text of the edit text.
+	 */
 	public void refreshText() {
 		this.entityEditText.setText(this.adapter.getSelectedItemString());
 	}
 	
-	public static abstract class EntityAdapter<T> {
+	/**
+	 * Adapter class for this widger.
+	 */
+	public abstract static class EntityAdapter<T> {
+		/** The associated widget. */
 		private SingleEntityWidget widget;
+		/** The item list. */
 		protected List<T> itemList;
+		/** The checked items. */
 		protected T selectedItem;
 		
+		/** 
+		 * Gives the string representation of the given entity for the list.
+	 	 * @param entity The entity
+		 * @return The string of the entity
+		 */
 		public abstract String entityToString(T entity);
 		
+		/**
+		 * Loads this list of entities.
+		 * @param items The list of items
+		 */
 		public void loadData(List<T> items) {
 			this.loadData(items, null);
 		}
 	
-
+		/**
+		 * Loads this list of entities.
+		 *
+		 * @param items The list of items
+		 * @param selectedItem The selected item
+		 */
 		public void loadData(List<T> items, T selectedItem) {
 			this.itemList = items;
 			this.selectedItem = selectedItem;
@@ -108,6 +165,11 @@ public class SingleEntityWidget extends FrameLayout implements OnClickListener, 
 					this.itemList.indexOf(this.selectedItem));
 		}
 		
+		/**
+		 * Extract the entities strings.
+		 *
+		 * @return the string array
+		 */
 		public String[] extractStrings() {
 			String[] result = new String[this.itemList.size()];
 			for (int i = 0; i < this.itemList.size(); i++) {
@@ -115,7 +177,12 @@ public class SingleEntityWidget extends FrameLayout implements OnClickListener, 
 			}
 			return result;
 		}
-		
+
+		/**
+		 * Select item.
+		 *
+		 * @param item The item to select
+		 */
 		public void selectItem(T item) {
 			this.selectedItem = item;
 			this.widget.recreateDialog(
@@ -124,18 +191,37 @@ public class SingleEntityWidget extends FrameLayout implements OnClickListener, 
 			this.widget.refreshText();
 		}
 		
+		/**
+		 * Select item.
+		 *
+		 * @param post The position of the item to select
+		 */
 		protected void selectItem(int pos) {
 			this.selectedItem = this.itemList.get(pos);
 		}
 		
+		/**
+		 * Gets the selected item string.
+		 *
+		 * @return the selected item string
+		 */
 		protected String getSelectedItemString() {
 			return this.entityToString(this.selectedItem);
 		}
 		
+		/**
+		 * Associate a widget to this adapter.
+		 *
+		 * @param widget The widget
+		 */
 		protected void setWidget(SingleEntityWidget widget) {
 			this.widget = widget;
 		}
 		
+		/**
+		 * Returns the selected item.
+		 * @return the selected item
+		 */
 		public T getSelectedItem() {
 			return this.selectedItem;
 		}

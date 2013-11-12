@@ -14,7 +14,7 @@ import com.google.common.io.Files;
 public class DatabaseUtil {
 
 	/** Private Constructor. */
-	private DatabaseUtil() {}
+	private DatabaseUtil() { }
 
 	/**
 	 * Import the Database.

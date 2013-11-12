@@ -16,7 +16,7 @@ public class ${project_name?cap_first}Menu
 	/**
 	 * Constructor.
 	 * @param ctx The Context
-	 * @throws Exception
+	 * @throws Exception If something bad happened
 	 */
 	public ${project_name?cap_first}Menu(final Context ctx) throws Exception {
 		super(ctx);
@@ -26,7 +26,7 @@ public class ${project_name?cap_first}Menu
 	 * Constructor.
 	 * @param ctx The context
 	 * @param fragment The parent fragment
-	 * @throws Exception
+	 * @throws Exception If something bad happened
 	 */
 	public ${project_name?cap_first}Menu(final Context ctx,
 						final Fragment fragment) throws Exception {
@@ -36,7 +36,7 @@ public class ${project_name?cap_first}Menu
 	/** Get unique instance.
 	 * @param ctx The context
 	 * @return ${project_name?cap_first}Menu instance
-	 * @throws Exception
+	 * @throws Exception If something bad happened
 	 */
 	public static final synchronized ${project_name?cap_first}Menu getInstance(
 						final Context ctx) throws Exception {
@@ -47,7 +47,7 @@ public class ${project_name?cap_first}Menu
 	 * @param ctx The context
 	 * @param fragment The parent fragment
 	 * @return ${project_name?cap_first}Menu instance
-	 * @throws Exception
+	 * @throws Exception If something bad happened
 	 */
 	public static final synchronized ${project_name?cap_first}Menu getInstance(
 			final Context ctx, final Fragment fragment) throws Exception {

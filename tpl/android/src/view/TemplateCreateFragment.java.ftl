@@ -6,6 +6,7 @@
 <#assign hasTime = FieldsUtils.hasTime(fields?values) />
 <#assign hasDateTime = FieldsUtils.hasDateTime(fields?values) />
 <#assign hasToManyRelation=FieldsUtils.hasToManyRelations(fields?values) />
+<#assign hasToOneRelation=FieldsUtils.hasManyToOneRelation(fields?values) />
 <#assign hasRelation=FieldsUtils.hasRelations(fields?values) />
 <@header?interpret />
 package ${curr.controller_namespace};
@@ -21,10 +22,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.View;<#if (hasRelation)>
-import android.view.View.OnClickListener;</#if>
-import android.view.ViewGroup;<#if (hasRelation)>
-import android.widget.Button;</#if><#if (ViewUtils.hasTypeBoolean(fields?values))>
+import android.view.View;
+import android.view.ViewGroup;<#if (ViewUtils.hasTypeBoolean(fields?values))>
 import android.widget.CheckBox;</#if><#if ViewUtils.shouldImportEditText(fields?values)>
 import android.widget.EditText;</#if>
 import android.widget.Toast;
@@ -44,9 +43,9 @@ import ${curr.namespace}.harmony.widget.TimeWidget;
 	<#if (hasDateTime)>
 import ${curr.namespace}.harmony.widget.DateTimeWidget;
 	</#if>
-</#if>
-import ${project_namespace}.harmony.widget.MultiEntityWidget;
-import ${project_namespace}.harmony.widget.SingleEntityWidget;<#if (ViewUtils.hasTypeEnum(fields?values))>
+</#if><#if hasToManyRelation>
+import ${project_namespace}.harmony.widget.MultiEntityWidget;</#if><#if hasToOneRelation>
+import ${project_namespace}.harmony.widget.SingleEntityWidget;</#if><#if (ViewUtils.hasTypeEnum(fields?values))>
 import ${project_namespace}.harmony.widget.EnumSpinner;</#if>
 import ${project_namespace}.harmony.widget.ValidationButtons;
 import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
@@ -90,12 +89,14 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	/** The ${field.name} chooser component. */
 	protected MultiEntityWidget ${field.name}Widget;
 	/** The ${field.name} Adapter. */
-	protected MultiEntityWidget.EntityAdapter<${field.relation.targetEntity}> ${field.name}Adapter;
+	protected MultiEntityWidget.EntityAdapter<${field.relation.targetEntity}> 
+				${field.name}Adapter;
 				<#else>
 	/** The ${field.name} chooser component. */
 	protected SingleEntityWidget ${field.name}Widget;
 	/** The ${field.name} Adapter. */
-	protected SingleEntityWidget.EntityAdapter<${field.relation.targetEntity}> ${field.name}Adapter;
+	protected SingleEntityWidget.EntityAdapter<${field.relation.targetEntity}> 
+				${field.name}Adapter;
 				</#if>
 			</#if>
 		</#if>
@@ -135,7 +136,8 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 					</#if>
 				<#else>
 					<#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
-		this.${field.name}Adapter = new MultiEntityWidget.EntityAdapter<${field.relation.targetEntity}>() {
+		this.${field.name}Adapter = 
+				new MultiEntityWidget.EntityAdapter<${field.relation.targetEntity}>() {
 			@Override
 			public String entityToString(${field.relation.targetEntity} item) {
 				return String.valueOf(item.get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
@@ -145,7 +147,8 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			(MultiEntityWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_button);
 		this.${field.name}Widget.setAdapter(this.${field.name}Adapter);
 					<#else>
-		this.${field.name}Adapter = new SingleEntityWidget.EntityAdapter<${field.relation.targetEntity}>() {
+		this.${field.name}Adapter = 
+				new SingleEntityWidget.EntityAdapter<${field.relation.targetEntity}>() {
 			@Override
 			public String entityToString(${field.relation.targetEntity} item) {
 				return String.valueOf(item.get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
@@ -159,8 +162,8 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			</#if>
 		</#list>
 
-		this.validationButtons =
-			(ValidationButtons) view.findViewById(R.id.${curr.name?lower_case}_validation);
+		this.validationButtons = (ValidationButtons) view.findViewById(
+					R.id.${curr.name?lower_case}_validation);
 		this.validationButtons.setListener(this);
 	}
 
@@ -181,9 +184,15 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	 * @return true if valid
 	 */
 	public boolean validateData() {
-		boolean result = true;
+		int error = 0;
 <#list fields?values as field>${AdapterUtils.validateDataFieldAdapter(field, 2)}</#list>
-		return result;
+	
+		if (error > 0) {
+			Toast.makeText(this.getActivity(),
+				this.getActivity().getString(error),
+				Toast.LENGTH_SHORT).show();
+		}
+		return error == 0;
 	}
 
 	@Override

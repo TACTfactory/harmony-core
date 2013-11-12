@@ -70,7 +70,8 @@ public class ${curr.name}ListFragment
 		//this.setHasOptionsMenu(true);
 
 		// Create an empty adapter we will use to display the loaded data.
-		((PinnedHeaderListView)this.getListView()).setPinnedHeaderEnabled(false);
+		((PinnedHeaderListView) this.getListView())
+					.setPinnedHeaderEnabled(false);
 		this.mAdapter = new ${curr.name}ListAdapter(this.getActivity(), this);
 
 		// Start out with a progress indicator.
@@ -129,9 +130,12 @@ public class ${curr.name}ListFragment
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI);
 
 		//this.mAdapter.swapCursor(data);
-		ArrayList<${curr.name}> users = new ${curr.name}SQLiteAdapter(this.getActivity()).cursorToItems(data);
+		ArrayList<${curr.name}> users = new ${curr.name}SQLiteAdapter(
+				this.getActivity()).cursorToItems(data);
 		this.mAdapter.setNotifyOnChange(false);
-		this.mAdapter.setData(new ${curr.name}ListAdapter.${curr.name}SectionIndexer(users));
+		this.mAdapter.setData(
+				new ${curr.name}ListAdapter
+					.${curr.name}SectionIndexer(users));
 		this.mAdapter.setNotifyOnChange(true);
 		this.mAdapter.notifyDataSetChanged();
 		this.mAdapter.setPinnedPartitionHeadersEnabled(false);
@@ -160,7 +164,8 @@ public class ${curr.name}ListFragment
 
 	@Override
 	public void onClickAdd() {
-		Intent intent = new Intent(this.getActivity(), ${curr.name}CreateActivity.class);
+		Intent intent = new Intent(this.getActivity(),
+					${curr.name}CreateActivity.class);
 		this.startActivity(intent);
 	}
 

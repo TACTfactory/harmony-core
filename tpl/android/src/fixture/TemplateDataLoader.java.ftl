@@ -41,7 +41,8 @@ import org.joda.time.DateTime;
 </#if>
 import android.content.Context;
 
-${ImportUtils.importRelatedEntities(curr)}${ImportUtils.importRelatedEnums(curr)}
+${ImportUtils.importRelatedEntities(curr)}
+${ImportUtils.importRelatedEnums(curr)}
 <#if (hasDate || hasDateTime || hasTime)>import ${project_namespace}.harmony.util.DateUtils;</#if>
 
 /**
@@ -80,11 +81,6 @@ public final class ${curr.name?cap_first}DataLoader
 
 
 	<#if fixtureType=="xml">
-	/**
-	 * Extract an entity from a fixture element (XML).
-	 * @param element The element to be extracted
-	 * @return A ${curr.name} entity
-	 */
 	@Override
 	protected ${curr.name} extractItem(final Element element) {
 		final ${curr.name?cap_first} ${curr.name?uncap_first} =
@@ -109,11 +105,6 @@ public final class ${curr.name?cap_first}DataLoader
 		</#if>
 
 	<#elseif fixtureType=="yml">
-	/**
-	 * Extract an entity from a fixture element (YML).
-	 * @param columns Columns to extract
-	 * @return A ${curr.name} entity
-	 */
 	@Override
 	protected ${curr.name} extractItem(final Map<?, ?> columns) {
 		final ${curr.name?cap_first} ${curr.name?uncap_first} =
@@ -124,6 +115,7 @@ public final class ${curr.name?cap_first}DataLoader
 	/**
 	 * Extract an entity from a fixture element (YML).
 	 * @param columns Columns to extract
+	 * @param ${curr.name?uncap_first} Entity to extract
 	 * @return A ${curr.name} entity
 	 */
 	protected ${curr.name} extractItem(final Map<?, ?> columns,

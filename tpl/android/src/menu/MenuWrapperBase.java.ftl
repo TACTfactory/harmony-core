@@ -16,6 +16,9 @@ public abstract class MenuWrapperBase {
 	/**
 	 * Menu initialization.
 	 * @param menu The menu object
+	 * @param activity The current activity.
+	 * @param fragment The current fragment.
+	 * @param ctx The context
 	 */
 	protected abstract void initializeMenu(Menu menu,
 			Activity activity,
@@ -25,8 +28,8 @@ public abstract class MenuWrapperBase {
 	/**
 	 * Menu update.
 	 * @param menu The menu object
-	 * @param currentActivityHashCode The current activity hashcode.
-	 * @param currentFragmentHashCode The current fragment hashcode.
+	 * @param activity The current activity.
+	 * @param fragment The current fragment.
 	 * @param ctx The context
 	 */
 	protected abstract void updateMenu(Menu menu,
@@ -66,6 +69,9 @@ public abstract class MenuWrapperBase {
 	/**
 	 * Menu clear.
 	 * @param menu The menu object
+	 * @param activity The current activity.
+	 * @param fragment The current fragment.
+	 * @param ctx The context
 	 */
 	protected abstract void clear(Menu menu,
 			Activity activity,

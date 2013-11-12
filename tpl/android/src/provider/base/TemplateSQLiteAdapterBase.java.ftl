@@ -59,6 +59,7 @@ import ${project_namespace}.criterias.base.value.SelectValue;
 public abstract class ${curr.name}SQLiteAdapterBase
 						extends ${extend} {
 	<#if (singleTabInheritance && !isTopMostSuperClass)>
+	/** Identifier for inheritance. */
 	public static final String DISCRIMINATOR_IDENTIFIER = "${curr.inheritance.discriminatorIdentifier}";
 	</#if>
 	<#if ((joinedInheritance || singleTabInheritance) && curr.inheritance.superclass??)>
@@ -263,9 +264,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		</#if>
 
 <#list curr_fields as field>${AdapterUtils.itemToContentValuesFieldAdapter("item", field, 2)}</#list>
-
 		<#if (singleTabInheritance && !isTopMostSuperClass)>
-		result.put(${curr.inheritance.superclass.name}SQLiteAdapter.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)}, DISCRIMINATOR_IDENTIFIER);
+		result.put(${curr.inheritance.superclass.name}SQLiteAdapter.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)},
+					DISCRIMINATOR_IDENTIFIER);
 		</#if>
 		return result;
 	}
@@ -357,6 +358,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	/**
 	 * Find & read ${curr.name} by ${relation.name}.
 	 * @param ${relation.name?lower_case}Id ${relation.name?lower_case}Id
+	 * @param orderBy Order by string (can be null)
 	 * @return List of ${curr.name} entities
 	 */
 	 public Cursor getBy${relation.name?cap_first}(final int ${relation.name?lower_case}Id, String orderBy) {
@@ -502,6 +504,14 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	}
 
 	<#if (InheritanceUtils.isExtended(curr))>
+	/**
+	 * Extract the content values for this entity.
+	 * (in case of joined inheritance)
+	 *
+	 * @param from The content values containing all the values 
+	 *	(superclasses + children)
+	 * @return the content values of this entity
+	 */
 	protected ContentValues extractContentValues(ContentValues from) {
 		ContentValues to = new ContentValues();
 		for (String colName : COLS) {
@@ -512,6 +522,14 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		return to;
 	}
 
+	/**
+	 * Transfer a column from a contentvalue to another one.
+	 *
+	 * @param from The source content value
+	 * @param to The destination contentvalue
+	 * @param colName The name of the column to transfer
+	 * @param keep if false, delete it from the old contentvalue
+	 */
 	protected void transfer(ContentValues from,
 			ContentValues to,
 			String colName,
@@ -691,7 +709,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	<#list curr_ids as id>
 		values.remove(${NamingUtils.alias(id.name)});
 	</#list>
-		int newid = (int)this.insert(
+		int newid = (int) this.insert(
 			null,
 			values);
 
@@ -959,6 +977,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	/**
 	 * Find & read ${curr.name} by ${leftRelation.name}.
      * @param ${leftRelation.name?lower_case} ${rightRelation.name?lower_case}
+	 * @param orderBy Order by string (can be null)
 	 * @return ArrayList of ${rightRelation.relation.targetEntity} matching ${leftRelation.name?lower_case}
 	 */
 	public Cursor getBy${leftRelation.relation.targetEntity}(

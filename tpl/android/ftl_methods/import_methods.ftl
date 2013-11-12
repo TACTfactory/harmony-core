@@ -2,7 +2,7 @@
 <#import utilityPath + "general_methods.ftl" as Utils />
 <#import utilityPath + "inheritance_methods.ftl" as InheritanceUtils />
 
-<#function importRelatedSQLiteAdapters entity importInternalsToo=true importSelfToo=true>
+<#function importRelatedSQLiteAdapters entity importInternalsToo=true importSelfToo=true importChilds=true>
 	<#assign result = ""/>
 	<#if importSelfToo>
 		<#assign import_array = [entity.name] />
@@ -12,7 +12,7 @@
 	<#if InheritanceUtils.isExtended(entity)>
 		<#assign import_array = import_array + [entity.inheritance.superclass.name] />
 	</#if>
-	<#if entity.inheritance?? && entity.inheritance.subclasses??>
+	<#if importChilds && entity.inheritance?? && entity.inheritance.subclasses??>
 		<#list entity.inheritance.subclasses as subclass>
 			<#assign import_array = import_array + [subclass.name] />
 		</#list>

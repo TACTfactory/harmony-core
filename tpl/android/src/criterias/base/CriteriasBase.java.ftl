@@ -8,8 +8,10 @@ import java.util.List;
 import ${project_namespace}.criterias.base.Criteria.Type;
 import ${project_namespace}.criterias.base.value.StringValue;
 
-/** CriteriasBase.
- *	An array of Criteria and CriteriasBase. Used for db requests.
+/**
+ * CriteriasBase.
+ * An array of Criteria and CriteriasBase. Used for db requests.
+ * @param T The entity type
  */
 public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 	/** Criteria GroupType. */

@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${project_namespace}.harmony.view;
 
 import java.util.LinkedHashMap;
@@ -10,24 +11,45 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
 
+/**
+ * Multiple load class for entities.
+ * @param T The entity
+ */
 public class MultiLoader<T> implements LoaderManager.LoaderCallbacks<Cursor> {
-	//protected ArrayList<Uri> uriList = new ArrayList<Uri>();
-	protected Map<Uri, UriLoadedCallback> uriMap = new LinkedHashMap<Uri, UriLoadedCallback>();
+	/** Uri map. */
+	protected Map<Uri, UriLoadedCallback> uriMap =
+			new LinkedHashMap<Uri, UriLoadedCallback>();
+	/** Entity to load. */
 	protected T model;
+	/** Associated fragment. */
 	protected HarmonyFragment fragment;
 	
+	/**
+	 * Constructor.
+	 *
+	 * @param fragment The fragment.
+	 * @param model The model to load
+	 */
 	public MultiLoader(HarmonyFragment fragment, T model) {
 		this.model = model;
 		this.fragment = fragment;
 	}
 
-
+	/**
+	 * Add an uri to load.
+	 *
+	 * @param uri The uri to load
+	 * @param callback The associated callback
+	 */
 	public void addUri(Uri uri, UriLoadedCallback callback) {
 		this.uriMap.put(uri, callback);
 	}
 	
+	/**
+	 * Init the loaders.
+	 */
 	public void init() {
-		for(int  i = 0; i < this.uriMap.size(); i++) {
+		for (int  i = 0; i < this.uriMap.size(); i++) {
 			this.fragment.getLoaderManager().restartLoader(i, null, this);
 		}
 	}
@@ -36,6 +58,7 @@ public class MultiLoader<T> implements LoaderManager.LoaderCallbacks<Cursor> {
 	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
 		return this.getLoader((Uri) uriMap.keySet().toArray()[arg0]);
 	}
+
 	@Override
 	public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
 		Uri uri = ((CursorLoader) arg0).getUri();
@@ -59,6 +82,11 @@ public class MultiLoader<T> implements LoaderManager.LoaderCallbacks<Cursor> {
 		}
 	}
 	
+	/**
+	 * Gets a new loader for the given uri.
+	 *
+	 * @return the new cursor loader
+	 */
 	public CursorLoader getLoader(Uri uri) {
 		return new CursorLoader(
 				this.fragment.getActivity(),
@@ -69,8 +97,13 @@ public class MultiLoader<T> implements LoaderManager.LoaderCallbacks<Cursor> {
 				null);
 	}
 	
+	/** Interface for loading callback. */
 	public interface UriLoadedCallback {
-		public void onLoadComplete(Cursor c);
-		public void onLoaderReset();
+		/** On load complete. 
+		 * @param c The loaded cursor
+		 */
+		void onLoadComplete(Cursor c);
+		/** On load reset. */
+		void onLoaderReset();
 	}
 }

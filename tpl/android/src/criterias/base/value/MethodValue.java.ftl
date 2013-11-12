@@ -6,19 +6,16 @@ import java.util.Arrays;
 import com.google.common.base.Joiner;
 
 public class MethodValue extends CriteriaValue {
-	/**
-	 * Parameters.
-	 */
+	/** Parameters. */
 	private String[] values;
 	
-	/**
-	 * Method used.
-	 */
+	/** Method used. */
 	private String method;
 
 	/**
 	 * Contructor.
-	 * @param value The value of this string.
+	 * @param method The method called
+	 * @param values The method arguments
 	 */
 	public MethodValue(String method, String... values) {
 		super();
@@ -28,7 +25,7 @@ public class MethodValue extends CriteriaValue {
 
 	/**
 	 * Set the value of this StringValue.
-	 * @param value The new value
+	 * @param values The new arguments
 	 */
 	public void setValues(String... values) {
 		this.values = values;
@@ -36,7 +33,7 @@ public class MethodValue extends CriteriaValue {
 
 	/**
 	 * Get this StringValue's value.
-	 * @return the value
+	 * @return the values
 	 */
 	public String[] getValues() {
 		return this.values;

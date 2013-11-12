@@ -14,7 +14,7 @@
 			<#assign ret=ret+"String.valueOf("+getter+")" />
 		<#elseif (field.harmony_type?lower_case == "enum")>
 			<#if (enums[field.type].id??)>
-				<#assign ret=ret+"String.valueOf("+getter+".getValue())" />
+				<#assign ret=ret+"String.valueOf(\n\t\t\t\t\t"+getter+".getValue())" />
 			<#else>
 				<#assign ret=ret+getter+".name()" />
 			</#if>
@@ -77,21 +77,21 @@
 		<#if (type?lower_case=="string" || type?lower_case=="email" || type?lower_case=="login" || type?lower_case=="password" || type?lower_case=="city" || type?lower_case=="text" || type?lower_case=="phone" || type?lower_case=="country")>
 			<#assign ret=ret+getter />
 		<#elseif (type?lower_case == "int" || type?lower_case == "integer")>
-			<#assign ret=ret+"Integer.parseInt("+getter+")" />
+			<#assign ret=ret+"Integer.parseInt(\n\t\t\t\t\t"+getter+")" />
 		<#elseif (type?lower_case=="long")>
-			<#assign ret=ret+"Long.parseLong("+getter+")" />
+			<#assign ret=ret+"Long.parseLong(\n\t\t\t\t\t"+getter+")" />
 		<#elseif (type?lower_case=="float")>
-			<#assign ret=ret+"Float.parseFloat("+getter+")" />
+			<#assign ret=ret+"Float.parseFloat(\n\t\t\t\t\t"+getter+")" />
 		<#elseif (type?lower_case=="double")>
-			<#assign ret=ret+"Double.parseDouble("+getter+")" />
+			<#assign ret=ret+"Double.parseDouble(\n\t\t\t\t\t"+getter+")" />
 		<#elseif (type?lower_case=="short")>
-			<#assign ret=ret+"Short.parseShort("+getter+")" />
+			<#assign ret=ret+"Short.parseShort(\n\t\t\t\t\t"+getter+")" />
 		<#elseif (type?lower_case=="char")>
-			<#assign ret=ret+getter+".charAt(0)" />
+			<#assign ret=ret+"\n\t\t\t\t\t"+getter+".charAt(0)" />
 		<#elseif (type?lower_case=="byte")>
-			<#assign ret=ret+"Byte.parseByte("+getter+")" />
+			<#assign ret=ret+"Byte.parseByte(\n\t\t\t\t\t"+getter+")" />
 		<#elseif (type?lower_case=="character")>
-			<#assign ret=ret+getter+".charAt(0)" />
+			<#assign ret=ret+"\n\t\t\t\t\t"+getter+".charAt(0)" />
 		<#elseif (field.harmony_type?lower_case == "enum")>
 			<#assign enumType = enums[field.type] />
 			<#if (enumType.id??)>

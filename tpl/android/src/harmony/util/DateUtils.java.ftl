@@ -279,7 +279,7 @@ public class DateUtils extends android.text.format.DateUtils {
 	
 	/**
 	 * Convert ISO8601 string date to datetime.
-	 * @param dateTime ISO8601 string date
+	 * @param time ISO8601 string date
 	 * @return datetime
 	 */
 	public static DateTime formatISOStringToTime(String time) {
@@ -475,7 +475,7 @@ public class DateUtils extends android.text.format.DateUtils {
 	 * @param pattern The datetime pattern (ex. "dd-mm-yyyy" or "yyyy-MM-dd
 	 * hh:mm")
 	 * @param dateTime date string
-	 * @param dateTime locale Locale
+	 * @param locale Locale
 	 * @return datetime
 	 */
 	public static DateTime formatPattern(
