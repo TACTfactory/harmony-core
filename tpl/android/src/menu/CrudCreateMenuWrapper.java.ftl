@@ -44,14 +44,19 @@ public class CrudCreateMenuWrapper extends MenuWrapperBase {
 
 	@Override
 	protected boolean dispatch(MenuItem item, Context ctx, Fragment fragment) {
+		boolean result;
 		if (fragment instanceof CrudCreateMenuInterface) {
 			switch (item.getItemId()) {
 				case 0:
 					((CrudCreateMenuInterface) fragment).onClickAdd();
-					return true;
+					result = true;
+					break;
+				default:
+					result = false;
+					break;
 			}
 		}
-		return false;
+		return result;
 	}
 
 	@Override

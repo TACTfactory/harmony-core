@@ -49,7 +49,7 @@ public class ${curr.name}ListAdapter
 	}
 
 	/** Holder row. */
-	private class ViewHolder extends SelectionItemView {
+	private static class ViewHolder extends SelectionItemView {
 
 		/**
 		 * Constructor.

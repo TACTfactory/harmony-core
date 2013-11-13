@@ -34,8 +34,6 @@ public class ${curr.name}ListFragment
 
 	/** The adapter which handles list population. */
 	protected ${curr.name}ListAdapter mAdapter;
-	/** ${curr.name}ListFragment instance. */
-	protected static ${curr.name}ListFragment instance;
 
 	@Override
 	public View onCreateView(
@@ -90,6 +88,7 @@ public class ${curr.name}ListFragment
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
+		Loader<Cursor> result = null;
 		${curr.name?cap_first}Criterias crit = null;
 		if (bundle != null) {
 			crit = (${curr.name?cap_first}Criterias) bundle.get(
@@ -104,19 +103,20 @@ public class ${curr.name}ListFragment
 
 		//return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
 		if (crit != null) {
-		return new ${curr.name?cap_first}ListLoader(this.getActivity(),
+			result = new ${curr.name?cap_first}ListLoader(this.getActivity(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
 				${curr.name?cap_first}SQLiteAdapter.ALIASED_COLS,
 				crit,
 				<#if (curr.orders?? && curr.orders?size > 0) >orderBy<#else>null</#if>);
 		} else {
-			return new ${curr.name?cap_first}ListLoader(this.getActivity(),
+			result = new ${curr.name?cap_first}ListLoader(this.getActivity(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
 				${curr.name?cap_first}SQLiteAdapter.ALIASED_COLS,
 				null,
 				null,
 				<#if (curr.orders?? && curr.orders?size > 0) >orderBy<#else>null</#if>);
 		}
+		return result;
 	}
 
 	@Override

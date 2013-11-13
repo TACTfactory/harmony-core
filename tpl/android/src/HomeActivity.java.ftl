@@ -50,7 +50,7 @@ public class HomeActivity extends HarmonyFragmentActivity
 	
 	@Override
 	public void onClick(View v) {
-		Intent intent = null;
+		Intent intent;
 		switch (v.getId()) {
 			<#list entities?values as entity>
 				<#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && !entity.hidden)>
@@ -66,6 +66,9 @@ public class HomeActivity extends HarmonyFragmentActivity
 
 				</#if>
 			</#list>
+			default;
+				intent = null;
+				break;
 		}
 
 		if (intent != null) {

@@ -291,7 +291,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	 * This class will save the entity into the DB.
 	 * It runs asynchronously and shows a progressDialog
 	 */
-	public class LoadTask extends AsyncTask<Void, Void, Void> {
+	public static class LoadTask extends AsyncTask<Void, Void, Void> {
 		/** AsyncTask's context. */
 		private final Context ctx;
 		/** Progress Dialog. */

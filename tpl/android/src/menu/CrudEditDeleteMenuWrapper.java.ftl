@@ -57,17 +57,18 @@ public class CrudEditDeleteMenuWrapper extends MenuWrapperBase {
 
 	@Override
 	protected boolean dispatch(MenuItem item, Context ctx, Fragment fragment) {
+		boolean result = false;
 		if (fragment != null 
 				&& fragment instanceof CrudEditDeleteMenuInterface) {
 			if (item.equals(this.deleteItem)) {
 				((CrudEditDeleteMenuInterface) fragment).onClickDelete();
-				return true;
+				result = true;
 			} else if (item.equals(this.editItem)) {
 				((CrudEditDeleteMenuInterface) fragment).onClickEdit();
-				return true;
+				result = true;
 			}
 		}
-		return false;
+		return result;
 	}
 
 	@Override
