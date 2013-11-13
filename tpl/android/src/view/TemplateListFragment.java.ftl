@@ -9,7 +9,7 @@ import ${data_namespace}.${curr.name?cap_first}SQLiteAdapter;
 import ${project_namespace}.menu.CrudCreateMenuWrapper.CrudCreateMenuInterface;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 import ${project_namespace}.harmony.view.HarmonyListFragment;
-import ${project_namespace}.harmony.widget.pinnedheader.headerlist.PinnedHeaderListView;
+import com.google.android.pinnedheader.headerlist.PinnedHeaderListView;
 
 import android.content.Intent;
 import android.database.Cursor;

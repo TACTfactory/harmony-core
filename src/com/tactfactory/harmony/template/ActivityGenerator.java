@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.Locale;
 
 import com.tactfactory.harmony.Context;
+import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
@@ -135,14 +136,36 @@ public class ActivityGenerator extends BaseGenerator {
 				"widget_validation_buttons.xml");
 
 		this.updateWidget("EnumSpinner.java");
-		this.updateWidget("pinnedheader/AutoScrollListView.java");
-		this.updateWidget("pinnedheader/SelectionItemView.java");
-		this.updateWidget("pinnedheader/headerlist/HeaderAdapter.java");
-		this.updateWidget("pinnedheader/headerlist/HeaderSectionIndexer.java");
+		
+		String pinnedHeaderFolder = String.format("%s/%s/%s/%s/%s/%s/",
+				Harmony.getProjectPath(),
+				this.getAdapter().getPlatform(),
+				this.getAdapter().getSource(),
+				"com",
+				"google",
+				"android");
+		
+		this.updateWidget("pinnedheader/AutoScrollListView.java",
+				null,
+				pinnedHeaderFolder);
+		this.updateWidget("pinnedheader/SelectionItemView.java",
+				null,
+				pinnedHeaderFolder);
+		this.updateWidget("pinnedheader/headerlist/HeaderAdapter.java",
+				null,
+				pinnedHeaderFolder);
+		this.updateWidget("pinnedheader/headerlist/HeaderSectionIndexer.java",
+				null,
+				pinnedHeaderFolder);
 		this.updateWidget("pinnedheader/headerlist/ListPinnedHeaderView.java",
-				"directory_header.xml");
-		this.updateWidget("pinnedheader/headerlist/PinnedHeaderListView.java");
-		this.updateWidget("pinnedheader/util/ComponentUtils.java");
+				"directory_header.xml",
+				pinnedHeaderFolder);
+		this.updateWidget("pinnedheader/headerlist/PinnedHeaderListView.java",
+				null,
+				pinnedHeaderFolder);
+		this.updateWidget("pinnedheader/util/ComponentUtils.java",
+				null,
+				pinnedHeaderFolder);
 		
 
 		AttrsFile.mergeFromTo(this.getAdapter(),
@@ -592,6 +615,29 @@ public class ActivityGenerator extends BaseGenerator {
 
 		super.makeSource(fullTemplatePath, fullFilePath, false);
 	}
+	
+	/**
+	 * Update Widget.
+	 * @param widgetName The widget name.
+	 * @param layoutName The layout name.
+	 */
+	protected final void updateWidget(final String widgetName,
+			final String layoutName,
+			final String destFolder) {
+		super.makeSource(
+				String.format("%s%s",
+						this.getAdapter().getTemplateWidgetPath(),
+						widgetName),
+
+				String.format("%s%s",
+						destFolder,
+						widgetName),
+				false);
+
+		if (layoutName != null) {
+			this.makeResourceLayout(layoutName, layoutName);
+		}
+	}
 
 	/**
 	 * Update Widget.
@@ -600,18 +646,10 @@ public class ActivityGenerator extends BaseGenerator {
 	 */
 	protected final void updateWidget(final String widgetName,
 			final String layoutName) {
-		super.makeSource(
-				String.format("%s%s",
-						this.getAdapter().getTemplateWidgetPath(),
-						widgetName),
-
-				String.format("%s%s",
-						this.getAdapter().getWidgetPath(),
-						widgetName),
-				false);
-		if (layoutName != null) {
-			this.makeResourceLayout(layoutName, layoutName);
-		}
+		this.updateWidget(
+				widgetName,
+				layoutName,
+				this.getAdapter().getWidgetPath());
 	}
 
 	/**

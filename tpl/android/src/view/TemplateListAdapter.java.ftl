@@ -26,10 +26,10 @@ import android.widget.TextView;
 <#if (importDate)>
 import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
-import ${project_namespace}.harmony.widget.pinnedheader.SelectionItemView;
-import ${project_namespace}.harmony.widget.pinnedheader.headerlist.HeaderAdapter;
-import ${project_namespace}.harmony.widget.pinnedheader.headerlist.HeaderSectionIndexer;
-import ${project_namespace}.harmony.widget.pinnedheader.headerlist.PinnedHeaderListView.PinnedHeaderAdapter;
+import com.google.android.pinnedheader.SelectionItemView;
+import com.google.android.pinnedheader.headerlist.HeaderAdapter;
+import com.google.android.pinnedheader.headerlist.HeaderSectionIndexer;
+import com.google.android.pinnedheader.headerlist.PinnedHeaderListView.PinnedHeaderAdapter;
 import ${curr.namespace}.entity.${curr.name};
 
 /**

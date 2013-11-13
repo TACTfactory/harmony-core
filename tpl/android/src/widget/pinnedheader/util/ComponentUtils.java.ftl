@@ -1,4 +1,4 @@
-package ${project_namespace}.harmony.widget.pinnedheader.util;
+package com.google.android.pinnedheader.util;
 
 import android.view.View;
 import android.widget.ListView;

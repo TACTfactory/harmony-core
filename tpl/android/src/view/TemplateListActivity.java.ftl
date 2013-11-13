@@ -6,7 +6,7 @@ import ${curr.namespace}.R;
 
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import ${project_namespace}.harmony.view.HarmonyListFragment;
-import ${project_namespace}.harmony.widget.pinnedheader.util.ComponentUtils;
+import com.google.android.pinnedheader.util.ComponentUtils;
 import ${project_namespace}.entity.${curr.name};
 
 import android.content.Intent;
