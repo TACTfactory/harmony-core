@@ -66,7 +66,7 @@ public class HomeActivity extends HarmonyFragmentActivity
 
 				</#if>
 			</#list>
-			default;
+			default:
 				intent = null;
 				break;
 		}

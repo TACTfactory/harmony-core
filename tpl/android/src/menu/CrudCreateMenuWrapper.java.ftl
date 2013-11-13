@@ -55,6 +55,8 @@ public class CrudCreateMenuWrapper extends MenuWrapperBase {
 					result = false;
 					break;
 			}
+		} else {
+			result = false;
 		}
 		return result;
 	}
