@@ -28,6 +28,7 @@ import android.widget.CheckBox;</#if><#if ViewUtils.shouldImportEditText(fields?
 import android.widget.EditText;</#if>
 import android.widget.Toast;
 
+import com.google.common.base.Strings;
 import ${curr.namespace}.R;
 ${ImportUtils.importRelatedEntities(curr, true)}
 ${ImportUtils.importRelatedEnums(curr)}

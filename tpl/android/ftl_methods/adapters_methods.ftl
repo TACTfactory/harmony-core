@@ -337,7 +337,8 @@
 						<#assign result = result + "${tab}if (this.${field.name}View.get${field.harmony_type?cap_first}() == null) {" />
 					</#if>
 				<#else>
-						<#assign result = result + "${tab}if (this.${field.name}View.getText().length() <= 0) {" />
+						<#assign result = result + "${tab}if (Strings.isNullOrEmpty(" />
+						<#assign result = result + "${tab}			this.${field.name}View.getText().toString().trim())) {" />
 				</#if>
 			<#else>
 				<#if ((field.relation.type == "ManyToOne") || (field.relation.type == "OneToOne"))>
