@@ -44,4 +44,5 @@
 	<exclude-pattern>${project_namespace}.provider.base.*</exclude-pattern>
 	<exclude-pattern>${project_namespace}.provider.utils.base.*</exclude-pattern>
 	<exclude-pattern>${project_namespace}.${project_name?cap_first}ApplicationBase.java</exclude-pattern>
+	<exclude-pattern>com.google.*</exclude-pattern>
 </ruleset>
