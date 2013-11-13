@@ -344,7 +344,7 @@
 				<#if ((field.relation.type == "ManyToOne") || (field.relation.type == "OneToOne"))>
 					<#assign result = result + "${tab}if (this.${field.name}Adapter.getSelectedItem() == null) {" />
 				<#else>
-					<#assign result = result + "${tab}if (this.${field.name}Adapter.getCheckedItems().size() <= 0) {" />
+					<#assign result = result + "${tab}if (this.${field.name}Adapter.getCheckedItems().isEmpty()) {" />
 				</#if>
 			</#if>
 			<#assign result = result + "${tab}	error = R.string.${field.owner?lower_case}_${field.name?lower_case}_invalid_field_error;" />
