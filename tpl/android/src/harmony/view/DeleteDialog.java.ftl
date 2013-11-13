@@ -21,8 +21,7 @@ public class DeleteDialog extends AlertDialog
 	/**
 	 * Constructor.
 	 * @param ctx context
-	 * @param fragment fragment
-	 * @param id id
+	 * @param callback The callback
 	 */
 	public DeleteDialog(Context ctx, DeleteDialogCallback callback) {
 		super(ctx);
@@ -99,6 +98,6 @@ public class DeleteDialog extends AlertDialog
 		 * 
 		 * @param ok True if user clicked ok. False otherwise.
 	 	 */
-		public void onDeleteDialogClose(boolean ok);
+		void onDeleteDialogClose(boolean ok);
 	}
 }

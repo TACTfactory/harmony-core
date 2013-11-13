@@ -50,8 +50,6 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		super(context);
 	}
 
-	/** Base operations.*/
-
 	@Override
 	public Uri insert(final ${curr.name} item) {
 		Uri result = null;

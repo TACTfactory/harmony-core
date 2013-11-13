@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-package ${project_namespace}.harmony.widget.pinnedheader.headerlist;
+package com.google.android.pinnedheader.headerlist;
 
-import ${project_namespace}.harmony.widget.pinnedheader.AutoScrollListView;
+import com.google.android.pinnedheader.AutoScrollListView;
 
 import android.content.Context;
 import android.graphics.Canvas;

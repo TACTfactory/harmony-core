@@ -133,11 +133,20 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 		this.loadCallback.onListLoaded();
 	}
 
+	/** Click callback interface. */
 	public interface OnClickCallback {
-		public void onListItemClick(ListView l, View v, int position, long id);
+		/** On list item click.
+		 * @param l The list view
+		 * @param v The view clicked
+		 * @param position The position of the item
+		 * @param id the id of the item
+		 */
+		void onListItemClick(ListView l, View v, int position, long id);
 	}
 
+	/** On load callback interface. */
 	public interface OnLoadCallback {
-		public void onListLoaded();
+		/** On list loaded. */
+		void onListLoaded();
 	}
 }

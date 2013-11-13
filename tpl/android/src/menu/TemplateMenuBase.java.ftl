@@ -26,20 +26,13 @@ public abstract class ${project_name?cap_first}MenuBase {
 		</#list>
 	</#if>
 
-
-
-
 	/** Array of MenuWrapperBase. */
 	protected SparseArray<MenuWrapperBase> menus =
 					new SparseArray<MenuWrapperBase>();
-
 	/** Context. */
 	protected Context ctx;
 	/** parent fragment. */
 	protected Fragment fragment;
-	/** Share String. */
-	protected String share;
-
 	/** Menu. */
 	protected Menu menu;
 

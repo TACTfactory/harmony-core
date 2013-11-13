@@ -1,4 +1,4 @@
-package ${project_namespace}.harmony.widget.pinnedheader.headerlist;
+package com.google.android.pinnedheader.headerlist;
 
 import java.util.List;
 
@@ -12,10 +12,10 @@ import android.widget.ListView;
 import android.widget.SectionIndexer;
 
 import ${project_namespace}.R;
-import ${project_namespace}.harmony.widget.pinnedheader.SelectionItemView;
-import ${project_namespace}.harmony.widget.pinnedheader.headerlist.ListPinnedHeaderView;
-import ${project_namespace}.harmony.widget.pinnedheader.headerlist.PinnedHeaderListView;
-import ${project_namespace}.harmony.widget.pinnedheader.headerlist.PinnedHeaderListView.PinnedHeaderAdapter;
+import com.google.android.pinnedheader.SelectionItemView;
+import com.google.android.pinnedheader.headerlist.ListPinnedHeaderView;
+import com.google.android.pinnedheader.headerlist.PinnedHeaderListView;
+import com.google.android.pinnedheader.headerlist.PinnedHeaderListView.PinnedHeaderAdapter;
 
 public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements PinnedHeaderAdapter{    
     private boolean mSectionHeaderDisplayEnabled;

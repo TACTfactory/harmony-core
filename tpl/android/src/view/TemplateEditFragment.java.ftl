@@ -6,6 +6,7 @@
 <#assign hasTime = FieldsUtils.hasTime(fields?values) />
 <#assign hasDateTime = FieldsUtils.hasDateTime(fields?values) />
 <#assign hasToManyRelation=FieldsUtils.hasToManyRelations(fields?values) />
+<#assign hasToOneRelation=FieldsUtils.hasManyToOneRelation(fields?values) />
 <#assign hasRelation=FieldsUtils.hasRelations(fields?values) />
 <@header?interpret />
 package ${curr.controller_namespace};
@@ -18,9 +19,9 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
+<#if hasToManyRelation>import android.database.Cursor;</#if>
 import android.database.sqlite.SQLiteException;
-import android.net.Uri;
+<#if hasToManyRelation>import android.net.Uri;</#if>
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
@@ -31,6 +32,7 @@ import android.widget.CheckBox;</#if><#if ViewUtils.shouldImportEditText(fields?
 import android.widget.EditText;</#if>
 import android.widget.Toast;
 
+import com.google.common.base.Strings;
 import ${curr.namespace}.R;
 ${ImportUtils.importRelatedEntities(curr, true)}
 ${ImportUtils.importRelatedEnums(curr)}
@@ -46,24 +48,20 @@ import ${curr.namespace}.harmony.widget.TimeWidget;
 	<#if (hasDateTime)>
 import ${curr.namespace}.harmony.widget.DateTimeWidget;
 	</#if>
-</#if>
-import ${project_namespace}.harmony.widget.MultiEntityWidget;
-import ${project_namespace}.harmony.widget.SingleEntityWidget;<#if (ViewUtils.hasTypeEnum(fields?values))>
+</#if><#if hasToManyRelation>
+import ${project_namespace}.harmony.widget.MultiEntityWidget;</#if><#if hasToOneRelation>
+import ${project_namespace}.harmony.widget.SingleEntityWidget;</#if><#if (ViewUtils.hasTypeEnum(fields?values))>
 import ${project_namespace}.harmony.widget.EnumSpinner;</#if>
 import ${project_namespace}.harmony.widget.ValidationButtons;
 import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
 <#list relations as relation>
 	<#if (!relation.internal && !relation.hidden)>
-		<#if (relation.relation.type == "ManyToMany")>
-import ${data_namespace}.${relation.relation.joinTable}SQLiteAdapter;
-import ${project_namespace}.provider.${relation.relation.joinTable}ProviderAdapter;
-		<#else>
-import ${data_namespace}.${relation.relation.targetEntity}SQLiteAdapter;
-import ${project_namespace}.provider.${relation.relation.targetEntity}ProviderAdapter;
+		<#if (relation.relation.type != "ManyToMany")>
+//import ${data_namespace}.${relation.relation.targetEntity}SQLiteAdapter;
 		</#if>
 	</#if>
 </#list>
-import ${project_namespace}.provider.${curr.name}ProviderAdapter;
+<#if hasToManyRelation>import ${project_namespace}.provider.${curr.name}ProviderAdapter;</#if>
 ${ImportUtils.importRelatedProviderUtils(curr, true)}
 <#list relations as field>
 	<#if (!field.internal && !field.hidden && field.writable)>
@@ -112,18 +110,20 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 	/** The ${field.name} chooser component. */
 	protected MultiEntityWidget ${field.name}Widget;
 	/** The ${field.name} Adapter. */
-	protected MultiEntityWidget.EntityAdapter<${field.relation.targetEntity}> ${field.name}Adapter;
+	protected MultiEntityWidget.EntityAdapter<${field.relation.targetEntity}>
+			${field.name}Adapter;
 				<#else>
 	/** The ${field.name} chooser component. */
 	protected SingleEntityWidget ${field.name}Widget;
 	/** The ${field.name} Adapter. */
-	protected SingleEntityWidget.EntityAdapter<${field.relation.targetEntity}> ${field.name}Adapter;
+	protected SingleEntityWidget.EntityAdapter<${field.relation.targetEntity}>
+			${field.name}Adapter;
 				</#if>
 			</#if>
 		</#if>
 	</#list>
 	/** Save button. */
-	protected ValidationButtons validationButtons;;
+	protected ValidationButtons validationButtons;
 
 	/** Initialize view of curr.fields.
 	 *
@@ -134,40 +134,42 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			<#if (!field.internal && !field.hidden && field.writable)>
 				<#if !field.relation??>
 					<#if field.type=="boolean">
-		this.${field.name}View =
-			(CheckBox) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
+		this.${field.name}View = (CheckBox) view.findViewById(
+				R.id.${curr.name?lower_case}_${field.name?lower_case});
 					<#elseif field.type?lower_case == "datetime">
 						<#if (field.harmony_type?lower_case == "datetime")>
-		this.${field.name}View =
-				(DateTimeWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
+		this.${field.name}View = (DateTimeWidget) view.findViewById(
+				R.id.${curr.name?lower_case}_${field.name?lower_case});
 						<#elseif (field.harmony_type?lower_case == "date")>
-		this.${field.name}View =
-				(DateWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
+		this.${field.name}View = (DateWidget) view.findViewById(
+				R.id.${curr.name?lower_case}_${field.name?lower_case});
 						<#elseif (field.harmony_type?lower_case == "time")>
-		this.${field.name}View =
-				(TimeWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
+		this.${field.name}View = (TimeWidget) view.findViewById(
+				R.id.${curr.name?lower_case}_${field.name?lower_case});
 						</#if>
 					<#elseif field.harmony_type?lower_case == "enum">
-		this.${field.name}View =
-			(EnumSpinner) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
+		this.${field.name}View = (EnumSpinner) view.findViewById(
+				R.id.${curr.name?lower_case}_${field.name?lower_case});
 		this.${field.name}View.setEnum(${field.type}.class);
 					<#else>
-		this.${field.name}View =
-				(EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
+		this.${field.name}View = (EditText) view.findViewById(
+				R.id.${curr.name?lower_case}_${field.name?lower_case});
 					</#if>
 				<#else>
 					<#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
-		this.${field.name}Adapter = new MultiEntityWidget.EntityAdapter<${field.relation.targetEntity}>() {
+		this.${field.name}Adapter =
+				new MultiEntityWidget.EntityAdapter<${field.relation.targetEntity}>() {
 			@Override
 			public String entityToString(${field.relation.targetEntity} item) {
 				return String.valueOf(item.get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
 			}
 		};
-		this.${field.name}Widget =
-			(MultiEntityWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_button);
+		this.${field.name}Widget = (MultiEntityWidget) view.findViewById(
+						R.id.${curr.name?lower_case}_${field.name?lower_case}_button);
 		this.${field.name}Widget.setAdapter(this.${field.name}Adapter);
 					<#else>
-		this.${field.name}Adapter = new SingleEntityWidget.EntityAdapter<${field.relation.targetEntity}>() {
+		this.${field.name}Adapter =
+				new SingleEntityWidget.EntityAdapter<${field.relation.targetEntity}>() {
 			@Override
 			public String entityToString(${field.relation.targetEntity} item) {
 				return String.valueOf(item.get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
@@ -181,8 +183,8 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			</#if>
 		</#list>
 
-		this.validationButtons =
-			(ValidationButtons) view.findViewById(R.id.${curr.name?lower_case}_validation);
+		this.validationButtons = (ValidationButtons) view.findViewById(
+					R.id.${curr.name?lower_case}_validation);
 		this.validationButtons.setListener(this);
 	}
 
@@ -203,9 +205,15 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 	 * @return true if valid
 	 */
 	public boolean validateData() {
-		boolean result = true;
+		int error = 0;
 <#list fields?values as field>${AdapterUtils.validateDataFieldAdapter(field, 2)}</#list>
-		return result;
+	
+		if (error > 0) {
+			Toast.makeText(this.getActivity(),
+				this.getActivity().getString(error),
+				Toast.LENGTH_SHORT).show();
+		}
+		return error == 0;
 	}
 	@Override
 	public View onCreateView(
@@ -220,8 +228,8 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 						false);
 
 		final Intent intent =  getActivity().getIntent();
-		this.model =
-				(${curr.name}) intent.getSerializableExtra("${curr.name}");
+		this.model = (${curr.name}) intent.getSerializableExtra(
+				"${curr.name}");
 
 		this.initializeComponent(view);
 		this.loadData();
@@ -248,7 +256,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		 * called
 		 */
 		public EditTask(final ${curr.name}EditFragment fragment,
-												final ${curr.name} entity) {
+					final ${curr.name} entity) {
 			super();
 			this.ctx = fragment.getActivity();
 			this.entity = entity;
@@ -315,7 +323,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 	 * This class will save the entity into the DB.
 	 * It runs asynchronously and shows a progressDialog
 	 */
-	public class LoadTask extends AsyncTask<Void, Void, Void> {
+	public static class LoadTask extends AsyncTask<Void, Void, Void> {
 		/** AsyncTask's context. */
 		private final Context ctx;
 		/** Progress Dialog. */
@@ -335,7 +343,6 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 
 		/**
 		 * Constructor of the task.
-		 * @param entity The entity to insert in the DB
 		 * @param fragment The parent fragment from where the aSyncTask is
 		 * called
 		 */
@@ -350,10 +357,10 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			super.onPreExecute();
 
 			this.progress = ProgressDialog.show(this.ctx,
-					this.ctx.getString(
-							R.string.${curr.name?lower_case}_progress_load_relations_title),
-					this.ctx.getString(
-							R.string.${curr.name?lower_case}_progress_load_relations_message));
+				this.ctx.getString(
+					R.string.${curr.name?lower_case}_progress_load_relations_title),
+				this.ctx.getString(
+					R.string.${curr.name?lower_case}_progress_load_relations_message));
 		}
 
 		@Override
@@ -429,6 +436,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 	<#if !relation.internal && !relation.hidden>
 	/**
 	 * Called when ${relation.name} have been loaded.
+	 * @param items The loaded items
 	 */
 	protected void on${relation.name?cap_first}Loaded(ArrayList<${relation.relation.targetEntity}> items) {
 		this.${relation.name}Adapter.loadData(items);

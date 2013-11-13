@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package ${project_namespace}.harmony.widget.pinnedheader;
+package com.google.android.pinnedheader;
 
 import android.content.Context;
 import android.util.AttributeSet;

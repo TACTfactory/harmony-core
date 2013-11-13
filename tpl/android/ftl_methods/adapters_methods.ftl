@@ -327,30 +327,27 @@
 <#function validateDataFieldAdapter field indentLevel = 0>
 	<#assign result = "" />
 	<#assign tab = "\n" + Utils.getIndentString(indentLevel) />
-	<#if !field.internal && !field.hidden && field.type?lower_case != "boolean" && field.writable>
+	<#if !field.internal && !field.hidden && (field.type?lower_case != "boolean" && field.harmony_type?lower_case != "enum")&& field.writable>
 		<#if !field.nullable>
 			<#if !field.relation??>
 				<#if field.type?lower_case == "datetime">
 					<#if (field.harmony_type) == "datetime">
-						<#assign result = result + "${tab}result = (result && this.${field.name}View.getDateTime() != null);" />
+						<#assign result = result + "${tab}if (this.${field.name}View.getDateTime() == null) {" />
 					<#else>
-						<#assign result = result + "${tab}result = (result && this.${field.name}View.get${field.harmony_type?cap_first}() != null);" />
+						<#assign result = result + "${tab}if (this.${field.name}View.get${field.harmony_type?cap_first}() == null) {" />
 					</#if>
-				<#elseif (field.harmony_type?lower_case != "enum")>
-						<#assign result = result + "${tab}result = (result && this.${field.name}View.getText().length() > 0);" />
+				<#else>
+						<#assign result = result + "${tab}if (Strings.isNullOrEmpty(" />
+						<#assign result = result + "${tab}			this.${field.name}View.getText().toString().trim())) {" />
 				</#if>
 			<#else>
 				<#if ((field.relation.type == "ManyToOne") || (field.relation.type == "OneToOne"))>
-					<#assign result = result + "${tab}result = (result && this.${field.name}Adapter.getSelectedItem() != null);" />
+					<#assign result = result + "${tab}if (this.${field.name}Adapter.getSelectedItem() == null) {" />
 				<#else>
-					<#assign result = result + "${tab}result = (result && this.${field.name}Adapter.getCheckedItems().size() > 0);" />
+					<#assign result = result + "${tab}if (this.${field.name}Adapter.getCheckedItems().isEmpty()) {" />
 				</#if>
 			</#if>
-			<#assign result = result + "${tab}if (result == false) {" />
-			<#assign result = result + "${tab}	Toast.makeText(this.getActivity()," />
-			<#assign result = result + "${tab}		R.string.${field.owner?lower_case}_${field.name?lower_case}_invalid_field_error," />
-			<#assign result = result + "${tab}		Toast.LENGTH_SHORT).show();" />
-			<#assign result = result + "${tab}	return result;" />
+			<#assign result = result + "${tab}	error = R.string.${field.owner?lower_case}_${field.name?lower_case}_invalid_field_error;" />
 			<#assign result = result + "${tab}}" />
 		</#if>
 	</#if>

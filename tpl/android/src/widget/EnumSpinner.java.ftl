@@ -81,6 +81,7 @@ public class EnumSpinner extends Spinner {
 	 * Associate an enum with this spinner.
 	 * @param e The enum class (for example: if your enum is called "Title",
 	 * 			send "Title.class")
+	 * @param T the class
 	 */
 	public <T extends Enum<T>> void setEnum(Class<T> e) {
 		

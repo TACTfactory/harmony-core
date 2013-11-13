@@ -1,7 +1,7 @@
-package ${project_namespace}.harmony.widget.pinnedheader;
+package com.google.android.pinnedheader;
 
 import ${project_namespace}.R;
-import ${project_namespace}.harmony.widget.pinnedheader.util.ComponentUtils;
+import com.google.android.pinnedheader.util.ComponentUtils;
 
 import android.content.Context;
 import android.content.res.TypedArray;

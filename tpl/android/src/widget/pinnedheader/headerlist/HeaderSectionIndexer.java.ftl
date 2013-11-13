@@ -1,4 +1,4 @@
-package ${project_namespace}.harmony.widget.pinnedheader.headerlist;
+package com.google.android.pinnedheader.headerlist;
 
 import android.text.TextUtils;
 import android.widget.SectionIndexer;

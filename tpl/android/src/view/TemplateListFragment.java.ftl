@@ -9,7 +9,7 @@ import ${data_namespace}.${curr.name?cap_first}SQLiteAdapter;
 import ${project_namespace}.menu.CrudCreateMenuWrapper.CrudCreateMenuInterface;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 import ${project_namespace}.harmony.view.HarmonyListFragment;
-import ${project_namespace}.harmony.widget.pinnedheader.headerlist.PinnedHeaderListView;
+import com.google.android.pinnedheader.headerlist.PinnedHeaderListView;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -34,8 +34,6 @@ public class ${curr.name}ListFragment
 
 	/** The adapter which handles list population. */
 	protected ${curr.name}ListAdapter mAdapter;
-	/** ${curr.name}ListFragment instance. */
-	protected static ${curr.name}ListFragment instance;
 
 	@Override
 	public View onCreateView(
@@ -70,7 +68,8 @@ public class ${curr.name}ListFragment
 		//this.setHasOptionsMenu(true);
 
 		// Create an empty adapter we will use to display the loaded data.
-		((PinnedHeaderListView)this.getListView()).setPinnedHeaderEnabled(false);
+		((PinnedHeaderListView) this.getListView())
+					.setPinnedHeaderEnabled(false);
 		this.mAdapter = new ${curr.name}ListAdapter(this.getActivity(), this);
 
 		// Start out with a progress indicator.
@@ -89,6 +88,7 @@ public class ${curr.name}ListFragment
 
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
+		Loader<Cursor> result = null;
 		${curr.name?cap_first}Criterias crit = null;
 		if (bundle != null) {
 			crit = (${curr.name?cap_first}Criterias) bundle.get(
@@ -103,19 +103,20 @@ public class ${curr.name}ListFragment
 
 		//return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
 		if (crit != null) {
-		return new ${curr.name?cap_first}ListLoader(this.getActivity(),
+			result = new ${curr.name?cap_first}ListLoader(this.getActivity(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
 				${curr.name?cap_first}SQLiteAdapter.ALIASED_COLS,
 				crit,
 				<#if (curr.orders?? && curr.orders?size > 0) >orderBy<#else>null</#if>);
 		} else {
-			return new ${curr.name?cap_first}ListLoader(this.getActivity(),
+			result = new ${curr.name?cap_first}ListLoader(this.getActivity(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
 				${curr.name?cap_first}SQLiteAdapter.ALIASED_COLS,
 				null,
 				null,
 				<#if (curr.orders?? && curr.orders?size > 0) >orderBy<#else>null</#if>);
 		}
+		return result;
 	}
 
 	@Override
@@ -129,9 +130,12 @@ public class ${curr.name}ListFragment
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI);
 
 		//this.mAdapter.swapCursor(data);
-		ArrayList<${curr.name}> users = new ${curr.name}SQLiteAdapter(this.getActivity()).cursorToItems(data);
+		ArrayList<${curr.name}> users = new ${curr.name}SQLiteAdapter(
+				this.getActivity()).cursorToItems(data);
 		this.mAdapter.setNotifyOnChange(false);
-		this.mAdapter.setData(new ${curr.name}ListAdapter.${curr.name}SectionIndexer(users));
+		this.mAdapter.setData(
+				new ${curr.name}ListAdapter
+					.${curr.name}SectionIndexer(users));
 		this.mAdapter.setNotifyOnChange(true);
 		this.mAdapter.notifyDataSetChanged();
 		this.mAdapter.setPinnedPartitionHeadersEnabled(false);
@@ -160,7 +164,8 @@ public class ${curr.name}ListFragment
 
 	@Override
 	public void onClickAdd() {
-		Intent intent = new Intent(this.getActivity(), ${curr.name}CreateActivity.class);
+		Intent intent = new Intent(this.getActivity(),
+					${curr.name}CreateActivity.class);
 		this.startActivity(intent);
 	}
 

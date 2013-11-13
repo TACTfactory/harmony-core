@@ -8,8 +8,11 @@ import com.actionbarsherlock.internal.view.menu.ActionMenuItem;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
+/**
+ * Menu wrapper for CRUD Create action.
+ */
 public class CrudCreateMenuWrapper extends MenuWrapperBase {
-	
+	/** Menu item ADD. */
 	private MenuItem addItem;
 	
 	@Override
@@ -18,7 +21,11 @@ public class CrudCreateMenuWrapper extends MenuWrapperBase {
 		
 		if (fragment != null && fragment instanceof CrudCreateMenuInterface) {	
 			
-			this.addItem 	= menu.add(${project_name?cap_first}Menu.CRUDCREATE, 0, Menu.NONE, "Add");
+			this.addItem 	= menu.add(
+					${project_name?cap_first}Menu.CRUDCREATE,
+					0,
+					Menu.NONE,
+					"Add");
 			this.addItem.setShowAsAction(
 					ActionMenuItem.SHOW_AS_ACTION_IF_ROOM
 					| ActionMenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -30,20 +37,28 @@ public class CrudCreateMenuWrapper extends MenuWrapperBase {
 	protected void updateMenu(Menu menu, Activity activity,
 			Fragment fragment, Context ctx) {
 		if (fragment != null && fragment instanceof CrudCreateMenuInterface) {
-			menu.setGroupVisible(${project_name?cap_first}Menu.CRUDCREATE, true);
+			menu.setGroupVisible(
+					${project_name?cap_first}Menu.CRUDCREATE, true);
 		}
 	}
 
 	@Override
 	protected boolean dispatch(MenuItem item, Context ctx, Fragment fragment) {
+		boolean result;
 		if (fragment instanceof CrudCreateMenuInterface) {
 			switch (item.getItemId()) {
 				case 0:
 					((CrudCreateMenuInterface) fragment).onClickAdd();
-					return true;
+					result = true;
+					break;
+				default:
+					result = false;
+					break;
 			}
+		} else {
+			result = false;
 		}
-		return false;
+		return result;
 	}
 
 	@Override
@@ -62,8 +77,15 @@ public class CrudCreateMenuWrapper extends MenuWrapperBase {
 		}
 	}
 
+	/**
+	 * Implement this interface in your fragment or activity
+	 * to activate this menu.
+	 */
 	public interface CrudCreateMenuInterface {
-		public void onClickAdd();
+		/**
+		 * Called when user clicks on Add menu button.
+		 */
+		void onClickAdd();
 	}
 }
 

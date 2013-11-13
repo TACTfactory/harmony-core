@@ -26,10 +26,10 @@ import android.widget.TextView;
 <#if (importDate)>
 import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
-import ${project_namespace}.harmony.widget.pinnedheader.SelectionItemView;
-import ${project_namespace}.harmony.widget.pinnedheader.headerlist.HeaderAdapter;
-import ${project_namespace}.harmony.widget.pinnedheader.headerlist.HeaderSectionIndexer;
-import ${project_namespace}.harmony.widget.pinnedheader.headerlist.PinnedHeaderListView.PinnedHeaderAdapter;
+import com.google.android.pinnedheader.SelectionItemView;
+import com.google.android.pinnedheader.headerlist.HeaderAdapter;
+import com.google.android.pinnedheader.headerlist.HeaderSectionIndexer;
+import com.google.android.pinnedheader.headerlist.PinnedHeaderListView.PinnedHeaderAdapter;
 import ${curr.namespace}.entity.${curr.name};
 
 /**
@@ -49,12 +49,23 @@ public class ${curr.name}ListAdapter
 	}
 
 	/** Holder row. */
-	private class ViewHolder extends SelectionItemView {
+	private static class ViewHolder extends SelectionItemView {
 
+		/**
+		 * Constructor.
+		 *
+		 * @param context The context
+		 */
 		public ViewHolder(Context context) {
 			this(context, null);
 		}
 		
+		/**
+		 * Constructor.
+		 *
+		 * @param context The context
+		 * @param attrs The attribute set
+		 */
 		public ViewHolder(Context context, AttributeSet attrs) {
 			super(context, attrs, R.layout.row_${curr.name?lower_case});
 		}
@@ -86,8 +97,15 @@ public class ${curr.name}ListAdapter
 		}
 	}
 
-	public static class ${curr.name}SectionIndexer extends HeaderSectionIndexer<${curr.name}> implements SectionIndexer {
+	/** Section indexer for this entity's list. */
+	public static class ${curr.name}SectionIndexer
+					extends HeaderSectionIndexer<${curr.name}>
+					implements SectionIndexer {
 
+		/**
+		 * Constructor.
+		 * @param items The items of the indexer
+		 */
 		public ${curr.name}SectionIndexer(List<${curr.name}> items) {
 			super(items);
 		}
@@ -99,7 +117,10 @@ public class ${curr.name}ListAdapter
 	}
 
 	@Override
-    protected View bindView(View itemView, int partition, ${curr.name} item, int position) {
+    protected View bindView(View itemView,
+				int partition,
+				${curr.name} item,
+				int position) {
     	final ViewHolder view;
     	
     	if (itemView != null) {

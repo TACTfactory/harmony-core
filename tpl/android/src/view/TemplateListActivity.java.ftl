@@ -6,12 +6,11 @@ import ${curr.namespace}.R;
 
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import ${project_namespace}.harmony.view.HarmonyListFragment;
-import ${project_namespace}.harmony.widget.pinnedheader.util.ComponentUtils;
+import com.google.android.pinnedheader.util.ComponentUtils;
 import ${project_namespace}.entity.${curr.name};
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.view.View;
 import android.widget.ListView;
 
@@ -23,10 +22,15 @@ public class ${curr.name}ListActivity
 		implements HarmonyListFragment.OnClickCallback,
 				HarmonyListFragment.OnLoadCallback {
 
+	/** Associated list fragment. */
 	protected ${curr.name}ListFragment listFragment;
+	/** Associated detail fragment if any (in case of tablet). */
 	protected ${curr.name}ShowFragment detailFragment;
+	/** Is this tablet/dual fragment mode ? */
 	protected boolean dualMode;
+	/** Last selected item position in the list. */
 	private int lastSelectedItemPosition = 0;
+	/** Last selected item. */
 	private ${curr.name} lastSelectedItem;
 	
 	@Override
@@ -36,10 +40,12 @@ public class ${curr.name}ListActivity
 
 		
 		this.detailFragment = (${curr.name}ShowFragment) 
-						this.getSupportFragmentManager().findFragmentById(R.id.fragment_show);
+						this.getSupportFragmentManager().findFragmentById(
+								R.id.fragment_show);
 
 		this.listFragment = (${curr.name}ListFragment)
-						this.getSupportFragmentManager().findFragmentById(R.id.fragment_list);
+						this.getSupportFragmentManager().findFragmentById(
+								R.id.fragment_list);
 		
 		if (this.detailFragment != null) {
 			this.dualMode = true;
@@ -102,11 +108,20 @@ public class ${curr.name}ListActivity
 		}
 	}
 
-
+	/** 
+	 * Load the detail fragment of the given item.
+	 * 
+	 * @param item The item to load
+	 */
 	private void loadDetailFragment(${curr.name} item) {
 		this.detailFragment.update(item);
 	}
 
+	/**
+	 * Select a list item.
+	 *
+	 * @param listPosition The position of the item.
+	 */
 	private void selectListItem(int listPosition) {
 		int listSize = this.listFragment.getListAdapter().getCount();
 		if (listSize > 0) {
@@ -128,7 +143,9 @@ public class ${curr.name}ListActivity
 	@Override
 	public void onListLoaded() {
 		if (this.dualMode) {
-			int newPosition = ((${curr.name}ListAdapter)this.listFragment.getListAdapter()).getPosition(this.lastSelectedItem);
+			int newPosition =
+				((${curr.name}ListAdapter) this.listFragment.getListAdapter())
+						.getPosition(this.lastSelectedItem);
 			if (newPosition < 0) {
 				this.selectListItem(this.lastSelectedItemPosition);
 			} else {				

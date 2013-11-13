@@ -16,16 +16,33 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.Toast;
 
-public class MultiEntityWidget extends FrameLayout implements OnClickListener, OnMultiChoiceClickListener {
+/**
+ * Graphical component used to pick multiple instances of an entity.
+ */
+public class MultiEntityWidget 
+		extends FrameLayout 
+		implements OnClickListener,
+				OnMultiChoiceClickListener {
+	/** Clickable edit text. */
 	private EditText entityEditText;
+	/** Title of the dialog. */
 	private String title;
+	/** Alert dialog. */
 	private AlertDialog dialog;
+	/** Entity Adapter. */
 	private EntityAdapter<?> adapter;
 	
+	/** Constructor.
+	 * @param context The context
+	 */
 	public MultiEntityWidget(Context context) {
 		this(context, null);
 	}
 	
+	/** Constructor.
+	 * @param context The context
+	 * @param attrs Attribute set
+	 */
 	public MultiEntityWidget(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		LayoutInflater inflater = (LayoutInflater) context
@@ -36,15 +53,26 @@ public class MultiEntityWidget extends FrameLayout implements OnClickListener, O
 		this.addView(view);
 	}
 	
+	/** Set the adapter of the widget.
+	 * @param adapter The entity adapter
+	 */
 	public void setAdapter(EntityAdapter<?> adapter) {
 		this.adapter = adapter;
 		this.adapter.setWidget(this);
 	}
 
+	/**
+	 * Set the title of the dialog.
+	 * @param title The title
+	 */
 	public void setTitle(String title) {
 		this.title = title;
 	}
 
+	/**
+	 * Set the title of the dialog.
+	 * @param titleId The title resource id
+	 */
 	public void setTitle(int titleId) {
 		this.title = this.getContext().getString(titleId);
 	}
@@ -60,7 +88,14 @@ public class MultiEntityWidget extends FrameLayout implements OnClickListener, O
 		//this.recreateDialog(this.title, this.getStrings(), this.checkedItems);
 	}
 	
-	private void recreateDialog(String[] displayedStrings, boolean[] checkedPositions) {
+	/**
+	 * Recreates the dialog.
+	 *
+	 * @param displayedStrings The displayed strings
+	 * @param checkedPositions The checked positions
+	 */
+	private void recreateDialog(String[] displayedStrings,
+				boolean[] checkedPositions) {
 		final AlertDialog.Builder builder =
 				new AlertDialog.Builder(this.getContext());
 		
@@ -91,6 +126,9 @@ public class MultiEntityWidget extends FrameLayout implements OnClickListener, O
 		this.refreshText();
 	}
 	
+	/**
+	 * Refresh the text of the edit text.
+	 */
 	public void refreshText() {
 		String[] strings = this.adapter.extractStrings();
 		StringBuilder text = new StringBuilder();
@@ -104,19 +142,39 @@ public class MultiEntityWidget extends FrameLayout implements OnClickListener, O
 		}
 		this.entityEditText.setText(text.toString());
 	}
-	
-	public static abstract class EntityAdapter<T> {
+
+	/**
+	 * Adapter class for this widger.
+	 */
+	public abstract static class EntityAdapter<T> {
+		/** The associated widget. */
 		private MultiEntityWidget widget;
+		/** The item list. */
 		protected List<T> itemList;
+		/** The checked items. */
 		protected boolean[] checkedItems;
 		
+		/** 
+		 * Gives the string representation of the given entity for the list.
+	 	 * @param entity The entity
+		 * @return The string of the entity
+		 */
 		public abstract String entityToString(T entity);
 		
+		/**
+		 * Loads this list of entities.
+		 * @param items The list of items
+		 */
 		public void loadData(List<T> items) {
 			this.loadData(items, null);
 		}
-	
 
+		/**
+		 * Loads this list of entities.
+		 *
+		 * @param items The list of items
+		 * @param checkedItems The checked items
+		 */
 		public void loadData(List<T> items, boolean[] checkedItems) {
 			this.itemList = items;
 			if (checkedItems != null) {
@@ -131,6 +189,11 @@ public class MultiEntityWidget extends FrameLayout implements OnClickListener, O
 			this.widget.refreshText();
 		}
 		
+		/**
+		 * Extract the entities strings.
+		 *
+		 * @return The string array
+		 */
 		public String[] extractStrings() {
 			String[] result = new String[this.itemList.size()];
 			for (int i = 0; i < this.itemList.size(); i++) {
@@ -139,22 +202,43 @@ public class MultiEntityWidget extends FrameLayout implements OnClickListener, O
 			return result;
 		}
 		
+		/**
+		 * Check/Uncheck item.
+		 *
+		 * @param item The item to check
+		 * @param check True to check, false to uncheck
+		 */
 		public void checkItem(T item, boolean check) {
 			this.checkItem(this.itemList.indexOf(item), check); 
 		}
-		
 
+		/**
+		 * Check/Uncheck item.
+		 *
+		 * @param pos The position of the item to check
+		 * @param check True to check, false to uncheck
+		 */
 		public void checkItem(int pos, boolean check) {
 			this.checkedItems[pos] = check; 
 			this.widget.recreateDialog(this.extractStrings(),
 					this.checkedItems);
 			this.widget.refreshText();
 		}
-		
+
+		/**
+		 * Associate a widget to this adapter.
+		 *
+		 * @param widget The widget
+		 */
 		protected void setWidget(MultiEntityWidget widget) {
 			this.widget = widget;
 		}
-		
+
+		/**
+		 * Get the checked items.
+		 *
+		 * @return The list of checked items
+		 */
 		public ArrayList<T> getCheckedItems() {
 			ArrayList<T> result = new ArrayList<T>();
 			for (int i = 0; i < this.checkedItems.length; i++) {
@@ -164,7 +248,12 @@ public class MultiEntityWidget extends FrameLayout implements OnClickListener, O
 			}
 			return result;
 		}
-		
+
+		/**
+		 * Set the checked items.
+		 *
+		 * @param items The list of checked items
+		 */		
 		public void setCheckedItems(List<T> items) {
 			for (int i = 0; i < this.itemList.size(); i++) {
 				if (items.contains(this.itemList.get(i))) {

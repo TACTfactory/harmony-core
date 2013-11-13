@@ -28,7 +28,12 @@ public class DataManager {
 	protected boolean isInInternalTransaction = false;
 	/** database. */
 	protected SQLiteDatabase db;
-
+<#list entities?values as entity>
+	<#if ((entity.fields?size>0) && !(entity.internal))>
+	/** ${entity.name} name constant. */
+	private static final String ${entity.name?upper_case} = "${entity.name?cap_first}";
+	</#if>
+</#list>
 	/**
 	 * Constructor.
 	 * @param ctx The context
@@ -38,9 +43,9 @@ public class DataManager {
 		this.db = db;
 		<#list entities?values as entity>
 			<#if ((entity.fields?size>0) && !(entity.internal))>
-		this.adapters.put("${entity.name}",
+		this.adapters.put(${entity.name?upper_case},
 				new ${entity.name?cap_first}SQLiteAdapter(ctx));
-		this.adapters.get("${entity.name}").open(this.db);
+		this.adapters.get(${entity.name?upper_case}).open(this.db);
 			</#if>
 		</#list>
 	}
@@ -60,7 +65,7 @@ public class DataManager {
 
     	<#list entities?values as entity>
     		<#if ((entity.fields?size>0) && (entity.ids?size>0) && !(entity.internal))>
-    	if (nameClass.equals("${entity.name}")) {
+    	if (nameClass.equals(${entity.name?upper_case})) {
         	ret = ((${entity.name}SQLiteAdapter)
         							   this.adapters.get(nameClass)).query(id);
     	}
@@ -116,7 +121,7 @@ public class DataManager {
     		<#if ((entity.fields?size>0 && entity.ids?size>0) && !(entity.internal))>
     		if (object instanceof ${entity.name}) {
     			((${entity.name}SQLiteAdapter)
-    					this.adapters.get("${entity.name}"))
+    					this.adapters.get(${entity.name?upper_case}))
     						.remove(<#list entity.ids as id>((${entity.name}) object).get${id.name?cap_first}()<#if id_has_next>, </#if></#list>);
     		}
     		</#if>

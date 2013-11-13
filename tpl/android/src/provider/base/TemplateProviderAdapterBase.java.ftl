@@ -8,9 +8,6 @@
 <@header?interpret />
 package ${local_namespace}.base;
 
-import org.joda.time.DateTime;
-import org.joda.time.format.ISODateTimeFormat;
-
 import android.content.ContentUris;
 import android.content.ContentValues;
 import android.content.Context;
@@ -18,12 +15,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
-import ${data_namespace}.${curr.name}SQLiteAdapter;
 <#if (!curr.internal)>
 import ${entity_namespace}.${curr.name};
 </#if>import ${local_namespace}.${project_name?cap_first}Provider;
 <#if (inherited)>
-
+	<#if joinedInheritance>
 import ${local_namespace}.${curr.inheritance.superclass.name?cap_first}ProviderAdapter;
 import ${data_namespace}.${curr.inheritance.superclass.name?cap_first}SQLiteAdapter;
 
@@ -33,11 +29,11 @@ import ${project_namespace}.criterias.base.Criteria.Type;
 import ${project_namespace}.criterias.base.CriteriasBase;
 import ${project_namespace}.criterias.base.CriteriasBase.GroupType;
 import ${project_namespace}.criterias.base.value.ArrayValue;
-	<#if singleTabInheritance>
+	<#elseif singleTabInheritance>
 import com.google.common.collect.ObjectArrays;
 	</#if>
 </#if>
-${ImportUtils.importRelatedSQLiteAdapters(curr, false, true)}
+${ImportUtils.importRelatedSQLiteAdapters(curr, false, true, false)}
 
 /**
  * ${curr.name?cap_first}ProviderAdapterBase.
@@ -130,11 +126,13 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 
 	@Override
 	public String getType(final Uri uri) {
-		String result = null;
+		String result;
 		final String single =
-				"vnc.android.cursor.item/" + ${project_name?cap_first}Provider.authority + ".";
+				"vnc.android.cursor.item/"
+					+ ${project_name?cap_first}Provider.authority + ".";
 		final String collection =
-				"vnc.android.cursor.collection/" + ${project_name?cap_first}Provider.authority + ".";
+				"vnc.android.cursor.collection/"
+					+ ${project_name?cap_first}Provider.authority + ".";
 
 		int matchedUri = ${project_name?cap_first}ProviderBase
 				.getUriMatcher().match(uri);
@@ -155,6 +153,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				</#if>
 			</#list>
 		</#if>
+			default:
+				result = null;
+				break;
 		}
 
 		return result;
@@ -309,7 +310,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		<#if MetadataUtils.hasToOneRelations(curr)>
 		Cursor ${curr.name?uncap_first}Cursor;
 		</#if>
-		int id = 0;
+		<#if (MetadataUtils.hasToManyRelations(curr))>int id = 0;</#if>
 
 		switch (matchedUri) {
 
@@ -346,7 +347,6 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 			<#list curr.relations as relation>
 				<#if !relation.internal>
 			case ${curr.name?upper_case}_${relation.name?upper_case}:
-				id = Integer.parseInt(uri.getPathSegments().get(1));
 				<#if relation.relation.type == "OneToOne" || relation.relation.type == "ManyToOne">
 				${curr.name?uncap_first}Cursor = this.queryById(uri.getPathSegments().get(1));
 				
@@ -360,6 +360,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					result = ${relation.relation.targetEntity?uncap_first}Adapter.query(${relation.name?uncap_first}Id);
 				}
 				<#else>
+				id = Integer.parseInt(uri.getPathSegments().get(1));
 					<#if relation.relation.type == "ManyToMany">
 				${relation.relation.joinTable}SQLiteAdapter ${relation.name}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 				${relation.name}Adapter.open(this.getDb());
@@ -514,6 +515,14 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	}
 
 	<#if inherited && joinedInheritance>
+	/**
+	 * Extract the content values for this entity.
+	 * (in case of joined inheritance)
+	 *
+	 * @param from The content values containing all the values 
+	 *	(superclasses + children)
+	 * @return the content values of this entity
+	 */
 	protected ContentValues extractContentValues(ContentValues from) {
 		ContentValues to = new ContentValues();
 		for (String colName : ${curr.name}SQLiteAdapter.COLS) {
@@ -524,6 +533,14 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		return to;
 	}
 
+	/**
+	 * Transfer a column from a contentvalue to another one.
+	 *
+	 * @param from The source content value
+	 * @param to The destination contentvalue
+	 * @param colName The name of the column to transfer
+	 * @param keep if false, delete it from the old contentvalue
+	 */
 	protected void transfer(ContentValues from,
 			ContentValues to,
 			String colName,
@@ -534,6 +551,14 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		}
 	}
 
+	/**
+	 * Transform a cursor of ids into a Criteria.
+	 *
+	 * @param cursor The cursor
+	 * @param key The key to map the ids to
+	 *
+	 * @return The criteria
+	 */
 	protected CriteriasBase cursorToIDSelection(Cursor cursor, String key) {
 		${curr.name}Criterias crit = new ${curr.name}Criterias(GroupType.AND);
 		Criteria inCrit = new Criteria();
@@ -562,6 +587,12 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	}
 
 	<#if (hasIds)>
+	/**
+	 * Query by ID.
+	 *
+	 * @param id The id of the entity to retrieve
+	 * @return The cursor
+	 */
 	private Cursor queryById(String id) {
 		Cursor result = null;
 		String selection = ${curr_ids[0].owner}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr_ids[0].name)}
