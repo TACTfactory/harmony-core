@@ -92,10 +92,7 @@ public class EntityGenerator extends BaseGenerator {
 			ConsoleUtils.display(">>> Decorate " + classMeta.getName());
 
 			final File entityFile = TactFileUtils.getFile(filepath);
-			if (entityFile.getAbsolutePath().contains("Category")) {
-				int i =0;
-				i++;
-			}
+			
 			if (entityFile.exists()) {
 				// Load the file once in a String buffer
 				final StringBuffer fileString = 
@@ -185,6 +182,19 @@ public class EntityGenerator extends BaseGenerator {
 	}
 	
 	/**
+	 * Import parcelable in the class if it doesn't already.
+	 * @param fileString The stringbuffer containing the class java code
+	 * @param classMeta The Metadata containing the infos on the java class
+	 */
+	protected final void addImportArrayList(final StringBuffer fileString,
+			final ClassMetadata classMeta) {
+		this.addImport(fileString,
+				classMeta,
+				"ArrayList",
+				"java.util.ArrayList");
+	}
+	
+	/**
 	 * Import serializable in the class if it doesn't already.
 	 * @param fileString The stringbuffer containing the class java code
 	 * @param classMeta The Metadata containing the infos on the java class
@@ -207,6 +217,8 @@ public class EntityGenerator extends BaseGenerator {
 			fileString.insert(
 					insertPos, 
 					"\rimport " + classPackage + ";\r");
+			
+			classMeta.getImports().add(className);
 		}
 	}
 
@@ -248,6 +260,13 @@ public class EntityGenerator extends BaseGenerator {
 									field.getName()));
 
 					this.generateMethod(fileString, field, this.setterTemplate);
+				}
+				
+				// Import ArrayList if relation
+				if (field.getRelation() != null 
+					&& (field.getRelation().getType().equals("ManyToMany")
+						|| field.getRelation().getType().equals("OneToMany"))) {
+					this.addImportArrayList(fileString, classMeta);
 				}
 			}
 		}
