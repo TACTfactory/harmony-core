@@ -4,7 +4,7 @@
 <#assign hasTime=false />
 <#assign hasDate=false />
 <#assign hasInternalFields = false />
-<#list curr.relations as relation><#if (relation.internal)><#assign hasInternalFields = true /></#if></#list>
+<#list (curr_relations) as relation><#if (relation.internal)><#assign hasInternalFields = true /></#if></#list>
 <#assign hasDate = MetadataUtils.hasDate(curr) />
 <#assign hasTime = MetadataUtils.hasTime(curr) />
 <#assign hasDateTime = MetadataUtils.hasDateTime(curr) />
@@ -173,7 +173,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		+ ${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)} + " ${curr.inheritance.discriminatorColumn.schema}<#if (curr.inheritance.subclasses?size > 0)>,</#if>"<#elseif MetadataUtils.hasRelationOrIds(curr, false)>,"<#else>"</#if>
 		<#if (singleTabInheritance)><#list curr.inheritance.subclasses as subclass>+ ${subclass.name}SQLiteAdapter.getSchema()<#if subclass_has_next || MetadataUtils.hasRelationOrIds(curr, false)> + ","</#if></#list></#if>
 <#if (curr.relations??)>
-	<#list curr.relations as relation>
+	<#list (curr.relations) as relation>
 		<#if (relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne")>
 		<#if (lastRelation??)>${lastRelation},"</#if>
 			<#assign lastRelation=" + \"FOREIGN KEY(\" + " + NamingUtils.alias(relation.name)
@@ -235,11 +235,11 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	<#if (hasInternalFields)>
 	/** Convert ${curr.name} entity to Content Values for database.
 	 *
-	 * @param item ${curr.name} entity object<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>
+	 * @param item ${curr.name} entity object<#list (curr_relations) as relation><#if relation.relation.type=="ManyToOne" && relation.internal>
 	 * @param ${relation.relation.targetEntity?lower_case}Id ${relation.relation.targetEntity?lower_case} id</#if></#list>
 	 * @return ContentValues object
 	 */
-	public ContentValues itemToContentValues(final ${curr.name} item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>,
+	public ContentValues itemToContentValues(final ${curr.name} item<#list (curr_relations) as relation><#if relation.relation.type=="ManyToOne" && relation.internal>,
 				int ${relation.relation.targetEntity?lower_case}Id</#if></#list>) {
 		final ContentValues result = this.itemToContentValues(item);
 	<#list curr_fields as field>
@@ -318,7 +318,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		final ${curr.name} result = this.cursorToItem(cursor);
 		cursor.close();
 
-		<#list curr.relations as relation>
+		<#list (curr_relations) as relation>
 			<#if (!relation.internal)>
 				<#if (relation.relation.type=="OneToMany")>
 		final ${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter =
@@ -352,8 +352,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	</#if>
 	}
 
-	<#if (curr.relations??)>
-		<#list curr.relations as relation>
+	<#if (curr_relations??)>
+		<#list (curr_relations) as relation>
 			<#if (relation.relation.type=="ManyToOne" | relation.relation.type=="OneToOne")>
 	/**
 	 * Find & read ${curr.name} by ${relation.name}.
@@ -363,7 +363,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	 public Cursor getBy${relation.name?cap_first}(final int ${relation.name?lower_case}Id, String orderBy) {
 		final Cursor cursor = this.query(ALIASED_COLS,
-				${NamingUtils.alias(relation.name)} + "=?",
+				${relation.owner}SQLiteAdapter.${NamingUtils.alias(relation.name)} + "=?",
 				new String[]{Integer.toString(${relation.name?lower_case}Id)},
 				null,
 				null,
@@ -399,7 +399,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		final ArrayList<${curr.name}> result = this.cursorToItems(cursor);
 		cursor.close();
 	<#if (relations??)>
-		<#list curr.relations as relation>
+		<#list (curr_relations) as relation>
 			<#if (relation.relation.type=="OneToMany")>
 		${relation.relation.targetEntity}SQLiteAdapter adapt${relation.relation.targetEntity} =
 				new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
@@ -442,7 +442,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		}
 
 		final ContentValues values =
-				this.itemToContentValues(item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
+				this.itemToContentValues(item<#list (curr_relations) as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 	<#if (singleTabInheritance && !isTopMostSuperClass)>
 	<#list curr_ids as id>
 		values.remove(${id.owner?cap_first}SQLiteAdapter.${NamingUtils.alias(id.name)});
@@ -467,7 +467,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					<#if InheritanceUtils.isExtended(curr)>currentValues<#else>values</#if>);
 
 		item.set${curr_ids[0].name?cap_first}((int) newid);
-	<#list curr.relations as relation>
+	<#list (curr_relations) as relation>
 		<#if (relation.relation.type=="ManyToMany")>
 
 			${relation.relation.joinTable}SQLiteAdapterBase ${relation.name?uncap_first}Adapter =
@@ -582,7 +582,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		}
 
 		final ContentValues values =
-				this.itemToContentValues(item<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
+				this.itemToContentValues(item<#list (curr_relations) as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 		<#if (singleTabInheritance && !isTopMostSuperClass)>
 		final String whereClause =
 				<#list curr_ids as id> ${id.owner}SQLiteAdapter.${NamingUtils.alias(id.name)}
@@ -624,7 +624,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	</#if>
 	}
 
-	<#list curr.relations as relation>
+	<#list (curr_relations) as relation>
 		<#if (relation.relation.type=="ManyToOne" && relation.internal)>
 
 	/**
@@ -642,7 +642,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		}
 
 		ContentValues values =
-				this.itemToContentValues(item<#list curr.relations as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>,
+				this.itemToContentValues(item<#list (curr_relations) as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>,
 							${relation.relation.targetEntity?lower_case}Id<#else>, 0</#if></#if></#list>);
 		String whereClause =
 				<#list curr_ids as id> ${NamingUtils.alias(id.name)}
@@ -703,7 +703,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		}
 
-		ContentValues values = this.itemToContentValues(item<#list curr.relations as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>,
+		ContentValues values = this.itemToContentValues(item<#list (curr_relations) as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>,
 				${relation.relation.targetEntity?lower_case}Id<#else>,
 				0</#if></#if></#list>);
 	<#list curr_ids as id>
@@ -713,7 +713,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			null,
 			values);
 
-	<#list curr.relations as relation>
+	<#list (curr_relations) as relation>
 		<#if (relation.relation.type=="ManyToMany")>
 
 		${relation.relation.joinTable}SQLiteAdapter ${relation.name?uncap_first}Adapter =
@@ -905,7 +905,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 <#if sync>
 	@Override
 	public void completeEntityRelationsServerId(${curr.name} item) {
-		<#list curr.relations as relation>
+		<#list (curr_relations) as relation>
 			<#if !relation.internal>
 				<#if relation.relation.type == "ManyToMany">
 		${relation.relation.joinTable}SQLiteAdapter ${relation.name}Adapter = 
@@ -931,7 +931,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 </#if>
 
 <#if (curr.internal)>
-	<#--<#list curr.relations as relation>
+	<#--<#list (curr_relations) as relation>
 	/**
 	 * get${relation.type}s.
 	 * @param id id

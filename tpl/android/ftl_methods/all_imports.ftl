@@ -14,11 +14,14 @@
 	<#if joinedInheritance>
 		<#assign curr_ids = entities[curr.inheritance.superclass.name].ids />
 		<#assign curr_fields = curr.fields?values + entities[curr.inheritance.superclass.name].ids />
+		<#assign curr_relations = curr.relations + entities[curr.inheritance.superclass.name].relations />
 	<#elseif (singleTabInheritance && curr.inheritance.superclass??)>
 		<#assign curr_ids = entities[curr.inheritance.superclass.name].ids />
 		<#assign curr_fields = curr.fields?values />
+		<#assign curr_relations = curr.relations />
 	<#else>
 		<#assign curr_ids = curr.ids />
 		<#assign curr_fields = curr.fields?values />
+		<#assign curr_relations = curr.relations />
 	</#if>
 </#if>
