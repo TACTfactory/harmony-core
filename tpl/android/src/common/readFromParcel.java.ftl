@@ -19,6 +19,7 @@
 					<#elseif field.type?lower_case == "datetime">
 		this.set${field.name?cap_first}(new DateTime(parc.readString()));
 					<#elseif (field.harmony_type?lower_case == "enum")>
+
 		int ${field.name}Bool = parc.readInt();
 		if (${field.name}Bool == 1) {
 						<#assign enumType = enums[field.type] />
@@ -36,8 +37,10 @@
 					</#if>
 				<#else>
 					<#if field.relation.type == "OneToOne" || field.relation.type == "ManyToOne">
+
 		this.set${field.name?cap_first}((${field.type}) parc.readParcelable(${field.type}.class.getClassLoader()));
 					<#else>
+
 		int nb${field.name?cap_first} = parc.readInt();
 		if (nb${field.name?cap_first} > -1) {
 			ArrayList<${field.relation.targetEntity}> items =
