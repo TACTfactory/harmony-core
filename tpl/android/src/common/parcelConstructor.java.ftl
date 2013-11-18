@@ -8,8 +8,10 @@
 		<#list curr.fields?values as field>
 			<#if !field.internal>
 				<#if !field.relation??>
-					<#if field.type == "int" || field.type == "Integer">
+					<#if field.type == "int" || field.type == "Integer">					
 		this.set${field.name?cap_first}(parc.readInt());
+					<#elseif field.type?lower_case == "boolean">
+		this.set${field.name?cap_first}(parc.readInt() == 1);
 					<#elseif field.type == "String">
 		this.set${field.name?cap_first}(parc.readString());
 					<#elseif field.type?lower_case == "datetime">
