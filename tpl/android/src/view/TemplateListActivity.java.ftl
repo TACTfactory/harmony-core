@@ -35,7 +35,6 @@ public class ${curr.name}ListActivity
 	
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onPostCreate(savedInstanceState);
 
 		
@@ -63,19 +62,11 @@ public class ${curr.name}ListActivity
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.activity_${curr.name?lower_case}_list);
-
-		// Google Analytics
-		//GoogleAnalyticsSessionManager.getInstance(getApplication())
-		//.incrementActivityCount();
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-
-		// Google Analytics
-		/*GoogleAnalyticsTracker.getInstance().dispatch();
-        GoogleAnalyticsSessionManager.getInstance().decrementActivityCount();*/
 	}
 
 	@Override
