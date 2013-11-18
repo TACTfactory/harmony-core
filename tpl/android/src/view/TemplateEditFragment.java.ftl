@@ -6,7 +6,7 @@
 <#assign hasTime = FieldsUtils.hasTime(fields?values) />
 <#assign hasDateTime = FieldsUtils.hasDateTime(fields?values) />
 <#assign hasToManyRelation=FieldsUtils.hasToManyRelations(fields?values) />
-<#assign hasToOneRelation=FieldsUtils.hasManyToOneRelation(fields?values) />
+<#assign hasToOneRelation=MetadataUtils.hasToOneRelations(curr) />
 <#assign hasRelation=FieldsUtils.hasRelations(fields?values) />
 <@header?interpret />
 package ${curr.controller_namespace};
