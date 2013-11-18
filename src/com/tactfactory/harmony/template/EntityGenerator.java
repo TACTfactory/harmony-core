@@ -40,9 +40,12 @@ public class EntityGenerator extends BaseGenerator {
 
 	/** remove HARD CODED String. */
 	private String setterTemplate = "itemSetter.java";
-	
+
 	/** remove HARD CODED String. */
 	private String writeToParcelTemplate = "writeToParcel.java";
+
+	/** remove HARD CODED String. */
+	private String writeToParcelRegenTemplate = "writeToParcelRegen.java";
 	
 	/** remove HARD CODED String. */
 	private String parcelConstructorTemplate = "parcelConstructor.java";
@@ -52,9 +55,12 @@ public class EntityGenerator extends BaseGenerator {
 	
 	/** remove HARD CODED String. */
 	private String parcelableCreatorTemplate = "parcelable.creator.java";
-	
+
 	/** remove HARD CODED String. */
 	private String describeContentsTemplate = "describeContents.java";
+
+	/** remove HARD CODED String. */
+	private String readFromParcelTemplate = "readFromParcel.java";
 	/** Entities folder. */
 	private String entityFolder;
 
@@ -486,6 +492,15 @@ public class EntityGenerator extends BaseGenerator {
 	protected final void implementParcelable(
 			final StringBuffer fileString,
 			final EntityMetadata classMeta) {
+
+		this.regenerateMethod(fileString,
+				this.writeToParcelRegenTemplate,
+				"writeToParcelRegen(Parcel dest, int flags) {");
+		
+		this.regenerateMethod(fileString,
+				this.readFromParcelTemplate,
+				"readFromParcel(Parcel parc) {");
+		
 		if (!this.alreadyImplementsParcelable(classMeta)) {
 			this.addImplementsParcelable(fileString, classMeta);
 			this.addImportParcelable(fileString, classMeta);
@@ -527,6 +542,78 @@ public class EntityGenerator extends BaseGenerator {
 		} catch (final TemplateException e) {
 			ConsoleUtils.displayError(e);
 		}		
+	}
+	
+	/**
+	 * Generate a get or set method following the given template.
+	 * @param fileString The stringbuffer containing the class java code
+	 * @param templateName The template file name
+	 */
+	protected final void regenerateMethod(final StringBuffer fileString, 
+			final String templateName,
+			final String methodSignature) {
+		final int methodStart = fileString.indexOf(methodSignature);
+		
+		if (methodStart != -1) {
+			final int methodEnd = this.findClosingBracket(fileString,
+						methodStart + (methodSignature.lastIndexOf('{'))) + 1;
+			
+			final int realMethodStart = fileString.toString().lastIndexOf('}',
+					methodStart) + 2;
+		
+			final Map<String, Object> map = this.getDatamodel();
+			
+			try {
+				final StringWriter writer = new StringWriter();
+				
+				final Template tpl = this.getCfg().getTemplate(
+						String.format("%s%s",
+								this.getAdapter().getTemplateSourceCommonPath(),
+								templateName + ".ftl"));
+				// Load template file in engine
+				
+				tpl.process(map, writer);
+				final StringBuffer getString = writer.getBuffer();
+				fileString.replace(
+						realMethodStart,
+						methodEnd,
+						"\n" + getString);
+				
+			} catch (final IOException e) {
+				ConsoleUtils.displayError(e);
+			} catch (final TemplateException e) {
+				ConsoleUtils.displayError(e);
+			}		
+
+		} else {
+			this.generateMethod(fileString, templateName);
+		}
+	}
+	
+	/**
+	 * Returns the position of the corresponding closing bracket.
+	 * @param fileString The file to parse
+	 * @param openingBracketIndex The opening bracket
+	 * @return The position
+	 */
+	private int findClosingBracket(final StringBuffer fileString,
+			final int openingBracketIndex) {
+		final String file = fileString.toString();
+		int i;
+		int bracketCounter = 0;
+		for (i = openingBracketIndex; i < file.length(); i++) {
+			if (file.charAt(i) == '{') {
+				bracketCounter++;
+			} else if (file.charAt(i) == '}') {
+				bracketCounter--;
+			}
+			
+			if (bracketCounter == 0) {
+				break;
+			}
+		}
+		
+		return i;
 	}
 	
 	/**
