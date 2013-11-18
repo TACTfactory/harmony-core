@@ -7,7 +7,7 @@
 					<#if field.type == "int" || field.type == "Integer">
 		dest.writeInt(this.get${field.name?cap_first}());
 					<#elseif field.type?lower_case == "boolean">
-		if (this.get${field.name?cap_first}()) {
+		if (this.is${field.name?cap_first}()) {
 			dest.writeInt(1);
 		} else {
 			dest.writeInt(0);
