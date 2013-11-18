@@ -20,7 +20,6 @@ public abstract class HarmonyListActivity<T extends Parcelable>
 	
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onPostCreate(savedInstanceState);
 
 		
@@ -41,7 +40,6 @@ public abstract class HarmonyListActivity<T extends Parcelable>
 		final Parcelable item = (Parcelable) l.getItemAtPosition(position);
 		if (this.dualMode) {
 			this.listFragment.getListView().setItemChecked(position, true);
-			//v.setSelected(true);
 			v.setActivated(true);
 			this.loadDetailFragment(item);
 			

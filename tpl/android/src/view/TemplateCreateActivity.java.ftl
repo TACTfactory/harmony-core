@@ -18,18 +18,10 @@ public class ${curr.name}CreateActivity extends HarmonyFragmentActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		this.setContentView(R.layout.activity_${curr.name?lower_case}_create);
-
-		// Google Analytics
-		//GoogleAnalyticsSessionManager.getInstance(getApplication())
-		//        	.incrementActivityCount();
 	}
 
 	@Override
 	protected void onDestroy() {
 		super.onDestroy();
-
-		// Google Analytics
-		/*GoogleAnalyticsTracker.getInstance().dispatch();
-        GoogleAnalyticsSessionManager.getInstance().decrementActivityCount();*/
 	}
 }
