@@ -54,5 +54,5 @@
 	    android:layout_height="match_parent"
 	    android:gravity="center"
 	    android:visibility="gone"
-	    android:text="No ${curr.name} to display" />
+	    android:text="@string/${curr.name?lower_case}_not_found" />
 </RelativeLayout>
