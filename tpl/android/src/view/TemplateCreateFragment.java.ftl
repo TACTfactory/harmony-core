@@ -10,9 +10,9 @@
 <#assign hasRelation=FieldsUtils.hasRelations(fields?values) />
 <@header?interpret />
 package ${curr.controller_namespace};
-<#if (hasRelation)>
-import java.util.ArrayList;
-</#if>
+
+<#if (hasRelation)>import java.util.ArrayList;</#if>
+
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
