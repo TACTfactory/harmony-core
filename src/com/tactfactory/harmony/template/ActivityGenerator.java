@@ -456,6 +456,12 @@ public class ActivityGenerator extends BaseGenerator {
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_load",
 				entityName + " loading error…",
 				Group.MODEL);
+		
+
+		TranslationMetadata.addDefaultTranslation(
+				entityName.toLowerCase(Locale.ENGLISH) + "_not_found",
+				"No " + entityName + " found to display…",
+				Group.MODEL);
 	}
 
 	/** Edit Action.
