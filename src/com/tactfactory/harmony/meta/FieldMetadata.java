@@ -87,49 +87,53 @@ public class FieldMetadata extends BaseMetadata {
 	 * @param componentName The component name
 	 */
 	public final void makeString(final String componentName) {
-		final String key =
-				this.owner.getName().toLowerCase()
-				+ "_"
-				+ this.getName().toLowerCase();
+		if (!this.hidden) {
+			final String key =
+					this.owner.getName().toLowerCase()
+					+ "_"
+					+ this.getName().toLowerCase();
+			
+			if (this.harmonyType != null) {
+				final boolean isDate =
+						this.harmonyType.equals(Type.DATE.getValue());
+				final boolean isTime =
+						this.harmonyType.equals(Type.TIME.getValue());
+				final boolean isDateTime =
+						this.harmonyType.equals(Type.DATETIME.getValue());
 		
-		if (this.harmonyType != null) {
-			final boolean isDate = this.harmonyType.equals(Type.DATE.getValue());
-			final boolean isTime = this.harmonyType.equals(Type.TIME.getValue());
-			final boolean isDateTime =
-					this.harmonyType.equals(Type.DATETIME.getValue());
-	
-			if (isDate || isDateTime || isTime) {
-				final String formatKey = "%s_%s_title";
-				final String formatTitle = "Select %s %s";
-				if (isDate || isDateTime) {
-					TranslationMetadata.addDefaultTranslation(
+				if (isDate || isDateTime || isTime) {
+					final String formatKey = "%s_%s_title";
+					final String formatTitle = "Select %s %s";
+					if (isDate || isDateTime) {
+						TranslationMetadata.addDefaultTranslation(
 							String.format(formatKey, key, Type.DATE.getValue()),
 							String.format(formatTitle,
 									this.getName(),
 									Type.DATE.getValue()),
 							Group.MODEL);
-				}
-	
-				if (isTime || isDateTime) {
-					TranslationMetadata.addDefaultTranslation(
+					}
+		
+					if (isTime || isDateTime) {
+						TranslationMetadata.addDefaultTranslation(
 							String.format(formatKey, key, Type.TIME.getValue()),
 							String.format(formatTitle,
 									this.getName(),
 									Type.TIME.getValue()),
 							Group.MODEL);
+					}
 				}
 			}
-		}
-		
-		TranslationMetadata.addDefaultTranslation(
-					key + "_" + componentName.toLowerCase(Locale.ENGLISH),
-					this.getName(),
+			
+			TranslationMetadata.addDefaultTranslation(
+						key + "_" + componentName.toLowerCase(Locale.ENGLISH),
+						this.getName(),
+						Group.MODEL);
+	
+			TranslationMetadata.addDefaultTranslation(
+					key + "_invalid_field_error",
+					"Field " + this.getName() + " is invalid.",
 					Group.MODEL);
-
-		TranslationMetadata.addDefaultTranslation(
-				key + "_invalid_field_error",
-				"Field " + this.getName() + " is invalid.",
-				Group.MODEL);
+		}
 	}
 
 	/**
