@@ -388,7 +388,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 					int ${field.name}Id = ${field.name}Cursor.getInt(
 							${field.name}Cursor.getColumnIndex(
 									${field.relation.targetEntity}SQLiteAdapter.COL_ID));
-					for (${field.relation.targetEntity} categories : this.categoriesList) {
+					for (${field.relation.targetEntity} ${field.name} : this.${field.name}List) {
 						if (${field.name}.getId() == ${field.name}Id) {
 							this.associated${field.name?cap_first}List.add(${field.name});
 						}
