@@ -18,7 +18,7 @@
 			android:padding="10dp"
 			android:gravity="center"
 			android:text="@string/${curr.name?lower_case}_empty_list" />
-	    <${project_namespace}.harmony.widget.pinnedheader.headerlist.PinnedHeaderListView
+	    <com.google.android.pinnedheader.headerlist.PinnedHeader
 			android:id="@android:id/list"
 			android:isScrollContainer="true"
 			android:scrollbars="vertical"
