@@ -17,7 +17,9 @@
 					<#elseif field.type == "String">
 		this.set${field.name?cap_first}(parc.readString());
 					<#elseif field.type?lower_case == "datetime">
-		this.set${field.name?cap_first}(new DateTime(parc.readString()));
+		if (parc.readInt() == 1) {
+			this.set${field.name?cap_first}(new DateTime(parc.readString()));
+		}
 					<#elseif (field.harmony_type?lower_case == "enum")>
 		int ${field.name}Bool = parc.readInt();
 		if (${field.name}Bool == 1) {

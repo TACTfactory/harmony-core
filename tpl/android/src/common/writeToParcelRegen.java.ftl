@@ -22,11 +22,11 @@
 					<#elseif field.type == "String">
 		dest.writeString(this.get${field.name?cap_first}());
 					<#elseif field.type?lower_case == "datetime">
-
 		if (this.get${field.name?cap_first}() != null) {
+			dest.writeInt(1);
 			dest.writeString(this.get${field.name?cap_first}().toString());
 		} else {
-			dest.writeString(null);
+			dest.writeInt(0);
 		}
 					<#elseif (field.harmony_type?lower_case == "enum")>		
 
