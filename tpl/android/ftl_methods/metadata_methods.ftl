@@ -109,7 +109,7 @@
 </#function>
 <#function isOnlyDependantOf entity entity_list>
 	<#list ViewUtils.getAllRelations(entity) as rel>
-		<#if rel.relation.type=="ManyToOne">
+		<#if rel.relation.type=="ManyToOne" || rel.relation.type=="OneToOne">
 			<#if !Utils.isInArray(entity_list, rel.relation.targetEntity)>
 				<#return false />
 			</#if>
