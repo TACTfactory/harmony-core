@@ -8,6 +8,7 @@
  */
 package com.tactfactory.harmony.parser;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import com.google.common.base.Strings;
@@ -44,10 +45,23 @@ public class ClassCompletor {
 	 * Complete classes.
 	 */
 	public final void execute() {
+		/** Remove non-existing classes. */
+		ArrayList<EntityMetadata> nonParsed = new ArrayList<EntityMetadata>();
+		for (final EntityMetadata classMeta : this.metas.values()) {
+			if (!classMeta.hasBeenParsed()) {
+				nonParsed.add(classMeta);
+			}
+		}
+		for (final EntityMetadata classMeta : nonParsed) {
+			this.metas.remove(classMeta.getName());
+		}
+		
+		/** Update column definitions for entities. */
 		for (final EntityMetadata classMeta : this.metas.values()) {
 			this.updateColumnDefinition(classMeta);
 		}
 		
+		/** Update column definitions for enums. */
 		for (final EnumMetadata enumMeta : this.enumMetas.values()) {
 			this.updateColumnDefinition(enumMeta);
 		}

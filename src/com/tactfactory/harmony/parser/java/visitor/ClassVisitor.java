@@ -41,7 +41,6 @@ import com.tactfactory.harmony.annotation.DiscriminatorColumn;
 import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
 import com.tactfactory.harmony.annotation.DiscriminatorIdentifier;
 import com.tactfactory.harmony.annotation.Entity;
-import com.tactfactory.harmony.annotation.Index;
 import com.tactfactory.harmony.annotation.InheritanceType;
 import com.tactfactory.harmony.annotation.OrderBys;
 import com.tactfactory.harmony.annotation.Table;
@@ -65,9 +64,6 @@ public class ClassVisitor {
 	
 	private static final String ANNOTATION_TABLE 		=
 			PackageUtils.extractNameEntity(Table.class);
-	
-	private static final String ANNOTATION_INDEX 		=
-			PackageUtils.extractNameEntity(Index.class);
 
 	private static final String ANNOTATION_INHERITANCE_TYPE	=
 			PackageUtils.extractNameEntity(InheritanceType.class);
@@ -146,6 +142,8 @@ public class ClassVisitor {
 	    	result.setName(PackageUtils.extractNameEntity(
 	    			classDeclaration.getName()));
     	}
+    	
+    	result.setParsed(true);
     	
     	// Debug Log
     	ConsoleUtils.displayDebug("Found class : " +  result.getName());

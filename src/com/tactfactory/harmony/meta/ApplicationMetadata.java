@@ -199,24 +199,25 @@ public final class ApplicationMetadata extends BaseMetadata {
 		final Map<String, Object> entitiesMap = new HashMap<String, Object>();
 
 		// Make Map for entities
-		for (final ClassMetadata cm : this.classes.values()) {
-			classesMap.put(cm.getName(), cm.toMap(adapt));
-
-			if (cm instanceof EntityMetadata) {
-				entitiesMap.put(cm.getName(), cm.toMap(adapt));
-				if (!((EntityMetadata) cm).isInternal()) {
-					((EntityMetadata) cm).makeString("label");
-				}
-			} else
-
-			if (cm instanceof EnumMetadata) {
-				enumsMap.put(cm.getName(), cm.toMap(adapt));
-			} else
-
-			if (cm instanceof InterfaceMetadata) {
-				interfacesMap.put(cm.getName(), cm.toMap(adapt));
+		for (final ClassMetadata classMeta : this.classes.values()) {
+			classesMap.put(classMeta.getName(), classMeta.toMap(adapt));
+		}
+		
+		for (final EntityMetadata entityMeta : this.entities.values()) {
+			entitiesMap.put(entityMeta.getName(), entityMeta.toMap(adapt));
+			if (!entityMeta.isInternal()) {
+				entityMeta.makeString("label");
 			}
+		}
 
+		for (final EnumMetadata enumMeta : this.enums.values()) {
+			enumsMap.put(enumMeta.getName(), enumMeta.toMap(adapt));
+		}
+		
+		for (final InterfaceMetadata interfaceMeta 
+				: this.interfaces.values()) {
+			interfacesMap.put(interfaceMeta.getName(),
+					interfaceMeta.toMap(adapt));
 		}
 
 		// Add root
