@@ -48,7 +48,7 @@ public class ClassCompletor {
 		/** Remove non-existing classes. */
 		ArrayList<EntityMetadata> nonParsed = new ArrayList<EntityMetadata>();
 		for (final EntityMetadata classMeta : this.metas.values()) {
-			if (!classMeta.hasBeenParsed()) {
+			if (!classMeta.hasBeenParsed() && !classMeta.isInternal()) {
 				nonParsed.add(classMeta);
 			}
 		}
