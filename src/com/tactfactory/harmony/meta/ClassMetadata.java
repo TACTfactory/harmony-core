@@ -47,6 +47,9 @@ public class ClassMetadata extends BaseMetadata {
 	
 	/** Inheritance mode if any. */
 	private InheritanceMetadata inheritanceMeta;
+	
+	/** Has this class been parsed by harmony ? */
+	private boolean hasBeenParsed = false;
 
 
 	/**
@@ -227,5 +230,30 @@ public class ClassMetadata extends BaseMetadata {
 	 */
 	public final void setOuterClass(String outerClass) {
 		this.outerClass = outerClass;
+	}
+	
+	/**
+	 * Removes given field from this class.
+	 * @param field The field to remove
+	 */
+	public void removeField(FieldMetadata field) {
+		field.setOwner(null);
+		this.fields.remove(field.getName());
+	}
+	
+	/**
+	 * Sets this class parsed.
+	 * @param parsed True of parsed
+	 */
+	public void setParsed(boolean parsed) {
+		this.hasBeenParsed = parsed;
+	}
+	
+	/**
+	 * Has this class been parsed ?
+	 * @return true if parsed
+	 */
+	public boolean hasBeenParsed() {
+		return this.hasBeenParsed;
 	}
 }

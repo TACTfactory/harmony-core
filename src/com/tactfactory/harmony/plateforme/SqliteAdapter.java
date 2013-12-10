@@ -118,7 +118,25 @@ public abstract class SqliteAdapter {
 				EntityMetadata relatedEntity = field.getRelation().getEntityRef();
 				ArrayList<FieldMetadata> ids = new ArrayList<FieldMetadata>(
 						relatedEntity.getIds().values());
-				type = SqliteAdapter.generateColumnType(ids.get(0));
+				if (ids.size() > 0) {
+					type = SqliteAdapter.generateColumnType(ids.get(0));
+				} else {
+					StringBuilder warning = new StringBuilder();
+					warning.append("Erroneous relation between ");
+					warning.append(field.getOwner().getName());
+					warning.append(".");
+					warning.append(field.getName());
+					warning.append(" AND ");
+					warning.append(relatedEntity.getName());
+					warning.append(". Entity ");
+					warning.append(relatedEntity.getName());
+					warning.append(" must be an entity and declare an @Id.");
+					ConsoleUtils.displayWarning(warning.toString());
+					
+					field.getOwner().removeField(field);
+					
+					type = "BLOB";
+				}
 			} else {
 				type = field.getType();
 			}
@@ -185,7 +203,9 @@ public abstract class SqliteAdapter {
 		if (type.equalsIgnoreCase(Column.Type.CHARACTER.getValue())) {
 			type = "STRING";
 		} else {
-			ConsoleUtils.display("No type found for " + type);
+			ConsoleUtils.displayWarning("No type found for " + type 
+					+ " in entity " + field.getOwner().getName());
+			type = "BLOB";
 		}
 		
 		return type;

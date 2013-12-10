@@ -217,4 +217,11 @@ public class EntityMetadata extends ClassMetadata {
 			
 		return result;
 	}
+	
+	@Override
+	public final void removeField(FieldMetadata field) {
+		super.removeField(field);
+		this.relations.remove(field.getName());
+		this.ids.remove(field.getName());
+	}
 }
