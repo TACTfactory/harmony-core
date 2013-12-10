@@ -450,7 +450,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	</#list>		
 	<#else>
 	<#list curr_ids as id>
-		values.remove(${NamingUtils.alias(id.name)});
+		values.remove(${id.owner?cap_first}SQLiteAdapter.${NamingUtils.alias(id.name)});
 	</#list>
 	<#if !InheritanceUtils.isExtended(curr)>
 		int newid;
@@ -597,7 +597,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		return this.motherAdapter.update(values, whereClause, whereArgs);
 		<#else>
 		final String whereClause =
-				<#list curr_ids as id> ${NamingUtils.alias(id.name)}
+				<#list curr_ids as id> ${id.owner?cap_first}SQLiteAdapter.${NamingUtils.alias(id.name)}
 				 + "=? <#if id_has_next>AND </#if>"</#list>;
 		final String[] whereArgs =
 				new String[] {<#list curr_ids as id>String.valueOf(item.get${id.name?cap_first}()) <#if id_has_next>,
@@ -645,7 +645,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				this.itemToContentValues(item<#list (curr_relations) as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>,
 							${relation.relation.targetEntity?lower_case}Id<#else>, 0</#if></#if></#list>);
 		String whereClause =
-				<#list curr_ids as id> ${NamingUtils.alias(id.name)}
+				<#list curr_ids as id> ${id.owner?cap_first}SQLiteAdapter.${NamingUtils.alias(id.name)}
 				 + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs =
 				new String[] {<#list curr_ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>,
@@ -707,7 +707,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				${relation.relation.targetEntity?lower_case}Id<#else>,
 				0</#if></#if></#list>);
 	<#list curr_ids as id>
-		values.remove(${NamingUtils.alias(id.name)});
+		values.remove(${id.owner?cap_first}SQLiteAdapter.${NamingUtils.alias(id.name)});
 	</#list>
 		int newid = (int) this.insert(
 			null,
@@ -775,7 +775,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				whereArgs);
 		<#else>
 		
-		final String whereClause = <#list curr_ids as id> ${NamingUtils.alias(id.name)}
+		final String whereClause = <#list curr_ids as id> ${id.owner?cap_first}SQLiteAdapter.${NamingUtils.alias(id.name)}
 					 + "=? <#if (id_has_next)>AND </#if>"</#list>;
 		final String[] whereArgs = new String[] {<#list curr_ids as id>String.valueOf(${id.name}) <#if (id_has_next)>,
 					</#if></#list>};
@@ -829,7 +829,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				null,
 				null);
 		<#else>
-		final String whereClause = <#list curr_ids as id> ALIASED_${NamingUtils.alias(id.name)}
+		final String whereClause = <#list curr_ids as id> ${id.owner?cap_first}SQLiteAdapter.ALIASED_${NamingUtils.alias(id.name)}
 					 + "=? <#if id_has_next>AND </#if>"</#list>;
 		final String[] whereArgs = new String[] {<#list curr_ids as id>String.valueOf(${id.name}) <#if id_has_next>,
 					</#if></#list>};
