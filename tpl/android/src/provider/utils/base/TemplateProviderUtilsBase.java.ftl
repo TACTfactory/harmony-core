@@ -72,7 +72,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		<#list relations as relation>
 			<#if (relation.relation.type == "OneToMany") >
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
-			String ${relation.name}Selection = ${relation.relation.targetEntity?cap_first}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)} + " IN (";
+			String ${relation.name}Selection = ${entities[relation.relation.targetEntity].ids[0].owner}SQLiteAdapter.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)} + " IN (";
 			String[] ${relation.name}SelectionArgs = new String[item.get${relation.name?cap_first}().size()];
 			for (int i = 0; i < item.get${relation.name?cap_first}().size(); i++) {
 				${relation.name}SelectionArgs[i] = String.valueOf(item.get${relation.name?cap_first}().get(i).get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
@@ -362,7 +362,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 			Criteria crit = new Criteria();
 			ArrayValue values = new ArrayValue();
 			crit.setType(Type.IN);
-			crit.setKey(${relation.relation.targetEntity}SQLiteAdapter.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
+			crit.setKey(${entities[relation.relation.targetEntity].ids[0].owner}SQLiteAdapter.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
 			crit.addValue(values);
 			${relation.name}Crit.add(crit);
 
@@ -472,7 +472,7 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 			Criteria crit = new Criteria();
 			ArrayValue values = new ArrayValue();
 			crit.setType(Type.IN);
-			crit.setKey(${relation.relation.targetEntity}SQLiteAdapter.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
+			crit.setKey(${entities[relation.relation.targetEntity].ids[0].owner}SQLiteAdapter.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
 			crit.addValue(values);
 			${relation.name}Crit.add(crit);
 
