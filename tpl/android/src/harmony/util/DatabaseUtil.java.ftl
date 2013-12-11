@@ -3,6 +3,7 @@ package ${project_namespace}.harmony.util;
 
 import java.io.File;
 
+import android.content.ContentValues;
 import android.content.Context;
 
 import com.google.common.base.Strings;
@@ -74,4 +75,46 @@ public class DatabaseUtil {
 
 	}
 
+	/**
+	 * Extract the content values for this entity.
+	 * (in case of joined inheritance)
+	 *
+	 * @param from The content values containing all the values 
+	 *	(superclasses + children)
+	 * @param columnsToExtract The columns to extract from the values
+	 * @return the content values of this entity
+	 */
+	public static ContentValues extractContentValues(
+			ContentValues from, String[] columnsToExtract) {
+		ContentValues to = new ContentValues();
+		for (String colName : columnsToExtract) {
+			if (from.containsKey(colName)) {
+				DatabaseUtil.transfer(from, to, colName, false);
+			}
+		}
+		return to;
+	}
+
+	/**
+	 * Transfer a column from a contentvalue to another one.
+	 *
+	 * @param from The source content value
+	 * @param to The destination contentvalue
+	 * @param colName The name of the column to transfer
+	 * @param keep if false, delete it from the old contentvalue
+	 */
+	protected static void transfer(ContentValues from,
+			ContentValues to,
+			String colName,
+			boolean keep) {
+		Object fromObject = from.get(colName);
+		if (fromObject instanceof Boolean) {
+			to.put(colName, from.getAsBoolean(colName));
+		} else {
+			to.put(colName, from.getAsString(colName));
+		}
+		if (!keep) {
+			from.remove(colName);
+		}
+	}
 }

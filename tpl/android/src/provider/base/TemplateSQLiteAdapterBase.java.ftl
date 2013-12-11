@@ -49,6 +49,9 @@ import ${project_namespace}.criterias.base.Criteria.Type;
 import ${project_namespace}.criterias.base.CriteriasBase.GroupType;
 import ${project_namespace}.criterias.base.value.SelectValue;
 </#if>
+<#if (InheritanceUtils.isExtended(curr))>
+import ${project_namespace}.harmony.util.DatabaseUtil;
+</#if>
 
 /** ${curr.name} adapter database abstract class. <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project<br/>
@@ -331,7 +334,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter =
 				new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
-		Cursor ${relation.name?lower_case}Cursor = ${relation.relation.joinTable?lower_case}Adapter.getBy${curr.name}(
+		Cursor ${relation.name?lower_case}Cursor = ${relation.relation.joinTable?lower_case}Adapter.getBy${relation.owner}(
 							result.get${curr_ids[0].name?cap_first}(), null);
 		result.set${relation.name?cap_first}(new ${relation.relation.targetEntity}SQLiteAdapter(ctx).cursorToItems(${relation.name?lower_case}Cursor));
 				<#else>
@@ -457,7 +460,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	<#else>
 		this.motherAdapter.open(this.mDatabase);
 		final ContentValues currentValues =
-				this.extractContentValues(values);
+				DatabaseUtil.extractContentValues(values, COLS);
 		int newid = (int) this.motherAdapter.insert(null, values);
 		currentValues.put(${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)}, newid);
 	</#if>
@@ -465,11 +468,15 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			<#if !InheritanceUtils.isExtended(curr)>newid = (int) </#if>this.insert(
 					null,
 					<#if InheritanceUtils.isExtended(curr)>currentValues<#else>values</#if>);
-
+		} else {
+			<#if !InheritanceUtils.isExtended(curr)>newid = (int) </#if>this.insert(
+					${curr_ids[0].owner?cap_first}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)},
+					<#if InheritanceUtils.isExtended(curr)>currentValues<#else>values</#if>);
+		}
 		item.set${curr_ids[0].name?cap_first}((int) newid);
 	<#list (curr_relations) as relation>
 		<#if (relation.relation.type=="ManyToMany")>
-
+		if (item.get${relation.name?cap_first}() != null) {
 			${relation.relation.joinTable}SQLiteAdapterBase ${relation.name?uncap_first}Adapter =
 					new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 			${relation.name?uncap_first}Adapter.open(this.mDatabase);
@@ -477,69 +484,29 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				${relation.name?uncap_first}Adapter.insert(newid,
 						i.get${relation.relation.field_ref[0].name?cap_first}());
 			}
+		}
 		<#elseif (relation.relation.type=="OneToMany")>
+		if (item.get${relation.name?cap_first}() != null) {
 			${relation.relation.targetEntity}SQLiteAdapterBase ${relation.name?uncap_first}Adapter =
 					new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 			${relation.name?uncap_first}Adapter.open(this.mDatabase);
-			if (item.get${relation.name?cap_first}() != null) {
-				for (${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case}
-							: item.get${relation.name?cap_first}()) {
-				<#if (relation.relation.mappedBy?? && !MetadataUtils.getMappedField(relation).internal)>
-					${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
-					${relation.name?uncap_first}Adapter.insertOrUpdate(${relation.relation.targetEntity?lower_case});
-				<#else>
-					${relation.name?uncap_first}Adapter.insertOrUpdateWith${curr.name?cap_first}${relation.name?cap_first}(
-										${relation.relation.targetEntity?lower_case},
-										newid);
-				</#if>
-				}
+			for (${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case}
+						: item.get${relation.name?cap_first}()) {
+			<#if (relation.relation.mappedBy?? && !MetadataUtils.getMappedField(relation).internal)>
+				${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
+				${relation.name?uncap_first}Adapter.insertOrUpdate(${relation.relation.targetEntity?lower_case});
+			<#else>
+				${relation.name?uncap_first}Adapter.insertOrUpdateWith${curr.name?cap_first}${relation.name?cap_first}(
+									${relation.relation.targetEntity?lower_case},
+									newid);
+			</#if>
 			}
+		}
 		</#if>
 	</#list>
-		} else {
-			newid = -1;
-		}
 	</#if>
 		return newid;
 	}
-
-	<#if (InheritanceUtils.isExtended(curr))>
-	/**
-	 * Extract the content values for this entity.
-	 * (in case of joined inheritance)
-	 *
-	 * @param from The content values containing all the values 
-	 *	(superclasses + children)
-	 * @return the content values of this entity
-	 */
-	protected ContentValues extractContentValues(ContentValues from) {
-		ContentValues to = new ContentValues();
-		for (String colName : COLS) {
-			if (from.containsKey(colName)) {
-				this.transfer(from, to, colName, false);
-			}
-		}
-		return to;
-	}
-
-	/**
-	 * Transfer a column from a contentvalue to another one.
-	 *
-	 * @param from The source content value
-	 * @param to The destination contentvalue
-	 * @param colName The name of the column to transfer
-	 * @param keep if false, delete it from the old contentvalue
-	 */
-	protected void transfer(ContentValues from,
-			ContentValues to,
-			String colName,
-			boolean keep) {
-		to.put(colName, from.getAsString(colName));
-		if (!keep) {
-			from.remove(colName);
-		}
-	}
-	</#if>
 
 	/**
 	 * Either insert or update a ${curr.name} entity into database whether.
@@ -605,7 +572,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 
 		<#if (InheritanceUtils.isExtended(curr))>
 		final ContentValues currentValues =
-				this.extractContentValues(values);
+				DatabaseUtil.extractContentValues(values, COLS);
 		this.motherAdapter.update(values, whereClause, whereArgs);
 
 		return this.update(
@@ -725,17 +692,18 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter =
 				new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 		${relation.name?uncap_first}Adapter.open(this.mDatabase);
-		for (${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()) {
-			<#if (relation.relation.mappedBy?? && !MetadataUtils.getMappedField(relation).internal)>
-			${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
-			${relation.name?uncap_first}Adapter.updateWith${curr.name?cap_first}${relation.name?cap_first}(
-					${relation.relation.targetEntity?lower_case});
-			<#else>
-			${relation.name?uncap_first}Adapter.updateWith${curr.name?cap_first}${relation.name?cap_first}(
-					${relation.relation.targetEntity?lower_case}, newid);
-			</#if>
+		if (item.get${relation.name?cap_first}() != null) {
+			for (${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()) {
+				<#if (relation.relation.mappedBy?? && !MetadataUtils.getMappedField(relation).internal)>
+				${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
+				${relation.name?uncap_first}Adapter.update(
+						${relation.relation.targetEntity?lower_case});
+				<#else>
+				${relation.name?uncap_first}Adapter.updateWith${curr.name?cap_first}${relation.name?cap_first}(
+						${relation.relation.targetEntity?lower_case}, newid);
+				</#if>
+			}
 		}
-
 		</#if>
 	</#list>
 
@@ -981,12 +949,12 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return ArrayList of ${rightRelation.relation.targetEntity} matching ${leftRelation.name?lower_case}
 	 */
 	public Cursor getBy${leftRelation.relation.targetEntity}(
-			final int ${leftRelation.name},
+			final int ${leftRelation.name?uncap_first},
 			final String orderBy) {
 
 		Cursor ret = null;
 		${curr.name}Criterias crit = new ${curr.name}Criterias(GroupType.AND);
-		crit.add(ALIASED_${NamingUtils.alias(leftRelation.name)}, String.valueOf(${leftRelation.name}), Type.EQUALS);
+		crit.add(ALIASED_${NamingUtils.alias(leftRelation.name)}, String.valueOf(${leftRelation.name?uncap_first}), Type.EQUALS);
 		SelectValue value = new SelectValue();
 		value.setRefKey(ALIASED_${NamingUtils.alias(rightRelation.name)});
 		value.setRefTable(TABLE_NAME);

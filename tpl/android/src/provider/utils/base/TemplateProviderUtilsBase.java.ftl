@@ -134,9 +134,9 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 	 <#list relations as relation><#if (relation.internal)>* @param ${relation.name?uncap_first}Id ${relation.name?uncap_first} Id</#if></#list>
 	 * @return number of rows affected
 	 */
-	public int insert(final ${curr.name?cap_first} item<#list relations as relation><#if (relation.internal)>,
+	public Uri insert(final ${curr.name?cap_first} item<#list relations as relation><#if (relation.internal)>,
 							 final int ${relation.name?uncap_first}Id</#if></#list>) {
-		int result = -1;
+		Uri result = null;
 		ArrayList<ContentProviderOperation> operations =
 				new ArrayList<ContentProviderOperation>();
 		ContentResolver prov = this.getContext().getContentResolver();
@@ -205,8 +205,11 @@ public class ${curr.name?cap_first}ProviderUtilsBase
 		</#list>
 
 		try {
-			prov.applyBatch(${project_name?cap_first}Provider.authority, operations);
-			result = 0;
+			ContentProviderResult[] results =
+				prov.applyBatch(${project_name?cap_first}Provider.authority, operations);
+			if (results[0] != null) {
+				result = results[0].uri;
+			}
 		} catch (RemoteException e) {
 			Log.e(TAG, e.getMessage());
 		} catch (OperationApplicationException e) {
