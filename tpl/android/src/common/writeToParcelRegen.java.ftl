@@ -7,7 +7,9 @@
 	 * @param flags flags
 	 */
 	public void writeToParcelRegen(Parcel dest, int flags) {
+		<#if curr.inheritance?? && curr.inheritance.superclass??>
 		super.writeToParcelRegen(dest, flags);
+		</#if>
 		<#list curr.fields?values as field>
 			<#if !field.internal>
 				<#if !field.relation??>
