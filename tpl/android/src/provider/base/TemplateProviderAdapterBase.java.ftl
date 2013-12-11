@@ -34,6 +34,9 @@ import com.google.common.collect.ObjectArrays;
 	</#if>
 </#if>
 ${ImportUtils.importRelatedSQLiteAdapters(curr, false, true, false)}
+<#if inherited && joinedInheritance>
+import ${project_namespace}.harmony.util.DatabaseUtil;
+</#if>
 
 /**
  * ${curr.name?cap_first}ProviderAdapterBase.
@@ -269,7 +272,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		int matchedUri = ${project_name?cap_first}ProviderBase
 				.getUriMatcher().match(uri);
 		<#if inherited && joinedInheritance>ContentValues ${curr.name?uncap_first}Values =
-			this.extractContentValues(values);</#if>
+			DatabaseUtil.extractContentValues(values, ${curr.name}SQLiteAdapter.COLS);</#if>
 		Uri result = null;
 		int id = 0;
 		switch (matchedUri) {
@@ -400,7 +403,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 			String[] selectionArgs) {
 		<#if (curr.options.sync??)>values.put(${curr.name}SQLiteAdapter.COL_SYNC_UDATE,
 					new DateTime().toString(ISODateTimeFormat.dateTime()));</#if>
-		<#if inherited && joinedInheritance>ContentValues ${curr.name?uncap_first}Values = this.extractContentValues(values);</#if>
+		<#if inherited && joinedInheritance>ContentValues ${curr.name?uncap_first}Values = DatabaseUtil.extractContentValues(values, ${curr.name}SQLiteAdapter.COLS);</#if>
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher()
 				.match(uri);
 		int result = -1;
@@ -515,42 +518,6 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	}
 
 	<#if inherited && joinedInheritance>
-	/**
-	 * Extract the content values for this entity.
-	 * (in case of joined inheritance)
-	 *
-	 * @param from The content values containing all the values 
-	 *	(superclasses + children)
-	 * @return the content values of this entity
-	 */
-	protected ContentValues extractContentValues(ContentValues from) {
-		ContentValues to = new ContentValues();
-		for (String colName : ${curr.name}SQLiteAdapter.COLS) {
-			if (from.containsKey(colName)) {
-				this.transfer(from, to, colName, false);
-			}
-		}
-		return to;
-	}
-
-	/**
-	 * Transfer a column from a contentvalue to another one.
-	 *
-	 * @param from The source content value
-	 * @param to The destination contentvalue
-	 * @param colName The name of the column to transfer
-	 * @param keep if false, delete it from the old contentvalue
-	 */
-	protected void transfer(ContentValues from,
-			ContentValues to,
-			String colName,
-			boolean keep) {
-		to.put(colName, from.getAsString(colName));
-		if (!keep) {
-			from.remove(colName);
-		}
-	}
-
 	/**
 	 * Transform a cursor of ids into a Criteria.
 	 *
