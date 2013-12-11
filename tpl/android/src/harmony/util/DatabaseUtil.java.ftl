@@ -3,6 +3,7 @@ package ${project_namespace}.harmony.util;
 
 import java.io.File;
 
+import android.content.ContentValues;
 import android.content.Context;
 
 import com.google.common.base.Strings;
