@@ -334,7 +334,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter =
 				new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
-		Cursor ${relation.name?lower_case}Cursor = ${relation.relation.joinTable?lower_case}Adapter.getBy${curr.name}(
+		Cursor ${relation.name?lower_case}Cursor = ${relation.relation.joinTable?lower_case}Adapter.getBy${relation.owner}(
 							result.get${curr_ids[0].name?cap_first}(), null);
 		result.set${relation.name?cap_first}(new ${relation.relation.targetEntity}SQLiteAdapter(ctx).cursorToItems(${relation.name?lower_case}Cursor));
 				<#else>
