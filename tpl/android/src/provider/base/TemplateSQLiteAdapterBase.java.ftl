@@ -984,12 +984,12 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return ArrayList of ${rightRelation.relation.targetEntity} matching ${leftRelation.name?lower_case}
 	 */
 	public Cursor getBy${leftRelation.relation.targetEntity}(
-			final int ${leftRelation.name},
+			final int ${leftRelation.name?uncap_first},
 			final String orderBy) {
 
 		Cursor ret = null;
 		${curr.name}Criterias crit = new ${curr.name}Criterias(GroupType.AND);
-		crit.add(ALIASED_${NamingUtils.alias(leftRelation.name)}, String.valueOf(${leftRelation.name}), Type.EQUALS);
+		crit.add(ALIASED_${NamingUtils.alias(leftRelation.name)}, String.valueOf(${leftRelation.name?uncap_first}), Type.EQUALS);
 		SelectValue value = new SelectValue();
 		value.setRefKey(ALIASED_${NamingUtils.alias(rightRelation.name)});
 		value.setRefTable(TABLE_NAME);
