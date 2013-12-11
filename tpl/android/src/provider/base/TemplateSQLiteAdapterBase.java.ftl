@@ -49,6 +49,9 @@ import ${project_namespace}.criterias.base.Criteria.Type;
 import ${project_namespace}.criterias.base.CriteriasBase.GroupType;
 import ${project_namespace}.criterias.base.value.SelectValue;
 </#if>
+<#if (InheritanceUtils.isExtended(curr))>
+import ${project_namespace}.harmony.util.DatabaseUtil;
+</#if>
 
 /** ${curr.name} adapter database abstract class. <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project<br/>
@@ -457,7 +460,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	<#else>
 		this.motherAdapter.open(this.mDatabase);
 		final ContentValues currentValues =
-				this.extractContentValues(values);
+				DatabaseUtil.extractContentValues(values, COLS);
 		int newid = (int) this.motherAdapter.insert(null, values);
 		currentValues.put(${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)}, newid);
 	</#if>
@@ -504,44 +507,6 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	</#if>
 		return newid;
 	}
-
-	<#if (InheritanceUtils.isExtended(curr))>
-	/**
-	 * Extract the content values for this entity.
-	 * (in case of joined inheritance)
-	 *
-	 * @param from The content values containing all the values 
-	 *	(superclasses + children)
-	 * @return the content values of this entity
-	 */
-	protected ContentValues extractContentValues(ContentValues from) {
-		ContentValues to = new ContentValues();
-		for (String colName : COLS) {
-			if (from.containsKey(colName)) {
-				this.transfer(from, to, colName, false);
-			}
-		}
-		return to;
-	}
-
-	/**
-	 * Transfer a column from a contentvalue to another one.
-	 *
-	 * @param from The source content value
-	 * @param to The destination contentvalue
-	 * @param colName The name of the column to transfer
-	 * @param keep if false, delete it from the old contentvalue
-	 */
-	protected void transfer(ContentValues from,
-			ContentValues to,
-			String colName,
-			boolean keep) {
-		to.put(colName, from.getAsString(colName));
-		if (!keep) {
-			from.remove(colName);
-		}
-	}
-	</#if>
 
 	/**
 	 * Either insert or update a ${curr.name} entity into database whether.
@@ -607,7 +572,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 
 		<#if (InheritanceUtils.isExtended(curr))>
 		final ContentValues currentValues =
-				this.extractContentValues(values);
+				DatabaseUtil.extractContentValues(values, COLS);
 		this.motherAdapter.update(values, whereClause, whereArgs);
 
 		return this.update(
