@@ -285,12 +285,14 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				} else {
 					id = (int) this.adapter.insert(${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)}, ${curr.name?uncap_first}Values);
 				}
-				<#else>
+				<#elseif (hasIds)>
 				if (values.size() > 0) {
 					id = (int) this.adapter.insert(null, values);
 				} else {
 					id = (int) this.adapter.insert(${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)}, values);
 				}
+				<#else>
+				id = (int) this.adapter.insert(null, values);
 				</#if>
 				if (id > 0) {
 					result = ContentUris.withAppendedId(
