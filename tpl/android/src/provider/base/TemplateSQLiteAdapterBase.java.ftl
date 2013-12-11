@@ -465,11 +465,15 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			<#if !InheritanceUtils.isExtended(curr)>newid = (int) </#if>this.insert(
 					null,
 					<#if InheritanceUtils.isExtended(curr)>currentValues<#else>values</#if>);
-
+		} else {
+			<#if !InheritanceUtils.isExtended(curr)>newid = (int) </#if>this.insert(
+					${curr_ids[0].owner?cap_first}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)},
+					<#if InheritanceUtils.isExtended(curr)>currentValues<#else>values</#if>);
+		}
 		item.set${curr_ids[0].name?cap_first}((int) newid);
 	<#list (curr_relations) as relation>
 		<#if (relation.relation.type=="ManyToMany")>
-
+		if (item.get${relation.name?cap_first}() != null) {
 			${relation.relation.joinTable}SQLiteAdapterBase ${relation.name?uncap_first}Adapter =
 					new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 			${relation.name?uncap_first}Adapter.open(this.mDatabase);
@@ -477,28 +481,26 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				${relation.name?uncap_first}Adapter.insert(newid,
 						i.get${relation.relation.field_ref[0].name?cap_first}());
 			}
+		}
 		<#elseif (relation.relation.type=="OneToMany")>
+		if (item.get${relation.name?cap_first}() != null) {
 			${relation.relation.targetEntity}SQLiteAdapterBase ${relation.name?uncap_first}Adapter =
 					new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 			${relation.name?uncap_first}Adapter.open(this.mDatabase);
-			if (item.get${relation.name?cap_first}() != null) {
-				for (${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case}
-							: item.get${relation.name?cap_first}()) {
-				<#if (relation.relation.mappedBy?? && !MetadataUtils.getMappedField(relation).internal)>
-					${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
-					${relation.name?uncap_first}Adapter.insertOrUpdate(${relation.relation.targetEntity?lower_case});
-				<#else>
-					${relation.name?uncap_first}Adapter.insertOrUpdateWith${curr.name?cap_first}${relation.name?cap_first}(
-										${relation.relation.targetEntity?lower_case},
-										newid);
-				</#if>
-				}
+			for (${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case}
+						: item.get${relation.name?cap_first}()) {
+			<#if (relation.relation.mappedBy?? && !MetadataUtils.getMappedField(relation).internal)>
+				${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
+				${relation.name?uncap_first}Adapter.insertOrUpdate(${relation.relation.targetEntity?lower_case});
+			<#else>
+				${relation.name?uncap_first}Adapter.insertOrUpdateWith${curr.name?cap_first}${relation.name?cap_first}(
+									${relation.relation.targetEntity?lower_case},
+									newid);
+			</#if>
 			}
+		}
 		</#if>
 	</#list>
-		} else {
-			newid = -1;
-		}
 	</#if>
 		return newid;
 	}
