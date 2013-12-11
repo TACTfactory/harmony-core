@@ -18,7 +18,7 @@
 			android:padding="10dp"
 			android:gravity="center"
 			android:text="@string/${curr.name?lower_case}_empty_list" />
-	    <com.google.android.pinnedheader.headerlist.PinnedHeader
+	    <com.google.android.pinnedheader.headerlist.PinnedHeaderListView
 			android:id="@android:id/list"
 			android:isScrollContainer="true"
 			android:scrollbars="vertical"
