@@ -90,6 +90,8 @@
 	<#return false />
 </#function>
 
+
+
 <#function hasOnlyRecursiveRelations entity>
 	<#list ViewUtils.getAllRelations(entity) as relation>
 		<#if relation.relation.targetEntity!=entity.name>
@@ -108,10 +110,22 @@
 	<#return ret />
 </#function>
 <#function isOnlyDependantOf entity entity_list>
+	<#if (entity.inheritance?? && entity.inheritance.superclass??)>
+		<#if !(Utils.isInArray(entity_list, entity.inheritance.superclass.name))>
+			<#return false />
+		</#if>
+	</#if>
 	<#list ViewUtils.getAllRelations(entity) as rel>
-		<#if rel.relation.type=="ManyToOne" || rel.relation.type=="OneToOne">
-			<#if !Utils.isInArray(entity_list, rel.relation.targetEntity)>
+		<#if ((rel.relation.type=="ManyToOne" || rel.relation.type=="OneToOne") && !rel.nullable)>
+			<#if !(Utils.isInArray(entity_list, rel.relation.targetEntity))>
 				<#return false />
+			</#if>
+			<#if (entities[rel.relation.targetEntity].inheritance?? && entities[rel.relation.targetEntity].inheritance.subclasses??)>
+				<#list entities[rel.relation.targetEntity].inheritance.subclasses as subclass>
+					<#if !(Utils.isInArray(entity_list, subclass.name))>
+						<#return false />
+					</#if>
+				</#list>
 			</#if>
 		</#if>
 	</#list>
@@ -133,6 +147,8 @@
 	</#list>
 	<#return ret>
 </#function>
+
+
 
 <#function isPrimitive field>
 	<#if (field.type == "int" ||
