@@ -345,4 +345,48 @@ public abstract class ${project_name?cap_first}ApplicationBase
 
 		return result;
 	}
+
+	/**
+	 * Gets the device type associated to this context.
+	 */
+	public static DeviceType getDeviceType(Context context) {
+		return DeviceType.fromValue(context.getString(R.string.device_type));
+	}
+
+	/**
+	 * Enum for device type. (phone, tablet, tv, etc.)
+	 */
+	public enum DeviceType {
+		PHONE("phone"),
+		TABLET("tablet"),
+		TV("tv"),
+		WATCH("watch"),
+		GLASS("glass");
+
+		/** String value as in configs.xml */
+		private String configValue;
+
+		/**
+		 * Constructor.
+		 *
+		 * @param configValue The string value as in configs.xml.
+		 */
+		private DeviceType(String configValue) {
+			this.configValue = configValue;
+		}
+
+		/**
+		 * Gets the device type corresponding to the given string.
+		 */
+		public static DeviceType fromValue(String configValue) {
+			DeviceType result = null;
+			for (DeviceType deviceType : DeviceType.values()) {
+				if (deviceType.configValue.equals(configValue)) {
+					result = deviceType;
+					break;
+				}
+			}
+			return result;
+		}
+	}
 }
