@@ -11,6 +11,7 @@ package ${fixture_namespace};
 <#list curr.relations as relation>
 	<#if relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany" || (relation.relation.type == "ManyToOne" && MetadataUtils.getInversingField(relation)??) >
 import java.util.ArrayList;
+import java.util.List;
 	<#break>
 	</#if>
 </#list>
