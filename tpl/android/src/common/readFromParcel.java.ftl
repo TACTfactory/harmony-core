@@ -7,6 +7,7 @@
 	 * @param parc The parcel to read from
 	 */
 	public void readFromParcel(Parcel parc) {
+		super.readFromParcel(parc);
 		<#list curr.fields?values as field>
 			<#if !field.internal>
 				<#if !field.relation??>

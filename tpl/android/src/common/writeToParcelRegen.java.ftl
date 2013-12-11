@@ -7,6 +7,7 @@
 	 * @param flags flags
 	 */
 	public void writeToParcelRegen(Parcel dest, int flags) {
+		super.writeToParcelRegen(dest, flags);
 		<#list curr.fields?values as field>
 			<#if !field.internal>
 				<#if !field.relation??>
