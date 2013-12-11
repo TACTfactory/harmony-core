@@ -280,9 +280,17 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						values);
 				int newId = Integer.parseInt(newUri.getPathSegments().get(1));
 				${curr.name?uncap_first}Values.put(${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)}, newId);
-				id = (int) this.adapter.insert(null, ${curr.name?uncap_first}Values);
+				if (${curr.name?uncap_first}Values.size() > 0) {
+					id = (int) this.adapter.insert(null, ${curr.name?uncap_first}Values);
+				} else {
+					id = (int) this.adapter.insert(${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)}, ${curr.name?uncap_first}Values);
+				}
 				<#else>
-				id = (int) this.adapter.insert(null, values);
+				if (values.size() > 0) {
+					id = (int) this.adapter.insert(null, values);
+				} else {
+					id = (int) this.adapter.insert(${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)}, values);
+				}
 				</#if>
 				if (id > 0) {
 					result = ContentUris.withAppendedId(
