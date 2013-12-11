@@ -584,12 +584,12 @@ public class FieldVisitor {
 		final FieldMetadata newField = new FieldMetadata(entityRef);
 		newField.setColumnDefinition(TYPE_INTEGER);
 		newField.setHidden(true);
-		newField.setNullable(currentField.isNullable());
+		newField.setNullable(true);
 		newField.setInternal(true);
 		newField.setName(
 				currentField.getOwner().getName() 
 				+ currentField.getName() 
-				+ "_Internal");
+				+ "Internal");
 		
 		newField.setColumnName(
 				currentField.getOwner().getName() 
