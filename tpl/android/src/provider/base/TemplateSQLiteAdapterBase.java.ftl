@@ -725,17 +725,18 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter =
 				new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 		${relation.name?uncap_first}Adapter.open(this.mDatabase);
-		for (${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()) {
-			<#if (relation.relation.mappedBy?? && !MetadataUtils.getMappedField(relation).internal)>
-			${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
-			${relation.name?uncap_first}Adapter.updateWith${curr.name?cap_first}${relation.name?cap_first}(
-					${relation.relation.targetEntity?lower_case});
-			<#else>
-			${relation.name?uncap_first}Adapter.updateWith${curr.name?cap_first}${relation.name?cap_first}(
-					${relation.relation.targetEntity?lower_case}, newid);
-			</#if>
+		if (item.get${relation.name?cap_first}() != null) {
+			for (${relation.relation.targetEntity?cap_first} ${relation.relation.targetEntity?lower_case} : item.get${relation.name?cap_first}()) {
+				<#if (relation.relation.mappedBy?? && !MetadataUtils.getMappedField(relation).internal)>
+				${relation.relation.targetEntity?lower_case}.set${relation.relation.mappedBy?cap_first}(item);
+				${relation.name?uncap_first}Adapter.update(
+						${relation.relation.targetEntity?lower_case});
+				<#else>
+				${relation.name?uncap_first}Adapter.updateWith${curr.name?cap_first}${relation.name?cap_first}(
+						${relation.relation.targetEntity?lower_case}, newid);
+				</#if>
+			}
 		}
-
 		</#if>
 	</#list>
 
