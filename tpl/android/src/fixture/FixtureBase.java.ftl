@@ -36,7 +36,11 @@ import android.util.Log;
 
 /**
  * FixtureBase.
- * @param <T> Fixture
+ * FixtureBase is the abstract base of all your fixtures' dataloaders.
+ * It loads the fixture file associated to your entity, parse each items in it
+ * and store them in the database.
+ *
+ * @param <T> Entity related to this fixture loader
  */
 public abstract class FixtureBase<T> {
 	/** TAG for debug purpose. */

@@ -10,6 +10,8 @@ import android.os.Bundle;
 
 /** ${curr.name} edit Activity.
  *
+ * This only contains a ${curr.name}EditFragment.
+ *
  * @see android.app.Activity
  */
 public class ${curr.name}EditActivity extends HarmonyFragmentActivity {

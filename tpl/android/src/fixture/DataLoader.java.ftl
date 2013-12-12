@@ -13,6 +13,11 @@ import android.util.Log;
 
 /**
  * DataLoader for fixture purpose.
+ * 
+ * The Dataloader is a useful class to wrap the fixture loading 
+ * for various entities.
+ * The order in which the fixtures are loaded are the order in which
+ * they are put in the "dataLoaders" list.
  */
 public class DataLoader {
 	/** TAG for debug purpose. */

@@ -16,6 +16,12 @@ import android.widget.ListView;
 
 /**
  * This class will display ${curr.name} entities in a list.
+ *
+ * This activity has a different behaviour wether you're on a tablet or a phone.
+ * - On a phone, you will have a ${curr.name} list. A click on an item will get 
+ * you to ${curr.name}ShowActivity.
+ * - On a tablet, the ${curr.name}ShowFragment will be displayed right next to
+ * the list.
  */
 public class ${curr.name}ListActivity 
 		extends HarmonyFragmentActivity

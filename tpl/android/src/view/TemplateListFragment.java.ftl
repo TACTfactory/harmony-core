@@ -26,6 +26,8 @@ import ${curr.namespace}.entity.${curr.name};
 
 /** ${curr.name} list fragment.
  *
+ * This fragment gives you an interface to list all your ${curr.name}s.
+ *
  * @see android.app.Fragment
  */
 public class ${curr.name}ListFragment

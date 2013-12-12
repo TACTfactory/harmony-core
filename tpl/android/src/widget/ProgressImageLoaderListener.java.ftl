@@ -11,6 +11,11 @@ import android.widget.ProgressBar;
 import com.nostra13.universalimageloader.core.assist.FailReason;
 import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 
+/**
+ * This listener is used in conjonction with the Universal Android Image Loader
+ * library. It display a neat undefined progress bar when your image is loading.
+ * (Don't use it in list adapters. )
+ */
 public class ProgressImageLoaderListener implements ImageLoadingListener {
 	
 	@Override

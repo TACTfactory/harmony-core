@@ -11,6 +11,8 @@ import android.os.Bundle;
 
 /** ${curr.name} show Activity.
  *
+ * This only contains a ${curr.name}ShowFragment.
+ *
  * @see android.app.Activity
  */
 public class ${curr.name}ShowActivity 

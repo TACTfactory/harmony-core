@@ -13,6 +13,9 @@ import android.support.v4.content.Loader;
 
 /**
  * Multiple load class for entities.
+ * This helps you do a lot of provider requests simultaneously
+ * with only one manager.
+ *
  * @param T The entity
  */
 public class MultiLoader<T> implements LoaderManager.LoaderCallbacks<Cursor> {

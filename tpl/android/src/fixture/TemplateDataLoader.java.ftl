@@ -48,6 +48,9 @@ ${ImportUtils.importRelatedEnums(curr)}
 
 /**
  * ${curr.name?cap_first}DataLoader.
+ *
+ * This dataloader implements the parsing method needed while reading
+ * the fixtures files.
  */
 public final class ${curr.name?cap_first}DataLoader
 						extends FixtureBase<${curr.name?cap_first}> {

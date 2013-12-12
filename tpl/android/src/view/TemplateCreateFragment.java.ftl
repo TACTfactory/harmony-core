@@ -54,6 +54,8 @@ ${ImportUtils.importRelatedProviderUtils(curr, true)}
 
 /**
  * ${curr.name} create fragment.
+ *
+ * This fragment gives you an interface to create a ${curr.name}.
  */
 public class ${curr.name}CreateFragment extends HarmonyFragment
 			implements OnValidationListener {

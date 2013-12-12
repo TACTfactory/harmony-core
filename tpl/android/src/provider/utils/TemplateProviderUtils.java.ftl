@@ -8,6 +8,9 @@ import ${project_namespace}.provider.utils.base.${curr.name?cap_first}ProviderUt
 
 /**
  * ${curr.name?cap_first} Provider Utils.
+ *
+ * This class is an utility class for wrapping provider calls.
+ * Feel free to modify it, add new methods to it, etc.
  */
 public class ${curr.name?cap_first}ProviderUtils
 	extends ${curr.name?cap_first}ProviderUtilsBase {

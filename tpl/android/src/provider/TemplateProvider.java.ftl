@@ -8,7 +8,14 @@ import android.database.Cursor;
 import android.net.Uri;
 
 /**
- * ${project_name?cap_first}Provider to handle DB operations.
+ * ${project_name?cap_first}Provider.
+ *
+ * This class is used to make a bridge between your data and your gui.
+ * Harmony has first generated this class to give you a clean access to
+ * your SQLiteAdapters but you can override any method, add URI, etc. to add
+ * another sources (REST, other android content resolver, etc.)
+ *
+ * @see <a href="http://developer.android.com/guide/topics/providers/content-providers.html">Android's guide to content providers</a>
  */
 public class ${project_name?cap_first}Provider
 				extends ${project_name?cap_first}ProviderBase {
