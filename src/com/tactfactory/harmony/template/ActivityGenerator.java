@@ -23,11 +23,13 @@ import com.tactfactory.harmony.meta.TranslationMetadata;
 import com.tactfactory.harmony.meta.TranslationMetadata.Group;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.template.androidxml.AttrsFile;
+import com.tactfactory.harmony.template.androidxml.ColorsFile;
 import com.tactfactory.harmony.template.androidxml.DimensFile;
 import com.tactfactory.harmony.template.androidxml.ManifestUpdater;
 import com.tactfactory.harmony.template.androidxml.StylesFile;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.PackageUtils;
+
 import freemarker.template.TemplateException;
 
 /**
@@ -180,6 +182,13 @@ public class ActivityGenerator extends BaseGenerator {
 					+ "/styles.xml",
 				this.getAdapter().getRessourceValuesPath() 
 					+ "/styles.xml");
+
+		ColorsFile.mergeFromTo(this.getAdapter(),
+				Context.getCurrentBundleFolder() 
+					+ this.getAdapter().getTemplateRessourceValuesPath() 
+					+ "/colors.xml",
+				this.getAdapter().getRessourceValuesPath() 
+					+ "/colors.xml");
 		
 		this.manifestUpdater.setApplicationTheme("@style/PinnedTheme");
 

@@ -6,7 +6,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="horizontal"
-  	android:background="@android:color/white" >
+  	android:background="@android:color/white"
+	android:baselineAligned="false"
+	tools:ignore="InconsistentLayout" >
 
     <fragment
         android:id="@+id/fragment_list"
@@ -23,6 +25,6 @@
         android:layout_width="0dp"
 		android:layout_weight="67"
         android:layout_height="match_parent"
-		android:layout_toRightOf="@id/fragment_list"/>
+        tools:layout="@layout/fragment_${curr.name?lower_case}_show" />
 
 </LinearLayout>
