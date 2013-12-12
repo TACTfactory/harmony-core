@@ -132,12 +132,14 @@ public class MultiEntityWidget
 	public void refreshText() {
 		String[] strings = this.adapter.extractStrings();
 		StringBuilder text = new StringBuilder();
-		for (int i = 0; i < this.adapter.itemList.size(); i++) {
-			if (this.adapter.checkedItems[i]) {
-				if (text.length() > 0) {
-					text.append(", ");
+		if (this.adapter.itemList != null) {
+			for (int i = 0; i < this.adapter.itemList.size(); i++) {
+				if (this.adapter.checkedItems[i]) {
+					if (text.length() > 0) {
+						text.append(", ");
+					}
+					text.append(strings[i]);
 				}
-				text.append(strings[i]);
 			}
 		}
 		this.entityEditText.setText(text.toString());
@@ -196,8 +198,10 @@ public class MultiEntityWidget
 		 */
 		public String[] extractStrings() {
 			String[] result = new String[this.itemList.size()];
-			for (int i = 0; i < this.itemList.size(); i++) {
-				result[i] = this.entityToString(this.itemList.get(i));
+			if (this.itemList != null) {
+				for (int i = 0; i < this.itemList.size(); i++) {
+					result[i] = this.entityToString(this.itemList.get(i));
+				}
 			}
 			return result;
 		}
@@ -241,9 +245,11 @@ public class MultiEntityWidget
 		 */
 		public ArrayList<T> getCheckedItems() {
 			ArrayList<T> result = new ArrayList<T>();
-			for (int i = 0; i < this.checkedItems.length; i++) {
-				if (this.checkedItems[i]) {
-					result.add(this.itemList.get(i));
+			if (this.checkedItems != null) {
+				for (int i = 0; i < this.checkedItems.length; i++) {
+					if (this.checkedItems[i]) {
+						result.add(this.itemList.get(i));
+					}
 				}
 			}
 			return result;
@@ -255,15 +261,17 @@ public class MultiEntityWidget
 		 * @param items The list of checked items
 		 */		
 		public void setCheckedItems(List<T> items) {
-			for (int i = 0; i < this.itemList.size(); i++) {
-				if (items.contains(this.itemList.get(i))) {
-					this.checkedItems[i] = true;
+			if (this.itemList != null) {
+				for (int i = 0; i < this.itemList.size(); i++) {
+					if (items.contains(this.itemList.get(i))) {
+						this.checkedItems[i] = true;
+					}
 				}
-			}
 			
-			this.widget.recreateDialog(this.extractStrings(),
-					this.checkedItems);
-			this.widget.refreshText();
+				this.widget.recreateDialog(this.extractStrings(),
+						this.checkedItems);
+				this.widget.refreshText();
+			}
 		}
 	}
 }
