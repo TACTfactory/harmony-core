@@ -6,6 +6,16 @@ import android.support.v4.app.Fragment;
 
 /**
  * ${project_name?cap_first}Menu.
+ * 
+ * This class is an engine used to manage the different menus of your application.
+ * Its use is quite simple :
+ * Create a class called [YourMenuName]MenuWrapper in this package and
+ * make it implement the interface MenuWrapperBase.
+ * (For examples, please see CrudCreateMenuWrapper and CrudEditDeleteMenuWrapper in
+ * this package.)
+ * When this is done, just call this harmony command :
+ * script/console.sh orm:menu:update.
+ * This will auto-generate a group id for your menu.
  */
 public class ${project_name?cap_first}Menu
 				extends ${project_name?cap_first}MenuBase {

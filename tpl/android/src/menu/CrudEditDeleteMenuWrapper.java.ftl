@@ -11,14 +11,14 @@ import com.actionbarsherlock.view.MenuItem;
 /**
  * Crud Menu wrapper for edit and delete actions.
  */
-public class CrudEditDeleteMenuWrapper extends MenuWrapperBase {
+public class CrudEditDeleteMenuWrapper implements MenuWrapperBase {
 	/** Delete menu item. */
 	private MenuItem deleteItem;
 	/** Edit menu item. */
 	private MenuItem editItem;
 	
 	@Override
-	protected void initializeMenu(Menu menu, Activity activity,
+	public void initializeMenu(Menu menu, Activity activity,
 			Fragment fragment, Context ctx) {
 		if (fragment != null
 				&& fragment instanceof CrudEditDeleteMenuInterface) {
@@ -46,7 +46,7 @@ public class CrudEditDeleteMenuWrapper extends MenuWrapperBase {
 	}
 
 	@Override
-	protected void updateMenu(Menu menu, Activity activity,
+	public void updateMenu(Menu menu, Activity activity,
 			Fragment fragment, Context ctx) {
 		if (fragment != null 
 				&& fragment instanceof CrudEditDeleteMenuInterface) {
@@ -56,7 +56,7 @@ public class CrudEditDeleteMenuWrapper extends MenuWrapperBase {
 	}
 
 	@Override
-	protected boolean dispatch(MenuItem item, Context ctx, Fragment fragment) {
+	public boolean dispatch(MenuItem item, Context ctx, Fragment fragment) {
 		boolean result = false;
 		if (fragment != null 
 				&& fragment instanceof CrudEditDeleteMenuInterface) {
@@ -72,14 +72,13 @@ public class CrudEditDeleteMenuWrapper extends MenuWrapperBase {
 	}
 
 	@Override
-	protected void onActivityResult(int requestCode, int resultCode,
+	public void onActivityResult(int requestCode, int resultCode,
 			Intent data, Context ctx, Fragment fragment) {
-		// TODO Auto-generated method stub
-		
+		// We don't need this.
 	}
 
 	@Override
-	protected void clear(Menu menu, Activity activity,
+	public void clear(Menu menu, Activity activity,
 			Fragment fragment, Context ctx) {
 		
 		if (fragment != null 
