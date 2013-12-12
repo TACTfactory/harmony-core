@@ -229,7 +229,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 
 		final Intent intent =  getActivity().getIntent();
 		this.model = (${curr.name}) intent.getSerializableExtra(
-				"${curr.name}");
+				${curr.name}.PARCEL);
 
 		this.initializeComponent(view);
 		this.loadData();
