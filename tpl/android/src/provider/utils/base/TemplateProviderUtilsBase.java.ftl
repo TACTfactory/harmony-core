@@ -35,7 +35,7 @@ import ${project_namespace}.provider.${project_name?cap_first}Provider;
 /**
  * ${curr.name?cap_first} Provider Utils Base.
  */
-public class ${curr.name?cap_first}ProviderUtilsBase
+public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			extends ProviderUtilsBase<${curr.name?cap_first}> {
 	/**
 	 * Tag for debug messages.
