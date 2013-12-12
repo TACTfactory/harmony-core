@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${project_namespace}.harmony.widget;
 
 import java.util.List;
