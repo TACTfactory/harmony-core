@@ -64,8 +64,7 @@ public class CrudCreateMenuWrapper implements MenuWrapperBase {
 	@Override
 	public void onActivityResult(int requestCode, int resultCode,
 			Intent data, Context ctx, Fragment fragment) {
-		// TODO Auto-generated method stub
-		
+		// We don't need this.
 	}
 
 	@Override
