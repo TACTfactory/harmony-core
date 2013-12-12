@@ -1,5 +1,4 @@
-<#assign curr = entities[current_entity] />		
-	/* This method is not regenerated. You can implement your own parcel mechanics here. */
+<#assign curr = entities[current_entity] />	/* This method is not regenerated. You can implement your own parcel mechanics here. */
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
 		<#if curr.inheritance?? && curr.inheritance.superclass??>
@@ -11,4 +10,3 @@
 
 		// You can  implement your own parcel mechanics here.
 	}
-

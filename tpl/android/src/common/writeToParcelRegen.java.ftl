@@ -1,6 +1,4 @@
-<#assign curr = entities[current_entity] />	
-
-	/**
+<#assign curr = entities[current_entity] />	/**
 	 * This stub of code is regenerated. DO NOT MODIFY.
 	 * 
 	 * @param dest Destination parcel
@@ -69,4 +67,3 @@
 			</#if>
 		</#list>		
 	}
-

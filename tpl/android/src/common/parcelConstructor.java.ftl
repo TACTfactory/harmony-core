@@ -1,5 +1,4 @@
-<#assign curr = entities[current_entity] />
-	/**
+<#assign curr = entities[current_entity] />	/**
 	 * Parcel Constructor.
 	 *
 	 * @param parc The parcel to read from

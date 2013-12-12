@@ -1,5 +1,4 @@
-<#assign curr = entities[current_entity] />
-	/**
+<#assign curr = entities[current_entity] />	/**
 	 * Regenerated Parcel Constructor. 
 	 *
 	 * This stub of code is regenerated. DO NOT MODIFY THIS METHOD.
