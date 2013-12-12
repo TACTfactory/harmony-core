@@ -4,7 +4,7 @@
 	 * @param parc The parcel to read from
 	 */
 	public ${curr.name}(Parcel parc) {
-		<#if curr.inheritance?? && curr.inheritance.superclass??>
+		<#if curr.inheritance?? && curr.inheritance.superclass?? && entities[curr.inheritance.superclass.name]??>
 		super(parc);
 		</#if>
 		// You can chose not to use harmony's generated parcel.

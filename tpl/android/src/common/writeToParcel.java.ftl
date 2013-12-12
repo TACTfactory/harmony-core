@@ -1,7 +1,7 @@
 <#assign curr = entities[current_entity] />	/* This method is not regenerated. You can implement your own parcel mechanics here. */
 	@Override
 	public void writeToParcel(Parcel dest, int flags) {
-		<#if curr.inheritance?? && curr.inheritance.superclass??>
+		<#if curr.inheritance?? && curr.inheritance.superclass?? && entities[curr.inheritance.superclass.name]??>
 		super.writeToParcel(dest, flags);
 		</#if>
 		// You can chose not to use harmony's generated parcel.

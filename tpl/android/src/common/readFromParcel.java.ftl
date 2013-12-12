@@ -6,7 +6,7 @@
 	 * @param parc The parcel to read from
 	 */
 	public void readFromParcel(Parcel parc) {
-		<#if curr.inheritance?? && curr.inheritance.superclass??>
+		<#if curr.inheritance?? && curr.inheritance.superclass?? && entities[curr.inheritance.superclass.name]??>
 		super.readFromParcel(parc);
 		</#if>
 		<#list curr.fields?values as field>
