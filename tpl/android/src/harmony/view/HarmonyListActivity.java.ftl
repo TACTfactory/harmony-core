@@ -16,7 +16,6 @@ public abstract class HarmonyListActivity<T extends Parcelable>
 				HarmonyListFragment.OnLoadCallback {
 	protected HarmonyListFragment<?> listFragment;
 	protected Fragment detailFragment;
-	protected boolean dualMode;
 	
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
@@ -45,7 +44,7 @@ public abstract class HarmonyListActivity<T extends Parcelable>
 			
 		} else {
 			final Intent intent = new Intent(this,
-			this.getShowActivity());
+					this.getShowActivity());
 			Bundle extras = new Bundle();
 			extras.putParcelable(item.getClass().getSimpleName(), item);
 			intent.putExtras(extras);

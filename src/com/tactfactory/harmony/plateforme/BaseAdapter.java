@@ -65,6 +65,8 @@ public abstract class BaseAdapter {
 	private String largeView 		= "layout-xlarge";
 	/** Values path. */
 	private String values		= "values";
+	/** Values path. */
+	private String valuesXLarge		= "values-xlarge";
 	/** Controllers path. */
 	private String controller 	= "view";
 	/** Data path. */
@@ -457,12 +459,36 @@ public abstract class BaseAdapter {
 				this.getResource(),
 				this.getValues());
 	}
+	
+	/**
+	 * Get the resources' values path.
+	 * @return The resources values path
+	 */
+	public final String getRessourceXLargeValuesPath() {
+		return String.format("%s/%s/%s/%s/",
+				Harmony.getProjectPath(),
+				this.getPlatform(),
+				this.getResource(),
+				this.getValuesXLarge());
+	}
 
 	/**
 	 * Get the resources' values' templates path.
 	 * @return The resources values' templates path
 	 */
 	public final String getTemplateRessourceValuesPath() {
+		return String.format("%s%s/%s/%s/",
+				Harmony.getTemplatesPath(),
+				this.getPlatform(),
+				this.getResource(),
+				this.getValues());
+	}
+
+	/**
+	 * Get the resources' values-xlarge' templates path.
+	 * @return The resources values-xlarge' templates path
+	 */
+	public final String getTemplateRessourceXLargeValuesPath() {
 		return String.format("%s%s/%s/%s/",
 				Harmony.getTemplatesPath(),
 				this.getPlatform(),
@@ -1033,6 +1059,13 @@ public abstract class BaseAdapter {
 	 */
 	public final String getValues() {
 		return this.values;
+	}
+	
+	/**
+	 * @return the values-xlarge
+	 */
+	public final String getValuesXLarge() {
+		return this.valuesXLarge;
 	}
 
 	/**

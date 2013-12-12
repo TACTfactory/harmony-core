@@ -7,6 +7,8 @@ import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import ${project_namespace}.menu.${project_name?cap_first}Menu;
+import ${project_namespace}.${project_name?cap_first}Application;
+import ${project_namespace}.${project_name?cap_first}ApplicationBase.DeviceType;
 
 /**
  * Custom FragmentActivity for harmony projects.
@@ -62,4 +64,12 @@ public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 
+	/**
+	 * Is this device in tablet mode ?
+	 *
+	 * @return true if tablet mode
+	 */
+	public boolean isDualMode() {
+		return ${project_name?cap_first}Application.getDeviceType(this).equals(DeviceType.TABLET);
+	}
 }
