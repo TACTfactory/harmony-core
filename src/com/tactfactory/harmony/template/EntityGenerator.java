@@ -61,6 +61,10 @@ public class EntityGenerator extends BaseGenerator {
 
 	/** remove HARD CODED String. */
 	private String readFromParcelTemplate = "readFromParcel.java";
+
+	/** remove HARD CODED String. */
+	private String parcelConstantTemplate = "parcelConstant.java";
+	
 	/** Entities folder. */
 	private String entityFolder;
 
@@ -108,6 +112,7 @@ public class EntityGenerator extends BaseGenerator {
 				this.addImportSerializable(fileString, classMeta);
 				this.generateGetterAndSetters(fileString, classMeta);
 				this.implementParcelable(fileString, classMeta);
+				this.addParcelConstant(fileString, classMeta);
 				
 				 // After treatment on entity, write it in the original file
 				TactFileUtils.stringBufferToFile(fileString, entityFile);
@@ -545,6 +550,38 @@ public class EntityGenerator extends BaseGenerator {
 	}
 	
 	/**
+	 * Generate a field following the given template.
+	 * @param fileString The stringbuffer containing the class java code
+	 * @param templateName The template file name
+	 */
+	protected final void generateField(final StringBuffer fileString, 
+			final String templateName) {
+		final int firstAccolade = fileString.indexOf("{") + 1;
+		
+		final Map<String, Object> map = this.getDatamodel();
+		
+		try {
+			final StringWriter writer = new StringWriter();
+			
+			final Template tpl = this.getCfg().getTemplate(
+					String.format("%s%s",
+							this.getAdapter().getTemplateSourceCommonPath(),
+							templateName + ".ftl"));
+			// Load template file in engine
+			
+			tpl.process(map, writer);
+			final StringBuffer getString = writer.getBuffer();
+			fileString.insert(firstAccolade, "\n\n" + getString);
+			
+		} catch (final IOException e) {
+			ConsoleUtils.displayError(e);
+		} catch (final TemplateException e) {
+			ConsoleUtils.displayError(e);
+		}		
+	}
+	
+	
+	/**
 	 * Generate a get or set method following the given template.
 	 * @param fileString The stringbuffer containing the class java code
 	 * @param templateName The template file name
@@ -626,6 +663,39 @@ public class EntityGenerator extends BaseGenerator {
 			final ClassMetadata classMeta) {
 		if (!this.alreadyImplementsDefaultConstructor(classMeta)) {
 			this.generateMethod(fileString, this.defaultConstructorTemplate);
+		}
+	}
+	
+	/**
+	 * Checks wether the entity already implements the parcel constant.
+	 * 
+	 * @param fileString The file string
+	 * 
+	 * @return True if already implements
+	 */
+	protected final boolean alreadyImplementsParcelConstant(
+			StringBuffer fileString) {
+		boolean result = false;
+		
+		if (fileString.toString().contains(
+				"public final static String PARCEL")) {
+			result = true;
+		}
+		
+		return result;
+	}
+		
+	/**
+	 * Add parcel constant.
+	 * 
+	 * @param fileString The string buffer representing the file
+	 * @param classMeta The classMetadata
+	 */
+	protected final void addParcelConstant(
+			final StringBuffer fileString,
+			final ClassMetadata classMeta) {
+		if (!this.alreadyImplementsParcelConstant(fileString)) {
+			this.generateField(fileString, this.parcelConstantTemplate);
 		}
 	}
 }

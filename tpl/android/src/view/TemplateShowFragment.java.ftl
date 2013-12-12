@@ -123,7 +123,7 @@ public class ${curr.name}ShowFragment
         this.initializeComponent(view);
         
         final Intent intent =  getActivity().getIntent();
-        this.update((${curr.name}) intent.getParcelableExtra("${curr.name}"));
+        this.update((${curr.name}) intent.getParcelableExtra(${curr.name}.PARCEL));
 
         return view;
     }
