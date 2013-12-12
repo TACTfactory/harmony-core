@@ -17,21 +17,21 @@
 			<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
 				<#if (field.type=="boolean")>
 	    <CheckBox
-		android:id="@+id/row_${m_id}"
+			android:id="@+id/row_${m_id}"
 	    	android:layout_width="match_parent"
 	    	android:layout_height="wrap_content"
-		android:focusable="false"
-		android:enabled="false"
+			android:focusable="false"
+			android:enabled="false"
 				<#else>
 	    <TextView
-		android:id="@+id/row_${m_id}"
+			android:id="@+id/row_${m_id}"
 	    	android:layout_width="match_parent"
 	    	android:layout_height="wrap_content"
 				</#if>
 				<#if (!lastFieldName??)>
 	        android:layout_alignParentTop="true" />
 				<#else>
-		android:layout_below="@+id/row_${curr.name?lower_case}_${lastFieldName}" />
+			android:layout_below="@+id/row_${curr.name?lower_case}_${lastFieldName}" />
 				</#if>
 				<#assign lastFieldName=field.name?lower_case />
 			</#if>
