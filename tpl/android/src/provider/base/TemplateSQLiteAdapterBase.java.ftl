@@ -1,5 +1,6 @@
 <#include utilityPath + "all_imports.ftl" />
 <#assign sync = curr.options.sync?? />
+<#assign isRecursiveJoinTable = (curr.internal) && (!curr.relations[1]??) && (curr.relations[0].relation.targetEntity == entities[curr.relations[0].relation.targetEntity].fields[curr.relations[0].relation.inversedBy].relation.targetEntity) />
 <#assign hasDateTime=false />
 <#assign hasTime=false />
 <#assign hasDate=false />
@@ -42,7 +43,9 @@ import ${project_namespace}.${project_name?cap_first}Application;
 
 <#if curr.internal>
 import ${project_namespace}.criterias.${curr.relations[0].relation.targetEntity}Criterias;
+<#if (!isRecursiveJoinTable)>
 import ${project_namespace}.criterias.${curr.relations[1].relation.targetEntity}Criterias;
+</#if>
 import ${project_namespace}.criterias.${curr.name}Criterias;
 import ${project_namespace}.criterias.base.Criteria;
 import ${project_namespace}.criterias.base.Criteria.Type;
@@ -899,38 +902,31 @@ public abstract class ${curr.name}SQLiteAdapterBase
 </#if>
 
 <#if (curr.internal)>
-	<#--<#list (curr_relations) as relation>
-	/**
-	 * get${relation.type}s.
-	 * @param id id
-	 * @return ArrayList of ${relation.type} matching id
-	 */
-	public ArrayList<${relation.type}> get${relation.type}s(final int id) {
-		final ${relation.type}SQLiteAdapter adapt =
-				new ${relation.type}SQLiteAdapter(this.ctx);
-		return adapt.getBy${curr.name}(id);
-	}
-
-	</#list>-->
+	<#assign leftRelation = curr.relations[0] />
+	<#if isRecursiveJoinTable>
+		<#assign rightRelation = curr.relations[0] />
+	<#else>
+		<#assign rightRelation = curr.relations[1] />
+	</#if>
 
 	/**
 	 * Insert a ${curr.name} entity into database.
 	 *
-	 * @param ${curr.relations[0].name?lower_case} ${curr.relations[0].name?lower_case}
-	 * @param ${curr.relations[1].name?lower_case} ${curr.relations[1].name?lower_case}
+	 * @param ${leftRelation.name?lower_case} ${leftRelation.name?lower_case}
+	 * @param ${rightRelation.name?lower_case} ${rightRelation.name?lower_case}
 	 * @return Id of the ${curr.name} entity
 	 */
-	public long insert(final int ${curr.relations[0].name?lower_case},
-					   final int ${curr.relations[1].name?lower_case}) {
+	public long insert(final int ${leftRelation.name?lower_case},
+					   final int ${rightRelation.name?lower_case}) {
 		if (${project_name?cap_first}Application.DEBUG) {
 			Log.d(TAG, "Insert DB(" + TABLE_NAME + ")");
 		}
 
 		ContentValues values = new ContentValues();
-		values.put(${NamingUtils.alias(curr.relations[0].name)},
-				${curr.relations[0].name?lower_case});
-		values.put(${NamingUtils.alias(curr.relations[1].name)},
-				${curr.relations[1].name?lower_case});
+		values.put(${NamingUtils.alias(leftRelation.name)},
+				${leftRelation.name?lower_case});
+		values.put(${NamingUtils.alias(rightRelation.name)},
+				${rightRelation.name?lower_case});
 
 		return this.mDatabase.insert(
 				TABLE_NAME,
@@ -939,8 +935,6 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	}
 
 
-	<#assign leftRelation = curr.relations[0] />
-	<#assign rightRelation = curr.relations[1] />
 	<#list 1..2 as i>	
 	/**
 	 * Find & read ${curr.name} by ${leftRelation.name}.
@@ -975,7 +969,12 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				orderBy);
 		return ret;
 	}
-	<#assign leftRelation = curr.relations[1] />
+
+	<#if isRecursiveJoinTable>
+		<#assign leftRelation = curr.relations[0] />
+	<#else>
+		<#assign leftRelation = curr.relations[1] />
+	</#if>
 	<#assign rightRelation = curr.relations[0] />
 	</#list>
 

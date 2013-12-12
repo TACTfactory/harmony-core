@@ -646,7 +646,6 @@ public class FieldVisitor {
 			joinTable = this.projectEntities.get(rel.getJoinTable());
 		}
 
-		
 		FieldMetadata mappingField = this.generateJoinTableRefField(
 				(EntityMetadata) currentField.getOwner(),
 				joinTable);

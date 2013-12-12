@@ -9,6 +9,7 @@
 package com.tactfactory.harmony.test.demact.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import org.joda.time.DateTime;
 
@@ -20,6 +21,7 @@ import com.tactfactory.harmony.annotation.GeneratedValue;
 import com.tactfactory.harmony.annotation.Id;
 import com.tactfactory.harmony.annotation.InheritanceType;
 import com.tactfactory.harmony.annotation.ManyToOne;
+import com.tactfactory.harmony.annotation.ManyToMany;
 import com.tactfactory.harmony.annotation.Table;
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
@@ -73,6 +75,9 @@ public class User implements Cloneable, Serializable {
 
 	@ColumnResult(columnName="firstname || ' ' || lastname")
 	private String fullName;
+
+	@ManyToMany
+	private ArrayList<User> friends;
 
 	/**
 	 * Constructor.
