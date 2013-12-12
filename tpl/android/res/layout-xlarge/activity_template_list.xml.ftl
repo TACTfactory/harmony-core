@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:orientation="horizontal"
   	android:background="@android:color/white"
-	android:baselineAligned="false" >
+	android:baselineAligned="false"
+	tools:ignore="InconsistentLayout" >
 
     <fragment
         android:id="@+id/fragment_list"
