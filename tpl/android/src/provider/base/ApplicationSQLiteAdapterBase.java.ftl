@@ -272,10 +272,6 @@ public abstract class SQLiteAdapterBase<T> {
 				item = this.cursorToItem(cursor);
 				result.add(item);
 			} while (cursor.moveToNext());
-
-			//if (DemactApplication.DEBUG)
-			//Log.d(TAG, "Read DB(" + TABLE_NAME + ") count : "
-		    //			+ cursor.getCount() );
 		}
 
 		return result;

@@ -76,8 +76,6 @@ public abstract class FixtureBase<T> {
 <#if fixtureType == "xml">
 		// XML Loader
 		try {
-			//String currentDir = new File(".").getAbsolutePath();
-
 			// Make engine
 			SAXBuilder builder = new SAXBuilder();
 			InputStream xmlStream = this.getXml(
@@ -88,8 +86,6 @@ public abstract class FixtureBase<T> {
 				Document doc = (Document) builder.build(xmlStream);
 				// Load Root element
 				final Element rootNode = doc.getRootElement();
-				// Load Name space (required for manipulate attributes)
-				//final Namespace ns = rootNode.getNamespace("android");
 
 				// Find Application Node
 			 	// Find an element
@@ -103,10 +99,8 @@ public abstract class FixtureBase<T> {
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			Log.e(TAG, e.getMessage());
 		} catch (JDOMException e) {
-			// TODO Auto-generated catch block
 			Log.e(TAG, e.getMessage());
 		}
 <#elseif fixtureType == "yml">
@@ -176,7 +170,6 @@ public abstract class FixtureBase<T> {
 	 * @return index order
 	 */
 	public int getOrder() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -191,7 +184,6 @@ public abstract class FixtureBase<T> {
 		try {
 			ret = assetManager.open(entityName + ".xml");
 		} catch (IOException e) {
-			// TODO Auto-generated method stub
 			Log.w(TAG, "No " + entityName + " fixture file found.");
 		}
 		return ret;
@@ -207,7 +199,6 @@ public abstract class FixtureBase<T> {
 		try {
 			ret = assetManager.open(entityName + ".yml");
 		} catch (IOException e) {
-			// TODO Auto-generated method stub
 			Log.w(TAG, "No " + entityName + " fixture file found.");
 		}
 		return ret;
@@ -233,21 +224,19 @@ public abstract class FixtureBase<T> {
 		 this.serializedBackup = bos.toByteArray();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage());
 		} finally {
 			if (out != null) {
 				try {
 					out.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Log.e(TAG, e.getMessage());
 				}
 			}
 			try {
 				bos.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e(TAG, e.getMessage());
 			}
 		}
 	}
@@ -267,23 +256,21 @@ public abstract class FixtureBase<T> {
 		  result = (LinkedHashMap<String, T>) in.readObject();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage());
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage());
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Log.e(TAG, e.getMessage());
 				}
 			}
 			try {
 				bis.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e(TAG, e.getMessage());
 			}
 		}
 

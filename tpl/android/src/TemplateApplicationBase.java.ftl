@@ -82,10 +82,6 @@ public abstract class ${project_name?cap_first}ApplicationBase
 		
 		</#if>
 		Log.i(TAG, "Starting application...");
-
-		// Manage unmanaged error of application
-		//Thread.setDefaultUncaughtExceptionHandler(
-		//		new ApplicationCrashHandler(super.getApplicationContext()));
 	}
 	
 	<#if (services?size > 0)>

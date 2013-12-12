@@ -46,7 +46,7 @@ public class ${curr.name}ShowFragment
 	/** DeleteCallback. */
 	protected DeleteCallback deleteCallback;
 
-	/* curr.fields View */
+	/* This entity's fields views */
 <#list fields?values as field>
 	<#if (!field.internal && !field.hidden)>
 	/** ${field.name} View. */

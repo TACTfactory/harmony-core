@@ -43,8 +43,6 @@ public class ${curr.name}ListFragment
 			ViewGroup container,
 			Bundle savedInstanceState) {
 
-		//inflater.getContext().getSystemService(
-		//Context.LAYOUT_INFLATER_SERVICE);
 		final View view =
 				inflater.inflate(R.layout.fragment_${curr.name?lower_case}_list,
 						null);
@@ -65,9 +63,6 @@ public class ${curr.name}ListFragment
 		this.setEmptyText(
 				getString(
 						R.string.${curr.name?lower_case}_empty_list));
-
-		// We have a menu item to show in action bar.
-		//this.setHasOptionsMenu(true);
 
 		// Create an empty adapter we will use to display the loaded data.
 		((PinnedHeaderListView) this.getListView())
@@ -103,7 +98,6 @@ public class ${curr.name}ListFragment
 			</#list>
 		</#if>
 
-		//return new ${curr.name?cap_first}ListLoader(getActivity(), crit);
 		if (crit != null) {
 			result = new ${curr.name?cap_first}ListLoader(this.getActivity(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
@@ -127,11 +121,9 @@ public class ${curr.name}ListFragment
 			Cursor data) {
 
 		// Set the new data in the adapter.
-		//this.mAdapter.setData(data);
 		data.setNotificationUri(this.getActivity().getContentResolver(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI);
 
-		//this.mAdapter.swapCursor(data);
 		ArrayList<${curr.name}> users = new ${curr.name}SQLiteAdapter(
 				this.getActivity()).cursorToItems(data);
 		this.mAdapter.setNotifyOnChange(false);
@@ -160,7 +152,6 @@ public class ${curr.name}ListFragment
 	@Override
 	public void onLoaderReset(Loader<Cursor> loader) {
 		// Clear the data in the adapter.
-		//this.mAdapter.swapCursor(null);
 		this.mAdapter.clear();
 	}
 
