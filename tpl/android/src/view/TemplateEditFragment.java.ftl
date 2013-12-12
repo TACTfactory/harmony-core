@@ -54,13 +54,6 @@ import ${project_namespace}.harmony.widget.SingleEntityWidget;</#if><#if (ViewUt
 import ${project_namespace}.harmony.widget.EnumSpinner;</#if>
 import ${project_namespace}.harmony.widget.ValidationButtons;
 import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
-<#list relations as relation>
-	<#if (!relation.internal && !relation.hidden)>
-		<#if (relation.relation.type != "ManyToMany")>
-//import ${data_namespace}.${relation.relation.targetEntity}SQLiteAdapter;
-		</#if>
-	</#if>
-</#list>
 <#if hasToManyRelation>import ${project_namespace}.provider.${curr.name}ProviderAdapter;</#if>
 ${ImportUtils.importRelatedProviderUtils(curr, true)}
 <#list relations as field>

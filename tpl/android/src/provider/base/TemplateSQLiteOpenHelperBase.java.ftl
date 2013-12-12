@@ -148,7 +148,6 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	}
 
 	<#if options.fixture?? && options.fixture.enabled>
-	//@SuppressWarnings("rawtypes")
 	/**
 	 * Loads data from the fixture files.
 	 * @param db The database to populate with fixtures

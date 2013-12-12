@@ -410,7 +410,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		for (${curr.name} ${curr.name?lower_case} : result) {
 			${curr.name?lower_case}.set${relation.name?cap_first}(
 					adapt${relation.relation.targetEntity}.getBy${curr.name}(
-							${curr.name?lower_case}.get${curr_ids[0].name?cap_first}())); // relation.relation.inversedBy?cap_first
+							${curr.name?lower_case}.get${curr_ids[0].name?cap_first}()));
 		}
 
 			</#if>
