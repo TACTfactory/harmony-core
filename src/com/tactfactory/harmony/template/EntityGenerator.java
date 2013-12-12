@@ -136,9 +136,10 @@ public class EntityGenerator extends BaseGenerator {
 			
 			// Class already implements an interface which is not the class
 			if (classMeta.getImplementTypes().size() > 0) { 
-				fileString.insert(firstAccolade, ", " + className);
+				fileString.insert(firstAccolade, ", " + className + " ");
 			} else {
-				fileString.insert(firstAccolade, " implements " + className);
+				fileString.insert(firstAccolade, 
+						" implements " + className + " ");
 			}		
 			classMeta.getImplementTypes().add(className);
 		}
@@ -219,15 +220,16 @@ public class EntityGenerator extends BaseGenerator {
 		if (!this.alreadyImportsClass(classMeta, className)) {
 			ConsoleUtils.displayDebug("Add " + className + " import");
 			int insertPos;
-
+			String prefix = "";
 			if (classMeta.getImports().size() > 0) {
 				insertPos = fileString.indexOf("import");
 			} else {
 				insertPos = fileString.indexOf(";") + 1;
+				prefix = "\n\n";
 			}
 			fileString.insert(
 					insertPos, 
-					"\rimport " + classPackage + ";\r");
+					prefix + "import " + classPackage + ";\n");
 			
 			classMeta.getImports().add(className);
 		}
@@ -310,7 +312,8 @@ public class EntityGenerator extends BaseGenerator {
 
 			tpl.process(map, writer);
 			final StringBuffer getString = writer.getBuffer();
-			fileString.insert(lastAccolade, getString + "\n\n");
+			fileString.insert(lastAccolade, 
+					getString.toString() + "\n");
 
 		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);
@@ -540,7 +543,7 @@ public class EntityGenerator extends BaseGenerator {
 			
 			tpl.process(map, writer);
 			final StringBuffer getString = writer.getBuffer();
-			fileString.insert(lastAccolade, getString + "\n\n");
+			fileString.insert(lastAccolade, getString + "\n");
 			
 		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);
