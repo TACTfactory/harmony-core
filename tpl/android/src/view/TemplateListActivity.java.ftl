@@ -26,8 +26,6 @@ public class ${curr.name}ListActivity
 	protected ${curr.name}ListFragment listFragment;
 	/** Associated detail fragment if any (in case of tablet). */
 	protected ${curr.name}ShowFragment detailFragment;
-	/** Is this tablet/dual fragment mode ? */
-	protected boolean dualMode;
 	/** Last selected item position in the list. */
 	private int lastSelectedItemPosition = 0;
 	/** Last selected item. */
@@ -46,8 +44,7 @@ public class ${curr.name}ListActivity
 						this.getSupportFragmentManager().findFragmentById(
 								R.id.fragment_list);
 		
-		if (this.detailFragment != null) {
-			this.dualMode = true;
+		if (this.isDualMode() && this.detailFragment != null) {
 			this.listFragment.setRetainInstance(true);
 			this.detailFragment.setRetainInstance(true);
 
@@ -87,7 +84,7 @@ public class ${curr.name}ListActivity
 	public void onListItemClick(ListView l, View v, int position, long id) {
 			this.lastSelectedItemPosition = position;
 		
-		if (this.dualMode) {
+		if (this.isDualMode()) {
 			this.selectListItem(this.lastSelectedItemPosition);
 		} else {
 			final Intent intent = new Intent(this, ${curr.name}ShowActivity.class);
@@ -133,7 +130,7 @@ public class ${curr.name}ListActivity
 
 	@Override
 	public void onListLoaded() {
-		if (this.dualMode) {
+		if (this.isDualMode()) {
 			int newPosition =
 				((${curr.name}ListAdapter) this.listFragment.getListAdapter())
 						.getPosition(this.lastSelectedItem);
@@ -143,14 +140,5 @@ public class ${curr.name}ListActivity
 				this.selectListItem(newPosition);
 			}
 		}
-	}
-
-	/**
-	 * Is the activity in dual fragment mode (tablet) ?
-	 *
-	 * @return true if dual mode
-	 */
-	public boolean isDualMode() {
-		return this.dualMode;
 	}
 }

@@ -26,6 +26,7 @@ import android.widget.TextView;
 <#if (importDate)>
 import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
+import ${curr.namespace}.harmony.view.HarmonyFragmentActivity;
 import com.google.android.pinnedheader.SelectionItemView;
 import com.google.android.pinnedheader.headerlist.HeaderAdapter;
 import com.google.android.pinnedheader.headerlist.HeaderSectionIndexer;
@@ -129,7 +130,7 @@ public class ${curr.name}ListAdapter
     		view = new ViewHolder(this.getContext());
 		}
 
-    	if (!((${curr.name}ListActivity) this.getContext()).isDualMode()) {
+    	if (!((HarmonyFragmentActivity) this.getContext()).isDualMode()) {
     		view.setActivatedStateSupported(false);
 		}
     	
