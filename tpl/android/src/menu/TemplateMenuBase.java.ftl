@@ -15,6 +15,9 @@ import android.util.SparseArray;
 
 /**
  * ${project_name?cap_first}MenuBase.
+ * This class is regenerated with harmony.
+ * To modify or learn more about this class,
+ * please see ${project_name?cap_first}Menu.
  */
 public abstract class ${project_name?cap_first}MenuBase {
 	<#assign idMenu = 1 />
