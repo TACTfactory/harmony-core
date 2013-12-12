@@ -21,6 +21,9 @@ import ${project_namespace}.harmony.util.DateUtils;
 
 /**
  * View for Date selection.
+ * This view is composed of a disabled edit text and
+ * of an alert dialogs (DatePickerDialog).
+ * It is really helpful to let your users chose a date.
  */
 public class DateWidget extends FrameLayout implements OnClickListener {
 	/** Date Click Listener. */

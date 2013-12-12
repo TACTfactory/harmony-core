@@ -73,6 +73,8 @@ import ${project_namespace}.data.${field.relation.targetEntity}SQLiteAdapter;
 
 /** ${curr.name} create fragment.
  *
+ * This fragment gives you an interface to edit a ${curr.name}.
+ *
  * @see android.app.Fragment
  */
 public class ${curr.name}EditFragment extends HarmonyFragment

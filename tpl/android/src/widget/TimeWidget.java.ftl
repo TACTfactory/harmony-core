@@ -23,6 +23,9 @@ import ${project_namespace}.harmony.util.DateUtils.TimeFormatType;
 
 /**
  * View for Time selection.
+ * This view is composed of a disabled edit text and
+ * of an alert dialogs (TimePickerDialog).
+ * It is really helpful to let your users chose a time.
  */
 public class TimeWidget extends FrameLayout implements OnClickListener {
 	/** Enum format24h value H24. */

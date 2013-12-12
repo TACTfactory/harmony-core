@@ -8,7 +8,10 @@ import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 
 import android.os.Bundle;
 
-/** ${curr.name} create Activity.
+/** 
+ * ${curr.name} create Activity.
+ *
+ * This only contains a ${curr.name}CreateFragment.
  *
  * @see android.app.Activity
  */

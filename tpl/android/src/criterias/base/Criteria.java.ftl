@@ -10,7 +10,14 @@ import android.database.DatabaseUtils;
 
 import ${project_namespace}.criterias.base.value.CriteriaValue;
 
-/** Criteria. Criteria used for some db requests.*/
+/** Criteria. Criteria used for some db requests.
+ * 
+ * A criteria reprensents a condition (ie. "id = 2").
+ * It is composed of:
+ * - a key (ie. "id")
+ * - a Type (ie. "EQUALS")
+ * - a value (ie. 2)
+ */
 public class Criteria implements Serializable, ICriteria {
 	/** Criteria key. */
 	private String key;

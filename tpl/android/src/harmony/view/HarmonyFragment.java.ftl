@@ -11,6 +11,8 @@ import ${project_namespace}.menu.${project_name?cap_first}Menu;
 
 /**
  * Harmony custom Fragment.
+ * This fragment will help you use a lot of harmony's functionnality
+ * (menu wrappers, etc.)
  */
 public abstract class HarmonyFragment extends SherlockFragment {
 

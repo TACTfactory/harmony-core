@@ -34,6 +34,11 @@ import ${project_namespace}.provider.${project_name?cap_first}Provider;
 
 /**
  * ${curr.name?cap_first} Provider Utils Base.
+ *
+ * DO NOT MODIFY THIS CLASS AS IT IS REGENERATED
+ *
+ * This class is a utility class helpful for complex provider calls.
+ * ex : inserting an entity and its relations alltogether, etc.
  */
 public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			extends ProviderUtilsBase<${curr.name?cap_first}> {

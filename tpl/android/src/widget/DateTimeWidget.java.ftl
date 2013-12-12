@@ -24,6 +24,9 @@ import ${project_namespace}.harmony.util.DateUtils.TimeFormatType;
 
 /**
  * View for DateTime selection.
+ * This view is composed of two disabled edit text next to each other and
+ * of two alert dialogs (DatePickerDialog & TimePickerDialog).
+ * It is really helpful to let your users chose a date.
  */
 public class DateTimeWidget extends FrameLayout implements OnClickListener {
 	/** Enum format24h value H24. */

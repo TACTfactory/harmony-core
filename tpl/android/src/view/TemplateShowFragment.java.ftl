@@ -32,6 +32,8 @@ import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 
 /** ${curr.name} show fragment.
  *
+ * This fragment gives you an interface to show a ${curr.name}.
+ * 
  * @see android.app.Fragment
  */
 public class ${curr.name}ShowFragment

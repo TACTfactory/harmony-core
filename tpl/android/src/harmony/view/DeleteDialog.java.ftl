@@ -12,7 +12,9 @@ import android.widget.TextView;
 import ${project_namespace}.R;
 
 /**
- * Confirmation dialog for entity deletion.
+ * Convenient confirmation dialog for deleting things.
+ *
+ * To use it, don't forget to use the callback.
  */
 public class DeleteDialog extends AlertDialog
 									implements DialogInterface.OnClickListener {

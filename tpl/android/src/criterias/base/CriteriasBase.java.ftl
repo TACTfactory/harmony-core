@@ -11,6 +11,7 @@ import ${project_namespace}.criterias.base.value.StringValue;
 /**
  * CriteriasBase.
  * An array of Criteria and CriteriasBase. Used for db requests.
+ * A criterias represents the WHERE clause of a request.
  * @param T The entity type
  */
 public abstract class CriteriasBase<T> implements Serializable, ICriteria {
@@ -90,13 +91,6 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 	}
 
 	/**
-	 * Test if the given criteria is valid.
-	 * @param c The criteria to test
-	 * @return true if the criteria is valid
-	 */
-	public abstract boolean validCriteria(Criteria c);
-
-	/**
 	 * Adds a criteria of form : (key TYPE value).
 	 * @param crit The criteria to add
 	 * @return True if the criterias is valid and doesn't exists yet
@@ -104,7 +98,7 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 	public boolean add(final Criteria crit) {
 		boolean result;
 
-		if (this.validCriteria(crit) && !this.criterias.contains(crit)) {
+		if (!this.criterias.contains(crit)) {
 			this.criterias.add(crit);
 			result = true;
 		} else {

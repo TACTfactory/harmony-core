@@ -9,6 +9,9 @@ import ${project_namespace}.criterias.base.Criteria;
 
 /**
  * ${curr.name?cap_first}Criterias.
+ *
+ * This class can help you forge requests for your ${curr.name} Entity.
+ * For more details, see CriteriasBase.
  */
 public class ${curr.name?cap_first}Criterias extends CriteriasBase<#if !curr.internal><${curr.name?cap_first}></#if> {
 	/** String to parcel ${curr.name?uncap_first}Criteria. */
@@ -22,17 +25,4 @@ public class ${curr.name?cap_first}Criterias extends CriteriasBase<#if !curr.int
 	public ${curr.name?cap_first}Criterias(final GroupType type) {
 		super(type);
 	}
-
-	/**
-	 * Checks if the given Criteria is valid.
-	 * @param crit The Criteria to validate
-	 * @return true if the criteria is valid
-	 */
-	@Override
-	public boolean validCriteria(final Criteria crit) {
-		boolean result = true;
-
-		return result;
-	}
-
 }

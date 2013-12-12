@@ -17,6 +17,9 @@ import ${project_namespace}.entity.${entity.name?cap_first};
 
 /**
  * DataManager.
+ * 
+ * This class is an "orm-like" manager which simplifies insertion in database
+ * with sqlite adapters.
  */
 public class DataManager {
 	/** HashMap to join Entity Name and its SQLiteAdapterBase. */
