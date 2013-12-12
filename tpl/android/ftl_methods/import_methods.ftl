@@ -26,7 +26,7 @@
 			</#if>
 			<#if (!Utils.isInArray(import_array, relation.relation.targetEntity))>
 				<#assign import_array = import_array + [relation.relation.targetEntity] />
-				<#if entities[relation.relation.targetEntity].inheritance?? && entities[relation.relation.targetEntity].inheritance.superclass??>
+				<#if entities[relation.relation.targetEntity].inheritance?? && entities[relation.relation.targetEntity].inheritance.superclass?? && entities[entities[relation.relation.targetEntity].inheritance.superclass.name]??>
 					<#assign import_array = import_array + [entities[relation.relation.targetEntity].inheritance.superclass.name] />
 				</#if>
 			</#if>
