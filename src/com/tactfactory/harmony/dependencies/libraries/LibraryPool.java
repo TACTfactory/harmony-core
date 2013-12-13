@@ -58,29 +58,28 @@ public class LibraryPool {
 	 */
 	public final void parseLibraries(final File file) {
 		if (file.exists()) {
+			final String path = file.getAbsolutePath();
+			final String fileName = path.substring(path.lastIndexOf("lib" + File.separator) 
+					+ ("lib" + File.separator).length());
+			if (this.pool.get(fileName) != null) {
+				ConsoleUtils.displayWarning(
+						"The library " 
+						+ fileName
+						+ " has been found multiple times."
+						+ "Keeping "
+						+ this.pool.get(fileName).getAbsolutePath());
+			} else {
+				ConsoleUtils.displayDebug("Adding library " + fileName
+						+ " to the pool.");
+				this.pool.put(fileName, file);
+			}
+
 			if (file.isDirectory()) {
 				final File[] files = file.listFiles(this.filter);
 				for (File f : files) {
 					this.parseLibraries(f);
 				}
-			} else if (file.isFile()) {
-				final String path = file.getAbsolutePath();
-				final String fileName = path.substring(path.lastIndexOf("lib" + File.separator) 
-						+ ("lib" + File.separator).length());
-				if (this.pool.get(fileName) != null) {
-					ConsoleUtils.displayWarning(
-							"The library " 
-							+ fileName
-							+ " has been found multiple times."
-							+ "Keeping "
-							+ this.pool.get(fileName).getAbsolutePath());
-				} else {
-					ConsoleUtils.displayDebug("Adding library " + fileName
-							+ " to the pool.");
-					this.pool.put(fileName, file);
-				}
 			}
-			
 		}
 	}
 }
