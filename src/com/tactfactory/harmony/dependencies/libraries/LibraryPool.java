@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.tactfactory.harmony.utils.ConsoleUtils;
+import com.tactfactory.harmony.utils.OsUtil;
 
 /**
  * Library Pool. Contains all the libraries brought by 
@@ -20,8 +21,8 @@ public class LibraryPool {
 			//return pathname.isDirectory() 
 			//		|| pathname.getName().endsWith(".jar");
 			return pathname.isDirectory()
-					|| (pathname.getAbsolutePath().lastIndexOf("lib/")
-						> pathname.getAbsolutePath().lastIndexOf("vendor/"));
+					|| (pathname.getAbsolutePath().lastIndexOf("lib" + File.separator)
+						> pathname.getAbsolutePath().lastIndexOf("vendor" + File.separator));
 		}
 	};
 	/** Map of all the libraries <FileName, File>. */
@@ -64,8 +65,8 @@ public class LibraryPool {
 				}
 			} else if (file.isFile()) {
 				final String path = file.getAbsolutePath();
-				final String fileName = path.substring(path.lastIndexOf("lib/") 
-						+ "lib/".length());
+				final String fileName = path.substring(path.lastIndexOf("lib" + File.separator) 
+						+ ("lib" + File.separator).length());
 				if (this.pool.get(fileName) != null) {
 					ConsoleUtils.displayWarning(
 							"The library " 

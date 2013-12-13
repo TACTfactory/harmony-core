@@ -324,7 +324,8 @@ public final class Harmony {
 	 * @return The library file
 	 */
 	public static File getLibrary(final String libraryName) {
-		return getInstance().context.getLibrary(libraryName);
+		File lib = getInstance().context.getLibrary(libraryName);
+		return lib;
 	}
 	
 	/**
