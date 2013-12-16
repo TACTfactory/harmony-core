@@ -245,10 +245,18 @@ public abstract class BaseGenerator {
 				String.format("%s/%s", this.adapter.getLibsPath(), libName));
 
 		if (!dest.exists()) {
-			File src = Harmony.getLibrary(libName);
-			TactFileUtils.copyfile(
+			File src = Harmony.getLibrary(libName.replace("/", File.separator));
+			if (src.isDirectory()) {
+				try {
+					TactFileUtils.copyDirectory(src, dest);
+				} catch (IOException e) {
+					ConsoleUtils.displayError(e);
+				}
+			} else {
+				TactFileUtils.copyfile(
 					src,
 					dest);
+			}
 		}
 	}
 
