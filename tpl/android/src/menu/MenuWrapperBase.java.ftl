@@ -1,10 +1,10 @@
 <@header?interpret />
 package ${project_namespace}.menu;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -23,7 +23,7 @@ public interface MenuWrapperBase {
 	 * @param ctx The context
 	 */
 	void initializeMenu(Menu menu,
-			Activity activity,
+			SherlockFragmentActivity activity,
 			Fragment fragment,
 			Context ctx);
 
@@ -35,7 +35,7 @@ public interface MenuWrapperBase {
 	 * @param ctx The context
 	 */
 	void updateMenu(Menu menu,
-										Activity activity,
+										SherlockFragmentActivity activity,
 										Fragment fragment,
 										Context ctx);
 
@@ -76,7 +76,7 @@ public interface MenuWrapperBase {
 	 * @param ctx The context
 	 */
 	void clear(Menu menu,
-			Activity activity,
+			SherlockFragmentActivity activity,
 			Fragment fragment,
 			Context ctx);
 }

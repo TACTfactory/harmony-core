@@ -4,10 +4,10 @@
 <@header?interpret />
 package ${project_namespace}.menu;
 
+import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
@@ -80,7 +80,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 
 		for (int i = 0; i < this.menus.size(); i++) {
 			this.menus.valueAt(i).initializeMenu(menu,
-					(Activity) this.ctx,
+					(SherlockFragmentActivity) this.ctx,
 					this.fragment,
 					this.ctx);
 		}
@@ -106,7 +106,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	public void updateMenu(final Menu menu) {
 		for (int i = 0; i < this.menus.size(); i++) {
 			this.menus.valueAt(i).updateMenu(menu,
-					(Activity) this.ctx,
+					(SherlockFragmentActivity) this.ctx,
 					this.fragment,
 					this.ctx);
 		}
@@ -118,7 +118,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	public void clear(final Menu menu) {
 		for (int i = 0; i < this.menus.size(); i++) {
 			this.menus.valueAt(i).clear(menu,
-					(Activity) this.ctx,
+					(SherlockFragmentActivity) this.ctx,
 					this.fragment,
 					this.ctx);
 		}
