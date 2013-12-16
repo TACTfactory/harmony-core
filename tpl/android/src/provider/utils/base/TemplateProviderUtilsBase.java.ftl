@@ -275,8 +275,15 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 		<#list relations as relation>
 			<#if (!relation.internal)>
+				<#if (relation.relation.type == "ManyToOne" || relation.relation.type == "OneToOne")>
+			if (result.get${relation.name?cap_first}() != null) {
 				result.set${relation.name?cap_first}(
 					this.getAssociate${relation.name?cap_first}(result));
+			}
+				<#else>
+			result.set${relation.name?cap_first}(
+				this.getAssociate${relation.name?cap_first}(result));
+				</#if>
 			</#if>
 		</#list>
 		}
