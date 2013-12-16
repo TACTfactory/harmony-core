@@ -1,3 +1,4 @@
 <#assign curr = entities[current_entity] />
 	/** Key Constant for parcelable/serialization. */
-	public final static String PARCEL = "${curr.name}";
+	public static final String PARCEL = 
+			"${curr.name}";
