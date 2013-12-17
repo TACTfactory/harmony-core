@@ -10,6 +10,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
+import ${project_namespace}.menu.base.MenuWrapperBase;
+
 /**
  * Crud Menu wrapper for edit and delete actions.
  */

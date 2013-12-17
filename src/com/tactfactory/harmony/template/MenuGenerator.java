@@ -40,8 +40,8 @@ public class MenuGenerator extends BaseGenerator {
 		// create ProjectMenuBase
 		super.makeSource(
 			this.getAdapter().getTemplateSourcePath()
-			+ "menu/TemplateMenuBase.java",
-			this.getAdapter().getMenuPath()
+			+ "menu/base/TemplateMenuBase.java",
+			this.getAdapter().getMenuPath() + "base/"
 
 			+ CaseFormat.LOWER_CAMEL.to(
 					CaseFormat.UPPER_CAMEL,
@@ -63,8 +63,8 @@ public class MenuGenerator extends BaseGenerator {
 		// create MenuWrapper
 		super.makeSource(
 			this.getAdapter().getTemplateSourcePath()
-			+ "menu/MenuWrapperBase.java",
-			this.getAdapter().getMenuPath() + "MenuWrapperBase.java",
+			+ "menu/base/MenuWrapperBase.java",
+			this.getAdapter().getMenuPath() + "base/MenuWrapperBase.java",
 			true);
 
 	}
@@ -79,8 +79,8 @@ public class MenuGenerator extends BaseGenerator {
 
 		super.makeSource(
 			this.getAdapter().getTemplateSourcePath()
-			+ "menu/TemplateMenuBase.java",
-			this.getAdapter().getMenuPath()
+			+ "menu/base/TemplateMenuBase.java",
+			this.getAdapter().getMenuPath() + "base/"
 
 			+ CaseFormat.LOWER_CAMEL.to(
 					CaseFormat.UPPER_CAMEL,

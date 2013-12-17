@@ -4,6 +4,8 @@ package ${project_namespace}.menu;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 
+import ${project_namespace}.menu.base.${project_name?cap_first}MenuBase;
+
 /**
  * ${project_name?cap_first}Menu.
  * 
