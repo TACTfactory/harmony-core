@@ -48,4 +48,10 @@ public final class RimAdapter extends BaseAdapter {
 
 	}
 
+	@Override
+	public boolean filesEqual(String oldContent, String newContent,
+			String fileName, boolean ignoreHeader) {
+		return oldContent.equals(newContent);
+	}
+
 }

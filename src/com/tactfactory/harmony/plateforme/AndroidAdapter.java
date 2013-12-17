@@ -170,6 +170,22 @@ public final class AndroidAdapter extends BaseAdapter {
 		}
 		return ret;
 	}
+	
+	@Override
+	public boolean filesEqual(String oldContent,
+			String newContent,
+			String fileName,
+			boolean ignoreHeader) {
+		boolean result = false;
+		
+		if (ignoreHeader && fileName.endsWith("java")) {
+			oldContent = oldContent.substring(oldContent.indexOf("package"));
+			newContent = newContent.substring(newContent.indexOf("package"));
+		}
+		
+		result = oldContent.equals(newContent);
+		return result;
+	}
 
 
 
