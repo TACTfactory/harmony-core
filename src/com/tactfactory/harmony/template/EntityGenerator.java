@@ -35,6 +35,18 @@ import freemarker.template.TemplateException;
  * Used to decorate or generate entities.
  */
 public class EntityGenerator extends BaseGenerator {
+	/** Parcel constant declaration. */
+	private static final String PARCEL_CONSTANT_DECL =
+			"public static final String PARCEL";
+
+	/** Write to parcel method declaration. */
+	private static final String WRITE_TO_PARCEL_REGEN_DECL =
+			"writeToParcelRegen(Parcel dest, int flags) {";
+	
+	/** Read from parcel method declaration. */
+	private static final String READ_FROM_PARCEL_REGEN_DECL =
+			"readFromParcel(Parcel parc) {";
+	
 	/** remove HARD CODED String. */
 	private String getterTemplate = "itemGetter.java";
 
@@ -503,11 +515,11 @@ public class EntityGenerator extends BaseGenerator {
 
 		this.regenerateMethod(fileString,
 				this.writeToParcelRegenTemplate,
-				"writeToParcelRegen(Parcel dest, int flags) {");
+				WRITE_TO_PARCEL_REGEN_DECL);
 		
 		this.regenerateMethod(fileString,
 				this.readFromParcelTemplate,
-				"readFromParcel(Parcel parc) {");
+				READ_FROM_PARCEL_REGEN_DECL);
 		
 		if (!this.alreadyImplementsParcelable(classMeta)) {
 			this.addImplementsParcelable(fileString, classMeta);
@@ -681,7 +693,7 @@ public class EntityGenerator extends BaseGenerator {
 		boolean result = false;
 		
 		if (fileString.toString().contains(
-				"public final static String PARCEL")) {
+				PARCEL_CONSTANT_DECL)) {
 			result = true;
 		}
 		
