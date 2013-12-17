@@ -141,8 +141,7 @@ public class ${curr.name}ShowFragment
 		this.loadData();
 		
 		if (this.model != null) {
-			MultiLoader<${curr.name}> loader = 
-					new MultiLoader<${curr.name}>(this, this.model);
+			MultiLoader loader = new MultiLoader(this);
 			String baseUri = 
 					${curr.name}ProviderAdapter.${curr.name?upper_case}_URI 
 					+ "/" 
