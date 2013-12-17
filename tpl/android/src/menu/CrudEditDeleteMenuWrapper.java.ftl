@@ -1,14 +1,14 @@
 <@header?interpret />
 package ${project_namespace}.menu;
 
+import android.content.Context;
+import android.content.Intent;
+import android.support.v4.app.Fragment;
+
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.internal.view.menu.ActionMenuItem;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-
-import android.content.Context;
-import android.content.Intent;
-import android.support.v4.app.Fragment;
 
 /**
  * Crud Menu wrapper for edit and delete actions.

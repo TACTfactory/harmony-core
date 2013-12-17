@@ -10,47 +10,44 @@ import com.actionbarsherlock.internal.view.menu.ActionMenuItem;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-/**
- * Menu wrapper for CRUD Create action.
- */
-public class CrudCreateMenuWrapper implements MenuWrapperBase {
-	/** Menu item ADD. */
-	private MenuItem addItem;
+public class SaveMenuWrapper implements MenuWrapperBase {
+	/** Menu item SAVE. */
+	private MenuItem saveItem;
 	
 	@Override
 	public void initializeMenu(Menu menu, SherlockFragmentActivity activity,
 			Fragment fragment, Context ctx) {
 		
-		if (fragment != null && fragment instanceof CrudCreateMenuInterface) {	
+		if (fragment != null && fragment instanceof SaveMenuInterface) {	
 			
-			this.addItem 	= menu.add(
-					${project_name?cap_first}Menu.CRUDCREATE,
+			this.saveItem 	= menu.add(
+					DemactMenu.SAVE,
 					0,
 					Menu.NONE,
-					"Add");
-			this.addItem.setShowAsAction(
+					"Save");
+			this.saveItem.setShowAsAction(
 					ActionMenuItem.SHOW_AS_ACTION_IF_ROOM
 					| ActionMenuItem.SHOW_AS_ACTION_WITH_TEXT);
-			this.addItem.setVisible(false);
+			this.saveItem.setVisible(false);
 		}
 	}
 
 	@Override
 	public void updateMenu(Menu menu, SherlockFragmentActivity activity,
 			Fragment fragment, Context ctx) {
-		if (fragment != null && fragment instanceof CrudCreateMenuInterface) {
+		if (fragment != null && fragment instanceof SaveMenuInterface) {
 			menu.setGroupVisible(
-					${project_name?cap_first}Menu.CRUDCREATE, true);
+					DemactMenu.SAVE, true);
 		}
 	}
 
 	@Override
 	public boolean dispatch(MenuItem item, Context ctx, Fragment fragment) {
 		boolean result;
-		if (fragment instanceof CrudCreateMenuInterface) {
+		if (fragment instanceof SaveMenuInterface) {
 			switch (item.getItemId()) {
 				case 0:
-					((CrudCreateMenuInterface) fragment).onClickAdd();
+					((SaveMenuInterface) fragment).onClickSave();
 					result = true;
 					break;
 				default:
@@ -73,8 +70,8 @@ public class CrudCreateMenuWrapper implements MenuWrapperBase {
 	public void clear(Menu menu, SherlockFragmentActivity activity,
 			Fragment fragment, Context ctx) {
 
-		if (fragment != null && fragment instanceof CrudCreateMenuInterface) {
-			menu.removeGroup(${project_name?cap_first}Menu.CRUDCREATE);
+		if (fragment != null && fragment instanceof SaveMenuInterface) {
+			menu.removeGroup(DemactMenu.SAVE);
 		}
 	}
 
@@ -82,11 +79,12 @@ public class CrudCreateMenuWrapper implements MenuWrapperBase {
 	 * Implement this interface in your fragment or activity
 	 * to activate this menu.
 	 */
-	public interface CrudCreateMenuInterface {
+	public interface SaveMenuInterface {
 		/**
 		 * Called when user clicks on Add menu button.
 		 */
-		void onClickAdd();
+		void onClickSave();
 	}
 }
+
 

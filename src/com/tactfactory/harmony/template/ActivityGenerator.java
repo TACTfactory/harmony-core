@@ -242,6 +242,7 @@ public class ActivityGenerator extends BaseGenerator {
 			MenuGenerator menuGenerator = new MenuGenerator(this.getAdapter());
 			menuGenerator.generateMenu("CrudCreate");
 			menuGenerator.generateMenu("CrudEditDelete");
+			menuGenerator.generateMenu("Save");
 			menuGenerator.updateMenu();
 		} catch (Exception e) {
 			
