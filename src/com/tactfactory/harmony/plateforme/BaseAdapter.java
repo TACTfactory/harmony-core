@@ -84,6 +84,8 @@ public abstract class BaseAdapter {
 	private String fixture 		= "fixture";
 	/** Criterias path. */
 	private String criterias  	= "criterias";
+	/** Base path. */
+	private String base  		= "base";
 
 	// File
 	/** Manifest path. */
@@ -273,6 +275,38 @@ public abstract class BaseAdapter {
 				this.getSource(),
 				ApplicationMetadata.INSTANCE.getProjectNameSpace(),
 				this.getMenu());
+	}
+	
+	/**
+	 * Get the project's menu base path.
+	 * @return The menu base path
+	 */
+	public final String getMenuBasePath() {
+		return String.format("%s/%s/",
+				this.getMenuPath(),
+				this.getBase());
+	}
+	
+	/**
+	 * Get the project's menu path.
+	 * @return The menu path
+	 */
+	public final String getTemplateMenuPath() {
+		return String.format("%s/%s/%s/%s/",
+				Harmony.getTemplatesPath(),
+				this.getPlatform(),
+				this.getSource(),
+				this.getMenu());
+	}
+	
+	/**
+	 * Get the project's menu base path.
+	 * @return The menu base path
+	 */
+	public final String getTemplateMenuBasePath() {
+		return String.format("%s/%s/",
+				this.getTemplateMenuPath(),
+				this.getBase());
 	}
 
 	/**
@@ -1049,6 +1083,20 @@ public abstract class BaseAdapter {
 	 */
 	public final void setCriterias(final String criterias) {
 		this.criterias = criterias;
+	}
+	
+	/**
+	 * @return the base
+	 */
+	public final String getBase() {
+		return this.base;
+	}
+
+	/**
+	 * @param base the base to set
+	 */
+	public final void setBase(final String base) {
+		this.base = base;
 	}
 
 	/**

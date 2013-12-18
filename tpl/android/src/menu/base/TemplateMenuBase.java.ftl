@@ -2,7 +2,7 @@
 	<#return menuName?replace("MenuWrapper", "", 'i')?upper_case />
 </#function>
 <@header?interpret />
-package ${project_namespace}.menu;
+package ${project_namespace}.menu.base;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
@@ -12,6 +12,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
+
+<#if menus??>
+	<#list menus as menu>
+import ${project_namespace}.menu.${menu};
+	</#list>
+</#if>
 
 /**
  * ${project_name?cap_first}MenuBase.

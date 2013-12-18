@@ -1,5 +1,5 @@
 <@header?interpret />
-package ${project_namespace}.menu;
+package ${project_namespace}.menu.base;
 
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;

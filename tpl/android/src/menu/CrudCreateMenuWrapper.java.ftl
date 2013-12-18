@@ -12,6 +12,8 @@ import com.actionbarsherlock.view.MenuItem;
 
 import ${project_namespace}.R;
 
+import ${project_namespace}.menu.base.MenuWrapperBase;
+
 /**
  * Menu wrapper for CRUD Create action.
  */
