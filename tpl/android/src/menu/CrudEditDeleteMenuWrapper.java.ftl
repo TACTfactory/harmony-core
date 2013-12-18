@@ -10,6 +10,8 @@ import com.actionbarsherlock.internal.view.menu.ActionMenuItem;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
+import ${project_namespace}.R;
+
 /**
  * Crud Menu wrapper for edit and delete actions.
  */
@@ -28,7 +30,7 @@ public class CrudEditDeleteMenuWrapper implements MenuWrapperBase {
 					${project_name?cap_first}Menu.CRUDEDITDELETE,
 					0,
 					Menu.NONE,
-					"Delete");
+					R.string.menu_item_delete);
 			this.deleteItem.setShowAsAction(
 					ActionMenuItem.SHOW_AS_ACTION_IF_ROOM
 					| ActionMenuItem.SHOW_AS_ACTION_WITH_TEXT);
@@ -38,7 +40,7 @@ public class CrudEditDeleteMenuWrapper implements MenuWrapperBase {
 					${project_name?cap_first}Menu.CRUDEDITDELETE,
 					1,
 					Menu.NONE,
-					"Edit");
+					R.string.menu_item_edit);
 
 			this.editItem.setShowAsAction(
 					ActionMenuItem.SHOW_AS_ACTION_IF_ROOM

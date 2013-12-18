@@ -26,7 +26,7 @@ public class MenuGenerator extends BaseGenerator {
 	 * @param adapt The adapter to use
 	 * @throws Exception if adapter is null
 	 */
-	public MenuGenerator(final BaseAdapter adapt) throws Exception {
+	public MenuGenerator(final BaseAdapter adapt) {
 		super(adapt);
 
 		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));

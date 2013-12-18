@@ -10,6 +10,8 @@ import com.actionbarsherlock.internal.view.menu.ActionMenuItem;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
+import ${project_namespace}.R;
+
 /**
  * Menu wrapper for CRUD Create action.
  */
@@ -27,7 +29,7 @@ public class CrudCreateMenuWrapper implements MenuWrapperBase {
 					${project_name?cap_first}Menu.CRUDCREATE,
 					0,
 					Menu.NONE,
-					"Add");
+					R.string.menu_item_create);
 			this.addItem.setShowAsAction(
 					ActionMenuItem.SHOW_AS_ACTION_IF_ROOM
 					| ActionMenuItem.SHOW_AS_ACTION_WITH_TEXT);

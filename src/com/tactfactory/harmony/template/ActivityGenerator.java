@@ -238,15 +238,27 @@ public class ActivityGenerator extends BaseGenerator {
 				false);
 		
 
-		try {
-			MenuGenerator menuGenerator = new MenuGenerator(this.getAdapter());
-			menuGenerator.generateMenu("CrudCreate");
-			menuGenerator.generateMenu("CrudEditDelete");
-			menuGenerator.generateMenu("Save");
-			menuGenerator.updateMenu();
-		} catch (Exception e) {
-			
-		}
+		MenuGenerator menuGenerator = new MenuGenerator(this.getAdapter());
+		menuGenerator.generateMenu("CrudCreate");
+		menuGenerator.generateMenu("CrudEditDelete");
+		menuGenerator.generateMenu("Save");
+		menuGenerator.updateMenu();
+		
+		TranslationMetadata.addDefaultTranslation("menu_item_create",
+				"Add",
+				Group.COMMON);
+		
+		TranslationMetadata.addDefaultTranslation("menu_item_edit",
+				"Edit",
+				Group.COMMON);
+		
+		TranslationMetadata.addDefaultTranslation("menu_item_delete",
+				"Delete",
+				Group.COMMON);
+		
+		TranslationMetadata.addDefaultTranslation("menu_item_save",
+				"Save",
+				Group.COMMON);
 
 		
 		if (this.isDate || this.isTime) {	
