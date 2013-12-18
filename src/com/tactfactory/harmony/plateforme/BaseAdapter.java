@@ -251,7 +251,7 @@ public abstract class BaseAdapter {
 	 * @return The menu path
 	 */
 	public final String getTemplateMenuPath() {
-		return String.format("%s/%s/%s/%s/%s/",
+		return String.format("%s/%s/%s/%s/",
 				Harmony.getTemplatesPath(),
 				this.getPlatform(),
 				this.getSource(),
