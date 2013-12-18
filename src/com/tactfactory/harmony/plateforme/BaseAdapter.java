@@ -126,10 +126,21 @@ public abstract class BaseAdapter {
 	/** Convert image structure to alternative resolution. */
 	public abstract void resizeImage();
 	
-	
-	
-
-	
+	/**
+	 * Checks whether the two versions of the given file are different.
+	 * Header can be ignored.
+	 * 
+	 * @param oldContent Old content of the file
+	 * @param newContent New content of the file
+	 * @param fileName The file name
+	 * @param ignoreHeader True if ignore header
+	 * 
+	 * @return True if files are the same
+	 */
+	public abstract boolean filesEqual(String oldContent,
+			String newContent,
+			String fileName,
+			boolean ignoreHeader);	
 	/**
 	 * Install an android project library from git.
 	 * @param url The url of the git repository.

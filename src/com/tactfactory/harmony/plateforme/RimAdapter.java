@@ -54,12 +54,16 @@ public final class RimAdapter extends BaseAdapter {
 	}
 
 	@Override
+	public boolean filesEqual(String oldContent, String newContent,
+			String fileName, boolean ignoreHeader) {
+		return oldContent.equals(newContent);
+	}
+	
+	@Override
 	public void installGitLibrary(String url, String pathLib,
 			String versionTag, String libName, List<File> filesToDelete,
 			String libraryProjectPath, String target, String referencePath,
 			boolean isSupportV4Dependant) {
 		throw new NotImplementedException();
-		
 	}
-
 }

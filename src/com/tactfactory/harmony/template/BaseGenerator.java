@@ -184,7 +184,7 @@ public abstract class BaseGenerator {
 				output.close();
 				
 				if (oldFile != null && !oldFile.isEmpty()) {
-					this.backupIfNeeded(generateFile, oldFile);
+					this.backupOrRollbackIfNeeded(generateFile, oldFile);
 				}
 			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);
@@ -280,14 +280,20 @@ public abstract class BaseGenerator {
 	 * @param file The file to backup
 	 * @param oldContent Its old content
 	 */
-	private void backupIfNeeded(final File file, final String oldContent) {
+	private void backupOrRollbackIfNeeded(
+			final File file, final String oldContent) {
 		String newContent = TactFileUtils.fileToString(file);
 		
-		if (!newContent.equals(oldContent)) {
+		if (!this.adapter.filesEqual(
+				oldContent, newContent, file.getName(), true)) {
 			String backupFileName = "." + file.getName() + ".back"; 
 			TactFileUtils.stringBufferToFile(
 					new StringBuffer(oldContent), 
 					new File(file.getParent() + "/" + backupFileName));
+		} else {
+			TactFileUtils.stringBufferToFile(
+					new StringBuffer(oldContent), 
+					file);
 		}
 	}
 }
