@@ -67,7 +67,7 @@ public class ${curr.name}ListFragment
 		// Create an empty adapter we will use to display the loaded data.
 		((PinnedHeaderListView) this.getListView())
 					.setPinnedHeaderEnabled(false);
-		this.mAdapter = new ${curr.name}ListAdapter(this.getActivity(), this);
+		this.mAdapter = new ${curr.name}ListAdapter(this.getActivity());
 
 		// Start out with a progress indicator.
 		this.setListShown(false);
