@@ -42,10 +42,8 @@ public class ${curr.name}ListAdapter
 	/**
 	 * Constructor.
 	 * @param ctx context
-	 * @param fragment fragment
 	 */
-	public ${curr.name}ListAdapter(Context ctx,
-			${curr.name?cap_first}ListFragment fragment) {
+	public ${curr.name}ListAdapter(Context ctx) {
 		super(ctx);
 	}
 

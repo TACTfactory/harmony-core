@@ -24,6 +24,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
+<#if (MetadataUtils.hasToOneRelations(curr) || curr.internal)>
+import com.google.common.base.Strings;
+import com.google.common.collect.ObjectArrays;
+</#if>
 ${ImportUtils.importRelatedSQLiteAdapters(curr, true, true)}
 ${ImportUtils.importRelatedEntities(curr)}
 ${ImportUtils.importRelatedEnums(curr)}<#if !(curr_ids?size>0)>import ${project_namespace}.harmony.exception.NotImplementedException;</#if>
@@ -328,14 +332,14 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 		${relation.name?uncap_first}Adapter.open(this.mDatabase);
 		Cursor ${relation.name?lower_case}Cursor = ${relation.name?uncap_first}Adapter
-					.getBy${relation.relation.mappedBy?cap_first}(result.get${curr_ids[0].name?cap_first}(), null);
+					.getBy${relation.relation.mappedBy?cap_first}(result.get${curr_ids[0].name?cap_first}(), ${relation.relation.targetEntity}SQLiteAdapter.ALIASED_COLS, null, null, null);
 		result.set${relation.name?cap_first}(${relation.name?uncap_first}Adapter.cursorToItems(${relation.name?lower_case}Cursor));
 				<#elseif (relation.relation.type=="ManyToMany")>
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter =
 				new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
 		Cursor ${relation.name?lower_case}Cursor = ${relation.relation.joinTable?lower_case}Adapter.getBy${relation.owner}(
-							result.get${curr_ids[0].name?cap_first}(), null);
+							result.get${curr_ids[0].name?cap_first}(), ${relation.relation.targetEntity}SQLiteAdapter.ALIASED_COLS, null, null, null);
 		result.set${relation.name?cap_first}(new ${relation.relation.targetEntity}SQLiteAdapter(ctx).cursorToItems(${relation.name?lower_case}Cursor));
 				<#else>
 		if (result.get${relation.name?cap_first}() != null) {
@@ -357,38 +361,34 @@ public abstract class ${curr.name}SQLiteAdapterBase
 
 	<#if (curr_relations??)>
 		<#list (curr_relations) as relation>
-			<#if (relation.relation.type=="ManyToOne" | relation.relation.type=="OneToOne")>
+			<#if (relation.relation.type=="ManyToOne" || relation.relation.type=="OneToOne")>
 	/**
 	 * Find & read ${curr.name} by ${relation.name}.
 	 * @param ${relation.name?lower_case}Id ${relation.name?lower_case}Id
 	 * @param orderBy Order by string (can be null)
 	 * @return List of ${curr.name} entities
 	 */
-	 public Cursor getBy${relation.name?cap_first}(final int ${relation.name?lower_case}Id, String orderBy) {
-		final Cursor cursor = this.query(ALIASED_COLS,
-				${relation.owner}SQLiteAdapter.${NamingUtils.alias(relation.name)} + "=?",
-				new String[]{Integer.toString(${relation.name?lower_case}Id)},
+	 public Cursor getBy${relation.name?cap_first}(final int ${relation.name?lower_case}Id, String[] projection, String selection, String[] selectionArgs, String orderBy) {
+		String idSelection = ${relation.owner}SQLiteAdapter.${NamingUtils.alias(relation.name)} + "=?";
+		String idSelectionArgs = String.valueOf(${relation.name?lower_case}Id);
+		if (!Strings.isNullOrEmpty(selection)) {
+			selection += " AND " + idSelection;
+			selectionArgs = ObjectArrays.concat(selectionArgs, idSelectionArgs);
+		} else {
+			selection = idSelection;
+			selectionArgs = new String[]{idSelectionArgs};
+		}
+		final Cursor cursor = this.query(
+				projection,
+				selection,
+				selectionArgs,
 				null,
 				null,
 				orderBy);
 
 		return cursor;
 	 }
-
-			<#elseif (relation.relation.type=="ManyToMany")>	<#--
-	/**
-	 * Find & read ${curr.name} by ${relation.name}.
-	 * @param ${relation.name?lower_case}Id ${relation.name?lower_case}Id
-	 * @return List of ${curr.name} entities
-	 */
-	public Cursor getBy${relation.name?cap_first}(int ${relation.name?lower_case}Id) {
-		final Cursor cursor = this.getCursor(${NamingUtils.alias(relation.name)} + "=?",
-				new String[]{Integer.toString(${relation.name?lower_case}Id)});
-
-		return cursor;
-	 }
-
-			--></#if>
+			</#if>
 		</#list>
 	</#if>
 
@@ -879,18 +879,28 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		${relation.relation.joinTable}SQLiteAdapter ${relation.name}Adapter = 
 					new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 		${relation.name}Adapter.open(this.mDatabase);
-		item.set${relation.name?cap_first}(new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx).cursorToItems(${relation.name}Adapter.getBy${curr.name}(item.getId(), null)));
+		item.set${relation.name?cap_first}(
+				new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx)
+						.cursorToItems(${relation.name}Adapter
+								.getBy${curr.name}(
+										item.getId(),
+										${relation.relation.joinTable}SQLiteAdapter.ALIASED_COLS, null, null, null)));
 				<#elseif relation.relation.type == "OneToMany">
 		${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter = 
 					new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 		${relation.name}Adapter.open(this.mDatabase);
-		item.set${relation.name?cap_first}(${relation.name}Adapter.cursorToItems(${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(item.getId(), null)));
+		item.set${relation.name?cap_first}(
+				${relation.name}Adapter.cursorToItems(
+						${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(
+								item.getId(),
+								${relation.relation.targetEntity}SQLiteAdapter.ALIASED_COLS, null, null, null)));
 				<#else>
 		if (item.get${relation.name?cap_first}() != null) {
 			${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter = 
 						new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 			${relation.name}Adapter.open(this.mDatabase);
-			item.set${relation.name?cap_first}(${relation.name}Adapter.getByID(item.get${relation.name?cap_first}().getId()));
+			item.set${relation.name?cap_first}(${relation.name}Adapter
+					.getByID(item.get${relation.name?cap_first}().getId()));
 		}
 				</#if>
 			</#if>
@@ -950,6 +960,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public Cursor getBy${leftRelation.relation.targetEntity}(
 			final int ${leftRelation.name?uncap_first},
+			final String[] projection,
+			String selection,
+			String[] selectionArgs,
 			final String orderBy) {
 
 		Cursor ret = null;
@@ -966,10 +979,21 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		${rightRelation.relation.targetEntity?lower_case}SelectCrit.addValue(value);
 		${rightRelation.relation.targetEntity?lower_case}Crit.add(${rightRelation.relation.targetEntity?lower_case}SelectCrit);
 		
+		if (Strings.isNullOrEmpty(selection)) {
+			selection = ${rightRelation.relation.targetEntity?lower_case}Crit.toSQLiteSelection();
+			selectionArgs = ${rightRelation.relation.targetEntity?lower_case}Crit.toSQLiteSelectionArgs();
+		} else {
+			selection += " AND " + ${rightRelation.relation.targetEntity?lower_case}Crit.toSQLiteSelection();
+			selectionArgs = ObjectArrays.concat(
+						${rightRelation.relation.targetEntity?lower_case}Crit.toSQLiteSelectionArgs(),
+						selectionArgs,
+						String.class);
+		}
+
 		ret = this.mDatabase.query(${rightRelation.relation.targetEntity}SQLiteAdapter.TABLE_NAME,
-				${rightRelation.relation.targetEntity}SQLiteAdapter.ALIASED_COLS,
-				${rightRelation.relation.targetEntity?lower_case}Crit.toSQLiteSelection(),
-				${rightRelation.relation.targetEntity?lower_case}Crit.toSQLiteSelectionArgs(),
+				projection,
+				selection,
+				selectionArgs,
 				null,
 				null,
 				orderBy);

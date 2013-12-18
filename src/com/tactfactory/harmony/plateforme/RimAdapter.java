@@ -8,6 +8,11 @@
  */
 package com.tactfactory.harmony.plateforme;
 
+import java.io.File;
+import java.util.List;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import com.tactfactory.harmony.meta.ClassMetadata;
 
 /** RIM Blackberry Adapter of project structure. */
@@ -53,5 +58,12 @@ public final class RimAdapter extends BaseAdapter {
 			String fileName, boolean ignoreHeader) {
 		return oldContent.equals(newContent);
 	}
-
+	
+	@Override
+	public void installGitLibrary(String url, String pathLib,
+			String versionTag, String libName, List<File> filesToDelete,
+			String libraryProjectPath, String target, String referencePath,
+			boolean isSupportV4Dependant) {
+		throw new NotImplementedException();
+	}
 }

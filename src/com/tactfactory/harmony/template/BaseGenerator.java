@@ -36,8 +36,7 @@ import freemarker.template.TemplateException;
  */
 public abstract class BaseGenerator {
 
-	/** GIT command. */
-	protected static final String GIT = "git";
+	
 	// Meta-models
 	/** The application metadata. */
 	private ApplicationMetadata appMetas;
@@ -274,98 +273,7 @@ public abstract class BaseGenerator {
 						utilName),
 				false);
 	}
-	
-	/**
-	 * Install an android project library from git.
-	 * @param url The url of the git repository.
-	 * @param pathLib The folder path where the repo should be downloaded
-	 * @param versionTag The tag/commit/branch you want to checkout
-	 * @param libName The library name (ie. demact-abs)
-	 * @param filesToDelete The list of files/folders to delete (samples, etc.)
-	 * @param libraryProjectPath The library project path inside the downloaded
-	 * 				folder
-	 * @param isSupportV4Dependant true if the library is supportv4 dependent
-	 */
-	protected void installGitLibrary(String url,
-			String pathLib,
-			String versionTag,
-			String libName,
-			List<File> filesToDelete,
-			String libraryProjectPath,
-			boolean isSupportV4Dependant) {		
 
-		if (!TactFileUtils.exists(pathLib)) {
-			final ArrayList<String> command = new ArrayList<String>();
-
-			
-			// Clone Command
-			command.add(GIT);
-			command.add("clone");
-			command.add(url);
-			command.add(pathLib);
-			ConsoleUtils.launchCommand(command);
-			command.clear();
-
-			// Checkout Command
-			if (versionTag != null) {
-				command.add(GIT);
-				command.add(String.format(
-						"%s%s/%s",
-						"--git-dir=",
-						pathLib,
-						".git"));
-	
-				command.add(String.format("%s%s",
-						"--work-tree=",
-						pathLib));
-	
-				command.add("checkout");
-				command.add(versionTag);
-				ConsoleUtils.launchCommand(command);
-				command.clear();
-			}
-			
-			// Delete useless files
-			if (filesToDelete != null) {
-				for (File fileToDelete : filesToDelete) {
-					TactFileUtils.deleteRecursive(fileToDelete);
-				}
-			}
-
-			//make build sherlock
-			String sdkTools = String.format("%s/%s",
-					ApplicationMetadata.getAndroidSdkPath(),
-					"tools/android");
-			if (OsUtil.isWindows()) {
-				sdkTools += ".bat";
-			}
-
-			command.add(new File(sdkTools).getAbsolutePath());
-			command.add("update");
-			command.add("project");
-			command.add("--path");
-			command.add(libraryProjectPath);
-			command.add("--name");
-			command.add(libName);
-			ConsoleUtils.launchCommand(command);
-
-			if (isSupportV4Dependant) {
-				AndroidSDKManager.copySupportV4Into(libraryProjectPath + "/libs/");
-			}
-		}
-
-		final File projectFolder = new File(Harmony.getProjectAndroidPath());
-		final ArrayList<String> command = new ArrayList<String>();
-		command.add(GIT);
-		command.add("submodule");
-		command.add("add");
-		// command depot
-		command.add(url);
-		command.add(TactFileUtils.absoluteToRelativePath(
-				pathLib,
-				projectFolder.getAbsolutePath()));
-		ConsoleUtils.launchCommand(command, projectFolder.getAbsolutePath());
-	}
 	
 	/** 
 	 * Backup the given file if its old content is not the same.

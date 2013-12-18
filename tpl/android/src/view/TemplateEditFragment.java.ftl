@@ -52,8 +52,7 @@ import ${curr.namespace}.harmony.widget.DateTimeWidget;
 import ${project_namespace}.harmony.widget.MultiEntityWidget;</#if><#if hasToOneRelation>
 import ${project_namespace}.harmony.widget.SingleEntityWidget;</#if><#if (ViewUtils.hasTypeEnum(fields?values))>
 import ${project_namespace}.harmony.widget.EnumSpinner;</#if>
-import ${project_namespace}.harmony.widget.ValidationButtons;
-import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
+import ${project_namespace}.menu.SaveMenuWrapper.SaveMenuInterface;
 <#if hasToManyRelation>import ${project_namespace}.provider.${curr.name}ProviderAdapter;</#if>
 ${ImportUtils.importRelatedProviderUtils(curr, true)}
 <#list relations as field>
@@ -71,7 +70,7 @@ import ${project_namespace}.data.${field.relation.targetEntity}SQLiteAdapter;
  * @see android.app.Fragment
  */
 public class ${curr.name}EditFragment extends HarmonyFragment
-			implements OnValidationListener {
+			implements SaveMenuInterface {
 	/** Model data. */
 	protected ${curr.name} model = new ${curr.name}();
 
@@ -117,8 +116,6 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			</#if>
 		</#if>
 	</#list>
-	/** Save button. */
-	protected ValidationButtons validationButtons;
 
 	/** Initialize view of curr.fields.
 	 *
@@ -177,10 +174,6 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 				</#if>
 			</#if>
 		</#list>
-
-		this.validationButtons = (ValidationButtons) view.findViewById(
-					R.id.${curr.name?lower_case}_validation);
-		this.validationButtons.setListener(this);
 	}
 
 	/** Load data from model to curr.fields view. */
@@ -223,7 +216,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 						false);
 
 		final Intent intent =  getActivity().getIntent();
-		this.model = (${curr.name}) intent.getSerializableExtra(
+		this.model = (${curr.name}) intent.getParcelableExtra(
 				${curr.name}.PARCEL);
 
 		this.initializeComponent(view);
@@ -415,16 +408,11 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 </#if>
 
 	@Override
-	public void onValidationSelected() {
+	public void onClickSave() {
 		if (this.validateData()) {
 			this.saveData();
 			new EditTask(this, this.model).execute();
 		}
-	}
-
-	@Override
-	public void onCancelSelected() {
-		this.getActivity().finish();
 	}
 
 <#list relations as relation>

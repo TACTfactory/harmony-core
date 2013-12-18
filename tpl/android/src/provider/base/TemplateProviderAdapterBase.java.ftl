@@ -15,6 +15,12 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
+import com.google.common.base.Strings;
+
+<#if (curr.options.sync??)>
+import org.joda.time.DateTime;
+import org.joda.time.format.ISODateTimeFormat;
+</#if>
 <#if (!curr.internal)>
 import ${entity_namespace}.${curr.name};
 </#if>import ${local_namespace}.${project_name?cap_first}Provider;
@@ -225,7 +231,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							parentSelectionArgs);
 				}
 					<#else>
-				if (selection == null || selection.length() < 1) {
+				if (Strings.isNullOrEmpty(selection)) {
 					selection = 
 						${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
 					selectionArgs = new String[]{${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER};
@@ -329,7 +335,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 
 			case ${curr.name?upper_case}_ALL:
 				<#if inherited && singleTabInheritance>
-				if (selection == null || selection.length() < 1) {
+				if (Strings.isNullOrEmpty(selection)) {
 					selection = 
 						${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?"<#if (curr.options.sync??)>
 								+ " AND " + ${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_COL_SYNC_DTAG + " = ?"</#if>;
@@ -378,17 +384,17 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				${relation.relation.joinTable}SQLiteAdapter ${relation.name}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 				${relation.name}Adapter.open(this.getDb());
 						<#if (relation.relation.orders?? && relation.relation.orders?size > 0) >
-				result = ${relation.name}Adapter.getBy${curr.name}(id, "<#list relation.relation.orders?keys as orderKey>${orderKey} ${relation.relation.orders[orderKey]}<#if orderKey_has_next> AND </#if></#list>");
+				result = ${relation.name}Adapter.getBy${curr.name}(id, ${relation.relation.targetEntity}SQLiteAdapter.ALIASED_COLS, selection, selectionArgs, "<#list relation.relation.orders?keys as orderKey>${orderKey} ${relation.relation.orders[orderKey]}<#if orderKey_has_next> AND </#if></#list>");
 						<#else>
-				result = ${relation.name}Adapter.getBy${curr.name}(id, null);
+				result = ${relation.name}Adapter.getBy${curr.name}(id, ${relation.relation.targetEntity}SQLiteAdapter.ALIASED_COLS, selection, selectionArgs, null);
 						</#if>
 					<#else>
 				${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 				${relation.name}Adapter.open(this.getDb());
 						<#if (relation.relation.orders?? && relation.relation.orders?size > 0) >
-				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id, "<#list relation.relation.orders?keys as orderKey>${orderKey} ${relation.relation.orders[orderKey]}<#if orderKey_has_next> AND </#if></#list>");
+				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id, ${relation.relation.targetEntity}SQLiteAdapter.ALIASED_COLS, selection, selectionArgs, "<#list relation.relation.orders?keys as orderKey>${orderKey} ${relation.relation.orders[orderKey]}<#if orderKey_has_next> AND </#if></#list>");
 						<#else>
-				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id, null);
+				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id, ${relation.relation.targetEntity}SQLiteAdapter.ALIASED_COLS, selection, selectionArgs, null);
 						</#if>
 					</#if>
 				</#if>
@@ -496,7 +502,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					}
 				}
 					<#else>
-				if (selection == null || selection.length() < 1) {
+				if (Strings.isNullOrEmpty(selection)) {
 					selection = 
 						${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
 					selectionArgs = new String[]{${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER};

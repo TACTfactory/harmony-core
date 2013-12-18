@@ -13,7 +13,7 @@ import ${data_namespace}.base.SQLiteAdapterBase;
 import ${project_namespace}.provider.${project_name?cap_first}Provider;
 
 /**
- * ProviderAdapterBase<T extends Serializable>. 
+ * ProviderAdapterBase<T>. 
  *
  * DO NOT MODIFY THIS CLASS AS IT IS REGENERATED
  *

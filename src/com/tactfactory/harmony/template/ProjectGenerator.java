@@ -240,11 +240,14 @@ public class ProjectGenerator extends BaseGenerator {
 							pathLib,
 							"samples")));
 		
-		this.installGitLibrary("https://github.com/JakeWharton/ActionBarSherlock.git",
+		this.getAdapter().installGitLibrary(
+				"https://github.com/JakeWharton/ActionBarSherlock.git",
 				pathLib,
 				"4.2.0",
 				ApplicationMetadata.INSTANCE.getName() + "-abs",
 				filesToDelete,
+				pathLib + "/library",
+				null,
 				pathLib + "/library",
 				true);
 		
@@ -331,7 +334,7 @@ public class ProjectGenerator extends BaseGenerator {
 	private void initGitProject() {
 		final ArrayList<String> command = new ArrayList<String>();
 		final File projectFolder = new File(Harmony.getProjectAndroidPath());
-		command.add(GIT);
+		command.add("git");
 		command.add("init");
 		command.add(projectFolder.getAbsolutePath());
 		ConsoleUtils.launchCommand(command);
