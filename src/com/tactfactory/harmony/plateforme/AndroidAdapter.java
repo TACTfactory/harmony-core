@@ -20,6 +20,28 @@ import com.tactfactory.harmony.utils.TactFileUtils;
 
 /** Google Android Adapter of project structure. */
 public final class AndroidAdapter extends BaseAdapter {
+	/* Constants. */
+	/** Constant for java extension. */
+	private static final String JAVA_EXTENSION = "java";
+
+	/** Constant for package keyword. */
+	private static final String PACKAGE = "package";
+	
+	/**	Constant for Drawable folder */
+	private static final String DRAWABLE_FOLDER = "/drawable";
+	
+	/**	Constant for XHDPI drawable folder */
+	private static final String XHDPI_FOLDER = DRAWABLE_FOLDER + "-xhdpi";
+	
+	/**	Constant for HDPI drawable folder */
+	private static final String HDPI_FOLDER = DRAWABLE_FOLDER + "-hdpi";
+	
+	/**	Constant for MDPI drawable folder */
+	private static final String MDPI_FOLDER = DRAWABLE_FOLDER + "-mdpi";
+	
+	/**	Constant for LDPI drawable folder */
+	private static final String LDPI_FOLDER = DRAWABLE_FOLDER + "-ldpi";
+	
 	/** Ratio for HD images resizing. */
 	private static final float HD_RATIO = 0.75f;
 
@@ -178,9 +200,9 @@ public final class AndroidAdapter extends BaseAdapter {
 			boolean ignoreHeader) {
 		boolean result = false;
 		
-		if (ignoreHeader && fileName.endsWith("java")) {
-			oldContent = oldContent.substring(oldContent.indexOf("package"));
-			newContent = newContent.substring(newContent.indexOf("package"));
+		if (ignoreHeader && fileName.endsWith(JAVA_EXTENSION)) {
+			oldContent = oldContent.substring(oldContent.indexOf(PACKAGE));
+			newContent = newContent.substring(newContent.indexOf(PACKAGE));
 		}
 		
 		result = oldContent.equals(newContent);
@@ -192,13 +214,13 @@ public final class AndroidAdapter extends BaseAdapter {
 	@Override
 	public void resizeImage() {
 		final File imageDirectoryXHD
-				= new File(this.getRessourcePath() + "/drawable-xhdpi");
+				= new File(this.getRessourcePath() + XHDPI_FOLDER);
 		final File imageDirectoryHD
-				= new File(this.getRessourcePath() + "/drawable-hdpi");
+				= new File(this.getRessourcePath() + HDPI_FOLDER);
 		final File imageDirectoryMD
-				= new File(this.getRessourcePath() + "/drawable-mdpi");
+				= new File(this.getRessourcePath() + MDPI_FOLDER);
 		final File imageDirectoryLD
-				= new File(this.getRessourcePath() + "/drawable-ldpi");
+				= new File(this.getRessourcePath() + LDPI_FOLDER);
 
 		File imageHD;
 		File imageMD;
