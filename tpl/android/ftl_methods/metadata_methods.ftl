@@ -110,7 +110,7 @@
 	<#return ret />
 </#function>
 <#function isOnlyDependantOf entity entity_list>
-	<#if (entity.inheritance?? && entity.inheritance.superclass??)>
+	<#if (entity.inheritance?? && entity.inheritance.superclass?? && entities[entity.inheritance.superclass.name]??)>
 		<#if !(Utils.isInArray(entity_list, entity.inheritance.superclass.name))>
 			<#return false />
 		</#if>
