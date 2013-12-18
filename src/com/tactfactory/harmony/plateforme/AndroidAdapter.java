@@ -11,15 +11,25 @@ package com.tactfactory.harmony.plateforme;
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.annotation.Column;
+import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
+import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.ImageUtils;
+import com.tactfactory.harmony.utils.OsUtil;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
 /** Google Android Adapter of project structure. */
 public final class AndroidAdapter extends BaseAdapter {
+
+	/** GIT command. */
+	protected static final String GIT = "git";
+	
 	/** Ratio for HD images resizing. */
 	private static final float HD_RATIO = 0.75f;
 
@@ -99,6 +109,111 @@ public final class AndroidAdapter extends BaseAdapter {
 		return String.format("%s.%s",
 				cm.getSpace(),
 				type);
+	}
+	
+	
+	@Override
+	public void installGitLibrary(String url,
+			String pathLib,
+			String versionTag,
+			String libName,
+			List<File> filesToDelete,
+			String libraryProjectPath,
+			String target,
+			String referencePath,
+			boolean isSupportV4Dependant) {		
+
+		if (!TactFileUtils.exists(pathLib)) {
+			final ArrayList<String> command = new ArrayList<String>();
+
+			
+			// Clone Command
+			command.add(GIT);
+			command.add("clone");
+			command.add(url);
+			command.add(pathLib);
+			ConsoleUtils.launchCommand(command);
+			command.clear();
+
+			// Checkout Command
+			if (versionTag != null) {
+				command.add(GIT);
+				command.add(String.format(
+						"%s%s/%s",
+						"--git-dir=",
+						pathLib,
+						".git"));
+	
+				command.add(String.format("%s%s",
+						"--work-tree=",
+						pathLib));
+	
+				command.add("checkout");
+				command.add(versionTag);
+				ConsoleUtils.launchCommand(command);
+				command.clear();
+			}
+			
+			// Delete useless files
+			if (filesToDelete != null) {
+				for (File fileToDelete : filesToDelete) {
+					TactFileUtils.deleteRecursive(fileToDelete);
+				}
+			}
+
+			//make build sherlock
+			String sdkTools = String.format("%s/%s",
+					ApplicationMetadata.getAndroidSdkPath(),
+					"tools/android");
+			if (OsUtil.isWindows()) {
+				sdkTools += ".bat";
+			}
+
+			command.add(new File(sdkTools).getAbsolutePath());
+			command.add("update");
+			command.add("project");
+			command.add("--path");
+			command.add(libraryProjectPath);
+			command.add("--name");
+			command.add(libName);
+			if (target != null) {
+				command.add("--target");
+				command.add(target);
+			}
+			ConsoleUtils.launchCommand(command);
+			command.clear();
+
+			if (isSupportV4Dependant) {
+				AndroidSDKManager.copySupportV4Into(libraryProjectPath + "/libs/");
+			}
+			
+			final File projectFolder = new File(Harmony.getProjectAndroidPath());
+			command.add(GIT);
+			command.add("submodule");
+			command.add("add");
+			// command depot
+			command.add(url);
+			command.add(TactFileUtils.absoluteToRelativePath(
+					pathLib,
+					projectFolder.getAbsolutePath()));
+			ConsoleUtils.launchCommand(command, projectFolder.getAbsolutePath());
+			command.clear();
+			
+			if (referencePath != null) {
+				// Update android project to reference the new downloaded library
+				String projectPath = Harmony.getProjectPath() + this.getPlatform();
+				command.add(new File(sdkTools).getAbsolutePath());
+				command.add("update");
+				command.add("project");
+				command.add("--path");
+				command.add(projectPath);
+				command.add("--library");
+				command.add(TactFileUtils.absoluteToRelativePath(
+						referencePath, projectPath));
+				ConsoleUtils.launchCommand(command);
+				command.clear();
+			}
+		}
 	}
 
 	@Override

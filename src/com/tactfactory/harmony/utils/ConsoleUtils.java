@@ -525,8 +525,7 @@ public abstract class ConsoleUtils {
 						if (this.processError.ready()) {
 							final String error = this.processError.readLine();
 							if (error != null && !error.isEmpty()
-									&& !"Note: checking out '4.2.0'."
-									.equals(error)) {
+									&& !error.startsWith("Note: checking out ")) {
 								if (("'libs/sherlock' already "
 										+ "exists in the index")
 										.equals(error)) {

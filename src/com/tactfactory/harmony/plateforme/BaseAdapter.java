@@ -8,6 +8,9 @@
  */
 package com.tactfactory.harmony.plateforme;
 
+import java.io.File;
+import java.util.List;
+
 import com.tactfactory.harmony.Context;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
@@ -122,6 +125,33 @@ public abstract class BaseAdapter {
 
 	/** Convert image structure to alternative resolution. */
 	public abstract void resizeImage();
+	
+	
+	
+
+	
+	/**
+	 * Install an android project library from git.
+	 * @param url The url of the git repository.
+	 * @param pathLib The folder path where the repo should be downloaded
+	 * @param versionTag The tag/commit/branch you want to checkout
+	 * @param libName The library name (ie. demact-abs)
+	 * @param filesToDelete The list of files/folders to delete (samples, etc.)
+	 * @param libraryProjectPath The library project path inside the downloaded
+	 * 				folder
+	 * @param target The SDK build target
+	 * @param referencePath The library path to reference in your project
+	 * @param isSupportV4Dependant true if the library is supportv4 dependent
+	 */
+	public abstract void installGitLibrary(String url,
+			String pathLib,
+			String versionTag,
+			String libName,
+			List<File> filesToDelete,
+			String libraryProjectPath,
+			String target,
+			String referencePath,
+			boolean isSupportV4Dependant);
 
 	// Utils
 	/**

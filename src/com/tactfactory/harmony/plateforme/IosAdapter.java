@@ -8,6 +8,11 @@
  */
 package com.tactfactory.harmony.plateforme;
 
+import java.io.File;
+import java.util.List;
+
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+
 import com.tactfactory.harmony.meta.ClassMetadata;
 
 /** Apple iOS Adapter of project structure. */
@@ -62,6 +67,16 @@ public final class IosAdapter extends BaseAdapter {
 	public void resizeImage() {
 		// TODO Auto-generated method stub
 
+	}
+
+
+	@Override
+	public void installGitLibrary(String url, String pathLib,
+			String versionTag, String libName, List<File> filesToDelete,
+			String libraryProjectPath, String target, String referencePath,
+			boolean isSupportV4Dependant) {
+		throw new NotImplementedException();
+		
 	}
 
 }
