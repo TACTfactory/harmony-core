@@ -15,6 +15,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 <#if (curr.options.sync??)>
+import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 </#if>
 <#if (!curr.internal)>

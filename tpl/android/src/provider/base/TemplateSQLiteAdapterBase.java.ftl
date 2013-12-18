@@ -879,18 +879,28 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		${relation.relation.joinTable}SQLiteAdapter ${relation.name}Adapter = 
 					new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 		${relation.name}Adapter.open(this.mDatabase);
-		item.set${relation.name?cap_first}(new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx).cursorToItems(${relation.name}Adapter.getBy${curr.name}(item.getId(), ${relation.relation.joinTable}SQLiteAdapter.ALIASED_COLS, null, null, null)));
+		item.set${relation.name?cap_first}(
+				new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx)
+						.cursorToItems(${relation.name}Adapter
+								.getBy${curr.name}(
+										item.getId(),
+										${relation.relation.joinTable}SQLiteAdapter.ALIASED_COLS, null, null, null)));
 				<#elseif relation.relation.type == "OneToMany">
 		${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter = 
 					new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 		${relation.name}Adapter.open(this.mDatabase);
-		item.set${relation.name?cap_first}(${relation.name}Adapter.cursorToItems(${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(item.getId(), ${relation.relation.mappedBy}SQLiteAdapter.ALIASED_COLS, null, null, null)));
+		item.set${relation.name?cap_first}(
+				${relation.name}Adapter.cursorToItems(
+						${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(
+								item.getId(),
+								${relation.relation.targetEntity}SQLiteAdapter.ALIASED_COLS, null, null, null)));
 				<#else>
 		if (item.get${relation.name?cap_first}() != null) {
 			${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter = 
 						new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 			${relation.name}Adapter.open(this.mDatabase);
-			item.set${relation.name?cap_first}(${relation.name}Adapter.getByID(item.get${relation.name?cap_first}().getId()));
+			item.set${relation.name?cap_first}(${relation.name}Adapter
+					.getByID(item.get${relation.name?cap_first}().getId()));
 		}
 				</#if>
 			</#if>
