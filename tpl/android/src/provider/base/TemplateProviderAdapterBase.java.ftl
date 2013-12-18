@@ -14,6 +14,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+
+import com.google.common.base.Strings;
+
 <#if (curr.options.sync??)>
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
@@ -228,7 +231,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							parentSelectionArgs);
 				}
 					<#else>
-				if (selection == null || selection.length() < 1) {
+				if (Strings.isNullOrEmpty(selection)) {
 					selection = 
 						${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
 					selectionArgs = new String[]{${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER};
@@ -332,7 +335,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 
 			case ${curr.name?upper_case}_ALL:
 				<#if inherited && singleTabInheritance>
-				if (selection == null || selection.length() < 1) {
+				if (Strings.isNullOrEmpty(selection)) {
 					selection = 
 						${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?"<#if (curr.options.sync??)>
 								+ " AND " + ${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_COL_SYNC_DTAG + " = ?"</#if>;
@@ -499,7 +502,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					}
 				}
 					<#else>
-				if (selection == null || selection.length() < 1) {
+				if (Strings.isNullOrEmpty(selection)) {
 					selection = 
 						${curr.inheritance.superclass.name}SQLiteAdapter.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
 					selectionArgs = new String[]{${curr.name}SQLiteAdapter.DISCRIMINATOR_IDENTIFIER};
