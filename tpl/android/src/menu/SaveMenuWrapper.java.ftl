@@ -12,6 +12,8 @@ import com.actionbarsherlock.view.MenuItem;
 
 import ${project_namespace}.R;
 
+import ${project_namespace}.menu.base.MenuWrapperBase;
+
 /**
  * Menu wrapper for save action. To implement a save menu item in your fragment
  * or activity, just make this fragment/activity implement the SaveMenuInterface
