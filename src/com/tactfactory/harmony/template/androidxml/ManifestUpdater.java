@@ -270,7 +270,7 @@ public class ManifestUpdater extends XmlManager {
 		if (setPerm) {
 			final Element permissionElem = new Element(ELEMENT_PERMISSION);
 			permissionElem.setAttribute(ATTRIBUTE_NAME, permission, ns);
-			rootNode.addContent(permissionElem);
+			rootNode.addContent(2, permissionElem);
 		}
 	}
 	
