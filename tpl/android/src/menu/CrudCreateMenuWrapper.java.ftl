@@ -5,7 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
+import android.support.v4.app.FragmentActivity;
 import com.actionbarsherlock.internal.view.menu.ActionMenuItem;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
@@ -22,7 +22,7 @@ public class CrudCreateMenuWrapper implements MenuWrapperBase {
 	private MenuItem addItem;
 	
 	@Override
-	public void initializeMenu(Menu menu, SherlockFragmentActivity activity,
+	public void initializeMenu(Menu menu, FragmentActivity activity,
 			Fragment fragment, Context ctx) {
 		
 		if (fragment != null && fragment instanceof CrudCreateMenuInterface) {	
@@ -40,7 +40,7 @@ public class CrudCreateMenuWrapper implements MenuWrapperBase {
 	}
 
 	@Override
-	public void updateMenu(Menu menu, SherlockFragmentActivity activity,
+	public void updateMenu(Menu menu, FragmentActivity activity,
 			Fragment fragment, Context ctx) {
 		if (fragment != null && fragment instanceof CrudCreateMenuInterface) {
 			menu.setGroupVisible(
@@ -74,7 +74,7 @@ public class CrudCreateMenuWrapper implements MenuWrapperBase {
 	}
 
 	@Override
-	public void clear(Menu menu, SherlockFragmentActivity activity,
+	public void clear(Menu menu, FragmentActivity activity,
 			Fragment fragment, Context ctx) {
 
 		if (fragment != null && fragment instanceof CrudCreateMenuInterface) {
