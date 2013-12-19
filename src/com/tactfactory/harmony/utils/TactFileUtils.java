@@ -370,7 +370,7 @@ public abstract class TactFileUtils extends FileUtils {
 	public static boolean ensureFolderExistence(final File file) {
 		boolean result = file.exists();
 		if (!result) {
-			result = file.mkdir();
+			result = file.mkdirs();
 		}
 		return result;
 	}
