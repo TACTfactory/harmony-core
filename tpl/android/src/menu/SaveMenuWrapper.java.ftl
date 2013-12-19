@@ -31,7 +31,7 @@ public class SaveMenuWrapper implements MenuWrapperBase {
 		if (fragment != null && fragment instanceof SaveMenuInterface) {	
 			
 			this.saveItem 	= menu.add(
-					DemactMenu.SAVE,
+					${project_name?cap_first}Menu.SAVE,
 					0,
 					Menu.NONE,
 					R.string.menu_item_save);
@@ -47,7 +47,7 @@ public class SaveMenuWrapper implements MenuWrapperBase {
 			Fragment fragment, Context ctx) {
 		if (fragment != null && fragment instanceof SaveMenuInterface) {
 			menu.setGroupVisible(
-					DemactMenu.SAVE, this.visible);
+					${project_name?cap_first}Menu.SAVE, this.visible);
 		}
 	}
 
@@ -81,7 +81,7 @@ public class SaveMenuWrapper implements MenuWrapperBase {
 			Fragment fragment, Context ctx) {
 
 		if (fragment != null && fragment instanceof SaveMenuInterface) {
-			menu.removeGroup(DemactMenu.SAVE);
+			menu.removeGroup(${project_name?cap_first}Menu.SAVE);
 		}
 	}
 
