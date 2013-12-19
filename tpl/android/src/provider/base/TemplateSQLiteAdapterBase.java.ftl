@@ -884,7 +884,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 						.cursorToItems(${relation.name}Adapter
 								.getBy${curr.name}(
 										item.getId(),
-										${relation.relation.joinTable}SQLiteAdapter.ALIASED_COLS, null, null, null)));
+										${relation.relation.targetEntity}SQLiteAdapter.ALIASED_COLS, null, null, null)));
 				<#elseif relation.relation.type == "OneToMany">
 		${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter = 
 					new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
