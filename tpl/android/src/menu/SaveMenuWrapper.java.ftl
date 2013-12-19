@@ -21,6 +21,8 @@ import ${project_namespace}.menu.base.MenuWrapperBase;
 public class SaveMenuWrapper implements MenuWrapperBase {
 	/** Menu item SAVE. */
 	private MenuItem saveItem;
+	/** Menu Visibility. */
+	private boolean visible = true;
 	
 	@Override
 	public void initializeMenu(Menu menu, FragmentActivity activity,
@@ -45,7 +47,7 @@ public class SaveMenuWrapper implements MenuWrapperBase {
 			Fragment fragment, Context ctx) {
 		if (fragment != null && fragment instanceof SaveMenuInterface) {
 			menu.setGroupVisible(
-					DemactMenu.SAVE, true);
+					DemactMenu.SAVE, this.visible);
 		}
 	}
 
@@ -81,6 +83,18 @@ public class SaveMenuWrapper implements MenuWrapperBase {
 		if (fragment != null && fragment instanceof SaveMenuInterface) {
 			menu.removeGroup(DemactMenu.SAVE);
 		}
+	}
+
+	@Override
+	public void hide(Menu menu, FragmentActivity activity, Fragment fragment,
+			Context ctx) {
+		this.visible = false;
+	}
+
+	@Override
+	public void show(Menu menu, FragmentActivity activity, Fragment fragment,
+			Context ctx) {
+		this.visible = true;
 	}
 
 	/**
