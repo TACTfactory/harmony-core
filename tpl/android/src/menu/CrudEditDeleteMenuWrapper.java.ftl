@@ -22,6 +22,8 @@ public class CrudEditDeleteMenuWrapper implements MenuWrapperBase {
 	private MenuItem deleteItem;
 	/** Edit menu item. */
 	private MenuItem editItem;
+	/** Menu Visibility. */
+	private boolean visible = true;
 	
 	@Override
 	public void initializeMenu(Menu menu, FragmentActivity activity,
@@ -57,7 +59,7 @@ public class CrudEditDeleteMenuWrapper implements MenuWrapperBase {
 		if (fragment != null 
 				&& fragment instanceof CrudEditDeleteMenuInterface) {
 			menu.setGroupVisible(
-					${project_name?cap_first}Menu.CRUDEDITDELETE, true);
+					${project_name?cap_first}Menu.CRUDEDITDELETE, this.visible);
 		}
 	}
 
@@ -91,6 +93,18 @@ public class CrudEditDeleteMenuWrapper implements MenuWrapperBase {
 				&& fragment instanceof CrudEditDeleteMenuInterface) {
 			menu.removeGroup(${project_name?cap_first}Menu.CRUDEDITDELETE);
 		}
+	}
+
+	@Override
+	public void hide(Menu menu, FragmentActivity activity, Fragment fragment,
+			Context ctx) {
+		this.visible = false;
+	}
+
+	@Override
+	public void show(Menu menu, FragmentActivity activity, Fragment fragment,
+			Context ctx) {
+		this.visible = true;
 	}
 
 	/**

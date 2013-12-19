@@ -204,4 +204,32 @@ public abstract class ${project_name?cap_first}MenuBase {
 					this.fragment);
 		}
 	}
+
+	/**
+	 * Hide the menus.
+	 */
+	public void hideMenus() {
+		for (int i = 0; i < this.menus.size(); i++) {
+			this.menus.valueAt(i).hide(menu,
+					(FragmentActivity) this.ctx,
+					this.fragment,
+					this.ctx);
+		}
+		
+		((FragmentActivity) this.ctx).supportInvalidateOptionsMenu();
+	}
+	
+	/**
+	 * Show the menus.
+	 */
+	public void showMenus() {
+		for (int i = 0; i < this.menus.size(); i++) {
+			this.menus.valueAt(i).show(menu,
+					(FragmentActivity) this.ctx,
+					this.fragment,
+					this.ctx);
+		}
+		
+		((FragmentActivity) this.ctx).supportInvalidateOptionsMenu();
+	}
 }

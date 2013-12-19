@@ -79,4 +79,29 @@ public interface MenuWrapperBase {
 			FragmentActivity activity,
 			Fragment fragment,
 			Context ctx);
+
+
+	/**
+	 * Menu hide.
+	 * @param menu The menu object
+	 * @param activity The current activity.
+	 * @param fragment The current fragment.
+	 * @param ctx The context
+	 */
+	void hide(Menu menu,
+			FragmentActivity activity,
+			Fragment fragment,
+			Context ctx);
+	
+	/**
+	 * Menu show.
+	 * @param menu The menu object
+	 * @param activity The current activity.
+	 * @param fragment The current fragment.
+	 * @param ctx The context
+	 */
+	void show(Menu menu,
+			FragmentActivity activity,
+			Fragment fragment,
+			Context ctx);
 }
