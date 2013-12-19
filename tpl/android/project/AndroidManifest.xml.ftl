@@ -5,7 +5,7 @@
       android:versionName="@string/app_version">
     <uses-sdk
     	android:minSdkVersion="7"
-    	android:targetSdkVersion="17" />
+    	android:targetSdkVersion="18" />
     <uses-permission android:name="android.permission.GET_TASKS"  />
     <application
     	android:label="@string/app_name"
