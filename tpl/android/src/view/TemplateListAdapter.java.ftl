@@ -47,6 +47,86 @@ public class ${curr.name}ListAdapter
 		super(ctx);
 	}
 
+	/**
+     * Constructor.
+     * 
+	 * @param context The context
+	 * @param resource The resource
+	 * @param textViewResourceId The resource id of the text view
+	 * @param objects The list of objects of this adapter
+	 */
+	public ${curr.name}ListAdapter(Context context,
+			int resource,
+			int textViewResourceId,
+			List<${curr.name}> objects) {
+		super(context, resource, textViewResourceId, objects);
+	}
+
+	/**
+     * Constructor.
+     *
+	 * @param context The context
+	 * @param resource The resource
+	 * @param textViewResourceId The resource id of the text view
+	 * @param objects The list of objects of this adapter
+	 */
+	public ${curr.name}ListAdapter(Context context,
+			int resource,
+			int textViewResourceId,
+			${curr.name}[] objects) {
+		super(context, resource, textViewResourceId, objects);
+	}
+
+	/**
+     * Constructor.
+     * 
+	 * @param context The context
+	 * @param resource The resource
+	 * @param textViewResourceId The resource id of the text view
+	 */
+	public ${curr.name}ListAdapter(Context context,
+			int resource,
+			int textViewResourceId) {
+		super(context, resource, textViewResourceId);
+	}
+
+	/**
+     * Constructor.
+     * 
+	 * @param context The context
+	 * @param textViewResourceId The resource id of the text view
+	 * @param objects The list of objects of this adapter
+	 */
+	public ${curr.name}ListAdapter(Context context,
+			int textViewResourceId,
+			List<${curr.name}> objects) {
+		super(context, textViewResourceId, objects);
+	}
+
+	/**
+     * Constructor.
+     * 
+	 * @param context The context
+	 * @param textViewResourceId The resource id of the text view
+	 * @param objects The list of objects of this adapter
+	 */
+	public ${curr.name}ListAdapter(Context context,
+			int textViewResourceId,
+			${curr.name}[] objects) {
+		super(context, textViewResourceId, objects);
+	}
+
+	/**
+     * Constructor.
+     * 
+	 * @param context The context
+	 * @param textViewResourceId The resource id of the text view
+	 */
+	public ${curr.name}ListAdapter(Context context,
+			int textViewResourceId) {
+		super(context, textViewResourceId);
+	}
+
 	/** Holder row. */
 	private static class ViewHolder extends SelectionItemView {
 
