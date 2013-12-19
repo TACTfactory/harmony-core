@@ -11,8 +11,7 @@ package com.tactfactory.harmony.plateforme;
 import java.io.File;
 import java.util.List;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
-
+import com.tactfactory.harmony.exception.NotImplementedException;
 import com.tactfactory.harmony.meta.ClassMetadata;
 
 /** RIM Blackberry Adapter of project structure. */
@@ -30,27 +29,27 @@ public final class RimAdapter extends BaseAdapter {
 
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException(
+				"Rim adapter has not been implemented yet.");
 	}
 
 	@Override
 	public String getNameSpaceEntity(final ClassMetadata cm,
 			final String type) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException(
+				"Rim adapter has not been implemented yet.");
 	}
 
 	@Override
 	public String getNativeType(final String type) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException(
+				"Rim adapter has not been implemented yet.");
 	}
 
 	@Override
 	public void resizeImage() {
-		// TODO Auto-generated method stub
-
+		throw new NotImplementedException(
+				"Rim adapter has not been implemented yet.");
 	}
 
 	@Override
@@ -64,6 +63,7 @@ public final class RimAdapter extends BaseAdapter {
 			String versionTag, String libName, List<File> filesToDelete,
 			String libraryProjectPath, String target, String referencePath,
 			boolean isSupportV4Dependant) {
-		throw new NotImplementedException();
+		throw new NotImplementedException(
+				"Rim adapter has not been implemented yet.");
 	}
 }
