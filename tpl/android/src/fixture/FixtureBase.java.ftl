@@ -296,4 +296,10 @@ public abstract class FixtureBase<T> {
 	    }
 	}
 	</#if>
+
+	/**
+	 * Gets the extracted fixture corresponding to the given name.
+	 * This method will search for a T type, or for any type extending T.
+	 */
+	protected abstract T get(final String key);
 }

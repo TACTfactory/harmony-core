@@ -164,4 +164,23 @@ public final class ${curr.name?cap_first}DataLoader
 	public String getFixtureFileName() {
 		return FILE_NAME;
 	}
+
+	@Override
+	protected ${curr.name} get(final String key) {
+		final ${curr.name} result;
+		if (this.items.containsKey(key)) {
+			result = this.items.get(key);
+		}
+		<#if (curr.inheritance?? && curr.inheritance.subclasses??)>
+			<#list curr.inheritance.subclasses as subclass>
+		else if (${subclass.name}DataLoader.getInstance(this.ctx).items.containsKey(key)) {
+			result = ${subclass.name}DataLoader.getInstance(this.ctx).items.get(key);
+		}
+			</#list>
+		</#if>
+		else {
+			result = null;
+		}
+		return result;
+	}
 }
