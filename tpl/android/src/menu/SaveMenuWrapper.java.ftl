@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
-import com.actionbarsherlock.app.SherlockFragmentActivity;
+import android.support.v4.app.FragmentActivity;
 import com.actionbarsherlock.internal.view.menu.ActionMenuItem;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
 import ${project_namespace}.R;
+
+import ${project_namespace}.menu.base.MenuWrapperBase;
 
 /**
  * Menu wrapper for save action. To implement a save menu item in your fragment
@@ -21,7 +23,7 @@ public class SaveMenuWrapper implements MenuWrapperBase {
 	private MenuItem saveItem;
 	
 	@Override
-	public void initializeMenu(Menu menu, SherlockFragmentActivity activity,
+	public void initializeMenu(Menu menu, FragmentActivity activity,
 			Fragment fragment, Context ctx) {
 		
 		if (fragment != null && fragment instanceof SaveMenuInterface) {	
@@ -39,7 +41,7 @@ public class SaveMenuWrapper implements MenuWrapperBase {
 	}
 
 	@Override
-	public void updateMenu(Menu menu, SherlockFragmentActivity activity,
+	public void updateMenu(Menu menu, FragmentActivity activity,
 			Fragment fragment, Context ctx) {
 		if (fragment != null && fragment instanceof SaveMenuInterface) {
 			menu.setGroupVisible(
@@ -73,7 +75,7 @@ public class SaveMenuWrapper implements MenuWrapperBase {
 	}
 
 	@Override
-	public void clear(Menu menu, SherlockFragmentActivity activity,
+	public void clear(Menu menu, FragmentActivity activity,
 			Fragment fragment, Context ctx) {
 
 		if (fragment != null && fragment instanceof SaveMenuInterface) {
