@@ -128,7 +128,7 @@ public final class ${curr.name?cap_first}DataLoader
 		${curr.inheritance.superclass.name}DataLoader.getInstance(this.ctx).extractItem(columns, ${curr.name?uncap_first});
 
 		</#if>
-<#list curr_fields as field>${AdapterUtils.ymlExtractFieldAdapter(curr.name?uncap_first, field, curr, 2)}</#list>
+<#list curr_fields as field><#if (field.relation?? || field.harmony_type?lower_case=="enum" || field.harmony_type?lower_case=="datetime")>${AdapterUtils.ymlExtractFieldAdapter(curr.name?uncap_first, field, curr, 2)}<#else>${curr.name?uncap_first}.set${field.name?cap_first}(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, ${field.type}.class));</#if></#list>
 	</#if>
 
 		return ${curr.name?uncap_first};

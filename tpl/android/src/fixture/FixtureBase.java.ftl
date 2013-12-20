@@ -334,4 +334,28 @@ public abstract class FixtureBase<T> {
 	 * This method will search for a T type, or for any type extending T.
 	 */
 	protected abstract T get(final String key);
+
+	/**
+	 * Parse a basic field (for datetimes/enums/relations,
+	 * use the dedicated functions.)
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 * @param type The type to parse (String.class, Integer.class, etc.)
+	 *
+	 * @result The value of the field
+	 */
+	protected <U> U parseField(final Map<?, ?> columns,
+				final String key,
+				final Class<U> type) {
+		U result;
+		
+		if (columns.containsKey(key)) {
+			result = (U) columns.get(key);
+		} else {
+			result = null;
+		}
+		
+		return result;
+	}
 }
