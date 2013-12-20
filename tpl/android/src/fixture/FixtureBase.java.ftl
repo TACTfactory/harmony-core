@@ -101,18 +101,7 @@ public abstract class FixtureBase<T> {
 							this.items.put(elementName,
 								this.extractItem(element));
 						} catch (Exception e) {
-							StringBuilder error = new StringBuilder();
-							error.append("Error in ");
-							error.append(fileName);
-							error.append(".xml");
-							error.append(" in field ");
-							error.append(elementName);
-							error.append(".");
-							error.append(this.currentFieldName);
-							error.append(" => ");
-							error.append(e.getMessage());
-
-							Log.e(TAG, error.toString());
+							this.displayError(e, fileName, elementName);
 						}
 					}
 				}
@@ -147,24 +136,33 @@ public abstract class FixtureBase<T> {
 							this.items.put((String) name,
 								this.extractItem(currEntity));
 						} catch (Exception e) {
-							StringBuilder error = new StringBuilder();
-							error.append("Error in ");
-							error.append(fileName);
-							error.append(".yml");
-							error.append(" in field ");
-							error.append(name);
-							error.append(".");
-							error.append(this.currentFieldName);
-							error.append(" => ");
-							error.append(e.getMessage());
-
-							Log.e(TAG, error.toString());
+							this.displayError(e, fileName, name.toString());
 						}
 					}
 				}
 			}
 		}
 </#if>
+	}
+
+	/**
+	 * Display a fixture error.
+	 */
+	protected void displayError(final Exception e,
+			final String fileName,
+			final String entityName) {
+		StringBuilder error = new StringBuilder();
+		error.append("Error in ");
+		error.append(fileName);
+		error.append(".${fixtureType}");
+		error.append(" in field ");
+		error.append(entityName);
+		error.append(".");
+		error.append(this.currentFieldName);
+		error.append(" => ");
+		error.append(e.getMessage());
+
+		Log.e(TAG, error.toString());
 	}
 
 	/**
