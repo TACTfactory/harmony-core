@@ -401,7 +401,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			// Remove old associated ${relation.name}
 			crit.setType(Type.NOT_IN);
 			${relation.name}Crit.add(${relation.relation.targetEntity}SQLiteAdapter.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
-					String.valueOf(item.getId()),
+					String.valueOf(item.get${curr_ids[0].name?cap_first}()),
 					Type.EQUALS);
 			
 
@@ -511,7 +511,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			// Remove old associated ${relation.name}
 			crit.setType(Type.NOT_IN);
 			${relation.name}Crit.add(${relation.relation.targetEntity}SQLiteAdapter.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
-					String.valueOf(item.getId()),
+					String.valueOf(item.get${curr_ids[0].name?cap_first}()),
 					Type.EQUALS);
 			
 
