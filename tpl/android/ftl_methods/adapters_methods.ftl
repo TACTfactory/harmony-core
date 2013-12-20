@@ -133,6 +133,7 @@
 	<#assign result = "" />
 	<#assign tab = "\n" + Utils.getIndentString(indentLevel) />
 	<#if (!field.internal)>
+		<#assign result = result + "${tab}this.currentFieldName = ${NamingUtils.fixtureAlias(field)};" />
 		<#assign result = result + "${tab}if (columns.get(${NamingUtils.fixtureAlias(field)}) != null) {" />
 		<#if !field.relation??>
 			<#if (field.type?lower_case=="int" || field.type?lower_case=="integer" || field.type?lower_case=="zipcode" || field.type?lower_case=="ean")>
@@ -225,6 +226,7 @@
 	<#assign result = "" />
 	<#assign tab = "\n" + Utils.getIndentString(indentLevel) />
 	<#if (!field.internal)>
+		<#assign result = result + "${tab}this.currentFieldName = ${NamingUtils.fixtureAlias(field)};" />
 		<#assign result = result + "${tab}String ${NamingUtils.fixtureParsedAlias(field)} = element.getChildText(${NamingUtils.fixtureAlias(field)});" />
 		<#assign result = result + "${tab}if (${NamingUtils.fixtureParsedAlias(field)} != null) {" />
 		<#if !field.relation??>
