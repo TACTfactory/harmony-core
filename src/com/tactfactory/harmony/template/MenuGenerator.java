@@ -24,6 +24,9 @@ public class MenuGenerator extends BaseGenerator {
 	/** Constant for MenuWrapper. */
 	private static final String MENU_WRAPPER = "MenuWrapper";
 
+	/** Constant for MenuWrapper. */
+	private static final String FILE_MENU_WRAPPER = MENU_WRAPPER + ".java";
+
 	/** Constant for MenuWrapperBase. */
 	private static final String MENU_WRAPPER_BASE = MENU_WRAPPER + "Base";
 
@@ -122,8 +125,7 @@ public class MenuGenerator extends BaseGenerator {
 
 				@Override
 				public boolean accept(final File arg0) {
-					return arg0.getName().contains(MENU_WRAPPER)
-							&& !arg0.getName().contains(MENU_WRAPPER_BASE);
+					return arg0.getName().endsWith(FILE_MENU_WRAPPER);
 				}
 			});
 
@@ -141,7 +143,7 @@ public class MenuGenerator extends BaseGenerator {
 					+ menuName + MENU_WRAPPER + ".java",
 			this.getAdapter().getMenuPath() 
 					+ menuName + MENU_WRAPPER + ".java",
-			true);
+			false);
 	}
 
 }
