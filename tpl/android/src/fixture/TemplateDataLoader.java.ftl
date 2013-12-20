@@ -22,29 +22,19 @@ import java.util.List;
 	</#if>
 </#list>
 <#if fixtureType=="yml">
-	<#if (hasTime || hasDate || hasDateTime)>
-import java.util.Date;
-	</#if>
 import java.util.Map;
-</#if>
-
-<#if fixtureType=="xml">
+<#else>
 import org.jdom2.Element;
-
-<#elseif fixtureType=="yml">
-	<#if hasLocaleTime>
-import org.joda.time.DateTimeZone;
-	</#if>
-	<#if (hasTime || hasDate || hasDateTime)>
-import org.joda.time.DateTime;
-
-	</#if>
 </#if>
 import android.content.Context;
 
-${ImportUtils.importRelatedEntities(curr)}
+import ${entity_namespace}.${curr.name};
 ${ImportUtils.importRelatedEnums(curr)}
-<#if (hasDate || hasDateTime || hasTime)>import ${project_namespace}.harmony.util.DateUtils;</#if>
+<#list curr.relations as relation>
+	<#if (relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany")>
+import ${entity_namespace}.${relation.relation.targetEntity};
+	</#if>
+</#list>
 
 /**
  * ${curr.name?cap_first}DataLoader.
@@ -128,7 +118,52 @@ public final class ${curr.name?cap_first}DataLoader
 		${curr.inheritance.superclass.name}DataLoader.getInstance(this.ctx).extractItem(columns, ${curr.name?uncap_first});
 
 		</#if>
-<#list curr_fields as field><#if (field.relation?? || field.harmony_type?lower_case=="enum" || field.harmony_type?lower_case=="datetime")>${AdapterUtils.ymlExtractFieldAdapter(curr.name?uncap_first, field, curr, 2)}<#else>${curr.name?uncap_first}.set${field.name?cap_first}(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, ${field.type}.class));</#if></#list>
+		<#list curr_fields as field>
+			<#if (!field.internal)>
+				<#if (!field.relation??)>
+					<#if field.type?lower_case=="datetime">
+		${curr.name?uncap_first}.set${field.name?cap_first}(this.parseDateTimeField(columns, ${NamingUtils.fixtureAlias(field)}));
+					<#elseif field.harmony_type?lower_case=="enum">
+						<#assign enumType = enums[field.type] />
+						<#if (enumType.id??)>
+							<#assign idEnum = enumType.fields[enumType.id] />
+							<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
+		${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, Integer.class)));
+							<#else>
+		${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, String.class)));
+							</#if>
+						<#else>
+		${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.valueOf(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, String.class)));
+							
+						</#if>
+					<#else>
+						<#if (field.type == "double" || field.type?lower_case == "char" || field.type?lower_case == "float" || field.type?lower_case == "byte" || field.type?lower_case == "short" || field.type?lower_case == "int" || field.type?lower_case == "boolean")>
+		${curr.name?uncap_first}.set${field.name?cap_first}(this.parse${field.type?cap_first}Field(columns, ${NamingUtils.fixtureAlias(field)}));
+						<#elseif (field.type?lower_case == "character")>
+		${curr.name?uncap_first}.set${field.name?cap_first}(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, String.class).charAt(0));
+						<#else>
+		${curr.name?uncap_first}.set${field.name?cap_first}(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, ${field.type?cap_first}.class));
+						</#if>
+					</#if>
+				<#else>
+					<#if (field.relation.type == "OneToOne" || field.relation.type == "ManyToOne")>
+		${curr.name?uncap_first}.set${field.name?cap_first}(this.parseSimpleRelationField(columns, ${NamingUtils.fixtureAlias(field)}, ${field.relation.targetEntity}DataLoader.getInstance(this.ctx)));
+						<#if (field.relation.inversedBy??)>
+		if (${curr.name?uncap_first}.get${field.name?cap_first}() != null) {
+			${curr.name?uncap_first}.get${field.name?cap_first}().get${field.relation.inversedBy?cap_first}().add(${curr.name?uncap_first});
+		}
+						</#if>
+					<#else>
+		${curr.name?uncap_first}.set${field.name?cap_first}(this.parseMultiRelationField(columns, ${NamingUtils.fixtureAlias(field)}, ${field.relation.targetEntity}DataLoader.getInstance(this.ctx)));
+						<#if (field.relation.type == "OneToMany" && field.relation.mappedBy?? && field.relation.mappedBy?? && !entities[field.relation.targetEntity].fields[field.relation.mappedBy].internal)>
+		for (${field.relation.targetEntity} related : ${curr.name?uncap_first}.get${field.name?cap_first}()) {
+			related.set${field.relation.mappedBy?cap_first}(${curr.name?uncap_first});
+		}
+						</#if>
+					</#if>
+				</#if>
+			</#if>
+		</#list>
 	</#if>
 
 		return ${curr.name?uncap_first};

@@ -10,6 +10,7 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.LinkedHashMap;
 <#if fixtureType=="xml">
 import java.util.List;
@@ -29,10 +30,13 @@ import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Representer;
 import org.yaml.snakeyaml.resolver.Resolver;
 </#if>
+import org.joda.time.DateTime;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
+
+import ${project_namespace}.harmony.util.DateUtils;
 
 /**
  * FixtureBase.
@@ -348,12 +352,238 @@ public abstract class FixtureBase<T> {
 	protected <U> U parseField(final Map<?, ?> columns,
 				final String key,
 				final Class<U> type) {
+		this.currentFieldName = key;
 		U result;
 		
 		if (columns.containsKey(key)) {
 			result = (U) columns.get(key);
 		} else {
 			result = null;
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Parse a datetime field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The datetime value of the field
+	 */
+	protected DateTime parseDateTimeField(final Map<?, ?> columns,
+				final String key) {
+		DateTime result;
+		String dateTimeString = this.parseField(columns, key, String.class);
+		if (dateTimeString != null) {
+			result = DateUtils.formatYAMLStringToDateTime(dateTimeString);
+		} else {
+			result = null;
+		}
+
+		return result;
+	}
+
+	/**
+	 * Parse a relation field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The datetime value of the field
+	 */
+	protected <U> U parseSimpleRelationField(final Map<?, ?> columns,
+				final String key,
+				final FixtureBase<U> relationLoader) {
+		U result;
+		String relationString = this.parseField(columns, key, String.class);
+		if (relationString != null) {
+			result = relationLoader.get(relationString);
+		} else {
+			result = null;
+		}
+
+		return result;
+	}
+
+	/**
+	 * Parse a relation field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The datetime value of the field
+	 */
+	protected <U> ArrayList<U> parseMultiRelationField(final Map<?, ?> columns,
+				final String key,
+				final FixtureBase<U> relationLoader) {
+		ArrayList<U> result;
+		Map<?, ?> relationMap = this.parseField(columns, key, Map.class);
+		if (relationMap != null) {
+			result = new ArrayList<U>();
+			for (Object relationName : relationMap.values()) {
+				U relatedEntity = relationLoader.get((String) relationName);
+				if (relatedEntity != null) {
+					result.add(relatedEntity);
+				}
+			}
+		} else {
+			result = null;
+		}
+
+		return result;
+	}
+
+	/**
+	 * Parse a primitive int field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The value of the field, 0 if nothing found
+	 */
+	protected int parseIntField(final Map<?, ?> columns,
+				final String key) {
+		int result;
+		Integer field = this.parseField(columns, key, Integer.class);
+		
+		if (field != null) {
+			result = field.intValue();
+		} else {
+			result = 0;
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Parse a primitive byte field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The value of the field, 0 if nothing found
+	 */
+	protected byte parseByteField(final Map<?, ?> columns,
+				final String key) {
+		byte result;
+		Integer field = this.parseField(columns, key, Integer.class);
+		
+		if (field != null) {
+			result = field.byteValue();
+		} else {
+			result = 0;
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Parse a primitive short field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The value of the field, 0 if nothing found
+	 */
+	protected short parseShortField(final Map<?, ?> columns,
+				final String key) {
+		short result;
+		Integer field = this.parseField(columns, key, Integer.class);
+		
+		if (field != null) {
+			result = field.shortValue();
+		} else {
+			result = 0;
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Parse a primitive char field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The value of the field, '\u0000' if nothing found
+	 */
+	protected char parseCharField(final Map<?, ?> columns,
+				final String key) {
+		char result;
+		String field = this.parseField(columns, key, String.class);
+		
+		if (field != null) {
+			result = field.charAt(0);
+		} else {
+			result = '\u0000';
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Parse a primitive boolean field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The value of the field, 'false' if nothing found
+	 */
+	protected boolean parseBooleanField(final Map<?, ?> columns,
+				final String key) {
+		boolean result;
+		Boolean field = this.parseField(columns, key, Boolean.class);
+		
+		if (field != null) {
+			result = field.booleanValue();
+		} else {
+			result = false;
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Parse a primitive float field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The value of the field, 0.0f if nothing found
+	 */
+	protected float parseFloatField(final Map<?, ?> columns,
+				final String key) {
+		float result;
+		Double field = this.parseField(columns, key, Double.class);
+		
+		if (field != null) {
+			result = field.floatValue();
+		} else {
+			result = 0.0f;
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Parse a primitive double field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The value of the field, 0.0d if nothing found
+	 */
+	protected double parseDoubleField(final Map<?, ?> columns,
+				final String key) {
+		double result;
+		Double field = this.parseField(columns, key, Double.class);
+		
+		if (field != null) {
+			result = field.doubleValue();
+		} else {
+			result = 0.0d;
 		}
 		
 		return result;
