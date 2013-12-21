@@ -121,8 +121,8 @@ public abstract class ConsoleUtils {
 	// DISPLAY MODE
 
 	private static String makeString(final String title, final String value) {
-		if (Strings.isNullOrEmpty(title))
-			throw new RuntimeException("Title doesn't not null or empty !!");
+//TODO enable later	if (Strings.isNullOrEmpty(title))
+//			throw new RuntimeException("Title doesn't not null or empty !!");
 		
 		String resultString = title;
 		
