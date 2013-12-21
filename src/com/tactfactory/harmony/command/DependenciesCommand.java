@@ -1,5 +1,7 @@
 package com.tactfactory.harmony.command;
 
+import java.util.LinkedHashMap;
+
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
@@ -45,9 +47,12 @@ public class DependenciesCommand extends BaseCommand {
 
 	@Override
 	public final void summary() {
-		ConsoleUtils.display("\n> DEPENDENCIES \n"
-				+ "\t" + INSTALL_SDK
-				+ "\t => Install the android SDK\n");
+		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
+		commands.put(INSTALL_SDK, "Install the android SDK");
+		
+		ConsoleUtils.displaySummary(
+				BUNDLE,
+				commands);
 	}
 
 	@Override

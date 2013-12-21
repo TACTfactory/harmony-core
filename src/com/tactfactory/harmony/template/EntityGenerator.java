@@ -266,8 +266,8 @@ public class EntityGenerator extends BaseGenerator {
 				// Getter
 				if (!this.alreadyImplementsGet(field, classMeta)) {
 					ConsoleUtils.displayDebug("Add implements getter of "
-							+ field.getName()
-							+ " => get"
+							+ field.getName(),
+							" => get"
 							+ CaseFormat.LOWER_CAMEL.to(
 									CaseFormat.UPPER_CAMEL,
 									field.getName()));
@@ -278,8 +278,8 @@ public class EntityGenerator extends BaseGenerator {
 				// Setter
 				if (!this.alreadyImplementsSet(field, classMeta)) {
 					ConsoleUtils.displayDebug("Add implements setter of "
-							+ field.getName()
-							+ " => set"
+							+ field.getName(),
+							" => set"
 							+ CaseFormat.LOWER_CAMEL.to(
 									CaseFormat.UPPER_CAMEL,
 									field.getName()));
@@ -402,9 +402,8 @@ public class EntityGenerator extends BaseGenerator {
 				ret = true;
 
 				ConsoleUtils.displayDebug("Already implements getter of "
-						+ fieldMeta.getName()
-						+ " => "
-						+ m.getName());
+						+ fieldMeta.getName(),
+						" => " + m.getName());
 			}
 		}
 
@@ -435,8 +434,8 @@ public class EntityGenerator extends BaseGenerator {
 				result = true;
 
 				ConsoleUtils.displayDebug("Already implements setter of "
-						+ fieldMeta.getName()
-						+ " => "
+						+ fieldMeta.getName(),
+						" => "
 						+ method.getName());
 			}
 		}

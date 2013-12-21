@@ -121,7 +121,7 @@ public abstract class XMLUtils {
 
 		// Debug Log
 		ConsoleUtils.displayDebug(
-				"Update String : " + newNode.getAttributeValue(id));
+				"Update String : ", newNode.getAttributeValue(id));
 
 		findElement =
 				findNode(baseNode,

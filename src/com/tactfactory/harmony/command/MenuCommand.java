@@ -8,6 +8,8 @@
  */
 package com.tactfactory.harmony.command;
 
+import java.util.LinkedHashMap;
+
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
@@ -54,8 +56,12 @@ public class MenuCommand extends BaseCommand {
 
 	@Override
 	public final void summary() {
-		ConsoleUtils.display("\n> MENU \n"
-				+ "\t" + UPDATE_MENU + "\t => Update the menu\n");
+		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
+		commands.put(UPDATE_MENU, "Update the menu");
+		
+		ConsoleUtils.displaySummary(
+				"Menu",
+				commands);
 	}
 
 	@Override

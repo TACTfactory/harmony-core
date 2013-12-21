@@ -87,18 +87,20 @@ public class FixtureGenerator extends BaseGenerator {
 				TactFileUtils.copyDirectory(
 						fixtAppSrc, fixtAppDest, fileFilter);
 				ConsoleUtils.displayDebug(
-						"Copying fixtures/app into " + fixtAppDest.getPath());
+						"Copying fixtures/app into ",
+						fixtAppDest.getPath());
 
 				TactFileUtils.copyDirectory(
 						fixtDebugSrc, fixtDebugDest, fileFilter);
 				ConsoleUtils.displayDebug(
-						"Copying fixtures/debug into "
-							+ fixtDebugDest.getPath());
+						"Copying fixtures/debug into ",
+						fixtDebugDest.getPath());
 
 				TactFileUtils.copyDirectory(
 						fixtTestSrc, fixtTestDest, fileFilter);
 				ConsoleUtils.displayDebug(
-						"Copying fixtures/test into " + fixtTestDest.getPath());
+						"Copying fixtures/test into ",
+						fixtTestDest.getPath());
 
 			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);

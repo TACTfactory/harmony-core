@@ -1,5 +1,7 @@
 package com.tactfactory.harmony.command;
 
+import java.util.LinkedHashMap;
+
 import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.plateforme.AndroidAdapter;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
@@ -75,10 +77,12 @@ public class BundleCommand extends BaseCommand {
 
 	@Override
 	public final void summary() {
-		ConsoleUtils.display(
-				"\n> BUNDLE \n"
-				+ "\t" + GENERATE_EMPTY_BUNDLE + "\t => Generate Empty Bundle\n"
-				);
+		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
+		commands.put(GENERATE_EMPTY_BUNDLE, "Generate Empty Bundle");
+		
+		ConsoleUtils.displaySummary(
+				BUNDLE,
+				commands);
 	}
 
 	@Override

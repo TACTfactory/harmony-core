@@ -8,6 +8,8 @@
  */
 package com.tactfactory.harmony.command;
 
+import java.util.LinkedHashMap;
+
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Harmony;
@@ -56,9 +58,13 @@ public class GeneralCommand extends BaseCommand {
 
 	@Override
 	public final void summary() {
-		ConsoleUtils.display("\n> General \n"
-				+ "\t" + HELP + "\t\t\t => Display this help message\n"
-				+ "\t" + LIST + "\t\t\t => List all commands");
+		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
+		commands.put(HELP, "Display this help message");
+		commands.put(LIST, "List all commands");
+		
+		ConsoleUtils.displaySummary(
+				"General",
+				commands);
 	}
 
 	@Override

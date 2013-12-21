@@ -146,7 +146,7 @@ public class ClassVisitor {
     	result.setParsed(true);
     	
     	// Debug Log
-    	ConsoleUtils.displayDebug("Found class : " +  result.getName());
+    	ConsoleUtils.displayDebug("Found class : ",  result.getName());
     	// Check reserved keywords
 		SqliteAdapter.Keywords.exists(result.getName());
 
@@ -213,8 +213,7 @@ public class ClassVisitor {
 					result.getImplementTypes().add(impl.getName());
 
 					// Debug Log
-					ConsoleUtils.displayDebug("\tImplement : "
-								+ impl.getName());
+					ConsoleUtils.displayDebug("\tImplement : ", impl.getName());
 				}
 			}
 
@@ -284,7 +283,7 @@ public class ClassVisitor {
 	 * @return The ClassMetadata containing the metadata of the visited enum
 	 */
     public final ClassMetadata visit(final EnumDeclaration enumDecl) {
-    	ConsoleUtils.displayDebug("Found enum " + enumDecl.getName());
+    	ConsoleUtils.displayDebug("Found enum ", enumDecl.getName());
     	final EnumMetadata result = new EnumMetadata();
     	result.setName(enumDecl.getName());
     	// Check reserved keywords

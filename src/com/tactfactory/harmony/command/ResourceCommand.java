@@ -8,6 +8,8 @@
  */
 package com.tactfactory.harmony.command;
 
+import java.util.LinkedHashMap;
+
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
@@ -46,12 +48,13 @@ public class ResourceCommand extends BaseCommand {
 
 	@Override
 	public final void summary() {
-		ConsoleUtils.display("\n> " + BUNDLE.toUpperCase() + " \n"
-				+ "\t" + GENERATE_IMAGE
-				+ "\t => Generate all resize of the HD images\n"
-
-				+ "\t" + GENERATE_TRANSLATE
-				+ "\t => Generate translate\n");
+		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
+		commands.put(GENERATE_IMAGE, "Generate all resize of the HD images");
+		commands.put(GENERATE_TRANSLATE, "Generate translate");
+		
+		ConsoleUtils.displaySummary(
+				BUNDLE,
+				commands);
 	}
 
 	@Override
