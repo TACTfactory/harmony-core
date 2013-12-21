@@ -95,7 +95,7 @@ public class ManifestUpdater extends XmlManager {
 				classFile);
 
 		// Debug Log
-		ConsoleUtils.displayDebug("Update Manifest : " + pathRelatif);
+		ConsoleUtils.displayDebug("Update Manifest : ", pathRelatif);
 		
 
 		// Load Root element

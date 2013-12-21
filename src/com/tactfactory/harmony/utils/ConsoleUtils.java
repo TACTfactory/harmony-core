@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.google.common.base.Strings;
@@ -119,6 +120,19 @@ public abstract class ConsoleUtils {
 
 	// DISPLAY MODE
 
+	private static String makeString(final String title, final String value) {
+//TODO enable later	if (Strings.isNullOrEmpty(title))
+//			throw new RuntimeException("Title doesn't not null or empty !!");
+		
+		String resultString = title;
+		
+		if (value != null) {
+			resultString = String.format("%-32s %s", title, value);
+		}
+		
+		return resultString;
+	}
+	
 	/**
 	 * Display given String to the console.
 	 * (White color)
@@ -135,6 +149,24 @@ public abstract class ConsoleUtils {
 		}
 	}
 
+	public static void displaySummary(String title,
+			LinkedHashMap<String, String> commands) {
+		
+		displayLicence("\n> " + title.toUpperCase());
+		
+		for (String command : commands.keySet()) {
+			display(
+				String.format("\t%-32s => %s", command, commands.get(command)));
+
+		}
+		
+	}
+
+	public static void display(String title, String value) {
+		String display = makeString(title, value);
+		display(display);
+	}
+	
 	/**
 	 * Display given String to the console prefixed by [WARNING].
 	 * (Yellow color)
@@ -153,22 +185,33 @@ public abstract class ConsoleUtils {
 			}
 		}
 	}
-
+	
 	/**
 	 * Display given String to the console prefixed by [DEBUG].
 	 * (Blue color)
 	 * @param value The String to display
 	 */
 	public static void displayDebug(final String value) {
+		displayDebug(value, null);
+	}
+
+	/**
+	 * Display given String to the console prefixed by [DEBUG].
+	 * (Blue color)
+	 * @param value The String to display
+	 */
+	public static void displayDebug(final String title, String value) {
 		if (!isQuiet && ConsoleUtils.isDebug()) {
+			String display = makeString(title, value);
+			
 			if (isAnsi) {
-				cp.println("[DEBUG]" + TAB + value + NEWLINE,
+				cp.println("[DEBUG]" + TAB + display + NEWLINE,
 						Attribute.NONE,
 						FColor.BLUE,
 						BColor.BLACK);
 				cp.clear();
 			} else {
-				System.out.println("[DEBUG]" + TAB + value);
+				System.out.println("[DEBUG]" + TAB + display);
 			}
 		}
 	}
@@ -285,7 +328,7 @@ public abstract class ConsoleUtils {
 			commandPathDisplay = commandPath;
 		}
 
-		ConsoleUtils.displayDebug(commandPathDisplay + command.toString());
+		ConsoleUtils.displayDebug(commandPathDisplay, command.toString());
 
 		try {
 			ProcessBuilder processBuilder = new ProcessBuilder(command);

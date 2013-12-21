@@ -102,7 +102,7 @@ public final class Context {
 			final File predictiveBaseDir =
 					new File(harmonyPath).getParentFile();
 
-			ConsoleUtils.displayDebug("Eclipse Mode : " + harmonyPath);
+			ConsoleUtils.displayDebug("Eclipse Mode : ", harmonyPath);
 			baseDir = this.detectAppTree(predictiveBaseDir);
 		}
 
@@ -112,7 +112,7 @@ public final class Context {
 					.getParentFile()
 					.getParentFile();
 
-			ConsoleUtils.displayDebug("Console Mode : " + harmonyPath);
+			ConsoleUtils.displayDebug("Console Mode : ", harmonyPath);
 			baseDir = this.detectAppTree(predictiveBaseDir);
 		}
 
@@ -125,7 +125,7 @@ public final class Context {
 						.getParentFile()
 						.getParentFile();
 
-			ConsoleUtils.displayDebug("Other Mode : " + harmonyPath);
+			ConsoleUtils.displayDebug("Other Mode : ", harmonyPath);
 			baseDir = this.detectAppTree(predictiveBaseDir);
 		}
 
@@ -138,7 +138,7 @@ public final class Context {
 						.getParentFile()
 						.getParentFile();
 
-			ConsoleUtils.displayDebug("Emma Mode : " + harmonyPath);
+			ConsoleUtils.displayDebug("Emma Mode : ", harmonyPath);
 			baseDir = this.detectAppTree(predictiveBaseDir);
 		}
 
@@ -152,7 +152,7 @@ public final class Context {
 			System.exit(-1);
 		}
 
-		ConsoleUtils.displayDebug("Detect app on " + basePath);
+		ConsoleUtils.displayDebug("Detect app on ", basePath);
 
 		// Set Path
 		this.projectPath 		= this.basePath + projectForlder;

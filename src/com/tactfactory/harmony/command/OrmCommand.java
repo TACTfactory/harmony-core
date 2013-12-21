@@ -8,6 +8,8 @@
  */
 package com.tactfactory.harmony.command;
 
+import java.util.LinkedHashMap;
+
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
@@ -143,11 +145,15 @@ public class OrmCommand extends BaseCommand {
 
 	@Override
 	public final void summary() {
-		ConsoleUtils.display("\n> ORM \n"
-				// + "\t" + GENERATE_ENTITY + "\t => Generate Entry\n"
-				+ "\t" + GENERATE_ENTITIES + "\t => Generate Entries\n"
-				// + "\t" + GENERATE_FORM + "\t => Generate Form\n"
-				+ "\t" + GENERATE_CRUD + "\t => Generate CRUD");
+		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
+//		commands.put(GENERATE_ENTITY, "Generate Entry");
+		commands.put(GENERATE_ENTITIES, "Generate Entries");
+//		commands.put(GENERATE_FORM, "Generate Form");
+		commands.put(GENERATE_CRUD, "Generate CRUD");
+		
+		ConsoleUtils.displaySummary(
+				BUNDLE,
+				commands);
 	}
 
 	@Override

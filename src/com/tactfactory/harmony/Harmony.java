@@ -34,7 +34,7 @@ import com.tactfactory.harmony.utils.TactFileUtils;
 public final class Harmony {
 
 	/** Harmony version. */
-	public static final String VERSION = "0.5.0-DEV";
+	public static final String VERSION = "0.6.1f-DEV";
 
 	/** Singleton of console. */
 	private static Harmony instance;
@@ -151,7 +151,8 @@ public final class Harmony {
 	 */
 	public void initialize() throws Exception {
 		ConsoleUtils.display(
-				"Current Working Path: " + new File(".").getCanonicalPath());
+				"Current Working Path: ", 
+				new File(".").getCanonicalPath());
 
 		// Check name space
 		if (Strings.isNullOrEmpty(
@@ -210,13 +211,21 @@ public final class Harmony {
 
 		// Debug Log
 		ConsoleUtils.display(
-				"Current Project : " + ApplicationMetadata.INSTANCE.getName()
-				+ "\nCurrent NameSpace : "
-						+ ApplicationMetadata.INSTANCE.getProjectNameSpace()
-				+ "\nCurrent Android SDK Path : "
-						+ ApplicationMetadata.getAndroidSdkPath()
-				+ "\nCurrent Android SDK Revision : "
-						+ ProjectDiscover.getAndroidSdkVersion());
+				"Current Project : ",
+				ApplicationMetadata.INSTANCE.getName());
+		
+		ConsoleUtils.display(
+				"Current NameSpace : ",
+				ApplicationMetadata.INSTANCE.getProjectNameSpace());
+		
+		ConsoleUtils.display(
+				"Current Android SDK Path : ",
+				ApplicationMetadata.getAndroidSdkPath());
+		
+		ConsoleUtils.display(
+				"Current Android SDK Revision : ",
+				ProjectDiscover.getAndroidSdkVersion());
+		ConsoleUtils.display("");
 	}
 
 	/**
