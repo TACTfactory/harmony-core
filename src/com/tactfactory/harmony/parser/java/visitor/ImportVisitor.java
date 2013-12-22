@@ -41,7 +41,7 @@ public class ImportVisitor
 		//meta.getImports().add(impName);
 
 		// Debug Log
-		ConsoleUtils.displayDebug("\tImport : ", impName);
+		ConsoleUtils.displayDebug("\tImport : " + impName);
 		return impName;
 	}
 }

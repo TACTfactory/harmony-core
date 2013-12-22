@@ -503,7 +503,7 @@ public class FieldVisitor {
 			isId = true;
 
 			// Debug Log
-			ConsoleUtils.displayDebug("\tID : ", result.getName());
+			ConsoleUtils.displayDebug("\tID : " + result.getName());
 		}
 
 		return isId;

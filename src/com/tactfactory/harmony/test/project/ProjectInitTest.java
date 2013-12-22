@@ -10,12 +10,9 @@ package com.tactfactory.harmony.test.project;
 
 import static org.junit.Assert.assertEquals;
 
-import java.io.File;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import com.tactfactory.harmony.Harmony;
@@ -24,8 +21,6 @@ import com.tactfactory.harmony.command.ProjectCommand;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.template.ProjectGenerator;
 import com.tactfactory.harmony.test.CommonTest;
-import com.tactfactory.harmony.utils.ConsoleUtils;
-import com.tactfactory.harmony.utils.TactFileUtils;
 
 /**
  * Test class for project initialization.

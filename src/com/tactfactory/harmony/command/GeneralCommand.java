@@ -34,7 +34,7 @@ public class GeneralCommand extends BaseCommand {
 				+ "\tconsole [--options] command [--parameters]\n"
 				+ "\nUsage example:\n"
 				+ "\tconsole --verbose project:init:android --nam =test "
-				+ "--namespac =com/tact/android/test --sdkdi =/root/android\n"
+				+ "--namespac =com/tact/android/test --sdkdir =/root/android\n"
 				+ "\nPlease use 'console list' to display available commands !"
 				);
 	}

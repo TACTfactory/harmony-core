@@ -169,13 +169,13 @@ public class ActivityGenerator extends BaseGenerator {
 				null,
 				pinnedHeaderFolder);
 		
-
 		AttrsFile.mergeFromTo(this.getAdapter(),
 				Context.getCurrentBundleFolder() 
 					+ this.getAdapter().getTemplateRessourceValuesPath() 
 					+ "/attrs.xml",
 				this.getAdapter().getRessourceValuesPath() 
 					+ "/attrs.xml");
+		
 		StylesFile.mergeFromTo(this.getAdapter(),
 				Context.getCurrentBundleFolder() 
 					+ this.getAdapter().getTemplateRessourceValuesPath() 

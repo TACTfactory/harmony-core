@@ -387,7 +387,6 @@ public abstract class ConsoleUtils {
 
 		return input;
 	}
-	
 
 	/**
 	 * Generic user console prompt. 
@@ -547,6 +546,7 @@ public abstract class ConsoleUtils {
 			 */
 			public ErrorBridge(final Process proc) {
 				super();
+				
 				try {
 					this.processError =
 							new BufferedReader(
@@ -569,9 +569,8 @@ public abstract class ConsoleUtils {
 							final String error = this.processError.readLine();
 							if (error != null && !error.isEmpty()
 									&& !error.startsWith("Note: checking out ")) {
-								if (("'libs/sherlock' already "
-										+ "exists in the index")
-										.equals(error)) {
+								if (("already exists in the index")
+										.contains(error)) {
 									ConsoleUtils.displayWarning(error);
 								} else {
 									ConsoleUtils.displayError(

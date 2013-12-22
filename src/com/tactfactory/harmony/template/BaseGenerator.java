@@ -154,19 +154,20 @@ public abstract class BaseGenerator {
 	protected void makeSource(final String templatePath,
 			final String generatePath,
 			final boolean override) {
+		
 		if (!TactFileUtils.exists(generatePath) || override) {
 			final File generateFile = TactFileUtils.makeFile(generatePath);
-
+			
 			try {
 				String oldFile = TactFileUtils.fileToString(generateFile);
 				// Debug Log
-				ConsoleUtils.displayDebug("Generate Source : ",
+				ConsoleUtils.displayDebug("Generate Source : " +
 						generateFile.getCanonicalPath());
-
+				
 				// Create
 				final Template tpl =
 						this.cfg.getTemplate(templatePath + ".ftl");
-
+				
 				// Write and close
 				final OutputStreamWriter output =
 						new OutputStreamWriter(
