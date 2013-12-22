@@ -34,7 +34,7 @@ import com.tactfactory.harmony.utils.TactFileUtils;
 public final class Harmony {
 
 	/** Harmony version. */
-	public static final String VERSION = "0.6.1f-DEV";
+	public static final String VERSION = "0.6.1-DEV";
 
 	/** Singleton of console. */
 	private static Harmony instance;
@@ -116,7 +116,7 @@ public final class Harmony {
 			
 			// Load bundles
 			ConsoleUtils.displayDebug(
-					"Load plugins from " + plugin.getName());
+					"Load plugins : " + plugin.getName());
 			pluginManager.addPluginsFrom(plugin.toURI());
 			
 			// Template bundles
@@ -124,7 +124,7 @@ public final class Harmony {
 					plugin.getParentFile().getAbsoluteFile();
 			this.templateFolders.put(plugin.getName(), templateFolderFile);
 			ConsoleUtils.displayDebug(
-					"Load templates from " + templateFolderFile);
+					"Load templates from : " + templateFolderFile);
 		
 			
 			// Process extensions commands
@@ -254,7 +254,7 @@ public final class Harmony {
 
 		// No found action
 		if (!isfindAction) {
-			ConsoleUtils.display("Command not found...");
+			ConsoleUtils.displayError("Command not found...");
 
 			this.getCommand(GeneralCommand.class).execute(
 					GeneralCommand.LIST,
