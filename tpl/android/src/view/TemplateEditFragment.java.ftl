@@ -62,6 +62,7 @@ import ${project_namespace}.data.${field.relation.targetEntity}SQLiteAdapter;
 		</#if>
 	</#if>
 </#list>
+import ${project_namespace}.provider.${project_name?cap_first}Contract;
 
 /** ${curr.name} create fragment.
  *
@@ -365,7 +366,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			Cursor ${field.name}Cursor = 
 					this.ctx.getContentResolver().query(
 							${field.name}Uri,
-							new String[]{${field.relation.targetEntity}SQLiteAdapter.ALIASED_COL_ID},
+							new String[]{${project_name?cap_first}Contract.${field.relation.targetEntity}.ALIASED_COL_ID},
 							null,
 							null, 
 							null);
@@ -375,7 +376,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 				while (${field.name}Cursor.moveToNext()) {
 					int ${field.name}Id = ${field.name}Cursor.getInt(
 							${field.name}Cursor.getColumnIndex(
-									${field.relation.targetEntity}SQLiteAdapter.COL_ID));
+									${project_name?cap_first}Contract.${field.relation.targetEntity}.COL_ID));
 					for (${field.relation.targetEntity} ${field.name} : this.${field.name}List) {
 						if (${field.name}.getId() == ${field.name}Id) {
 							this.associated${field.name?cap_first}List.add(${field.name});
