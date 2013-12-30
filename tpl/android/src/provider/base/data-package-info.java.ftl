@@ -5,5 +5,5 @@
  *
  * DO NOT MODIFY. REGENERATED PACKAGE.
  */
-package ${project_namespace}.data;
+package ${project_namespace}.data.base;
 

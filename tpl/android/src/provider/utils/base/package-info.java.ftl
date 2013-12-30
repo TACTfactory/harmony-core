@@ -6,5 +6,5 @@
  *
  * DO NOT MODIFY. REGENERATED PACKAGE.
  */
-package ${project_namespace}.provider.utils;
+package ${project_namespace}.provider.utils.base;
 

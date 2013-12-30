@@ -4,5 +4,5 @@
  *
  * Don't modifiy any of those classes. They will be regenerated.
  */
-package ${project_namespace};
+package ${project_namespace}.menu.base;
 

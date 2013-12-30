@@ -6,5 +6,5 @@
  * To add one menu, create a [YourMenuName]MenuWrapper class
  * extending MenuWrapperBase and run the orm:menu:update harmony command.
  */
-package ${project_namespace};
+package ${project_namespace}.menu;
 

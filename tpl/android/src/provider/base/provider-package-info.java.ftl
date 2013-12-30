@@ -5,5 +5,5 @@
  *
  * DO NOT MODIFY. REGENERATED PACKAGE.
  */
-package ${project_namespace}.provider;
+package ${project_namespace}.provider.base;
 

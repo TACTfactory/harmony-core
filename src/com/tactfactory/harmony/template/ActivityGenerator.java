@@ -129,6 +129,17 @@ public class ActivityGenerator extends BaseGenerator {
 				this.generateAllAction(cm.getName());
 			}
 		}
+		
+		final String fullFilePath = String.format("%s%s/%s/%s",
+				this.getAdapter().getSourcePath(),
+				ApplicationMetadata.INSTANCE.getProjectNameSpace(),
+				this.getAdapter().getController(),
+				"package-info.java");
+		final String fullTemplatePath = String.format("%s%s",
+				this.getAdapter().getTemplateSourceControlerPath(),
+				"package-info.java");
+		
+		super.makeSource(fullTemplatePath, fullFilePath, false);
 
 		this.updateLibrary("universal-image-loader-1.8.6-with-sources.jar");
 		this.updateLibrary("ImageViewTouch.jar");
@@ -374,6 +385,9 @@ public class ActivityGenerator extends BaseGenerator {
 
 			this.generateShowAction(entityName);
 			this.generateListAction(entityName);
+			
+			this.makeSourceControler("entity-package-info.java",
+					"package-info.java");
 
 			TranslationMetadata.addDefaultTranslation(
 					entityName.toLowerCase(Locale.ENGLISH)
@@ -385,7 +399,7 @@ public class ActivityGenerator extends BaseGenerator {
 						+ "_progress_load_message",
 					entityName + " is loading…",
 					Group.MODEL);
-
+			
 			new TranslationGenerator(this.getAdapter()).generateStringsXml();
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
@@ -601,7 +615,7 @@ public class ActivityGenerator extends BaseGenerator {
 
 		super.makeSource(fullTemplatePath, fullFilePath, false);
 	}
-
+	
 	/**
 	 * Make Resource file.
 	 *

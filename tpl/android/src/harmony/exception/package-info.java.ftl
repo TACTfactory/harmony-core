@@ -2,5 +2,5 @@
  * Harmony exceptions.
  * Those exceptions are all harmony generated.
  */
-package ${project_namespace};
+package ${project_namespace}.harmony.exception;
 
