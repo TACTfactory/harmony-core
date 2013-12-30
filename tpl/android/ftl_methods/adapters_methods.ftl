@@ -133,6 +133,7 @@
 	<#assign result = "" />
 	<#assign tab = "\n" + Utils.getIndentString(indentLevel) />
 	<#if (!field.internal)>
+		<#assign result = result + "${tab}this.currentFieldName = ${NamingUtils.fixtureAlias(field)};" />
 		<#assign result = result + "${tab}if (columns.get(${NamingUtils.fixtureAlias(field)}) != null) {" />
 		<#if !field.relation??>
 			<#if (field.type?lower_case=="int" || field.type?lower_case=="integer" || field.type?lower_case=="zipcode" || field.type?lower_case=="ean")>
@@ -184,7 +185,7 @@
 			<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">
 					<#assign result = result + "${tab}	final ${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} =" />
 					<#assign result = result + "${tab}		${field.relation.targetEntity?cap_first}DataLoader.getInstance(" />
-					<#assign result = result + "${tab}				this.ctx).items.get(" />
+					<#assign result = result + "${tab}				this.ctx).get(" />
 					<#assign result = result + "${tab}						(String) columns.get(${NamingUtils.fixtureAlias(field)}));" />
 					<#assign result = result + "${tab}	if (${field.relation.targetEntity?uncap_first} != null) {" />
 					<#assign result = result + "${tab}		${objectName}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first});" />
@@ -201,20 +202,17 @@
 				</#if>
 				<#assign result = result + "${tab}	}" />
 			<#else>
-				<#assign result = result + "${tab}	ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s =" />
+				<#assign result = result + "${tab}	ArrayList<${field.relation.targetEntity?cap_first}> ${field.name}sList =" />
 				<#assign result = result + "${tab}		new ArrayList<${field.relation.targetEntity?cap_first}>();" />
 				<#assign result = result + "${tab}	final Map<?, ?> ${field.relation.targetEntity?uncap_first}sMap =" />
 				<#assign result = result + "${tab}		(Map<?, ?>) columns.get(${NamingUtils.fixtureAlias(field)});" />
 				<#assign result = result + "${tab}	for (final Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()) {" />
-				<#assign result = result + "${tab}		if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(" />
-				<#assign result = result + "${tab}			this.ctx).items.containsKey(" />
-				<#assign result = result + "${tab}					(String) ${field.relation.targetEntity?uncap_first}Name)) {" />
-				<#assign result = result + "${tab}		${field.relation.targetEntity?uncap_first}s.add(" />
-				<#assign result = result + "${tab}				${field.relation.targetEntity?cap_first}DataLoader.getInstance(" />
-				<#assign result = result + "${tab}						this.ctx).items.get((String) ${field.relation.targetEntity?uncap_first}Name));" />
+				<#assign result = result + "${tab}		${field.relation.targetEntity} ${field.name} = ${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.ctx).get((String) ${field.relation.targetEntity?uncap_first}Name);" />
+				<#assign result = result + "${tab}		if (${field.name} != null) {" />
+				<#assign result = result + "${tab}			${field.name}sList.add(${field.name});" />
 				<#assign result = result + "${tab}		}" />
 				<#assign result = result + "${tab}	}" />
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first}s);" />
+				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${field.name}sList);" />
 			</#if>
 		</#if>
 		<#assign result = result + "${tab}}\n" />
@@ -228,6 +226,7 @@
 	<#assign result = "" />
 	<#assign tab = "\n" + Utils.getIndentString(indentLevel) />
 	<#if (!field.internal)>
+		<#assign result = result + "${tab}this.currentFieldName = ${NamingUtils.fixtureAlias(field)};" />
 		<#assign result = result + "${tab}String ${NamingUtils.fixtureParsedAlias(field)} = element.getChildText(${NamingUtils.fixtureAlias(field)});" />
 		<#assign result = result + "${tab}if (${NamingUtils.fixtureParsedAlias(field)} != null) {" />
 		<#if !field.relation??>

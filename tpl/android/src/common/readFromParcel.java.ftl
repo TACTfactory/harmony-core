@@ -35,7 +35,7 @@
 			this.set${field.name?cap_first}(${field.type}.fromValue(parc.readString()));
 							</#if>
 						<#else>
-			this.set${field.name?cap_first}(${field.type}.fromValue(parc.readString()));
+			this.set${field.name?cap_first}(${field.type}.valueOf(parc.readString()));
 						</#if>
 		}
 					</#if>

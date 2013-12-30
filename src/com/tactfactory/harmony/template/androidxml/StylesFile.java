@@ -1,3 +1,11 @@
+/**
+ * This file is part of the Harmony package.
+ *
+ * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.tactfactory.harmony.template.androidxml;
 
 import java.util.ArrayList;
@@ -139,8 +147,11 @@ public class StylesFile extends XmlManager {
 			
 			this.name = 
 					this.element.getAttribute(ATTRIBUTE_NAME).getValue();
-			this.parent = 
-					this.element.getAttribute(ATTRIBUTE_PARENT).getValue();
+			
+			if (this.element.getAttribute(ATTRIBUTE_PARENT) != null) {
+				this.parent = 
+						this.element.getAttribute(ATTRIBUTE_PARENT).getValue();
+			}
 			
 			for (Element elem : this.element.getChildren(ELEMENT_ITEM)) {
 				Item item = new Item(elem);

@@ -20,6 +20,8 @@ import ${project_namespace}.menu.base.MenuWrapperBase;
 public class CrudCreateMenuWrapper implements MenuWrapperBase {
 	/** Menu item ADD. */
 	private MenuItem addItem;
+	/** Menu Visibility. */
+	private boolean visible = true;
 	
 	@Override
 	public void initializeMenu(Menu menu, FragmentActivity activity,
@@ -44,7 +46,7 @@ public class CrudCreateMenuWrapper implements MenuWrapperBase {
 			Fragment fragment, Context ctx) {
 		if (fragment != null && fragment instanceof CrudCreateMenuInterface) {
 			menu.setGroupVisible(
-					${project_name?cap_first}Menu.CRUDCREATE, true);
+					${project_name?cap_first}Menu.CRUDCREATE, this.visible);
 		}
 	}
 
@@ -80,6 +82,18 @@ public class CrudCreateMenuWrapper implements MenuWrapperBase {
 		if (fragment != null && fragment instanceof CrudCreateMenuInterface) {
 			menu.removeGroup(${project_name?cap_first}Menu.CRUDCREATE);
 		}
+	}
+
+	@Override
+	public void hide(Menu menu, FragmentActivity activity, Fragment fragment,
+			Context ctx) {
+		this.visible = false;
+	}
+
+	@Override
+	public void show(Menu menu, FragmentActivity activity, Fragment fragment,
+			Context ctx) {
+		this.visible = true;
 	}
 
 	/**

@@ -136,6 +136,7 @@ public abstract class SqliteAdapter {
 					field.getOwner().removeField(field);
 					
 					type = "BLOB";
+					return type;
 				}
 			} else {
 				type = field.getType();

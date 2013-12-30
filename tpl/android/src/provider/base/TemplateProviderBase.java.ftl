@@ -64,35 +64,30 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 		URI_NOT_SUPPORTED = this.getContext().getString(
 				R.string.uri_not_supported);
 
-		try {
-			this.providerAdapters = new ArrayList<ProviderAdapterBase<?>>();
+		this.providerAdapters = new ArrayList<ProviderAdapterBase<?>>();
 		<#assign firstGo = true />
 		<#list entities?values as entity>
 			<#if (entity.fields?size>0 || entity.inheritance??) >
 				<#if (firstGo)>
-			${entity.name?cap_first}ProviderAdapter ${entity.name?uncap_first}ProviderAdapter =
-				new ${entity.name?cap_first}ProviderAdapter(this.mContext);
-			this.db = ${entity.name?uncap_first}ProviderAdapter.getDb();			
-			this.providerAdapters.add(${entity.name?uncap_first}ProviderAdapter);
+		${entity.name?cap_first}ProviderAdapter ${entity.name?uncap_first}ProviderAdapter =
+			new ${entity.name?cap_first}ProviderAdapter(this.mContext);
+		this.db = ${entity.name?uncap_first}ProviderAdapter.getDb();			
+		this.providerAdapters.add(${entity.name?uncap_first}ProviderAdapter);
 					<#assign firstGo = false />
 				<#else>
-			this.providerAdapters.add(
-					new ${entity.name?cap_first}ProviderAdapter(
-						this.mContext,
-						this.db));
+		this.providerAdapters.add(
+				new ${entity.name?cap_first}ProviderAdapter(
+					this.mContext,
+					this.db));
 				</#if>
 				<#if (entity.options.sync??)>
-			this.providerAdapters.add(
-					new ${entity.name?cap_first}SyncProviderAdapter(
-						this.mContext,
-						this.db));
+		this.providerAdapters.add(
+				new ${entity.name?cap_first}SyncProviderAdapter(
+					this.mContext,
+					this.db));
 				</#if>
 			</#if>
 		</#list>
-		} catch (Exception e) {
-			Log.e(TAG, e.getMessage());
-			result = false;
-		}
 
 		return result;
 	}

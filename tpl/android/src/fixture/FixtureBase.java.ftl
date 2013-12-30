@@ -61,6 +61,9 @@ public abstract class FixtureBase<T> {
 	/** SerializedBackup. */
 	protected byte[] serializedBackup;
 
+	/** Current field being read. */
+	protected String currentFieldName;
+
 	/**
 	 * Constructor.
 	 * @param ctx The context
@@ -76,11 +79,11 @@ public abstract class FixtureBase<T> {
 <#if fixtureType == "xml">
 		// XML Loader
 		try {
+			String fileName = DataLoader.getPathToFixtures(mode)
+					+ this.getFixtureFileName();
 			// Make engine
 			SAXBuilder builder = new SAXBuilder();
-			InputStream xmlStream = this.getXml(
-					DataLoader.getPathToFixtures(mode)
-					+ this.getFixtureFileName());
+			InputStream xmlStream = this.getXml(fileName);
 			if (xmlStream != null) {
 				// Load XML File
 				Document doc = (Document) builder.build(xmlStream);
@@ -93,8 +96,13 @@ public abstract class FixtureBase<T> {
 											this.getFixtureFileName());
 				if (entities != null) {
 					for (Element element : entities) {
-						this.items.put((String) element.getAttributeValue("id"),
+						String elementName = (String) element.getAttributeValue("id");
+						try {
+							this.items.put(elementName,
 								this.extractItem(element));
+						} catch (Exception e) {
+							this.displayError(e, fileName, elementName);
+						}
 					}
 				}
 			}
@@ -111,9 +119,9 @@ public abstract class FixtureBase<T> {
 				new DumperOptions(),
 				new CustomResolver());
 
-		final InputStream inputStream = this.getYml(
-					DataLoader.getPathToFixtures(mode)
-					+ this.getFixtureFileName());
+		String fileName = DataLoader.getPathToFixtures(mode)
+					+ this.getFixtureFileName();
+		final InputStream inputStream = this.getYml(fileName);
 
 		if (inputStream != null) {
 			final Map<?, ?> map = (Map<?, ?>) yaml.load(inputStream);
@@ -124,13 +132,37 @@ public abstract class FixtureBase<T> {
 					for (final Object name : listEntities.keySet()) {
 						final Map<?, ?> currEntity =
 								(Map<?, ?>) listEntities.get(name);
-						this.items.put((String) name,
+						try {
+							this.items.put((String) name,
 								this.extractItem(currEntity));
+						} catch (Exception e) {
+							this.displayError(e, fileName, name.toString());
+						}
 					}
 				}
 			}
 		}
 </#if>
+	}
+
+	/**
+	 * Display a fixture error.
+	 */
+	protected void displayError(final Exception e,
+			final String fileName,
+			final String entityName) {
+		StringBuilder error = new StringBuilder();
+		error.append("Error in ");
+		error.append(fileName);
+		error.append(".${fixtureType}");
+		error.append(" in field ");
+		error.append(entityName);
+		error.append(".");
+		error.append(this.currentFieldName);
+		error.append(" => ");
+		error.append(e.getMessage());
+
+		Log.e(TAG, error.toString());
 	}
 
 	/**
@@ -296,4 +328,10 @@ public abstract class FixtureBase<T> {
 	    }
 	}
 	</#if>
+
+	/**
+	 * Gets the extracted fixture corresponding to the given name.
+	 * This method will search for a T type, or for any type extending T.
+	 */
+	protected abstract T get(final String key);
 }

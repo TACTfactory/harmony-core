@@ -11,7 +11,7 @@ package com.tactfactory.harmony.plateforme;
 import java.io.File;
 import java.util.List;
 
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import com.tactfactory.harmony.exception.NotImplementedException;
 
 import com.tactfactory.harmony.meta.ClassMetadata;
 
@@ -32,41 +32,29 @@ public final class IosAdapter extends BaseAdapter {
 
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException(
+				"IOS adapter has not been implemented yet.");
 	}
 
 	@Override
 	public String getNameSpaceEntity(final ClassMetadata cm,
 			final String type) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException(
+				"IOS adapter has not been implemented yet.");
 	}
-
-	/*@Override
-	public String getViewComponentShow(FieldMetadata field) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
-
-	/*@Override
-	public String getViewComponentEdit(FieldMetadata field) {
-		// TODO Auto-generated method stub
-		return null;
-	}*/
 
 
 	@Override
 	public String getNativeType(final String type) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException(
+				"IOS adapter has not been implemented yet.");
 	}
 
 
 	@Override
 	public void resizeImage() {
-		// TODO Auto-generated method stub
-
+		throw new NotImplementedException(
+				"IOS adapter has not been implemented yet.");
 	}
 
 
@@ -81,7 +69,8 @@ public final class IosAdapter extends BaseAdapter {
 			String versionTag, String libName, List<File> filesToDelete,
 			String libraryProjectPath, String target, String referencePath,
 			boolean isSupportV4Dependant) {
-		throw new NotImplementedException();
+		throw new NotImplementedException(
+				"IOS adapter has not been implemented yet.");
 
 	}
 

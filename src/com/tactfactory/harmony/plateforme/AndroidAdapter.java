@@ -316,8 +316,10 @@ public final class AndroidAdapter extends BaseAdapter {
 		boolean result = false;
 		
 		if (ignoreHeader && fileName.endsWith(JAVA_EXTENSION)) {
-			oldContent = oldContent.substring(oldContent.indexOf(PACKAGE));
-			newContent = newContent.substring(newContent.indexOf(PACKAGE));
+			oldContent = oldContent.substring(
+					Math.max(oldContent.indexOf(PACKAGE), 0));
+			newContent = newContent.substring(
+					Math.max(newContent.indexOf(PACKAGE), 0));
 		}
 		
 		result = oldContent.equals(newContent);

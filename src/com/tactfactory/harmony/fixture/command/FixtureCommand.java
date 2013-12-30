@@ -8,6 +8,8 @@
  */
 package com.tactfactory.harmony.fixture.command;
 
+import java.util.LinkedHashMap;
+
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
@@ -138,23 +140,19 @@ public class FixtureCommand extends BaseCommand {
 
 	@Override
 	public final void summary() {
-		ConsoleUtils.display("\n> FIXTURE \n"
-				+ "\t" + FIXTURE_INIT
-				+ "\t => Initialize fixtures, create loaders\n"
-				+ "\t\t use --format=(xml|yml) "
-				+ "to specify a format (default : yml)\n"
-				+ "\t\t use --force=(true|false) "
-				+ "to overwrite existing fixture loaders (default : false)\n"
-
-				+ "\t" + FIXTURE_LOAD
-				+ "\t => Load fixtures into the projects (overwrite)\n"
-
-				+ "\t" + FIXTURE_PURGE
-				+ "\t => Clear fixtures on the projects\n"
-
-				+ "\t" + FIXTURE_UPDATE
-				+ "\t => Update the fixtures in the project");
-
+		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
+		commands.put(FIXTURE_INIT,	"Initialize fixtures, create loaders :\n" 
+				+ "\t\t use --format=(xml|yml)"
+				+ " to specify a format (default : yml)\n"
+				+ "\t\t use --force=(true|false)"
+				+ " to overwrite existing fixture loaders (default : false)");
+		commands.put(FIXTURE_LOAD,	"Load fixtures into the projects (overwrite)");
+		commands.put(FIXTURE_PURGE,		"Clear fixtures on the projects");
+		commands.put(FIXTURE_UPDATE,	"Update the fixtures in the project");
+		
+		ConsoleUtils.displaySummary(
+				SUBJECT,
+				commands);
 	}
 
 	@Override

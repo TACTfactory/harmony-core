@@ -27,15 +27,110 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
     private View mHeader;
     private boolean mHeaderVisibility[];
 
+    /**
+     * Constructor.
+     * 
+     * @param context The context
+     */
     protected HeaderAdapter(Context context) {
         super(context, -1);
         
+        this.init();
+    }
+
+    /**
+     * Constructor.
+     * 
+	 * @param context The context
+	 * @param resource The resource
+	 * @param textViewResourceId The resource id of the text view
+	 * @param objects The list of objects of this adapter
+	 */
+	public HeaderAdapter(Context context, int resource, int textViewResourceId,
+			List<T> objects) {
+		super(context, resource, textViewResourceId, objects);
+		
+		this.init();
+	}
+
+	/**
+     * Constructor.
+     *
+	 * @param context The context
+	 * @param resource The resource
+	 * @param textViewResourceId The resource id of the text view
+	 * @param objects The list of objects of this adapter
+	 */
+	public HeaderAdapter(Context context, int resource, int textViewResourceId,
+			T[] objects) {
+		super(context, resource, textViewResourceId, objects);
+
+		this.init();
+	}
+
+	/**
+     * Constructor.
+     * 
+	 * @param context The context
+	 * @param resource The resource
+	 * @param textViewResourceId The resource id of the text view
+	 */
+	public HeaderAdapter(Context context, int resource, int textViewResourceId) {
+		super(context, resource, textViewResourceId);
+		
+		this.init();
+	}
+
+	/**
+     * Constructor.
+     * 
+	 * @param context The context
+	 * @param textViewResourceId The resource id of the text view
+	 * @param objects The list of objects of this adapter
+	 */
+	public HeaderAdapter(Context context, int textViewResourceId,
+			List<T> objects) {
+		super(context, textViewResourceId, objects);
+		
+		this.init();
+	}
+
+	/**
+     * Constructor.
+     * 
+	 * @param context The context
+	 * @param textViewResourceId The resource id of the text view
+	 * @param objects The list of objects of this adapter
+	 */
+	public HeaderAdapter(Context context, int textViewResourceId, T[] objects) {
+		super(context, textViewResourceId, objects);
+		
+		this.init();
+	}
+
+	/**
+     * Constructor.
+     * 
+	 * @param context The context
+	 * @param textViewResourceId The resource id of the text view
+	 */
+	public HeaderAdapter(Context context, int textViewResourceId) {
+		super(context, textViewResourceId);
+		
+		this.init();
+	}
+	
+	/**
+	 * Initialize the headers.
+	 */
+	private void init() {
         //Force display for header to true
         this.setSectionHeaderDisplayEnabled(true);
         
         //Force Pinned Header enable to true
         this.setPinnedPartitionHeadersEnabled(true);
-    }
+		
+	}
 
     public void setData(HeaderSectionIndexer<T> sectionIndexer) {
         this.clear();
