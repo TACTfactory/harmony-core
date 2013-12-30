@@ -15,7 +15,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
-import com.google.common.base.Strings;
+<#if (curr.inheritance?? && curr.inheritance.superclass??) >import com.google.common.base.Strings;</#if>
 
 <#if (curr.options.sync??)>
 import org.joda.time.DateTime;
@@ -235,7 +235,8 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				if (Strings.isNullOrEmpty(selection)) {
 					selection = 
 						${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
-					selectionArgs = new String[]{${project_name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER};
+					selectionArgs = new String[]{
+							${project_name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER};
 				} else {
 					selection += " AND " 
 							+ ${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)}
