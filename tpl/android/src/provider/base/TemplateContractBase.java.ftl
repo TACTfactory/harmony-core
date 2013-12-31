@@ -48,7 +48,7 @@ public abstract class ${project_name?cap_first}ContractBase {
 	/**
 	 * Columns names and aliases for ${curr.name} entity.
 	 */
-	public interface ${curr.name}Columns {
+	public interface ${curr.name}Columns<#if ((joinedInheritance || singleTabInheritance) && curr.inheritance.superclass??)> extends ${curr.inheritance.superclass.name}Columns</#if> {
 		<#if (singleTabInheritance && !isTopMostSuperClass)>
 		/** Identifier for inheritance. */
 		public static final String DISCRIMINATOR_IDENTIFIER = "${curr.inheritance.discriminatorIdentifier}";
@@ -76,7 +76,7 @@ public abstract class ${project_name?cap_first}ContractBase {
 	/**
 	 * Contract base class for ${curr.name} Entity.
 	 */
-	public static class ${curr.name}Base implements ${curr.name}Columns<#if ((joinedInheritance || singleTabInheritance) && curr.inheritance.superclass??)>, ${curr.inheritance.superclass.name}Columns</#if> {
+	public static class ${curr.name}Base implements ${curr.name}Columns {
 		/** Table name of SQLite database. */
 		public static final String TABLE_NAME = <#if singleTabInheritance && !isTopMostSuperClass>${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.TABLE_NAME<#else>"${curr.name}"</#if>;
 		/** Global Fields. */

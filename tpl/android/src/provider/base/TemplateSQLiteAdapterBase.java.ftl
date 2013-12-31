@@ -95,7 +95,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		result += " INNER JOIN ";
 		result += this.motherAdapter.getJoinedTableName();
 		result += " <#if InheritanceUtils.isExtended(entities[curr.inheritance.superclass.name])>AND<#else>ON</#if> ";
-		result += ALIASED_${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)} + " = " + ${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)};
+		result += ${project_name?cap_first}Contract.${curr.name}.ALIASED_${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)} + " = " + ${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)};
 		</#if>
 		return result;
 	}
@@ -369,9 +369,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	<#else>
 		this.motherAdapter.open(this.mDatabase);
 		final ContentValues currentValues =
-				DatabaseUtil.extractContentValues(values, COLS);
+				DatabaseUtil.extractContentValues(values, ${project_name?cap_first}Contract.${curr.name}.COLS);
 		int newid = (int) this.motherAdapter.insert(null, values);
-		currentValues.put(${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)}, newid);
+		currentValues.put(${project_name?cap_first}Contract.${curr.name}.${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)}, newid);
 	</#if>
 		if (values.size() != 0) {
 			<#if !InheritanceUtils.isExtended(curr)>newid = (int) </#if>this.insert(
@@ -481,7 +481,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 
 		<#if (InheritanceUtils.isExtended(curr))>
 		final ContentValues currentValues =
-				DatabaseUtil.extractContentValues(values, COLS);
+				DatabaseUtil.extractContentValues(values, ${project_name?cap_first}Contract.${curr.name}.COLS);
 		this.motherAdapter.update(values, whereClause, whereArgs);
 
 		return this.update(
@@ -785,27 +785,39 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		<#list (curr_relations) as relation>
 			<#if !relation.internal>
 				<#if relation.relation.type == "ManyToMany">
-		${relation.relation.joinTable}SQLiteAdapter ${relation.name}Adapter = 
+		${relation.relation.joinTable}SQLiteAdapter ${relation.name}Adapter =
 					new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
+		
 		${relation.name}Adapter.open(this.mDatabase);
+		
+		Cursor ${relation.name}Cursor = ${relation.name}Adapter.getBy${curr.name}(
+				item.getId(),
+				${project_name?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS,
+				null, null, null);
+		
 		item.set${relation.name?cap_first}(
 				new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx)
-						.cursorToItems(${relation.name}Adapter
-								.getBy${curr.name}(
-										item.getId(),
-										${project_name?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS, null, null, null)));
+						.cursorToItems(${relation.name}Cursor));
+		
+		${relation.name}Cursor.close();
 				<#elseif relation.relation.type == "OneToMany">
-		${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter = 
+		${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter =
 					new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
+					
 		${relation.name}Adapter.open(this.mDatabase);
+		
+		Cursor ${relation.name}Cursor = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(
+				item.getId(),
+				${project_name?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS,
+				null, null, null);
+		
 		item.set${relation.name?cap_first}(
-				${relation.name}Adapter.cursorToItems(
-						${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(
-								item.getId(),
-								${project_name?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS, null, null, null)));
+				${relation.name}Adapter.cursorToItems(${relation.name}Cursor));
+		
+		${relation.name}Cursor.close();
 				<#else>
 		if (item.get${relation.name?cap_first}() != null) {
-			${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter = 
+			${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter =
 						new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 			${relation.name}Adapter.open(this.mDatabase);
 			item.set${relation.name?cap_first}(${relation.name}Adapter
