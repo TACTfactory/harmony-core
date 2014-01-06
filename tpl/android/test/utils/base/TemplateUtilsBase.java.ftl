@@ -102,7 +102,14 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 		return ${curr.name?uncap_first};
 	}
 
-	public static boolean equals(${curr.name?cap_first} ${curr.name?uncap_first}1, ${curr.name?cap_first} ${curr.name?uncap_first}2){
+	public static boolean equals(${curr.name?cap_first} ${curr.name?uncap_first}1,
+			${curr.name?cap_first} ${curr.name?uncap_first}2){
+		return equals(${curr.name?uncap_first}1, ${curr.name?uncap_first}2, true);
+	}
+	
+	public static boolean equals(${curr.name?cap_first} ${curr.name?uncap_first}1,
+			${curr.name?cap_first} ${curr.name?uncap_first}2,
+			boolean checkRecursiveId){
 		boolean ret = true;
 		Assert.assertNotNull(${curr.name?uncap_first}1);
 		Assert.assertNotNull(${curr.name?uncap_first}2);
@@ -123,15 +130,18 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 			if (${curr.name?uncap_first}1.get${field.name?cap_first}() != null
 					&& ${curr.name?uncap_first}2.get${field.name?cap_first}() != null) {
 					<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
-				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}(),
-						${curr.name?uncap_first}2.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
-
+				if (checkRecursiveId) {
+					Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}(),
+							${curr.name?uncap_first}2.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
+				}
 					<#else>
 				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().size(),
 					${curr.name?uncap_first}2.get${field.name?cap_first}().size());
-				for (int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
-					Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).get${entities[field.relation.targetEntity].ids[0].name?cap_first}(),
-								${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
+				if (checkRecursiveId) {
+					for (int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
+						Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).get${entities[field.relation.targetEntity].ids[0].name?cap_first}(),
+									${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
+					}
 				}
 					</#if>
 			}
