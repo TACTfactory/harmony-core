@@ -390,7 +390,6 @@ public class ProjectGenerator extends BaseGenerator {
 		this.createFolders();
 		this.makeSources();
 		this.initGitProject();
-		this.addLibs();
 		this.addBaseDrawables();
 
 		// copy utils
@@ -409,6 +408,8 @@ public class ProjectGenerator extends BaseGenerator {
 					this.getAdapter().getTemplateProjectPath());
 			result = true;
 		}
+
+		this.addLibs();
 
 		// Make Test project
 

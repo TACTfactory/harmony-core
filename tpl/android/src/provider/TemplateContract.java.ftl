@@ -1,20 +1,15 @@
 <@header?interpret />
-package ${local_namespace};
+package ${project_namespace}.provider;
 
-import android.content.Context;
+import ${project_namespace}.provider.base.${project_name?cap_first}ContractBase;
 
-/** ${name} contract. */
-public final class ${name}Contract {
-	//public static final String AUTHORITY = "com.android.contacts";
+/** ${project_name?cap_first} contract. */
+public final class ${project_name?cap_first}Contract extends ${project_name?cap_first}ContractBase {
+	<#list entities?values as curr>
+		<#if (curr.fields?size > 0 || curr.inheritance??)>
+	public final class ${curr.name} extends ${project_name?cap_first}ContractBase.${curr.name}Base {
 
-	//public static final Uri AUTHORITY_URI = Uri.parse("content://" + AUTHORITY);
-
-	//public static final Uri CONTENT_URI =
-	//		Uri.withAppendedPath(AUTHORITY_URI, CONTENT_DIRECTORY);
-
-	// Fields
-	<#list fields as field>
-	/** ${field.name}. */
-	public static final String ${field.alias} = "${field.name}";
+	}
+		</#if>
 	</#list>
 }

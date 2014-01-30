@@ -19,7 +19,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import ${curr.namespace}.R;
-${ImportUtils.importRelatedSQLiteAdapters(curr, false, true, false)}
 ${ImportUtils.importToManyRelatedEntities(curr)}<#if (importDate)>
 import ${curr.namespace}.harmony.util.DateUtils;</#if>
 import ${project_namespace}.harmony.view.DeleteDialog;
@@ -29,6 +28,7 @@ import ${project_namespace}.harmony.view.MultiLoader.UriLoadedCallback;
 import ${project_namespace}.menu.CrudEditDeleteMenuWrapper.CrudEditDeleteMenuInterface;
 import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
+import ${project_namespace}.provider.${project_name?cap_first}Contract;
 
 /** ${curr.name} show fragment.
  *
@@ -188,7 +188,8 @@ public class ${curr.name}ShowFragment
 	public void on${curr.name}Loaded(Cursor c) {
 		if (c.getCount() > 0) {
 			c.moveToFirst();
-			new ${curr.name}SQLiteAdapter(getActivity()).cursorToItem(
+			
+			${project_name?cap_first}Contract.${curr.name}.cursorToItem(
 						c,
 						this.model);
 			this.loadData();
@@ -207,14 +208,12 @@ public class ${curr.name}ShowFragment
 		<#if relation.relation.type == "ManyToOne" || relation.relation.type == "OneToOne">
 				if (c.getCount() > 0) {
 					c.moveToFirst();
-					this.model.set${relation.name?cap_first}(
-							new ${relation.relation.targetEntity}SQLiteAdapter(getActivity()).cursorToItem(c));
+					${project_name?cap_first}Contract.${relation.relation.targetEntity}.cursorToItem(c);
 					this.loadData();
-			}
+				}
 		<#else>
-				this.model.set${relation.name?cap_first}(
-						new ${relation.relation.targetEntity}SQLiteAdapter(getActivity()).cursorToItems(c));
-					this.loadData();
+			${project_name?cap_first}Contract.${relation.relation.targetEntity}.cursorToItem(c);
+			this.loadData();
 		</#if>
 			} else {
 				this.model.set${relation.name?cap_first}(null);

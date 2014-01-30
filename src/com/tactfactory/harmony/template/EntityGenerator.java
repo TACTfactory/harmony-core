@@ -607,7 +607,7 @@ public class EntityGenerator extends BaseGenerator {
 		
 		if (methodStart != -1) {
 			final int methodEnd = this.findClosingBracket(fileString,
-						methodStart + (methodSignature.lastIndexOf('{'))) + 1;
+						methodStart + (methodSignature.lastIndexOf('{'))) + 2;
 			
 			final int realMethodStart = fileString.toString().lastIndexOf('}',
 					methodStart) + 2;
