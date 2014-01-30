@@ -188,12 +188,14 @@ public class ClassVisitor {
 							((NormalAnnotationExpr)
 									entityAnnot).getPairs();
 					
-					for (MemberValuePair pair : pairs) {
-						if (ATTRIBUTE_HIDDEN.equals(pair.getName())) {
-							
-							((EntityMetadata) result).setHidden(
-									pair.getValue().toString()
-									.equals(String.valueOf(true)));
+					if (pairs != null) {	
+						for (MemberValuePair pair : pairs) {
+							if (ATTRIBUTE_HIDDEN.equals(pair.getName())) {
+								
+								((EntityMetadata) result).setHidden(
+										pair.getValue().toString()
+										.equals(String.valueOf(true)));
+							}
 						}
 					}
 				}
