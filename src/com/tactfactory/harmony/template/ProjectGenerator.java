@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
@@ -332,12 +335,12 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Initialize git project.
 	 */
 	private void initGitProject() {
-		final ArrayList<String> command = new ArrayList<String>();
 		final File projectFolder = new File(Harmony.getProjectAndroidPath());
-		command.add("git");
-		command.add("init");
-		command.add(projectFolder.getAbsolutePath());
-		ConsoleUtils.launchCommand(command);
+		try {
+			Git.init().setDirectory(projectFolder).call();
+		} catch (GitAPIException e) {
+			ConsoleUtils.displayError(e);
+		}
 	}
 
 	/**
