@@ -123,6 +123,17 @@ public class ProviderGenerator extends BaseGenerator {
 					"base/" + this.nameProvider + "Base.java", true);
 			this.makeSourceProvider("base/ProviderAdapterBase.java",
 					"base/ProviderAdapterBase.java", true);
+
+			// Package infos
+			this.makeSourceProvider("provider-package-info.java",
+					"package-info.java", false);
+			this.makeSourceProvider("base/provider-package-info.java",
+					"base/package-info.java", false);
+
+			this.makeSourceProvider("utils/base/package-info.java",
+					"utils/base/package-info.java", false);
+			this.makeSourceProvider("utils/package-info.java",
+					"utils/package-info.java", false);
 			
 			// Make contracts
 			this.makeSourceProvider("TemplateContract.java",
