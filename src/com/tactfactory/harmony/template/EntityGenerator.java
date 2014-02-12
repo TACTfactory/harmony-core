@@ -391,7 +391,7 @@ public class EntityGenerator extends BaseGenerator {
 				fieldMeta.getName().substring(0, 1).toUpperCase()
 				+ fieldMeta.getName().substring(1);
 		String prefix = "get";
-		if ("boolean".equals(fieldMeta.getType())) {
+		if ("boolean".equalsIgnoreCase(fieldMeta.getType())) {
 			prefix = "is";
 		}
 		for (final MethodMetadata m : methods) {

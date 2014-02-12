@@ -50,7 +50,7 @@ public class ${curr.name}ShowFragment
 <#list fields?values as field>
 	<#if (!field.internal && !field.hidden)>
 	/** ${field.name} View. */
-		<#if (field.type=="boolean")>
+		<#if (field.type?lower_case == "boolean")>
 	protected CheckBox ${field.name}View;
 		<#else>
 	protected TextView ${field.name}View;
@@ -70,7 +70,7 @@ public class ${curr.name}ShowFragment
     protected void initializeComponent(final View view) {
 	<#list fields?values as field>
 		<#if (!field.internal && !field.hidden)>
-			<#if (field.type=="boolean")>
+			<#if (field.type?lower_case == "boolean")>
 		this.${field.name}View =
 			(CheckBox) view.findViewById(
 					R.id.${curr.name?lower_case}_${field.name?lower_case});
