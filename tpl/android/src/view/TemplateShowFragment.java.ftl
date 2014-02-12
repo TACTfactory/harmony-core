@@ -232,7 +232,7 @@ public class ${curr.name}ShowFragment
 		final Intent intent = new Intent(getActivity(),
 									${curr.name}EditActivity.class);
 		Bundle extras = new Bundle();
-		extras.putParcelable("${curr.name}", this.model);
+		extras.putParcelable(${curr.name}.PARCEL, this.model);
 		intent.putExtras(extras);
 
 		this.getActivity().startActivity(intent);
