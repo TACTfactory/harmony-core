@@ -65,7 +65,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	<#list fields?values as field>
 		<#if (!field.internal && !field.hidden && field.writable)>
 			<#if !field.relation??>
-				<#if field.type=="boolean">
+				<#if field.type?lower_case=="boolean">
 	/** ${field.name} View. */
 	protected CheckBox ${field.name}View;
 				<#elseif field.type?lower_case=="datetime">
@@ -112,7 +112,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		<#list fields?values as field>
 			<#if (!field.internal && !field.hidden && field.writable)>
 				<#if !field.relation??>
-					<#if field.type=="boolean">
+					<#if field.type?lower_case=="boolean">
 		this.${field.name}View =
 				(CheckBox) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 					<#elseif field.type?lower_case == "datetime">

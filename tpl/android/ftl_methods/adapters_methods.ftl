@@ -374,7 +374,11 @@
 	<#if !field.internal && !field.hidden && field.writable>
 			<#if !field.relation??>
 				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
+					<#if (field.type=="Boolean")>
+		<#assign result = result + "${tab}if (this.model.is${field.name?cap_first}() != null) {" />					
+					<#else>
 		<#assign result = result + "${tab}if (this.model.get${field.name?cap_first}() != null) {" />
+					</#if>
 					<#if field.type?lower_case=="datetime">
 						<#if field.harmony_type=="datetime">
 		<#assign result = result + "${tab}	this.${field.name}View.setDateTime(this.model.get${field.name?cap_first}());" />
@@ -401,7 +405,11 @@
 	<#if (!field.internal && !field.hidden)>
 			<#if (!field.relation??)>
 		    	<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
+					<#if (field.type == "Boolean")>
+		<#assign result = result + "${tab}if (this.model.is${field.name?cap_first}() != null) {" />
+					<#else>
 		<#assign result = result + "${tab}if (this.model.get${field.name?cap_first}() != null) {" />
+					</#if>
 					<#if (field.type?lower_case == "datetime")>
 						<#if (field.harmony_type == "datetime")>
 		<#assign result = result + "${tab}	this.${field.name}View.setText(" />
@@ -451,7 +459,11 @@
 	<#if (!field.internal && !field.hidden)>
 		<#if (!field.relation??)>
 			<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
-				<#assign result = result + "${tab}if (model.get${field.name?cap_first}() != null) {" />
+				<#if (field.type == "Boolean")>
+					<#assign result = result + "${tab}if (model.is${field.name?cap_first}() != null) {" />
+				<#else>
+					<#assign result = result + "${tab}if (model.get${field.name?cap_first}() != null) {" />
+				</#if>
 				<#assign result = result + "${tab}	${ViewUtils.setAdapterLoader(field)}" />
 				<#assign result = result + "${tab}}" />
 			<#else>
