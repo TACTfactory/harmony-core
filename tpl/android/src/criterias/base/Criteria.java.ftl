@@ -185,7 +185,15 @@ public class Criteria implements Serializable, ICriteria {
 		/** IN "IN" (May be used with ArrayValue or SelectValue). */
 		IN("IN"),
 		/** NOT IN "NOT IN" (May be used with ArrayValue or SelectValue). */
-		NOT_IN("NOT IN");
+		NOT_IN("NOT IN"),
+		/** IS "IS". */
+        IS("IS"),
+        /** IS NULL. WARNING : Use null Value */
+        IS_NULL("IS NULL"),
+        /** IS NOT NULL. WARNING : Use null Value */
+        IS_NOT_NULL("IS NOT NULL"),
+        /** Different. <>*/
+        DIFFERENT("<>");
 
 		/** SQLite representation of this type. */
 		private String sql;
