@@ -20,7 +20,7 @@ public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
 	protected static final int SUPPORT_V4_RESULT_HACK = 0xFFFF;
 
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = true;
 
 		try {
@@ -33,7 +33,7 @@ public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
 		}
 
 		if (result) {
-			result = super.onPrepareOptionsMenu(menu);
+			result = super.onCreateOptionsMenu(menu);
 		}
 
 		return result;
