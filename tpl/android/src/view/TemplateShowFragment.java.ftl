@@ -19,7 +19,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import ${curr.namespace}.R;
-${ImportUtils.importRelatedSQLiteAdapters(curr, false, true, false)}
 ${ImportUtils.importToManyRelatedEntities(curr)}<#if (importDate)>
 import ${curr.namespace}.harmony.util.DateUtils;</#if>
 import ${project_namespace}.harmony.view.DeleteDialog;
@@ -29,6 +28,7 @@ import ${project_namespace}.harmony.view.MultiLoader.UriLoadedCallback;
 import ${project_namespace}.menu.CrudEditDeleteMenuWrapper.CrudEditDeleteMenuInterface;
 import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
+import ${project_namespace}.provider.${project_name?cap_first}Contract;
 
 /** ${curr.name} show fragment.
  *
@@ -50,7 +50,7 @@ public class ${curr.name}ShowFragment
 <#list fields?values as field>
 	<#if (!field.internal && !field.hidden)>
 	/** ${field.name} View. */
-		<#if (field.type=="boolean")>
+		<#if (field.type?lower_case == "boolean")>
 	protected CheckBox ${field.name}View;
 		<#else>
 	protected TextView ${field.name}View;
@@ -70,7 +70,7 @@ public class ${curr.name}ShowFragment
     protected void initializeComponent(final View view) {
 	<#list fields?values as field>
 		<#if (!field.internal && !field.hidden)>
-			<#if (field.type=="boolean")>
+			<#if (field.type?lower_case == "boolean")>
 		this.${field.name}View =
 			(CheckBox) view.findViewById(
 					R.id.${curr.name?lower_case}_${field.name?lower_case});
@@ -188,7 +188,8 @@ public class ${curr.name}ShowFragment
 	public void on${curr.name}Loaded(Cursor c) {
 		if (c.getCount() > 0) {
 			c.moveToFirst();
-			new ${curr.name}SQLiteAdapter(getActivity()).cursorToItem(
+			
+			${project_name?cap_first}Contract.${curr.name}.cursorToItem(
 						c,
 						this.model);
 			this.loadData();
@@ -207,14 +208,12 @@ public class ${curr.name}ShowFragment
 		<#if relation.relation.type == "ManyToOne" || relation.relation.type == "OneToOne">
 				if (c.getCount() > 0) {
 					c.moveToFirst();
-					this.model.set${relation.name?cap_first}(
-							new ${relation.relation.targetEntity}SQLiteAdapter(getActivity()).cursorToItem(c));
+					${project_name?cap_first}Contract.${relation.relation.targetEntity}.cursorToItem(c);
 					this.loadData();
-			}
+				}
 		<#else>
-				this.model.set${relation.name?cap_first}(
-						new ${relation.relation.targetEntity}SQLiteAdapter(getActivity()).cursorToItems(c));
-					this.loadData();
+			${project_name?cap_first}Contract.${relation.relation.targetEntity}.cursorToItem(c);
+			this.loadData();
 		</#if>
 			} else {
 				this.model.set${relation.name?cap_first}(null);
@@ -233,7 +232,7 @@ public class ${curr.name}ShowFragment
 		final Intent intent = new Intent(getActivity(),
 									${curr.name}EditActivity.class);
 		Bundle extras = new Bundle();
-		extras.putParcelable("${curr.name}", this.model);
+		extras.putParcelable(${curr.name}.PARCEL, this.model);
 		intent.putExtras(extras);
 
 		this.getActivity().startActivity(intent);

@@ -9,6 +9,10 @@
 package com.tactfactory.harmony;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
+import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.dependencies.libraries.LibraryPool;
@@ -46,13 +50,7 @@ public final class Context {
 	private String basePath = new File("./").getAbsolutePath(); // /
 
 	/** Path of harmony.jar. or Binary */
-	private static String harmonyPath =
-			Harmony.class
-			.getProtectionDomain()
-			.getCodeSource()
-			.getLocation()
-			.toString()
-			.substring("file:".length());
+	private static String harmonyPath;
 
 	/** Path of project (app folder in Harmony root).<br/>
 	 * eg. /app/
@@ -90,24 +88,41 @@ public final class Context {
 	/** Symfony path. */
 	public static final String SYMFONY_PATH = "D:/Site/wamp/www/Symfony";
 
+
+	static {
+		String url = Harmony.class
+				.getProtectionDomain()
+				.getCodeSource()
+				.getLocation()
+				.getPath();
+		try {
+			Context.harmonyPath = URLDecoder.decode(url, "utf-8");
+			
+		} catch (UnsupportedEncodingException e) {
+			ConsoleUtils.displayError(e);
+			Context.harmonyPath = URLDecoder.decode(url);
+		}
+	}
+	
 	/**
 	 * Contructor.
 	 */
 	public Context() {
+		File harmonyFile = new File(harmonyPath);
 		// For root case
-		File baseDir = this.detectAppTree(new File(harmonyPath));
+		File baseDir = this.detectAppTree(harmonyFile);
 
 		// Clean binary case (for /bin and /vendor/**/bin)
 		if (baseDir == null && harmonyPath.endsWith("bin/")) {
 			final File predictiveBaseDir =
-					new File(harmonyPath).getParentFile();
+					harmonyFile.getParentFile();
 
 			ConsoleUtils.displayDebug("Eclipse Mode : " + harmonyPath);
 			baseDir = this.detectAppTree(predictiveBaseDir);
 		}
 
 		if (baseDir == null && harmonyPath.endsWith("harmony.jar")) {
-			final File predictiveBaseDir = new File(harmonyPath)
+			final File predictiveBaseDir = harmonyFile
 					.getParentFile()
 					.getParentFile()
 					.getParentFile();
@@ -120,7 +135,7 @@ public final class Context {
 		// For vendor/tact-core case
 		if (baseDir == null) {
 			final File predictiveBaseDir =
-					new File(harmonyPath)
+					harmonyFile
 						.getParentFile()
 						.getParentFile()
 						.getParentFile();
@@ -132,7 +147,7 @@ public final class Context {
 		//For Emma
 		if (baseDir == null) {
 			final File predictiveBaseDir =
-					new File(harmonyPath)
+					harmonyFile
 						.getParentFile()
 						.getParentFile()
 						.getParentFile()

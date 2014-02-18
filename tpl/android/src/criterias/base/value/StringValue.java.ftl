@@ -45,11 +45,19 @@ public class StringValue extends CriteriaValue {
 
 	@Override
 	public String toSQLiteSelection() {
-		return "?";
+		String result;
+		if (this.value == null) {
+			result = "";
+		} else {
+			result = "?";
+		}
+		return result;
 	}
 
 	@Override
 	public void toSQLiteSelectionArgs(final ArrayList<String> array) {
-		array.add(this.value);
+		if (this.value != null) {
+			array.add(this.value);
+		}
 	}
 }

@@ -158,7 +158,7 @@ public class ${curr.name}ListAdapter
 			<#list fields?values as field>
 				<#if (!field.internal && !field.hidden)>
 					<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
-						<#if (field.type=="boolean")>
+						<#if (field.type?lower_case == "boolean")>
 			CheckBox ${field.name}View =
 				(CheckBox) convertView.findViewById(
 						R.id.row_${curr.name?lower_case}_${field.name?lower_case});

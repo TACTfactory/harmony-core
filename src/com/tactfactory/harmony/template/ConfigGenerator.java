@@ -73,7 +73,7 @@ public class ConfigGenerator extends BaseGenerator {
 
 				// Debug Log
 				ConsoleUtils.displayDebug(
-						"Update config : " + configMeta.getKey());
+						"Update config : ", configMeta.getKey());
 
 				// Find String Node
 				final List<Element> configs =

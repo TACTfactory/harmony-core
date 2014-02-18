@@ -1,3 +1,11 @@
+/**
+ * This file is part of the Harmony package.
+ *
+ * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.tactfactory.harmony.threads;
 
 import java.io.File;
@@ -11,7 +19,7 @@ import java.net.URLConnection;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
- * Thread used to download a file from the internet.
+ * Thread used to download a file from the Internet.
  */
 public class DownloadFileThread extends Thread {
 	/**

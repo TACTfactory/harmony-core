@@ -203,8 +203,10 @@ public abstract class SqliteAdapter {
 		if (type.equalsIgnoreCase(Column.Type.CHARACTER.getValue())) {
 			type = "STRING";
 		} else {
-			ConsoleUtils.displayWarning("No type found for " + type 
-					+ " in entity " + field.getOwner().getName());
+			if (field.getOwner() != null) {
+				ConsoleUtils.displayWarning("No type found for " + type 
+						+ " in entity " + field.getOwner().getName());
+			}
 			type = "BLOB";
 		}
 		

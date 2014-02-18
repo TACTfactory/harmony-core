@@ -90,7 +90,20 @@ public class MenuGenerator extends BaseGenerator {
 					+ FILE_MENU_WRAPPER_BASE,
 			this.getAdapter().getMenuBasePath() + FILE_MENU_WRAPPER_BASE,
 			true);
-
+		
+		// Package infos
+		super.makeSource(
+				this.getAdapter().getTemplateMenuBasePath()	
+						+ "package-info.java",
+				this.getAdapter().getMenuBasePath()
+						+ "package-info.java",
+				false);
+		super.makeSource(
+				this.getAdapter().getTemplateMenuPath()	
+						+ "package-info.java",
+				this.getAdapter().getMenuPath()
+						+ "package-info.java",
+				false);
 	}
 
 	/**

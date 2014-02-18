@@ -631,7 +631,7 @@ public class FieldVisitor {
 		}
 		
 		ConsoleUtils.displayDebug(
-				"Association Table => " + rel.getJoinTable());
+				"Association Table => ", rel.getJoinTable());
 		
 		EntityMetadata joinTable;
 		// If jointable doesn't exist yet, create it

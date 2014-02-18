@@ -8,6 +8,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.errors.GitAPIException;
+
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
@@ -153,6 +156,15 @@ public class ProjectGenerator extends BaseGenerator {
 				this.getAdapter().getRessourceLayoutPath() + "main.xml",
 				false);
 
+		super.makeSource(
+				this.getAdapter().getTemplateSourcePath()
+				+ "harmony/view/package-info.java",
+				this.getAdapter().getSourcePath()
+				+ this.getAppMetas().getProjectNameSpace()
+				+ "/harmony/view/"
+				+ "package-info.java",
+				false);
+		
 		// create HarmonyFragmentActivity
 		super.makeSource(
 				this.getAdapter().getTemplateSourcePath()
@@ -207,8 +219,39 @@ public class ProjectGenerator extends BaseGenerator {
 			+ "harmony/exception/NotImplementedException.java",
 			this.getAdapter().getSourcePath()
 			+ this.getAppMetas().getProjectNameSpace()
-			+ "/harmony/exception/"
-			+ "NotImplementedException.java",
+			+ "/harmony/exception/NotImplementedException.java",
+			false);
+		
+		super.makeSource(
+			this.getAdapter().getTemplateSourcePath()
+			+ "harmony/exception/package-info.java",
+			this.getAdapter().getSourcePath()
+			+ this.getAppMetas().getProjectNameSpace()
+			+ "/harmony/exception/package-info.java",
+			false);
+		
+		super.makeSource(
+			this.getAdapter().getTemplateSourcePath()
+			+ "harmony/util/package-info.java",
+			this.getAdapter().getSourcePath()
+			+ this.getAppMetas().getProjectNameSpace()
+			+ "/harmony/util/package-info.java",
+			false);
+		
+		super.makeSource(
+			this.getAdapter().getTemplateSourcePath()
+			+ "widget/package-info.java",
+			this.getAdapter().getSourcePath()
+			+ this.getAppMetas().getProjectNameSpace()
+			+ "/harmony/widget/package-info.java",
+			false);
+		
+		super.makeSource(
+			this.getAdapter().getTemplateSourcePath()
+			+ "package-info.java",
+			this.getAdapter().getSourcePath()
+			+ this.getAppMetas().getProjectNameSpace()
+			+ "/package-info.java",
 			false);
 
 		try {
@@ -332,12 +375,12 @@ public class ProjectGenerator extends BaseGenerator {
 	 * Initialize git project.
 	 */
 	private void initGitProject() {
-		final ArrayList<String> command = new ArrayList<String>();
 		final File projectFolder = new File(Harmony.getProjectAndroidPath());
-		command.add("git");
-		command.add("init");
-		command.add(projectFolder.getAbsolutePath());
-		ConsoleUtils.launchCommand(command);
+		try {
+			Git.init().setDirectory(projectFolder).call();
+		} catch (GitAPIException e) {
+			ConsoleUtils.displayError(e);
+		}
 	}
 
 	/**
@@ -350,7 +393,6 @@ public class ProjectGenerator extends BaseGenerator {
 		this.createFolders();
 		this.makeSources();
 		this.initGitProject();
-		this.addLibs();
 		this.addBaseDrawables();
 
 		// copy utils
@@ -369,6 +411,8 @@ public class ProjectGenerator extends BaseGenerator {
 					this.getAdapter().getTemplateProjectPath());
 			result = true;
 		}
+
+		this.addLibs();
 
 		// Make Test project
 

@@ -5,6 +5,7 @@ package ${curr.test_namespace}.base;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
+import ${project_namespace}.provider.${project_name?cap_first}Contract;
 
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 <#if (InheritanceUtils.isExtended(curr))>import ${data_namespace}.${curr.inheritance.superclass.name}SQLiteAdapter;</#if>
@@ -82,8 +83,8 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
 
 			try {
-				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
-				values.remove(${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)});
+				ContentValues values = ${project_name?cap_first}Contract.${curr.name}.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
+				values.remove(${project_name?cap_first}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)});
 				result = this.provider.insert(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, values);
 
 			} catch (Exception e) {
@@ -104,7 +105,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			try {
 				Cursor c = this.provider.query(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.get${curr_ids[0].name?cap_first}()), this.adapter.getCols(), null, null, null);
 				c.moveToFirst();
-				result = this.adapter.cursorToItem(c);
+				result = ${project_name?cap_first}Contract.${curr.name}.cursorToItem(c);
 				c.close();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -120,7 +121,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		ArrayList<${curr.name}> result = null;
 		try {
 			Cursor c = this.provider.query(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, this.adapter.getCols(), null, null, null);
-			result = this.adapter.cursorToItems(c);
+			result = ${project_name?cap_first}Contract.${curr.name}.cursorToItems(c);
 			c.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -142,7 +143,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			try {
 				${curr.name?uncap_first}.set${curr_ids[0].name?cap_first}(this.entity.get${curr_ids[0].name?cap_first}());
 
-				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
+				ContentValues values = ${project_name?cap_first}Contract.${curr.name}.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				result = this.provider.update(
 					Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI
 						+ "/"
@@ -167,11 +168,11 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
 
 			try {
-				ContentValues values = this.adapter.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
-				values.remove(${curr_ids[0].owner}SQLiteAdapter.${NamingUtils.alias(curr_ids[0].name)});
+				ContentValues values = ${project_name?cap_first}Contract.${curr.name}.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
+				values.remove(${project_name?cap_first}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)});
 				<#list ViewUtils.getAllFields(curr)?values as field>
 					<#if field.unique?? && field.unique>
-				values.remove(${field.owner}SQLiteAdapter.COL_${field.name?upper_case});
+				values.remove(${project_name?cap_first}Contract.${field.owner}.COL_${field.name?upper_case});
 					</#if>
 				</#list>
 

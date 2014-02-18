@@ -12,16 +12,12 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 import com.tactfactory.harmony.Harmony;
-import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
-import com.tactfactory.harmony.utils.OsUtil;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
 import freemarker.cache.FileTemplateLoader;
@@ -158,19 +154,20 @@ public abstract class BaseGenerator {
 	protected void makeSource(final String templatePath,
 			final String generatePath,
 			final boolean override) {
+		
 		if (!TactFileUtils.exists(generatePath) || override) {
 			final File generateFile = TactFileUtils.makeFile(generatePath);
-
+			
 			try {
 				String oldFile = TactFileUtils.fileToString(generateFile);
 				// Debug Log
-				ConsoleUtils.displayDebug("Generate Source : "
-						+ generateFile.getCanonicalPath());
-
+				ConsoleUtils.displayDebug("Generate Source : " +
+						generateFile.getCanonicalPath());
+				
 				// Create
 				final Template tpl =
 						this.cfg.getTemplate(templatePath + ".ftl");
-
+				
 				// Write and close
 				final OutputStreamWriter output =
 						new OutputStreamWriter(
@@ -208,8 +205,8 @@ public abstract class BaseGenerator {
 
 			try {
 				// Debug Log
-				ConsoleUtils.displayDebug("Append Source : "
-						+ generateFile.getPath());
+				ConsoleUtils.displayDebug("Append Source : ",
+						generateFile.getPath());
 
 				// Create
 				final Template tpl =

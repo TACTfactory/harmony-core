@@ -8,6 +8,8 @@
  */
 package com.tactfactory.harmony.command;
 
+import java.util.LinkedHashMap;
+
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
@@ -483,42 +485,29 @@ public class ProjectCommand extends BaseCommand {
 
 	@Override
 	public final void summary() {
-		ConsoleUtils.display("\n> PROJECT \n"
-				+ "\t" + INIT_ANDROID
-				+ "\t => Init Android project directory\n"
-
-				+ "\t" + INIT_IOS
-				+ "\t => Init Apple IOS project directory\n"
-
-				+ "\t" + INIT_RIM
-				+ "\t => Init BlackBerry project directory\n"
-
-				+ "\t" + INIT_WINPHONE
-				+ "\t => Init Windows Phone project directory\n"
-
-				+ "\t" + INIT_ALL
-				+ "\t => Init All project directories\n"
-
-				+ "\t" + REMOVE_ANDROID
-				+ "\t => Remove Google Android project directory\n"
-
-				+ "\t" + REMOVE_IOS
-				+ "\t => Remove Apple IOS project directory\n"
-
-				+ "\t" + REMOVE_RIM
-				+ "\t => Remove BlackBerry project directory\n"
-
-				+ "\t" + REMOVE_WINPHONE
-				+ "\t => Remove Windows Phone project directory\n"
-
-				+ "\t" + REMOVE_ALL
-				+ "\t => Remove All project directories\n"
-
-				+ "\t" + UPDATE_SDK
-				+ "\t => Update the SDK Path\n"
-
-				+ "\t" + UPDATE_DEPENDENCIES
-				+ "\t => Update the dependencies from an existing project\n");
+		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
+		
+		// Init
+		commands.put(INIT_ANDROID, "Init Google Android project directory");
+//		commands.put(INIT_IOS, "Init Apple IOS project directory");
+//		commands.put(INIT_RIM, "Init BlackBerry project directory");
+//		commands.put(INIT_WINPHONE, "Init Windows Phone project directory");
+		commands.put(INIT_ALL, "Init All project directories");
+		
+		// Remove
+		commands.put(REMOVE_ANDROID, "Remove Google Android project directory");
+//		commands.put(REMOVE_IOS, "Remove Apple IOS project directory");
+//		commands.put(REMOVE_RIM, "Remove BlackBerry project directory");
+//		commands.put(REMOVE_WINPHONE, "Remove Windows Phone project directory");
+		commands.put(REMOVE_ALL, "Remove All project directories");
+		
+		// Update
+		commands.put(UPDATE_SDK, "Update the SDK Path");
+		commands.put(UPDATE_DEPENDENCIES, "Update the dependencies from an existing project");
+		
+		ConsoleUtils.displaySummary(
+				BUNDLE,
+				commands);
 	}
 
 	@Override
