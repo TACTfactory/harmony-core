@@ -28,9 +28,9 @@ public abstract class HarmonyFragment extends SherlockFragment {
 		super.onCreateOptionsMenu(menu, inflater);
 		
 		try {
-			DemactMenu.getInstance(this.getActivity(), this)
+			${project_name?cap_first}Menu.getInstance(this.getActivity(), this)
 											.clear(menu);
-			DemactMenu.getInstance(this.getActivity(), this)
+			${project_name?cap_first}Menu.getInstance(this.getActivity(), this)
 										  .updateMenu(menu, this.getActivity());
 		} catch (Exception e) {
 			e.printStackTrace();
