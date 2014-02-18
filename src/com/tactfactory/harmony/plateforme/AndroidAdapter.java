@@ -27,10 +27,14 @@ import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.plateforme.buffers.JavaFileManipulator;
+import com.tactfactory.harmony.plateforme.buffers.SourceFileManipulator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.ImageUtils;
 import com.tactfactory.harmony.utils.OsUtil;
 import com.tactfactory.harmony.utils.TactFileUtils;
+
+import freemarker.template.Configuration;
 
 /** Google Android Adapter of project structure. */
 public final class AndroidAdapter extends BaseAdapter {
@@ -385,5 +389,12 @@ public final class AndroidAdapter extends BaseAdapter {
 
 			}
 		}
+	}
+	
+	@Override
+	public SourceFileManipulator getFileManipulator(
+			final File file,
+			final Configuration config) {
+		return new JavaFileManipulator(file, this, config);
 	}
 }
