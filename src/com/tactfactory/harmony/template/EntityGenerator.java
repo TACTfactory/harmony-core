@@ -11,6 +11,7 @@ package com.tactfactory.harmony.template;
 import java.io.File;
 import java.util.Collection;
 import java.util.List;
+
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
@@ -18,7 +19,7 @@ import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.meta.MethodMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
-import com.tactfactory.harmony.plateforme.buffers.SourceFileManipulator;
+import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.MetadataUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;

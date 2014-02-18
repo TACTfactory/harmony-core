@@ -15,7 +15,7 @@ import com.tactfactory.harmony.Context;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
-import com.tactfactory.harmony.plateforme.buffers.SourceFileManipulator;
+import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
 
 import freemarker.template.Configuration;
 

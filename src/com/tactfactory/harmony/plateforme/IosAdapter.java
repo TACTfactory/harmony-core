@@ -13,7 +13,7 @@ import java.util.List;
 
 import com.tactfactory.harmony.exception.NotImplementedException;
 import com.tactfactory.harmony.meta.ClassMetadata;
-import com.tactfactory.harmony.plateforme.buffers.SourceFileManipulator;
+import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
 
 import freemarker.template.Configuration;
 
