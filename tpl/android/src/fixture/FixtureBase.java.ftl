@@ -10,7 +10,7 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
+<#if fixtureType=="yml">import java.util.ArrayList;</#if>
 import java.util.LinkedHashMap;
 <#if fixtureType=="xml">
 import java.util.List;
@@ -23,6 +23,8 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 <#elseif fixtureType=="yml">
+import org.joda.time.DateTime;
+
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -30,13 +32,12 @@ import org.yaml.snakeyaml.nodes.Tag;
 import org.yaml.snakeyaml.representer.Representer;
 import org.yaml.snakeyaml.resolver.Resolver;
 </#if>
-import org.joda.time.DateTime;
 
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
 
-import ${project_namespace}.harmony.util.DateUtils;
+<#if fixtureType=="yml">import ${project_namespace}.harmony.util.DateUtils;</#if>
 
 /**
  * FixtureBase.
@@ -282,6 +283,7 @@ public abstract class FixtureBase<T> {
 	 * Returns the Map<String, T> loaded from the fixtures.
 	 * @return the Map
 	 */
+	@SuppressWarnings("unchecked")
 	public Map<String, T> getMap() {
 		Map<String, T> result = null;
 		ByteArrayInputStream bis = 
@@ -338,6 +340,8 @@ public abstract class FixtureBase<T> {
 	 * This method will search for a T type, or for any type extending T.
 	 */
 	protected abstract T get(final String key);
+
+	<#if (fixtureType == "yml")>
 
 	/**
 	 * Parse a basic field (for datetimes/enums/relations,
@@ -588,4 +592,5 @@ public abstract class FixtureBase<T> {
 		
 		return result;
 	}
+	</#if>
 }

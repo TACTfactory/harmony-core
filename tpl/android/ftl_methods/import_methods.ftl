@@ -51,7 +51,7 @@
 	<#if useInheritedFieldsToo>
 		<#assign fields = ViewUtils.getAllFields(entity)?values />
 	<#else>
-		<#assign fields = ViewUtils.getAllRelations(entity) />
+		<#assign fields = entity.relations />
 	</#if>
 	<#list fields as relation>
 		<#if relation.relation?? && !relation.internal>
@@ -88,10 +88,15 @@
 	<#return result />
 </#function>
 
-<#function importRelatedEnums entity>
+<#function importRelatedEnums entity useInheritedFieldsToo=true>
 	<#assign result = ""/>
 	<#assign import_array = [entity.name] />
-	<#list ViewUtils.getAllFields(entity)?values as field>
+	<#if useInheritedFieldsToo>
+		<#assign fields = ViewUtils.getAllFields(entity)?values />
+	<#else>
+		<#assign fields = entity.fields?values />
+	</#if>
+	<#list fields as field>
 		<#if field.harmony_type?lower_case == "enum">
 			<#if (!Utils.isInArray(import_array, field.type)) >
 				<#assign import_array = import_array + [field.type] />

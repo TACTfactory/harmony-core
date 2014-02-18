@@ -8,19 +8,25 @@
 <@header?interpret />
 package ${fixture_namespace};
 
-<#list curr.relations as relation>
-	<#if relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany" || (relation.relation.type == "ManyToOne" && MetadataUtils.getInversingField(relation)??) >
+<#if fixtureType == "xml">
+	<#assign listImported = false />
+	<#assign arraylistImported = false />
+	<#list curr.relations as relation>
+		<#if !listImported && (relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany")>
+import java.util.List;
+			<#assign listImported = true />
+			<#if !arraylistImported>
 import java.util.ArrayList;
-import java.util.List;
-	<#break>
-	</#if>
-</#list>
-<#list curr.relations as relation>
-	<#if fixtureType=="xml" && (relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany") >
-import java.util.List;
-	<#break>
-	</#if>
-</#list>
+			<#assign arraylistImported = true />
+			<#break />
+			</#if>
+		</#if>
+		<#if !arraylistImported && (relation.relation.type == "ManyToOne" && MetadataUtils.getInversingField(relation)??)>
+import java.util.ArrayList;
+			<#assign arraylistImported = true />
+		</#if>
+	</#list>
+</#if>
 <#if fixtureType=="yml">
 import java.util.Map;
 <#else>
@@ -28,13 +34,23 @@ import org.jdom2.Element;
 </#if>
 import android.content.Context;
 
+<#if (fixtureType == "xml" && (hasDate || hasDateTime || hasTime))>import ${project_namespace}.harmony.util.DateUtils;</#if>
+<#if (fixtureType == "xml")>${ImportUtils.importRelatedEntities(curr)}</#if>
+<#if (fixtureType == "yml")>
 import ${entity_namespace}.${curr.name};
-${ImportUtils.importRelatedEnums(curr)}
-<#list curr.relations as relation>
+	<#list curr.relations as relation>
+		<#if (relation.relation.type == "OneToMany" || relation.relation.type == "ManyToMany") && MetadataUtils.getInversingField(relation)?? && !MetadataUtils.getInversingField(relation).internal>
+import ${entity_namespace}.${relation.relation.targetEntity};
+		</#if>
+	</#list>
+</#if>
+<#--import ${entity_namespace}.${curr.name};-->
+${ImportUtils.importRelatedEnums(curr, false)}
+<#--#list curr.relations as relation>
 	<#if (relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany")>
 import ${entity_namespace}.${relation.relation.targetEntity};
 	</#if>
-</#list>
+</#list-->
 
 /**
  * ${curr.name?cap_first}DataLoader.
