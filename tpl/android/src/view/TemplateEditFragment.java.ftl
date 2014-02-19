@@ -366,7 +366,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			Cursor ${field.name}Cursor = 
 					this.ctx.getContentResolver().query(
 							${field.name}Uri,
-							new String[]{${project_name?cap_first}Contract.${field.relation.targetEntity}.ALIASED_COL_ID},
+							new String[]{${project_name?cap_first}Contract.${field.relation.targetEntity}.ALIASED_COL_${entities[field.relation.targetEntity].ids[0].name?upper_case}},
 							null,
 							null, 
 							null);
@@ -376,9 +376,9 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 				while (${field.name}Cursor.moveToNext()) {
 					int ${field.name}Id = ${field.name}Cursor.getInt(
 							${field.name}Cursor.getColumnIndex(
-									${project_name?cap_first}Contract.${field.relation.targetEntity}.COL_ID));
+									${project_name?cap_first}Contract.${field.relation.targetEntity}.COL_${entities[field.relation.targetEntity].ids[0].name?upper_case}));
 					for (${field.relation.targetEntity} ${field.name} : this.${field.name}List) {
-						if (${field.name}.getId() == ${field.name}Id) {
+						if (${field.name}.get${entities[field.relation.targetEntity].ids[0].name?cap_first}() == ${field.name}Id) {
 							this.associated${field.name?cap_first}List.add(${field.name});
 						}
 					}
@@ -442,7 +442,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		<#else>
 		
 		for (${relation.relation.targetEntity} item : items) {
-			if (item.getId() == this.model.get${relation.name?cap_first}().getId()) {
+			if (item.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}() == this.model.get${relation.name?cap_first}().get${entities[relation.relation.targetEntity].ids[0].name?cap_first}()) {
 				this.${relation.name}Adapter.selectItem(item);
 			}
 		}
