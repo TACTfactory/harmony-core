@@ -524,7 +524,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				<#list curr_ids as id> ${project_name?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)}
 				 + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs =
-				new String[] {<#list curr_ids as id>String.valueOf(item.get${id.name?capitalize}()) <#if id_has_next>,
+				new String[] {<#list curr_ids as id>String.valueOf(item.get${id.name?cap_first}()) <#if id_has_next>,
 				</#if></#list>};
 
 		return this.update(
