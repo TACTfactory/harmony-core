@@ -25,10 +25,9 @@ import android.os.RemoteException;
 import android.util.Log;
 
 ${ImportUtils.importRelatedCriterias(curr)}
-${ImportUtils.importRelatedSQLiteAdapters(curr, false)}
 ${ImportUtils.importManyToManyTargetSQLiteAdapters(curr)}
-${ImportUtils.importRelatedEntities(curr)}
-${ImportUtils.importRelatedEnums(curr)}
+${ImportUtils.importRelatedEntities(curr, true)}
+${ImportUtils.importRelatedEnums(curr, false)}
 ${ImportUtils.importRelatedProviderAdapters(curr, false)}
 import ${project_namespace}.provider.${project_name?cap_first}Provider;
 import ${project_namespace}.provider.${project_name?cap_first}Contract;
