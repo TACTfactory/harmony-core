@@ -13,12 +13,18 @@ import java.util.List;
 
 import com.tactfactory.harmony.exception.NotImplementedException;
 import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
+
+import freemarker.template.Configuration;
 
 /**
  * Microsoft Adapter of project structure.
  *
  */
 public final class WinphoneAdapter extends BaseAdapter {
+	/** Error message for not implemented feature. */
+	private static final String NOT_IMPLEMENTED_MESSAGE =
+			"WinPhone adapter has not been implemented yet.";
 
 	/**
 	 * Constructor.
@@ -33,28 +39,24 @@ public final class WinphoneAdapter extends BaseAdapter {
 	@Override
 	public String getNameSpace(final ClassMetadata classMeta,
 			final String type) {
-		throw new NotImplementedException(
-				"WinPhone adapter has not been implemented yet.");
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 
 	@Override
 	public String getNameSpaceEntity(final ClassMetadata classMeta,
 			final String type) {
-		throw new NotImplementedException(
-				"WinPhone adapter has not been implemented yet.");
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 
 
 	@Override
 	public String getNativeType(final String type) {
-		throw new NotImplementedException(
-				"WinPhone adapter has not been implemented yet.");
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 
 	@Override
 	public void resizeImage() {
-		throw new NotImplementedException(
-				"WinPhone adapter has not been implemented yet.");
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 	
 	@Override
@@ -62,8 +64,7 @@ public final class WinphoneAdapter extends BaseAdapter {
 			String versionTag, String libName, List<File> filesToDelete,
 			String libraryProjectPath, String target, String referencePath,
 			boolean isSupportV4Dependant) {
-		throw new NotImplementedException(
-				"WinPhone adapter has not been implemented yet.");
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 		
 	}
 
@@ -71,5 +72,12 @@ public final class WinphoneAdapter extends BaseAdapter {
 	public boolean filesEqual(String oldContent, String newContent,
 			String fileName, boolean ignoreHeader) {
 		return oldContent.equals(newContent);
+	}
+
+	@Override
+	public SourceFileManipulator getFileManipulator(
+			final File file,
+			final Configuration config) {
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 }

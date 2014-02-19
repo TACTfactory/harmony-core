@@ -15,6 +15,9 @@ import com.tactfactory.harmony.Context;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
+
+import freemarker.template.Configuration;
 
 /** Base Adapter of project structure. */
 public abstract class BaseAdapter {
@@ -1408,4 +1411,14 @@ public abstract class BaseAdapter {
 		this.commandBundleTemplates = commandBundleTemplates;
 	}
 
+	/**
+	 * Gets the source file manipulator associated to this adapter.
+	 *  
+	 * @param file The file to open.
+	 * 
+	 * @return The associated file manipulator
+	 */
+	public abstract SourceFileManipulator getFileManipulator(
+			final File file,
+			final Configuration config);
 }

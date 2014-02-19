@@ -12,11 +12,16 @@ import java.io.File;
 import java.util.List;
 
 import com.tactfactory.harmony.exception.NotImplementedException;
-
 import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
+
+import freemarker.template.Configuration;
 
 /** Apple iOS Adapter of project structure. */
 public final class IosAdapter extends BaseAdapter {
+	/** Error message for not implemented feature. */
+	private static final String NOT_IMPLEMENTED_MESSAGE =
+			"IOS adapter has not been implemented yet.";
 
 	/**
 	 * Constructor.
@@ -32,29 +37,25 @@ public final class IosAdapter extends BaseAdapter {
 
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
-		throw new NotImplementedException(
-				"IOS adapter has not been implemented yet.");
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 
 	@Override
 	public String getNameSpaceEntity(final ClassMetadata cm,
 			final String type) {
-		throw new NotImplementedException(
-				"IOS adapter has not been implemented yet.");
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 
 
 	@Override
 	public String getNativeType(final String type) {
-		throw new NotImplementedException(
-				"IOS adapter has not been implemented yet.");
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 
 
 	@Override
 	public void resizeImage() {
-		throw new NotImplementedException(
-				"IOS adapter has not been implemented yet.");
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 
 
@@ -69,9 +70,14 @@ public final class IosAdapter extends BaseAdapter {
 			String versionTag, String libName, List<File> filesToDelete,
 			String libraryProjectPath, String target, String referencePath,
 			boolean isSupportV4Dependant) {
-		throw new NotImplementedException(
-				"IOS adapter has not been implemented yet.");
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 
 	}
 
+	@Override
+	public SourceFileManipulator getFileManipulator(
+			final File file,
+			final Configuration config) {
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
+	}
 }
