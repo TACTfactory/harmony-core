@@ -38,7 +38,7 @@ public abstract class ${project_name?cap_first}ContractBase {
 			<#elseif (singleTabInheritance && curr.inheritance.superclass??)>
 				<#assign curr_ids = entities[curr.inheritance.superclass.name].ids />
 				<#assign curr_fields = curr.fields?values />
-				<#assign curr_relations = curr.relations />
+				<#assign curr_relations = curr.relations + entities[curr.inheritance.superclass.name].relations  />
 			<#else>
 				<#assign curr_ids = curr.ids />
 				<#assign curr_fields = curr.fields?values />
@@ -113,12 +113,12 @@ public abstract class ${project_name?cap_first}ContractBase {
 		 * @return ContentValues object
 		 */
 		public static ContentValues itemToContentValues(final ${curr.name} item<#list (curr_relations) as relation><#if relation.relation.type=="ManyToOne" && relation.internal>,
-					int ${relation.relation.targetEntity?lower_case}Id</#if></#list>) {
+					final int ${relation.name?uncap_first}Id</#if></#list>) {
 			final ContentValues result = ${project_name?cap_first}Contract.${curr.name}.itemToContentValues(item);
 		<#list curr_fields as field>
 			<#if (field.internal)>
 			result.put(${NamingUtils.alias(field.name)},
-					String.valueOf(${field.relation.targetEntity?lower_case}Id));
+					String.valueOf(${field.name?uncap_first}Id));
 			</#if>
 		</#list>
 			return result;
