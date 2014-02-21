@@ -77,6 +77,8 @@ public abstract class ${project_name?cap_first}ContractBase {
 	 * Contract base class for ${curr.name} Entity.
 	 */
 	public static class ${curr.name}Base implements ${curr.name}Columns {
+		/** Constant for parcelisation/serialization. */
+		public static final String PARCEL = "${curr.name}";
 		/** Table name of SQLite database. */
 		public static final String TABLE_NAME = <#if singleTabInheritance && !isTopMostSuperClass>${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.TABLE_NAME<#else>"${curr.name}"</#if>;
 		/** Global Fields. */

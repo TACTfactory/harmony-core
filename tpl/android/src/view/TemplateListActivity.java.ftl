@@ -8,6 +8,7 @@ import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import ${project_namespace}.harmony.view.HarmonyListFragment;
 import com.google.android.pinnedheader.util.ComponentUtils;
 import ${project_namespace}.entity.${curr.name};
+import ${project_namespace}.provider.${project_name?cap_first}Contract;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -96,7 +97,7 @@ public class ${curr.name}ListActivity
 			final Intent intent = new Intent(this, ${curr.name}ShowActivity.class);
 			final ${curr.name} item = (${curr.name}) l.getItemAtPosition(position);
 			Bundle extras = new Bundle();
-			extras.putParcelable(${curr.name}.PARCEL, item);
+			extras.putParcelable(${project_name?cap_first}Contract.${curr.name}.PARCEL, item);
 			intent.putExtras(extras);
 			this.startActivity(intent);
 		}

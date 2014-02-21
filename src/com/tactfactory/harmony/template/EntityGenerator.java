@@ -123,7 +123,7 @@ public class EntityGenerator extends BaseGenerator {
 						"java.io.Serializable");
 				this.generateGetterAndSetters(manipulator, classMeta);
 				this.implementParcelable(manipulator, classMeta);
-				this.addParcelConstant(manipulator, classMeta);
+				//this.addParcelConstant(manipulator, classMeta);
 				
 				 // After treatment on entity, write it in the original file
 				manipulator.writeFile();

@@ -125,7 +125,7 @@ public class ${curr.name}ShowFragment
         this.initializeComponent(view);
         
         final Intent intent =  getActivity().getIntent();
-        this.update((${curr.name}) intent.getParcelableExtra(${curr.name}.PARCEL));
+        this.update((${curr.name}) intent.getParcelableExtra(${project_name?cap_first}Contract.${curr.name}.PARCEL));
 
         return view;
     }
@@ -232,7 +232,7 @@ public class ${curr.name}ShowFragment
 		final Intent intent = new Intent(getActivity(),
 									${curr.name}EditActivity.class);
 		Bundle extras = new Bundle();
-		extras.putParcelable(${curr.name}.PARCEL, this.model);
+		extras.putParcelable(${project_name?cap_first}Contract.${curr.name}.PARCEL, this.model);
 		intent.putExtras(extras);
 
 		this.getActivity().startActivity(intent);
