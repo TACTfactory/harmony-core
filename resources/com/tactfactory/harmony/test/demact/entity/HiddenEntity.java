@@ -26,7 +26,8 @@ import com.tactfactory.harmony.annotation.Column.Type;
 /** Test Application entity. */
 // All annotation with default value/parameter
 @Table
-@Entity(hidden = true)
+@Entity
+@Crud(hidden=true)
 public class HiddenEntity implements Serializable {
 	/** Serial UID. */
 	private static final long serialVersionUID = -6549779793416923128L;

@@ -15,7 +15,6 @@ import com.tactfactory.harmony.annotation.Id;
 
 /** Test Application entity. */
 @Entity
-@Crud(hidden=true)
 public class UserGroup {
 
 	/** Entity's technical id. */
