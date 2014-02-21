@@ -10,10 +10,12 @@ package com.tactfactory.harmony.test.demact.entity;
 
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Entity;
+import com.tactfactory.harmony.annotation.Crud;
 import com.tactfactory.harmony.annotation.Id;
 
 /** Test Application entity. */
 @Entity
+@Crud(hidden=true)
 public class UserGroup {
 
 	/** Entity's technical id. */
