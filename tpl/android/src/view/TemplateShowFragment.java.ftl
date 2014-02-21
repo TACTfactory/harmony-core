@@ -208,11 +208,11 @@ public class ${curr.name}ShowFragment
 		<#if relation.relation.type == "ManyToOne" || relation.relation.type == "OneToOne">
 				if (c.getCount() > 0) {
 					c.moveToFirst();
-					${project_name?cap_first}Contract.${relation.relation.targetEntity}.cursorToItem(c);
+					this.model.set${relation.name?cap_first}(${project_name?cap_first}Contract.${relation.relation.targetEntity}.cursorToItem(c));
 					this.loadData();
 				}
 		<#else>
-			${project_name?cap_first}Contract.${relation.relation.targetEntity}.cursorToItem(c);
+			this.model.set${relation.name?cap_first}(${project_name?cap_first}Contract.${relation.relation.targetEntity}.cursorToItems(c));
 			this.loadData();
 		</#if>
 			} else {
