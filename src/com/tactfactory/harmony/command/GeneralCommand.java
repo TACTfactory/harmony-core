@@ -8,11 +8,18 @@
  */
 package com.tactfactory.harmony.command;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedHashMap;
+import java.util.List;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
+import com.google.common.collect.Lists;
 import com.tactfactory.harmony.Harmony;
+import com.tactfactory.harmony.fixture.command.FixtureCommand;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -43,16 +50,87 @@ public class GeneralCommand extends BaseCommand {
 	 * Display list of All commands.
 	 */
 	public final void list() {
-		final Command general =
-				Harmony.getInstance().getCommand(GeneralCommand.class);
-
 		ConsoleUtils.display("Available Commands:");
-		general.summary();
+		
+		ArrayList<Command> thirdPartyCommands = new ArrayList<Command>(
+				Harmony.getInstance().getCommands());
+		ArrayList<Command> coreCommands = new ArrayList<Command>();
+		ArrayList<Command> commonCommands = new ArrayList<Command>();
 
-		for (final Command baseCommand : Harmony.getInstance().getCommands()) {
-			if (baseCommand != general) {
-				baseCommand.summary();
+		this.moveCommand(
+				thirdPartyCommands, coreCommands, GeneralCommand.class);
+		
+		this.moveCommand(
+				thirdPartyCommands, coreCommands, ProjectCommand.class);
+		
+		this.moveCommand(
+				thirdPartyCommands, coreCommands, DependenciesCommand.class);
+		
+		this.moveCommand(
+				thirdPartyCommands, coreCommands, OrmCommand.class);
+				
+		this.moveCommand(
+				thirdPartyCommands, coreCommands, MenuCommand.class);
+
+		this.moveCommand(
+				thirdPartyCommands, coreCommands, FosCommand.class);
+
+		this.moveCommand(
+				thirdPartyCommands, coreCommands, FixtureCommand.class);
+
+		
+		
+		this.moveCommand(
+				thirdPartyCommands, commonCommands, ResourceCommand.class);
+
+		this.moveCommand(
+				thirdPartyCommands, commonCommands, BundleCommand.class);
+		
+		this.moveCommand(
+				thirdPartyCommands, commonCommands, RouterCommand.class);
+
+		
+		Comparator<Command> thirdPartyComparator = new Comparator<Command>() {
+
+			@Override
+			public int compare(Command o1, Command o2) {
+				return o1.getClass().getSimpleName().compareTo(
+						o2.getClass().getSimpleName());
 			}
+		};
+		
+		Collections.sort(thirdPartyCommands, thirdPartyComparator);
+		
+		this.displayList(coreCommands);
+		this.displayList(thirdPartyCommands);
+		this.displayList(commonCommands);
+	}
+	
+	/**
+	 * Display the summary of a list of commands.
+	 * @param commands The list of commands
+	 */
+	private final void displayList(List<Command> commands) {
+		for (final Command command : commands) {
+			command.summary();
+		}
+	}
+	
+	/**
+	 * Move a command from a list to another.
+	 * 
+	 * @param from From list
+	 * @param to To list
+	 * @param commandName The name of the command
+	 */
+	private final void moveCommand(
+			final List<Command> from,
+			final List<Command> to,
+			final Class<? extends Command> commandName) {
+		Command command = Harmony.getInstance().getCommand(commandName);
+		if (command != null) {
+			from.remove(command);
+			to.add(command);
 		}
 	}
 
