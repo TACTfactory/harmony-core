@@ -518,8 +518,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		}
 
 		ContentValues values =
-				${project_name?cap_first}Contract.${curr.name}.itemToContentValues(item<#list (curr_relations) as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>,
-							${relation.relation.targetEntity?lower_case}Id<#else>, 0</#if></#if></#list>);
+				${project_name?cap_first}Contract.${curr.name}.itemToContentValues(item);
+		values.put(${project_name?cap_first}Contract.${curr.name}.${NamingUtils.alias(relation.name)}, ${relation.relation.targetEntity?lower_case}Id);
 		String whereClause =
 				<#list curr_ids as id> ${project_name?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)}
 				 + "=? <#if id_has_next>AND </#if>"</#list>;
