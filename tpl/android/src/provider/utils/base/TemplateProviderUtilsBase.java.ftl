@@ -561,7 +561,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
 				${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI,
 				${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COLS,
-				${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)} + "= ?",
+				${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)} + "= ?",
 				new String[]{String.valueOf(item.get${relation.name?cap_first}().get${entities[relation.relation.targetEntity].ids[0].name?cap_first}())},
 				null);
 
@@ -588,7 +588,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
 				${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI,
 				${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COLS,
-				${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}.COL_${relation.relation.mappedBy?upper_case}
+				${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COL_${relation.relation.mappedBy?upper_case}
 						+ "= ?",
 				new String[]{String.valueOf(item.get${curr_ids[0].name?cap_first}())},
 				null);
@@ -612,7 +612,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		Cursor ${relation.relation.joinTable?uncap_first}Cursor = prov.query(
 				${relation.relation.joinTable?cap_first}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI,
 				${project_name?cap_first}Contract.${relation.relation.joinTable?cap_first}.ALIASED_COLS,
-				${project_name?cap_first}Contract.${relation.relation.joinTable?cap_first}.${NamingUtils.alias(relation.relation.mappedBy)} + "= ?",
+				${project_name?cap_first}Contract.${relation.relation.joinTable?cap_first}.ALIASED_${NamingUtils.alias(relation.relation.mappedBy)} + "= ?",
 				new String[]{String.valueOf(item.get${curr_ids[0].name?cap_first}())},
 				null);
 
@@ -621,7 +621,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 					new ${relation.relation.targetEntity}Criterias(GroupType.AND);
 			Criteria inCrit = new Criteria();
 			ArrayValue arrayValue = new ArrayValue();
-			inCrit.setKey(${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
+			inCrit.setKey(${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
 			inCrit.setType(Type.IN);
 			inCrit.addValue(arrayValue);
 			${relation.relation.targetEntity?uncap_first}Crits.add(inCrit);
