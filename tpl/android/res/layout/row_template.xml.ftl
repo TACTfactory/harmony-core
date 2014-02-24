@@ -27,6 +27,9 @@
 			android:id="@+id/row_${m_id}"
 	    	android:layout_width="match_parent"
 	    	android:layout_height="wrap_content"
+					<#if (field.harmony_type?lower_case == "password")>
+			android:inputType="textPassword"
+					</#if>
 				</#if>
 				<#if (!lastFieldName??)>
 	        android:layout_alignParentTop="true" />
