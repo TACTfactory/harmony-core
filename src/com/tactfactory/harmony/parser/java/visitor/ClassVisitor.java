@@ -39,6 +39,7 @@ import com.tactfactory.harmony.parser.JavaModelParser;
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.annotation.DiscriminatorColumn;
 import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
+import com.tactfactory.harmony.annotation.Crud;
 import com.tactfactory.harmony.annotation.DiscriminatorIdentifier;
 import com.tactfactory.harmony.annotation.Entity;
 import com.tactfactory.harmony.annotation.InheritanceType;
@@ -61,6 +62,9 @@ public class ClassVisitor {
 	/** Entity annotation name. */
 	private static final String ANNOTATION_ENTITY	 	=
 			PackageUtils.extractNameEntity(Entity.class);
+
+	private static final String ANNOTATION_CRUD =
+			PackageUtils.extractNameEntity(Crud.class);
 
 	private static final String ANNOTATION_TABLE 		=
 			PackageUtils.extractNameEntity(Table.class);
@@ -182,11 +186,17 @@ public class ClassVisitor {
 	    	
 	    	if (entityAnnot != null) {
 	    		isEntity = true;
+	    	}
+
+	    	AnnotationExpr crudAnnot = 
+	    			this.annotationMap.get(ANNOTATION_CRUD);
+	    	
+	    	if (crudAnnot != null) {
 				
-				if (entityAnnot instanceof NormalAnnotationExpr) {
+				if (crudAnnot instanceof NormalAnnotationExpr) {
 					List<MemberValuePair> pairs = 
 							((NormalAnnotationExpr)
-									entityAnnot).getPairs();
+									crudAnnot).getPairs();
 					
 					if (pairs != null) {	
 						for (MemberValuePair pair : pairs) {

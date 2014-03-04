@@ -15,6 +15,7 @@ import org.joda.time.DateTime;
 
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Entity;
+import com.tactfactory.harmony.annotation.Crud;
 import com.tactfactory.harmony.annotation.GeneratedValue;
 import com.tactfactory.harmony.annotation.Id;
 import com.tactfactory.harmony.annotation.ManyToMany;
@@ -26,7 +27,8 @@ import com.tactfactory.harmony.annotation.Column.Type;
 /** Test Application entity. */
 // All annotation with default value/parameter
 @Table
-@Entity(hidden = true)
+@Entity
+@Crud(hidden=true)
 public class HiddenEntity implements Serializable {
 	/** Serial UID. */
 	private static final long serialVersionUID = -6549779793416923128L;
