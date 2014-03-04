@@ -2,7 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
       package="${project_namespace}"
       android:versionCode="1"
-      android:versionName="@string/app_version">
+      android:versionName="@string/app_version"
+      android:installLocation="auto">
     <uses-sdk
     	android:minSdkVersion="7"
     	android:targetSdkVersion="18" />
