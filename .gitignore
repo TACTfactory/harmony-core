@@ -1,32 +1,39 @@
-/www/*
+# Eclipse files
+/.classpath
+/.project
+.settings/*
 /bin/*
-/vendor/*
 /gen/*
-/tmp/*
-/fixtures
-/emmainstr
 
+# Gradle files
+/build
+
+# Javadoc
 /doc/internal/*
 /doc/stats/*
 /doc/API/*
 /javadoc
 
-/.classpath
-/.project
-/local.properties
-!/tpl/android/project/.project
-!/tpl/android/project/.classpath
-!/tpl/android/project/local.properties
+# Hamony generated files
+/harmony.jar
+/lib/core-annotations.jar
+/fixtures
 
-!/tpl/android/test/project/.project
-!/tpl/android/test/project/.classpath
-
-.settings/*
-/app/*
+# Reports
 /checkstyle_report.html
 /checkstyle_report.xml
 /pmd.xml
 /findbugs.xml
 /findbugs-default.html
-/harmony.jar
-/lib/core-annotations.jar
+
+# Others
+/local.properties
+/tmp/*
+/emmainstr
+
+# Exclude templates
+!/tpl/android/project/.project
+!/tpl/android/project/.classpath
+!/tpl/android/project/local.properties
+!/tpl/android/test/project/.project
+!/tpl/android/test/project/.classpath
