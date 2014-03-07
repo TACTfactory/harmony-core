@@ -10,10 +10,7 @@ package com.tactfactory.harmony;
 
 import java.io.File;
 import java.io.UnsupportedEncodingException;
-import java.net.URL;
 import java.net.URLDecoder;
-import java.net.URLEncoder;
-
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.dependencies.libraries.LibraryPool;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -109,53 +106,7 @@ public final class Context {
 	 */
 	public Context() {
 		File harmonyFile = new File(harmonyPath);
-		// For root case
-		File baseDir = this.detectAppTree(harmonyFile);
-
-		// Clean binary case (for /bin and /vendor/**/bin)
-		if (baseDir == null && harmonyPath.endsWith("bin/")) {
-			final File predictiveBaseDir =
-					harmonyFile.getParentFile();
-
-			ConsoleUtils.displayDebug("Eclipse Mode : " + harmonyPath);
-			baseDir = this.detectAppTree(predictiveBaseDir);
-		}
-
-		if (baseDir == null && harmonyPath.endsWith("harmony.jar")) {
-			final File predictiveBaseDir = harmonyFile
-					.getParentFile()
-					.getParentFile()
-					.getParentFile();
-
-			ConsoleUtils.displayDebug("Console Mode : " + harmonyPath);
-			baseDir = this.detectAppTree(predictiveBaseDir);
-		}
-
-
-		// For vendor/tact-core case
-		if (baseDir == null) {
-			final File predictiveBaseDir =
-					harmonyFile
-						.getParentFile()
-						.getParentFile()
-						.getParentFile();
-
-			ConsoleUtils.displayDebug("Other Mode : " + harmonyPath);
-			baseDir = this.detectAppTree(predictiveBaseDir);
-		}
-
-		//For Emma
-		if (baseDir == null) {
-			final File predictiveBaseDir =
-					harmonyFile
-						.getParentFile()
-						.getParentFile()
-						.getParentFile()
-						.getParentFile();
-
-			ConsoleUtils.displayDebug("Emma Mode : " + harmonyPath);
-			baseDir = this.detectAppTree(predictiveBaseDir);
-		}
+		File baseDir = this.getBaseDir(harmonyFile);
 
 		if (baseDir != null) {
 			// Transform PATH_BASE !!!
@@ -289,6 +240,99 @@ public final class Context {
 	 */
 	public static String getCurrentBundleFolder() {
 		return currentBundleFolder;
+	}
+	
+	/**
+	 * Get the base directory of harmony.
+	 * @return File representing base directory.
+	 */
+	public File getBaseDir(File harmonyFile) {
+		// For root case
+		File baseDir = this.detectAppTree(harmonyFile);
+
+		// Clean binary case (for /bin and /vendor/**/bin)
+		if (baseDir == null && harmonyPath.endsWith("bin/")) {
+			final File predictiveBaseDir =
+					harmonyFile.getParentFile();
+			
+			baseDir = this.detectAppTree(predictiveBaseDir);
+			
+			if (baseDir != null) {
+				ConsoleUtils.displayDebug("Eclipse Mode : " + harmonyPath);
+			}
+		}
+
+		if (baseDir == null && harmonyPath.endsWith("harmony.jar")) {
+			final File predictiveBaseDir = harmonyFile
+					.getParentFile()
+					.getParentFile()
+					.getParentFile();
+
+			baseDir = this.detectAppTree(predictiveBaseDir);
+			
+			if (baseDir != null) {
+				ConsoleUtils.displayDebug("Console Mode : " + harmonyPath);
+			}
+		}
+
+		// For vendor/tact-core case
+		if (baseDir == null) {
+			final File predictiveBaseDir =
+					harmonyFile
+						.getParentFile()
+						.getParentFile()
+						.getParentFile();
+
+			baseDir = this.detectAppTree(predictiveBaseDir);
+			
+			if (baseDir != null) {
+				ConsoleUtils.displayDebug("Other Mode : " + harmonyPath);
+			}
+		}
+
+		//For Emma
+		if (baseDir == null) {
+			final File predictiveBaseDir =
+					harmonyFile
+						.getParentFile()
+						.getParentFile()
+						.getParentFile()
+						.getParentFile();
+
+			ConsoleUtils.displayDebug("Emma Mode : " + harmonyPath);
+			baseDir = this.detectAppTree(predictiveBaseDir);
+		}
+		
+		//For Gradle
+		if (baseDir == null) {
+			final File predictiveBaseDir =
+					harmonyFile
+						.getParentFile()
+						.getParentFile()
+						.getParentFile()
+						.getParentFile()
+						.getParentFile();
+
+			ConsoleUtils.displayDebug("Gradle Mode : " + harmonyPath);
+			baseDir = this.detectAppTree(predictiveBaseDir);
+		}
+		
+		//For Gradle Emma
+		if (baseDir == null) {
+			final File predictiveBaseDir =
+					harmonyFile
+						.getParentFile()
+						.getParentFile()
+						.getParentFile()
+						.getParentFile()
+						.getParentFile()
+						.getParentFile();
+
+			ConsoleUtils.displayDebug("Gradle Emma Mode : " + harmonyPath);
+			baseDir = this.detectAppTree(predictiveBaseDir);
+		}
+		
+		return baseDir;
 	}
 
 }
