@@ -8,15 +8,22 @@
  */
 package com.tactfactory.harmony.test.orm;
 
+import java.util.Collection;
+
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import com.tactfactory.harmony.command.OrmCommand;
 import com.tactfactory.harmony.command.ProjectCommand;
+import com.tactfactory.harmony.meta.ApplicationMetadata;
+import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.test.CommonTest;
 
+@RunWith(Parameterized.class)
 /**
  * CRUD Generation tests class.
  *
@@ -26,32 +33,80 @@ public class OrmInitViewTest extends CommonTest {
 	private static final String VIEW_PATH =
 			"android/src/com/tactfactory/harmony/test/demact/view/";
 
-	/**
-	 * Initialization.
-	 * @throws Exception if something bad happened.
-	 */
-	@BeforeClass
-	public static void setUpBefore() throws Exception {
-		CommonTest.setUpBefore();
-		initAll();
+	private static final String VIEW_PATH_CREATE_ACTIVITY =
+			VIEW_PATH + "%s/%sCreateActivity.java";
+	private static final String VIEW_PATH_CREATE_FRAGMENT =
+			VIEW_PATH + "%s/%sCreateFragment.java";
+	private static final String VIEW_PATH_EDIT_ACTIVITY =
+			VIEW_PATH + "%s/%sEditActivity.java";
+	private static final String VIEW_PATH_EDIT_FRAGMENT =
+			VIEW_PATH + "%s/%sEditFragment.java";
+	private static final String VIEW_PATH_SHOW_ACTIVITY=
+			VIEW_PATH + "%s/%sShowActivity.java";
+	private static final String VIEW_PATH_SHOW_FRAGMENT =
+			VIEW_PATH + "%s/%sShowFragment.java";
+	private static final String VIEW_PATH_LIST_ACTIVITY =
+			VIEW_PATH + "%s/%sListActivity.java";
+	private static final String VIEW_PATH_LIST_FRAGMENT =
+			VIEW_PATH + "%s/%sListFragment.java";
+	private static final String VIEW_PATH_LIST_ADAPTER =
+			VIEW_PATH + "%s/%sListAdapter.java";
+	private static final String VIEW_PATH_LIST_LOADER =
+			VIEW_PATH + "%s/%sListLoader.java";
+
+	private static final String LAYOUT_PATH = 
+			"android/res/layout/";
+	private static final String LAYOUT_PATH_CREATE_ACTIVITY =
+			LAYOUT_PATH + "activity_%s_create.xml";
+	private static final String LAYOUT_PATH_CREATE_FRAGMENT =
+			LAYOUT_PATH + "fragment_%s_create.xml";
+	private static final String LAYOUT_PATH_EDIT_ACTIVITY =
+			LAYOUT_PATH + "activity_%s_edit.xml";
+	private static final String LAYOUT_PATH_EDIT_FRAGMENT =
+			LAYOUT_PATH + "fragment_%s_edit.xml";
+	private static final String LAYOUT_PATH_SHOW_ACTIVITY =
+			LAYOUT_PATH + "activity_%s_show.xml";
+	private static final String LAYOUT_PATH_SHOW_FRAGMENT =
+			LAYOUT_PATH + "fragment_%s_show.xml";
+	private static final String LAYOUT_PATH_LIST_ACTIVITY =
+			LAYOUT_PATH + "activity_%s_list.xml";
+	private static final String LAYOUT_PATH_LIST_FRAGMENT =
+			LAYOUT_PATH + "fragment_%s_list.xml";
+	private static final String LAYOUT_PATH_ROW =
+			LAYOUT_PATH + "row_%s.xml";
+
+	public OrmInitViewTest(ApplicationMetadata currentMetadata) {
+		super(currentMetadata);
+	}
+	
+	@Override
+	public void setUpBeforeNewParameter() {
+		super.setUpBeforeNewParameter();
+		
+		this.initAll();
 	}
 
 	@Before
 	@Override
-	public final void setUp() throws Exception {
+	public final void setUp() throws RuntimeException {
 		super.setUp();
 	}
 
 	@After
 	@Override
-	public final void tearDown() throws Exception {
+	public final void tearDown() throws RuntimeException {
 		super.tearDown();
+	}
+	
+	@Parameters
+	public static Collection<Object[]> getParameters() {
+		return CommonTest.getParameters();
 	}
 
 	/**
 	 * Initialize everything needed for the test.
 	 */
-	private static void initAll() {
+	private void initAll() {
 		System.out.println("\nTest Orm generate View");
 		System.out.println("###############"
 				 + "##############"
@@ -66,269 +121,52 @@ public class OrmInitViewTest extends CommonTest {
 		getHarmony().findAndExecute(
 				OrmCommand.GENERATE_CRUD, new String[] {}, null);
 	}
-
-	/**
-	 * Launch all the tests.
-	 */
-	//@Test
-	public final void all() {
-		this.viewPostCreate();
-		this.viewPostEdit();
-		this.viewPostList();
-		this.viewPostShow();
-
-		this.viewCommentCreate();
-		this.viewCommentEdit();
-		this.viewCommentList();
-		this.viewCommentShow();
-
-		this.viewUserCreate();
-		this.viewUserEdit();
-		this.viewUserList();
-		this.viewUserShow();
-
-		this.ressourcePostCreate();
-		this.ressourcePostEdit();
-		this.ressourcePostList();
-		this.ressourcePostShow();
-
-		this.ressourceCommentCreate();
-		this.ressourceCommentEdit();
-		this.ressourceCommentList();
-		this.ressourceCommentShow();
-
-		this.ressourceUserCreate();
-		this.ressourceUserEdit();
-		this.ressourceUserList();
-		this.ressourceUserShow();
-	}
-
-	/**
-	 * Post Create activity test.
-	 */
+	
 	@Test
-	public final void viewPostCreate() {
-		CommonTest.hasFindFile(VIEW_PATH + "post/PostCreateActivity.java");
-		CommonTest.hasFindFile(VIEW_PATH + "post/PostCreateFragment.java");
-	}
-
-	/**
-	 * Post Edit activity test.
-	 */
-	@Test
-	public final void viewPostEdit() {
-		CommonTest.hasFindFile(VIEW_PATH + "post/PostEditActivity.java");
-		CommonTest.hasFindFile(VIEW_PATH + "post/PostEditFragment.java");
-	}
-
-	/**
-	 * Post List activity test.
-	 */
-	@Test
-	public final void viewPostList() {
-		CommonTest.hasFindFile(VIEW_PATH + "post/PostListActivity.java");
-		CommonTest.hasFindFile(VIEW_PATH + "post/PostListFragment.java");
-		CommonTest.hasFindFile(VIEW_PATH + "post/PostListAdapter.java");
-		CommonTest.hasFindFile(VIEW_PATH + "post/PostListLoader.java");
-	}
-
-	/**
-	 * Post Show activity test.
-	 */
-	@Test
-	public final void viewPostShow() {
-		CommonTest.hasFindFile(VIEW_PATH + "post/PostShowActivity.java");
-		CommonTest.hasFindFile(VIEW_PATH + "post/PostShowFragment.java");
-	}
-
-	/**
-	 * Comment Create activity test.
-	 */
-	@Test
-	public final void viewCommentCreate() {
-		CommonTest.hasFindFile(
-				VIEW_PATH + "comment/CommentCreateActivity.java");
-		CommonTest.hasFindFile(
-				VIEW_PATH + "comment/CommentCreateFragment.java");
-	}
-
-	/**
-	 * Comment Edit activity test.
-	 */
-	@Test
-	public final void viewCommentEdit() {
-		CommonTest.hasFindFile(VIEW_PATH + "comment/CommentEditActivity.java");
-		CommonTest.hasFindFile(VIEW_PATH + "comment/CommentEditFragment.java");
-	}
-
-	/**
-	 * Comment List activity test.
-	 */
-	@Test
-	public final void viewCommentList() {
-		CommonTest.hasFindFile(VIEW_PATH + "comment/CommentListActivity.java");
-		CommonTest.hasFindFile(VIEW_PATH + "comment/CommentListFragment.java");
-		CommonTest.hasFindFile(VIEW_PATH + "comment/CommentListAdapter.java");
-		CommonTest.hasFindFile(VIEW_PATH + "comment/CommentListLoader.java");
-	}
-
-	/**
-	 * Comment Show activity test.
-	 */
-	@Test
-	public final void viewCommentShow() {
-		CommonTest.hasFindFile(VIEW_PATH + "comment/CommentShowActivity.java");
-		CommonTest.hasFindFile(VIEW_PATH + "comment/CommentShowFragment.java");
-	}
-
-	/**
-	 * User Create activity test.
-	 */
-	@Test
-	public final void viewUserCreate() {
-		CommonTest.hasFindFile(VIEW_PATH + "user/UserCreateActivity.java");
-		CommonTest.hasFindFile(VIEW_PATH + "user/UserCreateFragment.java");
-	}
-
-	/**
-	 * User Edit activity test.
-	 */
-	@Test
-	public final void viewUserEdit() {
-		CommonTest.hasFindFile(VIEW_PATH + "user/UserEditActivity.java");
-		CommonTest.hasFindFile(VIEW_PATH + "user/UserEditFragment.java");
-	}
-
-	/**
-	 * User List activity test.
-	 */
-	@Test
-	public final void viewUserList() {
-		CommonTest.hasFindFile(VIEW_PATH + "user/UserListActivity.java");
-		CommonTest.hasFindFile(VIEW_PATH + "user/UserListFragment.java");
-		CommonTest.hasFindFile(VIEW_PATH + "user/UserListAdapter.java");
-		CommonTest.hasFindFile(VIEW_PATH + "user/UserListLoader.java");
-	}
-
-	/**
-	 * User Show activity test.
-	 */
-	@Test
-	public final void viewUserShow() {
-		CommonTest.hasFindFile(VIEW_PATH + "user/UserShowActivity.java");
-		CommonTest.hasFindFile(VIEW_PATH + "user/UserShowFragment.java");
-	}
-
-	/**
-	 * Post Create layout test.
-	 */
-	@Test
-	public final void ressourcePostCreate() {
-		CommonTest.hasFindFile("android/res/layout/activity_post_create.xml");
-		CommonTest.hasFindFile("android/res/layout/fragment_post_create.xml");
-	}
-
-	/**
-	 * Post Edit layout test.
-	 */
-	@Test
-	public final void ressourcePostEdit() {
-		CommonTest.hasFindFile("android/res/layout/activity_post_edit.xml");
-		CommonTest.hasFindFile("android/res/layout/fragment_post_edit.xml");
-	}
-
-	/**
-	 * Post List layout test.
-	 */
-	@Test
-	public final void ressourcePostList() {
-		CommonTest.hasFindFile("android/res/layout/activity_post_list.xml");
-		CommonTest.hasFindFile("android/res/layout/fragment_post_list.xml");
-		CommonTest.hasFindFile("android/res/layout/row_post.xml");
-	}
-
-	/**
-	 * Post Show layout test.
-	 */
-	@Test
-	public final void ressourcePostShow() {
-		CommonTest.hasFindFile("android/res/layout/activity_post_show.xml");
-		CommonTest.hasFindFile("android/res/layout/fragment_post_show.xml");
-	}
-
-	/**
-	 * Comment Create layout test.
-	 */
-	@Test
-	public final void ressourceCommentCreate() {
-		CommonTest.hasFindFile(
-				"android/res/layout/activity_comment_create.xml");
-		CommonTest.hasFindFile(
-				"android/res/layout/fragment_comment_create.xml");
-	}
-
-	/**
-	 * Comment Edit layout test.
-	 */
-	@Test
-	public final void ressourceCommentEdit() {
-		CommonTest.hasFindFile("android/res/layout/activity_comment_edit.xml");
-		CommonTest.hasFindFile("android/res/layout/fragment_comment_edit.xml");
-	}
-
-	/**
-	 * Comment List layout test.
-	 */
-	@Test
-	public final void ressourceCommentList() {
-		CommonTest.hasFindFile("android/res/layout/activity_comment_list.xml");
-		CommonTest.hasFindFile("android/res/layout/fragment_comment_list.xml");
-		CommonTest.hasFindFile("android/res/layout/row_comment.xml");
-	}
-
-	/**
-	 * Comment Show layout test.
-	 */
-	@Test
-	public final void ressourceCommentShow() {
-		CommonTest.hasFindFile("android/res/layout/activity_comment_show.xml");
-		CommonTest.hasFindFile("android/res/layout/fragment_comment_show.xml");
-	}
-
-	/**
-	 * User Create layout test.
-	 */
-	@Test
-	public final void ressourceUserCreate() {
-		CommonTest.hasFindFile("android/res/layout/activity_user_create.xml");
-		CommonTest.hasFindFile("android/res/layout/fragment_user_create.xml");
-	}
-
-	/**
-	 * User Edit layout test.
-	 */
-	@Test
-	public final void ressourceUserEdit() {
-		CommonTest.hasFindFile("android/res/layout/activity_user_edit.xml");
-		CommonTest.hasFindFile("android/res/layout/fragment_user_edit.xml");
-	}
-
-	/**
-	 * User List layout test.
-	 */
-	@Test
-	public final void ressourceUserList() {
-		CommonTest.hasFindFile("android/res/layout/activity_user_list.xml");
-		CommonTest.hasFindFile("android/res/layout/fragment_user_list.xml");
-		CommonTest.hasFindFile("android/res/layout/row_user.xml");
-	}
-
-	/**
-	 * User Show layout test.
-	 */
-	@Test
-	public final void ressourceUserShow() {
-		CommonTest.hasFindFile("android/res/layout/activity_user_show.xml");
-		CommonTest.hasFindFile("android/res/layout/fragment_user_show.xml");
+	public final void viewEntitiesCreate() {
+		for (EntityMetadata entity 
+				: this.currentMetadata.getEntities().values()) {
+			if (!entity.getFields().isEmpty() && !entity.isHidden()) {
+				String lowerName = entity.getName().toLowerCase();
+				String name = entity.getName();
+				CommonTest.hasFindFile(String.format(VIEW_PATH_CREATE_ACTIVITY, lowerName, name));
+				CommonTest.hasFindFile(String.format(VIEW_PATH_CREATE_FRAGMENT, lowerName, name));
+				CommonTest.hasFindFile(String.format(VIEW_PATH_EDIT_ACTIVITY, lowerName, name));
+				CommonTest.hasFindFile(String.format(VIEW_PATH_EDIT_FRAGMENT, lowerName, name));
+				CommonTest.hasFindFile(String.format(VIEW_PATH_SHOW_ACTIVITY, lowerName, name));
+				CommonTest.hasFindFile(String.format(VIEW_PATH_SHOW_FRAGMENT, lowerName, name));
+				CommonTest.hasFindFile(String.format(VIEW_PATH_LIST_ACTIVITY, lowerName, name));
+				CommonTest.hasFindFile(String.format(VIEW_PATH_LIST_FRAGMENT, lowerName, name));
+				CommonTest.hasFindFile(String.format(VIEW_PATH_LIST_ADAPTER, lowerName, name));
+				CommonTest.hasFindFile(String.format(VIEW_PATH_LIST_LOADER, lowerName, name));
+				CommonTest.hasFindFile(String.format(
+						LAYOUT_PATH_CREATE_ACTIVITY,
+						entity.getName().toLowerCase()));
+				CommonTest.hasFindFile(String.format(
+						LAYOUT_PATH_CREATE_FRAGMENT,
+						entity.getName().toLowerCase()));
+				CommonTest.hasFindFile(String.format(
+						LAYOUT_PATH_EDIT_ACTIVITY,
+						entity.getName().toLowerCase()));
+				CommonTest.hasFindFile(String.format(
+						LAYOUT_PATH_EDIT_FRAGMENT,
+						entity.getName().toLowerCase()));
+				CommonTest.hasFindFile(String.format(
+						LAYOUT_PATH_LIST_ACTIVITY,
+						entity.getName().toLowerCase()));
+				CommonTest.hasFindFile(String.format(
+						LAYOUT_PATH_LIST_FRAGMENT,
+						entity.getName().toLowerCase()));
+				CommonTest.hasFindFile(String.format(
+						LAYOUT_PATH_ROW,
+						entity.getName().toLowerCase()));
+				CommonTest.hasFindFile(String.format(
+						LAYOUT_PATH_SHOW_ACTIVITY,
+						entity.getName().toLowerCase()));
+				CommonTest.hasFindFile(String.format(
+						LAYOUT_PATH_SHOW_FRAGMENT,
+						entity.getName().toLowerCase()));
+			}
+		}
 	}
 }

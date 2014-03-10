@@ -10,10 +10,15 @@ package com.tactfactory.harmony.test.project;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Collection;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.ProjectDiscover;
@@ -25,29 +30,37 @@ import com.tactfactory.harmony.test.CommonTest;
 /**
  * Test class for project initialization.
  */
+@RunWith(Parameterized.class)
 public class ProjectInitTest extends CommonTest {
-
+	
+	public ProjectInitTest(ApplicationMetadata currentMetadata) {
+		super(currentMetadata);
+	}
 	/**
 	 * Initialization of the test.
 	 * @throws Exception if something bad happened.
 	 */
 	@BeforeClass
-	public static void setUpBefore() throws Exception {
-		CommonTest.setUpBefore();
+	public static void setUpBefore() {
+		//CommonTest.setUpBefore();
 	}
 
 	@Before
 	@Override
-	public final void setUp() throws Exception {
+	public final void setUp() throws RuntimeException {
 		super.setUp();
 	}
 
 	@After
 	@Override
-	public final void tearDown() throws Exception {
+	public final void tearDown() throws RuntimeException {
 		super.tearDown();
 	}
-
+	
+	@Override
+	public void setUpBeforeNewParameter() {
+		super.setUpBeforeNewParameter();
+	}
 	/**
 	 * Test the initialization of the android project.
 	 */
@@ -71,10 +84,11 @@ public class ProjectInitTest extends CommonTest {
 		CommonTest.hasFindFile("android/project.properties");
 
 		CommonTest.hasFindFile("android/src");
-		CommonTest.hasFindFile(
-				"android/src/com/tactfactory/harmony/test/demact");
-		CommonTest.hasFindFile(
-				"android/src/com/tactfactory/harmony/test/demact/entity");
+		CommonTest.hasFindFile("android/src/" 
+				+ this.currentMetadata.getProjectNameSpace().replace('.', '/'));
+		CommonTest.hasFindFile("android/src/" 
+				+ this.currentMetadata.getProjectNameSpace().replace('.', '/')
+				+ "/entity");
 		//this.isFindFile("android/res/");
 
 		CommonTest.hasFindFile("android/libs");
@@ -155,4 +169,8 @@ public class ProjectInitTest extends CommonTest {
 		// TODO add asserts (for folder/file exist..)
 	}*/
 
+	@Parameters
+	public static Collection<Object[]> getParameters() {
+		return CommonTest.getParameters();
+	}
 }

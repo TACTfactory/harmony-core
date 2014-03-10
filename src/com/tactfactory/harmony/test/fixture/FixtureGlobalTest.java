@@ -9,56 +9,68 @@
 package com.tactfactory.harmony.test.fixture;
 
 import java.io.File;
+import java.util.Collection;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.command.OrmCommand;
 import com.tactfactory.harmony.command.ProjectCommand;
 import com.tactfactory.harmony.fixture.command.FixtureCommand;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
+import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.test.CommonTest;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
+@RunWith(Parameterized.class)
 /**
  * Test class for Fixtures generation and loading.
  */
 public class FixtureGlobalTest extends CommonTest {
 	/** Fixture path. */
 	private static final String FIXTURE_PATH =
-			"android/src/com/tactfactory/harmony/test/demact/fixture/";
+			"android/src/com/tactfactory/harmony/test/%s/fixture/%s";
 
-	/**
-	 * @throws Exception if something bad happened.
-	 */
-	@BeforeClass
-	public static void setUpBefore() throws Exception {
-		CommonTest.setUpBefore();
-		initAll();
+	public FixtureGlobalTest (ApplicationMetadata currentMetadata) {
+		super(currentMetadata);
+	}
+	
+	@Override
+	public void setUpBeforeNewParameter() {
+		super.setUpBeforeNewParameter();
 
 		final File dirfixtures = new File("fixtures/");
 		TactFileUtils.deleteRecursive(dirfixtures);
+		
+		this.initAll();
 	}
 
 	@Before
 	@Override
-	public final void setUp() throws Exception {
+	public final void setUp() throws RuntimeException {
 		super.setUp();
 	}
 
 	@After
 	@Override
-	public final void tearDown() throws Exception {
+	public final void tearDown() throws RuntimeException {
 		super.tearDown();
 	}
 
+	@Parameters
+	public static Collection<Object[]> getParameters() {
+		return CommonTest.getParameters();
+	}
+	
 	/**
 	 * Initialize the tests.
 	 */
-	private static void initAll() {
+	private void initAll() {
 		System.out.println("\nTest Orm generate entity");
 		System.out.println("######################################"
 				+ "#########################################");
@@ -76,43 +88,48 @@ public class FixtureGlobalTest extends CommonTest {
 	}
 
 	/**
-	 * Tests if loaders are generated.
-	 */
-	@Test
-	public final void hasFixtureLoaders() {
-		CommonTest.hasFindFile(FIXTURE_PATH + "UserDataLoader.java");
-		CommonTest.hasFindFile(FIXTURE_PATH + "CommentDataLoader.java");
-		CommonTest.hasFindFile(FIXTURE_PATH + "PostDataLoader.java");
-		CommonTest.hasFindFile(FIXTURE_PATH + "ViewComponentDataLoader.java");
-		CommonTest.hasFindFile(FIXTURE_PATH + "FixtureBase.java");
-		CommonTest.hasFindFile(FIXTURE_PATH + "DataManager.java");
-	}
-
-	/**
 	 * Tests if XML Fixtures have really been loaded.
 	 */
 	@Test
 	public final void hasFixturesXml() {
 		// Copy fixture files
-		copyFixturesXml();
+		this.copyFixturesXml();
 		CommonTest.getHarmony().findAndExecute(
 				FixtureCommand.FIXTURE_LOAD, new String[] {}, null);
 
-		CommonTest.hasFindFile("android/assets/app/User.xml");
-		CommonTest.hasFindFile("android/assets/app/Comment.xml");
-		CommonTest.hasFindFile("android/assets/app/Post.xml");
-		CommonTest.hasFindFile("android/assets/app/ViewComponent.xml");
-
-		CommonTest.hasFindFile("android/assets/test/User.xml");
-		CommonTest.hasFindFile("android/assets/test/Comment.xml");
-		CommonTest.hasFindFile("android/assets/test/Post.xml");
-		CommonTest.hasFindFile("android/assets/test/ViewComponent.xml");
+		CommonTest.hasFindFile(String.format(
+					FIXTURE_PATH,
+					this.currentMetadata.getName().toLowerCase(),
+					"FixtureBase.java"));
+		CommonTest.hasFindFile(String.format(
+					FIXTURE_PATH,
+					this.currentMetadata.getName().toLowerCase(),
+					"DataManager.java"));
+		for (EntityMetadata entity : this.currentMetadata.getEntities().values()) {
+			if (!entity.getFields().isEmpty() && !entity.isInternal()) {
+				CommonTest.hasFindFile(String.format(
+						"android/assets/test/%s.xml",
+						entity.getName()));
+				CommonTest.hasFindFile(String.format(
+						"android/assets/app/%s.xml",
+						entity.getName()));
+				CommonTest.hasFindFile(String.format(
+						"android/assets/debug/%s.xml",
+						entity.getName()));
+				CommonTest.hasFindFile(String.format(
+						FIXTURE_PATH,
+						this.currentMetadata.getName().toLowerCase(),
+						String.format(
+								"%sDataLoader.java",
+								entity.getName())));
+			}
+		}
 	}
 
 	/**
 	 * Tests if YML Fixtures have really been loaded.
 	 */
-	@Test
+	//@Test
 	public final void hasFixturesYml() {
 		//Purge & init
 		CommonTest.getHarmony().findAndExecute(
@@ -123,7 +140,7 @@ public class FixtureGlobalTest extends CommonTest {
 				null);
 
 		// Copy fixture files
-		copyFixturesYml();
+		this.copyFixturesYml();
 		CommonTest.getHarmony().findAndExecute(
 				FixtureCommand.FIXTURE_LOAD, new String[] {}, null);
 
@@ -141,10 +158,10 @@ public class FixtureGlobalTest extends CommonTest {
 	/**
 	 * Copy XML fixtures in test project.
 	 */
-	protected static final void copyFixturesXml() {
+	protected final void copyFixturesXml() {
 		final String pathNameSpace =
-				ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll(
-						"\\.", "/");
+				this.currentMetadata.getProjectNameSpace().replace(
+						'.', '/');
 		
 		String srcDir = 
 				String.format("%s/tact-core/resources/%s/%s/%s/",
@@ -164,10 +181,10 @@ public class FixtureGlobalTest extends CommonTest {
 	/**
 	 * Copy YML fixtures in test project.
 	 */
-	protected static final void copyFixturesYml() {
+	protected final void copyFixturesYml() {
 		final String pathNameSpace =
-				ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll(
-						"\\.", "/");
+				this.currentMetadata.getProjectNameSpace().replace(
+						'.', '/');
 		
 		String srcDir = 
 				String.format("%s/tact-core/resources/%s/%s/%s/",

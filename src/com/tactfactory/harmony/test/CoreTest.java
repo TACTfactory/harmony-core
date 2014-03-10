@@ -28,19 +28,19 @@ public class CoreTest extends CommonTest {
 	 * @throws Exception if something bad happened.
 	 */
 	@BeforeClass
-	public static void setUpBefore() throws Exception {
+	public static void setUpBefore() {
 		CommonTest.setUpBefore();
 	}
 
 	@Before
 	@Override
-	public final void setUp() throws Exception {
+	public final void setUp() {
 		super.setUp();
 	}
 
 	@After
 	@Override
-	public final void tearDown() throws Exception {
+	public final void tearDown() {
 		super.tearDown();
 	}
 

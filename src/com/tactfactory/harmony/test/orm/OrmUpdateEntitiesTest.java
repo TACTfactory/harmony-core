@@ -8,39 +8,47 @@
  */
 package com.tactfactory.harmony.test.orm;
 
+import java.util.Collection;
+
 import org.junit.After;
 import org.junit.Before;
-import org.junit.BeforeClass;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
 import com.tactfactory.harmony.command.OrmCommand;
 import com.tactfactory.harmony.command.ProjectCommand;
+import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.test.CommonTest;
 
+@RunWith(Parameterized.class)
 /**
  * Entities updates test class.
  *
  */
 public class OrmUpdateEntitiesTest extends CommonTest {
 
-	/**
-	 * Initialization.
-	 * @throws Exception if something bad happened.
-	 */
-	@BeforeClass
-	public static void setUpBefore() throws Exception {
-		CommonTest.setUpBefore();
-		initAll();
+
+	public OrmUpdateEntitiesTest(ApplicationMetadata currentMetadata) {
+		super(currentMetadata);
+	}
+
+	@Override
+	public void setUpBeforeNewParameter() {
+		super.setUpBeforeNewParameter();
+		
+		this.initAll();
 	}
 
 	@Before
 	@Override
-	public final void setUp() throws Exception {
+	public final void setUp() throws RuntimeException {
 		super.setUp();
 	}
 
 	@After
 	@Override
-	public final void tearDown() throws Exception {
+	public final void tearDown() throws RuntimeException {
 		super.tearDown();
 
 		//TODO : enable !! FileUtils.deleteRecursive(dirproj);
@@ -49,7 +57,7 @@ public class OrmUpdateEntitiesTest extends CommonTest {
 	/**
 	 * Generate the entities.
 	 */
-	private static void initAll() {
+	private void initAll() {
 		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 		makeEntities();
 		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES,
@@ -59,5 +67,10 @@ public class OrmUpdateEntitiesTest extends CommonTest {
 		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES,
 				new String[] {},
 				null);
+	}
+	
+	@Parameters
+	public static Collection<Object[]> getParameters() {
+		return CommonTest.getParameters();
 	}
 }
