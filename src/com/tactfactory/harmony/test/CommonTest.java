@@ -77,12 +77,11 @@ public abstract class CommonTest {
 			 + "#########";
 
 	/** Harmony instance. */
-	private static Harmony harmony;
+	protected static Harmony harmony;
 	
 	public CommonTest(ApplicationMetadata currentMetadata) {
 			this.currentMetadata = currentMetadata;
 			if (!this.currentMetadata.equals(oldMetadata)) {
-				CommonTest.cleanAndroidFolder();
 				this.setUpBeforeNewParameter();
 			}
 			CommonTest.oldMetadata = this.currentMetadata;
@@ -97,6 +96,9 @@ public abstract class CommonTest {
 		ConsoleUtils.setAnsi(false);
 		ConsoleUtils.setQuiet(false);
 		ConsoleUtils.setDebug(true);
+
+		// Clean folder
+		CommonTest.cleanAndroidFolder();
 
 		// Project test config
 		ApplicationMetadata.INSTANCE.setName(
@@ -255,12 +257,32 @@ public abstract class CommonTest {
 	 * Clean the /android/ folder.
 	 */
 	protected static void cleanAndroidFolder() {
+		CommonTest.cleanAndroidFolder(true);
+	}
+	
+	protected static void cleanAndroidFolder(boolean keepLibs) {
 		ConsoleUtils.display(
 				  "################################  "
 				+ "Clean Android Folder !! "
 				+ "################################");
 		final File dirproj = new File(Harmony.getProjectAndroidPath());
-		TactFileUtils.deleteRecursive(dirproj);
+		if (keepLibs) { 
+			ConsoleUtils.display("Keep libraries !");
+			File[] files = dirproj.listFiles();
+			if (files != null) {
+				for (File file : files) {
+					if (file.isFile()) {
+						file.delete();
+					} else {
+						if (!file.getName().equals("libs")) {
+							TactFileUtils.deleteRecursive(file);
+						}
+					}
+				}
+			}
+		} else {
+			TactFileUtils.deleteRecursive(dirproj);
+		}
 	}
 	
 	@Parameters
@@ -605,7 +627,7 @@ public abstract class CommonTest {
 	private static ApplicationMetadata getTracscanMetadata() {
 		ApplicationMetadata tracscan = new ApplicationMetadata();
 		tracscan.setName("tracsan");
-		tracscan.setProjectNameSpace("com/tactfactory/harmony/test/tracscan");
+		tracscan.setProjectNameSpace("com/tactfactory/tracscan");
 		
 		EntityMetadata itemProd = new EntityMetadata();
 		EntityMetadata logProd = new EntityMetadata();
@@ -624,6 +646,105 @@ public abstract class CommonTest {
 		tracscan.getEntities().put(orderProd.getName(), orderProd);
 		tracscan.getEntities().put(user.getName(), user);
 		tracscan.getEntities().put(zone.getName(), zone);
+		
+		
+		// Imports
+		itemProd.getImports().add(CLASS_SERIALIZABLE);
+		itemProd.getImports().add(CLASS_PARCELABLE);
+		itemProd.getImports().add(CLASS_PARCEL);
+		itemProd.getImports().add(CLASS_DATETIME);
+		itemProd.getImports().add(CLASS_COLUMN);
+		itemProd.getImports().add(CLASS_ENTITY);
+		itemProd.getImports().add(CLASS_ID);
+		itemProd.getImports().add(CLASS_MANY_TO_ONE);
+		itemProd.getImports().add(CLASS_TYPE);
+
+		logProd.getImports().add(CLASS_SERIALIZABLE);
+		logProd.getImports().add(CLASS_PARCELABLE);
+		logProd.getImports().add(CLASS_PARCEL);
+		logProd.getImports().add(CLASS_DATETIME);
+		logProd.getImports().add(CLASS_COLUMN);
+		logProd.getImports().add(CLASS_ENTITY);
+		logProd.getImports().add(CLASS_ID);
+		logProd.getImports().add(CLASS_MANY_TO_ONE);
+		logProd.getImports().add(CLASS_TYPE);
+
+		orderProd.getImports().add(CLASS_SERIALIZABLE);
+		orderProd.getImports().add(CLASS_PARCELABLE);
+		orderProd.getImports().add(CLASS_PARCEL);
+		orderProd.getImports().add(CLASS_ARRAYLIST);
+		orderProd.getImports().add(CLASS_COLUMN);
+		orderProd.getImports().add(CLASS_ENTITY);
+		orderProd.getImports().add(CLASS_ID);
+		orderProd.getImports().add(CLASS_ONE_TO_MANY);
+		orderProd.getImports().add(CLASS_TYPE);
+
+		user.getImports().add(CLASS_SERIALIZABLE);
+		user.getImports().add(CLASS_PARCELABLE);
+		user.getImports().add(CLASS_PARCEL);
+		user.getImports().add(CLASS_COLUMN);
+		user.getImports().add(CLASS_ENTITY);
+		user.getImports().add(CLASS_ID);
+		user.getImports().add(CLASS_TYPE);
+
+		zone.getImports().add(CLASS_SERIALIZABLE);
+		zone.getImports().add(CLASS_PARCELABLE);
+		zone.getImports().add(CLASS_PARCEL);
+		zone.getImports().add(CLASS_COLUMN);
+		zone.getImports().add(CLASS_ENTITY);
+		zone.getImports().add(CLASS_ID);
+		zone.getImports().add(CLASS_TYPE);
+		
+		// Interfaces
+		user.getImplementTypes().add(CLASS_SERIALIZABLE);
+		user.getImplementTypes().add(CLASS_PARCELABLE);
+
+		zone.getImplementTypes().add(CLASS_SERIALIZABLE);
+		zone.getImplementTypes().add(CLASS_PARCELABLE);
+
+		logProd.getImplementTypes().add(CLASS_SERIALIZABLE);
+		logProd.getImplementTypes().add(CLASS_PARCELABLE);
+
+		orderProd.getImplementTypes().add(CLASS_SERIALIZABLE);
+		orderProd.getImplementTypes().add(CLASS_PARCELABLE);
+
+		itemProd.getImplementTypes().add(CLASS_SERIALIZABLE);
+		itemProd.getImplementTypes().add(CLASS_PARCELABLE);
+		
+		// Ids
+		CommonTest.generateIdField(user, "id");
+		CommonTest.generateIdField(zone, "id");
+		CommonTest.generateIdField(logProd, "id");
+		CommonTest.generateIdField(orderProd, "id");
+		CommonTest.generateIdField(itemProd, "id");
+		
+		// Fields
+		CommonTest.generateField(user, "type", false, false);
+		CommonTest.generateField(user, "login", false, true);
+		CommonTest.generateField(user, "passwd", false, false);
+		
+		CommonTest.generateField(zone, "name", false, false);
+		CommonTest.generateField(zone, "quantity", false, true);
+
+		CommonTest.generateField(itemProd, "name", false, false);
+		CommonTest.generateField(itemProd, "state", false, false);
+		CommonTest.generateField(itemProd, "updateDate", false, false);
+		CommonTest.generateField(itemProd, "orderCustomer", false, false);
+		CommonTest.generateField(itemProd, "currentZone", false, false);
+		CommonTest.generateField(itemProd, "OrderProditemsInternal", true, false, "OrderProd_items_internal");
+
+		CommonTest.generateField(logProd, "createDate", false, false);
+		CommonTest.generateField(logProd, "stateAction", false, false);
+		CommonTest.generateField(logProd, "zoneLogged", false, false);
+		CommonTest.generateField(logProd, "userLogged", false, false);
+		CommonTest.generateField(logProd, "itemLogged", false, false);
+
+		CommonTest.generateField(orderProd, "customer", false, false);
+		CommonTest.generateField(orderProd, "productType", false, false);
+		CommonTest.generateField(orderProd, "materialType", false, false);
+		CommonTest.generateField(orderProd, "quantity", false, false);
+		CommonTest.generateField(orderProd, "items", true, false);
+		
 		return tracscan;
 	}
 }

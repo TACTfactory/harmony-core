@@ -30,8 +30,8 @@ import com.tactfactory.harmony.test.CommonTest;
  */
 public class OrmInitViewTest extends CommonTest {
 	/** Path to the generated view folder. */
-	private static final String VIEW_PATH =
-			"android/src/com/tactfactory/harmony/test/demact/view/";
+	private final static String VIEW_PATH =
+			"android/src/%s/view/";
 
 	private static final String VIEW_PATH_CREATE_ACTIVITY =
 			VIEW_PATH + "%s/%sCreateActivity.java";
@@ -129,16 +129,66 @@ public class OrmInitViewTest extends CommonTest {
 			if (!entity.getFields().isEmpty() && !entity.isHidden()) {
 				String lowerName = entity.getName().toLowerCase();
 				String name = entity.getName();
-				CommonTest.hasFindFile(String.format(VIEW_PATH_CREATE_ACTIVITY, lowerName, name));
-				CommonTest.hasFindFile(String.format(VIEW_PATH_CREATE_FRAGMENT, lowerName, name));
-				CommonTest.hasFindFile(String.format(VIEW_PATH_EDIT_ACTIVITY, lowerName, name));
-				CommonTest.hasFindFile(String.format(VIEW_PATH_EDIT_FRAGMENT, lowerName, name));
-				CommonTest.hasFindFile(String.format(VIEW_PATH_SHOW_ACTIVITY, lowerName, name));
-				CommonTest.hasFindFile(String.format(VIEW_PATH_SHOW_FRAGMENT, lowerName, name));
-				CommonTest.hasFindFile(String.format(VIEW_PATH_LIST_ACTIVITY, lowerName, name));
-				CommonTest.hasFindFile(String.format(VIEW_PATH_LIST_FRAGMENT, lowerName, name));
-				CommonTest.hasFindFile(String.format(VIEW_PATH_LIST_ADAPTER, lowerName, name));
-				CommonTest.hasFindFile(String.format(VIEW_PATH_LIST_LOADER, lowerName, name));
+				CommonTest.hasFindFile(String.format(
+						VIEW_PATH_CREATE_ACTIVITY,
+						this.currentMetadata.getProjectNameSpace(),
+						lowerName,
+						name));
+				
+				CommonTest.hasFindFile(String.format(
+						VIEW_PATH_CREATE_FRAGMENT,
+						this.currentMetadata.getProjectNameSpace(),
+						lowerName,
+						name));
+				
+				CommonTest.hasFindFile(String.format(
+						VIEW_PATH_EDIT_ACTIVITY,
+						this.currentMetadata.getProjectNameSpace(),
+						lowerName,
+						name));
+				
+				CommonTest.hasFindFile(String.format(
+						VIEW_PATH_EDIT_FRAGMENT,
+						this.currentMetadata.getProjectNameSpace(),
+						lowerName,
+						name));
+				
+				CommonTest.hasFindFile(String.format(
+						VIEW_PATH_SHOW_ACTIVITY,
+						this.currentMetadata.getProjectNameSpace(),
+						lowerName,
+						name));
+				
+				CommonTest.hasFindFile(String.format(
+						VIEW_PATH_SHOW_FRAGMENT,
+						this.currentMetadata.getProjectNameSpace(),
+						lowerName,
+						name));
+				
+				CommonTest.hasFindFile(String.format(
+						VIEW_PATH_LIST_ACTIVITY,
+						this.currentMetadata.getProjectNameSpace(),
+						lowerName,
+						name));
+				
+				CommonTest.hasFindFile(String.format(
+						VIEW_PATH_LIST_FRAGMENT,
+						this.currentMetadata.getProjectNameSpace(),
+						lowerName,
+						name));
+				
+				CommonTest.hasFindFile(String.format(
+						VIEW_PATH_LIST_ADAPTER,
+						this.currentMetadata.getProjectNameSpace(),
+						lowerName,
+						name));
+				
+				CommonTest.hasFindFile(String.format(
+						VIEW_PATH_LIST_LOADER,
+						this.currentMetadata.getProjectNameSpace(),
+						lowerName,
+						name));
+				
 				CommonTest.hasFindFile(String.format(
 						LAYOUT_PATH_CREATE_ACTIVITY,
 						entity.getName().toLowerCase()));

@@ -34,7 +34,7 @@ import com.tactfactory.harmony.utils.TactFileUtils;
 public class FixtureGlobalTest extends CommonTest {
 	/** Fixture path. */
 	private static final String FIXTURE_PATH =
-			"android/src/com/tactfactory/harmony/test/%s/fixture/%s";
+			"android/src/%s/fixture/%s";
 
 	public FixtureGlobalTest (ApplicationMetadata currentMetadata) {
 		super(currentMetadata);
@@ -85,6 +85,14 @@ public class FixtureGlobalTest extends CommonTest {
 				FixtureCommand.FIXTURE_INIT,
 				new String[] {"--format=xml", "--force=true"},
 				null);
+
+
+		final OrmCommand command =
+				(OrmCommand) Harmony.getInstance().getCommand(
+						OrmCommand.class);
+		command.generateMetas();
+
+		parsedMetadata = ApplicationMetadata.INSTANCE;
 	}
 
 	/**
@@ -99,11 +107,11 @@ public class FixtureGlobalTest extends CommonTest {
 
 		CommonTest.hasFindFile(String.format(
 					FIXTURE_PATH,
-					this.currentMetadata.getName().toLowerCase(),
+					this.currentMetadata.getProjectNameSpace(),
 					"FixtureBase.java"));
 		CommonTest.hasFindFile(String.format(
 					FIXTURE_PATH,
-					this.currentMetadata.getName().toLowerCase(),
+					this.currentMetadata.getProjectNameSpace(),
 					"DataManager.java"));
 		for (EntityMetadata entity : this.currentMetadata.getEntities().values()) {
 			if (!entity.getFields().isEmpty() && !entity.isInternal()) {
@@ -118,7 +126,7 @@ public class FixtureGlobalTest extends CommonTest {
 						entity.getName()));
 				CommonTest.hasFindFile(String.format(
 						FIXTURE_PATH,
-						this.currentMetadata.getName().toLowerCase(),
+						this.currentMetadata.getProjectNameSpace(),
 						String.format(
 								"%sDataLoader.java",
 								entity.getName())));
@@ -144,15 +152,33 @@ public class FixtureGlobalTest extends CommonTest {
 		CommonTest.getHarmony().findAndExecute(
 				FixtureCommand.FIXTURE_LOAD, new String[] {}, null);
 
-		CommonTest.hasFindFile("android/assets/app/User.yml");
-		CommonTest.hasFindFile("android/assets/app/Comment.yml");
-		CommonTest.hasFindFile("android/assets/app/Post.yml");
-		CommonTest.hasFindFile("android/assets/app/ViewComponent.yml");
-
-		CommonTest.hasFindFile("android/assets/test/User.yml");
-		CommonTest.hasFindFile("android/assets/test/Comment.yml");
-		CommonTest.hasFindFile("android/assets/test/Post.yml");
-		CommonTest.hasFindFile("android/assets/test/ViewComponent.yml");
+		CommonTest.hasFindFile(String.format(
+				FIXTURE_PATH,
+				this.currentMetadata.getProjectNameSpace(),
+				"FixtureBase.java"));
+	CommonTest.hasFindFile(String.format(
+				FIXTURE_PATH,
+				this.currentMetadata.getProjectNameSpace(),
+				"DataManager.java"));
+	for (EntityMetadata entity : this.currentMetadata.getEntities().values()) {
+		if (!entity.getFields().isEmpty() && !entity.isInternal()) {
+			CommonTest.hasFindFile(String.format(
+					"android/assets/test/%s.yml",
+					entity.getName()));
+			CommonTest.hasFindFile(String.format(
+					"android/assets/app/%s.yml",
+					entity.getName()));
+			CommonTest.hasFindFile(String.format(
+					"android/assets/debug/%s.yml",
+					entity.getName()));
+			CommonTest.hasFindFile(String.format(
+					FIXTURE_PATH,
+					this.currentMetadata.getProjectNameSpace(),
+					String.format(
+							"%sDataLoader.java",
+							entity.getName())));
+		}
+	}
 	}
 
 	/**

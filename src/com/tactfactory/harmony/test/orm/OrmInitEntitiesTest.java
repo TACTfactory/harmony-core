@@ -36,11 +36,11 @@ public class OrmInitEntitiesTest extends CommonTest {
 
 	/** Path of entity folder. */
 	private static final String ENTITY_PATH =
-			"android/src/com/tactfactory/harmony/test/demact/entity/";
+			"android/src/%s/entity/%s.java";
 
 	/** Path of data folder. */
 	private static final String DATA_PATH =
-			"android/src/com/tactfactory/harmony/test/demact/data/";
+			"android/src/%s/data/";
 	
 	public OrmInitEntitiesTest(ApplicationMetadata currentMetadata) {
 		super(currentMetadata);
@@ -110,7 +110,11 @@ public class OrmInitEntitiesTest extends CommonTest {
 					parsedMetadata.getEntities().get(entity.getName())); 
 			
 			if (!entity.isHidden() && !entity.isInternal()) {
-				CommonTest.hasFindFile(ENTITY_PATH + entity.getName() + ".java");
+				CommonTest.hasFindFile(
+						String.format(
+								ENTITY_PATH,
+								this.currentMetadata.getProjectNameSpace(),
+								entity.getName()));
 			}
 		}
 	}
@@ -256,11 +260,15 @@ public class OrmInitEntitiesTest extends CommonTest {
 				: this.currentMetadata.getEntities().values()) {
 			
 			if (!entity.getFields().isEmpty()) {
-				CommonTest.hasFindFile(DATA_PATH
-						+ entity.getName() + "SQLiteAdapter.java");
+				CommonTest.hasFindFile(String.format(
+						DATA_PATH,
+						this.currentMetadata.getProjectNameSpace(),
+						entity.getName() + "SQLiteAdapter"));
 	
-				CommonTest.hasFindFile(DATA_PATH
-						+ "base/" + entity.getName() + "SQLiteAdapterBase.java");
+				CommonTest.hasFindFile(String.format(
+						DATA_PATH,
+						this.currentMetadata.getProjectNameSpace(),
+						"base/" + entity.getName() + "SQLiteAdapterBase.java"));
 			}
 		}
 	}
