@@ -111,16 +111,6 @@ public class Zone  implements Serializable , Parcelable {
 		this.setQuantity(parc.readInt());
 	}
 
-
-
-
-
-
-
-
-
-
-
 	/**
 	 * Parcel Constructor.
 	 *
