@@ -250,7 +250,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter =
 				new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
-		Cursor ${relation.name?lower_case}Cursor = ${relation.relation.joinTable?lower_case}Adapter.getBy${relation.owner}(
+		Cursor ${relation.name?lower_case}Cursor = ${relation.relation.joinTable?lower_case}Adapter.getBy${relation.relation.mappedBy?cap_first}(
 							result.get${curr_ids[0].name?cap_first}(), ${project_name?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS, null, null, null);
 		result.set${relation.name?cap_first}(new ${relation.relation.targetEntity}SQLiteAdapter(ctx).cursorToItems(${relation.name?lower_case}Cursor));
 				<#else>
@@ -873,7 +873,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @param orderBy Order by string (can be null)
 	 * @return ArrayList of ${rightRelation.relation.targetEntity} matching ${leftRelation.name?lower_case}
 	 */
-	public Cursor getBy${leftRelation.relation.targetEntity}(
+	public Cursor getBy${leftRelation.name?cap_first}(
 			final int ${leftRelation.name?uncap_first},
 			final String[] projection,
 			String selection,

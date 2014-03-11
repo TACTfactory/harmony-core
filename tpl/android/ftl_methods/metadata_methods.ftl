@@ -116,13 +116,13 @@
 		</#if>
 	</#if>
 	<#list ViewUtils.getAllRelations(entity) as rel>
-		<#if ((rel.relation.type=="ManyToOne" || rel.relation.type=="OneToOne") && !rel.nullable)>
+		<#if ((rel.relation.type=="ManyToOne" || rel.relation.type=="OneToOne") && !rel.nullable && (rel.relation.targetEntity != entity.name))>
 			<#if !(Utils.isInArray(entity_list, rel.relation.targetEntity))>
 				<#return false />
 			</#if>
 			<#if (entities[rel.relation.targetEntity].inheritance?? && entities[rel.relation.targetEntity].inheritance.subclasses??)>
 				<#list entities[rel.relation.targetEntity].inheritance.subclasses as subclass>
-					<#if !(Utils.isInArray(entity_list, subclass.name))>
+					<#if !(Utils.isInArray(entity_list, subclass.name)) && subclass.name != entity.name>
 						<#return false />
 					</#if>
 				</#list>

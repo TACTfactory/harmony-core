@@ -28,4 +28,7 @@ User:
       createdAt: 2001-12-15 00:00:00-02:00
       birthdate: 2001-12-15 00:00:00-02:00
       userGroup: Admin
+      friends:
+          friend: Dupond
+          friend: Haddock
       title: 1

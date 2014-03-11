@@ -47,7 +47,9 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 		<#if (inherited)>
 		${curr.inheritance.superclass.name?cap_first} ${curr.inheritance.superclass.name?uncap_first} = ${curr.inheritance.superclass.name?cap_first}Utils.generateRandom(ctx);
 			<#list entities[curr.inheritance.superclass.name].fields?values as field>
+				<#if !field.internal>
 		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.inheritance.superclass.name?uncap_first}.<#if field.type?lower_case == "boolean">is<#else>get</#if>${field.name?cap_first}());
+				</#if>
 			</#list>
 		</#if>
 
