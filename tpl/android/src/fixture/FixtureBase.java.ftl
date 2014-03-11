@@ -10,6 +10,7 @@ import java.io.ObjectInput;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
+<#if fixtureType=="yml">import java.util.ArrayList;</#if>
 import java.util.LinkedHashMap;
 <#if fixtureType=="xml">
 import java.util.List;
@@ -22,6 +23,8 @@ import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 <#elseif fixtureType=="yml">
+import org.joda.time.DateTime;
+
 import org.yaml.snakeyaml.DumperOptions;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
@@ -34,9 +37,15 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.util.Log;
 
+<#if fixtureType=="yml">import ${project_namespace}.harmony.util.DateUtils;</#if>
+
 /**
  * FixtureBase.
- * @param <T> Fixture
+ * FixtureBase is the abstract base of all your fixtures' dataloaders.
+ * It loads the fixture file associated to your entity, parse each items in it
+ * and store them in the database.
+ *
+ * @param <T> Entity related to this fixture loader
  */
 public abstract class FixtureBase<T> {
 	/** TAG for debug purpose. */
@@ -57,6 +66,9 @@ public abstract class FixtureBase<T> {
 	/** SerializedBackup. */
 	protected byte[] serializedBackup;
 
+	/** Current field being read. */
+	protected String currentFieldName;
+
 	/**
 	 * Constructor.
 	 * @param ctx The context
@@ -72,20 +84,16 @@ public abstract class FixtureBase<T> {
 <#if fixtureType == "xml">
 		// XML Loader
 		try {
-			//String currentDir = new File(".").getAbsolutePath();
-
+			String fileName = DataLoader.getPathToFixtures(mode)
+					+ this.getFixtureFileName();
 			// Make engine
 			SAXBuilder builder = new SAXBuilder();
-			InputStream xmlStream = this.getXml(
-					DataLoader.getPathToFixtures(mode)
-					+ this.getFixtureFileName());
+			InputStream xmlStream = this.getXml(fileName);
 			if (xmlStream != null) {
 				// Load XML File
 				Document doc = (Document) builder.build(xmlStream);
 				// Load Root element
 				final Element rootNode = doc.getRootElement();
-				// Load Name space (required for manipulate attributes)
-				//final Namespace ns = rootNode.getNamespace("android");
 
 				// Find Application Node
 			 	// Find an element
@@ -93,16 +101,19 @@ public abstract class FixtureBase<T> {
 											this.getFixtureFileName());
 				if (entities != null) {
 					for (Element element : entities) {
-						this.items.put((String) element.getAttributeValue("id"),
+						String elementName = (String) element.getAttributeValue("id");
+						try {
+							this.items.put(elementName,
 								this.extractItem(element));
+						} catch (Exception e) {
+							this.displayError(e, fileName, elementName);
+						}
 					}
 				}
 			}
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			Log.e(TAG, e.getMessage());
 		} catch (JDOMException e) {
-			// TODO Auto-generated catch block
 			Log.e(TAG, e.getMessage());
 		}
 <#elseif fixtureType == "yml">
@@ -113,9 +124,9 @@ public abstract class FixtureBase<T> {
 				new DumperOptions(),
 				new CustomResolver());
 
-		final InputStream inputStream = this.getYml(
-					DataLoader.getPathToFixtures(mode)
-					+ this.getFixtureFileName());
+		String fileName = DataLoader.getPathToFixtures(mode)
+					+ this.getFixtureFileName();
+		final InputStream inputStream = this.getYml(fileName);
 
 		if (inputStream != null) {
 			final Map<?, ?> map = (Map<?, ?>) yaml.load(inputStream);
@@ -126,13 +137,37 @@ public abstract class FixtureBase<T> {
 					for (final Object name : listEntities.keySet()) {
 						final Map<?, ?> currEntity =
 								(Map<?, ?>) listEntities.get(name);
-						this.items.put((String) name,
+						try {
+							this.items.put((String) name,
 								this.extractItem(currEntity));
+						} catch (Exception e) {
+							this.displayError(e, fileName, name.toString());
+						}
 					}
 				}
 			}
 		}
 </#if>
+	}
+
+	/**
+	 * Display a fixture error.
+	 */
+	protected void displayError(final Exception e,
+			final String fileName,
+			final String entityName) {
+		StringBuilder error = new StringBuilder();
+		error.append("Error in ");
+		error.append(fileName);
+		error.append(".${fixtureType}");
+		error.append(" in field ");
+		error.append(entityName);
+		error.append(".");
+		error.append(this.currentFieldName);
+		error.append(" => ");
+		error.append(e.getMessage());
+
+		Log.e(TAG, error.toString());
 	}
 
 	/**
@@ -172,7 +207,6 @@ public abstract class FixtureBase<T> {
 	 * @return index order
 	 */
 	public int getOrder() {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 
@@ -187,7 +221,6 @@ public abstract class FixtureBase<T> {
 		try {
 			ret = assetManager.open(entityName + ".xml");
 		} catch (IOException e) {
-			// TODO Auto-generated method stub
 			Log.w(TAG, "No " + entityName + " fixture file found.");
 		}
 		return ret;
@@ -203,7 +236,6 @@ public abstract class FixtureBase<T> {
 		try {
 			ret = assetManager.open(entityName + ".yml");
 		} catch (IOException e) {
-			// TODO Auto-generated method stub
 			Log.w(TAG, "No " + entityName + " fixture file found.");
 		}
 		return ret;
@@ -229,21 +261,19 @@ public abstract class FixtureBase<T> {
 		 this.serializedBackup = bos.toByteArray();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage());
 		} finally {
 			if (out != null) {
 				try {
 					out.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Log.e(TAG, e.getMessage());
 				}
 			}
 			try {
 				bos.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e(TAG, e.getMessage());
 			}
 		}
 	}
@@ -253,6 +283,7 @@ public abstract class FixtureBase<T> {
 	 * Returns the Map<String, T> loaded from the fixtures.
 	 * @return the Map
 	 */
+	@SuppressWarnings("unchecked")
 	public Map<String, T> getMap() {
 		Map<String, T> result = null;
 		ByteArrayInputStream bis = 
@@ -263,23 +294,21 @@ public abstract class FixtureBase<T> {
 		  result = (LinkedHashMap<String, T>) in.readObject();
 
 		} catch (IOException e) {
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage());
 		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
+			Log.e(TAG, e.getMessage());
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
 				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
+					Log.e(TAG, e.getMessage());
 				}
 			}
 			try {
 				bis.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				Log.e(TAG, e.getMessage());
 			}
 		}
 
@@ -303,6 +332,265 @@ public abstract class FixtureBase<T> {
 	        addImplicitResolver(Tag.NULL, EMPTY, null);
 	        addImplicitResolver(Tag.VALUE, VALUE, "=");
 	    }
+	}
+	</#if>
+
+	/**
+	 * Gets the extracted fixture corresponding to the given name.
+	 * This method will search for a T type, or for any type extending T.
+	 */
+	protected abstract T get(final String key);
+
+	<#if (fixtureType == "yml")>
+
+	/**
+	 * Parse a basic field (for datetimes/enums/relations,
+	 * use the dedicated functions.)
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 * @param type The type to parse (String.class, Integer.class, etc.)
+	 *
+	 * @result The value of the field
+	 */
+	protected <U> U parseField(final Map<?, ?> columns,
+				final String key,
+				final Class<U> type) {
+		this.currentFieldName = key;
+		U result;
+		
+		if (columns.containsKey(key)) {
+			result = (U) columns.get(key);
+		} else {
+			result = null;
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Parse a datetime field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The datetime value of the field
+	 */
+	protected DateTime parseDateTimeField(final Map<?, ?> columns,
+				final String key) {
+		DateTime result;
+		String dateTimeString = this.parseField(columns, key, String.class);
+		if (dateTimeString != null) {
+			result = DateUtils.formatYAMLStringToDateTime(dateTimeString);
+		} else {
+			result = null;
+		}
+
+		return result;
+	}
+
+	/**
+	 * Parse a relation field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The datetime value of the field
+	 */
+	protected <U> U parseSimpleRelationField(final Map<?, ?> columns,
+				final String key,
+				final FixtureBase<U> relationLoader) {
+		U result;
+		String relationString = this.parseField(columns, key, String.class);
+		if (relationString != null) {
+			result = relationLoader.get(relationString);
+		} else {
+			result = null;
+		}
+
+		return result;
+	}
+
+	/**
+	 * Parse a relation field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The datetime value of the field
+	 */
+	protected <U> ArrayList<U> parseMultiRelationField(final Map<?, ?> columns,
+				final String key,
+				final FixtureBase<U> relationLoader) {
+		ArrayList<U> result;
+		Map<?, ?> relationMap = this.parseField(columns, key, Map.class);
+		if (relationMap != null) {
+			result = new ArrayList<U>();
+			for (Object relationName : relationMap.values()) {
+				U relatedEntity = relationLoader.get((String) relationName);
+				if (relatedEntity != null) {
+					result.add(relatedEntity);
+				}
+			}
+		} else {
+			result = null;
+		}
+
+		return result;
+	}
+
+	/**
+	 * Parse a primitive int field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The value of the field, 0 if nothing found
+	 */
+	protected int parseIntField(final Map<?, ?> columns,
+				final String key) {
+		int result;
+		Integer field = this.parseField(columns, key, Integer.class);
+		
+		if (field != null) {
+			result = field.intValue();
+		} else {
+			result = 0;
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Parse a primitive byte field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The value of the field, 0 if nothing found
+	 */
+	protected byte parseByteField(final Map<?, ?> columns,
+				final String key) {
+		byte result;
+		Integer field = this.parseField(columns, key, Integer.class);
+		
+		if (field != null) {
+			result = field.byteValue();
+		} else {
+			result = 0;
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Parse a primitive short field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The value of the field, 0 if nothing found
+	 */
+	protected short parseShortField(final Map<?, ?> columns,
+				final String key) {
+		short result;
+		Integer field = this.parseField(columns, key, Integer.class);
+		
+		if (field != null) {
+			result = field.shortValue();
+		} else {
+			result = 0;
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Parse a primitive char field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The value of the field, '\u0000' if nothing found
+	 */
+	protected char parseCharField(final Map<?, ?> columns,
+				final String key) {
+		char result;
+		String field = this.parseField(columns, key, String.class);
+		
+		if (field != null) {
+			result = field.charAt(0);
+		} else {
+			result = '\u0000';
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Parse a primitive boolean field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The value of the field, 'false' if nothing found
+	 */
+	protected boolean parseBooleanField(final Map<?, ?> columns,
+				final String key) {
+		boolean result;
+		Boolean field = this.parseField(columns, key, Boolean.class);
+		
+		if (field != null) {
+			result = field.booleanValue();
+		} else {
+			result = false;
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Parse a primitive float field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The value of the field, 0.0f if nothing found
+	 */
+	protected float parseFloatField(final Map<?, ?> columns,
+				final String key) {
+		float result;
+		Double field = this.parseField(columns, key, Double.class);
+		
+		if (field != null) {
+			result = field.floatValue();
+		} else {
+			result = 0.0f;
+		}
+		
+		return result;
+	}
+
+	/**
+	 * Parse a primitive double field.
+	 *
+	 * @param columns The map
+	 * @param key The key of the value to retrieve
+	 *
+	 * @result The value of the field, 0.0d if nothing found
+	 */
+	protected double parseDoubleField(final Map<?, ?> columns,
+				final String key) {
+		double result;
+		Double field = this.parseField(columns, key, Double.class);
+		
+		if (field != null) {
+			result = field.doubleValue();
+		} else {
+			result = 0.0d;
+		}
+		
+		return result;
 	}
 	</#if>
 }

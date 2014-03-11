@@ -6,11 +6,14 @@ import android.os.Bundle;
 
 import com.actionbarsherlock.app.SherlockFragment;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 import ${project_namespace}.menu.${project_name?cap_first}Menu;
 
 /**
  * Harmony custom Fragment.
+ * This fragment will help you use a lot of harmony's functionnality
+ * (menu wrappers, etc.)
  */
 public abstract class HarmonyFragment extends SherlockFragment {
 
@@ -21,9 +24,9 @@ public abstract class HarmonyFragment extends SherlockFragment {
 	}
 
 	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		super.onPrepareOptionsMenu(menu);
-
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		
 		try {
 			${project_name?cap_first}Menu.getInstance(this.getActivity(), this)
 											.clear(menu);

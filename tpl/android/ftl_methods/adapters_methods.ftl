@@ -127,107 +127,11 @@
 	<#return result />
 </#function>
 
-
-
-<#function ymlExtractFieldAdapter objectName field curr indentLevel = 0>
-	<#assign result = "" />
-	<#assign tab = "\n" + Utils.getIndentString(indentLevel) />
-	<#if (!field.internal)>
-		<#assign result = result + "${tab}if (columns.get(${NamingUtils.fixtureAlias(field)}) != null) {" />
-		<#if !field.relation??>
-			<#if (field.type?lower_case=="int" || field.type?lower_case=="integer" || field.type?lower_case=="zipcode" || field.type?lower_case=="ean")>
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-				<#assign result = result + "${tab}		(Integer) columns.get(${NamingUtils.fixtureAlias(field)}));" />
-			<#elseif field.type?lower_case=="double">
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-				<#assign result = result + "${tab}		(Double) columns.get(${NamingUtils.fixtureAlias(field)}));" />
-			<#elseif field.type?lower_case=="float">
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-				<#assign result = result + "${tab}		((Double) columns.get(${NamingUtils.fixtureAlias(field)})).floatValue());" />
-			<#elseif field.type?lower_case=="datetime">
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-				<#assign result = result + "${tab}		DateUtils.formatYAMLStringToDateTime(" />
-				<#assign result = result + "${tab}			(String) columns.get(${NamingUtils.fixtureAlias(field)})" />
-				<#assign result = result + "));" />
-			<#elseif field.type?lower_case=="boolean">
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-				<#assign result = result + "${tab}		(Boolean) columns.get(${NamingUtils.fixtureAlias(field)}));" />
-			<#elseif (field.type?lower_case == "string")>
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-				<#assign result = result + "${tab}		(String) columns.get(${NamingUtils.fixtureAlias(field)}));" />
-			<#elseif (field.type?lower_case == "short")>
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-				<#assign result = result + "${tab}		((Integer) columns.get(${NamingUtils.fixtureAlias(field)})).shortValue());" />
-			<#elseif (field.type?lower_case == "char" || field.type?lower_case == "character")>
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-				<#assign result = result + "${tab}		((String) columns.get(${NamingUtils.fixtureAlias(field)})).charAt(0));" />
-			<#elseif (field.type?lower_case == "byte")>
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-				<#assign result = result + "${tab}		((Integer) columns.get(${NamingUtils.fixtureAlias(field)})).byteValue());" />
-			<#elseif (field.harmony_type == "enum")>
-				<#assign enumType = enums[field.type] />
-				<#if (enumType.id??)>
-					<#assign idEnum = enumType.fields[enumType.id] />
-					<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
-						<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${field.type}.fromValue(" />
-						<#assign result = result + "${tab}		(Integer) columns.get(${NamingUtils.fixtureAlias(field)})));" />
-					<#else>
-						<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${field.type}.fromValue(" />
-						<#assign result = result + "${tab}		(String) columns.get(${NamingUtils.fixtureAlias(field)})));" />
-					</#if>
-				<#else>
-					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${field.type}.valueOf(" />
-					<#assign result = result + "${tab}		(String) columns.get(${NamingUtils.fixtureAlias(field)})));" />
-				</#if>
-			</#if>
-		<#else>
-			<#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne">
-					<#assign result = result + "${tab}	final ${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} =" />
-					<#assign result = result + "${tab}		${field.relation.targetEntity?cap_first}DataLoader.getInstance(" />
-					<#assign result = result + "${tab}				this.ctx).items.get(" />
-					<#assign result = result + "${tab}						(String) columns.get(${NamingUtils.fixtureAlias(field)}));" />
-					<#assign result = result + "${tab}	if (${field.relation.targetEntity?uncap_first} != null) {" />
-					<#assign result = result + "${tab}		${objectName}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first});" />
-				<#if field.relation.inversedBy??>
-					<#assign invField = MetadataUtils.getInversingField(field) />
-					<#assign result = result + "${tab}		${invField.type} ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =" />
-					<#assign result = result + "${tab}			${field.relation.targetEntity?uncap_first}.get${invField.name?cap_first}();" />
-					<#assign result = result + "${tab}		if (${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s == null) {" />
-					<#assign result = result + "${tab}			${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =" />
-					<#assign result = result + "${tab}				new ArrayList<${curr.name?cap_first}>();" />
-					<#assign result = result + "${tab}		}" />
-					<#assign result = result + "${tab}		${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s.add(${objectName});" />
-					<#assign result = result + "${tab}		${field.relation.targetEntity?uncap_first}.set${invField.name?cap_first}(${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s);" />
-				</#if>
-				<#assign result = result + "${tab}	}" />
-			<#else>
-				<#assign result = result + "${tab}	ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s =" />
-				<#assign result = result + "${tab}		new ArrayList<${field.relation.targetEntity?cap_first}>();" />
-				<#assign result = result + "${tab}	final Map<?, ?> ${field.relation.targetEntity?uncap_first}sMap =" />
-				<#assign result = result + "${tab}		(Map<?, ?>) columns.get(${NamingUtils.fixtureAlias(field)});" />
-				<#assign result = result + "${tab}	for (final Object ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap.values()) {" />
-				<#assign result = result + "${tab}		if (${field.relation.targetEntity?cap_first}DataLoader.getInstance(" />
-				<#assign result = result + "${tab}			this.ctx).items.containsKey(" />
-				<#assign result = result + "${tab}					(String) ${field.relation.targetEntity?uncap_first}Name)) {" />
-				<#assign result = result + "${tab}		${field.relation.targetEntity?uncap_first}s.add(" />
-				<#assign result = result + "${tab}				${field.relation.targetEntity?cap_first}DataLoader.getInstance(" />
-				<#assign result = result + "${tab}						this.ctx).items.get((String) ${field.relation.targetEntity?uncap_first}Name));" />
-				<#assign result = result + "${tab}		}" />
-				<#assign result = result + "${tab}	}" />
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first}s);" />
-			</#if>
-		</#if>
-		<#assign result = result + "${tab}}\n" />
-	</#if>
-	<#return result />
-</#function>
-
-
-
 <#function xmlExtractFieldAdapter objectName field curr indentLevel = 0>
 	<#assign result = "" />
 	<#assign tab = "\n" + Utils.getIndentString(indentLevel) />
 	<#if (!field.internal)>
+		<#assign result = result + "${tab}this.currentFieldName = ${NamingUtils.fixtureAlias(field)};" />
 		<#assign result = result + "${tab}String ${NamingUtils.fixtureParsedAlias(field)} = element.getChildText(${NamingUtils.fixtureAlias(field)});" />
 		<#assign result = result + "${tab}if (${NamingUtils.fixtureParsedAlias(field)} != null) {" />
 		<#if !field.relation??>
@@ -375,7 +279,11 @@
 	<#if !field.internal && !field.hidden && field.writable>
 			<#if !field.relation??>
 				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
+					<#if (field.type=="Boolean")>
+		<#assign result = result + "${tab}if (this.model.is${field.name?cap_first}() != null) {" />					
+					<#else>
 		<#assign result = result + "${tab}if (this.model.get${field.name?cap_first}() != null) {" />
+					</#if>
 					<#if field.type?lower_case=="datetime">
 						<#if field.harmony_type=="datetime">
 		<#assign result = result + "${tab}	this.${field.name}View.setDateTime(this.model.get${field.name?cap_first}());" />
@@ -402,7 +310,11 @@
 	<#if (!field.internal && !field.hidden)>
 			<#if (!field.relation??)>
 		    	<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
+					<#if (field.type == "Boolean")>
+		<#assign result = result + "${tab}if (this.model.is${field.name?cap_first}() != null) {" />
+					<#else>
 		<#assign result = result + "${tab}if (this.model.get${field.name?cap_first}() != null) {" />
+					</#if>
 					<#if (field.type?lower_case == "datetime")>
 						<#if (field.harmony_type == "datetime")>
 		<#assign result = result + "${tab}	this.${field.name}View.setText(" />
@@ -452,7 +364,11 @@
 	<#if (!field.internal && !field.hidden)>
 		<#if (!field.relation??)>
 			<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
-				<#assign result = result + "${tab}if (model.get${field.name?cap_first}() != null) {" />
+				<#if (field.type == "Boolean")>
+					<#assign result = result + "${tab}if (model.is${field.name?cap_first}() != null) {" />
+				<#else>
+					<#assign result = result + "${tab}if (model.get${field.name?cap_first}() != null) {" />
+				</#if>
 				<#assign result = result + "${tab}	${ViewUtils.setAdapterLoader(field)}" />
 				<#assign result = result + "${tab}}" />
 			<#else>

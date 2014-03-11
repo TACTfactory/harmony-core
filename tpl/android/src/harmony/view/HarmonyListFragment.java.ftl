@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.actionbarsherlock.app.SherlockListFragment;
 import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
 import com.actionbarsherlock.view.MenuItem;
 
 import ${project_namespace}.menu.${project_name?cap_first}Menu;
@@ -50,11 +51,12 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 	}
 
 	@Override
-	public void onPrepareOptionsMenu(Menu menu) {
-		super.onPrepareOptionsMenu(menu);
-		menu.clear();
-
+	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+		super.onCreateOptionsMenu(menu, inflater);
+		
 		try {
+			${project_name?cap_first}Menu.getInstance(this.getActivity(), this)
+											.clear(menu);
 			${project_name?cap_first}Menu.getInstance(this.getActivity(), this)
 										  .updateMenu(menu, this.getActivity());
 		} catch (Exception e) {

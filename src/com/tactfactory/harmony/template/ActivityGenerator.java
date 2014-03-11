@@ -23,11 +23,13 @@ import com.tactfactory.harmony.meta.TranslationMetadata;
 import com.tactfactory.harmony.meta.TranslationMetadata.Group;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.template.androidxml.AttrsFile;
+import com.tactfactory.harmony.template.androidxml.ColorsFile;
 import com.tactfactory.harmony.template.androidxml.DimensFile;
 import com.tactfactory.harmony.template.androidxml.ManifestUpdater;
 import com.tactfactory.harmony.template.androidxml.StylesFile;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.PackageUtils;
+
 import freemarker.template.TemplateException;
 
 /**
@@ -127,6 +129,17 @@ public class ActivityGenerator extends BaseGenerator {
 				this.generateAllAction(cm.getName());
 			}
 		}
+		
+		final String fullFilePath = String.format("%s%s/%s/%s",
+				this.getAdapter().getSourcePath(),
+				ApplicationMetadata.INSTANCE.getProjectNameSpace(),
+				this.getAdapter().getController(),
+				"package-info.java");
+		final String fullTemplatePath = String.format("%s%s",
+				this.getAdapter().getTemplateSourceControlerPath(),
+				"package-info.java");
+		
+		super.makeSource(fullTemplatePath, fullFilePath, false);
 
 		this.updateLibrary("universal-image-loader-1.8.6-with-sources.jar");
 		this.updateLibrary("ImageViewTouch.jar");
@@ -167,19 +180,26 @@ public class ActivityGenerator extends BaseGenerator {
 				null,
 				pinnedHeaderFolder);
 		
-
 		AttrsFile.mergeFromTo(this.getAdapter(),
 				Context.getCurrentBundleFolder() 
 					+ this.getAdapter().getTemplateRessourceValuesPath() 
 					+ "/attrs.xml",
 				this.getAdapter().getRessourceValuesPath() 
 					+ "/attrs.xml");
+		
 		StylesFile.mergeFromTo(this.getAdapter(),
 				Context.getCurrentBundleFolder() 
 					+ this.getAdapter().getTemplateRessourceValuesPath() 
 					+ "/styles.xml",
 				this.getAdapter().getRessourceValuesPath() 
 					+ "/styles.xml");
+
+		ColorsFile.mergeFromTo(this.getAdapter(),
+				Context.getCurrentBundleFolder() 
+					+ this.getAdapter().getTemplateRessourceValuesPath() 
+					+ "/colors.xml",
+				this.getAdapter().getRessourceValuesPath() 
+					+ "/colors.xml");
 		
 		this.manifestUpdater.setApplicationTheme("@style/PinnedTheme");
 
@@ -229,14 +249,27 @@ public class ActivityGenerator extends BaseGenerator {
 				false);
 		
 
-		try {
-			MenuGenerator menuGenerator = new MenuGenerator(this.getAdapter());
-			menuGenerator.generateMenu("CrudCreate");
-			menuGenerator.generateMenu("CrudEditDelete");
-			menuGenerator.updateMenu();
-		} catch (Exception e) {
-			
-		}
+		MenuGenerator menuGenerator = new MenuGenerator(this.getAdapter());
+		menuGenerator.generateMenu("CrudCreate");
+		menuGenerator.generateMenu("CrudEditDelete");
+		menuGenerator.generateMenu("Save");
+		menuGenerator.updateMenu();
+		
+		TranslationMetadata.addDefaultTranslation("menu_item_create",
+				"Add",
+				Group.COMMON);
+		
+		TranslationMetadata.addDefaultTranslation("menu_item_edit",
+				"Edit",
+				Group.COMMON);
+		
+		TranslationMetadata.addDefaultTranslation("menu_item_delete",
+				"Delete",
+				Group.COMMON);
+		
+		TranslationMetadata.addDefaultTranslation("menu_item_save",
+				"Save",
+				Group.COMMON);
 
 		
 		if (this.isDate || this.isTime) {	
@@ -352,6 +385,9 @@ public class ActivityGenerator extends BaseGenerator {
 
 			this.generateShowAction(entityName);
 			this.generateListAction(entityName);
+			
+			this.makeSourceControler("entity-package-info.java",
+					"package-info.java");
 
 			TranslationMetadata.addDefaultTranslation(
 					entityName.toLowerCase(Locale.ENGLISH)
@@ -363,7 +399,7 @@ public class ActivityGenerator extends BaseGenerator {
 						+ "_progress_load_message",
 					entityName + " is loading…",
 					Group.MODEL);
-
+			
 			new TranslationGenerator(this.getAdapter()).generateStringsXml();
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
@@ -579,7 +615,7 @@ public class ActivityGenerator extends BaseGenerator {
 
 		super.makeSource(fullTemplatePath, fullFilePath, false);
 	}
-
+	
 	/**
 	 * Make Resource file.
 	 *

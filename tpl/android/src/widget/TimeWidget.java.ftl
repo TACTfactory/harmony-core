@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,6 +15,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TimePicker;
 
+import com.google.common.base.Strings;
+
 import ${project_namespace}.${project_name?cap_first}Application;
 import ${project_namespace}.R;
 import ${project_namespace}.harmony.util.DateUtils;
@@ -23,6 +24,9 @@ import ${project_namespace}.harmony.util.DateUtils.TimeFormatType;
 
 /**
  * View for Time selection.
+ * This view is composed of a disabled edit text and
+ * of an alert dialogs (TimePickerDialog).
+ * It is really helpful to let your users chose a time.
  */
 public class TimeWidget extends FrameLayout implements OnClickListener {
 	/** Enum format24h value H24. */
@@ -136,7 +140,7 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 
         final String time =
         		this.timeEditText.getText().toString();
-		if (!TextUtils.isEmpty(time)) {
+		if (!Strings.isNullOrEmpty(time)) {
 			final String strInputTime =
 					time;
 			dt = DateUtils.formatStringToTime(strInputTime);
@@ -188,7 +192,7 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 	 */
 	public DateTime getTime() {
 		DateTime result;
-		if (this.timeEditText.getText().toString().isEmpty()) {
+		if (Strings.isNullOrEmpty(this.timeEditText.getText().toString())) {
 			result = null;
 		} else {
 			result = DateUtils.formatStringToTime(

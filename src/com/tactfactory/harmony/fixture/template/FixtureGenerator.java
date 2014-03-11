@@ -87,18 +87,20 @@ public class FixtureGenerator extends BaseGenerator {
 				TactFileUtils.copyDirectory(
 						fixtAppSrc, fixtAppDest, fileFilter);
 				ConsoleUtils.displayDebug(
-						"Copying fixtures/app into " + fixtAppDest.getPath());
+						"Copying fixtures/app into ",
+						fixtAppDest.getPath());
 
 				TactFileUtils.copyDirectory(
 						fixtDebugSrc, fixtDebugDest, fileFilter);
 				ConsoleUtils.displayDebug(
-						"Copying fixtures/debug into "
-							+ fixtDebugDest.getPath());
+						"Copying fixtures/debug into ",
+						fixtDebugDest.getPath());
 
 				TactFileUtils.copyDirectory(
 						fixtTestSrc, fixtTestDest, fileFilter);
 				ConsoleUtils.displayDebug(
-						"Copying fixtures/test into " + fixtTestDest.getPath());
+						"Copying fixtures/test into ",
+						fixtTestDest.getPath());
 
 			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);
@@ -134,6 +136,8 @@ public class FixtureGenerator extends BaseGenerator {
 			this.makeSource("FixtureBase.java", "FixtureBase.java", force);
 			this.makeSource("DataManager.java", "DataManager.java", force);
 			this.makeSource("DataLoader.java", "DataLoader.java", force);
+			
+			this.makeSource("package-info.java", "package-info.java", false);
 
 			//Update SQLiteOpenHelper
 			new SQLiteGenerator(this.getAdapter()).generateDatabase();

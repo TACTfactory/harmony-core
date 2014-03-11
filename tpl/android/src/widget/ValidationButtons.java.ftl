@@ -11,7 +11,7 @@ import android.widget.Button;
 import android.widget.FrameLayout;
 
 /**
- * Widget for validation. (1 button ok, 1 button cancel)
+ * Simple widget for validation. (1 button ok, 1 button cancel)
  */
 public class ValidationButtons extends FrameLayout {
 

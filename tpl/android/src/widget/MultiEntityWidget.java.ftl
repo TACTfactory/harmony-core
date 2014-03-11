@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${project_namespace}.harmony.widget;
 
 import java.util.ArrayList;
@@ -84,8 +85,6 @@ public class MultiEntityWidget
 	private void initializeComponent(View view) {
 		this.entityEditText = (EditText) view.findViewById(R.id.editText);
 		this.entityEditText.setOnClickListener(this);
-		
-		//this.recreateDialog(this.title, this.getStrings(), this.checkedItems);
 	}
 	
 	/**

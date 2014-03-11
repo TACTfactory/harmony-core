@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.meta.TranslationMetadata.Group;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
@@ -126,12 +127,16 @@ public class FieldMetadata extends BaseMetadata {
 			
 			TranslationMetadata.addDefaultTranslation(
 						key + "_" + componentName.toLowerCase(Locale.ENGLISH),
-						this.getName(),
+						CaseFormat.LOWER_CAMEL.to(
+								CaseFormat.UPPER_CAMEL, this.getName()),
 						Group.MODEL);
 	
 			TranslationMetadata.addDefaultTranslation(
 					key + "_invalid_field_error",
-					"Field " + this.getName() + " is invalid.",
+					"Field " 
+							+ CaseFormat.LOWER_CAMEL.to(
+									CaseFormat.UPPER_CAMEL, this.getName())
+							+ " is invalid.",
 					Group.MODEL);
 		}
 	}

@@ -2,19 +2,28 @@
 	<#return menuName?replace("MenuWrapper", "", 'i')?upper_case />
 </#function>
 <@header?interpret />
-package ${project_namespace}.menu;
+package ${project_namespace}.menu.base;
 
+import android.support.v4.app.FragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
 
+<#if menus??>
+	<#list menus as menu>
+import ${project_namespace}.menu.${menu};
+	</#list>
+</#if>
+
 /**
  * ${project_name?cap_first}MenuBase.
+ * This class is regenerated with harmony.
+ * To modify or learn more about this class,
+ * please see ${project_name?cap_first}Menu.
  */
 public abstract class ${project_name?cap_first}MenuBase {
 	<#assign idMenu = 1 />
@@ -77,7 +86,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 
 		for (int i = 0; i < this.menus.size(); i++) {
 			this.menus.valueAt(i).initializeMenu(menu,
-					(Activity) this.ctx,
+					(FragmentActivity) this.ctx,
 					this.fragment,
 					this.ctx);
 		}
@@ -103,7 +112,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	public void updateMenu(final Menu menu) {
 		for (int i = 0; i < this.menus.size(); i++) {
 			this.menus.valueAt(i).updateMenu(menu,
-					(Activity) this.ctx,
+					(FragmentActivity) this.ctx,
 					this.fragment,
 					this.ctx);
 		}
@@ -115,7 +124,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	public void clear(final Menu menu) {
 		for (int i = 0; i < this.menus.size(); i++) {
 			this.menus.valueAt(i).clear(menu,
-					(Activity) this.ctx,
+					(FragmentActivity) this.ctx,
 					this.fragment,
 					this.ctx);
 		}
@@ -194,5 +203,33 @@ public abstract class ${project_name?cap_first}MenuBase {
 					this.ctx,
 					this.fragment);
 		}
+	}
+
+	/**
+	 * Hide the menus.
+	 */
+	public void hideMenus() {
+		for (int i = 0; i < this.menus.size(); i++) {
+			this.menus.valueAt(i).hide(menu,
+					(FragmentActivity) this.ctx,
+					this.fragment,
+					this.ctx);
+		}
+		
+		((FragmentActivity) this.ctx).supportInvalidateOptionsMenu();
+	}
+	
+	/**
+	 * Show the menus.
+	 */
+	public void showMenus() {
+		for (int i = 0; i < this.menus.size(); i++) {
+			this.menus.valueAt(i).show(menu,
+					(FragmentActivity) this.ctx,
+					this.fragment,
+					this.ctx);
+		}
+		
+		((FragmentActivity) this.ctx).supportInvalidateOptionsMenu();
 	}
 }

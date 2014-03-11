@@ -8,10 +8,20 @@
  */
 package com.tactfactory.harmony.plateforme;
 
+import java.io.File;
+import java.util.List;
+
+import com.tactfactory.harmony.exception.NotImplementedException;
 import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
+
+import freemarker.template.Configuration;
 
 /** RIM Blackberry Adapter of project structure. */
 public final class RimAdapter extends BaseAdapter {
+	/** Error message for not implemented feature. */
+	private static final String NOT_IMPLEMENTED_MESSAGE =
+			"Rim adapter has not been implemented yet.";
 
 	/**
 	 * Constructor.
@@ -25,27 +35,43 @@ public final class RimAdapter extends BaseAdapter {
 
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 
 	@Override
 	public String getNameSpaceEntity(final ClassMetadata cm,
 			final String type) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 
 	@Override
 	public String getNativeType(final String type) {
-		// TODO Auto-generated method stub
-		return null;
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 
 	@Override
 	public void resizeImage() {
-		// TODO Auto-generated method stub
-
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 
+	@Override
+	public boolean filesEqual(String oldContent, String newContent,
+			String fileName, boolean ignoreHeader) {
+		return oldContent.equals(newContent);
+	}
+	
+	@Override
+	public void installGitLibrary(String url, String pathLib,
+			String versionTag, String libName, List<File> filesToDelete,
+			String libraryProjectPath, String target, String referencePath,
+			boolean isSupportV4Dependant) {
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
+	}
+
+	@Override
+	public SourceFileManipulator getFileManipulator(
+			final File file,
+			final Configuration config) {
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
+	}
 }

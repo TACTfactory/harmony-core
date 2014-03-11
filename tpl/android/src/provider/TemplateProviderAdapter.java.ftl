@@ -9,6 +9,11 @@ import ${local_namespace}.base.${curr.name?cap_first}ProviderAdapterBase;
 
 /**
  * ${curr.name?cap_first}ProviderAdapter.
+ *
+ * A provider adapter is used to separate your provider requests for
+ * each entity of your application.
+ * You will find here basic methods for database manipulation.
+ * Feel free to override any method here.
  */
 public class ${curr.name?cap_first}ProviderAdapter
 					extends ${curr.name?cap_first}ProviderAdapterBase {

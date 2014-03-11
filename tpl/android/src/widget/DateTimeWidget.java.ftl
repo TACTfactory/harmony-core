@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,6 +16,8 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.TimePicker;
 
+import com.google.common.base.Strings;
+
 import ${project_namespace}.${project_name?cap_first}Application;
 import ${project_namespace}.R;
 import ${project_namespace}.harmony.util.DateUtils;
@@ -24,6 +25,9 @@ import ${project_namespace}.harmony.util.DateUtils.TimeFormatType;
 
 /**
  * View for DateTime selection.
+ * This view is composed of two disabled edit text next to each other and
+ * of two alert dialogs (DatePickerDialog & TimePickerDialog).
+ * It is really helpful to let your users chose a date.
  */
 public class DateTimeWidget extends FrameLayout implements OnClickListener {
 	/** Enum format24h value H24. */
@@ -159,7 +163,7 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 				}
 		        final String date = this.dateEditText.getText().toString();
 
-				if (!TextUtils.isEmpty(date)) {
+				if (!Strings.isNullOrEmpty(date)) {
 					dt = DateUtils.formatStringToDate(date);
 				}
 
@@ -184,7 +188,7 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 				}
 		        final String time =
 		        		this.timeEditText.getText().toString();
-				if (!TextUtils.isEmpty(time)) {
+				if (!Strings.isNullOrEmpty(time)) {
 					dt = DateUtils.formatStringToTime(time);
 				}
 
@@ -235,7 +239,7 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 	 */
 	public DateTime getDate() {
 		DateTime result;
-		if (this.dateEditText.getText().toString().isEmpty()) {
+		if (Strings.isNullOrEmpty(this.dateEditText.getText().toString())) {
 			result = null;
 		} else {
 			result = DateUtils.formatStringToDate(
@@ -262,7 +266,7 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 	 */
 	public DateTime getTime() {
 		DateTime result;
-		if (this.timeEditText.getText().toString().isEmpty()) {
+		if (Strings.isNullOrEmpty(this.timeEditText.getText().toString())) {
 			result = null;
 		} else {
 			result = DateUtils.formatStringToTime(
@@ -292,8 +296,8 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 	 */
 	public DateTime getDateTime() {
 		DateTime result;
-		if (this.timeEditText.getText().toString().isEmpty()
-				|| this.dateEditText.getText().toString().isEmpty()) {
+		if (Strings.isNullOrEmpty(this.timeEditText.getText().toString())
+				|| Strings.isNullOrEmpty(this.dateEditText.getText().toString())) {
 			result = null;
 		} else {
 			result = DateUtils.formatStringToDateTime(

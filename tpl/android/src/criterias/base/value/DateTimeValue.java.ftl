@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${project_namespace}.criterias.base.value;
 
 import com.google.common.collect.ObjectArrays;

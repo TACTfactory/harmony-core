@@ -78,21 +78,19 @@ public abstract class Console /*extends Harmony*/ {
 
 		@Override
 		public String toString() {
-			final StringBuilder result = new StringBuilder();
-			result.append('\t');
-			result.append(ARGUMENT_PREFIX);
-			result.append(this.fullName);
-
-			result.append("\t\t");
+			final StringBuilder result = new StringBuilder(
+					String.format("\t%s%-12s", ARGUMENT_PREFIX, this.fullName));
+			
+			result.append("\t");
 			if (!Strings.isNullOrEmpty(this.shortName)) {
-				result.append(ARGUMENT_PREFIX_SHORT);
-				result.append(this.shortName);
+				result.append(
+						String.format(
+								"%s%-4s",
+								ARGUMENT_PREFIX_SHORT,
+								this.shortName));
 			}
-
-			result.append("\t\t");
-			result.append(this.description);
-
-			result.append('\n');
+			
+			result.append(String.format("\t%s\n", this.description));
 			return result.toString();
 		}
 
@@ -154,7 +152,9 @@ public abstract class Console /*extends Harmony*/ {
 			ConsoleUtils.displayLicence(HARMONY_VERSION);
 
 			// If no valid parameters
-			ConsoleUtils.display("Usage:\n\t[options] command [arguments]\n");
+			ConsoleUtils.display(
+							"Usage:\n\t[options] command [arguments]\n");
+			
 			ConsoleUtils.display("\nOptions:\n"
 					+ Option.HELP
 					+ Option.QUIET
@@ -162,10 +162,13 @@ public abstract class Console /*extends Harmony*/ {
 					+ Option.VERSION
 					+ Option.ANSI
 					+ Option.NO_ANSI);
-
-			ConsoleUtils.display("Tips : please use 'list' command to"
+			
+			ConsoleUtils.display("\nCommand:\n\tUse 'list' command to"
 					 + " display available commands!\n");
-
+			
+			ConsoleUtils.display("\nArguments:\n\tUse '--help <command>' to"
+					 + " display available arguments of command!\n");
+			
 		} else {
 			final String commandOption = null;
 

@@ -1,13 +1,11 @@
-<#assign curr = entities[current_entity] />	
-
-	/**
+<#assign curr = entities[current_entity] />	/**
 	 * This stub of code is regenerated. DO NOT MODIFY.
 	 * 
 	 * @param dest Destination parcel
 	 * @param flags flags
 	 */
 	public void writeToParcelRegen(Parcel dest, int flags) {
-		<#if curr.inheritance?? && curr.inheritance.superclass??>
+		<#if curr.inheritance?? && curr.inheritance.superclass?? && entities[curr.inheritance.superclass.name]??>
 		super.writeToParcelRegen(dest, flags);
 		</#if>
 		<#list curr.fields?values as field>
@@ -69,4 +67,3 @@
 			</#if>
 		</#list>		
 	}
-

@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${project_namespace}.harmony.widget;
 
 import android.content.Context;
@@ -7,6 +8,8 @@ import android.widget.Spinner;
 
 /**
  * Spinner dedicated to enums.
+ * By giving this spinner an Enum, you will be able to let your users chose
+ * a value amongst the available values of your enum.
  */
 public class EnumSpinner extends Spinner {
 	/** ArrayAdapter for enums. */

@@ -58,3 +58,11 @@
 -dontwarn org.jdom2.**
 
 -target 1.6
+
+# ActionBarSherlock
+-keep class android.support.v4.app.** { *; }
+-keep interface android.support.v4.app.** { *; }
+-keep class android.support.v4.content.Loader
+-keep class android.support.v4.widget.CursorAdapter
+-keep class com.actionbarsherlock.** { *; }
+-keep interface com.actionbarsherlock.** { *; }

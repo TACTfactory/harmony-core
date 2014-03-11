@@ -42,11 +42,89 @@ public class ${curr.name}ListAdapter
 	/**
 	 * Constructor.
 	 * @param ctx context
-	 * @param fragment fragment
 	 */
-	public ${curr.name}ListAdapter(Context ctx,
-			${curr.name?cap_first}ListFragment fragment) {
+	public ${curr.name}ListAdapter(Context ctx) {
 		super(ctx);
+	}
+
+	/**
+     * Constructor.
+     * 
+	 * @param context The context
+	 * @param resource The resource
+	 * @param textViewResourceId The resource id of the text view
+	 * @param objects The list of objects of this adapter
+	 */
+	public ${curr.name}ListAdapter(Context context,
+			int resource,
+			int textViewResourceId,
+			List<${curr.name}> objects) {
+		super(context, resource, textViewResourceId, objects);
+	}
+
+	/**
+     * Constructor.
+     *
+	 * @param context The context
+	 * @param resource The resource
+	 * @param textViewResourceId The resource id of the text view
+	 * @param objects The list of objects of this adapter
+	 */
+	public ${curr.name}ListAdapter(Context context,
+			int resource,
+			int textViewResourceId,
+			${curr.name}[] objects) {
+		super(context, resource, textViewResourceId, objects);
+	}
+
+	/**
+     * Constructor.
+     * 
+	 * @param context The context
+	 * @param resource The resource
+	 * @param textViewResourceId The resource id of the text view
+	 */
+	public ${curr.name}ListAdapter(Context context,
+			int resource,
+			int textViewResourceId) {
+		super(context, resource, textViewResourceId);
+	}
+
+	/**
+     * Constructor.
+     * 
+	 * @param context The context
+	 * @param textViewResourceId The resource id of the text view
+	 * @param objects The list of objects of this adapter
+	 */
+	public ${curr.name}ListAdapter(Context context,
+			int textViewResourceId,
+			List<${curr.name}> objects) {
+		super(context, textViewResourceId, objects);
+	}
+
+	/**
+     * Constructor.
+     * 
+	 * @param context The context
+	 * @param textViewResourceId The resource id of the text view
+	 * @param objects The list of objects of this adapter
+	 */
+	public ${curr.name}ListAdapter(Context context,
+			int textViewResourceId,
+			${curr.name}[] objects) {
+		super(context, textViewResourceId, objects);
+	}
+
+	/**
+     * Constructor.
+     * 
+	 * @param context The context
+	 * @param textViewResourceId The resource id of the text view
+	 */
+	public ${curr.name}ListAdapter(Context context,
+			int textViewResourceId) {
+		super(context, textViewResourceId);
 	}
 
 	/** Holder row. */
@@ -80,7 +158,7 @@ public class ${curr.name}ListAdapter
 			<#list fields?values as field>
 				<#if (!field.internal && !field.hidden)>
 					<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
-						<#if (field.type=="boolean")>
+						<#if (field.type?lower_case == "boolean")>
 			CheckBox ${field.name}View =
 				(CheckBox) convertView.findViewById(
 						R.id.row_${curr.name?lower_case}_${field.name?lower_case});

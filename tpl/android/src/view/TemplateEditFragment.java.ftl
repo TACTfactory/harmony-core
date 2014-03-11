@@ -52,15 +52,7 @@ import ${curr.namespace}.harmony.widget.DateTimeWidget;
 import ${project_namespace}.harmony.widget.MultiEntityWidget;</#if><#if hasToOneRelation>
 import ${project_namespace}.harmony.widget.SingleEntityWidget;</#if><#if (ViewUtils.hasTypeEnum(fields?values))>
 import ${project_namespace}.harmony.widget.EnumSpinner;</#if>
-import ${project_namespace}.harmony.widget.ValidationButtons;
-import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
-<#list relations as relation>
-	<#if (!relation.internal && !relation.hidden)>
-		<#if (relation.relation.type != "ManyToMany")>
-//import ${data_namespace}.${relation.relation.targetEntity}SQLiteAdapter;
-		</#if>
-	</#if>
-</#list>
+import ${project_namespace}.menu.SaveMenuWrapper.SaveMenuInterface;
 <#if hasToManyRelation>import ${project_namespace}.provider.${curr.name}ProviderAdapter;</#if>
 ${ImportUtils.importRelatedProviderUtils(curr, true)}
 <#list relations as field>
@@ -70,13 +62,16 @@ import ${project_namespace}.data.${field.relation.targetEntity}SQLiteAdapter;
 		</#if>
 	</#if>
 </#list>
+import ${project_namespace}.provider.${project_name?cap_first}Contract;
 
 /** ${curr.name} create fragment.
+ *
+ * This fragment gives you an interface to edit a ${curr.name}.
  *
  * @see android.app.Fragment
  */
 public class ${curr.name}EditFragment extends HarmonyFragment
-			implements OnValidationListener {
+			implements SaveMenuInterface {
 	/** Model data. */
 	protected ${curr.name} model = new ${curr.name}();
 
@@ -84,7 +79,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 	<#list fields?values as field>
 		<#if (!field.internal && !field.hidden && field.writable)>
 			<#if (!field.relation??)>
-				<#if (field.type=="boolean")>
+				<#if (field.type?lower_case == "boolean")>
 	/** ${field.name} View. */
 	protected CheckBox ${field.name}View;
 				<#elseif field.type?lower_case=="datetime">
@@ -122,8 +117,6 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			</#if>
 		</#if>
 	</#list>
-	/** Save button. */
-	protected ValidationButtons validationButtons;
 
 	/** Initialize view of curr.fields.
 	 *
@@ -133,7 +126,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		<#list fields?values as field>
 			<#if (!field.internal && !field.hidden && field.writable)>
 				<#if !field.relation??>
-					<#if field.type=="boolean">
+					<#if field.type?lower_case == "boolean">
 		this.${field.name}View = (CheckBox) view.findViewById(
 				R.id.${curr.name?lower_case}_${field.name?lower_case});
 					<#elseif field.type?lower_case == "datetime">
@@ -182,10 +175,6 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 				</#if>
 			</#if>
 		</#list>
-
-		this.validationButtons = (ValidationButtons) view.findViewById(
-					R.id.${curr.name?lower_case}_validation);
-		this.validationButtons.setListener(this);
 	}
 
 	/** Load data from model to curr.fields view. */
@@ -228,7 +217,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 						false);
 
 		final Intent intent =  getActivity().getIntent();
-		this.model = (${curr.name}) intent.getSerializableExtra(
+		this.model = (${curr.name}) intent.getParcelableExtra(
 				${curr.name}.PARCEL);
 
 		this.initializeComponent(view);
@@ -377,7 +366,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			Cursor ${field.name}Cursor = 
 					this.ctx.getContentResolver().query(
 							${field.name}Uri,
-							new String[]{${field.relation.targetEntity}SQLiteAdapter.ALIASED_COL_ID},
+							new String[]{${project_name?cap_first}Contract.${field.relation.targetEntity}.ALIASED_COL_${entities[field.relation.targetEntity].ids[0].name?upper_case}},
 							null,
 							null, 
 							null);
@@ -387,9 +376,9 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 				while (${field.name}Cursor.moveToNext()) {
 					int ${field.name}Id = ${field.name}Cursor.getInt(
 							${field.name}Cursor.getColumnIndex(
-									${field.relation.targetEntity}SQLiteAdapter.COL_ID));
+									${project_name?cap_first}Contract.${field.relation.targetEntity}.COL_${entities[field.relation.targetEntity].ids[0].name?upper_case}));
 					for (${field.relation.targetEntity} ${field.name} : this.${field.name}List) {
-						if (${field.name}.getId() == ${field.name}Id) {
+						if (${field.name}.get${entities[field.relation.targetEntity].ids[0].name?cap_first}() == ${field.name}Id) {
 							this.associated${field.name?cap_first}List.add(${field.name});
 						}
 					}
@@ -420,16 +409,11 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 </#if>
 
 	@Override
-	public void onValidationSelected() {
+	public void onClickSave() {
 		if (this.validateData()) {
 			this.saveData();
 			new EditTask(this, this.model).execute();
 		}
-	}
-
-	@Override
-	public void onCancelSelected() {
-		this.getActivity().finish();
 	}
 
 <#list relations as relation>
@@ -458,7 +442,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 		<#else>
 		
 		for (${relation.relation.targetEntity} item : items) {
-			if (item.getId() == this.model.get${relation.name?cap_first}().getId()) {
+			if (item.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}() == this.model.get${relation.name?cap_first}().get${entities[relation.relation.targetEntity].ids[0].name?cap_first}()) {
 				this.${relation.name}Adapter.selectItem(item);
 			}
 		}

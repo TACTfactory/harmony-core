@@ -93,11 +93,6 @@
 		<#list entities?values as entity>			
 				<#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && !entity.hidden)>
 		<Button
-			android:id="@+id/${entity.name?lower_case}_create_button"
-			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			android:text="Create new ${entity.name}" />
-		<Button
 			android:id="@+id/${entity.name?lower_case}_list_button"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"

@@ -1,3 +1,11 @@
+/**
+ * This file is part of the Harmony package.
+ *
+ * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.tactfactory.harmony.dependencies.android.sdk;
 
 import java.io.BufferedReader;
@@ -251,8 +259,12 @@ public class AndroidSDKManager
 	 */
 	public static final boolean checkIfAndroidSDKExists(final String sdkPath) {
 		boolean result = false;
-		final File file = new File(sdkPath + "/tools/android");
+		File file = new File(sdkPath + "/tools/android");
 		result = file.exists();
+		if (!result) {
+			file = new File(sdkPath + "/tools/android.bat");
+			result = file.exists();
+		}
 		return result;
 	}
 	

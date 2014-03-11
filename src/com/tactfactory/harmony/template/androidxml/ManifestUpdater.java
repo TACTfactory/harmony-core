@@ -1,3 +1,11 @@
+/**
+ * This file is part of the Harmony package.
+ *
+ * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.tactfactory.harmony.template.androidxml;
 
 import java.util.ArrayList;
@@ -32,11 +40,17 @@ public class ManifestUpdater extends XmlManager {
 	private static final String ELEMENT_PERMISSION = "uses-permission";
 	/** Service Element. */
 	private static final String ELEMENT_SERVICE = "service";
+	/** Provider Element. */
+	private static final String ELEMENT_PROVIDER = "provider";
 	
 	/** name attribute. */
 	private static final String ATTRIBUTE_NAME = "name";
 	/** label attribute. */
 	private static final String ATTRIBUTE_LABEL = "label";
+	/** Authorities attribute. */
+	private static final String ATTRIBUTE_AUTHORITIES = "authorities";
+	/** Description attribute. */
+	private static final String ATTRIBUTE_DESCRIPTION = "description";
 	/** exported attribute. */
 	private static final String ATTRIBUTE_EXPORTED = "exported";
 	/** mimeType attribute. */
@@ -89,7 +103,7 @@ public class ManifestUpdater extends XmlManager {
 				classFile);
 
 		// Debug Log
-		ConsoleUtils.displayDebug("Update Manifest : " + pathRelatif);
+		ConsoleUtils.displayDebug("Update Manifest : ", pathRelatif);
 		
 
 		// Load Root element
@@ -264,7 +278,7 @@ public class ManifestUpdater extends XmlManager {
 		if (setPerm) {
 			final Element permissionElem = new Element(ELEMENT_PERMISSION);
 			permissionElem.setAttribute(ATTRIBUTE_NAME, permission, ns);
-			rootNode.addContent(permissionElem);
+			rootNode.addContent(2, permissionElem);
 		}
 	}
 	
@@ -304,6 +318,49 @@ public class ManifestUpdater extends XmlManager {
 			permissionElem.setAttribute(ATTRIBUTE_NAME, serviceName, ns);
 			permissionElem.setAttribute(ATTRIBUTE_LABEL, label, ns);
 			appElem.addContent(permissionElem);
+		}
+	}
+	
+	/**
+	 * Adds a content provider to the manifest.xml
+	 * @param name The name of the provider
+	 * @param label The label of the provider
+	 * @param authorities The authorities of the provider
+	 * @param description The description of the provider
+	 */
+	public void addProvider(final String name,
+			final String label,
+			final String authorities,
+			final String description) {
+		// Load Root element
+		final Element rootNode = this.getDocument().getRootElement();
+
+		// Load Name space (required for manipulate attributes)
+		final Namespace ns = rootNode.getNamespace(NAMESPACE_ANDROID);
+		final Element appElem = rootNode.getChild(ELEMENT_APPLICATION);
+		boolean setProvider = true;
+		for (Element elem : appElem.getChildren(ELEMENT_PROVIDER)) {
+			if (elem.getAttributeValue(ATTRIBUTE_NAME, ns).equals(name)) {
+				setProvider = false;
+				break;
+			}
+		}
+		
+		if (setProvider) {
+			final Element providerElem = new Element(ELEMENT_PROVIDER);
+			providerElem.setAttribute(ATTRIBUTE_NAME, name, ns);
+			providerElem.setAttribute(ATTRIBUTE_AUTHORITIES,
+					authorities,
+					ns);
+			providerElem.setAttribute(ATTRIBUTE_LABEL,
+					label, 
+					ns);
+			providerElem.setAttribute(ATTRIBUTE_DESCRIPTION,
+					description, 
+					ns);
+			
+
+			appElem.addContent(providerElem);
 		}
 	}
 	

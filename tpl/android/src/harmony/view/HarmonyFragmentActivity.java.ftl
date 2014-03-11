@@ -12,13 +12,15 @@ import ${project_namespace}.${project_name?cap_first}ApplicationBase.DeviceType;
 
 /**
  * Custom FragmentActivity for harmony projects.
+ * This fragment activity helps you use the menu wrappers, detect alone if
+ * you're in tablet/dual mode.
  */
 public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
 	/** Hack number for support v4 onActivityResult. */
 	protected static final int SUPPORT_V4_RESULT_HACK = 0xFFFF;
 
 	@Override
-	public boolean onPrepareOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu) {
 		boolean result = true;
 
 		try {
@@ -31,7 +33,7 @@ public abstract class HarmonyFragmentActivity extends SherlockFragmentActivity {
 		}
 
 		if (result) {
-			result = super.onPrepareOptionsMenu(menu);
+			result = super.onCreateOptionsMenu(menu);
 		}
 
 		return result;

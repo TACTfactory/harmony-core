@@ -1,7 +1,7 @@
 <#function setLoader field>
 	<#assign type=field.type />
 	<#assign ret="this."+field.name+"View" />
-	<#if (type=="boolean")>
+	<#if (type?lower_case=="boolean")>
 		<#assign ret=ret+".setChecked(this.model.is"+field.name?cap_first+"());" />
 	<#elseif (field.harmony_type?lower_case == "enum")>
 		<#assign ret=ret+".setSelectedItem(this.model.get"+field.name?cap_first+"());" />

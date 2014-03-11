@@ -13,14 +13,14 @@ import android.support.v4.content.Loader;
 
 /**
  * Multiple load class for entities.
- * @param T The entity
+ * This helps you do a lot of provider requests simultaneously
+ * with only one manager.
+ *
  */
-public class MultiLoader<T> implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MultiLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 	/** Uri map. */
 	protected Map<Uri, UriLoadedCallback> uriMap =
 			new LinkedHashMap<Uri, UriLoadedCallback>();
-	/** Entity to load. */
-	protected T model;
 	/** Associated fragment. */
 	protected HarmonyFragment fragment;
 	
@@ -28,10 +28,8 @@ public class MultiLoader<T> implements LoaderManager.LoaderCallbacks<Cursor> {
 	 * Constructor.
 	 *
 	 * @param fragment The fragment.
-	 * @param model The model to load
 	 */
-	public MultiLoader(HarmonyFragment fragment, T model) {
-		this.model = model;
+	public MultiLoader(HarmonyFragment fragment) {
 		this.fragment = fragment;
 	}
 

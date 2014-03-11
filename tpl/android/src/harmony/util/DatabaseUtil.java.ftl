@@ -10,7 +10,9 @@ import com.google.common.base.Strings;
 import com.google.common.io.Files;
 
 /**
- * Utility class for backup/restore procedures for the DB.
+ * Utility class for the sqlite DB.
+ * It contains methods to import and export the db and various operations
+ * on android ContentValues.
  */
 public class DatabaseUtil {
 

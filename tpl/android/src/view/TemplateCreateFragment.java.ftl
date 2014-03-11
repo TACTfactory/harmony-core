@@ -48,15 +48,16 @@ import ${curr.namespace}.harmony.widget.DateTimeWidget;
 import ${project_namespace}.harmony.widget.MultiEntityWidget;</#if><#if hasToOneRelation>
 import ${project_namespace}.harmony.widget.SingleEntityWidget;</#if><#if (ViewUtils.hasTypeEnum(fields?values))>
 import ${project_namespace}.harmony.widget.EnumSpinner;</#if>
-import ${project_namespace}.harmony.widget.ValidationButtons;
-import ${project_namespace}.harmony.widget.ValidationButtons.OnValidationListener;
+import ${project_namespace}.menu.SaveMenuWrapper.SaveMenuInterface;
 ${ImportUtils.importRelatedProviderUtils(curr, true)}
 
 /**
  * ${curr.name} create fragment.
+ *
+ * This fragment gives you an interface to create a ${curr.name}.
  */
 public class ${curr.name}CreateFragment extends HarmonyFragment
-			implements OnValidationListener {
+			implements SaveMenuInterface {
 	/** Model data. */
 	protected ${curr.name} model = new ${curr.name}();
 
@@ -64,7 +65,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	<#list fields?values as field>
 		<#if (!field.internal && !field.hidden && field.writable)>
 			<#if !field.relation??>
-				<#if field.type=="boolean">
+				<#if field.type?lower_case=="boolean">
 	/** ${field.name} View. */
 	protected CheckBox ${field.name}View;
 				<#elseif field.type?lower_case=="datetime">
@@ -102,8 +103,6 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 			</#if>
 		</#if>
 	</#list>
-	/** Save button. */
-	protected ValidationButtons validationButtons;
 
 	/** Initialize view of fields.
 	 *
@@ -113,7 +112,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		<#list fields?values as field>
 			<#if (!field.internal && !field.hidden && field.writable)>
 				<#if !field.relation??>
-					<#if field.type=="boolean">
+					<#if field.type?lower_case=="boolean">
 		this.${field.name}View =
 				(CheckBox) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
 					<#elseif field.type?lower_case == "datetime">
@@ -162,10 +161,6 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 				</#if>
 			</#if>
 		</#list>
-
-		this.validationButtons = (ValidationButtons) view.findViewById(
-					R.id.${curr.name?lower_case}_validation);
-		this.validationButtons.setListener(this);
 	}
 
 	/** Load data from model to fields view. */
@@ -354,15 +349,10 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 </#if>
 
 	@Override
-	public void onValidationSelected() {
+	public void onClickSave() {
 		if (this.validateData()) {
 			this.saveData();
 			new CreateTask(this, this.model).execute();
 		}
-	}
-
-	@Override
-	public void onCancelSelected() {
-		this.getActivity().finish();
 	}
 }

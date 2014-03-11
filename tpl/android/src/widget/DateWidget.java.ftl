@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
-import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,11 +15,16 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 
+import com.google.common.base.Strings;
+
 import ${project_namespace}.R;
 import ${project_namespace}.harmony.util.DateUtils;
 
 /**
  * View for Date selection.
+ * This view is composed of a disabled edit text and
+ * of an alert dialogs (DatePickerDialog).
+ * It is really helpful to let your users chose a date.
  */
 public class DateWidget extends FrameLayout implements OnClickListener {
 	/** Date Click Listener. */
@@ -102,7 +106,7 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 
         final String createdAtDate =
         		this.dateEditText.getText().toString();
-		if (!TextUtils.isEmpty(createdAtDate)) {
+		if (!Strings.isNullOrEmpty(createdAtDate)) {
 			final String strInputDate =
 					createdAtDate;
 			dt = DateUtils.formatStringToDate(strInputDate);
@@ -136,7 +140,7 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 	 */
 	public DateTime getDate() {
 		DateTime result;
-		if (this.dateEditText.getText().toString().isEmpty()) {
+		if (Strings.isNullOrEmpty(this.dateEditText.getText().toString())) {
 			result = null;
 		} else {
 			result = DateUtils.formatStringToDate(

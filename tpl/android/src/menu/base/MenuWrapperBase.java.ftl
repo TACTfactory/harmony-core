@@ -1,18 +1,20 @@
 <@header?interpret />
-package ${project_namespace}.menu;
+package ${project_namespace}.menu.base;
 
+import android.support.v4.app.FragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
 /**
  * MenuWrapperBase.
+ * This interface is used to declare your menu groups easily.
+ * Please see examples to understand how this works.
  */
-public abstract class MenuWrapperBase {
+public interface MenuWrapperBase {
 	/**
 	 * Menu initialization.
 	 * @param menu The menu object
@@ -20,8 +22,8 @@ public abstract class MenuWrapperBase {
 	 * @param fragment The current fragment.
 	 * @param ctx The context
 	 */
-	protected abstract void initializeMenu(Menu menu,
-			Activity activity,
+	void initializeMenu(Menu menu,
+			FragmentActivity activity,
 			Fragment fragment,
 			Context ctx);
 
@@ -32,8 +34,8 @@ public abstract class MenuWrapperBase {
 	 * @param fragment The current fragment.
 	 * @param ctx The context
 	 */
-	protected abstract void updateMenu(Menu menu,
-										Activity activity,
+	void updateMenu(Menu menu,
+										FragmentActivity activity,
 										Fragment fragment,
 										Context ctx);
 
@@ -45,7 +47,7 @@ public abstract class MenuWrapperBase {
 	 * @param fragment The fragment in which it has been clicked
 	 * @return true if event has been treated
 	 */
-	protected abstract boolean dispatch(MenuItem item,
+	boolean dispatch(MenuItem item,
 										 Context ctx,
 									     Fragment fragment);
 
@@ -59,7 +61,7 @@ public abstract class MenuWrapperBase {
 	 * @param ctx The context
 	 * @param fragment The fragment
 	 */
-	protected abstract void onActivityResult(int requestCode,
+	void onActivityResult(int requestCode,
 										      int resultCode,
 											  Intent data,
 											  Context ctx,
@@ -73,8 +75,33 @@ public abstract class MenuWrapperBase {
 	 * @param fragment The current fragment.
 	 * @param ctx The context
 	 */
-	protected abstract void clear(Menu menu,
-			Activity activity,
+	void clear(Menu menu,
+			FragmentActivity activity,
+			Fragment fragment,
+			Context ctx);
+
+
+	/**
+	 * Menu hide.
+	 * @param menu The menu object
+	 * @param activity The current activity.
+	 * @param fragment The current fragment.
+	 * @param ctx The context
+	 */
+	void hide(Menu menu,
+			FragmentActivity activity,
+			Fragment fragment,
+			Context ctx);
+	
+	/**
+	 * Menu show.
+	 * @param menu The menu object
+	 * @param activity The current activity.
+	 * @param fragment The current fragment.
+	 * @param ctx The context
+	 */
+	void show(Menu menu,
+			FragmentActivity activity,
 			Fragment fragment,
 			Context ctx);
 }

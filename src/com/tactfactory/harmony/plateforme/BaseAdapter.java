@@ -8,10 +8,16 @@
  */
 package com.tactfactory.harmony.plateforme;
 
+import java.io.File;
+import java.util.List;
+
 import com.tactfactory.harmony.Context;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
+
+import freemarker.template.Configuration;
 
 /** Base Adapter of project structure. */
 public abstract class BaseAdapter {
@@ -81,6 +87,8 @@ public abstract class BaseAdapter {
 	private String fixture 		= "fixture";
 	/** Criterias path. */
 	private String criterias  	= "criterias";
+	/** Base path. */
+	private String base  		= "base";
 
 	// File
 	/** Manifest path. */
@@ -122,6 +130,44 @@ public abstract class BaseAdapter {
 
 	/** Convert image structure to alternative resolution. */
 	public abstract void resizeImage();
+	
+	/**
+	 * Checks whether the two versions of the given file are different.
+	 * Header can be ignored.
+	 * 
+	 * @param oldContent Old content of the file
+	 * @param newContent New content of the file
+	 * @param fileName The file name
+	 * @param ignoreHeader True if ignore header
+	 * 
+	 * @return True if files are the same
+	 */
+	public abstract boolean filesEqual(String oldContent,
+			String newContent,
+			String fileName,
+			boolean ignoreHeader);	
+	/**
+	 * Install an android project library from git.
+	 * @param url The url of the git repository.
+	 * @param pathLib The folder path where the repo should be downloaded
+	 * @param versionTag The tag/commit/branch you want to checkout
+	 * @param libName The library name (ie. demact-abs)
+	 * @param filesToDelete The list of files/folders to delete (samples, etc.)
+	 * @param libraryProjectPath The library project path inside the downloaded
+	 * 				folder
+	 * @param target The SDK build target
+	 * @param referencePath The library path to reference in your project
+	 * @param isSupportV4Dependant true if the library is supportv4 dependent
+	 */
+	public abstract void installGitLibrary(String url,
+			String pathLib,
+			String versionTag,
+			String libName,
+			List<File> filesToDelete,
+			String libraryProjectPath,
+			String target,
+			String referencePath,
+			boolean isSupportV4Dependant);
 
 	// Utils
 	/**
@@ -232,6 +278,38 @@ public abstract class BaseAdapter {
 				this.getSource(),
 				ApplicationMetadata.INSTANCE.getProjectNameSpace(),
 				this.getMenu());
+	}
+	
+	/**
+	 * Get the project's menu base path.
+	 * @return The menu base path
+	 */
+	public final String getMenuBasePath() {
+		return String.format("%s/%s/",
+				this.getMenuPath(),
+				this.getBase());
+	}
+	
+	/**
+	 * Get the project's menu path.
+	 * @return The menu path
+	 */
+	public final String getTemplateMenuPath() {
+		return String.format("%s/%s/%s/%s/",
+				Harmony.getTemplatesPath(),
+				this.getPlatform(),
+				this.getSource(),
+				this.getMenu());
+	}
+	
+	/**
+	 * Get the project's menu base path.
+	 * @return The menu base path
+	 */
+	public final String getTemplateMenuBasePath() {
+		return String.format("%s/%s/",
+				this.getTemplateMenuPath(),
+				this.getBase());
 	}
 
 	/**
@@ -1009,6 +1087,20 @@ public abstract class BaseAdapter {
 	public final void setCriterias(final String criterias) {
 		this.criterias = criterias;
 	}
+	
+	/**
+	 * @return the base
+	 */
+	public final String getBase() {
+		return this.base;
+	}
+
+	/**
+	 * @param base the base to set
+	 */
+	public final void setBase(final String base) {
+		this.base = base;
+	}
 
 	/**
 	 * @return the common
@@ -1319,4 +1411,14 @@ public abstract class BaseAdapter {
 		this.commandBundleTemplates = commandBundleTemplates;
 	}
 
+	/**
+	 * Gets the source file manipulator associated to this adapter.
+	 *  
+	 * @param file The file to open.
+	 * 
+	 * @return The associated file manipulator
+	 */
+	public abstract SourceFileManipulator getFileManipulator(
+			final File file,
+			final Configuration config);
 }

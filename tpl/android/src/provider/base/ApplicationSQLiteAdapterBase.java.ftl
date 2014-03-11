@@ -16,8 +16,11 @@ import java.util.ArrayList;
 import ${project_namespace}.criterias.base.CriteriasBase;
 
 /**
- * This is the base SQLiteAdapter.
- * @param <T> Type
+ * This is the base SQLiteAdapter. DO NOT MODIFY THIS CLASS AS IT IS REGENERATED
+ *
+ * This is the base class for all basic operations for your sqlite adapters.
+ *
+ * @param <T> Entity type of this adapter.
  */
 public abstract class SQLiteAdapterBase<T> {
 
@@ -269,10 +272,6 @@ public abstract class SQLiteAdapterBase<T> {
 				item = this.cursorToItem(cursor);
 				result.add(item);
 			} while (cursor.moveToNext());
-
-			//if (DemactApplication.DEBUG)
-			//Log.d(TAG, "Read DB(" + TABLE_NAME + ") count : "
-		    //			+ cursor.getCount() );
 		}
 
 		return result;

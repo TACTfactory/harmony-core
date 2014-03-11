@@ -1,10 +1,10 @@
 /**************************************************************************
  * ${fileName}, ${project_name} Android
  *
- * Copyright ${.now?string("yyyy")} Mickael Gaillard / TACTfactory
+ * Copyright ${.now?string("yyyy")}
  * Description : 
  * Author(s)   : Harmony
- * Licence     : all right reserved
+ * Licence     : 
  * Last update : ${.now?date}
  *
  **************************************************************************/

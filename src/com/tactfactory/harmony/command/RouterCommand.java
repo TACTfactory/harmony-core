@@ -8,6 +8,8 @@
  */
 package com.tactfactory.harmony.command;
 
+import java.util.LinkedHashMap;
+
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -49,9 +51,13 @@ public class RouterCommand extends BaseCommand {
 
 	@Override
 	public final void summary() {
-		ConsoleUtils.display("\n> ROUTER \n"
-				+ "\t" + ROUTER_DEBUG + "\t\t => List all URI\n"
-				+ "\t" + ROUTER_GENERATE_MANIFEST + " => Generate Manifest\n");
+		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
+		commands.put(ROUTER_DEBUG, 	"List all URI");
+		commands.put(ROUTER_GENERATE_MANIFEST, 	"Generate Manifest");
+		
+		ConsoleUtils.displaySummary(
+				BUNDLE,
+				commands);
 	}
 
 	@Override

@@ -1,3 +1,4 @@
+<@header?interpret />
 package ${project_namespace}.criterias.base.value;
 
 import java.util.ArrayList;
@@ -5,6 +6,9 @@ import java.util.Arrays;
 
 import com.google.common.base.Joiner;
 
+/**
+ * This criteria value represents a method (ie. strtf(param1, param2))
+ */
 public class MethodValue extends CriteriaValue {
 	/** Parameters. */
 	private String[] values;
