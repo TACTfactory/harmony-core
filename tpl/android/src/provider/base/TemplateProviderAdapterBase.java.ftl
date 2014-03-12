@@ -386,9 +386,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				${relation.relation.joinTable}SQLiteAdapter ${relation.name}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 				${relation.name}Adapter.open(this.getDb());
 						<#if (relation.relation.orders?? && relation.relation.orders?size > 0) >
-				result = ${relation.name}Adapter.getBy${curr.name}(id, ${project_name?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS, selection, selectionArgs, "<#list relation.relation.orders?keys as orderKey>${orderKey} ${relation.relation.orders[orderKey]}<#if orderKey_has_next> AND </#if></#list>");
+				result = ${relation.name}Adapter.getBy${relation.name?cap_first}(id, ${project_name?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS, selection, selectionArgs, "<#list relation.relation.orders?keys as orderKey>${orderKey} ${relation.relation.orders[orderKey]}<#if orderKey_has_next> AND </#if></#list>");
 						<#else>
-				result = ${relation.name}Adapter.getBy${curr.name}(id, ${project_name?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS, selection, selectionArgs, null);
+				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id, ${project_name?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS, selection, selectionArgs, null);
 						</#if>
 					<#else>
 				${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);

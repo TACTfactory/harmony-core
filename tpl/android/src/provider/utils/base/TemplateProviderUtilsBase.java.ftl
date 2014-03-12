@@ -98,7 +98,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 				ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
 				${relation.relation.targetEntity?uncap_first}Values.put(
-						${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.targetEntity)}ID,
+						${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)},
 						${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
 
 				operations.add(ContentProviderOperation.newInsert(
@@ -188,7 +188,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 				ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
 				${relation.relation.targetEntity?uncap_first}Values.put(
-						${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.targetEntity)}ID,
+						${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)},
 						${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
 
 				operations.add(ContentProviderOperation.newInsert(
@@ -413,7 +413,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 		for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 			ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
-			${relation.relation.targetEntity?uncap_first}Values.put(${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.targetEntity)}ID,
+			${relation.relation.targetEntity?uncap_first}Values.put(${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)},
 					${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
 			${relation.relation.targetEntity?uncap_first}Values.put(${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)},
 					item.get${curr_ids[0].name?cap_first}());
@@ -521,7 +521,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 		for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 			ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
-			${relation.relation.targetEntity?uncap_first}Values.put(${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.targetEntity)}ID,
+			${relation.relation.targetEntity?uncap_first}Values.put(${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)},
 					${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
 			${relation.relation.targetEntity?uncap_first}Values.put(${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)},
 					item.get${curr_ids[0].name?cap_first}());
@@ -628,7 +628,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 			while (${relation.relation.joinTable?uncap_first}Cursor.moveToNext()) {
 				int index = ${relation.relation.joinTable?uncap_first}Cursor.getColumnIndex(
-						${project_name?cap_first}Contract.${relation.relation.joinTable?cap_first}.${NamingUtils.alias(relation.relation.targetEntity)}ID);
+						${project_name?cap_first}Contract.${relation.relation.joinTable?cap_first}.${NamingUtils.alias(relation.name)});
 				int ${relation.relation.targetEntity?uncap_first}Id = ${relation.relation.joinTable?uncap_first}Cursor.getInt(index);
 
 				arrayValue.addValue(String.valueOf(

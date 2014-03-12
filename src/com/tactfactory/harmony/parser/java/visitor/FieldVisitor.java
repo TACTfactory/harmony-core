@@ -645,58 +645,57 @@ public class FieldVisitor {
 		} else {
 			joinTable = this.projectEntities.get(rel.getJoinTable());
 		}
-
 		
-		FieldMetadata mappingField = this.generateJoinTableRefField(
-				(EntityMetadata) currentField.getOwner(),
-				joinTable);
-		
-		mappingField.getRelation().setInversedBy(currentField);
-		currentField.getRelation().setMappedBy(mappingField);
-		
-		if (this.projectEntities.containsKey(rel.getEntityRef().getName())) {
-			EntityMetadata entityRef = 
-					this.projectEntities.get(rel.getEntityRef().getName());
-			this.generateJoinTableRefField(
-					(EntityMetadata) entityRef,
-					joinTable);
-		} 
-	}
-	
-	/**
-	 * Generate a field pointing to the given referencedClass in the
-	 * given Jointable.
-	 * 
-	 * @param referencedClass The class to reference
-	 * @param joinTable The join table
-	 * @return The field
-	 */
-	private FieldMetadata generateJoinTableRefField(EntityMetadata referencedClass,
-			EntityMetadata joinTable) {
-		
-		FieldMetadata mappingField;
-		String mappingFieldName = referencedClass.getName() + "Id";
-		
-		if (joinTable.getFields().containsKey(mappingFieldName)) {
-			// If field already exists
-			mappingField = joinTable.getFields().get(mappingFieldName);
+		// Create or retrieve inversing field in the joinTable
+		FieldMetadata invertField = currentField.getRelation().getMappedBy();
+		if (invertField == null) {
+			invertField = currentField.getRelation().getInversedBy();
+		}
+		String invertFieldName;
+		if (invertField != null) {
+			invertFieldName = invertField.getName();
 		} else {
-			// Else create field
-			mappingField = new FieldMetadata(joinTable);
-			mappingField.setRelation(new RelationMetadata());
-			joinTable.getFields().put(mappingFieldName, mappingField);
-			joinTable.getRelations().put(mappingFieldName, mappingField);
-
-			mappingField.setName(mappingFieldName);
-			mappingField.setColumnName(mappingFieldName);
-			mappingField.setType(TYPE_INTEGER);
-			mappingField.setColumnDefinition(TYPE_INTEGER);
-			mappingField.setHarmonyType(TYPE_INTEGER);
-			mappingField.getRelation().setEntityRef(referencedClass);
-			mappingField.getRelation().setType("ManyToOne");
+			invertFieldName = currentField.getOwner().getName() + "InternalId";
 		}
 		
-		return mappingField;
+		FieldMetadata joinTableInvertField = 
+				joinTable.getFields().get(invertFieldName);
+		
+		if (joinTableInvertField == null) {
+			joinTableInvertField = new FieldMetadata(joinTable);
+			joinTableInvertField.setName(invertFieldName);
+			joinTable.getRelations().put(invertFieldName, joinTableInvertField);
+			joinTable.getFields().put(invertFieldName, joinTableInvertField);
+			joinTableInvertField.setColumnName(invertFieldName);
+			joinTableInvertField.setType(TYPE_INTEGER);
+			joinTableInvertField.setColumnDefinition(TYPE_INTEGER);
+			joinTableInvertField.setHarmonyType(TYPE_INTEGER);
+			joinTableInvertField.setRelation(new RelationMetadata());
+			joinTableInvertField.getRelation().setEntityRef(
+					(EntityMetadata) currentField.getOwner());
+			joinTableInvertField.getRelation().setType("ManyToOne");
+		}
+		
+		currentField.getRelation().setMappedBy(joinTableInvertField);
+		
+		// Create or retrieve associated field in the joinTable
+		FieldMetadata joinTableAssociatedField = 
+				joinTable.getFields().get(currentField.getName());
+		
+		if (joinTableAssociatedField == null) {
+			joinTableAssociatedField = new FieldMetadata(joinTable);
+			joinTableAssociatedField.setName(currentField.getName());
+			joinTable.getRelations().put(currentField.getName(), joinTableAssociatedField);
+			joinTable.getFields().put(currentField.getName(), joinTableAssociatedField);
+			joinTableAssociatedField.setColumnName(currentField.getName());
+			joinTableAssociatedField.setType(TYPE_INTEGER);
+			joinTableAssociatedField.setColumnDefinition(TYPE_INTEGER);
+			joinTableAssociatedField.setHarmonyType(TYPE_INTEGER);
+			joinTableAssociatedField.setRelation(new RelationMetadata());
+			joinTableAssociatedField.getRelation().setEntityRef(
+					(EntityMetadata) currentField.getRelation().getEntityRef());
+			joinTableAssociatedField.getRelation().setType("ManyToOne");
+		}
 	}
 	
     /**
