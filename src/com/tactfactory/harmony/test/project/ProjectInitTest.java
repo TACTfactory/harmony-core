@@ -10,44 +10,90 @@ package com.tactfactory.harmony.test.project;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.Collection;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
+import org.junit.runners.Parameterized.Parameters;
 
+import com.google.common.base.Strings;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.ProjectDiscover;
 import com.tactfactory.harmony.command.ProjectCommand;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.template.ProjectGenerator;
 import com.tactfactory.harmony.test.CommonTest;
+import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
  * Test class for project initialization.
  */
+@RunWith(Parameterized.class)
 public class ProjectInitTest extends CommonTest {
-
+	
+	public ProjectInitTest(ApplicationMetadata currentMetadata) {
+		super(currentMetadata);
+	}
 	/**
 	 * Initialization of the test.
 	 * @throws Exception if something bad happened.
 	 */
 	@BeforeClass
-	public static void setUpBefore() throws Exception {
-		CommonTest.setUpBefore();
+	public static void setUpBefore() {
+		//CommonTest.setUpBefore();
 	}
 
 	@Before
 	@Override
-	public final void setUp() throws Exception {
+	public final void setUp() throws RuntimeException {
 		super.setUp();
 	}
 
 	@After
 	@Override
-	public final void tearDown() throws Exception {
+	public final void tearDown() throws RuntimeException {
 		super.tearDown();
 	}
+	
+	@Override
+	public void setUpBeforeNewParameter() {
+		// Base configs
+		ConsoleUtils.setAnsi(false);
+		ConsoleUtils.setQuiet(false);
+		ConsoleUtils.setDebug(true);
 
+		// Clean folder
+		CommonTest.cleanAndroidFolder(false);
+
+		// Project test config
+		ApplicationMetadata.INSTANCE.setName(
+				this.currentMetadata.getName());
+		
+		ApplicationMetadata.INSTANCE.setProjectNameSpace(
+				this.currentMetadata.getProjectNameSpace());
+
+		harmony = Harmony.getInstance();
+
+		if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
+			final String localProp =
+					String.format("%s/%s",
+							Harmony.getProjectAndroidPath(),
+							"local.properties");
+
+			ApplicationMetadata.setAndroidSdkPath(
+					ProjectDiscover.getSdkDirFromPropertiesFile(localProp));
+
+			if (ApplicationMetadata.getAndroidSdkPath() == null) {
+				ApplicationMetadata.setAndroidSdkPath(
+						"/opt/android-sdk-linux_86/");
+			}
+		}
+	}
+	
 	/**
 	 * Test the initialization of the android project.
 	 */
@@ -71,10 +117,11 @@ public class ProjectInitTest extends CommonTest {
 		CommonTest.hasFindFile("android/project.properties");
 
 		CommonTest.hasFindFile("android/src");
-		CommonTest.hasFindFile(
-				"android/src/com/tactfactory/harmony/test/demact");
-		CommonTest.hasFindFile(
-				"android/src/com/tactfactory/harmony/test/demact/entity");
+		CommonTest.hasFindFile("android/src/" 
+				+ this.currentMetadata.getProjectNameSpace().replace('.', '/'));
+		CommonTest.hasFindFile("android/src/" 
+				+ this.currentMetadata.getProjectNameSpace().replace('.', '/')
+				+ "/entity");
 		//this.isFindFile("android/res/");
 
 		CommonTest.hasFindFile("android/libs");
@@ -155,4 +202,8 @@ public class ProjectInitTest extends CommonTest {
 		// TODO add asserts (for folder/file exist..)
 	}*/
 
+	@Parameters
+	public static Collection<Object[]> getParameters() {
+		return CommonTest.getParameters();
+	}
 }

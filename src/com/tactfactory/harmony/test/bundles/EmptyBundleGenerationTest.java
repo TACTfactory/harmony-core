@@ -48,14 +48,14 @@ public class EmptyBundleGenerationTest extends CommonTest {
 	 * @throws Exception if something bad happends.
 	 */
 	@BeforeClass
-	public static void setUpBefore() throws Exception {
+	public static void setUpBefore() throws RuntimeException {
 		CommonTest.setUpBefore();
 
 	}
 
 	@Before
 	@Override
-	public final void setUp() throws Exception {
+	public final void setUp() throws RuntimeException {
 		super.setUp();
 		// Delete bundle folder if exists
 		final File existingFolder = new File(String.format("%s/%s-%s",
@@ -70,7 +70,7 @@ public class EmptyBundleGenerationTest extends CommonTest {
 
 	@After
 	@Override
-	public final void tearDown() throws Exception {
+	public final void tearDown() throws RuntimeException {
 		super.tearDown();
 	}
 

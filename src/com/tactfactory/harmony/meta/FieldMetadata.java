@@ -467,4 +467,9 @@ public class FieldMetadata extends BaseMetadata {
 	public final void setWritable(final boolean writable) {
 		this.writable = writable;
 	}
+	
+	@Override
+	public String toString() {
+		return String.format("FieldMetadata : %s", this.getName());
+	}
 }
