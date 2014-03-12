@@ -218,7 +218,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 
 		final Intent intent =  getActivity().getIntent();
 		this.model = (${curr.name}) intent.getParcelableExtra(
-				${curr.name}.PARCEL);
+				${project_name?cap_first}Contract.${curr.name}.PARCEL);
 
 		this.initializeComponent(view);
 		this.loadData();
