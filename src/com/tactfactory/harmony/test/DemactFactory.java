@@ -28,6 +28,9 @@ public class DemactFactory extends ProjectMetadataFactory {
 		EntityMetadata user = new EntityMetadata();
 		user.setName("User");
 		
+		EntityMetadata userToUser = new EntityMetadata();
+		userToUser.setName("UsertoUser");
+		
 		EntityMetadata client = new EntityMetadata();
 		client.setName("Client");
 
@@ -62,6 +65,7 @@ public class DemactFactory extends ProjectMetadataFactory {
 		postToCategory.setName("PosttoCategory");
 		
 		demact.getEntities().put(user.getName(), user);
+		demact.getEntities().put(userToUser.getName(), userToUser);
 		demact.getEntities().put(client.getName(), client);
 		demact.getEntities().put(comment.getName(), comment);
 		demact.getEntities().put(category.getName(), category);
@@ -114,8 +118,10 @@ public class DemactFactory extends ProjectMetadataFactory {
 		user.getImports().add(CLASS_ID);
 		user.getImports().add(CLASS_INHERITANCE_TYPE);
 		user.getImports().add(CLASS_MANY_TO_ONE);
+		user.getImports().add(CLASS_MANY_TO_MANY);
 		user.getImports().add(CLASS_TABLE);
 		user.getImports().add(CLASS_INHERITANCE_MODE);
+		user.getImports().add(CLASS_ARRAYLIST);
 
 		client.getImports().add(CLASS_SERIALIZABLE);
 		client.getImports().add(CLASS_PARCELABLE);
@@ -221,6 +227,8 @@ public class DemactFactory extends ProjectMetadataFactory {
 		hiddenEntity.setHidden(true);
 		postToCategory.setInternal(true);
 		postToCategory.setHidden(true);
+		userToUser.setInternal(true);
+		userToUser.setHidden(true);
 		
 		
 		// Set inheritance
@@ -274,7 +282,9 @@ public class DemactFactory extends ProjectMetadataFactory {
 				user, "title", false, false);
 		ProjectMetadataFactory.generateField(
 				user, "fullName", false, false, "firstname || ' ' || lastname");
-
+		ProjectMetadataFactory.generateField(
+				user, "friends", false, true);
+		
 		ProjectMetadataFactory.generateField(
 				client, "adress", false, false);
 
@@ -370,9 +380,14 @@ public class DemactFactory extends ProjectMetadataFactory {
 				hiddenEntity, "content", false, false);
 		
 		ProjectMetadataFactory.generateField(
-				postToCategory, "PostId", false, false);
+				postToCategory, "PostInternalId", false, false);
 		ProjectMetadataFactory.generateField(
-				postToCategory, "CategoryId", false, false);
+				postToCategory, "categories", false, false);
+		
+		ProjectMetadataFactory.generateField(
+				userToUser, "UserInternalId", false, false);
+		ProjectMetadataFactory.generateField(
+				userToUser, "friends", false, false);
 		
 		
 		return demact;
