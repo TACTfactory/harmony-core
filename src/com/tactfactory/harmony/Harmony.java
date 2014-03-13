@@ -34,7 +34,7 @@ import com.tactfactory.harmony.utils.TactFileUtils;
 public final class Harmony {
 
 	/** Harmony version. */
-	public static final String VERSION = "0.6.1-DEV";
+	public static final String VERSION = "0.6.2-DEV";
 
 	/** Singleton of console. */
 	private static Harmony instance;
