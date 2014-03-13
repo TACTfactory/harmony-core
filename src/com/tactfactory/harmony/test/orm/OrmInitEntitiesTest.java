@@ -95,13 +95,6 @@ public class OrmInitEntitiesTest extends CommonTest {
 
 	@Test
 	public final void testEntities() {
-		Assert.assertEquals(
-				String.format(
-						"Found a wrong number of entities in project : %s",
-						this.currentMetadata.getName()),
-				this.currentMetadata.getEntities().size(),
-				parsedMetadata.getEntities().size());
-		
 		for (EntityMetadata entity : this.currentMetadata.getEntities().values()) {
 			Assert.assertNotNull(String.format(
 					"Entity %s not found in project : %s.",
@@ -117,6 +110,13 @@ public class OrmInitEntitiesTest extends CommonTest {
 								entity.getName()));
 			}
 		}
+		
+		Assert.assertEquals(
+				String.format(
+						"Found a wrong number of entities in project : %s",
+						this.currentMetadata.getName()),
+				this.currentMetadata.getEntities().size(),
+				parsedMetadata.getEntities().size());
 	}
 	
 	@Test
@@ -137,13 +137,6 @@ public class OrmInitEntitiesTest extends CommonTest {
 			EntityMetadata parsedEntity = 
 					parsedMetadata.getEntities().get(entity.getName());
 			
-			Assert.assertEquals(String.format(
-						"Implement : %s implements a wrong number of interfaces in project %s",
-						entity.getName(),
-						this.currentMetadata.getName()),
-					entity.getImplementTypes().size(),
-					parsedEntity.getImplementTypes().size());
-			
 			for (String implement : entity.getImplementTypes()) {
 				Assert.assertTrue(String.format(
 						"Implement : %s should implement %s in project %s",
@@ -153,6 +146,12 @@ public class OrmInitEntitiesTest extends CommonTest {
 					parsedEntity.getImplementTypes().contains(implement));
 			}
 			
+			Assert.assertEquals(String.format(
+					"Implement : %s implements a wrong number of interfaces in project %s",
+					entity.getName(),
+					this.currentMetadata.getName()),
+				entity.getImplementTypes().size(),
+				parsedEntity.getImplementTypes().size());
 		}
 	}
 	
@@ -163,13 +162,6 @@ public class OrmInitEntitiesTest extends CommonTest {
 			EntityMetadata parsedEntity = 
 					parsedMetadata.getEntities().get(entity.getName());
 			
-			Assert.assertEquals(String.format(
-						"Import : %s has a wrong number of imports in project %s",
-						entity.getName(),
-						this.currentMetadata.getName()),
-					entity.getImports().size(),
-					parsedEntity.getImports().size());
-			
 			for (String impor : entity.getImports()) {
 				Assert.assertTrue(String.format(
 						"Import : %s should import %s in project %s",
@@ -179,6 +171,12 @@ public class OrmInitEntitiesTest extends CommonTest {
 					parsedEntity.getImports().contains(impor));
 			}
 			
+			Assert.assertEquals(String.format(
+					"Import : %s has a wrong number of imports in project %s",
+					entity.getName(),
+					this.currentMetadata.getName()),
+				entity.getImports().size(),
+				parsedEntity.getImports().size());
 		}
 	}
 	
@@ -189,13 +187,6 @@ public class OrmInitEntitiesTest extends CommonTest {
 			EntityMetadata parsedEntity = 
 					parsedMetadata.getEntities().get(entity.getName());
 			
-			Assert.assertEquals(String.format(
-					"Ids : %s has a wrong number of ids in project %s",
-					entity.getName(),
-					this.currentMetadata.getName()),
-				entity.getIds().size(),
-				parsedEntity.getIds().size());
-			
 			for (FieldMetadata id : entity.getIds().values()) {
 				Assert.assertNotNull(String.format(
 						"Ids : %s have wrong id in project %s",
@@ -204,6 +195,12 @@ public class OrmInitEntitiesTest extends CommonTest {
 					parsedEntity.getIds().get(id.getName()));
 			}
 			
+			Assert.assertEquals(String.format(
+					"Ids : %s has a wrong number of ids in project %s",
+					entity.getName(),
+					this.currentMetadata.getName()),
+				entity.getIds().size(),
+				parsedEntity.getIds().size());
 		}
 	}
 	
@@ -213,13 +210,6 @@ public class OrmInitEntitiesTest extends CommonTest {
 				: this.currentMetadata.getEntities().values()) {
 			EntityMetadata parsedEntity = 
 					parsedMetadata.getEntities().get(entity.getName());
-			
-			Assert.assertEquals(String.format(
-					"Fields : %s has a wrong number of fields in project %s",
-					entity.getName(),
-					this.currentMetadata.getName()),
-				entity.getFields().size(),
-				parsedEntity.getFields().size());
 			
 			for (FieldMetadata field : entity.getFields().values()) {
 				FieldMetadata parsedField = 
@@ -251,6 +241,12 @@ public class OrmInitEntitiesTest extends CommonTest {
 					parsedField.getColumnName());
 			}
 			
+			Assert.assertEquals(String.format(
+					"Fields : %s has a wrong number of fields in project %s",
+					entity.getName(),
+					this.currentMetadata.getName()),
+				entity.getFields().size(),
+				parsedEntity.getFields().size());
 		}
 	}
 	
