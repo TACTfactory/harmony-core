@@ -14,14 +14,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.SubmoduleAddCommand;
-import org.eclipse.jgit.api.errors.GitAPIException;
-import org.eclipse.jgit.api.errors.InvalidRemoteException;
-import org.eclipse.jgit.api.errors.TransportException;
-import org.eclipse.jgit.lib.Repository;
-import org.eclipse.jgit.lib.RepositoryBuilder;
-
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
@@ -30,6 +22,8 @@ import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.plateforme.manipulator.JavaFileManipulator;
 import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
+import com.tactfactory.harmony.utils.GitUtils;
+import com.tactfactory.harmony.utils.GitUtils.GitException;
 import com.tactfactory.harmony.utils.ImageUtils;
 import com.tactfactory.harmony.utils.OsUtil;
 import com.tactfactory.harmony.utils.TactFileUtils;
@@ -160,35 +154,10 @@ public final class AndroidAdapter extends BaseAdapter {
 		if (!TactFileUtils.exists(pathLib)) {
 			try {
 				final File projectFolder = new File(Harmony.getProjectAndroidPath());
-
-				RepositoryBuilder repoBuilder = new RepositoryBuilder();
-				Repository repo = repoBuilder.setWorkTree(
-						new File(projectFolder.getAbsolutePath()))
-						.setGitDir(new File(projectFolder.getAbsolutePath() + "/.git"))
-						.readEnvironment()
-						.findGitDir()
-						.build();
 				
-				SubmoduleAddCommand subAddCMD = new SubmoduleAddCommand(repo);
-				subAddCMD.setURI(url);
-				subAddCMD.setPath(TactFileUtils.absoluteToRelativePath(
-											pathLib,
-											projectFolder.getAbsolutePath()));
-				subAddCMD.call();
-				
-
-				repoBuilder = new RepositoryBuilder();
-				Repository repoSherlock = repoBuilder
-						.setWorkTree(new File(pathLib))
-						.setGitDir(new File(pathLib + "/.git"))
-						.readEnvironment()
-						.findGitDir()
-						.build();
-				
-				if (versionTag != null) {
-					Git git = new Git(repoSherlock);
-					git.checkout().setName(versionTag).call();
-				}
+				GitUtils.cloneRepository(pathLib, url, versionTag);
+				GitUtils.addSubmodule(
+						projectFolder.getAbsolutePath(), pathLib, url);
 				
 				// Delete useless files
 				if (filesToDelete != null) {
@@ -213,17 +182,19 @@ public final class AndroidAdapter extends BaseAdapter {
 				command.add(libraryProjectPath);
 				command.add("--name");
 				command.add(libName);
+				
 				if (target != null) {
 					command.add("--target");
 					command.add(target);
 				}
+				
 				ConsoleUtils.launchCommand(command);
 				command.clear();
 				
 				if (isSupportV4Dependant) {
-					AndroidSDKManager.copySupportV4Into(libraryProjectPath + "/libs/");
+					AndroidSDKManager.copySupportV4Into(
+							libraryProjectPath + "/libs/");
 				}
-
 			
 				if (referencePath != null) {
 					// Update android project to reference the new downloaded library
@@ -239,14 +210,9 @@ public final class AndroidAdapter extends BaseAdapter {
 					ConsoleUtils.launchCommand(command);
 					command.clear();
 				}
-				
 			} catch (IOException e) {
 				ConsoleUtils.displayError(e);
-			} catch (InvalidRemoteException e) {
-				ConsoleUtils.displayError(e);
-			} catch (TransportException e) {
-				ConsoleUtils.displayError(e);
-			} catch (GitAPIException e) {
+			} catch (GitException e) {
 				ConsoleUtils.displayError(e);
 			}
 		}
