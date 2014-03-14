@@ -40,7 +40,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 
 	/** Path of data folder. */
 	private static final String DATA_PATH =
-			"android/src/%s/data/";
+			"android/src/%s/data/%s.java";
 	
 	public OrmInitEntitiesTest(ApplicationMetadata currentMetadata) {
 		super(currentMetadata);
@@ -264,7 +264,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 				CommonTest.hasFindFile(String.format(
 						DATA_PATH,
 						this.currentMetadata.getProjectNameSpace(),
-						"base/" + entity.getName() + "SQLiteAdapterBase.java"));
+						"base/" + entity.getName() + "SQLiteAdapterBase"));
 			}
 		}
 	}
