@@ -1,4 +1,4 @@
-package com.tactfactory.harmony.test;
+package com.tactfactory.harmony.test.factory;
 
 import java.util.HashMap;
 import java.util.Map;

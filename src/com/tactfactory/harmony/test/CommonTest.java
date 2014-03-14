@@ -13,6 +13,7 @@ import static org.junit.Assert.assertTrue;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
+
 import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
@@ -23,6 +24,8 @@ import com.google.common.base.Strings;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.ProjectDiscover;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
+import com.tactfactory.harmony.test.factory.DemactFactory;
+import com.tactfactory.harmony.test.factory.TracScanFactory;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
 

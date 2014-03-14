@@ -1,4 +1,4 @@
-package com.tactfactory.harmony.test;
+package com.tactfactory.harmony.test.factory;
 
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
