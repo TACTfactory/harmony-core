@@ -60,12 +60,12 @@ public class GitUtils {
 				.setURI(url)
 				.setDirectory(new File(path));
 		
-		if (Strings.isNullOrEmpty(branch)) {
+		if (!Strings.isNullOrEmpty(branch)) {
 			command.setBranch(branch);
 		}
 		
 		try {
-			command.call();
+			command.call().close();
 		} catch (InvalidRemoteException e) {
 			throw new GitException(e);
 		} catch (TransportException e) {
@@ -125,6 +125,8 @@ public class GitUtils {
 		} catch (ConfigInvalidException e) {
 			ConsoleUtils.displayError(e);
 		}
+		
+		repository.close();
 	}
 	
 	/**
