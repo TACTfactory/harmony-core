@@ -59,7 +59,7 @@ public class BundleCommand extends BaseCommand {
 	 * Generate an empty bundle.
 	 */
 	private void generateEmptyBundle() {
-		this.generateMetas();
+		//this.generateMetas();
 		// Confirmation
 		if (ConsoleUtils.isConsole()) {
 			final String bundleOwnerName =
