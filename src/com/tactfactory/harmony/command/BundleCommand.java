@@ -59,7 +59,6 @@ public class BundleCommand extends BaseCommand {
 	 * Generate an empty bundle.
 	 */
 	private void generateEmptyBundle() {
-		//this.generateMetas();
 		// Confirmation
 		if (ConsoleUtils.isConsole()) {
 			final String bundleOwnerName =
@@ -77,8 +76,7 @@ public class BundleCommand extends BaseCommand {
 						bundleName,
 						bundleNameSpace);
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+				ConsoleUtils.displayError(e);
 			}
 		}
 	}
