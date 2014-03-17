@@ -793,7 +793,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		
 		${relation.name}Adapter.open(this.mDatabase);
 		
-		Cursor ${relation.name}Cursor = ${relation.name}Adapter.getBy${curr.name}(
+		Cursor ${relation.name}Cursor = ${relation.name}Adapter.getBy${curr.name}InternalId(
 				item.getId(),
 				${project_name?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS,
 				null, null, null);
