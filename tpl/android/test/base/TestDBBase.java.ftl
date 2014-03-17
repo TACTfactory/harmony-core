@@ -112,7 +112,9 @@ public abstract class TestDBBase extends AndroidTestCase {
 		File cacheDbFile = new File(dbPath);
 
 		if (!cacheDbFile.exists() || !DataLoader.hasFixturesBeenLoaded) {
-			Log.d("TEST", "Create new Database cache");
+			if (${project_name?cap_first}Application.DEBUG) {
+				Log.d("TEST", "Create new Database cache");
+			}
 
 			// Create initial database
 			${project_name?cap_first}SQLiteOpenHelper helper =
@@ -141,7 +143,9 @@ public abstract class TestDBBase extends AndroidTestCase {
 					cacheDbFile,
 					SQLiteAdapterBase.DB_NAME);
 		} else {
-			Log.d("TEST", "Re use old Database cache");
+			if (${project_name?cap_first}Application.DEBUG) {
+				Log.d("TEST", "Re use old Database cache");
+			}
 			DatabaseUtil.importDB(this.getMockContext(),
 					cacheDbFile,
 					SQLiteAdapterBase.DB_NAME,
