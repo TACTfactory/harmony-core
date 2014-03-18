@@ -29,6 +29,8 @@
 	    	android:layout_height="wrap_content"
 					<#if (field.harmony_type?lower_case == "password")>
 			android:inputType="textPassword"
+			android:focusable="false"
+			android:focusableInTouchMode="false"
 					</#if>
 				</#if>
 				<#if (!lastFieldName??)>

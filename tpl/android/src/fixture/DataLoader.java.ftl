@@ -11,6 +11,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.util.SparseArray;
 import android.util.Log;
 
+import ${project_namespace}.${project_name?cap_first}Application;
+
 /**
  * DataLoader for fixture purpose.
  * 
@@ -75,20 +77,30 @@ public class DataLoader {
 		Log.i(TAG, "Initializing fixtures.");
 		final DataManager manager = new DataManager(this.ctx, db);
 		for (final FixtureBase<?> dataLoader : this.dataLoaders) {
-			Log.d(TAG, "Loading xxx fixtures");
+			if (${project_name?cap_first}Application.DEBUG) {
+				Log.d(TAG, String.format(
+						"Loading %s fixtures",
+						dataLoader.getFixtureFileName()));
+			}
 
 			if (this.isType(modes, MODE_APP)) {
-				Log.d(TAG, "Loading APP fixtures");
+				if (${project_name?cap_first}Application.DEBUG) {
+					Log.d(TAG, "Loading APP fixtures");
+				}
 
 				dataLoader.getModelFixtures(MODE_APP);
 			}
 			if (this.isType(modes, MODE_DEBUG)) {
-				Log.d(TAG, "Loading DEBUG fixtures");
+				if (${project_name?cap_first}Application.DEBUG) {
+					Log.d(TAG, "Loading DEBUG fixtures");
+				}
 
 				dataLoader.getModelFixtures(MODE_DEBUG);
 			}
 			if (this.isType(modes, MODE_TEST)) {
-				Log.d(TAG, "Loading TEST fixtures");
+				if (${project_name?cap_first}Application.DEBUG) {
+					Log.d(TAG, "Loading TEST fixtures");
+				}
 
 				dataLoader.getModelFixtures(MODE_TEST);
 			}
