@@ -40,8 +40,6 @@ public class ProviderGenerator extends BaseGenerator {
 	private String localNameSpace;
 	/** The provider name. */
 	private String nameProvider;
-	/** The contract name. */
-	private String nameContract;
 
 	/**
 	 * Constructor.
@@ -54,9 +52,7 @@ public class ProviderGenerator extends BaseGenerator {
 		this.nameProvider =
 				CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
 						this.getAppMetas().getName() + "Provider");
-		this.nameContract =
-				CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
-						this.getAppMetas().getName() + "Contract");
+		
 		this.localNameSpace =
 				this.getAppMetas().getProjectNameSpace().replace('/', '.')
 				+ "."
@@ -93,6 +89,13 @@ public class ProviderGenerator extends BaseGenerator {
 				this.makeSourceProvider("base/TemplateProviderAdapterBase.java",
 						"base/" + cm.getName() + "ProviderAdapterBase.java",
 						true);
+				
+
+				// Make contracts
+				this.makeSourceProvider("/contract/TemplateContract.java",
+						"contract/" + cm.getName() + "Contract.java", false);
+				this.makeSourceProvider("/contract/base/TemplateContractBase.java",
+						"contract/base/" + cm.getName() + "ContractBase.java", true);
 
 
 				// Provider utils
@@ -134,12 +137,6 @@ public class ProviderGenerator extends BaseGenerator {
 					"utils/base/package-info.java", false);
 			this.makeSourceProvider("utils/package-info.java",
 					"utils/package-info.java", false);
-			
-			// Make contracts
-			this.makeSourceProvider("TemplateContract.java",
-					this.nameContract + ".java", false);
-			this.makeSourceProvider("base/TemplateContractBase.java",
-					"base/" + this.nameContract + "Base.java", true);
 
 			this.generateProviderAdapters();
 

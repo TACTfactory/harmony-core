@@ -7,7 +7,7 @@ import java.util.ArrayList;
 import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
 import ${project_namespace}.menu.CrudCreateMenuWrapper.CrudCreateMenuInterface;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
-import ${project_namespace}.provider.${project_name?cap_first}Contract;
+import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
 import ${project_namespace}.harmony.view.HarmonyListFragment;
 import com.google.android.pinnedheader.headerlist.PinnedHeaderListView;
 
@@ -101,13 +101,13 @@ public class ${curr.name}ListFragment
 		if (crit != null) {
 			result = new ${curr.name?cap_first}ListLoader(this.getActivity(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
-				${project_name?cap_first}Contract.${curr.name}.ALIASED_COLS,
+				${curr.name}Contract.${curr.name}.ALIASED_COLS,
 				crit,
 				<#if (curr.orders?? && curr.orders?size > 0) >orderBy<#else>null</#if>);
 		} else {
 			result = new ${curr.name?cap_first}ListLoader(this.getActivity(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
-				${project_name?cap_first}Contract.${curr.name}.ALIASED_COLS,
+				${curr.name}Contract.${curr.name}.ALIASED_COLS,
 				null,
 				null,
 				<#if (curr.orders?? && curr.orders?size > 0) >orderBy<#else>null</#if>);
@@ -124,7 +124,7 @@ public class ${curr.name}ListFragment
 		data.setNotificationUri(this.getActivity().getContentResolver(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI);
 
-		ArrayList<${curr.name}> users = ${project_name?cap_first}Contract.${curr.name}.cursorToItems(data);
+		ArrayList<${curr.name}> users = ${curr.name}Contract.${curr.name}.cursorToItems(data);
 		this.mAdapter.setNotifyOnChange(false);
 		this.mAdapter.setData(
 				new ${curr.name}ListAdapter
