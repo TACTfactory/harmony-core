@@ -6,6 +6,7 @@ import java.util.List;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
+import com.google.common.base.CaseFormat;
 import com.google.common.base.Joiner;
 import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.command.questionnary.Questionnary;
@@ -64,7 +65,7 @@ public class CommonCommand extends BaseCommand {
 		this.setCommandArgs(Console.parseCommandArgs(args));
 
 		if (GENERATE_STATIC.equals(action)) {
-			this.generateEmptyBundle();
+			this.generateStaticView();
 		}
 	}
 
@@ -72,7 +73,7 @@ public class CommonCommand extends BaseCommand {
 	/**
 	 * Generate an empty bundle.
 	 */
-	private void generateEmptyBundle() {
+	private void generateStaticView() {
 		this.generateMetas();
 		Questionnary questionnary = new Questionnary(this.getCommandArgs());
 		
@@ -84,28 +85,28 @@ public class CommonCommand extends BaseCommand {
 		viewNameQuestion.setAcceptBlankAnswer(false);
 		
 		// Type question
-		String[] options = new String[ViewType.values().length];
-		List<String> choiceStrings = new ArrayList<String>(options.length);
-		
-		for (int i = 0; i < ViewType.values().length; i++) {
-			ViewType possibleType = ViewType.values()[i];
-			options[i] = String.valueOf(possibleType.getId());
-			choiceStrings.add(possibleType.getChoiceString());
-		}
-		String possibleTypes = Joiner.on('\n').join(choiceStrings);
-		Question viewTypeQuestion = new Question();
-		viewTypeQuestion.setQuestion(QUESTION_VIEW_TYPE + possibleTypes);
-		viewTypeQuestion.setParamName("type");
-		viewTypeQuestion.setShortParamName("t");
-		viewTypeQuestion.setAcceptBlankAnswer(false);
-		viewTypeQuestion.setAuthorizedValues(options);
+//		String[] options = new String[ViewType.values().length];
+//		List<String> choiceStrings = new ArrayList<String>(options.length);
+//		
+//		for (int i = 0; i < ViewType.values().length; i++) {
+//			ViewType possibleType = ViewType.values()[i];
+//			options[i] = String.valueOf(possibleType.getId());
+//			choiceStrings.add(possibleType.getChoiceString());
+//		}
+//		String possibleTypes = Joiner.on('\n').join(choiceStrings);
+//		Question viewTypeQuestion = new Question();
+//		viewTypeQuestion.setQuestion(QUESTION_VIEW_TYPE + possibleTypes);
+//		viewTypeQuestion.setParamName("type");
+//		viewTypeQuestion.setShortParamName("t");
+//		viewTypeQuestion.setAcceptBlankAnswer(false);
+//		viewTypeQuestion.setAuthorizedValues(options);
 		
 		// Linked entity question
-		Question entityQuestion = new Question();
-		entityQuestion.setParamName("entity");
-		entityQuestion.setShortParamName("e");
-		entityQuestion.setAcceptBlankAnswer(true);
-		entityQuestion.setQuestion(QUESTION_LINKED_ENTITY);
+//		Question entityQuestion = new Question();
+//		entityQuestion.setParamName("entity");
+//		entityQuestion.setShortParamName("e");
+//		entityQuestion.setAcceptBlankAnswer(true);
+//		entityQuestion.setQuestion(QUESTION_LINKED_ENTITY);
 		
 		// Package name question
 		Question packageQuestion = new Question();
@@ -117,15 +118,17 @@ public class CommonCommand extends BaseCommand {
 		// Add the questions to the questionnary
 		questionnary.addQuestion("package", packageQuestion);
 		questionnary.addQuestion("name", viewNameQuestion);
-		questionnary.addQuestion("type", viewTypeQuestion);
-		questionnary.addQuestion("entity", entityQuestion);
+		//questionnary.addQuestion("type", viewTypeQuestion);
+		//questionnary.addQuestion("entity", entityQuestion);
 		questionnary.launchQuestionnary();
 		
-		ViewType viewType = ViewType.fromId(
-				Integer.valueOf(questionnary.getAnswer("type")));
+		/*ViewType viewType = ViewType.fromId(
+				Integer.valueOf(questionnary.getAnswer("type")));*/
+		ViewType viewType = ViewType.EMPTY;
 		String viewName = questionnary.getAnswer("name");
-		String packageName = questionnary.getAnswer("package");
-		String linkedEntityName = questionnary.getAnswer("entity");
+		String packageName = questionnary.getAnswer("package").toLowerCase();
+		//String linkedEntityName = questionnary.getAnswer("entity");
+		String linkedEntityName = "";
 		
 		EntityMetadata linkedEntity = 
 				ApplicationMetadata.INSTANCE.getEntities().get(

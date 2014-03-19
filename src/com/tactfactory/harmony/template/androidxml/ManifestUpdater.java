@@ -86,6 +86,7 @@ public class ManifestUpdater extends XmlManager {
 	public ManifestUpdater(final BaseAdapter adapter) {
 		super(adapter, adapter.getManifestPathFile());
 	}
+	
 	/**
 	 * Update Android Manifest.
 	 * @param classF The class file name
@@ -95,11 +96,28 @@ public class ManifestUpdater extends XmlManager {
 			final String projectNamespace,
 			final String classF,
 			final String entityName) {
+		this.addActivity(
+				projectNamespace,
+				classF,
+				entityName,
+				entityName.toLowerCase());
+	}
+	
+	/**
+	 * Update Android Manifest.
+	 * @param classF The class file name
+	 * @param entityName the entity for which to update the manifest for.
+	 */
+	public void addActivity(
+			final String projectNamespace,
+			final String classF,
+			final String viewName,
+			final String viewPackage) {
 		
-		final String classFile = entityName + classF;
+		final String classFile = viewName + classF;
 		final String pathRelatif = String.format(".%s.%s.%s",
 				this.getAdapter().getController(),
-				entityName.toLowerCase(Locale.ENGLISH),
+				viewPackage,
 				classFile);
 
 		// Debug Log
@@ -177,7 +195,7 @@ public class ManifestUpdater extends XmlManager {
 
 				data.append(projectNamespace.replace('/', '.'));
 				data.append('.');
-				data.append(entityName);
+				data.append(viewName);
 
 				filterActivity.getChild(ELEMENT_ACTION).setAttribute(
 						ATTRIBUTE_NAME,
