@@ -9,7 +9,6 @@
 package com.tactfactory.harmony.command;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.LinkedHashMap;
@@ -17,7 +16,6 @@ import java.util.List;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
-import com.google.common.collect.Lists;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.fixture.command.FixtureCommand;
 import com.tactfactory.harmony.utils.ConsoleUtils;
