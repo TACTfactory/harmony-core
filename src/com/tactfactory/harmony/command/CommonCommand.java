@@ -1,13 +1,16 @@
+/**
+ * This file is part of the Harmony package.
+ *
+ * (c) Mickael Gaillard <mickael.gaillard@tactfactory.com>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
 package com.tactfactory.harmony.command;
 
-import java.util.ArrayList;
 import java.util.LinkedHashMap;
-import java.util.List;
-
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
-import com.google.common.base.CaseFormat;
-import com.google.common.base.Joiner;
 import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.command.questionnary.Questionnary;
 import com.tactfactory.harmony.command.questionnary.Question;
@@ -27,12 +30,12 @@ public class CommonCommand extends BaseCommand {
 	/** Question for view name. */
 	private static final String QUESTION_VIEW_NAME =
 			"Name of the view ? (The activity will be named {Name}Activity)";
-	/** Question for view type. */
-	private static final String QUESTION_VIEW_TYPE =
-			"Type of the view ?\n";
-	/** Question for linked entity. */
-	private static final String QUESTION_LINKED_ENTITY =
-			"Link this view to which entity ? (leave blank for no entity)";
+//	/** Question for view type. */
+//	private static final String QUESTION_VIEW_TYPE =
+//			"Type of the view ?\n";
+//	/** Question for linked entity. */
+//	private static final String QUESTION_LINKED_ENTITY =
+//			"Link this view to which entity ? (leave blank for no entity)";
 	/** Question for package name. */
 	private static final String QUESTION_VIEW_PACKAGE_NAME =
 			"Name of the package the view will be in ?"
