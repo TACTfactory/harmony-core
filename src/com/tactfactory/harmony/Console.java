@@ -305,11 +305,19 @@ public abstract class Console /*extends Harmony*/ {
 				new HashMap<String, String>();
 		if (args != null && args.length != 0) {
 			for (final String arg : args) {
-				if (arg.startsWith(ARGUMENT_PREFIX)) {
+				if (arg.startsWith(ARGUMENT_PREFIX_SHORT)) {
 					final String[] key = arg.split(ARGUMENT_AFFECT);
+					int prefixSize = 0;
+					if (arg.startsWith(ARGUMENT_PREFIX)) {
+						prefixSize = 2;
+					} else {
+						prefixSize = 1;
+					}
 
 					if (key.length > 1) {
-						commandArgs.put(key[0].substring(2), key[1]);
+						commandArgs.put(key[0].substring(prefixSize), key[1]);
+					} else {
+						commandArgs.put(key[0].substring(prefixSize), "");
 					}
 				}
 			}
