@@ -20,15 +20,17 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  * the core and all the bundles.
  */
 public class LibraryPool {
+	/** Library footprint. */
 	private final static String LIB_FOOTPRINT = "lib" + File.separator;
+	/** Error message for not found library. */
+	private final static String MESSAGE_LIBRARY_NOT_FOUND = 
+			"The library %s has not been found. Aborting.";
 	
 	/** File filter to parse only libraries. */
 	private final FileFilter filter = new FileFilter() {
 		
 		@Override
 		public boolean accept(final File pathname) {
-			//return pathname.isDirectory() 
-			//		|| pathname.getName().endsWith(".jar");
 			return pathname.isDirectory()
 					|| (pathname.getAbsolutePath().lastIndexOf(LIB_FOOTPRINT)
 						> pathname.getAbsolutePath().lastIndexOf(
@@ -41,10 +43,16 @@ public class LibraryPool {
 	/**
 	 * Get the File pointing to the library file.
 	 * @param fileName The filename of the library
+	 * @throws RuntimeException if the required library has not been found
 	 * @return The library File
 	 */
-	public final File getLibrary(final String fileName) {
-		return this.pool.get(fileName);
+	public final File getLibrary(final String fileName) throws RuntimeException {
+		File result = this.pool.get(fileName);
+		if (result == null) {
+			throw new RuntimeException(
+					String.format(MESSAGE_LIBRARY_NOT_FOUND, fileName));
+		}
+		return result;
 	}
 	
 	/**
