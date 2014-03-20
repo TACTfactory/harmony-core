@@ -6,7 +6,7 @@ import android.test.suitebuilder.annotation.SmallTest;
 
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
-<#if (curr.inheritance?? && curr.inheritance.superclass??)>
+<#if (InheritanceUtils.isExtended(curr))>
 import ${project_namespace}.provider.contract.${curr.inheritance.superclass.name?cap_first}Contract;
 </#if>
 
