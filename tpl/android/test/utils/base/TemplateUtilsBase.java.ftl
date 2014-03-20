@@ -24,7 +24,7 @@ import ${project_namespace}.test.utils.TestUtils;
 		</#if>
 	</#if>
 </#list>
-<#if curr.inheritance?? && curr.inheritance.superclass??>import ${project_namespace}.test.utils.${curr.inheritance.superclass.name}Utils;</#if>
+<#if (InheritanceUtils.isExtended(curr))>import ${project_namespace}.test.utils.${curr.inheritance.superclass.name}Utils;</#if>
 <#list curr.fields?values as field>
 	<#if field.harmony_type?lower_case == "enum">
 		<#assign enumClass = enums[field.type] />
