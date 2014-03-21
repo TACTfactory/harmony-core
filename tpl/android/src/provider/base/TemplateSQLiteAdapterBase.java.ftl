@@ -1,5 +1,6 @@
 <#include utilityPath + "all_imports.ftl" />
 <#assign sync = curr.options.sync?? />
+<#assign isRecursiveJoinTable = (curr.internal) && (!curr.relations[1]??) && (curr.relations[0].relation.targetEntity == entities[curr.relations[0].relation.targetEntity].fields[curr.relations[0].relation.inversedBy].relation.targetEntity) />
 <#assign hasDateTime=false />
 <#assign hasTime=false />
 <#assign hasDate=false />
@@ -28,7 +29,7 @@ import android.util.Log;
 import com.google.common.base.Strings;
 import com.google.common.collect.ObjectArrays;
 </#if>
-${ImportUtils.importRelatedSQLiteAdapters(curr, true, true)}
+${ImportUtils.importRelatedSQLiteAdapters(curr, false, true)}
 ${ImportUtils.importRelatedEntities(curr)}
 ${ImportUtils.importRelatedEnums(curr)}<#if !(curr_ids?size>0)>import ${project_namespace}.harmony.exception.NotImplementedException;</#if>
 <#if hasDate || hasTime || hasDateTime>import ${curr.namespace}.harmony.util.DateUtils;</#if>
@@ -46,7 +47,9 @@ import ${project_namespace}.${project_name?cap_first}Application;
 
 <#if curr.internal>
 import ${project_namespace}.criterias.${curr.relations[0].relation.targetEntity}Criterias;
+<#if (!isRecursiveJoinTable)>
 import ${project_namespace}.criterias.${curr.relations[1].relation.targetEntity}Criterias;
+</#if>
 import ${project_namespace}.criterias.${curr.name}Criterias;
 import ${project_namespace}.criterias.base.Criteria;
 import ${project_namespace}.criterias.base.Criteria.Type;
@@ -55,9 +58,16 @@ import ${project_namespace}.criterias.base.value.SelectValue;
 </#if>
 <#if (InheritanceUtils.isExtended(curr))>
 import ${project_namespace}.harmony.util.DatabaseUtil;
+import ${project_namespace}.provider.contract.${curr.inheritance.superclass.name?cap_first}Contract;
 </#if>
 
-import ${project_namespace}.provider.${project_name?cap_first}Contract;
+import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
+<#list curr_relations as relation>
+	<#if (relation.relation.type == "ManyToMany")>
+import ${project_namespace}.provider.contract.${relation.relation.joinTable?cap_first}Contract;
+	</#if>
+import ${project_namespace}.provider.contract.${relation.relation.targetEntity?cap_first}Contract;
+</#list>
 
 /** ${curr.name} adapter database abstract class. <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project<br/>
@@ -81,7 +91,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return A String showing the table name
 	 */
 	public String getTableName() {
-		return ${project_name?cap_first}Contract.${curr.name}.TABLE_NAME;
+		return ${curr.name}Contract.${curr.name}.TABLE_NAME;
 	}
 
 	/**
@@ -90,12 +100,12 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return A String showing the joined table name
 	 */
 	public String getJoinedTableName() {
-		String result = ${project_name?cap_first}Contract.${curr.name}.TABLE_NAME;
+		String result = ${curr.name}Contract.${curr.name}.TABLE_NAME;
 		<#if (joinedInheritance)>
 		result += " INNER JOIN ";
 		result += this.motherAdapter.getJoinedTableName();
 		result += " <#if InheritanceUtils.isExtended(entities[curr.inheritance.superclass.name])>AND<#else>ON</#if> ";
-		result += ${project_name?cap_first}Contract.${curr.name}.ALIASED_${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)} + " = " + ${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)};
+		result += ${curr.name}Contract.${curr.name}.ALIASED_${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)} + " = " + ${curr.inheritance.superclass.name}Contract.${curr.inheritance.superclass.name}.ALIASED_${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)};
 		</#if>
 		return result;
 	}
@@ -105,7 +115,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return An array of String representing the columns
 	 */
 	public String[] getCols() {
-		return ${project_name?cap_first}Contract.${curr.name}.ALIASED_COLS;
+		return ${curr.name}Contract.${curr.name}.ALIASED_COLS;
 	}
 
 	/**
@@ -117,37 +127,37 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		return ""
 <#else>
 		return "CREATE TABLE "
-		+ ${project_name?cap_first}Contract.${curr.name}.TABLE_NAME	+ " ("
+		+ ${curr.name}Contract.${curr.name}.TABLE_NAME	+ " ("
 </#if>
 <#list curr_fields as field>
 	<#if (!field.columnResult && (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")))>
 		<#if (lastLine??)>${lastLine},"</#if>
-		<#assign lastLine=" + ${project_name?cap_first}Contract.${curr.name}." + NamingUtils.alias(field.name) + "	+ \"" + field.schema />
+		<#assign lastLine=" + ${curr.name}Contract.${curr.name}." + NamingUtils.alias(field.name) + "	+ \"" + field.schema />
 	</#if>
 </#list>
 		${lastLine}<#if (singleTabInheritance && isTopMostSuperClass)>,"
-		+ ${project_name?cap_first}Contract.${curr.name}.${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)} + " ${curr.inheritance.discriminatorColumn.schema}<#if (curr.inheritance.subclasses?size > 0)>,</#if>"<#elseif MetadataUtils.hasRelationOrIds(curr, false)>,"<#else>"</#if>
+		+ ${curr.name}Contract.${curr.name}.${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)} + " ${curr.inheritance.discriminatorColumn.schema}<#if (curr.inheritance.subclasses?size > 0)>,</#if>"<#elseif MetadataUtils.hasRelationOrIds(curr, false)>,"<#else>"</#if>
 		<#if (singleTabInheritance)><#list curr.inheritance.subclasses as subclass>+ ${subclass.name}SQLiteAdapter.getSchema()<#if subclass_has_next || MetadataUtils.hasRelationOrIds(curr, false)> + ","</#if></#list></#if>
 <#if (curr.relations??)>
 	<#list (curr.relations) as relation>
 		<#if (relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne")>
 		<#if (lastRelation??)>${lastRelation},"</#if>
-			<#assign lastRelation=" + \"FOREIGN KEY(\" + ${project_name?cap_first}Contract.${curr.name}." + NamingUtils.alias(relation.name)
+			<#assign lastRelation=" + \"FOREIGN KEY(\" + ${curr.name}Contract.${curr.name}." + NamingUtils.alias(relation.name)
 			+ " + \") REFERENCES \" \n\t\t\t + "
-			+ "${project_name?cap_first}Contract.${relation.relation.targetEntity}.TABLE_NAME \n\t\t\t\t+ \" (\" + ${project_name?cap_first}Contract.${relation.relation.targetEntity}." + NamingUtils.alias(relation.relation.field_ref[0].name) + " + \")">
+			+ "${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}.TABLE_NAME \n\t\t\t\t+ \" (\" + ${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}." + NamingUtils.alias(relation.relation.field_ref[0].name) + " + \")">
 		</#if>
 	</#list>
 		<#if (lastRelation??)>${lastRelation}<#if (curr_ids?size>1)>,</#if>"</#if>
 </#if>
 <#if (curr_ids?size>1)>
-		+ "PRIMARY KEY (" + <#list curr_ids as id>${project_name?cap_first}Contract.${curr.name}.${NamingUtils.alias(id.name)}<#if (id_has_next)> + "," + </#if></#list> + ")"
+		+ "PRIMARY KEY (" + <#list curr_ids as id>${curr.name}Contract.${curr.name}.${NamingUtils.alias(id.name)}<#if (id_has_next)> + "," + </#if></#list> + ")"
 </#if>
 <#if (joinedInheritance)>
-		+ ", FOREIGN KEY (" + ${project_name?cap_first}Contract.${curr.name}.${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)} + ") REFERENCES " + ${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.TABLE_NAME + "(" + ${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)} + ") ON DELETE CASCADE"
+		+ ", FOREIGN KEY (" + ${curr.name}Contract.${curr.name}.${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)} + ") REFERENCES " + ${curr.inheritance.superclass.name}Contract.${curr.inheritance.superclass.name}.TABLE_NAME + "(" + ${curr.inheritance.superclass.name}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)} + ") ON DELETE CASCADE"
 </#if>
 <#list curr_fields as field>
 	<#if (field.unique?? && field.unique)>
-		+ ", UNIQUE(" + ${project_name?cap_first}Contract.${curr.name}.${NamingUtils.alias(field.name)} + ")"
+		+ ", UNIQUE(" + ${curr.name}Contract.${curr.name}.${NamingUtils.alias(field.name)} + ")"
 	</#if>
 </#list>
 <#if !(singleTabInheritance && !isTopMostSuperClass)>
@@ -194,7 +204,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return ContentValues object
 	 */
 	public ContentValues itemToContentValues(final ${curr.name} item) {
-		return ${project_name?cap_first}Contract.${curr.name}.itemToContentValues(item);
+		return ${curr.name}Contract.${curr.name}.itemToContentValues(item);
 	}
 
 	/**
@@ -203,7 +213,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return ${curr.name} entity
 	 */
 	public ${curr.name} cursorToItem(final Cursor cursor) {
-		return ${project_name?cap_first}Contract.${curr.name}.cursorToItem(cursor);
+		return ${curr.name}Contract.${curr.name}.cursorToItem(cursor);
 	}
 
 	/**
@@ -212,7 +222,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @param result ${curr.name} entity
 	 */
 	public void cursorToItem(final Cursor cursor, final ${curr.name} result) {
-		${project_name?cap_first}Contract.${curr.name}.cursorToItem(cursor, result);
+		${curr.name}Contract.${curr.name}.cursorToItem(cursor, result);
 	}
 
 	//// CRUD Entity ////
@@ -241,14 +251,14 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 		${relation.name?uncap_first}Adapter.open(this.mDatabase);
 		Cursor ${relation.name?lower_case}Cursor = ${relation.name?uncap_first}Adapter
-					.getBy${relation.relation.mappedBy?cap_first}(result.get${curr_ids[0].name?cap_first}(), ${project_name?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS, null, null, null);
+					.getBy${relation.relation.mappedBy?cap_first}(result.get${curr_ids[0].name?cap_first}(), ${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}.ALIASED_COLS, null, null, null);
 		result.set${relation.name?cap_first}(${relation.name?uncap_first}Adapter.cursorToItems(${relation.name?lower_case}Cursor));
 				<#elseif (relation.relation.type=="ManyToMany")>
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter =
 				new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
-		Cursor ${relation.name?lower_case}Cursor = ${relation.relation.joinTable?lower_case}Adapter.getBy${relation.owner}(
-							result.get${curr_ids[0].name?cap_first}(), ${project_name?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS, null, null, null);
+		Cursor ${relation.name?lower_case}Cursor = ${relation.relation.joinTable?lower_case}Adapter.getBy${relation.relation.mappedBy?cap_first}(
+							result.get${curr_ids[0].name?cap_first}(), ${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}.ALIASED_COLS, null, null, null);
 		result.set${relation.name?cap_first}(new ${relation.relation.targetEntity}SQLiteAdapter(ctx).cursorToItems(${relation.name?lower_case}Cursor));
 				<#else>
 		if (result.get${relation.name?cap_first}() != null) {
@@ -278,7 +288,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return List of ${curr.name} entities
 	 */
 	 public Cursor getBy${relation.name?cap_first}(final int ${relation.name?lower_case}Id, String[] projection, String selection, String[] selectionArgs, String orderBy) {
-		String idSelection = ${project_name?cap_first}Contract.${relation.owner}.${NamingUtils.alias(relation.name)} + "=?";
+		String idSelection = ${relation.owner}Contract.${relation.owner}.${NamingUtils.alias(relation.name)} + "=?";
 		String idSelectionArgs = String.valueOf(${relation.name?lower_case}Id);
 		if (!Strings.isNullOrEmpty(selection)) {
 			selection += " AND " + idSelection;
@@ -332,9 +342,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	<#if (singleTabInheritance && !isTopMostSuperClass)>
 	@Override
 	protected Cursor getAllCursor() {
-		return this.query(${project_name?cap_first}Contract.${curr.name}.ALIASED_COLS,
-				${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?",
-				new String[]{${project_name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER},
+		return this.query(${curr.name}Contract.${curr.name}.ALIASED_COLS,
+				${curr.inheritance.superclass.name}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?",
+				new String[]{${curr.name}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER},
 				null,
 				null,
 				null);
@@ -350,28 +360,28 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public long insert(final ${curr.name} item) {
 		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Insert DB(" + ${project_name?cap_first}Contract.${curr.name}.TABLE_NAME + ")");
+			Log.d(TAG, "Insert DB(" + ${curr.name}Contract.${curr.name}.TABLE_NAME + ")");
 		}
 
 		final ContentValues values =
-				${project_name?cap_first}Contract.${curr.name}.itemToContentValues(item<#list (curr_relations) as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
+				${curr.name}Contract.${curr.name}.itemToContentValues(item<#list (curr_relations) as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 	<#if (singleTabInheritance && !isTopMostSuperClass)>
 	<#list curr_ids as id>
-		values.remove(${project_name?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)});
+		values.remove(${id.owner?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)});
 		long newid = this.motherAdapter.insert(null, values);
 	</#list>		
 	<#else>
 	<#list curr_ids as id>
-		values.remove(${project_name?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)});
+		values.remove(${id.owner?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)});
 	</#list>
 	<#if !InheritanceUtils.isExtended(curr)>
 		int newid;
 	<#else>
 		this.motherAdapter.open(this.mDatabase);
 		final ContentValues currentValues =
-				DatabaseUtil.extractContentValues(values, ${project_name?cap_first}Contract.${curr.name}.COLS);
+				DatabaseUtil.extractContentValues(values, ${curr.name}Contract.${curr.name}.COLS);
 		int newid = (int) this.motherAdapter.insert(null, values);
-		currentValues.put(${project_name?cap_first}Contract.${curr.name}.${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)}, newid);
+		currentValues.put(${curr.name}Contract.${curr.name}.${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)}, newid);
 	</#if>
 		if (values.size() != 0) {
 			<#if !InheritanceUtils.isExtended(curr)>newid = (int) </#if>this.insert(
@@ -379,7 +389,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					<#if InheritanceUtils.isExtended(curr)>currentValues<#else>values</#if>);
 		} else {
 			<#if !InheritanceUtils.isExtended(curr)>newid = (int) </#if>this.insert(
-					${project_name?cap_first}Contract.${curr_ids[0].owner?cap_first}.${NamingUtils.alias(curr_ids[0].name)},
+					${curr_ids[0].owner?cap_first}Contract.${curr_ids[0].owner?cap_first}.${NamingUtils.alias(curr_ids[0].name)},
 					<#if InheritanceUtils.isExtended(curr)>currentValues<#else>values</#if>);
 		}
 		item.set${curr_ids[0].name?cap_first}((int) newid);
@@ -454,26 +464,26 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	public int update(final ${curr.name} item) {
 	<#if (curr_ids?size>0)>
 		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Update DB(" + ${project_name?cap_first}Contract.${curr.name}.TABLE_NAME + ")");
+			Log.d(TAG, "Update DB(" + ${curr.name}Contract.${curr.name}.TABLE_NAME + ")");
 		}
 
 		final ContentValues values =
-				${project_name?cap_first}Contract.${curr.name}.itemToContentValues(item<#list (curr_relations) as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
+				${curr.name}Contract.${curr.name}.itemToContentValues(item<#list (curr_relations) as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 		<#if (singleTabInheritance && !isTopMostSuperClass)>
 		final String whereClause =
-				<#list curr_ids as id> ${project_name?cap_first}Contract.${id.owner}.${NamingUtils.alias(id.name)}
+				<#list curr_ids as id> ${id.owner}Contract.${id.owner}.${NamingUtils.alias(id.name)}
 				 + "=? <#if id_has_next>AND </#if>"</#list>
 				 + " AND "
-				 + ${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
+				 + ${curr.inheritance.superclass.name}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
 		final String[] whereArgs =
 				new String[] {<#list curr_ids as id>String.valueOf(item.get${id.name?cap_first}()),
 </#list>
-								${project_name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER};
+								${curr.name}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER};
 		
 		return this.motherAdapter.update(values, whereClause, whereArgs);
 		<#else>
 		final String whereClause =
-				<#list curr_ids as id> ${project_name?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)}
+				<#list curr_ids as id> ${id.owner?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)}
 				 + "=? <#if id_has_next>AND </#if>"</#list>;
 		final String[] whereArgs =
 				new String[] {<#list curr_ids as id>String.valueOf(item.get${id.name?cap_first}()) <#if id_has_next>,
@@ -481,7 +491,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 
 		<#if (InheritanceUtils.isExtended(curr))>
 		final ContentValues currentValues =
-				DatabaseUtil.extractContentValues(values, ${project_name?cap_first}Contract.${curr.name}.COLS);
+				DatabaseUtil.extractContentValues(values, ${curr.name}Contract.${curr.name}.COLS);
 		this.motherAdapter.update(values, whereClause, whereArgs);
 
 		return this.update(
@@ -514,14 +524,14 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					${curr.name} item, int ${relation.relation.targetEntity?lower_case}Id) {
 			<#if (curr_ids?size>0)>
 		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Update DB(" + ${project_name?cap_first}Contract.${curr.name}.TABLE_NAME + ")");
+			Log.d(TAG, "Update DB(" + ${curr.name}Contract.${curr.name}.TABLE_NAME + ")");
 		}
 
 		ContentValues values =
-				${project_name?cap_first}Contract.${curr.name}.itemToContentValues(item);
-		values.put(${project_name?cap_first}Contract.${curr.name}.${NamingUtils.alias(relation.name)}, ${relation.relation.targetEntity?lower_case}Id);
+				${curr.name}Contract.${curr.name}.itemToContentValues(item);
+		values.put(${curr.name}Contract.${curr.name}.${NamingUtils.alias(relation.name)}, ${relation.relation.targetEntity?lower_case}Id);
 		String whereClause =
-				<#list curr_ids as id> ${project_name?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)}
+				<#list curr_ids as id> ${id.owner?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)}
 				 + "=? <#if id_has_next>AND </#if>"</#list>;
 		String[] whereArgs =
 				new String[] {<#list curr_ids as id>String.valueOf(item.get${id.name?cap_first}()) <#if id_has_next>,
@@ -576,14 +586,14 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	public long insertWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(
 			${curr.name} item, int ${relation.relation.targetEntity?lower_case}Id) {
 		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Insert DB(" + ${project_name?cap_first}Contract.${curr.name}.TABLE_NAME + ")");
+			Log.d(TAG, "Insert DB(" + ${curr.name}Contract.${curr.name}.TABLE_NAME + ")");
 		}
 
-		ContentValues values = ${project_name?cap_first}Contract.${curr.name}.itemToContentValues(item<#list (curr_relations) as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>,
+		ContentValues values = ${curr.name}Contract.${curr.name}.itemToContentValues(item<#list (curr_relations) as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>,
 				${relation.relation.targetEntity?lower_case}Id<#else>,
 				0</#if></#if></#list>);
 	<#list curr_ids as id>
-		values.remove(${project_name?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)});
+		values.remove(${id.owner?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)});
 	</#list>
 		int newid = (int) this.insert(
 			null,
@@ -633,26 +643,26 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			,</#if></#list>) {
 	<#if (curr_ids?size>0)>
 		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Delete DB(" + ${project_name?cap_first}Contract.${curr.name}.TABLE_NAME
+			Log.d(TAG, "Delete DB(" + ${curr.name}Contract.${curr.name}.TABLE_NAME
 					+ ") id : " + <#list curr_ids as id>${id.name}<#if (id_has_next)>
 					+ " id : " + </#if></#list>);
 		}
 
 		<#if (singleTabInheritance && !isTopMostSuperClass)>
-		final String whereClause = <#list curr_ids as id> ${project_name?cap_first}Contract.${id.owner}.${NamingUtils.alias(id.name)}
+		final String whereClause = <#list curr_ids as id> ${id.owner}Contract.${id.owner}.${NamingUtils.alias(id.name)}
 					 + "=? <#if (id_has_next)>AND </#if>"</#list>
-					 + " AND " + ${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
+					 + " AND " + ${curr.inheritance.superclass.name}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
 
 		final String[] whereArgs = new String[] {<#list curr_ids as id>String.valueOf(${id.name}),
 </#list>
-					 ${project_name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER};
+					 ${curr.name}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER};
 
 		return this.motherAdapter.delete(
 				whereClause,
 				whereArgs);
 		<#else>
 		
-		final String whereClause = <#list curr_ids as id> ${project_name?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)}
+		final String whereClause = <#list curr_ids as id> ${id.owner?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)}
 					 + "=? <#if (id_has_next)>AND </#if>"</#list>;
 		final String[] whereArgs = new String[] {<#list curr_ids as id>String.valueOf(${id.name}) <#if (id_has_next)>,
 					</#if></#list>};
@@ -691,27 +701,27 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		}
 
 		<#if (singleTabInheritance && !isTopMostSuperClass)>
-		final String whereClause = <#list curr_ids as id> ${project_name?cap_first}Contract.${id.owner}.${NamingUtils.alias(id.name)}
+		final String whereClause = <#list curr_ids as id> ${id.owner}Contract.${id.owner}.${NamingUtils.alias(id.name)}
 					 + "=? <#if (id_has_next)>AND </#if>"</#list>
-					 + " AND " + ${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
+					 + " AND " + ${curr.inheritance.superclass.name}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
 
 		final String[] whereArgs = new String[] {<#list curr_ids as id>String.valueOf(${id.name}),
 </#list>
-					 ${project_name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER};
+					 ${curr.name}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER};
 
-		return this.motherAdapter.query(${project_name?cap_first}Contract.${curr.name}.ALIASED_COLS,
+		return this.motherAdapter.query(${curr.name}Contract.${curr.name}.ALIASED_COLS,
 				whereClause,
 				whereArgs,
 				null,
 				null,
 				null);
 		<#else>
-		final String whereClause = <#list curr_ids as id> ${project_name?cap_first}Contract.${id.owner?cap_first}.ALIASED_${NamingUtils.alias(id.name)}
+		final String whereClause = <#list curr_ids as id> ${id.owner?cap_first}Contract.${id.owner?cap_first}.ALIASED_${NamingUtils.alias(id.name)}
 					 + "=? <#if id_has_next>AND </#if>"</#list>;
 		final String[] whereArgs = new String[] {<#list curr_ids as id>String.valueOf(${id.name}) <#if id_has_next>,
 					</#if></#list>};
 
-		return this.query(${project_name?cap_first}Contract.${curr.name}.ALIASED_COLS,
+		return this.query(${curr.name}Contract.${curr.name}.ALIASED_COLS,
 				whereClause,
 				whereArgs,
 				null,
@@ -738,17 +748,17 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		<#else>
 			<#if (singleTabInheritance && !isTopMostSuperClass)>
 		return this.motherAdapter.query(
-				${project_name?cap_first}Contract.${curr.name}.ALIASED_COLS,
-				${project_name?cap_first}Contract.${curr_ids[0].owner}.ALIASED_${NamingUtils.alias(curr_ids[0].name)} + " = ?"
-					+ " AND " + ${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?",
-				new String[]{String.valueOf(id), ${project_name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER},
+				${curr.name}Contract.${curr.name}.ALIASED_COLS,
+				${curr_ids[0].owner}Contract.${curr_ids[0].owner}.ALIASED_${NamingUtils.alias(curr_ids[0].name)} + " = ?"
+					+ " AND " + ${curr.inheritance.superclass.name}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?",
+				new String[]{String.valueOf(id), ${curr.name}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER},
 				null,
 				null,
 				null);
 			<#else>
 		return this.query(
-				${project_name?cap_first}Contract.${curr.name}.ALIASED_COLS,
-				${project_name?cap_first}Contract.${curr.name}.ALIASED_${NamingUtils.alias(curr_ids[0].name)} + " = ?",
+				${curr.name}Contract.${curr.name}.ALIASED_COLS,
+				${curr.name}Contract.${curr.name}.ALIASED_${NamingUtils.alias(curr_ids[0].name)} + " = ?",
 				new String[]{String.valueOf(id)},
 				null,
 				null,
@@ -769,12 +779,12 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		<#else>
 			<#if (singleTabInheritance && !isTopMostSuperClass)>
 		return this.delete(
-				${project_name?cap_first}Contract.${curr_ids[0].owner}.ALIASED_${NamingUtils.alias(curr_ids[0].name)} + " = ?"
-					+ " AND " + ${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?",
-				new String[]{String.valueOf(id), ${project_name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER});				
+				${curr_ids[0].owner}Contract.${curr_ids[0].owner}.ALIASED_${NamingUtils.alias(curr_ids[0].name)} + " = ?"
+					+ " AND " + ${curr.inheritance.superclass.name}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?",
+				new String[]{String.valueOf(id), ${curr.name}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER});				
 			<#else>
 		return this.delete(
-				${project_name?cap_first}Contract.${curr.name}.ALIASED_${NamingUtils.alias(curr_ids[0].name)} + " = ?",
+				${curr.name}Contract.${curr.name}.ALIASED_${NamingUtils.alias(curr_ids[0].name)} + " = ?",
 				new String[]{String.valueOf(id)});
 			</#if>
 		</#if>
@@ -790,9 +800,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		
 		${relation.name}Adapter.open(this.mDatabase);
 		
-		Cursor ${relation.name}Cursor = ${relation.name}Adapter.getBy${curr.name}(
+		Cursor ${relation.name}Cursor = ${relation.name}Adapter.getBy${curr.name}InternalId(
 				item.getId(),
-				${project_name?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS,
+				${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}.ALIASED_COLS,
 				null, null, null);
 		
 		item.set${relation.name?cap_first}(
@@ -808,7 +818,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		
 		Cursor ${relation.name}Cursor = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(
 				item.getId(),
-				${project_name?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS,
+				${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}.ALIASED_COLS,
 				null, null, null);
 		
 		item.set${relation.name?cap_first}(
@@ -830,35 +840,39 @@ public abstract class ${curr.name}SQLiteAdapterBase
 </#if>
 
 <#if (curr.internal)>
+	<#assign leftRelation = curr.relations[0] />
+	<#if isRecursiveJoinTable>
+		<#assign rightRelation = curr.relations[0] />
+	<#else>
+		<#assign rightRelation = curr.relations[1] />
+	</#if>
 
 	/**
 	 * Insert a ${curr.name} entity into database.
 	 *
-	 * @param ${curr.relations[0].name?lower_case} ${curr.relations[0].name?lower_case}
-	 * @param ${curr.relations[1].name?lower_case} ${curr.relations[1].name?lower_case}
+	 * @param ${leftRelation.name?lower_case} ${leftRelation.name?lower_case}
+	 * @param ${rightRelation.name?lower_case} ${rightRelation.name?lower_case}
 	 * @return Id of the ${curr.name} entity
 	 */
-	public long insert(final int ${curr.relations[0].name?lower_case},
-					   final int ${curr.relations[1].name?lower_case}) {
+	public long insert(final int ${leftRelation.name?lower_case},
+					   final int ${rightRelation.name?lower_case}) {
 		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Insert DB(" + ${project_name?cap_first}Contract.${curr.name}.TABLE_NAME + ")");
+			Log.d(TAG, "Insert DB(" + ${curr.name}Contract.${curr.name}.TABLE_NAME + ")");
 		}
 
 		ContentValues values = new ContentValues();
-		values.put(${project_name?cap_first}Contract.${curr.name}.${NamingUtils.alias(curr.relations[0].name)},
-				${curr.relations[0].name?lower_case});
-		values.put(${project_name?cap_first}Contract.${curr.name}.${NamingUtils.alias(curr.relations[1].name)},
-				${curr.relations[1].name?lower_case});
+		values.put(${curr.name}Contract.${curr.name}.${NamingUtils.alias(leftRelation.name)},
+				${leftRelation.name?lower_case});
+		values.put(${curr.name}Contract.${curr.name}.${NamingUtils.alias(rightRelation.name)},
+				${rightRelation.name?lower_case});
 
 		return this.mDatabase.insert(
-				${project_name?cap_first}Contract.${curr.name}.TABLE_NAME,
+				${curr.name}Contract.${curr.name}.TABLE_NAME,
 				null,
 				values);
 	}
 
 
-	<#assign leftRelation = curr.relations[0] />
-	<#assign rightRelation = curr.relations[1] />
 	<#list 1..2 as i>	
 	/**
 	 * Find & read ${curr.name} by ${leftRelation.name}.
@@ -866,7 +880,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @param orderBy Order by string (can be null)
 	 * @return ArrayList of ${rightRelation.relation.targetEntity} matching ${leftRelation.name?lower_case}
 	 */
-	public Cursor getBy${leftRelation.relation.targetEntity}(
+	public Cursor getBy${leftRelation.name?cap_first}(
 			final int ${leftRelation.name?uncap_first},
 			final String[] projection,
 			String selection,
@@ -875,14 +889,14 @@ public abstract class ${curr.name}SQLiteAdapterBase
 
 		Cursor ret = null;
 		${curr.name}Criterias crit = new ${curr.name}Criterias(GroupType.AND);
-		crit.add(${project_name?cap_first}Contract.${curr.name}.ALIASED_${NamingUtils.alias(leftRelation.name)}, String.valueOf(${leftRelation.name?uncap_first}), Type.EQUALS);
+		crit.add(${curr.name}Contract.${curr.name}.ALIASED_${NamingUtils.alias(leftRelation.name)}, String.valueOf(${leftRelation.name?uncap_first}), Type.EQUALS);
 		SelectValue value = new SelectValue();
-		value.setRefKey(${project_name?cap_first}Contract.${curr.name}.ALIASED_${NamingUtils.alias(rightRelation.name)});
-		value.setRefTable(${project_name?cap_first}Contract.${curr.name}.TABLE_NAME);
+		value.setRefKey(${curr.name}Contract.${curr.name}.ALIASED_${NamingUtils.alias(rightRelation.name)});
+		value.setRefTable(${curr.name}Contract.${curr.name}.TABLE_NAME);
 		value.setCriteria(crit);
 		${rightRelation.relation.targetEntity}Criterias ${rightRelation.relation.targetEntity?lower_case}Crit = new ${rightRelation.relation.targetEntity}Criterias(GroupType.AND);
 		Criteria ${rightRelation.relation.targetEntity?lower_case}SelectCrit = new Criteria();
-		${rightRelation.relation.targetEntity?lower_case}SelectCrit.setKey(${project_name?cap_first}Contract.${rightRelation.relation.targetEntity}.ALIASED_${NamingUtils.alias(entities[rightRelation.relation.targetEntity].ids[0].name)});
+		${rightRelation.relation.targetEntity?lower_case}SelectCrit.setKey(${rightRelation.relation.targetEntity}Contract.${rightRelation.relation.targetEntity}.ALIASED_${NamingUtils.alias(entities[rightRelation.relation.targetEntity].ids[0].name)});
 		${rightRelation.relation.targetEntity?lower_case}SelectCrit.setType(Type.IN);
 		${rightRelation.relation.targetEntity?lower_case}SelectCrit.addValue(value);
 		${rightRelation.relation.targetEntity?lower_case}Crit.add(${rightRelation.relation.targetEntity?lower_case}SelectCrit);
@@ -898,7 +912,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 						String.class);
 		}
 
-		ret = this.mDatabase.query(${project_name?cap_first}Contract.${rightRelation.relation.targetEntity}.TABLE_NAME,
+		ret = this.mDatabase.query(${rightRelation.relation.targetEntity}Contract.${rightRelation.relation.targetEntity}.TABLE_NAME,
 				projection,
 				selection,
 				selectionArgs,
@@ -907,7 +921,12 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				orderBy);
 		return ret;
 	}
-	<#assign leftRelation = curr.relations[1] />
+
+	<#if isRecursiveJoinTable>
+		<#assign leftRelation = curr.relations[0] />
+	<#else>
+		<#assign leftRelation = curr.relations[1] />
+	</#if>
 	<#assign rightRelation = curr.relations[0] />
 	</#list>
 

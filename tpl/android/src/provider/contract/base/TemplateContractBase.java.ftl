@@ -1,32 +1,39 @@
+<#assign curr = entities[current_entity] />
 <#include utilityPath + "all_imports.ftl" />
+<#assign hasDate = MetadataUtils.hasDate(curr) />
+<#assign hasTime = MetadataUtils.hasTime(curr) />
+<#assign hasDateTime = MetadataUtils.hasDateTime(curr) />
 <@header?interpret />
-package ${project_namespace}.provider.base;
+package ${project_namespace}.provider.contract.base;
 
 import android.content.ContentValues;
 import android.database.Cursor;
 
 import java.util.ArrayList;
 
+<#if hasDate || hasTime || hasDateTime>
 import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
+</#if>
+${ImportUtils.importRelatedEntities(curr, false)}
+${ImportUtils.importRelatedEnums(curr, false)}
 
-<#list entities?values + enums?values as entity>
-	<#if (!entity.internal?? || !entity.internal && entity.fields?size > 0)>
-import ${entity_namespace}.${InheritanceUtils.getCompleteNamespace(entity)};
-	</#if>
-</#list>
+<#if (InheritanceUtils.isExtended(curr))>
+import ${project_namespace}.provider.contract.${curr.inheritance.superclass.name?cap_first}Contract;
+import ${project_namespace}.provider.contract.base.${curr.inheritance.superclass.name?cap_first}ContractBase.${curr.inheritance.superclass.name?cap_first}Columns;
+</#if>
 
-import ${project_namespace}.provider.${project_name?cap_first}Contract;
-
+import ${project_namespace}.provider.contract.${curr.name}Contract;
+<#if hasDate || hasTime || hasDateTime>
 import ${project_namespace}.harmony.util.DateUtils;
+</#if>
 
 /** ${project_name?cap_first} contract base.
  *
  * This class is regenerated. DO NOT MODIFY.
  */
-public abstract class ${project_name?cap_first}ContractBase {
+public abstract class ${curr.name}ContractBase {
 
-<#list entities?values as curr>		
 	<#if (curr.fields?size > 0 || curr.inheritance??)>
 			<#assign isTopMostSuperClass = (curr.inheritance?? && !curr.inheritance.superclass??) />
 			<#assign singleTabInheritance = (curr.inheritance?? && curr.inheritance.inheritanceType?? && curr.inheritance.inheritanceType == "SingleTab") />
@@ -60,7 +67,7 @@ public abstract class ${project_name?cap_first}ContractBase {
 				"${field.columnName}";
 		/** Alias. */
 		public static final String ALIASED_${NamingUtils.alias(field.name)} =
-				<#if !field.columnResult>${project_name?cap_first}Contract.${curr.name}.TABLE_NAME + "." + </#if>${NamingUtils.alias(field.name)};
+				<#if !field.columnResult>${curr.name?cap_first}Contract.${curr.name}.TABLE_NAME + "." + </#if>${NamingUtils.alias(field.name)};
 			</#if>
 		</#list>
 		<#if (singleTabInheritance && isTopMostSuperClass)>
@@ -69,7 +76,7 @@ public abstract class ${project_name?cap_first}ContractBase {
 					"${curr.inheritance.discriminatorColumn.columnName}";
 			/** Alias. */
 			public static final String ALIASED_${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)} = 
-					${project_name?cap_first}Contract.${curr.name}.TABLE_NAME + "." + ${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)};
+					${curr.name}Contract.${curr.name}.TABLE_NAME + "." + ${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)};
 		</#if>
 	}
 
@@ -77,19 +84,21 @@ public abstract class ${project_name?cap_first}ContractBase {
 	 * Contract base class for ${curr.name} Entity.
 	 */
 	public static class ${curr.name}Base implements ${curr.name}Columns {
+		/** Constant for parcelisation/serialization. */
+		public static final String PARCEL = "${curr.name}";
 		/** Table name of SQLite database. */
-		public static final String TABLE_NAME = <#if singleTabInheritance && !isTopMostSuperClass>${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.TABLE_NAME<#else>"${curr.name}"</#if>;
+		public static final String TABLE_NAME = <#if singleTabInheritance && !isTopMostSuperClass>${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.TABLE_NAME<#else>"${curr.name}"</#if>;
 		/** Global Fields. */
 		public static final String[] COLS = new String[] {
 	<#assign firstFieldDone=false />
 	<#list curr_fields as field>
 		<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
-	<#if (firstFieldDone)>,</#if>
+<#if (firstFieldDone)>,</#if>
 			${field.owner?cap_first}Columns.${NamingUtils.alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
 	<#if singleTabInheritance && !isTopMostSuperClass>
 		<#list curr.inheritance.superclass.fields?values as field>
 			<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
-		<#if (firstFieldDone)>,</#if>
+<#if (firstFieldDone)>,</#if>
 			${field.owner?cap_first}Columns.${NamingUtils.alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
 	</#if>
 		};
@@ -114,7 +123,7 @@ public abstract class ${project_name?cap_first}ContractBase {
 		 */
 		public static ContentValues itemToContentValues(final ${curr.name} item<#list (curr_relations) as relation><#if relation.relation.type=="ManyToOne" && relation.internal>,
 					final int ${relation.name?uncap_first}Id</#if></#list>) {
-			final ContentValues result = ${project_name?cap_first}Contract.${curr.name}.itemToContentValues(item);
+			final ContentValues result = ${curr.name?cap_first}Contract.${curr.name}.itemToContentValues(item);
 		<#list curr_fields as field>
 			<#if (field.internal)>
 			result.put(${NamingUtils.alias(field.name)},
@@ -135,13 +144,13 @@ public abstract class ${project_name?cap_first}ContractBase {
 		public static ContentValues itemToContentValues(final ${curr.name} item) {
 			final ContentValues result = new ContentValues();
 			<#if (InheritanceUtils.isExtended(curr))>
-			result.putAll(${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.itemToContentValues(item));
+			result.putAll(${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.itemToContentValues(item));
 			</#if>
 
 <#list curr_fields as field>${AdapterUtils.itemToContentValuesFieldAdapter("item", field, 3)}</#list>
 			<#if (singleTabInheritance && !isTopMostSuperClass)>
-			result.put(${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)},
-						${project_name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER);
+			result.put(${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)},
+						${curr.name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER);
 			</#if>
 			return result;
 		}
@@ -155,7 +164,7 @@ public abstract class ${project_name?cap_first}ContractBase {
 		 */
 		public static ${curr.name} cursorToItem(final Cursor cursor) {
 			${curr.name} result = new ${curr.name}();
-			${project_name?cap_first}Contract.${curr.name}.cursorToItem(cursor, result);
+			${curr.name?cap_first}Contract.${curr.name}.cursorToItem(cursor, result);
 			return result;
 		}
 
@@ -167,7 +176,7 @@ public abstract class ${project_name?cap_first}ContractBase {
 		public static void cursorToItem(final Cursor cursor, final ${curr.name} result) {
 			if (cursor.getCount() != 0) {
 				<#if (InheritanceUtils.isExtended(curr))>
-				${project_name?cap_first}Contract.${curr.inheritance.superclass.name}.cursorToItem(cursor, result);
+				${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.cursorToItem(cursor, result);
 
 				</#if>
 				int index;
@@ -189,7 +198,7 @@ public abstract class ${project_name?cap_first}ContractBase {
 
 				${curr.name} item;
 				do {
-					item = ${project_name?cap_first}Contract.${curr.name}.cursorToItem(cursor);
+					item = ${curr.name?cap_first}Contract.${curr.name}.cursorToItem(cursor);
 					result.add(item);
 				} while (cursor.moveToNext());
 			}
@@ -199,5 +208,4 @@ public abstract class ${project_name?cap_first}ContractBase {
 	</#if>
 	}
 	</#if>
-</#list>
 }

@@ -11,23 +11,38 @@ package com.tactfactory.harmony.test;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
 
 import org.junit.Rule;
 import org.junit.rules.TestRule;
 import org.junit.rules.TestWatcher;
 import org.junit.runner.Description;
+import org.junit.runners.Parameterized.Parameters;
 
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.ProjectDiscover;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
+import com.tactfactory.harmony.test.factory.DemactFactory;
+import com.tactfactory.harmony.test.factory.TracScanFactory;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
 /**
- *
+ * Common class for all the test.
  */
 public abstract class CommonTest {
+	
+	/** Current tested metadata. */
+	protected final ApplicationMetadata currentMetadata;
+	
+	/** Old metadata. */
+	protected static ApplicationMetadata oldMetadata;
+
+	/** Parsed metadata. */
+	protected static ApplicationMetadata parsedMetadata;
+	
 	/** Console delimiter for tests. */
 	protected static final String SHARP_DELIMITOR =
 			  "#################"
@@ -37,8 +52,67 @@ public abstract class CommonTest {
 			 + "#########";
 
 	/** Harmony instance. */
-	private static Harmony harmony;
+	protected static Harmony harmony;
+	
+	/**
+	 * Constructor for parameterized tests.
+	 * The parameters sent to this should be all the metadata of the different
+	 * project we want to test. (ie. Demact, Tracscan, etc.)
+	 * 
+	 * @param currentMetadata The metadata of the project
+	 */
+	public CommonTest(ApplicationMetadata currentMetadata) {
+			this.currentMetadata = currentMetadata;
+			if (!this.currentMetadata.equals(oldMetadata)) {
+				this.setUpBeforeNewParameter();
+			}
+			CommonTest.oldMetadata = this.currentMetadata;
+	}
+	
+	/**
+	 * Empty constructor.
+	 */
+	public CommonTest() {
+		this.currentMetadata = null;
+	}
 
+	/**
+	 * This method is called before every new parameter is tested by JUnit.
+	 */
+	public void setUpBeforeNewParameter() {
+		// Base configs
+		ConsoleUtils.setAnsi(false);
+		ConsoleUtils.setQuiet(false);
+		ConsoleUtils.setDebug(true);
+
+		// Clean folder
+		CommonTest.cleanAndroidFolder();
+
+		// Project test config
+		ApplicationMetadata.INSTANCE.setName(
+				this.currentMetadata.getName());
+		
+		ApplicationMetadata.INSTANCE.setProjectNameSpace(
+				this.currentMetadata.getProjectNameSpace());
+
+		harmony = Harmony.getInstance();
+
+		if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
+			final String localProp =
+					String.format("%s/%s",
+							Harmony.getProjectAndroidPath(),
+							"local.properties");
+
+			ApplicationMetadata.setAndroidSdkPath(
+					ProjectDiscover.getSdkDirFromPropertiesFile(localProp));
+
+			if (ApplicationMetadata.getAndroidSdkPath() == null) {
+				ApplicationMetadata.setAndroidSdkPath(
+						"/opt/android-sdk-linux_86/");
+			}
+		}
+	}
+	
 	/**
 	 * Add logger to common test life-cycle.
 	 */
@@ -72,9 +146,16 @@ public abstract class CommonTest {
 
 	/**
 	 * Initialization.
+	 * 
+	 * (This method is still here for compatibility purpose with the other
+	 * bundles...)
+	 * 
 	 * @throws Exception if something bad happens
+	 * 
+	 * @deprecated Use setUpBeforeNewParameter instead.
 	 */
-	public static void setUpBefore() throws Exception {
+	@Deprecated
+	public static void setUpBefore() throws RuntimeException {
 		// Base configs
 		ConsoleUtils.setAnsi(false);
 		ConsoleUtils.setQuiet(false);
@@ -107,7 +188,7 @@ public abstract class CommonTest {
 	 * Initialization.
 	 * @throws Exception if something bad happends.
 	 */
-	public void setUp() throws Exception {
+	public void setUp() throws RuntimeException {
 
 	}
 
@@ -115,7 +196,7 @@ public abstract class CommonTest {
 	 * Test clean.
 	 * @throws Exception if something bad happends.
 	 */
-	public void tearDown() throws Exception {
+	public void tearDown() throws RuntimeException {
 	}
 
 	/** Get Harmony instance.
@@ -168,14 +249,62 @@ public abstract class CommonTest {
 	}
 	
 	/**
-	 * Clean the /android/ folder.
+	 * Clean the /android/ folder. (But keeps the libs folder)
 	 */
 	protected static void cleanAndroidFolder() {
+		CommonTest.cleanAndroidFolder(true);
+	}
+	
+	/**
+	 * Clean the /android/ folder.  
+	 * @param keepLibs True if you want to keep the libs folder.
+	 * 				(Use this if you don't want to redownload the various git
+	 *               libraries of your test project / bundle.)
+	 */
+	protected static void cleanAndroidFolder(boolean keepLibs) {
 		ConsoleUtils.display(
 				  "################################  "
 				+ "Clean Android Folder !! "
 				+ "################################");
 		final File dirproj = new File(Harmony.getProjectAndroidPath());
-		TactFileUtils.deleteRecursive(dirproj);
+		if (keepLibs) { 
+			ConsoleUtils.display("Keep libraries !");
+			File[] files = dirproj.listFiles();
+			if (files != null) {
+				for (File file : files) {
+					if (file.isFile()) {
+						file.delete();
+					} else {
+						if (!file.getName().equals("libs")) {
+							TactFileUtils.deleteRecursive(file);
+						}
+					}
+				}
+			}
+		} else {
+			TactFileUtils.deleteRecursive(dirproj);
+		}
+	}
+	
+	/**
+	 * JUnit Parameters method.
+	 * This should return the various application metadata associated 
+	 * to your various test projects. (ie. Demact, Tracscan, etc.)
+	 * 
+	 * @return The collection of application metadatas.
+	 */
+	@Parameters
+	public static Collection<Object[]> getParameters() {
+		Collection<Object[]> result = new ArrayList<Object[]>();
+		
+		result.add(new ApplicationMetadata[] {
+				TracScanFactory.generateTestMetadata()
+		});
+		
+		result.add(new ApplicationMetadata[] {
+				DemactFactory.generateTestMetadata()
+		});
+		
+		return result;
 	}
 }

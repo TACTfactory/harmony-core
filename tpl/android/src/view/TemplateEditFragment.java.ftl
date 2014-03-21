@@ -62,7 +62,13 @@ import ${project_namespace}.data.${field.relation.targetEntity}SQLiteAdapter;
 		</#if>
 	</#if>
 </#list>
-import ${project_namespace}.provider.${project_name?cap_first}Contract;
+import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
+<#if (curr.inheritance?? && curr.inheritance.superclass??)>
+import ${project_namespace}.provider.contract.${curr.inheritance.superclass.name?cap_first}Contract;
+</#if>
+<#list curr.relations as relation>
+import ${project_namespace}.provider.contract.${relation.relation.targetEntity?cap_first}Contract;
+</#list>
 
 /** ${curr.name} create fragment.
  *
@@ -218,7 +224,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 
 		final Intent intent =  getActivity().getIntent();
 		this.model = (${curr.name}) intent.getParcelableExtra(
-				${curr.name}.PARCEL);
+				${curr.name?cap_first}Contract.${curr.name}.PARCEL);
 
 		this.initializeComponent(view);
 		this.loadData();
@@ -366,7 +372,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			Cursor ${field.name}Cursor = 
 					this.ctx.getContentResolver().query(
 							${field.name}Uri,
-							new String[]{${project_name?cap_first}Contract.${field.relation.targetEntity}.ALIASED_COL_${entities[field.relation.targetEntity].ids[0].name?upper_case}},
+							new String[]{${field.relation.targetEntity}Contract.${field.relation.targetEntity}.ALIASED_COL_${entities[field.relation.targetEntity].ids[0].name?upper_case}},
 							null,
 							null, 
 							null);
@@ -376,7 +382,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 				while (${field.name}Cursor.moveToNext()) {
 					int ${field.name}Id = ${field.name}Cursor.getInt(
 							${field.name}Cursor.getColumnIndex(
-									${project_name?cap_first}Contract.${field.relation.targetEntity}.COL_${entities[field.relation.targetEntity].ids[0].name?upper_case}));
+									${field.relation.targetEntity}Contract.${field.relation.targetEntity}.COL_${entities[field.relation.targetEntity].ids[0].name?upper_case}));
 					for (${field.relation.targetEntity} ${field.name} : this.${field.name}List) {
 						if (${field.name}.get${entities[field.relation.targetEntity].ids[0].name?cap_first}() == ${field.name}Id) {
 							this.associated${field.name?cap_first}List.add(${field.name});

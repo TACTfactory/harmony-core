@@ -67,7 +67,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 	/**
 	 * Constructor.
 	 */
-	private ApplicationMetadata() {
+	public ApplicationMetadata() {
 		super();
 	}
 
