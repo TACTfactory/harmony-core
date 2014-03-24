@@ -99,10 +99,16 @@ public final class Harmony {
 		// Filters
 		final IOFileFilter includeFilter =
 				FileFilterUtils.suffixFileFilter(".jar");
-		final IOFileFilter excludeFilter =
+		
+		IOFileFilter excludeFilter =
 				FileFilterUtils.notFileFilter(
 							FileFilterUtils.nameFileFilter("lib"));
-
+		
+		excludeFilter = FileFilterUtils.and(
+				excludeFilter,
+				FileFilterUtils.notFileFilter(
+							FileFilterUtils.nameFileFilter("libs")));
+		
 		// Check list of Bundles .jar
 		final Collection<File> plugins = TactFileUtils.listFiles(
 				pluginBaseDirectory,
