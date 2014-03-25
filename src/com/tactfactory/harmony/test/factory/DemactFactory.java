@@ -237,7 +237,7 @@ public class DemactFactory extends ProjectMetadataFactory {
 				new HashMap<String, EntityMetadata>();
 		userSubclasses.put(client.getName(), client);
 		userInheritance.setSubclasses(userSubclasses);
-		userInheritance.setType(InheritanceMode.SINGLE_TAB);
+		userInheritance.setType(InheritanceMode.SINGLE_TABLE);
 		FieldMetadata discriminator = new FieldMetadata(user);
 		discriminator.setColumnName("type");
 		discriminator.setColumnDefinition("varchar");
@@ -246,7 +246,7 @@ public class DemactFactory extends ProjectMetadataFactory {
 
 		InheritanceMetadata clientInheritance = new InheritanceMetadata();
 		clientInheritance.setSuperclass(user);
-		clientInheritance.setType(InheritanceMode.SINGLE_TAB);
+		clientInheritance.setType(InheritanceMode.SINGLE_TABLE);
 		clientInheritance.setDiscriminorIdentifier("Client");
 		client.setInheritance(clientInheritance);
 		

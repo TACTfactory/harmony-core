@@ -36,7 +36,7 @@ public abstract class ${curr.name}ContractBase {
 
 	<#if (curr.fields?size > 0 || curr.inheritance??)>
 			<#assign isTopMostSuperClass = (curr.inheritance?? && !curr.inheritance.superclass??) />
-			<#assign singleTabInheritance = (curr.inheritance?? && curr.inheritance.inheritanceType?? && curr.inheritance.inheritanceType == "SingleTab") />
+			<#assign singleTabInheritance = (curr.inheritance?? && curr.inheritance.inheritanceType?? && curr.inheritance.inheritanceType == "SingleTable") />
 			<#assign joinedInheritance = (curr.inheritance?? && curr.inheritance.superclass?? && entities[curr.inheritance.superclass.name]?? && !singleTabInheritance) />
 			<#if joinedInheritance>
 				<#assign curr_ids = entities[curr.inheritance.superclass.name].ids />

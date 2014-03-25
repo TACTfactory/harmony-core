@@ -76,7 +76,7 @@ public abstract class SqliteAdapter {
 			boolean isSingleTabInherited = 
 					fm.getOwner().getInheritance() != null 
 					&& fm.getOwner().getInheritance().getType() 
-									== InheritanceMode.SINGLE_TAB
+									== InheritanceMode.SINGLE_TABLE
 					&& fm.getOwner().getInheritance().getSuperclass() != null;
 			
 			
