@@ -39,7 +39,7 @@ public @interface InheritanceType {
 		 * SingleTab inheritance : One table for each entity. Discriminator
 		 * column to distinguish type.
 		 */
-		SINGLE_TAB("SingleTab");
+		SINGLE_TABLE("SingleTable");
 		
 		private String value;
 		
