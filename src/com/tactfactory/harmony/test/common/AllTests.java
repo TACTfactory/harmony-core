@@ -6,23 +6,19 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.harmony.test;
+package com.tactfactory.harmony.test.common;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
-
 /**
- * All Harmony tests.
+ * All tests related to ORM initialization and generation.
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-	com.tactfactory.harmony.test.CoreTest.class,
-	com.tactfactory.harmony.test.project.AllTests.class,
-	com.tactfactory.harmony.test.orm.AllTests.class,
-	com.tactfactory.harmony.test.fixture.AllTests.class,
-	com.tactfactory.harmony.test.common.AllTests.class})
-public class AllTests {
+	GenerateStaticViewTest.class})
 
+public class AllTests {
+	
 }

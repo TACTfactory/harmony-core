@@ -175,11 +175,12 @@ public abstract class ConsoleUtils {
 	public static void displayWarning(final String value) {
 		if (!isQuiet) {
 			if (isAnsi) {
-				cp.println("[WARNING]" + TAB + value + NEWLINE,
+				cp.println("[WARNING]" + TAB + value,
 						Attribute.NONE,
 						FColor.YELLOW,
 						BColor.BLACK);
 				cp.clear();
+				cp.print(NEWLINE);
 			} else {
 				System.out.println(value);
 			}
@@ -205,11 +206,12 @@ public abstract class ConsoleUtils {
 			String display = makeString(title, value);
 			
 			if (isAnsi) {
-				cp.println("[DEBUG]" + TAB + display + NEWLINE,
+				cp.println("[DEBUG]" + TAB + display,
 						Attribute.NONE,
 						FColor.BLUE,
 						BColor.BLACK);
 				cp.clear();
+				cp.print(NEWLINE);
 			} else {
 				System.out.println("[DEBUG]" + TAB + display);
 			}
@@ -227,14 +229,14 @@ public abstract class ConsoleUtils {
 								 + TAB
 								 + value
 								 + NEWLINE
-								 + getStackTrace(value.getStackTrace())
-								 + NEWLINE;
+								 + getStackTrace(value.getStackTrace());
 			if (isAnsi) {
 				cp.println(message,
 						Attribute.NONE,
 						FColor.RED,
 						BColor.BLACK);
 				cp.clear();
+				cp.print(NEWLINE);
 			} else {
 				System.out.println(message);
 			}
@@ -250,11 +252,12 @@ public abstract class ConsoleUtils {
 	public static void displayError(final String value) {
 		if (!isQuiet) {
 			if (isAnsi) {
-				cp.println("[DEBUG]" + TAB + value + NEWLINE,
+				cp.println("[DEBUG]" + TAB + value,
 						Attribute.NONE,
 						FColor.RED,
 						BColor.BLACK);
 				cp.clear();
+				cp.print(NEWLINE);
 			} else {
 				System.out.println("[DEBUG]" + TAB + value);
 			}
@@ -270,11 +273,12 @@ public abstract class ConsoleUtils {
 	public static void displayLicence(final String value) {
 		if (!isQuiet) {
 			if (isAnsi) {
-				cp.println(value + NEWLINE,
+				cp.println(value,
 						Attribute.BOLD,
 						FColor.GREEN,
 						BColor.BLACK);
 				cp.clear();
+				cp.print(NEWLINE);
 			} else {
 				System.out.println(value);
 			}
@@ -370,17 +374,36 @@ public abstract class ConsoleUtils {
 	 * @return input user input
 	 */
 	public static String getUserInput(final String promptMessage) {
+		return ConsoleUtils.getUserInput(promptMessage, true);
+	}
+	
+
+	/**
+	 * Generic user console prompt.
+	 *
+	 * @param promptMessage message to display
+	 * @param acceptBlank true to accept blank answers,
+	 * 				false to force user to write something
+	 * @return input user input
+	 */
+	public static String getUserInput(
+			final String promptMessage,
+			final boolean acceptBlank) {
+		
 		String input = null;
 		try {
-			ConsoleUtils.display(promptMessage);
+
 			final BufferedReader br =
 					new BufferedReader(
 							new InputStreamReader(
 									System.in,
 									TactFileUtils.DEFAULT_ENCODING));
 
-
-			input = br.readLine();
+			do {
+				ConsoleUtils.display(promptMessage);
+				input = br.readLine();
+			} while (!acceptBlank && input.isEmpty());
+			
 		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);
 		}
