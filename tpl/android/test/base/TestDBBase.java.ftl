@@ -1,23 +1,23 @@
 <@header?interpret />
 package ${project_namespace}.test.base;
 
-import java.io.File;
+<#if dataLoader?? && dataLoader>import java.io.File;</#if>
 
 import ${project_namespace}.provider.${project_name?cap_first}Provider;
-import ${project_namespace}.${project_name?cap_first}Application;
-import ${project_namespace}.fixture.DataLoader;
-import ${project_namespace}.harmony.util.DatabaseUtil;
+<#if dataLoader?? && dataLoader>import ${project_namespace}.${project_name?cap_first}Application;</#if>
+<#if dataLoader?? && dataLoader>import ${project_namespace}.fixture.DataLoader;</#if>
+<#if dataLoader?? && dataLoader>import ${project_namespace}.harmony.util.DatabaseUtil;</#if>
 import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
-import ${data_namespace}.base.SQLiteAdapterBase;
+<#if dataLoader?? && dataLoader>import ${data_namespace}.base.SQLiteAdapterBase;</#if>
 
 import android.content.ContentProvider;
 import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
+<#if dataLoader?? && dataLoader>import android.database.sqlite.SQLiteDatabase;</#if>
 import android.test.AndroidTestCase;
 import android.test.IsolatedContext;
 import android.test.RenamingDelegatingContext;
 import android.test.mock.MockContentResolver;
-import android.util.Log;
+<#if dataLoader?? && dataLoader>import android.util.Log;</#if>
 
 
 /** Base test abstract class <br/>
@@ -103,7 +103,7 @@ public abstract class TestDBBase extends AndroidTestCase {
 	protected void setUp() throws Exception {
 		${project_name?cap_first}SQLiteOpenHelper.isJUnit = true;
 		this.setMockContext();
-		super.setUp();
+		super.setUp();<#if dataLoader?? && dataLoader>
 
 		String dbPath =
 				this.getContext().getDatabasePath(SQLiteAdapterBase.DB_NAME)
@@ -150,6 +150,6 @@ public abstract class TestDBBase extends AndroidTestCase {
 					cacheDbFile,
 					SQLiteAdapterBase.DB_NAME,
 					false);
-		}
+		}</#if>
 	}
 }

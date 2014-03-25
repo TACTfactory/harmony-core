@@ -18,10 +18,10 @@ import java.io.OutputStream;
 <#list entities?values as entity>
 	<#if (entity.fields?size>0 || entity.inheritance?? || entity.inheritance??)>
 import ${data_namespace}.${entity.name?cap_first}SQLiteAdapter;
+import ${project_namespace}.provider.contract.${entity.name?cap_first}Contract;
 	</#if>
 </#list>
 import ${project_namespace}.${project_name?cap_first}Application;
-import ${project_namespace}.provider.${project_name?cap_first}Contract;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -128,7 +128,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 
 		<#list entities?values as entity>
 			<#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??))>
-		db.delete(${project_name?cap_first}Contract.${entity.name?cap_first}.TABLE_NAME,
+		db.delete(${entity.name?cap_first}Contract.${entity.name?cap_first}.TABLE_NAME,
 				null,
 				null);
 			</#if>

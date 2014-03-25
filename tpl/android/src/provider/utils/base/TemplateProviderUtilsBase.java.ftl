@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
 import android.database.Cursor;
-import android.content.ContentProviderOperation;
-import android.content.ContentProviderResult;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
@@ -30,7 +28,16 @@ ${ImportUtils.importRelatedEntities(curr, true)}
 ${ImportUtils.importRelatedEnums(curr, false)}
 ${ImportUtils.importRelatedProviderAdapters(curr, false)}
 import ${project_namespace}.provider.${project_name?cap_first}Provider;
-import ${project_namespace}.provider.${project_name?cap_first}Contract;
+import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
+<#if (curr.inheritance?? && curr.inheritance.superclass??)>
+import ${project_namespace}.provider.contract.${curr.inheritance.superclass.name?cap_first}Contract;
+</#if>
+<#list relations as relation>
+	<#if (relation.relation.type == "ManyToMany")>
+import ${project_namespace}.provider.contract.${relation.relation.joinTable?cap_first}Contract;
+	</#if>
+import ${project_namespace}.provider.contract.${relation.relation.targetEntity?cap_first}Contract;
+</#list>
 
 /**
  * ${curr.name?cap_first} Provider Utils Base.
@@ -63,8 +70,8 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		ContentResolver prov = this.getContext().getContentResolver();
 
 
-		ContentValues itemValues = ${project_name?cap_first}Contract.${curr.name}.itemToContentValues(item);
-		itemValues.remove(${project_name?cap_first}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)});
+		ContentValues itemValues = ${curr.name?cap_first}Contract.${curr.name}.itemToContentValues(item);
+		itemValues.remove(${curr_ids[0].owner}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)});
 
 		operations.add(ContentProviderOperation.newInsert(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
@@ -74,7 +81,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		<#list relations as relation>
 			<#if (relation.relation.type == "OneToMany") >
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
-			String ${relation.name}Selection = ${project_name?cap_first}Contract.${entities[relation.relation.targetEntity].ids[0].owner}.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)} + " IN (";
+			String ${relation.name}Selection = ${entities[relation.relation.targetEntity].ids[0].owner}Contract.${entities[relation.relation.targetEntity].ids[0].owner}.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)} + " IN (";
 			String[] ${relation.name}SelectionArgs = new String[item.get${relation.name?cap_first}().size()];
 			for (int i = 0; i < item.get${relation.name?cap_first}().size(); i++) {
 				${relation.name}SelectionArgs[i] = String.valueOf(item.get${relation.name?cap_first}().get(i).get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
@@ -87,7 +94,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 			operations.add(ContentProviderOperation.newUpdate(${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
 					.withValueBackReference(
-							${project_name?cap_first}Contract.${relation.relation.targetEntity}
+							${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}
 									.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
 							0)
 					.withSelection(${relation.name}Selection, ${relation.name}SelectionArgs)
@@ -98,14 +105,14 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 				ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
 				${relation.relation.targetEntity?uncap_first}Values.put(
-						${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)},
+						${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)},
 						${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
 
 				operations.add(ContentProviderOperation.newInsert(
 					${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
 					    .withValues(${relation.relation.targetEntity?uncap_first}Values)
 					    .withValueBackReference(
-								${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)},
+								${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)},
 					    		0)
 					    .build());
 
@@ -144,9 +151,9 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 				new ArrayList<ContentProviderOperation>();
 		ContentResolver prov = this.getContext().getContentResolver();
 
-		ContentValues itemValues = ${project_name?cap_first}Contract.${curr.name}.itemToContentValues(item<#list relations as relation><#if (relation.internal)>,
+		ContentValues itemValues = ${curr.name?cap_first}Contract.${curr.name}.itemToContentValues(item<#list relations as relation><#if (relation.internal)>,
 					${relation.name?uncap_first}Id</#if></#list>);
-		itemValues.remove(${project_name?cap_first}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)});
+		itemValues.remove(${curr_ids[0].owner}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)});
 
 		operations.add(ContentProviderOperation.newInsert(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
@@ -162,7 +169,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			Criteria crit = new Criteria();
 			ArrayValue values = new ArrayValue();
 			crit.setType(Type.IN);
-			crit.setKey(${project_name?cap_first}Contract.${relation.relation.targetEntity}.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
+			crit.setKey(${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
 			crit.addValue(values);
 			${curr.name?uncap_first}Crit.add(crit);
 
@@ -175,7 +182,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			operations.add(ContentProviderOperation.newUpdate(
 					${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
 						.withValueBackReference(
-								${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}
+								${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}
 										.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
 								0)
 					.withSelection(
@@ -188,14 +195,14 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 				ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
 				${relation.relation.targetEntity?uncap_first}Values.put(
-						${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)},
+						${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)},
 						${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
 
 				operations.add(ContentProviderOperation.newInsert(
 					${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
 					    .withValues(${relation.relation.targetEntity?uncap_first}Values)
 					    .withValueBackReference(
-								${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)},
+								${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)},
 					    		0)
 					    .build());
 
@@ -252,19 +259,19 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 		${curr.name}Criterias crits =
 				new ${curr.name}Criterias(GroupType.AND);
-		crits.add(${project_name?cap_first}Contract.${curr_ids[0].owner}.ALIASED_${NamingUtils.alias(curr_ids[0].name)},
+		crits.add(${curr_ids[0].owner}Contract.${curr_ids[0].owner}.ALIASED_${NamingUtils.alias(curr_ids[0].name)},
 					String.valueOf(id));
 
 		Cursor cursor = prov.query(
 			${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
-			${project_name?cap_first}Contract.${curr.name?cap_first}.ALIASED_COLS,
+			${curr.name?cap_first}Contract.${curr.name?cap_first}.ALIASED_COLS,
 			crits.toSQLiteSelection(),
 			crits.toSQLiteSelectionArgs(),
 			null);
 
 		if (cursor.getCount() > 0) {
 			cursor.moveToFirst();
-			result = ${project_name?cap_first}Contract.${curr.name}.cursorToItem(cursor);
+			result = ${curr.name?cap_first}Contract.${curr.name}.cursorToItem(cursor);
 			cursor.close();
 
 		<#list relations as relation>
@@ -297,12 +304,12 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 		Cursor cursor = prov.query(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
-				${project_name?cap_first}Contract.${curr.name?cap_first}.ALIASED_COLS,
+				${curr.name?cap_first}Contract.${curr.name?cap_first}.ALIASED_COLS,
 				null,
 				null,
 				null);
 
-		result = ${project_name?cap_first}Contract.${curr.name}.cursorToItems(cursor);
+		result = ${curr.name?cap_first}Contract.${curr.name}.cursorToItems(cursor);
 
 		cursor.close();
 
@@ -322,12 +329,12 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 		Cursor cursor = prov.query(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
-				${project_name?cap_first}Contract.${curr.name?cap_first}.ALIASED_COLS,
+				${curr.name?cap_first}Contract.${curr.name?cap_first}.ALIASED_COLS,
 				criteria.toSQLiteSelection(),
 				criteria.toSQLiteSelectionArgs(),
 				null);
 
-		result = ${project_name?cap_first}Contract.${curr.name}.cursorToItems(cursor);
+		result = ${curr.name?cap_first}Contract.${curr.name}.cursorToItems(cursor);
 
 		cursor.close();
 
@@ -345,7 +352,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		ArrayList<ContentProviderOperation> operations =
 				new ArrayList<ContentProviderOperation>();
 		ContentResolver prov = this.getContext().getContentResolver();
-		ContentValues itemValues = ${project_name?cap_first}Contract.${curr.name}.itemToContentValues(item);
+		ContentValues itemValues = ${curr.name?cap_first}Contract.${curr.name}.itemToContentValues(item);
 
 		Uri uri = Uri.withAppendedPath(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
@@ -365,7 +372,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			Criteria crit = new Criteria();
 			ArrayValue values = new ArrayValue();
 			crit.setType(Type.IN);
-			crit.setKey(${project_name?cap_first}Contract.${entities[relation.relation.targetEntity].ids[0].owner}.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
+			crit.setKey(${entities[relation.relation.targetEntity].ids[0].owner}Contract.${entities[relation.relation.targetEntity].ids[0].owner}.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
 			crit.addValue(values);
 			${relation.name}Crit.add(crit);
 
@@ -378,7 +385,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			operations.add(ContentProviderOperation.newUpdate(
 					${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
 						.withValue(
-								${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}
+								${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}
 										.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
 								item.get${curr_ids[0].name?cap_first}())
 					.withSelection(
@@ -388,7 +395,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 			// Remove old associated ${relation.name}
 			crit.setType(Type.NOT_IN);
-			${relation.name}Crit.add(${project_name?cap_first}Contract.${relation.relation.targetEntity}.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
+			${relation.name}Crit.add(${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
 					String.valueOf(item.get${curr_ids[0].name?cap_first}()),
 					Type.EQUALS);
 			
@@ -396,7 +403,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			operations.add(ContentProviderOperation.newUpdate(
 					${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
 						.withValue(
-								${project_name?cap_first}Contract.${relation.relation.targetEntity}
+								${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}
 										.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
 								null)
 					.withSelection(
@@ -407,15 +414,15 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 			<#elseif (relation.relation.type == "ManyToMany") >
 		operations.add(ContentProviderOperation.newDelete(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
-				.withSelection(${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)} + "= ?",
+				.withSelection(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)} + "= ?",
 								new String[]{String.valueOf(item.get${curr_ids[0].name?cap_first}())})
 				.build());
 
 		for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 			ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
-			${relation.relation.targetEntity?uncap_first}Values.put(${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)},
+			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)},
 					${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
-			${relation.relation.targetEntity?uncap_first}Values.put(${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)},
+			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)},
 					item.get${curr_ids[0].name?cap_first}());
 
 			operations.add(ContentProviderOperation.newInsert(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
@@ -450,7 +457,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		ArrayList<ContentProviderOperation> operations =
 				new ArrayList<ContentProviderOperation>();
 		ContentResolver prov = this.getContext().getContentResolver();
-		ContentValues itemValues = ${project_name?cap_first}Contract.${curr.name}.itemToContentValues(
+		ContentValues itemValues = ${curr.name?cap_first}Contract.${curr.name}.itemToContentValues(
 				item<#list relations as relation><#if (relation.internal)>,
 				${relation.name?uncap_first}Id</#if></#list>);
 
@@ -473,7 +480,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			Criteria crit = new Criteria();
 			ArrayValue values = new ArrayValue();
 			crit.setType(Type.IN);
-			crit.setKey(${project_name?cap_first}Contract.${entities[relation.relation.targetEntity].ids[0].owner}.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
+			crit.setKey(${entities[relation.relation.targetEntity].ids[0].owner}Contract.${entities[relation.relation.targetEntity].ids[0].owner}.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
 			crit.addValue(values);
 			${relation.name}Crit.add(crit);
 
@@ -486,7 +493,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			operations.add(ContentProviderOperation.newUpdate(
 					${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
 						.withValue(
-								${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}
+								${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}
 										.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
 								item.get${curr_ids[0].name?cap_first}())
 					.withSelection(
@@ -496,7 +503,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 			// Remove old associated ${relation.name}
 			crit.setType(Type.NOT_IN);
-			${relation.name}Crit.add(${project_name?cap_first}Contract.${relation.relation.targetEntity}.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
+			${relation.name}Crit.add(${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
 					String.valueOf(item.get${curr_ids[0].name?cap_first}()),
 					Type.EQUALS);
 			
@@ -504,7 +511,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			operations.add(ContentProviderOperation.newUpdate(
 					${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
 						.withValue(
-								${project_name?cap_first}Contract.${relation.relation.targetEntity}
+								${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}
 										.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
 								null)
 					.withSelection(
@@ -515,15 +522,15 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 			<#elseif (relation.relation.type == "ManyToMany") >
 		operations.add(ContentProviderOperation.newDelete(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
-				.withSelection(${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)} + "= ?",
+				.withSelection(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)} + "= ?",
 								new String[]{String.valueOf(item.get${curr_ids[0].name?cap_first}())})
 				.build());
 
 		for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 			ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
-			${relation.relation.targetEntity?uncap_first}Values.put(${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)},
+			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)},
 					${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
-			${relation.relation.targetEntity?uncap_first}Values.put(${project_name?cap_first}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)},
+			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)},
 					item.get${curr_ids[0].name?cap_first}());
 
 			operations.add(ContentProviderOperation.newInsert(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
@@ -560,14 +567,14 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		ContentResolver prov = this.getContext().getContentResolver();
 		Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
 				${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI,
-				${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COLS,
-				${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)} + "= ?",
+				${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COLS,
+				${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)} + "= ?",
 				new String[]{String.valueOf(item.get${relation.name?cap_first}().get${entities[relation.relation.targetEntity].ids[0].name?cap_first}())},
 				null);
 
 		if (${relation.relation.targetEntity?uncap_first}Cursor.getCount() > 0) {
 			${relation.relation.targetEntity?uncap_first}Cursor.moveToFirst();
-			result = ${project_name?cap_first}Contract.${relation.relation.targetEntity}.cursorToItem(${relation.relation.targetEntity?uncap_first}Cursor);
+			result = ${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}.cursorToItem(${relation.relation.targetEntity?uncap_first}Cursor);
 		} else {
 			result = null;
 		}
@@ -587,13 +594,13 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		ContentResolver prov = this.getContext().getContentResolver();
 		Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
 				${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI,
-				${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COLS,
-				${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COL_${relation.relation.mappedBy?upper_case}
+				${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COLS,
+				${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COL_${relation.relation.mappedBy?upper_case}
 						+ "= ?",
 				new String[]{String.valueOf(item.get${curr_ids[0].name?cap_first}())},
 				null);
 
-		result = ${project_name?cap_first}Contract.${relation.relation.targetEntity}.cursorToItems(
+		result = ${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}.cursorToItems(
 						${relation.relation.targetEntity?uncap_first}Cursor);
 		${relation.relation.targetEntity?uncap_first}Cursor.close();
 
@@ -611,8 +618,8 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		ContentResolver prov = this.getContext().getContentResolver();
 		Cursor ${relation.relation.joinTable?uncap_first}Cursor = prov.query(
 				${relation.relation.joinTable?cap_first}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI,
-				${project_name?cap_first}Contract.${relation.relation.joinTable?cap_first}.ALIASED_COLS,
-				${project_name?cap_first}Contract.${relation.relation.joinTable?cap_first}.ALIASED_${NamingUtils.alias(relation.relation.mappedBy)} + "= ?",
+				${relation.relation.joinTable?cap_first}Contract.${relation.relation.joinTable?cap_first}.ALIASED_COLS,
+				${relation.relation.joinTable?cap_first}Contract.${relation.relation.joinTable?cap_first}.ALIASED_${NamingUtils.alias(relation.relation.mappedBy)} + "= ?",
 				new String[]{String.valueOf(item.get${curr_ids[0].name?cap_first}())},
 				null);
 
@@ -621,14 +628,14 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 					new ${relation.relation.targetEntity}Criterias(GroupType.AND);
 			Criteria inCrit = new Criteria();
 			ArrayValue arrayValue = new ArrayValue();
-			inCrit.setKey(${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
+			inCrit.setKey(${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
 			inCrit.setType(Type.IN);
 			inCrit.addValue(arrayValue);
 			${relation.relation.targetEntity?uncap_first}Crits.add(inCrit);
 
 			while (${relation.relation.joinTable?uncap_first}Cursor.moveToNext()) {
 				int index = ${relation.relation.joinTable?uncap_first}Cursor.getColumnIndex(
-						${project_name?cap_first}Contract.${relation.relation.joinTable?cap_first}.${NamingUtils.alias(relation.name)});
+						${relation.relation.joinTable?cap_first}Contract.${relation.relation.joinTable?cap_first}.${NamingUtils.alias(relation.name)});
 				int ${relation.relation.targetEntity?uncap_first}Id = ${relation.relation.joinTable?uncap_first}Cursor.getInt(index);
 
 				arrayValue.addValue(String.valueOf(
@@ -637,12 +644,12 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			${relation.relation.joinTable?uncap_first}Cursor.close();
 			Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
 					${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI,
-					${project_name?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COLS,
+					${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COLS,
 					${relation.relation.targetEntity?uncap_first}Crits.toSQLiteSelection(),
 					${relation.relation.targetEntity?uncap_first}Crits.toSQLiteSelectionArgs(),
 					null);
 
-			result = ${project_name?cap_first}Contract.${relation.relation.targetEntity}.cursorToItems(${relation.relation.targetEntity?uncap_first}Cursor);
+			result = ${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}.cursorToItems(${relation.relation.targetEntity?uncap_first}Cursor);
 			${relation.relation.targetEntity?uncap_first}Cursor.close();
 		} else {
 			result = new ArrayList<${relation.relation.targetEntity?cap_first}>();
