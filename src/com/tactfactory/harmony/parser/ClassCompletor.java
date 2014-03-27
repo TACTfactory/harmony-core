@@ -50,6 +50,14 @@ public class ClassCompletor {
 		for (final EntityMetadata classMeta : this.metas.values()) {
 			if (!classMeta.hasBeenParsed() && !classMeta.isInternal()) {
 				nonParsed.add(classMeta);
+			} else if (classMeta.getInheritance() != null) {
+				// Check if superclass is a parsed entity
+				EntityMetadata superclass =
+						classMeta.getInheritance().getSuperclass();
+				
+				if (superclass != null && !superclass.hasBeenParsed()) {
+					classMeta.getInheritance().setSuperclass(null);
+				}
 			}
 		}
 		for (final EntityMetadata classMeta : nonParsed) {
