@@ -82,6 +82,7 @@ public class ClassMetadata extends BaseMetadata {
 			model.put(TagConstant.INHERITANCE, this.inheritanceMeta.toMap(adapter));
 		}
 		model.put(TagConstant.OUTER_CLASS, this.outerClass);
+		model.put(TagConstant.HAS_BEEN_PARSED, this.hasBeenParsed);
 
 		return model;
 	}

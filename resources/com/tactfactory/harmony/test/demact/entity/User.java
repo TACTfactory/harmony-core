@@ -32,7 +32,7 @@ import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
 @Entity
 @InheritanceType(InheritanceMode.SINGLE_TABLE)
 @DiscriminatorColumn(name="type", type="varchar")
-public class User implements Cloneable, Serializable {
+public class User extends Object implements Cloneable, Serializable {
 	/** Serial UID. */
 	private static final long serialVersionUID = 7032873279928549706L;
 

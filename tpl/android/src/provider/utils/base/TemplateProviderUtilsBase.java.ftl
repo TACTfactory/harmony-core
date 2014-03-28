@@ -29,7 +29,7 @@ ${ImportUtils.importRelatedEnums(curr, false)}
 ${ImportUtils.importRelatedProviderAdapters(curr, false)}
 import ${project_namespace}.provider.${project_name?cap_first}Provider;
 import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
-<#if (curr.inheritance?? && curr.inheritance.superclass??)>
+<#if (InheritanceUtils.isExtended(curr))>
 import ${project_namespace}.provider.contract.${curr.inheritance.superclass.name?cap_first}Contract;
 </#if>
 <#list relations as relation>

@@ -63,7 +63,7 @@ import ${project_namespace}.data.${field.relation.targetEntity}SQLiteAdapter;
 	</#if>
 </#list>
 import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
-<#if (curr.inheritance?? && curr.inheritance.superclass??)>
+<#if (InheritanceUtils.isExtended(curr))>
 import ${project_namespace}.provider.contract.${curr.inheritance.superclass.name?cap_first}Contract;
 </#if>
 <#list curr.relations as relation>

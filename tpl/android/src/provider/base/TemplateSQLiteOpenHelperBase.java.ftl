@@ -95,11 +95,11 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		if (!assetsExist) {
 			/// Create Schema
 	<#list entities?values as entity>
-		<#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !(entity.inheritance?? && entity.inheritance.inheritanceType?? && entity.inheritance.inheritanceType == "SingleTable" && entity.inheritance.superclass??))>
+		<#if ((entity.fields?size>0 || InheritanceUtils.isExtended(entity)) && !(entity.inheritance?? && entity.inheritance.inheritanceType?? && entity.inheritance.inheritanceType == "SingleTable" && InheritanceUtils.isExtended(entity)))>
+
 			if (${project_name?cap_first}Application.DEBUG) {
 				Log.d(TAG, "Creating schema : ${entity.name}");
 			}
-
 			db.execSQL(${entity.name}SQLiteAdapter.getSchema());
 			<#list entity["relations"] as relation>
 				<#if (relation.type=="ManyToMany")>
