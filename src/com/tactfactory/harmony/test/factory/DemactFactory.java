@@ -242,6 +242,7 @@ public class DemactFactory extends ProjectMetadataFactory {
 		discriminator.setColumnName("type");
 		discriminator.setColumnDefinition("varchar");
 		userInheritance.setDiscriminorColumn(discriminator);
+		userInheritance.setDiscriminorIdentifier("User");
 		user.setInheritance(userInheritance);
 
 		InheritanceMetadata clientInheritance = new InheritanceMetadata();

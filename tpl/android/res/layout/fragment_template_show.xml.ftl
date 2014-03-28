@@ -1,5 +1,4 @@
 <#include utilityPath + "all_imports.ftl" />
-<#assign curr = entities[current_entity] />
 <#assign fields = ViewUtils.getAllFields(curr) />
 <#assign currname=curr.name?lower_case />
 <?xml version="1.0" encoding="utf-8"?>

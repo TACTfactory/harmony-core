@@ -1,5 +1,5 @@
 <#include utilityPath + "all_imports.ftl" />
-<#assign inherited = joinedInheritance || singleTabInheritance && curr.inheritance.superclass?? />
+<#assign inherited = joinedInheritance || singleTabInheritance && curr.inheritance.superclass?? && entities[curr.inheritance.superclass.name]?? />
 <#assign ext = curr.name?cap_first />
 <#assign hasIds = (curr_ids?? && curr_ids?size > 0) />
 <#if (curr.internal)>

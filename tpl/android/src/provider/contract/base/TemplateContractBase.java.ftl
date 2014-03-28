@@ -35,27 +35,12 @@ import ${project_namespace}.harmony.util.DateUtils;
 public abstract class ${curr.name}ContractBase {
 
 	<#if (curr.fields?size > 0 || curr.inheritance??)>
-			<#assign isTopMostSuperClass = (curr.inheritance?? && !curr.inheritance.superclass??) />
-			<#assign singleTabInheritance = (curr.inheritance?? && curr.inheritance.inheritanceType?? && curr.inheritance.inheritanceType == "SingleTable") />
-			<#assign joinedInheritance = (curr.inheritance?? && curr.inheritance.superclass?? && entities[curr.inheritance.superclass.name]?? && !singleTabInheritance) />
-			<#if joinedInheritance>
-				<#assign curr_ids = entities[curr.inheritance.superclass.name].ids />
-				<#assign curr_fields = curr.fields?values + entities[curr.inheritance.superclass.name].ids />
-				<#assign curr_relations = curr.relations + entities[curr.inheritance.superclass.name].relations />
-			<#elseif (singleTabInheritance && curr.inheritance.superclass??)>
-				<#assign curr_ids = entities[curr.inheritance.superclass.name].ids />
-				<#assign curr_fields = curr.fields?values />
-				<#assign curr_relations = curr.relations + entities[curr.inheritance.superclass.name].relations  />
-			<#else>
-				<#assign curr_ids = curr.ids />
-				<#assign curr_fields = curr.fields?values />
-				<#assign curr_relations = curr.relations />
-			</#if>
+			<#assign isTopMostSuperClass = (curr.inheritance?? && (!curr.inheritance.superclass?? || !entities[curr.inheritance.superclass.name]??)) />
 			<#assign hasInternalFields = false /><#list (curr_relations) as relation><#if (relation.internal)><#assign hasInternalFields = true /></#if></#list>
 	/**
 	 * Columns names and aliases for ${curr.name} entity.
 	 */
-	public interface ${curr.name}Columns<#if ((joinedInheritance || singleTabInheritance) && curr.inheritance.superclass??)> extends ${curr.inheritance.superclass.name}Columns</#if> {
+	public interface ${curr.name}Columns<#if InheritanceUtils.isExtended(curr)> extends ${curr.inheritance.superclass.name}Columns</#if> {
 		<#if (singleTabInheritance && !isTopMostSuperClass)>
 		/** Identifier for inheritance. */
 		public static final String DISCRIMINATOR_IDENTIFIER = "${curr.inheritance.discriminatorIdentifier}";

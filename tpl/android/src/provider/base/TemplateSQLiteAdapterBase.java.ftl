@@ -10,7 +10,7 @@
 <#assign hasTime = MetadataUtils.hasTime(curr) />
 <#assign hasDateTime = MetadataUtils.hasDateTime(curr) />
 
-<#assign isTopMostSuperClass = (curr.inheritance?? && !curr.inheritance.superclass??) />
+<#assign isTopMostSuperClass = (curr.inheritance?? && (!curr.inheritance.superclass?? || !entities[curr.inheritance.superclass.name]??)) />
 <@header?interpret />
 package ${data_namespace}.base;
 
@@ -81,7 +81,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	/** TAG for debug purpose. */
 	protected static final String TAG = "${curr.name}DBAdapter";
 
-<#if ((joinedInheritance || singleTabInheritance) && curr.inheritance.superclass??)>
+<#if (InheritanceUtils.isExtended(curr))>
 	/** Mother Adapter. */
 	private final ${curr.inheritance.superclass.name}SQLiteAdapter motherAdapter;
 </#if>
@@ -170,7 +170,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 </#if>
 ;
 	}
-	<#if ((joinedInheritance || singleTabInheritance) && curr.inheritance.superclass??)>
+	<#if (InheritanceUtils.isExtended(curr))>
 	@Override
 	public SQLiteDatabase open() {
 		SQLiteDatabase db = super.open();
@@ -190,7 +190,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public ${curr.name}SQLiteAdapterBase(final Context ctx) {
 		super(ctx);
-		<#if ((joinedInheritance || singleTabInheritance) && curr.inheritance.superclass??)>
+		<#if (InheritanceUtils.isExtended(curr))>
 		this.motherAdapter = new ${curr.inheritance.superclass.name}SQLiteAdapter(ctx);
 		</#if>
 	}

@@ -152,5 +152,7 @@ public abstract class TagConstant {
 	public static final String COLUMN_RESULT = "columnResult";
 	/** Constant for writable. */
 	public static final String WRITABLE = "writable";
+	/** Constant for writable. */
+	public static final String HAS_BEEN_PARSED = "hasBeenParsed";
 
 }
