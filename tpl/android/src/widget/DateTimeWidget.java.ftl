@@ -159,7 +159,7 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 		switch (arg0.getId()) {
 			case R.id.date:
 				if (this.dateListener != null) {
-					this.dateListener.onClickDateEditText();
+					this.dateListener.onClickDateEditText(this);
 				}
 		        final String date = this.dateEditText.getText().toString();
 
@@ -184,7 +184,7 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 			    break;
 			case R.id.time:
 				if (this.timeListener != null) {
-					this.timeListener.onClickTimeEditText();
+					this.timeListener.onClickTimeEditText(this);
 				}
 		        final String time =
 		        		this.timeEditText.getText().toString();
@@ -339,13 +339,13 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 								0);
 					this.dateWidget.setDate(date);
 					if (DateTimeWidget.this.dateListener != null) {
-						DateTimeWidget.this.dateListener.onValidateDate();
+						DateTimeWidget.this.dateListener.onValidateDate(DateTimeWidget.this);
 					}
 					break;
 
 				case AlertDialog.BUTTON_NEGATIVE :
 					if (DateTimeWidget.this.dateListener != null) {
-						DateTimeWidget.this.dateListener.onCancelDate();
+						DateTimeWidget.this.dateListener.onCancelDate(DateTimeWidget.this);
 					}
 					break;
 				default:
@@ -386,13 +386,13 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 						tp.getCurrentMinute());
 					this.timeWidget.setTime(time);
 					if (DateTimeWidget.this.timeListener != null) {
-						DateTimeWidget.this.timeListener.onValidateTime();
+						DateTimeWidget.this.timeListener.onValidateTime(DateTimeWidget.this);
 					}
 				break;
 
 				case AlertDialog.BUTTON_NEGATIVE :
 					if (DateTimeWidget.this.timeListener != null) {
-						DateTimeWidget.this.timeListener.onCancelTime();
+						DateTimeWidget.this.timeListener.onCancelTime(DateTimeWidget.this);
 					}
 					break;
 				default:
@@ -438,17 +438,17 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 		/**
 		 * Called when User click on the Date EditText.
 		 */
-		void onClickDateEditText();
+		void onClickDateEditText(DateTimeWidget dateTimeWidget);
 
 		/**
 		 * Called when User click on the date picker dialog's ok button.
 		 */
-		void onValidateDate();
+		void onValidateDate(DateTimeWidget dateTimeWidget);
 
 		/**
 		 * Called when User click on the date picker dialog's cancel button.
 		 */
-		void onCancelDate();
+		void onCancelDate(DateTimeWidget dateTimeWidget);
 	}
 
 	/** Widget Interface for click events. */
@@ -456,17 +456,17 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 		/**
 		 * Called when User click on the Time EditText.
 		 */
-		void onClickTimeEditText();
+		void onClickTimeEditText(DateTimeWidget dateTimeWidget);
 
 		/**
 		 * Called when User click on the Time picker dialog's ok button.
 		 */
-		void onValidateTime();
+		void onValidateTime(DateTimeWidget dateTimeWidget);
 
 		/**
 		 * Called when User click on the Time picker dialog's cancel button.
 		 */
-		void onCancelTime();
+		void onCancelTime(DateTimeWidget dateTimeWidget);
 	}
 }
 
