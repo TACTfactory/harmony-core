@@ -100,7 +100,7 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 	@Override
 	public void onClick(View arg0) {
 		if (this.dateListener != null) {
-			this.dateListener.onClickDateEditText();
+			this.dateListener.onClickDateEditText(this);
 		}
 		DateTime dt = new DateTime();
 
@@ -180,13 +180,13 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 								0);
 					this.dateWidget.setDate(date);
 					if (DateWidget.this.dateListener != null) {
-						DateWidget.this.dateListener.onValidateDate();
+						DateWidget.this.dateListener.onValidateDate(DateWidget.this);
 					}
 					break;
 
 				case AlertDialog.BUTTON_NEGATIVE :
 					if (DateWidget.this.dateListener != null) {
-						DateWidget.this.dateListener.onCancelDate();
+						DateWidget.this.dateListener.onCancelDate(DateWidget.this);
 					}
 					break;
 				default:
@@ -216,17 +216,17 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 		/**
 		 * Called when User click on the Date EditText.
 		 */
-		void onClickDateEditText();
+		void onClickDateEditText(DateWidget dateWidget);
 
 		/**
 		 * Called when User click on the date picker dialog's ok button.
 		 */
-		void onValidateDate();
+		void onValidateDate(DateWidget dateWidget);
 
 		/**
 		 * Called when User click on the date picker dialog's cancel button.
 		 */
-		void onCancelDate();
+		void onCancelDate(DateWidget dateWidget);
 	}
 
 }

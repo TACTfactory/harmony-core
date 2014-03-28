@@ -134,7 +134,7 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 	@Override
 	public void onClick(View arg0) {
 		if (this.timeListener != null) {
-			this.timeListener.onClickTimeEditText();
+			this.timeListener.onClickTimeEditText(this);
 		}
 		DateTime dt = new DateTime();
 
@@ -233,13 +233,13 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 						tp.getCurrentMinute());
 					this.timeWidget.setTime(time);
 					if (TimeWidget.this.timeListener != null) {
-						TimeWidget.this.timeListener.onValidateTime();
+						TimeWidget.this.timeListener.onValidateTime(TimeWidget.this);
 					}
 				break;
 
 				case AlertDialog.BUTTON_NEGATIVE :
 					if (TimeWidget.this.timeListener != null) {
-						TimeWidget.this.timeListener.onCancelTime();
+						TimeWidget.this.timeListener.onCancelTime(TimeWidget.this);
 					}
 					break;
 				default:
@@ -269,16 +269,16 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 		/**
 		 * Called when User click on the Time EditText.
 		 */
-		void onClickTimeEditText();
+		void onClickTimeEditText(TimeWidget timeWidget);
 
 		/**
 		 * Called when User click on the Time picker dialog's ok button.
 		 */
-		void onValidateTime();
+		void onValidateTime(TimeWidget timeWidget);
 
 		/**
 		 * Called when User click on the Time picker dialog's cancel button.
 		 */
-		void onCancelTime();
+		void onCancelTime(TimeWidget timeWidget);
 	}
 }
