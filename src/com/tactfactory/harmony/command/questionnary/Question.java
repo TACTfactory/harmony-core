@@ -8,6 +8,7 @@
  */
 package com.tactfactory.harmony.command.questionnary;
 
+import com.google.common.base.Strings;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -159,7 +160,10 @@ public class Question {
 		if (this.authorizedValues == null) {
 			result = ConsoleUtils.getUserInput(
 					this.question,
-					this.acceptBlankAnswer);
+					(this.acceptBlankAnswer || (this.defaultValue != null)));
+			if (this.defaultValue != null && Strings.isNullOrEmpty(result)) {
+				result = this.defaultValue;
+			}
 		} else {
 			result = ConsoleUtils.getValidUserInput(
 					this.question,

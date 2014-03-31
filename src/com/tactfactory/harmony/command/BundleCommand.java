@@ -11,6 +11,8 @@ package com.tactfactory.harmony.command;
 import java.util.LinkedHashMap;
 
 import com.tactfactory.harmony.Console;
+import com.tactfactory.harmony.command.questionnary.Question;
+import com.tactfactory.harmony.command.questionnary.Questionnary;
 import com.tactfactory.harmony.plateforme.AndroidAdapter;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.template.BundleGenerator;
@@ -61,23 +63,34 @@ public class BundleCommand extends BaseCommand {
 	private void generateEmptyBundle() {
 		// Confirmation
 		if (ConsoleUtils.isConsole()) {
-			final String bundleOwnerName =
-					ConsoleUtils.getUserInput("Bundle's owner ?");
+			Questionnary questionnary = new Questionnary(this.getCommandArgs());
+			Question ownerQuestion = new Question();
+			ownerQuestion.setQuestion("Bundle's owner ?");
+			ownerQuestion.setParamName("owner");
+			ownerQuestion.setShortParamName("o");
+			ownerQuestion.setAcceptBlankAnswer(false);
+			questionnary.addQuestion("owner", ownerQuestion);
 
-			final String bundleName =
-					ConsoleUtils.getUserInput("Name of your Bundle ?");
+			Question nameQuestion = new Question();
+			nameQuestion.setQuestion("Name of your Bundle ?");
+			nameQuestion.setParamName("name");
+			nameQuestion.setShortParamName("n");
+			ownerQuestion.setAcceptBlankAnswer(false);
+			questionnary.addQuestion("name", nameQuestion);
 
-			final String bundleNameSpace =
-					ConsoleUtils.getUserInput("Namespace of your Bundle ?");
+			Question namespaceQuestion = new Question();
+			namespaceQuestion.setQuestion("Namespace of your Bundle ?");
+			namespaceQuestion.setParamName("namespace");
+			namespaceQuestion.setShortParamName("ns");
+			ownerQuestion.setAcceptBlankAnswer(false);
+			questionnary.addQuestion("namespace", namespaceQuestion);
+			
+			questionnary.launchQuestionnary();
 
-			try {
-				new BundleGenerator(this.adapter).generateBundleFiles(
-						bundleOwnerName,
-						bundleName,
-						bundleNameSpace);
-			} catch (Exception e) {
-				ConsoleUtils.displayError(e);
-			}
+			new BundleGenerator(this.adapter).generateBundleFiles(
+					questionnary.getAnswer("owner"),
+					questionnary.getAnswer("name"),
+					questionnary.getAnswer("namespace"));
 		}
 	}
 

@@ -56,7 +56,8 @@ public class MenuCommand extends BaseCommand {
 
 	@Override
 	public final void summary() {
-		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> commands =
+				new LinkedHashMap<String, String>();
 		commands.put(UPDATE_MENU, "Update the menu");
 		
 		ConsoleUtils.displaySummary(

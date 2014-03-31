@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.HashMap;
 import java.util.List;
 import java.util.regex.Pattern;
 
@@ -22,6 +23,8 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
 import com.google.common.base.Strings;
+import com.tactfactory.harmony.command.questionnary.Question;
+import com.tactfactory.harmony.command.questionnary.Questionnary;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.template.TagConstant;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -181,26 +184,23 @@ public final class ProjectDiscover {
 	/**
 	 * Prompt Project Android SDK Path to the user.
 	 */
-	public static void initProjectAndroidSdkPath() {
+	public static void initProjectAndroidSdkPath(
+			HashMap<String, String> arguments) {
+		
 		if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
-			final String sdkPath =
-					ConsoleUtils.getUserInput("Please enter AndroidSDK "
-							+ "full path ["
-							+ defaultSDKPath
-							+ "]:");
-
-			if (!Strings.isNullOrEmpty(sdkPath)) {
-				defaultSDKPath = sdkPath.trim();
-
-			} else {
-				final String osMessage = "Detected OS: " + detectedOS;
-
-				// Debug Log
-				ConsoleUtils.displayDebug(osMessage);
-			}
-			ApplicationMetadata.setAndroidSdkPath(defaultSDKPath);
-			androidSdkVersion = ProjectDiscover.setAndroidSdkPath(
-					ApplicationMetadata.getAndroidSdkPath());
+			Questionnary questionnary = new Questionnary(arguments);
+			Question question = new Question();
+			question.setParamName("androidsdk");
+			question.setDefaultValue(defaultSDKPath);
+			question.setQuestion(String.format(
+					"Please enter AndroidSDK full path [%s]:",
+							defaultSDKPath));
+			question.setShortParamName("sdk");
+			
+			
+			questionnary.addQuestion("sdk", question);
+			questionnary.launchQuestionnary();
+			ApplicationMetadata.setAndroidSdkPath(questionnary.getAnswer("sdk"));
 		}
 	}
 
@@ -283,35 +283,49 @@ public final class ProjectDiscover {
 	/**
 	 * Prompt Project Name to the user.
 	 */
-	public static void initProjectName() {
+	public static void initProjectName(HashMap<String, String> arguments) {
 		if (Strings.isNullOrEmpty(ApplicationMetadata.INSTANCE.getName())) {
-			final String projectName =
-					ConsoleUtils.getUserInput("Please enter your Project Name ["
-						+ defaultProjectName
-						+ "]:");
-
-			if (!Strings.isNullOrEmpty(projectName)) {
-				defaultProjectName = projectName.trim();
-			}
-			ApplicationMetadata.INSTANCE.setName(defaultProjectName);
+			Questionnary questionnary = new Questionnary(arguments);
+			Question question = new Question();
+			question.setParamName("name");
+			question.setDefaultValue(defaultProjectName);
+			question.setQuestion(String.format(
+					"Please enter your Project Name [%s]:",
+					defaultProjectName));
+			question.setShortParamName("n");
+			
+			
+			questionnary.addQuestion("name", question);
+			questionnary.launchQuestionnary();
+			ApplicationMetadata.INSTANCE.setName(questionnary.getAnswer("name"));
 		}
 	}
 
 	/**
 	 * Prompt Project Name Space to the user.
 	 */
-	public static void initProjectNameSpace() {
+	public static void initProjectNameSpace(HashMap<String, String> arguments) {
 		if (Strings.isNullOrEmpty(
 				ApplicationMetadata.INSTANCE.getProjectNameSpace())) {
+			Questionnary questionnary = new Questionnary(arguments);
+			Question question = new Question();
+			question.setParamName("namespace");
+			question.setDefaultValue(defaultProjectNamespace);
+			question.setQuestion(String.format(
+					"Please enter your Project NameSpace [%s]:",
+					defaultProjectNamespace));
+			question.setShortParamName("ns");
+			
+			
+			questionnary.addQuestion("namespace", question);
+			
 			boolean good = false;
 
 			while (!good) {
-				final String projectNameSpace = ConsoleUtils.getUserInput(
-								"Please enter your Project NameSpace ["
-										+ defaultProjectNamespace
-										+ "]:");
+				questionnary.launchQuestionnary();
+				String nameSpace = questionnary.getAnswer("namespace");
 
-				if (Strings.isNullOrEmpty(projectNameSpace)) {
+				if (Strings.isNullOrEmpty(nameSpace)) {
 					good = true;
 
 				} else {
@@ -319,13 +333,15 @@ public final class ProjectDiscover {
 					final String namespaceForm =
 							"^(((([a-z0-9_]+)\\.)*)([a-z0-9_]+))$";
 
-					if (Pattern.matches(namespaceForm, projectNameSpace)) {
-						defaultProjectNamespace = projectNameSpace.trim();
+					if (Pattern.matches(namespaceForm, nameSpace)) {
+						defaultProjectNamespace = nameSpace.trim();
 						good = true;
 					} else {
 						ConsoleUtils.display(
 								"You can't use special characters "
 								+ "except '.' in the NameSpace.");
+						question.setParamName(null);
+						question.setShortParamName(null);
 					}
 				}
 			}
