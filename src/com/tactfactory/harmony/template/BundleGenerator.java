@@ -23,7 +23,7 @@ public class BundleGenerator extends BaseGenerator {
 	 * @param adapt Adapter
 	 * @throws Exception Exception
 	 */
-	public BundleGenerator(final BaseAdapter adapt) throws Exception {
+	public BundleGenerator(final BaseAdapter adapt) {
 		super(adapt);
 
 

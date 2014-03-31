@@ -10,6 +10,8 @@ package com.tactfactory.harmony.command;
 
 import java.util.LinkedHashMap;
 
+import com.tactfactory.harmony.command.questionnary.Question;
+import com.tactfactory.harmony.command.questionnary.Questionnary;
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
@@ -44,12 +46,18 @@ public class DependenciesCommand extends BaseCommand {
 		final AndroidSDKManager androidSDKManager = new AndroidSDKManager();
 		final String distantSDKUrl = androidSDKManager.findLatestSDKToolsLink(
 						AndroidSDKManager.LINUX);
-		final String sdkPath = ConsoleUtils.getUserInput(
-					"Where do you want to install the Android SDK ?");
+		
+		Questionnary questionnary = new Questionnary(this.getCommandArgs());
+		Question question = new Question();
+		question.setQuestion("Where do you want to install the Android SDK ?");
+		question.setAcceptBlankAnswer(false);
+		question.setParamName("path");
+		question.setShortParamName("p");
+		questionnary.addQuestion("path", question);
+		questionnary.launchQuestionnary();
+		
+		final String sdkPath = questionnary.getAnswer("path");
 		androidSDKManager.downloadAndInstallAndroidSDK(distantSDKUrl, sdkPath);
-		//androidSDKManager.initSDKList(sdkPath);
-		/**
-		ConsoleUtils.display(distantSDKUrl);**/
 
 	}
 

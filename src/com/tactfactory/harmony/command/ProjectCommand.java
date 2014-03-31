@@ -169,30 +169,15 @@ public class ProjectCommand extends BaseCommand {
 			while (!this.userHasConfirmed) {
 				ConsoleUtils.display(">> Project Parameters");
 
-				//Project Name
-				if (!this.getCommandArgs().containsKey("name")) {
-					ProjectDiscover.initProjectName();
-				} else {
-					ApplicationMetadata.INSTANCE.setName(
-							this.getCommandArgs().get("name"));
-				}
-
-				//Project NameSpace
-				if (!this.getCommandArgs().containsKey("namespace")) {
-					ProjectDiscover.initProjectNameSpace();
-				} else {
-					ApplicationMetadata.INSTANCE.setProjectNameSpace(
-							this.getCommandArgs().get("namespace")
-								.replaceAll("\\.", "/"));
-				}
-
-				//Android sdk path
-				if (!this.getCommandArgs().containsKey("androidsdk")) {
-					ProjectDiscover.initProjectAndroidSdkPath();
-				} else {
-					ApplicationMetadata.setAndroidSdkPath(
-							this.getCommandArgs().get("androidsdk"));
-				}
+				
+				ProjectDiscover.initProjectName(
+						this.getCommandArgs());
+				
+				ProjectDiscover.initProjectNameSpace(
+						this.getCommandArgs());
+				
+				ProjectDiscover.initProjectAndroidSdkPath(
+						this.getCommandArgs());
 
 				ConsoleUtils.display("Project Name: "
 							+ ApplicationMetadata.INSTANCE.getName()
@@ -558,7 +543,7 @@ public class ProjectCommand extends BaseCommand {
 
 		if (action.equals(UPDATE_SDK)) {
 			ApplicationMetadata.setAndroidSdkPath("");
-			ProjectDiscover.initProjectAndroidSdkPath();
+			ProjectDiscover.initProjectAndroidSdkPath(this.getCommandArgs());
 			ProjectGenerator.updateSDKPath();
 		} else
 
