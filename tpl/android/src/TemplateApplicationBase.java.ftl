@@ -15,6 +15,7 @@ import java.util.List;
 
 import android.app.Application;
 <#if (services?size > 0)>
+import android.app.IntentService;
 import android.app.Service;
 </#if>
 import android.content.Context;
@@ -37,7 +38,11 @@ import org.joda.time.DateTime;
 </#if>
 
 <#list services as service>
+	<#if service?starts_with(".")>
+import ${project_namespace}${service};
+	<#else>
 import ${service};
+	</#if>
 </#list>
 
 /**
@@ -100,8 +105,10 @@ public abstract class ${project_name?cap_first}ApplicationBase
 		
 		if (!this.isServicesBinded) {
 			for (Class<? extends Service> service : this.getServices()) {
-				Intent intent = new Intent(this, service);
-				this.startService(intent);
+				if (!(IntentService.class.isAssignableFrom(service))) {
+					Intent intent = new Intent(this, service);
+					this.startService(intent);
+				}
 			}
 			
 			this.isServicesBinded = true;
@@ -116,8 +123,10 @@ public abstract class ${project_name?cap_first}ApplicationBase
 		
 		if (this.isServicesBinded) {
 			for (Class<? extends Service> service : this.getServices()) {
-				Intent intent = new Intent(this, service);
-				this.stopService(intent);
+				if (!(IntentService.class.isAssignableFrom(service))) {
+					Intent intent = new Intent(this, service);
+					this.stopService(intent);
+				}
 			}
 			
 			this.isServicesBinded = false;
