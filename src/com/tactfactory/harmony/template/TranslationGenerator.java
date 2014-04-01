@@ -14,9 +14,11 @@ import java.util.Locale;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
+
 import com.tactfactory.harmony.meta.TranslationMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
+import com.tactfactory.harmony.utils.TactFileUtils;
 import com.tactfactory.harmony.utils.XMLUtils;
 
 /**
@@ -45,8 +47,15 @@ public class TranslationGenerator extends BaseGenerator {
 
 		ConsoleUtils.display(">> Generate translate string...");
 
-		final Document doc = XMLUtils.openXMLFile(
-				this.getAdapter().getStringsPathFile());
+		final Document doc;
+		
+		if (TactFileUtils.exists(this.getAdapter().getStringsPathFile())) {
+			doc = XMLUtils.openXMLFile(
+					this.getAdapter().getStringsPathFile());
+		} else {
+			Element rootElement = new Element("resources");
+			doc = new Document(rootElement);
+		}
 
 		// Load Root element
 		final Element rootNode =

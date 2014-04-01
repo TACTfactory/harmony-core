@@ -337,73 +337,67 @@ public class ActivityGenerator extends BaseGenerator {
 	public final void generateAllAction(final String entityName) {
 		ConsoleUtils.display(">>> Generate CRUD view for " +  entityName);
 
-		try {
-			if (this.isWritable) {
-				ConsoleUtils.display("   with write actions");
+		if (this.isWritable) {
+			ConsoleUtils.display("   with write actions");
 
-				this.generateCreateAction(entityName);
-				this.generateEditAction(entityName);
+			this.generateCreateAction(entityName);
+			this.generateEditAction(entityName);
 
-				TranslationMetadata.addDefaultTranslation(
-						"common_create",
-						"Create",
-						Group.COMMON);
+			TranslationMetadata.addDefaultTranslation(
+					"common_create",
+					"Create",
+					Group.COMMON);
 
-				TranslationMetadata.addDefaultTranslation(
-						"common_edit",
-						"Edit",
-						Group.COMMON);
+			TranslationMetadata.addDefaultTranslation(
+					"common_edit",
+					"Edit",
+					Group.COMMON);
 
-				TranslationMetadata.addDefaultTranslation(
-						"common_delete",
-						"Del",
-						Group.COMMON);
-				
-				TranslationMetadata.addDefaultTranslation(
-						entityName.toLowerCase(Locale.ENGLISH)
-							+ "_progress_load_relations_title",
-						entityName + " related entities loading",
-						Group.MODEL);
-				
-				TranslationMetadata.addDefaultTranslation(
-						entityName.toLowerCase(Locale.ENGLISH)
-							+ "_progress_load_relations_message",
-						entityName + " related entities are loading...",
-						Group.MODEL);
-
-				TranslationMetadata.addDefaultTranslation(
-						entityName.toLowerCase(Locale.ENGLISH)
-							+ "_progress_save_title",
-						entityName + " save progress",
-						Group.MODEL);
-				TranslationMetadata.addDefaultTranslation(
-						entityName.toLowerCase(Locale.ENGLISH)
-							+ "_progress_save_message",
-						entityName + " is saving to database…",
-						Group.MODEL);
-			}
-
-			this.generateShowAction(entityName);
-			this.generateListAction(entityName);
+			TranslationMetadata.addDefaultTranslation(
+					"common_delete",
+					"Del",
+					Group.COMMON);
 			
-			this.makeSourceControler("entity-package-info.java",
-					"package-info.java");
+			TranslationMetadata.addDefaultTranslation(
+					entityName.toLowerCase(Locale.ENGLISH)
+						+ "_progress_load_relations_title",
+					entityName + " related entities loading",
+					Group.MODEL);
+			
+			TranslationMetadata.addDefaultTranslation(
+					entityName.toLowerCase(Locale.ENGLISH)
+						+ "_progress_load_relations_message",
+					entityName + " related entities are loading...",
+					Group.MODEL);
 
 			TranslationMetadata.addDefaultTranslation(
 					entityName.toLowerCase(Locale.ENGLISH)
-						+ "_progress_load_title",
-					entityName + " Loading progress",
+						+ "_progress_save_title",
+					entityName + " save progress",
 					Group.MODEL);
 			TranslationMetadata.addDefaultTranslation(
 					entityName.toLowerCase(Locale.ENGLISH)
-						+ "_progress_load_message",
-					entityName + " is loading…",
+						+ "_progress_save_message",
+					entityName + " is saving to database…",
 					Group.MODEL);
-			
-			new TranslationGenerator(this.getAdapter()).generateStringsXml();
-		} catch (final Exception e) {
-			ConsoleUtils.displayError(e);
 		}
+
+		this.generateShowAction(entityName);
+		this.generateListAction(entityName);
+		
+		this.makeSourceControler("entity-package-info.java",
+				"package-info.java");
+
+		TranslationMetadata.addDefaultTranslation(
+				entityName.toLowerCase(Locale.ENGLISH)
+					+ "_progress_load_title",
+				entityName + " Loading progress",
+				Group.MODEL);
+		TranslationMetadata.addDefaultTranslation(
+				entityName.toLowerCase(Locale.ENGLISH)
+					+ "_progress_load_message",
+				entityName + " is loading…",
+				Group.MODEL);
 	}
 
 	/** List Action.
