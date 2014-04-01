@@ -24,7 +24,7 @@ import com.tactfactory.harmony.template.ProjectGenerator;
 import com.tactfactory.harmony.template.ProviderGenerator;
 import com.tactfactory.harmony.template.SQLiteAdapterGenerator;
 import com.tactfactory.harmony.template.SQLiteGenerator;
-import com.tactfactory.harmony.template.TestDBGenerator;
+import com.tactfactory.harmony.template.TestGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -119,7 +119,7 @@ public class OrmCommand extends BaseCommand {
 	 */
 	protected final void makeLayoutTestDatabase() {
 		try {
-			new TestDBGenerator(this.adapter).generateAll();
+			new TestGenerator(this.adapter).generateAll();
 
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);

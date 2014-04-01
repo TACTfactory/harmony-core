@@ -417,7 +417,7 @@ public class ProjectGenerator extends BaseGenerator {
 		// Make Test project
 
 		try {
-			new TestDBGenerator(this.getAdapter()).initTestAndroid();
+			new TestGenerator(this.getAdapter()).initTestAndroid();
 		} catch (Exception e) {
 			ConsoleUtils.displayError(e);
 		}
