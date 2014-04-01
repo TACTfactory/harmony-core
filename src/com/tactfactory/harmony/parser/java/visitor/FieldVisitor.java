@@ -451,29 +451,57 @@ public class FieldVisitor {
 							rel.setMappedBy(fieldRef);						}
 					} else
 
-					if (annotationType.equals(FILTER_MANY2ONE)) {
-						if (mvp.getName().equals(ATTRIBUTE_INVERSED_BY)) {
-							String fieldName = ((StringLiteralExpr)
-									mvp.getValue()).getValue();
-							FieldMetadata fieldRef;
-							if (rel.getEntityRef().getFields().containsKey(
-									fieldName)) {
-								fieldRef = rel.getEntityRef().getFields().get(
-										fieldName);
-							} else {
-								RelationMetadata inversingRel = 
-										new RelationMetadata();
-								inversingRel.setMappedBy(result);
-								inversingRel.setType("OneToMany");
-								fieldRef = new FieldMetadata(rel.getEntityRef());
-								fieldRef.setName(fieldName);
-								fieldRef.setRelation(inversingRel);
-								fieldRef.setInternal(true);
-								fieldRef.setType(result.getOwner().getName());
+						if (annotationType.equals(FILTER_MANY2ONE)) {
+							if (mvp.getName().equals(ATTRIBUTE_INVERSED_BY)) {
+								String fieldName = ((StringLiteralExpr)
+										mvp.getValue()).getValue();
+								FieldMetadata fieldRef;
+								if (rel.getEntityRef().getFields().containsKey(
+										fieldName)) {
+									fieldRef = rel.getEntityRef().getFields().get(
+											fieldName);
+								} else {
+									RelationMetadata inversingRel = 
+											new RelationMetadata();
+									inversingRel.setMappedBy(result);
+									inversingRel.setType("OneToMany");
+									fieldRef = new FieldMetadata(rel.getEntityRef());
+									fieldRef.setName(fieldName);
+									fieldRef.setRelation(inversingRel);
+									fieldRef.setInternal(true);
+									fieldRef.setType(result.getOwner().getName());
+								}
+								rel.setInversedBy(fieldRef);
 							}
-							rel.setInversedBy(fieldRef);
-						}
-					} else
+						}else
+
+						if (annotationType.equals(FILTER_MANY2MANY)) {
+							if (mvp.getName().equals(ATTRIBUTE_INVERSED_BY)
+									|| mvp.getName().equals(ATTRIBUTE_MAPPED_BY)) {
+								String fieldName = ((StringLiteralExpr)
+										mvp.getValue()).getValue();
+								FieldMetadata fieldRef;
+								if (rel.getEntityRef().getFields().containsKey(
+										fieldName)) {
+									fieldRef = rel.getEntityRef().getFields().get(
+											fieldName);
+								} else {
+									RelationMetadata inversingRel = 
+											new RelationMetadata();
+									inversingRel.setMappedBy(result);
+									inversingRel.setInversedBy(result);
+									inversingRel.setType("ManyToMany");
+									fieldRef = new FieldMetadata(rel.getEntityRef());
+									fieldRef.setName(fieldName);
+									fieldRef.setRelation(inversingRel);
+									fieldRef.setInternal(true);
+									fieldRef.setType(result.getOwner().getName());
+								}
+								rel.setInversedBy(fieldRef);
+								rel.setMappedBy(fieldRef);
+							}
+						} else
+							
 						if (annotationType.equals(FILTER_COLUMNRESULT)) {
 							if (mvp.getName().equals(ATTRIBUTE_COLUMN_NAME)) {
 								String command = ((StringLiteralExpr)
