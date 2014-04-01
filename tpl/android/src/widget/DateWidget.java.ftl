@@ -33,6 +33,8 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 	private EditText dateEditText;
 	/** Date dialog title. */
 	private String dialogTitle;
+	/** Default date. */
+	private DateTime defaultDate;
 
 	/**
 	 * Constructor.
@@ -102,7 +104,12 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 		if (this.dateListener != null) {
 			this.dateListener.onClickDateEditText(this);
 		}
-		DateTime dt = new DateTime();
+		DateTime dt;
+		if (this.defaultDate == null) {
+			dt = DateTime.now();
+		} else {
+			dt = this.defaultDate;
+		}
 
         final String createdAtDate =
         		this.dateEditText.getText().toString();
@@ -122,6 +129,20 @@ public class DateWidget extends FrameLayout implements OnClickListener {
 	    datePicker.setPositiveButton(android.R.string.ok, listener);
 	    datePicker.setNegativeButton(android.R.string.cancel, listener);
 	    datePicker.show();
+	}
+
+	/**
+	 * Clear the date field.
+	 */
+	public void clearDate() {
+		this.dateEditText.setText("");
+	}
+	
+	/**
+	 * Set the default date when user click and field is empty.
+	 */
+	public void setDefaultDate(DateTime defaultDate) {
+		this.defaultDate = defaultDate;
 	}
 
 	/**

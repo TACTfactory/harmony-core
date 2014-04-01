@@ -51,6 +51,10 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 	private String dateDialogTitle;
 	/** Time dialog title. */
 	private String timeDialogTitle;
+	/** Default date. */
+	private DateTime defaultDate;
+	/** Default time. */
+	private DateTime defaultTime;
 
 	/**
 	 * Constructor.
@@ -154,10 +158,15 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 
 	@Override
 	public void onClick(View arg0) {
-		DateTime dt = new DateTime();
+		DateTime dt;
 
 		switch (arg0.getId()) {
 			case R.id.date:
+				if (this.defaultDate == null) {
+					dt = DateTime.now();
+				} else {
+					dt = this.defaultDate;
+				}
 				if (this.dateListener != null) {
 					this.dateListener.onClickDateEditText(this);
 				}
@@ -183,6 +192,11 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 			    datePicker.show();
 			    break;
 			case R.id.time:
+				if (this.defaultTime == null) {
+					dt = DateTime.now();
+				} else {
+					dt = this.defaultTime;
+				}
 				if (this.timeListener != null) {
 					this.timeListener.onClickTimeEditText(this);
 				}
@@ -224,6 +238,20 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 	}
 
 	/**
+	 * Clear the date field.
+	 */
+	public void clearDate() {
+		this.dateEditText.setText("");
+	}
+
+	/**
+	 * Set the default date when user click and field is empty.
+	 */
+	public void setDefaultDate(DateTime defaultDate) {
+		this.defaultDate = defaultDate;
+	}
+
+	/**
 	 * Set the component date.
 	 *
 	 * @param date The date to set
@@ -246,6 +274,20 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 					this.dateEditText.getText().toString());
 		}
 		return result;
+	}
+
+	/**
+	 * Clear the time field.
+	 */
+	public void clearTime() {
+		this.timeEditText.setText("");
+	}
+
+	/**
+	 * Set the default time when user click and field is empty.
+	 */
+	public void setDefaultTime(DateTime defaultTime) {
+		this.defaultTime = defaultTime;
 	}
 
 	/**
@@ -274,6 +316,22 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 					this.timeFormat);
 		}
 		return result;
+	}
+
+	/**
+	 * Clear the date and time fields.
+	 */
+	public void clearDateTime() {
+		this.clearTime();
+		this.clearDate();
+	}
+
+	/**
+	 * Set the default date and time when user click and field is empty.
+	 */
+	public void setDefaultDateTime(DateTime defaultDateTime) {
+		this.setDefaultDate(defaultDateTime);
+		this.setDefaultTime(defaultDateTime);
 	}
 
 	/**
