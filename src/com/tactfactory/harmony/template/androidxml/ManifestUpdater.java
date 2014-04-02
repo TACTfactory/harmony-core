@@ -11,7 +11,6 @@ package com.tactfactory.harmony.template.androidxml;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
 
 import org.jdom2.Element;
 import org.jdom2.Namespace;
@@ -312,11 +311,25 @@ public class ManifestUpdater extends XmlManager {
 	}
 	
 	/**
-	 * Adds a service to the manifest.
+	 * Adds a service to the manifest. (exported default to false)
 	 * @param serviceName The service name
 	 * @param label The service label
 	 */
 	public void addService(final String serviceName, final String label) {
+		this.addService(serviceName, label, false);
+	}
+	
+	/**
+	 * Adds a service to the manifest.
+	 * @param serviceName The service name
+	 * @param label The service label
+	 * @param exported If the service is exported
+	 */
+	public void addService(
+			final String serviceName,
+			final String label,
+			final boolean exported) {
+		
 		// Load Root element
 		final Element rootNode = this.getDocument().getRootElement();
 
@@ -335,12 +348,15 @@ public class ManifestUpdater extends XmlManager {
 			final Element permissionElem = new Element(ELEMENT_SERVICE);
 			permissionElem.setAttribute(ATTRIBUTE_NAME, serviceName, ns);
 			permissionElem.setAttribute(ATTRIBUTE_LABEL, label, ns);
+			permissionElem.setAttribute(ATTRIBUTE_EXPORTED,
+					String.valueOf(exported),
+					ns);
 			appElem.addContent(permissionElem);
 		}
 	}
 	
 	/**
-	 * Adds a content provider to the manifest.xml
+	 * Adds a content provider to the manifest.xml (exported default to false)
 	 * @param name The name of the provider
 	 * @param label The label of the provider
 	 * @param authorities The authorities of the provider
@@ -350,6 +366,22 @@ public class ManifestUpdater extends XmlManager {
 			final String label,
 			final String authorities,
 			final String description) {
+		this.addProvider(name, label, authorities, description, false);		
+	}
+	
+	/**
+	 * Adds a content provider to the manifest.xml
+	 * @param name The name of the provider
+	 * @param label The label of the provider
+	 * @param authorities The authorities of the provider
+	 * @param description The description of the provider
+	 * @param exported The exported state of the provider
+	 */
+	public void addProvider(final String name,
+			final String label,
+			final String authorities,
+			final String description,
+			final boolean exported) {
 		// Load Root element
 		final Element rootNode = this.getDocument().getRootElement();
 
@@ -375,6 +407,9 @@ public class ManifestUpdater extends XmlManager {
 					ns);
 			providerElem.setAttribute(ATTRIBUTE_DESCRIPTION,
 					description, 
+					ns);
+			providerElem.setAttribute(ATTRIBUTE_EXPORTED,
+					String.valueOf(exported),
 					ns);
 			
 
