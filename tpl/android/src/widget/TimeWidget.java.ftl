@@ -44,6 +44,8 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 	private TimeFormatType timeFormat = TimeFormatType.ANDROID_CONF;
 	/** Title dialog. */
 	private String dialogTitle;
+	/** Default time. */
+	private DateTime defaultTime;
 
 	/**
 	 * Constructor.
@@ -136,7 +138,12 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 		if (this.timeListener != null) {
 			this.timeListener.onClickTimeEditText(this);
 		}
-		DateTime dt = new DateTime();
+		DateTime dt;
+		if (this.defaultTime == null) {
+			dt = DateTime.now();
+		} else {
+			dt = this.defaultTime;
+		}
 
         final String time =
         		this.timeEditText.getText().toString();
@@ -171,7 +178,20 @@ public class TimeWidget extends FrameLayout implements OnClickListener {
 
 	    timePicker.show();
 
+	}
 
+	/**
+	 * Clear the time field.
+	 */
+	public void clearTime() {
+		this.timeEditText.setText("");
+	}
+	
+	/**
+	 * Set the default time when user click and field is empty.
+	 */
+	public void setDefaultTime(DateTime defaultTime) {
+		this.defaultTime = defaultTime;
 	}
 
 	/**

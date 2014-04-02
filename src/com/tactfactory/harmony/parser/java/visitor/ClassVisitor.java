@@ -614,13 +614,15 @@ public class ClassVisitor {
     			List<MemberValuePair> pairs = 
     					((NormalAnnotationExpr) tableAnnot).getPairs();
     			
-    			for (MemberValuePair pair : pairs) {
-    				if (ATTRIBUTE_INDEXES.equals(pair.getName())) {
-    					this.parseIndexes(
-    							classMeta,
-    							(ArrayInitializerExpr) pair.getValue());
-    					
-    				}
+    			if (pairs != null) {
+	    			for (MemberValuePair pair : pairs) {
+	    				if (ATTRIBUTE_INDEXES.equals(pair.getName())) {
+	    					this.parseIndexes(
+	    							classMeta,
+	    							(ArrayInitializerExpr) pair.getValue());
+	    					
+	    				}
+	    			}
     			}
     		}
     	}

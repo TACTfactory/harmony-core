@@ -29,6 +29,14 @@ public abstract class SqliteAdapter {
 	private static final String PREFIX = "COL_";
 	/** Suffix for column name generation. */
 	private static final String SUFFIX = "_ID";
+	
+	/** Error message for type not found. */
+	private static final String ERROR_TYPE_NOT_FOUND =
+			"No type found for %s in entity %s (field : %s).";
+	/** Proposal message for erroneous type. */
+	private static final String PROPOSAL_TYPE_NOT_FOUND =
+			ERROR_TYPE_NOT_FOUND +
+			" You should use %s or %s to declare your relation.";
 
 	/**
 	 * Generate field's structure for database creation schema.
@@ -204,8 +212,49 @@ public abstract class SqliteAdapter {
 			type = "STRING";
 		} else {
 			if (field.getOwner() != null) {
-				ConsoleUtils.displayWarning("No type found for " + type 
-						+ " in entity " + field.getOwner().getName());
+
+				String realType;
+				String errorMessage;
+				boolean isArray = false;
+				if (type.contains("<")) {
+					isArray = true;
+					realType = type.substring(
+							type.lastIndexOf('<') + 1,
+							type.indexOf('>'));
+				} else {
+					
+					realType = type;
+				}
+				
+				if (ApplicationMetadata.INSTANCE.getEntities()
+						.containsKey(realType)) {
+					if (isArray) {
+						errorMessage = String.format(
+								PROPOSAL_TYPE_NOT_FOUND,
+								type,
+								field.getOwner().getName(),
+								field.getName(),
+								"@OneToMany",
+								"@ManyToMany");
+					} else {
+						errorMessage = String.format(
+								PROPOSAL_TYPE_NOT_FOUND,
+								type,
+								field.getOwner().getName(),
+								field.getName(),
+								"@ManyToOne",
+								"@OneToOne");
+						
+					}
+				} else {
+					errorMessage = String.format(
+							ERROR_TYPE_NOT_FOUND,
+							type,
+							field.getOwner().getName(),
+							field.getName());
+				}
+				
+				ConsoleUtils.displayWarning(errorMessage);
 			}
 			type = "BLOB";
 		}
