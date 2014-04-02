@@ -54,7 +54,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	protected void setUp() throws Exception {
 		super.setUp();
 
-		this.ctx = this.getMockContext();
+		this.ctx = this.getContext();
 
 		this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
 
@@ -68,7 +68,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		this.nbEntities += ${child.name?cap_first}DataLoader.getInstance(this.ctx).getMap().size();
 		</#list>
 		</#if>
-		this.provider = this.getMockContext().getContentResolver();
+		this.provider = this.getContext().getContentResolver();
 	}
 
 	/* (non-Javadoc)

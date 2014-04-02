@@ -19,7 +19,7 @@ import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.template.BaseGenerator;
 import com.tactfactory.harmony.template.SQLiteGenerator;
 import com.tactfactory.harmony.template.TagConstant;
-import com.tactfactory.harmony.template.TestDBGenerator;
+import com.tactfactory.harmony.template.TestGenerator;
 import com.tactfactory.harmony.template.TestProviderGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
@@ -141,7 +141,7 @@ public class FixtureGenerator extends BaseGenerator {
 
 			//Update SQLiteOpenHelper
 			new SQLiteGenerator(this.getAdapter()).generateDatabase();
-			new TestDBGenerator(this.getAdapter()).generateAll();
+			new TestGenerator(this.getAdapter()).generateAll();
 			new TestProviderGenerator(this.getAdapter()).generateAll();
 
 			//Create each entity's data loader

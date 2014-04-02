@@ -5,16 +5,16 @@ import android.content.Context;
 import android.test.AndroidTestCase;
 
 
-/** Base test abstract class for DB tests.<br/>
+/** Base test abstract class for Service Test <br/>
  * <b><i>This class will be overwrited whenever
  * you regenerate the project with Harmony.</i></b>
  */
-public abstract class TestDBBase extends AndroidTestCase {
+public abstract class TestServiceBase extends AndroidTestCase {
 
 	/** The Mocked android {@link Context}. */
     protected TestContextMock testContextMock;
 
-	protected TestDBBase() {
+	protected TestServiceBase() {
         this.testContextMock = new TestContextMock(this);
     }
 

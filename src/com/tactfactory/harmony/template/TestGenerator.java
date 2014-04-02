@@ -16,10 +16,10 @@ import com.tactfactory.harmony.utils.PackageUtils;
 import java.io.File;
 
 /**
- * Database tests generator.
+ * Tests generator.
  *
  */
-public class TestDBGenerator extends BaseGenerator {
+public class TestGenerator extends BaseGenerator {
 	/** Local name space. */
 	private String localNameSpace;
 
@@ -28,7 +28,7 @@ public class TestDBGenerator extends BaseGenerator {
 	 * @param adapter The adapter to use
 	 * @throws Exception if adapter is null
 	 */
-	public TestDBGenerator(final BaseAdapter adapter) throws Exception {
+	public TestGenerator(final BaseAdapter adapter) throws Exception {
 		super(adapter);
 		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 	}
@@ -57,9 +57,17 @@ public class TestDBGenerator extends BaseGenerator {
 		this.makeSourceTest("utils/TestUtils.java",
 				"utils/TestUtils.java",
 				false);
+		
+		this.makeSourceTest("base/TestContextMock.java",
+				"base/TestContextMock.java",
+				true);
 
 		this.makeSourceTest("base/TestDBBase.java",
 				"base/TestDBBase.java",
+				true);
+		
+		this.makeSourceTest("base/TestServiceBase.java",
+				"base/TestServiceBase.java",
 				true);
 	}
 
