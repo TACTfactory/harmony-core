@@ -93,8 +93,8 @@ public class TestContextMock {
 					targetContextWrapper) {
 						@Override
 						public Object getSystemService(String name) {
-								return TestDBBase.this
-										.baseContext.getSystemService(name);
+							return TestContextMock.this
+									.baseContext.getSystemService(name);
 						}
 						
 						@Override
