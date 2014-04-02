@@ -5,7 +5,7 @@ import android.content.Context;
 import android.test.AndroidTestCase;
 
 
-/** Base test abstract class <br/>
+/** Base test abstract class for DB tests.<br/>
  * <b><i>This class will be overwrited whenever
  * you regenerate the project with Harmony.</i></b>
  */

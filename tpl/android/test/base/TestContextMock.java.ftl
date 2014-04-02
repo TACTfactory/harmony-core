@@ -23,11 +23,11 @@ import android.test.mock.MockContentResolver;
 <#if dataLoader?? && dataLoader>import android.util.Log;</#if>
 
 
-/** Base test abstract class <br/>
+/** Context mock for tests.<br/>
  * <b><i>This class will be overwrited whenever
  * you regenerate the project with Harmony.</i></b>
  */
-public abstract class TestDBBase extends AndroidTestCase {
+public class TestContextMock {
 	private final static String CONTEXT_PREFIX = "test.";
 	private final static String PROVIDER_AUTHORITY =
 					"${project_namespace}.provider";
@@ -38,7 +38,7 @@ public abstract class TestDBBase extends AndroidTestCase {
 	private AndroidTestCase androidTestCase;
 	private Context baseContext;
 	
-	protected TestContextMock(AndroidTestCase androidTestCase) {
+	public TestContextMock(AndroidTestCase androidTestCase) {
         this.androidTestCase = androidTestCase;
     }
 
