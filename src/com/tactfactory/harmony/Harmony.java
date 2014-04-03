@@ -211,7 +211,7 @@ public final class Harmony {
 			String target = 
 					ProjectDiscover.getTargetFromPropertiesFile(
 							projPropFile);
-			if (target == null) {
+			if (Strings.isNullOrEmpty(target)) {
 				target = AndroidAdapter.DEFAULT_TARGET;
 			}
 			ApplicationMetadata.INSTANCE.setAndroidTarget(target);
