@@ -290,7 +290,7 @@ public class ProjectGenerator extends BaseGenerator {
 				ApplicationMetadata.INSTANCE.getName() + "-abs",
 				filesToDelete,
 				pathLib + "/library",
-				null,
+				this.getAdapter().getDefaultTarget(),
 				pathLib + "/library",
 				true);
 		

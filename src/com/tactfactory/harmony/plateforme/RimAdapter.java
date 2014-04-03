@@ -74,4 +74,9 @@ public final class RimAdapter extends BaseAdapter {
 			final Configuration config) {
 		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
+
+	@Override
+	public String getDefaultTarget() {
+		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
+	}
 }
