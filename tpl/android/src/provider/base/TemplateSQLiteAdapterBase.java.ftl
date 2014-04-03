@@ -683,7 +683,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return count of updated entities
 	 */
 	public int delete(final ${curr.name?cap_first} ${curr.name?uncap_first}) {
-		return this.delete(${curr.name?uncap_first}.get${curr_ids[0].name?cap_first}());
+		return this.remove(${curr.name?uncap_first}.get${curr_ids[0].name?cap_first}());
 	}
 
 	/**
@@ -768,28 +768,6 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		</#if>
 	}
 
-	/**
-	 * Deletes the given entity.
-	 * @param id The ID of the entity to delete
-	 * @return the number of token deleted
-	 */
-	public int delete(final int id) {
-		<#if curr_ids?size==0>
-			throw new NotImplementedException(
-				"An entity with no ID can't implement this method.");
-		<#else>
-			<#if (singleTabInheritance && !isTopMostSuperClass)>
-		return this.delete(
-				${curr_ids[0].owner}Contract.${curr_ids[0].owner}.ALIASED_${NamingUtils.alias(curr_ids[0].name)} + " = ?"
-					+ " AND " + ${curr.inheritance.superclass.name}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?",
-				new String[]{String.valueOf(id), ${curr.name}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER});				
-			<#else>
-		return this.delete(
-				${curr.name}Contract.${curr.name}.ALIASED_${NamingUtils.alias(curr_ids[0].name)} + " = ?",
-				new String[]{String.valueOf(id)});
-			</#if>
-		</#if>
-	}
 <#if sync>
 	@Override
 	public void completeEntityRelationsServerId(${curr.name} item) {
