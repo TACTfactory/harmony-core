@@ -20,6 +20,6 @@ public abstract class ProviderAdapter<T> extends ProviderAdapterBase<T> {
 	 * @param context The context.
 	 */
 	public ProviderAdapter(final Context context) {
-		this.ctx = context;
+		super(context);
 	}
 }
