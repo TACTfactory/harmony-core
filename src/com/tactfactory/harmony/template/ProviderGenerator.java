@@ -74,6 +74,11 @@ public class ProviderGenerator extends BaseGenerator {
 				"utils/base/ProviderUtilsBase.java",
 				true);
 
+		this.makeSourceProvider(
+				"utils/ApplicationProviderUtils.java",
+				"utils/ProviderUtils.java",
+				false);
+
 		for (EntityMetadata cm : this.getAppMetas().getEntities().values()) {
 			if (cm.hasFields()) {
 
@@ -126,6 +131,8 @@ public class ProviderGenerator extends BaseGenerator {
 					"base/" + this.nameProvider + "Base.java", true);
 			this.makeSourceProvider("base/ProviderAdapterBase.java",
 					"base/ProviderAdapterBase.java", true);
+			this.makeSourceProvider("ProviderAdapter.java",
+					"ProviderAdapter.java", false);
 
 			// Package infos
 			this.makeSourceProvider("provider-package-info.java",

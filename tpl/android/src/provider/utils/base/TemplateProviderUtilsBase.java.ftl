@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.RemoteException;
 import android.util.Log;
 
+import ${project_namespace}.provider.utils.ProviderUtils;
 ${ImportUtils.importRelatedCriterias(curr)}
 ${ImportUtils.importManyToManyTargetSQLiteAdapters(curr)}
 ${ImportUtils.importRelatedEntities(curr, true)}
@@ -48,7 +49,7 @@ import ${project_namespace}.provider.contract.${relation.relation.targetEntity?c
  * ex : inserting an entity and its relations alltogether, etc.
  */
 public abstract class ${curr.name?cap_first}ProviderUtilsBase
-			extends ProviderUtilsBase<${curr.name?cap_first}> {
+			extends ProviderUtils<${curr.name?cap_first}> {
 	/**
 	 * Tag for debug messages.
 	 */

@@ -29,6 +29,7 @@ import android.util.Log;
 import com.google.common.base.Strings;
 import com.google.common.collect.ObjectArrays;
 </#if>
+import ${data_namespace}.SQLiteAdapter;
 ${ImportUtils.importRelatedSQLiteAdapters(curr, false, true)}
 ${ImportUtils.importRelatedEntities(curr)}
 ${ImportUtils.importRelatedEnums(curr)}<#if !(curr_ids?size>0)>import ${project_namespace}.harmony.exception.NotImplementedException;</#if>
@@ -42,7 +43,7 @@ import ${project_namespace}.${project_name?cap_first}Application;
 <#if sync>
 	<#assign extend="SyncSQLiteAdapterBase<" +extendType+ ">" />
 <#else>
-	<#assign extend="SQLiteAdapterBase<" +extendType+ ">" />
+	<#assign extend="SQLiteAdapter<" +extendType+ ">" />
 </#if>
 
 <#if curr.internal>
