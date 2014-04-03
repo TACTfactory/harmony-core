@@ -118,7 +118,6 @@ public class ActivityGenerator extends BaseGenerator {
 					&& cm.hasFields()
 					&& !cm.isHidden()) {
 				
-				cm.makeString("label");
 				this.getDatamodel().put(
 						TagConstant.CURRENT_ENTITY, cm.getName());
 				this.localNameSpace =
@@ -342,21 +341,6 @@ public class ActivityGenerator extends BaseGenerator {
 
 			this.generateCreateAction(entityName);
 			this.generateEditAction(entityName);
-
-			TranslationMetadata.addDefaultTranslation(
-					"common_create",
-					"Create",
-					Group.COMMON);
-
-			TranslationMetadata.addDefaultTranslation(
-					"common_edit",
-					"Edit",
-					Group.COMMON);
-
-			TranslationMetadata.addDefaultTranslation(
-					"common_delete",
-					"Del",
-					Group.COMMON);
 			
 			TranslationMetadata.addDefaultTranslation(
 					entityName.toLowerCase(Locale.ENGLISH)
@@ -388,7 +372,7 @@ public class ActivityGenerator extends BaseGenerator {
 		this.makeSourceControler("entity-package-info.java",
 				"package-info.java");
 
-		TranslationMetadata.addDefaultTranslation(
+		/**TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH)
 					+ "_progress_load_title",
 				entityName + " Loading progress",
@@ -397,7 +381,7 @@ public class ActivityGenerator extends BaseGenerator {
 				entityName.toLowerCase(Locale.ENGLISH)
 					+ "_progress_load_message",
 				entityName + " is loading…",
-				Group.MODEL);
+				Group.MODEL);**/
 	}
 
 	/** List Action.
@@ -481,12 +465,6 @@ public class ActivityGenerator extends BaseGenerator {
 				this.getAppMetas().getProjectNameSpace(),
 				"ShowActivity",
 				entityName);
-
-		TranslationMetadata.addDefaultTranslation(
-				entityName.toLowerCase(Locale.ENGLISH) + "_error_load",
-				entityName + " loading error…",
-				Group.MODEL);
-		
 
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_not_found",
