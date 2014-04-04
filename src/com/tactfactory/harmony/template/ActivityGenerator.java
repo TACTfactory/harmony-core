@@ -342,17 +342,23 @@ public class ActivityGenerator extends BaseGenerator {
 			this.generateCreateAction(entityName);
 			this.generateEditAction(entityName);
 			
-			TranslationMetadata.addDefaultTranslation(
-					entityName.toLowerCase(Locale.ENGLISH)
-						+ "_progress_load_relations_title",
-					entityName + " related entities loading",
-					Group.MODEL);
+			EntityMetadata currentEntity = this.getAppMetas().getEntities()
+					.get(entityName); 
 			
-			TranslationMetadata.addDefaultTranslation(
-					entityName.toLowerCase(Locale.ENGLISH)
-						+ "_progress_load_relations_message",
-					entityName + " related entities are loading...",
-					Group.MODEL);
+			if (!currentEntity.getRelations().isEmpty()
+					|| currentEntity.getInheritance() != null) {
+				TranslationMetadata.addDefaultTranslation(
+						entityName.toLowerCase(Locale.ENGLISH)
+							+ "_progress_load_relations_title",
+						entityName + " related entities loading",
+						Group.MODEL);
+				
+				TranslationMetadata.addDefaultTranslation(
+						entityName.toLowerCase(Locale.ENGLISH)
+							+ "_progress_load_relations_message",
+						entityName + " related entities are loading...",
+						Group.MODEL);
+			}
 
 			TranslationMetadata.addDefaultTranslation(
 					entityName.toLowerCase(Locale.ENGLISH)
