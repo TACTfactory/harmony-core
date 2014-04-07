@@ -135,7 +135,9 @@ public class FieldMetadata extends BaseMetadata {
 								CaseFormat.UPPER_CAMEL, this.getName()),
 						Group.MODEL);
 	
-			if (!this.nullable && !this.type.equalsIgnoreCase("boolean")
+			if (!this.nullable 
+					&& !this.type.equalsIgnoreCase("boolean")
+					&& !this.harmonyType.equalsIgnoreCase(Type.ENUM.getValue())
 					&& !this.columnResult) {
 				TranslationMetadata.addDefaultTranslation(
 						key + "_invalid_field_error",
