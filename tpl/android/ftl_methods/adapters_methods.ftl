@@ -115,9 +115,11 @@
 				</#if>
 			</#if>
 		<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
-			<#assign result = result + "${tab}${localTab}final ${field.type} ${field.name} = new ${field.type}();\n"/>
-			<#assign result = result + "${tab}${localTab}${field.name}.set${entities[field.relation.targetEntity].ids[0].name?cap_first}(cursor.getInt(index));\n"/>
-			<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(${field.name});\n"/>
+			<#assign result = result + "${tab}${localTab}if (result.get${field.name?cap_first}() == null) {\n" />
+			<#assign result = result + "${tab}${localTab}	final ${field.type} ${field.name} = new ${field.type}();\n"/>
+			<#assign result = result + "${tab}${localTab}	${field.name}.set${entities[field.relation.targetEntity].ids[0].name?cap_first}(cursor.getInt(index));\n"/>
+			<#assign result = result + "${tab}${localTab}	result.set${field.name?cap_first}(${field.name});\n"/>
+			<#assign result = result + "${tab}${localTab}}\n" />
 		</#if>
 		<#if (field.nullable?? && field.nullable)>
 			<#assign result = result + "${tab}}\n"/>
