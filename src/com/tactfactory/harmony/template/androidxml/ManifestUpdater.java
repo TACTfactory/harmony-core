@@ -17,55 +17,16 @@ import org.jdom2.Namespace;
 
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.template.androidxml.manifest.ManifestActivity;
+import com.tactfactory.harmony.template.androidxml.manifest.ManifestConstants;
+import com.tactfactory.harmony.template.androidxml.manifest.ManifestIntentFilter;
+import com.tactfactory.harmony.template.androidxml.manifest.ManifestIntentFilter.ManifestData;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
  * Manifest update.
  */
 public class ManifestUpdater extends XmlManager {
-	/** Application Element. */
-	private static final String ELEMENT_APPLICATION = "application";
-	/** Activity Element. */
-	private static final String ELEMENT_ACTIVITY = "activity";
-	/** Intent filter Element. */
-	private static final String ELEMENT_INTENT_FILTER = "intent-filter";
-	/** Action Element. */
-	private static final String ELEMENT_ACTION = "action";
-	/** Category Element. */
-	private static final String ELEMENT_CATEGORY = "category";
-	/** Data Element. */
-	private static final String ELEMENT_DATA = "data";
-	/** Permission Element. */
-	private static final String ELEMENT_PERMISSION = "uses-permission";
-	/** Service Element. */
-	private static final String ELEMENT_SERVICE = "service";
-	/** Provider Element. */
-	private static final String ELEMENT_PROVIDER = "provider";
-	
-	/** name attribute. */
-	private static final String ATTRIBUTE_NAME = "name";
-	/** label attribute. */
-	private static final String ATTRIBUTE_LABEL = "label";
-	/** Authorities attribute. */
-	private static final String ATTRIBUTE_AUTHORITIES = "authorities";
-	/** Description attribute. */
-	private static final String ATTRIBUTE_DESCRIPTION = "description";
-	/** exported attribute. */
-	private static final String ATTRIBUTE_EXPORTED = "exported";
-	/** mimeType attribute. */
-	private static final String ATTRIBUTE_MIME_TYPE = "mimeType";
-	/** theme attribute. */
-	private static final String ATTRIBUTE_THEME = "theme";
-	
-	/** View Action.*/
-	private static final String ACTION_VIEW = "VIEW";
-	/** Edit Action.*/
-	private static final String ACTION_EDIT = "EDIT";
-	/** Insert Action.*/
-	private static final String ACTION_INSERT = "INSERT";
-	
-	/** Android Namespace. */
-	private static final String NAMESPACE_ANDROID = "android";
 	
 	/**
 	 * Comparator used to order elements by alphabetical order.
@@ -102,6 +63,39 @@ public class ManifestUpdater extends XmlManager {
 				entityName.toLowerCase());
 	}
 	
+	public void addActivity(ManifestActivity activity) {
+		ConsoleUtils.displayDebug(String.format(
+				"Add activity %s to manifest.",
+				activity.getName()));
+		
+		// Load Root element
+		final Element rootNode = this.getDocument().getRootElement();
+
+		// Load Name space (required for manipulate attributes)
+		final Namespace ns = rootNode.getNamespace(
+				ManifestConstants.NAMESPACE_ANDROID);
+		
+		// Find Application Node
+		Element findActivity = null;
+
+		// Find a element
+		final Element applicationNode = rootNode.getChild(
+				ManifestConstants.ELEMENT_APPLICATION);
+		
+		if (applicationNode != null) {	
+			findActivity = this.findActivityNamed(activity.getName(), ns);
+			
+			// If not found Node, create it
+			if (findActivity == null) {
+				applicationNode.addContent(activity.toElement(ns));
+
+				// Clean manifest
+				applicationNode.sortChildren(ABC_COMPARATOR);
+			}
+		}
+
+	}
+	
 	/**
 	 * Update Android Manifest.
 	 * @param classF The class file name
@@ -118,103 +112,42 @@ public class ManifestUpdater extends XmlManager {
 				this.getAdapter().getController(),
 				viewPackage,
 				classFile);
-
-		// Debug Log
-		ConsoleUtils.displayDebug("Update Manifest : ", pathRelatif);
 		
+		ManifestActivity activity = new ManifestActivity();
+		activity.setName(pathRelatif);
+		activity.setLabel("@string/app_name");
+		activity.setExported(false);
+		
+		ManifestIntentFilter intentFilter = new ManifestIntentFilter();
+		activity.addIntentFilter(intentFilter);
+		intentFilter.setCategoryName("android.intent.category.DEFAULT");
+		
+		String action = ManifestConstants.ACTION_VIEW;
+		final StringBuffer data = new StringBuffer();
+		if (pathRelatif.matches(".*List.*")) {
+			data.append("vnd.android.cursor.collection/");
+		} else {
+			data.append("vnd.android.cursor.item/");
 
-		// Load Root element
-		final Element rootNode = this.getDocument().getRootElement();
+			if (pathRelatif.matches(".*Edit.*")) {
+				action = ManifestConstants.ACTION_EDIT;
+			} else
 
-		// Load Name space (required for manipulate attributes)
-		final Namespace ns = rootNode.getNamespace(NAMESPACE_ANDROID);
-
-		// Find Application Node
-		Element findActivity = null;
-
-		// Find a element
-		final Element applicationNode = 
-				rootNode.getChild(ELEMENT_APPLICATION);
-		if (applicationNode != null) {
-			
-			findActivity = this.findActivityNamed(pathRelatif, ns);
-
-			// If not found Node, create it
-			if (findActivity == null) {
-				// Create new element
-				findActivity = new Element(ELEMENT_ACTIVITY);
-
-				// Add Attributes to element
-				findActivity.setAttribute(ATTRIBUTE_NAME, pathRelatif, ns);
-				final Element findFilter = 
-						new Element(ELEMENT_INTENT_FILTER);
-				final Element findAction = new Element(ELEMENT_ACTION);
-				final Element findCategory = new Element(ELEMENT_CATEGORY);
-				final Element findData = new Element(ELEMENT_DATA);
-
-				// Add Child element
-				findFilter.addContent(findAction);
-				findFilter.addContent(findCategory);
-				findFilter.addContent(findData);
-				findActivity.addContent(findFilter);
-				applicationNode.addContent(findActivity);
+			if (pathRelatif.matches(".*Create.*")) {
+				action = ManifestConstants.ACTION_INSERT;
 			}
-
-			// Set values
-			findActivity.setAttribute(
-					ATTRIBUTE_LABEL,
-					"@string/app_name",
-					ns);
-			
-			findActivity.setAttribute(
-					ATTRIBUTE_EXPORTED,
-					"false",
-					ns);
-			
-			final Element filterActivity =
-					findActivity.getChild(ELEMENT_INTENT_FILTER);
-			if (filterActivity != null) {
-				final StringBuffer data = new StringBuffer();
-				String action = ACTION_VIEW;
-
-				if (pathRelatif.matches(".*List.*")) {
-					data.append("vnd.android.cursor.collection/");
-				} else {
-					data.append("vnd.android.cursor.item/");
-
-					if (pathRelatif.matches(".*Edit.*")) {
-						action = ACTION_EDIT;
-					} else
-
-					if (pathRelatif.matches(".*Create.*")) {
-						action = ACTION_INSERT;
-					}
-				}
-
-
-				data.append(projectNamespace.replace('/', '.'));
-				data.append('.');
-				data.append(viewName);
-
-				filterActivity.getChild(ELEMENT_ACTION).setAttribute(
-						ATTRIBUTE_NAME,
-						"android.intent.action." + action,
-						ns);
-				
-				filterActivity.getChild(ELEMENT_CATEGORY).setAttribute(
-						ATTRIBUTE_NAME,
-						"android.intent.category.DEFAULT",
-						ns);
-				
-				filterActivity.getChild(ELEMENT_DATA).setAttribute(
-						ATTRIBUTE_MIME_TYPE,
-						data.toString(),
-						ns);
-			}
-
-			// Clean code
-			applicationNode.sortChildren(ABC_COMPARATOR);
 		}
+		data.append(projectNamespace.replace('/', '.'));
+		data.append('.');
+		data.append(viewName);
+		
+		ManifestData manifestData = intentFilter.new ManifestData();
+		manifestData.setMimeType(data.toString());
+		
+		intentFilter.setActionName(action);
+		intentFilter.addData(manifestData);
+		
+		this.addActivity(activity);
 	}
 	
 	/**
@@ -224,8 +157,10 @@ public class ManifestUpdater extends XmlManager {
 	private List<Element> getActivities() {
 		List<Element> result = null;
 		Element appNode = 
-				this.getDocument().getRootElement().getChild(ELEMENT_APPLICATION);
-		result = appNode.getChildren(ELEMENT_ACTIVITY);
+				this.getDocument().getRootElement().getChild(
+						ManifestConstants.ELEMENT_APPLICATION);
+		result = appNode.getChildren(
+				ManifestConstants.ELEMENT_ACTIVITY);
 		return result;
 	}
 	
@@ -244,8 +179,9 @@ public class ManifestUpdater extends XmlManager {
 		for (final Element activity : activities) {
 			// Load attribute value
 			if (activity.hasAttributes()
-					&& activity.getAttributeValue(ATTRIBUTE_NAME, namespace)
-						.equals(name)) {
+					&& activity.getAttributeValue(
+							ManifestConstants.ATTRIBUTE_NAME,
+							namespace).equals(name)) {
 				result = activity;
 				break;
 			}
@@ -283,18 +219,26 @@ public class ManifestUpdater extends XmlManager {
 		final Element rootNode = this.getDocument().getRootElement();
 
 		// Load Name space (required for manipulate attributes)
-		final Namespace ns = rootNode.getNamespace(NAMESPACE_ANDROID);
+		final Namespace ns = rootNode.getNamespace(
+				ManifestConstants.NAMESPACE_ANDROID);
 		boolean setPerm = true;
-		for (Element elem : rootNode.getChildren(ELEMENT_PERMISSION)) {
-			if (elem.getAttributeValue(ATTRIBUTE_NAME, ns).equals(permission)) {
+		for (Element elem : rootNode.getChildren(
+				ManifestConstants.ELEMENT_PERMISSION)) {
+			if (elem.getAttributeValue(
+					ManifestConstants.ATTRIBUTE_NAME,
+					ns).equals(permission)) {
 				setPerm = false;
 				break;
 			}
 		}
 		
 		if (setPerm) {
-			final Element permissionElem = new Element(ELEMENT_PERMISSION);
-			permissionElem.setAttribute(ATTRIBUTE_NAME, permission, ns);
+			final Element permissionElem = new Element(
+					ManifestConstants.ELEMENT_PERMISSION);
+			
+			permissionElem.setAttribute(
+					ManifestConstants.ATTRIBUTE_NAME, permission, ns);
+			
 			rootNode.addContent(2, permissionElem);
 		}
 	}
@@ -305,9 +249,11 @@ public class ManifestUpdater extends XmlManager {
 	 */
 	public void setApplicationTheme(String theme) {
 		final Element rootNode = this.getDocument().getRootElement();
-		final Namespace ns = rootNode.getNamespace(NAMESPACE_ANDROID);
-		final Element appElem = rootNode.getChild(ELEMENT_APPLICATION);
-		appElem.setAttribute(ATTRIBUTE_THEME, theme, ns);
+		final Namespace ns = rootNode.getNamespace(
+				ManifestConstants.NAMESPACE_ANDROID);
+		final Element appElem = rootNode.getChild(
+				ManifestConstants.ELEMENT_APPLICATION);
+		appElem.setAttribute(ManifestConstants.ATTRIBUTE_THEME, theme, ns);
 	}
 	
 	/**
@@ -334,21 +280,29 @@ public class ManifestUpdater extends XmlManager {
 		final Element rootNode = this.getDocument().getRootElement();
 
 		// Load Name space (required for manipulate attributes)
-		final Namespace ns = rootNode.getNamespace(NAMESPACE_ANDROID);
-		final Element appElem = rootNode.getChild(ELEMENT_APPLICATION);
+		final Namespace ns = rootNode.getNamespace(
+				ManifestConstants.NAMESPACE_ANDROID);
+		final Element appElem = rootNode.getChild(
+				ManifestConstants.ELEMENT_APPLICATION);
 		boolean setService = true;
-		for (Element elem : appElem.getChildren(ELEMENT_SERVICE)) {
-			if (elem.getAttributeValue(ATTRIBUTE_NAME, ns).equals(serviceName)) {
+		for (Element elem : appElem.getChildren(
+				ManifestConstants.ELEMENT_SERVICE)) {
+			if (elem.getAttributeValue(
+					ManifestConstants.ATTRIBUTE_NAME, ns).equals(serviceName)) {
 				setService = false;
 				break;
 			}
 		}
 		
 		if (setService) {
-			final Element permissionElem = new Element(ELEMENT_SERVICE);
-			permissionElem.setAttribute(ATTRIBUTE_NAME, serviceName, ns);
-			permissionElem.setAttribute(ATTRIBUTE_LABEL, label, ns);
-			permissionElem.setAttribute(ATTRIBUTE_EXPORTED,
+			final Element permissionElem = new Element(
+					ManifestConstants.ELEMENT_SERVICE);
+			permissionElem.setAttribute(
+					ManifestConstants.ATTRIBUTE_NAME, serviceName, ns);
+			permissionElem.setAttribute(
+					ManifestConstants.ATTRIBUTE_LABEL, label, ns);
+			permissionElem.setAttribute(
+					ManifestConstants.ATTRIBUTE_EXPORTED,
 					String.valueOf(exported),
 					ns);
 			appElem.addContent(permissionElem);
@@ -386,29 +340,39 @@ public class ManifestUpdater extends XmlManager {
 		final Element rootNode = this.getDocument().getRootElement();
 
 		// Load Name space (required for manipulate attributes)
-		final Namespace ns = rootNode.getNamespace(NAMESPACE_ANDROID);
-		final Element appElem = rootNode.getChild(ELEMENT_APPLICATION);
+		final Namespace ns = rootNode.getNamespace(
+				ManifestConstants.NAMESPACE_ANDROID);
+		final Element appElem = rootNode.getChild(
+				ManifestConstants.ELEMENT_APPLICATION);
 		boolean setProvider = true;
-		for (Element elem : appElem.getChildren(ELEMENT_PROVIDER)) {
-			if (elem.getAttributeValue(ATTRIBUTE_NAME, ns).equals(name)) {
+		for (Element elem : appElem.getChildren(
+				ManifestConstants.ELEMENT_PROVIDER)) {
+			if (elem.getAttributeValue(
+					ManifestConstants.ATTRIBUTE_NAME, ns).equals(name)) {
 				setProvider = false;
 				break;
 			}
 		}
 		
 		if (setProvider) {
-			final Element providerElem = new Element(ELEMENT_PROVIDER);
-			providerElem.setAttribute(ATTRIBUTE_NAME, name, ns);
-			providerElem.setAttribute(ATTRIBUTE_AUTHORITIES,
+			final Element providerElem = new Element(
+					ManifestConstants.ELEMENT_PROVIDER);
+			providerElem.setAttribute(
+					ManifestConstants.ATTRIBUTE_NAME, name, ns);
+			providerElem.setAttribute(
+					ManifestConstants.ATTRIBUTE_AUTHORITIES,
 					authorities,
 					ns);
-			providerElem.setAttribute(ATTRIBUTE_LABEL,
+			providerElem.setAttribute(
+					ManifestConstants.ATTRIBUTE_LABEL,
 					label, 
 					ns);
-			providerElem.setAttribute(ATTRIBUTE_DESCRIPTION,
+			providerElem.setAttribute(
+					ManifestConstants.ATTRIBUTE_DESCRIPTION,
 					description, 
 					ns);
-			providerElem.setAttribute(ATTRIBUTE_EXPORTED,
+			providerElem.setAttribute(
+					ManifestConstants.ATTRIBUTE_EXPORTED,
 					String.valueOf(exported),
 					ns);
 			
@@ -426,13 +390,17 @@ public class ManifestUpdater extends XmlManager {
 		
 		// Load Root element
 		final Element rootNode = this.getDocument().getRootElement();
-		final Element appElem = rootNode.getChild(ELEMENT_APPLICATION);
+		final Element appElem = rootNode.getChild(
+				ManifestConstants.ELEMENT_APPLICATION);
 
 		// Load Name space (required for manipulate attributes)
-		final Namespace ns = rootNode.getNamespace(NAMESPACE_ANDROID);
+		final Namespace ns = rootNode.getNamespace(
+				ManifestConstants.NAMESPACE_ANDROID);
 		
-		for (Element elem : appElem.getChildren(ELEMENT_SERVICE)) {
-			result.add(elem.getAttributeValue(ATTRIBUTE_NAME, ns));
+		for (Element elem 
+				: appElem.getChildren(ManifestConstants.ELEMENT_SERVICE)) {
+			result.add(elem.getAttributeValue(
+					ManifestConstants.ATTRIBUTE_NAME, ns));
 		}
 		
 		return result;
