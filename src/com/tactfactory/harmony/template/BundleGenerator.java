@@ -45,7 +45,7 @@ public class BundleGenerator extends BaseGenerator {
 				bundleName,
 				bundleNameSpace);
 
-		this.generateBuildXml(bundleOwnerName, bundleName);
+		this.generateBuildFile(bundleOwnerName, bundleName);
 		
 		this.generateGitIgnore(bundleOwnerName, bundleName);
 
@@ -116,20 +116,20 @@ public class BundleGenerator extends BaseGenerator {
 	}
 
 	/**
-	 * Generate the build.xml.
+	 * Generate the build.gradle.
 	 * @param bundleOwnerName Owner name
 	 * @param bundleName Bundle name
 	 */
-	private void generateBuildXml(
+	private void generateBuildFile(
 			final String bundleOwnerName,
 			final String bundleName) {
 
 		final String tplPath = this.getAdapter().getBundleTemplatePath()
-				+ "/build.xml";
+				+ "/build.gradle";
 		final String genPath = this.getAdapter().getBundlePath(
 							bundleOwnerName,
 							bundleName)
-						+ "/build.xml";
+						+ "/build.gradle";
 
 		this.makeSource(tplPath, genPath, false);
 	}

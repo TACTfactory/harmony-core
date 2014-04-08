@@ -1,0 +1,29 @@
+task annotationJar(type: Jar) {
+    baseName 'core-annotations'
+    from sourceSets.main.output
+    include 'com/tactfactory/harmony/annotation/**'
+    
+    doLast{
+        copy {
+            from new File(project.buildDir, 'libs')
+            into new File(project.projectDir, 'lib')
+            include '*annotations*.jar'
+            rename '(.*)-[\0-9]*(.jar)', '$1$2'
+        }
+    }
+}
+
+jar {
+    baseName 'harmony'
+    exclude 'com/tactfactory/harmony/annotation/**'
+    dependsOn annotationJar
+    
+    /** Add Main-Class to manifest to create executable jar. */
+    manifest {
+        attributes 'Main-Class': 'com.tactfactory.harmony.Console'
+    }
+}
+
+javadoc {
+    exclude 'com/tactfactory/harmony/test/**'
+}
