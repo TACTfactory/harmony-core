@@ -151,6 +151,93 @@ public class ManifestUpdater extends XmlManager {
 	}
 	
 	/**
+	 * Get the list of all the launcher activities names.
+	 * @return The launcher activities names
+	 */
+	public List<String> getLauncherActivitiesNames() {
+		// Load Root element
+		final Element rootNode = this.getDocument().getRootElement();
+
+		// Load Name space (required for manipulate attributes)
+		final Namespace ns = rootNode.getNamespace(
+				ManifestConstants.NAMESPACE_ANDROID);
+		
+		List<String> result = new ArrayList<String>();
+		List<Element> activities = this.getActivities();
+		if (activities != null) {
+			for (Element activity : activities) {
+				List<Element> intentFilters = activity.getChildren(
+						ManifestConstants.ELEMENT_INTENT_FILTER);
+				
+				if (intentFilters != null) {
+					for (Element intentFilter : intentFilters) {
+						List<Element> categories = intentFilter.getChildren(
+								ManifestConstants.ELEMENT_CATEGORY);
+						
+						if (categories != null) {
+							for (Element category : categories) {
+								String categoryName = 
+									category.getAttributeValue(
+										ManifestConstants.ATTRIBUTE_NAME, ns);
+								if ("android.intent.category.LAUNCHER".equals(
+										categoryName)) {
+									result.add(activity.getAttributeValue(
+											ManifestConstants.ATTRIBUTE_NAME,
+											ns));
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Remove the launcher category from the intent filter 
+	 * of the given activity.
+	 * 
+	 * @param activityName The activity to remove the launcher category from
+	 */
+	public void removeLauncherIntentFilter(String activityName) {
+		// Load Root element
+		final Element rootNode = this.getDocument().getRootElement();
+
+		// Load Name space (required for manipulate attributes)
+		final Namespace ns = rootNode.getNamespace(
+				ManifestConstants.NAMESPACE_ANDROID);
+		
+		Element activity = this.findActivityNamed(activityName, ns);
+		Element foundCategory = null;
+		List<Element> intentFilters = activity.getChildren(
+				ManifestConstants.ELEMENT_INTENT_FILTER);
+		
+		if (intentFilters != null) {
+			for (Element intentFilter : intentFilters) {
+				List<Element> categories = intentFilter.getChildren(
+						ManifestConstants.ELEMENT_CATEGORY);
+				
+				if (categories != null) {
+					for (Element category : categories) {
+						String categoryName = 
+							category.getAttributeValue(
+								ManifestConstants.ATTRIBUTE_NAME, ns);
+						if ("android.intent.category.LAUNCHER".equals(
+								categoryName)) {
+							foundCategory = category;
+						}
+					}
+					
+					if (foundCategory != null) {
+						intentFilter.removeContent(foundCategory);
+					}
+				}
+			}
+		}	
+	}
+	
+	/**
 	 * Get the activities.
 	 * @return The list of activities.
 	 */
