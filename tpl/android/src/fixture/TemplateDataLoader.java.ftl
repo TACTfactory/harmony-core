@@ -191,8 +191,11 @@ public final class ${curr.name?cap_first}DataLoader
 	@Override
 	public void load(final DataManager manager) {
 		for (final ${curr.name?cap_first} ${curr.name?uncap_first} : this.items.values()) {
-			${curr.name?uncap_first}.set${curr_ids[0].name?cap_first}(
-					manager.persist(${curr.name?uncap_first}));
+			int id = manager.persist(${curr.name?uncap_first});
+			<#list curr_ids as id><#if id.strategy == "IDENTITY">
+			${curr.name?uncap_first}.set${id.name?cap_first}(id);
+			</#if></#list>
+
 		}
 		manager.flush();
 	}

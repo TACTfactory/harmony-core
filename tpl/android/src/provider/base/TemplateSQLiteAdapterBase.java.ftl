@@ -132,8 +132,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 </#if>
 <#list curr_fields as field>
 	<#if (!field.columnResult && (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")))>
+		<#assign fieldNames = ContractUtils.getFieldsNames(field) />
 		<#if (lastLine??)>${lastLine},"</#if>
-		<#assign lastLine=" + ${curr.name}Contract.${curr.name}." + NamingUtils.alias(field.name) + "	+ \"" + field.schema />
+		<#assign lastLine=" + ${fieldNames[0]}	+ \"" + field.schema />
 	</#if>
 </#list>
 		${lastLine}<#if (singleTabInheritance && isTopMostSuperClass)>,"
@@ -393,7 +394,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					${curr_ids[0].owner?cap_first}Contract.${curr_ids[0].owner?cap_first}.${NamingUtils.alias(curr_ids[0].name)},
 					<#if InheritanceUtils.isExtended(curr)>currentValues<#else>values</#if>);
 		}
-		item.set${curr_ids[0].name?cap_first}((int) newid);
+		<#list curr_ids as id><#if id.strategy == "IDENTITY">
+		item.set${id.name?cap_first}((int) newid);
+		</#if></#list>
 	<#list (curr_relations) as relation>
 		<#if (relation.relation.type=="ManyToMany")>
 		if (item.get${relation.name?cap_first}() != null) {
@@ -438,8 +441,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	public int insertOrUpdate(final ${curr.name} item) {
 		<#if (curr_ids?? && curr_ids?size > 0)>
 		int result = 0;
-		<#assign id = curr_ids[0] />
-		if (this.getByID(item.get${id.name?cap_first}()) != null) {
+		if (this.getByID(<#list curr_ids as id>item.get${id.name?cap_first}()<#if id_has_next>, </#if></#list>) != null) {
 			// Item already exists => update it
 			result = this.update(item);
 		} else {
@@ -485,7 +487,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		<#else>
 		final String whereClause =
 				<#list curr_ids as id> ${id.owner?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)}
-				 + "=? <#if id_has_next>AND </#if>"</#list>;
+				 + "=?"<#if id_has_next>
+				 + " AND "
+				 +</#if></#list>;
 		final String[] whereArgs =
 				new String[] {<#list curr_ids as id>String.valueOf(item.get${id.name?cap_first}()) <#if id_has_next>,
 							  </#if></#list>};
@@ -533,7 +537,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		values.put(${curr.name}Contract.${curr.name}.${NamingUtils.alias(relation.name)}, ${relation.relation.targetEntity?lower_case}Id);
 		String whereClause =
 				<#list curr_ids as id> ${id.owner?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)}
-				 + "=? <#if id_has_next>AND </#if>"</#list>;
+				 + "=?"<#if id_has_next>
+				 + " AND "
+				 +</#if></#list>;
 		String[] whereArgs =
 				new String[] {<#list curr_ids as id>String.valueOf(item.get${id.name?cap_first}()) <#if id_has_next>,
 				</#if></#list>};
@@ -663,8 +669,10 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				whereArgs);
 		<#else>
 		
-		final String whereClause = <#list curr_ids as id> ${id.owner?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)}
-					 + "=? <#if (id_has_next)>AND </#if>"</#list>;
+		final String whereClause =<#list curr_ids as id> ${id.owner?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)}
+				 + "=?"<#if id_has_next>
+				 + " AND "
+				 +</#if></#list>;
 		final String[] whereArgs = new String[] {<#list curr_ids as id>String.valueOf(${id.name}) <#if (id_has_next)>,
 					</#if></#list>};
 
@@ -683,7 +691,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return count of updated entities
 	 */
 	public int delete(final ${curr.name?cap_first} ${curr.name?uncap_first}) {
-		return this.remove(${curr.name?uncap_first}.get${curr_ids[0].name?cap_first}());
+		return this.remove(<#list curr_ids as id>${curr.name?uncap_first}.get${id.name?cap_first}()<#if id_has_next>, </#if></#list>);
 	}
 
 	/**
@@ -702,8 +710,10 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		}
 
 		<#if (singleTabInheritance && !isTopMostSuperClass)>
-		final String whereClause = <#list curr_ids as id> ${id.owner}Contract.${id.owner}.${NamingUtils.alias(id.name)}
-					 + "=? <#if (id_has_next)>AND </#if>"</#list>
+		final String whereClause =<#list curr_ids as id> ${id.owner?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)}
+					 + "=?"<#if id_has_next>
+					 + " AND "
+					 +</#if></#list>
 					 + " AND " + ${curr.inheritance.superclass.name}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
 
 		final String[] whereArgs = new String[] {<#list curr_ids as id>String.valueOf(${id.name}),
@@ -717,8 +727,10 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				null,
 				null);
 		<#else>
-		final String whereClause = <#list curr_ids as id> ${id.owner?cap_first}Contract.${id.owner?cap_first}.ALIASED_${NamingUtils.alias(id.name)}
-					 + "=? <#if id_has_next>AND </#if>"</#list>;
+		final String whereClause =<#list curr_ids as id> ${id.owner?cap_first}Contract.${id.owner?cap_first}.${NamingUtils.alias(id.name)}
+				 + "=?"<#if id_has_next>
+				 + " AND "
+				 +</#if></#list>;
 		final String[] whereArgs = new String[] {<#list curr_ids as id>String.valueOf(${id.name}) <#if id_has_next>,
 					</#if></#list>};
 

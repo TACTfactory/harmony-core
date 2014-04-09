@@ -72,7 +72,11 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 
 		ContentValues itemValues = ${curr.name?cap_first}Contract.${curr.name}.itemToContentValues(item);
-		itemValues.remove(${curr_ids[0].owner}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)});
+		<#list curr_ids as id>
+			<#if id.strategy == "IDENTITY">
+		itemValues.remove(${id.owner}Contract.${id.owner}.${NamingUtils.alias(id.name)});
+			</#if>
+		</#list>
 
 		operations.add(ContentProviderOperation.newInsert(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
@@ -159,7 +163,11 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 		ContentValues itemValues = ${curr.name?cap_first}Contract.${curr.name}.itemToContentValues(item<#list relations as relation><#if (relation.internal)>,
 					${relation.name?uncap_first}Id</#if></#list>);
-		itemValues.remove(${curr_ids[0].owner}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)});
+		<#list curr_ids as id>
+			<#if id.strategy == "IDENTITY">
+		itemValues.remove(${id.owner}Contract.${id.owner}.${NamingUtils.alias(id.name)});
+			</#if>
+		</#list>
 
 		operations.add(ContentProviderOperation.newInsert(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
@@ -243,30 +251,47 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		int result = -1;
 		ContentResolver prov = this.getContext().getContentResolver();
 
-		Uri uri = Uri.withAppendedPath(
-				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
-				String.valueOf(item.get${curr_ids[0].name?cap_first}()));
+		Uri uri = ${curr.name}ProviderAdapter.${curr.name?upper_case}_URI;
+		<#list curr_ids as id>
+		uri = Uri.withAppendedPath(uri, String.valueOf(item.get${id.name?cap_first}()));
+		</#list>
+
 		result = prov.delete(uri,
 			null,
 			null);
 
-
 		return result;
+	}
+
+
+	/**
+	 * Query the DB.
+	 * @param item The item with its ids set
+	 * @return ${curr.name?cap_first}
+	 */
+	public ${curr.name?cap_first} query(final ${curr.name} item) {
+		return this.query(<#list curr_ids as id>item.get${id.name?cap_first}()<#if id_has_next>, </#if></#list>);
 	}
 
 	/**
 	 * Query the DB.
-	 * @param id The ID
+	 *
+	 * <#list curr_ids as id>@param ${id.name} ${id.name}<#if id_has_next>
+	 * </#if></#list>
+	 *
 	 * @return ${curr.name?cap_first}
 	 */
-	public ${curr.name?cap_first} query(final int id) {
+	public ${curr.name?cap_first} query(<#list curr_ids as id>final ${id.type} ${id.name}<#if id_has_next>,
+				</#if></#list>) {
 		${curr.name?cap_first} result = null;
 		ContentResolver prov = this.getContext().getContentResolver();
 
 		${curr.name}Criterias crits =
 				new ${curr.name}Criterias(GroupType.AND);
-		crits.add(${curr_ids[0].owner}Contract.${curr_ids[0].owner}.ALIASED_${NamingUtils.alias(curr_ids[0].name)},
-					String.valueOf(id));
+		<#list curr_ids as id>
+		crits.add(${id.owner}Contract.${id.owner}.ALIASED_${NamingUtils.alias(id.name)},
+					String.valueOf(${id.name}));
+		</#list>
 
 		Cursor cursor = prov.query(
 			${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
@@ -360,10 +385,10 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		ContentResolver prov = this.getContext().getContentResolver();
 		ContentValues itemValues = ${curr.name?cap_first}Contract.${curr.name}.itemToContentValues(item);
 
-		Uri uri = Uri.withAppendedPath(
-				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
-				String.valueOf(item.get${curr_ids[0].name?cap_first}()));
-
+		Uri uri = ${curr.name}ProviderAdapter.${curr.name?upper_case}_URI;
+		<#list curr_ids as id>
+		uri = Uri.withAppendedPath(uri, String.valueOf(item.get${id.name?cap_first}()));
+		</#list>
 
 		operations.add(ContentProviderOperation.newUpdate(uri)
 				.withValues(itemValues)
@@ -467,9 +492,10 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 				item<#list relations as relation><#if (relation.internal)>,
 				${relation.name?uncap_first}Id</#if></#list>);
 
-		Uri uri = Uri.withAppendedPath(
-				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
-				String.valueOf(item.get${curr_ids[0].name?cap_first}()));
+		Uri uri = ${curr.name}ProviderAdapter.${curr.name?upper_case}_URI;
+		<#list curr_ids as id>
+		uri = Uri.withAppendedPath(uri, String.valueOf(item.get${id.name?cap_first}()));
+		</#list>
 
 
 		operations.add(ContentProviderOperation.newUpdate(uri)
@@ -480,7 +506,12 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		<#list relations as relation>
 			<#if (relation.relation.type == "OneToMany")>
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
+			String selection;
+			String[] selectionArgs;
 			// Set new ${relation.name} for ${curr.name}
+			<#if (entities[relation.relationtargetEntity].ids?size > 1)>
+
+			<#else>
 			${relation.relation.targetEntity}Criterias ${relation.name}Crit =
 						new ${relation.relation.targetEntity}Criterias(GroupType.AND);
 			Criteria crit = new Criteria();
@@ -491,10 +522,12 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			${relation.name}Crit.add(crit);
 
 
-			for (int i = 0; i < item.get${relation.name?cap_first}().size(); i++) {
-				values.addValue(String.valueOf(
-						item.get${relation.name?cap_first}().get(i).get${entities[relation.relation.targetEntity].ids[0].name?cap_first}()));
+			for (${relation.relation.targetEntity} ${relation.name} : item.get${relation.name?cap_first}()) {
+				values.addValue(String.valueOf(${relation.name}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}()));
 			}
+			selection = ${relation.name}Crit.toSQLiteSelection();
+			selectionArgs = ${relation.name}Crit.toSQLiteSelectionArgs();
+			</#if>
 
 			operations.add(ContentProviderOperation.newUpdate(
 					${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
@@ -503,8 +536,8 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 										.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
 								item.get${curr_ids[0].name?cap_first}())
 					.withSelection(
-							${relation.name}Crit.toSQLiteSelection(),
-							${relation.name}Crit.toSQLiteSelectionArgs())
+							selection,
+							selectionArgs)
 					.build());
 
 			// Remove old associated ${relation.name}

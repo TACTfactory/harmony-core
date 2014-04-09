@@ -14,6 +14,7 @@ import java.util.Map;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.annotation.Column.Type;
+import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
 import com.tactfactory.harmony.meta.TranslationMetadata.Group;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.plateforme.SqliteAdapter;
@@ -73,6 +74,9 @@ public class FieldMetadata extends BaseMetadata {
 	
 	/** Is field a writable field ? */
 	private boolean writable = true;
+	
+	/** ID Strategy. */
+	private Strategy strategy;
 
 	/**
 	 * Constructor.
@@ -178,6 +182,11 @@ public class FieldMetadata extends BaseMetadata {
 		model.put(TagConstant.STATIC,		this.isStatic);
 		model.put(TagConstant.COLUMN_RESULT, this.columnResult);
 		model.put(TagConstant.WRITABLE, this.writable);
+		if (this.strategy != null) {
+			model.put(TagConstant.STRATEGY, this.strategy.getValue());
+		} else {
+			model.put(TagConstant.STRATEGY, Strategy.MODE_NONE);
+		}
 		
 		if (this.relation != null) {
 			model.put(TagConstant.RELATION, this.relation.toMap(adapter));
@@ -480,5 +489,21 @@ public class FieldMetadata extends BaseMetadata {
 	@Override
 	public String toString() {
 		return String.format("FieldMetadata : %s", this.getName());
+	}
+
+
+	/**
+	 * @return the strategy
+	 */
+	public final Strategy getStrategy() {
+		return strategy;
+	}
+
+
+	/**
+	 * @param strategy the strategy to set
+	 */
+	public final void setStrategy(Strategy strategy) {
+		this.strategy = strategy;
 	}
 }

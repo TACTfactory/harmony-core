@@ -45,16 +45,7 @@ public abstract class ${curr.name}ContractBase {
 		/** Identifier for inheritance. */
 		public static final String DISCRIMINATOR_IDENTIFIER = "${curr.inheritance.discriminatorIdentifier}";
 		</#if>
-		<#list curr_fields as field>
-			<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
-		/** ${field.columnName}. */
-		public static final String ${NamingUtils.alias(field.name)} =
-				"${field.columnName}";
-		/** Alias. */
-		public static final String ALIASED_${NamingUtils.alias(field.name)} =
-				<#if !field.columnResult>${curr.name?cap_first}Contract.${curr.name}.TABLE_NAME + "." + </#if>${NamingUtils.alias(field.name)};
-			</#if>
-		</#list>
+		<#list curr_fields as field>${ContractUtils.getFieldsDeclarations(field)}</#list>
 		<#if (singleTabInheritance && isTopMostSuperClass)>
 			/** userGroup. */
 			public static final String ${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)} = 
@@ -75,27 +66,26 @@ public abstract class ${curr.name}ContractBase {
 		public static final String TABLE_NAME = <#if singleTabInheritance && !isTopMostSuperClass>${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.TABLE_NAME<#else>"${curr.name}"</#if>;
 		/** Global Fields. */
 		public static final String[] COLS = new String[] {
-	<#assign firstFieldDone=false />
-	<#list curr_fields as field>
-		<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
-<#if (firstFieldDone)>,</#if>
-			${field.owner?cap_first}Columns.${NamingUtils.alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
-	<#if singleTabInheritance && !isTopMostSuperClass>
-		<#list curr.inheritance.superclass.fields?values as field>
-			<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
-<#if (firstFieldDone)>,</#if>
-			${field.owner?cap_first}Columns.${NamingUtils.alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
-	</#if>
+		<#assign wholeFields = curr_fields />
+		<#if singleTabInheritance && !isTopMostSuperClass>
+			<#assign wholeFields = wholeFields + curr.inheritance.superclass.fields?values />
+		</#if>
+		<#list wholeFields as field>
+			<#assign fieldNames = ContractUtils.getFieldsNames(field) />
+			<#list fieldNames as name>
+				${name}<#if field_has_next || name_has_next>,</#if>
+			</#list>
+		</#list>
 		};
 
 		/** Global Fields. */
 		public static final String[] ALIASED_COLS = new String[] {
-	<#assign firstFieldDone=false />
-	<#assign allFields = ViewUtils.getAllFields(curr)?values />
-	<#list allFields as field>
-		<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
-	<#if (firstFieldDone)>,</#if>
-			${field.owner?cap_first}Columns.ALIASED_${NamingUtils.alias(field.name)}<#assign firstFieldDone=true /></#if></#list>
+		<#list curr_fields as field>
+			<#assign fieldNames = ContractUtils.getFieldsNames(field, true) />
+			<#list fieldNames as name>
+				${name}<#if field_has_next || name_has_next>,</#if>
+			</#list>
+		</#list>
 		};
 
 	<#if !curr.internal>
@@ -166,7 +156,7 @@ public abstract class ${curr.name}ContractBase {
 				</#if>
 				int index;
 
-	<#list curr_fields as field>${AdapterUtils.cursorToItemFieldAdapter("result", field, 3)}</#list>
+<#list curr_fields as field>${AdapterUtils.cursorToItemFieldAdapter("result", field, 4)}</#list>
 			}
 		}
 

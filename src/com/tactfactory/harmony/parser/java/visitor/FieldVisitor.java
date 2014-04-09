@@ -25,6 +25,7 @@ import java.util.Map;
 import com.tactfactory.harmony.parser.JavaModelParser;
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.ColumnResult;
+import com.tactfactory.harmony.annotation.GeneratedValue;
 import com.tactfactory.harmony.annotation.Id;
 import com.tactfactory.harmony.annotation.JoinColumn;
 import com.tactfactory.harmony.annotation.ManyToMany;
@@ -33,6 +34,7 @@ import com.tactfactory.harmony.annotation.OneToMany;
 import com.tactfactory.harmony.annotation.OneToOne;
 import com.tactfactory.harmony.annotation.OrderBys;
 import com.tactfactory.harmony.annotation.Column.Type;
+import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
@@ -53,6 +55,10 @@ public class FieldVisitor {
 	/** Id annotation name. */
 	private static final String FILTER_ID	 		=
 			PackageUtils.extractNameEntity(Id.class);
+	
+	/** Id annotation name. */
+	private static final String FILTER_GENERATED_VALUE	 		=
+			PackageUtils.extractNameEntity(GeneratedValue.class);
 
 	/** Column annotation name. */
 	private static final String FILTER_COLUMN 		=
@@ -112,6 +118,9 @@ public class FieldVisitor {
 
 	/** Column annotation hidden attribute. */
 	private static final String ATTRIBUTE_HIDDEN = "hidden";
+
+	/** Column annotation strategy attribute. */
+	private static final String ATTRIBUTE_STRATEGY = "strategy";
 
 	/** Column annotation column name attribute. */
 	private static final String ATTRIBUTE_COLUMN_NAME = "columnName";
@@ -238,6 +247,35 @@ public class FieldVisitor {
 				
 				if (annotationType.equals(FILTER_COLUMNRESULT)) {
 					result.setColumnResult(true);
+				}
+				
+				if (annotationType.equals(FILTER_GENERATED_VALUE)) {
+					Strategy strategy = Strategy.MODE_NONE;
+					if (annotationExpr instanceof NormalAnnotationExpr) {
+						List<MemberValuePair> pairs = 
+								((NormalAnnotationExpr) annotationExpr)
+										.getPairs();
+						if (pairs != null) {
+							for (MemberValuePair pair : pairs) {
+								if (pair.getName().equals(ATTRIBUTE_STRATEGY)) {
+									String strategyName;
+									if (pair.getValue()
+											instanceof StringLiteralExpr) {
+										strategyName = ((StringLiteralExpr)
+												pair.getValue()).getValue();
+									} else {
+										strategyName = 
+												pair.getValue().toString();
+									}
+									
+									strategyName = strategyName.substring(
+											strategyName.indexOf('.') + 1);
+									strategy = Strategy.valueOf(strategyName);
+								}
+							}
+						}
+					}
+					result.setStrategy(strategy);
 				}
 
 				this.loadAttributes(rel,

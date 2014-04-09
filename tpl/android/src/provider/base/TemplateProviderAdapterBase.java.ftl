@@ -103,13 +103,13 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		<#if (hasIds)>
 		${project_name?cap_first}Provider.getUriMatcher().addURI(
 				${project_name?cap_first}Provider.authority,
-				${curr.name?uncap_first}Type + "/#",
+				${curr.name?uncap_first}Type<#list curr_ids as id><#if id.type?lower_case == "int" || id.type?lower_case == "integer"> + "/#"<#else> + "/*"</#if></#list>,
 				${curr.name?upper_case}_ONE);
 		<#list curr.relations as relation>
 			<#if !relation.internal>
 		${project_name?cap_first}Provider.getUriMatcher().addURI(
 				${project_name?cap_first}Provider.authority,
-				${curr.name?uncap_first}Type + "/#/${relation.name?lower_case}",
+				${curr.name?uncap_first}Type<#list curr_ids as id><#if id.type?lower_case == "int" || id.type?lower_case == "integer"> + "/#"<#else> + "/*"</#if></#list> + "/${relation.name?lower_case}",
 				${curr.name?upper_case}_${relation.name?upper_case});
 			</#if>
 		</#list>
@@ -195,17 +195,25 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		switch (matchedUri) {
 			<#if (hasIds)>
 			case ${curr.name?upper_case}_ONE:
-				int id = Integer.parseInt(uri.getPathSegments().get(1));
+				<#list curr_ids as id>
+				String ${id.name} = uri.getPathSegments().get(${id_index + 1});
+				</#list>
 				<#if inherited && joinedInheritance>
+					<#assign superclassIds = [] />
+					<#list curr_ids as id><#if (id.owner.name != curr.name)><#assign superclassIds = superclassIds + [id] /></#if></#list>
 				Uri motherUri = Uri.withAppendedPath(
-						${curr.inheritance.superclass.name?cap_first}ProviderAdapter.${curr.inheritance.superclass.name?upper_case}_URI, String.valueOf(id));
+						${curr.inheritance.superclass.name?cap_first}ProviderAdapter.${curr.inheritance.superclass.name?upper_case}_URI, <#list superclassIds as id>${id.name}<#if id_has_next> + "/" + ${id.name}</#if></#list>);
 				result = this.ctx.getContentResolver().delete(motherUri,
 						selection, selectionArgs);
 				<#else>
-				selection = ${curr_ids[0].owner?cap_first}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)}
-						+ " = ?";
-				selectionArgs = new String[1];
-				selectionArgs[0] = String.valueOf(id);
+				selection =<#list curr_ids as id> ${id.owner?cap_first}Contract.${id.owner}.${NamingUtils.alias(id.name)}
+						+ " = ?"<#if id_has_next>
+						+ " AND "
+						+</#if></#list>;
+				selectionArgs = new String[${curr_ids?size}];
+				<#list curr_ids as id>
+				selectionArgs[${id_index}] = ${id.name};
+				</#list>
 					<#if (curr.options.sync??)>
 				result = this.adapter.update(
 						deleteCv,
@@ -371,7 +379,8 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				break;
 			<#if (hasIds)>
 			case ${curr.name?upper_case}_ONE:
-				result = this.queryById(uri.getPathSegments().get(1));
+				result = this.queryById(<#list curr_ids as id>uri.getPathSegments().get(${id_index + 1})<#if id_has_next>,
+						</#if></#list>);
 				break;
 			
 			<#list curr.relations as relation>
@@ -587,18 +596,26 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param id The id of the entity to retrieve
 	 * @return The cursor
 	 */
-	private Cursor queryById(String id) {
+	private Cursor queryById(<#list curr_ids as id>String ${id.name}<#if id_has_next>, </#if></#list>) {
 		Cursor result = null;
-		String selection = ${curr_ids[0].owner?cap_first}Contract.${curr_ids[0].owner}.ALIASED_${NamingUtils.alias(curr_ids[0].name)}
-						+ " = ?";
+		String selection =<#list curr_ids as id> ${id.owner?cap_first}Contract.${id.owner}.ALIASED_${NamingUtils.alias(id.name)}
+						+ " = ?"<#if id_has_next>
+						+ " AND "
+						+</#if></#list>;
 		<#if curr.options.sync??>
 		selection += " AND " + ${curr.name?cap_first}Contract.${curr.name}.ALIASED_COL_SYNC_DTAG + " = ?";</#if>
 		<#if inherited && singleTabInheritance>
 		selection += " AND " + ${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
-		String[] selectionArgs = new String[]{id<#if (curr.options.sync??)>, "0"</#if>, ${curr.name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER};
-		<#else>
-		String[] selectionArgs = new String[]{id<#if (curr.options.sync??)>, "0"</#if>};
 		</#if>
+		<#assign argsSize = curr_ids?size />
+		<#if (curr.options.sync??)><#assign argsSize = argsSize + 1 /></#if>
+		<#if (inherited && signleTabInheritance??)><#assign argsSize = argsSize + 1 /></#if>
+		String[] selectionArgs = new String[${argsSize}];
+		<#list curr_ids as id>
+		selectionArgs[${id_index}] = ${id.name};
+		</#list>
+		<#if (curr.options.sync??)>selectionArgs[${curr_ids?size}] = String.valueOf(0);</#if>
+		<#if inherited && singleTabInheritance>selectionArgs[${curr_ids?size}] = ${curr.name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER;</#if>
 
 		result = this.adapter.query(
 					${curr.name?cap_first}Contract.${curr.name}.ALIASED_COLS,

@@ -2,28 +2,34 @@
 	<#assign t = Utils.getIndentString(indentLevel) />
 	<#assign result = "" />
 	<#if (!field.internal && field.writable)>
+		<#assign fieldNames = ContractUtils.getFieldsNames(field) />
 		<#if (!field.relation??)>
 			<#if (MetadataUtils.isPrimitive(field))>
-				<#assign result = result + "${t}result.put(${NamingUtils.alias(field.name)},\n" />
+				<#assign result = result + "${t}result.put(${fieldNames[0]},\n" />
 				<#assign result = result + "${t}	${FieldsUtils.generateStringGetter(\"item\", field)});\n\n"/>
 			<#else>
 				<#assign result = result + "${t}if (${FieldsUtils.generateCompleteGetter(\"item\", field)} != null) {\n" />
-				<#assign result = result + "${t}	result.put(${NamingUtils.alias(field.name)},\n"/>
+				<#assign result = result + "${t}	result.put(${fieldNames[0]},\n"/>
 				<#assign result = result + "${t}		${FieldsUtils.generateStringGetter(\"item\", field)});\n"/>
 				<#if (field.nullable)>
 					<#assign result = result + "${t}} else {\n"/>
-					<#assign result = result + "${t}	result.put(${NamingUtils.alias(field.name)}, (String) null);\n"/>
+					<#assign result = result + "${t}	result.put(${fieldNames[0]}, (String) null);\n"/>
 				</#if>
 				<#assign result = result + "${t}}\n\n"/>
 			</#if>
 		<#else>
+			<#assign targetEntity = entities[field.relation.targetEntity] />
 			<#if (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 				<#assign result = result + "${t}if (${FieldsUtils.generateCompleteGetter(\"item\", field)} != null) {\n"/>
-				<#assign result = result + "${t}	result.put(${NamingUtils.alias(field.name)},\n"/>
-				<#assign result = result + "${t}		item.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}());\n"/>
+				<#list targetEntity.ids as id>
+					<#assign result = result + "${t}	result.put(${fieldNames[id_index]},\n"/>
+					<#assign result = result + "${t}		item.get${field.name?cap_first}().get${id.name?cap_first}());\n"/>
+				</#list>
 				<#if (field.nullable)>
-					<#assign result = result + "${t}} else {\n"/>
-					<#assign result = result + "${t}	result.put(${NamingUtils.alias(field.name)}, (String) null);\n"/>
+					<#list targetEntity.ids as id>
+						<#assign result = result + "${t}} else {\n"/>
+						<#assign result = result + "${t}	result.put(${fieldNames[id_index]}, (String) null);\n"/>
+					</#list>
 				</#if>
 				<#assign result = result + "${t}}\n\n"/>
 			</#if>
@@ -46,9 +52,10 @@
 <#function cursorToItemFieldAdapter objectName field indentLevel = 0>
 	<#assign tab = Utils.getIndentString(indentLevel) />
 	<#assign result = "" />
+	<#assign fieldNames = ContractUtils.getFieldsNames(field) />
 	<#if (!field.internal && !(field.relation?? && (field.relation.type=="ManyToMany" || field.relation.type=="OneToMany")))>
 		<#assign localTab="" />
-		<#assign result = result + "${tab}index = cursor.getColumnIndexOrThrow(${NamingUtils.alias(field.name)});\n"/>
+		<#assign result = result + "${tab}index = cursor.getColumnIndexOrThrow(${fieldNames[0]});\n"/>
 		<#if (field.nullable)>
 			<#assign result = result + "${tab}if (!cursor.isNull(index)) {\n"/><#assign localTab="\t" />
 		</#if>
@@ -117,7 +124,9 @@
 		<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 			<#assign result = result + "${tab}${localTab}if (result.get${field.name?cap_first}() == null) {\n" />
 			<#assign result = result + "${tab}${localTab}	final ${field.type} ${field.name} = new ${field.type}();\n"/>
-			<#assign result = result + "${tab}${localTab}	${field.name}.set${entities[field.relation.targetEntity].ids[0].name?cap_first}(cursor.getInt(index));\n"/>
+				<#list entities[field.relation.targetEntity].ids as id>
+			<#assign result = result + "${tab}${localTab}	${field.name}.set${id.name?cap_first}(${AdapterUtils.getCursorGet(id)}index));\n"/>
+				</#list>
 			<#assign result = result + "${tab}${localTab}	result.set${field.name?cap_first}(${field.name});\n"/>
 			<#assign result = result + "${tab}${localTab}}\n" />
 		</#if>
@@ -384,4 +393,13 @@
 		</#if>
 	</#if>
 	<#return result/>
+</#function>
+
+<#function getCursorGet field>
+	<#if (field.type?lower_case == "integer" || field.type?lower_case == "int")>
+		<#assign result = "cursor.getInt(" />
+	<#else>
+		<#assign result = "cursor.getString(" />
+	</#if>
+	<#return result />
 </#function>

@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Column.Type;
+import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
 import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
@@ -48,9 +49,12 @@ public abstract class SqliteAdapter {
 		final StringBuilder builder = new StringBuilder(20);
 		builder.append(' ');
 		builder.append(fm.getColumnDefinition());
-		if (fm.isId()) {
+		if (fm.isId()
+				&& (!(fm.getOwner() instanceof EntityMetadata)
+					|| ((EntityMetadata) fm.getOwner()).getIds().size() == 1)) {
 			builder.append(" PRIMARY KEY");
-			if (fm.getColumnDefinition().equalsIgnoreCase("INTEGER")) {
+			if (fm.getStrategy() != null && 
+					fm.getStrategy().equals(Strategy.MODE_IDENTITY)) {
 				builder.append(" AUTOINCREMENT");
 			}
 		} else {
@@ -158,7 +162,8 @@ public abstract class SqliteAdapter {
 			|| type.equalsIgnoreCase(Column.Type.EMAIL.getValue())
 			|| type.equalsIgnoreCase(Column.Type.CITY.getValue())
 			|| type.equalsIgnoreCase(Column.Type.ZIPCODE.getValue())
-			|| type.equalsIgnoreCase(Column.Type.COUNTRY.getValue())) {
+			|| type.equalsIgnoreCase(Column.Type.COUNTRY.getValue())
+			|| type.equalsIgnoreCase("VARCHAR")) {
 			type = "VARCHAR";
 		} else
 
