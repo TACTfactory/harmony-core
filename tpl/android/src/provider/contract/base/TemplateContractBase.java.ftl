@@ -45,7 +45,7 @@ public abstract class ${curr.name}ContractBase {
 		/** Identifier for inheritance. */
 		public static final String DISCRIMINATOR_IDENTIFIER = "${curr.inheritance.discriminatorIdentifier}";
 		</#if>
-		<#list curr_fields as field>${ContractUtils.getFieldsDeclarations(field)}</#list>
+		<#list curr_fields as field><#if !field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany")>${ContractUtils.getFieldsDeclarations(field)}</#if></#list>
 		<#if (singleTabInheritance && isTopMostSuperClass)>
 			/** userGroup. */
 			public static final String ${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)} = 
@@ -71,20 +71,24 @@ public abstract class ${curr.name}ContractBase {
 			<#assign wholeFields = wholeFields + curr.inheritance.superclass.fields?values />
 		</#if>
 		<#list wholeFields as field>
-			<#assign fieldNames = ContractUtils.getFieldsNames(field) />
-			<#list fieldNames as name>
+			<#if !field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany")>
+				<#assign fieldNames = ContractUtils.getFieldsNames(field) />
+				<#list fieldNames as name>
 				${name}<#if field_has_next || name_has_next>,</#if>
-			</#list>
+				</#list>
+			</#if>
 		</#list>
 		};
 
 		/** Global Fields. */
 		public static final String[] ALIASED_COLS = new String[] {
 		<#list curr_fields as field>
-			<#assign fieldNames = ContractUtils.getFieldsNames(field, true) />
-			<#list fieldNames as name>
+			<#if !field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany")>
+				<#assign fieldNames = ContractUtils.getFieldsNames(field, true) />
+				<#list fieldNames as name>
 				${name}<#if field_has_next || name_has_next>,</#if>
-			</#list>
+				</#list>
+			</#if>
 		</#list>
 		};
 
@@ -101,8 +105,11 @@ public abstract class ${curr.name}ContractBase {
 			final ContentValues result = ${curr.name?cap_first}Contract.${curr.name}.itemToContentValues(item);
 		<#list curr_fields as field>
 			<#if (field.internal)>
-			result.put(${NamingUtils.alias(field.name)},
+				<#assign fieldNames = ContractUtils.getFieldsNames(field) />
+					<#list field.relation.field_ref as refField>
+			result.put(${fieldNames[refField_index]},
 					String.valueOf(${field.name?uncap_first}Id));
+					</#list>
 			</#if>
 		</#list>
 			return result;

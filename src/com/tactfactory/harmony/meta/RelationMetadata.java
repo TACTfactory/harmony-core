@@ -8,8 +8,11 @@
  */
 package com.tactfactory.harmony.meta;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.tactfactory.harmony.plateforme.BaseAdapter;
@@ -51,7 +54,8 @@ public class RelationMetadata extends BaseMetadata {
 		model.put(TagConstant.NAME, this.getName());
 		model.put(TagConstant.TYPE, this.type);
 		model.put(TagConstant.ENTITY_REF, this.entityRef.getName());
-		model.put(TagConstant.FIELD_REF, this.entityRef.getIds().values());
+		model.put(TagConstant.FIELD_REF, 
+				this.toFieldArray(this.entityRef.getIds().values(), adapter));
 		if (this.inversedBy != null) {
 			model.put("inversedBy", this.inversedBy.getName());
 		}
@@ -156,5 +160,25 @@ public class RelationMetadata extends BaseMetadata {
 	 */
 	public void addOrder(String columnName, String order) {
 		this.orders.put(columnName, order);
+	}
+	
+	/**
+	 * Build a map from a collection of fields.
+	 * @param c The collection of fields
+	 * @param adapter The adapter to use.
+	 * @return The fields map.
+	 */
+	private List<Map<String, Object>> toFieldArray(
+			final Collection<FieldMetadata> c,
+			final BaseAdapter adapter) {
+		final List<Map<String, Object>> result =
+				new ArrayList<Map<String, Object>>();
+		Map<String, Object> subField = null;
+
+		for (final FieldMetadata field : c) {
+			result.add(field.toMap(adapter));
+		}
+
+		return result;
 	}
 }

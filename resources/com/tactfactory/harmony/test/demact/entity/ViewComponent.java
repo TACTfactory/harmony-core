@@ -15,6 +15,7 @@ import org.joda.time.DateTime;
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Entity;
 import com.tactfactory.harmony.annotation.GeneratedValue;
+import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
 import com.tactfactory.harmony.annotation.Id;
 import com.tactfactory.harmony.annotation.Column.Type;
 
@@ -27,7 +28,7 @@ public class ViewComponent implements Serializable {
 	/** Entity's technical id. */
 	@Id
     @Column(type = Type.INTEGER, hidden = true)
-    @GeneratedValue(strategy = "IDENTITY")
+    @GeneratedValue(strategy = Strategy.MODE_IDENTITY)
 	private int id;
 
 	/** String type. */

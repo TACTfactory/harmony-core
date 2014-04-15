@@ -16,6 +16,7 @@ import org.joda.time.DateTime;
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Entity;
 import com.tactfactory.harmony.annotation.GeneratedValue;
+import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
 import com.tactfactory.harmony.annotation.Id;
 import com.tactfactory.harmony.annotation.ManyToOne;
 import com.tactfactory.harmony.annotation.Table;
@@ -32,7 +33,7 @@ public class Comment implements Serializable { //TODO extends EntityBase {
 	/** Entity's technical id. */
 	@Id
     @Column(type = Type.INTEGER)
-    @GeneratedValue(strategy = "IDENTITY")
+    @GeneratedValue(strategy = Strategy.MODE_IDENTITY)
     private int id;
 
 	/** Content. */

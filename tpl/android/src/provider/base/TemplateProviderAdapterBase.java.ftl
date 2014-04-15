@@ -187,7 +187,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 			String[] selectionArgs) {
 		<#if (curr.options.sync??)>
 		ContentValues deleteCv = new ContentValues();
-		deleteCv.put(${curr.name?cap_first}Contract.${curr.name}.COL_SYNC_DTAG, 1);
+		deleteCv.put(${ContractUtils.getContractClass(curr)}.COL_SYNC_DTAG, 1);
 		</#if>
 		int matchedUri = ${project_name?cap_first}ProviderBase
 					.getUriMatcher().match(uri);
@@ -206,7 +206,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				result = this.ctx.getContentResolver().delete(motherUri,
 						selection, selectionArgs);
 				<#else>
-				selection =<#list curr_ids as id> ${id.owner?cap_first}Contract.${id.owner}.${NamingUtils.alias(id.name)}
+				selection =<#list curr_ids as id> ${ContractUtils.getContractCol(id)}
 						+ " = ?"<#if id_has_next>
 						+ " AND "
 						+</#if></#list>;
@@ -232,7 +232,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					<#if joinedInheritance>
 				// Query the ids of the changing fields.
 				Cursor idsCursor = this.adapter.query(
-						new String[]{${curr_ids[0].owner?cap_first}Contract.${curr_ids[0].owner}.ALIASED_${NamingUtils.alias(curr_ids[0].name)}},
+						new String[]{${ContractUtils.getContractCol(curr_ids[0], true)}},
 						selection,
 						selectionArgs,
 						null,
@@ -240,7 +240,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						null);
 				// If there are ids
 				if (idsCursor.getCount() > 0) {
-					CriteriasBase parentCrit = this.cursorToIDSelection(idsCursor, ${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_${NamingUtils.alias(curr_ids[0].name)});
+					CriteriasBase parentCrit = this.cursorToIDSelection(idsCursor, ${ContractUtils.getContractClass(curr.inheritance.superclass)}.ALIASED_${NamingUtils.alias(curr_ids[0].name)});
 					String parentSelection = parentCrit.toSQLiteSelection();
 					String[] parentSelectionArgs = parentCrit.toSQLiteSelectionArgs();
 					result = this.ctx.getContentResolver().delete(
@@ -251,15 +251,15 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					<#else>
 				if (Strings.isNullOrEmpty(selection)) {
 					selection = 
-						${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
+						${ContractUtils.getContractCol(curr.inheritance.superclass.inheritance.discriminatorColumn, true)} + " = ?";
 					selectionArgs = new String[]{
-							${curr.name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER};
+							${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER};
 				} else {
 					selection += " AND " 
-							+ ${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)}
+							+ ${ContractUtils.getContractCol(curr.inheritance.superclass.inheritance.discriminatorColumn, true)}
 							+ " = ?";
 					selectionArgs = ObjectArrays.concat(selectionArgs,
-							${curr.name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER);
+							${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER);
 				}
 						<#if (curr.options.sync??)>
 				result = this.adapter.update(
@@ -297,7 +297,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		int matchedUri = ${project_name?cap_first}ProviderBase
 				.getUriMatcher().match(uri);
 		<#if inherited && joinedInheritance>ContentValues ${curr.name?uncap_first}Values =
-			DatabaseUtil.extractContentValues(values, ${curr.name?cap_first}Contract.${curr.name}.COLS);</#if>
+			DatabaseUtil.extractContentValues(values, ${ContractUtils.getContractCols(curr)});</#if>
 		Uri result = null;
 		int id = 0;
 		switch (matchedUri) {
@@ -307,17 +307,17 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						${curr.inheritance.superclass.name}ProviderAdapter.${curr.inheritance.superclass.name?upper_case}_URI,
 						values);
 				int newId = Integer.parseInt(newUri.getPathSegments().get(1));
-				${curr.name?uncap_first}Values.put(${curr_ids[0].owner?cap_first}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)}, newId);
+				${curr.name?uncap_first}Values.put(${ContractUtils.getContractCol(curr_ids[0])}, newId);
 				if (${curr.name?uncap_first}Values.size() > 0) {
 					id = (int) this.adapter.insert(null, ${curr.name?uncap_first}Values);
 				} else {
-					id = (int) this.adapter.insert(${curr_ids[0].owner?cap_first}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)}, ${curr.name?uncap_first}Values);
+					id = (int) this.adapter.insert(${ContractUtils.getContractCol(curr_ids[0])}, ${curr.name?uncap_first}Values);
 				}
 				<#elseif (hasIds)>
 				if (values.size() > 0) {
 					id = (int) this.adapter.insert(null, values);
 				} else {
-					id = (int) this.adapter.insert(${curr_ids[0].owner?cap_first}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)}, values);
+					id = (int) this.adapter.insert(${ContractUtils.getContractCol(curr_ids[0])}, values);
 				}
 				<#else>
 				id = (int) this.adapter.insert(null, values);
@@ -356,17 +356,17 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				<#if inherited && singleTabInheritance>
 				if (Strings.isNullOrEmpty(selection)) {
 					selection = 
-						${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?"<#if (curr.options.sync??)>
-								+ " AND " + ${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_COL_SYNC_DTAG + " = ?"</#if>;
-					selectionArgs = new String[]{${curr.name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER<#if (curr.options.sync??)>, "0"</#if>};
+						${ContractUtils.getContractCol(curr.inheritance.superclass.inheritance.discriminatorColumn, true)} + " = ?"<#if (curr.options.sync??)>
+								+ " AND " + ${ContractUtils.getContractClass(curr.inheritance.superclass)}.ALIASED_COL_SYNC_DTAG + " = ?"</#if>;
+					selectionArgs = new String[]{${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER<#if (curr.options.sync??)>, "0"</#if>};
 				} else {
 					selection += " AND " 
-							+ ${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)}
+							+ ${ContractUtils.getContractCol(curr.inheritance.superclass.inheritance.discriminatorColumn, true)}
 							+ " = ?"<#if (curr.options.sync??)>
-							+ " AND " + ${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_COL_SYNC_DTAG 
+							+ " AND " + ${ContractUtils.getContractClass(curr.inheritance.superclass)}.ALIASED_COL_SYNC_DTAG 
 							+ " = ?"</#if>;
 					selectionArgs = ObjectArrays.concat(selectionArgs,
-							${curr.name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER<#if (curr.options.sync??)>, "0"</#if>);
+							${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER<#if (curr.options.sync??)>, "0"</#if>);
 				}
 				</#if>
 				result = this.adapter.query(
@@ -391,8 +391,12 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				
 				if (${curr.name?uncap_first}Cursor.getCount() > 0) {
 					${curr.name?uncap_first}Cursor.moveToFirst();
-					int ${relation.name?uncap_first}Id = ${curr.name?uncap_first}Cursor.getInt(${curr.name?uncap_first}Cursor.getColumnIndex(
-									${curr.name?cap_first}Contract.${curr.name}.COL_${relation.name?upper_case}));
+					<#assign relNames = ContractUtils.getFieldsNames(relation) />
+					<#list entities[relation.relation.targetEntity].ids as id>
+					${id.type} ${relation.name}${id.name?cap_first} = ${curr.name?uncap_first}${AdapterUtils.getCursorGet(id)?cap_first}
+							${curr.name?uncap_first}Cursor.getColumnIndex(
+									${relNames[id_index]}));
+					</#list>
 					
 					${relation.relation.targetEntity}SQLiteAdapter ${relation.relation.targetEntity?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 					${relation.relation.targetEntity?uncap_first}Adapter.open(this.getDb());
@@ -404,17 +408,17 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				${relation.relation.joinTable}SQLiteAdapter ${relation.name}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 				${relation.name}Adapter.open(this.getDb());
 						<#if (relation.relation.orders?? && relation.relation.orders?size > 0) >
-				result = ${relation.name}Adapter.getBy${relation.name?cap_first}(id, ${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS, selection, selectionArgs, "<#list relation.relation.orders?keys as orderKey>${orderKey} ${relation.relation.orders[orderKey]}<#if orderKey_has_next> AND </#if></#list>");
+				result = ${relation.name}Adapter.getBy${relation.name?cap_first}(id, ${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)}, selection, selectionArgs, "<#list relation.relation.orders?keys as orderKey>${orderKey} ${relation.relation.orders[orderKey]}<#if orderKey_has_next> AND </#if></#list>");
 						<#else>
-				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id, ${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS, selection, selectionArgs, null);
+				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id, ${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)}, selection, selectionArgs, null);
 						</#if>
 					<#else>
 				${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 				${relation.name}Adapter.open(this.getDb());
 						<#if (relation.relation.orders?? && relation.relation.orders?size > 0) >
-				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id, ${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS, selection, selectionArgs, "<#list relation.relation.orders?keys as orderKey>${orderKey} ${relation.relation.orders[orderKey]}<#if orderKey_has_next> AND </#if></#list>");
+				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id, ${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)}, selection, selectionArgs, "<#list relation.relation.orders?keys as orderKey>${orderKey} ${relation.relation.orders[orderKey]}<#if orderKey_has_next> AND </#if></#list>");
 						<#else>
-				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id, ${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity}.ALIASED_COLS, selection, selectionArgs, null);
+				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id, ${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)}, selection, selectionArgs, null);
 						</#if>
 					</#if>
 				</#if>
@@ -437,9 +441,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 			final ContentValues values,
 			String selection,
 			String[] selectionArgs) {
-		<#if (curr.options.sync??)>values.put(${curr.name?cap_first}Contract.${curr.name}.COL_SYNC_UDATE,
+		<#if (curr.options.sync??)>values.put(${ContractUtils.getContractClass(curr)}.COL_SYNC_UDATE,
 					new DateTime().toString(ISODateTimeFormat.dateTime()));</#if>
-		<#if inherited && joinedInheritance>ContentValues ${curr.name?uncap_first}Values = DatabaseUtil.extractContentValues(values, ${curr.name?cap_first}Contract.${curr.name}.COLS);</#if>
+		<#if inherited && joinedInheritance>ContentValues ${curr.name?uncap_first}Values = DatabaseUtil.extractContentValues(values, ${ContractUtils.getContractCols()});</#if>
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher()
 				.match(uri);
 		int result = -1;
@@ -458,19 +462,19 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						null);
 				result += this.adapter.update(
 						${curr.name?uncap_first}Values,
-						${curr_ids[0].owner?cap_first}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)} + " = ?",
+						${ContractUtils.getContractCol(curr_ids[0])} + " = ?",
 						new String[]{String.valueOf(id)});
 					<#else>
 				result = this.adapter.update(
 						values,
-						${curr_ids[0].owner?cap_first}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)} + " = ?"
-							+ " AND " + ${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?",
-						new String[]{id, ${curr.name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER});
+						${ContractUtils.getContractCol(curr_ids[0])} + " = ?"
+							+ " AND " + ${ContractUtils.getContractCol(curr.inheritance.superclass.inheritance.discriminatorColumn, true)} + " = ?",
+						new String[]{id, ${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER});
 					</#if>
 				<#else>
 				result = this.adapter.update(
 						values,
-						${curr_ids[0].owner?cap_first}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)} + " = "
+						${ContractUtils.getContractCol(curr_ids[0])} + " = "
 						+ id,
 						selectionArgs);
 				</#if>
@@ -481,7 +485,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					<#if joinedInheritance>
 				// Query the ids of the changing fields.
 				Cursor idsCursor = this.adapter.query(
-						new String[]{${curr_ids[0].owner?cap_first}Contract.${curr_ids[0].owner}.ALIASED_${NamingUtils.alias(curr_ids[0].name)}},
+						new String[]{${ContractUtils.getContractCol(curr_ids[0], true)}},
 						selection,
 						selectionArgs,
 						null,
@@ -493,7 +497,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					if (${curr.name?uncap_first}Values.size() > 0) {
 						CriteriasBase currentCrit = this.cursorToIDSelection(
 								idsCursor,
-								${curr_ids[0].owner?cap_first}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)});
+								${ContractUtils.getContractCol(curr_ids[0])});
 
 						String currentSelection = currentCrit.toSQLiteSelection();
 						String[] currentSelectionArgs = currentCrit
@@ -508,7 +512,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					if (values.size() > 0) {
 						CriteriasBase parentCrit = this.cursorToIDSelection(
 								idsCursor,
-								${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.${NamingUtils.alias(curr_ids[0].name)});
+								${ContractUtils.getContractClass(curr.inheritance.superclass)}.${NamingUtils.alias(curr_ids[0].name)});
 
 						String parentSelection = parentCrit.toSQLiteSelection();
 						String[] parentSelectionArgs = parentCrit
@@ -524,14 +528,14 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					<#else>
 				if (Strings.isNullOrEmpty(selection)) {
 					selection = 
-						${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
-					selectionArgs = new String[]{${curr.name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER};
+						${ContractUtils.getContractCol(curr.inheritance.superclass.inheritance.discriminatorColumn, true)} + " = ?";
+					selectionArgs = new String[]{${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER};
 				} else {
 					selection += " AND " 
-							+ ${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)}
+							+ ${ContractUtils.getContractCol(curr.inheritance.superclass.inheritance.discriminatorColumn, true)}
 							+ " = ?";
 					selectionArgs = ObjectArrays.concat(selectionArgs,
-							${curr.name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER);
+							${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER);
 				}
 				
 				result = this.adapter.update(
@@ -571,7 +575,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		cursor.moveToFirst();
 		do {
 			inArray.addValue(cursor.getString(
-				cursor.getColumnIndex(${curr_ids[0].owner?cap_first}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)})));
+				cursor.getColumnIndex(${ContractUtils.getContractCol(curr_ids[0])})));
 		} while (cursor.moveToNext());
 		inCrit.addValue(inArray);
 		crit.add(inCrit);
@@ -603,9 +607,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						+ " AND "
 						+</#if></#list>;
 		<#if curr.options.sync??>
-		selection += " AND " + ${curr.name?cap_first}Contract.${curr.name}.ALIASED_COL_SYNC_DTAG + " = ?";</#if>
+		selection += " AND " + ${ContractUtils.getContractClass(curr)}.ALIASED_COL_SYNC_DTAG + " = ?";</#if>
 		<#if inherited && singleTabInheritance>
-		selection += " AND " + ${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.ALIASED_${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)} + " = ?";
+		selection += " AND " + ${ContractUtils.getContractCol(curr.inheritance.superclass.inheritance.discriminatorColumn, true)} + " = ?";
 		</#if>
 		<#assign argsSize = curr_ids?size />
 		<#if (curr.options.sync??)><#assign argsSize = argsSize + 1 /></#if>
@@ -615,10 +619,10 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		selectionArgs[${id_index}] = ${id.name};
 		</#list>
 		<#if (curr.options.sync??)>selectionArgs[${curr_ids?size}] = String.valueOf(0);</#if>
-		<#if inherited && singleTabInheritance>selectionArgs[${curr_ids?size}] = ${curr.name?cap_first}Contract.${curr.name}.DISCRIMINATOR_IDENTIFIER;</#if>
+		<#if inherited && singleTabInheritance>selectionArgs[${curr_ids?size}] = ${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER;</#if>
 
 		result = this.adapter.query(
-					${curr.name?cap_first}Contract.${curr.name}.ALIASED_COLS,
+					${ContractUtils.getContractCols(curr, true)},
 					selection,
 					selectionArgs,
 					null,
