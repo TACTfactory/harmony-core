@@ -613,7 +613,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		</#if>
 		<#assign argsSize = curr_ids?size />
 		<#if (curr.options.sync??)><#assign argsSize = argsSize + 1 /></#if>
-		<#if (inherited && signleTabInheritance??)><#assign argsSize = argsSize + 1 /></#if>
+		<#if (inherited && singleTabInheritance)><#assign argsSize = argsSize + 1 /></#if>
 		String[] selectionArgs = new String[${argsSize}];
 		<#list curr_ids as id>
 		selectionArgs[${id_index}] = ${id.name};

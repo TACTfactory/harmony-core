@@ -10,6 +10,8 @@ package com.tactfactory.harmony.test.demact.entity;
 
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Entity;
+import com.tactfactory.harmony.annotation.GeneratedValue;
+import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
 import com.tactfactory.harmony.annotation.Id;
 
 /** Test Application entity. */
@@ -18,6 +20,7 @@ public class UserGroup {
 
 	/** Entity's technical id. */
 	@Id
+	@GeneratedValue(strategy=Strategy.MODE_IDENTITY)
 	@Column
 	private int id;
 

@@ -82,7 +82,7 @@ public abstract class ${curr.name}ContractBase {
 
 		/** Global Fields. */
 		public static final String[] ALIASED_COLS = new String[] {
-		<#list curr_fields as field>
+		<#list ViewUtils.getAllFields(curr)?values as field>
 			<#if !field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany")>
 				<#assign fieldNames = ContractUtils.getFieldsNames(field, true) />
 				<#list fieldNames as name>
