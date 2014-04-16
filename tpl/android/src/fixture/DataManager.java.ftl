@@ -52,6 +52,8 @@ public class DataManager {
 			</#if>
 		</#list>
 	}
+
+	<#--
 	/**
      * Finds a object by its identifier.
      *
@@ -77,7 +79,7 @@ public class DataManager {
 
     	return ret;
     }
-
+	-->
     /**
      * Tells the ObjectManager to make an instance managed and persistent.
      *

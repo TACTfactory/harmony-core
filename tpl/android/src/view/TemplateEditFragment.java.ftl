@@ -382,11 +382,13 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			if (${field.name}Cursor != null && ${field.name}Cursor.getCount() > 0) {
 				this.associated${field.name?cap_first}List = new ArrayList<${field.relation.targetEntity}>();
 				while (${field.name}Cursor.moveToNext()) {
-					int ${field.name}Id = ${field.name}Cursor.getInt(
-							${field.name}Cursor.getColumnIndex(
-									${field.relation.targetEntity}Contract.${field.relation.targetEntity}.COL_${entities[field.relation.targetEntity].ids[0].name?upper_case}));
+					<#list entities[field.relation.targetEntity].ids as id>
+					${id.type} ${field.name}${id.name?cap_first} = ${field.name}${AdapterUtils.getCursorGet(id)?cap_first}
+							${field.name}Cursor.getColumnIndex(${ContractUtils.getContractCol(id)}));
+					</#list>
 					for (${field.relation.targetEntity} ${field.name} : this.${field.name}List) {
-						if (${field.name}.get${entities[field.relation.targetEntity].ids[0].name?cap_first}() == ${field.name}Id) {
+						if (<#list entities[field.relation.targetEntity].ids as id>${field.name}.get${id.name?cap_first}()<#if MetadataUtils.isPrimitive(id)> == <#else>.equals(</#if> ${field.name}${id.name?cap_first}<#if !MetadataUtils.isPrimitive(id)>)</#if><#if id_has_next>
+								&& </#if></#list>) {
 							this.associated${field.name?cap_first}List.add(${field.name});
 						}
 					}

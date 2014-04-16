@@ -348,7 +348,11 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		<#if MetadataUtils.hasToOneRelations(curr)>
 		Cursor ${curr.name?uncap_first}Cursor;
 		</#if>
-		<#if (MetadataUtils.hasToManyRelations(curr))>int id = 0;</#if>
+		<#if MetadataUtils.hasToManyRelations(curr)>
+			<#list curr.ids as id>
+		${id.type} ${curr.name?lower_case}${id.name?cap_first};
+			</#list>
+		</#if>
 
 		switch (matchedUri) {
 
@@ -400,25 +404,28 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					
 					${relation.relation.targetEntity}SQLiteAdapter ${relation.relation.targetEntity?uncap_first}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 					${relation.relation.targetEntity?uncap_first}Adapter.open(this.getDb());
-					result = ${relation.relation.targetEntity?uncap_first}Adapter.query(${relation.name?uncap_first}Id);
+					result = ${relation.relation.targetEntity?uncap_first}Adapter.query(<#list entities[relation.relation.targetEntity].ids as id>${relation.name}${id.name?cap_first}<#if id_has_next>,
+							</#if></#list>);
 				}
 				<#else>
-				id = Integer.parseInt(uri.getPathSegments().get(1));
+					<#list curr.ids as id>
+				${curr.name?lower_case}${id.name?cap_first} = <#if id.type?lower_case == "int" || id.type?lower_case == "integer">Integer.parseInt(</#if>uri.getPathSegments().get(${id_index + 1})<#if id.type?lower_case == "int" || id.type?lower_case == "integer">)</#if>;
+					</#list>
 					<#if relation.relation.type == "ManyToMany">
 				${relation.relation.joinTable}SQLiteAdapter ${relation.name}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 				${relation.name}Adapter.open(this.getDb());
 						<#if (relation.relation.orders?? && relation.relation.orders?size > 0) >
-				result = ${relation.name}Adapter.getBy${relation.name?cap_first}(id, ${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)}, selection, selectionArgs, "<#list relation.relation.orders?keys as orderKey>${orderKey} ${relation.relation.orders[orderKey]}<#if orderKey_has_next> AND </#if></#list>");
+				result = ${relation.name}Adapter.getBy${relation.name?cap_first}(<#list curr_ids as id>${curr.name?lower_case}${id.name?cap_first}<#if id_has_next>, </#if></#list>, ${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)}, selection, selectionArgs, "<#list relation.relation.orders?keys as orderKey>${orderKey} ${relation.relation.orders[orderKey]}<#if orderKey_has_next> AND </#if></#list>");
 						<#else>
-				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id, ${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)}, selection, selectionArgs, null);
+				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(<#list curr_ids as id>${curr.name?lower_case}${id.name?cap_first}<#if id_has_next>, </#if></#list>, ${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)}, selection, selectionArgs, null);
 						</#if>
 					<#else>
 				${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter = new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 				${relation.name}Adapter.open(this.getDb());
 						<#if (relation.relation.orders?? && relation.relation.orders?size > 0) >
-				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id, ${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)}, selection, selectionArgs, "<#list relation.relation.orders?keys as orderKey>${orderKey} ${relation.relation.orders[orderKey]}<#if orderKey_has_next> AND </#if></#list>");
+				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(<#list curr_ids as id>${curr.name?lower_case}${id.name?cap_first}<#if id_has_next>, </#if></#list>, ${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)}, selection, selectionArgs, "<#list relation.relation.orders?keys as orderKey>${orderKey} ${relation.relation.orders[orderKey]}<#if orderKey_has_next> AND </#if></#list>");
 						<#else>
-				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(id, ${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)}, selection, selectionArgs, null);
+				result = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(<#list curr_ids as id>${curr.name?lower_case}${id.name?cap_first}<#if id_has_next>, </#if></#list>, ${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)}, selection, selectionArgs, null);
 						</#if>
 					</#if>
 				</#if>
@@ -450,9 +457,16 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		switch (matchedUri) {
 			<#if (hasIds)>
 			case ${curr.name?upper_case}_ONE:
-				String id = uri.getPathSegments().get(1);
-				<#if inherited>
-					<#if joinedInheritance>
+				selectionArgs = new String[<#if inherited && !joinedInheritance>${curr_ids?size + 1}<#else>${curr_ids?size}</#if>];
+				<#list curr_ids as id>
+				selection <#if (id_index > 0)>+</#if>= ${ContractUtils.getContractCol(id)} + " = ?";
+				selectionArgs[${id_index}] = uri.getPathSegments().get(${id_index + 1});
+				</#list>
+				<#if inherited && !joinedInheritance>
+				selection += " AND " + ${ContractUtils.getContractCol(curr.inheritance.superclass.inheritance.discriminatorColumn, true)} + " = ?";
+				selectionArgs[${curr_ids?size}] = ${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER;
+				</#if>
+				<#if inherited && joinedInheritance>
 				Uri parentUri = Uri.withAppendedPath(${curr.inheritance.superclass.name?cap_first}ProviderAdapter.${curr.inheritance.superclass.name?upper_case}_URI,
 						String.valueOf(id));
 				result = this.ctx.getContentResolver().update(
@@ -462,20 +476,12 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						null);
 				result += this.adapter.update(
 						${curr.name?uncap_first}Values,
-						${ContractUtils.getContractCol(curr_ids[0])} + " = ?",
-						new String[]{String.valueOf(id)});
-					<#else>
-				result = this.adapter.update(
-						values,
-						${ContractUtils.getContractCol(curr_ids[0])} + " = ?"
-							+ " AND " + ${ContractUtils.getContractCol(curr.inheritance.superclass.inheritance.discriminatorColumn, true)} + " = ?",
-						new String[]{id, ${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER});
-					</#if>
+						selection,
+						selectionArgs);
 				<#else>
 				result = this.adapter.update(
 						values,
-						${ContractUtils.getContractCol(curr_ids[0])} + " = "
-						+ id,
+						selection,
 						selectionArgs);
 				</#if>
 				break;

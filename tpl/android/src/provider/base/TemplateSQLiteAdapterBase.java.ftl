@@ -377,31 +377,39 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		final ContentValues values =
 				${ContractUtils.getContractItemToContentValues(curr)}(item<#list (curr_relations) as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 	<#list curr_ids as id>
+		<#if id.strategy == "IDENTITY">
 		values.remove(${ContractUtils.getContractCol(id)});
+		</#if>
 	</#list>
 	<#if (singleTabInheritance && !isTopMostSuperClass)>
-		long newid = this.motherAdapter.insert(null, values);		
+		long insertResult = this.motherAdapter.insert(null, values);		
 	<#else>
 	<#if !InheritanceUtils.isExtended(curr)>
-		int newid;
+		int insertResult;
 	<#else>
 		this.motherAdapter.open(this.mDatabase);
 		final ContentValues currentValues =
 				DatabaseUtil.extractContentValues(values, ${ContractUtils.getContractCols(curr)});
-		int newid = (int) this.motherAdapter.insert(null, values);
-		currentValues.put(${ContractUtils.getContractClass(curr)}.${NamingUtils.alias(entities[curr.inheritance.superclass.name].ids[0].name)}, newid);
+		int insertResult = (int) this.motherAdapter.insert(null, values);
+		<#list entities[curr.inheritance.superclass.name].ids as id>
+		<#if id.strategy == "IDENTITY">
+			currentValues.put(${ContractUtils.getContractClass(curr)}.${NamingUtils.alias(id.name)}, insertResult);
+		<#else>
+			currentValues.put(${ContractUtils.getContractClass(curr)}.${NamingUtils.alias(id.name)}, item.get${id.name?cap_first}());
+		</#if>
+		</#list>
 	</#if>
 		if (values.size() != 0) {
-			<#if !InheritanceUtils.isExtended(curr)>newid = (int) </#if>this.insert(
+			<#if !InheritanceUtils.isExtended(curr)>insertResult = (int) </#if>this.insert(
 					null,
 					<#if InheritanceUtils.isExtended(curr)>currentValues<#else>values</#if>);
 		} else {
-			<#if !InheritanceUtils.isExtended(curr)>newid = (int) </#if>this.insert(
+			<#if !InheritanceUtils.isExtended(curr)>insertResult = (int) </#if>this.insert(
 					${ContractUtils.getContractCol(curr_ids[0])},
 					<#if InheritanceUtils.isExtended(curr)>currentValues<#else>values</#if>);
 		}
 		<#list curr_ids as id><#if id.strategy == "IDENTITY">
-		item.set${id.name?cap_first}((int) newid);
+		item.set${id.name?cap_first}((int) insertResult);
 		</#if></#list>
 	<#list (curr_relations) as relation>
 		<#if (relation.relation.type=="ManyToMany")>
@@ -410,8 +418,10 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 			${relation.name?uncap_first}Adapter.open(this.mDatabase);
 			for (${relation.relation.targetEntity?cap_first} i : item.get${relation.name?cap_first}()) {
-				${relation.name?uncap_first}Adapter.insert(newid,
-						i.get${relation.relation.field_ref[0].name?cap_first}());
+				${relation.name?uncap_first}Adapter.insert(<#list curr_ids as id><#if id.strategy == "IDENTITY">insertResult<#else>item.get${id.name?cap_first}()</#if><#if id_has_next>
+						</#if></#list>,
+						<#list relation.relation.field_ref as ref>i.get${ref.name?cap_first}()<#if ref_has_next>,
+						</#if></#list>);
 			}
 		}
 		<#elseif (relation.relation.type=="OneToMany")>
@@ -427,14 +437,14 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			<#else>
 				${relation.name?uncap_first}Adapter.insertOrUpdateWith${curr.name?cap_first}${relation.name?cap_first}(
 									${relation.relation.targetEntity?lower_case},
-									newid);
+									insertResult);
 			</#if>
 			}
 		}
 		</#if>
 	</#list>
 	</#if>
-		return newid;
+		return insertResult;
 	}
 
 	/**
@@ -613,7 +623,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 				${relation.relation.targetEntity?lower_case}Id<#else>,
 				0</#if></#if></#list>);
 	<#list curr_ids as id>
+		<#if id.strategy == "IDENTITY">
 		values.remove(${ContractUtils.getContractCol(id)});
+		</#if>
 	</#list>
 		int newid = (int) this.insert(
 			null,

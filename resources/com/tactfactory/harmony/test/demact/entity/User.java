@@ -37,13 +37,8 @@ public class User extends Object implements Cloneable, Serializable {
 	/** Serial UID. */
 	private static final long serialVersionUID = 7032873279928549706L;
 
-	/** Entity's technical id. */
-	@Id
-    @Column(type = Type.INTEGER, hidden = true)
-    @GeneratedValue(strategy = Strategy.MODE_IDENTITY)
-    private int id;
-
 	/** Login. */
+	@Id
 	@Column(type = Type.LOGIN)
     private String login;
 
@@ -84,14 +79,12 @@ public class User extends Object implements Cloneable, Serializable {
 	 * Constructor.
 	 */
 	public User() {
-		this.id = -1;
     	this.createdAt = new DateTime();
     }
 
 	@Override
 	public final User clone() throws CloneNotSupportedException {
 		final User u = (User) super.clone();
-		u.id = this.id;
 		u.login = this.login;
 		u.password = this.password;
 		u.firstname = this.firstname;
@@ -100,20 +93,6 @@ public class User extends Object implements Cloneable, Serializable {
 		u.birthdate = new DateTime(this.birthdate);
 
 		return u;
-	}
-
-	/**
-	 * @return the id
-	 */
-	public final int getId() {
-		return this.id;
-	}
-
-	/**
-	 * @param id the id to set
-	 */
-	public final void setId(final int id) {
-		this.id = id;
 	}
 
 	/**
