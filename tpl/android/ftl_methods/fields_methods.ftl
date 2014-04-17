@@ -122,6 +122,14 @@
 	</#if>
 </#function>
 
-
+<#function getStringParser type varName>
+	<#local result = "" />
+	<#if type?lower_case == "int" || type?lower_case == "integer">
+		<#local result = "Integer.parseInt(${varName})" />
+	<#else>
+		<#local result = "${varName}" />
+	</#if>
+	<#return result />
+</#function>
 
 

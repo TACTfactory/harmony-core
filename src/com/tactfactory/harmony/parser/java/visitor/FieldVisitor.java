@@ -730,10 +730,11 @@ public class FieldVisitor {
 		if (joinTableInvertField == null) {
 			joinTableInvertField = new FieldMetadata(joinTable);
 			joinTableInvertField.setName(invertFieldName);
+			joinTable.getIds().put(invertFieldName, joinTableInvertField);
 			joinTable.getRelations().put(invertFieldName, joinTableInvertField);
 			joinTable.getFields().put(invertFieldName, joinTableInvertField);
 			joinTableInvertField.setColumnName(invertFieldName);
-			joinTableInvertField.setType(TYPE_INTEGER);
+			joinTableInvertField.setType(currentField.getOwner().getName());
 			joinTableInvertField.setColumnDefinition(TYPE_INTEGER);
 			joinTableInvertField.setHarmonyType(TYPE_INTEGER);
 			joinTableInvertField.setRelation(new RelationMetadata());
@@ -751,10 +752,11 @@ public class FieldVisitor {
 		if (joinTableAssociatedField == null) {
 			joinTableAssociatedField = new FieldMetadata(joinTable);
 			joinTableAssociatedField.setName(currentField.getName());
+			joinTable.getIds().put(currentField.getName(), joinTableAssociatedField);
 			joinTable.getRelations().put(currentField.getName(), joinTableAssociatedField);
 			joinTable.getFields().put(currentField.getName(), joinTableAssociatedField);
 			joinTableAssociatedField.setColumnName(currentField.getName());
-			joinTableAssociatedField.setType(TYPE_INTEGER);
+			joinTableAssociatedField.setType(((EntityMetadata) currentField.getRelation().getEntityRef()).getName());
 			joinTableAssociatedField.setColumnDefinition(TYPE_INTEGER);
 			joinTableAssociatedField.setHarmonyType(TYPE_INTEGER);
 			joinTableAssociatedField.setRelation(new RelationMetadata());

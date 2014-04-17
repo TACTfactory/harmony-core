@@ -17,16 +17,16 @@ import com.tactfactory.harmony.annotation.ManyToOne;
 /** Link entity between category and comment. */
 public class CategoryToComment {
 
-	@Id
-	@Column
-	/** Entity's technical id. */
-	private int id;
-
 	/** The displayed name of the category. */
 	@Column
 	private String displayName;
 
 	/** The category in which this CategoryToComment is. */
+	@Id
 	@ManyToOne(inversedBy="comments")
 	private Category category;
+
+	@Id
+	@ManyToOne(inversedBy="categories")
+	private Comment comment;
 }

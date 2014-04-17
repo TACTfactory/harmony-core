@@ -151,14 +151,18 @@
 
 
 <#function isPrimitive field>
-	<#if (field.type == "int" ||
-			field.type == "double" ||
-			field.type == "long" ||
-			field.type == "float" ||
-			field.type == "char" ||
-			field.type == "byte" ||
-			field.type == "boolean" ||
-			field.type == "short")>
+	<#return isPrimitiveType(field.type) />
+</#function>
+
+<#function isPrimitiveType type>
+	<#if (type == "int" ||
+			type == "double" ||
+			type == "long" ||
+			type == "float" ||
+			type == "char" ||
+			type == "byte" ||
+			type == "boolean" ||
+			type == "short")>
 		<#return true />
 	<#else>
 		<#return false />
