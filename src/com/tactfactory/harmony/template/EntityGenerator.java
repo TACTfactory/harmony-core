@@ -18,11 +18,10 @@ import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.meta.MethodMetadata;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.MetadataUtils;
-import com.tactfactory.harmony.utils.TactFileUtils;
 
 /**
  * Entity Generator.
@@ -70,22 +69,14 @@ public class EntityGenerator extends BaseGenerator {
 
 	/** remove HARD CODED String. */
 	private String parcelConstantTemplate = "parcelConstant.java";
-	
-	/** Entities folder. */
-	private String entityFolder;
 
 	/** Constructor.
 	 * @param adapter Adapter used by this generator
 	 * @throws Exception if adapter is null
 	 */
-	public EntityGenerator(final BaseAdapter adapter) throws Exception {
+	public EntityGenerator(final IAdapter adapter) throws Exception {
 		super(adapter);
 		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
-		this.entityFolder = 
-				this.getAdapter().getSourcePath() 
-				+ this.getAppMetas()
-					.getProjectNameSpace().replaceAll("\\.", "/")
-				+ "/entity/";
 	}
 
 	/**
@@ -95,19 +86,19 @@ public class EntityGenerator extends BaseGenerator {
 	public final void generateAll() {
 		ConsoleUtils.display(">> Decorate entities...");
 
-		for (final EntityMetadata classMeta
-				: this.getAppMetas().getEntities().values()) {
-			final String filepath = String.format("%s/%s",
-					this.entityFolder,
-					String.format("%s.java", classMeta.getName()));
+		Iterable<EntityMetadata> entities =
+		        this.getAppMetas().getEntities().values();
+		
+		for (final EntityMetadata entity : entities) {
+		    this.getDatamodel().put(
+                    TagConstant.CURRENT_ENTITY,
+                    entity.getName());
+		    
+			ConsoleUtils.display(">>> Decorate " + entity.getName());
 			
-			this.getDatamodel().put(
-					TagConstant.CURRENT_ENTITY,
-					classMeta.getName());
-			
-			ConsoleUtils.display(">>> Decorate " + classMeta.getName());
-
-			final File entityFile = TactFileUtils.getFile(filepath);
+			final File entityFile = new File(String.format("%s%s.java",
+	                this.getAdapter().getSourceEntityPath(),
+	                entity.getName()));
 			
 			if (entityFile.exists()) {
 				final SourceFileManipulator manipulator =
@@ -115,17 +106,17 @@ public class EntityGenerator extends BaseGenerator {
 								entityFile,
 								this.getCfg());
 				
-				this.implementEmptyConstructor(manipulator, classMeta);
-				manipulator.addImplement(classMeta, "Serializable");
+				this.implementEmptyConstructor(manipulator, entity);
+				manipulator.addImplement(entity, "Serializable");
 				manipulator.addImport(
-						classMeta,
+						entity,
 						"Serializable",
 						"java.io.Serializable");
-				this.generateGetterAndSetters(manipulator, classMeta);
-				this.implementParcelable(manipulator, classMeta);
+				this.generateGetterAndSetters(manipulator, entity);
+				this.implementParcelable(manipulator, entity);
 				//this.addParcelConstant(manipulator, classMeta);
 				
-				 // After treatment on entity, write it in the original file
+				// After treatment on entity, write it in the original file
 				manipulator.writeFile();
 			}
 		}

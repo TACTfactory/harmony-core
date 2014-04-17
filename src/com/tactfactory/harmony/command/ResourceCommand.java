@@ -13,8 +13,8 @@ import java.util.LinkedHashMap;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
-import com.tactfactory.harmony.plateforme.AndroidAdapter;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

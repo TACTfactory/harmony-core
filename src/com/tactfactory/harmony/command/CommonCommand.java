@@ -9,6 +9,7 @@
 package com.tactfactory.harmony.command;
 
 import java.util.LinkedHashMap;
+
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
@@ -16,8 +17,8 @@ import com.tactfactory.harmony.command.questionnary.Questionnary;
 import com.tactfactory.harmony.command.questionnary.Question;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
-import com.tactfactory.harmony.plateforme.AndroidAdapter;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.template.CommonGenerator;
 import com.tactfactory.harmony.template.CommonGenerator.ViewType;
 import com.tactfactory.harmony.utils.ConsoleUtils;

@@ -34,7 +34,7 @@ import com.tactfactory.harmony.utils.TactFileUtils;
 public final class Harmony {
 
 	/** Harmony version. */
-	public static final String VERSION = "0.6.2-DEV";
+	public static final String VERSION = getVersion();
 
 	/** Singleton of console. */
 	private static Harmony instance;
@@ -92,10 +92,6 @@ public final class Harmony {
 		props.setProperty(PluginManager.class, "cache.mode",    "weak");
 		props.setProperty(PluginManager.class, "cache.file",    "jspf.cache");*/
 
-		/** PluginManager. */
-		PluginManager pluginManager = null;
-				
-
 		// Filters
 		final IOFileFilter includeFilter =
 				FileFilterUtils.suffixFileFilter(".jar");
@@ -117,39 +113,54 @@ public final class Harmony {
 
 		// Add Bundles to Plugin Manager &  foldertemplate
 		for (File plugin : plugins) {
-			// TODO : clean plugin manager mechanic for folders
-			pluginManager = PluginManagerFactory.createPluginManager(props);
-			
-			// Load bundles
-			ConsoleUtils.displayDebug(
-					"Load plugins : " + plugin.getName());
-			pluginManager.addPluginsFrom(plugin.toURI());
-			
-			// Template bundles
-			final File templateFolderFile =
-					plugin.getParentFile().getAbsoluteFile();
-			this.templateFolders.put(plugin.getName(), templateFolderFile);
-			ConsoleUtils.displayDebug(
-					"Load templates from : " + templateFolderFile);
-		
-			
-			// Process extensions commands
-			final PluginManagerUtil pmu = new PluginManagerUtil(pluginManager);
-			final Collection<Command> commands = pmu.getPlugins(Command.class);
-
-			// Bootstrap all commands
-			for (final Command command : commands) {
-				this.bootstrap.put(command.getClass(), command);
-				this.commandBundleFolders.put(command.getClass(), 
-						templateFolderFile.getAbsolutePath());
-			}
-			
-			pluginManager.shutdown();
+			this.loadPlugin(plugin, props);
+			this.loadTemplates(plugin);
 		}
-
-		
-
 	}
+	
+    private void loadPlugin(File plugin, JSPFProperties props) {
+        PluginManager pluginManager = null;
+        
+        // TODO : clean plugin manager mechanic for folders
+        pluginManager = PluginManagerFactory.createPluginManager(props);
+        
+        // Load bundles
+        ConsoleUtils.displayDebug("Load plugins : " + plugin.getName());
+        pluginManager.addPluginsFrom(plugin.toURI());
+        
+        // Template bundles
+        final File bundleFolderFile =
+                plugin.getParentFile().getAbsoluteFile();
+        
+        // Process extensions commands
+        final PluginManagerUtil pmu = new PluginManagerUtil(pluginManager);
+        final Collection<Command> commands = pmu.getPlugins(Command.class);
+        
+        // Bootstrap all commands
+        for (final Command command : commands) {
+            this.bootstrap.put(command.getClass(), command);
+            this.commandBundleFolders.put(command.getClass(), 
+                    bundleFolderFile.getAbsolutePath());
+        }
+        
+        pluginManager.shutdown();
+	}
+    
+    private void loadTemplates(File plugin) {
+        // Template bundles
+        File templateFolderFile = plugin;
+        
+        if (templateFolderFile.isFile()) {
+            templateFolderFile = templateFolderFile.getParentFile();
+        }
+        
+        this.templateFolders.put(
+                plugin.getName(),
+                templateFolderFile.getAbsoluteFile());
+        
+        ConsoleUtils.displayDebug(
+                "Load templates from : " + templateFolderFile);
+    }
 
 	/** 
 	 * Initialize Harmony.
@@ -249,8 +260,8 @@ public final class Harmony {
 		// Select Action and launch
 		for (final Command baseCommand : this.bootstrap.values()) {
 			if (baseCommand.isAvailableCommand(action)) {
-				Context.setCurrentBundleFolder(
-						this.commandBundleFolders.get(baseCommand.getClass()) 
+				getInstance().context.setCurrentBundleFolder(
+						this.commandBundleFolders.get(baseCommand.getClass())
 						+ "/");
 				
 				baseCommand.execute(action, args, option);
@@ -286,6 +297,10 @@ public final class Harmony {
 	 */
 	public Collection<Command> getCommands() {
 		return this.bootstrap.values();
+	}
+	
+	public Context getContext() {
+	    return this.context;
 	}
 
 	/**
@@ -353,15 +368,6 @@ public final class Harmony {
 	}
 
 	/**
-	 * Get the harmony core path.<br/>
-	 * eg. /vendor/tact-core or /bin
-	 * @return the harmony path
-	 */
-	/*public static String getHarmonyPath() {
-		return getInstance().context.getHarmonyPath();
-	}*/
-
-	/**
 	 * Get the libraries path.<br/>
 	 * eg. /lib/
 	 * @return the libraries path
@@ -375,7 +381,7 @@ public final class Harmony {
 	 * @return The current bundle path
 	 */
 	public static String getCurrentBundlePath() {
-		return Context.getCurrentBundleFolder();
+		return getInstance().context.getCurrentBundleFolder();
 	}
 
 	/**
@@ -400,5 +406,16 @@ public final class Harmony {
 	 */
 	public static Map<String, File> getTemplateFolders() {
 		return getInstance().templateFolders;
+	}
+	
+	private static String getVersion() {
+	    Package objPackage = getInstance().getClass().getPackage();
+	    String version = objPackage.getImplementationVersion();
+	    
+	    if (Strings.isNullOrEmpty(version)) {
+	        version = "DEVELOPPMENT";
+	    }
+	    
+	    return version;
 	}
 }

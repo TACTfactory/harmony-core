@@ -29,12 +29,13 @@ import com.tactfactory.harmony.test.CommonTest;
 public class OrmUpdateEntitiesTest extends CommonTest {
 
 
-	public OrmUpdateEntitiesTest(ApplicationMetadata currentMetadata) {
+	public OrmUpdateEntitiesTest(ApplicationMetadata currentMetadata)
+	        throws Exception {
 		super(currentMetadata);
 	}
 
 	@Override
-	public void setUpBeforeNewParameter() {
+	public void setUpBeforeNewParameter() throws Exception {
 		super.setUpBeforeNewParameter();
 		
 		this.initAll();

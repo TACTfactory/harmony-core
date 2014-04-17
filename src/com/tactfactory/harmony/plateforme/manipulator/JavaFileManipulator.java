@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.tactfactory.harmony.meta.ClassMetadata;
-import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -62,7 +61,7 @@ public class JavaFileManipulator extends SourceFileManipulator {
 	}
 
 	@Override
-	public boolean addImplement(EntityMetadata classMeta, String className) {
+	public boolean addImplement(ClassMetadata classMeta, String className) {
 		boolean result;
 		if (!this.alreadyImplementsClass(classMeta, className)) {
 			ConsoleUtils.displayDebug("Add " + className + " implement");

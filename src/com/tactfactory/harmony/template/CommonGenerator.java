@@ -10,7 +10,8 @@ package com.tactfactory.harmony.template;
 
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.template.androidxml.ManifestUpdater;
 
 /**
@@ -21,12 +22,11 @@ public class CommonGenerator extends BaseGenerator {
 	/**
 	 * Constructor.
 	 * 
-	 * @param adapt The adapter to use
+	 * @param adapter The adapter to use
 	 */
-	public CommonGenerator(BaseAdapter adapt) {
-		super(adapt);
-		this.setDatamodel(
-				ApplicationMetadata.INSTANCE.toMap(this.getAdapter()));
+	public CommonGenerator(IAdapter adapter) {
+		super(adapter);
+		this.setDatamodel(ApplicationMetadata.INSTANCE.toMap(adapter));
 	}
 
 	
@@ -114,10 +114,10 @@ public class CommonGenerator extends BaseGenerator {
 	private void makeResourceLayout(final String template,
 			final String filename) {
 		final String fullFilePath = String.format("%s/%s",
-									this.getAdapter().getRessourceLayoutPath(),
+									((AndroidAdapter)this.getAdapter()).getRessourceLayoutPath(),
 									filename);
 		final String fullTemplatePath = String.format("%s/%s",
-				this.getAdapter().getTemplateRessourceLayoutPath(),
+		        ((AndroidAdapter)this.getAdapter()).getTemplateRessourceLayoutPath(),
 				template);
 
 		super.makeSource(fullTemplatePath, fullFilePath, false);

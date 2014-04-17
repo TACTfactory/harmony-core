@@ -14,15 +14,14 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.plateforme.AndroidAdapter;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.template.ActivityGenerator;
 import com.tactfactory.harmony.template.ApplicationGenerator;
 import com.tactfactory.harmony.template.EntityGenerator;
 import com.tactfactory.harmony.template.EnumCompletor;
 import com.tactfactory.harmony.template.ProjectGenerator;
 import com.tactfactory.harmony.template.ProviderGenerator;
-import com.tactfactory.harmony.template.SQLiteAdapterGenerator;
 import com.tactfactory.harmony.template.SQLiteGenerator;
 import com.tactfactory.harmony.template.TestGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -105,8 +104,7 @@ public class OrmCommand extends BaseCommand {
 			new EnumCompletor(this.adapter).generateAll();
 			new EntityGenerator(this.adapter).generateAll();
 			new ApplicationGenerator(this.adapter).generateApplication();
-			new SQLiteAdapterGenerator(this.adapter).generateAll();
-			new SQLiteGenerator(this.adapter).generateDatabase();
+			new SQLiteGenerator(this.adapter).generateAll();
 			new ProviderGenerator(this.adapter).generateProvider();
 
 		} catch (final Exception e) {
@@ -133,7 +131,7 @@ public class OrmCommand extends BaseCommand {
 	protected final void makeLayoutUi(final boolean generateHome) {
 		try {
 			if (generateHome) {
-				new ProjectGenerator(this.adapter).generateHomeActivity();
+				new ProjectGenerator(this.adapter).generateStartView();
 			}
 
 			new ActivityGenerator(this.adapter).generateAll();

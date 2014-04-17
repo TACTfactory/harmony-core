@@ -25,8 +25,6 @@ public class BundleGenerator extends BaseGenerator {
 	 */
 	public BundleGenerator(final BaseAdapter adapt) {
 		super(adapt);
-
-
 	}
 
 	/**

@@ -10,8 +10,6 @@ package com.tactfactory.harmony.template;
 
 /**
  * Tag Constants for Freemarker templates.
- *
- *
  */
 public abstract class TagConstant {
 	//Project markers
@@ -22,8 +20,6 @@ public abstract class TagConstant {
 	public static final String PROJECT_NAMESPACE = "project_namespace";
 	/** Constant for project name. */
 	public static final String PROJECT_NAME = "project_name";
-	/** Constant for classes local namespace. */
-	public static final String LOCAL_NAMESPACE = "local_namespace";
 	/** Constant for project controller namespace. */
 	public static final String CONTROLLER_NAMESPACE = "controller_namespace";
 	/** Constant for project tests namespace. */

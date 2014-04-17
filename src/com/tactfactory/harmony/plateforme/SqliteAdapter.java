@@ -24,7 +24,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 /**
  * SQliteAdapter.
  */
-public abstract class SqliteAdapter {
+public final class SqliteAdapter {
 	/** Prefix for column name generation. */
 	private static final String PREFIX = "COL_";
 	/** Suffix for column name generation. */

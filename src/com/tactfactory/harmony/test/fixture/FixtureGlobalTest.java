@@ -36,12 +36,13 @@ public class FixtureGlobalTest extends CommonTest {
 	private static final String FIXTURE_PATH =
 			"android/src/%s/fixture/%s";
 
-	public FixtureGlobalTest (ApplicationMetadata currentMetadata) {
+	public FixtureGlobalTest (ApplicationMetadata currentMetadata)
+	        throws Exception {
 		super(currentMetadata);
 	}
 	
 	@Override
-	public void setUpBeforeNewParameter() {
+	public void setUpBeforeNewParameter() throws Exception {
 		super.setUpBeforeNewParameter();
 
 		final File dirfixtures = new File("fixtures/");

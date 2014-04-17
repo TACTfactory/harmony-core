@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.harmony.plateforme;
+package com.tactfactory.harmony.plateforme.android;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -19,11 +19,13 @@ import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapterProject;
+import com.tactfactory.harmony.updater.impl.LibraryGit;
+import com.tactfactory.harmony.plateforme.android.AndroidProjectAdapter.LibraryGitAndroid;
 import com.tactfactory.harmony.plateforme.manipulator.JavaFileManipulator;
 import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
-import com.tactfactory.harmony.utils.GitUtils;
-import com.tactfactory.harmony.utils.GitUtils.GitException;
 import com.tactfactory.harmony.utils.ImageUtils;
 import com.tactfactory.harmony.utils.OsUtil;
 import com.tactfactory.harmony.utils.TactFileUtils;
@@ -33,7 +35,6 @@ import freemarker.template.Configuration;
 /** Google Android Adapter of project structure. */
 public final class AndroidAdapter extends BaseAdapter {
 
-	/* Constants. */
 	/** Constant for java extension. */
 	private static final String JAVA_EXTENSION = "java";
 
@@ -54,9 +55,6 @@ public final class AndroidAdapter extends BaseAdapter {
 	
 	/**	Constant for LDPI drawable folder */
 	private static final String LDPI_FOLDER = DRAWABLE_FOLDER + "-ldpi";
-
-	/** GIT command. */
-	protected static final String GIT = "git";
 	
 	/** Ratio for HD images resizing. */
 	private static final float HD_RATIO = 0.75f;
@@ -139,9 +137,32 @@ public final class AndroidAdapter extends BaseAdapter {
 				type);
 	}
 	
-	
 	@Override
-	public void installGitLibrary(String url,
+	public void installGitLibrary(LibraryGit library) {
+	    String androidTarget = null;
+	    String androidReferencePath = null;
+	    boolean androidIsSupportV4 = false;
+	    
+	    if (library instanceof LibraryGitAndroid) {
+	        LibraryGitAndroid libAndroid = (LibraryGitAndroid) library;
+	        androidTarget = libAndroid.getAndroidTarget();
+	        androidReferencePath = libAndroid.getAndroidReferencePath();
+	        androidIsSupportV4 = libAndroid.isAndroidIsSupportV4Dependant();
+	    }
+	    
+	    this.installGitLibrary(
+	            library.getUrl(),
+	            library.getPath(),
+	            library.getBranch(),
+	            library.getName(),
+	            library.getFilesToDelete(),
+	            library.getLibraryPath(),
+	            androidTarget,
+	            androidReferencePath,
+	            androidIsSupportV4);
+	}
+	
+	private void installGitLibrary(String url,
 			String pathLib,
 			String versionTag,
 			String libName,
@@ -149,72 +170,53 @@ public final class AndroidAdapter extends BaseAdapter {
 			String libraryProjectPath,
 			String target,
 			String referencePath,
-			boolean isSupportV4Dependant) {		
+			boolean isSupportV4Dependant) {
 
 		if (!TactFileUtils.exists(pathLib)) {
-			try {
-				final File projectFolder = new File(Harmony.getProjectAndroidPath());
-				
-				GitUtils.cloneRepository(pathLib, url, versionTag);
-				GitUtils.addSubmodule(
-						projectFolder.getAbsolutePath(), pathLib, url);
-				
-				// Delete useless files
-				if (filesToDelete != null) {
-					for (File fileToDelete : filesToDelete) {
-						TactFileUtils.deleteRecursive(fileToDelete);
-					}
-				}
+			ArrayList<String> command = new ArrayList<String>();
+            //make build sherlock
+            String sdkTools = String.format("%s/%s",
+            		ApplicationMetadata.getAndroidSdkPath(),
+            		"tools/android");
+            if (OsUtil.isWindows()) {
+            	sdkTools += ".bat";
+            }
 
-				ArrayList<String> command = new ArrayList<String>();
-				//make build sherlock
-				String sdkTools = String.format("%s/%s",
-						ApplicationMetadata.getAndroidSdkPath(),
-						"tools/android");
-				if (OsUtil.isWindows()) {
-					sdkTools += ".bat";
-				}
-	
-				command.add(new File(sdkTools).getAbsolutePath());
-				command.add("update");
-				command.add("project");
-				command.add("--path");
-				command.add(libraryProjectPath);
-				command.add("--name");
-				command.add(libName);
-				
-				if (target != null) {
-					command.add("--target");
-					command.add(target);
-				}
-				
-				ConsoleUtils.launchCommand(command);
-				command.clear();
-				
-				if (isSupportV4Dependant) {
-					AndroidSDKManager.copySupportV4Into(
-							libraryProjectPath + "/libs/");
-				}
-			
-				if (referencePath != null) {
-					// Update android project to reference the new downloaded library
-					String projectPath = Harmony.getProjectPath() + this.getPlatform();
-					command.add(new File(sdkTools).getAbsolutePath());
-					command.add("update");
-					command.add("project");
-					command.add("--path");
-					command.add(projectPath);
-					command.add("--library");
-					command.add(TactFileUtils.absoluteToRelativePath(
-							referencePath, projectPath));
-					ConsoleUtils.launchCommand(command);
-					command.clear();
-				}
-			} catch (IOException e) {
-				ConsoleUtils.displayError(e);
-			} catch (GitException e) {
-				ConsoleUtils.displayError(e);
-			}
+            command.add(new File(sdkTools).getAbsolutePath());
+            command.add("update");
+            command.add("project");
+            command.add("--path");
+            command.add(libraryProjectPath);
+            command.add("--name");
+            command.add(libName);
+            
+            if (target != null) {
+            	command.add("--target");
+            	command.add(target);
+            }
+            
+            ConsoleUtils.launchCommand(command);
+            command.clear();
+            
+            if (isSupportV4Dependant) {
+            	AndroidSDKManager.copySupportV4Into(
+            			libraryProjectPath + "/libs/");
+            }
+
+            if (referencePath != null) {
+            	// Update android project to reference the new downloaded library
+            	String projectPath = Harmony.getProjectPath() + this.getPlatform();
+            	command.add(new File(sdkTools).getAbsolutePath());
+            	command.add("update");
+            	command.add("project");
+            	command.add("--path");
+            	command.add(projectPath);
+            	command.add("--library");
+            	command.add(TactFileUtils.absoluteToRelativePath(
+            			referencePath, projectPath));
+            	ConsoleUtils.launchCommand(command);
+            	command.clear();
+            }
 		}
 	}
 
@@ -363,4 +365,132 @@ public final class AndroidAdapter extends BaseAdapter {
 			final Configuration config) {
 		return new JavaFileManipulator(file, this, config);
 	}
+
+    @Override
+    public List<String> getDirectoryForResources() {
+        List<String> result = new ArrayList<String>();
+        
+        result.add("drawable-hdpi");
+        result.add("drawable-ldpi");
+        result.add("drawable-mdpi");
+        result.add("drawable-xhdpi");
+        result.add("drawable-xxhdpi");
+        
+        return result;
+    }
+    
+    private IAdapterProject adapterProject = new AndroidProjectAdapter(this);
+    public IAdapterProject getAdapterProject() {
+        return this.adapterProject;
+    }
+    
+    /**
+     * Get the home activity path.
+     * @return The home activity path
+     */
+    public final String getHomeActivityPathFile() {
+        return String.format("%s/%s/%s",
+                this.getSourcePath(),
+                this.getApplicationMetadata().getProjectNameSpace(),
+                this.getHome());
+    }
+
+    /**
+     * Get the home activity template path.
+     * @return The home activity template path
+     */
+    public final String getTemplateHomeActivityPathFile() {
+        return String.format("%s/%s",
+                this.getTemplateSourcePath(),
+                this.getHome());
+    }
+
+    /**
+     * Get the resource's layouts path.
+     * @return The resource's layouts path
+     */
+    public final String getRessourceLayoutPath() {
+        return String.format("%s/%s/",
+                this.getRessourcePath(),
+                this.getView());
+    }
+    
+    /**
+     * Get the resource's layouts path.
+     * @return The resource's layouts path
+     */
+    public final String getRessourceLargeLayoutPath() {
+        return String.format("%s/%s/",
+                this.getRessourcePath(),
+                this.getLargeView());
+    }
+
+    /**
+     * Get the resources' layouts' templates path.
+     * @return The resources' layouts' templates path
+     */
+    public final String getTemplateRessourceLayoutPath() {
+        return String.format("%s/%s/",
+                this.getTemplateRessourcePath(),
+                this.getView());
+    }
+
+    
+    /**
+     * Get the resources' layouts' templates path.
+     * @return The resources' layouts' templates path
+     */
+    public final String getTemplateRessourceLargeLayoutPath() {
+        return String.format("%s/%s/",
+                this.getTemplateRessourcePath(),
+                this.getLargeView());
+    }
+
+    /**
+     * Get the resources' values path.
+     * @return The resources values path
+     */
+    public final String getRessourceValuesPath() {
+        return String.format("%s/%s/",
+                this.getRessourcePath(),
+                this.getValues());
+    }
+    
+    /**
+     * Get the resources' values path.
+     * @return The resources values path
+     */
+    public final String getRessourceXLargeValuesPath() {
+        return String.format("%s/%s/",
+                this.getRessourcePath(),
+                this.getValuesXLarge());
+    }
+
+    /**
+     * Get the resources' values' templates path.
+     * @return The resources values' templates path
+     */
+    public final String getTemplateRessourceValuesPath() {
+        return String.format("%s/%s/",
+                this.getTemplateRessourcePath(),
+                this.getValues());
+    }
+
+    /**
+     * Get the resources' values-xlarge' templates path.
+     * @return The resources values-xlarge' templates path
+     */
+    public final String getTemplateRessourceXLargeValuesPath() {
+        return String.format("%s/%s/",
+                this.getTemplateRessourcePath(),
+                this.getValues());
+    }
+    
+    @Override
+    public final String getSourceEntityPath() {
+        return String.format("%s%s/%s/",
+                this.getSourcePath(),
+                this.getApplicationMetadata().getProjectNameSpace(),
+                "entity");
+    }
 }

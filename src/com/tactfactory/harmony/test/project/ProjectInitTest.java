@@ -20,14 +20,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.google.common.base.Strings;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.ProjectDiscover;
 import com.tactfactory.harmony.command.ProjectCommand;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.template.ProjectGenerator;
 import com.tactfactory.harmony.test.CommonTest;
-import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
  * Test class for project initialization.
@@ -35,7 +33,8 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 @RunWith(Parameterized.class)
 public class ProjectInitTest extends CommonTest {
 	
-	public ProjectInitTest(ApplicationMetadata currentMetadata) {
+	public ProjectInitTest(ApplicationMetadata currentMetadata)
+	        throws Exception {
 		super(currentMetadata);
 	}
 	/**
@@ -60,38 +59,8 @@ public class ProjectInitTest extends CommonTest {
 	}
 	
 	@Override
-	public void setUpBeforeNewParameter() {
-		// Base configs
-		ConsoleUtils.setAnsi(false);
-		ConsoleUtils.setQuiet(false);
-		ConsoleUtils.setDebug(true);
-
-		// Clean folder
-		CommonTest.cleanAndroidFolder(false);
-
-		// Project test config
-		ApplicationMetadata.INSTANCE.setName(
-				this.currentMetadata.getName());
-		
-		ApplicationMetadata.INSTANCE.setProjectNameSpace(
-				this.currentMetadata.getProjectNameSpace());
-
-		harmony = Harmony.getInstance();
-
-		if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
-			final String localProp =
-					String.format("%s/%s",
-							Harmony.getProjectAndroidPath(),
-							"local.properties");
-
-			ApplicationMetadata.setAndroidSdkPath(
-					ProjectDiscover.getSdkDirFromPropertiesFile(localProp));
-
-			if (ApplicationMetadata.getAndroidSdkPath() == null) {
-				ApplicationMetadata.setAndroidSdkPath(
-						"/opt/android-sdk-linux_86/");
-			}
-		}
+	public void setUpBeforeNewParameter() throws Exception {
+        super.setUpBeforeNewParameter();
 	}
 	
 	/**

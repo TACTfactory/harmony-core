@@ -19,7 +19,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import com.tactfactory.harmony.Harmony;
-import com.tactfactory.harmony.plateforme.AndroidAdapter;
+import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.template.BundleGenerator;
 import com.tactfactory.harmony.test.CommonTest;
 import com.tactfactory.harmony.utils.TactFileUtils;
@@ -50,21 +50,18 @@ public class EmptyBundleGenerationTest extends CommonTest {
 	@BeforeClass
 	public static void setUpBefore() throws RuntimeException {
 		CommonTest.setUpBefore();
-
 	}
 
 	@Before
 	@Override
 	public final void setUp() throws RuntimeException {
 		super.setUp();
+		
 		// Delete bundle folder if exists
-		final File existingFolder = new File(String.format("%s/%s-%s",
-						Harmony.getBundlePath(),
-						BUNDLE_OWNER.toLowerCase(),
-						BUNDLE_NAME.toLowerCase()));
-		if (existingFolder.exists()) {
-			TactFileUtils.deleteRecursive(existingFolder);
-		}
+		
+		
+		this.deleteBundle();
+		
 		this.initAll();
 	}
 
@@ -72,6 +69,8 @@ public class EmptyBundleGenerationTest extends CommonTest {
 	@Override
 	public final void tearDown() throws RuntimeException {
 		super.tearDown();
+		
+		this.deleteBundle();
 	}
 
 	/**
@@ -123,4 +122,14 @@ public class EmptyBundleGenerationTest extends CommonTest {
 		assertTrue(file.getAbsolutePath() + " doesn't exist", file.exists());
 	}
 
+	private void deleteBundle() {
+	    File bundleTest = new File(String.format("%s/%s-%s",
+                Harmony.getBundlePath(),
+                BUNDLE_OWNER.toLowerCase(),
+                BUNDLE_NAME.toLowerCase()));
+	    
+	    if (bundleTest.exists()) {
+            TactFileUtils.deleteRecursive(bundleTest);
+        }
+	}
 }

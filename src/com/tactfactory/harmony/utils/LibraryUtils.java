@@ -11,7 +11,7 @@ package com.tactfactory.harmony.utils;
 import java.io.File;
 
 import com.tactfactory.harmony.Harmony;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 
 /**
  * Utility class for libraries.
@@ -24,7 +24,7 @@ public abstract class LibraryUtils {
 	 * @param libName The library name.
 	 */
 	public static void addLibraryToTestProject(
-			final BaseAdapter adapter,
+			final IAdapter adapter,
 			final String libName) {
 
 		final File dest = new File(String.format("%s/%s",

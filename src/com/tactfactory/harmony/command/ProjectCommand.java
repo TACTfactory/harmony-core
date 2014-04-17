@@ -18,11 +18,11 @@ import com.tactfactory.harmony.TargetPlatform;
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.parser.HeaderParser;
-import com.tactfactory.harmony.plateforme.AndroidAdapter;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
-import com.tactfactory.harmony.plateforme.IosAdapter;
-import com.tactfactory.harmony.plateforme.RimAdapter;
-import com.tactfactory.harmony.plateforme.WinphoneAdapter;
+import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
+import com.tactfactory.harmony.plateforme.ios.IosAdapter;
+import com.tactfactory.harmony.plateforme.rim.RimAdapter;
+import com.tactfactory.harmony.plateforme.winphone.WinphoneAdapter;
 import com.tactfactory.harmony.template.ApplicationGenerator;
 import com.tactfactory.harmony.template.ProjectGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -245,8 +245,8 @@ public class ProjectCommand extends BaseCommand {
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
+		
 		return result;
-			
 	}
 
 	/**

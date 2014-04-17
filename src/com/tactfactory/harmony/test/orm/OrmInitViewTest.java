@@ -75,12 +75,13 @@ public class OrmInitViewTest extends CommonTest {
 	private static final String LAYOUT_PATH_ROW =
 			LAYOUT_PATH + "row_%s.xml";
 
-	public OrmInitViewTest(ApplicationMetadata currentMetadata) {
+	public OrmInitViewTest(ApplicationMetadata currentMetadata)
+	        throws Exception {
 		super(currentMetadata);
 	}
 	
 	@Override
-	public void setUpBeforeNewParameter() {
+	public void setUpBeforeNewParameter() throws Exception {
 		super.setUpBeforeNewParameter();
 		
 		this.initAll();

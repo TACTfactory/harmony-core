@@ -10,7 +10,7 @@ package com.tactfactory.harmony.meta;
 
 import java.util.Map;
 
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 
 /**
  * Defines the Metadatas class which will be used by Freemarker.
@@ -22,7 +22,7 @@ public interface Metadata {
 	 * @param adapter The adapter to use for the conversion
 	 * @return The generated map
 	 **/
-	Map<String, Object> toMap(BaseAdapter adapter);
+	Map<String, Object> toMap(IAdapter adapter);
 
 	/**
 	 * The key defining this Metadata in the global map.

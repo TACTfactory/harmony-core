@@ -13,12 +13,13 @@ import java.util.List;
 
 import org.jdom2.Element;
 
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.updater.IXmlUtil;
 
 /**
  * Represents an android dimens.xml file.
  */
-public class ColorsFile extends XmlManager {
+public class ColorsFile extends XmlManager implements IXmlUtil {
 	/** Resources element. */
 	private final static String ELEMENT_ROOT = "resources";
 	/** Dimen element. */
@@ -37,7 +38,7 @@ public class ColorsFile extends XmlManager {
 	 * @param adapter The adapter
 	 * @param dimenFilePath The file path
 	 */
-	public ColorsFile(BaseAdapter adapter, String dimenFilePath) {
+	public ColorsFile(IAdapter adapter, String dimenFilePath) {
 		super(adapter, dimenFilePath);
 		Element root = this.getDocument().getRootElement();
 		List<Element> dimens = root.getChildren(ELEMENT_COLOR);
@@ -45,6 +46,10 @@ public class ColorsFile extends XmlManager {
 			this.dimens.add(new Dimen(dimen));
 		}
 		
+	}
+	
+	public ColorsFile() {
+	    
 	}
 	
 	/**
@@ -181,7 +186,7 @@ public class ColorsFile extends XmlManager {
 	 * @param from The source dimens.xml 
 	 * @param to The dimens.xml to overwrite
 	 */
-	public static void mergeFromTo(BaseAdapter adapter, String from, String to) {
+	public static void mergeFromTo(IAdapter adapter, String from, String to) {
 		ColorsFile fromDimens = new ColorsFile(adapter, from);
 		ColorsFile toDimens = new ColorsFile(adapter, to);
 		toDimens.mergeFrom(fromDimens);
@@ -193,4 +198,21 @@ public class ColorsFile extends XmlManager {
 		Element rootElement = new Element(ELEMENT_ROOT);
 		return rootElement;
 	}
+
+    @Override
+    public void mergeFiles(String from, String to) {
+        mergeFromTo(null, from, to);
+    }
+
+    @Override
+    public void open(String file) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public String addElement(String key, String value) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

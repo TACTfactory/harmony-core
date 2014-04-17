@@ -13,13 +13,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.TagConstant;
 
 /**
  * Metadatas representing a Method.
  */
-public class MethodMetadata extends BaseMetadata {
+public final class MethodMetadata extends BaseMetadata {
 	/** Return type. */
 	private String type;
 
@@ -30,7 +30,7 @@ public class MethodMetadata extends BaseMetadata {
 	private boolean isFinal;
 
 	@Override
-	public final Map<String, Object> toMap(final BaseAdapter adapter) {
+	public final Map<String, Object> toMap(final IAdapter adapter) {
 		final Map<String, Object> map = new HashMap<String, Object>();
 		map.put(TagConstant.TYPE, this.type);
 		map.put("isFinal", this.isFinal);

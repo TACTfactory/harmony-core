@@ -1,6 +1,6 @@
 <#include utilityPath + "all_imports.ftl" />
 <@header?interpret />
-package ${local_namespace}.base;
+package ${project_namespace}.provider.base;
 
 import java.util.ArrayList;
 
@@ -16,9 +16,9 @@ import android.util.Log;
 import ${project_namespace}.R;
 <#list entities?values as entity>
 	<#if (entity.fields?size > 0 || entity.inheritance??)>
-import ${local_namespace}.${entity.name?cap_first}ProviderAdapter;
+import ${project_namespace}.provider.${entity.name?cap_first}ProviderAdapter;
 		<#if (entity.options.sync??)>
-import ${local_namespace}.${entity.name?cap_first}SyncProviderAdapter;
+import ${project_namespace}.provider.${entity.name?cap_first}SyncProviderAdapter;
 		</#if>
 	</#if>
 </#list>

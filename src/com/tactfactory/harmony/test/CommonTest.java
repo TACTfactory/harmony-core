@@ -60,8 +60,9 @@ public abstract class CommonTest {
 	 * project we want to test. (ie. Demact, Tracscan, etc.)
 	 * 
 	 * @param currentMetadata The metadata of the project
+	 * @throws Exception 
 	 */
-	public CommonTest(ApplicationMetadata currentMetadata) {
+	public CommonTest(ApplicationMetadata currentMetadata) throws Exception {
 			this.currentMetadata = currentMetadata;
 			if (!this.currentMetadata.equals(oldMetadata)) {
 				this.setUpBeforeNewParameter();
@@ -78,8 +79,9 @@ public abstract class CommonTest {
 
 	/**
 	 * This method is called before every new parameter is tested by JUnit.
+	 * @throws Exception 
 	 */
-	public void setUpBeforeNewParameter() {
+	public void setUpBeforeNewParameter() throws Exception {
 		// Base configs
 		ConsoleUtils.setAnsi(false);
 		ConsoleUtils.setQuiet(false);

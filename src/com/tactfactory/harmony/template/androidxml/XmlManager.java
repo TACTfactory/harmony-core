@@ -11,7 +11,7 @@ package com.tactfactory.harmony.template.androidxml;
 import org.jdom2.Document;
 import org.jdom2.Element;
 
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.utils.XMLUtils;
 
 /**
@@ -23,7 +23,7 @@ public abstract class XmlManager {
 	/** XML Document. */
 	private Document docXml;
 	/** Adapter. */
-	private BaseAdapter adapter;
+	private IAdapter adapter;
 	
 	/**
 	 * Constructor.
@@ -34,7 +34,7 @@ public abstract class XmlManager {
 	 * @param adapter The adapter to use.
 	 * @param xmlPath The path to the xml file.
 	 */
-	public XmlManager(final BaseAdapter adapter, final String xmlPath) {
+	public XmlManager(final IAdapter adapter, final String xmlPath) {
 		this.filePath = xmlPath;
 		this.adapter = adapter;
 		this.docXml = XMLUtils.openXML(xmlPath);
@@ -43,6 +43,10 @@ public abstract class XmlManager {
 		if (!this.getDocument().hasRootElement()) {
 			this.getDocument().setRootElement(this.getDefaultRoot());
 		}
+	}
+	
+	public XmlManager() {
+	    
 	}
 	
 	/**
@@ -55,7 +59,7 @@ public abstract class XmlManager {
 	/**
 	 * @return the adapter.
 	 */
-	public BaseAdapter getAdapter() {
+	public IAdapter getAdapter() {
 		return this.adapter;
 	}
 	

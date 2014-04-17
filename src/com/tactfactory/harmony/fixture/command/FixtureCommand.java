@@ -17,7 +17,7 @@ import com.tactfactory.harmony.command.BaseCommand;
 import com.tactfactory.harmony.fixture.metadata.FixtureMetadata;
 import com.tactfactory.harmony.fixture.template.FixtureGenerator;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.plateforme.AndroidAdapter;
+import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

@@ -12,11 +12,11 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.TagConstant;
 
 /** Entity relation Metadata. */
-public class RelationMetadata extends BaseMetadata {
+public final class RelationMetadata extends BaseMetadata {
 
 	/** The type of relation. */
 	private String type;
@@ -46,7 +46,7 @@ public class RelationMetadata extends BaseMetadata {
 	 * @return the generated HashMap
 	 */
 	@Override
-	public final Map<String, Object> toMap(final BaseAdapter adapter) {
+	public final Map<String, Object> toMap(final IAdapter adapter) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 		model.put(TagConstant.NAME, this.getName());
 		model.put(TagConstant.TYPE, this.type);

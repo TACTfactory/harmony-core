@@ -15,12 +15,13 @@ import java.util.List;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.updater.IXmlUtil;
 
 /**
  * Class representing an android attrs.xml file.
  */
-public class AttrsFile extends XmlManager {
+public class AttrsFile extends XmlManager implements IXmlUtil {
 	/** Root element. */
 	private final static String ELEMENT_ROOT = "resources";
 	/** declare-styleable element. */
@@ -48,7 +49,7 @@ public class AttrsFile extends XmlManager {
 	 * @param adapter The adapter
 	 * @param xmlPath The xml path
 	 */
-	public AttrsFile(BaseAdapter adapter, String xmlPath) {
+	public AttrsFile(IAdapter adapter, String xmlPath) {
 		super(adapter, xmlPath);
 		
 
@@ -62,6 +63,10 @@ public class AttrsFile extends XmlManager {
 		for (Element attr : attrs) {
 			this.attrs.add(new Styleable.Attr(attr));
 		}
+	}
+	
+	public AttrsFile() {
+	    super();
 	}
 
 	@Override
@@ -440,10 +445,27 @@ public class AttrsFile extends XmlManager {
 	 * @param from The source attrs.xml 
 	 * @param to The attrs.xml that will be written to
 	 */
-	public static void mergeFromTo(BaseAdapter adapter, String from, String to) {
+	public static void mergeFromTo(IAdapter adapter, String from, String to) {
 		AttrsFile fromStyles = new AttrsFile(adapter, from);
 		AttrsFile toStyles = new AttrsFile(adapter, to);
 		toStyles.mergeFrom(fromStyles);
 		toStyles.save();
 	}
+
+    @Override
+    public void mergeFiles(String from, String to) {
+        mergeFromTo(null, from, to);
+    }
+
+    @Override
+    public void open(String file) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public String addElement(String key, String value) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

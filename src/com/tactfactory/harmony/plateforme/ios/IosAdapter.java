@@ -6,32 +6,37 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.harmony.plateforme;
+package com.tactfactory.harmony.plateforme.ios;
 
 import java.io.File;
 import java.util.List;
 
 import com.tactfactory.harmony.exception.NotImplementedException;
 import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapterProject;
 import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
+import com.tactfactory.harmony.updater.impl.LibraryGit;
 
 import freemarker.template.Configuration;
 
-/** RIM Blackberry Adapter of project structure. */
-public final class RimAdapter extends BaseAdapter {
+/** Apple iOS Adapter of project structure. */
+public final class IosAdapter extends BaseAdapter {
 	/** Error message for not implemented feature. */
 	private static final String NOT_IMPLEMENTED_MESSAGE =
-			"Rim adapter has not been implemented yet.";
+			"IOS adapter has not been implemented yet.";
 
 	/**
 	 * Constructor.
 	 */
-	public RimAdapter() {
+	public IosAdapter()	 {
 		super();
-		this.setPlatform("rim");
+		this.setProject("project");
+		this.setPlatform("ios");
 		this.setResource("res");
 		this.setSource("src");
 	}
+
 
 	@Override
 	public String getNameSpace(final ClassMetadata cm, final String type) {
@@ -44,28 +49,23 @@ public final class RimAdapter extends BaseAdapter {
 		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 
+
 	@Override
 	public String getNativeType(final String type) {
 		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
+
 
 	@Override
 	public void resizeImage() {
 		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 
+
 	@Override
 	public boolean filesEqual(String oldContent, String newContent,
 			String fileName, boolean ignoreHeader) {
 		return oldContent.equals(newContent);
-	}
-	
-	@Override
-	public void installGitLibrary(String url, String pathLib,
-			String versionTag, String libName, List<File> filesToDelete,
-			String libraryProjectPath, String target, String referencePath,
-			boolean isSupportV4Dependant) {
-		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 
 	@Override
@@ -74,4 +74,31 @@ public final class RimAdapter extends BaseAdapter {
 			final Configuration config) {
 		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
+
+
+    @Override
+    public void installGitLibrary(LibraryGit library) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public List<String> getDirectoryForResources() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+    @Override
+    public IAdapterProject getAdapterProject() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+
+    @Override
+    public String getSourceEntityPath() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

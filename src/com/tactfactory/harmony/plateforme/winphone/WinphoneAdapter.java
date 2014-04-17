@@ -6,13 +6,16 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.harmony.plateforme;
+package com.tactfactory.harmony.plateforme.winphone;
 
 import java.io.File;
 import java.util.List;
 
 import com.tactfactory.harmony.exception.NotImplementedException;
 import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapterProject;
+import com.tactfactory.harmony.updater.impl.LibraryGit;
 import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
 
 import freemarker.template.Configuration;
@@ -58,15 +61,6 @@ public final class WinphoneAdapter extends BaseAdapter {
 	public void resizeImage() {
 		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
-	
-	@Override
-	public void installGitLibrary(String url, String pathLib,
-			String versionTag, String libName, List<File> filesToDelete,
-			String libraryProjectPath, String target, String referencePath,
-			boolean isSupportV4Dependant) {
-		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
-		
-	}
 
 	@Override
 	public boolean filesEqual(String oldContent, String newContent,
@@ -80,4 +74,28 @@ public final class WinphoneAdapter extends BaseAdapter {
 			final Configuration config) {
 		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
+
+    @Override
+    public void installGitLibrary(LibraryGit library) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public List<String> getDirectoryForResources() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public IAdapterProject getAdapterProject() {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public String getSourceEntityPath() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

@@ -16,11 +16,11 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.tactfactory.harmony.meta.TranslationMetadata.Group;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.TagConstant;
 
 /** Entity class metadata. */
-public class EntityMetadata extends ClassMetadata {
+public final class EntityMetadata extends ClassMetadata {
 
 	/** Used for join tables (ManyToMany relations). */
 	private boolean internal = false;
@@ -62,7 +62,7 @@ public class EntityMetadata extends ClassMetadata {
 	 * @return the map
 	 */
 	@Override
-	public final Map<String, Object> toMap(final BaseAdapter adapter) {
+	public final Map<String, Object> toMap(final IAdapter adapter) {
 		final Map<String, Object> model = super.toMap(adapter);
 
 		model.put(TagConstant.IDS,
@@ -158,7 +158,7 @@ public class EntityMetadata extends ClassMetadata {
 	 */
 	private List<Map<String, Object>> toFieldArray(
 			final Collection<FieldMetadata> c,
-			final BaseAdapter adapter) {
+			final IAdapter adapter) {
 		final List<Map<String, Object>> result =
 				new ArrayList<Map<String, Object>>();
 		Map<String, Object> subField = null;

@@ -141,6 +141,7 @@ public abstract class XMLUtils {
 			baseNode.addContent(newNode);
 			return true;
 		} else {
+		    newNode.setText(findElement.getText());
 			return false;
 		}
 	}

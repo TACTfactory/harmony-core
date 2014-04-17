@@ -9,8 +9,7 @@
 package com.tactfactory.harmony;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
+import java.net.URI;
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.dependencies.libraries.LibraryPool;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -26,28 +25,28 @@ public final class Context {
 	private final LibraryPool libPool = new LibraryPool();
 
 	/** Project folder. */
-	private static String projectForlder	= "app"		+ DELIMITER;
+	private static final String projectFolder        = "app" + DELIMITER;
 
 	/** Library folder. */
-	private static String libraryFolder 	= "lib"		+ DELIMITER;
+	private static final String libraryFolder        = "lib" + DELIMITER;
 
 	/** Bundle folder. */
-	private static String bundleFolder 		= "vendor"	+ DELIMITER;
+	private static final String bundleFolder         = "vendor" + DELIMITER;
 
 	/** Template folder. */
-	private static String templateFolder 	= "tpl"		+ DELIMITER;
+	private static final String templateFolder       = "tpl" + DELIMITER;
 
 	/** Project base folder. */
-	private static String projectBaseFolder = "android" + DELIMITER;
+	private static final String projectBaseFolder    = "android" + DELIMITER;
 	
+	/** Path of harmony.jar. or Binary */
+    private String harmonyPath;
+    
 	/** Current bundle folder. */
-	private static String currentBundleFolder;
+	private String currentBundleFolder;
 
 	/** Path of Harmony base. */
-	private String basePath = new File("./").getAbsolutePath(); // /
-
-	/** Path of harmony.jar. or Binary */
-	private static String harmonyPath;
+	private String basePath = new File("./").getAbsolutePath();
 
 	/** Path of project (app folder in Harmony root).<br/>
 	 * eg. /app/
@@ -75,37 +74,18 @@ public final class Context {
 	 * eg. /vendor/../tpl/
 	 */
 	private String templatePath;
-
-	/** Path of sub-libraries.<br/>
-	 * eg. /vendor/../lib/
-	 */
-	//private String librarySubPath;
-
-	// Temporizes...
-	/** Symfony path. */
-	public static final String SYMFONY_PATH = "D:/Site/wamp/www/Symfony";
-
-
-	static {
-		String url = Harmony.class
-				.getProtectionDomain()
-				.getCodeSource()
-				.getLocation()
-				.getPath();
-		try {
-			Context.harmonyPath = URLDecoder.decode(url, "utf-8");
-			
-		} catch (UnsupportedEncodingException e) {
-			ConsoleUtils.displayError(e);
-			Context.harmonyPath = URLDecoder.decode(url);
-		}
-	}
 	
 	/**
 	 * Contructor.
 	 */
 	public Context() {
-		File harmonyFile = new File(harmonyPath);
+	    this.harmonyPath = URI.create(Harmony.class
+	            .getProtectionDomain()
+	            .getCodeSource()
+	            .getLocation()
+	            .getPath()).getPath();
+	    
+		File harmonyFile = new File(this.harmonyPath);
 		File baseDir = this.getBaseDir(harmonyFile);
 
 		if (baseDir != null) {
@@ -121,7 +101,7 @@ public final class Context {
 		ConsoleUtils.displayDebug("Detect app on " + basePath);
 
 		// Set Path
-		this.projectPath 		= this.basePath + projectForlder;
+		this.projectPath 		= this.basePath + projectFolder;
 		this.projectBasePath	= this.projectPath + projectBaseFolder;
 		this.libraryPath 		= this.basePath + libraryFolder;
 
@@ -131,8 +111,6 @@ public final class Context {
 
 		//TODO remove by bundle path
 		this.templatePath 	= templateFolder;
-				//TactFileUtils.absoluteToRelativePath(
-				//PATH_BASE + templateFolder, PATH_BASE);
 		
 		this.libPool.parseLibraries(new File(this.bundlePath));
 	}
@@ -172,7 +150,7 @@ public final class Context {
 	 * @return the harmonyPath
 	 */
 	public String getHarmonyPath() {
-		return harmonyPath;
+		return this.harmonyPath;
 	}
 
 	/** eg. /lib/
@@ -216,7 +194,7 @@ public final class Context {
 
 		if (list != null) {
 			for (File dir : list) {
-				if (dir.getPath().endsWith(projectForlder.replace("/", ""))) {
+				if (dir.getPath().endsWith(projectFolder.replace("/", ""))) {
 					result = checkPath;
 					break;
 				}
@@ -230,39 +208,39 @@ public final class Context {
 	 * Sets the current bundle folder.
 	 * @param folder The folder path
 	 */
-	public static void setCurrentBundleFolder(String folder) {
-		currentBundleFolder = folder;
+	public void setCurrentBundleFolder(String folder) {
+		this.currentBundleFolder = folder;
 	}
 	
 	/**
 	 * Sets the current bundle folder.
 	 * @return the current bundle folder path
 	 */
-	public static String getCurrentBundleFolder() {
-		return currentBundleFolder;
+	public String getCurrentBundleFolder() {
+		return this.currentBundleFolder;
 	}
 	
 	/**
 	 * Get the base directory of harmony.
 	 * @return File representing base directory.
 	 */
-	public File getBaseDir(File harmonyFile) {
+	private File getBaseDir(File harmonyFile) {
 		// For root case
 		File baseDir = this.detectAppTree(harmonyFile);
 
 		// Clean binary case (for /bin and /vendor/**/bin)
-		if (baseDir == null && harmonyPath.endsWith("bin/")) {
+		if (baseDir == null && this.harmonyPath.endsWith("bin/")) {
 			final File predictiveBaseDir =
 					harmonyFile.getParentFile();
 			
 			baseDir = this.detectAppTree(predictiveBaseDir);
 			
 			if (baseDir != null) {
-				ConsoleUtils.displayDebug("Eclipse Mode : " + harmonyPath);
+				ConsoleUtils.displayDebug("Eclipse Mode : " + this.harmonyPath);
 			}
 		}
 
-		if (baseDir == null && harmonyPath.endsWith("harmony.jar")) {
+		if (baseDir == null && this.harmonyPath.endsWith("harmony.jar")) {
 			final File predictiveBaseDir = harmonyFile
 					.getParentFile()
 					.getParentFile()
@@ -271,36 +249,8 @@ public final class Context {
 			baseDir = this.detectAppTree(predictiveBaseDir);
 			
 			if (baseDir != null) {
-				ConsoleUtils.displayDebug("Console Mode : " + harmonyPath);
+				ConsoleUtils.displayDebug("Console Mode : " + this.harmonyPath);
 			}
-		}
-
-		// For vendor/tact-core case
-		if (baseDir == null) {
-			final File predictiveBaseDir =
-					harmonyFile
-						.getParentFile()
-						.getParentFile()
-						.getParentFile();
-
-			baseDir = this.detectAppTree(predictiveBaseDir);
-			
-			if (baseDir != null) {
-				ConsoleUtils.displayDebug("Other Mode : " + harmonyPath);
-			}
-		}
-
-		//For Emma
-		if (baseDir == null) {
-			final File predictiveBaseDir =
-					harmonyFile
-						.getParentFile()
-						.getParentFile()
-						.getParentFile()
-						.getParentFile();
-
-			ConsoleUtils.displayDebug("Emma Mode : " + harmonyPath);
-			baseDir = this.detectAppTree(predictiveBaseDir);
 		}
 		
 		//For Gradle
@@ -313,8 +263,11 @@ public final class Context {
 						.getParentFile()
 						.getParentFile();
 
-			ConsoleUtils.displayDebug("Gradle Mode : " + harmonyPath);
 			baseDir = this.detectAppTree(predictiveBaseDir);
+			
+			if (baseDir != null) {
+                ConsoleUtils.displayDebug("Gradle Mode : " + this.harmonyPath);
+			}
 		}
 		
 		//For Gradle Emma
@@ -328,11 +281,14 @@ public final class Context {
 						.getParentFile()
 						.getParentFile();
 
-			ConsoleUtils.displayDebug("Gradle Emma Mode : " + harmonyPath);
 			baseDir = this.detectAppTree(predictiveBaseDir);
+			
+			if (baseDir != null) {
+                ConsoleUtils.displayDebug(
+                        "Gradle Emma Mode : " + this.harmonyPath);
+			}
 		}
 		
 		return baseDir;
 	}
-
 }

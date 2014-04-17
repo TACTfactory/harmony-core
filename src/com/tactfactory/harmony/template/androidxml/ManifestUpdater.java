@@ -11,13 +11,11 @@ package com.tactfactory.harmony.template.androidxml;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
-import java.util.Locale;
-
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -83,7 +81,7 @@ public class ManifestUpdater extends XmlManager {
 	 * Constructor.
 	 * @param adapter The adapter
 	 */
-	public ManifestUpdater(final BaseAdapter adapter) {
+	public ManifestUpdater(final IAdapter adapter) {
 		super(adapter, adapter.getManifestPathFile());
 	}
 	

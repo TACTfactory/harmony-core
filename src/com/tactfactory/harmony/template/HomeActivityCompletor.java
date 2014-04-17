@@ -15,6 +15,7 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 
+import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
 import com.tactfactory.harmony.utils.XMLUtils;
@@ -50,7 +51,9 @@ public abstract class HomeActivityCompletor {
 			final String buttonId) {
 		
 		// Update HomeActivity
-		File file = new File(generator.getAdapter().getHomeActivityPathFile());
+		File file = new File(((AndroidAdapter)generator.getAdapter())
+		        .getHomeActivityPathFile());
+		
 		if (file != null && file.isFile()) {
 			String strFile = TactFileUtils.fileToString(file);
 			
@@ -142,8 +145,8 @@ public abstract class HomeActivityCompletor {
 	private static void addButtonToMainXML(final BaseGenerator generator,
 			final String text,
 			final String buttonId) {
-		String xmlFileName = generator.getAdapter().getRessourceLayoutPath() 
-				+ "main.xml";
+		String xmlFileName = ((AndroidAdapter)generator.getAdapter())
+		        .getRessourceLayoutPath() + "main.xml";
 		Document doc = XMLUtils.openXML(xmlFileName);
 		Namespace androidNs = doc.getRootElement().getNamespace("android");
 		Element linearL = doc.getRootElement().getChild("LinearLayout");

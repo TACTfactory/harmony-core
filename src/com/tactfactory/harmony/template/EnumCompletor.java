@@ -16,7 +16,7 @@ import java.util.Map;
 import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.MethodMetadata;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
@@ -44,7 +44,7 @@ public class EnumCompletor extends BaseGenerator {
 	 * @param adapt Adapter used by this generator
 	 * @throws Exception if adapter is null
 	 */
-	public EnumCompletor(final BaseAdapter adapt) throws Exception {
+	public EnumCompletor(final IAdapter adapt) throws Exception {
 		super(adapt);
 		this.entityFolder =
 				this.getAdapter().getSourcePath()

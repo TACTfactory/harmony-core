@@ -1,11 +1,11 @@
 <#assign curr = entities[current_entity] />
 <@header?interpret />
-package ${local_namespace};
+package ${project_namespace}.provider;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import ${local_namespace}.base.${curr.name?cap_first}ProviderAdapterBase;
+import ${project_namespace}.provider.base.${curr.name?cap_first}ProviderAdapterBase;
 
 /**
  * ${curr.name?cap_first}ProviderAdapter.

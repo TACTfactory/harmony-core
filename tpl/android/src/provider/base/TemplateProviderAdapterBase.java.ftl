@@ -6,7 +6,7 @@
 	<#assign ext = "Void" />
 </#if>
 <@header?interpret />
-package ${local_namespace}.base;
+package ${project_namespace}.provider.base;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
@@ -23,19 +23,19 @@ import org.joda.time.format.ISODateTimeFormat;
 </#if>
 <#if (!curr.internal)>
 import ${entity_namespace}.${curr.name};
-</#if>import ${local_namespace}.${project_name?cap_first}Provider;
-import ${local_namespace}.contract.${curr.name?cap_first}Contract;
+</#if>import ${project_namespace}.provider.${project_name?cap_first}Provider;
+import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
 <#if (inherited && curr.inheritance.superclass??)>
-import ${local_namespace}.contract.${curr.inheritance.superclass.name?cap_first}Contract;
+import ${project_namespace}.provider.contract.${curr.inheritance.superclass.name?cap_first}Contract;
 </#if>
 <#list curr.relations as relation>
 	<#if (!relation.internal && (relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany"))>
-import ${local_namespace}.contract.${relation.relation.targetEntity?cap_first}Contract;
+import ${project_namespace}.provider.contract.${relation.relation.targetEntity?cap_first}Contract;
 	</#if>
 </#list>
 <#if (inherited)>
 	<#if joinedInheritance>
-import ${local_namespace}.${curr.inheritance.superclass.name?cap_first}ProviderAdapter;
+import ${project_namespace}.provider.${curr.inheritance.superclass.name?cap_first}ProviderAdapter;
 import ${data_namespace}.${curr.inheritance.superclass.name?cap_first}SQLiteAdapter;
 
 import ${project_namespace}.criterias.${curr.name}Criterias;
