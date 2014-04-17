@@ -1,12 +1,16 @@
 package com.tactfactory.harmony.plateforme;
 
 import java.util.List;
+import java.util.Map;
 
 import com.tactfactory.harmony.meta.EntityMetadata;
+import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.updater.IConfigFileUtil;
 import com.tactfactory.harmony.updater.ITranslateFileUtil;
 import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.updater.IUpdaterProject;
+
+import freemarker.template.Configuration;
 
 public interface IAdapterProject {
     //Used by ProjectGenerator
@@ -36,7 +40,8 @@ public interface IAdapterProject {
     //Used by FixtureGenerator
     List<IUpdater> getFixtureLibraries(String type);
     List<IUpdater> getFixtureFiles(boolean forceOverwrite);
-    List<IUpdater> getFixtureEntityFiles(boolean forceOverwrite, String fixtureType, EntityMetadata entity);
+    List<IUpdater> getFixtureEntityFiles(boolean forceOverwrite,
+            String fixtureType, EntityMetadata entity);
     
     //Used by ApplicationGenerator
     List<IUpdater> getApplicationFiles();
@@ -73,4 +78,9 @@ public interface IAdapterProject {
     
     //Used by EntityGenerator
     List<IUpdater> getEntityFiles(EntityMetadata entity);
+    void updateEntity(EntityMetadata entity, Configuration cfg,
+            Map<String, Object> dataModel);
+    
+    //Used by EnumGenerator
+    void updateEnum(EnumMetadata enumMeta, Configuration cfg);
 }

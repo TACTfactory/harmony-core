@@ -49,7 +49,7 @@ public class GenerateConfigFileTest extends CommonTest {
 	
 	@Override
 	public void setUpBeforeNewParameter() throws Exception {
-		super.cleanAndroidFolder(false);
+		super.cleanAndroidFolder();
 		super.setUpBeforeNewParameter();
 		
 		this.initAll();

@@ -19,7 +19,7 @@ import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.template.ActivityGenerator;
 import com.tactfactory.harmony.template.ApplicationGenerator;
 import com.tactfactory.harmony.template.EntityGenerator;
-import com.tactfactory.harmony.template.EnumCompletor;
+import com.tactfactory.harmony.template.EnumGenerator;
 import com.tactfactory.harmony.template.ProjectGenerator;
 import com.tactfactory.harmony.template.ProviderGenerator;
 import com.tactfactory.harmony.template.SQLiteGenerator;
@@ -101,7 +101,7 @@ public class OrmCommand extends BaseCommand {
 	 */
 	protected final void makeLayoutDatabase() {
 		try {
-			new EnumCompletor(this.adapter).generateAll();
+			new EnumGenerator(this.adapter).generateAll();
 			new EntityGenerator(this.adapter).generateAll();
 			new ApplicationGenerator(this.adapter).generateApplication();
 			new SQLiteGenerator(this.adapter).generateAll();

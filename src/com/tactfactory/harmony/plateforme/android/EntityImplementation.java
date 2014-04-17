@@ -1,0 +1,252 @@
+package com.tactfactory.harmony.plateforme.android;
+
+import java.io.File;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
+
+import com.google.common.base.CaseFormat;
+import com.tactfactory.harmony.meta.ApplicationMetadata;
+import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.meta.EntityMetadata;
+import com.tactfactory.harmony.meta.FieldMetadata;
+import com.tactfactory.harmony.meta.MethodMetadata;
+import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
+import com.tactfactory.harmony.utils.ConsoleUtils;
+import com.tactfactory.harmony.utils.MetadataUtils;
+
+import freemarker.template.Configuration;
+
+class EntityImplementation {
+    private final IAdapter adapter;
+    private final Configuration configuration;
+    private final Map<String, Object> dataModel;
+    
+    protected EntityImplementation(IAdapter adapter, Configuration cfg,
+            Map<String, Object> dataModel) {
+        this.adapter = adapter;
+        this.configuration = cfg;
+        this.dataModel = dataModel;
+    }
+    
+    protected void updateEntity(File entityFile, EntityMetadata entity) {
+        final SourceFileManipulator manipulator =
+                this.adapter.getFileManipulator(
+                        entityFile,
+                        this.configuration);
+        
+        this.implementEmptyConstructor(manipulator, entity);
+        
+        manipulator.addImplement(entity, "Serializable");
+        manipulator.addImport(
+                entity,
+                "Serializable",
+                "java.io.Serializable");
+        this.generateGetterAndSetters(manipulator, entity);
+        this.implementParcelable(manipulator, entity);
+        
+        // After treatment on entity, write it in the original file
+        manipulator.writeFile();
+    }
+    /**
+     * Generate the necessary getters and setters for the class.
+     * @param fileString The stringbuffer containing the class java code
+     * @param classMeta The Metadata containing the infos on the java class
+     */
+    private final void generateGetterAndSetters(
+            final SourceFileManipulator manipulator,
+            final EntityMetadata classMeta) {
+        
+        final Collection<FieldMetadata> fields = classMeta.getFields().values();
+        final boolean childClass = MetadataUtils.inheritsFromEntity(classMeta,
+                ApplicationMetadata.INSTANCE);
+        for (final FieldMetadata field : fields) {
+            final boolean isInheritedId = 
+                    childClass 
+                    && classMeta.getIds().containsKey(field.getName());
+            if (!field.isInternal() && !isInheritedId) {
+                // Getter
+                if (!this.alreadyImplementsGet(field, classMeta)) {
+                    ConsoleUtils.displayDebug("Add implements getter of "
+                            + field.getName(),
+                            " => get"
+                            + CaseFormat.LOWER_CAMEL.to(
+                                    CaseFormat.UPPER_CAMEL,
+                                    field.getName()));
+
+                    manipulator.generateFieldAccessor(field, "itemGetter.java");
+                }
+
+                // Setter
+                if (!this.alreadyImplementsSet(field, classMeta)) {
+                    ConsoleUtils.displayDebug("Add implements setter of "
+                            + field.getName(),
+                            " => set"
+                            + CaseFormat.LOWER_CAMEL.to(
+                                    CaseFormat.UPPER_CAMEL,
+                                    field.getName()));
+
+                    manipulator.generateFieldAccessor(field, "itemSetter.java");
+                }
+                
+                // Import ArrayList if relation
+                if (field.getRelation() != null 
+                    && (field.getRelation().getType().equals("ManyToMany")
+                        || field.getRelation().getType().equals("OneToMany"))) {
+                    manipulator.addImport(
+                            classMeta,
+                            "ArrayList",
+                            "java.util.ArrayList");
+                }
+            }
+        }
+    }
+    
+    /**
+     * Check if the class already has a getter for the given field.
+     * @param fieldMeta The Metadata of the field
+     * @param classMeta The Metadata containing the infos on the java class
+     * @return True if it already has getter for this field
+     */
+    private final boolean alreadyImplementsGet(final FieldMetadata fieldMeta,
+            final ClassMetadata classMeta) {
+        boolean ret = false;
+        final List<MethodMetadata> methods = classMeta.getMethods();
+        final String capitalizedName =
+                fieldMeta.getName().substring(0, 1).toUpperCase()
+                + fieldMeta.getName().substring(1);
+        String prefix = "get";
+        if ("boolean".equalsIgnoreCase(fieldMeta.getType())) {
+            prefix = "is";
+        }
+        for (final MethodMetadata m : methods) {
+            if (m.getName().equals(prefix + capitalizedName)
+                    && m.getArgumentsTypes().size() == 0
+                    && m.getType().equals(this.adapter.getNativeType(
+                            fieldMeta.getType()))) {
+                ret = true;
+
+                ConsoleUtils.displayDebug("Already implements getter of "
+                        + fieldMeta.getName(),
+                        " => " + m.getName());
+            }
+        }
+
+        return ret;
+    }
+
+    /**
+     * Check if the class already has a setter for the given field.
+     * @param fieldMeta The Metadata of the field
+     * @param classMeta The Metadata containing the infos on the java class
+     * @return True if it already has setter for this field
+     */
+    private final boolean alreadyImplementsSet(
+            final FieldMetadata fieldMeta,
+            final ClassMetadata classMeta) {
+        boolean result = false;
+        final List<MethodMetadata> methods = classMeta.getMethods();
+        final String capitalizedName =
+                fieldMeta.getName().substring(0, 1).toUpperCase()
+                + fieldMeta.getName().substring(1);
+
+        for (final MethodMetadata method : methods) {
+            if (method.getName().equals("set" + capitalizedName)
+                    && method.getArgumentsTypes().size() == 1
+                    && method.getArgumentsTypes().get(0).equals(
+                            this.adapter.getNativeType(
+                                    fieldMeta.getType()))) {
+                result = true;
+
+                ConsoleUtils.displayDebug("Already implements setter of "
+                        + fieldMeta.getName(),
+                        " => "
+                        + method.getName());
+            }
+        }
+
+        return result;
+    }   
+    
+    /**
+     * Check if the class already has a getter for the given field.
+     * @param classMeta The Metadata containing the infos on the java class
+     * @return True if it already has getter for this field
+     */
+    private final boolean alreadyImplementsDefaultConstructor(
+            final ClassMetadata classMeta) {
+        boolean ret = false;
+        
+        for (final MethodMetadata methodMeta : classMeta.getMethods()) {
+            if (methodMeta.getName().equals(classMeta.getName()) 
+                    && methodMeta.getArgumentsTypes().size() == 0) {
+                ret = true;
+                
+                ConsoleUtils.displayDebug("Already implements " 
+                        + "empty constructor");
+            }
+        }
+                    
+        return ret;
+    }
+    
+    /**
+     * Implement all methods needed by parcelable.
+     * @param fileString The string buffer representation of the file 
+     * @param classMeta The classmetadata
+     */
+    private final void implementParcelable(
+            final SourceFileManipulator manipulator,
+            final EntityMetadata classMeta) {
+        
+        manipulator.regenerateMethod(
+                "writeToParcelRegen.java",
+                "writeToParcelRegen(Parcel dest, int flags) {",
+                this.dataModel);
+        
+        manipulator.regenerateMethod(
+                "readFromParcel.java",
+                "readFromParcel(Parcel parc) {",
+                this.dataModel);
+        
+        if (manipulator.addImplement(classMeta, "Parcelable")) {
+            manipulator.addImport(
+                    classMeta,
+                    "Parcelable",
+                    "android.os.Parcelable");
+            manipulator.addImport(classMeta, "Parcel", "android.os.Parcel");
+
+            manipulator.generateMethod(
+                    "parcelConstructor.java",
+                    this.dataModel);
+
+            manipulator.generateMethod(
+                    "writeToParcel.java",
+                    this.dataModel);
+            
+            manipulator.generateMethod(
+                    "describeContents.java",
+                    this.dataModel);
+
+            manipulator.generateMethod(
+                    "parcelable.creator.java",
+                    this.dataModel);
+        }
+    }
+    
+    /**
+     * Implement an empty contructor if it doesn't already exists.
+     * @param fileString The string buffer representing the file
+     * @param classMeta The classMetadata
+     */
+    private final void implementEmptyConstructor(
+            final SourceFileManipulator manipulator,
+            final ClassMetadata classMeta) {
+        if (!this.alreadyImplementsDefaultConstructor(classMeta)) {
+            manipulator.generateMethod(
+                    "defaultConstructor.java",
+                    this.dataModel);
+        }
+    }
+}

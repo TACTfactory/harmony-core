@@ -5,10 +5,12 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.EntityMetadata;
+import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.plateforme.IAdapterProject;
 import com.tactfactory.harmony.template.ProviderGenerator;
 import com.tactfactory.harmony.template.androidxml.AttrsFile;
@@ -27,6 +29,8 @@ import com.tactfactory.harmony.updater.impl.DeleteFile;
 import com.tactfactory.harmony.updater.impl.LibraryGit;
 import com.tactfactory.harmony.updater.impl.SourceFile;
 import com.tactfactory.harmony.updater.impl.XmlAndroid;
+
+import freemarker.template.Configuration;
 
 public class AndroidProjectAdapter implements IAdapterProject {
     
@@ -53,6 +57,9 @@ public class AndroidProjectAdapter implements IAdapterProject {
     @Override
     public List<IUpdater> getProjectFiles() {
         List<IUpdater> result = new ArrayList<IUpdater>();
+        
+        String templatePath;
+        String filePath;
         
         // HomeActivity.java
         result.add(new SourceFile(
@@ -84,113 +91,87 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 this.adapter.getRessourceLayoutPath() + "main.xml",
                 false));
 
+        templatePath = this.adapter.getTemplateSourcePath();
+        filePath = this.adapter.getSourcePath()
+                + this.adapter.getApplicationMetadata().getProjectNameSpace();
+        
         result.add(new SourceFile(
-                this.adapter.getTemplateSourcePath()
-                        + "harmony/view/package-info.java",
-                this.adapter.getSourcePath()
-                        + this.adapter.getApplicationMetadata().getProjectNameSpace()
-                        + "/harmony/view/package-info.java",
+                templatePath + "harmony/view/package-info.java",
+                filePath + "/harmony/view/package-info.java",
                 false));
         
         // HarmonyFragmentActivity
         result.add(new SourceFile(
-                this.adapter.getTemplateSourcePath()
-                        + "harmony/view/HarmonyFragmentActivity.java",
-                this.adapter.getSourcePath()
-                        + this.adapter.getApplicationMetadata().getProjectNameSpace()
-                        + "/harmony/view/HarmonyFragmentActivity.java",
+                templatePath + "harmony/view/HarmonyFragmentActivity.java",
+                filePath + "/harmony/view/HarmonyFragmentActivity.java",
                 false));
         
         result.add(new SourceFile(
-                this.adapter.getTemplateSourcePath()
-                        + "harmony/view/MultiLoader.java",
-                this.adapter.getSourcePath()
-                        + this.adapter.getApplicationMetadata().getProjectNameSpace()
-                        + "/harmony/view/MultiLoader.java",
+                templatePath + "harmony/view/MultiLoader.java",
+                filePath + "/harmony/view/MultiLoader.java",
                 false));
         
         result.add(new SourceFile(
-                this.adapter.getTemplateSourcePath()
-                        + "harmony/view/HarmonyGridFragment.java",
-                this.adapter.getSourcePath()
-                        + this.adapter.getApplicationMetadata().getProjectNameSpace()
-                        + "/harmony/view/HarmonyGridFragment.java",
+                templatePath + "harmony/view/HarmonyGridFragment.java",
+                filePath + "/harmony/view/HarmonyGridFragment.java",
                 false));
 
         // HarmonyFragment
         result.add(new SourceFile(
-                this.adapter.getTemplateSourcePath()
-                        + "harmony/view/HarmonyFragment.java",
-                this.adapter.getSourcePath()
-                        + this.adapter.getApplicationMetadata().getProjectNameSpace()
-                        + "/harmony/view/HarmonyFragment.java",
+                templatePath + "harmony/view/HarmonyFragment.java",
+                filePath + "/harmony/view/HarmonyFragment.java",
                 false));
 
         // HarmonyListFragment
         result.add(new SourceFile(
-                this.adapter.getTemplateSourcePath()
-                        + "harmony/view/HarmonyListFragment.java",
-                this.adapter.getSourcePath()
-                        + this.adapter.getApplicationMetadata().getProjectNameSpace()
-                        + "/harmony/view/HarmonyListFragment.java",
+                templatePath + "harmony/view/HarmonyListFragment.java",
+                filePath + "/harmony/view/HarmonyListFragment.java",
                 false));
 
         // NotImplementedException
         result.add(new SourceFile(
-                this.adapter.getTemplateSourcePath()
-                        + "harmony/exception/NotImplementedException.java",
-                this.adapter.getSourcePath()
-                        + this.adapter.getApplicationMetadata().getProjectNameSpace()
-                        + "/harmony/exception/NotImplementedException.java",
+                templatePath + "harmony/exception/NotImplementedException.java",
+                filePath + "/harmony/exception/NotImplementedException.java",
                 false));
         
         result.add(new SourceFile(
-                this.adapter.getTemplateSourcePath()
-                        + "harmony/exception/package-info.java",
-                this.adapter.getSourcePath()
-                        + this.adapter.getApplicationMetadata().getProjectNameSpace()
-                        + "/harmony/exception/package-info.java",
+                templatePath + "harmony/exception/package-info.java",
+                filePath + "/harmony/exception/package-info.java",
                 false));
         
         result.add(new SourceFile(
-                this.adapter.getTemplateSourcePath()
-                        + "harmony/util/package-info.java",
-                this.adapter.getSourcePath()
-                        + this.adapter.getApplicationMetadata().getProjectNameSpace()
-                        + "/harmony/util/package-info.java",
+                templatePath + "harmony/util/package-info.java",
+                filePath + "/harmony/util/package-info.java",
                 false));
         
         result.add(new SourceFile(
-                this.adapter.getTemplateSourcePath()
-                        + "widget/package-info.java",
-                this.adapter.getSourcePath()
-                        + this.adapter.getApplicationMetadata().getProjectNameSpace()
-                        + "/harmony/widget/package-info.java",
+                templatePath + "widget/package-info.java",
+                filePath + "/harmony/widget/package-info.java",
                 false));
         
         result.add(new SourceFile(
-                this.adapter.getTemplateSourcePath() + "package-info.java",
-                this.adapter.getSourcePath()
-                        + this.adapter.getApplicationMetadata().getProjectNameSpace()
-                        + "/package-info.java",
+                templatePath + "package-info.java",
+                filePath + "/package-info.java",
+                false));
+        
+        templatePath = this.adapter.getTemplateUtilPath();
+        filePath = this.adapter.getUtilPath();
+        
+        result.add(new SourceFile(
+                templatePath + "DateUtils.java",
+                filePath + "DateUtils.java",
                 false));
         
         result.add(new SourceFile(
-                this.adapter.getTemplateUtilPath() + "DateUtils.java",
-                this.adapter.getUtilPath() + "DateUtils.java",
-                false));
-        
-        result.add(new SourceFile(
-                this.adapter.getTemplateUtilPath() + "DatabaseUtil.java",
-                this.adapter.getUtilPath() + "DatabaseUtil.java",
+                templatePath + "DatabaseUtil.java",
+                filePath + "DatabaseUtil.java",
                 false));
         
         result.addAll(this.getFilesFromFolder(
                 Harmony.getBundlePath() + "tact-core/"
                         + this.adapter.getTemplateProjectPath(),
                 this.adapter.getTemplateProjectPath(),
-                Harmony.getProjectPath()
-                        + this.adapter.getPlatform() + "/",
+                Harmony.getProjectPath() + this.adapter.getPlatform() + "/",
                 Harmony.getBundlePath() + "tact-core/"
                         + this.adapter.getTemplateProjectPath()));
         
@@ -219,7 +200,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 
                 String srcPath = filePath
                         + file.getAbsolutePath().replace(fullTemplatePath, "");
-    
+                
                 tplPath = tplPath.substring(0, tplPath.length()
                         - ".ftl".length());
                 srcPath = srcPath.substring(0, srcPath.length()
@@ -588,13 +569,13 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 templatePath + "activity_template_edit.xml",
                 String.format("%sactivity_%s_edit.xml",
                         filePath,
-                        entity.getName().toLowerCase(Locale.US))));
+                        entity.getName().toLowerCase(Locale.ENGLISH))));
         
         result.add(new SourceFile(
                 templatePath + "fragment_template_edit.xml",
                 String.format("%sfragment_%s_edit.xml",
                         filePath,
-                        entity.getName().toLowerCase(Locale.US))));
+                        entity.getName().toLowerCase(Locale.ENGLISH))));
         
         //TODO replace
         ManifestUpdater manifestUpdater = new ManifestUpdater(this.adapter);
@@ -608,7 +589,8 @@ public class AndroidProjectAdapter implements IAdapterProject {
     }
 
     @Override
-    public List<IUpdater> getCommonView(EntityMetadata entity, boolean isWritable) {
+    public List<IUpdater> getCommonView(EntityMetadata entity,
+            boolean isWritable) {
         List<IUpdater> result = new ArrayList<IUpdater>();
         
         String templatePath = this.adapter.getTemplateSourceControlerPath();
@@ -741,22 +723,22 @@ public class AndroidProjectAdapter implements IAdapterProject {
         result.add(new EditFile(
                 Harmony.getInstance().getContext().getCurrentBundleFolder()
                         + this.adapter.getTemplateRessourceValuesPath() 
-                        + "/attrs.xml",
-                this.adapter.getRessourceValuesPath() + "/attrs.xml",
+                        + "attrs.xml",
+                this.adapter.getRessourceValuesPath() + "attrs.xml",
                 new AttrsFile()));
         
         result.add(new EditFile(
                 Harmony.getInstance().getContext().getCurrentBundleFolder()
                         + this.adapter.getTemplateRessourceValuesPath() 
-                        + "/styles.xml",
-                this.adapter.getRessourceValuesPath() + "/styles.xml",
+                        + "styles.xml",
+                this.adapter.getRessourceValuesPath() + "styles.xml",
                 new StylesFile()));
 
         result.add(new EditFile(
                 Harmony.getInstance().getContext().getCurrentBundleFolder()
                         + this.adapter.getTemplateRessourceValuesPath() 
-                        + "/colors.xml",
-                this.adapter.getRessourceValuesPath() + "/colors.xml",
+                        + "colors.xml",
+                this.adapter.getRessourceValuesPath() + "colors.xml",
                 new ColorsFile()));
         
         result.add(new EditFile(
@@ -932,25 +914,25 @@ public class AndroidProjectAdapter implements IAdapterProject {
         filePath = this.adapter.getRessourcePath();
         
         result.add(new SourceFile(
-                templatePath + "/color/primary_text_color.xml",
-                filePath+ "/color/primary_text_color.xml"));
+                templatePath + "color/primary_text_color.xml",
+                filePath+ "color/primary_text_color.xml"));
 
         result.add(new SourceFile(
-                templatePath + "/color/secondary_text_color.xml",
-                filePath+ "/color/secondary_text_color.xml"));
+                templatePath + "color/secondary_text_color.xml",
+                filePath+ "color/secondary_text_color.xml"));
         
 
         result.add(new SourceFile(
-                templatePath + "/color-xlarge/primary_text_color.xml",
-                filePath+ "/color-xlarge/primary_text_color.xml"));
+                templatePath + "color-xlarge/primary_text_color.xml",
+                filePath+ "color-xlarge/primary_text_color.xml"));
 
         result.add(new SourceFile(
-                templatePath + "/color-xlarge/secondary_text_color.xml",
-                filePath+ "/color-xlarge/secondary_text_color.xml"));
+                templatePath + "color-xlarge/secondary_text_color.xml",
+                filePath+ "color-xlarge/secondary_text_color.xml"));
         
         result.add(new SourceFile(
-                templatePath + "/drawable/list_item_activated_background.xml",
-                filePath+ "/drawable/list_item_activated_background.xml"));
+                templatePath + "drawable/list_item_activated_background.xml",
+                filePath+ "drawable/list_item_activated_background.xml"));
         
         templatePath = String.format("%sharmony/view/",
                 this.adapter.getTemplateSourcePath());
@@ -1102,10 +1084,10 @@ public class AndroidProjectAdapter implements IAdapterProject {
 
         // Make contracts
         result.add(new SourceFile(
-                templatePath + "/contract/TemplateContract.java",
+                templatePath + "contract/TemplateContract.java",
                 filePath + "contract/" + entity.getName() + "Contract.java"));
         result.add(new SourceFile(
-                templatePath + "/contract/base/TemplateContractBase.java",
+                templatePath + "contract/base/TemplateContractBase.java",
                 filePath + "contract/base/" + entity.getName() + "ContractBase.java",
                 true));
 
@@ -1506,8 +1488,8 @@ public class AndroidProjectAdapter implements IAdapterProject {
             File[] files = menuFolder.listFiles(new FileFilter() {
 
                 @Override
-                public boolean accept(final File arg0) {
-                    return arg0.getName().endsWith("MenuWrapper.java");
+                public boolean accept(final File file) {
+                    return file.getName().endsWith("MenuWrapper.java");
                 }
             });
 
@@ -1523,5 +1505,23 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<IUpdater> result = new ArrayList<IUpdater>();
         
         return result;
+    }
+
+    @Override
+    public void updateEntity(EntityMetadata entity, Configuration cfg,
+            Map<String, Object> dataModel) {
+        final File entityFile = new File(String.format("%s%s.java",
+                this.adapter.getSourceEntityPath(),
+                entity.getName()));
+        
+        if (entityFile.exists()) {
+            new EntityImplementation(this.adapter, cfg, dataModel)
+                    .updateEntity(entityFile, entity);
+        }
+    }
+
+    @Override
+    public void updateEnum(EnumMetadata enumMeta, Configuration cfg) {
+        new EnumImplementation(adapter, cfg).updateEnum(enumMeta);
     }
 }
