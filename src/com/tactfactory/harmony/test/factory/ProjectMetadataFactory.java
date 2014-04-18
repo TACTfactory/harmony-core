@@ -1,5 +1,6 @@
 package com.tactfactory.harmony.test.factory;
 
+import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 
@@ -20,12 +21,14 @@ public class ProjectMetadataFactory {
 	protected static final String CLASS_COLUMN_RESULT = "ColumnResult";
 	protected static final String CLASS_DISCRIMINATOR_COLUMN = "DiscriminatorColumn";
 	protected static final String CLASS_GENERATED_VALUE = "GeneratedValue";
+	protected static final String CLASS_GENERATED_VALUE_STRATEGY = "Strategy";
 	protected static final String CLASS_ID = "Id";
 	protected static final String CLASS_CRUD = "Crud";
 	protected static final String CLASS_INHERITANCE_TYPE = "InheritanceType";
 	protected static final String CLASS_MANY_TO_ONE = "ManyToOne";
-	protected static final String CLASS_MANY_TO_MANY = "ManyToOne";
+	protected static final String CLASS_MANY_TO_MANY = "ManyToMany";
 	protected static final String CLASS_ONE_TO_MANY = "OneToMany";
+	protected static final String CLASS_ONE_TO_ONE = "OneToOne";
 	protected static final String CLASS_TABLE = "Table";
 	protected static final String CLASS_INHERITANCE_MODE = "InheritanceMode";
 	
@@ -91,5 +94,31 @@ public class ProjectMetadataFactory {
 			field.setColumnName(columnName);
 		}
 		owner.getFields().put(field.getName(), field);
+	}
+
+	
+	protected static EntityMetadata addEntity(String name, ApplicationMetadata app) {
+		EntityMetadata result = new EntityMetadata();
+		result.setName(name);
+		app.getEntities().put(result.getName(), result);
+		return result;
+	}
+
+	protected static void addImplements(EntityMetadata entity, String... implementTypes) {
+		for (String implementType : implementTypes) {
+			entity.getImplementTypes().add(implementType);
+		}
+	}
+	
+	protected static void addImports(EntityMetadata entity, String... importTypes) {
+		for (String importType : importTypes) {
+			entity.getImports().add(importType);
+		}
+	}
+	
+	protected static void setFieldAsId(EntityMetadata entity, String... fieldNames) {
+		for (String fieldName : fieldNames) {
+			entity.getIds().put(fieldName, entity.getFields().get(fieldName));
+		}
 	}
 }

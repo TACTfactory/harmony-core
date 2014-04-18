@@ -116,6 +116,7 @@ public class DemactFactory extends ProjectMetadataFactory {
 		user.getImports().add(CLASS_DISCRIMINATOR_COLUMN);
 		user.getImports().add(CLASS_GENERATED_VALUE);
 		user.getImports().add(CLASS_ID);
+		user.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
 		user.getImports().add(CLASS_INHERITANCE_TYPE);
 		user.getImports().add(CLASS_MANY_TO_ONE);
 		user.getImports().add(CLASS_MANY_TO_MANY);
@@ -141,6 +142,7 @@ public class DemactFactory extends ProjectMetadataFactory {
 		comment.getImports().add(CLASS_MANY_TO_ONE);
 		comment.getImports().add(CLASS_ONE_TO_MANY);
 		comment.getImports().add(CLASS_ID);
+		comment.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
 		comment.getImports().add(CLASS_TYPE);
 
 		category.getImports().add(CLASS_SERIALIZABLE);
@@ -149,6 +151,8 @@ public class DemactFactory extends ProjectMetadataFactory {
 		category.getImports().add(CLASS_COLUMN);
 		category.getImports().add(CLASS_ENTITY);
 		category.getImports().add(CLASS_ID);
+		category.getImports().add(CLASS_GENERATED_VALUE);
+		category.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
 		category.getImports().add(CLASS_ARRAYLIST);
 		category.getImports().add(CLASS_ONE_TO_MANY);
 
@@ -174,6 +178,7 @@ public class DemactFactory extends ProjectMetadataFactory {
 		post.getImports().add(CLASS_MANY_TO_MANY);
 		post.getImports().add(CLASS_ONE_TO_MANY);
 		post.getImports().add(CLASS_GENERATED_VALUE);
+		post.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
 
 		emptyEntity.getImports().add(CLASS_SERIALIZABLE);
 		emptyEntity.getImports().add(CLASS_PARCELABLE);
@@ -186,6 +191,7 @@ public class DemactFactory extends ProjectMetadataFactory {
 		simpleEntity.getImports().add(CLASS_ENTITY);
 		simpleEntity.getImports().add(CLASS_COLUMN);
 		simpleEntity.getImports().add(CLASS_GENERATED_VALUE);
+		simpleEntity.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
 		simpleEntity.getImports().add(CLASS_ID);
 		simpleEntity.getImports().add(CLASS_TYPE);
 
@@ -195,6 +201,8 @@ public class DemactFactory extends ProjectMetadataFactory {
 		userGroup.getImports().add(CLASS_ENTITY);
 		userGroup.getImports().add(CLASS_COLUMN);
 		userGroup.getImports().add(CLASS_ID);
+		userGroup.getImports().add(CLASS_GENERATED_VALUE);
+		userGroup.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
 
 		viewComponent.getImports().add(CLASS_SERIALIZABLE);
 		viewComponent.getImports().add(CLASS_PARCELABLE);
@@ -203,6 +211,7 @@ public class DemactFactory extends ProjectMetadataFactory {
 		viewComponent.getImports().add(CLASS_ENTITY);
 		viewComponent.getImports().add(CLASS_ID);
 		viewComponent.getImports().add(CLASS_GENERATED_VALUE);
+		viewComponent.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
 		viewComponent.getImports().add(CLASS_TYPE);
 		viewComponent.getImports().add(CLASS_DATETIME);
 
@@ -215,6 +224,7 @@ public class DemactFactory extends ProjectMetadataFactory {
 		hiddenEntity.getImports().add(CLASS_TYPE);
 		hiddenEntity.getImports().add(CLASS_COLUMN);
 		hiddenEntity.getImports().add(CLASS_GENERATED_VALUE);
+		hiddenEntity.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
 		hiddenEntity.getImports().add(CLASS_ID);
 		hiddenEntity.getImports().add(CLASS_MANY_TO_ONE);
 		hiddenEntity.getImports().add(CLASS_MANY_TO_MANY);
@@ -384,11 +394,15 @@ public class DemactFactory extends ProjectMetadataFactory {
 				postToCategory, "PostInternalId", false, false);
 		ProjectMetadataFactory.generateField(
 				postToCategory, "categories", false, false);
+		DemactFactory.setFieldAsId(postToCategory, "categories");
+		DemactFactory.setFieldAsId(postToCategory, "PostInternalId");
 		
 		ProjectMetadataFactory.generateField(
 				userToUser, "UserInternalId", false, false);
 		ProjectMetadataFactory.generateField(
 				userToUser, "friends", false, false);
+		DemactFactory.setFieldAsId(userToUser, "friends");
+		DemactFactory.setFieldAsId(userToUser, "UserInternalId");
 		
 		
 		return demact;

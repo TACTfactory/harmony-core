@@ -45,9 +45,9 @@ public abstract class ${curr.name}ContractBase {
 		/** Identifier for inheritance. */
 		public static final String DISCRIMINATOR_IDENTIFIER = "${curr.inheritance.discriminatorIdentifier}";
 		</#if>
-		<#list curr_fields as field><#if !field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany")>${ContractUtils.getFieldsDeclarations(field)}</#if></#list>
+		<#list curr_fields as field><#if !field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany")>${ContractUtils.getFieldsDeclarations(field, curr)}</#if></#list>
 		<#if (singleTabInheritance && isTopMostSuperClass)>
-			/** userGroup. */
+			/** Discriminator column. */
 			public static final String ${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)} = 
 					"${curr.inheritance.discriminatorColumn.columnName}";
 			/** Alias. */

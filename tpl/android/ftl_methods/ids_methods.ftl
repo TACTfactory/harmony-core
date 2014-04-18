@@ -54,10 +54,10 @@
 	<#return result />
 </#function>
 
-<#function getAllIdsColsFromArray ids>
+<#function getAllIdsColsFromArray ids aliased=false>
 	<#local result = [] />
 	<#list ids as id>
-		<#local result = result + ContractUtils.getFieldsNames(id) />
+		<#local result = result + ContractUtils.getFieldsNames(id, aliased) />
 	</#list>
 	<#return result />
 </#function>

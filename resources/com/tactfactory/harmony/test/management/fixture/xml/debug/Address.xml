@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<Address id="Address1">
+		<street>Madison Street</street>
+		<city>New-York</city>
+		<country>USA</country>
+		<streetNumber>12</streetNumber>
+		<zipcode>12345</zipcode>
+		<inhabitants>
+			<Person>Billou</Person>
+		</inhabitants>
+	</Address>
+	<Address id="Address2">
+		<street>Fleet Street</street>
+		<city>New-York</city>
+		<country>USA</country>
+		<streetNumber>25</streetNumber>
+		<zipcode>12346</zipcode>
+		<inhabitants>
+			<Person>Worker1</Person>
+		</inhabitants>
+	</Address>
+	<Address id="Address3">
+		<street>Baker Street</street>
+		<city>London</city>
+		<country>UK</country>
+		<streetNumber>201b</streetNumber>
+		<zipcode>12347</zipcode>
+		<inhabitants>
+			<Person>Worker2</Person>
+			<Person>Worker3</Person>
+		</inhabitants>
+	</Address>
+</list>

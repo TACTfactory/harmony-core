@@ -26,8 +26,8 @@
 					<#assign result = result + "${t}		item.get${field.name?cap_first}().get${id.name?cap_first}());\n"/>
 				</#list>
 				<#if (field.nullable)>
+					<#assign result = result + "${t}} else {\n"/>
 					<#list targetEntity.ids as id>
-						<#assign result = result + "${t}} else {\n"/>
 						<#assign result = result + "${t}	result.put(${fieldNames[id_index]}, (String) null);\n"/>
 					</#list>
 				</#if>
@@ -55,11 +55,11 @@
 	<#assign fieldNames = ContractUtils.getFieldsNames(field) />
 	<#if (!field.internal && !(field.relation?? && (field.relation.type=="ManyToMany" || field.relation.type=="OneToMany")))>
 		<#assign localTab="" />
-		<#assign result = result + "${tab}index = cursor.getColumnIndexOrThrow(${fieldNames[0]});\n"/>
-		<#if (field.nullable)>
-			<#assign result = result + "${tab}if (!cursor.isNull(index)) {\n"/><#assign localTab="\t" />
-		</#if>
 		<#if (!field.relation??)>
+			<#assign result = result + "${tab}index = cursor.getColumnIndexOrThrow(${fieldNames[0]});\n"/>
+			<#if (field.nullable)>
+				<#assign result = result + "${tab}if (!cursor.isNull(index)) {\n"/><#assign localTab="\t" />
+			</#if>
 			<#if (field.type?lower_case == "datetime") >
 				<#if ((field.harmony_type == "date") || (field.harmony_type == "datetime") || (field.harmony_type == "time"))>
 
@@ -121,17 +121,24 @@
 
 				</#if>
 			</#if>
+			<#if (field.nullable?? && field.nullable)>
+				<#assign result = result + "${tab}}\n"/>
+			</#if>
 		<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
-			<#assign result = result + "${tab}${localTab}if (result.get${field.name?cap_first}() == null) {\n" />
+			<#assign result = result + "${tab}if (result.get${field.name?cap_first}() == null) {\n" />
 			<#assign result = result + "${tab}${localTab}	final ${field.type} ${field.name} = new ${field.type}();\n"/>
 				<#list entities[field.relation.targetEntity].ids as id>
-			<#assign result = result + "${tab}${localTab}	${field.name}.set${id.name?cap_first}(${AdapterUtils.getCursorGet(id)}index));\n"/>
+					<#assign result = result + "${tab}${localTab}	index = cursor.getColumnIndexOrThrow(${fieldNames[id_index]});\n"/>
+					<#if (field.nullable)>
+						<#assign result = result + "${tab}${localTab}	if (!cursor.isNull(index)) {\n"/><#assign localTab="\t" />
+					</#if>
+					<#assign result = result + "${tab}${localTab}	${field.name}.set${id.name?cap_first}(${AdapterUtils.getCursorGet(id)}index));\n"/>
+					<#if (field.nullable?? && field.nullable)>
+						<#assign result = result + "${tab}${localTab}	}\n"/>
+					</#if>
 				</#list>
 			<#assign result = result + "${tab}${localTab}	result.set${field.name?cap_first}(${field.name});\n"/>
-			<#assign result = result + "${tab}${localTab}}\n" />
-		</#if>
-		<#if (field.nullable?? && field.nullable)>
-			<#assign result = result + "${tab}}\n"/>
+			<#assign result = result + "${tab}}\n" />
 		</#if>
 	</#if>
 	<#if (result?length > 0)><#assign result = result + "\n" /></#if>

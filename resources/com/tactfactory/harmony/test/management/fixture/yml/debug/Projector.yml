@@ -1,0 +1,13 @@
+Projector:
+   Projector1:
+      lensSize: 25
+      lampType: LCD_BULB
+      id: 2001
+      price: 25000
+      purchaseDate: 2013-08-04T12:00:00.000+00:00
+   Projector2:
+      lensSize: 25
+      lampType: LCD_LAMP
+      id: 2002
+      price: 50000
+      purchaseDate: 2013-08-04T12:00:05.000+00:00

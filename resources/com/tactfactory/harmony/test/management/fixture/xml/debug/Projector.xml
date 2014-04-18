@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<Projector id="Projector1">
+		<lensSize>25</lensSize>
+		<lampType>LCD_BULB</lampType>
+		<id>2001</id>
+		<price>25000</price>
+		<purchaseDate>2013-08-04T12:00:00.000+00:00</purchaseDate>
+	</Projector>
+	<Projector id="Projector2">
+		<lensSize>25</lensSize>
+		<lampType>LCD_LAMP</lampType>
+		<id>2002</id>
+		<price>50000</price>
+		<purchaseDate>2013-08-04T12:00:05.000+00:00</purchaseDate>
+	</Projector>
+</list>

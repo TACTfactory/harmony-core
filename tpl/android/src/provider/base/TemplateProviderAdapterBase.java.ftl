@@ -200,7 +200,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				</#list>
 				<#if inherited && joinedInheritance>
 					<#assign superclassIds = [] />
-					<#list curr_ids as id><#if (id.owner.name != curr.name)><#assign superclassIds = superclassIds + [id] /></#if></#list>
+					<#list curr_ids as id><#if (id.owner != curr.name)><#assign superclassIds = superclassIds + [id] /></#if></#list>
 				Uri motherUri = Uri.withAppendedPath(
 						${curr.inheritance.superclass.name?cap_first}ProviderAdapter.${curr.inheritance.superclass.name?upper_case}_URI, <#list IdsUtils.getAllIdsNamesFromArray(superclassIds) as id>${id}<#if id_has_next> + "/" + </#if></#list>);
 				result = this.ctx.getContentResolver().delete(motherUri,
@@ -300,7 +300,12 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		int matchedUri = ${project_name?cap_first}ProviderBase
 				.getUriMatcher().match(uri);
 		<#if inherited && joinedInheritance>ContentValues ${curr.name?uncap_first}Values =
-			DatabaseUtil.extractContentValues(values, ${ContractUtils.getContractCols(curr)});</#if>
+			DatabaseUtil.extractContentValues(values, ${ContractUtils.getContractCols(curr)});
+		<#list IdsUtils.getAllIdsColsFromArray(curr_ids) as id>
+		values.put(${id},
+				${curr.name?uncap_first}Values.getAsString(
+						${id}));
+		</#list></#if>
 		Uri result = null;
 		int id = 0;
 		switch (matchedUri) {
@@ -328,7 +333,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				if (id > 0) {
 					result = Uri.withAppendedPath(
 							${curr.name?upper_case}_URI,
-							<#list curr_ids as id><#if id.strategy == "IDENTITY">String.valueOf(id)<#else><#if id.relation??><#list IdsUtils.getAllIdsColsFromArray([id]) as refId>values.getAsString(${refId})</#list><#else>values.getAsString(${ContractUtils.getContractCol(id)})</#if></#if><#if id_has_next>
+							<#list curr_ids as id><#if id.strategy == "IDENTITY">String.valueOf(id)<#else><#if id.relation??><#list IdsUtils.getAllIdsColsFromArray([id]) as refId>values.getAsString(${refId})<#if refId_has_next>
+							+ "/"
+							+ </#if></#list><#else>values.getAsString(${ContractUtils.getContractCol(id)})</#if></#if><#if id_has_next>
 							+ "/"
 							+ </#if></#list>);
 				}
@@ -456,7 +463,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 			String[] selectionArgs) {
 		<#if (curr.options.sync??)>values.put(${ContractUtils.getContractClass(curr)}.COL_SYNC_UDATE,
 					new DateTime().toString(ISODateTimeFormat.dateTime()));</#if>
-		<#if inherited && joinedInheritance>ContentValues ${curr.name?uncap_first}Values = DatabaseUtil.extractContentValues(values, ${ContractUtils.getContractCols()});</#if>
+		<#if inherited && joinedInheritance>ContentValues ${curr.name?uncap_first}Values = DatabaseUtil.extractContentValues(values, ${ContractUtils.getContractCols(curr)});</#if>
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher()
 				.match(uri);
 		int result = -1;
@@ -474,7 +481,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				</#if>
 				<#if inherited && joinedInheritance>
 				Uri parentUri = Uri.withAppendedPath(${curr.inheritance.superclass.name?cap_first}ProviderAdapter.${curr.inheritance.superclass.name?upper_case}_URI,
-						String.valueOf(id));
+						<#list IdsUtils.getAllIdsColsFromArray(curr_ids) as id>uri.getPathSegments().get(${id_index + 1})<#if id_has_next> + "/" + </#if></#list>);
 				result = this.ctx.getContentResolver().update(
 						parentUri,
 						values,
@@ -590,7 +597,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		ArrayValue inArray = new ArrayValue();
 		cursor.moveToFirst();
 		do {
-			inArray.addValue(<#list IdsUtils.getAllColNamesFromArray(curr_ids) as id>cursor.getString(cursor.getColumnIndex(${id}))<#if id_has_next>
+			inArray.addValue(<#list IdsUtils.getAllIdsColsFromArray(curr_ids) as id>cursor.getString(cursor.getColumnIndex(${id}))<#if id_has_next>
 					+ "::dirtyHack::" +
 					</#if></#list>);
 		} while (cursor.moveToNext());
@@ -619,7 +626,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 */
 	private Cursor queryById(<#list IdsUtils.getAllIdsNamesFromArray(curr_ids) as id>String ${id}<#if id_has_next>, </#if></#list>) {
 		Cursor result = null;
-		String selection =<#list IdsUtils.getAllIdsColsFromArray(curr_ids) as id> ${id}
+		String selection =<#list IdsUtils.getAllIdsColsFromArray(curr_ids, true) as id> ${id}
 						+ " = ?"<#if id_has_next>
 						+ " AND "
 						+</#if></#list>;

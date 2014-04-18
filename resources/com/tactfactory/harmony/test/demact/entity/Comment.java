@@ -57,7 +57,7 @@ public class Comment implements Serializable { //TODO extends EntityBase {
 	private boolean validate = false;
 
 	/** Categories of this comment. */
-	@OneToMany(mappedBy="comment")
+	@OneToMany
 	private ArrayList<CategoryToComment> categories;
 
 	/**

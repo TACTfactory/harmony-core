@@ -8,7 +8,7 @@
 </#function>
 
 <#function hasRelationOrIds entity withInheritedFields = true>
-	<#if (entity.ids?size>1)><#return true /></#if>
+	<#if (withInheritedFields || !(entity.inheritance?? && entity.inheritance.superclass?? && entities[entity.inheritance.superclass.name]??)) && (entity.ids?size>1)><#return true /></#if>
 	<#if withInheritedFields>
 		<#assign relations = ViewUtils.getAllRelations(entity) />
 	<#else>

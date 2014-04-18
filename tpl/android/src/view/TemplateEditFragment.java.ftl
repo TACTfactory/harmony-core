@@ -66,7 +66,11 @@ import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
 <#if (InheritanceUtils.isExtended(curr))>
 import ${project_namespace}.provider.contract.${curr.inheritance.superclass.name?cap_first}Contract;
 </#if>
-<#list curr.relations as relation>
+<#assign allRelations = curr.relations />
+<#if (singleTabInheritance && curr.inheritance.superclass??) && entities[curr.inheritance.superclass.name]??>
+	<#assign allRelations = allRelations + entities[curr.inheritance.superclass.name].relations />
+</#if>
+<#list allRelations as relation>
 import ${project_namespace}.provider.contract.${relation.relation.targetEntity?cap_first}Contract;
 </#list>
 

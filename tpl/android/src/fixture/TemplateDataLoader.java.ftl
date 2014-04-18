@@ -189,15 +189,15 @@ public final class ${curr.name?cap_first}DataLoader
 	 * @param manager The DataManager
 	 */
 	@Override
-	public void load(final DataManager manager) {
+	public void load(final DataManager dataManager) {
 		for (final ${curr.name?cap_first} ${curr.name?uncap_first} : this.items.values()) {
-			int id = manager.persist(${curr.name?uncap_first});
+			int id = dataManager.persist(${curr.name?uncap_first});
 			<#list curr_ids as id><#if id.strategy == "IDENTITY">
 			${curr.name?uncap_first}.set${id.name?cap_first}(id);
 			</#if></#list>
 
 		}
-		manager.flush();
+		dataManager.flush();
 	}
 
 	/**

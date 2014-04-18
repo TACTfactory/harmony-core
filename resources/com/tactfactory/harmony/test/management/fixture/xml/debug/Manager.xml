@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<Manager id="Billou">
+		<salary>10000</salary>
+		<firstname>Bill</firstname>
+		<lastname>Gates</lastname>
+		<name>Bill Gates</name>
+		<phoneNumber>0101010101</phoneNumber>
+		<company>Microsoft</company>
+		<addresses><address>Address1</address></addresses>
+	</Manager>
+</list>
