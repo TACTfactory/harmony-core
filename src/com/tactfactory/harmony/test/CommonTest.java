@@ -88,7 +88,7 @@ public abstract class CommonTest {
 		// Clean folder
 		CommonTest.cleanAndroidFolder();
 
-		ApplicationMetadata.reinit();
+		//ApplicationMetadata.reinit();
 		
 		// Project test config
 		ApplicationMetadata.INSTANCE.setName(

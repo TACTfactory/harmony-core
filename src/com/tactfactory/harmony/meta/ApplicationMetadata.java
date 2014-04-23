@@ -28,7 +28,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 	private static final String PACKAGE_DELIMITER = "\\.";
 
 	/** Singleton. */
-	public static ApplicationMetadata INSTANCE =
+	public static final ApplicationMetadata INSTANCE =
 			new ApplicationMetadata();
 
 	/** Android SDK Path. */
@@ -313,12 +313,5 @@ public final class ApplicationMetadata extends BaseMetadata {
 	 */
 	public String getAndroidTarget() {
 		return this.androidTarget;
-	}
-	
-	/**
-	 * Reinit the Application Metadata instance.
-	 */
-	public static void reinit() {
-		ApplicationMetadata.INSTANCE = new ApplicationMetadata();
 	}
 }
