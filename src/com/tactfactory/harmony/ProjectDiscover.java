@@ -112,28 +112,6 @@ public final class ProjectDiscover {
 		return androidSdkVersion;
 	}
 
-	/**
-	 * Extract Android SDK Path from project.properties file.
-	 *
-	 * @param fileProp project.properties File
-	 * @return Android SDK Path
-	 */
-	public static String getTargetFromPropertiesFile(final File fileProp) {
-		String result = null;
-		
-		if (fileProp.exists()) {
-			final List<String> lines =
-					TactFileUtils.fileToStringArray(fileProp);
-
-			for (int i = 0; i < lines.size(); i++) {
-				if (lines.get(i).startsWith("target=")) {
-					result = lines.get(i).replace("target=", "").trim();
-					break;
-				}
-			}
-		}
-		return result;
-	}
 
 	/**
 	 * Extract Android SDK Path from .properties file.

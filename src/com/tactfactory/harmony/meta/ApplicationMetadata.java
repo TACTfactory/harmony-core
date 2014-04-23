@@ -13,7 +13,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.TreeMap;
 
-import com.google.common.base.Strings;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.template.TagConstant;
@@ -33,9 +32,6 @@ public final class ApplicationMetadata extends BaseMetadata {
 
 	/** Android SDK Path. */
 	private static String androidSdkPath;
-	
-	/** Android Target. */
-	private String androidTarget;
 
 	/** Project NameSpace (com/tactfactory/harmony/test/demact). */
 	private String projectNameSpace;
@@ -276,11 +272,6 @@ public final class ApplicationMetadata extends BaseMetadata {
 		ret.put(TagConstant.HEADER, this.headerTemplate);
 		ret.put(TagConstant.UTILITY_PATH, adapt.getTemplateUtilityPath());
 		ret.put(TagConstant.HARMONY_VERSION, Harmony.VERSION);
-		if (Strings.isNullOrEmpty(this.androidTarget)) {
-			ret.put(TagConstant.TARGET_SDK, adapt.getDefaultTarget());
-		} else {
-			ret.put(TagConstant.TARGET_SDK, this.androidTarget);
-		}
 
 		return ret;
 	}
@@ -298,20 +289,5 @@ public final class ApplicationMetadata extends BaseMetadata {
 	 */
 	public void setHeaderTemplate(final String headerTemplate) {
 		this.headerTemplate = headerTemplate;
-	}
-	
-	/**
-	 * Sets the android target.
-	 * @param target The target to set
-	 */
-	public void setAndroidTarget(final String target) {
-		this.androidTarget = target;
-	}
-	
-	/**
-	 * @return The android target
-	 */
-	public String getAndroidTarget() {
-		return this.androidTarget;
 	}
 }

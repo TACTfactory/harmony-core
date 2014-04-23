@@ -27,7 +27,6 @@ import com.google.common.base.Strings;
 import com.tactfactory.harmony.command.Command;
 import com.tactfactory.harmony.command.GeneralCommand;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.plateforme.AndroidAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
@@ -196,31 +195,16 @@ public final class Harmony {
 			}
 
 			// get SDK from local.properties
-			final String localProp = String.format("%s/%s",
+			final String projectProp = String.format("%s/%s",
 					this.context.getProjectAndroidPath(),
 					"local.properties");
-			final File localPropFile = new File(localProp);
-			
+			final File projectPropFile = new File(projectProp);
 
-			// and target from project.properties
-			final File projPropFile = new File(String.format("%s/%s",
-					this.context.getProjectAndroidPath(),
-					"project.properties"));
-
-
-			if (localPropFile.exists()) {
+			if (projectPropFile.exists()) {
 				ApplicationMetadata.setAndroidSdkPath(
 						ProjectDiscover.getSdkDirFromPropertiesFile(
-								localProp));
+								projectProp));
 			}
-
-			String target = 
-					ProjectDiscover.getTargetFromPropertiesFile(
-							projPropFile);
-			if (Strings.isNullOrEmpty(target)) {
-				target = AndroidAdapter.DEFAULT_TARGET;
-			}
-			ApplicationMetadata.INSTANCE.setAndroidTarget(target);
 
 		} else {
 			final String[] projectNameSpaceData =

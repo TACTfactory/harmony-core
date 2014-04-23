@@ -1421,11 +1421,4 @@ public abstract class BaseAdapter {
 	public abstract SourceFileManipulator getFileManipulator(
 			final File file,
 			final Configuration config);
-	
-	/**
-	 * Returns the default build target for the platform.
-	 * 
-	 * @return The default build target
-	 */
-	public abstract String getDefaultTarget();
 }

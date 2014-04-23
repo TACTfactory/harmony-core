@@ -52,9 +52,6 @@ public class AndroidSDKManager
 	
 	/** Constant for MacOS/X. */
 	public static final String MAC_OSX = "macosx";
-	
-	/** List of available SDK versions. */
-	private static AndroidTargetList availableSDKVersions;
 
 	/**
 	 * Install the Android SDK for the given OS to the given path.
@@ -306,99 +303,5 @@ public class AndroidSDKManager
 		} else {
 			ConsoleUtils.displayWarning("SDK not found.");
 		}
-	}
-	
-	/**
-	 * Init the various sdk targets available.
-	 * 
-	 * @param sdkPath The android SDK path
-	 */
-	private static void initAvailableSDKTargets(String sdkPath) {
-		try {
-			final File f = new File(sdkPath + "tools/android");
-			// TODO : Set executable permissions for all executable files
-			f.setExecutable(true); 
-			
-			
-			final Runtime runtime = Runtime.getRuntime();
-			final Process process = 
-					runtime.exec(sdkPath + "tools/android list target");
-			final BufferedReader reader = new BufferedReader(
-					new InputStreamReader(process.getInputStream()));
-			process.getErrorStream().close();
-			process.getOutputStream().close();
-			
-			final StringBuilder builder = new StringBuilder();
-			String line;
-			while ((line = reader.readLine()) != null) {
-				builder.append(line);
-				builder.append("\n");
-			}
-			reader.close();
-			
-			final String inputString = builder.toString();
-			
-			AndroidSDKManager.availableSDKVersions = new AndroidTargetList();
-			AndroidSDKManager.availableSDKVersions.parseString(inputString);
-		} catch (IOException e) {
-			ConsoleUtils.displayError(e);
-		}
-	}
-	
-	/**
-	 * Tells if the given target is available.
-	 * 
-	 * @param sdkPath The android SDK path
-	 * @param target The target to test.
-	 * 
-	 * @return true if target available
-	 */
-	public static boolean isTargetAvailable(String sdkPath, String target) {
-		if (AndroidSDKManager.availableSDKVersions == null) {
-			AndroidSDKManager.initAvailableSDKTargets(sdkPath);
-		}
-		boolean result = false;
-//		for (String availableTarget : AndroidSDKManager.availableSDKVersions) {
-//			if (availableTarget.equals(target)) {
-//				result = true;
-//			}
-//		}
-		if (AndroidSDKManager.availableSDKVersions.getIdByName(target) != null) {
-			result = true;
-		}
-		
-		return result;
-	}
-
-	/**
-	 * Send back the latest SDK target available.
-	 * 
-	 * @param sdkPath The android SDK path
-	 * 
-	 * @return The latest SDK target available
-	 */
-	public static String getLatestAvailableTarget(String sdkPath) {
-		return AndroidSDKManager.getLatestAvailableTarget(sdkPath, null);
-	}
-	
-	/**
-	 * Send back the latest SDK target available.
-	 * 
-	 * @param sdkPath The android SDK path
-	 * 
-	 * @return The latest SDK target available
-	 */
-	public static String getLatestAvailableTarget(
-			String sdkPath,
-			String vendor) {
-		
-		if (AndroidSDKManager.availableSDKVersions == null) {
-			AndroidSDKManager.initAvailableSDKTargets(sdkPath);
-		}
-		
-		String result = AndroidSDKManager.availableSDKVersions
-							.getLatestTarget(vendor).getAlternativeId();
-		
-		return result;
 	}
 }

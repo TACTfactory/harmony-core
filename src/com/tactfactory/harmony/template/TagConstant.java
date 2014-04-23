@@ -38,8 +38,6 @@ public abstract class TagConstant {
 	public static final String FIXTURE_NAMESPACE = "fixture_namespace";
 	/** Constant for android sdk dir. */
 	public static final String ANDROID_SDK_DIR = "sdk_dir";
-	/** Constant for target sdk. */
-	public static final String TARGET_SDK = "project_target";
 
 	// Ant markers
 	/** Constant for ant sdk dir. */

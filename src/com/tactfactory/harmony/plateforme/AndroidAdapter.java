@@ -32,12 +32,6 @@ import freemarker.template.Configuration;
 
 /** Google Android Adapter of project structure. */
 public final class AndroidAdapter extends BaseAdapter {
-	/** Default build target for generated project. */
-	public static final String DEFAULT_TARGET = "android-17";
-	/** Target not found. */
-	private static final String ERROR_TARGET_NOT_FOUND = 
-			"Android target '%s' has not been found. "
-			+ "Using target '%s' instead.";
 
 	/* Constants. */
 	/** Constant for java extension. */
@@ -190,7 +184,6 @@ public final class AndroidAdapter extends BaseAdapter {
 				command.add(libName);
 				
 				if (target != null) {
-					target = this.getExistingTarget(target);
 					command.add("--target");
 					command.add(target);
 				}
@@ -204,9 +197,6 @@ public final class AndroidAdapter extends BaseAdapter {
 				}
 			
 				if (referencePath != null) {
-					String projTarget = this.getExistingTarget(
-							ApplicationMetadata.INSTANCE.getAndroidTarget());
-					
 					// Update android project to reference the new downloaded library
 					String projectPath = Harmony.getProjectPath() + this.getPlatform();
 					command.add(new File(sdkTools).getAbsolutePath());
@@ -214,8 +204,6 @@ public final class AndroidAdapter extends BaseAdapter {
 					command.add("project");
 					command.add("--path");
 					command.add(projectPath);
-					command.add("--target");
-					command.add(projTarget);
 					command.add("--library");
 					command.add(TactFileUtils.absoluteToRelativePath(
 							referencePath, projectPath));
@@ -228,24 +216,6 @@ public final class AndroidAdapter extends BaseAdapter {
 				ConsoleUtils.displayError(e);
 			}
 		}
-	}
-	
-	private String getExistingTarget(String target) {
-		if (!AndroidSDKManager.isTargetAvailable(
-				ApplicationMetadata.getAndroidSdkPath(), target)) {
-			String newTarget = 
-					AndroidSDKManager.getLatestAvailableTarget(
-							ApplicationMetadata.getAndroidSdkPath());
-			
-			ConsoleUtils.displayWarning(String.format(
-					ERROR_TARGET_NOT_FOUND,
-					target,
-					newTarget));
-			target = newTarget;
-			
-		}
-		
-		return target;
 	}
 
 	@Override
@@ -392,10 +362,5 @@ public final class AndroidAdapter extends BaseAdapter {
 			final File file,
 			final Configuration config) {
 		return new JavaFileManipulator(file, this, config);
-	}
-	
-	@Override
-	public String getDefaultTarget() {
-		return DEFAULT_TARGET;
 	}
 }
