@@ -146,6 +146,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		this.${field.name}Widget =
 			(MultiEntityWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_button);
 		this.${field.name}Widget.setAdapter(this.${field.name}Adapter);
+		this.${field.name}Widget.setTitle(R.string.${field.owner?lower_case}_${field.name?lower_case}_dialog_title);
 					<#else>
 		this.${field.name}Adapter = 
 				new SingleEntityWidget.EntityAdapter<${field.relation.targetEntity}>() {
@@ -157,6 +158,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 		this.${field.name}Widget =
 			(SingleEntityWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case}_button);
 		this.${field.name}Widget.setAdapter(this.${field.name}Adapter);
+		this.${field.name}Widget.setTitle(R.string.${field.owner?lower_case}_${field.name?lower_case}_dialog_title);
 					</#if>
 				</#if>
 			</#if>

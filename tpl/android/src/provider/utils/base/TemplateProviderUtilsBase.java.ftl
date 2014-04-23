@@ -22,6 +22,7 @@ import android.net.Uri;
 import android.os.RemoteException;
 import android.util.Log;
 
+import ${project_namespace}.provider.utils.ProviderUtils;
 ${ImportUtils.importRelatedCriterias(curr)}
 ${ImportUtils.importManyToManyTargetSQLiteAdapters(curr)}
 ${ImportUtils.importRelatedEntities(curr, true)}
@@ -48,7 +49,7 @@ import ${project_namespace}.provider.contract.${relation.relation.targetEntity?c
  * ex : inserting an entity and its relations alltogether, etc.
  */
 public abstract class ${curr.name?cap_first}ProviderUtilsBase
-			extends ProviderUtilsBase<${curr.name?cap_first}> {
+			extends ProviderUtils<${curr.name?cap_first}> {
 	/**
 	 * Tag for debug messages.
 	 */
@@ -81,23 +82,28 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		<#list relations as relation>
 			<#if (relation.relation.type == "OneToMany") >
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
-			String ${relation.name}Selection = ${entities[relation.relation.targetEntity].ids[0].owner}Contract.${entities[relation.relation.targetEntity].ids[0].owner}.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)} + " IN (";
-			String[] ${relation.name}SelectionArgs = new String[item.get${relation.name?cap_first}().size()];
+			${relation.relation.targetEntity}Criterias crit =
+					new ${relation.relation.targetEntity}Criterias(GroupType.AND);
+			Criteria inCrit = new Criteria();
+			crit.add(inCrit);
+			
+			inCrit.setKey(${entities[relation.relation.targetEntity].ids[0].owner}Contract.${entities[relation.relation.targetEntity].ids[0].owner}.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
+			inCrit.setType(Type.IN);
+			ArrayValue inValue = new ArrayValue();
+			inCrit.addValue(inValue);
+
 			for (int i = 0; i < item.get${relation.name?cap_first}().size(); i++) {
-				${relation.name}SelectionArgs[i] = String.valueOf(item.get${relation.name?cap_first}().get(i).get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
-				${relation.name}Selection += "? ";
-				if (i != item.get${relation.name?cap_first}().size() - 1) {
-					 ${relation.name}Selection += ", ";
-				}
+				inValue.addValue(String.valueOf(item.get${relation.name?cap_first}().get(i).get${entities[relation.relation.targetEntity].ids[0].name?cap_first}()));
 			}
-			${relation.name}Selection += ")";
 
 			operations.add(ContentProviderOperation.newUpdate(${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
 					.withValueBackReference(
 							${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}
 									.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
 							0)
-					.withSelection(${relation.name}Selection, ${relation.name}SelectionArgs)
+					.withSelection(
+							crit.toSQLiteSelection(),
+							crit.toSQLiteSelectionArgs())
 					.build());
 		}
 			<#elseif (relation.relation.type == "ManyToMany") >
