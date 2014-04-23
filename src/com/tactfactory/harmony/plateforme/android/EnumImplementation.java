@@ -10,6 +10,7 @@ import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.meta.MethodMetadata;
 import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.TagConstant;
+import com.tactfactory.harmony.updater.IUpdaterFile;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
@@ -17,16 +18,20 @@ import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
-class EnumImplementation {
+//TODO remove
+class EnumImplementation implements IUpdaterFile {
     private final IAdapter adapter;
     private final Configuration configuration;
+    private final EnumMetadata enumMeta;
     
-    protected EnumImplementation(IAdapter adapter, Configuration cfg) {
+    protected EnumImplementation(IAdapter adapter, Configuration cfg,
+            EnumMetadata enumMeta) {
         this.adapter = adapter;
         this.configuration = cfg;
+        this.enumMeta = enumMeta;
     }
     
-    protected void updateEnum(EnumMetadata enumMeta) {
+    protected void updateEnum() {
         File entityFile = new File(String.format("%s/%s.java",
                 this.adapter.getSourceEntityPath(),
                 this.getOldestMother(enumMeta).getName()));
@@ -244,5 +249,10 @@ class EnumImplementation {
         }
 
         return result;
+    }
+
+    @Override
+    public void execute() {
+        this.updateEnum();
     }
 }

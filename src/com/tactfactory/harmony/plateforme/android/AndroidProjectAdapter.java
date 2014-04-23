@@ -9,10 +9,11 @@ import java.util.Map;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.Harmony;
+import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.plateforme.IAdapterProject;
-import com.tactfactory.harmony.template.ProviderGenerator;
+import com.tactfactory.harmony.template.CommonGenerator.ViewType;
 import com.tactfactory.harmony.template.androidxml.AttrsFile;
 import com.tactfactory.harmony.template.androidxml.ColorsFile;
 import com.tactfactory.harmony.template.androidxml.DimensFile;
@@ -21,7 +22,6 @@ import com.tactfactory.harmony.template.androidxml.StylesFile;
 import com.tactfactory.harmony.updater.IConfigFileUtil;
 import com.tactfactory.harmony.updater.ITranslateFileUtil;
 import com.tactfactory.harmony.updater.IUpdater;
-import com.tactfactory.harmony.updater.IUpdaterProject;
 import com.tactfactory.harmony.updater.impl.EditFile;
 import com.tactfactory.harmony.updater.impl.CopyFile;
 import com.tactfactory.harmony.updater.impl.CreateFolder;
@@ -35,7 +35,7 @@ import freemarker.template.Configuration;
 public class AndroidProjectAdapter implements IAdapterProject {
     
     /** String prefix. */
-    private static final String STRING_PREFIX = "@string/";
+    public static final String STRING_PREFIX = "@string/";
     
     private final AndroidAdapter adapter;
     
@@ -471,12 +471,6 @@ public class AndroidProjectAdapter implements IAdapterProject {
     }
 
     @Override
-    public IUpdaterProject getUpdaterProject() {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public List<IUpdater> getActivityLibraries() {
         List<IUpdater> result = new ArrayList<IUpdater>();
         
@@ -528,13 +522,9 @@ public class AndroidProjectAdapter implements IAdapterProject {
                         filePath,
                         entity.getName().toLowerCase(Locale.US))));
         
-        //TODO replace
-        ManifestUpdater manifestUpdater = new ManifestUpdater(this.adapter);
-        manifestUpdater.addActivity(
-                this.adapter.getApplicationMetadata().getProjectNameSpace(),
-                "CreateActivity",
-                entity.getName());
-        manifestUpdater.save();
+        result.add(new ManifestActivity(
+                this.adapter, entity.getName(),
+                entity.getName().toLowerCase(), "CreateActivity"));
         
         return result;
     }
@@ -577,13 +567,9 @@ public class AndroidProjectAdapter implements IAdapterProject {
                         filePath,
                         entity.getName().toLowerCase(Locale.ENGLISH))));
         
-        //TODO replace
-        ManifestUpdater manifestUpdater = new ManifestUpdater(this.adapter);
-        manifestUpdater.addActivity(
-                this.adapter.getApplicationMetadata().getProjectNameSpace(),
-                "EditActivity",
-                entity.getName());
-        manifestUpdater.save();
+        result.add(new ManifestActivity(
+                this.adapter, entity.getName(),
+                entity.getName().toLowerCase(), "EditActivity"));
         
         return result;
     }
@@ -646,13 +632,9 @@ public class AndroidProjectAdapter implements IAdapterProject {
                         filePath,
                         entity.getName().toLowerCase(Locale.US))));
         
-        //TODO replace
-        ManifestUpdater manifestUpdater = new ManifestUpdater(this.adapter);
-        manifestUpdater.addActivity(
-                this.adapter.getApplicationMetadata().getProjectNameSpace(),
-                "ShowActivity",
-                entity.getName());
-        manifestUpdater.save();
+        result.add(new ManifestActivity(
+                this.adapter, entity.getName(),
+                entity.getName().toLowerCase(), "ShowActivity"));
         
         return result;
     }
@@ -748,14 +730,12 @@ public class AndroidProjectAdapter implements IAdapterProject {
                     this.adapter.getRessourceValuesPath() + "dimens.xml",
                     new DimensFile()));
         
-        //TODO replace
-        ManifestUpdater manifestUpdater = new ManifestUpdater(this.adapter);
-        manifestUpdater.addActivity(
-                this.adapter.getApplicationMetadata().getProjectNameSpace(),
-                "ListActivity",
-                entity.getName());
-        manifestUpdater.setApplicationTheme("@style/PinnedTheme");
-        manifestUpdater.save();
+        result.add(new ManifestActivity(
+                this.adapter, entity.getName(),
+                entity.getName().toLowerCase(), "ListActivity"));
+        
+        result.add(new ManifestApplicationTheme(
+                this.adapter, "@style/PinnedTheme"));
         
         return result;
     }
@@ -1151,20 +1131,12 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 templatePath + "utils/package-info.java",
                 filePath + "utils/package-info.java"));
         
-        
-        //TODO replace
         String providerNamespace = this.adapter.getApplicationMetadata()
                 .getProjectNameSpace().replace('/', '.') + "."
-                        + this.adapter.getProvider();        
-        ManifestUpdater manifest = new ManifestUpdater(this.adapter);
-        manifest.addProvider(
-                String.format("%s.%s",
-                        providerNamespace,
-                        nameProvider),
-                STRING_PREFIX + ProviderGenerator.PROVIDER_NAME_STRING_ID,
-                providerNamespace,
-                STRING_PREFIX + ProviderGenerator.PROVIDER_DESCRIPTION_STRING_ID);
-        manifest.save();
+                        + this.adapter.getProvider();
+        
+        result.add(new ManifestProvider(
+                this.adapter, providerNamespace, nameProvider));
         
         return result;
     }
@@ -1501,27 +1473,74 @@ public class AndroidProjectAdapter implements IAdapterProject {
     }
 
     @Override
-    public List<IUpdater> getEntityFiles(EntityMetadata entity) {
+    public List<IUpdater> getEntityFiles(EntityMetadata entity, Configuration cfg,
+            Map<String, Object> dataModel) {
         List<IUpdater> result = new ArrayList<IUpdater>();
         
-        return result;
-    }
-
-    @Override
-    public void updateEntity(EntityMetadata entity, Configuration cfg,
-            Map<String, Object> dataModel) {
         final File entityFile = new File(String.format("%s%s.java",
                 this.adapter.getSourceEntityPath(),
                 entity.getName()));
         
         if (entityFile.exists()) {
-            new EntityImplementation(this.adapter, cfg, dataModel)
-                    .updateEntity(entityFile, entity);
+            result.add(new EntityImplementation(this.adapter, cfg, dataModel,
+                    entityFile, entity));
         }
+        
+        return result;
     }
 
     @Override
-    public void updateEnum(EnumMetadata enumMeta, Configuration cfg) {
-        new EnumImplementation(adapter, cfg).updateEnum(enumMeta);
+    public List<IUpdater> updateEnum(EnumMetadata enumMeta, Configuration cfg) {
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        
+        result.add(new EnumImplementation(adapter, cfg, enumMeta));
+        
+        return result;
+    }
+
+    @Override
+    public List<IUpdater> getStaticViewFiles(String packageName,
+            String viewName, ViewType type) {
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        
+        String templatePath = this.adapter.getTemplateSourceControlerPath();
+        String filePath = String.format("%s%s/view/%s/",
+                this.adapter.getSourcePath(),
+                ApplicationMetadata.INSTANCE.getProjectNameSpace(),
+                packageName.replace('.', '/'));
+        
+        result.add(new SourceFile(
+                templatePath + "TemplateStaticFragment.java",
+                filePath + viewName + "Fragment.java"));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateStaticActivity.java",
+                filePath + viewName + "Activity.java"));
+        
+        templatePath = this.adapter.getTemplateRessourceLayoutPath();
+        filePath = this.adapter.getRessourceLayoutPath();
+
+        result.add(new SourceFile(
+                templatePath + "fragment_template_static.xml",
+                filePath + "fragment_" + viewName.toLowerCase() + ".xml"));
+        
+        result.add(new SourceFile(
+                templatePath + "activity_template_static.xml",
+                filePath + "activity_" + viewName.toLowerCase() + ".xml"));
+        
+        result.add(new ManifestActivity(
+                this.adapter, viewName,
+                packageName, "Activity"));
+        
+        return result;
+    }
+
+    @Override
+    public List<IUpdater> updateHomeActivity(String activity, String buttonId) {
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        
+        result.add(new HomeActivityUpdater(this.adapter, activity, buttonId));
+        
+        return result;
     }
 }

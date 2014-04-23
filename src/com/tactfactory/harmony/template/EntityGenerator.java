@@ -8,8 +8,11 @@
  */
 package com.tactfactory.harmony.template;
 
+import java.util.List;
+
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -44,8 +47,9 @@ public class EntityGenerator extends BaseGenerator {
 		    
 			ConsoleUtils.display(">>> Decorate " + entity.getName());
 			
-			this.getAdapter().getAdapterProject()
-                    .updateEntity(entity, this.getCfg(), this.getDatamodel());
+			List<IUpdater> updaters = this.getAdapter().getAdapterProject()
+                    .getEntityFiles(entity, this.getCfg(), this.getDatamodel());
+			this.processUpdater(updaters);
 		}
 	}
 }

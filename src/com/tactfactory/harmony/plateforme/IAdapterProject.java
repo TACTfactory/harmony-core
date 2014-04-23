@@ -5,10 +5,10 @@ import java.util.Map;
 
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
+import com.tactfactory.harmony.template.CommonGenerator.ViewType;
 import com.tactfactory.harmony.updater.IConfigFileUtil;
 import com.tactfactory.harmony.updater.ITranslateFileUtil;
 import com.tactfactory.harmony.updater.IUpdater;
-import com.tactfactory.harmony.updater.IUpdaterProject;
 
 import freemarker.template.Configuration;
 
@@ -25,8 +25,6 @@ public interface IAdapterProject {
     List<IUpdater> getCriteriasEntityFiles(EntityMetadata entity);
     List<IUpdater> getDatabaseFiles();
     List<IUpdater> getSqlAdapterEntityFiles(EntityMetadata entity);
-    
-    IUpdaterProject getUpdaterProject();
     
     //Used by ActivityGenerator
     List<IUpdater> getActivityLibraries();
@@ -77,10 +75,16 @@ public interface IAdapterProject {
     List<String> getAvailableMenus();
     
     //Used by EntityGenerator
-    List<IUpdater> getEntityFiles(EntityMetadata entity);
-    void updateEntity(EntityMetadata entity, Configuration cfg,
+    List<IUpdater> getEntityFiles(EntityMetadata entity, Configuration cfg,
             Map<String, Object> dataModel);
     
     //Used by EnumGenerator
-    void updateEnum(EnumMetadata enumMeta, Configuration cfg);
+    List<IUpdater> updateEnum(EnumMetadata enumMeta, Configuration cfg);
+    
+    //Used by CommonGenerator
+    List<IUpdater> getStaticViewFiles(String packageName, String viewName,
+            ViewType type);
+    
+    //Used by HomeActivityGenerator
+    List<IUpdater> updateHomeActivity(String activity, String buttonId);
 }

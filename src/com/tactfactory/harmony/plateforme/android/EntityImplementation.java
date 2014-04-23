@@ -13,24 +13,31 @@ import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.meta.MethodMetadata;
 import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
+import com.tactfactory.harmony.updater.IUpdaterFile;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.MetadataUtils;
 
 import freemarker.template.Configuration;
 
-class EntityImplementation {
+//TODO remove
+class EntityImplementation implements IUpdaterFile {
     private final IAdapter adapter;
     private final Configuration configuration;
     private final Map<String, Object> dataModel;
+    private final File entityFile;
+    private final EntityMetadata entity;
     
-    protected EntityImplementation(IAdapter adapter, Configuration cfg,
-            Map<String, Object> dataModel) {
+    public EntityImplementation(IAdapter adapter, Configuration cfg,
+            Map<String, Object> dataModel, File entityFile,
+            EntityMetadata entity) {
         this.adapter = adapter;
         this.configuration = cfg;
         this.dataModel = dataModel;
+        this.entityFile = entityFile;
+        this.entity = entity;
     }
     
-    protected void updateEntity(File entityFile, EntityMetadata entity) {
+    protected void updateEntity() {
         final SourceFileManipulator manipulator =
                 this.adapter.getFileManipulator(
                         entityFile,
@@ -248,5 +255,10 @@ class EntityImplementation {
                     "defaultConstructor.java",
                     this.dataModel);
         }
+    }
+
+    @Override
+    public void execute() {
+        this.updateEntity();
     }
 }

@@ -19,6 +19,7 @@ import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.updater.IUpdater;
+import com.tactfactory.harmony.updater.IUpdaterFile;
 import com.tactfactory.harmony.updater.impl.EditFile;
 import com.tactfactory.harmony.updater.impl.CopyFile;
 import com.tactfactory.harmony.updater.impl.CreateFolder;
@@ -202,6 +203,10 @@ public abstract class BaseGenerator {
 		}
 	}
 	
+	/**
+	 * Make source file.
+	 * @param file
+	 */
 	protected final void makeSource(SourceFile file) {
 	    this.makeSource(
 	            file.getTemplateSource(),
@@ -209,6 +214,10 @@ public abstract class BaseGenerator {
 	            file.isOverwrite());
 	}
 	
+	/**
+	 * Make sources files
+	 * @param files
+	 */
 	protected final void makeSource(List<SourceFile> files) {
 	    for (SourceFile file : files) {
             this.makeSource(file);
@@ -279,6 +288,7 @@ public abstract class BaseGenerator {
                     }
                 }
                 
+                //TODO check that
                 this.getAdapter().installGitLibrary(library);
             } catch (IOException e) {
                 ConsoleUtils.displayError(e);
@@ -340,25 +350,31 @@ public abstract class BaseGenerator {
 	    }
 	}
 	
+	private void processUpdaterFile(IUpdaterFile updaterFile) {
+	    updaterFile.execute();
+	}
+	
     protected void processUpdater(List<IUpdater> updaters) {
         for (IUpdater updater : updaters) {
             this.processUpdater(updater);
         }
     }
 
-	protected void processUpdater(IUpdater updater) {
-	    if (updater instanceof SourceFile) {
-	        this.makeSource((SourceFile) updater);
-	    } else if (updater instanceof LibraryGit) {
-	        this.installLibrary((LibraryGit) updater);
-	    } else if (updater instanceof CopyFile) {
-	        this.updateLibrary((CopyFile) updater);
-	    } else if (updater instanceof EditFile) {
-	        this.processEditFile((EditFile) updater);
-	    } else if (updater instanceof CreateFolder) {
-	        this.processCreateFolder((CreateFolder) updater);
-	    } else if (updater instanceof DeleteFile) {
-	        this.processDeleteFile((DeleteFile) updater);
-	    }
-	}
+    protected void processUpdater(IUpdater updater) {
+        if (updater instanceof SourceFile) {
+            this.makeSource((SourceFile) updater);
+        } else if (updater instanceof LibraryGit) {
+            this.installLibrary((LibraryGit) updater);
+        } else if (updater instanceof CopyFile) {
+            this.updateLibrary((CopyFile) updater);
+        } else if (updater instanceof EditFile) {
+            this.processEditFile((EditFile) updater);
+        } else if (updater instanceof CreateFolder) {
+            this.processCreateFolder((CreateFolder) updater);
+        } else if (updater instanceof DeleteFile) {
+            this.processDeleteFile((DeleteFile) updater);
+        } else if (updater instanceof IUpdaterFile) {
+            this.processUpdaterFile((IUpdaterFile) updater);
+        }
+    }
 }
