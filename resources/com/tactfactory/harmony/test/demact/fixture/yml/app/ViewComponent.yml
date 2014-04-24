@@ -18,6 +18,7 @@ ViewComponent:
       shortField: 1
       character: "A"
       choice: 0
+      booleanObject: true
    VC2:
       id: 0
       string: "VC2 String"
@@ -37,6 +38,7 @@ ViewComponent:
       shortField: 1
       character: "A"
       choice: 0
+      booleanObject: true
    VC3:
       id: 0
       string: "VC3 String"
@@ -56,3 +58,4 @@ ViewComponent:
       shortField: 1
       character: "A"
       choice: 0
+      booleanObject: false
