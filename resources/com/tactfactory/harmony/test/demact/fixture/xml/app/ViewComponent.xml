@@ -19,6 +19,7 @@
 		<shortField>1</shortField>
 		<character>A</character>
 		<choice>0</choice>
+		<booleanObject>true</booleanObject>
 	</ViewComponent>
 	<ViewComponent id="VC2">
 		<id>0</id>
@@ -39,6 +40,7 @@
 		<shortField>1</shortField>
 		<character>A</character>
 		<choice>0</choice>
+		<booleanObject>true</booleanObject>
 	</ViewComponent>
 	<ViewComponent id="VC3">
 		<id>0</id>
@@ -59,5 +61,6 @@
 		<shortField>1</shortField>
 		<character>A</character>
 		<choice>0</choice>
+		<booleanObject>false</booleanObject>
 	</ViewComponent>
 </list>

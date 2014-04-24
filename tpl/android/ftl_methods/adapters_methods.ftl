@@ -147,7 +147,7 @@
 					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
 					<#assign result = result + "${tab}		DateUtils.formatXMLStringToDateTime(" />
 					<#assign result = result + "${tab}				${NamingUtils.fixtureParsedAlias(field)}));" />
-			<#elseif field.type=="boolean">
+			<#elseif field.type?lower_case=="boolean">
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
 				<#assign result = result + "${tab}		Boolean.parseBoolean(${NamingUtils.fixtureParsedAlias(field)}));" />
 			<#elseif field.type?lower_case=="string">

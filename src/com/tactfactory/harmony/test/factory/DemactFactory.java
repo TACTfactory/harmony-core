@@ -376,6 +376,8 @@ public class DemactFactory extends ProjectMetadataFactory {
 				viewComponent, "character", false, false);
 		ProjectMetadataFactory.generateField(
 				viewComponent, "choice", false, false);
+		ProjectMetadataFactory.generateField(
+				viewComponent, "booleanObject", false, false);
 		
 		ProjectMetadataFactory.generateField(
 				hiddenEntity, "content", false, false);

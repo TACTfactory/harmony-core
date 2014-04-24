@@ -98,6 +98,10 @@ public class ViewComponent implements Serializable {
 	@Column(type = Type.ENUM)
 	private Choice choice;
 
+	/** character field. */
+	@Column
+	private Boolean booleanObject;
+
 	public enum Choice {
 		CHOICE_1(0),
 		CHOICE_2(1);
