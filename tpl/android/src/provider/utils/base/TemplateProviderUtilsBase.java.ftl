@@ -440,53 +440,67 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		uri = Uri.withAppendedPath(uri, String.valueOf(item.get${id.name?cap_first}()));
 		</#list>
 
+
 		operations.add(ContentProviderOperation.newUpdate(uri)
 				.withValues(itemValues)
 				.build());
 
+
 		<#list relations as relation>
 			<#if (relation.relation.type == "OneToMany")>
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
+			String selection;
+			String[] selectionArgs;
 			// Set new ${relation.name} for ${curr.name}
 			${relation.relation.targetEntity}Criterias ${relation.name}Crit =
 						new ${relation.relation.targetEntity}Criterias(GroupType.AND);
 			Criteria crit = new Criteria();
 			ArrayValue values = new ArrayValue();
 			crit.setType(Type.IN);
-			crit.setKey(${ContractUtils.getContractCol(entities[relation.relation.targetEntity].ids[0])});
+			crit.setKey(<#list IdsUtils.getAllIdsColsFromArray(entities[relation.relation.targetEntity].ids) as id>${id}<#if id_has_next>
+					+ " || '::dirtyHack::' || " 
+					+ </#if></#list>);
 			crit.addValue(values);
 			${relation.name}Crit.add(crit);
 
 
-			for (int i = 0; i < item.get${relation.name?cap_first}().size(); i++) {
-				values.addValue(String.valueOf(
-						item.get${relation.name?cap_first}().get(i).get${entities[relation.relation.targetEntity].ids[0].name?cap_first}()));
+			for (${relation.relation.targetEntity} ${relation.name} : item.get${relation.name?cap_first}()) {
+				values.addValue(<#list entities[relation.relation.targetEntity].ids as id>
+					String.valueOf(${relation.name}.get${id.name?cap_first}())<#if id_has_next>
+					+ "::dirtyHack::"
+					+ </#if></#list>);
 			}
+			selection = ${relation.name}Crit.toSQLiteSelection();
+			selectionArgs = ${relation.name}Crit.toSQLiteSelectionArgs();
 
 			operations.add(ContentProviderOperation.newUpdate(
 					${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
-						.withValue(
-								${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}
-										.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
-								item.get${curr_ids[0].name?cap_first}())
+					<#list curr_ids as id>
+					.withValue(
+							${ContractUtils.getContractCol(MetadataUtils.getMappedField(relation))}_${id.name?upper_case},
+							item.get${id.name?cap_first}())
+					</#list>
 					.withSelection(
-							${relation.name}Crit.toSQLiteSelection(),
-							${relation.name}Crit.toSQLiteSelectionArgs())
+							selection,
+							selectionArgs)
 					.build());
 
 			// Remove old associated ${relation.name}
 			crit.setType(Type.NOT_IN);
-			${relation.name}Crit.add(${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
-					String.valueOf(item.get${curr_ids[0].name?cap_first}()),
+			<#list curr_ids as id>
+			${relation.name}Crit.add(${ContractUtils.getContractCol(MetadataUtils.getMappedField(relation))}_${id.name?upper_case},
+					String.valueOf(item.get${id.name?cap_first}()),
 					Type.EQUALS);
+			</#list>
 			
 
 			operations.add(ContentProviderOperation.newUpdate(
 					${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
-						.withValue(
-								${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}
-										.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
-								null)
+					<#list curr_ids as id>
+					.withValue(
+							${ContractUtils.getContractCol(MetadataUtils.getMappedField(relation))}_${id.name?upper_case},
+							null)
+					</#list>
 					.withSelection(
 							${relation.name}Crit.toSQLiteSelection(),
 							${relation.name}Crit.toSQLiteSelectionArgs())
@@ -495,16 +509,22 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 			<#elseif (relation.relation.type == "ManyToMany") >
 		operations.add(ContentProviderOperation.newDelete(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
-				.withSelection(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)} + "= ?",
-								new String[]{String.valueOf(item.get${curr_ids[0].name?cap_first}())})
+				<#list curr_ids as id>
+				.withSelection(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)}_${id.name?upper_case} + "= ?",
+								new String[]{String.valueOf(item.get${id.name?cap_first}())})
+				</#list>
 				.build());
 
 		for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 			ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
-			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)},
-					${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
-			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)},
-					item.get${curr_ids[0].name?cap_first}());
+			<#list entities[relation.relation.targetEntity].ids as id>
+			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)}_${id.name?upper_case},
+					${relation.relation.targetEntity?uncap_first}.get${id.name?cap_first}());
+			</#list>
+			<#list curr.ids as id>
+			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)}_${id.name?upper_case},
+					item.get${id.name?cap_first}());
+			</#list>
 
 			operations.add(ContentProviderOperation.newInsert(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
 					.withValues(${relation.relation.targetEntity?uncap_first}Values)
