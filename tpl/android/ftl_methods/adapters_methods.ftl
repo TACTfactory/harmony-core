@@ -133,11 +133,11 @@
 						<#assign result = result + "${tab}${localTab}	if (!cursor.isNull(index)) {\n"/><#assign localTab="\t" />
 					</#if>
 					<#assign result = result + "${tab}${localTab}	${field.name}.set${id.name?cap_first}(${AdapterUtils.getCursorGet(id)}index));\n"/>
+					<#assign result = result + "${tab}${localTab}	result.set${field.name?cap_first}(${field.name});\n"/>
 					<#if (field.nullable?? && field.nullable)>
 						<#assign result = result + "${tab}${localTab}	}\n"/>
 					</#if>
 				</#list>
-			<#assign result = result + "${tab}${localTab}	result.set${field.name?cap_first}(${field.name});\n"/>
 			<#assign result = result + "${tab}}\n" />
 		</#if>
 	</#if>
