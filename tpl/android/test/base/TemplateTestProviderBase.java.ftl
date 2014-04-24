@@ -87,7 +87,11 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 			try {
 				ContentValues values = ${curr.name}Contract.${curr.name}.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
-				values.remove(${curr_ids[0].owner}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)});
+				<#list curr_ids as id>
+					<#if id.strategy == "IDENTITY">
+				values.remove(${ContractUtils.getContractCol(id)});
+					</#if>
+				</#list>
 				result = this.provider.insert(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, values);
 
 			} catch (Exception e) {
@@ -95,7 +99,18 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			}
 
 			Assert.assertNotNull(result);
-			Assert.assertTrue(Integer.valueOf(result.getEncodedPath().substring(result.getEncodedPath().lastIndexOf("/")+1)) > 0);
+			<#assign idGetters = IdsUtils.getAllIdsGetters(curr) />
+			<#list curr_ids as id>
+				<#list IdsUtils.getAllIdsTypesFromArray([id]) as idType>
+					<#assign varName = "result.getPathSegments().get(${id_index + 1})" />
+					<#if id.strategy == "IDENTITY">
+			Assert.assertTrue(${FieldsUtils.getStringParser(idType, varName)}<#if MetadataUtils.isPrimitiveType(idType)> > <#else>.equals(</#if>0)<#if !MetadataUtils.isPrimitiveType(idType)>)</#if>;		
+					<#else>
+			Assert.assertTrue(${FieldsUtils.getStringParser(idType, varName)}<#if MetadataUtils.isPrimitiveType(idType)> == <#else>.equals(</#if>${curr.name?uncap_first}${idGetters[id_index]})<#if !MetadataUtils.isPrimitiveType(idType)>)</#if>;
+					</#if>
+				</#list>
+			</#list>
+			
 		}
 	}
 
@@ -106,7 +121,14 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 		if (this.entity != null) {
 			try {
-				Cursor c = this.provider.query(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.get${curr_ids[0].name?cap_first}()), this.adapter.getCols(), null, null, null);
+				Cursor c = this.provider.query(Uri.parse(
+						${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI<#list IdsUtils.getAllIdsGetters(curr) as id>
+								+ "/" 
+								+ this.entity${id}</#list>),
+						this.adapter.getCols(),
+						null,
+						null,
+						null);
 				c.moveToFirst();
 				result = ${curr.name}Contract.${curr.name}.cursorToItem(c);
 				c.close();
@@ -144,13 +166,15 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
 
 			try {
-				${curr.name?uncap_first}.set${curr_ids[0].name?cap_first}(this.entity.get${curr_ids[0].name?cap_first}());
+				<#list curr_ids as id>
+				${curr.name?uncap_first}.set${id.name?cap_first}(this.entity.get${id.name?cap_first}());
+				</#list>
 
 				ContentValues values = ${curr.name}Contract.${curr.name}.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				result = this.provider.update(
-					Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI
+					Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI<#list IdsUtils.getAllIdsGetters(curr) as id>
 						+ "/"
-						+ ${curr.name?uncap_first}.get${curr_ids[0].name?cap_first}()),
+						+ ${curr.name?uncap_first}${id}</#list>),
 					values,
 					null,
 					null);
@@ -172,7 +196,9 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 			try {
 				ContentValues values = ${curr.name}Contract.${curr.name}.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
-				values.remove(${curr_ids[0].owner}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)});
+				<#list IdsUtils.getAllIdsColsFromArray(curr_ids) as id>
+				values.remove(${id});
+				</#list>
 				<#list ViewUtils.getAllFields(curr)?values as field>
 					<#if field.unique?? && field.unique>
 				values.remove(${field.owner}Contract.${field.owner}.COL_${field.name?upper_case});
@@ -194,7 +220,12 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		int result = -1;
 		if (this.entity != null) {
 			try {
-				result = this.provider.delete(Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI + "/" + this.entity.get${curr_ids[0].name?cap_first}()), null, null);
+				result = this.provider.delete(
+						Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI<#list IdsUtils.getAllIdsGetters(curr) as id>
+							+ "/" 
+							+ this.entity${id}</#list>),
+						null,
+						null);
 
 			} catch (Exception e) {
 				e.printStackTrace();

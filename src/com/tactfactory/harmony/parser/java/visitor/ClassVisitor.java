@@ -438,6 +438,10 @@ public class ClassVisitor {
      						classMeta);
      			} else {
      				mode = superclass.getInheritance().getType();
+     				
+     				superclass.getInheritance().getSubclasses().put(
+     						classMeta.getName(),
+     						classMeta);
      			}
     			
     		} else {

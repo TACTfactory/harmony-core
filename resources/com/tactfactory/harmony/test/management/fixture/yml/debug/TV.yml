@@ -1,0 +1,8 @@
+TV:
+   TV1:
+      brand: Samsung
+      width: 1024
+      height: 768
+      id: 1001
+      price: 1000
+      purchaseDate: 2010-01-01T00:00:00.000+00:00

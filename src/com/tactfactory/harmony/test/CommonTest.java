@@ -25,6 +25,7 @@ import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.ProjectDiscover;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.test.factory.DemactFactory;
+import com.tactfactory.harmony.test.factory.ManagementFactory;
 import com.tactfactory.harmony.test.factory.TracScanFactory;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
@@ -307,6 +308,10 @@ public abstract class CommonTest {
 		
 		result.add(new ApplicationMetadata[] {
 				DemactFactory.generateTestMetadata()
+		});
+		
+		result.add(new ApplicationMetadata[] {
+			ManagementFactory.generateTestMetadata()	
 		});
 		
 		return result;

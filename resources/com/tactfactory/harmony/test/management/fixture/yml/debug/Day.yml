@@ -1,0 +1,22 @@
+Day:
+   Christmas:
+      identifier: 20141225
+      day: 25
+      month: 12
+      year: 2014
+      publicHoliday: true
+      officeToClean: Office1
+   NationalDay:
+      identifier: 20140704
+      day: 4
+      month: 7
+      year: 2014
+      publicHoliday: true
+      officeToClean: Office2
+   Thanksgiving:
+      identifier: 2014127
+      day: 27
+      month: 11
+      year: 2014
+      publicHoliday: false
+      officeToClean: Office3

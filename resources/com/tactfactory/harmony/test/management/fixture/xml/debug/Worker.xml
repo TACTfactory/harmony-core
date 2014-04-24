@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<Worker id="Worker1">
+		<manager>Billou</manager>
+		<firstname>John</firstname>
+		<lastname>Smith</lastname>
+		<name>John Smith</name>
+		<phoneNumber>0202020202</phoneNumber>
+		<company>Microsoft</company>
+		<addresses><address>Address2</address></addresses>
+		<holidays><day>Christmas</day><day>NationalDay</day></holidays>
+	</Worker>
+	<Worker id="Worker2">
+		<manager>Billou</manager>
+		<firstname>James</firstname>
+		<lastname>Johnson</lastname>
+		<name>James Johnson</name>
+		<phoneNumber>0303030303</phoneNumber>
+		<company>Microsoft</company>
+		<addresses><address>Address3</address></addresses>
+		<holidays><day>Christmas</day><day>Thanksgiving</day></holidays>
+	</Worker>
+	<Worker id="Worker3">
+		<manager>Billou</manager>
+		<firstname>Mary</firstname>
+		<lastname>Johnson</lastname>
+		<name>John Smith</name>
+		<phoneNumber>0303030303</phoneNumber>
+		<company>Microsoft</company>
+		<addresses><address>Address3</address></addresses>
+		<holidays><day>Christmas</day></holidays>
+	</Worker>
+</list>

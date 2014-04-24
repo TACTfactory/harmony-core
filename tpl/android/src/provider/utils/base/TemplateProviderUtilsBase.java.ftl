@@ -71,8 +71,12 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		ContentResolver prov = this.getContext().getContentResolver();
 
 
-		ContentValues itemValues = ${curr.name?cap_first}Contract.${curr.name}.itemToContentValues(item);
-		itemValues.remove(${curr_ids[0].owner}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)});
+		ContentValues itemValues = ${ContractUtils.getContractItemToContentValues(curr)}(item);
+		<#list curr_ids as id>
+			<#if id.strategy == "IDENTITY">
+		itemValues.remove(${ContractUtils.getContractCol(id)});
+			</#if>
+		</#list>
 
 		operations.add(ContentProviderOperation.newInsert(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
@@ -80,6 +84,8 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 						.build());
 
 		<#list relations as relation>
+			<#assign targetEntity = entities[relation.relation.targetEntity] />
+			<#assign fieldNames = ContractUtils.getColumnsNames(relation) />
 			<#if (relation.relation.type == "OneToMany") >
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
 			${relation.relation.targetEntity}Criterias crit =
@@ -87,39 +93,63 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			Criteria inCrit = new Criteria();
 			crit.add(inCrit);
 			
-			inCrit.setKey(${entities[relation.relation.targetEntity].ids[0].owner}Contract.${entities[relation.relation.targetEntity].ids[0].owner}.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
+			inCrit.setKey(<#list IdsUtils.getAllIdsColsFromArray(targetEntity.ids) as refId>${refId}<#if refId_has_next>
+					+ " || '::dirtyHack::' ||"
+					+ </#if></#list>);
 			inCrit.setType(Type.IN);
 			ArrayValue inValue = new ArrayValue();
 			inCrit.addValue(inValue);
 
 			for (int i = 0; i < item.get${relation.name?cap_first}().size(); i++) {
-				inValue.addValue(String.valueOf(item.get${relation.name?cap_first}().get(i).get${entities[relation.relation.targetEntity].ids[0].name?cap_first}()));
+				inValue.addValue(<#list IdsUtils.getAllIdsGetters(targetEntity) as refId>String.valueOf(item.get${relation.name?cap_first}().get(i)${refId})<#if refId_has_next>
+						+ " || ::dirtHack:: ||"
+						+ </#if></#list>);
 			}
 
 			operations.add(ContentProviderOperation.newUpdate(${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
+					<#list curr_ids as id>
+						<#if id.strategy == "IDENTITY">
 					.withValueBackReference(
 							${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}
-									.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
+									.${NamingUtils.alias(MetadataUtils.getMappedField(relation).name)}_${id.name?upper_case},
 							0)
+						<#else>
+					.withValue(
+							${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}
+									.${NamingUtils.alias(MetadataUtils.getMappedField(relation).name)}_${id.name?upper_case},
+							item.get${id.name?cap_first}())
+						</#if>
+					</#list>
 					.withSelection(
 							crit.toSQLiteSelection(),
 							crit.toSQLiteSelectionArgs())
 					.build());
 		}
 			<#elseif (relation.relation.type == "ManyToMany") >
+				<#assign joinTable = entities[relation.relation.joinTable] />
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
-			for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
-				ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
-				${relation.relation.targetEntity?uncap_first}Values.put(
-						${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)},
-						${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
+			for (${targetEntity.name} ${targetEntity.name?uncap_first} : item.get${relation.name?cap_first}()) {
+				ContentValues ${targetEntity.name?uncap_first}Values = new ContentValues();
+				<#list relation.relation.field_ref as refField>
+				${targetEntity.name?uncap_first}Values.put(
+						${ContractUtils.getContractClass(joinTable)}.${NamingUtils.alias(fieldNames[refField_index])},
+						${targetEntity.name?uncap_first}.get${refField.name?cap_first}());
+				</#list>
 
 				operations.add(ContentProviderOperation.newInsert(
-					${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
-					    .withValues(${relation.relation.targetEntity?uncap_first}Values)
+					${joinTable.name}ProviderAdapter.${joinTable.name?upper_case}_URI)
+					    .withValues(${targetEntity.name?uncap_first}Values)
+						<#list curr.ids as id>
+							<#if id.strategy == "IDENTITY">
 					    .withValueBackReference(
-								${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)},
+								${ContractUtils.getContractClass(joinTable)}.${NamingUtils.alias(relation.relation.mappedBy)}_${id.name?upper_case},
 					    		0)
+							<#else>
+						.withValue(
+								${ContractUtils.getContractClass(joinTable)}.${NamingUtils.alias(relation.relation.mappedBy)}_${id.name?upper_case},
+								item.get${id.name?cap_first}())	
+							</#if>
+						</#list>
 					    .build());
 
 			}
@@ -132,7 +162,10 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 					prov.applyBatch(${project_name?cap_first}Provider.authority, operations);
 			if (results[0] != null) {
 				result = results[0].uri;
-				item.set${curr.ids[0].name?cap_first}(<#if curr.ids[0].type?lower_case=="int" || curr.ids[0].type?lower_case=="integer">Integer.parseInt(result.getLastPathSegment())<#else>result.getLastPathSegment()</#if>);
+				<#assign idTypes = IdsUtils.getAllIdsTypesFromArray(curr_ids) />
+				<#list IdsUtils.getAllIdsSettersFromArray(curr_ids) as id>
+				item${id}<#if idTypes[id_index]?lower_case == "int" || idTypes[id_index]?lower_case == "integer">Integer.parseInt(</#if>result.getPathSegments().get(${id_index + 1}<#if idTypes[id_index]?lower_case != "string">)</#if>));
+				</#list>
 			}
 		} catch (RemoteException e) {
 			Log.e(TAG, e.getMessage());
@@ -157,9 +190,13 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 				new ArrayList<ContentProviderOperation>();
 		ContentResolver prov = this.getContext().getContentResolver();
 
-		ContentValues itemValues = ${curr.name?cap_first}Contract.${curr.name}.itemToContentValues(item<#list relations as relation><#if (relation.internal)>,
+		ContentValues itemValues = ${ContractUtils.getContractItemToContentValues(curr)}(item<#list relations as relation><#if (relation.internal)>,
 					${relation.name?uncap_first}Id</#if></#list>);
-		itemValues.remove(${curr_ids[0].owner}Contract.${curr_ids[0].owner}.${NamingUtils.alias(curr_ids[0].name)});
+		<#list curr_ids as id>
+			<#if id.strategy == "IDENTITY">
+		itemValues.remove(${ContractUtils.getContractCol(id)});
+			</#if>
+		</#list>
 
 		operations.add(ContentProviderOperation.newInsert(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI)
@@ -168,48 +205,68 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 
 		<#list relations as relation>
+			<#assign fieldNames = ContractUtils.getColumnsNames(relation) />
 			<#if (relation.relation.type == "OneToMany") >
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
-			${curr.name}Criterias ${curr.name?uncap_first}Crit =
-						new ${curr.name}Criterias(GroupType.AND);
-			Criteria crit = new Criteria();
-			ArrayValue values = new ArrayValue();
-			crit.setType(Type.IN);
-			crit.setKey(${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
-			crit.addValue(values);
-			${curr.name?uncap_first}Crit.add(crit);
-
+			${relation.relation.targetEntity}Criterias crit =
+					new ${relation.relation.targetEntity}Criterias(GroupType.AND);
+			Criteria inCrit = new Criteria();
+			crit.add(inCrit);
+			
+			inCrit.setKey(${ContractUtils.getContractCol(entities[relation.relation.targetEntity].ids[0])});
+			inCrit.setType(Type.IN);
+			ArrayValue inValue = new ArrayValue();
+			inCrit.addValue(inValue);
 
 			for (int i = 0; i < item.get${relation.name?cap_first}().size(); i++) {
-				values.addValue(String.valueOf(
-						item.get${relation.name?cap_first}().get(i).get${entities[relation.relation.targetEntity].ids[0].name?cap_first}()));
+				inValue.addValue(String.valueOf(item.get${relation.name?cap_first}().get(i).get${entities[relation.relation.targetEntity].ids[0].name?cap_first}()));
 			}
 
-			operations.add(ContentProviderOperation.newUpdate(
-					${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
-						.withValueBackReference(
-								${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}
-										.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
-								0)
+			operations.add(ContentProviderOperation.newUpdate(${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
+					<#list curr_ids as id>
+						<#if id.strategy == "IDENTITY">
+					.withValueBackReference(
+							${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}
+									.${NamingUtils.alias(MetadataUtils.getMappedField(relation).name)}_${id.name?upper_case},
+							0)
+						<#else>
+					.withValue(
+							${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}
+									.${NamingUtils.alias(MetadataUtils.getMappedField(relation).name)}_${id.name?upper_case},
+							item.get${id.name?cap_first}())
+						</#if>
+					</#list>
 					.withSelection(
-							${curr.name?uncap_first}Crit.toSQLiteSelection(),
-							${curr.name?uncap_first}Crit.toSQLiteSelectionArgs())
+							crit.toSQLiteSelection(),
+							crit.toSQLiteSelectionArgs())
 					.build());
 		}
 			<#elseif (relation.relation.type == "ManyToMany") >
+				<#assign joinTable = entities[relation.relation.joinTable] />
+				<#assign targetEntity = entities[relation.relation.targetEntity] />
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
-			for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
-				ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
-				${relation.relation.targetEntity?uncap_first}Values.put(
-						${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)},
-						${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
+			for (${targetEntity.name} ${targetEntity.name?uncap_first} : item.get${relation.name?cap_first}()) {
+				ContentValues ${targetEntity.name?uncap_first}Values = new ContentValues();
+				<#list relation.relation.field_ref as refField>
+				${targetEntity.name?uncap_first}Values.put(
+						${ContractUtils.getContractClass(joinTable)}.${NamingUtils.alias(fieldNames[refField_index])},
+						${targetEntity.name?uncap_first}.get${refField.name?cap_first}());
+				</#list>
 
 				operations.add(ContentProviderOperation.newInsert(
-					${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
-					    .withValues(${relation.relation.targetEntity?uncap_first}Values)
+					${joinTable.name}ProviderAdapter.${joinTable.name?upper_case}_URI)
+					    .withValues(${targetEntity.name?uncap_first}Values)
+						<#list curr.ids as id>
+							<#if id.strategy == "IDENTITY">
 					    .withValueBackReference(
-								${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)},
+								${ContractUtils.getContractClass(joinTable)}.${NamingUtils.alias(relation.relation.mappedBy)}_${id.name?upper_case},
 					    		0)
+							<#else>
+						.withValue(
+								${ContractUtils.getContractClass(joinTable)}.${NamingUtils.alias(relation.relation.mappedBy)}_${id.name?upper_case},
+								item.get${id.name?cap_first}())	
+							</#if>
+						</#list>
 					    .build());
 
 			}
@@ -243,30 +300,48 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		int result = -1;
 		ContentResolver prov = this.getContext().getContentResolver();
 
-		Uri uri = Uri.withAppendedPath(
-				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
-				String.valueOf(item.get${curr_ids[0].name?cap_first}()));
+		Uri uri = ${curr.name}ProviderAdapter.${curr.name?upper_case}_URI;
+		<#list curr_ids as id>
+		uri = Uri.withAppendedPath(uri, String.valueOf(item.get${id.name?cap_first}()));
+		</#list>
+
 		result = prov.delete(uri,
 			null,
 			null);
 
-
 		return result;
+	}
+
+
+	/**
+	 * Query the DB.
+	 * @param item The item with its ids set
+	 * @return ${curr.name?cap_first}
+	 */
+	public ${curr.name?cap_first} query(final ${curr.name} item) {
+		return this.query(<#list curr_ids as id>item.get${id.name?cap_first}()<#if id_has_next>, </#if></#list>);
 	}
 
 	/**
 	 * Query the DB.
-	 * @param id The ID
+	 *
+	 * <#list curr_ids as id>@param ${id.name} ${id.name}<#if id_has_next>
+	 * </#if></#list>
+	 *
 	 * @return ${curr.name?cap_first}
 	 */
-	public ${curr.name?cap_first} query(final int id) {
+	public ${curr.name?cap_first} query(<#list curr_ids as id>final ${id.type} ${id.name}<#if id_has_next>,
+				</#if></#list>) {
 		${curr.name?cap_first} result = null;
 		ContentResolver prov = this.getContext().getContentResolver();
 
 		${curr.name}Criterias crits =
 				new ${curr.name}Criterias(GroupType.AND);
-		crits.add(${curr_ids[0].owner}Contract.${curr_ids[0].owner}.ALIASED_${NamingUtils.alias(curr_ids[0].name)},
-					String.valueOf(id));
+		<#assign idGetters = IdsUtils.getAllIdsGettersFromArray(curr_ids) />
+		<#list IdsUtils.getAllIdsColsFromArray(curr_ids) as id>
+		crits.add(${id},
+					String.valueOf(${idGetters[id_index]}));
+		</#list>
 
 		Cursor cursor = prov.query(
 			${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
@@ -358,12 +433,12 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		ArrayList<ContentProviderOperation> operations =
 				new ArrayList<ContentProviderOperation>();
 		ContentResolver prov = this.getContext().getContentResolver();
-		ContentValues itemValues = ${curr.name?cap_first}Contract.${curr.name}.itemToContentValues(item);
+		ContentValues itemValues = ${ContractUtils.getContractItemToContentValues(curr)}(item);
 
-		Uri uri = Uri.withAppendedPath(
-				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
-				String.valueOf(item.get${curr_ids[0].name?cap_first}()));
-
+		Uri uri = ${curr.name}ProviderAdapter.${curr.name?upper_case}_URI;
+		<#list curr_ids as id>
+		uri = Uri.withAppendedPath(uri, String.valueOf(item.get${id.name?cap_first}()));
+		</#list>
 
 		operations.add(ContentProviderOperation.newUpdate(uri)
 				.withValues(itemValues)
@@ -378,7 +453,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			Criteria crit = new Criteria();
 			ArrayValue values = new ArrayValue();
 			crit.setType(Type.IN);
-			crit.setKey(${entities[relation.relation.targetEntity].ids[0].owner}Contract.${entities[relation.relation.targetEntity].ids[0].owner}.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
+			crit.setKey(${ContractUtils.getContractCol(entities[relation.relation.targetEntity].ids[0])});
 			crit.addValue(values);
 			${relation.name}Crit.add(crit);
 
@@ -463,13 +538,14 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		ArrayList<ContentProviderOperation> operations =
 				new ArrayList<ContentProviderOperation>();
 		ContentResolver prov = this.getContext().getContentResolver();
-		ContentValues itemValues = ${curr.name?cap_first}Contract.${curr.name}.itemToContentValues(
+		ContentValues itemValues = ${ContractUtils.getContractItemToContentValues(curr)}(
 				item<#list relations as relation><#if (relation.internal)>,
 				${relation.name?uncap_first}Id</#if></#list>);
 
-		Uri uri = Uri.withAppendedPath(
-				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
-				String.valueOf(item.get${curr_ids[0].name?cap_first}()));
+		Uri uri = ${curr.name}ProviderAdapter.${curr.name?upper_case}_URI;
+		<#list curr_ids as id>
+		uri = Uri.withAppendedPath(uri, String.valueOf(item.get${id.name?cap_first}()));
+		</#list>
 
 
 		operations.add(ContentProviderOperation.newUpdate(uri)
@@ -480,46 +556,58 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		<#list relations as relation>
 			<#if (relation.relation.type == "OneToMany")>
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
+			String selection;
+			String[] selectionArgs;
 			// Set new ${relation.name} for ${curr.name}
 			${relation.relation.targetEntity}Criterias ${relation.name}Crit =
 						new ${relation.relation.targetEntity}Criterias(GroupType.AND);
 			Criteria crit = new Criteria();
 			ArrayValue values = new ArrayValue();
 			crit.setType(Type.IN);
-			crit.setKey(${entities[relation.relation.targetEntity].ids[0].owner}Contract.${entities[relation.relation.targetEntity].ids[0].owner}.${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
+			crit.setKey(<#list IdsUtils.getAllIdsColsFromArray(entities[relation.relation.targetEntity].ids) as id>${id}<#if id_has_next>
+					+ " || '::dirtyHack::' || " 
+					+ </#if></#list>);
 			crit.addValue(values);
 			${relation.name}Crit.add(crit);
 
 
-			for (int i = 0; i < item.get${relation.name?cap_first}().size(); i++) {
-				values.addValue(String.valueOf(
-						item.get${relation.name?cap_first}().get(i).get${entities[relation.relation.targetEntity].ids[0].name?cap_first}()));
+			for (${relation.relation.targetEntity} ${relation.name} : item.get${relation.name?cap_first}()) {
+				values.addValue(<#list entities[relation.relation.targetEntity].ids as id>
+					String.valueOf(${relation.name}.get${id.name?cap_first}())<#if id_has_next>
+					+ "::dirtyHack::"
+					+ </#if></#list>);
 			}
+			selection = ${relation.name}Crit.toSQLiteSelection();
+			selectionArgs = ${relation.name}Crit.toSQLiteSelectionArgs();
 
 			operations.add(ContentProviderOperation.newUpdate(
 					${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
-						.withValue(
-								${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}
-										.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
-								item.get${curr_ids[0].name?cap_first}())
+					<#list curr_ids as id>
+					.withValue(
+							${ContractUtils.getContractCol(MetadataUtils.getMappedField(relation))}_${id.name?upper_case},
+							item.get${id.name?cap_first}())
+					</#list>
 					.withSelection(
-							${relation.name}Crit.toSQLiteSelection(),
-							${relation.name}Crit.toSQLiteSelectionArgs())
+							selection,
+							selectionArgs)
 					.build());
 
 			// Remove old associated ${relation.name}
 			crit.setType(Type.NOT_IN);
-			${relation.name}Crit.add(${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
-					String.valueOf(item.get${curr_ids[0].name?cap_first}()),
+			<#list curr_ids as id>
+			${relation.name}Crit.add(${ContractUtils.getContractCol(MetadataUtils.getMappedField(relation))}_${id.name?upper_case},
+					String.valueOf(item.get${id.name?cap_first}()),
 					Type.EQUALS);
+			</#list>
 			
 
 			operations.add(ContentProviderOperation.newUpdate(
 					${relation.relation.targetEntity}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI)
-						.withValue(
-								${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}
-										.COL_${MetadataUtils.getMappedField(relation).name?upper_case},
-								null)
+					<#list curr_ids as id>
+					.withValue(
+							${ContractUtils.getContractCol(MetadataUtils.getMappedField(relation))}_${id.name?upper_case},
+							null)
+					</#list>
 					.withSelection(
 							${relation.name}Crit.toSQLiteSelection(),
 							${relation.name}Crit.toSQLiteSelectionArgs())
@@ -528,16 +616,22 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 			<#elseif (relation.relation.type == "ManyToMany") >
 		operations.add(ContentProviderOperation.newDelete(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
-				.withSelection(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)} + "= ?",
-								new String[]{String.valueOf(item.get${curr_ids[0].name?cap_first}())})
+				<#list curr_ids as id>
+				.withSelection(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)}_${id.name?upper_case} + "= ?",
+								new String[]{String.valueOf(item.get${id.name?cap_first}())})
+				</#list>
 				.build());
 
 		for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : item.get${relation.name?cap_first}()) {
 			ContentValues ${relation.relation.targetEntity?uncap_first}Values = new ContentValues();
-			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)},
-					${relation.relation.targetEntity?uncap_first}.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}());
-			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)},
-					item.get${curr_ids[0].name?cap_first}());
+			<#list entities[relation.relation.targetEntity].ids as id>
+			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.name)}_${id.name?upper_case},
+					${relation.relation.targetEntity?uncap_first}.get${id.name?cap_first}());
+			</#list>
+			<#list curr.ids as id>
+			${relation.relation.targetEntity?uncap_first}Values.put(${relation.relation.joinTable}Contract.${relation.relation.joinTable}.${NamingUtils.alias(relation.relation.mappedBy)}_${id.name?upper_case},
+					item.get${id.name?cap_first}());
+			</#list>
 
 			operations.add(ContentProviderOperation.newInsert(${relation.relation.joinTable}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI)
 					.withValues(${relation.relation.targetEntity?uncap_first}Values)
@@ -601,8 +695,10 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
 				${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI,
 				${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COLS,
-				${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COL_${relation.relation.mappedBy?upper_case}
-						+ "= ?",
+				<#list curr_ids as id>
+				${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COL_${relation.relation.mappedBy?upper_case}_${id.name?upper_case}
+						+ "= ?<#if id_has_next> AND "
+						+ </#if></#list>",
 				new String[]{String.valueOf(item.get${curr_ids[0].name?cap_first}())},
 				null);
 
@@ -625,7 +721,9 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		Cursor ${relation.relation.joinTable?uncap_first}Cursor = prov.query(
 				${relation.relation.joinTable?cap_first}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI,
 				${relation.relation.joinTable?cap_first}Contract.${relation.relation.joinTable?cap_first}.ALIASED_COLS,
-				${relation.relation.joinTable?cap_first}Contract.${relation.relation.joinTable?cap_first}.ALIASED_${NamingUtils.alias(relation.relation.mappedBy)} + "= ?",
+				<#list curr_ids as id>${relation.relation.joinTable?cap_first}Contract.${relation.relation.joinTable?cap_first}.ALIASED_${NamingUtils.alias(relation.relation.mappedBy)}_${id.name?upper_case} 
+						+ "= ?<#if id_has_next> AND "
+						+ </#if></#list>",
 				new String[]{String.valueOf(item.get${curr_ids[0].name?cap_first}())},
 				null);
 
@@ -640,12 +738,13 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			${relation.relation.targetEntity?uncap_first}Crits.add(inCrit);
 
 			while (${relation.relation.joinTable?uncap_first}Cursor.moveToNext()) {
-				int index = ${relation.relation.joinTable?uncap_first}Cursor.getColumnIndex(
-						${relation.relation.joinTable?cap_first}Contract.${relation.relation.joinTable?cap_first}.${NamingUtils.alias(relation.name)});
-				int ${relation.relation.targetEntity?uncap_first}Id = ${relation.relation.joinTable?uncap_first}Cursor.getInt(index);
+				<#list entities[relation.relation.targetEntity].ids as id>
+				<#if (id_index == 0)>int </#if>index = ${relation.relation.joinTable?uncap_first}Cursor.getColumnIndex(
+						${relation.relation.joinTable?cap_first}Contract.${relation.relation.joinTable?cap_first}.${NamingUtils.alias(relation.name)}_${id.name?upper_case});
+				String ${relation.relation.targetEntity?uncap_first}${id.name?cap_first} = ${relation.relation.joinTable?uncap_first}Cursor.getString(index);
+				</#list>
 
-				arrayValue.addValue(String.valueOf(
-						${relation.relation.targetEntity?uncap_first}Id));
+				arrayValue.addValue(<#list entities[relation.relation.targetEntity].ids as id>${relation.relation.targetEntity?uncap_first}${id.name?cap_first}<#if id_has_next> + "::dirtyHack::" + </#if></#list>);
 			}
 			${relation.relation.joinTable?uncap_first}Cursor.close();
 			Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(

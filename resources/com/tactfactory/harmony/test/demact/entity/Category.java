@@ -12,6 +12,8 @@ import java.util.ArrayList;
 
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Entity;
+import com.tactfactory.harmony.annotation.GeneratedValue;
+import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
 import com.tactfactory.harmony.annotation.Id;
 import com.tactfactory.harmony.annotation.OneToMany;
 
@@ -21,6 +23,7 @@ public class Category {
 
 	/** Entity's technical id. */
 	@Id
+	@GeneratedValue(strategy=Strategy.MODE_IDENTITY)
 	@Column
 	private int id;
 

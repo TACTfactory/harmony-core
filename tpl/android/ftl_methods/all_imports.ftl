@@ -7,6 +7,8 @@
 <#import utilityPath + "fields_methods.ftl" as FieldsUtils />
 <#import utilityPath + "view_methods.ftl" as ViewUtils />
 <#import utilityPath + "adapters_methods.ftl" as AdapterUtils />
+<#import utilityPath + "contract_methods.ftl" as ContractUtils />
+<#import utilityPath + "ids_methods.ftl" as IdsUtils />
 <#if current_entity??>
 	<#assign curr = entities[current_entity] />
 	<#assign singleTabInheritance = (curr.inheritance?? && curr.inheritance.inheritanceType?? && curr.inheritance.inheritanceType == "SingleTable") />

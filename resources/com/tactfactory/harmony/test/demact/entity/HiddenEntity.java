@@ -17,6 +17,7 @@ import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Entity;
 import com.tactfactory.harmony.annotation.Crud;
 import com.tactfactory.harmony.annotation.GeneratedValue;
+import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
 import com.tactfactory.harmony.annotation.Id;
 import com.tactfactory.harmony.annotation.ManyToMany;
 import com.tactfactory.harmony.annotation.ManyToOne;
@@ -36,7 +37,7 @@ public class HiddenEntity implements Serializable {
 	/** Entity's technical id. */
 	@Id
     @Column(type = Type.INTEGER)
-    @GeneratedValue(strategy = "IDENTITY")
+    @GeneratedValue(strategy = Strategy.MODE_IDENTITY)
 	private int id;
 
 	/** Content of the post. */
