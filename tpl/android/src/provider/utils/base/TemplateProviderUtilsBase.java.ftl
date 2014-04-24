@@ -88,9 +88,8 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			<#assign fieldNames = ContractUtils.getColumnsNames(relation) />
 			<#if (relation.relation.type == "OneToMany") >
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
-			${relation.relation.targetEntity}Criterias crit =
-					new ${relation.relation.targetEntity}Criterias(GroupType.AND);
-			Criteria inCrit = new Criteria();
+			CriteriaExpression crit = new CriteriaExpression(GroupType.AND);
+			Criterion inCrit = new Criterion();
 			crit.add(inCrit);
 			
 			inCrit.setKey(<#list IdsUtils.getAllIdsColsFromArray(targetEntity.ids) as refId>${refId}<#if refId_has_next>
@@ -208,9 +207,8 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			<#assign fieldNames = ContractUtils.getColumnsNames(relation) />
 			<#if (relation.relation.type == "OneToMany") >
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
-			${relation.relation.targetEntity}Criterias crit =
-					new ${relation.relation.targetEntity}Criterias(GroupType.AND);
-			Criteria inCrit = new Criteria();
+			CriteriaExpression crit = new CriteriaExpression(GroupType.AND);
+			Criterion inCrit = new Criterion();
 			crit.add(inCrit);
 			
 			inCrit.setKey(${ContractUtils.getContractCol(entities[relation.relation.targetEntity].ids[0])});
@@ -335,8 +333,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		${curr.name?cap_first} result = null;
 		ContentResolver prov = this.getContext().getContentResolver();
 
-		${curr.name}Criterias crits =
-				new ${curr.name}Criterias(GroupType.AND);
+		CriteriaExpression crits = new CriteriaExpression(GroupType.AND);
 		<#assign idGetters = IdsUtils.getAllIdsGettersFromArray(curr_ids) />
 		<#list IdsUtils.getAllIdsColsFromArray(curr_ids) as id>
 		crits.add(${id},
@@ -399,11 +396,10 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 	/**
 	 * Query the DB to get the entities filtered by criteria.
-	 * @param criteria The criteria defining the selection and selection args
+	 * @param expression The criteria expression defining the selection and selection args
 	 * @return ArrayList<${curr.name}>
 	 */
-	public ArrayList<${curr.name}> query(
-				CriteriasBase<${curr.name}> criteria) {
+	public ArrayList<${curr.name}> query(CriteriaExpression expression) {
 		ArrayList<${curr.name}> result =
 					new ArrayList<${curr.name}>();
 		ContentResolver prov = this.getContext().getContentResolver();
@@ -411,8 +407,8 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		Cursor cursor = prov.query(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
 				${curr.name?cap_first}Contract.${curr.name?cap_first}.ALIASED_COLS,
-				criteria.toSQLiteSelection(),
-				criteria.toSQLiteSelectionArgs(),
+				expression.toSQLiteSelection(),
+				expression.toSQLiteSelectionArgs(),
 				null);
 
 		result = ${curr.name?cap_first}Contract.${curr.name}.cursorToItems(cursor);
@@ -448,9 +444,9 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			<#if (relation.relation.type == "OneToMany")>
 		if (item.get${relation.name?cap_first}() != null && item.get${relation.name?cap_first}().size() > 0) {
 			// Set new ${relation.name} for ${curr.name}
-			${relation.relation.targetEntity}Criterias ${relation.name}Crit =
-						new ${relation.relation.targetEntity}Criterias(GroupType.AND);
-			Criteria crit = new Criteria();
+			CriteriaExpression ${relation.name}Crit = 
+					new CriteriasExpression(GroupType.AND);
+			Criterion crit = new Criterion();
 			ArrayValue values = new ArrayValue();
 			crit.setType(Type.IN);
 			crit.setKey(${ContractUtils.getContractCol(entities[relation.relation.targetEntity].ids[0])});
@@ -559,9 +555,9 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			String selection;
 			String[] selectionArgs;
 			// Set new ${relation.name} for ${curr.name}
-			${relation.relation.targetEntity}Criterias ${relation.name}Crit =
-						new ${relation.relation.targetEntity}Criterias(GroupType.AND);
-			Criteria crit = new Criteria();
+			CriteriaExpression ${relation.name}Crit =
+						new CriteriaExpression(GroupType.AND);
+			Criterion crit = new Criterion();
 			ArrayValue values = new ArrayValue();
 			crit.setType(Type.IN);
 			crit.setKey(<#list IdsUtils.getAllIdsColsFromArray(entities[relation.relation.targetEntity].ids) as id>${id}<#if id_has_next>
@@ -728,9 +724,9 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 				null);
 
 		if (${relation.relation.joinTable?uncap_first}Cursor.getCount() > 0) {
-			${relation.relation.targetEntity}Criterias ${relation.relation.targetEntity?uncap_first}Crits =
-					new ${relation.relation.targetEntity}Criterias(GroupType.AND);
-			Criteria inCrit = new Criteria();
+			CriteriaExpression ${relation.relation.targetEntity?uncap_first}Crits =
+					new CriteriaExpression(GroupType.AND);
+			Criterion inCrit = new Criterion();
 			ArrayValue arrayValue = new ArrayValue();
 			inCrit.setKey(${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)});
 			inCrit.setType(Type.IN);
