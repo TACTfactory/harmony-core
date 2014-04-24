@@ -1,0 +1,10 @@
+Worker:
+#   Worker_name:
+#      manager:
+#      firstname:
+#      lastname:
+#      name:
+#      phoneNumber:
+#      company:
+#      addresses:
+#      holidays:

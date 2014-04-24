@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<Office id="Office1">
+		<floor>1</floor>
+		<name>Room101</name>
+		<cleaningDay>Christmas</cleaningDay>
+		<furniture>TV1</furniture>
+	</Office>
+	<Office id="Office2">
+		<floor>2</floor>
+		<name>Room201</name>
+		<cleaningDay>NationalDay</cleaningDay>
+		<furniture>Projector1</furniture>
+	</Office>
+	<Office id="Office3">
+		<floor>2</floor>
+		<name>Room202</name>
+		<cleaningDay>Thanksgiving</cleaningDay>
+		<furniture>Projector2</furniture>
+	</Office>
+</list>

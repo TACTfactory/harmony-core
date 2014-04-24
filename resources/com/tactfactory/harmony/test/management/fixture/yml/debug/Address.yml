@@ -1,0 +1,26 @@
+Address:
+   Address1:
+      street: Madison Street
+      city: New-York
+      country: USA
+      streetNumber: 12
+      zipcode: "12345"
+      inhabitants:
+          1: Billou
+   Address2:
+      street: Fleet Street
+      city: New-York
+      country: USA
+      streetNumber: 25
+      zipcode: "12346"
+      inhabitants:
+          1: Worker1
+   Address3:
+      street: Baker Street
+      city: London
+      country: UK
+      streetNumber: 201
+      zipcode: "12347"
+      inhabitants:
+          1: Worker2
+          2: Worker3

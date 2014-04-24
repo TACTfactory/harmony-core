@@ -1,0 +1,10 @@
+Manager:
+   Billou:
+      salary: 10000
+      firstname: Bill
+      lastname: Gates
+      name: Bill Gates
+      phoneNumber: "0101010101"
+      company: Microsoft
+      addresses:
+          1: Address1

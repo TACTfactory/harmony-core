@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<Day id="Christmas">
+		<identifier>20141225</identifier>
+		<day>25</day>
+		<month>12</month>
+		<year>2014</year>
+		<publicHoliday>true</publicHoliday>
+		<officeToClean>Office1</officeToClean>
+	</Day>
+	<Day id="NationalDay">
+		<identifier>20140704</identifier>
+		<day>4</day>
+		<month>7</month>
+		<year>2014</year>
+		<publicHoliday>true</publicHoliday>
+		<officeToClean>Office2</officeToClean>
+	</Day>
+	<Day id="Thanksgiving">
+		<identifier>20141127</identifier>
+		<day>27</day>
+		<month>11</month>
+		<year>2014</year>
+		<publicHoliday>false</publicHoliday>
+		<officeToClean>Office3</officeToClean>
+	</Day>
+</list>

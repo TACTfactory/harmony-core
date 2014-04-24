@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<list>
+	<TV id="TV1">
+		<brand>Samsung</brand>
+		<width>1024</width>
+		<height>768</height>
+		<id>1001</id>
+		<price>1000</price>
+		<purchaseDate>2010-01-01T00:00:00.000+00:00</purchaseDate>
+	</TV>
+</list>

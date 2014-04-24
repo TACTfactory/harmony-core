@@ -18,6 +18,7 @@ import com.tactfactory.harmony.annotation.ColumnResult;
 import com.tactfactory.harmony.annotation.DiscriminatorColumn;
 import com.tactfactory.harmony.annotation.Entity;
 import com.tactfactory.harmony.annotation.GeneratedValue;
+import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
 import com.tactfactory.harmony.annotation.Id;
 import com.tactfactory.harmony.annotation.InheritanceType;
 import com.tactfactory.harmony.annotation.ManyToOne;
@@ -39,7 +40,7 @@ public class User extends Object implements Cloneable, Serializable {
 	/** Entity's technical id. */
 	@Id
     @Column(type = Type.INTEGER, hidden = true)
-    @GeneratedValue(strategy = "IDENTITY")
+    @GeneratedValue(strategy = Strategy.MODE_IDENTITY)
     private int id;
 
 	/** Login. */

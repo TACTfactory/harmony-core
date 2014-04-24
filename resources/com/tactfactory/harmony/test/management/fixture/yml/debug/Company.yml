@@ -1,0 +1,7 @@
+Company:
+   Microsoft:
+      name: Microsoft
+      employees:
+          1: Worker1
+          2: Worker2
+          3: Worker3

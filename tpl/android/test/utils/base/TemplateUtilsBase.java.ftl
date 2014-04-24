@@ -151,9 +151,11 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().size(),
 					${curr.name?uncap_first}2.get${field.name?cap_first}().size());
 				if (checkRecursiveId) {
-					for (int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){
-						Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i).get${entities[field.relation.targetEntity].ids[0].name?cap_first}(),
-									${curr.name?uncap_first}2.get${field.name?cap_first}().get(i).get${entities[field.relation.targetEntity].ids[0].name?cap_first}());
+					for (int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){					
+						<#list IdsUtils.getAllIdsGetters(entities[field.relation.targetEntity]) as refId>
+						Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i)${refId},
+									${curr.name?uncap_first}2.get${field.name?cap_first}().get(i)${refId});
+						</#list>
 					}
 				}
 					</#if>

@@ -1,0 +1,17 @@
+Office:
+   Office1:
+      floor: 1
+      name: Room101
+      cleaningDay: Christmas
+      furniture: TV1
+   Office2:
+      floor: 2
+      name: Room201
+      cleaningDay: NationalDay
+      furniture: Projector1
+   Office3:
+      floor: 2
+      name: Room202
+      cleaningDay: Thanksgiving
+      furniture: Projector2
+

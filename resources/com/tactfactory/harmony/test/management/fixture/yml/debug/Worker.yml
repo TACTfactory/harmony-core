@@ -1,0 +1,36 @@
+Worker:
+   Worker1:
+      manager: Billou
+      firstname: John
+      lastname: Smith
+      name: John Smith
+      phoneNumber: "0202020202"
+      company: Microsoft
+      addresses:
+          1: Address2
+      holidays:
+          1: Christmas
+          2: NationalDay
+   Worker2:
+      manager: Billou
+      firstname: James
+      lastname: Johnson
+      name: James Johnson
+      phoneNumber: "0303030303"
+      company: Microsoft
+      addresses:
+          1: Address3
+      holidays:
+          1: Christmas
+          2: Thanksgiving
+   Worker3:
+      manager: Billou
+      firstname: Mary
+      lastname: Johnson
+      name: Mary Johnson
+      phoneNumber: "0303030303"
+      company: Microsoft
+      addresses:
+          1: Address3
+      holidays:
+          1: Christmas
