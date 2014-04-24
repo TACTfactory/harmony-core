@@ -19,7 +19,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  * Entity Generator.
  * Used to decorate or generate entities.
  */
-public class EntityGenerator extends BaseGenerator {
+public class EntityGenerator extends BaseGenerator<IAdapter> {
 
 	/** Constructor.
 	 * @param adapter Adapter used by this generator

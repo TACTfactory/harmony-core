@@ -19,7 +19,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 /**
  * Enum Generator class.
  */
-public class EnumGenerator extends BaseGenerator {
+public class EnumGenerator extends BaseGenerator<IAdapter> {
 	/** Constructor.
 	 * @param adapt Adapter used by this generator
 	 * @throws Exception if adapter is null

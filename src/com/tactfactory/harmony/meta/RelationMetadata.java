@@ -170,7 +170,7 @@ public final class RelationMetadata extends BaseMetadata {
 	 */
 	private List<Map<String, Object>> toFieldArray(
 			final Collection<FieldMetadata> c,
-			final BaseAdapter adapter) {
+			final IAdapter adapter) {
 		final List<Map<String, Object>> result =
 				new ArrayList<Map<String, Object>>();
 		Map<String, Object> subField = null;

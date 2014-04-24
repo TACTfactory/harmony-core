@@ -19,7 +19,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  * Strings and config generator.
  *
  */
-public class TranslationGenerator extends BaseGenerator {
+public class TranslationGenerator extends BaseGenerator<IAdapter> {
 
 	/**
 	 * Constructor.

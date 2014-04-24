@@ -22,7 +22,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 /**
  * Generate the CRUD activities.
  */
-public class ActivityGenerator extends BaseGenerator {
+public class ActivityGenerator extends BaseGenerator<IAdapter> {
 
 	/** Are the entities writable ? */
 	private boolean isWritable;

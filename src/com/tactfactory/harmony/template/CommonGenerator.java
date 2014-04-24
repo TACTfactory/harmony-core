@@ -18,7 +18,7 @@ import com.tactfactory.harmony.updater.IUpdater;
 /**
  * Generator class for common commands. (Generate static view, etc.)
  */
-public class CommonGenerator extends BaseGenerator {
+public class CommonGenerator extends BaseGenerator<IAdapter> {
 
 	/**
 	 * Constructor.

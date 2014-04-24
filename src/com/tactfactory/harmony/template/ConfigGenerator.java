@@ -16,7 +16,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 /**
  * Configuration generator.
  */
-public class ConfigGenerator extends BaseGenerator {
+public class ConfigGenerator extends BaseGenerator<IAdapter> {
     /**
      * Constructor.
      * @param adapter The adapter to use

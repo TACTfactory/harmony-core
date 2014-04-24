@@ -16,7 +16,7 @@ import com.tactfactory.harmony.updater.IUpdater;
 /**
  * Utility class used to add buttons to the home activity. 
  */
-public class HomeActivityGenerator extends BaseGenerator {
+public class HomeActivityGenerator extends BaseGenerator<IAdapter> {
 	
 	public HomeActivityGenerator(IAdapter adapter) {
 	    super(adapter);

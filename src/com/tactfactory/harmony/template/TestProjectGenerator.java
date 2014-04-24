@@ -12,7 +12,7 @@ import com.tactfactory.harmony.updater.IUpdater;
  * Test project generator.
  *
  */
-public class TestProjectGenerator extends BaseGenerator {
+public class TestProjectGenerator extends BaseGenerator<IAdapter> {
 
 	/**
 	 * Constructor.

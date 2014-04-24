@@ -17,7 +17,7 @@ import com.tactfactory.harmony.updater.IUpdater;
  * Generate the application.
  *
  */
-public class ApplicationGenerator extends BaseGenerator {
+public class ApplicationGenerator extends BaseGenerator<IAdapter> {
 	/**
 	 * Constructor.
 	 * @param adapter the adapter to use

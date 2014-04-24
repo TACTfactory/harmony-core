@@ -21,6 +21,7 @@ import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.plateforme.IAdapterProject;
+import com.tactfactory.harmony.updater.impl.CopyFile;
 import com.tactfactory.harmony.updater.impl.LibraryGit;
 import com.tactfactory.harmony.plateforme.android.AndroidProjectAdapter.LibraryGitAndroid;
 import com.tactfactory.harmony.plateforme.manipulator.JavaFileManipulator;
@@ -33,7 +34,7 @@ import com.tactfactory.harmony.utils.TactFileUtils;
 import freemarker.template.Configuration;
 
 /** Google Android Adapter of project structure. */
-public final class AndroidAdapter extends BaseAdapter {
+public class AndroidAdapter extends BaseAdapter {
 
 	/** Constant for java extension. */
 	private static final String JAVA_EXTENSION = "java";
@@ -492,5 +493,18 @@ public final class AndroidAdapter extends BaseAdapter {
                 this.getSourcePath(),
                 this.getApplicationMetadata().getProjectNameSpace(),
                 "entity");
+    }
+    
+    protected List<CopyFile> getLibrariesCopyFile(List<String> libraries) {
+        List<CopyFile> result = new ArrayList<CopyFile>();
+        String destination = this.getLibsPath() + "%s";
+        
+        for (String library : libraries) {
+            result.add(new CopyFile(
+                    Harmony.getLibrary(library).getAbsolutePath(),
+                    String.format(destination, library)));
+        }
+        
+        return result;
     }
 }

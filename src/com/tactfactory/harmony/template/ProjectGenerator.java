@@ -21,7 +21,7 @@ import com.tactfactory.harmony.utils.TactFileUtils;
  * Generator class for the project.
  *
  */
-public class ProjectGenerator extends BaseGenerator {
+public class ProjectGenerator extends BaseGenerator<IAdapter> {
 
 	/**
 	 * Constructor.

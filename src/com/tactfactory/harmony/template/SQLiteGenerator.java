@@ -19,7 +19,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 /**
  * SQLite Generator.
  */
-public class SQLiteGenerator extends BaseGenerator {
+public class SQLiteGenerator extends BaseGenerator<IAdapter> {
 
 	/**
 	 * Constructor.

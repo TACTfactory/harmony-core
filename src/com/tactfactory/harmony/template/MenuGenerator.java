@@ -17,7 +17,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 /**
  * The generator class for Menu.
  */
-public class MenuGenerator extends BaseGenerator {
+public class MenuGenerator extends BaseGenerator<IAdapter> {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use

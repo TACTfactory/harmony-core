@@ -12,11 +12,12 @@ import java.util.HashMap;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 
 /**
  * Generator for bundles.
  */
-public class BundleGenerator extends BaseGenerator {
+public class BundleGenerator extends BaseGenerator<IAdapter> {
 
 	/**
 	 * Constructor.

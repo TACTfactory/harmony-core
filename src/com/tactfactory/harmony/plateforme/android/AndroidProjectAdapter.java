@@ -407,7 +407,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
         libraries.add("jsr305.jar");
         libraries.add("core-annotations.jar");
         
-        result.addAll(this.getLibrariesCopyFile(libraries));
+        result.addAll(this.adapter.getLibrariesCopyFile(libraries));
         
         String pathLib = new File(String.format("%s%s",
                 this.adapter.getLibsPath(), "sherlock")).getAbsolutePath();
@@ -448,19 +448,6 @@ public class AndroidProjectAdapter implements IAdapterProject {
         return result;
     }
     
-    private List<CopyFile> getLibrariesCopyFile(List<String> libraries) {
-        List<CopyFile> result = new ArrayList<CopyFile>();
-        String destination = this.adapter.getLibsPath() + "%s";
-        
-        for (String library : libraries) {
-            result.add(new CopyFile(
-                    Harmony.getLibrary(library).getAbsolutePath(),
-                    String.format(destination, library)));
-        }
-        
-        return result;
-    }
-    
     private List<CopyFile> getTestLibrariesCopyFile(List<String> libraries) {
         List<CopyFile> result = new ArrayList<CopyFile>();
         String destination = this.adapter.getTestLibsPath() + "%s";
@@ -482,7 +469,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
         libraries.add("universal-image-loader-1.8.6-with-sources.jar");
         libraries.add("ImageViewTouch.jar");
         
-        result.addAll(this.getLibrariesCopyFile(libraries));
+        result.addAll(this.adapter.getLibrariesCopyFile(libraries));
         
         return result;
     }
@@ -943,7 +930,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
             libraries.add("snakeyaml-1.10-android.jar");
         }
         
-        result.addAll(this.getLibrariesCopyFile(libraries));
+        result.addAll(this.adapter.getLibrariesCopyFile(libraries));
         
         return result;
     }

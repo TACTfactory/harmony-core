@@ -41,7 +41,7 @@ import freemarker.template.TemplateException;
 /**
  * Base Generator.
  */
-public abstract class BaseGenerator {
+public abstract class BaseGenerator<T extends IAdapter> {
 
 	// Meta-models
 	/** The application metadata. */
@@ -49,7 +49,7 @@ public abstract class BaseGenerator {
 
 	// Platform adapter
 	/** The used adapter. */
-	private IAdapter adapter;
+	private T adapter;
 	/** The datamodel. */
 	private Map<String, Object> datamodel;
 
@@ -74,15 +74,8 @@ public abstract class BaseGenerator {
 	/**
 	 * @return the adapter
 	 */
-	public final IAdapter getAdapter() {
+	public final T getAdapter() {
 		return adapter;
-	}
-
-	/**
-	 * @param adapter the adapter to set
-	 */
-	public final void setAdapter(final IAdapter adapter) {
-		this.adapter = adapter;
 	}
 
 	/**
@@ -118,7 +111,7 @@ public abstract class BaseGenerator {
 	 * @param adapter The adapter to use
 	 * @throws Exception if adapter is null
 	 */
-	public BaseGenerator(final IAdapter adapter) {
+	public BaseGenerator(final T adapter) {
 		if (adapter == null) {
 			throw new RuntimeException("No adapter define.");
 		}

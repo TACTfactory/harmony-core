@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Generator for provider tests.
  */
-public class TestProviderGenerator extends BaseGenerator {
+public class TestProviderGenerator extends BaseGenerator<IAdapter> {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use

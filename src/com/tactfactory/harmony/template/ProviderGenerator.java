@@ -21,7 +21,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  * The provider generator.
  *
  */
-public class ProviderGenerator extends BaseGenerator {
+public class ProviderGenerator extends BaseGenerator<IAdapter> {
 	/** Provider name string id. */
 	public static final String PROVIDER_NAME_STRING_ID = 
 			"app_provider_name";

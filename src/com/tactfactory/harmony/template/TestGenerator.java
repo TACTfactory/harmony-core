@@ -18,7 +18,7 @@ import java.util.List;
 /**
  * Tests generator.
  */
-public class TestGenerator extends BaseGenerator {
+public class TestGenerator extends BaseGenerator<IAdapter> {
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use

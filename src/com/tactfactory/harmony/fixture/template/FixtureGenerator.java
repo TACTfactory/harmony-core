@@ -29,7 +29,7 @@ import com.tactfactory.harmony.utils.TactFileUtils;
 /**
  * Fixture bundle generator.
  */
-public class FixtureGenerator extends BaseGenerator {
+public class FixtureGenerator extends BaseGenerator<IAdapter> {
 
 	/**
 	 * Constructor.
