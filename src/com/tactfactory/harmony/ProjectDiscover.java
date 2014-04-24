@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 import org.jdom2.Document;
@@ -44,14 +45,13 @@ public final class ProjectDiscover {
 			"com.tactfactory.harmony.test.demact";
 
 	/** Default project NameSpace. */
-	private static String defaultSDKPath =
-			"/opt/android-sdk/";
+	private static String defaultSDKPath;
 
 	/** Android SDK version. */
 	private static String androidSdkVersion;
-
-	/** Detected OS name. */
-	private static String detectedOS = "Unknown";
+	
+	/** Android home environment variables key. */
+	private static final String ANDROID_HOME = "ANDROID_HOME";
 
 	/**
 	 * Private constructor.
@@ -59,22 +59,43 @@ public final class ProjectDiscover {
 	private ProjectDiscover() { }
 
 	static {
-		if (OsUtil.isWindows()) {
-			if (OsUtil.isX64()) {
-				detectedOS = "Windows x64";
-				defaultSDKPath = "C:/Program Files/android-sdk";
-
-			} else if (!OsUtil.isX64()) {
-				detectedOS = "Windows x86";
-				defaultSDKPath = "C:/Program Files (x86)/android-sdk";
+		ProjectDiscover.defaultSDKPath = 
+				ProjectDiscover.findSDKEnvironmentVariable();
+		
+		if (ProjectDiscover.defaultSDKPath == null) {
+			if (OsUtil.isWindows()) {
+				if (OsUtil.isX64()) {
+					ProjectDiscover.defaultSDKPath = 
+							"C:/Program Files (x86)/android-sdk";
+				} else {
+					ProjectDiscover.defaultSDKPath = 
+							"C:/Program Files/android-sdk";
+				}
+			} else if (OsUtil.isLinux()) {
+				ProjectDiscover.defaultSDKPath = "/opt/android-sdk/";
 			} else {
-				detectedOS = "Windows x??";
-				defaultSDKPath = "C:/Program Files/android-sdk";
+				ProjectDiscover.defaultSDKPath = "/opt/android-sdk/";
 			}
-		} else if (OsUtil.isLinux()) {
-			detectedOS = "Linux";
-			defaultSDKPath = "/opt/android-sdk/";
 		}
+	}
+	
+	/**
+	 * Search the system's environment variables for the android sdk path and
+	 * returns it.
+	 * 
+	 * @return The AndroidSDKPath if found, null otherwise
+	 */
+	private static String findSDKEnvironmentVariable() {
+		String result = null;
+		
+		Map<String, String> env = System.getenv();
+        for (String envName : env.keySet()) {
+        	if (envName.equalsIgnoreCase(ANDROID_HOME)) {
+        		result = env.get(envName);
+        	}
+        }
+		
+		return result;
 	}
 
 	/**
@@ -120,7 +141,7 @@ public final class ProjectDiscover {
 		}
 
 		if (result != null) {
-			defaultSDKPath = result;
+			ProjectDiscover.defaultSDKPath = result;
 		}
 
 		return result;
@@ -183,6 +204,8 @@ public final class ProjectDiscover {
 
 	/**
 	 * Prompt Project Android SDK Path to the user.
+	 * 
+	 * @param arguments The console arguments passed by the user
 	 */
 	public static void initProjectAndroidSdkPath(
 			HashMap<String, String> arguments) {
@@ -191,16 +214,17 @@ public final class ProjectDiscover {
 			Questionnary questionnary = new Questionnary(arguments);
 			Question question = new Question();
 			question.setParamName("androidsdk");
-			question.setDefaultValue(defaultSDKPath);
+			question.setDefaultValue(ProjectDiscover.defaultSDKPath);
 			question.setQuestion(String.format(
 					"Please enter AndroidSDK full path [%s]:",
-							defaultSDKPath));
+							ProjectDiscover.defaultSDKPath));
 			question.setShortParamName("sdk");
 			
 			
 			questionnary.addQuestion("sdk", question);
 			questionnary.launchQuestionnary();
-			ApplicationMetadata.setAndroidSdkPath(questionnary.getAnswer("sdk"));
+			ApplicationMetadata.setAndroidSdkPath(
+					questionnary.getAnswer("sdk"));
 		}
 	}
 
@@ -282,6 +306,8 @@ public final class ProjectDiscover {
 
 	/**
 	 * Prompt Project Name to the user.
+	 * 
+	 * @param arguments The console arguments passed by the user
 	 */
 	public static void initProjectName(HashMap<String, String> arguments) {
 		if (Strings.isNullOrEmpty(ApplicationMetadata.INSTANCE.getName())) {
@@ -303,8 +329,11 @@ public final class ProjectDiscover {
 
 	/**
 	 * Prompt Project Name Space to the user.
+	 * 
+	 * @param arguments The console arguments passed by the user
 	 */
-	public static void initProjectNameSpace(HashMap<String, String> arguments) {
+	public static void initProjectNameSpace(
+			HashMap<String, String> arguments) {
 		if (Strings.isNullOrEmpty(
 				ApplicationMetadata.INSTANCE.getProjectNameSpace())) {
 			Questionnary questionnary = new Questionnary(arguments);

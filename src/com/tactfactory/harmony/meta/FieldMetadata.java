@@ -88,7 +88,11 @@ public final class FieldMetadata extends BaseMetadata {
 	 * @param componentName The component name
 	 */
 	public final void makeString(final String componentName) {
-		if (!this.hidden) {
+		if (!this.hidden 
+				&& !this.internal
+				&& (this.owner instanceof EntityMetadata) 
+				&& !((EntityMetadata) this.owner).isHidden()
+				&& !((EntityMetadata) this.owner).isInternal()) {
 			final String key =
 					this.owner.getName().toLowerCase()
 					+ "_"
@@ -131,13 +135,18 @@ public final class FieldMetadata extends BaseMetadata {
 								CaseFormat.UPPER_CAMEL, this.getName()),
 						Group.MODEL);
 	
-			TranslationMetadata.addDefaultTranslation(
-					key + "_invalid_field_error",
-					"Field " 
-							+ CaseFormat.LOWER_CAMEL.to(
-									CaseFormat.UPPER_CAMEL, this.getName())
-							+ " is invalid.",
-					Group.MODEL);
+			if (!this.nullable 
+					&& !this.type.equalsIgnoreCase("boolean")
+					&& !this.harmonyType.equalsIgnoreCase(Type.ENUM.getValue())
+					&& !this.columnResult) {
+				TranslationMetadata.addDefaultTranslation(
+						key + "_invalid_field_error",
+						"Field " 
+								+ CaseFormat.LOWER_CAMEL.to(
+										CaseFormat.UPPER_CAMEL, this.getName())
+								+ " is invalid.",
+						Group.MODEL);
+			}
 		}
 	}
 

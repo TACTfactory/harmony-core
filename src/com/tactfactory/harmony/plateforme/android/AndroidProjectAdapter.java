@@ -350,6 +350,10 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 templatePath + "base/ApplicationSQLiteAdapterBase.java",
                 filePath + "base/SQLiteAdapterBase.java",
                 true));
+        result.add(new SourceFile(
+                templatePath + "ApplicationSQLiteAdapter.java",
+                filePath + "SQLiteAdapter.java",
+                false));
         
         result.add(new SourceFile(
                 templatePath + "data-package-info.java",
@@ -1105,6 +1109,11 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 true));
         
         result.add(new SourceFile(
+                templatePath + "utils/ApplicationProviderUtils.java",
+                filePath + "utils/ProviderUtils.java",
+                false));
+        
+        result.add(new SourceFile(
                 templatePath + "TemplateProvider.java",
                 filePath + nameProvider + ".java"));
         result.add(new SourceFile(
@@ -1115,6 +1124,10 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 templatePath + "base/ProviderAdapterBase.java",
                 filePath + "base/ProviderAdapterBase.java",
                 true));
+        result.add(new SourceFile(
+                templatePath + "ProviderAdapter.java",
+                filePath + "ProviderAdapter.java",
+                false));
 
         // Package infos
         result.add(new SourceFile(

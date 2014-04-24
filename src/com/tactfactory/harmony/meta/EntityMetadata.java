@@ -169,7 +169,7 @@ public final class EntityMetadata extends ClassMetadata {
 			subField = field.toMap(adapter);
 
 			// Add field translate
-			if (!field.isInternal() && !field.isHidden()) {
+			if (!field.isInternal() && !field.isHidden() && !this.hidden) {
 				field.makeString("label");
 			}
 

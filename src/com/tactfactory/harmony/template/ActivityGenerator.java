@@ -67,8 +67,9 @@ public class ActivityGenerator extends BaseGenerator {
 		        this.getAppMetas().getEntities().values();
 
 		for (final EntityMetadata cm : entities) {
-			if (!cm.isInternal() && cm.hasFields() && !cm.isHidden()) {
-				cm.makeString("label");
+			if (!cm.isInternal() 
+					&& cm.hasFields()
+					&& !cm.isHidden()) {
 				this.getDatamodel().put(
 						TagConstant.CURRENT_ENTITY, cm.getName());
 				this.generateAllAction(cm.getName());
@@ -169,18 +170,6 @@ public class ActivityGenerator extends BaseGenerator {
                     Group.COMMON);
             
             TranslationMetadata.addDefaultTranslation(
-                    entityMetadata.getName() + "_progress_load_relations_title",
-                    entityMetadata.getName() + " related entities loading",
-                    Group.MODEL);
-            
-            TranslationMetadata.addDefaultTranslation(
-                    entityMetadata.getName()
-                            + "_progress_load_relations_message",
-                    entityMetadata.getName()
-                            + " related entities are loading...",
-                    Group.MODEL);
-    
-            TranslationMetadata.addDefaultTranslation(
                     entityMetadata.getName() + "_progress_save_title",
                     entityMetadata.getName() + " save progress",
                     Group.MODEL);
@@ -189,6 +178,21 @@ public class ActivityGenerator extends BaseGenerator {
                     entityMetadata.getName() + "_progress_save_message",
                     entityMetadata.getName() + " is saving to database…",
                     Group.MODEL);
+            
+            if (!entityMetadata.getRelations().isEmpty()
+                    || entityMetadata.getInheritance() != null) {
+                TranslationMetadata.addDefaultTranslation(
+                        entityMetadata.getName() + "_progress_load_relations_title",
+                        entityMetadata.getName() + " related entities loading",
+                        Group.MODEL);
+                
+                TranslationMetadata.addDefaultTranslation(
+                        entityMetadata.getName()
+                                + "_progress_load_relations_message",
+                        entityMetadata.getName()
+                                + " related entities are loading...",
+                        Group.MODEL);
+            }
             
             for (final FieldMetadata fm : entityMetadata.getFields().values()) {
                 if (!fm.isInternal() && !fm.isHidden()

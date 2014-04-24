@@ -23,7 +23,8 @@ import org.joda.time.format.ISODateTimeFormat;
 </#if>
 <#if (!curr.internal)>
 import ${entity_namespace}.${curr.name};
-</#if>import ${project_namespace}.provider.${project_name?cap_first}Provider;
+</#if>import ${project_namespace}.provider.ProviderAdapter;
+import ${project_namespace}.provider.${project_name?cap_first}Provider;
 import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
 <#if (inherited && curr.inheritance.superclass??)>
 import ${project_namespace}.provider.contract.${curr.inheritance.superclass.name?cap_first}Contract;
@@ -57,7 +58,7 @@ import ${project_namespace}.harmony.util.DatabaseUtil;
  * ${curr.name?cap_first}ProviderAdapterBase.
  */
 public abstract class ${curr.name?cap_first}ProviderAdapterBase
-				extends ProviderAdapterBase<${ext}> {
+				extends ProviderAdapter<${ext}> {
 
 	/** TAG for debug purpose. */
 	protected static final String TAG = "${curr.name?cap_first}ProviderAdapter";

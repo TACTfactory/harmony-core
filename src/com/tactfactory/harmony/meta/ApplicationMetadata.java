@@ -205,9 +205,6 @@ public final class ApplicationMetadata extends BaseMetadata {
 		
 		for (final EntityMetadata entityMeta : this.entities.values()) {
 			entitiesMap.put(entityMeta.getName(), entityMeta.toMap(adapt));
-			if (!entityMeta.isInternal()) {
-				entityMeta.makeString("label");
-			}
 		}
 
 		for (final EnumMetadata enumMeta : this.enums.values()) {
