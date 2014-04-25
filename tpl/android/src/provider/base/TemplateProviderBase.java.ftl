@@ -5,8 +5,11 @@ package ${local_namespace}.base;
 import java.util.ArrayList;
 
 import android.content.ContentProvider;
+import android.content.ContentProviderOperation;
+import android.content.ContentProviderResult;
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.OperationApplicationException;
 import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -46,6 +49,10 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	 * Database.
 	 */
 	protected SQLiteDatabase db;
+	/**
+	 * Is this provider currently in a batch operation ?
+	 */
+	private boolean isBatch = false;
 
 	/**
 	 * Context.
@@ -308,5 +315,25 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	 */
 	public static UriMatcher getUriMatcher() {
 		return uriMatcher;
+	}
+
+	@Override
+	public ContentProviderResult[] applyBatch(
+			ArrayList<ContentProviderOperation> operations)
+			throws OperationApplicationException {
+		ContentProviderResult[] result;
+		this.isBatch = true;
+		this.db.beginTransaction();
+		try {
+			result = super.applyBatch(operations);
+			this.db.setTransactionSuccessful();
+			this.db.endTransaction();
+			this.isBatch = false;
+			return result;
+		} catch (OperationApplicationException e) {
+			this.db.endTransaction();
+			this.isBatch = false;
+			throw e;
+		}
 	}
 }
