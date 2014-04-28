@@ -3,6 +3,8 @@
 package ${local_namespace}.base;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
@@ -11,6 +13,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.OperationApplicationException;
 import android.content.UriMatcher;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -58,6 +61,13 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	 * Context.
 	 */
 	protected Context mContext;
+	
+	/** 
+	 * Hashmap containing the uris to notify at the end of a batch and their
+	 * associated ContentObservers.
+	 */
+	protected Map<Uri, ContentObserver> urisToNotify = 
+			new HashMap<Uri, ContentObserver>();
 
 	/**
 	 * Called when the contentProvider is first created.
@@ -77,21 +87,17 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			<#if (entity.fields?size>0 || entity.inheritance??) >
 				<#if (firstGo)>
 		${entity.name?cap_first}ProviderAdapter ${entity.name?uncap_first}ProviderAdapter =
-			new ${entity.name?cap_first}ProviderAdapter(this.mContext);
+			new ${entity.name?cap_first}ProviderAdapter(this);
 		this.db = ${entity.name?uncap_first}ProviderAdapter.getDb();			
 		this.providerAdapters.add(${entity.name?uncap_first}ProviderAdapter);
 					<#assign firstGo = false />
 				<#else>
 		this.providerAdapters.add(
-				new ${entity.name?cap_first}ProviderAdapter(
-					this.mContext,
-					this.db));
+				new ${entity.name?cap_first}ProviderAdapter(this));
 				</#if>
 				<#if (entity.options.sync??)>
 		this.providerAdapters.add(
-				new ${entity.name?cap_first}SyncProviderAdapter(
-					this.mContext,
-					this.db));
+				new ${entity.name?cap_first}SyncProviderAdapter(this));
 				</#if>
 			</#if>
 		</#list>
@@ -335,5 +341,50 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 			this.isBatch = false;
 			throw e;
 		}
+	}
+
+	/**
+	 * Ask the provider to notify an Uri. This method is useful 
+	 * for not notifying the same Uri a lot of times when we're in case of a
+	 * batch. (It will delay all the uri changes notification at the end of the
+	 * batch.)
+	 * 
+	 * @param uri The uri to notify
+	 * @param observer The observer that originated the change.
+	 */
+	public void notifyUri(Uri uri, ContentObserver observer) {
+		try {
+			Thread.sleep(1000);
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
+		if (this.isBatch) {
+			if (!this.urisToNotify.containsKey(uri)) {
+				this.urisToNotify.put(uri, observer);
+			}
+		} else {
+			this.getContext().getContentResolver().notifyChange(uri, observer);
+		}
+	}
+	
+	/**
+	 * Notify all stored uris in case we're in a batch.
+	 */
+	protected void notifyAllUrisNow() {
+		for (Uri uri : this.urisToNotify.keySet()) {
+			this.getContext().getContentResolver().notifyChange(
+					uri,
+					this.urisToNotify.get(uri));
+		}
+		this.urisToNotify.clear();
+	}
+
+	/**
+	 * Returns the sqlite database object attached to this provider.
+	 *
+	 * @return The sqlite database
+	 */
+	public SQLiteDatabase getDatabase() {
+		return this.db;
 	}
 }

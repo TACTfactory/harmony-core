@@ -1,9 +1,9 @@
 <@header?interpret />
 package ${local_namespace};
 
-import ${local_namespace}.base.ProviderAdapterBase;
-
-import android.content.Context;
+import ${project_namespace}.provider.base.ProviderAdapterBase;
+import ${project_namespace}.provider.base.${project_name?cap_first}ProviderBase;
+import ${project_namespace}.data.base.SQLiteAdapterBase;
 
 /**
  * ProviderAdapter<T>. 
@@ -19,7 +19,9 @@ public abstract class ProviderAdapter<T> extends ProviderAdapterBase<T> {
 	 *
 	 * @param context The context.
 	 */
-	public ProviderAdapter(final Context context) {
-		super(context);
+	public ProviderAdapter(
+				final ${project_name?cap_first}ProviderBase provider,
+				final SQLiteAdapterBase<T> adapter) {
+		super(provider, adapter);
 	}
 }
