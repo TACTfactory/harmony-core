@@ -42,8 +42,13 @@ public class EnumGenerator extends BaseGenerator<IAdapter> {
 		for (final EnumMetadata enumMeta : enums) {
 
 			if (enumMeta.getIdName() != null) {
-			    updaters.addAll(this.getAdapter().getAdapterProject()
-			         .updateEnum(enumMeta, this.getCfg()));
+			    List<IUpdater> enumsUpdaters =
+			            this.getAdapter().getAdapterProject()
+                                .updateEnum(enumMeta, this.getCfg());
+                
+			    if (enumsUpdaters != null) {
+                    updaters.addAll(enumsUpdaters);
+                }
 			}
 		}
 		

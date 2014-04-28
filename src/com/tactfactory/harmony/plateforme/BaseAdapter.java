@@ -151,7 +151,7 @@ public abstract class BaseAdapter implements IAdapter {
 	 * Get the sources path.
 	 * @return The sources path
 	 */
-	public final String getSourcePath() {
+	public String getSourcePath() {
 		return String.format("%s%s/%s/",
 				Harmony.getProjectPath(),
 				this.getPlatform(),
@@ -162,7 +162,7 @@ public abstract class BaseAdapter implements IAdapter {
 	 * Get the sources path.
 	 * @return The sources path
 	 */
-	public final String getSourceControllerPath() {
+	public String getSourceControllerPath() {
 		return String.format("%s%s/%s/",
 				this.getSourcePath(),
 				this.getApplicationMetadata().getProjectNameSpace(),
@@ -401,7 +401,7 @@ public abstract class BaseAdapter implements IAdapter {
 	 * Get the strings path.
 	 * @return The strings path
 	 */
-	public final String getStringsPathFile() {
+	public String getStringsPathFile() {
 		return String.format("%s%s/%s/%s/%s",
 				Harmony.getProjectPath(),
 				this.getPlatform(),
@@ -504,7 +504,7 @@ public abstract class BaseAdapter implements IAdapter {
      * Get the resource path.
      * @return The resource path
      */
-    public final String getRessourcePath() {
+    public String getRessourcePath() {
         return String.format("%s%s/%s/",
                 Harmony.getProjectPath(),
                 this.getPlatform(),

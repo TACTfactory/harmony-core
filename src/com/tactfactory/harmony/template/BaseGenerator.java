@@ -348,8 +348,10 @@ public abstract class BaseGenerator<T extends IAdapter> {
 	}
 	
     protected void processUpdater(List<IUpdater> updaters) {
-        for (IUpdater updater : updaters) {
-            this.processUpdater(updater);
+        if (updaters != null) {
+            for (IUpdater updater : updaters) {
+                this.processUpdater(updater);
+            }
         }
     }
 
