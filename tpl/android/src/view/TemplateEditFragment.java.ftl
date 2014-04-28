@@ -383,8 +383,8 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 							null, 
 							null);
 			
+			this.associated${field.name?cap_first}List = new ArrayList<${field.relation.targetEntity}>();
 			if (${field.name}Cursor != null && ${field.name}Cursor.getCount() > 0) {
-				this.associated${field.name?cap_first}List = new ArrayList<${field.relation.targetEntity}>();
 				while (${field.name}Cursor.moveToNext()) {
 					<#list entities[field.relation.targetEntity].ids as id>
 					${id.type} ${field.name}${id.name?cap_first} = ${field.name}${AdapterUtils.getCursorGet(id)?cap_first}
