@@ -122,15 +122,10 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param db database
 	 */
 	public ${curr.name?cap_first}ProviderAdapterBase(
-				final Context ctx,
-				final SQLiteDatabase db) {
-		super(ctx);
-		this.adapter = new ${curr.name?cap_first}SQLiteAdapter(ctx);
-		if (db != null) {
-			this.db = this.adapter.open(db);
-		} else {
-			this.db = this.adapter.open();
-		}
+			${project_name?cap_first}ProviderBase provider) {
+		super(
+			provider,
+			new ${curr.name?cap_first}SQLiteAdapter(provider.getContext()));
 
 		this.uriIds.add(${curr.name?upper_case}_ALL);
 		<#if (hasIds)>
