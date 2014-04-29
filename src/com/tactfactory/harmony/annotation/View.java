@@ -17,9 +17,30 @@ import java.lang.annotation.Target;
 @Retention(SOURCE)
 @Target(TYPE)
 @Inherited
-public @interface Crud {
+public @interface View {
 	/**
 	 * No views generated for this entity.
 	 */
 	boolean hidden() default false;
+
+	/**
+	 * Should create the list activity for this entity. (default true)
+	 */
+	boolean list() default true;
+	/**
+	 * Should create the show activity for this entity. (default true)
+	 */
+	boolean show() default true;
+	/**
+	 * Should create the edit activity for this entity. (default true)
+	 */
+	boolean edit() default true;
+	/**
+	 * Should create the create activity for this entity. (default true)
+	 */
+	boolean create() default true;
+	/**
+	 * Should display the delete button for this entity. (default true)
+	 */
+	boolean delete() default true;
 }

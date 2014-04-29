@@ -102,7 +102,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 					this.currentMetadata.getName()),
 					parsedMetadata.getEntities().get(entity.getName())); 
 			
-			if (!entity.isHidden() && !entity.isInternal()) {
+			if (!entity.isInternal()) {
 				CommonTest.hasFindFile(
 						String.format(
 								ENTITY_PATH,

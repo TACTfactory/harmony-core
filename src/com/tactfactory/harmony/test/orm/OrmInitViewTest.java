@@ -126,96 +126,107 @@ public class OrmInitViewTest extends CommonTest {
 	public final void viewEntitiesCreate() {
 		for (EntityMetadata entity 
 				: this.currentMetadata.getEntities().values()) {
-			if (!entity.getFields().isEmpty() && !entity.isHidden()) {
+			if (!entity.getFields().isEmpty()) {
 				String lowerName = entity.getName().toLowerCase();
 				String name = entity.getName();
-				CommonTest.hasFindFile(String.format(
-						VIEW_PATH_CREATE_ACTIVITY,
-						this.currentMetadata.getProjectNameSpace(),
-						lowerName,
-						name));
+				if (entity.isCreateAction()) {
+					CommonTest.hasFindFile(String.format(
+							VIEW_PATH_CREATE_ACTIVITY,
+							this.currentMetadata.getProjectNameSpace(),
+							lowerName,
+							name));
+					
+					CommonTest.hasFindFile(String.format(
+							VIEW_PATH_CREATE_FRAGMENT,
+							this.currentMetadata.getProjectNameSpace(),
+							lowerName,
+							name));
+
+					CommonTest.hasFindFile(String.format(
+							LAYOUT_PATH_CREATE_ACTIVITY,
+							entity.getName().toLowerCase()));
+					CommonTest.hasFindFile(String.format(
+							LAYOUT_PATH_CREATE_FRAGMENT,
+							entity.getName().toLowerCase()));
+				}
 				
-				CommonTest.hasFindFile(String.format(
-						VIEW_PATH_CREATE_FRAGMENT,
-						this.currentMetadata.getProjectNameSpace(),
-						lowerName,
-						name));
+				if (entity.isEditAction()) {
+					CommonTest.hasFindFile(String.format(
+							VIEW_PATH_EDIT_ACTIVITY,
+							this.currentMetadata.getProjectNameSpace(),
+							lowerName,
+							name));
+					
+					CommonTest.hasFindFile(String.format(
+							VIEW_PATH_EDIT_FRAGMENT,
+							this.currentMetadata.getProjectNameSpace(),
+							lowerName,
+							name));
+					
+					CommonTest.hasFindFile(String.format(
+							LAYOUT_PATH_EDIT_ACTIVITY,
+							entity.getName().toLowerCase()));
+					CommonTest.hasFindFile(String.format(
+							LAYOUT_PATH_EDIT_FRAGMENT,
+							entity.getName().toLowerCase()));
+				}
 				
-				CommonTest.hasFindFile(String.format(
-						VIEW_PATH_EDIT_ACTIVITY,
-						this.currentMetadata.getProjectNameSpace(),
-						lowerName,
-						name));
+				if (entity.isShowAction()) {
+					CommonTest.hasFindFile(String.format(
+							VIEW_PATH_SHOW_ACTIVITY,
+							this.currentMetadata.getProjectNameSpace(),
+							lowerName,
+							name));
+					
+					CommonTest.hasFindFile(String.format(
+							VIEW_PATH_SHOW_FRAGMENT,
+							this.currentMetadata.getProjectNameSpace(),
+							lowerName,
+							name));
+
+					CommonTest.hasFindFile(String.format(
+							LAYOUT_PATH_SHOW_ACTIVITY,
+							entity.getName().toLowerCase()));
+					CommonTest.hasFindFile(String.format(
+							LAYOUT_PATH_SHOW_FRAGMENT,
+							entity.getName().toLowerCase()));
+				}
 				
-				CommonTest.hasFindFile(String.format(
-						VIEW_PATH_EDIT_FRAGMENT,
-						this.currentMetadata.getProjectNameSpace(),
-						lowerName,
-						name));
-				
-				CommonTest.hasFindFile(String.format(
-						VIEW_PATH_SHOW_ACTIVITY,
-						this.currentMetadata.getProjectNameSpace(),
-						lowerName,
-						name));
-				
-				CommonTest.hasFindFile(String.format(
-						VIEW_PATH_SHOW_FRAGMENT,
-						this.currentMetadata.getProjectNameSpace(),
-						lowerName,
-						name));
-				
-				CommonTest.hasFindFile(String.format(
-						VIEW_PATH_LIST_ACTIVITY,
-						this.currentMetadata.getProjectNameSpace(),
-						lowerName,
-						name));
-				
-				CommonTest.hasFindFile(String.format(
-						VIEW_PATH_LIST_FRAGMENT,
-						this.currentMetadata.getProjectNameSpace(),
-						lowerName,
-						name));
-				
-				CommonTest.hasFindFile(String.format(
-						VIEW_PATH_LIST_ADAPTER,
-						this.currentMetadata.getProjectNameSpace(),
-						lowerName,
-						name));
-				
-				CommonTest.hasFindFile(String.format(
-						VIEW_PATH_LIST_LOADER,
-						this.currentMetadata.getProjectNameSpace(),
-						lowerName,
-						name));
-				
-				CommonTest.hasFindFile(String.format(
-						LAYOUT_PATH_CREATE_ACTIVITY,
-						entity.getName().toLowerCase()));
-				CommonTest.hasFindFile(String.format(
-						LAYOUT_PATH_CREATE_FRAGMENT,
-						entity.getName().toLowerCase()));
-				CommonTest.hasFindFile(String.format(
-						LAYOUT_PATH_EDIT_ACTIVITY,
-						entity.getName().toLowerCase()));
-				CommonTest.hasFindFile(String.format(
-						LAYOUT_PATH_EDIT_FRAGMENT,
-						entity.getName().toLowerCase()));
-				CommonTest.hasFindFile(String.format(
-						LAYOUT_PATH_LIST_ACTIVITY,
-						entity.getName().toLowerCase()));
-				CommonTest.hasFindFile(String.format(
-						LAYOUT_PATH_LIST_FRAGMENT,
-						entity.getName().toLowerCase()));
-				CommonTest.hasFindFile(String.format(
-						LAYOUT_PATH_ROW,
-						entity.getName().toLowerCase()));
-				CommonTest.hasFindFile(String.format(
-						LAYOUT_PATH_SHOW_ACTIVITY,
-						entity.getName().toLowerCase()));
-				CommonTest.hasFindFile(String.format(
-						LAYOUT_PATH_SHOW_FRAGMENT,
-						entity.getName().toLowerCase()));
+				if (entity.isListAction()) {
+					CommonTest.hasFindFile(String.format(
+							VIEW_PATH_LIST_ACTIVITY,
+							this.currentMetadata.getProjectNameSpace(),
+							lowerName,
+							name));
+					
+					CommonTest.hasFindFile(String.format(
+							VIEW_PATH_LIST_FRAGMENT,
+							this.currentMetadata.getProjectNameSpace(),
+							lowerName,
+							name));
+					
+					CommonTest.hasFindFile(String.format(
+							VIEW_PATH_LIST_ADAPTER,
+							this.currentMetadata.getProjectNameSpace(),
+							lowerName,
+							name));
+					
+					CommonTest.hasFindFile(String.format(
+							VIEW_PATH_LIST_LOADER,
+							this.currentMetadata.getProjectNameSpace(),
+							lowerName,
+							name));
+					
+					CommonTest.hasFindFile(String.format(
+							LAYOUT_PATH_LIST_ACTIVITY,
+							entity.getName().toLowerCase()));
+					CommonTest.hasFindFile(String.format(
+							LAYOUT_PATH_LIST_FRAGMENT,
+							entity.getName().toLowerCase()));
+					CommonTest.hasFindFile(String.format(
+							LAYOUT_PATH_ROW,
+							entity.getName().toLowerCase()));
+				}
 			}
 		}
 	}

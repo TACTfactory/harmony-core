@@ -23,7 +23,7 @@ public class ProjectMetadataFactory {
 	protected static final String CLASS_GENERATED_VALUE = "GeneratedValue";
 	protected static final String CLASS_GENERATED_VALUE_STRATEGY = "Strategy";
 	protected static final String CLASS_ID = "Id";
-	protected static final String CLASS_CRUD = "Crud";
+	protected static final String CLASS_VIEW = "View";
 	protected static final String CLASS_INHERITANCE_TYPE = "InheritanceType";
 	protected static final String CLASS_MANY_TO_ONE = "ManyToOne";
 	protected static final String CLASS_MANY_TO_MANY = "ManyToMany";

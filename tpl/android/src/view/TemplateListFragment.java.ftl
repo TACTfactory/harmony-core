@@ -31,8 +31,8 @@ import ${curr.namespace}.entity.${curr.name};
  * @see android.app.Fragment
  */
 public class ${curr.name}ListFragment
-		extends HarmonyListFragment<${curr.name}>
-		implements CrudCreateMenuInterface {
+		extends HarmonyListFragment<${curr.name}><#if curr.createAction>
+		implements CrudCreateMenuInterface </#if>{
 
 	/** The adapter which handles list population. */
 	protected ${curr.name}ListAdapter mAdapter;
@@ -153,12 +153,13 @@ public class ${curr.name}ListFragment
 		// Clear the data in the adapter.
 		this.mAdapter.clear();
 	}
-
+	<#if curr.createAction>
 	@Override
 	public void onClickAdd() {
 		Intent intent = new Intent(this.getActivity(),
 					${curr.name}CreateActivity.class);
 		this.startActivity(intent);
 	}
+	</#if>
 
 }
