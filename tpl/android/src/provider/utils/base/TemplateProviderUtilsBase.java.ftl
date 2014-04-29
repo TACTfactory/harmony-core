@@ -338,7 +338,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		${curr.name}Criterias crits =
 				new ${curr.name}Criterias(GroupType.AND);
 		<#assign idGetters = IdsUtils.getAllIdsGettersFromArray(curr_ids) />
-		<#list IdsUtils.getAllIdsColsFromArray(curr_ids) as id>
+		<#list IdsUtils.getAllIdsColsFromArray(curr_ids, true) as id>
 		crits.add(${id},
 					String.valueOf(${idGetters[id_index]}));
 		</#list>

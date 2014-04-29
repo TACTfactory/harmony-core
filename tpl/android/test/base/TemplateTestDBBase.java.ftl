@@ -43,8 +43,10 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 		this.adapter.open();
 
 		<#if dataLoader?? && dataLoader>
-		this.entities = new ArrayList<${curr.name?cap_first}>(
-				${curr.name?cap_first}DataLoader.getInstance(this.ctx).getMap().values());
+		this.entities = new ArrayList<${curr.name?cap_first}>();		
+		<#list InheritanceUtils.getAllChildren(curr) as child>
+		this.entities.addAll(${child.name?cap_first}DataLoader.getInstance(this.ctx).getMap().values());
+		</#list>
 		if (entities.size()>0){
 			this.entity = this.entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}

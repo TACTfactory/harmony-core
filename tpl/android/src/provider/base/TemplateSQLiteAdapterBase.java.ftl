@@ -497,6 +497,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		<#list curr_ids as id><#if id.strategy == "IDENTITY">
 		item.set${id.name?cap_first}((int) insertResult);
 		</#if></#list>
+	</#if>
 	<#list (curr_relations) as relation>
 		<#if (relation.relation.type=="ManyToMany")>
 		if (item.get${relation.name?cap_first}() != null) {
@@ -537,7 +538,6 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		}
 		</#if>
 	</#list>
-	</#if>
 		return insertResult;
 	}
 

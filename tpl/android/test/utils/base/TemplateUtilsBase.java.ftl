@@ -19,7 +19,8 @@ import ${project_namespace}.test.utils.TestUtils;
 	<#if !relation.internal>
 		<#if !Utils.isInArray(importList, relation.relation.targetEntity)>
 <#if (dataLoader?? && dataLoader) || (relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany")>import ${curr.namespace}.entity.${relation.relation.targetEntity?cap_first};</#if>
-<#if (dataLoader?? && dataLoader)>import ${fixture_namespace}.${relation.relation.targetEntity?cap_first}DataLoader;<#else>import ${project_namespace}.test.utils.${relation.relation.targetEntity}Utils;</#if>
+<#if (dataLoader?? && dataLoader)><#list InheritanceUtils.getAllChildren(entities[relation.relation.targetEntity]) as child>import ${fixture_namespace}.${child.name?cap_first}DataLoader;
+</#list><#else>import ${project_namespace}.test.utils.${relation.relation.targetEntity}Utils;</#if>
 			<#assign importList = importList + [relation.relation.targetEntity] />
 		</#if>
 	</#if>
@@ -87,7 +88,10 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 				<#else>
 					<#if dataLoader?? && dataLoader>
 		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s =
-			new ArrayList<${field.relation.targetEntity?cap_first}>(${field.relation.targetEntity?cap_first}DataLoader.getInstance(ctx).getMap().values());
+			new ArrayList<${field.relation.targetEntity?cap_first}>();
+		<#list InheritanceUtils.getAllChildren(entities[field.relation.targetEntity]) as child>
+		${field.name?uncap_first}s.addAll(${child.name?cap_first}DataLoader.getInstance(ctx).getMap().values());
+		</#list>
 						<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 		if (!${field.name?uncap_first}s.isEmpty()) {
 			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
