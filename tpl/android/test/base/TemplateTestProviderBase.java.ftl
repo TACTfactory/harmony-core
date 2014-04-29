@@ -15,7 +15,6 @@ import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 
 <#if dataLoader?? && dataLoader>
-import ${fixture_namespace}.${curr.name?cap_first}DataLoader;
 	<#list InheritanceUtils.getAllChildren(curr) as child>
 import ${fixture_namespace}.${child.name?cap_first}DataLoader;
 	</#list>

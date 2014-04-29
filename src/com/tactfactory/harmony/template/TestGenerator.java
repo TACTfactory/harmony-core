@@ -82,6 +82,16 @@ public class TestGenerator extends BaseGenerator {
 
 		try {
 			this.makeSourceTest(
+					"base/TemplateTestParcelableBase.java",
+					"base/%sTestParcelableBase.java",
+					true);
+			
+			this.makeSourceTest(
+					"TemplateTestParcelable.java",
+					"%sTestParcelable.java",
+					false);
+			
+			this.makeSourceTest(
 					"base/TemplateTestDBBase.java",
 					"base/%sTestDBBase.java",
 					true);
