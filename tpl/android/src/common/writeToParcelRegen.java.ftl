@@ -31,7 +31,8 @@
 					<#elseif field.type?lower_case == "datetime">
 		if (this.get${field.name?cap_first}() != null) {
 			dest.writeInt(1);
-			dest.writeString(this.get${field.name?cap_first}().toString());
+			dest.writeString(ISODateTimeFormat.dateTime().print(
+					this.get${field.name?cap_first}()));
 		} else {
 			dest.writeInt(0);
 		}

@@ -47,6 +47,8 @@ public class TracScanFactory extends ProjectMetadataFactory {
 		itemProd.getImports().add(CLASS_ID);
 		itemProd.getImports().add(CLASS_MANY_TO_ONE);
 		itemProd.getImports().add(CLASS_TYPE);
+		itemProd.getImports().add(CLASS_ARRAYLIST);
+		itemProd.getImports().add(CLASS_LIST);
 
 		logProd.getImports().add(CLASS_SERIALIZABLE);
 		logProd.getImports().add(CLASS_PARCELABLE);
@@ -57,16 +59,19 @@ public class TracScanFactory extends ProjectMetadataFactory {
 		logProd.getImports().add(CLASS_ID);
 		logProd.getImports().add(CLASS_MANY_TO_ONE);
 		logProd.getImports().add(CLASS_TYPE);
+		logProd.getImports().add(CLASS_ARRAYLIST);
+		logProd.getImports().add(CLASS_LIST);
 
 		orderProd.getImports().add(CLASS_SERIALIZABLE);
 		orderProd.getImports().add(CLASS_PARCELABLE);
 		orderProd.getImports().add(CLASS_PARCEL);
-		orderProd.getImports().add(CLASS_ARRAYLIST);
 		orderProd.getImports().add(CLASS_COLUMN);
 		orderProd.getImports().add(CLASS_ENTITY);
 		orderProd.getImports().add(CLASS_ID);
 		orderProd.getImports().add(CLASS_ONE_TO_MANY);
 		orderProd.getImports().add(CLASS_TYPE);
+		orderProd.getImports().add(CLASS_ARRAYLIST);
+		orderProd.getImports().add(CLASS_LIST);
 
 		user.getImports().add(CLASS_SERIALIZABLE);
 		user.getImports().add(CLASS_PARCELABLE);
@@ -75,6 +80,8 @@ public class TracScanFactory extends ProjectMetadataFactory {
 		user.getImports().add(CLASS_ENTITY);
 		user.getImports().add(CLASS_ID);
 		user.getImports().add(CLASS_TYPE);
+		user.getImports().add(CLASS_ARRAYLIST);
+		user.getImports().add(CLASS_LIST);
 
 		zone.getImports().add(CLASS_SERIALIZABLE);
 		zone.getImports().add(CLASS_PARCELABLE);
@@ -83,6 +90,8 @@ public class TracScanFactory extends ProjectMetadataFactory {
 		zone.getImports().add(CLASS_ENTITY);
 		zone.getImports().add(CLASS_ID);
 		zone.getImports().add(CLASS_TYPE);
+		zone.getImports().add(CLASS_ARRAYLIST);
+		zone.getImports().add(CLASS_LIST);
 		
 		// Interfaces
 		user.getImplementTypes().add(CLASS_SERIALIZABLE);

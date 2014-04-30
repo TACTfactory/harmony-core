@@ -29,13 +29,6 @@ import com.tactfactory.harmony.utils.TactFileUtils;
  * Used to decorate or generate entities.
  */
 public class EntityGenerator extends BaseGenerator {
-	/** Parcel constant declaration. */
-	private static final String PARCEL_CONSTANT_DECL =
-			"public static final String PARCEL";
-
-	/** Parcel constant declaration. */
-	private static final String PARCEL_PARENT_DECL =
-			"private Parcelable parcellableParent";
 
 	/** Write to parcel method declaration. */
 	private static final String WRITE_TO_PARCEL_REGEN_DECL =
@@ -340,6 +333,18 @@ public class EntityGenerator extends BaseGenerator {
 				manipulator.generateField(
 						this.parcelParentTemplate, 
 						this.getDatamodel());
+			}
+			
+			boolean hasDateTime = false;
+			for (FieldMetadata field : classMeta.getFields().values()) {
+				if (field.getType().equals("DateTime")) {
+					hasDateTime = true;
+				}
+			}
+			if (hasDateTime) {
+				manipulator.addImport(classMeta,
+						"ISODateTimeFormat",
+						"org.joda.time.format.ISODateTimeFormat");
 			}
 		}
 	}

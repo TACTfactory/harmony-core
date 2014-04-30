@@ -14,6 +14,8 @@ import ${project_namespace}.provider.contract.${curr.inheritance.superclass.name
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 <#if (InheritanceUtils.isExtended(curr))>import ${data_namespace}.${curr.inheritance.superclass.name}SQLiteAdapter;</#if>
 import ${curr.namespace}.entity.${curr.name};
+<#list curr_relations as relation><#if ((relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany") && (!MetadataUtils.getInversingField(relation)?? || !MetadataUtils.getInversingField(relation).nullable))>import ${project_namespace}.entity.${relation.relation.targetEntity};
+</#if></#list>
 
 <#if dataLoader?? && dataLoader>
 	<#list InheritanceUtils.getAllChildren(curr) as child>
@@ -301,7 +303,19 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			</#list>
 			<#list curr_relations as relation>
 				<#if ((relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany") && (!MetadataUtils.getInversingField(relation)?? || !MetadataUtils.getInversingField(relation).nullable))>
-			${curr.name?uncap_first}.get${relation.name?cap_first}().addAll(this.entity.get${relation.name?cap_first}());
+			for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : this.entity.get${relation.name?cap_first}()) {
+				boolean found = false;
+				for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first}2 : ${curr.name?uncap_first}.get${relation.name?cap_first}()) {
+					if (<#list IdsUtils.getAllIdsGetters(entities[relation.relation.targetEntity]) as id>${relation.relation.targetEntity?uncap_first}${id}<#if MetadataUtils.isPrimitive(entities[relation.relation.targetEntity].ids[id_index])> == <#else>.equals(</#if>${relation.relation.targetEntity?uncap_first}2${id}<#if !MetadataUtils.isPrimitive(entities[relation.relation.targetEntity].ids[id_index])>)</#if><#if id_has_next>
+						 && </#if></#list> ) {
+						found = true;
+						break;
+					}
+				}					
+				if(!found) {
+					${curr.name?uncap_first}.get${relation.name?cap_first}().add(${relation.relation.targetEntity?uncap_first});
+				}
+			}
 				</#if>
 			</#list>
 			result = this.providerUtils.update(${curr.name?uncap_first});

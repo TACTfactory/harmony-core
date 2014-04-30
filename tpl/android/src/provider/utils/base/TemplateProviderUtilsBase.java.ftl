@@ -750,7 +750,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 					new CriteriaExpression(GroupType.AND);
 			Criterion inCrit = new Criterion();
 			ArrayValue arrayValue = new ArrayValue();
-			inCrit.setKey(<#list entities[relation.relation.targetEntity].ids as id>${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_${NamingUtils.alias(entities[id.name)}<#if id_has_next> + " || '::dirtyHack::' || " + </#if></#list>);
+			inCrit.setKey(<#list entities[relation.relation.targetEntity].ids as id>${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_${NamingUtils.alias(id.name)}<#if id_has_next> + " || '::dirtyHack::' || " + </#if></#list>);
 			inCrit.setType(Type.IN);
 			inCrit.addValue(arrayValue);
 			${relation.relation.targetEntity?uncap_first}Crits.add(inCrit);
