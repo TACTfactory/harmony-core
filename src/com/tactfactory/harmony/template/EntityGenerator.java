@@ -184,14 +184,18 @@ public class EntityGenerator extends BaseGenerator {
 				}
 				
 				// Import ArrayList if relation
-				if (field.getRelation() != null 
-					&& (field.getRelation().getType().equals("ManyToMany")
-						|| field.getRelation().getType().equals("OneToMany"))) {
-					manipulator.addImport(
-							classMeta,
-							"ArrayList",
-							"java.util.ArrayList");
-				}
+				//if (field.getRelation() != null 
+				//	&& (field.getRelation().getType().equals("ManyToMany")
+				//		|| field.getRelation().getType().equals("OneToMany"))) {
+				manipulator.addImport(
+						classMeta,
+						"ArrayList",
+						"java.util.ArrayList");
+				manipulator.addImport(
+						classMeta,
+						"List",
+						"java.util.List");
+				//}
 			}
 		}
 	}

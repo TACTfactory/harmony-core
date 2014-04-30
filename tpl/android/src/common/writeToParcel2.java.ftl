@@ -6,8 +6,8 @@
 	 * @param dest The destination parcel
 	 * @param flags The flags
 	 */
-	public synchronized void writeToParcel(Parcelable parent, Parcel dest, int flags) {
-		this.parcelableParent = parent;
+	public synchronized void writeToParcel(List<Parcelable> parents, Parcel dest, int flags) {
+		this.parcelableParents = new ArrayList<Parcelable>(parents);
 		dest.writeParcelable(this, flags);
-		this.parcelableParent = null;
+		this.parcelableParents = null;
 	}

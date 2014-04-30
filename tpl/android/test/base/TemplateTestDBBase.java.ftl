@@ -87,7 +87,7 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 			result = this.adapter.getByID(<#list curr_ids as id>this.entity.get${id.name?cap_first}()<#if id_has_next>,
 					</#if></#list>);
 
-			${curr.name?cap_first}Utils.equals(result, this.entity);
+			${curr.name?cap_first}Utils.equals(this.entity, result);
 		}
 	}
 

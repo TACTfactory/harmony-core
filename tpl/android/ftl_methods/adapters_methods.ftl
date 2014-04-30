@@ -239,6 +239,19 @@
 				<#assign result = result + "${tab}		}" />
 				<#assign result = result + "${tab}	}" />
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first}s);" />
+				<#if field.relation.inversedBy??>
+					<#assign invField = MetadataUtils.getInversingField(field) />
+					<#assign result = result + "${tab}	for (${field.relation.targetEntity} ${field.relation.targetEntity?uncap_first} : ${field.relation.targetEntity?uncap_first}s) {" />
+					<#assign result = result + "${tab}		ArrayList<${curr.name?cap_first}> ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =" />
+					<#assign result = result + "${tab}			${field.relation.targetEntity?uncap_first}.get${invField.name?cap_first}();" />
+					<#assign result = result + "${tab}		if (${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s == null) {" />
+					<#assign result = result + "${tab}			${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =" />
+					<#assign result = result + "${tab}				new ArrayList<${curr.name?cap_first}>();" />
+					<#assign result = result + "${tab}		}" />
+					<#assign result = result + "${tab}		${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s.add(${objectName});" />
+					<#assign result = result + "${tab}		${field.relation.targetEntity?uncap_first}.set${invField.name?cap_first}(${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s);" />
+					<#assign result = result + "${tab}	}" />
+				</#if>
 			</#if>
 		</#if>
 		<#assign result = result + "${tab}}\n" />

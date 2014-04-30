@@ -5,6 +5,12 @@
 	 * @param flags flags
 	 */
 	public void writeToParcelRegen(Parcel dest, int flags) {
+		if (this.parcelableParents == null) {
+			this.parcelableParents = new ArrayList<Parcelable>();
+		}
+		if (!this.parcelableParents.contains(this)) {
+			this.parcelableParents.add(this);
+		}
 		<#if curr.inheritance?? && curr.inheritance.superclass?? && entities[curr.inheritance.superclass.name]??>
 		super.writeToParcelRegen(dest, flags);
 		</#if>
@@ -51,8 +57,8 @@
 				<#else>
 					<#if field.relation.type == "OneToOne" || field.relation.type == "ManyToOne">
 		if (<#if field.nullable>this.get${field.name?cap_first}() != null
-					&& </#if>!this.get${field.name?cap_first}().equals(this.parcelableParent)) {
-			this.get${field.name?cap_first}().writeToParcel(this, dest, flags);
+					&& </#if>(!this.parcelableParents.contains(this.get${field.name?cap_first}()))) {
+			this.get${field.name?cap_first}().writeToParcel(this.parcelableParents, dest, flags);
 		} else {
 			dest.writeParcelable(null, flags);
 		}
@@ -61,8 +67,8 @@
 		if (this.get${field.name?cap_first}() != null) {
 			dest.writeInt(this.get${field.name?cap_first}().size());
 			for (${field.relation.targetEntity?cap_first} item : this.get${field.name?cap_first}()) {
-				if (!item.equals(this.parcelableParent)) {
-					item.writeToParcel(this, dest, flags);
+				if (!this.parcelableParents.contains(item)) {
+					item.writeToParcel(this.parcelableParents, dest, flags);
 				} else {
 					dest.writeParcelable(null, flags);
 				}
@@ -73,5 +79,6 @@
 					</#if>
 				</#if>
 			</#if>
-		</#list>		
+		</#list>	
+		this.parcelableParents = null;	
 	}

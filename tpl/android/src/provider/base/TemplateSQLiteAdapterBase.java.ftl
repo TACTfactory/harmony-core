@@ -31,7 +31,7 @@ import com.google.common.collect.ObjectArrays;
 </#if>
 import ${data_namespace}.SQLiteAdapter;
 ${ImportUtils.importRelatedSQLiteAdapters(curr, false, true)}
-${ImportUtils.importRelatedEntities(curr)}
+${ImportUtils.importRelatedEntities(curr, true)}
 ${ImportUtils.importRelatedEnums(curr)}<#if !(curr_ids?size>0)>import ${project_namespace}.harmony.exception.NotImplementedException;</#if>
 <#if hasDate || hasTime || hasDateTime>import ${curr.namespace}.harmony.util.DateUtils;</#if>
 import ${project_namespace}.${project_name?cap_first}Application;
@@ -498,14 +498,15 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		item.set${id.name?cap_first}((int) insertResult);
 		</#if></#list>
 	</#if>
-	<#list (curr_relations) as relation>
+	<#list (ViewUtils.getAllRelations(curr)) as relation>
 		<#if (relation.relation.type=="ManyToMany")>
 		if (item.get${relation.name?cap_first}() != null) {
 			${relation.relation.joinTable}SQLiteAdapterBase ${relation.name?uncap_first}Adapter =
 					new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 			${relation.name?uncap_first}Adapter.open(this.mDatabase);
 			for (${relation.relation.targetEntity?cap_first} i : item.get${relation.name?cap_first}()) {
-				<#if curr.name != entities[relation.relation.joinTable].ids[0].relation.targetEntity>
+				<#if curr.name != entities[relation.relation.joinTable].ids[0].relation.targetEntity
+						&& (!curr.inheritance?? || !curr.inheritance.superclass?? || curr.inheritance.superclass.name != entities[relation.relation.joinTable].ids[0].relation.targetEntity)>
 				${relation.name?uncap_first}Adapter.insert(
 						<#list relation.relation.field_ref as ref>i.get${ref.name?cap_first}()<#if ref_has_next>,
 						</#if></#list>,

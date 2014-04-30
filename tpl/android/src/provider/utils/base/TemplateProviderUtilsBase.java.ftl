@@ -699,7 +699,8 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 				${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COL_${relation.relation.mappedBy?upper_case}_${id.name?upper_case}
 						+ "= ?<#if id_has_next> AND "
 						+ </#if></#list>",
-				new String[]{String.valueOf(item.get${curr_ids[0].name?cap_first}())},
+				new String[]{<#list curr_ids as id>String.valueOf(item.get${id.name?cap_first}())<#if id_has_next>,
+						</#if></#list>},
 				null);
 
 		result = ${relation.relation.targetEntity}Contract.${relation.relation.targetEntity}.cursorToItems(
@@ -724,7 +725,8 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 				<#list curr_ids as id>${relation.relation.joinTable?cap_first}Contract.${relation.relation.joinTable?cap_first}.ALIASED_${NamingUtils.alias(relation.relation.mappedBy)}_${id.name?upper_case} 
 						+ "= ?<#if id_has_next> AND "
 						+ </#if></#list>",
-				new String[]{String.valueOf(item.get${curr_ids[0].name?cap_first}())},
+				new String[]{<#list curr_ids as id>String.valueOf(item.get${id.name?cap_first}())<#if id_has_next>,
+						</#if></#list>},
 				null);
 
 		if (${relation.relation.joinTable?uncap_first}Cursor.getCount() > 0) {

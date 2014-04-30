@@ -127,7 +127,11 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 	public static boolean equals(${curr.name?cap_first} ${curr.name?uncap_first}1,
 			${curr.name?cap_first} ${curr.name?uncap_first}2,
 			boolean checkRecursiveId){
+		<#if curr.inheritance?? && curr.inheritance.superclass?? && entities[curr.inheritance.superclass.name]??>
+		boolean ret = ${curr.inheritance.superclass.name}Utils.equals(${curr.name?uncap_first}1, ${curr.name?uncap_first}2);
+		<#else>
 		boolean ret = true;
+		</#if>
 		Assert.assertNotNull(${curr.name?uncap_first}1);
 		Assert.assertNotNull(${curr.name?uncap_first}2);
 		if (${curr.name?uncap_first}1!=null && ${curr.name?uncap_first}2 !=null){
@@ -155,11 +159,22 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().size(),
 					${curr.name?uncap_first}2.get${field.name?cap_first}().size());
 				if (checkRecursiveId) {
-					for (int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){					
-						<#list IdsUtils.getAllIdsGetters(entities[field.relation.targetEntity]) as refId>
-						Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i)${refId},
-									${curr.name?uncap_first}2.get${field.name?cap_first}().get(i)${refId});
-						</#list>
+					for (${field.relation.targetEntity} ${field.name?uncap_first}1 : ${curr.name?uncap_first}1.get${field.name?cap_first}()) {
+						boolean found = false;
+						for (${field.relation.targetEntity} ${field.name?uncap_first}2 : ${curr.name?uncap_first}2.get${field.name?cap_first}()) {
+							<#assign target = entities[field.relation.targetEntity] />
+							if (<#list IdsUtils.getAllIdsGetters(target) as refId>${field.name?uncap_first}1${refId}<#if MetadataUtils.isPrimitive(target.ids[refId_index])> == <#else>.equals(</#if>${field.name?uncap_first}2${refId}<#if !MetadataUtils.isPrimitive(target.ids[refId_index])>)</#if><#if refId_has_next>
+								&& </#if></#list>) {
+								found = true;
+							}
+						}
+						Assert.assertTrue(
+								String.format(
+										"Couldn't find associated ${field.name} (<#list target.ids as id>${id.name} = %s<#if id_has_next>, </#if></#list>) in ${curr.name} (<#list curr_ids as id>${id.name} = %s<#if id_has_next>,</#if></#list>)",
+										<#list IdsUtils.getAllIdsGetters(target) as id>${field.name?uncap_first}1${id},
+										</#list><#list IdsUtils.getAllIdsGetters(curr) as id>${curr.name?uncap_first}1${id}<#if id_has_next>,
+										</#if></#list>),
+								found);
 					}
 				}
 					</#if>
