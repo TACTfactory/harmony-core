@@ -30,27 +30,28 @@ public class ${curr.name}ListActivity
 				HarmonyListFragment.OnLoadCallback {
 
 	/** Associated list fragment. */
-	protected ${curr.name}ListFragment listFragment;
+	protected ${curr.name}ListFragment listFragment;<#if curr.showAction>
 	/** Associated detail fragment if any (in case of tablet). */
 	protected ${curr.name}ShowFragment detailFragment;
 	/** Last selected item position in the list. */
 	private int lastSelectedItemPosition = 0;
 	/** Last selected item. */
-	private ${curr.name} lastSelectedItem;
+	private ${curr.name} lastSelectedItem;</#if>
 	
 	@Override
 	protected void onPostCreate(Bundle savedInstanceState) {
 		super.onPostCreate(savedInstanceState);
 
-		
+		<#if curr.showAction>
 		this.detailFragment = (${curr.name}ShowFragment) 
 						this.getSupportFragmentManager().findFragmentById(
 								R.id.fragment_show);
-
+		</#if>
 		this.listFragment = (${curr.name}ListFragment)
 						this.getSupportFragmentManager().findFragmentById(
 								R.id.fragment_list);
 		
+		<#if curr.showAction>
 		if (this.isDualMode() && this.detailFragment != null) {
 			this.listFragment.setRetainInstance(true);
 			this.detailFragment.setRetainInstance(true);
@@ -60,6 +61,7 @@ public class ${curr.name}ListActivity
 							this.listFragment.getListView(),
 							View.SCROLLBAR_POSITION_LEFT);
 		}
+		</#if>
 	}
 
 	@Override
@@ -89,7 +91,8 @@ public class ${curr.name}ListActivity
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-			this.lastSelectedItemPosition = position;
+		<#if curr.showAction>
+		this.lastSelectedItemPosition = position;
 		
 		if (this.isDualMode()) {
 			this.selectListItem(this.lastSelectedItemPosition);
@@ -101,8 +104,10 @@ public class ${curr.name}ListActivity
 			intent.putExtras(extras);
 			this.startActivity(intent);
 		}
+		</#if>
 	}
 
+	<#if curr.showAction>
 	/** 
 	 * Load the detail fragment of the given item.
 	 * 
@@ -134,9 +139,11 @@ public class ${curr.name}ListActivity
 			this.loadDetailFragment(null);
 		}
 	}
+	</#if>
 
 	@Override
 	public void onListLoaded() {
+		<#if curr.showAction>
 		if (this.isDualMode()) {
 			int newPosition =
 				((${curr.name}ListAdapter) this.listFragment.getListAdapter())
@@ -147,5 +154,6 @@ public class ${curr.name}ListActivity
 				this.selectListItem(newPosition);
 			}
 		}
+		</#if>
 	}
 }

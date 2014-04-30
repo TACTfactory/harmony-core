@@ -5,8 +5,8 @@ package ${curr.controller_namespace};
 import ${curr.namespace}.R;
 
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
-import ${project_namespace}.view.${curr.name?lower_case}.${curr.name}ShowFragment.DeleteCallback;
-
+<#if curr.deleteAction>import ${project_namespace}.view.${curr.name?lower_case}.${curr.name}ShowFragment.DeleteCallback;
+</#if>
 import android.os.Bundle;
 
 /** ${curr.name} show Activity.
@@ -16,8 +16,8 @@ import android.os.Bundle;
  * @see android.app.Activity
  */
 public class ${curr.name}ShowActivity 
-		extends HarmonyFragmentActivity 
-		implements DeleteCallback {
+		extends HarmonyFragmentActivity<#if curr.deleteAction> 
+		implements DeleteCallback</#if> {
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -25,13 +25,10 @@ public class ${curr.name}ShowActivity
 		this.setContentView(R.layout.activity_${curr.name?lower_case}_show);
 	}
 
-	@Override
-	protected void onDestroy() {
-		super.onDestroy();
-	}
-
+<#if curr.deleteAction>
 	@Override
 	public void onItemDeleted() {
 		this.finish();
 	}
+</#if>
 }

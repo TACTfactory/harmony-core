@@ -18,7 +18,7 @@ import ${project_namespace}.criterias.base.value.CriteriaValue;
  * - a Type (ie. "EQUALS")
  * - a value (ie. 2)
  */
-public class Criteria implements Serializable, ICriteria {
+public class Criterion implements Serializable, ICriteria {
 	/** Criteria key. */
 	private String key;
 	/** Criteria value. */
@@ -231,7 +231,7 @@ public class Criteria implements Serializable, ICriteria {
 		}
 
 		if (result) {
-			final Criteria other = (Criteria) obj;
+			final Criterion other = (Criterion) obj;
 			if (this.key == null) {
 				if (other.key != null) {
 					result = false;

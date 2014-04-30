@@ -123,6 +123,7 @@ public class DemactFactory extends ProjectMetadataFactory {
 		user.getImports().add(CLASS_TABLE);
 		user.getImports().add(CLASS_INHERITANCE_MODE);
 		user.getImports().add(CLASS_ARRAYLIST);
+		user.getImports().add(CLASS_VIEW);
 
 		client.getImports().add(CLASS_SERIALIZABLE);
 		client.getImports().add(CLASS_PARCELABLE);
@@ -144,6 +145,7 @@ public class DemactFactory extends ProjectMetadataFactory {
 		comment.getImports().add(CLASS_ID);
 		comment.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
 		comment.getImports().add(CLASS_TYPE);
+		comment.getImports().add(CLASS_VIEW);
 
 		category.getImports().add(CLASS_SERIALIZABLE);
 		category.getImports().add(CLASS_PARCELABLE);
@@ -163,6 +165,7 @@ public class DemactFactory extends ProjectMetadataFactory {
 		categoryToComment.getImports().add(CLASS_ENTITY);
 		categoryToComment.getImports().add(CLASS_ID);
 		categoryToComment.getImports().add(CLASS_MANY_TO_ONE);
+		categoryToComment.getImports().add(CLASS_VIEW);
 
 		post.getImports().add(CLASS_SERIALIZABLE);
 		post.getImports().add(CLASS_PARCELABLE);
@@ -229,16 +232,33 @@ public class DemactFactory extends ProjectMetadataFactory {
 		hiddenEntity.getImports().add(CLASS_MANY_TO_ONE);
 		hiddenEntity.getImports().add(CLASS_MANY_TO_MANY);
 		hiddenEntity.getImports().add(CLASS_ONE_TO_MANY);
-		hiddenEntity.getImports().add(CLASS_CRUD);
+		hiddenEntity.getImports().add(CLASS_VIEW);
 		hiddenEntity.getImports().add(CLASS_TABLE);
 
 
 		// Set entities attributes
-		hiddenEntity.setHidden(true);
+		hiddenEntity.setCreateAction(false);
+		hiddenEntity.setListAction(false);
+		hiddenEntity.setEditAction(false);
+		hiddenEntity.setShowAction(false);
+		hiddenEntity.setDeleteAction(false);
 		postToCategory.setInternal(true);
-		postToCategory.setHidden(true);
+		postToCategory.setCreateAction(false);
+		postToCategory.setListAction(false);
+		postToCategory.setEditAction(false);
+		postToCategory.setShowAction(false);
+		postToCategory.setDeleteAction(false);
 		userToUser.setInternal(true);
-		userToUser.setHidden(true);
+		userToUser.setCreateAction(false);
+		userToUser.setListAction(false);
+		userToUser.setEditAction(false);
+		userToUser.setShowAction(false);
+		userToUser.setDeleteAction(false);
+		user.setCreateAction(false);
+		user.setDeleteAction(false);
+		comment.setEditAction(false);
+		comment.setShowAction(false);
+		categoryToComment.setListAction(false);
 		
 		
 		// Set inheritance

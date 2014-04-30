@@ -17,6 +17,7 @@ import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.ColumnResult;
 import com.tactfactory.harmony.annotation.DiscriminatorColumn;
 import com.tactfactory.harmony.annotation.Entity;
+import com.tactfactory.harmony.annotation.View;
 import com.tactfactory.harmony.annotation.GeneratedValue;
 import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
 import com.tactfactory.harmony.annotation.Id;
@@ -31,6 +32,7 @@ import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
 //All annotation with forced value/parameter
 @Table(name = "local_user")
 @Entity
+@View(create = false, delete = false)
 @InheritanceType(InheritanceMode.SINGLE_TABLE)
 @DiscriminatorColumn(name="type", type="varchar")
 public class User extends Object implements Cloneable, Serializable {

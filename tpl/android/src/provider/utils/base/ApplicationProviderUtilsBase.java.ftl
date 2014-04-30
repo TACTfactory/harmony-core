@@ -6,7 +6,7 @@ import android.net.Uri;
 
 import android.content.Context;
 
-import ${project_namespace}.criterias.base.CriteriasBase;
+import ${project_namespace}.criterias.base.CriteriaExpression;
 
 
 /**
@@ -56,11 +56,11 @@ public abstract class ProviderUtilsBase<T> {
 	public abstract ArrayList<T> queryAll();
 
 	/**
-	 * Query the DB to get the entities filtered by criteria.
-	 * @param criteria The criteria defining the selection and selection args
+	 * Query the DB to get the entities filtered by the given expression.
+	 * @param expression The expression defining the selection and selection args
 	 * @return ArrayList<T>
 	 */
-	public abstract ArrayList<T> query(CriteriasBase<T> criteria);
+	public abstract ArrayList<T> query(CriteriaExpression expression);
 
 	/**
 	 * Update a T item through the provider.

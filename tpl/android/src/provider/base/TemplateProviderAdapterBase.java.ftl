@@ -39,11 +39,10 @@ import ${local_namespace}.contract.${relation.relation.targetEntity?cap_first}Co
 import ${local_namespace}.${curr.inheritance.superclass.name?cap_first}ProviderAdapter;
 import ${data_namespace}.${curr.inheritance.superclass.name?cap_first}SQLiteAdapter;
 
-import ${project_namespace}.criterias.${curr.name}Criterias;
-import ${project_namespace}.criterias.base.Criteria;
-import ${project_namespace}.criterias.base.Criteria.Type;
-import ${project_namespace}.criterias.base.CriteriasBase;
-import ${project_namespace}.criterias.base.CriteriasBase.GroupType;
+import ${project_namespace}.criterias.base.Criterion;
+import ${project_namespace}.criterias.base.Criterion.Type;
+import ${project_namespace}.criterias.base.CriteriaExpression;
+import ${project_namespace}.criterias.base.CriteriaExpression.GroupType;
 import ${project_namespace}.criterias.base.value.ArrayValue;
 	<#elseif singleTabInheritance>
 import com.google.common.collect.ObjectArrays;
@@ -122,15 +121,10 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param db database
 	 */
 	public ${curr.name?cap_first}ProviderAdapterBase(
-				final Context ctx,
-				final SQLiteDatabase db) {
-		super(ctx);
-		this.adapter = new ${curr.name?cap_first}SQLiteAdapter(ctx);
-		if (db != null) {
-			this.db = this.adapter.open(db);
-		} else {
-			this.db = this.adapter.open();
-		}
+			${project_name?cap_first}ProviderBase provider) {
+		super(
+			provider,
+			new ${curr.name?cap_first}SQLiteAdapter(provider.getContext()));
 
 		this.uriIds.add(${curr.name?upper_case}_ALL);
 		<#if (hasIds)>
@@ -240,7 +234,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						null);
 				// If there are ids
 				if (idsCursor.getCount() > 0) {
-					CriteriasBase parentCrit = this.cursorToIDSelection(idsCursor, 
+					CriteriaExpression parentCrit = this.cursorToIDSelection(idsCursor, 
 								<#list IdsUtils.getAllIdsColsFromArray(curr_ids) as id>${id}<#if id_has_next>
 								+ " || ::dirtHack:: || "
 								+ </#if></#list>);
@@ -514,7 +508,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				if (idsCursor.getCount() > 0) {
 					// If there are values in this table
 					if (${curr.name?uncap_first}Values.size() > 0) {
-						CriteriasBase currentCrit = this.cursorToIDSelection(
+						CriteriaExpression currentCrit = this.cursorToIDSelection(
 								idsCursor,
 								<#list IdsUtils.getAllIdsColsFromArray(curr_ids) as id>${id}<#if id_has_next>
 								+ " || ::dirtHack:: || "
@@ -531,7 +525,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					}
 					// If there are still values to be updated in parents
 					if (values.size() > 0) {
-						CriteriasBase parentCrit = this.cursorToIDSelection(
+						CriteriaExpression parentCrit = this.cursorToIDSelection(
 								idsCursor,
 								<#list IdsUtils.getAllIdsColsFromArray(curr_ids) as id>${id}<#if id_has_next>
 								+ " || ::dirtHack:: || "
@@ -582,16 +576,16 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 
 	<#if inherited && joinedInheritance>
 	/**
-	 * Transform a cursor of ids into a Criteria.
+	 * Transform a cursor of ids into a criteria expression.
 	 *
 	 * @param cursor The cursor
 	 * @param key The key to map the ids to
 	 *
-	 * @return The criteria
+	 * @return The expression
 	 */
-	protected CriteriasBase cursorToIDSelection(Cursor cursor, String key) {
-		${curr.name}Criterias crit = new ${curr.name}Criterias(GroupType.AND);
-		Criteria inCrit = new Criteria();
+	protected CriteriaExpression cursorToIDSelection(Cursor cursor, String key) {
+		CriteriaExpression crit = new CriteriaExpression(GroupType.AND);
+		Criterion inCrit = new Criterion();
 		inCrit.setKey(key);
 		inCrit.setType(Type.IN);
 		ArrayValue inArray = new ArrayValue();

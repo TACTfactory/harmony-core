@@ -115,8 +115,7 @@ public class ActivityGenerator extends BaseGenerator {
 		for (final EntityMetadata cm
 				: this.getAppMetas().getEntities().values()) {
 			if (!cm.isInternal() 
-					&& cm.hasFields()
-					&& !cm.isHidden()) {
+					&& cm.hasFields()) {
 				
 				this.getDatamodel().put(
 						TagConstant.CURRENT_ENTITY, cm.getName());
@@ -125,7 +124,7 @@ public class ActivityGenerator extends BaseGenerator {
 								this.getAdapter().getController())
 						+ "."
 						+ cm.getName().toLowerCase(Locale.ENGLISH);
-				this.generateAllAction(cm.getName());
+				this.generateAllAction(cm);
 			}
 		}
 		
@@ -250,7 +249,8 @@ public class ActivityGenerator extends BaseGenerator {
 
 		MenuGenerator menuGenerator = new MenuGenerator(this.getAdapter());
 		menuGenerator.generateMenu("CrudCreate");
-		menuGenerator.generateMenu("CrudEditDelete");
+		menuGenerator.generateMenu("CrudEdit");
+		menuGenerator.generateMenu("CrudDelete");
 		menuGenerator.generateMenu("Save");
 		menuGenerator.updateMenu();
 		
@@ -333,14 +333,19 @@ public class ActivityGenerator extends BaseGenerator {
 	 * Generate all actions (List, Show, Edit, Create).
 	 * @param entityName The entity for which to generate the crud.
 	 */
-	public final void generateAllAction(final String entityName) {
+	public final void generateAllAction(final EntityMetadata entity) {
+		final String entityName = entity.getName();
 		ConsoleUtils.display(">>> Generate CRUD view for " +  entityName);
 
 		if (this.isWritable) {
 			ConsoleUtils.display("   with write actions");
 
-			this.generateCreateAction(entityName);
-			this.generateEditAction(entityName);
+			if (entity.isCreateAction()) {
+				this.generateCreateAction(entityName);
+			}
+			if (entity.isEditAction()) {
+				this.generateEditAction(entityName);
+			}
 			
 			EntityMetadata currentEntity = this.getAppMetas().getEntities()
 					.get(entityName); 
@@ -372,8 +377,12 @@ public class ActivityGenerator extends BaseGenerator {
 					Group.MODEL);
 		}
 
-		this.generateShowAction(entityName);
-		this.generateListAction(entityName);
+		if (entity.isShowAction()) {
+			this.generateShowAction(entityName);
+		}
+		if (entity.isListAction()) {
+			this.generateListAction(entityName);
+		}
 		
 		this.makeSourceControler("entity-package-info.java",
 				"package-info.java");
@@ -408,7 +417,9 @@ public class ActivityGenerator extends BaseGenerator {
 		xmls.add("row_%s.xml");
 
 		final ArrayList<String> largeXmls = new ArrayList<String>();
-		largeXmls.add("activity_%s_list.xml");
+		if (this.getAppMetas().getEntities().get(entityName).isShowAction()) {
+			largeXmls.add("activity_%s_list.xml");
+		}
 
 		for (final String java : javas) {
 			this.makeSourceControler(
@@ -510,6 +521,23 @@ public class ActivityGenerator extends BaseGenerator {
 				this.getAppMetas().getProjectNameSpace(),
 				"EditActivity",
 				entityName);
+
+		final ClassMetadata classMeta =
+				this.getAppMetas().getEntities().get(entityName);
+		
+		for (final FieldMetadata fm : classMeta.getFields().values()) {
+			if (!fm.isInternal()
+					&& !fm.isHidden()
+					&& fm.getRelation() != null) {
+				TranslationMetadata.addDefaultTranslation(
+						entityName.toLowerCase(Locale.ENGLISH)
+							+ "_"
+							+ fm.getName().toLowerCase(Locale.ENGLISH)
+							+ "_dialog_title",
+						"Select " + fm.getName(),
+						Group.MODEL);
+			}
+		}
 
 		TranslationMetadata.addDefaultTranslation(
 				entityName.toLowerCase(Locale.ENGLISH) + "_error_edit",

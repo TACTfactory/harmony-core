@@ -47,14 +47,10 @@ import ${project_namespace}.${project_name?cap_first}Application;
 </#if>
 
 <#if curr.internal>
-import ${project_namespace}.criterias.${curr.relations[0].relation.targetEntity}Criterias;
-<#if (!isRecursiveJoinTable)>
-import ${project_namespace}.criterias.${curr.relations[1].relation.targetEntity}Criterias;
-</#if>
-import ${project_namespace}.criterias.${curr.name}Criterias;
-import ${project_namespace}.criterias.base.Criteria;
-import ${project_namespace}.criterias.base.Criteria.Type;
-import ${project_namespace}.criterias.base.CriteriasBase.GroupType;
+import ${project_namespace}.criterias.base.CriteriaExpression;
+import ${project_namespace}.criterias.base.Criterion;
+import ${project_namespace}.criterias.base.Criterion.Type;
+import ${project_namespace}.criterias.base.CriteriaExpression.GroupType;
 import ${project_namespace}.criterias.base.value.SelectValue;
 </#if>
 <#if (InheritanceUtils.isExtended(curr))>
@@ -1027,7 +1023,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			final String orderBy) {
 
 		Cursor ret = null;
-		${curr.name}Criterias crit = new ${curr.name}Criterias(GroupType.AND);
+		CriteriaExpression crit = new CriteriaExpression(GroupType.AND);
 		<#list leftRelation.relation.field_ref as refField>
 		crit.add(${leftRelationFieldsNames[refField_index]},
 				String.valueOf(${leftRelation.name?uncap_first}${refField.name?cap_first}),
@@ -1037,8 +1033,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		value.setRefKey(<#list rightRelation.relation.field_ref as refField>${rightRelationFieldsNames[refField_index]}<#if refField_has_next> + " || '::dirtyHack::' ||" + </#if></#list>);
 		value.setRefTable(${ContractUtils.getContractTableName(curr)});
 		value.setCriteria(crit);
-		${rightRelation.relation.targetEntity}Criterias ${rightRelation.relation.targetEntity?lower_case}Crit = new ${rightRelation.relation.targetEntity}Criterias(GroupType.AND);
-		Criteria ${rightRelation.relation.targetEntity?lower_case}SelectCrit = new Criteria();
+		CriteriaExpression ${rightRelation.relation.targetEntity?lower_case}Crit = new CriteriaExpression(GroupType.AND);
+		Criterion ${rightRelation.relation.targetEntity?lower_case}SelectCrit = new Criterion();
 		${rightRelation.relation.targetEntity?lower_case}SelectCrit.setKey(<#list entities[rightRelation.relation.targetEntity].ids as id>${ContractUtils.getContractCol(id, true)}<#if id_has_next>+ " || '::dirtyHack::' || " + </#if></#list>);
 		${rightRelation.relation.targetEntity?lower_case}SelectCrit.setType(Type.IN);
 		${rightRelation.relation.targetEntity?lower_case}SelectCrit.addValue(value);

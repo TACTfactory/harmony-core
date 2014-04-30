@@ -55,12 +55,20 @@ public class ManagementFactory extends ProjectMetadataFactory {
 		EntityMetadata personToAddress = 
 				ManagementFactory.addEntity("PersontoAddress", management);
 		personToAddress.setInternal(true);
-		personToAddress.setHidden(true);
+		personToAddress.setCreateAction(false);
+		personToAddress.setListAction(false);
+		personToAddress.setEditAction(false);
+		personToAddress.setShowAction(false);
+		personToAddress.setDeleteAction(false);
 
 		EntityMetadata personToDay = 
 				ManagementFactory.addEntity("PersontoDay", management);
 		personToDay.setInternal(true);
-		personToDay.setHidden(true);
+		personToDay.setCreateAction(false);
+		personToDay.setListAction(false);
+		personToDay.setEditAction(false);
+		personToDay.setShowAction(false);
+		personToDay.setDeleteAction(false);
 
 //		EntityMetadata office = 
 //				ManagementFactory.addEntity("Office", management);

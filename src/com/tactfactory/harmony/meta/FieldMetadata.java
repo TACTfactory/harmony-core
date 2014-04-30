@@ -95,7 +95,9 @@ public class FieldMetadata extends BaseMetadata {
 		if (!this.hidden 
 				&& !this.internal
 				&& (this.owner instanceof EntityMetadata) 
-				&& !((EntityMetadata) this.owner).isHidden()
+				&& (!((EntityMetadata) this.owner).isCreateAction()
+						|| ((EntityMetadata) this.owner).isShowAction()
+						|| ((EntityMetadata) this.owner).isEditAction())
 				&& !((EntityMetadata) this.owner).isInternal()) {
 			final String key =
 					this.owner.getName().toLowerCase()

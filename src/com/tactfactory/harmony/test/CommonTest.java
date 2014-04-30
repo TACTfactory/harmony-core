@@ -303,6 +303,7 @@ public abstract class CommonTest {
 //		result.add(new ApplicationMetadata[] {
 //				TracScanFactory.generateTestMetadata()
 //		});
+		
 //		
 //		result.add(new ApplicationMetadata[] {
 //				DemactFactory.generateTestMetadata()
