@@ -62,11 +62,11 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 				"base/value/package-info.java",
 				"base/value/package-info.java", false);
 		this.makeSourceCriteria(
-				"base/Criteria.java",
-				"base/Criteria.java", true);
+				"base/CriteriaExpression.java",
+				"base/CriteriaExpression.java", true);
 		this.makeSourceCriteria(
-				"base/CriteriasBase.java",
-				"base/CriteriasBase.java", true);
+				"base/Criterion.java",
+				"base/Criterion.java", true);
 		this.makeSourceCriteria(
 				"base/ICriteria.java",
 				"base/ICriteria.java", true);

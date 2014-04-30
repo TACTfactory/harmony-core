@@ -6,7 +6,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 
-import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
+import ${project_namespace}.criterias.base.CriteriaExpression;
 
 /**
  * ${curr.name} Loader.
@@ -17,11 +17,9 @@ public class ${curr.name}ListLoader
 	/**
 	 * Constructor.
 	 * @param ctx context
-	 * @param crit ${curr.name?cap_first}Criterias
 	 */
 	public ${curr.name}ListLoader(
-			final Context ctx,
-			final ${curr.name?cap_first}Criterias crit) {
+			final Context ctx) {
 		super(ctx);
 	}
 
@@ -54,20 +52,20 @@ public class ${curr.name}ListLoader
 	 * @param ctx context
 	 * @param uri The URI associated with this loader
 	 * @param projection The projection to use
-	 * @param criterias ${curr.name?cap_first}Criterias
+	 * @param expression The CriteriaExpression
 	 * @param sortOrder The sort order
 	 */
 	public ${curr.name}ListLoader(
 					Context ctx,
 					Uri uri,
 					String[] projection,
-					${curr.name?cap_first}Criterias criterias,
+					CriteriaExpression expression,
 					String sortOrder) {
 		super(ctx,
 				uri,
 				projection,
-				criterias.toSQLiteSelection(),
-				criterias.toSQLiteSelectionArgs(),
+				expression.toSQLiteSelection(),
+				expression.toSQLiteSelectionArgs(),
 				sortOrder);
 	}
 }
