@@ -17,7 +17,7 @@ import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.parser.BaseParser;
 import com.tactfactory.harmony.parser.ClassCompletor;
 import com.tactfactory.harmony.parser.HeaderParser;
-import com.tactfactory.harmony.parser.JavaModelParser;
+import com.tactfactory.harmony.parser.java.JavaModelParser;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

@@ -11,9 +11,9 @@ package com.tactfactory.harmony.parser.java.visitor;
 import japa.parser.ast.ImportDeclaration;
 import japa.parser.ast.visitor.GenericVisitorAdapter;
 
-import com.tactfactory.harmony.parser.JavaModelParser;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.parser.BaseParser;
+import com.tactfactory.harmony.parser.java.JavaModelParser;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
