@@ -180,8 +180,7 @@ public final class Harmony {
 					"AndroidManifest.xml"));
 
 			if (manifest.exists()) {
-				ApplicationMetadata.INSTANCE.setProjectNameSpace(
-						ProjectContext.getNameSpaceFromManifest(manifest));
+			    ProjectContext.loadNameSpaceFromManifest(manifest);
 			}
 
 			// get project name from configs.xml
@@ -200,8 +199,7 @@ public final class Harmony {
 					"build.xml"));
 
 			if (config.exists()) {
-				ApplicationMetadata.INSTANCE.setName(
-						ProjectContext.getProjectNameFromConfig(config));
+			    ProjectContext.loadProjectNameFromConfig(config);
 			}
 
 			// get SDK from local.properties
@@ -259,7 +257,7 @@ public final class Harmony {
 		// Select Action and launch
 		for (final Command baseCommand : this.bootstrap.values()) {
 			if (baseCommand.isAvailableCommand(action)) {
-				getInstance().harmonyContext.setCurrentBundleFolder(
+				harmonyContext.setCurrentBundleFolder(
 						this.commandBundleFolders.get(baseCommand.getClass())
 						+ "/");
 				

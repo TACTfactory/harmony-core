@@ -173,7 +173,6 @@ public final class RelationMetadata extends BaseMetadata {
 			final IAdapter adapter) {
 		final List<Map<String, Object>> result =
 				new ArrayList<Map<String, Object>>();
-		Map<String, Object> subField = null;
 
 		for (final FieldMetadata field : c) {
 			result.add(field.toMap(adapter));

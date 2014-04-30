@@ -36,10 +36,10 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 public final class ProjectContext {
 	// DEMO/TEST MODE
 	/** Default project name. */
-	private static String defaultProjectName = "demact";
+	private final static String PRJ_NAME = "demact";
 
-	/** Default project NameSpace. */
-	private static String defaultProjectNamespace =
+    /** Default project NameSpace. */
+	private final static String PRJ_NS =
 			"com.tactfactory.harmony.test.demact";
 
 	/**
@@ -53,8 +53,8 @@ public final class ProjectContext {
 	 * @param manifest Manifest File
 	 * @return Project Name Space
 	 */
-	public static String getNameSpaceFromManifest(final File manifest) {
-		String projectNamespace = null;
+	public static void loadNameSpaceFromManifest(final File manifest) {
+		String result = null;
 		SAXBuilder builder;
 		Document doc;
 
@@ -69,23 +69,18 @@ public final class ProjectContext {
 				final Element rootNode = doc.getRootElement();
 
 				// Get Name Space from package declaration
-				projectNamespace = rootNode.getAttributeValue("package");
-				projectNamespace =
-						projectNamespace.replaceAll("\\.", HarmonyContext.DELIMITER);
+				result = rootNode.getAttributeValue("package");
+				result = result.replaceAll("\\.", HarmonyContext.DELIMITER);
 			} catch (final JDOMException e) {
-				// TODO Auto-generated catch block
 				ConsoleUtils.displayError(e);
 			} catch (final IOException e) {
-				// TODO Auto-generated catch block
 				ConsoleUtils.displayError(e);
 			}
 		}
 
-		if (projectNamespace != null) {
-			defaultProjectNamespace = projectNamespace.trim();
+		if (result != null) {
+			ApplicationMetadata.INSTANCE.setName(result.trim());
 		}
-
-		return projectNamespace;
 	}
 
 	/**
@@ -94,8 +89,8 @@ public final class ProjectContext {
 	 * @param config Configuration file
 	 * @return Project Name Space
 	 */
-	public static String getProjectNameFromConfig(final File config) {
-		String projname = null;
+	public static void loadProjectNameFromConfig(final File config) {
+		String result = null;
 		SAXBuilder builder;
 		Document doc;
 
@@ -107,95 +102,91 @@ public final class ProjectContext {
 				doc = builder.build(config);
 				// Load Root element
 				final Element rootNode = doc.getRootElement();
-				projname = rootNode.getAttribute("name").getValue();
+				result = rootNode.getAttribute("name").getValue();
 			} catch (final JDOMException e) {
 				ConsoleUtils.displayError(e);
 			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);
 			}
 		}
-		if (projname != null) {
-			defaultProjectName = projname.trim();
-		}
 
-		return projname;
-	}
-
-	/**
-	 * Prompt Project Name to the user.
-	 * 
-	 * @param arguments The console arguments passed by the user
-	 */
-	public static void initProjectName(HashMap<String, String> arguments) {
-		if (Strings.isNullOrEmpty(ApplicationMetadata.INSTANCE.getName())) {
-			Questionnary questionnary = new Questionnary(arguments);
-			Question question = new Question();
-			question.setParamName("name");
-			question.setDefaultValue(defaultProjectName);
-			question.setQuestion(String.format(
-					"Please enter your Project Name [%s]:",
-					defaultProjectName));
-			question.setShortParamName("n");
-			
-			
-			questionnary.addQuestion("name", question);
-			questionnary.launchQuestionnary();
-			ApplicationMetadata.INSTANCE.setName(questionnary.getAnswer("name"));
+		if (result != null) {
+			ApplicationMetadata.INSTANCE.setName(result.trim());
 		}
 	}
 
-	/**
-	 * Prompt Project Name Space to the user.
-	 * 
-	 * @param arguments The console arguments passed by the user
-	 */
-	public static void initProjectNameSpace(
-			HashMap<String, String> arguments) {
-		if (Strings.isNullOrEmpty(
-				ApplicationMetadata.INSTANCE.getProjectNameSpace())) {
-			Questionnary questionnary = new Questionnary(arguments);
-			Question question = new Question();
-			question.setParamName("namespace");
-			question.setDefaultValue(defaultProjectNamespace);
-			question.setQuestion(String.format(
-					"Please enter your Project NameSpace [%s]:",
-					defaultProjectNamespace));
-			question.setShortParamName("ns");
-			
-			
-			questionnary.addQuestion("namespace", question);
-			
-			boolean good = false;
+   /**
+     * Prompt Project Name to the user.
+     * 
+     * @param arguments The console arguments passed by the user
+     */
+    public static void initProjectName(HashMap<String, String> arguments) {
+        if (Strings.isNullOrEmpty(ApplicationMetadata.INSTANCE.getName())) {
+            final String KEY =  "name";
 
-			while (!good) {
-				questionnary.launchQuestionnary();
-				String nameSpace = questionnary.getAnswer("namespace");
+            Question question = new Question();
+            question.setParamName(KEY, "n");
+            question.setQuestion("Please enter your Project Name [%s]:", PRJ_NAME);
+            question.setDefaultValue(PRJ_NAME);
 
-				if (Strings.isNullOrEmpty(nameSpace)) {
-					good = true;
+            Questionnary questionnary = new Questionnary(arguments);
+            questionnary.addQuestion(KEY, question);
+            questionnary.launchQuestionnary();
+            ApplicationMetadata.INSTANCE.setName(questionnary.getAnswer(KEY));
+        }
+    }
 
-				} else {
+    /**
+     * Prompt Project Name Space to the user.
+     * 
+     * @param arguments The console arguments passed by the user
+     */
+    public static void initProjectNameSpace(
+            HashMap<String, String> arguments) {
+        if (Strings.isNullOrEmpty(
+                ApplicationMetadata.INSTANCE.getProjectNameSpace())) {
+            final String KEY =  "namespace";
+            String result = null;
+            
+            Question question = new Question();
+            question.setParamName(KEY, "ns");
+            question.setQuestion("Please enter your Project NameSpace [%s]:",
+                    PRJ_NS);
+            question.setDefaultValue(PRJ_NS);
+            
+            Questionnary questionnary = new Questionnary(arguments);
+            questionnary.addQuestion(KEY, question);
+            
+            boolean good = false;
 
-					final String namespaceForm =
-							"^(((([a-z0-9_]+)\\.)*)([a-z0-9_]+))$";
+            while (!good) {
+                questionnary.launchQuestionnary();
+                String nameSpace = questionnary.getAnswer(KEY);
 
-					if (Pattern.matches(namespaceForm, nameSpace)) {
-						defaultProjectNamespace = nameSpace.trim();
-						good = true;
-					} else {
-						ConsoleUtils.display(
-								"You can't use special characters "
-								+ "except '.' in the NameSpace.");
-						question.setParamName(null);
-						question.setShortParamName(null);
-					}
-				}
-			}
+                if (Strings.isNullOrEmpty(nameSpace)) {
+                    good = true;
+                } else {
 
-			ApplicationMetadata.INSTANCE.setProjectNameSpace(
-				defaultProjectNamespace.replaceAll("\\.", HarmonyContext.DELIMITER)
-					.trim());
-		}
-	}
+                    final String namespaceForm =
+                            "^(((([a-z0-9_]+)\\.)*)([a-z0-9_]+))$";
 
+                    if (Pattern.matches(namespaceForm, nameSpace)) {
+                        result = nameSpace.trim();
+                        good = true;
+                    } else {
+                        ConsoleUtils.display(
+                                "You can't use special characters "
+                                + "except '.' in the NameSpace.");
+                        question.setParamName(null);
+                        question.setShortParamName(null);
+                    }
+                }
+            }
+
+            if (result != null) {
+                ApplicationMetadata.INSTANCE.setProjectNameSpace(
+                        result.replaceAll("\\.", HarmonyContext.DELIMITER).trim());
+            }
+        }
+    }
 }

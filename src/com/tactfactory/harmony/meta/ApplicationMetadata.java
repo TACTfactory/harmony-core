@@ -21,6 +21,7 @@ import com.tactfactory.harmony.template.TagConstant;
  * Application Metadata.
  */
 public final class ApplicationMetadata extends BaseMetadata {
+
 	/** Path delimiter. */
 	private static final String PATH_DELIMITER = "/";
 	/** Package delimiter. */
