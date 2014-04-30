@@ -65,10 +65,18 @@ public class TestGenerator extends BaseGenerator {
 		this.makeSourceTest("base/TestDBBase.java",
 				"base/TestDBBase.java",
 				true);
-		
+
 		this.makeSourceTest("base/TestServiceBase.java",
 				"base/TestServiceBase.java",
 				true);
+
+		this.makeSourceTest("base/TestCriteriaBase.java",
+				"base/TestCriteriaBase.java",
+				true);
+		
+		this.makeSourceTest("TestCriteria.java",
+				"TestCriteria.java",
+				false);
 	}
 
 	/**
