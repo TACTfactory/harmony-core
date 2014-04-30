@@ -139,6 +139,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 
 	@Override
 	public String getType(final Uri uri) {
+		<#if curr.internal>
+		return null;
+		<#else>
 		String result;
 		final String single =
 				"vnc.android.cursor.item/"
@@ -172,6 +175,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		}
 
 		return result;
+		</#if>
 	}
 
 	@Override
