@@ -13,12 +13,13 @@ import java.util.LinkedHashMap;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
-import com.tactfactory.harmony.ProjectDiscover;
-import com.tactfactory.harmony.TargetPlatform;
+import com.tactfactory.harmony.HarmonyContext;
+import com.tactfactory.harmony.ProjectContext;
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.parser.HeaderParser;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.TargetPlatform;
 import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.plateforme.ios.IosAdapter;
 import com.tactfactory.harmony.plateforme.rim.RimAdapter;
@@ -170,13 +171,13 @@ public class ProjectCommand extends BaseCommand {
 				ConsoleUtils.display(">> Project Parameters");
 
 				
-				ProjectDiscover.initProjectName(
+				ProjectContext.initProjectName(
 						this.getCommandArgs());
 				
-				ProjectDiscover.initProjectNameSpace(
+				ProjectContext.initProjectNameSpace(
 						this.getCommandArgs());
 				
-				ProjectDiscover.initProjectAndroidSdkPath(
+				HarmonyContext.initProjectAndroidSdkPath(
 						this.getCommandArgs());
 
 				ConsoleUtils.display("Project Name: "
@@ -543,7 +544,7 @@ public class ProjectCommand extends BaseCommand {
 
 		if (action.equals(UPDATE_SDK)) {
 			ApplicationMetadata.setAndroidSdkPath("");
-			ProjectDiscover.initProjectAndroidSdkPath(this.getCommandArgs());
+			HarmonyContext.initProjectAndroidSdkPath(this.getCommandArgs());
 			ProjectGenerator.updateSDKPath();
 		} else
 

@@ -8,7 +8,7 @@
  */
 package com.tactfactory.harmony.plateforme;
 
-import com.tactfactory.harmony.Context;
+import com.tactfactory.harmony.HarmonyContext;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 
@@ -560,7 +560,7 @@ public abstract class BaseAdapter implements IAdapter {
 		return String.format("%s%s/src/%s/%s",
 				Harmony.getBundlePath(),
 				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
-				bundleNamespace.replaceAll("\\.", Context.DELIMITER),
+				bundleNamespace.replaceAll("\\.", HarmonyContext.DELIMITER),
 				this.getAnnotationsBundleTemplates());
 	}
 
@@ -590,7 +590,7 @@ public abstract class BaseAdapter implements IAdapter {
 		return String.format("%s%s/src/%s/%s",
 				Harmony.getBundlePath(),
 				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
-				bundleNamespace.replaceAll("\\.", Context.DELIMITER),
+				bundleNamespace.replaceAll("\\.", HarmonyContext.DELIMITER),
 				this.getCommandBundleTemplates());
 	}
 
@@ -619,7 +619,7 @@ public abstract class BaseAdapter implements IAdapter {
 		return String.format("%s%s/src/%s/%s",
 				Harmony.getBundlePath(),
 				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
-				bundleNamespace.replaceAll("\\.", Context.DELIMITER),
+				bundleNamespace.replaceAll("\\.", HarmonyContext.DELIMITER),
 				this.getMetaBundleTemplates());
 	}
 
@@ -649,7 +649,7 @@ public abstract class BaseAdapter implements IAdapter {
 		return String.format("%s%s/src/%s/%s",
 				Harmony.getBundlePath(),
 				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
-				bundleNamespace.replaceAll("\\.", Context.DELIMITER),
+				bundleNamespace.replaceAll("\\.", HarmonyContext.DELIMITER),
 				this.getTemplateBundleTemplates());
 	}
 
@@ -678,7 +678,7 @@ public abstract class BaseAdapter implements IAdapter {
 		return String.format("%s%s/src/%s/%s",
 				Harmony.getBundlePath(),
 				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
-				bundleNamespace.replaceAll("\\.", Context.DELIMITER),
+				bundleNamespace.replaceAll("\\.", HarmonyContext.DELIMITER),
 				this.getParserBundleTemplates());
 	}
 

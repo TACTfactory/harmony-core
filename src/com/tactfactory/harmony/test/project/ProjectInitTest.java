@@ -21,7 +21,7 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import com.tactfactory.harmony.Harmony;
-import com.tactfactory.harmony.ProjectDiscover;
+import com.tactfactory.harmony.HarmonyContext;
 import com.tactfactory.harmony.command.ProjectCommand;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.template.ProjectGenerator;
@@ -116,7 +116,7 @@ public class ProjectInitTest extends CommonTest {
 				String.format("%s/%s",
 						Harmony.getProjectAndroidPath(),
 						"local.properties");
-		assertEquals(ProjectDiscover.getSdkDirFromPropertiesFile(localProp),
+		assertEquals(HarmonyContext.getSdkDirFromPropertiesFile(localProp),
 				newSdkPath);
 
 		ApplicationMetadata.setAndroidSdkPath("/opt/android-sdk-linux_86/");

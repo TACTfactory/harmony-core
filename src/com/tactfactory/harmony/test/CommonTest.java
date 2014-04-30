@@ -22,7 +22,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.Harmony;
-import com.tactfactory.harmony.ProjectDiscover;
+import com.tactfactory.harmony.HarmonyContext;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.test.factory.DemactFactory;
 import com.tactfactory.harmony.test.factory.ManagementFactory;
@@ -109,7 +109,7 @@ public abstract class CommonTest {
 							"local.properties");
 
 			ApplicationMetadata.setAndroidSdkPath(
-					ProjectDiscover.getSdkDirFromPropertiesFile(localProp));
+			        HarmonyContext.getSdkDirFromPropertiesFile(localProp));
 
 			if (ApplicationMetadata.getAndroidSdkPath() == null) {
 				ApplicationMetadata.setAndroidSdkPath(
@@ -180,7 +180,7 @@ public abstract class CommonTest {
 							"local.properties");
 
 			ApplicationMetadata.setAndroidSdkPath(
-					ProjectDiscover.getSdkDirFromPropertiesFile(localProp));
+			        HarmonyContext.getSdkDirFromPropertiesFile(localProp));
 
 			if (ApplicationMetadata.getAndroidSdkPath() == null) {
 				ApplicationMetadata.setAndroidSdkPath(

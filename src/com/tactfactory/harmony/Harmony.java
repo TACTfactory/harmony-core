@@ -54,8 +54,8 @@ public final class Harmony {
 		return Harmony.instance;
 	}
 
-	/** Context of execution. */
-	private final Context context = new Context();
+	/** HarmonyContext of execution. */
+	private final HarmonyContext harmonyContext = new HarmonyContext();
 
 	/** Bootstrap. */
 	private final Map<Class<?>, Command> bootstrap =
@@ -64,7 +64,6 @@ public final class Harmony {
 	/** Template folders. */
 	private final Map<String, File> templateFolders =
 			new HashMap<String, File>();
-	
 
 	/** Command classes associated to bundle folder. */
 	private final Map<Class<?>, String> commandBundleFolders =
@@ -74,7 +73,7 @@ public final class Harmony {
 	 * @throws Exception PluginManager failure
 	 */
 	private Harmony() throws Exception {
-		this.loadPlugins(new File(this.context.getBundlesPath()));
+		this.loadPlugins(new File(this.harmonyContext.getBundlesPath()));
 
 		Locale.setDefault(Locale.US);
 		Harmony.instance = this;
@@ -145,7 +144,7 @@ public final class Harmony {
         
         pluginManager.shutdown();
 	}
-    
+
     private void loadTemplates(File plugin) {
         // Template bundles
         File templateFolderFile = plugin;
@@ -177,12 +176,12 @@ public final class Harmony {
 
 			// get project namespace from AndroidManifest.xml
 			final File manifest = new File(String.format("%s/%s",
-					this.context.getProjectAndroidPath(),
+					this.harmonyContext.getProjectAndroidPath(),
 					"AndroidManifest.xml"));
 
 			if (manifest.exists()) {
 				ApplicationMetadata.INSTANCE.setProjectNameSpace(
-						ProjectDiscover.getNameSpaceFromManifest(manifest));
+						ProjectContext.getNameSpaceFromManifest(manifest));
 			}
 
 			// get project name from configs.xml
@@ -192,35 +191,35 @@ public final class Harmony {
 
 			if (config.exists()) {
 				ApplicationMetadata.INSTANCE.setName(
-						ProjectDiscover.getProjectNameFromConfig(config));
+						ProjectContext.getProjectNameFromConfig(config));
 			}*/
 			// TODO MATCH : Voir avec Mickael pertinence d'utiliser le build.xml
 			// pour récupérer le project name
 			final File config = new File(String.format("%s/%s",
-					this.context.getProjectAndroidPath(),
+					this.harmonyContext.getProjectAndroidPath(),
 					"build.xml"));
 
 			if (config.exists()) {
 				ApplicationMetadata.INSTANCE.setName(
-						ProjectDiscover.getProjectNameFromConfig(config));
+						ProjectContext.getProjectNameFromConfig(config));
 			}
 
 			// get SDK from local.properties
 			final String projectProp = String.format("%s/%s",
-					this.context.getProjectAndroidPath(),
+					this.harmonyContext.getProjectAndroidPath(),
 					"local.properties");
 			final File projectPropFile = new File(projectProp);
 
 			if (projectPropFile.exists()) {
 				ApplicationMetadata.setAndroidSdkPath(
-						ProjectDiscover.getSdkDirFromPropertiesFile(
+				        HarmonyContext.getSdkDirFromPropertiesFile(
 								projectProp));
 			}
 
 		} else {
 			final String[] projectNameSpaceData =
 					ApplicationMetadata.INSTANCE.getProjectNameSpace()
-							.split(Context.DELIMITER);
+							.split(HarmonyContext.DELIMITER);
 
 			ApplicationMetadata.INSTANCE.setName(
 					projectNameSpaceData[projectNameSpaceData.length - 1]);
@@ -241,7 +240,7 @@ public final class Harmony {
 		
 		ConsoleUtils.display(
 				"Current Android SDK Revision : ",
-				ProjectDiscover.getAndroidSdkVersion());
+				HarmonyContext.getAndroidSdkVersion());
 		ConsoleUtils.display("");
 	}
 
@@ -260,7 +259,7 @@ public final class Harmony {
 		// Select Action and launch
 		for (final Command baseCommand : this.bootstrap.values()) {
 			if (baseCommand.isAvailableCommand(action)) {
-				getInstance().context.setCurrentBundleFolder(
+				getInstance().harmonyContext.setCurrentBundleFolder(
 						this.commandBundleFolders.get(baseCommand.getClass())
 						+ "/");
 				
@@ -299,8 +298,8 @@ public final class Harmony {
 		return this.bootstrap.values();
 	}
 	
-	public Context getContext() {
-	    return this.context;
+	public HarmonyContext getContext() {
+	    return this.harmonyContext;
 	}
 
 	/**
@@ -308,7 +307,7 @@ public final class Harmony {
 	 * @return the android SDK version
 	 */
 	public static String getAndroidSDKVersion() {
-		return ProjectDiscover.getAndroidSdkVersion();
+		return HarmonyContext.getAndroidSdkVersion();
 	}
 
 	// TODO/FIXME remove..
@@ -318,7 +317,7 @@ public final class Harmony {
 	 * @return the harmony base path
 	 */
 	public static String getRootPath() {
-		return getInstance().context.getBasePath();
+		return getInstance().harmonyContext.getBasePath();
 	}
 
 	/**
@@ -327,7 +326,7 @@ public final class Harmony {
 	 * @return the android project folder
 	 */
 	public static String getProjectPath() {
-		return getInstance().context.getProjectPath();
+		return getInstance().harmonyContext.getProjectPath();
 	}
 
 	/**
@@ -336,7 +335,7 @@ public final class Harmony {
 	 * @return the android project path
 	 */
 	public static String getProjectAndroidPath() {
-		return getInstance().context.getProjectAndroidPath();
+		return getInstance().harmonyContext.getProjectAndroidPath();
 	}
 
 	/**
@@ -345,7 +344,7 @@ public final class Harmony {
 	 * @return the bundles path
 	 */
 	public static String getBundlePath() {
-		return getInstance().context.getBundlesPath();
+		return getInstance().harmonyContext.getBundlesPath();
 	}
 	
 	/**
@@ -354,7 +353,7 @@ public final class Harmony {
 	 * @return The library file
 	 */
 	public static File getLibrary(final String libraryName) {
-		File lib = getInstance().context.getLibrary(libraryName);
+		File lib = getInstance().harmonyContext.getLibrary(libraryName);
 		return lib;
 	}
 	
@@ -364,7 +363,7 @@ public final class Harmony {
 	 * @return The library license file
 	 */
 	public static File getLibraryLicense(final String libraryName) {
-		return getInstance().context.getLibraryLicense(libraryName);
+		return getInstance().harmonyContext.getLibraryLicense(libraryName);
 	}
 
 	/**
@@ -373,7 +372,7 @@ public final class Harmony {
 	 * @return the libraries path
 	 */
 	public static String getLibsPath() {
-		return getInstance().context.getLibsPath();
+		return getInstance().harmonyContext.getLibsPath();
 	}
 
 	/**
@@ -381,7 +380,7 @@ public final class Harmony {
 	 * @return The current bundle path
 	 */
 	public static String getCurrentBundlePath() {
-		return getInstance().context.getCurrentBundleFolder();
+		return getInstance().harmonyContext.getCurrentBundleFolder();
 	}
 
 	/**
@@ -398,7 +397,7 @@ public final class Harmony {
 	 * @return the template path
 	 */
 	public static String getTemplatesPath() {
-		return getInstance().context.getTemplatesPath();
+		return getInstance().harmonyContext.getTemplatesPath();
 	}
 
 	/**

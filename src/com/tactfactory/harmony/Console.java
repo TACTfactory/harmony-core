@@ -47,12 +47,12 @@ public abstract class Console /*extends Harmony*/ {
 							"Usage:\n\t[options] command [arguments]\n");
 			
 			ConsoleUtils.display("\nOptions:\n"
-					+ Option.HELP
-					+ Option.QUIET
-					+ Option.VERBOSE
-					+ Option.VERSION
-					+ Option.ANSI
-					+ Option.NO_ANSI);
+					+ ConsoleOption.HELP
+					+ ConsoleOption.QUIET
+					+ ConsoleOption.VERBOSE
+					+ ConsoleOption.VERSION
+					+ ConsoleOption.ANSI
+					+ ConsoleOption.NO_ANSI);
 			
 			ConsoleUtils.display("\nCommand:\n\tUse 'list' command to"
 					 + " display available commands!\n");
@@ -138,27 +138,27 @@ public abstract class Console /*extends Harmony*/ {
 					}
 
 					// Quiet mode
-					if (Option.QUIET.equal(key)) {
+					if (ConsoleOption.QUIET.equal(key)) {
 						ConsoleUtils.setQuiet(true);
 					} else
 
 					// Verbose mode
-					if (Option.VERBOSE.equal(key)) {
+					if (ConsoleOption.VERBOSE.equal(key)) {
 						ConsoleUtils.setDebug(true);
 					} else
 
 					// Version mode
-					if (Option.VERSION.equal(key)) {
+					if (ConsoleOption.VERSION.equal(key)) {
 						ConsoleUtils.displayLicence(HARMONY_VERSION);
 					} else
 
 					// ANSI mode (default)
-					if (Option.ANSI.equal(key)) {
+					if (ConsoleOption.ANSI.equal(key)) {
 						ConsoleUtils.setAnsi(true);
 					} else
 
 					// NO_ANSI mode
-					if (Option.NO_ANSI.equal(key)) {
+					if (ConsoleOption.NO_ANSI.equal(key)) {
 						ConsoleUtils.setAnsi(false);
 					}
 				} else {
