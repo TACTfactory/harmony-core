@@ -13,11 +13,13 @@ import japa.parser.ast.CompilationUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.parser.BaseParser;
 import com.tactfactory.harmony.parser.ClassCompletor;
 import com.tactfactory.harmony.parser.HeaderParser;
 import com.tactfactory.harmony.parser.java.JavaModelParser;
+import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -37,6 +39,10 @@ public abstract class BaseCommand implements Command {
 	/** Parser. */
 	private JavaModelParser javaModelParser;
 
+	/** Adapter to apply generator */
+	protected ArrayList<BaseAdapter> adapters = Harmony.getInstance()
+            .getProjectContext().getAdapters();
+	
 	/**
 	 * Gets the Metadatas of all the entities actually in the package entity.
 	 * You can register your own bundle parsers

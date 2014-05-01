@@ -30,23 +30,32 @@ import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
-/** Harmony main class. */
+/**
+ * Harmony main class.<br/>
+ * <br/>
+ * Usage :
+ * <pre>
+ * Harmony harmony = Harmony.getInstance();
+ * harmony.findAndExecute(action, action_arguments, harmony_option);
+ * </pre>
+ */
 public final class Harmony {
 
 	/** Harmony version. */
 	public static final String VERSION = getVersion();
 
 	/** Singleton of console. */
-	private static Harmony instance;
+	private volatile static Harmony instance;
 
 	/**
 	 * Get Harmony instance (Singleton).
 	 * @return The harmony instance
 	 */
-	public static Harmony getInstance() {
+	public synchronized static Harmony getInstance() {
 		if (Harmony.instance == null) {
 			try {
-				new Harmony();
+			    Harmony.instance = new Harmony();
+			    //TODO Harmony.instance.initialize();
 			} catch (Exception e) {
 				ConsoleUtils.displayError(e);
 			}
@@ -56,6 +65,7 @@ public final class Harmony {
 
 	/** HarmonyContext of execution. */
 	private final HarmonyContext harmonyContext = new HarmonyContext();
+	private final ProjectContext projectContext = new ProjectContext();
 
 	/** Bootstrap. */
 	private final Map<Class<?>, Command> bootstrap =
@@ -73,10 +83,10 @@ public final class Harmony {
 	 * @throws Exception PluginManager failure
 	 */
 	private Harmony() throws Exception {
+	    Harmony.instance = this;
 		this.loadPlugins(new File(this.harmonyContext.getBundlesPath()));
 
 		Locale.setDefault(Locale.US);
-		Harmony.instance = this;
 	}
 
 	/**
@@ -87,7 +97,7 @@ public final class Harmony {
 		final JSPFProperties props = new JSPFProperties();
 		/*props.setProperty(PluginManager.class, "cache.enabled", "true");
 
-		//optional
+		// Optional
 		props.setProperty(PluginManager.class, "cache.mode",    "weak");
 		props.setProperty(PluginManager.class, "cache.file",    "jspf.cache");*/
 
@@ -170,6 +180,8 @@ public final class Harmony {
 				"Current Working Path: ", 
 				new File(".").getCanonicalPath());
 
+		this.projectContext.detectPlatforms();
+		
 		// Check name space
 		if (Strings.isNullOrEmpty(
 				ApplicationMetadata.INSTANCE.getProjectNameSpace())) {
@@ -296,8 +308,12 @@ public final class Harmony {
 		return this.bootstrap.values();
 	}
 	
-	public HarmonyContext getContext() {
+	public HarmonyContext getHarmonyContext() {
 	    return this.harmonyContext;
+	}
+
+	public ProjectContext getProjectContext() {
+	    return this.projectContext;
 	}
 
 	/**

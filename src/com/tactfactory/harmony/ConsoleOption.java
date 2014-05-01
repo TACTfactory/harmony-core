@@ -2,7 +2,10 @@ package com.tactfactory.harmony;
 
 import com.google.common.base.Strings;
 
-/** Possible options. */
+/**
+ * Harmony options.<br/>
+ * Available options for harmony instance.
+ */
 public enum ConsoleOption {
 	//name		Internal	Short	Help message
 	/** Help command. */

@@ -694,28 +694,28 @@ public class AndroidProjectAdapter implements IAdapterProject {
                         entity.getName().toLowerCase(Locale.US))));
         
         result.add(new EditFile(
-                Harmony.getInstance().getContext().getCurrentBundleFolder()
+                Harmony.getInstance().getHarmonyContext().getCurrentBundleFolder()
                         + this.adapter.getTemplateRessourceValuesPath() 
                         + "attrs.xml",
                 this.adapter.getRessourceValuesPath() + "attrs.xml",
                 new AttrsFile()));
         
         result.add(new EditFile(
-                Harmony.getInstance().getContext().getCurrentBundleFolder()
+                Harmony.getInstance().getHarmonyContext().getCurrentBundleFolder()
                         + this.adapter.getTemplateRessourceValuesPath() 
                         + "styles.xml",
                 this.adapter.getRessourceValuesPath() + "styles.xml",
                 new StylesFile()));
 
         result.add(new EditFile(
-                Harmony.getInstance().getContext().getCurrentBundleFolder()
+                Harmony.getInstance().getHarmonyContext().getCurrentBundleFolder()
                         + this.adapter.getTemplateRessourceValuesPath() 
                         + "colors.xml",
                 this.adapter.getRessourceValuesPath() + "colors.xml",
                 new ColorsFile()));
         
         result.add(new EditFile(
-                Harmony.getInstance().getContext().getCurrentBundleFolder()
+                Harmony.getInstance().getHarmonyContext().getCurrentBundleFolder()
                         + this.adapter.getTemplateRessourceValuesPath()
                         + "dimens.xml",
                     this.adapter.getRessourceValuesPath() + "dimens.xml",

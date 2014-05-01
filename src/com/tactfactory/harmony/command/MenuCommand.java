@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
-import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
+import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.template.MenuGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
@@ -42,15 +42,17 @@ public class MenuCommand extends BaseCommand {
 		ConsoleUtils.display("> ORM Generator");
 
 		this.setCommandArgs(Console.parseCommandArgs(args));
+		//this.generateMetas();
 
-		try {
-			if (action.equals(UPDATE_MENU)) {
-				this.generateMetas();
-				new MenuGenerator(new AndroidAdapter()).updateMenu();
-			}
-
-		} catch (final Exception e) {
-			ConsoleUtils.displayError(e);
+		for(BaseAdapter adapter : this.adapters) {
+    		try {
+    			if (action.equals(UPDATE_MENU)) {
+    				this.generateMetas();           //TODO MG : why ?
+    				new MenuGenerator(adapter).updateMenu();
+    			}
+    		} catch (final Exception e) {
+    			ConsoleUtils.displayError(e);
+    		}
 		}
 	}
 

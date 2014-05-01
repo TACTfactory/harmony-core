@@ -9,7 +9,11 @@
 package com.tactfactory.harmony;
 
 import java.io.File;
+import java.io.FilenameFilter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.regex.Pattern;
 
@@ -22,6 +26,11 @@ import com.google.common.base.Strings;
 import com.tactfactory.harmony.command.questionnary.Question;
 import com.tactfactory.harmony.command.questionnary.Questionnary;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
+import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.TargetPlatform;
+import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
+import com.tactfactory.harmony.plateforme.ios.IosAdapter;
+import com.tactfactory.harmony.plateforme.winphone.WinphoneAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -43,9 +52,9 @@ public final class ProjectContext {
 			"com.tactfactory.harmony.test.demact";
 
 	/**
-	 * Private constructor.
+	 * Constructor.
 	 */
-	private ProjectContext() { }
+	public ProjectContext() { }
 
 	/**
 	 * Extract Project NameSpace from AndroidManifest file.
@@ -115,6 +124,59 @@ public final class ProjectContext {
 		}
 	}
 
+	private HashMap<TargetPlatform, BaseAdapter> adapters = 
+	        new HashMap<TargetPlatform, BaseAdapter>();
+	
+	public ArrayList<BaseAdapter> getAdapters() {
+	    return new ArrayList<>(this.adapters.values());
+	}
+	
+	public BaseAdapter getAdapter(TargetPlatform platform) {
+	    return this.adapters.get(platform);
+	}
+
+	public void detectPlatforms() {
+	    final File dir = new File(Harmony.getProjectPath());
+        final String[] files = dir.list(new FilenameFilter() {
+            @Override
+            public boolean accept(File current, String name) {
+              return new File(current, name).isDirectory();
+            }
+          });
+        final ArrayList<String> directories =
+                new ArrayList<String>(Arrays.asList(files));
+        Collections.sort(directories);
+
+        for (final String directory : directories) {
+            switch (TargetPlatform.parse(directory)) {
+            case ANDROID:
+                this.adapters.put(
+                        TargetPlatform.ANDROID,
+                        new AndroidAdapter());
+                break;
+            case IPHONE :
+            case IPAD:
+                this.adapters.put(
+                        TargetPlatform.IPHONE,
+                        new IosAdapter());
+                break;
+            case RIM:
+                //this.adapters.put(TargetPlatform.RIM, new RimAdapter());
+                break;
+            case WEB:
+                //this.adapters.put(TargetPlatform.WEB, new WebAdapter());
+                break;
+            case WINPHONE:
+                this.adapters.put(
+                        TargetPlatform.WINPHONE,
+                        new WinphoneAdapter());
+                break;
+            default:
+                break;
+            }
+        }
+	}
+	
    /**
      * Prompt Project Name to the user.
      * 
@@ -126,7 +188,8 @@ public final class ProjectContext {
 
             Question question = new Question();
             question.setParamName(KEY, "n");
-            question.setQuestion("Please enter your Project Name [%s]:", PRJ_NAME);
+            question.setQuestion("Please enter your Project Name [%s]:", 
+                    PRJ_NAME);
             question.setDefaultValue(PRJ_NAME);
 
             Questionnary questionnary = new Questionnary(arguments);
@@ -141,8 +204,7 @@ public final class ProjectContext {
      * 
      * @param arguments The console arguments passed by the user
      */
-    public static void initProjectNameSpace(
-            HashMap<String, String> arguments) {
+    public static void initProjectNameSpace(HashMap<String, String> arguments) {
         if (Strings.isNullOrEmpty(
                 ApplicationMetadata.INSTANCE.getProjectNameSpace())) {
             final String KEY =  "namespace";

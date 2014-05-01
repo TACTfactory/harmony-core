@@ -15,7 +15,6 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
-import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.template.ActivityGenerator;
 import com.tactfactory.harmony.template.ApplicationGenerator;
 import com.tactfactory.harmony.template.EntityGenerator;
@@ -69,10 +68,6 @@ public class OrmCommand extends BaseCommand {
 	public static final String GENERATE_CRUD 		=
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_CRUD;
 
-	/** Adapter. */
-	private BaseAdapter adapter = new AndroidAdapter();
-
-
 	/**
 	 * Generate java code files from parsed Entities.
 	 */
@@ -100,28 +95,32 @@ public class OrmCommand extends BaseCommand {
 	 * Generate the Persistence part for the given classes.
 	 */
 	protected final void makeLayoutDatabase() {
-		try {
-			new EnumGenerator(this.adapter).generateAll();
-			new EntityGenerator(this.adapter).generateAll();
-			new ApplicationGenerator(this.adapter).generateApplication();
-			new SQLiteGenerator(this.adapter).generateAll();
-			new ProviderGenerator(this.adapter).generateProvider();
-
-		} catch (final Exception e) {
-			ConsoleUtils.displayError(e);
-		}
+	    for(BaseAdapter adapter : this.adapters) {
+    		try {
+    			new EnumGenerator(adapter).generateAll();
+    			new EntityGenerator(adapter).generateAll();
+    			new ApplicationGenerator(adapter).generateApplication();
+    			new SQLiteGenerator(adapter).generateAll();
+    			new ProviderGenerator(adapter).generateProvider();
+    
+    		} catch (final Exception e) {
+    			ConsoleUtils.displayError(e);
+    		}
+	    }
 	}
 
 	/**
 	 * Generate Test DB for Entities.
 	 */
 	protected final void makeLayoutTestDatabase() {
-		try {
-			new TestGenerator(this.adapter).generateAll();
-
-		} catch (final Exception e) {
-			ConsoleUtils.displayError(e);
-		}
+	    for(BaseAdapter adapter : this.adapters) {
+    		try {
+    			new TestGenerator(adapter).generateAll();
+    
+    		} catch (final Exception e) {
+    			ConsoleUtils.displayError(e);
+    		}
+	    }
 	}
 
 	/**
@@ -129,16 +128,18 @@ public class OrmCommand extends BaseCommand {
 	 * @param generateHome True if you want the HomeActivity to be regenerated.
 	 */
 	protected final void makeLayoutUi(final boolean generateHome) {
-		try {
-			if (generateHome) {
-				new ProjectGenerator(this.adapter).generateStartView();
-			}
-
-			new ActivityGenerator(this.adapter).generateAll();
-
-		} catch (final Exception e) {
-			ConsoleUtils.displayError(e);
-		}
+	    for(BaseAdapter adapter : this.adapters) {
+    		try {
+    			if (generateHome) {
+    				new ProjectGenerator(adapter).generateStartView();
+    			}
+    
+    			new ActivityGenerator(adapter).generateAll();
+    
+    		} catch (final Exception e) {
+    			ConsoleUtils.displayError(e);
+    		}
+	    }
 	}
 
 	@Override

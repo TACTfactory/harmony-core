@@ -138,6 +138,7 @@ public class ProjectCommand extends BaseCommand {
 								+ ACTION_UPDATE
 								+ SEPARATOR
 								+ SUBJECT_SDK_PATH;
+
 	/** Command : PROJECT:UPDATE:DEPENDENCIES. */
 	public static final String UPDATE_DEPENDENCIES = BUNDLE
 								+ SEPARATOR
