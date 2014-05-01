@@ -45,11 +45,14 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 public final class ProjectContext {
 	// DEMO/TEST MODE
 	/** Default project name. */
-	private final static String PRJ_NAME = "demact";
+	private final static String DEFLAUT_PRJ_NAME = "demact";
 
     /** Default project NameSpace. */
-	private final static String PRJ_NS =
+	private final static String DEFAULT_PRJ_NS =
 			"com.tactfactory.harmony.test.demact";
+
+	private HashMap<TargetPlatform, BaseAdapter> adapters = 
+	         new HashMap<TargetPlatform, BaseAdapter>();
 
 	/**
 	 * Constructor.
@@ -124,17 +127,6 @@ public final class ProjectContext {
 		}
 	}
 
-	private HashMap<TargetPlatform, BaseAdapter> adapters = 
-	        new HashMap<TargetPlatform, BaseAdapter>();
-	
-	public ArrayList<BaseAdapter> getAdapters() {
-	    return new ArrayList<BaseAdapter>(this.adapters.values());
-	}
-	
-	public BaseAdapter getAdapter(TargetPlatform platform) {
-	    return this.adapters.get(platform);
-	}
-
 	public void detectPlatforms() {
 	    final File dir = new File(Harmony.getProjectPath());
         final String[] files = dir.list(new FilenameFilter() {
@@ -147,29 +139,35 @@ public final class ProjectContext {
                 new ArrayList<String>(Arrays.asList(files));
         Collections.sort(directories);
 
+        ConsoleUtils.display("Current platforms found :");
         for (final String directory : directories) {
             switch (TargetPlatform.parse(directory)) {
             case ANDROID:
                 this.adapters.put(
                         TargetPlatform.ANDROID,
                         new AndroidAdapter());
+                ConsoleUtils.display("\t- Detected Android project !");
                 break;
             case IPHONE :
             case IPAD:
                 this.adapters.put(
                         TargetPlatform.IPHONE,
                         new IosAdapter());
+                ConsoleUtils.display("\t- Detected iOS project !");
                 break;
             case RIM:
                 //this.adapters.put(TargetPlatform.RIM, new RimAdapter());
+                ConsoleUtils.display("\t- Detected RIM project !");
                 break;
             case WEB:
                 //this.adapters.put(TargetPlatform.WEB, new WebAdapter());
+                ConsoleUtils.display("\t- Detected Web project !");
                 break;
             case WINPHONE:
                 this.adapters.put(
                         TargetPlatform.WINPHONE,
                         new WinphoneAdapter());
+                ConsoleUtils.display("\t- Detected Windows Phone project !");
                 break;
             default:
                 break;
@@ -182,15 +180,15 @@ public final class ProjectContext {
      * 
      * @param arguments The console arguments passed by the user
      */
-    public static void initProjectName(HashMap<String, String> arguments) {
+    public static void promptProjectName(HashMap<String, String> arguments) {
         if (Strings.isNullOrEmpty(ApplicationMetadata.INSTANCE.getName())) {
             final String KEY =  "name";
 
             Question question = new Question();
             question.setParamName(KEY, "n");
             question.setQuestion("Please enter your Project Name [%s]:", 
-                    PRJ_NAME);
-            question.setDefaultValue(PRJ_NAME);
+                    DEFLAUT_PRJ_NAME);
+            question.setDefaultValue(DEFLAUT_PRJ_NAME);
 
             Questionnary questionnary = new Questionnary(arguments);
             questionnary.addQuestion(KEY, question);
@@ -204,7 +202,7 @@ public final class ProjectContext {
      * 
      * @param arguments The console arguments passed by the user
      */
-    public static void initProjectNameSpace(HashMap<String, String> arguments) {
+    public static void promptProjectNameSpace(HashMap<String, String> arguments) {
         if (Strings.isNullOrEmpty(
                 ApplicationMetadata.INSTANCE.getProjectNameSpace())) {
             final String KEY =  "namespace";
@@ -213,8 +211,8 @@ public final class ProjectContext {
             Question question = new Question();
             question.setParamName(KEY, "ns");
             question.setQuestion("Please enter your Project NameSpace [%s]:",
-                    PRJ_NS);
-            question.setDefaultValue(PRJ_NS);
+                    DEFAULT_PRJ_NS);
+            question.setDefaultValue(DEFAULT_PRJ_NS);
             
             Questionnary questionnary = new Questionnary(arguments);
             questionnary.addQuestion(KEY, question);
@@ -246,9 +244,23 @@ public final class ProjectContext {
             }
 
             if (result != null) {
-                ApplicationMetadata.INSTANCE.setProjectNameSpace(
-                        result.replaceAll("\\.", HarmonyContext.DELIMITER).trim());
+                ApplicationMetadata.INSTANCE.setProjectNameSpace(result
+                            .replaceAll("\\.", HarmonyContext.DELIMITER)
+                            .trim());
             }
         }
+    }
+
+    public void addAdapter(TargetPlatform platform, BaseAdapter adapter) {
+        this.adapters.put(platform, adapter);
+        
+    }
+
+    public ArrayList<BaseAdapter> getAdapters() {
+        return new ArrayList<BaseAdapter>(this.adapters.values());
+    }
+
+    public BaseAdapter getAdapter(TargetPlatform platform) {
+        return this.adapters.get(platform);
     }
 }

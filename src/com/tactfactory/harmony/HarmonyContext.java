@@ -130,7 +130,7 @@ public final class HarmonyContext {
 			System.exit(-1);
 		}
 
-		ConsoleUtils.displayDebug("Detect app on " + basePath);
+		ConsoleUtils.displayDebug("Detect app folder on " + basePath);
 
 		// Set Path
 		this.projectPath 		= this.basePath + projectFolder;

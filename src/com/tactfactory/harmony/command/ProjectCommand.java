@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
+import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.HarmonyContext;
 import com.tactfactory.harmony.ProjectContext;
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
@@ -172,10 +173,10 @@ public class ProjectCommand extends BaseCommand {
 				ConsoleUtils.display(">> Project Parameters");
 
 				
-				ProjectContext.initProjectName(
+				ProjectContext.promptProjectName(
 						this.getCommandArgs());
 				
-				ProjectContext.initProjectNameSpace(
+				ProjectContext.promptProjectNameSpace(
 						this.getCommandArgs());
 				
 				HarmonyContext.initProjectAndroidSdkPath(
@@ -237,6 +238,8 @@ public class ProjectCommand extends BaseCommand {
 			if (new ProjectGenerator(this.adapterAndroid).makeProject()) {
 				ConsoleUtils.displayDebug("Init Android Project Success!");
 
+				Harmony.getInstance().getProjectContext()
+				    .addAdapter(TargetPlatform.ANDROID, this.adapterAndroid);
 				new ApplicationGenerator(this.adapterAndroid)
 							.generateApplication();
 				result = true;
@@ -264,6 +267,8 @@ public class ProjectCommand extends BaseCommand {
 		try {
 			if (new ProjectGenerator(this.adapterIOS).makeProject()) {
 				ConsoleUtils.displayDebug("Init IOS Project Success!");
+			    Harmony.getInstance().getProjectContext()
+			        .addAdapter(TargetPlatform.IPHONE, this.adapterIOS);
 				result = true;
 			} else {
 				ConsoleUtils.displayError(
@@ -289,6 +294,8 @@ public class ProjectCommand extends BaseCommand {
 		try {
 			if (new ProjectGenerator(this.adapterRIM).makeProject()) {
 				ConsoleUtils.displayDebug("Init RIM Project Success!");
+				Harmony.getInstance().getProjectContext()
+                    .addAdapter(TargetPlatform.RIM, this.adapterRIM);
 				result = true;
 			} else {
 				ConsoleUtils.displayError(
@@ -314,6 +321,8 @@ public class ProjectCommand extends BaseCommand {
 		try {
 			if (new ProjectGenerator(this.adapterWinPhone).makeProject()) {
 				ConsoleUtils.displayDebug("Init WinPhone Project Success!");
+				Harmony.getInstance().getProjectContext()
+                    .addAdapter(TargetPlatform.WINPHONE, this.adapterWinPhone);
 				result = true;
 			} else {
 				ConsoleUtils.displayError(

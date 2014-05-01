@@ -55,7 +55,7 @@ public final class Harmony {
 		if (Harmony.instance == null) {
 			try {
 			    Harmony.instance = new Harmony();
-			    //TODO Harmony.instance.initialize();
+			    Harmony.instance.initialize();
 			} catch (Exception e) {
 				ConsoleUtils.displayError(e);
 			}
@@ -83,8 +83,7 @@ public final class Harmony {
 	 * @throws Exception PluginManager failure
 	 */
 	private Harmony() throws Exception {
-	    Harmony.instance = this;
-		this.loadPlugins(new File(this.harmonyContext.getBundlesPath()));
+		this.loadPluginsAndTemplate(new File(this.harmonyContext.getBundlesPath()));
 
 		Locale.setDefault(Locale.US);
 	}
@@ -92,7 +91,7 @@ public final class Harmony {
 	/**
 	 * @param pluginBaseDirectory The plugin base directory
 	 */
-	private void loadPlugins(final File pluginBaseDirectory) {
+	private void loadPluginsAndTemplate(final File pluginBaseDirectory) {
 		// Cache
 		final JSPFProperties props = new JSPFProperties();
 		/*props.setProperty(PluginManager.class, "cache.enabled", "true");
@@ -179,8 +178,6 @@ public final class Harmony {
 		ConsoleUtils.display(
 				"Current Working Path: ", 
 				new File(".").getCanonicalPath());
-
-		this.projectContext.detectPlatforms();
 		
 		// Check name space
 		if (Strings.isNullOrEmpty(
@@ -273,6 +270,7 @@ public final class Harmony {
 						this.commandBundleFolders.get(baseCommand.getClass())
 						+ "/");
 				
+				baseCommand.registerAdapters(projectContext.getAdapters());
 				baseCommand.execute(action, args, option);
 				isfindAction = true;
 			}
@@ -422,7 +420,7 @@ public final class Harmony {
 	}
 	
 	private static String getVersion() {
-	    Package objPackage = getInstance().getClass().getPackage();
+	    Package objPackage = Harmony.class.getPackage();
 	    String version = objPackage.getImplementationVersion();
 	    
 	    if (Strings.isNullOrEmpty(version)) {
