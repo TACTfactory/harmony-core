@@ -128,7 +128,7 @@ public final class ProjectContext {
 	        new HashMap<TargetPlatform, BaseAdapter>();
 	
 	public ArrayList<BaseAdapter> getAdapters() {
-	    return new ArrayList<>(this.adapters.values());
+	    return new ArrayList<BaseAdapter>(this.adapters.values());
 	}
 	
 	public BaseAdapter getAdapter(TargetPlatform platform) {
