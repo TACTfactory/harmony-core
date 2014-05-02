@@ -104,14 +104,11 @@ public final class Harmony {
 		final IOFileFilter includeFilter =
 				FileFilterUtils.suffixFileFilter(".jar");
 		
-		IOFileFilter excludeFilter =
+		final IOFileFilter excludeFilter = FileFilterUtils.and(
+		        FileFilterUtils.notFileFilter(
+                        FileFilterUtils.nameFileFilter("lib")),
 				FileFilterUtils.notFileFilter(
-							FileFilterUtils.nameFileFilter("lib"));
-		
-		excludeFilter = FileFilterUtils.and(
-				excludeFilter,
-				FileFilterUtils.notFileFilter(
-							FileFilterUtils.nameFileFilter("libs")));
+						FileFilterUtils.nameFileFilter("libs")));
 		
 		// Check list of Bundles .jar
 		final Collection<File> plugins = TactFileUtils.listFiles(
@@ -125,7 +122,7 @@ public final class Harmony {
 			this.loadTemplates(plugin);
 		}
 	}
-	
+
     private void loadPlugin(File plugin, JSPFProperties props) {
         PluginManager pluginManager = null;
         
@@ -201,6 +198,7 @@ public final class Harmony {
 				ApplicationMetadata.INSTANCE.setName(
 						ProjectContext.getProjectNameFromConfig(config));
 			}*/
+
 			// TODO MATCH : Voir avec Mickael pertinence d'utiliser le build.xml
 			// pour récupérer le project name
 			final File config = new File(String.format("%s/%s",
@@ -231,6 +229,8 @@ public final class Harmony {
 			ApplicationMetadata.INSTANCE.setName(
 					projectNameSpaceData[projectNameSpaceData.length - 1]);
 		}
+
+		this.projectContext.detectPlatforms();
 
 		// Debug Log
 		ConsoleUtils.display(

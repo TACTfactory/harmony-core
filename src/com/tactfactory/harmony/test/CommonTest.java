@@ -34,16 +34,16 @@ import com.tactfactory.harmony.utils.TactFileUtils;
  * Common class for all the test.
  */
 public abstract class CommonTest {
-	
+
 	/** Current tested metadata. */
 	protected final ApplicationMetadata currentMetadata;
-	
+
 	/** Old metadata. */
 	protected static ApplicationMetadata oldMetadata;
 
 	/** Parsed metadata. */
 	protected static ApplicationMetadata parsedMetadata;
-	
+
 	/** Console delimiter for tests. */
 	protected static final String SHARP_DELIMITOR =
 			  "#################"
@@ -54,7 +54,7 @@ public abstract class CommonTest {
 
 	/** Harmony instance. */
 	protected static Harmony harmony;
-	
+
 	/**
 	 * Constructor for parameterized tests.
 	 * The parameters sent to this should be all the metadata of the different
@@ -70,7 +70,7 @@ public abstract class CommonTest {
 			}
 			CommonTest.oldMetadata = this.currentMetadata;
 	}
-	
+
 	/**
 	 * Empty constructor.
 	 */
@@ -91,12 +91,10 @@ public abstract class CommonTest {
 		// Clean folder
 		CommonTest.cleanAndroidFolder();
 
-		//ApplicationMetadata.reinit();
-		
 		// Project test config
 		ApplicationMetadata.INSTANCE.setName(
 				this.currentMetadata.getName());
-		
+
 		ApplicationMetadata.INSTANCE.setProjectNameSpace(
 				this.currentMetadata.getProjectNameSpace());
 
@@ -117,7 +115,7 @@ public abstract class CommonTest {
 			}
 		}
 	}
-	
+
 	/**
 	 * Add logger to common test life-cycle.
 	 */
@@ -128,18 +126,18 @@ public abstract class CommonTest {
 					+ "\n# Starting test: " + description.getMethodName() 
 					+ "\n" + SHARP_DELIMITOR);
 		}
-		
+
 		@Override
 		protected void failed(final Throwable e,
 				final Description description) {
 			
 		}
-		
+
 		@Override
 		protected void succeeded(final Description description) {
 			System.out.println("So good !");
 		}
-		
+
 		@Override
 		protected void finished(final Description description) {
 			System.out.println(SHARP_DELIMITOR 
@@ -194,7 +192,7 @@ public abstract class CommonTest {
 	 * @throws Exception if something bad happends.
 	 */
 	public void setUp() throws RuntimeException {
-
+	    
 	}
 
 	/**
@@ -202,6 +200,7 @@ public abstract class CommonTest {
 	 * @throws Exception if something bad happends.
 	 */
 	public void tearDown() throws RuntimeException {
+	    
 	}
 
 	/** Get Harmony instance.
@@ -224,7 +223,7 @@ public abstract class CommonTest {
 						Harmony.getBundlePath(),
 						pathNameSpace, 
 						"entity");
-		
+
 		final String destDir = 
 				String.format("%s/src/%s/%s/", 
 						Harmony.getProjectAndroidPath(), 
@@ -252,14 +251,14 @@ public abstract class CommonTest {
 		ConsoleUtils.display("Testing existence of " + file.getAbsolutePath());
 		assertTrue(file.getAbsolutePath() + " does not exist", file.exists());
 	}
-	
+
 	/**
 	 * Clean the /android/ folder. (But keeps the libs folder)
 	 */
 	protected static void cleanAndroidFolder() {
 		CommonTest.cleanAndroidFolder(true);
 	}
-	
+
 	/**
 	 * Clean the /android/ folder.  
 	 * @param keepLibs True if you want to keep the libs folder.
@@ -271,6 +270,7 @@ public abstract class CommonTest {
 				  "################################  "
 				+ "Clean Android Folder !! "
 				+ "################################");
+
 		final File dirproj = new File(Harmony.getProjectAndroidPath());
 		if (keepLibs) { 
 			ConsoleUtils.display("Keep libraries !");
@@ -290,7 +290,7 @@ public abstract class CommonTest {
 			TactFileUtils.deleteRecursive(dirproj);
 		}
 	}
-	
+
 	/**
 	 * JUnit Parameters method.
 	 * This should return the various application metadata associated 
@@ -301,19 +301,19 @@ public abstract class CommonTest {
 	@Parameters
 	public static Collection<Object[]> getParameters() {
 		Collection<Object[]> result = new ArrayList<Object[]>();
-		
+
 		result.add(new ApplicationMetadata[] {
 				TracScanFactory.generateTestMetadata()
 		});
-		
+
 		result.add(new ApplicationMetadata[] {
 				DemactFactory.generateTestMetadata()
 		});
-		
+
 		result.add(new ApplicationMetadata[] {
 			ManagementFactory.generateTestMetadata()	
 		});
-		
+
 		return result;
 	}
 }
