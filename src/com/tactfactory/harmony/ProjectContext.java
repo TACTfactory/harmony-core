@@ -43,98 +43,90 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  * </ul>
  */
 public final class ProjectContext {
-	// DEMO/TEST MODE
-	/** Default project name. */
-	private final static String DEFLAUT_PRJ_NAME = "demact";
+    // DEMO/TEST MODE
+    /** Default project name. */
+    private final static String DEFLAUT_PRJ_NAME = "demact";
 
     /** Default project NameSpace. */
-	private final static String DEFAULT_PRJ_NS =
-			"com.tactfactory.harmony.test.demact";
+    private final static String DEFAULT_PRJ_NS =
+            "com.tactfactory.harmony.test.demact";
 
-	private HashMap<TargetPlatform, BaseAdapter> adapters = 
-	         new HashMap<TargetPlatform, BaseAdapter>();
+    private HashMap<TargetPlatform, BaseAdapter> adapters = 
+            new HashMap<TargetPlatform, BaseAdapter>();
 
-	/**
-	 * Constructor.
-	 */
-	public ProjectContext() { }
+    private Harmony harmony;
 
-	/**
-	 * Extract Project NameSpace from AndroidManifest file.
-	 *
-	 * @param manifest Manifest File
-	 * @return Project Name Space
-	 */
-	public static void loadNameSpaceFromManifest(final File manifest) {
-		String result = null;
-		SAXBuilder builder;
-		Document doc;
+    /**
+     * Constructor.
+     */
+    public ProjectContext(Harmony harmony) {
+        this.harmony = harmony;
+    }
 
-		if (manifest.exists()) {
-			// Make engine
-			builder = new SAXBuilder();
-			try {
-				// Load XML File
-				doc = builder.build(manifest);
+    public void detectProject() {
+     // Check name space
+        if (Strings.isNullOrEmpty(
+                ApplicationMetadata.INSTANCE.getProjectNameSpace())) {
 
-				// Load Root element
-				final Element rootNode = doc.getRootElement();
+            // get project namespace from AndroidManifest.xml
+            final File manifest = new File(String.format("%s/%s",
+                    this.harmony.getHarmonyContext().getProjectAndroidPath(),
+                    "AndroidManifest.xml"));
 
-				// Get Name Space from package declaration
-				result = rootNode.getAttributeValue("package");
-				result = result.replaceAll("\\.", HarmonyContext.DELIMITER);
-			} catch (final JDOMException e) {
-				ConsoleUtils.displayError(e);
-			} catch (final IOException e) {
-				ConsoleUtils.displayError(e);
-			}
-		}
+            if (manifest.exists()) {
+                ProjectContext.loadNameSpaceFromManifest(manifest);
+            }
 
-		if (result != null) {
-			ApplicationMetadata.INSTANCE.setName(result.trim());
-		}
-	}
+            // get project name from configs.xml
+            /*final File config = new File(String.format("%s/%s",
+                    this.context.getProjectAndroidPath(),
+                    "/res/values/configs.xml"));        //FIXME path by adapter
 
-	/**
-	 * Extract Project Name from configuration file.
-	 *
-	 * @param config Configuration file
-	 * @return Project Name Space
-	 */
-	public static void loadProjectNameFromConfig(final File config) {
-		String result = null;
-		SAXBuilder builder;
-		Document doc;
+            if (config.exists()) {
+                ApplicationMetadata.INSTANCE.setName(
+                        ProjectContext.getProjectNameFromConfig(config));
+            }*/
 
-		if (config.exists()) {
-			// Make engine
-			builder = new SAXBuilder();
-			try {
-				// Load XML File
-				doc = builder.build(config);
-				// Load Root element
-				final Element rootNode = doc.getRootElement();
-				result = rootNode.getAttribute("name").getValue();
-			} catch (final JDOMException e) {
-				ConsoleUtils.displayError(e);
-			} catch (final IOException e) {
-				ConsoleUtils.displayError(e);
-			}
-		}
+            // TODO MATCH : Voir avec Mickael pertinence d'utiliser le build.xml
+            // pour récupérer le project name
+            final File config = new File(String.format("%s/%s",
+                    this.harmony.getHarmonyContext().getProjectAndroidPath(),
+                    "build.xml"));
 
-		if (result != null) {
-			ApplicationMetadata.INSTANCE.setName(result.trim());
-		}
-	}
+            if (config.exists()) {
+                ProjectContext.loadProjectNameFromConfig(config);
+            }
 
-	public void detectPlatforms() {
-	    final File dir = new File(Harmony.getProjectPath());
+            // get SDK from local.properties
+            final String projectProp = String.format("%s/%s",
+                    this.harmony.getHarmonyContext().getProjectAndroidPath(),
+                    "local.properties");
+            final File projectPropFile = new File(projectProp);
+
+            if (projectPropFile.exists()) {
+                ApplicationMetadata.setAndroidSdkPath(
+                        HarmonyContext.getSdkDirFromPropertiesFile(
+                                projectProp));
+            }
+
+        } else {
+            final String[] projectNameSpaceData =
+                    ApplicationMetadata.INSTANCE.getProjectNameSpace()
+                            .split(HarmonyContext.DELIMITER);
+
+            ApplicationMetadata.INSTANCE.setName(
+                    projectNameSpaceData[projectNameSpaceData.length - 1]);
+        }
+    }
+
+    public void detectPlatforms() {
+        final File dir = new File(Harmony.getProjectPath());
         final String[] files = dir.list(new FilenameFilter() {
             @Override
             public boolean accept(File current, String name) {
-              return new File(current, name).isDirectory();
+                return new File(current, name).isDirectory();
             }
-          });
+        });
         final ArrayList<String> directories =
                 new ArrayList<String>(Arrays.asList(files));
         Collections.sort(directories);
@@ -173,9 +165,90 @@ public final class ProjectContext {
                 break;
             }
         }
-	}
-	
-   /**
+    }
+
+    public void addAdapter(TargetPlatform platform, BaseAdapter adapter) {
+        this.adapters.put(platform, adapter);
+
+    }
+
+    public ArrayList<BaseAdapter> getAdapters() {
+        return new ArrayList<BaseAdapter>(this.adapters.values());
+    }
+
+    public BaseAdapter getAdapter(TargetPlatform platform) {
+        return this.adapters.get(platform);
+    }
+
+    /**
+     * Extract Project NameSpace from AndroidManifest file.
+     *
+     * @param manifest Manifest File
+     * @return Project Name Space
+     */
+    public static void loadNameSpaceFromManifest(final File manifest) {
+        String result = null;
+        SAXBuilder builder;
+        Document doc;
+
+        if (manifest.exists()) {
+            // Make engine
+            builder = new SAXBuilder();
+            try {
+                // Load XML File
+                doc = builder.build(manifest);
+
+                // Load Root element
+                final Element rootNode = doc.getRootElement();
+
+                // Get Name Space from package declaration
+                result = rootNode.getAttributeValue("package");
+                result = result.replaceAll("\\.", HarmonyContext.DELIMITER);
+            } catch (final JDOMException e) {
+                ConsoleUtils.displayError(e);
+            } catch (final IOException e) {
+                ConsoleUtils.displayError(e);
+            }
+        }
+
+        if (result != null) {
+            ApplicationMetadata.INSTANCE.setName(result.trim());
+        }
+    }
+
+    /**
+     * Extract Project Name from configuration file.
+     *
+     * @param config Configuration file
+     * @return Project Name Space
+     */
+    public static void loadProjectNameFromConfig(final File config) {
+        String result = null;
+        SAXBuilder builder;
+        Document doc;
+
+        if (config.exists()) {
+            // Make engine
+            builder = new SAXBuilder();
+            try {
+                // Load XML File
+                doc = builder.build(config);
+                // Load Root element
+                final Element rootNode = doc.getRootElement();
+                result = rootNode.getAttribute("name").getValue();
+            } catch (final JDOMException e) {
+                ConsoleUtils.displayError(e);
+            } catch (final IOException e) {
+                ConsoleUtils.displayError(e);
+            }
+        }
+
+        if (result != null) {
+            ApplicationMetadata.INSTANCE.setName(result.trim());
+        }
+    }
+
+    /**
      * Prompt Project Name to the user.
      * 
      * @param arguments The console arguments passed by the user
@@ -202,21 +275,22 @@ public final class ProjectContext {
      * 
      * @param arguments The console arguments passed by the user
      */
-    public static void promptProjectNameSpace(HashMap<String, String> arguments) {
+    public static void promptProjectNameSpace(
+            HashMap<String, String> arguments) {
         if (Strings.isNullOrEmpty(
                 ApplicationMetadata.INSTANCE.getProjectNameSpace())) {
             final String KEY =  "namespace";
             String result = null;
-            
+
             Question question = new Question();
             question.setParamName(KEY, "ns");
             question.setQuestion("Please enter your Project NameSpace [%s]:",
                     DEFAULT_PRJ_NS);
             question.setDefaultValue(DEFAULT_PRJ_NS);
-            
+
             Questionnary questionnary = new Questionnary(arguments);
             questionnary.addQuestion(KEY, question);
-            
+
             boolean good = false;
 
             while (!good) {
@@ -236,7 +310,7 @@ public final class ProjectContext {
                     } else {
                         ConsoleUtils.display(
                                 "You can't use special characters "
-                                + "except '.' in the NameSpace.");
+                                        + "except '.' in the NameSpace.");
                         question.setParamName(null);
                         question.setShortParamName(null);
                     }
@@ -245,22 +319,9 @@ public final class ProjectContext {
 
             if (result != null) {
                 ApplicationMetadata.INSTANCE.setProjectNameSpace(result
-                            .replaceAll("\\.", HarmonyContext.DELIMITER)
-                            .trim());
+                        .replaceAll("\\.", HarmonyContext.DELIMITER)
+                        .trim());
             }
         }
-    }
-
-    public void addAdapter(TargetPlatform platform, BaseAdapter adapter) {
-        this.adapters.put(platform, adapter);
-        
-    }
-
-    public ArrayList<BaseAdapter> getAdapters() {
-        return new ArrayList<BaseAdapter>(this.adapters.values());
-    }
-
-    public BaseAdapter getAdapter(TargetPlatform platform) {
-        return this.adapters.get(platform);
     }
 }

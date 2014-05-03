@@ -65,7 +65,7 @@ public final class Harmony {
 
 	/** HarmonyContext of execution. */
 	private final HarmonyContext harmonyContext = new HarmonyContext();
-	private final ProjectContext projectContext = new ProjectContext();
+	private final ProjectContext projectContext = new ProjectContext(this);
 
 	/** Bootstrap. */
 	private final Map<Class<?>, Command> bootstrap =
@@ -175,61 +175,8 @@ public final class Harmony {
 		ConsoleUtils.display(
 				"Current Working Path: ", 
 				new File(".").getCanonicalPath());
-		
-		// Check name space
-		if (Strings.isNullOrEmpty(
-				ApplicationMetadata.INSTANCE.getProjectNameSpace())) {
 
-			// get project namespace from AndroidManifest.xml
-			final File manifest = new File(String.format("%s/%s",
-					this.harmonyContext.getProjectAndroidPath(),
-					"AndroidManifest.xml"));
-
-			if (manifest.exists()) {
-			    ProjectContext.loadNameSpaceFromManifest(manifest);
-			}
-
-			// get project name from configs.xml
-			/*final File config = new File(String.format("%s/%s",
-					this.context.getProjectAndroidPath(),
-					"/res/values/configs.xml"));		//FIXME path by adapter
-
-			if (config.exists()) {
-				ApplicationMetadata.INSTANCE.setName(
-						ProjectContext.getProjectNameFromConfig(config));
-			}*/
-
-			// TODO MATCH : Voir avec Mickael pertinence d'utiliser le build.xml
-			// pour récupérer le project name
-			final File config = new File(String.format("%s/%s",
-					this.harmonyContext.getProjectAndroidPath(),
-					"build.xml"));
-
-			if (config.exists()) {
-			    ProjectContext.loadProjectNameFromConfig(config);
-			}
-
-			// get SDK from local.properties
-			final String projectProp = String.format("%s/%s",
-					this.harmonyContext.getProjectAndroidPath(),
-					"local.properties");
-			final File projectPropFile = new File(projectProp);
-
-			if (projectPropFile.exists()) {
-				ApplicationMetadata.setAndroidSdkPath(
-				        HarmonyContext.getSdkDirFromPropertiesFile(
-								projectProp));
-			}
-
-		} else {
-			final String[] projectNameSpaceData =
-					ApplicationMetadata.INSTANCE.getProjectNameSpace()
-							.split(HarmonyContext.DELIMITER);
-
-			ApplicationMetadata.INSTANCE.setName(
-					projectNameSpaceData[projectNameSpaceData.length - 1]);
-		}
-
+		this.projectContext.detectProject();
 		this.projectContext.detectPlatforms();
 
 		// Debug Log
