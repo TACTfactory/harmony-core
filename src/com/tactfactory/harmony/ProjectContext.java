@@ -212,7 +212,7 @@ public final class ProjectContext {
         }
 
         if (result != null) {
-            ApplicationMetadata.INSTANCE.setName(result.trim());
+            ApplicationMetadata.INSTANCE.setProjectNameSpace(result.trim());
         }
     }
 

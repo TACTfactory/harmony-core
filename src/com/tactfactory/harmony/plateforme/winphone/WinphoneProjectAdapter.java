@@ -261,32 +261,35 @@ public class WinphoneProjectAdapter implements IAdapterProject {
     public List<IUpdater> getSqlAdapterEntityFiles(EntityMetadata entity) {
         List<IUpdater> result = new ArrayList<IUpdater>();
         
-        String templatePath = this.adapter.getTemplateSourceDataPath();
-        String filePath = this.adapter.getSourcePath() + this.adapter.getData() + "/";
-        
-        result.add(new SourceFile(
-                templatePath + "Base/TemplateSqlAdapterBase.cs",
-                String.format("%sBase/%sSqlAdapterBase.cs",
-                        filePath,
-                        entity.getName()),
-                true));
-        
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "Data/" + String.format("Base/%sSqlAdapterBase.cs",
-                        entity.getName())));
-        
-        result.add(new SourceFile(
-                templatePath + "TemplateSqlAdapter.cs",
-                String.format("%s%sSqlAdapter.cs",
-                        filePath,
-                        entity.getName()),
-                false));
-        
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "Data/" + String.format("%sSqlAdapter.cs",
-                        entity.getName())));
+        if (!entity.isInternal())
+        {
+	        String templatePath = this.adapter.getTemplateSourceDataPath();
+	        String filePath = this.adapter.getSourcePath() + this.adapter.getData() + "/";
+	        
+	        result.add(new SourceFile(
+	                templatePath + "Base/TemplateSqlAdapterBase.cs",
+	                String.format("%sBase/%sSqlAdapterBase.cs",
+	                        filePath,
+	                        entity.getName()),
+	                true));
+	        
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "Data/" + String.format("Base/%sSqlAdapterBase.cs",
+	                        entity.getName())));
+	        
+	        result.add(new SourceFile(
+	                templatePath + "TemplateSqlAdapter.cs",
+	                String.format("%s%sSqlAdapter.cs",
+	                        filePath,
+	                        entity.getName()),
+	                false));
+	        
+	        result.add(new ProjectUpdater(
+	                FileType.Compile,
+	                "Data/" + String.format("%sSqlAdapter.cs",
+	                        entity.getName())));
+        }
         
         return result;
     }

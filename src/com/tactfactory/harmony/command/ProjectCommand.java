@@ -343,9 +343,9 @@ public class ProjectCommand extends BaseCommand {
 
 		this.initProjectParam();
 		this.initAndroid();
-		this.initIOS();
+//		this.initIOS();
 		//this.initRIM();
-		//this.initWinPhone();
+		this.initWinPhone();
 	}
 
 	/**
@@ -487,14 +487,14 @@ public class ProjectCommand extends BaseCommand {
 		commands.put(INIT_ANDROID, "Init Google Android project directory");
 //		commands.put(INIT_IOS, "Init Apple IOS project directory");
 //		commands.put(INIT_RIM, "Init BlackBerry project directory");
-//		commands.put(INIT_WINPHONE, "Init Windows Phone project directory");
+		commands.put(INIT_WINPHONE, "Init Windows Phone project directory");
 		commands.put(INIT_ALL, "Init All project directories");
 		
 		// Remove
 		commands.put(REMOVE_ANDROID, "Remove Google Android project directory");
 //		commands.put(REMOVE_IOS, "Remove Apple IOS project directory");
 //		commands.put(REMOVE_RIM, "Remove BlackBerry project directory");
-//		commands.put(REMOVE_WINPHONE, "Remove Windows Phone project directory");
+		commands.put(REMOVE_WINPHONE, "Remove Windows Phone project directory");
 		commands.put(REMOVE_ALL, "Remove All project directories");
 		
 		// Update
@@ -516,17 +516,17 @@ public class ProjectCommand extends BaseCommand {
 			this.initAndroid();
 		} else
 
-		if (action.equals(INIT_IOS)) {
-			this.initIOS();
-		} else
+//		if (action.equals(INIT_IOS)) {
+//			this.initIOS();
+//		} else
 
 //		if (action.equals(INIT_RIM)) {
 //			this.initRIM();
 //		} else
 
-//		if (action.equals(INIT_WINPHONE)) {
-//			this.initWinPhone();
-//		} else
+		if (action.equals(INIT_WINPHONE)) {
+			this.initWinPhone();
+		} else
 
 		if (action.equals(INIT_ALL)) {
 			this.initAll();
@@ -536,17 +536,17 @@ public class ProjectCommand extends BaseCommand {
 			this.removeAndroid();
 		} else
 
-		if (action.equals(REMOVE_IOS)) {
-			this.removeIOS();
-		} else
+//		if (action.equals(REMOVE_IOS)) {
+//			this.removeIOS();
+//		} else
 
 //		if (action.equals(REMOVE_RIM)) {
 //			this.removeRIM();
 //		} else
 
-//		if (action.equals(REMOVE_WINPHONE)) {
-//			this.removeWinPhone();
-//		} else
+		if (action.equals(REMOVE_WINPHONE)) {
+			this.removeWinPhone();
+		} else
 
 		if (action.equals(REMOVE_ALL)) {
 			this.removeAll();
@@ -570,14 +570,14 @@ public class ProjectCommand extends BaseCommand {
 	@Override
 	public final boolean isAvailableCommand(final String command) {
 		return  command.equals(INIT_ANDROID)
-				|| command.equals(INIT_IOS)
+				//|| command.equals(INIT_IOS)
 				//|| command.equals(INIT_RIM)
-				//|| command.equals(INIT_WINPHONE)
+				|| command.equals(INIT_WINPHONE)
 				|| command.equals(INIT_ALL)
 				|| command.equals(REMOVE_ANDROID)
-				|| command.equals(REMOVE_IOS)
+				//|| command.equals(REMOVE_IOS)
 				//|| command.equals(REMOVE_RIM)
-				//|| command.equals(REMOVE_WINPHONE)
+				|| command.equals(REMOVE_WINPHONE)
 				|| command.equals(REMOVE_ALL)
 				|| command.equals(UPDATE_SDK)
 				|| command.equals(UPDATE_DEPENDENCIES);
