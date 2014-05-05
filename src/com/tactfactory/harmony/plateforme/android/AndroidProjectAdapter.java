@@ -29,6 +29,7 @@ import com.tactfactory.harmony.updater.impl.DeleteFile;
 import com.tactfactory.harmony.updater.impl.LibraryGit;
 import com.tactfactory.harmony.updater.impl.SourceFile;
 import com.tactfactory.harmony.updater.impl.XmlAndroid;
+import com.tactfactory.harmony.utils.TactFileUtils;
 
 import freemarker.template.Configuration;
 
@@ -196,10 +197,14 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 }
             } else {
                 String tplPath = templatePath
-                        + file.getAbsolutePath().replace(fullTemplatePath, "");
+                        + TactFileUtils.absoluteToRelativePath(
+                        		file.getAbsolutePath(),
+                        		fullTemplatePath);
                 
                 String srcPath = filePath
-                        + file.getAbsolutePath().replace(fullTemplatePath, "");
+                        + TactFileUtils.absoluteToRelativePath(
+                        		file.getAbsolutePath(),
+                        		fullTemplatePath);
                 
                 tplPath = tplPath.substring(0, tplPath.length()
                         - ".ftl".length());
@@ -969,6 +974,27 @@ public class AndroidProjectAdapter implements IAdapterProject {
     }
 
     @Override
+    public List<IUpdater> getFixtureEntityDefinitionFiles(
+            String fixtureType, EntityMetadata entity) {
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        
+        String templatePath = this.adapter.getTemplateSourceFixturePath();
+        String filePath = "fixtures/";
+        
+        result.add(new SourceFile(
+                templatePath + "TemplateFixture." + fixtureType,
+                filePath + "app/" + entity.getName() + "." + fixtureType));
+        result.add(new SourceFile(
+                templatePath + "TemplateFixture." + fixtureType,
+                filePath + "debug/" + entity.getName() + "." + fixtureType));
+        result.add(new SourceFile(
+                templatePath + "TemplateFixture." + fixtureType,
+                filePath + "test/" + entity.getName() + "." + fixtureType));
+        
+        return result;
+    }
+    
+    @Override
     public List<IUpdater> getFixtureEntityFiles(boolean forceOverwrite,
             String fixtureType, EntityMetadata entity) {
         List<IUpdater> result = new ArrayList<IUpdater>();
@@ -984,19 +1010,6 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 templatePath + "TemplateDataLoader.java",
                 filePath + entity.getName() + "DataLoader.java",
                 forceOverwrite));
-        
-        templatePath = this.adapter.getTemplateSourceFixturePath();
-        filePath = "fixtures/";
-        
-        result.add(new SourceFile(
-                templatePath + "TemplateFixture." + fixtureType,
-                filePath + "app/" + entity.getName() + "." + fixtureType));
-        result.add(new SourceFile(
-                templatePath + "TemplateFixture." + fixtureType,
-                filePath + "debug/" + entity.getName() + "." + fixtureType));
-        result.add(new SourceFile(
-                templatePath + "TemplateFixture." + fixtureType,
-                filePath + "test/" + entity.getName() + "." + fixtureType));
         
         return result;
     }

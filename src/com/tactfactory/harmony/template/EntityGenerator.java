@@ -41,15 +41,17 @@ public class EntityGenerator extends BaseGenerator<IAdapter> {
 		        this.getAppMetas().getEntities().values();
 		
 		for (final EntityMetadata entity : entities) {
-		    this.getDatamodel().put(
-                    TagConstant.CURRENT_ENTITY,
-                    entity.getName());
-		    
-			ConsoleUtils.display(">>> Decorate " + entity.getName());
-			
-			List<IUpdater> updaters = this.getAdapter().getAdapterProject()
-                    .getEntityFiles(entity, this.getCfg(), this.getDatamodel());
-			this.processUpdater(updaters);
+			if (!entity.isInternal()) {
+			    this.getDatamodel().put(
+	                    TagConstant.CURRENT_ENTITY,
+	                    entity.getName());
+			    
+				ConsoleUtils.display(">>> Decorate " + entity.getName());
+				
+				List<IUpdater> updaters = this.getAdapter().getAdapterProject()
+	                    .getEntityFiles(entity, this.getCfg(), this.getDatamodel());
+				this.processUpdater(updaters);
+			}
 		}
 	}
 }

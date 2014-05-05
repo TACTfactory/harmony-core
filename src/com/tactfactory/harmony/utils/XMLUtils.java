@@ -21,6 +21,7 @@ import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -220,7 +221,15 @@ public abstract class XMLUtils {
 			attributeEscapedEntitiesFilter(out, fstack, attribute.getValue());
 			write(out, "\"");
 		}
-		
+        
+		protected void printNamespace(Writer out, FormatStack fstack, Namespace ns)
+		        throws java.io.IOException {
+		    if (ns == Namespace.NO_NAMESPACE) {
+		        return;
+		    } else {
+		        super.printNamespace(out, fstack, ns);
+		    }
+		}
 	}
 }
 
