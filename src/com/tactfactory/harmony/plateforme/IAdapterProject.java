@@ -38,6 +38,8 @@ public interface IAdapterProject {
     //Used by FixtureGenerator
     List<IUpdater> getFixtureLibraries(String type);
     List<IUpdater> getFixtureFiles(boolean forceOverwrite);
+    List<IUpdater> getFixtureEntityDefinitionFiles(
+            String fixtureType, EntityMetadata entity);
     List<IUpdater> getFixtureEntityFiles(boolean forceOverwrite,
             String fixtureType, EntityMetadata entity);
     

@@ -1,9 +1,9 @@
 package com.tactfactory.harmony.plateforme.winphone.updater;
 
+import java.io.File;
 import java.util.Locale;
 
 import com.tactfactory.harmony.plateforme.winphone.WinphoneAdapter;
-import com.tactfactory.harmony.plateforme.winphone.XmlProjectWinphone;
 import com.tactfactory.harmony.updater.IUpdaterFile;
 
 public class ProjectUpdater implements IUpdaterFile {
@@ -33,33 +33,35 @@ public class ProjectUpdater implements IUpdaterFile {
         xmlProjectWinphone.open(adapter.getSourcePath()
                 + applicationName + ".csproj");
         
+        String file = new File(this.filename).getPath();
+        
         switch (this.type) {
             case Compile:
-                xmlProjectWinphone.addCompileFile(this.filename, this.depends);
+                xmlProjectWinphone.addCompileFile(file, this.depends);
                 break;
             
             case ApplicationDefinition:
-                xmlProjectWinphone.addApplicationDefinitionFile(this.filename);
+                xmlProjectWinphone.addApplicationDefinitionFile(file);
                 break;
                 
             case Page:
-                xmlProjectWinphone.addPageFile(this.filename);
+                xmlProjectWinphone.addPageFile(file);
                 break;
                 
             case None:
-                xmlProjectWinphone.addNoneFile(this.filename);
+                xmlProjectWinphone.addNoneFile(file);
                 break;
                 
             case Content:
-                xmlProjectWinphone.addContentFile(this.filename);
+                xmlProjectWinphone.addContentFile(file);
                 break;
                 
             case EmbeddedResource:
-                xmlProjectWinphone.addEmbeddedFile(this.filename);
+                xmlProjectWinphone.addEmbeddedFile(file);
                 break;
                 
             case Reference:
-                xmlProjectWinphone.addReferenceFile(this.filename);
+                xmlProjectWinphone.addReferenceFile(file);
                 break;
                 
             default:

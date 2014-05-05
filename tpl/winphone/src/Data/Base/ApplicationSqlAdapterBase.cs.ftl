@@ -8,7 +8,12 @@ using ${project_namespace}.Utils;
 
 namespace ${project_namespace}.Data.Base
 {
-    public abstract class SqlAdapterBase<T> where T : class
+    public abstract class SqlAdapterBase
+    {
+
+    }
+    
+    public abstract class SqlAdapterBase<T> : SqlAdapterBase where T : class
     {
         private const string TAG = "${project_name?cap_first}SqlAdapterBase";
 
@@ -121,12 +126,12 @@ namespace ${project_namespace}.Data.Base
                 (current, criterion) => current.Where(criterion));
         }
 
-        /// <summary>
+        /*/// <summary>
         /// Refresh item from database.
         /// Use this method if the original object not from database.
         /// </summary>
         /// <param name="item">Entity to refresh</param>
         /// <returns>Database entity</returns>
-        public abstract T Refresh(T item);
+        public abstract T Refresh(T item);*/
     }
 }

@@ -88,7 +88,6 @@ public final class WinphoneAdapter extends BaseAdapter {
 		super();
 		this.setProject("project");
 		this.setResource("res");
-        this.setAssets("assets");
         this.setLibs("libs");
         this.setTest("test");
         this.setTestLibs("libs");
@@ -99,6 +98,8 @@ public final class WinphoneAdapter extends BaseAdapter {
         this.setMenu("menu");
         
         this.setPlatform("winphone");
+        this.setAssets("Assets");
+        this.setFixture("Fixture");
         this.setSource("src");
         this.setData("Data");
         this.setController("View");

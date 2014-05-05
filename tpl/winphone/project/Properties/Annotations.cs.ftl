@@ -1,6 +1,6 @@
 using System;
 
-namespace Tactfactory.Anticounterfeit.Annotations
+namespace ${project_namespace}.Annotations
 {
   /// <summary>
   /// Indicates that the value of the marked element could be <c>null</c> sometimes,

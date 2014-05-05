@@ -1,5 +1,6 @@
-package com.tactfactory.harmony.plateforme.winphone;
+package com.tactfactory.harmony.plateforme.winphone.updater;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.jdom2.Document;
@@ -77,6 +78,7 @@ public class XmlProjectWinphone {
 
         Element itemGroup = this.findFirstItemGroup(XML_ELEMENT_COMPILE);
         
+        this.removeIfExists(itemGroup, XML_ELEMENT_COMPILE, filename);
         itemGroup.addContent(newNode);
     }
     
@@ -95,6 +97,7 @@ public class XmlProjectWinphone {
 
         Element itemGroup = this.findFirstItemGroup(XML_ELEMENT_APPLICATION);
         
+        this.removeIfExists(itemGroup, XML_ELEMENT_APPLICATION, filename);
         itemGroup.addContent(newNode);
     }
     
@@ -113,6 +116,7 @@ public class XmlProjectWinphone {
 
         Element itemGroup = this.findFirstItemGroup(XML_ELEMENT_PAGE);
         
+        this.removeIfExists(itemGroup, XML_ELEMENT_PAGE, filename);
         itemGroup.addContent(newNode);
     }
     
@@ -123,6 +127,7 @@ public class XmlProjectWinphone {
 
         Element itemGroup = this.findFirstItemGroup(XML_ELEMENT_NONE);
         
+        this.removeIfExists(itemGroup, XML_ELEMENT_NONE, filename);
         itemGroup.addContent(newNode);
     }
     
@@ -133,6 +138,7 @@ public class XmlProjectWinphone {
         
         Element itemGroup = this.findFirstItemGroup(XML_ELEMENT_CONTENT);
         
+        this.removeIfExists(itemGroup, XML_ELEMENT_CONTENT, filename);
         itemGroup.addContent(newNode);
     }
     
@@ -143,11 +149,28 @@ public class XmlProjectWinphone {
         
         Element itemGroup = this.findFirstItemGroup(XML_ELEMENT_EMBEDDED);
         
+        this.removeIfExists(itemGroup, XML_ELEMENT_EMBEDDED, filename);
         itemGroup.addContent(newNode);
     }
     
     public void addReferenceFile(String filename) {
         //TODO
+    }
+    
+    private void removeIfExists(Element element, String type, String file) {
+    	Filter<Element> filter = new ElementFilter(type);
+        List<Element> content = element.getContent(filter);
+        List<Element> elementToDelete = new ArrayList<>();
+        
+        for (Element node : content) {
+        	if (node.getAttribute("Include").getValue().equals(file)) {
+        		elementToDelete.add(node);
+        	}
+		}
+        
+        for (Element node : elementToDelete) {
+        	element.removeContent(node);
+		}
     }
     
     private Element findFirstItemGroup(String groupType) {
@@ -169,7 +192,9 @@ public class XmlProjectWinphone {
         
         if (result == null) {
             result = new Element(XML_ELEMENT_ITEM);
-            rootNode.addContent(result);
+            filter = new ElementFilter("Import");
+            content = this.rootNode.getContent(filter);
+            rootNode.addContent(rootNode.indexOf(content.get(0)), result);
         }
         
         return result;

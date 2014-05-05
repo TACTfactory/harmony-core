@@ -7,7 +7,6 @@ using System.Windows;
 using System.Windows.Resources;
 using System.Data.Linq;
 using ${project_namespace}.Entity;
-using ${project_namespace}.Entity.Base;
 
 namespace ${project_namespace}.Data.Base
 {
@@ -25,26 +24,17 @@ namespace ${project_namespace}.Data.Base
         public const string DATABASE_CONNECTION_STRING =
             "Data Source=isostore:/" + DB_NAME;
 
+        <#if (entities??)>
+            <#list entities?values as entity>
+                <#if (!entity.internal)>
         /// <summary>
-        /// Table for Scan entity.
+        /// Table for ${entity.name} entity.
         /// </summary>
-        public Table<Scan> Scan;
-
-        /// <summary>
-        /// Table for ProductInfo entity.
-        /// </summary>
-        public Table<ProductInfo> ProductInfo;
-
-        /// <summary>
-        /// Table for Device entity.
-        /// </summary>
-        public Table<Device> Device;
-
-        /// <summary>
-        /// Table for Product entity.
-        /// </summary>
-        public Table<Product> Product;
-
+        public Table<${entity.name}> ${entity.name};
+        
+                </#if>
+            </#list>
+        </#if>
         public ${project_name?cap_first}SqlOpenHelperBase()
             : base(DATABASE_CONNECTION_STRING)
         {
@@ -62,7 +52,6 @@ namespace ${project_namespace}.Data.Base
                 if (streamInfo != null)
                 {
                     this.CopyDataBase(streamInfo);
-                    this.UpdateLastSyncDate();
                 }
                 else
                 {

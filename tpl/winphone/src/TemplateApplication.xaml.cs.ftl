@@ -7,7 +7,6 @@ using System.Windows.Markup;
 using System.Windows.Navigation;
 using Microsoft.Phone.Controls;
 using Microsoft.Phone.Shell;
-using ${project_namespace}.Provider.Utils;
 using ${project_namespace}.Entity;
 using ${project_namespace}.Data.Base;
 using ${project_namespace}.Resources.Values;

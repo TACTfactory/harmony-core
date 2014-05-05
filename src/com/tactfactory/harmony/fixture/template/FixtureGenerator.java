@@ -152,7 +152,13 @@ public class FixtureGenerator extends BaseGenerator<IAdapter> {
 							classMeta.getName());
 					
 					updaters = this.getAdapter().getAdapterProject()
-					        .getFixtureEntityFiles(force, fixtureType, classMeta);
+					        .getFixtureEntityDefinitionFiles(
+					        		fixtureType, classMeta);
+					this.processUpdater(updaters);
+					
+					updaters = this.getAdapter().getAdapterProject()
+					        .getFixtureEntityFiles(
+					        		force, fixtureType, classMeta);
 		            this.processUpdater(updaters);
 				}
 			}
@@ -184,7 +190,7 @@ public class FixtureGenerator extends BaseGenerator<IAdapter> {
 	 * Delete file in assets directory.
 	 * @param fileName The filename.
 	 */
-	protected final void removeSource(final String fileName) {
+	private void removeSource(final String fileName) {
 		final String fullFilePath =
 				this.getAdapter().getAssetsPath() + fileName;
 		final File file = new File(fullFilePath);

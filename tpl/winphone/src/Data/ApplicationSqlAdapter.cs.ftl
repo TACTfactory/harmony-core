@@ -7,7 +7,7 @@ namespace ${project_namespace}.Data
 {
     public abstract class SqlAdapter<T> : SqlAdapterBase<T> where T : class
     {
-        protected SqlAdapterBase(DataContext context) : base(context)
+        protected SqlAdapter(DataContext context) : base(context)
         {
             
         }

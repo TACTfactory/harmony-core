@@ -105,11 +105,13 @@ namespace ${project_namespace}.Data.Base
             return result;
         }
 
+<#if sync>
         public override void CompleteEntityRelationsServerId(${curr.name} item)
         {
             throw new NotImplementedException();
         }
-
+        
+</#if>
 /*
         public override ${curr.name} Refresh(${curr.name} item)
         {

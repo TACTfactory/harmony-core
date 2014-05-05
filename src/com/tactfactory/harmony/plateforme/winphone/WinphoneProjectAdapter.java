@@ -1,13 +1,11 @@
 package com.tactfactory.harmony.plateforme.winphone;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 
 import com.google.common.base.CaseFormat;
-import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.plateforme.IAdapterProject;
@@ -56,14 +54,41 @@ public class WinphoneProjectAdapter implements IAdapterProject {
                 filePath + applicationName + ".sln",
                 false));
         
-        result.addAll(this.getFilesFromFolder(
-                Harmony.getBundlePath() + "tact-core/"
-                        + this.adapter.getTemplateProjectPath()
-                        + "Properties/",
-                this.adapter.getTemplateProjectPath() + "Properties/",
-                this.adapter.getSourcePath() + "/Properties/",
-                Harmony.getBundlePath() + "tact-core/"
-                        + this.adapter.getTemplateProjectPath() + "Properties/"));
+        result.add(new SourceFile(
+                templatePath + "Properties/Annotations.cs",
+                filePath + "Properties/Annotations.cs",
+                false));
+        
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "Properties/" + "Annotations.cs"));
+        
+        result.add(new SourceFile(
+                templatePath + "Properties/AppManifest.xml",
+                filePath + "Properties/AppManifest.xml",
+                false));
+        
+//        result.add(new ProjectUpdater(
+//                FileType.None,
+//                "Properties/" + "AppManifest.xml"));
+        
+        result.add(new SourceFile(
+                templatePath + "Properties/AssemblyInfo.cs",
+                filePath + "Properties/AssemblyInfo.cs",
+                false));
+        
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "Properties/" + "AssemblyInfo.cs"));
+        
+        result.add(new SourceFile(
+                templatePath + "Properties/WMAppManifest.xml",
+                filePath + "Properties/WMAppManifest.xml",
+                false));
+        
+//        result.add(new ProjectUpdater(
+//                FileType.None,
+//                "Properties/" + "WMAppManifest.xml"));
         
         templatePath = this.adapter.getTemplateSourcePath();
         filePath = this.adapter.getSourcePath();
@@ -73,6 +98,19 @@ public class WinphoneProjectAdapter implements IAdapterProject {
                 filePath + "Utils/Log.cs",
                 true));
         
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "Utils/" + "Log.cs"));
+        
+        result.add(new SourceFile(
+                templatePath + "Utils/AssetManager.cs",
+                filePath + "Utils/AssetManager.cs",
+                true));
+        
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "Utils/" + "AssetManager.cs"));
+        
         templatePath = this.adapter.getTemplateRessourcePath();
         filePath = this.adapter.getRessourcePath();
         
@@ -81,10 +119,28 @@ public class WinphoneProjectAdapter implements IAdapterProject {
                 filePath + "LocalizedStrings.cs",
                 true));
         
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "Resources/" + "LocalizedStrings.cs"));
+        
+        result.add(new SourceFile(
+                templatePath + "Values/StringsResources.Designer.cs",
+                filePath + "Values/StringsResources.Designer.cs",
+                false));
+        
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "Resources/Values/" + "StringsResources.Designer.cs",
+                "StringsResources.resx"));
+        
         result.add(new SourceFile(
                 templatePath + "Values/StringsResources.resx",
                 filePath + "Values/StringsResources.resx",
                 false));
+        
+        result.add(new ProjectUpdater(
+                FileType.EmbeddedResource,
+                "Resources/Values/" + "StringsResources.resx"));
         
         return result;
     }
@@ -156,14 +212,13 @@ public class WinphoneProjectAdapter implements IAdapterProject {
         
         result.add(new SourceFile(
                 templatePath + "Base/ApplicationSqlAdapterBase.cs",
-                String.format("%sBase/%sSqlAdapterBase.cs",
-                        filePath,
-                        applicationName),
+                String.format("%sBase/SqlAdapterBase.cs",
+                        filePath),
                 true));
         
         result.add(new ProjectUpdater(
                 FileType.Compile,
-                "Data/" + "Base/ApplicationSqlAdapterBase.cs"));
+                "Data/" + "Base/SqlAdapterBase.cs"));
         
         result.add(new SourceFile(
                 templatePath + "Base/ApplicationSqlOpenHelperBase.cs",
@@ -179,15 +234,13 @@ public class WinphoneProjectAdapter implements IAdapterProject {
         
         result.add(new SourceFile(
                 templatePath + "ApplicationSqlAdapter.cs",
-                String.format("%s%sSqlAdapter.cs",
-                        filePath,
-                        applicationName),
+                String.format("%sSqlAdapter.cs",
+                        filePath),
                 false));
         
         result.add(new ProjectUpdater(
                 FileType.Compile,
-                "Data/" + String.format("%sSqlAdapter.cs",
-                        applicationName)));
+                "Data/" + "SqlAdapter.cs"));
         
         result.add(new SourceFile(
                 templatePath + "ApplicationSqlOpenHelper.cs",
@@ -263,7 +316,7 @@ public class WinphoneProjectAdapter implements IAdapterProject {
         
         result.add(new ProjectUpdater(
                 FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sCreatePage.cs",
+                "View/" + entity.getName()  + "/" + String.format("%sCreatePage.xaml.cs",
                         entity.getName()),
                 String.format("%sCreatePage.xaml",
                         entity.getName())));
@@ -322,15 +375,72 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getFixtureFiles(boolean forceOverwrite) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        
+        String templatePath = this.adapter.getTemplateSourceFixturePath();
+        
+        String filePath = this.adapter.getSourcePath()
+                + "/" + this.adapter.getFixture() + "/";
+
+        //Create base classes for Fixtures loaders
+        result.add(new SourceFile(
+                templatePath + "FixtureBase.cs",
+                filePath + "FixtureBase.cs",
+                forceOverwrite));
+        
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                this.adapter.getFixture() + "/FixtureBase.cs"));
+        
+        result.add(new SourceFile(
+                templatePath + "DataManager.cs",
+                filePath + "DataManager.cs",
+                forceOverwrite));
+        
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                this.adapter.getFixture() + "/DataManager.cs"));
+        
+        result.add(new SourceFile(
+                templatePath + "DataLoader.cs",
+                filePath + "DataLoader.cs",
+                forceOverwrite));
+        
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                this.adapter.getFixture() + "/DataLoader.cs"));
+        
+        return result;
     }
 
     @Override
+    public List<IUpdater> getFixtureEntityDefinitionFiles(
+            String fixtureType, EntityMetadata entity) {
+    	return  null;
+    }
+    
+    @Override
     public List<IUpdater> getFixtureEntityFiles(boolean forceOverwrite,
             String fixtureType, EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        
+        String templatePath = this.adapter.getTemplateSourceFixturePath();
+        
+        String filePath = this.adapter.getSourcePath()
+                + "/" + this.adapter.getFixture() + "/";
+
+        //Create base classes for Fixtures loaders
+        result.add(new SourceFile(
+                templatePath + "TemplateDataLoader.cs",
+                filePath + entity.getName() + "DataLoader.cs",
+                forceOverwrite));
+        
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                this.adapter.getFixture() + "/"
+            			+ entity.getName() + "DataLoader.cs"));
+        
+        return result;
     }
 
     @Override
@@ -476,8 +586,25 @@ public class WinphoneProjectAdapter implements IAdapterProject {
     @Override
     public List<IUpdater> getEntityFiles(EntityMetadata entity,
             Configuration cfg, Map<String, Object> dataModel) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        
+        String templatePath = this.adapter.getTemplateSourcePath() + "Entity/";
+        
+        String filePath = this.adapter.getSourcePath() + "Entity/";
+        
+        result.add(new SourceFile(
+                templatePath + "TemplateEntity.cs",
+                String.format("%s%s.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+        
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "Entity/" + String.format("%s.cs",
+                        entity.getName())));
+        
+        return result;
     }
 
     @Override
@@ -497,42 +624,5 @@ public class WinphoneProjectAdapter implements IAdapterProject {
     public List<IUpdater> updateHomeActivity(String activity, String buttonId) {
         // TODO Auto-generated method stub
         return null;
-    }
-
-    private List<IUpdater> getFilesFromFolder(String fullTemplatePath,
-            String templatePath, String filePath, String path) {
-        List<IUpdater> result = new ArrayList<IUpdater>();
-        
-        File file = new File(path);
-        
-        if (file.exists()) {
-            if (file.isDirectory()) {
-                final File[] files = file.listFiles();
-                for (File subFile : files) {
-                    result.addAll(this.getFilesFromFolder(
-                            fullTemplatePath,
-                            templatePath,
-                            filePath,
-                            subFile.getAbsolutePath()));
-                }
-            } else {
-                String tplPath = templatePath
-                        + file.getAbsolutePath().replace(fullTemplatePath, "");
-                
-                String srcPath = filePath
-                        + file.getAbsolutePath().replace(fullTemplatePath, "");
-                
-                tplPath = tplPath.substring(0, tplPath.length()
-                        - ".ftl".length());
-                srcPath = srcPath.substring(0, srcPath.length()
-                        - ".ftl".length());
-                
-                result.add(new SourceFile(
-                        tplPath,
-                        srcPath));
-            }
-        }
-        
-        return result;
     }
 }

@@ -44,7 +44,7 @@ public class SQLiteGenerator extends BaseGenerator<IAdapter> {
                 this.getAppMetas().getEntities().values();
         
         for (final EntityMetadata classMeta : metas) {
-            if (classMeta.hasFields()) {
+            if (classMeta.hasFields() && !classMeta.isInternal()) {
                 this.getDatamodel().put(
                         TagConstant.CURRENT_ENTITY,
                         classMeta.getName());

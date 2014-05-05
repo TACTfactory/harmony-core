@@ -5,24 +5,20 @@
     <Language code="en" />
   </Languages>
   <App xmlns="" ProductID="{572bb699-01d8-459e-995e-6ee408f5d2dd}" Title="${project_name?cap_first}"
-        RuntimeType="Silverlight" Version="0.4.0" Genre="apps.normal" Author="TactFactory"
-        Description="" Publisher="Fimor" PublisherID="{b13cefda-cb70-41b3-8d8f-5d37902c45cc}">
+        RuntimeType="Silverlight" Version="0.0.0" Genre="apps.normal" Author="Harmony"
+        Description="" Publisher="Harmony" PublisherID="{b13cefda-cb70-41b3-8d8f-5d37902c45cc}">
     <IconPath IsRelative="true" IsResource="false">Resources\Drawable\launcher.png</IconPath>
     <Capabilities>
     </Capabilities>
     <Tasks>
-      <DefaultTask Name="_default" NavigationPage="View/Home/ScanPage.xaml" />
+      <DefaultTask Name="_default" NavigationPage="View/HomePage.xaml" />
     </Tasks>
     <Tokens>
       <PrimaryToken TokenID="${project_name}Token" TaskName="_default">
         <TemplateFlip>
-            <SmallImageURI IsRelative="true" IsResource="false">
-                Resources\Drawable\launcher.png
-            </SmallImageURI>
+            <SmallImageURI IsRelative="true" IsResource="false">Resources\Drawable\launcher.png</SmallImageURI>
             <Count>0</Count>
-            <BackgroundImageURI IsRelative="true" IsResource="false">
-                Resources\Drawable\launcher.png
-            </BackgroundImageURI>
+            <BackgroundImageURI IsRelative="true" IsResource="false">Resources\Drawable\launcher.png</BackgroundImageURI>
             <Title>${project_name?cap_first}</Title>
             <BackContent>
             </BackContent>
