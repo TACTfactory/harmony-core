@@ -261,15 +261,16 @@ public final class Harmony {
 	    return this.projectContext;
 	}
 
+	// TODO/FIXME remove..
 	/**
 	 * Get the android SDK version.
 	 * @return the android SDK version
+	 * @deprecated Use HarmonyContext.getAndroidSdkVersion()
 	 */
 	public static String getAndroidSDKVersion() {
 		return HarmonyContext.getAndroidSdkVersion();
 	}
 
-	// TODO/FIXME remove..
 	/**
 	 * Get the harmony project base path.<br/>
 	 * eg. /
