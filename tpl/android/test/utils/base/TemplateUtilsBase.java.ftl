@@ -19,7 +19,8 @@ import ${project_namespace}.test.utils.TestUtils;
 	<#if !relation.internal>
 		<#if !Utils.isInArray(importList, relation.relation.targetEntity)>
 <#if (dataLoader?? && dataLoader) || (relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany")>import ${curr.namespace}.entity.${relation.relation.targetEntity?cap_first};</#if>
-<#if (dataLoader?? && dataLoader)>import ${fixture_namespace}.${relation.relation.targetEntity?cap_first}DataLoader;<#else>import ${project_namespace}.test.utils.${relation.relation.targetEntity}Utils;</#if>
+<#if (dataLoader?? && dataLoader)><#list InheritanceUtils.getAllChildren(entities[relation.relation.targetEntity]) as child>import ${fixture_namespace}.${child.name?cap_first}DataLoader;
+</#list><#else>import ${project_namespace}.test.utils.${relation.relation.targetEntity}Utils;</#if>
 			<#assign importList = importList + [relation.relation.targetEntity] />
 		</#if>
 	</#if>
@@ -87,7 +88,10 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 				<#else>
 					<#if dataLoader?? && dataLoader>
 		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s =
-			new ArrayList<${field.relation.targetEntity?cap_first}>(${field.relation.targetEntity?cap_first}DataLoader.getInstance(ctx).getMap().values());
+			new ArrayList<${field.relation.targetEntity?cap_first}>();
+		<#list InheritanceUtils.getAllChildren(entities[field.relation.targetEntity]) as child>
+		${field.name?uncap_first}s.addAll(${child.name?cap_first}DataLoader.getInstance(ctx).getMap().values());
+		</#list>
 						<#if field.relation.type=="OneToOne" || field.relation.type=="ManyToOne">
 		if (!${field.name?uncap_first}s.isEmpty()) {
 			${curr.name?uncap_first}.set${field.name?cap_first}(${field.name?uncap_first}s.get(TestUtils.generateRandomInt(0, ${field.name?uncap_first}s.size())));
@@ -123,7 +127,11 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 	public static boolean equals(${curr.name?cap_first} ${curr.name?uncap_first}1,
 			${curr.name?cap_first} ${curr.name?uncap_first}2,
 			boolean checkRecursiveId){
+		<#if curr.inheritance?? && curr.inheritance.superclass?? && entities[curr.inheritance.superclass.name]??>
+		boolean ret = ${curr.inheritance.superclass.name}Utils.equals(${curr.name?uncap_first}1, ${curr.name?uncap_first}2);
+		<#else>
 		boolean ret = true;
+		</#if>
 		Assert.assertNotNull(${curr.name?uncap_first}1);
 		Assert.assertNotNull(${curr.name?uncap_first}2);
 		if (${curr.name?uncap_first}1!=null && ${curr.name?uncap_first}2 !=null){
@@ -151,11 +159,22 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 				Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().size(),
 					${curr.name?uncap_first}2.get${field.name?cap_first}().size());
 				if (checkRecursiveId) {
-					for (int i=0;i<${curr.name?uncap_first}1.get${field.name?cap_first}().size();i++){					
-						<#list IdsUtils.getAllIdsGetters(entities[field.relation.targetEntity]) as refId>
-						Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}().get(i)${refId},
-									${curr.name?uncap_first}2.get${field.name?cap_first}().get(i)${refId});
-						</#list>
+					for (${field.relation.targetEntity} ${field.name?uncap_first}1 : ${curr.name?uncap_first}1.get${field.name?cap_first}()) {
+						boolean found = false;
+						for (${field.relation.targetEntity} ${field.name?uncap_first}2 : ${curr.name?uncap_first}2.get${field.name?cap_first}()) {
+							<#assign target = entities[field.relation.targetEntity] />
+							if (<#list IdsUtils.getAllIdsGetters(target) as refId>${field.name?uncap_first}1${refId}<#if MetadataUtils.isPrimitive(target.ids[refId_index])> == <#else>.equals(</#if>${field.name?uncap_first}2${refId}<#if !MetadataUtils.isPrimitive(target.ids[refId_index])>)</#if><#if refId_has_next>
+								&& </#if></#list>) {
+								found = true;
+							}
+						}
+						Assert.assertTrue(
+								String.format(
+										"Couldn't find associated ${field.name} (<#list target.ids as id>${id.name} = %s<#if id_has_next>, </#if></#list>) in ${curr.name} (<#list curr_ids as id>${id.name} = %s<#if id_has_next>,</#if></#list>)",
+										<#list IdsUtils.getAllIdsGetters(target) as id>${field.name?uncap_first}1${id},
+										</#list><#list IdsUtils.getAllIdsGetters(curr) as id>${curr.name?uncap_first}1${id}<#if id_has_next>,
+										</#if></#list>),
+								found);
 					}
 				}
 					</#if>

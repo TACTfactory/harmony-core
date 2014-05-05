@@ -13,7 +13,7 @@ import android.util.Log;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import ${project_namespace}.criterias.base.CriteriasBase;
+import ${project_namespace}.criterias.base.CriteriaExpression;
 
 /**
  * This is the base SQLiteAdapter. DO NOT MODIFY THIS CLASS AS IT IS REGENERATED
@@ -237,7 +237,7 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @param crits The criterias to use for the request
 	 * @return List of T entities
 	 */
-	public ArrayList<T> getAll(final CriteriasBase<T> crits) {
+	public ArrayList<T> getAll(final CriteriaExpression crits) {
 		ArrayList<T> result;
 
 		if (crits == null || crits.isEmpty()) {

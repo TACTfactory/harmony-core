@@ -177,20 +177,14 @@
 
 <#function importRelatedCriterias entity>
 	<#assign result = ""/>
-	<#assign import_array = [entity.name + "Criterias"] />
-	<#list ViewUtils.getAllRelations(entity) as relation>
-			<#if (!Utils.isInArray(import_array, relation.relation.targetEntity + "Criterias"))>
-				<#assign import_array = import_array + [relation.relation.targetEntity + "Criterias"] />
-			</#if>
-
-	</#list>
+	<#assign import_array = []/>
 	<#if (MetadataUtils.hasToManyRelations(entity))>
-		<#assign import_array = import_array + ["base.Criteria"] />
-		<#assign import_array = import_array + ["base.Criteria.Type"] />
+		<#assign import_array = import_array + ["base.Criterion"] />
+		<#assign import_array = import_array + ["base.Criterion.Type"] />
 		<#assign import_array = import_array + ["base.value.ArrayValue"] />
 	</#if>
-	<#assign import_array = import_array + ["base.CriteriasBase"] />
-	<#assign import_array = import_array + ["base.CriteriasBase.GroupType"] />
+	<#assign import_array = import_array + ["base.CriteriaExpression"] />
+	<#assign import_array = import_array + ["base.CriteriaExpression.GroupType"] />
 	<#list import_array as import>
 			<#assign result = result + "import ${project_namespace}.criterias.${import};" />
 		<#if import_has_next>

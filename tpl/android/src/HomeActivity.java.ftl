@@ -4,7 +4,7 @@ package ${project_namespace};
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 <#if (entities??)>
 	<#list entities?values as entity>
-		<#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && !entity.hidden)>
+		<#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && entity.listAction)>
 import ${project_namespace}.view.${entity.name?lower_case}.${entity.name}ListActivity;
 		</#if>
 	</#list>
@@ -38,7 +38,7 @@ public class HomeActivity extends HarmonyFragmentActivity
 	private void initButtons() {
 		<#if (entities??)>
 			<#list entities?values as entity>
-				<#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && !entity.hidden)>
+				<#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && entity.listAction)>
 		this.findViewById(R.id.${entity.name?lower_case}_list_button)
 						.setOnClickListener(this);
 				</#if>
@@ -51,7 +51,7 @@ public class HomeActivity extends HarmonyFragmentActivity
 		Intent intent;
 		switch (v.getId()) {
 			<#list entities?values as entity>
-				<#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && !entity.hidden)>
+				<#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && entity.listAction)>
 			case R.id.${entity.name?lower_case}_list_button:
 				intent = new Intent(this,
 						${entity.name}ListActivity.class);

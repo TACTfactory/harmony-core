@@ -4,7 +4,7 @@ package ${curr.controller_namespace};
 
 import java.util.ArrayList;
 
-import ${project_namespace}.criterias.${curr.name?cap_first}Criterias;
+import ${project_namespace}.criterias.base.CriteriaExpression;
 import ${project_namespace}.menu.CrudCreateMenuWrapper.CrudCreateMenuInterface;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
@@ -31,8 +31,8 @@ import ${curr.namespace}.entity.${curr.name};
  * @see android.app.Fragment
  */
 public class ${curr.name}ListFragment
-		extends HarmonyListFragment<${curr.name}>
-		implements CrudCreateMenuInterface {
+		extends HarmonyListFragment<${curr.name}><#if curr.createAction>
+		implements CrudCreateMenuInterface </#if>{
 
 	/** The adapter which handles list population. */
 	protected ${curr.name}ListAdapter mAdapter;
@@ -86,10 +86,10 @@ public class ${curr.name}ListFragment
 	@Override
 	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
 		Loader<Cursor> result = null;
-		${curr.name?cap_first}Criterias crit = null;
+		CriteriaExpression crit = null;
 		if (bundle != null) {
-			crit = (${curr.name?cap_first}Criterias) bundle.get(
-						${curr.name?cap_first}Criterias.PARCELABLE);
+			crit = (CriteriaExpression) bundle.get(
+						CriteriaExpression.PARCELABLE);
 		}
 		<#if (curr.orders?? && curr.orders?size > 0) >
 		String orderBy = "";
@@ -153,12 +153,13 @@ public class ${curr.name}ListFragment
 		// Clear the data in the adapter.
 		this.mAdapter.clear();
 	}
-
+	<#if curr.createAction>
 	@Override
 	public void onClickAdd() {
 		Intent intent = new Intent(this.getActivity(),
 					${curr.name}CreateActivity.class);
 		this.startActivity(intent);
 	}
+	</#if>
 
 }

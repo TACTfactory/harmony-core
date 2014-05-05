@@ -41,8 +41,16 @@ public final class EntityMetadata extends ClassMetadata {
 	private Map<String, String> orders =
 			new LinkedHashMap<String, String>();	
 	
-	/** Is entity hidden ? */
-	private boolean hidden = false;
+	/** Should we be able to create this entity ? */
+	private boolean createAction = true;
+	/** Should we be able to edit this entity ? */
+	private boolean editAction = true;
+	/** Should we be able to show this entity ? */
+	private boolean showAction = true;
+	/** Should we be able to list this entity ? */
+	private boolean listAction = true;
+	/** Should we be able to delete this entity ? */
+	private boolean deleteAction = true;
 
 	/**
 	 * Add Component String of field.
@@ -70,7 +78,11 @@ public final class EntityMetadata extends ClassMetadata {
 		model.put(TagConstant.RELATIONS,
 				this.toFieldArray(this.relations.values(), adapter));
 		model.put(TagConstant.INTERNAL,	this.internal);
-		model.put(TagConstant.HIDDEN, this.hidden);
+		model.put(TagConstant.SHOW_ACTION, this.showAction);
+		model.put(TagConstant.LIST_ACTION, this.listAction);
+		model.put(TagConstant.CREATE_ACTION, this.createAction);
+		model.put(TagConstant.EDIT_ACTION, this.editAction);
+		model.put(TagConstant.DELETE_ACTION, this.deleteAction);
 		model.put(TagConstant.INDEXES, this.indexes);
 		model.put(TagConstant.ORDERS, this.orders);
 
@@ -113,21 +125,7 @@ public final class EntityMetadata extends ClassMetadata {
 	public final void addId(FieldMetadata id) {
 		this.ids.put(id.getName(), id);
 	}
-
-	/**
-	 * @param hidden the hidden to set 
-	 */
-	public final void setHidden(final boolean hidden) {
-		this.hidden = hidden;
-	}
 	
-	/**
-	 * @return hidden
-	 */
-	public final boolean isHidden() {
-		return this.hidden;
-	}
-
 	/**
 	 * @param ids the ids to set
 	 */
@@ -169,9 +167,7 @@ public final class EntityMetadata extends ClassMetadata {
 			subField = field.toMap(adapter);
 
 			// Add field translate
-			if (!field.isInternal() && !field.isHidden() && !this.hidden) {
-				field.makeString("label");
-			}
+			field.makeString("label");
 
 			result.add(subField);
 		}
@@ -223,5 +219,83 @@ public final class EntityMetadata extends ClassMetadata {
 		super.removeField(field);
 		this.relations.remove(field.getName());
 		this.ids.remove(field.getName());
+	}
+
+
+	/**
+	 * @return the createAction
+	 */
+	public final boolean isCreateAction() {
+		return this.createAction;
+	}
+
+
+	/**
+	 * @return the editAction
+	 */
+	public final boolean isEditAction() {
+		return this.editAction;
+	}
+
+	/**
+	 * @return the showAction
+	 */
+	public final boolean isShowAction() {
+		return this.showAction;
+	}
+
+	/**
+	 * @return the deleteAction
+	 */
+	public final boolean isDeleteAction() {
+		return this.deleteAction;
+	}
+
+
+	/**
+	 * @return the listAction
+	 */
+	public final boolean isListAction() {
+		return listAction;
+	}
+
+
+	/**
+	 * @param createAction the createAction to set
+	 */
+	public final void setCreateAction(boolean createAction) {
+		this.createAction = createAction;
+	}
+
+	
+	/**
+	 * @param createAction the createAction to set
+	 */
+	public final void setDeleteAction(boolean deleteAction) {
+		this.deleteAction = deleteAction;
+	}
+
+
+	/**
+	 * @param editAction the editAction to set
+	 */
+	public final void setEditAction(boolean editAction) {
+		this.editAction = editAction;
+	}
+
+
+	/**
+	 * @param showAction the showAction to set
+	 */
+	public final void setShowAction(boolean showAction) {
+		this.showAction = showAction;
+	}
+
+
+	/**
+	 * @param listAction the listAction to set
+	 */
+	public final void setListAction(boolean listAction) {
+		this.listAction = listAction;
 	}
 }

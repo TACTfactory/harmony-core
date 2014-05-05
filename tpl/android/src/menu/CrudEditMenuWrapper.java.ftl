@@ -17,9 +17,7 @@ import ${project_namespace}.menu.base.MenuWrapperBase;
 /**
  * Crud Menu wrapper for edit and delete actions.
  */
-public class CrudEditDeleteMenuWrapper implements MenuWrapperBase {
-	/** Delete menu item. */
-	private MenuItem deleteItem;
+public class CrudEditMenuWrapper implements MenuWrapperBase {
 	/** Edit menu item. */
 	private MenuItem editItem;
 	/** Menu Visibility. */
@@ -28,20 +26,11 @@ public class CrudEditDeleteMenuWrapper implements MenuWrapperBase {
 	@Override
 	public void initializeMenu(Menu menu, FragmentActivity activity,
 			Fragment fragment, Context ctx) {
-		if (fragment != null
-				&& fragment instanceof CrudEditDeleteMenuInterface) {
-			this.deleteItem 	= menu.add(
-					${project_name?cap_first}Menu.CRUDEDITDELETE,
-					0,
-					Menu.NONE,
-					R.string.menu_item_delete);
-			this.deleteItem.setShowAsAction(
-					ActionMenuItem.SHOW_AS_ACTION_IF_ROOM
-					| ActionMenuItem.SHOW_AS_ACTION_WITH_TEXT);
-			this.deleteItem.setVisible(false);
-			
+		if ((fragment != null
+				&& fragment instanceof CrudEditMenuInterface)
+				|| activity instanceof CrudEditMenuInterface) {			
 			this.editItem 	= menu.add(
-					${project_name?cap_first}Menu.CRUDEDITDELETE,
+					${project_name?cap_first}Menu.CRUDEDIT,
 					1,
 					Menu.NONE,
 					R.string.menu_item_edit);
@@ -56,23 +45,22 @@ public class CrudEditDeleteMenuWrapper implements MenuWrapperBase {
 	@Override
 	public void updateMenu(Menu menu, FragmentActivity activity,
 			Fragment fragment, Context ctx) {
-		if (fragment != null 
-				&& fragment instanceof CrudEditDeleteMenuInterface) {
+		if ((fragment != null 
+				&& fragment instanceof CrudEditMenuInterface)
+				|| ctx instanceof CrudEditMenuInterface) {
 			menu.setGroupVisible(
-					${project_name?cap_first}Menu.CRUDEDITDELETE, this.visible);
+					${project_name?cap_first}Menu.CRUDEDIT, this.visible);
 		}
 	}
 
 	@Override
 	public boolean dispatch(MenuItem item, Context ctx, Fragment fragment) {
 		boolean result = false;
-		if (fragment != null 
-				&& fragment instanceof CrudEditDeleteMenuInterface) {
-			if (item.equals(this.deleteItem)) {
-				((CrudEditDeleteMenuInterface) fragment).onClickDelete();
-				result = true;
-			} else if (item.equals(this.editItem)) {
-				((CrudEditDeleteMenuInterface) fragment).onClickEdit();
+		if ((fragment != null 
+				&& fragment instanceof CrudEditMenuInterface)
+				|| ctx instanceof CrudEditMenuInterface) {
+			if (item.equals(this.editItem)) {
+				((CrudEditMenuInterface) fragment).onClickEdit();
 				result = true;
 			}
 		}
@@ -90,8 +78,8 @@ public class CrudEditDeleteMenuWrapper implements MenuWrapperBase {
 			Fragment fragment, Context ctx) {
 		
 		if (fragment != null 
-				&& fragment instanceof CrudEditDeleteMenuInterface) {
-			menu.removeGroup(${project_name?cap_first}Menu.CRUDEDITDELETE);
+				&& fragment instanceof CrudEditMenuInterface) {
+			menu.removeGroup(${project_name?cap_first}Menu.CRUDEDIT);
 		}
 	}
 
@@ -111,11 +99,9 @@ public class CrudEditDeleteMenuWrapper implements MenuWrapperBase {
 	 * Implement this interface in your activity or fragment
 	 * to have edit and delete menu buttons.
 	 */
-	public interface CrudEditDeleteMenuInterface {
+	public interface CrudEditMenuInterface {
 		/** On click edit. */
 		void onClickEdit();
-		/** On click delete. */
-		void onClickDelete();
 	}
 }
 

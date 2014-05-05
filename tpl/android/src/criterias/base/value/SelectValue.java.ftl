@@ -3,7 +3,7 @@ package ${project_namespace}.criterias.base.value;
 
 import java.util.ArrayList;
 
-import ${project_namespace}.criterias.base.CriteriasBase;
+import ${project_namespace}.criterias.base.CriteriaExpression;
 
 
 /** A SelectValue is used to query another table in a criteria.
@@ -17,7 +17,7 @@ public class SelectValue extends CriteriaValue {
 	/** The field in refTable that will match this criteria's key. */
 	private String refKey;
 	/** A criteria of the refTable type. */
-	private CriteriasBase criteria;
+	private CriteriaExpression criteria;
 
 	/**
 	 * @return the refTable
@@ -50,14 +50,14 @@ public class SelectValue extends CriteriaValue {
 	/**
 	 * @return the criteria
 	 */
-	public final CriteriasBase getCriteria() {
+	public final CriteriaExpression getCriteria() {
 		return this.criteria;
 	}
 
 	/**
 	 * @param criteria the criteria to set
 	 */
-	public final void setCriteria(CriteriasBase criteria) {
+	public final void setCriteria(CriteriaExpression criteria) {
 		this.criteria = criteria;
 	}
 

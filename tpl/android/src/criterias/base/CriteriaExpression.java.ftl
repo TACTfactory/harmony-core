@@ -5,26 +5,28 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-import ${project_namespace}.criterias.base.Criteria.Type;
+import ${project_namespace}.criterias.base.Criterion.Type;
 import ${project_namespace}.criterias.base.value.StringValue;
 
 /**
- * CriteriasBase.
- * An array of Criteria and CriteriasBase. Used for db requests.
- * A criterias represents the WHERE clause of a request.
+ * CriteriaExpression.
+ * An array of Criterion and CriteriaExpression. Used for db requests.
+ * A CriteriaExpression represents the WHERE clause of a request.
  * @param T The entity type
  */
-public abstract class CriteriasBase<T> implements Serializable, ICriteria {
-	/** Criteria GroupType. */
+public class CriteriaExpression implements Serializable, ICriteria {
+	/** Expression GroupType. */
 	private GroupType type;
 	/** Array of ICriteria. */
-	private List<ICriteria> criterias = new ArrayList<ICriteria>();
+	private List<ICriteria> criteria = new ArrayList<ICriteria>();
+	/** KEY constant for serializing a criteria expression inside a bundle. */
+	public static final String PARCELABLE = "CriteriaExpression";
 
 	/**
 	 * Constructor.
 	 * @param type The Criteria's GroupType
 	 */
-	public CriteriasBase(final GroupType type) {
+	public CriteriaExpression(final GroupType type) {
 		this.type = type;
 	}
 
@@ -32,10 +34,10 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 	public String toSQLiteString() {
 		StringBuilder ret = new StringBuilder("(");
 
-		for (int i = 0; i < this.criterias.size(); i++) {
-			final ICriteria crit = this.criterias.get(i);
+		for (int i = 0; i < this.criteria.size(); i++) {
+			final ICriteria crit = this.criteria.get(i);
 			ret.append(crit.toSQLiteString());
-			if (i != this.criterias.size() - 1) {
+			if (i != this.criteria.size() - 1) {
 				ret.append(' ');
 				ret.append(this.type.getSqlType());
 				ret.append(' ');
@@ -47,15 +49,15 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 
 	@Override
 	public String toSQLiteSelection() {
-		if (this.criterias.isEmpty()) {
+		if (this.criteria.isEmpty()) {
 			return null;
 		} else {
 			StringBuilder ret = new StringBuilder("(");
 
-			for (int i = 0; i < this.criterias.size(); i++) {
-				final ICriteria crit = this.criterias.get(i);
+			for (int i = 0; i < this.criteria.size(); i++) {
+				final ICriteria crit = this.criteria.get(i);
 				ret.append(crit.toSQLiteSelection());
-				if (i != this.criterias.size() - 1) {
+				if (i != this.criteria.size() - 1) {
 					ret.append(' ');
 					ret.append(this.type.getSqlType());
 					ret.append(' ');
@@ -69,19 +71,19 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 	@Override
 	public void toSQLiteSelectionArgs(final ArrayList<String> array) {
 
-		for (int i = 0; i < this.criterias.size(); i++) {
-			final ICriteria crit = this.criterias.get(i);
+		for (int i = 0; i < this.criteria.size(); i++) {
+			final ICriteria crit = this.criteria.get(i);
 			crit.toSQLiteSelectionArgs(array);
 		}
 
 	}
 
 	/**
-	 * Converts the criterias to a Selection args String array.
+	 * Converts the criteria expression to a Selection args String array.
 	 * @return The String[] of selection args
 	 */
 	public String[] toSQLiteSelectionArgs() {
-		if (this.criterias.isEmpty()) {
+		if (this.criteria.isEmpty()) {
 			return null;
 		} else {
 			ArrayList<String> tmpArray = new ArrayList<String>();
@@ -91,15 +93,15 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 	}
 
 	/**
-	 * Adds a criteria of form : (key TYPE value).
-	 * @param crit The criteria to add
-	 * @return True if the criterias is valid and doesn't exists yet
+	 * Adds a criterion of form : (key TYPE value).
+	 * @param crit The criterion to add
+	 * @return True if the criterion is valid and doesn't exists yet
 	 */
-	public boolean add(final Criteria crit) {
+	public boolean add(final Criterion crit) {
 		boolean result;
 
-		if (!this.criterias.contains(crit)) {
-			this.criterias.add(crit);
+		if (!this.criteria.contains(crit)) {
+			this.criteria.add(crit);
 			result = true;
 		} else {
 			result = false;
@@ -109,15 +111,15 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 	}
 
 	/**
-	 * Adds a criteria of form : (key TYPE value).
-	 * @param crit The criteria to add
-	 * @return True if the criterias is valid and doesn't exists yet
+	 * Adds a criterion of form : (key TYPE value).
+	 * @param crit The criterion to add
+	 * @return True if the criterion is valid and doesn't exists yet
 	 */
 	public boolean add(final ICriteria crit) {
 		boolean result;
 
-		if (!this.criterias.contains(crit)) {
-			this.criterias.add(crit);
+		if (!this.criteria.contains(crit)) {
+			this.criteria.add(crit);
 			result = true;
 		} else {
 			result = false;
@@ -127,26 +129,26 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 	}
 
 	/**
-	 * Add a criteria of form : (key TYPE value).
+	 * Add a criterion of form : (key TYPE value).
 	 * @param key The db column
 	 * @param value The value
-	 * @param type The type of criteria (can be Equals, Superior, etc.)
-	 * @return True if the criterias is valid and doesn't exists yet
+	 * @param type The type of criterion (can be Equals, Superior, etc.)
+	 * @return True if the criterion is valid and doesn't exists yet
 	 */
 	public boolean add(final String key, final String value, final Type type) {
-		final Criteria criteria = new Criteria();
-		criteria.setKey(key);
-		criteria.addValue(new StringValue(value));
-		criteria.setType(type);
+		final Criterion criterion = new Criterion();
+		criterion.setKey(key);
+		criterion.addValue(new StringValue(value));
+		criterion.setType(type);
 
-		return this.add(criteria);
+		return this.add(criterion);
 	}
 
 	/**
-	 * Add a criteria of form : (key EQUALS value).
+	 * Add a criterion of form : (key EQUALS value).
 	 * @param key The db column
 	 * @param value The value
-	 * @return True if the criterias is valid and doesn't exists yet
+	 * @return True if the criterion is valid and doesn't exists yet
 	 */
 	public boolean add(final String key, final String value) {
 		return this.add(key, value, Type.EQUALS);
@@ -184,6 +186,6 @@ public abstract class CriteriasBase<T> implements Serializable, ICriteria {
 	 * @return true if the List is empty, false otherwise
 	 */
 	public boolean isEmpty() {
-		return this.criterias.isEmpty();
+		return this.criteria.isEmpty();
 	}
 }

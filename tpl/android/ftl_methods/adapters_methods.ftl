@@ -133,11 +133,11 @@
 						<#assign result = result + "${tab}${localTab}	if (!cursor.isNull(index)) {\n"/><#assign localTab="\t" />
 					</#if>
 					<#assign result = result + "${tab}${localTab}	${field.name}.set${id.name?cap_first}(${AdapterUtils.getCursorGet(id)}index));\n"/>
+					<#assign result = result + "${tab}${localTab}	result.set${field.name?cap_first}(${field.name});\n"/>
 					<#if (field.nullable?? && field.nullable)>
 						<#assign result = result + "${tab}${localTab}	}\n"/>
 					</#if>
 				</#list>
-			<#assign result = result + "${tab}${localTab}	result.set${field.name?cap_first}(${field.name});\n"/>
 			<#assign result = result + "${tab}}\n" />
 		</#if>
 	</#if>
@@ -153,7 +153,7 @@
 		<#assign result = result + "${tab}String ${NamingUtils.fixtureParsedAlias(field)} = element.getChildText(${NamingUtils.fixtureAlias(field)});" />
 		<#assign result = result + "${tab}if (${NamingUtils.fixtureParsedAlias(field)} != null) {" />
 		<#if !field.relation??>
-			<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
+			<#if field.type=="int" || field.type=="Integer" || field.type=="zipcode" || field.type=="ean">
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(Integer.parseInt(${NamingUtils.fixtureParsedAlias(field)}));"/>
 			<#elseif (field.type?lower_case=="float")>
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(Float.parseFloat(${NamingUtils.fixtureParsedAlias(field)}));"/>
@@ -163,7 +163,7 @@
 					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
 					<#assign result = result + "${tab}		DateUtils.formatXMLStringToDateTime(" />
 					<#assign result = result + "${tab}				${NamingUtils.fixtureParsedAlias(field)}));" />
-			<#elseif field.type=="boolean">
+			<#elseif field.type?lower_case=="boolean">
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
 				<#assign result = result + "${tab}		Boolean.parseBoolean(${NamingUtils.fixtureParsedAlias(field)}));" />
 			<#elseif field.type?lower_case=="string">
@@ -239,6 +239,19 @@
 				<#assign result = result + "${tab}		}" />
 				<#assign result = result + "${tab}	}" />
 				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first}s);" />
+				<#if field.relation.inversedBy??>
+					<#assign invField = MetadataUtils.getInversingField(field) />
+					<#assign result = result + "${tab}	for (${field.relation.targetEntity} ${field.relation.targetEntity?uncap_first} : ${field.relation.targetEntity?uncap_first}s) {" />
+					<#assign result = result + "${tab}		ArrayList<${curr.name?cap_first}> ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =" />
+					<#assign result = result + "${tab}			${field.relation.targetEntity?uncap_first}.get${invField.name?cap_first}();" />
+					<#assign result = result + "${tab}		if (${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s == null) {" />
+					<#assign result = result + "${tab}			${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =" />
+					<#assign result = result + "${tab}				new ArrayList<${curr.name?cap_first}>();" />
+					<#assign result = result + "${tab}		}" />
+					<#assign result = result + "${tab}		${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s.add(${objectName});" />
+					<#assign result = result + "${tab}		${field.relation.targetEntity?uncap_first}.set${invField.name?cap_first}(${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s);" />
+					<#assign result = result + "${tab}	}" />
+				</#if>
 			</#if>
 		</#if>
 		<#assign result = result + "${tab}}\n" />

@@ -38,7 +38,7 @@ import com.tactfactory.harmony.meta.InterfaceMetadata;
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.annotation.DiscriminatorColumn;
 import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
-import com.tactfactory.harmony.annotation.Crud;
+import com.tactfactory.harmony.annotation.View;
 import com.tactfactory.harmony.annotation.DiscriminatorIdentifier;
 import com.tactfactory.harmony.annotation.Entity;
 import com.tactfactory.harmony.annotation.InheritanceType;
@@ -63,8 +63,8 @@ public class ClassVisitor {
 	private static final String ANNOTATION_ENTITY	 	=
 			PackageUtils.extractNameEntity(Entity.class);
 
-	private static final String ANNOTATION_CRUD =
-			PackageUtils.extractNameEntity(Crud.class);
+	private static final String ANNOTATION_VIEW =
+			PackageUtils.extractNameEntity(View.class);
 
 	private static final String ANNOTATION_TABLE 		=
 			PackageUtils.extractNameEntity(Table.class);
@@ -80,9 +80,24 @@ public class ClassVisitor {
 	
 	private static final String ANNOTATION_ORDER_BYS=
 			PackageUtils.extractNameEntity(OrderBys.class);
-	
+
 	/** Column annotation hidden attribute. */
 	private static final String ATTRIBUTE_HIDDEN = "hidden";
+
+	/** Column annotation list attribute. */
+	private static final String ATTRIBUTE_LIST = "list";
+
+	/** Column annotation show attribute. */
+	private static final String ATTRIBUTE_SHOW = "show";
+	
+	/** Column annotation delete attribute. */
+	private static final String ATTRIBUTE_DELETE = "delete";
+
+	/** Column annotation edit attribute. */
+	private static final String ATTRIBUTE_EDIT = "edit";
+
+	/** Column annotation create attribute. */
+	private static final String ATTRIBUTE_CREATE = "create";
 	
 	/** Column annotation hidden attribute. */
 	private static final String ATTRIBUTE_VALUE = "value";
@@ -188,24 +203,46 @@ public class ClassVisitor {
 	    		isEntity = true;
 	    	}
 
-	    	AnnotationExpr crudAnnot = 
-	    			this.annotationMap.get(ANNOTATION_CRUD);
+	    	AnnotationExpr viewAnnot = 
+	    			this.annotationMap.get(ANNOTATION_VIEW);
 	    	
-	    	if (crudAnnot != null) {
-				
-				if (crudAnnot instanceof NormalAnnotationExpr) {
+	    	if (viewAnnot != null && result instanceof EntityMetadata) {
+				EntityMetadata resultEntity = (EntityMetadata) result;
+				if (viewAnnot instanceof NormalAnnotationExpr) {
 					List<MemberValuePair> pairs = 
 							((NormalAnnotationExpr)
-									crudAnnot).getPairs();
+									viewAnnot).getPairs();
 					
-					if (pairs != null) {	
+					if (pairs != null) {
 						for (MemberValuePair pair : pairs) {
 							if (ATTRIBUTE_HIDDEN.equals(pair.getName())) {
-								
-								((EntityMetadata) result).setHidden(
-										pair.getValue().toString()
-										.equals(String.valueOf(true)));
-							}
+
+								boolean hidden = Boolean.parseBoolean(
+										pair.getValue().toString());
+								if (hidden) {
+									resultEntity.setShowAction(false);
+									resultEntity.setCreateAction(false);
+									resultEntity.setEditAction(false);
+									resultEntity.setListAction(false);
+									resultEntity.setDeleteAction(false);
+									break;
+								}
+							} else if (ATTRIBUTE_SHOW.equals(pair.getName())) {
+								resultEntity.setShowAction(Boolean.parseBoolean(
+										pair.getValue().toString()));
+							} else if (ATTRIBUTE_LIST.equals(pair.getName())) {
+								resultEntity.setListAction(Boolean.parseBoolean(
+										pair.getValue().toString()));
+							} else if (ATTRIBUTE_EDIT.equals(pair.getName())) {
+								resultEntity.setEditAction(Boolean.parseBoolean(
+										pair.getValue().toString()));
+							} else if (ATTRIBUTE_CREATE.equals(pair.getName())) {
+								resultEntity.setCreateAction(Boolean.parseBoolean(
+										pair.getValue().toString()));
+							} else if (ATTRIBUTE_DELETE.equals(pair.getName())) {
+								resultEntity.setDeleteAction(Boolean.parseBoolean(
+										pair.getValue().toString()));
+							} 
 						}
 					}
 				}

@@ -23,7 +23,11 @@
 </#function>
 
 <#function getInversingField field>
-	<#assign entityT = entities[field.relation.targetEntity] />
+	<#if field.relation.type == "ManyToMany">
+		<#assign entityT = entities[field.relation.joinTable] />
+	<#else>
+		<#assign entityT = entities[field.relation.targetEntity] />
+	</#if>
 	<#list entityT.relations as f>
 		<#if field.relation.inversedBy??>
 			<#if f.name == field.relation.inversedBy>

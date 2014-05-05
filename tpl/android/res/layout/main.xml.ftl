@@ -91,7 +91,7 @@
 		    android:layout_height="wrap_content"
 		    android:text="More documentation at http://support.tactfactory.com/harmony/"  />
 		<#list entities?values as entity>			
-				<#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && !entity.hidden)>
+				<#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && entity.listAction)>
 		<Button
 			android:id="@+id/${entity.name?lower_case}_list_button"
 			android:layout_width="match_parent"
