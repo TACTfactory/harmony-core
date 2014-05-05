@@ -194,12 +194,6 @@ public class WinphoneProjectAdapter implements IAdapterProject {
     }
 
     @Override
-    public List<IUpdater> getCriteriasEntityFiles(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public List<IUpdater> getDatabaseFiles() {
         List<IUpdater> result = new ArrayList<IUpdater>();
         

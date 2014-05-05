@@ -49,7 +49,6 @@ public class SQLiteGenerator extends BaseGenerator<IAdapter> {
                         TagConstant.CURRENT_ENTITY,
                         classMeta.getName());
                 this.generateAdapters(classMeta);
-                this.generateCriterias(classMeta);
             }
         }
 
@@ -87,23 +86,6 @@ public class SQLiteGenerator extends BaseGenerator<IAdapter> {
         try {
             List<IUpdater> files = this.getAdapter().getAdapterProject()
                     .getSqlAdapterEntityFiles(entity);
-            
-            this.processUpdater(files);
-        } catch (final Exception e) {
-            ConsoleUtils.displayError(e);
-        }
-    }
-    
-    /**
-     * Generate the current entity's criteria.
-     */
-    private void generateCriterias(EntityMetadata entity) {
-        // Info
-        ConsoleUtils.display(">>> Generate Criterias for "
-                + this.getDatamodel().get(TagConstant.CURRENT_ENTITY));
-        try {
-            List<IUpdater> files = this.getAdapter().getAdapterProject()
-                    .getCriteriasEntityFiles(entity);
             
             this.processUpdater(files);
         } catch (final Exception e) {
