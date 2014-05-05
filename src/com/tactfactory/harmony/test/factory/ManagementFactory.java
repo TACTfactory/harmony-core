@@ -76,7 +76,6 @@ public class ManagementFactory extends ProjectMetadataFactory {
 
 		// Set Implements
 		ManagementFactory.addImports(address,
-				CLASS_ARRAYLIST,
 				CLASS_COLUMN,
 				CLASS_ENTITY,
 				CLASS_GENERATED_VALUE,
@@ -84,7 +83,6 @@ public class ManagementFactory extends ProjectMetadataFactory {
 				CLASS_MANY_TO_MANY,
 				CLASS_GENERATED_VALUE_STRATEGY);
 		ManagementFactory.addImports(company,
-				CLASS_ARRAYLIST,
 				CLASS_COLUMN,
 				CLASS_ENTITY,
 				CLASS_GENERATED_VALUE,
@@ -97,6 +95,7 @@ public class ManagementFactory extends ProjectMetadataFactory {
 				CLASS_ID,
 				CLASS_ONE_TO_ONE);
 		ManagementFactory.addImports(furniture,
+				CLASS_ISODATETIMEFORMAT,
 				CLASS_DATETIME,
 				CLASS_COLUMN,
 				CLASS_ENTITY,
@@ -112,7 +111,6 @@ public class ManagementFactory extends ProjectMetadataFactory {
 				CLASS_ID,
 				CLASS_ONE_TO_ONE);
 		ManagementFactory.addImports(person,
-				CLASS_ARRAYLIST,
 				CLASS_COLUMN,
 				CLASS_TYPE,
 				CLASS_COLUMN_RESULT,
@@ -138,6 +136,8 @@ public class ManagementFactory extends ProjectMetadataFactory {
 			if (!entity.isInternal()) {
 				ManagementFactory.addImports(
 						entity,
+						CLASS_LIST,
+						CLASS_ARRAYLIST,
 						CLASS_SERIALIZABLE,
 						CLASS_PARCELABLE,
 						CLASS_PARCEL);

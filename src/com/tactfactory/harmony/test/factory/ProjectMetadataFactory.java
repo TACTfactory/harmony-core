@@ -16,6 +16,8 @@ public class ProjectMetadataFactory {
 	protected static final String CLASS_ENTITY = "Entity";
 	protected static final String CLASS_TYPE = "Type";
 	protected static final String CLASS_ARRAYLIST = "ArrayList";
+	protected static final String CLASS_LIST = "List";
+	protected static final String CLASS_ISODATETIMEFORMAT = "ISODateTimeFormat";
 
 	protected static final String CLASS_COLUMN = "Column";
 	protected static final String CLASS_COLUMN_RESULT = "ColumnResult";

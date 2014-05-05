@@ -20,7 +20,10 @@
 		this.set${field.name?cap_first}(parc.readString());
 					<#elseif field.type?lower_case == "datetime">
 		if (parc.readInt() == 1) {
-			this.set${field.name?cap_first}(new DateTime(parc.readString()));
+			this.set${field.name?cap_first}(
+					ISODateTimeFormat.dateTimeParser()
+							.withOffsetParsed().parseDateTime(
+									parc.readString()));
 		}
 					<#elseif (field.harmony_type?lower_case == "enum")>
 

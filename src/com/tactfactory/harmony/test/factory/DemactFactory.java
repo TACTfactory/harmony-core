@@ -64,177 +64,6 @@ public class DemactFactory extends ProjectMetadataFactory {
 		EntityMetadata postToCategory = new EntityMetadata();
 		postToCategory.setName("PosttoCategory");
 		
-		demact.getEntities().put(user.getName(), user);
-		demact.getEntities().put(userToUser.getName(), userToUser);
-		demact.getEntities().put(client.getName(), client);
-		demact.getEntities().put(comment.getName(), comment);
-		demact.getEntities().put(category.getName(), category);
-		demact.getEntities().put(categoryToComment.getName(), categoryToComment);
-		demact.getEntities().put(post.getName(), post);
-		demact.getEntities().put(emptyEntity.getName(), emptyEntity);
-		demact.getEntities().put(simpleEntity.getName(), simpleEntity);
-		demact.getEntities().put(userGroup.getName(), userGroup);
-		demact.getEntities().put(viewComponent.getName(), viewComponent);
-		demact.getEntities().put(hiddenEntity.getName(), hiddenEntity);
-		demact.getEntities().put(postToCategory.getName(), postToCategory);
-		
-
-		// Set Implements
-		user.getImplementTypes().add(CLASS_SERIALIZABLE);
-		user.getImplementTypes().add(CLASS_PARCELABLE);
-		user.getImplementTypes().add(CLASS_CLONEABLE);
-		comment.getImplementTypes().add(CLASS_SERIALIZABLE);
-		comment.getImplementTypes().add(CLASS_PARCELABLE);
-		post.getImplementTypes().add(CLASS_SERIALIZABLE);
-		post.getImplementTypes().add(CLASS_PARCELABLE);
-		client.getImplementTypes().add(CLASS_SERIALIZABLE);
-		client.getImplementTypes().add(CLASS_PARCELABLE);
-		category.getImplementTypes().add(CLASS_SERIALIZABLE);
-		category.getImplementTypes().add(CLASS_PARCELABLE);
-		categoryToComment.getImplementTypes().add(CLASS_SERIALIZABLE);
-		categoryToComment.getImplementTypes().add(CLASS_PARCELABLE);
-		hiddenEntity.getImplementTypes().add(CLASS_SERIALIZABLE);
-		hiddenEntity.getImplementTypes().add(CLASS_PARCELABLE);
-		simpleEntity.getImplementTypes().add(CLASS_SERIALIZABLE);
-		simpleEntity.getImplementTypes().add(CLASS_PARCELABLE);
-		userGroup.getImplementTypes().add(CLASS_SERIALIZABLE);
-		userGroup.getImplementTypes().add(CLASS_PARCELABLE);
-		viewComponent.getImplementTypes().add(CLASS_SERIALIZABLE);
-		viewComponent.getImplementTypes().add(CLASS_PARCELABLE);
-		emptyEntity.getImplementTypes().add(CLASS_SERIALIZABLE);
-		emptyEntity.getImplementTypes().add(CLASS_PARCELABLE);
-		
-		// Set import
-		user.getImports().add(CLASS_SERIALIZABLE);
-		user.getImports().add(CLASS_PARCELABLE);
-		user.getImports().add(CLASS_PARCEL);
-		user.getImports().add(CLASS_DATETIME);
-		user.getImports().add(CLASS_ENTITY);
-		user.getImports().add(CLASS_TYPE);
-		user.getImports().add(CLASS_COLUMN);
-		user.getImports().add(CLASS_COLUMN_RESULT);
-		user.getImports().add(CLASS_DISCRIMINATOR_COLUMN);
-		user.getImports().add(CLASS_GENERATED_VALUE);
-		user.getImports().add(CLASS_ID);
-		user.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
-		user.getImports().add(CLASS_INHERITANCE_TYPE);
-		user.getImports().add(CLASS_MANY_TO_ONE);
-		user.getImports().add(CLASS_MANY_TO_MANY);
-		user.getImports().add(CLASS_TABLE);
-		user.getImports().add(CLASS_INHERITANCE_MODE);
-		user.getImports().add(CLASS_ARRAYLIST);
-		user.getImports().add(CLASS_VIEW);
-
-		client.getImports().add(CLASS_SERIALIZABLE);
-		client.getImports().add(CLASS_PARCELABLE);
-		client.getImports().add(CLASS_PARCEL);
-		client.getImports().add(CLASS_COLUMN);
-		client.getImports().add(CLASS_ENTITY);
-
-		comment.getImports().add(CLASS_SERIALIZABLE);
-		comment.getImports().add(CLASS_PARCELABLE);
-		comment.getImports().add(CLASS_PARCEL);
-		comment.getImports().add(CLASS_COLUMN);
-		comment.getImports().add(CLASS_ENTITY);
-		comment.getImports().add(CLASS_TABLE);
-		comment.getImports().add(CLASS_DATETIME);
-		comment.getImports().add(CLASS_ARRAYLIST);
-		comment.getImports().add(CLASS_GENERATED_VALUE);
-		comment.getImports().add(CLASS_MANY_TO_ONE);
-		comment.getImports().add(CLASS_ONE_TO_MANY);
-		comment.getImports().add(CLASS_ID);
-		comment.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
-		comment.getImports().add(CLASS_TYPE);
-		comment.getImports().add(CLASS_VIEW);
-
-		category.getImports().add(CLASS_SERIALIZABLE);
-		category.getImports().add(CLASS_PARCELABLE);
-		category.getImports().add(CLASS_PARCEL);
-		category.getImports().add(CLASS_COLUMN);
-		category.getImports().add(CLASS_ENTITY);
-		category.getImports().add(CLASS_ID);
-		category.getImports().add(CLASS_GENERATED_VALUE);
-		category.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
-		category.getImports().add(CLASS_ARRAYLIST);
-		category.getImports().add(CLASS_ONE_TO_MANY);
-
-		categoryToComment.getImports().add(CLASS_SERIALIZABLE);
-		categoryToComment.getImports().add(CLASS_PARCELABLE);
-		categoryToComment.getImports().add(CLASS_PARCEL);
-		categoryToComment.getImports().add(CLASS_COLUMN);
-		categoryToComment.getImports().add(CLASS_ENTITY);
-		categoryToComment.getImports().add(CLASS_ID);
-		categoryToComment.getImports().add(CLASS_MANY_TO_ONE);
-		categoryToComment.getImports().add(CLASS_VIEW);
-
-		post.getImports().add(CLASS_SERIALIZABLE);
-		post.getImports().add(CLASS_PARCELABLE);
-		post.getImports().add(CLASS_PARCEL);
-		post.getImports().add(CLASS_ARRAYLIST);
-		post.getImports().add(CLASS_DATETIME);
-		post.getImports().add(CLASS_COLUMN);
-		post.getImports().add(CLASS_ENTITY);
-		post.getImports().add(CLASS_TABLE);
-		post.getImports().add(CLASS_TYPE);
-		post.getImports().add(CLASS_ID);
-		post.getImports().add(CLASS_MANY_TO_ONE);
-		post.getImports().add(CLASS_MANY_TO_MANY);
-		post.getImports().add(CLASS_ONE_TO_MANY);
-		post.getImports().add(CLASS_GENERATED_VALUE);
-		post.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
-
-		emptyEntity.getImports().add(CLASS_SERIALIZABLE);
-		emptyEntity.getImports().add(CLASS_PARCELABLE);
-		emptyEntity.getImports().add(CLASS_PARCEL);
-		emptyEntity.getImports().add(CLASS_ENTITY);
-
-		simpleEntity.getImports().add(CLASS_SERIALIZABLE);
-		simpleEntity.getImports().add(CLASS_PARCELABLE);
-		simpleEntity.getImports().add(CLASS_PARCEL);
-		simpleEntity.getImports().add(CLASS_ENTITY);
-		simpleEntity.getImports().add(CLASS_COLUMN);
-		simpleEntity.getImports().add(CLASS_GENERATED_VALUE);
-		simpleEntity.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
-		simpleEntity.getImports().add(CLASS_ID);
-		simpleEntity.getImports().add(CLASS_TYPE);
-
-		userGroup.getImports().add(CLASS_SERIALIZABLE);
-		userGroup.getImports().add(CLASS_PARCELABLE);
-		userGroup.getImports().add(CLASS_PARCEL);
-		userGroup.getImports().add(CLASS_ENTITY);
-		userGroup.getImports().add(CLASS_COLUMN);
-		userGroup.getImports().add(CLASS_ID);
-		userGroup.getImports().add(CLASS_GENERATED_VALUE);
-		userGroup.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
-
-		viewComponent.getImports().add(CLASS_SERIALIZABLE);
-		viewComponent.getImports().add(CLASS_PARCELABLE);
-		viewComponent.getImports().add(CLASS_PARCEL);
-		viewComponent.getImports().add(CLASS_COLUMN);
-		viewComponent.getImports().add(CLASS_ENTITY);
-		viewComponent.getImports().add(CLASS_ID);
-		viewComponent.getImports().add(CLASS_GENERATED_VALUE);
-		viewComponent.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
-		viewComponent.getImports().add(CLASS_TYPE);
-		viewComponent.getImports().add(CLASS_DATETIME);
-
-		hiddenEntity.getImports().add(CLASS_SERIALIZABLE);
-		hiddenEntity.getImports().add(CLASS_PARCELABLE);
-		hiddenEntity.getImports().add(CLASS_PARCEL);
-		hiddenEntity.getImports().add(CLASS_DATETIME);
-		hiddenEntity.getImports().add(CLASS_ARRAYLIST);
-		hiddenEntity.getImports().add(CLASS_ENTITY);
-		hiddenEntity.getImports().add(CLASS_TYPE);
-		hiddenEntity.getImports().add(CLASS_COLUMN);
-		hiddenEntity.getImports().add(CLASS_GENERATED_VALUE);
-		hiddenEntity.getImports().add(CLASS_GENERATED_VALUE_STRATEGY);
-		hiddenEntity.getImports().add(CLASS_ID);
-		hiddenEntity.getImports().add(CLASS_MANY_TO_ONE);
-		hiddenEntity.getImports().add(CLASS_MANY_TO_MANY);
-		hiddenEntity.getImports().add(CLASS_ONE_TO_MANY);
-		hiddenEntity.getImports().add(CLASS_VIEW);
-		hiddenEntity.getImports().add(CLASS_TABLE);
-
 
 		// Set entities attributes
 		hiddenEntity.setCreateAction(false);
@@ -259,6 +88,28 @@ public class DemactFactory extends ProjectMetadataFactory {
 		comment.setEditAction(false);
 		comment.setShowAction(false);
 		categoryToComment.setListAction(false);
+		
+		demact.getEntities().put(user.getName(), user);
+		demact.getEntities().put(userToUser.getName(), userToUser);
+		demact.getEntities().put(client.getName(), client);
+		demact.getEntities().put(comment.getName(), comment);
+		demact.getEntities().put(category.getName(), category);
+		demact.getEntities().put(categoryToComment.getName(), categoryToComment);
+		demact.getEntities().put(post.getName(), post);
+		demact.getEntities().put(emptyEntity.getName(), emptyEntity);
+		demact.getEntities().put(simpleEntity.getName(), simpleEntity);
+		demact.getEntities().put(userGroup.getName(), userGroup);
+		demact.getEntities().put(viewComponent.getName(), viewComponent);
+		demact.getEntities().put(hiddenEntity.getName(), hiddenEntity);
+		demact.getEntities().put(postToCategory.getName(), postToCategory);
+		
+
+		// Set Implements
+		user.getImplementTypes().add(CLASS_CLONEABLE);
+		
+		
+		
+
 		
 		
 		// Set inheritance
@@ -426,6 +277,135 @@ public class DemactFactory extends ProjectMetadataFactory {
 		DemactFactory.setFieldAsId(userToUser, "friends");
 		DemactFactory.setFieldAsId(userToUser, "UserInternalId");
 		
+		// Set import
+		DemactFactory.addImports(user,
+				CLASS_ISODATETIMEFORMAT,
+				CLASS_DATETIME,
+				CLASS_ENTITY,
+				CLASS_TYPE,
+				CLASS_COLUMN,
+				CLASS_COLUMN_RESULT,
+				CLASS_DISCRIMINATOR_COLUMN,
+				CLASS_GENERATED_VALUE,
+				CLASS_ID,
+				CLASS_GENERATED_VALUE_STRATEGY,
+				CLASS_INHERITANCE_TYPE,
+				CLASS_MANY_TO_ONE,
+				CLASS_MANY_TO_MANY,
+				CLASS_TABLE,
+				CLASS_INHERITANCE_MODE,
+				CLASS_VIEW);
+
+		DemactFactory.addImports(client,
+				CLASS_COLUMN,
+				CLASS_ENTITY);
+
+		DemactFactory.addImports(comment,
+				CLASS_ISODATETIMEFORMAT,
+				CLASS_COLUMN,
+				CLASS_ENTITY,
+				CLASS_TABLE,
+				CLASS_DATETIME,
+				CLASS_GENERATED_VALUE,
+				CLASS_MANY_TO_ONE,
+				CLASS_ONE_TO_MANY,
+				CLASS_ID,
+				CLASS_GENERATED_VALUE_STRATEGY,
+				CLASS_TYPE,
+				CLASS_VIEW);
+
+		DemactFactory.addImports(category,
+				CLASS_COLUMN,
+				CLASS_ENTITY,
+				CLASS_ID,
+				CLASS_GENERATED_VALUE,
+				CLASS_GENERATED_VALUE_STRATEGY,
+				CLASS_ONE_TO_MANY);
+
+		DemactFactory.addImports(categoryToComment,
+				CLASS_COLUMN,
+				CLASS_ENTITY,
+				CLASS_ID,
+				CLASS_MANY_TO_ONE,
+				CLASS_VIEW);
+
+		DemactFactory.addImports(post,
+				CLASS_ISODATETIMEFORMAT,
+				CLASS_DATETIME,
+				CLASS_COLUMN,
+				CLASS_ENTITY,
+				CLASS_TABLE,
+				CLASS_TYPE,
+				CLASS_ID,
+				CLASS_MANY_TO_ONE,
+				CLASS_MANY_TO_MANY,
+				CLASS_ONE_TO_MANY,
+				CLASS_GENERATED_VALUE,
+				CLASS_GENERATED_VALUE_STRATEGY);
+
+		DemactFactory.addImports(emptyEntity,
+				CLASS_ENTITY);
+
+		DemactFactory.addImports(simpleEntity,
+				CLASS_ENTITY,
+				CLASS_COLUMN,
+				CLASS_GENERATED_VALUE,
+				CLASS_GENERATED_VALUE_STRATEGY,
+				CLASS_ID,
+				CLASS_TYPE);
+
+		DemactFactory.addImports(userGroup,
+				CLASS_ENTITY,
+				CLASS_COLUMN,
+				CLASS_ID,
+				CLASS_GENERATED_VALUE,
+				CLASS_GENERATED_VALUE_STRATEGY);
+
+		DemactFactory.addImports(viewComponent,
+				CLASS_ISODATETIMEFORMAT,
+				CLASS_COLUMN,
+				CLASS_ENTITY,
+				CLASS_ID,
+				CLASS_GENERATED_VALUE,
+				CLASS_GENERATED_VALUE_STRATEGY,
+				CLASS_TYPE,
+				CLASS_DATETIME);
+
+		DemactFactory.addImports(hiddenEntity,
+				CLASS_DATETIME,
+				CLASS_ARRAYLIST,
+				CLASS_TYPE,
+				CLASS_COLUMN,
+				CLASS_GENERATED_VALUE,
+				CLASS_GENERATED_VALUE_STRATEGY,
+				CLASS_ID,
+				CLASS_MANY_TO_ONE,
+				CLASS_MANY_TO_MANY,
+				CLASS_ONE_TO_MANY,
+				CLASS_VIEW,
+				CLASS_TABLE);
+		
+		for (EntityMetadata entity : demact.getEntities().values()) {
+			if (!entity.isInternal()) {
+				ManagementFactory.addImports(
+						entity,
+						CLASS_SERIALIZABLE,
+						CLASS_PARCELABLE,
+						CLASS_PARCEL);
+	
+				ManagementFactory.addImplements(
+						entity,
+						CLASS_SERIALIZABLE,
+						CLASS_PARCELABLE);
+				
+				if (!entity.getFields().isEmpty()) {
+					ManagementFactory.addImports(
+							entity,
+							CLASS_LIST,
+							CLASS_ARRAYLIST);
+				}
+			}
+		}
 		
 		return demact;
 	}

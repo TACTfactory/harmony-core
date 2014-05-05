@@ -29,9 +29,6 @@ import com.tactfactory.harmony.utils.TactFileUtils;
  * Used to decorate or generate entities.
  */
 public class EntityGenerator extends BaseGenerator {
-	/** Parcel constant declaration. */
-	private static final String PARCEL_CONSTANT_DECL =
-			"public static final String PARCEL";
 
 	/** Write to parcel method declaration. */
 	private static final String WRITE_TO_PARCEL_REGEN_DECL =
@@ -49,6 +46,9 @@ public class EntityGenerator extends BaseGenerator {
 
 	/** remove HARD CODED String. */
 	private String writeToParcelTemplate = "writeToParcel.java";
+	
+	/** remove HARD CODED String. */
+	private String writeToParcel2Template = "writeToParcel2.java";
 
 	/** remove HARD CODED String. */
 	private String writeToParcelRegenTemplate = "writeToParcelRegen.java";
@@ -70,6 +70,9 @@ public class EntityGenerator extends BaseGenerator {
 
 	/** remove HARD CODED String. */
 	private String parcelConstantTemplate = "parcelConstant.java";
+
+	/** remove HARD CODED String. */
+	private String parcelParentTemplate = "parcelParent.java";
 	
 	/** Entities folder. */
 	private String entityFolder;
@@ -174,14 +177,18 @@ public class EntityGenerator extends BaseGenerator {
 				}
 				
 				// Import ArrayList if relation
-				if (field.getRelation() != null 
-					&& (field.getRelation().getType().equals("ManyToMany")
-						|| field.getRelation().getType().equals("OneToMany"))) {
-					manipulator.addImport(
-							classMeta,
-							"ArrayList",
-							"java.util.ArrayList");
-				}
+				//if (field.getRelation() != null 
+				//	&& (field.getRelation().getType().equals("ManyToMany")
+				//		|| field.getRelation().getType().equals("OneToMany"))) {
+				manipulator.addImport(
+						classMeta,
+						"ArrayList",
+						"java.util.ArrayList");
+				manipulator.addImport(
+						classMeta,
+						"List",
+						"java.util.List");
+				//}
 			}
 		}
 	}
@@ -309,12 +316,36 @@ public class EntityGenerator extends BaseGenerator {
 					this.getDatamodel());
 			
 			manipulator.generateMethod(
+					this.writeToParcel2Template,
+					this.getDatamodel());
+			
+			manipulator.generateMethod(
 					this.describeContentsTemplate,
 					this.getDatamodel());
 
 			manipulator.generateMethod(
 					this.parcelableCreatorTemplate,
 					this.getDatamodel());
+
+			if (!(classMeta.getInheritance() != null
+					&& classMeta.getInheritance().getSuperclass() != null
+					&& classMeta.getInheritance().getSuperclass().hasBeenParsed())) {
+				manipulator.generateField(
+						this.parcelParentTemplate, 
+						this.getDatamodel());
+			}
+			
+			boolean hasDateTime = false;
+			for (FieldMetadata field : classMeta.getFields().values()) {
+				if (field.getType().equals("DateTime")) {
+					hasDateTime = true;
+				}
+			}
+			if (hasDateTime) {
+				manipulator.addImport(classMeta,
+						"ISODateTimeFormat",
+						"org.joda.time.format.ISODateTimeFormat");
+			}
 		}
 	}
 	
@@ -329,22 +360,6 @@ public class EntityGenerator extends BaseGenerator {
 		if (!this.alreadyImplementsDefaultConstructor(classMeta)) {
 			manipulator.generateMethod(
 					this.defaultConstructorTemplate,
-					this.getDatamodel());
-		}
-	}
-			
-	/**
-	 * Add parcel constant.
-	 * 
-	 * @param fileString The string buffer representing the file
-	 * @param classMeta The classMetadata
-	 */
-	protected final void addParcelConstant(
-			final SourceFileManipulator manipulator,
-			final ClassMetadata classMeta) {
-		if (!manipulator.alreadyHasField(PARCEL_CONSTANT_DECL)) {
-			manipulator.generateField(
-					this.parcelConstantTemplate, 
 					this.getDatamodel());
 		}
 	}

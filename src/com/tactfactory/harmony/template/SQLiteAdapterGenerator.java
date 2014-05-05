@@ -111,18 +111,6 @@ public class SQLiteAdapterGenerator extends BaseGenerator {
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
-
-		// Info
-		ConsoleUtils.display(">>> Generate Criterias for "
-				+ this.getDatamodel().get(TagConstant.CURRENT_ENTITY));
-		try {
-			this.makeSourceCriteria(
-					"TemplateCriterias.java",
-					"%sCriterias.java", false);
-
-		} catch (final Exception e) {
-			ConsoleUtils.displayError(e);
-		}
 	}
 
 	/**

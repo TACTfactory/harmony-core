@@ -300,17 +300,18 @@ public abstract class CommonTest {
 	public static Collection<Object[]> getParameters() {
 		Collection<Object[]> result = new ArrayList<Object[]>();
 		
-//		result.add(new ApplicationMetadata[] {
-//				TracScanFactory.generateTestMetadata()
-//		});
+		result.add(new ApplicationMetadata[] {
+				TracScanFactory.generateTestMetadata()
+		});
+		
 		
 		result.add(new ApplicationMetadata[] {
 				DemactFactory.generateTestMetadata()
 		});
 		
-//		result.add(new ApplicationMetadata[] {
-//			ManagementFactory.generateTestMetadata()	
-//		});
+		result.add(new ApplicationMetadata[] {
+			ManagementFactory.generateTestMetadata()	
+		});
 		
 		return result;
 	}
