@@ -13,12 +13,14 @@ import java.util.LinkedHashMap;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
-import com.tactfactory.harmony.ProjectDiscover;
-import com.tactfactory.harmony.TargetPlatform;
+import com.tactfactory.harmony.Harmony;
+import com.tactfactory.harmony.HarmonyContext;
+import com.tactfactory.harmony.ProjectContext;
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.parser.HeaderParser;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.TargetPlatform;
 import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.plateforme.ios.IosAdapter;
 import com.tactfactory.harmony.plateforme.rim.RimAdapter;
@@ -137,6 +139,7 @@ public class ProjectCommand extends BaseCommand {
 								+ ACTION_UPDATE
 								+ SEPARATOR
 								+ SUBJECT_SDK_PATH;
+
 	/** Command : PROJECT:UPDATE:DEPENDENCIES. */
 	public static final String UPDATE_DEPENDENCIES = BUNDLE
 								+ SEPARATOR
@@ -170,13 +173,13 @@ public class ProjectCommand extends BaseCommand {
 				ConsoleUtils.display(">> Project Parameters");
 
 				
-				ProjectDiscover.initProjectName(
+				ProjectContext.promptProjectName(
 						this.getCommandArgs());
 				
-				ProjectDiscover.initProjectNameSpace(
+				ProjectContext.promptProjectNameSpace(
 						this.getCommandArgs());
 				
-				ProjectDiscover.initProjectAndroidSdkPath(
+				HarmonyContext.initProjectAndroidSdkPath(
 						this.getCommandArgs());
 
 				ConsoleUtils.display("Project Name: "
@@ -235,6 +238,8 @@ public class ProjectCommand extends BaseCommand {
 			if (new ProjectGenerator(this.adapterAndroid).makeProject()) {
 				ConsoleUtils.displayDebug("Init Android Project Success!");
 
+				Harmony.getInstance().getProjectContext()
+				    .addAdapter(TargetPlatform.ANDROID, this.adapterAndroid);
 				new ApplicationGenerator(this.adapterAndroid)
 							.generateApplication();
 				result = true;
@@ -262,6 +267,8 @@ public class ProjectCommand extends BaseCommand {
 		try {
 			if (new ProjectGenerator(this.adapterIOS).makeProject()) {
 				ConsoleUtils.displayDebug("Init IOS Project Success!");
+			    Harmony.getInstance().getProjectContext()
+			        .addAdapter(TargetPlatform.IPHONE, this.adapterIOS);
 				result = true;
 			} else {
 				ConsoleUtils.displayError(
@@ -287,6 +294,8 @@ public class ProjectCommand extends BaseCommand {
 		try {
 			if (new ProjectGenerator(this.adapterRIM).makeProject()) {
 				ConsoleUtils.displayDebug("Init RIM Project Success!");
+				Harmony.getInstance().getProjectContext()
+                    .addAdapter(TargetPlatform.RIM, this.adapterRIM);
 				result = true;
 			} else {
 				ConsoleUtils.displayError(
@@ -312,6 +321,8 @@ public class ProjectCommand extends BaseCommand {
 		try {
 			if (new ProjectGenerator(this.adapterWinPhone).makeProject()) {
 				ConsoleUtils.displayDebug("Init WinPhone Project Success!");
+				Harmony.getInstance().getProjectContext()
+                    .addAdapter(TargetPlatform.WINPHONE, this.adapterWinPhone);
 				result = true;
 			} else {
 				ConsoleUtils.displayError(
@@ -543,7 +554,7 @@ public class ProjectCommand extends BaseCommand {
 
 		if (action.equals(UPDATE_SDK)) {
 			ApplicationMetadata.setAndroidSdkPath("");
-			ProjectDiscover.initProjectAndroidSdkPath(this.getCommandArgs());
+			HarmonyContext.initProjectAndroidSdkPath(this.getCommandArgs());
 			ProjectGenerator.updateSDKPath();
 		} else
 

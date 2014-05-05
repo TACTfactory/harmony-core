@@ -43,11 +43,20 @@ public class Question {
 	}
 
 	/**
-	 * @param paramName the paramName to set
+	 * @param paramName the parameter full name to set
 	 */
 	public final void setParamName(String paramName) {
 		this.paramName = paramName;
 	}
+
+	/**
+     * @param paramName the parameter full name to set
+     * @param shortParamName the parameter short name to set
+     */
+    public final void setParamName(String paramName, String shortParamName) {
+        this.setParamName(paramName);
+        this.setShortParamName(shortParamName);
+    }
 
 	/**
 	 * @return the shortParamName
@@ -76,6 +85,14 @@ public class Question {
 	public void setQuestion(String question) {
 		this.question = question;
 	}
+	
+	/**
+     * @param format The question to set (with format).
+     * @param params Array of parameters of the formated question.
+     */
+    public void setQuestion(String format, Object... params) {
+        this.question = String.format(format, params);
+    }
 
 	/**
 	 * @return the authorizedValues

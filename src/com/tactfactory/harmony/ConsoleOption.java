@@ -2,8 +2,11 @@ package com.tactfactory.harmony;
 
 import com.google.common.base.Strings;
 
-/** Possible options. */
-public enum Option {
+/**
+ * Harmony options.<br/>
+ * Available options for harmony instance.
+ */
+public enum ConsoleOption {
 	//name		Internal	Short	Help message
 	/** Help command. */
 	HELP		("help",	"h",	"Display this help message."),
@@ -23,13 +26,13 @@ public enum Option {
 	// "\t--env\t\t -e The Environment name.\n" +
 	// "\t--no-debug \t    Switches off debug mode.\n\n"
 
-	/** Option full name. */
+	/** ConsoleOption full name. */
 	private String fullName;
 
-	/** Option short name. */
+	/** ConsoleOption short name. */
 	private String shortName;
 
-	/** Option description. */
+	/** ConsoleOption description. */
 	private String description;
 
 	/**
@@ -38,7 +41,7 @@ public enum Option {
 	 * @param sName The option short name
 	 * @param desc The option description
 	 */
-	private Option(final String fName,
+	private ConsoleOption(final String fName,
 			final String sName,
 			final String desc) {
 		this.fullName = fName;
@@ -81,12 +84,12 @@ public enum Option {
 	 * @param value The full name
 	 * @return The option
 	 */
-	public static Option fromFullName(final String value) {
-		Option ret = null;
+	public static ConsoleOption fromFullName(final String value) {
+		ConsoleOption ret = null;
 		if (value != null) {
-			for (final Option option : Option.values()) {
-				if (value.equalsIgnoreCase(option.fullName)) {
-					ret = option;
+			for (final ConsoleOption consoleOption : ConsoleOption.values()) {
+				if (value.equalsIgnoreCase(consoleOption.fullName)) {
+					ret = consoleOption;
 				}
 			}
 		}
@@ -99,12 +102,12 @@ public enum Option {
 	 * @param value The short name
 	 * @return The option
 	 */
-	public static Option fromShortName(final String value) {
-		Option ret = null;
+	public static ConsoleOption fromShortName(final String value) {
+		ConsoleOption ret = null;
 		if (value != null) {
-			for (final Option option : Option.values()) {
-				if (value.equalsIgnoreCase(option.shortName)) {
-					ret = option;
+			for (final ConsoleOption consoleOption : ConsoleOption.values()) {
+				if (value.equalsIgnoreCase(consoleOption.shortName)) {
+					ret = consoleOption;
 				}
 			}
 		}

@@ -14,7 +14,6 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
-import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -42,10 +41,6 @@ public class ResourceCommand extends BaseCommand {
 	public static final String GENERATE_TRANSLATE	=
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_TRANSLATE;
 
-	//internal
-	/** Adapter. */
-	private final BaseAdapter adapter = new AndroidAdapter();
-
 	@Override
 	public final void summary() {
 		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
@@ -65,12 +60,14 @@ public class ResourceCommand extends BaseCommand {
 
 		this.setCommandArgs(Console.parseCommandArgs(args));
 
-		try {
-			if (action.equals(GENERATE_IMAGE)) {
-				this.adapter.resizeImage();
-			}
-		} catch (final Exception e) {
-			ConsoleUtils.displayError(e);
+		for(BaseAdapter adapter : this.adapters) {
+    		try {
+    			if (action.equals(GENERATE_IMAGE)) {
+    				adapter.resizeImage();
+    			}
+    		} catch (final Exception e) {
+    			ConsoleUtils.displayError(e);
+    		}
 		}
 	}
 

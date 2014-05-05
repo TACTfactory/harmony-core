@@ -14,7 +14,6 @@ import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.command.questionnary.Question;
 import com.tactfactory.harmony.command.questionnary.Questionnary;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
-import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.template.BundleGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
@@ -38,10 +37,6 @@ public class BundleCommand extends BaseCommand {
 	/** Command : BUNDLE:GENERATE:EMPTYBUNDLE. */
 	public static final String GENERATE_EMPTY_BUNDLE =
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_EMPTY_BUNDLE;
-
-	/** Adapter. */
-	private BaseAdapter adapter = new AndroidAdapter();
-
 
 	@Override
 	public final void execute(final String action,
@@ -87,10 +82,12 @@ public class BundleCommand extends BaseCommand {
 			
 			questionnary.launchQuestionnary();
 
-			new BundleGenerator(this.adapter).generateBundleFiles(
-					questionnary.getAnswer("owner"),
-					questionnary.getAnswer("name"),
-					questionnary.getAnswer("namespace"));
+			for(BaseAdapter adapter : this.adapters) {
+			    new BundleGenerator(adapter).generateBundleFiles(
+			            questionnary.getAnswer("owner"),
+			            questionnary.getAnswer("name"),
+			            questionnary.getAnswer("namespace"));
+			}
 		}
 	}
 

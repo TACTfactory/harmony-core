@@ -22,13 +22,13 @@ import org.rauschig.jarchivelib.ArchiveFormat;
 
 import com.google.common.base.Joiner;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.threads.DownloadFileThread;
-import com.tactfactory.harmony.threads.UnpackThread;
-import com.tactfactory.harmony.threads.DownloadFileThread.OnDownloadFinishedListener;
-import com.tactfactory.harmony.threads.UnpackThread.OnUnpackedFinishedListener;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
 import com.tactfactory.harmony.utils.XMLUtils;
+import com.tactfactory.harmony.utils.threads.DownloadFileThread;
+import com.tactfactory.harmony.utils.threads.UnpackThread;
+import com.tactfactory.harmony.utils.threads.DownloadFileThread.OnDownloadFinishedListener;
+import com.tactfactory.harmony.utils.threads.UnpackThread.OnUnpackedFinishedListener;
 
 /**
  * Manager class for Android SDK.

@@ -14,10 +14,10 @@ import japa.parser.ast.body.Parameter;
 
 import java.util.List;
 
-import com.tactfactory.harmony.parser.JavaModelParser;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.MethodMetadata;
 import com.tactfactory.harmony.parser.BaseParser;
+import com.tactfactory.harmony.parser.java.JavaModelParser;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

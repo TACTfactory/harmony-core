@@ -8,6 +8,11 @@
  */
 package com.tactfactory.harmony.command;
 
+import java.util.ArrayList;
+
+import com.tactfactory.harmony.parser.BaseParser;
+import com.tactfactory.harmony.plateforme.BaseAdapter;
+
 import net.xeoh.plugins.base.Plugin;
 
 
@@ -37,4 +42,16 @@ public interface Command extends Plugin {
 	 * @return true if found
 	 */
 	boolean isAvailableCommand(String command);
+
+	/**
+     * Register a parser to the global parser.
+     * @param parser The parser to register.
+     */
+    void registerParser(BaseParser parser);
+
+	/**
+	 * Register platform adapter to generate.
+	 * @param adapters
+	 */
+	void registerAdapters(ArrayList<BaseAdapter> adapters);
 }

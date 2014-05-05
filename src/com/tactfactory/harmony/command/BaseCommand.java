@@ -17,19 +17,26 @@ import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.parser.BaseParser;
 import com.tactfactory.harmony.parser.ClassCompletor;
 import com.tactfactory.harmony.parser.HeaderParser;
-import com.tactfactory.harmony.parser.JavaModelParser;
+import com.tactfactory.harmony.parser.java.JavaModelParser;
+import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
  * Common Command structure.
  */
 public abstract class BaseCommand implements Command {
-	/** Registered parsers for the global parser. */
-	private ArrayList<BaseParser> registeredParsers
+
+    /** Command separator. */
+    protected static final String SEPARATOR = ":";
+
+    /** Registered parsers for the global parser. */
+    protected ArrayList<BaseParser> registeredParsers
 			= new ArrayList<BaseParser>();
 
-	/** Command separator. */
-	protected static final String SEPARATOR = ":";
+	/** Adapter to apply generator */
+	protected ArrayList<BaseAdapter> adapters
+            = new ArrayList<BaseAdapter>();
+            
 
 	/** Command arguments. */
 	private HashMap<String, String> commandArgs;
@@ -37,6 +44,7 @@ public abstract class BaseCommand implements Command {
 	/** Parser. */
 	private JavaModelParser javaModelParser;
 
+	
 	/**
 	 * Gets the Metadatas of all the entities actually in the package entity.
 	 * You can register your own bundle parsers
@@ -46,7 +54,9 @@ public abstract class BaseCommand implements Command {
 		ApplicationMetadata.INSTANCE.getClasses().clear();
 		ApplicationMetadata.INSTANCE.getEntities().clear();
 		ApplicationMetadata.INSTANCE.getEnums().clear();
+
 		HeaderParser.parseHeaderFile();
+
 		ConsoleUtils.display(">> Analyse Models...");
 		this.javaModelParser = new JavaModelParser();
 		for (final BaseParser parser : this.registeredParsers) {
@@ -77,12 +87,14 @@ public abstract class BaseCommand implements Command {
 		}
 	}
 
-	/**
-	 * Register a parser to the global parser.
-	 * @param parser The parser to register.
-	 */
+	@Override
 	public final void registerParser(final BaseParser parser) {
 		this.registeredParsers.add(parser);
+	}
+
+	@Override
+	public final void registerAdapters(final ArrayList<BaseAdapter> adapters) {
+	    this.adapters = adapters;
 	}
 
 	/**

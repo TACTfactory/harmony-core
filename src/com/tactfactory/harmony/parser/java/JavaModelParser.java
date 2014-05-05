@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.harmony.parser;
+package com.tactfactory.harmony.parser.java;
 
 import japa.parser.JavaParser;
 import japa.parser.ParseException;
@@ -27,6 +27,7 @@ import com.tactfactory.harmony.meta.InterfaceMetadata;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
+import com.tactfactory.harmony.parser.BaseParser;
 import com.tactfactory.harmony.parser.java.visitor.FileVisitor;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.plateforme.android.AndroidAdapter;

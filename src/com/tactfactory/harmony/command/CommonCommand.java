@@ -18,7 +18,6 @@ import com.tactfactory.harmony.command.questionnary.Question;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
-import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.template.CommonGenerator;
 import com.tactfactory.harmony.template.CommonGenerator.ViewType;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -55,10 +54,6 @@ public class CommonCommand extends BaseCommand {
 	/** Command : COMMON:GENERATE:STATIC. */
 	public static final String GENERATE_STATIC =
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_STATIC;
-
-	/** Adapter. */
-	private BaseAdapter adapter = new AndroidAdapter();
-
 
 	@Override
 	public final void execute(final String action,
@@ -138,12 +133,13 @@ public class CommonCommand extends BaseCommand {
 				ApplicationMetadata.INSTANCE.getEntities().get(
 						linkedEntityName);
 		
-		
-		new CommonGenerator(this.adapter).generateStaticView(
-				packageName,
-				viewName,
-				viewType,
-				linkedEntity);
+		for(BaseAdapter adapter : this.adapters) {
+		    new CommonGenerator(adapter).generateStaticView(
+		            packageName,
+		            viewName,
+		            viewType,
+		            linkedEntity);
+		}
 	}
 
 	@Override

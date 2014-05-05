@@ -13,8 +13,20 @@ import java.util.HashMap;
 
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
-/** Harmony console class. */
-public abstract class Console /*extends Harmony*/ {
+/** 
+ * Harmony console class. <br/>
+ * This class is use for transforming the parameters from command line to Harmony.<br/>
+ * 3 types of parameters is available :
+ * <ol><li>Harmony Options @see ConsoleOption </li>
+ * <li>Command</li>
+ * <li>Command options (multi separate by space char)</li></ol>
+ * <br/><br>
+ * eg. -V list
+ * <ol><li>Harmony option : -V (Version display)</li>
+ * <li>Command : list (show all available commands)</li></ol>
+ */
+public abstract class Console {
+
 	/** NB Required commands constant. */
 	private static final int REQUIRED_COMMANDS = 3;
 
@@ -47,12 +59,12 @@ public abstract class Console /*extends Harmony*/ {
 							"Usage:\n\t[options] command [arguments]\n");
 			
 			ConsoleUtils.display("\nOptions:\n"
-					+ Option.HELP
-					+ Option.QUIET
-					+ Option.VERBOSE
-					+ Option.VERSION
-					+ Option.ANSI
-					+ Option.NO_ANSI);
+					+ ConsoleOption.HELP
+					+ ConsoleOption.QUIET
+					+ ConsoleOption.VERBOSE
+					+ ConsoleOption.VERSION
+					+ ConsoleOption.ANSI
+					+ ConsoleOption.NO_ANSI);
 			
 			ConsoleUtils.display("\nCommand:\n\tUse 'list' command to"
 					 + " display available commands!\n");
@@ -138,27 +150,27 @@ public abstract class Console /*extends Harmony*/ {
 					}
 
 					// Quiet mode
-					if (Option.QUIET.equal(key)) {
+					if (ConsoleOption.QUIET.equal(key)) {
 						ConsoleUtils.setQuiet(true);
 					} else
 
 					// Verbose mode
-					if (Option.VERBOSE.equal(key)) {
+					if (ConsoleOption.VERBOSE.equal(key)) {
 						ConsoleUtils.setDebug(true);
 					} else
 
 					// Version mode
-					if (Option.VERSION.equal(key)) {
+					if (ConsoleOption.VERSION.equal(key)) {
 						ConsoleUtils.displayLicence(HARMONY_VERSION);
 					} else
 
 					// ANSI mode (default)
-					if (Option.ANSI.equal(key)) {
+					if (ConsoleOption.ANSI.equal(key)) {
 						ConsoleUtils.setAnsi(true);
 					} else
 
 					// NO_ANSI mode
-					if (Option.NO_ANSI.equal(key)) {
+					if (ConsoleOption.NO_ANSI.equal(key)) {
 						ConsoleUtils.setAnsi(false);
 					}
 				} else {
@@ -188,7 +200,6 @@ public abstract class Console /*extends Harmony*/ {
 	 * @param args String array of command arguments with their identifier
 	 * @return HashMap<String, String> arguments
 	 */
-
 	public static HashMap<String, String> parseCommandArgs(
 			final String[] args) {
 
