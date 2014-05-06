@@ -20,14 +20,6 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  * Used to decorate or generate entities.
  */
 public class EntityGenerator extends BaseGenerator<IAdapter> {
-	
-	private String writeToParcel2Template = "writeToParcel2.java";
-
-	/** remove HARD CODED String. */
-
-	/** remove HARD CODED String. */
-	private String parcelParentTemplate = "parcelParent.java";
-	
 
 	/** Constructor.
 	 * @param adapter Adapter used by this generator
