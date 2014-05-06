@@ -175,22 +175,17 @@ public class EntityGenerator extends BaseGenerator {
 
 					manipulator.generateFieldAccessor(field, this.setterTemplate);
 				}
-				
-				// Import ArrayList if relation
-				//if (field.getRelation() != null 
-				//	&& (field.getRelation().getType().equals("ManyToMany")
-				//		|| field.getRelation().getType().equals("OneToMany"))) {
-				manipulator.addImport(
-						classMeta,
-						"ArrayList",
-						"java.util.ArrayList");
-				manipulator.addImport(
-						classMeta,
-						"List",
-						"java.util.List");
-				//}
 			}
 		}
+		// Import ArrayList and List for parcelable
+		manipulator.addImport(
+				classMeta,
+				"ArrayList",
+				"java.util.ArrayList");
+		manipulator.addImport(
+				classMeta,
+				"List",
+				"java.util.List");
 	}
 	
 	/**

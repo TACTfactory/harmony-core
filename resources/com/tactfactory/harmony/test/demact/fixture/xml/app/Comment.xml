@@ -5,7 +5,7 @@
 		<content>Commentaire 1</content>
 		<owner>Dupond</owner>
 		<post>Post1</post>
-		<createdAt>2012-01-01T00:00:00</createdAt>
+		<createdAt>2012-01-01 00:00</createdAt>
 		<validate>true</validate>
 	</Comment>
 	<Comment id="Comment2">
@@ -13,7 +13,7 @@
 		<content>Commentaire 2</content>
 		<owner>Haddock</owner>
 		<post>Post2</post>
-		<createdAt>2012-01-01T00:00:00+02:00</createdAt>
+		<createdAt>2012-01-01 00:00</createdAt>
 		<validate>true</validate>
 	</Comment>
 	<Comment id="Comment3">
@@ -21,7 +21,7 @@
 		<content>Commentaire 3</content>
 		<owner>Tournesol</owner>
 		<post>Post3</post>
-		<createdAt>2012-01-01T00:00:00-02:00</createdAt>
+		<createdAt>2012-01-01 00:00</createdAt>
 		<validate>false</validate>
 	</Comment>
 </list>

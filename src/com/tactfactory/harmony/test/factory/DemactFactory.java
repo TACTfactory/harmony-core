@@ -398,12 +398,10 @@ public class DemactFactory extends ProjectMetadataFactory {
 						CLASS_SERIALIZABLE,
 						CLASS_PARCELABLE);
 				
-				if (!entity.getFields().isEmpty()) {
-					ManagementFactory.addImports(
-							entity,
-							CLASS_LIST,
-							CLASS_ARRAYLIST);
-				}
+				ManagementFactory.addImports(
+						entity,
+						CLASS_LIST,
+						CLASS_ARRAYLIST);
 			}
 		}
 		
