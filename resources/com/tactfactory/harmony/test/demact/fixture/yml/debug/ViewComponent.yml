@@ -18,7 +18,6 @@ ViewComponent:
       shortField: 1
       character: "A"
       choice: 0
-      booleanObject: true
    DEBUG - VC2:
       id: 0
       string: "DEBUG - VC2 String"
@@ -38,7 +37,6 @@ ViewComponent:
       shortField: 1
       character: "A"
       choice: 0
-      booleanObject: true
    DEBUG - VC3:
       id: 0
       string: "DEBUG - VC3 String"
@@ -58,4 +56,3 @@ ViewComponent:
       shortField: 1
       character: "A"
       choice: 0
-      booleanObject: true

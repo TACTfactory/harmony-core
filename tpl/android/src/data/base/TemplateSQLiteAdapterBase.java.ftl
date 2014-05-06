@@ -456,7 +456,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		</#if>
 	</#list>
 	<#if (singleTabInheritance && !isTopMostSuperClass)>
-		long insertResult = this.motherAdapter.insert(null, values);		
+		int insertResult = (int) this.motherAdapter.insert(null, values);		
 	<#else>
 	<#if !InheritanceUtils.isExtended(curr)>
 		int insertResult;
@@ -491,7 +491,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					<#if InheritanceUtils.isExtended(curr)>currentValues<#else>values</#if>);
 		}
 		<#list curr_ids as id><#if id.strategy == "IDENTITY">
-		item.set${id.name?cap_first}((int) insertResult);
+		item.set${id.name?cap_first}(insertResult);
 		</#if></#list>
 	</#if>
 	<#list (ViewUtils.getAllRelations(curr)) as relation>

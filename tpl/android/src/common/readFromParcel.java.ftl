@@ -18,6 +18,17 @@
 		this.set${field.name?cap_first}(parc.readInt() == 1);
 					<#elseif field.type == "String">
 		this.set${field.name?cap_first}(parc.readString());
+					<#elseif field.type?lower_case == "byte">
+		this.set${field.name?cap_first}(parc.readByte());
+					<#elseif field.type?lower_case == "char">
+		this.set${field.name?cap_first}(parc.readString().charAt(0));
+					<#elseif field.type?lower_case == "short">
+		this.set${field.name?cap_first}((short) parc.readInt());
+					<#elseif field.type?lower_case == "character">
+		int ${field.name}Bool = parc.readInt();
+		if (${field.name}Bool == 1) {
+			this.set${field.name?cap_first}(parc.readString().charAt(0));
+		}
 					<#elseif field.type?lower_case == "datetime">
 		if (parc.readInt() == 1) {
 			this.set${field.name?cap_first}(

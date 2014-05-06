@@ -172,8 +172,10 @@ public final class ${curr.name?cap_first}DataLoader
 					<#else>
 		${curr.name?uncap_first}.set${field.name?cap_first}(this.parseMultiRelationField(columns, ${NamingUtils.fixtureAlias(field)}, ${field.relation.targetEntity}DataLoader.getInstance(this.ctx)));
 						<#if (field.relation.type == "OneToMany" && field.relation.mappedBy?? && field.relation.mappedBy?? && !entities[field.relation.targetEntity].fields[field.relation.mappedBy].internal)>
-		for (${field.relation.targetEntity} related : ${curr.name?uncap_first}.get${field.name?cap_first}()) {
-			related.set${field.relation.mappedBy?cap_first}(${curr.name?uncap_first});
+		if (${curr.name?uncap_first}.get${field.name?cap_first}() != null) {
+			for (${field.relation.targetEntity} related : ${curr.name?uncap_first}.get${field.name?cap_first}()) {
+				related.set${field.relation.mappedBy?cap_first}(${curr.name?uncap_first});
+			}
 		}
 						</#if>
 					</#if>

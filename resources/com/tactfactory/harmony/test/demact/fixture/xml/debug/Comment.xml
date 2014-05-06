@@ -5,7 +5,7 @@
 		<content>DEBUG - Commentaire 1</content>
 		<owner>DEBUG - Dupond</owner>
 		<post>DEBUG - Post1</post>
-		<createdAt>2012-01-01T00:00:00</createdAt>
+		<createdAt>2012-01-01 00:00</createdAt>
 		<validate>true</validate>
 	</Comment>
 	<Comment id="DEBUG - Comment2">
@@ -13,7 +13,7 @@
 		<content>DEBUG - Commentaire 2</content>
 		<owner>DEBUG - Haddock</owner>
 		<post>DEBUG - Post2</post>
-		<createdAt>2012-01-01T00:00:00</createdAt>
+		<createdAt>2012-01-01 00:00</createdAt>
 		<validate>true</validate>
 	</Comment>
 	<Comment id="DEBUG - Comment3">
@@ -21,7 +21,7 @@
 		<content>DEBUG - Commentaire 3</content>
 		<owner>DEBUG - Tournesol</owner>
 		<post>DEBUG - Post3</post>
-		<createdAt>2012-01-01T00:00:00</createdAt>
+		<createdAt>2012-01-01 00:00</createdAt>
 		<validate>false</validate>
 	</Comment>
 </list>

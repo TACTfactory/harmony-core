@@ -89,7 +89,8 @@ public final class SqliteAdapter {
 					fm.getOwner().getInheritance() != null 
 					&& fm.getOwner().getInheritance().getType() 
 									== InheritanceMode.SINGLE_TABLE
-					&& fm.getOwner().getInheritance().getSuperclass() != null;
+					&& fm.getOwner().getInheritance().getSuperclass() != null
+					&& fm.getOwner().getInheritance().getSuperclass().hasBeenParsed();
 			
 			
 			// Set Nullable
