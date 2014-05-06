@@ -24,8 +24,8 @@ namespace ${project_namespace}.Fixture
         private const String TAG = "DataManager";
         
         /** HashMap to join Entity Name and its SQLiteAdapterBase. */
-        protected IDictionary<String, SqlAdapterBase> adapters =
-                new Dictionary<String, SqlAdapterBase>();
+        protected IDictionary<Type, SqlAdapterBase> adapters =
+                new Dictionary<Type, SqlAdapterBase>();
         /** is successfull. */
         protected bool isSuccessfull = true;
         /** is in internal transaction. */
@@ -47,11 +47,12 @@ namespace ${project_namespace}.Fixture
         public DataManager(DataContext context)
         {
             this.context = context;
+            
             <#list entities?values as entity>
                 <#if ((entity.fields?size>0) && !(entity.internal))>
-            this.adapters.Add(${entity.name?upper_case},
+            this.adapters.Add(typeof(${entity.name}),
                     new ${entity.name?cap_first}SqlAdapter(context));
-            this.adapters[${entity.name?upper_case}].open(this.db);
+            
                 </#if>
             </#list>
         }
@@ -111,7 +112,7 @@ namespace ${project_namespace}.Fixture
             }
             catch (Exception ex)
             {
-                Log.D("", ex);
+                Log.D(TAG, ex);
                 this.isSuccessfull = false;
                 result = 0;
             }
@@ -133,16 +134,7 @@ namespace ${project_namespace}.Fixture
             
             try
             {
-            <#list entities?values as entity>
-                <#if ((entity.fields?size>0 && entity.ids?size>0) && !(entity.internal))>
-                if (obj is ${entity.name})
-                {
-                    ((${entity.name}SqlAdapter)
-                            this.adapters[${entity.name?upper_case}])
-                                .remove(<#list entity.ids as id>((${entity.name}) obj).get${id.name?cap_first}()<#if id_has_next>, </#if></#list>);
-                }
-                </#if>
-            </#list>
+                ((SqlAdapterBase<T>)this.adapters[typeof(T)]).Delete(obj);
             }
             catch (Exception ex)
             {
@@ -162,7 +154,7 @@ namespace ${project_namespace}.Fixture
             {
                 if (this.isSuccessfull)
                 {
-                    this.context.SubmitChanges;
+                    this.context.SubmitChanges();
                     //this.db.setTransactionSuccessful();
                 }
                 
@@ -179,7 +171,7 @@ namespace ${project_namespace}.Fixture
          */
         public SqlAdapterBase<T> getRepository<T>(String className) where T : class
         {
-            return this.adapters[className];
+            return (SqlAdapterBase<T>) this.adapters[typeof(T)];
         }
     
     

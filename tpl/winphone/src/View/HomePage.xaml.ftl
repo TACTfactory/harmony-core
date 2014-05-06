@@ -109,7 +109,7 @@
                     Margin="0,0,0,20"
                     Text="http://support.tactfactory.com/harmony/"/>
                 <#list entities?values as entity>           
-                    <#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && !entity.hidden)>
+                    <#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && entity.listAction)>
                 <Button Name="Button${entity.name}" Content="List all ${entity.name}"/>
                     </#if>
                 </#list>
