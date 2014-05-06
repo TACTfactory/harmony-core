@@ -85,6 +85,8 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		super.tearDown();
 	}
 
+	/********** Direct Provider calls. *******/
+
 	/** Test case Create Entity */
 	@SmallTest
 	public void testCreate() {
@@ -121,7 +123,6 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		}
 	}
 
-	/********** Direct Provider calls. *******/
 	/** Test case Read Entity */
 	@SmallTest
 	public void testRead() {
@@ -179,7 +180,9 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 				</#list>
 				<#list curr_relations as relation>
 					<#if ((relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany") && (!MetadataUtils.getInversingField(relation)?? || !MetadataUtils.getInversingField(relation).nullable))>
-				${curr.name?uncap_first}.get${relation.name?cap_first}().addAll(this.entity.get${relation.name?cap_first}());
+				if (this.entity.get${relation.name?cap_first}() != null) {
+					${curr.name?uncap_first}.get${relation.name?cap_first}().addAll(this.entity.get${relation.name?cap_first}());
+				}
 					</#if>
 				</#list>
 
@@ -303,17 +306,19 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			</#list>
 			<#list curr_relations as relation>
 				<#if ((relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany") && (!MetadataUtils.getInversingField(relation)?? || !MetadataUtils.getInversingField(relation).nullable))>
-			for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first} : this.entity.get${relation.name?cap_first}()) {
-				boolean found = false;
-				for (${relation.relation.targetEntity} ${relation.relation.targetEntity?uncap_first}2 : ${curr.name?uncap_first}.get${relation.name?cap_first}()) {
-					if (<#list IdsUtils.getAllIdsGetters(entities[relation.relation.targetEntity]) as id>${relation.relation.targetEntity?uncap_first}${id}<#if MetadataUtils.isPrimitive(entities[relation.relation.targetEntity].ids[id_index])> == <#else>.equals(</#if>${relation.relation.targetEntity?uncap_first}2${id}<#if !MetadataUtils.isPrimitive(entities[relation.relation.targetEntity].ids[id_index])>)</#if><#if id_has_next>
-						 && </#if></#list> ) {
-						found = true;
-						break;
+			if (this.entity.get${relation.name?cap_first}() != null) {
+				for (${relation.relation.targetEntity} ${relation.name} : this.entity.get${relation.name?cap_first}()) {
+					boolean found = false;
+					for (${relation.relation.targetEntity} ${relation.name}2 : ${curr.name?uncap_first}.get${relation.name?cap_first}()) {
+						if (<#list IdsUtils.getAllIdsGetters(entities[relation.relation.targetEntity]) as id>${relation.name}${id}<#if MetadataUtils.isPrimitive(entities[relation.relation.targetEntity].ids[id_index])> == <#else>.equals(</#if>${relation.name}2${id}<#if !MetadataUtils.isPrimitive(entities[relation.relation.targetEntity].ids[id_index])>)</#if><#if id_has_next>
+							 && </#if></#list> ) {
+							found = true;
+							break;
+						}
+					}					
+					if(!found) {
+						${curr.name?uncap_first}.get${relation.name?cap_first}().add(${relation.name});
 					}
-				}					
-				if(!found) {
-					${curr.name?uncap_first}.get${relation.name?cap_first}().add(${relation.relation.targetEntity?uncap_first});
 				}
 			}
 				</#if>

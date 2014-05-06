@@ -7,9 +7,9 @@
 		<categories>TEST - Radotage</categories>
 		<owner>TEST - Dupond</owner>
 		<comments></comments>
-		<createdAt>2012-01-01T00:00:00</createdAt>
-		<updatedAt>2012-01-01T00:00:00</updatedAt>
-		<expiresAt>2012-01-01T00:00:00</expiresAt>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<updatedAt>2012-01-01 00:00</updatedAt>
+		<expiresAt>2012-01-01 00:00</expiresAt>
 	</Post>
 	<Post id="TEST - Post2">
 		<id>0</id>
@@ -18,9 +18,9 @@
 		<categories>TEST - Insulte</categories>
 		<owner>TEST - Haddock</owner>
 		<comments></comments>
-		<createdAt>2012-01-01T00:00:00</createdAt>
-		<updatedAt>2012-01-01T00:00:00</updatedAt>
-		<expiresAt>2012-01-01T00:00:00</expiresAt>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<updatedAt>2012-01-01 00:00</updatedAt>
+		<expiresAt>2012-01-01 00:00</expiresAt>
 	</Post>
 	<Post id="TEST - Post3">
 		<id>0</id>
@@ -29,8 +29,8 @@
 		<categories>TEST - Fait scientifique</categories>
 		<owner>TEST - Tournesol</owner>
 		<comments></comments>
-		<createdAt>2012-01-01T00:00:00</createdAt>
-		<updatedAt>2012-01-01T00:00:00</updatedAt>
-		<expiresAt>2012-01-01T00:00:00</expiresAt>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<updatedAt>2012-01-01 00:00</updatedAt>
+		<expiresAt>2012-01-01 00:00</expiresAt>
 	</Post>
 </list>

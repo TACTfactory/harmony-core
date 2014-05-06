@@ -6,7 +6,7 @@
 		<lastname>DEBUG - Client - Dupont</lastname>
 		<login>DEBUG - Client - dup</login>
 		<password>DEBUG - Client - password</password>
-		<createdAt>2012-01-01T00:00:00</createdAt>
+		<createdAt>2012-01-01 00:00</createdAt>
 		<birthdate>2012-01-01</birthdate>
 		<adress>Address1</adress>
 		<userGroup>User</userGroup>
@@ -18,7 +18,7 @@
 		<lastname>DEBUG - Client - Archibald</lastname>
 		<login>DEBUG - Client - had</login>
 		<password>DEBUG - Client - password</password>
-		<createdAt>2012-01-01T00:00:00</createdAt>
+		<createdAt>2012-01-01 00:00</createdAt>
 		<birthdate>2012-01-01</birthdate>
 		<adress>Address1</adress>
 		<userGroup>User</userGroup>
@@ -30,10 +30,10 @@
 		<lastname>DEBUG - Client - Tryphon</lastname>
 		<login>DEBUG - Client - tou</login>
 		<password>DEBUG - Client - password</password>
-		<createdAt>2012-01-01T00:00:00</createdAt>
+		<createdAt>2012-01-01 00:00</createdAt>
 		<birthdate>2012-01-01</birthdate>
 		<adress>Address1</adress>
 		<userGroup>User</userGroup>
-		<title>0</title>
+		<title>2</title>
 	</Client>
 </list>

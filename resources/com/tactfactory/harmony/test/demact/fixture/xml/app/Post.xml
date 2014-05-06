@@ -10,9 +10,9 @@
 			<category>HiTech</category>
 		</categories>
 		<comments></comments>
-		<createdAt>2012-01-01T00:00:00</createdAt>
-		<updatedAt>2012-01-01T00:00:00</updatedAt>
-		<expiresAt>2012-01-01T00:00:00</expiresAt>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<updatedAt>2012-01-01 00:00</updatedAt>
+		<expiresAt>2012-01-01 00:00</expiresAt>
 	</Post>
 	<Post id="Post2">
 		<id>0</id>
@@ -24,9 +24,9 @@
 			<category>HiTech</category>
 		</categories>
 		<comments></comments>
-		<createdAt>2012-01-01T00:00:00</createdAt>
-		<updatedAt>2012-01-01T00:00:00</updatedAt>
-		<expiresAt>2012-01-01T00:00:00</expiresAt>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<updatedAt>2012-01-01 00:00</updatedAt>
+		<expiresAt>2012-01-01 00:00</expiresAt>
 	</Post>
 	<Post id="Post3">
 		<id>0</id>
@@ -38,8 +38,8 @@
 			<category>HiTech</category>
 		</categories>
 		<comments></comments>
-		<createdAt>2012-01-01T00:00:00</createdAt>
-		<updatedAt>2012-01-01T00:00:00</updatedAt>
-		<expiresAt>2012-01-01T00:00:00</expiresAt>
+		<createdAt>2012-01-01 00:00</createdAt>
+		<updatedAt>2012-01-01 00:00</updatedAt>
+		<expiresAt>2012-01-01 00:00</expiresAt>
 	</Post>
 </list>

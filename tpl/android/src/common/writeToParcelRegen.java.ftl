@@ -28,6 +28,19 @@
 		}
 					<#elseif field.type == "String">
 		dest.writeString(this.get${field.name?cap_first}());
+					<#elseif field.type?lower_case == "byte">
+		dest.writeByte(this.get${field.name?cap_first}());
+					<#elseif field.type?lower_case == "char">
+		dest.writeString(String.valueOf(this.get${field.name?cap_first}()));
+					<#elseif field.type?lower_case == "short">
+		dest.writeInt(this.get${field.name?cap_first}());
+					<#elseif field.type?lower_case == "character">
+		if (this.get${field.name?cap_first}() != null) {
+			dest.writeInt(1);
+			dest.writeString(String.valueOf(this.get${field.name?cap_first}()));
+		} else {
+			dest.writeInt(0);
+		}			
 					<#elseif field.type?lower_case == "datetime">
 		if (this.get${field.name?cap_first}() != null) {
 			dest.writeInt(1);

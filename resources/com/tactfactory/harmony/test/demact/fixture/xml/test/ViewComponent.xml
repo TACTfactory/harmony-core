@@ -4,9 +4,9 @@
 		<id>0</id>
 		<string>TEST - String</string>
 		<text>TEST - Texte</text>
-		<dateTime>2012-01-01T00:00:00</dateTime>
+		<dateTime>2012-01-01 00:00</dateTime>
 		<date>2012-01-01</date>
-		<time>00:00:00</time>
+		<time>00:00</time>
 		<login>TEST - VC1 login</login>
 		<password>TEST - VC1 password</password>
 		<email>TEST - user1@vc1.com</email>
@@ -14,20 +14,20 @@
 		<city>TEST - VC1 city</city>
 		<zipcode>01000</zipcode>
 		<country>TEST - VC1 country</country>
+		<character>g</character>
+		<choice>0</choice>
 		<byteField>5</byteField>
 		<charField>a</charField>
 		<shortField>1</shortField>
-		<character>A</character>
-		<choice>0</choice>
 		<booleanObject>true</booleanObject>
 	</ViewComponent>
 	<ViewComponent id="TEST - VC2">
 		<id>0</id>
 		<string>TEST - Dupond</string>
 		<text>TEST - Dupont</text>
-		<dateTime>2012-01-01T00:00:00</dateTime>
+		<dateTime>2012-01-01 00:00</dateTime>
 		<date>2012-01-01</date>
-		<time>00:00:00</time>
+		<time>00:00</time>
 		<login>TEST - VC2 login</login>
 		<password>TEST - VC2 password</password>
 		<email>TEST - user2@vc2.com</email>
@@ -35,20 +35,20 @@
 		<city>TEST - VC2 city</city>
 		<zipcode>02000</zipcode>
 		<country>TEST - VC2 country</country>
+		<character>g</character>
+		<choice>0</choice>
 		<byteField>5</byteField>
 		<charField>a</charField>
 		<shortField>1</shortField>
-		<character>A</character>
-		<choice>0</choice>
 		<booleanObject>true</booleanObject>
 	</ViewComponent>
 	<ViewComponent id="TEST - VC3">
 		<id>0</id>
 		<string>TEST - Dupond</string>
 		<text>TEST - Dupont</text>
-		<dateTime>2012-01-01T00:00:00</dateTime>
+		<dateTime>2012-01-01 00:00</dateTime>
 		<date>2012-01-01</date>
-		<time>00:00:00</time>
+		<time>00:00</time>
 		<login>TEST - VC3 login</login>
 		<password>TEST - VC3 password</password>
 		<email>TEST - user3@vc3.com</email>
@@ -56,11 +56,11 @@
 		<city>TEST - VC3 city</city>
 		<zipcode>03000</zipcode>
 		<country>TEST - VC3 country</country>
+		<character>g</character>
+		<choice>0</choice>
 		<byteField>5</byteField>
 		<charField>a</charField>
 		<shortField>1</shortField>
-		<character>A</character>
-		<choice>0</choice>
 		<booleanObject>true</booleanObject>
 	</ViewComponent>
 </list>
