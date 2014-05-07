@@ -44,7 +44,7 @@ public class MenuCommand extends BaseCommand {
 		this.setCommandArgs(Console.parseCommandArgs(args));
 		//this.generateMetas();
 
-		for(BaseAdapter adapter : this.adapters) {
+		for(BaseAdapter adapter : this.getAdapters()) {
     		try {
     			if (action.equals(UPDATE_MENU)) {
     				this.generateMetas();           //TODO MG : why ?

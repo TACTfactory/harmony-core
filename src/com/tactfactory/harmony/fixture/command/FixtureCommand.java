@@ -99,7 +99,7 @@ public class FixtureCommand extends BaseCommand {
 			ApplicationMetadata.INSTANCE.getOptions().put(
 					fixtureMeta.getName(), fixtureMeta);
 
-			for(BaseAdapter adapter : this.adapters) {
+			for(BaseAdapter adapter : this.getAdapters()) {
 	    		try {
 	    			new FixtureGenerator(adapter).init(force);
 	    		} catch (final Exception e) {
@@ -116,7 +116,7 @@ public class FixtureCommand extends BaseCommand {
 	 * Load command.
 	 */
 	public final void load() {
-		for(BaseAdapter adapter : this.adapters) {
+		for(BaseAdapter adapter : this.getAdapters()) {
     		try {
     			new FixtureGenerator(adapter).load();
     		} catch (final Exception e) {
@@ -131,7 +131,7 @@ public class FixtureCommand extends BaseCommand {
 	public final void purge() {
 		this.generateMetas();
 		
-		for(BaseAdapter adapter : this.adapters) {
+		for(BaseAdapter adapter : this.getAdapters()) {
     		try {
     			new FixtureGenerator(adapter).purge();
     		} catch (final Exception e) {

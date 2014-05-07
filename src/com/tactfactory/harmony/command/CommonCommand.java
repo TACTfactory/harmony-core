@@ -133,7 +133,7 @@ public class CommonCommand extends BaseCommand {
 				ApplicationMetadata.INSTANCE.getEntities().get(
 						linkedEntityName);
 		
-		for(BaseAdapter adapter : this.adapters) {
+		for(BaseAdapter adapter : this.getAdapters()) {
 		    new CommonGenerator(adapter).generateStaticView(
 		            packageName,
 		            viewName,

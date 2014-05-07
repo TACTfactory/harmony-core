@@ -126,27 +126,27 @@ public enum TargetPlatform {
 
         if (adapter != null) {
             if (TargetPlatform.ANDROID
-                    .getAdapterType().getClass().equals(adapter.getClass())) {
+                    .getAdapterType().equals(adapter.getClass())) {
                 result = TargetPlatform.ANDROID;
             } else
 
             if (TargetPlatform.IPHONE
-                    .getAdapterType().getClass().equals(adapter.getClass())) {
+                    .getAdapterType().equals(adapter.getClass())) {
                 result = TargetPlatform.IPHONE;
             } else
 
             if (TargetPlatform.RIM
-                    .getAdapterType().getClass().equals(adapter.getClass())) {
+                    .getAdapterType().equals(adapter.getClass())) {
                 result = TargetPlatform.RIM;
             } else
 
             if (TargetPlatform.WINPHONE
-                    .getAdapterType().getClass().equals(adapter.getClass())) {
+                    .getAdapterType().equals(adapter.getClass())) {
                 result = TargetPlatform.WINPHONE;
             } //else
 
 //            if (TargetPlatform.WEB
-//                    .getAdapterType().getClass().equals(adapter.getClass())) {
+//                    .getAdapterType().equals(adapter.getClass())) {
 //                result = TargetPlatform.WEB;
 //            }
         }

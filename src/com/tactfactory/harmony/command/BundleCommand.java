@@ -82,7 +82,7 @@ public class BundleCommand extends BaseCommand {
 			
 			questionnary.launchQuestionnary();
 
-			for(BaseAdapter adapter : this.adapters) {
+			for(BaseAdapter adapter : this.getAdapters()) {
 			    new BundleGenerator(adapter).generateBundleFiles(
 			            questionnary.getAnswer("owner"),
 			            questionnary.getAnswer("name"),

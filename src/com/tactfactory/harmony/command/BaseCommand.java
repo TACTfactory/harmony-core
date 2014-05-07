@@ -30,11 +30,11 @@ public abstract class BaseCommand implements Command {
     protected static final String SEPARATOR = ":";
 
     /** Registered parsers for the global parser. */
-    protected ArrayList<BaseParser> registeredParsers
+    private ArrayList<BaseParser> registeredParsers
 			= new ArrayList<BaseParser>();
 
 	/** Adapter to apply generator */
-	protected ArrayList<BaseAdapter> adapters
+	private ArrayList<BaseAdapter> adapters
             = new ArrayList<BaseAdapter>();
             
 
@@ -93,9 +93,13 @@ public abstract class BaseCommand implements Command {
 	}
 
 	@Override
-	public final void registerAdapters(final ArrayList<BaseAdapter> adapters) {
+	public void registerAdapters(final ArrayList<BaseAdapter> adapters) {
 	    this.adapters = adapters;
 	}
+
+    public ArrayList<BaseAdapter> getAdapters() {
+        return this.adapters;
+    }
 
 	/**
 	 * Set the command arguments.
