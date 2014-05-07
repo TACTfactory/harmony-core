@@ -350,6 +350,15 @@ public class ClassVisitor {
     		for (final EnumConstantDeclaration enumEntry
     				: enumDecl.getEntries()) {
     			result.getEntries().add(enumEntry.getName());
+    			List<String> values = new ArrayList<String>();
+    			for (Expression expr : enumEntry.getArgs()) {
+    				if (expr instanceof StringLiteralExpr) {
+    					values.add(((StringLiteralExpr) expr).getValue());
+    				} else {
+    					values.add(expr.toString());
+    				}
+    			}
+    			result.getValues().put(enumEntry.getName(), values);
     		}
     	}
 
