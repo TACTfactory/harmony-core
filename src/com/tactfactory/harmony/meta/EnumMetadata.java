@@ -29,8 +29,8 @@ public class EnumMetadata extends ClassMetadata {
 	/** List of the enum names.*/
 	private ArrayList<String> entries = new ArrayList<String>();
 	
-	private Map<String, List<String>> values =
-			new HashMap<String, List<String>>();
+	private Map<String, String> values =
+			new HashMap<String, String>();
 
 	/**
 	 * Transform the class to a map given an adapter.
@@ -92,14 +92,14 @@ public class EnumMetadata extends ClassMetadata {
 	/**
 	 * @return the values
 	 */
-	public final Map<String, List<String>> getValues() {
+	public final Map<String, String> getValues() {
 		return values;
 	}
 
 	/**
 	 * @param values the values to set
 	 */
-	public final void setValues(Map<String, List<String>> values) {
+	public final void setValues(Map<String, String> values) {
 		this.values = values;
 	}
 }
