@@ -67,12 +67,11 @@ public class ActivityGenerator extends BaseGenerator<IAdapter> {
 		        this.getAppMetas().getEntities().values();
 
 		for (final EntityMetadata cm : entities) {
-			if (!cm.isInternal() 
-					&& cm.hasFields()
-					&& !cm.isHidden()) {
+			if (!cm.isInternal() && cm.hasFields()) {
 				this.getDatamodel().put(
-						TagConstant.CURRENT_ENTITY, cm.getName());
-				this.generateAllAction(cm.getName());
+						TagConstant.CURRENT_ENTITY,
+						cm.getName());
+				this.generateAllAction(cm);
 			}
 		}
 		
@@ -85,7 +84,8 @@ public class ActivityGenerator extends BaseGenerator<IAdapter> {
 
 		MenuGenerator menuGenerator = new MenuGenerator(this.getAdapter());
 		menuGenerator.generateMenu("CrudCreate");
-		menuGenerator.generateMenu("CrudEditDelete");
+		menuGenerator.generateMenu("CrudEdit");
+		menuGenerator.generateMenu("CrudDelete");
 		menuGenerator.generateMenu("Save");
 		menuGenerator.updateMenu();
 
@@ -130,7 +130,8 @@ public class ActivityGenerator extends BaseGenerator<IAdapter> {
 	 * Generate all actions (List, Show, Edit, Create).
 	 * @param entityName The entity for which to generate the crud.
 	 */
-	public final void generateAllAction(final String entityName) {
+	public final void generateAllAction(final EntityMetadata entity) {
+		final String entityName = entity.getName();
 		ConsoleUtils.display(">>> Generate CRUD view for " +  entityName);
 		
 		List<IUpdater> updaters;
@@ -141,13 +142,17 @@ public class ActivityGenerator extends BaseGenerator<IAdapter> {
 		if (this.isWritable) {
 			ConsoleUtils.display("   with write actions");
             
-			updaters = this.getAdapter().getAdapterProject()
-			        .getCreateView(entityMetadata);
-			this.processUpdater(updaters);
-			
-			updaters = this.getAdapter().getAdapterProject()
-                    .getEditView(entityMetadata);
-            this.processUpdater(updaters);
+			if (entity.isCreateAction()) {
+				updaters = this.getAdapter().getAdapterProject()
+				        .getCreateView(entityMetadata);
+				this.processUpdater(updaters);
+			}
+
+			if (entity.isEditAction()) {
+				updaters = this.getAdapter().getAdapterProject()
+	                    .getEditView(entityMetadata);
+	            this.processUpdater(updaters);
+			}
             
             TranslationMetadata.addDefaultTranslation(
                     entityMetadata.getName() + "_error_edit",
@@ -208,14 +213,18 @@ public class ActivityGenerator extends BaseGenerator<IAdapter> {
             }
 		}
 
-		updaters = this.getAdapter().getAdapterProject()
-		        .getShowView(entityMetadata);
-		this.processUpdater(updaters);
+		if (entity.isShowAction()) {
+			updaters = this.getAdapter().getAdapterProject()
+			        .getShowView(entityMetadata);
+			this.processUpdater(updaters);
+		}
 		
-		updaters = this.getAdapter().getAdapterProject()
-		        .getListView(entityMetadata);
-		this.processUpdater(updaters);
-
+		if (entity.isListAction()) {
+			updaters = this.getAdapter().getAdapterProject()
+			        .getListView(entityMetadata);
+			this.processUpdater(updaters);
+		}
+		
 		updaters = this.getAdapter().getAdapterProject()
                 .getCommonView(entityMetadata, this.isWritable);
         this.processUpdater(updaters);

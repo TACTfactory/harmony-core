@@ -22,7 +22,6 @@ public interface IAdapterProject {
     
     //Used by SqlGenerator
     List<IUpdater> getCriteriasFiles();
-    List<IUpdater> getCriteriasEntityFiles(EntityMetadata entity);
     List<IUpdater> getDatabaseFiles();
     List<IUpdater> getSqlAdapterEntityFiles(EntityMetadata entity);
     

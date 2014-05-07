@@ -91,6 +91,16 @@ public abstract class TagConstant {
 	public static final String ORDERS = "orders";
 	/** Constant for hidden field. */
 	public static final String HIDDEN = "hidden";
+	/** Constant for entity create action. */
+	public static final String CREATE_ACTION = "createAction";
+	/** Constant for entity edit action. */
+	public static final String EDIT_ACTION = "editAction";
+	/** Constant for entity delete action. */
+	public static final String DELETE_ACTION = "deleteAction";
+	/** Constant for entity list action. */
+	public static final String LIST_ACTION = "listAction";
+	/** Constant for entity show action. */
+	public static final String SHOW_ACTION = "showAction";
 	/** Constant for static field. */
 	public static final String STATIC = "static";
 	/** Constant for unique field. */

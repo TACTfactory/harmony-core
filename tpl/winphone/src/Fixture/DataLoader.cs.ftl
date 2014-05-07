@@ -86,7 +86,7 @@ namespace ${project_namespace}.Fixture
             {
                 if (${project_name?cap_first}Application.DEBUG)
                 {
-                    Log.D(TAG, string.format(
+                    Log.D(TAG, string.Format(
                             "Loading {0} fixtures",
                             dataLoader.GetFixtureFileName()));
                 }
@@ -121,7 +121,7 @@ namespace ${project_namespace}.Fixture
                     dataLoader.getModelFixtures(MODE_TEST);
                 }
                 
-                dataLoader.load(manager);
+                dataLoader.Load(manager);
             }
     
             // After getting all the informations from the fixture,
@@ -140,9 +140,9 @@ namespace ${project_namespace}.Fixture
          * @param mode Mode
          * @return true if mode
          */
-        private boolean isType(int modes, int mode)
+        private bool isType(int modes, int mode)
         {
-            boolean result;
+            bool result;
     
             if ((modes & mode) == mode)
             {

@@ -2,16 +2,18 @@
 <@header?interpret />
 package ${curr.test_namespace}.base;
 
+import java.util.ArrayList;
+
 import android.test.suitebuilder.annotation.SmallTest;
 
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 import ${curr.namespace}.entity.${curr.name};
 
 <#if dataLoader?? && dataLoader>
-import ${fixture_namespace}.${curr.name?cap_first}DataLoader;
+	<#list InheritanceUtils.getAllChildren(curr) as child>
+import ${fixture_namespace}.${child.name?cap_first}DataLoader;
+	</#list>
 </#if>
-
-import java.util.ArrayList;
 
 import ${curr.test_namespace}.utils.*;
 import android.content.Context;
@@ -27,6 +29,8 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 	protected ${curr.name}SQLiteAdapter adapter;
 
 	protected ${curr.name} entity;
+	protected ArrayList<${curr.name}> entities;
+	protected int nbEntities = 0;
 	/* (non-Javadoc)
 	 * @see junit.framework.TestCase#setUp()
 	 */
@@ -39,10 +43,17 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 		this.adapter.open();
 
 		<#if dataLoader?? && dataLoader>
-		ArrayList<${curr.name?cap_first}> entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).getMap().values());
+		this.entities = new ArrayList<${curr.name?cap_first}>();		
+		<#list InheritanceUtils.getAllChildren(curr) as child>
+		this.entities.addAll(${child.name?cap_first}DataLoader.getInstance(this.ctx).getMap().values());
+		</#list>
 		if (entities.size()>0){
-			this.entity = entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
+			this.entity = this.entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}
+
+		<#list InheritanceUtils.getAllChildren(curr) as child>
+		this.nbEntities += ${child.name?cap_first}DataLoader.getInstance(this.ctx).getMap().size();
+		</#list>
 		</#if>
 	}
 
@@ -76,7 +87,7 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 			result = this.adapter.getByID(<#list curr_ids as id>this.entity.get${id.name?cap_first}()<#if id_has_next>,
 					</#if></#list>);
 
-			${curr.name?cap_first}Utils.equals(result, this.entity);
+			${curr.name?cap_first}Utils.equals(this.entity, result);
 		}
 	}
 
@@ -105,5 +116,13 @@ public abstract class ${curr.name}TestDBBase extends TestDBBase {
 					</#if></#list>);
 			Assert.assertTrue(result >= 0);
 		}
+	}
+	
+	/** Test the get all method. */
+	@SmallTest
+	public void testAll() {
+		int result = this.adapter.getAll().size();
+		int expectedSize = this.nbEntities;
+		Assert.assertEquals(expectedSize, result);
 	}
 }

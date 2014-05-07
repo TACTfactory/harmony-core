@@ -21,9 +21,14 @@ namespace ${project_namespace}.Fixture
          * Returns the fixture file name.
          * @return the fixture file name
          */
-        protected abstract String GetFixtureFileName();
-        
-        public abstract void Clean();
+        public abstract String GetFixtureFileName();
+        public abstract void getModelFixtures(int mode);
+        public abstract void Clear();
+        /**
+         * Load data fixtures.
+         * @param manager The DataManager
+         */
+        public abstract void Load(DataManager manager);
     }
     
     /**
@@ -49,7 +54,7 @@ namespace ${project_namespace}.Fixture
         protected String patternTime = "HH:mm";
     
         /** Link an ID and its entity. */
-        protected Dictionary<String, T> items = new Dictionary<String, T>();
+        public Dictionary<String, T> items = new Dictionary<String, T>();
     
         /** SerializedBackup. */
         protected byte[] serializedBackup;
@@ -70,7 +75,7 @@ namespace ${project_namespace}.Fixture
          * Load the fixtures for the current model.
          * @param mode Mode
          */
-        public void getModelFixtures(int mode)
+        public override void getModelFixtures(int mode)
         {
     <#if fixtureType == "xml">
             // XML Loader
@@ -84,7 +89,7 @@ namespace ${project_namespace}.Fixture
                 if (xmlStream != null)
                 {
                     // Load XML File
-                    XDocument doc = (XDocument) builder.build(xmlStream);
+                    XDocument doc = XDocument.Load(xmlStream);
                     // Load Root element
                     XElement rootNode = doc.Root;
     
@@ -167,26 +172,20 @@ namespace ${project_namespace}.Fixture
                 String entityName)
         {
             StringBuilder error = new StringBuilder();
-            error.append("Error in ");
-            error.append(fileName);
-            error.append(".${fixtureType}");
-            error.append(" in field ");
-            error.append(entityName);
-            error.append(".");
-            error.append(this.currentFieldName);
-            error.append(" => ");
-            error.append(e.Message);
+            error.Append("Error in ");
+            error.Append(fileName);
+            error.Append(".${fixtureType}");
+            error.Append(" in field ");
+            error.Append(entityName);
+            error.Append(".");
+            error.Append(this.currentFieldName);
+            error.Append(" => ");
+            error.Append(e.Message);
     
-            Log.E(TAG, error.toString());
+            Log.E(TAG, error.ToString());
         }
-    
-        /**
-         * Load data fixtures.
-         * @param manager The DataManager
-         */
-        public abstract void Load(DataManager manager);
         
-        public override void Clean()
+        public override void Clear()
         {
             this.items.Clear();
         }
@@ -207,14 +206,14 @@ namespace ${project_namespace}.Fixture
          * @param element The xml representation of the item.
          * @return The T item read.
          */
-        protected abstract T ExtractItem(XElement element);
+        public abstract T ExtractItem(XElement element);
         <#else>
         /**
          * Transform the yml into an Item of type T.
          * @param columns The yml representation of the item.
          * @return The T item read.
          */
-        protected abstract T ExtractItem(Dictionary<?, ?> columns);
+        public abstract T ExtractItem(Dictionary<?, ?> columns);
         </#if>
     
         /**
@@ -222,7 +221,7 @@ namespace ${project_namespace}.Fixture
          *
          * @return index order
          */
-        public int GetOrder()
+        public virtual int GetOrder()
         {
             return 0;
         }
@@ -234,13 +233,13 @@ namespace ${project_namespace}.Fixture
          */
         public StreamReader GetXml(String entityName)
         {
-            InputStream ret = null;
+            StreamReader ret = null;
             
             try
             {
                 ret = AssetManager.Open(entityName + ".xml");
             }
-            catch (IOException e)
+            catch (IOException)
             {
                 Log.W(TAG, "No " + entityName + " fixture file found.");
             }

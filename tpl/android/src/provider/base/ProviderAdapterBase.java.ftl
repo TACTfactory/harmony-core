@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import android.database.sqlite.SQLiteDatabase;
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.ContentObserver;
 import android.database.Cursor;
 import android.net.Uri;
 
@@ -30,14 +31,25 @@ public abstract class ProviderAdapterBase<T> {
 	protected SQLiteDatabase db;
 	/** matched uri ids. */
 	protected ArrayList<Integer> uriIds = new ArrayList<Integer>();
+	/** General provider item for the application. */
+	protected ${project_name?cap_first}ProviderBase provider;
 
 	/**
 	 * Provider Adapter Base constructor.
 	 *
 	 * @param context The context.
 	 */
-	public ProviderAdapterBase(final Context context) {
-		this.ctx = context;
+	public ProviderAdapterBase(
+			final ${project_name?cap_first}ProviderBase provider,
+			final SQLiteAdapterBase<T> adapter) {
+		this.provider = provider;
+		this.adapter = adapter;
+		this.ctx = provider.getContext();
+		if (provider.getDatabase() != null) {
+			this.db = this.adapter.open(provider.getDatabase());
+		} else {
+			this.db = this.adapter.open();
+		}
 	}
 
 	/**
@@ -133,5 +145,15 @@ public abstract class ProviderAdapterBase<T> {
 	public boolean match(Uri uri) {
 		return this.uriIds.contains(
 				${project_name?cap_first}Provider.getUriMatcher().match(uri));
+	}
+
+	/**
+	 * Use this method to notify an Uri change.
+	 *
+	 * @param uri The uri that has changed
+	 * @param observer The observer that initiated the change
+	 */
+	public void notifyUri(Uri uri, ContentObserver observer) {
+		this.provider.notifyUri(uri, observer);
 	}
 }

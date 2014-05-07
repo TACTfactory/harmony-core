@@ -96,18 +96,18 @@ class EntityImplementation implements IUpdaterFile {
 
                     manipulator.generateFieldAccessor(field, "itemSetter.java");
                 }
-                
-                // Import ArrayList if relation
-                if (field.getRelation() != null 
-                    && (field.getRelation().getType().equals("ManyToMany")
-                        || field.getRelation().getType().equals("OneToMany"))) {
-                    manipulator.addImport(
-                            classMeta,
-                            "ArrayList",
-                            "java.util.ArrayList");
-                }
             }
         }
+        
+        manipulator.addImport(
+                classMeta,
+                "ArrayList",
+                "java.util.ArrayList");
+        
+        manipulator.addImport(
+				classMeta,
+				"List",
+				"java.util.List");
     }
     
     /**
@@ -233,12 +233,38 @@ class EntityImplementation implements IUpdaterFile {
                     this.dataModel);
             
             manipulator.generateMethod(
+					"writeToParcel2.java",
+					this.dataModel);
+            
+            manipulator.generateMethod(
                     "describeContents.java",
                     this.dataModel);
 
             manipulator.generateMethod(
                     "parcelable.creator.java",
                     this.dataModel);
+            
+            if (!(classMeta.getInheritance() != null
+					&& classMeta.getInheritance().getSuperclass() != null
+					&& classMeta.getInheritance().getSuperclass().hasBeenParsed())) {
+				manipulator.generateField(
+						"parcelParent.java", 
+						this.dataModel);
+			}
+            
+            boolean hasDateTime = false;
+            
+			for (FieldMetadata field : classMeta.getFields().values()) {
+				if (field.getType().equals("DateTime")) {
+					hasDateTime = true;
+				}
+			}
+			
+			if (hasDateTime) {
+				manipulator.addImport(classMeta,
+						"ISODateTimeFormat",
+						"org.joda.time.format.ISODateTimeFormat");
+			}
         }
     }
     

@@ -306,6 +306,7 @@ public abstract class CommonTest {
 				TracScanFactory.generateTestMetadata()
 		});
 
+		
 		result.add(new ApplicationMetadata[] {
 				DemactFactory.generateTestMetadata()
 		});

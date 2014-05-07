@@ -42,8 +42,8 @@
 	<#assign tab = Utils.getIndentString(indentLevel) />
 	<#assign result = "" />
 	<#if (!field.internal)>
-		<#assign result = result + "${tab}/** Constant field for ${field.name}. */\n"/>		
-		<#assign result = result + "${tab}private static final String ${NamingUtils.fixtureAlias(field)} = \"${field.name?uncap_first}\";\n"/>		
+		<#assign result = result + "${tab}${tab}/** Constant field for ${field.name}. */\n"/>		
+		<#assign result = result + "${tab}${tab}private const String ${NamingUtils.fixtureAlias(field)} = \"${field.name?uncap_first}\";\n"/>		
 	</#if>
 	<#return result />
 </#function>
@@ -150,32 +150,32 @@
 	<#assign tab = "\n" + Utils.getIndentString(indentLevel) />
 	<#if (!field.internal)>
 		<#assign result = result + "${tab}this.currentFieldName = ${NamingUtils.fixtureAlias(field)};" />
-		<#assign result = result + "${tab}String ${NamingUtils.fixtureParsedAlias(field)} = element.getChildText(${NamingUtils.fixtureAlias(field)});" />
+		<#assign result = result + "${tab}String ${NamingUtils.fixtureParsedAlias(field)} = element.Element(XName.Get(${NamingUtils.fixtureAlias(field)})).Value;" />
 		<#assign result = result + "${tab}if (${NamingUtils.fixtureParsedAlias(field)} != null) {" />
 		<#if !field.relation??>
 			<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(Integer.parseInt(${NamingUtils.fixtureParsedAlias(field)}));"/>
+				<#assign result = result + "${tab}	${objectName}.${field.name?cap_first} = Convert.ToInt32(${NamingUtils.fixtureParsedAlias(field)});"/>
 			<#elseif (field.type?lower_case=="float")>
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(Float.parseFloat(${NamingUtils.fixtureParsedAlias(field)}));"/>
+				<#assign result = result + "${tab}	${objectName}.${field.name?cap_first} = Convert.Single(${NamingUtils.fixtureParsedAlias(field)});"/>
 			<#elseif (field.type?lower_case=="double")>
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(Double.parseDouble(${NamingUtils.fixtureParsedAlias(field)}));"/>
+				<#assign result = result + "${tab}	${objectName}.${field.name?cap_first} = Convert.ToDouble(${NamingUtils.fixtureParsedAlias(field)});"/>
 			<#elseif (field.type?lower_case=="datetime")>
-					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+					<#assign result = result + "${tab}	${objectName}.${field.name?cap_first} = " />
 					<#assign result = result + "${tab}		DateUtils.formatXMLStringToDateTime(" />
-					<#assign result = result + "${tab}				${NamingUtils.fixtureParsedAlias(field)}));" />
+					<#assign result = result + "${tab}				${NamingUtils.fixtureParsedAlias(field)});" />
 			<#elseif field.type=="boolean">
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-				<#assign result = result + "${tab}		Boolean.parseBoolean(${NamingUtils.fixtureParsedAlias(field)}));" />
+				<#assign result = result + "${tab}	${objectName}.${field.name?cap_first} = " />
+				<#assign result = result + "${tab}		Convert.ToBoolean(${NamingUtils.fixtureParsedAlias(field)});" />
 			<#elseif field.type?lower_case=="string">
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${NamingUtils.fixtureParsedAlias(field)});" />
+				<#assign result = result + "${tab}	${objectName}.${field.name?cap_first} = ${NamingUtils.fixtureParsedAlias(field)};" />
 			<#elseif (field.type?lower_case == "short")>
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-				<#assign result = result + "${tab}		Integer.valueOf(${NamingUtils.fixtureParsedAlias(field)}).shortValue());" />
+				<#assign result = result + "${tab}	${objectName}.${field.name?cap_first} = " />
+				<#assign result = result + "${tab}		Convert.ToInt16(${NamingUtils.fixtureParsedAlias(field)});" />
 			<#elseif (field.type?lower_case == "char" || field.type?lower_case == "character")>
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${NamingUtils.fixtureParsedAlias(field)}.charAt(0));" />
+				<#assign result = result + "${tab}	${objectName}.${field.name?cap_first} = Convert.ToChar(${NamingUtils.fixtureParsedAlias(field)});" />
 			<#elseif (field.type?lower_case == "byte")>
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-				<#assign result = result + "${tab}		Integer.valueOf(${NamingUtils.fixtureParsedAlias(field)}).byteValue());" />
+				<#assign result = result + "${tab}	${objectName}.${field.name?cap_first} = " />
+				<#assign result = result + "${tab}		Convert.ToByte(${NamingUtils.fixtureParsedAlias(field)});" />
 			<#elseif (field.harmony_type == "enum")>
 				<#assign enumType = enums[field.type] />
 				<#if (enumType.id??)>
@@ -195,50 +195,50 @@
 			<#if (field.relation.type=="OneToOne")>
 				<#assign result = result + "${tab}	${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} = "/>
 				<#assign result = result + "${tab}		${field.relation.targetEntity?cap_first}DataLoader.getInstance(" />
-				<#assign result = result + "${tab}				this.ctx).getModelFixture(" />
+				<#assign result = result + "${tab}				this.ctx).GetModelFixture(" />
 				<#assign result = result + "${tab}						${NamingUtils.fixtureParsedAlias(field)}); "/>
 				<#assign result = result + "${tab}if (${field.relation.targetEntity?uncap_first} != null) { "/>
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-				<#assign result = result + "${tab}					${field.relation.targetEntity?uncap_first});" />
+				<#assign result = result + "${tab}	${objectName}.${field.name?cap_first} = " />
+				<#assign result = result + "${tab}					${field.relation.targetEntity?uncap_first};" />
 				<#if field.relation.inversedBy??>
 					<#assign invField = MetadataUtils.getInversingField(field) />
-					<#assign result = result + "${tab}	${field.relation.targetEntity?uncap_first}.set${invField.name?cap_first}(" />
-					<#assign result = result + "${tab}					${objectName});" />
+					<#assign result = result + "${tab}	${field.relation.targetEntity?uncap_first}.${invField.name?cap_first} = " />
+					<#assign result = result + "${tab}					${objectName};" />
 				</#if>
 			<#assign result = result + "${tab}}" />
 			<#elseif (field.relation.type=="ManyToOne")>
 				<#assign result = result + "${tab}	${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} = ${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.ctx)" />
-				<#assign result = result + "${tab}				.getModelFixture(${NamingUtils.fixtureParsedAlias(field)});" />
+				<#assign result = result + "${tab}				.GetModelFixture(${NamingUtils.fixtureParsedAlias(field)});" />
 				<#assign result = result + "${tab}	if (${field.relation.targetEntity?uncap_first} != null) {" />
-				<#assign result = result + "${tab}		${objectName}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first});" />
+				<#assign result = result + "${tab}		${objectName}.${field.name?cap_first} = ${field.relation.targetEntity?uncap_first};" />
 				<#if field.relation.inversedBy??>
 					<#assign invField = MetadataUtils.getInversingField(field) />
-					<#assign result = result + "${tab}		ArrayList<${curr.name?cap_first}> ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =" />
-					<#assign result = result + "${tab}			${field.relation.targetEntity?uncap_first}.get${invField.name?cap_first}();" />
+					<#assign result = result + "${tab}		List<${curr.name?cap_first}> ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =" />
+					<#assign result = result + "${tab}			${field.relation.targetEntity?uncap_first}.${invField.name?cap_first};" />
 					<#assign result = result + "${tab}		if (${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s == null) {" />
 					<#assign result = result + "${tab}			${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =" />
-					<#assign result = result + "${tab}				new ArrayList<${curr.name?cap_first}>();" />
+					<#assign result = result + "${tab}				new List<${curr.name?cap_first}>();" />
 					<#assign result = result + "${tab}		}" />
-					<#assign result = result + "${tab}		${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s.add(${objectName});" />
-					<#assign result = result + "${tab}		${field.relation.targetEntity?uncap_first}.set${invField.name?cap_first}(${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s);" />
+					<#assign result = result + "${tab}		${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s.Add(${objectName});" />
+					<#assign result = result + "${tab}		${field.relation.targetEntity?uncap_first}.${invField.name?cap_first} = ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s;" />
 				</#if>
 			<#assign result = result + "${tab}	}" />
 			<#else>
-				<#assign result = result + "${tab}	ArrayList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s =" />
-				<#assign result = result + "${tab}		new ArrayList<${field.relation.targetEntity?cap_first}>();" />
-				<#assign result = result + "${tab}	List<Element> ${field.relation.targetEntity?uncap_first}sMap =" />
-				<#assign result = result + "${tab}		element.getChild(${NamingUtils.fixtureAlias(field)}).getChildren();" />
+				<#assign result = result + "${tab}	IList<${field.relation.targetEntity?cap_first}> ${field.relation.targetEntity?uncap_first}s =" />
+				<#assign result = result + "${tab}		new List<${field.relation.targetEntity?cap_first}>();" />
+				<#assign result = result + "${tab}	IEnumerable<XElement> ${field.relation.targetEntity?uncap_first}sMap =" />
+				<#assign result = result + "${tab}		element.Element(XName.Get(${NamingUtils.fixtureAlias(field)})).Elements();" />
 				<#assign result = result + "${tab}	${field.relation.targetEntity?cap_first}DataLoader ${field.relation.targetEntity?uncap_first}DataLoader = " />
 				<#assign result = result + "${tab}			${field.relation.targetEntity?cap_first}DataLoader.getInstance(this.ctx);\n" />
-				<#assign result = result + "${tab}	for (Element ${field.relation.targetEntity?uncap_first}Name : ${field.relation.targetEntity?uncap_first}sMap) {" />
-				<#assign result = result + "${tab}		if (${field.relation.targetEntity?uncap_first}DataLoader.items.containsKey(" />
-				<#assign result = result + "${tab}				${field.relation.targetEntity?uncap_first}Name.getText())) {" />
-				<#assign result = result + "${tab}			${field.relation.targetEntity?uncap_first}s.add(" />
-				<#assign result = result + "${tab}				${field.relation.targetEntity?uncap_first}DataLoader.getModelFixture(" />
-				<#assign result = result + "${tab}								${field.relation.targetEntity?uncap_first}Name.getText()));" />
+				<#assign result = result + "${tab}	foreach (XElement ${field.relation.targetEntity?uncap_first}Name in ${field.relation.targetEntity?uncap_first}sMap) {" />
+				<#assign result = result + "${tab}		if (${field.relation.targetEntity?uncap_first}DataLoader.items.ContainsKey(" />
+				<#assign result = result + "${tab}				${field.relation.targetEntity?uncap_first}Name.Value)) {" />
+				<#assign result = result + "${tab}			${field.relation.targetEntity?uncap_first}s.Add(" />
+				<#assign result = result + "${tab}				${field.relation.targetEntity?uncap_first}DataLoader.GetModelFixture(" />
+				<#assign result = result + "${tab}								${field.relation.targetEntity?uncap_first}Name.Value));" />
 				<#assign result = result + "${tab}		}" />
 				<#assign result = result + "${tab}	}" />
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${field.relation.targetEntity?uncap_first}s);" />
+				<#assign result = result + "${tab}	${objectName}.${field.name?cap_first} = ${field.relation.targetEntity?uncap_first}s;" />
 			</#if>
 		</#if>
 		<#assign result = result + "${tab}}\n" />

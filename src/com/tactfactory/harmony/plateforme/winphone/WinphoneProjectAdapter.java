@@ -194,12 +194,6 @@ public class WinphoneProjectAdapter implements IAdapterProject {
     }
 
     @Override
-    public List<IUpdater> getCriteriasEntityFiles(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public List<IUpdater> getDatabaseFiles() {
         List<IUpdater> result = new ArrayList<IUpdater>();
         
@@ -419,7 +413,7 @@ public class WinphoneProjectAdapter implements IAdapterProject {
     @Override
     public List<IUpdater> getFixtureEntityDefinitionFiles(
             String fixtureType, EntityMetadata entity) {
-    	return  null;
+    	return null;
     }
     
     @Override
@@ -430,7 +424,7 @@ public class WinphoneProjectAdapter implements IAdapterProject {
         String templatePath = this.adapter.getTemplateSourceFixturePath();
         
         String filePath = this.adapter.getSourcePath()
-                + "/" + this.adapter.getFixture() + "/";
+                + "/" + this.adapter.getFixture() + "/Loaders/";
 
         //Create base classes for Fixtures loaders
         result.add(new SourceFile(
@@ -440,7 +434,7 @@ public class WinphoneProjectAdapter implements IAdapterProject {
         
         result.add(new ProjectUpdater(
                 FileType.Compile,
-                this.adapter.getFixture() + "/"
+                this.adapter.getFixture() + "/Loaders/"
             			+ entity.getName() + "DataLoader.cs"));
         
         return result;
@@ -600,7 +594,7 @@ public class WinphoneProjectAdapter implements IAdapterProject {
                 String.format("%s%s.cs",
                         filePath,
                         entity.getName()),
-                false));
+                true));
         
         result.add(new ProjectUpdater(
                 FileType.Compile,

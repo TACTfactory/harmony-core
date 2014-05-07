@@ -85,6 +85,11 @@ public enum TargetPlatform {
 			if (target.equalsIgnoreCase(
 					TargetPlatform.ANDROID.toLowerString())) {
 				result = TargetPlatform.ANDROID;
+			}  else
+
+			if (target.equalsIgnoreCase(
+					TargetPlatform.WINPHONE.toLowerString())) {
+				result = TargetPlatform.WINPHONE;
 			} else
 
 			if (target.equalsIgnoreCase(

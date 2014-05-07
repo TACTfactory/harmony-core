@@ -16,6 +16,8 @@ public class ProjectMetadataFactory {
 	protected static final String CLASS_ENTITY = "Entity";
 	protected static final String CLASS_TYPE = "Type";
 	protected static final String CLASS_ARRAYLIST = "ArrayList";
+	protected static final String CLASS_LIST = "List";
+	protected static final String CLASS_ISODATETIMEFORMAT = "ISODateTimeFormat";
 
 	protected static final String CLASS_COLUMN = "Column";
 	protected static final String CLASS_COLUMN_RESULT = "ColumnResult";
@@ -23,7 +25,7 @@ public class ProjectMetadataFactory {
 	protected static final String CLASS_GENERATED_VALUE = "GeneratedValue";
 	protected static final String CLASS_GENERATED_VALUE_STRATEGY = "Strategy";
 	protected static final String CLASS_ID = "Id";
-	protected static final String CLASS_CRUD = "Crud";
+	protected static final String CLASS_VIEW = "View";
 	protected static final String CLASS_INHERITANCE_TYPE = "InheritanceType";
 	protected static final String CLASS_MANY_TO_ONE = "ManyToOne";
 	protected static final String CLASS_MANY_TO_MANY = "ManyToMany";

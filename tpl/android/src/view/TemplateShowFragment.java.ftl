@@ -25,7 +25,8 @@ import ${project_namespace}.harmony.view.DeleteDialog;
 import ${project_namespace}.harmony.view.HarmonyFragment;
 import ${project_namespace}.harmony.view.MultiLoader;
 import ${project_namespace}.harmony.view.MultiLoader.UriLoadedCallback;
-import ${project_namespace}.menu.CrudEditDeleteMenuWrapper.CrudEditDeleteMenuInterface;
+<#if curr.deleteAction>import ${project_namespace}.menu.CrudDeleteMenuWrapper.CrudDeleteMenuInterface;</#if>
+<#if curr.editAction>import ${project_namespace}.menu.CrudEditMenuWrapper.CrudEditMenuInterface;</#if>
 import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
 import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
@@ -41,13 +42,15 @@ import ${project_namespace}.provider.contract.${relation.relation.targetEntity?c
  */
 public class ${curr.name}ShowFragment
 		extends HarmonyFragment
-		implements CrudEditDeleteMenuInterface,
-				DeleteDialog.DeleteDialogCallback {
+		<#if curr.deleteAction || curr.editAction>implements </#if><#if curr.deleteAction>CrudDeleteMenuInterface,
+				DeleteDialog.DeleteDialogCallback<#if curr.editAction>,</#if></#if>
+				<#if curr.editAction>CrudEditMenuInterface</#if> {
 	/** Model data. */
 	protected ${curr.name} model;
-
+<#if curr.deleteAction>
 	/** DeleteCallback. */
 	protected DeleteCallback deleteCallback;
+</#if>
 
 	/* This entity's fields views */
 <#list fields?values as field>
@@ -119,11 +122,12 @@ public class ${curr.name}ShowFragment
         		inflater.inflate(
         				R.layout.fragment_${curr.name?lower_case}_show,
         				container,
-        				false);
-        
+        				false);  
+<#if curr.deleteAction>
         if (this.getActivity() instanceof DeleteCallback) {
         	this.deleteCallback = (DeleteCallback) this.getActivity();
         }
+</#if>
 
         this.initializeComponent(view);
         
@@ -227,6 +231,7 @@ public class ${curr.name}ShowFragment
 		</#if>
 	</#list>
 
+	<#if curr.editAction>
 	/**
 	 * Calls the ${curr.name}EditActivity.
 	 */
@@ -240,7 +245,8 @@ public class ${curr.name}ShowFragment
 
 		this.getActivity().startActivity(intent);
 	}
-
+	</#if>
+	<#if curr.deleteAction>
 	/**
 	 * Shows a confirmation dialog.
 	 */
@@ -308,7 +314,7 @@ public class ${curr.name}ShowFragment
 		
 
 	}
-	
+
 	/**
 	 * Callback for item deletion.
 	 */ 
@@ -316,5 +322,6 @@ public class ${curr.name}ShowFragment
 		/** Called when current item has been deleted. */
 		void onItemDeleted();
 	}
+	</#if>
 }
 

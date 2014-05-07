@@ -261,12 +261,12 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 filePath + "base/value/package-info.java",
                 false));
         result.add(new SourceFile(
-                templatePath + "base/Criteria.java",
-                filePath + "base/Criteria.java",
+                templatePath + "base/CriteriaExpression.java",
+                filePath + "base/CriteriaExpression.java",
                 true));
         result.add(new SourceFile(
-                templatePath + "base/CriteriasBase.java",
-                filePath + "base/CriteriasBase.java",
+                templatePath + "base/Criterion.java",
+                filePath + "base/Criterion.java",
                 true));
         result.add(new SourceFile(
                 templatePath + "base/ICriteria.java",
@@ -296,27 +296,6 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 templatePath + "base/value/DateTimeValue.java",
                 filePath + "base/value/DateTimeValue.java",
                 true));
-        
-        return result;
-    }
-
-    @Override
-    public List<IUpdater> getCriteriasEntityFiles(EntityMetadata entity) {
-        List<IUpdater> result = new ArrayList<IUpdater>();
-        
-        final String filePath = String.format("%s%s/%s/%sCriterias.java",
-                this.adapter.getSourcePath(),
-                this.adapter.getApplicationMetadata().getProjectNameSpace(),
-                this.adapter.getCriterias(),
-                entity.getName());
-        
-        String templatePath = this.adapter.getTemplateSourceCriteriasPath()
-                + "TemplateCriterias.java";
-        
-        result.add(new SourceFile(
-                templatePath,
-                filePath,
-                false));
         
         return result;
     }

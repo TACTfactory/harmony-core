@@ -10,8 +10,28 @@
 
 using System;
 using System.Data.Linq;
+<#if fixtureType == "xml">
+    <#assign listImported = false />
+    <#assign arraylistImported = false />
+    <#list curr.relations as relation>
+        <#if !listImported && (relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany")>
+using System.Collections.Generic;
+            <#assign listImported = true />
+            <#break />
+        </#if>
+        <#if !listImported && (relation.relation.type == "ManyToOne" && MetadataUtils.getInversingField(relation)??)>
+using System.Collections.Generic;
+            <#assign listImported = true />
+        </#if>
+    </#list>
+</#if>
+<#if fixtureType=="yml">
+import java.util.Map;
+<#else>
 using System.Xml.Linq;
+</#if>
 using ${project_namespace}.Entity;
+
 
 namespace ${project_namespace}.Fixture
 {
@@ -19,6 +39,11 @@ namespace ${project_namespace}.Fixture
     {
         /** ${curr.name?cap_first}DataLoader name. */
         private const String FILE_NAME = "${curr.name}";
+        
+        <#list curr_fields as field>${AdapterUtils.fixtureConstantsFieldAdapter(field, 1)}</#list>
+        
+        /** ${curr.name?cap_first}DataLoader instance (Singleton). */
+        private static ${curr.name?cap_first}DataLoader instance;
     
         /**
          * Get the ${curr.name?cap_first}DataLoader singleton.
@@ -44,11 +69,10 @@ namespace ${project_namespace}.Fixture
     
     
         <#if fixtureType=="xml">
-        @Override
-        protected ${curr.name} extractItem(Element element) {
+        public override ${curr.name} ExtractItem(XElement element) {
             ${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
     
-            return this.extractItem(element, ${curr.name?uncap_first});
+            return this.ExtractItem(element, ${curr.name?uncap_first});
         }
     
         /**
@@ -57,22 +81,22 @@ namespace ${project_namespace}.Fixture
          * @param ${curr.name?uncap_first} Item in which to store the extracted data
          * @return A ${curr.name} entity
          */
-        protected ${curr.name} extractItem(Element element,
+        public ${curr.name} ExtractItem(XElement element,
                                     ${curr.name} ${curr.name?uncap_first}) {
-    <#list curr_fields as field>${AdapterUtils.xmlExtractFieldAdapter(curr.name?uncap_first, field, curr, 2)}</#list>
+        <#list curr_fields as field>${AdapterUtils.xmlExtractFieldAdapter(curr.name?uncap_first, field, curr, 3)}</#list>
+            
             <#if InheritanceUtils.isExtended(curr)>
             ${curr.inheritance.superclass.name}DataLoader inheritanceDataLoader =
                     ${curr.inheritance.superclass.name}DataLoader.getInstance(this.ctx);
-            inheritanceDataLoader.extractItem(element, ${curr.name?uncap_first});
+            inheritanceDataLoader.ExtractItem(element, ${curr.name?uncap_first});
             </#if>
     
         <#elseif fixtureType=="yml">
-        @Override
-        protected ${curr.name} extractItem(Map<?, ?> columns) {
+        public ${curr.name} extractItem(Map<?, ?> columns) {
             ${curr.name?cap_first} ${curr.name?uncap_first} =
                     new ${curr.name?cap_first}();
     
-            return this.extractItem(columns, ${curr.name?uncap_first});
+            return this.ExtractItem(columns, ${curr.name?uncap_first});
         }
         /**
          * Extract an entity from a fixture element (YML).
@@ -80,7 +104,7 @@ namespace ${project_namespace}.Fixture
          * @param ${curr.name?uncap_first} Entity to extract
          * @return A ${curr.name} entity
          */
-        protected ${curr.name} extractItem(Map<?, ?> columns,
+        public ${curr.name} ExtractItem(Map<?, ?> columns,
                     ${curr.name?cap_first} ${curr.name?uncap_first}) {
             <#if InheritanceUtils.isExtended(curr)>
             ${curr.inheritance.superclass.name}DataLoader.getInstance(this.ctx).extractItem(columns, ${curr.name?uncap_first});
@@ -140,12 +164,11 @@ namespace ${project_namespace}.Fixture
          * Loads ${curr.name?cap_first}s into the DataManager.
          * @param manager The DataManager
          */
-        @Override
-        public void load(DataManager dataManager) {
-            for (${curr.name?cap_first} ${curr.name?uncap_first} : this.items.values()) {
+        public override void Load(DataManager dataManager) {
+            foreach (${curr.name?cap_first} ${curr.name?uncap_first} in this.items.Values) {
                 int id = dataManager.persist(${curr.name?uncap_first});
                 <#list curr_ids as id><#if id.strategy == "IDENTITY">
-                ${curr.name?uncap_first}.set${id.name?cap_first}(id);
+                ${curr.name?uncap_first}.${id.name?cap_first} = id;
                 </#if></#list>
     
             }
@@ -157,8 +180,7 @@ namespace ${project_namespace}.Fixture
          * 0 is the first.
          * @return The order
          */
-        @Override
-        public int getOrder() {
+        public override int GetOrder() {
             return 0;
         }
     
@@ -166,21 +188,19 @@ namespace ${project_namespace}.Fixture
          * Get the fixture file name.
          * @return A String representing the file name
          */
-        @Override
-        public String getFixtureFileName() {
+        public override String GetFixtureFileName() {
             return FILE_NAME;
         }
-    
-        @Override
-        protected ${curr.name} get(String key) {
+        
+        protected override ${curr.name} get(String key) {
             ${curr.name} result;
-            if (this.items.containsKey(key)) {
-                result = this.items.get(key);
+            if (this.items.ContainsKey(key)) {
+                result = this.items[key];
             }
             <#if (curr.inheritance?? && curr.inheritance.subclasses??)>
                 <#list curr.inheritance.subclasses as subclass>
-            else if (${subclass.name}DataLoader.getInstance(this.ctx).items.containsKey(key)) {
-                result = ${subclass.name}DataLoader.getInstance(this.ctx).items.get(key);
+            else if (${subclass.name}DataLoader.getInstance(this.ctx).items.ContainsKey(key)) {
+                result = ${subclass.name}DataLoader.getInstance(this.ctx).items[key];
             }
                 </#list>
             </#if>

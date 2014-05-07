@@ -86,7 +86,6 @@ public abstract class Console {
 
 			// Harmony command launch
 			final Harmony harmony = Harmony.getInstance();
-			harmony.initialize();
 			harmony.findAndExecute(command, commandArgs, commandOption);
 		}
 	}

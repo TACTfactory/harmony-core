@@ -24,7 +24,7 @@
 		<street>Baker Street</street>
 		<city>London</city>
 		<country>UK</country>
-		<streetNumber>201b</streetNumber>
+		<streetNumber>201</streetNumber>
 		<zipcode>12347</zipcode>
 		<inhabitants>
 			<Person>Worker2</Person>

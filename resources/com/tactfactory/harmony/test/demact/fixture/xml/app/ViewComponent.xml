@@ -4,9 +4,9 @@
 		<id>0</id>
 		<string>String</string>
 		<text>Texte</text>
-		<dateTime>2012-01-01T00:00:00</dateTime>
+		<dateTime>2012-01-01 00:00</dateTime>
 		<date>2012-01-01</date>
-		<time>00:00:00</time>
+		<time>00:00</time>
 		<login>VC1 login</login>
 		<password>VC1 password</password>
 		<email>user1@vc1.com</email>
@@ -14,19 +14,20 @@
 		<city>VC1 city</city>
 		<zipcode>01000</zipcode>
 		<country>VC1 country</country>
+		<character>g</character>
+		<choice>0</choice>
 		<byteField>5</byteField>
 		<charField>a</charField>
 		<shortField>1</shortField>
-		<character>A</character>
-		<choice>0</choice>
+		<booleanObject>true</booleanObject>
 	</ViewComponent>
 	<ViewComponent id="VC2">
 		<id>0</id>
 		<string>Dupond</string>
 		<text>Dupont</text>
-		<dateTime>2012-01-01T00:00:00</dateTime>
+		<dateTime>2012-01-01 00:00</dateTime>
 		<date>2012-01-01</date>
-		<time>00:00:00</time>
+		<time>00:00</time>
 		<login>VC2 login</login>
 		<password>VC2 password</password>
 		<email>user2@vc2.com</email>
@@ -34,19 +35,20 @@
 		<city>VC2 city</city>
 		<zipcode>02000</zipcode>
 		<country>VC2 country</country>
+		<character>g</character>
+		<choice>0</choice>
 		<byteField>5</byteField>
 		<charField>a</charField>
 		<shortField>1</shortField>
-		<character>A</character>
-		<choice>0</choice>
+		<booleanObject>true</booleanObject>
 	</ViewComponent>
 	<ViewComponent id="VC3">
 		<id>0</id>
 		<string>Dupond</string>
 		<text>Dupont</text>
-		<dateTime>2012-01-01T00:00:00</dateTime>
+		<dateTime>2012-01-01 00:00</dateTime>
 		<date>2012-01-01</date>
-		<time>00:00:00</time>
+		<time>00:00</time>
 		<login>VC3 login</login>
 		<password>VC3 password</password>
 		<email>user3@vc3.com</email>
@@ -54,10 +56,11 @@
 		<city>VC3 city</city>
 		<zipcode>03000</zipcode>
 		<country>VC3 country</country>
+		<character>g</character>
+		<choice>0</choice>
 		<byteField>5</byteField>
 		<charField>a</charField>
 		<shortField>1</shortField>
-		<character>A</character>
-		<choice>0</choice>
+		<booleanObject>true</booleanObject>
 	</ViewComponent>
 </list>

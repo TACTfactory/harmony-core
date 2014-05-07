@@ -5,6 +5,7 @@ package ${curr.test_namespace}.base;
 import android.test.suitebuilder.annotation.SmallTest;
 
 import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
+import ${project_namespace}.provider.utils.${curr.name?cap_first}ProviderUtils;
 import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
 <#if (InheritanceUtils.isExtended(curr))>
 import ${project_namespace}.provider.contract.${curr.inheritance.superclass.name?cap_first}Contract;
@@ -13,9 +14,10 @@ import ${project_namespace}.provider.contract.${curr.inheritance.superclass.name
 import ${curr.namespace}.data.${curr.name}SQLiteAdapter;
 <#if (InheritanceUtils.isExtended(curr))>import ${data_namespace}.${curr.inheritance.superclass.name}SQLiteAdapter;</#if>
 import ${curr.namespace}.entity.${curr.name};
+<#list curr_relations as relation><#if ((relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany") && (!MetadataUtils.getInversingField(relation)?? || !MetadataUtils.getInversingField(relation).nullable))>import ${project_namespace}.entity.${relation.relation.targetEntity};
+</#if></#list>
 
 <#if dataLoader?? && dataLoader>
-import ${fixture_namespace}.${curr.name?cap_first}DataLoader;
 	<#list InheritanceUtils.getAllChildren(curr) as child>
 import ${fixture_namespace}.${child.name?cap_first}DataLoader;
 	</#list>
@@ -44,6 +46,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 	protected ${curr.name} entity;
 	protected ContentResolver provider;
+	protected ${curr.name}ProviderUtils providerUtils;
 
 	protected ArrayList<${curr.name}> entities;
 
@@ -59,7 +62,10 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
 
 		<#if dataLoader?? && dataLoader>
-		this.entities = new ArrayList<${curr.name?cap_first}>(${curr.name?cap_first}DataLoader.getInstance(this.ctx).getMap().values());
+		this.entities = new ArrayList<${curr.name?cap_first}>();		
+		<#list InheritanceUtils.getAllChildren(curr) as child>
+		this.entities.addAll(${child.name?cap_first}DataLoader.getInstance(this.ctx).getMap().values());
+		</#list>
 		if (this.entities.size()>0) {
 			this.entity = this.entities.get(TestUtils.generateRandomInt(0,entities.size()-1));
 		}
@@ -69,6 +75,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		</#list>
 		</#if>
 		this.provider = this.getContext().getContentResolver();
+		this.providerUtils = new ${curr.name}ProviderUtils(this.getContext());
 	}
 
 	/* (non-Javadoc)
@@ -77,6 +84,8 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	protected void tearDown() throws Exception {
 		super.tearDown();
 	}
+
+	/********** Direct Provider calls. *******/
 
 	/** Test case Create Entity */
 	@SmallTest
@@ -169,6 +178,13 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 				<#list curr_ids as id>
 				${curr.name?uncap_first}.set${id.name?cap_first}(this.entity.get${id.name?cap_first}());
 				</#list>
+				<#list curr_relations as relation>
+					<#if ((relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany") && (!MetadataUtils.getInversingField(relation)?? || !MetadataUtils.getInversingField(relation).nullable))>
+				if (this.entity.get${relation.name?cap_first}() != null) {
+					${curr.name?uncap_first}.get${relation.name?cap_first}().addAll(this.entity.get${relation.name?cap_first}());
+				}
+					</#if>
+				</#list>
 
 				ContentValues values = ${curr.name}Contract.${curr.name}.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				result = this.provider.update(
@@ -250,5 +266,78 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 			Assert.assertEquals(result, this.nbEntities);
 		}
+	}
+
+	/****** Provider Utils calls ********/
+
+	/** Test case Read Entity by provider utils. */
+	@SmallTest
+	public void testUtilsRead() {
+		${curr.name} result = null;
+
+		if (this.entity != null) {
+			result = this.providerUtils.query(this.entity);
+
+			${curr.name}Utils.equals(this.entity, result);
+		}
+	}
+
+	/** Test case ReadAll Entity by provider utils. */
+	@SmallTest
+	public void testUtilsReadAll() {
+		ArrayList<${curr.name}> result = null;
+		result = this.providerUtils.queryAll();
+
+		Assert.assertNotNull(result);
+		if (result != null) {
+			Assert.assertEquals(result.size(), this.nbEntities);
+		}
+	}
+
+	/** Test case Update Entity by provider utils. */
+	@SmallTest
+	public void testUtilsUpdate() {
+		int result = -1;
+		if (this.entity != null) {
+			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
+
+			<#list curr_ids as id>
+			${curr.name?uncap_first}.set${id.name?cap_first}(this.entity.get${id.name?cap_first}());
+			</#list>
+			<#list curr_relations as relation>
+				<#if ((relation.relation.type == "ManyToMany" || relation.relation.type == "OneToMany") && (!MetadataUtils.getInversingField(relation)?? || !MetadataUtils.getInversingField(relation).nullable))>
+			if (this.entity.get${relation.name?cap_first}() != null) {
+				for (${relation.relation.targetEntity} ${relation.name} : this.entity.get${relation.name?cap_first}()) {
+					boolean found = false;
+					for (${relation.relation.targetEntity} ${relation.name}2 : ${curr.name?uncap_first}.get${relation.name?cap_first}()) {
+						if (<#list IdsUtils.getAllIdsGetters(entities[relation.relation.targetEntity]) as id>${relation.name}${id}<#if MetadataUtils.isPrimitive(entities[relation.relation.targetEntity].ids[id_index])> == <#else>.equals(</#if>${relation.name}2${id}<#if !MetadataUtils.isPrimitive(entities[relation.relation.targetEntity].ids[id_index])>)</#if><#if id_has_next>
+							 && </#if></#list> ) {
+							found = true;
+							break;
+						}
+					}					
+					if(!found) {
+						${curr.name?uncap_first}.get${relation.name?cap_first}().add(${relation.name});
+					}
+				}
+			}
+				</#if>
+			</#list>
+			result = this.providerUtils.update(${curr.name?uncap_first});
+
+			Assert.assertTrue(result > 0);
+		}
+	}
+
+
+	/** Test case Delete Entity by provider utils. */
+	@SmallTest
+	public void testUtilsDelete() {
+		int result = -1;
+		if (this.entity != null) {
+			result = this.providerUtils.delete(this.entity);
+			Assert.assertTrue(result >= 0);
+		}
+
 	}
 }

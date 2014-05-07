@@ -2,10 +2,8 @@
 <@header?interpret />
 package ${project_namespace}.provider;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-
 import ${project_namespace}.provider.base.${curr.name?cap_first}ProviderAdapterBase;
+import ${project_namespace}.provider.base.${project_name?cap_first}ProviderBase;
 
 /**
  * ${curr.name?cap_first}ProviderAdapter.
@@ -22,18 +20,9 @@ public class ${curr.name?cap_first}ProviderAdapter
 	 * Constructor.
 	 * @param ctx context
 	 */
-	public ${curr.name?cap_first}ProviderAdapter(final Context ctx) {
-		this(ctx, null);
-	}
-
-	/**
-	 * Constructor.
-	 * @param ctx context
-	 * @param db database
-	 */
-	public ${curr.name?cap_first}ProviderAdapter(final Context ctx,
-												 final SQLiteDatabase db) {
-		super(ctx, db);
+	public ${curr.name?cap_first}ProviderAdapter(
+			final ${project_name?cap_first}ProviderBase provider) {
+		super(provider);
 	}
 }
 

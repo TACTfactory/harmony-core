@@ -12,8 +12,10 @@ import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Entity;
 import com.tactfactory.harmony.annotation.Id;
 import com.tactfactory.harmony.annotation.ManyToOne;
+import com.tactfactory.harmony.annotation.View;
 
 @Entity
+@View(list = false)
 /** Link entity between category and comment. */
 public class CategoryToComment {
 
@@ -30,3 +32,4 @@ public class CategoryToComment {
 	@ManyToOne(inversedBy="comments")
 	private Category category;
 }
+
