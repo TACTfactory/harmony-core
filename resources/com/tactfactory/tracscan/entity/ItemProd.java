@@ -25,7 +25,7 @@ public class ItemProd  implements Serializable , Parcelable {
 
 	
 	@Id
-	@Column(type = Type.INTEGER, hidden = true)
+	@Column(type = Type.INT, hidden = true)
 	protected int id;
 	
 	@Column
