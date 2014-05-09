@@ -1203,4 +1203,42 @@ public abstract class BaseAdapter implements IAdapter {
 			final String commandBundleTemplates) {
 		this.commandBundleTemplates = commandBundleTemplates;
 	}
+	
+	public void cloneTo(BaseAdapter adapter) {
+        //TODO use reflection for that !
+	    adapter.setAnnotationsBundleTemplates(this.getAnnotationsBundleTemplates());
+	    adapter.setAssets(this.getAssets());
+	    adapter.setBase(this.getBase());
+	    adapter.setBundleTemplates(this.getBundleTemplates());
+	    adapter.setCommandBundleTemplates(this.getCommandBundleTemplates());
+	    adapter.setCommon(this.getCommon());
+	    adapter.setConfigs(this.getConfigs());
+	    adapter.setController(this.getController());
+	    adapter.setCriterias(this.getCriterias());
+	    adapter.setData(this.getData());
+	    adapter.setFixture(this.getFixture());
+	    adapter.setHarmony(this.getHarmony());
+	    adapter.setHome(this.getHome());
+	    adapter.setLibs(this.getLibs());
+	    adapter.setManifest(this.getManifest());
+	    adapter.setMenu(this.getMenu());
+	    adapter.setMetaBundleTemplates(this.getMetaBundleTemplates());
+	    adapter.setModel(this.getModel());
+	    adapter.setParserBundleTemplates(this.getParserBundleTemplates());
+	    adapter.setPlatform(this.getPlatform());
+	    adapter.setProject(this.getProject());
+	    adapter.setProvider(this.getProvider());
+	    adapter.setResource(this.getResource());
+	    adapter.setService(this.getService());
+	    adapter.setSource(this.getSource());
+	    adapter.setStrings(this.getStrings());
+	    adapter.setTemplateBundleTemplates(this.getTemplateBundleTemplates());
+	    adapter.setTest(this.getTest());
+	    adapter.setTestLibs(this.getTestLibs());
+	    adapter.setUtil(this.getUtil());
+	    adapter.setUtilityPath(this.getUtilityPath());
+	    adapter.setValues(this.getValues());
+	    adapter.setView(this.getView());
+	    adapter.setWidget(this.getWidget());
+	}
 }

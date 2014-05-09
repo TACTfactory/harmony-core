@@ -60,7 +60,7 @@ public class ResourceCommand extends BaseCommand {
 
 		this.setCommandArgs(Console.parseCommandArgs(args));
 
-		for(BaseAdapter adapter : this.adapters) {
+		for(BaseAdapter adapter : this.getAdapters()) {
     		try {
     			if (action.equals(GENERATE_IMAGE)) {
     				adapter.resizeImage();

@@ -95,7 +95,7 @@ public class OrmCommand extends BaseCommand {
 	 * Generate the Persistence part for the given classes.
 	 */
 	protected final void makeLayoutDatabase() {
-	    for(BaseAdapter adapter : this.adapters) {
+	    for(BaseAdapter adapter : this.getAdapters()) {
     		try {
     			new EnumGenerator(adapter).generateAll();
     			new EntityGenerator(adapter).generateAll();
@@ -113,7 +113,7 @@ public class OrmCommand extends BaseCommand {
 	 * Generate Test DB for Entities.
 	 */
 	protected final void makeLayoutTestDatabase() {
-	    for(BaseAdapter adapter : this.adapters) {
+	    for(BaseAdapter adapter : this.getAdapters()) {
     		try {
     			new TestGenerator(adapter).generateAll();
     
@@ -128,7 +128,7 @@ public class OrmCommand extends BaseCommand {
 	 * @param generateHome True if you want the HomeActivity to be regenerated.
 	 */
 	protected final void makeLayoutUi(final boolean generateHome) {
-	    for(BaseAdapter adapter : this.adapters) {
+	    for(BaseAdapter adapter : this.getAdapters()) {
     		try {
     			if (generateHome) {
     				new ProjectGenerator(adapter).generateStartView();
