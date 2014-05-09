@@ -33,7 +33,7 @@ public class ViewComponent implements Serializable {
 
 	/** String type. */
 	@Column(type = Type.STRING)
-	private String string;
+	private String stringField;
 
 	/** Text type. */
 	@Column(type = Type.TEXT)
@@ -133,16 +133,16 @@ public class ViewComponent implements Serializable {
 	/**
 	 * @return the string
 	 */
-	public String getString() {
-	     return this.string;
+	public String getStringField() {
+	     return this.stringField;
 	}
 
 
 	/**
 	 * @param value the string to set
 	 */
-	public void setString(final String value) {
-	     this.string = value;
+	public void setStringField(final String value) {
+	     this.stringField = value;
 	}
 
 	/**

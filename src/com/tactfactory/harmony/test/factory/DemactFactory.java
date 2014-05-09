@@ -224,7 +224,7 @@ public class DemactFactory extends ProjectMetadataFactory {
 				userGroup, "deletePermission", false, false);
 		
 		ProjectMetadataFactory.generateField(
-				viewComponent, "string", false, false);
+				viewComponent, "stringField", false, false);
 		ProjectMetadataFactory.generateField(
 				viewComponent, "text", false, false);
 		ProjectMetadataFactory.generateField(
