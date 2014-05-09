@@ -60,7 +60,7 @@ public abstract class SqliteAdapter {
 		} else {
 
 			// Set Length
-			final Type fieldType = Type.fromName(fm.getType());
+			final Type fieldType = Type.fromName(fm.getHarmonyType());
 			if (fieldType != null) {
 				if (fm.getLength() != null
 						&& fm.getLength() != fieldType.getLength()) {
@@ -114,20 +114,14 @@ public abstract class SqliteAdapter {
 	 * @return The columnType for SQLite
 	 */
 	public static String generateColumnType(final FieldMetadata field) {
-		String type;
+		String type = field.getHarmonyType();
 		if (!Strings.isNullOrEmpty(field.getHarmonyType())) {
-			
 			if (field.getHarmonyType().equals(Column.Type.ENUM.getValue())) {
 				EnumMetadata enumMeta = 
 						ApplicationMetadata.INSTANCE.getEnums().get(
-								field.getType());
+								field.getEnumMeta().getTargetEnum());
 				type =	enumMeta.getType();
-			} else {
-				type = field.getHarmonyType();
-			}
-			
-		} else {
-			if (field.getRelation() != null) {
+			} else if (field.getHarmonyType().equals(Column.Type.RELATION.getValue())) {
 				EntityMetadata relatedEntity = field.getRelation().getEntityRef();
 				ArrayList<FieldMetadata> ids = new ArrayList<FieldMetadata>(
 						relatedEntity.getIds().values());
@@ -150,9 +144,7 @@ public abstract class SqliteAdapter {
 					
 					type = "BLOB";
 				}
-			} else {
-				type = field.getType();
-			}
+			}	
 		}
 		
 		if (type.equalsIgnoreCase(Column.Type.STRING.getValue())
@@ -184,9 +176,9 @@ public abstract class SqliteAdapter {
 			type = "BOOLEAN";
 		} else
 
-		if (type.equalsIgnoreCase(Column.Type.INTEGER.getValue())
-				|| type.equalsIgnoreCase(Column.Type.INT.getValue())
-				|| type.equalsIgnoreCase(Column.Type.BC_EAN.getValue())) {
+		if (type.equalsIgnoreCase(Column.Type.INT.getValue())
+				|| type.equalsIgnoreCase(Column.Type.BC_EAN.getValue())
+				|| type.equalsIgnoreCase("INTEGER")) {
 			type = "INTEGER";
 		} else
 
@@ -211,10 +203,6 @@ public abstract class SqliteAdapter {
 		} else
 
 		if (type.equalsIgnoreCase(Column.Type.BYTE.getValue())) {
-			type = "STRING";
-		} else
-
-		if (type.equalsIgnoreCase(Column.Type.CHARACTER.getValue())) {
 			type = "STRING";
 		} else {
 			if (field.getOwner() != null) {

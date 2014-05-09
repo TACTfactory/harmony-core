@@ -98,9 +98,9 @@
 	</#if>
 	<#list fields as field>
 		<#if field.harmony_type?lower_case == "enum">
-			<#if (!Utils.isInArray(import_array, field.type)) >
-				<#assign import_array = import_array + [field.type] />
-				<#assign enumClass = enums[field.type] />
+			<#if (!Utils.isInArray(import_array, field.enum.targetEnum)) >
+				<#assign import_array = import_array + [field.enum.targetEnum] />
+				<#assign enumClass = enums[field.enum.targetEnum] />
 				<#assign result = result + "import ${entity_namespace}.${InheritanceUtils.getCompleteNamespace(enumClass)};\n" />
 			</#if>
 		</#if>

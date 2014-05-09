@@ -29,7 +29,7 @@
 				</#if>
 				<#assign lastFieldName=field.name />
 				android:text="@string/${m_string_label}"/>
-				<#if (field.type?lower_case=="boolean")>
+				<#if (field.harmony_type?lower_case=="boolean")>
 			<CheckBox
 				android:id="@+id/${m_id}"
 				android:layout_width="match_parent"

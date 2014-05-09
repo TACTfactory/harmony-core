@@ -155,7 +155,7 @@
 
 
 <#function isPrimitive field>
-	<#return isPrimitiveType(field.type) />
+	<#return field.primitive />
 </#function>
 
 <#function isPrimitiveType type>

@@ -38,6 +38,7 @@ import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
+import com.tactfactory.harmony.meta.EnumTypeMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.meta.RelationMetadata;
 import com.tactfactory.harmony.parser.BaseParser;
@@ -182,15 +183,21 @@ public class FieldVisitor {
 			}
 			result.setInternal(false);
 			
-			result.setType(field.getType().toString());
+			String javaType = field.getType().toString();
+			
 			result.setStatic(ModifierSet.isStatic(field.getModifiers()));
 
+			if (Type.fromString(javaType) != null) {
+				result.setHarmonyType(Type.fromString(field.getType().toString()).getValue());
+			} else {
+				result.setHarmonyType(javaType);
+			}
 			// Java types Date and Time are deprecated in Harmony
-			if (result.getType().equalsIgnoreCase("date")
-					|| result.getType().equalsIgnoreCase("time")) {
+			if (javaType.equalsIgnoreCase("date")
+					|| javaType.equalsIgnoreCase("time")) {
 				ConsoleUtils.displayWarning(
 						"You should use DateTime java type instead of "
-						+ result.getType()
+						+ javaType
 						+ ". Errors may occur.");
 			}
 			result.setColumnName(result.getName());
@@ -206,7 +213,7 @@ public class FieldVisitor {
 			boolean isRelation = false;
 
 			String referencedEntityName = 
-					PackageUtils.extractClassNameFromArray(result.getType());
+					PackageUtils.extractClassNameFromArray(javaType);
 			// Prepare relation ?
 			if (projectEntities.containsKey(referencedEntityName)) {
 				referencedEntity = this.projectEntities.get(referencedEntityName);
@@ -243,6 +250,7 @@ public class FieldVisitor {
 						|| annotationType.equals(FILTER_MANY2ONE)
 						|| annotationType.equals(FILTER_MANY2MANY)) {
 					rel.setType(annotationType);
+					result.setHarmonyType(Type.RELATION.getValue());
 				}
 				
 				if (annotationType.equals(FILTER_COLUMNRESULT)) {
@@ -282,6 +290,16 @@ public class FieldVisitor {
 						result,
 						annotationExpr,
 						annotationType);
+				
+				if (Type.ENUM.getValue().equals(result.getHarmonyType())) {
+					EnumTypeMetadata enumMeta = new EnumTypeMetadata();
+					enumMeta.setTargetEnum(field.getType().toString());
+					result.setEnumMeta(enumMeta);
+				}
+				
+				if (field.getType().toString().matches("^[a-z].*")) {
+					result.setPrimitive(true);
+				}
 			}
 
 			// ID relation
@@ -326,7 +344,7 @@ public class FieldVisitor {
 			if (!result.getName().equals(result.getColumnName())) {
 				SqliteAdapter.Keywords.exists(result.getColumnName());
 			}
-			SqliteAdapter.Keywords.exists(result.getType());
+			SqliteAdapter.Keywords.exists(javaType);
 		}
 		return result;
 	}
@@ -482,7 +500,7 @@ public class FieldVisitor {
 								fieldRef = new FieldMetadata(rel.getEntityRef());
 								fieldRef.setName(fieldName);
 								fieldRef.setRelation(inversingRel);
-								fieldRef.setType(result.getOwner().getName());
+								fieldRef.setHarmonyType(Column.Type.RELATION.getValue());
 								fieldRef.setInternal(true);
 							}
 							fieldRef.getRelation().setInversedBy(result);
@@ -507,7 +525,7 @@ public class FieldVisitor {
 									fieldRef.setName(fieldName);
 									fieldRef.setRelation(inversingRel);
 									fieldRef.setInternal(true);
-									fieldRef.setType(result.getOwner().getName());
+									fieldRef.setHarmonyType(Column.Type.RELATION.getValue());
 								}
 								rel.setInversedBy(fieldRef);
 							}
@@ -533,7 +551,7 @@ public class FieldVisitor {
 									fieldRef.setName(fieldName);
 									fieldRef.setRelation(inversingRel);
 									fieldRef.setInternal(true);
-									fieldRef.setType(result.getOwner().getName());
+									fieldRef.setHarmonyType(Column.Type.RELATION.getValue());
 								}
 								rel.setInversedBy(fieldRef);
 								rel.setMappedBy(fieldRef);
@@ -602,7 +620,7 @@ public class FieldVisitor {
 
 			ConsoleUtils.displayDebug(
 					"\t" + type + " : " + result.getName()
-					+ " type of " + result.getType());
+					+ " type of " + result.getHarmonyType());
 		}
 
 		return isColumn;
@@ -633,7 +651,7 @@ public class FieldVisitor {
 					+ " : "
 					+ result.getName()
 					+ " type of "
-					+ result.getType());
+					+ result.getHarmonyType());
 		}
 
 		return isRelation;
@@ -661,8 +679,7 @@ public class FieldVisitor {
 				currentField.getOwner().getName() 
 				+ "_" + currentField.getName() 
 				+ "_internal");
-		newField.setType(currentField.getOwner().getName());
-		newField.setHarmonyType(TYPE_INTEGER);
+		newField.setHarmonyType(Column.Type.RELATION.getValue());
 		newField.setRelation(new RelationMetadata());
 		newField.getRelation().setEntityRef((EntityMetadata) currentField.getOwner());
 		newField.getRelation().setField(newField.getName());
@@ -734,9 +751,8 @@ public class FieldVisitor {
 			joinTable.getRelations().put(invertFieldName, joinTableInvertField);
 			joinTable.getFields().put(invertFieldName, joinTableInvertField);
 			joinTableInvertField.setColumnName(invertFieldName);
-			joinTableInvertField.setType(currentField.getOwner().getName());
 			joinTableInvertField.setColumnDefinition(TYPE_INTEGER);
-			joinTableInvertField.setHarmonyType(TYPE_INTEGER);
+			joinTableInvertField.setHarmonyType(Column.Type.RELATION.getValue());
 			joinTableInvertField.setRelation(new RelationMetadata());
 			joinTableInvertField.getRelation().setEntityRef(
 					(EntityMetadata) currentField.getOwner());
@@ -756,9 +772,8 @@ public class FieldVisitor {
 			joinTable.getRelations().put(currentField.getName(), joinTableAssociatedField);
 			joinTable.getFields().put(currentField.getName(), joinTableAssociatedField);
 			joinTableAssociatedField.setColumnName(currentField.getName());
-			joinTableAssociatedField.setType(((EntityMetadata) currentField.getRelation().getEntityRef()).getName());
 			joinTableAssociatedField.setColumnDefinition(TYPE_INTEGER);
-			joinTableAssociatedField.setHarmonyType(TYPE_INTEGER);
+			joinTableAssociatedField.setHarmonyType(Column.Type.RELATION.getValue());
 			joinTableAssociatedField.setRelation(new RelationMetadata());
 			joinTableAssociatedField.getRelation().setEntityRef(
 					(EntityMetadata) currentField.getRelation().getEntityRef());

@@ -19,6 +19,7 @@ import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.plateforme.manipulator.JavaFileManipulator;
 import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -219,71 +220,132 @@ public final class AndroidAdapter extends BaseAdapter {
 	}
 
 	@Override
-	public String getNativeType(final String type) {
-		String ret = type;
-
-		if (type.equals(Column.Type.STRING.getValue())) {
+	public String getNativeType(final FieldMetadata field) {
+		String ret = field.getHarmonyType();
+		if (ret.equals(Column.Type.ENUM.getValue())) {
+			ret = field.getEnumMeta().getTargetEnum();
+		} else
+			
+		if (ret.equals(Column.Type.RELATION.getValue())) {
+			if (field.getRelation().getType().endsWith("ToMany")) {
+				ret = String.format("ArrayList<%s>",
+						field.getRelation().getEntityRef().getName());
+			} else {
+				ret = field.getRelation().getEntityRef().getName();
+			}
+		} else
+			
+		if (ret.equals(Column.Type.STRING.getValue())) {
 			ret = STR;
 		} else
 
-		if (type.equals(Column.Type.TEXT.getValue())) {
+		if (ret.equals(Column.Type.TEXT.getValue())) {
 			ret = STR;
 		} else
 
-		if (type.equals(Column.Type.INTEGER.getValue())) {
-			ret = INT;
+		if (ret.equals(Column.Type.INT.getValue())) {
+			if (field.isPrimitive()) {
+				ret = INT;
+			} else {
+				ret = "Integer";
+			}
 		} else
 
-		if (type.equals(Column.Type.INT.getValue())) {
-			ret = INT;
-		} else
-
-		if (type.equals(Column.Type.FLOAT.getValue())) {
+		if (ret.equals(Column.Type.FLOAT.getValue())) {
 			ret = FLOAT;
 		} else
 
-		if (type.equals(Column.Type.DATETIME.getValue())) {
+		if (ret.equals(Column.Type.DATETIME.getValue())) {
 			ret = DATETIME;
 		} else
 
-		if (type.equals(Column.Type.DATE.getValue())) {
+		if (ret.equals(Column.Type.DATE.getValue())) {
 			ret = DATETIME;
 		} else
 
-		if (type.equals(Column.Type.TIME.getValue())) {
+		if (ret.equals(Column.Type.TIME.getValue())) {
 			ret = DATETIME;
 		} else
 
-		if (type.equals(Column.Type.LOGIN.getValue())) {
+		if (ret.equals(Column.Type.LOGIN.getValue())) {
 			ret = STR;
 		} else
 
-		if (type.equals(Column.Type.PASSWORD.getValue())) {
+		if (ret.equals(Column.Type.PASSWORD.getValue())) {
 			ret = STR;
 		} else
 
-		if (type.equals(Column.Type.EMAIL.getValue())) {
+		if (ret.equals(Column.Type.EMAIL.getValue())) {
 			ret = STR;
 		} else
 
-		if (type.equals(Column.Type.PHONE.getValue())) {
+		if (ret.equals(Column.Type.PHONE.getValue())) {
 			ret = STR;
 		} else
 
-		if (type.equals(Column.Type.CITY.getValue())) {
+		if (ret.equals(Column.Type.CITY.getValue())) {
 			ret = STR;
 		} else
 
-		if (type.equals(Column.Type.ZIPCODE.getValue())) {
-			ret = INT;
+		if (ret.equals(Column.Type.ZIPCODE.getValue())) {
+			if (field.isPrimitive()) {
+				ret = INT;
+			} else {
+				ret = "Integer";
+			}
 		} else
 
-		if (type.equals(Column.Type.COUNTRY.getValue())) {
+		if (ret.equals(Column.Type.COUNTRY.getValue())) {
 			ret = STR;
 		} else
 
-		if (type.equals(Column.Type.BC_EAN.getValue())) {
-			ret = INT;
+		if (ret.equals(Column.Type.BC_EAN.getValue())) {
+			if (field.isPrimitive()) {
+				ret = INT;
+			} else {
+				ret = "Integer";
+			}
+		} else
+		
+		if (ret.equals(Column.Type.CHAR.getValue())) {
+
+			if (field.isPrimitive()) {
+				ret = "char";
+			} else {
+				ret = "Character";
+			}
+		} else
+			
+		if (ret.equals(Column.Type.FLOAT.getValue())) {
+			if (field.isPrimitive()) {
+				ret = "float";
+			} else {
+				ret = "Float";
+			}
+		}
+		
+		if (ret.equals(Column.Type.DOUBLE.getValue())) {
+			if (field.isPrimitive()) {
+				ret = "double";
+			} else {
+				ret = "Double";
+			}
+		} else
+			
+		if (ret.equals(Column.Type.LONG.getValue())) {
+			if (field.isPrimitive()) {
+				ret = "long";
+			} else {
+				ret = "Long";
+			}
+		}
+		
+		if (ret.equals(Column.Type.BOOLEAN.getValue())) {
+			if (field.isPrimitive()) {
+				ret = "boolean";
+			} else {
+				ret = "Boolean";
+			}
 		}
 		return ret;
 	}

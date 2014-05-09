@@ -277,7 +277,11 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 				prov.applyBatch(${project_name?cap_first}Provider.authority, operations);
 			if (results[0] != null) {
 				result = results[0].uri;
-				item.set${curr.ids[0].name?cap_first}(<#if curr.ids[0].type?lower_case=="int" || curr.ids[0].type?lower_case=="integer">Integer.parseInt(result.getLastPathSegment())<#else>result.getLastPathSegment()</#if>);
+				<#list curr.ids as id>
+					<#if id.strategy == "IDENTITY">
+				item.set${id.name?cap_first}(<#if FieldsUtils.getJavaType(id)?lower_case=="int" || FieldsUtils.getJavaType(id)?lower_case=="integer">Integer.parseInt(result.getLastPathSegment())<#else>result.getLastPathSegment()</#if>);
+					</#if>
+				</#list>
 			}
 		} catch (RemoteException e) {
 			Log.e(TAG, e.getMessage());
@@ -328,7 +332,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 	 *
 	 * @return ${curr.name?cap_first}
 	 */
-	public ${curr.name?cap_first} query(<#list curr_ids as id>final ${id.type} ${id.name}<#if id_has_next>,
+	public ${curr.name?cap_first} query(<#list curr_ids as id>final ${FieldsUtils.getJavaType(id)} ${id.name}<#if id_has_next>,
 				</#if></#list>) {
 		${curr.name?cap_first} result = null;
 		ContentResolver prov = this.getContext().getContentResolver();

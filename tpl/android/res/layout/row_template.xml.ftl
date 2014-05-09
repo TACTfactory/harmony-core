@@ -15,7 +15,7 @@
 		<#assign m_id_label="${m_id}_label" />
 		<#if (!field.internal && !field.hidden)>
 			<#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
-				<#if (field.type?lower_case=="boolean")>
+				<#if (field.harmony_type?lower_case=="boolean")>
 	    <CheckBox
 			android:id="@+id/row_${m_id}"
 	    	android:layout_width="match_parent"
