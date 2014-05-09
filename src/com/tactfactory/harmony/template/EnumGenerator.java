@@ -8,7 +8,6 @@
  */
 package com.tactfactory.harmony.template;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.tactfactory.harmony.meta.EnumMetadata;
@@ -26,6 +25,7 @@ public class EnumGenerator extends BaseGenerator<IAdapter> {
 	 */
 	public EnumGenerator(final IAdapter adapt) throws Exception {
 		super(adapt);
+		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 	}
 
 	/**
@@ -34,24 +34,21 @@ public class EnumGenerator extends BaseGenerator<IAdapter> {
 	 */
 	public final void generateAll() {
 		ConsoleUtils.display(">> Decorate enums...");
-
-		List<IUpdater> updaters = new ArrayList<IUpdater>();
 		
 		Iterable<EnumMetadata> enums = this.getAppMetas().getEnums().values();
 		
 		for (final EnumMetadata enumMeta : enums) {
 
 			if (enumMeta.getIdName() != null) {
-			    List<IUpdater> enumsUpdaters =
-			            this.getAdapter().getAdapterProject()
-                                .updateEnum(enumMeta, this.getCfg());
+				this.getDatamodel().put(
+	                    TagConstant.CURRENT_ENTITY,
+	                    enumMeta.getName());
+				
+			    List<IUpdater> updaters = this.getAdapter().getAdapterProject()
+                            .updateEnum(enumMeta, this.getCfg());
                 
-			    if (enumsUpdaters != null) {
-                    updaters.addAll(enumsUpdaters);
-                }
+			    this.processUpdater(updaters);
 			}
 		}
-		
-		this.processUpdater(updaters);
 	}
 }
