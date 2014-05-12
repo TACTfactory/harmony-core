@@ -360,7 +360,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		</#if>
 		<#if MetadataUtils.hasToManyRelations(curr)>
 			<#list curr.ids as id>
-		${id.type} ${curr.name?lower_case}${id.name?cap_first};
+		${FieldsUtils.getJavaType(id)} ${curr.name?lower_case}${id.name?cap_first};
 			</#list>
 		</#if>
 
@@ -408,7 +408,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 					${curr.name?uncap_first}Cursor.moveToFirst();
 					<#assign relNames = ContractUtils.getFieldsNames(relation) />
 					<#list entities[relation.relation.targetEntity].ids as id>
-					${id.type} ${relation.name}${id.name?cap_first} = ${curr.name?uncap_first}${AdapterUtils.getCursorGet(id)?cap_first}
+					${FieldsUtils.getJavaType(id)} ${relation.name}${id.name?cap_first} = ${curr.name?uncap_first}${AdapterUtils.getCursorGet(id)?cap_first}
 							${curr.name?uncap_first}Cursor.getColumnIndex(
 									${relNames[id_index]}));
 					</#list>
@@ -420,7 +420,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				}
 				<#else>
 					<#list curr.ids as id>
-				${curr.name?lower_case}${id.name?cap_first} = <#if id.type?lower_case == "int" || id.type?lower_case == "integer">Integer.parseInt(</#if>uri.getPathSegments().get(${id_index + 1})<#if id.type?lower_case == "int" || id.type?lower_case == "integer">)</#if>;
+				${curr.name?lower_case}${id.name?cap_first} = <#if FieldsUtils.getJavaType(id)?lower_case == "int" || FieldsUtils.getJavaType(id)?lower_case == "integer">Integer.parseInt(</#if>uri.getPathSegments().get(${id_index + 1})<#if FieldsUtils.getJavaType(id)?lower_case == "int" || FieldsUtils.getJavaType(id)?lower_case == "integer">)</#if>;
 					</#list>
 					<#if relation.relation.type == "ManyToMany">
 				${relation.relation.joinTable}SQLiteAdapter ${relation.name}Adapter = new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);

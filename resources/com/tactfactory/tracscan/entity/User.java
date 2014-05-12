@@ -21,7 +21,7 @@ public class User  implements Serializable , Parcelable {
 	private static final long serialVersionUID = -6626602416969280536L;
 	
 	@Id
-	@Column(type = Type.INTEGER, hidden = true)
+	@Column(type = Type.INT, hidden = true)
 	protected int id;
 
 	@Column(type = Type.ENUM)

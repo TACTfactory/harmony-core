@@ -101,12 +101,6 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 				Log.d(TAG, "Creating schema : ${entity.name}");
 			}
 			db.execSQL(${entity.name}SQLiteAdapter.getSchema());
-			<#list entity["relations"] as relation>
-				<#if (relation.type=="ManyToMany")>
-			db.execSQL(${entity.name}SQLiteAdapter
-					.get${relation.name?cap_first}RelationSchema());
-				</#if>
-			</#list>
 		</#if>
 	</#list>
 			db.execSQL("PRAGMA foreign_keys = ON;");

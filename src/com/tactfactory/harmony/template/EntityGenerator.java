@@ -202,14 +202,14 @@ public class EntityGenerator extends BaseGenerator {
 				fieldMeta.getName().substring(0, 1).toUpperCase()
 				+ fieldMeta.getName().substring(1);
 		String prefix = "get";
-		if ("boolean".equalsIgnoreCase(fieldMeta.getType())) {
+		if ("boolean".equalsIgnoreCase(fieldMeta.getHarmonyType())) {
 			prefix = "is";
 		}
 		for (final MethodMetadata m : methods) {
 			if (m.getName().equals(prefix + capitalizedName)
 					&& m.getArgumentsTypes().size() == 0
 					&& m.getType().equals(this.getAdapter().getNativeType(
-							fieldMeta.getType()))) {
+							fieldMeta))) {
 				ret = true;
 
 				ConsoleUtils.displayDebug("Already implements getter of "
@@ -241,7 +241,7 @@ public class EntityGenerator extends BaseGenerator {
 					&& method.getArgumentsTypes().size() == 1
 					&& method.getArgumentsTypes().get(0).equals(
 							this.getAdapter().getNativeType(
-									fieldMeta.getType()))) {
+									fieldMeta))) {
 				result = true;
 
 				ConsoleUtils.displayDebug("Already implements setter of "
@@ -332,7 +332,9 @@ public class EntityGenerator extends BaseGenerator {
 			
 			boolean hasDateTime = false;
 			for (FieldMetadata field : classMeta.getFields().values()) {
-				if (field.getType().equals("DateTime")) {
+				if (field.getHarmonyType().equalsIgnoreCase("DateTime")
+						|| field.getHarmonyType().equalsIgnoreCase("Date")
+						|| field.getHarmonyType().equalsIgnoreCase("Time")) {
 					hasDateTime = true;
 				}
 			}

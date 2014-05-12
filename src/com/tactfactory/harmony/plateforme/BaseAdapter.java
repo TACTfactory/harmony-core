@@ -15,6 +15,7 @@ import com.tactfactory.harmony.Context;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
 
 import freemarker.template.Configuration;
@@ -123,10 +124,10 @@ public abstract class BaseAdapter {
 
 	/** Convert a Harmony type into a native type.
 	 *
-	 * @param type The type name
+	 * @param field The field name
 	 * @return String of the native type
 	 */
-	public abstract String getNativeType(String type);
+	public abstract String getNativeType(FieldMetadata field);
 
 	/** Convert image structure to alternative resolution. */
 	public abstract void resizeImage();
