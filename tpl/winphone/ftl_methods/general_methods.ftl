@@ -11,7 +11,7 @@
 	<#assign t = "" />
 	<#if (indentLevel > 0) >
 		<#list 1..indentLevel as x>
-			<#assign t = t + "\t" />
+			<#assign t = t + "    " />
 		</#list> 
 	</#if>
 	<#return t />

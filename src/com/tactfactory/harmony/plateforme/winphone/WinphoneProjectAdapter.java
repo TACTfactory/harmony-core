@@ -142,6 +142,18 @@ public class WinphoneProjectAdapter implements IAdapterProject {
                 FileType.EmbeddedResource,
                 "Resources/Values/" + "StringsResources.resx"));
         
+        templatePath = this.adapter.getTemplateUtilPath();
+        filePath = this.adapter.getUtilPath();
+        
+        result.add(new SourceFile(
+                templatePath + "DateUtils.cs",
+                filePath + "DateUtils.cs",
+                false));
+        
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "Harmony/Util/" + "DateUtils.cs"));
+        
         return result;
     }
 
@@ -347,8 +359,41 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getListView(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        
+        String templatePath = this.adapter.getTemplateSourceControlerPath();
+        
+        String filePath = String.format("%s%s/",
+                this.adapter.getSourceControllerPath(),
+                entity.getName());
+        
+        result.add(new SourceFile(
+                templatePath + "TemplateListPage.xaml.cs",
+                String.format("%s%sListPage.xaml.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+        
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + entity.getName()  + "/" + String.format("%sListPage.xaml.cs",
+                        entity.getName()),
+                String.format("%sListPage.xaml",
+                        entity.getName())));
+        
+        result.add(new SourceFile(
+                templatePath + "TemplateListPage.xaml",
+                String.format("%s%sListPage.xaml",
+                        filePath,
+                        entity.getName()),
+                false));
+        
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + entity.getName()  + "/" + String.format("%sListPage.xaml",
+                        entity.getName())));
+        
+        return result;
     }
 
     @Override
@@ -421,10 +466,11 @@ public class WinphoneProjectAdapter implements IAdapterProject {
             String fixtureType, EntityMetadata entity) {
     	List<IUpdater> result = new ArrayList<IUpdater>();
         
-        String templatePath = this.adapter.getTemplateSourceFixturePath();
+        String templatePath = this.adapter.getTemplateSourceFixturePath()
+        		+ "Loaders/";
         
         String filePath = this.adapter.getSourcePath()
-                + "/" + this.adapter.getFixture() + "/Loaders/";
+                + this.adapter.getFixture() + "/Loaders/";
 
         //Create base classes for Fixtures loaders
         result.add(new SourceFile(
@@ -606,8 +652,25 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> updateEnum(EnumMetadata enumMeta, Configuration cfg) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        
+        String templatePath = this.adapter.getTemplateSourcePath() + "Entity/";
+        
+        String filePath = this.adapter.getSourcePath() + "Entity/";
+        
+        result.add(new SourceFile(
+                templatePath + "TemplateEnum.cs",
+                String.format("%s%s.cs",
+                        filePath,
+                        enumMeta.getName()),
+                true));
+        
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "Entity/" + String.format("%s.cs",
+                        enumMeta.getName())));
+        
+        return result;
     }
 
     @Override

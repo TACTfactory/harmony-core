@@ -86,7 +86,8 @@ namespace ${project_namespace}
                 db.CreateDatabaseIfNotExists();
             }
         }
-
+        
+        <#if (sync)>
         /// <summary>
         /// Get the last sync date.
         /// </summary>
@@ -106,7 +107,8 @@ namespace ${project_namespace}
                 PREFERENCE_LAST_SYNC,
                 dateTime);
         }
-
+        
+        </#if>
         /// <summary>
         /// Get the device's UDID.
         /// </summary>

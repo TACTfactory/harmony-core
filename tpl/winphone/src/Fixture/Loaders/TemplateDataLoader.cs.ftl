@@ -31,6 +31,7 @@ import java.util.Map;
 using System.Xml.Linq;
 </#if>
 using ${project_namespace}.Entity;
+using ${project_namespace}.Harmony.Util;
 
 
 namespace ${project_namespace}.Fixture
@@ -83,6 +84,7 @@ namespace ${project_namespace}.Fixture
          */
         public ${curr.name} ExtractItem(XElement element,
                                     ${curr.name} ${curr.name?uncap_first}) {
+            XElement subElement = null;
         <#list curr_fields as field>${AdapterUtils.xmlExtractFieldAdapter(curr.name?uncap_first, field, curr, 3)}</#list>
             
             <#if InheritanceUtils.isExtended(curr)>

@@ -91,9 +91,9 @@ public final class WinphoneAdapter extends BaseAdapter {
         this.setLibs("libs");
         this.setTest("test");
         this.setTestLibs("libs");
-        this.setHarmony("harmony");
+        this.setHarmony("Harmony");
         this.setWidget("widget");
-        this.setUtil("util");
+        this.setUtil("Util");
         this.setUtilityPath("ftl_methods");
         this.setMenu("menu");
         
@@ -312,4 +312,11 @@ public final class WinphoneAdapter extends BaseAdapter {
                 this.getValues(),
                 this.getStrings());
     }
+    
+    public String getUtilPath() {
+		return String.format("%s%s/%s/",
+				this.getSourcePath(),
+				this.getHarmony(),
+				this.getUtil());
+	}
 }

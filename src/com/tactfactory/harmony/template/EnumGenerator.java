@@ -38,17 +38,15 @@ public class EnumGenerator extends BaseGenerator<IAdapter> {
 		Iterable<EnumMetadata> enums = this.getAppMetas().getEnums().values();
 		
 		for (final EnumMetadata enumMeta : enums) {
+			this.getDatamodel().put(
+                    TagConstant.CURRENT_ENTITY,
+                    enumMeta.getName());
 
-			if (enumMeta.getIdName() != null) {
-				this.getDatamodel().put(
-	                    TagConstant.CURRENT_ENTITY,
-	                    enumMeta.getName());
-				
-			    List<IUpdater> updaters = this.getAdapter().getAdapterProject()
-                            .updateEnum(enumMeta, this.getCfg());
-                
-			    this.processUpdater(updaters);
-			}
+			
+		    List<IUpdater> updaters = this.getAdapter().getAdapterProject()
+                        .updateEnum(enumMeta, this.getCfg());
+            
+		    this.processUpdater(updaters);
 		}
 	}
 }

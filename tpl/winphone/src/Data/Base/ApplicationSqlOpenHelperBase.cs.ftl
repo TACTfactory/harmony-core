@@ -7,6 +7,9 @@ using System.Windows;
 using System.Windows.Resources;
 using System.Data.Linq;
 using ${project_namespace}.Entity;
+<#if options.fixture?? && options.fixture.enabled>
+using ${project_namespace}.Fixture;
+</#if>
 
 namespace ${project_namespace}.Data.Base
 {
@@ -26,7 +29,8 @@ namespace ${project_namespace}.Data.Base
 
         <#if (entities??)>
             <#list entities?values as entity>
-                <#if (!entity.internal)>
+                <#if (!entity.internal && entity.fields?? && entity.fields?size > 0 &&
+                    (!entity.inheritance?? || (entity.inheritance.subclasses?? && entity.inheritance.subclasses?size > 0)))>
         /// <summary>
         /// Table for ${entity.name} entity.
         /// </summary>
@@ -57,12 +61,31 @@ namespace ${project_namespace}.Data.Base
                 {
                     //Create the database
                     this.CreateDatabase();
+                    <#if options.fixture?? && options.fixture.enabled>
+                    this.LoadData();
+                    </#if>
                 }
             }
 
             return result;
         }
+        
+        <#if options.fixture?? && options.fixture.enabled>
+        private void LoadData()
+        {
+            DataLoader dataLoader = new DataLoader(this);
+            dataLoader.clean();
 
+            int mode = DataLoader.MODE_APP;
+
+            if (DemactApplication.DEBUG) {
+                mode = DataLoader.MODE_APP | DataLoader.MODE_DEBUG;
+            }
+
+            dataLoader.loadData(mode);
+        }
+
+        </#if>
         private StreamResourceInfo GetDatabaseAssets()
         {
             StreamResourceInfo stream = Application.GetResourceStream(

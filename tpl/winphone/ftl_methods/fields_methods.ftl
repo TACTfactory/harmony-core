@@ -1,3 +1,65 @@
+<#function getFieldType field>
+    <#if (field.harmony_type == "string")>
+        <#assign result = "String" />
+    <#elseif (field.harmony_type == "text")>
+        <#assign result = "String" />
+    <#elseif (field.harmony_type == "boolean")>
+        <#assign result = "Boolean" />
+    <#elseif (field.harmony_type == "integer")>
+        <#assign result = "Int32" />
+    <#elseif (field.harmony_type == "int")>
+        <#assign result = "Int32" />
+    <#elseif (field.harmony_type == "short")>
+        <#assign result = "Int16" />
+    <#elseif (field.harmony_type == "byte")>
+        <#assign result = "Byte" />
+    <#elseif (field.harmony_type == "char")>
+        <#assign result = "Char" />
+    <#elseif (field.harmony_type == "character")>
+        <#assign result = "Char" />
+    <#elseif (field.harmony_type == "long")>
+        <#assign result = "Int64" />
+    <#elseif (field.harmony_type == "float")>
+        <#assign result = "Single" />
+    <#elseif (field.harmony_type == "double")>
+        <#assign result = "Double" />
+    <#elseif (field.harmony_type == "datetime")>
+        <#assign result = "DateTime" />
+    <#elseif (field.harmony_type == "date")>
+        <#assign result = "DateTime" />
+    <#elseif (field.harmony_type == "time")>
+        <#assign result = "DateTime" />
+    <#elseif (field.harmony_type == "login")>
+        <#assign result = "String" />
+    <#elseif (field.harmony_type == "password")>
+        <#assign result = "String" />
+    <#elseif (field.harmony_type == "email")>
+        <#assign result = "String" />
+    <#elseif (field.harmony_type == "phone")>
+        <#assign result = "String" />
+    <#elseif (field.harmony_type == "city")>
+        <#assign result = "String" />
+    <#elseif (field.harmony_type == "zipcode")>
+        <#assign result = "Int32" />
+    <#elseif (field.harmony_type == "country")>
+        <#assign result = "String" />
+    <#elseif (field.harmony_type == "ean")>
+        <#assign result = "String" />
+    <#elseif (field.harmony_type == "enum")>
+        <#assign result = field.type />
+    <#elseif (field.relation??)>
+        <#assign result = field.relation.targetEntity />
+    <#else>
+        <#assign result = "FAILED" />
+    </#if>
+    
+    <#if (field.isIterable)>
+        <#assign result = "List<" + result + ">" />
+    </#if>
+    
+    <#return result />
+</#function>
+
 <#function hasManyToOneRelation fields>
 	<#list fields as field>
 		<#if (field.relation?? && field.relation.type == "ManyToOne")>
