@@ -345,14 +345,6 @@ public class ClassVisitor {
     	// Check reserved keywords
 		SqliteAdapter.Keywords.exists(result.getName());
 
-    	// Get the Enum entries
-    	if (enumDecl.getEntries() != null) {
-    		for (final EnumConstantDeclaration enumEntry
-    				: enumDecl.getEntries()) {
-    			result.getEntries().add(enumEntry.getName());
-    		}
-    	}
-
     	// Get list of Members (Methods, Fields, Subclasses, Enums, etc.)
 		final List<BodyDeclaration> members = enumDecl.getMembers();
 		if (members != null) {
@@ -389,6 +381,27 @@ public class ClassVisitor {
 		} else {
 			result.setType(Type.STRING.getValue());
 		}
+		
+		// Get the Enum entries
+    	if (enumDecl.getEntries() != null) {
+    		for (final EnumConstantDeclaration enumEntry
+    				: enumDecl.getEntries()) {
+    			result.getEntries().add(enumEntry.getName());
+    			if (result.getIdName() != null) {
+	    			Expression expr = enumEntry.getArgs().get(0);
+					if (expr instanceof StringLiteralExpr) {
+						result.getValues().put(
+								enumEntry.getName(),
+								((StringLiteralExpr) expr).getValue());
+					} else {
+						result.getValues().put(
+								enumEntry.getName(),
+								expr.toString());
+					}
+    			}
+    		}
+    	}
+		
     	return result;
     }
 

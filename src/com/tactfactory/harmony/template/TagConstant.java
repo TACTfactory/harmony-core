@@ -162,5 +162,7 @@ public abstract class TagConstant {
 	public static final String HAS_BEEN_PARSED = "hasBeenParsed";
 	/** Constant for strategy. */
 	public static final String STRATEGY = "strategy";
+	/** Constant for values. */
+	public static final String VALUES = "values";
 
 }

@@ -9,6 +9,8 @@
 package com.tactfactory.harmony.meta;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.tactfactory.harmony.plateforme.IAdapter;
@@ -26,6 +28,9 @@ public final class EnumMetadata extends ClassMetadata {
 
 	/** List of the enum names.*/
 	private ArrayList<String> entries = new ArrayList<String>();
+	
+	private Map<String, String> values =
+			new HashMap<String, String>();
 
 	/**
 	 * Transform the class to a map given an adapter.
@@ -35,9 +40,10 @@ public final class EnumMetadata extends ClassMetadata {
 	@Override
 	public final Map<String, Object> toMap(final IAdapter adapter) {
 		final Map<String, Object> model = super.toMap(adapter);
-		model.put(TagConstant.ID, idName);
-		model.put(TagConstant.TYPE, type);
-		model.put(TagConstant.NAMES, entries);
+		model.put(TagConstant.ID, this.idName);
+		model.put(TagConstant.TYPE, this.type);
+		model.put(TagConstant.NAMES, this.entries);
+		model.put(TagConstant.VALUES, this.values);
 		return model;
 	}
 
@@ -81,5 +87,19 @@ public final class EnumMetadata extends ClassMetadata {
 	 */
 	public final void setIdName(final String idName) {
 		this.idName = idName;
+	}
+
+	/**
+	 * @return the values
+	 */
+	public final Map<String, String> getValues() {
+		return values;
+	}
+
+	/**
+	 * @param values the values to set
+	 */
+	public final void setValues(Map<String, String> values) {
+		this.values = values;
 	}
 }

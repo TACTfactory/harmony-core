@@ -29,6 +29,7 @@ import java.util.ArrayList;
 </#if>
 <#if fixtureType=="yml">
 import java.util.Map;
+<#list curr.relations as relation><#if relation.relation.type == "ManyToMany" && relation.relation.inversedBy??>import java.util.ArrayList;<#break /></#if></#list>
 <#else>
 import org.jdom2.Element;
 </#if>
@@ -176,6 +177,18 @@ public final class ${curr.name?cap_first}DataLoader
 			for (${field.relation.targetEntity} related : ${curr.name?uncap_first}.get${field.name?cap_first}()) {
 				related.set${field.relation.mappedBy?cap_first}(${curr.name?uncap_first});
 			}
+		}
+						<#elseif field.relation.type == "ManyToMany" && field.relation.inversedBy??>
+							<#assign invField = MetadataUtils.getInversingField(field) />
+		for (${field.relation.targetEntity} ${field.relation.targetEntity?uncap_first} : ${curr.name?uncap_first}.get${field.name?cap_first}()) {
+			ArrayList<${curr.name?cap_first}> ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =
+					${field.relation.targetEntity?uncap_first}.get${invField.name?cap_first}();
+			if (${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s == null) {
+					${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =
+							new ArrayList<${curr.name?cap_first}>();
+					${field.relation.targetEntity?uncap_first}.set${invField.name?cap_first}(${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s);
+			}
+			${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s.add(${curr.name?uncap_first});
 		}
 						</#if>
 					</#if>
