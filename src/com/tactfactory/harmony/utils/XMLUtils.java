@@ -97,18 +97,23 @@ public abstract class XMLUtils {
 	public static void writeXMLToFile(final Document doc,
 			final String xmlFileName) {
 		try {
-			final File xmlFile =
-					TactFileUtils.makeFile(xmlFileName);
-			// Write to File
+			final File xmlFile = TactFileUtils.makeFile(xmlFileName);
 			final XMLOutputter xmlOutput = new XMLOutputter();
+			
+			// Write to File
 			// Make beautiful file with indent !!!
 			xmlOutput.setFormat(Format.getPrettyFormat().setIndent("\t"));
 			xmlOutput.setXMLOutputProcessor(new TactXMLOutputter());
-			xmlOutput.output(doc,
+			FileOutputStream fos = new FileOutputStream(
+					xmlFile.getAbsoluteFile());
+			
+			xmlOutput.output(
+					doc,
 					new OutputStreamWriter(
-							new FileOutputStream(
-									xmlFile.getAbsoluteFile()),
-									TactFileUtils.DEFAULT_ENCODING));
+							fos,
+							TactFileUtils.DEFAULT_ENCODING));
+			
+			fos.close();
 		} catch (IOException e) {
 			ConsoleUtils.displayError(e);
 		}
