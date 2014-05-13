@@ -6,6 +6,7 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
@@ -120,7 +121,7 @@ public class JavaFileManipulator extends SourceFileManipulator {
 
 		final Map<String, Object> map = new HashMap<String, Object>();
 		map.put("property", f.getName());
-		map.put("property_type", this.adapter.getNativeType(f.getType()));
+		map.put("property_type", this.adapter.getNativeType(f));
 
 		try {
 			final StringWriter writer = new StringWriter();

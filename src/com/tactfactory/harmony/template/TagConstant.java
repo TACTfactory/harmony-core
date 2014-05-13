@@ -49,12 +49,16 @@ public abstract class TagConstant {
 	public static final String CLASSES = "classes";
 	/** Constant for entities. */
 	public static final String ENTITIES = "entities";
-	/** Constant for entities. */
+	/** Constant for enums. */
 	public static final String ENUMS = "enums";
+	/** Constant for enum. */
+	public static final String ENUM = "enum";
 	/** Constant for entities. */
 	public static final String INTERFACES = "interfaces";
 	/** Constant for relation target entity. */
 	public static final String ENTITY_REF = "targetEntity";
+	/** Constant for relation target enum. */
+	public static final String ENUM_REF = "targetEnum";
 	/** Constant for classes fields. */
 	public static final String FIELDS = "fields";
 	/** Constant for fields name. */
@@ -91,6 +95,8 @@ public abstract class TagConstant {
 	public static final String ORDERS = "orders";
 	/** Constant for hidden field. */
 	public static final String HIDDEN = "hidden";
+	/** Constant for primitive field. */
+	public static final String PRIMITIVE = "primitive";
 	/** Constant for entity create action. */
 	public static final String CREATE_ACTION = "createAction";
 	/** Constant for entity edit action. */

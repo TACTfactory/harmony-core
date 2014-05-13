@@ -377,7 +377,7 @@ public class ClassVisitor {
 
 		if (!Strings.isNullOrEmpty(result.getIdName())) {
 			result.setType(
-					result.getFields().get(result.getIdName()).getType());
+					result.getFields().get(result.getIdName()).getHarmonyType());
 		} else {
 			result.setType(Type.STRING.getValue());
 		}
@@ -599,7 +599,7 @@ public class ClassVisitor {
     		
 			FieldMetadata discriminatorColumn = 
 					new FieldMetadata(classMeta);
-			discriminatorColumn.setType(type);
+			discriminatorColumn.setHarmonyType(type);
 			discriminatorColumn.setColumnDefinition(type);
 			discriminatorColumn.setColumnName(columnName);
 			discriminatorColumn.setName(name);

@@ -118,29 +118,29 @@ class EntityImplementation implements IUpdaterFile {
      */
     private final boolean alreadyImplementsGet(final FieldMetadata fieldMeta,
             final ClassMetadata classMeta) {
-        boolean ret = false;
-        final List<MethodMetadata> methods = classMeta.getMethods();
-        final String capitalizedName =
-                fieldMeta.getName().substring(0, 1).toUpperCase()
-                + fieldMeta.getName().substring(1);
-        String prefix = "get";
-        if ("boolean".equalsIgnoreCase(fieldMeta.getType())) {
-            prefix = "is";
-        }
-        for (final MethodMetadata m : methods) {
-            if (m.getName().equals(prefix + capitalizedName)
-                    && m.getArgumentsTypes().size() == 0
-                    && m.getType().equals(this.adapter.getNativeType(
-                            fieldMeta.getType()))) {
-                ret = true;
+    	boolean ret = false;
+		final List<MethodMetadata> methods = classMeta.getMethods();
+		final String capitalizedName =
+				fieldMeta.getName().substring(0, 1).toUpperCase()
+				+ fieldMeta.getName().substring(1);
+		String prefix = "get";
+		if ("boolean".equalsIgnoreCase(fieldMeta.getHarmonyType())) {
+			prefix = "is";
+		}
+		for (final MethodMetadata m : methods) {
+			if (m.getName().equals(prefix + capitalizedName)
+					&& m.getArgumentsTypes().size() == 0
+					&& m.getType().equals(this.adapter.getNativeType(
+							fieldMeta))) {
+				ret = true;
 
-                ConsoleUtils.displayDebug("Already implements getter of "
-                        + fieldMeta.getName(),
-                        " => " + m.getName());
-            }
-        }
+				ConsoleUtils.displayDebug("Already implements getter of "
+						+ fieldMeta.getName(),
+						" => " + m.getName());
+			}
+		}
 
-        return ret;
+		return ret;
     }
 
     /**
@@ -152,28 +152,28 @@ class EntityImplementation implements IUpdaterFile {
     private final boolean alreadyImplementsSet(
             final FieldMetadata fieldMeta,
             final ClassMetadata classMeta) {
-        boolean result = false;
-        final List<MethodMetadata> methods = classMeta.getMethods();
-        final String capitalizedName =
-                fieldMeta.getName().substring(0, 1).toUpperCase()
-                + fieldMeta.getName().substring(1);
+    	boolean result = false;
+		final List<MethodMetadata> methods = classMeta.getMethods();
+		final String capitalizedName =
+				fieldMeta.getName().substring(0, 1).toUpperCase()
+				+ fieldMeta.getName().substring(1);
 
-        for (final MethodMetadata method : methods) {
-            if (method.getName().equals("set" + capitalizedName)
-                    && method.getArgumentsTypes().size() == 1
-                    && method.getArgumentsTypes().get(0).equals(
-                            this.adapter.getNativeType(
-                                    fieldMeta.getType()))) {
-                result = true;
+		for (final MethodMetadata method : methods) {
+			if (method.getName().equals("set" + capitalizedName)
+					&& method.getArgumentsTypes().size() == 1
+					&& method.getArgumentsTypes().get(0).equals(
+							this.adapter.getNativeType(
+									fieldMeta))) {
+				result = true;
 
-                ConsoleUtils.displayDebug("Already implements setter of "
-                        + fieldMeta.getName(),
-                        " => "
-                        + method.getName());
-            }
-        }
+				ConsoleUtils.displayDebug("Already implements setter of "
+						+ fieldMeta.getName(),
+						" => "
+						+ method.getName());
+			}
+		}
 
-        return result;
+		return result;
     }   
     
     /**
@@ -253,13 +253,13 @@ class EntityImplementation implements IUpdaterFile {
 			}
             
             boolean hasDateTime = false;
-            
 			for (FieldMetadata field : classMeta.getFields().values()) {
-				if (field.getType().equals("DateTime")) {
+				if (field.getHarmonyType().equalsIgnoreCase("DateTime")
+						|| field.getHarmonyType().equalsIgnoreCase("Date")
+						|| field.getHarmonyType().equalsIgnoreCase("Time")) {
 					hasDateTime = true;
 				}
 			}
-			
 			if (hasDateTime) {
 				manipulator.addImport(classMeta,
 						"ISODateTimeFormat",

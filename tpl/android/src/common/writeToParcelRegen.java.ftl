@@ -1,4 +1,4 @@
-<#assign curr = entities[current_entity] />	/**
+<#include utilityPath + "all_imports.ftl" />	/**
 	 * This stub of code is regenerated. DO NOT MODIFY.
 	 * 
 	 * @param dest Destination parcel
@@ -16,32 +16,40 @@
 		</#if>
 		<#list curr.fields?values as field>
 			<#if !field.internal>
-				<#if !field.relation??>
-					<#if field.type == "int" || field.type == "Integer">
+				<#if field.harmony_type?lower_case != "relation">
+					<#switch FieldsUtils.getJavaType(field)?lower_case>
+						<#case "int">
 		dest.writeInt(this.get${field.name?cap_first}());
-					<#elseif field.type?lower_case == "boolean">
-
+							<#break />
+						<#case "boolean">
 		if (this.is${field.name?cap_first}()) {
 			dest.writeInt(1);
 		} else {
 			dest.writeInt(0);
 		}
-					<#elseif field.type == "String">
+							<#break />
+						<#case "string">
 		dest.writeString(this.get${field.name?cap_first}());
-					<#elseif field.type?lower_case == "byte">
+							<#break />
+						<#case "byte">
 		dest.writeByte(this.get${field.name?cap_first}());
-					<#elseif field.type?lower_case == "char">
+							<#break />
+						<#case "char">
+							<#if field.primitive>
 		dest.writeString(String.valueOf(this.get${field.name?cap_first}()));
-					<#elseif field.type?lower_case == "short">
-		dest.writeInt(this.get${field.name?cap_first}());
-					<#elseif field.type?lower_case == "character">
+							<#else>
 		if (this.get${field.name?cap_first}() != null) {
 			dest.writeInt(1);
 			dest.writeString(String.valueOf(this.get${field.name?cap_first}()));
 		} else {
 			dest.writeInt(0);
-		}			
-					<#elseif field.type?lower_case == "datetime">
+		}
+							</#if>
+							<#break />
+						<#case "short">
+		dest.writeInt(this.get${field.name?cap_first}());
+							<#break />
+						<#case "datetime">
 		if (this.get${field.name?cap_first}() != null) {
 			dest.writeInt(1);
 			dest.writeString(ISODateTimeFormat.dateTime().print(
@@ -49,14 +57,14 @@
 		} else {
 			dest.writeInt(0);
 		}
-					<#elseif (field.harmony_type?lower_case == "enum")>		
-
+							<#break />
+						<#case "enum">
 		if (this.get${field.name?cap_first}() != null) {
 			dest.writeInt(1);
-						<#assign enumType = enums[field.type] />
+						<#assign enumType = enums[field.enum.targetEnum] />
 						<#if enumType.id??>
-							<#assign idEnum = enumType.fields[enumType.id] />
-							<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
+							<#assign idEnumType = FieldsUtils.getJavaType(enumType.fields[enumType.id])?lower_case />
+							<#if (idEnumType == "int") >
 			dest.writeInt(this.get${field.name?cap_first}().getValue());
 							<#else>
 			dest.writeString(this.get${field.name?cap_first}().getValue());
@@ -67,7 +75,8 @@
 		} else {
 			dest.writeInt(0);
 		}
-					</#if>
+							<#break />
+					</#switch>
 				<#else>
 					<#if field.relation.type == "OneToOne" || field.relation.type == "ManyToOne">
 		if (<#if field.nullable>this.get${field.name?cap_first}() != null

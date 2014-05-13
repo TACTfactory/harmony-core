@@ -50,16 +50,12 @@ public @interface Column {
 		TEXT	("text", 	1024, 	true, 	null, 	null, 	null,	null),
 		/** boolean type. */
 		BOOLEAN	("boolean", 	null, 	false, 	null, 	null, 	null,	null),
-		/** Integer type. */
-		INTEGER	("integer", 	null, 	true, 	null, 	null, 	null,	null),
 		/** short type. */
 		SHORT	("short", 		null, 	false,	null,	null,	null,	null),
 		/** byte type. */
 		BYTE	("byte", 		null, 	false,	null,	null,	null,	null),
 		/** char type. */
 		CHAR	("char", 		null, 	false,	null,	null,	null,	null),
-		/** char type. */
-		CHARACTER	("character", null, false,	null,	null,	null,	null),
 		/** int type. */
 		INT		("int", 		null, 	false,	null,	null,	null,	null),
 		/** long type. */
@@ -76,6 +72,8 @@ public @interface Column {
 		TIME	("time",		null,	true,	null,	null,	null,	false),
 		/** Enum type. */
 		ENUM	("enum",		null,	false,	null,	null,	null,	null),
+		/** Enum type. */
+		RELATION("relation",	null,	false,	null,	null,	null,	null),
 
 		// EXTEND
 		/** Login type. */

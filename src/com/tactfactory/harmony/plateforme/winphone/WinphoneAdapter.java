@@ -17,6 +17,7 @@ import java.util.List;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.plateforme.IAdapterProject;
 import com.tactfactory.harmony.updater.impl.LibraryGit;
@@ -41,6 +42,9 @@ public final class WinphoneAdapter extends BaseAdapter {
 
     /** Int type. */
     private static final String INT = "int";
+    
+    /** Byte type. */
+    private static final String BYTE = "byte";
 
     /** DateTime type. */
     private static final String DATETIME = "DateTime";
@@ -124,70 +128,74 @@ public final class WinphoneAdapter extends BaseAdapter {
     }
 
     @Override
-    public String getNativeType(final String type) {
-        String ret = type;
+    public String getNativeType(final FieldMetadata field) {
+        String ret = field.getHarmonyType();
 
-        if (type.equals(Column.Type.STRING.getValue())) {
+        if (ret.equals(Column.Type.STRING.getValue())) {
             ret = STR;
         } else
 
-        if (type.equals(Column.Type.TEXT.getValue())) {
+        if (ret.equals(Column.Type.TEXT.getValue())) {
             ret = STR;
         } else
 
-        if (type.equals(Column.Type.INTEGER.getValue())) {
+        if (ret.equals(Column.Type.CHAR.getValue())) {
+            ret = STR;
+        } else
+        
+    	if (ret.equals(Column.Type.BYTE.getValue())) {
+            ret = BYTE;
+        } else
+
+        if (ret.equals(Column.Type.INT.getValue())) {
             ret = INT;
         } else
 
-        if (type.equals(Column.Type.INT.getValue())) {
-            ret = INT;
-        } else
-
-        if (type.equals(Column.Type.FLOAT.getValue())) {
+        if (ret.equals(Column.Type.FLOAT.getValue())) {
             ret = FLOAT;
         } else
 
-        if (type.equals(Column.Type.DATETIME.getValue())) {
+        if (ret.equals(Column.Type.DATETIME.getValue())) {
             ret = DATETIME;
         } else
 
-        if (type.equals(Column.Type.DATE.getValue())) {
+        if (ret.equals(Column.Type.DATE.getValue())) {
             ret = DATETIME;
         } else
 
-        if (type.equals(Column.Type.TIME.getValue())) {
+        if (ret.equals(Column.Type.TIME.getValue())) {
             ret = DATETIME;
         } else
 
-        if (type.equals(Column.Type.LOGIN.getValue())) {
+        if (ret.equals(Column.Type.LOGIN.getValue())) {
             ret = STR;
         } else
 
-        if (type.equals(Column.Type.PASSWORD.getValue())) {
+        if (ret.equals(Column.Type.PASSWORD.getValue())) {
             ret = STR;
         } else
 
-        if (type.equals(Column.Type.EMAIL.getValue())) {
+        if (ret.equals(Column.Type.EMAIL.getValue())) {
             ret = STR;
         } else
 
-        if (type.equals(Column.Type.PHONE.getValue())) {
+        if (ret.equals(Column.Type.PHONE.getValue())) {
             ret = STR;
         } else
 
-        if (type.equals(Column.Type.CITY.getValue())) {
+        if (ret.equals(Column.Type.CITY.getValue())) {
             ret = STR;
         } else
 
-        if (type.equals(Column.Type.ZIPCODE.getValue())) {
+        if (ret.equals(Column.Type.ZIPCODE.getValue())) {
             ret = INT;
         } else
 
-        if (type.equals(Column.Type.COUNTRY.getValue())) {
+        if (ret.equals(Column.Type.COUNTRY.getValue())) {
             ret = STR;
         } else
 
-        if (type.equals(Column.Type.BC_EAN.getValue())) {
+        if (ret.equals(Column.Type.BC_EAN.getValue())) {
             ret = INT;
         }
         return ret;

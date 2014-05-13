@@ -1,4 +1,4 @@
-<#function getFieldType field>
+<#function getJavaType field>
     <#if (field.harmony_type == "string")>
         <#assign result = "String" />
     <#elseif (field.harmony_type == "text")>
@@ -46,15 +46,11 @@
     <#elseif (field.harmony_type == "ean")>
         <#assign result = "String" />
     <#elseif (field.harmony_type == "enum")>
-        <#assign result = field.type />
-    <#elseif (field.relation??)>
+        <#assign result = "enum" />
+    <#elseif (field.harmony_type == "relation")>
         <#assign result = field.relation.targetEntity />
     <#else>
         <#assign result = "FAILED" />
-    </#if>
-    
-    <#if (field.isIterable)>
-        <#assign result = "List<" + result + ">" />
     </#if>
     
     <#return result />

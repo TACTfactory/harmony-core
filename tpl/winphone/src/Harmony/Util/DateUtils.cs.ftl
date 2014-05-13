@@ -76,10 +76,10 @@ namespace ${project_namespace}.Harmony.Util
             if (matchTimeZone.Success) {
                 String timeZoneString = matchTimeZone.Groups[1].Value;
                 //TODO TimeZone
-                defaultDt = new DateTime();
+                defaultDt = new DateTime(1970, 1, 1);
             } else {
                 //TODO UTC
-                defaultDt = new DateTime();
+                defaultDt = new DateTime(1970, 1, 1);
             }
         
             Match matchTime = Regex.Match(dateTime, REGEXP_XML_TIME);

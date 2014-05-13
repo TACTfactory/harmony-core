@@ -2,6 +2,8 @@
 
 using System;
 using System.IO;
+using System.Windows;
+using System.Windows.Resources;
 
 namespace ${project_namespace}.Utils
 {
@@ -9,7 +11,17 @@ namespace ${project_namespace}.Utils
     {
         public static StreamReader Open(String file)
         {
-            return null;
+            StreamReader result = null;
+
+            StreamResourceInfo si = Application.GetResourceStream(new Uri(
+                "Assets/" + file, UriKind.Relative));
+
+            if (si != null)
+            {
+                result = new StreamReader(si.Stream);
+            }
+
+            return result;
         }
     }
 }

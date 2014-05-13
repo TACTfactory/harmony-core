@@ -11,7 +11,6 @@ package com.tactfactory.harmony.meta;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
-
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
@@ -24,9 +23,6 @@ import com.tactfactory.harmony.template.TagConstant;
 public final class FieldMetadata extends BaseMetadata {
 	/** Owner. */
 	private ClassMetadata owner;
-
-	/** Field type. */
-	private String type;
 
 	/** Field harmony type. */
 	private String harmonyType;
@@ -59,6 +55,8 @@ public final class FieldMetadata extends BaseMetadata {
 
 	/** Is Field hidden ? */
 	private boolean hidden;
+	/** Is Field a primitive ? */
+	private boolean primitive;
 	/** Is field ID ? */
 	private boolean id;
 
@@ -78,6 +76,9 @@ public final class FieldMetadata extends BaseMetadata {
 	/** ID Strategy. */
 	private Strategy strategy;
 
+	/** Enum type metadata. */
+	private EnumTypeMetadata enumMeta;
+	
 	/**
 	 * Constructor.
 	 * @param owner ClassMetadata owning this field.
@@ -142,7 +143,7 @@ public final class FieldMetadata extends BaseMetadata {
 						Group.MODEL);
 	
 			if (!this.nullable 
-					&& !this.type.equalsIgnoreCase("boolean")
+					&& !this.harmonyType.equalsIgnoreCase("boolean")
 					&& !this.harmonyType.equalsIgnoreCase(Type.ENUM.getValue())
 					&& !this.columnResult) {
 				TranslationMetadata.addDefaultTranslation(
@@ -166,11 +167,12 @@ public final class FieldMetadata extends BaseMetadata {
 		final Map<String, Object> model = new HashMap<String, Object>();
 
 		model.put(TagConstant.NAME, 		this.getName());
-		model.put(TagConstant.TYPE, 		this.type);
+		//model.put(TagConstant.TYPE, 		this.type);
 		model.put(TagConstant.HARMONY_TYPE, 		this.harmonyType);
 		model.put(TagConstant.FIELD_NAME, 	this.columnName);
 		model.put(TagConstant.FIELD_DEF, 	this.columnDefinition);
 		model.put(TagConstant.HIDDEN, 		this.hidden);
+		model.put(TagConstant.PRIMITIVE,	this.primitive);
 		model.put(TagConstant.UNIQUE, 		this.unique);
 		model.put(TagConstant.ID, 		    this.id);
 		model.put(TagConstant.OWNER,		this.owner.getName());
@@ -197,6 +199,10 @@ public final class FieldMetadata extends BaseMetadata {
 		if (this.defaultValue != null) {
 			model.put(TagConstant.DEFAULT_VALUE, this.defaultValue);
 		}
+		
+		if (this.enumMeta != null) {
+			model.put(this.enumMeta.getName(), this.enumMeta.toMap(adapter));
+		}
 
 		final HashMap<String, Object> optionsModel =
 				new HashMap<String, Object>();
@@ -222,22 +228,6 @@ public final class FieldMetadata extends BaseMetadata {
 	 */
 	public final void setOwner(final ClassMetadata owner) {
 		this.owner = owner;
-	}
-
-
-	/**
-	 * @return the type
-	 */
-	public final String getType() {
-		return type;
-	}
-
-
-	/**
-	 * @param type the type to set
-	 */
-	public final void setType(final String type) {
-		this.type = type;
 	}
 
 
@@ -507,5 +497,37 @@ public final class FieldMetadata extends BaseMetadata {
 	 */
 	public final void setStrategy(Strategy strategy) {
 		this.strategy = strategy;
+	}
+
+
+	/**
+	 * @return the enumMeta
+	 */
+	public final EnumTypeMetadata getEnumMeta() {
+		return enumMeta;
+	}
+
+
+	/**
+	 * @param enumMeta the enumMeta to set
+	 */
+	public final void setEnumMeta(final EnumTypeMetadata enumMeta) {
+		this.enumMeta = enumMeta;
+	}
+
+
+	/**
+	 * @return the primitive
+	 */
+	public final boolean isPrimitive() {
+		return primitive;
+	}
+
+
+	/**
+	 * @param primitive the primitive to set
+	 */
+	public final void setPrimitive(boolean primitive) {
+		this.primitive = primitive;
 	}
 }

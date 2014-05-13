@@ -1,5 +1,6 @@
 package com.tactfactory.harmony.plateforme.winphone;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -486,6 +487,43 @@ public class WinphoneProjectAdapter implements IAdapterProject {
         return result;
     }
 
+    @Override
+	public List<IUpdater> getFixtureAssets() {
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+    	
+    	File assets = new File(this.adapter.getAssetsPath() + "app");
+    	
+    	if (assets.exists() && assets.isDirectory()) {
+    		for (File file : assets.listFiles()) {
+    			result.add(new ProjectUpdater(
+    	                FileType.Content,
+    	                this.adapter.getAssets() + "/app/" + file.getName()));
+			}
+    	}
+    	
+    	assets = new File(this.adapter.getAssetsPath() + "debug");
+    	
+    	if (assets.exists() && assets.isDirectory()) {
+    		for (File file : assets.listFiles()) {
+    			result.add(new ProjectUpdater(
+    	                FileType.Content,
+    	                this.adapter.getAssets() + "/debug/" + file.getName()));
+			}
+    	}
+    	
+		assets = new File(this.adapter.getAssetsPath() + "test");
+    	
+    	if (assets.exists() && assets.isDirectory()) {
+    		for (File file : assets.listFiles()) {
+    			result.add(new ProjectUpdater(
+    	                FileType.Content,
+    	                this.adapter.getAssets() + "/test/" + file.getName()));
+			}
+    	}
+        
+        return result;
+	}
+    
     @Override
     public List<IUpdater> getApplicationFiles() {
         List<IUpdater> result = new ArrayList<IUpdater>();

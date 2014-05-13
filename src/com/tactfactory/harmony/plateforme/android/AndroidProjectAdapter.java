@@ -992,6 +992,12 @@ public class AndroidProjectAdapter implements IAdapterProject {
         
         return result;
     }
+    
+    @Override
+	public List<IUpdater> getFixtureAssets() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
     @Override
     public List<IUpdater> getApplicationFiles() {

@@ -156,45 +156,67 @@
 		<#assign result = result + "${tab}    String ${NamingUtils.fixtureParsedAlias(field)} = subElement.Value;" />
 		<#assign result = result + "${tab}    if (${NamingUtils.fixtureParsedAlias(field)} != null)" />
 		<#assign result = result + "${tab}    {" />
-		<#if !field.relation??>
-			<#if field.type=="int" || field.type=="integer" || field.type=="zipcode" || field.type=="ean">
-				<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = Convert.ToInt32(${NamingUtils.fixtureParsedAlias(field)});"/>
-			<#elseif (field.type?lower_case=="float")>
-				<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = Convert.Single(${NamingUtils.fixtureParsedAlias(field)});"/>
-			<#elseif (field.type?lower_case=="double")>
-				<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = Convert.ToDouble(${NamingUtils.fixtureParsedAlias(field)});"/>
-			<#elseif (field.type?lower_case=="datetime")>
+		<#if field.harmony_type?lower_case != "relation">
+		    <#switch FieldsUtils.getJavaType(field)?lower_case>
+    			<#case "int">
+                <#case "int32">
+				    <#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = Convert.ToInt32(${NamingUtils.fixtureParsedAlias(field)});"/>
+			        <#break />
+			    <#case "float">
+			    <#case "single">
+				    <#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = Convert.Single(${NamingUtils.fixtureParsedAlias(field)});"/>
+			        <#break />
+    			<#case "double">
+    				<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = Convert.ToDouble(${NamingUtils.fixtureParsedAlias(field)});"/>
+			        <#break />
+    			<#case "datetime">
 					<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = " />
 					<#assign result = result + "${tab}            DateUtils.formatXMLStringToDateTime(" />
 					<#assign result = result + "${tab}                ${NamingUtils.fixtureParsedAlias(field)});" />
-			<#elseif field.type=="boolean">
-				<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = " />
-				<#assign result = result + "${tab}                Convert.ToBoolean(${NamingUtils.fixtureParsedAlias(field)});" />
-			<#elseif field.type?lower_case=="string">
-				<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = ${NamingUtils.fixtureParsedAlias(field)};" />
-			<#elseif (field.type?lower_case == "short")>
-				<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = " />
-				<#assign result = result + "${tab}                Convert.ToInt16(${NamingUtils.fixtureParsedAlias(field)});" />
-			<#elseif (field.type?lower_case == "char" || field.type?lower_case == "character")>
-				<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = Convert.ToChar(${NamingUtils.fixtureParsedAlias(field)});" />
-			<#elseif (field.type?lower_case == "byte")>
-				<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = " />
-				<#assign result = result + "${tab}                Convert.ToByte(${NamingUtils.fixtureParsedAlias(field)});" />
-			<#elseif (field.harmony_type == "enum")>
-				<#assign enumType = enums[field.type] />
-				<#if (enumType.id??)>
-					<#assign idEnum = enumType.fields[enumType.id] />
-					<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
-						<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} =" />
-						<#assign result = result + "${tab}                (${field.type}) Convert.ToInt32(${NamingUtils.fixtureParsedAlias(field)});" />
-					<#else>
-						<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} =" />
-						<#assign result = result + "${tab}                (${field.type}) ${NamingUtils.fixtureParsedAlias(field)};" />
-					</#if>
-				<#else>
-					<#assign result = result + "${tab}        ${objectName}.set${field.name?cap_first}(${field.type}.valueOf(${NamingUtils.fixtureParsedAlias(field)}));" />
-				</#if>
-			</#if>
+			        <#break />
+    			<#case "boolean">
+    				<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = " />
+    				<#assign result = result + "${tab}                Convert.ToBoolean(${NamingUtils.fixtureParsedAlias(field)});" />
+			        <#break />
+    			<#case "string">
+    				<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = ${NamingUtils.fixtureParsedAlias(field)};" />
+			        <#break />
+    			<#case "short">
+    			<#case "int16">
+    				<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = " />
+    				<#assign result = result + "${tab}                Convert.ToInt16(${NamingUtils.fixtureParsedAlias(field)});" />
+			        <#break />
+			    <#case "long">
+                <#case "int64">
+                    <#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = " />
+                    <#assign result = result + "${tab}                Convert.ToInt64(${NamingUtils.fixtureParsedAlias(field)});" />
+                    <#break />
+    			<#case "char">
+    			<#case "character">
+				    <#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = Convert.ToChar(${NamingUtils.fixtureParsedAlias(field)});" />
+			        <#break />
+    			<#case "byte">
+    				<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} = " />
+    				<#assign result = result + "${tab}                Convert.ToByte(${NamingUtils.fixtureParsedAlias(field)});" />
+			        <#break />
+    			<#case "enum">
+                    <#assign enumType = enums[field.enum.targetEnum] />
+    				<#if (enumType.id??)>
+    					<#assign idEnumType = FieldsUtils.getJavaType(enumType.fields[enumType.id])?lower_case />
+    					<#if (idEnumType == "int" || idEnumType == "int32") >
+    						<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} =" />
+    						<#assign result = result + "${tab}                (${enumType.name}) Convert.ToInt32(${NamingUtils.fixtureParsedAlias(field)});" />
+    					<#else>
+    						<#assign result = result + "${tab}        ${objectName}.${field.name?cap_first} =" />
+    						<#assign result = result + "${tab}                (${enumType.name}) ${NamingUtils.fixtureParsedAlias(field)};" />
+    					</#if>
+    				<#else>
+    					<#assign result = result + "${tab}        ${objectName}.set${field.name?cap_first}(${enumType.name}.valueOf(${NamingUtils.fixtureParsedAlias(field)}));" />
+    				</#if>
+    				<#break />
+    			<#default>
+                       <#assign result = result + "${tab}       //TODO : Handle type ${FieldsUtils.getJavaType(field)}"/>
+            </#switch>
 		<#else>
 			<#if (field.relation.type=="OneToOne")>
 				<#assign result = result + "${tab}        ${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} = "/>

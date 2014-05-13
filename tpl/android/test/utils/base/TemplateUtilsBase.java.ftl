@@ -28,7 +28,7 @@ import ${project_namespace}.test.utils.TestUtils;
 <#if (InheritanceUtils.isExtended(curr))>import ${project_namespace}.test.utils.${curr.inheritance.superclass.name}Utils;</#if>
 <#list curr.fields?values as field>
 	<#if field.harmony_type?lower_case == "enum">
-		<#assign enumClass = enums[field.type] />
+		<#assign enumClass = enums[field.enum.targetEnum] />
 import ${entity_namespace}.${InheritanceUtils.getCompleteNamespace(enumClass)};
 	</#if>
 </#list>
@@ -50,41 +50,56 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 		${curr.inheritance.superclass.name?cap_first} ${curr.inheritance.superclass.name?uncap_first} = ${curr.inheritance.superclass.name?cap_first}Utils.generateRandom(ctx);
 			<#list entities[curr.inheritance.superclass.name].fields?values as field>
 				<#if !field.internal>
-		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.inheritance.superclass.name?uncap_first}.<#if field.type?lower_case == "boolean">is<#else>get</#if>${field.name?cap_first}());
+		${curr.name?uncap_first}.set${field.name?cap_first}(${curr.inheritance.superclass.name?uncap_first}.<#if FieldsUtils.getJavaType(field)?lower_case == "boolean">is<#else>get</#if>${field.name?cap_first}());
 				</#if>
 			</#list>
 		</#if>
 
 		<#list curr.fields?values as field>
 			<#if !field.internal>
-				<#if !field.relation??>
-					<#if field.type?lower_case=="string">
+				<#if field.harmony_type?lower_case != "relation">
+					<#switch FieldsUtils.getJavaType(field)?lower_case>
+						<#case "string">
 		${curr.name?uncap_first}.set${field.name?cap_first}("${field.name?uncap_first}_"+TestUtils.generateRandomString(10));
-					<#elseif (field.type?lower_case == "int" || field.type?lower_case == "integer")>
+							<#break />
+						<#case "int">
+						<#case "integer">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomInt(0,100)<#if (field.id?? && field.id)> + 1</#if>);
-					<#elseif field.type?lower_case=="boolean">
+							<#break />
+						<#case "boolean">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomBool());
-					<#elseif field.type?lower_case=="double">
+							<#break />
+						<#case "double">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDouble(0,100));
-					<#elseif field.type?lower_case=="float">
+							<#break />
+						<#case "float">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomFloat(0,100));
-					<#elseif field.type?lower_case=="short">
+							<#break />
+						<#case "short">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomShort());
-					<#elseif field.type?lower_case=="char" || field.type?lower_case=="character">
+							<#break />
+						<#case "char">
+						<#case "character">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomChar());
-					<#elseif field.type?lower_case=="byte">
+							<#break />
+						<#case "byte">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomByte());
-					<#elseif field.type?lower_case=="datetime">
-						<#if field.harmony_type?lower_case=="date">
+							<#break />
+						<#case "datetime">
+							<#if field.harmony_type?lower_case=="date">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDate());
-						<#elseif field.harmony_type?lower_case=="time">
+							<#elseif field.harmony_type?lower_case=="time">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomTime());
-						<#elseif field.harmony_type?lower_case=="datetime">
+							<#elseif field.harmony_type?lower_case=="datetime">
 		${curr.name?uncap_first}.set${field.name?cap_first}(TestUtils.generateRandomDateTime());
-						</#if>
-					<#elseif (field.harmony_type?lower_case == "enum")>
-		${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.values()[TestUtils.generateRandomInt(0,${field.type}.values().length)]);
-					</#if>
+							</#if>
+							<#break />
+						<#case "enum">
+		${curr.name?uncap_first}.set${field.name?cap_first}(${field.enum.targetEnum}.values()[TestUtils.generateRandomInt(0,${field.enum.targetEnum}.values().length)]);
+							<#break />
+						<#default>
+		//TODO : Manage field type : ${field.harmony_type} / ${FieldsUtils.getJavaType(field)}
+					</#switch>
 				<#else>
 					<#if dataLoader?? && dataLoader>
 		ArrayList<${field.relation.targetEntity?cap_first}> ${field.name?uncap_first}s =
@@ -137,16 +152,24 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 		if (${curr.name?uncap_first}1!=null && ${curr.name?uncap_first}2 !=null){
 		<#list curr.fields?values as field>
 			<#if !field.internal && !field.columnResult>
-				<#if !field.relation??>
-					<#if field.type?lower_case=="int" || field.type?lower_case=="integer" || field.type?lower_case=="long" || field.type?lower_case=="double" || field.type?lower_case=="float" || field.type?lower_case=="zipcode" || field.type?lower_case=="ean">
+				<#if field.harmony_type?lower_case != "relation">
+					<#switch FieldsUtils.getJavaType(field)?lower_case>
+						<#case "int">
+						<#case "string">
+						<#case "integer">
+						<#case "float">
+						<#case "long">
+						<#case "double">
+						<#case "float">
+						<#case "datetime">
 			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
-					<#elseif field.type?lower_case=="boolean">
+							<#break />
+						<#case "boolean">
 			Assert.assertEquals(${curr.name?uncap_first}1.is${field.name?cap_first}(), ${curr.name?uncap_first}2.is${field.name?cap_first}());
-					<#elseif field.type?lower_case=="date" || field.type?lower_case=="time" || field.type?lower_case=="datetime">
-			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
-					<#else>
-			Assert.assertEquals(${curr.name?uncap_first}1.get${field.name?cap_first}(), ${curr.name?uncap_first}2.get${field.name?cap_first}());
-					</#if>
+							<#break />
+						<#default>
+			//TODO : Manage field type : ${field.harmony_type} / ${FieldsUtils.getJavaType(field)}
+					</#switch>
 				<#else>
 			if (${curr.name?uncap_first}1.get${field.name?cap_first}() != null
 					&& ${curr.name?uncap_first}2.get${field.name?cap_first}() != null) {

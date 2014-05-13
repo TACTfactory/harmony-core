@@ -23,17 +23,19 @@ namespace ${project_namespace}.Entity
     public class ${curr.name}<#if (curr.inheritance?? && (curr.inheritance.superclass?? && entities[curr.inheritance.superclass.name]??))> : ${curr.inheritance.superclass.name}</#if>
     {
         <#list curr_fields as field>
-            <#if !field.id && !field.relation??>
-        private ${FieldsUtils.getFieldType(field)} ${field.name};
+            <#if !field.id && !field.relation?? && !field.enum??>
+        private ${FieldsUtils.getJavaType(field)} ${field.name};
+            <#elseif field.enum??>
+        private ${enums[field.enum.targetEnum].name} ${field.name};
             <#elseif field.id>
-        private ${FieldsUtils.getFieldType(field)} ${field.name};
+        private ${FieldsUtils.getJavaType(field)} ${field.name};
             <#elseif field.relation?? && !field.internal>
                 <#if field.relation.type == "ManyToOne" || field.relation.type == "OneToOne">
         [Column]
         internal int ${field.name}Id;
-        private EntityRef<${FieldsUtils.getFieldType(field)}> ${field.name};
+        private EntityRef<${FieldsUtils.getJavaType(field)}> ${field.name};
                 <#else>
-        private EntitySet<${FieldsUtils.getFieldType(field)}> ${field.name};
+        private EntitySet<${FieldsUtils.getJavaType(field)}> ${field.name};
                 </#if>
             </#if>
         </#list>
@@ -44,23 +46,26 @@ namespace ${project_namespace}.Entity
         
         </#if>
         <#list curr_fields as field>
-            <#if !field.id && !field.relation??>
+            <#if !field.id && !field.relation?? && !field.enum??>
         [Column]
-        public ${FieldsUtils.getFieldType(field)} ${field.name?cap_first}
+        public ${FieldsUtils.getJavaType(field)} ${field.name?cap_first}
+            <#elseif field.enum??>
+        [Column]
+        public ${enums[field.enum.targetEnum].name} ${field.name?cap_first}
             <#elseif field.id>
         [Column(
             IsPrimaryKey = true,
             IsDbGenerated = true,
             CanBeNull = false,
             AutoSync = AutoSync.OnInsert)]
-        public ${FieldsUtils.getFieldType(field)} ${field.name?cap_first}
+        public ${FieldsUtils.getJavaType(field)} ${field.name?cap_first}
             <#elseif field.relation?? && !field.internal>
                 <#if field.relation.type == "ManyToOne" || field.relation.type == "OneToOne">
-        [Association(Storage = "${field.name}", ThisKey = "${field.name}Id")]
-        public ${FieldsUtils.getFieldType(field)} ${field.name?cap_first}
+        [Association(ThisKey = "${field.name}Id")]
+        public ${FieldsUtils.getJavaType(field)} ${field.name?cap_first}
                 <#else>
-        [Association(Storage = "${field.name}", OtherKey = "Id")] 
-        public List<${FieldsUtils.getFieldType(field)}> ${field.name?cap_first}
+        [Association(OtherKey = "Id")] 
+        public List<${FieldsUtils.getJavaType(field)}> ${field.name?cap_first}
                 </#if>
             </#if>
             <#if !field.internal>
@@ -104,10 +109,10 @@ namespace ${project_namespace}.Entity
             <#list curr_fields as field>
                 <#if field.relation?? && !field.internal 
                     && field.relation.type != "ManyToOne" && field.relation.type != "OneToOne">
-            this.${field.name} = new EntitySet<${FieldsUtils.getFieldType(field)}>(
+            this.${field.name} = new EntitySet<${FieldsUtils.getJavaType(field)}>(
                 <#if field.relation.type != "ManyToMany">
-                new Action<${FieldsUtils.getFieldType(field)}>(this.attach_${FieldsUtils.getFieldType(field)}),
-                new Action<${FieldsUtils.getFieldType(field)}>(this.detach_${FieldsUtils.getFieldType(field)})
+                new Action<${FieldsUtils.getJavaType(field)}>(this.attach_${FieldsUtils.getJavaType(field)}),
+                new Action<${FieldsUtils.getJavaType(field)}>(this.detach_${FieldsUtils.getJavaType(field)})
                 </#if>
                 );
                 </#if>
@@ -117,7 +122,7 @@ namespace ${project_namespace}.Entity
             <#if field.relation?? && !field.internal 
                 && field.relation.type != "ManyToOne" && field.relation.type != "OneToOne"
                 && field.relation.type != "ManyToMany">
-                <#assign item = FieldsUtils.getFieldType(field)/>
+                <#assign item = FieldsUtils.getJavaType(field)/>
         
         // Called during an add operation 
         private void attach_${item}(${item} ${item?lower_case})
