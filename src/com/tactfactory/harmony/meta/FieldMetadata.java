@@ -201,7 +201,7 @@ public final class FieldMetadata extends BaseMetadata {
 		}
 		
 		if (this.enumMeta != null) {
-			model.put(this.enumMeta.getName(), this.enumMeta.toMap(adapter));
+			model.put(TagConstant.ENUM, this.enumMeta.toMap(adapter));
 		}
 
 		final HashMap<String, Object> optionsModel =
