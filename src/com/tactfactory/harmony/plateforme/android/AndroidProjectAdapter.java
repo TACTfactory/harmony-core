@@ -505,7 +505,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
                         filePath,
                         entity.getName().toLowerCase(Locale.US))));
         
-        result.add(new ManifestActivity(
+        result.add(new AndroidManifestActivity(
                 this.adapter, entity.getName(),
                 entity.getName().toLowerCase(), "CreateActivity"));
         
@@ -550,7 +550,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
                         filePath,
                         entity.getName().toLowerCase(Locale.ENGLISH))));
         
-        result.add(new ManifestActivity(
+        result.add(new AndroidManifestActivity(
                 this.adapter, entity.getName(),
                 entity.getName().toLowerCase(), "EditActivity"));
         
@@ -615,7 +615,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
                         filePath,
                         entity.getName().toLowerCase(Locale.US))));
         
-        result.add(new ManifestActivity(
+        result.add(new AndroidManifestActivity(
                 this.adapter, entity.getName(),
                 entity.getName().toLowerCase(), "ShowActivity"));
         
@@ -713,7 +713,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
                     this.adapter.getRessourceValuesPath() + "dimens.xml",
                     new DimensFile()));
         
-        result.add(new ManifestActivity(
+        result.add(new AndroidManifestActivity(
                 this.adapter, entity.getName(),
                 entity.getName().toLowerCase(), "ListActivity"));
         
@@ -1536,7 +1536,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 templatePath + "activity_template_static.xml",
                 filePath + "activity_" + viewName.toLowerCase() + ".xml"));
         
-        result.add(new ManifestActivity(
+        result.add(new AndroidManifestActivity(
                 this.adapter, viewName,
                 packageName, "Activity"));
         

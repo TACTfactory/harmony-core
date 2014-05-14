@@ -18,8 +18,8 @@ import java.util.Map;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.updater.IExecutor;
 import com.tactfactory.harmony.updater.IUpdater;
-import com.tactfactory.harmony.updater.IUpdaterFile;
 import com.tactfactory.harmony.updater.impl.EditFile;
 import com.tactfactory.harmony.updater.impl.CopyFile;
 import com.tactfactory.harmony.updater.impl.CreateFolder;
@@ -343,8 +343,8 @@ public abstract class BaseGenerator<T extends IAdapter> {
 	    }
 	}
 	
-	private void processUpdaterFile(IUpdaterFile updaterFile) {
-	    updaterFile.execute();
+	private void processExecutor(IExecutor updater) {
+	    updater.execute();
 	}
 	
     protected void processUpdater(List<IUpdater> updaters) {
@@ -368,8 +368,8 @@ public abstract class BaseGenerator<T extends IAdapter> {
             this.processCreateFolder((CreateFolder) updater);
         } else if (updater instanceof DeleteFile) {
             this.processDeleteFile((DeleteFile) updater);
-        } else if (updater instanceof IUpdaterFile) {
-            this.processUpdaterFile((IUpdaterFile) updater);
+        } else if (updater instanceof IExecutor) {
+            this.processExecutor((IExecutor) updater);
         }
     }
 }
