@@ -22,7 +22,7 @@ import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
 import freemarker.template.Configuration;
 
 /** RIM Blackberry Adapter of project structure. */
-public final class RimAdapter extends BaseAdapter {
+public class RimAdapter extends BaseAdapter {
 	/** Error message for not implemented feature. */
 	private static final String NOT_IMPLEMENTED_MESSAGE =
 			"Rim adapter has not been implemented yet.";

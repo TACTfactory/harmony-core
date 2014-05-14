@@ -22,7 +22,7 @@ import com.tactfactory.harmony.updater.impl.LibraryGit;
 import freemarker.template.Configuration;
 
 /** Apple iOS Adapter of project structure. */
-public final class IosAdapter extends BaseAdapter {
+public class IosAdapter extends BaseAdapter {
 	/** Error message for not implemented feature. */
 	private static final String NOT_IMPLEMENTED_MESSAGE =
 			"IOS adapter has not been implemented yet.";

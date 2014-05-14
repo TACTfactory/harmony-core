@@ -33,7 +33,7 @@ import freemarker.template.Configuration;
  * Microsoft Adapter of project structure.
  *
  */
-public final class WinphoneAdapter extends BaseAdapter {
+public class WinphoneAdapter extends BaseAdapter {
 	/** Float type. */
     private static final String FLOAT = "float";
 
