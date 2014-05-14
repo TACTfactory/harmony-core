@@ -103,6 +103,11 @@ public class FixtureGenerator extends BaseGenerator<IAdapter> {
 				ConsoleUtils.displayDebug(
 						"Copying fixtures/test into ",
 						fixtTestDest.getPath());
+				
+				List<IUpdater> updaters = this.getAdapter()
+						.getAdapterProject().getFixtureAssets();
+				
+				this.processUpdater(updaters);
 
 			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);

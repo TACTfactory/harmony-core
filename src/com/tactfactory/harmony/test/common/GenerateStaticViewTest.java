@@ -65,7 +65,6 @@ public class GenerateStaticViewTest extends CommonTest {
 	
 	@Override
 	public void setUpBeforeNewParameter() throws Exception {
-		super.cleanAndroidFolder(false);
 		super.setUpBeforeNewParameter();
 		
 		this.initAll();

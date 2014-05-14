@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.updater.impl.LibraryGit;
 import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
 
@@ -31,12 +32,13 @@ public interface IAdapter {
      */
     String getNameSpaceEntity(ClassMetadata cm, String type);
 
-    /** Convert a Harmony type into a native type.
-     *
-     * @param type The type name
-     * @return String of the native type
-     */
-    String getNativeType(String type);
+    /**
+	 * Convert a Harmony type into a native type.
+	 *
+	 * @param field The field name
+	 * @return String of the native type
+	 */
+    String getNativeType(FieldMetadata field);
 
     /** Convert image structure to alternative resolution. */
     void resizeImage();

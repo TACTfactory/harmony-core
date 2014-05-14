@@ -41,6 +41,7 @@ public interface IAdapterProject {
             String fixtureType, EntityMetadata entity);
     List<IUpdater> getFixtureEntityFiles(boolean forceOverwrite,
             String fixtureType, EntityMetadata entity);
+    List<IUpdater> getFixtureAssets();
     
     //Used by ApplicationGenerator
     List<IUpdater> getApplicationFiles();

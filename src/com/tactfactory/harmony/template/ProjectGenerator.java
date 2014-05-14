@@ -73,6 +73,7 @@ public class ProjectGenerator extends BaseGenerator<IAdapter> {
         this.makeSources();
         this.initGitProject();
         this.addResources();
+        this.generateStartView();
 
         // copy libraries
         List<IUpdater> libraries = this.getAdapter().getAdapterProject()

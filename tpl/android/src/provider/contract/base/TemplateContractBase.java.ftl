@@ -1,4 +1,3 @@
-<#assign curr = entities[current_entity] />
 <#include utilityPath + "all_imports.ftl" />
 <#assign hasDate = MetadataUtils.hasDate(curr) />
 <#assign hasTime = MetadataUtils.hasTime(curr) />

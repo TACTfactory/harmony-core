@@ -24,7 +24,7 @@ public class LogProd  implements Serializable , Parcelable {
 	private static final long serialVersionUID = 321829571509107215L;
 
 	@Id
-	@Column(type = Type.INTEGER, hidden = true)
+	@Column(type = Type.INT, hidden = true)
 	protected int id;
 	
 	@Column(type = Type.DATETIME)

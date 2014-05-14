@@ -13,6 +13,7 @@ import java.util.List;
 
 import com.tactfactory.harmony.exception.NotImplementedException;
 import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.plateforme.IAdapterProject;
 import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
@@ -51,7 +52,7 @@ public final class IosAdapter extends BaseAdapter {
 
 
 	@Override
-	public String getNativeType(final String type) {
+	public String getNativeType(final FieldMetadata field) {
 		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
 

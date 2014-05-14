@@ -29,6 +29,7 @@ import java.util.ArrayList;
 </#if>
 <#if fixtureType=="yml">
 import java.util.Map;
+<#list curr.relations as relation><#if relation.relation.type == "ManyToMany" && relation.relation.inversedBy??>import java.util.ArrayList;<#break /></#if></#list>
 <#else>
 import org.jdom2.Element;
 </#if>
@@ -136,31 +137,40 @@ public final class ${curr.name?cap_first}DataLoader
 		</#if>
 		<#list curr_fields as field>
 			<#if (!field.internal)>
-				<#if (!field.relation??)>
-					<#if field.type?lower_case=="datetime">
+				<#if (field.harmony_type?lower_case != "relation")>
+					<#switch FieldsUtils.getJavaType(field)?lower_case>
+						<#case "datetime">
 		${curr.name?uncap_first}.set${field.name?cap_first}(this.parseDateTimeField(columns, ${NamingUtils.fixtureAlias(field)}));
-					<#elseif field.harmony_type?lower_case=="enum">
-						<#assign enumType = enums[field.type] />
-						<#if (enumType.id??)>
-							<#assign idEnum = enumType.fields[enumType.id] />
-							<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
-		${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, Integer.class)));
+							<#break />
+						<#case "enum">
+							<#assign enumType = enums[field.enum.targetEnum] />
+							<#if (enumType.id??)>
+								<#assign idEnumType = FieldsUtils.getJavaType(enumType.fields[enumType.id])?lower_case />
+								<#if (idEnumType == "int") >
+		${curr.name?uncap_first}.set${field.name?cap_first}(${enumType.name}.fromValue(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, Integer.class)));
+								<#else>
+		${curr.name?uncap_first}.set${field.name?cap_first}(${enumType.name}.fromValue(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, String.class)));
+								</#if>
 							<#else>
-		${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.fromValue(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, String.class)));
+		${curr.name?uncap_first}.set${field.name?cap_first}(${enumType.name}.valueOf(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, String.class)));						
 							</#if>
-						<#else>
-		${curr.name?uncap_first}.set${field.name?cap_first}(${field.type}.valueOf(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, String.class)));
-							
-						</#if>
-					<#else>
-						<#if (field.type == "double" || field.type?lower_case == "char" || field.type?lower_case == "float" || field.type?lower_case == "byte" || field.type?lower_case == "short" || field.type?lower_case == "int" || field.type?lower_case == "boolean")>
-		${curr.name?uncap_first}.set${field.name?cap_first}(this.parse${field.type?cap_first}Field(columns, ${NamingUtils.fixtureAlias(field)}));
-						<#elseif (field.type?lower_case == "character")>
+							<#break />
+						<#case "double">
+						<#case "char">
+						<#case "float">
+						<#case "byte">
+						<#case "short">
+						<#case "int">
+						<#case "boolean">
+		${curr.name?uncap_first}.set${field.name?cap_first}(this.parse${FieldsUtils.getJavaType(field)?cap_first}Field(columns, ${NamingUtils.fixtureAlias(field)}));
+							<#break />
+						<#case "char">
 		${curr.name?uncap_first}.set${field.name?cap_first}(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, String.class).charAt(0));
-						<#else>
-		${curr.name?uncap_first}.set${field.name?cap_first}(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, ${field.type?cap_first}.class));
-						</#if>
-					</#if>
+							<#break />
+						<#default>
+		${curr.name?uncap_first}.set${field.name?cap_first}(this.parseField(columns, ${NamingUtils.fixtureAlias(field)}, ${FieldsUtils.getJavaType(field)?cap_first}.class));
+							<#break />
+					</#switch>
 				<#else>
 					<#if (field.relation.type == "OneToOne" || field.relation.type == "ManyToOne")>
 		${curr.name?uncap_first}.set${field.name?cap_first}(this.parseSimpleRelationField(columns, ${NamingUtils.fixtureAlias(field)}, ${field.relation.targetEntity}DataLoader.getInstance(this.ctx)));
@@ -176,6 +186,18 @@ public final class ${curr.name?cap_first}DataLoader
 			for (${field.relation.targetEntity} related : ${curr.name?uncap_first}.get${field.name?cap_first}()) {
 				related.set${field.relation.mappedBy?cap_first}(${curr.name?uncap_first});
 			}
+		}
+						<#elseif field.relation.type == "ManyToMany" && field.relation.inversedBy??>
+							<#assign invField = MetadataUtils.getInversingField(field) />
+		for (${field.relation.targetEntity} ${field.relation.targetEntity?uncap_first} : ${curr.name?uncap_first}.get${field.name?cap_first}()) {
+			ArrayList<${curr.name?cap_first}> ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =
+					${field.relation.targetEntity?uncap_first}.get${invField.name?cap_first}();
+			if (${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s == null) {
+					${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =
+							new ArrayList<${curr.name?cap_first}>();
+					${field.relation.targetEntity?uncap_first}.set${invField.name?cap_first}(${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s);
+			}
+			${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s.add(${curr.name?uncap_first});
 		}
 						</#if>
 					</#if>

@@ -2,7 +2,7 @@
 <list>
 	<Day id="Christmas">
 		<identifier>20141225</identifier>
-		<day>25</day>
+		<theDay>25</theDay>
 		<month>12</month>
 		<year>2014</year>
 		<publicHoliday>true</publicHoliday>
@@ -10,7 +10,7 @@
 	</Day>
 	<Day id="NationalDay">
 		<identifier>20140704</identifier>
-		<day>4</day>
+		<theDay>4</theDay>
 		<month>7</month>
 		<year>2014</year>
 		<publicHoliday>true</publicHoliday>
@@ -18,7 +18,7 @@
 	</Day>
 	<Day id="Thanksgiving">
 		<identifier>20141127</identifier>
-		<day>27</day>
+		<theDay>27</theDay>
 		<month>11</month>
 		<year>2014</year>
 		<publicHoliday>false</publicHoliday>

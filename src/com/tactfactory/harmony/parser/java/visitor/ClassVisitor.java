@@ -345,14 +345,6 @@ public class ClassVisitor {
     	// Check reserved keywords
 		SqliteAdapter.Keywords.exists(result.getName());
 
-    	// Get the Enum entries
-    	if (enumDecl.getEntries() != null) {
-    		for (final EnumConstantDeclaration enumEntry
-    				: enumDecl.getEntries()) {
-    			result.getEntries().add(enumEntry.getName());
-    		}
-    	}
-
     	// Get list of Members (Methods, Fields, Subclasses, Enums, etc.)
 		final List<BodyDeclaration> members = enumDecl.getMembers();
 		if (members != null) {
@@ -385,10 +377,31 @@ public class ClassVisitor {
 
 		if (!Strings.isNullOrEmpty(result.getIdName())) {
 			result.setType(
-					result.getFields().get(result.getIdName()).getType());
+					result.getFields().get(result.getIdName()).getHarmonyType());
 		} else {
 			result.setType(Type.STRING.getValue());
 		}
+		
+		// Get the Enum entries
+    	if (enumDecl.getEntries() != null) {
+    		for (final EnumConstantDeclaration enumEntry
+    				: enumDecl.getEntries()) {
+    			result.getEntries().add(enumEntry.getName());
+    			if (result.getIdName() != null) {
+	    			Expression expr = enumEntry.getArgs().get(0);
+					if (expr instanceof StringLiteralExpr) {
+						result.getValues().put(
+								enumEntry.getName(),
+								((StringLiteralExpr) expr).getValue());
+					} else {
+						result.getValues().put(
+								enumEntry.getName(),
+								expr.toString());
+					}
+    			}
+    		}
+    	}
+		
     	return result;
     }
 
@@ -586,7 +599,7 @@ public class ClassVisitor {
     		
 			FieldMetadata discriminatorColumn = 
 					new FieldMetadata(classMeta);
-			discriminatorColumn.setType(type);
+			discriminatorColumn.setHarmonyType(type);
 			discriminatorColumn.setColumnDefinition(type);
 			discriminatorColumn.setColumnName(columnName);
 			discriminatorColumn.setName(name);

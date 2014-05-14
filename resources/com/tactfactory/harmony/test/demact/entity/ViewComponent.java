@@ -27,13 +27,13 @@ public class ViewComponent implements Serializable {
 
 	/** Entity's technical id. */
 	@Id
-    @Column(type = Type.INTEGER, hidden = true)
+    @Column(type = Type.INT, hidden = true)
     @GeneratedValue(strategy = Strategy.MODE_IDENTITY)
 	private int id;
 
 	/** String type. */
 	@Column(type = Type.STRING)
-	private String string;
+	private String stringField;
 
 	/** Text type. */
 	@Column(type = Type.TEXT)
@@ -92,7 +92,7 @@ public class ViewComponent implements Serializable {
 	private short shortField;
 
 	/** character field. */
-	@Column(type = Type.CHARACTER)
+	@Column(type = Type.CHAR)
 	private Character character;
 
 	/** character field. */
@@ -133,16 +133,16 @@ public class ViewComponent implements Serializable {
 	/**
 	 * @return the string
 	 */
-	public String getString() {
-	     return this.string;
+	public String getStringField() {
+	     return this.stringField;
 	}
 
 
 	/**
 	 * @param value the string to set
 	 */
-	public void setString(final String value) {
-	     this.string = value;
+	public void setStringField(final String value) {
+	     this.stringField = value;
 	}
 
 	/**

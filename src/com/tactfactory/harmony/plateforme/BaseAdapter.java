@@ -185,7 +185,7 @@ public abstract class BaseAdapter implements IAdapter {
 	 * Get the utility classes path.
 	 * @return The utility classes path
 	 */
-	public final String getUtilPath() {
+	public String getUtilPath() {
 		return String.format("%s%s/%s/%s/",
 				this.getSourcePath(),
 				this.getApplicationMetadata().getProjectNameSpace(),

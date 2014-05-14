@@ -303,7 +303,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @param id Identify of ${curr.name}
 	 * @return ${curr.name} entity
 	 */
-	public ${curr.name} getByID(<#list curr_ids as id>final ${m.javaType(id.type)} ${id.name}<#if (id_has_next)>
+	public ${curr.name} getByID(<#list curr_ids as id>final ${FieldsUtils.getJavaType(id)} ${id.name}<#if (id_has_next)>
 							,</#if></#list>) {
 	<#if (curr_ids?size>0)>
 		final Cursor cursor = this.getSingleCursor(<#list curr_ids as id>${id.name}<#if (id_has_next)>,
@@ -766,7 +766,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 </#list>
 	 * @return count of updated entities
 	 */
-	public int remove(<#list curr_ids as id>final ${id.type} ${id.name}<#if (id_has_next)>
+	public int remove(<#list curr_ids as id>final ${FieldsUtils.getJavaType(id)} ${id.name}<#if (id_has_next)>
 			,</#if></#list>) {
 	<#if (curr_ids?size>0)>
 		if (${project_name?cap_first}Application.DEBUG) {
@@ -827,7 +827,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 *		to the given id.
 	 */
 	protected Cursor getSingleCursor(<#list curr_ids as id><#if (curr_ids?size > 1)>
-						</#if>final ${id.type} ${id.name}<#if id_has_next>,</#if></#list>) {
+						</#if>final ${FieldsUtils.getJavaType(id)} ${id.name}<#if id_has_next>,</#if></#list>) {
 	<#if (curr_ids?size>0)>
 		if (${project_name?cap_first}Application.DEBUG) {
 			Log.d(TAG, "Get entities id : " + <#list IdsUtils.getAllIdsGettersFromArray(curr_ids) as id>${id}<#if id_has_next>
@@ -882,7 +882,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 *
 	 * @return The cursor pointing to the query's result
 	 */
-	public Cursor query(<#list curr_ids as id>final ${id.type} ${id.name}<#if id_has_next>,
+	public Cursor query(<#list curr_ids as id>final ${FieldsUtils.getJavaType(id)} ${id.name}<#if id_has_next>,
 				</#if></#list>) {
 		<#if curr_ids?size==0>
 			throw new NotImplementedException(
@@ -982,8 +982,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @param ${rightRelation.name?lower_case} ${rightRelation.name?lower_case}
 	 * @return Id of the ${curr.name} entity
 	 */
-	public long insert(<#list leftRelation.relation.field_ref as refField>final ${refField.type} ${leftRelation.name?uncap_first}${refField.name?cap_first},
-			</#list><#list rightRelation.relation.field_ref as refField>final ${refField.type} ${rightRelation.name?uncap_first}${refField.name?cap_first}<#if refField_has_next>,
+	public long insert(<#list leftRelation.relation.field_ref as refField>final ${FieldsUtils.getJavaType(refField)} ${leftRelation.name?uncap_first}${refField.name?cap_first},
+			</#list><#list rightRelation.relation.field_ref as refField>final ${FieldsUtils.getJavaType(refField)} ${rightRelation.name?uncap_first}${refField.name?cap_first}<#if refField_has_next>,
 			</#if></#list>) {
 		if (${project_name?cap_first}Application.DEBUG) {
 			Log.d(TAG, "Insert DB(" + ${ContractUtils.getContractTableName(curr)} + ")");
@@ -1015,7 +1015,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public Cursor getBy${leftRelation.name?cap_first}(
 			<#list leftRelation.relation.field_ref as refField>
-			final ${refField.type} ${leftRelation.name?uncap_first}${refField.name?cap_first},
+			final ${FieldsUtils.getJavaType(refField)} ${leftRelation.name?uncap_first}${refField.name?cap_first},
 			</#list>
 			final String[] projection,
 			String selection,

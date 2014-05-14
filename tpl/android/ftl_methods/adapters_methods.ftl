@@ -55,14 +55,13 @@
 	<#assign fieldNames = ContractUtils.getFieldsNames(field) />
 	<#if (!field.internal && !(field.relation?? && (field.relation.type=="ManyToMany" || field.relation.type=="OneToMany")))>
 		<#assign localTab="" />
-		<#if (!field.relation??)>
+		<#if (field.harmony_type?lower_case != "relation")>
 			<#assign result = result + "${tab}index = cursor.getColumnIndexOrThrow(${fieldNames[0]});\n"/>
 			<#if (field.nullable)>
 				<#assign result = result + "${tab}if (!cursor.isNull(index)) {\n"/><#assign localTab="\t" />
 			</#if>
-			<#if (field.type?lower_case == "datetime") >
-				<#if ((field.harmony_type == "date") || (field.harmony_type == "datetime") || (field.harmony_type == "time"))>
-
+			<#switch FieldsUtils.getJavaType(field)?lower_case>
+				<#case "datetime">
 					<#assign result = result + "${tab}${localTab}final DateTime dt${field.name?cap_first} =\n"/>
 					<#assign result = result + "${tab}		DateUtils.formatISOStringToDateTime(\n"/>
 					<#assign result = result + "${tab}				cursor.getString(index));\n"/>
@@ -72,61 +71,75 @@
 					<#assign result = result + "${tab}${localTab}} else {\n"/>
 					<#assign result = result + "${tab}${localTab}	result.set${field.name?cap_first}(new DateTime());\n"/>
 					<#assign result = result + "${tab}${localTab}}\n"/>
-				</#if>
-			<#elseif (field.type?lower_case == "boolean")>
-				<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
-				<#assign result = result + "${tab}		cursor.getInt(index) == 1);\n"/>
-			<#elseif (field.type?lower_case == "int" || field.type?lower_case == "integer" || field.type == "ean" || field.type == "zipcode")>
-				<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
-				<#assign result = result + "${tab}		cursor.getInt(index));\n"/>
-			<#elseif (field.type?lower_case == "float")>
-				<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
-				<#assign result = result + "${tab}		cursor.getFloat(index));\n"/>
-			<#elseif (field.type?lower_case == "double")>
-				<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
-				<#assign result = result + "${tab}		cursor.getDouble(index));\n"/>
-			<#elseif (field.type?lower_case == "long")>
-				<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
-				<#assign result = result + "${tab}		cursor.getLong(index));\n"/>
-			<#elseif (field.type?lower_case == "short")>
-				<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
-				<#assign result = result + "${tab}		cursor.getShort(index));\n"/>
-			<#elseif (field.type?lower_case == "char" || field.type?lower_case == "character")>
-				<#assign result = result + "${tab}String ${field.name?uncap_first}DB = cursor.getString(index);\n"/>
-				<#assign result = result + "${tab}if (${field.name?uncap_first}DB != null\n"/>
-				<#assign result = result + "${tab}	&& ${field.name?uncap_first}DB.length() > 0) {\n"/>
-				<#assign result = result + "${tab}	${localTab}result.set${field.name?cap_first}(\n"/>
-				<#assign result = result + "${tab}		${field.name?uncap_first}DB.charAt(0));\n"/>
-				<#assign result = result + "${tab}}\n"/>
-			<#elseif (field.type?lower_case == "byte")>
-				<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(Byte.valueOf(\n"/>
-				<#assign result = result + "${tab}		cursor.getString(index)));\n"/>
-			<#elseif (field.type?lower_case == "string")>
-				<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
-				<#assign result = result + "${tab}		cursor.getString(index));\n"/>
-			<#elseif (field.harmony_type?lower_case == "enum")>
-				<#assign enumType = enums[field.type] />
-				<#if enumType.id??>
-					<#assign idEnum = enumType.fields[enumType.id] />
-					<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
-						<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
-						<#assign result = result + "${tab}	${field.type}.fromValue(cursor.getInt(index)));\n"/>
+					<#break />
+				<#case "boolean">
+					<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
+					<#assign result = result + "${tab}		cursor.getInt(index) == 1);\n"/>
+					<#break />
+				<#case "int">
+				<#case "integer">
+					<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
+					<#assign result = result + "${tab}		cursor.getInt(index));\n"/>
+					<#break />
+				<#case "float">
+					<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
+					<#assign result = result + "${tab}		cursor.getFloat(index));\n"/>
+					<#break />
+				<#case "double">
+					<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
+					<#assign result = result + "${tab}		cursor.getDouble(index));\n"/>
+					<#break />
+				<#case "long">
+					<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
+					<#assign result = result + "${tab}		cursor.getLong(index));\n"/>
+					<#break />
+				<#case "short">
+					<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
+					<#assign result = result + "${tab}		cursor.getShort(index));\n"/>
+					<#break />
+				<#case "char">
+				<#case "character">
+					<#assign result = result + "${tab}String ${field.name?uncap_first}DB = cursor.getString(index);\n"/>
+					<#assign result = result + "${tab}if (${field.name?uncap_first}DB != null\n"/>
+					<#assign result = result + "${tab}	&& ${field.name?uncap_first}DB.length() > 0) {\n"/>
+					<#assign result = result + "${tab}	${localTab}result.set${field.name?cap_first}(\n"/>
+					<#assign result = result + "${tab}		${field.name?uncap_first}DB.charAt(0));\n"/>
+					<#assign result = result + "${tab}}\n"/>
+					<#break />
+				<#case "byte">
+					<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(Byte.valueOf(\n"/>
+					<#assign result = result + "${tab}		cursor.getString(index)));\n"/>
+					<#break />
+				<#case "string">
+					<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
+					<#assign result = result + "${tab}		cursor.getString(index));\n"/>
+					<#break />
+				<#case "enum">
+					<#assign enumType = enums[field.enum.targetEnum] />
+					<#if enumType.id??>
+						<#assign idEnumType = FieldsUtils.getJavaType(enumType.fields[enumType.id])?lower_case />
+						<#if (idEnumType == "int" || idEnumType == "integer") >
+							<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
+							<#assign result = result + "${tab}	${enumType.name}.fromValue(cursor.getInt(index)));\n"/>
+						<#else>
+							<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
+							<#assign result = result + "${tab}	${enumType.name}.fromValue(cursor.getString(index)));\n"/>
+						</#if>
 					<#else>
 						<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
-						<#assign result = result + "${tab}	${field.type}.fromValue(cursor.getString(index)));\n"/>
-					</#if>
-				<#else>
-					<#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
-					<#assign result = result + "${tab}	${field.type}.valueOf(cursor.getString(index)));\n"/>
+						<#assign result = result + "${tab}	${enumType.name}.valueOf(cursor.getString(index)));\n"/>
 
-				</#if>
-			</#if>
+					</#if>
+					<#break />
+				<#default>
+						<#assign result = result + "${tab}${localTab}//TODO : Handle type ${field.type} / ${FieldsUtils.getJavaType(field)}"/>
+			</#switch>
 			<#if (field.nullable?? && field.nullable)>
 				<#assign result = result + "${tab}}\n"/>
 			</#if>
 		<#elseif (field.relation.type=="OneToOne" | field.relation.type=="ManyToOne")>
 			<#assign result = result + "${tab}if (result.get${field.name?cap_first}() == null) {\n" />
-			<#assign result = result + "${tab}${localTab}	final ${field.type} ${field.name} = new ${field.type}();\n"/>
+			<#assign result = result + "${tab}${localTab}	final ${field.relation.targetEntity} ${field.name} = new ${field.relation.targetEntity}();\n"/>
 				<#list entities[field.relation.targetEntity].ids as id>
 					<#assign result = result + "${tab}${localTab}	index = cursor.getColumnIndexOrThrow(${fieldNames[id_index]});\n"/>
 					<#if (field.nullable)>
@@ -152,45 +165,60 @@
 		<#assign result = result + "${tab}this.currentFieldName = ${NamingUtils.fixtureAlias(field)};" />
 		<#assign result = result + "${tab}String ${NamingUtils.fixtureParsedAlias(field)} = element.getChildText(${NamingUtils.fixtureAlias(field)});" />
 		<#assign result = result + "${tab}if (${NamingUtils.fixtureParsedAlias(field)} != null) {" />
-		<#if !field.relation??>
-			<#if field.type=="int" || field.type=="Integer" || field.type=="zipcode" || field.type=="ean">
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(Integer.parseInt(${NamingUtils.fixtureParsedAlias(field)}));"/>
-			<#elseif (field.type?lower_case=="float")>
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(Float.parseFloat(${NamingUtils.fixtureParsedAlias(field)}));"/>
-			<#elseif (field.type?lower_case=="double")>
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(Double.parseDouble(${NamingUtils.fixtureParsedAlias(field)}));"/>
-			<#elseif (field.type?lower_case=="datetime")>
+		<#if field.harmony_type?lower_case != "relation">
+			<#switch FieldsUtils.getJavaType(field)?lower_case>
+				<#case "int">
+				<#case "integer">
+					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(Integer.parseInt(${NamingUtils.fixtureParsedAlias(field)}));"/>
+					<#break />
+				<#case "float">
+					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(Float.parseFloat(${NamingUtils.fixtureParsedAlias(field)}));"/>
+					<#break />
+				<#case "double">
+					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(Double.parseDouble(${NamingUtils.fixtureParsedAlias(field)}));"/>
+					<#break />
+				<#case "datetime">
 					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
 					<#assign result = result + "${tab}		DateUtils.formatXMLStringToDateTime(" />
 					<#assign result = result + "${tab}				${NamingUtils.fixtureParsedAlias(field)}));" />
-			<#elseif field.type?lower_case=="boolean">
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-				<#assign result = result + "${tab}		Boolean.parseBoolean(${NamingUtils.fixtureParsedAlias(field)}));" />
-			<#elseif field.type?lower_case=="string">
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${NamingUtils.fixtureParsedAlias(field)});" />
-			<#elseif (field.type?lower_case == "short")>
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-				<#assign result = result + "${tab}		Integer.valueOf(${NamingUtils.fixtureParsedAlias(field)}).shortValue());" />
-			<#elseif (field.type?lower_case == "char" || field.type?lower_case == "character")>
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${NamingUtils.fixtureParsedAlias(field)}.charAt(0));" />
-			<#elseif (field.type?lower_case == "byte")>
-				<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
-				<#assign result = result + "${tab}		Integer.valueOf(${NamingUtils.fixtureParsedAlias(field)}).byteValue());" />
-			<#elseif (field.harmony_type == "enum")>
-				<#assign enumType = enums[field.type] />
-				<#if (enumType.id??)>
-					<#assign idEnum = enumType.fields[enumType.id] />
-					<#if (idEnum.type?lower_case == "int" || idEnum.type?lower_case == "integer") >
-						<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${field.type}.fromValue(" />
-						<#assign result = result + "${tab}				Integer.parseInt(${NamingUtils.fixtureParsedAlias(field)})));" />
+					<#break />
+				<#case "boolean">
+					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+					<#assign result = result + "${tab}		Boolean.parseBoolean(${NamingUtils.fixtureParsedAlias(field)}));" />
+					<#break />
+				<#case "string">
+					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${NamingUtils.fixtureParsedAlias(field)});" />
+					<#break />
+				<#case "short">
+					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+					<#assign result = result + "${tab}		Integer.valueOf(${NamingUtils.fixtureParsedAlias(field)}).shortValue());" />
+					<#break />
+				<#case "char">
+				<#case "character">
+					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${NamingUtils.fixtureParsedAlias(field)}.charAt(0));" />
+					<#break />
+				<#case "byte">
+					<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(" />
+					<#assign result = result + "${tab}		Integer.valueOf(${NamingUtils.fixtureParsedAlias(field)}).byteValue());" />
+					<#break />
+				<#case "enum">
+					<#assign enumType = enums[field.enum.targetEnum] />
+					<#if (enumType.id??)>
+						<#assign idEnumType = FieldsUtils.getJavaType(enumType.fields[enumType.id])?lower_case />
+						<#if (idEnumType == "int" || idEnumType == "integer") >
+							<#assign result = result + "${tab}	${objectName}.set${field.name?cap_first}(${enumType.name}.fromValue(" />
+							<#assign result = result + "${tab}				Integer.parseInt(${NamingUtils.fixtureParsedAlias(field)})));" />
+						<#else>
+							<#assign result = result + "${tab}${objectName}.set${field.name?cap_first}(${enumType.name}.fromValue(" />
+							<#assign result = result + "${tab}				${NamingUtils.fixtureParsedAlias(field)}));" />
+						</#if>
 					<#else>
-						<#assign result = result + "${tab}${objectName}.set${field.name?cap_first}(${field.type}.fromValue(" />
-						<#assign result = result + "${tab}				${NamingUtils.fixtureParsedAlias(field)}));" />
+						<#assign result = result + "${tab}${objectName}.set${field.name?cap_first}(${enumType.name}.valueOf(${NamingUtils.fixtureParsedAlias(field)}));" />
 					</#if>
-				<#else>
-					<#assign result = result + "${tab}${objectName}.set${field.name?cap_first}(${field.type}.valueOf(${NamingUtils.fixtureParsedAlias(field)}));" />
-				</#if>
-			</#if>
+					<#break />
+				<#default>
+						<#assign result = result + "${tab}${localTab}//TODO : Handle type ${field.type} / ${FieldsUtils.getJavaType(field)}"/>
+			</#switch>
 		<#else>
 			<#if (field.relation.type=="OneToOne")>
 				<#assign result = result + "${tab}	${field.relation.targetEntity?cap_first} ${field.relation.targetEntity?uncap_first} = "/>
@@ -262,10 +290,14 @@
 <#function validateDataFieldAdapter field indentLevel = 0>
 	<#assign result = "" />
 	<#assign tab = "\n" + Utils.getIndentString(indentLevel) />
-	<#if !field.internal && !field.hidden && (field.type?lower_case != "boolean" && field.harmony_type?lower_case != "enum")&& field.writable>
+	<#if !field.internal 
+			&& !field.hidden 
+			&& FieldsUtils.getJavaType(field)?lower_case != "boolean" 
+			&& field.harmony_type?lower_case != "enum"
+			&& field.writable>
 		<#if !field.nullable>
 			<#if !field.relation??>
-				<#if field.type?lower_case == "datetime">
+				<#if FieldsUtils.getJavaType(field)?lower_case == "datetime">
 					<#if (field.harmony_type) == "datetime">
 						<#assign result = result + "${tab}if (this.${field.name}View.getDateTime() == null) {" />
 					<#else>
@@ -309,13 +341,13 @@
 	<#assign tab = "\n" + Utils.getIndentString(indentLevel) />
 	<#if !field.internal && !field.hidden && field.writable>
 			<#if !field.relation??>
-				<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
-					<#if (field.type=="Boolean")>
+				<#if !MetadataUtils.isPrimitive(field) >
+					<#if (FieldsUtils.getJavaType(field)?lower_case == "boolean")>
 		<#assign result = result + "${tab}if (this.model.is${field.name?cap_first}() != null) {" />					
 					<#else>
 		<#assign result = result + "${tab}if (this.model.get${field.name?cap_first}() != null) {" />
 					</#if>
-					<#if field.type?lower_case=="datetime">
+					<#if FieldsUtils.getJavaType(field)?lower_case=="datetime">
 						<#if field.harmony_type=="datetime">
 		<#assign result = result + "${tab}	this.${field.name}View.setDateTime(this.model.get${field.name?cap_first}());" />
 						<#elseif (field.harmony_type=="date")>
@@ -339,25 +371,25 @@
 	<#assign result = "" />
 	<#assign tab = "\n" + Utils.getIndentString(indentLevel) />
 	<#if (!field.internal && !field.hidden)>
-			<#if (!field.relation??)>
-		    	<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
-					<#if (field.type == "Boolean")>
+			<#if (field.harmony_type?lower_case != "relation")>
+		    	<#if (!MetadataUtils.isPrimitive(field))>
+					<#if (FieldsUtils.getJavaType(field)?lower_case == "boolean")>
 		<#assign result = result + "${tab}if (this.model.is${field.name?cap_first}() != null) {" />
 					<#else>
 		<#assign result = result + "${tab}if (this.model.get${field.name?cap_first}() != null) {" />
 					</#if>
-					<#if (field.type?lower_case == "datetime")>
-						<#if (field.harmony_type == "datetime")>
+					<#if (FieldsUtils.getJavaType(field)?lower_case == "datetime")>
+						<#if (field.harmony_type?lower_case == "datetime")>
 		<#assign result = result + "${tab}	this.${field.name}View.setText(" />
 		<#assign result = result + "${tab}			DateUtils.formatDateTimeToString(" />
 		<#assign result = result + "${tab}					this.model.get${field.name?cap_first}()));" />
 						</#if>
-						<#if (field.harmony_type == "date")>
+						<#if (field.harmony_type?lower_case == "date")>
 		<#assign result = result + "${tab}	this.${field.name}View.setText(" />
 		<#assign result = result + "${tab}			DateUtils.formatDateToString(" />
 		<#assign result = result + "${tab}					this.model.get${field.name?cap_first}()));" />
 						</#if>
-						<#if (field.harmony_type == "time")>
+						<#if (field.harmony_type?lower_case == "time")>
 		<#assign result = result + "${tab}	this.${field.name}View.setText(" />
 		<#assign result = result + "${tab}			DateUtils.formatTimeToString(" />
 		<#assign result = result + "${tab}					this.model.get${field.name?cap_first}()));" />
@@ -394,8 +426,8 @@
 	<#assign tab = "\n" + Utils.getIndentString(indentLevel) />
 	<#if (!field.internal && !field.hidden)>
 		<#if (!field.relation??)>
-			<#if (field.type!="int") && (field.type!="boolean") && (field.type!="long") && (field.type!="ean") && (field.type!="zipcode") && (field.type!="float") && (field.type!="long") && (field.type!="short") && (field.type!="double") && (field.type != "char") && (field.type != "byte")>
-				<#if (field.type == "Boolean")>
+			<#if !MetadataUtils.isPrimitive(field)>
+				<#if (FieldsUtils.getJavaType(field)?lower_case == "boolean")>
 					<#assign result = result + "${tab}if (model.is${field.name?cap_first}() != null) {" />
 				<#else>
 					<#assign result = result + "${tab}if (model.get${field.name?cap_first}() != null) {" />
@@ -416,7 +448,7 @@
 </#function>
 
 <#function getCursorGet field>
-	<#if (field.type?lower_case == "integer" || field.type?lower_case == "int")>
+	<#if (FieldsUtils.getJavaType(field)?lower_case == "integer" || FieldsUtils.getJavaType(field)?lower_case == "int")>
 		<#assign result = "cursor.getInt(" />
 	<#else>
 		<#assign result = "cursor.getString(" />

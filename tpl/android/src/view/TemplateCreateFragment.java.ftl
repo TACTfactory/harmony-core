@@ -64,28 +64,33 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	/** Fields View. */
 	<#list fields?values as field>
 		<#if (!field.internal && !field.hidden && field.writable)>
-			<#if !field.relation??>
-				<#if field.type?lower_case=="boolean">
+			<#if field.harmony_type?lower_case != "relation">
+				<#switch FieldsUtils.getJavaType(field)?lower_case>
+					<#case "boolean">
 	/** ${field.name} View. */
 	protected CheckBox ${field.name}View;
-				<#elseif field.type?lower_case=="datetime">
-					<#if (field.harmony_type=="datetime")>
+						<#break />
+					<#case "datetime">
+						<#if (field.harmony_type=="datetime")>
 	/** ${field.name} DateTime View. */
 	protected DateTimeWidget ${field.name}View;
-					<#elseif (field.harmony_type=="date")>
+						<#elseif (field.harmony_type=="date")>
 	/** ${field.name} Date View. */
 	protected DateWidget ${field.name}View;
-					<#elseif (field.harmony_type=="time")>
+						<#elseif (field.harmony_type=="time")>
 	/** ${field.name} Time View. */
 	protected TimeWidget ${field.name}View;
-					</#if>
-				<#elseif field.harmony_type?lower_case == "enum">
+						</#if>
+						<#break />
+					<#case "enum">
 	/** ${field.name} View. */
 	protected EnumSpinner ${field.name}View;
-				<#else>
+						<#break />
+					<#default>
 	/** ${field.name} View. */
 	protected EditText ${field.name}View;
-				</#if>
+						<#break />
+				</#switch>
 			<#else>
 				<#if field.relation.type=="OneToMany" || field.relation.type=="ManyToMany">
 	/** The ${field.name} chooser component. */
@@ -111,29 +116,34 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	protected void initializeComponent(final View view) {
 		<#list fields?values as field>
 			<#if (!field.internal && !field.hidden && field.writable)>
-				<#if !field.relation??>
-					<#if field.type?lower_case=="boolean">
+				<#if field.harmony_type?lower_case != "relation">
+					<#switch FieldsUtils.getJavaType(field)?lower_case>
+						<#case "boolean">
 		this.${field.name}View =
 				(CheckBox) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
-					<#elseif field.type?lower_case == "datetime">
-						<#if (field.harmony_type?lower_case == "datetime")>
+							<#break />
+						<#case "datetime">
+							<#if (field.harmony_type?lower_case == "datetime")>
 		this.${field.name}View =
 				(DateTimeWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
-						<#elseif (field.harmony_type?lower_case == "date")>
+							<#elseif (field.harmony_type?lower_case == "date")>
 		this.${field.name}View =
 				(DateWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
-						<#elseif (field.harmony_type?lower_case == "time")>
+							<#elseif (field.harmony_type?lower_case == "time")>
 		this.${field.name}View =
 				(TimeWidget) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
-						</#if>
-					<#elseif field.harmony_type?lower_case == "enum">
+							</#if>
+							<#break />
+						<#case "enum">
 		this.${field.name}View =
 			(EnumSpinner) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
-		this.${field.name}View.setEnum(${field.type}.class);
-					<#else>
+		this.${field.name}View.setEnum(${field.enum.targetEnum}.class);
+							<#break />
+						<#default>
 		this.${field.name}View =
 			(EditText) view.findViewById(R.id.${curr.name?lower_case}_${field.name?lower_case});
-					</#if>
+							<#break />
+					</#switch>
 				<#else>
 					<#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
 		this.${field.name}Adapter = 

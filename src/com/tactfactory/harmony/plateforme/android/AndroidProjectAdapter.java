@@ -1000,6 +1000,12 @@ public class AndroidProjectAdapter implements IAdapterProject {
         
         return result;
     }
+    
+    @Override
+	public List<IUpdater> getFixtureAssets() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
     @Override
     public List<IUpdater> getApplicationFiles() {
@@ -1493,7 +1499,9 @@ public class AndroidProjectAdapter implements IAdapterProject {
     public List<IUpdater> updateEnum(EnumMetadata enumMeta, Configuration cfg) {
         List<IUpdater> result = new ArrayList<IUpdater>();
         
-        result.add(new EnumImplementation(adapter, cfg, enumMeta));
+        if (enumMeta.getIdName() != null) {
+        	result.add(new EnumImplementation(adapter, cfg, enumMeta));
+        }
         
         return result;
     }

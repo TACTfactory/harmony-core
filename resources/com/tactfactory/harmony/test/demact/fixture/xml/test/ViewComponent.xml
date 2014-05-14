@@ -2,7 +2,7 @@
 <list>
 	<ViewComponent id="TEST - VC1">
 		<id>0</id>
-		<string>TEST - String</string>
+		<stringField>TEST - String</stringField>
 		<text>TEST - Texte</text>
 		<dateTime>2012-01-01 00:00</dateTime>
 		<date>2012-01-01</date>
@@ -23,7 +23,7 @@
 	</ViewComponent>
 	<ViewComponent id="TEST - VC2">
 		<id>0</id>
-		<string>TEST - Dupond</string>
+		<stringField>TEST - Dupond</stringField>
 		<text>TEST - Dupont</text>
 		<dateTime>2012-01-01 00:00</dateTime>
 		<date>2012-01-01</date>
@@ -44,7 +44,7 @@
 	</ViewComponent>
 	<ViewComponent id="TEST - VC3">
 		<id>0</id>
-		<string>TEST - Dupond</string>
+		<stringField>TEST - Dupond</stringField>
 		<text>TEST - Dupont</text>
 		<dateTime>2012-01-01 00:00</dateTime>
 		<date>2012-01-01</date>

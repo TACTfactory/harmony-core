@@ -68,7 +68,7 @@
 		<#if id.relation??>
 			<#local result = result + getAllIdsTypesFromArray(entities[id.relation.targetEntity].ids) />
 		<#else>
-			<#local result = result + [id.type] />
+			<#local result = result + [FieldsUtils.getJavaType(id)] />
 		</#if>
 	</#list>
 	<#return result />

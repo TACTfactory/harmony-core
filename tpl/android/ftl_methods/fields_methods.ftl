@@ -85,7 +85,7 @@
 
 <#-- Generate the getter method call of the given field -->
 <#function generateGetter field>
-	<#if (field.type?lower_case == "boolean")>
+	<#if (FieldsUtils.getJavaType(field)?lower_case == "boolean")>
 		<#assign prefix = "is" />
 	<#else>
 		<#assign prefix = "get" />
@@ -95,7 +95,7 @@
 
 <#-- Generate the getter method call appended to object name -->
 <#function generateCompleteGetter objectName field>
-	<#if (field.type?lower_case == "boolean")>
+	<#if (FieldsUtils.getJavaType(field)?lower_case == "boolean")>
 		<#assign prefix = "is" />
 	<#else>
 		<#assign prefix = "get" />
@@ -105,21 +105,29 @@
 
 <#-- Generate the getter of the given field, with its converter to string. -->
 <#function generateStringGetter className field>
-	<#if (field.type?lower_case == "datetime")>																		<#-- If datetime -->
-		<#return generateCompleteGetter(className field) + ".toString(ISODateTimeFormat.dateTime())" />
-	<#elseif (field.type?lower_case == "string")>																	<#-- If String (field) -->
-		<#return generateCompleteGetter(className field) + ""/>
-	<#elseif (field.type?lower_case == "boolean")>																	<#-- If boolean (field) -->
-		<#return generateCompleteGetter(className field) + ""/>
-	<#elseif (field.harmony_type?lower_case == "enum")>																<#-- If Enum (field.getValue() || field.name()) -->
-		<#if (enums[field.type].id??) >
-			<#return generateCompleteGetter(className field) + ".getValue()"/>
-		<#else>
-			<#return generateCompleteGetter(className field) + ".name()"/>
-		</#if>
-	<#else>																											<#-- For all other cases (String.valueOf(field)) -->
-		<#return "String.valueOf(" + generateCompleteGetter(className field) + ")" />
-	</#if>
+	<#local result = "" />
+	<#switch FieldsUtils.getJavaType(field)?lower_case>
+		<#case "datetime">
+			<#local result = generateCompleteGetter(className field) + ".toString(ISODateTimeFormat.dateTime())" />
+			<#break />
+		<#case "string">
+			<#local result = generateCompleteGetter(className field) + ""/>
+			<#break />
+		<#case "boolean">
+			<#local result = generateCompleteGetter(className field) + ""/>
+			<#break />
+		<#case "enum">
+			<#if (enums[field.enum.targetEnum].id??) >
+				<#local result = generateCompleteGetter(className field) + ".getValue()"/>
+			<#else>
+				<#local result = generateCompleteGetter(className field) + ".name()"/>
+			</#if>
+			<#break />
+		<#default>
+			<#local result = "String.valueOf(" + generateCompleteGetter(className field) + ")" />
+			<#break />
+	</#switch>
+	<#return result />
 </#function>
 
 <#function getStringParser type varName>
@@ -132,4 +140,58 @@
 	<#return result />
 </#function>
 
+<#-- Returns the java type of a given field. -->
+<#function getJavaType field>
+	<#local result = field.harmony_type />
+	<#switch field.harmony_type?lower_case>
+		<#case "enum">
+			<#local result = "enum" />
+			<#break />
+		<#case "relation">
+			<#local result = field.relation.targetEntity />
+			<#break />
+		<#case "email">
+		<#case "phone">
+		<#case "city">
+		<#case "country">
+		<#case "ean">
+		<#case "string">
+		<#case "text">
+		<#case "login">
+		<#case "password">
+			<#local result = "String" />
+			<#break />
+		<#case "boolean">
+			<#local result = "boolean" />
+			<#break />
+		<#case "int">
+		<#case "zipcode">
+			<#local result = "int" />
+			<#break />
+		<#case "short">
+			<#local result = "short" />
+			<#break />
+		<#case "byte">
+			<#local result = "byte" />
+			<#break />
+		<#case "char">
+			<#local result = "char" />
+			<#break />
+		<#case "long">
+			<#local result = "long" />
+			<#break />
+		<#case "float">
+			<#local result = "float" />
+			<#break />
+		<#case "double">
+			<#local result = "double" />
+			<#break />
+		<#case "datetime">
+		<#case "date">
+		<#case "time">
+			<#local result = "DateTime" />
+			<#break />
+	</#switch>
+	<#return result />
+</#function>
 

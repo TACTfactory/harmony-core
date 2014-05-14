@@ -23,13 +23,13 @@
 	    android:layout_below="@+id/${lastField}"
 		    	</#if>
 	    android:text="@string/${m_string_label}"/>
-			<#if (field.type?lower_case=="boolean")>
+			<#if (field.harmony_type?lower_case=="boolean")>
     <CheckBox
 	    android:id="@+id/${m_id}"
 	    android:layout_width="match_parent"
 	    android:layout_height="wrap_content"
 	    android:layout_below="@+id/${m_id_label}" />
-	    		<#elseif (field.type?lower_case == "datetime")>
+	    		<#elseif (FieldsUtils.getJavaType(field)?lower_case == "datetime")>
 				<#if (field.harmony_type?lower_case == "datetime")>
 	<${project_namespace}.harmony.widget.DateTimeWidget
 		android:id="@+id/${m_id}"

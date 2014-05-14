@@ -323,6 +323,10 @@ public class ProjectCommand extends BaseCommand {
 				ConsoleUtils.displayDebug("Init WinPhone Project Success!");
 				Harmony.getInstance().getProjectContext()
                     .addAdapter(TargetPlatform.WINPHONE, this.adapterWinPhone);
+				
+				new ApplicationGenerator(this.adapterWinPhone)
+						.generateApplication();
+				
 				result = true;
 			} else {
 				ConsoleUtils.displayError(

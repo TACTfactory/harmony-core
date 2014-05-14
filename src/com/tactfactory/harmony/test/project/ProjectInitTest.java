@@ -61,6 +61,9 @@ public class ProjectInitTest extends CommonTest {
 	@Override
 	public void setUpBeforeNewParameter() throws Exception {
         super.setUpBeforeNewParameter();
+        
+        //Force clean all files
+        CommonTest.cleanAndroidFolder(false);
 	}
 	
 	/**
@@ -68,7 +71,6 @@ public class ProjectInitTest extends CommonTest {
 	 */
 	@Test
  	public final void initAndroid() {
-		CommonTest.cleanAndroidFolder();
 		System.out.println("\nTest Project init Android");
 		System.out.println(SHARP_DELIMITOR);
 
@@ -76,7 +78,6 @@ public class ProjectInitTest extends CommonTest {
 		CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID,
 				null,
 				null);
-
 		
 		CommonTest.hasFindFile("android/AndroidManifest.xml");
 		CommonTest.hasFindFile("android/build.xml");
@@ -110,7 +111,6 @@ public class ProjectInitTest extends CommonTest {
 		final String newSdkPath = "test-sdkpath/";
 		ApplicationMetadata.setAndroidSdkPath(newSdkPath);
 		ProjectGenerator.updateSDKPath();
-
 
 		final String localProp =
 				String.format("%s/%s",

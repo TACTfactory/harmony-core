@@ -1,7 +1,7 @@
 Day:
    Christmas:
       identifier: 20141225
-      day: 25
+      theDay: 25
       month: 12
       year: 2014
       publicHoliday: true
