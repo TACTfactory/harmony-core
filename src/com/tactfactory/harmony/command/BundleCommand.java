@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.command.questionnary.Question;
 import com.tactfactory.harmony.command.questionnary.Questionnary;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.BundleGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
@@ -82,7 +82,7 @@ public class BundleCommand extends BaseCommand {
 			
 			questionnary.launchQuestionnary();
 
-			for(BaseAdapter adapter : this.getAdapters()) {
+			for(IAdapter adapter : this.getAdapters()) {
 			    new BundleGenerator(adapter).generateBundleFiles(
 			            questionnary.getAnswer("owner"),
 			            questionnary.getAnswer("name"),

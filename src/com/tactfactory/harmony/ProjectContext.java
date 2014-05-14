@@ -27,6 +27,7 @@ import com.tactfactory.harmony.command.questionnary.Question;
 import com.tactfactory.harmony.command.questionnary.Questionnary;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.plateforme.TargetPlatform;
 import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.plateforme.ios.IosAdapter;
@@ -172,8 +173,8 @@ public final class ProjectContext {
 
     }
 
-    public ArrayList<BaseAdapter> getAdapters() {
-        return new ArrayList<BaseAdapter>(this.adapters.values());
+    public ArrayList<IAdapter> getAdapters() {
+        return new ArrayList<IAdapter>(this.adapters.values());
     }
 
     public BaseAdapter getAdapter(TargetPlatform platform) {

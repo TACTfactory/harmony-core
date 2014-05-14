@@ -121,7 +121,7 @@ public enum TargetPlatform {
      * @param target The target to parse
      * @return The found platform. (All if nothing else found)
      */
-    public static TargetPlatform parse(final BaseAdapter adapter) {
+    public static TargetPlatform parse(final IAdapter adapter) {
         TargetPlatform result = TargetPlatform.ALL;
 
         if (adapter != null) {

@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.MenuGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
@@ -44,7 +44,7 @@ public class MenuCommand extends BaseCommand {
 		this.setCommandArgs(Console.parseCommandArgs(args));
 		//this.generateMetas();
 
-		for(BaseAdapter adapter : this.getAdapters()) {
+		for(IAdapter adapter : this.getAdapters()) {
     		try {
     			if (action.equals(UPDATE_MENU)) {
     				this.generateMetas();           //TODO MG : why ?

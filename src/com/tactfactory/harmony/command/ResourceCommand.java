@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -60,7 +60,7 @@ public class ResourceCommand extends BaseCommand {
 
 		this.setCommandArgs(Console.parseCommandArgs(args));
 
-		for(BaseAdapter adapter : this.getAdapters()) {
+		for(IAdapter adapter : this.getAdapters()) {
     		try {
     			if (action.equals(GENERATE_IMAGE)) {
     				adapter.resizeImage();

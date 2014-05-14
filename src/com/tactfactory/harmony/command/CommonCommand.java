@@ -17,7 +17,7 @@ import com.tactfactory.harmony.command.questionnary.Questionnary;
 import com.tactfactory.harmony.command.questionnary.Question;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.CommonGenerator;
 import com.tactfactory.harmony.template.CommonGenerator.ViewType;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -133,7 +133,7 @@ public class CommonCommand extends BaseCommand {
 				ApplicationMetadata.INSTANCE.getEntities().get(
 						linkedEntityName);
 		
-		for(BaseAdapter adapter : this.getAdapters()) {
+		for(IAdapter adapter : this.getAdapters()) {
 		    new CommonGenerator(adapter).generateStaticView(
 		            packageName,
 		            viewName,

@@ -11,7 +11,7 @@ package com.tactfactory.harmony.command;
 import java.util.ArrayList;
 
 import com.tactfactory.harmony.parser.BaseParser;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 
 import net.xeoh.plugins.base.Plugin;
 
@@ -53,5 +53,5 @@ public interface Command extends Plugin {
 	 * Register platform adapter to generate.
 	 * @param adapters
 	 */
-	void registerAdapters(ArrayList<BaseAdapter> adapters);
+	void registerAdapters(ArrayList<IAdapter> adapters);
 }

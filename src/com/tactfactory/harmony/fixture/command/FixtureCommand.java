@@ -17,7 +17,7 @@ import com.tactfactory.harmony.command.BaseCommand;
 import com.tactfactory.harmony.fixture.metadata.FixtureMetadata;
 import com.tactfactory.harmony.fixture.template.FixtureGenerator;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -99,7 +99,7 @@ public class FixtureCommand extends BaseCommand {
 			ApplicationMetadata.INSTANCE.getOptions().put(
 					fixtureMeta.getName(), fixtureMeta);
 
-			for(BaseAdapter adapter : this.getAdapters()) {
+			for(IAdapter adapter : this.getAdapters()) {
 	    		try {
 	    			new FixtureGenerator(adapter).init(force);
 	    		} catch (final Exception e) {
@@ -116,7 +116,7 @@ public class FixtureCommand extends BaseCommand {
 	 * Load command.
 	 */
 	public final void load() {
-		for(BaseAdapter adapter : this.getAdapters()) {
+		for(IAdapter adapter : this.getAdapters()) {
     		try {
     			new FixtureGenerator(adapter).load();
     		} catch (final Exception e) {
@@ -131,7 +131,7 @@ public class FixtureCommand extends BaseCommand {
 	public final void purge() {
 		this.generateMetas();
 		
-		for(BaseAdapter adapter : this.getAdapters()) {
+		for(IAdapter adapter : this.getAdapters()) {
     		try {
     			new FixtureGenerator(adapter).purge();
     		} catch (final Exception e) {

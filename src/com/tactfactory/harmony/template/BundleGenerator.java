@@ -11,7 +11,6 @@ package com.tactfactory.harmony.template;
 import java.util.HashMap;
 
 import com.google.common.base.CaseFormat;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.plateforme.IAdapter;
 
 /**
@@ -24,7 +23,7 @@ public class BundleGenerator extends BaseGenerator<IAdapter> {
 	 * @param adapt Adapter
 	 * @throws Exception Exception
 	 */
-	public BundleGenerator(final BaseAdapter adapt) {
+	public BundleGenerator(final IAdapter adapt) {
 		super(adapt);
 	}
 

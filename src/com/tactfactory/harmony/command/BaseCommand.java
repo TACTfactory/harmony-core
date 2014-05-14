@@ -18,7 +18,7 @@ import com.tactfactory.harmony.parser.BaseParser;
 import com.tactfactory.harmony.parser.ClassCompletor;
 import com.tactfactory.harmony.parser.HeaderParser;
 import com.tactfactory.harmony.parser.java.JavaModelParser;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -34,8 +34,8 @@ public abstract class BaseCommand implements Command {
 			= new ArrayList<BaseParser>();
 
 	/** Adapter to apply generator */
-	private ArrayList<BaseAdapter> adapters
-            = new ArrayList<BaseAdapter>();
+	private ArrayList<IAdapter> adapters
+            = new ArrayList<IAdapter>();
             
 
 	/** Command arguments. */
@@ -93,11 +93,11 @@ public abstract class BaseCommand implements Command {
 	}
 
 	@Override
-	public void registerAdapters(final ArrayList<BaseAdapter> adapters) {
+	public void registerAdapters(final ArrayList<IAdapter> adapters) {
 	    this.adapters = adapters;
 	}
 
-    public ArrayList<BaseAdapter> getAdapters() {
+    public ArrayList<IAdapter> getAdapters() {
         return this.adapters;
     }
 
