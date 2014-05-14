@@ -6,7 +6,6 @@ import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
