@@ -18,11 +18,8 @@ import java.util.Map;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.updater.IAddExtends;
-import com.tactfactory.harmony.updater.IManifestActivity;
-import com.tactfactory.harmony.updater.IManifestRemoveLauncher;
+import com.tactfactory.harmony.updater.IExecutor;
 import com.tactfactory.harmony.updater.IUpdater;
-import com.tactfactory.harmony.updater.IUpdaterFile;
 import com.tactfactory.harmony.updater.impl.EditFile;
 import com.tactfactory.harmony.updater.impl.CopyFile;
 import com.tactfactory.harmony.updater.impl.CreateFolder;
@@ -346,21 +343,9 @@ public abstract class BaseGenerator<T extends IAdapter> {
 	    }
 	}
 	
-	private void processUpdaterFile(IUpdaterFile updaterFile) {
-	    updaterFile.execute();
+	private void processExecutor(IExecutor updater) {
+	    updater.execute();
 	}
-	
-	private void processUpdaterFile(IAddExtends updater) {
-        updater.execute();
-    }
-	
-	private void processUpdaterFile(IManifestActivity updater) {
-        updater.execute();
-    }
-	
-	private void processUpdaterFile(IManifestRemoveLauncher updater) {
-        updater.execute();
-    }
 	
     protected void processUpdater(List<IUpdater> updaters) {
         if (updaters != null) {
@@ -383,14 +368,8 @@ public abstract class BaseGenerator<T extends IAdapter> {
             this.processCreateFolder((CreateFolder) updater);
         } else if (updater instanceof DeleteFile) {
             this.processDeleteFile((DeleteFile) updater);
-        } else if (updater instanceof IUpdaterFile) {
-            this.processUpdaterFile((IUpdaterFile) updater);
-        } else if (updater instanceof IAddExtends) {
-            this.processUpdaterFile((IAddExtends) updater);
-        } else if (updater instanceof IManifestActivity) {
-            this.processUpdaterFile((IManifestActivity) updater);
-        } else if (updater instanceof IManifestRemoveLauncher) {
-            this.processUpdaterFile((IManifestRemoveLauncher) updater);
+        } else if (updater instanceof IExecutor) {
+            this.processExecutor((IExecutor) updater);
         }
     }
 }
