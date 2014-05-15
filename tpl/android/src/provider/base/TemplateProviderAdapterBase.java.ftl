@@ -380,7 +380,10 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							+ " AND " + ${ContractUtils.getContractClass(curr.inheritance.superclass)}.ALIASED_COL_SYNC_DTAG 
 							+ " = ?"</#if>;
 					selectionArgs = ObjectArrays.concat(selectionArgs,
-							${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER<#if (curr.options.sync??)>, "0"</#if>);
+							${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER);
+					<#if (curr.options.sync??)>
+					selectionArgs = ObjectArrays.concat(selectionArgs, "0");
+					</#if>
 				}
 				</#if>
 				result = this.adapter.query(
