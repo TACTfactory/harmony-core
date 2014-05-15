@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.harmony.fixture.command;
+package com.tactfactory.harmony.command;
 
 import java.util.LinkedHashMap;
 
@@ -14,10 +14,10 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.command.base.CommandBase;
-import com.tactfactory.harmony.fixture.metadata.FixtureMetadata;
-import com.tactfactory.harmony.fixture.template.FixtureGenerator;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
+import com.tactfactory.harmony.meta.FixtureMetadata;
 import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.template.FixtureGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

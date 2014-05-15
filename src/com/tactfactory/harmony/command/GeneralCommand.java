@@ -19,7 +19,6 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.command.base.Command;
 import com.tactfactory.harmony.command.base.CommandBase;
-import com.tactfactory.harmony.fixture.command.FixtureCommand;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

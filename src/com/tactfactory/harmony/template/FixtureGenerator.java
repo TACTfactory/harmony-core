@@ -6,22 +6,17 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.harmony.fixture.template;
+package com.tactfactory.harmony.template;
 
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
 import java.util.List;
 
-import com.tactfactory.harmony.fixture.metadata.FixtureMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
+import com.tactfactory.harmony.meta.FixtureMetadata;
 import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.template.BaseGenerator;
-import com.tactfactory.harmony.template.SQLiteGenerator;
-import com.tactfactory.harmony.template.TagConstant;
-import com.tactfactory.harmony.template.TestGenerator;
-import com.tactfactory.harmony.template.TestProviderGenerator;
 import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
