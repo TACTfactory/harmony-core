@@ -95,7 +95,14 @@ public abstract class BaseAdapter implements IAdapter {
 
 	/** Menu path. */
 	private String menu;
-	
+
+    public BaseAdapter(final BaseAdapter adapter) {
+        this();
+        adapter.cloneTo(this);
+    }
+    
+    public BaseAdapter() { }
+
 	@Override
 	public final ApplicationMetadata getApplicationMetadata() {
 	    //TODO return a copy of ApplicationMetadata.INSTANCE
