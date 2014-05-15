@@ -11,6 +11,7 @@ package com.tactfactory.harmony.command;
 import java.util.LinkedHashMap;
 
 import com.tactfactory.harmony.Console;
+import com.tactfactory.harmony.command.base.CommandBase;
 import com.tactfactory.harmony.command.questionnary.Question;
 import com.tactfactory.harmony.command.questionnary.Questionnary;
 import com.tactfactory.harmony.plateforme.IAdapter;
@@ -23,7 +24,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
  * Bundle Code Generator.
  */
 @PluginImplementation
-public class BundleCommand extends BaseCommand {
+public class BundleCommand extends CommandBase {
 
 	/** Bundle name. */
 	public static final String BUNDLE = "bundle";

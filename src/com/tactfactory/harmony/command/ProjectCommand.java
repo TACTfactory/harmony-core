@@ -16,6 +16,7 @@ import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.HarmonyContext;
 import com.tactfactory.harmony.ProjectContext;
+import com.tactfactory.harmony.command.base.CommandBase;
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.parser.HeaderParser;
@@ -40,7 +41,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  *
  */
 @PluginImplementation
-public class ProjectCommand extends BaseCommand {
+public class ProjectCommand extends CommandBase {
 	/** Bundle name. */
 	public static final String BUNDLE 		= "project";
 

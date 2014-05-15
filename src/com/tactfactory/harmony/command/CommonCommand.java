@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
+import com.tactfactory.harmony.command.base.CommandBase;
 import com.tactfactory.harmony.command.questionnary.Questionnary;
 import com.tactfactory.harmony.command.questionnary.Question;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
@@ -26,7 +27,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  * Common generation commands.
  */
 @PluginImplementation
-public class CommonCommand extends BaseCommand {
+public class CommonCommand extends CommandBase {
 	/** Question for view name. */
 	private static final String QUESTION_VIEW_NAME =
 			"Name of the view ? (The activity will be named {Name}Activity)";

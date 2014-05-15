@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
+import com.tactfactory.harmony.command.base.CommandBase;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.ActivityGenerator;
@@ -38,7 +39,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  *
  */
 @PluginImplementation
-public class OrmCommand extends BaseCommand {
+public class OrmCommand extends CommandBase {
 
 	/** Bundle name. */
 	public static final String BUNDLE = "orm";

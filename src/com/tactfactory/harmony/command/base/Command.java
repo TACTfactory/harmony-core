@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.harmony.command;
+package com.tactfactory.harmony.command.base;
 
 import java.util.ArrayList;
 
@@ -17,7 +17,7 @@ import net.xeoh.plugins.base.Plugin;
 
 
 /**
- * Interface defining the commmands class for all bundles.
+ * Interface defining the commands class for all bundles.
  */
 public interface Command extends Plugin {
 

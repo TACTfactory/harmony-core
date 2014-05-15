@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
+import com.tactfactory.harmony.command.base.CommandBase;
 import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
@@ -21,7 +22,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  *
  */
 @PluginImplementation
-public class ResourceCommand extends BaseCommand {
+public class ResourceCommand extends CommandBase {
 
 	/** Bundle name. */
 	public static final String BUNDLE = "resource";

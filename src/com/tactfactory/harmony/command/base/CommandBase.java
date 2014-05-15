@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.harmony.command;
+package com.tactfactory.harmony.command.base;
 
 import japa.parser.ast.CompilationUnit;
 
@@ -24,7 +24,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 /**
  * Common Command structure.
  */
-public abstract class BaseCommand implements Command {
+public abstract class CommandBase implements Command {
 
     /** Command separator. */
     protected static final String SEPARATOR = ":";

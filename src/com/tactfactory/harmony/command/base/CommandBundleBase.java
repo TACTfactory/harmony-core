@@ -1,4 +1,4 @@
-package com.tactfactory.harmony.command;
+package com.tactfactory.harmony.command.base;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.ParameterizedType;
@@ -14,7 +14,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  * In many case the bundle does override the core function.
  * @param <T> The adapter interface of the bundle
  */
-public abstract class BundleCommandBase<T extends IAdapter> extends BaseCommand {
+public abstract class CommandBundleBase<T extends IAdapter> extends CommandBase {
 
     protected HashMap<TargetPlatform, Class<? extends T>> adapterMapping = 
             new HashMap<TargetPlatform, Class<? extends T>>();

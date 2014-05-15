@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
-import com.tactfactory.harmony.command.BaseCommand;
+import com.tactfactory.harmony.command.base.CommandBase;
 import com.tactfactory.harmony.fixture.metadata.FixtureMetadata;
 import com.tactfactory.harmony.fixture.template.FixtureGenerator;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
@@ -24,7 +24,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  * Fixture bundle command class.
  */
 @PluginImplementation
-public class FixtureCommand extends BaseCommand {
+public class FixtureCommand extends CommandBase {
 	//bundle name
 	/** Bundle name. */
 	public static final String BUNDLE = "orm";

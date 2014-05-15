@@ -13,6 +13,7 @@ import java.util.LinkedHashMap;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
+import com.tactfactory.harmony.command.base.CommandBase;
 import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.MenuGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -21,7 +22,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  * Command class for Menu generation.
  */
 @PluginImplementation
-public class MenuCommand extends BaseCommand {
+public class MenuCommand extends CommandBase {
 
 	/** Bundle name. */
 	public static final String BUNDLE = "orm";

@@ -12,6 +12,7 @@ import java.util.LinkedHashMap;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
+import com.tactfactory.harmony.command.base.CommandBase;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -19,7 +20,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  *
  */
 @PluginImplementation
-public class RouterCommand extends BaseCommand {
+public class RouterCommand extends CommandBase {
 
 	/** Bundle name. */
 	public static final String BUNDLE = "router";
