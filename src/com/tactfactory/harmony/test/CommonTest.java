@@ -122,7 +122,7 @@ public abstract class CommonTest {
 	@Rule
 	public final TestRule watcher = new TestWatcher() {
 		protected void starting(final Description description) {
-			System.out.println(SHARP_DELIMITOR 
+		    ConsoleUtils.display(SHARP_DELIMITOR 
 					+ "\n# Starting test: " + description.getMethodName() 
 					+ "\n" + SHARP_DELIMITOR);
 		}
@@ -135,12 +135,12 @@ public abstract class CommonTest {
 
 		@Override
 		protected void succeeded(final Description description) {
-			System.out.println("So good !");
+		    ConsoleUtils.display("So good !");
 		}
 
 		@Override
 		protected void finished(final Description description) {
-			System.out.println(SHARP_DELIMITOR 
+		    ConsoleUtils.display(SHARP_DELIMITOR 
 					+ "\n# Finishing test: " + description.getMethodName() 
 					+ "\n" + SHARP_DELIMITOR + "\n");
 		}
@@ -230,7 +230,7 @@ public abstract class CommonTest {
 						pathNameSpace, 
 						"entity");
 
-		System.out.println(destDir);
+		ConsoleUtils.display(destDir);
 
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
 		if (new File(destDir + "Post.java").exists()) {

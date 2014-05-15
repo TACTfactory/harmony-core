@@ -245,8 +245,7 @@ public class ProjectCommand extends CommandBase {
 							.generateApplication();
 				result = true;
 			} else {
-				ConsoleUtils.displayError(
-						new Exception("Init Android Project Fail!"));
+				ConsoleUtils.displayError("Init Android Project Fail!");
 			}
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
@@ -272,8 +271,7 @@ public class ProjectCommand extends CommandBase {
 			        .addAdapter(TargetPlatform.IPHONE, this.adapterIOS);
 				result = true;
 			} else {
-				ConsoleUtils.displayError(
-						new Exception("Init IOS Project Fail!"));
+				ConsoleUtils.displayError("Init IOS Project Fail!");
 			}
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
@@ -299,8 +297,7 @@ public class ProjectCommand extends CommandBase {
                     .addAdapter(TargetPlatform.RIM, this.adapterRIM);
 				result = true;
 			} else {
-				ConsoleUtils.displayError(
-						new Exception("Init RIM Project Fail!"));
+				ConsoleUtils.displayError("Init RIM Project Fail!");
 			}
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
@@ -330,8 +327,7 @@ public class ProjectCommand extends CommandBase {
 				
 				result = true;
 			} else {
-				ConsoleUtils.displayError(
-						new Exception("Init WinPhone Project Fail!"));
+				ConsoleUtils.displayError("Init WinPhone Project Fail!");
 			}
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);

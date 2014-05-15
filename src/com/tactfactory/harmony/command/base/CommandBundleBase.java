@@ -19,22 +19,29 @@ public abstract class CommandBundleBase<T extends IAdapter> extends CommandBase 
     protected HashMap<TargetPlatform, Class<? extends T>> adapterMapping = 
             new HashMap<TargetPlatform, Class<? extends T>>();
 
+    protected CommandBundleBase() {
+        this.initBundleAdapter();
+    }
+    
     /**
      * Register and transform to typed Adapter of this Bundle.
      */
     @Override
     public void registerAdapters(ArrayList<IAdapter> adapters) {
         ArrayList<IAdapter> lazyTypes = new ArrayList<IAdapter>();
-        
+
         if (adapters.size() > 0) {
             for (TargetPlatform mappedPlatform : adapterMapping.keySet()) {
                 for (IAdapter coreAdapter : adapters) {
                     TargetPlatform targetPlatform = TargetPlatform.parse(coreAdapter);
-                    
+
                     if (mappedPlatform.equals(targetPlatform)) {
                         T newAdapter = null;
                         try {
-                            newAdapter = (T)adapterMapping.get(mappedPlatform).getConstructor(IAdapter.class).newInstance(coreAdapter);
+                            newAdapter = (T)adapterMapping
+                                    .get(mappedPlatform)
+                                    .getConstructor(IAdapter.class)
+                                    .newInstance(coreAdapter);
                         } catch (InstantiationException | IllegalAccessException
                                 | IllegalArgumentException
                                 | InvocationTargetException | NoSuchMethodException
