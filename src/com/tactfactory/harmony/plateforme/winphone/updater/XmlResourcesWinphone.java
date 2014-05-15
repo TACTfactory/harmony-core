@@ -1,13 +1,15 @@
 package com.tactfactory.harmony.plateforme.winphone.updater;
 
 import java.util.Comparator;
+
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.filter.ElementFilter;
+
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.TranslationMetadata;
-import com.tactfactory.harmony.updater.IConfigFileUtil;
-import com.tactfactory.harmony.updater.ITranslateFileUtil;
+import com.tactfactory.harmony.updater.old.IConfigFileUtil;
+import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
 import com.tactfactory.harmony.utils.TactFileUtils;
 import com.tactfactory.harmony.utils.XMLUtils;
 

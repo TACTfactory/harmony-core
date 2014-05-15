@@ -14,10 +14,10 @@ import com.tactfactory.harmony.plateforme.winphone.updater.ProjectUpdater;
 import com.tactfactory.harmony.plateforme.winphone.updater.XmlResourcesWinphone;
 import com.tactfactory.harmony.plateforme.winphone.updater.ProjectUpdater.FileType;
 import com.tactfactory.harmony.template.CommonGenerator.ViewType;
-import com.tactfactory.harmony.updater.IConfigFileUtil;
-import com.tactfactory.harmony.updater.ITranslateFileUtil;
 import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.updater.impl.SourceFile;
+import com.tactfactory.harmony.updater.old.IConfigFileUtil;
+import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
 
 import freemarker.template.Configuration;
 

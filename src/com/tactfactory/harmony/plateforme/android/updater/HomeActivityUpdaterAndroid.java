@@ -1,4 +1,4 @@
-package com.tactfactory.harmony.plateforme.android;
+package com.tactfactory.harmony.plateforme.android.updater;
 
 import java.io.File;
 import java.io.IOException;
@@ -7,18 +7,19 @@ import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 
+import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.updater.IUpdaterFile;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
 import com.tactfactory.harmony.utils.XMLUtils;
 
 
-public final class HomeActivityUpdater implements IUpdaterFile {
+public final class HomeActivityUpdaterAndroid implements IUpdaterFile {
     private final AndroidAdapter adapter;
     private final String activity;
     private final String buttonId;
     
-    public HomeActivityUpdater(AndroidAdapter adapter, String activity,
+    public HomeActivityUpdaterAndroid(AndroidAdapter adapter, String activity,
             String buttonId) {
         this.adapter = adapter;
         this.activity = activity;

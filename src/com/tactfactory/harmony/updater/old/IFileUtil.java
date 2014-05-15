@@ -1,4 +1,4 @@
-package com.tactfactory.harmony.updater;
+package com.tactfactory.harmony.updater.old;
 
 public interface IFileUtil {
     void open(String file);

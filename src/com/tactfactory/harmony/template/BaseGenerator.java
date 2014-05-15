@@ -280,9 +280,6 @@ public abstract class BaseGenerator<T extends IAdapter> {
                         TactFileUtils.deleteRecursive(fileToDelete);
                     }
                 }
-                
-                //TODO check that
-                this.getAdapter().installGitLibrary(library);
             } catch (IOException e) {
                 ConsoleUtils.displayError(e);
             } catch (GitException e) {

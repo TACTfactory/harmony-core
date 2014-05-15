@@ -1,16 +1,17 @@
-package com.tactfactory.harmony.plateforme.android;
+package com.tactfactory.harmony.plateforme.android.updater;
 
 import java.util.List;
 
+import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.template.androidxml.ManifestUpdater;
 import com.tactfactory.harmony.updater.IManifestRemoveLauncher;
 
-public class AndroidManifestRemoveLauncher implements IManifestRemoveLauncher {
+public class ManifestRemoveLauncherAndroid implements IManifestRemoveLauncher {
 
     private final AndroidAdapter adapter;
     private final boolean onlyIfSingle;
     
-    public AndroidManifestRemoveLauncher(AndroidAdapter adapter, boolean onlyIfSingle) {
+    public ManifestRemoveLauncherAndroid(AndroidAdapter adapter, boolean onlyIfSingle) {
         this.adapter = adapter;
         this.onlyIfSingle = onlyIfSingle;
     }

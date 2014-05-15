@@ -1,7 +1,7 @@
 package com.tactfactory.harmony.updater.impl;
 
-import com.tactfactory.harmony.updater.IFileUtil;
 import com.tactfactory.harmony.updater.IUpdater;
+import com.tactfactory.harmony.updater.old.IFileUtil;
 
 public final class EditFile implements IUpdater {
     private final String from;

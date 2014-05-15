@@ -6,9 +6,9 @@ import java.util.Map;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.template.CommonGenerator.ViewType;
-import com.tactfactory.harmony.updater.IConfigFileUtil;
-import com.tactfactory.harmony.updater.ITranslateFileUtil;
 import com.tactfactory.harmony.updater.IUpdater;
+import com.tactfactory.harmony.updater.old.IConfigFileUtil;
+import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
 
 import freemarker.template.Configuration;
 

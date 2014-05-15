@@ -20,7 +20,6 @@ import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.plateforme.IAdapterProject;
-import com.tactfactory.harmony.updater.impl.LibraryGit;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.ImageUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
@@ -262,12 +261,6 @@ public class WinphoneAdapter extends BaseAdapter {
 			final Configuration config) {
 	    return new CsharpFileManipulator(file, this, config);
 	}
-
-    @Override
-    public void installGitLibrary(LibraryGit library) {
-        // TODO Auto-generated method stub
-        
-    }
 
     @Override
     public List<String> getDirectoryForResources() {

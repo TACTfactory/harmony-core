@@ -21,14 +21,19 @@ import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.plateforme.IAdapterProject;
+import com.tactfactory.harmony.plateforme.android.updater.ManifestActivityAndroid;
+import com.tactfactory.harmony.plateforme.android.updater.EntityImplementationAndroid;
+import com.tactfactory.harmony.plateforme.android.updater.EnumImplementationAndroid;
+import com.tactfactory.harmony.plateforme.android.updater.HomeActivityUpdaterAndroid;
+import com.tactfactory.harmony.plateforme.android.updater.ManifestApplicationThemeAndroid;
+import com.tactfactory.harmony.plateforme.android.updater.ManifestProviderAndroid;
+import com.tactfactory.harmony.plateforme.android.updater.UpdateLibraryAndroid;
 import com.tactfactory.harmony.template.CommonGenerator.ViewType;
 import com.tactfactory.harmony.template.androidxml.AttrsFile;
 import com.tactfactory.harmony.template.androidxml.ColorsFile;
 import com.tactfactory.harmony.template.androidxml.DimensFile;
 import com.tactfactory.harmony.template.androidxml.ManifestUpdater;
 import com.tactfactory.harmony.template.androidxml.StylesFile;
-import com.tactfactory.harmony.updater.IConfigFileUtil;
-import com.tactfactory.harmony.updater.ITranslateFileUtil;
 import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.updater.impl.EditFile;
 import com.tactfactory.harmony.updater.impl.CopyFile;
@@ -37,6 +42,8 @@ import com.tactfactory.harmony.updater.impl.DeleteFile;
 import com.tactfactory.harmony.updater.impl.LibraryGit;
 import com.tactfactory.harmony.updater.impl.SourceFile;
 import com.tactfactory.harmony.updater.impl.XmlAndroid;
+import com.tactfactory.harmony.updater.old.IConfigFileUtil;
+import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
 import freemarker.template.Configuration;
@@ -410,18 +417,23 @@ public class AndroidProjectAdapter implements IAdapterProject {
                             pathLib,
                             "samples")));
         
-        LibraryGit library = new LibraryGitAndroid(
+        LibraryGit library = new LibraryGit(
                 "https://github.com/JakeWharton/ActionBarSherlock.git",
                 pathLib,
                 "4.2.0",
                 this.adapter.getApplicationMetadata().getName() + "-abs",
                 filesToDelete,
+                pathLib + "/library");
+        
+        result.add(library);
+        
+        result.add(new UpdateLibraryAndroid(
+                this.adapter,
+                this.adapter.getApplicationMetadata().getName() + "-abs",
                 pathLib + "/library",
                 null,
                 pathLib + "/library",
-                true);
-        
-        result.add(library);
+                true));
         
         result.add(new SourceFile(
                 Harmony.getTemplatesPath()
@@ -505,7 +517,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
                         filePath,
                         entity.getName().toLowerCase(Locale.US))));
         
-        result.add(new AndroidManifestActivity(
+        result.add(new ManifestActivityAndroid(
                 this.adapter, entity.getName(),
                 entity.getName().toLowerCase(), "CreateActivity"));
         
@@ -550,7 +562,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
                         filePath,
                         entity.getName().toLowerCase(Locale.ENGLISH))));
         
-        result.add(new AndroidManifestActivity(
+        result.add(new ManifestActivityAndroid(
                 this.adapter, entity.getName(),
                 entity.getName().toLowerCase(), "EditActivity"));
         
@@ -615,7 +627,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
                         filePath,
                         entity.getName().toLowerCase(Locale.US))));
         
-        result.add(new AndroidManifestActivity(
+        result.add(new ManifestActivityAndroid(
                 this.adapter, entity.getName(),
                 entity.getName().toLowerCase(), "ShowActivity"));
         
@@ -713,11 +725,11 @@ public class AndroidProjectAdapter implements IAdapterProject {
                     this.adapter.getRessourceValuesPath() + "dimens.xml",
                     new DimensFile()));
         
-        result.add(new AndroidManifestActivity(
+        result.add(new ManifestActivityAndroid(
                 this.adapter, entity.getName(),
                 entity.getName().toLowerCase(), "ListActivity"));
         
-        result.add(new ManifestApplicationTheme(
+        result.add(new ManifestApplicationThemeAndroid(
                 this.adapter, "@style/PinnedTheme"));
         
         return result;
@@ -1141,7 +1153,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 .getProjectNameSpace().replace('/', '.') + "."
                         + this.adapter.getProvider();
         
-        result.add(new ManifestProvider(
+        result.add(new ManifestProviderAndroid(
                 this.adapter, providerNamespace, nameProvider));
         
         return result;
@@ -1249,33 +1261,6 @@ public class AndroidProjectAdapter implements IAdapterProject {
         result.add(new CreateFolder(this.adapter.getLibsPath()));
         
         return result;
-    }
-    
-    public final class LibraryGitAndroid extends LibraryGit {
-        private final String androidTarget;
-        private final String androidReferencePath;
-        private final boolean androidIsSupportV4Dependant;
-        
-        public LibraryGitAndroid(String url, String path, String branch,
-                String name, List<File> filesToDelete, String libraryPath,
-                String androidTarget, String androidReferencePath,
-                boolean androidIsSupportV4Dependant) {
-            super(url, path, branch, name, filesToDelete, libraryPath);
-            
-            this.androidTarget = androidTarget;
-            this.androidReferencePath = androidReferencePath;
-            this.androidIsSupportV4Dependant = androidIsSupportV4Dependant;
-        }
-        
-        public String getAndroidTarget() {
-            return androidTarget;
-        }
-        public String getAndroidReferencePath() {
-            return androidReferencePath;
-        }
-        public boolean isAndroidIsSupportV4Dependant() {
-            return androidIsSupportV4Dependant;
-        }
     }
 
     @Override
@@ -1488,7 +1473,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 entity.getName()));
         
         if (entityFile.exists()) {
-            result.add(new EntityImplementation(this.adapter, cfg, dataModel,
+            result.add(new EntityImplementationAndroid(this.adapter, cfg, dataModel,
                     entityFile, entity));
         }
         
@@ -1500,7 +1485,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<IUpdater> result = new ArrayList<IUpdater>();
         
         if (enumMeta.getIdName() != null) {
-        	result.add(new EnumImplementation(adapter, cfg, enumMeta));
+        	result.add(new EnumImplementationAndroid(adapter, cfg, enumMeta));
         }
         
         return result;
@@ -1536,7 +1521,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 templatePath + "activity_template_static.xml",
                 filePath + "activity_" + viewName.toLowerCase() + ".xml"));
         
-        result.add(new AndroidManifestActivity(
+        result.add(new ManifestActivityAndroid(
                 this.adapter, viewName,
                 packageName, "Activity"));
         
@@ -1547,7 +1532,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
     public List<IUpdater> updateHomeActivity(String activity, String buttonId) {
         List<IUpdater> result = new ArrayList<IUpdater>();
         
-        result.add(new HomeActivityUpdater(this.adapter, activity, buttonId));
+        result.add(new HomeActivityUpdaterAndroid(this.adapter, activity, buttonId));
         
         return result;
     }

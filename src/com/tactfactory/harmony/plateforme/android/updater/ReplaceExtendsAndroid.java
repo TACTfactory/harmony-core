@@ -1,17 +1,17 @@
-package com.tactfactory.harmony.plateforme.android;
+package com.tactfactory.harmony.plateforme.android.updater;
 
 import java.io.File;
 
 import com.tactfactory.harmony.updater.IReplaceExtends;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
-public class AndroidReplaceExtends implements IReplaceExtends {
+public class ReplaceExtendsAndroid implements IReplaceExtends {
     
     private final File file;
     private final String oldInheritance;
     private final String newInheritance;
     
-    public AndroidReplaceExtends(File file, 
+    public ReplaceExtendsAndroid(File file, 
             String oldInheritance, 
             String newInheritance) {
         this.file = file;
