@@ -558,8 +558,20 @@ public class AndroidAdapter extends BaseAdapter {
     }
     
     protected List<CopyFile> getLibrariesCopyFile(List<String> libraries) {
+        return this.getLibrariesCopyFile(
+                libraries,
+                this.getLibsPath() + "%s");
+    }
+    
+    protected List<CopyFile> getLibrariesTestCopyFile(List<String> libraries) {
+        return this.getLibrariesCopyFile(
+                libraries,
+                this.getTestLibsPath() + "%s");
+    }
+    
+    private List<CopyFile> getLibrariesCopyFile(
+            List<String> libraries, String destination) {
         List<CopyFile> result = new ArrayList<CopyFile>();
-        String destination = this.getLibsPath() + "%s";
         
         for (String library : libraries) {
             result.add(new CopyFile(
