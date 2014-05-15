@@ -21,37 +21,37 @@ import net.xeoh.plugins.base.Plugin;
  */
 public interface Command extends Plugin {
 
-	/**
-	 * Execute specific action.
-	 *
-	 * @param action to realize
-	 * @param args action arguments
-	 * @param option of console
-	 */
-	void execute(String action, String[] args, String option);
+    /**
+     * Execute specific action.
+     *
+     * @param action to realize
+     * @param args action arguments
+     * @param option of console
+     */
+    void execute(String action, String[] args, String option);
 
-	/**
-	 * Display Bundle commands summary.
-	 */
-	void summary();
+    /**
+     * Display Bundle commands summary.
+     */
+    void summary();
 
-	/**
-	 * Check availability of command.
-	 *
-	 * @param command to check
-	 * @return true if found
-	 */
-	boolean isAvailableCommand(String command);
+    /**
+     * Check availability of command.
+     *
+     * @param command to check
+     * @return true if found
+     */
+    boolean isAvailableCommand(String command);
 
-	/**
+    /**
      * Register a parser to the global parser.
      * @param parser The parser to register.
      */
     void registerParser(BaseParser parser);
 
-	/**
-	 * Register platform adapter to generate.
-	 * @param adapters
-	 */
-	void registerAdapters(ArrayList<IAdapter> adapters);
+    /**
+     * Register platform adapter to generate.
+     * @param adapters
+     */
+    void registerAdapters(ArrayList<IAdapter> adapters);
 }

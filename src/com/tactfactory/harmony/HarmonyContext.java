@@ -19,8 +19,8 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Strings;
-import com.tactfactory.harmony.command.questionnary.Question;
-import com.tactfactory.harmony.command.questionnary.Questionnary;
+import com.tactfactory.harmony.command.interaction.Question;
+import com.tactfactory.harmony.command.interaction.Questionnary;
 import com.tactfactory.harmony.dependencies.libraries.LibraryPool;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.template.TagConstant;

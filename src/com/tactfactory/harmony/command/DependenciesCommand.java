@@ -11,8 +11,8 @@ package com.tactfactory.harmony.command;
 import java.util.LinkedHashMap;
 
 import com.tactfactory.harmony.command.base.CommandBase;
-import com.tactfactory.harmony.command.questionnary.Question;
-import com.tactfactory.harmony.command.questionnary.Questionnary;
+import com.tactfactory.harmony.command.interaction.Question;
+import com.tactfactory.harmony.command.interaction.Questionnary;
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 

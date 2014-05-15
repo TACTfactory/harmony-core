@@ -14,8 +14,8 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.command.base.CommandBase;
-import com.tactfactory.harmony.command.questionnary.Questionnary;
-import com.tactfactory.harmony.command.questionnary.Question;
+import com.tactfactory.harmony.command.interaction.Question;
+import com.tactfactory.harmony.command.interaction.Questionnary;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.plateforme.IAdapter;

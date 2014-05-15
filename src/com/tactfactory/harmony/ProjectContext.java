@@ -23,8 +23,8 @@ import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 
 import com.google.common.base.Strings;
-import com.tactfactory.harmony.command.questionnary.Question;
-import com.tactfactory.harmony.command.questionnary.Questionnary;
+import com.tactfactory.harmony.command.interaction.Question;
+import com.tactfactory.harmony.command.interaction.Questionnary;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.plateforme.IAdapter;

@@ -184,11 +184,11 @@ public class ProjectCommand extends CommandBase {
 						this.getCommandArgs());
 
 				ConsoleUtils.display("Project Name: "
-							+ ApplicationMetadata.INSTANCE.getName()
-						 + "\nProject NameSpace: "
-							+ ApplicationMetadata.INSTANCE.getProjectNameSpace()
-						 + "\nAndroid SDK Path: "
-							+ ApplicationMetadata.getAndroidSdkPath());
+						+ ApplicationMetadata.INSTANCE.getName()
+						+ "\nProject NameSpace: "
+						+ ApplicationMetadata.INSTANCE.getProjectNameSpace()
+						+ "\nAndroid SDK Path: "
+						+ ApplicationMetadata.getAndroidSdkPath());
 
 				// Confirmation
 				if (ConsoleUtils.isConsole()) {
@@ -486,7 +486,8 @@ public class ProjectCommand extends CommandBase {
 
 	@Override
 	public final void summary() {
-		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
+		final LinkedHashMap<String, String> commands = 
+		        new LinkedHashMap<String, String>();
 		
 		// Init
 		commands.put(INIT_ANDROID, "Init Google Android project directory");
