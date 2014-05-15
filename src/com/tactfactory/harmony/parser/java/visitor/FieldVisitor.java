@@ -283,7 +283,7 @@ public class FieldVisitor {
 									}
 									
 									strategyName = strategyName.substring(
-											strategyName.indexOf('.') + 1);
+											strategyName.lastIndexOf('.') + 1);
 									strategy = Strategy.valueOf(strategyName);
 								}
 							}
