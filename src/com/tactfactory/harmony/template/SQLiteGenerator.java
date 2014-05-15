@@ -8,6 +8,8 @@
  */
 package com.tactfactory.harmony.template;
 
+import java.io.File;
+
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -33,8 +35,24 @@ public class SQLiteGenerator extends BaseGenerator {
 		this.localNameSpace =
 				this.getAppMetas().getProjectNameSpace()
 				+ "/" + this.getAdapter().getData();
+		this.getDatamodel().put("dataLoader",
+				this.isDataLoaderAlreadyGenerated());
 	}
 
+	/**
+	 * Check if the fixture dataloader class has already been generated.
+	 * @return True if it already exists.
+	 */
+	private boolean isDataLoaderAlreadyGenerated() {
+		final String dataLoaderPath = this.getAdapter().getSourcePath()
+				+ this.getAppMetas().getProjectNameSpace()
+				+ "/" + this.getAdapter().getFixture() + "/"
+				+ "DataLoader.java";
+
+
+		return new File(dataLoaderPath).exists();
+	}
+	
 	/**
 	 * Generate Database Interface Source Code.
 	 */
