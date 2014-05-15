@@ -1,21 +1,22 @@
-package com.tactfactory.harmony.plateforme.android;
+package com.tactfactory.harmony.plateforme.android.updater;
 
 import java.io.File;
 
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.InheritanceMetadata;
+import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.updater.IAddExtends;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
-public class AndroidAddExtends implements IAddExtends {
+public class AddExtendsAndroid implements IAddExtends {
     
     private final AndroidAdapter adapter;
     private final EntityMetadata entity;
     private final String extendedClassName;
     
-    public AndroidAddExtends(AndroidAdapter adapter, EntityMetadata entity,
+    public AddExtendsAndroid(AndroidAdapter adapter, EntityMetadata entity,
             String extendedClassName) {
         this.adapter = adapter;
         this.entity = entity;

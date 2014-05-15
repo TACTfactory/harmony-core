@@ -10,7 +10,7 @@ package com.tactfactory.harmony.template;
 
 import com.tactfactory.harmony.meta.ConfigMetadata;
 import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.updater.IConfigFileUtil;
+import com.tactfactory.harmony.updater.old.IConfigFileUtil;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

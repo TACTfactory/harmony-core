@@ -15,7 +15,7 @@ import org.jdom2.Element;
 import org.jdom2.Namespace;
 
 import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.updater.IXmlUtil;
+import com.tactfactory.harmony.updater.old.IXmlUtil;
 
 /**
  * Represents an android dimens.xml file.

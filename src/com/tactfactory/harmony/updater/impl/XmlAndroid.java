@@ -8,8 +8,8 @@ import org.jdom2.Namespace;
 
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.TranslationMetadata;
-import com.tactfactory.harmony.updater.IConfigFileUtil;
-import com.tactfactory.harmony.updater.ITranslateFileUtil;
+import com.tactfactory.harmony.updater.old.IConfigFileUtil;
+import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
 import com.tactfactory.harmony.utils.TactFileUtils;
 import com.tactfactory.harmony.utils.XMLUtils;
 

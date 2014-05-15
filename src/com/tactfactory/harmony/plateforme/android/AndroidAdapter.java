@@ -16,20 +16,15 @@ import java.util.List;
 
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.annotation.Column;
-import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
-import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.plateforme.IAdapterProject;
 import com.tactfactory.harmony.updater.impl.CopyFile;
-import com.tactfactory.harmony.updater.impl.LibraryGit;
-import com.tactfactory.harmony.plateforme.android.AndroidProjectAdapter.LibraryGitAndroid;
 import com.tactfactory.harmony.plateforme.manipulator.JavaFileManipulator;
 import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.ImageUtils;
-import com.tactfactory.harmony.utils.OsUtil;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
 import freemarker.template.Configuration;
@@ -137,89 +132,6 @@ public class AndroidAdapter extends BaseAdapter {
 		return String.format("%s.%s",
 				cm.getSpace(),
 				type);
-	}
-	
-	@Override
-	public void installGitLibrary(LibraryGit library) {
-	    String androidTarget = null;
-	    String androidReferencePath = null;
-	    boolean androidIsSupportV4 = false;
-	    
-	    if (library instanceof LibraryGitAndroid) {
-	        LibraryGitAndroid libAndroid = (LibraryGitAndroid) library;
-	        androidTarget = libAndroid.getAndroidTarget();
-	        androidReferencePath = libAndroid.getAndroidReferencePath();
-	        androidIsSupportV4 = libAndroid.isAndroidIsSupportV4Dependant();
-	    }
-	    
-	    this.installGitLibrary(
-	            library.getUrl(),
-	            library.getPath(),
-	            library.getBranch(),
-	            library.getName(),
-	            library.getFilesToDelete(),
-	            library.getLibraryPath(),
-	            androidTarget,
-	            androidReferencePath,
-	            androidIsSupportV4);
-	}
-	
-	private void installGitLibrary(String url,
-			String pathLib,
-			String versionTag,
-			String libName,
-			List<File> filesToDelete,
-			String libraryProjectPath,
-			String target,
-			String referencePath,
-			boolean isSupportV4Dependant) {
-
-		if (!TactFileUtils.exists(pathLib)) {
-			ArrayList<String> command = new ArrayList<String>();
-            //make build sherlock
-            String sdkTools = String.format("%s/%s",
-            		ApplicationMetadata.getAndroidSdkPath(),
-            		"tools/android");
-            if (OsUtil.isWindows()) {
-            	sdkTools += ".bat";
-            }
-
-            command.add(new File(sdkTools).getAbsolutePath());
-            command.add("update");
-            command.add("project");
-            command.add("--path");
-            command.add(libraryProjectPath);
-            command.add("--name");
-            command.add(libName);
-            
-            if (target != null) {
-            	command.add("--target");
-            	command.add(target);
-            }
-            
-            ConsoleUtils.launchCommand(command);
-            command.clear();
-            
-            if (isSupportV4Dependant) {
-            	AndroidSDKManager.copySupportV4Into(
-            			libraryProjectPath + "/libs/");
-            }
-
-            if (referencePath != null) {
-            	// Update android project to reference the new downloaded library
-            	String projectPath = Harmony.getProjectPath() + this.getPlatform();
-            	command.add(new File(sdkTools).getAbsolutePath());
-            	command.add("update");
-            	command.add("project");
-            	command.add("--path");
-            	command.add(projectPath);
-            	command.add("--library");
-            	command.add(TactFileUtils.absoluteToRelativePath(
-            			referencePath, projectPath));
-            	ConsoleUtils.launchCommand(command);
-            	command.clear();
-            }
-		}
 	}
 
 	@Override

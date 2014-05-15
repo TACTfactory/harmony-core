@@ -1,14 +1,15 @@
-package com.tactfactory.harmony.plateforme.android;
+package com.tactfactory.harmony.plateforme.android.updater;
 
+import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.template.androidxml.ManifestUpdater;
 import com.tactfactory.harmony.updater.IUpdaterFile;
 
-public class ManifestPermission implements IUpdaterFile {
+public class ManifestPermissionAndroid implements IUpdaterFile {
 
     private final AndroidAdapter adapter;
     private final String permission;
     
-    public ManifestPermission(AndroidAdapter adapter, String permission) {
+    public ManifestPermissionAndroid(AndroidAdapter adapter, String permission) {
         this.adapter = adapter;
         this.permission = permission;
     }

@@ -1,4 +1,4 @@
-package com.tactfactory.harmony.plateforme.android;
+package com.tactfactory.harmony.plateforme.android.updater;
 
 import java.io.File;
 import java.util.Collection;
@@ -20,14 +20,14 @@ import com.tactfactory.harmony.utils.MetadataUtils;
 import freemarker.template.Configuration;
 
 //TODO remove
-class EntityImplementation implements IUpdaterFile {
+public class EntityImplementationAndroid implements IUpdaterFile {
     private final IAdapter adapter;
     private final Configuration configuration;
     private final Map<String, Object> dataModel;
     private final File entityFile;
     private final EntityMetadata entity;
     
-    public EntityImplementation(IAdapter adapter, Configuration cfg,
+    public EntityImplementationAndroid(IAdapter adapter, Configuration cfg,
             Map<String, Object> dataModel, File entityFile,
             EntityMetadata entity) {
         this.adapter = adapter;

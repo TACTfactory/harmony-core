@@ -1,10 +1,11 @@
-package com.tactfactory.harmony.plateforme.android;
+package com.tactfactory.harmony.plateforme.android.updater;
 
+import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.template.androidxml.ManifestUpdater;
 import com.tactfactory.harmony.template.androidxml.manifest.ManifestActivity;
 import com.tactfactory.harmony.updater.IManifestActivity;
 
-public class AndroidManifestActivity implements IManifestActivity {
+public class ManifestActivityAndroid implements IManifestActivity {
 
     private final AndroidAdapter adapter;
     
@@ -14,7 +15,7 @@ public class AndroidManifestActivity implements IManifestActivity {
     
     private ManifestActivity activity;
     
-    public AndroidManifestActivity(AndroidAdapter adapter, String entity,
+    public ManifestActivityAndroid(AndroidAdapter adapter, String entity,
             String entityPackage, String activity) {
         this.adapter = adapter;
         this.entity = entity;
@@ -22,7 +23,7 @@ public class AndroidManifestActivity implements IManifestActivity {
         this.activityName = activity;
     }
     
-    public AndroidManifestActivity(AndroidAdapter adapter,
+    public ManifestActivityAndroid(AndroidAdapter adapter,
             ManifestActivity activity) {
         this.adapter = adapter;
         this.activity = activity;

@@ -1,4 +1,4 @@
-package com.tactfactory.harmony.plateforme.android;
+package com.tactfactory.harmony.plateforme.android.updater;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,12 +19,12 @@ import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 //TODO remove
-class EnumImplementation implements IUpdaterFile {
+public class EnumImplementationAndroid implements IUpdaterFile {
     private final IAdapter adapter;
     private final Configuration configuration;
     private final EnumMetadata enumMeta;
     
-    protected EnumImplementation(IAdapter adapter, Configuration cfg,
+    public EnumImplementationAndroid(IAdapter adapter, Configuration cfg,
             EnumMetadata enumMeta) {
         this.adapter = adapter;
         this.configuration = cfg;

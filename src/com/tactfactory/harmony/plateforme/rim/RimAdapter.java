@@ -16,7 +16,6 @@ import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.plateforme.IAdapterProject;
-import com.tactfactory.harmony.updater.impl.LibraryGit;
 import com.tactfactory.harmony.plateforme.manipulator.SourceFileManipulator;
 
 import freemarker.template.Configuration;
@@ -70,12 +69,6 @@ public class RimAdapter extends BaseAdapter {
 			final Configuration config) {
 		throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
 	}
-
-    @Override
-    public void installGitLibrary(LibraryGit library) {
-        // TODO Auto-generated method stub
-        
-    }
 
     @Override
     public List<String> getDirectoryForResources() {

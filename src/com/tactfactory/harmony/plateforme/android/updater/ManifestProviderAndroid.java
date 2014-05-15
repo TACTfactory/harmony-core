@@ -1,16 +1,18 @@
-package com.tactfactory.harmony.plateforme.android;
+package com.tactfactory.harmony.plateforme.android.updater;
 
+import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
+import com.tactfactory.harmony.plateforme.android.AndroidProjectAdapter;
 import com.tactfactory.harmony.template.ProviderGenerator;
 import com.tactfactory.harmony.template.androidxml.ManifestUpdater;
 import com.tactfactory.harmony.updater.IUpdaterFile;
 
-public class ManifestProvider implements IUpdaterFile {
+public class ManifestProviderAndroid implements IUpdaterFile {
 
     private final AndroidAdapter adapter;
     private final String providerNamespace;
     private final String providerName;
     
-    public ManifestProvider(AndroidAdapter adapter, String providerNamespace,
+    public ManifestProviderAndroid(AndroidAdapter adapter, String providerNamespace,
             String providerName) {
         this.adapter = adapter;
         this.providerNamespace = providerNamespace;

@@ -12,7 +12,7 @@ import java.util.Locale;
 
 import com.tactfactory.harmony.meta.TranslationMetadata;
 import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.updater.ITranslateFileUtil;
+import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
