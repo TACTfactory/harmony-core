@@ -744,7 +744,7 @@ public abstract class BaseAdapter implements IAdapter {
 	/**
 	 * @return the source
 	 */
-	public final String getSource() {
+	public String getSource() {
 		return this.source;
 	}
 
@@ -772,7 +772,7 @@ public abstract class BaseAdapter implements IAdapter {
 	/**
 	 * @return the controller
 	 */
-	public final String getController() {
+	public String getController() {
 		return this.controller;
 	}
 
