@@ -380,7 +380,10 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 							+ " AND " + ${ContractUtils.getContractClass(curr.inheritance.superclass)}.ALIASED_COL_SYNC_DTAG 
 							+ " = ?"</#if>;
 					selectionArgs = ObjectArrays.concat(selectionArgs,
-							${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER<#if (curr.options.sync??)>, "0"</#if>);
+							${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER);
+					<#if (curr.options.sync??)>
+					selectionArgs = ObjectArrays.concat(selectionArgs, "0");
+					</#if>
 				}
 				</#if>
 				result = this.adapter.query(
@@ -640,8 +643,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 		<#list IdsUtils.getAllIdsNamesFromArray(curr_ids) as id>
 		selectionArgs[${id_index}] = ${id};
 		</#list>
-		<#if (curr.options.sync??)>selectionArgs[${IdsUtils.getAllIdsNamesFromArray(curr_ids)?size}] = String.valueOf(0);</#if>
-		<#if inherited && singleTabInheritance>selectionArgs[${IdsUtils.getAllIdsNamesFromArray(curr_ids)?size}] = ${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER;</#if>
+		<#assign index = IdsUtils.getAllIdsNamesFromArray(curr_ids)?size />
+		<#if (curr.options.sync??)>selectionArgs[${index}] = String.valueOf(0);<#assign index = index + 1 /></#if>
+		<#if inherited && singleTabInheritance>selectionArgs[${index}] = ${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER;<#assign index = index + 1 /></#if>
 
 		result = this.adapter.query(
 					${ContractUtils.getContractCols(curr, true)},

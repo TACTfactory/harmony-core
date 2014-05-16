@@ -29,7 +29,6 @@ public class SQLiteGenerator extends BaseGenerator<IAdapter> {
 	public SQLiteGenerator(final IAdapter adapter) throws Exception {
 		super(adapter);
 
-		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 	}
 
 	/**
@@ -37,6 +36,10 @@ public class SQLiteGenerator extends BaseGenerator<IAdapter> {
      */
     public final void generateAll() {
         ConsoleUtils.display(">> Generate Adapter...");
+        
+        this.getDatamodel().put("dataLoader",
+                this.getAdapter().getAdapterProject()
+                        .isDataLoaderAlreadyGenerated());
         
         this.generateDatabase();
 
@@ -57,7 +60,7 @@ public class SQLiteGenerator extends BaseGenerator<IAdapter> {
         List<IUpdater> files =
                 this.getAdapter().getAdapterProject().getCriteriasFiles();
         this.processUpdater(files);
-    }
+	}
     
 	/**
 	 * Generate Database Interface Source Code.
