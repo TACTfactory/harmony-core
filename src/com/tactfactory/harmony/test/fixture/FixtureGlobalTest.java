@@ -197,7 +197,7 @@ public class FixtureGlobalTest extends CommonTest {
 						"fixture",
 						"xml");
 
-		final String destDir = String.format("fixtures/");
+        final String destDir = String.format("app/android/assets/");
 
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
@@ -220,7 +220,7 @@ public class FixtureGlobalTest extends CommonTest {
 						"fixture",
 						"yml");
 
-		final String destDir = String.format("fixtures/");
+		final String destDir = String.format("app/android/assets/");
 
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
