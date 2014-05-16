@@ -9,18 +9,14 @@
 package com.tactfactory.harmony.template;
 
 import java.io.File;
-import java.io.FileFilter;
-import java.io.IOException;
 import java.util.List;
 
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FixtureMetadata;
 import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.plateforme.TargetPlatform;
 import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.utils.ConsoleUtils;
-import com.tactfactory.harmony.utils.TactFileUtils;
 
 /**
  * Fixture bundle generator.
@@ -41,79 +37,11 @@ public class FixtureGenerator extends BaseGenerator<IAdapter> {
 	 * Load the fixtures.
 	 */
 	public final void load() {
-//	    final String baseFixFolder = "app/android/assets/"; 
-//		final File fixtAppSrc = new File(baseFixFolder + "app");
-//		final File fixtDebugSrc = new File(baseFixFolder + "debug");
-//		final File fixtTestSrc = new File(baseFixFolder + "test");
-//
-//		if (fixtAppSrc.exists()) {
-//			final File fixtAppDest =
-//					new File(this.getAdapter().getAssetsPath() + "/app");
-//
-//			final File fixtDebugDest =
-//					new File(this.getAdapter().getAssetsPath() + "/debug");
-//
-//			final File fixtTestDest =
-//					new File(this.getAdapter().getAssetsPath() + "/test");
-//
-//			if (!fixtAppDest.exists() && !fixtAppDest.mkdirs()) {
-//				ConsoleUtils.displayError(
-//						new Exception("Couldn't create folder "
-//								+ fixtAppDest.getAbsolutePath()));
-//			}
-//
-//			if (!fixtDebugDest.exists() && !fixtDebugDest.mkdirs()) {
-//				ConsoleUtils.displayError(
-//						new Exception("Couldn't create folder "
-//								+ fixtDebugDest.getAbsolutePath()));
-//			}
-//
-//			if (!fixtTestDest.exists() && !fixtTestDest.mkdirs()) {
-//				ConsoleUtils.displayError(
-//						new Exception("Couldn't create folder "
-//								+ fixtTestDest.getAbsolutePath()));
-//			}
-//
-//			try {
-//				final FileFilter fileFilter = new FileFilter() {
-//					@Override
-//					public boolean accept(final File arg0) {
-//						return arg0.getPath().endsWith(".xml")
-//								|| arg0.getPath().endsWith(".yml");
-//					}
-//				};
-//
-//				TactFileUtils.copyDirectory(
-//						fixtAppSrc, fixtAppDest, fileFilter);
-//				ConsoleUtils.displayDebug(
-//						"Copying fixtures/app into ",
-//						fixtAppDest.getPath());
-//
-//				TactFileUtils.copyDirectory(
-//						fixtDebugSrc, fixtDebugDest, fileFilter);
-//				ConsoleUtils.displayDebug(
-//						"Copying fixtures/debug into ",
-//						fixtDebugDest.getPath());
-//
-//				TactFileUtils.copyDirectory(
-//						fixtTestSrc, fixtTestDest, fileFilter);
-//				ConsoleUtils.displayDebug(
-//						"Copying fixtures/test into ",
-//						fixtTestDest.getPath());
-				
-				List<IUpdater> updaters = this.getAdapter()
-						.getAdapterProject().getFixtureAssets();
-				
-				this.processUpdater(updaters);
+		List<IUpdater> updaters = this.getAdapter()
+				.getAdapterProject().getFixtureAssets();
+		
+		this.processUpdater(updaters);
 
-//			} catch (final IOException e) {
-//				ConsoleUtils.displayError(e);
-//			}
-//		} else {
-//			ConsoleUtils.displayError(new Exception(
-//					"You must init the fixtures before loading them."
-//					+ " Use the command orm:fixture:init."));
-//		}
 	}
 
 	/**
