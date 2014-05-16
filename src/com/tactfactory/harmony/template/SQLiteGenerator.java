@@ -8,116 +8,91 @@
  */
 package com.tactfactory.harmony.template;
 
-import java.io.File;
+import java.util.Collection;
+import java.util.List;
 
-import com.google.common.base.CaseFormat;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.meta.EntityMetadata;
+import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.utils.ConsoleUtils;
-import com.tactfactory.harmony.utils.PackageUtils;
 
 /**
  * SQLite Generator.
- *
  */
-public class SQLiteGenerator extends BaseGenerator {
-	/** Local name space. */
-	private String localNameSpace;
+public class SQLiteGenerator extends BaseGenerator<IAdapter> {
 
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use
 	 * @throws Exception if adapter is null
 	 */
-	public SQLiteGenerator(final BaseAdapter adapter) throws Exception {
+	public SQLiteGenerator(final IAdapter adapter) throws Exception {
 		super(adapter);
-
 		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
-		this.localNameSpace =
-				this.getAppMetas().getProjectNameSpace()
-				+ "/" + this.getAdapter().getData();
-		this.getDatamodel().put("dataLoader",
-				this.isDataLoaderAlreadyGenerated());
 	}
 
 	/**
-	 * Check if the fixture dataloader class has already been generated.
-	 * @return True if it already exists.
-	 */
-	private boolean isDataLoaderAlreadyGenerated() {
-		final String dataLoaderPath = this.getAdapter().getSourcePath()
-				+ this.getAppMetas().getProjectNameSpace()
-				+ "/" + this.getAdapter().getFixture() + "/"
-				+ "DataLoader.java";
+     * Generate the adapters and the criterias.
+     */
+    public final void generateAll() {
+        ConsoleUtils.display(">> Generate Adapter...");
+        
+        this.generateDatabase();
 
+        Collection<EntityMetadata> metas =
+                this.getAppMetas().getEntities().values();
+        
+        for (final EntityMetadata classMeta : metas) {
+            if (classMeta.hasFields()) {
+                this.getDatamodel().put(
+                        TagConstant.CURRENT_ENTITY,
+                        classMeta.getName());
+                this.generateAdapters(classMeta);
+            }
+        }
 
-		return new File(dataLoaderPath).exists();
+        ConsoleUtils.display(">> Generate CriteriaBase...");
+        
+        List<IUpdater> files =
+                this.getAdapter().getAdapterProject().getCriteriasFiles();
+        this.processUpdater(files);
 	}
-	
+    
 	/**
 	 * Generate Database Interface Source Code.
 	 */
 	public final void generateDatabase() {
 		// Info
 		ConsoleUtils.display(">> Generate Database");
+		
+		this.getDatamodel().put("dataLoader",
+                this.getAdapter().getAdapterProject()
+                        .isDataLoaderAlreadyGenerated());
 
 		try {
-			this.makeSourceData(
-					"TemplateSQLiteOpenHelper.java",
-					"%sSQLiteOpenHelper.java",
-					false);
-
-			this.makeSourceData(
-					"base/TemplateSQLiteOpenHelperBase.java",
-					"base/%sSQLiteOpenHelperBase.java",
-					true);
-
-			this.makeSourceData(
-					"base/ApplicationSQLiteAdapterBase.java",
-					"base/SQLiteAdapterBase.java",
-					true);
-
-			this.makeSourceData(
-					"ApplicationSQLiteAdapter.java",
-					"SQLiteAdapter.java",
-					false);
-			
-			this.makeSourceData(
-					"data-package-info.java",
-					"package-info.java",
-					true);
-			
-			this.makeSourceData(
-					"base/data-package-info.java",
-					"base/package-info.java",
-					true);
-
+			List<IUpdater> files =
+			        this.getAdapter().getAdapterProject().getDatabaseFiles();
+			this.processUpdater(files);
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
 	}
+	
+	/**
+     * Generate the current entity's adapters.
+     */
+    private void generateAdapters(EntityMetadata entity) {
+        // Info
+        ConsoleUtils.display(">>> Generate Adapter for "
+                + this.getDatamodel().get(TagConstant.CURRENT_ENTITY));
 
-	/** Make Java Source Code.
-	 * @param template Template path file.
-	 * @param filename The destination file.
-	 * @param override True if must overwrite file.
-	 */
-	private void makeSourceData(final String template,
-			final String filename,
-			final boolean override) {
-
-		final String fullFilePath = String.format("%s%s/%s",
-						this.getAdapter().getSourcePath(),
-						PackageUtils.extractPath(this.localNameSpace)
-							.toLowerCase(),
-						String.format(filename,
-								CaseFormat.LOWER_CAMEL.to(
-										CaseFormat.UPPER_CAMEL,
-										this.getAppMetas().getName())));
-
-		final String fullTemplatePath =
-				this.getAdapter().getTemplateSourceProviderPath()
-				+ template;
-
-		super.makeSource(fullTemplatePath, fullFilePath, override);
-	}
+        try {
+            List<IUpdater> files = this.getAdapter().getAdapterProject()
+                    .getSqlAdapterEntityFiles(entity);
+            
+            this.processUpdater(files);
+        } catch (final Exception e) {
+            ConsoleUtils.displayError(e);
+        }
+    }
 }

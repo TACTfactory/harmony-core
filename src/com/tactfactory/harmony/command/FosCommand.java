@@ -8,10 +8,12 @@
  */
 package com.tactfactory.harmony.command;
 
+import com.tactfactory.harmony.command.base.CommandBase;
+
 /**
  * FOS Bundle Commands.
  */
-public class FosCommand extends BaseCommand {
+public class FosCommand extends CommandBase {
 
 	/**
 	 * Create.

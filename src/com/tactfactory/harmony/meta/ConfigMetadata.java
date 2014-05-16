@@ -11,7 +11,7 @@ package com.tactfactory.harmony.meta;
 /**
  * Configuration Metadata.
  */
-public class ConfigMetadata {
+public final class ConfigMetadata {
 	/** Identify configuration resource. */
 	private String key;
 

@@ -12,13 +12,24 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.List;
 import java.util.Map;
 
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.updater.IExecutor;
+import com.tactfactory.harmony.updater.IUpdater;
+import com.tactfactory.harmony.updater.impl.EditFile;
+import com.tactfactory.harmony.updater.impl.CopyFile;
+import com.tactfactory.harmony.updater.impl.CreateFolder;
+import com.tactfactory.harmony.updater.impl.DeleteFile;
+import com.tactfactory.harmony.updater.impl.LibraryGit;
+import com.tactfactory.harmony.updater.impl.SourceFile;
 import com.tactfactory.harmony.utils.ConsoleUtils;
+import com.tactfactory.harmony.utils.GitUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
+import com.tactfactory.harmony.utils.GitUtils.GitException;
 
 import freemarker.cache.FileTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
@@ -30,16 +41,15 @@ import freemarker.template.TemplateException;
 /**
  * Base Generator.
  */
-public abstract class BaseGenerator {
+public abstract class BaseGenerator<T extends IAdapter> {
 
-	
 	// Meta-models
 	/** The application metadata. */
 	private ApplicationMetadata appMetas;
 
 	// Platform adapter
 	/** The used adapter. */
-	private BaseAdapter adapter;
+	private T adapter;
 	/** The datamodel. */
 	private Map<String, Object> datamodel;
 
@@ -64,15 +74,8 @@ public abstract class BaseGenerator {
 	/**
 	 * @return the adapter
 	 */
-	public final BaseAdapter getAdapter() {
+	public final T getAdapter() {
 		return adapter;
-	}
-
-	/**
-	 * @param adapter the adapter to set
-	 */
-	public final void setAdapter(final BaseAdapter adapter) {
-		this.adapter = adapter;
 	}
 
 	/**
@@ -105,33 +108,33 @@ public abstract class BaseGenerator {
 
 	/**
 	 * Constructor.
-	 * @param adapt The adapter to use
+	 * @param adapter The adapter to use
 	 * @throws Exception if adapter is null
 	 */
-	public BaseGenerator(final BaseAdapter adapt) {
-		if (adapt == null) {
+	public BaseGenerator(final T adapter) {
+		if (adapter == null) {
 			throw new RuntimeException("No adapter define.");
 		}
 
 		try {
 			// FIXME Clone object tree
 			this.appMetas	= ApplicationMetadata.INSTANCE;
-			this.adapter	= adapt;
-	
-			//this.cfg.setDirectoryForTemplateLoading(
-			//		new File(Harmony.getRootPath() + "/vendor/tact-core"));
+			this.adapter	= adapter;
 	
 			final  Object[] files = 
 					Harmony.getTemplateFolders().values().toArray();
 			final  TemplateLoader[] loaders = 
 					new TemplateLoader[files.length + 1];
+			
 			for (int i = 0; i < files.length; i++) {
 				final FileTemplateLoader ftl =
 						new FileTemplateLoader((File) files[i]);
 				loaders[i] = ftl;
 			}
-				loaders[files.length] = new FileTemplateLoader(
-						new File(Harmony.getRootPath() + "/vendor/tact-core"));
+			
+			loaders[files.length] = new FileTemplateLoader(
+					new File(Harmony.getRootPath() + "/vendor/tact-core"));
+			
 			final MultiTemplateLoader mtl = new MultiTemplateLoader(loaders);
 	
 			this.cfg.setTemplateLoader(mtl);
@@ -173,8 +176,10 @@ public abstract class BaseGenerator {
 						new OutputStreamWriter(
 								new FileOutputStream(generateFile),
 								TactFileUtils.DEFAULT_ENCODING);
+				
 				final String fileName = generatePath.split("/")
 						[generatePath.split("/").length - 1];
+				
 				this.datamodel.put("fileName", fileName);
 				tpl.process(this.datamodel, output);
 				output.flush();
@@ -189,6 +194,27 @@ public abstract class BaseGenerator {
 				ConsoleUtils.displayError(e);
 			}
 		}
+	}
+	
+	/**
+	 * Make source file.
+	 * @param file
+	 */
+	protected final void makeSource(SourceFile file) {
+	    this.makeSource(
+	            file.getTemplateSource(),
+	            file.getFileDestination(),
+	            file.isOverwrite());
+	}
+	
+	/**
+	 * Make sources files
+	 * @param files
+	 */
+	protected final void makeSource(List<SourceFile> files) {
+	    for (SourceFile file : files) {
+            this.makeSource(file);
+        }
 	}
 
 	/**
@@ -217,6 +243,7 @@ public abstract class BaseGenerator {
 						new OutputStreamWriter(
 								new FileOutputStream(generateFile, true),
 								TactFileUtils.DEFAULT_ENCODING);
+				
 				tpl.process(this.datamodel, output);
 				output.flush();
 				output.close();
@@ -230,47 +257,48 @@ public abstract class BaseGenerator {
 			}
 		}
 	}
-
-
-	/**
-	 * Update Libs.
-	 * @param libName The library name
-	 */
-	protected void updateLibrary(final String libName) {
-		final File dest = new File(
-				String.format("%s/%s", this.adapter.getLibsPath(), libName));
-
-		if (!dest.exists()) {
-			File src = Harmony.getLibrary(libName.replace("/", File.separator));
-			if (src.isDirectory()) {
-				try {
-					TactFileUtils.copyDirectory(src, dest);
-				} catch (IOException e) {
-					ConsoleUtils.displayError(e);
-				}
-			} else {
-				TactFileUtils.copyfile(
-					src,
-					dest);
-			}
-		}
+	
+	protected void installLibrary(LibraryGit library) {
+	    if (!TactFileUtils.exists(library.getPath())) {
+            try {
+                final File projectFolder = new File(Harmony.getProjectPath()
+                        + this.getAdapter().getPlatform() + "/");
+                
+                GitUtils.cloneRepository(
+                        library.getPath(),
+                        library.getUrl(),
+                        library.getBranch());
+                
+                GitUtils.addSubmodule(
+                        projectFolder.getAbsolutePath(),
+                        library.getPath(),
+                        library.getUrl());
+                
+                // Delete useless files
+                if (library.getFilesToDelete() != null) {
+                    for (File fileToDelete : library.getFilesToDelete()) {
+                        TactFileUtils.deleteRecursive(fileToDelete);
+                    }
+                }
+            } catch (IOException e) {
+                ConsoleUtils.displayError(e);
+            } catch (GitException e) {
+                ConsoleUtils.displayError(e);
+            }
+        }
 	}
-
-	/**
-	 * Generate Utils.
-	 * @param utilName The utility class name
-	 */
-	protected void updateUtil(final String utilName) {
-		this.makeSource(
-				String.format("%s%s",
-						this.adapter.getTemplateUtilPath(),
-						utilName),
-				String.format("%s%s",
-						this.adapter.getUtilPath(),
-						utilName),
-				false);
-	}
-
+	
+    protected void updateLibrary(CopyFile library) {
+        final File dest = new File(library.getFileDestination());
+        
+        if (!dest.exists()) {
+            File src = new File(library.getFileSource());
+            
+            if (!src.isDirectory()) {
+                TactFileUtils.copyfile(src, dest);
+            }
+        }
+    }
 	
 	/** 
 	 * Backup the given file if its old content is not the same.
@@ -293,4 +321,52 @@ public abstract class BaseGenerator {
 					file);
 		}
 	}
+	
+	private void processEditFile(EditFile editfile) {
+	    editfile.getFileUtil().mergeFiles(
+	            editfile.getFrom(),
+	            editfile.getTo());
+	}
+	
+	private void processCreateFolder(CreateFolder createFolder) {
+	    TactFileUtils.makeFolder(createFolder.getPath());
+	}
+	
+	private void processDeleteFile(DeleteFile deleteFile) {
+	    File file = new File(deleteFile.getPath());
+	    
+	    if (file.exists()) {
+	        file.delete();
+	    }
+	}
+	
+	private void processExecutor(IExecutor updater) {
+	    updater.execute();
+	}
+	
+    protected void processUpdater(List<IUpdater> updaters) {
+        if (updaters != null) {
+            for (IUpdater updater : updaters) {
+                this.processUpdater(updater);
+            }
+        }
+    }
+
+    protected void processUpdater(IUpdater updater) {
+        if (updater instanceof SourceFile) {
+            this.makeSource((SourceFile) updater);
+        } else if (updater instanceof LibraryGit) {
+            this.installLibrary((LibraryGit) updater);
+        } else if (updater instanceof CopyFile) {
+            this.updateLibrary((CopyFile) updater);
+        } else if (updater instanceof EditFile) {
+            this.processEditFile((EditFile) updater);
+        } else if (updater instanceof CreateFolder) {
+            this.processCreateFolder((CreateFolder) updater);
+        } else if (updater instanceof DeleteFile) {
+            this.processDeleteFile((DeleteFile) updater);
+        } else if (updater instanceof IExecutor) {
+            this.processExecutor((IExecutor) updater);
+        }
+    }
 }

@@ -16,7 +16,7 @@ import java.util.Locale;
  * Translations metadata.
  *
  */
-public class TranslationMetadata {
+public final class TranslationMetadata {
 
 	/** Identify string resource. */
 	private String key;
@@ -102,7 +102,7 @@ public class TranslationMetadata {
 			final String defaultValue,
 			final Group group) {
 		final TranslationMetadata translateMeta = new TranslationMetadata();
-		translateMeta.key = key;
+		translateMeta.key = key.toLowerCase(Locale.US);
 		translateMeta.group = group;
 		translateMeta.i18n.put(Locale.getDefault(), defaultValue);
 

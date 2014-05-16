@@ -14,13 +14,14 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import com.tactfactory.harmony.Harmony;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.TagConstant;
 
 /**
  * Application Metadata.
  */
 public final class ApplicationMetadata extends BaseMetadata {
+
 	/** Path delimiter. */
 	private static final String PATH_DELIMITER = "/";
 	/** Package delimiter. */
@@ -191,7 +192,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 	 * @return the map
 	 */
 	@Override
-	public Map<String, Object> toMap(final BaseAdapter adapt) {
+	public Map<String, Object> toMap(final IAdapter adapt) {
 		final Map<String, Object> ret = new HashMap<String, Object>();
 		final Map<String, Object> classesMap = new HashMap<String, Object>();
 		final Map<String, Object> enumsMap = new HashMap<String, Object>();

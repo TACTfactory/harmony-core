@@ -11,30 +11,32 @@ package com.tactfactory.harmony.fixture.template;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.List;
 
 import com.tactfactory.harmony.fixture.metadata.FixtureMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.BaseGenerator;
 import com.tactfactory.harmony.template.SQLiteGenerator;
 import com.tactfactory.harmony.template.TagConstant;
 import com.tactfactory.harmony.template.TestGenerator;
 import com.tactfactory.harmony.template.TestProviderGenerator;
+import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
 /**
  * Fixture bundle generator.
  */
-public class FixtureGenerator extends BaseGenerator {
+public class FixtureGenerator extends BaseGenerator<IAdapter> {
 
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use.
 	 * @throws Exception If adapter is null
 	 */
-	public FixtureGenerator(final BaseAdapter adapter) throws Exception {
+	public FixtureGenerator(final IAdapter adapter) throws Exception {
 		super(adapter);
 		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 	}
@@ -101,6 +103,11 @@ public class FixtureGenerator extends BaseGenerator {
 				ConsoleUtils.displayDebug(
 						"Copying fixtures/test into ",
 						fixtTestDest.getPath());
+				
+				List<IUpdater> updaters = this.getAdapter()
+						.getAdapterProject().getFixtureAssets();
+				
+				this.processUpdater(updaters);
 
 			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);
@@ -118,45 +125,46 @@ public class FixtureGenerator extends BaseGenerator {
 	 */
 	public final void init(final boolean force) {
 		 try {
-			 final String fixtureType = ((FixtureMetadata)
-							 this.getAppMetas().getOptions()
-							 	.get("fixture")).getType();
+			final String fixtureType = ((FixtureMetadata)
+					 this.getAppMetas().getOptions()
+					 	.get("fixture")).getType();
 
 			final FixtureMetadata meta =
 					 (FixtureMetadata) this.getAppMetas().getOptions().get(
 							 FixtureMetadata.NAME);
-			 //Copy JDOM Library
-			if (meta.getType().equals("xml")) {
-				this.updateLibrary("jdom-2.0.2.jar");
-			} else {
-				this.updateLibrary("snakeyaml-1.10-android.jar");
-			}
-
-			//Create base classes for Fixtures loaders
-			this.makeSource("FixtureBase.java", "FixtureBase.java", force);
-			this.makeSource("DataManager.java", "DataManager.java", force);
-			this.makeSource("DataLoader.java", "DataLoader.java", force);
 			
-			this.makeSource("package-info.java", "package-info.java", false);
+			List<IUpdater> updaters = this.getAdapter()
+			        .getAdapterProject().getFixtureLibraries(meta.getType());
+			this.processUpdater(updaters);
+
+			updaters = this.getAdapter()
+                    .getAdapterProject().getFixtureFiles(force);
+            this.processUpdater(updaters);
 
 			//Update SQLiteOpenHelper
 			new SQLiteGenerator(this.getAdapter()).generateDatabase();
 			new TestGenerator(this.getAdapter()).generateAll();
 			new TestProviderGenerator(this.getAdapter()).generateAll();
 
+			Iterable<EntityMetadata> entities =
+			        this.getAppMetas().getEntities().values();
+			
 			//Create each entity's data loader
-			for (final EntityMetadata classMeta
-					: this.getAppMetas().getEntities().values()) {
-				if (classMeta.hasFields()
-						&& !classMeta.isInternal()) {
-					this.getDatamodel().put(TagConstant.CURRENT_ENTITY,
+			for (final EntityMetadata classMeta : entities) {
+				if (classMeta.hasFields() && !classMeta.isInternal()) {
+					this.getDatamodel().put(
+					        TagConstant.CURRENT_ENTITY,
 							classMeta.getName());
-					this.makeSource("TemplateDataLoader.java",
-							classMeta.getName() + "DataLoader.java",
-							force);
-					this.makeBaseFixture("TemplateFixture." + fixtureType,
-							classMeta.getName() + "." + fixtureType,
-							false);
+					
+					updaters = this.getAdapter().getAdapterProject()
+					        .getFixtureEntityDefinitionFiles(
+					        		fixtureType, classMeta);
+					this.processUpdater(updaters);
+					
+					updaters = this.getAdapter().getAdapterProject()
+					        .getFixtureEntityFiles(
+					        		force, fixtureType, classMeta);
+		            this.processUpdater(updaters);
 				}
 			}
 		} catch (final Exception e) {
@@ -174,35 +182,20 @@ public class FixtureGenerator extends BaseGenerator {
 				this.removeSource("app/" + classMeta.getName() + ".xml");
 				this.removeSource("app/" + classMeta.getName() + ".yml");
 
+				this.removeSource("debug/" + classMeta.getName() + ".xml");
+                this.removeSource("debug/" + classMeta.getName() + ".yml");
+                
 				this.removeSource("test/" + classMeta.getName() + ".xml");
 				this.removeSource("test/" + classMeta.getName() + ".yml");
 			}
 		}
-
-	}
-
-	@Override
-	protected final void makeSource(final String templateName,
-			final String fileName,
-			final boolean override) {
-		final String fullFilePath =
-				this.getAdapter().getSourcePath()
-				+ this.getAppMetas().getProjectNameSpace()
-				+ "/" + this.getAdapter().getFixture() + "/"
-				+ fileName;
-
-		final String fullTemplatePath =
-				this.getAdapter().getTemplateSourceFixturePath()
-				+ templateName;
-
-		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 
 	/**
 	 * Delete file in assets directory.
 	 * @param fileName The filename.
 	 */
-	protected final void removeSource(final String fileName) {
+	private void removeSource(final String fileName) {
 		final String fullFilePath =
 				this.getAdapter().getAssetsPath() + fileName;
 		final File file = new File(fullFilePath);
@@ -212,34 +205,5 @@ public class FixtureGenerator extends BaseGenerator {
 					new Exception("Couldn't delete file "
 							+ file.getPath()));
 		}
-	}
-
-	/**
-	 * Make base fixture.
-	 * @param templateName The template name.
-	 * @param fileName The destination file name.
-	 * @param override True for overwrite existing fixture.
-	 */
-	protected final void makeBaseFixture(final String templateName,
-			final String fileName,
-			final boolean override) {
-		String fullFilePath = "fixtures/app/" + fileName;
-		String fullTemplatePath =
-				this.getAdapter().getTemplateSourceFixturePath()
-				+ templateName;
-		super.makeSource(fullTemplatePath, fullFilePath, override);
-
-		fullFilePath = "fixtures/test/" + fileName;
-		fullTemplatePath =
-				this.getAdapter().getTemplateSourceFixturePath()
-				+ templateName;
-		super.makeSource(fullTemplatePath, fullFilePath, override);
-
-
-		fullFilePath = "fixtures/debug/" + fileName;
-		fullTemplatePath =
-				this.getAdapter().getTemplateSourceFixturePath()
-				+ templateName;
-		super.makeSource(fullTemplatePath, fullFilePath, override);
 	}
 }

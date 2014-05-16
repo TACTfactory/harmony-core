@@ -16,7 +16,7 @@ import org.jdom2.Element;
 import org.jdom2.Namespace;
 
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.androidxml.manifest.ManifestActivity;
 import com.tactfactory.harmony.template.androidxml.manifest.ManifestConstants;
 import com.tactfactory.harmony.template.androidxml.manifest.ManifestIntentFilter;
@@ -43,7 +43,7 @@ public class ManifestUpdater extends XmlManager {
 	 * Constructor.
 	 * @param adapter The adapter
 	 */
-	public ManifestUpdater(final BaseAdapter adapter) {
+	public ManifestUpdater(final IAdapter adapter) {
 		super(adapter, adapter.getManifestPathFile());
 	}
 	

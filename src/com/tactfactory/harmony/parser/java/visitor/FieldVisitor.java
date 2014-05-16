@@ -22,7 +22,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.tactfactory.harmony.parser.JavaModelParser;
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.ColumnResult;
 import com.tactfactory.harmony.annotation.GeneratedValue;
@@ -42,6 +41,7 @@ import com.tactfactory.harmony.meta.EnumTypeMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.meta.RelationMetadata;
 import com.tactfactory.harmony.parser.BaseParser;
+import com.tactfactory.harmony.parser.java.JavaModelParser;
 import com.tactfactory.harmony.plateforme.SqliteAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.PackageUtils;

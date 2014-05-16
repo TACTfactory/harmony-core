@@ -17,6 +17,7 @@ import org.junit.Test;
 import com.tactfactory.harmony.command.GeneralCommand;
 import com.tactfactory.harmony.command.OrmCommand;
 import com.tactfactory.harmony.command.ProjectCommand;
+import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
  * Test class for the Harmony core.
@@ -64,8 +65,7 @@ public class CoreTest extends CommonTest {
 	 */
 	@Test
 	public final void list() {
-		System.out.println("\nTest List bundle/command");
-		System.out.println(SHARP_DELIMITOR);
+	    ConsoleUtils.display("\nTest List bundle/command\n" + SHARP_DELIMITOR);
 
 		CommonTest.getHarmony().findAndExecute(GeneralCommand.LIST, null, null);
 	}
@@ -75,8 +75,7 @@ public class CoreTest extends CommonTest {
 	 */
 	@Test
 	public final void help() {
-		System.out.println("\nTest Help");
-		System.out.println(SHARP_DELIMITOR);
+	    ConsoleUtils.display("\nTest Help\n" + SHARP_DELIMITOR);
 
 		CommonTest.getHarmony().findAndExecute(GeneralCommand.HELP, null, null);
 	}

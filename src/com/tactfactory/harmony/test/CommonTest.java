@@ -22,7 +22,7 @@ import org.junit.runners.Parameterized.Parameters;
 
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.Harmony;
-import com.tactfactory.harmony.ProjectDiscover;
+import com.tactfactory.harmony.HarmonyContext;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.test.factory.DemactFactory;
 import com.tactfactory.harmony.test.factory.ManagementFactory;
@@ -34,16 +34,16 @@ import com.tactfactory.harmony.utils.TactFileUtils;
  * Common class for all the test.
  */
 public abstract class CommonTest {
-	
+
 	/** Current tested metadata. */
 	protected final ApplicationMetadata currentMetadata;
-	
+
 	/** Old metadata. */
 	protected static ApplicationMetadata oldMetadata;
 
 	/** Parsed metadata. */
 	protected static ApplicationMetadata parsedMetadata;
-	
+
 	/** Console delimiter for tests. */
 	protected static final String SHARP_DELIMITOR =
 			  "#################"
@@ -54,22 +54,23 @@ public abstract class CommonTest {
 
 	/** Harmony instance. */
 	protected static Harmony harmony;
-	
+
 	/**
 	 * Constructor for parameterized tests.
 	 * The parameters sent to this should be all the metadata of the different
 	 * project we want to test. (ie. Demact, Tracscan, etc.)
 	 * 
 	 * @param currentMetadata The metadata of the project
+	 * @throws Exception 
 	 */
-	public CommonTest(ApplicationMetadata currentMetadata) {
+	public CommonTest(ApplicationMetadata currentMetadata) throws Exception {
 			this.currentMetadata = currentMetadata;
 			if (!this.currentMetadata.equals(oldMetadata)) {
 				this.setUpBeforeNewParameter();
 			}
 			CommonTest.oldMetadata = this.currentMetadata;
 	}
-	
+
 	/**
 	 * Empty constructor.
 	 */
@@ -79,8 +80,9 @@ public abstract class CommonTest {
 
 	/**
 	 * This method is called before every new parameter is tested by JUnit.
+	 * @throws Exception 
 	 */
-	public void setUpBeforeNewParameter() {
+	public void setUpBeforeNewParameter() throws Exception {
 		// Base configs
 		ConsoleUtils.setAnsi(false);
 		ConsoleUtils.setQuiet(false);
@@ -89,12 +91,10 @@ public abstract class CommonTest {
 		// Clean folder
 		CommonTest.cleanAndroidFolder();
 
-		//ApplicationMetadata.reinit();
-		
 		// Project test config
 		ApplicationMetadata.INSTANCE.setName(
 				this.currentMetadata.getName());
-		
+
 		ApplicationMetadata.INSTANCE.setProjectNameSpace(
 				this.currentMetadata.getProjectNameSpace());
 
@@ -107,7 +107,7 @@ public abstract class CommonTest {
 							"local.properties");
 
 			ApplicationMetadata.setAndroidSdkPath(
-					ProjectDiscover.getSdkDirFromPropertiesFile(localProp));
+			        HarmonyContext.getSdkDirFromPropertiesFile(localProp));
 
 			if (ApplicationMetadata.getAndroidSdkPath() == null) {
 				ApplicationMetadata.setAndroidSdkPath(
@@ -115,32 +115,32 @@ public abstract class CommonTest {
 			}
 		}
 	}
-	
+
 	/**
 	 * Add logger to common test life-cycle.
 	 */
 	@Rule
 	public final TestRule watcher = new TestWatcher() {
 		protected void starting(final Description description) {
-			System.out.println(SHARP_DELIMITOR 
+		    ConsoleUtils.display(SHARP_DELIMITOR 
 					+ "\n# Starting test: " + description.getMethodName() 
 					+ "\n" + SHARP_DELIMITOR);
 		}
-		
+
 		@Override
 		protected void failed(final Throwable e,
 				final Description description) {
 			
 		}
-		
+
 		@Override
 		protected void succeeded(final Description description) {
-			System.out.println("So good !");
+		    ConsoleUtils.display("So good !");
 		}
-		
+
 		@Override
 		protected void finished(final Description description) {
-			System.out.println(SHARP_DELIMITOR 
+		    ConsoleUtils.display(SHARP_DELIMITOR 
 					+ "\n# Finishing test: " + description.getMethodName() 
 					+ "\n" + SHARP_DELIMITOR + "\n");
 		}
@@ -178,7 +178,7 @@ public abstract class CommonTest {
 							"local.properties");
 
 			ApplicationMetadata.setAndroidSdkPath(
-					ProjectDiscover.getSdkDirFromPropertiesFile(localProp));
+			        HarmonyContext.getSdkDirFromPropertiesFile(localProp));
 
 			if (ApplicationMetadata.getAndroidSdkPath() == null) {
 				ApplicationMetadata.setAndroidSdkPath(
@@ -192,7 +192,7 @@ public abstract class CommonTest {
 	 * @throws Exception if something bad happends.
 	 */
 	public void setUp() throws RuntimeException {
-
+	    
 	}
 
 	/**
@@ -200,6 +200,7 @@ public abstract class CommonTest {
 	 * @throws Exception if something bad happends.
 	 */
 	public void tearDown() throws RuntimeException {
+	    
 	}
 
 	/** Get Harmony instance.
@@ -222,14 +223,14 @@ public abstract class CommonTest {
 						Harmony.getBundlePath(),
 						pathNameSpace, 
 						"entity");
-		
+
 		final String destDir = 
 				String.format("%s/src/%s/%s/", 
 						Harmony.getProjectAndroidPath(), 
 						pathNameSpace, 
 						"entity");
 
-		System.out.println(destDir);
+		ConsoleUtils.display(destDir);
 
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
 		if (new File(destDir + "Post.java").exists()) {
@@ -250,14 +251,14 @@ public abstract class CommonTest {
 		ConsoleUtils.display("Testing existence of " + file.getAbsolutePath());
 		assertTrue(file.getAbsolutePath() + " does not exist", file.exists());
 	}
-	
+
 	/**
 	 * Clean the /android/ folder. (But keeps the libs folder)
 	 */
 	protected static void cleanAndroidFolder() {
 		CommonTest.cleanAndroidFolder(true);
 	}
-	
+
 	/**
 	 * Clean the /android/ folder.  
 	 * @param keepLibs True if you want to keep the libs folder.
@@ -269,6 +270,7 @@ public abstract class CommonTest {
 				  "################################  "
 				+ "Clean Android Folder !! "
 				+ "################################");
+
 		final File dirproj = new File(Harmony.getProjectAndroidPath());
 		if (keepLibs) { 
 			ConsoleUtils.display("Keep libraries !");
@@ -288,7 +290,7 @@ public abstract class CommonTest {
 			TactFileUtils.deleteRecursive(dirproj);
 		}
 	}
-	
+
 	/**
 	 * JUnit Parameters method.
 	 * This should return the various application metadata associated 
@@ -299,20 +301,20 @@ public abstract class CommonTest {
 	@Parameters
 	public static Collection<Object[]> getParameters() {
 		Collection<Object[]> result = new ArrayList<Object[]>();
-		
+
 		result.add(new ApplicationMetadata[] {
 				TracScanFactory.generateTestMetadata()
 		});
-		
+
 		
 		result.add(new ApplicationMetadata[] {
 				DemactFactory.generateTestMetadata()
 		});
-		
+
 		result.add(new ApplicationMetadata[] {
 			ManagementFactory.generateTestMetadata()	
 		});
-		
+
 		return result;
 	}
 }

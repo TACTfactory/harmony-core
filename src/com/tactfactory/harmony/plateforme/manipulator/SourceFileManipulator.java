@@ -4,7 +4,6 @@ import java.io.File;
 import java.util.Map;
 
 import com.tactfactory.harmony.meta.ClassMetadata;
-import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -64,7 +63,7 @@ public abstract class SourceFileManipulator {
 	 *     already exists.
 	 */
 	public abstract boolean addImplement(
-			final EntityMetadata classMeta,
+			final ClassMetadata classMeta,
 			final String className);
 	
 	/**
@@ -166,7 +165,7 @@ public abstract class SourceFileManipulator {
 	 * @return True if already implements
 	 */
 	public final boolean alreadyImplementsClass(
-			final EntityMetadata classMeta,
+			final ClassMetadata classMeta,
 			final String className) {
 		boolean ret = false;
 		for (final String implement : classMeta.getImplementTypes()) {

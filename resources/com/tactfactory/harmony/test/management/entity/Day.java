@@ -12,7 +12,7 @@ public class Day {
 	private int identifier;
 
 	@Column
-	private int day;
+	private int theDay;
 
 	@Column
 	private int month;

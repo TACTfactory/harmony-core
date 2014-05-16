@@ -46,7 +46,8 @@ public class GenerateStaticViewTest extends CommonTest {
 	private static final String TEST_VIEW_NAME = "ViewTest";
 	
 	
-	public GenerateStaticViewTest(ApplicationMetadata currentMetadata) {
+	public GenerateStaticViewTest(ApplicationMetadata currentMetadata)
+	        throws Exception {
 		super(currentMetadata);
 	}
 
@@ -63,8 +64,7 @@ public class GenerateStaticViewTest extends CommonTest {
 	}
 	
 	@Override
-	public void setUpBeforeNewParameter() {
-		super.cleanAndroidFolder(false);
+	public void setUpBeforeNewParameter() throws Exception {
 		super.setUpBeforeNewParameter();
 		
 		this.initAll();

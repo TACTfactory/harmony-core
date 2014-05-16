@@ -14,12 +14,13 @@ import java.util.List;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.updater.old.IXmlUtil;
 
 /**
  * Represents an android dimens.xml file.
  */
-public class DimensFile extends XmlManager {
+public class DimensFile extends XmlManager implements IXmlUtil {
 	/** Resources element. */
 	private final static String ELEMENT_ROOT = "resources";
 	/** Dimen element. */
@@ -38,7 +39,7 @@ public class DimensFile extends XmlManager {
 	 * @param adapter The adapter
 	 * @param dimenFilePath The file path
 	 */
-	public DimensFile(BaseAdapter adapter, String dimenFilePath) {
+	public DimensFile(IAdapter adapter, String dimenFilePath) {
 		super(adapter, dimenFilePath);
 		Element root = this.getDocument().getRootElement();
 		List<Element> dimens = root.getChildren(ELEMENT_DIMEN);
@@ -46,6 +47,10 @@ public class DimensFile extends XmlManager {
 			this.dimens.add(new Dimen(dimen));
 		}
 		
+	}
+	
+	public DimensFile() {
+	    
 	}
 	
 	/**
@@ -182,7 +187,7 @@ public class DimensFile extends XmlManager {
 	 * @param from The source dimens.xml 
 	 * @param to The dimens.xml to overwrite
 	 */
-	public static void mergeFromTo(BaseAdapter adapter, String from, String to) {
+	public static void mergeFromTo(IAdapter adapter, String from, String to) {
 		DimensFile fromDimens = new DimensFile(adapter, from);
 		DimensFile toDimens = new DimensFile(adapter, to);
 		toDimens.mergeFrom(fromDimens);
@@ -198,4 +203,21 @@ public class DimensFile extends XmlManager {
 						"http://schemas.android.com/apk/res/android"));
 		return rootElement;
 	}
+
+    @Override
+    public void mergeFiles(String from, String to) {
+        mergeFromTo(null, from, to);
+    }
+
+    @Override
+    public void open(String file) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public String addElement(String key, String value) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

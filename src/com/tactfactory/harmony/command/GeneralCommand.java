@@ -17,6 +17,8 @@ import java.util.List;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Harmony;
+import com.tactfactory.harmony.command.base.Command;
+import com.tactfactory.harmony.command.base.CommandBase;
 import com.tactfactory.harmony.fixture.command.FixtureCommand;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
@@ -25,7 +27,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  *
  */
 @PluginImplementation
-public class GeneralCommand extends BaseCommand {
+public class GeneralCommand extends CommandBase {
 	/** List command. */
 	public static final String LIST = "list";
 	/** Help command. */

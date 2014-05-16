@@ -42,7 +42,8 @@ public class OrmInitEntitiesTest extends CommonTest {
 	private static final String DATA_PATH =
 			"android/src/%s/data/%s.java";
 	
-	public OrmInitEntitiesTest(ApplicationMetadata currentMetadata) {
+	public OrmInitEntitiesTest(ApplicationMetadata currentMetadata)
+	        throws Exception {
 		super(currentMetadata);
 	}
 
@@ -59,7 +60,7 @@ public class OrmInitEntitiesTest extends CommonTest {
 	}
 	
 	@Override
-	public void setUpBeforeNewParameter() {
+	public void setUpBeforeNewParameter() throws Exception {
 		super.setUpBeforeNewParameter();
 		
 		this.initAll();

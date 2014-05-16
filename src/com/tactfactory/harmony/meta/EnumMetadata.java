@@ -12,13 +12,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.TagConstant;
 
 /**
  * Enum Metadata.
  */
-public class EnumMetadata extends ClassMetadata {
+public final class EnumMetadata extends ClassMetadata {
 	/** ID field name. */
 	private String idName;
 
@@ -37,7 +37,7 @@ public class EnumMetadata extends ClassMetadata {
 	 * @return the map
 	 */
 	@Override
-	public final Map<String, Object> toMap(final BaseAdapter adapter) {
+	public final Map<String, Object> toMap(final IAdapter adapter) {
 		final Map<String, Object> model = super.toMap(adapter);
 		model.put(TagConstant.ID, this.idName);
 		model.put(TagConstant.TYPE, this.type);

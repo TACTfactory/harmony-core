@@ -1,6 +1,6 @@
 <#assign curr = entities[current_entity] />
 <@header?interpret />
-package ${local_namespace};
+package ${project_namespace}.provider;
 
 import ${project_namespace}.provider.base.${curr.name?cap_first}ProviderAdapterBase;
 import ${project_namespace}.provider.base.${project_name?cap_first}ProviderBase;

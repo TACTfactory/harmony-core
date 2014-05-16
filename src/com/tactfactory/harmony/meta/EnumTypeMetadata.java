@@ -3,7 +3,7 @@ package com.tactfactory.harmony.meta;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.TagConstant;
 
 /**
@@ -24,7 +24,7 @@ public class EnumTypeMetadata extends BaseMetadata {
 	}
 	
 	@Override
-	public Map<String, Object> toMap(BaseAdapter adapter) {
+	public Map<String, Object> toMap(IAdapter adapter) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		result.put(TagConstant.ENUM_REF, this.targetEnum);
 		return result;

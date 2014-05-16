@@ -8,28 +8,28 @@
  */
 package com.tactfactory.harmony.template;
 
+import java.util.List;
+
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
-import com.tactfactory.harmony.template.androidxml.ManifestUpdater;
+import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.updater.IUpdater;
 
 /**
  * Generator class for common commands. (Generate static view, etc.)
  */
-public class CommonGenerator extends BaseGenerator {
+public class CommonGenerator extends BaseGenerator<IAdapter> {
 
 	/**
 	 * Constructor.
 	 * 
-	 * @param adapt The adapter to use
+	 * @param adapter The adapter to use
 	 */
-	public CommonGenerator(BaseAdapter adapt) {
-		super(adapt);
-		this.setDatamodel(
-				ApplicationMetadata.INSTANCE.toMap(this.getAdapter()));
+	public CommonGenerator(IAdapter adapter) {
+		super(adapter);
+		this.setDatamodel(ApplicationMetadata.INSTANCE.toMap(adapter));
 	}
 
-	
 	/**
 	 * Generates a static view in the project.
 	 * 
@@ -47,80 +47,9 @@ public class CommonGenerator extends BaseGenerator {
 		this.getDatamodel().put("viewPackage", packageName);
 		this.getDatamodel().put("viewName", viewName);
 		
-		ManifestUpdater updater = new ManifestUpdater(this.getAdapter());
-		
-		if (type.equals(ViewType.EMPTY)) {
-			this.makeSourceControler(
-					packageName,
-					"TemplateStaticFragment.java",
-					viewName + "Fragment.java");
-
-			this.makeSourceControler(
-					packageName,
-					"TemplateStaticActivity.java",
-					viewName + "Activity.java");
-			
-			this.makeResourceLayout(
-					"fragment_template_static.xml",
-					"fragment_" + viewName.toLowerCase() + ".xml");
-			
-			this.makeResourceLayout(
-					"activity_template_static.xml",
-					"activity_" + viewName.toLowerCase() + ".xml");
-			
-			updater.addActivity(
-					this.getAppMetas().getProjectNameSpace(),
-					"Activity",
-					viewName,
-					packageName);
-		}
-		
-		updater.save();
-		
-	}
-	
-	/** Make Java Source Code.
-	 *
-	 * @param template Template path file.
-	 *		For list activity is "TemplateListActivity.java"
-	 * @param filename The destination file name.
-	 */
-	private void makeSourceControler(
-			final String packageName,
-			final String template,
-			final String filename) {
-		
-		final String fullFilePath = String.format("%s%s/view/%s/%s",
-						this.getAdapter().getSourcePath(),
-						ApplicationMetadata.INSTANCE.getProjectNameSpace(),
-						packageName.replace('.', '/'),
-						filename);
-		final String fullTemplatePath = String.format("%s%s",
-				this.getAdapter().getTemplateSourceControlerPath(),
-				template);
-	
-		super.makeSource(fullTemplatePath, fullFilePath, false);
-	}
-	
-	/**
-	 * Make Resource file.
-	 *
-	 * @param template Template path file.
-	 * @param filename Resource file.
-	 * 	prefix is type of view "row_" or "activity_" or "fragment_" with
-	 *	postfix is type of action and extension file :
-	 *		"_list.xml" or "_edit.xml".
-	 */
-	private void makeResourceLayout(final String template,
-			final String filename) {
-		final String fullFilePath = String.format("%s/%s",
-									this.getAdapter().getRessourceLayoutPath(),
-									filename);
-		final String fullTemplatePath = String.format("%s/%s",
-				this.getAdapter().getTemplateRessourceLayoutPath(),
-				template);
-
-		super.makeSource(fullTemplatePath, fullFilePath, false);
+		List<IUpdater> updaters = this.getAdapter().getAdapterProject()
+		      .getStaticViewFiles(packageName, viewName, type);
+		this.processUpdater(updaters);
 	}
 	
 	/**

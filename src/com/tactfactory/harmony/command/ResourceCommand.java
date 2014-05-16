@@ -13,8 +13,8 @@ import java.util.LinkedHashMap;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
-import com.tactfactory.harmony.plateforme.AndroidAdapter;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.command.base.CommandBase;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -22,7 +22,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  *
  */
 @PluginImplementation
-public class ResourceCommand extends BaseCommand {
+public class ResourceCommand extends CommandBase {
 
 	/** Bundle name. */
 	public static final String BUNDLE = "resource";
@@ -41,10 +41,6 @@ public class ResourceCommand extends BaseCommand {
 	/** Command : RESOURCE:GENERATE:TRANSLATE. */
 	public static final String GENERATE_TRANSLATE	=
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_TRANSLATE;
-
-	//internal
-	/** Adapter. */
-	private final BaseAdapter adapter = new AndroidAdapter();
 
 	@Override
 	public final void summary() {
@@ -65,12 +61,14 @@ public class ResourceCommand extends BaseCommand {
 
 		this.setCommandArgs(Console.parseCommandArgs(args));
 
-		try {
-			if (action.equals(GENERATE_IMAGE)) {
-				this.adapter.resizeImage();
-			}
-		} catch (final Exception e) {
-			ConsoleUtils.displayError(e);
+		for(IAdapter adapter : this.getAdapters()) {
+    		try {
+    			if (action.equals(GENERATE_IMAGE)) {
+    				adapter.resizeImage();
+    			}
+    		} catch (final Exception e) {
+    			ConsoleUtils.displayError(e);
+    		}
 		}
 	}
 

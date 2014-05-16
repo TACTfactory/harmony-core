@@ -1,5 +1,5 @@
 <@header?interpret />
-package ${local_namespace};
+package ${project_namespace}.provider;
 
 import ${project_namespace}.provider.base.ProviderAdapterBase;
 import ${project_namespace}.provider.base.${project_name?cap_first}ProviderBase;

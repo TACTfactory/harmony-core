@@ -229,7 +229,7 @@ public class ManagementFactory extends ProjectMetadataFactory {
 		ProjectMetadataFactory.generateField(
 				day, "identifier", false, true);
 		ProjectMetadataFactory.generateField(
-				day, "day", false, false);
+				day, "theDay", false, false);
 		ProjectMetadataFactory.generateField(
 				day, "month", false, false);
 		ProjectMetadataFactory.generateField(

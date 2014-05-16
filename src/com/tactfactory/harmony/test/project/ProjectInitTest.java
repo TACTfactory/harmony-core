@@ -20,14 +20,12 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
-import com.google.common.base.Strings;
 import com.tactfactory.harmony.Harmony;
-import com.tactfactory.harmony.ProjectDiscover;
+import com.tactfactory.harmony.HarmonyContext;
 import com.tactfactory.harmony.command.ProjectCommand;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.template.ProjectGenerator;
 import com.tactfactory.harmony.test.CommonTest;
-import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
  * Test class for project initialization.
@@ -35,7 +33,8 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 @RunWith(Parameterized.class)
 public class ProjectInitTest extends CommonTest {
 	
-	public ProjectInitTest(ApplicationMetadata currentMetadata) {
+	public ProjectInitTest(ApplicationMetadata currentMetadata)
+	        throws Exception {
 		super(currentMetadata);
 	}
 	/**
@@ -60,38 +59,11 @@ public class ProjectInitTest extends CommonTest {
 	}
 	
 	@Override
-	public void setUpBeforeNewParameter() {
-		// Base configs
-		ConsoleUtils.setAnsi(false);
-		ConsoleUtils.setQuiet(false);
-		ConsoleUtils.setDebug(true);
-
-		// Clean folder
-		CommonTest.cleanAndroidFolder(false);
-
-		// Project test config
-		ApplicationMetadata.INSTANCE.setName(
-				this.currentMetadata.getName());
-		
-		ApplicationMetadata.INSTANCE.setProjectNameSpace(
-				this.currentMetadata.getProjectNameSpace());
-
-		harmony = Harmony.getInstance();
-
-		if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
-			final String localProp =
-					String.format("%s/%s",
-							Harmony.getProjectAndroidPath(),
-							"local.properties");
-
-			ApplicationMetadata.setAndroidSdkPath(
-					ProjectDiscover.getSdkDirFromPropertiesFile(localProp));
-
-			if (ApplicationMetadata.getAndroidSdkPath() == null) {
-				ApplicationMetadata.setAndroidSdkPath(
-						"/opt/android-sdk-linux_86/");
-			}
-		}
+	public void setUpBeforeNewParameter() throws Exception {
+        super.setUpBeforeNewParameter();
+        
+        //Force clean all files
+        CommonTest.cleanAndroidFolder(false);
 	}
 	
 	/**
@@ -99,7 +71,6 @@ public class ProjectInitTest extends CommonTest {
 	 */
 	@Test
  	public final void initAndroid() {
-		CommonTest.cleanAndroidFolder();
 		System.out.println("\nTest Project init Android");
 		System.out.println(SHARP_DELIMITOR);
 
@@ -107,7 +78,6 @@ public class ProjectInitTest extends CommonTest {
 		CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID,
 				null,
 				null);
-
 		
 		CommonTest.hasFindFile("android/AndroidManifest.xml");
 		CommonTest.hasFindFile("android/build.xml");
@@ -142,12 +112,11 @@ public class ProjectInitTest extends CommonTest {
 		ApplicationMetadata.setAndroidSdkPath(newSdkPath);
 		ProjectGenerator.updateSDKPath();
 
-
 		final String localProp =
 				String.format("%s/%s",
 						Harmony.getProjectAndroidPath(),
 						"local.properties");
-		assertEquals(ProjectDiscover.getSdkDirFromPropertiesFile(localProp),
+		assertEquals(HarmonyContext.getSdkDirFromPropertiesFile(localProp),
 				newSdkPath);
 
 		ApplicationMetadata.setAndroidSdkPath("/opt/android-sdk-linux_86/");

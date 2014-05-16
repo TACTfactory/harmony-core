@@ -9,15 +9,16 @@
 package com.tactfactory.harmony.command;
 
 import java.util.LinkedHashMap;
+
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
-import com.tactfactory.harmony.command.questionnary.Questionnary;
-import com.tactfactory.harmony.command.questionnary.Question;
+import com.tactfactory.harmony.command.base.CommandBase;
+import com.tactfactory.harmony.command.interaction.Question;
+import com.tactfactory.harmony.command.interaction.Questionnary;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
-import com.tactfactory.harmony.plateforme.AndroidAdapter;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.CommonGenerator;
 import com.tactfactory.harmony.template.CommonGenerator.ViewType;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -26,7 +27,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  * Common generation commands.
  */
 @PluginImplementation
-public class CommonCommand extends BaseCommand {
+public class CommonCommand extends CommandBase {
 	/** Question for view name. */
 	private static final String QUESTION_VIEW_NAME =
 			"Name of the view ? (The activity will be named {Name}Activity)";
@@ -54,10 +55,6 @@ public class CommonCommand extends BaseCommand {
 	/** Command : COMMON:GENERATE:STATIC. */
 	public static final String GENERATE_STATIC =
 			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_STATIC;
-
-	/** Adapter. */
-	private BaseAdapter adapter = new AndroidAdapter();
-
 
 	@Override
 	public final void execute(final String action,
@@ -137,12 +134,13 @@ public class CommonCommand extends BaseCommand {
 				ApplicationMetadata.INSTANCE.getEntities().get(
 						linkedEntityName);
 		
-		
-		new CommonGenerator(this.adapter).generateStaticView(
-				packageName,
-				viewName,
-				viewType,
-				linkedEntity);
+		for(IAdapter adapter : this.getAdapters()) {
+		    new CommonGenerator(adapter).generateStaticView(
+		            packageName,
+		            viewName,
+		            viewType,
+		            linkedEntity);
+		}
 	}
 
 	@Override

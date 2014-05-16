@@ -3,189 +3,53 @@
  */
 package com.tactfactory.harmony.template;
 
-import java.io.File;
+import java.util.List;
 
-import com.tactfactory.harmony.Harmony;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
-import com.tactfactory.harmony.utils.LibraryUtils;
-import com.tactfactory.harmony.utils.TactFileUtils;
+import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.updater.IUpdater;
 
 /**
  * Test project generator.
  *
  */
-public class TestProjectGenerator extends BaseGenerator {
+public class TestProjectGenerator extends BaseGenerator<IAdapter> {
 
 	/**
 	 * Constructor.
 	 * @param adapter The adapter to use.
 	 * @throws Exception if adapter is null
 	 */
-	public TestProjectGenerator(final BaseAdapter adapter) throws Exception {
+	public TestProjectGenerator(final IAdapter adapter) throws Exception {
 		super(adapter);
 
 		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 	}
 
 	/**
-	 * Make Platform specific Project Structure.
-	 * @return success to make the platform test project folder
-	 */
-	public final boolean makeProject() {
-		boolean result = false;
-		if (this.getAdapter().getPlatform().equals("android")) {
-			result = this.makeTestProjectAndroid();
-		} else if (this.getAdapter().getPlatform().equals("ios")) {
-			result = this.makeTestProjectIOS();
-		} else if (this.getAdapter().getPlatform().equals("rim")) {
-			result = this.makeTestProjectRIM();
-		} else if (this.getAdapter().getPlatform().equals("winphone")) {
-			result = this.makeTestProjectWinPhone();
-		}
-
-		return result;
-	}
-
-	/**
-	 * Make Android Test Project Structure.
-	 * @return success to make the platform test project folder
-	 */
-	private boolean makeTestProjectAndroid() {
+     * Make Platform specific Project Structure.
+     * @return success to make the platform test project folder
+     */
+    public final boolean makeProject() {
 		boolean result = false;
 
-		// create project name space folders
-		//FileUtils.makeFolder(this.getAdapter().getSourcePath()
-		// + Harmony.projectNameSpace.replaceAll("\\.", "/"));
-
+		List<IUpdater> updaters = this.getAdapter().getAdapterProject()
+                .getTestProjectFilesToClear();
+		this.processUpdater(updaters);
+		
 		// create libs folder
-		TactFileUtils.makeFolder(this.getAdapter().getTestLibsPath());
+		updaters = this.getAdapter().getAdapterProject()
+		        .getTestProjectCreateFolders();
+		this.processUpdater(updaters);
 
-		// create strings.xml
-		super.makeSource(
-				this.getAdapter().getTemplateStringsTestPathFile(),
-				this.getAdapter().getStringsTestPathFile(), false);
+		updaters = this.getAdapter().getAdapterProject().getTestProjectFiles();
+		this.processUpdater(updaters);
 
-		LibraryUtils.addLibraryToTestProject(
-				this.getAdapter(),
-				"android-junit-report-1.5.8.jar");
-
-		final File dirTpl =
-				new File(Harmony.getBundlePath() + "tact-core/"
-						+ this.getAdapter().getTemplateTestProjectPath());
-
-		// Update newly created files with datamodel
-		if (dirTpl.exists() && dirTpl.listFiles().length != 0
-				&& this.clearProjectSources()) {
-			for (int i = 0; i < dirTpl.listFiles().length; i++) {
-				if (dirTpl.listFiles()[i].isFile()) {
-					final String fullFilePath = String.format("%s/%s/%s/%s",
-							Harmony.getProjectPath(),
-							this.getAdapter().getPlatform(),
-							this.getAdapter().getTest(),
-							dirTpl.listFiles()[i].getName());
-
-					final String fullTemplatePath =
-							this.getAdapter().getTemplateTestProjectPath()
-							 + dirTpl.listFiles()[i].getName();
-
-					super.makeSource(
-							fullTemplatePath.substring(
-									0,
-									fullTemplatePath.length()
-										- ".ftl".length()),
-							fullFilePath.substring(
-									0,
-									fullFilePath.length()
-										- ".ftl".length()),
-								false);
-				}
-			}
-			result = true;
-		}
+		updaters = this.getAdapter().getAdapterProject()
+		        .getTestProjectLibraries();
+		this.processUpdater(updaters);
+		
+		result = true;
+		
 		return result;
-	}
-
-	/**
-	 * Make IOS Test Project Structure.
-	 * @return success to make the platform test project folder
-	 */
-	private boolean makeTestProjectIOS() {
-		boolean result = false;
-
-		//Generate base folders & files
-		final File dirProj = TactFileUtils.makeFolderRecursive(
-				String.format("%s/%s/%s/",
-						Harmony.getTemplatesPath(),
-						this.getAdapter().getPlatform(),
-						this.getAdapter().getProject()),
-				String.format("%s/%s/",
-						Harmony.getProjectPath(),
-						this.getAdapter().getPlatform()),
-				true);
-
-		if (dirProj.exists() && dirProj.listFiles().length != 0) {
-			result = true;
-		}
-
-		return result;
-	}
-
-	/**
-	 * Make RIM Test Project Structure.
-	 * @return success to make the platform test project folder
-	 */
-	private boolean makeTestProjectRIM() {
-		final boolean result = false;
-
-		return result;
-	}
-
-	/**
-	 * Make Windows Phone Test Project Structure.
-	 * @return success to make the platform test project folder
-	 */
-	private boolean makeTestProjectWinPhone() {
-		final boolean result = false;
-
-		return result;
-	}
-
-	/**
-	 * Delete files that need to be recreated.
-	 * @return true if project cleaning successful
-	 */
-	private boolean clearProjectSources() {
-		boolean result = true;
-
-		final String projectPath = Harmony.getProjectPath()
-				+ File.separator + this.getAdapter().getPlatform()
-				+ File.separator + this.getAdapter().getTest();
-
-		final File buildRules = new File(projectPath
-				+ File.separator + "build.rules.xml");
-
-		if (buildRules.exists()) {
-			result &= buildRules.delete();
-		}
-
-		return result;
-	}
-
-	/**
-	 * Update TestLibs.
-	 * @param libName The library name.
-	 */
-	@Override
-	protected final void updateLibrary(final String libName) {
-		final File dest = new File(String.format("%s/%s",
-				this.getAdapter().getTestLibsPath(),
-				libName));
-
-		if (!dest.exists()) {
-			File src = Harmony.getLibrary(libName);
-			TactFileUtils.copyfile(
-					src,
-					dest);
-		}
 	}
 }

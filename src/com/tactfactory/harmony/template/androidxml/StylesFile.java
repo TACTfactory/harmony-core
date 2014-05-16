@@ -15,12 +15,13 @@ import java.util.List;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
 
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.updater.old.IXmlUtil;
 
 /**
  * Represents an android styles.xml file.
  */
-public class StylesFile extends XmlManager {
+public class StylesFile extends XmlManager implements IXmlUtil {
 	/** Resources element. */
 	private final static String ELEMENT_ROOT = "resources";
 	/** Style element. */
@@ -43,7 +44,7 @@ public class StylesFile extends XmlManager {
 	 * @param adapter The adapter
 	 * @param styleFilePath The file path
 	 */
-	public StylesFile(BaseAdapter adapter, String styleFilePath) {
+	public StylesFile(IAdapter adapter, String styleFilePath) {
 		super(adapter, styleFilePath);
 		Element root = this.getDocument().getRootElement();
 		List<Element> styles = root.getChildren(ELEMENT_STYLE);
@@ -51,6 +52,10 @@ public class StylesFile extends XmlManager {
 			this.styles.add(new Style(style));
 		}
 		
+	}
+	
+	public StylesFile() {
+
 	}
 	
 	/**
@@ -292,7 +297,7 @@ public class StylesFile extends XmlManager {
 	 * @param from The source styles.xml 
 	 * @param to The styles.xml to overwrite
 	 */
-	public static void mergeFromTo(BaseAdapter adapter, String from, String to) {
+	public static void mergeFromTo(IAdapter adapter, String from, String to) {
 		StylesFile fromStyles = new StylesFile(adapter, from);
 		StylesFile toStyles = new StylesFile(adapter, to);
 		toStyles.mergeFrom(fromStyles);
@@ -308,4 +313,21 @@ public class StylesFile extends XmlManager {
 						"http://schemas.android.com/apk/res/android"));
 		return rootElement;
 	}
+
+    @Override
+    public void mergeFiles(String from, String to) {
+        mergeFromTo(null, from, to);
+    }
+
+    @Override
+    public void open(String file) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public String addElement(String key, String value) {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

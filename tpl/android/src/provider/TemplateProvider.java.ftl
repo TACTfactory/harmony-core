@@ -1,7 +1,7 @@
 <@header?interpret />
-package ${local_namespace};
+package ${project_namespace}.provider;
 
-import ${local_namespace}.base.${project_name?cap_first}ProviderBase;
+import ${project_namespace}.provider.base.${project_name?cap_first}ProviderBase;
 
 import android.content.ContentValues;
 import android.database.Cursor;

@@ -1,5 +1,5 @@
 <@header?interpret />
-package ${local_namespace}.base;
+package ${project_namespace}.provider.base;
 
 import java.util.ArrayList;
 

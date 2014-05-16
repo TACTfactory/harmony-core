@@ -13,16 +13,19 @@ import java.util.LinkedHashMap;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
-import com.tactfactory.harmony.ProjectDiscover;
-import com.tactfactory.harmony.TargetPlatform;
+import com.tactfactory.harmony.Harmony;
+import com.tactfactory.harmony.HarmonyContext;
+import com.tactfactory.harmony.ProjectContext;
+import com.tactfactory.harmony.command.base.CommandBase;
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.parser.HeaderParser;
-import com.tactfactory.harmony.plateforme.AndroidAdapter;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
-import com.tactfactory.harmony.plateforme.IosAdapter;
-import com.tactfactory.harmony.plateforme.RimAdapter;
-import com.tactfactory.harmony.plateforme.WinphoneAdapter;
+import com.tactfactory.harmony.plateforme.TargetPlatform;
+import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
+import com.tactfactory.harmony.plateforme.ios.IosAdapter;
+import com.tactfactory.harmony.plateforme.rim.RimAdapter;
+import com.tactfactory.harmony.plateforme.winphone.WinphoneAdapter;
 import com.tactfactory.harmony.template.ApplicationGenerator;
 import com.tactfactory.harmony.template.ProjectGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -38,7 +41,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  *
  */
 @PluginImplementation
-public class ProjectCommand extends BaseCommand {
+public class ProjectCommand extends CommandBase {
 	/** Bundle name. */
 	public static final String BUNDLE 		= "project";
 
@@ -137,6 +140,7 @@ public class ProjectCommand extends BaseCommand {
 								+ ACTION_UPDATE
 								+ SEPARATOR
 								+ SUBJECT_SDK_PATH;
+
 	/** Command : PROJECT:UPDATE:DEPENDENCIES. */
 	public static final String UPDATE_DEPENDENCIES = BUNDLE
 								+ SEPARATOR
@@ -170,21 +174,21 @@ public class ProjectCommand extends BaseCommand {
 				ConsoleUtils.display(">> Project Parameters");
 
 				
-				ProjectDiscover.initProjectName(
+				ProjectContext.promptProjectName(
 						this.getCommandArgs());
 				
-				ProjectDiscover.initProjectNameSpace(
+				ProjectContext.promptProjectNameSpace(
 						this.getCommandArgs());
 				
-				ProjectDiscover.initProjectAndroidSdkPath(
+				HarmonyContext.initProjectAndroidSdkPath(
 						this.getCommandArgs());
 
 				ConsoleUtils.display("Project Name: "
-							+ ApplicationMetadata.INSTANCE.getName()
-						 + "\nProject NameSpace: "
-							+ ApplicationMetadata.INSTANCE.getProjectNameSpace()
-						 + "\nAndroid SDK Path: "
-							+ ApplicationMetadata.getAndroidSdkPath());
+						+ ApplicationMetadata.INSTANCE.getName()
+						+ "\nProject NameSpace: "
+						+ ApplicationMetadata.INSTANCE.getProjectNameSpace()
+						+ "\nAndroid SDK Path: "
+						+ ApplicationMetadata.getAndroidSdkPath());
 
 				// Confirmation
 				if (ConsoleUtils.isConsole()) {
@@ -235,18 +239,19 @@ public class ProjectCommand extends BaseCommand {
 			if (new ProjectGenerator(this.adapterAndroid).makeProject()) {
 				ConsoleUtils.displayDebug("Init Android Project Success!");
 
+				Harmony.getInstance().getProjectContext()
+				    .addAdapter(TargetPlatform.ANDROID, this.adapterAndroid);
 				new ApplicationGenerator(this.adapterAndroid)
 							.generateApplication();
 				result = true;
 			} else {
-				ConsoleUtils.displayError(
-						new Exception("Init Android Project Fail!"));
+				ConsoleUtils.displayError("Init Android Project Fail!");
 			}
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
+		
 		return result;
-			
 	}
 
 	/**
@@ -262,10 +267,11 @@ public class ProjectCommand extends BaseCommand {
 		try {
 			if (new ProjectGenerator(this.adapterIOS).makeProject()) {
 				ConsoleUtils.displayDebug("Init IOS Project Success!");
+			    Harmony.getInstance().getProjectContext()
+			        .addAdapter(TargetPlatform.IPHONE, this.adapterIOS);
 				result = true;
 			} else {
-				ConsoleUtils.displayError(
-						new Exception("Init IOS Project Fail!"));
+				ConsoleUtils.displayError("Init IOS Project Fail!");
 			}
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
@@ -287,10 +293,11 @@ public class ProjectCommand extends BaseCommand {
 		try {
 			if (new ProjectGenerator(this.adapterRIM).makeProject()) {
 				ConsoleUtils.displayDebug("Init RIM Project Success!");
+				Harmony.getInstance().getProjectContext()
+                    .addAdapter(TargetPlatform.RIM, this.adapterRIM);
 				result = true;
 			} else {
-				ConsoleUtils.displayError(
-						new Exception("Init RIM Project Fail!"));
+				ConsoleUtils.displayError("Init RIM Project Fail!");
 			}
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
@@ -312,10 +319,15 @@ public class ProjectCommand extends BaseCommand {
 		try {
 			if (new ProjectGenerator(this.adapterWinPhone).makeProject()) {
 				ConsoleUtils.displayDebug("Init WinPhone Project Success!");
+				Harmony.getInstance().getProjectContext()
+                    .addAdapter(TargetPlatform.WINPHONE, this.adapterWinPhone);
+				
+				new ApplicationGenerator(this.adapterWinPhone)
+						.generateApplication();
+				
 				result = true;
 			} else {
-				ConsoleUtils.displayError(
-						new Exception("Init WinPhone Project Fail!"));
+				ConsoleUtils.displayError("Init WinPhone Project Fail!");
 			}
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
@@ -332,9 +344,9 @@ public class ProjectCommand extends BaseCommand {
 
 		this.initProjectParam();
 		this.initAndroid();
-		this.initIOS();
+//		this.initIOS();
 		//this.initRIM();
-		//this.initWinPhone();
+		this.initWinPhone();
 	}
 
 	/**
@@ -470,20 +482,21 @@ public class ProjectCommand extends BaseCommand {
 
 	@Override
 	public final void summary() {
-		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
+		final LinkedHashMap<String, String> commands = 
+		        new LinkedHashMap<String, String>();
 		
 		// Init
 		commands.put(INIT_ANDROID, "Init Google Android project directory");
 //		commands.put(INIT_IOS, "Init Apple IOS project directory");
 //		commands.put(INIT_RIM, "Init BlackBerry project directory");
-//		commands.put(INIT_WINPHONE, "Init Windows Phone project directory");
+		commands.put(INIT_WINPHONE, "Init Windows Phone project directory");
 		commands.put(INIT_ALL, "Init All project directories");
 		
 		// Remove
 		commands.put(REMOVE_ANDROID, "Remove Google Android project directory");
 //		commands.put(REMOVE_IOS, "Remove Apple IOS project directory");
 //		commands.put(REMOVE_RIM, "Remove BlackBerry project directory");
-//		commands.put(REMOVE_WINPHONE, "Remove Windows Phone project directory");
+		commands.put(REMOVE_WINPHONE, "Remove Windows Phone project directory");
 		commands.put(REMOVE_ALL, "Remove All project directories");
 		
 		// Update
@@ -505,17 +518,17 @@ public class ProjectCommand extends BaseCommand {
 			this.initAndroid();
 		} else
 
-		if (action.equals(INIT_IOS)) {
-			this.initIOS();
-		} else
+//		if (action.equals(INIT_IOS)) {
+//			this.initIOS();
+//		} else
 
 //		if (action.equals(INIT_RIM)) {
 //			this.initRIM();
 //		} else
 
-//		if (action.equals(INIT_WINPHONE)) {
-//			this.initWinPhone();
-//		} else
+		if (action.equals(INIT_WINPHONE)) {
+			this.initWinPhone();
+		} else
 
 		if (action.equals(INIT_ALL)) {
 			this.initAll();
@@ -525,17 +538,17 @@ public class ProjectCommand extends BaseCommand {
 			this.removeAndroid();
 		} else
 
-		if (action.equals(REMOVE_IOS)) {
-			this.removeIOS();
-		} else
+//		if (action.equals(REMOVE_IOS)) {
+//			this.removeIOS();
+//		} else
 
 //		if (action.equals(REMOVE_RIM)) {
 //			this.removeRIM();
 //		} else
 
-//		if (action.equals(REMOVE_WINPHONE)) {
-//			this.removeWinPhone();
-//		} else
+		if (action.equals(REMOVE_WINPHONE)) {
+			this.removeWinPhone();
+		} else
 
 		if (action.equals(REMOVE_ALL)) {
 			this.removeAll();
@@ -543,7 +556,7 @@ public class ProjectCommand extends BaseCommand {
 
 		if (action.equals(UPDATE_SDK)) {
 			ApplicationMetadata.setAndroidSdkPath("");
-			ProjectDiscover.initProjectAndroidSdkPath(this.getCommandArgs());
+			HarmonyContext.initProjectAndroidSdkPath(this.getCommandArgs());
 			ProjectGenerator.updateSDKPath();
 		} else
 
@@ -559,14 +572,14 @@ public class ProjectCommand extends BaseCommand {
 	@Override
 	public final boolean isAvailableCommand(final String command) {
 		return  command.equals(INIT_ANDROID)
-				|| command.equals(INIT_IOS)
+				//|| command.equals(INIT_IOS)
 				//|| command.equals(INIT_RIM)
-				//|| command.equals(INIT_WINPHONE)
+				|| command.equals(INIT_WINPHONE)
 				|| command.equals(INIT_ALL)
 				|| command.equals(REMOVE_ANDROID)
-				|| command.equals(REMOVE_IOS)
+				//|| command.equals(REMOVE_IOS)
 				//|| command.equals(REMOVE_RIM)
-				//|| command.equals(REMOVE_WINPHONE)
+				|| command.equals(REMOVE_WINPHONE)
 				|| command.equals(REMOVE_ALL)
 				|| command.equals(UPDATE_SDK)
 				|| command.equals(UPDATE_DEPENDENCIES);

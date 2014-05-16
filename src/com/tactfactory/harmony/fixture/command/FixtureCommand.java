@@ -13,18 +13,18 @@ import java.util.LinkedHashMap;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
-import com.tactfactory.harmony.command.BaseCommand;
+import com.tactfactory.harmony.command.base.CommandBase;
 import com.tactfactory.harmony.fixture.metadata.FixtureMetadata;
 import com.tactfactory.harmony.fixture.template.FixtureGenerator;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.plateforme.AndroidAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
  * Fixture bundle command class.
  */
 @PluginImplementation
-public class FixtureCommand extends BaseCommand {
+public class FixtureCommand extends CommandBase {
 	//bundle name
 	/** Bundle name. */
 	public static final String BUNDLE = "orm";
@@ -99,7 +99,13 @@ public class FixtureCommand extends BaseCommand {
 			ApplicationMetadata.INSTANCE.getOptions().put(
 					fixtureMeta.getName(), fixtureMeta);
 
-			new FixtureGenerator(new AndroidAdapter()).init(force);
+			for(IAdapter adapter : this.getAdapters()) {
+	    		try {
+	    			new FixtureGenerator(adapter).init(force);
+	    		} catch (final Exception e) {
+	    			ConsoleUtils.displayError(e);
+	    		}
+			}
 		} catch (final Exception e) {
 			// TODO Auto-generated catch block
 			ConsoleUtils.displayError(e);
@@ -110,11 +116,12 @@ public class FixtureCommand extends BaseCommand {
 	 * Load command.
 	 */
 	public final void load() {
-		try {
-			new FixtureGenerator(new AndroidAdapter()).load();
-		} catch (final Exception e) {
-			// TODO Auto-generated catch block
-			ConsoleUtils.displayError(e);
+		for(IAdapter adapter : this.getAdapters()) {
+    		try {
+    			new FixtureGenerator(adapter).load();
+    		} catch (final Exception e) {
+    			ConsoleUtils.displayError(e);
+    		}
 		}
 	}
 
@@ -122,12 +129,14 @@ public class FixtureCommand extends BaseCommand {
 	 * Purge command.
 	 */
 	public final void purge() {
-		try {
-			this.generateMetas();
-			new FixtureGenerator(new AndroidAdapter()).purge();
-		} catch (final Exception e) {
-			// TODO Auto-generated catch block
-			ConsoleUtils.displayError(e);
+		this.generateMetas();
+		
+		for(IAdapter adapter : this.getAdapters()) {
+    		try {
+    			new FixtureGenerator(adapter).purge();
+    		} catch (final Exception e) {
+    			ConsoleUtils.displayError(e);
+    		}
 		}
 	}
 

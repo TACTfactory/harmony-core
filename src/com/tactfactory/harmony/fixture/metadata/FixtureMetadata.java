@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.tactfactory.harmony.meta.BaseMetadata;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 
 /**
  * Metadata for Fixture bundle.
@@ -34,7 +34,7 @@ public class FixtureMetadata extends BaseMetadata {
 	}
 
 	@Override
-	public final Map<String, Object> toMap(final BaseAdapter adapter) {
+	public final Map<String, Object> toMap(final IAdapter adapter) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 			model.put("enabled", this.enabled);
 			model.put("type", this.type);

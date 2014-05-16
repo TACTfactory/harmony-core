@@ -21,6 +21,7 @@ import org.jdom2.Attribute;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.JDOMException;
+import org.jdom2.Namespace;
 import org.jdom2.input.SAXBuilder;
 import org.jdom2.output.Format;
 import org.jdom2.output.XMLOutputter;
@@ -96,18 +97,23 @@ public abstract class XMLUtils {
 	public static void writeXMLToFile(final Document doc,
 			final String xmlFileName) {
 		try {
-			final File xmlFile =
-					TactFileUtils.makeFile(xmlFileName);
-			// Write to File
+			final File xmlFile = TactFileUtils.makeFile(xmlFileName);
 			final XMLOutputter xmlOutput = new XMLOutputter();
+			
+			// Write to File
 			// Make beautiful file with indent !!!
 			xmlOutput.setFormat(Format.getPrettyFormat().setIndent("\t"));
 			xmlOutput.setXMLOutputProcessor(new TactXMLOutputter());
-			xmlOutput.output(doc,
+			FileOutputStream fos = new FileOutputStream(
+					xmlFile.getAbsoluteFile());
+			
+			xmlOutput.output(
+					doc,
 					new OutputStreamWriter(
-							new FileOutputStream(
-									xmlFile.getAbsoluteFile()),
-									TactFileUtils.DEFAULT_ENCODING));
+							fos,
+							TactFileUtils.DEFAULT_ENCODING));
+			
+			fos.close();
 		} catch (IOException e) {
 			ConsoleUtils.displayError(e);
 		}
@@ -141,6 +147,7 @@ public abstract class XMLUtils {
 			baseNode.addContent(newNode);
 			return true;
 		} else {
+		    newNode.setText(findElement.getText());
 			return false;
 		}
 	}
@@ -219,7 +226,15 @@ public abstract class XMLUtils {
 			attributeEscapedEntitiesFilter(out, fstack, attribute.getValue());
 			write(out, "\"");
 		}
-		
+        
+		protected void printNamespace(Writer out, FormatStack fstack, Namespace ns)
+		        throws java.io.IOException {
+		    if (ns == Namespace.NO_NAMESPACE) {
+		        return;
+		    } else {
+		        super.printNamespace(out, fstack, ns);
+		    }
+		}
 	}
 }
 

@@ -12,10 +12,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.TagConstant;
 
-public class InheritanceMetadata extends BaseMetadata {
+public final class InheritanceMetadata extends BaseMetadata {
 	private InheritanceMode type;
 	private FieldMetadata discriminorColumn;
 	private String discriminorIdentifier;
@@ -26,7 +26,7 @@ public class InheritanceMetadata extends BaseMetadata {
 	
 	
 	@Override
-	public Map<String, Object> toMap(BaseAdapter adapter) {
+	public Map<String, Object> toMap(IAdapter adapter) {
 		Map<String, Object> result = new HashMap<String, Object>();
 		if (this.type != null) {
 			result.put(TagConstant.INHERITANCE_TYPE,

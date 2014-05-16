@@ -1,6 +1,6 @@
 package com.tactfactory.harmony.test.utils;
 
-import junit.framework.Assert;
+import org.junit.Assert;
 
 import com.tactfactory.harmony.meta.InheritanceMetadata;
 

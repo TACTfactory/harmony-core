@@ -11,22 +11,20 @@ package com.tactfactory.harmony.template;
 import java.util.HashMap;
 
 import com.google.common.base.CaseFormat;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 
 /**
  * Generator for bundles.
  */
-public class BundleGenerator extends BaseGenerator {
+public class BundleGenerator extends BaseGenerator<IAdapter> {
 
 	/**
 	 * Constructor.
 	 * @param adapt Adapter
 	 * @throws Exception Exception
 	 */
-	public BundleGenerator(final BaseAdapter adapt) {
+	public BundleGenerator(final IAdapter adapt) {
 		super(adapt);
-
-
 	}
 
 	/**

@@ -15,7 +15,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.template.TagConstant;
 
 /** Entity class metadata. */
@@ -58,7 +58,7 @@ public class ClassMetadata extends BaseMetadata {
 	 * @return the map
 	 */
 	@Override
-	public Map<String, Object> toMap(final BaseAdapter adapter) {
+	public Map<String, Object> toMap(final IAdapter adapter) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 
 		model.put(TagConstant.SPACE,			this.space);
@@ -174,7 +174,7 @@ public class ClassMetadata extends BaseMetadata {
 	 */
 	private Map<String, Map<String, Object>> toFieldArray(
 			final Collection<FieldMetadata> c,
-			final BaseAdapter adapter) {
+			final IAdapter adapter) {
 		final Map<String, Map<String, Object>> result =
 				new LinkedHashMap<String, Map<String, Object>>();
 		Map<String, Object> subField = null;

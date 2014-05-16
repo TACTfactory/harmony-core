@@ -15,12 +15,12 @@ import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
 import com.tactfactory.harmony.meta.TranslationMetadata.Group;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
+import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.plateforme.SqliteAdapter;
 import com.tactfactory.harmony.template.TagConstant;
 
 /** Entity field metadata. */
-public class FieldMetadata extends BaseMetadata {
+public final class FieldMetadata extends BaseMetadata {
 	/** Owner. */
 	private ClassMetadata owner;
 
@@ -163,7 +163,7 @@ public class FieldMetadata extends BaseMetadata {
 	 * @return the map
 	 */
 	@Override
-	public final Map<String, Object> toMap(final BaseAdapter adapter) {
+	public final Map<String, Object> toMap(final IAdapter adapter) {
 		final Map<String, Object> model = new HashMap<String, Object>();
 
 		model.put(TagConstant.NAME, 		this.getName());
