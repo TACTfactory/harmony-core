@@ -918,6 +918,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
 <#if sync>
 	@Override
 	public void completeEntityRelationsServerId(${curr.name} item) {
+		<#if InheritanceUtils.isExtended(curr)>
+		this.motherAdapter.completeEntityRelationsServerId(item);
+		</#if>
 		<#list (curr_relations) as relation>
 			<#if !relation.internal>
 				<#if relation.relation.type == "ManyToMany">
@@ -963,6 +966,24 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			</#if>
 		</#list>
 	}
+
+	<#if curr.inheritance?? && (curr.inheritance.subclasses?? && curr.inheritance.subclasses?size > 0)>
+	@Override
+	public ArrayList<${curr.name}> getAllForSync() {
+		final ArrayList<${curr.name}> result;
+		
+		final Cursor cursor = this.query(this.getCols(),
+				${curr.name}Contract.${curr.name}.ALIASED_COL_DISCRIMINATORCOLUMN + " IS NULL",
+				new String[]{},
+				null,
+				null,
+				null);
+
+		result = this.cursorToItems(cursor);
+
+		return result;
+	}
+	</#if>
 </#if>
 
 <#if (curr.internal)>

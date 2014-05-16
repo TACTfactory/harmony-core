@@ -21,11 +21,11 @@ import com.tactfactory.harmony.annotation.View;
 import com.tactfactory.harmony.annotation.GeneratedValue;
 import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
 import com.tactfactory.harmony.annotation.Id;
-import com.tactfactory.harmony.annotation.InheritanceType;
 import com.tactfactory.harmony.annotation.ManyToOne;
 import com.tactfactory.harmony.annotation.ManyToMany;
 import com.tactfactory.harmony.annotation.Table;
 import com.tactfactory.harmony.annotation.Column.Type;
+import com.tactfactory.harmony.annotation.InheritanceType;
 import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
 
 /** Test Application entity. */

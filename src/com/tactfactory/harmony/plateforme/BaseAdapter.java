@@ -95,7 +95,14 @@ public abstract class BaseAdapter implements IAdapter {
 
 	/** Menu path. */
 	private String menu;
-	
+
+    public BaseAdapter(final BaseAdapter adapter) {
+        this();
+        adapter.cloneTo(this);
+    }
+    
+    public BaseAdapter() { }
+
 	@Override
 	public final ApplicationMetadata getApplicationMetadata() {
 	    //TODO return a copy of ApplicationMetadata.INSTANCE
@@ -737,7 +744,7 @@ public abstract class BaseAdapter implements IAdapter {
 	/**
 	 * @return the source
 	 */
-	public final String getSource() {
+	public String getSource() {
 		return this.source;
 	}
 
@@ -765,7 +772,7 @@ public abstract class BaseAdapter implements IAdapter {
 	/**
 	 * @return the controller
 	 */
-	public final String getController() {
+	public String getController() {
 		return this.controller;
 	}
 

@@ -311,4 +311,17 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @return The count of deleted entities
 	 */
 	public abstract int delete(final T item);
+
+	<#list entities?values as entity>
+		<#if entity.options.sync??>
+	/**
+	 * Read All T entities for the synchronization agorithm.
+	 * @return List of T entities
+	 */
+	public ArrayList<T> getAllForSync() {
+		return this.getAll(null);
+	}
+			<#break />
+		</#if>
+	</#list>
 }

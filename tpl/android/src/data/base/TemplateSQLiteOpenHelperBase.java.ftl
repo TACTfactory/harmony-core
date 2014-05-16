@@ -14,7 +14,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
-<#if options.fixture?? && options.fixture.enabled>import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;</#if>
+<#if dataLoader>import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;</#if>
 <#list entities?values as entity>
 	<#if (entity.fields?size>0 || entity.inheritance?? || entity.inheritance??)>
 import ${data_namespace}.${entity.name?cap_first}SQLiteAdapter;
@@ -30,7 +30,7 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-<#if options.fixture?? && options.fixture.enabled>
+<#if dataLoader>
 import ${fixture_namespace}.DataLoader;
 </#if>
 
@@ -104,7 +104,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		</#if>
 	</#list>
 			db.execSQL("PRAGMA foreign_keys = ON;");
-	<#if options.fixture?? && options.fixture.enabled>
+	<#if dataLoader>
 			if (!${project_name?cap_first}SQLiteOpenHelper.isJUnit) {
 				this.loadData(db);
 			}
@@ -142,7 +142,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		// TODO : Upgrade your tables !
 	}
 
-	<#if options.fixture?? && options.fixture.enabled>
+	<#if dataLoader>
 	/**
 	 * Loads data from the fixture files.
 	 * @param db The database to populate with fixtures
