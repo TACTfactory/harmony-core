@@ -28,7 +28,7 @@ public class SQLiteGenerator extends BaseGenerator<IAdapter> {
 	 */
 	public SQLiteGenerator(final IAdapter adapter) throws Exception {
 		super(adapter);
-
+		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 	}
 
 	/**
