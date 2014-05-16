@@ -37,10 +37,6 @@ public class SQLiteGenerator extends BaseGenerator<IAdapter> {
     public final void generateAll() {
         ConsoleUtils.display(">> Generate Adapter...");
         
-        this.getDatamodel().put("dataLoader",
-                this.getAdapter().getAdapterProject()
-                        .isDataLoaderAlreadyGenerated());
-        
         this.generateDatabase();
 
         Collection<EntityMetadata> metas =
@@ -68,6 +64,10 @@ public class SQLiteGenerator extends BaseGenerator<IAdapter> {
 	public final void generateDatabase() {
 		// Info
 		ConsoleUtils.display(">> Generate Database");
+		
+		this.getDatamodel().put("dataLoader",
+                this.getAdapter().getAdapterProject()
+                        .isDataLoaderAlreadyGenerated());
 
 		try {
 			List<IUpdater> files =
