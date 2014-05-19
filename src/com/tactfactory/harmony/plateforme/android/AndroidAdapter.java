@@ -493,4 +493,11 @@ public class AndroidAdapter extends BaseAdapter {
         
         return result;
     }
+    
+    @Override
+    public void cloneTo(BaseAdapter adapter) {
+        super.cloneTo(adapter);
+        
+        ((AndroidAdapter) adapter).adapterProject = this.adapterProject;
+    }
 }
