@@ -16,7 +16,7 @@ import ${fixture_namespace}.${child.name?cap_first}DataLoader;
 </#if>
 
 import ${curr.test_namespace}.utils.*;
-import android.content.Context;
+
 import junit.framework.Assert;
 
 /** ${curr.name} database test abstract class <br/>
@@ -24,7 +24,7 @@ import junit.framework.Assert;
  * You should edit ${curr.name}TestDB class instead of this one or you will lose all your modifications.</i></b>
  */
 public abstract class ${curr.name}TestDBBase extends TestDBBase {
-	protected Context ctx;
+	protected android.content.Context ctx;
 
 	protected ${curr.name}SQLiteAdapter adapter;
 

@@ -7,7 +7,7 @@
 <@header?interpret />
 package ${curr.test_namespace}.utils.base;
 
-import android.content.Context;
+
 import junit.framework.Assert;
 import ${curr.namespace}.entity.${curr.name};
 
@@ -44,7 +44,7 @@ public abstract class ${curr.name?cap_first}UtilsBase {
 	 *
 	 * @return The randomly generated entity
 	 */
-	public static ${curr.name?cap_first} generateRandom(Context ctx){
+	public static ${curr.name?cap_first} generateRandom(android.content.Context ctx){
 		${curr.name?cap_first} ${curr.name?uncap_first} = new ${curr.name?cap_first}();
 		<#if (inherited)>
 		${curr.inheritance.superclass.name?cap_first} ${curr.inheritance.superclass.name?uncap_first} = ${curr.inheritance.superclass.name?cap_first}Utils.generateRandom(ctx);

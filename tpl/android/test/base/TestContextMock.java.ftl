@@ -12,7 +12,7 @@ import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
 
 import android.content.BroadcastReceiver;
 import android.content.ContentProvider;
-import android.content.Context;
+
 import android.content.Intent;
 import android.content.IntentFilter;
 <#if dataLoader?? && dataLoader>import android.database.sqlite.SQLiteDatabase;</#if>
@@ -23,7 +23,7 @@ import android.test.mock.MockContentResolver;
 <#if dataLoader?? && dataLoader>import android.util.Log;</#if>
 
 
-/** Context mock for tests.<br/>
+/** android.content.Context mock for tests.<br/>
  * <b><i>This class will be overwrited whenever
  * you regenerate the project with Harmony.</i></b>
  */
@@ -34,9 +34,9 @@ public class TestContextMock {
 	private final static Class<? extends ContentProvider> PROVIDER_CLASS =
 					${project_name?cap_first}Provider.class;
 
-	private static Context context = null;
+	private static android.content.Context context = null;
 	private AndroidTestCase androidTestCase;
-	private Context baseContext;
+	private android.content.Context baseContext;
 	
 	public TestContextMock(AndroidTestCase androidTestCase) {
         this.androidTestCase = androidTestCase;
@@ -44,9 +44,9 @@ public class TestContextMock {
 
 	/**
 	 * Get the original context
-	 * @return unmocked Context
+	 * @return unmocked android.content.Context
 	 */
-	protected Context getBaseContext() {
+	protected android.content.Context getBaseContext() {
 		return this.baseContext;
 	}
 
@@ -59,15 +59,15 @@ public class TestContextMock {
 	}
 
 	/**
-	 * Get the mock for Context
+	 * Get the mock for android.content.Context
 	 * @return MockContext
 	 */
-	protected Context getMockContext() {
+	protected android.content.Context getMockContext() {
 			return this.androidTestCase.getContext();
 	}
 
 	/**
-	 * Initialize the mock Context
+	 * Initialize the mock android.content.Context
 	 * @throws Exception
 	 */
 	protected void setMockContext() throws Exception {
