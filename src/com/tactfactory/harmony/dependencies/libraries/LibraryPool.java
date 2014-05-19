@@ -13,6 +13,7 @@ import java.io.FileFilter;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tactfactory.harmony.exception.HarmonyException;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

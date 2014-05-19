@@ -26,6 +26,7 @@ import org.apache.commons.io.filefilter.IOFileFilter;
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.command.GeneralCommand;
 import com.tactfactory.harmony.command.base.Command;
+import com.tactfactory.harmony.exception.HarmonyException;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
@@ -311,6 +312,7 @@ public final class Harmony {
 	 * Get library identified by given name.
 	 * @param libraryName The library name
 	 * @return The library file
+	 * @throws HarmonyException 
 	 */
 	public static File getLibrary(final String libraryName) {
 		File lib = getInstance().harmonyContext.getLibrary(libraryName);

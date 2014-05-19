@@ -22,6 +22,7 @@ import com.google.common.base.Strings;
 import com.tactfactory.harmony.command.interaction.Question;
 import com.tactfactory.harmony.command.interaction.Questionnary;
 import com.tactfactory.harmony.dependencies.libraries.LibraryPool;
+import com.tactfactory.harmony.exception.HarmonyException;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.template.TagConstant;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -464,6 +465,7 @@ public final class HarmonyContext {
 	/**
 	 * @param libraryName The library to get
 	 * @return The library File
+	 * @throws HarmonyException 
 	 */
 	public File getLibrary(final String libraryName) {
 		return this.libPool.getLibrary(libraryName);

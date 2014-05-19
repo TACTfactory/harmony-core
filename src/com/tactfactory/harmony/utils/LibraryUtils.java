@@ -11,6 +11,7 @@ package com.tactfactory.harmony.utils;
 import java.io.File;
 
 import com.tactfactory.harmony.Harmony;
+import com.tactfactory.harmony.exception.HarmonyException;
 import com.tactfactory.harmony.plateforme.IAdapter;
 
 /**
@@ -32,10 +33,10 @@ public abstract class LibraryUtils {
 				libName));
 
 		if (!dest.exists()) {
-			final File src = Harmony.getLibrary(libName);
-			TactFileUtils.copyfile(
-					src,
-					dest);
+			File src = Harmony.getLibrary(libName);
+            TactFileUtils.copyfile(
+                    src,
+                    dest);
 		}
 
 	}

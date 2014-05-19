@@ -15,7 +15,6 @@ import com.tactfactory.harmony.plateforme.IAdapter;
 
 import net.xeoh.plugins.base.Plugin;
 
-
 /**
  * Interface defining the commands class for all bundles.
  */
