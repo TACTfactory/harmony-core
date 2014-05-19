@@ -29,7 +29,7 @@ import android.content.pm.PackageManager.NameNotFoundException;
 import android.net.NetworkInfo;
 import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
-import android.util.Log;
+
 import android.content.SharedPreferences;
 
 <#if (sync)>
@@ -86,7 +86,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 		this.doBindServices();
 		
 		</#if>
-		Log.i(TAG, "Starting application...");
+		android.util.Log.i(TAG, "Starting application...");
 	}
 	
 	<#if (services?size > 0)>
@@ -101,7 +101,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 * Bind all services to the application.
 	 */
 	private void doBindServices() {
-		Log.i(TAG, "Bind Services.");
+		android.util.Log.i(TAG, "Bind Services.");
 		
 		if (!this.isServicesBinded) {
 			for (Class<? extends Service> service : this.getServices()) {
@@ -119,7 +119,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 * Unbind all services to the application.
 	 */
 	private void doUnbindServices() {
-		Log.i(TAG, "Unbind Services.");
+		android.util.Log.i(TAG, "Unbind Services.");
 		
 		if (this.isServicesBinded) {
 			for (Class<? extends Service> service : this.getServices()) {
@@ -345,7 +345,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 
 			result = manager.versionCode;
 		} catch (NameNotFoundException e) {
-			Log.e(TAG, "Version Code not found : " + e.toString());
+			android.util.Log.e(TAG, "Version Code not found : " + e.toString());
 		}
 
 		return result;

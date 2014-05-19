@@ -17,7 +17,7 @@ import android.database.ContentObserver;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.util.Log;
+
 
 import ${project_namespace}.R;
 <#list entities?values as entity>

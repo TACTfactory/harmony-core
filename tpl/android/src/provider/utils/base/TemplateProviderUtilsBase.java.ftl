@@ -20,7 +20,7 @@ import android.content.ContentValues;
 import android.content.OperationApplicationException;
 import android.net.Uri;
 import android.os.RemoteException;
-import android.util.Log;
+
 
 import ${project_namespace}.provider.utils.ProviderUtils;
 ${ImportUtils.importRelatedCriterias(curr)}
@@ -167,9 +167,9 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 				</#list>
 			}
 		} catch (RemoteException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		} catch (OperationApplicationException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		}
 
 		return result;
@@ -284,9 +284,9 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 				</#list>
 			}
 		} catch (RemoteException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		} catch (OperationApplicationException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		}
 
 		return result;
@@ -537,9 +537,9 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			ContentProviderResult[] results = prov.applyBatch(${project_name?cap_first}Provider.authority, operations);
 			result = results[0].count;
 		} catch (RemoteException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		} catch (OperationApplicationException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		}
 
 		return result;
@@ -664,9 +664,9 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			ContentProviderResult[] results = prov.applyBatch(${project_name?cap_first}Provider.authority, operations);
 			result = results[0].count;
 		} catch (RemoteException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		} catch (OperationApplicationException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		}
 
 		return result;

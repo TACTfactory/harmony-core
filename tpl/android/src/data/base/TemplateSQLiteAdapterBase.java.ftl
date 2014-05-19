@@ -23,7 +23,7 @@ import android.content.ContentValues;
 
 
 import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
+
 
 <#if (MetadataUtils.hasToOneRelations(curr) || curr.internal)>
 import com.google.common.base.Strings;
@@ -442,7 +442,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 */
 	public long insert(final ${curr.name} item) {
 		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Insert DB(" + ${ContractUtils.getContractTableName(curr)} + ")");
+			android.util.Log.d(TAG, "Insert DB(" + ${ContractUtils.getContractTableName(curr)} + ")");
 		}
 
 		final ContentValues values =
@@ -574,7 +574,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	public int update(final ${curr.name} item) {
 	<#if (curr_ids?size>0)>
 		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Update DB(" + ${ContractUtils.getContractTableName(curr)} + ")");
+			android.util.Log.d(TAG, "Update DB(" + ${ContractUtils.getContractTableName(curr)} + ")");
 		}
 
 		final ContentValues values =
@@ -640,7 +640,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					</#if></#list>) {
 			<#if (curr_ids?size>0)>
 		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Update DB(" + ${ContractUtils.getContractTableName(curr)} + ")");
+			android.util.Log.d(TAG, "Update DB(" + ${ContractUtils.getContractTableName(curr)} + ")");
 		}
 
 		ContentValues values =
@@ -709,7 +709,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	public long insertWith${relation.relation.targetEntity?cap_first}${relation.relation.inversedBy?cap_first}(
 			${curr.name} item, int ${relation.relation.targetEntity?lower_case}Id) {
 		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Insert DB(" + ${ContractUtils.getContractTableName(curr)} + ")");
+			android.util.Log.d(TAG, "Insert DB(" + ${ContractUtils.getContractTableName(curr)} + ")");
 		}
 
 		ContentValues values = ${ContractUtils.getContractItemToContentValues(curr)}(item<#list (curr_relations) as allRelation><#if allRelation.relation.type=="ManyToOne" && allRelation.internal><#if allRelation.relation.targetEntity==relation.relation.targetEntity && allRelation.relation.inversedBy==relation.relation.inversedBy>,
@@ -770,7 +770,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			,</#if></#list>) {
 	<#if (curr_ids?size>0)>
 		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(
+			android.util.Log.d(
 				TAG,
 				"Delete DB(" 
 					+ ${ContractUtils.getContractTableName(curr)} 
@@ -830,7 +830,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 						</#if>final ${FieldsUtils.getJavaType(id)} ${id.name}<#if id_has_next>,</#if></#list>) {
 	<#if (curr_ids?size>0)>
 		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Get entities id : " + <#list IdsUtils.getAllIdsGettersFromArray(curr_ids) as id>${id}<#if id_has_next>
+			android.util.Log.d(TAG, "Get entities id : " + <#list IdsUtils.getAllIdsGettersFromArray(curr_ids) as id>${id}<#if id_has_next>
 					 + " id : " + </#if></#list>);
 		}
 
@@ -1007,7 +1007,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			</#list><#list rightRelation.relation.field_ref as refField>final ${FieldsUtils.getJavaType(refField)} ${rightRelation.name?uncap_first}${refField.name?cap_first}<#if refField_has_next>,
 			</#if></#list>) {
 		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Insert DB(" + ${ContractUtils.getContractTableName(curr)} + ")");
+			android.util.Log.d(TAG, "Insert DB(" + ${ContractUtils.getContractTableName(curr)} + ")");
 		}
 
 		ContentValues values = new ContentValues();

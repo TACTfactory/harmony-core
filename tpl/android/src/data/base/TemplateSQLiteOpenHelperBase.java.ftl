@@ -28,7 +28,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
+
 
 <#if dataLoader>
 import ${fixture_namespace}.DataLoader;
@@ -90,7 +90,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 
 	@Override
 	public void onCreate(final SQLiteDatabase db) {
-		Log.i(TAG, "Create database..");
+		android.util.Log.i(TAG, "Create database..");
 
 		if (!assetsExist) {
 			/// Create Schema
@@ -98,7 +98,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 		<#if ((entity.fields?size>0 || InheritanceUtils.isExtended(entity)) && !(entity.inheritance?? && entity.inheritance.inheritanceType?? && entity.inheritance.inheritanceType == "SingleTable" && InheritanceUtils.isExtended(entity)))>
 
 			if (${project_name?cap_first}Application.DEBUG) {
-				Log.d(TAG, "Creating schema : ${entity.name}");
+				android.util.Log.d(TAG, "Creating schema : ${entity.name}");
 			}
 			db.execSQL(${entity.name}SQLiteAdapter.getSchema());
 		</#if>
@@ -118,7 +118,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	 * @param db The database to clear
 	 */
 	public static void clearDatabase(final SQLiteDatabase db) {
-		Log.i(TAG, "Clearing database...");
+		android.util.Log.i(TAG, "Clearing database...");
 
 		<#list entities?values as entity>
 			<#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??))>
@@ -132,10 +132,10 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 	@Override
 	public void onUpgrade(final SQLiteDatabase db, final int oldVersion,
 			final int newVersion) {
-		Log.i(TAG, "Update database..");
+		android.util.Log.i(TAG, "Update database..");
 
 		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Upgrading database from version " + oldVersion
+			android.util.Log.d(TAG, "Upgrading database from version " + oldVersion
 					   + " to " + newVersion);
 		}
 

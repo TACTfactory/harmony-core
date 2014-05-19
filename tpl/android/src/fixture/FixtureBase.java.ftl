@@ -35,7 +35,7 @@ import org.yaml.snakeyaml.resolver.Resolver;
 
 
 import android.content.res.AssetManager;
-import android.util.Log;
+
 
 <#if fixtureType=="yml">import ${project_namespace}.harmony.util.DateUtils;</#if>
 
@@ -112,9 +112,9 @@ public abstract class FixtureBase<T> {
 				}
 			}
 		} catch (IOException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		} catch (JDOMException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		}
 <#elseif fixtureType == "yml">
 		// YAML Loader
@@ -167,7 +167,7 @@ public abstract class FixtureBase<T> {
 		error.append(" => ");
 		error.append(e.getMessage());
 
-		Log.e(TAG, error.toString());
+		android.util.Log.e(TAG, error.toString());
 	}
 
 	/**
@@ -221,7 +221,7 @@ public abstract class FixtureBase<T> {
 		try {
 			ret = assetManager.open(entityName + ".xml");
 		} catch (IOException e) {
-			Log.w(TAG, "No " + entityName + " fixture file found.");
+			android.util.Log.w(TAG, "No " + entityName + " fixture file found.");
 		}
 		return ret;
 	}
@@ -236,7 +236,7 @@ public abstract class FixtureBase<T> {
 		try {
 			ret = assetManager.open(entityName + ".yml");
 		} catch (IOException e) {
-			Log.w(TAG, "No " + entityName + " fixture file found.");
+			android.util.Log.w(TAG, "No " + entityName + " fixture file found.");
 		}
 		return ret;
 	}
@@ -261,19 +261,19 @@ public abstract class FixtureBase<T> {
 		 this.serializedBackup = bos.toByteArray();
 
 		} catch (IOException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		} finally {
 			if (out != null) {
 				try {
 					out.close();
 				} catch (IOException e) {
-					Log.e(TAG, e.getMessage());
+					android.util.Log.e(TAG, e.getMessage());
 				}
 			}
 			try {
 				bos.close();
 			} catch (IOException e) {
-				Log.e(TAG, e.getMessage());
+				android.util.Log.e(TAG, e.getMessage());
 			}
 		}
 	}
@@ -294,21 +294,21 @@ public abstract class FixtureBase<T> {
 		  result = (LinkedHashMap<String, T>) in.readObject();
 
 		} catch (IOException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		} catch (ClassNotFoundException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		} finally {
 			if (in != null) {
 				try {
 					in.close();
 				} catch (IOException e) {
-					Log.e(TAG, e.getMessage());
+					android.util.Log.e(TAG, e.getMessage());
 				}
 			}
 			try {
 				bis.close();
 			} catch (IOException e) {
-				Log.e(TAG, e.getMessage());
+				android.util.Log.e(TAG, e.getMessage());
 			}
 		}
 

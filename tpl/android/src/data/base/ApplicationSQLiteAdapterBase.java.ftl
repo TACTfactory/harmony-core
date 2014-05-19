@@ -8,7 +8,7 @@ import android.content.ContentValues;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import android.util.Log;
+
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -92,7 +92,7 @@ public abstract class SQLiteAdapterBase<T> {
 	 */
 	protected android.database.Cursor getAllCursor() {
 		if (${project_name?cap_first}Application.DEBUG) {
-			Log.d(TAG, "Get all entities");
+			android.util.Log.d(TAG, "Get all entities");
 		}
 
 		return this.query(this.getCols(),

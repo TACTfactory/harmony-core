@@ -20,7 +20,7 @@ import android.test.AndroidTestCase;
 import android.test.IsolatedContext;
 import android.test.RenamingDelegatingContext;
 import android.test.mock.MockContentResolver;
-<#if dataLoader?? && dataLoader>import android.util.Log;</#if>
+<#if dataLoader?? && dataLoader></#if>
 
 
 /** android.content.Context mock for tests.<br/>
@@ -138,7 +138,7 @@ public class TestContextMock {
 
 		if (!cacheDbFile.exists() || !DataLoader.hasFixturesBeenLoaded) {
 			if (${project_name?cap_first}Application.DEBUG) {
-				Log.d("TEST", "Create new Database cache");
+				android.util.Log.d("TEST", "Create new Database cache");
 			}
 
 			// Create initial database
@@ -169,7 +169,7 @@ public class TestContextMock {
 					SQLiteAdapterBase.DB_NAME);
 		} else {
 			if (${project_name?cap_first}Application.DEBUG) {
-				Log.d("TEST", "Re use old Database cache");
+				android.util.Log.d("TEST", "Re use old Database cache");
 			}
 			DatabaseUtil.importDB(this.getMockContext(),
 					cacheDbFile,

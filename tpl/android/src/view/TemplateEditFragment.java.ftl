@@ -24,7 +24,7 @@ import android.database.sqlite.SQLiteException;
 <#if hasToManyRelation>import android.net.Uri;</#if>
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;<#if (ViewUtils.hasTypeBoolean(fields?values))>
@@ -292,7 +292,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 				result = new ${curr.name?cap_first}ProviderUtils(this.ctx).update(
 					this.entity);
 			} catch (SQLiteException e) {
-				Log.e("${curr.name}EditFragment", e.getMessage());
+				android.util.Log.e("${curr.name}EditFragment", e.getMessage());
 			}
 
 			return result;

@@ -12,7 +12,7 @@ import org.joda.time.LocalDateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.ISODateTimeFormat;
 
-import android.util.Log;
+
 
 import ${project_namespace}.${project_name?cap_first}Application;
 
@@ -254,7 +254,7 @@ public class DateUtils extends android.text.format.DateUtils {
 		try {
 			dt = new DateTime(dateFormat.parse(dateTime).getTime());
 		} catch (ParseException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		}
 
 		return dt;
@@ -272,7 +272,7 @@ public class DateUtils extends android.text.format.DateUtils {
 			dt = ISODateTimeFormat.dateTime()
 					.withOffsetParsed().parseDateTime(dateTime);
 		} catch (IllegalArgumentException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		}
 
 		return dt;
@@ -291,7 +291,7 @@ public class DateUtils extends android.text.format.DateUtils {
 			dt = ISODateTimeFormat.timeParser().withOffsetParsed()
 					.parseDateTime(time);
 		} catch (IllegalArgumentException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		}
 
 		return dt;
@@ -309,7 +309,7 @@ public class DateUtils extends android.text.format.DateUtils {
 			dt = ISODateTimeFormat.localDateOptionalTimeParser()
 					.parseDateTime(dateTime);
 		} catch (IllegalArgumentException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		}
 
 		return dt;
@@ -488,7 +488,7 @@ public class DateUtils extends android.text.format.DateUtils {
 			dt = DateTimeFormat.forPattern(pattern)
 					.withLocale(locale).parseDateTime(dateTime);
 		} catch (IllegalArgumentException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		}
 
 		return dt;
@@ -520,7 +520,7 @@ public class DateUtils extends android.text.format.DateUtils {
 					.parseLocalDateTime(dateTime);
 			dt = DateUtils.formatLocalISOStringToDateTime(tmp.toString());
 		} catch (IllegalArgumentException e) {
-			Log.e(TAG, e.getMessage());
+			android.util.Log.e(TAG, e.getMessage());
 		}
 
 		return dt;
