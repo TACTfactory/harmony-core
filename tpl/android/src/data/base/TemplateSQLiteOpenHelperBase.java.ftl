@@ -45,7 +45,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
                         extends SQLiteOpenHelper {
     /** TAG for debug purpose. */
     protected static final String TAG = "DatabaseHelper";
-    /** android.content.Context. */
+    /** Context. */
     protected android.content.Context ctx;
 
     /** Android's default system path of the database.
@@ -61,7 +61,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 
     /**
      * Constructor.
-     * @param ctx android.content.Context
+     * @param ctx Context
      * @param name name
      * @param factory factory
      * @param version version
@@ -122,7 +122,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 
         <#list entities?values as entity>
             <#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??))>
-        db.delete(${entity.name?cap_first}Contract.${entity.name?cap_first}.TABLE_NAME,
+        db.delete(${entity.name?cap_first}Contract.TABLE_NAME,
                 null,
                 null);
             </#if>

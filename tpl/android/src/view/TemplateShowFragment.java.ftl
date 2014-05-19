@@ -132,7 +132,7 @@ public class ${curr.name}ShowFragment
         this.initializeComponent(view);
         
         final Intent intent =  getActivity().getIntent();
-        this.update((${curr.name}) intent.getParcelableExtra(${curr.name}Contract.${curr.name}.PARCEL));
+        this.update((${curr.name}) intent.getParcelableExtra(${ContractUtils.getContractParcel(curr)}));
 
         return view;
     }
@@ -297,6 +297,116 @@ public class ${curr.name}ShowFragment
         protected Integer doInBackground(Void... params) {
             int result = -1;
 
+    /**
+     * Called when the entity has been loaded.
+     * 
+     * @param c The cursor of this entity
+     */
+    public void on${curr.name}Loaded(Cursor c) {
+        if (c.getCount() > 0) {
+            c.moveToFirst();
+            
+            ${ContractUtils.getContractCursorToItem(curr)}(
+                        c,
+                        this.model);
+            this.loadData();
+        }
+    }
+    <#list curr.relations as relation>
+        <#if !relation.internal>
+    /**
+     * Called when the relation has been loaded.
+     * 
+     * @param c The cursor of this relation
+     */
+    public void on${relation.name?cap_first}Loaded(Cursor c) {
+        if (this.model != null) {
+            if (c != null) {
+        <#if relation.relation.type == "ManyToOne" || relation.relation.type == "OneToOne">
+                if (c.getCount() > 0) {
+                    c.moveToFirst();
+                    this.model.set${relation.name?cap_first}(${ContractUtils.getContractCursorToItem(entities[relation.relation.targetEntity])}(c));
+                    this.loadData();
+                }
+        <#else>
+            this.model.set${relation.name?cap_first}(${ContractUtils.getContractCursorToItem(entities[relation.relation.targetEntity])}s(c));
+            this.loadData();
+        </#if>
+            } else {
+                this.model.set${relation.name?cap_first}(null);
+                    this.loadData();
+            }
+        }
+    }
+        </#if>
+    </#list>
+
+    <#if curr.editAction>
+    /**
+     * Calls the ${curr.name}EditActivity.
+     */
+    @Override
+    public void onClickEdit() {
+        final Intent intent = new Intent(getActivity(),
+                                    ${curr.name}EditActivity.class);
+        Bundle extras = new Bundle();
+        extras.putParcelable(${ContractUtils.getContractParcel(curr)}, this.model);
+        intent.putExtras(extras);
+
+        this.getActivity().startActivity(intent);
+    }
+    </#if>
+    <#if curr.deleteAction>
+    /**
+     * Shows a confirmation dialog.
+     */
+    @Override
+    public void onClickDelete() {
+        new DeleteDialog(this.getActivity(), this).show();
+    }
+
+    @Override
+    public void onDeleteDialogClose(boolean ok) {
+        if (ok) {
+            new DeleteTask(this.getActivity(), this.model).execute();
+        }
+    }
+    
+    /** 
+     * Called when delete task is done.
+     */    
+    public void onPostDelete() {
+        if (this.deleteCallback != null) {
+            this.deleteCallback.onItemDeleted();
+        }
+    }
+
+    /**
+     * This class will remove the entity into the DB.
+     * It runs asynchronously.
+     */
+    private class DeleteTask extends AsyncTask<Void, Void, Integer> {
+        /** AsyncTask's context. */
+        private android.content.Context ctx;
+        /** Entity to delete. */
+        private ${curr.name?cap_first} item;
+
+        /**
+         * Constructor of the task.
+         * @param item The entity to remove from DB
+         * @param ctx A context to build ${curr.name?cap_first}SQLiteAdapter
+         */
+        public DeleteTask(final android.content.Context ctx,
+                    final ${curr.name?cap_first} item) {
+            super();
+            this.ctx = ctx;
+            this.item = item;
+        }
+
+        @Override
+        protected Integer doInBackground(Void... params) {
+            int result = -1;
+
             result = new ${curr.name?cap_first}ProviderUtils(this.ctx)
                     .delete(this.item);
 
@@ -323,5 +433,6 @@ public class ${curr.name}ShowFragment
         void onItemDeleted();
     }
     </#if>
+
 }
 

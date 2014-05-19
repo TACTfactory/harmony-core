@@ -240,7 +240,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 
         final Intent intent =  getActivity().getIntent();
         this.model = (${curr.name}) intent.getParcelableExtra(
-                ${curr.name?cap_first}Contract.${curr.name}.PARCEL);
+                ${ContractUtils.getContractParcel(curr)});
 
         this.initializeComponent(view);
         this.loadData();
@@ -388,7 +388,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
             android.database.Cursor ${field.name}Cursor = 
                     this.ctx.getContentResolver().query(
                             ${field.name}Uri,
-                            new String[]{${field.relation.targetEntity}Contract.${field.relation.targetEntity}.ALIASED_COL_${entities[field.relation.targetEntity].ids[0].name?upper_case}},
+                            new String[]{${field.relation.targetEntity}Contract.ALIASED_COL_${entities[field.relation.targetEntity].ids[0].name?upper_case}},
                             null,
                             null, 
                             null);
