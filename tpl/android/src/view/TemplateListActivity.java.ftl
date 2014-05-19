@@ -1,4 +1,4 @@
-<#assign curr = entities[current_entity] />
+<#include utilityPath + "all_imports.ftl" />
 <@header?interpret />
 package ${curr.controller_namespace};
 
@@ -100,7 +100,7 @@ public class ${curr.name}ListActivity
 			final Intent intent = new Intent(this, ${curr.name}ShowActivity.class);
 			final ${curr.name} item = (${curr.name}) l.getItemAtPosition(position);
 			Bundle extras = new Bundle();
-			extras.putParcelable(${curr.name?cap_first}Contract.${curr.name}.PARCEL, item);
+			extras.putParcelable(${ContractUtils.getContractParcel(curr)}, item);
 			intent.putExtras(extras);
 			this.startActivity(intent);
 		}
