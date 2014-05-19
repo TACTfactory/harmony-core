@@ -122,7 +122,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 
 		<#list entities?values as entity>
 			<#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??))>
-		db.delete(${entity.name?cap_first}Contract.${entity.name?cap_first}.TABLE_NAME,
+		db.delete(${entity.name?cap_first}Contract.TABLE_NAME,
 				null,
 				null);
 			</#if>

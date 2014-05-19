@@ -1,4 +1,4 @@
-<#assign curr = entities[current_entity] />
+<#include utilityPath + "all_imports.ftl" />
 <@header?interpret />
 package ${curr.controller_namespace};
 
@@ -101,13 +101,13 @@ public class ${curr.name}ListFragment
 		if (crit != null) {
 			result = new ${curr.name?cap_first}ListLoader(this.getActivity(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
-				${curr.name}Contract.${curr.name}.ALIASED_COLS,
+				${ContractUtils.getContractCols(curr, true)},
 				crit,
 				<#if (curr.orders?? && curr.orders?size > 0) >orderBy<#else>null</#if>);
 		} else {
 			result = new ${curr.name?cap_first}ListLoader(this.getActivity(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
-				${curr.name}Contract.${curr.name}.ALIASED_COLS,
+				${ContractUtils.getContractCols(curr, true)},
 				null,
 				null,
 				<#if (curr.orders?? && curr.orders?size > 0) >orderBy<#else>null</#if>);
@@ -124,7 +124,7 @@ public class ${curr.name}ListFragment
 		data.setNotificationUri(this.getActivity().getContentResolver(),
 				${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI);
 
-		ArrayList<${curr.name}> users = ${curr.name}Contract.${curr.name}.cursorToItems(data);
+		ArrayList<${curr.name}> users = ${ContractUtils.getContractCursorToItem(curr)}s(data);
 		this.mAdapter.setNotifyOnChange(false);
 		this.mAdapter.setData(
 				new ${curr.name}ListAdapter

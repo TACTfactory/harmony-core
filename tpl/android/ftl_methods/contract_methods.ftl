@@ -27,18 +27,18 @@
 	<#assign fieldsNames = ContractUtils.getColumnsNames(field) />
 	<#assign result = "" />
 	<#list fieldsNames as fieldName>
-		<#assign result = result + "		/** ${fieldName}. */\n" />
-		<#assign result = result + "		public static final String ${NamingUtils.alias(fieldName)} =\n" />
+		<#assign result = result + "	/** ${fieldName}. */\n" />
+		<#assign result = result + "	public static final String ${NamingUtils.alias(fieldName)} =\n" />
 		<#if field.relation??>
-			<#assign result = result + "				\"${field.columnName}_${field.relation.field_ref[fieldName_index].name}\";\n"/>
+			<#assign result = result + "			\"${field.columnName}_${field.relation.field_ref[fieldName_index].name}\";\n"/>
 		<#else>
-			<#assign result = result + "				\"${field.columnName}\";\n"/>
+			<#assign result = result + "			\"${field.columnName}\";\n"/>
 		</#if>
-		<#assign result = result + "		/** Alias. */\n" />
-		<#assign result = result + "		public static final String ALIASED_${NamingUtils.alias(fieldName)} =\n" />
-		<#assign result = result + "				" />
+		<#assign result = result + "	/** Alias. */\n" />
+		<#assign result = result + "	public static final String ALIASED_${NamingUtils.alias(fieldName)} =\n" />
+		<#assign result = result + "			" />
 		<#if !field.columnResult>
-			<#assign result = result + "${entity.name?cap_first}Contract.${entity.name?cap_first}.TABLE_NAME + \".\" + " />
+			<#assign result = result + "${entity.name?cap_first}Contract.TABLE_NAME + \".\" + " />
 		</#if>
 		<#assign result = result + "${NamingUtils.alias(fieldName)};\n\n"/>
 	</#list>
@@ -66,7 +66,7 @@
 </#function>
 
 <#function getContractClass entity>
-	<#return "${entity.name}Contract.${entity.name}" />
+	<#return "${entity.name}Contract" />
 </#function>
 
 <#function getContractItemToContentValues entity>
@@ -75,4 +75,8 @@
 
 <#function getContractCursorToItem entity>
 	<#return ContractUtils.getContractClass(entity) + ".cursorToItem" />
+</#function>
+
+<#function getContractParcel entity>
+	<#return ContractUtils.getContractClass(entity) + ".PARCEL" />
 </#function>
