@@ -38,7 +38,7 @@ public class AddExtendsAndroid implements IAddExtends {
         if (entity.getInheritance() == null
                         || entity.getInheritance().getSuperclass() == null) {
             
-            final String filepath = String.format("%s/%s",
+            final String filepath = String.format("%s%s",
                     this.adapter.getSourceEntityPath(),
                     String.format("%s.java", entity.getName()));
             
@@ -58,6 +58,9 @@ public class AddExtendsAndroid implements IAddExtends {
             
             ConsoleUtils.display(">>> Class name POS " + classNamePos);
             fileString.insert(classNamePos, " extends " + extendedClassName);
+            
+            // After treatment on entity, write it in the original file
+            TactFileUtils.stringBufferToFile(fileString, entityFile);
             
             InheritanceMetadata inheritanceMeta = entity.getInheritance();
             
