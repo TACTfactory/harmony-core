@@ -346,10 +346,7 @@ public class FieldVisitor {
 			}
 
 			// Check SQLite reserved keywords
-			SqliteAdapter.Keywords.exists(result.getName());
-			if (!result.getName().equals(result.getColumnName())) {
-				SqliteAdapter.Keywords.exists(result.getColumnName());
-			}
+			SqliteAdapter.Keywords.exists(result.getColumnName());
 			SqliteAdapter.Keywords.exists(javaType);
 		}
 		return result;
