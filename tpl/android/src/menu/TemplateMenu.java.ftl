@@ -1,7 +1,7 @@
 <@header?interpret />
 package ${project_namespace}.menu;
 
-import android.content.Context;
+
 import android.support.v4.app.Fragment;
 
 import ${project_namespace}.menu.base.${project_name?cap_first}MenuBase;
@@ -27,10 +27,10 @@ public class ${project_name?cap_first}Menu
 
 	/**
 	 * Constructor.
-	 * @param ctx The Context
+	 * @param ctx The android.content.Context
 	 * @throws Exception If something bad happened
 	 */
-	public ${project_name?cap_first}Menu(final Context ctx) throws Exception {
+	public ${project_name?cap_first}Menu(final android.content.Context ctx) throws Exception {
 		super(ctx);
 	}
 
@@ -40,7 +40,7 @@ public class ${project_name?cap_first}Menu
 	 * @param fragment The parent fragment
 	 * @throws Exception If something bad happened
 	 */
-	public ${project_name?cap_first}Menu(final Context ctx,
+	public ${project_name?cap_first}Menu(final android.content.Context ctx,
 						final Fragment fragment) throws Exception {
 		super(ctx, fragment);
 	}
@@ -51,7 +51,7 @@ public class ${project_name?cap_first}Menu
 	 * @throws Exception If something bad happened
 	 */
 	public static final synchronized ${project_name?cap_first}Menu getInstance(
-						final Context ctx) throws Exception {
+						final android.content.Context ctx) throws Exception {
 		return getInstance(ctx, null);
 	}
 
@@ -62,7 +62,7 @@ public class ${project_name?cap_first}Menu
 	 * @throws Exception If something bad happened
 	 */
 	public static final synchronized ${project_name?cap_first}Menu getInstance(
-			final Context ctx, final Fragment fragment) throws Exception {
+			final android.content.Context ctx, final Fragment fragment) throws Exception {
 		if (singleton == null) {
 			singleton = new ${project_name?cap_first}Menu(ctx, fragment);
 		}  else {

@@ -8,7 +8,7 @@ import android.support.v4.app.FragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-import android.content.Context;
+
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.util.SparseArray;
@@ -38,8 +38,8 @@ public abstract class ${project_name?cap_first}MenuBase {
 	/** Array of MenuWrapperBase. */
 	protected SparseArray<MenuWrapperBase> menus =
 					new SparseArray<MenuWrapperBase>();
-	/** Context. */
-	protected Context ctx;
+	/** android.content.Context. */
+	protected android.content.Context ctx;
 	/** parent fragment. */
 	protected Fragment fragment;
 	/** Menu. */
@@ -50,7 +50,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	 * @param ctx context
 	 * @throws Exception if context is null
 	 */
-	protected ${project_name?cap_first}MenuBase(final Context ctx)
+	protected ${project_name?cap_first}MenuBase(final android.content.Context ctx)
 														throws Exception {
 		this(ctx, null);
 	}
@@ -61,7 +61,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	 * @param fragment parent fragment
 	 * @throws Exception If context is null
 	 */
-	protected ${project_name?cap_first}MenuBase(final Context ctx,
+	protected ${project_name?cap_first}MenuBase(final android.content.Context ctx,
 								final Fragment fragment) throws Exception {
 		if (ctx == null) {
 			throw new Exception(
@@ -97,7 +97,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	 * @param menu menu
 	 * @param ctx context
 	 */
-	public void updateMenu(final Menu menu, final Context ctx) {
+	public void updateMenu(final Menu menu, final android.content.Context ctx) {
 		if (ctx != null) {
 			this.ctx = ctx;
 		}
@@ -135,7 +135,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	 * @param ctx context
 	 * @return true if event has been treated
 	 */
-	public boolean dispatch(final MenuItem item, final Context ctx) {
+	public boolean dispatch(final MenuItem item, final android.content.Context ctx) {
 		if (ctx != null) {
 			this.ctx = ctx;
 		}
@@ -161,7 +161,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	 * @param ctx The context
 	 */
 	public void onActivityResult(int requestCode, int resultCode, Intent data,
-															 Context ctx) {
+															 android.content.Context ctx) {
 		this.onActivityResult(requestCode, resultCode, data, ctx, null);
 	}
 
@@ -175,7 +175,7 @@ public abstract class ${project_name?cap_first}MenuBase {
 	 * @param fragment The fragment
 	 */
 	public void onActivityResult(int requestCode, int resultCode, Intent data,
-										  Context ctx, Fragment fragment) {
+										  android.content.Context ctx, Fragment fragment) {
 		if (ctx != null) {
 			this.ctx = ctx;
 		}

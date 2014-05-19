@@ -30,7 +30,7 @@ import ${curr.test_namespace}.utils.*;
 import android.content.ContentResolver;
 import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
+
 import android.net.Uri;
 
 import junit.framework.Assert;
@@ -130,7 +130,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
 		if (this.entity != null) {
 			try {
-				Cursor c = this.provider.query(Uri.parse(
+				android.database.Cursor c = this.provider.query(Uri.parse(
 						${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI<#list IdsUtils.getAllIdsGetters(curr) as id>
 								+ "/" 
 								+ this.entity${id}</#list>),
@@ -154,7 +154,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 	public void testReadAll() {
 		ArrayList<${curr.name}> result = null;
 		try {
-			Cursor c = this.provider.query(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, this.adapter.getCols(), null, null, null);
+			android.database.Cursor c = this.provider.query(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, this.adapter.getCols(), null, null, null);
 			result = ${curr.name}Contract.${curr.name}.cursorToItems(c);
 			c.close();
 		} catch (Exception e) {

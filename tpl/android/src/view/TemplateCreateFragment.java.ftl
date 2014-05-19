@@ -16,7 +16,7 @@ package ${curr.controller_namespace};
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
+
 import android.content.DialogInterface;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -225,7 +225,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	 */
 	public static class CreateTask extends AsyncTask<Void, Void, Uri> {
 		/** AsyncTask's context. */
-		private final Context ctx;
+		private final android.content.Context ctx;
 		/** Entity to persist. */
 		private final ${curr.name} entity;
 		/** Progress Dialog. */
@@ -301,7 +301,7 @@ public class ${curr.name}CreateFragment extends HarmonyFragment
 	 */
 	public static class LoadTask extends AsyncTask<Void, Void, Void> {
 		/** AsyncTask's context. */
-		private final Context ctx;
+		private final android.content.Context ctx;
 		/** Progress Dialog. */
 		private ProgressDialog progress;
 		/** Fragment. */

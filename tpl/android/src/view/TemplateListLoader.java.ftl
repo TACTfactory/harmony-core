@@ -2,7 +2,7 @@
 <@header?interpret />
 package ${curr.controller_namespace};
 
-import android.content.Context;
+
 import android.net.Uri;
 import android.support.v4.content.CursorLoader;
 
@@ -19,7 +19,7 @@ public class ${curr.name}ListLoader
 	 * @param ctx context
 	 */
 	public ${curr.name}ListLoader(
-			final Context ctx) {
+			final android.content.Context ctx) {
 		super(ctx);
 	}
 
@@ -33,7 +33,7 @@ public class ${curr.name}ListLoader
 	 * @param sortOrder The sort order
 	 */
 	public ${curr.name}ListLoader(
-					Context ctx,
+					android.content.Context ctx,
 					Uri uri,
 					String[] projection,
 					String selection,
@@ -56,7 +56,7 @@ public class ${curr.name}ListLoader
 	 * @param sortOrder The sort order
 	 */
 	public ${curr.name}ListLoader(
-					Context ctx,
+					android.content.Context ctx,
 					Uri uri,
 					String[] projection,
 					CriteriaExpression expression,

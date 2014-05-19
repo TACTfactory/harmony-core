@@ -3,7 +3,7 @@ package ${project_namespace};
 
 import java.util.ArrayList;
 
-import android.content.Context;
+
 import android.content.SharedPreferences;
 
 public abstract class ${project_name?cap_first}Preferences {
@@ -17,9 +17,9 @@ public abstract class ${project_name?cap_first}Preferences {
 	 * Constructor.
 	 * @param ctx context
 	 */
-	public ${project_name?cap_first}Preferences(Context ctx) {
+	public ${project_name?cap_first}Preferences(android.content.Context ctx) {
 		this.settings = ctx.getSharedPreferences(
-				shareName, Context.MODE_PRIVATE);
+				shareName, android.content.Context.MODE_PRIVATE);
 	}
 
 	/**

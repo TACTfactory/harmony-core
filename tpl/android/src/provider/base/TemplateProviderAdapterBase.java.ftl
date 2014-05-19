@@ -10,8 +10,8 @@ package ${project_namespace}.provider.base;
 
 import android.content.ContentUris;
 import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
+
+
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 
@@ -229,7 +229,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				<#if inherited>
 					<#if joinedInheritance>
 				// Query the ids of the changing fields.
-				Cursor idsCursor = this.adapter.query(
+				android.database.Cursor idsCursor = this.adapter.query(
 						new String[]{${ContractUtils.getContractCol(curr_ids[0], true)}},
 						selection,
 						selectionArgs,
@@ -346,7 +346,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	}
 
 	@Override
-	public Cursor query(final Uri uri,
+	public android.database.Cursor query(final Uri uri,
 						String[] projection,
 						String selection,
 						String[] selectionArgs,
@@ -354,9 +354,9 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher()
 				.match(uri);
-		Cursor result = null;
+		android.database.Cursor result = null;
 		<#if MetadataUtils.hasToOneRelations(curr)>
-		Cursor ${curr.name?uncap_first}Cursor;
+		android.database.Cursor ${curr.name?uncap_first}Cursor;
 		</#if>
 		<#if MetadataUtils.hasToManyRelations(curr)>
 			<#list curr.ids as id>
@@ -504,7 +504,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 				<#if inherited>
 					<#if joinedInheritance>
 				// Query the ids of the changing fields.
-				Cursor idsCursor = this.adapter.query(
+				android.database.Cursor idsCursor = this.adapter.query(
 						new String[]{${ContractUtils.getContractCol(curr_ids[0], true)}},
 						selection,
 						selectionArgs,
@@ -590,7 +590,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 *
 	 * @return The expression
 	 */
-	protected CriteriaExpression cursorToIDSelection(Cursor cursor, String key) {
+	protected CriteriaExpression cursorToIDSelection(android.database.Cursor cursor, String key) {
 		CriteriaExpression crit = new CriteriaExpression(GroupType.AND);
 		Criterion inCrit = new Criterion();
 		inCrit.setKey(key);
@@ -625,8 +625,8 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 	 * @param id The id of the entity to retrieve
 	 * @return The cursor
 	 */
-	private Cursor queryById(<#list IdsUtils.getAllIdsNamesFromArray(curr_ids) as id>String ${id}<#if id_has_next>, </#if></#list>) {
-		Cursor result = null;
+	private android.database.Cursor queryById(<#list IdsUtils.getAllIdsNamesFromArray(curr_ids) as id>String ${id}<#if id_has_next>, </#if></#list>) {
+		android.database.Cursor result = null;
 		String selection =<#list IdsUtils.getAllIdsColsFromArray(curr_ids, true) as id> ${id}
 						+ " = ?"<#if id_has_next>
 						+ " AND "

@@ -2,7 +2,7 @@
 <@header?interpret />
 package ${project_namespace}.provider.utils;
 
-import android.content.Context;
+
 
 import ${project_namespace}.provider.utils.base.${curr.name?cap_first}ProviderUtilsBase;
 
@@ -19,7 +19,7 @@ public class ${curr.name?cap_first}ProviderUtils
 	 * Constructor.
 	 * @param context The context
 	 */
-	public ${curr.name?cap_first}ProviderUtils(Context context) {
+	public ${curr.name?cap_first}ProviderUtils(android.content.Context context) {
 		super(context);
 	}
 

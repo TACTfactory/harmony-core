@@ -33,7 +33,7 @@ import java.util.Map;
 <#else>
 import org.jdom2.Element;
 </#if>
-import android.content.Context;
+
 
 <#if (fixtureType == "xml" && (hasDate || hasDateTime || hasTime))>import ${project_namespace}.harmony.util.DateUtils;</#if>
 <#if (fixtureType == "xml")>${ImportUtils.importRelatedEntities(curr)}</#if>
@@ -75,7 +75,7 @@ public final class ${curr.name?cap_first}DataLoader
 	 * @return The dataloader instance
 	 */
 	public static ${curr.name?cap_first}DataLoader getInstance(
-											final Context ctx) {
+											final android.content.Context ctx) {
 		if (instance == null) {
 			instance = new ${curr.name?cap_first}DataLoader(ctx);
 		}
@@ -86,7 +86,7 @@ public final class ${curr.name?cap_first}DataLoader
 	 * Constructor.
 	 * @param ctx The context
 	 */
-	private ${curr.name?cap_first}DataLoader(final Context ctx) {
+	private ${curr.name?cap_first}DataLoader(final android.content.Context ctx) {
 		super(ctx);
 	}
 

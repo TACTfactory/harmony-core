@@ -18,7 +18,7 @@ import android.app.Application;
 import android.app.IntentService;
 import android.app.Service;
 </#if>
-import android.content.Context;
+
 <#if (services?size > 0)>
 import android.content.Intent;
 </#if>
@@ -165,7 +165,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 				android.text.format.DateFormat.is24HourFormat(application);
 			<#if (sync)>
 			preferences = application.getSharedPreferences(
-					"${project_name?uncap_first}", Context.MODE_PRIVATE);
+					"${project_name?uncap_first}", android.content.Context.MODE_PRIVATE);
 
 			if (!preferences.contains("lastSyncDate")) {
 				// TODO: First Sync
@@ -182,7 +182,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 * @param ctx The context
 	 * @return A String containing the UDID
 	 */
-	public static String getUDID(final Context ctx) {
+	public static String getUDID(final android.content.Context ctx) {
 		String udid = Secure.getString(
 			ctx.getContentResolver(), Secure.ANDROID_ID);
 
@@ -194,7 +194,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 		// for google bug, android < 2.3 (many device)
 		if (udid.equals("9774d56d682e549c")) {
 			final TelephonyManager telephonyManager = (TelephonyManager)
-				ctx.getSystemService(Context.TELEPHONY_SERVICE);
+				ctx.getSystemService(android.content.Context.TELEPHONY_SERVICE);
 			udid = telephonyManager.getDeviceId();
 		}
 
@@ -231,10 +231,10 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 * @param ctx The application context.
 	 * @return the version number
 	 */
-	public static String getVersion(final Context ctx) {
+	public static String getVersion(final android.content.Context ctx) {
 		final SharedPreferences settings = ctx.getSharedPreferences(
 				${project_name?cap_first}ApplicationBase.PREFS_PUBL,
-				Context.MODE_WORLD_READABLE);
+				android.content.Context.MODE_WORLD_READABLE);
 
 		return settings.getString(
 				${project_name?cap_first}ApplicationBase.PREFS_VERS, "");
@@ -245,7 +245,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 * @param ctx The application context.
 	 * @return true if same version
 	 */
-	public static boolean isGoodVersion(final Context ctx) {
+	public static boolean isGoodVersion(final android.content.Context ctx) {
 		final String oldVersion = getVersion(ctx);
 		final String currentVersion = ctx.getString(R.string.app_version);
 
@@ -256,10 +256,10 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 *
 	 * @param ctx The application context.
 	 */
-	public static void setVersion(final Context ctx) {
+	public static void setVersion(final android.content.Context ctx) {
 		final SharedPreferences settings = ctx.getSharedPreferences(
 				${project_name?cap_first}ApplicationBase.PREFS_PUBL,
-				Context.MODE_WORLD_READABLE);
+				android.content.Context.MODE_WORLD_READABLE);
 
 		final String currentVersion = ctx.getString(R.string.app_version);
 	    final SharedPreferences.Editor editor = settings.edit();
@@ -276,9 +276,9 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 * @param ctx The application context
 	 * @return true if have a network
 	 */
-	public static boolean isNetworkAvailable(final Context ctx) {
+	public static boolean isNetworkAvailable(final android.content.Context ctx) {
 	    final ConnectivityManager connectivityManager = (ConnectivityManager)
-	    	ctx.getSystemService(Context.CONNECTIVITY_SERVICE);
+	    	ctx.getSystemService(android.content.Context.CONNECTIVITY_SERVICE);
 
 	    final NetworkInfo activeNetworkInfo = connectivityManager
 	    	.getActiveNetworkInfo();
@@ -336,7 +336,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	 * @param ctx The context
 	 * @return The application version code
 	 */
-	public static int getVersionCode(Context ctx) {
+	public static int getVersionCode(android.content.Context ctx) {
 		int result = 1;
 
 		try {
@@ -354,7 +354,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
 	/**
 	 * Gets the device type associated to this context.
 	 */
-	public static DeviceType getDeviceType(Context context) {
+	public static DeviceType getDeviceType(android.content.Context context) {
 		return DeviceType.fromValue(context.getString(R.string.device_type));
 	}
 

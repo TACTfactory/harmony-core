@@ -33,7 +33,7 @@ import org.yaml.snakeyaml.representer.Representer;
 import org.yaml.snakeyaml.resolver.Resolver;
 </#if>
 
-import android.content.Context;
+
 import android.content.res.AssetManager;
 import android.util.Log;
 
@@ -50,8 +50,8 @@ import android.util.Log;
 public abstract class FixtureBase<T> {
 	/** TAG for debug purpose. */
 	private static final String TAG = "FixtureBase";
-	/** Context. */
-	protected Context ctx;
+	/** android.content.Context. */
+	protected android.content.Context ctx;
 
 	/** Date + time pattern. */
 	protected String patternDateTime = "yyyy-MM-dd HH:mm";
@@ -73,7 +73,7 @@ public abstract class FixtureBase<T> {
 	 * Constructor.
 	 * @param ctx The context
 	 */
-	public FixtureBase(final Context ctx) {
+	public FixtureBase(final android.content.Context ctx) {
 		this.ctx = ctx;
 	}
 	/**

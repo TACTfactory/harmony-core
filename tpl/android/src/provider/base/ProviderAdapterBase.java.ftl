@@ -5,9 +5,9 @@ import java.util.ArrayList;
 
 import android.database.sqlite.SQLiteDatabase;
 import android.content.ContentValues;
-import android.content.Context;
+
 import android.database.ContentObserver;
-import android.database.Cursor;
+
 import android.net.Uri;
 
 import ${data_namespace}.base.SQLiteAdapterBase;
@@ -23,8 +23,8 @@ import ${project_namespace}.provider.${project_name?cap_first}Provider;
 public abstract class ProviderAdapterBase<T> {
 	/** TAG for debug purpose. */
 	public static final String TAG = "ProviderAdapterBase<T>";
-	/** Context. */
-	protected Context ctx;
+	/** android.content.Context. */
+	protected android.content.Context ctx;
 	/** SQLiteAdapterBase. */
 	protected SQLiteAdapterBase<T> adapter;
 	/** database. */
@@ -88,7 +88,7 @@ public abstract class ProviderAdapterBase<T> {
 	 *
 	 * @return A cursor pointing to the result of the query
 	 */
-	public abstract Cursor query(final Uri uri,
+	public abstract android.database.Cursor query(final Uri uri,
 						final String[] projection,
 						final String selection,
 						final String[] selectionArgs,

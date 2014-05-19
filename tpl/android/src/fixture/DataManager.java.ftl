@@ -1,7 +1,7 @@
 <@header?interpret />
 package ${fixture_namespace};
 
-import android.content.Context;
+
 import android.database.sqlite.SQLiteDatabase;
 
 import java.util.HashMap;
@@ -42,7 +42,7 @@ public class DataManager {
 	 * @param ctx The context
 	 * @param db The DB to work in
 	 */
-	public DataManager(final Context ctx, final SQLiteDatabase db) {
+	public DataManager(final android.content.Context ctx, final SQLiteDatabase db) {
 		this.db = db;
 		<#list entities?values as entity>
 			<#if ((entity.fields?size>0) && !(entity.internal))>

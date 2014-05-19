@@ -4,7 +4,7 @@ package ${project_namespace}.harmony.widget;
 import org.joda.time.DateTime;
 
 import android.app.AlertDialog;
-import android.content.Context;
+
 import android.content.DialogInterface;
 import android.content.res.TypedArray;
 import android.util.AttributeSet;
@@ -61,7 +61,7 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 	 *
 	 * @param context View's context
 	 */
-	public DateTimeWidget(Context context) {
+	public DateTimeWidget(android.content.Context context) {
 		this(context, null);
 	}
 
@@ -71,10 +71,10 @@ public class DateTimeWidget extends FrameLayout implements OnClickListener {
 	 * @param context View's context
 	 * @param attrs The attribute set
 	 */
-	public DateTimeWidget(Context context, AttributeSet attrs) {
+	public DateTimeWidget(android.content.Context context, AttributeSet attrs) {
 		super(context, attrs);
 		LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.widget_datetime, null);
 
 		this.initializeComponent(view);

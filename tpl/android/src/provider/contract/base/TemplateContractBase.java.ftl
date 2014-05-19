@@ -6,7 +6,7 @@
 package ${project_namespace}.provider.contract.base;
 
 import android.content.ContentValues;
-import android.database.Cursor;
+
 
 import java.util.ArrayList;
 
@@ -137,24 +137,24 @@ public abstract class ${curr.name}ContractBase {
 		}
 
 		/**
-		 * Converts a Cursor into a ${curr.name}.
+		 * Converts a android.database.Cursor into a ${curr.name}.
 		 *
 		 * @param cursor The cursor to convert
 		 *
 		 * @return The extracted ${curr.name} 
 		 */
-		public static ${curr.name} cursorToItem(final Cursor cursor) {
+		public static ${curr.name} cursorToItem(final android.database.Cursor cursor) {
 			${curr.name} result = new ${curr.name}();
 			${curr.name?cap_first}Contract.${curr.name}.cursorToItem(cursor, result);
 			return result;
 		}
 
 		/**
-		 * Convert Cursor of database to ${curr.name} entity.
-		 * @param cursor Cursor object
+		 * Convert android.database.Cursor of database to ${curr.name} entity.
+		 * @param cursor android.database.Cursor object
 		 * @param result ${curr.name} entity
 		 */
-		public static void cursorToItem(final Cursor cursor, final ${curr.name} result) {
+		public static void cursorToItem(final android.database.Cursor cursor, final ${curr.name} result) {
 			if (cursor.getCount() != 0) {
 				<#if (InheritanceUtils.isExtended(curr))>
 				${curr.inheritance.superclass.name?cap_first}Contract.${curr.inheritance.superclass.name}.cursorToItem(cursor, result);
@@ -167,11 +167,11 @@ public abstract class ${curr.name}ContractBase {
 		}
 
 		/**
-		 * Convert Cursor of database to Array of ${curr.name} entity.
-		 * @param cursor Cursor object
+		 * Convert android.database.Cursor of database to Array of ${curr.name} entity.
+		 * @param cursor android.database.Cursor object
 		 * @return Array of ${curr.name} entity
 		 */
-		public static ArrayList<${curr.name}> cursorToItems(final Cursor cursor) {
+		public static ArrayList<${curr.name}> cursorToItems(final android.database.Cursor cursor) {
 			final ArrayList<${curr.name}> result = new ArrayList<${curr.name}>(cursor.getCount());
 
 			if (cursor.getCount() != 0) {

@@ -12,7 +12,7 @@ import ${project_namespace}.harmony.view.HarmonyListFragment;
 import com.google.android.pinnedheader.headerlist.PinnedHeaderListView;
 
 import android.content.Intent;
-import android.database.Cursor;
+
 import android.os.Bundle;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
@@ -84,8 +84,8 @@ public class ${curr.name}ListFragment
 	}
 
 	@Override
-	public Loader<Cursor> onCreateLoader(int id, Bundle bundle) {
-		Loader<Cursor> result = null;
+	public Loader<android.database.Cursor> onCreateLoader(int id, Bundle bundle) {
+		Loader<android.database.Cursor> result = null;
 		CriteriaExpression crit = null;
 		if (bundle != null) {
 			crit = (CriteriaExpression) bundle.get(
@@ -117,8 +117,8 @@ public class ${curr.name}ListFragment
 
 	@Override
 	public void onLoadFinished(
-			Loader<Cursor> loader,
-			Cursor data) {
+			Loader<android.database.Cursor> loader,
+			android.database.Cursor data) {
 
 		// Set the new data in the adapter.
 		data.setNotificationUri(this.getActivity().getContentResolver(),
@@ -149,7 +149,7 @@ public class ${curr.name}ListFragment
 	}
 
 	@Override
-	public void onLoaderReset(Loader<Cursor> loader) {
+	public void onLoaderReset(Loader<android.database.Cursor> loader) {
 		// Clear the data in the adapter.
 		this.mAdapter.clear();
 	}

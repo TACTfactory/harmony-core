@@ -4,7 +4,7 @@ package ${project_namespace}.harmony.view;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import android.database.Cursor;
+
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.LoaderManager;
@@ -17,7 +17,7 @@ import android.support.v4.content.Loader;
  * with only one manager.
  *
  */
-public class MultiLoader implements LoaderManager.LoaderCallbacks<Cursor> {
+public class MultiLoader implements LoaderManager.LoaderCallbacks<android.database.Cursor> {
 	/** Uri map. */
 	protected Map<Uri, UriLoadedCallback> uriMap =
 			new LinkedHashMap<Uri, UriLoadedCallback>();
@@ -53,12 +53,12 @@ public class MultiLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 	}
 	
 	@Override
-	public Loader<Cursor> onCreateLoader(int arg0, Bundle arg1) {
+	public Loader<android.database.Cursor> onCreateLoader(int arg0, Bundle arg1) {
 		return this.getLoader((Uri) uriMap.keySet().toArray()[arg0]);
 	}
 
 	@Override
-	public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
+	public void onLoadFinished(Loader<android.database.Cursor> arg0, android.database.Cursor arg1) {
 		Uri uri = ((CursorLoader) arg0).getUri();
 		if (this.uriMap.containsKey(uri)) {
 			if (arg1 != null) {
@@ -73,7 +73,7 @@ public class MultiLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 	}
 	
 	@Override
-	public void onLoaderReset(Loader<Cursor> arg0) {
+	public void onLoaderReset(Loader<android.database.Cursor> arg0) {
 		Uri uri = ((CursorLoader) arg0).getUri();
 		if (this.uriMap.containsKey(uri)) {
 			this.uriMap.get(uri).onLoaderReset();
@@ -100,7 +100,7 @@ public class MultiLoader implements LoaderManager.LoaderCallbacks<Cursor> {
 		/** On load complete. 
 		 * @param c The loaded cursor
 		 */
-		void onLoadComplete(Cursor c);
+		void onLoadComplete(android.database.Cursor c);
 		/** On load reset. */
 		void onLoaderReset();
 	}

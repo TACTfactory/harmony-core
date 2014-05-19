@@ -6,7 +6,7 @@ import java.util.List;
 import ${project_namespace}.R;
 
 import android.app.AlertDialog;
-import android.content.Context;
+
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnMultiChoiceClickListener;
 import android.util.AttributeSet;
@@ -36,7 +36,7 @@ public class MultiEntityWidget
 	/** Constructor.
 	 * @param context The context
 	 */
-	public MultiEntityWidget(Context context) {
+	public MultiEntityWidget(android.content.Context context) {
 		this(context, null);
 	}
 	
@@ -44,10 +44,10 @@ public class MultiEntityWidget
 	 * @param context The context
 	 * @param attrs Attribute set
 	 */
-	public MultiEntityWidget(Context context, AttributeSet attrs) {
+	public MultiEntityWidget(android.content.Context context, AttributeSet attrs) {
 		super(context, attrs);
 		LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.widget_multi_entity, null);
 
 		this.initializeComponent(view);

@@ -4,7 +4,7 @@ package ${project_namespace}.harmony.util;
 import java.io.File;
 
 import android.content.ContentValues;
-import android.content.Context;
+
 
 import com.google.common.base.Strings;
 import com.google.common.io.Files;
@@ -29,7 +29,7 @@ public class DatabaseUtil {
 	 * 			False otherwise.
      * @throws Exception if any parameter is null or empty.
 	 */
-	public static void importDB(Context context,
+	public static void importDB(android.content.Context context,
 			File source,
 			String databaseName,
 			boolean removeSource)
@@ -60,7 +60,7 @@ public class DatabaseUtil {
 	 * @param databaseName The name of the database.
      * @throws Exception if any parameter is null or empty.
 	 */
-	public static void exportDB(Context context,
+	public static void exportDB(android.content.Context context,
 			File destination,
 			String databaseName)
 						throws Exception {

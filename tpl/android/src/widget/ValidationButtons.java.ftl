@@ -3,7 +3,7 @@ package ${project_namespace}.harmony.widget;
 
 import ${project_namespace}.R;
 
-import android.content.Context;
+
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -38,11 +38,11 @@ public class ValidationButtons extends FrameLayout {
 	 * @param context The context
 	 * @param attrs The attribute set
 	 */
-	public ValidationButtons(Context context, AttributeSet attrs) {
+	public ValidationButtons(android.content.Context context, AttributeSet attrs) {
 		super(context, attrs);
 		// TODO Auto-generated constructor stub
 		LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+				.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE);
 		View view = inflater.inflate(R.layout.widget_validation_buttons, null);
 
 		this.initializeComponent(view);

@@ -3,7 +3,7 @@ package ${project_namespace}.harmony.view;
 
 import java.util.List;
 
-import android.content.Context;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -122,7 +122,7 @@ public abstract class HarmonyGridFragment<T> extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
     												Bundle savedInstanceState) {
-        final Context context = getActivity();
+        final android.content.Context context = getActivity();
 
         FrameLayout root = new FrameLayout(context);
 

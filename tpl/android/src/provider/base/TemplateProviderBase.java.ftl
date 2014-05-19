@@ -10,11 +10,11 @@ import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
 import android.content.ContentValues;
-import android.content.Context;
+
 import android.content.OperationApplicationException;
 import android.content.UriMatcher;
 import android.database.ContentObserver;
-import android.database.Cursor;
+
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.util.Log;
@@ -58,9 +58,9 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	private boolean isBatch = false;
 
 	/**
-	 * Context.
+	 * android.content.Context.
 	 */
-	protected Context mContext;
+	protected android.content.Context mContext;
 	
 	/** 
 	 * Hashmap containing the uris to notify at the end of a batch and their
@@ -218,10 +218,10 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 	 * @return A cursor pointing to the result of the query
 	 */
 	@Override
-	public Cursor query(final Uri uri, final String[] projection,
+	public android.database.Cursor query(final Uri uri, final String[] projection,
 			final String selection, final String[] selectionArgs,
 			final String sortOrder) {
-		Cursor result = null;
+		android.database.Cursor result = null;
 		boolean matched = false;
 		boolean alreadyInTransaction = this.db.inTransaction();
 		if (!alreadyInTransaction) {

@@ -16,10 +16,10 @@ package ${curr.controller_namespace};
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Context;
+
 import android.content.DialogInterface;
 import android.content.Intent;
-<#if hasToManyRelation>import android.database.Cursor;</#if>
+<#if hasToManyRelation></#if>
 import android.database.sqlite.SQLiteException;
 <#if hasToManyRelation>import android.net.Uri;</#if>
 import android.os.AsyncTask;
@@ -254,7 +254,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 	 */
 	public static class EditTask extends AsyncTask<Void, Void, Integer> {
 		/** AsyncTask's context. */
-		private final Context ctx;
+		private final android.content.Context ctx;
 		/** Entity to update. */
 		private final ${curr.name} entity;
 		/** Progress Dialog. */
@@ -336,7 +336,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 	 */
 	public static class LoadTask extends AsyncTask<Void, Void, Void> {
 		/** AsyncTask's context. */
-		private final Context ctx;
+		private final android.content.Context ctx;
 		/** Progress Dialog. */
 		private ProgressDialog progress;
 		/** Fragment. */
@@ -385,7 +385,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
 			${field.name}Uri = Uri.withAppendedPath(${field.name}Uri, 
 									String.valueOf(this.fragment.model.get${curr.ids[0].name?cap_first}()));
 			${field.name}Uri = Uri.withAppendedPath(${field.name}Uri, "${field.name}");
-			Cursor ${field.name}Cursor = 
+			android.database.Cursor ${field.name}Cursor = 
 					this.ctx.getContentResolver().query(
 							${field.name}Uri,
 							new String[]{${field.relation.targetEntity}Contract.${field.relation.targetEntity}.ALIASED_COL_${entities[field.relation.targetEntity].ids[0].name?upper_case}},

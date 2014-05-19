@@ -5,7 +5,7 @@ import android.support.v4.app.FragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 
-import android.content.Context;
+
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
@@ -25,7 +25,7 @@ public interface MenuWrapperBase {
 	void initializeMenu(Menu menu,
 			FragmentActivity activity,
 			Fragment fragment,
-			Context ctx);
+			android.content.Context ctx);
 
 	/**
 	 * Menu update.
@@ -37,7 +37,7 @@ public interface MenuWrapperBase {
 	void updateMenu(Menu menu,
 										FragmentActivity activity,
 										Fragment fragment,
-										Context ctx);
+										android.content.Context ctx);
 
 	/**
 	 * Menu dispatch.
@@ -48,7 +48,7 @@ public interface MenuWrapperBase {
 	 * @return true if event has been treated
 	 */
 	boolean dispatch(MenuItem item,
-										 Context ctx,
+										 android.content.Context ctx,
 									     Fragment fragment);
 
 	/**
@@ -64,7 +64,7 @@ public interface MenuWrapperBase {
 	void onActivityResult(int requestCode,
 										      int resultCode,
 											  Intent data,
-											  Context ctx,
+											  android.content.Context ctx,
 											  Fragment fragment);
 
 
@@ -78,7 +78,7 @@ public interface MenuWrapperBase {
 	void clear(Menu menu,
 			FragmentActivity activity,
 			Fragment fragment,
-			Context ctx);
+			android.content.Context ctx);
 
 
 	/**
@@ -91,7 +91,7 @@ public interface MenuWrapperBase {
 	void hide(Menu menu,
 			FragmentActivity activity,
 			Fragment fragment,
-			Context ctx);
+			android.content.Context ctx);
 	
 	/**
 	 * Menu show.
@@ -103,5 +103,5 @@ public interface MenuWrapperBase {
 	void show(Menu menu,
 			FragmentActivity activity,
 			Fragment fragment,
-			Context ctx);
+			android.content.Context ctx);
 }

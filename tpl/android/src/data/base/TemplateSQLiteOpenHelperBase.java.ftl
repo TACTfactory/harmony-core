@@ -23,7 +23,7 @@ import ${project_namespace}.provider.contract.${entity.name?cap_first}Contract;
 </#list>
 import ${project_namespace}.${project_name?cap_first}Application;
 
-import android.content.Context;
+
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.database.sqlite.SQLiteDatabase.CursorFactory;
@@ -45,8 +45,8 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 						extends SQLiteOpenHelper {
 	/** TAG for debug purpose. */
 	protected static final String TAG = "DatabaseHelper";
-	/** Context. */
-	protected Context ctx;
+	/** android.content.Context. */
+	protected android.content.Context ctx;
 
 	/** Android's default system path of the database.
 	 *
@@ -61,12 +61,12 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
 
 	/**
 	 * Constructor.
-	 * @param ctx Context
+	 * @param ctx android.content.Context
 	 * @param name name
 	 * @param factory factory
 	 * @param version version
 	 */
-	public ${project_name?cap_first}SQLiteOpenHelperBase(final Context ctx,
+	public ${project_name?cap_first}SQLiteOpenHelperBase(final android.content.Context ctx,
 		   final String name, final CursorFactory factory, final int version) {
 		super(ctx, name, factory, version);
 		this.ctx = ctx;

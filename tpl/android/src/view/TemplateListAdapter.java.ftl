@@ -8,7 +8,7 @@ import java.util.List;
 
 import ${curr.namespace}.R;
 
-import android.content.Context;
+
 import android.util.AttributeSet;
 import android.view.View;<#if (ViewUtils.hasTypeBoolean(fields?values))>
 import android.widget.CheckBox;</#if>
@@ -43,7 +43,7 @@ public class ${curr.name}ListAdapter
 	 * Constructor.
 	 * @param ctx context
 	 */
-	public ${curr.name}ListAdapter(Context ctx) {
+	public ${curr.name}ListAdapter(android.content.Context ctx) {
 		super(ctx);
 	}
 
@@ -55,7 +55,7 @@ public class ${curr.name}ListAdapter
 	 * @param textViewResourceId The resource id of the text view
 	 * @param objects The list of objects of this adapter
 	 */
-	public ${curr.name}ListAdapter(Context context,
+	public ${curr.name}ListAdapter(android.content.Context context,
 			int resource,
 			int textViewResourceId,
 			List<${curr.name}> objects) {
@@ -70,7 +70,7 @@ public class ${curr.name}ListAdapter
 	 * @param textViewResourceId The resource id of the text view
 	 * @param objects The list of objects of this adapter
 	 */
-	public ${curr.name}ListAdapter(Context context,
+	public ${curr.name}ListAdapter(android.content.Context context,
 			int resource,
 			int textViewResourceId,
 			${curr.name}[] objects) {
@@ -84,7 +84,7 @@ public class ${curr.name}ListAdapter
 	 * @param resource The resource
 	 * @param textViewResourceId The resource id of the text view
 	 */
-	public ${curr.name}ListAdapter(Context context,
+	public ${curr.name}ListAdapter(android.content.Context context,
 			int resource,
 			int textViewResourceId) {
 		super(context, resource, textViewResourceId);
@@ -97,7 +97,7 @@ public class ${curr.name}ListAdapter
 	 * @param textViewResourceId The resource id of the text view
 	 * @param objects The list of objects of this adapter
 	 */
-	public ${curr.name}ListAdapter(Context context,
+	public ${curr.name}ListAdapter(android.content.Context context,
 			int textViewResourceId,
 			List<${curr.name}> objects) {
 		super(context, textViewResourceId, objects);
@@ -110,7 +110,7 @@ public class ${curr.name}ListAdapter
 	 * @param textViewResourceId The resource id of the text view
 	 * @param objects The list of objects of this adapter
 	 */
-	public ${curr.name}ListAdapter(Context context,
+	public ${curr.name}ListAdapter(android.content.Context context,
 			int textViewResourceId,
 			${curr.name}[] objects) {
 		super(context, textViewResourceId, objects);
@@ -122,7 +122,7 @@ public class ${curr.name}ListAdapter
 	 * @param context The context
 	 * @param textViewResourceId The resource id of the text view
 	 */
-	public ${curr.name}ListAdapter(Context context,
+	public ${curr.name}ListAdapter(android.content.Context context,
 			int textViewResourceId) {
 		super(context, textViewResourceId);
 	}
@@ -135,7 +135,7 @@ public class ${curr.name}ListAdapter
 		 *
 		 * @param context The context
 		 */
-		public ViewHolder(Context context) {
+		public ViewHolder(android.content.Context context) {
 			this(context, null);
 		}
 		
@@ -145,7 +145,7 @@ public class ${curr.name}ListAdapter
 		 * @param context The context
 		 * @param attrs The attribute set
 		 */
-		public ViewHolder(Context context, AttributeSet attrs) {
+		public ViewHolder(android.content.Context context, AttributeSet attrs) {
 			super(context, attrs, R.layout.row_${curr.name?lower_case});
 		}
 

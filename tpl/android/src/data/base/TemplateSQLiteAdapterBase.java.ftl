@@ -20,8 +20,8 @@ import org.joda.time.DateTime;
 import org.joda.time.format.ISODateTimeFormat;
 </#if>
 import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
+
+
 import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
@@ -259,7 +259,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * Constructor.
 	 * @param ctx context
 	 */
-	public ${curr.name}SQLiteAdapterBase(final Context ctx) {
+	public ${curr.name}SQLiteAdapterBase(final android.content.Context ctx) {
 		super(ctx);
 		<#if (InheritanceUtils.isExtended(curr))>
 		this.motherAdapter = new ${curr.inheritance.superclass.name}SQLiteAdapter(ctx);
@@ -279,20 +279,20 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	}
 
 	/**
-	 * Convert Cursor of database to ${curr.name} entity.
-	 * @param cursor Cursor object
+	 * Convert android.database.Cursor of database to ${curr.name} entity.
+	 * @param cursor android.database.Cursor object
 	 * @return ${curr.name} entity
 	 */
-	public ${curr.name} cursorToItem(final Cursor cursor) {
+	public ${curr.name} cursorToItem(final android.database.Cursor cursor) {
 		return ${ContractUtils.getContractCursorToItem(curr)}(cursor);
 	}
 
 	/**
-	 * Convert Cursor of database to ${curr.name} entity.
-	 * @param cursor Cursor object
+	 * Convert android.database.Cursor of database to ${curr.name} entity.
+	 * @param cursor android.database.Cursor object
 	 * @param result ${curr.name} entity
 	 */
-	public void cursorToItem(final Cursor cursor, final ${curr.name} result) {
+	public void cursorToItem(final android.database.Cursor cursor, final ${curr.name} result) {
 		${ContractUtils.getContractCursorToItem(curr)}(cursor, result);
 	}
 
@@ -306,7 +306,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	public ${curr.name} getByID(<#list curr_ids as id>final ${FieldsUtils.getJavaType(id)} ${id.name}<#if (id_has_next)>
 							,</#if></#list>) {
 	<#if (curr_ids?size>0)>
-		final Cursor cursor = this.getSingleCursor(<#list curr_ids as id>${id.name}<#if (id_has_next)>,
+		final android.database.Cursor cursor = this.getSingleCursor(<#list curr_ids as id>${id.name}<#if (id_has_next)>,
 										</#if></#list>);
 		if (cursor.getCount() != 0) {
 			cursor.moveToFirst();
@@ -321,7 +321,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		final ${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter =
 				new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
 		${relation.name?uncap_first}Adapter.open(this.mDatabase);
-		Cursor ${relation.name?lower_case}Cursor = ${relation.name?uncap_first}Adapter
+		android.database.Cursor ${relation.name?lower_case}Cursor = ${relation.name?uncap_first}Adapter
 					.getBy${relation.relation.mappedBy?cap_first}(<#list IdsUtils.getAllIdsGetters(curr) as id>
 							result${id},</#list>
 							${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)},
@@ -333,7 +333,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter =
 				new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
 		${relation.relation.joinTable?lower_case}Adapter.open(this.mDatabase);
-		Cursor ${relation.name?lower_case}Cursor = ${relation.relation.joinTable?lower_case}Adapter.getBy${relation.relation.mappedBy?cap_first}(<#list IdsUtils.getAllIdsGetters(curr) as id>
+		android.database.Cursor ${relation.name?lower_case}Cursor = ${relation.relation.joinTable?lower_case}Adapter.getBy${relation.relation.mappedBy?cap_first}(<#list IdsUtils.getAllIdsGetters(curr) as id>
 							result${id},</#list>
 							${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)},
 							null,
@@ -367,7 +367,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @param orderBy Order by string (can be null)
 	 * @return List of ${curr.name} entities
 	 */
-	 public Cursor getBy${relation.name?cap_first}(final int ${relation.name?lower_case}Id, String[] projection, String selection, String[] selectionArgs, String orderBy) {
+	 public android.database.Cursor getBy${relation.name?cap_first}(final int ${relation.name?lower_case}Id, String[] projection, String selection, String[] selectionArgs, String orderBy) {
 		String idSelection = <#list ContractUtils.getFieldsNames(relation) as relName>${relName} + "= ?"<#if relName_has_next>
 				+ " AND "
 				+</#if></#list>;
@@ -379,7 +379,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			selection = idSelection;
 			selectionArgs = new String[]{idSelectionArgs};
 		}
-		final Cursor cursor = this.query(
+		final android.database.Cursor cursor = this.query(
 				projection,
 				selection,
 				selectionArgs,
@@ -399,7 +399,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @return List of ${curr.name} entities
 	 */
 	public ArrayList<${curr.name}> getAll() {
-		final Cursor cursor = this.getAllCursor();
+		final android.database.Cursor cursor = this.getAllCursor();
 		final ArrayList<${curr.name}> result = this.cursorToItems(cursor);
 		cursor.close();
 	<#if (relations??)>
@@ -423,7 +423,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 
 	<#if (singleTabInheritance && !isTopMostSuperClass)>
 	@Override
-	protected Cursor getAllCursor() {
+	protected android.database.Cursor getAllCursor() {
 		return this.query(${ContractUtils.getContractCols(curr, true)},
 				${ContractUtils.getContractCol(curr.inheritance.superclass.inheritance.discriminatorColumn)} + " = ?",
 				new String[]{${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER},
@@ -820,13 +820,13 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	}
 
 	/**
-	 *  Internal Cursor.
+	 *  Internal android.database.Cursor.
 	 <#list curr_ids as id>* @param ${id.name} ${id.name}
 	 </#list>
-	 *  @return A Cursor pointing to the ${curr.name} corresponding
+	 *  @return A android.database.Cursor pointing to the ${curr.name} corresponding
 	 *		to the given id.
 	 */
-	protected Cursor getSingleCursor(<#list curr_ids as id><#if (curr_ids?size > 1)>
+	protected android.database.Cursor getSingleCursor(<#list curr_ids as id><#if (curr_ids?size > 1)>
 						</#if>final ${FieldsUtils.getJavaType(id)} ${id.name}<#if id_has_next>,</#if></#list>) {
 	<#if (curr_ids?size>0)>
 		if (${project_name?cap_first}Application.DEBUG) {
@@ -882,7 +882,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 *
 	 * @return The cursor pointing to the query's result
 	 */
-	public Cursor query(<#list curr_ids as id>final ${FieldsUtils.getJavaType(id)} ${id.name}<#if id_has_next>,
+	public android.database.Cursor query(<#list curr_ids as id>final ${FieldsUtils.getJavaType(id)} ${id.name}<#if id_has_next>,
 				</#if></#list>) {
 		<#if curr_ids?size==0>
 			throw new NotImplementedException(
@@ -929,7 +929,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 		
 		${relation.name}Adapter.open(this.mDatabase);
 		
-		Cursor ${relation.name}Cursor = ${relation.name}Adapter.getBy${curr.name}InternalId(
+		android.database.Cursor ${relation.name}Cursor = ${relation.name}Adapter.getBy${curr.name}InternalId(
 				item.getId(),
 				${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)},
 				null, null, null);
@@ -945,7 +945,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 					
 		${relation.name}Adapter.open(this.mDatabase);
 		
-		Cursor ${relation.name}Cursor = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(
+		android.database.Cursor ${relation.name}Cursor = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(
 				item.getId(),
 				${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)},
 				null, null, null);
@@ -972,7 +972,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	public ArrayList<${curr.name}> getAllForSync() {
 		final ArrayList<${curr.name}> result;
 		
-		final Cursor cursor = this.query(this.getCols(),
+		final android.database.Cursor cursor = this.query(this.getCols(),
 				${curr.name}Contract.${curr.name}.ALIASED_COL_DISCRIMINATORCOLUMN + " IS NULL",
 				new String[]{},
 				null,
@@ -1034,7 +1034,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	 * @param orderBy Order by string (can be null)
 	 * @return ArrayList of ${rightRelation.relation.targetEntity} matching ${leftRelation.name?lower_case}
 	 */
-	public Cursor getBy${leftRelation.name?cap_first}(
+	public android.database.Cursor getBy${leftRelation.name?cap_first}(
 			<#list leftRelation.relation.field_ref as refField>
 			final ${FieldsUtils.getJavaType(refField)} ${leftRelation.name?uncap_first}${refField.name?cap_first},
 			</#list>
@@ -1043,7 +1043,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 			String[] selectionArgs,
 			final String orderBy) {
 
-		Cursor ret = null;
+		android.database.Cursor ret = null;
 		CriteriaExpression crit = new CriteriaExpression(GroupType.AND);
 		<#list leftRelation.relation.field_ref as refField>
 		crit.add(${leftRelationFieldsNames[refField_index]},
@@ -1094,7 +1094,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
 	</#list>
 
 	@Override
-	public Void cursorToItem(Cursor c) {
+	public Void cursorToItem(android.database.Cursor c) {
 		return null;
 	}
 

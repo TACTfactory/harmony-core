@@ -4,7 +4,7 @@ package ${project_namespace}.provider.utils.base;
 import java.util.ArrayList;
 import android.net.Uri;
 
-import android.content.Context;
+
 
 import ${project_namespace}.criterias.base.CriteriaExpression;
 
@@ -15,16 +15,16 @@ import ${project_namespace}.criterias.base.CriteriaExpression;
  */
 public abstract class ProviderUtilsBase<T> {
 	/**
-	 * Context.
+	 * android.content.Context.
 	 */
-	private Context context;
+	private android.content.Context context;
 
 
 	/**
 	 * Constructor.
-	 * @param context Context
+	 * @param context android.content.Context
 	 */
-	public ProviderUtilsBase(Context context) {
+	public ProviderUtilsBase(android.content.Context context) {
 		this.context = context;
 	}
 
@@ -73,7 +73,7 @@ public abstract class ProviderUtilsBase<T> {
 	 * Returns the context.
 	 * @return the context
 	 */
-	public Context getContext() {
+	public android.content.Context getContext() {
 		return this.context;
 	}
 }

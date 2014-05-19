@@ -1,7 +1,7 @@
 <@header?interpret />
 package ${data_namespace};
 
-import android.content.Context;
+
 
 import ${data_namespace}.base.SQLiteAdapterBase;
 
@@ -20,7 +20,7 @@ public abstract class SQLiteAdapter<T> extends SQLiteAdapterBase<T> {
 	 * Constructor.
 	 * @param ctx context
 	 */
-	protected SQLiteAdapter(final Context ctx) {
+	protected SQLiteAdapter(final android.content.Context ctx) {
 		super(ctx);
 	}
 }

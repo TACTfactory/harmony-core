@@ -3,7 +3,7 @@ package com.google.android.pinnedheader;
 import ${project_namespace}.R;
 import com.google.android.pinnedheader.util.ComponentUtils;
 
-import android.content.Context;
+
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -46,7 +46,7 @@ public class SelectionItemView extends ViewGroup {
     	
 	private Rect mBoundsWithoutHeader = new Rect();
 	
-	protected final Context mContext;
+	protected final android.content.Context mContext;
 	
 	// Header layout data
     private boolean mHeaderVisible;
@@ -58,15 +58,15 @@ public class SelectionItemView extends ViewGroup {
 	private ViewGroup innerLayout;
     private int innerLayoutHeight;
     
-    public SelectionItemView(Context context) {
+    public SelectionItemView(android.content.Context context) {
     	this(context, null);
     }
     
-    public SelectionItemView(Context context, AttributeSet attrs) {
+    public SelectionItemView(android.content.Context context, AttributeSet attrs) {
     	this(context, attrs, 0);
     }
 	
-	public SelectionItemView(Context context, AttributeSet attrs, int layout) {
+	public SelectionItemView(android.content.Context context, AttributeSet attrs, int layout) {
 		super(context, attrs);
 		
 		this.mContext = context;

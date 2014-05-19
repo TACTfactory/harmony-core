@@ -6,7 +6,7 @@ package ${fixture_namespace};
 import java.util.ArrayList;
 import java.util.List;
 
-import android.content.Context;
+
 import android.database.sqlite.SQLiteDatabase;
 import android.util.SparseArray;
 import android.util.Log;
@@ -35,8 +35,8 @@ public class DataLoader {
 	private List<FixtureBase<?>> dataLoaders;
 	/** List of Fixture folders. */
 	private static SparseArray<String> fixtureFolders;
-	/** Context. */
-	private Context ctx;
+	/** android.content.Context. */
+	private android.content.Context ctx;
 	/** Has the fixtures been loaded yet ? */
 	public static boolean hasFixturesBeenLoaded = false;
 
@@ -56,7 +56,7 @@ public class DataLoader {
 	 * Constructor.
 	 * @param ctx The context
 	 */
-	public DataLoader(final Context ctx) {
+	public DataLoader(final android.content.Context ctx) {
 		this.ctx = ctx;
 		this.dataLoaders = new ArrayList<FixtureBase<?>>();
 		<#list orderedEntities as entityName>

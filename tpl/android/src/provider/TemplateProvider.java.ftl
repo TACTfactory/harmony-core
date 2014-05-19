@@ -4,7 +4,7 @@ package ${project_namespace}.provider;
 import ${project_namespace}.provider.base.${project_name?cap_first}ProviderBase;
 
 import android.content.ContentValues;
-import android.database.Cursor;
+
 import android.net.Uri;
 
 /**
@@ -68,11 +68,11 @@ public class ${project_name?cap_first}Provider
 	 * @return A cursor pointing to the result of the query
 	 */
 	@Override
-	public Cursor query(final Uri uri, final String[] projection,
+	public android.database.Cursor query(final Uri uri, final String[] projection,
 			final String selection, final String[] selectionArgs,
 			final String sortOrder) {
 
-		Cursor result = null;
+		android.database.Cursor result = null;
 
 		switch (uriMatcher.match(uri)) {
 			default:

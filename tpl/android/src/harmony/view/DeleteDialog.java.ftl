@@ -2,7 +2,7 @@
 package ${project_namespace}.harmony.view;
 
 import android.app.AlertDialog;
-import android.content.Context;
+
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -25,7 +25,7 @@ public class DeleteDialog extends AlertDialog
 	 * @param ctx context
 	 * @param callback The callback
 	 */
-	public DeleteDialog(Context ctx, DeleteDialogCallback callback) {
+	public DeleteDialog(android.content.Context ctx, DeleteDialogCallback callback) {
 		super(ctx);
 		this.callback = callback;
 	}

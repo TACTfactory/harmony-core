@@ -6,7 +6,7 @@ import ${project_namespace}.R;
 import org.joda.time.DateTime;
 
 import android.app.AlertDialog;
-import android.content.Context;
+
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -17,8 +17,8 @@ import android.widget.TimePicker;
  *  A simple AlertDialog containing an TimePicker.
  */
 public class CustomTimePickerDialog extends AlertDialog {
-	/** Context. */
-	private Context ctx;
+	/** android.content.Context. */
+	private android.content.Context ctx;
 	/** time picker. */
 	private TimePicker timePicker;
 	/** title. */
@@ -36,7 +36,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 	 * @param is24HourView Whether this is a 24 hour view, or AM/PM.
 	 * @param title The text of the title.
 	 */
-	public CustomTimePickerDialog(Context ctx, DateTime date,
+	public CustomTimePickerDialog(android.content.Context ctx, DateTime date,
 										boolean is24HourView, String title) {
 		super(ctx);
 
@@ -49,7 +49,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 	 * @param is24HourView Whether this is a 24 hour view, or AM/PM.
 	 * @param titleId The resource id of the title.
 	 */
-	public CustomTimePickerDialog(Context ctx, DateTime date,
+	public CustomTimePickerDialog(android.content.Context ctx, DateTime date,
 										boolean is24HourView, int titleId) {
 		super(ctx);
 
@@ -63,7 +63,7 @@ public class CustomTimePickerDialog extends AlertDialog {
 	 * @param is24HourView Whether this is a 24 hour view, or AM/PM.
 	 * @param title The text of the title.
 	 */
-	private void initializeTimePickerDialog(Context ctx, DateTime date,
+	private void initializeTimePickerDialog(android.content.Context ctx, DateTime date,
 										boolean is24HourView, String title) {
 		this.ctx = ctx;
 		this.title = title;

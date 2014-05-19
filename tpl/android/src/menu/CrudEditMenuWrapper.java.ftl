@@ -1,7 +1,7 @@
 <@header?interpret />
 package ${project_namespace}.menu;
 
-import android.content.Context;
+
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 
@@ -25,7 +25,7 @@ public class CrudEditMenuWrapper implements MenuWrapperBase {
 	
 	@Override
 	public void initializeMenu(Menu menu, FragmentActivity activity,
-			Fragment fragment, Context ctx) {
+			Fragment fragment, android.content.Context ctx) {
 		if ((fragment != null
 				&& fragment instanceof CrudEditMenuInterface)
 				|| activity instanceof CrudEditMenuInterface) {			
@@ -44,7 +44,7 @@ public class CrudEditMenuWrapper implements MenuWrapperBase {
 
 	@Override
 	public void updateMenu(Menu menu, FragmentActivity activity,
-			Fragment fragment, Context ctx) {
+			Fragment fragment, android.content.Context ctx) {
 		if ((fragment != null 
 				&& fragment instanceof CrudEditMenuInterface)
 				|| ctx instanceof CrudEditMenuInterface) {
@@ -54,7 +54,7 @@ public class CrudEditMenuWrapper implements MenuWrapperBase {
 	}
 
 	@Override
-	public boolean dispatch(MenuItem item, Context ctx, Fragment fragment) {
+	public boolean dispatch(MenuItem item, android.content.Context ctx, Fragment fragment) {
 		boolean result = false;
 		if ((fragment != null 
 				&& fragment instanceof CrudEditMenuInterface)
@@ -69,13 +69,13 @@ public class CrudEditMenuWrapper implements MenuWrapperBase {
 
 	@Override
 	public void onActivityResult(int requestCode, int resultCode,
-			Intent data, Context ctx, Fragment fragment) {
+			Intent data, android.content.Context ctx, Fragment fragment) {
 		// We don't need this.
 	}
 
 	@Override
 	public void clear(Menu menu, FragmentActivity activity,
-			Fragment fragment, Context ctx) {
+			Fragment fragment, android.content.Context ctx) {
 		
 		if (fragment != null 
 				&& fragment instanceof CrudEditMenuInterface) {
@@ -85,13 +85,13 @@ public class CrudEditMenuWrapper implements MenuWrapperBase {
 
 	@Override
 	public void hide(Menu menu, FragmentActivity activity, Fragment fragment,
-			Context ctx) {
+			android.content.Context ctx) {
 		this.visible = false;
 	}
 
 	@Override
 	public void show(Menu menu, FragmentActivity activity, Fragment fragment,
-			Context ctx) {
+			android.content.Context ctx) {
 		this.visible = true;
 	}
 

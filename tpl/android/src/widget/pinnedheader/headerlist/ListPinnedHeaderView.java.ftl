@@ -19,7 +19,7 @@ package com.google.android.pinnedheader.headerlist;
 import ${project_namespace}.R;
 import com.google.android.pinnedheader.util.ComponentUtils;
 
-import android.content.Context;
+
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -36,7 +36,7 @@ import android.widget.TextView;
  */
 public class ListPinnedHeaderView extends ViewGroup {
 
-    protected final Context mContext;
+    protected final android.content.Context mContext;
 
     private final int mHeaderTextColor;
     private final int mHeaderTextIndent;
@@ -53,7 +53,7 @@ public class ListPinnedHeaderView extends ViewGroup {
     private TextView mCountTextView = null;
     private View mHeaderDivider;
 
-    public ListPinnedHeaderView(Context context, AttributeSet attrs) {
+    public ListPinnedHeaderView(android.content.Context context, AttributeSet attrs) {
         super(context, attrs);
         mContext = context;
 

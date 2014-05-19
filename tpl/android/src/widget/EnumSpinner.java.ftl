@@ -1,7 +1,7 @@
 <@header?interpret />
 package ${project_namespace}.harmony.widget;
 
-import android.content.Context;
+
 import android.util.AttributeSet;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
@@ -19,7 +19,7 @@ public class EnumSpinner extends Spinner {
 	 * Constructor. 
 	 * @param context component context
 	 */
-	public EnumSpinner(Context context) {
+	public EnumSpinner(android.content.Context context) {
 		super(context);
 		this.initAdapter();
 	}
@@ -29,7 +29,7 @@ public class EnumSpinner extends Spinner {
 	 * @param context component context
 	 * @param attrs attribute set
 	 */
-	public EnumSpinner(Context context, AttributeSet attrs) {
+	public EnumSpinner(android.content.Context context, AttributeSet attrs) {
 		super(context, attrs);
 		this.initAdapter();
 	}
@@ -39,7 +39,7 @@ public class EnumSpinner extends Spinner {
 	 * @param context component context
 	 * @param mode mode
 	 */
-	public EnumSpinner(Context context, int mode) {
+	public EnumSpinner(android.content.Context context, int mode) {
 		super(context, mode);
 		this.initAdapter();
 	}
@@ -50,7 +50,7 @@ public class EnumSpinner extends Spinner {
 	 * @param attrs attribute set
 	 * @param defStyle Def Style
 	 */
-	public EnumSpinner(Context context, AttributeSet attrs, int defStyle) {
+	public EnumSpinner(android.content.Context context, AttributeSet attrs, int defStyle) {
 		super(context, attrs, defStyle);
 		this.initAdapter();
 	}
@@ -62,7 +62,7 @@ public class EnumSpinner extends Spinner {
 	 * @param defStyle Def Style
 	 * @param mode mode
 	 */
-	public EnumSpinner(Context context,
+	public EnumSpinner(android.content.Context context,
 			AttributeSet attrs,
 			int defStyle,
 			int mode) {

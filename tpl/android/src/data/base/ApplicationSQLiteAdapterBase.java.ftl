@@ -5,9 +5,9 @@ import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
 import ${project_namespace}.${project_name?cap_first}Application;
 
 import android.content.ContentValues;
-import android.content.Context;
+
 import android.database.sqlite.SQLiteDatabase;
-import android.database.Cursor;
+
 import android.util.Log;
 
 import java.io.IOException;
@@ -30,8 +30,8 @@ public abstract class SQLiteAdapterBase<T> {
 	public static final String TAG = "${project_name?cap_first}SQLiteAdapterBase";
 
 
-	/** Context. */
-	protected Context ctx;
+	/** android.content.Context. */
+	protected android.content.Context ctx;
 	/**
 	 * Database.
 	 */
@@ -46,7 +46,7 @@ public abstract class SQLiteAdapterBase<T> {
 	 * Constructor.
 	 * @param ctx context
 	 */
-	protected SQLiteAdapterBase(final Context ctx) {
+	protected SQLiteAdapterBase(final android.content.Context ctx) {
 		this.ctx = ctx;
 		this.mBaseHelper = new ${project_name?cap_first}SQLiteOpenHelper(
 				ctx,
@@ -90,7 +90,7 @@ public abstract class SQLiteAdapterBase<T> {
 	 * Get all entities from the DB.
 	 * @return A cursor pointing to all entities
 	 */
-	protected Cursor getAllCursor() {
+	protected android.database.Cursor getAllCursor() {
 		if (${project_name?cap_first}Application.DEBUG) {
 			Log.d(TAG, "Get all entities");
 		}
@@ -113,7 +113,7 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @param orderBy ORDER BY clause
 	 * @return A cursor pointing to the result of the query
 	 */
-	public Cursor query(final String[] projection,
+	public android.database.Cursor query(final String[] projection,
 						final String whereClause,
 						final String[] whereArgs,
 						final String groupBy,
@@ -140,7 +140,7 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @param limit LIMIT clause
 	 * @return A cursor pointing to the result of the query
 	 */
-	public Cursor query(final String[] projection,
+	public android.database.Cursor query(final String[] projection,
 						final String whereClause,
 						final String[] whereArgs,
 						final String groupBy,
@@ -224,7 +224,7 @@ public abstract class SQLiteAdapterBase<T> {
 	 * @return List of T entities
 	 */
 	public ArrayList<T> getAll() {
-		Cursor cursor = this.getAllCursor();
+		android.database.Cursor cursor = this.getAllCursor();
 		ArrayList<T> result = this.cursorToItems(cursor);
 		cursor.close();
 
@@ -243,7 +243,7 @@ public abstract class SQLiteAdapterBase<T> {
 		if (crits == null || crits.isEmpty()) {
 			result = this.getAll();
 		} else {
-			final Cursor cursor = this.query(this.getCols(),
+			final android.database.Cursor cursor = this.query(this.getCols(),
 							crits.toSQLiteSelection(),
 							crits.toSQLiteSelectionArgs(),
 							null,
@@ -257,11 +257,11 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 
 	/**
-	 * Convert Cursor of database to Array of T entity.
-	 * @param cursor Cursor object
+	 * Convert android.database.Cursor of database to Array of T entity.
+	 * @param cursor android.database.Cursor object
 	 * @return Array of T entity
 	 */
-	public ArrayList<T> cursorToItems(final Cursor cursor) {
+	public ArrayList<T> cursorToItems(final android.database.Cursor cursor) {
 		final ArrayList<T> result = new ArrayList<T>(cursor.getCount());
 
 		if (cursor.getCount() != 0) {
@@ -278,11 +278,11 @@ public abstract class SQLiteAdapterBase<T> {
 	}
 
 	/**
-	 * Convert Cursor of database to a T entity.
-	 * @param c Cursor object
+	 * Convert android.database.Cursor of database to a T entity.
+	 * @param c android.database.Cursor object
 	 * @return T entity
 	 */
-	public abstract T cursorToItem(final Cursor c);
+	public abstract T cursorToItem(final android.database.Cursor c);
 
 	/**
 	 * Convert a T item to a ContentValues for the database.

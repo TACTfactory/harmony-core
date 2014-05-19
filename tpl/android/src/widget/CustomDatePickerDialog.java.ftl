@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
 
 import android.annotation.TargetApi;
 import android.app.AlertDialog;
-import android.content.Context;
+
 import android.content.DialogInterface;
 import android.os.Build;
 import android.os.Bundle;
@@ -21,8 +21,8 @@ import android.widget.DatePicker.OnDateChangedListener;
  */
 public class CustomDatePickerDialog extends AlertDialog
 		implements OnDateChangedListener {
-	/** Context. */
-	private Context ctx;
+	/** android.content.Context. */
+	private android.content.Context ctx;
 	/** datePicker. */
 	private DatePicker datePicker;
 	/** Title. */
@@ -43,7 +43,7 @@ public class CustomDatePickerDialog extends AlertDialog
 	 * @param date The initial date of the dialog.
 	 * @param title The text of the title.
 	 */
-	public CustomDatePickerDialog(Context ctx, DateTime date, String title) {
+	public CustomDatePickerDialog(android.content.Context ctx, DateTime date, String title) {
 		super(ctx);
 
 		this.initializeDatePickerDialog(ctx, date, title, null, null);
@@ -54,7 +54,7 @@ public class CustomDatePickerDialog extends AlertDialog
 	 * @param date The initial date of the dialog.
 	 * @param titleId The resource id of the title.
 	 */
-	public CustomDatePickerDialog(Context ctx, DateTime date, int titleId) {
+	public CustomDatePickerDialog(android.content.Context ctx, DateTime date, int titleId) {
 		super(ctx);
 
 		this.initializeDatePickerDialog(
@@ -68,7 +68,7 @@ public class CustomDatePickerDialog extends AlertDialog
 	 * @param minDate The minimum date of the dialog.
 	 * @param maxDate The maximum date of the dialog.
 	 */
-	public CustomDatePickerDialog(Context ctx, DateTime date, String title,
+	public CustomDatePickerDialog(android.content.Context ctx, DateTime date, String title,
 							  final DateTime minDate, final DateTime maxDate) {
 		super(ctx);
 
@@ -82,7 +82,7 @@ public class CustomDatePickerDialog extends AlertDialog
 	 * @param minDate The minimum date of the dialog.
 	 * @param maxDate The maximum date of the dialog.
 	 */
-	public CustomDatePickerDialog(Context ctx, DateTime date, int titleId,
+	public CustomDatePickerDialog(android.content.Context ctx, DateTime date, int titleId,
 							  final DateTime minDate, final DateTime maxDate) {
 		super(ctx);
 
@@ -97,7 +97,7 @@ public class CustomDatePickerDialog extends AlertDialog
 	 * @param minDate The minimum date of the dialog.
 	 * @param maxDate The maximum date of the dialog.
 	 */
-	private void initializeDatePickerDialog(Context ctx, DateTime date,
+	private void initializeDatePickerDialog(android.content.Context ctx, DateTime date,
 	                         String title, DateTime minDate, DateTime maxDate) {
 		this.ctx = ctx;
 		this.title = title;

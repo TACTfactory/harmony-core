@@ -13,10 +13,10 @@ import java.util.ArrayList;
 
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
-import android.database.Cursor;
+
 import android.content.ContentResolver;
 import android.content.ContentValues;
-import android.content.Context;
+
 import android.content.OperationApplicationException;
 import android.net.Uri;
 import android.os.RemoteException;
@@ -57,9 +57,9 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 
 	/**
 	 * Constructor.
-	 * @param context Context
+	 * @param context android.content.Context
 	 */
-	public ${curr.name?cap_first}ProviderUtilsBase(Context context) {
+	public ${curr.name?cap_first}ProviderUtilsBase(android.content.Context context) {
 		super(context);
 	}
 
@@ -344,7 +344,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 					String.valueOf(${idGetters[id_index]}));
 		</#list>
 
-		Cursor cursor = prov.query(
+		android.database.Cursor cursor = prov.query(
 			${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI,
 			${curr.name?cap_first}Contract.${curr.name?cap_first}.ALIASED_COLS,
 			crits.toSQLiteSelection(),
@@ -384,7 +384,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 		ContentResolver prov =
 					this.getContext().getContentResolver();
 
-		Cursor cursor = prov.query(
+		android.database.Cursor cursor = prov.query(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
 				${curr.name?cap_first}Contract.${curr.name?cap_first}.ALIASED_COLS,
 				null,
@@ -408,7 +408,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 					new ArrayList<${curr.name}>();
 		ContentResolver prov = this.getContext().getContentResolver();
 
-		Cursor cursor = prov.query(
+		android.database.Cursor cursor = prov.query(
 				${curr.name}ProviderAdapter.${curr.name?upper_case}_URI,
 				${curr.name?cap_first}Contract.${curr.name?cap_first}.ALIASED_COLS,
 				expression.toSQLiteSelection(),
@@ -685,7 +685,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			final ${curr.name} item) {
 		${relation.relation.targetEntity?cap_first} result;
 		ContentResolver prov = this.getContext().getContentResolver();
-		Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
+		android.database.Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
 				${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI,
 				${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COLS,
 				${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_${NamingUtils.alias(entities[relation.relation.targetEntity].ids[0].name)} + "= ?",
@@ -712,7 +712,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			final ${curr.name} item) {
 		ArrayList<${relation.relation.targetEntity?cap_first}> result;
 		ContentResolver prov = this.getContext().getContentResolver();
-		Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
+		android.database.Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
 				${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI,
 				${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COLS,
 				<#list curr_ids as id>
@@ -739,7 +739,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 			final ${curr.name} item) {
 		ArrayList<${relation.relation.targetEntity?cap_first}> result;
 		ContentResolver prov = this.getContext().getContentResolver();
-		Cursor ${relation.relation.joinTable?uncap_first}Cursor = prov.query(
+		android.database.Cursor ${relation.relation.joinTable?uncap_first}Cursor = prov.query(
 				${relation.relation.joinTable?cap_first}ProviderAdapter.${relation.relation.joinTable?upper_case}_URI,
 				${relation.relation.joinTable?cap_first}Contract.${relation.relation.joinTable?cap_first}.ALIASED_COLS,
 				<#list curr_ids as id>${relation.relation.joinTable?cap_first}Contract.${relation.relation.joinTable?cap_first}.ALIASED_${NamingUtils.alias(relation.relation.mappedBy)}_${id.name?upper_case} 
@@ -769,7 +769,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
 				arrayValue.addValue(<#list entities[relation.relation.targetEntity].ids as id>${relation.relation.targetEntity?uncap_first}${id.name?cap_first}<#if id_has_next> + "::dirtyHack::" + </#if></#list>);
 			}
 			${relation.relation.joinTable?uncap_first}Cursor.close();
-			Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
+			android.database.Cursor ${relation.relation.targetEntity?uncap_first}Cursor = prov.query(
 					${relation.relation.targetEntity?cap_first}ProviderAdapter.${relation.relation.targetEntity?upper_case}_URI,
 					${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity?cap_first}.ALIASED_COLS,
 					${relation.relation.targetEntity?uncap_first}Crits.toSQLiteSelection(),

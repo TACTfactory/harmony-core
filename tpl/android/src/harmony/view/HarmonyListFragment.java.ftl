@@ -3,7 +3,7 @@ package ${project_namespace}.harmony.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.database.Cursor;
+
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.view.View;
@@ -24,7 +24,7 @@ import ${project_namespace}.menu.${project_name?cap_first}Menu;
  * @param <T> Type to show
  */
 public abstract class HarmonyListFragment<T> extends SherlockListFragment
-implements LoaderManager.LoaderCallbacks<Cursor> {
+implements LoaderManager.LoaderCallbacks<android.database.Cursor> {
 	/**
 	 * Recall internal address (Hack Micky).
 	 */
@@ -131,7 +131,7 @@ implements LoaderManager.LoaderCallbacks<Cursor> {
 	}
 
 	@Override
-	public void onLoadFinished(Loader<Cursor> arg0, Cursor arg1) {
+	public void onLoadFinished(Loader<android.database.Cursor> arg0, android.database.Cursor arg1) {
 		this.loadCallback.onListLoaded();
 	}
 

@@ -5,9 +5,9 @@
 <@header?interpret />
 package ${curr.controller_namespace};
 
-import android.content.Context;
+
 import android.content.Intent;
-import android.database.Cursor;
+
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -157,7 +157,7 @@ public class ${curr.name}ShowFragment
 			loader.addUri(Uri.parse(baseUri), new UriLoadedCallback() {
 
 				@Override
-				public void onLoadComplete(Cursor c) {
+				public void onLoadComplete(android.database.Cursor c) {
 					${curr.name}ShowFragment.this.on${curr.name}Loaded(c);
 				}
 
@@ -172,7 +172,7 @@ public class ${curr.name}ShowFragment
 					new UriLoadedCallback() {
 
 				@Override
-				public void onLoadComplete(Cursor c) {
+				public void onLoadComplete(android.database.Cursor c) {
 					${curr.name}ShowFragment.this.on${relation.name?cap_first}Loaded(c);
 				}
 
@@ -192,7 +192,7 @@ public class ${curr.name}ShowFragment
 	 * 
 	 * @param c The cursor of this entity
 	 */
-	public void on${curr.name}Loaded(Cursor c) {
+	public void on${curr.name}Loaded(android.database.Cursor c) {
 		if (c.getCount() > 0) {
 			c.moveToFirst();
 			
@@ -209,7 +209,7 @@ public class ${curr.name}ShowFragment
 	 * 
 	 * @param c The cursor of this relation
 	 */
-	public void on${relation.name?cap_first}Loaded(Cursor c) {
+	public void on${relation.name?cap_first}Loaded(android.database.Cursor c) {
 		if (this.model != null) {
 			if (c != null) {
 		<#if relation.relation.type == "ManyToOne" || relation.relation.type == "OneToOne">
@@ -277,7 +277,7 @@ public class ${curr.name}ShowFragment
 	 */
 	private class DeleteTask extends AsyncTask<Void, Void, Integer> {
 		/** AsyncTask's context. */
-		private Context ctx;
+		private android.content.Context ctx;
 		/** Entity to delete. */
 		private ${curr.name?cap_first} item;
 
@@ -286,7 +286,7 @@ public class ${curr.name}ShowFragment
 		 * @param item The entity to remove from DB
 		 * @param ctx A context to build ${curr.name?cap_first}SQLiteAdapter
 		 */
-		public DeleteTask(final Context ctx,
+		public DeleteTask(final android.content.Context ctx,
 					final ${curr.name?cap_first} item) {
 			super();
 			this.ctx = ctx;

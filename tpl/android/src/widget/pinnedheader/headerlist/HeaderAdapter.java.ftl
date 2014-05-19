@@ -2,8 +2,8 @@ package com.google.android.pinnedheader.headerlist;
 
 import java.util.List;
 
-import android.content.Context;
-import android.database.Cursor;
+
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +32,7 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
      * 
      * @param context The context
      */
-    protected HeaderAdapter(Context context) {
+    protected HeaderAdapter(android.content.Context context) {
         super(context, -1);
         
         this.init();
@@ -46,7 +46,7 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
 	 * @param textViewResourceId The resource id of the text view
 	 * @param objects The list of objects of this adapter
 	 */
-	public HeaderAdapter(Context context, int resource, int textViewResourceId,
+	public HeaderAdapter(android.content.Context context, int resource, int textViewResourceId,
 			List<T> objects) {
 		super(context, resource, textViewResourceId, objects);
 		
@@ -61,7 +61,7 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
 	 * @param textViewResourceId The resource id of the text view
 	 * @param objects The list of objects of this adapter
 	 */
-	public HeaderAdapter(Context context, int resource, int textViewResourceId,
+	public HeaderAdapter(android.content.Context context, int resource, int textViewResourceId,
 			T[] objects) {
 		super(context, resource, textViewResourceId, objects);
 
@@ -75,7 +75,7 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
 	 * @param resource The resource
 	 * @param textViewResourceId The resource id of the text view
 	 */
-	public HeaderAdapter(Context context, int resource, int textViewResourceId) {
+	public HeaderAdapter(android.content.Context context, int resource, int textViewResourceId) {
 		super(context, resource, textViewResourceId);
 		
 		this.init();
@@ -88,7 +88,7 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
 	 * @param textViewResourceId The resource id of the text view
 	 * @param objects The list of objects of this adapter
 	 */
-	public HeaderAdapter(Context context, int textViewResourceId,
+	public HeaderAdapter(android.content.Context context, int textViewResourceId,
 			List<T> objects) {
 		super(context, textViewResourceId, objects);
 		
@@ -102,7 +102,7 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
 	 * @param textViewResourceId The resource id of the text view
 	 * @param objects The list of objects of this adapter
 	 */
-	public HeaderAdapter(Context context, int textViewResourceId, T[] objects) {
+	public HeaderAdapter(android.content.Context context, int textViewResourceId, T[] objects) {
 		super(context, textViewResourceId, objects);
 		
 		this.init();
@@ -114,7 +114,7 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
 	 * @param context The context
 	 * @param textViewResourceId The resource id of the text view
 	 */
-	public HeaderAdapter(Context context, int textViewResourceId) {
+	public HeaderAdapter(android.content.Context context, int textViewResourceId) {
 		super(context, textViewResourceId);
 		
 		this.init();
@@ -394,7 +394,7 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
 		return 1;// getPositionForPartition(viewIndex);
 	}
 	
-	protected View createPinnedSectionHeaderView(Context context, ViewGroup parent) {
+	protected View createPinnedSectionHeaderView(android.content.Context context, ViewGroup parent) {
         return new ListPinnedHeaderView(context, null);
     }
 
@@ -410,7 +410,7 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
         ((ListPinnedHeaderView)header).setCountView(null);
     }
     
-    protected View newHeaderView(Context context, int partition, Cursor cursor, ViewGroup parent) {
+    protected View newHeaderView(android.content.Context context, int partition, android.database.Cursor cursor, ViewGroup parent) {
         LayoutInflater inflater = LayoutInflater.from(context);
         return inflater.inflate(R.layout.directory_header, parent, false);
     }
