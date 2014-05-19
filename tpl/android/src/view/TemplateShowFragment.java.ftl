@@ -132,7 +132,7 @@ public class ${curr.name}ShowFragment
         this.initializeComponent(view);
         
         final Intent intent =  getActivity().getIntent();
-        this.update((${curr.name}) intent.getParcelableExtra(${curr.name}Contract.${curr.name}.PARCEL));
+        this.update((${curr.name}) intent.getParcelableExtra(${ContractUtils.getContractParcel(curr)}));
 
         return view;
     }
@@ -196,7 +196,7 @@ public class ${curr.name}ShowFragment
 		if (c.getCount() > 0) {
 			c.moveToFirst();
 			
-			${curr.name}Contract.${curr.name}.cursorToItem(
+			${ContractUtils.getContractCursorToItem(curr)}(
 						c,
 						this.model);
 			this.loadData();
@@ -215,11 +215,11 @@ public class ${curr.name}ShowFragment
 		<#if relation.relation.type == "ManyToOne" || relation.relation.type == "OneToOne">
 				if (c.getCount() > 0) {
 					c.moveToFirst();
-					this.model.set${relation.name?cap_first}(${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity}.cursorToItem(c));
+					this.model.set${relation.name?cap_first}(${ContractUtils.getContractCursorToItem(entities[relation.relation.targetEntity])}(c));
 					this.loadData();
 				}
 		<#else>
-			this.model.set${relation.name?cap_first}(${relation.relation.targetEntity?cap_first}Contract.${relation.relation.targetEntity}.cursorToItems(c));
+			this.model.set${relation.name?cap_first}(${ContractUtils.getContractCursorToItem(entities[relation.relation.targetEntity])}s(c));
 			this.loadData();
 		</#if>
 			} else {
@@ -240,7 +240,7 @@ public class ${curr.name}ShowFragment
 		final Intent intent = new Intent(getActivity(),
 									${curr.name}EditActivity.class);
 		Bundle extras = new Bundle();
-		extras.putParcelable(${curr.name}Contract.${curr.name}.PARCEL, this.model);
+		extras.putParcelable(${ContractUtils.getContractParcel(curr)}, this.model);
 		intent.putExtras(extras);
 
 		this.getActivity().startActivity(intent);

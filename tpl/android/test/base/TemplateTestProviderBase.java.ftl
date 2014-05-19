@@ -95,7 +95,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
 
 			try {
-				ContentValues values = ${curr.name}Contract.${curr.name}.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
+				ContentValues values = ${ContractUtils.getContractItemToContentValues(curr)}(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				<#list curr_ids as id>
 					<#if id.strategy == "IDENTITY">
 				values.remove(${ContractUtils.getContractCol(id)});
@@ -139,7 +139,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 						null,
 						null);
 				c.moveToFirst();
-				result = ${curr.name}Contract.${curr.name}.cursorToItem(c);
+				result = ${ContractUtils.getContractCursorToItem(curr)}(c);
 				c.close();
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -155,7 +155,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 		ArrayList<${curr.name}> result = null;
 		try {
 			Cursor c = this.provider.query(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, this.adapter.getCols(), null, null, null);
-			result = ${curr.name}Contract.${curr.name}.cursorToItems(c);
+			result = ${ContractUtils.getContractCursorToItem(curr)}s(c);
 			c.close();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -186,7 +186,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 					</#if>
 				</#list>
 
-				ContentValues values = ${curr.name}Contract.${curr.name}.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
+				ContentValues values = ${ContractUtils.getContractItemToContentValues(curr)}(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				result = this.provider.update(
 					Uri.parse(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI<#list IdsUtils.getAllIdsGetters(curr) as id>
 						+ "/"
@@ -211,13 +211,13 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 			${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
 
 			try {
-				ContentValues values = ${curr.name}Contract.${curr.name}.itemToContentValues(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
+				ContentValues values = ${ContractUtils.getContractItemToContentValues(curr)}(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
 				<#list IdsUtils.getAllIdsColsFromArray(curr_ids) as id>
 				values.remove(${id});
 				</#list>
 				<#list ViewUtils.getAllFields(curr)?values as field>
 					<#if field.unique?? && field.unique>
-				values.remove(${field.owner}Contract.${field.owner}.COL_${field.name?upper_case});
+				values.remove(${field.owner}Contract.COL_${field.name?upper_case});
 					</#if>
 				</#list>
 
