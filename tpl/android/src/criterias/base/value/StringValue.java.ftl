@@ -8,56 +8,56 @@ import java.util.ArrayList;
  * A StringValue is a simple String used for criterias.
  */
 public class StringValue extends CriteriaValue {
-	/**
-	 * List of values.
-	 */
-	private String value;
+    /**
+     * List of values.
+     */
+    private String value;
 
-	/**
-	 * Contructor.
-	 * @param value The value of this string.
-	 */
-	public StringValue(String value) {
-		super();
-		this.value = value;
-	}
+    /**
+     * Contructor.
+     * @param value The value of this string.
+     */
+    public StringValue(String value) {
+        super();
+        this.value = value;
+    }
 
-	/**
-	 * Set the value of this StringValue.
-	 * @param value The new value
-	 */
-	public void setValue(String value) {
-		this.value = value;
-	}
+    /**
+     * Set the value of this StringValue.
+     * @param value The new value
+     */
+    public void setValue(String value) {
+        this.value = value;
+    }
 
-	/**
-	 * Get this StringValue's value.
-	 * @return the value
-	 */
-	public String getValue() {
-		return this.value;
-	}
+    /**
+     * Get this StringValue's value.
+     * @return the value
+     */
+    public String getValue() {
+        return this.value;
+    }
 
-	@Override
-	public String toSQLiteString() {
-		return this.value;
-	}
+    @Override
+    public String toSQLiteString() {
+        return this.value;
+    }
 
-	@Override
-	public String toSQLiteSelection() {
-		String result;
-		if (this.value == null) {
-			result = "";
-		} else {
-			result = "?";
-		}
-		return result;
-	}
+    @Override
+    public String toSQLiteSelection() {
+        String result;
+        if (this.value == null) {
+            result = "";
+        } else {
+            result = "?";
+        }
+        return result;
+    }
 
-	@Override
-	public void toSQLiteSelectionArgs(final ArrayList<String> array) {
-		if (this.value != null) {
-			array.add(this.value);
-		}
-	}
+    @Override
+    public void toSQLiteSelectionArgs(final ArrayList<String> array) {
+        if (this.value != null) {
+            array.add(this.value);
+        }
+    }
 }

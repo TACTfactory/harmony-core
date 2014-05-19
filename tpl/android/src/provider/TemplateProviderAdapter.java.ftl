@@ -14,15 +14,15 @@ import ${project_namespace}.provider.base.${project_name?cap_first}ProviderBase;
  * Feel free to override any method here.
  */
 public class ${curr.name?cap_first}ProviderAdapter
-					extends ${curr.name?cap_first}ProviderAdapterBase {
+                    extends ${curr.name?cap_first}ProviderAdapterBase {
 
-	/**
-	 * Constructor.
-	 * @param ctx context
-	 */
-	public ${curr.name?cap_first}ProviderAdapter(
-			final ${project_name?cap_first}ProviderBase provider) {
-		super(provider);
-	}
+    /**
+     * Constructor.
+     * @param ctx context
+     */
+    public ${curr.name?cap_first}ProviderAdapter(
+            final ${project_name?cap_first}ProviderBase provider) {
+        super(provider);
+    }
 }
 

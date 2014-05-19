@@ -12,12 +12,12 @@ import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
 @InheritanceType(InheritanceMode.JOINED)
 public class Furniture {
 
-	@Id
-	private int id;
-	
-	@Column
-	private int price;
-	
-	@Column
-	private DateTime purchaseDate;
+    @Id
+    private int id;
+    
+    @Column
+    private int price;
+    
+    @Column
+    private DateTime purchaseDate;
 }

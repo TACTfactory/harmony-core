@@ -16,19 +16,19 @@ import android.os.Bundle;
  * @see android.app.Activity
  */
 public class ${curr.name}ShowActivity 
-		extends HarmonyFragmentActivity<#if curr.deleteAction> 
-		implements DeleteCallback</#if> {
+        extends HarmonyFragmentActivity<#if curr.deleteAction> 
+        implements DeleteCallback</#if> {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		this.setContentView(R.layout.activity_${curr.name?lower_case}_show);
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.setContentView(R.layout.activity_${curr.name?lower_case}_show);
+    }
 
 <#if curr.deleteAction>
-	@Override
-	public void onItemDeleted() {
-		this.finish();
-	}
+    @Override
+    public void onItemDeleted() {
+        this.finish();
+    }
 </#if>
 }

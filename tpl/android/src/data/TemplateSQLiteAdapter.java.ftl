@@ -13,11 +13,11 @@ import ${data_namespace}.base.${curr.name}SQLiteAdapterBase;
  */
 public class ${curr.name}SQLiteAdapter extends ${curr.name}SQLiteAdapterBase {
 
-	/**
-	 * Constructor.
-	 * @param ctx context
-	 */
-	public ${curr.name}SQLiteAdapter(final android.content.Context ctx) {
-		super(ctx);
-	}
+    /**
+     * Constructor.
+     * @param ctx context
+     */
+    public ${curr.name}SQLiteAdapter(final android.content.Context ctx) {
+        super(ctx);
+    }
 }

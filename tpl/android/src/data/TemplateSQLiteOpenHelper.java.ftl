@@ -12,18 +12,18 @@ import android.database.sqlite.SQLiteDatabase.CursorFactory;
  * @see android.database.sqlite.SQLiteOpenHelper
  */
 public class ${project_name?cap_first}SQLiteOpenHelper
-					extends ${project_name?cap_first}SQLiteOpenHelperBase {
+                    extends ${project_name?cap_first}SQLiteOpenHelperBase {
 
-	/**
-	 * Constructor.
-	 * @param ctx context
-	 * @param name name
-	 * @param factory factory
-	 * @param version version
-	 */
-	public ${project_name?cap_first}SQLiteOpenHelper(final android.content.Context ctx,
-		   final String name, final CursorFactory factory, final int version) {
-		super(ctx, name, factory, version);
-	}
+    /**
+     * Constructor.
+     * @param ctx context
+     * @param name name
+     * @param factory factory
+     * @param version version
+     */
+    public ${project_name?cap_first}SQLiteOpenHelper(final android.content.Context ctx,
+           final String name, final CursorFactory factory, final int version) {
+        super(ctx, name, factory, version);
+    }
 
 }

@@ -89,7 +89,7 @@ public class ListPinnedHeaderView extends ViewGroup {
         mHeaderTextView.setGravity(Gravity.CENTER_VERTICAL);
         
         if (ComponentUtils.isIceCreamSandwich())
-        	mHeaderTextView.setAllCaps(true);
+            mHeaderTextView.setAllCaps(true);
         
         addView(mHeaderTextView);
         mHeaderDivider = new View(mContext);

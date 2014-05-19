@@ -8,22 +8,22 @@ import com.tactfactory.harmony.annotation.OneToOne;
 @Entity
 public class Day {
 
-	@Id
-	private int identifier;
+    @Id
+    private int identifier;
 
-	@Column
-	private int theDay;
+    @Column
+    private int theDay;
 
-	@Column
-	private int month;
+    @Column
+    private int month;
 
-	@Column
-	private int year;
-	
-	@Column
-	private boolean publicHoliday;
-	
-	@OneToOne
-	@Column(nullable=true)
-	private Office officeToClean;
+    @Column
+    private int year;
+    
+    @Column
+    private boolean publicHoliday;
+    
+    @OneToOne
+    @Column(nullable=true)
+    private Office officeToClean;
 }

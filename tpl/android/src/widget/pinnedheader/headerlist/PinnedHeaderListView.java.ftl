@@ -140,8 +140,8 @@ public class PinnedHeaderListView extends AutoScrollListView
 
     @Override
     public void setAdapter(ListAdapter adapter) {
-    	if (this.pinnedHeaderEnabled)
-    		mAdapter = (PinnedHeaderAdapter)adapter;
+        if (this.pinnedHeaderEnabled)
+            mAdapter = (PinnedHeaderAdapter)adapter;
         super.setAdapter(adapter);
     }
 
@@ -526,10 +526,10 @@ public class PinnedHeaderListView extends AutoScrollListView
     }
     
     public void setPinnedHeaderEnabled(boolean enable) {
-    	this.pinnedHeaderEnabled = enable;
+        this.pinnedHeaderEnabled = enable;
     }
     
     public boolean isPinnedHeaderEnabled() {
-    	return this.pinnedHeaderEnabled;
+        return this.pinnedHeaderEnabled;
     }
 }

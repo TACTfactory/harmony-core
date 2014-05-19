@@ -41,114 +41,114 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
     /**
      * Constructor.
      * 
-	 * @param context The context
-	 * @param resource The resource
-	 * @param textViewResourceId The resource id of the text view
-	 * @param objects The list of objects of this adapter
-	 */
-	public HeaderAdapter(android.content.Context context, int resource, int textViewResourceId,
-			List<T> objects) {
-		super(context, resource, textViewResourceId, objects);
-		
-		this.init();
-	}
+     * @param context The context
+     * @param resource The resource
+     * @param textViewResourceId The resource id of the text view
+     * @param objects The list of objects of this adapter
+     */
+    public HeaderAdapter(android.content.Context context, int resource, int textViewResourceId,
+            List<T> objects) {
+        super(context, resource, textViewResourceId, objects);
+        
+        this.init();
+    }
 
-	/**
+    /**
      * Constructor.
      *
-	 * @param context The context
-	 * @param resource The resource
-	 * @param textViewResourceId The resource id of the text view
-	 * @param objects The list of objects of this adapter
-	 */
-	public HeaderAdapter(android.content.Context context, int resource, int textViewResourceId,
-			T[] objects) {
-		super(context, resource, textViewResourceId, objects);
+     * @param context The context
+     * @param resource The resource
+     * @param textViewResourceId The resource id of the text view
+     * @param objects The list of objects of this adapter
+     */
+    public HeaderAdapter(android.content.Context context, int resource, int textViewResourceId,
+            T[] objects) {
+        super(context, resource, textViewResourceId, objects);
 
-		this.init();
-	}
+        this.init();
+    }
 
-	/**
+    /**
      * Constructor.
      * 
-	 * @param context The context
-	 * @param resource The resource
-	 * @param textViewResourceId The resource id of the text view
-	 */
-	public HeaderAdapter(android.content.Context context, int resource, int textViewResourceId) {
-		super(context, resource, textViewResourceId);
-		
-		this.init();
-	}
+     * @param context The context
+     * @param resource The resource
+     * @param textViewResourceId The resource id of the text view
+     */
+    public HeaderAdapter(android.content.Context context, int resource, int textViewResourceId) {
+        super(context, resource, textViewResourceId);
+        
+        this.init();
+    }
 
-	/**
+    /**
      * Constructor.
      * 
-	 * @param context The context
-	 * @param textViewResourceId The resource id of the text view
-	 * @param objects The list of objects of this adapter
-	 */
-	public HeaderAdapter(android.content.Context context, int textViewResourceId,
-			List<T> objects) {
-		super(context, textViewResourceId, objects);
-		
-		this.init();
-	}
+     * @param context The context
+     * @param textViewResourceId The resource id of the text view
+     * @param objects The list of objects of this adapter
+     */
+    public HeaderAdapter(android.content.Context context, int textViewResourceId,
+            List<T> objects) {
+        super(context, textViewResourceId, objects);
+        
+        this.init();
+    }
 
-	/**
+    /**
      * Constructor.
      * 
-	 * @param context The context
-	 * @param textViewResourceId The resource id of the text view
-	 * @param objects The list of objects of this adapter
-	 */
-	public HeaderAdapter(android.content.Context context, int textViewResourceId, T[] objects) {
-		super(context, textViewResourceId, objects);
-		
-		this.init();
-	}
+     * @param context The context
+     * @param textViewResourceId The resource id of the text view
+     * @param objects The list of objects of this adapter
+     */
+    public HeaderAdapter(android.content.Context context, int textViewResourceId, T[] objects) {
+        super(context, textViewResourceId, objects);
+        
+        this.init();
+    }
 
-	/**
+    /**
      * Constructor.
      * 
-	 * @param context The context
-	 * @param textViewResourceId The resource id of the text view
-	 */
-	public HeaderAdapter(android.content.Context context, int textViewResourceId) {
-		super(context, textViewResourceId);
-		
-		this.init();
-	}
-	
-	/**
-	 * Initialize the headers.
-	 */
-	private void init() {
+     * @param context The context
+     * @param textViewResourceId The resource id of the text view
+     */
+    public HeaderAdapter(android.content.Context context, int textViewResourceId) {
+        super(context, textViewResourceId);
+        
+        this.init();
+    }
+    
+    /**
+     * Initialize the headers.
+     */
+    private void init() {
         //Force display for header to true
         this.setSectionHeaderDisplayEnabled(true);
         
         //Force Pinned Header enable to true
         this.setPinnedPartitionHeadersEnabled(true);
-		
-	}
+        
+    }
 
     public void setData(HeaderSectionIndexer<T> sectionIndexer) {
         this.clear();
         
         if (sectionIndexer != null) {
-	        List<T> data = sectionIndexer.getItems();	        
-	        if (data != null) {
-	        	this.mIndexer = sectionIndexer;
-	            for (T item : data) {
-	                this.add(item);
-	            }            
-	        }
+            List<T> data = sectionIndexer.getItems();            
+            if (data != null) {
+                this.mIndexer = sectionIndexer;
+                for (T item : data) {
+                    this.add(item);
+                }            
+            }
         }
     }
     
     public void setData(Iterable<T> data) {
         this.clear();
-        	        
+                    
         if (data != null) {
             for (T item : data) {
                 this.add(item);
@@ -157,11 +157,11 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
     }
     
     /** (non-Javadoc)
-	 * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
-	 */
+     * @see android.widget.ArrayAdapter#getView(int, android.view.View, android.view.ViewGroup)
+     */
     @Override 
     public View getView(int position, View convertView, ViewGroup parent) {
-    	T item = this.getItem(position);        
+        T item = this.getItem(position);        
         return this.bindView(convertView, 0, item, position);
     }
     
@@ -185,8 +185,8 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
 //            view.setCountView(null);
         }
     }
-	
-	public boolean isSectionHeaderDisplayEnabled() {
+    
+    public boolean isSectionHeaderDisplayEnabled() {
         return mSectionHeaderDisplayEnabled;
     }
 
@@ -202,7 +202,7 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
         this.mIndexedPartition = partition;
     }
     
-	/**
+    /**
      * Computes the item's placement within its section and populates the {@code placement}
      * object accordingly.  Please note that the returned object is volatile and should be
      * copied if the result needs to be used later.
@@ -270,7 +270,7 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
 
         return mIndexer.getSectionForPosition(position);
     }
-	
+    
     public boolean getPinnedPartitionHeadersEnabled() {
         return mPinnedPartitionHeadersEnabled;
     }
@@ -279,7 +279,7 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
         this.mPinnedPartitionHeadersEnabled = flag;
     }
     
-	/**
+    /**
      * An item view is displayed differently depending on whether it is placed
      * at the beginning, middle or end of a section. It also needs to know the
      * section header when it is at the beginning of a section. This object
@@ -300,31 +300,31 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
 
     protected boolean isPinnedPartitionHeaderVisible(int partition) {
         return mPinnedPartitionHeadersEnabled 
-//        		&& hasHeader(partition)
+//                && hasHeader(partition)
 //                && !isPartitionEmpty(partition)
                 ;
     }
     
-	@Override
-	public int getPinnedHeaderCount() {
-		if (isSectionHeaderDisplayEnabled() && mPinnedPartitionHeadersEnabled) {
+    @Override
+    public int getPinnedHeaderCount() {
+        if (isSectionHeaderDisplayEnabled() && mPinnedPartitionHeadersEnabled) {
             return this.mIndexer.getSections().length;// + 1;
         } else {
             return 0;
         }
-	}
+    }
 
-	@Override
-	public View getPinnedHeaderView(int viewIndex, View convertView, ViewGroup parent) {
-		View view = null;
-		
-		if (isSectionHeaderDisplayEnabled() && viewIndex == getPinnedHeaderCount() - 1) {
+    @Override
+    public View getPinnedHeaderView(int viewIndex, View convertView, ViewGroup parent) {
+        View view = null;
+        
+        if (isSectionHeaderDisplayEnabled() && viewIndex == getPinnedHeaderCount() - 1) {
             if (mHeader == null) {
                 mHeader = createPinnedSectionHeaderView(this.getContext(), parent);
             }
             view = mHeader;
         } else {
-        	if (mPinnedPartitionHeadersEnabled/*hasHeader(partition)*/) {
+            if (mPinnedPartitionHeadersEnabled/*hasHeader(partition)*/) {
                 if (convertView != null) {
                     Integer headerType = (Integer)convertView.getTag();
                     if (headerType != null && headerType == PARTITION_HEADER_TYPE) {
@@ -339,16 +339,16 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
                 }
                 
                 if (this.mIndexer != null)
-                	bindHeaderView(view, viewIndex, this.mIndexer.getSections()[viewIndex].toString());
+                    bindHeaderView(view, viewIndex, this.mIndexer.getSections()[viewIndex].toString());
             }
         }
-		
-		return view;
-	}
+        
+        return view;
+    }
 
-	@Override
-	public void configurePinnedHeaders(PinnedHeaderListView listView) {
-		if (!mPinnedPartitionHeadersEnabled || this.mIndexer == null) {
+    @Override
+    public void configurePinnedHeaders(PinnedHeaderListView listView) {
+        if (!mPinnedPartitionHeadersEnabled || this.mIndexer == null) {
             return;
         }
 
@@ -386,15 +386,15 @@ public abstract class HeaderAdapter<T> extends ArrayAdapter<T> implements Pinned
                 boolean isLastInSection = position == nextSectionPosition - 1;
                 listView.setFadingHeader(index, listPosition, isLastInSection);
             }
-        }		
-	}
+        }        
+    }
 
-	@Override
-	public int getScrollPositionForHeader(int viewIndex) {
-		return 1;// getPositionForPartition(viewIndex);
-	}
-	
-	protected View createPinnedSectionHeaderView(android.content.Context context, ViewGroup parent) {
+    @Override
+    public int getScrollPositionForHeader(int viewIndex) {
+        return 1;// getPositionForPartition(viewIndex);
+    }
+    
+    protected View createPinnedSectionHeaderView(android.content.Context context, ViewGroup parent) {
         return new ListPinnedHeaderView(context, null);
     }
 

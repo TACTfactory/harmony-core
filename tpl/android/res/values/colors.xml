@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>	
-	<color name="list_item_prefix_highlight_color">#99cc00</color>
-	<color name="list_item_header_color">#33B5E5</color>
+<resources>    
+    <color name="list_item_prefix_highlight_color">#99cc00</color>
+    <color name="list_item_header_color">#33B5E5</color>
 </resources>

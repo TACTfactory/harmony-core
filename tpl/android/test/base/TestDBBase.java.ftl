@@ -11,14 +11,14 @@ import android.test.AndroidTestCase;
  */
 public abstract class TestDBBase extends AndroidTestCase {
 
-	/** The Mocked android {@link android.content.Context}. */
+    /** The Mocked android {@link android.content.Context}. */
     protected TestContextMock testContextMock;
 
-	protected TestDBBase() {
+    protected TestDBBase() {
         this.testContextMock = new TestContextMock(this);
     }
 
-	/* (non-Javadoc)
+    /* (non-Javadoc)
      * @see junit.framework.TestCase#setUp()
      */
     protected void setUp() throws Exception {

@@ -16,11 +16,11 @@ import ${data_namespace}.base.SQLiteAdapterBase;
  */
 public abstract class SQLiteAdapter<T> extends SQLiteAdapterBase<T> {
 
-	/**
-	 * Constructor.
-	 * @param ctx context
-	 */
-	protected SQLiteAdapter(final android.content.Context ctx) {
-		super(ctx);
-	}
+    /**
+     * Constructor.
+     * @param ctx context
+     */
+    protected SQLiteAdapter(final android.content.Context ctx) {
+        super(ctx);
+    }
 }

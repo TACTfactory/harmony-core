@@ -27,227 +27,227 @@ import ${project_namespace}.harmony.util.DateUtils;
  * It is really helpful to let your users chose a date.
  */
 public class DateWidget extends FrameLayout implements OnClickListener {
-	/** Date Click Listener. */
-	private OnDateClickListener dateListener;
-	/** Date Edit Text. */
-	private EditText dateEditText;
-	/** Date dialog title. */
-	private String dialogTitle;
-	/** Default date. */
-	private DateTime defaultDate;
+    /** Date Click Listener. */
+    private OnDateClickListener dateListener;
+    /** Date Edit Text. */
+    private EditText dateEditText;
+    /** Date dialog title. */
+    private String dialogTitle;
+    /** Default date. */
+    private DateTime defaultDate;
 
-	/**
-	 * Constructor.
-	 *
-	 * @param context View's context
-	 */
-	public DateWidget(android.content.Context context) {
-		this(context, null);
-	}
+    /**
+     * Constructor.
+     *
+     * @param context View's context
+     */
+    public DateWidget(android.content.Context context) {
+        this(context, null);
+    }
 
-	/**
-	 * Constructor.
-	 *
-	 * @param context View's context
-	 * @param attrs The attribute set
-	 */
-	public DateWidget(android.content.Context context, AttributeSet attrs) {
-		super(context, attrs);
-		LayoutInflater inflater = (LayoutInflater) context
-				.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE);
-		View view = inflater.inflate(R.layout.widget_date, null);
+    /**
+     * Constructor.
+     *
+     * @param context View's context
+     * @param attrs The attribute set
+     */
+    public DateWidget(android.content.Context context, AttributeSet attrs) {
+        super(context, attrs);
+        LayoutInflater inflater = (LayoutInflater) context
+                .getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE);
+        View view = inflater.inflate(R.layout.widget_date, null);
 
-		this.initializeComponent(view);
-		if (attrs != null) {
-			this.initializeAttributes(attrs);
-		}
-		this.addView(view);
-	}
+        this.initializeComponent(view);
+        if (attrs != null) {
+            this.initializeAttributes(attrs);
+        }
+        this.addView(view);
+    }
 
-	/**
-	 * Initialize this views components.
-	 * @param view The view
-	 */
-	private void initializeComponent(View view) {
-		this.dateEditText = (EditText) view.findViewById(R.id.date);
-		this.dateEditText.setOnClickListener(this);
-	}
+    /**
+     * Initialize this views components.
+     * @param view The view
+     */
+    private void initializeComponent(View view) {
+        this.dateEditText = (EditText) view.findViewById(R.id.date);
+        this.dateEditText.setOnClickListener(this);
+    }
 
-	/**
-	 * Initialize this views attribute set.
-	 * @param attrs the attribute set
-	 */
-	private void initializeAttributes(AttributeSet attrs) {
-		TypedArray a = this.getContext().getTheme().obtainStyledAttributes(
-		        attrs,
-		        R.styleable.DateWidget,
-		        0, 0);
+    /**
+     * Initialize this views attribute set.
+     * @param attrs the attribute set
+     */
+    private void initializeAttributes(AttributeSet attrs) {
+        TypedArray a = this.getContext().getTheme().obtainStyledAttributes(
+                attrs,
+                R.styleable.DateWidget,
+                0, 0);
 
-		   try {
-		       // Dialog Title
-		       this.dialogTitle = a.getString(
-		    		   R.styleable.DateWidget_dateWidget_dialogTitle);
-		       if (this.dialogTitle == null) {
-		    	   int rId = a.getResourceId(
-			    		   R.styleable.DateWidget_dateWidget_dialogTitle,
-			    		   0);
-		    	   this.dialogTitle = this.getContext().getString(rId);
-		       }
+           try {
+               // Dialog Title
+               this.dialogTitle = a.getString(
+                       R.styleable.DateWidget_dateWidget_dialogTitle);
+               if (this.dialogTitle == null) {
+                   int rId = a.getResourceId(
+                           R.styleable.DateWidget_dateWidget_dialogTitle,
+                           0);
+                   this.dialogTitle = this.getContext().getString(rId);
+               }
 
-		   } finally {
-		       a.recycle();
-		   }
-	}
+           } finally {
+               a.recycle();
+           }
+    }
 
-	@Override
-	public void onClick(View arg0) {
-		if (this.dateListener != null) {
-			this.dateListener.onClickDateEditText(this);
-		}
-		DateTime dt;
-		if (this.defaultDate == null) {
-			dt = DateTime.now();
-		} else {
-			dt = this.defaultDate;
-		}
+    @Override
+    public void onClick(View arg0) {
+        if (this.dateListener != null) {
+            this.dateListener.onClickDateEditText(this);
+        }
+        DateTime dt;
+        if (this.defaultDate == null) {
+            dt = DateTime.now();
+        } else {
+            dt = this.defaultDate;
+        }
 
         final String createdAtDate =
-        		this.dateEditText.getText().toString();
-		if (!Strings.isNullOrEmpty(createdAtDate)) {
-			final String strInputDate =
-					createdAtDate;
-			dt = DateUtils.formatStringToDate(strInputDate);
-		}
+                this.dateEditText.getText().toString();
+        if (!Strings.isNullOrEmpty(createdAtDate)) {
+            final String strInputDate =
+                    createdAtDate;
+            dt = DateUtils.formatStringToDate(strInputDate);
+        }
 
-	    final CustomDatePickerDialog datePicker =
-	    		new CustomDatePickerDialog(
-	    				getContext(),
-	    				dt,
-	    				this.dialogTitle);
+        final CustomDatePickerDialog datePicker =
+                new CustomDatePickerDialog(
+                        getContext(),
+                        dt,
+                        this.dialogTitle);
 
-	    DialogClickListener listener = new DialogClickListener(this);
-	    datePicker.setPositiveButton(android.R.string.ok, listener);
-	    datePicker.setNegativeButton(android.R.string.cancel, listener);
-	    datePicker.show();
-	}
+        DialogClickListener listener = new DialogClickListener(this);
+        datePicker.setPositiveButton(android.R.string.ok, listener);
+        datePicker.setNegativeButton(android.R.string.cancel, listener);
+        datePicker.show();
+    }
 
-	/**
-	 * Clear the date field.
-	 */
-	public void clearDate() {
-		this.dateEditText.setText("");
-	}
-	
-	/**
-	 * Set the default date when user click and field is empty.
-	 */
-	public void setDefaultDate(DateTime defaultDate) {
-		this.defaultDate = defaultDate;
-	}
+    /**
+     * Clear the date field.
+     */
+    public void clearDate() {
+        this.dateEditText.setText("");
+    }
+    
+    /**
+     * Set the default date when user click and field is empty.
+     */
+    public void setDefaultDate(DateTime defaultDate) {
+        this.defaultDate = defaultDate;
+    }
 
-	/**
-	 * Set the component date.
-	 *
-	 * @param date The date to set
-	 */
-	public void setDate(DateTime date) {
-		this.dateEditText.setText(DateUtils.formatDateToString(date));
-	}
+    /**
+     * Set the component date.
+     *
+     * @param date The date to set
+     */
+    public void setDate(DateTime date) {
+        this.dateEditText.setText(DateUtils.formatDateToString(date));
+    }
 
-	/**
-	 * Get the component date.
-	 *
-	 * @return The date
-	 */
-	public DateTime getDate() {
-		DateTime result;
-		if (Strings.isNullOrEmpty(this.dateEditText.getText().toString())) {
-			result = null;
-		} else {
-			result = DateUtils.formatStringToDate(
-					this.dateEditText.getText().toString());
-		}
-		return result;
-	}
+    /**
+     * Get the component date.
+     *
+     * @return The date
+     */
+    public DateTime getDate() {
+        DateTime result;
+        if (Strings.isNullOrEmpty(this.dateEditText.getText().toString())) {
+            result = null;
+        } else {
+            result = DateUtils.formatStringToDate(
+                    this.dateEditText.getText().toString());
+        }
+        return result;
+    }
 
-	/**
-	 * Internal Click Listener for the dialog.
-	 */
-	private class DialogClickListener
-				implements DialogInterface.OnClickListener {
-		/** The date widget associated to this listener. */
-		private DateWidget dateWidget;
+    /**
+     * Internal Click Listener for the dialog.
+     */
+    private class DialogClickListener
+                implements DialogInterface.OnClickListener {
+        /** The date widget associated to this listener. */
+        private DateWidget dateWidget;
 
-		/**
-		 * Constructor.
-		 *
-		 * @param dateWidget The datewidget
-		 */
-		public DialogClickListener(DateWidget dateWidget) {
-			this.dateWidget = dateWidget;
-		}
+        /**
+         * Constructor.
+         *
+         * @param dateWidget The datewidget
+         */
+        public DialogClickListener(DateWidget dateWidget) {
+            this.dateWidget = dateWidget;
+        }
 
-		@Override
-		public void onClick(DialogInterface dialog, int which) {
-			switch (which) {
-				case AlertDialog.BUTTON_POSITIVE :
-					final DatePicker dp =
-						((CustomDatePickerDialog) dialog).getDatePicker();
-					final DateTime date =
-						new DateTime(dp.getYear(),
-								dp.getMonth() + 1,
-								dp.getDayOfMonth(),
-								0,
-								0);
-					this.dateWidget.setDate(date);
-					if (DateWidget.this.dateListener != null) {
-						DateWidget.this.dateListener.onValidateDate(DateWidget.this);
-					}
-					break;
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+            switch (which) {
+                case AlertDialog.BUTTON_POSITIVE :
+                    final DatePicker dp =
+                        ((CustomDatePickerDialog) dialog).getDatePicker();
+                    final DateTime date =
+                        new DateTime(dp.getYear(),
+                                dp.getMonth() + 1,
+                                dp.getDayOfMonth(),
+                                0,
+                                0);
+                    this.dateWidget.setDate(date);
+                    if (DateWidget.this.dateListener != null) {
+                        DateWidget.this.dateListener.onValidateDate(DateWidget.this);
+                    }
+                    break;
 
-				case AlertDialog.BUTTON_NEGATIVE :
-					if (DateWidget.this.dateListener != null) {
-						DateWidget.this.dateListener.onCancelDate(DateWidget.this);
-					}
-					break;
-				default:
-					break;
-			}
-		}
-	}
+                case AlertDialog.BUTTON_NEGATIVE :
+                    if (DateWidget.this.dateListener != null) {
+                        DateWidget.this.dateListener.onCancelDate(DateWidget.this);
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
 
-	/**
-	 * Sets an OnDateClickListener for this view.
-	 *
-	 * @param listener The listener to set
-	 */
-	public void setOnDateClickListener(OnDateClickListener listener) {
-		this.dateListener = listener;
-	}
+    /**
+     * Sets an OnDateClickListener for this view.
+     *
+     * @param listener The listener to set
+     */
+    public void setOnDateClickListener(OnDateClickListener listener) {
+        this.dateListener = listener;
+    }
 
-	/**
-	 * Remove the current OnDateClickListener.
-	 */
-	public void removeOnDateClickListener() {
-		this.dateListener = null;
-	}
+    /**
+     * Remove the current OnDateClickListener.
+     */
+    public void removeOnDateClickListener() {
+        this.dateListener = null;
+    }
 
-	/** Widget Interface for click events. */
-	public interface OnDateClickListener {
-		/**
-		 * Called when User click on the Date EditText.
-		 */
-		void onClickDateEditText(DateWidget dateWidget);
+    /** Widget Interface for click events. */
+    public interface OnDateClickListener {
+        /**
+         * Called when User click on the Date EditText.
+         */
+        void onClickDateEditText(DateWidget dateWidget);
 
-		/**
-		 * Called when User click on the date picker dialog's ok button.
-		 */
-		void onValidateDate(DateWidget dateWidget);
+        /**
+         * Called when User click on the date picker dialog's ok button.
+         */
+        void onValidateDate(DateWidget dateWidget);
 
-		/**
-		 * Called when User click on the date picker dialog's cancel button.
-		 */
-		void onCancelDate(DateWidget dateWidget);
-	}
+        /**
+         * Called when User click on the date picker dialog's cancel button.
+         */
+        void onCancelDate(DateWidget dateWidget);
+    }
 
 }

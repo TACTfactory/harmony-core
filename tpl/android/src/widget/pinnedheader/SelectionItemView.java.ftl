@@ -23,7 +23,7 @@ import android.widget.TextView;
 
 public class SelectionItemView extends ViewGroup {
 
-	// Horizontal divider between contact views.
+    // Horizontal divider between contact views.
     private boolean mHorizontalDividerVisible;
     private Drawable mHorizontalDividerDrawable;
     private int mHorizontalDividerHeight;
@@ -43,35 +43,35 @@ public class SelectionItemView extends ViewGroup {
     //private ColorStateList mSecondaryTextColor;
     
     private boolean mActivatedStateSupported;
-    	
-	private Rect mBoundsWithoutHeader = new Rect();
-	
-	protected final android.content.Context mContext;
-	
-	// Header layout data
+        
+    private Rect mBoundsWithoutHeader = new Rect();
+    
+    protected final android.content.Context mContext;
+    
+    // Header layout data
     private boolean mHeaderVisible;
     private View mHeaderDivider;
     private int mHeaderBackgroundHeight;
     private TextView mHeaderTextView;
     
-	// List item objects	
-	private ViewGroup innerLayout;
+    // List item objects    
+    private ViewGroup innerLayout;
     private int innerLayoutHeight;
     
     public SelectionItemView(android.content.Context context) {
-    	this(context, null);
+        this(context, null);
     }
     
     public SelectionItemView(android.content.Context context, AttributeSet attrs) {
-    	this(context, attrs, 0);
+        this(context, attrs, 0);
     }
-	
-	public SelectionItemView(android.content.Context context, AttributeSet attrs, int layout) {
-		super(context, attrs);
-		
-		this.mContext = context;
-				
-		// Read all style values
+    
+    public SelectionItemView(android.content.Context context, AttributeSet attrs, int layout) {
+        super(context, attrs);
+        
+        this.mContext = context;
+                
+        // Read all style values
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.ContactListItemView);
         
         mActivatedBackgroundDrawable = a.getDrawable(
@@ -92,36 +92,36 @@ public class SelectionItemView extends ViewGroup {
         mHeaderUnderlineColor = a.getColor(
                 R.styleable.ContactListItemView_list_item_header_underline_color, 0);
         
-		this.mPreferredHeight = 0;
-		this.mTextIndent = 0;
-		
-//	    this.mVerticalDividerMargin = 0;
-//	    this.mCountViewTextSize = 0;
-//	    this.mCountViewTextColor = 0;	    
-	    
-		if (this.mHorizontalDividerDrawable != null) {
-			this.mHorizontalDividerHeight = this.mHorizontalDividerDrawable.getIntrinsicHeight();
-			this.mHorizontalDividerVisible = true;
-		}
-	    
-	    if (mActivatedBackgroundDrawable != null) {
+        this.mPreferredHeight = 0;
+        this.mTextIndent = 0;
+        
+//        this.mVerticalDividerMargin = 0;
+//        this.mCountViewTextSize = 0;
+//        this.mCountViewTextColor = 0;        
+        
+        if (this.mHorizontalDividerDrawable != null) {
+            this.mHorizontalDividerHeight = this.mHorizontalDividerDrawable.getIntrinsicHeight();
+            this.mHorizontalDividerVisible = true;
+        }
+        
+        if (mActivatedBackgroundDrawable != null) {
             mActivatedBackgroundDrawable.setCallback(this);
-	    }
-	    
-	    //Force ActivatedStateSupport to true
-	    this.setActivatedStateSupported(true);
-	    
-	    if (layout != 0) {
-	        this.innerLayout = (ViewGroup) inflate(context, layout, null);
-		    this.addView(this.innerLayout);
-	    }
-	}
-	
-	protected ViewGroup getInnerLayout(){
-		return this.innerLayout;
-	}
-	
-	@Override
+        }
+        
+        //Force ActivatedStateSupport to true
+        this.setActivatedStateSupported(true);
+        
+        if (layout != 0) {
+            this.innerLayout = (ViewGroup) inflate(context, layout, null);
+            this.addView(this.innerLayout);
+        }
+    }
+    
+    protected ViewGroup getInnerLayout(){
+        return this.innerLayout;
+    }
+    
+    @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         // We will match parent's width and wrap content vertically, but make sure
         // height is no less than listPreferredItemHeight.
@@ -145,10 +145,10 @@ public class SelectionItemView extends ViewGroup {
         // Also calculate their heights to get the total height for this entire view.
 
         if (isVisible(this.innerLayout)){
-        	this.innerLayout.measure(
+            this.innerLayout.measure(
                 MeasureSpec.makeMeasureSpec(effectiveWidth, MeasureSpec.EXACTLY),
                 MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED));
-        	this.innerLayoutHeight = this.innerLayout.getMeasuredHeight();
+            this.innerLayoutHeight = this.innerLayout.getMeasuredHeight();
         }
         
         // Calculate height including padding.
@@ -182,8 +182,8 @@ public class SelectionItemView extends ViewGroup {
 
         setMeasuredDimension(specWidth, height);
     }
-	
-	@Override
+    
+    @Override
     protected void onLayout(boolean changed, int left, int top, int right, int bottom) {
         final int height = bottom - top;
         final int width = right - left;
@@ -241,15 +241,15 @@ public class SelectionItemView extends ViewGroup {
         int textTopBound = (bottomBound + topBound - totalTextHeight) / 2;
 
         if (isVisible(this.innerLayout)) {
-        	this.innerLayout.layout(leftBound,
+            this.innerLayout.layout(leftBound,
                     textTopBound,
                     rightBound,
                     textTopBound + this.innerLayoutHeight);
             textTopBound += this.innerLayoutHeight;
         }
     }
-	
-	/**
+    
+    /**
      * Sets section header or makes it invisible if the title is null.
      */
     public void setSectionHeader(String title) {
@@ -272,7 +272,7 @@ public class SelectionItemView extends ViewGroup {
             mHeaderDivider.setVisibility(View.VISIBLE);
             
             if (ComponentUtils.isIceCreamSandwich())
-            	mHeaderTextView.setAllCaps(true);
+                mHeaderTextView.setAllCaps(true);
             
             mHeaderVisible = true;
         } else {
@@ -286,15 +286,15 @@ public class SelectionItemView extends ViewGroup {
         }
     }
     
-	@Override
+    @Override
     protected void drawableStateChanged() {
         super.drawableStateChanged();
         if (mActivatedStateSupported) {
             mActivatedBackgroundDrawable.setState(getDrawableState());
         }
     }
-	
-	@Override
+    
+    @Override
     protected boolean verifyDrawable(Drawable who) {
         return who == mActivatedBackgroundDrawable || super.verifyDrawable(who);
     }
@@ -337,17 +337,17 @@ public class SelectionItemView extends ViewGroup {
     protected boolean isVisible(View view) {
         return view != null && view.getVisibility() == View.VISIBLE;
     }
-	
-	private TruncateAt getTextEllipsis() {
+    
+    private TruncateAt getTextEllipsis() {
         return TruncateAt.MARQUEE;
     }
-	
-	public void setActivatedStateSupported(boolean flag) {
-		if (this.mActivatedBackgroundDrawable != null)
-			this.mActivatedStateSupported = flag;
+    
+    public void setActivatedStateSupported(boolean flag) {
+        if (this.mActivatedBackgroundDrawable != null)
+            this.mActivatedStateSupported = flag;
     }
-	
-	protected void setMarqueeText(TextView textView, CharSequence text) {
+    
+    protected void setMarqueeText(TextView textView, CharSequence text) {
         if (getTextEllipsis() == TruncateAt.MARQUEE) {
             // To show MARQUEE correctly (with END effect during non-active state), we need
             // to build Spanned with MARQUEE in addition to TextView's ellipsize setting.
