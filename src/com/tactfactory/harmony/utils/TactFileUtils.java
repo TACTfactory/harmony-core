@@ -72,6 +72,9 @@ public abstract class TactFileUtils extends FileUtils {
 	 */
 	public static void copyfile(final File srcFile, final File destFile) {
 		try {
+		    if (!destFile.getParentFile().exists()) {
+		        destFile.getParentFile().mkdirs();
+		    }
 			Files.copy(srcFile, destFile);
 		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);

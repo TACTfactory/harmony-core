@@ -978,7 +978,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<IUpdater> result = new ArrayList<IUpdater>();
         
         String templatePath = this.adapter.getTemplateSourceFixturePath();
-        String filePath = "fixtures/";
+        String filePath = this.adapter.getAssetsPath();
         
         result.add(new SourceFile(
                 templatePath + "TemplateFixture." + fixtureType,

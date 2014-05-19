@@ -19,9 +19,9 @@ import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
 import com.tactfactory.harmony.Harmony;
+import com.tactfactory.harmony.command.FixtureCommand;
 import com.tactfactory.harmony.command.OrmCommand;
 import com.tactfactory.harmony.command.ProjectCommand;
-import com.tactfactory.harmony.fixture.command.FixtureCommand;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.test.CommonTest;
@@ -197,7 +197,7 @@ public class FixtureGlobalTest extends CommonTest {
 						"fixture",
 						"xml");
 
-		final String destDir = String.format("fixtures/");
+        final String destDir = String.format("app/android/assets/");
 
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
@@ -220,7 +220,7 @@ public class FixtureGlobalTest extends CommonTest {
 						"fixture",
 						"yml");
 
-		final String destDir = String.format("fixtures/");
+		final String destDir = String.format("app/android/assets/");
 
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);

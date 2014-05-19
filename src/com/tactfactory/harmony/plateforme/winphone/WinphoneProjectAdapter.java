@@ -15,6 +15,7 @@ import com.tactfactory.harmony.plateforme.winphone.updater.XmlResourcesWinphone;
 import com.tactfactory.harmony.plateforme.winphone.updater.ProjectUpdater.FileType;
 import com.tactfactory.harmony.template.CommonGenerator.ViewType;
 import com.tactfactory.harmony.updater.IUpdater;
+import com.tactfactory.harmony.updater.impl.CopyFile;
 import com.tactfactory.harmony.updater.impl.SourceFile;
 import com.tactfactory.harmony.updater.old.IConfigFileUtil;
 import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
@@ -491,34 +492,58 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 	public List<IUpdater> getFixtureAssets() {
     	List<IUpdater> result = new ArrayList<IUpdater>();
     	
-    	File assets = new File(this.adapter.getAssetsPath() + "app");
-    	
-    	if (assets.exists() && assets.isDirectory()) {
-    		for (File file : assets.listFiles()) {
-    			result.add(new ProjectUpdater(
-    	                FileType.Content,
-    	                this.adapter.getAssets() + "/app/" + file.getName()));
-			}
-    	}
-    	
-    	assets = new File(this.adapter.getAssetsPath() + "debug");
-    	
-    	if (assets.exists() && assets.isDirectory()) {
-    		for (File file : assets.listFiles()) {
-    			result.add(new ProjectUpdater(
-    	                FileType.Content,
-    	                this.adapter.getAssets() + "/debug/" + file.getName()));
-			}
-    	}
-    	
-		assets = new File(this.adapter.getAssetsPath() + "test");
-    	
-    	if (assets.exists() && assets.isDirectory()) {
-    		for (File file : assets.listFiles()) {
-    			result.add(new ProjectUpdater(
-    	                FileType.Content,
-    	                this.adapter.getAssets() + "/test/" + file.getName()));
-			}
+    	File androidAssets = new File("app/android/assets/");
+    	if (androidAssets.exists() && androidAssets.isDirectory()) {
+    	    
+        	File assets = new File(this.adapter.getAssetsPath() + "app");
+        	androidAssets = new File("app/android/assets/app");
+        	
+        	if (androidAssets.exists() && androidAssets.isDirectory()) {
+        		for (File file : androidAssets.listFiles()) {
+        		    result.add(new CopyFile(
+        		            file,
+        		            new File(assets.getAbsolutePath() 
+        		                    + "/" 
+        		                    + file.getName())));
+        			result.add(new ProjectUpdater(
+        	                FileType.Content,
+        	                this.adapter.getAssets() + "/app/" + file.getName()));
+    			}
+        	}
+        	
+        	assets = new File(this.adapter.getAssetsPath() + "debug");
+            androidAssets = new File("app/android/assets/debug");
+        	
+
+            if (androidAssets.exists() && androidAssets.isDirectory()) {
+                for (File file : androidAssets.listFiles()) {
+                    result.add(new CopyFile(
+                            file,
+                            new File(assets.getAbsolutePath() 
+                                    + "/" 
+                                    + file.getName())));
+                    result.add(new ProjectUpdater(
+                            FileType.Content,
+                            this.adapter.getAssets() + "/debug/" + file.getName()));
+                }
+            }
+        	
+    		assets = new File(this.adapter.getAssetsPath() + "test");
+            androidAssets = new File("app/android/assets/test");
+        	
+            if (androidAssets.exists() && androidAssets.isDirectory()) {
+                for (File file : androidAssets.listFiles()) {
+                    result.add(new CopyFile(
+                            file,
+                            new File(assets.getAbsolutePath() 
+                                    + "/" 
+                                    + file.getName())));
+                    result.add(new ProjectUpdater(
+                            FileType.Content,
+                            this.adapter.getAssets() + "/test/" + file.getName()));
+                }
+            }
+            
     	}
         
         return result;
