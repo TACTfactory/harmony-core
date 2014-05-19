@@ -185,7 +185,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 			String[] selectionArgs) {
 		<#if (curr.options.sync??)>
 		ContentValues deleteCv = new ContentValues();
-		deleteCv.put(${ContractUtils.getContractClass(curr)}.COL_SYNC_DTAG, 1);
+		deleteCv.put(<#if InheritanceUtils.isExtended(curr)>${ContractUtils.getContractClass(curr.inheritance.superclass)}<#else>${ContractUtils.getContractClass(curr)}</#if>.COL_SYNC_DTAG, 1);
 		</#if>
 		int matchedUri = ${project_name?cap_first}ProviderBase
 					.getUriMatcher().match(uri);
@@ -462,7 +462,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 			final ContentValues values,
 			String selection,
 			String[] selectionArgs) {
-		<#if (curr.options.sync??)>values.put(${ContractUtils.getContractClass(curr)}.COL_SYNC_UDATE,
+		<#if (curr.options.sync??)>values.put(<#if InheritanceUtils.isExtended(curr)>${ContractUtils.getContractClass(curr.inheritance.superclass)}<#else>${ContractUtils.getContractClass(curr)}</#if>.COL_SYNC_UDATE,
 					new DateTime().toString(ISODateTimeFormat.dateTime()));</#if>
 		<#if inherited && joinedInheritance>ContentValues ${curr.name?uncap_first}Values = DatabaseUtil.extractContentValues(values, ${ContractUtils.getContractCols(curr)});</#if>
 		int matchedUri = ${project_name?cap_first}ProviderBase.getUriMatcher()
@@ -632,7 +632,7 @@ public abstract class ${curr.name?cap_first}ProviderAdapterBase
 						+ " AND "
 						+</#if></#list>;
 		<#if curr.options.sync??>
-		selection += " AND " + ${ContractUtils.getContractClass(curr)}.ALIASED_COL_SYNC_DTAG + " = ?";</#if>
+		selection += " AND " + <#if InheritanceUtils.isExtended(curr)>${ContractUtils.getContractClass(curr.inheritance.superclass)}<#else>${ContractUtils.getContractClass(curr)}</#if>.ALIASED_COL_SYNC_DTAG + " = ?";</#if>
 		<#if inherited && singleTabInheritance>
 		selection += " AND " + ${ContractUtils.getContractCol(curr.inheritance.superclass.inheritance.discriminatorColumn, true)} + " = ?";
 		</#if>
