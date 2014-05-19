@@ -40,7 +40,7 @@ import junit.framework.Assert;
  * You should edit ${curr.name}TestDB class instead of this one or you will lose all your modifications.</i></b>
  */
 public abstract class ${curr.name}TestProviderBase extends TestDBBase {
-    protected Context ctx;
+    protected android.content.Context ctx;
 
     protected ${curr.name}SQLiteAdapter adapter;
 
@@ -130,7 +130,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
 
         if (this.entity != null) {
             try {
-                Cursor c = this.provider.query(Uri.parse(
+                android.database.Cursor c = this.provider.query(Uri.parse(
                         ${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI<#list IdsUtils.getAllIdsGetters(curr) as id>
                                 + "/" 
                                 + this.entity${id}</#list>),
@@ -154,7 +154,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
     public void testReadAll() {
         ArrayList<${curr.name}> result = null;
         try {
-            Cursor c = this.provider.query(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, this.adapter.getCols(), null, null, null);
+            android.database.Cursor c = this.provider.query(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, this.adapter.getCols(), null, null, null);
             result = ${ContractUtils.getContractCursorToItem(curr)}s(c);
             c.close();
         } catch (Exception e) {
