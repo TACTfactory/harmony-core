@@ -27,16 +27,16 @@
 	<#assign fieldsNames = ContractUtils.getColumnsNames(field) />
 	<#assign result = "" />
 	<#list fieldsNames as fieldName>
-		<#assign result = result + "		/** ${fieldName}. */\n" />
-		<#assign result = result + "		public static final String ${NamingUtils.alias(fieldName)} =\n" />
+		<#assign result = result + "	/** ${fieldName}. */\n" />
+		<#assign result = result + "	public static final String ${NamingUtils.alias(fieldName)} =\n" />
 		<#if field.relation??>
-			<#assign result = result + "				\"${field.columnName}_${field.relation.field_ref[fieldName_index].name}\";\n"/>
+			<#assign result = result + "			\"${field.columnName}_${field.relation.field_ref[fieldName_index].name}\";\n"/>
 		<#else>
-			<#assign result = result + "				\"${field.columnName}\";\n"/>
+			<#assign result = result + "			\"${field.columnName}\";\n"/>
 		</#if>
-		<#assign result = result + "		/** Alias. */\n" />
-		<#assign result = result + "		public static final String ALIASED_${NamingUtils.alias(fieldName)} =\n" />
-		<#assign result = result + "				" />
+		<#assign result = result + "	/** Alias. */\n" />
+		<#assign result = result + "	public static final String ALIASED_${NamingUtils.alias(fieldName)} =\n" />
+		<#assign result = result + "			" />
 		<#if !field.columnResult>
 			<#assign result = result + "${entity.name?cap_first}Contract.TABLE_NAME + \".\" + " />
 		</#if>
