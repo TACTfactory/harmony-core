@@ -12,13 +12,13 @@ import com.tactfactory.harmony.annotation.OneToMany;
 @Entity
 public class Company {
 
-	@Id
-	@GeneratedValue(strategy=Strategy.MODE_IDENTITY)
-	private int id;
-	
-	@Column
-	private String name;
-	
-	@OneToMany(mappedBy="company")
-	private ArrayList<Person> employees;
+    @Id
+    @GeneratedValue(strategy=Strategy.MODE_IDENTITY)
+    private int id;
+    
+    @Column
+    private String name;
+    
+    @OneToMany(mappedBy="company")
+    private ArrayList<Person> employees;
 }

@@ -7,9 +7,9 @@ import com.tactfactory.harmony.annotation.ManyToOne;
 @Entity
 public class Worker extends Person {
 
-	@ManyToOne
-	@Column(nullable=true)
-	private Manager manager;
-	
-	
+    @ManyToOne
+    @Column(nullable=true)
+    private Manager manager;
+    
+    
 }

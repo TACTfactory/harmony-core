@@ -13,31 +13,31 @@ import java.util.List;
  */
 public abstract class HeaderSectionIndexer<T> implements SectionIndexer {
 
-	private List<T> items;
+    private List<T> items;
     private ArrayList<String> mSections = new ArrayList<String>();
     private ArrayList<Integer> mPositions = new ArrayList<Integer>();
     private static final String BLANK_HEADER_STRING = " ";
     private int totalCount;
     
     protected HeaderSectionIndexer(List<T> items) {  
-    	this.items = items;
-    	this.totalCount = items.size();
-    	        
-    	int size = items.size();
+        this.items = items;
+        this.totalCount = items.size();
+                
+        int size = items.size();
         for (int i = 0; i < size; i++) {
-        	String header = this.getHeaderText(items.get(i));
-        	        
-        	if (!mSections.contains(header)) {        		
-	            if (TextUtils.isEmpty(header)) {
-	                mSections.add(BLANK_HEADER_STRING);
-	            } else if (!header.equals(BLANK_HEADER_STRING)) {
-	                mSections.add(header.trim());
-	            } else {
-	            	mSections.add(header);
-	            }
-	            
-	            mPositions.add(i);
-        	}
+            String header = this.getHeaderText(items.get(i));
+                    
+            if (!mSections.contains(header)) {                
+                if (TextUtils.isEmpty(header)) {
+                    mSections.add(BLANK_HEADER_STRING);
+                } else if (!header.equals(BLANK_HEADER_STRING)) {
+                    mSections.add(header.trim());
+                } else {
+                    mSections.add(header);
+                }
+                
+                mPositions.add(i);
+            }
         }
     }
     
@@ -48,15 +48,15 @@ public abstract class HeaderSectionIndexer<T> implements SectionIndexer {
     }
     
     public List<T> getItems(){
-    	return this.items;
+        return this.items;
     }
 
     public int getPositionForSection(int section) {
-    	if (section < 0 || section >= mPositions.size()) {
+        if (section < 0 || section >= mPositions.size()) {
             return -1;
         }
-    	
-    	return mPositions.get(section);
+        
+        return mPositions.get(section);
     }
 
     public int getSectionForPosition(int position) {

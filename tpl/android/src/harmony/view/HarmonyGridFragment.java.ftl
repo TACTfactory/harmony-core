@@ -3,7 +3,7 @@ package ${project_namespace}.harmony.view;
 
 import java.util.List;
 
-import android.content.Context;
+
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
@@ -32,14 +32,14 @@ import android.widget.TextView;
  * @param <T> The type to hold
  */
 public abstract class HarmonyGridFragment<T> extends Fragment
-							 implements LoaderManager.LoaderCallbacks<List<T>> {
-	/**
-	 * Empty ID.
-	 */
-	protected static final int INTERNAL_EMPTY_ID = 0x00ff0001;
-	/**
-	 * Progress container ID.
-	 */
+                             implements LoaderManager.LoaderCallbacks<List<T>> {
+    /**
+     * Empty ID.
+     */
+    protected static final int INTERNAL_EMPTY_ID = 0x00ff0001;
+    /**
+     * Progress container ID.
+     */
     protected static final int INTERNAL_PROGRESS_CONTAINER_ID = 0x00ff0002;
     /**
      * List container ID.
@@ -66,7 +66,7 @@ public abstract class HarmonyGridFragment<T> extends Fragment
     private final AdapterView.OnItemClickListener mOnClickListener
             = new AdapterView.OnItemClickListener() {
         public void onItemClick(final AdapterView<?> parent, final View v, 
-        									final int position, final long id) {
+                                            final int position, final long id) {
             onListItemClick((GridView) parent, v, position, id);
         }
     };
@@ -121,8 +121,8 @@ public abstract class HarmonyGridFragment<T> extends Fragment
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-    												Bundle savedInstanceState) {
-        final Context context = getActivity();
+                                                    Bundle savedInstanceState) {
+        final android.content.Context context = getActivity();
 
         FrameLayout root = new FrameLayout(context);
 
@@ -138,11 +138,11 @@ public abstract class HarmonyGridFragment<T> extends Fragment
                 android.R.attr.progressBarStyleLarge);
         pframe.addView(progress, new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, 
-                						  ViewGroup.LayoutParams.WRAP_CONTENT));
+                                          ViewGroup.LayoutParams.WRAP_CONTENT));
 
         root.addView(pframe, new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, 
-                						  ViewGroup.LayoutParams.MATCH_PARENT));
+                                          ViewGroup.LayoutParams.MATCH_PARENT));
 
         // ------------------------------------------------------------------
 
@@ -154,24 +154,24 @@ public abstract class HarmonyGridFragment<T> extends Fragment
         tv.setGravity(Gravity.CENTER);
         lframe.addView(tv, new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                					      ViewGroup.LayoutParams.MATCH_PARENT));
+                                          ViewGroup.LayoutParams.MATCH_PARENT));
         
         GridView lv = new GridView(getActivity());
         lv.setId(android.R.id.list);
         lv.setDrawSelectorOnTop(false);
         lframe.addView(lv, new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, 
-                						  ViewGroup.LayoutParams.MATCH_PARENT));
+                                          ViewGroup.LayoutParams.MATCH_PARENT));
 
         root.addView(lframe, new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, 
-                						  ViewGroup.LayoutParams.MATCH_PARENT));
+                                          ViewGroup.LayoutParams.MATCH_PARENT));
         
         // ------------------------------------------------------------------
 
         root.setLayoutParams(new FrameLayout.LayoutParams(
                 ViewGroup.LayoutParams.MATCH_PARENT, 
-                						  ViewGroup.LayoutParams.MATCH_PARENT));
+                                          ViewGroup.LayoutParams.MATCH_PARENT));
         
         return root;
     }
@@ -212,7 +212,7 @@ public abstract class HarmonyGridFragment<T> extends Fragment
      * @param id The row id of the item that was clicked
      */
     public void onListItemClick(final GridView l, final View v, 
-    										final int position, final long id) {
+                                            final int position, final long id) {
     }
 
     /**
@@ -280,7 +280,7 @@ public abstract class HarmonyGridFragment<T> extends Fragment
         ensureList();
         if (mStandardEmptyView == null) {
             throw new IllegalStateException(
-            						"Can't be used with a custom content view");
+                                    "Can't be used with a custom content view");
         }
         mStandardEmptyView.setText(text);
         if (mEmptyText == null) {
@@ -331,7 +331,7 @@ public abstract class HarmonyGridFragment<T> extends Fragment
         ensureList();
         if (mProgressContainer == null) {
             throw new IllegalStateException(
-            						"Can't be used with a custom content view");
+                                    "Can't be used with a custom content view");
         }
         if (mListShown == shown) {
             return;
@@ -387,21 +387,21 @@ public abstract class HarmonyGridFragment<T> extends Fragment
             mGrid = (GridView) root;
         } else {
             mStandardEmptyView = 
-            					(TextView) root.findViewById(INTERNAL_EMPTY_ID);
+                                (TextView) root.findViewById(INTERNAL_EMPTY_ID);
             if (mStandardEmptyView == null) {
                 mEmptyView = root.findViewById(android.R.id.empty);
             } else {
                 mStandardEmptyView.setVisibility(View.GONE);
             }
             mProgressContainer =
-            				  root.findViewById(INTERNAL_PROGRESS_CONTAINER_ID);
+                              root.findViewById(INTERNAL_PROGRESS_CONTAINER_ID);
             mListContainer = root.findViewById(INTERNAL_LIST_CONTAINER_ID);
             View rawGridView = root.findViewById(android.R.id.list);
             if (!(rawGridView instanceof GridView)) {
                 if (rawGridView == null) {
                     throw new RuntimeException(
                             "Your content must have a GridView whose id "
-                    		+ "attribute is 'android.R.id.list'");
+                            + "attribute is 'android.R.id.list'");
                 }
                 throw new RuntimeException(
                         "Content has view with id attribute 'android.R.id.list'"

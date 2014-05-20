@@ -16,24 +16,24 @@ import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
 @InheritanceType(InheritanceMode.SINGLE_TABLE)
 public class Person {
 
-	@Id
-	private String firstname;
-	
-	@Id
-	private String lastname;
-	
-	@ColumnResult(columnName="firstname || ' ' || lastname")
-	private String name;
-	
-	@Column(type=Type.PHONE)
-	private String phoneNumber;
-	
-	@ManyToOne(inversedBy="employees")
-	private Company company;
-	
-	@ManyToMany(inversedBy="inhabitants", mappedBy="inhabitants")
-	private ArrayList<Address> addresses;
-	
-	@ManyToMany
-	private ArrayList<Day> holidays;
+    @Id
+    private String firstname;
+    
+    @Id
+    private String lastname;
+    
+    @ColumnResult(columnName="firstname || ' ' || lastname")
+    private String name;
+    
+    @Column(type=Type.PHONE)
+    private String phoneNumber;
+    
+    @ManyToOne(inversedBy="employees")
+    private Company company;
+    
+    @ManyToMany(inversedBy="inhabitants", mappedBy="inhabitants")
+    private ArrayList<Address> addresses;
+    
+    @ManyToMany
+    private ArrayList<Day> holidays;
 }

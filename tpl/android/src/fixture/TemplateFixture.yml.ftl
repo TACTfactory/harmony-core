@@ -3,7 +3,7 @@
 ${curr.name}:
 #   ${curr.name}_name:
 <#list ViewUtils.getAllFields(curr)?values as field>
-	<#if !field.internal>
+    <#if !field.internal>
 #      ${field.name}:
-	</#if>
+    </#if>
 </#list>

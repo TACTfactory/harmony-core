@@ -2,7 +2,7 @@
 package ${project_namespace}.test.base;
 
 import android.app.Service;
-import android.content.Context;
+
 import android.test.AndroidTestCase;
 import android.test.ServiceTestCase;;
 
@@ -14,15 +14,15 @@ import android.test.ServiceTestCase;;
 public abstract class TestServiceBase<T extends Service>
         extends ServiceTestCase<T> {
 
-	/** The Mocked android {@link Context}. */
+    /** The Mocked android {@link android.content.Context}. */
     protected TestContextMock testContextMock;
 
-	protected TestServiceBase(Class<T> serviceClass) {
+    protected TestServiceBase(Class<T> serviceClass) {
         super(serviceClass);
         this.testContextMock = new TestContextMock(this);
     }
 
-	/* (non-Javadoc)
+    /* (non-Javadoc)
      * @see junit.framework.TestCase#setUp()
      */
     protected void setUp() throws Exception {

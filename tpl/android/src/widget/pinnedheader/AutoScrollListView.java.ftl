@@ -16,7 +16,7 @@
 
 package com.google.android.pinnedheader;
 
-import android.content.Context;
+
 import android.util.AttributeSet;
 import android.widget.ListView;
 
@@ -35,15 +35,15 @@ public class AutoScrollListView extends ListView {
     private int mRequestedScrollPosition = -1;
     private boolean mSmoothScrollRequested;
 
-    public AutoScrollListView(Context context) {
+    public AutoScrollListView(android.content.Context context) {
         super(context);
     }
 
-    public AutoScrollListView(Context context, AttributeSet attrs) {
+    public AutoScrollListView(android.content.Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public AutoScrollListView(Context context, AttributeSet attrs, int defStyle) {
+    public AutoScrollListView(android.content.Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
     }
 

@@ -29,11 +29,11 @@
     <property file="ant.properties" />
 
     <!-- If sdk.dir was not set from one of the property file, then
-		 get it from the ANDROID_HOME env var.
-	     This must be done before we load project.properties since
-	     the proguard config can use sdk.dir
-	-->
-	<property environment="env"/>
+         get it from the ANDROID_HOME env var.
+         This must be done before we load project.properties since
+         the proguard config can use sdk.dir
+    -->
+    <property environment="env"/>
 
     <!-- The project.properties file is created and updated by the 'android'
          tool, as well as ADT.

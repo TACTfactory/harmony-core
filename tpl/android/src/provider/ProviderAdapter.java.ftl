@@ -14,14 +14,14 @@ import ${project_namespace}.data.base.SQLiteAdapterBase;
  */
 public abstract class ProviderAdapter<T> extends ProviderAdapterBase<T> {
 
-	/**
-	 * Provider Adapter Base constructor.
-	 *
-	 * @param context The context.
-	 */
-	public ProviderAdapter(
-				final ${project_name?cap_first}ProviderBase provider,
-				final SQLiteAdapterBase<T> adapter) {
-		super(provider, adapter);
-	}
+    /**
+     * Provider Adapter Base constructor.
+     *
+     * @param context The context.
+     */
+    public ProviderAdapter(
+                final ${project_name?cap_first}ProviderBase provider,
+                final SQLiteAdapterBase<T> adapter) {
+        super(provider, adapter);
+    }
 }
