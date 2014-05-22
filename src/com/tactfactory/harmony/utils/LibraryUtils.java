@@ -11,7 +11,6 @@ package com.tactfactory.harmony.utils;
 import java.io.File;
 
 import com.tactfactory.harmony.Harmony;
-import com.tactfactory.harmony.exception.HarmonyException;
 import com.tactfactory.harmony.plateforme.IAdapter;
 
 /**
