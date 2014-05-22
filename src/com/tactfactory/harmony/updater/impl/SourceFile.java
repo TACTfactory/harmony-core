@@ -2,6 +2,12 @@ package com.tactfactory.harmony.updater.impl;
 
 import com.tactfactory.harmony.updater.IUpdater;
 
+/** 
+ * Command of generator for copy file.
+ * 
+ * @author Erwan LeHuitouze <erwan.lehuitouze@tactfactory.com>
+ * @author Mickael Gaillard <mickael.gaillard@tactfactory.com>
+ */
 public final class SourceFile implements IUpdater {
     private final String templateSource;
     private final String fileDestination;
