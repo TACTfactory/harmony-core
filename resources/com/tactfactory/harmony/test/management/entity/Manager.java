@@ -6,6 +6,6 @@ import com.tactfactory.harmony.annotation.Entity;
 @Entity
 public class Manager extends Person {
 
-	@Column(nullable=true)
-	private int salary;
+    @Column(nullable=true)
+    private int salary;
 }

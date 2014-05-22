@@ -6,15 +6,15 @@ import android.widget.ListView;
 import ${project_namespace}.R;
 
 public class ComponentUtils {
-	
-	public static void configureVerticalScrollbar(ListView listView, int verticalScrollbarPosition) {
+    
+    public static void configureVerticalScrollbar(ListView listView, int verticalScrollbarPosition) {
         boolean hasScrollbar = true;//isVisibleScrollbarEnabled() && isSectionHeaderDisplayEnabled();
 
         if (listView != null) {
-        	listView.setFastScrollEnabled(hasScrollbar);
-        	listView.setFastScrollAlwaysVisible(hasScrollbar);
-        	listView.setVerticalScrollbarPosition(verticalScrollbarPosition);
-        	listView.setScrollBarStyle(ListView.SCROLLBARS_OUTSIDE_OVERLAY);
+            listView.setFastScrollEnabled(hasScrollbar);
+            listView.setFastScrollAlwaysVisible(hasScrollbar);
+            listView.setVerticalScrollbarPosition(verticalScrollbarPosition);
+            listView.setScrollBarStyle(ListView.SCROLLBARS_OUTSIDE_OVERLAY);
             int leftPadding = 0;
             int rightPadding = 0;
             if (verticalScrollbarPosition == View.SCROLLBAR_POSITION_LEFT) {
@@ -28,9 +28,9 @@ public class ComponentUtils {
                     rightPadding, listView.getPaddingBottom());
         }
     }
-	
-	public static boolean isIceCreamSandwich() {
-		int currentapiVersion = android.os.Build.VERSION.SDK_INT;
-		return (currentapiVersion >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH);
-	}
+    
+    public static boolean isIceCreamSandwich() {
+        int currentapiVersion = android.os.Build.VERSION.SDK_INT;
+        return (currentapiVersion >= android.os.Build.VERSION_CODES.ICE_CREAM_SANDWICH);
+    }
 }

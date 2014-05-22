@@ -18,7 +18,7 @@ package com.google.android.pinnedheader.headerlist;
 
 import com.google.android.pinnedheader.AutoScrollListView;
 
-import android.content.Context;
+
 import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
@@ -110,15 +110,15 @@ public class PinnedHeaderListView extends AutoScrollListView
     private int mHeaderPaddingLeft;
     private int mHeaderWidth;
 
-    public PinnedHeaderListView(Context context) {
+    public PinnedHeaderListView(android.content.Context context) {
         this(context, null, android.R.attr.listViewStyle);
     }
 
-    public PinnedHeaderListView(Context context, AttributeSet attrs) {
+    public PinnedHeaderListView(android.content.Context context, AttributeSet attrs) {
         this(context, attrs, android.R.attr.listViewStyle);
     }
 
-    public PinnedHeaderListView(Context context, AttributeSet attrs, int defStyle) {
+    public PinnedHeaderListView(android.content.Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         super.setOnScrollListener(this);
         super.setOnItemSelectedListener(this);
@@ -140,8 +140,8 @@ public class PinnedHeaderListView extends AutoScrollListView
 
     @Override
     public void setAdapter(ListAdapter adapter) {
-    	if (this.pinnedHeaderEnabled)
-    		mAdapter = (PinnedHeaderAdapter)adapter;
+        if (this.pinnedHeaderEnabled)
+            mAdapter = (PinnedHeaderAdapter)adapter;
         super.setAdapter(adapter);
     }
 
@@ -526,10 +526,10 @@ public class PinnedHeaderListView extends AutoScrollListView
     }
     
     public void setPinnedHeaderEnabled(boolean enable) {
-    	this.pinnedHeaderEnabled = enable;
+        this.pinnedHeaderEnabled = enable;
     }
     
     public boolean isPinnedHeaderEnabled() {
-    	return this.pinnedHeaderEnabled;
+        return this.pinnedHeaderEnabled;
     }
 }

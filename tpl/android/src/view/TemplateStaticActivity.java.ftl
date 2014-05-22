@@ -16,11 +16,11 @@ import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
  * @see android.app.Activity
  */
 public class ${viewName}Activity 
-		extends HarmonyFragmentActivity {
+        extends HarmonyFragmentActivity {
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		this.setContentView(R.layout.activity_${viewName?lower_case});
-	}
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.setContentView(R.layout.activity_${viewName?lower_case});
+    }
 }

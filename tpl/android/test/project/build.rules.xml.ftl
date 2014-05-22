@@ -1,23 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="harmony-rules-test" default="help">
-	<property name="reports.dir" value="tmp" />
+    <property name="reports.dir" value="tmp" />
     <property name="tested.manifest.package" value="${project_namespace}" />
 
     <target name="test-report">
-    	<echo>Downloading XML test report...</echo>
-    	<mkdir dir="tmp"/>
-    	<exec executable="${sdk.dir}/platform-tools/adb" failonerror="true">
-			<arg value="pull" />
-			<arg value="/data/data/${project_namespace}/files/junit-report.xml" />
-			<arg value="tmp/junit-report.xml" />
-   		</exec>
-   		
-   		<fail message="Tests failed!!!">
-     		<condition>
-         		<contains string="${r"${tests.output}"}" substring="FAILURES" />
-     		</condition>
-		</fail>
-	</target>
+        <echo>Downloading XML test report...</echo>
+        <mkdir dir="tmp"/>
+        <exec executable="${sdk.dir}/platform-tools/adb" failonerror="true">
+            <arg value="pull" />
+            <arg value="/data/data/${project_namespace}/files/junit-report.xml" />
+            <arg value="tmp/junit-report.xml" />
+           </exec>
+           
+           <fail message="Tests failed!!!">
+             <condition>
+                 <contains string="${r"${tests.output}"}" substring="FAILURES" />
+             </condition>
+        </fail>
+    </target>
 
     <target name="test" depends="-test-project-check"
                 description="Runs tests from the package defined in test.package property">

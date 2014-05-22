@@ -7,7 +7,7 @@ import org.joda.time.DateTime;
 
 public abstract class TestUtils{
 
-	private static final Random RANDOM = new Random();
+    private static final Random RANDOM = new Random();
 
      /**
       * <p>Creates a random string based on a variety of options, using
@@ -104,71 +104,71 @@ public abstract class TestUtils{
      }
 
      public static String generateRandomString(int length){
-    	 return random(length, 0, 0, true, true, null, RANDOM);
+         return random(length, 0, 0, true, true, null, RANDOM);
      }
 
      public static int generateRandomInt(int min, int max){
-    	 return (int)generateRandomDouble(min, max);
+         return (int)generateRandomDouble(min, max);
      }
 
      public static double generateRandomDouble(double min, double max){
-    	 return Math.random()*(max-min)+min;
+         return Math.random()*(max-min)+min;
      }
 
      public static float generateRandomFloat(float min, float max){
-    	 return (float)generateRandomDouble(min, max);
+         return (float)generateRandomDouble(min, max);
      }
 
      public static short generateRandomShort(){
-    	 return (short) (Math.random() * (Short.MAX_VALUE));
+         return (short) (Math.random() * (Short.MAX_VALUE));
      }
 
      public static byte generateRandomByte(){
-    	 return (byte) (Math.random() * (Byte.MAX_VALUE));
+         return (byte) (Math.random() * (Byte.MAX_VALUE));
      }
 
      public static char generateRandomChar(){
-    	 return (char) (Math.random() * (Character.MAX_VALUE));
+         return (char) (Math.random() * (Character.MAX_VALUE));
      }
 
      public static boolean generateRandomBool(){
-    	 return (Math.random()>0.5);
+         return (Math.random()>0.5);
      }
 
      public static DateTime generateRandomDateTime(){
-    	 DateTime date = generateRandomDate();
-    	 DateTime time = generateRandomTime();
+         DateTime date = generateRandomDate();
+         DateTime time = generateRandomTime();
 
-    	 return new DateTime(
-    			 		date.getYear(),
-    			 		date.getMonthOfYear(),
-    			 		date.getDayOfWeek(),
-    			 		time.getHourOfDay(),
-    			 		time.getMinuteOfHour());
+         return new DateTime(
+                         date.getYear(),
+                         date.getMonthOfYear(),
+                         date.getDayOfWeek(),
+                         time.getHourOfDay(),
+                         time.getMinuteOfHour());
      }
 
      public static DateTime generateRandomDate(){
-    	 int year, month, day;
+         int year, month, day;
 
-    	 year = (int)(Math.random()*200)+1900;
-    	 month = (int)(Math.random()*11)+1;
-    	 day = (int)(Math.random()*27)+1;
+         year = (int)(Math.random()*200)+1900;
+         month = (int)(Math.random()*11)+1;
+         day = (int)(Math.random()*27)+1;
 
-    	 return new DateTime(year, month, day, 0, 0);
+         return new DateTime(year, month, day, 0, 0);
      }
 
      public static DateTime generateRandomTime(){
-    	 DateTime dt = new DateTime();
-    	 int hours,minutes;
+         DateTime dt = new DateTime();
+         int hours,minutes;
 
-    	 hours = (int)(Math.random()*23);
-    	 minutes = (int)(Math.random()*59);
+         hours = (int)(Math.random()*23);
+         minutes = (int)(Math.random()*59);
 
-    	 return new DateTime(
-		    			 dt.getYear(),
-		    			 dt.getMonthOfYear(),
-		    			 dt.getDayOfMonth(),
-		    			 hours,
-		    			 minutes);
+         return new DateTime(
+                         dt.getYear(),
+                         dt.getMonthOfYear(),
+                         dt.getDayOfMonth(),
+                         hours,
+                         minutes);
      }
 }

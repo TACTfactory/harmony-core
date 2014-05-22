@@ -102,8 +102,8 @@
         <!-- Checks for Size Violations.                    -->
         <!-- See http://checkstyle.sf.net/config_sizes.html -->
         <module name="LineLength">
-		<property name="ignorePattern" value="^import"/>
-	</module>
+        <property name="ignorePattern" value="^import"/>
+    </module>
         <module name="MethodLength"/>
         <module name="ParameterNumber"/>
 
@@ -144,9 +144,9 @@
         <module name="EmptyStatement"/>
         <module name="EqualsHashCode"/>
         <module name="HiddenField">
-		<property name="ignoreConstructorParameter" value="true"/>
-		<property name="ignoreSetter" value="true"/>
-	</module>
+        <property name="ignoreConstructorParameter" value="true"/>
+        <property name="ignoreSetter" value="true"/>
+    </module>
         <module name="IllegalInstantiation"/>
         <module name="InnerAssignment"/>
         <module name="MagicNumber"/>
@@ -169,11 +169,11 @@
         <module name="TodoComment"/>
         <module name="UpperEll"/>
 
-		<module name="RequireThisCheck" />
+        <module name="RequireThisCheck" />
 
     </module>
-	<module name="SuppressionFilter">
-		<property name="file" value="checkstyle_exclude.xml" />
-	</module>
+    <module name="SuppressionFilter">
+        <property name="file" value="checkstyle_exclude.xml" />
+    </module>
 
 </module>

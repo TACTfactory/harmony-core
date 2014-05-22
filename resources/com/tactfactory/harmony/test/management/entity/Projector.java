@@ -7,14 +7,14 @@ import com.tactfactory.harmony.annotation.Column.Type;
 @Entity
 public class Projector extends Furniture {
 
-	@Column
-	private int lensSize;
-	
-	@Column(type=Type.ENUM)
-	private Lamp lampType;
-	
-	public enum Lamp {
-		LCD_BULB,
-		LCD_LAMP;
-	}
+    @Column
+    private int lensSize;
+    
+    @Column(type=Type.ENUM)
+    private Lamp lampType;
+    
+    public enum Lamp {
+        LCD_BULB,
+        LCD_LAMP;
+    }
 }

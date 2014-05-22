@@ -12,25 +12,25 @@ import com.tactfactory.harmony.annotation.ManyToMany;
 @Entity
 public class Address {
 
-	@Id
-	@GeneratedValue(strategy=Strategy.MODE_IDENTITY)
-	private int id;
-	
-	@Column
-	private String street;
-	
-	@Column
-	private String city;
-	
-	@Column
-	private String country;
-	
-	@Column(nullable=true)
-	private Integer streetNumber;
-	
-	@Column
-	private String zipcode;
-	
-	@ManyToMany(inversedBy="addresses", mappedBy="addresses")
-	private ArrayList<Person> inhabitants;
+    @Id
+    @GeneratedValue(strategy=Strategy.MODE_IDENTITY)
+    private int id;
+    
+    @Column
+    private String street;
+    
+    @Column
+    private String city;
+    
+    @Column
+    private String country;
+    
+    @Column(nullable=true)
+    private Integer streetNumber;
+    
+    @Column
+    private String zipcode;
+    
+    @ManyToMany(inversedBy="addresses", mappedBy="addresses")
+    private ArrayList<Person> inhabitants;
 }

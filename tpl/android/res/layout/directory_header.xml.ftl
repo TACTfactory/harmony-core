@@ -37,7 +37,7 @@
         android:singleLine="true"
         android:textStyle="bold"
          />
-<!--    android:textAllCaps="true" 	android:textAppearance="?android:attr/textAppearanceSmall"/> -->
+<!--    android:textAllCaps="true"     android:textAppearance="?android:attr/textAppearanceSmall"/> -->
     <TextView
         android:id="@+id/count"
         android:layout_width="wrap_content"
@@ -60,5 +60,5 @@
         android:singleLine="true"
         android:textStyle="bold"
          />
-<!--   android:textAllCaps="true"  	android:textAppearance="?android:attr/textAppearanceSmall"/> -->
+<!--   android:textAllCaps="true"      android:textAppearance="?android:attr/textAppearanceSmall"/> -->
 </RelativeLayout>
