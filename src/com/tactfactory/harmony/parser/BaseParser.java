@@ -69,4 +69,9 @@ public abstract class BaseParser {
 	 * @param meta The class Metadata
 	 */
 	public abstract void visitImport(ImportDeclaration imp, ClassMetadata meta);
+	
+	/**
+	 * This method is call at the end of the parsing.
+	 */
+	public void callFinalCompletor() { }
 }

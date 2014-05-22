@@ -30,20 +30,17 @@ public abstract class CommandBase implements Command {
     protected static final String SEPARATOR = ":";
 
     /** Registered parsers for the global parser. */
-    private ArrayList<BaseParser> registeredParsers
-    = new ArrayList<BaseParser>();
+    private static HashMap<Class<?>, BaseParser> registeredParsers
+            = new HashMap<Class<?>, BaseParser>();
 
     /** Adapter to apply generator */
-    private ArrayList<IAdapter> adapters
-    = new ArrayList<IAdapter>();
-
+    private ArrayList<IAdapter> adapters = new ArrayList<IAdapter>();
 
     /** Command arguments. */
     private HashMap<String, String> commandArgs;
 
     /** Parser. */
     private JavaModelParser javaModelParser;
-
 
     /**
      * Gets the Metadatas of all the entities actually in the package entity.
@@ -59,9 +56,11 @@ public abstract class CommandBase implements Command {
 
         ConsoleUtils.display(">> Analyse Models...");
         this.javaModelParser = new JavaModelParser();
-        for (final BaseParser parser : this.registeredParsers) {
+        
+        for (final BaseParser parser : registeredParsers.values()) {
             this.javaModelParser.registerParser(parser);
         }
+        
         // Parse models and load entities into CompilationUnits
         try {
             this.javaModelParser.loadEntities();
@@ -82,14 +81,20 @@ public abstract class CommandBase implements Command {
             new ClassCompletor(
                     ApplicationMetadata.INSTANCE.getEntities(),
                     ApplicationMetadata.INSTANCE.getEnums()).execute();
+            
+            for (final BaseParser parser : registeredParsers.values()) {
+                parser.callFinalCompletor();
+            }
         } else {
             ConsoleUtils.displayWarning("No entities found in entity package!");
         }
     }
 
     @Override
-    public final void registerParser(final BaseParser parser) {
-        this.registeredParsers.add(parser);
+    public final synchronized void registerParser(final BaseParser parser) {
+        if (!registeredParsers.containsKey(parser.getClass())) {
+            registeredParsers.put(parser.getClass(), parser);
+        }
     }
 
     @Override
