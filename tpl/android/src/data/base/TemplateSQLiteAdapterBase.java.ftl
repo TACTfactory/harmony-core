@@ -973,7 +973,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
         final ArrayList<${curr.name}> result;
         
         final android.database.Cursor cursor = this.query(this.getCols(),
-                ${curr.name}Contract.${curr.name}.ALIASED_COL_DISCRIMINATORCOLUMN + " IS NULL",
+                ${curr.name}Contract.ALIASED_COL_DISCRIMINATORCOLUMN + " IS NULL",
                 new String[]{},
                 null,
                 null,
