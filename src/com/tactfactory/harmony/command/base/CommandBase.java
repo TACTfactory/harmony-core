@@ -30,8 +30,8 @@ public abstract class CommandBase implements Command {
     protected static final String SEPARATOR = ":";
 
     /** Registered parsers for the global parser. */
-    private static HashMap<Class<?>, BaseParser> registeredParsers
-            = new HashMap<Class<?>, BaseParser>();
+    private static HashMap<String, BaseParser> registeredParsers
+            = new HashMap<String, BaseParser>();
 
     /** Adapter to apply generator */
     private ArrayList<IAdapter> adapters = new ArrayList<IAdapter>();
@@ -92,9 +92,10 @@ public abstract class CommandBase implements Command {
 
     @Override
     public final synchronized void registerParser(final BaseParser parser) {
-        if (!registeredParsers.containsKey(parser.getClass())) {
-            registeredParsers.put(parser.getClass(), parser);
-        }
+        //if (!registeredParsers.containsKey(parser.getClass())) {
+        //    registeredParsers.put(parser.getClass(), parser);
+        //}
+        registeredParsers.put(parser.getClass().getName(),parser);
     }
 
     @Override
