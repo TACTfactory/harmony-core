@@ -77,8 +77,6 @@ public class GeneralCommand extends CommandBase {
 		this.moveCommand(
 				thirdPartyCommands, coreCommands, FixtureCommand.class);
 
-		
-		
 		this.moveCommand(
 				thirdPartyCommands, commonCommands, ResourceCommand.class);
 
@@ -88,7 +86,6 @@ public class GeneralCommand extends CommandBase {
 		this.moveCommand(
 				thirdPartyCommands, commonCommands, RouterCommand.class);
 
-		
 		Comparator<Command> thirdPartyComparator = new Comparator<Command>() {
 
 			@Override

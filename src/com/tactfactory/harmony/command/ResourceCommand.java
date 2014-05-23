@@ -18,8 +18,7 @@ import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
- *
- *
+ * Manipulate resource command.
  */
 @PluginImplementation
 public class ResourceCommand extends CommandBase {

@@ -16,14 +16,14 @@ import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
 
-@Documented
-@Retention(SOURCE)
-@Target(FIELD)
-@Inherited
 /**
  * An orderBy constraint.
  * Must be put inside an OrderBys array
  */
+@Documented
+@Retention(SOURCE)
+@Target(FIELD)
+@Inherited
 public @interface OrderBy {
 	/** Column name.*/
 	String columnName();

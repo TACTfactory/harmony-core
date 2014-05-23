@@ -32,10 +32,10 @@ public abstract class LibraryUtils {
 				libName));
 
 		if (!dest.exists()) {
-			final File src = Harmony.getLibrary(libName);
-			TactFileUtils.copyfile(
-					src,
-					dest);
+			File src = Harmony.getLibrary(libName);
+            TactFileUtils.copyfile(
+                    src,
+                    dest);
 		}
 
 	}
