@@ -18,6 +18,8 @@ import com.tactfactory.harmony.HarmonyContext;
 import com.tactfactory.harmony.ProjectContext;
 import com.tactfactory.harmony.command.base.CommandBase;
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
+import com.tactfactory.harmony.generator.ApplicationGenerator;
+import com.tactfactory.harmony.generator.ProjectGenerator;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.parser.HeaderParser;
 import com.tactfactory.harmony.plateforme.BaseAdapter;
@@ -26,8 +28,6 @@ import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.plateforme.ios.IosAdapter;
 import com.tactfactory.harmony.plateforme.rim.RimAdapter;
 import com.tactfactory.harmony.plateforme.winphone.WinphoneAdapter;
-import com.tactfactory.harmony.template.ApplicationGenerator;
-import com.tactfactory.harmony.template.ProjectGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

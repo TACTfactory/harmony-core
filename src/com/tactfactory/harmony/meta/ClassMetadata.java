@@ -15,8 +15,8 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.tactfactory.harmony.generator.TagConstant;
 import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.template.TagConstant;
 
 /** Entity class metadata. */
 public class ClassMetadata extends BaseMetadata {

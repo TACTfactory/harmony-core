@@ -12,8 +12,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tactfactory.harmony.generator.TagConstant;
 import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.template.TagConstant;
 
 /**
  * Enum Metadata.

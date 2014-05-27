@@ -11,13 +11,14 @@ package com.tactfactory.harmony.meta;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
+
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
+import com.tactfactory.harmony.generator.TagConstant;
 import com.tactfactory.harmony.meta.TranslationMetadata.Group;
 import com.tactfactory.harmony.plateforme.IAdapter;
 import com.tactfactory.harmony.plateforme.SqliteAdapter;
-import com.tactfactory.harmony.template.TagConstant;
 
 /** Entity field metadata. */
 public final class FieldMetadata extends BaseMetadata {

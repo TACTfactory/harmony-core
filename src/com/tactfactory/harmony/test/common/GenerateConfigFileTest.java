@@ -17,10 +17,10 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.junit.runners.Parameterized.Parameters;
 
+import com.tactfactory.harmony.generator.ConfigGenerator;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ConfigMetadata;
 import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
-import com.tactfactory.harmony.template.ConfigGenerator;
 import com.tactfactory.harmony.test.CommonTest;
 
 

@@ -141,7 +141,7 @@ public class ManifestUpdater extends XmlManager {
 		data.append('.');
 		data.append(viewName);
 		
-		ManifestData manifestData = intentFilter.new ManifestData();
+		ManifestData manifestData = new ManifestData();
 		manifestData.setMimeType(data.toString());
 		
 		intentFilter.setActionName(action);

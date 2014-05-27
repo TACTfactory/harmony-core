@@ -12,8 +12,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
+import com.tactfactory.harmony.generator.TagConstant;
 import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.template.TagConstant;
 
 public final class InheritanceMetadata extends BaseMetadata {
 	private InheritanceMode type;

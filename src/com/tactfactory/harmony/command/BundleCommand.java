@@ -14,8 +14,8 @@ import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.command.base.CommandBase;
 import com.tactfactory.harmony.command.interaction.Question;
 import com.tactfactory.harmony.command.interaction.Questionnary;
+import com.tactfactory.harmony.generator.BundleGenerator;
 import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.template.BundleGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;

@@ -8,6 +8,8 @@
  */
 package com.tactfactory.harmony.plateforme;
 
+import java.io.File;
+
 import com.tactfactory.harmony.HarmonyContext;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
@@ -1209,6 +1211,19 @@ public abstract class BaseAdapter implements IAdapter {
 	public final void setCommandBundleTemplates(
 			final String commandBundleTemplates) {
 		this.commandBundleTemplates = commandBundleTemplates;
+	}
+	
+	/**
+	 * Check if the given library exists in the platform libraries folder.
+	 * @param library The name of the file to looking for
+	 * @return True if the file was founded
+	 */
+	public boolean libraryExists(String library) {
+        boolean result = false;
+        
+        result = new File(this.getLibsPath() + library).exists();
+        
+        return result;
 	}
 	
 	public void cloneTo(BaseAdapter adapter) {

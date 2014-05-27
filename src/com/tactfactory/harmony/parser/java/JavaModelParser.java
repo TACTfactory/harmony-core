@@ -130,6 +130,7 @@ public class JavaModelParser {
 				cu = JavaParser.parse(in);
 	        } catch (final ParseException e) {
 				// TODO Auto-generated catch block
+	            ConsoleUtils.displayError("Error while parsing : " + filename);
 				ConsoleUtils.displayError(e);
 			} catch (final FileNotFoundException e) {
 				// TODO Auto-generated catch block

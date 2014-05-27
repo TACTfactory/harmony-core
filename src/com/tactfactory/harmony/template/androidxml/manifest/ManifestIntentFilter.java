@@ -144,7 +144,7 @@ public class ManifestIntentFilter extends ManifestElement {
 		this.data.add(data);
 	}
 
-	public class ManifestData extends ManifestElement {
+	public static class ManifestData extends ManifestElement {
 		private String scheme;
 		private String host;
 		private String port;

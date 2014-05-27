@@ -46,34 +46,30 @@ public final class HomeActivityUpdaterAndroid implements IUpdaterFile {
         File file = new File(this.adapter.getHomeActivityPathFile());
         
         if (file != null && file.isFile()) {
-            String strFile = TactFileUtils.fileToString(file);
-            
-            String activityName = activity.substring(
-                    activity.lastIndexOf('.') + 1);
-            
-            String listenerTpl = String.format("\t\tthis.findViewById(R.id.%s).setOnClickListener(this);",
-                    buttonId);
-            
-            String caseTpl = String.format("\t\t\tcase R.id.%s:\n\t\t\t\tintent = new Intent(this, %s.class);\n\t\t\t\tbreak;\n",
-                    buttonId,
-                    activityName);
-            
-            // Import Activity
-            this.updateFileAdd(file,
-                    "import", "import", "import " + activity + ";", true);
-            
-            this.addButtonToMainXML(activityName, buttonId);
-            
-            // If Listener not set
-            this.updateFileAdd(file,
-                    "private void initButtons() {", "private void initButtons() {", listenerTpl, false);
-            
-            // If case not set
-            this.updateFileAdd(file,
-                    "public void onClick(View v) {", "switch (v.getId()) {", caseTpl, false);
-            
             try {
-                TactFileUtils.writeStringToFile(file, strFile);
+                String activityName = activity.substring(
+                        activity.lastIndexOf('.') + 1);
+                
+                String listenerTpl = String.format("\t\tthis.findViewById(R.id.%s).setOnClickListener(this);",
+                        buttonId);
+                
+                String caseTpl = String.format("\t\t\tcase R.id.%s:\n\t\t\t\tintent = new Intent(this, %s.class);\n\t\t\t\tbreak;\n",
+                        buttonId,
+                        activityName);
+                
+                // Import Activity
+                this.updateFileAdd(file,
+                        "import", "import", "import " + activity + ";", true);
+                
+                this.addButtonToMainXML(activityName, buttonId);
+                
+                // If Listener not set
+                this.updateFileAdd(file,
+                        "private void initButtons() {", "private void initButtons() {", listenerTpl, false);
+                
+                // If case not set
+                this.updateFileAdd(file,
+                        "public void onClick(View v) {", "switch (v.getId()) {", caseTpl, false);
             } catch (IOException e) {
                 ConsoleUtils.displayError(e);
             }
@@ -135,7 +131,7 @@ public final class HomeActivityUpdaterAndroid implements IUpdaterFile {
     }
 
     private void updateFileAdd(File file, String find, String replace,
-            String add, boolean addBefore) {
+            String add, boolean addBefore) throws IOException {
         if (file != null && file.isFile()) {
             String strFile = TactFileUtils.fileToString(file);
             
@@ -154,6 +150,8 @@ public final class HomeActivityUpdaterAndroid implements IUpdaterFile {
                             add,
                             lastBracketIndex);
                 }
+                
+                TactFileUtils.writeStringToFile(file, strFile);
             }
         }
     }

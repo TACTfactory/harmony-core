@@ -17,6 +17,7 @@ import java.util.Map;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.Harmony;
+import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
@@ -28,7 +29,6 @@ import com.tactfactory.harmony.plateforme.android.updater.HomeActivityUpdaterAnd
 import com.tactfactory.harmony.plateforme.android.updater.ManifestApplicationThemeAndroid;
 import com.tactfactory.harmony.plateforme.android.updater.ManifestProviderAndroid;
 import com.tactfactory.harmony.plateforme.android.updater.UpdateLibraryAndroid;
-import com.tactfactory.harmony.template.CommonGenerator.ViewType;
 import com.tactfactory.harmony.template.androidxml.AttrsFile;
 import com.tactfactory.harmony.template.androidxml.ColorsFile;
 import com.tactfactory.harmony.template.androidxml.DimensFile;
