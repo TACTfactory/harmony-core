@@ -30,7 +30,7 @@ public class CoreTest extends CommonTest {
 	 */
 	@BeforeClass
 	public static void setUpBefore() {
-		CommonTest.setUpBefore();
+		
 	}
 
 	@Before

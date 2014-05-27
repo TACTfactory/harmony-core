@@ -49,7 +49,7 @@ public class EmptyBundleGenerationTest extends CommonTest {
 	 */
 	@BeforeClass
 	public static void setUpBefore() throws RuntimeException {
-		CommonTest.setUpBefore();
+		
 	}
 
 	@Before
