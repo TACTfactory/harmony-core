@@ -14,7 +14,7 @@ import java.util.List;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FixtureMetadata;
-import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 

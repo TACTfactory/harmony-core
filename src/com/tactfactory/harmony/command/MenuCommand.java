@@ -15,7 +15,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.command.base.CommandBase;
 import com.tactfactory.harmony.generator.MenuGenerator;
-import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

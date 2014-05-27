@@ -14,6 +14,7 @@ import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
+import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.command.GeneralCommand;
 import com.tactfactory.harmony.command.OrmCommand;
 import com.tactfactory.harmony.command.ProjectCommand;
@@ -30,7 +31,7 @@ public class CoreTest extends CommonTest {
 	 */
 	@BeforeClass
 	public static void setUpBefore() {
-		
+	    harmony = Harmony.getInstance();
 	}
 
 	@Before

@@ -15,7 +15,7 @@ import java.util.TreeMap;
 
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.generator.TagConstant;
-import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 
 /**
  * Application Metadata.

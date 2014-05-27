@@ -20,7 +20,7 @@ import com.tactfactory.harmony.generator.CommonGenerator;
 import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
-import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

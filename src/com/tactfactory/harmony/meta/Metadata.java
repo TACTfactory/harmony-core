@@ -10,7 +10,7 @@ package com.tactfactory.harmony.meta;
 
 import java.util.Map;
 
-import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 
 /**
  * Defines the Metadatas class which will be used by Freemarker.

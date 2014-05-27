@@ -26,12 +26,12 @@ import com.google.common.base.Strings;
 import com.tactfactory.harmony.command.interaction.Question;
 import com.tactfactory.harmony.command.interaction.Questionnary;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
-import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.plateforme.TargetPlatform;
-import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
-import com.tactfactory.harmony.plateforme.ios.IosAdapter;
-import com.tactfactory.harmony.plateforme.winphone.WinphoneAdapter;
+import com.tactfactory.harmony.platform.BaseAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
+import com.tactfactory.harmony.platform.TargetPlatform;
+import com.tactfactory.harmony.platform.android.AndroidAdapter;
+import com.tactfactory.harmony.platform.ios.IosAdapter;
+import com.tactfactory.harmony.platform.winphone.WinphoneAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

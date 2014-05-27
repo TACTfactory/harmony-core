@@ -16,9 +16,9 @@ import java.util.HashMap;
 
 import sun.reflect.ReflectionFactory;
 
-import com.tactfactory.harmony.plateforme.BaseAdapter;
-import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.plateforme.TargetPlatform;
+import com.tactfactory.harmony.platform.BaseAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
+import com.tactfactory.harmony.platform.TargetPlatform;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

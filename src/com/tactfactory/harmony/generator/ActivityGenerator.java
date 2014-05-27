@@ -15,7 +15,7 @@ import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.meta.TranslationMetadata;
 import com.tactfactory.harmony.meta.TranslationMetadata.Group;
-import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 

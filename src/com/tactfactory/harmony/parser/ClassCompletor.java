@@ -17,7 +17,7 @@ import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
-import com.tactfactory.harmony.plateforme.SqliteAdapter;
+import com.tactfactory.harmony.platform.SqliteAdapter;
 
 
 /** The class ClassCompletor will complete all ClassMetadatas

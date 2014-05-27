@@ -9,7 +9,7 @@
 package com.tactfactory.harmony.generator;
 
 import com.tactfactory.harmony.meta.ConfigMetadata;
-import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.updater.old.IConfigFileUtil;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 

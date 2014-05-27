@@ -17,7 +17,7 @@ import java.util.Map;
 
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.updater.IExecutor;
 import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.updater.impl.EditFile;

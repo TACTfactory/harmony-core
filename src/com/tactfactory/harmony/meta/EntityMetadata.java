@@ -17,7 +17,7 @@ import java.util.Map;
 
 import com.tactfactory.harmony.generator.TagConstant;
 import com.tactfactory.harmony.meta.TranslationMetadata.Group;
-import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 
 /** Entity class metadata. */
 public final class EntityMetadata extends ClassMetadata {

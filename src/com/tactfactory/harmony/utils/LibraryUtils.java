@@ -11,7 +11,7 @@ package com.tactfactory.harmony.utils;
 import java.io.File;
 
 import com.tactfactory.harmony.Harmony;
-import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 
 /**
  * Utility class for libraries.

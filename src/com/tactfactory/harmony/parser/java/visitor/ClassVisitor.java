@@ -51,7 +51,7 @@ import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.meta.InheritanceMetadata;
 import com.tactfactory.harmony.parser.BaseParser;
 import com.tactfactory.harmony.parser.java.JavaModelParser;
-import com.tactfactory.harmony.plateforme.SqliteAdapter;
+import com.tactfactory.harmony.platform.SqliteAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.PackageUtils;
 

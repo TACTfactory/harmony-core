@@ -29,8 +29,8 @@ import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.parser.BaseParser;
 import com.tactfactory.harmony.parser.java.visitor.FileVisitor;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
-import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
+import com.tactfactory.harmony.platform.BaseAdapter;
+import com.tactfactory.harmony.platform.android.AndroidAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

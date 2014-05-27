@@ -12,7 +12,7 @@ import org.eclipse.jgit.api.errors.GitAPIException;
 
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;

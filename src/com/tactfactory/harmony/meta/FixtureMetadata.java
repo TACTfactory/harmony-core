@@ -11,7 +11,7 @@ package com.tactfactory.harmony.meta;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 
 /**
  * Metadata for Fixture bundle.

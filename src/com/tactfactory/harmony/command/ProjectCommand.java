@@ -22,12 +22,12 @@ import com.tactfactory.harmony.generator.ApplicationGenerator;
 import com.tactfactory.harmony.generator.ProjectGenerator;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.parser.HeaderParser;
-import com.tactfactory.harmony.plateforme.BaseAdapter;
-import com.tactfactory.harmony.plateforme.TargetPlatform;
-import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
-import com.tactfactory.harmony.plateforme.ios.IosAdapter;
-import com.tactfactory.harmony.plateforme.rim.RimAdapter;
-import com.tactfactory.harmony.plateforme.winphone.WinphoneAdapter;
+import com.tactfactory.harmony.platform.BaseAdapter;
+import com.tactfactory.harmony.platform.TargetPlatform;
+import com.tactfactory.harmony.platform.android.AndroidAdapter;
+import com.tactfactory.harmony.platform.ios.IosAdapter;
+import com.tactfactory.harmony.platform.rim.RimAdapter;
+import com.tactfactory.harmony.platform.winphone.WinphoneAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

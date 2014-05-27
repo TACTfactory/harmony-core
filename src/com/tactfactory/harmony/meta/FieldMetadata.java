@@ -17,8 +17,8 @@ import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.annotation.GeneratedValue.Strategy;
 import com.tactfactory.harmony.generator.TagConstant;
 import com.tactfactory.harmony.meta.TranslationMetadata.Group;
-import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.plateforme.SqliteAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
+import com.tactfactory.harmony.platform.SqliteAdapter;
 
 /** Entity field metadata. */
 public final class FieldMetadata extends BaseMetadata {

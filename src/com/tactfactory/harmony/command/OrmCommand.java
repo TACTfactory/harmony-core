@@ -23,7 +23,7 @@ import com.tactfactory.harmony.generator.ProviderGenerator;
 import com.tactfactory.harmony.generator.SQLiteGenerator;
 import com.tactfactory.harmony.generator.TestGenerator;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.plateforme.IAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

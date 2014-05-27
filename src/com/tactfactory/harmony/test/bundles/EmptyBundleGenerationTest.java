@@ -20,7 +20,7 @@ import org.junit.Test;
 
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.generator.BundleGenerator;
-import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
+import com.tactfactory.harmony.platform.android.AndroidAdapter;
 import com.tactfactory.harmony.test.CommonTest;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
