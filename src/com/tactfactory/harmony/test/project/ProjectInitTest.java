@@ -23,8 +23,8 @@ import org.junit.runners.Parameterized.Parameters;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.HarmonyContext;
 import com.tactfactory.harmony.command.ProjectCommand;
+import com.tactfactory.harmony.generator.ProjectGenerator;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.template.ProjectGenerator;
 import com.tactfactory.harmony.test.CommonTest;
 
 /**

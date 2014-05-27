@@ -1,7 +1,7 @@
 /**
  * This file is part of the Harmony package.
  */
-package com.tactfactory.harmony.template;
+package com.tactfactory.harmony.generator;
 
 import java.io.File;
 import java.io.IOException;

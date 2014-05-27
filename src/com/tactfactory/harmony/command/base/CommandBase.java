@@ -92,9 +92,6 @@ public abstract class CommandBase implements Command {
 
     @Override
     public final synchronized void registerParser(final BaseParser parser) {
-        //if (!registeredParsers.containsKey(parser.getClass())) {
-        //    registeredParsers.put(parser.getClass(), parser);
-        //}
         registeredParsers.put(parser.getClass().getName(),parser);
     }
 

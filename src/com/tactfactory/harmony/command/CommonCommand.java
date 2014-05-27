@@ -16,11 +16,11 @@ import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.command.base.CommandBase;
 import com.tactfactory.harmony.command.interaction.Question;
 import com.tactfactory.harmony.command.interaction.Questionnary;
+import com.tactfactory.harmony.generator.CommonGenerator;
+import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.template.CommonGenerator;
-import com.tactfactory.harmony.template.CommonGenerator.ViewType;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

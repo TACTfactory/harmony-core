@@ -3,8 +3,8 @@ package com.tactfactory.harmony.meta;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.tactfactory.harmony.generator.TagConstant;
 import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.template.TagConstant;
 
 /**
  * Metadata linking a type Enum field to the concerned enum.

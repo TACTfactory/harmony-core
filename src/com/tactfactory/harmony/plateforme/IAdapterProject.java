@@ -11,9 +11,9 @@ package com.tactfactory.harmony.plateforme;
 import java.util.List;
 import java.util.Map;
 
+import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
-import com.tactfactory.harmony.template.CommonGenerator.ViewType;
 import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.updater.old.IConfigFileUtil;
 import com.tactfactory.harmony.updater.old.ITranslateFileUtil;

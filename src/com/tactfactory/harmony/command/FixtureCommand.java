@@ -14,10 +14,10 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.command.base.CommandBase;
+import com.tactfactory.harmony.generator.FixtureGenerator;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.FixtureMetadata;
 import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.template.FixtureGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

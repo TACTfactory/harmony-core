@@ -14,16 +14,16 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.command.base.CommandBase;
+import com.tactfactory.harmony.generator.ActivityGenerator;
+import com.tactfactory.harmony.generator.ApplicationGenerator;
+import com.tactfactory.harmony.generator.EntityGenerator;
+import com.tactfactory.harmony.generator.EnumGenerator;
+import com.tactfactory.harmony.generator.ProjectGenerator;
+import com.tactfactory.harmony.generator.ProviderGenerator;
+import com.tactfactory.harmony.generator.SQLiteGenerator;
+import com.tactfactory.harmony.generator.TestGenerator;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.plateforme.IAdapter;
-import com.tactfactory.harmony.template.ActivityGenerator;
-import com.tactfactory.harmony.template.ApplicationGenerator;
-import com.tactfactory.harmony.template.EntityGenerator;
-import com.tactfactory.harmony.template.EnumGenerator;
-import com.tactfactory.harmony.template.ProjectGenerator;
-import com.tactfactory.harmony.template.ProviderGenerator;
-import com.tactfactory.harmony.template.SQLiteGenerator;
-import com.tactfactory.harmony.template.TestGenerator;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**

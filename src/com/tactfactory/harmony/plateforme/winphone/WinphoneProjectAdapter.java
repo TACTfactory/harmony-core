@@ -15,13 +15,13 @@ import java.util.Locale;
 import java.util.Map;
 
 import com.google.common.base.CaseFormat;
+import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.plateforme.IAdapterProject;
 import com.tactfactory.harmony.plateforme.winphone.updater.ProjectUpdater;
 import com.tactfactory.harmony.plateforme.winphone.updater.XmlResourcesWinphone;
 import com.tactfactory.harmony.plateforme.winphone.updater.ProjectUpdater.FileType;
-import com.tactfactory.harmony.template.CommonGenerator.ViewType;
 import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.updater.impl.CopyFile;
 import com.tactfactory.harmony.updater.impl.SourceFile;

@@ -1,7 +1,7 @@
 ViewComponent:
    DEBUG - VC1:
       id: 0
-      string: "DEBUG - VC1 String"
+      stringField: "DEBUG - VC1 String"
       text: "DEBUG - VC1 Text"
       dateTime: "2001-12-15 2:59:43.10"
       date: "2012-01-01"
@@ -20,7 +20,7 @@ ViewComponent:
       choice: 0
    DEBUG - VC2:
       id: 0
-      string: "DEBUG - VC2 String"
+      stringField: "DEBUG - VC2 String"
       text: "DEBUG - VC2 Text"
       dateTime: "2001-12-15 2:59:43.10"
       date: "2012-01-01"
@@ -39,7 +39,7 @@ ViewComponent:
       choice: 0
    DEBUG - VC3:
       id: 0
-      string: "DEBUG - VC3 String"
+      stringField: "DEBUG - VC3 String"
       text: "DEBUG - VC3 Text"
       dateTime: "2001-12-15 2:59:43.10"
       date: "2012-01-01"

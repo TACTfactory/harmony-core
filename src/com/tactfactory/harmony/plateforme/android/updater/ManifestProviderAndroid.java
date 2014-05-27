@@ -8,9 +8,9 @@
  */
 package com.tactfactory.harmony.plateforme.android.updater;
 
+import com.tactfactory.harmony.generator.ProviderGenerator;
 import com.tactfactory.harmony.plateforme.android.AndroidAdapter;
 import com.tactfactory.harmony.plateforme.android.AndroidProjectAdapter;
-import com.tactfactory.harmony.template.ProviderGenerator;
 import com.tactfactory.harmony.template.androidxml.ManifestUpdater;
 import com.tactfactory.harmony.updater.IUpdaterFile;
 
