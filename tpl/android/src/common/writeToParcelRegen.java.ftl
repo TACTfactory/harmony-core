@@ -79,8 +79,8 @@
                     </#switch>
                 <#else>
                     <#if field.relation.type == "OneToOne" || field.relation.type == "ManyToOne">
-        if (<#if field.nullable>this.get${field.name?cap_first}() != null
-                    && </#if>(!this.parcelableParents.contains(this.get${field.name?cap_first}()))) {
+        if (this.get${field.name?cap_first}() != null
+                    && !this.parcelableParents.contains(this.get${field.name?cap_first}())) {
             this.get${field.name?cap_first}().writeToParcel(this.parcelableParents, dest, flags);
         } else {
             dest.writeParcelable(null, flags);
