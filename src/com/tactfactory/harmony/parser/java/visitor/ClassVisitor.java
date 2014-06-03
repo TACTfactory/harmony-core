@@ -166,8 +166,6 @@ public class ClassVisitor {
     	
     	// Debug Log
     	ConsoleUtils.displayDebug("Found class : " + result.getName());
-    	// Check reserved keywords
-		SqliteAdapter.Keywords.exists(result.getName());
 		
 		// If the class has a name
 		if (!Strings.isNullOrEmpty(result.getName())) {
@@ -327,9 +325,16 @@ public class ClassVisitor {
 			}
 		}
 
+		if (isEntity && result instanceof EntityMetadata) {
+            // Check reserved keywords
+            SqliteAdapter.Keywords.exists(
+                    ((EntityMetadata)result).getTableName());
+		}
+        
 		if (!isEntity && !isInterface) {
 			result = null;
 		}
+		
 		return result;
     }
 
@@ -663,6 +668,8 @@ public class ClassVisitor {
     	AnnotationExpr tableAnnot = 
     			this.annotationMap.get(ANNOTATION_TABLE);
     	
+    	classMeta.setTableName(classMeta.getName());
+    	
     	if (tableAnnot != null) {
     		if (tableAnnot instanceof NormalAnnotationExpr) {
     			List<MemberValuePair> pairs = 
@@ -676,6 +683,17 @@ public class ClassVisitor {
 	    							(ArrayInitializerExpr) pair.getValue());
 	    					
 	    				}
+	    				
+	    				if (ATTRIBUTE_NAME.equals(pair.getName())) {
+                            if (pair.getValue()
+                                    instanceof StringLiteralExpr) {
+                                classMeta.setTableName(((StringLiteralExpr)
+                                        pair.getValue()).getValue());
+                            } else {
+                                classMeta.setTableName(
+                                        pair.getValue().toString());
+                            }
+                        }
 	    			}
     			}
     		}

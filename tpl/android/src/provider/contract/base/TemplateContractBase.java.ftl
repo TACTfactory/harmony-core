@@ -54,7 +54,7 @@ public abstract class ${curr.name}ContractBase {
     /** Constant for parcelisation/serialization. */
     public static final String PARCEL = "${curr.name}";
     /** Table name of SQLite database. */
-    public static final String TABLE_NAME = <#if singleTabInheritance && !isTopMostSuperClass>${curr.inheritance.superclass.name?cap_first}Contract.TABLE_NAME<#else>"${curr.name}"</#if>;
+    public static final String TABLE_NAME = <#if singleTabInheritance && !isTopMostSuperClass>${curr.inheritance.superclass.name?cap_first}Contract.TABLE_NAME<#else>"<#if curr.tableName??>${curr.tableName}<#else>${curr.name}</#if>"</#if>;
     /** Global Fields. */
     public static final String[] COLS = new String[] {
     <#assign wholeFields = curr_fields />

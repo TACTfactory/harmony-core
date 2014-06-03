@@ -24,6 +24,9 @@ public final class EntityMetadata extends ClassMetadata {
 
 	/** Used for join tables (ManyToMany relations). */
 	private boolean internal = false;
+	
+	/** Entity SQL table name. */
+	private String tableName;
 
 	/** List of ids of entity class. */
 	private Map<String, FieldMetadata> ids =
@@ -73,6 +76,7 @@ public final class EntityMetadata extends ClassMetadata {
 	public final Map<String, Object> toMap(final IAdapter adapter) {
 		final Map<String, Object> model = super.toMap(adapter);
 
+		model.put(TagConstant.TABLE_NAME, this.tableName);
 		model.put(TagConstant.IDS,
 				this.toFieldArray(this.getIds().values(), adapter));
 		model.put(TagConstant.RELATIONS,
@@ -297,5 +301,19 @@ public final class EntityMetadata extends ClassMetadata {
 	 */
 	public final void setListAction(boolean listAction) {
 		this.listAction = listAction;
+	}
+	
+	/**
+	 * @return Get the entity SQL name
+	 */
+	public final String getTableName() {
+	    return this.tableName;
+	}
+	
+	/**
+	 * @param name The entity SQL table name
+	 */
+	public final void setTableName(String name) {
+	    this.tableName = name;
 	}
 }
