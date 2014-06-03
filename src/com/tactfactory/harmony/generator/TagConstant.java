@@ -87,6 +87,8 @@ public abstract class TagConstant {
 	public static final String SCHEMA = "schema";
 	/** Constant for alias. */
 	public static final String ALIAS = "alias";
+	/** Constant for table name. */
+	public static final String TABLE_NAME = "tableName";
 	/** Constant for entitiesids. */
 	public static final String IDS = "ids";
 	/** Constant for indexes. */
