@@ -325,7 +325,7 @@ public class ClassVisitor {
 			}
 		}
 
-		if (result instanceof EntityMetadata) {
+		if (isEntity && result instanceof EntityMetadata) {
             // Check reserved keywords
             SqliteAdapter.Keywords.exists(
                     ((EntityMetadata)result).getTableName());
