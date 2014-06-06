@@ -224,12 +224,12 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
                     <#list curr_ids as id>
                         <#if id.strategy == "IDENTITY">
                     .withValueBackReference(
-                            ${relation.relation.targetEntity}Contract.
+                            ${relation.relation.targetEntity}Contract
                                     .${NamingUtils.alias(MetadataUtils.getMappedField(relation).name)}_${id.name?upper_case},
                             0)
                         <#else>
                     .withValue(
-                            ${relation.relation.targetEntity}Contract.
+                            ${relation.relation.targetEntity}Contract
                                     .${NamingUtils.alias(MetadataUtils.getMappedField(relation).name)}_${id.name?upper_case},
                             item.get${id.name?cap_first}())
                         </#if>
@@ -262,7 +262,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
                             <#else>
                         .withValue(
                                 ${ContractUtils.getContractClass(joinTable)}.${NamingUtils.alias(relation.relation.mappedBy)}_${id.name?upper_case},
-                                item.get${id.name?cap_first}())    
+                                item.get${id.name?cap_first}())
                             </#if>
                         </#list>
                         .build());
@@ -453,7 +453,7 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
             String[] selectionArgs;
             // Set new ${relation.name} for ${curr.name}
             CriteriaExpression ${relation.name}Crit = 
-                    new CriteriasExpression(GroupType.AND);
+                    new CriteriaExpression(GroupType.AND);
             Criterion crit = new Criterion();
             ArrayValue values = new ArrayValue();
             crit.setType(Type.IN);
