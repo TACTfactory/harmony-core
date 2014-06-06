@@ -454,7 +454,7 @@ public class ${curr.name}EditFragment extends HarmonyFragment
             <#else>
         ArrayList<${relation.relation.targetEntity}> modelItems = new ArrayList<${relation.relation.targetEntity}>();
         for (${relation.relation.targetEntity} item : items) {
-            if (item.get${MetadataUtils.getInversingField(relation).name?cap_first}().getId() == this.model.getId()) {
+            if (item.get${MetadataUtils.getInversingField(relation).name?cap_first}() != null && item.get${MetadataUtils.getInversingField(relation).name?cap_first}().getId() == this.model.getId()) {
                 modelItems.add(item);
                 this.${relation.name}Adapter.checkItem(item, true);
             }
@@ -465,9 +465,11 @@ public class ${curr.name}EditFragment extends HarmonyFragment
         this.${relation.name}Adapter.setCheckedItems(this.model.get${relation.name?cap_first}());
         <#else>
         
-        for (${relation.relation.targetEntity} item : items) {
-            if (item.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}() == this.model.get${relation.name?cap_first}().get${entities[relation.relation.targetEntity].ids[0].name?cap_first}()) {
-                this.${relation.name}Adapter.selectItem(item);
+        if (this.model.get${relation.name?cap_first}() != null) {
+            for (${relation.relation.targetEntity} item : items) {
+                if (item.get${entities[relation.relation.targetEntity].ids[0].name?cap_first}() == this.model.get${relation.name?cap_first}().get${entities[relation.relation.targetEntity].ids[0].name?cap_first}()) {
+                    this.${relation.name}Adapter.selectItem(item);
+                }
             }
         }
         </#if>
