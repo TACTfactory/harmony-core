@@ -31,6 +31,7 @@ import com.google.common.collect.ObjectArrays;
 </#if>
 import ${data_namespace}.SQLiteAdapter;
 ${ImportUtils.importRelatedSQLiteAdapters(curr, false, true)}
+${ImportUtils.importRelatedContracts(curr, true, true)}
 ${ImportUtils.importRelatedEntities(curr, true)}
 ${ImportUtils.importRelatedEnums(curr)}<#if !(curr_ids?size>0)>import ${project_namespace}.harmony.exception.NotImplementedException;</#if>
 <#if hasDate || hasTime || hasDateTime>import ${curr.namespace}.harmony.util.DateUtils;</#if>
@@ -55,16 +56,7 @@ import ${project_namespace}.criterias.base.value.SelectValue;
 </#if>
 <#if (InheritanceUtils.isExtended(curr))>
 import ${project_namespace}.harmony.util.DatabaseUtil;
-import ${project_namespace}.provider.contract.${curr.inheritance.superclass.name?cap_first}Contract;
 </#if>
-
-import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
-<#list curr_relations as relation>
-    <#if (relation.relation.type == "ManyToMany")>
-import ${project_namespace}.provider.contract.${relation.relation.joinTable?cap_first}Contract;
-    </#if>
-import ${project_namespace}.provider.contract.${relation.relation.targetEntity?cap_first}Contract;
-</#list>
 
 /** ${curr.name} adapter database abstract class. <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project<br/>
@@ -1119,3 +1111,4 @@ public abstract class ${curr.name}SQLiteAdapterBase
     }
 </#if>
 }
+

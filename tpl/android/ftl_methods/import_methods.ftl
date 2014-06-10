@@ -41,6 +41,46 @@
     <#return result />
 </#function>
 
+<#function importRelatedContracts entity importInternalsToo=true importSelfToo=true importChilds=true>
+    <#assign result = ""/>
+    <#if importSelfToo>
+        <#assign import_array = [entity.name] />
+    <#else>
+        <#assign import_array = [] />
+    </#if>
+    <#if InheritanceUtils.isExtended(entity)>
+        <#assign import_array = import_array + [entity.inheritance.superclass.name] />
+    </#if>
+    <#if importChilds && entity.inheritance?? && entity.inheritance.subclasses??>
+        <#list entity.inheritance.subclasses as subclass>
+            <#assign import_array = import_array + [subclass.name] />
+        </#list>
+    </#if>
+    <#list ViewUtils.getAllRelations(entity) as relation>
+        <#if importInternalsToo || !relation.internal>
+            <#if relation.relation.type == "ManyToMany">
+                <#if (!Utils.isInArray(import_array, relation.relation.joinTable))>
+                    <#assign import_array = import_array + [relation.relation.joinTable] />
+                </#if>
+            </#if>
+            
+            <#if (!Utils.isInArray(import_array, relation.relation.targetEntity))>
+                <#assign import_array = import_array + [relation.relation.targetEntity] />
+                <#if entities[relation.relation.targetEntity].inheritance?? && entities[relation.relation.targetEntity].inheritance.superclass?? && entities[entities[relation.relation.targetEntity].inheritance.superclass.name]??>
+                    <#assign import_array = import_array + [entities[relation.relation.targetEntity].inheritance.superclass.name] />
+                </#if>
+            </#if>
+        </#if>
+    </#list>
+    <#list import_array as import>
+                <#assign result = result + "import ${project_namespace}.provider.contract.${import}Contract;" />
+        <#if import_has_next>
+            <#assign result = result + "\n" />
+        </#if>
+    </#list>
+    <#return result />
+</#function>
+
 <#function importRelatedEntities entity useInheritedFieldsToo=false>
     <#assign result = ""/>
     <#if entity.internal>
@@ -193,3 +233,4 @@
     </#list>
     <#return result />
 </#function>
+
