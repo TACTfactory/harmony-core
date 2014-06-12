@@ -132,7 +132,7 @@
                     </#if>
                     <#break />
                 <#default>
-                        <#assign result = result + "${tab}${localTab}//TODO : Handle type ${field.type} / ${FieldsUtils.getJavaType(field)}"/>
+                        <#assign result = result + "${tab}${localTab}//TODO : Handle type / ${FieldsUtils.getJavaType(field)}"/>
             </#switch>
             <#if (field.nullable?? && field.nullable)>
                 <#assign result = result + "${tab}}\n"/>
