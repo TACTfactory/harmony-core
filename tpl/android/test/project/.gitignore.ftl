@@ -63,5 +63,11 @@ local.properties
 # Libs Sherlock #
 /libs/sherlock/*
 
+# Sources and Javadoc Libs
+##########################
+/libs/docs/*
+/libs/src/*
+
+
 # Custom rules #
 ################
