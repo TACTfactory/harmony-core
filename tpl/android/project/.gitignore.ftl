@@ -64,6 +64,11 @@ local.properties
 #################
 /libs/sherlock/*
 
+# Sources and Javadoc Libs
+##########################
+/libs/docs/*
+/libs/src/*
+
 # Gradle #
 ##########
 /build
