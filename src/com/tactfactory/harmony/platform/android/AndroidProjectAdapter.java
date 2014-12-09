@@ -39,7 +39,6 @@ import com.tactfactory.harmony.updater.impl.EditFile;
 import com.tactfactory.harmony.updater.impl.CopyFile;
 import com.tactfactory.harmony.updater.impl.CreateFolder;
 import com.tactfactory.harmony.updater.impl.DeleteFile;
-import com.tactfactory.harmony.updater.impl.LibraryGit;
 import com.tactfactory.harmony.updater.impl.SourceFile;
 import com.tactfactory.harmony.updater.impl.XmlAndroid;
 import com.tactfactory.harmony.updater.old.IConfigFileUtil;
@@ -408,46 +407,26 @@ public class AndroidProjectAdapter implements IAdapterProject {
         
         result.addAll(this.adapter.getLibrariesCopyFile(libraries));
         
-        String pathLib = new File(String.format("%s%s",
-                this.adapter.getLibsPath(), "sherlock")).getAbsolutePath();
+        String appCompatPath = String.format(
+                "%s%s",
+                this.adapter.getLibsPath(),
+                "appcompat-v7");
         
-        List<File> filesToDelete = new ArrayList<File>();
+        //Add compatv7
+        CopyFile copyfile = new CopyFile(
+                ApplicationMetadata.getAndroidSdkPath()
+                        + "/extras/android/support/v7/appcompat",
+                appCompatPath);
         
-        filesToDelete.add(new File(String.format("%s/%s",
-                            pathLib,
-                            "samples")));
-        
-        LibraryGit library = new LibraryGit(
-                "https://github.com/JakeWharton/ActionBarSherlock.git",
-                pathLib,
-                "4.2.0",
-                this.adapter.getApplicationMetadata().getName() + "-abs",
-                filesToDelete,
-                pathLib + "/library");
-        
-        result.add(library);
+        result.add(copyfile);
         
         result.add(new UpdateLibraryAndroid(
                 this.adapter,
-                this.adapter.getApplicationMetadata().getName() + "-abs",
-                pathLib + "/library",
-                null,
-                pathLib + "/library",
+                this.adapter.getApplicationMetadata().getName() + "-appcompat-v7",
+                appCompatPath,
+                "android-21",
+                appCompatPath,
                 true));
-        
-        result.add(new SourceFile(
-                Harmony.getTemplatesPath()
-                        + "/android/libs/sherlock_ant.properties",
-                this.adapter.getLibsPath() + "sherlock"
-                        + "/library/" + "ant.properties",
-                false));
-        
-        result.add(new SourceFile(
-                Harmony.getTemplatesPath()
-                        + "/android/libs/sherlock_.project",
-                this.adapter.getLibsPath() + "sherlock"
-                        + "/library/" + ".project",
-                false));
         
         return result;
     }
@@ -710,6 +689,13 @@ public class AndroidProjectAdapter implements IAdapterProject {
                         + "styles.xml",
                 this.adapter.getRessourceValuesPath() + "styles.xml",
                 new StylesFile()));
+        
+        result.add(new EditFile(
+                Harmony.getInstance().getHarmonyContext().getCurrentBundleFolder()
+                        + this.adapter.getTemplateRessourceValuesPath() 
+                        + "themes.xml",
+                this.adapter.getRessourceValuesPath() + "themes.xml",
+                new StylesFile()));
 
         result.add(new EditFile(
                 Harmony.getInstance().getHarmonyContext().getCurrentBundleFolder()
@@ -730,7 +716,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 entity.getName().toLowerCase(), "ListActivity"));
         
         result.add(new ManifestApplicationThemeAndroid(
-                this.adapter, "@style/PinnedTheme"));
+                this.adapter, "@style/AppTheme"));
         
         return result;
     }
@@ -849,41 +835,6 @@ public class AndroidProjectAdapter implements IAdapterProject {
                         filePath + "widget_datetime.xml"));
             }
         }
-        
-        templatePath = String.format(
-                "%spinnedheader/",
-                this.adapter.getTemplateWidgetPath());
-        filePath = String.format(
-                "%s/com/google/android/pinnedheader/",
-                this.adapter.getSourcePath());
-        
-        result.add(new SourceFile(
-                templatePath + "AutoScrollListView.java",
-                filePath + "AutoScrollListView.java"));
-        
-        result.add(new SourceFile(
-                templatePath + "SelectionItemView.java",
-                filePath + "SelectionItemView.java"));
-        
-        result.add(new SourceFile(
-                templatePath + "headerlist/HeaderAdapter.java",
-                filePath + "headerlist/HeaderAdapter.java"));
-        
-        result.add(new SourceFile(
-                templatePath + "headerlist/HeaderSectionIndexer.java",
-                filePath + "headerlist/HeaderSectionIndexer.java"));
-        
-        result.add(new SourceFile(
-                templatePath + "headerlist/ListPinnedHeaderView.java",
-                filePath + "headerlist/ListPinnedHeaderView.java"));
-        
-        result.add(new SourceFile(
-                templatePath + "headerlist/PinnedHeaderListView.java",
-                filePath + "headerlist/PinnedHeaderListView.java"));
-        
-        result.add(new SourceFile(
-                templatePath + "util/ComponentUtils.java",
-                filePath + "util/ComponentUtils.java"));
         
         templatePath = this.adapter.getTemplateRessourcePath();
         filePath = this.adapter.getRessourcePath();

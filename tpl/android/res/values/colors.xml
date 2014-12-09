@@ -2,4 +2,8 @@
 <resources>    
     <color name="list_item_prefix_highlight_color">#99cc00</color>
     <color name="list_item_header_color">#33B5E5</color>
+    
+    <color name="primary_color">#259b24</color>
+    <color name="primary_color_dark">#0d5302</color>
+    <color name="accent_color">#795548</color>
 </resources>

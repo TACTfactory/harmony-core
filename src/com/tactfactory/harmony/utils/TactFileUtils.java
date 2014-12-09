@@ -72,10 +72,32 @@ public abstract class TactFileUtils extends FileUtils {
 	 */
 	public static void copyfile(final File srcFile, final File destFile) {
 		try {
-		    if (!destFile.getParentFile().exists()) {
-		        destFile.getParentFile().mkdirs();
+		    if (srcFile.isDirectory()
+		            && destFile.exists() && !destFile.isDirectory()) {
+		        ConsoleUtils.displayError(String.format(
+		                "Can't copy folder %s into file %s",
+		                srcFile.getAbsolutePath(),
+		                destFile.getAbsolutePath()));
+		    } else {
+		        if (srcFile.isDirectory() && !destFile.exists()) {
+                    destFile.mkdirs();
+		        }
+		        
+		        if (srcFile.isDirectory() && destFile.isDirectory()) {
+		            File[] inFiles = srcFile.listFiles();
+		            
+		            for (File file : inFiles) {
+		                File childDestFile = new File(destFile, file.getName());
+                        copyfile(file, childDestFile);
+                    }
+		        } else {
+		            if (!destFile.getParentFile().exists()) {
+        		        destFile.getParentFile().mkdirs();
+        		    }
+		            
+        			Files.copy(srcFile, destFile);
+		        }
 		    }
-			Files.copy(srcFile, destFile);
 		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);
 		}

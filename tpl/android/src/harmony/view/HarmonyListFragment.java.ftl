@@ -3,19 +3,17 @@ package ${project_namespace}.harmony.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-
+import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-
-import com.actionbarsherlock.app.SherlockListFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 
 import ${project_namespace}.menu.${project_name?cap_first}Menu;
 
@@ -23,8 +21,8 @@ import ${project_namespace}.menu.${project_name?cap_first}Menu;
  * Harmony custom list Fragment.
  * @param <T> Type to show
  */
-public abstract class HarmonyListFragment<T> extends SherlockListFragment
-implements LoaderManager.LoaderCallbacks<android.database.Cursor> {
+public abstract class HarmonyListFragment<T> extends ListFragment
+        implements LoaderManager.LoaderCallbacks<android.database.Cursor> {
     /**
      * Recall internal address (Hack Micky).
      */

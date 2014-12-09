@@ -25,7 +25,7 @@ public class HomeActivity extends HarmonyFragmentActivity
         implements OnClickListener {
 
     @Override
-    public void onCreate(Bundle savedInstanceState)    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.main);
         
@@ -68,5 +68,4 @@ public class HomeActivity extends HarmonyFragmentActivity
             this.startActivity(intent);
         }
     }
-
 }

@@ -4,15 +4,15 @@
 <@header?interpret />
 package ${curr.controller_namespace};
 
-import java.util.List;
 
 import ${curr.namespace}.R;
-
-
-import android.util.AttributeSet;
-import android.view.View;<#if (ViewUtils.hasTypeBoolean(fields?values))>
+<#if (ViewUtils.hasTypeBoolean(fields?values))>
 import android.widget.CheckBox;</#if>
-import android.widget.SectionIndexer;
+import android.database.Cursor;
+import android.support.v4.widget.CursorAdapter;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 
 <#assign importDate=false />
@@ -26,135 +26,125 @@ import android.widget.TextView;
 <#if (importDate)>
 import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
-import ${curr.namespace}.harmony.view.HarmonyFragmentActivity;
-import com.google.android.pinnedheader.SelectionItemView;
-import com.google.android.pinnedheader.headerlist.HeaderAdapter;
-import com.google.android.pinnedheader.headerlist.HeaderSectionIndexer;
-import com.google.android.pinnedheader.headerlist.PinnedHeaderListView.PinnedHeaderAdapter;
+
 import ${curr.namespace}.entity.${curr.name};
+import ${curr.namespace}.provider.contract.${curr.name?cap_first}Contract;
 
 /**
  * List adapter for ${curr.name} entity.
  */
-public class ${curr.name}ListAdapter
-        extends HeaderAdapter<${curr.name}>
-        implements PinnedHeaderAdapter {
+public class ${curr.name}ListAdapter extends CursorAdapter {
+    
+    /** Android {@link Context}. */
+    private android.content.Context context;
+    
     /**
      * Constructor.
      * @param ctx context
+     * @param cursor cursor
      */
-    public ${curr.name}ListAdapter(android.content.Context ctx) {
-        super(ctx);
+    public ${curr.name}ListAdapter(android.content.Context context, Cursor cursor) {
+        super(context, cursor, 0);
+        this.context = context;
     }
-
+    
     /**
-     * Constructor.
-     * 
-     * @param context The context
-     * @param resource The resource
-     * @param textViewResourceId The resource id of the text view
-     * @param objects The list of objects of this adapter
+     * @return {@link Context}
      */
-    public ${curr.name}ListAdapter(android.content.Context context,
-            int resource,
-            int textViewResourceId,
-            List<${curr.name}> objects) {
-        super(context, resource, textViewResourceId, objects);
+    protected android.content.Context getContext() {
+        return this.context;
+    }
+    
+    @Override
+    public void bindView(View view,
+            android.content.Context context, Cursor cursor) {
+        ViewHolder viewHolder = (ViewHolder) view.getTag();
+        viewHolder.populate(${curr.name}Contract.cursorToItem(cursor));
     }
 
-    /**
-     * Constructor.
-     *
-     * @param context The context
-     * @param resource The resource
-     * @param textViewResourceId The resource id of the text view
-     * @param objects The list of objects of this adapter
-     */
-    public ${curr.name}ListAdapter(android.content.Context context,
-            int resource,
-            int textViewResourceId,
-            ${curr.name}[] objects) {
-        super(context, resource, textViewResourceId, objects);
+    @Override
+    public View newView(android.content.Context context,
+            Cursor cursor, ViewGroup group) {
+        final ViewHolder viewHolder = new ViewHolder(this.getContext(), group);
+        
+        viewHolder.populate(${curr.name}Contract.cursorToItem(cursor));
+        
+        return viewHolder.getView();
     }
-
-    /**
-     * Constructor.
-     * 
-     * @param context The context
-     * @param resource The resource
-     * @param textViewResourceId The resource id of the text view
-     */
-    public ${curr.name}ListAdapter(android.content.Context context,
-            int resource,
-            int textViewResourceId) {
-        super(context, resource, textViewResourceId);
-    }
-
-    /**
-     * Constructor.
-     * 
-     * @param context The context
-     * @param textViewResourceId The resource id of the text view
-     * @param objects The list of objects of this adapter
-     */
-    public ${curr.name}ListAdapter(android.content.Context context,
-            int textViewResourceId,
-            List<${curr.name}> objects) {
-        super(context, textViewResourceId, objects);
-    }
-
-    /**
-     * Constructor.
-     * 
-     * @param context The context
-     * @param textViewResourceId The resource id of the text view
-     * @param objects The list of objects of this adapter
-     */
-    public ${curr.name}ListAdapter(android.content.Context context,
-            int textViewResourceId,
-            ${curr.name}[] objects) {
-        super(context, textViewResourceId, objects);
-    }
-
-    /**
-     * Constructor.
-     * 
-     * @param context The context
-     * @param textViewResourceId The resource id of the text view
-     */
-    public ${curr.name}ListAdapter(android.content.Context context,
-            int textViewResourceId) {
-        super(context, textViewResourceId);
-    }
-
-    /** Holder row. */
-    private static class ViewHolder extends SelectionItemView {
-
-        /**
-         * Constructor.
-         *
-         * @param context The context
-         */
-        public ViewHolder(android.content.Context context) {
-            this(context, null);
+    
+    @Override
+    public Cursor swapCursor(Cursor newCursor) {
+        if (newCursor == this.mCursor) {
+            return null;
         }
+        
+        Cursor oldCursor = this.mCursor;
+        
+        if (oldCursor != null) {
+            if (this.mChangeObserver != null) {
+                oldCursor.unregisterContentObserver(this.mChangeObserver);
+            }
+            
+            if (this.mDataSetObserver != null) {
+                oldCursor.unregisterDataSetObserver(this.mDataSetObserver);
+            }
+        }
+        
+        mCursor = newCursor;
+        
+        if (newCursor != null) {
+            if (this.mChangeObserver != null) {
+                newCursor.registerContentObserver(this.mChangeObserver);
+            }
+            
+            if (this.mDataSetObserver != null) {
+                newCursor.registerDataSetObserver(this.mDataSetObserver);
+            }
+            
+            this.mRowIDColumn = newCursor.getColumnIndexOrThrow(
+                    ${curr.name}Contract.COL_ID);
+            this.mDataValid = true;
+            // notify the observers about the new cursor
+            this.notifyDataSetChanged();
+        } else {
+            this.mRowIDColumn = -1;
+            this.mDataValid = false;
+            // notify the observers about the lack of a data set
+            this.notifyDataSetInvalidated();
+        }
+        
+        return oldCursor;
+    }
+    
+    /** Holder row. */
+    private class ViewHolder {
+        private View convertView;
         
         /**
          * Constructor.
          *
          * @param context The context
-         * @param attrs The attribute set
          */
-        public ViewHolder(android.content.Context context, AttributeSet attrs) {
-            super(context, attrs, R.layout.row_${curr.name?lower_case});
+        public ViewHolder(android.content.Context context, ViewGroup parent) {
+            this.convertView = LayoutInflater.from(context).inflate(
+                    R.layout.row_${curr.name?lower_case}, parent, false);
+            
+            this.convertView.setTag(this);
+        }
+        
+        /**
+         * @return Holder view
+         */
+        public View getView() {
+            return this.convertView;
         }
 
-        /** Populate row with a ${curr.name}.
+        /**
+         * Populate row with a Server.
          *
-         * @param model ${curr.name} data
+         * @param model Server data
          */
         public void populate(final ${curr.name} model) {
-            View convertView = this.getInnerLayout();
             <#list fields?values as field>
                 <#if (!field.internal && !field.hidden)>
                     <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
@@ -174,60 +164,5 @@ public class ${curr.name}ListAdapter
 
 <#list fields?values as field>${AdapterUtils.populateViewHolderFieldAdapter(field, 3)}</#list>
         }
-    }
-
-    /** Section indexer for this entity's list. */
-    public static class ${curr.name}SectionIndexer
-                    extends HeaderSectionIndexer<${curr.name}>
-                    implements SectionIndexer {
-
-        /**
-         * Constructor.
-         * @param items The items of the indexer
-         */
-        public ${curr.name}SectionIndexer(List<${curr.name}> items) {
-            super(items);
-        }
-        
-        @Override
-        protected String getHeaderText(${curr.name} item) {
-            return "Your entity's header name here";
-        }
-    }
-
-    @Override
-    protected View bindView(View itemView,
-                int partition,
-                ${curr.name} item,
-                int position) {
-        final ViewHolder view;
-        
-        if (itemView != null) {
-            view = (ViewHolder) itemView;
-        } else {
-            view = new ViewHolder(this.getContext());
-        }
-
-        if (!((HarmonyFragmentActivity) this.getContext()).isDualMode()) {
-            view.setActivatedStateSupported(false);
-        }
-        
-        view.populate(item);
-        this.bindSectionHeaderAndDivider(view, position);
-        
-        return view;
-    }
-
-    @Override
-    public int getPosition(${curr.name} item) {
-        int result = -1;
-        if (item != null) {
-            for (int i = 0; i < this.getCount(); i++) {
-                if (item.get${curr_ids[0].name?cap_first}() == this.getItem(i).get${curr_ids[0].name?cap_first}()) {
-                    result = i;
-                }
-            }
-        }
-        return result;
     }
 }

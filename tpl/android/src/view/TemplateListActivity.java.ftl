@@ -6,7 +6,6 @@ import ${curr.namespace}.R;
 
 import ${project_namespace}.harmony.view.HarmonyFragmentActivity;
 import ${project_namespace}.harmony.view.HarmonyListFragment;
-import com.google.android.pinnedheader.util.ComponentUtils;
 import ${project_namespace}.entity.${curr.name};
 import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
 
@@ -55,11 +54,6 @@ public class ${curr.name}ListActivity
         if (this.isDualMode() && this.detailFragment != null) {
             this.listFragment.setRetainInstance(true);
             this.detailFragment.setRetainInstance(true);
-
-            
-            ComponentUtils.configureVerticalScrollbar(
-                            this.listFragment.getListView(),
-                            View.SCROLLBAR_POSITION_LEFT);
         }
         </#if>
     }
@@ -144,7 +138,7 @@ public class ${curr.name}ListActivity
     @Override
     public void onListLoaded() {
         <#if curr.showAction>
-        if (this.isDualMode()) {
+        /*if (this.isDualMode()) {
             int newPosition =
                 ((${curr.name}ListAdapter) this.listFragment.getListAdapter())
                         .getPosition(this.lastSelectedItem);
@@ -153,7 +147,7 @@ public class ${curr.name}ListActivity
             } else {                
                 this.selectListItem(newPosition);
             }
-        }
+        }*/
         </#if>
     }
 }

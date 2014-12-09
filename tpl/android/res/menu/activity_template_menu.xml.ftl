@@ -5,7 +5,7 @@
         android:id="@+id/share"
         android:title="@string/common_share"
         android:showAsAction="ifRoom"
-        android:actionProviderClass="com.actionbarsherlock.widget.ShareActionProvider"
+        android:actionProviderClass="android.support.v7.widget.ShareActionProvider"
     />
     <item
         android:id="@+id/search"
