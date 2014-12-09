@@ -189,15 +189,17 @@ public final class ${curr.name?cap_first}DataLoader
         }
                         <#elseif field.relation.type == "ManyToMany" && field.relation.inversedBy??>
                             <#assign invField = MetadataUtils.getInversingField(field) />
-        for (${field.relation.targetEntity} ${field.relation.targetEntity?uncap_first} : ${curr.name?uncap_first}.get${field.name?cap_first}()) {
-            ArrayList<${curr.name?cap_first}> ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =
-                    ${field.relation.targetEntity?uncap_first}.get${invField.name?cap_first}();
-            if (${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s == null) {
-                    ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =
-                            new ArrayList<${curr.name?cap_first}>();
-                    ${field.relation.targetEntity?uncap_first}.set${invField.name?cap_first}(${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s);
+        if (${curr.name?uncap_first}.get${field.name?cap_first}() != null) {
+            for (${field.relation.targetEntity} ${field.relation.targetEntity?uncap_first} : ${curr.name?uncap_first}.get${field.name?cap_first}()) {
+                ArrayList<${curr.name?cap_first}> ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =
+                        ${field.relation.targetEntity?uncap_first}.get${invField.name?cap_first}();
+                if (${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s == null) {
+                        ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s =
+                                new ArrayList<${curr.name?cap_first}>();
+                        ${field.relation.targetEntity?uncap_first}.set${invField.name?cap_first}(${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s);
+                }
+                ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s.add(${curr.name?uncap_first});
             }
-            ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s.add(${curr.name?uncap_first});
         }
                         </#if>
                     </#if>
