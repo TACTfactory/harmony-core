@@ -28,7 +28,7 @@ import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
 
 import ${curr.namespace}.entity.${curr.name};
-import ${curr.namespace}.provider.contract.${curr.name?cap_first}Contract;
+${ImportUtils.importRelatedContracts(curr, true, true)}
 
 /**
  * List adapter for ${curr.name} entity.
