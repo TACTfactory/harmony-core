@@ -120,7 +120,10 @@ public final class SqliteAdapter {
 				EnumMetadata enumMeta = 
 						ApplicationMetadata.INSTANCE.getEnums().get(
 								field.getEnumMeta().getTargetEnum());
-				type =	enumMeta.getType();
+				
+				if (enumMeta != null) {
+				    type =	enumMeta.getType();
+				}
 			} else if (field.getHarmonyType().equals(Column.Type.RELATION.getValue())) {
 			    //TODO
 			    // field.getRelation().getEntityRef() & 

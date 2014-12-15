@@ -1111,3 +1111,4 @@ public abstract class ${curr.name}SQLiteAdapterBase
     }
 </#if>
 }
+
