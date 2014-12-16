@@ -712,6 +712,13 @@ public class AndroidProjectAdapter implements IAdapterProject {
         
         result.add(new EditFile(
                 Harmony.getInstance().getHarmonyContext().getCurrentBundleFolder()
+                        + this.adapter.getTemplateRessourceXLargeValuesPath() 
+                        + "colors.xml",
+                this.adapter.getRessourceXLargeValuesPath() + "colors.xml",
+                new ColorsFile()));
+        
+        result.add(new EditFile(
+                Harmony.getInstance().getHarmonyContext().getCurrentBundleFolder()
                         + this.adapter.getTemplateRessourceValuesPath()
                         + "dimens.xml",
                     this.adapter.getRessourceValuesPath() + "dimens.xml",

@@ -9,9 +9,6 @@ import ${curr.namespace}.R;
 <#if (ViewUtils.hasTypeBoolean(fields?values))>
 import android.widget.CheckBox;</#if>
 import android.database.Cursor;
-import android.support.v4.widget.CursorAdapter;
-import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 

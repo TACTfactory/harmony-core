@@ -132,8 +132,9 @@ public class ${curr.name}ListActivity
             }
             
             this.listFragment.getListView().setItemChecked(listPosition, true);
-            ${curr.name} item = ${curr.name}Contract.cursorToItem((Cursor)
-                    this.listFragment.getListAdapter().getItem(listPosition));
+            ${curr.name} item = ${curr.name}Contract.cursorToItem(
+                    (android.database.Cursor) this.listFragment
+                            .getListAdapter().getItem(listPosition));
             this.loadDetailFragment(item);
         } else {
             this.loadDetailFragment(null);
