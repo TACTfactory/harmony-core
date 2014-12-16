@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="fill_parent"
-    android:background="@drawable/list_background_holo"
+    android:background="@color/list_background_color"
     android:layout_height="fill_parent" >
     <RelativeLayout
         android:id="@+id/${curr.name?lower_case}ListContainer"
@@ -27,7 +27,8 @@
             android:clickable="true"
             android:drawSelectorOnTop="false"
             android:fadingEdge="none"
-            android:divider="@android:color/transparent" />
+            android:divider="@android:color/transparent"
+            android:choiceMode="singleChoice" />
     </RelativeLayout>
 
     <LinearLayout

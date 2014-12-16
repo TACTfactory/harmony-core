@@ -22,7 +22,12 @@ public class ${curr.name}ShowActivity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_${curr.name?lower_case}_show);
+        this.setNavigationBack(true);
+    }
+    
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_${curr.name?lower_case}_show;
     }
 
 <#if curr.deleteAction>

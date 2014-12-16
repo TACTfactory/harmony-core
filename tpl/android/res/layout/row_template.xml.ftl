@@ -9,7 +9,8 @@
     android:paddingBottom="2.5dp"
     android:paddingLeft="10dp"
     android:paddingRight="10dp"
-    android:paddingTop="2.5dp" >
+    android:paddingTop="2.5dp"
+    android:background="@drawable/list_item_activated_background" >
     <#list fields?values as field>
         <#assign m_id="${curr.name?lower_case}_${field.name?lower_case}" />
         <#assign m_id_label="${m_id}_label" />

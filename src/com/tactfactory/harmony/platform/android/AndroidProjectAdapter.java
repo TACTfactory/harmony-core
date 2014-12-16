@@ -100,12 +100,6 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 this.adapter.getStringsPathFile(),
                 false));
 
-        // main.xml
-        result.add(new SourceFile(
-                this.adapter.getTemplateRessourceLayoutPath() + "main.xml",
-                this.adapter.getRessourceLayoutPath() + "main.xml",
-                false));
-
         templatePath = this.adapter.getTemplateSourcePath();
         filePath = this.adapter.getSourcePath()
                 + this.adapter.getApplicationMetadata().getProjectNameSpace();
@@ -141,6 +135,12 @@ public class AndroidProjectAdapter implements IAdapterProject {
         result.add(new SourceFile(
                 templatePath + "harmony/view/HarmonyListFragment.java",
                 filePath + "/harmony/view/HarmonyListFragment.java",
+                false));
+        
+        // HarmonyCursorAdapter
+        result.add(new SourceFile(
+                templatePath + "harmony/view/HarmonyCursorAdapter.java",
+                filePath + "/harmony/view/HarmonyCursorAdapter.java",
                 false));
 
         // NotImplementedException
@@ -242,6 +242,12 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 this.adapter.getTemplateHomeActivityPathFile(),
                 this.adapter.getHomeActivityPathFile(),
                 true));
+        
+        // toolbar.xml
+        result.add(new SourceFile(
+                this.adapter.getTemplateRessourceLayoutPath() + "toolbar.xml",
+                this.adapter.getRessourceLayoutPath() + "toolbar.xml",
+                false));
         
         result.add(new SourceFile(
                 this.adapter.getTemplateRessourceLayoutPath() + "main.xml",
@@ -859,6 +865,10 @@ public class AndroidProjectAdapter implements IAdapterProject {
         result.add(new SourceFile(
                 templatePath + "drawable/list_item_activated_background.xml",
                 filePath+ "drawable/list_item_activated_background.xml"));
+        
+        result.add(new SourceFile(
+                templatePath + "drawable-xlarge/list_item_activated_background.xml",
+                filePath+ "drawable-xlarge/list_item_activated_background.xml"));
         
         templatePath = String.format("%sharmony/view/",
                 this.adapter.getTemplateSourcePath());

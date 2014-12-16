@@ -28,15 +28,13 @@ import ${curr.namespace}.harmony.util.DateUtils;
 </#if>
 
 import ${curr.namespace}.entity.${curr.name};
+import ${curr.namespace}.harmony.view.HarmonyCursorAdapter;
 ${ImportUtils.importRelatedContracts(curr, true, true)}
 
 /**
  * List adapter for ${curr.name} entity.
  */
-public class ${curr.name}ListAdapter extends CursorAdapter {
-    
-    /** Android {@link Context}. */
-    private android.content.Context context;
+public class ${curr.name}ListAdapter extends HarmonyCursorAdapter<${curr.name}> {
     
     /**
      * Constructor.
@@ -44,99 +42,41 @@ public class ${curr.name}ListAdapter extends CursorAdapter {
      * @param cursor cursor
      */
     public ${curr.name}ListAdapter(android.content.Context context, Cursor cursor) {
-        super(context, cursor, 0);
-        this.context = context;
-    }
-    
-    /**
-     * @return {@link Context}
-     */
-    protected android.content.Context getContext() {
-        return this.context;
+        super(context, cursor);
     }
     
     @Override
-    public void bindView(View view,
-            android.content.Context context, Cursor cursor) {
-        ViewHolder viewHolder = (ViewHolder) view.getTag();
-        viewHolder.populate(${curr.name}Contract.cursorToItem(cursor));
+    protected ${curr.name} cursorToItem(Cursor cursor) {
+        return ${curr.name}Contract.cursorToItem(cursor);
     }
 
     @Override
-    public View newView(android.content.Context context,
-            Cursor cursor, ViewGroup group) {
-        final ViewHolder viewHolder = new ViewHolder(this.getContext(), group);
-        
-        viewHolder.populate(${curr.name}Contract.cursorToItem(cursor));
-        
-        return viewHolder.getView();
+    protected String getColId() {
+        return ${InheritanceUtils.getClassWithId(curr).name}Contract.COL_ID;
     }
-    
+
     @Override
-    public Cursor swapCursor(Cursor newCursor) {
-        if (newCursor == this.mCursor) {
-            return null;
-        }
-        
-        Cursor oldCursor = this.mCursor;
-        
-        if (oldCursor != null) {
-            if (this.mChangeObserver != null) {
-                oldCursor.unregisterContentObserver(this.mChangeObserver);
-            }
-            
-            if (this.mDataSetObserver != null) {
-                oldCursor.unregisterDataSetObserver(this.mDataSetObserver);
-            }
-        }
-        
-        mCursor = newCursor;
-        
-        if (newCursor != null) {
-            if (this.mChangeObserver != null) {
-                newCursor.registerContentObserver(this.mChangeObserver);
-            }
-            
-            if (this.mDataSetObserver != null) {
-                newCursor.registerDataSetObserver(this.mDataSetObserver);
-            }
-            
-            this.mRowIDColumn = newCursor.getColumnIndexOrThrow(
-                    ${curr.name}Contract.COL_ID);
-            this.mDataValid = true;
-            // notify the observers about the new cursor
-            this.notifyDataSetChanged();
-        } else {
-            this.mRowIDColumn = -1;
-            this.mDataValid = false;
-            // notify the observers about the lack of a data set
-            this.notifyDataSetInvalidated();
-        }
-        
-        return oldCursor;
+    protected ViewHolder getViewHolder(
+            android.content.Context context, ViewGroup group) {
+        return new ${curr.name}ViewHolder(context, group);
     }
     
     /** Holder row. */
-    private class ViewHolder {
-        private View convertView;
-        
+    private class ${curr.name}ViewHolder extends ViewHolder {
+    
         /**
          * Constructor.
          *
          * @param context The context
          */
-        public ViewHolder(android.content.Context context, ViewGroup parent) {
-            this.convertView = LayoutInflater.from(context).inflate(
-                    R.layout.row_${curr.name?lower_case}, parent, false);
-            
-            this.convertView.setTag(this);
+        public ${curr.name}ViewHolder(
+                android.content.Context context, ViewGroup parent) {
+            super(context, parent);
         }
         
-        /**
-         * @return Holder view
-         */
-        public View getView() {
-            return this.convertView;
+        @Override
+        protected int getContentLayout() {
+            return R.layout.row_${curr.name?lower_case};
         }
 
         /**
@@ -150,12 +90,12 @@ public class ${curr.name}ListAdapter extends CursorAdapter {
                     <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
                         <#if (field.harmony_type?lower_case == "boolean")>
             CheckBox ${field.name}View =
-                (CheckBox) convertView.findViewById(
+                (CheckBox) this.getView().findViewById(
                         R.id.row_${curr.name?lower_case}_${field.name?lower_case});
             ${field.name}View.setEnabled(false);
                         <#else>
             TextView ${field.name}View =
-                (TextView) convertView.findViewById(
+                (TextView) this.getView().findViewById(
                         R.id.row_${curr.name?lower_case}_${field.name?lower_case});
                         </#if>
                     </#if>

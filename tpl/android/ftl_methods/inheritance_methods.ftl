@@ -31,3 +31,13 @@
     </#list>
     <#return result />
 </#function>
+
+<#function getClassWithId entity>
+    <#assign result = entity>
+    
+    <#if InheritanceUtils.isExtended(entity)>
+        <#assign result = getClassWithId(entity.inheritance.superclass) />
+    </#if>
+    
+    <#return result />
+</#function>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>    
-    <color name="list_item_prefix_highlight_color">#99cc00</color>
-    <color name="list_item_header_color">#33B5E5</color>
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+    <color name="list_background_color">#ffffffff</color>
     
     <color name="primary_color">#259b24</color>
     <color name="primary_color_dark">#0d5302</color>

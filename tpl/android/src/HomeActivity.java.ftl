@@ -27,9 +27,13 @@ public class HomeActivity extends HarmonyFragmentActivity
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.main);
         
         this.initButtons();
+    }
+    
+    @Override
+    protected int getContentView() {
+        return R.layout.main;
     }
 
     /**

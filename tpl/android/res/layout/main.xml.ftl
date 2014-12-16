@@ -7,11 +7,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
         
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="?attr/colorPrimaryDark"/>
+        <include layout="@layout/toolbar" />
 
         <LinearLayout
             android:id="@+id/homeLayout"
@@ -29,7 +25,7 @@
                 android:layout_height="wrap_content"
                 android:text="Step 1"
                 android:textStyle="bold"
-                android:textColor="@android:color/white"  />
+                android:textColor="?attr/colorPrimary"  />
             <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
@@ -57,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:text="Step 2"
                 android:textStyle="bold"
-                android:textColor="@android:color/white"  />
+                android:textColor="?attr/colorPrimary"  />
             <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
@@ -86,7 +82,7 @@
                 android:layout_height="wrap_content"
                 android:text="Step 3"
                 android:textStyle="bold"
-                android:textColor="@android:color/white" />
+                android:textColor="?attr/colorPrimary" />
             <FrameLayout
                 android:layout_width="fill_parent"
                 android:layout_height="1dp"
