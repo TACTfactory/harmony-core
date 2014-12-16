@@ -19,12 +19,14 @@
         tools:layout="@layout/fragment_${curr.name?lower_case}_list" >
     </fragment>
 
-    <fragment
-        android:id="@+id/fragment_show"
-        android:name="${curr.controller_namespace}.${curr.name}ShowFragment"
-        android:layout_width="0dp"
-        android:layout_weight="67"
-        android:layout_height="match_parent"
-        tools:layout="@layout/fragment_${curr.name?lower_case}_show" />
+    <#if curr.showAction>
+        <fragment
+            android:id="@+id/fragment_show"
+            android:name="${curr.controller_namespace}.${curr.name}ShowFragment"
+            android:layout_width="0dp"
+            android:layout_weight="67"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_${curr.name?lower_case}_show" />
 
+    </#if>
 </LinearLayout>
