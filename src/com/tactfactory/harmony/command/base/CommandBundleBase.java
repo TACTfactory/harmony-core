@@ -10,11 +10,10 @@ package com.tactfactory.harmony.command.base;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.HashMap;
-
-import sun.reflect.ReflectionFactory;
 
 import com.tactfactory.harmony.platform.BaseAdapter;
 import com.tactfactory.harmony.platform.IAdapter;
@@ -50,20 +49,24 @@ public abstract class CommandBundleBase<T extends IAdapter> extends CommandBase 
                     if (mappedPlatform.equals(targetPlatform)) {
                         T newAdapter = null;
                         try {
-                            Class<? extends T> childType  = adapterMapping.get(mappedPlatform);
-                            Class<BaseAdapter> parentType = BaseAdapter.class;
+                            Class<? extends T> childType =
+                                    adapterMapping.get(mappedPlatform);
                             
-                            ReflectionFactory rf =
-                                    ReflectionFactory.getReflectionFactory();
-                            Constructor<?> objDef = parentType.getDeclaredConstructor(BaseAdapter.class);
-                            Constructor<?> intConstr = rf.newConstructorForSerialization(
-                                    childType, objDef);
-                            newAdapter = (T) childType.cast(intConstr.newInstance(coreAdapter));
+                            Constructor<? extends T> constructor =
+                                    childType.getConstructor();
+                            
+                            newAdapter = constructor.newInstance();
+                            
+                            Method method = childType.getMethod(
+                                    "cloneTo", BaseAdapter.class);
+                            
+                            method.invoke(newAdapter, coreAdapter);
                         } catch (InstantiationException | IllegalAccessException
                                 | IllegalArgumentException
                                 | InvocationTargetException | NoSuchMethodException
                                 | SecurityException e) {
-                            ConsoleUtils.displayError(targetPlatform.name() + " platform not supported !");
+                            ConsoleUtils.displayError(targetPlatform.name()
+                                    + " platform not supported !");
                         }
                         if (newAdapter != null) {
                             lazyTypes.add(newAdapter);
