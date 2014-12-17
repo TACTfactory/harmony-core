@@ -458,7 +458,7 @@ public class AndroidAdapter extends BaseAdapter {
     public final String getTemplateRessourceXLargeValuesPath() {
         return String.format("%s/%s/",
                 this.getTemplateRessourcePath(),
-                this.getValues());
+                this.getValuesXLarge());
     }
     
     @Override

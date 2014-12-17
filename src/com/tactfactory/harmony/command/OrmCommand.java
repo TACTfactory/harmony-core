@@ -13,7 +13,7 @@ import java.util.LinkedHashMap;
 import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.Console;
-import com.tactfactory.harmony.command.base.CommandBase;
+import com.tactfactory.harmony.command.base.CommandBundleBase;
 import com.tactfactory.harmony.generator.ActivityGenerator;
 import com.tactfactory.harmony.generator.ApplicationGenerator;
 import com.tactfactory.harmony.generator.EntityGenerator;
@@ -23,7 +23,12 @@ import com.tactfactory.harmony.generator.ProviderGenerator;
 import com.tactfactory.harmony.generator.SQLiteGenerator;
 import com.tactfactory.harmony.generator.TestGenerator;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
+import com.tactfactory.harmony.platform.BaseAdapter;
 import com.tactfactory.harmony.platform.IAdapter;
+import com.tactfactory.harmony.platform.TargetPlatform;
+import com.tactfactory.harmony.platform.android.AndroidAdapter;
+import com.tactfactory.harmony.platform.ios.IosAdapter;
+import com.tactfactory.harmony.platform.winphone.WinphoneAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -39,7 +44,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  *
  */
 @PluginImplementation
-public class OrmCommand extends CommandBase {
+public class OrmCommand extends CommandBundleBase<BaseAdapter> {
 
 	/** Bundle name. */
 	public static final String BUNDLE = "orm";
@@ -192,4 +197,17 @@ public class OrmCommand extends CommandBase {
 				//|| command.equals(GENERATE_FORM)
 				|| command.equals(GENERATE_CRUD);
 	}
+
+    @Override
+    public void initBundleAdapter() {
+        this.adapterMapping.put(
+                TargetPlatform.ANDROID,
+                AndroidAdapter.class);
+        this.adapterMapping.put(
+                TargetPlatform.WINPHONE,
+                WinphoneAdapter.class);
+        this.adapterMapping.put(
+                TargetPlatform.IPHONE,
+                IosAdapter.class);
+    }
 }
