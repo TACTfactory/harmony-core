@@ -15,6 +15,8 @@ import android.content.ContentProvider;
 
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.content.pm.ProviderInfo;
 <#if dataLoader?? && dataLoader>import android.database.sqlite.SQLiteDatabase;</#if>
 import android.test.AndroidTestCase;
 import android.test.IsolatedContext;
@@ -114,7 +116,12 @@ public class TestContextMock {
                         }
                     };
     
-            provider.attachInfo(context, null);
+            PackageManager packageManager = this.baseContext.getPackageManager();
+            ProviderInfo providerInfo = packageManager.resolveContentProvider(
+                    ${project_name?cap_first}Provider.class.getPackage().getName(), 0);
+
+            provider.attachInfo(context, providerInfo);
+
             resolver.addProvider(PROVIDER_AUTHORITY, provider);
         }
 
