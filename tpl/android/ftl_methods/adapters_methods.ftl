@@ -6,11 +6,19 @@
         <#if (!field.relation??)>
             <#if (MetadataUtils.isPrimitive(field))>
                 <#assign result = result + "${t}result.put(${fieldNames[0]},\n" />
-                <#assign result = result + "${t}    ${FieldsUtils.generateStringGetter(\"item\", field)});\n\n"/>
+                <#if (FieldsUtils.getJavaType(field)?lower_case == "boolean")>
+                    <#assign result = result + "${t}    ${FieldsUtils.generateStringGetter(\"item\", field)} ? 1 : 0);\n\n"/>
+                <#else>
+                    <#assign result = result + "${t}    ${FieldsUtils.generateStringGetter(\"item\", field)});\n\n"/>
+                </#if>
             <#else>
                 <#assign result = result + "${t}if (${FieldsUtils.generateCompleteGetter(\"item\", field)} != null) {\n" />
                 <#assign result = result + "${t}    result.put(${fieldNames[0]},\n"/>
-                <#assign result = result + "${t}        ${FieldsUtils.generateStringGetter(\"item\", field)});\n"/>
+                <#if (FieldsUtils.getJavaType(field)?lower_case == "boolean")>
+                    <#assign result = result + "${t}    ${FieldsUtils.generateStringGetter(\"item\", field)} ? 1 : 0);\n\n"/>
+                <#else>
+                    <#assign result = result + "${t}        ${FieldsUtils.generateStringGetter(\"item\", field)});\n"/>
+                </#if>
                 <#if (field.nullable)>
                     <#assign result = result + "${t}} else {\n"/>
                     <#assign result = result + "${t}    result.put(${fieldNames[0]}, (String) null);\n"/>
