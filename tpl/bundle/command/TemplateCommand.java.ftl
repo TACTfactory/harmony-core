@@ -4,7 +4,7 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 import com.tactfactory.harmony.command.base.CommandBundleBase;
 
-import ${bundle_namespace}.platform.InstallerAdapter;
+import ${bundle_namespace}.platform.${bundle_name?cap_first}Adapter;
 
 
 /**
