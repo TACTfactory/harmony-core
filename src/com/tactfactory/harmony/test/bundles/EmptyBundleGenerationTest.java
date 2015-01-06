@@ -20,7 +20,7 @@ import org.junit.Test;
 
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.generator.BundleGenerator;
-import com.tactfactory.harmony.platform.android.AndroidAdapter;
+import com.tactfactory.harmony.platform.BundleAdapter;
 import com.tactfactory.harmony.test.CommonTest;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
@@ -79,7 +79,7 @@ public class EmptyBundleGenerationTest extends CommonTest {
 	public final void initAll() {
 		try {
 			final BundleGenerator generator = 
-					new BundleGenerator(new AndroidAdapter());
+					new BundleGenerator(new BundleAdapter());
 			generator.generateBundleFiles(
 					BUNDLE_OWNER,
 					BUNDLE_NAME,

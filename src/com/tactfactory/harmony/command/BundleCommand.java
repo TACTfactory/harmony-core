@@ -15,7 +15,7 @@ import com.tactfactory.harmony.command.base.CommandBase;
 import com.tactfactory.harmony.command.interaction.Question;
 import com.tactfactory.harmony.command.interaction.Questionnary;
 import com.tactfactory.harmony.generator.BundleGenerator;
-import com.tactfactory.harmony.platform.IAdapter;
+import com.tactfactory.harmony.platform.BundleAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -83,12 +83,10 @@ public class BundleCommand extends CommandBase {
 			
 			questionnary.launchQuestionnary();
 
-			for(IAdapter adapter : this.getAdapters()) {
-			    new BundleGenerator(adapter).generateBundleFiles(
-			            questionnary.getAnswer("owner"),
-			            questionnary.getAnswer("name"),
-			            questionnary.getAnswer("namespace"));
-			}
+		    new BundleGenerator(new BundleAdapter()).generateBundleFiles(
+		            questionnary.getAnswer("owner"),
+		            questionnary.getAnswer("name"),
+		            questionnary.getAnswer("namespace"));
 		}
 	}
 

@@ -13,20 +13,20 @@ import java.util.HashMap;
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.HarmonyContext;
-import com.tactfactory.harmony.platform.IAdapter;
+import com.tactfactory.harmony.platform.BundleAdapter;
 
 /**
  * Generator for bundles.
  */
-public class BundleGenerator extends BaseGenerator<IAdapter> {
+public class BundleGenerator extends BaseGenerator<BundleAdapter> {
 
 	/**
 	 * Constructor.
-	 * @param adapt Adapter
+	 * @param adapter Adapter
 	 * @throws Exception Exception
 	 */
-	public BundleGenerator(final IAdapter adapt) {
-		super(adapt);
+	public BundleGenerator(final BundleAdapter adapter) {
+		super(adapter);
 	}
 
 	/**
