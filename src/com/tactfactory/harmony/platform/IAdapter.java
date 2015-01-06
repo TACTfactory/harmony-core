@@ -358,7 +358,7 @@ public interface IAdapter {
      * Get the source data namespace.
      * @return The source data namespace
      */
-    String getTemplateBundleTemplatePath();
+    String getGeneratorBundleTemplatePath();
 
 
     /**
@@ -368,7 +368,7 @@ public interface IAdapter {
      * @param bundleName The bundle name
      * @return The source data namespace
      */
-    String getTemplateBundlePath(
+    String getGeneratorBundlePath(
              String bundleOwnerName,
              String bundleNamespace,
              String bundleName);
@@ -721,14 +721,14 @@ public interface IAdapter {
     void setAnnotationsBundleTemplates( String annotationsBundleTemplates);
 
     /**
-     * @return the templateBundleTemplates
+     * @return the generatorBundleTemplates
      */
-    String getTemplateBundleTemplates();
+    String getGeneratorBundleTemplates();
 
     /**
-     * @param templateBundleTemplates the templateBundleTemplates to set
+     * @param generatorBundleTemplates the generatorBundleTemplates to set
      */
-    void setTemplateBundleTemplates( String templateBundleTemplates);
+    void setGeneratorBundleTemplates( String generatorBundleTemplates);
 
     /**
      * @return the parserBundleTemplates

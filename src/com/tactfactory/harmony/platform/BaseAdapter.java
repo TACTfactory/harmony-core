@@ -49,7 +49,7 @@ public abstract class BaseAdapter implements IAdapter {
 	/**	Bundle template files path. */
 	private String annotationsBundleTemplates = "annotation";
 	/**	Bundle template files path. */
-	private String templateBundleTemplates = "template";
+	private String generatorBundleTemplates = "generator";
 	/**	Bundle template files path. */
 	private String parserBundleTemplates = "parser";
 	/**	Bundle template files path. */
@@ -636,11 +636,11 @@ public abstract class BaseAdapter implements IAdapter {
 	 * Get the source data namespace.
 	 * @return The source data namespace
 	 */
-	public final String getTemplateBundleTemplatePath() {
+	public final String getGeneratorBundleTemplatePath() {
 		return String.format("%s%s/%s",
 				Harmony.getTemplatesPath(),
 				this.getBundleTemplates(),
-				this.getTemplateBundleTemplates());
+				this.getGeneratorBundleTemplates());
 	}
 
 
@@ -651,7 +651,7 @@ public abstract class BaseAdapter implements IAdapter {
 	 * @param bundleName The bundle name
 	 * @return The source data namespace
 	 */
-	public final String getTemplateBundlePath(
+	public final String getGeneratorBundlePath(
 			final String bundleOwnerName,
 			final String bundleNamespace,
 			final String bundleName) {
@@ -659,7 +659,7 @@ public abstract class BaseAdapter implements IAdapter {
 				Harmony.getBundlePath(),
 				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
 				bundleNamespace.replaceAll("\\.", HarmonyContext.DELIMITER),
-				this.getTemplateBundleTemplates());
+				this.getGeneratorBundleTemplates());
 	}
 
 	/**
@@ -1154,18 +1154,18 @@ public abstract class BaseAdapter implements IAdapter {
 	}
 
 	/**
-	 * @return the templateBundleTemplates
+	 * @return the generatorBundleTemplates
 	 */
-	public final String getTemplateBundleTemplates() {
-		return templateBundleTemplates;
+	public final String getGeneratorBundleTemplates() {
+		return generatorBundleTemplates;
 	}
 
 	/**
-	 * @param templateBundleTemplates the templateBundleTemplates to set
+	 * @param generatorBundleTemplates the generatorBundleTemplates to set
 	 */
-	public final void setTemplateBundleTemplates(
-			final String templateBundleTemplates) {
-		this.templateBundleTemplates = templateBundleTemplates;
+	public final void setGeneratorBundleTemplates(
+			final String generatorBundleTemplates) {
+		this.generatorBundleTemplates = generatorBundleTemplates;
 	}
 
 	/**
@@ -1254,7 +1254,7 @@ public abstract class BaseAdapter implements IAdapter {
 	    adapter.setService(this.getService());
 	    adapter.setSource(this.getSource());
 	    adapter.setStrings(this.getStrings());
-	    adapter.setTemplateBundleTemplates(this.getTemplateBundleTemplates());
+	    adapter.setGeneratorBundleTemplates(this.getGeneratorBundleTemplates());
 	    adapter.setTest(this.getTest());
 	    adapter.setTestLibs(this.getTestLibs());
 	    adapter.setUtil(this.getUtil());

@@ -11,6 +11,8 @@ package com.tactfactory.harmony.generator;
 import java.util.HashMap;
 
 import com.google.common.base.CaseFormat;
+import com.tactfactory.harmony.Harmony;
+import com.tactfactory.harmony.HarmonyContext;
 import com.tactfactory.harmony.platform.IAdapter;
 
 /**
@@ -38,7 +40,6 @@ public class BundleGenerator extends BaseGenerator<IAdapter> {
 			final String bundleName,
 			final String bundleNameSpace) {
 
-
 		this.generateDataModel(bundleOwnerName,
 				bundleName,
 				bundleNameSpace);
@@ -50,6 +51,7 @@ public class BundleGenerator extends BaseGenerator<IAdapter> {
 		this.generateAnnotation(bundleOwnerName,
 				bundleName,
 				bundleNameSpace);
+		
 		this.generateParser(bundleOwnerName,
 				bundleName,
 				bundleNameSpace);
@@ -58,13 +60,17 @@ public class BundleGenerator extends BaseGenerator<IAdapter> {
 				bundleName,
 				bundleNameSpace);
 
-		this.generateTemplate(bundleOwnerName,
+		this.generateGenerator(bundleOwnerName,
 				bundleName,
 				bundleNameSpace);
 
 		this.generateMeta(bundleOwnerName,
 				bundleName,
 				bundleNameSpace);
+		
+		this.generateAdapters(bundleOwnerName,
+                bundleName,
+                bundleNameSpace);
 	}
 
 	/**
@@ -207,14 +213,14 @@ public class BundleGenerator extends BaseGenerator<IAdapter> {
 	 * @param bundleName Bundle name
 	 * @param bundleNameSpace Bundle namespace
 	 */
-	private void generateTemplate(
+	private void generateGenerator(
 			final String bundleOwnerName,
 			final String bundleName,
 			final String bundleNameSpace) {
 
-		final String tplPath = this.getAdapter().getTemplateBundleTemplatePath()
+		final String tplPath = this.getAdapter().getGeneratorBundleTemplatePath()
 				+ "/TemplateGenerator.java";
-		final String genPath = this.getAdapter().getTemplateBundlePath(
+		final String genPath = this.getAdapter().getGeneratorBundlePath(
 							bundleOwnerName,
 							bundleNameSpace,
 							bundleName)
@@ -250,4 +256,75 @@ public class BundleGenerator extends BaseGenerator<IAdapter> {
 
 		this.makeSource(tplPath, genPath, false);
 	}
+	
+	/**
+     * Generate Bundle adapters.
+     * @param bundleOwnerName Owner name
+     * @param bundleName Bundle name
+     * @param bundleNameSpace Bundle namespace
+     */
+    private void generateAdapters(
+            final String bundleOwnerName,
+            final String bundleName,
+            final String bundleNameSpace) {
+
+        String tplAdapterPath = String.format("%s%s/%s",
+                Harmony.getTemplatesPath(),
+                this.getAdapter().getBundleTemplates(),
+                "platform/");
+        
+        String genAdapterPath = String.format("%s%s/src/%s/%s",
+                Harmony.getBundlePath(),
+                bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
+                bundleNameSpace.replaceAll("\\.", HarmonyContext.DELIMITER),
+                "platform/");
+        
+        // Generate bundle adapter
+        String tplPath = String.format("%s%s",
+                tplAdapterPath,
+                "TemplateAdapter.java");
+        
+        String genPath = String.format("%s%s%s",
+                genAdapterPath,
+                CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, bundleName),
+                "Adapter.java");
+
+        this.makeSource(tplPath, genPath, false);
+        
+        // Generate bundle android adapter
+        tplPath = String.format("%sandroid/%s",
+                tplAdapterPath,
+                "TemplateAdapterAndroid.java");
+        
+        genPath = String.format("%sandroid/%s%s",
+                genAdapterPath,
+                CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, bundleName),
+                "AdapterAndroid.java");
+
+        this.makeSource(tplPath, genPath, false);
+        
+        // Generate bundle ios adapter
+        tplPath = String.format("%sios/%s",
+                tplAdapterPath,
+                "TemplateAdapterIos.java");
+        
+        genPath = String.format("%sios/%s%s",
+                genAdapterPath,
+                CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, bundleName),
+                "AdapterIos.java");
+
+        this.makeSource(tplPath, genPath, false);
+        
+        // Generate bundle winphone adapter
+        tplPath = String.format("%swinphone/%s",
+                tplAdapterPath,
+                "TemplateAdapterWinphone.java");
+        
+        genPath = String.format("%swinphone/%s%s",
+                genAdapterPath,
+                CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, bundleName),
+                "AdapterWinphone.java");
+
+        this.makeSource(tplPath, genPath, false);
+    }
 }

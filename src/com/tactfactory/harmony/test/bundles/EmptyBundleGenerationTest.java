@@ -98,13 +98,21 @@ public class EmptyBundleGenerationTest extends CommonTest {
 		EmptyBundleGenerationTest.hasFindFile(
 				"annotation/" + BUNDLE_NAME + ".java");
 		EmptyBundleGenerationTest.hasFindFile(
-				"template/" + BUNDLE_NAME + "Generator.java");
+				"generator/" + BUNDLE_NAME + "Generator.java");
 		EmptyBundleGenerationTest.hasFindFile(
 				"parser/" + BUNDLE_NAME + "Parser.java");
 		EmptyBundleGenerationTest.hasFindFile(
 				"meta/" + BUNDLE_NAME + "Metadata.java");
 		EmptyBundleGenerationTest.hasFindFile(
-				"command/" + BUNDLE_NAME + "Command.java");
+		        "command/" + BUNDLE_NAME + "Command.java");
+		EmptyBundleGenerationTest.hasFindFile(
+		        "platform/" + BUNDLE_NAME + "Adapter.java");
+		EmptyBundleGenerationTest.hasFindFile(
+		        "platform/android" + BUNDLE_NAME + "AdapterAndroid.java");
+		EmptyBundleGenerationTest.hasFindFile(
+		        "platform/ios" + BUNDLE_NAME + "AdapterIos.java");
+		EmptyBundleGenerationTest.hasFindFile(
+				"platform/winphone" + BUNDLE_NAME + "AdapterWinphone.java");
 
 	}
 
