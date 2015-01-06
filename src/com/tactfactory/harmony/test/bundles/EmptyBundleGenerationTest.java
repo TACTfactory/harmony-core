@@ -108,11 +108,11 @@ public class EmptyBundleGenerationTest extends CommonTest {
 		EmptyBundleGenerationTest.hasFindFile(
 		        "platform/" + BUNDLE_NAME + "Adapter.java");
 		EmptyBundleGenerationTest.hasFindFile(
-		        "platform/android" + BUNDLE_NAME + "AdapterAndroid.java");
+		        "platform/android/" + BUNDLE_NAME + "AdapterAndroid.java");
 		EmptyBundleGenerationTest.hasFindFile(
-		        "platform/ios" + BUNDLE_NAME + "AdapterIos.java");
+		        "platform/ios/" + BUNDLE_NAME + "AdapterIos.java");
 		EmptyBundleGenerationTest.hasFindFile(
-				"platform/winphone" + BUNDLE_NAME + "AdapterWinphone.java");
+				"platform/winphone/" + BUNDLE_NAME + "AdapterWinphone.java");
 
 	}
 
