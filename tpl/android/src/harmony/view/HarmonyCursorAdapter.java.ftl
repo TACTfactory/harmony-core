@@ -4,7 +4,6 @@ package ${project_namespace}.harmony.view;
 import android.content.Context;
 import android.database.Cursor;
 import android.support.v4.widget.CursorAdapter;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -12,9 +11,13 @@ import android.view.ViewGroup;
  * List adapter for <T> entity.
  */
 public abstract class HarmonyCursorAdapter<T> extends CursorAdapter {
-    
-    /** Android {@link Context}. */
-    private Context context;
+    /**
+     * Constructor.
+     * @param ctx context
+     */
+    public HarmonyCursorAdapter(Context ctx) {
+        super(ctx, null, 0);
+    }
     
     /**
      * Constructor.
@@ -23,14 +26,6 @@ public abstract class HarmonyCursorAdapter<T> extends CursorAdapter {
      */
     public HarmonyCursorAdapter(Context context, Cursor cursor) {
         super(context, cursor, 0);
-        this.context = context;
-    }
-    
-    /**
-     * @return {@link Context}
-     */
-    protected android.content.Context getContext() {
-        return this.context;
     }
     
     /** Convert cursor to item. Must be call Contract class. */
@@ -39,20 +34,27 @@ public abstract class HarmonyCursorAdapter<T> extends CursorAdapter {
     /** Get the column name (not aliased) from Contract class. */
     protected abstract String getColId();
     
-    /** Return a ViewHolder instance. */
-    protected abstract ViewHolder getViewHolder(
-            Context context, ViewGroup group);
+    /**
+     * Get a new {@link HarmonyViewHolder} for the item <T>.
+     * @param context
+     * @param cursor
+     * @param group
+     * @return
+     */
+    protected abstract HarmonyViewHolder<T> getNewViewHolder(
+            Context context, Cursor cursor, ViewGroup group);
     
     @SuppressWarnings("unchecked")
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-        ViewHolder viewHolder = (ViewHolder) view.getTag();
+        HarmonyViewHolder<T> viewHolder = (HarmonyViewHolder<T>) view.getTag();
         viewHolder.populate(this.cursorToItem(cursor));
     }
 
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup group) {
-        final ViewHolder viewHolder = this.getViewHolder(context, group);
+        final HarmonyViewHolder<T> viewHolder = this.getNewViewHolder(
+                context, cursor, group);
         
         viewHolder.populate(this.cursorToItem(cursor));
         
@@ -102,38 +104,5 @@ public abstract class HarmonyCursorAdapter<T> extends CursorAdapter {
         }
         
         return oldCursor;
-    }
-    
-    /** Holder row. */
-    protected abstract class ViewHolder {
-        private View convertView;
-        
-        /**
-         * Constructor.
-         *
-         * @param context The context
-         */
-        public ViewHolder(Context context, ViewGroup parent) {
-            this.convertView = LayoutInflater.from(context).inflate(
-                    this.getContentLayout(), parent, false);
-            
-            this.convertView.setTag(this);
-        }
-        
-        protected abstract int getContentLayout();
-        
-        /**
-         * @return Holder view
-         */
-        public View getView() {
-            return this.convertView;
-        }
-
-        /**
-         * Populate row with a <T>.
-         *
-         * @param model <T> data
-         */
-        public abstract void populate(final T model);
     }
 }

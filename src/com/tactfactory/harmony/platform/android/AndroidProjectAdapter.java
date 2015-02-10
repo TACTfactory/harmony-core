@@ -107,41 +107,47 @@ public class AndroidProjectAdapter implements IAdapterProject {
         result.add(new SourceFile(
                 templatePath + "harmony/view/package-info.java",
                 filePath + "/harmony/view/package-info.java",
-                false));
+                true));
         
         // HarmonyFragmentActivity
         result.add(new SourceFile(
                 templatePath + "harmony/view/HarmonyFragmentActivity.java",
                 filePath + "/harmony/view/HarmonyFragmentActivity.java",
-                false));
+                true));
         
         result.add(new SourceFile(
                 templatePath + "harmony/view/MultiLoader.java",
                 filePath + "/harmony/view/MultiLoader.java",
-                false));
+                true));
         
         result.add(new SourceFile(
                 templatePath + "harmony/view/HarmonyGridFragment.java",
                 filePath + "/harmony/view/HarmonyGridFragment.java",
-                false));
+                true));
 
         // HarmonyFragment
         result.add(new SourceFile(
                 templatePath + "harmony/view/HarmonyFragment.java",
                 filePath + "/harmony/view/HarmonyFragment.java",
-                false));
+                true));
 
         // HarmonyListFragment
         result.add(new SourceFile(
                 templatePath + "harmony/view/HarmonyListFragment.java",
                 filePath + "/harmony/view/HarmonyListFragment.java",
-                false));
+                true));
         
         // HarmonyCursorAdapter
         result.add(new SourceFile(
                 templatePath + "harmony/view/HarmonyCursorAdapter.java",
                 filePath + "/harmony/view/HarmonyCursorAdapter.java",
-                false));
+                true));
+        
+        // HarmonyViewHolder
+        result.add(new SourceFile(
+                templatePath + "harmony/view/HarmonyViewHolder.java",
+                filePath + "/harmony/view/HarmonyViewHolder.java",
+                true));
 
         // NotImplementedException
         result.add(new SourceFile(
@@ -816,10 +822,6 @@ public class AndroidProjectAdapter implements IAdapterProject {
         result.add(new SourceFile(
                 templatePath + "dialog_delete_confirmation.xml",
                 filePath + "dialog_delete_confirmation.xml"));
-        
-        result.add(new SourceFile(
-                templatePath + "directory_header.xml",
-                filePath + "directory_header.xml"));
         
         if (isDate || isTime) {
             if (isDate) {

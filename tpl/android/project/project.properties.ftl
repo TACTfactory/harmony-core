@@ -13,4 +13,3 @@ proguard.config=${sdk.dir}/tools/proguard/proguard-android.txt:proguard-project.
 # Project target.
 target=android-21
 
-android.library.reference.1=libs/sherlock/library
