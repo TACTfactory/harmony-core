@@ -189,7 +189,7 @@ public final class SqliteAdapter {
 			type = "BOOLEAN";
 		} else
 
-		if (type.equalsIgnoreCase(Column.Type.INT.getValue())
+		if (type.equalsIgnoreCase(Column.Type.INTEGER.getValue())
 				|| type.equalsIgnoreCase(Column.Type.BC_EAN.getValue())
 				|| type.equalsIgnoreCase("INTEGER")) {
 			type = "INTEGER";
