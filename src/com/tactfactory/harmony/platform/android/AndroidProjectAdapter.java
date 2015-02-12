@@ -94,6 +94,27 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 this.adapter.getRessourceXLargeValuesPath() + "configs.xml",
                 false));
         
+        result.add(new EditFile(
+                Harmony.getInstance().getHarmonyContext().getCurrentBundleFolder()
+                        + this.adapter.getTemplateRessourceValuesPath()
+                        + "themes.xml",
+                this.adapter.getRessourceValuesPath() + "themes.xml",
+                new StylesFile()));
+
+        result.add(new EditFile(
+                Harmony.getInstance().getHarmonyContext().getCurrentBundleFolder()
+                        + this.adapter.getTemplateRessourceValuesPath()
+                        + "colors.xml",
+                this.adapter.getRessourceValuesPath() + "colors.xml",
+                new ColorsFile()));
+        
+        result.add(new EditFile(
+                Harmony.getInstance().getHarmonyContext().getCurrentBundleFolder()
+                        + this.adapter.getTemplateRessourceXLargeValuesPath()
+                        + "colors.xml",
+                this.adapter.getRessourceXLargeValuesPath() + "colors.xml",
+                new ColorsFile()));
+        
         // strings.xml
         result.add(new SourceFile(
                 this.adapter.getTemplateStringsPathFile(),
@@ -195,6 +216,9 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 Harmony.getProjectPath() + this.adapter.getPlatform() + "/",
                 Harmony.getBundlePath() + "tact-core/"
                         + this.adapter.getTemplateProjectPath()));
+        
+        result.add(new ManifestApplicationThemeAndroid(
+                this.adapter, "@style/AppTheme"));
         
         return result;
     }
@@ -704,27 +728,6 @@ public class AndroidProjectAdapter implements IAdapterProject {
         
         result.add(new EditFile(
                 Harmony.getInstance().getHarmonyContext().getCurrentBundleFolder()
-                        + this.adapter.getTemplateRessourceValuesPath() 
-                        + "themes.xml",
-                this.adapter.getRessourceValuesPath() + "themes.xml",
-                new StylesFile()));
-
-        result.add(new EditFile(
-                Harmony.getInstance().getHarmonyContext().getCurrentBundleFolder()
-                        + this.adapter.getTemplateRessourceValuesPath() 
-                        + "colors.xml",
-                this.adapter.getRessourceValuesPath() + "colors.xml",
-                new ColorsFile()));
-        
-        result.add(new EditFile(
-                Harmony.getInstance().getHarmonyContext().getCurrentBundleFolder()
-                        + this.adapter.getTemplateRessourceXLargeValuesPath() 
-                        + "colors.xml",
-                this.adapter.getRessourceXLargeValuesPath() + "colors.xml",
-                new ColorsFile()));
-        
-        result.add(new EditFile(
-                Harmony.getInstance().getHarmonyContext().getCurrentBundleFolder()
                         + this.adapter.getTemplateRessourceValuesPath()
                         + "dimens.xml",
                     this.adapter.getRessourceValuesPath() + "dimens.xml",
@@ -733,9 +736,6 @@ public class AndroidProjectAdapter implements IAdapterProject {
         result.add(new ManifestActivityAndroid(
                 this.adapter, entity.getName(),
                 entity.getName().toLowerCase(), "ListActivity"));
-        
-        result.add(new ManifestApplicationThemeAndroid(
-                this.adapter, "@style/AppTheme"));
         
         return result;
     }
