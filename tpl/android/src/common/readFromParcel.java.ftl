@@ -16,6 +16,9 @@
                         <#case "int">                    
         this.set${field.name?cap_first}(parc.readInt());
                             <#break />
+                        <#case "long">                    
+        this.set${field.name?cap_first}(parc.readLong());
+                            <#break />
                         <#case "boolean">
         this.set${field.name?cap_first}(parc.readInt() == 1);
                             <#break />

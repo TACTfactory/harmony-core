@@ -21,6 +21,9 @@
                         <#case "int">
         dest.writeInt(this.get${field.name?cap_first}());
                             <#break />
+                        <#case "long">
+        dest.writeLong(this.get${field.name?cap_first}());
+                            <#break />
                         <#case "boolean">
         if (this.is${field.name?cap_first}()) {
             dest.writeInt(1);
