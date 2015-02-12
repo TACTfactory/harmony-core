@@ -1280,10 +1280,20 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 false));
         
         result.add(new SourceFile(
+                templatePath + "base/TestContextIsolatedBase.java",
+                filePath + "base/TestContextIsolatedBase.java",
+                true));
+
+        result.add(new SourceFile(
+                templatePath + "TestContextIsolated.java",
+                filePath + "TestContextIsolated.java",
+                false));
+        
+        result.add(new SourceFile(
                 templatePath + "base/TestContextMock.java",
                 filePath + "base/TestContextMock.java",
                 true));
-
+        
         result.add(new SourceFile(
                 templatePath + "base/TestDBBase.java",
                 filePath + "base/TestDBBase.java",

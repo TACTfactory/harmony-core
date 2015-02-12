@@ -1,6 +1,5 @@
-<#assign curr = entities[current_entity] />
 <@header?interpret />
-package ${curr.test_namespace};
+package ${project_namespace}.test;
 
 import android.test.RenamingDelegatingContext;
 import android.test.mock.MockContentResolver;
@@ -8,7 +7,7 @@ import android.test.mock.MockContentResolver;
 import ${project_namespace}.test.base.TestContextIsolatedBase;
 
 /** Context isolated test class. */
-public class TestContextIsolated extends TestContextIsolatedBase{
+public class TestContextIsolated extends TestContextIsolatedBase {
 
     /**
      * Constructor.
