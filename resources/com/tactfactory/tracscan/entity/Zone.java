@@ -22,13 +22,13 @@ public class Zone  implements Serializable , Parcelable {
 
 	
 	@Id
-	@Column(type = Type.INT, hidden = true)
+	@Column(type = Type.INTEGER, hidden = true)
 	protected int id;
 	
 	@Column
 	protected String name;
 	
-	@Column(type = Type.INT, defaultValue="1")
+	@Column(type = Type.INTEGER, defaultValue="1")
 	protected int quantity;
 
 
