@@ -102,7 +102,7 @@ public abstract class XMLUtils {
 			
 			// Write to File
 			// Make beautiful file with indent !!!
-			xmlOutput.setFormat(Format.getPrettyFormat().setIndent("\t"));
+			xmlOutput.setFormat(Format.getPrettyFormat().setIndent("    "));
 			xmlOutput.setXMLOutputProcessor(new TactXMLOutputter());
 			FileOutputStream fos = new FileOutputStream(
 					xmlFile.getAbsoluteFile());
