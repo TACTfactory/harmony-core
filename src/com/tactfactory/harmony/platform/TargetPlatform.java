@@ -25,10 +25,8 @@ public enum TargetPlatform {
 	WEB 	(1005, 	"web", null), //TODO WebAdapter.class),
 	/** Android. */
 	ANDROID (2004, 	"android", AndroidAdapter.class),
-	/** iPhone. */
-	IPHONE 	(3005, 	"iphone", IosAdapter.class),
-	/** iPad. */
-	IPAD	(3105, 	"ipad", IosAdapter.class),
+	/** iOS. */
+    IPHONE    (3104,  "ios", IosAdapter.class),
 	/** RIM. */
 	RIM		(4006, 	"rim", RimAdapter.class),
 	/** WinPhone. */
@@ -92,10 +90,10 @@ public enum TargetPlatform {
 				result = TargetPlatform.WINPHONE;
 			} else
 
-			if (target.equalsIgnoreCase(
-					TargetPlatform.IPHONE.toLowerString())) {
-				result = TargetPlatform.IPHONE;
-			} else
+            if (target.equalsIgnoreCase(
+                    TargetPlatform.IPHONE.toLowerString())) {
+                result = TargetPlatform.IPHONE;
+            } else
 
 		    if (target.equalsIgnoreCase(
 		            TargetPlatform.RIM.toLowerString())) {
