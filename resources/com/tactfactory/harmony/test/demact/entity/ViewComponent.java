@@ -27,7 +27,7 @@ public class ViewComponent implements Serializable {
 
 	/** Entity's technical id. */
 	@Id
-    @Column(type = Type.INT, hidden = true)
+    @Column(type = Type.INTEGER, hidden = true)
     @GeneratedValue(strategy = Strategy.MODE_IDENTITY)
 	private int id;
 
