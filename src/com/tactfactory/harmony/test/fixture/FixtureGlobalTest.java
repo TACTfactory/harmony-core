@@ -197,7 +197,10 @@ public class FixtureGlobalTest extends CommonTest {
 						"fixture",
 						"xml");
 
-        final String destDir = String.format("app/android/assets/");
+		final String destDir =
+                String.format("%s/%s/",
+                        Harmony.getProjectAndroidPath(),
+                        "assets");
 
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);
@@ -220,7 +223,10 @@ public class FixtureGlobalTest extends CommonTest {
 						"fixture",
 						"yml");
 
-		final String destDir = String.format("app/android/assets/");
+		final String destDir =
+                String.format("%s/%s/",
+                        Harmony.getProjectAndroidPath(),
+                        "assets");
 
 		// FileUtils.copyDirectory(new File(srcDir), new File(destDir));
 		TactFileUtils.makeFolderRecursive(srcDir, destDir, true);

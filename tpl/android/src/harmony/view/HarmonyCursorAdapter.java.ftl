@@ -34,6 +34,23 @@ public abstract class HarmonyCursorAdapter<T> extends CursorAdapter {
     /** Get the column name (not aliased) from Contract class. */
     protected abstract String getColId();
     
+    @Override
+    public long getItemId(int position) {
+        long result = position;
+        
+        if (this.hasStableIds()) {
+            result = super.getItemId(position);
+        }
+        
+        return result;
+    }
+    
+    @Override
+    public boolean hasStableIds() {
+        return this.getColId() != null;
+    }
+    
+    
     /**
      * Get a new {@link HarmonyViewHolder} for the item <T>.
      * @param context
@@ -90,8 +107,12 @@ public abstract class HarmonyCursorAdapter<T> extends CursorAdapter {
                 newCursor.registerDataSetObserver(this.mDataSetObserver);
             }
             
-            this.mRowIDColumn = newCursor.getColumnIndexOrThrow(
-                    this.getColId());
+            if (this.getColId() != null) {
+                this.mRowIDColumn = newCursor.getColumnIndexOrThrow(
+                        this.getColId());
+            } else {
+                this.mRowIDColumn = -1;
+            }
             
             this.mDataValid = true;
             // notify the observers about the new cursor

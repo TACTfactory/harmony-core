@@ -57,7 +57,12 @@ public class ${curr.name}ListAdapter extends HarmonyCursorAdapter<${curr.name}> 
 
     @Override
     protected String getColId() {
-        return ${InheritanceUtils.getClassWithId(curr).name}Contract.COL_ID;
+        <#assign colId = ContractUtils.getContractColId(curr) />
+        <#if colId != "">
+        return ${colId};
+        <#else>
+        return null;
+        </#if>
     }
     
     @Override
@@ -77,7 +82,7 @@ public class ${curr.name}ListAdapter extends HarmonyCursorAdapter<${curr.name}> 
          * @param parent Optional view to be the parent of the generated hierarchy
          */
         public ViewHolder(android.content.Context context, ViewGroup parent) {
-            super(context, parent, R.layout.row_user);
+            super(context, parent, R.layout.row_${curr.name?lower_case});
         }
 
         /**

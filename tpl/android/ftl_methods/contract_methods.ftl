@@ -80,3 +80,26 @@
 <#function getContractParcel entity>
     <#return ContractUtils.getContractClass(entity) + ".PARCEL" />
 </#function>
+
+<#function getContractColId entity>
+    <#assign result = "" />
+    <#assign count = 0 />
+    
+    <#if entity.inheritance?? && entity.inheritance.superclass??
+            && entity.inheritance.superclass.name != entity.name
+            && InheritanceUtils.isExtended(entity)>
+        <#assign result = ContractUtils.getContractColId(entity.inheritance.superclass) />
+    <#else>
+        <#list entity.ids as id>
+            <#assign result = ContractUtils.getContractClass(entity) + ".COL_" + id.name?upper_case />
+            <#assign count = count + 1 />
+        </#list>
+    </#if>
+
+    <#if (count > 1)>
+        <#assign result = "" />
+    </#if>
+    
+    <#return result />
+</#function>
+

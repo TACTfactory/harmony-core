@@ -10,7 +10,6 @@ package com.tactfactory.harmony.platform;
 
 import java.io.File;
 
-import com.tactfactory.harmony.HarmonyContext;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 
@@ -41,21 +40,6 @@ public abstract class BaseAdapter implements IAdapter {
 	private String util;
 	/** Template Utility files path. */
 	private String utilityPath;
-	/**	Bundle template files path. */
-	private String bundleTemplates = "bundle";
-
-
-	// Bundles
-	/**	Bundle template files path. */
-	private String annotationsBundleTemplates = "annotation";
-	/**	Bundle template files path. */
-	private String templateBundleTemplates = "template";
-	/**	Bundle template files path. */
-	private String parserBundleTemplates = "parser";
-	/**	Bundle template files path. */
-	private String metaBundleTemplates = "meta";
-	/**	Bundle template files path. */
-	private String commandBundleTemplates = "command";
 
 	// MVC
 	/** Models path. */
@@ -545,164 +529,6 @@ public abstract class BaseAdapter implements IAdapter {
 
 	/**
 	 * Get the source data namespace.
-	 * @return The source data namespace
-	 */
-	public final String getAnnotationBundleTemplatePath() {
-		return String.format("%s%s/%s",
-				Harmony.getTemplatesPath(),
-				this.getBundleTemplates(),
-				this.getAnnotationsBundleTemplates());
-	}
-
-
-	/**
-	 * Get the source data namespace.
-	 * @param bundleOwnerName The bundle owner name
-	 * @param bundleNamespace The bundle namespace
-	 * @param bundleName The bundle name
-	 * @return The source data namespace
-	 */
-	public final String getAnnotationBundlePath(
-			final String bundleOwnerName,
-			final String bundleNamespace,
-			final String bundleName) {
-		return String.format("%s%s/src/%s/%s",
-				Harmony.getBundlePath(),
-				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
-				bundleNamespace.replaceAll("\\.", HarmonyContext.DELIMITER),
-				this.getAnnotationsBundleTemplates());
-	}
-
-	/**
-	 * Get the source data namespace.
-	 * @return The source data namespace
-	 */
-	public final String getCommandBundleTemplatePath() {
-		return String.format("%s%s/%s",
-				Harmony.getTemplatesPath(),
-				this.getBundleTemplates(),
-				this.getCommandBundleTemplates());
-	}
-
-
-	/**
-	 * Get the source data namespace.
-	 * @param bundleOwnerName The bundle owner name
-	 * @param bundleNamespace The bundle namespace
-	 * @param bundleName The bundle name
-	 * @return The source data namespace
-	 */
-	public final String getCommandBundlePath(
-			final String bundleOwnerName,
-			final String bundleNamespace,
-			final String bundleName) {
-		return String.format("%s%s/src/%s/%s",
-				Harmony.getBundlePath(),
-				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
-				bundleNamespace.replaceAll("\\.", HarmonyContext.DELIMITER),
-				this.getCommandBundleTemplates());
-	}
-
-	/**
-	 * Get the source data namespace.
-	 * @return The source data namespace
-	 */
-	public final String getMetaBundleTemplatePath() {
-		return String.format("%s%s/%s",
-				Harmony.getTemplatesPath(),
-				this.getBundleTemplates(),
-				this.getMetaBundleTemplates());
-	}
-
-	/**
-	 * Get the source data namespace.
-	 * @param bundleOwnerName The bundle owner name
-	 * @param bundleNamespace The bundle namespace
-	 * @param bundleName The bundle name
-	 * @return The source data namespace
-	 */
-	public final String getMetaBundlePath(
-			final String bundleOwnerName,
-			final String bundleNamespace,
-			final String bundleName) {
-		return String.format("%s%s/src/%s/%s",
-				Harmony.getBundlePath(),
-				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
-				bundleNamespace.replaceAll("\\.", HarmonyContext.DELIMITER),
-				this.getMetaBundleTemplates());
-	}
-
-	/**
-	 * Get the source data namespace.
-	 * @return The source data namespace
-	 */
-	public final String getTemplateBundleTemplatePath() {
-		return String.format("%s%s/%s",
-				Harmony.getTemplatesPath(),
-				this.getBundleTemplates(),
-				this.getTemplateBundleTemplates());
-	}
-
-
-	/**
-	 * Get the source data namespace.
-	 * @param bundleOwnerName The bundle owner name
-	 * @param bundleNamespace The bundle namespace
-	 * @param bundleName The bundle name
-	 * @return The source data namespace
-	 */
-	public final String getTemplateBundlePath(
-			final String bundleOwnerName,
-			final String bundleNamespace,
-			final String bundleName) {
-		return String.format("%s%s/src/%s/%s",
-				Harmony.getBundlePath(),
-				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
-				bundleNamespace.replaceAll("\\.", HarmonyContext.DELIMITER),
-				this.getTemplateBundleTemplates());
-	}
-
-	/**
-	 * Get the source data namespace.
-	 * @return The source data namespace
-	 */
-	public final String getParserBundleTemplatePath() {
-		return String.format("%s%s/%s",
-				Harmony.getTemplatesPath(),
-				this.getBundleTemplates(),
-				this.getParserBundleTemplates());
-	}
-
-	/**
-	 * Get the source data namespace.
-	 * @param bundleOwnerName The bundle owner name
-	 * @param bundleNamespace The bundle namespace
-	 * @param bundleName The bundle name
-	 * @return The source data namespace
-	 */
-	public final String getParserBundlePath(
-			final String bundleOwnerName,
-			final String bundleNamespace,
-			final String bundleName) {
-		return String.format("%s%s/src/%s/%s",
-				Harmony.getBundlePath(),
-				bundleOwnerName.toLowerCase() + "-" + bundleName.toLowerCase(),
-				bundleNamespace.replaceAll("\\.", HarmonyContext.DELIMITER),
-				this.getParserBundleTemplates());
-	}
-
-	/**
-	 * Get the source data namespace.
-	 * @return The source data namespace
-	 */
-	public final String getBundleTemplatePath() {
-		return String.format("%s%s",
-				Harmony.getTemplatesPath(),
-				this.getBundleTemplates());
-	}
-
-	/**
-	 * Get the source data namespace.
 	 * @param bundleOwnerName The bundle owner name
 	 * @param bundleName The bundle name
 	 * @return The source data namespace
@@ -1122,96 +948,6 @@ public abstract class BaseAdapter implements IAdapter {
 	public final void setUtilityPath(final String utilityPath) {
 		this.utilityPath = utilityPath;
 	}
-
-	/**
-	 * @return the bundleTemplates
-	 */
-	public final String getBundleTemplates() {
-		return bundleTemplates;
-	}
-
-	/**
-	 * @param bundleTemplates the bundleTemplates to set
-	 */
-	public final void setBundleTemplates(
-			final String bundleTemplates) {
-		this.bundleTemplates = bundleTemplates;
-	}
-
-	/**
-	 * @return the annotationsBundleTemplates
-	 */
-	public final String getAnnotationsBundleTemplates() {
-		return annotationsBundleTemplates;
-	}
-
-	/**
-	 * @param annotationsBundleTemplates the annotationsBundleTemplates to set
-	 */
-	public final void setAnnotationsBundleTemplates(
-			final String annotationsBundleTemplates) {
-		this.annotationsBundleTemplates = annotationsBundleTemplates;
-	}
-
-	/**
-	 * @return the templateBundleTemplates
-	 */
-	public final String getTemplateBundleTemplates() {
-		return templateBundleTemplates;
-	}
-
-	/**
-	 * @param templateBundleTemplates the templateBundleTemplates to set
-	 */
-	public final void setTemplateBundleTemplates(
-			final String templateBundleTemplates) {
-		this.templateBundleTemplates = templateBundleTemplates;
-	}
-
-	/**
-	 * @return the parserBundleTemplates
-	 */
-	public final String getParserBundleTemplates() {
-		return parserBundleTemplates;
-	}
-
-	/**
-	 * @param parserBundleTemplates the parserBundleTemplates to set
-	 */
-	public final void setParserBundleTemplates(
-			final String parserBundleTemplates) {
-		this.parserBundleTemplates = parserBundleTemplates;
-	}
-
-	/**
-	 * @return the metaBundleTemplates
-	 */
-	public final String getMetaBundleTemplates() {
-		return metaBundleTemplates;
-	}
-
-	/**
-	 * @param metaBundleTemplates the metaBundleTemplates to set
-	 */
-	public final void setMetaBundleTemplates(
-			final String metaBundleTemplates) {
-		this.metaBundleTemplates = metaBundleTemplates;
-	}
-
-	/**
-	 * @return the commandBundleTemplates
-	 */
-	public final String getCommandBundleTemplates() {
-		return commandBundleTemplates;
-	}
-
-	/**
-	 * @param commandBundleTemplates the commandBundleTemplates to set
-	 */
-	public final void setCommandBundleTemplates(
-			final String commandBundleTemplates) {
-		this.commandBundleTemplates = commandBundleTemplates;
-	}
 	
 	/**
 	 * Check if the given library exists in the platform libraries folder.
@@ -1228,11 +964,8 @@ public abstract class BaseAdapter implements IAdapter {
 	
 	public void cloneTo(BaseAdapter adapter) {
         //TODO use reflection for that !
-	    adapter.setAnnotationsBundleTemplates(this.getAnnotationsBundleTemplates());
 	    adapter.setAssets(this.getAssets());
 	    adapter.setBase(this.getBase());
-	    adapter.setBundleTemplates(this.getBundleTemplates());
-	    adapter.setCommandBundleTemplates(this.getCommandBundleTemplates());
 	    adapter.setCommon(this.getCommon());
 	    adapter.setConfigs(this.getConfigs());
 	    adapter.setController(this.getController());
@@ -1244,9 +977,7 @@ public abstract class BaseAdapter implements IAdapter {
 	    adapter.setLibs(this.getLibs());
 	    adapter.setManifest(this.getManifest());
 	    adapter.setMenu(this.getMenu());
-	    adapter.setMetaBundleTemplates(this.getMetaBundleTemplates());
 	    adapter.setModel(this.getModel());
-	    adapter.setParserBundleTemplates(this.getParserBundleTemplates());
 	    adapter.setPlatform(this.getPlatform());
 	    adapter.setProject(this.getProject());
 	    adapter.setProvider(this.getProvider());
@@ -1254,7 +985,6 @@ public abstract class BaseAdapter implements IAdapter {
 	    adapter.setService(this.getService());
 	    adapter.setSource(this.getSource());
 	    adapter.setStrings(this.getStrings());
-	    adapter.setTemplateBundleTemplates(this.getTemplateBundleTemplates());
 	    adapter.setTest(this.getTest());
 	    adapter.setTestLibs(this.getTestLibs());
 	    adapter.setUtil(this.getUtil());
