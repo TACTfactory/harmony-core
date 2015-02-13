@@ -19,7 +19,12 @@ public class ${curr.name}EditActivity extends HarmonyFragmentActivity {
     @Override
       protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_${curr.name?lower_case}_edit);
+        this.setNavigationBack(true);
+    }
+    
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_${curr.name?lower_case}_edit;
     }
 
     @Override

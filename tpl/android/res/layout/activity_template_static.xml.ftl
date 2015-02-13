@@ -5,6 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <include layout="@layout/toolbar" />
+    
     <fragment
         android:id="@+id/fragment"
         android:name="${project_namespace}.view.${viewPackage}.${viewName}Fragment"

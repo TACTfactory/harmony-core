@@ -3,11 +3,11 @@ package ${project_namespace}.harmony.view;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 
-import com.actionbarsherlock.app.SherlockFragment;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuInflater;
-import com.actionbarsherlock.view.MenuItem;
 import ${project_namespace}.menu.${project_name?cap_first}Menu;
 
 /**
@@ -15,7 +15,7 @@ import ${project_namespace}.menu.${project_name?cap_first}Menu;
  * This fragment will help you use a lot of harmony's functionnality
  * (menu wrappers, etc.)
  */
-public abstract class HarmonyFragment extends SherlockFragment {
+public abstract class HarmonyFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

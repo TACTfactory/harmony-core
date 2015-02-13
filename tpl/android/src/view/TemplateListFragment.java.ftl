@@ -2,17 +2,7 @@
 <@header?interpret />
 package ${curr.controller_namespace};
 
-import java.util.ArrayList;
-
-import ${project_namespace}.criterias.base.CriteriaExpression;
-import ${project_namespace}.menu.CrudCreateMenuWrapper.CrudCreateMenuInterface;
-import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
-import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
-import ${project_namespace}.harmony.view.HarmonyListFragment;
-import com.google.android.pinnedheader.headerlist.PinnedHeaderListView;
-
 import android.content.Intent;
-
 import android.os.Bundle;
 import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
@@ -20,9 +10,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 
-
+import ${project_namespace}.criterias.base.CriteriaExpression;
+import ${project_namespace}.menu.CrudCreateMenuWrapper.CrudCreateMenuInterface;
+import ${project_namespace}.provider.${curr.name?cap_first}ProviderAdapter;
+import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
+import ${project_namespace}.harmony.view.HarmonyListFragment;
 import ${curr.namespace}.R;
 import ${curr.namespace}.entity.${curr.name};
+
 
 /** ${curr.name} list fragment.
  *
@@ -60,14 +55,11 @@ public class ${curr.name}ListFragment
 
         // Give some text to display if there is no data.  In a real
         // application this would come from a resource.
-        this.setEmptyText(
-                getString(
-                        R.string.${curr.name?lower_case}_empty_list));
+        this.setEmptyText(this.getString(
+                R.string.${curr.name?lower_case}_empty_list));
 
         // Create an empty adapter we will use to display the loaded data.
-        ((PinnedHeaderListView) this.getListView())
-                    .setPinnedHeaderEnabled(false);
-        this.mAdapter = new ${curr.name}ListAdapter(this.getActivity());
+        this.mAdapter = new ${curr.name}ListAdapter(this.getActivity(), null);
 
         // Start out with a progress indicator.
         this.setListShown(false);
@@ -124,15 +116,7 @@ public class ${curr.name}ListFragment
         data.setNotificationUri(this.getActivity().getContentResolver(),
                 ${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI);
 
-        ArrayList<${curr.name}> users = ${ContractUtils.getContractCursorToItem(curr)}s(data);
-        this.mAdapter.setNotifyOnChange(false);
-        this.mAdapter.setData(
-                new ${curr.name}ListAdapter
-                    .${curr.name}SectionIndexer(users));
-        this.mAdapter.setNotifyOnChange(true);
-        this.mAdapter.notifyDataSetChanged();
-        this.mAdapter.setPinnedPartitionHeadersEnabled(false);
-        this.mAdapter.setSectionHeaderDisplayEnabled(false);
+        this.mAdapter.swapCursor(data);
 
         if (this.getListAdapter() == null) {
             this.setListAdapter(this.mAdapter);
@@ -151,8 +135,9 @@ public class ${curr.name}ListFragment
     @Override
     public void onLoaderReset(Loader<android.database.Cursor> loader) {
         // Clear the data in the adapter.
-        this.mAdapter.clear();
+        this.mAdapter.swapCursor(null);
     }
+    
     <#if curr.createAction>
     @Override
     public void onClickAdd() {

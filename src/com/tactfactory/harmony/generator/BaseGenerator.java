@@ -292,11 +292,9 @@ public abstract class BaseGenerator<T extends IAdapter> {
         final File dest = new File(library.getFileDestination());
         
         if (!dest.exists()) {
-            File src = new File(library.getFileSource());
-            
-            if (!src.isDirectory()) {
-                TactFileUtils.copyfile(src, dest);
-            }
+            TactFileUtils.copyfile(
+                    new File(library.getFileSource()),
+                    dest);
         }
     }
 	
