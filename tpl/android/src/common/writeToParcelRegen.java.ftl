@@ -23,7 +23,10 @@
         dest.writeInt(this.get${field.name?cap_first}());
                             <#else>
         if (this.get${field.name?cap_first}() != null) {
+            dest.writeInt(1);
             dest.writeInt(this.get${field.name?cap_first}());
+        } else {
+            dest.writeInt(0);
         }
                             </#if>
                             <#break />
@@ -32,7 +35,10 @@
         dest.writeLong(this.get${field.name?cap_first}());
                             <#else>
         if (this.is${field.name?cap_first}() != null) {
+            dest.writeInt(1);
             dest.writeLong(this.get${field.name?cap_first}());
+        } else {
+            dest.writeInt(0);
         }
                             </#if>
                             <#break />
@@ -45,17 +51,23 @@
         }
                             <#else>
         if (this.is${field.name?cap_first}() != null) {
+            dest.writeInt(1);
             if (this.is${field.name?cap_first}()) {
                 dest.writeInt(1);
             } else {
                 dest.writeInt(0);
             }
+        } else {
+            dest.writeInt(0);
         }
                             </#if>
                             <#break />
                         <#case "string">
         if (this.get${field.name?cap_first}() != null) {
+            dest.writeInt(1);
             dest.writeString(this.get${field.name?cap_first}());
+        } else {
+            dest.writeInt(0);
         }
                             <#break />
                         <#case "byte">
@@ -63,7 +75,10 @@
         dest.writeByte(this.get${field.name?cap_first}());
                             <#else>
         if (this.get${field.name?cap_first}() != null) {
+            dest.writeInt(1);
             dest.writeByte(this.get${field.name?cap_first}());
+        } else {
+            dest.writeInt(0);
         }
                             </#if>
                             <#break />
@@ -84,7 +99,10 @@
         dest.writeInt(this.get${field.name?cap_first}());
                             <#else>
         if (this.get${field.name?cap_first}() != null) {
+            dest.writeInt(1);
             dest.writeInt(this.get${field.name?cap_first}());
+        } else {
+            dest.writeInt(0);
         }
                             </#if>
                             <#break />
