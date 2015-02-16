@@ -53,7 +53,7 @@ public class UpdateLibraryAndroid implements IUpdateLibrary {
     public void execute() {
         ArrayList<String> command = new ArrayList<String>();
         
-        //make build sherlock
+        //make build
         String sdkTools = String.format("%s/%s",
                 ApplicationMetadata.getAndroidSdkPath(),
                 "tools/android");

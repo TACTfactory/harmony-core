@@ -57,7 +57,7 @@ public @interface Column {
 		/** char type. */
 		CHAR	("char", 		null, 	false,	null,	null,	null,	null),
 		/** int type. */
-		INT		("int", 		null, 	false,	null,	null,	null,	null),
+		INTEGER		("int", 		null, 	false,	null,	null,	null,	null),
 		/** long type. */
 		LONG 	("long", 	null, 	false,	null,	null,	null,	null),
 		/** float type. */

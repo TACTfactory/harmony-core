@@ -36,7 +36,7 @@ public class HiddenEntity implements Serializable {
 
 	/** Entity's technical id. */
 	@Id
-    @Column(type = Type.INT)
+    @Column(type = Type.INTEGER)
     @GeneratedValue(strategy = Strategy.MODE_IDENTITY)
 	private int id;
 

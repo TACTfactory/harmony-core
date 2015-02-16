@@ -5,21 +5,29 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="horizontal"
-      android:background="@android:color/white"
+    android:orientation="vertical"
+    android:background="@android:color/white"
     android:baselineAligned="false"
     tools:ignore="InconsistentLayout" >
 
-    <fragment
-        android:id="@+id/fragment_list"
-        android:name="${curr.controller_namespace}.${curr.name}ListFragment"
-        android:layout_width="0dp"
-        android:layout_weight="33"
+    <include layout="@layout/toolbar" />
+    
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_${curr.name?lower_case}_list" >
-    </fragment>
+        android:baselineAligned="false"
+        android:orientation="horizontal">
 
-    <#if curr.showAction>
+        <fragment
+            android:id="@+id/fragment_list"
+            android:name="${curr.controller_namespace}.${curr.name}ListFragment"
+            android:layout_width="0dp"
+            android:layout_weight="33"
+            android:layout_height="match_parent"
+            tools:layout="@layout/fragment_${curr.name?lower_case}_list" >
+        </fragment>
+        
+        <#if curr.showAction>
         <fragment
             android:id="@+id/fragment_show"
             android:name="${curr.controller_namespace}.${curr.name}ShowFragment"
@@ -27,6 +35,7 @@
             android:layout_weight="67"
             android:layout_height="match_parent"
             tools:layout="@layout/fragment_${curr.name?lower_case}_show" />
-
-    </#if>
+        
+        </#if>
+    </LinearLayout>
 </LinearLayout>

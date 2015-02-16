@@ -234,7 +234,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
     public static String getVersion(final android.content.Context ctx) {
         final SharedPreferences settings = ctx.getSharedPreferences(
                 ${project_name?cap_first}ApplicationBase.PREFS_PUBL,
-                android.content.Context.MODE_WORLD_READABLE);
+                android.content.Context.MODE_PRIVATE);
 
         return settings.getString(
                 ${project_name?cap_first}ApplicationBase.PREFS_VERS, "");
@@ -259,7 +259,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
     public static void setVersion(final android.content.Context ctx) {
         final SharedPreferences settings = ctx.getSharedPreferences(
                 ${project_name?cap_first}ApplicationBase.PREFS_PUBL,
-                android.content.Context.MODE_WORLD_READABLE);
+                android.content.Context.MODE_PRIVATE);
 
         final String currentVersion = ctx.getString(R.string.app_version);
         final SharedPreferences.Editor editor = settings.edit();

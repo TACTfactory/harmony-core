@@ -2,12 +2,11 @@
 package ${project_namespace}.menu.base;
 
 import android.support.v4.app.FragmentActivity;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
-
-
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.view.Menu;
+import android.view.MenuItem;
+
 
 /**
  * MenuWrapperBase.

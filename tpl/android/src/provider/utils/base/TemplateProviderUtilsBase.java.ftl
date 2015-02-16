@@ -354,7 +354,6 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             result = ${ContractUtils.getContractCursorToItem(curr)}(cursor);
-            cursor.close();
 
         <#list relations as relation>
             <#if (!relation.internal)>
@@ -370,7 +369,8 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
             </#if>
         </#list>
         }
-
+        cursor.close();
+        
         return result;
     }
 

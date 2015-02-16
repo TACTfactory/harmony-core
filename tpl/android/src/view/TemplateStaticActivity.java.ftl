@@ -21,6 +21,10 @@ public class ${viewName}Activity
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        this.setContentView(R.layout.activity_${viewName?lower_case});
+    }
+    
+    @Override
+    protected int getContentView() {
+        return R.layout.activity_${viewName?lower_case};
     }
 }

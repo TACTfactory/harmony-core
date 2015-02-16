@@ -4,14 +4,12 @@ package ${project_namespace}.menu;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
-
 import android.support.v4.app.FragmentActivity;
-import com.actionbarsherlock.internal.view.menu.ActionMenuItem;
-import com.actionbarsherlock.view.Menu;
-import com.actionbarsherlock.view.MenuItem;
+import android.support.v4.view.MenuItemCompat;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import ${project_namespace}.R;
-
 import ${project_namespace}.menu.base.MenuWrapperBase;
 
 /**
@@ -34,9 +32,11 @@ public class CrudCreateMenuWrapper implements MenuWrapperBase {
                     0,
                     Menu.NONE,
                     R.string.menu_item_create);
-            this.addItem.setShowAsAction(
-                    ActionMenuItem.SHOW_AS_ACTION_IF_ROOM
-                    | ActionMenuItem.SHOW_AS_ACTION_WITH_TEXT);
+                    
+            MenuItemCompat.setShowAsAction(this.addItem,
+                    MenuItemCompat.SHOW_AS_ACTION_IF_ROOM
+                    | MenuItemCompat.SHOW_AS_ACTION_WITH_TEXT);
+                    
             this.addItem.setVisible(false);
         }
     }
