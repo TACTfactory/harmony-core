@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tactfactory.core.ios.platform.ios.IosProjectAdapter;
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.exception.NotImplementedException;
 import com.tactfactory.harmony.meta.ClassMetadata;
@@ -92,7 +93,7 @@ public class IosAdapter extends BaseAdapter {
             ret = STR;
         } else
 
-        if (ret.equals(Column.Type.INT.getValue())) {
+        if (ret.equals(Column.Type.INTEGER.getValue())) {
             if (field.isPrimitive()) {
                 ret = INT;
             } else {
