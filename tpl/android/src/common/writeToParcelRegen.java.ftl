@@ -28,7 +28,13 @@
                             </#if>
                             <#break />
                         <#case "long">
+                            <#if field.primitive>
         dest.writeLong(this.get${field.name?cap_first}());
+                            <#else>
+        if (this.is${field.name?cap_first}() != null) {
+            dest.writeLong(this.get${field.name?cap_first}());
+        }
+                            </#if>
                             <#break />
                         <#case "boolean">
                             <#if field.primitive>
