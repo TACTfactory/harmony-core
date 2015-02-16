@@ -132,6 +132,5 @@
                     </#if>
                 </#if>
             </#if>
-        </#list>    
-        this.parcelableParents = null;    
+        </#list>
     }
