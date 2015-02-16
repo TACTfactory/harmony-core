@@ -158,7 +158,7 @@ public class AndroidAdapter extends BaseAdapter {
 			ret = STR;
 		} else
 
-		if (ret.equals(Column.Type.INT.getValue())) {
+		if (ret.equals(Column.Type.INTEGER.getValue())) {
 			if (field.isPrimitive()) {
 				ret = INT;
 			} else {

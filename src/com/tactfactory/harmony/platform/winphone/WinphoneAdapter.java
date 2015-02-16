@@ -146,7 +146,7 @@ public class WinphoneAdapter extends BaseAdapter {
             ret = BYTE;
         } else
 
-        if (ret.equals(Column.Type.INT.getValue())) {
+        if (ret.equals(Column.Type.INTEGER.getValue())) {
             ret = INT;
         } else
 

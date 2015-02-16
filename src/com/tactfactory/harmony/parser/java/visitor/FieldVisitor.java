@@ -191,7 +191,7 @@ public class FieldVisitor {
 				result.setHarmonyType(Type.fromString(field.getType().toString()).getValue());
 			} else {
 				if (javaType.equals("Integer")) {
-					result.setHarmonyType(Type.INT.getValue());
+					result.setHarmonyType(Type.INTEGER.getValue());
 				} else if (javaType.equals("Character")) {
 					result.setHarmonyType(Type.CHAR.getValue());
 				} else {
