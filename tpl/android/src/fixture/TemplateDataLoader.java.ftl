@@ -176,6 +176,11 @@ public final class ${curr.name?cap_first}DataLoader
         ${curr.name?uncap_first}.set${field.name?cap_first}(this.parseSimpleRelationField(columns, ${NamingUtils.fixtureAlias(field)}, ${field.relation.targetEntity}DataLoader.getInstance(this.ctx)));
                         <#if (field.relation.inversedBy??)>
         if (${curr.name?uncap_first}.get${field.name?cap_first}() != null) {
+            if (${curr.name?uncap_first}.get${field.name?cap_first}().get${field.relation.inversedBy?cap_first}() == null) {
+                ${curr.name?uncap_first}.get${field.name?cap_first}().set${field.relation.inversedBy?cap_first}(
+                        new ArrayList<${curr.name?cap_first}>());
+            }
+            
             ${curr.name?uncap_first}.get${field.name?cap_first}().get${field.relation.inversedBy?cap_first}().add(${curr.name?uncap_first});
         }
                         </#if>
@@ -198,6 +203,7 @@ public final class ${curr.name?cap_first}DataLoader
                                 new ArrayList<${curr.name?cap_first}>();
                         ${field.relation.targetEntity?uncap_first}.set${invField.name?cap_first}(${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s);
                 }
+                
                 ${field.relation.targetEntity?uncap_first}${curr.name?cap_first}s.add(${curr.name?uncap_first});
             }
         }
