@@ -29,16 +29,7 @@ ${ImportUtils.importRelatedEntities(curr, true)}
 ${ImportUtils.importRelatedEnums(curr, false)}
 ${ImportUtils.importRelatedProviderAdapters(curr, false)}
 import ${project_namespace}.provider.${project_name?cap_first}Provider;
-import ${project_namespace}.provider.contract.${curr.name?cap_first}Contract;
-<#if (InheritanceUtils.isExtended(curr))>
-import ${project_namespace}.provider.contract.${curr.inheritance.superclass.name?cap_first}Contract;
-</#if>
-<#list relations as relation>
-    <#if (relation.relation.type == "ManyToMany")>
-import ${project_namespace}.provider.contract.${relation.relation.joinTable?cap_first}Contract;
-    </#if>
-import ${project_namespace}.provider.contract.${relation.relation.targetEntity?cap_first}Contract;
-</#list>
+${ImportUtils.importRelatedContracts(curr, true, true, true)}
 
 /**
  * ${curr.name?cap_first} Provider Utils Base.
@@ -354,7 +345,6 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
         if (cursor.getCount() > 0) {
             cursor.moveToFirst();
             result = ${ContractUtils.getContractCursorToItem(curr)}(cursor);
-            cursor.close();
 
         <#list relations as relation>
             <#if (!relation.internal)>
@@ -370,7 +360,8 @@ public abstract class ${curr.name?cap_first}ProviderUtilsBase
             </#if>
         </#list>
         }
-
+        cursor.close();
+        
         return result;
     }
 

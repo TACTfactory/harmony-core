@@ -90,32 +90,10 @@ public class TestContextMock {
                     // Prefix database
                     CONTEXT_PREFIX);
     
-            context = new IsolatedContext(
+            context = new TestContextIsolatedBase(
                     resolver,
-                    targetContextWrapper) {
-                        @Override
-                        public Object getSystemService(String name) {
-                            return TestContextMock.this
-                                    .baseContext.getSystemService(name);
-                        }
-                        
-                        @Override
-                        public void sendOrderedBroadcast(
-                                Intent intent, String receiverPermission) {
-                            TestContextMock.this.baseContext
-                                    .sendOrderedBroadcast(
-                                            intent, receiverPermission);
-                        }
-                        
-                        @Override
-                        public Intent registerReceiver(
-                                BroadcastReceiver receiver,
-                                IntentFilter filter) {
-                            return TestContextMock.this.baseContext
-                                    .registerReceiver(receiver, filter);
-                        }
-                    };
-    
+                    targetContextWrapper);
+            
             PackageManager packageManager = this.baseContext.getPackageManager();
             ProviderInfo providerInfo = packageManager.resolveContentProvider(
                     ${project_name?cap_first}Provider.class.getPackage().getName(), 0);

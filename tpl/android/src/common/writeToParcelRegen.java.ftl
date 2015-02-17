@@ -19,20 +19,92 @@
                 <#if field.harmony_type?lower_case != "relation">
                     <#switch FieldsUtils.getJavaType(field)?lower_case>
                         <#case "int">
+                            <#if field.primitive>
         dest.writeInt(this.get${field.name?cap_first}());
+                            <#else>
+        if (this.get${field.name?cap_first}() != null) {
+            dest.writeInt(1);
+            dest.writeInt(this.get${field.name?cap_first}());
+        } else {
+            dest.writeInt(0);
+        }
+                            </#if>
+                            <#break />
+                        <#case "long">
+                            <#if field.primitive>
+        dest.writeLong(this.get${field.name?cap_first}());
+                            <#else>
+        if (this.is${field.name?cap_first}() != null) {
+            dest.writeInt(1);
+            dest.writeLong(this.get${field.name?cap_first}());
+        } else {
+            dest.writeInt(0);
+        }
+                            </#if>
+                            <#break />
+                        <#case "float">
+                            <#if field.primitive>
+        dest.writeFloat(this.get${field.name?cap_first}());
+                            <#else>
+        if (this.get${field.name?cap_first}() != null) {
+            dest.writeInt(1);
+            dest.writeFloat(this.get${field.name?cap_first}());
+        } else {
+            dest.writeInt(0);
+        }
+                            </#if>
+                            <#break />
+                        <#case "double">
+                            <#if field.primitive>
+        dest.writeDouble(this.get${field.name?cap_first}());
+                            <#else>
+        if (this.get${field.name?cap_first}() != null) {
+            dest.writeInt(1);
+            dest.writeDouble(this.get${field.name?cap_first}());
+        } else {
+            dest.writeInt(0);
+        }
+                            </#if>
                             <#break />
                         <#case "boolean">
+                            <#if field.primitive>
         if (this.is${field.name?cap_first}()) {
             dest.writeInt(1);
         } else {
             dest.writeInt(0);
         }
+                            <#else>
+        if (this.is${field.name?cap_first}() != null) {
+            dest.writeInt(1);
+            if (this.is${field.name?cap_first}()) {
+                dest.writeInt(1);
+            } else {
+                dest.writeInt(0);
+            }
+        } else {
+            dest.writeInt(0);
+        }
+                            </#if>
                             <#break />
                         <#case "string">
-        dest.writeString(this.get${field.name?cap_first}());
+        if (this.get${field.name?cap_first}() != null) {
+            dest.writeInt(1);
+            dest.writeString(this.get${field.name?cap_first}());
+        } else {
+            dest.writeInt(0);
+        }
                             <#break />
                         <#case "byte">
+                            <#if field.primitive>
         dest.writeByte(this.get${field.name?cap_first}());
+                            <#else>
+        if (this.get${field.name?cap_first}() != null) {
+            dest.writeInt(1);
+            dest.writeByte(this.get${field.name?cap_first}());
+        } else {
+            dest.writeInt(0);
+        }
+                            </#if>
                             <#break />
                         <#case "char">
                             <#if field.primitive>
@@ -47,7 +119,16 @@
                             </#if>
                             <#break />
                         <#case "short">
+                            <#if field.primitive>
         dest.writeInt(this.get${field.name?cap_first}());
+                            <#else>
+        if (this.get${field.name?cap_first}() != null) {
+            dest.writeInt(1);
+            dest.writeInt(this.get${field.name?cap_first}());
+        } else {
+            dest.writeInt(0);
+        }
+                            </#if>
                             <#break />
                         <#case "datetime">
         if (this.get${field.name?cap_first}() != null) {
@@ -102,6 +183,5 @@
                     </#if>
                 </#if>
             </#if>
-        </#list>    
-        this.parcelableParents = null;    
+        </#list>
     }
