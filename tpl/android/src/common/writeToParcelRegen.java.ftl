@@ -42,6 +42,30 @@
         }
                             </#if>
                             <#break />
+                        <#case "float">
+                            <#if field.primitive>
+        dest.writeFloat(this.get${field.name?cap_first}());
+                            <#else>
+        if (this.get${field.name?cap_first}() != null) {
+            dest.writeInt(1);
+            dest.writeFloat(this.get${field.name?cap_first}());
+        } else {
+            dest.writeInt(0);
+        }
+                            </#if>
+                            <#break />
+                        <#case "double">
+                            <#if field.primitive>
+        dest.writeDouble(this.get${field.name?cap_first}());
+                            <#else>
+        if (this.get${field.name?cap_first}() != null) {
+            dest.writeInt(1);
+            dest.writeDouble(this.get${field.name?cap_first}());
+        } else {
+            dest.writeInt(0);
+        }
+                            </#if>
+                            <#break />
                         <#case "boolean">
                             <#if field.primitive>
         if (this.is${field.name?cap_first}()) {
