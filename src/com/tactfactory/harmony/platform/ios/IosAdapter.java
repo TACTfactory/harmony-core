@@ -12,7 +12,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.tactfactory.core.ios.platform.ios.IosProjectAdapter;
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.exception.NotImplementedException;
 import com.tactfactory.harmony.meta.ClassMetadata;
