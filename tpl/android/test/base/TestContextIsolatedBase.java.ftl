@@ -24,19 +24,19 @@ public class TestContextIsolatedBase extends IsolatedContext {
     
     @Override
     public Object getSystemService(String name) {
-        return this.getSystemService(name);
+        return this.getBaseContext().getSystemService(name);
     }
     
     @Override
     public void sendOrderedBroadcast(
             Intent intent, String receiverPermission) {
-        this.sendOrderedBroadcast(intent, receiverPermission);
+        this.getBaseContext().sendOrderedBroadcast(intent, receiverPermission);
     }
     
     @Override
     public Intent registerReceiver(
             BroadcastReceiver receiver,
             IntentFilter filter) {
-        return this.registerReceiver(receiver, filter);
+        return this.getBaseContext().registerReceiver(receiver, filter);
     }
 }
