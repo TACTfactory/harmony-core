@@ -33,6 +33,26 @@
         }
                             </#if>
                             <#break />
+                        <#case "float">
+                            <#if field.primitive>
+        this.set${field.name?cap_first}(parc.readFloat());
+                        <#else>
+        int ${field.name}Bool = parc.readInt();
+        if (${field.name}Bool == 1) {
+            this.set${field.name?cap_first}(parc.readFloat());
+        }
+                            </#if>
+                            <#break />
+                        <#case "double">
+                            <#if field.primitive>
+        this.set${field.name?cap_first}(parc.readDouble());
+                        <#else>
+        int ${field.name}Bool = parc.readInt();
+        if (${field.name}Bool == 1) {
+            this.set${field.name?cap_first}(parc.readDouble());
+        }
+                            </#if>
+                            <#break />
                         <#case "boolean">
                             <#if field.primitive>
         this.set${field.name?cap_first}(parc.readInt() == 1);
