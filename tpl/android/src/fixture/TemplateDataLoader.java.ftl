@@ -21,7 +21,8 @@ import java.util.ArrayList;
             <#break />
             </#if>
         </#if>
-        <#if !arraylistImported && (relation.relation.type == "ManyToOne" && MetadataUtils.getInversingField(relation)??)>
+        <#if !arraylistImported && ((relation.relation.type == "ManyToOne" && MetadataUtils.getInversingField(relation)??)
+                || (relation.relation.type == "OneToOne" && relation.relation.inversedBy??))>
 import java.util.ArrayList;
             <#assign arraylistImported = true />
         </#if>
@@ -29,7 +30,11 @@ import java.util.ArrayList;
 </#if>
 <#if fixtureType=="yml">
 import java.util.Map;
-<#list curr.relations as relation><#if relation.relation.type == "ManyToMany" && relation.relation.inversedBy??>import java.util.ArrayList;<#break /></#if></#list>
+    <#list curr.relations as relation>
+        <#if (relation.relation.type == "ManyToMany" || relation.relation.type == "ManyToOne" || relation.relation.type == "OneToOne") && relation.relation.inversedBy??>
+import java.util.ArrayList;<#break />
+        </#if>
+    </#list>
 <#else>
 import org.jdom2.Element;
 </#if>
