@@ -9,7 +9,7 @@ import java.util.Map;
 
 import ${data_namespace}.base.SQLiteAdapterBase;
 <#list entities?values as entity>
-    <#if ((entity.fields?size>0) && !(entity.internal) || (entity.inheritance??))>
+    <#if (((entity.fields?size>0)  || (entity.inheritance??)) && !(entity.internal))>
 import ${data_namespace}.${entity.name?cap_first}SQLiteAdapter;
 import ${project_namespace}.entity.${entity.name?cap_first};
     </#if>
@@ -32,7 +32,7 @@ public class DataManager {
     /** database. */
     protected SQLiteDatabase db;
 <#list entities?values as entity>
-    <#if ((entity.fields?size>0) && !(entity.internal) || (entity.inheritance??))>
+    <#if (((entity.fields?size>0)  || (entity.inheritance??)) && !(entity.internal))>
     /** ${entity.name} name constant. */
     private static final String ${entity.name?upper_case} = "${entity.name?cap_first}";
     </#if>
@@ -45,7 +45,7 @@ public class DataManager {
     public DataManager(final android.content.Context ctx, final SQLiteDatabase db) {
         this.db = db;
         <#list entities?values as entity>
-            <#if ((entity.fields?size>0) && !(entity.internal) || (entity.inheritance??))>
+            <#if (((entity.fields?size>0)  || (entity.inheritance??)) && !(entity.internal))>
         this.adapters.put(${entity.name?upper_case},
                 new ${entity.name?cap_first}SQLiteAdapter(ctx));
         this.adapters.get(${entity.name?upper_case}).open(this.db);
@@ -123,7 +123,7 @@ public class DataManager {
         this.beginTransaction();
         try {
         <#list entities?values as entity>
-            <#if ((entity.fields?size>0 && entity.ids?size>0) && !(entity.internal) || (entity.inheritance??))>
+            <#if (((entity.fields?size>0 && entity.ids?size>0) || (entity.inheritance??)) && !(entity.internal))>
             if (object instanceof ${entity.name}) {
                 ((${entity.name}SQLiteAdapter)
                         this.adapters.get(${entity.name?upper_case}))
