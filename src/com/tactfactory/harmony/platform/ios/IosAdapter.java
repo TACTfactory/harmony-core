@@ -12,6 +12,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.exception.NotImplementedException;
 import com.tactfactory.harmony.meta.ClassMetadata;
@@ -48,6 +49,7 @@ public class IosAdapter extends BaseAdapter {
         this.setProject("project");
         this.setPlatform("ios");
         this.setResource("res");
+        this.setTest("test");
         this.setSource("src");
     }
 
@@ -231,9 +233,84 @@ public class IosAdapter extends BaseAdapter {
 
     @Override
     public String getSourceEntityPath() {
-        return String.format("%s%s/%s/",
+        return String.format("%s/%s/",
                 this.getSourcePath(),
-                this.getApplicationMetadata().getProjectNameSpace(),
-                "entity");
+                "Entity");
+    }
+
+    /**
+     * Get Path of entity template in core.
+     * @return The path
+     */
+    public String getTemplateSourceEntityPath() {
+        return String.format("%s%s/%s/%s/",
+                Harmony.getTemplatesPath(),
+                this.getPlatform(),
+                this.getSource(),
+                "common");
+    }
+
+    public String getTemplateSourceHarmonyUtilsPath() {
+        return String.format("%s%s/%s/%s/",
+                Harmony.getTemplatesPath(),
+                this.getPlatform(),
+                this.getSource(),
+                "harmony/utils");
+    }
+
+    public String getTemplateSourceHarmonySqlPath() {
+        return String.format("%s%s/%s/%s/",
+                Harmony.getTemplatesPath(),
+                this.getPlatform(),
+                this.getSource(),
+                "harmony/sql");
+    }
+
+    public String getTemplateSourceTestPath() {
+        return String.format("%s%s/%s/%s/",
+                Harmony.getTemplatesPath(),
+                this.getPlatform(),
+                this.getSource(),
+                "test");
+    }
+
+    public String getSourceHarmonyPath() {
+        return String.format("%s/%s/",
+                this.getSourcePath(),
+                "Harmony");
+    }
+
+    public String getSourceDataPath() {
+        return String.format("%s/%s/",
+                this.getSourcePath(),
+                "Data");
+    }
+
+    public String getSourceProviderPath() {
+        return String.format("%s/%s/",
+                this.getSourcePath(),
+                "Provider");
+    }
+    
+    @Override
+    public String getSourcePath() {
+        return String.format("%s%s/%s/",
+                Harmony.getProjectPath(),
+                this.getPlatform(),
+                this.getApplicationMetadata().getName().toLowerCase());
+    }
+
+    @Override
+    public String getTestPath() {
+        return String.format("%s%s/%sTests/",
+                Harmony.getProjectPath(),
+                this.getPlatform(),
+                this.getApplicationMetadata().getName().toLowerCase());
+    }
+
+    public String getSourceTestPath() {
+        return String.format("%s/%s/",
+                this.getSourcePath(),
+                "Test");
     }
 }
