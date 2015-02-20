@@ -123,7 +123,7 @@ public abstract class BaseAdapter implements IAdapter {
 	 * Get the tests path.
 	 * @return The tests path
 	 */
-	public String getTestPath() {
+	public final String getTestPath() {
 		return String.format("%s%s/%s/",
 				Harmony.getProjectPath(),
 				this.getPlatform(),
