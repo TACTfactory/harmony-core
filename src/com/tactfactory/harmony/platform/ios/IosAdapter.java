@@ -51,6 +51,8 @@ public class IosAdapter extends BaseAdapter {
         this.setResource("res");
         this.setTest("test");
         this.setSource("src");
+		this.setUtilityPath("ftl_methods");
+
     }
 
 
