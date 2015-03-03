@@ -13,17 +13,71 @@
             <#if !field.internal>
                 <#if field.harmony_type?lower_case != "relation">
                     <#switch FieldsUtils.getJavaType(field)?lower_case>
-                        <#case "int">                    
+                        <#case "int">
+                            <#if field.primitive>
         this.set${field.name?cap_first}(parc.readInt());
+                            <#else>
+        int ${field.name}Bool = parc.readInt();
+        if (${field.name}Bool == 1) {
+            this.set${field.name?cap_first}(parc.readInt());
+        }
+                            </#if>
+                            <#break />
+                        <#case "long">
+                            <#if field.primitive>
+        this.set${field.name?cap_first}(parc.readLong());
+                        <#else>
+        int ${field.name}Bool = parc.readInt();
+        if (${field.name}Bool == 1) {
+            this.set${field.name?cap_first}(parc.readLong());
+        }
+                            </#if>
+                            <#break />
+                        <#case "float">
+                            <#if field.primitive>
+        this.set${field.name?cap_first}(parc.readFloat());
+                        <#else>
+        int ${field.name}Bool = parc.readInt();
+        if (${field.name}Bool == 1) {
+            this.set${field.name?cap_first}(parc.readFloat());
+        }
+                            </#if>
+                            <#break />
+                        <#case "double">
+                            <#if field.primitive>
+        this.set${field.name?cap_first}(parc.readDouble());
+                        <#else>
+        int ${field.name}Bool = parc.readInt();
+        if (${field.name}Bool == 1) {
+            this.set${field.name?cap_first}(parc.readDouble());
+        }
+                            </#if>
                             <#break />
                         <#case "boolean">
+                            <#if field.primitive>
         this.set${field.name?cap_first}(parc.readInt() == 1);
+                            <#else>
+        int ${field.name}Bool = parc.readInt();
+        if (${field.name}Bool == 1) {
+            this.set${field.name?cap_first}(parc.readInt() == 1);
+        }
+                            </#if>
                             <#break />
                         <#case "string">
-        this.set${field.name?cap_first}(parc.readString());
+        int ${field.name}Bool = parc.readInt();
+        if (${field.name}Bool == 1) {
+            this.set${field.name?cap_first}(parc.readString());
+        }
                             <#break />
                         <#case "byte">
+                            <#if field.primitive>
         this.set${field.name?cap_first}(parc.readByte());
+                            <#else>
+        int ${field.name}Bool = parc.readInt();
+        if (${field.name}Bool == 1) {
+            this.set${field.name?cap_first}(parc.readByte());
+        }
+                            </#if>
                             <#break />
                         <#case "char">
                             <#if field.primitive>
@@ -36,7 +90,14 @@
                             </#if>
                             <#break />
                         <#case "short">
+                            <#if field.primitive>
         this.set${field.name?cap_first}((short) parc.readInt());
+                            <#else>
+        int ${field.name}Bool = parc.readInt();
+        if (${field.name}Bool == 1) {
+            this.set${field.name?cap_first}((short) parc.readInt());
+        }
+                            </#if>
                             <#break />
                         <#case "datetime">
         if (parc.readInt() == 1) {
