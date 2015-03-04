@@ -126,7 +126,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
         </#list>
     </#if>
 </#list>
-        ${lastLine}"
+        <#if (lastLine??)>${lastLine}"</#if>
         <#list curr.inheritance.subclasses as subclass>+ ${subclass.name}SQLiteAdapter.getSchemaColumns()<#if subclass_has_next> + ","</#if></#list>
 ;
     }
