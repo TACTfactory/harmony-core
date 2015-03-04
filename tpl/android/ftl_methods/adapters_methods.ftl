@@ -66,7 +66,7 @@
         <#if (field.harmony_type?lower_case != "relation")>
             <#assign result = result + "${tab}index = cursor.getColumnIndexOrThrow(${fieldNames[0]});\n"/>
             <#if (field.nullable)>
-                <#assign result = result + "${tab}if (![cursor columnIndexIsNull:index]) {\n"/><#assign localTab="    " />
+                <#assign result = result + "${tab}if (!cursor.isNull(index)) {\n"/><#assign localTab="    " />
             </#if>
             <#switch FieldsUtils.getJavaType(field)?lower_case>
                 <#case "datetime">
@@ -122,6 +122,23 @@
                     <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
                     <#assign result = result + "${tab}        cursor.getString(index));\n"/>
                     <#break />
+                <#case "enum">
+                    <#assign enumType = enums[field.enum.targetEnum] />
+                    <#if enumType.id??>
+                        <#assign idEnumType = FieldsUtils.getJavaType(enumType.fields[enumType.id])?lower_case />
+                        <#if (idEnumType == "int" || idEnumType == "integer") >
+                           <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
+                           <#assign result = result + "${tab}    ${enumType.name}.fromValue(cursor.getInt(index)));\n"/>
+                        <#else>
+                            <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
+                            <#assign result = result + "${tab}    ${enumType.name}.fromValue(cursor.getString(index)));\n"/>
+                    </#if>
+                    <#else>
+                    <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
+                    <#assign result = result + "${tab}    ${enumType.name}.valueOf(cursor.getString(index)));\n"/>
+                    
+                    </#if>
+                   <#break />
                 <#default>
                         <#assign result = result + "${tab}${localTab}//TODO : Handle type / ${FieldsUtils.getJavaType(field)}"/>
             </#switch>
@@ -134,7 +151,7 @@
                 <#list entities[field.relation.targetEntity].ids as id>
                     <#assign result = result + "${tab}${localTab}    index = cursor.getColumnIndexOrThrow(${fieldNames[id_index]});\n"/>
                     <#if (field.nullable)>
-                        <#assign result = result + "${tab}${localTab}    if (![cursor columnIndexIsNull:index]) {\n"/><#assign localTab="    " />
+                        <#assign result = result + "${tab}${localTab}    if (!cursor.isNull(index)) {\n"/><#assign localTab="    " />
                     </#if>
                     <#assign result = result + "${tab}${localTab}    ${field.name}.set${id.name?cap_first}(${AdapterUtils.getCursorGet(id)}index));\n"/>
                     <#assign result = result + "${tab}${localTab}    result.set${field.name?cap_first}(${field.name});\n"/>
