@@ -36,20 +36,22 @@ public class ConfigGenerator extends BaseGenerator<IAdapter> {
             IConfigFileUtil configUtil = this.getAdapter()
                     .getAdapterProject().getConfigFileUtil();
             
-            configUtil.open(this.getAdapter().getConfigsPathFile());
-            
-            Iterable<ConfigMetadata> configs = this.getAppMetas()
-                    .getConfigs().values();
-            
-            for (final ConfigMetadata configMeta : configs) {
-                String addedString = configUtil.addElement(
-                        configMeta.getKey(),
-                        configMeta.getValue());
-                
-                configMeta.setValue(addedString);
+            if (configUtil != null) {
+	            configUtil.open(this.getAdapter().getConfigsPathFile());
+	            
+	            Iterable<ConfigMetadata> configs = this.getAppMetas()
+	                    .getConfigs().values();
+	            
+	            for (final ConfigMetadata configMeta : configs) {
+	                String addedString = configUtil.addElement(
+	                        configMeta.getKey(),
+	                        configMeta.getValue());
+	                
+	                configMeta.setValue(addedString);
+	            }
+	            
+	            configUtil.save();
             }
-            
-            configUtil.save();
         } catch (final Exception e) {
             ConsoleUtils.displayError(e);
         }
