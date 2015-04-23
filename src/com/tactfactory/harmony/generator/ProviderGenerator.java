@@ -78,9 +78,9 @@ public class ProviderGenerator extends BaseGenerator<IAdapter> {
 						+ this.getAppMetas().getName()
 						+ " to access data",
 					Group.PROVIDER);
-
-			new TranslationGenerator(this.getAdapter()).generateStringsXml();
+			
 			new TestProviderGenerator(this.getAdapter()).generateAll();
+			new TranslationGenerator(this.getAdapter()).generateStringsXml();
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}

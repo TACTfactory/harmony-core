@@ -127,18 +127,18 @@
                     <#if enumType.id??>
                         <#assign idEnumType = FieldsUtils.getJavaType(enumType.fields[enumType.id])?lower_case />
                         <#if (idEnumType == "int" || idEnumType == "integer") >
-                            <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
-                            <#assign result = result + "${tab}    ${enumType.name}.fromValue(cursor.getInt(index)));\n"/>
+                           <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
+                           <#assign result = result + "${tab}    ${enumType.name}.fromValue(cursor.getInt(index)));\n"/>
                         <#else>
                             <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
                             <#assign result = result + "${tab}    ${enumType.name}.fromValue(cursor.getString(index)));\n"/>
-                        </#if>
-                    <#else>
-                        <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
-                        <#assign result = result + "${tab}    ${enumType.name}.valueOf(cursor.getString(index)));\n"/>
-
                     </#if>
-                    <#break />
+                    <#else>
+                    <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
+                    <#assign result = result + "${tab}    ${enumType.name}.valueOf(cursor.getString(index)));\n"/>
+                    
+                    </#if>
+                   <#break />
                 <#default>
                         <#assign result = result + "${tab}${localTab}//TODO : Handle type / ${FieldsUtils.getJavaType(field)}"/>
             </#switch>
