@@ -70,7 +70,7 @@
 </#function>
 
 <#function getContractItemToContentValues entity>
-    <#return ContractUtils.getContractClass(entity) + " itemToContentValues" />
+    <#return ContractUtils.getContractClass(entity) + ".itemToContentValues" />
 </#function>
 
 <#function getContractCursorToItem entity>
