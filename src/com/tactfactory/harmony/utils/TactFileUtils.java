@@ -597,4 +597,8 @@ public abstract class TactFileUtils extends FileUtils {
 
 		return result;
 	}
+	
+	public static String getFileBackUpPath(File file) {
+	    return String.format("%s%s.%s.back", file.getParent(), File.separator, file.getName());
+	}
 }

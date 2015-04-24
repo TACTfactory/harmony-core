@@ -20,16 +20,16 @@ import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.updater.IExecutor;
 import com.tactfactory.harmony.updater.IUpdater;
-import com.tactfactory.harmony.updater.impl.EditFile;
 import com.tactfactory.harmony.updater.impl.CopyFile;
 import com.tactfactory.harmony.updater.impl.CreateFolder;
 import com.tactfactory.harmony.updater.impl.DeleteFile;
+import com.tactfactory.harmony.updater.impl.EditFile;
 import com.tactfactory.harmony.updater.impl.LibraryGit;
 import com.tactfactory.harmony.updater.impl.SourceFile;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.GitUtils;
-import com.tactfactory.harmony.utils.TactFileUtils;
 import com.tactfactory.harmony.utils.GitUtils.GitException;
+import com.tactfactory.harmony.utils.TactFileUtils;
 
 import freemarker.cache.FileTemplateLoader;
 import freemarker.cache.MultiTemplateLoader;
@@ -309,10 +309,9 @@ public abstract class BaseGenerator<T extends IAdapter> {
 		
 		if (!this.adapter.filesEqual(
 				oldContent, newContent, file.getName(), true)) {
-			String backupFileName = "." + file.getName() + ".back"; 
 			TactFileUtils.stringBufferToFile(
 					new StringBuffer(oldContent), 
-					new File(file.getParent() + "/" + backupFileName));
+					new File(TactFileUtils.getFileBackUpPath(file)));
 		} else {
 			TactFileUtils.stringBufferToFile(
 					new StringBuffer(oldContent), 

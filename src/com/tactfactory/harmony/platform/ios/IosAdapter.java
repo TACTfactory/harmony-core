@@ -31,7 +31,16 @@ public class IosAdapter extends BaseAdapter {
             "IOS adapter has not been implemented yet.";
 
     private IAdapterProject adapterProject = new IosProjectAdapter(this);
+
+    /** Constant for java extension. */
+    private static final String HEADER_EXTENSION = "h";
     
+    /** Constant for java extension. */
+    private static final String METHOD_EXTENSION = "m";
+    
+    /** Constant for package keyword. */
+    private static final String IMPORT = "#import";
+
     /** String type. */
     private static final String STR = "NSString";
 
@@ -207,9 +216,22 @@ public class IosAdapter extends BaseAdapter {
 
 
     @Override
-    public boolean filesEqual(String oldContent, String newContent,
-            String fileName, boolean ignoreHeader) {
-        return oldContent.equals(newContent);
+    public boolean filesEqual(String oldContent,
+            String newContent,
+            String fileName,
+            boolean ignoreHeader) {
+        boolean result = false;
+        
+        if (ignoreHeader && (fileName.endsWith(HEADER_EXTENSION) 
+                || (fileName.endsWith(METHOD_EXTENSION)))) {
+            oldContent = oldContent.substring(
+                    Math.max(oldContent.indexOf(IMPORT), 0));
+            newContent = newContent.substring(
+                    Math.max(newContent.indexOf(IMPORT), 0));
+        }
+        
+        result = oldContent.equals(newContent);
+        return result;
     }
 
     @Override
