@@ -220,7 +220,8 @@ public final class ApplicationMetadata extends BaseMetadata {
 
 		// Add root
 		ret.put(TagConstant.PROJECT_NAME, 		this.getName());
-
+		ret.put(TagConstant.PROJECT_PLATFORM, this.getPlatform(adapt));
+		
 		ret.put(TagConstant.CLASSES, 		classesMap);
 		ret.put(TagConstant.ENTITIES, 		entitiesMap);
 		ret.put(TagConstant.ENUMS, 			enumsMap);
@@ -290,5 +291,17 @@ public final class ApplicationMetadata extends BaseMetadata {
 	 */
 	public void setHeaderTemplate(final String headerTemplate) {
 		this.headerTemplate = headerTemplate;
+	}
+	
+	public String getPlatform(IAdapter adapter) {
+	    String result = null;
+	    
+	    if (adapter.getPlatform().equals(TagConstant.ANDROID_PLATFORM.toLowerCase())) {
+	        result = TagConstant.ANDROID_PLATFORM;
+	    } else if (adapter.getPlatform().equals(TagConstant.IOS_PLATFORM.toLowerCase())) {
+	        result = TagConstant.IOS_PLATFORM;
+	    }
+	    
+	    return result;
 	}
 }

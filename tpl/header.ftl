@@ -1,5 +1,5 @@
 /**************************************************************************
- * ${fileName}, ${project_name} Android
+ * ${fileName}, ${project_name} ${project_platform}
  *
  * Copyright ${.now?string("yyyy")}
  * Description : 
