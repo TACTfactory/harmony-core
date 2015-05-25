@@ -321,6 +321,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
                             null,
                             null);
         result.set${relation.name?cap_first}(${relation.name?uncap_first}Adapter.cursorToItems(${relation.name?lower_case}Cursor));
+        
+        ${relation.name?lower_case}Cursor.close();
                 <#elseif (relation.relation.type=="ManyToMany")>
         ${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter =
                 new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
@@ -332,6 +334,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
                             null,
                             null);
         result.set${relation.name?cap_first}(new ${relation.relation.targetEntity}SQLiteAdapter(ctx).cursorToItems(${relation.name?lower_case}Cursor));
+
+        ${relation.name?lower_case}Cursor.close();
                 <#else>
         if (result.get${relation.name?cap_first}() != null) {
             final ${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter =
