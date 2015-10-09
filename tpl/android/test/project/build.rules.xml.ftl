@@ -6,12 +6,10 @@
     <property name="monkey.numberevents" value="5000" />
     <property name="monkey.seed" value="0" />
     
-    <!-- 6628 -->
     <!-- generic setup -->
     <target name="-setup" depends="android_rules.-setup">
         <property name="junit.report.file" value="${r"${project.app.package}"}.junit-report.xml" />
     </target>
-    <!-- END6628 -->
     
     <target name="test-report" depends="-setup">
         <echo>Downloading XML test report...</echo>
@@ -29,11 +27,10 @@
         </fail>
     </target>
     
-    <!-- 6628 -->
     <target name="test-all" depends="emma,clean,debug,install,test,test-report,monkey"/>
 
     <target name="monkey" depends="-setup">
-        <echo level="info">Launch monkey on ${tested.manifest.package}"</echo>
+        <echo level="info">Launch monkey on ${r"${tested.manifest.package}"}"</echo>
         <exec executable="${r"${sdk.dir}"}/platform-tools/adb" failonerror="true">
             <arg value="shell"/>
             <arg value="monkey"/>
@@ -45,11 +42,11 @@
             <arg value="${r"${monkey.seed}"}"/>
         </exec>
     </target>
-    <!-- END6628 -->
     
     <target name="test" 
             depends="-test-project-check"
             description="Runs tests from the package defined in test.package property">
+        
         <property name="test.runner" value="android.test.InstrumentationTestRunner" />
 
         <if condition="${r"${project.is.test}"}">

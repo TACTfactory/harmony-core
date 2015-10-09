@@ -35,7 +35,10 @@
          the proguard config can use sdk.dir
     -->
     <property environment="env"/>
-
+    <condition property="sdk.dir" value="${r"${env.ANDROID_HOME}"}">
+        <isset property="env.ANDROID_HOME" />
+    </condition>
+    
     <!-- The project.properties file is created and updated by the 'android'
          tool, as well as ADT.
 
