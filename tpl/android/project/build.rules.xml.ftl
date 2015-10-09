@@ -1,31 +1,49 @@
+<#-- Refer to documentation for change https://support.tactfactory.com/projects/harmony/wiki/Metadata_Map -->
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="harmony-rules">
     <property name="findbug.analyze.package" value="" />
     <property name="checkstyle.includes" value="" />
     <property name="checkstyle.excludes" value="" />
-    <property name="android-jar" value="${sdk.dir}/platforms/android-14/android.jar" />
     <property name="tmp.rel-dir" value="tmp" />
+    <property name="sdk.extra.dir" value="${r"${sdk.dir}"}"/extras/android/support/v4" />
+    <property name="supportv4.jar" value="android-support-v4.jar" />
+    
     <path id="findbugs.dir.jars">
     <fileset dir="${r"${env.FINDBUGS_HOME}"}/lib">
         <include name="*.jar" />
     </fileset>
     </path>
-    <path id="classpath">
-    <fileset dir="${r"${jar.libs.dir}"}">
-        <include name="*.jar" />
-    </fileset>
-    <pathelement path="${r"${android-jar}"}" />
-    <pathelement path="${r"${jar.libs.dir}"}/sherlock/library/bin/classes.jar" />
-    <pathelement path="${r"${jar.libs.dir}"}/sherlock/library/libs/android-support-v4.jar" />
-    </path>
-
+    
+    <!-- 6628 Check for var -->
+    <target name="-setup" depends="android_rules.-setup">
+        <condition property="android_executable" value="android.bat" else="android">
+            <os family="windows"/>
+        </condition> 
+    </target>
+    <!-- END6628 -->
+    
 <!-- basic -->
     <target name="init">
         <mkdir dir="${r"${out.dir}"}"/>
         <mkdir dir="${r"${tmp.rel-dir}"}"/>
     </target>
+    
+    <!-- 6628 -->
+    <target name="test-all" depends="emma,clean,test-all-sub,reports,uninstall,clean,release,install,monkey"/>
 
+    <target name="test-all-sub">
+        <subant target="test-all">
+            <fileset dir="./test" includes="build.xml"/>
+        </subant>
+    </target>
 
+    <target name="monkey">
+        <subant target="monkey">
+            <fileset dir="./test" includes="build.xml"/>
+        </subant>
+    </target>
+    <!-- END6628 -->
+    
     <target name="run-findbugs" depends="init">
         <taskdef name="findbugs" classname="edu.umd.cs.findbugs.anttask.FindBugsTask" description="classes+findbugs=magic" classpathref="findbugs.dir.jars"/>
         <findbugs home="${r"${env.FINDBUGS_HOME}"}"
@@ -43,8 +61,7 @@
             style="${r"${env.FINDBUGS_HOME}"}/src/xsl/fancy.xsl"
            />
     </target>
-
-
+    
     <target name="run-checkstyle" depends="init"
         description="Report of code convention violations.">
 
@@ -64,8 +81,8 @@
                        failOnViolation="false" >
                <formatter type="xml" tofile="${r"${tmp.rel-dir}"}/checkstyle-result.xml" />
                <fileset dir="${r"${source.dir}"}"
-            includes="${r"${checkstyle.includes}"}"
-            excludes="${r"${checkstyle.excludes}"}" />
+                    includes="${r"${checkstyle.includes}"}"
+                    excludes="${r"${checkstyle.excludes}"}" />
            </checkstyle>
 
         <!-- Report -->
@@ -132,4 +149,36 @@
     </target>
 
     <target name="reports" depends="run-checkstyle,run-findbugs,run-pmd" />
+    
+    <!-- 6628 -->
+    <target name="-update-library">
+        <condition property="library.target" value="${r"${target}"}">
+           <not>
+              <isset property="library.target"/>
+           </not>
+        </condition>
+
+        <echo level="info">Update ${library.update} Android library</echo>
+        <exec executable="${r"${sdk.dir}/tools/${android_executable}"}" failonerror="true">
+            <arg value="update"/>
+            <arg value="lib-project"/>
+            <arg value="-p"/>
+            <arg value="${r"${library.update}"}"/>
+            <arg value="--target"/>
+            <arg value="${r"${library.target}"}"/>
+        </exec>
+    </target>
+    
+    <target name="-update-library-add">
+        <echo level="info">Update ${library.update} Android library with library</echo>
+        <exec executable="${sdk.dir}/tools/${android_executable}" failonerror="true">
+            <arg value="update"/>
+            <arg value="project"/>
+            <arg value="-p"/>
+            <arg value="${r"${library.update}"}"/>
+            <arg value="--library"/>
+            <arg value="${r"${library.param.library}"}"/>
+        </exec>
+    </target>
+    <!-- END6628 -->
 </project>
