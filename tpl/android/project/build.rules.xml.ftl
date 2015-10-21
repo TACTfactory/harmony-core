@@ -146,6 +146,18 @@
 
     <target name="reports" depends="run-checkstyle,run-findbugs,run-pmd" />
     
+    <!-- Code obfuscation check  -->
+    <target name="proguard" >
+        <property name="debug.proguard.enable" value="true" />
+    </target>
+    
+	<target name="-debug-obfuscation-check">
+		<!-- proguard is never enabled in debug mode -->
+        <condition property="proguard.enabled" value="true" else="false">
+            <isset property="debug.proguard.enable"/>
+        </condition>
+	</target>
+	
     <target name="-update-library">
         <condition property="library.target" value="${r"${target}"}">
            <not>
