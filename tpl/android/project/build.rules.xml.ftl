@@ -165,6 +165,13 @@
            </not>
         </condition>
 
+		<!-- Manage library naming -->
+		<condition property="library.target" value="${r"${nameSetter}"}">
+           <not>
+              <isset property="${r"${nameSetter}"}"/>
+           </not>
+        </condition>
+        
         <echo level="info">Update ${r"${library.update}"} Android library</echo>
         <exec executable="${r"${sdk.dir}/tools/${android_executable}"}" failonerror="true">
             <arg value="update"/>
@@ -173,6 +180,8 @@
             <arg value="${r"${library.update}"}"/>
             <arg value="--target"/>
             <arg value="${r"${library.target}"}"/>
+            <arg value="--name" />
+            <arg value="${r"${nameSetter}"}"/>
         </exec>
     </target>
     
