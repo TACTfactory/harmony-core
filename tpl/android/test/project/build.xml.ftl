@@ -1,5 +1,7 @@
+<#-- Refer to documentation for change https://support.tactfactory.com/projects/harmony/wiki/Metadata_Map -->
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="${project_name}-test" default="help">
+    
     <!-- The local.properties file is created and updated by the 'android' tool.
          It contains the path to the SDK. It should *NOT* be checked into
          Version Control Systems. -->
@@ -32,7 +34,10 @@
          This must be done before we load project.properties since
          the proguard config can use sdk.dir -->
     <property environment="env" />
-
+    <condition property="sdk.dir" value="${r"${env.ANDROID_HOME}"}">
+        <isset property="env.ANDROID_HOME" />
+    </condition>
+    
     <!-- The project.properties file is created and updated by the 'android'
          tool, as well as ADT.
 
@@ -84,5 +89,5 @@
     -->
     <!-- version-tag: 1 -->
     <import file="${sdk.dir}/tools/ant/build.xml" />
-    <import file="./build.rules.xml" />
+    
 </project>
