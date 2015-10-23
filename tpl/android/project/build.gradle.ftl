@@ -15,8 +15,9 @@ repositories {
 }
 
 dependencies {
-    compile 'com.android.support:support-v4:13.0.+'
-    compile 'com.actionbarsherlock:actionbarsherlock:4.4.0@aar'
+    //Configure appcompat version to match your compileSdkVersion
+    //Support V4 is embeded in appcompat-v7
+    compile 'com.android.support:appcompat-v7:22.2.0'
     
     compile fileTree(dir: 'libs', include: '*.jar')
 
@@ -26,16 +27,18 @@ dependencies {
 }
 
 android {
-    compileSdkVersion 23
+    compileSdkVersion 21
     buildToolsVersion "23.0.1"
 
     defaultConfig {
         //multiDexEnabled true 
 
         applicationId "${project_namespace}"
-        minSdkVersion 23
-        targetSdkVersion 23
+        minSdkVersion 8
+        targetSdkVersion 21
 
+        //Default test project is set with projectName.test 
+        //If you defined another test project set it here
         //testApplicationId "${project_namespace}.test"
         testInstrumentationRunner "com.zutubi.android.junitreport.JUnitReportTestRunner"
     }
@@ -50,6 +53,7 @@ android {
         }
     }
 
+    //SourceSets make correct setup path to use gradle with eclipse architecture
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -70,11 +74,15 @@ android {
         }
     }
 
+    //Exclude file when using Dex to setup one package for build
+    //We need to exclude remanente files from all embeded .jar
     packagingOptions {
         exclude 'META-INF/NOTICE.txt'
         exclude 'META-INF/LICENSE.txt'
       }
 
+    //Because of some compatibilities issues between lint and eclipse projects
+    //we need to continue build process even if lint report issues
     lintOptions {
           abortOnError false
       }
