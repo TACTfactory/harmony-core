@@ -19,7 +19,7 @@ dependencies {
     //Support V4 is embeded in appcompat-v7
     compile 'com.android.support:appcompat-v7:22.2.0'
     
-    compile fileTree(dir: 'libs', include: '*.jar')
+    compile fileTree(dir: 'libs', include: '*.jar', exclude:'android-support-v4.jar')
 
     androidTestCompile "com.android.support.test:runner:0.3"
     androidTestCompile 'junit:junit:4.12'
