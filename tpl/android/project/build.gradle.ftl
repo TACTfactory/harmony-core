@@ -42,11 +42,27 @@ android {
         //testApplicationId "${project_namespace}.test"
         testInstrumentationRunner "com.zutubi.android.junitreport.JUnitReportTestRunner"
     }
+    
+    signingConfigs {
+        release {
+            if(new File("$System.env.KEYSTORE_PATH" + "/" + project.name + ".properties").exists()) {
+                def props = new Properties()
+
+                props.load(new FileInputStream("$System.env.KEYSTORE_PATH" + "/" + project.name + ".properties"))
+
+                storeFile rootProject.file(props.keyStore)
+                storePassword props.keyStorePassword
+                keyAlias props.keyAlias
+                keyPassword props.keyAliasPassword
+            }
+        }
+    }
 
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-project.txt'
+            signingConfig signingConfigs.release
         }
         debug {
             testCoverageEnabled true
@@ -86,4 +102,12 @@ android {
     lintOptions {
           abortOnError false
       }
+}
+
+tasks.all {
+    // Disable application signing if no configurations found
+    task -> if (task.name.equals('packageRelease')
+            && !new File("$System.env.KEYSTORE_PATH" + "/" + project.name + ".properties").exists()) {
+        task.enabled = false
+    }
 }
