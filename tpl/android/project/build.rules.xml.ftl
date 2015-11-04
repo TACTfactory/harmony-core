@@ -5,7 +5,7 @@
     <property name="checkstyle.includes" value="" />
     <property name="checkstyle.excludes" value="" />
     <property name="tmp.rel-dir" value="tmp" />
-    <property name="sdk.extra.dir" value="${r"${sdk.dir}"}"/extras/android/support/v4" />
+    <property name="sdk.extra.dir" value="${r"${sdk.dir}"}/extras/android/support/v4" />
     <property name="supportv4.jar" value="android-support-v4.jar" />
     
     <path id="findbugs.dir.jars">

@@ -27,9 +27,7 @@
         </fail>
     </target>
     
-    <target name="test-all" depends="test-all-debug,test-all-release"/>
-    <target name="test-all-debug" depends="uninstall,emma,clean,test-all-sub,reports"/>
-    <target name="test-all-release" depends="uninstall,clean,release,install,monkey"/>
+    <target name="test-all" depends="emma,clean,debug,install,test,test-report,monkey"/>
 
     <target name="monkey" depends="-setup">
         <echo level="info">Launch monkey on ${r"${tested.manifest.package}"}"</echo>
