@@ -62,7 +62,7 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
         this.adapter = new ${curr.name}SQLiteAdapter(this.ctx);
 
         <#if dataLoader?? && dataLoader>
-        this.entities = new ArrayList<${curr.name?cap_first}>();        
+        this.entities = new ArrayList<${curr.name?cap_first}>();
         <#list InheritanceUtils.getAllChildren(curr) as child>
         this.entities.addAll(${child.name?cap_first}DataLoader.getInstance(this.ctx).getMap().values());
         </#list>
@@ -207,26 +207,28 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
     @SmallTest
     public void testUpdateAll() {
         int result = -1;
-        if (this.entities.size() > 0) {
-            ${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
-
-            try {
-                ContentValues values = ${ContractUtils.getContractItemToContentValues(curr)}(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
-                <#list IdsUtils.getAllIdsColsFromArray(curr_ids) as id>
-                values.remove(${id});
-                </#list>
-                <#list ViewUtils.getAllFields(curr)?values as field>
-                    <#if field.unique?? && field.unique>
-                values.remove(${field.owner}Contract.COL_${field.name?upper_case});
-                    </#if>
-                </#list>
-
-                result = this.provider.update(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, values, null, null);
-            } catch (Exception e) {
-                e.printStackTrace();
+        if (this.entities != null) {
+            if (this.entities.size() > 0) {
+                ${curr.name} ${curr.name?uncap_first} = ${curr.name?cap_first}Utils.generateRandom(this.ctx);
+    
+                try {
+                    ContentValues values = ${ContractUtils.getContractItemToContentValues(curr)}(${curr.name?uncap_first}<#list curr.relations as relation><#if relation.relation.type=="ManyToOne" && relation.internal>, 0</#if></#list>);
+                    <#list IdsUtils.getAllIdsColsFromArray(curr_ids) as id>
+                    values.remove(${id});
+                    </#list>
+                    <#list ViewUtils.getAllFields(curr)?values as field>
+                        <#if field.unique?? && field.unique>
+                    values.remove(${field.owner}Contract.COL_${field.name?upper_case});
+                        </#if>
+                    </#list>
+    
+                    result = this.provider.update(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, values, null, null);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+    
+                Assert.assertEquals(result, this.nbEntities);
             }
-
-            Assert.assertEquals(result, this.nbEntities);
         }
     }
 
@@ -255,16 +257,18 @@ public abstract class ${curr.name}TestProviderBase extends TestDBBase {
     @SmallTest
     public void testDeleteAll() {
         int result = -1;
-        if (this.entities.size() > 0) {
-
-            try {
-                result = this.provider.delete(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, null, null);
-
-            } catch (Exception e) {
-                e.printStackTrace();
+        if (this.entities != null) {
+            if (this.entities.size() > 0) {
+    
+                try {
+                    result = this.provider.delete(${curr.name?cap_first}ProviderAdapter.${curr.name?upper_case}_URI, null, null);
+    
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+    
+                Assert.assertEquals(result, this.nbEntities);
             }
-
-            Assert.assertEquals(result, this.nbEntities);
         }
     }
 
