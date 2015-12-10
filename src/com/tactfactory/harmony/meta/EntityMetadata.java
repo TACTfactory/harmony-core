@@ -24,7 +24,7 @@ public final class EntityMetadata extends ClassMetadata {
 
 	/** Used for join tables (ManyToMany relations). */
 	private boolean internal = false;
-	
+
 	/** Entity SQL table name. */
 	private String tableName;
 
@@ -35,15 +35,15 @@ public final class EntityMetadata extends ClassMetadata {
 	/** List of relations of entity class. */
 	private Map<String, FieldMetadata> relations =
 			new LinkedHashMap<String, FieldMetadata>();
-	
+
 	/** List of indexes of entity. */
 	private Map<String, ArrayList<String>> indexes =
 			new LinkedHashMap<String, ArrayList<String>>();
-	
+
 	/** List of orderBys of entity. */
 	private Map<String, String> orders =
-			new LinkedHashMap<String, String>();	
-	
+			new LinkedHashMap<String, String>();
+
 	/** Should we be able to create this entity ? */
 	private boolean createAction = true;
 	/** Should we be able to edit this entity ? */
@@ -54,6 +54,8 @@ public final class EntityMetadata extends ClassMetadata {
 	private boolean listAction = true;
 	/** Should we be able to delete this entity ? */
 	private boolean deleteAction = true;
+    /** Should be resource ? */
+    private boolean resource = false;
 
 	/**
 	 * Add Component String of field.
@@ -89,6 +91,7 @@ public final class EntityMetadata extends ClassMetadata {
 		model.put(TagConstant.DELETE_ACTION, this.deleteAction);
 		model.put(TagConstant.INDEXES, this.indexes);
 		model.put(TagConstant.ORDERS, this.orders);
+		model.put(TagConstant.RESOURCE, this.resource);
 
 		return model;
 	}
@@ -122,14 +125,14 @@ public final class EntityMetadata extends ClassMetadata {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Add an id to the entity.
 	 */
 	public final void addId(FieldMetadata id) {
 		this.ids.put(id.getName(), id);
 	}
-	
+
 	/**
 	 * @param ids the ids to set
 	 */
@@ -180,7 +183,7 @@ public final class EntityMetadata extends ClassMetadata {
 	}
 
 	/**
-	 * Add an index constraint to this entity. 
+	 * Add an index constraint to this entity.
 	 * @param indexName The index name
 	 * @param columns The columns of this index
 	 */
@@ -196,7 +199,7 @@ public final class EntityMetadata extends ClassMetadata {
 	public void addOrder(String columnName, String order) {
 		this.orders.put(columnName, order);
 	}
-	
+
 
 	/**
 	 * Tells if this entitymetadata has fields. (either by itself or by its
@@ -214,10 +217,10 @@ public final class EntityMetadata extends ClassMetadata {
 				result = inheritance.getSuperclass().hasFields();
 			}
 		}
-			
+
 		return result;
 	}
-	
+
 	@Override
 	public final void removeField(FieldMetadata field) {
 		super.removeField(field);
@@ -271,7 +274,7 @@ public final class EntityMetadata extends ClassMetadata {
 		this.createAction = createAction;
 	}
 
-	
+
 	/**
 	 * @param createAction the createAction to set
 	 */
@@ -302,18 +305,32 @@ public final class EntityMetadata extends ClassMetadata {
 	public final void setListAction(boolean listAction) {
 		this.listAction = listAction;
 	}
-	
+
 	/**
 	 * @return Get the entity SQL name
 	 */
 	public final String getTableName() {
 	    return this.tableName;
 	}
-	
+
 	/**
 	 * @param name The entity SQL table name
 	 */
 	public final void setTableName(String name) {
 	    this.tableName = name;
 	}
+
+	   /**
+     * @return the resource
+     */
+    public final boolean isResource() {
+        return this.resource;
+    }
+
+    /**
+     * @param resource the resource to set
+     */
+    public final void setResource(boolean resource) {
+        this.resource = resource;
+    }
 }
