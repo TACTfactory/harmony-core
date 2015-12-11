@@ -7,10 +7,14 @@ import org.joda.time.DateTime;
 
 public interface Resource {
     /**
-     * Get the EntityBase server id.
-     * @return The EntityBase server id
+     * @return the resourceId
      */
-    Integer getServerId();
+    Integer getResourceId();
+
+    /**
+     * @param value the resourceId to set
+     */
+    void setResourceId(final Integer value);
 
     /**
      * @return the path
@@ -21,14 +25,4 @@ public interface Resource {
      * @param value the path to set
      */
     void setPath(final String value);
-
-    /**
-     * @return the local path
-     */
-    String getLocalPath();
-
-    /**
-     * @param value the local path to set
-     */
-    void setLocalPath(final String value);
 }

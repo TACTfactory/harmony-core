@@ -254,9 +254,7 @@ public class ClassVisitor {
 
 	    	if (resourceAnnot != null) {
 	    	    EntityMetadata resultEntity = (EntityMetadata) result;
-	    	    if (resourceAnnot instanceof NormalAnnotationExpr) {
-	    	        resultEntity.setResource(true);
-	    	    }
+	    	    resultEntity.setResource(true);
 	    	}
 
 	    	if (isEntity) {

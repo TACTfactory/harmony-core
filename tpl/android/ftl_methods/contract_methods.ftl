@@ -24,24 +24,27 @@
 </#function>
 
 <#function getFieldsDeclarations field entity>
-    <#assign fieldsNames = ContractUtils.getColumnsNames(field) />
-    <#assign result = "" />
-    <#list fieldsNames as fieldName>
-        <#assign result = result + "    /** ${fieldName}. */\n" />
-        <#assign result = result + "    public static final String ${NamingUtils.alias(fieldName)} =\n" />
-        <#if field.relation??>
-            <#assign result = result + "            \"${field.columnName}_${field.relation.field_ref[fieldName_index].name}\";\n"/>
-        <#else>
-            <#assign result = result + "            \"${field.columnName}\";\n"/>
-        </#if>
-        <#assign result = result + "    /** Alias. */\n" />
-        <#assign result = result + "    public static final String ALIASED_${NamingUtils.alias(fieldName)} =\n" />
-        <#assign result = result + "            " />
-        <#if !field.columnResult>
-            <#assign result = result + "${entity.name?cap_first}Contract.TABLE_NAME + \".\" + " />
-        </#if>
-        <#assign result = result + "${NamingUtils.alias(fieldName)};\n\n"/>
-    </#list>
+    <#if field.columnName??>
+        <#assign fieldsNames = ContractUtils.getColumnsNames(field) />
+        <#assign result = "" />
+        <#list fieldsNames as fieldName>
+            <#assign result = result + "    /** ${fieldName}. */\n" />
+            <#assign result = result + "    public static final String ${NamingUtils.alias(fieldName)} =\n" />
+            <#if field.relation??>
+                <#assign result = result + "            \"${field.columnName}_${field.relation.field_ref[fieldName_index].name}\";\n"/>
+            <#else>
+                <#assign result = result + "            \"${field.columnName}\";\n"/>
+            </#if>
+            <#assign result = result + "    /** Alias. */\n" />
+            <#assign result = result + "    public static final String ALIASED_${NamingUtils.alias(fieldName)} =\n" />
+            <#assign result = result + "            " />
+            <#if !field.columnResult>
+                <#assign result = result + "${entity.name?cap_first}Contract.TABLE_NAME + \".\" + " />
+            </#if>
+            <#assign result = result + "${NamingUtils.alias(fieldName)};\n\n"/>
+        </#list>
+    </#if>
+
     <#return result />
 </#function>
 
@@ -84,7 +87,7 @@
 <#function getContractColId entity>
     <#assign result = "" />
     <#assign count = 0 />
-    
+
     <#if entity.inheritance?? && entity.inheritance.superclass??
             && entity.inheritance.superclass.name != entity.name
             && InheritanceUtils.isExtended(entity)>
@@ -99,7 +102,7 @@
     <#if (count > 1)>
         <#assign result = "" />
     </#if>
-    
+
     <#return result />
 </#function>
 

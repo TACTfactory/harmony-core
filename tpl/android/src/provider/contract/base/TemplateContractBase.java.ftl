@@ -40,13 +40,13 @@ public abstract class ${curr.name}ContractBase {
     /** Identifier for inheritance. */
     public static final String DISCRIMINATOR_IDENTIFIER = "${curr.inheritance.discriminatorIdentifier}";
     </#if>
-    <#list curr_fields as field><#if !field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany")>${ContractUtils.getFieldsDeclarations(field, curr)}</#if></#list>
+    <#list curr_fields as field><#if field.columnName?? && (!field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany"))>${ContractUtils.getFieldsDeclarations(field, curr)}</#if></#list>
     <#if (singleTabInheritance && isTopMostSuperClass)>
     /** Discriminator column. */
-    public static final String ${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)} = 
+    public static final String ${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)} =
             "${curr.inheritance.discriminatorColumn.columnName}";
     /** Alias. */
-    public static final String ALIASED_${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)} = 
+    public static final String ALIASED_${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)} =
             ${curr.name}Contract.TABLE_NAME + "." + ${NamingUtils.alias(curr.inheritance.discriminatorColumn.name)};
     </#if>
 
@@ -62,7 +62,7 @@ public abstract class ${curr.name}ContractBase {
         <#assign wholeFields = wholeFields + curr.inheritance.superclass.fields?values />
     </#if>
     <#list wholeFields as field>
-        <#if !field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany")>
+        <#if field.columnName?? && (!field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany"))>
             <#assign fieldNames = ContractUtils.getFieldsNames(field) />
             <#list fieldNames as name>
             ${name}<#if field_has_next || name_has_next>,</#if>
@@ -74,7 +74,7 @@ public abstract class ${curr.name}ContractBase {
     /** Global Fields. */
     public static final String[] ALIASED_COLS = new String[] {
     <#list ViewUtils.getAllFields(curr)?values as field>
-        <#if !field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany")>
+        <#if field.columnName?? && (!field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany"))>
             <#assign fieldNames = ContractUtils.getFieldsNames(field, true) />
             <#list fieldNames as name>
             ${name}<#if field_has_next || name_has_next>,</#if>
@@ -95,7 +95,7 @@ public abstract class ${curr.name}ContractBase {
                 final int ${relation.name?uncap_first}Id</#if></#list>) {
         final ContentValues result = ${curr.name?cap_first}Contract.itemToContentValues(item);
     <#list curr_fields as field>
-        <#if (field.internal)>
+        <#if field.columnName?? && (field.internal)>
             <#assign fieldNames = ContractUtils.getFieldsNames(field) />
                 <#list field.relation.field_ref as refField>
         result.put(${fieldNames[refField_index]},
@@ -120,7 +120,7 @@ public abstract class ${curr.name}ContractBase {
         result.putAll(${curr.inheritance.superclass.name?cap_first}Contract.itemToContentValues(item));
         </#if>
 
-<#list curr_fields as field>${AdapterUtils.itemToContentValuesFieldAdapter("item", field, 3)}</#list>
+<#list curr_fields as field><#if field.columnName??> ${AdapterUtils.itemToContentValuesFieldAdapter("item", field, 3)}</#if></#list>
         <#if (singleTabInheritance && !isTopMostSuperClass)>
         result.put(${curr.inheritance.superclass.name?cap_first}Contract.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)},
                     ${curr.name?cap_first}Contract.DISCRIMINATOR_IDENTIFIER);
@@ -133,7 +133,7 @@ public abstract class ${curr.name}ContractBase {
      *
      * @param cursor The cursor to convert
      *
-     * @return The extracted ${curr.name} 
+     * @return The extracted ${curr.name}
      */
     public static ${curr.name} cursorToItem(final android.database.Cursor cursor) {
         ${curr.name} result = new ${curr.name}();
@@ -154,7 +154,7 @@ public abstract class ${curr.name}ContractBase {
             </#if>
             int index;
 
-<#list curr_fields as field>${AdapterUtils.cursorToItemFieldAdapter("result", field, 4)}</#list>
+<#list curr_fields as field><#if (field.columnName??) >${AdapterUtils.cursorToItemFieldAdapter("result", field, 4)}</#if></#list>
         }
     }
 

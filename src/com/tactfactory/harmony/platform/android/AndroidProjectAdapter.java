@@ -205,6 +205,11 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 false));
 
         result.add(new SourceFile(
+                templatePath + "ImageUtils.java",
+                filePath + "ImageUtils.java",
+                false));
+
+        result.add(new SourceFile(
                 templatePath + "DatabaseUtil.java",
                 filePath + "DatabaseUtil.java",
                 false));

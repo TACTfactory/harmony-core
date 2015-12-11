@@ -14,12 +14,14 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.CaseFormat;
+import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.meta.MethodMetadata;
 import com.tactfactory.harmony.platform.IAdapter;
+import com.tactfactory.harmony.platform.SqliteAdapter;
 import com.tactfactory.harmony.platform.manipulator.SourceFileManipulator;
 import com.tactfactory.harmony.updater.IUpdaterFile;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -51,6 +53,10 @@ public class EntityImplementationAndroid implements IUpdaterFile {
                         entityFile,
                         this.configuration);
 
+        if (this.entity.isResource()) {
+            this.generateResourceField(manipulator);
+        }
+
         this.implementEmptyConstructor(manipulator, entity);
 
         manipulator.addImplement(entity, "Serializable");
@@ -58,9 +64,10 @@ public class EntityImplementationAndroid implements IUpdaterFile {
                 entity,
                 "Serializable",
                 "java.io.Serializable");
+
+        this.implementResource(manipulator, this.entity);
         this.generateGetterAndSetters(manipulator, entity);
         this.implementParcelable(manipulator, entity);
-        this.implementResource(manipulator, this.entity);
         // After treatment on entity, write it in the original file
         manipulator.writeFile();
     }
@@ -76,10 +83,17 @@ public class EntityImplementationAndroid implements IUpdaterFile {
         final Collection<FieldMetadata> fields = classMeta.getFields().values();
         final boolean childClass = MetadataUtils.inheritsFromEntity(classMeta,
                 ApplicationMetadata.INSTANCE);
+//        if (this.entity.isResource()) {
+//            resourceField.setName("path");
+//
+//            fields.add(resourceField);
+//        }
+
         for (final FieldMetadata field : fields) {
             final boolean isInheritedId =
                     childClass
                     && classMeta.getIds().containsKey(field.getName());
+
             if (!field.isInternal() && !isInheritedId) {
                 // Getter
                 if (!this.alreadyImplementsGet(field, classMeta)) {
@@ -90,7 +104,7 @@ public class EntityImplementationAndroid implements IUpdaterFile {
                                     CaseFormat.UPPER_CAMEL,
                                     field.getName()));
 
-                    manipulator.generateFieldAccessor(field, "itemGetter.java");
+                    manipulator.generateFieldAccessor(field, "itemGetter.java", this.entity);
                 }
 
                 // Setter
@@ -102,7 +116,7 @@ public class EntityImplementationAndroid implements IUpdaterFile {
                                     CaseFormat.UPPER_CAMEL,
                                     field.getName()));
 
-                    manipulator.generateFieldAccessor(field, "itemSetter.java");
+                    manipulator.generateFieldAccessor(field, "itemSetter.java", this.entity);
                 }
             }
         }
@@ -290,7 +304,8 @@ public class EntityImplementationAndroid implements IUpdaterFile {
                 manipulator.addImport(
                         classMeta,
                         "Resource",
-                        this.adapter.getNameSpace(this.entity, "android") + ".entity.base.Resource");
+                        this.adapter.getApplicationMetadata().getProjectNameSpace().replace("/", ".")
+                                + ".entity.base.Resource");
             }
         }
     }
@@ -308,6 +323,36 @@ public class EntityImplementationAndroid implements IUpdaterFile {
                     "defaultConstructor.java",
                     this.dataModel);
         }
+    }
+
+    private final void generateResourceField(SourceFileManipulator manipulator) {
+        FieldMetadata resourceFieldPath = new FieldMetadata(entity);
+        resourceFieldPath.setName("path");
+        resourceFieldPath.setNullable(false);
+        resourceFieldPath.setPrimitive(false);
+        resourceFieldPath.setHarmonyType(Type.STRING.getValue());
+        resourceFieldPath.setColumnDefinition(SqliteAdapter.generateColumnType(resourceFieldPath));
+        resourceFieldPath.setColumnName("path");
+
+        manipulator.addField(this.adapter, this.entity, this.entity.getName(), resourceFieldPath);
+
+        FieldMetadata resourceFieldLocalPath = new FieldMetadata(entity);
+        resourceFieldLocalPath.setName("localPath");
+        resourceFieldLocalPath.setPrimitive(false);
+        resourceFieldLocalPath.setHarmonyType(Type.STRING.getValue());
+        resourceFieldLocalPath.setNullable(true);
+
+        manipulator.addField(this.adapter, this.entity, this.entity.getName(), resourceFieldLocalPath);
+
+        FieldMetadata resourceFieldId = new FieldMetadata(entity);
+        resourceFieldId.setName("resourceId");
+        resourceFieldId.setHarmonyType(Type.INTEGER.getValue());
+        resourceFieldId.setColumnDefinition(SqliteAdapter.generateColumnType(resourceFieldId));
+        resourceFieldPath.setPrimitive(false);
+        resourceFieldId.setNullable(false);
+        resourceFieldId.setColumnName("resourceId");
+
+        manipulator.addField(this.adapter, this.entity, this.entity.getName(), resourceFieldId);
     }
 
     @Override
