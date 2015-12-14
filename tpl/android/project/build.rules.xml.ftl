@@ -74,7 +74,7 @@
                classpath="${r"${env.CHECKSTYLE_HOME}"}/checkstyle-5.6-all.jar" />
 
            <!-- run analysis-->
-           <checkstyle config="checkstyle_rules.xml"
+           <checkstyle config="checkstyle_rules_lvl1.xml"
                        failureProperty="checkstyle.failure"
                        failOnViolation="false" >
                <formatter type="xml" tofile="${r"${tmp.rel-dir}"}/checkstyle-result.xml" />
@@ -112,7 +112,7 @@
             classpath="${r"${env.PMD_HOME}"}/lib/pmd-5.0.2.jar"
             classname="net.sourceforge.pmd.ant.PMDTask" />
         <pmd shortFilenames="true">
-            <ruleset>./pmd_rules.xml</ruleset>
+            <ruleset>./pmd_rules_lvl1.xml</ruleset>
             <formatter type="xml" toFile="${r"${tmp.rel-dir}"}/pmd.xml"/>
             <fileset dir="${r"${source.dir}"}">
                 <include name="**/*.java"/>
