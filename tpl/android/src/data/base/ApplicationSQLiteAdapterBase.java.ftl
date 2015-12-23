@@ -1,18 +1,17 @@
 <@header?interpret />
 package ${data_namespace}.base;
 
-import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
-import ${project_namespace}.${project_name?cap_first}Application;
-
-import android.content.ContentValues;
-
-import android.database.sqlite.SQLiteDatabase;
-
-
-
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
+import android.content.ContentValues;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+import ${data_namespace}.${project_name?cap_first}SQLiteOpenHelper;
+import ${project_namespace}.${project_name?cap_first}Application;
 import ${project_namespace}.criterias.base.CriteriaExpression;
 
 /**
@@ -275,6 +274,74 @@ public abstract class SQLiteAdapterBase<T> {
         }
 
         return result;
+    }
+
+    /** Update list of items with transaction.
+     * @param items the list to update
+     * @return result Return true if update was success
+     */
+    public boolean update(List<T> items) {
+        boolean result = false;
+
+        try {
+            this.mDatabase.beginTransaction();
+
+            for (T item : items) {
+                this.update(item);
+            }
+
+            this.mDatabase.setTransactionSuccessful();
+            result = true;
+        }
+        catch (SQLException e) {
+            Log.w(TAG, e.getMessage());
+        }
+        finally {
+            this.mDatabase.endTransaction();
+        }
+
+        return result;
+    }
+
+    /** Insert list of items with transaction.
+     * @param items the list to insert
+     * @return result Return true if insert was success
+     */
+    public boolean insert(List<T> items) {
+        boolean result = false;
+
+        try {
+            this.mDatabase.beginTransaction();
+
+            for (T item : items) {
+                this.insert(item);
+            }
+
+            this.mDatabase.setTransactionSuccessful();
+        }
+        catch (SQLException e) {
+            Log.w(TAG, e.getMessage());
+        }
+        finally {
+            this.mDatabase.endTransaction();
+        }
+
+        return result;
+    }
+
+    /** Begin the transaction with database. */
+    public void beginTransaction() {
+        this.mDatabase.beginTransaction();
+    }
+
+    /** Set the state of the transaction. */
+    public void setTransactionSuccessful() {
+        this.mDatabase.setTransactionSuccessful();
+    }
+
+    /** End the transaction with database. */
+    public void endTransaction() {
+        this.mDatabase.endTransaction();
     }
 
     /**

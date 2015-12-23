@@ -81,28 +81,28 @@ public abstract class ${project_name?cap_first}ApplicationBase
         super.onCreate();
 
         setSingleton(this);
-        
+
         <#if (services?size > 0)>
         this.doBindServices();
-        
+
         </#if>
         android.util.Log.i(TAG, "Starting application...");
     }
-    
+
     <#if (services?size > 0)>
     @Override
     protected void finalize() throws Throwable {
         this.doUnbindServices();
-        
+
         super.finalize();
     }
-    
+
     /**
      * Bind all services to the application.
      */
     private void doBindServices() {
         android.util.Log.i(TAG, "Bind Services.");
-        
+
         if (!this.isServicesBinded) {
             for (Class<? extends Service> service : this.getServices()) {
                 if (!(IntentService.class.isAssignableFrom(service))) {
@@ -110,17 +110,17 @@ public abstract class ${project_name?cap_first}ApplicationBase
                     this.startService(intent);
                 }
             }
-            
+
             this.isServicesBinded = true;
         }
     }
-    
+
     /**
      * Unbind all services to the application.
      */
     private void doUnbindServices() {
         android.util.Log.i(TAG, "Unbind Services.");
-        
+
         if (this.isServicesBinded) {
             for (Class<? extends Service> service : this.getServices()) {
                 if (!(IntentService.class.isAssignableFrom(service))) {
@@ -128,26 +128,26 @@ public abstract class ${project_name?cap_first}ApplicationBase
                     this.stopService(intent);
                 }
             }
-            
+
             this.isServicesBinded = false;
         }
     }
-    
+
     /**
      * Get Services.
      */
     protected List<Class<? extends Service>> getServices() {
         List<Class<? extends Service>> result
             = new ArrayList<Class<? extends Service>>();
-        
+
         <#list services as service>
             <#assign serviceSplit= service?split(".")/>
         result.add(${serviceSplit[serviceSplit?size - 1]}.class);
         </#list>
-        
+
         return result;
     }
-    
+
     </#if>
     /**
      * Set the application singleton.
@@ -356,6 +356,10 @@ public abstract class ${project_name?cap_first}ApplicationBase
      */
     public static DeviceType getDeviceType(android.content.Context context) {
         return DeviceType.fromValue(context.getString(R.string.device_type));
+    }
+
+    public static DateTime getDefaultLastSyncDate() {
+        return new DateTime().minusYears(10);
     }
 
     /**

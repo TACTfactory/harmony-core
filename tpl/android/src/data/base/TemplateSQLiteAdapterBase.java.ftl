@@ -1,5 +1,11 @@
 <#include utilityPath + "all_imports.ftl" />
 <#assign sync = curr.options.sync?? />
+<#list entities?values as entity>
+    <#if entity.options.sync??>
+        <#assign relationsync=true />
+    </#if>
+</#list>
+
 <#assign isRecursiveJoinTable = (curr.internal) && (!curr.relations[1]??) && (curr.relations[0].relation.targetEntity == entities[curr.relations[0].relation.targetEntity].fields[curr.relations[0].relation.inversedBy].relation.targetEntity) />
 <#assign hasDateTime=false />
 <#assign hasTime=false />
@@ -42,6 +48,8 @@ import ${project_namespace}.${project_name?cap_first}Application;
     <#assign extendType = curr.name />
 </#if>
 <#if sync>
+    <#assign extend="SyncSQLiteAdapterBase<" +extendType+ ">" />
+<#elseif (relationsync?? && relationsync && singleTabInheritance && !isTopMostSuperClass)>
     <#assign extend="SyncSQLiteAdapterBase<" +extendType+ ">" />
 <#else>
     <#assign extend="SQLiteAdapter<" +extendType+ ">" />
@@ -175,7 +183,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
         <#list fieldNames as fieldName>
         <#if (lastLine??)>${lastLine},"</#if>
             <#if (field.relation?? && field.relation.field_ref?size > 1)>
-                <#if field.nullable || (curr.sync?? && field.name?uncap_first != "resourceid")>
+                <#if field.nullable>
                     <#assign lastLine=" + ${fieldName}    + \"" + field.relation.field_ref[fieldName_index].schema?replace("NOT NULL", "") />
                 <#else>
                     <#assign lastLine=" + ${fieldName}    + \"" + field.relation.field_ref[fieldName_index].schema />

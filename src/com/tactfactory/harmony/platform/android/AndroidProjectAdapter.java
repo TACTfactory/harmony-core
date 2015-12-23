@@ -1477,6 +1477,11 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 filePath + "base/Resource.java",
                 true));
 
+        result.add(new SourceFile(
+                templatePath + "EntityResourceBase.java",
+                filePath + "base/EntityResourceBase.java",
+                true));
+
         return result;
     }
 

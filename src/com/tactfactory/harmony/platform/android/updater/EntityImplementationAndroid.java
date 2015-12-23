@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.CaseFormat;
+import com.tactfactory.harmony.annotation.Column;
 import com.tactfactory.harmony.annotation.Column.Type;
+import com.tactfactory.harmony.completor.ResourceCompletor;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
@@ -305,7 +307,7 @@ public class EntityImplementationAndroid implements IUpdaterFile {
                         classMeta,
                         "Resource",
                         this.adapter.getApplicationMetadata().getProjectNameSpace().replace("/", ".")
-                                + ".entity.base.Resource");
+                        + ".entity.base.Resource");
             }
         }
     }
@@ -326,33 +328,7 @@ public class EntityImplementationAndroid implements IUpdaterFile {
     }
 
     private final void generateResourceField(SourceFileManipulator manipulator) {
-        FieldMetadata resourceFieldPath = new FieldMetadata(entity);
-        resourceFieldPath.setName("path");
-        resourceFieldPath.setNullable(false);
-        resourceFieldPath.setPrimitive(false);
-        resourceFieldPath.setHarmonyType(Type.STRING.getValue());
-        resourceFieldPath.setColumnDefinition(SqliteAdapter.generateColumnType(resourceFieldPath));
-        resourceFieldPath.setColumnName("path");
-
-        manipulator.addField(this.adapter, this.entity, this.entity.getName(), resourceFieldPath);
-
-        FieldMetadata resourceFieldLocalPath = new FieldMetadata(entity);
-        resourceFieldLocalPath.setName("localPath");
-        resourceFieldLocalPath.setPrimitive(false);
-        resourceFieldLocalPath.setHarmonyType(Type.STRING.getValue());
-        resourceFieldLocalPath.setNullable(true);
-
-        manipulator.addField(this.adapter, this.entity, this.entity.getName(), resourceFieldLocalPath);
-
-        FieldMetadata resourceFieldId = new FieldMetadata(entity);
-        resourceFieldId.setName("resourceId");
-        resourceFieldId.setHarmonyType(Type.INTEGER.getValue());
-        resourceFieldId.setColumnDefinition(SqliteAdapter.generateColumnType(resourceFieldId));
-        resourceFieldPath.setPrimitive(false);
-        resourceFieldId.setNullable(false);
-        resourceFieldId.setColumnName("resourceId");
-
-        manipulator.addField(this.adapter, this.entity, this.entity.getName(), resourceFieldId);
+        ResourceCompletor.completeEntities();
     }
 
     @Override

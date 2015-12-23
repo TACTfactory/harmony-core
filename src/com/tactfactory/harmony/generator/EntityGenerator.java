@@ -57,4 +57,17 @@ public class EntityGenerator extends BaseGenerator<IAdapter> {
 			}
 		}
 	}
+
+	   /**
+     * Implements serializable
+     * and add necessary getters and setters for all classes.
+     */
+    public final void generateAllBase() {
+        ConsoleUtils.display(">> Decorate Entity Base Files...");
+
+        List<IUpdater> updaters = this.getAdapter().getAdapterProject()
+                .getEntityBaseFiles();
+
+        this.processUpdater(updaters);
+    }
 }
