@@ -18,17 +18,16 @@ import ${entity_namespace}.base.RestResource;
 import ${entity_namespace}.base.Resource;
 </#if>
 
-public class EntityResourceBase <#if sync> extends EntityBase </#if>implements <#if rest> RestResource<#else>Resource</#if> {
+public class EntityResourceBase <#if sync> extends EntityBase </#if>implements <#if rest==true> RestResource<#else>Resource</#if> {
 
-<#if rest>
-    private Integer resourceId;
-
-</#if>
     private String path;
+
+    <#if rest>
+    private Integer resourceId;
 
     private String localPath;
 
-    <#if rest>@Override
+    @Override
     public Integer getResourceId() {
          return this.resourceId;
     }
@@ -36,17 +35,6 @@ public class EntityResourceBase <#if sync> extends EntityBase </#if>implements <
     @Override
     public void setResourceId(final Integer value) {
          this.resourceId = value;
-    }
-
-    </#if>
-    @Override
-    public String getPath() {
-         return this.path;
-    }
-
-    @Override
-    public void setPath(final String value) {
-         this.path = value;
     }
 
     @Override
@@ -58,4 +46,16 @@ public class EntityResourceBase <#if sync> extends EntityBase </#if>implements <
     public void setLocalPath(final String value) {
          this.localPath = value;
     }
+    </#if>
+
+    @Override
+    public String getPath() {
+         return this.path;
+    }
+
+    @Override
+    public void setPath(final String value) {
+         this.path = value;
+    }
+
 }

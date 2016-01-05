@@ -9,7 +9,7 @@ import java.io.InputStream;
 
 import com.google.common.base.Strings;
 import ${project_namespace}.${project_name?cap_first}Application;
-import import ${project_namespace}.${project_name?cap_first}Application.R;
+import ${project_namespace}.R;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -79,7 +79,7 @@ public class ImageUtils {
         if (checkPathImageURL(path) && !path.startsWith("http")) {
             int configId = R.string.image_url_prefix_prod;
 
-            if (BusyPandaApplication.DEBUG) {
+            if (${project_name?cap_first}Application.DEBUG) {
                 configId = R.string.image_url_prefix_dev;
             }
 

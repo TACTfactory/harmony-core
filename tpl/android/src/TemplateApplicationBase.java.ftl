@@ -7,6 +7,8 @@
 <@header?interpret />
 package ${project_namespace};
 
+import org.joda.time.DateTime;
+
 import java.text.DateFormat;
 <#if (services?size > 0)>
 import java.util.ArrayList;

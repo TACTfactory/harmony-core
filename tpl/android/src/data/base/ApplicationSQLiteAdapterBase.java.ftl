@@ -1,4 +1,11 @@
+<#assign sync=false />
+<#list entities?values as entity>
+    <#if entity.options.sync??>
+        <#assign sync=true />
+    </#if>
+</#list>
 <@header?interpret />
+
 package ${data_namespace}.base;
 
 import java.io.IOException;
@@ -379,16 +386,11 @@ public abstract class SQLiteAdapterBase<T> {
      */
     public abstract int delete(final T item);
 
-    <#list entities?values as entity>
-        <#if entity.options.sync??>
-    /**
+    <#if sync>/**
      * Read All T entities for the synchronization agorithm.
      * @return List of T entities
      */
     public ArrayList<T> getAllForSync() {
         return this.getAll(null);
-    }
-            <#break />
-        </#if>
-    </#list>
+    }</#if>
 }
