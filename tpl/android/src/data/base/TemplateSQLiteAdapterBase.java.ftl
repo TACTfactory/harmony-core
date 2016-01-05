@@ -1120,7 +1120,12 @@ public abstract class ${curr.name}SQLiteAdapterBase
     @Override
     public int delete(Void item) {
         return 0;
-    }
-</#if>
+    }</#if>
+
+    <#if sync??>@Override
+    public void completeEntityRelationsServerId(Client item) {
+        // TODO Auto-generated method stub
+
+    }</#if>
 }
 
