@@ -3,15 +3,18 @@ package ${project_namespace}.harmony.view;
 
 import java.util.List;
 
-
 import android.os.Bundle;
 import android.os.Handler;
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -22,6 +25,8 @@ import android.widget.ListAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import ${project_namespace}.menu.${project_name?cap_first}Menu;
+
 /**
  * Static library support version of the framework's 
  * {@link android.app.ListFragment}.
@@ -31,8 +36,7 @@ import android.widget.TextView;
  * documentation for a class overview.
  * @param <T> The type to hold
  */
-public abstract class HarmonyGridFragment<T> extends Fragment
-                             implements LoaderManager.LoaderCallbacks<List<T>> {
+public abstract class HarmonyGridFragment<T> extends Fragment implements LoaderManager.LoaderCallbacks<List<T>> {
     /**
      * Empty ID.
      */
@@ -65,8 +69,7 @@ public abstract class HarmonyGridFragment<T> extends Fragment
      */
     private final AdapterView.OnItemClickListener mOnClickListener
             = new AdapterView.OnItemClickListener() {
-        public void onItemClick(final AdapterView<?> parent, final View v, 
-                                            final int position, final long id) {
+        public void onItemClick(final AdapterView<?> parent, final View v, final int position, final long id) {
             onListItemClick((GridView) parent, v, position, id);
         }
     };
@@ -120,8 +123,7 @@ public abstract class HarmonyGridFragment<T> extends Fragment
      * way to have the built-in indeterminant progress state be shown.
      */
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                                    Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         final android.content.Context context = getActivity();
 
         FrameLayout root = new FrameLayout(context);
@@ -137,43 +139,81 @@ public abstract class HarmonyGridFragment<T> extends Fragment
         ProgressBar progress = new ProgressBar(context, null,
                 android.R.attr.progressBarStyleLarge);
         pframe.addView(progress, new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.WRAP_CONTENT, 
-                                          ViewGroup.LayoutParams.WRAP_CONTENT));
+                ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
         root.addView(pframe, new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 
-                                          ViewGroup.LayoutParams.MATCH_PARENT));
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         // ------------------------------------------------------------------
 
         FrameLayout lframe = new FrameLayout(context);
         lframe.setId(INTERNAL_LIST_CONTAINER_ID);
         
-        TextView tv = new TextView(getActivity());
+        TextView tv = new TextView(this.getActivity());
         tv.setId(INTERNAL_EMPTY_ID);
         tv.setGravity(Gravity.CENTER);
         lframe.addView(tv, new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                                          ViewGroup.LayoutParams.MATCH_PARENT));
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         
-        GridView lv = new GridView(getActivity());
+        GridView lv = new GridView(this.getActivity());
         lv.setId(android.R.id.list);
         lv.setDrawSelectorOnTop(false);
         lframe.addView(lv, new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 
-                                          ViewGroup.LayoutParams.MATCH_PARENT));
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
 
         root.addView(lframe, new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 
-                                          ViewGroup.LayoutParams.MATCH_PARENT));
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
         
         // ------------------------------------------------------------------
 
         root.setLayoutParams(new FrameLayout.LayoutParams(
-                ViewGroup.LayoutParams.MATCH_PARENT, 
-                                          ViewGroup.LayoutParams.MATCH_PARENT));
-        
+                ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+
         return root;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        this.setHasOptionsMenu(true);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+
+        try {
+            ${project_name?cap_first}Menu.getInstance(this.getActivity(), this).clear(menu);
+            ${project_name?cap_first}Menu.getInstance(this.getActivity(), this).updateMenu(menu, this.getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        boolean result;
+
+        try {
+            result = ${project_name?cap_first}Menu.getInstance(this.getActivity(), this).dispatch(item, this.getActivity());
+        } catch (Exception e) {
+            e.printStackTrace();
+            result = false;
+        }
+
+        return result;
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        try {
+            ${project_name?cap_first}Menu.getInstance(this.getActivity(), this)
+                    .onActivityResult(requestCode, resultCode, data, this.getActivity(), this);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     /*
@@ -182,7 +222,7 @@ public abstract class HarmonyGridFragment<T> extends Fragment
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        ensureList();
+        this.ensureList();
     }
 
     /**
@@ -190,13 +230,13 @@ public abstract class HarmonyGridFragment<T> extends Fragment
      */
     @Override
     public void onDestroyView() {
-        mHandler.removeCallbacks(mRequestFocus);
-        mGrid = null;
-        mListShown = false;
-        mEmptyView = null;
-        mProgressContainer = null;
-        mListContainer = null;
-        mStandardEmptyView = null;
+        this.mHandler.removeCallbacks(mRequestFocus);
+        this.mGrid = null;
+        this.mListShown = false;
+        this.mEmptyView = null;
+        this.mProgressContainer = null;
+        this.mListContainer = null;
+        this.mStandardEmptyView = null;
         super.onDestroyView();
     }
 
@@ -211,8 +251,7 @@ public abstract class HarmonyGridFragment<T> extends Fragment
      * @param position The position of the view in the list
      * @param id The row id of the item that was clicked
      */
-    public void onListItemClick(final GridView l, final View v, 
-                                            final int position, final long id) {
+    public void onListItemClick(final GridView l, final View v, final int position, final long id) {
     }
 
     /**
@@ -220,14 +259,16 @@ public abstract class HarmonyGridFragment<T> extends Fragment
      * @param adapter adapter to set
      */
     public void setListAdapter(final ArrayAdapter<T> adapter) {
-        boolean hadAdapter = mAdapter != null;
-        mAdapter = adapter;
-        if (mGrid != null) {
-            mGrid.setAdapter(adapter);
-            if (!mListShown && !hadAdapter) {
+        boolean hadAdapter = this.mAdapter != null;
+        this.mAdapter = adapter;
+
+        if (this.mGrid != null) {
+            this.mGrid.setAdapter(adapter);
+
+            if (!this.mListShown && !hadAdapter) {
                 // The list was hidden, and previously didn't have an
                 // adapter.  It is now time to show it.
-                setListShown(true, getView().getWindowToken() != null);
+                this.setListShown(true, this.getView().getWindowToken() != null);
             }
         }
     }
@@ -239,8 +280,8 @@ public abstract class HarmonyGridFragment<T> extends Fragment
      * @param position position
      */
     public void setSelection(final int position) {
-        ensureList();
-        mGrid.setSelection(position);
+        this.ensureList();
+        this.mGrid.setSelection(position);
     }
 
     /**
@@ -248,8 +289,8 @@ public abstract class HarmonyGridFragment<T> extends Fragment
      * @return selected item position 
      */
     public int getSelectedItemPosition() {
-        ensureList();
-        return mGrid.getSelectedItemPosition();
+        this.ensureList();
+        return this.mGrid.getSelectedItemPosition();
     }
 
     /**
@@ -257,8 +298,8 @@ public abstract class HarmonyGridFragment<T> extends Fragment
      * @return selected item id
      */
     public long getSelectedItemId() {
-        ensureList();
-        return mGrid.getSelectedItemId();
+        this.ensureList();
+        return this.mGrid.getSelectedItemId();
     }
 
     /**
@@ -266,8 +307,8 @@ public abstract class HarmonyGridFragment<T> extends Fragment
      * @return grid view
      */
     public GridView getGridView() {
-        ensureList();
-        return mGrid;
+        this.ensureList();
+        return this.mGrid;
     }
 
     /**
@@ -277,16 +318,19 @@ public abstract class HarmonyGridFragment<T> extends Fragment
      * @param text text
      */
     public void setEmptyText(final CharSequence text) {
-        ensureList();
-        if (mStandardEmptyView == null) {
-            throw new IllegalStateException(
-                                    "Can't be used with a custom content view");
+        this.ensureList();
+
+        if (this.mStandardEmptyView == null) {
+            throw new IllegalStateException("Can't be used with a custom content view");
         }
-        mStandardEmptyView.setText(text);
-        if (mEmptyText == null) {
-            mGrid.setEmptyView(mStandardEmptyView);
+
+        this.mStandardEmptyView.setText(text);
+
+        if (this.mEmptyText == null) {
+            this.mGrid.setEmptyView(this.mStandardEmptyView);
         }
-        mEmptyText = text;
+
+        this.mEmptyText = text;
     }
     
     /**
@@ -305,7 +349,7 @@ public abstract class HarmonyGridFragment<T> extends Fragment
      * indicator.  The initial value is true.
      */
     public void setListShown(final boolean shown) {
-        setListShown(shown, true);
+        this.setListShown(shown, true);
     }
     
     /**
@@ -314,7 +358,7 @@ public abstract class HarmonyGridFragment<T> extends Fragment
      * @param shown shown 
      */
     public void setListShownNoAnimation(final boolean shown) {
-        setListShown(shown, false);
+        this.setListShown(shown, false);
     }
     
     /**
@@ -328,39 +372,44 @@ public abstract class HarmonyGridFragment<T> extends Fragment
      * new state.
      */
     private void setListShown(final boolean shown, final boolean animate) {
-        ensureList();
-        if (mProgressContainer == null) {
-            throw new IllegalStateException(
-                                    "Can't be used with a custom content view");
+        this.ensureList();
+
+        if (this.mProgressContainer == null) {
+            throw new IllegalStateException("Can't be used with a custom content view");
         }
-        if (mListShown == shown) {
+
+        if (this.mListShown == shown) {
             return;
         }
-        mListShown = shown;
+
+        this.mListShown = shown;
+
         if (shown) {
             if (animate) {
-                mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
+                this.mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
                         getActivity(), android.R.anim.fade_out));
-                mListContainer.startAnimation(AnimationUtils.loadAnimation(
+                this.mListContainer.startAnimation(AnimationUtils.loadAnimation(
                         getActivity(), android.R.anim.fade_in));
             } else {
-                mProgressContainer.clearAnimation();
-                mListContainer.clearAnimation();
+                this.mProgressContainer.clearAnimation();
+                this.mListContainer.clearAnimation();
             }
-            mProgressContainer.setVisibility(View.GONE);
-            mListContainer.setVisibility(View.VISIBLE);
+
+            this.mProgressContainer.setVisibility(View.GONE);
+            this.mListContainer.setVisibility(View.VISIBLE);
         } else {
             if (animate) {
-                mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
+                this.mProgressContainer.startAnimation(AnimationUtils.loadAnimation(
                         getActivity(), android.R.anim.fade_in));
-                mListContainer.startAnimation(AnimationUtils.loadAnimation(
+                this.mListContainer.startAnimation(AnimationUtils.loadAnimation(
                         getActivity(), android.R.anim.fade_out));
             } else {
-                mProgressContainer.clearAnimation();
-                mListContainer.clearAnimation();
+                this.mProgressContainer.clearAnimation();
+                this.mListContainer.clearAnimation();
             }
-            mProgressContainer.setVisibility(View.VISIBLE);
-            mListContainer.setVisibility(View.GONE);
+
+            this.mProgressContainer.setVisibility(View.VISIBLE);
+            this.mListContainer.setVisibility(View.GONE);
         }
     }
     
@@ -369,65 +418,73 @@ public abstract class HarmonyGridFragment<T> extends Fragment
      * @return list adapter
      */
     public ListAdapter getListAdapter() {
-        return mAdapter;
+        return this.mAdapter;
     }
 
     /**
      * Ensures list.
      */
     private void ensureList() {
-        if (mGrid != null) {
+        if (this.mGrid != null) {
             return;
         }
+
         View root = getView();
+
         if (root == null) {
             throw new IllegalStateException("Content view not yet created");
         }
+
         if (root instanceof GridView) {
-            mGrid = (GridView) root;
+            this.mGrid = (GridView) root;
         } else {
-            mStandardEmptyView = 
-                                (TextView) root.findViewById(INTERNAL_EMPTY_ID);
-            if (mStandardEmptyView == null) {
-                mEmptyView = root.findViewById(android.R.id.empty);
+            this.mStandardEmptyView = (TextView) root.findViewById(INTERNAL_EMPTY_ID);
+
+            if (this.mStandardEmptyView == null) {
+                this.mEmptyView = root.findViewById(android.R.id.empty);
             } else {
-                mStandardEmptyView.setVisibility(View.GONE);
+                this.mStandardEmptyView.setVisibility(View.GONE);
             }
-            mProgressContainer =
-                              root.findViewById(INTERNAL_PROGRESS_CONTAINER_ID);
-            mListContainer = root.findViewById(INTERNAL_LIST_CONTAINER_ID);
+
+            this.mProgressContainer = root.findViewById(INTERNAL_PROGRESS_CONTAINER_ID);
+            this.mListContainer = root.findViewById(INTERNAL_LIST_CONTAINER_ID);
             View rawGridView = root.findViewById(android.R.id.list);
+
             if (!(rawGridView instanceof GridView)) {
                 if (rawGridView == null) {
-                    throw new RuntimeException(
-                            "Your content must have a GridView whose id "
+                    throw new RuntimeException("Your content must have a GridView whose id "
                             + "attribute is 'android.R.id.list'");
                 }
-                throw new RuntimeException(
-                        "Content has view with id attribute 'android.R.id.list'"
+
+                throw new RuntimeException("Content has view with id attribute 'android.R.id.list'"
                         + "that is not a GridView class");
             }
-            mGrid = (GridView) rawGridView;
-            if (mEmptyView != null) {
-                mGrid.setEmptyView(mEmptyView);
-            } else if (mEmptyText != null) {
-                mStandardEmptyView.setText(mEmptyText);
-                mGrid.setEmptyView(mStandardEmptyView);
+
+            this.mGrid = (GridView) rawGridView;
+
+            if (this.mEmptyView != null) {
+                this.mGrid.setEmptyView(this.mEmptyView);
+            } else if (this.mEmptyText != null) {
+                this.mStandardEmptyView.setText(this.mEmptyText);
+                this.mGrid.setEmptyView(this.mStandardEmptyView);
             }
         }
-        mListShown = true;
-        mGrid.setOnItemClickListener(mOnClickListener);
-        if (mAdapter != null) {
-            ArrayAdapter<T> adapter = mAdapter;
-            mAdapter = null;
-            setListAdapter(adapter);
+
+        this.mListShown = true;
+        this.mGrid.setOnItemClickListener(this.mOnClickListener);
+
+        if (this.mAdapter != null) {
+            ArrayAdapter<T> adapter = this.mAdapter;
+            this.mAdapter = null;
+            this.setListAdapter(adapter);
         } else {
             // We are starting without an adapter, so assume we won't
             // have our data right away and start with the progress indicator.
-            if (mProgressContainer != null) {
-                setListShown(false, false);
+            if (this.mProgressContainer != null) {
+                this.setListShown(false, false);
             }
         }
-        mHandler.post(mRequestFocus);
+
+        this.mHandler.post(mRequestFocus);
     }
 }
