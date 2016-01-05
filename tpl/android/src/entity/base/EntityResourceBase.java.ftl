@@ -20,7 +20,7 @@ import ${entity_namespace}.base.Resource;
 
 public class EntityResourceBase <#if sync> extends EntityBase </#if>implements <#if rest==true> RestResource<#else>Resource</#if> {
 
-    private String path;
+    protected String path;
 
     <#if rest>
     private Integer resourceId;
