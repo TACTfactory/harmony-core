@@ -261,8 +261,7 @@ public abstract class BaseGenerator<T extends IAdapter> {
 	protected void installLibrary(LibraryGit library) {
 	    if (!TactFileUtils.exists(library.getPath())) {
             try {
-                final File projectFolder = new File(Harmony.getProjectPath()
-                        + this.getAdapter().getPlatform() + "/");
+                final File projectFolder = new File(Harmony.getProjectPath() + this.getAdapter().getPlatform() + "/");
                 
                 GitUtils.cloneRepository(
                         library.getPath(),
@@ -292,9 +291,7 @@ public abstract class BaseGenerator<T extends IAdapter> {
         final File dest = new File(library.getFileDestination());
         
         if (!dest.exists()) {
-            TactFileUtils.copyfile(
-                    new File(library.getFileSource()),
-                    dest);
+            TactFileUtils.copyfile(new File(library.getFileSource()), dest);
         }
     }
 	

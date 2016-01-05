@@ -10,7 +10,9 @@ import java.util.List;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.errors.GitAPIException;
 
+import com.google.common.base.Strings;
 import com.tactfactory.harmony.Harmony;
+import com.tactfactory.harmony.HarmonyContext;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.updater.IUpdater;
@@ -137,8 +139,7 @@ public class ProjectGenerator extends BaseGenerator<IAdapter> {
             TactFileUtils.makeFolder(this.getAdapter().getLibsPath());
             
             // copy libraries
-            List<IUpdater> libraries = this.getAdapter().getAdapterProject()
-                    .getLibraries();
+            List<IUpdater> libraries = this.getAdapter().getAdapterProject().getLibraries();
             this.processUpdater(libraries);
         } catch (Exception e) {
             ConsoleUtils.displayError(e);
@@ -149,8 +150,7 @@ public class ProjectGenerator extends BaseGenerator<IAdapter> {
 	 * Create project folders.
 	 */
 	private void createFolders() {
-	    List<IUpdater> createFolders = this.getAdapter().getAdapterProject()
-	            .getCreateFolders();
+	    List<IUpdater> createFolders = this.getAdapter().getAdapterProject().getCreateFolders();
 	    
 	    this.processUpdater(createFolders);
 	}

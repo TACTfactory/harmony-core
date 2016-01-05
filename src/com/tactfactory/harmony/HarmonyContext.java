@@ -390,8 +390,7 @@ public final class HarmonyContext {
      * 
      * @param arguments The console arguments passed by the user
      */
-    public static void initProjectAndroidSdkPath(
-            HashMap<String, String> arguments) {
+    public static void initProjectAndroidSdkPath(HashMap<String, String> arguments) {
         
         if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
             Questionnary questionnary = new Questionnary(arguments);
