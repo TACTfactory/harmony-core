@@ -919,7 +919,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
         </#if>
     }
 
-<#if sync>
+<#if sync || (relationsync?? && relationsync && singleTabInheritance && !isTopMostSuperClass)>
     @Override
     public void completeEntityRelationsServerId(${curr.name} item) {
         <#if InheritanceUtils.isExtended(curr)>
@@ -1122,10 +1122,5 @@ public abstract class ${curr.name}SQLiteAdapterBase
         return 0;
     }</#if>
 
-    <#if sync??>@Override
-    public void completeEntityRelationsServerId(Client item) {
-        // TODO Auto-generated method stub
-
-    }</#if>
 }
 
