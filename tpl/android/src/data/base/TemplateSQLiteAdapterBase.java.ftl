@@ -51,6 +51,8 @@ import ${project_namespace}.${project_name?cap_first}Application;
     <#assign extend="SyncSQLiteAdapterBase<" +extendType+ ">" />
 <#elseif (relationsync?? && relationsync && singleTabInheritance && !isTopMostSuperClass)>
     <#assign extend="SyncSQLiteAdapterBase<" +extendType+ ">" />
+<#elseif relationsync?? && curr.resource>
+    <#assign extend="SyncSQLiteAdapterBase<" +extendType+ ">" />
 <#else>
     <#assign extend="SQLiteAdapter<" +extendType+ ">" />
 </#if>
@@ -919,7 +921,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
         </#if>
     }
 
-<#if sync || (relationsync?? && relationsync && singleTabInheritance && !isTopMostSuperClass)>
+<#if sync || (relationsync?? && relationsync && singleTabInheritance && !isTopMostSuperClass) || (relationsync?? && curr.resource)>
     @Override
     public void completeEntityRelationsServerId(${curr.name} item) {
         <#if InheritanceUtils.isExtended(curr)>
