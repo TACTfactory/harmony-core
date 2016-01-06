@@ -108,7 +108,8 @@ public class ProjectInitTest extends CommonTest {
 		System.out.println("\nTest Update SDK Path");
 		System.out.println(SHARP_DELIMITOR);
 
-		final String newSdkPath = "test-sdkpath/";
+		String currentSdkPath = ApplicationMetadata.getAndroidSdkPath();
+		String newSdkPath = "test-sdkpath/";
 		ApplicationMetadata.setAndroidSdkPath(newSdkPath);
 		ProjectGenerator.updateSDKPath();
 
@@ -119,7 +120,7 @@ public class ProjectInitTest extends CommonTest {
 		assertEquals(HarmonyContext.getSdkDirFromPropertiesFile(localProp),
 				newSdkPath);
 
-		ApplicationMetadata.setAndroidSdkPath("/opt/android-sdk-linux_86/");
+		ApplicationMetadata.setAndroidSdkPath(currentSdkPath);
 		ProjectGenerator.updateSDKPath();
 	}
 
