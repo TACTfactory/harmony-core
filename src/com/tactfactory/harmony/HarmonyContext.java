@@ -345,7 +345,7 @@ public final class HarmonyContext {
         if (result != null) {
             androidSdkVersion = setAndroidSdkPath(result);
         } else {
-            result = HarmonyContext.defaultSDKPath;
+            result = ApplicationMetadata.getAndroidSdkPath();
         }
 
         return result;
