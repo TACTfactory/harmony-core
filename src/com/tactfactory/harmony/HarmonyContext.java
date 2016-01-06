@@ -282,6 +282,13 @@ public final class HarmonyContext {
     }
 
     /**
+     * @return Default detected Android SDK path
+     */
+    public static String getDefautlAndroidSdkPath() {
+        return defaultSDKPath;
+    }
+
+    /**
      * @param androidSdkVersion the androidSdkVersion to set
      */
     public static void setAndroidSdkVersion(final String androidSdkVersion) {

@@ -103,15 +103,19 @@ public final class ProjectContext {
             }
 
             // get SDK from local.properties
+            ApplicationMetadata.setAndroidSdkPath(HarmonyContext.getDefautlAndroidSdkPath());
+
             final String projectProp = String.format("%s/%s",
                     this.harmony.getHarmonyContext().getProjectAndroidPath(),
                     "local.properties");
             final File projectPropFile = new File(projectProp);
 
             if (projectPropFile.exists()) {
-                ApplicationMetadata.setAndroidSdkPath(
-                        HarmonyContext.getSdkDirFromPropertiesFile(
-                                projectProp));
+                String path = HarmonyContext.getSdkDirFromPropertiesFile(projectProp);
+
+                if (!Strings.isNullOrEmpty(path)) {
+                    ApplicationMetadata.setAndroidSdkPath(path);
+                }
             }
 
         } else {
