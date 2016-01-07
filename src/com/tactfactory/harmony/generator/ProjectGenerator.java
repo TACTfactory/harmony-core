@@ -108,21 +108,26 @@ public class ProjectGenerator extends BaseGenerator<IAdapter> {
      * in the ApplicationMetadata.
      */
     public static final void updateSDKPath() {
+        boolean sdkFound = false;
+        
         final File fileProp = new File(
                 String.format("%s/%s",
                         Harmony.getProjectAndroidPath(),
                         "local.properties"));
 
         if (fileProp.exists()) {
-            final List<String> lines =
-                    TactFileUtils.fileToStringArray(fileProp);
+            final List<String> lines = TactFileUtils.fileToStringArray(fileProp);
 
             for (int i = 0; i < lines.size(); i++) {
                 if (lines.get(i).startsWith("sdk.dir=")) {
-                    lines.set(i, "sdk.dir="
-                + ApplicationMetadata.getAndroidSdkPath());
+                    lines.set(i, "sdk.dir=" + ApplicationMetadata.getAndroidSdkPath());
+                    sdkFound = true;
                     break;
                 }
+            }
+
+            if (!sdkFound) {
+                lines.set(lines.size() - 1, "sdk.dir=" + ApplicationMetadata.getAndroidSdkPath());
             }
 
             TactFileUtils.stringArrayToFile(lines, fileProp);
