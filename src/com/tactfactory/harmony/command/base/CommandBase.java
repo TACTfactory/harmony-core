@@ -12,8 +12,11 @@ import japa.parser.ast.CompilationUnit;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import com.tactfactory.harmony.meta.ApplicationMetadata;
+import com.tactfactory.harmony.meta.EntityMetadata;
+import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.parser.BaseParser;
 import com.tactfactory.harmony.parser.ClassCompletor;
 import com.tactfactory.harmony.parser.HeaderParser;
@@ -85,6 +88,8 @@ public abstract class CommandBase implements Command {
             for (final BaseParser parser : registeredParsers.values()) {
                 parser.callFinalCompletor();
             }
+
+            this.validateMetadata();
         } else {
             ConsoleUtils.displayWarning("No entities found in entity package!");
         }
@@ -118,5 +123,46 @@ public abstract class CommandBase implements Command {
      */
     protected final HashMap<String, String> getCommandArgs() {
         return this.commandArgs;
+    }
+    
+    /**
+     * Validate all metadata tree.
+     */
+    private final void validateMetadata() {
+        //TODO Check all validity of metadata (Classes, enums, etc...).
+
+        List<String> entityToRemove = new ArrayList<>();
+        List<FieldMetadata> relationToRemove = new ArrayList<>();
+
+        for (EntityMetadata entityMetadata : ApplicationMetadata.INSTANCE.getEntities().values()) {
+            for (FieldMetadata fieldMetadata : entityMetadata.getRelations().values()) {
+                if (fieldMetadata.getColumnDefinition().equalsIgnoreCase("BLOB")) {
+                    ConsoleUtils.displayWarning(String.format("Field %s of entity %s isn't valid."
+                            + " Check your relation annotation.",
+                            fieldMetadata.getName(), entityMetadata.getName()));
+                    ConsoleUtils.displayWarning(String.format("Field %s.%s will be ignored.",
+                            entityMetadata.getName(), fieldMetadata.getName()));
+
+                    fieldMetadata.setHarmonyType("STRING");
+                    entityToRemove.add(String.format("%sto%s",
+                            entityMetadata.getName(),
+                            fieldMetadata.getRelation().getEntityRef().getName()));
+                    fieldMetadata.setRelation(null);
+                    
+                    relationToRemove.add(fieldMetadata);
+                }
+            }
+
+            for (FieldMetadata fieldMetadata : relationToRemove) {
+                entityMetadata.getRelations().remove(fieldMetadata.getName());
+                entityMetadata.removeField(fieldMetadata);
+            }
+
+            relationToRemove.clear();
+        }
+
+        for (String entityKey : entityToRemove) {
+            ApplicationMetadata.INSTANCE.getEntities().remove(entityKey);
+        }
     }
 }
