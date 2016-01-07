@@ -117,8 +117,7 @@ public class ProjectInitTest extends CommonTest {
 				String.format("%s/%s",
 						Harmony.getProjectAndroidPath(),
 						"local.properties");
-		assertEquals(HarmonyContext.getSdkDirFromPropertiesFile(localProp),
-				newSdkPath);
+		assertEquals(HarmonyContext.getSdkDirFromPropertiesFile(localProp), newSdkPath);
 
 		ApplicationMetadata.setAndroidSdkPath(currentSdkPath);
 		ProjectGenerator.updateSDKPath();
