@@ -125,17 +125,9 @@ public final class SqliteAdapter {
 				    type =	enumMeta.getType();
 				}
 			} else if (field.getHarmonyType().equals(Column.Type.RELATION.getValue())) {
-			    //TODO
-			    // field.getRelation().getEntityRef() & 
-			    //   ApplicationMetadata.INSTANCE.getEntities().get(
-                //      field.getRelation().getEntityRef().getName())
-			    // has a different object ref, check why
-			    EntityMetadata relatedEntity =
-			            ApplicationMetadata.INSTANCE.getEntities().get(
-			                    field.getRelation().getEntityRef().getName());
-			    
-			    field.getRelation().setEntityRef(relatedEntity);
-				ArrayList<FieldMetadata> ids = new ArrayList<FieldMetadata>(
+			    EntityMetadata relatedEntity = field.getRelation().getEntityRef();
+
+			    ArrayList<FieldMetadata> ids = new ArrayList<FieldMetadata>(
 						relatedEntity.getIds().values());
 				
 				if (ids.size() > 0) {
