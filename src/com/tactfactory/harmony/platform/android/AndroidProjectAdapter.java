@@ -395,6 +395,18 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 false));
 
         result.add(new SourceFile(
+                templatePath + "base/ResourceSQLiteAdapterBase.java",
+                String.format("%sbase/ResourceSQLiteAdapterBase.java",
+                        filePath),
+                true));
+
+        result.add(new SourceFile(
+                templatePath + "ResourceSQLiteAdapter.java",
+                String.format("%sResourceSQLiteAdapter.java",
+                        filePath),
+                false));
+
+        result.add(new SourceFile(
                 templatePath + "data-package-info.java",
                 filePath + "package-info.java",
                 true));
@@ -1108,6 +1120,25 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 templatePath + "ProviderAdapter.java",
                 filePath + "ProviderAdapter.java",
                 false));
+        result.add(new SourceFile(
+                templatePath + "base/ResourceProviderAdapterBase.java",
+                String.format("%sbase/ResourceProviderAdapterBase.java",
+                        filePath),
+                true));
+
+        result.add(new SourceFile(
+                templatePath + "ResourceProviderAdapter.java",
+                String.format("%sResourceProviderAdapter.java",
+                        filePath),
+                false));
+
+        result.add(new SourceFile(
+                templatePath + "contract/ResourceContract.java",
+                filePath + "contract/ResourceContract.java"));
+        result.add(new SourceFile(
+                templatePath + "contract/base/ResourceContractBase.java",
+                filePath + "contract/base/ResourceContractBase.java",
+                true));
 
         // Package infos
         result.add(new SourceFile(

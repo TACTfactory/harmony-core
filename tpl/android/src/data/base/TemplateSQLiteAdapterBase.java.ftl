@@ -171,6 +171,46 @@ public abstract class ${curr.name}SQLiteAdapterBase
 <#list curr.inheritance.subclasses as subclass>+ ${subclass.name}SQLiteAdapter.getSchemaConstraints()<#if subclass_has_next> + ","</#if></#list>
 ;
     }
+<#elseif curr.resource>
+
+    public static String getSchemaColumns() {
+        return ""
+<#list curr_fields as field>
+    <#if (!field.columnResult && !field.id && (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")))>
+        <#assign fieldNames = ContractUtils.getFieldsNames(field) />
+        <#list fieldNames as fieldName>
+        <#if (lastLine??)>${lastLine},"</#if>
+            <#if (field.relation?? && field.relation.field_ref?size > 1)>
+                <#assign lastLine=" + ${fieldName}    + \"" + field.relation.field_ref[fieldName_index].schema?replace(" NOT NULL", "") />
+            <#else>
+                <#assign lastLine=" + ${fieldName}    + \"" + field.schema?replace(" NOT NULL", "") />
+            </#if>
+        </#list>
+    </#if>
+</#list>
+        <#if (lastLine??)>${lastLine}"</#if>
+        <#if (curr.inheritance??)><#list curr.inheritance.subclasses as subclass>+ ${subclass.name}SQLiteAdapter.getSchemaColumns()<#if subclass_has_next> + ","</#if></#list></#if>
+;
+    }
+
+    public static String getSchemaConstraints() {
+        return ""
+<#if (curr.relations??)>
+    <#list (curr.relations) as relation>
+        <#if (relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne")>
+        <#assign fieldNames = ContractUtils.getFieldsNames(relation) />
+        <#list fieldNames as fieldName>
+        <#assign refId = relation.relation.field_ref[fieldName_index] />
+        <#if (lastRelation??)>${lastRelation},"</#if>
+            <#assign lastRelation=" + \"FOREIGN KEY(\" + ${fieldName}"
+            + " + \") REFERENCES \" \n             + "
+            + "${ContractUtils.getContractTableName(entities[relation.relation.targetEntity])} \n                + \" (\" + ${ContractUtils.getFieldsNames(refId)[0]} + \")">
+        </#list>
+        </#if>
+    </#list>
+        <#if (lastRelation??)>${lastRelation}"</#if>;
+</#if>
+    }
 <#else>
     /**
      * Generate Entity Table Schema.

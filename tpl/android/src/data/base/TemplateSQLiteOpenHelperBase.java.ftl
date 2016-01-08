@@ -6,6 +6,7 @@
     <#assign ret=ret+entity.name?uncap_first+"Loader.load(manager);\r\r" />
     <#return ret />
 </#function>
+
 <@header?interpret />
 package ${data_namespace}.base;
 
@@ -19,6 +20,13 @@ import java.io.OutputStream;
     <#if (entity.fields?size>0 || entity.inheritance?? || entity.inheritance??)>
 import ${data_namespace}.${entity.name?cap_first}SQLiteAdapter;
 import ${project_namespace}.provider.contract.${entity.name?cap_first}Contract;
+    </#if>
+</#list>
+<#list entities?values as entity>
+    <#if (entity.resource)><#assign resource=true>
+import ${data_namespace}.ResourceSQLiteAdapter;
+import ${project_namespace}.provider.contract.ResourceContract;
+    <#break />
     </#if>
 </#list>
 import ${project_namespace}.${project_name?cap_first}Application;
@@ -95,7 +103,7 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
         if (!assetsExist) {
             /// Create Schema
     <#list entities?values as entity>
-        <#if ((entity.fields?size>0 || InheritanceUtils.isExtended(entity)) && !(entity.inheritance?? && entity.inheritance.inheritanceType?? && entity.inheritance.inheritanceType == "SingleTable" && InheritanceUtils.isExtended(entity)))>
+        <#if (!entity.resource && (entity.fields?size>0  ||  InheritanceUtils.isExtended(entity)) && !(entity.inheritance?? && entity.inheritance.inheritanceType?? && entity.inheritance.inheritanceType == "SingleTable" && InheritanceUtils.isExtended(entity)))>
 
             if (${project_name?cap_first}Application.DEBUG) {
                 android.util.Log.d(TAG, "Creating schema : ${entity.name}");
@@ -108,6 +116,12 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
             if (!${project_name?cap_first}SQLiteOpenHelper.isJUnit) {
                 this.loadData(db);
             }
+    </#if>
+    <#if resource??>
+            if (${project_name?cap_first}Application.DEBUG) {
+                android.util.Log.d(TAG, "Creating schema : Resource");
+            }
+            db.execSQL(ResourceSQLiteAdapter.getSchema());
     </#if>
         }
 
@@ -127,6 +141,11 @@ public class ${project_name?cap_first}SQLiteOpenHelperBase
                 null);
             </#if>
         </#list>
+        <#if resource??>
+        db.delete(ResourceContract.TABLE_NAME,
+                null,
+                null);
+        </#if>
     }
 
     @Override
