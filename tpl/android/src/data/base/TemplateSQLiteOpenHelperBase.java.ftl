@@ -41,16 +41,13 @@ import ${fixture_namespace}.DataLoader;
  * application startup with long-running database upgrades.
  * @see android.database.sqlite.SQLiteOpenHelper
  */
-public class ${project_name?cap_first}SQLiteOpenHelperBase
-                        extends SQLiteOpenHelper {
+public class ${project_name?cap_first}SQLiteOpenHelperBase extends SQLiteOpenHelper {
     /** TAG for debug purpose. */
     protected static final String TAG = "DatabaseHelper";
     /** Context. */
     protected android.content.Context ctx;
 
-    /** Android's default system path of the database.
-     *
-     */
+    /** Android's default system path of the database. */
     private static String DB_PATH;
     /** database name. */
     private static String DB_NAME;

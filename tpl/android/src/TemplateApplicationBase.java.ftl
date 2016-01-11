@@ -31,14 +31,15 @@ import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 
 import android.content.SharedPreferences;
-
+import ${project_namespace}.provider.${project_name?cap_first}Provider;
 <#if (sync)>
+
 import ${project_namespace}.harmony.util.DateUtils;
 import org.joda.time.DateTime;
 </#if>
-
 <#list services as service>
     <#if service?starts_with(".")>
+
 import ${project_namespace}${service};
     <#else>
 import ${service};
@@ -54,8 +55,7 @@ import ${service};
  * one or you will lose all your modifications.</i></b>
  *
  */
-public abstract class ${project_name?cap_first}ApplicationBase
-    extends Application {
+public abstract class ${project_name?cap_first}ApplicationBase extends Application {
 
     /** TAG for debug purpose. */
     protected static final String TAG = "${project_name?cap_first}Application";
@@ -78,13 +78,17 @@ public abstract class ${project_name?cap_first}ApplicationBase
 
     @Override
     public void onCreate() {
+        if (!${project_name?cap_first}Application.CREATE_DATABASE_DEFERRED) {
+            ${project_name?cap_first}Provider.initializeDatabase(this);
+        }
+
         super.onCreate();
 
         setSingleton(this);
-        
+
         <#if (services?size > 0)>
         this.doBindServices();
-        
+
         </#if>
         android.util.Log.i(TAG, "Starting application...");
     }
@@ -93,7 +97,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
     @Override
     protected void finalize() throws Throwable {
         this.doUnbindServices();
-        
+
         super.finalize();
     }
     
@@ -102,7 +106,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
      */
     private void doBindServices() {
         android.util.Log.i(TAG, "Bind Services.");
-        
+
         if (!this.isServicesBinded) {
             for (Class<? extends Service> service : this.getServices()) {
                 if (!(IntentService.class.isAssignableFrom(service))) {
@@ -110,7 +114,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
                     this.startService(intent);
                 }
             }
-            
+
             this.isServicesBinded = true;
         }
     }
@@ -170,8 +174,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
             if (!preferences.contains("lastSyncDate")) {
                 // TODO: First Sync
 
-                ${project_name?cap_first}ApplicationBase
-                    .setLastSyncDate(new DateTime().minusWeeks(1));
+                ${project_name?cap_first}ApplicationBase.setLastSyncDate(new DateTime().minusWeeks(1));
             }
             </#if>
         }
@@ -236,8 +239,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
                 ${project_name?cap_first}ApplicationBase.PREFS_PUBL,
                 android.content.Context.MODE_PRIVATE);
 
-        return settings.getString(
-                ${project_name?cap_first}ApplicationBase.PREFS_VERS, "");
+        return settings.getString(${project_name?cap_first}ApplicationBase.PREFS_VERS, "");
     }
 
     /** Check if is a new version of Application.
@@ -280,8 +282,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
         final ConnectivityManager connectivityManager = (ConnectivityManager)
             ctx.getSystemService(android.content.Context.CONNECTIVITY_SERVICE);
 
-        final NetworkInfo activeNetworkInfo = connectivityManager
-            .getActiveNetworkInfo();
+        final NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
 
         return (activeNetworkInfo != null && activeNetworkInfo.isConnected());
     }
@@ -316,8 +317,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
      * @return A DateTime representing the last sync date
      */
     public static DateTime getLastSyncDate() {
-        return DateUtils.formatISOStringToDateTime(
-                preferences.getString("lastSyncDate", null));
+        return DateUtils.formatISOStringToDateTime(preferences.getString("lastSyncDate", null));
     }
 
     /**
@@ -340,8 +340,7 @@ public abstract class ${project_name?cap_first}ApplicationBase
         int result = 1;
 
         try {
-            PackageInfo manager = ctx.getPackageManager().getPackageInfo(
-                    ctx.getPackageName(), 0);
+            PackageInfo manager = ctx.getPackageManager().getPackageInfo(ctx.getPackageName(), 0);
 
             result = manager.versionCode;
         } catch (NameNotFoundException e) {
@@ -385,12 +384,14 @@ public abstract class ${project_name?cap_first}ApplicationBase
          */
         public static DeviceType fromValue(String configValue) {
             DeviceType result = null;
+
             for (DeviceType deviceType : DeviceType.values()) {
                 if (deviceType.configValue.equals(configValue)) {
                     result = deviceType;
                     break;
                 }
             }
+
             return result;
         }
     }
