@@ -136,7 +136,10 @@ public abstract class CommandBase implements Command {
 
         for (EntityMetadata entityMetadata : ApplicationMetadata.INSTANCE.getEntities().values()) {
             for (FieldMetadata fieldMetadata : entityMetadata.getRelations().values()) {
-                if (fieldMetadata.getColumnDefinition().equalsIgnoreCase("BLOB")) {
+                if (fieldMetadata.getColumnDefinition().equalsIgnoreCase("BLOB")
+                        || (fieldMetadata.getRelation().getType().equals("OneToMany")
+                                && !fieldMetadata.getRelation().getMappedBy().getName().equals(
+                                        entityMetadata.getName()))) {
                     ConsoleUtils.displayWarning(String.format("Field %s of entity %s isn't valid."
                             + " Check your relation annotation.",
                             fieldMetadata.getName(), entityMetadata.getName()));
