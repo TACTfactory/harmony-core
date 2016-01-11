@@ -164,5 +164,19 @@ public abstract class CommandBase implements Command {
         for (String entityKey : entityToRemove) {
             ApplicationMetadata.INSTANCE.getEntities().remove(entityKey);
         }
+
+        // Validate the entities.
+        for (EntityMetadata entityMetadata : ApplicationMetadata.INSTANCE.getEntities().values()) {
+            for (FieldMetadata fieldMetadata : entityMetadata.getFields().values()) {
+                if (fieldMetadata.getColumnDefinition().equalsIgnoreCase("BLOB")) {
+                    ConsoleUtils.displayWarning(String.format("Field %s of entity %s isn't valid.",
+                            fieldMetadata.getName(), entityMetadata.getName()));
+                    ConsoleUtils.displayWarning(String.format("Field %s.%s will be considered as a String.",
+                            entityMetadata.getName(), fieldMetadata.getName()));
+
+                    fieldMetadata.setHarmonyType("STRING");
+                }
+            }
+        }
     }
 }
