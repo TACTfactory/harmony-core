@@ -70,7 +70,7 @@
                     </then>
                 </if>
 
-                <property name="junit.report.dir" value="${device.out.dir}${tested.project.app.package}/" />
+                <property name="junit.report.dir" value="${r"${device.out.dir}"}${r"${tested.project.app.package}"}/" />
 
             </then>
             <else>
@@ -96,7 +96,7 @@
             <then>
                 <echo>Running tests with emma...</echo>
 
-                <property name="emma.dump.file" value="${device.out.dir}${tested.project.app.package}/coverage.ec" />
+                <property name="emma.dump.file" value="${r"${device.out.dir}"}${r"${tested.project.app.package}"}/coverage.ec" />
 
                 <run-tests-helper emma.enabled="true">
                     <extra-instrument-args>
