@@ -39,7 +39,7 @@ public class TestContextMock {
     private static android.content.Context context = null;
     private AndroidTestCase androidTestCase;
     private android.content.Context baseContext;
-    
+
     public TestContextMock(AndroidTestCase androidTestCase) {
         this.androidTestCase = androidTestCase;
     }
@@ -80,7 +80,7 @@ public class TestContextMock {
         if (context == null) {
             ContentProvider provider = PROVIDER_CLASS.newInstance();
             MockContentResolver resolver = this.getMockContentResolver();
-    
+
             RenamingDelegatingContext targetContextWrapper
                 = new RenamingDelegatingContext(
                     // The context that most methods are delegated to:
@@ -89,11 +89,11 @@ public class TestContextMock {
                     this.baseContext,
                     // Prefix database
                     CONTEXT_PREFIX);
-    
+
             context = new TestContextIsolatedBase(
                     resolver,
                     targetContextWrapper);
-            
+
             PackageManager packageManager = this.baseContext.getPackageManager();
             ProviderInfo providerInfo = packageManager.resolveContentProvider(
                     ${project_name?cap_first}Provider.class.getPackage().getName(), 0);
@@ -101,6 +101,9 @@ public class TestContextMock {
             provider.attachInfo(context, providerInfo);
 
             resolver.addProvider(PROVIDER_AUTHORITY, provider);
+
+            // Call INITIALIZE_DATABASE to create adapters and database (if needed)
+            provider.call("INITIALIZE_DATABASE", null, null);
         }
 
         this.androidTestCase.setContext(context);
