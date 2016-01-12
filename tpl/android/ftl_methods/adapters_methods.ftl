@@ -63,71 +63,74 @@
     <#assign fieldNames = ContractUtils.getFieldsNames(field) />
     <#if (!field.internal && !(field.relation?? && (field.relation.type=="ManyToMany" || field.relation.type=="OneToMany")))>
         <#assign localTab="" />
+        <#assign otherTab="" />
         <#if (field.harmony_type?lower_case != "relation")>
-            <#assign result = result + "${tab}index = cursor.getColumnIndex(${fieldNames[0]});\n"/>
+            <#assign result = result + "${tab}index = cursor.getColumnIndex(${fieldNames[0]});\n\n"/>
+            <#assign result = result + "${tab}if (index > 1) {\n"/>
             <#if (field.nullable)>
                 <#assign result = result + "${tab}if (!cursor.isNull(index)) {\n"/><#assign localTab="    " />
             </#if>
             <#switch FieldsUtils.getJavaType(field)?lower_case>
                 <#case "datetime">
-                    <#assign result = result + "${tab}${localTab}final DateTime dt${field.name?cap_first} =\n"/>
-                    <#assign result = result + "${tab}        DateUtils.formatISOStringToDateTime(cursor.getString(index));\n"/>
-                    <#assign result = result + "${tab}${localTab}if (dt${field.name?cap_first} != null) {\n"/>
-                    <#assign result = result + "${tab}${localTab}        result.set${field.name?cap_first}(dt${field.name?cap_first});\n"/>
-                    <#assign result = result + "${tab}${localTab}} else {\n"/>
-                    <#assign result = result + "${tab}${localTab}    result.set${field.name?cap_first}(new DateTime());\n"/>
-                    <#assign result = result + "${tab}${localTab}}\n"/>
+                    <#assign result = result + "${tab}${localTab}    final DateTime dt${field.name?cap_first} =\n"/>
+                    <#assign result = result + "${tab}            DateUtils.formatISOStringToDateTime(cursor.getString(index));\n"/>
+                    <#assign result = result + "${tab}${localTab}    if (dt${field.name?cap_first} != null) {\n"/>
+                    <#assign result = result + "${tab}${localTab}            result.set${field.name?cap_first}(dt${field.name?cap_first});\n"/>
+                    <#assign result = result + "${tab}${localTab}    } else {\n"/>
+                    <#assign result = result + "${tab}${localTab}        result.set${field.name?cap_first}(new DateTime());\n"/>
+                    <#assign result = result + "${tab}${localTab}    }\n"/>
                     <#break />
                 <#case "boolean">
-                    <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(cursor.getInt(index) == 1);\n"/>
+                    <#assign result = result + "${tab}${localTab}    result.set${field.name?cap_first}(cursor.getInt(index) == 1);\n"/>
                     <#break />
                 <#case "int">
                 <#case "integer">
-                    <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(cursor.getInt(index));\n"/>
+                    <#assign result = result + "${tab}${localTab}    result.set${field.name?cap_first}(cursor.getInt(index));\n"/>
                     <#break />
                 <#case "float">
-                    <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(cursor.getFloat(index));\n"/>
+                    <#assign result = result + "${tab}${localTab}    result.set${field.name?cap_first}(cursor.getFloat(index));\n"/>
                     <#break />
                 <#case "double">
-                    <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(cursor.getDouble(index));\n"/>
+                    <#assign result = result + "${tab}${localTab}    result.set${field.name?cap_first}(cursor.getDouble(index));\n"/>
                     <#break />
                 <#case "long">
-                    <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(cursor.getLong(index));\n"/>
+                    <#assign result = result + "${tab}${localTab}    result.set${field.name?cap_first}(cursor.getLong(index));\n"/>
                     <#break />
                 <#case "short">
-                    <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(cursor.getShort(index));\n"/>
+                    <#assign result = result + "${tab}${localTab}    result.set${field.name?cap_first}(cursor.getShort(index));\n"/>
                     <#break />
                 <#case "char">
                 <#case "character">
-                    <#assign result = result + "${tab}String ${field.name?uncap_first}DB = cursor.getString(index);\n"/>
-                    <#assign result = result + "${tab}if (${field.name?uncap_first}DB != null\n"/>
-                    <#assign result = result + "${tab}    && ${field.name?uncap_first}DB.length() > 0) {\n"/>
-                    <#assign result = result + "${tab}    ${localTab}result.set${field.name?cap_first}(${field.name?uncap_first}DB.charAt(0));\n"/>
-                    <#assign result = result + "${tab}}\n"/>
+                    <#assign result = result + "${tab}    String ${field.name?uncap_first}DB = cursor.getString(index);\n"/>
+                    <#assign result = result + "${tab}    if (${field.name?uncap_first}DB != null\n"/>
+                    <#assign result = result + "${tab}        && ${field.name?uncap_first}DB.length() > 0) {\n"/>
+                    <#assign result = result + "${tab}        ${localTab}result.set${field.name?cap_first}(${field.name?uncap_first}DB.charAt(0));\n"/>
+                    <#assign result = result + "${tab}    }\n"/>
                     <#break />
                 <#case "byte">
-                    <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(Byte.valueOf(cursor.getString(index)));\n"/>
+                    <#assign result = result + "${tab}${localTab}    result.set${field.name?cap_first}(Byte.valueOf(cursor.getString(index)));\n"/>
                     <#break />
                 <#case "string">
-                    <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(cursor.getString(index));\n"/>
+                    <#assign result = result + "${tab}${localTab}    result.set${field.name?cap_first}(cursor.getString(index));\n"/>
                     <#break />
                 <#case "enum">
                     <#assign enumType = enums[field.enum.targetEnum] />
                     <#if enumType.id??>
                         <#assign idEnumType = FieldsUtils.getJavaType(enumType.fields[enumType.id])?lower_case />
                         <#if (idEnumType == "int" || idEnumType == "integer") >
-                            <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(${enumType.name}.fromValue(cursor.getInt(index)));\n"/>
+                            <#assign result = result + "${tab}${localTab}    result.set${field.name?cap_first}(${enumType.name}.fromValue(cursor.getInt(index)));\n"/>
                         <#else>
-                            <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(${enumType.name}.fromValue(cursor.getString(index)));\n"/>
+                            <#assign result = result + "${tab}${localTab}    result.set${field.name?cap_first}(${enumType.name}.fromValue(cursor.getString(index)));\n"/>
                         </#if>
                     <#else>
-                        <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(${enumType.name}.valueOf(cursor.getString(index)));\n"/>
+                        <#assign result = result + "${tab}${localTab}    result.set${field.name?cap_first}(${enumType.name}.valueOf(cursor.getString(index)));\n"/>
 
                     </#if>
                     <#break />
                 <#default>
                         <#assign result = result + "${tab}${localTab}//TODO : Handle type / ${FieldsUtils.getJavaType(field)}"/>
             </#switch>
+            <#assign result = result + "${tab}}\n"/>
             <#if (field.nullable?? && field.nullable)>
                 <#assign result = result + "${tab}}\n"/>
             </#if>
@@ -135,15 +138,17 @@
             <#assign result = result + "${tab}if (result.get${field.name?cap_first}() == null) {\n" />
             <#assign result = result + "${tab}${localTab}    final ${field.relation.targetEntity} ${field.name} = new ${field.relation.targetEntity}();\n"/>
                 <#list entities[field.relation.targetEntity].ids as id>
-                    <#assign result = result + "${tab}${localTab}    index = cursor.getColumnIndex(${fieldNames[id_index]});\n"/>
+                    <#assign result = result + "${tab}${localTab}    index = cursor.getColumnIndex(${fieldNames[id_index]});\n\n"/>
+                    <#assign result = result + "${tab}${localTab}    if (index > 1) {\n"/>
                     <#if (field.nullable)>
-                        <#assign result = result + "${tab}${localTab}    if (!cursor.isNull(index)) {\n"/><#assign localTab="    " />
+                        <#assign result = result + "${tab}${localTab}        if (!cursor.isNull(index)) {\n"/><#assign otherTab="    "/>
                     </#if>
-                    <#assign result = result + "${tab}${localTab}    ${field.name}.set${id.name?cap_first}(${AdapterUtils.getCursorGet(id)}index));\n"/>
-                    <#assign result = result + "${tab}${localTab}    result.set${field.name?cap_first}(${field.name});\n"/>
+                    <#assign result = result + "${tab}${localTab}${otherTab}        ${field.name}.set${id.name?cap_first}(${AdapterUtils.getCursorGet(id)}index));\n"/>
+                    <#assign result = result + "${tab}${localTab}${otherTab}        result.set${field.name?cap_first}(${field.name});\n"/>
                     <#if (field.nullable?? && field.nullable)>
-                        <#assign result = result + "${tab}${localTab}    }\n"/>
+                        <#assign result = result + "${tab}${localTab}        }\n"/>
                     </#if>
+                    <#assign result = result + "${tab}${localTab}    }\n\n"/>
                 </#list>
             <#assign result = result + "${tab}}\n" />
         </#if>

@@ -154,7 +154,7 @@ public abstract class ${curr.name}ContractBase {
             </#if>
             int index;
 
-<#list curr_fields as field>${AdapterUtils.cursorToItemFieldAdapter("result", field, 4)}</#list>
+<#list curr_fields as field>${AdapterUtils.cursorToItemFieldAdapter("result", field, 3)}</#list>
         }
     }
 
