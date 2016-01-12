@@ -13,8 +13,6 @@ import java.io.FileFilter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
@@ -222,8 +220,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 Harmony.getBundlePath() + "tact-core/"
                         + this.adapter.getTemplateProjectPath()));
 
-        result.add(new ManifestApplicationThemeAndroid(
-                this.adapter, "@style/AppTheme"));
+        result.add(new ManifestApplicationThemeAndroid("@style/AppTheme"));
 
         return result;
     }
@@ -474,7 +471,6 @@ public class AndroidProjectAdapter implements IAdapterProject {
         result.add(copyfile);
 
         result.add(new UpdateLibraryAndroid(
-                this.adapter,
                 this.adapter.getApplicationMetadata().getName() + "-appcompat-v7",
                 appCompatPath,
                 "android-21",
@@ -550,8 +546,9 @@ public class AndroidProjectAdapter implements IAdapterProject {
                         entity.getName().toLowerCase(Locale.US))));
 
         result.add(new ManifestActivityAndroid(
-                this.adapter, entity.getName(),
-                entity.getName().toLowerCase(), "CreateActivity"));
+                entity.getName(),
+                entity.getName().toLowerCase(),
+                "CreateActivity"));
 
         return result;
     }
@@ -595,8 +592,9 @@ public class AndroidProjectAdapter implements IAdapterProject {
                         entity.getName().toLowerCase(Locale.ENGLISH))));
 
         result.add(new ManifestActivityAndroid(
-                this.adapter, entity.getName(),
-                entity.getName().toLowerCase(), "EditActivity"));
+                entity.getName(),
+                entity.getName().toLowerCase(),
+                "EditActivity"));
 
         return result;
     }
@@ -660,8 +658,9 @@ public class AndroidProjectAdapter implements IAdapterProject {
                         entity.getName().toLowerCase(Locale.US))));
 
         result.add(new ManifestActivityAndroid(
-                this.adapter, entity.getName(),
-                entity.getName().toLowerCase(), "ShowActivity"));
+                entity.getName(),
+                entity.getName().toLowerCase(),
+                "ShowActivity"));
 
         return result;
     }
@@ -751,8 +750,9 @@ public class AndroidProjectAdapter implements IAdapterProject {
                     new DimensFile()));
 
         result.add(new ManifestActivityAndroid(
-                this.adapter, entity.getName(),
-                entity.getName().toLowerCase(), "ListActivity"));
+                entity.getName(),
+                entity.getName().toLowerCase(),
+                "ListActivity"));
 
         return result;
     }
@@ -1160,7 +1160,8 @@ public class AndroidProjectAdapter implements IAdapterProject {
                         + this.adapter.getProvider();
 
         result.add(new ManifestProviderAndroid(
-                this.adapter, providerNamespace, nameProvider));
+                providerNamespace,
+                nameProvider));
 
         return result;
     }
@@ -1480,8 +1481,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
     }
 
     @Override
-    public List<IUpdater> getEntityFiles(EntityMetadata entity, Configuration cfg,
-            Map<String, Object> dataModel) {
+    public List<IUpdater> getEntityFiles(EntityMetadata entity) {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
         final File entityFile = new File(String.format("%s%s.java",
@@ -1489,8 +1489,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 entity.getName()));
 
         if (entityFile.exists()) {
-            result.add(new EntityImplementationAndroid(this.adapter, cfg, dataModel,
-                    entityFile, entity));
+            result.add(new EntityImplementationAndroid(entityFile, entity));
         }
 
         return result;
@@ -1521,7 +1520,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
         if (enumMeta.getIdName() != null) {
-        	result.add(new EnumImplementationAndroid(adapter, cfg, enumMeta));
+        	result.add(new EnumImplementationAndroid(enumMeta));
         }
 
         return result;
@@ -1558,8 +1557,9 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 filePath + "activity_" + viewName.toLowerCase() + ".xml"));
 
         result.add(new ManifestActivityAndroid(
-                this.adapter, viewName,
-                packageName, "Activity"));
+                viewName,
+                packageName,
+                "Activity"));
 
         return result;
     }
@@ -1568,7 +1568,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
     public List<IUpdater> updateHomeActivity(String activity, String buttonId) {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
-        result.add(new HomeActivityUpdaterAndroid(this.adapter, activity, buttonId));
+        result.add(new HomeActivityUpdaterAndroid(activity, buttonId));
 
         return result;
     }

@@ -9,7 +9,6 @@
 package com.tactfactory.harmony.platform;
 
 import java.util.List;
-import java.util.Map;
 
 import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
 import com.tactfactory.harmony.meta.EntityMetadata;
@@ -45,10 +44,8 @@ public interface IAdapterProject {
     //Used by FixtureGenerator
     List<IUpdater> getFixtureLibraries(String type);
     List<IUpdater> getFixtureFiles(boolean forceOverwrite);
-    List<IUpdater> getFixtureEntityDefinitionFiles(
-            String fixtureType, EntityMetadata entity);
-    List<IUpdater> getFixtureEntityFiles(boolean forceOverwrite,
-            String fixtureType, EntityMetadata entity);
+    List<IUpdater> getFixtureEntityDefinitionFiles(String fixtureType, EntityMetadata entity);
+    List<IUpdater> getFixtureEntityFiles(boolean forceOverwrite, String fixtureType, EntityMetadata entity);
     List<IUpdater> getFixtureAssets();
 
     //Used by ApplicationGenerator
@@ -85,8 +82,7 @@ public interface IAdapterProject {
     List<String> getAvailableMenus();
 
     //Used by EntityGenerator
-    List<IUpdater> getEntityFiles(EntityMetadata entity, Configuration cfg,
-            Map<String, Object> dataModel);
+    List<IUpdater> getEntityFiles(EntityMetadata entity);
     List<IUpdater> getEntityBaseFiles();
 
     //Used by EnumGenerator

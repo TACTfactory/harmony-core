@@ -12,7 +12,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
@@ -698,8 +697,7 @@ public class WinphoneProjectAdapter implements IAdapterProject {
     }
 
     @Override
-    public List<IUpdater> getEntityFiles(EntityMetadata entity,
-            Configuration cfg, Map<String, Object> dataModel) {
+    public List<IUpdater> getEntityFiles(EntityMetadata entity) {
     	List<IUpdater> result = new ArrayList<IUpdater>();
 
         String templatePath = this.adapter.getTemplateSourcePath() + "Entity/";

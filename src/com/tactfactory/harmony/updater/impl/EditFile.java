@@ -8,12 +8,14 @@
  */
 package com.tactfactory.harmony.updater.impl;
 
+import com.tactfactory.harmony.generator.BaseGenerator;
+import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.updater.old.IFileUtil;
 
-/** 
+/**
  * Command of generator for edit file.
- * 
+ *
  * @author Erwan LeHuitouze <erwan.lehuitouze@tactfactory.com>
  * @author Mickael Gaillard <mickael.gaillard@tactfactory.com>
  */
@@ -25,8 +27,8 @@ public final class EditFile implements IUpdater {
 
     /**
      * Constructor of the command generator.
-     * 
-     * @param from 
+     *
+     * @param from
      * @param to
      * @param util
      */
@@ -46,5 +48,12 @@ public final class EditFile implements IUpdater {
 
     public IFileUtil getFileUtil() {
         return fileUtil;
+    }
+
+    @Override
+    public void execute(BaseGenerator<? extends IAdapter> generator) {
+        this.getFileUtil().mergeFiles(
+                this.getFrom(),
+                this.getTo());
     }
 }
