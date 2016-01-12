@@ -22,12 +22,12 @@ public interface Resource {
     /**
      * @return the id
      */
-    Integer getId();
+    int getId();
 
     /**
      * @param value the id to set
      */
-    void setId(final Integer value);
+    void setId(final int value);
     </#if>
 
     /**

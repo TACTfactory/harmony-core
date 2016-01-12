@@ -23,26 +23,26 @@ public class EntityResourceBase <#if sync> extends EntityBase </#if>implements <
     protected String path;
 
     <#if !sync>
-    private Integer id;
+    private int id;
     </#if>
 
-    <#if sync>
+    <#if (sync) || (rest)>
     private String localPath;
     </#if>
 
     <#if !sync>
     @Override
-    public Integer getId() {
+    public int getId() {
          return this.id;
     }
 
     @Override
-    public void setId(final Integer value) {
+    public void setId(final int value) {
          this.id = value;
     }
     </#if>
 
-    <#if sync>
+    <#if (sync) || (rest)>
     @Override
     public String getLocalPath() {
          return this.localPath;

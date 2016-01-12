@@ -1,4 +1,10 @@
 <@header?interpret />
+<#assign sync=false />
+<#list entities?values as entity>
+    <#if entity.options.sync??>
+        <#assign sync=true />
+    </#if>
+</#list>
 package ${project_namespace}.provider.base;
 
 import android.content.ContentValues;
@@ -100,7 +106,7 @@ public abstract class ResourceProviderAdapterBase
             String selection,
             String[] selectionArgs) {
         ContentValues deleteCv = new ContentValues();
-        deleteCv.put(ResourceContract.COL_SYNC_DTAG, 1);
+        <#if sync>deleteCv.put(ResourceContract.COL_SYNC_DTAG, 1);</#if>
         int matchedUri = ${project_name?cap_first}ProviderBase
                     .getUriMatcher().match(uri);
         int result = -1;
@@ -243,7 +249,7 @@ public abstract class ResourceProviderAdapterBase
         android.database.Cursor result = null;
         String selection = ResourceContract.ALIASED_COL_ID
                         + " = ?";
-        selection += " AND " + ResourceContract.ALIASED_COL_SYNC_DTAG + " = ?";
+        <#if sync>selection += " AND " + ResourceContract.ALIASED_COL_SYNC_DTAG + " = ?";</#if>
         String[] selectionArgs = new String[2];
         selectionArgs[0] = id;
         selectionArgs[1] = String.valueOf(0);
