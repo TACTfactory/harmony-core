@@ -14,6 +14,8 @@ import java.util.ArrayList;
 import android.content.ContentValues;
 
 import ${project_namespace}.${project_name?cap_first}Application;
+import ${data_namespace}.SQLiteAdapter;
+
 <#list entities?values as entity>
     <#if entity.resource>
 import ${data_namespace}.${entity.name?cap_first}SQLiteAdapter;
@@ -69,22 +71,19 @@ public abstract class ResourceSQLiteAdapterBase
     public static String getSchema() {
         return "CREATE TABLE "
          + ResourceContract.TABLE_NAME    + " ("
-
          + ResourceContract.COL_ID    + " INTEGER PRIMARY KEY AUTOINCREMENT,"
          + ResourceContract.COL_PATH    + " VARCHAR NOT NULL,"<#if sync>
          + ResourceContract.COL_SERVERID    + " integer,"
          + ResourceContract.COL_SYNC_DTAG    + " boolean NOT NULL,"
          + ResourceContract.COL_SYNC_UDATE    + " datetime,"
          + ResourceContract.COL_HASH    + " VARCHAR,"</#if>
-         + ResourceContract.COL_DISCRIMINATORCOLUMN + "  VARCHAR,"
+         + ResourceContract.COL_DISCRIMINATORCOLUMN + "  VARCHAR"
         <#list entities?values as entity>
-            <#if entity.resource>
-         + ${entity.name?cap_first}SQLiteAdapter.getSchemaColumns() + ","
+            <#if ((entity.resource) && (entity.fields?size>1))>
+         + "," + ${entity.name?cap_first}SQLiteAdapter.getSchemaColumns()
             </#if>
         </#list>
-
-         + ");"
-;
+         + ");";
     }
 
     /**

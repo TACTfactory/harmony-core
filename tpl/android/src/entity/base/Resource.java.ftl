@@ -18,16 +18,16 @@ import java.io.Serializable;
 import org.joda.time.DateTime;
 
 public interface Resource {
-    <#if rest>
+    <#if !sync>
     /**
-     * @return the resourceId
+     * @return the id
      */
-    Integer getResourceId();
+    Integer getId();
 
     /**
-     * @param value the resourceId to set
+     * @param value the id to set
      */
-    void setResourceId(final Integer value);
+    void setId(final Integer value);
     </#if>
 
     /**

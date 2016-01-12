@@ -1,4 +1,10 @@
 <#include utilityPath + "all_imports.ftl" />
+<#assign sync=false />
+<#list entities?values as entity>
+    <#if entity.options.sync??>
+        <#assign sync=true />
+    </#if>
+</#list>
 <#assign hasDate = MetadataUtils.hasDate(curr) />
 <#assign hasTime = MetadataUtils.hasTime(curr) />
 <#assign hasDateTime = MetadataUtils.hasDateTime(curr) />
@@ -70,11 +76,11 @@ public abstract class ${curr.name}ContractBase {
     </#if>
     <#if curr.resource>
         ResourceContract.COL_ID,
-        ResourceContract.COL_PATH,
+        ResourceContract.COL_PATH<#if sync>,
         ResourceContract.COL_SERVERID,
         ResourceContract.COL_SYNC_DTAG,
         ResourceContract.COL_SYNC_UDATE,
-        ResourceContract.COL_HASH</#if>
+        ResourceContract.COL_HASH</#if></#if>
         <#list wholeFields as field>
         <#if field.columnName??
          && (!field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany"))>
@@ -93,11 +99,11 @@ public abstract class ${curr.name}ContractBase {
     public static final String[] ALIASED_COLS = new String[] {
     <#if curr.resource>
         ResourceContract.ALIASED_COL_ID,
-        ResourceContract.ALIASED_COL_PATH,
+        ResourceContract.ALIASED_COL_PATH<#if sync>,
         ResourceContract.ALIASED_COL_SERVERID,
         ResourceContract.ALIASED_COL_SYNC_DTAG,
         ResourceContract.ALIASED_COL_SYNC_UDATE,
-        ResourceContract.ALIASED_COL_HASH
+        ResourceContract.ALIASED_COL_HASH</#if>
     </#if>
     <#list ViewUtils.getAllFields(curr)?values as field>
         <#if field_index=1 && curr.resource>,</#if>
