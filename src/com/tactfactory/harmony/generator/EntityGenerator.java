@@ -49,7 +49,7 @@ public class EntityGenerator extends BaseGenerator<IAdapter> {
 				ConsoleUtils.display(">>> Decorate " + entity.getName());
 
 				List<IUpdater> updaters = this.getAdapter().getAdapterProject()
-	                    .getEntityFiles(entity, this.getCfg(), this.getDatamodel());
+	                    .getEntityFiles(entity);
 
 				updaters.addAll(this.getAdapter().getAdapterProject().getEntityBaseFiles());
 

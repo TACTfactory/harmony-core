@@ -8,6 +8,9 @@
  */
 package com.tactfactory.harmony.updater;
 
-public interface IUpdater {
+import com.tactfactory.harmony.generator.BaseGenerator;
+import com.tactfactory.harmony.platform.IAdapter;
 
+public interface IUpdater {
+    void execute(BaseGenerator<? extends IAdapter> generator);
 }
