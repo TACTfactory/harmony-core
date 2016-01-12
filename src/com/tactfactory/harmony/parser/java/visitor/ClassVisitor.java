@@ -33,22 +33,23 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.Strings;
-import com.tactfactory.harmony.meta.EnumMetadata;
-import com.tactfactory.harmony.meta.InterfaceMetadata;
 import com.tactfactory.harmony.annotation.Column.Type;
 import com.tactfactory.harmony.annotation.DiscriminatorColumn;
-import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
-import com.tactfactory.harmony.annotation.View;
 import com.tactfactory.harmony.annotation.DiscriminatorIdentifier;
 import com.tactfactory.harmony.annotation.Entity;
+import com.tactfactory.harmony.annotation.EntityResource;
 import com.tactfactory.harmony.annotation.InheritanceType;
+import com.tactfactory.harmony.annotation.InheritanceType.InheritanceMode;
 import com.tactfactory.harmony.annotation.OrderBys;
 import com.tactfactory.harmony.annotation.Table;
+import com.tactfactory.harmony.annotation.View;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
+import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.meta.InheritanceMetadata;
+import com.tactfactory.harmony.meta.InterfaceMetadata;
 import com.tactfactory.harmony.parser.BaseParser;
 import com.tactfactory.harmony.parser.java.JavaModelParser;
 import com.tactfactory.harmony.platform.SqliteAdapter;
@@ -77,9 +78,12 @@ public class ClassVisitor {
 
 	private static final String ANNOTATION_DISCRIMINATOR_IDENTIFIER =
 			PackageUtils.extractNameEntity(DiscriminatorIdentifier.class);
-	
+
 	private static final String ANNOTATION_ORDER_BYS=
 			PackageUtils.extractNameEntity(OrderBys.class);
+
+    private static final String ANNOTATION_RESOURCE       =
+            PackageUtils.extractNameEntity(EntityResource.class);
 
 	/** Column annotation hidden attribute. */
 	private static final String ATTRIBUTE_HIDDEN = "hidden";
@@ -89,7 +93,7 @@ public class ClassVisitor {
 
 	/** Column annotation show attribute. */
 	private static final String ATTRIBUTE_SHOW = "show";
-	
+
 	/** Column annotation delete attribute. */
 	private static final String ATTRIBUTE_DELETE = "delete";
 
@@ -98,25 +102,25 @@ public class ClassVisitor {
 
 	/** Column annotation create attribute. */
 	private static final String ATTRIBUTE_CREATE = "create";
-	
+
 	/** Column annotation hidden attribute. */
 	private static final String ATTRIBUTE_VALUE = "value";
-	
+
 	/** Column annotation name attribute. */
 	private static final String ATTRIBUTE_NAME = "name";
-	
+
 	/** Column annotation column name attribute. */
 	private static final String ATTRIBUTE_COLUMN_NAME = "columnName";
-	
+
 	/** Column annotation order attribute. */
 	private static final String ATTRIBUTE_ORDER = "order";
-	
+
 	/** Column annotation indexes attribute. */
 	private static final String ATTRIBUTE_INDEXES = "indexes";
-	
+
 	/** Column annotation columns attribute. */
 	private static final String ATTRIBUTE_COLUMNS = "columns";
-	
+
 	/** Column annotation type attribute. */
 	private static final String ATTRIBUTE_TYPE = "type";
 
@@ -125,11 +129,11 @@ public class ClassVisitor {
 
 	/** The method visitor used by this visitor. */
 	private final MethodVisitor methodVisitor = new MethodVisitor();
-	
+
 	/** The constructor visitor used by this visitor. */
-	private final ConstructorVisitor constructorVisitor = 
+	private final ConstructorVisitor constructorVisitor =
 			new ConstructorVisitor();
-	
+
 	/** Annotation map for this class. */
 	private Map<String, AnnotationExpr> annotationMap;
 
@@ -144,10 +148,10 @@ public class ClassVisitor {
 
     	boolean isEntity = false;
     	boolean isInterface = false;
-    	
+
     	String classname = PackageUtils.extractNameEntity(
     			classDeclaration.getName());
-    	
+
     	if (ApplicationMetadata.INSTANCE.getClasses().containsKey(classname)) {
     		result = ApplicationMetadata.INSTANCE.getClasses().get(classname);
     	} else {
@@ -161,56 +165,56 @@ public class ClassVisitor {
 	    	result.setName(PackageUtils.extractNameEntity(
 	    			classDeclaration.getName()));
     	}
-    	
+
     	result.setParsed(true);
-    	
+
     	// Debug Log
     	ConsoleUtils.displayDebug("Found class : " + result.getName());
-		
+
 		// If the class has a name
 		if (!Strings.isNullOrEmpty(result.getName())) {
-			
+
 	    	// Call the parsers which have been registered by the bundle
 	    	for (final BaseParser bParser
 	    			: JavaModelParser.getBundleParsers()) {
-	    		
+
 	    		bParser.visitClass(classDeclaration, result);
 	    	}
-	    	
+
 	    	// Parse the annotations
 	    	this.annotationMap = this.getAnnotMap(classDeclaration);
-	    	
+
 	    	// TODO : adapt bundles code !
 			// Call the bundles class annotations parsers
 	    	if (classDeclaration.getAnnotations() != null) {
-		    	for (AnnotationExpr annotationExpr 
+		    	for (AnnotationExpr annotationExpr
 		    			: classDeclaration.getAnnotations()) {
-		    		
+
 					for (final BaseParser bParser
 							: JavaModelParser.getBundleParsers()) {
-						
+
 			    		bParser.visitClassAnnotation(result, annotationExpr);
 					}
 		    	}
 	    	}
-	    	
-	    	AnnotationExpr entityAnnot = 
+
+	    	AnnotationExpr entityAnnot =
 	    			this.annotationMap.get(ANNOTATION_ENTITY);
-	    	
+
 	    	if (entityAnnot != null) {
 	    		isEntity = true;
 	    	}
 
-	    	AnnotationExpr viewAnnot = 
+	    	AnnotationExpr viewAnnot =
 	    			this.annotationMap.get(ANNOTATION_VIEW);
-	    	
+
 	    	if (viewAnnot != null && result instanceof EntityMetadata) {
 				EntityMetadata resultEntity = (EntityMetadata) result;
 				if (viewAnnot instanceof NormalAnnotationExpr) {
-					List<MemberValuePair> pairs = 
+					List<MemberValuePair> pairs =
 							((NormalAnnotationExpr)
 									viewAnnot).getPairs();
-					
+
 					if (pairs != null) {
 						for (MemberValuePair pair : pairs) {
 							if (ATTRIBUTE_HIDDEN.equals(pair.getName())) {
@@ -240,28 +244,35 @@ public class ClassVisitor {
 							} else if (ATTRIBUTE_DELETE.equals(pair.getName())) {
 								resultEntity.setDeleteAction(Boolean.parseBoolean(
 										pair.getValue().toString()));
-							} 
+							}
 						}
 					}
 				}
 	    	}
-	    	
+
+	    	AnnotationExpr resourceAnnot = this.annotationMap.get(ANNOTATION_RESOURCE);
+
+	    	if (resourceAnnot != null) {
+	    	    EntityMetadata resultEntity = (EntityMetadata) result;
+	    	    resultEntity.setResource(true);
+	    	}
+
 	    	if (isEntity) {
 	    		this.loadInheritanceData(
-	    				(EntityMetadata) result, 
+	    				(EntityMetadata) result,
 	    				classDeclaration);
 	    		this.parseTableAnnotation((EntityMetadata) result);
 	    		this.parseOrderBysAnnotation((EntityMetadata) result);
 	    	}
-	    	
-	    	
+
+
 			// Get list of Implement type
 			final List<ClassOrInterfaceType> impls =
 					classDeclaration.getImplements();
 			if (impls != null) {
 				for (final ClassOrInterfaceType impl : impls) {
 					result.getImplementTypes().add(impl.getName());
-					
+
 					// Debug Log
 					ConsoleUtils.displayDebug(
 							"\tImplement : " + impl.getName());
@@ -273,14 +284,14 @@ public class ClassVisitor {
 					new LinkedHashMap<String, ClassMetadata>();
 			final List<BodyDeclaration> members =
 					classDeclaration.getMembers();
-			
+
 			if (members != null) {
 				for (final BodyDeclaration member : members) {
 					// Subclass or Enum
 					if (member instanceof TypeDeclaration) {
 						final ClassMetadata subClass =
 								this.visit((TypeDeclaration) member);
-						
+
 						subClasses.put(subClass.getName(), subClass);
 					} else
 
@@ -294,7 +305,7 @@ public class ClassVisitor {
 							if (fieldMetas.isId()) {
 								((EntityMetadata) result).addId(fieldMetas);
 							}
-							
+
 							if (fieldMetas.getRelation() != null) {
 								((EntityMetadata) result).getRelations().put(
 										fieldMetas.getName(),
@@ -302,14 +313,14 @@ public class ClassVisitor {
 							}
 						}
 					} else
-						
+
 					// Methods
 					if (member instanceof MethodDeclaration) {
 						result.getMethods().add(this.methodVisitor.visit(
 										(MethodDeclaration) member,
 										result));
 					} else
-						
+
 					// Constructors
 					if (member instanceof ConstructorDeclaration) {
 						result.getMethods().add(this.constructorVisitor.visit(
@@ -317,7 +328,7 @@ public class ClassVisitor {
 										result));
 					}
 				}
-				
+
 				for (final ClassMetadata subClass : subClasses.values()) {
 					subClass.setOuterClass(result.getName());
 				}
@@ -330,11 +341,11 @@ public class ClassVisitor {
             SqliteAdapter.Keywords.exists(
                     ((EntityMetadata)result).getTableName());
 		}
-        
+
 		if (!isEntity && !isInterface) {
 			result = null;
 		}
-		
+
 		return result;
     }
 
@@ -358,7 +369,7 @@ public class ClassVisitor {
 				if (member instanceof TypeDeclaration) {
 					this.visit((TypeDeclaration) member);
 				} else
-					
+
 				// Fields
 				if (member instanceof FieldDeclaration) {
 					final FieldMetadata fieldMetas = this.fieldVisitor.visit(
@@ -370,7 +381,7 @@ public class ClassVisitor {
 						}
 					}
 				} else
-					
+
 				// Methods
 				if (member instanceof MethodDeclaration) {
 					result.getMethods().add(this.methodVisitor.visit(
@@ -386,7 +397,7 @@ public class ClassVisitor {
 		} else {
 			result.setType(Type.STRING.getValue());
 		}
-		
+
 		// Get the Enum entries
     	if (enumDecl.getEntries() != null) {
     		for (final EnumConstantDeclaration enumEntry
@@ -406,7 +417,7 @@ public class ClassVisitor {
     			}
     		}
     	}
-		
+
     	return result;
     }
 
@@ -428,7 +439,7 @@ public class ClassVisitor {
 
     	return result;
     }
-    
+
     /**
      * Transform the class declaration to an annotation map
      * @param classDecl The class declaration
@@ -436,19 +447,19 @@ public class ClassVisitor {
      */
     private Map<String, AnnotationExpr> getAnnotMap(
     		ClassOrInterfaceDeclaration classDecl) {
-    	
-    	Map<String, AnnotationExpr> result = 
+
+    	Map<String, AnnotationExpr> result =
     			new HashMap<String, AnnotationExpr>();
-    	
+
     	if (classDecl.getAnnotations() != null) {
 	    	for (AnnotationExpr annot : classDecl.getAnnotations()) {
 	    		result.put(annot.getName().toString(), annot);
 	    	}
     	}
-    	
+
     	return result;
     }
-    
+
     /**
      * Loads the inheritance data for the given entity.
      * @param classMeta The metadata of the entity
@@ -462,7 +473,7 @@ public class ClassVisitor {
     			this.annotationMap.get(ANNOTATION_DISCRIMINATOR_COLUMN);
     	AnnotationExpr discriminatorIdentifier =
     			this.annotationMap.get(ANNOTATION_DISCRIMINATOR_IDENTIFIER);
-    	
+
     	boolean inherits = false;
     	InheritanceMetadata inheritanceMeta;
     	if (classMeta.getInheritance() != null) {
@@ -471,46 +482,46 @@ public class ClassVisitor {
     	} else {
     		inheritanceMeta = new InheritanceMetadata();
     	}
-    	
+
     	if (classDecl.getExtends() != null) {
     		inherits = true;
     		// TODO : check if extends is a entity ?
     		InheritanceMode mode = null;
     		String superClassName = classDecl.getExtends().get(0).getName();
-    		
+
     		EntityMetadata superclass;
     		if (ApplicationMetadata.INSTANCE.getEntities().containsKey(
     				superClassName)) {
-    			 superclass = 
+    			 superclass =
     					 ApplicationMetadata.INSTANCE.getEntities().get(
-    							 superClassName); 
-    			 
+    							 superClassName);
+
     			if (superclass.getInheritance() == null) {
      				superclass.setInheritance(new InheritanceMetadata());
-     				
+
      				superclass.getInheritance().getSubclasses().put(
      						classMeta.getName(),
      						classMeta);
      			} else {
      				mode = superclass.getInheritance().getType();
-     				
+
      				superclass.getInheritance().getSubclasses().put(
      						classMeta.getName(),
      						classMeta);
      			}
-    			
+
     		} else {
     			superclass = new EntityMetadata();
     			superclass.setName(superClassName);
-    			
+
     			if (superclass.getInheritance() == null) {
     				superclass.setInheritance(new InheritanceMetadata());
     			}
-    			
+
     			superclass.getInheritance().getSubclasses().put(
     					classMeta.getName(),
     					classMeta);
-    			
+
     			ApplicationMetadata.INSTANCE.getEntities().put(
     					superClassName, superclass);
     		}
@@ -519,53 +530,53 @@ public class ClassVisitor {
     		if (mode != null) {
     			inheritanceMeta.setType(mode);
     		}
-    		
+
     		String discriminatorIdentifierValue = classMeta.getName();
     		if (discriminatorIdentifier instanceof NormalAnnotationExpr) {
-				List<MemberValuePair> pairs = 
+				List<MemberValuePair> pairs =
 						((NormalAnnotationExpr) discriminatorIdentifier)
 								.getPairs();
-				
+
 				for (MemberValuePair pair : pairs) {
 					if (ATTRIBUTE_VALUE.equals(pair.getName())) {
-						discriminatorIdentifierValue = 
+						discriminatorIdentifierValue =
 								pair.getValue().toString();
 					}
 				}
-			} else if (discriminatorIdentifier 
+			} else if (discriminatorIdentifier
 					instanceof SingleMemberAnnotationExpr){
-				SingleMemberAnnotationExpr annot = 
+				SingleMemberAnnotationExpr annot =
 						(SingleMemberAnnotationExpr) discriminatorIdentifier;
-				discriminatorIdentifierValue = 
+				discriminatorIdentifierValue =
 						((FieldAccessExpr) annot.getMemberValue()).getField();
 			}
     		inheritanceMeta.setDiscriminorIdentifier(
     				discriminatorIdentifierValue);
-    	} 
-    	
+    	}
+
     	if (inheritanceTypeAnnot != null) {
     		inherits = true;
     		// Get mode
     		InheritanceMode mode = null;
     		String modeName = null;
     		if (inheritanceTypeAnnot instanceof NormalAnnotationExpr) {
-				List<MemberValuePair> pairs = 
+				List<MemberValuePair> pairs =
 						((NormalAnnotationExpr) inheritanceTypeAnnot)
 								.getPairs();
-				
+
 				for (MemberValuePair pair : pairs) {
 					if (ATTRIBUTE_VALUE.equals(pair.getName())) {
 						modeName = pair.getValue().toString();
 					}
 				}
-			} else if (inheritanceTypeAnnot 
+			} else if (inheritanceTypeAnnot
 					instanceof SingleMemberAnnotationExpr){
-				SingleMemberAnnotationExpr annot = 
+				SingleMemberAnnotationExpr annot =
 						(SingleMemberAnnotationExpr) inheritanceTypeAnnot;
-				modeName = 
+				modeName =
 						((FieldAccessExpr) annot.getMemberValue()).getField();
 			}
-    		
+
     		if (modeName != null) {
     			mode = InheritanceMode.valueOf(modeName);
     		} else {
@@ -574,35 +585,35 @@ public class ClassVisitor {
 
     		// Propagate type to subclasses
     		inheritanceMeta.setType(mode);
-    		
+
 
 			String type = "VARCHAR";
 			String columnName = "inheritance_type";
 			String name = "discriminatorColumn";
-			
+
     		if (discriminatorAnnot != null) {
     			if (discriminatorAnnot instanceof NormalAnnotationExpr) {
-    				
-    				List<MemberValuePair> pairs = 
+
+    				List<MemberValuePair> pairs =
     						((NormalAnnotationExpr) discriminatorAnnot)
     								.getPairs();
-    				
+
     				for (MemberValuePair pair : pairs) {
     					if (ATTRIBUTE_NAME.equals(pair.getName())) {
-    						columnName = ((StringLiteralExpr) 
+    						columnName = ((StringLiteralExpr)
     										pair.getValue()).getValue();
-    					} else 
-    						
+    					} else
+
     					if (ATTRIBUTE_TYPE.equals(pair.getName())) {
-    						type = ((StringLiteralExpr) 
+    						type = ((StringLiteralExpr)
     								pair.getValue()).getValue();
     					}
     				}
-    				
+
     			}
-    		} 
-    		
-			FieldMetadata discriminatorColumn = 
+    		}
+
+			FieldMetadata discriminatorColumn =
 					new FieldMetadata(classMeta);
 			discriminatorColumn.setHarmonyType(type);
 			discriminatorColumn.setColumnDefinition(type);
@@ -611,46 +622,46 @@ public class ClassVisitor {
 			discriminatorColumn.setNullable(true);
 			inheritanceMeta.setDiscriminorColumn(discriminatorColumn);
     	}
-    	
+
     	if (inherits) {
     		classMeta.setInheritance(inheritanceMeta);
     		this.propagateModeToSubclasses(classMeta);
     	}
     }
-    
-    /** 
-     * Propagates the inheritance mode to the subclasses. 
+
+    /**
+     * Propagates the inheritance mode to the subclasses.
      *
      * @param classMeta the entity to propagate the mode.
      */
     private void propagateModeToSubclasses(EntityMetadata classMeta) {
 		// Propagate type to subclasses
-		for (EntityMetadata subclass 
+		for (EntityMetadata subclass
 				: classMeta.getInheritance().getSubclasses().values()) {
-			
+
 			subclass.getInheritance().setType(
 					classMeta.getInheritance().getType());
-			
+
 			this.propagateModeToSubclasses(subclass);
 		}
     }
-    
+
 
     /**
      * Parse the table annotation.
-     * 
+     *
      * @param classMeta The class to complete
      */
     private void parseOrderBysAnnotation(EntityMetadata classMeta) {
-    	AnnotationExpr orderBysAnnot = 
+    	AnnotationExpr orderBysAnnot =
     			this.annotationMap.get(ANNOTATION_ORDER_BYS);
-    	
+
     	if (orderBysAnnot != null) {
     		if (orderBysAnnot instanceof SingleMemberAnnotationExpr) {
-    			Expression memberValue = 
-    					((SingleMemberAnnotationExpr) 
+    			Expression memberValue =
+    					((SingleMemberAnnotationExpr)
     							orderBysAnnot).getMemberValue();
-    			
+
 				this.parseOrderByArray(
 						classMeta,
 						(ArrayInitializerExpr) memberValue);
@@ -658,32 +669,32 @@ public class ClassVisitor {
     		}
     	}
     }
-    
+
     /**
      * Parse the table annotation.
-     * 
+     *
      * @param classMeta The class to complete
      */
     private void parseTableAnnotation(EntityMetadata classMeta) {
-    	AnnotationExpr tableAnnot = 
+    	AnnotationExpr tableAnnot =
     			this.annotationMap.get(ANNOTATION_TABLE);
-    	
+
     	classMeta.setTableName(classMeta.getName());
-    	
+
     	if (tableAnnot != null) {
     		if (tableAnnot instanceof NormalAnnotationExpr) {
-    			List<MemberValuePair> pairs = 
+    			List<MemberValuePair> pairs =
     					((NormalAnnotationExpr) tableAnnot).getPairs();
-    			
+
     			if (pairs != null) {
 	    			for (MemberValuePair pair : pairs) {
 	    				if (ATTRIBUTE_INDEXES.equals(pair.getName())) {
 	    					this.parseIndexes(
 	    							classMeta,
 	    							(ArrayInitializerExpr) pair.getValue());
-	    					
+
 	    				}
-	    				
+
 	    				if (ATTRIBUTE_NAME.equals(pair.getName())) {
                             if (pair.getValue()
                                     instanceof StringLiteralExpr) {
@@ -699,10 +710,10 @@ public class ClassVisitor {
     		}
     	}
     }
-    
+
     /**
      * Parse the indexes array.
-     * 
+     *
      * @param classMeta The class to complete
      * @param indexesArray The indexes array
      */
@@ -711,49 +722,49 @@ public class ClassVisitor {
 		for (Expression indexExpr : indexesArray.getValues()) {
 			if (indexExpr instanceof AnnotationExpr) {
 				this.parseIndexAnnotation(
-						classMeta, 
+						classMeta,
 						(AnnotationExpr) indexExpr);
 			}
 		}
     }
-    
+
     /**
      * Parse an index annotation and put it into the metadata of the class.
-     * 
+     *
      * @param classMeta The class metadata to complete
      * @param indexAnnot The index annotation
      */
-    private void parseIndexAnnotation(EntityMetadata classMeta, 
+    private void parseIndexAnnotation(EntityMetadata classMeta,
     		AnnotationExpr indexAnnot) {
     	String indexName = null;
 		ArrayList<String> columns = new ArrayList<String>();
-		List<MemberValuePair> indexPairs = 
+		List<MemberValuePair> indexPairs =
 						((NormalAnnotationExpr) indexAnnot).getPairs();
-		
+
 		for (MemberValuePair indexPair : indexPairs) {
 			if (ATTRIBUTE_NAME.equals(indexPair.getName())) {
-				indexName = 
+				indexName =
 						((StringLiteralExpr) indexPair.getValue()).getValue();
-			} else 
-				
+			} else
+
 			if (ATTRIBUTE_COLUMNS.equals(indexPair.getName())) {
-				ArrayInitializerExpr colArray = 
+				ArrayInitializerExpr colArray =
 						((ArrayInitializerExpr) indexPair.getValue());
-				
+
 				for (Expression columnExpr : colArray.getValues()) {
 					columns.add(((StringLiteralExpr) columnExpr).getValue());
 				}
 			}
 		}
-		
+
 		if (indexName != null) {
 			classMeta.addIndex(indexName, columns);
 		}
     }
-    
+
     /**
      * Parse the indexes array.
-     * 
+     *
      * @param classMeta The class to complete
      * @param indexesArray The indexes array
      */
@@ -762,37 +773,37 @@ public class ClassVisitor {
     	for (Expression orderByAnnot : orderByArray.getValues()) {
 			if (orderByAnnot instanceof AnnotationExpr) {
 				this.parseOrderByAnnotation(
-						classMeta, 
+						classMeta,
 						(AnnotationExpr) orderByAnnot);
 			}
 		}
     }
-    
+
     /**
      * Parse an index annotation and put it into the metadata of the class.
-     * 
+     *
      * @param classMeta The class metadata to complete
      * @param indexAnnot The index annotation
      */
-    private void parseOrderByAnnotation(EntityMetadata classMeta, 
+    private void parseOrderByAnnotation(EntityMetadata classMeta,
     		AnnotationExpr orderByAnnot) {
     	String columnName = null;
 		String order = null;
-		List<MemberValuePair> indexPairs = 
+		List<MemberValuePair> indexPairs =
 						((NormalAnnotationExpr) orderByAnnot).getPairs();
-		
+
 		for (MemberValuePair indexPair : indexPairs) {
 			if (ATTRIBUTE_COLUMN_NAME.equals(indexPair.getName())) {
-				columnName = 
+				columnName =
 						((StringLiteralExpr) indexPair.getValue()).getValue();
-			} else 
-			
+			} else
+
 			if (ATTRIBUTE_ORDER.equals(indexPair.getName())) {
-				order = 
+				order =
 						((StringLiteralExpr) indexPair.getValue()).getValue();
 			}
 		}
-		
+
 		if (columnName != null) {
 			classMeta.addOrder(columnName, order);
 		}

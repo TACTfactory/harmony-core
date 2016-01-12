@@ -14,12 +14,16 @@ import java.util.List;
 import java.util.Map;
 
 import com.google.common.base.CaseFormat;
+import com.tactfactory.harmony.annotation.Column;
+import com.tactfactory.harmony.annotation.Column.Type;
+import com.tactfactory.harmony.completor.ResourceCompletor;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.meta.MethodMetadata;
 import com.tactfactory.harmony.platform.IAdapter;
+import com.tactfactory.harmony.platform.SqliteAdapter;
 import com.tactfactory.harmony.platform.manipulator.SourceFileManipulator;
 import com.tactfactory.harmony.updater.IUpdaterFile;
 import com.tactfactory.harmony.utils.ConsoleUtils;
@@ -34,7 +38,7 @@ public class EntityImplementationAndroid implements IUpdaterFile {
     private final Map<String, Object> dataModel;
     private final File entityFile;
     private final EntityMetadata entity;
-    
+
     public EntityImplementationAndroid(IAdapter adapter, Configuration cfg,
             Map<String, Object> dataModel, File entityFile,
             EntityMetadata entity) {
@@ -44,23 +48,28 @@ public class EntityImplementationAndroid implements IUpdaterFile {
         this.entityFile = entityFile;
         this.entity = entity;
     }
-    
+
     protected void updateEntity() {
         final SourceFileManipulator manipulator =
                 this.adapter.getFileManipulator(
                         entityFile,
                         this.configuration);
-        
+
+        if (this.entity.isResource()) {
+            this.generateResourceField(manipulator);
+        }
+
         this.implementEmptyConstructor(manipulator, entity);
-        
+
         manipulator.addImplement(entity, "Serializable");
         manipulator.addImport(
                 entity,
                 "Serializable",
                 "java.io.Serializable");
+
+        this.implementResource(manipulator, this.entity);
         this.generateGetterAndSetters(manipulator, entity);
         this.implementParcelable(manipulator, entity);
-        
         // After treatment on entity, write it in the original file
         manipulator.writeFile();
     }
@@ -72,14 +81,21 @@ public class EntityImplementationAndroid implements IUpdaterFile {
     private final void generateGetterAndSetters(
             final SourceFileManipulator manipulator,
             final EntityMetadata classMeta) {
-        
+
         final Collection<FieldMetadata> fields = classMeta.getFields().values();
         final boolean childClass = MetadataUtils.inheritsFromEntity(classMeta,
                 ApplicationMetadata.INSTANCE);
+//        if (this.entity.isResource()) {
+//            resourceField.setName("path");
+//
+//            fields.add(resourceField);
+//        }
+
         for (final FieldMetadata field : fields) {
-            final boolean isInheritedId = 
-                    childClass 
+            final boolean isInheritedId =
+                    childClass
                     && classMeta.getIds().containsKey(field.getName());
+
             if (!field.isInternal() && !isInheritedId) {
                 // Getter
                 if (!this.alreadyImplementsGet(field, classMeta)) {
@@ -90,7 +106,7 @@ public class EntityImplementationAndroid implements IUpdaterFile {
                                     CaseFormat.UPPER_CAMEL,
                                     field.getName()));
 
-                    manipulator.generateFieldAccessor(field, "itemGetter.java");
+                    manipulator.generateFieldAccessor(field, "itemGetter.java", this.entity);
                 }
 
                 // Setter
@@ -102,22 +118,22 @@ public class EntityImplementationAndroid implements IUpdaterFile {
                                     CaseFormat.UPPER_CAMEL,
                                     field.getName()));
 
-                    manipulator.generateFieldAccessor(field, "itemSetter.java");
+                    manipulator.generateFieldAccessor(field, "itemSetter.java", this.entity);
                 }
             }
         }
-        
+
         manipulator.addImport(
                 classMeta,
                 "ArrayList",
                 "java.util.ArrayList");
-        
+
         manipulator.addImport(
 				classMeta,
 				"List",
 				"java.util.List");
     }
-    
+
     /**
      * Check if the class already has a getter for the given field.
      * @param fieldMeta The Metadata of the field
@@ -182,8 +198,8 @@ public class EntityImplementationAndroid implements IUpdaterFile {
 		}
 
 		return result;
-    }   
-    
+    }
+
     /**
      * Check if the class already has a getter for the given field.
      * @param classMeta The Metadata containing the infos on the java class
@@ -192,39 +208,39 @@ public class EntityImplementationAndroid implements IUpdaterFile {
     private final boolean alreadyImplementsDefaultConstructor(
             final ClassMetadata classMeta) {
         boolean ret = false;
-        
+
         for (final MethodMetadata methodMeta : classMeta.getMethods()) {
-            if (methodMeta.getName().equals(classMeta.getName()) 
+            if (methodMeta.getName().equals(classMeta.getName())
                     && methodMeta.getArgumentsTypes().size() == 0) {
                 ret = true;
-                
-                ConsoleUtils.displayDebug("Already implements " 
+
+                ConsoleUtils.displayDebug("Already implements "
                         + "empty constructor");
             }
         }
-                    
+
         return ret;
     }
-    
+
     /**
      * Implement all methods needed by parcelable.
-     * @param fileString The string buffer representation of the file 
+     * @param fileString The string buffer representation of the file
      * @param classMeta The classmetadata
      */
     private final void implementParcelable(
             final SourceFileManipulator manipulator,
             final EntityMetadata classMeta) {
-        
+
         manipulator.regenerateMethod(
                 "writeToParcelRegen.java",
                 "writeToParcelRegen(Parcel dest, int flags) {",
                 this.dataModel);
-        
+
         manipulator.regenerateMethod(
                 "readFromParcel.java",
                 "readFromParcel(Parcel parc) {",
                 this.dataModel);
-        
+
         if (manipulator.addImplement(classMeta, "Parcelable")) {
             manipulator.addImport(
                     classMeta,
@@ -239,11 +255,11 @@ public class EntityImplementationAndroid implements IUpdaterFile {
             manipulator.generateMethod(
                     "writeToParcel.java",
                     this.dataModel);
-            
+
             manipulator.generateMethod(
 					"writeToParcel2.java",
 					this.dataModel);
-            
+
             manipulator.generateMethod(
                     "describeContents.java",
                     this.dataModel);
@@ -251,15 +267,15 @@ public class EntityImplementationAndroid implements IUpdaterFile {
             manipulator.generateMethod(
                     "parcelable.creator.java",
                     this.dataModel);
-            
+
             if (!(classMeta.getInheritance() != null
 					&& classMeta.getInheritance().getSuperclass() != null
 					&& classMeta.getInheritance().getSuperclass().hasBeenParsed())) {
 				manipulator.generateField(
-						"parcelParent.java", 
+						"parcelParent.java",
 						this.dataModel);
 			}
-            
+
             boolean hasDateTime = false;
 			for (FieldMetadata field : classMeta.getFields().values()) {
 				if (field.getHarmonyType().equalsIgnoreCase("DateTime")
@@ -275,7 +291,27 @@ public class EntityImplementationAndroid implements IUpdaterFile {
 			}
         }
     }
-    
+
+    /**
+     * Implement all methods needed by parcelable.
+     * @param fileString The string buffer representation of the file
+     * @param classMeta The classmetadata
+     */
+    private final void implementResource(
+            final SourceFileManipulator manipulator,
+            final EntityMetadata classMeta) {
+
+        if (this.entity.isResource()) {
+            if (manipulator.addImplement(classMeta, "Resource")) {
+                manipulator.addImport(
+                        classMeta,
+                        "Resource",
+                        this.adapter.getApplicationMetadata().getProjectNameSpace().replace("/", ".")
+                        + ".entity.base.Resource");
+            }
+        }
+    }
+
     /**
      * Implement an empty contructor if it doesn't already exists.
      * @param fileString The string buffer representing the file
@@ -289,6 +325,10 @@ public class EntityImplementationAndroid implements IUpdaterFile {
                     "defaultConstructor.java",
                     this.dataModel);
         }
+    }
+
+    private final void generateResourceField(SourceFileManipulator manipulator) {
+        ResourceCompletor.completeEntities();
     }
 
     @Override

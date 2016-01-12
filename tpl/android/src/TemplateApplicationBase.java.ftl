@@ -7,6 +7,8 @@
 <@header?interpret />
 package ${project_namespace};
 
+import org.joda.time.DateTime;
+
 import java.text.DateFormat;
 <#if (services?size > 0)>
 import java.util.ArrayList;
@@ -350,6 +352,10 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
      */
     public static DeviceType getDeviceType(android.content.Context context) {
         return DeviceType.fromValue(context.getString(R.string.device_type));
+    }
+
+    public static DateTime getDefaultLastSyncDate() {
+        return new DateTime().minusYears(10);
     }
 
     /**

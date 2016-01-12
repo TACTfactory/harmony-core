@@ -15,8 +15,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.platform.BaseAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 import freemarker.template.Configuration;
@@ -30,7 +32,7 @@ public class JavaFileManipulator extends SourceFileManipulator {
 
 	/**
 	 * Constructor.
-	 * 
+	 *
 	 * @param file The file to associate this buffer with.
 	 */
 	public JavaFileManipulator(
@@ -44,10 +46,10 @@ public class JavaFileManipulator extends SourceFileManipulator {
 	public boolean generateMethod(
 			final String templateName,
 			final Map<String, Object> model) {
-		
+
 		boolean result;
 		final int lastAccolade = this.buffer.lastIndexOf("}");
-		
+
 		try {
 			final StringWriter writer = new StringWriter();
 			final Template tpl = this.config.getTemplate(
@@ -74,14 +76,14 @@ public class JavaFileManipulator extends SourceFileManipulator {
 		if (!this.alreadyImplementsClass(classMeta, className)) {
 			ConsoleUtils.displayDebug("Add " + className + " implement");
 			final int firstAccolade = this.indexOf("{", false);
-			
+
 			// Class already implements an interface which is not the class
-			if (classMeta.getImplementTypes().size() > 0) { 
+			if (classMeta.getImplementTypes().size() > 0) {
 				this.buffer.insert(firstAccolade, ", " + className + " ");
 			} else {
-				this.buffer.insert(firstAccolade, 
+				this.buffer.insert(firstAccolade,
 						" implements " + className + " ");
-			}		
+			}
 			classMeta.getImplementTypes().add(className);
 			result = true;
 		} else {
@@ -94,7 +96,7 @@ public class JavaFileManipulator extends SourceFileManipulator {
 	public boolean addImport(ClassMetadata classMeta, String className,
 			String classPackage) {
 		boolean result;
-		
+
 		if (!this.alreadyImportsClass(classMeta, className)) {
 			ConsoleUtils.displayDebug("Add " + className + " import");
 			int insertPos;
@@ -106,22 +108,23 @@ public class JavaFileManipulator extends SourceFileManipulator {
 				prefix = "\n\n";
 			}
 			this.buffer.insert(
-					insertPos, 
+					insertPos,
 					prefix + "import " + classPackage + ";\n");
-			
+
 			classMeta.getImports().add(className);
 			result = true;
 		} else {
 			result = false;
 		}
-		
+
 		return result;
 	}
 
 	@Override
 	public boolean generateFieldAccessor(
 			final FieldMetadata f,
-			final String templateName) {
+			final String templateName,
+			EntityMetadata model) {
 		boolean result;
 
 		final int lastAccolade = this.buffer.lastIndexOf("}");
@@ -129,6 +132,7 @@ public class JavaFileManipulator extends SourceFileManipulator {
 		final Map<String, Object> map = new HashMap<String, Object>();
 		map.put("property", f.getName());
 		map.put("property_type", this.adapter.getNativeType(f));
+		map.put("entity_resource", model.isResource());
 
 		try {
 			final StringWriter writer = new StringWriter();
@@ -141,7 +145,7 @@ public class JavaFileManipulator extends SourceFileManipulator {
 
 			tpl.process(map, writer);
 			final StringBuffer getString = writer.getBuffer();
-			this.buffer.insert(lastAccolade, 
+			this.buffer.insert(lastAccolade,
 					getString.toString() + "\n");
 
 			result = true;
@@ -160,22 +164,22 @@ public class JavaFileManipulator extends SourceFileManipulator {
 			String templateName,
 			Map<String, Object> model) {
 		boolean result;
-		
+
 		final int firstAccolade = this.indexOf("{", false) + 1;
-		
+
 		try {
 			final StringWriter writer = new StringWriter();
-			
+
 			final Template tpl = this.config.getTemplate(
 					String.format("%s%s",
 							this.adapter.getTemplateSourceCommonPath(),
 							templateName + ".ftl"));
 			// Load template file in engine
-			
+
 			tpl.process(model, writer);
 			final StringBuffer getString = writer.getBuffer();
 			this.buffer.insert(firstAccolade, "\n\n" + getString);
-			
+
 			result = true;
 		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);
@@ -183,8 +187,8 @@ public class JavaFileManipulator extends SourceFileManipulator {
 		} catch (final TemplateException e) {
 			ConsoleUtils.displayError(e);
 			result = false;
-		}		
-		
+		}
+
 		return result;
 	}
 
@@ -198,27 +202,27 @@ public class JavaFileManipulator extends SourceFileManipulator {
 			final String templateName,
 			final String methodSignature,
 			final Map<String, Object> model) {
-		
+
 		boolean result;
-		
+
 		final int methodStart = this.indexOf(methodSignature, false);
-		
+
 		if (methodStart != -1) {
 			final int methodEnd = this.findClosingBracket(
 						methodStart + (methodSignature.lastIndexOf('{'))) + 2;
-			
+
 			final int realMethodStart = this.buffer.toString().lastIndexOf('}',
 					methodStart) + 2;
-			
+
 			try {
 				final StringWriter writer = new StringWriter();
-				
+
 				final Template tpl = this.config.getTemplate(
 						String.format("%s%s",
 								this.adapter.getTemplateSourceCommonPath(),
 								templateName + ".ftl"));
 				// Load template file in engine
-				
+
 				tpl.process(model, writer);
 				final StringBuffer getString = writer.getBuffer();
 				this.buffer.replace(
@@ -226,14 +230,14 @@ public class JavaFileManipulator extends SourceFileManipulator {
 						methodEnd,
 						"\n" + getString);
 				result = true;
-				
+
 			} catch (final IOException e) {
 				ConsoleUtils.displayError(e);
 				result = false;
 			} catch (final TemplateException e) {
 				ConsoleUtils.displayError(e);
 				result = false;
-			}		
+			}
 
 		} else {
 			result = this.generateMethod(templateName, model);
@@ -254,16 +258,16 @@ public class JavaFileManipulator extends SourceFileManipulator {
 			int tmpIndex;
 			do {
 				tmpIndex = this.buffer.indexOf(content, fIndex);
-				final int lastCommentClose = 
+				final int lastCommentClose =
 						this.buffer.lastIndexOf("*/", tmpIndex);
-				
-				final int lastCommentOpen = 
+
+				final int lastCommentOpen =
 						this.buffer.lastIndexOf("/*", tmpIndex);
-				
-				final int lastLineComment = 
+
+				final int lastLineComment =
 						this.buffer.lastIndexOf("//", tmpIndex);
-				
-				final int lastCarriotRet = 
+
+				final int lastCarriotRet =
 						this.buffer.lastIndexOf("\n", tmpIndex);
 				// If the last multi-line comment is close
 				// and if there is a carriot return
@@ -281,5 +285,25 @@ public class JavaFileManipulator extends SourceFileManipulator {
 
 		return index;
 	}
+
+    @Override
+    public boolean addField(IAdapter iAdapter, ClassMetadata classMeta, String className, FieldMetadata fieldMetadata) {
+        boolean result;
+        ConsoleUtils.displayDebug("Add " + className + " field");
+        final int firstField = this.indexOf("id;", false) + 3;
+
+        // Class already implements an interface which is not the class
+        if (fieldMetadata.getColumnDefinition() != null && !this.alreadyHasField(fieldMetadata.getName())) {
+            this.buffer.insert(firstField, String.format("\n\n    @Column(nullable = %s) \n    private %s %s;",
+                    fieldMetadata.isNullable(), iAdapter.getNativeType(fieldMetadata), fieldMetadata.getName()));
+        } else if (fieldMetadata.getColumnDefinition() == null && !this.alreadyHasField(fieldMetadata.getName())) {
+            this.buffer.insert(firstField, String.format("\n\n    private %s %s;",
+                    iAdapter.getNativeType(fieldMetadata), fieldMetadata.getName()));
+        }
+
+        classMeta.getFields().put(fieldMetadata.getName(), fieldMetadata);
+        result = true;
+        return result;
+    }
 
 }
