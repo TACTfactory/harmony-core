@@ -29,18 +29,24 @@
 
     <target name="test-all" depends="emma,clean,debug,install,test,test-report,monkey"/>
 
+    <target name="monkey-disable" depends="-setup">
+        <property name="monkey.enabled" value="false" />
+    </target>
+
     <target name="monkey" depends="-setup">
-        <echo level="info">Launch monkey on ${r"${tested.manifest.package}"}"</echo>
-        <exec executable="${r"${sdk.dir}"}/platform-tools/adb" failonerror="true">
-            <arg value="shell"/>
-            <arg value="monkey"/>
-            <arg value="-p"/>
-            <arg value="${r"${tested.manifest.package}"}"/>
-            <arg value="-v"/>
-            <arg value="${r"${monkey.numberevents}"}"/>
-            <arg value="-s"/>
-            <arg value="${r"${monkey.seed}"}"/>
-        </exec>
+        <if condition="${monkey.enabled}">
+            <echo level="info">Launch monkey on ${r"${tested.manifest.package}"}"</echo>
+            <exec executable="${r"${sdk.dir}"}/platform-tools/adb" failonerror="true">
+                <arg value="shell"/>
+                <arg value="monkey"/>
+                <arg value="-p"/>
+                <arg value="${r"${tested.manifest.package}"}"/>
+                <arg value="-v"/>
+                <arg value="${r"${monkey.numberevents}"}"/>
+                <arg value="-s"/>
+                <arg value="${r"${monkey.seed}"}"/>
+            </exec>
+        </if>
     </target>
 
     <target name="test"
@@ -98,7 +104,7 @@
 
                 <property name="emma.dump.file" value="${r"${device.out.dir}"}${r"${tested.project.app.package}"}/coverage.ec" />
 
-                <run-tests-helper emma.enabled="true">
+                <run-tests-helper-harmony emma.enabled="true">
                     <extra-instrument-args>
                         <arg value="-e" />
                         <arg value="coverageFile"/>
@@ -110,7 +116,7 @@
                         <arg value="reportFile"/>
                         <arg value="${r"${junit.report.file}"}"/>
                     </extra-instrument-args>
-                </run-tests-helper>
+                </run-tests-helper-harmony>
 
                 <echo level="info">Setting permission to download the coverage file...</echo>
 
@@ -172,7 +178,7 @@
                 <echo level="info">Saving the coverage reports in ${r"${out.absolute.dir}"}</echo>
             </then>
             <else>
-                <run-tests-helper>
+                <run-tests-helper-harmony>
                     <extra-instrument-args>
                         <arg value="-e"/>
                         <arg value="reportDir"/>
@@ -181,9 +187,31 @@
                         <arg value="reportFile"/>
                         <arg value="${r"${junit.report.file}"}"/>
                     </extra-instrument-args>
-                </run-tests-helper>
+                </run-tests-helper-harmony>
             </else>
         </if>
     </target>
+
+    <!-- Create new run-tests-helper to add failure capability for CI-->
+    <macrodef name="run-tests-helper-harmony">
+        <attribute name="emma.enabled" default="false" />
+        <element name="extra-instrument-args" optional="yes" />
+        <sequential>
+            <echo level="info">Running tests...</echo>
+            <exec executable="${adb}" failonerror="true">
+                <arg line="${adb.device.arg}" />
+                <arg value="shell" />
+                <arg value="am" />
+                <arg value="instrument" />
+                <arg value="-w" />
+                <arg value="-e" />
+                <arg value="coverage" />
+                <arg value="@{emma.enabled}" />
+                <extra-instrument-args />
+                <arg value="${project.app.package}/${test.runner}" />
+                <redirector outputproperty="tests.output" alwayslog="true" />
+            </exec>
+        </sequential>
+    </macrodef>
 
 </project>
