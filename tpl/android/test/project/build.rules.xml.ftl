@@ -34,7 +34,7 @@
     </target>
 
     <target name="monkey" depends="-setup">
-        <if condition="${monkey.enabled}">
+        <if condition="${r"${monkey.enabled}"}">
             <echo level="info">Launch monkey on ${r"${tested.manifest.package}"}"</echo>
             <exec executable="${r"${sdk.dir}"}/platform-tools/adb" failonerror="true">
                 <arg value="shell"/>
