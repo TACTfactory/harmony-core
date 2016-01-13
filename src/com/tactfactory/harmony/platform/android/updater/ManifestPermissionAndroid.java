@@ -8,23 +8,22 @@
  */
 package com.tactfactory.harmony.platform.android.updater;
 
+import com.tactfactory.harmony.generator.BaseGenerator;
 import com.tactfactory.harmony.generator.androidxml.ManifestUpdater;
-import com.tactfactory.harmony.platform.android.AndroidAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.updater.IUpdaterFile;
 
 public class ManifestPermissionAndroid implements IUpdaterFile {
 
-    private final AndroidAdapter adapter;
     private final String permission;
-    
-    public ManifestPermissionAndroid(AndroidAdapter adapter, String permission) {
-        this.adapter = adapter;
+
+    public ManifestPermissionAndroid(String permission) {
         this.permission = permission;
     }
-    
+
     @Override
-    public void execute() {
-        ManifestUpdater manifest = new ManifestUpdater(this.adapter);
+    public void execute(BaseGenerator<? extends IAdapter> generator) {
+        ManifestUpdater manifest = new ManifestUpdater(generator.getAdapter());
         manifest.addPermission(this.permission);
         manifest.save();
     }

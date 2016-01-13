@@ -10,16 +10,16 @@ import android.content.ContentProvider;
 import android.content.ContentProviderOperation;
 import android.content.ContentProviderResult;
 import android.content.ContentValues;
-
+import android.content.Context;
 import android.content.OperationApplicationException;
 import android.content.UriMatcher;
 import android.database.ContentObserver;
-
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-
+import android.os.Bundle;
 
 import ${project_namespace}.R;
+import ${project_namespace}.provider.${project_name?cap_first}Provider;
 <#list entities?values as entity>
     <#if (entity.fields?size > 0 || entity.inheritance??)>
 import ${project_namespace}.provider.${entity.name?cap_first}ProviderAdapter;
@@ -38,36 +38,35 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
     /** Uri not supported. */
     protected static String URI_NOT_SUPPORTED;
 
+    /** INITIALIZE_DATABASE. */
+    private static final String INITIALIZE_DATABASE = "INITIALIZE_DATABASE";
+
     /* Tools / Common. */
     /** ${project_namespace}.provider authority. */
-    public static String authority
-                = "${project_namespace}.provider";
+    public static String authority = "${project_namespace}.provider";
     /** URI Matcher. */
-    protected static UriMatcher uriMatcher =
-            new UriMatcher(UriMatcher.NO_MATCH);
+    protected static UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     /** List of all the provider adapters. */
     protected ArrayList<ProviderAdapterBase<?>> providerAdapters;
-    /**
-     * Database.
-     */
+
+    /** Database. */
     protected SQLiteDatabase db;
-    /**
-     * Is this provider currently in a batch operation ?
-     */
+
+    /** Is this provider currently in a batch operation ? */
     private boolean isBatch = false;
 
-    /**
-     * android.content.Context.
-     */
+    /** True if the adapters is already loaded. */
+    private boolean isAdaptersLoaded = false;
+
+    /** android.content.Context. */
     protected android.content.Context mContext;
-    
-    /** 
+
+    /**
      * Hashmap containing the uris to notify at the end of a batch and their
      * associated ContentObservers.
      */
-    protected Map<Uri, ContentObserver> urisToNotify = 
-            new HashMap<Uri, ContentObserver>();
+    protected Map<Uri, ContentObserver> urisToNotify = new HashMap<Uri, ContentObserver>();
 
     /**
      * Called when the contentProvider is first created.
@@ -78,31 +77,39 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
         boolean result = true;
 
         this.mContext = getContext();
-        URI_NOT_SUPPORTED = this.getContext().getString(
-                R.string.uri_not_supported);
+        URI_NOT_SUPPORTED = this.getContext().getString(R.string.uri_not_supported);
 
+        // Load adapters if database creation is not deferred
+        if (!${project_name?cap_first}Provider.CREATE_DATABASE_DEFERRED) {
+            this.loadAdapters();
+        }
+
+        return result;
+    }
+
+    /**
+     * Load all the adapters.
+     */
+    public void loadAdapters() {
         this.providerAdapters = new ArrayList<ProviderAdapterBase<?>>();
         <#assign firstGo = true />
         <#list entities?values as entity>
             <#if (entity.fields?size>0 || entity.inheritance??) >
                 <#if (firstGo)>
-        ${entity.name?cap_first}ProviderAdapter ${entity.name?uncap_first}ProviderAdapter =
-            new ${entity.name?cap_first}ProviderAdapter(this);
-        this.db = ${entity.name?uncap_first}ProviderAdapter.getDb();            
+        ${entity.name?cap_first}ProviderAdapter ${entity.name?uncap_first}ProviderAdapter = new ${entity.name?cap_first}ProviderAdapter(this);
+        this.db = ${entity.name?uncap_first}ProviderAdapter.getDb();
         this.providerAdapters.add(${entity.name?uncap_first}ProviderAdapter);
                     <#assign firstGo = false />
                 <#else>
-        this.providerAdapters.add(
-                new ${entity.name?cap_first}ProviderAdapter(this));
+        this.providerAdapters.add(new ${entity.name?cap_first}ProviderAdapter(this));
                 </#if>
                 <#if (entity.options.sync??)>
-        this.providerAdapters.add(
-                new ${entity.name?cap_first}SyncProviderAdapter(this));
+        this.providerAdapters.add(new ${entity.name?cap_first}SyncProviderAdapter(this));
                 </#if>
             </#if>
         </#list>
 
-        return result;
+        this.isAdaptersLoaded = true;
     }
 
     /**
@@ -114,7 +121,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
     public String getType(final Uri uri) {
         String result = null;
         boolean matched = false;
-        
+
         for (ProviderAdapterBase<?> adapter : this.providerAdapters) {
             if (adapter.match(uri)) {
                 result = adapter.getType(uri);
@@ -143,10 +150,11 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
         int result = 0;
         boolean matched = false;
         boolean alreadyInTransaction = this.db.inTransaction();
+
         if (!alreadyInTransaction) {
             this.db.beginTransaction();
         }
-        
+
         for (ProviderAdapterBase<?> adapter : this.providerAdapters) {
             if (adapter.match(uri)) {
                 result = adapter.delete(uri, selection, selectionArgs);
@@ -154,19 +162,19 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
                 break;
             }
         }
-        
+
         if (!alreadyInTransaction) {
             this.db.setTransactionSuccessful();
             this.db.endTransaction();
         }
-        
+
         if (!matched) {
             throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
         } else {
             if (result > 0) {
                 this.getContext().getContentResolver().notifyChange(uri, null);
             }
-            return result;        
+            return result;
         }
     }
 
@@ -181,10 +189,11 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
         Uri result = null;
         boolean matched = false;
         boolean alreadyInTransaction = this.db.inTransaction();
+
         if (!alreadyInTransaction) {
             this.db.beginTransaction();
         }
-        
+
         for (ProviderAdapterBase<?> adapter : this.providerAdapters) {
             if (adapter.match(uri)) {
                 result = adapter.insert(uri, values);
@@ -192,19 +201,20 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
                 break;
             }
         }
-        
+
         if (!alreadyInTransaction) {
             this.db.setTransactionSuccessful();
             this.db.endTransaction();
         }
-        
+
         if (!matched) {
             throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
         } else {
             if (result != null) {
                 this.getContext().getContentResolver().notifyChange(uri, null);
             }
-            return result;        
+
+            return result;
         }
     }
 
@@ -224,10 +234,11 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
         android.database.Cursor result = null;
         boolean matched = false;
         boolean alreadyInTransaction = this.db.inTransaction();
+
         if (!alreadyInTransaction) {
             this.db.beginTransaction();
         }
-        
+
         for (ProviderAdapterBase<?> adapter : this.providerAdapters) {
             if (adapter.match(uri)) {
                 result = adapter.query(uri,
@@ -240,16 +251,16 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
                 break;
             }
         }
-        
+
         if (!alreadyInTransaction) {
             this.db.setTransactionSuccessful();
             this.db.endTransaction();
         }
-        
+
         if (!matched) {
             throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
         } else {
-            return result;        
+            return result;
         }
     }
 
@@ -267,10 +278,11 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
         int result = 0;
         boolean matched = false;
         boolean alreadyInTransaction = this.db.inTransaction();
+
         if (!alreadyInTransaction) {
             this.db.beginTransaction();
         }
-        
+
         for (ProviderAdapterBase<?> adapter : this.providerAdapters) {
             if (adapter.match(uri)) {
                 result = adapter.update(uri,
@@ -282,19 +294,20 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
                 break;
             }
         }
-        
+
         if (!alreadyInTransaction) {
             this.db.setTransactionSuccessful();
             this.db.endTransaction();
         }
-        
+
         if (!matched) {
             throw new IllegalArgumentException(URI_NOT_SUPPORTED + uri);
         } else {
             if (result > 0) {
                 this.getContext().getContentResolver().notifyChange(uri, null);
             }
-            return result;        
+
+            return result;
         }
     }
 
@@ -330,11 +343,13 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
         ContentProviderResult[] result;
         this.isBatch = true;
         this.db.beginTransaction();
+
         try {
             result = super.applyBatch(operations);
             this.db.setTransactionSuccessful();
             this.db.endTransaction();
             this.isBatch = false;
+
             return result;
         } catch (OperationApplicationException e) {
             this.db.endTransaction();
@@ -344,11 +359,11 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
     }
 
     /**
-     * Ask the provider to notify an Uri. This method is useful 
+     * Ask the provider to notify an Uri. This method is useful
      * for not notifying the same Uri a lot of times when we're in case of a
      * batch. (It will delay all the uri changes notification at the end of the
      * batch.)
-     * 
+     *
      * @param uri The uri to notify
      * @param observer The observer that originated the change.
      */
@@ -358,6 +373,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
         if (this.isBatch) {
             if (!this.urisToNotify.containsKey(uri)) {
                 this.urisToNotify.put(uri, observer);
@@ -366,16 +382,15 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
             this.getContext().getContentResolver().notifyChange(uri, observer);
         }
     }
-    
+
     /**
      * Notify all stored uris in case we're in a batch.
      */
     protected void notifyAllUrisNow() {
         for (Uri uri : this.urisToNotify.keySet()) {
-            this.getContext().getContentResolver().notifyChange(
-                    uri,
-                    this.urisToNotify.get(uri));
+            this.getContext().getContentResolver().notifyChange(uri, this.urisToNotify.get(uri));
         }
+
         this.urisToNotify.clear();
     }
 
@@ -386,5 +401,30 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
      */
     public SQLiteDatabase getDatabase() {
         return this.db;
+    }
+
+    @Override
+    public Bundle call(String method, String arg, Bundle extras) {
+        Bundle result = null;
+
+        if (INITIALIZE_DATABASE.equals(method) && !isAdaptersLoaded) {
+            this.loadAdapters();
+        } else {
+            result = super.call(method, arg, extras);
+        }
+
+        return result;
+    }
+
+    /**
+     * Initialize the database.
+     * @param context {@link Context}
+     */
+    public static void initializeDatabase(Context context) {
+        context.getContentResolver().call(
+                ${project_name?cap_first}ProviderBase.generateUri(),
+                ${project_name?cap_first}ProviderBase.INITIALIZE_DATABASE,
+                null,
+                null);
     }
 }

@@ -8,49 +8,44 @@
  */
 package com.tactfactory.harmony.platform.android.updater;
 
+import com.tactfactory.harmony.generator.BaseGenerator;
 import com.tactfactory.harmony.generator.androidxml.ManifestUpdater;
 import com.tactfactory.harmony.generator.androidxml.manifest.ManifestActivity;
-import com.tactfactory.harmony.platform.android.AndroidAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.updater.IManifestActivity;
 
 public class ManifestActivityAndroid implements IManifestActivity {
 
-    private final AndroidAdapter adapter;
-    
     private String entity;
     private String entityPackage;
     private String activityName;
-    
+
     private ManifestActivity activity;
-    
-    public ManifestActivityAndroid(AndroidAdapter adapter, String entity,
-            String entityPackage, String activity) {
-        this.adapter = adapter;
+
+    public ManifestActivityAndroid(String entity, String entityPackage, String activity) {
         this.entity = entity;
         this.entityPackage = entityPackage;
         this.activityName = activity;
     }
-    
-    public ManifestActivityAndroid(AndroidAdapter adapter,
-            ManifestActivity activity) {
-        this.adapter = adapter;
+
+    public ManifestActivityAndroid(ManifestActivity activity) {
         this.activity = activity;
     }
-    
+
     @Override
-    public void execute() {
-        ManifestUpdater manifestUpdater = new ManifestUpdater(this.adapter);
-        
+    public void execute(BaseGenerator<? extends IAdapter> generator) {
+        ManifestUpdater manifestUpdater = new ManifestUpdater(generator.getAdapter());
+
         if (this.activity == null) {
             manifestUpdater.addActivity(
-                    this.adapter.getApplicationMetadata().getProjectNameSpace(),
+                    generator.getAdapter().getApplicationMetadata().getProjectNameSpace(),
                     this.activityName,
                     this.entity,
                     this.entityPackage);
         } else {
             manifestUpdater.addActivity(this.activity);
         }
-        
+
         manifestUpdater.save();
     }
 }

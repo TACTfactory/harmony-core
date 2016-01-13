@@ -19,8 +19,8 @@ import android.widget.DatePicker.OnDateChangedListener;
 /** CustomDatePickerDialog widget class.
  *  A simple AlertDialog containing an DatePicker.
  */
-public class CustomDatePickerDialog extends AlertDialog
-        implements OnDateChangedListener {
+public class CustomDatePickerDialog extends AlertDialog implements OnDateChangedListener {
+
     /** android.content.Context. */
     private android.content.Context ctx;
     /** datePicker. */
@@ -57,8 +57,7 @@ public class CustomDatePickerDialog extends AlertDialog
     public CustomDatePickerDialog(android.content.Context ctx, DateTime date, int titleId) {
         super(ctx);
 
-        this.initializeDatePickerDialog(
-                         ctx, date, ctx.getString(titleId), null, null);
+        this.initializeDatePickerDialog(ctx, date, ctx.getString(titleId), null, null);
     }
 
     /** Constructor.
@@ -86,8 +85,7 @@ public class CustomDatePickerDialog extends AlertDialog
                               final DateTime minDate, final DateTime maxDate) {
         super(ctx);
 
-        this.initializeDatePickerDialog(ctx, date,
-                                  ctx.getString(titleId), minDate, maxDate);
+        this.initializeDatePickerDialog(ctx, date, ctx.getString(titleId), minDate, maxDate);
     }
 
     /** DatePicker dialog initialisation.
@@ -116,16 +114,11 @@ public class CustomDatePickerDialog extends AlertDialog
         this.setIcon(0);
 
         LayoutInflater inflater = this.getLayoutInflater();
-        View alertDialogView = inflater.inflate(R.layout.dialog_date_picker,
-                                                null);
+        View alertDialogView = inflater.inflate(R.layout.dialog_date_picker, null);
         this.setView(alertDialogView);
 
-        this.datePicker = (DatePicker) alertDialogView.findViewById(
-                                                        R.id.dialog_pick_date);
-        this.datePicker.init(this.year,
-                            this.monthOfYear,
-                            this.dayOfMonth,
-                            this);
+        this.datePicker = (DatePicker) alertDialogView.findViewById(R.id.dialog_pick_date);
+        this.datePicker.init(this.year, this.monthOfYear, this.dayOfMonth, this);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
             if (this.minDate != null) {
@@ -133,55 +126,43 @@ public class CustomDatePickerDialog extends AlertDialog
             }
 
             if (this.maxDate != null) {
-                this.datePicker.setMinDate(this.maxDate.getMillis());
+                this.datePicker.setMaxDate(this.maxDate.getMillis());
             }
         }
 
         super.onCreate(savedInstanceState);
     }
 
-    /** Set a listener to be invoked when the positive button of the dialog is
-     * pressed.
+    /** Set a listener to be invoked when the positive button of the dialog is pressed.
      * @param text The text to display in the positive button
      * @param listener The DialogInterface.OnClickListener to use.
      */
-    public void setPositiveButton(CharSequence text,
-                                     DialogInterface.OnClickListener listener) {
+    public void setPositiveButton(CharSequence text, DialogInterface.OnClickListener listener) {
         this.setButton(AlertDialog.BUTTON_POSITIVE, text, listener);
     }
 
-    /** Set a listener to be invoked when the negative button of the dialog is
-     * pressed.
+    /** Set a listener to be invoked when the negative button of the dialog is pressed.
      * @param text The text to display in the negative button
      * @param listener The DialogInterface.OnClickListener to use.
      */
-    public void setNegativeButton(CharSequence text,
-                                     DialogInterface.OnClickListener listener) {
+    public void setNegativeButton(CharSequence text, DialogInterface.OnClickListener listener) {
         this.setButton(AlertDialog.BUTTON_NEGATIVE, text, listener);
     }
 
-    /** Set a listener to be invoked when the positive button of the dialog is
-     * pressed.
-     * @param textId The resource id of the text to display in the positive
-     * button
+    /** Set a listener to be invoked when the positive button of the dialog is pressed.
+     * @param textId The resource id of the text to display in the positive button
      * @param listener The DialogInterface.OnClickListener to use.
      */
-    public void setPositiveButton(int textId,
-                                     DialogInterface.OnClickListener listener) {
-        this.setButton(AlertDialog.BUTTON_POSITIVE, this.ctx.getString(textId),
-                                                                      listener);
+    public void setPositiveButton(int textId, DialogInterface.OnClickListener listener) {
+        this.setButton(AlertDialog.BUTTON_POSITIVE, this.ctx.getString(textId), listener);
     }
 
-    /** Set a listener to be invoked when the negative button of the dialog is
-     * pressed.
-     * @param textId The resource id of the text to display in the negative
-     * button
+    /** Set a listener to be invoked when the negative button of the dialog is pressed.
+     * @param textId The resource id of the text to display in the negative button
      * @param listener The DialogInterface.OnClickListener to use.
      */
-    public void setNegativeButton(int textId,
-                                     DialogInterface.OnClickListener listener) {
-        this.setButton(AlertDialog.BUTTON_NEGATIVE, this.ctx.getString(textId),
-                                                                      listener);
+    public void setNegativeButton(int textId, DialogInterface.OnClickListener listener) {
+        this.setButton(AlertDialog.BUTTON_NEGATIVE, this.ctx.getString(textId), listener);
     }
 
     /** Gets the DatePicker contained in this dialog.
@@ -192,26 +173,15 @@ public class CustomDatePickerDialog extends AlertDialog
     }
 
     @Override
-    public void onDateChanged(DatePicker view, int year,
-                                     int monthOfYear, int dayOfMonth) {
-        if (!(Build.VERSION.SDK_INT
-                >= Build.VERSION_CODES.HONEYCOMB)) {
-            DateTime newDate =
-                    new DateTime(year,
-                            monthOfYear + 1,
-                            dayOfMonth,
-                            0,
-                            0);
+    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+        if (!(Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB)) {
+            DateTime newDate = new DateTime(year, monthOfYear + 1, dayOfMonth, 0, 0);
 
             if (this.minDate != null && this.minDate.isAfter(newDate)) {
-                view.init(
-                        this.minDate.getYear(),
-                        this.minDate.getMonthOfYear() - 1,
+                view.init(this.minDate.getYear(), this.minDate.getMonthOfYear() - 1,
                         this.minDate.getDayOfMonth(), this);
             } else if (this.maxDate != null && this.maxDate.isBefore(newDate)) {
-                view.init(
-                        this.maxDate.getYear(),
-                        this.maxDate.getMonthOfYear() - 1,
+                view.init(this.maxDate.getYear(), this.maxDate.getMonthOfYear() - 1,
                         this.maxDate.getDayOfMonth(), this);
             } else {
                 view.init(year, monthOfYear, dayOfMonth, this);

@@ -123,16 +123,16 @@ public abstract class ConsoleUtils {
 	private static String makeString(final String title, final String value) {
 //TODO enable later	if (Strings.isNullOrEmpty(title))
 //			throw new RuntimeException("Title doesn't not null or empty !!");
-		
+
 		String resultString = title;
-		
+
 		if (value != null) {
 			resultString = String.format("%-32s %s", title, value);
 		}
-		
+
 		return resultString;
 	}
-	
+
 	/**
 	 * Display given String to the console.
 	 * (White color)
@@ -151,22 +151,22 @@ public abstract class ConsoleUtils {
 
 	public static void displaySummary(String title,
 			LinkedHashMap<String, String> commands) {
-		
+
 		displayLicence("\n> " + title.toUpperCase());
-		
+
 		for (String command : commands.keySet()) {
 			display(
 				String.format("\t%-32s => %s", command, commands.get(command)));
 
 		}
-		
+
 	}
 
 	public static void display(String title, String value) {
 		String display = makeString(title, value);
 		display(display);
 	}
-	
+
 	/**
 	 * Display given String to the console prefixed by [WARNING].
 	 * (Yellow color)
@@ -186,7 +186,7 @@ public abstract class ConsoleUtils {
 			}
 		}
 	}
-	
+
 	/**
 	 * Display given String to the console prefixed by [DEBUG].
 	 * (Blue color)
@@ -204,7 +204,7 @@ public abstract class ConsoleUtils {
 	public static void displayDebug(final String title, String value) {
 		if (!isQuiet && ConsoleUtils.isDebug()) {
 			String display = makeString(title, value);
-			
+
 			if (isAnsi) {
 				cp.println("[DEBUG]" + TAB + display,
 						Attribute.NONE,
@@ -240,10 +240,12 @@ public abstract class ConsoleUtils {
 			} else {
 				System.out.println(message);
 			}
+
+			System.out.println(value.getMessage());
 		}
 
 	}
-	
+
 	/**
 	 * Display given String to the console prefixed by [ERROR].
 	 * (Red color)
@@ -336,7 +338,7 @@ public abstract class ConsoleUtils {
 
 		try {
 			ProcessBuilder processBuilder = new ProcessBuilder(command);
-			
+
 			//processBuilder.redirectErrorStream(true);
 			if (commandPath != null) {
 				processBuilder =
@@ -376,7 +378,7 @@ public abstract class ConsoleUtils {
 	public static String getUserInput(final String promptMessage) {
 		return ConsoleUtils.getUserInput(promptMessage, true);
 	}
-	
+
 
 	/**
 	 * Generic user console prompt.
@@ -389,7 +391,7 @@ public abstract class ConsoleUtils {
 	public static String getUserInput(
 			final String promptMessage,
 			final boolean acceptBlank) {
-		
+
 		String input = null;
 		try {
 
@@ -403,7 +405,7 @@ public abstract class ConsoleUtils {
 				ConsoleUtils.display(promptMessage);
 				input = br.readLine();
 			} while (!acceptBlank && input.isEmpty());
-			
+
 		} catch (final IOException e) {
 			ConsoleUtils.displayError(e);
 		}
@@ -412,7 +414,7 @@ public abstract class ConsoleUtils {
 	}
 
 	/**
-	 * Generic user console prompt. 
+	 * Generic user console prompt.
 	 * Repeat the prompt until user input is valid.
 	 *
 	 * @param promptMessage message to display
@@ -423,17 +425,17 @@ public abstract class ConsoleUtils {
 			final String... validAnswers) {
 		boolean validAnswer = false;
 		String result = null;
-		
-		
+
+
 		while (!validAnswer) {
 			result = ConsoleUtils.getUserInput(promptMessage);
-			
+
 			for (String possibleAnswer : validAnswers) {
 				if (result.equals(possibleAnswer)) {
 					validAnswer = true;
 				}
 			}
-			
+
 			if (!validAnswer) {
 				ConsoleUtils.display("Invalid answer: " + result);
 			}
@@ -452,7 +454,7 @@ public abstract class ConsoleUtils {
 
 		/** Error thread. */
 		private final ErrorBridge error;
-		
+
 		/** Output thread. */
 		private final OutputBridge out;
 
@@ -553,7 +555,7 @@ public abstract class ConsoleUtils {
 				super.start();
 			}
 		}
-		
+
 		/** Error bridge thread. */
 		private static class ErrorBridge extends Thread {
 
@@ -569,7 +571,7 @@ public abstract class ConsoleUtils {
 			 */
 			public ErrorBridge(final Process proc) {
 				super();
-				
+
 				try {
 					this.processError =
 							new BufferedReader(
@@ -587,13 +589,12 @@ public abstract class ConsoleUtils {
 						if (!this.processError.ready()) {
 							Thread.sleep(SLEEP_TIME);
 						}
-						
+
 						if (this.processError.ready()) {
 							final String error = this.processError.readLine();
 							if (error != null && !error.isEmpty()
 									&& !error.startsWith("Note: checking out ")) {
-								if (("already exists in the index")
-										.contains(error)) {
+								if (error.contains("already exists in the index")) {
 									ConsoleUtils.displayWarning(error);
 								} else {
 									ConsoleUtils.displayError(

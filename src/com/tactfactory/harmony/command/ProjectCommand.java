@@ -233,7 +233,8 @@ public class ProjectCommand extends CommandBase {
 							ApplicationMetadata.getAndroidSdkPath());*/
 			ConsoleUtils.displayWarning("No SDK found at given path, please "
 					+ "launch command " + DependenciesCommand.INSTALL_SDK + " "
-					+ "to install Android SDK.");
+					+ "to install Android SDK, "
+					+ "or set environment variable ANDROID_HOME.");
 		} 
 		try {
 			if (new ProjectGenerator(this.adapterAndroid).makeProject()) {
@@ -561,6 +562,8 @@ public class ProjectCommand extends CommandBase {
 		} else
 
 		if (action.equals(UPDATE_DEPENDENCIES)) {
+		    HarmonyContext.initProjectAndroidSdkPath(this.getCommandArgs());
+
 			try {
 				new ProjectGenerator(this.adapterAndroid).updateDependencies();
 			} catch (Exception e) {

@@ -1,7 +1,6 @@
 package com.tactfactory.harmony.platform.ios;
 
 import java.util.List;
-import java.util.Map;
 
 import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
 import com.tactfactory.harmony.meta.EntityMetadata;
@@ -251,13 +250,6 @@ public class IosProjectAdapter implements IAdapterProject{
     }
 
     @Override
-    public List<IUpdater> getEntityFiles(EntityMetadata entity,
-            Configuration cfg, Map<String, Object> dataModel) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public List<IUpdater> updateEnum(EnumMetadata enumMeta, Configuration cfg) {
         // TODO Auto-generated method stub
         return null;
@@ -272,6 +264,18 @@ public class IosProjectAdapter implements IAdapterProject{
 
     @Override
     public List<IUpdater> updateHomeActivity(String activity, String buttonId) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<IUpdater> getEntityFiles(EntityMetadata entity) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public List<IUpdater> getEntityBaseFiles() {
         // TODO Auto-generated method stub
         return null;
     }

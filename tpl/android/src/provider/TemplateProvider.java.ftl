@@ -20,6 +20,9 @@ import android.net.Uri;
 public class ${project_name?cap_first}Provider
                 extends ${project_name?cap_first}ProviderBase {
 
+    /** Set to true if you want the database creation deferred. */
+    public static final boolean CREATE_DATABASE_DEFERRED = false;
+
     /**
      * Deletes matching tokens with the given URI.
      * @param uri URI

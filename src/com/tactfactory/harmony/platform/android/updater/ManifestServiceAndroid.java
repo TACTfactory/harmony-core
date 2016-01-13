@@ -8,32 +8,29 @@
  */
 package com.tactfactory.harmony.platform.android.updater;
 
+import com.tactfactory.harmony.generator.BaseGenerator;
 import com.tactfactory.harmony.generator.androidxml.ManifestUpdater;
-import com.tactfactory.harmony.platform.android.AndroidAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.updater.IUpdaterFile;
 
 public class ManifestServiceAndroid implements IUpdaterFile {
 
-    private final AndroidAdapter adapter;
     private final String name;
     private final String label;
-    
+
     /**
      * ManifestServiceAndroid updater to add a service to the android manifest.
-     * @param adapter {@link AndroidAdapter}
      * @param name Name of the service (with namespace)
      * @param label Label of the service
      */
-    public ManifestServiceAndroid(AndroidAdapter adapter,
-            String name, String label) {
-        this.adapter = adapter;
+    public ManifestServiceAndroid(String name, String label) {
         this.name = name;
         this.label = label;
     }
-    
+
     @Override
-    public void execute() {
-        ManifestUpdater manifest = new ManifestUpdater(this.adapter);
+    public void execute(BaseGenerator<? extends IAdapter> generator) {
+        ManifestUpdater manifest = new ManifestUpdater(generator.getAdapter());
         manifest.addService(this.name, this.label);
         manifest.save();
     }

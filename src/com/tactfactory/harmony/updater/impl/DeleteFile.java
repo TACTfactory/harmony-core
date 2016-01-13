@@ -8,11 +8,15 @@
  */
 package com.tactfactory.harmony.updater.impl;
 
+import java.io.File;
+
+import com.tactfactory.harmony.generator.BaseGenerator;
+import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.updater.IUpdater;
 
-/** 
+/**
  * Command of generator for delete file.
- * 
+ *
  * @author Erwan LeHuitouze <erwan.lehuitouze@tactfactory.com>
  * @author Mickael Gaillard <mickael.gaillard@tactfactory.com>
  */
@@ -22,7 +26,7 @@ public final class DeleteFile implements IUpdater {
 
     /**
      * Constructor of the command generator.
-     * 
+     *
      * @param path String path to delete.
      */
     public DeleteFile(String path) {
@@ -31,10 +35,19 @@ public final class DeleteFile implements IUpdater {
 
     /**
      * The path of the folder to create.
-     * 
+     *
      * @return String path of the folder.
      */
     public String getPath() {
         return path;
+    }
+
+    @Override
+    public void execute(BaseGenerator<? extends IAdapter> generator) {
+        File file = new File(this.getPath());
+
+        if (file.exists()) {
+            file.delete();
+        }
     }
 }

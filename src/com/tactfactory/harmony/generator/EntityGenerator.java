@@ -39,19 +39,35 @@ public class EntityGenerator extends BaseGenerator<IAdapter> {
 
 		Iterable<EntityMetadata> entities =
 		        this.getAppMetas().getEntities().values();
-		
+
 		for (final EntityMetadata entity : entities) {
 			if (!entity.isInternal()) {
 			    this.getDatamodel().put(
 	                    TagConstant.CURRENT_ENTITY,
 	                    entity.getName());
-			    
+
 				ConsoleUtils.display(">>> Decorate " + entity.getName());
-				
+
 				List<IUpdater> updaters = this.getAdapter().getAdapterProject()
-	                    .getEntityFiles(entity, this.getCfg(), this.getDatamodel());
+	                    .getEntityFiles(entity);
+
+				updaters.addAll(this.getAdapter().getAdapterProject().getEntityBaseFiles());
+
 				this.processUpdater(updaters);
 			}
 		}
 	}
+
+	   /**
+     * Implements serializable
+     * and add necessary getters and setters for all classes.
+     */
+    public final void generateAllBase() {
+        ConsoleUtils.display(">> Decorate Entity Base Files...");
+
+        List<IUpdater> updaters = this.getAdapter().getAdapterProject()
+                .getEntityBaseFiles();
+
+        this.processUpdater(updaters);
+    }
 }

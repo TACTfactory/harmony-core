@@ -12,8 +12,10 @@ import java.io.File;
 import java.util.Map;
 
 import com.tactfactory.harmony.meta.ClassMetadata;
+import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
 import com.tactfactory.harmony.platform.BaseAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 
 import freemarker.template.Configuration;
 
@@ -45,7 +47,7 @@ public class CsharpFileManipulator extends SourceFileManipulator {
     }
 
     @Override
-    public boolean generateFieldAccessor(FieldMetadata f, String templateName) {
+    public boolean generateFieldAccessor(FieldMetadata f, String templateName, EntityMetadata model) {
         // TODO Auto-generated method stub
         return false;
     }
@@ -73,6 +75,13 @@ public class CsharpFileManipulator extends SourceFileManipulator {
     protected int indexOf(String content, int fromIndex, boolean allowComments) {
         // TODO Auto-generated method stub
         return 0;
+    }
+
+    @Override
+    public boolean addField(IAdapter iAdapter, ClassMetadata classMeta, String className,
+            FieldMetadata fieldMetadata) {
+        // TODO Auto-generated method stub
+        return false;
     }
 
 }

@@ -282,6 +282,13 @@ public final class HarmonyContext {
     }
 
     /**
+     * @return Default detected Android SDK path
+     */
+    public static String getDefautlAndroidSdkPath() {
+        return defaultSDKPath;
+    }
+
+    /**
      * @param androidSdkVersion the androidSdkVersion to set
      */
     public static void setAndroidSdkVersion(final String androidSdkVersion) {
@@ -344,6 +351,8 @@ public final class HarmonyContext {
 
         if (result != null) {
             androidSdkVersion = setAndroidSdkPath(result);
+        } else {
+            result = ApplicationMetadata.getAndroidSdkPath();
         }
 
         return result;
@@ -390,8 +399,7 @@ public final class HarmonyContext {
      * 
      * @param arguments The console arguments passed by the user
      */
-    public static void initProjectAndroidSdkPath(
-            HashMap<String, String> arguments) {
+    public static void initProjectAndroidSdkPath(HashMap<String, String> arguments) {
         
         if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
             Questionnary questionnary = new Questionnary(arguments);

@@ -10,8 +10,6 @@ package com.tactfactory.harmony.command;
 
 import java.util.LinkedHashMap;
 
-import net.xeoh.plugins.base.annotations.PluginImplementation;
-
 import com.tactfactory.harmony.Console;
 import com.tactfactory.harmony.command.base.CommandBundleBase;
 import com.tactfactory.harmony.generator.FixtureGenerator;
@@ -24,6 +22,8 @@ import com.tactfactory.harmony.platform.android.AndroidAdapter;
 import com.tactfactory.harmony.platform.ios.IosAdapter;
 import com.tactfactory.harmony.platform.winphone.WinphoneAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
+
+import net.xeoh.plugins.base.annotations.PluginImplementation;
 
 /**
  * Fixture bundle command class.
@@ -178,7 +178,7 @@ public class FixtureCommand extends CommandBundleBase<BaseAdapter> {
 
 	}
 
-	@Override
+    @Override
     public void initBundleAdapter() {
         this.adapterMapping.put(
                 TargetPlatform.ANDROID,

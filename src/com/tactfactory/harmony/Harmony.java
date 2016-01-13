@@ -20,8 +20,10 @@ import net.xeoh.plugins.base.impl.PluginManagerFactory;
 import net.xeoh.plugins.base.util.JSPFProperties;
 import net.xeoh.plugins.base.util.PluginManagerUtil;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
+import org.eclipse.jgit.api.GitCommand;
 
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.command.GeneralCommand;
@@ -29,6 +31,7 @@ import com.tactfactory.harmony.command.base.Command;
 import com.tactfactory.harmony.exception.HarmonyException;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.utils.ConsoleUtils;
+import com.tactfactory.harmony.utils.GitUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
 /**
@@ -104,13 +107,13 @@ public final class Harmony {
 		// Filters
 		final IOFileFilter includeFilter =
 				FileFilterUtils.suffixFileFilter(".jar");
-		
+
 		final IOFileFilter excludeFilter = FileFilterUtils.and(
 		        FileFilterUtils.notFileFilter(
                         FileFilterUtils.nameFileFilter("lib")),
 				FileFilterUtils.notFileFilter(
 						FileFilterUtils.nameFileFilter("libs")));
-		
+
 		// Check list of Bundles .jar
 		final Collection<File> plugins = TactFileUtils.listFiles(
 				pluginBaseDirectory,
@@ -126,55 +129,55 @@ public final class Harmony {
 
     private void loadPlugin(File plugin, JSPFProperties props) {
         PluginManager pluginManager = null;
-        
+
         // TODO : clean plugin manager mechanic for folders
         pluginManager = PluginManagerFactory.createPluginManager(props);
-        
+
         // Load bundles
         ConsoleUtils.displayDebug("Load plugins : " + plugin.getName());
         pluginManager.addPluginsFrom(plugin.toURI());
-        
+
         // Template bundles
         final File bundleFolderFile =
                 plugin.getParentFile().getAbsoluteFile();
-        
+
         // Process extensions commands
         final PluginManagerUtil pmu = new PluginManagerUtil(pluginManager);
         final Collection<Command> commands = pmu.getPlugins(Command.class);
-        
+
         // Bootstrap all commands
         for (final Command command : commands) {
             this.bootstrap.put(command.getClass(), command);
-            this.commandBundleFolders.put(command.getClass(), 
+            this.commandBundleFolders.put(command.getClass(),
                     bundleFolderFile.getAbsolutePath());
         }
-        
+
         pluginManager.shutdown();
 	}
 
     private void loadTemplates(File plugin) {
         // Template bundles
         File templateFolderFile = plugin;
-        
+
         if (templateFolderFile.isFile()) {
             templateFolderFile = templateFolderFile.getParentFile();
         }
-        
+
         this.templateFolders.put(
                 plugin.getName(),
                 templateFolderFile.getAbsoluteFile());
-        
+
         ConsoleUtils.displayDebug(
                 "Load templates from : " + templateFolderFile);
     }
 
-	/** 
+	/**
 	 * Initialize Harmony.
 	 * @throws Exception if current working path is unavailable.
 	 */
 	public void initialize() throws Exception {
 		ConsoleUtils.display(
-				"Current Working Path: ", 
+				"Current Working Path: ",
 				new File(".").getCanonicalPath());
 
 		this.projectContext.detectProject();
@@ -184,15 +187,15 @@ public final class Harmony {
 		ConsoleUtils.display(
 				"Current Project : ",
 				ApplicationMetadata.INSTANCE.getName());
-		
+
 		ConsoleUtils.display(
 				"Current NameSpace : ",
 				ApplicationMetadata.INSTANCE.getProjectNameSpace());
-		
+
 		ConsoleUtils.display(
 				"Current Android SDK Path : ",
 				ApplicationMetadata.getAndroidSdkPath());
-		
+
 		ConsoleUtils.display(
 				"Current Android SDK Revision : ",
 				HarmonyContext.getAndroidSdkVersion());
@@ -214,12 +217,14 @@ public final class Harmony {
 		// Select Action and launch
 		for (final Command baseCommand : this.bootstrap.values()) {
 			if (baseCommand.isAvailableCommand(action)) {
-				harmonyContext.setCurrentBundleFolder(
-						this.commandBundleFolders.get(baseCommand.getClass())
-						+ "/");
-				
+			    String bundleFolder = this.commandBundleFolders.get(baseCommand.getClass());
+				harmonyContext.setCurrentBundleFolder(bundleFolder + "/");
+
 				baseCommand.registerAdapters(projectContext.getAdapters());
 				baseCommand.execute(action, args, option);
+
+				this.logBundleRevision(baseCommand);
+
 				isfindAction = true;
 			}
 		}
@@ -233,6 +238,13 @@ public final class Harmony {
 					null,
 					null);
 		}
+	}
+
+	private void logBundleRevision(Command command) {
+	    String version = getVersion(command.getClass());
+	    String revision = GitUtils.getRef(this.commandBundleFolders.get(command.getClass()));
+
+//	    FileUtils.write(new File(getProjectAndroidPath()), data, append);
 	}
 
 	/**
@@ -253,7 +265,7 @@ public final class Harmony {
 	public Collection<Command> getCommands() {
 		return this.bootstrap.values();
 	}
-	
+
 	public HarmonyContext getHarmonyContext() {
 	    return this.harmonyContext;
 	}
@@ -307,18 +319,18 @@ public final class Harmony {
 	public static String getBundlePath() {
 		return getInstance().harmonyContext.getBundlesPath();
 	}
-	
+
 	/**
 	 * Get library identified by given name.
 	 * @param libraryName The library name
 	 * @return The library file
-	 * @throws HarmonyException 
+	 * @throws HarmonyException
 	 */
 	public static File getLibrary(final String libraryName) {
 		File lib = getInstance().harmonyContext.getLibrary(libraryName);
 		return lib;
 	}
-	
+
 	/**
 	 * Get library license identified by given library name.
 	 * @param libraryName The library name
@@ -353,7 +365,7 @@ public final class Harmony {
 	public static String getCommandPath(Class<? extends Command> command) {
 		return getInstance().commandBundleFolders.get(command);
 	}
-	
+
 	/**
 	 * Get the templates path.
 	 * @return the template path
@@ -368,15 +380,19 @@ public final class Harmony {
 	public static Map<String, File> getTemplateFolders() {
 		return getInstance().templateFolders;
 	}
-	
-	private static String getVersion() {
-	    Package objPackage = Harmony.class.getPackage();
-	    String version = objPackage.getImplementationVersion();
-	    
-	    if (Strings.isNullOrEmpty(version)) {
-	        version = "DEVELOPPMENT";
-	    }
-	    
-	    return version;
-	}
+
+    private static String getVersion() {
+        return getVersion(Harmony.class);
+    }
+
+    private static String getVersion(Class<?> clas) {
+        Package objPackage = clas.getPackage();
+        String version = objPackage.getImplementationVersion();
+
+        if (Strings.isNullOrEmpty(version)) {
+            version = "DEVELOPPMENT";
+        }
+
+        return version;
+    }
 }

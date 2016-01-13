@@ -115,8 +115,8 @@ public final class SqliteAdapter {
 	 */
 	public static String generateColumnType(final FieldMetadata field) {
 		String type = field.getHarmonyType();
-		if (!Strings.isNullOrEmpty(field.getHarmonyType())) {
-			if (field.getHarmonyType().equals(Column.Type.ENUM.getValue())) {
+		if (!Strings.isNullOrEmpty(type)) {
+			if (type.equals(Column.Type.ENUM.getValue())) {
 				EnumMetadata enumMeta = 
 						ApplicationMetadata.INSTANCE.getEnums().get(
 								field.getEnumMeta().getTargetEnum());
@@ -124,40 +124,34 @@ public final class SqliteAdapter {
 				if (enumMeta != null) {
 				    type =	enumMeta.getType();
 				}
-			} else if (field.getHarmonyType().equals(Column.Type.RELATION.getValue())) {
-			    //TODO
-			    // field.getRelation().getEntityRef() & 
-			    //   ApplicationMetadata.INSTANCE.getEntities().get(
-                //      field.getRelation().getEntityRef().getName())
-			    // has a different object ref, check why
-			    EntityMetadata relatedEntity =
-			            ApplicationMetadata.INSTANCE.getEntities().get(
-			                    field.getRelation().getEntityRef().getName());
-			    
-			    field.getRelation().setEntityRef(relatedEntity);
-				ArrayList<FieldMetadata> ids = new ArrayList<FieldMetadata>(
-						relatedEntity.getIds().values());
-				
-				if (ids.size() > 0) {
-					type = SqliteAdapter.generateColumnType(ids.get(0));
-				} else {
-					StringBuilder warning = new StringBuilder();
-					warning.append("Erroneous relation between ");
-					warning.append(field.getOwner().getName());
-					warning.append(".");
-					warning.append(field.getName());
-					warning.append(" AND ");
-					warning.append(relatedEntity.getName());
-					warning.append(". Entity ");
-					warning.append(relatedEntity.getName());
-					warning.append(" must be an entity and declare an @Id.");
-					ConsoleUtils.displayWarning(warning.toString());
-					
-					field.getOwner().removeField(field);
-					
-					type = "BLOB";
-				}
-			}	
+			} else if (type.equals(Column.Type.RELATION.getValue())) {
+			    EntityMetadata relatedEntity = field.getRelation().getEntityRef();
+
+			    if (relatedEntity != null) {
+			    ArrayList<FieldMetadata> ids = new ArrayList<FieldMetadata>(
+	                        relatedEntity.getIds().values());
+
+	                if (ids.size() > 0) {
+	                    type = SqliteAdapter.generateColumnType(ids.get(0));
+	                } else {
+	                    StringBuilder warning = new StringBuilder();
+	                    warning.append("Erroneous relation between ");
+	                    warning.append(field.getOwner().getName());
+	                    warning.append(".");
+	                    warning.append(field.getName());
+	                    warning.append(" AND ");
+	                    warning.append(relatedEntity.getName());
+	                    warning.append(". Entity ");
+	                    warning.append(relatedEntity.getName());
+	                    warning.append(" must be an entity and declare an @Id.");
+	                    ConsoleUtils.displayWarning(warning.toString());
+	                    
+	                    field.getOwner().removeField(field);
+	                    
+	                    type = "BLOB";
+	                }
+                }
+			}
 		}
 		
 		if (type.equalsIgnoreCase(Column.Type.STRING.getValue())

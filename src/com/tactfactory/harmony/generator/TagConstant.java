@@ -55,6 +55,8 @@ public abstract class TagConstant {
 	public static final String CLASSES = "classes";
 	/** Constant for entities. */
 	public static final String ENTITIES = "entities";
+    /** Constant for entities. */
+    public static final String RESOURCE = "resource";
 	/** Constant for enums. */
 	public static final String ENUMS = "enums";
 	/** Constant for enum. */
