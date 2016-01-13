@@ -35,17 +35,19 @@
 
     <target name="monkey" depends="-setup">
         <if condition="${r"${monkey.enabled}"}">
-            <echo level="info">Launch monkey on ${r"${tested.manifest.package}"}"</echo>
-            <exec executable="${r"${sdk.dir}"}/platform-tools/adb" failonerror="true">
-                <arg value="shell"/>
-                <arg value="monkey"/>
-                <arg value="-p"/>
-                <arg value="${r"${tested.manifest.package}"}"/>
-                <arg value="-v"/>
-                <arg value="${r"${monkey.numberevents}"}"/>
-                <arg value="-s"/>
-                <arg value="${r"${monkey.seed}"}"/>
-            </exec>
+            <then>
+                <echo level="info">Launch monkey on ${r"${tested.manifest.package}"}"</echo>
+                <exec executable="${r"${sdk.dir}"}/platform-tools/adb" failonerror="true">
+                    <arg value="shell"/>
+                    <arg value="monkey"/>
+                    <arg value="-p"/>
+                    <arg value="${r"${tested.manifest.package}"}"/>
+                    <arg value="-v"/>
+                    <arg value="${r"${monkey.numberevents}"}"/>
+                    <arg value="-s"/>
+                    <arg value="${r"${monkey.seed}"}"/>
+                </exec>
+            </then>
         </if>
     </target>
 
