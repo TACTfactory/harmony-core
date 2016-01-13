@@ -198,8 +198,8 @@
         <element name="extra-instrument-args" optional="yes" />
         <sequential>
             <echo level="info">Running tests...</echo>
-            <exec executable="${adb}" failonerror="true">
-                <arg line="${adb.device.arg}" />
+            <exec executable="${r"${adb}"}" failonerror="true">
+                <arg line="${r"${adb.device.arg}"}" />
                 <arg value="shell" />
                 <arg value="am" />
                 <arg value="instrument" />
@@ -208,7 +208,7 @@
                 <arg value="coverage" />
                 <arg value="@{emma.enabled}" />
                 <extra-instrument-args />
-                <arg value="${project.app.package}/${test.runner}" />
+                <arg value="${r"${project.app.package}"}/${r"${test.runner}"}" />
                 <redirector outputproperty="tests.output" alwayslog="true" />
             </exec>
         </sequential>
