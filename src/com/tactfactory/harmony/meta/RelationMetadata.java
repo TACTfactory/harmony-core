@@ -42,7 +42,10 @@ public final class RelationMetadata extends BaseMetadata {
 	/** List of orderBys of entity. */
 	private Map<String, String> orders =
 			new LinkedHashMap<String, String>();
-	
+
+	/** Relation isResource. */
+	private boolean resource;
+
 	/**
 	 * Transform the relation to a field of map of strings.
 	 * @param adapter The adapter to use.
@@ -54,7 +57,7 @@ public final class RelationMetadata extends BaseMetadata {
 		model.put(TagConstant.NAME, this.getName());
 		model.put(TagConstant.TYPE, this.type);
 		model.put(TagConstant.ENTITY_REF, this.entityRef.getName());
-		model.put(TagConstant.FIELD_REF, 
+		model.put(TagConstant.FIELD_REF,
 				this.toFieldArray(this.entityRef.getIds().values(), adapter));
 		if (this.inversedBy != null) {
 			model.put("inversedBy", this.inversedBy.getName());
@@ -63,6 +66,7 @@ public final class RelationMetadata extends BaseMetadata {
 			model.put("mappedBy", this.mappedBy.getName());
 		}
 		model.put("joinTable", this.joinTable);
+		model.put(TagConstant.RESOURCE, this.entityRef.isResource());
 		model.put(TagConstant.ORDERS, this.orders);
 
 		return model;
@@ -151,7 +155,7 @@ public final class RelationMetadata extends BaseMetadata {
 	public final void setJoinTable(final String joinTable) {
 		this.joinTable = joinTable;
 	}
-	
+
 
 	/**
 	 * Add an order constraint to this entity.
@@ -161,7 +165,7 @@ public final class RelationMetadata extends BaseMetadata {
 	public void addOrder(String columnName, String order) {
 		this.orders.put(columnName, order);
 	}
-	
+
 	/**
 	 * Build a map from a collection of fields.
 	 * @param c The collection of fields

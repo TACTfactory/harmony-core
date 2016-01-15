@@ -64,6 +64,10 @@ import ${project_namespace}.criterias.base.Criterion.Type;
 import ${project_namespace}.criterias.base.CriteriaExpression.GroupType;
 import ${project_namespace}.criterias.base.value.SelectValue;
 </#if>
+    <#list (curr.relations) as relation><#if relation.relation.resource >
+import ${project_namespace}.provider.contract.ResourceContract;
+</#if></#list>
+
 <#if (InheritanceUtils.isExtended(curr))>
 import ${project_namespace}.harmony.util.DatabaseUtil;
 </#if>
@@ -251,10 +255,11 @@ public abstract class ${curr.name}SQLiteAdapterBase
         <#assign fieldNames = ContractUtils.getFieldsNames(relation) />
         <#list fieldNames as fieldName>
         <#assign refId = relation.relation.field_ref[fieldName_index] />
+        <#if (relation.relation.resource)><#assign idCol = "ResourceContract.COL_ID" /><#else><#assign idCol = ContractUtils.getFieldsNames(refId)[0] /></#if>
         <#if (lastRelation??)>${lastRelation},"</#if>
             <#assign lastRelation=" + \"FOREIGN KEY(\" + ${fieldName}"
             + " + \") REFERENCES \" \n             + "
-            + "${ContractUtils.getContractTableName(entities[relation.relation.targetEntity])} \n                + \" (\" + ${ContractUtils.getFieldsNames(refId)[0]} + \")">
+            + "${ContractUtils.getContractTableName(entities[relation.relation.targetEntity])} \n                + \" (\" + ${idCol} + \")">
         </#list>
         </#if>
     </#list>
