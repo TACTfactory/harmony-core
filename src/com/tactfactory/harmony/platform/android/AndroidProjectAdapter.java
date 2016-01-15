@@ -203,11 +203,6 @@ public class AndroidProjectAdapter implements IAdapterProject {
                 false));
 
         result.add(new SourceFile(
-                templatePath + "ImageUtils.java",
-                filePath + "ImageUtils.java",
-                false));
-
-        result.add(new SourceFile(
                 templatePath + "DatabaseUtil.java",
                 filePath + "DatabaseUtil.java",
                 false));
@@ -454,6 +449,9 @@ public class AndroidProjectAdapter implements IAdapterProject {
         libraries.add("guava-12.0.jar");
         libraries.add("jsr305.jar");
         libraries.add("core-annotations.jar");
+
+        // TODO add only if an entity has @EntityResource annotation
+        libraries.add("universal-image-loader-1.8.6-with-sources.jar");
 
         result.addAll(this.adapter.getLibrariesCopyFile(libraries));
 
