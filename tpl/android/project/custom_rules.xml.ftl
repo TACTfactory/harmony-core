@@ -1,6 +1,6 @@
 <#-- Refer to documentation for change https://support.tactfactory.com/projects/harmony/wiki/Metadata_Map -->
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="${project_name}" default="help">
+<project name="${project_name}-custom" default="help">
     <import file="build.rules.xml"/>
 
     <!-- Load keystore params for release mode -->
