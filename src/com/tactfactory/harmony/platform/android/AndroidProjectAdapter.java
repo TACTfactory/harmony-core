@@ -471,7 +471,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
         result.add(new UpdateLibraryAndroid(
                 this.adapter.getApplicationMetadata().getName() + "-appcompat-v7",
                 appCompatPath,
-                "android-21",
+                "android-23",
                 appCompatPath,
                 true));
 
