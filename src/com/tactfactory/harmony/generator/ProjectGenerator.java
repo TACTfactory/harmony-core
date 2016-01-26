@@ -80,7 +80,7 @@ public class ProjectGenerator extends BaseGenerator<IAdapter> {
         this.processUpdater(libraries);
 
         //remove unused files in library.
-        List<IUpdater> librariesFiles = this.getAdapter().getAdapterProject().getLibrariesFiles();
+        List<IUpdater> librariesFiles = this.getAdapter().getAdapterProject().getFilesToDelete();
         this.processUpdater(librariesFiles);
 
         // Make Test project

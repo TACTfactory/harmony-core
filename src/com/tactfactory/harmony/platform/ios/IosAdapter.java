@@ -34,10 +34,10 @@ public class IosAdapter extends BaseAdapter {
 
     /** Constant for java extension. */
     private static final String HEADER_EXTENSION = "h";
-    
+
     /** Constant for java extension. */
     private static final String METHOD_EXTENSION = "m";
-    
+
     /** Constant for package keyword. */
     private static final String IMPORT = "#import";
 
@@ -49,21 +49,21 @@ public class IosAdapter extends BaseAdapter {
 
     /** DateTime type. */
     private static final String DATETIME = "DateTime";
+
     /**
      * Constructor.
      */
     public IosAdapter()  {
         super();
-        
+
         this.setProject("project");
         this.setPlatform("ios");
         this.setResource("res");
-        this.setTest("test");
         this.setSource("src");
+        this.setLibs("libs");
+        this.setTest("test");
         this.setUtilityPath("ftl_methods");
-
     }
-
 
     @Override
     public String getNameSpace(final ClassMetadata cm, final String type) {
@@ -80,14 +80,13 @@ public class IosAdapter extends BaseAdapter {
                 cm.getName().toLowerCase());
     }
 
-
     @Override
     public String getNativeType(final FieldMetadata field) {
         String ret = field.getHarmonyType();
         if (ret.equals(Column.Type.ENUM.getValue())) {
             ret = field.getEnumMeta().getTargetEnum();
         } else
-            
+
         if (ret.equals(Column.Type.RELATION.getValue())) {
             if (field.getRelation().getType().endsWith("ToMany")) {
                 ret = String.format("ArrayList<%s>",
@@ -96,7 +95,7 @@ public class IosAdapter extends BaseAdapter {
                 ret = field.getRelation().getEntityRef().getName();
             }
         } else
-            
+
         if (ret.equals(Column.Type.STRING.getValue())) {
             ret = STR;
         } else
@@ -164,7 +163,7 @@ public class IosAdapter extends BaseAdapter {
                 ret = "Integer";
             }
         } else
-        
+
         if (ret.equals(Column.Type.CHAR.getValue())) {
 
             if (field.isPrimitive()) {
@@ -173,7 +172,7 @@ public class IosAdapter extends BaseAdapter {
                 ret = "Character";
             }
         } else
-            
+
         if (ret.equals(Column.Type.FLOAT.getValue())) {
             if (field.isPrimitive()) {
                 ret = "float";
@@ -181,7 +180,7 @@ public class IosAdapter extends BaseAdapter {
                 ret = "Float";
             }
         }
-        
+
         if (ret.equals(Column.Type.DOUBLE.getValue())) {
             if (field.isPrimitive()) {
                 ret = "double";
@@ -189,7 +188,7 @@ public class IosAdapter extends BaseAdapter {
                 ret = "Double";
             }
         } else
-            
+
         if (ret.equals(Column.Type.LONG.getValue())) {
             if (field.isPrimitive()) {
                 ret = "long";
@@ -197,7 +196,7 @@ public class IosAdapter extends BaseAdapter {
                 ret = "Long";
             }
         }
-        
+
         if (ret.equals(Column.Type.BOOLEAN.getValue())) {
             if (field.isPrimitive()) {
                 ret = "boolean";
@@ -208,12 +207,10 @@ public class IosAdapter extends BaseAdapter {
         return ret;
     }
 
-
     @Override
     public void resizeImage() {
         throw new NotImplementedException(NOT_IMPLEMENTED_MESSAGE);
     }
-
 
     @Override
     public boolean filesEqual(String oldContent,
@@ -221,15 +218,15 @@ public class IosAdapter extends BaseAdapter {
             String fileName,
             boolean ignoreHeader) {
         boolean result = false;
-        
-        if (ignoreHeader && (fileName.endsWith(HEADER_EXTENSION) 
+
+        if (ignoreHeader && (fileName.endsWith(HEADER_EXTENSION)
                 || (fileName.endsWith(METHOD_EXTENSION)))) {
             oldContent = oldContent.substring(
                     Math.max(oldContent.indexOf(IMPORT), 0));
             newContent = newContent.substring(
                     Math.max(newContent.indexOf(IMPORT), 0));
         }
-        
+
         result = oldContent.equals(newContent);
         return result;
     }
@@ -244,8 +241,8 @@ public class IosAdapter extends BaseAdapter {
     @Override
     public List<String> getDirectoryForResources() {
         List<String> result = new ArrayList<String>();
-        
-        
+
+
         return result;
     }
 
@@ -253,7 +250,6 @@ public class IosAdapter extends BaseAdapter {
     public IAdapterProject getAdapterProject() {
         return this.adapterProject;
     }
-
 
     @Override
     public String getSourceEntityPath() {
@@ -274,6 +270,10 @@ public class IosAdapter extends BaseAdapter {
                 "common");
     }
 
+    /**
+     * Get the harmony template utils path.
+     * @return The harmony template utils path
+     */
     public String getTemplateSourceHarmonyUtilsPath() {
         return String.format("%s%s/%s/%s/",
                 Harmony.getTemplatesPath(),
@@ -282,6 +282,10 @@ public class IosAdapter extends BaseAdapter {
                 "harmony/utils");
     }
 
+    /**
+     * Get the harmony template sql adapter path.
+     * @return The harmony template sql adapter path
+     */
     public String getTemplateSourceHarmonySqlPath() {
         return String.format("%s%s/%s/%s/",
                 Harmony.getTemplatesPath(),
@@ -290,6 +294,10 @@ public class IosAdapter extends BaseAdapter {
                 "harmony/sql");
     }
 
+    /**
+     * Get the libraries path.
+     * @return The libraries path
+     */
     public String getTemplateSourceTestPath() {
         return String.format("%s%s/%s/%s/",
                 Harmony.getTemplatesPath(),
@@ -298,24 +306,56 @@ public class IosAdapter extends BaseAdapter {
                 "test");
     }
 
+    /**
+     * Get the harmony path.
+     * @return The harmony path
+     */
     public String getSourceHarmonyPath() {
         return String.format("%s/%s/",
                 this.getSourcePath(),
                 "Harmony");
     }
 
+    /**
+     * Get the data path.
+     * @return The data path
+     */
     public String getSourceDataPath() {
         return String.format("%s/%s/",
                 this.getSourcePath(),
                 "Data");
     }
 
+    /**
+     * Get the provider path.
+     * @return The provider path
+     */
     public String getSourceProviderPath() {
         return String.format("%s/%s/",
                 this.getSourcePath(),
                 "Provider");
     }
-    
+
+    /**
+     * Get the libraries path.
+     * @return The libraries path
+     */
+    public String getSourceLibsPath() {
+        return String.format("%s/%s/",
+                this.getSourcePath(),
+                "libs");
+    }
+
+    /**
+     * Get the frameworks path.
+     * @return The frameworks path
+     */
+    public String getSourceFrameworksPath() {
+        return String.format("%s/%s/",
+                this.getSourcePath(),
+                "Frameworks");
+    }
+
     @Override
     public String getSourcePath() {
         return String.format("%s%s/%s/",
@@ -324,14 +364,10 @@ public class IosAdapter extends BaseAdapter {
                 this.getApplicationMetadata().getName().toLowerCase());
     }
 
-    @Override
-    public String getTestPath() {
-        return String.format("%s%s/%sTests/",
-                Harmony.getProjectPath(),
-                this.getPlatform(),
-                this.getApplicationMetadata().getName().toLowerCase());
-    }
-
+    /**
+     * Get the test path.
+     * @return The test path
+     */
     public String getSourceTestPath() {
         return String.format("%s/%s/",
                 this.getSourcePath(),

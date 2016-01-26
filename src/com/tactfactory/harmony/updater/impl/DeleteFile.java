@@ -50,12 +50,14 @@ public final class DeleteFile implements IUpdater {
         File file = new File(this.getPath());
 
         if (file.exists()) {
-            if (!file.delete()) {
+            if (file.isDirectory()) {
                 try {
                     FileUtils.deleteDirectory(file);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            } else {
+                file.delete();
             }
         }
     }

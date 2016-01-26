@@ -1572,7 +1572,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
     }
 
     @Override
-    public List<IUpdater> getLibrariesFiles() {
+    public List<IUpdater> getFilesToDelete() {
         // TODO Auto-generated method stub
         return null;
     }

@@ -14,6 +14,7 @@ import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.updater.IUpdater;
+import com.tactfactory.harmony.updater.impl.DeleteFile;
 import com.tactfactory.harmony.updater.old.IConfigFileUtil;
 import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
 
@@ -25,7 +26,11 @@ public interface IAdapterProject {
     List<IUpdater> getProjectFiles();
     List<IUpdater> getStartViewFiles();
     List<IUpdater> getLibraries();
-    List<IUpdater> getLibrariesFiles();
+    /**
+     * Get all files to clean after init.
+     * @return List of {@link DeleteFile} updaters
+     */
+    List<IUpdater> getFilesToDelete();
     List<IUpdater> getCreateFolders();
 
     //Used by SqlGenerator
