@@ -25,6 +25,7 @@ public interface IAdapterProject {
     List<IUpdater> getProjectFiles();
     List<IUpdater> getStartViewFiles();
     List<IUpdater> getLibraries();
+    List<IUpdater> getLibrariesFiles();
     List<IUpdater> getCreateFolders();
 
     //Used by SqlGenerator

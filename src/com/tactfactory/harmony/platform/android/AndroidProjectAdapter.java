@@ -1570,4 +1570,10 @@ public class AndroidProjectAdapter implements IAdapterProject {
 
         return result;
     }
+
+    @Override
+    public List<IUpdater> getLibrariesFiles() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }
