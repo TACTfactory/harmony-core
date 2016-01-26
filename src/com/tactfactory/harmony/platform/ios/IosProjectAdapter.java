@@ -1,5 +1,6 @@
 package com.tactfactory.harmony.platform.ios;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
@@ -270,12 +271,16 @@ public class IosProjectAdapter implements IAdapterProject{
 
     @Override
     public List<IUpdater> getEntityFiles(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+        return new ArrayList<IUpdater>();
     }
 
     @Override
     public List<IUpdater> getEntityBaseFiles() {
+        return new ArrayList<IUpdater>();
+    }
+
+    @Override
+    public List<IUpdater> getLibrariesFiles() {
         // TODO Auto-generated method stub
         return null;
     }
