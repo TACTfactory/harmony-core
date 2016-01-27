@@ -8,6 +8,7 @@
  */
 package com.tactfactory.harmony.command;
 
+import java.io.File;
 import java.util.LinkedHashMap;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -173,13 +174,13 @@ public class ProjectCommand extends CommandBase {
 			while (!this.userHasConfirmed) {
 				ConsoleUtils.display(">> Project Parameters");
 
-				
+
 				ProjectContext.promptProjectName(
 						this.getCommandArgs());
-				
+
 				ProjectContext.promptProjectNameSpace(
 						this.getCommandArgs());
-				
+
 				HarmonyContext.initProjectAndroidSdkPath(
 						this.getCommandArgs());
 
@@ -226,7 +227,7 @@ public class ProjectCommand extends CommandBase {
 		boolean result = false;
 
 		boolean androidSDKExists = AndroidSDKManager.checkIfAndroidSDKExists(
-				ApplicationMetadata.getAndroidSdkPath()); 
+				ApplicationMetadata.getAndroidSdkPath());
 		if (!androidSDKExists) {
 			/*AndroidSDKManager sdkManager = new AndroidSDKManager();
 			androidSDKExists = sdkManager.installSDKTo(AndroidSDKManager.LINUX,
@@ -235,7 +236,7 @@ public class ProjectCommand extends CommandBase {
 					+ "launch command " + DependenciesCommand.INSTALL_SDK + " "
 					+ "to install Android SDK, "
 					+ "or set environment variable ANDROID_HOME.");
-		} 
+		}
 		try {
 			if (new ProjectGenerator(this.adapterAndroid).makeProject()) {
 				ConsoleUtils.displayDebug("Init Android Project Success!");
@@ -251,7 +252,7 @@ public class ProjectCommand extends CommandBase {
 		} catch (final Exception e) {
 			ConsoleUtils.displayError(e);
 		}
-		
+
 		return result;
 	}
 
@@ -264,6 +265,11 @@ public class ProjectCommand extends CommandBase {
 
 		this.initProjectParam();
 		boolean result = false;
+
+		// Temporary HACK, user need to create ios folder in app to generate an ios project.
+		if (!new File(Harmony.getProjectPath(), "ios").exists()) {
+		    return result;
+		}
 
 		try {
 			if (new ProjectGenerator(this.adapterIOS).makeProject()) {
@@ -322,10 +328,10 @@ public class ProjectCommand extends CommandBase {
 				ConsoleUtils.displayDebug("Init WinPhone Project Success!");
 				Harmony.getInstance().getProjectContext()
                     .addAdapter(TargetPlatform.WINPHONE, this.adapterWinPhone);
-				
+
 				new ApplicationGenerator(this.adapterWinPhone)
 						.generateApplication();
-				
+
 				result = true;
 			} else {
 				ConsoleUtils.displayError("Init WinPhone Project Fail!");
@@ -483,27 +489,27 @@ public class ProjectCommand extends CommandBase {
 
 	@Override
 	public final void summary() {
-		final LinkedHashMap<String, String> commands = 
+		final LinkedHashMap<String, String> commands =
 		        new LinkedHashMap<String, String>();
-		
+
 		// Init
 		commands.put(INIT_ANDROID, "Init Google Android project directory");
 //		commands.put(INIT_IOS, "Init Apple IOS project directory");
 //		commands.put(INIT_RIM, "Init BlackBerry project directory");
 		commands.put(INIT_WINPHONE, "Init Windows Phone project directory");
 		commands.put(INIT_ALL, "Init All project directories");
-		
+
 		// Remove
 		commands.put(REMOVE_ANDROID, "Remove Google Android project directory");
 //		commands.put(REMOVE_IOS, "Remove Apple IOS project directory");
 //		commands.put(REMOVE_RIM, "Remove BlackBerry project directory");
 		commands.put(REMOVE_WINPHONE, "Remove Windows Phone project directory");
 		commands.put(REMOVE_ALL, "Remove All project directories");
-		
+
 		// Update
 		commands.put(UPDATE_SDK, "Update the SDK Path");
 		commands.put(UPDATE_DEPENDENCIES, "Update the dependencies from an existing project");
-		
+
 		ConsoleUtils.displaySummary(
 				BUNDLE,
 				commands);

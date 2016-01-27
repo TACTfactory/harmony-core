@@ -9,10 +9,14 @@
 package com.tactfactory.harmony.updater.impl;
 
 import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
 
 import com.tactfactory.harmony.generator.BaseGenerator;
 import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.updater.IUpdater;
+import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
  * Command of generator for delete file.
@@ -47,7 +51,15 @@ public final class DeleteFile implements IUpdater {
         File file = new File(this.getPath());
 
         if (file.exists()) {
-            file.delete();
+            if (file.isDirectory()) {
+                try {
+                    FileUtils.deleteDirectory(file);
+                } catch (IOException e) {
+                    ConsoleUtils.displayError(e);
+                }
+            } else {
+                file.delete();
+            }
         }
     }
 }

@@ -40,19 +40,20 @@ public class TranslationGenerator extends BaseGenerator<IAdapter> {
 		ITranslateFileUtil translateUtil =
 		        this.getAdapter().getAdapterProject().getTranslateFileUtil();
 		
-		translateUtil.open(this.getAdapter().getStringsPathFile());
-		
-		for (final TranslationMetadata translationMeta
-				: this.getAppMetas().getTranslates().values()) {
-		    String addedString = translateUtil.addElement(
-		            translationMeta.getKey(),
-		            translationMeta.getI18n().get(Locale.getDefault()));
-
-            translationMeta.getI18n().put(
-                    Locale.getDefault(),
-                    addedString);
+		if (translateUtil != null) {
+			translateUtil.open(this.getAdapter().getStringsPathFile());
+			
+			for (final TranslationMetadata translationMeta
+					: this.getAppMetas().getTranslates().values()) {
+			    String addedString = translateUtil.addElement(
+			            translationMeta.getKey(),
+			            translationMeta.getI18n().get(Locale.getDefault()));
+	
+	            translationMeta.getI18n().put(
+	                    Locale.getDefault(),
+	                    addedString);
+			}
+			translateUtil.save();
 		}
-
-		translateUtil.save();
 	}
 }

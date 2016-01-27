@@ -760,4 +760,10 @@ public class WinphoneProjectAdapter implements IAdapterProject {
         // TODO Auto-generated method stub
         return null;
     }
+
+    @Override
+    public List<IUpdater> getFilesToDelete() {
+        // TODO Auto-generated method stub
+        return null;
+    }
 }

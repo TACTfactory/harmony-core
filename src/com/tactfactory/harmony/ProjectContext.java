@@ -150,7 +150,6 @@ public final class ProjectContext {
                 ConsoleUtils.display("\t- Detected Android project !");
                 break;
             case IPHONE :
-            case IPAD:
                 this.adapters.put(
                         TargetPlatform.IPHONE,
                         new IosAdapter());

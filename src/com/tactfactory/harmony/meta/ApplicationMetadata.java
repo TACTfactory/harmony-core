@@ -203,7 +203,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 		for (final ClassMetadata classMeta : this.classes.values()) {
 			classesMap.put(classMeta.getName(), classMeta.toMap(adapt));
 		}
-		
+
 		for (final EntityMetadata entityMeta : this.entities.values()) {
 			entitiesMap.put(entityMeta.getName(), entityMeta.toMap(adapt));
 		}
@@ -211,8 +211,8 @@ public final class ApplicationMetadata extends BaseMetadata {
 		for (final EnumMetadata enumMeta : this.enums.values()) {
 			enumsMap.put(enumMeta.getName(), enumMeta.toMap(adapt));
 		}
-		
-		for (final InterfaceMetadata interfaceMeta 
+
+		for (final InterfaceMetadata interfaceMeta
 				: this.interfaces.values()) {
 			interfacesMap.put(interfaceMeta.getName(),
 					interfaceMeta.toMap(adapt));
@@ -220,6 +220,7 @@ public final class ApplicationMetadata extends BaseMetadata {
 
 		// Add root
 		ret.put(TagConstant.PROJECT_NAME, 		this.getName());
+		ret.put(TagConstant.PROJECT_PLATFORM, this.getPlatform(adapt));
 
 		ret.put(TagConstant.CLASSES, 		classesMap);
 		ret.put(TagConstant.ENTITIES, 		entitiesMap);
@@ -290,5 +291,19 @@ public final class ApplicationMetadata extends BaseMetadata {
 	 */
 	public void setHeaderTemplate(final String headerTemplate) {
 		this.headerTemplate = headerTemplate;
+	}
+
+	public String getPlatform(IAdapter adapter) {
+	    String result = null;
+
+	    if (adapter.getPlatform().equals(TagConstant.PLATFORM_ANDROID.toLowerCase())) {
+	        result = TagConstant.PLATFORM_ANDROID;
+	    } else if (adapter.getPlatform().equals(TagConstant.PLATFORM_IOS.toLowerCase())) {
+	        result = TagConstant.PLATFORM_IOS;
+	    } else if (adapter.getPlatform().equals(TagConstant.PLATFORM_WINPHONE.toLowerCase())) {
+	        result = TagConstant.PLATFORM_WINPHONE;
+	    }
+
+	    return result;
 	}
 }

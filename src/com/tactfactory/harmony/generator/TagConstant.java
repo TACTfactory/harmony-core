@@ -34,6 +34,14 @@ public abstract class TagConstant {
 	public static final String FIXTURE_NAMESPACE = "fixture_namespace";
 	/** Constant for android sdk dir. */
 	public static final String ANDROID_SDK_DIR = "sdk_dir";
+    /** Constant for platform. */
+    public static final String PROJECT_PLATFORM = "project_platform";
+    /** Constant for android platform. */
+    public static final String PLATFORM_ANDROID = "Android";
+    /** Constant for ios platform. */
+    public static final String PLATFORM_IOS = "iOS";
+    /** Constant for winphone platform. */
+    public static final String PLATFORM_WINPHONE = "WindowsPhone";
 
 	// Ant markers
 	/** Constant for ant sdk dir. */
