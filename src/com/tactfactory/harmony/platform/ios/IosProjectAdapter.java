@@ -1026,8 +1026,19 @@ public class IosProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> updateEnum(EnumMetadata enumMeta, Configuration cfg) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+
+        String filePath = String.format("%s/",
+                this.adapter.getSourceEntityPath());
+
+        final String templatePath = this.adapter.getTemplateSourceEntityPath();
+
+        result.add(new SourceFile(
+                templatePath + "TemplateEnum.h",
+                String.format("%s%s.h", filePath, enumMeta.getName()),
+                true));
+
+        return result;
     }
 
     @Override

@@ -27,9 +27,8 @@ public final class EnumMetadata extends ClassMetadata {
 
 	/** List of the enum names.*/
 	private ArrayList<String> entries = new ArrayList<String>();
-	
-	private Map<String, String> values =
-			new HashMap<String, String>();
+
+	private Map<String, String> values = new HashMap<String, String>();
 
 	/**
 	 * Transform the class to a map given an adapter.
