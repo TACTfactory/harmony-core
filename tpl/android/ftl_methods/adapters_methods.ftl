@@ -50,8 +50,8 @@
     <#assign tab = Utils.getIndentString(indentLevel) />
     <#assign result = "" />
     <#if (!field.internal)>
-        <#assign result = result + "${tab}/** Constant field for ${field.name}. */\n"/>        
-        <#assign result = result + "${tab}private static final String ${NamingUtils.fixtureAlias(field)} = \"${field.name?uncap_first}\";\n"/>        
+        <#assign result = result + "${tab}/** Constant field for ${field.name}. */\n"/>
+        <#assign result = result + "${tab}private static final String ${NamingUtils.fixtureAlias(field)} = \"${field.name?uncap_first}\";\n"/>
     </#if>
     <#return result />
 </#function>
@@ -132,11 +132,11 @@
                         <#else>
                             <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
                             <#assign result = result + "${tab}    ${enumType.name}.fromValue(cursor.getString(index)));\n"/>
-                    </#if>
+                        </#if>
                     <#else>
-                    <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
-                    <#assign result = result + "${tab}    ${enumType.name}.valueOf(cursor.getString(index)));\n"/>
-                    
+                        <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
+                        <#assign result = result + "${tab}    ${enumType.name}.valueOf(cursor.getString(index)));\n"/>
+
                     </#if>
                    <#break />
                 <#default>
@@ -298,9 +298,9 @@
 <#function validateDataFieldAdapter field indentLevel = 0>
     <#assign result = "" />
     <#assign tab = "\n" + Utils.getIndentString(indentLevel) />
-    <#if !field.internal 
-            && !field.hidden 
-            && FieldsUtils.getJavaType(field)?lower_case != "boolean" 
+    <#if !field.internal
+            && !field.hidden
+            && FieldsUtils.getJavaType(field)?lower_case != "boolean"
             && field.harmony_type?lower_case != "enum"
             && field.writable>
         <#if !field.nullable>
@@ -351,7 +351,7 @@
             <#if !field.relation??>
                 <#if !MetadataUtils.isPrimitive(field) >
                     <#if (FieldsUtils.getJavaType(field)?lower_case == "boolean")>
-        <#assign result = result + "${tab}if (this.model.is${field.name?cap_first}() != null) {" />                    
+        <#assign result = result + "${tab}if (this.model.is${field.name?cap_first}() != null) {" />
                     <#else>
         <#assign result = result + "${tab}if (this.model.get${field.name?cap_first}() != null) {" />
                     </#if>

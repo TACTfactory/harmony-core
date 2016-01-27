@@ -37,10 +37,12 @@ public abstract class TagConstant {
     /** Constant for platform. */
     public static final String PROJECT_PLATFORM = "project_platform";
     /** Constant for android platform. */
-    public static final String ANDROID_PLATFORM = "Android";
-    /** Constant for project namespace. */
-    public static final String IOS_PLATFORM = "iOS";
-    
+    public static final String PLATFORM_ANDROID = "Android";
+    /** Constant for ios platform. */
+    public static final String PLATFORM_IOS = "iOS";
+    /** Constant for winphone platform. */
+    public static final String PLATFORM_WINPHONE = "WindowsPhone";
+
 	// Ant markers
 	/** Constant for ant sdk dir. */
 	public static final String ANT_ANDROID_SDK_DIR = "sdk";
