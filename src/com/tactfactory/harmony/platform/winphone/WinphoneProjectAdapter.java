@@ -27,8 +27,6 @@ import com.tactfactory.harmony.updater.impl.SourceFile;
 import com.tactfactory.harmony.updater.old.IConfigFileUtil;
 import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
 
-import freemarker.template.Configuration;
-
 public class WinphoneProjectAdapter implements IAdapterProject {
 
     private final WinphoneAdapter adapter;
@@ -720,7 +718,7 @@ public class WinphoneProjectAdapter implements IAdapterProject {
     }
 
     @Override
-    public List<IUpdater> updateEnum(EnumMetadata enumMeta, Configuration cfg) {
+    public List<IUpdater> updateEnum(EnumMetadata enumMeta) {
     	List<IUpdater> result = new ArrayList<IUpdater>();
 
         String templatePath = this.adapter.getTemplateSourcePath() + "Entity/";

@@ -36,7 +36,7 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
  * The project context is the specific configuration of your project.
- * 
+ *
  * You can find :
  * <ul><li>Project name;</li>
  * <li>Global name space;</li>
@@ -47,17 +47,15 @@ public final class ProjectContext {
     // DEMO/TEST MODE
     /** Default project name. */
     private static final String DEFAULT_PRJ_NAME = "demact";
-    
-    private static final String ERROR_INVALID_PRJ_NAME = 
-    		"Your project name should begin with a letter"
-    		+ "and contain only alphanumeric characters.";
+
+    private static final String ERROR_INVALID_PRJ_NAME =
+            "Your project name should begin with a letter"
+            + "and contain only alphanumeric characters.";
 
     /** Default project NameSpace. */
-    private static final String DEFAULT_PRJ_NS =
-            "com.tactfactory.harmony.test.demact";
+    private static final String DEFAULT_PRJ_NS = "com.tactfactory.harmony.test.demact";
 
-    private HashMap<TargetPlatform, BaseAdapter> adapters = 
-            new HashMap<TargetPlatform, BaseAdapter>();
+    private HashMap<TargetPlatform, BaseAdapter> adapters = new HashMap<TargetPlatform, BaseAdapter>();
 
     private Harmony harmony;
 
@@ -177,7 +175,6 @@ public final class ProjectContext {
 
     public void addAdapter(TargetPlatform platform, BaseAdapter adapter) {
         this.adapters.put(platform, adapter);
-
     }
 
     public ArrayList<IAdapter> getAdapters() {
@@ -258,7 +255,7 @@ public final class ProjectContext {
 
     /**
      * Prompt Project Name to the user.
-     * 
+     *
      * @param arguments The console arguments passed by the user
      */
     public static void promptProjectName(HashMap<String, String> arguments) {
@@ -267,32 +264,31 @@ public final class ProjectContext {
 
             Question question = new Question();
             question.setParamName(KEY, "n");
-            question.setQuestion("Please enter your Project Name [%s]:", 
+            question.setQuestion("Please enter your Project Name [%s]:",
                     DEFAULT_PRJ_NAME);
             question.setDefaultValue(DEFAULT_PRJ_NAME);
 
             Questionnary questionnary = new Questionnary(arguments);
             questionnary.addQuestion(KEY, question);
-            
+
             String projectName;
 
-        	questionnary.launchQuestionnary();
-        	projectName = questionnary.getAnswer(KEY);
-        	
-        	while (!projectName.matches("[a-zA-Z][a-zA-Z0-9]*")) {
-        		ConsoleUtils.display(ERROR_INVALID_PRJ_NAME);
-            	questionnary.launchQuestionnary();
-            	projectName = questionnary.getAnswer(KEY);
+            questionnary.launchQuestionnary();
+            projectName = questionnary.getAnswer(KEY);
+
+            while (!projectName.matches("[a-zA-Z][a-zA-Z0-9]*")) {
+                ConsoleUtils.display(ERROR_INVALID_PRJ_NAME);
+                questionnary.launchQuestionnary();
+                projectName = questionnary.getAnswer(KEY);
             }
-            
-            
+
             ApplicationMetadata.INSTANCE.setName(projectName);
         }
     }
 
     /**
      * Prompt Project Name Space to the user.
-     * 
+     *
      * @param arguments The console arguments passed by the user
      */
     public static void promptProjectNameSpace(

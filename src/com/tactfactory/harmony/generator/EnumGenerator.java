@@ -19,34 +19,32 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  * Enum Generator class.
  */
 public class EnumGenerator extends BaseGenerator<IAdapter> {
-	/** Constructor.
-	 * @param adapt Adapter used by this generator
-	 * @throws Exception if adapter is null
-	 */
-	public EnumGenerator(final IAdapter adapt) throws Exception {
-		super(adapt);
-		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
-	}
+    /** Constructor.
+     * @param adapt Adapter used by this generator
+     * @throws Exception if adapter is null
+     */
+    public EnumGenerator(final IAdapter adapt) throws Exception {
+        super(adapt);
+        this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
+    }
 
-	/**
-	 * Add getValue and fromValue to enum who declares an ID
-	 * and don't have theses methods.
-	 */
-	public final void generateAll() {
-		ConsoleUtils.display(">> Decorate enums...");
-		
-		Iterable<EnumMetadata> enums = this.getAppMetas().getEnums().values();
-		
-		for (final EnumMetadata enumMeta : enums) {
-			this.getDatamodel().put(
+    /**
+     * Add getValue and fromValue to enum who declares an ID
+     * and don't have theses methods.
+     */
+    public final void generateAll() {
+        ConsoleUtils.display(">> Decorate enums...");
+
+        Iterable<EnumMetadata> enums = this.getAppMetas().getEnums().values();
+
+        for (final EnumMetadata enumMeta : enums) {
+            this.getDatamodel().put(
                     TagConstant.CURRENT_ENTITY,
                     enumMeta.getName());
 
-			
-		    List<IUpdater> updaters = this.getAdapter().getAdapterProject()
-                        .updateEnum(enumMeta, this.getCfg());
-            
-		    this.processUpdater(updaters);
-		}
-	}
+            List<IUpdater> updaters = this.getAdapter().getAdapterProject().updateEnum(enumMeta);
+
+            this.processUpdater(updaters);
+        }
+    }
 }

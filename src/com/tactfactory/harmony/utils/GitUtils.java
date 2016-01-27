@@ -45,8 +45,7 @@ public class GitUtils {
      * @throws TransportException
      * @throws GitAPIException
      */
-    public static void cloneRepository(
-            String path, String url) throws GitException {
+    public static void cloneRepository(String path, String url) throws GitException {
         cloneRepository(path, url, true);
     }
 
@@ -60,8 +59,7 @@ public class GitUtils {
      * @throws TransportException
      * @throws GitAPIException
      */
-    public static void cloneRepository(
-            String path, String url, boolean enableOutput) throws GitException {
+    public static void cloneRepository(String path, String url, boolean enableOutput) throws GitException {
         cloneRepository(path, url, null);
     }
 
@@ -72,8 +70,7 @@ public class GitUtils {
      * @param branch Branch/Tag to checkout after clone, can be null
      * @throws GitException
      */
-    public static void cloneRepository(
-            String path, String url, String branch) throws GitException {
+    public static void cloneRepository(String path, String url, String branch) throws GitException {
         cloneRepository(path, url, branch, true);
     }
 
@@ -85,9 +82,8 @@ public class GitUtils {
      * @param enableOutput Enable log in the standard output, true by default
      * @throws GitException
      */
-    public static void cloneRepository(
-            String path, String url, String branch, boolean enableOutput)
-                 throws GitException {
+    public static void cloneRepository(String path, String url, String branch, boolean enableOutput)
+            throws GitException {
         CloneCommand command = Git.cloneRepository()
                 .setProgressMonitor(new GitMonitor())
                 .setURI(url)
@@ -115,9 +111,8 @@ public class GitUtils {
      * @param submoduleUrl Url of the submodule
      * @throws IOException
      */
-    public static void addSubmodule(
-            String repositoryPath, String submodulePath, String submoduleUrl)
-                    throws IOException {
+    public static void addSubmodule(String repositoryPath, String submodulePath, String submoduleUrl)
+            throws IOException {
         // Get main repository
         RepositoryBuilder repoBuilder = new RepositoryBuilder();
         Repository repository = repoBuilder.setWorkTree(
@@ -187,6 +182,7 @@ public class GitUtils {
 
         return result;
     }
+
     /**
      * {@link ProgressMonitor} for Git download.
      *
@@ -244,7 +240,6 @@ public class GitUtils {
     }
 
     public static class GitException extends Exception {
-
         /**
          * Serialization UID.
          */

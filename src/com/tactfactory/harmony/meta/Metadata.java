@@ -17,17 +17,17 @@ import com.tactfactory.harmony.platform.IAdapter;
  */
 public interface Metadata {
 
-	/** Converts the Metadata to a map usable for Freemaker.
-	 *
-	 * @param adapter The adapter to use for the conversion
-	 * @return The generated map
-	 **/
-	Map<String, Object> toMap(IAdapter adapter);
+    /** Converts the Metadata to a map usable for Freemaker.
+     *
+     * @param adapter The adapter to use for the conversion
+     * @return The generated map
+     **/
+    Map<String, Object> toMap(IAdapter adapter);
 
-	/**
-	 * The key defining this Metadata in the global map.
-	 * This will be used to call the metadatas in Freemarker templates.
-	 * @return The key of the Metadata
-	 */
-	String getName();
+    /**
+     * The key defining this Metadata in the global map.
+     * This will be used to call the metadatas in Freemarker templates.
+     * @return The key of the Metadata
+     */
+    String getName();
 }

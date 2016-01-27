@@ -18,8 +18,6 @@ import com.tactfactory.harmony.updater.impl.DeleteFile;
 import com.tactfactory.harmony.updater.old.IConfigFileUtil;
 import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
 
-import freemarker.template.Configuration;
-
 public interface IAdapterProject {
     //Used by ProjectGenerator
     List<IUpdater> getProjectFilesToClear();
@@ -92,11 +90,10 @@ public interface IAdapterProject {
     List<IUpdater> getEntityBaseFiles();
 
     //Used by EnumGenerator
-    List<IUpdater> updateEnum(EnumMetadata enumMeta, Configuration cfg);
+    List<IUpdater> updateEnum(EnumMetadata enumMeta);
 
     //Used by CommonGenerator
-    List<IUpdater> getStaticViewFiles(String packageName, String viewName,
-            ViewType type);
+    List<IUpdater> getStaticViewFiles(String packageName, String viewName, ViewType type);
 
     //Used by HomeActivityGenerator
     List<IUpdater> updateHomeActivity(String activity, String buttonId);
