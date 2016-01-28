@@ -7,7 +7,6 @@
 <#assign hasLocaleTime = MetadataUtils.hasLocaleTime(curr) />
 <@header?interpret />
 
-#import "${curr.name}DataLoader.h"
 #import "${curr.name}.h"
 #import "DateUtils.h"
 ${ImportUtils.importRelatedLoaders(curr, true)}
@@ -46,12 +45,12 @@ static NSString *FILE_NAME = @"${curr.name}";
 
 <#list curr_fields as field>
     <#if (FieldsUtils.getObjectiveType(field)?lower_case == "datetime")>
-    if (item.${field.name} isKindOfClass:[NSString class]]) {
+    if ([item.${field.name} isKindOfClass:[NSString class]]) {
         result.${field.name} = [DateUtils fixtureStringToDateTime:(NSString *) item.${field.name}];
     }
     <#elseif (field.relation??)>
     if (item.${field.name} != nil) {
-        result.${field.name} = [[[${field.name?cap_first}DataLoader get${field.name?cap_first}DataLoader] getItems] objectForKey:item.${field.name}];
+        result.${field.name} = [[[${field.relation.targetEntity}DataLoader get${field.relation.targetEntity}DataLoader] getItems] objectForKey:item.${field.name}];
     }
     </#if>
 </#list>
