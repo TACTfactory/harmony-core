@@ -24,8 +24,10 @@ static bool hasFixturesBeenLoaded = false;
 }
 
 - (void) initializeLoaders {
-<#list entities?values as entity>
-    <#if (((entity.fields?size>0)  || (entity.inheritance??)) && !(entity.internal))>
+
+<#list orderedEntities as entityName>
+    <#assign entity = entities[entityName] />
+    <#if (!(entity.internal) && (entity.fields?size>0 || entity.inheritance??))>
     [self->loaders addObject:[${entity.name?cap_first}DataLoader get${entity.name?cap_first}DataLoader]];
     </#if>
 </#list>

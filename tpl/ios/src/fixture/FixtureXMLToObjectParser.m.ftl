@@ -39,7 +39,7 @@ didStartElement:(NSString *) elementName
         self->entity = [NSClassFromString(self->entityName) new];
         [self->itemsWithKey setObject:self->entity forKey:[attributeDict valueForKey:@"id"]];
     } else {
-        self->currentNodeName = [element copy];
+        self->currentNodeName = [elementName copy];
         self->currentNodeContent = [NSMutableString new];
     }
 }

@@ -1,8 +1,9 @@
 <#assign fixtureType = options["fixture"].type />
 <@header?interpret />
+
 #import "FixtureBase.h"
 #import "DataLoader.h"
-#import "XMLToObjectParser.h"
+#import "FixtureXMLToObjectParser.h"
 
 @implementation FixtureBase
 
@@ -19,19 +20,27 @@
 
     if (mode == MODE_APP) {
         fixtureDirectoryPath = @"app";
-    } else if (mode = MODE_DEBUG) {
+    } else if (mode == MODE_DEBUG) {
         fixtureDirectoryPath = @"debug";
-    } else if (mode = MODE_TEST) {
+    } else if (mode == MODE_TEST) {
         fixtureDirectoryPath = @"test";
     }
 
     NSString *fileName = [self getFixtureFileName];
     NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:@"xml" inDirectory:fixtureDirectoryPath];
-    NSURL *fixtureUrl = [NSURL fileURLWithPath:path];
 
-    XMLToObjectParser *xmlParser = [[XMLToObjectParser alloc] parseXMLAtURL:url toObject:fileName parseError:nil];
+    if (path != nil) {
+        NSURL *fixtureUrl = [NSURL fileURLWithPath:path];
 
-    self->items = [parser getItemsWithKey];
+        FixtureXMLToObjectParser *xmlParser = [[XMLToObjectParser alloc]
+                                               parseXMLAtURL:fixtureUrl
+                                               toObject:fileName
+                                               parseError:nil];
+
+        self->items = [xmlParser getItemsWithKey];
+    } else {
+        NSLog(@"Fixture error : The filename %@ wasn't found in assets.", fileName);
+    }
 }
 
 - (void) loadModel {

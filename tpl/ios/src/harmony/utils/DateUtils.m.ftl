@@ -4,24 +4,24 @@
 
 @implementation DateUtils
 
-+ (NSDate *) isoStringToDate:(NSString *)isoString{
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
++ (NSDate *) isoStringToDate:(NSString *) isoString {
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZZZ"];
     NSDate *date = [dateFormatter dateFromString:isoString];
-    
+
     return date;
 }
 
-+ (NSString *) dateToISOString:(NSDate *)date{
-    NSDateFormatter *dateFormatter = [[NSDateFormatter alloc] init];
++ (NSString *) dateToISOString:(NSDate *) date {
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
     [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSSSSZZZZZ"];
     NSString *isoString = [dateFormatter stringFromDate:date];
-    
+
     return isoString;
 }
 
 + (NSString *) dateToString:(NSDate *) date {
-    
+
     NSString *dateString = [NSDateFormatter
                             localizedStringFromDate:date
                             dateStyle:NSDateFormatterMediumStyle
@@ -29,7 +29,24 @@
     return dateString;
 }
 
-+ (NSDate *) isoStringToTime:(NSString *)isoString {
++ (NSDate *) isoStringToTime:(NSString *) isoString {
     return nil;
 }
+
++ (NSDate *) fixtureStringToDate:(NSString *) fixtureString {
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd HH:mm"];
+    NSDate *date = [dateFormatter dateFromString:fixtureString];
+
+    return date;
+}
+
++ (NSDate *) fixtureStringToDateTime:(NSString *) fixtureString {
+    NSDateFormatter *dateFormatter = [NSDateFormatter new];
+    [dateFormatter setDateFormat:@"yyyy-MM-dd"];
+    NSDate *date = [dateFormatter dateFromString:fixtureString];
+
+    return date;
+}
+
 @end

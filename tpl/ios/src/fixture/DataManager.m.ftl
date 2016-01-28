@@ -1,4 +1,5 @@
 <@header?interpret />
+
 #import "DataManager.h"
 <#list entities?values as entity>
     <#if (((entity.fields?size>0)  || (entity.inheritance??)) && !(entity.internal))>

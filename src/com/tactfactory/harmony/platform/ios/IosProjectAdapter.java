@@ -162,6 +162,15 @@ public class IosProjectAdapter implements IAdapterProject {
                 filePath + "Database.m",
                 false));
 
+        templatePath = this.adapter.getTemplateSourceEntityPath();
+        filePath = this.adapter.getSourcePath();
+
+        result.add(new SourceFile(
+                templatePath + "AppDelegate.m", String.format("%s/AppDelegate.m", filePath), true));
+
+        result.add(new SourceFile(
+                templatePath + "AppDelegate.h", String.format("%s/AppDelegate.h", filePath), true));
+
         return result;
     }
 

@@ -63,7 +63,7 @@
                     <#assign import_array = import_array + [relation.relation.joinTable] />
                 </#if>
             </#if>
-            
+
             <#if (!Utils.isInArray(import_array, relation.relation.targetEntity))>
                 <#assign import_array = import_array + [relation.relation.targetEntity] />
                 <#if entities[relation.relation.targetEntity].inheritance?? && entities[relation.relation.targetEntity].inheritance.superclass?? && entities[entities[relation.relation.targetEntity].inheritance.superclass.name]??>
@@ -102,6 +102,34 @@
     </#list>
     <#list import_array as import>
         <#assign result = result + "#import \"${import}.h\"" />
+        <#if import_has_next>
+            <#assign result = result + "\n" />
+        </#if>
+    </#list>
+    <#return result />
+</#function>
+
+<#function importRelatedLoaders entity useInheritedFieldsToo=false>
+    <#assign result = ""/>
+    <#if entity.internal>
+        <#assign import_array = [] />
+    <#else>
+        <#assign import_array = [entity.name] />
+    </#if>
+    <#if useInheritedFieldsToo>
+        <#assign fields = ViewUtils.getAllFields(entity)?values />
+    <#else>
+        <#assign fields = entity.relations />
+    </#if>
+    <#list fields as relation>
+        <#if relation.relation?? && !relation.internal>
+            <#if (!Utils.isInArray(import_array, relation.relation.targetEntity))>
+                <#assign import_array = import_array + [relation.relation.targetEntity] />
+            </#if>
+        </#if>
+    </#list>
+    <#list import_array as import>
+        <#assign result = result + "#import \"${import}DataLoader.h\"" />
         <#if import_has_next>
             <#assign result = result + "\n" />
         </#if>

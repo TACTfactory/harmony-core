@@ -44,7 +44,7 @@ static NSObject *lock;
 
 - (id) initWithName:(NSString *) name andVersion:(int) version {
     self = [super init];
-    
+
     if (self) {
         NSString *docsPath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
         DB_PATH = [docsPath stringByAppendingPathComponent:DB_NAME];
@@ -52,7 +52,7 @@ static NSObject *lock;
         //TODO set boolean if asset exist
         assetsExist = NO;
 
-        [self getDatabase];
+        //[self getDatabase];
     }
 
     return self;
@@ -93,25 +93,26 @@ static NSObject *lock;
     }
 }
 
-- (void) onUpgrade:(FMDatabase*)db andOldVersion:(int)oldVersion andNewVersion:(int)newVersion{
+- (void) onUpgrade:(FMDatabase *) db andOldVersion:(int) oldVersion andNewVersion:(int) newVersion {
+}
+
+- (void) onDowngrade:(FMDatabase *) db andOldVersion:(int) oldVersion andNewVersion:(int) newVersion {
     if (oldVersion == 0) {
         [NSException raise:@"Invalid version value" format:@"Version is invalid"];
     }
 }
 
-- (void) onDowngrade:(FMDatabase*)db andOldVersion:(int)oldVersion andNewVersion:(int)newVersion{
-    if (oldVersion == 0) {
-        [NSException raise:@"Invalid version value" format:@"Version is invalid"];
-    }
-}
-
+- (void) loadData:(FMDatabase *) db {
 <#if dataLoader>
-- (void) loadData:(FMDatabase *) db{
     DataLoader *dataLoader = [DataLoader new];
     [dataLoader clean];
-    [dataLoader loadData];
-}
+
+    [dataLoader loadData:MODE_APP];
+#if DEBUG
+    [dataLoader loadData:MODE_DEBUG];
+#endif
 </#if>
+}
 
 - (void) createDataBase {
     if (assetsExist && ![self checkDataBase]) {
@@ -170,10 +171,6 @@ static NSObject *lock;
 
 - (FMDatabaseQueue *) getQueue {
     return [FMDatabaseQueue databaseQueueWithPath:DB_PATH];
-}
-
-- (void) loadData:(FMDatabase *) db {
-
 }
 
 @end
