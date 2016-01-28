@@ -7,7 +7,19 @@
     </#if>
 </#list>
 
+<#list entities?values as entity>
+    <#if (((entity.fields?size>0) || (entity.inheritance??)) && !(entity.internal))>
+static ${entity.name?cap_first}SQLiteAdapter *${entity.name?upper_case};
+    </#if>
+</#list>
+
 @implementation DataManager
+
+- (id) init {
+    if (self = [super init]) {
+        ${entity.name?upper_case} = [${entity.name?cap_first}SQLiteAdapter new]
+    }
+}
 
 - (int) persist:(id) item {
     int result = -1;
@@ -15,8 +27,7 @@
 <#list entities?values as entity>
     <#if (((entity.fields?size>0)  || (entity.inheritance??)) && !(entity.internal))>
     if ([item isKindOfClass:[${entity.name?cap_first} class]]) {
-        ${entity.name?cap_first}SQLiteAdapter *${entity.name?uncap_first}SQLiteAdapter = [${entity.name?cap_first}SQLiteAdapter new];
-        result = (int) [${entity.name?uncap_first}SQLiteAdapter insert:item];
+        result = (int) [${entity.name?upper_case} insert:item];
     }
 
     </#if>
@@ -28,8 +39,7 @@
 <#list entities?values as entity>
     <#if (((entity.fields?size>0)  || (entity.inheritance??)) && !(entity.internal))>
     if ([item isKindOfClass:[${entity.name?cap_first} class]]) {
-        ${entity.name?cap_first}SQLiteAdapter *${entity.name?uncap_first}SQLiteAdapter = [${entity.name?cap_first}SQLiteAdapter new];
-        [${entity.name?uncap_first}SQLiteAdapter remove:item];
+        [${entity.name?upper_case} remove:item];
     }
 
     </#if>

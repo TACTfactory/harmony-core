@@ -27,12 +27,12 @@
     }
 
     NSString *fileName = [self getFixtureFileName];
-    NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:@"xml" inDirectory:fixtureDirectoryPath];
+    NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:@"xml"];
 
     if (path != nil) {
         NSURL *fixtureUrl = [NSURL fileURLWithPath:path];
 
-        FixtureXMLToObjectParser *xmlParser = [[XMLToObjectParser alloc]
+        FixtureXMLToObjectParser *xmlParser = [[FixtureXMLToObjectParser alloc]
                                                parseXMLAtURL:fixtureUrl
                                                toObject:fileName
                                                parseError:nil];
