@@ -31,11 +31,11 @@ static bool hasFixturesBeenLoaded = false;
 </#list>
 }
 
-- (void) loadData {
+- (void) loadData:(int) mode {
     DataManager *dataManager = [DataManager new];
 
     for (FixtureBase *dataLoader in self->loaders) {
-        [dataLoader loadModel];
+        [dataLoader getModelFixtures:mode];
         [dataLoader load:dataManager];
     }
 

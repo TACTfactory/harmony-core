@@ -11,6 +11,8 @@
 #import "${curr.name}.h"
 #import "DateUtils.h"
 
+static NSString *FILE_NAME = @"${curr.name}";
+
 @implementation ${curr.name}DataLoader
 
 + (instancetype) get${curr.name}DataLoader {
@@ -25,7 +27,10 @@
 }
 
 - (void) loadModel {
+}
 
+- (NSString *) getFixtureFileName {
+    return FILE_NAME;
 }
 
 - (void) load:(DataManager *) dataManager {

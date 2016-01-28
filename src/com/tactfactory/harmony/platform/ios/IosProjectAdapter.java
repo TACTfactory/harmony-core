@@ -561,6 +561,16 @@ public class IosProjectAdapter implements IAdapterProject {
                 templatePath + "DataLoader.m",
                 filePath + "DataLoader.m",
                 forceOverwrite));
+
+        result.add(new SourceFile(
+                templatePath + "FixtureXMLToObjectParser.h",
+                filePath + "FixtureXMLToObjectParser.h",
+                forceOverwrite));
+
+        result.add(new SourceFile(
+                templatePath + "FixtureXMLToObjectParser.m",
+                filePath + "FixtureXMLToObjectParser.m",
+                forceOverwrite));
         return result;
     }
 
