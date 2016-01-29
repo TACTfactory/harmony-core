@@ -2,6 +2,7 @@
 <@header?interpret />
 
 #import "FixtureXMLToObjectParser.h"
+#import "ParseValue.h"
 
 @implementation FixtureXMLToObjectParser {
     @private
@@ -76,7 +77,9 @@ didStartElement:(NSString *) elementName
             self->childElementName = nil;
             [self->listOfElements removeAllObjects];
         } else if ([elementName isEqualToString:self->currentNodeName]) {
-            [self->entity setValue:self->currentNodeContent forKey:elementName];
+            ParseValue *parseValue = [[ParseValue alloc] initWithString:self->currentNodeContent];
+
+            [self->entity setValue:parseValue forKey:elementName];
 
             self->currentNodeContent = nil;
             self->currentNodeName = nil;

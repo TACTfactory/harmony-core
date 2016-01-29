@@ -571,6 +571,8 @@ public class IosProjectAdapter implements IAdapterProject {
                 filePath + "DataLoader.m",
                 forceOverwrite));
 
+        filePath = String.format("%s/Fixture/XMLParser/", this.adapter.getSourceDataPath());
+
         result.add(new SourceFile(
                 templatePath + "FixtureXMLToObjectParser.h",
                 filePath + "FixtureXMLToObjectParser.h",
@@ -580,6 +582,17 @@ public class IosProjectAdapter implements IAdapterProject {
                 templatePath + "FixtureXMLToObjectParser.m",
                 filePath + "FixtureXMLToObjectParser.m",
                 forceOverwrite));
+
+        result.add(new SourceFile(
+                templatePath + "ParseValue.h",
+                filePath + "ParseValue.h",
+                forceOverwrite));
+
+        result.add(new SourceFile(
+                templatePath + "ParseValue.m",
+                filePath + "ParseValue.m",
+                forceOverwrite));
+
         return result;
     }
 

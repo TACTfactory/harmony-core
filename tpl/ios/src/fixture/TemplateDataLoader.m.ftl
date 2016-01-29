@@ -52,13 +52,14 @@ static NSString *FILE_NAME = @"${curr.name}";
             result.${field.name} = [DateUtils isoStringToDate:(NSString *) item.${field.name}];
         }
     }
+
     <#elseif (field.relation??)>
     if (item.${field.name} != nil) {
         result.${field.name} = [[[${field.relation.targetEntity}DataLoader get${field.relation.targetEntity}DataLoader] getItems] objectForKey:item.${field.name}];
     }
+
     </#if>
 </#list>
-
     return result;
 }
 
