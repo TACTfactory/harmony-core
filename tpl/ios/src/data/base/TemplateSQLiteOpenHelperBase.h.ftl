@@ -22,7 +22,7 @@
     bool isUnitTest;
 
     @private
-    bool assetsExist;
+    bool databaseExistInAssets;
     NSString* DB_PATH;
 }
 
@@ -45,7 +45,7 @@ extern int const DB_VERSION;
  * @param version The Database version
  * @return the ${project_name?cap_first}SQLiteOpenHelperBase
  */
- 
+
 - (id) initWithName:(NSString *) name andVersion:(int) version;
 
 /**

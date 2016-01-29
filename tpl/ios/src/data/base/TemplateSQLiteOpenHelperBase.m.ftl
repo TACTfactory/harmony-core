@@ -49,8 +49,8 @@ static NSObject *lock;
         NSString *docsPath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
         DB_PATH = [docsPath stringByAppendingPathComponent:DB_NAME];
 
-        //TODO set boolean if asset exist
-        assetsExist = NO;
+        //If we load an existing database with a file, we don't need to create the schema.
+        self->databaseExistInAssets = [[NSBundle mainBundle] pathForResource:@"database" ofType:@"sqlite"] != nil;
 
         //[self getDatabase];
     }
@@ -70,7 +70,7 @@ static NSObject *lock;
 }
 
 - (void) onCreate:(FMDatabase *) db{
-    if (!assetsExist) {
+    if (!self->databaseExistInAssets) {
         if ([db open]) {
             //[db setUserVersion:DB_VERSION];
             // Create Schema
@@ -115,7 +115,7 @@ static NSObject *lock;
 }
 
 - (void) createDataBase {
-    if (assetsExist && ![self checkDataBase]) {
+    if (self->databaseExistInAssets && ![self checkDataBase]) {
         [self copyDataBase];
     }
 }

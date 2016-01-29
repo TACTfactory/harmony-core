@@ -20,10 +20,11 @@ static ${entity.name?cap_first}SQLiteAdapter *${entity.name?upper_case};
 <#list entities?values as entity>
     <#if (((entity.fields?size>0)  || (entity.inheritance??)) && !(entity.internal))>
         ${entity.name?upper_case} = [${entity.name?cap_first}SQLiteAdapter new];
-
     </#if>
 </#list>
     }
+
+    return self;
 }
 
 - (int) persist:(id) item {

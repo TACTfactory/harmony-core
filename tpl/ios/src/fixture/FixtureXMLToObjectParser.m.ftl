@@ -3,7 +3,12 @@
 
 #import "FixtureXMLToObjectParser.h"
 
-@implementation FixtureXMLToObjectParser
+@implementation FixtureXMLToObjectParser {
+    @private
+    NSMutableArray *listOfElements;
+    NSString *parentElementName;
+    NSString *childElementName;
+}
 
 - (NSArray *) getItems {
     return self->items;
@@ -17,6 +22,7 @@
     self->items = [NSMutableArray new];
     self->itemsWithKey = [NSMutableDictionary new];
     self->entityName = className;
+    self->listOfElements = [NSMutableArray new];
 
     NSXMLParser *parser = [[NSXMLParser alloc] initWithContentsOfURL:url];
     [parser setDelegate:self];
@@ -39,6 +45,11 @@ didStartElement:(NSString *) elementName
         self->entity = [NSClassFromString(self->entityName) new];
         [self->itemsWithKey setObject:self->entity forKey:[attributeDict valueForKey:@"id"]];
     } else {
+        if (self->currentNodeName != nil && ![self->currentNodeName isEqualToString:@"list"]) {
+            self->parentElementName = self->currentNodeName;
+            self->childElementName = [elementName copy];
+        }
+
         self->currentNodeName = [elementName copy];
         self->currentNodeContent = [NSMutableString new];
     }
@@ -52,11 +63,24 @@ didStartElement:(NSString *) elementName
     if ([elementName isEqualToString:self->entityName]) {
         [items addObject:self->entity];
         self->entity = nil;
-    } else if ([elementName isEqualToString:self->currentNodeName]) {
-        [self->entity setValue:self->currentNodeContent forKey:elementName];
+    } else {
+        if (self->childElementName != nil && self->childElementName == elementName) {
+            [self->listOfElements addObject:self->currentNodeContent];
 
-        self->currentNodeContent = nil;
-        self->currentNodeName = nil;
+            self->currentNodeContent = nil;
+            self->currentNodeName = nil;
+        } else if (self->parentElementName != nil && [elementName isEqualToString:self->parentElementName]
+                   && self->listOfElements != nil && self->listOfElements.count > 0) {
+            [self->entity setValue:[self->listOfElements copy] forKey:self->parentElementName];
+            self->parentElementName = nil;
+            self->childElementName = nil;
+            [self->listOfElements removeAllObjects];
+        } else if ([elementName isEqualToString:self->currentNodeName]) {
+            [self->entity setValue:self->currentNodeContent forKey:elementName];
+
+            self->currentNodeContent = nil;
+            self->currentNodeName = nil;
+        }
     }
 }
 

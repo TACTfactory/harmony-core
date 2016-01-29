@@ -16,18 +16,18 @@
 }
 
 - (void) getModelFixtures:(int) mode {
-    NSString *fixtureDirectoryPath;
+    NSMutableString *fixtureDirectoryPath = @"assets/";
 
     if (mode == MODE_APP) {
-        fixtureDirectoryPath = @"app";
+        [fixtureDirectoryPath appendString:@"app"];
     } else if (mode == MODE_DEBUG) {
-        fixtureDirectoryPath = @"debug";
+        [fixtureDirectoryPath appendString:@"debug"];
     } else if (mode == MODE_TEST) {
-        fixtureDirectoryPath = @"test";
+        [fixtureDirectoryPath appendString:@"test"];
     }
 
     NSString *fileName = [self getFixtureFileName];
-    NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:@"xml"];
+    NSString *path = [[NSBundle mainBundle] pathForResource:fileName ofType:@"xml" inDirectory:fixtureDirectoryPath];
 
     if (path != nil) {
         NSURL *fixtureUrl = [NSURL fileURLWithPath:path];
