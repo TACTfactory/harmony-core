@@ -17,7 +17,12 @@ static ${entity.name?cap_first}SQLiteAdapter *${entity.name?upper_case};
 
 - (id) init {
     if (self = [super init]) {
-        ${entity.name?upper_case} = [${entity.name?cap_first}SQLiteAdapter new]
+<#list entities?values as entity>
+    <#if (((entity.fields?size>0)  || (entity.inheritance??)) && !(entity.internal))>
+        ${entity.name?upper_case} = [${entity.name?cap_first}SQLiteAdapter new];
+
+    </#if>
+</#list>
     }
 }
 
