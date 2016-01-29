@@ -60,6 +60,10 @@ static NSString *FILE_NAME = @"${curr.name}";
 
     </#if>
 </#list>
+<#if (InheritanceUtils.isExtended(curr))>
+    [[${curr.inheritance.superclass.name?cap_first}DataLoader get${curr.inheritance.superclass.name?cap_first}DataLoader] extractItem:item];
+
+</#if>
     return result;
 }
 

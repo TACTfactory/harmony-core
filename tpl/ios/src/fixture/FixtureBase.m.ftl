@@ -16,7 +16,7 @@
 }
 
 - (void) getModelFixtures:(int) mode {
-    NSMutableString *fixtureDirectoryPath = @"assets/";
+    NSMutableString *fixtureDirectoryPath = [NSMutableString stringWithString:@"assets/"];
 
     if (mode == MODE_APP) {
         [fixtureDirectoryPath appendString:@"app"];
