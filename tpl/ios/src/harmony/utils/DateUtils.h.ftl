@@ -26,17 +26,10 @@
 + (NSString *) dateToString:(NSDate *) date;
 
 /**
- * Change NSString in NSDate with the format : "yyyy-MM-dd HH:mm".
+ * Convert XMLString to Date/Time.
  * @param the NSString to format
  * @return NSDate
  */
-+ (NSDate *) fixtureStringToDate:(NSString *) fixtureString;
-
-/**
- * Change NSString in NSDate with the format : "yyyy-MM-dd".
- * @param the NSString to format
- * @return NSDate
- */
-+ (NSDate *) fixtureStringToDateTime:(NSString *) fixtureString;
++ (NSDate *) formatXMLStringToDateTime:(NSString *) xmlString;
 
 @end
