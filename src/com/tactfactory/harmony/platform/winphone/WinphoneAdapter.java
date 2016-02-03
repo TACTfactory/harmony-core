@@ -100,7 +100,7 @@ public class WinphoneAdapter extends BaseAdapter {
         this.setUtilityPath("ftl_methods");
         this.setMenu("menu");
         
-        this.setPlatform("winphone");
+        this.setPlatform("windows");
         this.setAssets("Assets");
         this.setFixture("Fixture");
         this.setSource("src");

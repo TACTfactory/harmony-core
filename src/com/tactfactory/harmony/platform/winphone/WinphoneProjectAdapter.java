@@ -202,14 +202,14 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getCreateFolders() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getCriteriasFiles() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
@@ -309,8 +309,8 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getActivityLibraries() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
@@ -354,14 +354,14 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getEditView(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getShowView(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
@@ -406,20 +406,20 @@ public class WinphoneProjectAdapter implements IAdapterProject {
     @Override
     public List<IUpdater> getCommonView(EntityMetadata entity,
             boolean isWritable) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getViews(boolean isDate, boolean isTime) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getFixtureLibraries(String type) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
@@ -465,7 +465,8 @@ public class WinphoneProjectAdapter implements IAdapterProject {
     @Override
     public List<IUpdater> getFixtureEntityDefinitionFiles(
             String fixtureType, EntityMetadata entity) {
-    	return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
@@ -612,14 +613,14 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getProviderFiles() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getProviderAdaptersEntityFiles(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
@@ -630,62 +631,62 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getTestProviderEntityFiles(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getTestProjectFilesToClear() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getTestProjectCreateFolders() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getTestProjectLibraries() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getTestProjectFiles() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getTestFiles() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getTestEntityFiles(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getMenuFiles() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getMenuBaseFiles() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getMenuFiles(String menuName) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
@@ -743,25 +744,25 @@ public class WinphoneProjectAdapter implements IAdapterProject {
     @Override
     public List<IUpdater> getStaticViewFiles(String packageName,
             String viewName, ViewType type) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> updateHomeActivity(String activity, String buttonId) {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getEntityBaseFiles() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getFilesToDelete() {
-        // TODO Auto-generated method stub
-        return null;
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 }
