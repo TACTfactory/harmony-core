@@ -18,25 +18,24 @@ import com.tactfactory.harmony.platform.IAdapter;
  */
 public abstract class LibraryUtils {
 
-	/**
-	 * Update TestLibs.
-	 * @param adapter The adapter.
-	 * @param libName The library name.
-	 */
-	public static void addLibraryToTestProject(
-			final IAdapter adapter,
-			final String libName) {
+    /**
+     * Update TestLibs.
+     * @param adapter The adapter.
+     * @param libName The library name.
+     */
+    public static void addLibraryToTestProject(
+            final IAdapter adapter,
+            final String libName) {
 
-		final File dest = new File(String.format("%s/%s",
-				adapter.getTestLibsPath(),
-				libName));
+        final File dest = new File(String.format("%s/%s",
+                adapter.getTestLibsPath(),
+                libName));
 
-		if (!dest.exists()) {
-			File src = Harmony.getLibrary(libName);
+        if (!dest.exists()) {
+            File src = Harmony.getLibrary(libName);
             TactFileUtils.copyfile(
                     src,
                     dest);
-		}
-
-	}
+        }
+    }
 }

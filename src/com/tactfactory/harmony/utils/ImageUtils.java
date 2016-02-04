@@ -22,39 +22,37 @@ import com.mortennobel.imagescaling.ResampleOp;
  * Images utility class.
  */
 public abstract class ImageUtils {
-	/** Thread numbers. */
-	private static final int NB_THREAD = 8;
+    /** Thread numbers. */
+    private static final int NB_THREAD = 8;
 
-	/**
-	 * Resize a image given a ratio.
-	 * @param imageSrc Source image
-	 * @param imageDst Destination file
-	 * @param fraction Ratio for image resizing
-	 * @throws IOException If image source doesn't exists
-	 */
-	public static void resize(
-			final File imageSrc,
-			final File imageDst,
-			final float fraction)
-					throws IOException {
+    /**
+     * Resize a image given a ratio.
+     * @param imageSrc Source image
+     * @param imageDst Destination file
+     * @param fraction Ratio for image resizing
+     * @throws IOException If image source doesn't exists
+     */
+    public static void resize(
+            final File imageSrc,
+            final File imageDst,
+            final float fraction)
+                    throws IOException {
 
-		if (!imageDst.exists()) {
-			final ResampleOp resampleOp = new ResampleOp(
-						DimensionConstrain.createRelativeDimension(fraction));
+        if (!imageDst.exists()) {
+            final ResampleOp resampleOp = new ResampleOp(DimensionConstrain.createRelativeDimension(fraction));
 
-			resampleOp.setFilter(
-					ResampleFilters.getBiCubicHighFreqResponse());
-			resampleOp.setNumberOfThreads(NB_THREAD);
+            resampleOp.setFilter(ResampleFilters.getBiCubicHighFreqResponse());
+            resampleOp.setNumberOfThreads(NB_THREAD);
 
-			final BufferedImage image = ImageIO.read(imageSrc);
-			final BufferedImage imageResize =
-					resampleOp.filter(image, null);
+            final BufferedImage image = ImageIO.read(imageSrc);
+            final BufferedImage imageResize =
+                    resampleOp.filter(image, null);
 
-			ImageIO.write(
-					imageResize,
-					TactFileUtils.getExtension(imageDst),
-					imageDst);
-		}
-	}
+            ImageIO.write(
+                    imageResize,
+                    TactFileUtils.getExtension(imageDst),
+                    imageDst);
+        }
+    }
 
 }

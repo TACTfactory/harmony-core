@@ -24,56 +24,56 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 @PluginImplementation
 public class DependenciesCommand extends CommandBase {
 
-	/** Bundle name. */
-	public static final String BUNDLE 		= "dependencies";
+    /** Bundle name. */
+    public static final String BUNDLE         = "dependencies";
 
-	/** Subject name. */
-	public static final String SUBJECT 		= "install";
+    /** Subject name. */
+    public static final String SUBJECT         = "install";
 
-	/** Action name. */
-	public static final String ACTION_SDK	= "sdk";
+    /** Action name. */
+    public static final String ACTION_SDK    = "sdk";
 
-	/** SDK:INSTALL:SDK. */
-	public static final String INSTALL_SDK	= BUNDLE
-			+ SEPARATOR
-			+ SUBJECT
-			+ SEPARATOR
-			+ ACTION_SDK;
+    /** SDK:INSTALL:SDK. */
+    public static final String INSTALL_SDK    = BUNDLE
+            + SEPARATOR
+            + SUBJECT
+            + SEPARATOR
+            + ACTION_SDK;
 
-	@Override
-	public final void execute(final String action,
-			final String[] args,
-			final String option) {
-		final AndroidSDKManager androidSDKManager = new AndroidSDKManager();
-		final String distantSDKUrl = androidSDKManager.findLatestSDKToolsLink(
-						AndroidSDKManager.LINUX);
-		
-		Questionnary questionnary = new Questionnary(this.getCommandArgs());
-		Question question = new Question();
-		question.setQuestion("Where do you want to install the Android SDK ?");
-		question.setAcceptBlankAnswer(false);
-		question.setParamName("path");
-		question.setShortParamName("p");
-		questionnary.addQuestion("path", question);
-		questionnary.launchQuestionnary();
-		
-		final String sdkPath = questionnary.getAnswer("path");
-		androidSDKManager.downloadAndInstallAndroidSDK(distantSDKUrl, sdkPath);
+    @Override
+    public final void execute(final String action,
+            final String[] args,
+            final String option) {
+        final AndroidSDKManager androidSDKManager = new AndroidSDKManager();
+        final String distantSDKUrl = androidSDKManager.findLatestSDKToolsLink(
+                        AndroidSDKManager.LINUX);
 
-	}
+        Questionnary questionnary = new Questionnary(this.getCommandArgs());
+        Question question = new Question();
+        question.setQuestion("Where do you want to install the Android SDK ?");
+        question.setAcceptBlankAnswer(false);
+        question.setParamName("path");
+        question.setShortParamName("p");
+        questionnary.addQuestion("path", question);
+        questionnary.launchQuestionnary();
 
-	@Override
-	public final void summary() {
-		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
-		commands.put(INSTALL_SDK, "Install the android SDK");
-		
-		ConsoleUtils.displaySummary(
-				BUNDLE,
-				commands);
-	}
+        final String sdkPath = questionnary.getAnswer("path");
+        androidSDKManager.downloadAndInstallAndroidSDK(distantSDKUrl, sdkPath);
 
-	@Override
-	public final boolean isAvailableCommand(final String command) {
-		return INSTALL_SDK.equals(command);
-	}
+    }
+
+    @Override
+    public final void summary() {
+        LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
+        commands.put(INSTALL_SDK, "Install the android SDK");
+
+        ConsoleUtils.displaySummary(
+                BUNDLE,
+                commands);
+    }
+
+    @Override
+    public final boolean isAvailableCommand(final String command) {
+        return INSTALL_SDK.equals(command);
+    }
 }

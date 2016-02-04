@@ -74,8 +74,7 @@ public abstract class CommandBase implements Command {
 
         // Convert CompilationUnits entities to ClassMetaData
         if (this.javaModelParser.getEntities().size() > 0) {
-            for (final CompilationUnit mclass
-                    : this.javaModelParser.getEntities()) {
+            for (final CompilationUnit mclass : this.javaModelParser.getEntities()) {
                 this.javaModelParser.parse(
                         mclass,
                         ApplicationMetadata.INSTANCE);

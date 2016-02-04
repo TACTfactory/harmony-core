@@ -23,57 +23,57 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 @PluginImplementation
 public class ResourceCommand extends CommandBase {
 
-	/** Bundle name. */
-	public static final String BUNDLE = "resource";
-	/** Subject. */
-	public static final String SUBJECT = "generate";
+    /** Bundle name. */
+    public static final String BUNDLE = "resource";
+    /** Subject. */
+    public static final String SUBJECT = "generate";
 
-	/** Image action. */
-	public static final String ACTION_IMAGE = "image";
-	/** Translate action. */
-	public static final String ACTION_TRANSLATE = "translate";
+    /** Image action. */
+    public static final String ACTION_IMAGE = "image";
+    /** Translate action. */
+    public static final String ACTION_TRANSLATE = "translate";
 
-	//commands
-	/** Command : RESOURCE:GENERATE:IMAGE. */
-	public static final String GENERATE_IMAGE 	=
-			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_IMAGE;
-	/** Command : RESOURCE:GENERATE:TRANSLATE. */
-	public static final String GENERATE_TRANSLATE	=
-			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_TRANSLATE;
+    //commands
+    /** Command : RESOURCE:GENERATE:IMAGE. */
+    public static final String GENERATE_IMAGE     =
+            BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_IMAGE;
+    /** Command : RESOURCE:GENERATE:TRANSLATE. */
+    public static final String GENERATE_TRANSLATE    =
+            BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_TRANSLATE;
 
-	@Override
-	public final void summary() {
-		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
-		commands.put(GENERATE_IMAGE, "Generate all resize of the HD images");
-		commands.put(GENERATE_TRANSLATE, "Generate translate");
-		
-		ConsoleUtils.displaySummary(
-				BUNDLE,
-				commands);
-	}
+    @Override
+    public final void summary() {
+        LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
+        commands.put(GENERATE_IMAGE, "Generate all resize of the HD images");
+        commands.put(GENERATE_TRANSLATE, "Generate translate");
 
-	@Override
-	public final void execute(final String action,
-			final String[] args,
-			final String option) {
-		ConsoleUtils.display("> Resource Generator");
+        ConsoleUtils.displaySummary(
+                BUNDLE,
+                commands);
+    }
 
-		this.setCommandArgs(Console.parseCommandArgs(args));
+    @Override
+    public final void execute(final String action,
+            final String[] args,
+            final String option) {
+        ConsoleUtils.display("> Resource Generator");
 
-		for(IAdapter adapter : this.getAdapters()) {
-    		try {
-    			if (action.equals(GENERATE_IMAGE)) {
-    				adapter.resizeImage();
-    			}
-    		} catch (final Exception e) {
-    			ConsoleUtils.displayError(e);
-    		}
-		}
-	}
+        this.setCommandArgs(Console.parseCommandArgs(args));
 
-	@Override
-	public final boolean isAvailableCommand(final String command) {
-		return  command.equals(GENERATE_IMAGE)
-				|| command.equals(GENERATE_TRANSLATE);
-	}
+        for(IAdapter adapter : this.getAdapters()) {
+            try {
+                if (action.equals(GENERATE_IMAGE)) {
+                    adapter.resizeImage();
+                }
+            } catch (final Exception e) {
+                ConsoleUtils.displayError(e);
+            }
+        }
+    }
+
+    @Override
+    public final boolean isAvailableCommand(final String command) {
+        return  command.equals(GENERATE_IMAGE)
+                || command.equals(GENERATE_TRANSLATE);
+    }
 }

@@ -25,59 +25,55 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  */
 public class CoreTest extends CommonTest {
 
-	/**
-	 * Initialization.
-	 * @throws Exception if something bad happened.
-	 */
-	@BeforeClass
-	public static void setUpBefore() {
-	    harmony = Harmony.getInstance();
-	}
+    /**
+     * Initialization.
+     * @throws Exception if something bad happened.
+     */
+    @BeforeClass
+    public static void setUpBefore() {
+        harmony = Harmony.getInstance();
+    }
 
-	@Before
-	@Override
-	public final void setUp() {
-		super.setUp();
-	}
+    @Before
+    @Override
+    public final void setUp() {
+        super.setUp();
+    }
 
-	@After
-	@Override
-	public final void tearDown() {
-		super.tearDown();
-	}
+    @After
+    @Override
+    public final void tearDown() {
+        super.tearDown();
+    }
 
-	/**
-	 * Tests the plugin loading.
-	 */
-	@Test
-	public final void loadPlugins() {
-		Assert.assertTrue(!CommonTest.getHarmony().getCommands().isEmpty());
+    /**
+     * Tests the plugin loading.
+     */
+    @Test
+    public final void loadPlugins() {
+        Assert.assertTrue(!CommonTest.getHarmony().getCommands().isEmpty());
+        Assert.assertNotNull(CommonTest.getHarmony().getCommand(GeneralCommand.class));
+        Assert.assertNotNull(CommonTest.getHarmony().getCommand(ProjectCommand.class));
+        Assert.assertNotNull(CommonTest.getHarmony().getCommand(OrmCommand.class));
+    }
 
-		Assert.assertNotNull(
-				CommonTest.getHarmony().getCommand(GeneralCommand.class));
-		Assert.assertNotNull(
-				CommonTest.getHarmony().getCommand(ProjectCommand.class));
-		Assert.assertNotNull(
-				CommonTest.getHarmony().getCommand(OrmCommand.class));
-	}
+    /**
+     * List all the available commands.
+     */
+    @Test
+    public final void list() {
+        ConsoleUtils.display("\nTest List bundle/command\n" + SHARP_DELIMITOR);
 
-	/**
-	 * List all the available commands.
-	 */
-	@Test
-	public final void list() {
-	    ConsoleUtils.display("\nTest List bundle/command\n" + SHARP_DELIMITOR);
+        CommonTest.getHarmony().findAndExecute(GeneralCommand.LIST, null, null);
+    }
 
-		CommonTest.getHarmony().findAndExecute(GeneralCommand.LIST, null, null);
-	}
+    /**
+     * Display Harmony help.
+     */
+    @Test
+    public final void help() {
+        ConsoleUtils.display("\nTest Help\n" + SHARP_DELIMITOR);
 
-	/**
-	 * Display Harmony help.
-	 */
-	@Test
-	public final void help() {
-	    ConsoleUtils.display("\nTest Help\n" + SHARP_DELIMITOR);
-
-		CommonTest.getHarmony().findAndExecute(GeneralCommand.HELP, null, null);
-	}
+        CommonTest.getHarmony().findAndExecute(GeneralCommand.HELP, null, null);
+    }
 }

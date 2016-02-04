@@ -18,27 +18,27 @@ import com.tactfactory.harmony.updater.IUpdater;
  *
  */
 public class ApplicationGenerator extends BaseGenerator<IAdapter> {
-	/**
-	 * Constructor.
-	 * @param adapter the adapter to use
-	 * @throws Exception if adapter is null
-	 */
-	public ApplicationGenerator(final IAdapter adapter) throws Exception {
-		super(adapter);
+    /**
+     * Constructor.
+     * @param adapter the adapter to use
+     * @throws Exception if adapter is null
+     */
+    public ApplicationGenerator(final IAdapter adapter) throws Exception {
+        super(adapter);
 
-		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
+        this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
 
-		List<String> services = this.getAdapter().getAdapterProject()
-		        .getServices();
-		this.getDatamodel().put(TagConstant.SERVICES, services);
-	}
+        List<String> services = this.getAdapter().getAdapterProject()
+                .getServices();
+        this.getDatamodel().put(TagConstant.SERVICES, services);
+    }
 
-	/**
-	 * Generate the application.
-	 */
-	public final void generateApplication() {
-	    List<IUpdater> updaters =
-	            this.getAdapter().getAdapterProject().getApplicationFiles();
-	    this.processUpdater(updaters);
-	}
+    /**
+     * Generate the application.
+     */
+    public final void generateApplication() {
+        List<IUpdater> updaters =
+                this.getAdapter().getAdapterProject().getApplicationFiles();
+        this.processUpdater(updaters);
+    }
 }

@@ -28,133 +28,133 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  */
 @PluginImplementation
 public class CommonCommand extends CommandBase {
-	/** Question for view name. */
-	private static final String QUESTION_VIEW_NAME =
-			"Name of the view ? (The activity will be named {Name}Activity)";
-//	/** Question for view type. */
-//	private static final String QUESTION_VIEW_TYPE =
-//			"Type of the view ?\n";
-//	/** Question for linked entity. */
-//	private static final String QUESTION_LINKED_ENTITY =
-//			"Link this view to which entity ? (leave blank for no entity)";
-	/** Question for package name. */
-	private static final String QUESTION_VIEW_PACKAGE_NAME =
-			"Name of the package the view will be in ?"
-			+ "(The activity will be created in"
-			+ "{YourProjectNamespace}.view.{PackageName})";
-	
-	/** Bundle name. */
-	public static final String BUNDLE = "common";
-	/** Subject. */
-	public static final String SUBJECT = "generate";
+    /** Question for view name. */
+    private static final String QUESTION_VIEW_NAME =
+            "Name of the view ? (The activity will be named {Name}Activity)";
+//    /** Question for view type. */
+//    private static final String QUESTION_VIEW_TYPE =
+//            "Type of the view ?\n";
+//    /** Question for linked entity. */
+//    private static final String QUESTION_LINKED_ENTITY =
+//            "Link this view to which entity ? (leave blank for no entity)";
+    /** Question for package name. */
+    private static final String QUESTION_VIEW_PACKAGE_NAME =
+            "Name of the package the view will be in ?"
+            + "(The activity will be created in"
+            + "{YourProjectNamespace}.view.{PackageName})";
 
-	/** Action entity. */
-	public static final String ACTION_STATIC = "static";
+    /** Bundle name. */
+    public static final String BUNDLE = "common";
+    /** Subject. */
+    public static final String SUBJECT = "generate";
 
-	//commands
-	/** Command : COMMON:GENERATE:STATIC. */
-	public static final String GENERATE_STATIC =
-			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_STATIC;
+    /** Action entity. */
+    public static final String ACTION_STATIC = "static";
 
-	@Override
-	public final void execute(final String action,
-			final String[] args,
-			final String option) {
-		ConsoleUtils.display("> Common generator ");
+    //commands
+    /** Command : COMMON:GENERATE:STATIC. */
+    public static final String GENERATE_STATIC =
+            BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_STATIC;
 
-		this.setCommandArgs(Console.parseCommandArgs(args));
+    @Override
+    public final void execute(final String action,
+            final String[] args,
+            final String option) {
+        ConsoleUtils.display("> Common generator ");
 
-		if (GENERATE_STATIC.equals(action)) {
-			this.generateStaticView();
-		}
-	}
+        this.setCommandArgs(Console.parseCommandArgs(args));
+
+        if (GENERATE_STATIC.equals(action)) {
+            this.generateStaticView();
+        }
+    }
 
 
-	/**
-	 * Generate an empty bundle.
-	 */
-	private void generateStaticView() {
-		this.generateMetas();
-		Questionnary questionnary = new Questionnary(this.getCommandArgs());
-		
-		// Name Question
-		Question viewNameQuestion = new Question();
-		viewNameQuestion.setQuestion(QUESTION_VIEW_NAME);
-		viewNameQuestion.setParamName("name");
-		viewNameQuestion.setShortParamName("n");
-		viewNameQuestion.setAcceptBlankAnswer(false);
-		
-		// Type question
-//		String[] options = new String[ViewType.values().length];
-//		List<String> choiceStrings = new ArrayList<String>(options.length);
-//		
-//		for (int i = 0; i < ViewType.values().length; i++) {
-//			ViewType possibleType = ViewType.values()[i];
-//			options[i] = String.valueOf(possibleType.getId());
-//			choiceStrings.add(possibleType.getChoiceString());
-//		}
-//		String possibleTypes = Joiner.on('\n').join(choiceStrings);
-//		Question viewTypeQuestion = new Question();
-//		viewTypeQuestion.setQuestion(QUESTION_VIEW_TYPE + possibleTypes);
-//		viewTypeQuestion.setParamName("type");
-//		viewTypeQuestion.setShortParamName("t");
-//		viewTypeQuestion.setAcceptBlankAnswer(false);
-//		viewTypeQuestion.setAuthorizedValues(options);
-		
-		// Linked entity question
-//		Question entityQuestion = new Question();
-//		entityQuestion.setParamName("entity");
-//		entityQuestion.setShortParamName("e");
-//		entityQuestion.setAcceptBlankAnswer(true);
-//		entityQuestion.setQuestion(QUESTION_LINKED_ENTITY);
-		
-		// Package name question
-		Question packageQuestion = new Question();
-		packageQuestion.setParamName("package");
-		packageQuestion.setShortParamName("p");
-		packageQuestion.setAcceptBlankAnswer(false);
-		packageQuestion.setQuestion(QUESTION_VIEW_PACKAGE_NAME);
-		
-		// Add the questions to the questionnary
-		questionnary.addQuestion("package", packageQuestion);
-		questionnary.addQuestion("name", viewNameQuestion);
-		//questionnary.addQuestion("type", viewTypeQuestion);
-		//questionnary.addQuestion("entity", entityQuestion);
-		questionnary.launchQuestionnary();
-		
-		/*ViewType viewType = ViewType.fromId(
-				Integer.valueOf(questionnary.getAnswer("type")));*/
-		ViewType viewType = ViewType.EMPTY;
-		String viewName = questionnary.getAnswer("name");
-		String packageName = questionnary.getAnswer("package").toLowerCase();
-		//String linkedEntityName = questionnary.getAnswer("entity");
-		String linkedEntityName = "";
-		
-		EntityMetadata linkedEntity = 
-				ApplicationMetadata.INSTANCE.getEntities().get(
-						linkedEntityName);
-		
-		for(IAdapter adapter : this.getAdapters()) {
-		    new CommonGenerator(adapter).generateStaticView(
-		            packageName,
-		            viewName,
-		            viewType,
-		            linkedEntity);
-		}
-	}
+    /**
+     * Generate an empty bundle.
+     */
+    private void generateStaticView() {
+        this.generateMetas();
+        Questionnary questionnary = new Questionnary(this.getCommandArgs());
 
-	@Override
-	public final void summary() {
-		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
-		commands.put(GENERATE_STATIC, "Generate static view stack");
-		
-		ConsoleUtils.displaySummary(
-				BUNDLE,
-				commands);
-	}
+        // Name Question
+        Question viewNameQuestion = new Question();
+        viewNameQuestion.setQuestion(QUESTION_VIEW_NAME);
+        viewNameQuestion.setParamName("name");
+        viewNameQuestion.setShortParamName("n");
+        viewNameQuestion.setAcceptBlankAnswer(false);
 
-	@Override
-	public final boolean isAvailableCommand(final String command) {
-		return GENERATE_STATIC.equals(command);
-	}
+        // Type question
+//        String[] options = new String[ViewType.values().length];
+//        List<String> choiceStrings = new ArrayList<String>(options.length);
+//
+//        for (int i = 0; i < ViewType.values().length; i++) {
+//            ViewType possibleType = ViewType.values()[i];
+//            options[i] = String.valueOf(possibleType.getId());
+//            choiceStrings.add(possibleType.getChoiceString());
+//        }
+//        String possibleTypes = Joiner.on('\n').join(choiceStrings);
+//        Question viewTypeQuestion = new Question();
+//        viewTypeQuestion.setQuestion(QUESTION_VIEW_TYPE + possibleTypes);
+//        viewTypeQuestion.setParamName("type");
+//        viewTypeQuestion.setShortParamName("t");
+//        viewTypeQuestion.setAcceptBlankAnswer(false);
+//        viewTypeQuestion.setAuthorizedValues(options);
+
+        // Linked entity question
+//        Question entityQuestion = new Question();
+//        entityQuestion.setParamName("entity");
+//        entityQuestion.setShortParamName("e");
+//        entityQuestion.setAcceptBlankAnswer(true);
+//        entityQuestion.setQuestion(QUESTION_LINKED_ENTITY);
+
+        // Package name question
+        Question packageQuestion = new Question();
+        packageQuestion.setParamName("package");
+        packageQuestion.setShortParamName("p");
+        packageQuestion.setAcceptBlankAnswer(false);
+        packageQuestion.setQuestion(QUESTION_VIEW_PACKAGE_NAME);
+
+        // Add the questions to the questionnary
+        questionnary.addQuestion("package", packageQuestion);
+        questionnary.addQuestion("name", viewNameQuestion);
+        //questionnary.addQuestion("type", viewTypeQuestion);
+        //questionnary.addQuestion("entity", entityQuestion);
+        questionnary.launchQuestionnary();
+
+        /*ViewType viewType = ViewType.fromId(
+                Integer.valueOf(questionnary.getAnswer("type")));*/
+        ViewType viewType = ViewType.EMPTY;
+        String viewName = questionnary.getAnswer("name");
+        String packageName = questionnary.getAnswer("package").toLowerCase();
+        //String linkedEntityName = questionnary.getAnswer("entity");
+        String linkedEntityName = "";
+
+        EntityMetadata linkedEntity =
+                ApplicationMetadata.INSTANCE.getEntities().get(
+                        linkedEntityName);
+
+        for(IAdapter adapter : this.getAdapters()) {
+            new CommonGenerator(adapter).generateStaticView(
+                    packageName,
+                    viewName,
+                    viewType,
+                    linkedEntity);
+        }
+    }
+
+    @Override
+    public final void summary() {
+        LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
+        commands.put(GENERATE_STATIC, "Generate static view stack");
+
+        ConsoleUtils.displaySummary(
+                BUNDLE,
+                commands);
+    }
+
+    @Override
+    public final boolean isAvailableCommand(final String command) {
+        return GENERATE_STATIC.equals(command);
+    }
 }
