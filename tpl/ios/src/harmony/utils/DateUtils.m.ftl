@@ -52,7 +52,7 @@ static NSString *REGEX_XML_TIMEZONE = @"(Z|[-+][0-9][0-9]:[0-9][0-9]";
                                                                     options:0
                                                                       range:NSMakeRange(0, fixtureString.length)];
 
-    if (match != nil) {
+    if (matchTimeZone != nil) {
         [components setTimeZone:[NSTimeZone timeZoneWithName:[fixtureString
                                                               substringWithRange:[matchTimeZone rangeAtIndex:1]]]];
     } else {
