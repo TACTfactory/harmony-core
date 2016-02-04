@@ -525,9 +525,9 @@ public class ProjectCommand extends CommandBase {
 			this.initAndroid();
 		} else
 
-//		if (action.equals(INIT_IOS)) {
-//			this.initIOS();
-//		} else
+		if (action.equals(INIT_IOS)) {
+			this.initIOS();
+		} else
 
 //		if (action.equals(INIT_RIM)) {
 //			this.initRIM();
@@ -545,9 +545,9 @@ public class ProjectCommand extends CommandBase {
 			this.removeAndroid();
 		} else
 
-//		if (action.equals(REMOVE_IOS)) {
-//			this.removeIOS();
-//		} else
+		if (action.equals(REMOVE_IOS)) {
+			this.removeIOS();
+		} else
 
 //		if (action.equals(REMOVE_RIM)) {
 //			this.removeRIM();
@@ -581,12 +581,12 @@ public class ProjectCommand extends CommandBase {
 	@Override
 	public final boolean isAvailableCommand(final String command) {
 		return  command.equals(INIT_ANDROID)
-				//|| command.equals(INIT_IOS)
+				|| command.equals(INIT_IOS)
 				//|| command.equals(INIT_RIM)
 				|| command.equals(INIT_WINPHONE)
 				|| command.equals(INIT_ALL)
 				|| command.equals(REMOVE_ANDROID)
-				//|| command.equals(REMOVE_IOS)
+				|| command.equals(REMOVE_IOS)
 				//|| command.equals(REMOVE_RIM)
 				|| command.equals(REMOVE_WINPHONE)
 				|| command.equals(REMOVE_ALL)
