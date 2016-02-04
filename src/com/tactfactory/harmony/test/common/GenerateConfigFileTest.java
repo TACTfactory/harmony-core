@@ -29,55 +29,54 @@ import com.tactfactory.harmony.test.CommonTest;
  */
 @RunWith(Parameterized.class)
 public class GenerateConfigFileTest extends CommonTest {
-	
-	public GenerateConfigFileTest(ApplicationMetadata currentMetadata)
-	        throws Exception {
-		super(currentMetadata);
-	}
 
-	@Before
-	@Override
-	public final void setUp() throws RuntimeException {
-		super.setUp();
-	}
+    public GenerateConfigFileTest(ApplicationMetadata currentMetadata) throws Exception {
+        super(currentMetadata);
+    }
 
-	@After
-	@Override
-	public final void tearDown() throws RuntimeException {
-		super.tearDown();
-	}
-	
-	@Override
-	public void setUpBeforeNewParameter() throws Exception {
-		super.cleanAndroidFolder();
-		super.setUpBeforeNewParameter();
-		
-		this.initAll();
-	}
+    @Before
+    @Override
+    public final void setUp() throws RuntimeException {
+        super.setUp();
+    }
 
-	/**
-	 * Initialize everything for the test.
-	 * @throws Exception 
-	 */
-	private void initAll() throws Exception {
-		System.out.println("\nTest Config generator");
-		System.out.println(SHARP_DELIMITOR);
-		
-		ConfigMetadata.addConfiguration("test", "testvalue");
-		new ConfigGenerator(new AndroidAdapter()).generateConfigFile();
-	}
-	
-	@Parameters
-	public static Collection<Object[]> getParameters() {
-		return CommonTest.getParameters();
-	}
+    @After
+    @Override
+    public final void tearDown() throws RuntimeException {
+        super.tearDown();
+    }
 
-	/**
-	 * Tests the existence of the various generated files.
-	 */
-	@Test
-	public final void testFiles() {
-		CommonTest.hasFindFile("android/res/values/configs.xml");
-		//TODO check configs.xml content
-	}
+    @Override
+    public void setUpBeforeNewParameter() throws Exception {
+        super.cleanAndroidFolder();
+        super.setUpBeforeNewParameter();
+
+        this.initAll();
+    }
+
+    /**
+     * Initialize everything for the test.
+     * @throws Exception
+     */
+    private void initAll() throws Exception {
+        System.out.println("\nTest Config generator");
+        System.out.println(SHARP_DELIMITOR);
+
+        ConfigMetadata.addConfiguration("test", "testvalue");
+        new ConfigGenerator(new AndroidAdapter()).generateConfigFile();
+    }
+
+    @Parameters
+    public static Collection<Object[]> getParameters() {
+        return CommonTest.getParameters();
+    }
+
+    /**
+     * Tests the existence of the various generated files.
+     */
+    @Test
+    public final void testFiles() {
+        CommonTest.hasFindFile("android/res/values/configs.xml");
+        //TODO check configs.xml content
+    }
 }

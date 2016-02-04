@@ -26,83 +26,83 @@ import net.xeoh.plugins.base.annotations.PluginImplementation;
 @PluginImplementation
 public class BundleCommand extends CommandBase {
 
-	/** Bundle name. */
-	public static final String BUNDLE = "bundle";
-	/** Subject. */
-	public static final String SUBJECT = "generate";
+    /** Bundle name. */
+    public static final String BUNDLE = "bundle";
+    /** Subject. */
+    public static final String SUBJECT = "generate";
 
-	/** Action entity. */
-	public static final String ACTION_EMPTY_BUNDLE = "emptybundle";
+    /** Action entity. */
+    public static final String ACTION_EMPTY_BUNDLE = "emptybundle";
 
-	//commands
-	/** Command : BUNDLE:GENERATE:EMPTYBUNDLE. */
-	public static final String GENERATE_EMPTY_BUNDLE =
-			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_EMPTY_BUNDLE;
+    //commands
+    /** Command : BUNDLE:GENERATE:EMPTYBUNDLE. */
+    public static final String GENERATE_EMPTY_BUNDLE =
+            BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_EMPTY_BUNDLE;
 
-	@Override
-	public final void execute(final String action,
-			final String[] args,
-			final String option) {
-		ConsoleUtils.display("> Bundle generator ");
+    @Override
+    public final void execute(final String action,
+            final String[] args,
+            final String option) {
+        ConsoleUtils.display("> Bundle generator ");
 
-		this.setCommandArgs(Console.parseCommandArgs(args));
+        this.setCommandArgs(Console.parseCommandArgs(args));
 
-		if (GENERATE_EMPTY_BUNDLE.equals(action)) {
-			this.generateEmptyBundle();
-		}
-	}
+        if (GENERATE_EMPTY_BUNDLE.equals(action)) {
+            this.generateEmptyBundle();
+        }
+    }
 
 
-	/**
-	 * Generate an empty bundle.
-	 */
-	private void generateEmptyBundle() {
-		// Confirmation
-		if (ConsoleUtils.isConsole()) {
-			Questionnary questionnary = new Questionnary(this.getCommandArgs());
-			Question ownerQuestion = new Question();
-			ownerQuestion.setQuestion("Bundle's owner ?");
-			ownerQuestion.setParamName("owner");
-			ownerQuestion.setShortParamName("o");
-			ownerQuestion.setAcceptBlankAnswer(false);
-			questionnary.addQuestion("owner", ownerQuestion);
+    /**
+     * Generate an empty bundle.
+     */
+    private void generateEmptyBundle() {
+        // Confirmation
+        if (ConsoleUtils.isConsole()) {
+            Questionnary questionnary = new Questionnary(this.getCommandArgs());
+            Question ownerQuestion = new Question();
+            ownerQuestion.setQuestion("Bundle's owner ?");
+            ownerQuestion.setParamName("owner");
+            ownerQuestion.setShortParamName("o");
+            ownerQuestion.setAcceptBlankAnswer(false);
+            questionnary.addQuestion("owner", ownerQuestion);
 
-			Question nameQuestion = new Question();
-			nameQuestion.setQuestion("Name of your Bundle ?");
-			nameQuestion.setParamName("name");
-			nameQuestion.setShortParamName("n");
-			ownerQuestion.setAcceptBlankAnswer(false);
-			questionnary.addQuestion("name", nameQuestion);
+            Question nameQuestion = new Question();
+            nameQuestion.setQuestion("Name of your Bundle ?");
+            nameQuestion.setParamName("name");
+            nameQuestion.setShortParamName("n");
+            ownerQuestion.setAcceptBlankAnswer(false);
+            questionnary.addQuestion("name", nameQuestion);
 
-			Question namespaceQuestion = new Question();
-			namespaceQuestion.setQuestion("Namespace of your Bundle ?");
-			namespaceQuestion.setParamName("namespace");
-			namespaceQuestion.setShortParamName("ns");
-			ownerQuestion.setAcceptBlankAnswer(false);
-			questionnary.addQuestion("namespace", namespaceQuestion);
-			
-			questionnary.launchQuestionnary();
+            Question namespaceQuestion = new Question();
+            namespaceQuestion.setQuestion("Namespace of your Bundle ?");
+            namespaceQuestion.setParamName("namespace");
+            namespaceQuestion.setShortParamName("ns");
+            ownerQuestion.setAcceptBlankAnswer(false);
+            questionnary.addQuestion("namespace", namespaceQuestion);
 
-		    new BundleGenerator(new BundleAdapter()).generateBundleFiles(
-		            questionnary.getAnswer("owner"),
-		            questionnary.getAnswer("name"),
-		            questionnary.getAnswer("namespace"));
-		}
-	}
+            questionnary.launchQuestionnary();
 
-	@Override
-	public final void summary() {
-		LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
-		commands.put(GENERATE_EMPTY_BUNDLE, "Generate Empty Bundle");
-		
-		ConsoleUtils.displaySummary(
-				BUNDLE,
-				commands);
-	}
+            new BundleGenerator(new BundleAdapter()).generateBundleFiles(
+                    questionnary.getAnswer("owner"),
+                    questionnary.getAnswer("name"),
+                    questionnary.getAnswer("namespace"));
+        }
+    }
 
-	@Override
-	public final boolean isAvailableCommand(final String command) {
-		return GENERATE_EMPTY_BUNDLE.equals(command);
-	}
+    @Override
+    public final void summary() {
+        LinkedHashMap<String, String> commands = new LinkedHashMap<String, String>();
+        commands.put(GENERATE_EMPTY_BUNDLE, "Generate Empty Bundle");
+
+        ConsoleUtils.displaySummary(
+                BUNDLE,
+                commands);
+    }
+
+    @Override
+    public final boolean isAvailableCommand(final String command) {
+        return GENERATE_EMPTY_BUNDLE.equals(command);
+    }
 
 }

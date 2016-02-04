@@ -14,146 +14,146 @@ import java.io.File;
  * Utility class for OS manipulations.
  */
 public abstract class OsUtil {
-	/** Generic constant. */
-	private static final String GENERIC = "generic";
+    /** Generic constant. */
+    private static final String GENERIC = "generic";
 
-	/** First drive letter. */
-	private static final char BEGIN = 'c';
+    /** First drive letter. */
+    private static final char BEGIN = 'c';
 
-	/** Last drive letter. */
-	private static final char END = 'z';
-
-
-	/** Return Os name.
-	 * @return the OS name
-	 */
-	public static String getOsName() {
-		return System.getProperty("os.name", "unknown");
-	}
-
-	/** Return Platform type (win32, linux, solaris, mac, or generic).
-	 * @return the platform type
-	 */
-	public static String platform() {
-		String ret = GENERIC;
-		final String osname =
-				System.getProperty("os.name", GENERIC).toLowerCase();
-		if (osname.startsWith("windows")) {
-			ret = "win32";
-		} else if (osname.startsWith("linux")) {
-			ret = "linux";
-		} else if (osname.startsWith("sunos")) {
-			ret = "solaris";
-		} else if (osname.startsWith("mac") || osname.startsWith("darwin")) {
-			ret = "mac";
-		}
-		return ret;
-	}
-
-	/** warning! only gives JRE architecture,
-	 * on x64 machine with x86 JRE installed, prints 'x86'.
-	 * @return The JRE architecture
-	 */
-	public static String getArch() {
-		return System.getProperty("os.arch", GENERIC);
-	}
+    /** Last drive letter. */
+    private static final char END = 'z';
 
 
-	/**
-	 * Check if system is x64.
-	 * @return True if x64
-	 */
-	public static boolean isX64() {
-		boolean is64bit = false;
-		if (isWindows()) {
-			if (System.getProperty("os.name").contains("Windows")) {
-			    is64bit = System.getenv("ProgramFiles(x86)") != null;
-			} else {
-			    is64bit = System.getProperty("os.arch").indexOf("64") != -1;
-			}
-		} else {
-			is64bit = false;
-		}
-		return is64bit;
-	}
+    /** Return Os name.
+     * @return the OS name
+     */
+    public static String getOsName() {
+        return System.getProperty("os.name", "unknown");
+    }
 
-	/**
-	 * Check if system is Windows.
-	 * @return true if Windows
-	 */
-	public static boolean isWindows() {
-		return getOsName().toLowerCase().contains("windows");
-	}
+    /** Return Platform type (win32, linux, solaris, mac, or generic).
+     * @return the platform type
+     */
+    public static String platform() {
+        String ret = GENERIC;
+        final String osname =
+                System.getProperty("os.name", GENERIC).toLowerCase();
+        if (osname.startsWith("windows")) {
+            ret = "win32";
+        } else if (osname.startsWith("linux")) {
+            ret = "linux";
+        } else if (osname.startsWith("sunos")) {
+            ret = "solaris";
+        } else if (osname.startsWith("mac") || osname.startsWith("darwin")) {
+            ret = "mac";
+        }
+        return ret;
+    }
 
-	/**
-	 * Check if system is Linux.
-	 * @return true if Linux
-	 */
-	public static boolean isLinux() {
-		return getOsName().toLowerCase().contains("linux");
-	}
+    /** warning! only gives JRE architecture,
+     * on x64 machine with x86 JRE installed, prints 'x86'.
+     * @return The JRE architecture
+     */
+    public static String getArch() {
+        return System.getProperty("os.arch", GENERIC);
+    }
 
-	/**
-	 * Check if system is Mac.
-	 * @return true if Mac
-	 */
-	public static boolean isMac() {
-		final String os = getOsName().toLowerCase();
-		return os.startsWith("mac") || os.startsWith("darwin");
-	}
 
-	/**
-	 * Check if system is Solaris.
-	 * @return true if Solaris
-	 */
-	public static boolean isSolaris() {
-		final String os = getOsName().toLowerCase();
-		return os.indexOf("sunos") >= 0;
-	}
+    /**
+     * Check if system is x64.
+     * @return True if x64
+     */
+    public static boolean isX64() {
+        boolean is64bit = false;
+        if (isWindows()) {
+            if (System.getProperty("os.name").contains("Windows")) {
+                is64bit = System.getenv("ProgramFiles(x86)") != null;
+            } else {
+                is64bit = System.getProperty("os.arch").indexOf("64") != -1;
+            }
+        } else {
+            is64bit = false;
+        }
+        return is64bit;
+    }
 
-	/** return windows system drive.
-	 * @return Windows system drive
-	 */
-	public static String findWindowsSystemDrive() {
-		String sysdrive = null;
-		if (isWindows()
-				&& System.getProperty("java.version", "").startsWith("1.5.")) {
-			// System.getEnv(String name)
-			// is deprecated and throws java.lang.Error
-			// in java 1.2 through 1.4. but un-deprecated in 1.5
-			sysdrive = System.getenv("SYSTEMDRIVE");
-		}
-		return sysdrive;
-	}
+    /**
+     * Check if system is Windows.
+     * @return true if Windows
+     */
+    public static boolean isWindows() {
+        return getOsName().toLowerCase().contains("windows");
+    }
 
-	/** return windows system root folder.
-	 * @return Windows system root folder
-	 */
-	public static String findWindowsSystemRoot() {
-		String sysRoot = null;
-		if (isWindows()) {
-			if (System.getProperty("java.version", "").startsWith("1.5.")) {
-				// System.getEnv(String name)
-				// is deprecated and throws java.lang.Error
-				// in java 1.2 through 1.4. but un-deprecated in 1.5
-				sysRoot = System.getenv("SYSTEMROOT");
-			} else {
-				// try to find it by looking at the file system
-				for (char drive = OsUtil.BEGIN; drive < OsUtil.END; drive++) {
-					File root = new File(drive + ":\\WINDOWS");
-					if (root.exists() && root.isDirectory()) {
-						sysRoot = root.getAbsolutePath().toString();
-					}
+    /**
+     * Check if system is Linux.
+     * @return true if Linux
+     */
+    public static boolean isLinux() {
+        return getOsName().toLowerCase().contains("linux");
+    }
 
-					root = new File(drive + ":\\WINNT");
-					if (root.exists() && root.isDirectory()) {
-						sysRoot = root.getAbsolutePath().toString();
-					}
-				}
-			}
-		}
-		return sysRoot;
-	}
+    /**
+     * Check if system is Mac.
+     * @return true if Mac
+     */
+    public static boolean isMac() {
+        final String os = getOsName().toLowerCase();
+        return os.startsWith("mac") || os.startsWith("darwin");
+    }
+
+    /**
+     * Check if system is Solaris.
+     * @return true if Solaris
+     */
+    public static boolean isSolaris() {
+        final String os = getOsName().toLowerCase();
+        return os.indexOf("sunos") >= 0;
+    }
+
+    /** return windows system drive.
+     * @return Windows system drive
+     */
+    public static String findWindowsSystemDrive() {
+        String sysdrive = null;
+        if (isWindows()
+                && System.getProperty("java.version", "").startsWith("1.5.")) {
+            // System.getEnv(String name)
+            // is deprecated and throws java.lang.Error
+            // in java 1.2 through 1.4. but un-deprecated in 1.5
+            sysdrive = System.getenv("SYSTEMDRIVE");
+        }
+        return sysdrive;
+    }
+
+    /** return windows system root folder.
+     * @return Windows system root folder
+     */
+    public static String findWindowsSystemRoot() {
+        String sysRoot = null;
+        if (isWindows()) {
+            if (System.getProperty("java.version", "").startsWith("1.5.")) {
+                // System.getEnv(String name)
+                // is deprecated and throws java.lang.Error
+                // in java 1.2 through 1.4. but un-deprecated in 1.5
+                sysRoot = System.getenv("SYSTEMROOT");
+            } else {
+                // try to find it by looking at the file system
+                for (char drive = OsUtil.BEGIN; drive < OsUtil.END; drive++) {
+                    File root = new File(drive + ":\\WINDOWS");
+                    if (root.exists() && root.isDirectory()) {
+                        sysRoot = root.getAbsolutePath().toString();
+                    }
+
+                    root = new File(drive + ":\\WINNT");
+                    if (root.exists() && root.isDirectory()) {
+                        sysRoot = root.getAbsolutePath().toString();
+                    }
+                }
+            }
+        }
+        return sysRoot;
+    }
 }
 
 // Source: http://www.tolstoy.com/samizdat/sysprops.html
@@ -757,7 +757,7 @@ public abstract class OsUtil {
 // java.vendo = "Hewlett Packard Co." "hewlett packard co."
 // java.class.versio = "45.3" "45.3"
 // java.versio = "HP-UX Java C.01.15.03 07/07/98"
-// 			"hp-ux java c.01.15.03 07/07/98"
+//             "hp-ux java c.01.15.03 07/07/98"
 // file.separato = "/" "/"
 // path.separato = ":" ":"
 // line.separato = "0xa" "0xa"

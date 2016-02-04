@@ -16,7 +16,8 @@ import org.junit.runners.Suite.SuiteClasses;
  * All Harmony tests related to project generation.
  */
 @RunWith(Suite.class)
-@SuiteClasses({	ProjectInitTest.class })
+@SuiteClasses({
+    ProjectInitTest.class })
 
 public class AllTests {
 

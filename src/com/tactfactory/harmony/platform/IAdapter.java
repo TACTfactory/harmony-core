@@ -49,16 +49,16 @@ public interface IAdapter {
 
     /** Convert image structure to alternative resolution. */
     void resizeImage();
-    
+
     /**
      * Checks whether the two versions of the given file are different.
      * Header can be ignored.
-     * 
+     *
      * @param oldContent Old content of the file
      * @param newContent New content of the file
      * @param fileName The file name
      * @param ignoreHeader True if ignore header
-     * 
+     *
      * @return True if files are the same
      */
     boolean filesEqual(String oldContent,
@@ -96,13 +96,13 @@ public interface IAdapter {
      * @return The sources path
      */
     String getSourcePath();
-    
+
     /**
      * Get the sources path.
      * @return The sources path
      */
     String getSourceControllerPath();
-    
+
     /**
      * Get the sources path for entities.
      * @return The entities sources path
@@ -126,19 +126,19 @@ public interface IAdapter {
      * @return The menu path
      */
     String getMenuPath();
-    
+
     /**
      * Get the project's menu base path.
      * @return The menu base path
      */
     String getMenuBasePath();
-    
+
     /**
      * Get the project's menu path.
      * @return The menu path
      */
     String getTemplateMenuPath();
-    
+
     /**
      * Get the project's menu base path.
      * @return The menu base path
@@ -217,7 +217,7 @@ public interface IAdapter {
      */
     String getAssetsPath();
 
-    
+
 
     /**
      * Get the manifest's path.
@@ -278,7 +278,7 @@ public interface IAdapter {
      * @return The strings tests templates path
      */
     String getTemplateStringsTestPathFile();
-    
+
     /**
      * Get the resource path.
      * @return The resource path
@@ -296,6 +296,12 @@ public interface IAdapter {
      * @return The source data namespace
      */
     String getSourceDataNameSpace();
+
+    /**
+     * Get the source entity namespace.
+     * @return The source entity namespace
+     */
+    String getSourceEntityNameSpace();
 
     /**
      * Get the source data namespace.
@@ -341,7 +347,7 @@ public interface IAdapter {
      * @return the view
      */
     String getView();
-    
+
     /**
      * @return the large view
      */
@@ -430,7 +436,7 @@ public interface IAdapter {
      * @param criterias the criterias to set
      */
     void setCriterias( String criterias);
-    
+
     /**
      * @return the base
      */
@@ -477,7 +483,7 @@ public interface IAdapter {
      * @return the values
      */
     String getValues();
-    
+
     /**
      * @return the values-xlarge
      */
@@ -600,17 +606,17 @@ public interface IAdapter {
 
     /**
      * Gets the source file manipulator associated to this adapter.
-     *  
+     *
      * @param file The file to open.
-     * 
+     *
      * @return The associated file manipulator
      */
     SourceFileManipulator getFileManipulator(
              File file,
              Configuration config);
-    
+
     //Project generator
     List<String> getDirectoryForResources();
-    
+
     IAdapterProject getAdapterProject();
 }

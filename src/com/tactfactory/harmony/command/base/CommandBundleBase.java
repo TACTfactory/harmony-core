@@ -27,13 +27,13 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  */
 public abstract class CommandBundleBase<T extends IAdapter> extends CommandBase {
 
-    protected HashMap<TargetPlatform, Class<? extends T>> adapterMapping = 
+    protected HashMap<TargetPlatform, Class<? extends T>> adapterMapping =
             new HashMap<TargetPlatform, Class<? extends T>>();
 
     protected CommandBundleBase() {
         this.initBundleAdapter();
     }
-    
+
     /**
      * Register and transform to typed Adapter of this Bundle.
      */
@@ -48,18 +48,19 @@ public abstract class CommandBundleBase<T extends IAdapter> extends CommandBase 
 
                     if (mappedPlatform.equals(targetPlatform)) {
                         T newAdapter = null;
+
                         try {
                             Class<? extends T> childType =
                                     adapterMapping.get(mappedPlatform);
-                            
+
                             Constructor<? extends T> constructor =
                                     childType.getConstructor();
-                            
+
                             newAdapter = constructor.newInstance();
-                            
+
                             Method method = childType.getMethod(
                                     "cloneTo", BaseAdapter.class);
-                            
+
                             method.invoke(newAdapter, coreAdapter);
                         } catch (InstantiationException | IllegalAccessException
                                 | IllegalArgumentException
@@ -68,12 +69,14 @@ public abstract class CommandBundleBase<T extends IAdapter> extends CommandBase 
                             ConsoleUtils.displayError(targetPlatform.name()
                                     + " platform not supported !");
                         }
+
                         if (newAdapter != null) {
                             lazyTypes.add(newAdapter);
                         }
                     }
                 }
             }
+
             super.registerAdapters(lazyTypes);
         } else {
             // If not override... relay all core adapter.
@@ -92,11 +95,13 @@ public abstract class CommandBundleBase<T extends IAdapter> extends CommandBase 
                 .getGenericSuperclass()).getActualTypeArguments()[0]);
 
         ArrayList<IAdapter> baseAdapters = this.getAdapters();
+
         for (IAdapter baseAdapter : baseAdapters) {
             if (type.isAssignableFrom(baseAdapter.getClass())) {
                 lazyTypes.add((T)baseAdapter);
             }
         }
+
         return lazyTypes;
     }
 
@@ -104,7 +109,7 @@ public abstract class CommandBundleBase<T extends IAdapter> extends CommandBase 
      * Set the lazy inheritance adapter mapping.<br/><br/>
      * if your adapter (of platform) override the adapter of the core.
      * Declare in this method the mapping between platform vs extended bundle adapter.<br />
-     * 
+     *
      */
     public abstract void initBundleAdapter();
 }

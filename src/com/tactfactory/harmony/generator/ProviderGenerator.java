@@ -22,78 +22,71 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  *
  */
 public class ProviderGenerator extends BaseGenerator<IAdapter> {
-	/** Provider name string id. */
-	public static final String PROVIDER_NAME_STRING_ID = 
-			"app_provider_name";
-	
-	/** Provider description string id. */
-	public static final String PROVIDER_DESCRIPTION_STRING_ID = 
-			"app_provider_description";
+    /** Provider name string id. */
+    public static final String PROVIDER_NAME_STRING_ID = "app_provider_name";
 
-	/**
-	 * Constructor.
-	 * @param adapter The adapter to use.
-	 * @throws Exception if adapter is null
-	 */
-	public ProviderGenerator(final IAdapter adapter) throws Exception {
-		super(adapter);
-		
-		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
-	}
+    /** Provider description string id. */
+    public static final String PROVIDER_DESCRIPTION_STRING_ID = "app_provider_description";
 
-	/**
-	 * Generate the provider.
-	 */
-	public final void generateProvider() {
-		try {
-			List<IUpdater> updaters = this.getAdapter().getAdapterProject()
-			        .getProviderFiles();
-			this.processUpdater(updaters);
+    /**
+     * Constructor.
+     * @param adapter The adapter to use.
+     * @throws Exception if adapter is null
+     */
+    public ProviderGenerator(final IAdapter adapter) throws Exception {
+        super(adapter);
 
-			for (EntityMetadata cm : this.getAppMetas().getEntities().values()) {
-	            if (cm.hasFields()) {
-	                this.getDatamodel().put(
-	                        TagConstant.CURRENT_ENTITY, cm.getName());
-	                this.getDatamodel().put(
-	                        TagConstant.PROVIDER_ID, 
-	                        ProviderGenerator.generateProviderUriId(cm));
+        this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
+    }
 
-	                updaters = this.getAdapter().getAdapterProject()
-	                        .getProviderAdaptersEntityFiles(cm);
-	                this.processUpdater(updaters);
-	            }
-	        }
+    /**
+     * Generate the provider.
+     */
+    public final void generateProvider() {
+        try {
+            List<IUpdater> updaters = this.getAdapter().getAdapterProject().getProviderFiles();
+            this.processUpdater(updaters);
 
-			TranslationMetadata.addDefaultTranslation(
-					"uri_not_supported",
-					"URI not supported",
-					Group.PROVIDER);
-			TranslationMetadata.addDefaultTranslation(
-					PROVIDER_NAME_STRING_ID,
-					"Provider of " + this.getAppMetas().getName(),
-					Group.PROVIDER);
-			TranslationMetadata.addDefaultTranslation(
-					PROVIDER_DESCRIPTION_STRING_ID,
-					"Provider of "
-						+ this.getAppMetas().getName()
-						+ " to access data",
-					Group.PROVIDER);
+            for (EntityMetadata cm : this.getAppMetas().getEntities().values()) {
+                if (cm.hasFields()) {
+                    this.getDatamodel().put(TagConstant.CURRENT_ENTITY, cm.getName());
+                    this.getDatamodel().put(TagConstant.PROVIDER_ID, ProviderGenerator.generateProviderUriId(cm));
 
-			new TranslationGenerator(this.getAdapter()).generateStringsXml();
-			new TestProviderGenerator(this.getAdapter()).generateAll();
-		} catch (final Exception e) {
-			ConsoleUtils.displayError(e);
-		}
-	}
-	
-	/**
-	 * Generate a provider uri ID.
-	 * @param em The entity metadata
-	 * @return The provider uri ID
-	 */
-	public static int generateProviderUriId(final EntityMetadata em) {
-		int result = 0;
-		result = Math.abs(em.getName().hashCode());
-		return result;
-	}
+                    updaters = this.getAdapter().getAdapterProject().getProviderAdaptersEntityFiles(cm);
+                    this.processUpdater(updaters);
+                }
+            }
+
+            TranslationMetadata.addDefaultTranslation(
+                    "uri_not_supported",
+                    "URI not supported",
+                    Group.PROVIDER);
+            TranslationMetadata.addDefaultTranslation(
+                    PROVIDER_NAME_STRING_ID,
+                    "Provider of " + this.getAppMetas().getName(),
+                    Group.PROVIDER);
+            TranslationMetadata.addDefaultTranslation(
+                    PROVIDER_DESCRIPTION_STRING_ID,
+                    "Provider of "
+                        + this.getAppMetas().getName()
+                        + " to access data",
+                    Group.PROVIDER);
+
+            new TestProviderGenerator(this.getAdapter()).generateAll();
+            new TranslationGenerator(this.getAdapter()).generateStringsXml();
+        } catch (final Exception e) {
+            ConsoleUtils.displayError(e);
+        }
+    }
+
+    /**
+     * Generate a provider uri ID.
+     * @param em The entity metadata
+     * @return The provider uri ID
+     */
+    public static int generateProviderUriId(final EntityMetadata em) {
+        int result = 0;
+        result = Math.abs(em.getName().hashCode());
+        return result;
+    }
 }

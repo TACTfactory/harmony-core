@@ -326,7 +326,9 @@ public class ManifestUpdater extends XmlManager {
 			permissionElem.setAttribute(
 					ManifestConstants.ATTRIBUTE_NAME, permission, ns);
 			
-			rootNode.addContent(2, permissionElem);
+			if (rootNode.getContentSize() != 0) {
+				rootNode.addContent(2, permissionElem);
+			}
 		}
 	}
 	

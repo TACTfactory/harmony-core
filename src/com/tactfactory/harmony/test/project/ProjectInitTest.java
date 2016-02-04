@@ -32,147 +32,142 @@ import com.tactfactory.harmony.test.CommonTest;
  */
 @RunWith(Parameterized.class)
 public class ProjectInitTest extends CommonTest {
-	
-	public ProjectInitTest(ApplicationMetadata currentMetadata)
-	        throws Exception {
-		super(currentMetadata);
-	}
-	/**
-	 * Initialization of the test.
-	 * @throws Exception if something bad happened.
-	 */
-	@BeforeClass
-	public static void setUpBefore() {
-		//CommonTest.setUpBefore();
-	}
 
-	@Before
-	@Override
-	public final void setUp() throws RuntimeException {
-		super.setUp();
-	}
+    public ProjectInitTest(ApplicationMetadata currentMetadata) throws Exception {
+        super(currentMetadata);
+    }
+    /**
+     * Initialization of the test.
+     * @throws Exception if something bad happened.
+     */
+    @BeforeClass
+    public static void setUpBefore() {
+        //CommonTest.setUpBefore();
+    }
 
-	@After
-	@Override
-	public final void tearDown() throws RuntimeException {
-		super.tearDown();
-	}
-	
-	@Override
-	public void setUpBeforeNewParameter() throws Exception {
+    @Before
+    @Override
+    public final void setUp() throws RuntimeException {
+        super.setUp();
+    }
+
+    @After
+    @Override
+    public final void tearDown() throws RuntimeException {
+        super.tearDown();
+    }
+
+    @Override
+    public void setUpBeforeNewParameter() throws Exception {
         super.setUpBeforeNewParameter();
-        
+
         //Force clean all files
         CommonTest.cleanAndroidFolder(false);
-	}
-	
-	/**
-	 * Test the initialization of the android project.
-	 */
-	@Test
- 	public final void initAndroid() {
-		System.out.println("\nTest Project init Android");
-		System.out.println(SHARP_DELIMITOR);
+    }
 
-		// Generate Project
-		CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID,
-				null,
-				null);
-		
-		CommonTest.hasFindFile("android/AndroidManifest.xml");
-		CommonTest.hasFindFile("android/build.xml");
-		CommonTest.hasFindFile("android/lint.xml");
-		//this.isFindFile("android/local.properties");
-		CommonTest.hasFindFile("android/proguard-project.txt");
-		CommonTest.hasFindFile("android/project.properties");
+    /**
+     * Test the initialization of the android project.
+     */
+    @Test
+     public final void initAndroid() {
+        System.out.println("\nTest Project init Android");
+        System.out.println(SHARP_DELIMITOR);
 
-		CommonTest.hasFindFile("android/src");
-		CommonTest.hasFindFile("android/src/" 
-				+ this.currentMetadata.getProjectNameSpace().replace('.', '/'));
-		CommonTest.hasFindFile("android/src/" 
-				+ this.currentMetadata.getProjectNameSpace().replace('.', '/')
-				+ "/entity");
-		//this.isFindFile("android/res/");
+        // Generate Project
+        CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
 
-		CommonTest.hasFindFile("android/libs");
-		//CommonTest.hasFindFile("android/libs/android-support-v4.jar");
-		CommonTest.hasFindFile("android/libs/core-annotations.jar");
-		CommonTest.hasFindFile("android/libs/joda-time-2.3.jar");
+        CommonTest.hasFindFile("android/AndroidManifest.xml");
+        CommonTest.hasFindFile("android/build.xml");
+        CommonTest.hasFindFile("android/lint.xml");
+        //this.isFindFile("android/local.properties");
+        CommonTest.hasFindFile("android/proguard-project.txt");
+        CommonTest.hasFindFile("android/project.properties");
 
-		CommonTest.hasFindFile("android/res");
-		CommonTest.hasFindFile("android/res/values");
-		CommonTest.hasFindFile("android/res/values/configs.xml");
-		CommonTest.hasFindFile("android/res/values/strings.xml");
+        CommonTest.hasFindFile("android/src");
+        CommonTest.hasFindFile("android/src/"
+                + this.currentMetadata.getProjectNameSpace().replace('.', '/'));
+        CommonTest.hasFindFile("android/src/"
+                + this.currentMetadata.getProjectNameSpace().replace('.', '/')
+                + "/entity");
+        //this.isFindFile("android/res/");
 
+        CommonTest.hasFindFile("android/libs");
+        //CommonTest.hasFindFile("android/libs/android-support-v4.jar");
+        CommonTest.hasFindFile("android/libs/core-annotations.jar");
+        CommonTest.hasFindFile("android/libs/joda-time-2.3.jar");
 
-		System.out.println("\nTest Update SDK Path");
-		System.out.println(SHARP_DELIMITOR);
+        CommonTest.hasFindFile("android/res");
+        CommonTest.hasFindFile("android/res/values");
+        CommonTest.hasFindFile("android/res/values/configs.xml");
+        CommonTest.hasFindFile("android/res/values/strings.xml");
 
-		String currentSdkPath = ApplicationMetadata.getAndroidSdkPath();
-		String newSdkPath = "test-sdkpath/";
-		ApplicationMetadata.setAndroidSdkPath(newSdkPath);
-		ProjectGenerator.updateSDKPath();
+        System.out.println("\nTest Update SDK Path");
+        System.out.println(SHARP_DELIMITOR);
 
-		final String localProp =
-				String.format("%s/%s",
-						Harmony.getProjectAndroidPath(),
-						"local.properties");
-		assertEquals(HarmonyContext.getSdkDirFromPropertiesFile(localProp), newSdkPath);
+        String currentSdkPath = ApplicationMetadata.getAndroidSdkPath();
+        String newSdkPath = "test-sdkpath/";
+        ApplicationMetadata.setAndroidSdkPath(newSdkPath);
+        ProjectGenerator.updateSDKPath();
 
-		ApplicationMetadata.setAndroidSdkPath(currentSdkPath);
-		ProjectGenerator.updateSDKPath();
-	}
+        final String localProp =
+                String.format("%s/%s",
+                        Harmony.getProjectAndroidPath(),
+                        "local.properties");
+        assertEquals(HarmonyContext.getSdkDirFromPropertiesFile(localProp), newSdkPath);
 
+        ApplicationMetadata.setAndroidSdkPath(currentSdkPath);
+        ProjectGenerator.updateSDKPath();
+    }
 
-	/**
-	 * Test the initialization of the iPhone project.
-	 */
-	/*@Ignore
-	@Test
-	public final void initIphone() {
-		System.out.println("\nTest Project init iphone");
-		System.out.println(SHARP_DELIMITOR);
+    /**
+     * Test the initialization of the iPhone project.
+     */
+    /*@Ignore
+    @Test
+    public final void initIphone() {
+        System.out.println("\nTest Project init iphone");
+        System.out.println(SHARP_DELIMITOR);
 
-		CommonTest.getHarmony().findAndExecute(
-				ProjectCommand.INIT_IOS, null, null);
+        CommonTest.getHarmony().findAndExecute(
+                ProjectCommand.INIT_IOS, null, null);
 
-		// TODO add asserts (for folder/file exist..)
-	}*/
+        // TODO add asserts (for folder/file exist..)
+    }*/
 
-	/**
-	 * Test the initialization of the RIM project.
-	 */
-	/*@Ignore
-	@Test
-	public final void initRim() {
-		System.out.println("\nTest Project init RIM");
-		System.out.println(SHARP_DELIMITOR);
+    /**
+     * Test the initialization of the RIM project.
+     */
+    /*@Ignore
+    @Test
+    public final void initRim() {
+        System.out.println("\nTest Project init RIM");
+        System.out.println(SHARP_DELIMITOR);
 
-		CommonTest.getHarmony().findAndExecute(
-				ProjectCommand.INIT_RIM, null, null);
+        CommonTest.getHarmony().findAndExecute(
+                ProjectCommand.INIT_RIM, null, null);
 
-		// TODO add asserts (for folder/file exist..)
-	}*/
+        // TODO add asserts (for folder/file exist..)
+    }*/
 
-	/**
-	 * Test the initialization of the Windows Phone project.
-	 */
-	/*@Ignore
-	@Test
-	public final void initWinphone() {
-		System.out.println("\nTest Project init Windows Phone");
-		System.out.println(SHARP_DELIMITOR);
+    /**
+     * Test the initialization of the Windows Phone project.
+     */
+    /*@Ignore
+    @Test
+    public final void initWinphone() {
+        System.out.println("\nTest Project init Windows Phone");
+        System.out.println(SHARP_DELIMITOR);
 
 
-		CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_WINPHONE,
-									null,
-									null);
+        CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_WINPHONE,
+                                    null,
+                                    null);
 
-		// TODO add asserts (for folder/file exist..)
-	}*/
+        // TODO add asserts (for folder/file exist..)
+    }*/
 
-	@Parameters
-	public static Collection<Object[]> getParameters() {
-		return CommonTest.getParameters();
-	}
+    @Parameters
+    public static Collection<Object[]> getParameters() {
+        return CommonTest.getParameters();
+    }
 }

@@ -50,8 +50,8 @@
     <#assign tab = Utils.getIndentString(indentLevel) />
     <#assign result = "" />
     <#if (!field.internal)>
-        <#assign result = result + "${tab}/** Constant field for ${field.name}. */\n"/>        
-        <#assign result = result + "${tab}private static final String ${NamingUtils.fixtureAlias(field)} = \"${field.name?uncap_first}\";\n"/>        
+        <#assign result = result + "${tab}/** Constant field for ${field.name}. */\n"/>
+        <#assign result = result + "${tab}private static final String ${NamingUtils.fixtureAlias(field)} = \"${field.name?uncap_first}\";\n"/>
     </#if>
     <#return result />
 </#function>
@@ -66,7 +66,7 @@
         <#assign otherTab="" />
         <#if (field.harmony_type?lower_case != "relation")>
             <#assign result = result + "${tab}index = cursor.getColumnIndex(${fieldNames[0]});\n\n"/>
-            <#assign result = result + "${tab}if (index > 1) {\n"/>
+            <#assign result = result + "${tab}if (index > -1) {\n"/>
             <#if (field.nullable)>
                 <#assign result = result + "${tab}if (!cursor.isNull(index)) {\n"/><#assign localTab="    " />
             </#if>
@@ -139,7 +139,7 @@
             <#assign result = result + "${tab}${localTab}    final ${field.relation.targetEntity} ${field.name} = new ${field.relation.targetEntity}();\n"/>
                 <#list entities[field.relation.targetEntity].ids as id>
                     <#assign result = result + "${tab}${localTab}    index = cursor.getColumnIndex(${fieldNames[id_index]});\n\n"/>
-                    <#assign result = result + "${tab}${localTab}    if (index > 1) {\n"/>
+                    <#assign result = result + "${tab}${localTab}    if (index > -1) {\n"/>
                     <#if (field.nullable)>
                         <#assign result = result + "${tab}${localTab}        if (!cursor.isNull(index)) {\n"/><#assign otherTab="    "/>
                     </#if>
@@ -153,7 +153,6 @@
             <#assign result = result + "${tab}}\n" />
         </#if>
     </#if>
-    <#if (result?length > 0)><#assign result = result + "\n" /></#if>
     <#return result />
 </#function>
 
@@ -289,9 +288,9 @@
 <#function validateDataFieldAdapter field indentLevel = 0>
     <#assign result = "" />
     <#assign tab = "\n" + Utils.getIndentString(indentLevel) />
-    <#if !field.internal 
-            && !field.hidden 
-            && FieldsUtils.getJavaType(field)?lower_case != "boolean" 
+    <#if !field.internal
+            && !field.hidden
+            && FieldsUtils.getJavaType(field)?lower_case != "boolean"
             && field.harmony_type?lower_case != "enum"
             && field.writable>
         <#if !field.nullable>
@@ -342,7 +341,7 @@
             <#if !field.relation??>
                 <#if !MetadataUtils.isPrimitive(field) >
                     <#if (FieldsUtils.getJavaType(field)?lower_case == "boolean")>
-        <#assign result = result + "${tab}if (this.model.is${field.name?cap_first}() != null) {" />                    
+        <#assign result = result + "${tab}if (this.model.is${field.name?cap_first}() != null) {" />
                     <#else>
         <#assign result = result + "${tab}if (this.model.get${field.name?cap_first}() != null) {" />
                     </#if>

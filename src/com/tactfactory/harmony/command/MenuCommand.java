@@ -24,57 +24,57 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
 @PluginImplementation
 public class MenuCommand extends CommandBase {
 
-	/** Bundle name. */
-	public static final String BUNDLE = "orm";
-	/** Subject. */
-	public static final String SUBJECT = "menu";
-	/** Action crud. */
-	public static final String ACTION_UPDATE = "update";
+    /** Bundle name. */
+    public static final String BUNDLE = "orm";
+    /** Subject. */
+    public static final String SUBJECT = "menu";
+    /** Action crud. */
+    public static final String ACTION_UPDATE = "update";
 
-	/** Command : ORM:GENERATE:ENTITIES. */
-	public static final String UPDATE_MENU =
-			BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_UPDATE;
+    /** Command : ORM:GENERATE:ENTITIES. */
+    public static final String UPDATE_MENU =
+            BUNDLE + SEPARATOR + SUBJECT + SEPARATOR + ACTION_UPDATE;
 
-	@Override
-	public final void execute(
-			final String action,
-			final String[] args,
-			final String option) {
-		ConsoleUtils.display("> ORM Generator");
+    @Override
+    public final void execute(
+            final String action,
+            final String[] args,
+            final String option) {
+        ConsoleUtils.display("> ORM Generator");
 
-		this.setCommandArgs(Console.parseCommandArgs(args));
-		//this.generateMetas();
+        this.setCommandArgs(Console.parseCommandArgs(args));
+        //this.generateMetas();
 
-		for(IAdapter adapter : this.getAdapters()) {
-    		try {
-    			if (action.equals(UPDATE_MENU)) {
-    				this.generateMetas();           //TODO MG : why ?
-    				new MenuGenerator(adapter).updateMenu();
-    			}
-    		} catch (final Exception e) {
-    			ConsoleUtils.displayError(e);
-    		}
-		}
-	}
+        for(IAdapter adapter : this.getAdapters()) {
+            try {
+                if (action.equals(UPDATE_MENU)) {
+                    this.generateMetas();           //TODO MG : why ?
+                    new MenuGenerator(adapter).updateMenu();
+                }
+            } catch (final Exception e) {
+                ConsoleUtils.displayError(e);
+            }
+        }
+    }
 
-	@Override
-	public final void summary() {
-		LinkedHashMap<String, String> commands =
-				new LinkedHashMap<String, String>();
-		commands.put(UPDATE_MENU, "Update the menu");
-		
-		ConsoleUtils.displaySummary(
-				"Menu",
-				commands);
-	}
+    @Override
+    public final void summary() {
+        LinkedHashMap<String, String> commands =
+                new LinkedHashMap<String, String>();
+        commands.put(UPDATE_MENU, "Update the menu");
 
-	@Override
-	public final boolean isAvailableCommand(final String command) {
-		boolean result = false;
-		if (UPDATE_MENU.equals(command)) {
-			result = true;
-		}
-		return result;
-	}
+        ConsoleUtils.displaySummary(
+                "Menu",
+                commands);
+    }
+
+    @Override
+    public final boolean isAvailableCommand(final String command) {
+        boolean result = false;
+        if (UPDATE_MENU.equals(command)) {
+            result = true;
+        }
+        return result;
+    }
 
 }
