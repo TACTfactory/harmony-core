@@ -46,11 +46,7 @@ static NSString *FILE_NAME = @"${curr.name}";
 <#list curr_fields as field>
     <#if (FieldsUtils.getObjectiveType(field)?lower_case == "datetime")>
     if ([item.${field.name} isKindOfClass:[NSString class]]) {
-        if (((NSString *) item.${field.name}).length == 10) {
-            result.${field.name} = [DateUtils fixtureStringToDate:(NSString *) item.${field.name}];
-        } else {
-            result.${field.name} = [DateUtils isoStringToDate:(NSString *) item.${field.name}];
-        }
+        result.${field.name} = [DateUtils formatXMLStringToDateTime:(NSString *) item.${field.name}];
     }
 
     <#elseif (field.relation??)>
