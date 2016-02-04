@@ -220,7 +220,7 @@ public abstract class ${curr.name}ContractBase {
         result.putAll(${curr.inheritance.superclass.name?cap_first}Contract.itemToContentValues(item));
         </#if>
 
-<#list curr_fields as field>${AdapterUtils.itemToContentValuesFieldAdapter("item", field, 3)}</#list>
+<#list curr_fields as field><#if field.columnName??> ${AdapterUtils.itemToContentValuesFieldAdapter("item", field, 3)}</#if></#list>
         <#if (singleTabInheritance && !isTopMostSuperClass)>
         result.put(${curr.inheritance.superclass.name?cap_first}Contract.${NamingUtils.alias(curr.inheritance.superclass.inheritance.discriminatorColumn.name)},
                     ${curr.name?cap_first}Contract.DISCRIMINATOR_IDENTIFIER);
@@ -233,7 +233,7 @@ public abstract class ${curr.name}ContractBase {
      *
      * @param cursor The cursor to convert
      *
-     * @return The extracted ${curr.name} 
+     * @return The extracted ${curr.name}
      */
     public static ${curr.name} cursorToItem(final android.database.Cursor cursor) {
         ${curr.name} result = new ${curr.name}();
