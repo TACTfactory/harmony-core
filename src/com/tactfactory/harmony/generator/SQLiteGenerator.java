@@ -21,27 +21,26 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  */
 public class SQLiteGenerator extends BaseGenerator<IAdapter> {
 
-	/**
-	 * Constructor.
-	 * @param adapter The adapter to use
-	 * @throws Exception if adapter is null
-	 */
-	public SQLiteGenerator(final IAdapter adapter) throws Exception {
-		super(adapter);
-		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
-	}
+    /**
+     * Constructor.
+     * @param adapter The adapter to use
+     * @throws Exception if adapter is null
+     */
+    public SQLiteGenerator(final IAdapter adapter) throws Exception {
+        super(adapter);
+        this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
+    }
 
-	/**
+    /**
      * Generate the adapters and the criterias.
      */
     public final void generateAll() {
         ConsoleUtils.display(">> Generate Adapter...");
-        
+
         this.generateDatabase();
 
-        Collection<EntityMetadata> metas =
-                this.getAppMetas().getEntities().values();
-        
+        Collection<EntityMetadata> metas = this.getAppMetas().getEntities().values();
+
         for (final EntityMetadata classMeta : metas) {
             if (classMeta.hasFields()) {
                 this.getDatamodel().put(
@@ -52,44 +51,38 @@ public class SQLiteGenerator extends BaseGenerator<IAdapter> {
         }
 
         ConsoleUtils.display(">> Generate CriteriaBase...");
-        
-        List<IUpdater> files =
-                this.getAdapter().getAdapterProject().getCriteriasFiles();
-        this.processUpdater(files);
-	}
-    
-	/**
-	 * Generate Database Interface Source Code.
-	 */
-	public final void generateDatabase() {
-		// Info
-		ConsoleUtils.display(">> Generate Database");
-		
-		this.getDatamodel().put("dataLoader",
-                this.getAdapter().getAdapterProject()
-                        .isDataLoaderAlreadyGenerated());
 
-		try {
-			List<IUpdater> files =
-			        this.getAdapter().getAdapterProject().getDatabaseFiles();
-			this.processUpdater(files);
-		} catch (final Exception e) {
-			ConsoleUtils.displayError(e);
-		}
-	}
-	
-	/**
+        List<IUpdater> files = this.getAdapter().getAdapterProject().getCriteriasFiles();
+        this.processUpdater(files);
+    }
+
+    /**
+     * Generate Database Interface Source Code.
+     */
+    public final void generateDatabase() {
+        // Info
+        ConsoleUtils.display(">> Generate Database");
+
+        this.getDatamodel().put("dataLoader", this.getAdapter().getAdapterProject().isDataLoaderAlreadyGenerated());
+
+        try {
+            List<IUpdater> files = this.getAdapter().getAdapterProject().getDatabaseFiles();
+            this.processUpdater(files);
+        } catch (final Exception e) {
+            ConsoleUtils.displayError(e);
+        }
+    }
+
+    /**
      * Generate the current entity's adapters.
      */
     private void generateAdapters(EntityMetadata entity) {
         // Info
-        ConsoleUtils.display(">>> Generate Adapter for "
-                + this.getDatamodel().get(TagConstant.CURRENT_ENTITY));
+        ConsoleUtils.display(">>> Generate Adapter for " + this.getDatamodel().get(TagConstant.CURRENT_ENTITY));
 
         try {
-            List<IUpdater> files = this.getAdapter().getAdapterProject()
-                    .getSqlAdapterEntityFiles(entity);
-            
+            List<IUpdater> files = this.getAdapter().getAdapterProject().getSqlAdapterEntityFiles(entity);
+
             this.processUpdater(files);
         } catch (final Exception e) {
             ConsoleUtils.displayError(e);

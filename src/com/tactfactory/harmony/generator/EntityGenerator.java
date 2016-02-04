@@ -21,52 +21,50 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  */
 public class EntityGenerator extends BaseGenerator<IAdapter> {
 
-	/** Constructor.
-	 * @param adapter Adapter used by this generator
-	 * @throws Exception if adapter is null
-	 */
-	public EntityGenerator(final IAdapter adapter) throws Exception {
-		super(adapter);
-		this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
-	}
+    /** Constructor.
+     * @param adapter Adapter used by this generator
+     * @throws Exception if adapter is null
+     */
+    public EntityGenerator(final IAdapter adapter) throws Exception {
+        super(adapter);
+        this.setDatamodel(this.getAppMetas().toMap(this.getAdapter()));
+    }
 
-	/**
-	 * Implements serializable
-	 * and add necessary getters and setters for all classes.
-	 */
-	public final void generateAll() {
-		ConsoleUtils.display(">> Decorate entities...");
+    /**
+     * Implements serializable
+     * and add necessary getters and setters for all classes.
+     */
+    public final void generateAll() {
+        ConsoleUtils.display(">> Decorate entities...");
 
-		Iterable<EntityMetadata> entities =
-		        this.getAppMetas().getEntities().values();
+        Iterable<EntityMetadata> entities =
+                this.getAppMetas().getEntities().values();
 
-		for (final EntityMetadata entity : entities) {
-			if (!entity.isInternal()) {
-			    this.getDatamodel().put(
-	                    TagConstant.CURRENT_ENTITY,
-	                    entity.getName());
+        for (final EntityMetadata entity : entities) {
+            if (!entity.isInternal()) {
+                this.getDatamodel().put(
+                        TagConstant.CURRENT_ENTITY,
+                        entity.getName());
 
-				ConsoleUtils.display(">>> Decorate " + entity.getName());
+                ConsoleUtils.display(">>> Decorate " + entity.getName());
 
-				List<IUpdater> updaters = this.getAdapter().getAdapterProject()
-	                    .getEntityFiles(entity);
+                List<IUpdater> updaters = this.getAdapter().getAdapterProject().getEntityFiles(entity);
 
-				updaters.addAll(this.getAdapter().getAdapterProject().getEntityBaseFiles());
+                updaters.addAll(this.getAdapter().getAdapterProject().getEntityBaseFiles());
 
-				this.processUpdater(updaters);
-			}
-		}
-	}
+                this.processUpdater(updaters);
+            }
+        }
+    }
 
-	   /**
+       /**
      * Implements serializable
      * and add necessary getters and setters for all classes.
      */
     public final void generateAllBase() {
         ConsoleUtils.display(">> Decorate Entity Base Files...");
 
-        List<IUpdater> updaters = this.getAdapter().getAdapterProject()
-                .getEntityBaseFiles();
+        List<IUpdater> updaters = this.getAdapter().getAdapterProject().getEntityBaseFiles();
 
         this.processUpdater(updaters);
     }

@@ -25,13 +25,13 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface JoinColumn {
 
-	/**
-	 * The JoinColumn name.
-	 */
-	String name() default "";
+    /**
+     * The JoinColumn name.
+     */
+    String name() default "";
 
-	/**
-	 * The referenced Column name.
-	 */
-	String referencedColumnName() default Id.COLUMN_ID;
+    /**
+     * The referenced Column name.
+     */
+    String referencedColumnName() default Id.COLUMN_ID;
 }

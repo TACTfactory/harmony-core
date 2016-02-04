@@ -32,113 +32,108 @@ import com.tactfactory.harmony.test.CommonTest;
  */
 public class GenerateStaticViewTest extends CommonTest {
 
-	/** Path of view path. */
-	private static final String VIEW_PATH =
-			"android/src/%s/view/%s/%s%s.java";
+    /** Path of view path. */
+    private static final String VIEW_PATH = "android/src/%s/view/%s/%s%s.java";
+    /** Path for layout path. */
+    private static final String LAYOUT_PATH = "android/res/layout/%s_%s.xml";
+    /** Test package name. */
+    private static final String TEST_PACKAGE_NAME = "test.test2";
+    /** Test view name. */
+    private static final String TEST_VIEW_NAME = "ViewTest";
 
-	/** Path for layout path. */
-	private static final String LAYOUT_PATH = 
-			"android/res/layout/%s_%s.xml";
-	
-	/** Test package name. */
-	private static final String TEST_PACKAGE_NAME = "test.test2";
-	/** Test view name. */
-	private static final String TEST_VIEW_NAME = "ViewTest";
-	
-	
-	public GenerateStaticViewTest(ApplicationMetadata currentMetadata)
-	        throws Exception {
-		super(currentMetadata);
-	}
+    public GenerateStaticViewTest(ApplicationMetadata currentMetadata)
+            throws Exception {
+        super(currentMetadata);
+    }
 
-	@Before
-	@Override
-	public final void setUp() throws RuntimeException {
-		super.setUp();
-	}
+    @Before
+    @Override
+    public final void setUp() throws RuntimeException {
+        super.setUp();
+    }
 
-	@After
-	@Override
-	public final void tearDown() throws RuntimeException {
-		super.tearDown();
-	}
-	
-	@Override
-	public void setUpBeforeNewParameter() throws Exception {
-		super.setUpBeforeNewParameter();
-		
-		this.initAll();
-	}
+    @After
+    @Override
+    public final void tearDown() throws RuntimeException {
+        super.tearDown();
+    }
 
-	/**
-	 * Initialize everything for the test.
-	 */
-	private void initAll() {
-		System.out.println("\nTest Orm generate entity");
-		System.out.println(
-				"########################################"
-				 + "######################################");
+    @Override
+    public void setUpBeforeNewParameter() throws Exception {
+        super.setUpBeforeNewParameter();
 
-		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
-		makeEntities();
-		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES,
-				new String[] {},
-				null);
-		getHarmony().findAndExecute(OrmCommand.GENERATE_CRUD,
-				new String[] {},
-				null);
-		getHarmony().findAndExecute(FixtureCommand.FIXTURE_INIT,
-				new String[] {},
-				null);
+        this.initAll();
+    }
 
-		getHarmony().findAndExecute(CommonCommand.GENERATE_STATIC,
-				new String[] {
-					"--name=" + TEST_VIEW_NAME, 
-					"--package=" + TEST_PACKAGE_NAME},
-				null);
-		
-		final CommonCommand command =
-				(CommonCommand) Harmony.getInstance().getCommand(
-						CommonCommand.class);
+    /**
+     * Initialize everything for the test.
+     */
+    private void initAll() {
+        System.out.println("\nTest Orm generate entity");
+        System.out.println(
+                "########################################"
+                 + "######################################");
 
-		command.generateMetas();
+        getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+        makeEntities();
+        getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES,
+                new String[] {},
+                null);
+        getHarmony().findAndExecute(OrmCommand.GENERATE_CRUD,
+                new String[] {},
+                null);
+        getHarmony().findAndExecute(FixtureCommand.FIXTURE_INIT,
+                new String[] {},
+                null);
 
-		parsedMetadata = ApplicationMetadata.INSTANCE;
-	}
-	
-	@Parameters
-	public static Collection<Object[]> getParameters() {
-		return CommonTest.getParameters();
-	}
+        getHarmony().findAndExecute(CommonCommand.GENERATE_STATIC,
+                new String[] {
+                    "--name=" + TEST_VIEW_NAME,
+                    "--package=" + TEST_PACKAGE_NAME},
+                null);
 
-	/**
-	 * Tests the existence of the various generated files.
-	 */
-	@Test
-	public final void testFiles() {
-		CommonTest.hasFindFile(String.format(
-				VIEW_PATH,
-				this.currentMetadata.getProjectNameSpace(),
-				TEST_PACKAGE_NAME.replace('.', '/'),
-				TEST_VIEW_NAME,
-				"Activity"));
+        final CommonCommand command =
+                (CommonCommand) Harmony.getInstance().getCommand(
+                        CommonCommand.class);
 
-		CommonTest.hasFindFile(String.format(
-				VIEW_PATH,
-				this.currentMetadata.getProjectNameSpace(),
-				TEST_PACKAGE_NAME.replace('.', '/'),
-				TEST_VIEW_NAME,
-				"Fragment"));
-		
+        command.generateMetas();
 
-		CommonTest.hasFindFile(String.format(
-				LAYOUT_PATH,
-				"fragment",
-				TEST_VIEW_NAME.toLowerCase()));
-		
-		CommonTest.hasFindFile(String.format(
-				LAYOUT_PATH,
-				"activity",
-				TEST_VIEW_NAME.toLowerCase()));
-	}
+        parsedMetadata = ApplicationMetadata.INSTANCE;
+    }
+
+    @Parameters
+    public static Collection<Object[]> getParameters() {
+        return CommonTest.getParameters();
+    }
+
+    /**
+     * Tests the existence of the various generated files.
+     */
+    @Test
+    public final void testFiles() {
+        CommonTest.hasFindFile(String.format(
+                VIEW_PATH,
+                this.currentMetadata.getProjectNameSpace(),
+                TEST_PACKAGE_NAME.replace('.', '/'),
+                TEST_VIEW_NAME,
+                "Activity"));
+
+        CommonTest.hasFindFile(String.format(
+                VIEW_PATH,
+                this.currentMetadata.getProjectNameSpace(),
+                TEST_PACKAGE_NAME.replace('.', '/'),
+                TEST_VIEW_NAME,
+                "Fragment"));
+
+
+        CommonTest.hasFindFile(String.format(
+                LAYOUT_PATH,
+                "fragment",
+                TEST_VIEW_NAME.toLowerCase()));
+
+        CommonTest.hasFindFile(String.format(
+                LAYOUT_PATH,
+                "activity",
+                TEST_VIEW_NAME.toLowerCase()));
+    }
 }

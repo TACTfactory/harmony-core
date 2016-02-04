@@ -18,8 +18,6 @@ import com.tactfactory.harmony.updater.impl.SourceFile;
 import com.tactfactory.harmony.updater.old.IConfigFileUtil;
 import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
 
-import freemarker.template.Configuration;
-
 public class IosProjectAdapter implements IAdapterProject {
 
     private final IosAdapter adapter;
@@ -1057,7 +1055,7 @@ public class IosProjectAdapter implements IAdapterProject {
     }
 
     @Override
-    public List<IUpdater> updateEnum(EnumMetadata enumMeta, Configuration cfg) {
+    public List<IUpdater> updateEnum(EnumMetadata enumMeta) {
         // TODO Auto-generated method stub
         return null;
     }

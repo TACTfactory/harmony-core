@@ -21,39 +21,39 @@ import com.tactfactory.harmony.utils.ConsoleUtils;
  */
 public class TranslationGenerator extends BaseGenerator<IAdapter> {
 
-	/**
-	 * Constructor.
-	 * @param adapter The adapter to use.
-	 * @throws Exception if adapter is null
-	 */
-	public TranslationGenerator(final IAdapter adapter) throws Exception {
-		super(adapter);
-	}
+    /**
+     * Constructor.
+     * @param adapter The adapter to use.
+     * @throws Exception if adapter is null
+     */
+    public TranslationGenerator(final IAdapter adapter) throws Exception {
+        super(adapter);
+    }
 
-	/**
-	 * Update XML Strings.
-	 */
-	public final void generateStringsXml() {
+    /**
+     * Update XML Strings.
+     */
+    public final void generateStringsXml() {
 
-		ConsoleUtils.display(">> Generate translate string...");
+        ConsoleUtils.display(">> Generate translate string...");
 
-		ITranslateFileUtil translateUtil =
-		        this.getAdapter().getAdapterProject().getTranslateFileUtil();
-		
-		if (translateUtil != null) {
-			translateUtil.open(this.getAdapter().getStringsPathFile());
-			
-			for (final TranslationMetadata translationMeta
-					: this.getAppMetas().getTranslates().values()) {
-			    String addedString = translateUtil.addElement(
-			            translationMeta.getKey(),
-			            translationMeta.getI18n().get(Locale.getDefault()));
-	
-	            translationMeta.getI18n().put(
-	                    Locale.getDefault(),
-	                    addedString);
-			}
-			translateUtil.save();
-		}
-	}
+        ITranslateFileUtil translateUtil =
+                this.getAdapter().getAdapterProject().getTranslateFileUtil();
+
+        if (translateUtil != null) {
+            translateUtil.open(this.getAdapter().getStringsPathFile());
+
+            for (final TranslationMetadata translationMeta : this.getAppMetas().getTranslates().values()) {
+                String addedString = translateUtil.addElement(
+                        translationMeta.getKey(),
+                        translationMeta.getI18n().get(Locale.getDefault()));
+
+                translationMeta.getI18n().put(
+                        Locale.getDefault(),
+                        addedString);
+            }
+
+            translateUtil.save();
+        }
+    }
 }

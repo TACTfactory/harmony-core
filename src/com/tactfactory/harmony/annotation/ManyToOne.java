@@ -24,14 +24,14 @@ import java.lang.annotation.Target;
 @Target(FIELD)
 @Inherited
 public @interface ManyToOne {
-	/**
-	 * The Entity targeted by the relation (auto-generated).
-	 */
-	String targetEntity() default "";
+    /**
+     * The Entity targeted by the relation (auto-generated).
+     */
+    String targetEntity() default "";
 
 
-	/**
-	 * The field in the target entity inversed by this relation.
-	 */
-	String inversedBy() default "";
+    /**
+     * The field in the target entity inversed by this relation.
+     */
+    String inversedBy() default "";
 }

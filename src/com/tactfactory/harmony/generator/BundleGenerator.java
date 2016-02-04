@@ -31,244 +31,222 @@ import freemarker.template.TemplateException;
  */
 public class BundleGenerator extends BaseGenerator<BundleAdapter> {
 
-	/**
-	 * Constructor.
-	 * @param adapter Adapter
-	 * @throws Exception Exception
-	 */
-	public BundleGenerator(final BundleAdapter adapter) {
-		super(adapter);
-	}
+    /**
+     * Constructor.
+     * @param adapter Adapter
+     * @throws Exception Exception
+     */
+    public BundleGenerator(final BundleAdapter adapter) {
+        super(adapter);
+    }
 
-	/**
-	 * Generate the empty bundle basic files.
-	 * @param bundleOwnerName Owner name
-	 * @param bundleName Bundle name
-	 * @param bundleNameSpace Bundle namespace
-	 */
-	public final void generateBundleFiles(
-			final String bundleOwnerName,
-			final String bundleName,
-			final String bundleNameSpace) {
+    /**
+     * Generate the empty bundle basic files.
+     * @param bundleOwnerName Owner name
+     * @param bundleName Bundle name
+     * @param bundleNameSpace Bundle namespace
+     */
+    public final void generateBundleFiles(
+            final String bundleOwnerName,
+            final String bundleName,
+            final String bundleNameSpace) {
 
-		this.generateDataModel(bundleOwnerName,
-				bundleName,
-				bundleNameSpace);
-
-		this.generateBuildFile(bundleOwnerName, bundleName);
-
-		this.generateGitIgnore(bundleOwnerName, bundleName);
-
-		this.generateAnnotation(bundleOwnerName,
-				bundleName,
-				bundleNameSpace);
-
-		this.generateParser(bundleOwnerName,
-				bundleName,
-				bundleNameSpace);
-
-		this.generateCommand(bundleOwnerName,
-				bundleName,
-				bundleNameSpace);
-
-		this.generateGenerator(bundleOwnerName,
-				bundleName,
-				bundleNameSpace);
-
-		this.generateMeta(bundleOwnerName,
-				bundleName,
-				bundleNameSpace);
-
-		this.generateAdapters(bundleOwnerName,
+        this.generateDataModel(bundleOwnerName,
                 bundleName,
                 bundleNameSpace);
-	}
 
-	/**
-	 * Generate the datamodel associated with the bundle generation.
-	 * (different from the mobile project generation)
-	 * @param bundleOwnerName Owner name
-	 * @param bundleName Bundle name
-	 * @param bundleNameSpace Bundle namespace
-	 */
-	private void generateDataModel(
-			final String bundleOwnerName,
-			final String bundleName,
-			final String bundleNameSpace) {
+        this.generateBuildFile(bundleOwnerName, bundleName);
 
-		final HashMap<String, Object> datamodel = new HashMap<String, Object>();
-		datamodel.put("bundle_namespace", bundleNameSpace);
-		datamodel.put("bundle_name", bundleName);
-		datamodel.put("bundle_owner", bundleOwnerName);
+        this.generateGitIgnore(bundleOwnerName, bundleName);
 
-		this.setDatamodel(datamodel);
-	}
+        this.generateAnnotation(bundleOwnerName,
+                bundleName,
+                bundleNameSpace);
 
-	/**
-	 * Generate the empty annotation.
-	 * @param bundleOwnerName Owner name
-	 * @param bundleName Bundle name
-	 * @param bundleNameSpace Bundle namespace
-	 */
-	private void generateAnnotation(
-			final String bundleOwnerName,
-			final String bundleName,
-			final String bundleNameSpace) {
+        this.generateParser(bundleOwnerName,
+                bundleName,
+                bundleNameSpace);
 
-		final String tplPath =
-				this.getAdapter().getAnnotationBundleTemplatePath()
-				+ "/TemplateAnnotation.java";
-		final String genPath = this.getAdapter().getAnnotationBundlePath(
-							bundleOwnerName,
-							bundleNameSpace,
-							bundleName)
-						+ "/"
-						+ CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
-								bundleName)
-						+ ".java";
+        this.generateCommand(bundleOwnerName,
+                bundleName,
+                bundleNameSpace);
 
-		this.makeSource(tplPath, genPath, false);
-	}
+        this.generateGenerator(bundleOwnerName,
+                bundleName,
+                bundleNameSpace);
 
-	/**
-	 * Generate the build.gradle.
-	 * @param bundleOwnerName Owner name
-	 * @param bundleName Bundle name
-	 */
-	private void generateBuildFile(
-			final String bundleOwnerName,
-			final String bundleName) {
+        this.generateMeta(bundleOwnerName,
+                bundleName,
+                bundleNameSpace);
 
-		final String tplPath = this.getAdapter().getBundleTemplatePath()
-				+ "/build.gradle";
-		final String genPath = this.getAdapter().getBundlePath(
-							bundleOwnerName,
-							bundleName)
-						+ "/build.gradle";
+        this.generateAdapters(bundleOwnerName,
+                bundleName,
+                bundleNameSpace);
+    }
 
-		this.makeSource(tplPath, genPath, false);
-	}
+    /**
+     * Generate the datamodel associated with the bundle generation.
+     * (different from the mobile project generation)
+     * @param bundleOwnerName Owner name
+     * @param bundleName Bundle name
+     * @param bundleNameSpace Bundle namespace
+     */
+    private void generateDataModel(
+            final String bundleOwnerName,
+            final String bundleName,
+            final String bundleNameSpace) {
 
-	/**
-	 * Generate the .gitignore.
-	 * @param bundleOwnerName Owner name
-	 * @param bundleName Bundle name
-	 */
-	private void generateGitIgnore(
-			final String bundleOwnerName,
-			final String bundleName) {
+        final HashMap<String, Object> datamodel = new HashMap<String, Object>();
+        datamodel.put("bundle_namespace", bundleNameSpace);
+        datamodel.put("bundle_name", bundleName);
+        datamodel.put("bundle_owner", bundleOwnerName);
 
-		final String tplPath = this.getAdapter().getBundleTemplatePath()
-				+ "/.gitignore";
-		final String genPath = this.getAdapter().getBundlePath(
-							bundleOwnerName,
-							bundleName)
-						+ "/.gitignore";
+        this.setDatamodel(datamodel);
+    }
 
-		this.makeSource(tplPath, genPath, false);
-	}
+    /**
+     * Generate the empty annotation.
+     * @param bundleOwnerName Owner name
+     * @param bundleName Bundle name
+     * @param bundleNameSpace Bundle namespace
+     */
+    private void generateAnnotation(
+            final String bundleOwnerName,
+            final String bundleName,
+            final String bundleNameSpace) {
 
-	/**
-	 * Generate bundle's parser.
-	 * @param bundleOwnerName Owner name
-	 * @param bundleName Bundle name
-	 * @param bundleNameSpace Bundle namespace
-	 */
-	private void generateParser(
-			final String bundleOwnerName,
-			final String bundleName,
-			final String bundleNameSpace) {
+        final String tplPath =
+                this.getAdapter().getAnnotationBundleTemplatePath()
+                + "/TemplateAnnotation.java";
+        final String genPath =
+                this.getAdapter().getAnnotationBundlePath(bundleOwnerName, bundleNameSpace, bundleName)
+                        + "/"
+                        + CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, bundleName)
+                        + ".java";
 
-		final String tplPath = this.getAdapter().getParserBundleTemplatePath()
-				+ "/TemplateParser.java";
-		final String genPath = this.getAdapter().getParserBundlePath(
-							bundleOwnerName,
-							bundleNameSpace,
-							bundleName)
-						+ "/"
-						+ CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
-								bundleName)
-						+ "Parser.java";
+        this.makeSource(tplPath, genPath, false);
+    }
 
-		this.makeSource(tplPath, genPath, false);
-	}
+    /**
+     * Generate the build.gradle.
+     * @param bundleOwnerName Owner name
+     * @param bundleName Bundle name
+     */
+    private void generateBuildFile(
+            final String bundleOwnerName,
+            final String bundleName) {
 
-	/**
-	 * Generate command file for empty bundle.
-	 * @param bundleOwnerName Owner name
-	 * @param bundleName Bundle name
-	 * @param bundleNameSpace Bundle namespace
-	 */
-	private void generateCommand(
-			final String bundleOwnerName,
-			final String bundleName,
-			final String bundleNameSpace) {
+        final String tplPath = this.getAdapter().getBundleTemplatePath()
+                + "/build.gradle";
+        final String genPath = this.getAdapter().getBundlePath(bundleOwnerName, bundleName)
+                + "/build.gradle";
 
-		final String tplPath = this.getAdapter().getCommandBundleTemplatePath()
-				+ "/TemplateCommand.java";
-		final String genPath = this.getAdapter().getCommandBundlePath(
-							bundleOwnerName,
-							bundleNameSpace,
-							bundleName)
-						+ "/"
-						+ CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
-								bundleName)
-						+ "Command.java";
+        this.makeSource(tplPath, genPath, false);
+    }
 
-		this.makeSource(tplPath, genPath, false);
-	}
+    /**
+     * Generate the .gitignore.
+     * @param bundleOwnerName Owner name
+     * @param bundleName Bundle name
+     */
+    private void generateGitIgnore(
+            final String bundleOwnerName,
+            final String bundleName) {
 
-	/**
-	 * Generate bundle's generator.
-	 * @param bundleOwnerName Owner name
-	 * @param bundleName Bundle name
-	 * @param bundleNameSpace Bundle namespace
-	 */
-	private void generateGenerator(
-			final String bundleOwnerName,
-			final String bundleName,
-			final String bundleNameSpace) {
+        final String tplPath = this.getAdapter().getBundleTemplatePath()
+                + "/.gitignore";
+        final String genPath = this.getAdapter().getBundlePath(bundleOwnerName, bundleName)
+                + "/.gitignore";
 
-		final String tplPath = this.getAdapter().getGeneratorBundleTemplatePath()
-				+ "/TemplateGenerator.java";
-		final String genPath = this.getAdapter().getGeneratorBundlePath(
-							bundleOwnerName,
-							bundleNameSpace,
-							bundleName)
-						+ "/"
-						+ CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
-								bundleName)
-						+ "Generator.java";
+        this.makeSource(tplPath, genPath, false);
+    }
 
-		this.makeSource(tplPath, genPath, false);
-	}
+    /**
+     * Generate bundle's parser.
+     * @param bundleOwnerName Owner name
+     * @param bundleName Bundle name
+     * @param bundleNameSpace Bundle namespace
+     */
+    private void generateParser(
+            final String bundleOwnerName,
+            final String bundleName,
+            final String bundleNameSpace) {
 
-	/**
-	 * Generate Bundle metadata.
-	 * @param bundleOwnerName Owner name
-	 * @param bundleName Bundle name
-	 * @param bundleNameSpace Bundle namespace
-	 */
-	private void generateMeta(
-			final String bundleOwnerName,
-			final String bundleName,
-			final String bundleNameSpace) {
+        final String tplPath = this.getAdapter().getParserBundleTemplatePath()
+                + "/TemplateParser.java";
+        final String genPath = this.getAdapter().getParserBundlePath(bundleOwnerName, bundleNameSpace, bundleName)
+                + "/"
+                + CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, bundleName)
+                + "Parser.java";
 
-		final String tplPath = this.getAdapter().getMetaBundleTemplatePath()
-				+ "/TemplateMetadata.java";
-		final String genPath = this.getAdapter().getMetaBundlePath(
-							bundleOwnerName,
-							bundleNameSpace,
-							bundleName)
-						+ "/"
-						+ CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
-								bundleName)
-						+ "Metadata.java";
+        this.makeSource(tplPath, genPath, false);
+    }
 
-		this.makeSource(tplPath, genPath, false);
-	}
+    /**
+     * Generate command file for empty bundle.
+     * @param bundleOwnerName Owner name
+     * @param bundleName Bundle name
+     * @param bundleNameSpace Bundle namespace
+     */
+    private void generateCommand(
+            final String bundleOwnerName,
+            final String bundleName,
+            final String bundleNameSpace) {
 
-	/**
+        final String tplPath = this.getAdapter().getCommandBundleTemplatePath()
+                + "/TemplateCommand.java";
+        final String genPath = this.getAdapter().getCommandBundlePath(bundleOwnerName, bundleNameSpace, bundleName)
+                + "/"
+                + CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, bundleName)
+                + "Command.java";
+
+        this.makeSource(tplPath, genPath, false);
+    }
+
+    /**
+     * Generate bundle's generator.
+     * @param bundleOwnerName Owner name
+     * @param bundleName Bundle name
+     * @param bundleNameSpace Bundle namespace
+     */
+    private void generateGenerator(
+            final String bundleOwnerName,
+            final String bundleName,
+            final String bundleNameSpace) {
+
+        final String tplPath = this.getAdapter().getGeneratorBundleTemplatePath()
+                + "/TemplateGenerator.java";
+        final String genPath = this.getAdapter().getGeneratorBundlePath(bundleOwnerName, bundleNameSpace, bundleName)
+                + "/"
+                + CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL,
+                        bundleName)
+                + "Generator.java";
+
+        this.makeSource(tplPath, genPath, false);
+    }
+
+    /**
+     * Generate Bundle metadata.
+     * @param bundleOwnerName Owner name
+     * @param bundleName Bundle name
+     * @param bundleNameSpace Bundle namespace
+     */
+    private void generateMeta(
+            final String bundleOwnerName,
+            final String bundleName,
+            final String bundleNameSpace) {
+
+        final String tplPath = this.getAdapter().getMetaBundleTemplatePath()
+                + "/TemplateMetadata.java";
+        final String genPath = this.getAdapter().getMetaBundlePath(bundleOwnerName, bundleNameSpace, bundleName)
+                + "/"
+                + CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, bundleName)
+                + "Metadata.java";
+
+        this.makeSource(tplPath, genPath, false);
+    }
+
+    /**
      * Generate Bundle adapters.
      * @param bundleOwnerName Owner name
      * @param bundleName Bundle name
@@ -421,8 +399,7 @@ public class BundleGenerator extends BaseGenerator<BundleAdapter> {
             final File file, final String oldContent) {
         String newContent = TactFileUtils.fileToString(file);
 
-        if (!this.getAdapter().filesEqual(
-                oldContent, newContent, file.getName(), true)) {
+        if (!this.getAdapter().filesEqual(oldContent, newContent, file.getName(), true)) {
             String backupFileName = "." + file.getName() + ".back";
             TactFileUtils.stringBufferToFile(
                     new StringBuffer(oldContent),

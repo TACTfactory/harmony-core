@@ -28,50 +28,45 @@ import com.tactfactory.harmony.test.CommonTest;
  */
 public class OrmUpdateEntitiesTest extends CommonTest {
 
+    public OrmUpdateEntitiesTest(ApplicationMetadata currentMetadata)
+            throws Exception {
+        super(currentMetadata);
+    }
 
-	public OrmUpdateEntitiesTest(ApplicationMetadata currentMetadata)
-	        throws Exception {
-		super(currentMetadata);
-	}
+    @Override
+    public void setUpBeforeNewParameter() throws Exception {
+        super.setUpBeforeNewParameter();
 
-	@Override
-	public void setUpBeforeNewParameter() throws Exception {
-		super.setUpBeforeNewParameter();
-		
-		this.initAll();
-	}
+        this.initAll();
+    }
 
-	@Before
-	@Override
-	public final void setUp() throws RuntimeException {
-		super.setUp();
-	}
+    @Before
+    @Override
+    public final void setUp() throws RuntimeException {
+        super.setUp();
+    }
 
-	@After
-	@Override
-	public final void tearDown() throws RuntimeException {
-		super.tearDown();
+    @After
+    @Override
+    public final void tearDown() throws RuntimeException {
+        super.tearDown();
 
-		//TODO : enable !! FileUtils.deleteRecursive(dirproj);
-	}
+        //TODO : enable !! FileUtils.deleteRecursive(dirproj);
+    }
 
-	/**
-	 * Generate the entities.
-	 */
-	private void initAll() {
-		getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
-		makeEntities();
-		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES,
-				new String[] {},
-				null);
-		// The real test
-		getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES,
-				new String[] {},
-				null);
-	}
-	
-	@Parameters
-	public static Collection<Object[]> getParameters() {
-		return CommonTest.getParameters();
-	}
+    /**
+     * Generate the entities.
+     */
+    private void initAll() {
+        getHarmony().findAndExecute(ProjectCommand.INIT_ANDROID, null, null);
+        makeEntities();
+        getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
+        // The real test
+        getHarmony().findAndExecute(OrmCommand.GENERATE_ENTITIES, new String[] {}, null);
+    }
+
+    @Parameters
+    public static Collection<Object[]> getParameters() {
+        return CommonTest.getParameters();
+    }
 }

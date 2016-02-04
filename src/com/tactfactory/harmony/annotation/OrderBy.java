@@ -25,8 +25,8 @@ import java.lang.annotation.Target;
 @Target(FIELD)
 @Inherited
 public @interface OrderBy {
-	/** Column name.*/
-	String columnName();
-	/** Order (ASC or DESC).*/
-	String order();
+    /** Column name.*/
+    String columnName();
+    /** Order (ASC or DESC).*/
+    String order();
 }

@@ -26,5 +26,5 @@ import java.lang.annotation.Target;
 @Target(FIELD)
 @Inherited
 public @interface ColumnResult {
-	String columnName();
+    String columnName();
 }

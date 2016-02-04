@@ -17,9 +17,9 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-	GenerateStaticViewTest.class,
-	GenerateConfigFileTest.class })
+    GenerateStaticViewTest.class,
+    GenerateConfigFileTest.class })
 
 public class AllTests {
-	
+
 }

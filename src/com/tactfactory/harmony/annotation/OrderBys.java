@@ -22,6 +22,6 @@ import java.lang.annotation.Retention;
 @Retention(SOURCE)
 @Inherited
 public @interface OrderBys {
-	/** List of order by constraints. */
-	OrderBy[] value();
+    /** List of order by constraints. */
+    OrderBy[] value();
 }

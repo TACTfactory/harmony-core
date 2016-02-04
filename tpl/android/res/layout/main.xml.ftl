@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent">
-    <LinearLayout
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
         android:orientation="vertical"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content">
-        
+        android:layout_height="fill_parent">
+
+    <ScrollView
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+
         <include layout="@layout/toolbar" />
 
         <LinearLayout
@@ -95,8 +96,9 @@
             <TextView
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:text="More documentation at http://support.tactfactory.com/harmony/"  />
-            <#list entities?values as entity>            
+                android:autoLink="web"
+                android:text="More documentation at https://support.tactfactory.com/projects/harmony/wiki" />
+            <#list entities?values as entity>
                     <#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && entity.listAction)>
             <Button
                 android:id="@+id/${entity.name?lower_case}_list_button"
@@ -106,6 +108,6 @@
                     </#if>
             </#list>
         </LinearLayout>
-    </LinearLayout>
-</ScrollView>
+    </ScrollView>
+</LinearLayout>
 

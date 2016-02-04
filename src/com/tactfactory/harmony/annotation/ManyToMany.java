@@ -24,20 +24,20 @@ import java.lang.annotation.Target;
 @Target(FIELD)
 @Inherited
 public @interface ManyToMany {
-	/**
-	 * Entity targeted by this relation (auto-generated).
-	 */
-	String targetEntity() default "";
+    /**
+     * Entity targeted by this relation (auto-generated).
+     */
+    String targetEntity() default "";
 
-	/**
-	 * The field in the target Entity
-	 * inverting this relation (for bidirectionnal entities only).
-	 */
-	String inversedBy() default "";
+    /**
+     * The field in the target Entity
+     * inverting this relation (for bidirectionnal entities only).
+     */
+    String inversedBy() default "";
 
-	/**
-	 * The field in the target Entity
-	 * mapping this relation (for bidirectionnal entities only).
-	 */
-	String mappedBy() default "";
+    /**
+     * The field in the target Entity
+     * mapping this relation (for bidirectionnal entities only).
+     */
+    String mappedBy() default "";
 }

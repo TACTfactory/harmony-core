@@ -43,8 +43,6 @@ import com.tactfactory.harmony.updater.old.IConfigFileUtil;
 import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
-import freemarker.template.Configuration;
-
 public class AndroidProjectAdapter implements IAdapterProject {
 
     /** String prefix. */
@@ -1514,7 +1512,7 @@ public class AndroidProjectAdapter implements IAdapterProject {
     }
 
     @Override
-    public List<IUpdater> updateEnum(EnumMetadata enumMeta, Configuration cfg) {
+    public List<IUpdater> updateEnum(EnumMetadata enumMeta) {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
         if (enumMeta.getIdName() != null) {

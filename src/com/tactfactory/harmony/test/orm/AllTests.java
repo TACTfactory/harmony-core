@@ -17,12 +17,12 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-	OrmInitEntitiesTest.class,
-	OrmInitViewTest.class/*,
-	OrmUpdateEntitiesTest.class*/ })
+    OrmInitEntitiesTest.class,
+    OrmInitViewTest.class/*,
+    OrmUpdateEntitiesTest.class*/ })
 
 public class AllTests {
-        /*public static void main(String[] args) {
-                JUnitCore.runClasses(new Class[] { AllTests.class });
-        }*/
+    /*public static void main(String[] args) {
+            JUnitCore.runClasses(new Class[] { AllTests.class });
+    }*/
 }
