@@ -340,4 +340,12 @@ public final class ProjectContext {
             }
         }
     }
+
+    /**
+     * Check if the project is init.
+     * @return true if project is init.
+     */
+    public boolean isProjectInit() {
+        return !Strings.isNullOrEmpty(ApplicationMetadata.INSTANCE.getProjectNameSpace());
+    }
 }

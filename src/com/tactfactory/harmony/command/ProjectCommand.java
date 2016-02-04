@@ -162,15 +162,12 @@ public class ProjectCommand extends CommandBase {
     /** Has user confirmed ? */
     private boolean userHasConfirmed;
 
-    /** Is project initialized ? */
-    private boolean isProjectInit;
-
     /**
      * Initialize Project Parameters.
      * (project name, namespace, android sdk path)
      */
     public final void initProjectParam() {
-        if (!this.isProjectInit) {
+        if (!Harmony.getInstance().getProjectContext().isProjectInit()) {
             while (!this.userHasConfirmed) {
                 ConsoleUtils.display(">> Project Parameters");
 
@@ -212,7 +209,6 @@ public class ProjectCommand extends CommandBase {
             }
 
             this.userHasConfirmed = false;
-            this.isProjectInit = true;
         }
     }
 

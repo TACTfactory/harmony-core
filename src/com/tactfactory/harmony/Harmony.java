@@ -24,6 +24,7 @@ import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.IOFileFilter;
 import com.google.common.base.Strings;
 import com.tactfactory.harmony.command.GeneralCommand;
+import com.tactfactory.harmony.command.ProjectCommand;
 import com.tactfactory.harmony.command.base.Command;
 import com.tactfactory.harmony.exception.HarmonyException;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
@@ -76,6 +77,19 @@ public final class Harmony {
 
     /** Command classes associated to bundle folder. */
     private final Map<Class<?>, String> commandBundleFolders = new HashMap<Class<?>, String>();
+
+    /**
+     * List of commands available without init a project.
+     */
+    private final String[] commandsAlwaysAvailable = {
+            ProjectCommand.INIT_ALL,
+            ProjectCommand.INIT_ANDROID,
+            ProjectCommand.INIT_IOS,
+            ProjectCommand.INIT_RIM,
+            ProjectCommand.INIT_WINPHONE,
+            GeneralCommand.HELP,
+            GeneralCommand.LIST
+    };
 
     /** Constructor.
      * @throws Exception PluginManager failure
@@ -132,8 +146,7 @@ public final class Harmony {
         pluginManager.addPluginsFrom(plugin.toURI());
 
         // Template bundles
-        final File bundleFolderFile =
-                plugin.getParentFile().getAbsoluteFile();
+        final File bundleFolderFile = plugin.getParentFile().getAbsoluteFile();
 
         // Process extensions commands
         final PluginManagerUtil pmu = new PluginManagerUtil(pluginManager);
@@ -142,8 +155,7 @@ public final class Harmony {
         // Bootstrap all commands
         for (final Command command : commands) {
             this.bootstrap.put(command.getClass(), command);
-            this.commandBundleFolders.put(command.getClass(),
-                    bundleFolderFile.getAbsolutePath());
+            this.commandBundleFolders.put(command.getClass(), bundleFolderFile.getAbsolutePath());
         }
 
         pluginManager.shutdown();
@@ -208,15 +220,26 @@ public final class Harmony {
             final String option) {
         boolean isfindAction = false;
 
+        String errorMessage = null;
+
+        if (!Harmony.commandsAvailableContains(action) && !this.projectContext.isProjectInit()) {
+            errorMessage = "You can't use this command if you haven't init your project !";
+        }
+
         // Select Action and launch
         for (final Command baseCommand : this.bootstrap.values()) {
             if (baseCommand.isAvailableCommand(action)) {
+
+                if (errorMessage != null) {
+                    ConsoleUtils.displayWarning(errorMessage);
+                    System.exit(0);
+                }
+
                 String bundleFolder = this.commandBundleFolders.get(baseCommand.getClass());
                 harmonyContext.setCurrentBundleFolder(bundleFolder + "/");
 
                 baseCommand.registerAdapters(projectContext.getAdapters());
                 baseCommand.execute(action, args, option);
-
                 isfindAction = true;
             }
         }
@@ -379,5 +402,21 @@ public final class Harmony {
         }
 
         return version;
+    }
+
+    /**
+     * Check if the commands available contains the given command.
+     * @param command The command
+     */
+    private static boolean commandsAvailableContains(String command) {
+        boolean result = false;
+
+        for (String action : instance.commandsAlwaysAvailable) {
+            if (command.equalsIgnoreCase(action)) {
+                result = true;
+            }
+        }
+
+        return result;
     }
 }
