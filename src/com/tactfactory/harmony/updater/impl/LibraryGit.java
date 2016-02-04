@@ -9,13 +9,21 @@
 package com.tactfactory.harmony.updater.impl;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
+import com.tactfactory.harmony.Harmony;
+import com.tactfactory.harmony.generator.BaseGenerator;
+import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.updater.IUpdater;
+import com.tactfactory.harmony.utils.ConsoleUtils;
+import com.tactfactory.harmony.utils.GitUtils;
+import com.tactfactory.harmony.utils.TactFileUtils;
+import com.tactfactory.harmony.utils.GitUtils.GitException;
 
-/** 
+/**
  * Command of generator for install library from Git.
- * 
+ *
  * @author Erwan LeHuitouze <erwan.lehuitouze@tactfactory.com>
  * @author Mickael Gaillard <mickael.gaillard@tactfactory.com>
  */
@@ -30,7 +38,7 @@ public class LibraryGit implements IUpdater {
 
     /**
      * Constructor of the command generator.
-     * 
+     *
      * @param url Repository url.
      * @param path Local folder to install.
      * @param branch Branch to checkout.
@@ -70,5 +78,36 @@ public class LibraryGit implements IUpdater {
 
     public String getLibraryPath() {
         return libraryPath;
+    }
+
+    @Override
+    public void execute(BaseGenerator<? extends IAdapter> generator) {
+        if (!TactFileUtils.exists(this.getPath())) {
+            try {
+                final File projectFolder = new File(Harmony.getProjectPath()
+                        + generator.getAdapter().getPlatform() + "/");
+
+                GitUtils.cloneRepository(
+                        this.getPath(),
+                        this.getUrl(),
+                        this.getBranch());
+
+                GitUtils.addSubmodule(
+                        projectFolder.getAbsolutePath(),
+                        this.getPath(),
+                        this.getUrl());
+
+                // Delete useless files
+                if (this.getFilesToDelete() != null) {
+                    for (File fileToDelete : this.getFilesToDelete()) {
+                        TactFileUtils.deleteRecursive(fileToDelete);
+                    }
+                }
+            } catch (IOException e) {
+                ConsoleUtils.displayError(e);
+            } catch (GitException e) {
+                ConsoleUtils.displayError(e);
+            }
+        }
     }
 }

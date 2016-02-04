@@ -7,6 +7,8 @@
 <@header?interpret />
 package ${project_namespace};
 
+import org.joda.time.DateTime;
+
 import java.text.DateFormat;
 <#if (services?size > 0)>
 import java.util.ArrayList;
@@ -31,7 +33,6 @@ import android.provider.Settings.Secure;
 import android.telephony.TelephonyManager;
 
 import android.content.SharedPreferences;
-import ${project_namespace}.provider.${project_name?cap_first}Provider;
 <#if (sync)>
 
 import ${project_namespace}.harmony.util.DateUtils;
@@ -78,10 +79,6 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 
     @Override
     public void onCreate() {
-        if (!${project_name?cap_first}Application.CREATE_DATABASE_DEFERRED) {
-            ${project_name?cap_first}Provider.initializeDatabase(this);
-        }
-
         super.onCreate();
 
         setSingleton(this);
@@ -92,7 +89,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
         </#if>
         android.util.Log.i(TAG, "Starting application...");
     }
-    
+
     <#if (services?size > 0)>
     @Override
     protected void finalize() throws Throwable {
@@ -100,7 +97,7 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
 
         super.finalize();
     }
-    
+
     /**
      * Bind all services to the application.
      */
@@ -118,13 +115,13 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
             this.isServicesBinded = true;
         }
     }
-    
+
     /**
      * Unbind all services to the application.
      */
     private void doUnbindServices() {
         android.util.Log.i(TAG, "Unbind Services.");
-        
+
         if (this.isServicesBinded) {
             for (Class<? extends Service> service : this.getServices()) {
                 if (!(IntentService.class.isAssignableFrom(service))) {
@@ -132,26 +129,26 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
                     this.stopService(intent);
                 }
             }
-            
+
             this.isServicesBinded = false;
         }
     }
-    
+
     /**
      * Get Services.
      */
     protected List<Class<? extends Service>> getServices() {
         List<Class<? extends Service>> result
             = new ArrayList<Class<? extends Service>>();
-        
+
         <#list services as service>
             <#assign serviceSplit= service?split(".")/>
         result.add(${serviceSplit[serviceSplit?size - 1]}.class);
         </#list>
-        
+
         return result;
     }
-    
+
     </#if>
     /**
      * Set the application singleton.
@@ -355,6 +352,10 @@ public abstract class ${project_name?cap_first}ApplicationBase extends Applicati
      */
     public static DeviceType getDeviceType(android.content.Context context) {
         return DeviceType.fromValue(context.getString(R.string.device_type));
+    }
+
+    public static DateTime getDefaultLastSyncDate() {
+        return new DateTime().minusYears(10);
     }
 
     /**

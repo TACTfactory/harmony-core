@@ -19,6 +19,7 @@ import android.net.Uri;
 import android.os.Bundle;
 
 import ${project_namespace}.R;
+import ${project_namespace}.provider.${project_name?cap_first}Provider;
 <#list entities?values as entity>
     <#if (entity.fields?size > 0 || entity.inheritance??)>
 import ${project_namespace}.provider.${entity.name?cap_first}ProviderAdapter;
@@ -61,7 +62,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
     /** android.content.Context. */
     protected android.content.Context mContext;
 
-    /** 
+    /**
      * Hashmap containing the uris to notify at the end of a batch and their
      * associated ContentObservers.
      */
@@ -77,6 +78,11 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 
         this.mContext = getContext();
         URI_NOT_SUPPORTED = this.getContext().getString(R.string.uri_not_supported);
+
+        // Load adapters if database creation is not deferred
+        if (!${project_name?cap_first}Provider.CREATE_DATABASE_DEFERRED) {
+            this.loadAdapters();
+        }
 
         return result;
     }
@@ -115,7 +121,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
     public String getType(final Uri uri) {
         String result = null;
         boolean matched = false;
-        
+
         for (ProviderAdapterBase<?> adapter : this.providerAdapters) {
             if (adapter.match(uri)) {
                 result = adapter.getType(uri);
@@ -353,11 +359,11 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
     }
 
     /**
-     * Ask the provider to notify an Uri. This method is useful 
+     * Ask the provider to notify an Uri. This method is useful
      * for not notifying the same Uri a lot of times when we're in case of a
      * batch. (It will delay all the uri changes notification at the end of the
      * batch.)
-     * 
+     *
      * @param uri The uri to notify
      * @param observer The observer that originated the change.
      */
@@ -376,7 +382,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
             this.getContext().getContentResolver().notifyChange(uri, observer);
         }
     }
-    
+
     /**
      * Notify all stored uris in case we're in a batch.
      */
@@ -409,7 +415,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
 
         return result;
     }
-    
+
     /**
      * Initialize the database.
      * @param context {@link Context}
@@ -417,7 +423,7 @@ public class ${project_name?cap_first}ProviderBase extends ContentProvider {
     public static void initializeDatabase(Context context) {
         context.getContentResolver().call(
                 ${project_name?cap_first}ProviderBase.generateUri(),
-                ${project_name?cap_first}ProviderBase.INITIALIZE_DATABASE, 
+                ${project_name?cap_first}ProviderBase.INITIALIZE_DATABASE,
                 null,
                 null);
     }

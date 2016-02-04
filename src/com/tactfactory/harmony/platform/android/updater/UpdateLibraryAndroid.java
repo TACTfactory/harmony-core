@@ -13,24 +13,23 @@ import java.util.ArrayList;
 
 import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.dependencies.android.sdk.AndroidSDKManager;
+import com.tactfactory.harmony.generator.BaseGenerator;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
-import com.tactfactory.harmony.platform.android.AndroidAdapter;
+import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.updater.IUpdateLibrary;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.OsUtil;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
 public class UpdateLibraryAndroid implements IUpdateLibrary {
-    private final AndroidAdapter adapter;
     private final String libName;
     private final String libraryProjectPath;
     private final String target;
     private final String referencePath;
     private final boolean isSupportV4Dependant;
-    
+
     /**
      * Update an android project library.
-     * @param adapter Android adapter
      * @param libName The library name (ie. demact-abs)
      * @param libraryProjectPath The library project path inside the downloaded
      *              folder
@@ -38,10 +37,9 @@ public class UpdateLibraryAndroid implements IUpdateLibrary {
      * @param referencePath The library path to reference in your project
      * @param isSupportV4Dependant true if the library is supportv4 dependent
      */
-    public UpdateLibraryAndroid(AndroidAdapter adapter,
+    public UpdateLibraryAndroid(
             String libName, String libraryProjectPath,
             String target, String referencePath, boolean isSupportV4Dependant) {
-        this.adapter = adapter;
         this.libName = libName;
         this.libraryProjectPath = libraryProjectPath;
         this.target = target;
@@ -50,14 +48,14 @@ public class UpdateLibraryAndroid implements IUpdateLibrary {
     }
 
     @Override
-    public void execute() {
+    public void execute(BaseGenerator<? extends IAdapter> generator) {
         ArrayList<String> command = new ArrayList<String>();
-        
+
         //make build
         String sdkTools = String.format("%s/%s",
                 ApplicationMetadata.getAndroidSdkPath(),
                 "tools/android");
-        
+
         if (OsUtil.isWindows()) {
             sdkTools += ".bat";
         }
@@ -69,15 +67,15 @@ public class UpdateLibraryAndroid implements IUpdateLibrary {
         command.add(this.libraryProjectPath);
         command.add("--name");
         command.add(this.libName);
-        
+
         if (this.target != null) {
             command.add("--target");
             command.add(this.target);
         }
-        
+
         ConsoleUtils.launchCommand(command);
         command.clear();
-        
+
         if (this.isSupportV4Dependant) {
             AndroidSDKManager.copySupportV4Into(
                     this.libraryProjectPath + "/libs/");
@@ -85,9 +83,8 @@ public class UpdateLibraryAndroid implements IUpdateLibrary {
 
         if (this.referencePath != null) {
             // Update android project to reference the new downloaded library
-            String projectPath = Harmony.getProjectPath()
-                    + this.adapter.getPlatform();
-            
+            String projectPath = Harmony.getProjectPath() + generator.getAdapter().getPlatform();
+
             command.add(new File(sdkTools).getAbsolutePath());
             command.add("update");
             command.add("project");

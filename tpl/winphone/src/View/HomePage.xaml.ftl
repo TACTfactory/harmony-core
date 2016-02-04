@@ -107,7 +107,7 @@
                 <TextBlock
                     TextWrapping="Wrap"
                     Margin="0,0,0,20"
-                    Text="http://support.tactfactory.com/harmony/"/>
+                    Text="https://support.tactfactory.com/projects/harmony/wiki"/>
                 <#list entities?values as entity>
                     <#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && entity.listAction)>
                 <Button Name="Button${entity.name}" Content="List all ${entity.name}" Click="Button${entity.name}_Click"/>
@@ -115,7 +115,7 @@
                 </#list>
             </StackPanel>
         </ScrollViewer>
-        
+
         <!--Uncomment to see an alignment grid to help ensure your controls are
             aligned on common boundaries.  The image has a top margin of -32px to
             account for the System Tray. Set this to 0 (or remove the margin altogether)

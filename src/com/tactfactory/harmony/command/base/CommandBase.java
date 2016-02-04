@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import com.google.common.base.Strings;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.FieldMetadata;
@@ -59,11 +60,11 @@ public abstract class CommandBase implements Command {
 
         ConsoleUtils.display(">> Analyse Models...");
         this.javaModelParser = new JavaModelParser();
-        
+
         for (final BaseParser parser : registeredParsers.values()) {
             this.javaModelParser.registerParser(parser);
         }
-        
+
         // Parse models and load entities into CompilationUnits
         try {
             this.javaModelParser.loadEntities();
@@ -73,8 +74,7 @@ public abstract class CommandBase implements Command {
 
         // Convert CompilationUnits entities to ClassMetaData
         if (this.javaModelParser.getEntities().size() > 0) {
-            for (final CompilationUnit mclass
-                    : this.javaModelParser.getEntities()) {
+            for (final CompilationUnit mclass : this.javaModelParser.getEntities()) {
                 this.javaModelParser.parse(
                         mclass,
                         ApplicationMetadata.INSTANCE);
@@ -84,7 +84,7 @@ public abstract class CommandBase implements Command {
             new ClassCompletor(
                     ApplicationMetadata.INSTANCE.getEntities(),
                     ApplicationMetadata.INSTANCE.getEnums()).execute();
-            
+
             for (final BaseParser parser : registeredParsers.values()) {
                 parser.callFinalCompletor();
             }
@@ -124,7 +124,7 @@ public abstract class CommandBase implements Command {
     protected final HashMap<String, String> getCommandArgs() {
         return this.commandArgs;
     }
-    
+
     /**
      * Validate all metadata tree.
      */
@@ -136,7 +136,12 @@ public abstract class CommandBase implements Command {
 
         for (EntityMetadata entityMetadata : ApplicationMetadata.INSTANCE.getEntities().values()) {
             for (FieldMetadata fieldMetadata : entityMetadata.getRelations().values()) {
-                if (fieldMetadata.getColumnDefinition().equalsIgnoreCase("BLOB")) {
+                if (fieldMetadata.getColumnDefinition().equalsIgnoreCase("BLOB")
+                        || (fieldMetadata.getRelation().getType().equals("OneToMany")
+                                && fieldMetadata.getRelation().getMappedBy() != null
+                                && !Strings.isNullOrEmpty(fieldMetadata.getRelation().getMappedBy().getName())
+                                && !fieldMetadata.getRelation().getEntityRef().getFields().containsKey(
+                                        fieldMetadata.getRelation().getMappedBy().getName()))) {
                     ConsoleUtils.displayWarning(String.format("Field %s of entity %s isn't valid."
                             + " Check your relation annotation.",
                             fieldMetadata.getName(), entityMetadata.getName()));
@@ -148,7 +153,7 @@ public abstract class CommandBase implements Command {
                             entityMetadata.getName(),
                             fieldMetadata.getRelation().getEntityRef().getName()));
                     fieldMetadata.setRelation(null);
-                    
+
                     relationToRemove.add(fieldMetadata);
                 }
             }

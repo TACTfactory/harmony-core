@@ -24,23 +24,23 @@ import java.lang.annotation.Target;
 @Target(FIELD)
 @Inherited
 public @interface OneToOne {
-	/**
-	 * The Entity targeted by the relation.
-	 */
-	String targetEntity() default "";
+    /**
+     * The Entity targeted by the relation.
+     */
+    String targetEntity() default "";
 
-	/**
-	 * The field which map this relation.
-	 */
-	String mappedBy() default "";
+    /**
+     * The field which map this relation.
+     */
+    String mappedBy() default "";
 
-	/**
-	 * The field which inverse this relation.
-	 */
-	String inversedBy() default "";
+    /**
+     * The field which inverse this relation.
+     */
+    String inversedBy() default "";
 
-	/**
-	 * Is this field hidden in the views ?
-	 */
-	boolean hidden() default false;
+    /**
+     * Is this field hidden in the views ?
+     */
+    boolean hidden() default false;
 }

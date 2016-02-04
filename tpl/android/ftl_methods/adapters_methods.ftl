@@ -123,7 +123,8 @@
                             <#assign result = result + "${tab}${localTab}    result.set${field.name?cap_first}(${enumType.name}.fromValue(cursor.getString(index)));\n"/>
                         </#if>
                     <#else>
-                        <#assign result = result + "${tab}${localTab}    result.set${field.name?cap_first}(${enumType.name}.valueOf(cursor.getString(index)));\n"/>
+                        <#assign result = result + "${tab}${localTab}result.set${field.name?cap_first}(\n"/>
+                        <#assign result = result + "${tab}    ${enumType.name}.valueOf(cursor.getString(index)));\n"/>
 
                     </#if>
                     <#break />

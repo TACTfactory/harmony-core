@@ -18,12 +18,12 @@ import org.junit.runners.Suite.SuiteClasses;
  */
 @RunWith(Suite.class)
 @SuiteClasses({
-	com.tactfactory.harmony.test.CoreTest.class,
-	com.tactfactory.harmony.test.bundles.AllTests.class,
-	com.tactfactory.harmony.test.project.AllTests.class,
-	com.tactfactory.harmony.test.orm.AllTests.class,
-	com.tactfactory.harmony.test.common.AllTests.class,
-	com.tactfactory.harmony.test.fixture.AllTests.class})
+    com.tactfactory.harmony.test.CoreTest.class,
+    com.tactfactory.harmony.test.bundles.AllTests.class,
+    com.tactfactory.harmony.test.project.AllTests.class,
+    com.tactfactory.harmony.test.orm.AllTests.class,
+    com.tactfactory.harmony.test.common.AllTests.class,
+    com.tactfactory.harmony.test.fixture.AllTests.class})
 public class AllTests {
 
 }

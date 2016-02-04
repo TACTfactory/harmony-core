@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.StringWriter;
 import java.util.Map;
 
+import com.tactfactory.harmony.generator.BaseGenerator;
 import com.tactfactory.harmony.generator.TagConstant;
 import com.tactfactory.harmony.meta.ClassMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
@@ -22,60 +23,55 @@ import com.tactfactory.harmony.updater.IUpdaterFile;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
 
-import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 
 //TODO remove
 public class EnumImplementationAndroid implements IUpdaterFile {
-    private final IAdapter adapter;
-    private final Configuration configuration;
     private final EnumMetadata enumMeta;
-    
-    public EnumImplementationAndroid(IAdapter adapter, Configuration cfg,
-            EnumMetadata enumMeta) {
-        this.adapter = adapter;
-        this.configuration = cfg;
+
+    public EnumImplementationAndroid(EnumMetadata enumMeta) {
         this.enumMeta = enumMeta;
     }
-    
-    protected void updateEnum() {
+
+    protected void updateEnum(BaseGenerator<? extends IAdapter> generator) {
         File entityFile = new File(String.format("%s/%s.java",
-                this.adapter.getSourceEntityPath(),
-                this.getOldestMother(enumMeta).getName()));
+                generator.getAdapter().getSourceEntityPath(),
+                this.getOldestMother(generator, enumMeta).getName()));
 
         ConsoleUtils.display(">>> Decorate " + enumMeta.getName());
-        
+
         if (entityFile.exists()) {
             // Load the file once in a String buffer
             final StringBuffer fileString =
                     TactFileUtils.fileToStringBuffer(entityFile);
-    
-            this.addGetterAndRetriever(fileString, enumMeta);
+
+            this.addGetterAndRetriever(generator, fileString, enumMeta);
             //this.addRetriever(fileString, enumMeta);
-    
+
             // After treatment on entity, write it in the original file
             TactFileUtils.stringBufferToFile(fileString, entityFile);
         }
     }
-    
+
     /**
      * Implements serializable in the class if it doesn't already.
      * @param fileString The stringbuffer containing the class java code
      * @param enumMeta The Metadata containing the infos on the enum
      */
     private final void addGetterAndRetriever(
+            final BaseGenerator<? extends IAdapter> generator,
             final StringBuffer fileString,
             final EnumMetadata enumMeta) {
 
         if (!this.alreadyHasGetter(enumMeta)) {
             ConsoleUtils.displayDebug("Add method getValue()");
-            this.generateMethod(fileString, enumMeta, "enumGetter.java");
+            this.generateMethod(generator, fileString, enumMeta, "enumGetter.java");
         }
 
         if (!this.alreadyHasRetriever(enumMeta)) {
             ConsoleUtils.displayDebug("Add method fromValue()");
-            this.generateMethod(fileString, enumMeta, "enumRetriever.java");
+            this.generateMethod(generator, fileString, enumMeta, "enumRetriever.java");
         }
     }
 
@@ -87,7 +83,7 @@ public class EnumImplementationAndroid implements IUpdaterFile {
     private final boolean alreadyHasGetter(
             final EnumMetadata enumMeta) {
         boolean ret = false;
-        
+
         for (final MethodMetadata method : enumMeta.getMethods()) {
             if (method.getName().equals("getValue")
                     && method.getArgumentsTypes().size() == 0) {
@@ -107,7 +103,7 @@ public class EnumImplementationAndroid implements IUpdaterFile {
     private final boolean alreadyHasRetriever(
             final EnumMetadata enumMeta) {
         boolean ret = false;
-        
+
         for (final MethodMetadata method : enumMeta.getMethods()) {
             if (method.getName().equals("fromValue")
                     && method.getArgumentsTypes().size() == 1
@@ -126,10 +122,12 @@ public class EnumImplementationAndroid implements IUpdaterFile {
      * @param enumMeta The EnumMetadata
      * @return N "\t" appended in a String to get the correct indentation.
      */
-    private final String calculateIndentLevel(final EnumMetadata enumMeta) {
+    private final String calculateIndentLevel(
+            final BaseGenerator<? extends IAdapter> generator,
+            final EnumMetadata enumMeta) {
         final StringBuffer buffer = new StringBuffer();
 
-        for (int i = 0; i < this.nbMotherClass(enumMeta); i++) {
+        for (int i = 0; i < this.nbMotherClass(generator, enumMeta); i++) {
             buffer.append('\t');
         }
 
@@ -141,15 +139,16 @@ public class EnumImplementationAndroid implements IUpdaterFile {
      * @param classMeta The class
      * @return The number of mother classes
      */
-    private final int nbMotherClass(final ClassMetadata classMeta) {
+    private final int nbMotherClass(final BaseGenerator<? extends IAdapter> generator, final ClassMetadata classMeta) {
         int result = 1;
-        
+
         if (classMeta.getOuterClass() != null) {
             result += this.nbMotherClass(
-                    this.adapter.getApplicationMetadata().getClasses().get(
+                    generator,
+                    generator.getAdapter().getApplicationMetadata().getClasses().get(
                             classMeta.getOuterClass()));
         }
-        
+
         return result;
     }
 
@@ -159,12 +158,14 @@ public class EnumImplementationAndroid implements IUpdaterFile {
      * @return The oldest mother
      */
     private final ClassMetadata getOldestMother(
+            final BaseGenerator<? extends IAdapter> generator,
             final ClassMetadata classMeta) {
         ClassMetadata result;
-        
+
         if (classMeta.getOuterClass() != null) {
             result = getOldestMother(
-                    this.adapter.getApplicationMetadata().getClasses().get(
+                    generator,
+                    generator.getAdapter().getApplicationMetadata().getClasses().get(
                             classMeta.getOuterClass()));
         } else {
             result = classMeta;
@@ -179,23 +180,25 @@ public class EnumImplementationAndroid implements IUpdaterFile {
      * @param enumMeta The concerned enum
      * @param templateName The template file name
      */
-    private final void generateMethod(final StringBuffer fileString,
+    private final void generateMethod(
+            final BaseGenerator<? extends IAdapter> generator,
+            final StringBuffer fileString,
             final EnumMetadata enumMeta,
             final String templateName) {
         final int insertionIndex = this.getEnumClosingBracketIndex(fileString,
                 enumMeta);
 
         final Map<String, Object> map =
-                this.adapter.getApplicationMetadata().toMap(this.adapter);
-        map.put("indentLevel", this.calculateIndentLevel(enumMeta));
+                generator.getAdapter().getApplicationMetadata().toMap(generator.getAdapter());
+        map.put("indentLevel", this.calculateIndentLevel(generator, enumMeta));
         map.put(TagConstant.CURRENT_ENTITY, enumMeta.getName());
 
         try {
             final StringWriter writer = new StringWriter();
 
-            final Template tpl = this.configuration.getTemplate(
+            final Template tpl = generator.getCfg().getTemplate(
                     String.format("%s%s",
-                            this.adapter.getTemplateSourceCommonPath(),
+                            generator.getAdapter().getTemplateSourceCommonPath(),
                             templateName + ".ftl"));
             // Load template file in engine
 
@@ -260,7 +263,7 @@ public class EnumImplementationAndroid implements IUpdaterFile {
     }
 
     @Override
-    public void execute() {
-        this.updateEnum();
+    public void execute(BaseGenerator<? extends IAdapter> generator) {
+        this.updateEnum(generator);
     }
 }

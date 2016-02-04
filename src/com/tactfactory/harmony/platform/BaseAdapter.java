@@ -86,7 +86,7 @@ public abstract class BaseAdapter implements IAdapter {
         this();
         adapter.cloneTo(this);
     }
-    
+
     public BaseAdapter() { }
 
 	@Override
@@ -123,7 +123,7 @@ public abstract class BaseAdapter implements IAdapter {
 	 * Get the tests path.
 	 * @return The tests path
 	 */
-	public final String getTestPath() {
+	public String getTestPath() {
 		return String.format("%s%s/%s/",
 				Harmony.getProjectPath(),
 				this.getPlatform(),
@@ -150,7 +150,7 @@ public abstract class BaseAdapter implements IAdapter {
 				this.getPlatform(),
 				this.getSource());
 	}
-	
+
 	/**
 	 * Get the sources path.
 	 * @return The sources path
@@ -196,7 +196,7 @@ public abstract class BaseAdapter implements IAdapter {
 				this.getApplicationMetadata().getProjectNameSpace(),
 				this.getMenu());
 	}
-	
+
 	/**
 	 * Get the project's menu base path.
 	 * @return The menu base path
@@ -206,7 +206,7 @@ public abstract class BaseAdapter implements IAdapter {
 				this.getMenuPath(),
 				this.getBase());
 	}
-	
+
 	/**
 	 * Get the project's menu path.
 	 * @return The menu path
@@ -216,7 +216,7 @@ public abstract class BaseAdapter implements IAdapter {
 				this.getTemplateSourcePath(),
 				this.getMenu());
 	}
-	
+
 	/**
 	 * Get the project's menu base path.
 	 * @return The menu base path
@@ -247,6 +247,17 @@ public abstract class BaseAdapter implements IAdapter {
 				this.getHarmony(),
 				this.getUtil());
 	}
+
+	/**
+     * Get the utility classes' templates path.
+     * @return The utility classes' templates path
+     */
+    public final String getTemplateEntityPath() {
+        return String.format("%s%s/%s/",
+                this.getTemplateSourcePath(),
+                this.getHarmony(),
+                this.getUtil());
+    }
 
 	/**
 	 * Get the utility classes' templates path.
@@ -313,7 +324,7 @@ public abstract class BaseAdapter implements IAdapter {
 				this.getSource(),
 				this.getProvider());
 	}
-	
+
 	/**
      * Get the data' templates path.
      * @return The data' templates path
@@ -492,7 +503,7 @@ public abstract class BaseAdapter implements IAdapter {
 				this.getValues(),
 				this.getStrings());
 	}
-	
+
 	/**
      * Get the resource path.
      * @return The resource path
@@ -526,6 +537,18 @@ public abstract class BaseAdapter implements IAdapter {
 				this.getSource(),
 				this.getData());
 	}
+
+	/**
+     * Get the source data namespace.
+     * @return The source data namespace
+     */
+    public final String getSourceEntityNameSpace() {
+        return String.format("%s.%s.%s.%s",
+                Harmony.getProjectPath(),
+                this.getPlatform(),
+                this.getSource(),
+                this.getModel());
+    }
 
 	/**
 	 * Get the source data namespace.
@@ -589,7 +612,7 @@ public abstract class BaseAdapter implements IAdapter {
 	public final String getView() {
 		return this.view;
 	}
-	
+
 	/**
 	 * @return the large view
 	 */
@@ -715,7 +738,7 @@ public abstract class BaseAdapter implements IAdapter {
 	public final void setCriterias(final String criterias) {
 		this.criterias = criterias;
 	}
-	
+
 	/**
 	 * @return the base
 	 */
@@ -780,7 +803,7 @@ public abstract class BaseAdapter implements IAdapter {
 	public final String getValues() {
 		return this.values;
 	}
-	
+
 	/**
 	 * @return the values-xlarge
 	 */
@@ -948,7 +971,7 @@ public abstract class BaseAdapter implements IAdapter {
 	public final void setUtilityPath(final String utilityPath) {
 		this.utilityPath = utilityPath;
 	}
-	
+
 	/**
 	 * Check if the given library exists in the platform libraries folder.
 	 * @param library The name of the file to looking for
@@ -956,12 +979,12 @@ public abstract class BaseAdapter implements IAdapter {
 	 */
 	public boolean libraryExists(String library) {
         boolean result = false;
-        
+
         result = new File(this.getLibsPath() + library).exists();
-        
+
         return result;
 	}
-	
+
 	public void cloneTo(BaseAdapter adapter) {
         //TODO use reflection for that !
 	    adapter.setAssets(this.getAssets());

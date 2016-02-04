@@ -16,116 +16,106 @@ import com.tactfactory.harmony.generator.TagConstant;
 import com.tactfactory.harmony.platform.IAdapter;
 
 public final class InheritanceMetadata extends BaseMetadata {
-	private InheritanceMode type;
-	private FieldMetadata discriminorColumn;
-	private String discriminorIdentifier;
-	private EntityMetadata superclass;
-	/** Map to evolve easily to Map<String, ClassMetadata>. */
-	private Map<String, EntityMetadata> subclasses =
-				new HashMap<String, EntityMetadata>();
-	
-	
-	@Override
-	public Map<String, Object> toMap(IAdapter adapter) {
-		Map<String, Object> result = new HashMap<String, Object>();
-		if (this.type != null) {
-			result.put(TagConstant.INHERITANCE_TYPE,
-				this.type.getValue());
-		}
-		
-		if (this.discriminorColumn != null) {
-			result.put(TagConstant.DISCRIMINATOR_COLUMN,
-					this.discriminorColumn.toMap(adapter));
-		}
-		
-		result.put(TagConstant.DISCRIMINATOR_IDENTIFIER,
-				this.discriminorIdentifier);
-		
-		if (this.superclass != null) {
-			result.put(TagConstant.SUPERCLASS, this.superclass.toMap(adapter));
-		}
-		if (this.subclasses != null) {
-			result.put(TagConstant.SUBCLASSES, this.subclasses.values());
-		}
-		return result;
-	}
+    private InheritanceMode type;
+    private FieldMetadata discriminorColumn;
+    private String discriminorIdentifier;
+    private EntityMetadata superclass;
+    /** Map to evolve easily to Map<String, ClassMetadata>. */
+    private Map<String, EntityMetadata> subclasses = new HashMap<String, EntityMetadata>();
 
-	/**
-	 * @return the type
-	 */
-	public final InheritanceMode getType() {
-		return type;
-	}
+    @Override
+    public Map<String, Object> toMap(IAdapter adapter) {
+        Map<String, Object> result = new HashMap<String, Object>();
 
+        if (this.type != null) {
+            result.put(TagConstant.INHERITANCE_TYPE, this.type.getValue());
+        }
 
-	/**
-	 * @param type the type to set
-	 */
-	public final void setType(InheritanceMode type) {
-		this.type = type;
-	}
+        if (this.discriminorColumn != null) {
+            result.put(TagConstant.DISCRIMINATOR_COLUMN,
+                    this.discriminorColumn.toMap(adapter));
+        }
 
+        result.put(TagConstant.DISCRIMINATOR_IDENTIFIER, this.discriminorIdentifier);
 
-	/**
-	 * @return the discriminorColumn
-	 */
-	public final FieldMetadata getDiscriminorColumn() {
-		return discriminorColumn;
-	}
+        if (this.superclass != null) {
+            result.put(TagConstant.SUPERCLASS, this.superclass.toMap(adapter));
+        }
 
+        if (this.subclasses != null) {
+            result.put(TagConstant.SUBCLASSES, this.subclasses.values());
+        }
 
-	/**
-	 * @param discriminorColumn the discriminorColumn to set
-	 */
-	public final void setDiscriminorColumn(FieldMetadata discriminorColumn) {
-		this.discriminorColumn = discriminorColumn;
-	}
+        return result;
+    }
 
+    /**
+     * @return the type
+     */
+    public final InheritanceMode getType() {
+        return type;
+    }
 
-	/**
-	 * @return the discriminorIdentifier
-	 */
-	public final String getDiscriminorIdentifier() {
-		return discriminorIdentifier;
-	}
+    /**
+     * @param type the type to set
+     */
+    public final void setType(InheritanceMode type) {
+        this.type = type;
+    }
 
+    /**
+     * @return the discriminorColumn
+     */
+    public final FieldMetadata getDiscriminorColumn() {
+        return discriminorColumn;
+    }
 
-	/**
-	 * @param discriminorIdentifier the discriminorIdentifier to set
-	 */
-	public final void setDiscriminorIdentifier(String discriminorIdentifier) {
-		this.discriminorIdentifier = discriminorIdentifier;
-	}
+    /**
+     * @param discriminorColumn the discriminorColumn to set
+     */
+    public final void setDiscriminorColumn(FieldMetadata discriminorColumn) {
+        this.discriminorColumn = discriminorColumn;
+    }
 
+    /**
+     * @return the discriminorIdentifier
+     */
+    public final String getDiscriminorIdentifier() {
+        return discriminorIdentifier;
+    }
 
-	/**
-	 * @return the superclass
-	 */
-	public final EntityMetadata getSuperclass() {
-		return superclass;
-	}
+    /**
+     * @param discriminorIdentifier the discriminorIdentifier to set
+     */
+    public final void setDiscriminorIdentifier(String discriminorIdentifier) {
+        this.discriminorIdentifier = discriminorIdentifier;
+    }
 
+    /**
+     * @return the superclass
+     */
+    public final EntityMetadata getSuperclass() {
+        return superclass;
+    }
 
-	/**
-	 * @param superclass the superclass to set
-	 */
-	public final void setSuperclass(EntityMetadata superclass) {
-		this.superclass = superclass;
-	}
+    /**
+     * @param superclass the superclass to set
+     */
+    public final void setSuperclass(EntityMetadata superclass) {
+        this.superclass = superclass;
+    }
 
+    /**
+     * @return the subclasses
+     */
+    public final Map<String, EntityMetadata> getSubclasses() {
+        return subclasses;
+    }
 
-	/**
-	 * @return the subclasses
-	 */
-	public final Map<String, EntityMetadata> getSubclasses() {
-		return subclasses;
-	}
-
-
-	/**
-	 * @param subclasses the subclasses to set
-	 */
-	public final void setSubclasses(Map<String, EntityMetadata> subclasses) {
-		this.subclasses = subclasses;
-	}
+    /**
+     * @param subclasses the subclasses to set
+     */
+    public final void setSubclasses(Map<String, EntityMetadata> subclasses) {
+        this.subclasses = subclasses;
+    }
 }

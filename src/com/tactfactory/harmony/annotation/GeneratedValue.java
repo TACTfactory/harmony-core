@@ -25,27 +25,27 @@ import java.lang.annotation.Target;
 @Target(FIELD)
 @Inherited
 public @interface GeneratedValue {
-		public enum Strategy {
-		/** Auto mode. */
-		MODE_AUTO("AUTO"),
-		/** No generated value. */
-		MODE_NONE("NONE"),
-		/** Sequence mode. */
-		MODE_SEQUENCE("SEQUENCE"),
-		/** Identity mode. */
-		MODE_IDENTITY("IDENTITY");
-		
-		private String value;
-		
-		private Strategy(String value) {
-			this.value = value;
-		}
-		
-		public String getValue() {
-			return this.value;
-		}
-	}
+        public enum Strategy {
+        /** Auto mode. */
+        MODE_AUTO("AUTO"),
+        /** No generated value. */
+        MODE_NONE("NONE"),
+        /** Sequence mode. */
+        MODE_SEQUENCE("SEQUENCE"),
+        /** Identity mode. */
+        MODE_IDENTITY("IDENTITY");
 
-	/** Used strategy. Defaults to Auto mode. */
-	Strategy strategy() default Strategy.MODE_AUTO;
+        private String value;
+
+        private Strategy(String value) {
+            this.value = value;
+        }
+
+        public String getValue() {
+            return this.value;
+        }
+    }
+
+    /** Used strategy. Defaults to Auto mode. */
+    Strategy strategy() default Strategy.MODE_AUTO;
 }

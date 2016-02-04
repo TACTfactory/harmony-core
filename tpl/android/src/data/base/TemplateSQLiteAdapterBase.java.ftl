@@ -1,5 +1,11 @@
 <#include utilityPath + "all_imports.ftl" />
 <#assign sync = curr.options.sync?? />
+<#list entities?values as entity>
+    <#if entity.options.sync??>
+        <#assign relationsync=true />
+    </#if>
+</#list>
+
 <#assign isRecursiveJoinTable = (curr.internal) && (!curr.relations[1]??) && (curr.relations[0].relation.targetEntity == entities[curr.relations[0].relation.targetEntity].fields[curr.relations[0].relation.inversedBy].relation.targetEntity) />
 <#assign hasDateTime=false />
 <#assign hasTime=false />
@@ -43,6 +49,10 @@ import ${project_namespace}.${project_name?cap_first}Application;
 </#if>
 <#if sync>
     <#assign extend="SyncSQLiteAdapterBase<" +extendType+ ">" />
+<#elseif (relationsync?? && relationsync && singleTabInheritance && !isTopMostSuperClass)>
+    <#assign extend="SyncSQLiteAdapterBase<" +extendType+ ">" />
+<#elseif relationsync?? && curr.resource>
+    <#assign extend="SyncSQLiteAdapterBase<" +extendType+ ">" />
 <#else>
     <#assign extend="SQLiteAdapter<" +extendType+ ">" />
 </#if>
@@ -54,6 +64,10 @@ import ${project_namespace}.criterias.base.Criterion.Type;
 import ${project_namespace}.criterias.base.CriteriaExpression.GroupType;
 import ${project_namespace}.criterias.base.value.SelectValue;
 </#if>
+    <#list (curr.relations) as relation><#if relation.relation.resource >
+import ${project_namespace}.provider.contract.ResourceContract;
+</#if></#list>
+
 <#if (InheritanceUtils.isExtended(curr))>
 import ${project_namespace}.harmony.util.DatabaseUtil;
 </#if>
@@ -161,6 +175,46 @@ public abstract class ${curr.name}SQLiteAdapterBase
 <#list curr.inheritance.subclasses as subclass>+ ${subclass.name}SQLiteAdapter.getSchemaConstraints()<#if subclass_has_next> + ","</#if></#list>
 ;
     }
+<#elseif curr.resource>
+
+    public static String getSchemaColumns() {
+        return ""
+<#list curr_fields as field>
+    <#if (!field.columnResult && !field.id && (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")))>
+        <#assign fieldNames = ContractUtils.getFieldsNames(field) />
+        <#list fieldNames as fieldName>
+        <#if (lastLine??)>${lastLine},"</#if>
+            <#if (field.relation?? && field.relation.field_ref?size > 1)>
+                <#assign lastLine=" + ${fieldName}    + \"" + field.relation.field_ref[fieldName_index].schema?replace(" NOT NULL", "") />
+            <#else>
+                <#assign lastLine=" + ${fieldName}    + \"" + field.schema?replace(" NOT NULL", "") />
+            </#if>
+        </#list>
+    </#if>
+</#list>
+        <#if (lastLine??)>${lastLine}"</#if>
+        <#if (curr.inheritance??)><#list curr.inheritance.subclasses as subclass>+ ${subclass.name}SQLiteAdapter.getSchemaColumns()<#if subclass_has_next> + ","</#if></#list></#if>
+;
+    }
+
+    public static String getSchemaConstraints() {
+        return ""
+<#if (curr.relations??)>
+    <#list (curr.relations) as relation>
+        <#if (relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne")>
+        <#assign fieldNames = ContractUtils.getFieldsNames(relation) />
+        <#list fieldNames as fieldName>
+        <#assign refId = relation.relation.field_ref[fieldName_index] />
+        <#if (lastRelation??)>${lastRelation},"</#if>
+            <#assign lastRelation=" + \"FOREIGN KEY(\" + ${fieldName}"
+            + " + \") REFERENCES \" \n             + "
+            + "${ContractUtils.getContractTableName(entities[relation.relation.targetEntity])} \n                + \" (\" + ${ContractUtils.getFieldsNames(refId)[0]} + \")">
+        </#list>
+        </#if>
+    </#list>
+        <#if (lastRelation??)>${lastRelation}"</#if>;
+</#if>
+    }
 <#else>
     /**
      * Generate Entity Table Schema.
@@ -170,7 +224,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
         return "CREATE TABLE "
         + ${ContractUtils.getContractTableName(curr)}    + " ("
 <#list curr_fields as field>
-    <#if (!field.columnResult && (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")))>
+    <#if (field.columnName??) && (!field.columnResult && (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany")))>
         <#assign fieldNames = ContractUtils.getFieldsNames(field) />
         <#list fieldNames as fieldName>
         <#if (lastLine??)>${lastLine},"</#if>
@@ -201,10 +255,11 @@ public abstract class ${curr.name}SQLiteAdapterBase
         <#assign fieldNames = ContractUtils.getFieldsNames(relation) />
         <#list fieldNames as fieldName>
         <#assign refId = relation.relation.field_ref[fieldName_index] />
+        <#if (relation.relation.resource)><#assign idCol = "ResourceContract.COL_ID" /><#else><#assign idCol = ContractUtils.getFieldsNames(refId)[0] /></#if>
         <#if (lastRelation??)>${lastRelation},"</#if>
             <#assign lastRelation=" + \"FOREIGN KEY(\" + ${fieldName}"
             + " + \") REFERENCES \" \n             + "
-            + "${ContractUtils.getContractTableName(entities[relation.relation.targetEntity])} \n                + \" (\" + ${ContractUtils.getFieldsNames(refId)[0]} + \")">
+            + "${ContractUtils.getContractTableName(entities[relation.relation.targetEntity])} \n                + \" (\" + ${idCol} + \")">
         </#list>
         </#if>
     </#list>
@@ -321,7 +376,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
                             null,
                             null);
         result.set${relation.name?cap_first}(${relation.name?uncap_first}Adapter.cursorToItems(${relation.name?lower_case}Cursor));
-        
+
         ${relation.name?lower_case}Cursor.close();
                 <#elseif (relation.relation.type=="ManyToMany")>
         ${relation.relation.joinTable}SQLiteAdapter ${relation.relation.joinTable?lower_case}Adapter =
@@ -341,7 +396,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
             final ${relation.relation.targetEntity}SQLiteAdapter ${relation.name?uncap_first}Adapter =
                     new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
             ${relation.name?uncap_first}Adapter.open(this.mDatabase);
-            
+
             result.set${relation.name?cap_first}(${relation.name?uncap_first}Adapter.getByID(<#list IdsUtils.getAllIdsGetters(entities[relation.relation.targetEntity]) as id>
                             result.get${relation.name?cap_first}()${id}<#if id_has_next>,</#if></#list>));
         }
@@ -452,7 +507,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
         </#if>
     </#list>
     <#if (singleTabInheritance && !isTopMostSuperClass)>
-        int insertResult = (int) this.motherAdapter.insert(null, values);        
+        int insertResult = (int) this.motherAdapter.insert(null, values);
     <#else>
     <#if !InheritanceUtils.isExtended(curr)>
         int insertResult;
@@ -580,13 +635,13 @@ public abstract class ${curr.name}SQLiteAdapterBase
                 <#list curr_ids as id><#list ContractUtils.getFieldsNames(id) as fieldName>${fieldName}
                 + " = ? "<#if id_has_next || fieldName_has_next> + " AND "
                 + </#if></#list></#list> + " AND "
-                + ${ContractUtils.getContractCol(curr.inheritance.superclass.inheritance.discriminatorColumn)} 
+                + ${ContractUtils.getContractCol(curr.inheritance.superclass.inheritance.discriminatorColumn)}
                 + " = ?";
         final String[] whereArgs =
                 new String[] {<#list curr_ids as id>
                         String.valueOf(item.get${id.name?cap_first}()),</#list>
                         ${ContractUtils.getContractClass(curr)}.DISCRIMINATOR_IDENTIFIER};
-        
+
         return this.motherAdapter.update(values, whereClause, whereArgs);
         <#else>
         final String whereClause =
@@ -768,8 +823,8 @@ public abstract class ${curr.name}SQLiteAdapterBase
         if (${project_name?cap_first}Application.DEBUG) {
             android.util.Log.d(
                 TAG,
-                "Delete DB(" 
-                    + ${ContractUtils.getContractTableName(curr)} 
+                "Delete DB("
+                    + ${ContractUtils.getContractTableName(curr)}
                     + ")"<#list IdsUtils.getAllIdsGettersFromArray(curr_ids) as id>
                     + " id : "+ ${id}</#list>);
         }
@@ -778,7 +833,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
                 <#list curr_ids as id><#list ContractUtils.getFieldsNames(id) as fieldName>${fieldName}
                 + " = ? "<#if id_has_next || fieldName_has_next> + " AND "
                 + </#if></#list></#list> + " AND "
-                + ${ContractUtils.getContractCol(curr.inheritance.superclass.inheritance.discriminatorColumn)} 
+                + ${ContractUtils.getContractCol(curr.inheritance.superclass.inheritance.discriminatorColumn)}
                 + " = ?";
 
         final String[] whereArgs = new String[] {<#list curr_ids as id>
@@ -789,9 +844,9 @@ public abstract class ${curr.name}SQLiteAdapterBase
                 whereClause,
                 whereArgs);
         <#else>
-        
+
         final String whereClause =<#list IdsUtils.getAllIdsColsFromArray(curr_ids) as id>
-                <#if (id_index > 0)>+ </#if>${id} 
+                <#if (id_index > 0)>+ </#if>${id}
                 + " = ?<#if id_has_next> AND </#if>"</#list>;
         final String[] whereArgs = new String[] {<#list IdsUtils.getAllIdsGettersFromArray(curr_ids) as id>
                     String.valueOf(${id})<#if (id_has_next)>,</#if></#list>};
@@ -849,7 +904,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
                 null);
         <#else>
         final String whereClause =<#list IdsUtils.getAllIdsColsFromArray(curr_ids, true) as id>
-                <#if (id_index > 0)>+ </#if>${id} 
+                <#if (id_index > 0)>+ </#if>${id}
                 + " = ?<#if id_has_next> AND </#if>"</#list>;
         final String[] whereArgs = new String[] {<#list IdsUtils.getAllIdsGettersFromArray(curr_ids) as id><#if (curr_ids?size > 1)>
                 </#if>String.valueOf(${id})<#if id_has_next>,</#if></#list>};
@@ -911,7 +966,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
         </#if>
     }
 
-<#if sync>
+<#if sync || (relationsync?? && relationsync && singleTabInheritance && !isTopMostSuperClass) || (relationsync?? && curr.resource)>
     @Override
     public void completeEntityRelationsServerId(${curr.name} item) {
         <#if InheritanceUtils.isExtended(curr)>
@@ -922,33 +977,33 @@ public abstract class ${curr.name}SQLiteAdapterBase
                 <#if relation.relation.type == "ManyToMany">
         ${relation.relation.joinTable}SQLiteAdapter ${relation.name}Adapter =
                     new ${relation.relation.joinTable}SQLiteAdapter(this.ctx);
-        
+
         ${relation.name}Adapter.open(this.mDatabase);
-        
+
         android.database.Cursor ${relation.name}Cursor = ${relation.name}Adapter.getBy${curr.name}InternalId(
                 item.getId(),
                 ${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)},
                 null, null, null);
-        
+
         item.set${relation.name?cap_first}(
                 new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx)
                         .cursorToItems(${relation.name}Cursor));
-        
+
         ${relation.name}Cursor.close();
                 <#elseif relation.relation.type == "OneToMany">
         ${relation.relation.targetEntity}SQLiteAdapter ${relation.name}Adapter =
                     new ${relation.relation.targetEntity}SQLiteAdapter(this.ctx);
-                    
+
         ${relation.name}Adapter.open(this.mDatabase);
-        
+
         android.database.Cursor ${relation.name}Cursor = ${relation.name}Adapter.getBy${relation.relation.mappedBy?cap_first}(
                 item.getId(),
                 ${ContractUtils.getContractCols(entities[relation.relation.targetEntity], true)},
                 null, null, null);
-        
+
         item.set${relation.name?cap_first}(
                 ${relation.name}Adapter.cursorToItems(${relation.name}Cursor));
-        
+
         ${relation.name}Cursor.close();
                 <#else>
         if (item.get${relation.name?cap_first}() != null) {
@@ -967,7 +1022,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
     @Override
     public ArrayList<${curr.name}> getAllForSync() {
         final ArrayList<${curr.name}> result;
-        
+
         final android.database.Cursor cursor = this.query(this.getCols(),
                 ${curr.name}Contract.ALIASED_COL_DISCRIMINATORCOLUMN + " IS NULL",
                 new String[]{},
@@ -1011,7 +1066,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
         values.put(${leftRelationFieldsNames[refField_index]},
                 ${leftRelation.name?uncap_first}${refField.name?cap_first});
         </#list>
-        <#list rightRelation.relation.field_ref as refField>        
+        <#list rightRelation.relation.field_ref as refField>
         values.put(${rightRelationFieldsNames[refField_index]},
                 ${rightRelation.name?uncap_first}${refField.name?cap_first});
         </#list>
@@ -1023,7 +1078,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
     }
 
 
-    <#list 1..2 as i>    
+    <#list 1..2 as i>
     /**
      * Find & read ${curr.name} by ${leftRelation.name}.
      * @param ${leftRelation.name?lower_case} ${rightRelation.name?lower_case}
@@ -1056,7 +1111,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
         ${rightRelation.relation.targetEntity?lower_case}SelectCrit.setType(Type.IN);
         ${rightRelation.relation.targetEntity?lower_case}SelectCrit.addValue(value);
         ${rightRelation.relation.targetEntity?lower_case}Crit.add(${rightRelation.relation.targetEntity?lower_case}SelectCrit);
-        
+
         if (Strings.isNullOrEmpty(selection)) {
             selection = ${rightRelation.relation.targetEntity?lower_case}Crit.toSQLiteSelection();
             selectionArgs = ${rightRelation.relation.targetEntity?lower_case}Crit.toSQLiteSelectionArgs();
@@ -1112,7 +1167,7 @@ public abstract class ${curr.name}SQLiteAdapterBase
     @Override
     public int delete(Void item) {
         return 0;
-    }
-</#if>
+    }</#if>
+
 }
 
