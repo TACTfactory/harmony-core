@@ -18,8 +18,6 @@ import com.tactfactory.harmony.updater.impl.SourceFile;
 import com.tactfactory.harmony.updater.old.IConfigFileUtil;
 import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
 
-import freemarker.template.Configuration;
-
 public class IosProjectAdapter implements IAdapterProject {
 
     private final IosAdapter adapter;
@@ -1025,23 +1023,6 @@ public class IosProjectAdapter implements IAdapterProject {
     }
 
     @Override
-    public List<IUpdater> updateEnum(EnumMetadata enumMeta, Configuration cfg) {
-        List<IUpdater> result = new ArrayList<IUpdater>();
-
-        String filePath = String.format("%s/",
-                this.adapter.getSourceEntityPath());
-
-        final String templatePath = this.adapter.getTemplateSourceEntityPath();
-
-        result.add(new SourceFile(
-                templatePath + "TemplateEnum.h",
-                String.format("%s%s.h", filePath, enumMeta.getName()),
-                true));
-
-        return result;
-    }
-
-    @Override
     public List<IUpdater> getStaticViewFiles(String packageName,
             String viewName, ViewType type) {
         // TODO Auto-generated method stub
@@ -1075,6 +1056,23 @@ public class IosProjectAdapter implements IAdapterProject {
         result.add(new SourceFile(
                 templatePath + "Resource.h",
                 filePath + "Resource.h",
+                true));
+
+        return result;
+    }
+
+    @Override
+    public List<IUpdater> updateEnum(EnumMetadata enumMeta) {
+        List<IUpdater> result = new ArrayList<IUpdater>();
+
+        String filePath = String.format("%s/",
+                this.adapter.getSourceEntityPath());
+
+        final String templatePath = this.adapter.getTemplateSourceEntityPath();
+
+        result.add(new SourceFile(
+                templatePath + "TemplateEnum.h",
+                String.format("%s%s.h", filePath, enumMeta.getName()),
                 true));
 
         return result;
