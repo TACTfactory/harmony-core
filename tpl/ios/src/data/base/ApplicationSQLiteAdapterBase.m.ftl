@@ -135,17 +135,24 @@
     [[self->mBaseHelper getQueue] inDatabase:^(FMDatabase *db) {
         NSArray *keys = [values allKeys];
         NSMutableArray *prefixedKeys = [NSMutableArray array];
+        NSDictionary *valuesDictionary = values;
 
         [keys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             [prefixedKeys addObject:[NSString stringWithFormat:@":%@",obj]];
         }];
+
+        if (keys.count ==0 && nullColumnHack) {
+            keys = [NSArray arrayWithObject:nullColumnHack];
+            prefixedKeys = [NSMutableArray arrayWithObject:[NSString stringWithFormat:@":%@", nullColumnHack]];
+            valuesDictionary = [NSDictionary dictionaryWithObject:[NSNull null] forKey:nullColumnHack];
+        }
 
         NSString *query = [NSString stringWithFormat:@"INSERT INTO %@ (%@) VALUES (%@)",
                            [self getTableName],
                            [keys componentsJoinedByString:@", "],
                            [prefixedKeys componentsJoinedByString:@", "]];
 
-        bool insert = [db executeUpdate:query withParameterDictionary:values];
+        bool insert = [db executeUpdate:query withParameterDictionary:valuesDictionary];
 
         if (insert) {
             result = [db lastInsertRowId];

@@ -24,7 +24,7 @@
 <#if dataLoader?? && dataLoader>
 - (void)initDatabase {
     bool success;
-    
+
     NSFileManager *fileManager = [NSFileManager defaultManager];
     NSError *error;
     NSString *cacheDir = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
@@ -40,7 +40,7 @@
 
         DataLoader *dataLoader = [DataLoader new];
         [dataLoader clean];
-        [dataLoader loadData];
+        [dataLoader loadData:MODE_TEST];
 
         // The backup database does not exist, so copy the default to the appropriate location.
         success = [fileManager copyItemAtPath:dbPath

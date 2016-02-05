@@ -3,7 +3,11 @@
 
 #import "${curr.name}ProviderUtilsTestBase.h"
 #import "${curr.name}TestUtils.h"
-#import "${curr.name?cap_first}DataLoader.h"
+<#if dataLoader?? && dataLoader>
+    <#list InheritanceUtils.getAllChildren(curr) as child>
+#import "${child.name?cap_first}DataLoader.h"
+    </#list>
+</#if>
 
 @implementation ${curr.name}ProviderUtilsTestBase
 
@@ -12,7 +16,9 @@
 
     self.providerUtils = [${curr.name?cap_first}ProviderUtils new];
     self.entity = [${curr.name?cap_first}TestUtils generateRandom];
+    <#list InheritanceUtils.getAllChildren(curr) as child>
     self.nbEntities += [[${curr.name?cap_first}DataLoader get${curr.name?cap_first}DataLoader] getItems].count;
+    </#list>
 }
 
 - (void)tearDown {
