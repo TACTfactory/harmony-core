@@ -82,13 +82,26 @@ ${ImportUtils.importRelatedSQLiteAdapters(curr, false)}
 - (NSArray *) queryAll {
     NSArray *result = nil;
 
+    <#if (InheritanceUtils.isExtended(curr))>
+    NSString *whereClause = [NSString stringWithFormat:@"%@ = ?", ${curr.inheritance.superclass.name?cap_first}Contract.COL_DISCRIMINATORCOLUMN];
+
+    NSArray *whereArgs = [NSArray arrayWithObject:${curr.name}Contract.DISCRIMINATOR_IDENTIFIER];
+
+    Cursor *cursor = [self->adapter query:${curr.name?cap_first}Contract.ALIASED_COLS
+                          withWhereClause:whereClause
+                            withWhereArgs:whereArgs
+                              withGroupBy:nil
+                               withHaving:nil
+                              withOrderBy:nil];
+    <#else>
     Cursor *cursor = [self->adapter query:${curr.name?cap_first}Contract.ALIASED_COLS
                           withWhereClause:nil
                             withWhereArgs:nil
                               withGroupBy:nil
                                withHaving:nil
                               withOrderBy:nil];
-    
+    </#if>
+
     result = [${curr.name?cap_first}Contract cursorToItems:cursor];
 
     [cursor close];
@@ -162,12 +175,11 @@ ${ImportUtils.importRelatedSQLiteAdapters(curr, false)}
 
 - (${curr.name?cap_first} *) getByServerId:(NSNumber*) serverId {
     ${curr.name?cap_first}* result;
-    
+
     result = [self->adapter getByServerID:serverId];
-    
+
     return result;
 }
 </#if>
 
 @end
- 

@@ -78,6 +78,9 @@
                 <#case "integer">
                     <#assign result = result + "${tab}${localTab}[result set${field.name?cap_first}:[cursor intForColumnIndex:index]];\n"/>
                     <#break />
+                <#case "short">
+                    <#assign result = result + "${tab}${localTab}[result set${field.name?cap_first}:(short)[cursor intForColumnIndex:index]];\n"/>
+                    <#break />
                 <#case "nsnumber">
                     <#assign result = result + "${tab}${localTab}[result set${field.name?cap_first}:[NSNumber numberWithInt:[cursor intForColumnIndex:index]]];\n"/>
                     <#break />
@@ -94,6 +97,11 @@
                     <#assign result = result + "${tab}${localTab}[result set${field.name?cap_first}:[cursor longForColumnIndex:index]];\n"/>
                     <#break />
                 <#case "char">
+                    <#assign result = result + "${tab}${localTab}[result set${field.name?cap_first}:[[cursor stringForColumnIndex:index] UTF8String][0]];\n"/>
+                    <#break />
+                <#case "character">
+                    <#assign result = result + "${tab}${localTab}[result set${field.name?cap_first}:(const unsigned char *)[[cursor stringForColumnIndex:index] UTF8String][0]];\n"/>
+                    <#break />
                 <#case "string">
                     <#assign result = result + "${tab}${localTab}[result set${field.name?cap_first}:[cursor stringForColumnIndex:index]];\n"/>
                     <#break />

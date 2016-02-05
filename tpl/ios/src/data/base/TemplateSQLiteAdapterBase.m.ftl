@@ -346,6 +346,21 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
     return result;
 }
 
+<#if (InheritanceUtils.isExtended(curr))>
+- (Cursor *) getAllCursor {
+    NSString *whereClause = [NSString stringWithFormat:@"%@ = ?", ${curr.inheritance.superclass.name?cap_first}Contract.COL_DISCRIMINATORCOLUMN];
+
+    NSArray *whereArgs = [NSArray arrayWithObject:${curr.name}Contract.DISCRIMINATOR_IDENTIFIER];
+
+    return [self query:[self getCols]
+       withWhereClause:whereClause
+         withWhereArgs:whereArgs
+           withGroupBy:nil
+            withHaving:nil
+           withOrderBy:nil];
+}
+
+</#if>
 - (long long) insert:(${curr.name} *) item {
 #ifdef DEBUG
     NSLog(@"Insert DB(%@)", ${curr.name}Contract.TABLE_NAME);

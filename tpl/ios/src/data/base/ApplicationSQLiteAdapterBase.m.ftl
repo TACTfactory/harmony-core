@@ -43,26 +43,25 @@
 }
 
 - (NSArray *) getAll {
-    __block NSArray *result = nil;
+    NSArray *result = nil;
 
-    NSString *query = [NSString stringWithFormat:@"SELECT %@ FROM %@",
-                       [[self getCols] componentsJoinedByString:@", "],
-                       [self getJoinedTableName]];
+    Cursor *cursor = [self getAllCursor];
 
-    __block FMDatabaseQueue *queue = [self->mBaseHelper getQueue];
-    __block Cursor *cursor;
-
-    [queue inDatabase:^(FMDatabase *db) {
-        FMResultSet *rs = [db executeQuery:query];
-
-        cursor = [[Cursor alloc] initWithFMResultSet:rs andFMDatabaseQueue:queue];
-
-        result = [self cursorToItems:cursor];
-    }];
+    result = [self cursorToItems:cursor];
 
     [cursor close];
 
     return result;
+}
+
+- (Cursor *) getAllCursor {
+    return [self query:[self getJoinedTableName]
+        withProjection:[self getCols]
+       withWhereClause:nil
+         withWhereArgs:nil
+           withGroupBy:nil
+            withHaving:nil
+           withOrderBy:nil];
 }
 
 - (Cursor *) query:(NSString *) tables
