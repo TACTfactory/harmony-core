@@ -48,19 +48,19 @@
     NSString *query = [NSString stringWithFormat:@"SELECT %@ FROM %@",
                        [[self getCols] componentsJoinedByString:@", "],
                        [self getJoinedTableName]];
-    
+
     __block FMDatabaseQueue *queue = [self->mBaseHelper getQueue];
+    __block Cursor *cursor;
 
     [queue inDatabase:^(FMDatabase *db) {
-        Cursor *cursor;
         FMResultSet *rs = [db executeQuery:query];
 
         cursor = [[Cursor alloc] initWithFMResultSet:rs andFMDatabaseQueue:queue];
 
         result = [self cursorToItems:cursor];
-
-        [cursor close];
     }];
+
+    [cursor close];
 
     return result;
 }
@@ -131,7 +131,7 @@
 #ifdef DEBUG
     NSLog(@"Insert DB(%@)", self.getTableName);
 #endif
-    
+
     [[self->mBaseHelper getQueue] inDatabase:^(FMDatabase *db) {
         NSArray *keys = [values allKeys];
         NSMutableArray *prefixedKeys = [NSMutableArray array];
@@ -242,7 +242,7 @@
 
 - (DeleteBatch *) getDeleteBatch:(id) item
                  withWhereClause:(NSString *) whereClause
-                   withWhereArgs:(NSArray *) whereArgs {    
+                   withWhereArgs:(NSArray *) whereArgs {
 
     return [[DeleteBatch alloc] initWithItemValues:nil
                                      withTableName:[self getTableName]
