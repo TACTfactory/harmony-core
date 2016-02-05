@@ -22,7 +22,7 @@
 <#list curr.fields?values as field>
     <#if field.harmony_type?lower_case == "enum">
         <#assign enumClass = enums[field.enum.targetEnum] />
-#import "${enumClass}.h"
+#import "${enumClass.name}.h"
     </#if>
 </#list>
 

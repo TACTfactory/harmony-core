@@ -199,13 +199,13 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
     [result appendFormat:@",%@ ${curr.inheritance.discriminatorColumn.schema}", ${ContractUtils.getContractCol(curr.inheritance.discriminatorColumn)}];</#if>
         <#if (singleTabInheritance)>
             <#list curr.inheritance.subclasses as subclass>
-    [result appendString:[${subclass.name}SQLiteAdapter getSchemaColumns]];
+    [result appendFormat:@", %@", [${subclass.name}SQLiteAdapter getSchemaColumns]];
             </#list>
         </#if>
         <#if (singleTabInheritance)>
             <#list curr.inheritance.subclasses as subclass>
                 <#if (subclass.relations?size > 0)>
-    [result appendString:[${subclass.name}SQLiteAdapter getSchemaConstraints]];
+    [result appendFormat:@", %@", [${subclass.name}SQLiteAdapter getSchemaConstraints]];
                 </#if>
             </#list>
         </#if>

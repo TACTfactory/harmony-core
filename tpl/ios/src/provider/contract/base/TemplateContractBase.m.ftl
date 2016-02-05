@@ -108,11 +108,12 @@ static NSString* DISCRIMINATOR_IDENTIFIER;
 
     [result setObject:${curr.name?cap_first}Contract.DISCRIMINATOR_IDENTIFIER
                forKey:${curr.inheritance.superclass.name?cap_first}Contract.COL_DISCRIMINATORCOLUMN];
-    <#else>
-        <#list curr_fields as field>
-${AdapterUtils.itemToContentValuesFieldAdapter("item", field, 2)}
-        </#list>
+
     </#if>
+    <#list curr_fields as field>
+${AdapterUtils.itemToContentValuesFieldAdapter("item", field, 2)}
+    </#list>
+
     return result;
 }
 
