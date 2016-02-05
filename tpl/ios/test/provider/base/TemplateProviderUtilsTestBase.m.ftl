@@ -17,7 +17,7 @@
     self.providerUtils = [${curr.name?cap_first}ProviderUtils new];
     self.entity = [${curr.name?cap_first}TestUtils generateRandom];
     <#list InheritanceUtils.getAllChildren(curr) as child>
-    self.nbEntities += [[${curr.name?cap_first}DataLoader get${curr.name?cap_first}DataLoader] getItems].count;
+    self.nbEntities += [[${child.name?cap_first}DataLoader get${child.name?cap_first}DataLoader] getItems].count;
     </#list>
 }
 

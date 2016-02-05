@@ -113,7 +113,6 @@ static NSString* DISCRIMINATOR_IDENTIFIER;
     <#list curr_fields as field>
 ${AdapterUtils.itemToContentValuesFieldAdapter("item", field, 2)}
     </#list>
-
     return result;
 }
 
