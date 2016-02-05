@@ -6,7 +6,12 @@
 <#assign hasDateTime = MetadataUtils.hasDateTime(curr) />
 <#assign hasLocaleTime = MetadataUtils.hasLocaleTime(curr) />
 <@header?interpret />
+
 #import "FixtureBase.h"
+<#assign isTopMostSuperClass = (curr.inheritance?? && (!curr.inheritance.superclass?? || !entities[curr.inheritance.superclass.name]??)) />
+<#if (singleTabInheritance && isTopMostSuperClass)>
+#import "${curr.name}.h"
+</#if>
 
 @interface ${curr.name}DataLoader : FixtureBase
 
@@ -15,5 +20,9 @@
  * @return ${curr.name}DataLoader
  */
 + (instancetype) get${curr.name}DataLoader;
+
+<#if (singleTabInheritance && isTopMostSuperClass)>
+- (${curr.name} *) extractItem:(${curr.name} *) item;
+</#if>
 
 @end

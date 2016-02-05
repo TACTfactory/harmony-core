@@ -44,15 +44,15 @@ static NSObject *lock;
 
 - (id) initWithName:(NSString *) name andVersion:(int) version {
     self = [super init];
-    
+
     if (self) {
         NSString *docsPath = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES)[0];
         DB_PATH = [docsPath stringByAppendingPathComponent:DB_NAME];
 
-        //TODO set boolean if asset exist
-        assetsExist = NO;
+        //If we load an existing database with a file, we don't need to create the schema.
+        self->databaseExistInAssets = [[NSBundle mainBundle] pathForResource:@"database" ofType:@"sqlite"] != nil;
 
-        [self getDatabase];
+        //[self getDatabase];
     }
 
     return self;
@@ -70,7 +70,7 @@ static NSObject *lock;
 }
 
 - (void) onCreate:(FMDatabase *) db{
-    if (!assetsExist) {
+    if (!self->databaseExistInAssets) {
         if ([db open]) {
             //[db setUserVersion:DB_VERSION];
             // Create Schema
@@ -93,28 +93,29 @@ static NSObject *lock;
     }
 }
 
-- (void) onUpgrade:(FMDatabase*)db andOldVersion:(int)oldVersion andNewVersion:(int)newVersion{
+- (void) onUpgrade:(FMDatabase *) db andOldVersion:(int) oldVersion andNewVersion:(int) newVersion {
+}
+
+- (void) onDowngrade:(FMDatabase *) db andOldVersion:(int) oldVersion andNewVersion:(int) newVersion {
     if (oldVersion == 0) {
         [NSException raise:@"Invalid version value" format:@"Version is invalid"];
     }
 }
 
-- (void) onDowngrade:(FMDatabase*)db andOldVersion:(int)oldVersion andNewVersion:(int)newVersion{
-    if (oldVersion == 0) {
-        [NSException raise:@"Invalid version value" format:@"Version is invalid"];
-    }
-}
-
+- (void) loadData:(FMDatabase *) db {
 <#if dataLoader>
-- (void) loadData:(FMDatabase *) db{
     DataLoader *dataLoader = [DataLoader new];
     [dataLoader clean];
-    [dataLoader loadData];
-}
+
+    [dataLoader loadData:MODE_APP];
+#if DEBUG
+    [dataLoader loadData:MODE_DEBUG];
+#endif
 </#if>
+}
 
 - (void) createDataBase {
-    if (assetsExist && ![self checkDataBase]) {
+    if (self->databaseExistInAssets && ![self checkDataBase]) {
         [self copyDataBase];
     }
 }
@@ -170,10 +171,6 @@ static NSObject *lock;
 
 - (FMDatabaseQueue *) getQueue {
     return [FMDatabaseQueue databaseQueueWithPath:DB_PATH];
-}
-
-- (void) loadData:(FMDatabase *) db {
-
 }
 
 @end

@@ -24,18 +24,20 @@ static bool hasFixturesBeenLoaded = false;
 }
 
 - (void) initializeLoaders {
-<#list entities?values as entity>
-    <#if (((entity.fields?size>0)  || (entity.inheritance??)) && !(entity.internal))>
+
+<#list orderedEntities as entityName>
+    <#assign entity = entities[entityName] />
+    <#if (!(entity.internal) && (entity.fields?size>0 || entity.inheritance??))>
     [self->loaders addObject:[${entity.name?cap_first}DataLoader get${entity.name?cap_first}DataLoader]];
     </#if>
 </#list>
 }
 
-- (void) loadData {
+- (void) loadData:(int) mode {
     DataManager *dataManager = [DataManager new];
 
     for (FixtureBase *dataLoader in self->loaders) {
-        [dataLoader loadModel];
+        [dataLoader getModelFixtures:mode];
         [dataLoader load:dataManager];
     }
 

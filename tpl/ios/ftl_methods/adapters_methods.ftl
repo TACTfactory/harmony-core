@@ -10,6 +10,9 @@
             <#elseif (MetadataUtils.isPrimitive(field))>
                 <#assign result = result + "    [result setObject:${FieldsUtils.generateFieldContentType(\"item\", field)}item.${field.name}]\n" />
                 <#assign result = result + "${t}       forKey:${fieldNames[0]}]; \n" />
+            <#elseif (FieldsUtils.getObjectiveType(field)?lower_case == "int")>
+                <#assign result = result + "    [result setObject:[NSNumber numberWithInt:item.${field.name}]\n" />
+                <#assign result = result + "${t}       forKey:${fieldNames[0]}]; \n" />
             <#else>
                 <#assign result = result + "    if (item.${field.name} != nil) {\n" />
                 <#if field.name != "serverId">
@@ -39,7 +42,7 @@
                     <#assign result = result + "${t}           forKey:${fieldNames[id_index]}]; \n"/>
                     </#if>
                 </#list>
-                <#assign result = result + "    }"/>
+                <#assign result = result + "    }\n"/>
             </#if>
         </#if>
     </#if>

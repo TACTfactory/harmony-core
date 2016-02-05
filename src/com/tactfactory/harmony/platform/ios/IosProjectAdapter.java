@@ -160,6 +160,15 @@ public class IosProjectAdapter implements IAdapterProject {
                 filePath + "Database.m",
                 false));
 
+        templatePath = this.adapter.getTemplateSourceEntityPath();
+        filePath = this.adapter.getSourcePath();
+
+        result.add(new SourceFile(
+                templatePath + "AppDelegate.m", String.format("%s/AppDelegate.m", filePath), true));
+
+        result.add(new SourceFile(
+                templatePath + "AppDelegate.h", String.format("%s/AppDelegate.h", filePath), true));
+
         return result;
     }
 
@@ -559,6 +568,29 @@ public class IosProjectAdapter implements IAdapterProject {
                 templatePath + "DataLoader.m",
                 filePath + "DataLoader.m",
                 forceOverwrite));
+
+        filePath = String.format("%s/Fixture/XMLParser/", this.adapter.getSourceDataPath());
+
+        result.add(new SourceFile(
+                templatePath + "FixtureXMLToObjectParser.h",
+                filePath + "FixtureXMLToObjectParser.h",
+                forceOverwrite));
+
+        result.add(new SourceFile(
+                templatePath + "FixtureXMLToObjectParser.m",
+                filePath + "FixtureXMLToObjectParser.m",
+                forceOverwrite));
+
+        result.add(new SourceFile(
+                templatePath + "ParseValue.h",
+                filePath + "ParseValue.h",
+                forceOverwrite));
+
+        result.add(new SourceFile(
+                templatePath + "ParseValue.m",
+                filePath + "ParseValue.m",
+                forceOverwrite));
+
         return result;
     }
 
