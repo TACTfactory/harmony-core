@@ -290,8 +290,8 @@ public final class ApplicationMetadata extends BaseMetadata {
             result = TagConstant.PLATFORM_ANDROID;
         } else if (adapter.getPlatform().equals(TagConstant.PLATFORM_IOS.toLowerCase())) {
             result = TagConstant.PLATFORM_IOS;
-        } else if (adapter.getPlatform().equals(TagConstant.PLATFORM_WINPHONE.toLowerCase())) {
-            result = TagConstant.PLATFORM_WINPHONE;
+        } else if (adapter.getPlatform().equals(TagConstant.PLATFORM_WINDOWS.toLowerCase())) {
+            result = TagConstant.PLATFORM_WINDOWS;
         }
 
         return result;

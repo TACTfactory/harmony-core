@@ -20,7 +20,7 @@ import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.platform.TargetPlatform;
 import com.tactfactory.harmony.platform.android.AndroidAdapter;
 import com.tactfactory.harmony.platform.ios.IosAdapter;
-import com.tactfactory.harmony.platform.winphone.WinphoneAdapter;
+import com.tactfactory.harmony.platform.windows.WindowsAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 import net.xeoh.plugins.base.annotations.PluginImplementation;
@@ -184,8 +184,8 @@ public class FixtureCommand extends CommandBundleBase<BaseAdapter> {
                 TargetPlatform.ANDROID,
                 AndroidAdapter.class);
         this.adapterMapping.put(
-                TargetPlatform.WINPHONE,
-                WinphoneAdapter.class);
+                TargetPlatform.WINDOWS,
+                WindowsAdapter.class);
         this.adapterMapping.put(
                 TargetPlatform.IPHONE,
                 IosAdapter.class);

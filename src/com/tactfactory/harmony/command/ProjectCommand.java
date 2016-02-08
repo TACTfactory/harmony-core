@@ -28,7 +28,7 @@ import com.tactfactory.harmony.platform.TargetPlatform;
 import com.tactfactory.harmony.platform.android.AndroidAdapter;
 import com.tactfactory.harmony.platform.ios.IosAdapter;
 import com.tactfactory.harmony.platform.rim.RimAdapter;
-import com.tactfactory.harmony.platform.winphone.WinphoneAdapter;
+import com.tactfactory.harmony.platform.windows.WindowsAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -86,12 +86,12 @@ public class ProjectCommand extends CommandBase {
                                 + SEPARATOR
                                 + TargetPlatform.RIM.toLowerString();
 
-    /** Command : PROJECT:INIT:WINPHONE. */
-    public static final String INIT_WINPHONE     = BUNDLE
+    /** Command : PROJECT:INIT:WINDOWS. */
+    public static final String INIT_WINDOWS     = BUNDLE
                                 + SEPARATOR
                                 + ACTION_INIT
                                 + SEPARATOR
-                                + TargetPlatform.WINPHONE.toLowerString();
+                                + TargetPlatform.WINDOWS.toLowerString();
 
     /** Command : PROJECT:INIT:ALL. */
     public static final String INIT_ALL        = BUNDLE
@@ -121,12 +121,12 @@ public class ProjectCommand extends CommandBase {
                                 + SEPARATOR
                                 + TargetPlatform.RIM.toLowerString();
 
-    /** Command : PROJECT:REMOVE:WINPHONE. */
-    public static final String REMOVE_WINPHONE = BUNDLE
+    /** Command : PROJECT:REMOVE:WINDOWS. */
+    public static final String REMOVE_WINDOWS = BUNDLE
                                 + SEPARATOR
                                 + ACTION_REMOVE
                                 + SEPARATOR
-                                + TargetPlatform.WINPHONE.toLowerString();
+                                + TargetPlatform.WINDOWS.toLowerString();
 
     /** Command : PROJECT:REMOVE:ALL. */
     public static final String REMOVE_ALL     = BUNDLE
@@ -157,7 +157,7 @@ public class ProjectCommand extends CommandBase {
     /** RIM adapter. */
     private final BaseAdapter adapterRIM = new RimAdapter();
     /** Windows Phone adapter. */
-    private final BaseAdapter adapterWinPhone = new WinphoneAdapter();
+    private final BaseAdapter adapterWindows = new WindowsAdapter();
 
     /** Has user confirmed ? */
     private boolean userHasConfirmed;
@@ -317,24 +317,24 @@ public class ProjectCommand extends CommandBase {
      * Initialize Windows Phone Project folders and files.
      * @return success of Windows Phone project initialization
      */
-    public final boolean initWinPhone() {
+    public final boolean initWindows() {
         ConsoleUtils.display("> Init Project Windows Phone");
 
         this.initProjectParam();
         boolean result = false;
 
         try {
-            if (new ProjectGenerator(this.adapterWinPhone).makeProject()) {
-                ConsoleUtils.displayDebug("Init WinPhone Project Success!");
+            if (new ProjectGenerator(this.adapterWindows).makeProject()) {
+                ConsoleUtils.displayDebug("Init Windows Project Success!");
                 Harmony.getInstance().getProjectContext()
-                    .addAdapter(TargetPlatform.WINPHONE, this.adapterWinPhone);
+                    .addAdapter(TargetPlatform.WINDOWS, this.adapterWindows);
 
-                new ApplicationGenerator(this.adapterWinPhone)
+                new ApplicationGenerator(this.adapterWindows)
                         .generateApplication();
 
                 result = true;
             } else {
-                ConsoleUtils.displayError("Init WinPhone Project Fail!");
+                ConsoleUtils.displayError("Init Windows Project Fail!");
             }
         } catch (final Exception e) {
             ConsoleUtils.displayError(e);
@@ -353,7 +353,7 @@ public class ProjectCommand extends CommandBase {
         this.initAndroid();
 //        this.initIOS();
         //this.initRIM();
-        this.initWinPhone();
+        this.initWindows();
     }
 
     /**
@@ -432,7 +432,7 @@ public class ProjectCommand extends CommandBase {
     /**
      * Remove Windows Phone project folder.
      */
-    public final void removeWinPhone() {
+    public final void removeWindows() {
         if (!this.userHasConfirmed) {
             final String accept = ConsoleUtils.getUserInput(
                     "Are you sure to Delete Windows Phone Project? (y/n) ");
@@ -443,7 +443,7 @@ public class ProjectCommand extends CommandBase {
         }
 
         try {
-            if (!new ProjectGenerator(this.adapterWinPhone).removeProject()) {
+            if (!new ProjectGenerator(this.adapterWindows).removeProject()) {
                 ConsoleUtils.display(ERROR_MSG);
             }
         } catch (final Exception e) {
@@ -473,7 +473,7 @@ public class ProjectCommand extends CommandBase {
             final boolean removedRIM =
                     new ProjectGenerator(this.adapterRIM).removeProject();
             final boolean removedWin =
-                    new ProjectGenerator(this.adapterWinPhone).removeProject();
+                    new ProjectGenerator(this.adapterWindows).removeProject();
             if (!removedAndroid
                 || !removedIOS
                 || !removedRIM
@@ -496,14 +496,14 @@ public class ProjectCommand extends CommandBase {
         commands.put(INIT_ANDROID, "Init Google Android project directory");
 //        commands.put(INIT_IOS, "Init Apple IOS project directory");
 //        commands.put(INIT_RIM, "Init BlackBerry project directory");
-        commands.put(INIT_WINPHONE, "Init Windows Phone project directory");
+        commands.put(INIT_WINDOWS, "Init Windows Phone project directory");
         commands.put(INIT_ALL, "Init All project directories");
 
         // Remove
         commands.put(REMOVE_ANDROID, "Remove Google Android project directory");
 //        commands.put(REMOVE_IOS, "Remove Apple IOS project directory");
 //        commands.put(REMOVE_RIM, "Remove BlackBerry project directory");
-        commands.put(REMOVE_WINPHONE, "Remove Windows Phone project directory");
+        commands.put(REMOVE_WINDOWS, "Remove Windows Phone project directory");
         commands.put(REMOVE_ALL, "Remove All project directories");
 
         // Update
@@ -533,8 +533,8 @@ public class ProjectCommand extends CommandBase {
 //            this.initRIM();
 //        } else
 
-        if (action.equals(INIT_WINPHONE)) {
-            this.initWinPhone();
+        if (action.equals(INIT_WINDOWS)) {
+            this.initWindows();
         } else
 
         if (action.equals(INIT_ALL)) {
@@ -553,8 +553,8 @@ public class ProjectCommand extends CommandBase {
 //            this.removeRIM();
 //        } else
 
-        if (action.equals(REMOVE_WINPHONE)) {
-            this.removeWinPhone();
+        if (action.equals(REMOVE_WINDOWS)) {
+            this.removeWindows();
         } else
 
         if (action.equals(REMOVE_ALL)) {
@@ -583,12 +583,12 @@ public class ProjectCommand extends CommandBase {
         return  command.equals(INIT_ANDROID)
                 //|| command.equals(INIT_IOS)
                 //|| command.equals(INIT_RIM)
-                || command.equals(INIT_WINPHONE)
+                || command.equals(INIT_WINDOWS)
                 || command.equals(INIT_ALL)
                 || command.equals(REMOVE_ANDROID)
                 //|| command.equals(REMOVE_IOS)
                 //|| command.equals(REMOVE_RIM)
-                || command.equals(REMOVE_WINPHONE)
+                || command.equals(REMOVE_WINDOWS)
                 || command.equals(REMOVE_ALL)
                 || command.equals(UPDATE_SDK)
                 || command.equals(UPDATE_DEPENDENCIES);
