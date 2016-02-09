@@ -4,10 +4,6 @@
 
 #import <Foundation/Foundation.h>
 
-static int MODE_TEST = 1;
-static int MODE_APP = 2;
-static int MODE_DEBUG = 3;
-
 @interface DataLoader : NSObject {
     @private
     NSMutableArray *loaders;
@@ -28,5 +24,23 @@ static int MODE_DEBUG = 3;
  * Clean the data.
  */
 - (void) clean;
+
+/**
+ * Get the int define for the MODE_APP.
+ * return int MODE_APP
+ */
++ (int) MODE_APP;
+
+/**
+ * Get the int define for the MODE_DEBUG.
+ * return int MODE_DEBUG
+ */
++ (int) MODE_DEBUG;
+
+/**
+ * Get the int define for the MODE_TEST.
+ * return int MODE_TEST
+ */
++ (int) MODE_TEST;
 
 @end

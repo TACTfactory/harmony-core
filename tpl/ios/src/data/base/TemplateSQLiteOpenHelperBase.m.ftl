@@ -107,10 +107,12 @@ static NSObject *lock;
     DataLoader *dataLoader = [DataLoader new];
     [dataLoader clean];
 
-    [dataLoader loadData:MODE_APP];
+    int mode = [DataLoader MODE_APP];
 #if DEBUG
-    [dataLoader loadData:MODE_DEBUG];
+    mode |= [DataLoader MODE_DEBUG];
 #endif
+
+    [dataLoader loadData:mode];
 </#if>
 }
 

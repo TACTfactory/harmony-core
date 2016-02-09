@@ -18,11 +18,11 @@
 - (void) getModelFixtures:(int) mode {
     NSMutableString *fixtureDirectoryPath = [NSMutableString stringWithString:@"assets/"];
 
-    if (mode == MODE_APP) {
+    if (mode == [DataLoader MODE_APP]) {
         [fixtureDirectoryPath appendString:@"app"];
-    } else if (mode == MODE_DEBUG) {
+    } else if (mode == [DataLoader MODE_DEBUG]) {
         [fixtureDirectoryPath appendString:@"debug"];
-    } else if (mode == MODE_TEST) {
+    } else if (mode == [DataLoader MODE_TEST]) {
         [fixtureDirectoryPath appendString:@"test"];
     }
 
