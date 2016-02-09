@@ -8,4 +8,6 @@
 
 + (NSString *) jsonToString:(NSDictionary *) json;
 
++ (NSString *) jsonListToString:(NSArray *) jsonList;
+
 @end
