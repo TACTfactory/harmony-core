@@ -160,6 +160,15 @@ public class IosProjectAdapter implements IAdapterProject {
                 filePath + "Database.m",
                 false));
 
+        templatePath = this.adapter.getTemplateSourceEntityPath();
+        filePath = this.adapter.getSourcePath();
+
+        result.add(new SourceFile(
+                templatePath + "AppDelegate.m", String.format("%s/AppDelegate.m", filePath), true));
+
+        result.add(new SourceFile(
+                templatePath + "AppDelegate.h", String.format("%s/AppDelegate.h", filePath), true));
+
         return result;
     }
 
@@ -559,6 +568,29 @@ public class IosProjectAdapter implements IAdapterProject {
                 templatePath + "DataLoader.m",
                 filePath + "DataLoader.m",
                 forceOverwrite));
+
+        filePath = String.format("%s/Fixture/XMLParser/", this.adapter.getSourceDataPath());
+
+        result.add(new SourceFile(
+                templatePath + "FixtureXMLToObjectParser.h",
+                filePath + "FixtureXMLToObjectParser.h",
+                forceOverwrite));
+
+        result.add(new SourceFile(
+                templatePath + "FixtureXMLToObjectParser.m",
+                filePath + "FixtureXMLToObjectParser.m",
+                forceOverwrite));
+
+        result.add(new SourceFile(
+                templatePath + "ParseValue.h",
+                filePath + "ParseValue.h",
+                forceOverwrite));
+
+        result.add(new SourceFile(
+                templatePath + "ParseValue.m",
+                filePath + "ParseValue.m",
+                forceOverwrite));
+
         return result;
     }
 
@@ -1023,12 +1055,6 @@ public class IosProjectAdapter implements IAdapterProject {
     }
 
     @Override
-    public List<IUpdater> updateEnum(EnumMetadata enumMeta) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public List<IUpdater> getStaticViewFiles(String packageName,
             String viewName, ViewType type) {
         // TODO Auto-generated method stub
@@ -1062,6 +1088,23 @@ public class IosProjectAdapter implements IAdapterProject {
         result.add(new SourceFile(
                 templatePath + "Resource.h",
                 filePath + "Resource.h",
+                true));
+
+        return result;
+    }
+
+    @Override
+    public List<IUpdater> updateEnum(EnumMetadata enumMeta) {
+        List<IUpdater> result = new ArrayList<IUpdater>();
+
+        String filePath = String.format("%s/",
+                this.adapter.getSourceEntityPath());
+
+        final String templatePath = this.adapter.getTemplateSourceEntityPath();
+
+        result.add(new SourceFile(
+                templatePath + "TemplateEnum.h",
+                String.format("%s%s.h", filePath, enumMeta.getName()),
                 true));
 
         return result;

@@ -4,11 +4,11 @@
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
 
+    <include layout="@layout/toolbar" />
+
     <ScrollView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent">
-
-        <include layout="@layout/toolbar" />
 
         <LinearLayout
             android:id="@+id/homeLayout"
