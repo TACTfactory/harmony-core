@@ -6,14 +6,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.harmony.platform.winphone.updater;
+package com.tactfactory.harmony.platform.windows.updater;
 
 import java.io.File;
 import java.util.Locale;
 
 import com.tactfactory.harmony.generator.BaseGenerator;
 import com.tactfactory.harmony.platform.IAdapter;
-import com.tactfactory.harmony.platform.winphone.WinphoneAdapter;
+import com.tactfactory.harmony.platform.windows.WindowsAdapter;
 import com.tactfactory.harmony.updater.IUpdaterFile;
 
 public class ProjectUpdater implements IUpdaterFile {
@@ -34,51 +34,51 @@ public class ProjectUpdater implements IUpdaterFile {
 
     @Override
     public void execute(BaseGenerator<? extends IAdapter> generator) {
-        XmlProjectWinphone xmlProjectWinphone = new XmlProjectWinphone();
+        XmlProjectWindows xmlProjectWindows = new XmlProjectWindows();
 
         //TODO replace
-        WinphoneAdapter adapter = new WinphoneAdapter();
+        WindowsAdapter adapter = new WindowsAdapter();
         String applicationName = adapter.getApplicationMetadata()
                 .getName().toLowerCase(Locale.ENGLISH);
-        xmlProjectWinphone.open(adapter.getSourcePath()
+        xmlProjectWindows.open(adapter.getSourcePath()
                 + applicationName + ".csproj");
 
         String file = new File(this.filename).getPath();
 
         switch (this.type) {
             case Compile:
-                xmlProjectWinphone.addCompileFile(file, this.depends);
+                xmlProjectWindows.addCompileFile(file, this.depends);
                 break;
 
             case ApplicationDefinition:
-                xmlProjectWinphone.addApplicationDefinitionFile(file);
+                xmlProjectWindows.addApplicationDefinitionFile(file);
                 break;
 
             case Page:
-                xmlProjectWinphone.addPageFile(file);
+                xmlProjectWindows.addPageFile(file);
                 break;
 
             case None:
-                xmlProjectWinphone.addNoneFile(file);
+                xmlProjectWindows.addNoneFile(file);
                 break;
 
             case Content:
-                xmlProjectWinphone.addContentFile(file);
+                xmlProjectWindows.addContentFile(file);
                 break;
 
             case EmbeddedResource:
-                xmlProjectWinphone.addEmbeddedFile(file);
+                xmlProjectWindows.addEmbeddedFile(file);
                 break;
 
             case Reference:
-                xmlProjectWinphone.addReferenceFile(file);
+                xmlProjectWindows.addReferenceFile(file);
                 break;
 
             default:
                 break;
         }
 
-        xmlProjectWinphone.save();
+        xmlProjectWindows.save();
     }
 
     public enum FileType {

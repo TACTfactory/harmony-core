@@ -40,8 +40,8 @@ public abstract class TagConstant {
     public static final String PLATFORM_ANDROID = "Android";
     /** Constant for ios platform. */
     public static final String PLATFORM_IOS = "iOS";
-    /** Constant for winphone platform. */
-    public static final String PLATFORM_WINPHONE = "Windows";
+    /** Constant for windows platform. */
+    public static final String PLATFORM_WINDOWS = "Windows";
 
     // Ant markers
     /** Constant for ant sdk dir. */

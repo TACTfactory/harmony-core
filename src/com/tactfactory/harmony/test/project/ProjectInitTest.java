@@ -154,12 +154,12 @@ public class ProjectInitTest extends CommonTest {
      */
     /*@Ignore
     @Test
-    public final void initWinphone() {
+    public final void initWindows() {
         System.out.println("\nTest Project init Windows Phone");
         System.out.println(SHARP_DELIMITOR);
 
 
-        CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_WINPHONE,
+        CommonTest.getHarmony().findAndExecute(ProjectCommand.INIT_WINDOWS,
                                     null,
                                     null);
 
