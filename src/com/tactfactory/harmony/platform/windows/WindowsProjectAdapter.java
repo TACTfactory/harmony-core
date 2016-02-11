@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.harmony.platform.winphone;
+package com.tactfactory.harmony.platform.windows;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,20 +18,20 @@ import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.platform.IAdapterProject;
-import com.tactfactory.harmony.platform.winphone.updater.ProjectUpdater;
-import com.tactfactory.harmony.platform.winphone.updater.XmlResourcesWinphone;
-import com.tactfactory.harmony.platform.winphone.updater.ProjectUpdater.FileType;
+import com.tactfactory.harmony.platform.windows.updater.ProjectUpdater;
+import com.tactfactory.harmony.platform.windows.updater.XmlResourcesWindows;
+import com.tactfactory.harmony.platform.windows.updater.ProjectUpdater.FileType;
 import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.updater.impl.CopyFile;
 import com.tactfactory.harmony.updater.impl.SourceFile;
 import com.tactfactory.harmony.updater.old.IConfigFileUtil;
 import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
 
-public class WinphoneProjectAdapter implements IAdapterProject {
+public class WindowsProjectAdapter implements IAdapterProject {
 
-    private final WinphoneAdapter adapter;
+    private final WindowsAdapter adapter;
 
-    public WinphoneProjectAdapter(WinphoneAdapter adapter) {
+    public WindowsProjectAdapter(WindowsAdapter adapter) {
         this.adapter = adapter;
     }
 
@@ -603,12 +603,12 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
     @Override
     public ITranslateFileUtil getTranslateFileUtil() {
-        return new XmlResourcesWinphone();
+        return new XmlResourcesWindows();
     }
 
     @Override
     public IConfigFileUtil getConfigFileUtil() {
-        return new XmlResourcesWinphone();
+        return new XmlResourcesWindows();
     }
 
     @Override

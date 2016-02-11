@@ -31,7 +31,7 @@ import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.platform.TargetPlatform;
 import com.tactfactory.harmony.platform.android.AndroidAdapter;
 import com.tactfactory.harmony.platform.ios.IosAdapter;
-import com.tactfactory.harmony.platform.winphone.WinphoneAdapter;
+import com.tactfactory.harmony.platform.windows.WindowsAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -161,10 +161,10 @@ public final class ProjectContext {
                 //this.adapters.put(TargetPlatform.WEB, new WebAdapter());
                 ConsoleUtils.display("\t- Detected Web project !");
                 break;
-            case WINPHONE:
+            case WINDOWS:
                 this.adapters.put(
-                        TargetPlatform.WINPHONE,
-                        new WinphoneAdapter());
+                        TargetPlatform.WINDOWS,
+                        new WindowsAdapter());
                 ConsoleUtils.display("\t- Detected Windows Phone project !");
                 break;
             default:

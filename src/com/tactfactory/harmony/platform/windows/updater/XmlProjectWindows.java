@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.harmony.platform.winphone.updater;
+package com.tactfactory.harmony.platform.windows.updater;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import org.jdom2.filter.Filter;
 import com.tactfactory.harmony.utils.TactFileUtils;
 import com.tactfactory.harmony.utils.XMLUtils;
 
-public class XmlProjectWinphone {
+public class XmlProjectWindows {
     /** Xml element root. */
     private static final String XML_ELEMENT_ROOT = "Project";
     /** Xml element item. */

@@ -304,15 +304,15 @@ public class BundleGenerator extends BaseGenerator<BundleAdapter> {
 
         this.makeSource(tplPath, genPath, false);
 
-        // Generate bundle winphone adapter
-        tplPath = String.format("%swinphone/%s",
+        // Generate bundle windows adapter
+        tplPath = String.format("%swindows/%s",
                 tplAdapterPath,
-                "TemplateAdapterWinphone.java");
+                "TemplateAdapterWindows.java");
 
-        genPath = String.format("%swinphone/%s%s",
+        genPath = String.format("%swindows/%s%s",
                 genAdapterPath,
                 CaseFormat.LOWER_CAMEL.to(CaseFormat.UPPER_CAMEL, bundleName),
-                "AdapterWinphone.java");
+                "AdapterWindows.java");
 
         this.makeSource(tplPath, genPath, false);
     }

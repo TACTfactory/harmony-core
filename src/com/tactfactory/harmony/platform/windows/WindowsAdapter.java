@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.harmony.platform.winphone;
+package com.tactfactory.harmony.platform.windows;
 
 import java.io.File;
 import java.io.FilenameFilter;
@@ -32,7 +32,7 @@ import freemarker.template.Configuration;
  * Microsoft Adapter of project structure.
  *
  */
-public class WinphoneAdapter extends BaseAdapter {
+public class WindowsAdapter extends BaseAdapter {
 	/** Float type. */
     private static final String FLOAT = "float";
 
@@ -82,12 +82,12 @@ public class WinphoneAdapter extends BaseAdapter {
         }
     };
     
-    private IAdapterProject adapterProject = new WinphoneProjectAdapter(this);
+    private IAdapterProject adapterProject = new WindowsProjectAdapter(this);
     
 	/**
 	 * Constructor.
 	 */
-	public WinphoneAdapter() {
+	public WindowsAdapter() {
 		super();
 		this.setProject("project");
 		this.setResource("res");
