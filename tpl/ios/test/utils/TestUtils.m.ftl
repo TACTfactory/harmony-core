@@ -16,10 +16,10 @@
 + (NSString *) jsonListToString:(NSArray *) jsonList {
     NSMutableString *result = [NSMutableString new];
 
-    for (int i = 0; i < entities.count; i++) {
-        [result appendString:[TestUtils jsonToString:[jsonList objectAtIndex:i]];
+    for (int i = 0; i < jsonList.count; i++) {
+        [result appendString:[TestUtils jsonToString:[jsonList objectAtIndex:i]]];
 
-        if (i != entities.count - 1) {
+        if (i != jsonList.count - 1) {
             [result appendString:@","];
         }
     }
