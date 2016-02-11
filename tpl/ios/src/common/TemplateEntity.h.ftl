@@ -2,6 +2,7 @@
 <@header?interpret />
 <#assign curr = entities[current_entity] />
 <#assign curr_fields = (curr.name) />
+<#assign sync = curr.options.sync?? />
 
 #import <Foundation/Foundation.h>
 ${ImportUtils.importRelatedEntitiesHeader(curr, true)}
@@ -12,7 +13,7 @@ ${ImportUtils.importRelatedEntitiesHeader(curr, true)}
      </#if>
 </#list>
 
-@interface ${curr.name} : <#if (InheritanceUtils.isExtended(curr))> ${curr.inheritance.superclass.name} <#else> NSObject </#if>
+@interface ${curr.name} : <#if (InheritanceUtils.isExtended(curr))>${curr.inheritance.superclass.name}<#elseif (sync)>EntityBase<#else>NSObject</#if>
 
 <#list curr.fields?values as field>
 /** ${field.name} */

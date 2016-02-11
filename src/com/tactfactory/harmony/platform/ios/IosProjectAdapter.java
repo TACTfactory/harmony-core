@@ -785,7 +785,7 @@ public class IosProjectAdapter implements IAdapterProject {
                     filePath + "Utils/" + entity.getName() + "ProviderUtils.h"));
             result.add(new SourceFile(
                     templatePath + "utils/TemplateProviderUtils.m",
-                    filePath + "utils/" + entity.getName() + "ProviderUtils.m"));
+                    filePath + "Utils/" + entity.getName() + "ProviderUtils.m"));
 
             result.add(new SourceFile(
                     templatePath + "utils/base/TemplateProviderUtilsBase.h",
