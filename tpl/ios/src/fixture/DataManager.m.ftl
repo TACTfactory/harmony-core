@@ -57,7 +57,7 @@ static NSString *${entity.name?upper_case};
 - (SQLiteAdapterBase *) getRepository:(id) item {
     NSString *className = NSStringFromClass([item class]);
 
-    [adapter remove:item];
+    return [self->adapters valueForKey:className];
 }
 
 @end

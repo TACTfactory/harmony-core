@@ -3,10 +3,6 @@
 #import "AppDelegate.h"
 #import "${project_name?cap_first}SQLiteOpenHelper.h"
 
-@implementation AppDelegate ()
-
-@end
-
 @implementation AppDelegate
 
 - (BOOL) application:(UIApplication *) application didFinishLaunchingWithOptions:(NSDictionary *) launchOptions {

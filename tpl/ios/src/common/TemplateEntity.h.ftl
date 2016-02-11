@@ -13,6 +13,8 @@ ${ImportUtils.importRelatedEntitiesHeader(curr, true)}
      </#if>
 </#list>
 
+<#if (sync)>#import "EntityBase.h"</#if>
+
 @interface ${curr.name} : <#if (InheritanceUtils.isExtended(curr))>${curr.inheritance.superclass.name}<#elseif (sync)>EntityBase<#else>NSObject</#if>
 
 <#list curr.fields?values as field>

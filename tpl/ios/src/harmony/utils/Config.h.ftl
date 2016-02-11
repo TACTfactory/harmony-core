@@ -28,3 +28,5 @@
 + (NSString *) URL_PATH_DEV;
 /** Url Path for prod env. */
 + (NSString *) URL_PATH_PROD;
+
+@end
