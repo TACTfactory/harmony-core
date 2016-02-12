@@ -23,8 +23,8 @@ static NSString *COL_SYNC_DTAG;
 static NSString *ALIASED_COL_SYNC_DTAG;
 static NSString *COL_SYNC_UDATE;
 static NSString *ALIASED_COL_SYNC_UDATE;
-static NSString *COL_HASH;
-static NSString *ALIASED_COL_HASH;
+static NSString *COL_UUID;
+static NSString *ALIASED_COL_UUID;
 </#if>
 static NSString *COL_DISCRIMINATORCOLUMN;
 static NSString *ALIASED_COL_DISCRIMINATORCOLUMN;
@@ -39,17 +39,17 @@ static NSString *ALIASED_COL_DISCRIMINATORCOLUMN;
     TABLE_NAME = @"Resource";
     COL_ID = @"id";
     ALIASED_COL_ID = [NSString stringWithFormat:@"%@.%@", TABLE_NAME, COL_ID];
-    COL_PATH =@"path"; 
+    COL_PATH =@"path";
     ALIASED_COL_PATH = [NSString stringWithFormat:@"%@.%@", TABLE_NAME, COL_PATH];
     <#if sync>
-    COL_SERVERID = @"serverId"; 
+    COL_SERVERID = @"serverId";
     ALIASED_COL_SERVERID = [NSString stringWithFormat:@"%@.%@", TABLE_NAME, COL_SERVERID];
-    COL_SYNC_DTAG = @"sync_dtag"; 
+    COL_SYNC_DTAG = @"sync_dTag";
     ALIASED_COL_SYNC_DTAG = [NSString stringWithFormat:@"%@.%@", TABLE_NAME, COL_SYNC_DTAG];
-    COL_SYNC_UDATE = @"sync_uDate"; 
+    COL_SYNC_UDATE = @"sync_uDate";
     ALIASED_COL_SYNC_UDATE = [NSString stringWithFormat:@"%@.%@", TABLE_NAME, COL_SYNC_UDATE];
-    COL_HASH = @"hash";
-    ALIASED_COL_HASH = [NSString stringWithFormat:@"%@.%@", TABLE_NAME, COL_HASH];
+    COL_UUID = @"uuid";
+    ALIASED_COL_UUID = [NSString stringWithFormat:@"%@.%@", TABLE_NAME, COL_UUID];
     </#if>
     COL_DISCRIMINATORCOLUMN = @"inheritance_type";
     ALIASED_COL_DISCRIMINATORCOLUMN = [NSString stringWithFormat:@"%@.%@", TABLE_NAME, COL_DISCRIMINATORCOLUMN];
@@ -106,12 +106,12 @@ static NSString *ALIASED_COL_DISCRIMINATORCOLUMN;
     return ALIASED_COL_SYNC_UDATE;
 }
 
-+ (NSString *) COL_HASH {
-    return COL_HASH;
++ (NSString *) COL_UUID {
+    return COL_UUID;
 }
 
-+ (NSString *) ALIASED_COL_HASH {
-    return ALIASED_COL_HASH;
++ (NSString *) ALIASED_COL_UUID {
+    return ALIASED_COL_UUID;
 }
 </#if>
 + (NSString *) COL_DISCRIMINATORCOLUMN {
@@ -135,7 +135,7 @@ static NSString *ALIASED_COL_DISCRIMINATORCOLUMN;
             ResourceContract.COL_SERVERID,
             ResourceContract.COL_SYNC_DTAG,
             ResourceContract.COL_SYNC_UDATE,
-            ResourceContract.COL_HASH,</#if>
+            ResourceContract.COL_UUID,</#if>
             nil];
 }
 
@@ -147,16 +147,16 @@ static NSString *ALIASED_COL_DISCRIMINATORCOLUMN;
             ResourceContract.ALIASED_COL_SERVERID,
             ResourceContract.ALIASED_COL_SYNC_DTAG,
             ResourceContract.ALIASED_COL_SYNC_UDATE,
-            ResourceContract.ALIASED_COL_HASH,</#if>
+            ResourceContract.ALIASED_COL_UUID,</#if>
             nil];
 }
 
 + (NSDictionary *) itemToContentValues:(EntityResourceBase *) item {
     NSMutableDictionary *result = [NSMutableDictionary dictionary];
-    [result setObject:[NSNumber numberWithInt:item.id] forKey:ResourceContract.COL_ID]; 
+    [result setObject:[NSNumber numberWithInt:item.id] forKey:ResourceContract.COL_ID];
 
     if (item.path != nil) {
-        [result setObject:item.path forKey:ResourceContract.COL_PATH]; 
+        [result setObject:item.path forKey:ResourceContract.COL_PATH];
     }
     <#if sync>
 
@@ -166,18 +166,18 @@ static NSString *ALIASED_COL_DISCRIMINATORCOLUMN;
         [result setObject:[NSNull null] forKey:ResourceContract.COL_SERVERID];
     }
 
-    [result setObject:[NSNumber numberWithBool:item.sync_dtag] forKey:ResourceContract.COL_SYNC_DTAG];
+    [result setObject:[NSNumber numberWithBool:item.sync_dTag] forKey:ResourceContract.COL_SYNC_DTAG];
 
     if (item.sync_uDate != nil) {
         [result setObject:[DateUtils dateToISOString:item.sync_uDate] forKey:ResourceContract.COL_SYNC_UDATE];
     } else {
         [result setObject:[NSNull null] forKey:ResourceContract.COL_SYNC_UDATE];
     }
-    
+
     if (item.uuid != nil) {
-        [result setObject:item.uuid forKey:ResourceContract.COL_HASH];
+        [result setObject:item.uuid forKey:ResourceContract.COL_UUID];
     } else {
-        [result setObject:[NSNull null] forKey:ResourceContract.COL_HASH];
+        [result setObject:[NSNull null] forKey:ResourceContract.COL_UUID];
     }
     </#if>
 
@@ -220,7 +220,7 @@ static NSString *ALIASED_COL_DISCRIMINATORCOLUMN;
         }
     }
 
-    index = [cursor columnIndexForName:ResourceContract.COL_HASH];
+    index = [cursor columnIndexForName:ResourceContract.COL_UUID];
     if (![cursor columnIndexIsNull:index]) {
         [result setUuid:[cursor stringForColumnIndex:index]];
     }

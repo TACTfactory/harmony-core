@@ -39,12 +39,12 @@
 
 + (NSString*) getSchema {
     return [NSString stringWithFormat:@"CREATE TABLE %@ ("
-         " %@ INTEGER PRIMARY KEY AUTOINCREMENT," 
+         " %@ INTEGER PRIMARY KEY AUTOINCREMENT,"
          " %@ VARCHAR NOT NULL,"
          <#if sync>
-         " %@ integer," 
-         " %@ boolean NOT NULL," 
-         " %@ datetime" 
+         " %@ integer,"
+         " %@ boolean NOT NULL,"
+         " %@ datetime"
          ",%@ VARCHAR,"
          </#if>
          " %@ VARCHAR"
@@ -55,14 +55,14 @@
         </#list>
          ");",
 
-        ResourceContract.TABLE_NAME, 
+        ResourceContract.TABLE_NAME,
         ResourceContract.COL_ID,
         ResourceContract.COL_PATH,
         <#if sync>
         ResourceContract.COL_SERVERID,
         ResourceContract.COL_SYNC_DTAG,
         ResourceContract.COL_SYNC_UDATE,
-        ResourceContract.COL_HASH,
+        ResourceContract.COL_UUID,
         </#if>
         ResourceContract.COL_DISCRIMINATORCOLUMN
         <#list entities?values as entity>
@@ -93,7 +93,7 @@
     EntityResourceBase *result = [self query:id];
 
     return result;
-}  
+}
 
 - (NSArray *) getAll {
     NSArray *result;
@@ -118,7 +118,7 @@
     NSMutableDictionary* values = [[ResourceContract itemToContentValues:item] mutableCopy];
 
     [values removeObjectForKey:ResourceContract.COL_ID];
-    
+
     int insertResult;
 
     if ([values count] != 0) {
@@ -144,12 +144,12 @@
             result = 1;
         }
     }
-    
+
     return result;
 }
 
 - (bool) update:(EntityResourceBase *)item{
-    
+
 #ifdef DEBUG
     NSLog(@"Update DB(%@)", ResourceContract.TABLE_NAME);
 #endif
@@ -183,22 +183,22 @@
     NSString *whereClause = [NSString stringWithFormat:@"%@ = ?", ResourceContract.ALIASED_COL_ID];
 
     NSArray *whereArgs = [NSArray arrayWithObjects:[NSNumber numberWithInt:id], nil];
-    
+
     Cursor *cursor = [self query:ResourceContract.ALIASED_COLS
                  withWhereClause:whereClause
                    withWhereArgs:whereArgs
                      withGroupBy:nil
                       withHaving:nil
                      withOrderBy:nil];
-    
+
     NSArray *query = [self cursorToItems:cursor];
-    
+
     [cursor close];
-    
+
     if (query && query.count > 0) {
         result = query[0];
     }
-    
+
     return result;
 }
 <#if sync>
