@@ -1,4 +1,4 @@
-<#if property != "serverId" && property != "sync_uDate" && property != "sync_dTag" && property != "hash">
+<#if property != "serverId" && property != "sync_uDate" && property != "sync_dTag" && property != "uuid">
      /**
      * Get the ${property?cap_first}.
      * @return the ${property}
