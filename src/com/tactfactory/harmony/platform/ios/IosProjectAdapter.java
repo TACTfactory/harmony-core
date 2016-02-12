@@ -13,7 +13,6 @@ import com.tactfactory.harmony.platform.IAdapterProject;
 import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.updater.impl.CreateFolder;
 import com.tactfactory.harmony.updater.impl.DeleteFile;
-import com.tactfactory.harmony.updater.impl.LibraryGit;
 import com.tactfactory.harmony.updater.impl.SourceFile;
 import com.tactfactory.harmony.updater.old.IConfigFileUtil;
 import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
@@ -164,10 +163,12 @@ public class IosProjectAdapter implements IAdapterProject {
         filePath = this.adapter.getSourcePath();
 
         result.add(new SourceFile(
-                templatePath + "AppDelegate.m", String.format("%s/AppDelegate.m", filePath), true));
+                templatePath + "AppDelegate.m", String.format("%s/AppDelegate.m", filePath), false));
 
         result.add(new SourceFile(
-                templatePath + "AppDelegate.h", String.format("%s/AppDelegate.h", filePath), true));
+                templatePath + "AppDelegate.h", String.format("%s/AppDelegate.h", filePath), false));
+
+        result.add(new SourceFile(templatePath + "Podfile", String.format("%s/Podfile", filePath), false));
 
         return result;
     }
@@ -182,11 +183,11 @@ public class IosProjectAdapter implements IAdapterProject {
     public List<IUpdater> getFilesToDelete() {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
-        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "FMDB/Tests"));
-        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "FMDB/src/sample"));
-        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "FMDB/src/extra/Swift extensions"));
-        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "AFNetworking/Example"));
-        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "AFNetworking/Tests"));
+//        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "FMDB/Tests"));
+//        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "FMDB/src/sample"));
+//        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "FMDB/src/extra/Swift extensions"));
+//        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "AFNetworking/Example"));
+//        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "AFNetworking/Tests"));
 
         return result;
     }
@@ -195,31 +196,31 @@ public class IosProjectAdapter implements IAdapterProject {
     public List<IUpdater> getLibraries() {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
-        String libPath = new File(String.format("%s%s",
-                this.adapter.getSourceLibsPath(), "FMDB")).getAbsolutePath();
-
-        LibraryGit updater = new LibraryGit(
-                "https://github.com/ccgus/fmdb.git",
-                libPath,
-                "v2.5",
-                "FMDB",
-                null,
-                libPath);
-
-        libPath = new File(String.format("%s%s",
-                this.adapter.getSourceLibsPath(), "AFNetworking")).getAbsolutePath();
-
-        result.add(updater);
-
-        updater = new LibraryGit(
-                "https://github.com/AFNetworking/AFNetworking.git",
-                libPath,
-                "2.5.1",
-                "AFNetworking",
-                null,
-                libPath);
-
-        result.add(updater);
+//        String libPath = new File(String.format("%s%s",
+//                this.adapter.getSourceLibsPath(), "FMDB")).getAbsolutePath();
+//
+//        LibraryGit updater = new LibraryGit(
+//                "https://github.com/ccgus/fmdb.git",
+//                libPath,
+//                "v2.5",
+//                "FMDB",
+//                null,
+//                libPath);
+//
+//        libPath = new File(String.format("%s%s",
+//                this.adapter.getSourceLibsPath(), "AFNetworking")).getAbsolutePath();
+//
+//        result.add(updater);
+//
+//        updater = new LibraryGit(
+//                "https://github.com/AFNetworking/AFNetworking.git",
+//                libPath,
+//                "2.5.1",
+//                "AFNetworking",
+//                null,
+//                libPath);
+//
+//        result.add(updater);
 
         return result;
     }
