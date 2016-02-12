@@ -207,7 +207,7 @@ static NSString *ALIASED_COL_DISCRIMINATORCOLUMN;
     }
 
     index = [cursor columnIndexForName:ResourceContract.COL_SYNC_DTAG];
-    [result setSync_dtag:[cursor intForColumnIndex:index] == 1];
+    [result setSync_dTag:[cursor intForColumnIndex:index] == 1];
 
     index = [cursor columnIndexForName:ResourceContract.COL_SYNC_UDATE];
 
