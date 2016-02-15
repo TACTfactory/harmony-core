@@ -86,7 +86,7 @@ public final class Harmony {
             ProjectCommand.INIT_ANDROID,
             ProjectCommand.INIT_IOS,
             ProjectCommand.INIT_RIM,
-            ProjectCommand.INIT_WINPHONE,
+            ProjectCommand.INIT_WINDOWS,
             GeneralCommand.HELP,
             GeneralCommand.LIST
     };
