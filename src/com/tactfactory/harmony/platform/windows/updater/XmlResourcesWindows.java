@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.harmony.platform.winphone.updater;
+package com.tactfactory.harmony.platform.windows.updater;
 
 import java.util.Comparator;
 
@@ -21,7 +21,7 @@ import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
 import com.tactfactory.harmony.utils.TactFileUtils;
 import com.tactfactory.harmony.utils.XMLUtils;
 
-public class XmlResourcesWinphone implements ITranslateFileUtil, IConfigFileUtil {
+public class XmlResourcesWindows implements ITranslateFileUtil, IConfigFileUtil {
     /** Xml element root. */
     private static final String XML_ELEMENT_ROOT = "root";
     /** Xml element name. */

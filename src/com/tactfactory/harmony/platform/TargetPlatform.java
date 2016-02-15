@@ -12,7 +12,7 @@ import com.google.common.base.Strings;
 import com.tactfactory.harmony.platform.android.AndroidAdapter;
 import com.tactfactory.harmony.platform.ios.IosAdapter;
 import com.tactfactory.harmony.platform.rim.RimAdapter;
-import com.tactfactory.harmony.platform.winphone.WinphoneAdapter;
+import com.tactfactory.harmony.platform.windows.WindowsAdapter;
 
 /**
  * Target platform.
@@ -29,8 +29,8 @@ public enum TargetPlatform {
     IPHONE    (3104,  "ios", IosAdapter.class),
 	/** RIM. */
 	RIM		(4006, 	"rim", RimAdapter.class),
-	/** WinPhone. */
-	WINPHONE(5007, 	"winphone", WinphoneAdapter.class);
+	/** Windows. */
+	WINDOWS(5007, 	"windows", WindowsAdapter.class);
 
 	/** Value. */
 	private final int value;
@@ -86,8 +86,8 @@ public enum TargetPlatform {
 			}  else
 
 			if (target.equalsIgnoreCase(
-					TargetPlatform.WINPHONE.toLowerString())) {
-				result = TargetPlatform.WINPHONE;
+					TargetPlatform.WINDOWS.toLowerString())) {
+				result = TargetPlatform.WINDOWS;
 			} else
 
             if (target.equalsIgnoreCase(
@@ -101,8 +101,8 @@ public enum TargetPlatform {
             } else
 
 //		    if (target.equalsIgnoreCase(
-//                    TargetPlatform.WINPHONE.toLowerString())) {
-//                result = TargetPlatform.WINPHONE;
+//                    TargetPlatform.WINDOWS.toLowerString())) {
+//                result = TargetPlatform.WINDOWS;
 //            } else
 
 			if (target.equalsIgnoreCase(
@@ -138,9 +138,9 @@ public enum TargetPlatform {
                 result = TargetPlatform.RIM;
             } else
 
-            if (TargetPlatform.WINPHONE
+            if (TargetPlatform.WINDOWS
                     .getAdapterType().equals(adapter.getClass())) {
-                result = TargetPlatform.WINPHONE;
+                result = TargetPlatform.WINDOWS;
             } //else
 
 //            if (TargetPlatform.WEB

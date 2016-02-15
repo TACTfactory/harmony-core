@@ -80,7 +80,7 @@ public abstract class ${curr.name}ContractBase {
         ResourceContract.COL_SERVERID,
         ResourceContract.COL_SYNC_DTAG,
         ResourceContract.COL_SYNC_UDATE,
-        ResourceContract.COL_HASH</#if></#if>
+        ResourceContract.COL_UUID</#if></#if>
         <#list wholeFields as field>
         <#if field.columnName??
          && (!field.relation?? || (field.relation.type != "ManyToMany" && field.relation.type != "OneToMany"))>
@@ -103,7 +103,7 @@ public abstract class ${curr.name}ContractBase {
         ResourceContract.ALIASED_COL_SERVERID,
         ResourceContract.ALIASED_COL_SYNC_DTAG,
         ResourceContract.ALIASED_COL_SYNC_UDATE,
-        ResourceContract.ALIASED_COL_HASH</#if>
+        ResourceContract.ALIASED_COL_UUID</#if>
     </#if>
     <#list ViewUtils.getAllFields(curr)?values as field>
         <#if field_index=1 && curr.resource>,</#if>
@@ -254,7 +254,7 @@ public abstract class ${curr.name}ContractBase {
             </#if>
             int index;
 
-<#list curr_fields as field><#if (field.columnName??) >${AdapterUtils.cursorToItemFieldAdapter("result", field, 4)}</#if></#list>
+<#list curr_fields as field><#if (field.columnName??) >${AdapterUtils.cursorToItemFieldAdapter("result", field, 3)}</#if></#list>
         }
     }
 

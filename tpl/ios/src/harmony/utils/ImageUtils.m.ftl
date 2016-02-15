@@ -16,7 +16,7 @@
     NSString *result = path;
 
     if ([self checkPathImageURL:path] && ![path hasPrefix:@"http"]) {
-        NSString *config = IMAGE_URL_PREFIX_PROD;
+        NSString *config = Config.IMAGE_URL_PREFIX_PROD;
 
         result = [NSString stringWithFormat:@"%@%@", config, path];
     }
@@ -98,7 +98,7 @@
 
     ALAssetsLibrary *assetLibrary = [ALAssetsLibrary new];
     [assetLibrary assetForURL:[NSURL URLWithString:file] resultBlock:resultBlock failureBlock:failureblock];
-    
+
 }
 
 + (UIImage *) imageWithImage:(UIImage *) image maxSize:(int) maxSize {

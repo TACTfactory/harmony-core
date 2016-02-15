@@ -28,7 +28,7 @@ import com.tactfactory.harmony.platform.IAdapter;
 import com.tactfactory.harmony.platform.TargetPlatform;
 import com.tactfactory.harmony.platform.android.AndroidAdapter;
 import com.tactfactory.harmony.platform.ios.IosAdapter;
-import com.tactfactory.harmony.platform.winphone.WinphoneAdapter;
+import com.tactfactory.harmony.platform.windows.WindowsAdapter;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 
 /**
@@ -204,8 +204,8 @@ public class OrmCommand extends CommandBundleBase<BaseAdapter> {
                 TargetPlatform.ANDROID,
                 AndroidAdapter.class);
         this.adapterMapping.put(
-                TargetPlatform.WINPHONE,
-                WinphoneAdapter.class);
+                TargetPlatform.WINDOWS,
+                WindowsAdapter.class);
         this.adapterMapping.put(
                 TargetPlatform.IPHONE,
                 IosAdapter.class);

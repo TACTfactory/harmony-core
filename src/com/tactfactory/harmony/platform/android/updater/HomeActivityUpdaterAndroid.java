@@ -14,6 +14,9 @@ import java.io.IOException;
 import org.jdom2.Document;
 import org.jdom2.Element;
 import org.jdom2.Namespace;
+import org.jdom2.filter.Filters;
+import org.jdom2.xpath.XPathExpression;
+import org.jdom2.xpath.XPathFactory;
 
 import com.tactfactory.harmony.generator.BaseGenerator;
 import com.tactfactory.harmony.platform.IAdapter;
@@ -106,17 +109,29 @@ public final class HomeActivityUpdaterAndroid implements IUpdaterFile {
             final BaseGenerator<? extends IAdapter> generator,
             final String text,
             final String buttonId) {
+
         String xmlFileName = ((AndroidAdapter) generator.getAdapter()).getRessourceLayoutPath() + "main.xml";
         Document doc = XMLUtils.openXML(xmlFileName);
         Namespace androidNs = doc.getRootElement().getNamespace("android");
-        Element linearL = doc.getRootElement().getChild("LinearLayout");
+        Element linearL = null;
+
+        XPathExpression<Element> xpath = XPathFactory.instance().compile(
+                "//*[@android:id= '@+id/homeLayout']",
+                Filters.element(),
+                null,
+                androidNs);
 
         boolean alreadyExists = false;
 
+        for (Element element : xpath.evaluate(doc)) {
+            linearL = element;
+            break;
+        }
+
         for (Element element : linearL.getChildren("Button")) {
-            if (element.getAttributeValue("id", androidNs)
-                    .equals("@+id/" + buttonId)) {
+            if (element.getAttributeValue("id", androidNs).equals("@+id/" + buttonId)) {
                 alreadyExists = true;
+                break;
             }
         }
 

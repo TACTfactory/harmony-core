@@ -6,8 +6,14 @@
 
 @interface FixtureBase : NSObject {
     @protected
-    NSMutableDictionary *items;
+    NSDictionary *items;
 }
+
+/**
+ * Load the fixtures for the current model.
+ * @param mode Mode
+ */
+- (void) getModelFixtures:(int) mode;
 
 /**
  * Load the model.
@@ -21,10 +27,16 @@
 - (void) load:(DataManager *) dataManager;
 
 /**
+ * Returns the fixture file name.
+ * @return the fixture file name
+ */
+- (NSString *) getFixtureFileName;
+
+/**
  * Get the items.
  * @return items
  */
-- (NSMutableDictionary *) getItems;
+- (NSDictionary *) getItems;
 
 /**
  * Clear the fixture base.

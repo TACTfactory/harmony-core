@@ -21,7 +21,7 @@
  *
  * @return result boolean
  */
-+ (BOOL) equals:(${curr.name?cap_first}*) entity
++ (bool) equals:(${curr.name?cap_first}*) entity
     withCompare:(${curr.name?cap_first}*) compare;
 
 @end

@@ -1,6 +1,7 @@
 <#include utilityPath + "all_imports.ftl" />
 <#assign orderedEntities = MetadataUtils.orderEntitiesByRelation() />
 <@header?interpret />
+
 #import <Foundation/Foundation.h>
 
 @interface DataLoader : NSObject {
@@ -17,11 +18,29 @@
 /**
  * Load the data.
  */
-- (void) loadData;
+- (void) loadData:(int) mode;
 
 /**
  * Clean the data.
  */
 - (void) clean;
+
+/**
+ * Get the int define for the MODE_APP.
+ * return int MODE_APP
+ */
++ (int) MODE_APP;
+
+/**
+ * Get the int define for the MODE_DEBUG.
+ * return int MODE_DEBUG
+ */
++ (int) MODE_DEBUG;
+
+/**
+ * Get the int define for the MODE_TEST.
+ * return int MODE_TEST
+ */
++ (int) MODE_TEST;
 
 @end

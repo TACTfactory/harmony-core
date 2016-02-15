@@ -19,7 +19,7 @@
  * @param <T> Entity type of this adapter.
  */
 @interface SQLiteAdapterBase : NSObject {
-    
+
 @protected
     /* Database. */
     FMDatabase *mDatabase;
@@ -71,6 +71,12 @@
  * @return A cursor pointing to all entities
  */
 - (NSArray *) getAll;
+
+/**
+ * Get all entities from the DB.
+ * @return A cursor pointing to all entities
+ */
+- (NSArray *) getAllCursor;
 
 /**
 * Send a query to the DB.

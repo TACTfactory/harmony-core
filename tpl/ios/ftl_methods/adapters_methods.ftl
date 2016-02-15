@@ -10,6 +10,9 @@
             <#elseif (MetadataUtils.isPrimitive(field))>
                 <#assign result = result + "    [result setObject:${FieldsUtils.generateFieldContentType(\"item\", field)}item.${field.name}]\n" />
                 <#assign result = result + "${t}       forKey:${fieldNames[0]}]; \n" />
+            <#elseif (FieldsUtils.getObjectiveType(field)?lower_case == "int")>
+                <#assign result = result + "    [result setObject:[NSNumber numberWithInt:item.${field.name}]\n" />
+                <#assign result = result + "${t}       forKey:${fieldNames[0]}]; \n" />
             <#else>
                 <#assign result = result + "    if (item.${field.name} != nil) {\n" />
                 <#if field.name != "serverId">
@@ -39,7 +42,7 @@
                     <#assign result = result + "${t}           forKey:${fieldNames[id_index]}]; \n"/>
                     </#if>
                 </#list>
-                <#assign result = result + "    }"/>
+                <#assign result = result + "    }\n"/>
             </#if>
         </#if>
     </#if>
@@ -75,6 +78,9 @@
                 <#case "integer">
                     <#assign result = result + "${tab}${localTab}[result set${field.name?cap_first}:[cursor intForColumnIndex:index]];\n"/>
                     <#break />
+                <#case "short">
+                    <#assign result = result + "${tab}${localTab}[result set${field.name?cap_first}:(short)[cursor intForColumnIndex:index]];\n"/>
+                    <#break />
                 <#case "nsnumber">
                     <#assign result = result + "${tab}${localTab}[result set${field.name?cap_first}:[NSNumber numberWithInt:[cursor intForColumnIndex:index]]];\n"/>
                     <#break />
@@ -91,6 +97,11 @@
                     <#assign result = result + "${tab}${localTab}[result set${field.name?cap_first}:[cursor longForColumnIndex:index]];\n"/>
                     <#break />
                 <#case "char">
+                    <#assign result = result + "${tab}${localTab}[result set${field.name?cap_first}:[[cursor stringForColumnIndex:index] UTF8String][0]];\n"/>
+                    <#break />
+                <#case "character">
+                    <#assign result = result + "${tab}${localTab}[result set${field.name?cap_first}:(const unsigned char *)[[cursor stringForColumnIndex:index] UTF8String][0]];\n"/>
+                    <#break />
                 <#case "string">
                     <#assign result = result + "${tab}${localTab}[result set${field.name?cap_first}:[cursor stringForColumnIndex:index]];\n"/>
                     <#break />

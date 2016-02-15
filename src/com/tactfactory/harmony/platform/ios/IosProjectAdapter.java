@@ -13,7 +13,6 @@ import com.tactfactory.harmony.platform.IAdapterProject;
 import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.updater.impl.CreateFolder;
 import com.tactfactory.harmony.updater.impl.DeleteFile;
-import com.tactfactory.harmony.updater.impl.LibraryGit;
 import com.tactfactory.harmony.updater.impl.SourceFile;
 import com.tactfactory.harmony.updater.old.IConfigFileUtil;
 import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
@@ -160,6 +159,26 @@ public class IosProjectAdapter implements IAdapterProject {
                 filePath + "Database.m",
                 false));
 
+        templatePath = this.adapter.getTemplateSourceEntityPath();
+        filePath = this.adapter.getSourcePath();
+
+        result.add(new SourceFile(
+                templatePath + "AppDelegate.m", String.format("%s/AppDelegate.m", filePath), false));
+
+        result.add(new SourceFile(
+                templatePath + "AppDelegate.h", String.format("%s/AppDelegate.h", filePath), false));
+
+        result.add(new SourceFile(templatePath + "info.plist", String.format("%s/info.plist", filePath), false));
+
+        result.add(new SourceFile(templatePath + "main.m", String.format("%s/main.m", filePath), false));
+
+        templatePath = this.adapter.getTemplateProjectPath();
+        filePath = String.format("%s/%s", Harmony.getProjectPath(), this.adapter.getPlatform());
+
+        result.add(new SourceFile(templatePath + "Podfile", String.format("%s/Podfile", filePath), false));
+
+        result.add(new SourceFile(templatePath + "gitignore", String.format("%s/.gitignore", filePath), false));
+
         return result;
     }
 
@@ -173,11 +192,11 @@ public class IosProjectAdapter implements IAdapterProject {
     public List<IUpdater> getFilesToDelete() {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
-        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "FMDB/Tests"));
-        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "FMDB/src/sample"));
-        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "FMDB/src/extra/Swift extensions"));
-        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "AFNetworking/Example"));
-        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "AFNetworking/Tests"));
+//        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "FMDB/Tests"));
+//        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "FMDB/src/sample"));
+//        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "FMDB/src/extra/Swift extensions"));
+//        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "AFNetworking/Example"));
+//        result.add(new DeleteFile(this.adapter.getSourceLibsPath() + "AFNetworking/Tests"));
 
         return result;
     }
@@ -186,31 +205,31 @@ public class IosProjectAdapter implements IAdapterProject {
     public List<IUpdater> getLibraries() {
         List<IUpdater> result = new ArrayList<IUpdater>();
 
-        String libPath = new File(String.format("%s%s",
-                this.adapter.getSourceLibsPath(), "FMDB")).getAbsolutePath();
-
-        LibraryGit updater = new LibraryGit(
-                "https://github.com/ccgus/fmdb.git",
-                libPath,
-                "v2.5",
-                "FMDB",
-                null,
-                libPath);
-
-        libPath = new File(String.format("%s%s",
-                this.adapter.getSourceLibsPath(), "AFNetworking")).getAbsolutePath();
-
-        result.add(updater);
-
-        updater = new LibraryGit(
-                "https://github.com/AFNetworking/AFNetworking.git",
-                libPath,
-                "2.5.1",
-                "AFNetworking",
-                null,
-                libPath);
-
-        result.add(updater);
+//        String libPath = new File(String.format("%s%s",
+//                this.adapter.getSourceLibsPath(), "FMDB")).getAbsolutePath();
+//
+//        LibraryGit updater = new LibraryGit(
+//                "https://github.com/ccgus/fmdb.git",
+//                libPath,
+//                "v2.5",
+//                "FMDB",
+//                null,
+//                libPath);
+//
+//        libPath = new File(String.format("%s%s",
+//                this.adapter.getSourceLibsPath(), "AFNetworking")).getAbsolutePath();
+//
+//        result.add(updater);
+//
+//        updater = new LibraryGit(
+//                "https://github.com/AFNetworking/AFNetworking.git",
+//                libPath,
+//                "2.5.1",
+//                "AFNetworking",
+//                null,
+//                libPath);
+//
+//        result.add(updater);
 
         return result;
     }
@@ -559,6 +578,29 @@ public class IosProjectAdapter implements IAdapterProject {
                 templatePath + "DataLoader.m",
                 filePath + "DataLoader.m",
                 forceOverwrite));
+
+        filePath = String.format("%s/Fixture/XMLParser/", this.adapter.getSourceDataPath());
+
+        result.add(new SourceFile(
+                templatePath + "FixtureXMLToObjectParser.h",
+                filePath + "FixtureXMLToObjectParser.h",
+                forceOverwrite));
+
+        result.add(new SourceFile(
+                templatePath + "FixtureXMLToObjectParser.m",
+                filePath + "FixtureXMLToObjectParser.m",
+                forceOverwrite));
+
+        result.add(new SourceFile(
+                templatePath + "ParseValue.h",
+                filePath + "ParseValue.h",
+                forceOverwrite));
+
+        result.add(new SourceFile(
+                templatePath + "ParseValue.m",
+                filePath + "ParseValue.m",
+                forceOverwrite));
+
         return result;
     }
 
@@ -753,7 +795,7 @@ public class IosProjectAdapter implements IAdapterProject {
                     filePath + "Utils/" + entity.getName() + "ProviderUtils.h"));
             result.add(new SourceFile(
                     templatePath + "utils/TemplateProviderUtils.m",
-                    filePath + "utils/" + entity.getName() + "ProviderUtils.m"));
+                    filePath + "Utils/" + entity.getName() + "ProviderUtils.m"));
 
             result.add(new SourceFile(
                     templatePath + "utils/base/TemplateProviderUtilsBase.h",
@@ -968,6 +1010,8 @@ public class IosProjectAdapter implements IAdapterProject {
                         entity.getName()),
                 false));
 
+        result.add(new SourceFile(templatePath + "testInfo.plist", this.adapter.getTestPath() + "info.plist", false));
+
         return result;
     }
 
@@ -1023,12 +1067,6 @@ public class IosProjectAdapter implements IAdapterProject {
     }
 
     @Override
-    public List<IUpdater> updateEnum(EnumMetadata enumMeta) {
-        // TODO Auto-generated method stub
-        return null;
-    }
-
-    @Override
     public List<IUpdater> getStaticViewFiles(String packageName,
             String viewName, ViewType type) {
         // TODO Auto-generated method stub
@@ -1062,6 +1100,23 @@ public class IosProjectAdapter implements IAdapterProject {
         result.add(new SourceFile(
                 templatePath + "Resource.h",
                 filePath + "Resource.h",
+                true));
+
+        return result;
+    }
+
+    @Override
+    public List<IUpdater> updateEnum(EnumMetadata enumMeta) {
+        List<IUpdater> result = new ArrayList<IUpdater>();
+
+        String filePath = String.format("%s/",
+                this.adapter.getSourceEntityPath());
+
+        final String templatePath = this.adapter.getTemplateSourceEntityPath();
+
+        result.add(new SourceFile(
+                templatePath + "TemplateEnum.h",
+                String.format("%s%s.h", filePath, enumMeta.getName()),
                 true));
 
         return result;

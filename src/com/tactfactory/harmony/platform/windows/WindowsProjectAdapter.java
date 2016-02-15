@@ -6,7 +6,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  */
-package com.tactfactory.harmony.platform.winphone;
+package com.tactfactory.harmony.platform.windows;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -18,20 +18,20 @@ import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.platform.IAdapterProject;
-import com.tactfactory.harmony.platform.winphone.updater.ProjectUpdater;
-import com.tactfactory.harmony.platform.winphone.updater.XmlResourcesWinphone;
-import com.tactfactory.harmony.platform.winphone.updater.ProjectUpdater.FileType;
+import com.tactfactory.harmony.platform.windows.updater.ProjectUpdater;
+import com.tactfactory.harmony.platform.windows.updater.XmlResourcesWindows;
+import com.tactfactory.harmony.platform.windows.updater.ProjectUpdater.FileType;
 import com.tactfactory.harmony.updater.IUpdater;
 import com.tactfactory.harmony.updater.impl.CopyFile;
 import com.tactfactory.harmony.updater.impl.SourceFile;
 import com.tactfactory.harmony.updater.old.IConfigFileUtil;
 import com.tactfactory.harmony.updater.old.ITranslateFileUtil;
 
-public class WinphoneProjectAdapter implements IAdapterProject {
+public class WindowsProjectAdapter implements IAdapterProject {
 
-    private final WinphoneAdapter adapter;
+    private final WindowsAdapter adapter;
 
-    public WinphoneProjectAdapter(WinphoneAdapter adapter) {
+    public WindowsProjectAdapter(WindowsAdapter adapter) {
         this.adapter = adapter;
     }
 
@@ -202,14 +202,14 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getCreateFolders() {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getCriteriasFiles() {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
@@ -276,32 +276,32 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
         if (!entity.isInternal())
         {
-	        String templatePath = this.adapter.getTemplateSourceDataPath();
-	        String filePath = this.adapter.getSourcePath() + this.adapter.getData() + "/";
+            String templatePath = this.adapter.getTemplateSourceDataPath();
+            String filePath = this.adapter.getSourcePath() + this.adapter.getData() + "/";
 
-	        result.add(new SourceFile(
-	                templatePath + "Base/TemplateSqlAdapterBase.cs",
-	                String.format("%sBase/%sSqlAdapterBase.cs",
-	                        filePath,
-	                        entity.getName()),
-	                true));
+            result.add(new SourceFile(
+                    templatePath + "Base/TemplateSqlAdapterBase.cs",
+                    String.format("%sBase/%sSqlAdapterBase.cs",
+                            filePath,
+                            entity.getName()),
+                    true));
 
-	        result.add(new ProjectUpdater(
-	                FileType.Compile,
-	                "Data/" + String.format("Base/%sSqlAdapterBase.cs",
-	                        entity.getName())));
+            result.add(new ProjectUpdater(
+                    FileType.Compile,
+                    "Data/" + String.format("Base/%sSqlAdapterBase.cs",
+                            entity.getName())));
 
-	        result.add(new SourceFile(
-	                templatePath + "TemplateSqlAdapter.cs",
-	                String.format("%s%sSqlAdapter.cs",
-	                        filePath,
-	                        entity.getName()),
-	                false));
+            result.add(new SourceFile(
+                    templatePath + "TemplateSqlAdapter.cs",
+                    String.format("%s%sSqlAdapter.cs",
+                            filePath,
+                            entity.getName()),
+                    false));
 
-	        result.add(new ProjectUpdater(
-	                FileType.Compile,
-	                "Data/" + String.format("%sSqlAdapter.cs",
-	                        entity.getName())));
+            result.add(new ProjectUpdater(
+                    FileType.Compile,
+                    "Data/" + String.format("%sSqlAdapter.cs",
+                            entity.getName())));
         }
 
         return result;
@@ -309,8 +309,8 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getActivityLibraries() {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
@@ -354,19 +354,19 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getEditView(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getShowView(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getListView(EntityMetadata entity) {
-    	List<IUpdater> result = new ArrayList<IUpdater>();
+        List<IUpdater> result = new ArrayList<IUpdater>();
 
         String templatePath = this.adapter.getTemplateSourceControlerPath();
 
@@ -406,25 +406,25 @@ public class WinphoneProjectAdapter implements IAdapterProject {
     @Override
     public List<IUpdater> getCommonView(EntityMetadata entity,
             boolean isWritable) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getViews(boolean isDate, boolean isTime) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getFixtureLibraries(String type) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getFixtureFiles(boolean forceOverwrite) {
-    	List<IUpdater> result = new ArrayList<IUpdater>();
+        List<IUpdater> result = new ArrayList<IUpdater>();
 
         String templatePath = this.adapter.getTemplateSourceFixturePath();
 
@@ -465,16 +465,17 @@ public class WinphoneProjectAdapter implements IAdapterProject {
     @Override
     public List<IUpdater> getFixtureEntityDefinitionFiles(
             String fixtureType, EntityMetadata entity) {
-    	return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getFixtureEntityFiles(boolean forceOverwrite,
             String fixtureType, EntityMetadata entity) {
-    	List<IUpdater> result = new ArrayList<IUpdater>();
+        List<IUpdater> result = new ArrayList<IUpdater>();
 
         String templatePath = this.adapter.getTemplateSourceFixturePath()
-        		+ "Loaders/";
+                + "Loaders/";
 
         String filePath = this.adapter.getSourcePath()
                 + this.adapter.getFixture() + "/Loaders/";
@@ -488,35 +489,35 @@ public class WinphoneProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Compile,
                 this.adapter.getFixture() + "/Loaders/"
-            			+ entity.getName() + "DataLoader.cs"));
+                        + entity.getName() + "DataLoader.cs"));
 
         return result;
     }
 
     @Override
-	public List<IUpdater> getFixtureAssets() {
-    	List<IUpdater> result = new ArrayList<IUpdater>();
+    public List<IUpdater> getFixtureAssets() {
+        List<IUpdater> result = new ArrayList<IUpdater>();
 
-    	File androidAssets = new File("app/android/assets/");
-    	if (androidAssets.exists() && androidAssets.isDirectory()) {
+        File androidAssets = new File("app/android/assets/");
+        if (androidAssets.exists() && androidAssets.isDirectory()) {
 
-        	File assets = new File(this.adapter.getAssetsPath() + "app");
-        	androidAssets = new File("app/android/assets/app");
+            File assets = new File(this.adapter.getAssetsPath() + "app");
+            androidAssets = new File("app/android/assets/app");
 
-        	if (androidAssets.exists() && androidAssets.isDirectory()) {
-        		for (File file : androidAssets.listFiles()) {
-        		    result.add(new CopyFile(
-        		            file,
-        		            new File(assets.getAbsolutePath()
-        		                    + "/"
-        		                    + file.getName())));
-        			result.add(new ProjectUpdater(
-        	                FileType.Content,
-        	                this.adapter.getAssets() + "/app/" + file.getName()));
-    			}
-        	}
+            if (androidAssets.exists() && androidAssets.isDirectory()) {
+                for (File file : androidAssets.listFiles()) {
+                    result.add(new CopyFile(
+                            file,
+                            new File(assets.getAbsolutePath()
+                                    + "/"
+                                    + file.getName())));
+                    result.add(new ProjectUpdater(
+                            FileType.Content,
+                            this.adapter.getAssets() + "/app/" + file.getName()));
+                }
+            }
 
-        	assets = new File(this.adapter.getAssetsPath() + "debug");
+            assets = new File(this.adapter.getAssetsPath() + "debug");
             androidAssets = new File("app/android/assets/debug");
 
 
@@ -533,7 +534,7 @@ public class WinphoneProjectAdapter implements IAdapterProject {
                 }
             }
 
-    		assets = new File(this.adapter.getAssetsPath() + "test");
+            assets = new File(this.adapter.getAssetsPath() + "test");
             androidAssets = new File("app/android/assets/test");
 
             if (androidAssets.exists() && androidAssets.isDirectory()) {
@@ -549,10 +550,10 @@ public class WinphoneProjectAdapter implements IAdapterProject {
                 }
             }
 
-    	}
+        }
 
         return result;
-	}
+    }
 
     @Override
     public List<IUpdater> getApplicationFiles() {
@@ -602,24 +603,24 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
     @Override
     public ITranslateFileUtil getTranslateFileUtil() {
-        return new XmlResourcesWinphone();
+        return new XmlResourcesWindows();
     }
 
     @Override
     public IConfigFileUtil getConfigFileUtil() {
-        return new XmlResourcesWinphone();
+        return new XmlResourcesWindows();
     }
 
     @Override
     public List<IUpdater> getProviderFiles() {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getProviderAdaptersEntityFiles(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
@@ -630,62 +631,62 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getTestProviderEntityFiles(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getTestProjectFilesToClear() {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getTestProjectCreateFolders() {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getTestProjectLibraries() {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getTestProjectFiles() {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getTestFiles() {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getTestEntityFiles(EntityMetadata entity) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getMenuFiles() {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getMenuBaseFiles() {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getMenuFiles(String menuName) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
@@ -696,7 +697,7 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getEntityFiles(EntityMetadata entity) {
-    	List<IUpdater> result = new ArrayList<IUpdater>();
+        List<IUpdater> result = new ArrayList<IUpdater>();
 
         String templatePath = this.adapter.getTemplateSourcePath() + "Entity/";
 
@@ -719,7 +720,7 @@ public class WinphoneProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> updateEnum(EnumMetadata enumMeta) {
-    	List<IUpdater> result = new ArrayList<IUpdater>();
+        List<IUpdater> result = new ArrayList<IUpdater>();
 
         String templatePath = this.adapter.getTemplateSourcePath() + "Entity/";
 
@@ -743,25 +744,25 @@ public class WinphoneProjectAdapter implements IAdapterProject {
     @Override
     public List<IUpdater> getStaticViewFiles(String packageName,
             String viewName, ViewType type) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> updateHomeActivity(String activity, String buttonId) {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getEntityBaseFiles() {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 
     @Override
     public List<IUpdater> getFilesToDelete() {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+        return result;
     }
 }
