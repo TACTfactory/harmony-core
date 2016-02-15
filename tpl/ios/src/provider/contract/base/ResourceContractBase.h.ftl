@@ -51,9 +51,9 @@
 /** Alias. */
 + (NSString *) ALIASED_COL_SYNC_UDATE;
 
-+ (NSString *) COL_HASH;
++ (NSString *) COL_UUID;
 
-+ (NSString *) ALIASED_COL_HASH;
++ (NSString *) ALIASED_COL_UUID;
 
 </#if>
 + (NSString *) COL_DISCRIMINATORCOLUMN;

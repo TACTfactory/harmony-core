@@ -22,7 +22,7 @@
 <#list curr.fields?values as field>
     <#if field.harmony_type?lower_case == "enum">
         <#assign enumClass = enums[field.enum.targetEnum] />
-#import "${InheritanceUtils.getCompleteNamespace(enumClass)}.h"
+#import "${enumClass.name}.h"
     </#if>
 </#list>
 
@@ -31,9 +31,9 @@
     // If you have enums, you may have to override this method to generate the random enums values
 + (${curr.name?cap_first}*) generateRandom {
     ${curr.name?cap_first}* ${curr.name?uncap_first} = [${curr.name?cap_first} new];
-        <#list curr.relations as relation> <#if relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne"> <#if dataLoader?? && !dataLoader>
+        <#list curr.relations as relation> <#if relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne">
     ${relation.relation.targetEntity}* ${relation.relation.targetEntity?uncap_first} = [${relation.relation.targetEntity}TestUtils generateRandom];
-        </#if></#if></#list>
+        </#if></#list>
         <#if (inherited)>
     ${curr.inheritance.superclass.name?cap_first}* ${curr.inheritance.superclass.name?uncap_first} = [${curr.inheritance.superclass.name?cap_first}TestUtils generateRandom];
             <#list entities[curr.inheritance.superclass.name].fields?values as field>
@@ -66,7 +66,7 @@
     ${curr.name?uncap_first}.${field.name?uncap_first} = 0.1
                             <#break />
                         <#case "short">
-    ${curr.name?uncap_first}.${field.name?uncap_first} = 3
+    ${curr.name?uncap_first}.${field.name?uncap_first} = 3;
                             <#break />
                         <#case "char">
                         <#case "character">
@@ -91,14 +91,12 @@
     //TODO : Manage field type : ${field.harmony_type} / ${FieldsUtils.getObjectiveType(field)}
                     </#switch>
                 <#else>
-                     <#if dataLoader?? && dataLoader>
-                        <#if field.relation.type=="ManyToOne">
-    ${curr.name?uncap_first}.${field.name?uncap_first} = [${field.relation.targetEntity?cap_first}TestUtilsBase generateRandom];
-						<#elseif field.relation.type=="OneToMany" || field.relation.type=="ManyToMany" >
-	${curr.name?uncap_first}.${field.name?uncap_first} = [NSArray new];
-						<#else>
-	${curr.name?uncap_first}.${field.name?uncap_first} = [${field.relation.targetEntity?cap_first} new];
-                        </#if>
+                    <#if field.relation.type=="ManyToOne" || field.relation.type=="OneToOne" >
+    ${curr.name?uncap_first}.${field.name?uncap_first} = ${field.relation.targetEntity?uncap_first};
+                    <#elseif field.relation.type=="OneToMany" || field.relation.type=="ManyToMany" >
+    ${curr.name?uncap_first}.${field.name?uncap_first} = [NSArray new];
+                    <#else>
+    ${curr.name?uncap_first}.${field.name?uncap_first} = [${field.relation.targetEntity?cap_first} new];
                     </#if>
                 </#if>
             </#if>
@@ -109,7 +107,7 @@
 
 + (bool) equals:(${curr.name?cap_first}*) ${curr.name?uncap_first}1
     withCompare:(${curr.name?cap_first}*) ${curr.name?uncap_first}2 {
-    
+
         <#if curr.inheritance?? && curr.inheritance.superclass?? && entities[curr.inheritance.superclass.name]??>
     bool result = [${curr.inheritance.superclass.name}TestUtils equals:${curr.name?uncap_first}1 withCompare:${curr.name?uncap_first}2];
         <#else>
@@ -152,7 +150,7 @@
             NSAssert(${curr.name?uncap_first}1.${field.name?uncap_first}.${entities[field.relation.targetEntity].ids[0].name?uncap_first} ==
                     ${curr.name?uncap_first}2.${field.name?uncap_first}.${entities[field.relation.targetEntity].ids[0].name?uncap_first}, @"author are not equals");
             <#else>
-            assert(${curr.name?uncap_first}1.${field.name?uncap_first}.count == 
+            assert(${curr.name?uncap_first}1.${field.name?uncap_first}.count ==
                 ${curr.name?uncap_first}2.${field.name?uncap_first}.count);
             for (${field.relation.targetEntity?cap_first} *${field.name?uncap_first}1 in ${curr.name?uncap_first}1.${field.name?uncap_first}) {
                 bool found = false;
@@ -163,13 +161,13 @@
                         found = true;
                     }
                 }
-                    
+
             NSString* msg = [NSString stringWithFormat:
                             @"Couldn't find associated ${field.name} (<#list target.ids as id>${id.name} = %d<#if id_has_next>, </#if></#list>) in ${curr.name} (<#list curr_ids as id>${id.name} = %d<#if id_has_next>,</#if></#list>)",
                             <#list IdsUtils.getAllIdsGetters(target) as id>${field.name?uncap_first}1.${id},
                             </#list><#list IdsUtils.getAllIdsGetters(curr) as id>${curr.name?uncap_first}1.${id}<#if id_has_next>,
                             </#if></#list>];
-                
+
             NSAssert(found, msg);
             }
                 </#if>

@@ -361,16 +361,16 @@ public class IosAdapter extends BaseAdapter {
         return String.format("%s%s/%s/",
                 Harmony.getProjectPath(),
                 this.getPlatform(),
-                this.getApplicationMetadata().getName().toLowerCase());
+                this.getApplicationMetadata().getName());
     }
 
-    /**
-     * Get the test path.
-     * @return The test path
-     */
-    public String getSourceTestPath() {
-        return String.format("%s/%s/",
-                this.getSourcePath(),
-                "Test");
+    @Override
+    public String getTestPath() {
+        return String.format("%s%s/%s%s/",
+                Harmony.getProjectPath(),
+                this.getPlatform(),
+                this.getApplicationMetadata().getName(),
+                "Tests");
     }
+
 }

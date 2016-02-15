@@ -51,7 +51,7 @@ public abstract class ResourceContractBase {
 
     /** sync_dtag. */
     public static final String COL_SYNC_DTAG =
-            "sync_dtag";
+            "sync_dTag";
     /** Alias. */
     public static final String ALIASED_COL_SYNC_DTAG =
             ResourceContract.TABLE_NAME + "." + COL_SYNC_DTAG;
@@ -64,11 +64,11 @@ public abstract class ResourceContractBase {
             ResourceContract.TABLE_NAME + "." + COL_SYNC_UDATE;
 
     /** hash. */
-    public static final String COL_HASH =
+    public static final String COL_UUID =
             "hash";
     /** Alias. */
-    public static final String ALIASED_COL_HASH =
-            ResourceContract.TABLE_NAME + "." + COL_HASH;
+    public static final String ALIASED_COL_UUID =
+            ResourceContract.TABLE_NAME + "." + COL_UUID;
 </#if>
 
     /** Discriminator column. */
@@ -90,7 +90,7 @@ public abstract class ResourceContractBase {
             ResourceContract.COL_SERVERID,
             ResourceContract.COL_SYNC_DTAG,
             ResourceContract.COL_SYNC_UDATE,
-            ResourceContract.COL_HASH</#if>
+            ResourceContract.COL_UUID</#if>
     };
 
     /** Global Fields. */
@@ -100,7 +100,7 @@ public abstract class ResourceContractBase {
             ResourceContract.ALIASED_COL_SERVERID,
             ResourceContract.ALIASED_COL_SYNC_DTAG,
             ResourceContract.ALIASED_COL_SYNC_UDATE,
-            ResourceContract.ALIASED_COL_HASH</#if>
+            ResourceContract.ALIASED_COL_UUID</#if>
     };
 
 
@@ -139,11 +139,11 @@ public abstract class ResourceContractBase {
                 result.put(ResourceContract.COL_SYNC_UDATE, (String) null);
             }
 
-            if (item.getHash() != null) {
-                result.put(ResourceContract.COL_HASH,
-                    item.getHash());
+            if (item.getUuid() != null) {
+                result.put(ResourceContract.COL_UUID,
+                    item.getUuid());
             } else {
-                result.put(ResourceContract.COL_HASH, (String) null);
+                result.put(ResourceContract.COL_UUID, (String) null);
             }</#if>
 
         return result;
@@ -202,9 +202,9 @@ public abstract class ResourceContractBase {
                 }
             }
 
-            index = cursor.getColumnIndexOrThrow(ResourceContract.COL_HASH);
+            index = cursor.getColumnIndexOrThrow(ResourceContract.COL_UUID);
             if (!cursor.isNull(index)) {
-                result.setHash(
+                result.setUuid(
                     cursor.getString(index));
             }</#if>
 

@@ -43,26 +43,25 @@
 }
 
 - (NSArray *) getAll {
-    __block NSArray *result = nil;
+    NSArray *result = nil;
 
-    NSString *query = [NSString stringWithFormat:@"SELECT %@ FROM %@",
-                       [[self getCols] componentsJoinedByString:@", "],
-                       [self getJoinedTableName]];
-    
-    __block FMDatabaseQueue *queue = [self->mBaseHelper getQueue];
+    Cursor *cursor = [self getAllCursor];
 
-    [queue inDatabase:^(FMDatabase *db) {
-        Cursor *cursor;
-        FMResultSet *rs = [db executeQuery:query];
+    result = [self cursorToItems:cursor];
 
-        cursor = [[Cursor alloc] initWithFMResultSet:rs andFMDatabaseQueue:queue];
-
-        result = [self cursorToItems:cursor];
-
-        [cursor close];
-    }];
+    [cursor close];
 
     return result;
+}
+
+- (Cursor *) getAllCursor {
+    return [self query:[self getJoinedTableName]
+        withProjection:[self getCols]
+       withWhereClause:nil
+         withWhereArgs:nil
+           withGroupBy:nil
+            withHaving:nil
+           withOrderBy:nil];
 }
 
 - (Cursor *) query:(NSString *) tables
@@ -131,21 +130,28 @@
 #ifdef DEBUG
     NSLog(@"Insert DB(%@)", self.getTableName);
 #endif
-    
+
     [[self->mBaseHelper getQueue] inDatabase:^(FMDatabase *db) {
         NSArray *keys = [values allKeys];
         NSMutableArray *prefixedKeys = [NSMutableArray array];
+        NSDictionary *valuesDictionary = values;
 
         [keys enumerateObjectsUsingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
             [prefixedKeys addObject:[NSString stringWithFormat:@":%@",obj]];
         }];
+
+        if (keys.count ==0 && nullColumnHack) {
+            keys = [NSArray arrayWithObject:nullColumnHack];
+            prefixedKeys = [NSMutableArray arrayWithObject:[NSString stringWithFormat:@":%@", nullColumnHack]];
+            valuesDictionary = [NSDictionary dictionaryWithObject:[NSNull null] forKey:nullColumnHack];
+        }
 
         NSString *query = [NSString stringWithFormat:@"INSERT INTO %@ (%@) VALUES (%@)",
                            [self getTableName],
                            [keys componentsJoinedByString:@", "],
                            [prefixedKeys componentsJoinedByString:@", "]];
 
-        bool insert = [db executeUpdate:query withParameterDictionary:values];
+        bool insert = [db executeUpdate:query withParameterDictionary:valuesDictionary];
 
         if (insert) {
             result = [db lastInsertRowId];
@@ -242,7 +248,7 @@
 
 - (DeleteBatch *) getDeleteBatch:(id) item
                  withWhereClause:(NSString *) whereClause
-                   withWhereArgs:(NSArray *) whereArgs {    
+                   withWhereArgs:(NSArray *) whereArgs {
 
     return [[DeleteBatch alloc] initWithItemValues:nil
                                      withTableName:[self getTableName]

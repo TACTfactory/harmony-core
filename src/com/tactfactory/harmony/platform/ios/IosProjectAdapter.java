@@ -168,7 +168,16 @@ public class IosProjectAdapter implements IAdapterProject {
         result.add(new SourceFile(
                 templatePath + "AppDelegate.h", String.format("%s/AppDelegate.h", filePath), false));
 
+        result.add(new SourceFile(templatePath + "info.plist", String.format("%s/info.plist", filePath), false));
+
+        result.add(new SourceFile(templatePath + "main.m", String.format("%s/main.m", filePath), false));
+
+        templatePath = this.adapter.getTemplateProjectPath();
+        filePath = String.format("%s/%s", Harmony.getProjectPath(), this.adapter.getPlatform());
+
         result.add(new SourceFile(templatePath + "Podfile", String.format("%s/Podfile", filePath), false));
+
+        result.add(new SourceFile(templatePath + "gitignore", String.format("%s/.gitignore", filePath), false));
 
         return result;
     }
@@ -786,7 +795,7 @@ public class IosProjectAdapter implements IAdapterProject {
                     filePath + "Utils/" + entity.getName() + "ProviderUtils.h"));
             result.add(new SourceFile(
                     templatePath + "utils/TemplateProviderUtils.m",
-                    filePath + "utils/" + entity.getName() + "ProviderUtils.m"));
+                    filePath + "Utils/" + entity.getName() + "ProviderUtils.m"));
 
             result.add(new SourceFile(
                     templatePath + "utils/base/TemplateProviderUtilsBase.h",
@@ -1000,6 +1009,8 @@ public class IosProjectAdapter implements IAdapterProject {
                         filePath,
                         entity.getName()),
                 false));
+
+        result.add(new SourceFile(templatePath + "testInfo.plist", this.adapter.getTestPath() + "info.plist", false));
 
         return result;
     }

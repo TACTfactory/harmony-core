@@ -76,7 +76,7 @@ public abstract class ResourceSQLiteAdapterBase
          + ResourceContract.COL_SERVERID    + " integer,"
          + ResourceContract.COL_SYNC_DTAG    + " boolean NOT NULL,"
          + ResourceContract.COL_SYNC_UDATE    + " datetime,"
-         + ResourceContract.COL_HASH    + " VARCHAR,"</#if>
+         + ResourceContract.COL_UUID    + " VARCHAR,"</#if>
          + ResourceContract.COL_DISCRIMINATORCOLUMN + "  VARCHAR"
         <#list entities?values as entity>
             <#if ((entity.resource) && (entity.fields?size>1))>

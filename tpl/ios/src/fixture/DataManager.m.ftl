@@ -9,19 +9,30 @@
 
 <#list entities?values as entity>
     <#if (((entity.fields?size>0) || (entity.inheritance??)) && !(entity.internal))>
-static ${entity.name?cap_first}SQLiteAdapter *${entity.name?upper_case};
+static NSString *${entity.name?upper_case};
     </#if>
 </#list>
 
-@implementation DataManager
+@implementation DataManager {
+    @private
+    NSMutableDictionary *adapters;
+}
 
 - (id) init {
     if (self = [super init]) {
 <#list entities?values as entity>
-    <#if (((entity.fields?size>0)  || (entity.inheritance??)) && !(entity.internal))>
-        ${entity.name?upper_case} = [${entity.name?cap_first}SQLiteAdapter new];
+    <#if (((entity.fields?size>0) || (entity.inheritance??)) && !(entity.internal))>
+        ${entity.name?upper_case} = @"${entity.name?cap_first}";
     </#if>
 </#list>
+
+    self->adapters = [NSMutableDictionary new];
+<#list entities?values as entity>
+    <#if (((entity.fields?size>0) || (entity.inheritance??)) && !(entity.internal))>
+        [self->adapters setObject:[${entity.name?cap_first}SQLiteAdapter new] forKey:${entity.name?upper_case}];
+    </#if>
+</#list>
+
     }
 
     return self;
@@ -30,26 +41,23 @@ static ${entity.name?cap_first}SQLiteAdapter *${entity.name?upper_case};
 - (int) persist:(id) item {
     int result = -1;
 
-<#list entities?values as entity>
-    <#if (((entity.fields?size>0)  || (entity.inheritance??)) && !(entity.internal))>
-    if ([item isKindOfClass:[${entity.name?cap_first} class]]) {
-        result = (int) [${entity.name?upper_case} insert:item];
-    }
+    SQLiteAdapterBase *adapter = [self getRepository:item];
 
-    </#if>
-</#list>
+    result = (int) [adapter insert:item];
+
     return result;
 }
 
 - (void) remove:(id) item {
-<#list entities?values as entity>
-    <#if (((entity.fields?size>0)  || (entity.inheritance??)) && !(entity.internal))>
-    if ([item isKindOfClass:[${entity.name?cap_first} class]]) {
-        [${entity.name?upper_case} remove:item];
-    }
+    SQLiteAdapterBase *adapter = [self getRepository:item];
 
-    </#if>
-</#list>
+    [adapter remove:item];
+}
+
+- (SQLiteAdapterBase *) getRepository:(id) item {
+    NSString *className = NSStringFromClass([item class]);
+
+    return [self->adapters valueForKey:className];
 }
 
 @end

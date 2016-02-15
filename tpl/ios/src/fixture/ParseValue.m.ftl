@@ -48,4 +48,8 @@
     return (short)[self intValue];
 }
 
+- (unsigned long long) unsignedLongLongValue {
+    return [self longLongValue];
+}
+
 @end

@@ -218,6 +218,9 @@
         <#case "char">
             <#local result = "char" />
             <#break />
+        <#case "character">
+            <#local result = "character" />
+            <#break />
         <#case "long">
             <#local result = "long" />
             <#break />
