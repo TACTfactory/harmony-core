@@ -133,4 +133,13 @@ public class ProjectMetadataFactory {
             entity.getIds().put(fieldName, entity.getFields().get(fieldName));
         }
     }
+
+    /**
+     * Generate the test metadata.
+     *
+     * @return The test metadata
+     */
+    public ApplicationMetadata getTestMetadata() {
+        return null;
+    }
 }

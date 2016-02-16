@@ -12,7 +12,9 @@ import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 
 import org.junit.Rule;
 import org.junit.rules.TestRule;
@@ -26,6 +28,7 @@ import com.tactfactory.harmony.HarmonyContext;
 import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.test.factory.DemactFactory;
 import com.tactfactory.harmony.test.factory.ManagementFactory;
+import com.tactfactory.harmony.test.factory.ProjectMetadataFactory;
 import com.tactfactory.harmony.test.factory.TracScanFactory;
 import com.tactfactory.harmony.utils.ConsoleUtils;
 import com.tactfactory.harmony.utils.TactFileUtils;
@@ -64,13 +67,13 @@ public abstract class CommonTest {
      * @throws Exception
      */
     public CommonTest(ApplicationMetadata currentMetadata) throws Exception {
-            this.currentMetadata = currentMetadata;
+        this.currentMetadata = currentMetadata;
 
-            if (!this.currentMetadata.equals(oldMetadata)) {
-                this.setUpBeforeNewParameter();
-            }
+        if (!this.currentMetadata.equals(oldMetadata)) {
+            this.setUpBeforeNewParameter();
+        }
 
-            CommonTest.oldMetadata = this.currentMetadata;
+        CommonTest.oldMetadata = this.currentMetadata;
     }
 
     /**
@@ -94,26 +97,22 @@ public abstract class CommonTest {
         CommonTest.cleanAndroidFolder();
 
         // Project test config
-        ApplicationMetadata.INSTANCE.setName(
-                this.currentMetadata.getName());
+        ApplicationMetadata.INSTANCE.setName(this.currentMetadata.getName());
 
-        ApplicationMetadata.INSTANCE.setProjectNameSpace(
-                this.currentMetadata.getProjectNameSpace());
+        ApplicationMetadata.INSTANCE.setProjectNameSpace(this.currentMetadata.getProjectNameSpace());
 
         harmony = Harmony.getInstance();
 
         if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
-            final String localProp =
-                    String.format("%s/%s",
-                            Harmony.getProjectAndroidPath(),
-                            "local.properties");
+            final String localProp =String.format(
+                    "%s/%s",
+                    Harmony.getProjectAndroidPath(),
+                    "local.properties");
 
-            ApplicationMetadata.setAndroidSdkPath(
-                    HarmonyContext.getSdkDirFromPropertiesFile(localProp));
+            ApplicationMetadata.setAndroidSdkPath(HarmonyContext.getSdkDirFromPropertiesFile(localProp));
 
             if (ApplicationMetadata.getAndroidSdkPath() == null) {
-                ApplicationMetadata.setAndroidSdkPath(
-                        "/opt/android-sdk-linux_86/");
+                ApplicationMetadata.setAndroidSdkPath("/opt/android-sdk-linux_86/");
             }
         }
     }
@@ -171,13 +170,12 @@ public abstract class CommonTest {
         harmony = Harmony.getInstance();
 
         if (Strings.isNullOrEmpty(ApplicationMetadata.getAndroidSdkPath())) {
-            final String localProp =
-                    String.format("%s/%s",
-                            Harmony.getProjectAndroidPath(),
-                            "local.properties");
+            final String localProp = String.format(
+                    "%s/%s",
+                    Harmony.getProjectAndroidPath(),
+                    "local.properties");
 
-            ApplicationMetadata.setAndroidSdkPath(
-                    HarmonyContext.getSdkDirFromPropertiesFile(localProp));
+            ApplicationMetadata.setAndroidSdkPath(HarmonyContext.getSdkDirFromPropertiesFile(localProp));
 
             if (ApplicationMetadata.getAndroidSdkPath() == null) {
                 ApplicationMetadata.setAndroidSdkPath("/opt/android-sdk-linux_86/");
@@ -212,21 +210,19 @@ public abstract class CommonTest {
      * Copy the test entities in the test project.
      */
     protected static void makeEntities() {
-        final String pathNameSpace =
-                ApplicationMetadata.INSTANCE.getProjectNameSpace()
-                    .replaceAll("\\.", "/");
+        final String pathNameSpace = ApplicationMetadata.INSTANCE.getProjectNameSpace().replaceAll("\\.", "/");
 
-        final String srcDir =
-                String.format("%s/tact-core/resources/%s/%s/",
-                        Harmony.getBundlePath(),
-                        pathNameSpace,
-                        "entity");
+        final String srcDir = String.format(
+                "%s/tact-core/resources/%s/%s/",
+                Harmony.getBundlePath(),
+                pathNameSpace,
+                "entity");
 
-        final String destDir =
-                String.format("%s/src/%s/%s/",
-                        Harmony.getProjectAndroidPath(),
-                        pathNameSpace,
-                        "entity");
+        final String destDir = String.format(
+                "%s/src/%s/%s/",
+                Harmony.getProjectAndroidPath(),
+                pathNameSpace,
+                "entity");
 
         ConsoleUtils.display(destDir);
 
@@ -242,11 +238,11 @@ public abstract class CommonTest {
      * @param fileName The file name
      */
     protected static void hasFindFile(final String fileName) {
-        final File file =
-                new File(
-                    String.format("%s/%s",
-                        Harmony.getProjectPath(),
-                        fileName));
+        final File file = new File(String.format(
+                "%s/%s",
+                Harmony.getProjectPath(),
+                fileName));
+
         ConsoleUtils.display("Testing existence of " + file.getAbsolutePath());
         assertTrue(file.getAbsolutePath() + " does not exist", file.exists());
     }
@@ -266,7 +262,7 @@ public abstract class CommonTest {
      */
     protected static void cleanAndroidFolder(boolean keepLibs) {
         ConsoleUtils.display(
-                  "################################  "
+                  "################################"
                 + "Clean Android Folder !! "
                 + "################################");
 
@@ -275,14 +271,13 @@ public abstract class CommonTest {
         if (keepLibs) {
             ConsoleUtils.display("Keep libraries !");
             File[] files = dirproj.listFiles();
+
             if (files != null) {
                 for (File file : files) {
                     if (file.isFile()) {
                         file.delete();
-                    } else {
-                        if (!file.getName().equals("libs")) {
-                            TactFileUtils.deleteRecursive(file);
-                        }
+                    } else if (!file.getName().equals("libs")) {
+                        TactFileUtils.deleteRecursive(file);
                     }
                 }
             }
@@ -300,21 +295,74 @@ public abstract class CommonTest {
      */
     @Parameters
     public static Collection<Object[]> getParameters() {
-        Collection<Object[]> result = new ArrayList<Object[]>();
+        return new CommonTestConfiguration().getParameters();
+    }
 
-        result.add(new ApplicationMetadata[] {
-                TracScanFactory.generateTestMetadata()
-        });
+    /**
+     * Common Test Configuration class wich expose parameters for test runner.
+     *
+     * @author Erwan Le Huitouze (erwan.lehuitouze@tactfactory.com)
+     *
+     */
+    protected static class CommonTestConfiguration {
 
+        /**
+         * @return List of Metadata used by test runner.
+         */
+        public final Collection<Object[]> getParameters() {
+            Collection<Object[]> result = new ArrayList<Object[]>();
 
-        result.add(new ApplicationMetadata[] {
-                DemactFactory.generateTestMetadata()
-        });
+            String property = System.getProperty("factories");
+            List<String> factoriesToLoad = null;
+            List<Class<? extends ProjectMetadataFactory>> factories = this.getFactories();
 
-        result.add(new ApplicationMetadata[] {
-            ManagementFactory.generateTestMetadata()
-        });
+            if (property != null) {
+                factoriesToLoad = new ArrayList<String>();
+                factoriesToLoad = Arrays.asList(property.split(":"));
 
-        return result;
+                if (factoriesToLoad.isEmpty()) {
+                    factoriesToLoad = null;
+                }
+            }
+
+            if (factories != null && factories.size() > 0) {
+                for (Class<? extends ProjectMetadataFactory> factory : factories) {
+                    if (factoriesToLoad == null
+                            || factoriesToLoad.contains(factory.getSimpleName())
+                            || factoriesToLoad.contains(factory.getName())) {
+
+                        ApplicationMetadata metadata = null;
+
+                        try {
+                            metadata = factory.newInstance().getTestMetadata();
+                        } catch (InstantiationException e) {
+                            e.printStackTrace();
+                        } catch (IllegalAccessException e) {
+                            e.printStackTrace();
+                        }
+
+                        if (metadata != null) {
+                            result.add(new ApplicationMetadata[] { metadata });
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        /**
+         * @return List of {@link ProjectMetadataFactory} available for tests.
+         */
+        protected List<Class<? extends ProjectMetadataFactory>> getFactories() {
+            List<Class<? extends ProjectMetadataFactory>> result =
+                    new ArrayList<Class<? extends ProjectMetadataFactory>>();
+
+            result.add(TracScanFactory.class);
+            result.add(DemactFactory.class);
+            result.add(ManagementFactory.class);
+
+            return result;
+        }
     }
 }

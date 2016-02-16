@@ -23,8 +23,20 @@ public class ManagementFactory extends ProjectMetadataFactory {
      * Generate the test metadata.
      *
      * @return The test metadata
+     *
+     * @deprecated Use {@link #getTestMetadata()} instance method
      */
     public static ApplicationMetadata generateTestMetadata() {
+        return new ManagementFactory().getTestMetadata();
+    }
+
+    /**
+     * Generate the test metadata.
+     *
+     * @return The test metadata
+     */
+    @Override
+    public ApplicationMetadata getTestMetadata() {
         ApplicationMetadata management = new ApplicationMetadata();
         management.setName("Management");
         management.setProjectNameSpace("com/tactfactory/harmony/test/management");
