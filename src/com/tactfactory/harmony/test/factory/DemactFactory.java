@@ -26,8 +26,20 @@ public class DemactFactory extends ProjectMetadataFactory {
      * Generate the test metadata.
      *
      * @return The test metadata
+     *
+     * @deprecated Use {@link #getTestMetadata()} instance method
      */
     public static ApplicationMetadata generateTestMetadata() {
+        return new DemactFactory().getTestMetadata();
+    }
+
+    /**
+     * Generate the test metadata.
+     *
+     * @return The test metadata
+     */
+    @Override
+    public ApplicationMetadata getTestMetadata() {
         ApplicationMetadata demact = new ApplicationMetadata();
         demact.setName("demact");
         demact.setProjectNameSpace("com/tactfactory/harmony/test/demact");

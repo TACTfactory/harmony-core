@@ -20,8 +20,20 @@ public class TracScanFactory extends ProjectMetadataFactory {
      * Generate the test metadata.
      *
      * @return The test metadata
+     *
+     * @deprecated Use {@link #getTestMetadata()} instance method
      */
     public static ApplicationMetadata generateTestMetadata() {
+        return new TracScanFactory().getTestMetadata();
+    }
+
+    /**
+     * Generate the test metadata.
+     *
+     * @return The test metadata
+     */
+    @Override
+    public ApplicationMetadata getTestMetadata() {
         ApplicationMetadata tracscan = new ApplicationMetadata();
         tracscan.setName("tracsan");
         tracscan.setProjectNameSpace("com/tactfactory/tracscan");
