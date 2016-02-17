@@ -54,11 +54,11 @@ public class DemactFactory extends ProjectMetadataFactory {
         EntityMetadata client = new EntityMetadata();
         client.setName("Client");
 
-        EntityMetadata category = new EntityMetadata();
-        category.setName("Category");
+        EntityMetadata group = new EntityMetadata();
+        group.setName("Group");
 
-        EntityMetadata categoryToComment = new EntityMetadata();
-        categoryToComment.setName("CategoryToComment");
+        EntityMetadata groupToComment = new EntityMetadata();
+        groupToComment.setName("GroupToComment");
 
         EntityMetadata comment = new EntityMetadata();
         comment.setName("Comment");
@@ -81,8 +81,8 @@ public class DemactFactory extends ProjectMetadataFactory {
         EntityMetadata emptyEntity = new EntityMetadata();
         emptyEntity.setName("EmptyEntity");
 
-        EntityMetadata postToCategory = new EntityMetadata();
-        postToCategory.setName("PosttoCategory");
+        EntityMetadata postToGroup = new EntityMetadata();
+        postToGroup.setName("PosttoGroup");
 
         // Set entities attributes
         hiddenEntity.setCreateAction(false);
@@ -90,12 +90,12 @@ public class DemactFactory extends ProjectMetadataFactory {
         hiddenEntity.setEditAction(false);
         hiddenEntity.setShowAction(false);
         hiddenEntity.setDeleteAction(false);
-        postToCategory.setInternal(true);
-        postToCategory.setCreateAction(false);
-        postToCategory.setListAction(false);
-        postToCategory.setEditAction(false);
-        postToCategory.setShowAction(false);
-        postToCategory.setDeleteAction(false);
+        postToGroup.setInternal(true);
+        postToGroup.setCreateAction(false);
+        postToGroup.setListAction(false);
+        postToGroup.setEditAction(false);
+        postToGroup.setShowAction(false);
+        postToGroup.setDeleteAction(false);
         userToUser.setInternal(true);
         userToUser.setCreateAction(false);
         userToUser.setListAction(false);
@@ -106,21 +106,21 @@ public class DemactFactory extends ProjectMetadataFactory {
         user.setDeleteAction(false);
         comment.setEditAction(false);
         comment.setShowAction(false);
-        categoryToComment.setListAction(false);
+        groupToComment.setListAction(false);
 
         demact.getEntities().put(user.getName(), user);
         demact.getEntities().put(userToUser.getName(), userToUser);
         demact.getEntities().put(client.getName(), client);
         demact.getEntities().put(comment.getName(), comment);
-        demact.getEntities().put(category.getName(), category);
-        demact.getEntities().put(categoryToComment.getName(), categoryToComment);
+        demact.getEntities().put(group.getName(), group);
+        demact.getEntities().put(groupToComment.getName(), groupToComment);
         demact.getEntities().put(post.getName(), post);
         demact.getEntities().put(emptyEntity.getName(), emptyEntity);
         demact.getEntities().put(simpleEntity.getName(), simpleEntity);
         demact.getEntities().put(userGroup.getName(), userGroup);
         demact.getEntities().put(viewComponent.getName(), viewComponent);
         demact.getEntities().put(hiddenEntity.getName(), hiddenEntity);
-        demact.getEntities().put(postToCategory.getName(), postToCategory);
+        demact.getEntities().put(postToGroup.getName(), postToGroup);
 
         // Set Implements
         user.getImplementTypes().add(CLASS_CLONEABLE);
@@ -150,8 +150,8 @@ public class DemactFactory extends ProjectMetadataFactory {
         ProjectMetadataFactory.generateIdField(user, "id");
         ProjectMetadataFactory.generateIdField(post, "id");
         ProjectMetadataFactory.generateIdField(comment, "id");
-        ProjectMetadataFactory.generateIdField(category, "id");
-        ProjectMetadataFactory.generateIdField(categoryToComment, "id");
+        ProjectMetadataFactory.generateIdField(group, "id");
+        ProjectMetadataFactory.generateIdField(groupToComment, "id");
         ProjectMetadataFactory.generateIdField(userGroup, "id");
         ProjectMetadataFactory.generateIdField(viewComponent, "id");
         ProjectMetadataFactory.generateIdField(hiddenEntity, "id");
@@ -194,23 +194,23 @@ public class DemactFactory extends ProjectMetadataFactory {
         ProjectMetadataFactory.generateField(
                 comment, "validate", false, false);
         ProjectMetadataFactory.generateField(
-                comment, "categories", false, false);
+                comment, "groups", false, false);
 
         ProjectMetadataFactory.generateField(
-                category, "name", false, false);
+                group, "name", false, false);
         ProjectMetadataFactory.generateField(
-                category, "comments", false, false);
+                group, "comments", false, false);
 
         ProjectMetadataFactory.generateField(
-                categoryToComment, "displayName", false, false);
+                groupToComment, "displayName", false, false);
         ProjectMetadataFactory.generateField(
-                categoryToComment, "category", false, false);
+                groupToComment, "group", false, false);
         ProjectMetadataFactory.generateField(
-                categoryToComment,
-                "CommentcategoriesInternal",
+                groupToComment,
+                "CommentgroupsInternal",
                 true,
                 false,
-                "Comment_categories_internal");
+                "Comment_groups_internal");
 
         ProjectMetadataFactory.generateField(
                 post, "title", false, false);
@@ -221,7 +221,7 @@ public class DemactFactory extends ProjectMetadataFactory {
         ProjectMetadataFactory.generateField(
                 post, "comments", false, false);
         ProjectMetadataFactory.generateField(
-                post, "categories", false, false);
+                post, "groups", false, false);
         ProjectMetadataFactory.generateField(
                 post, "createdAt", false, false, "created_at");
         ProjectMetadataFactory.generateField(
@@ -277,11 +277,11 @@ public class DemactFactory extends ProjectMetadataFactory {
                 hiddenEntity, "content", false, false);
 
         ProjectMetadataFactory.generateField(
-                postToCategory, "PostInternalId", false, false);
+                postToGroup, "PostInternalId", false, false);
         ProjectMetadataFactory.generateField(
-                postToCategory, "categories", false, false);
-        DemactFactory.setFieldAsId(postToCategory, "categories");
-        DemactFactory.setFieldAsId(postToCategory, "PostInternalId");
+                postToGroup, "groups", false, false);
+        DemactFactory.setFieldAsId(postToGroup, "groups");
+        DemactFactory.setFieldAsId(postToGroup, "PostInternalId");
 
         ProjectMetadataFactory.generateField(
                 userToUser, "UserInternalId", false, false);
@@ -327,7 +327,7 @@ public class DemactFactory extends ProjectMetadataFactory {
                 CLASS_TYPE,
                 CLASS_VIEW);
 
-        DemactFactory.addImports(category,
+        DemactFactory.addImports(group,
                 CLASS_COLUMN,
                 CLASS_ENTITY,
                 CLASS_ID,
@@ -335,7 +335,7 @@ public class DemactFactory extends ProjectMetadataFactory {
                 CLASS_GENERATED_VALUE_STRATEGY,
                 CLASS_ONE_TO_MANY);
 
-        DemactFactory.addImports(categoryToComment,
+        DemactFactory.addImports(groupToComment,
                 CLASS_COLUMN,
                 CLASS_ENTITY,
                 CLASS_ID,
@@ -400,18 +400,18 @@ public class DemactFactory extends ProjectMetadataFactory {
 
         for (EntityMetadata entity : demact.getEntities().values()) {
             if (!entity.isInternal()) {
-                ManagementFactory.addImports(
+                DemactFactory.addImports(
                         entity,
                         CLASS_SERIALIZABLE,
                         CLASS_PARCELABLE,
                         CLASS_PARCEL);
 
-                ManagementFactory.addImplements(
+                DemactFactory.addImplements(
                         entity,
                         CLASS_SERIALIZABLE,
                         CLASS_PARCELABLE);
 
-                ManagementFactory.addImports(
+                DemactFactory.addImports(
                         entity,
                         CLASS_LIST,
                         CLASS_ARRAYLIST);

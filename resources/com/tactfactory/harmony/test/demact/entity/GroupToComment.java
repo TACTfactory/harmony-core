@@ -16,20 +16,20 @@ import com.tactfactory.harmony.annotation.View;
 
 @Entity
 @View(list = false)
-/** Link entity between category and comment. */
-public class CategoryToComment {
+/** Link entity between group and comment. */
+public class GroupToComment {
 
 	@Id
 	@Column
 	/** Entity's technical id. */
 	private int id;
 
-	/** The displayed name of the category. */
+	/** The displayed name of the group. */
 	@Column
 	private String displayName;
 
-	/** The category in which this CategoryToComment is. */
+	/** The group in which this GroupToComment is. */
 	@ManyToOne(inversedBy="comments")
-	private Category category;
+	private Group group;
 }
 

@@ -3,10 +3,10 @@ Post:
       id: 0
       title: "TEST - Post 1"
       content: "TEST - Je dirais meme plus..."
-      categories: 
-         category: HiTech
+      groups:
+         group: HiTech
       owner: TEST - Dupond
-      comments: 
+      comments:
          comment : TEST - Comment1
       createdAt: "2001-12-15 2:59:43.10"
       updatedAt: "2001-12-15 2:59:43.10"
@@ -15,10 +15,10 @@ Post:
       id: 0
       title: "TEST - Post 2"
       content: "TEST - Bachibouzouk"
-      categories: 
-         category: HiTech
+      groups:
+         group: HiTech
       owner: TEST - Haddock
-      comments: 
+      comments:
          comment : TEST - Comment2
       createdAt: "2001-12-15 2:59:43.10"
       updatedAt: "2001-12-15 2:59:43.10"
@@ -27,10 +27,10 @@ Post:
       id: 0
       title: "TEST - Post 3"
       content: "TEST - Mais oui, c'est un gymnote..."
-      categories: 
-         category: HiTech
+      groups:
+         group: HiTech
       owner: TEST - Tournesol
-      comments: 
+      comments:
          comment : TEST - Comment3
       createdAt: "2001-12-15 2:59:43.10"
       updatedAt: "2001-12-15 2:59:43.10"
