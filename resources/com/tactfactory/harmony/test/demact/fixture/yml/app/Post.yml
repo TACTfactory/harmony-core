@@ -3,10 +3,10 @@ Post:
       id: 0
       title: "Post 1"
       content: "Je dirais meme plus..."
-      categories: 
-         category: HiTech
+      groups:
+         group: HiTech
       owner: Dupond
-      comments: 
+      comments:
          comment : Comment1
       createdAt: "2001-12-15 2:59:43.10"
       updatedAt: "2001-12-15 2:59:43.10"
@@ -15,10 +15,10 @@ Post:
       id: 0
       title: "Post 2"
       content: "Bachibouzouk"
-      categories: 
-         category: HiTech
+      groups:
+         group: HiTech
       owner: Haddock
-      comments: 
+      comments:
          comment : Comment2
       createdAt: "2001-12-15 2:59:43.10"
       updatedAt: "2001-12-15 2:59:43.10"
@@ -27,10 +27,10 @@ Post:
       id: 0
       title: "Post 3"
       content: "Mais oui, c'est un gymnote..."
-      categories: 
-         category: HiTech
+      groups:
+         group: HiTech
       owner: Tournesol
-      comments: 
+      comments:
          comment : Comment3
       createdAt: "2001-12-15 2:59:43.10"
       updatedAt: "2001-12-15 2:59:43.10"

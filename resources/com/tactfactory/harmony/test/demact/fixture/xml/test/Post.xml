@@ -4,7 +4,7 @@
 		<id>0</id>
 		<title>TEST - Post 1</title>
 		<content>TEST - Je dirais meme plus...</content>
-		<categories>TEST - Radotage</categories>
+		<groups>TEST - Radotage</groups>
 		<owner>TEST - Dupond</owner>
 		<comments></comments>
 		<createdAt>2012-01-01 00:00</createdAt>
@@ -15,7 +15,7 @@
 		<id>0</id>
 		<title>TEST - Post 2</title>
 		<content>TEST - Bachibouzouk</content>
-		<categories>TEST - Insulte</categories>
+		<groups>TEST - Insulte</groups>
 		<owner>TEST - Haddock</owner>
 		<comments></comments>
 		<createdAt>2012-01-01 00:00</createdAt>
@@ -26,7 +26,7 @@
 		<id>0</id>
 		<title>TEST - Post 3</title>
 		<content>TEST - Mais oui, c'est une gymnote...</content>
-		<categories>TEST - Fait scientifique</categories>
+		<groups>TEST - Fait scientifique</groups>
 		<owner>TEST - Tournesol</owner>
 		<comments></comments>
 		<createdAt>2012-01-01 00:00</createdAt>

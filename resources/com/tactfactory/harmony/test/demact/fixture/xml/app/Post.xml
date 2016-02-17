@@ -4,11 +4,11 @@
 		<id>0</id>
 		<title>Post 1</title>
 		<content>Je dirais meme plus...</content>
-		<categories>Radotage</categories>
+		<groups>Radotage</groups>
 		<owner>Dupond</owner>
-		<categories>
-			<category>HiTech</category>
-		</categories>
+		<groups>
+			<group>HiTech</group>
+		</groups>
 		<comments></comments>
 		<createdAt>2012-01-01 00:00</createdAt>
 		<updatedAt>2012-01-01 00:00</updatedAt>
@@ -18,11 +18,11 @@
 		<id>0</id>
 		<title>Post 2</title>
 		<content>Bachibouzouk</content>
-		<categories>Insulte</categories>
+		<groups>Insulte</groups>
 		<owner>Haddock</owner>
-		<categories>
-			<category>HiTech</category>
-		</categories>
+		<groups>
+			<group>HiTech</group>
+		</groups>
 		<comments></comments>
 		<createdAt>2012-01-01 00:00</createdAt>
 		<updatedAt>2012-01-01 00:00</updatedAt>
@@ -32,11 +32,11 @@
 		<id>0</id>
 		<title>Post 3</title>
 		<content>Mais oui, c'est une gymnote...</content>
-		<categories>Fait scientifique</categories>
+		<groups>Fait scientifique</groups>
 		<owner>Tournesol</owner>
-		<categories>
-			<category>HiTech</category>
-		</categories>
+		<groups>
+			<group>HiTech</group>
+		</groups>
 		<comments></comments>
 		<createdAt>2012-01-01 00:00</createdAt>
 		<updatedAt>2012-01-01 00:00</updatedAt>

@@ -4,7 +4,7 @@
 		<id>0</id>
 		<title>DEBUG - Post 1</title>
 		<content>DEBUG - Je dirais meme plus...</content>
-		<categories>DEBUG - Radotage</categories>
+		<groups>DEBUG - Radotage</groups>
 		<owner>DEBUG - Dupond</owner>
 		<comments></comments>
 		<createdAt>2012-01-01 00:00</createdAt>
@@ -15,7 +15,7 @@
 		<id>0</id>
 		<title>DEBUG - Post 2</title>
 		<content>DEBUG - Bachibouzouk</content>
-		<categories>DEBUG - Insulte</categories>
+		<groups>DEBUG - Insulte</groups>
 		<owner>DEBUG - Haddock</owner>
 		<comments></comments>
 		<createdAt>2012-01-01 00:00</createdAt>
@@ -26,7 +26,7 @@
 		<id>0</id>
 		<title>DEBUG - Post 3</title>
 		<content>DEBUG - Mais oui, c'est une gymnote...</content>
-		<categories>DEBUG - Fait scientifique</categories>
+		<groups>DEBUG - Fait scientifique</groups>
 		<owner>DEBUG - Tournesol</owner>
 		<comments></comments>
 		<createdAt>2012-01-01 00:00</createdAt>
