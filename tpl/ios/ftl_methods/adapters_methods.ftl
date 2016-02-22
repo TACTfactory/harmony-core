@@ -374,47 +374,24 @@
     <#if (!field.internal && !field.hidden)>
             <#if (field.harmony_type?lower_case != "relation")>
                 <#if (!MetadataUtils.isPrimitive(field))>
-                    <#if (FieldsUtils.getObjectiveType(field)?lower_case == "boolean")>
-        <#assign result = result + "${tab}if (this.model.is${field.name?cap_first}() != null) {" />
-                    <#else>
-        <#assign result = result + "${tab}if (this.model.get${field.name?cap_first}() != null) {" />
-                    </#if>
                     <#if (FieldsUtils.getObjectiveType(field)?lower_case == "datetime")>
-                        <#if (field.harmony_type?lower_case == "datetime")>
-        <#assign result = result + "${tab}    this.${field.name}View.setText(" />
-        <#assign result = result + "${tab}            DateUtils.formatDateTimeToString(" />
-        <#assign result = result + "${tab}                    this.model.get${field.name?cap_first}()));" />
-                        </#if>
-                        <#if (field.harmony_type?lower_case == "date")>
-        <#assign result = result + "${tab}    this.${field.name}View.setText(" />
-        <#assign result = result + "${tab}            DateUtils.formatDateToString(" />
-        <#assign result = result + "${tab}                    this.model.get${field.name?cap_first}()));" />
-                        </#if>
-                        <#if (field.harmony_type?lower_case == "time")>
-        <#assign result = result + "${tab}    this.${field.name}View.setText(" />
-        <#assign result = result + "${tab}            DateUtils.formatTimeToString(" />
-        <#assign result = result + "${tab}                    this.model.get${field.name?cap_first}()));" />
-                        </#if>
+        <#assign result = result + "${tab}self.${field.name}Label.text = [DateUtils dateToString:self.model.${field.name}];" />
                     <#elseif (field.harmony_type?lower_case == "enum")>
-        <#assign result = result + "${tab}    this.${field.name}View.setText(this.model.get${field.name?cap_first}().toString());" />
+        <#assign result = result + "${tab}self.${field.name}Label.text = [NSString stringWithFormat:@\"%lu\", (unsigned long)self.model.${field.name}];" />
+                    <#elseif (field.harmony_type?lower_case == "int")>
+        <#assign result = result + "${tab}self.${field.name}Label.text = [NSString stringWithFormat:@\"%d\", self.model.${field.name}];" />
                     <#else>
-        <#assign result = result + "${tab}    ${ViewUtils.setLoader(field)}" />
+        <#assign result = result + "${tab}self.${field.name}Label.text = self.model.${field.name};" />
                     </#if>
-        <#assign result = result + "${tab}}" />
                 <#else>
         <#assign result = result + "${tab}${ViewUtils.setLoader(field)}" />
                 </#if>
             <#else>
-        <#assign result = result + "${tab}if (this.model.get${field.name?cap_first}() != null) {" />
+        <#assign result = result + "${tab}if (self.model.${field.name?cap_first} != nil) {" />
                 <#if (field.relation.type=="OneToOne" || field.relation.type=="ManyToOne")>
-        <#assign result = result + "${tab}    this.${field.name}View.setText(" />
-        <#assign result = result + "${tab}            String.valueOf(this.model.get${field.name?cap_first}().get${entities[field.relation.targetEntity].ids[0].name?cap_first}()));" />
+        <#assign result = result + "${tab}    self.${field.name}Label.text = [NSString stringWithFormat:@\"%d\", self.model.${field.name}.${entities[field.relation.targetEntity].ids[0].name}];" />
                 <#else>
-        <#assign result = result + "${tab}    String ${field.name}Value = \"\";" />
-        <#assign result = result + "${tab}    for (${field.relation.targetEntity} item : this.model.get${field.name?cap_first}()) {" />
-        <#assign result = result + "${tab}        ${field.name}Value += item.get${entities[field.relation.targetEntity].ids[0].name?cap_first}() + \",\";" />
-        <#assign result = result + "${tab}    }" />
-        <#assign result = result + "${tab}    this.${field.name}View.setText(${field.name}Value);" />
+        <#assign result = result + "${tab}    self.${field.name}Label.text = [self.model.${field.name} componentsJoinedByString:@\",\"];" />
                 </#if>
         <#assign result = result + "${tab}}" />
             </#if>
