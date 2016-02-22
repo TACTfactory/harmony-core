@@ -521,9 +521,9 @@ public class ProjectCommand extends CommandBase {
             this.initAndroid();
         } else
 
-//        if (action.equals(INIT_IOS)) {
-//            this.initIOS();
-//        } else
+        if (action.equals(INIT_IOS)) {
+            this.initIOS();
+        } else
 
 //        if (action.equals(INIT_RIM)) {
 //            this.initRIM();
@@ -577,7 +577,7 @@ public class ProjectCommand extends CommandBase {
     @Override
     public final boolean isAvailableCommand(final String command) {
         return  command.equals(INIT_ANDROID)
-                //|| command.equals(INIT_IOS)
+                || command.equals(INIT_IOS)
                 //|| command.equals(INIT_RIM)
                 || command.equals(INIT_WINDOWS)
                 || command.equals(INIT_ALL)
