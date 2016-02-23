@@ -30,11 +30,11 @@
             <#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && entity.listAction)>
         case ${tag}:
             controller = [${entity.name?cap_first}TableViewController new];
+            break;
             <#assign tag = tag + 1 />
             </#if>
         </#list>
     </#if>
-            break;
 
         default:
             break;

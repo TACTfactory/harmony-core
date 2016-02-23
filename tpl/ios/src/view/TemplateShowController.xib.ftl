@@ -1,6 +1,6 @@
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
 <#assign fields = ViewUtils.getAllFields(curr) />
-<#include utilityPath + "all_imports.ftl" />
 <#assign backgroundView = "${curr.name?cap_first}BackgroundView" />
 <#assign scrollView = "${curr.name?cap_first}ScrollView" />
 <#assign mainView = "${curr.name?cap_first}MainView" />
@@ -23,7 +23,7 @@
                 <outlet property="${field.name}Label" destination="${curr.name?cap_first}${field.name?cap_first}${typeElement}" id="${curr.name?cap_first}${field.name?cap_first}${typeElement}ShowController"/>
                 </#if>
             </#list>
-                <outlet property="view" destination="${backgroundView}" id="${curr.name?cap_first}${field.name?cap_first}ShowControllerBackgroundView"/>
+                <outlet property="view" destination="${backgroundView}" id="${curr.name?cap_first}ShowControllerBackgroundView"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>

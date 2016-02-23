@@ -47,7 +47,7 @@ static NSString *CELL_IDENTIFIER = @"${curr.name?lower_case}Identifier";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CELL_IDENTIFIER];
 
     if (cell == nil) {
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellWithSubtitle reuseIdentifier:CELL_IDENTIFIER];
+        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleSubtitle reuseIdentifier:CELL_IDENTIFIER];
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
 
@@ -59,8 +59,8 @@ static NSString *CELL_IDENTIFIER = @"${curr.name?lower_case}Identifier";
 }
 
 - (void) tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *) indexPath {
-    ${curr.name?cap_first}ShowViewController showViewController = [${curr.name?cap_first}ShowViewController new];
-    showViewController.model = (${curr.name?cap_first} *) [self->${curr.name?lower_case} objectAtIndex:indexPath.item];
+    ${curr.name?cap_first}ShowViewController *showViewController = [${curr.name?cap_first}ShowViewController new];
+    showViewController.model = (${curr.name?cap_first} *) [self->${curr.name?lower_case}Array objectAtIndex:indexPath.item];
 
     [self.navigationController pushViewController:showViewController animated:true];
 }

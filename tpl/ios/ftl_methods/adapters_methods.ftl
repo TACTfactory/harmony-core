@@ -387,7 +387,7 @@
         <#assign result = result + "${tab}${ViewUtils.setLoader(field)}" />
                 </#if>
             <#else>
-        <#assign result = result + "${tab}if (self.model.${field.name?cap_first} != nil) {" />
+        <#assign result = result + "${tab}if (self.model.${field.name} != nil) {" />
                 <#if (field.relation.type=="OneToOne" || field.relation.type=="ManyToOne")>
         <#assign result = result + "${tab}    self.${field.name}Label.text = [NSString stringWithFormat:@\"%d\", self.model.${field.name}.${entities[field.relation.targetEntity].ids[0].name}];" />
                 <#else>

@@ -1,6 +1,6 @@
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
 <#assign fields = ViewUtils.getAllFields(curr) />
-<#include utilityPath + "all_imports.ftl" />
 <@header?interpret />
 
 #import "${curr.name?cap_first}ShowViewController.h"

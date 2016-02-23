@@ -11,7 +11,7 @@
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="${curr.name?cap_first}TableViewController">
             <connections>
                 <outlet property="${curr.name?lower_case}TableView" destination="${curr.name?cap_first}${curr.name?lower_case}TableView" id="${curr.name?cap_first}${curr.name?lower_case}TableViewController"/>
-                <outlet property="view" destination="${backgroundView}" id="${curr.name?cap_first}${field.name?cap_first}TableViewControllerBackgroundView"/>
+                <outlet property="view" destination="${backgroundView}" id="${curr.name?cap_first}TableViewControllerBackgroundView"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -30,9 +30,9 @@
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
-                <constraint firstAttribute="bottom" secondItem="${curr.name?cap_first}${curr.name?lower_case}TableView" secondAttribute="bottom" id=""${curr.name?cap_first}${curr.name?lower_case}TableViewBottom"/>
+                <constraint firstAttribute="bottom" secondItem="${curr.name?cap_first}${curr.name?lower_case}TableView" secondAttribute="bottom" id="${curr.name?cap_first}${curr.name?lower_case}TableViewBottom"/>
                 <constraint firstItem="${curr.name?cap_first}${curr.name?lower_case}TableView" firstAttribute="leading" secondItem="${backgroundView}" secondAttribute="leading" id="${curr.name?cap_first}${curr.name?lower_case}TableViewLeading${backgroundView}"/>
-                <constraint firstAttribute="trailing" secondItem="${curr.name?cap_first}${curr.name?lower_case}TableView" secondAttribute="trailing" id=""${curr.name?cap_first}${curr.name?lower_case}TableViewTrailing"/>
+                <constraint firstAttribute="trailing" secondItem="${curr.name?cap_first}${curr.name?lower_case}TableView" secondAttribute="trailing" id="${curr.name?cap_first}${curr.name?lower_case}TableViewTrailing"/>
                 <constraint firstItem="${curr.name?cap_first}${curr.name?lower_case}TableView" firstAttribute="top" secondItem="${backgroundView}" secondAttribute="top" id="${curr.name?cap_first}${curr.name?lower_case}TableViewTop${backgroundView}"/>
             </constraints>
             <simulatedScreenMetrics key="simulatedDestinationMetrics" type="retina55"/>

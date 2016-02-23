@@ -373,4 +373,11 @@ public class IosAdapter extends BaseAdapter {
                 "Tests");
     }
 
+    @Override
+    public String getSourceControllerPath() {
+        return String.format("%s/%s/",
+                this.getSourcePath(),
+                "View");
+    }
+
 }
