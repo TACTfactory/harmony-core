@@ -159,9 +159,9 @@
     <#list import_array as import>
         <#if (import != entity.name)>
         <#assign result = result + "@class ${import};" />
-        <#if import_has_next>
-            <#assign result = result + "\n" />
-        </#if>
+            <#if import_has_next>
+                <#assign result = result + "\n" />
+            </#if>
         </#if>
     </#list>
     <#return result />

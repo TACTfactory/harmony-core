@@ -31,7 +31,7 @@
     // If you have enums, you may have to override this method to generate the random enums values
 + (${curr.name?cap_first}*) generateRandom {
     ${curr.name?cap_first}* ${curr.name?uncap_first} = [${curr.name?cap_first} new];
-        <#list curr.relations as relation> <#if relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne">
+        <#list curr.relations as relation> <#if (relation.relation.type=="OneToOne" || relation.relation.type=="ManyToOne") && !relation.internal??>
     ${relation.relation.targetEntity}* ${relation.relation.targetEntity?uncap_first} = [${relation.relation.targetEntity}TestUtils generateRandom];
         </#if></#list>
         <#if (inherited)>

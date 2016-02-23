@@ -195,6 +195,14 @@ public class IosProjectAdapter implements IAdapterProject {
 
         result.add(new SourceFile(templatePath + "gitignore", String.format("%s/.gitignore", filePath), false));
 
+        result.add(new SourceFile(
+                templatePath + "project.pbxproj",
+                String.format(
+                        "%s/%s.xcodeproj/project.pbxproj",
+                        filePath,
+                        this.adapter.getApplicationMetadata().getName().toLowerCase()),
+                false));
+
         return result;
     }
 

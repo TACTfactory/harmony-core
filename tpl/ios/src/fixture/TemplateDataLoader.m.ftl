@@ -49,7 +49,7 @@ static NSString *FILE_NAME = @"${curr.name}";
         result.${field.name} = [DateUtils formatXMLStringToDateTime:(NSString *) item.${field.name}];
     }
 
-    <#elseif (field.relation??)>
+    <#elseif (field.relation??) && (!field.internal)>
     if (item.${field.name} != nil) {
         result.${field.name} = [[[${field.relation.targetEntity}DataLoader get${field.relation.targetEntity}DataLoader] getItems] objectForKey:item.${field.name}];
     }
