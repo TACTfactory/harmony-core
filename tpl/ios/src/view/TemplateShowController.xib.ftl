@@ -48,7 +48,7 @@
                                 </label>
                                     <#assign y = y + 26/>
                                         <#if (field.harmony_type?lower_case == "boolean")>
-                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="${curr.name?cap_first}${field.name?cap_first}Switch" >
+                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="${curr.name?cap_first}${field.name?cap_first}Switch" >
                                     <rect key="frame" x="10" y="${y}" width="51" height="21"/>
                                 </switch>
                                         <#else>
@@ -81,11 +81,11 @@
                                 <constraint firstItem="${curr.name?cap_first}${field.name?cap_first}LabelTitle" firstAttribute="leading" secondItem="${mainView}" secondAttribute="leading" constant="10" id="${curr.name?cap_first}${field.name?cap_first}LabelTitleLeading${mainView}"/>
                                 <constraint firstItem="${curr.name?cap_first}${field.name?cap_first}LabelTitle" firstAttribute="top" secondItem="${lastElement}" secondAttribute="bottom" constant="5" id="${curr.name?cap_first}${field.name?cap_first}LabelTitleTop${lastElement}"/>
                                         </#if>
-                                <constraint firstItem="${curr.name?cap_first}${field.name?cap_first}${typeElement}" firstAttribute="leading" secondItem="${mainView}" secondAttribute="leading" constant="15" id="${curr.name?cap_first}${field.name?cap_first}LabelLeading${mainView}"/>
+                                <constraint firstItem="${curr.name?cap_first}${field.name?cap_first}${typeElement}" firstAttribute="leading" secondItem="${mainView}" secondAttribute="leading" constant="15" id="${curr.name?cap_first}${field.name?cap_first}${typeElement}Leading${mainView}"/>
                                 <constraint firstItem="${curr.name?cap_first}${field.name?cap_first}${typeElement}" firstAttribute="top" secondItem="${curr.name?cap_first}${field.name?cap_first}LabelTitle" secondAttribute="bottom" constant="5" id="${curr.name?cap_first}${field.name?cap_first}${typeElement}Top${curr.name?cap_first}${field.name?cap_first}LabelTitle"/>
                                         <#assign lastElement = "${curr.name?cap_first}${field.name?cap_first}${typeElement}" />
                                         <#if !(field_has_next)>
-                                <constraint firstAttribute="bottom" secondItem="${curr.name?cap_first}${field.name?cap_first}${typeElement}" secondAttribute="bottom" constant="10" id="${curr.name?cap_first}${field.name?cap_first}LabelBottom"/>
+                                <constraint firstAttribute="bottom" secondItem="${curr.name?cap_first}${field.name?cap_first}${typeElement}" secondAttribute="bottom" constant="10" id="${curr.name?cap_first}${field.name?cap_first}${typeElement}Bottom"/>
                                         </#if>
                                     </#if>
                                 </#list>
