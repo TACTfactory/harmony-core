@@ -23,6 +23,7 @@
                 <outlet property="${field.name}${typeElement}" destination="${curr.name?cap_first}${field.name?cap_first}${typeElement}" id="${curr.name?cap_first}${field.name?cap_first}${typeElement}CreateController"/>
                 </#if>
             </#list>
+                <outlet property="scrollView" destination="${scrollView}" id="${curr.name?cap_first}CreateControllerScrollView"/>
                 <outlet property="view" destination="${backgroundView}" id="${curr.name?cap_first}CreateControllerBackgroundView"/>
             </connections>
         </placeholder>

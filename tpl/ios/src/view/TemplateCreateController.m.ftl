@@ -112,19 +112,12 @@
             </#if>
         </#if>
     </#list>
-}
 
-- (void) textFieldDidBeginEditing:(UITextField *)textField {
     CGPoint point = CGPointMake(0, textField.frame.origin.y);
 
     self.scrollView.contentOffset = point;
 }
 
-- (void)textViewDidBeginEditing:(UITextView *)textView {
-    CGPoint point = CGPointMake(0, textView.frame.origin.y);
-
-    self.scrollView.contentOffset = point;
-}
 
 - (void) onClickSave {
     if ([self validateData]) {
