@@ -72,9 +72,9 @@
         <#elseif (field.harmony_type?lower_case == "enum")>
     [HarmonyPicker bindPicker:[[EnumUtils get${field.name?cap_first}Values] allKeys] withTextField:self.${field.name}TextField];
         </#if>
-    </#if>
 
     self.${field.name}TextField.delegate = self;
+    </#if>
 </#list>
 }
 
@@ -107,7 +107,6 @@
 
         [textField resignFirstResponder];
     }
-
                 </#if>
             </#if>
         </#if>

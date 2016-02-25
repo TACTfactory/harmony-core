@@ -20,4 +20,6 @@
     </#if>
 </#list>
 
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
+
 @end

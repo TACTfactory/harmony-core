@@ -25,6 +25,7 @@
         </#if>
     </#if>
 </#list>
+@property (strong, nonatomic) IBOutlet UIScrollView *scrollView;
 
 @property (nonatomic, assign) id delegate;
 
