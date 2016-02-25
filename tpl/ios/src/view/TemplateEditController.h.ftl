@@ -8,7 +8,7 @@
 
 @protocol ${curr.name?cap_first}Delegate <NSObject>
 
-- (void) refresh${curr.name?cap_first}:(${curr.name?cap_first} item;
+- (void) refresh${curr.name?cap_first}:(${curr.name?cap_first} *) item;
 
 @end
 

@@ -56,7 +56,7 @@
             <#if (field.relation.type=="OneToOne" || field.relation.type=="ManyToOne")>
     [HarmonyPicker bindPicker:${field.name}Ids withTextField:self.${field.name}TextField];
             <#else>
-    self.${field.name}TextField.delegate = true;
+    self.${field.name}TextField.delegate = self;
             </#if>
         <#elseif (field.harmony_type?lower_case == "datetime")>
     [HarmonyDatePicker bindPicker:UIDatePickerModeDateAndTime withTextField:self.${field.name}TextField];

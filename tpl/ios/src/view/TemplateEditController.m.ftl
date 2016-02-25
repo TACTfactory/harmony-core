@@ -69,7 +69,7 @@ ${AdapterUtils.loadDataCreateFieldAdapter(field, 2)}
 
         [HarmonyPicker bindPicker:${field.name}Ids withTextField:self.${field.name}TextField];
                 <#else>
-        self.${field.name}TextField.delegate = true;
+        self.${field.name}TextField.delegate = self;
                 </#if>
             <#elseif (field.harmony_type?lower_case == "datetime")>
         [HarmonyDatePicker bindPicker:UIDatePickerModeDateAndTime withTextField:self.${field.name}TextField];
@@ -100,7 +100,7 @@ ${AdapterUtils.loadDataCreateFieldAdapter(field, 2)}
 
         HarmonyMultiplePicker *${field.name}Picker = [[HarmonyMultiplePicker alloc] initWithData:${field.name}Ids
                                                                                     withCallback:^(NSArray *result) {
-            self.${field.name}TextField.text [result componentsJoinedByString:@","];
+            self.${field.name}TextField.text = [result componentsJoinedByString:@","];
             NSMutableArray *resultToSet = [NSMutableArray new];
 
             for (NSString *itemId in result) {

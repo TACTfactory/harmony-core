@@ -3,7 +3,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface HarmonyPicker : UITableViewController
+@interface HarmonyMultiplePicker : UITableViewController
 
 - (instancetype) initWithData:(NSArray *) pickerData withCallback:(void(^)(NSArray *result)) callback;
 
