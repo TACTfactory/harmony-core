@@ -5,9 +5,8 @@
 
 #import <UIKit/UIKit.h>
 #import "${curr.name?cap_first}.h"
-#import "${curr.name?cap_first}EditViewController.h"
 
-@interface ${curr.name?cap_first}ShowViewController : UIViewController <${curr.name?cap_first}Delegate>
+@interface ${curr.name?cap_first}CreateViewController : UIViewController <UITextFieldDelegate>
 
 @property (strong, nonatomic) ${curr.name?cap_first} *model;
 
@@ -16,7 +15,7 @@
         <#if (field.harmony_type?lower_case == "boolean")>
 @property (strong, nonatomic) IBOutlet UISwitch *${field.name}Switch;
         <#else>
-@property (strong, nonatomic) IBOutlet UILabel *${field.name}Label;
+@property (strong, nonatomic) IBOutlet UITextField *${field.name}TextField;
         </#if>
     </#if>
 </#list>

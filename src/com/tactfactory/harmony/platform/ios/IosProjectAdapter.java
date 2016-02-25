@@ -3,7 +3,6 @@ package com.tactfactory.harmony.platform.ios;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Locale;
 
 import com.google.common.base.CaseFormat;
 import com.tactfactory.harmony.Harmony;
@@ -176,17 +175,17 @@ public class IosProjectAdapter implements IAdapterProject {
         result.add(new SourceFile(
                 templatePath + "HomeViewController.h",
                 String.format("%s/HomeViewController.h", filePath),
-                true));
+                false));
 
         result.add(new SourceFile(
                 templatePath + "HomeViewController.m",
                 String.format("%s/HomeViewController.m", filePath),
-                true));
+                false));
 
         result.add(new SourceFile(
                 templatePath + "HomeViewController.xib",
                 String.format("%s/HomeViewController.xib", filePath),
-                true));
+                false));
 
         templatePath = this.adapter.getTemplateProjectPath();
         filePath = String.format("%s/%s", Harmony.getProjectPath(), this.adapter.getPlatform());
@@ -208,8 +207,27 @@ public class IosProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getStartViewFiles() {
-        // TODO Auto-generated method stub
-        return null;
+        List<IUpdater> result = new ArrayList<IUpdater>();
+
+        String templatePath = this.adapter.getTemplateSourceEntityPath();
+        String filePath = this.adapter.getSourcePath();
+
+        result.add(new SourceFile(
+                templatePath + "HomeViewController.h",
+                String.format("%s/HomeViewController.h", filePath),
+                true));
+
+        result.add(new SourceFile(
+                templatePath + "HomeViewController.m",
+                String.format("%s/HomeViewController.m", filePath),
+                true));
+
+        result.add(new SourceFile(
+                templatePath + "HomeViewController.xib",
+                String.format("%s/HomeViewController.xib", filePath),
+                true));
+
+        return result;
     }
 
     @Override
@@ -522,23 +540,23 @@ public class IosProjectAdapter implements IAdapterProject {
                 this.adapter.getSourceControllerPath(),
                 entity.getName());
 
-//        result.add(new SourceFile(
-//                templatePath + "TemplateCreateController.h",
-//                String.format("%s%sCreateViewController.h",
-//                        filePath,
-//                        entity.getName())));
-//
-//        result.add(new SourceFile(
-//                templatePath + "TemplateCreateController.m",
-//                String.format("%s%sCreateViewController.m",
-//                        filePath,
-//                        entity.getName())));
-//
-//        result.add(new SourceFile(
-//                templatePath + "TemplateCreateController.xib",
-//                String.format("%s%sCreateViewController.xib",
-//                        filePath,
-//                        entity.getName())));
+        result.add(new SourceFile(
+                templatePath + "TemplateCreateController.h",
+                String.format("%s%sCreateViewController.h",
+                        filePath,
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateCreateController.m",
+                String.format("%s%sCreateViewController.m",
+                        filePath,
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateCreateController.xib",
+                String.format("%s%sCreateViewController.xib",
+                        filePath,
+                        entity.getName())));
 
         return result;
     }
@@ -549,27 +567,27 @@ public class IosProjectAdapter implements IAdapterProject {
 
         String templatePath = this.adapter.getTemplateSourceControlerPath();
 
-//        String filePath = String.format("%s/%s/",
-//                this.adapter.getSourceControllerPath(),
-//                entity.getName());
-//
-//        result.add(new SourceFile(
-//                templatePath + "TemplateEditController.h",
-//                String.format("%s%sEditViewController.h",
-//                        filePath,
-//                        entity.getName())));
-//
-//        result.add(new SourceFile(
-//                templatePath + "TemplateEditController.m",
-//                String.format("%s%sEditViewController.m",
-//                        filePath,
-//                        entity.getName())));
-//
-//        result.add(new SourceFile(
-//                templatePath + "TemplateEditController.xib",
-//                String.format("%s%sEditViewController.xib",
-//                        filePath,
-//                        entity.getName())));
+        String filePath = String.format("%s/%s/",
+                this.adapter.getSourceControllerPath(),
+                entity.getName());
+
+        result.add(new SourceFile(
+                templatePath + "TemplateEditController.h",
+                String.format("%s%sEditViewController.h",
+                        filePath,
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateEditController.m",
+                String.format("%s%sEditViewController.m",
+                        filePath,
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateEditController.xib",
+                String.format("%s%sEditViewController.xib",
+                        filePath,
+                        entity.getName())));
 
         return result;
     }
@@ -657,8 +675,24 @@ public class IosProjectAdapter implements IAdapterProject {
                 filePath + "HarmonyDatePicker.h"));
 
         result.add(new SourceFile(
-            templatePath + "HarmonyDatePicker.m",
-            filePath + "HarmonyDatePicker.m"));
+                templatePath + "HarmonyDatePicker.m",
+                filePath + "HarmonyDatePicker.m"));
+
+        result.add(new SourceFile(
+                templatePath + "HarmonyPicker.h",
+                filePath + "HarmonyPicker.h"));
+
+        result.add(new SourceFile(
+                templatePath + "HarmonyPicker.m",
+                filePath + "HarmonyPicker.m"));
+
+        result.add(new SourceFile(
+                templatePath + "HarmonyMultiplePicker.h",
+                filePath + "HarmonyMultiplePicker.h"));
+
+        result.add(new SourceFile(
+            templatePath + "HarmonyMultiplePicker.m",
+            filePath + "HarmonyMultiplePicker.m"));
 
         return result;
     }
@@ -935,6 +969,13 @@ public class IosProjectAdapter implements IAdapterProject {
                     filePath + "Utils/base/" + entity.getName() + "ProviderUtilsBase.m",
                     true));
         }
+
+        templatePath = this.adapter.getTemplateSourceHarmonyUtilsPath();
+        filePath = String.format("%s/Utils/", this.adapter.getSourceHarmonyPath());
+
+        result.add(new SourceFile(templatePath + "EnumUtils.h", filePath + "EnumUtils.h", true));
+
+        result.add(new SourceFile(templatePath + "EnumUtils.m", filePath + "EnumUtils.m", true));
 
         return result;
     }

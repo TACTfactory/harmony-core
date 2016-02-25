@@ -5,6 +5,6 @@
 
 @interface HarmonyDatePicker : UIDatePicker
 
-- (instancetype) initWithType:(UIDatePickerMode) datePickerMode withTextField:(UITextField *) currentTextField;
++ (void) bindPicker:(UIDatePickerMode) datePickerMode withTextField:(UITextField *) textField;
 
 @end

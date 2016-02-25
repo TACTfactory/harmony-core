@@ -59,10 +59,10 @@
                                 <constraint firstItem="${entity.name}Button" firstAttribute="top" secondItem="${lastElement}" secondAttribute="bottom" constant="20" id="${entity.name}ButtonTop${lastElement}Constraint"/>
                                         </#if>
                                     <#assign lastElement = "${entity.name}Button" />
-                                        <#if !(field_has_next)>
+                                        <#if !(entity_has_next)>
                                 <constraint firstAttribute="bottom" secondItem="${entity.name}Button" secondAttribute="bottom" constant="20" id="${entity.name}ButtonBottomConstraint"/>
                                         </#if>
-                                <constraint firstItem="${entity.name}Button" firstAttribute="leading" secondItem="${mainView}" secondAttribute="leading" constant="10" id="${entity.name}ButtonLeading${MainView}Constraint"/>
+                                <constraint firstItem="${entity.name}Button" firstAttribute="leading" secondItem="${mainView}" secondAttribute="leading" constant="10" id="${entity.name}ButtonLeading${mainView}Constraint"/>
                                 <constraint firstAttribute="trailing" secondItem="${entity.name}Button" secondAttribute="trailing" constant="10" id="${entity.name}ButtonTrailingConstraint"/>
                                     </#if>
                                 </#list>

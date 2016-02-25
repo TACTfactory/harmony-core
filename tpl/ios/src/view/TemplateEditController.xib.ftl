@@ -11,19 +11,19 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
     </dependencies>
     <objects>
-        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="${curr.name?cap_first}ShowViewController">
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="${curr.name?cap_first}EditViewController">
             <connections>
             <#list fields?values as field>
                 <#if (!field.internal && !field.hidden)>
                     <#if (field.harmony_type?lower_case == "boolean")>
                         <#assign typeElement = "Switch" />
                     <#else>
-                        <#assign typeElement = "Label" />
+                        <#assign typeElement = "TextField" />
                     </#if>
-                <outlet property="${field.name}Label" destination="${curr.name?cap_first}${field.name?cap_first}${typeElement}" id="${curr.name?cap_first}${field.name?cap_first}${typeElement}ShowController"/>
+                <outlet property="${field.name}${typeElement}" destination="${curr.name?cap_first}${field.name?cap_first}${typeElement}" id="${curr.name?cap_first}${field.name?cap_first}${typeElement}EditController"/>
                 </#if>
             </#list>
-                <outlet property="view" destination="${backgroundView}" id="${curr.name?cap_first}ShowControllerBackgroundView"/>
+                <outlet property="view" destination="${backgroundView}" id="${curr.name?cap_first}EditControllerBackgroundView"/>
             </connections>
         </placeholder>
         <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
@@ -48,31 +48,29 @@
                                 </label>
                                     <#assign y = y + 26/>
                                         <#if (field.harmony_type?lower_case == "boolean")>
-                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" enabled="NO" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="${curr.name?cap_first}${field.name?cap_first}Switch" >
-                                    <rect key="frame" x="15" y="${y}" width="51" height="21"/>
+                                <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="${curr.name?cap_first}${field.name?cap_first}Switch" >
+                                    <rect key="frame" x="10" y="${y}" width="51" height="21"/>
                                 </switch>
                                         <#else>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="${curr.name?cap_first}${field.name?cap_first}Label">
-                                    <rect key="frame" x="15" y="${y}" width="42" height="21"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                    <nil key="highlightedColor"/>
-                                </label>
+                                <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="${curr.name?cap_first}${field.name?cap_first}TextField">
+                                    <rect key="frame" x="15" y="${y}" width="384" height="30"/>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                    <textInputTraits key="textInputTraits"/>
+                                </textField>
                                         </#if>
-                                    <#assign y = y + 26/>
+                                    <#assign y = y + 31/>
                                     </#if>
                                 </#list>
                             </subviews>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <constraints>
                                 <#assign lastElement = "" />
-                                <#assign typeElement = "Label" />
                                 <#list fields?values as field>
                                     <#if (!field.internal && !field.hidden)>
                                         <#if (field.harmony_type?lower_case == "boolean")>
                                             <#assign typeElement = "Switch" />
                                         <#else>
-                                            <#assign typeElement = "Label" />
+                                            <#assign typeElement = "TextField" />
                                         </#if>
                                         <#if lastElement == "">
                                 <constraint firstItem="${curr.name?cap_first}${field.name?cap_first}LabelTitle" firstAttribute="leading" secondItem="${mainView}" secondAttribute="leading" constant="10" id="${curr.name?cap_first}${field.name?cap_first}LabelTitleLeading${mainView}"/>
@@ -81,6 +79,7 @@
                                 <constraint firstItem="${curr.name?cap_first}${field.name?cap_first}LabelTitle" firstAttribute="leading" secondItem="${mainView}" secondAttribute="leading" constant="10" id="${curr.name?cap_first}${field.name?cap_first}LabelTitleLeading${mainView}"/>
                                 <constraint firstItem="${curr.name?cap_first}${field.name?cap_first}LabelTitle" firstAttribute="top" secondItem="${lastElement}" secondAttribute="bottom" constant="5" id="${curr.name?cap_first}${field.name?cap_first}LabelTitleTop${lastElement}"/>
                                         </#if>
+                                <constraint firstAttribute="trailing" secondItem="${curr.name?cap_first}${field.name?cap_first}${typeElement}" secondAttribute="trailing" constant="15" id="${curr.name?cap_first}${field.name?cap_first}${typeElement}Trailing"/>
                                 <constraint firstItem="${curr.name?cap_first}${field.name?cap_first}${typeElement}" firstAttribute="leading" secondItem="${mainView}" secondAttribute="leading" constant="15" id="${curr.name?cap_first}${field.name?cap_first}${typeElement}Leading${mainView}"/>
                                 <constraint firstItem="${curr.name?cap_first}${field.name?cap_first}${typeElement}" firstAttribute="top" secondItem="${curr.name?cap_first}${field.name?cap_first}LabelTitle" secondAttribute="bottom" constant="5" id="${curr.name?cap_first}${field.name?cap_first}${typeElement}Top${curr.name?cap_first}${field.name?cap_first}LabelTitle"/>
                                         <#assign lastElement = "${curr.name?cap_first}${field.name?cap_first}${typeElement}" />

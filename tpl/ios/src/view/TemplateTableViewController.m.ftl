@@ -11,7 +11,7 @@ static NSString *CELL_IDENTIFIER = @"${curr.name?lower_case}Identifier";
 
 @interface ${curr.name?cap_first}TableViewController () {
     @private
-    NSArray *${curr.name?lower_case}Array;
+    NSMutableArray *${curr.name?lower_case}Array;
 }
 
 @end
@@ -31,8 +31,14 @@ static NSString *CELL_IDENTIFIER = @"${curr.name?lower_case}Identifier";
     [self loadData];
 }
 
+- (void) viewDidAppear:(BOOL) animated {
+    [super viewDidAppear:animated];
+
+    [self loadData];
+}
+
 - (void) loadData {
-    self->${curr.name?lower_case}Array = [[${curr.name?cap_first}SQLiteAdapter new] getAll];
+    self->${curr.name?lower_case}Array = [NSMutableArray arrayWithArray:[[${curr.name?cap_first}SQLiteAdapter new] getAll]];
 
     dispatch_async(dispatch_get_main_queue(), ^{
         [self.${curr.name?lower_case}TableView reloadData];
@@ -65,6 +71,19 @@ static NSString *CELL_IDENTIFIER = @"${curr.name?lower_case}Identifier";
     [self.navigationController pushViewController:showViewController animated:true];
 }
 
+<#if curr.deleteAction>
+- (void) tableView:(UITableView *) tableView
+commitEditingStyle:(UITableViewCellEditingStyle) editingStyle
+ forRowAtIndexPath:(NSIndexPath *) indexPath {
+
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        [[${curr.name?cap_first}SQLiteAdapter new] remove:(${curr.name?cap_first} *) [self->${curr.name?lower_case}Array objectAtIndex:indexPath.item]];
+        [self->${curr.name?lower_case}Array removeObjectAtIndex:indexPath.item];
+        [self.${curr.name?lower_case}TableView reloadData];
+    }
+}
+
+</#if>
 - (void) onClickCreate {
     ${curr.name?cap_first}CreateViewController createViewController = [${curr.name?cap_first}CreateViewController new];
 

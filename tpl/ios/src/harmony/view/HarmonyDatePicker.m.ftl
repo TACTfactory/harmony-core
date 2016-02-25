@@ -13,12 +13,20 @@
 
 @implementation HarmonyDatePicker
 
+
++ (void) bindPicker:(UIDatePickerMode) datePickerMode withTextField:(UITextField *) textField {
+    HarmonyDatePicker *datePicker = [[HarmonyDatePicker alloc] initWithType:datePickerMode withTextField:textfield];
+
+    [datePicker addTarget:datePicker action:@selector(onChangeDate) forControlEvents:UIControlEventValueChanged];
+    [datePicker prepareDatePicker];
+}
+
 - (instancetype) initWithType:(UIDatePickerMode) datePickerMode withTextField:(UITextField *) currentTextField {
     if (self = [super init]) {
+
         self.datePickerMode = datePickerMode;
+
         self->textField = currentTextField;
-        [self addTarget:self action:@selector(onChangeDate) forControlEvents:UIControlEventValueChanged];
-        [self prepareDatePicker];
     }
 
     return self;
@@ -48,7 +56,7 @@
 }
 
 - (void) onChangeDate {
-    self->textField.text = [DateUtils dateToString:self.date];
+    self->textField.text = [DateUtils dateToISOString:self.date];
 }
 
 @end
