@@ -5,7 +5,7 @@
 
 @interface HarmonyPicker () {
     @private
-    NSArray *data
+    NSArray *data;
     UITextField *textField;
 }
 

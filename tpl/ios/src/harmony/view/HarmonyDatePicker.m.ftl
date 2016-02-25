@@ -15,7 +15,7 @@
 
 
 + (void) bindPicker:(UIDatePickerMode) datePickerMode withTextField:(UITextField *) textField {
-    HarmonyDatePicker *datePicker = [[HarmonyDatePicker alloc] initWithType:datePickerMode withTextField:textfield];
+    HarmonyDatePicker *datePicker = [[HarmonyDatePicker alloc] initWithType:datePickerMode withTextField:textField];
 
     [datePicker addTarget:datePicker action:@selector(onChangeDate) forControlEvents:UIControlEventValueChanged];
     [datePicker prepareDatePicker];

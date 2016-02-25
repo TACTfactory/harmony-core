@@ -5,7 +5,7 @@
 
 @interface HarmonyMultiplePicker () {
     @private
-    NSArray *data
+    NSArray *data;
     void (^resultCallback)(NSArray *result);
     NSMutableArray *selectedElement;
 }
@@ -14,7 +14,7 @@
 
 @implementation HarmonyMultiplePicker
 
-- (instancetype) initWithData:(NSArray *) pickerData withCallback:(void(^)(NSArray *result)) callback;
+- (instancetype) initWithData:(NSArray *) pickerData withCallback:(void(^)(NSArray *result)) callback {
     if (self = [super init]) {
 
         self->data = pickerData;
@@ -28,7 +28,7 @@
     [super viewDidLoad];
 
     self->selectedElement = [NSMutableArray new];
-    [self.tableView setAllowMultipleSelection:true];
+    [self.tableView setAllowsMultipleSelection:true];
 
     UIBarButtonItem *doneButton = [[UIBarButtonItem alloc] initWithTitle:@"Done"
                                                                    style:UIBarButtonItemStyleDone
@@ -38,7 +38,11 @@
     self.navigationItem.rightBarButtonItem = doneButton;
 }
 
-- (NSInteger) tableView:(UITableView *) tableView cellForRowAtIndexPath:(NSIndexPath *) indexPath {
+- (NSInteger) tableView:(UITableView *) tableView numberOfRowsInSection:(NSInteger) section {
+    return self->data.count;
+}
+
+- (UITableViewCell *) tableView:(UITableView *) tableView cellForRowAtIndexPath:(NSIndexPath *) indexPath {
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"checkmarkCell"];
 
     if (cell == nil) {

@@ -54,9 +54,14 @@
     <#if (!field.internal && !field.hidden)>
         <#if (field.harmony_type?lower_case == "relation")>
             <#if (field.relation.type=="OneToOne" || field.relation.type=="ManyToOne")>
+    NSMutableArray *${field.name}Ids = [NSMutableArray new];
+    NSArray *${field.name}s = [self->${field.relation.targetEntity?lower_case}SQLiteAdapter getAll];
+
+    for (${field.relation.targetEntity?cap_first} *item in ${field.name}s) {
+       [${field.name}Ids addObject:[NSString stringWithFormat:@"%d", item.id]];
+    }
+
     [HarmonyPicker bindPicker:${field.name}Ids withTextField:self.${field.name}TextField];
-            <#else>
-    self.${field.name}TextField.delegate = self;
             </#if>
         <#elseif (field.harmony_type?lower_case == "datetime")>
     [HarmonyDatePicker bindPicker:UIDatePickerModeDateAndTime withTextField:self.${field.name}TextField];
@@ -68,6 +73,8 @@
     [HarmonyPicker bindPicker:[[EnumUtils get${field.name?cap_first}Values] allKeys] withTextField:self.${field.name}TextField];
         </#if>
     </#if>
+
+    self.${field.name}TextField.delegate = self;
 </#list>
 }
 
@@ -86,7 +93,7 @@
 
         HarmonyMultiplePicker *${field.name}Picker = [[HarmonyMultiplePicker alloc] initWithData:${field.name}Ids
                                                                                     withCallback:^(NSArray *result) {
-            self.${field.name}TextField.text [result componentsJoinedByString:@","];
+            self.${field.name}TextField.text = [result componentsJoinedByString:@","];
             NSMutableArray *resultToSet = [NSMutableArray new];
 
             for (NSString *itemId in result) {
@@ -105,6 +112,18 @@
             </#if>
         </#if>
     </#list>
+}
+
+- (void) textFieldDidBeginEditing:(UITextField *)textField {
+    CGPoint point = CGPointMake(0, textField.frame.origin.y);
+
+    self.scrollView.contentOffset = point;
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    CGPoint point = CGPointMake(0, textView.frame.origin.y);
+
+    self.scrollView.contentOffset = point;
 }
 
 - (void) onClickSave {

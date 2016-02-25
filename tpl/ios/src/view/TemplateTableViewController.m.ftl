@@ -4,8 +4,12 @@
 
 #import "${curr.name?cap_first}TableViewController.h"
 #import "${curr.name?cap_first}SQLiteAdapter.h"
+<#if curr.showAction>
 #import "${curr.name?cap_first}ShowViewController.h"
+</#if>
+<#if curr.createAction>
 #import "${curr.name?cap_first}CreateViewController.h"
+</#if>
 
 static NSString *CELL_IDENTIFIER = @"${curr.name?lower_case}Identifier";
 
@@ -22,11 +26,13 @@ static NSString *CELL_IDENTIFIER = @"${curr.name?lower_case}Identifier";
     [super viewDidLoad];
 
     self.navigationItem.title = @"${curr.name?cap_first}";
+    <#if curr.createAction>
     UIBarButtonItem *createButton = [[UIBarButtonItem alloc] initWithTitle:@"Add"
                                                                      style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(onClickCreate)];
     self.navigationItem.rightBarButtonItem = createButton;
+    </#if>
 
     [self loadData];
 }
@@ -63,6 +69,7 @@ static NSString *CELL_IDENTIFIER = @"${curr.name?lower_case}Identifier";
 
     return cell;
 }
+<#if curr.showAction>
 
 - (void) tableView:(UITableView *) tableView didSelectRowAtIndexPath:(NSIndexPath *) indexPath {
     ${curr.name?cap_first}ShowViewController *showViewController = [${curr.name?cap_first}ShowViewController new];
@@ -70,6 +77,7 @@ static NSString *CELL_IDENTIFIER = @"${curr.name?lower_case}Identifier";
 
     [self.navigationController pushViewController:showViewController animated:true];
 }
+</#if>
 
 <#if curr.deleteAction>
 - (void) tableView:(UITableView *) tableView
@@ -84,10 +92,12 @@ commitEditingStyle:(UITableViewCellEditingStyle) editingStyle
 }
 
 </#if>
+<#if curr.createAction>
 - (void) onClickCreate {
-    ${curr.name?cap_first}CreateViewController createViewController = [${curr.name?cap_first}CreateViewController new];
+    ${curr.name?cap_first}CreateViewController *createViewController = [${curr.name?cap_first}CreateViewController new];
 
     [self.navigationController pushViewController:createViewController animated:true];
 }
+</#if>
 
 @end

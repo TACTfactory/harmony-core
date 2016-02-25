@@ -36,7 +36,7 @@
                                 <#list entities?values as entity>
                                     <#if (entity.fields?? && (entity.fields?size>0 || entity.inheritance??) && !entity.internal && entity.listAction)>
 
-                                <button opaque="NO" tag="${tag}" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="a2V-SZ-Fos">
+                                <button opaque="NO" tag="${tag}" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="${entity.name}Button">
                                     <rect key="frame" x="10" y="${y}" width="394" height="30"/>
                                     <state key="normal" title="${entity.name}"/>
                                     <connections>

@@ -2,6 +2,7 @@
 <@header?interpret />
 
 #import <UIKit/UIKit.h>
+#import "HomeViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate> {
     @public

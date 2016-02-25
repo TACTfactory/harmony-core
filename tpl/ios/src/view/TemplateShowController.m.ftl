@@ -4,8 +4,15 @@
 <@header?interpret />
 
 #import "${curr.name?cap_first}ShowViewController.h"
+<#if curr.editAction>
+#import "${curr.name?cap_first}EditViewController.h"
+</#if>
 #import "DateUtils.h"
-<#list curr.relations as relation>
+<#assign allRelations = curr.relations />
+<#if (singleTabInheritance && curr.inheritance.superclass??) && entities[curr.inheritance.superclass.name]??>
+    <#assign allRelations = allRelations + entities[curr.inheritance.superclass.name].relations />
+</#if>
+<#list allRelations as relation>
 #import "${relation.relation.targetEntity?cap_first}.h"
 </#list>
 
@@ -19,11 +26,13 @@
     [super viewDidLoad];
 
     self.navigationItem.title = [NSString stringWithFormat:@"%d", self.model.id];
+    <#if curr.editAction>
     UIBarButtonItem *editButton = [[UIBarButtonItem alloc] initWithTitle:@"Edit"
                                                                    style:UIBarButtonItemStylePlain
                                                                   target:self
                                                                   action:@selector(onClickEdit)];
     self.navigationItem.rightBarButtonItem = editButton;
+    </#if>
 
     [self loadData];
 }

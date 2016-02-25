@@ -9,11 +9,13 @@
 #import "HarmonyDatePicker.h"
 #import "HarmonyMultiplePicker.h"
 #import "EnumUtils.h"
-<#list curr.relations as relation>
-    <#if relation.relation.targetEntity != curr.name>
+<#assign allRelations = curr.relations />
+<#if (singleTabInheritance && curr.inheritance.superclass??) && entities[curr.inheritance.superclass.name]??>
+    <#assign allRelations = allRelations + entities[curr.inheritance.superclass.name].relations />
+</#if>
+<#list allRelations as relation>
 #import "${relation.relation.targetEntity?cap_first}.h"
 #import "${relation.relation.targetEntity?cap_first}SQLiteAdapter.h"
-    </#if>
 </#list>
 #import "${curr.name?cap_first}SQLiteAdapter.h"
 
@@ -41,7 +43,11 @@
                                                                   action:@selector(onClickSave)];
     self.navigationItem.rightBarButtonItem = saveButton;
 
-    <#list curr.relations as relation>
+    <#assign allRelations = curr.relations />
+    <#if (singleTabInheritance && curr.inheritance.superclass??) && entities[curr.inheritance.superclass.name]??>
+        <#assign allRelations = allRelations + entities[curr.inheritance.superclass.name].relations />
+    </#if>
+    <#list allRelations as relation>
     self->${relation.relation.targetEntity?lower_case}SQLiteAdapter = [${relation.relation.targetEntity?cap_first}SQLiteAdapter new];
     </#list>
     self->${curr.name?lower_case}SQLiteAdapter = [${curr.name?cap_first}SQLiteAdapter new];
@@ -68,8 +74,6 @@ ${AdapterUtils.loadDataCreateFieldAdapter(field, 2)}
         }
 
         [HarmonyPicker bindPicker:${field.name}Ids withTextField:self.${field.name}TextField];
-                <#else>
-        self.${field.name}TextField.delegate = self;
                 </#if>
             <#elseif (field.harmony_type?lower_case == "datetime")>
         [HarmonyDatePicker bindPicker:UIDatePickerModeDateAndTime withTextField:self.${field.name}TextField];
@@ -82,6 +86,8 @@ ${AdapterUtils.loadDataCreateFieldAdapter(field, 2)}
             </#if>
         </#if>
     </#list>
+
+        self.${field.name}TextField.delegate = self;
     }
 }
 
@@ -121,6 +127,18 @@ ${AdapterUtils.loadDataCreateFieldAdapter(field, 2)}
     </#list>
 }
 
+- (void) textFieldDidBeginEditing:(UITextField *)textField {
+    CGPoint point = CGPointMake(0, textField.frame.origin.y);
+
+    self.scrollView.contentOffset = point;
+}
+
+- (void)textViewDidBeginEditing:(UITextView *)textView {
+    CGPoint point = CGPointMake(0, textView.frame.origin.y);
+
+    self.scrollView.contentOffset = point;
+}
+
 - (void) onClickSave {
     if ([self validateData]) {
     <#list fields?values as field>
@@ -136,7 +154,7 @@ ${AdapterUtils.loadDataCreateFieldAdapter(field, 2)}
         self.model.${field.name} = [[[EnumUtils get${field.name?cap_first}Values] valueForKey:self.${field.name}TextField.text] intValue];
                 <#elseif (field.harmony_type?lower_case == "datetime") || (field.harmony_type?lower_case == "date") || (field.harmony_type?lower_case == "time")>
         self.model.${field.name} = [DateUtils isoStringToDate:self.${field.name}TextField.text];
-                <#elseif (field.harmony_type?lower_case == "int") || (field.harmony_type?lower_case == "integer")>
+                <#elseif (field.harmony_type?lower_case == "int") || (field.harmony_type?lower_case == "integer") || (field.harmony_type?lower_case == "zipcode")>
         self.model.${field.name} = [self.${field.name}TextField.text intValue];
                 <#elseif (field.harmony_type?lower_case == "short")>
         self.model.${field.name} = (short) [self.${field.name}TextField.text intValue];
