@@ -85,9 +85,8 @@ ${AdapterUtils.loadDataCreateFieldAdapter(field, 2)}
         [HarmonyPicker bindPicker:[[EnumUtils get${field.name?cap_first}Values] allKeys] withTextField:self.${field.name}TextField];
             </#if>
         </#if>
-    </#list>
-
         self.${field.name}TextField.delegate = self;
+    </#list>
     }
 }
 
