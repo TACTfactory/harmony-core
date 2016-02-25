@@ -14,8 +14,10 @@
     <#assign allRelations = allRelations + entities[curr.inheritance.superclass.name].relations />
 </#if>
 <#list allRelations as relation>
+    <#if relation.relation.targetEntity != curr.name>
 #import "${relation.relation.targetEntity?cap_first}.h"
 #import "${relation.relation.targetEntity?cap_first}SQLiteAdapter.h"
+    </#if>
 </#list>
 #import "${curr.name?cap_first}SQLiteAdapter.h"
 
@@ -26,7 +28,9 @@
         <#assign allRelations = allRelations + entities[curr.inheritance.superclass.name].relations />
     </#if>
     <#list allRelations as relation>
+        <#if relation.relation.targetEntity != curr.name>
     ${relation.relation.targetEntity?cap_first}SQLiteAdapter *${relation.relation.targetEntity?lower_case}SQLiteAdapter;
+        </#if>
     </#list>
     ${curr.name?cap_first}SQLiteAdapter *${curr.name?lower_case}SQLiteAdapter;
 }
@@ -50,7 +54,9 @@
         <#assign allRelations = allRelations + entities[curr.inheritance.superclass.name].relations />
     </#if>
     <#list allRelations as relation>
+        <#if relation.relation.targetEntity != curr.name>
     self->${relation.relation.targetEntity?lower_case}SQLiteAdapter = [${relation.relation.targetEntity?cap_first}SQLiteAdapter new];
+        </#if>
     </#list>
     self->${curr.name?lower_case}SQLiteAdapter = [${curr.name?cap_first}SQLiteAdapter new];
 
@@ -58,10 +64,12 @@
 }
 
 - (void) loadData {
+    self.model = [${curr.name?cap_first} new];
+
 <#list fields?values as field>
     <#if (!field.internal && !field.hidden)>
         <#if (field.harmony_type?lower_case != "boolean")>
-        self.${field.name}TextField.delegate = self;
+    self.${field.name}TextField.delegate = self;
         </#if>
         <#if (field.harmony_type?lower_case == "relation")>
             <#if (field.relation.type=="OneToOne" || field.relation.type=="ManyToOne")>
