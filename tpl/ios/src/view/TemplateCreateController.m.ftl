@@ -9,20 +9,24 @@
 #import "HarmonyDatePicker.h"
 #import "HarmonyMultiplePicker.h"
 #import "EnumUtils.h"
-<#list curr.relations as relation>
-    <#if relation.relation.targetEntity != curr.name>
+<#assign allRelations = curr.relations />
+<#if (singleTabInheritance && curr.inheritance.superclass??) && entities[curr.inheritance.superclass.name]??>
+    <#assign allRelations = allRelations + entities[curr.inheritance.superclass.name].relations />
+</#if>
+<#list allRelations as relation>
 #import "${relation.relation.targetEntity?cap_first}.h"
 #import "${relation.relation.targetEntity?cap_first}SQLiteAdapter.h"
-    </#if>
 </#list>
 #import "${curr.name?cap_first}SQLiteAdapter.h"
 
 @interface ${curr.name?cap_first}CreateViewController () {
     @private
-    <#list curr.relations as relation>
-        <#if relation.relation.targetEntity != curr.name>
+    <#assign allRelations = curr.relations />
+    <#if (singleTabInheritance && curr.inheritance.superclass??) && entities[curr.inheritance.superclass.name]??>
+        <#assign allRelations = allRelations + entities[curr.inheritance.superclass.name].relations />
+    </#if>
+    <#list allRelations as relation>
     ${relation.relation.targetEntity?cap_first}SQLiteAdapter *${relation.relation.targetEntity?lower_case}SQLiteAdapter;
-        </#if>
     </#list>
     ${curr.name?cap_first}SQLiteAdapter *${curr.name?lower_case}SQLiteAdapter;
 }
@@ -41,7 +45,11 @@
                                                                   action:@selector(onClickSave)];
     self.navigationItem.rightBarButtonItem = saveButton;
 
-    <#list curr.relations as relation>
+    <#assign allRelations = curr.relations />
+    <#if (singleTabInheritance && curr.inheritance.superclass??) && entities[curr.inheritance.superclass.name]??>
+        <#assign allRelations = allRelations + entities[curr.inheritance.superclass.name].relations />
+    </#if>
+    <#list allRelations as relation>
     self->${relation.relation.targetEntity?lower_case}SQLiteAdapter = [${relation.relation.targetEntity?cap_first}SQLiteAdapter new];
     </#list>
     self->${curr.name?lower_case}SQLiteAdapter = [${curr.name?cap_first}SQLiteAdapter new];
@@ -52,6 +60,9 @@
 - (void) loadData {
 <#list fields?values as field>
     <#if (!field.internal && !field.hidden)>
+        <#if (field.harmony_type?lower_case != "boolean")>
+        self.${field.name}TextField.delegate = self;
+        </#if>
         <#if (field.harmony_type?lower_case == "relation")>
             <#if (field.relation.type=="OneToOne" || field.relation.type=="ManyToOne")>
     NSMutableArray *${field.name}Ids = [NSMutableArray new];
@@ -72,8 +83,6 @@
         <#elseif (field.harmony_type?lower_case == "enum")>
     [HarmonyPicker bindPicker:[[EnumUtils get${field.name?cap_first}Values] allKeys] withTextField:self.${field.name}TextField];
         </#if>
-
-    self.${field.name}TextField.delegate = self;
     </#if>
 </#list>
 }
@@ -133,7 +142,7 @@
         self.model.${field.name} = [[[EnumUtils get${field.name?cap_first}Values] valueForKey:self.${field.name}TextField.text] intValue];
                 <#elseif (field.harmony_type?lower_case == "datetime") || (field.harmony_type?lower_case == "date") || (field.harmony_type?lower_case == "time")>
         self.model.${field.name} = [DateUtils isoStringToDate:self.${field.name}TextField.text];
-                <#elseif (field.harmony_type?lower_case == "int") || (field.harmony_type?lower_case == "integer")>
+                <#elseif (field.harmony_type?lower_case == "int") || (field.harmony_type?lower_case == "integer") || (field.harmony_type?lower_case == "zipcode")>
         self.model.${field.name} = [self.${field.name}TextField.text intValue];
                 <#elseif (field.harmony_type?lower_case == "short")>
         self.model.${field.name} = (short) [self.${field.name}TextField.text intValue];

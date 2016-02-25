@@ -21,10 +21,12 @@
 
 @interface ${curr.name?cap_first}EditViewController () {
     @private
-    <#list curr.relations as relation>
-        <#if relation.relation.targetEntity != curr.name>
+    <#assign allRelations = curr.relations />
+    <#if (singleTabInheritance && curr.inheritance.superclass??) && entities[curr.inheritance.superclass.name]??>
+        <#assign allRelations = allRelations + entities[curr.inheritance.superclass.name].relations />
+    </#if>
+    <#list allRelations as relation>
     ${relation.relation.targetEntity?cap_first}SQLiteAdapter *${relation.relation.targetEntity?lower_case}SQLiteAdapter;
-        </#if>
     </#list>
     ${curr.name?cap_first}SQLiteAdapter *${curr.name?lower_case}SQLiteAdapter;
 }
@@ -63,6 +65,7 @@
         [self.${field.name}Switch setOn:self.model.${field.name}];
             <#else>
 ${AdapterUtils.loadDataCreateFieldAdapter(field, 2)}
+        self.${field.name}TextField.delegate = self;
             </#if>
             <#if (field.harmony_type?lower_case == "relation")>
                 <#if (field.relation.type=="OneToOne" || field.relation.type=="ManyToOne")>
@@ -84,8 +87,6 @@ ${AdapterUtils.loadDataCreateFieldAdapter(field, 2)}
             <#elseif (field.harmony_type?lower_case == "enum")>
         [HarmonyPicker bindPicker:[[EnumUtils get${field.name?cap_first}Values] allKeys] withTextField:self.${field.name}TextField];
             </#if>
-
-        self.${field.name}TextField.delegate = self;
         </#if>
     </#list>
     }

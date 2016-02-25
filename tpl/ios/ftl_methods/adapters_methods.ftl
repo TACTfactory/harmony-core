@@ -330,10 +330,12 @@
         <#assign result = result + "${tab}self.${field.name}TextField.text = [DateUtils dateToISOString:self.model.${field.name}];" />
                     <#elseif (field.harmony_type?lower_case == "enum")>
         <#assign result = result + "${tab}self.${field.name}TextField.text = [NSString stringWithFormat:@\"%lu\", (unsigned long)self.model.${field.name}];" />
+                    <#elseif (field.harmony_type?lower_case == "char") || (field.harmony_type?lower_case == "character")>
+        <#assign result = result + "${tab}self.${field.name}TextField.text = [NSString stringWithFormat:@\"%c\", self.model.${field.name}];" />
                     <#else>
         <#assign result = result + "${tab}self.${field.name}TextField.text = self.model.${field.name};" />
                     </#if>
-                <#elseif (field.harmony_type?lower_case == "int") || (field.harmony_type?lower_case == "integer") || (field.harmony_type?lower_case == "short") || (field.harmony_type?lower_case == "byte")>
+                <#elseif (field.harmony_type?lower_case == "int") || (field.harmony_type?lower_case == "zipcode") || (field.harmony_type?lower_case == "integer") || (field.harmony_type?lower_case == "short") || (field.harmony_type?lower_case == "byte")>
         <#assign result = result + "${tab}self.${field.name}TextField.text = [NSString stringWithFormat:@\"%d\", self.model.${field.name}];" />
                 <#elseif (field.harmony_type?lower_case == "char" || (field.harmony_type?lower_case == "character"))>
         <#assign result = result + "${tab}self.${field.name}TextField.text = [NSString stringWithFormat:@\"%c\", self.model.${field.name}];" />
