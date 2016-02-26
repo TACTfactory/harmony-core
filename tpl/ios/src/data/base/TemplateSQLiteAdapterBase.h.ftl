@@ -160,8 +160,8 @@ ${ImportUtils.importRelatedEntities(curr, false)}
  * @param orderBy Order by string (can be null)
  * @return ArrayList of ${rightRelation.relation.targetEntity} matching ${leftRelation.name?lower_case}
  */
-- (Cursor *) getBy${leftRelation.name?cap_first}:<#list leftRelation.relation.field_ref as refField>(${FieldsUtils.getObjectiveType(refField)}) ${leftRelation.name?uncap_first}${refField.name?cap_first} with</#list>
-            Projection:(NSArray *) projection
+- (Cursor *) getBy${leftRelation.name?cap_first}:<#list leftRelation.relation.field_ref as refField>(${FieldsUtils.getObjectiveType(refField)}) ${leftRelation.name?uncap_first}${refField.name?cap_first}
+        with</#list>Projection:(NSArray *) projection
        withWhereClause:(NSString *) whereClause
          withWhereArgs:(NSArray *) whereArgs
            withOrderBy:(NSString *) orderBy;

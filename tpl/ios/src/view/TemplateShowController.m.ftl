@@ -40,9 +40,7 @@
 
 - (void) loadData {
     if (self.model != nil) {
-
-    self.model = [[${curr.name?cap_first}SQLiteAdapter new] getByID:self.model.id];
-
+        self.model = [[${curr.name?cap_first}SQLiteAdapter new] getByID:self.model.id];
     <#list fields?values as field>
         <#if (!field.internal && !field.hidden)>
             <#if (field.harmony_type?lower_case == "boolean")>
