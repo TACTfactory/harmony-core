@@ -48,7 +48,7 @@
                                     <nil key="highlightedColor"/>
                                 </label>
                                         <#if (field.harmony_type?lower_case == "boolean")>
-                                        <#assign y = y + 30/>
+                                        <#assign y = y + 50/>
                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="${curr.name?cap_first}${field.name?cap_first}Switch" >
                                     <rect key="frame" x="10" y="${y}" width="51" height="21"/>
                                 </switch>
