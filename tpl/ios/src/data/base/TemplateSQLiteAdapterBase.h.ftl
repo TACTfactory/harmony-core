@@ -62,6 +62,7 @@ ${ImportUtils.importRelatedEntities(curr, false)}
 + (NSString *) getSchema;
 </#if>
 
+<#if !curr.internal>
     <#if (curr_relations??)>
         <#list (curr_relations) as relation>
             <#if (relation.relation.type=="ManyToOne" || relation.relation.type=="OneToOne")>
@@ -82,7 +83,7 @@ ${ImportUtils.importRelatedEntities(curr, false)}
         </#list>
     </#if>
 
-<#if !curr.internal>//// CRUD Entity ////
+//// CRUD Entity ////
 /**
  * Find & read ${curr.name} by id in database.
  *
@@ -139,5 +140,41 @@ ${ImportUtils.importRelatedEntities(curr, false)}
  * @return The cursor pointing to the query's result
  */
 - (${curr.name} *) query<#list curr_ids as id><#if id_index != 0> with${id.name?cap_first}</#if>:(${FieldsUtils.convertToObjectiveType(id)}<#if !id.primitive>*</#if>) ${id.name}</#list>;
+</#if>
+
+<#if (curr.internal)>
+    <#assign leftRelation = curr.relations[0] />
+    <#if isRecursiveJoinTable>
+        <#assign rightRelation = curr.relations[0] />
+    <#else>
+        <#assign rightRelation = curr.relations[1] />
+    </#if>
+    <#assign rightRelationFieldsNames = ContractUtils.getFieldsNames(rightRelation) />
+    <#assign leftRelationFieldsNames = ContractUtils.getFieldsNames(leftRelation) />
+-(long long) insert:<#list leftRelation.relation.field_ref as refField>(${FieldsUtils.getObjectiveType(refField)}) ${leftRelation.name?uncap_first}${refField.name?cap_first} with:</#list><#list rightRelation.relation.field_ref as refField>(${FieldsUtils.getObjectiveType(refField)}) ${rightRelation.name?uncap_first}${refField.name?cap_first}<#if refField_has_next>with:</#if></#list>;
+    <#list 1..2 as i>
+
+/**
+ * Find & read ${curr.name} by ${leftRelation.name}.
+ * @param ${leftRelation.name?lower_case} ${rightRelation.name?lower_case}
+ * @param orderBy Order by string (can be null)
+ * @return ArrayList of ${rightRelation.relation.targetEntity} matching ${leftRelation.name?lower_case}
+ */
+- (Cursor *) getBy${leftRelation.name?cap_first}:<#list leftRelation.relation.field_ref as refField>(${FieldsUtils.getObjectiveType(refField)}) ${leftRelation.name?uncap_first}${refField.name?cap_first} with</#list>
+            Projection:(NSArray *) projection
+       withWhereClause:(NSString *) whereClause
+         withWhereArgs:(NSArray *) whereArgs
+           withOrderBy:(NSString *) orderBy;
+
+    <#if isRecursiveJoinTable>
+        <#assign leftRelation = curr.relations[0] />
+    <#else>
+        <#assign leftRelation = curr.relations[1] />
+    </#if>
+    <#assign rightRelation = curr.relations[0] />
+
+    <#assign rightRelationFieldsNames = ContractUtils.getFieldsNames(rightRelation) />
+    <#assign leftRelationFieldsNames = ContractUtils.getFieldsNames(leftRelation) />
+    </#list>
 </#if>
 @end

@@ -33,6 +33,11 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
 <#else>
     <#assign extend="SQLiteAdapter<" +extendType+ ">" />
 </#if>
+<#if curr.internal>
+#import "CriteriaExpression.h"
+#import "Criterion.h"
+#import "SelectValue.h"
+</#if>
 
 /** ${curr.name} adapter database abstract class. <br/>
  * <b><i>This class will be overwrited whenever you regenerate the project<br/>
@@ -254,7 +259,7 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
 - (NSArray *) getCols {
     return ${ContractUtils.getContractCols(curr, true)};
 }
-
+<#if (!curr.internal)>
     <#if (curr_relations??)>
         <#list (curr_relations) as relation>
             <#if (relation.relation.type=="ManyToOne" || relation.relation.type=="OneToOne")>
@@ -291,7 +296,6 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
         </#list>
     </#if>
 
-<#if (!curr.internal)>
 - (NSArray *) cursorToItems:(Cursor *) cursor {
     return [${curr.name}Contract cursorToItems:cursor];
 }
@@ -319,12 +323,13 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
     [result set${relation.name?cap_first}:[self cursorToItems:${relation.name?uncap_first}Cursor]];
 
     [${relation.name?uncap_first}Cursor close];
+
                 <#elseif relation.relation.type=="ManyToMany">
     ${relation.relation.joinTable?cap_first}SQLiteAdapter *${relation.relation.joinTable?uncap_first}Adapter = [${relation.relation.joinTable?cap_first}SQLiteAdapter new];
 
     Cursor *${relation.relation.joinTable?uncap_first}Cursor = [${relation.relation.joinTable?uncap_first}Adapter
             getBy${relation.relation.mappedBy?cap_first}:result.id
-            withProjection:${ContractUtils.getContractCols(entities[relation.relation.joinTable?cap_first], true)}
+            withProjection:${curr.name?cap_first}.ALIASED_COLS
            withWhereClause:nil
              withWhereArgs:nil
                withOrderBy:nil];
@@ -332,6 +337,7 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
     [result set${relation.name?cap_first}:[self cursorToItems:${relation.relation.joinTable?uncap_first}Cursor]];
 
     [${relation.relation.joinTable?uncap_first}Cursor close];
+
                 <#else>
 
     if ([result ${relation.name?uncap_first}] != nil) {
@@ -339,10 +345,10 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
 
         [result set${relation.name?cap_first}:[${relation.name?uncap_first}Adapter getByID<#list entities[relation.relation.targetEntity].ids as id><#if id_index != 0> with${id.name?cap_first}</#if>:[[result ${relation.name?uncap_first}]${id.name}]</#list>]];
     }
+
                 </#if>
             </#if>
         </#list>
-
     return result;
 }
 
@@ -390,7 +396,19 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
 
     <#list curr_ids as id><#if id.strategy == "IDENTITY">
     [item setId:(int) insertResult];
-        </#if></#list></#if>
+    </#if></#list></#if>
+
+    <#list (ViewUtils.getAllRelations(curr)) as relation>
+        <#if (relation.relation.type=="ManyToMany")>
+    if (item.${relation.name} != nil) {
+        ${relation.relation.joinTable}SQLiteAdapter *${relation.name}Adapter = [${relation.relation.joinTable}SQLiteAdapter new];
+
+        for (${relation.relation.targetEntity?cap_first} *i : item.${relation.name}) {
+            [${relation.name?uncap_first}Adapter insert:insertResult with:i.id];
+        }
+    }
+        </#if>
+    </#list>
 
     return insertResult;
 }
@@ -533,6 +551,85 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
     return [super getDeleteBatch:item withWhereClause:whereClause withWhereArgs:whereArgs];
 }
 <#else> // TODO != internal_curr
+</#if>
+
+<#if (curr.internal)>
+    <#assign leftRelation = curr.relations[0] />
+    <#if isRecursiveJoinTable>
+        <#assign rightRelation = curr.relations[0] />
+    <#else>
+        <#assign rightRelation = curr.relations[1] />
+    </#if>
+    <#assign rightRelationFieldsNames = ContractUtils.getFieldsNames(rightRelation) />
+    <#assign leftRelationFieldsNames = ContractUtils.getFieldsNames(leftRelation) />
+-(long long) insert:<#list leftRelation.relation.field_ref as refField>(${FieldsUtils.getObjectiveType(refField)}) ${leftRelation.name?uncap_first}${refField.name?cap_first} with:</#list><#list rightRelation.relation.field_ref as refField>(${FieldsUtils.getObjectiveType(refField)}) ${rightRelation.name?uncap_first}${refField.name?cap_first}<#if refField_has_next>with:</#if></#list> {
+
+        NSMutableDictionary *values = [NSMutableDictionary new];
+        <#list leftRelation.relation.field_ref as refField>
+        [values setValue:[NSString stringWithFormat:@"%d", ${leftRelation.name?uncap_first}${refField.name?cap_first}] forKey:${leftRelationFieldsNames[refField_index]}];
+        </#list>
+        <#list rightRelation.relation.field_ref as refField>
+        [values setValue:[NSString stringWithFormat:@"%d", ${rightRelation.name?uncap_first}${refField.name?cap_first}] forKey:${rightRelationFieldsNames[refField_index]}];
+        </#list>
+
+        return [self insert:nil withValues:values];
+    }
+
+    <#list 1..2 as i>
+- (Cursor *) getBy${leftRelation.name?cap_first}:<#list leftRelation.relation.field_ref as refField>(${FieldsUtils.getObjectiveType(refField)}) ${leftRelation.name?uncap_first}${refField.name?cap_first} with</#list>
+            Projection:(NSArray *) projection
+       withWhereClause:(NSString *) whereClause
+         withWhereArgs:(NSArray *) whereArgs
+           withOrderBy:(NSString *) orderBy {
+
+        Cursor *result = nil;
+
+        CriteriaExpression *crit = [[CriteriaExpression alloc] initWithType:AND];
+        <#list leftRelation.relation.field_ref as refField>
+        [crit addWithKey:${leftRelationFieldsNames[refField_index]} withValue:[NSString stringWithFormat:@"%d", ${leftRelation.name?uncap_first}${refField.name?cap_first}] withType:EQUALS];
+        </#list>
+
+        SelectValue *value = [SelectValue new];
+        [value setRefKey:<#list rightRelation.relation.field_ref as refField>${rightRelationFieldsNames[refField_index]}<#if refField_has_next> + " || '::dirtyHack::' ||" + </#if></#list>];
+        [value setRefTable:${ContractUtils.getContractTableName(curr)}];
+        [value setCriteria:crit];
+
+        CriteriaExpression *${rightRelation.relation.targetEntity?lower_case}Crit = [[CriteriaExpression alloc] initWithType:AND];
+        Criterion *${rightRelation.relation.targetEntity?lower_case}SelectCrit = [Criterion new];
+        [${rightRelation.relation.targetEntity?lower_case}SelectCrit setKey:<#list entities[rightRelation.relation.targetEntity].ids as id>${ContractUtils.getContractCol(id, true)}<#if id_has_next>+ " || '::dirtyHack::' || " + </#if></#list>];
+        [${rightRelation.relation.targetEntity?lower_case}SelectCrit setType:IN];
+        [${rightRelation.relation.targetEntity?lower_case}SelectCrit addValue:value];
+        [${rightRelation.relation.targetEntity?lower_case}Crit add:${rightRelation.relation.targetEntity?lower_case}SelectCrit];
+
+        if (whereClause != nil && whereClause.length > 0) {
+            whereClause = [NSString stringWithFormat:@"%@ AND %@", whereClause, ${rightRelation.relation.targetEntity?lower_case}Crit.toSQLiteSelection];
+            whereArgs = [whereArgs arrayByAddingObjectsFromArray:${rightRelation.relation.targetEntity?lower_case}Crit.toSQLiteSelectionArgs];
+        } else {
+            whereClause = ${rightRelation.relation.targetEntity?lower_case}Crit.toSQLiteSelection;
+            whereArgs = ${rightRelation.relation.targetEntity?lower_case}Crit.toSQLiteSelectionArgs;
+        }
+
+        result = [self query:${ContractUtils.getContractTableName(entities[rightRelation.relation.targetEntity])}
+              withProjection:projection
+             withWhereClause:whereClause
+               withWhereArgs:whereArgs
+                 withGroupBy:nil
+                  withHaving:nil
+                 withOrderBy:orderBy);
+
+        return result;
+    }
+
+    <#if isRecursiveJoinTable>
+        <#assign leftRelation = curr.relations[0] />
+    <#else>
+        <#assign leftRelation = curr.relations[1] />
+    </#if>
+    <#assign rightRelation = curr.relations[0] />
+
+    <#assign rightRelationFieldsNames = ContractUtils.getFieldsNames(rightRelation) />
+    <#assign leftRelationFieldsNames = ContractUtils.getFieldsNames(leftRelation) />
+    </#list>
 </#if>
 
 <#if sync>

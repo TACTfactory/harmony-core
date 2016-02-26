@@ -8,6 +8,7 @@
 #import "${curr.name?cap_first}EditViewController.h"
 </#if>
 #import "DateUtils.h"
+#import "${curr.name?cap_first}SQLiteAdapter.h"
 <#assign allRelations = curr.relations />
 <#if (singleTabInheritance && curr.inheritance.superclass??) && entities[curr.inheritance.superclass.name]??>
     <#assign allRelations = allRelations + entities[curr.inheritance.superclass.name].relations />
@@ -39,6 +40,9 @@
 
 - (void) loadData {
     if (self.model != nil) {
+
+    self.model = [[${curr.name?cap_first}SQLiteAdapter new] getByID:self.model.id];
+
     <#list fields?values as field>
         <#if (!field.internal && !field.hidden)>
             <#if (field.harmony_type?lower_case == "boolean")>
