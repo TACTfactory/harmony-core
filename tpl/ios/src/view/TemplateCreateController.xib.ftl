@@ -81,7 +81,9 @@
                                 <constraint firstItem="${curr.name?cap_first}${field.name?cap_first}LabelTitle" firstAttribute="leading" secondItem="${mainView}" secondAttribute="leading" constant="10" id="${curr.name?cap_first}${field.name?cap_first}LabelTitleLeading${mainView}"/>
                                 <constraint firstItem="${curr.name?cap_first}${field.name?cap_first}LabelTitle" firstAttribute="top" secondItem="${lastElement}" secondAttribute="bottom" constant="5" id="${curr.name?cap_first}${field.name?cap_first}LabelTitleTop${lastElement}"/>
                                         </#if>
+                                        <#if (field.harmony_type?lower_case != "boolean")>
                                 <constraint firstAttribute="trailing" secondItem="${curr.name?cap_first}${field.name?cap_first}${typeElement}" secondAttribute="trailing" constant="15" id="${curr.name?cap_first}${field.name?cap_first}${typeElement}Trailing"/>
+                                        </#if>
                                 <constraint firstItem="${curr.name?cap_first}${field.name?cap_first}${typeElement}" firstAttribute="leading" secondItem="${mainView}" secondAttribute="leading" constant="15" id="${curr.name?cap_first}${field.name?cap_first}${typeElement}Leading${mainView}"/>
                                 <constraint firstItem="${curr.name?cap_first}${field.name?cap_first}${typeElement}" firstAttribute="top" secondItem="${curr.name?cap_first}${field.name?cap_first}LabelTitle" secondAttribute="bottom" constant="5" id="${curr.name?cap_first}${field.name?cap_first}${typeElement}Top${curr.name?cap_first}${field.name?cap_first}LabelTitle"/>
                                         <#assign lastElement = "${curr.name?cap_first}${field.name?cap_first}${typeElement}" />
