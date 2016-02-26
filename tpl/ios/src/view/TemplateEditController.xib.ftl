@@ -47,12 +47,13 @@
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
-                                    <#assign y = y + 26/>
                                         <#if (field.harmony_type?lower_case == "boolean")>
+                                        <#assign y = y + 30/>
                                 <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="${curr.name?cap_first}${field.name?cap_first}Switch" >
                                     <rect key="frame" x="10" y="${y}" width="51" height="21"/>
                                 </switch>
                                         <#else>
+                                        <#assign y = y + 26/>
                                 <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="${curr.name?cap_first}${field.name?cap_first}TextField">
                                     <rect key="frame" x="15" y="${y}" width="384" height="30"/>
                                     <fontDescription key="fontDescription" type="system" pointSize="14"/>

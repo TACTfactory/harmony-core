@@ -452,17 +452,12 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
         }
     }
         <#elseif (relation.relation.type=="OneToMany")>
-    if (item.${relation.name}() != nil) {
+    if (item.${relation.name} != nil) {
         ${relation.relation.targetEntity}SQLiteAdapter *${relation.name?uncap_first}Adapter = [${relation.relation.targetEntity}SQLiteAdapter new];
 
         for (${relation.relation.targetEntity?cap_first} *${relation.relation.targetEntity?lower_case} in item.${relation.name}) {
-        <#if (relation.relation.mappedBy?? && !MetadataUtils.getMappedField(relation).internal)>
             ${relation.relation.targetEntity?lower_case}.${relation.relation.mappedBy} = item;
             [${relation.name?uncap_first}Adapter insertOrUpdate:${relation.relation.targetEntity?lower_case}];
-        <#else>
-            [${relation.name?uncap_first}Adapter insertOrUpdateWith${curr.name?cap_first}${relation.name?cap_first}:${relation.relation.targetEntity?lower_case}
-                                    with:insertResult];
-        </#if>
         }
     }
 
@@ -561,7 +556,7 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
                             withValue:[NSString stringWithFormat:@"%d", item.${id.name}]
                              withType:EQUALS];
 
-        [[${relation.relation.targetEntity?cap_first}SQLiteAdapter new] update:[NSDictionary dictionaryWithObject:[NSNull null]
+        [[${relation.relation.targetEntity?cap_first}SQLiteAdapter new] update:[NSDictionary dictionaryWithObject:@"0"
                                                            forKey:${ContractUtils.getContractCol(MetadataUtils.getMappedField(relation))}_${id.name?upper_case}]
                         withWhereClause:${relation.name}Crit.toSQLiteSelection
                           withWhereArgs:${relation.name}Crit.toSQLiteSelectionArgs];
