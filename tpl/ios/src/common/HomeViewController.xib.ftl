@@ -25,9 +25,24 @@
                         <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="${mainView}" userLabel="MainView">
                             <rect key="frame" x="0.0" y="0.0" width="414" height="241"/>
                             <subviews>
-                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Home View Controller" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HomeViewControllerTitleLabel">
-                                    <rect key="frame" x="124" y="30" width="167" height="21"/>
-                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="HomeViewControllerTitleLabel">
+                                    <rect key="frame" x="10" y="30" width="394" height="301"/>
+                                    <string key="text">You have generated your first iOS project with Harmony.
+
+Step 1
+Now you can create your models in the entity package of the project.
+File : /Entity/Post
+
+Step 2
+After creating your models, run Harmony CLI Entities and CRUD view generator.
+script/console orm:generate:entities
+script/console orm:generate:crud
+
+Step 3
+Refresh, clean and run your project again...
+
+More documentation at https://support.tactfactory.com/projects/harmony/wiki</string>
+                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                     <nil key="highlightedColor"/>
                                 </label>
@@ -66,8 +81,9 @@
                                 <constraint firstAttribute="trailing" secondItem="${entity.name}Button" secondAttribute="trailing" constant="10" id="${entity.name}ButtonTrailingConstraint"/>
                                     </#if>
                                 </#list>
-                                <constraint firstItem="HomeViewControllerTitleLabel" firstAttribute="centerX" secondItem="${mainView}" secondAttribute="centerX" id="HomeViewControllerTitleLabelCenterX${mainView}Constraint"/>
                                 <constraint firstItem="HomeViewControllerTitleLabel" firstAttribute="top" secondItem="${mainView}" secondAttribute="top" constant="30" id="HomeViewControllerTitleLabelTop${mainView}Constraint"/>
+                                <constraint firstItem="HomeViewControllerTitleLabel" firstAttribute="leading" secondItem="${mainView}" secondAttribute="leading" constant="10" id="HomeViewControllerTitleLabelLeading${mainView}Constraint"/>
+                                <constraint firstAttribute="trailing" secondItem="HomeViewControllerTitleLabel" secondAttribute="trailing" constant="10" id="HomeViewControllerTitleLabelTrailingConstraint"/>
                             </constraints>
                         </view>
                     </subviews>
