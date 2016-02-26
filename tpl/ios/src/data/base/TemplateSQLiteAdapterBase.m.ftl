@@ -522,12 +522,12 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
         [crit setType:IN];
         [crit setKey:<#list IdsUtils.getAllIdsColsFromArray(entities[relation.relation.targetEntity].ids) as id>${id}<#if id_has_next>
                 + " || '::dirtyHack::' || "
-                + </#if></#list>);
+                + </#if></#list>];
         [crit addValue:values];
-        [${relation.name}Crit addWithCriteria:crit]q;
+        [${relation.name}Crit addWithCriteria:crit];
 
         for (${relation.relation.targetEntity} *${relation.name} in item.${relation.name}) {
-            [values.addValue:<#list entities[relation.relation.targetEntity].ids as id>
+            [values addValue:<#list entities[relation.relation.targetEntity].ids as id>
                 [NSString stringWithFormat:@"%d", ${relation.name}.${id.name}]<#if id_has_next>
                 + "::dirtyHack::"
                 + </#if></#list>];
@@ -537,9 +537,8 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
         selectionArgs = ${relation.name}Crit.toSQLiteSelectionArgs;
 
         [[${relation.relation.targetEntity?cap_first}SQLiteAdapter new] update:<#list curr_ids as id>[NSDictionary dictionaryWithObject:[NSString stringWithFormat:@"%d", item.${id.name}]
-                                                            forKey:[${ContractUtils.getContractCol(MetadataUtils.getMappedField(relation))}_${id.name?upper_case}]</#list>
+                                                            forKey:${ContractUtils.getContractCol(MetadataUtils.getMappedField(relation))}_${id.name?upper_case}]</#list>
                         withWhereClause:selection withWhereArgs:selectionArgs];
-        ];
 
         [crit setType:NOT_IN];
         <#list curr_ids as id>
@@ -548,7 +547,7 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
                              withType:EQUALS];
 
         [[${relation.relation.targetEntity?cap_first}SQLiteAdapter new] update:[NSDictionary dictionaryWithObject:[NSNull null]
-                                                           forKey:[${ContractUtils.getContractCol(MetadataUtils.getMappedField(relation))}_${id.name?upper_case}]
+                                                           forKey:${ContractUtils.getContractCol(MetadataUtils.getMappedField(relation))}_${id.name?upper_case}]
                         withWhereClause:${relation.name}Crit.toSQLiteSelection
                           withWhereArgs:${relation.name}Crit.toSQLiteSelectionArgs];
         </#list>
@@ -562,18 +561,19 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
                                     withWhereArgs:@[[NSString stringWithFormat:@"%d", item.${id.name}]]];
     </#list>
 
-    NSMutableDictionary *values = [NSMutableDictionary new];
+    NSMutableDictionary *relationValues = [NSMutableDictionary new];
 
     for (${relation.relation.targetEntity} *${relation.relation.targetEntity?uncap_first} in item.${relation.name}) {
         <#list entities[relation.relation.targetEntity].ids as id>
-        [values setValue:[NSString stringWithFormat:@"%d", ${relation.relation.targetEntity?uncap_first}.${id.name}]
-                  forKey:${relation.relation.joinTable}Contract.${NamingUtils.alias(relation.name)}_${id.name?upper_case}];
+        [relationValues setValue:[NSString stringWithFormat:@"%d", ${relation.relation.targetEntity?uncap_first}.${id.name}]
+                          forKey:${relation.relation.joinTable}Contract.${NamingUtils.alias(relation.name)}_${id.name?upper_case}];
         </#list>
         <#list curr.ids as id>
-        [values setValue:[NSString stringWithFormat:@"%d", item.${id.name}]
+        [relationValues setValue:[NSString stringWithFormat:@"%d", item.${id.name}]
+                          forKey:${relation.relation.joinTable}Contract.${NamingUtils.alias(relation.relation.mappedBy)}_${id.name?upper_case}];
         </#list>
 
-        [${relation.relation.joinTable?uncap_first}SQLiteAdapter insert:nil withValues:values];
+        [${relation.relation.joinTable?uncap_first}SQLiteAdapter insert:nil withValues:relationValues];
     }
         </#if>
     </#list>
