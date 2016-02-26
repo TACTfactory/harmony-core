@@ -451,6 +451,21 @@ ${ImportUtils.importRelatedContracts(curr, true, true)}
             [${relation.name?uncap_first}Adapter insert:(int) insertResult with:i.id];
         }
     }
+        <#elseif (relation.relation.type=="OneToMany")>
+    if (item.${relation.name}() != nil) {
+        ${relation.relation.targetEntity}SQLiteAdapter *${relation.name?uncap_first}Adapter = [${relation.relation.targetEntity}SQLiteAdapter new];
+
+        for (${relation.relation.targetEntity?cap_first} *${relation.relation.targetEntity?lower_case} in item.${relation.name}) {
+        <#if (relation.relation.mappedBy?? && !MetadataUtils.getMappedField(relation).internal)>
+            ${relation.relation.targetEntity?lower_case}.${relation.relation.mappedBy} = item;
+            [${relation.name?uncap_first}Adapter insertOrUpdate:${relation.relation.targetEntity?lower_case}];
+        <#else>
+            [${relation.name?uncap_first}Adapter insertOrUpdateWith${curr.name?cap_first}${relation.name?cap_first}:${relation.relation.targetEntity?lower_case}
+                                    with:insertResult];
+        </#if>
+        }
+    }
+
         </#if>
     </#list>
 
