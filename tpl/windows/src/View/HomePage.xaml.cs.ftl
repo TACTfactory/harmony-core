@@ -1,9 +1,12 @@
 <@header?interpret />
-using Microsoft.Phone.Controls;
+
+using ${project_namespace}.Harmony.Util.StateMachine;
+using Windows.Graphics.Display;
+using Windows.UI.Xaml.Controls;
 
 namespace ${project_namespace}.View
 {
-    public partial class HomePage : PhoneApplicationPage
+    public partial class HomePage : Page
     {
         public HomePage()
         {
@@ -14,9 +17,9 @@ namespace ${project_namespace}.View
         
         private void Button${entity.name}_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            this.NavigationService.Navigate(new System.Uri(
-                "/View/${entity.name}/${entity.name}ListPage.xaml",
-                System.UriKind.Relative));
+            ViewStateMachine.Instance.SetTransition(
+                Transition.${entity.name}ListPage, 
+                new ${entity.name}View.JockeyListPage());
         }
             </#if>
         </#list>
