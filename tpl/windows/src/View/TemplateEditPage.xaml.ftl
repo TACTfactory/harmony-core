@@ -1,7 +1,8 @@
 <#assign curr = entities[current_entity] />
+<@header?interpret />
 
 <Page
-    x:Class="${project_namespace}.View.${curr.name}.${curr.name}CreatePage"
+    x:Class="${project_namespace}.View.${curr.name}.${curr.name}EditPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:${project_namespace}.View.${curr.name}"
@@ -12,14 +13,13 @@
     mc:Ignorable="d">
 
     <ScrollViewer>
-        <!--LayoutRoot is the root grid where all page content is placed-->
         <Grid x:Name="LayoutRoot" Background="Transparent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <usercontrol:BackBrowser x:Name="back_broswer" Grid.Row="0"/>
-            <localusercontrol:${curr.name}CreateUserControl x:Name="${curr.name?lower_case}_usercontrol_create" Grid.Row="1"/>
+            <localusercontrol:JockeyEditUserControl x:Name="${curr.name?lower_case}_edit" Grid.Row="1"/>
         </Grid>
     </ScrollViewer>
 </Page>

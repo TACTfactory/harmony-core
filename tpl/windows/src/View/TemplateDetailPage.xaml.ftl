@@ -1,7 +1,9 @@
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
+<#assign fields = ViewUtils.getAllFields(curr) />
 
 <Page
-    x:Class="${project_namespace}.View.${curr.name}.${curr.name}CreatePage"
+    x:Class="${project_namespace}.View.${curr.name}.${curr.name}DetailPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:${project_namespace}.View.${curr.name}"
@@ -12,14 +14,13 @@
     mc:Ignorable="d">
 
     <ScrollViewer>
-        <!--LayoutRoot is the root grid where all page content is placed-->
         <Grid x:Name="LayoutRoot" Background="Transparent">
             <Grid.RowDefinitions>
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <usercontrol:BackBrowser x:Name="back_broswer" Grid.Row="0"/>
-            <localusercontrol:${curr.name}CreateUserControl x:Name="${curr.name?lower_case}_usercontrol_create" Grid.Row="1"/>
+            <usercontrol:DetailBrowser x:Name="detail_broswer" Grid.Row="0"/>
+            <localusercontrol:${curr.name}DetailUserControl x:Name="${curr.name?lower_case}_detail" Grid.Row="1"/>
         </Grid>
     </ScrollViewer>
 </Page>
