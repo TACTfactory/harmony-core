@@ -576,21 +576,21 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 applicationName + "ApplicationBase.cs"));
 
         result.add(new SourceFile(
-                templatePath + "TemplateApplication.xaml.cs",
-                filePath + applicationName + "Application.xaml.cs"));
+                templatePath + "TemplateApp.xaml.cs",
+                filePath + applicationName + "App.xaml.cs"));
 
         result.add(new ProjectUpdater(
                 FileType.Compile,
-                applicationName + "Application.xaml.cs",
-                applicationName + "Application.xaml"));
+                applicationName + "App.xaml.cs",
+                applicationName + "App.xaml"));
 
         result.add(new SourceFile(
-                templatePath + "TemplateApplication.xaml",
-                filePath + applicationName + "Application.xaml"));
+                templatePath + "TemplateApp.xaml",
+                filePath + applicationName + "App.xaml"));
 
         result.add(new ProjectUpdater(
                 FileType.ApplicationDefinition,
-                applicationName + "Application.xaml"));
+                applicationName + "App.xaml"));
 
         return result;
     }
