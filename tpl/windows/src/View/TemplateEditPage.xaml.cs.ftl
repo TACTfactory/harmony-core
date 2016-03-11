@@ -1,11 +1,9 @@
 <#assign curr = entities[current_entity] />
 <@header?interpret />
 
-using com.tactfactory.demact.Entity;
-using com.tactfactory.demact.View.PoneyView;
-using Windows.UI.Xaml;
+using ${project_namespace}.View.${curr.name}.UsersControls;
+using ${project_namespace}.View.Navigation.UsersControls;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Navigation;
 
 namespace ${project_namespace}.View.${curr.name}
 {

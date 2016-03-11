@@ -1,9 +1,9 @@
 <#assign curr = entities[current_entity] />
 <@header?interpret />
 
+using ${project_namespace}.View.${curr.name}.UsersControls;
 using ${project_namespace}.View.Navigation.UsersControls;
 using Windows.UI.Xaml.Controls;
-using ${project_namespace}.View.${curr.name}.UsersControls;
 
 namespace ${project_namespace}.View.${curr.name}
 {
