@@ -399,6 +399,32 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Page,
                 "View/" + entity.getName()  + "/" + String.format("%sListPage.xaml",
                         entity.getName())));
+        
+        result.add(new SourceFile(
+                templatePath + "TemplateListUserControl.xaml.cs",
+                String.format("%s%sListUserControl.xaml.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + entity.getName()  + "/" + String.format("%sListUserControl.xaml.cs",
+                        entity.getName()),
+                String.format("%sListUserControl.xaml",
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateListUserControl.xaml",
+                String.format("%s%sListUserControl.xaml",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + entity.getName()  + "/" + String.format("%sListUserControl.xaml",
+                        entity.getName())));
 
         return result;
     }
