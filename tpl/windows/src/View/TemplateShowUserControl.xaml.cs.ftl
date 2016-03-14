@@ -12,39 +12,69 @@
 using com.tactfactory.demact.Data;
 using com.tactfactory.demact.Entity;
 using com.tactfactory.demact.Harmony.Util.StateMachine;
-using com.tactfactory.demact.View.PoneyView;
+<#if wishedrelation?has_content>
+    <#list wishedrelation as targetEntity> 
+using ${project_namespace}.View.${targetEntity?cap_first};
+    </#list>
+</#if>
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 
-// The User Control item template is documented at http://go.microsoft.com/fwlink/?LinkId=234236
-
-namespace com.tactfactory.demact.View.JockeyView.UsersControls
+namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
 {
-    public sealed partial class JockeyDetailUserControl : UserControl
+    public sealed partial class ${curr.name?cap_first}ShowUserControl : UserControl
     {
-        private JockeySQLiteAdapter adapter = new JockeySQLiteAdapter(new DemactSQLiteOpenHelper());
+        private ${curr.name?cap_first}SQLiteAdapter adapter = 
+            new ${curr.name?cap_first}SQLiteAdapter(new DemactSQLiteOpenHelper());
 
-        public JockeySQLiteAdapter Adapter
-        {
-            get { return adapter; }
-        }
-
-        public Jockey JockeyItem { get; set; }
+        public ${curr.name?cap_first} ${curr.name?cap_first}Item { get; set; }
 
         public StackPanel Stackpanel_btn { get; set; }
-        public Button Btn_show_poney { get; set; }
+        
+        <#list fields?values as field>
+            <#if (!field.internal && !field.hidden && field.relation??)>
+                <#if (field.relation.type == "OneToMany" || field.relation.type == "ManyToMany")>
+        public Button Btn_list_related_${field.relation.targetEntity?lower_case} { get; set; }                
+                <#else>
+        public Button Btn_show_${field.relation.targetEntity?lower_case} { get; set; }
+                </#if>
+            </#if>
+        </#list>
 
         public JockeyDetailUserControl()
         {
             this.InitializeComponent();
             this.DataContext = this;
             this.Stackpanel_btn = this.stackpanel_btn;
-            this.Btn_show_poney = this.btn_show_poney;
+            <#list fields?values as field>
+                <#if (!field.internal && !field.hidden && field.relation??)>
+                    <#if (field.relation.type == "OneToMany" || field.relation.type == "ManyToMany")>
+            this.Btn_list_related_${field.relation.targetEntity?lower_case} = this.btn_show_${field.relation.targetEntity?lower_case};
+                    <#else>
+            this.Btn_show_${field.relation.targetEntity?lower_case} = this.btn_show_${field.relation.targetEntity?lower_case};
+                    </#if>
+                </#if>
+            </#list>
         }
 
-        private void btn_show_poney_Tapped(object sender, TappedRoutedEventArgs e)
+        <#list fields?values as field>
+            <#if (!field.internal && !field.hidden && field.relation??)>
+                <#if (field.relation.type == "OneToMany" || field.relation.type == "ManyToMany")>
+        private void btn_list_related_${field.relation.targetEntity?lower_case}_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            ViewStateMachine.Instance.SetTransition(Transition.PoneyListPage, new PoneyListPage());
+            ViewStateMachine.Instance.SetTransition(Transition.${field.relation.targetEntity?cap_first}ListPage, 
+                new ${field.relation.targetEntity?cap_first}ListPage());
         }
+        
+                <#else>
+        private void btn_show_${field.relation.targetEntity?lower_case}_Tapped(object sender, TappedRoutedEventArgs e)
+        {
+            ViewStateMachine.Instance.SetTransition(Transition.${field.relation.targetEntity?cap_first}ShowPage, 
+                new ${field.relation.targetEntity?cap_first}ShowPage());
+        }
+        
+                </#if>
+            </#if>
+        </#list>
     }
 }

@@ -14,7 +14,7 @@ namespace ${project_namespace}.View.${curr.name}
     public partial class ${curr.name}CreatePage : Page
     {
         // Used to manage ${curr.name}Create UserControl in ${curr.name}CreateState
-        public ${curr.name}CreateUserControl ${curr.name}ItemCreate { get; set; }
+        public ${curr.name}CreateUserControl ${curr.name}CreateUserControl { get; set; }
         
         // Used to manage BackBrowser in ${curr.name}CreateState
         public BackBrowser BackBrowser { get; set; }
@@ -22,7 +22,7 @@ namespace ${project_namespace}.View.${curr.name}
         public ${curr.name}CreatePage()
         {
             InitializeComponent();
-            this.${curr.name}ItemCreate = this.${curr.name?lower_case}_usercontrol_create;
+            this.${curr.name}CreateUserControl = this.${curr.name?lower_case}_create_usercontrol;
             this.BackBrowser = this.back_broswer;
         }
     }

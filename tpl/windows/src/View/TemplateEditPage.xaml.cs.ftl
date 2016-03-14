@@ -14,7 +14,7 @@ namespace ${project_namespace}.View.${curr.name}
     public sealed partial class ${curr.name}EditPage : Page
     {
         // Used to manage ${curr.name}Edit UserControl in ${curr.name}EditState
-        public ${curr.name}EditUserControl ${curr.name}ItemEdit { get; set; }
+        public ${curr.name}EditUserControl ${curr.name}EditUserControl { get; set; }
         
         // Used to manage BackBrowser in ${curr.name}EditState
         public BackBrowser BackBrowser { get; set; }
@@ -23,7 +23,7 @@ namespace ${project_namespace}.View.${curr.name}
         {
             this.InitializeComponent();
             
-            this.${curr.name}ItemEdit = this.${curr.name?lower_case}_edit;
+            this.${curr.name}EditUserControl = this.${curr.name?lower_case}_edit_usercontrol;
             this.BackBrowser = this.back_broswer;
         }
     }

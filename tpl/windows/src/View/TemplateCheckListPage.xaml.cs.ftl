@@ -14,7 +14,7 @@ namespace ${project_namespace}.View.${curr.name}
     public sealed partial class ${curr.name}CheckListPage : Page
     {
         // Used to manage ${curr.name}CheckList UserControl in ${curr.name}CheckListState
-        public ${curr.name}CheckListUserControl ${curr.name}ItemCheckList { get; set; }
+        public ${curr.name}CheckListUserControl ${curr.name}CheckListUserControl { get; set; }
         
         // Used to manage BackBrowser in ${curr.name}CheckListState
         public BackBrowser BackBrowser { get; set; }
@@ -23,7 +23,7 @@ namespace ${project_namespace}.View.${curr.name}
         {
             this.InitializeComponent();
 
-            this.${curr.name}ItemCheckList = this.${curr.name?lower_case}_usercontrol_check_list;
+            this.${curr.name}CheckListUserControl = this.${curr.name?lower_case}_usercontrol_check_list;
             this.BackBrowser = this.back_broswer;
         }
     }

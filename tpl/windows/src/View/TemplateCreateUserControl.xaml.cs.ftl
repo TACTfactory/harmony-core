@@ -25,20 +25,27 @@ namespace ${project_namespace}.View.${curr.name}.UsersControls
     /// <summary>
     /// ${curr.name}CreateUserControl contain real create display mechanism for ${curr.name} entity.
     /// </summary>
-    public sealed partial class ${curr.name}CreateUserControl : UserControl
+    public sealed partial class ${curr.name?cap_first}CreateUserControl : UserControl
     {
         /// <summary>
-        /// ${curr.name} adapter to save and load ${curr.name} informations.
+        /// ${curr.name?cap_first}CreateUserControl button stackpanel 
+        /// use in state item view part to manage UI navigation display.
         /// </summary>
-        public ${curr.name?cap_first}SQLiteAdapter ${curr.name?cap_first}Adapter = 
+        public StackPanel Stackpanel_btn { get; set; }
+    
+        /// <summary>
+        /// ${curr.name?cap_first}CreateUserControl adapter to save and load ${curr.name?cap_first} informations.
+        /// </summary>
+        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?cap_first}Adapter = 
             new ${curr.name?cap_first}SQLiteAdapter(new DemactSQLiteOpenHelper());
 
         /// <summary>
         /// Default constructor
         /// </summary>
-        public ${curr.name}CreateUserControl()
+        public ${curr.name?cap_first}CreateUserControl()
         {
             this.InitializeComponent();
+            this.Stackpanel_btn = this.stackpanel_btn;
         }
 
         /// <summary>
@@ -179,7 +186,7 @@ namespace ${project_namespace}.View.${curr.name}.UsersControls
             </#list>
         </#if>
 
-        
+        //TODO setup in state part
         <#if curr.relations?has_content>
         /// <summary>
         /// Update ${curr.name?cap_first}UserControl UI to remove button if comming from other display tree state.

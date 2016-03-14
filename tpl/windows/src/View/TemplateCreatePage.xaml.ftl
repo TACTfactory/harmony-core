@@ -19,7 +19,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <usercontrol:BackBrowser x:Name="back_broswer" Grid.Row="0"/>
-            <localusercontrol:${curr.name}CreateUserControl x:Name="${curr.name?lower_case}_usercontrol_create" Grid.Row="1"/>
+            <localusercontrol:${curr.name}CreateUserControl x:Name="${curr.name?lower_case}_create_usercontrol" Grid.Row="1"/>
         </Grid>
     </ScrollViewer>
 </Page>

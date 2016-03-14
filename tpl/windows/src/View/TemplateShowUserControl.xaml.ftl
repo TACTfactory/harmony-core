@@ -4,11 +4,11 @@
 <@header?interpret />
 
 <UserControl
-    x:Class="com.tactfactory.demact.View.JockeyView.UsersControls.JockeyDetailUserControl"
+    x:Class="${project_namespace}.View.${curr.name}.UsersControls.${curr.name}ShowUserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:com.tactfactory.demact.View.JockeyView.UsersControls"
-    xmlns:entity="using:com.tactfactory.demact.Entity"
+    xmlns:local="using:${project_namespace}.View.${curr.name}.UsersControls"
+    xmlns:entity="using:${project_namespace}.Entity"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -17,12 +17,29 @@
 
     <ScrollViewer>
         <StackPanel x:Name="root_stackpanel">
-            <TextBlock x:Name="text_block_name" Text="Jockey : name"/>
-            <TextBlock x:Name="text_box_name" Text="{Binding JockeyItem.Name}"/>
-            <TextBlock x:Name="text_block_surname" Text="Jockey : surname"/>
-            <TextBlock x:Name="text_box_surname" Text="{Binding JockeyItem.Surname}"/>
+            <#list fields?values as field>
+                <#if (!field.internal && !field.hidden)>
+                    <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany" && field.relation.type!="OneToOne" && field.relation.type!="ManyToOne"))>
+                        <#if (field.harmony_type?lower_case == "boolean")>
+             <TextBlock x:Name="text_block_${field.name}" Text="${curr.name} : ${field.name}"/>
+             <CheckBox x:Name="checkbox_${field.name}" IsChecked="{Binding ${curr.name?cap_first}Item.${field.name?cap_first}}"/>
+                        <#else>
+            <TextBlock x:Name="text_block_${field.name}" Text="${curr.name} : ${field.name}"/>
+            <TextBox x:Name="text_box_${field.name}" Text="{Binding ${curr.name?cap_first}Item.${field.name?cap_first}}"/>
+                        </#if>
+                    </#if>
+                </#if>
+            </#list>
             <StackPanel x:Name="stackpanel_btn">
-                <Button x:Name="btn_show_poney" Content="Show Poneys" HorizontalAlignment="Stretch" Tapped="btn_show_poney_Tapped"/>
+            <#list fields?values as field>
+                <#if (!field.internal && !field.hidden && field.relation??)>
+                    <#if (field.relation.type == "OneToMany" || field.relation.type == "ManyToMany")>
+                <Button x:Name="btn_list_related_${field.relation.targetEntity?lower_case}" Content="List related ${field.relation.targetEntity?cap_first}" HorizontalAlignment="Stretch" Tapped="btn_list_related_${field.relation.targetEntity?lower_case}_Tapped"/>
+                    <#else>
+                <Button x:Name="btn_show_${field.relation.targetEntity?lower_case}" Content="Show ${field.relation.targetEntity?cap_first}" HorizontalAlignment="Stretch" Tapped="btn_show_${field.relation.targetEntity?lower_case}_Tapped"/>
+                    </#if>
+                </#if>
+            </#list>
             </StackPanel>
         </StackPanel>
     </ScrollViewer>

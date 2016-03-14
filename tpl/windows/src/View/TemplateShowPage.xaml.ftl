@@ -3,7 +3,7 @@
 <#assign fields = ViewUtils.getAllFields(curr) />
 
 <Page
-    x:Class="${project_namespace}.View.${curr.name}.${curr.name}DetailPage"
+    x:Class="${project_namespace}.View.${curr.name}.${curr.name}ShowPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:${project_namespace}.View.${curr.name}"
@@ -19,8 +19,8 @@
                 <RowDefinition Height="30"/>
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
-            <usercontrol:DetailBrowser x:Name="detail_broswer" Grid.Row="0"/>
-            <localusercontrol:${curr.name}DetailUserControl x:Name="${curr.name?lower_case}_detail" Grid.Row="1"/>
+            <usercontrol:ShowBrowser x:Name="show_broswer" Grid.Row="0"/>
+            <localusercontrol:${curr.name}ShowUserControl x:Name="${curr.name?lower_case}_show_usercontrol" Grid.Row="1"/>
         </Grid>
     </ScrollViewer>
 </Page>

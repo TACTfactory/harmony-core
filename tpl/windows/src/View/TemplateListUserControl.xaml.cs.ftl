@@ -8,47 +8,42 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Controls;
 
-namespace ${project_namespace}.View.${curr.name}.UsersControls
+namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
 {
     /// <summary>
-    /// ${curr.name}ListUserControl contain real List display mechanism for ${curr.name} entity.
+    /// ${curr.name?cap_first}ListUserControl contain real List display mechanism for ${curr.name?cap_first} entity.
     /// </summary>
-    public sealed partial class ${curr.name}ListUserControl : UserControl
+    public sealed partial class ${curr.name?cap_first}ListUserControl : UserControl
     {
-        private ${curr.name}SQLiteAdapter adapter = 
-            new ${curr.name}SQLiteAdapter(new ${project_name}SQLiteOpenHelper());
+        /// <summary>
+        /// Current ${curr.name?cap_first}SQLiteAdapter managing database ${curr.name?cap_first} 
+        /// item finding for ${curr.name?cap_first}ListUserControl.
+        /// </summary>
+        private ${curr.name?cap_first}SQLiteAdapter adapter = 
+            new ${curr.name?cap_first}SQLiteAdapter(new ${project_name}SQLiteOpenHelper());
 
         /// <summary>
-        /// Current ${curr.name}SQLiteAdapter managing database ${curr.name} 
-        /// item finding for ${curr.name}ListUserControl.
+        /// Current list for ${curr.name?cap_first} items.
         /// </summary>
-        public ${curr.name}SQLiteAdapter Adapter
-        {
-            get { return adapter; }
-        }
-
-        /// <summary>
-        /// Current list for ${curr.name} items.
-        /// </summary>
-        public ObservableCollection<${curr.name}> Obs {get; set;}
+        public ObservableCollection<${curr.name?cap_first}> Obs {get; set;}
 
         /// <summary>
         /// Constructor.
         /// Setup item .cs list and .xaml list. 
         /// </summary>
-        public ${curr.name}ListUserControl()
+        public ${curr.name?cap_first}ListUserControl()
         {
             this.InitializeComponent();
-            Obs = new ObservableCollection<${curr.name}>();
+            Obs = new ObservableCollection<${curr.name?cap_first}>();
             this.itemsList.ItemsSource = Obs;
         }
 
         /// <summary>
-        /// Current list for ${curr.name} items.
+        /// Current list for ${curr.name?cap_first} items.
         /// </summary>
         public void LoadItem()
         {
-            List<${curr.name}> items;
+            List<${curr.name?cap_first}> items;
 
             <#assign wishedrelation = []/>
             <#list curr.relations as rel>
@@ -59,14 +54,14 @@ namespace ${project_namespace}.View.${curr.name}.UsersControls
             <#if wishedrelation?has_content>
                 <#list wishedrelation as targetEntity> 
                     <#if (targetEntity?is_first)>
-            if (ViewStateMachine.Instance.${targetEntity} != null)
+            if (ViewStateMachine.Instance.${targetEntity?cap_first} != null)
             {
-                items = adapter.GetByParentId(ViewStateMachine.Instance.${targetEntity});
+                items = adapter.GetByParentId(ViewStateMachine.Instance.${targetEntity?cap_first});
             }    
                     <#else>
-            else if (ViewStateMachine.Instance.${targetEntity} != null)
+            else if (ViewStateMachine.Instance.${targetEntity?cap_first} != null)
             {
-                items = adapter.GetByParentId(ViewStateMachine.Instance.${targetEntity});
+                items = adapter.GetByParentId(ViewStateMachine.Instance.${targetEntity?cap_first});
             }
                     </#if> 
                 </#list>
@@ -88,8 +83,8 @@ namespace ${project_namespace}.View.${curr.name}.UsersControls
         private void itemsList_ItemClick(object sender, ItemClickEventArgs e)
         {
             // Save clicked item to procced with.
-            ViewStateMachine.Instance.SetTransition(Transition.${curr.name}DetailPage, 
-                new ${curr.name}.${curr.name}DetailPage(), e.ClickedItem);
+            ViewStateMachine.Instance.SetTransition(Transition.${curr.name?cap_first}ShowPage, 
+                new ${curr.name?cap_first}.${curr.name?cap_first}ShowPage(), e.ClickedItem);
         }
     }
 }

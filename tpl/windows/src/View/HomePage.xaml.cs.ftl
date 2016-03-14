@@ -19,7 +19,7 @@ namespace ${project_namespace}.View
         {
             ViewStateMachine.Instance.SetTransition(
                 Transition.${entity.name}ListPage, 
-                new ${entity.name}View.JockeyListPage());
+                new ${entity.name}.${entity.name}ListPage());
         }
             </#if>
         </#list>

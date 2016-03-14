@@ -21,7 +21,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <usercontrol:NavigationBrowser x:Name="navigation_broswer" Grid.Row="0"/>
-            <localusercontrol:${curr.name}ListUserControl x:Name="${curr.name?lower_case}_items_list" Grid.Row="1"/>
+            <localusercontrol:${curr.name}ListUserControl x:Name="${curr.name?lower_case}_list_usercontrol" Grid.Row="1"/>
         </Grid>
     </ScrollViewer>
 </Page>

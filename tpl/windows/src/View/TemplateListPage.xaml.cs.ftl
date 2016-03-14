@@ -14,7 +14,7 @@ namespace ${project_namespace}.View.${curr.name}
     public partial class ${curr.name}ListPage : Page
     {
         // Used to manage ${curr.name}List UserControl in ${curr.name}ListState
-        public ${curr.name}ListUserControl ${curr.name}ItemsList { get; set; }
+        public ${curr.name}ListUserControl ${curr.name}ListUserControl { get; set; }
         
         // Used to manage NavigationBrowser in ${curr.name}ListState
         public NavigationBrowser NavigationBrowser { get; set; }
@@ -23,7 +23,7 @@ namespace ${project_namespace}.View.${curr.name}
         {
             InitializeComponent();
 
-            this.${curr.name}ItemsList = this.${curr.name?lower_case}_items_list;
+            this.${curr.name}ListUserControl = this.${curr.name?lower_case}_list_usercontrol;
             this.NavigationBrowser = this.navigation_broswer;
         }
     }

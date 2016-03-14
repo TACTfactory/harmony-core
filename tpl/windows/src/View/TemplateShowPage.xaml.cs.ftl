@@ -8,23 +8,23 @@ using Windows.UI.Xaml.Controls;
 namespace ${project_namespace}.View.${curr.name}
 {
     /// <summary>
-    /// ${curr.name}DetailPage allow to create a new item based on ${curr.name} entity
-    /// This ${curr.name}DetailPage load graphical context and be managed by ${curr.name}DetailState 
+    /// ${curr.name}ShowPage allow to create a new item based on ${curr.name} entity.
+    /// This ${curr.name}ShowPage load graphical context and be managed by ${curr.name}ShowState.
     /// </summary>
-    public sealed partial class ${curr.name}DetailPage : Page
+    public sealed partial class ${curr.name}ShowPage : Page
     {
-        // Used to manage ${curr.name}Detail UserControl in ${curr.name}DetailState
-        public ${curr.name}DetailUserControl ${curr.name}ItemDetail { get; set; }
+        // Used to manage ${curr.name}Show UserControl in ${curr.name}ShowState.
+        public ${curr.name}ShowUserControl ${curr.name}ShowUserControl { get; set; }
         
-        // Used to manage DetailBrowser in ${curr.name}DetailState
-        public DetailBrowser DetailBrowser { get; set; }
+        // Used to manage ShowBrowser in ${curr.name}ShowState
+        public ShowBrowser ShowBrowser { get; set; }
 
-        public ${curr.name}DetailPage()
+        public ${curr.name}ShowPage()
         {
             this.InitializeComponent();
 
-            this.${curr.name}ItemDetail = this.${curr.name?lower_case}_detail;
-            this.DetailBrowser = this.detail_broswer;
+            this.${curr.name}ShowUserControl = this.${curr.name?lower_case}_show_usercontrol;
+            this.ShowBrowser = this.show_broswer;
         }
     }
 }

@@ -20,7 +20,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <usercontrol:BackBrowser x:Name="back_broswer" Grid.Row="0"/>
-            <localusercontrol:${curr.name}CheckListUserControl x:Name="${curr.name?lower_case}_usercontrol_check_list" Grid.Row="1"/>
+            <localusercontrol:${curr.name}CheckListUserControl x:Name="${curr.name?lower_case}_check_list_usercontrol" Grid.Row="1"/>
         </Grid>
     </ScrollViewer>
 </Page>
