@@ -23,7 +23,7 @@ namespace ${project_namespace}.View.${curr.name}
         {
             this.InitializeComponent();
 
-            this.${curr.name}CheckListUserControl = this.${curr.name?lower_case}_usercontrol_check_list;
+            this.${curr.name}CheckListUserControl = this.${curr.name?lower_case}_check_list_usercontrol;
             this.BackBrowser = this.back_broswer;
         }
     }

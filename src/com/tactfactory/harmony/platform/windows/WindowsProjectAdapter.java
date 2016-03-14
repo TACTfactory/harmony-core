@@ -380,7 +380,65 @@ public class WindowsProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getEditView(EntityMetadata entity) {
-        List<IUpdater> result = new ArrayList<IUpdater>();
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+    	String templatePath = this.adapter.getTemplateSourceControlerPath();
+
+        String filePath = String.format("%s%s/",
+                this.adapter.getSourceControllerPath(),
+                entity.getName());
+
+        result.add(new SourceFile(
+                templatePath + "TemplateEditPage.xaml.cs",
+                String.format("%s%sEditPage.xaml.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + entity.getName()  + "/" + String.format("%sEditPage.xaml.cs",
+                        entity.getName()),
+                String.format("%sEditPage.xaml",
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateEditPage.xaml",
+                String.format("%s%sEditPage.xaml",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + entity.getName()  + "/" + String.format("%sEditPage.xaml",
+                        entity.getName())));
+        
+        result.add(new SourceFile(
+                templatePath + "TemplateEditUserControl.xaml.cs",
+                String.format("%s%sEditUserControl.xaml.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + entity.getName()  + "/" + String.format("%sEditUserControl.xaml.cs",
+                        entity.getName()),
+                String.format("%sEditUserControl.xaml",
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateEditUserControl.xaml",
+                String.format("%s%sEditUserControl.xaml",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + entity.getName()  + "/" + String.format("%sEditUserControl.xaml",
+                        entity.getName())));
+
         return result;
     }
 
@@ -394,55 +452,55 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 entity.getName());
 
         result.add(new SourceFile(
-                templatePath + "TemplateShowPage.xaml.cs",
-                String.format("%s%sShowPage.xaml.cs",
+                templatePath + "TemplateEditPage.xaml.cs",
+                String.format("%s%sEditPage.xaml.cs",
                         filePath,
                         entity.getName()),
                 false));
 
         result.add(new ProjectUpdater(
                 FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sShowPage.xaml.cs",
+                "View/" + entity.getName()  + "/" + String.format("%sEditPage.xaml.cs",
                         entity.getName()),
-                String.format("%sShowPage.xaml",
+                String.format("%sEditPage.xaml",
                         entity.getName())));
 
         result.add(new SourceFile(
-                templatePath + "TemplateShowPage.xaml",
-                String.format("%s%sShowPage.xaml",
+                templatePath + "TemplateEditPage.xaml",
+                String.format("%s%sEditPage.xaml",
                         filePath,
                         entity.getName()),
                 false));
 
         result.add(new ProjectUpdater(
                 FileType.Page,
-                "View/" + entity.getName()  + "/" + String.format("%sShowPage.xaml",
+                "View/" + entity.getName()  + "/" + String.format("%sEditPage.xaml",
                         entity.getName())));
         
         result.add(new SourceFile(
-                templatePath + "TemplateShowUserControl.xaml.cs",
-                String.format("%s%sShowUserControl.xaml.cs",
+                templatePath + "TemplateEditUserControl.xaml.cs",
+                String.format("%s%sEditUserControl.xaml.cs",
                         filePath,
                         entity.getName()),
                 false));
 
         result.add(new ProjectUpdater(
                 FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sShowUserControl.xaml.cs",
+                "View/" + entity.getName()  + "/" + String.format("%sEditUserControl.xaml.cs",
                         entity.getName()),
-                String.format("%sShowUserControl.xaml",
+                String.format("%sEditUserControl.xaml",
                         entity.getName())));
 
         result.add(new SourceFile(
-                templatePath + "TemplateShowUserControl.xaml",
-                String.format("%s%sShowUserControl.xaml",
+                templatePath + "TemplateEditUserControl.xaml",
+                String.format("%s%sEditUserControl.xaml",
                         filePath,
                         entity.getName()),
                 false));
 
         result.add(new ProjectUpdater(
                 FileType.Page,
-                "View/" + entity.getName()  + "/" + String.format("%sShowUserControl.xaml",
+                "View/" + entity.getName()  + "/" + String.format("%sEditUserControl.xaml",
                         entity.getName())));
 
         return result;

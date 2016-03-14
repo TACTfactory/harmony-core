@@ -19,7 +19,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         /// Current ${curr.name?cap_first}SQLiteAdapter managing database ${curr.name?cap_first} 
         /// item finding for ${curr.name?cap_first}ListUserControl.
         /// </summary>
-        private ${curr.name?cap_first}SQLiteAdapter adapter = 
+        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
             new ${curr.name?cap_first}SQLiteAdapter(new ${project_name}SQLiteOpenHelper());
 
         /// <summary>
@@ -56,21 +56,21 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                     <#if (targetEntity?is_first)>
             if (ViewStateMachine.Instance.${targetEntity?cap_first} != null)
             {
-                items = adapter.GetByParentId(ViewStateMachine.Instance.${targetEntity?cap_first});
+                items = ${curr.name?lower_case}Adapter.GetByParentId(ViewStateMachine.Instance.${targetEntity?cap_first});
             }    
                     <#else>
             else if (ViewStateMachine.Instance.${targetEntity?cap_first} != null)
             {
-                items = adapter.GetByParentId(ViewStateMachine.Instance.${targetEntity?cap_first});
+                items = ${curr.name?lower_case}Adapter.GetByParentId(ViewStateMachine.Instance.${targetEntity?cap_first});
             }
                     </#if> 
                 </#list>
             else
             {
-                items = adapter.GetAll();
+                items = ${curr.name?lower_case}Adapter.GetAll();
             }  
             <#else>
-            items = adapter.GetAll();
+            items = ${curr.name?lower_case}Adapter.GetAll();
             </#if>
 
             Obs.Clear();

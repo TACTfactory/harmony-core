@@ -14,16 +14,16 @@ using ${project_namespace}.Entity;
 using ${project_namespace}.Harmony.Util.StateMachine;
 <#if wishedrelation?has_content>
     <#list wishedrelation as targetEntity> 
-using ${project_namespace}.View.${targetEntity};
+using ${project_namespace}.View.${targetEntity?cap_first};
     </#list>
 </#if>
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 
-namespace ${project_namespace}.View.${curr.name}.UsersControls
+namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
 {
     /// <summary>
-    /// ${curr.name}CreateUserControl contain real create display mechanism for ${curr.name} entity.
+    /// ${curr.name}CreateUserControl contain real create display mechanism for ${curr.name?cap_first} entity.
     /// </summary>
     public sealed partial class ${curr.name?cap_first}CreateUserControl : UserControl
     {
@@ -36,7 +36,7 @@ namespace ${project_namespace}.View.${curr.name}.UsersControls
         /// <summary>
         /// ${curr.name?cap_first}CreateUserControl adapter to save and load ${curr.name?cap_first} informations.
         /// </summary>
-        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?cap_first}Adapter = 
+        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
             new ${curr.name?cap_first}SQLiteAdapter(new DemactSQLiteOpenHelper());
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace ${project_namespace}.View.${curr.name}.UsersControls
                     <#if (targetEntity?is_first)>
             if (ViewStateMachine.Instance.${targetEntity?cap_first} != null)
             {
-                int result = ${curr.name?cap_first}Adapter.Insert(new ${curr.name?cap_first}(
+                int result = ${curr.name?lower_case}Adapter.Insert(new ${curr.name?cap_first}(
                         <#list fields?values as field>
                             <#if (!field.internal && !field.hidden)>
                                 <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany" && field.relation.type!="OneToOne" && field.relation.type!="ManyToOne"))>
@@ -73,12 +73,12 @@ namespace ${project_namespace}.View.${curr.name}.UsersControls
                         </#list>
                 )
                 , ViewStateMachine.Instance.${targetEntity?cap_first});
-                ViewStateMachine.Instance.${curr.name} = ${curr.name?cap_first}Adapter.GetById(result);
+                ViewStateMachine.Instance.${curr.name} = ${curr.name?lower_case}Adapter.GetById(result);
             }
                     <#else>
             else if (ViewStateMachine.Instance.${targetEntity?cap_first} != null)
             {
-                int result = ${curr.name?cap_first}Adapter.Insert(new ${curr.name?cap_first}(
+                int result = ${curr.name?lower_case}Adapter.Insert(new ${curr.name?cap_first}(
                         <#list fields?values as field>
                             <#if (!field.internal && !field.hidden)>
                                 <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany" && field.relation.type!="OneToOne" && field.relation.type!="ManyToOne"))>
@@ -92,13 +92,13 @@ namespace ${project_namespace}.View.${curr.name}.UsersControls
                         </#list>
                 )
                 , ViewStateMachine.Instance.${targetEntity?cap_first});
-                ViewStateMachine.Instance.${curr.name} = ${curr.name?cap_first}Adapter.GetById(result);
+                ViewStateMachine.Instance.${curr.name} = ${curr.name?lower_case}Adapter.GetById(result);
             }
                     </#if>
                 </#list>
             else
             {
-                int result = ${curr.name?cap_first}Adapter.Insert(new ${curr.name?cap_first}(
+                int result = ${curr.name?lower_case}Adapter.Insert(new ${curr.name?cap_first}(
                 <#list fields?values as field>
                     <#if (!field.internal && !field.hidden)>
                         <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany" && field.relation.type!="OneToOne" && field.relation.type!="ManyToOne"))>
@@ -111,11 +111,11 @@ namespace ${project_namespace}.View.${curr.name}.UsersControls
                     </#if>
                 </#list>
                 ));
-                ViewStateMachine.Instance.${curr.name?cap_first} = ${curr.name?cap_first}Adapter.GetById(result);
+                ViewStateMachine.Instance.${curr.name?cap_first} = ${curr.name?lower_case}Adapter.GetById(result);
             }
             ViewStateMachine.Instance.Back();
             <#else>
-            int result = ${curr.name?cap_first}Adapter.Insert(new ${curr.name?cap_first}(
+            int result = ${curr.name?lower_case}Adapter.Insert(new ${curr.name?cap_first}(
                 <#list fields?values as field>
                     <#if (!field.internal && !field.hidden)>
                         <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany" && field.relation.type!="OneToOne" && field.relation.type!="ManyToOne"))>
@@ -128,7 +128,7 @@ namespace ${project_namespace}.View.${curr.name}.UsersControls
                     </#if>
                 </#list>
             ));
-            ViewStateMachine.Instance.${curr.name?cap_first} = ${curr.name?cap_first}Adapter.GetById(result);
+            ViewStateMachine.Instance.${curr.name?cap_first} = ${curr.name?lower_case}Adapter.GetById(result);
             
             ViewStateMachine.Instance.Back();
             </#if>
@@ -143,7 +143,7 @@ namespace ${project_namespace}.View.${curr.name}.UsersControls
         /// </summary>
         private void btn_list_related_${rel.relation.targetEntity?lower_case}_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            ${curr.name?cap_first}Adapter.Insert(new ${curr.name?cap_first}(
+            ${curr.name?lower_case}Adapter.Insert(new ${curr.name?cap_first}(
                     <#list fields?values as field>
                         <#if (!field.internal && !field.hidden)>
                             <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany" && field.relation.type!="OneToOne" && field.relation.type!="ManyToOne"))>
@@ -156,7 +156,7 @@ namespace ${project_namespace}.View.${curr.name}.UsersControls
                         </#if>
                     </#list>
             ));
-            ViewStateMachine.Instance.${curr.name?cap_first} = ${curr.name?cap_first}Adapter.GetById(result);
+            ViewStateMachine.Instance.${curr.name?cap_first} = ${curr.name?lower_case}Adapter.GetById(result);
             ViewStateMachine.Instance.SetTransition(Transition.${rel.relation.targetEntity?cap_first}ListPage, new ${rel.relation.targetEntity?cap_first}ListPage());
         }
                 <#else>
@@ -166,7 +166,7 @@ namespace ${project_namespace}.View.${curr.name}.UsersControls
         /// </summary>
         private void btn_add_${rel.relation.targetEntity?lower_case}_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            ${curr.name?cap_first}Adapter.Insert(new ${curr.name?cap_first}(
+            ${curr.name?lower_case}Adapter.Insert(new ${curr.name?cap_first}(
                     <#list fields?values as field>
                         <#if (!field.internal && !field.hidden)>
                             <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany" && field.relation.type!="OneToOne" && field.relation.type!="ManyToOne"))>
@@ -179,7 +179,7 @@ namespace ${project_namespace}.View.${curr.name}.UsersControls
                         </#if>
                     </#list>
             ));
-            ViewStateMachine.Instance.${curr.name?cap_first} = ${curr.name?cap_first}Adapter.GetById(result);
+            ViewStateMachine.Instance.${curr.name?cap_first} = ${curr.name?lower_case}Adapter.GetById(result);
             ViewStateMachine.Instance.SetTransition(Transition.${rel.relation.targetEntity?cap_first}ListPage, new ${rel.relation.targetEntity?cap_first}ListPage());
         }            
                 </#if>

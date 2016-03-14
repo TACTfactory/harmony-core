@@ -24,9 +24,6 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
 {
     public sealed partial class ${curr.name?cap_first}ShowUserControl : UserControl
     {
-        private ${curr.name?cap_first}SQLiteAdapter adapter = 
-            new ${curr.name?cap_first}SQLiteAdapter(new DemactSQLiteOpenHelper());
-
         public ${curr.name?cap_first} ${curr.name?cap_first}Item { get; set; }
 
         public StackPanel Stackpanel_btn { get; set; }
