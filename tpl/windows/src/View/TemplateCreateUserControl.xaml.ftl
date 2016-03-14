@@ -1,4 +1,6 @@
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
+<#assign fields = ViewUtils.getAllFields(curr) />
 <@header?interpret />
 
 <UserControl
@@ -16,7 +18,7 @@
         <StackPanel x:Name="root_stackpanel">
             <#list fields?values as field>
                 <#if (!field.internal && !field.hidden)>
-                    <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
+                    <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany" && field.relation.type!="OneToOne" && field.relation.type!="ManyToOne"))>
                         <#if (field.harmony_type?lower_case == "boolean")>
              <TextBlock x:Name="text_block_${field.name}" Text="${curr.name} : ${field.name}"/>
              <CheckBox x:Name="checkbox_${field.name}"/>
@@ -30,11 +32,11 @@
 
             <StackPanel x:Name="stackpanel_btn">
             <#list fields?values as field>
-                <#if (!field.internal && !field.hidden)>
-                    <#if (field.relation.type=="OneToMany" && field.relation.type=="ManyToMany")>
-                <Button x:Name="btn_add_${field.relation.targetEntity}" Content="List related ${field.relation.targetEntity?cap_first}" HorizontalAlignment="Stretch" Tapped="btn_list_${field.relation.targetEntity}_Tapped"/>
+                <#if (!field.internal && !field.hidden && field.relation??)>
+                    <#if (field.relation.type == "OneToMany" || field.relation.type == "ManyToMany")>
+                <Button x:Name="btn_list_related_${field.relation.targetEntity?lower_case}" Content="List related ${field.relation.targetEntity?cap_first}" HorizontalAlignment="Stretch" Tapped="btn_list_related_${field.relation.targetEntity?lower_case}_Tapped"/>
                     <#else>
-                <Button x:Name="btn_add_${field.relation.targetEntity}" Content="Add ${field.relation.targetEntity?cap_first}" HorizontalAlignment="Stretch" Tapped="btn_add_${field.relation.targetEntity}_Tapped"/>
+                <Button x:Name="btn_add_${field.relation.targetEntity?lower_case}" Content="Add ${field.relation.targetEntity?cap_first}" HorizontalAlignment="Stretch" Tapped="btn_add_${field.relation.targetEntity?lower_case}_Tapped"/>
                     </#if>
                 </#if>
             </#list>
