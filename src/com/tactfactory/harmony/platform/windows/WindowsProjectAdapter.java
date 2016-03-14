@@ -386,7 +386,65 @@ public class WindowsProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getShowView(EntityMetadata entity) {
-        List<IUpdater> result = new ArrayList<IUpdater>();
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+    	String templatePath = this.adapter.getTemplateSourceControlerPath();
+
+        String filePath = String.format("%s%s/",
+                this.adapter.getSourceControllerPath(),
+                entity.getName());
+
+        result.add(new SourceFile(
+                templatePath + "TemplateShowPage.xaml.cs",
+                String.format("%s%sShowPage.xaml.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + entity.getName()  + "/" + String.format("%sShowPage.xaml.cs",
+                        entity.getName()),
+                String.format("%sShowPage.xaml",
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateShowPage.xaml",
+                String.format("%s%sShowPage.xaml",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + entity.getName()  + "/" + String.format("%sShowPage.xaml",
+                        entity.getName())));
+        
+        result.add(new SourceFile(
+                templatePath + "TemplateShowUserControl.xaml.cs",
+                String.format("%s%sShowUserControl.xaml.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + entity.getName()  + "/" + String.format("%sShowUserControl.xaml.cs",
+                        entity.getName()),
+                String.format("%sShowUserControl.xaml",
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateShowUserControl.xaml",
+                String.format("%s%sShowUserControl.xaml",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + entity.getName()  + "/" + String.format("%sShowUserControl.xaml",
+                        entity.getName())));
+
         return result;
     }
 
