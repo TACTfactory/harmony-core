@@ -172,6 +172,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
 
         String filePath = this.adapter.getSourceControllerPath();
 
+        // Base Home Views
         result.add(new SourceFile(
                 templatePath + "HomePage.xaml.cs",
                 filePath + "HomePage.xaml.cs",
@@ -191,7 +192,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Page,
                 "View/" + "HomePage.xaml"));
         
-        // State HomeState
+        // State Home Views
         result.add(new SourceFile(
                 templatePath + "HomeState.cs",
                 filePath + "HomeState.cs",
@@ -200,6 +201,64 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Page,
                 "View/" + "HomeState.cs"));
+        
+        // Browsers
+        result.add(new SourceFile(
+                templatePath + "BackBrowser.xaml.cs",
+                filePath + "BackBrowser.xaml.cs",
+                true));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + "BackBrowser.xaml.cs",
+                "HomePage.xaml"));
+
+        result.add(new SourceFile(
+                templatePath + "BackBrowser.xaml",
+                filePath + "BackBrowser.xaml",
+                true));
+
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + "BackBrowser.xaml"));
+        
+        result.add(new SourceFile(
+                templatePath + "ShowBrowser.xaml.cs",
+                filePath + "ShowBrowser.xaml.cs",
+                true));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + "ShowBrowser.xaml.cs",
+                "HomePage.xaml"));
+
+        result.add(new SourceFile(
+                templatePath + "ShowBrowser.xaml",
+                filePath + "ShowBrowser.xaml",
+                true));
+
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + "ShowBrowser.xaml"));
+        
+        result.add(new SourceFile(
+                templatePath + "NavigationBrowser.xaml.cs",
+                filePath + "NavigationBrowser.xaml.cs",
+                true));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + "NavigationBrowser.xaml.cs",
+                "HomePage.xaml"));
+
+        result.add(new SourceFile(
+                templatePath + "NavigationBrowser.xaml",
+                filePath + "NavigationBrowser.xaml",
+                true));
+
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + "NavigationBrowser.xaml"));
 
         return result;
     }
