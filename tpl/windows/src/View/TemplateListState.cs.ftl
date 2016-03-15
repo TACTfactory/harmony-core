@@ -22,6 +22,9 @@ using Windows.UI.Xaml.Controls;
 
 namespace ${project_namespace}.View.Navigation.States
 {
+    /// <summary>
+    /// ${curr.name?cap_first}ListState manage current item Page for state machine processing.
+    /// </summary>
     class ${curr.name?cap_first}ListState : ViewStateMachineState
     {
         private ${curr.name?cap_first}ListPage ${curr.name?lower_case}ListPage;
@@ -32,17 +35,31 @@ namespace ${project_namespace}.View.Navigation.States
         private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
             new ${curr.name?cap_first}SQLiteAdapter(new ${project_name?cap_first}SQLiteOpenHelper());
             
+        /// <summary>
+        /// Constructor that initialyze ${curr.name?cap_first}CreateState stateID 
+        /// to ${curr.name?cap_first}ListStateEnter for state machine base state on enter.
+        /// </summary>
         public ${curr.name?cap_first}ListState()
         {
             this.stateID = StateID.${curr.name?cap_first}ListPageEnter;
         }
 
+        /// <summary>
+        /// Setup state machine action for DoBeforeEntering.
+        /// In ListState only register current Page and let ViewStateMachineState processed.
+        /// </summary>
+        /// <param name="page">Current Page item where state machine have to navigate.</param>
         public override void DoBeforeEntering(Page page)
         {
             this.${curr.name?lower_case}ListPage = page as ${curr.name?cap_first}ListPage;
             base.DoBeforeEntering(page);
         }
 
+        /// <summary>
+        /// Setup state machine action for DoBeforeLeaving.
+        /// In ListState unreference event binding.
+        /// </summary>
+        /// <param name="page">Here not used.</param>
         public override void DoBeforeLeaving(Page page)
         {
             this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_New.Tapped -= Btn_New_Tapped;
@@ -51,6 +68,10 @@ namespace ${project_namespace}.View.Navigation.States
             this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Existing.Tapped -= Btn_Existing_Tapped;
         }
 
+        /// <summary>
+        /// Setup state machine action for DoAfterEntering.
+        /// In ListState reference event binding and process UI update if needed.
+        /// </summary>
         public override void DoAfterEntering()
         {
             this.${curr.name?lower_case}ListPage.${curr.name?cap_first}ListUserControl.LoadItem();
@@ -96,6 +117,13 @@ namespace ${project_namespace}.View.Navigation.States
             ViewStateMachine.Instance.Back();
         }
 
+        /// <summary>
+        /// Erase all datas displayed.
+        /// This can occurs by navigated to custom list or with full list.
+        /// On custom list case, only navigated from item relations, can be deleted.
+        /// </summary>
+        /// <param name="sender">Tapped item.</param>
+        /// <param name="e">Tapped event.</param>
         private void Btn_Erase_All_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             <#if wishedfields?has_content>
@@ -126,6 +154,11 @@ namespace ${project_namespace}.View.Navigation.States
             this.${curr.name?lower_case}ListPage.${curr.name?cap_first}ListUserControl.Obs.Clear();
         }
 
+        /// <summary>
+        /// Navigate to ${curr.name?cap_first}CreatePage.
+        /// </summary>
+        /// <param name="sender">Tapped item.</param>
+        /// <param name="e">Tapped event.</param>
         private void Btn_New_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             ViewStateMachine.Instance.SetTransition(
@@ -133,6 +166,11 @@ namespace ${project_namespace}.View.Navigation.States
                     new ${curr.name?cap_first}.${curr.name?cap_first}CreatePage());
         }
 
+        /// <summary>
+        /// Navigate to display list of checkable items.
+        /// </summary>
+        /// <param name="sender">Tapped item.</param>
+        /// <param name="e">Tapped event.</param>
         private void Btn_Existing_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
             ViewStateMachine.Instance.SetTransition(
