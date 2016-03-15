@@ -1,29 +1,29 @@
 <#assign curr = entities[current_entity] />
 <@header?interpret />
 
-using ${project_namespace}.View.${curr.name}.UsersControls;
+using ${project_namespace}.View.${curr.name?cap_first}.UsersControls;
 using ${project_namespace}.View.Navigation.UsersControls;
 using Windows.UI.Xaml.Controls;
 
-namespace ${project_namespace}.View.${curr.name}
+namespace ${project_namespace}.View.${curr.name?cap_first}
 {
     /// <summary>
-    /// ${curr.name}CheckListPage allow to create a new item based on ${curr.name} entity
-    /// This ${curr.name}CheckListPage load graphical context and be managed by ${curr.name}CheckListState 
+    /// ${curr.name?cap_first}CheckListPage allow to create a new item based on ${curr.name?cap_first} entity
+    /// This ${curr.name?cap_first}CheckListPage load graphical context and be managed by ${curr.name?cap_first}CheckListState 
     /// </summary>
-    public sealed partial class ${curr.name}CheckListPage : Page
+    public sealed partial class ${curr.name?cap_first}CheckListPage : Page
     {
-        // Used to manage ${curr.name}CheckList UserControl in ${curr.name}CheckListState
-        public ${curr.name}CheckListUserControl ${curr.name}CheckListUserControl { get; set; }
+        // Used to manage ${curr.name?cap_first}CheckList UserControl in ${curr.name?cap_first}CheckListState
+        public ${curr.name?cap_first}CheckListUserControl ${curr.name?cap_first}CheckListUserControl { get; set; }
         
-        // Used to manage BackBrowser in ${curr.name}CheckListState
+        // Used to manage BackBrowser in ${curr.name?cap_first}CheckListState
         public BackBrowser BackBrowser { get; set; }
 
-        public ${curr.name}CheckListPage()
+        public ${curr.name?cap_first}CheckListPage()
         {
             this.InitializeComponent();
 
-            this.${curr.name}CheckListUserControl = this.${curr.name?lower_case}_check_list_usercontrol;
+            this.${curr.name?cap_first}CheckListUserControl = this.${curr.name?lower_case}_check_list_usercontrol;
             this.BackBrowser = this.back_broswer;
         }
     }
