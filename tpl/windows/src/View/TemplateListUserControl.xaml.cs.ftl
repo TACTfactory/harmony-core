@@ -20,7 +20,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         /// item finding for ${curr.name?cap_first}ListUserControl.
         /// </summary>
         private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
-            new ${curr.name?cap_first}SQLiteAdapter(new ${project_name}SQLiteOpenHelper());
+            new ${curr.name?cap_first}SQLiteAdapter(new ${project_name?cap_first}SQLiteOpenHelper());
 
         /// <summary>
         /// Current list for ${curr.name?cap_first} items.

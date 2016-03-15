@@ -23,7 +23,7 @@ using Windows.UI.Xaml.Input;
 namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
 {
     /// <summary>
-    /// ${curr.name}CreateUserControl contain real create display mechanism for ${curr.name?cap_first} entity.
+    /// ${curr.name?cap_first}CreateUserControl contain real create display mechanism for ${curr.name?cap_first} entity.
     /// </summary>
     public sealed partial class ${curr.name?cap_first}CreateUserControl : UserControl
     {
@@ -37,10 +37,10 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         /// ${curr.name?cap_first}CreateUserControl adapter to save and load ${curr.name?cap_first} informations.
         /// </summary>
         private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
-            new ${curr.name?cap_first}SQLiteAdapter(new DemactSQLiteOpenHelper());
+            new ${curr.name?cap_first}SQLiteAdapter(new ${project_name?cap_first}SQLiteOpenHelper());
 
         /// <summary>
-        /// Default constructor
+        /// Default constructor.
         /// </summary>
         public ${curr.name?cap_first}CreateUserControl()
         {
@@ -52,6 +52,8 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         /// Retrieve all informations to save current ${curr.name?cap_first} item 
         /// check if comming from other state to save parent item association.
         /// </summary>
+        /// <param name="sender">Tapped item.</param>
+        /// <param name="e">Tapped event.</param>
         private void btn_validate_Tapped(object sender, TappedRoutedEventArgs e)
         {
             <#if wishedrelation?has_content>
@@ -141,6 +143,8 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         /// Retrieve all informations to save current ${curr.name?cap_first} item 
         /// and navigate to display relative ${rel.relation.targetEntity?cap_first} list.
         /// </summary>
+        /// <param name="sender">Tapped item.</param>
+        /// <param name="e">Tapped event.</param>
         private void btn_list_related_${rel.relation.targetEntity?lower_case}_Tapped(object sender, TappedRoutedEventArgs e)
         {
             ${curr.name?lower_case}Adapter.Insert(new ${curr.name?cap_first}(
@@ -164,6 +168,8 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         /// Retrieve all informations to save current ${curr.name?cap_first} item 
         /// and navigate to add relative ${rel.relation.targetEntity?cap_first} item.
         /// </summary>
+        /// <param name="sender">Tapped item.</param>
+        /// <param name="e">Tapped event.</param>
         private void btn_add_${rel.relation.targetEntity?lower_case}_Tapped(object sender, TappedRoutedEventArgs e)
         {
             ${curr.name?lower_case}Adapter.Insert(new ${curr.name?cap_first}(

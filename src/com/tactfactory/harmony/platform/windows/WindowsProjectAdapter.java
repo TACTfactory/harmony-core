@@ -516,6 +516,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 this.adapter.getSourceControllerPath(),
                 entity.getName());
 
+        // Add default list items for C#
         result.add(new SourceFile(
                 templatePath + "TemplateListPage.xaml.cs",
                 String.format("%s%sListPage.xaml.cs",
@@ -568,6 +569,59 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 "View/" + entity.getName()  + "/" + String.format("%sListUserControl.xaml",
                         entity.getName())));
 
+        // Add multi selectable list for C#
+        result.add(new SourceFile(
+                templatePath + "TemplateCheckListPage.xaml.cs",
+                String.format("%s%sCheckListPage.xaml.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + entity.getName()  + "/" + String.format("%sCheckListPage.xaml.cs",
+                        entity.getName()),
+                String.format("%sCheckListPage.xaml",
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateCheckListPage.xaml",
+                String.format("%s%sCheckListPage.xaml",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + entity.getName()  + "/" + String.format("%sCheckListPage.xaml",
+                        entity.getName())));
+        
+        result.add(new SourceFile(
+                templatePath + "TemplateCheckListUserControl.xaml.cs",
+                String.format("%s%sCheckListUserControl.xaml.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + entity.getName()  + "/" + String.format("%sCheckListUserControl.xaml.cs",
+                        entity.getName()),
+                String.format("%sCheckListUserControl.xaml",
+                        entity.getName())));
+
+        result.add(new SourceFile(
+                templatePath + "TemplateCheckListUserControl.xaml",
+                String.format("%s%sCheckListUserControl.xaml",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + entity.getName()  + "/" + String.format("%sCheckListUserControl.xaml",
+                        entity.getName())));
+        
         return result;
     }
 
