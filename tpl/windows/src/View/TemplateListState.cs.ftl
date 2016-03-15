@@ -1,36 +1,18 @@
+<#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
+<#assign fields = ViewUtils.getAllFields(curr) />
+<#assign wishedfields = [] />
+<#list fields?values as field>
+    <#if (!field.internal && !field.hidden)>
+        <#if field.relation?? && ((field.relation.type=="OneToMany") || (field.relation.type=="ManyToMany") || (field.relation.type=="OneToOne") || (field.relation.type=="ManyToOne"))>
+            <#assign wishedfields = wishedfields + [field]/>
+        </#if>
+    </#if>
+</#list>
 <@header?interpret />
 
-using ${project_namespace}.View.${curr.name}.UsersControls;
-using ${project_namespace}.View.Navigation.UsersControls;
-using Windows.UI.Xaml.Controls;
-
-namespace ${project_namespace}.View.${curr.name}
-{
-    /// <summary>
-    /// ${curr.name}ListPage allow to create a new item based on ${curr.name} entity
-    /// This ${curr.name}ListPage load graphical context and be managed by ${curr.name}ListState 
-    /// </summary>
-    public partial class ${curr.name}ListPage : Page
-    {
-        // Used to manage ${curr.name}List UserControl in ${curr.name}ListState
-        public ${curr.name}ListUserControl ${curr.name}ListUserControl { get; set; }
-        
-        // Used to manage NavigationBrowser in ${curr.name}ListState
-        public NavigationBrowser NavigationBrowser { get; set; }
-
-        public ${curr.name}ListPage()
-        {
-            InitializeComponent();
-
-            this.${curr.name}ListUserControl = this.${curr.name?lower_case}_list_usercontrol;
-            this.NavigationBrowser = this.navigation_broswer;
-        }
-    }
-}
-
-using com.tactfactory.demact.Harmony.Util.StateMachine;
-using com.tactfactory.demact.View.JockeyView;
+using ${project_namespace}.Harmony.Util.StateMachine;
+using ${project_namespace}.View.${curr.name?cap_first};
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -38,50 +20,76 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 
-namespace com.tactfactory.demact.View.Navigation.States
+namespace ${project_namespace}.View.Navigation.States
 {
-    class JockeyListState : ViewStateMachineState
+    class ${curr.name?cap_first}ListState : ViewStateMachineState
     {
-        private JockeyListPage jockeyListPage;
+        private ${curr.name?cap_first}ListPage ${curr.name?lower_case}ListPage;
 
-        public JockeyListState()
+        /// <summary>
+        /// ${curr.name?cap_first}CreateUserControl adapter to save and load ${curr.name?cap_first} informations.
+        /// </summary>
+        private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
+            new ${curr.name?cap_first}SQLiteAdapter(new ${project_name?cap_first}SQLiteOpenHelper());
+            
+        public ${curr.name?cap_first}ListState()
         {
-            this.stateID = StateID.JockeyListPageEnter;
+            this.stateID = StateID.${curr.name?cap_first}ListPageEnter;
         }
 
         public override void DoBeforeEntering(Page page)
         {
-            this.jockeyListPage = page as JockeyListPage;
+            this.${curr.name?lower_case}ListPage = page as ${curr.name?cap_first}ListPage;
             base.DoBeforeEntering(page);
         }
 
         public override void DoBeforeLeaving(Page page)
         {
-            this.jockeyListPage.NavigationBrowser.Btn_New.Tapped -= Btn_New_Tapped;
-            this.jockeyListPage.NavigationBrowser.Btn_Erase_All.Tapped -= Btn_Erase_All_Tapped;
-            this.jockeyListPage.NavigationBrowser.Btn_Back.Tapped -= Btn_Back_Tapped;
-            this.jockeyListPage.NavigationBrowser.Btn_Existing.Tapped -= Btn_Existing_Tapped;
+            this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_New.Tapped -= Btn_New_Tapped;
+            this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Erase_All.Tapped -= Btn_Erase_All_Tapped;
+            this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Back.Tapped -= Btn_Back_Tapped;
+            this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Existing.Tapped -= Btn_Existing_Tapped;
         }
 
         public override void DoAfterEntering()
         {
-            this.jockeyListPage.JockeyItemsList.LoadItem();
+            this.${curr.name?lower_case}ListPage.${curr.name?cap_first}ListUserControl.LoadItem();
 
-            this.jockeyListPage.NavigationBrowser.Btn_New.Tapped += Btn_New_Tapped;
-            this.jockeyListPage.NavigationBrowser.Btn_Erase_All.Tapped += Btn_Erase_All_Tapped;
-            this.jockeyListPage.NavigationBrowser.Btn_Existing.Tapped += Btn_Existing_Tapped;
-            this.jockeyListPage.NavigationBrowser.Btn_Back.Tapped += Btn_Back_Tapped;
+            this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_New.Tapped += Btn_New_Tapped;
+            this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Erase_All.Tapped += Btn_Erase_All_Tapped;
+            this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Existing.Tapped += Btn_Existing_Tapped;
+            this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Back.Tapped += Btn_Back_Tapped;
 
+        <#if wishedfields?has_content>
             this.UpdateUI();
+        </#if> 
         }
 
-        private void UpdateUI()
+        <#if wishedfields?has_content>
+        /// <summary>
+        /// Update ${curr.name?cap_first}ListUserControl UI to remove existing button 
+        /// if do not comming from other display tree state.
+        /// </summary>
+        public void UpdateUI()
         {
-            if (ViewStateMachine.Instance.Poney == null)
-            {
-                this.jockeyListPage.NavigationBrowser.Stackpanel_Btn.Children.Remove(jockeyListPage.NavigationBrowser.Btn_Existing);
+            <#list wishedfields as field>
+                <#if (field?is_first && field?is_last)>
+            if ( ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} == null)
+                <#elseif (field?is_first)>
+            if ( ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} == null
+                <#elseif (field?is_last)>
+                || ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} == null)
+                <#else>
+                || ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} == null
+                </#if>
+            </#list>
+                this.${curr.name?lower_case}ListPage.NavigationBrowser
+                    .Stackpanel_Btn.Children.Remove(
+                        this.${curr.name?lower_case}ListPage
+                            .NavigationBrowser.Btn_Existing);
             }
         }
+        </#if>
 
         private void Btn_Back_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
@@ -90,25 +98,46 @@ namespace com.tactfactory.demact.View.Navigation.States
 
         private void Btn_Erase_All_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            if (ViewStateMachine.Instance.Poney != null)
+            <#if wishedfields?has_content>
+                <#list wishedfields as field>
+                    <#if (field?is_first)>
+            if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
             {
-                this.jockeyListPage.JockeyItemsList.Adapter.Clear(ViewStateMachine.Instance.Poney.Id);
+                this.${curr.name?lower_case}Adapter.Clear(
+                    ViewStateMachine.Instance.${field.relation.targetEntity?cap_first});
             }
+                    <#else>
+            else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
+            {
+                this.${curr.name?lower_case}Adapter.Clear(
+                    ViewStateMachine.Instance.${field.relation.targetEntity?cap_first});
+            }
+                    </#if>
+                </#list>
             else
             {
-                this.jockeyListPage.JockeyItemsList.Adapter.Clear();
+                this.${curr.name?lower_case}Adapter.Clear();
             }
-            this.jockeyListPage.JockeyItemsList.Obs.Clear();
+            <#else>
+            this.${curr.name?lower_case}Adapter.Clear();
+            </#if>
+
+            // Remove items on current displayed view.
+            this.${curr.name?lower_case}ListPage.${curr.name?cap_first}ListUserControl.Obs.Clear();
         }
 
         private void Btn_New_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            ViewStateMachine.Instance.SetTransition(Transition.JockeyCreatePage, new JockeyView.JockeyCreatePage());
+            ViewStateMachine.Instance.SetTransition(
+                Transition.${curr.name?cap_first}CreatePage, 
+                    new ${curr.name?cap_first}.${curr.name?cap_first}CreatePage());
         }
 
         private void Btn_Existing_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            ViewStateMachine.Instance.SetTransition(Transition.JockeyCheckListPage, new JockeyView.JockeyCheckListPage());
+            ViewStateMachine.Instance.SetTransition(
+                Transition.${curr.name?cap_first}CheckListPage, 
+                    new ${curr.name?cap_first}.${curr.name?cap_first}CheckListPage());
         }
     }
 }

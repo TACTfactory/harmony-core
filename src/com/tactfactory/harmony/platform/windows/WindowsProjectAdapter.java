@@ -475,56 +475,70 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 this.adapter.getSourceControllerPath(),
                 entity.getName());
 
+        // Base Show Views
         result.add(new SourceFile(
-                templatePath + "TemplateEditPage.xaml.cs",
-                String.format("%s%sEditPage.xaml.cs",
+                templatePath + "TemplateShowPage.xaml.cs",
+                String.format("%s%sShowPage.xaml.cs",
                         filePath,
                         entity.getName()),
                 false));
 
         result.add(new ProjectUpdater(
                 FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sEditPage.xaml.cs",
+                "View/" + entity.getName()  + "/" + String.format("%sShowPage.xaml.cs",
                         entity.getName()),
-                String.format("%sEditPage.xaml",
+                String.format("%sShowPage.xaml",
                         entity.getName())));
 
         result.add(new SourceFile(
-                templatePath + "TemplateEditPage.xaml",
-                String.format("%s%sEditPage.xaml",
+                templatePath + "TemplateShowPage.xaml",
+                String.format("%s%sShowPage.xaml",
                         filePath,
                         entity.getName()),
                 false));
 
         result.add(new ProjectUpdater(
                 FileType.Page,
-                "View/" + entity.getName()  + "/" + String.format("%sEditPage.xaml",
+                "View/" + entity.getName()  + "/" + String.format("%sShowPage.xaml",
                         entity.getName())));
         
         result.add(new SourceFile(
-                templatePath + "TemplateEditUserControl.xaml.cs",
-                String.format("%s%sEditUserControl.xaml.cs",
+                templatePath + "TemplateShowUserControl.xaml.cs",
+                String.format("%s%sShowUserControl.xaml.cs",
                         filePath,
                         entity.getName()),
                 false));
 
         result.add(new ProjectUpdater(
                 FileType.Compile,
-                "View/" + entity.getName()  + "/" + String.format("%sEditUserControl.xaml.cs",
+                "View/" + entity.getName()  + "/" + String.format("%sShowUserControl.xaml.cs",
                         entity.getName()),
-                String.format("%sEditUserControl.xaml",
+                String.format("%sShowUserControl.xaml",
                         entity.getName())));
 
         result.add(new SourceFile(
-                templatePath + "TemplateEditUserControl.xaml",
-                String.format("%s%sEditUserControl.xaml",
+                templatePath + "TemplateShowUserControl.xaml",
+                String.format("%s%sShowUserControl.xaml",
                         filePath,
                         entity.getName()),
                 false));
 
         result.add(new ProjectUpdater(
                 FileType.Page,
-                "View/" + entity.getName()  + "/" + String.format("%sEditUserControl.xaml",
+                "View/" + entity.getName()  + "/" + String.format("%sShowUserControl.xaml",
+                        entity.getName())));
+        
+        // State Show Views
+        result.add(new SourceFile(
+                templatePath + "TemplateShowState.cs",
+                String.format("%s%sShowState.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + entity.getName()  + "/" + String.format("%sShowState.cs",
                         entity.getName())));
 
         return result;
@@ -541,6 +555,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 entity.getName());
 
         // Add default list items for C#
+        // Base List Views
         result.add(new SourceFile(
                 templatePath + "TemplateListPage.xaml.cs",
                 String.format("%s%sListPage.xaml.cs",
@@ -592,8 +607,22 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Page,
                 "View/" + entity.getName()  + "/" + String.format("%sListUserControl.xaml",
                         entity.getName())));
+     
+        // State List Views
+        result.add(new SourceFile(
+                templatePath + "TemplateListState.cs",
+                String.format("%s%sListState.cs",
+                        filePath,
+                        entity.getName()),
+                false));
 
-        // Add multi selectable list for C#
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + entity.getName()  + "/" + String.format("%sListState.cs",
+                        entity.getName())));
+
+        // Add Checkable list for C#
+        // Base Checkable Views
         result.add(new SourceFile(
                 templatePath + "TemplateCheckListPage.xaml.cs",
                 String.format("%s%sCheckListPage.xaml.cs",
@@ -645,6 +674,8 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Page,
                 "View/" + entity.getName()  + "/" + String.format("%sCheckListUserControl.xaml",
                         entity.getName())));
+        
+        // State Checkable Views
         
         return result;
     }
