@@ -676,6 +676,17 @@ public class WindowsProjectAdapter implements IAdapterProject {
                         entity.getName())));
         
         // State Checkable Views
+        result.add(new SourceFile(
+                templatePath + "TemplateCheckListState.cs",
+                String.format("%s%sCheckListState.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + entity.getName()  + "/" + String.format("%sCheckListState.cs",
+                        entity.getName())));
         
         return result;
     }
