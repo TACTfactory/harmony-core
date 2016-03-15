@@ -411,6 +411,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 this.adapter.getSourceControllerPath(),
                 entity.getName());
 
+        // Base Edit Views
         result.add(new SourceFile(
                 templatePath + "TemplateEditPage.xaml.cs",
                 String.format("%s%sEditPage.xaml.cs",
@@ -463,6 +464,19 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 "View/" + entity.getName()  + "/" + String.format("%sEditUserControl.xaml",
                         entity.getName())));
 
+        // State Edit Views
+        result.add(new SourceFile(
+                templatePath + "TemplateEditState.cs",
+                String.format("%s%sEditState.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + entity.getName()  + "/" + String.format("%sEditState.cs",
+                        entity.getName())));
+        
         return result;
     }
 
