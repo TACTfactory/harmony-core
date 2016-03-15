@@ -1,29 +1,29 @@
 <#assign curr = entities[current_entity] />
 <@header?interpret />
 
-using ${project_namespace}.View.${curr.name}.UsersControls;
+using ${project_namespace}.View.${curr.name?cap_first}.UsersControls;
 using ${project_namespace}.View.Navigation.UsersControls;
 using Windows.UI.Xaml.Controls;
 
-namespace ${project_namespace}.View.${curr.name}
+namespace ${project_namespace}.View.${curr.name?cap_first}
 {
     /// <summary>
-    /// ${curr.name}ShowPage allow to create a new item based on ${curr.name} entity.
-    /// This ${curr.name}ShowPage load graphical context and be managed by ${curr.name}ShowState.
+    /// ${curr.name}ShowPage allow to create a new item based on ${curr.name?cap_first} entity.
+    /// This ${curr.name?cap_first}ShowPage load graphical context and be managed by ${curr.name?cap_first}ShowState.
     /// </summary>
-    public sealed partial class ${curr.name}ShowPage : Page
+    public sealed partial class ${curr.name?cap_first}ShowPage : Page
     {
-        // Used to manage ${curr.name}Show UserControl in ${curr.name}ShowState.
-        public ${curr.name}ShowUserControl ${curr.name}ShowUserControl { get; set; }
+        // Used to manage ${curr.name?cap_first}Show UserControl in ${curr.name?cap_first}ShowState.
+        public ${curr.name?cap_first}ShowUserControl ${curr.name?cap_first}ShowUserControl { get; set; }
         
-        // Used to manage ShowBrowser in ${curr.name}ShowState
+        // Used to manage ShowBrowser in ${curr.name?cap_first}ShowState
         public ShowBrowser ShowBrowser { get; set; }
 
-        public ${curr.name}ShowPage()
+        public ${curr.name?cap_first}ShowPage()
         {
             this.InitializeComponent();
 
-            this.${curr.name}ShowUserControl = this.${curr.name?lower_case}_show_usercontrol;
+            this.${curr.name?cap_first}ShowUserControl = this.${curr.name?lower_case}_show_usercontrol;
             this.ShowBrowser = this.show_broswer;
         }
     }

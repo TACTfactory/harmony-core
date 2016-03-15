@@ -2,12 +2,6 @@
 <#assign curr = entities[current_entity] />
 <#assign fields = ViewUtils.getAllFields(curr) />
 <@header?interpret />
-<#assign wishedrelation = []/>
-<#list curr.relations as rel>
-    <#if ((rel.relation.type=="OneToMany") || (rel.relation.type=="ManyToMany") || (rel.relation.type=="OneToOne") || (rel.relation.type=="ManyToOne"))>
-        <#assign wishedrelation = wishedrelation + [rel.relation.targetEntity]/>
-    </#if>
-</#list>
 
 using ${project_namespace}.Data;
 using ${project_namespace}.Entity;
@@ -44,7 +38,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         /// <summary>
         /// Update button use to save datas in database.
         /// For any possible relations beetwen ${curr.name?cap_first} 
-        /// and others update all references if have to. 
+        /// and others entities update all references if have to. 
         /// </summary>
         /// <param name="sender">Tapped item.</param>
         /// <param name="e">Tapped event.</param>
@@ -64,7 +58,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             {
                 int result = this.${curr.name?lower_case}Adapter.Insert(this.${curr.name?cap_first}Item);
                 ViewStateMachine.Instance.${curr.name?cap_first} = this.${curr.name?lower_case}Adapter.GetById(result);
-                ViewStateMachine.Instance.${field.relation.targetEntity?cap_first}.${field.relation.mappedBy}.Add(ViewStateMachine.Instance.${curr.name?cap_first});
+                ViewStateMachine.Instance.${field.relation.targetEntity?cap_first}.${field.relation.mappedBy?cap_first}.Add(ViewStateMachine.Instance.${curr.name?cap_first});
                 ${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.relation.targetEntity?cap_first}Adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(new ${project_name?cap_first}SQLiteOpenHelper());
                 ${field.relation.targetEntity?cap_first}Adapter.Update(ViewStateMachine.Instance.${field.relation.targetEntity?cap_first});
             }
@@ -78,7 +72,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             {
                 int result = this.${curr.name?lower_case}Adapter.Insert(this.${curr.name?cap_first}Item);
                 ViewStateMachine.Instance.${curr.name?cap_first} = this.${curr.name?lower_case}Adapter.GetById(result);
-                ViewStateMachine.Instance.${field.relation.targetEntity?cap_first}.${field.relation.mappedBy} = ViewStateMachine.Instance.${curr.name?cap_first};
+                ViewStateMachine.Instance.${field.relation.targetEntity?cap_first}.${curr.name?cap_first} = ViewStateMachine.Instance.${curr.name?cap_first};
                 ${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.relation.targetEntity?cap_first}Adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(new ${project_name?cap_first}SQLiteOpenHelper());
                 ${field.relation.targetEntity?cap_first}Adapter.Update(ViewStateMachine.Instance.${field.relation.targetEntity?cap_first});
             }

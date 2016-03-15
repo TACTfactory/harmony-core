@@ -191,34 +191,5 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                 </#if>
             </#list>
         </#if>
-
-        //TODO setup in state part
-        <#if curr.relations?has_content>
-        /// <summary>
-        /// Update ${curr.name?cap_first}UserControl UI to remove button if comming from other display tree state.
-        /// </summary>
-        public void UpdateUI()
-        {
-            <#list curr.relations as rel>
-                <#if (rel?is_first && rel?is_last)>
-            if ( ViewStateMachine.Instance.${rel.relation.targetEntity?cap_first} != null)
-                <#elseif (rel?is_first)>
-            if ( ViewStateMachine.Instance.${rel.relation.targetEntity?cap_first} != null
-                <#elseif (rel?is_last)>
-                || ViewStateMachine.Instance.${rel.relation.targetEntity?cap_first} != null)
-                <#else>
-                || ViewStateMachine.Instance.${rel.relation.targetEntity?cap_first} != null
-                </#if>
-            </#list>
-            <#list curr.relations as rel>
-                <#if rel.relation.type == "ManyToMany" || rel.relation.type == "OneToMany">
-                this.stackpanel_btn.Children.Remove(this.btn_list_related_${rel.relation.targetEntity?lower_case});
-                <#else>      
-                this.stackpanel_btn.Children.Remove(this.btn_add_${rel.relation.targetEntity?lower_case});          
-                </#if>
-            </#list>
-            }
-        }
-        </#if>
     }
 }

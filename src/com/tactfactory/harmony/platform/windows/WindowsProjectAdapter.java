@@ -190,6 +190,16 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Page,
                 "View/" + "HomePage.xaml"));
+        
+        // State HomeState
+        result.add(new SourceFile(
+                templatePath + "HomeState.cs",
+                filePath + "HomeState.cs",
+                true));
+
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + "HomeState.cs"));
 
         return result;
     }
@@ -319,6 +329,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
 
         String templatePath = this.adapter.getTemplateSourceControlerPath();
 
+        // Base Create Views
         String filePath = String.format("%s%s/",
                 this.adapter.getSourceControllerPath(),
                 entity.getName());
@@ -374,7 +385,20 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Page,
                 "View/" + entity.getName()  + "/" + String.format("%sCreateUserControl.xaml",
                         entity.getName())));
+        
+        // State Create Views
+        result.add(new SourceFile(
+                templatePath + "TemplateCreateState.cs",
+                String.format("%s%sCreateState.cs",
+                        filePath,
+                        entity.getName()),
+                false));
 
+        result.add(new ProjectUpdater(
+                FileType.Page,
+                "View/" + entity.getName()  + "/" + String.format("%sCreateState.cs",
+                        entity.getName())));
+        
         return result;
     }
 
