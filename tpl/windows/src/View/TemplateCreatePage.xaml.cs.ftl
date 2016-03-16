@@ -13,12 +13,19 @@ namespace ${project_namespace}.View.${curr.name?cap_first}
     /// </summary>
     public partial class ${curr.name?cap_first}CreatePage : Page
     {
-        // Used to manage ${curr.name?cap_first}Create UserControl in ${curr.name?cap_first}CreateState
+        /// <summary>
+        /// Used to manage ${curr.name?cap_first}Create UserControl in ${curr.name?cap_first}CreateState.
+        /// </summary>
         public ${curr.name?cap_first}CreateUserControl ${curr.name?cap_first}CreateUserControl { get; set; }
         
-        // Used to manage BackBrowser in ${curr.name?cap_first}CreateState
+        /// <summary>
+        /// Used to manage BackBrowser in ${curr.name?cap_first}CreateState.
+        /// </summary>
         public BackBrowser BackBrowser { get; set; }
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public ${curr.name?cap_first}CreatePage()
         {
             InitializeComponent();

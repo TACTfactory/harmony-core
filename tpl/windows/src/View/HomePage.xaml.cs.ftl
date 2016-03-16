@@ -6,8 +6,14 @@ using Windows.UI.Xaml.Controls;
 
 namespace ${project_namespace}.View
 {
+    /// <summary>
+    /// Home Page base entry of harmony display.
+    /// </summary>
     public partial class HomePage : Page
     {
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public HomePage()
         {
             InitializeComponent();

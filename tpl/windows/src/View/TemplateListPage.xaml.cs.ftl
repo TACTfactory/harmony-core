@@ -13,12 +13,19 @@ namespace ${project_namespace}.View.${curr.name?cap_first}
     /// </summary>
     public partial class ${curr.name?cap_first}ListPage : Page
     {
-        // Used to manage ${curr.name?cap_first}List UserControl in ${curr.name?cap_first}ListState
+        /// <summary>
+        /// Used to manage ${curr.name?cap_first}List UserControl in ${curr.name?cap_first}ListState.
+        /// </summary>
         public ${curr.name?cap_first}ListUserControl ${curr.name?cap_first}ListUserControl { get; set; }
         
-        // Used to manage NavigationBrowser in ${curr.name?cap_first}ListState
+        /// <summary>
+        /// Used to manage NavigationBrowser in ${curr.name?cap_first}ListState.
+        /// </summary>
         public NavigationBrowser NavigationBrowser { get; set; }
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public ${curr.name?cap_first}ListPage()
         {
             InitializeComponent();

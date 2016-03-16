@@ -13,12 +13,19 @@ namespace ${project_namespace}.View.${curr.name?cap_first}
     /// </summary>
     public sealed partial class ${curr.name?cap_first}CheckListPage : Page
     {
-        // Used to manage ${curr.name?cap_first}CheckList UserControl in ${curr.name?cap_first}CheckListState
+        /// <summary>
+        /// Used to manage ${curr.name?cap_first}CheckList UserControl in ${curr.name?cap_first}CheckListState.
+        /// </summary>
         public ${curr.name?cap_first}CheckListUserControl ${curr.name?cap_first}CheckListUserControl { get; set; }
         
-        // Used to manage BackBrowser in ${curr.name?cap_first}CheckListState
+        /// <summary>
+        /// Used to manage BackBrowser in ${curr.name?cap_first}CheckListState.
+        /// </summary>
         public BackBrowser BackBrowser { get; set; }
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public ${curr.name?cap_first}CheckListPage()
         {
             this.InitializeComponent();

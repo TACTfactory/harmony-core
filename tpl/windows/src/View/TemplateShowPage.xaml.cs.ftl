@@ -13,12 +13,19 @@ namespace ${project_namespace}.View.${curr.name?cap_first}
     /// </summary>
     public sealed partial class ${curr.name?cap_first}ShowPage : Page
     {
-        // Used to manage ${curr.name?cap_first}Show UserControl in ${curr.name?cap_first}ShowState.
+        /// <summary>
+        /// Used to manage ${curr.name?cap_first}Show UserControl in ${curr.name?cap_first}ShowState.
+        /// </summary>
         public ${curr.name?cap_first}ShowUserControl ${curr.name?cap_first}ShowUserControl { get; set; }
         
-        // Used to manage ShowBrowser in ${curr.name?cap_first}ShowState
+        /// <summary>
+        /// Used to manage ShowBrowser in ${curr.name?cap_first}ShowState.
+        /// </summary>
         public ShowBrowser ShowBrowser { get; set; }
 
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public ${curr.name?cap_first}ShowPage()
         {
             this.InitializeComponent();

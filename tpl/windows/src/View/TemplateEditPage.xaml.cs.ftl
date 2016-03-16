@@ -19,6 +19,9 @@ namespace ${project_namespace}.View.${curr.name?cap_first}
         // Used to manage BackBrowser in ${curr.name?cap_first}EditState
         public BackBrowser BackBrowser { get; set; }
         
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public ${curr.name?cap_first}EditPage()
         {
             this.InitializeComponent();

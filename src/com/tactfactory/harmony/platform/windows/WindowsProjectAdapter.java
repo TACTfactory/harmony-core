@@ -199,7 +199,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 true));
 
         result.add(new ProjectUpdater(
-                FileType.Page,
+                FileType.Compile,
                 "View/" + "HomeState.cs"));
         
         // Browsers
@@ -211,7 +211,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Compile,
                 "View/" + "BackBrowser.xaml.cs",
-                "HomePage.xaml"));
+                "BackBrowser.xaml"));
 
         result.add(new SourceFile(
                 templatePath + "BackBrowser.xaml",
@@ -230,7 +230,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Compile,
                 "View/" + "ShowBrowser.xaml.cs",
-                "HomePage.xaml"));
+                "ShowBrowser.xaml"));
 
         result.add(new SourceFile(
                 templatePath + "ShowBrowser.xaml",
@@ -249,7 +249,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Compile,
                 "View/" + "NavigationBrowser.xaml.cs",
-                "HomePage.xaml"));
+                "NavigationBrowser.xaml"));
 
         result.add(new SourceFile(
                 templatePath + "NavigationBrowser.xaml",
@@ -260,6 +260,25 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Page,
                 "View/" + "NavigationBrowser.xaml"));
 
+        // State Machine
+        result.add(new SourceFile(
+                templatePath + "ViewStateMachine.cs",
+                filePath + "ViewStateMachine.cs",
+                true));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + "ViewStateMachine.cs"));
+        
+        result.add(new SourceFile(
+                templatePath + "ViewStateMachineStates.cs",
+                filePath + "ViewStateMachineStates.cs",
+                true));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + "ViewStateMachineStates.cs"));
+        
         return result;
     }
 
