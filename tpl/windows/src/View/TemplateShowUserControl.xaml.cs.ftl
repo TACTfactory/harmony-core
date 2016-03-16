@@ -11,7 +11,7 @@
 
 using ${project_namespace}.Data;
 using ${project_namespace}.Entity;
-using ${project_namespace}.Harmony.Util.StateMachine;
+using ${project_namespace}.Utils.StateMachine;
 <#if wishedrelation?has_content>
     <#list wishedrelation as targetEntity> 
 using ${project_namespace}.View.${targetEntity?cap_first};

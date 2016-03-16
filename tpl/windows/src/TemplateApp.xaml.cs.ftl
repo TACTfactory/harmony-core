@@ -1,7 +1,7 @@
 <@header?interpret />
 
 
-using ${project_namespace}.Harmony.Util.StateMachine;
+using ${project_namespace}.Utils.StateMachine;
 using ${project_namespace}.View;
 using System;
 using Windows.ApplicationModel;

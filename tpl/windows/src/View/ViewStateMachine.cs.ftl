@@ -3,7 +3,7 @@
 
 using ${project_namespace}.Entity;
 using ${project_namespace}.Entity.Base;
-using ${project_namespace}.Harmony.Util.StateMachine;
+using ${project_namespace}.Utils.StateMachine;
 using ${project_namespace}.View.Navigation.States;
 using System;
 using System.Linq;

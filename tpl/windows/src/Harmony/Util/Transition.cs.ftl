@@ -1,7 +1,7 @@
 <#include utilityPath + "all_imports.ftl" />
 <@header?interpret />
 
-namespace ${project_namespace}.Harmony.Util.StateMachine
+namespace ${project_namespace}.Utils.StateMachine
 {
     /// <summary>
     /// ViewStateMachine transitions.

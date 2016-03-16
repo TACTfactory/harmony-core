@@ -1,6 +1,6 @@
 <@header?interpret />
 
-using ${project_namespace}.Harmony.Util.StateMachine;
+using ${project_namespace}.Utils.StateMachine;
 using System.Diagnostics;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;

@@ -1,6 +1,6 @@
 <@header?interpret />
 
-using ${project_namespace}.Harmony.Util.StateMachine;
+using ${project_namespace}.Utils.StateMachine;
 using Windows.UI.Xaml.Controls;
 
 namespace ${project_namespace}.View.Navigation.States

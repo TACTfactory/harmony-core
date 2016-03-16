@@ -11,7 +11,7 @@
 </#list>
 <@header?interpret />
 
-using ${project_namespace}.Harmony.Util.StateMachine;
+using ${project_namespace}.Utils.StateMachine;
 using ${project_namespace}.View.${curr.name?cap_first};
 using Windows.UI.Xaml.Controls;
 
