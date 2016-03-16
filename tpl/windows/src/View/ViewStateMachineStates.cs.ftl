@@ -7,7 +7,7 @@ using Windows.UI.Xaml.Controls;
 
 namespace ${project_namespace}.View
 {
-    public class ViewStateMachineState : BaseStateMachineState
+    public class ViewStateMachineState : BaseViewStateMachineState
     {
         public ViewStateMachineState()
         {

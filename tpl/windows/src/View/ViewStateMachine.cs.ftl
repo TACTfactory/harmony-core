@@ -37,7 +37,7 @@ namespace ${project_namespace}.View
         }
         #endregion
         
-        private BaseStateMachine bsm;
+        private BaseViewStateMachine bsm;
 
         public Transition NextTransition { get; set; }
         <#list entities?values as entity>
@@ -260,7 +260,7 @@ namespace ${project_namespace}.View
             #endregion
 
             // Create and add all states to state machine.
-            bsm = new BaseStateMachine();
+            bsm = new BaseViewStateMachine();
             bsm.AddState(homeState);
             <#list entities?values as entity>
             bsm.AddState(${entity.name?lower_case}List);

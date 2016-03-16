@@ -279,6 +279,40 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Compile,
                 "View/" + "ViewStateMachineStates.cs"));
         
+        // Base Utils for views
+        templatePath = this.adapter.getTemplateSourcePath();
+        filePath = this.adapter.getSourcePath();
+
+		result.add(new SourceFile(templatePath
+				+ "Utils/BaseViewStateMachine.cs", filePath
+				+ "Utils/BaseViewStateMachine.cs", true));
+
+		result.add(new ProjectUpdater(FileType.Compile, "Utils/"
+				+ "BaseViewStateMachine.cs"));
+
+		result.add(new SourceFile(templatePath
+				+ "Utils/BaseViewStateMachineState.cs", filePath
+				+ "Utils/BaseViewStateMachineState.cs", true));
+
+		result.add(new ProjectUpdater(FileType.Compile, "Utils/"
+				+ "BaseViewStateMachineState.cs"));
+
+		result.add(new SourceFile(templatePath + "Utils/StateID.cs", filePath
+				+ "Utils/StateID.cs", true));
+
+		result.add(new ProjectUpdater(FileType.Compile, "Utils/" + "StateID.cs"));
+
+		result.add(new SourceFile(templatePath + "Utils/Transition.cs",
+				filePath + "Utils/Transition.cs", true));
+
+		result.add(new ProjectUpdater(FileType.Compile, "Utils/"
+				+ "Transition.cs"));
+
+		result.add(new SourceFile(templatePath + "Utils/UIUtils.cs", filePath
+				+ "Utils/UIUtils.cs", true));
+
+		result.add(new ProjectUpdater(FileType.Compile, "Utils/" + "UIUtils.cs"));
+
         return result;
     }
 
