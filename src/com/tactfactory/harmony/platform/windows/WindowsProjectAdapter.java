@@ -62,22 +62,19 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 false));
 
         result.add(new SourceFile(
-                templatePath + "Properties/Annotations.cs",
-                filePath + "Properties/Annotations.cs",
+                templatePath + "Package.appxmanifest",
+                filePath + "Package.appxmanifest",
                 false));
-
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "Properties/" + "Annotations.cs"));
-
+        
         result.add(new SourceFile(
-                templatePath + "Properties/AppManifest.xml",
-                filePath + "Properties/AppManifest.xml",
+                templatePath + "ApplicationInsights.config",
+                filePath + "ApplicationInsights.config",
                 false));
-
-//        result.add(new ProjectUpdater(
-//                FileType.None,
-//                "Properties/" + "AppManifest.xml"));
+        
+        result.add(new SourceFile(
+                templatePath + "project.json",
+                filePath + "project.json",
+                false));
 
         result.add(new SourceFile(
                 templatePath + "Properties/AssemblyInfo.cs",
@@ -87,15 +84,11 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Compile,
                 "Properties/" + "AssemblyInfo.cs"));
-
+        
         result.add(new SourceFile(
-                templatePath + "Properties/WMAppManifest.xml",
-                filePath + "Properties/WMAppManifest.xml",
+                templatePath + "Properties/Default.rd.xml",
+                filePath + "Properties/Default.rd.xml",
                 false));
-
-//        result.add(new ProjectUpdater(
-//                FileType.None,
-//                "Properties/" + "WMAppManifest.xml"));
 
         templatePath = this.adapter.getTemplateSourcePath();
         filePath = this.adapter.getSourcePath();
