@@ -1171,6 +1171,20 @@ public class WindowsProjectAdapter implements IAdapterProject {
     @Override
     public List<IUpdater> getEntityBaseFiles() {
         List<IUpdater> result = new ArrayList<IUpdater>();
+        
+        String templatePath = this.adapter.getTemplateSourcePath() + "Entity/";
+
+        String filePath = this.adapter.getSourcePath() + "Entity/";
+        
+        result.add(new SourceFile(
+                templatePath + "TemplateEntityBase.cs",
+                filePath + "TemplateEntityBase.cs",
+                true));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "Entity/" + "TemplateEntityBase.cs"));
+        
         return result;
     }
 

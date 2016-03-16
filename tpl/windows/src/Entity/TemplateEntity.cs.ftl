@@ -2,11 +2,12 @@
 <#assign curr = entities[current_entity] />
 <@header?interpret />
 
+using ${project_namespace}.Entity.Base;
+using ${project_namespace}.Provider.Contract;
+using SQLite.Net.Attributes;
+using SQLiteNetExtensions.Attributes;
 using System;
 using System.Collections.Generic;
-using System.Data.Linq;
-using System.Data.Linq.Mapping;
-using System.Linq;
 
 
 namespace ${project_namespace}.Entity
@@ -20,7 +21,7 @@ namespace ${project_namespace}.Entity
         </#list>
     [InheritanceMapping(Code = "${curr.name}", Type = typeof(${curr.name}), IsDefault = true)]
     </#if>
-    public class ${curr.name}<#if (curr.inheritance?? && (curr.inheritance.superclass?? && entities[curr.inheritance.superclass.name]??))> : ${curr.inheritance.superclass.name}</#if>
+    public class ${curr.name}<#if (curr.inheritance?? && (curr.inheritance.superclass?? && entities[curr.inheritance.superclass.name]??))> : ${curr.inheritance.superclass.name}<#else> : EntityBase</#if>
     {
         <#list curr_fields as field>
             <#if !field.id && !field.relation?? && !field.enum??>
