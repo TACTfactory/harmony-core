@@ -1,26 +1,28 @@
 <@header?interpret />
 
+using ${project_namespace}.Harmony.Util.StateMachine;
+using System.Diagnostics;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 
-namespace ${project_namespace}.View.Navigation.UsersControls
+namespace ${project_namespace}.View
 {
-    /// <summary>
-    /// Used for harmony navigation back ability.
-    /// </summary>
-    public sealed partial class BackBrowser : UserControl
+    public class ViewStateMachineState : BaseStateMachineState
     {
-        /// <summary>
-        /// UserControl back button.
-        /// </summary>
-        public Button Btn_Back { get; set; }
-
-        /// <summary>
-        /// Default constructor.
-        /// </summary>
-        public BackBrowser()
+        public ViewStateMachineState()
         {
-            this.InitializeComponent();
-            this.Btn_Back = this.btn_back;
+            stateID = StateID.Start;
+        }
+
+        public override void Navigate(Page currentPage)
+        {
+            Debug.Write("Load Page " + currentPage.Name);
+            ((Frame)Window.Current.Content).Content = currentPage;
+        }
+
+        public override void DoBeforeEntering(Page page)
+        {
+            this.Navigate(page);
         }
     }
 }
