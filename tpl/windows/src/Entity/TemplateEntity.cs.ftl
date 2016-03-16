@@ -13,7 +13,7 @@ using System.Collections.Generic;
 namespace ${project_namespace}.Entity
 {
     <#if (!curr.inheritance?? || (curr.inheritance.subclasses?? && curr.inheritance.subclasses?size > 0))>
-    [Table]
+    [Table(${curr.name?cap_first}Contract.TABLE_NAME)]
     </#if>
     <#if (curr.inheritance?? && curr.inheritance.subclasses?? && curr.inheritance.subclasses?size > 0)>
         <#list curr.inheritance.subclasses as entity>
@@ -32,11 +32,9 @@ namespace ${project_namespace}.Entity
         private ${FieldsUtils.getJavaType(field)} ${field.name};
             <#elseif field.relation?? && !field.internal>
                 <#if field.relation.type == "ManyToOne" || field.relation.type == "OneToOne">
-        [Column]
-        internal int ${field.name}Id;
-        private EntityRef<${FieldsUtils.getJavaType(field)}> ${field.name};
+        private Int32 ${field.name};
                 <#else>
-        private EntitySet<${FieldsUtils.getJavaType(field)}> ${field.name};
+        private List<${FieldsUtils.getJavaType(field)}> ${field.name};
                 </#if>
             </#if>
         </#list>
@@ -48,24 +46,28 @@ namespace ${project_namespace}.Entity
         </#if>
         <#list curr_fields as field>
             <#if !field.id && !field.relation?? && !field.enum??>
-        [Column]
+        [Column(${curr.name?cap_first}Contract.COL_${field.name?upper_case})]
         public ${FieldsUtils.getJavaType(field)} ${field.name?cap_first}
             <#elseif field.enum??>
-        [Column]
         public ${enums[field.enum.targetEnum].name} ${field.name?cap_first}
             <#elseif field.id>
-        [Column(
-            IsPrimaryKey = true,
-            IsDbGenerated = true,
-            CanBeNull = false,
-            AutoSync = AutoSync.OnInsert)]
+        [PrimaryKey, AutoIncrement]
+        [Column(${curr.name?cap_first}Contract.COL_${field.name?upper_case})]
         public ${FieldsUtils.getJavaType(field)} ${field.name?cap_first}
             <#elseif field.relation?? && !field.internal>
-                <#if field.relation.type == "ManyToOne" || field.relation.type == "OneToOne">
-        [Association(ThisKey = "${field.name}Id")]
-        public ${FieldsUtils.getJavaType(field)} ${field.name?cap_first}
-                <#else>
-        [Association(OtherKey = "Id")] 
+                <#if field.relation.type == "ManyToOne">
+        [Column(${curr.name?cap_first}Contract.COL_${field.relation.targetEntity?upper_case}),
+            ForeignKey(typeof(${field.relation.targetEntity?cap_first}))]
+        public Int32 ${field.name?cap_first}
+                <#elseif field.relation.type == "OneToOne">
+        [Column(${curr.name?cap_first}Contract.COL_${field.relation.targetEntity?upper_case}),
+            ForeignKey(typeof(${field.relation.targetEntity?cap_first}))]
+        public Int32 ${field.name?cap_first}
+                <#elseif field.relation.type == "OneToMany">
+        [OneToMany]
+        public List<${FieldsUtils.getJavaType(field)}> ${field.name?cap_first}        
+                <#elseif field.relation.type == "ManyToMany">
+        [ManyToMany(typeof(PoneyToJockey)]
         public List<${FieldsUtils.getJavaType(field)}> ${field.name?cap_first}
                 </#if>
             </#if>
@@ -77,9 +79,9 @@ namespace ${project_namespace}.Entity
                 return this.${field.name};
                 <#elseif field.relation??>
                     <#if field.relation.type == "ManyToOne" || field.relation.type == "OneToOne">
-                return this.${field.name}.Entity;
+                return this.${field.name};
                     <#else>
-                return this.${field.name}.ToList();
+                return this.${field.name};
                     </#if>
                 </#if>
             }
@@ -88,57 +90,34 @@ namespace ${project_namespace}.Entity
             {
                 <#if field.id || !field.relation??>
                 this.${field.name} = value;
+                OnPropertyChanged("${field.name}");
                 <#elseif field.relation??>
                     <#if field.relation.type == "ManyToOne" || field.relation.type == "OneToOne">
-                this.${field.name}.Entity = value;
+                this.${field.name} = value;
+                OnPropertyChanged("${field.name}");
                 
-                if (value != null)
-                {
-                    this.${field.name}Id = value.Id;
-                }
                     <#else>
-                this.${field.name}.Assign(value);
+                this.${field.name} = value;
+                OnPropertyChanged("${field.name}");
                     </#if>
                 </#if>
             }
         }
-        
             </#if>
         </#list>
+
+        /// <summary>
+        /// Default constructor.
+        /// </summary>
         public ${curr.name}()
         {
-            <#list curr_fields as field>
-                <#if field.relation?? && !field.internal 
-                    && field.relation.type != "ManyToOne" && field.relation.type != "OneToOne">
-            this.${field.name} = new EntitySet<${FieldsUtils.getJavaType(field)}>(
-                <#if field.relation.type != "ManyToMany">
-                new Action<${FieldsUtils.getJavaType(field)}>(this.attach_${FieldsUtils.getJavaType(field)}),
-                new Action<${FieldsUtils.getJavaType(field)}>(this.detach_${FieldsUtils.getJavaType(field)})
-                </#if>
-                );
-                </#if>
-            </#list>
-        }
         <#list curr_fields as field>
-            <#if field.relation?? && !field.internal 
-                && field.relation.type != "ManyToOne" && field.relation.type != "OneToOne"
-                && field.relation.type != "ManyToMany">
-                <#assign item = FieldsUtils.getJavaType(field)/>
-        
-        // Called during an add operation 
-        private void attach_${item}(${item} ${item?lower_case})
-        {
-            //NotifyPropertyChanging("${item}");
-            //${item?lower_case}.${curr.name} = this;
-        }
-
-        // Called during a remove operation 
-        private void detach_${item}(${item} ${item?lower_case})
-        {
-            //NotifyPropertyChanging("${item}");
-            //${item?lower_case}.${curr.name} = null;
-        }
+            <#if field.relation?? && !field.internal>
+                <#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
+            this.${field.name} = new List<${field.relation.targetEntity}>();
+                </#if>
             </#if>
         </#list>
+        }
     }
 }

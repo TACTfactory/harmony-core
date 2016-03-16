@@ -1183,7 +1183,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
 
         result.add(new ProjectUpdater(
                 FileType.Compile,
-                "Entity/" + "TemplateEntityBase.cs"));
+                "Entity/" + "EntityBase.cs"));
         
         return result;
     }
