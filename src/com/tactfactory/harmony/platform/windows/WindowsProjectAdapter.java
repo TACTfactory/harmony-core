@@ -1088,7 +1088,58 @@ public class WindowsProjectAdapter implements IAdapterProject {
 
     @Override
     public List<IUpdater> getTestProjectFiles() {
-        List<IUpdater> result = new ArrayList<IUpdater>();
+    	List<IUpdater> result = new ArrayList<IUpdater>();
+
+        String templatePath = this.adapter.getTemplateTestProjectPath();
+        String filePath = this.adapter.getSourcePath() + "Test/";
+
+        String applicationName = this.adapter.getApplicationMetadata()
+                .getName().toLowerCase(Locale.ENGLISH) + "-test";
+
+        result.add(new SourceFile(
+                templatePath + "Template.csproj",
+                filePath + applicationName + ".csproj",
+                false));
+
+        result.add(new SourceFile(
+                templatePath + "Package.appxmanifest",
+                filePath + "Package.appxmanifest",
+                false));
+        
+        result.add(new SourceFile(
+                templatePath + "project.json",
+                filePath + "project.json",
+                false));
+        
+        result.add(new SourceFile(
+                templatePath + "project.lock.json",
+                filePath + "project.lock.json",
+                false));
+        
+        result.add(new SourceFile(
+                templatePath + "Properties/Default.rd.xml",
+                filePath + "Properties/Default.rd.xml",
+                false));
+
+        // Load Assets
+        List<String> assets = new ArrayList<String>();
+        assets.add("LockScreenLogo.scale-200.png");
+        assets.add("SplashScreen.scale-200.png");
+        assets.add("Square150x150Logo.scale-200.png");
+        assets.add("Square44x44Logo.scale-200.png");
+        assets.add("Square44x44Logo.targetsize-24_altform-unplated.png");
+        assets.add("StoreLogo.png");
+        assets.add("Wide310x150Logo.scale-200.png");
+        
+        templatePath = this.adapter.getHarmonyTestAssetsPath();
+        filePath = this.adapter.getTestAssetsPath();
+        
+        for (String asset : assets) {
+            result.add(new CopyFile(
+            		templatePath + asset,
+                    filePath + asset));
+        }
+        
         return result;
     }
 

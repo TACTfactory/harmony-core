@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="${project_name?cap_first}" Publisher="CN=publisher" Version="1.0.0.0" />
+  <Identity Name="${project_name?cap_first}-test" Publisher="CN=publisher" Version="1.0.0.0" />
   <mp:PhoneIdentity PhoneProductId="00000000-0000-0000-0000-000000000000" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
-    <DisplayName>${project_name?cap_first}</DisplayName>
+    <DisplayName>${project_name?cap_first}-test</DisplayName>
     <PublisherDisplayName>publisher</PublisherDisplayName>
     <Logo>Assets\StoreLogo.png</Logo>
   </Properties>
