@@ -12,7 +12,7 @@ namespace ${project_namespace}.Utils.StateMachine
     /// which state the State Machine should be if a transition is fired while this state
     /// is the current state.
     /// </summary>
-    public abstract class BaseStateMachineState
+    public abstract class BaseViewStateMachineState
     {
         protected Dictionary<Transition, StateID> map = new Dictionary<Transition, StateID>();
         protected StateID stateID;

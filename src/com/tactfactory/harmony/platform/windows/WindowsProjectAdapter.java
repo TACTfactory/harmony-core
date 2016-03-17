@@ -312,6 +312,21 @@ public class WindowsProjectAdapter implements IAdapterProject {
 				+ "Utils/UIUtils.cs", true));
 
 		result.add(new ProjectUpdater(FileType.Compile, "Utils/" + "UIUtils.cs"));
+		
+		// Checkables
+		result.add(new SourceFile(templatePath
+				+ "View/CheckableBase.cs", filePath
+				+ "View/CheckableBase.cs", true));
+
+		result.add(new ProjectUpdater(FileType.Compile, "View/"
+				+ "CheckableBase.cs"));
+		
+		result.add(new SourceFile(templatePath
+				+ "View/ICheckableManager.cs", filePath
+				+ "View/ICheckableManager.cs", true));
+
+		result.add(new ProjectUpdater(FileType.Compile, "View/"
+				+ "ICheckableManager.cs"));
 
         return result;
     }
@@ -587,6 +602,31 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new ProjectUpdater(
                 FileType.Compile,
                 "View/" + entity.getName()  + "/" + String.format("%sEditState.cs",
+                        entity.getName())));
+        
+        // Checkable entities
+        result.add(new SourceFile(
+                templatePath + "TemplateCheckable.cs",
+                String.format("%s%sCheckable.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + entity.getName()  + "/" + String.format("%sCheckable.cs",
+                        entity.getName())));
+        
+        result.add(new SourceFile(
+                templatePath + "TemplateCheckableManager.cs",
+                String.format("%s%sCheckableManager.cs",
+                        filePath,
+                        entity.getName()),
+                false));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                "View/" + entity.getName()  + "/" + String.format("%sCheckableManager.cs",
                         entity.getName())));
         
         return result;
