@@ -14,7 +14,9 @@ import java.util.List;
 import java.util.Locale;
 
 import com.google.common.base.CaseFormat;
+import com.tactfactory.harmony.Harmony;
 import com.tactfactory.harmony.generator.CommonGenerator.ViewType;
+import com.tactfactory.harmony.meta.ApplicationMetadata;
 import com.tactfactory.harmony.meta.EntityMetadata;
 import com.tactfactory.harmony.meta.EnumMetadata;
 import com.tactfactory.harmony.platform.IAdapterProject;
@@ -74,6 +76,11 @@ public class WindowsProjectAdapter implements IAdapterProject {
         result.add(new SourceFile(
                 templatePath + "project.json",
                 filePath + "project.json",
+                false));
+        
+        result.add(new SourceFile(
+                templatePath + "project.lock.json",
+                filePath + "project.lock.json",
                 false));
 
         result.add(new SourceFile(
@@ -500,7 +507,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 false));
 
         result.add(new ProjectUpdater(
-                FileType.Page,
+                FileType.Compile,
                 "View/" + entity.getName()  + "/" + String.format("%sCreateState.cs",
                         entity.getName())));
         
@@ -578,7 +585,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 false));
 
         result.add(new ProjectUpdater(
-                FileType.Page,
+                FileType.Compile,
                 "View/" + entity.getName()  + "/" + String.format("%sEditState.cs",
                         entity.getName())));
         
@@ -656,7 +663,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 false));
 
         result.add(new ProjectUpdater(
-                FileType.Page,
+                FileType.Compile,
                 "View/" + entity.getName()  + "/" + String.format("%sShowState.cs",
                         entity.getName())));
 
@@ -736,7 +743,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 false));
 
         result.add(new ProjectUpdater(
-                FileType.Page,
+                FileType.Compile,
                 "View/" + entity.getName()  + "/" + String.format("%sListState.cs",
                         entity.getName())));
 
@@ -803,7 +810,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 false));
 
         result.add(new ProjectUpdater(
-                FileType.Page,
+                FileType.Compile,
                 "View/" + entity.getName()  + "/" + String.format("%sCheckListState.cs",
                         entity.getName())));
         
@@ -984,21 +991,40 @@ public class WindowsProjectAdapter implements IAdapterProject {
 
         result.add(new SourceFile(
                 templatePath + "TemplateApp.xaml.cs",
-                filePath + applicationName + "App.xaml.cs"));
+                filePath + "App.xaml.cs"));
 
         result.add(new ProjectUpdater(
                 FileType.Compile,
-                applicationName + "App.xaml.cs",
-                applicationName + "App.xaml"));
+                "App.xaml.cs",
+                "App.xaml"));
 
         result.add(new SourceFile(
                 templatePath + "TemplateApp.xaml",
-                filePath + applicationName + "App.xaml"));
+                filePath + "App.xaml"));
 
         result.add(new ProjectUpdater(
                 FileType.ApplicationDefinition,
-                applicationName + "App.xaml"));
-
+                "App.xaml"));
+        
+        // Load Assets
+        List<String> assets = new ArrayList<String>();
+        assets.add("LockScreenLogo.scale-200.png");
+        assets.add("SplashScreen.scale-200.png");
+        assets.add("Square150x150Logo.scale-200.png");
+        assets.add("Square44x44Logo.scale-200.png");
+        assets.add("Square44x44Logo.targetsize-24_altform-unplated.png");
+        assets.add("StoreLogo.png");
+        assets.add("Wide310x150Logo.scale-200.png");
+        
+        templatePath = this.adapter.getHarmonyAssetsPath();
+        filePath = this.adapter.getAssetsPath();
+        
+        for (String asset : assets) {
+            result.add(new CopyFile(
+            		templatePath + asset,
+                    filePath + asset));
+        }
+        
         return result;
     }
 
@@ -1171,7 +1197,7 @@ public class WindowsProjectAdapter implements IAdapterProject {
         
         result.add(new SourceFile(
                 templatePath + "TemplateEntityBase.cs",
-                filePath + "TemplateEntityBase.cs",
+                filePath + "EntityBase.cs",
                 true));
 
         result.add(new ProjectUpdater(

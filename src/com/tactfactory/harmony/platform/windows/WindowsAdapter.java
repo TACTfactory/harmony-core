@@ -320,4 +320,11 @@ public class WindowsAdapter extends BaseAdapter {
 				this.getHarmony(),
 				this.getUtil());
 	}
+    
+    public String getHarmonyAssetsPath(){
+    	return String.format("%s%s/%s/",
+    			Harmony.getCurrentBundlePath(),
+    			this.getTemplateRessourcePath(),
+    			"Assets/");
+    }
 }

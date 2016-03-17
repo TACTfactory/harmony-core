@@ -12,11 +12,11 @@ using Windows.UI.Xaml.Navigation;
 
 namespace ${project_namespace}
 {
-    // Base object used on application initialization
-    public ${project_name?cap_first}ApplicationBase DemactAppBase { get; set; }
-    
     public sealed partial class App
     {
+        // Base object used on application initialization
+        public ${project_name?cap_first}ApplicationBase DemactAppBase { get; set; }
+        
         /// <summary>
         /// Constructor for the Application object.
         /// Used a singleton to manage is access.
