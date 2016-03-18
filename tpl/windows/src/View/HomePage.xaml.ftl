@@ -1,3 +1,5 @@
+<!-- <@header?interpret /> -->
+
 <Page
     x:Class="${project_namespace}.View.HomePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -35,8 +37,8 @@
 
         <!--TitlePanel contains the name of the application and page title-->
         <StackPanel x:Name="TitlePanel" Grid.Row="0" Margin="12,17,0,28">
-            <TextBlock Text="${project_name?upper_case}" Style="{StaticResource PhoneTextNormalStyle}" Margin="12,0"/>
-            <TextBlock Text="What to do next" Margin="9,-7,0,0" Style="{StaticResource PhoneTextTitle1Style}" FontSize="{StaticResource PhoneFontSizeExtraLarge}"/>
+            <TextBlock Text="${project_name?upper_case}" Style="{StaticResource BaseTextBlockStyle}" Margin="12,0"/>
+            <TextBlock Text="What to do next" Margin="9,-7,0,0" Style="{StaticResource TitleTextBlockStyle}"/>
         </StackPanel>
 
         <!--ContentPanel - place additional content here-->
@@ -48,7 +50,7 @@
                     Text="You have generated your first Windows Phone project with Harmony."/>
                 <TextBlock
                     TextWrapping="Wrap"
-                    Foreground="{StaticResource PhoneAccentBrush}"
+                    Foreground="{StaticResource TextBoxButtonPressedForegroundThemeBrush}"
                     FontWeight="Bold"
                     Text="Step 1"/>
                 <TextBlock
@@ -68,7 +70,7 @@
                 <TextBlock
                     TextWrapping="Wrap"
                     FontWeight="Bold"
-                    Foreground="{StaticResource PhoneAccentBrush}"
+                    Foreground="{StaticResource TextBoxButtonPressedForegroundThemeBrush}"
                     Margin="0,8,0,0"
                     Text="Step 2"/>
                 <TextBlock
@@ -88,7 +90,7 @@
                 <TextBlock
                     TextWrapping="Wrap"
                     FontWeight="Bold"
-                    Foreground="{StaticResource PhoneAccentBrush}"
+                    Foreground="{StaticResource TextBoxButtonPressedForegroundThemeBrush}"
                     Margin="0,8,0,0"
                     Text="Step 3"/>
                 <TextBlock

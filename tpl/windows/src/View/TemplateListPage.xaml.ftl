@@ -1,6 +1,7 @@
 <#include utilityPath + "all_imports.ftl" />
 <#assign curr = entities[current_entity] />
 <#assign fields = ViewUtils.getAllFields(curr) />
+<!-- <@header?interpret /> -->
 
 <Page
     x:Class="${project_namespace}.View.${curr.name?cap_first}.${curr.name?cap_first}ListPage"

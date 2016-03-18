@@ -1,4 +1,5 @@
 <#assign curr = entities[current_entity] />
+<!-- <@header?interpret /> -->
 
 <Page
     x:Class="${project_namespace}.View.${curr.name?cap_first}.${curr.name?cap_first}CreatePage"

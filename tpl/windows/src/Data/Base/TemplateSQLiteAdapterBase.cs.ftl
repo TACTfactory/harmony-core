@@ -45,7 +45,7 @@ namespace ${project_namespace}.Data.Base
         private const string TAG = "${curr.name?cap_first}SQLiteAdapterBase";
 
         public ${curr.name?cap_first}SQLiteAdapterBase()
-            : this(new ${project_name?cap_first}SQLiteOpenHelper())
+            : this(${project_name?cap_first}SQLiteOpenHelper().Instance)
         {
 
         }

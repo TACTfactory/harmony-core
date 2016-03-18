@@ -12,10 +12,10 @@ using Windows.UI.Xaml.Navigation;
 
 namespace ${project_namespace}
 {
-    public sealed partial class App
+    public sealed partial class App : Application
     {
         // Base object used on application initialization
-        public ${project_name?cap_first}ApplicationBase DemactAppBase { get; set; }
+        public ${project_name?cap_first}ApplicationBase ${project_name?lower_case}ApplicationBase { get; set; }
         
         /// <summary>
         /// Constructor for the Application object.
@@ -28,8 +28,8 @@ namespace ${project_namespace}
             // Standard XAML initialization
             this.InitializeComponent();
             
-            // Initialization of current ${project_name?cap_first}AppBase used to manage application info
-            this.DemactAppBase = new DemactAppBase();
+            // Initialization of current ${project_name?cap_first}ApplicationBase used to manage application info
+            this.${project_name?lower_case}ApplicationBase = new ${project_name?cap_first}ApplicationBase();
             
             // Bind suspending event to manage application state
             base.Suspending += OnSuspending;

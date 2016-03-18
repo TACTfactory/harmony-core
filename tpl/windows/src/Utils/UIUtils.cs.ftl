@@ -42,7 +42,7 @@ namespace ${project_namespace}.Utils
                 else
                 {
                     /* Not found it - search children */
-                    DependencyObject nextLevel = FindChildControl<T>(child, ctrlName);
+                    DependencyObject nextLevel = FindViewControl<T>(child, ctrlName);
                     if (nextLevel != null)
                         return nextLevel;
                 }

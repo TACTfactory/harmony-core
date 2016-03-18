@@ -1,4 +1,4 @@
-<@header?interpret />
+<!-- <@header?interpret /> -->
 
 <UserControl
     x:Class="${project_namespace}.View.Navigation.UsersControls.ShowBrowser"

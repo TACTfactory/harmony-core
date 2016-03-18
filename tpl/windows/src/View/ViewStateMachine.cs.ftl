@@ -95,6 +95,7 @@ namespace ${project_namespace}.View
             </#list>
             #endregion
             
+            <#list entities?values as entity>
             /// <summary>
             /// Base navigation into entities.
             /// Navigation states definitions :
@@ -108,7 +109,6 @@ namespace ${project_namespace}.View
             ///                 - Back
             ///             - Back
             /// </summary>
-            <#list entities?values as entity>
             #region ${entity.name?cap_first}State base transitions.
             // ListState.
             ${entity.name?cap_first}ListState ${entity.name?lower_case}List = new ${entity.name?cap_first}ListState();
@@ -146,6 +146,7 @@ namespace ${project_namespace}.View
             #endregion
             </#list>
             
+            <#list entities?values as entity>
             /// <summary>
             /// Relations navigation into entities.
             /// Relations navigation states definitions :
@@ -182,7 +183,6 @@ namespace ${project_namespace}.View
             ///                 - Back
             ///             - Back
             /// </summary>
-            <#list entities?values as entity>
             #region ${entity.name?cap_first}State relations transitions.
                 <#assign fields = ViewUtils.getAllFields(entity) />
                 <#assign wishedfields = [] />
@@ -256,8 +256,8 @@ namespace ${project_namespace}.View
             #endregion        
                     </#if>
                 </#list>
-            </#list>
             #endregion
+            </#list>
 
             // Create and add all states to state machine.
             bsm = new BaseViewStateMachine();

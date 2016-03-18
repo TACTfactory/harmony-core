@@ -56,18 +56,18 @@ namespace ${project_namespace}.Entity
         public ${FieldsUtils.getJavaType(field)} ${field.name?cap_first}
             <#elseif field.relation?? && !field.internal>
                 <#if field.relation.type == "ManyToOne">
-        [Column(${curr.name?cap_first}Contract.COL_${field.relation.targetEntity?upper_case}),
+        [Column(${curr.name?cap_first}Contract.COL_${field.relation.targetEntity?upper_case}_ID),
             ForeignKey(typeof(${field.relation.targetEntity?cap_first}))]
         public ${field.relation.targetEntity} ${field.name?cap_first}
                 <#elseif field.relation.type == "OneToOne">
-        [Column(${curr.name?cap_first}Contract.COL_${field.relation.targetEntity?upper_case}),
+        [Column(${curr.name?cap_first}Contract.COL_${field.relation.targetEntity?upper_case}_ID),
             ForeignKey(typeof(${field.relation.targetEntity?cap_first}))]
         public ${field.relation.targetEntity} ${field.name?cap_first}
                 <#elseif field.relation.type == "OneToMany">
         [OneToMany]
         public List<${FieldsUtils.getJavaType(field)}> ${field.name?cap_first}        
                 <#elseif field.relation.type == "ManyToMany">
-        [ManyToMany(typeof(PoneyToJockey)]
+        [ManyToMany(typeof(PoneyToJockey))]
         public List<${FieldsUtils.getJavaType(field)}> ${field.name?cap_first}
                 </#if>
             </#if>

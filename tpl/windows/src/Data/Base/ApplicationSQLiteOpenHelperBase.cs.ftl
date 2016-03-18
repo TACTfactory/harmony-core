@@ -16,7 +16,7 @@ namespace ${project_namespace}.Data.Base
         #region Singleton
         private static ${project_name?cap_first}SQLiteOpenHelperBase instance;
 
-        private ${project_name?cap_first}SQLiteOpenHelperBase() : base(Instance.SqlitePlatform, Instance.DatabasePath)
+        protected ${project_name?cap_first}SQLiteOpenHelperBase() : base(SqlitePlatform, DatabasePath)
         {
         }
 
@@ -40,14 +40,14 @@ namespace ${project_namespace}.Data.Base
         /// </summary>
         private const String DB_NAME = "${project_name?lower_case}.sqlite";
 
-        private string databasePath = 
+        private static string databasePath = 
             Path.Combine(
                 Windows.Storage.ApplicationData.Current.LocalFolder.Path
-                , "this.DB_NAME");
+                , ${project_name?cap_first}SQLiteOpenHelperBase.DB_NAME);
         private static ISQLitePlatform sqlitePlatform = 
             new SQLite.Net.Platform.WinRT.SQLitePlatformWinRT();
             
-        public string DatabasePath
+        public static new string DatabasePath
         {
             get
             {
@@ -60,7 +60,7 @@ namespace ${project_namespace}.Data.Base
             }
         }
 
-        public ISQLitePlatform SqlitePlatform
+        public static ISQLitePlatform SqlitePlatform
         {
             get
             {
