@@ -27,7 +27,7 @@ namespace ${project_namespace}.View.Navigation.UsersControls
         /// <summary>
         /// Default constructor.
         /// </summary>
-        public DetailBrowser()
+        public ShowBrowser()
         {
             this.InitializeComponent();
             this.Btn_Back = this.btn_back;

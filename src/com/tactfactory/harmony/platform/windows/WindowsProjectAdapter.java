@@ -109,46 +109,6 @@ public class WindowsProjectAdapter implements IAdapterProject {
                 FileType.Compile,
                 "Utils/" + "Log.cs"));
 
-        result.add(new SourceFile(
-                templatePath + "Utils/AssetManager.cs",
-                filePath + "Utils/AssetManager.cs",
-                true));
-
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "Utils/" + "AssetManager.cs"));
-
-        templatePath = this.adapter.getTemplateRessourcePath();
-        filePath = this.adapter.getRessourcePath();
-
-        result.add(new SourceFile(
-                templatePath + "LocalizedStrings.cs",
-                filePath + "LocalizedStrings.cs",
-                true));
-
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "Resources/" + "LocalizedStrings.cs"));
-
-        result.add(new SourceFile(
-                templatePath + "Values/StringsResources.Designer.cs",
-                filePath + "Values/StringsResources.Designer.cs",
-                false));
-
-        result.add(new ProjectUpdater(
-                FileType.Compile,
-                "Resources/Values/" + "StringsResources.Designer.cs",
-                "StringsResources.resx"));
-
-        result.add(new SourceFile(
-                templatePath + "Values/StringsResources.resx",
-                filePath + "Values/StringsResources.resx",
-                false));
-
-        result.add(new ProjectUpdater(
-                FileType.EmbeddedResource,
-                "Resources/Values/" + "StringsResources.resx"));
-
         templatePath = this.adapter.getTemplateUtilPath();
         filePath = this.adapter.getUtilPath();
 

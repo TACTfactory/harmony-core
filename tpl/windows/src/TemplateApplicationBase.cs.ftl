@@ -1,13 +1,12 @@
 <@header?interpret />
 
-using c${project_namespace}.Data;
+using ${project_namespace}.Data;
 using System;
 using System.Diagnostics;
 using System.Globalization;
 using Windows.Networking.Connectivity;
 using Windows.Security.ExchangeActiveSyncProvisioning;
 using Windows.Storage;
-using Windows.UI.Xaml.Controls;
 
 namespace ${project_namespace}
 {

@@ -10,9 +10,7 @@
 <#assign hasDate = MetadataUtils.hasDate(curr) />
 <#assign hasTime = MetadataUtils.hasTime(curr) />
 <#assign hasDateTime = MetadataUtils.hasDateTime(curr) />
-
 <#assign isTopMostSuperClass = (curr.inheritance?? && (!curr.inheritance.superclass?? || !entities[curr.inheritance.superclass.name]??)) />
-
 <#if (curr.internal)>
     <#assign extendType = "Void" />
 <#else>
@@ -23,7 +21,12 @@
 <#else>
     <#assign extend="SQLiteAdapterBase<" +extendType+ ">" />
 </#if>
-
+<#assign fields = ViewUtils.getAllFields(curr) />
+<#list fields?values as field>
+    <#if field.id>
+        <#assign idCurr = field.name />
+    </#if>
+</#list>
 <@header?interpret />
 
 using System;
@@ -62,38 +65,43 @@ namespace ${project_namespace}.Data.Base
         {
             return this.Context.Find<${curr.name?cap_first}>(id);
         }
+        
+        public ${curr.name?cap_first} GetById(${curr.name?cap_first} item)
+        {
+            return this.Context.Find<${curr.name?cap_first}>(item.${idCurr?cap_first});
+        }
 
         public ${curr.name?cap_first} GetWithChildren(${curr.name?cap_first} item)
         {
-            return this.Context.FindWithChildren<${curr.name?cap_first}>(item.Id);
+            return this.Context.FindWithChildren<${curr.name?cap_first}>(item.${idCurr?cap_first});
         }
 
         <#list curr_fields as field>
             <#if field.relation?? && !field.internal>
-                <#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
+                <#list entities?values as entity>
+                    <#if entity.name == field.relation.targetEntity>
+                        <#assign relatedEntity = entity />
+                    </#if>
+                </#list>
+                <#assign fields = ViewUtils.getAllFields(relatedEntity) />
+                <#list fields?values as field>
+                    <#if field.id>
+                        <#assign id = field.name />
+                    </#if>
+                </#list>
+                <#if field.relation.type == "ManyToMany">
         public List<${curr.name?cap_first}> GetByParentId(${field.relation.targetEntity?cap_first} parentId)
         {
-                    <#list entities?values as entity>
-                        <#if entity.name == field.relation.targetEntity>
-                            <#assign relatedEntity = entity />
-                        </#if>
-                    </#list>
-                    <#assign fields = ViewUtils.getAllFields(relatedEntity) />
-                    <#list fields?values as field>
-                        <#if field.id>
-                            <#assign id = field.name />
-                        </#if>
-                    </#list>
             ${field.relation.targetEntity} parent = 
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
-            return parent.${field.relation.mappedBy};
+            return parent.${field.relation.mappedBy?cap_first};
         }
         
         public Int32 Insert(${curr.name?cap_first} item, ${field.relation.targetEntity?cap_first} parentId)
         {
             ${field.relation.targetEntity?cap_first} parent = 
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.Id);
-            parent.${field.relation.mappedBy}.Add(item);
+            parent.${field.relation.mappedBy?cap_first}.Add(item);
             this.Insert(item);
             ${field.relation.targetEntity?cap_first}SQLiteAdapter parentAdapter = 
                 new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.Context);
@@ -105,7 +113,88 @@ namespace ${project_namespace}.Data.Base
         {
             ${field.relation.targetEntity?cap_first} parent = 
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
-            foreach (var item in parent.${field.relation.mappedBy})
+            foreach (var item in parent.${field.relation.mappedBy?cap_first})
+            {
+                this.Context.Delete<${curr.name?cap_first}>(item.${id?cap_first});
+            }
+        }
+                <#elseif field.relation.type == "OneToMany">
+        public ${curr.name?cap_first} GetByParentId(${field.relation.targetEntity?cap_first} parentId)
+        {
+            ${field.relation.targetEntity} parent = 
+                this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
+            return parent.${field.relation.mappedBy?cap_first};
+        }
+        
+        public Int32 Insert(${curr.name?cap_first} item, ${field.relation.targetEntity?cap_first} parentId)
+        {
+            ${field.relation.targetEntity?cap_first} parent = 
+                this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.Id);
+            parent.${field.relation.mappedBy?cap_first} = item;
+            this.Insert(item);
+            ${field.relation.targetEntity?cap_first}SQLiteAdapter parentAdapter = 
+                new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.Context);
+            parentAdapter.Update(parent);
+            return LastInsertedRowId();
+        }
+        
+        public void Clear(${field.relation.targetEntity?cap_first} parentId)
+        {
+            ${field.relation.targetEntity?cap_first} parent = 
+                this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
+                this.Context.Delete<${curr.name?cap_first}>(parent.${id?cap_first});
+        }        
+                <#elseif field.relation.type == "OneToOne">
+        public ${curr.name?cap_first} GetByParentId(${field.relation.targetEntity?cap_first} parentId)
+        {
+            ${field.relation.targetEntity} parent = 
+                this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
+            return parent.${curr.name?cap_first};
+        }
+        
+        public Int32 Insert(${curr.name?cap_first} item, ${field.relation.targetEntity?cap_first} parentId)
+        {
+            ${field.relation.targetEntity?cap_first} parent = 
+                this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.Id);
+            parent.${curr.name?cap_first} = item;
+            this.Insert(item);
+            ${field.relation.targetEntity?cap_first}SQLiteAdapter parentAdapter = 
+                new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.Context);
+            parentAdapter.Update(parent);
+            return LastInsertedRowId();
+        }
+        
+        public void Clear(${field.relation.targetEntity?cap_first} parentId)
+        {
+            ${field.relation.targetEntity?cap_first} parent = 
+                this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
+            this.Context.Delete<${curr.name?cap_first}>(parent.${curr.name?cap_first}.${idCurr?cap_first});
+        }
+                <#elseif field.relation.type == "ManyToOne">
+        public List<${curr.name?cap_first}> GetByParentId(${field.relation.targetEntity?cap_first} parentId)
+        {      
+            ${field.relation.targetEntity} parent = 
+                this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
+            return parent.${field.relation.inversedBy?cap_first};
+        }
+        
+        public Int32 Insert(${curr.name?cap_first} item, ${field.relation.targetEntity?cap_first} parentId)
+        {
+            ${field.relation.targetEntity?cap_first} parent = 
+                this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.Id);
+            parent.${field.relation.inversedBy?cap_first}.Add(item);
+            this.Insert(item);
+            ${field.relation.targetEntity?cap_first}SQLiteAdapter parentAdapter = 
+                new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.Context);
+            parentAdapter.Update(parent);
+            return LastInsertedRowId();
+        }
+        
+        public void Clear(${field.relation.targetEntity?cap_first} parentId)
+        {
+            ${field.relation.targetEntity?cap_first} parent = 
+                this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
+            foreach (var item in parent.${field.relation.inversedBy?cap_first})
             {
                 this.Context.Delete<${curr.name?cap_first}>(item.${id?cap_first});
             }
