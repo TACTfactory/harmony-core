@@ -361,47 +361,47 @@ public class WindowsProjectAdapter implements IAdapterProject {
         String filePath = this.adapter.getSourcePath() + this.adapter.getData() + "/";
 
         result.add(new SourceFile(
-                templatePath + "Base/ApplicationSqlAdapterBase.cs",
-                String.format("%sBase/SqlAdapterBase.cs",
+                templatePath + "Base/ApplicationSQLiteAdapterBase.cs",
+                String.format("%sBase/SQLiteAdapterBase.cs",
                         filePath),
                 true));
 
         result.add(new ProjectUpdater(
                 FileType.Compile,
-                "Data/" + "Base/SqlAdapterBase.cs"));
+                "Data/" + "Base/SQLiteAdapterBase.cs"));
 
         result.add(new SourceFile(
-                templatePath + "Base/ApplicationSqlOpenHelperBase.cs",
-                String.format("%sBase/%sSqlOpenHelperBase.cs",
+                templatePath + "Base/ApplicationSQLiteOpenHelperBase.cs",
+                String.format("%sBase/%sSQLiteOpenHelperBase.cs",
                         filePath,
                         applicationName),
                 true));
 
         result.add(new ProjectUpdater(
                 FileType.Compile,
-                "Data/" + String.format("Base/%sSqlOpenHelperBase.cs",
+                "Data/" + String.format("Base/%sSQLiteOpenHelperBase.cs",
                         applicationName)));
 
         result.add(new SourceFile(
-                templatePath + "ApplicationSqlAdapter.cs",
-                String.format("%sSqlAdapter.cs",
+                templatePath + "ApplicationSQLiteAdapter.cs",
+                String.format("%sSQLiteAdapter.cs",
                         filePath),
                 false));
 
         result.add(new ProjectUpdater(
                 FileType.Compile,
-                "Data/" + "SqlAdapter.cs"));
+                "Data/" + "SQLiteAdapter.cs"));
 
         result.add(new SourceFile(
-                templatePath + "ApplicationSqlOpenHelper.cs",
-                String.format("%s%sSqlOpenHelper.cs",
+                templatePath + "ApplicationSQLiteOpenHelper.cs",
+                String.format("%s%sSQLiteOpenHelper.cs",
                         filePath,
                         applicationName),
                 false));
 
         result.add(new ProjectUpdater(
                 FileType.Compile,
-                "Data/" + String.format("%sSqlOpenHelper.cs",
+                "Data/" + String.format("%sSQLiteOpenHelper.cs",
                         applicationName)));
 
         return result;
@@ -417,27 +417,27 @@ public class WindowsProjectAdapter implements IAdapterProject {
             String filePath = this.adapter.getSourcePath() + this.adapter.getData() + "/";
 
             result.add(new SourceFile(
-                    templatePath + "Base/TemplateSqlAdapterBase.cs",
-                    String.format("%sBase/%sSqlAdapterBase.cs",
+                    templatePath + "Base/TemplateSQLiteAdapterBase.cs",
+                    String.format("%sBase/%sSQLiteAdapterBase.cs",
                             filePath,
                             entity.getName()),
                     true));
 
             result.add(new ProjectUpdater(
                     FileType.Compile,
-                    "Data/" + String.format("Base/%sSqlAdapterBase.cs",
+                    "Data/" + String.format("Base/%sSQLiteAdapterBase.cs",
                             entity.getName())));
 
             result.add(new SourceFile(
-                    templatePath + "TemplateSqlAdapter.cs",
-                    String.format("%s%sSqlAdapter.cs",
+                    templatePath + "TemplateSQLiteAdapter.cs",
+                    String.format("%s%sSQLiteAdapter.cs",
                             filePath,
                             entity.getName()),
                     false));
 
             result.add(new ProjectUpdater(
                     FileType.Compile,
-                    "Data/" + String.format("%sSqlAdapter.cs",
+                    "Data/" + String.format("%sSQLiteAdapter.cs",
                             entity.getName())));
         }
 
@@ -1236,7 +1236,34 @@ public class WindowsProjectAdapter implements IAdapterProject {
 
         result.add(new ProjectUpdater(
                 FileType.Compile,
-                "Entity/" + String.format("%s.cs",
+                filePath + String.format("%s.cs",
+                        entity.getName())));
+        
+        // Contract
+        templatePath = this.adapter.getTemplateSourcePath() + "Provider/Contract/Base/";
+        result.add(new SourceFile(
+                templatePath + "TemplateContractBase.cs",
+                String.format("%s%sContractBase.cs",
+                		this.adapter.getSourcePath() + "Provider/Contract/Base/",
+                        entity.getName()),
+                true));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                this.adapter.getSourcePath() + "Provider/Contract/Base/" + String.format("%sContractBase.cs",
+                        entity.getName())));
+        
+        templatePath = this.adapter.getTemplateSourcePath() + "Provider/Contract/";
+        result.add(new SourceFile(
+                templatePath + "TemplateContract.cs",
+                String.format("%s%sContract.cs",
+                		this.adapter.getSourcePath() + "Provider/Contract/",
+                        entity.getName()),
+                true));
+
+        result.add(new ProjectUpdater(
+                FileType.Compile,
+                this.adapter.getSourcePath() + "Provider/Contract/" + String.format("%sContract.cs",
                         entity.getName())));
 
         return result;
