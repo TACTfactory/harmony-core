@@ -5,8 +5,8 @@
 
 using ${project_namespace}.Data;
 using ${project_namespace}.Entity;
-using ${project_namespace}.Entity.Checkable;
-using ${project_namespace}.Entity.Checkable.Manager;
+using ${project_namespace}.View.${curr.name?cap_first}.Checkable;
+using ${project_namespace}.View.${curr.name?cap_first}.Checkable.Manager;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Controls;
@@ -21,7 +21,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
     public sealed partial class ${curr.name?cap_first}CheckListUserControl : UserControl
     {
         private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
-            new ${curr.name?cap_first}SQLiteAdapter(new ${project_name?cap_first}SQLiteOpenHelper());
+            new ${curr.name?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
             
         private ${curr.name?cap_first}CheckableManager ${curr.name?lower_case}CheckableManager = 
             new ${curr.name?cap_first}CheckableManager();
@@ -44,7 +44,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         /// </summary>
         public void LoadItem()
         {
-            List<${curr.name?cap_first}> items = adapter.GetAll();
+            List<Entity.${curr.name?cap_first}> items = ${curr.name?lower_case}Adapter.GetAll();
 
             ${curr.name?lower_case}CheckableManager.ParseInSelectables(items);
             
@@ -71,7 +71,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             </#list>
 
             obs.Clear();
-            foreach (var item in ${curr.name?lower_case}CheckableManager.${curr.name?cap_first}Selectables)
+            foreach (var item in ${curr.name?lower_case}CheckableManager.${curr.name?cap_first}Checkables)
             {
                 obs.Add(item);
             }

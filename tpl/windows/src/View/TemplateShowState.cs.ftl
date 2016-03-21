@@ -11,6 +11,12 @@
 </#list>
 <@header?interpret />
 
+<#list fields?values as field>
+    <#if field.relation??>
+using ${project_namespace}.View.${field.relation.targetEntity?cap_first};
+    </#if>
+</#list>
+using ${project_namespace}.Data;
 using ${project_namespace}.Utils.StateMachine;
 using ${project_namespace}.View.${curr.name?cap_first};
 using Windows.UI.Xaml.Controls;
@@ -28,7 +34,7 @@ namespace ${project_namespace}.View.Navigation.States
         /// ${curr.name?cap_first}CreateUserControl adapter to save and load ${curr.name?cap_first} informations.
         /// </summary>
         private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
-            new ${curr.name?cap_first}SQLiteAdapter(new ${project_name?cap_first}SQLiteOpenHelper());
+            new ${curr.name?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
 
         /// <summary>
         /// Constructor that initialyze ${curr.name?cap_first}ShowState stateID 
@@ -69,7 +75,7 @@ namespace ${project_namespace}.View.Navigation.States
         public override void DoAfterEntering()
         {
             this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Back.Tapped += Btn_Back_Tapped;
-            this.${curr.name?lower_case}ShowPage.${curr.name?cap_first}ShowUserControl.JockeyItem = ViewStateMachine.Instance.Jockey;
+            this.${curr.name?lower_case}ShowPage.${curr.name?cap_first}ShowUserControl.${curr.name?cap_first}Item = ViewStateMachine.Instance.${curr.name?cap_first};
 
         <#if wishedfields?has_content>
             this.UpdateUI();
@@ -93,20 +99,21 @@ namespace ${project_namespace}.View.Navigation.States
                 || ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
                 </#if>
             </#list>
+            {
             <#list wishedfields as field>
                 <#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
-                this.${curr.name?lower_case}CreatePage
-                    .${curr.name?cap_first}CreateUserControl
+                this.${curr.name?lower_case}ShowPage
+                    .${curr.name?cap_first}ShowUserControl
                         .Stackpanel_btn.Children.Remove(
-                            this.${curr.name?lower_case}CreatePage
-                                .${curr.name?cap_first}CreateUserControl
+                            this.${curr.name?lower_case}ShowPage
+                                .${curr.name?cap_first}ShowUserControl
                                     .Btn_list_related_${field.relation.targetEntity?lower_case});
                 <#else>      
-                this.${curr.name?lower_case}CreatePage
-                    .${curr.name?cap_first}CreateUserControl
+                this.${curr.name?lower_case}ShowPage
+                    .${curr.name?cap_first}ShowUserControl
                         .Stackpanel_btn.Children.Remove(
-                            this.${curr.name?lower_case}CreatePage
-                                .${curr.name?cap_first}CreateUserControl
+                            this.${curr.name?lower_case}ShowPage
+                                .${curr.name?cap_first}ShowUserControl
                                     .Btn_show_${field.relation.targetEntity?lower_case});
                 </#if>
             </#list>
@@ -180,7 +187,7 @@ namespace ${project_namespace}.View.Navigation.States
         {
             this.${curr.name?lower_case}Adapter.Delete(
                     this.${curr.name?lower_case}ShowPage.${curr.name?cap_first}ShowUserControl
-                        .JockeyItem);
+                        .${curr.name?cap_first}Item);
             ViewStateMachine.Instance.Back();
         }
 

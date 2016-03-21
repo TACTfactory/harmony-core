@@ -83,6 +83,7 @@ namespace ${project_namespace}.View.Navigation.States
                 || ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
                 </#if>
             </#list>
+            {
             <#list wishedfields as field>
                 <#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
                 this.${curr.name?lower_case}CreatePage

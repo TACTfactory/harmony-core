@@ -20,12 +20,12 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         /// item finding for ${curr.name?cap_first}ListUserControl.
         /// </summary>
         private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
-            new ${curr.name?cap_first}SQLiteAdapter(new ${project_name?cap_first}SQLiteOpenHelper());
+            new ${curr.name?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
 
         /// <summary>
         /// Current list for ${curr.name?cap_first} items.
         /// </summary>
-        public ObservableCollection<${curr.name?cap_first}> Obs {get; set;}
+        public ObservableCollection<Entity.${curr.name?cap_first}> Obs {get; set;}
 
         /// <summary>
         /// Constructor.
@@ -34,7 +34,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         public ${curr.name?cap_first}ListUserControl()
         {
             this.InitializeComponent();
-            Obs = new ObservableCollection<${curr.name?cap_first}>();
+            Obs = new ObservableCollection<Entity.${curr.name?cap_first}>();
             this.itemsList.ItemsSource = Obs;
         }
 
@@ -43,7 +43,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         /// </summary>
         public void LoadItem()
         {
-            List<${curr.name?cap_first}> items;
+            List<Entity.${curr.name?cap_first}> items;
 
             <#assign wishedrelation = []/>
             <#list curr.relations as rel>

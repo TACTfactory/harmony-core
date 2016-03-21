@@ -30,7 +30,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         /// <summary>
         /// ${curr.name?cap_first}Item use to fill view with item datas.
         /// </summary>
-        public ${curr.name?cap_first} ${curr.name?cap_first}Item { get; set; }
+        public Entity.${curr.name?cap_first} ${curr.name?cap_first}Item { get; set; }
 
         /// <summary>
         /// Provide access to this buttons and button stackpanel 
@@ -61,7 +61,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             <#list fields?values as field>
                 <#if (!field.internal && !field.hidden && field.relation??)>
                     <#if (field.relation.type == "OneToMany" || field.relation.type == "ManyToMany")>
-            this.Btn_list_related_${field.relation.targetEntity?lower_case} = this.btn_show_${field.relation.targetEntity?lower_case};
+            this.Btn_list_related_${field.relation.targetEntity?lower_case} = this.btn_list_related_${field.relation.targetEntity?lower_case};
                     <#else>
             this.Btn_show_${field.relation.targetEntity?lower_case} = this.btn_show_${field.relation.targetEntity?lower_case};
                     </#if>

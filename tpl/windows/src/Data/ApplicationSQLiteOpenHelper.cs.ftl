@@ -22,7 +22,7 @@ namespace ${project_namespace}.Data
             {
                 if (instance == null)
                 {
-                    instance = new ${project_name?cap_first}SQLiteOpenHelper();
+                    instance = ${project_name?cap_first}SQLiteOpenHelper.Instance;
                 }
                 return instance;
             }

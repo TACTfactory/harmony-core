@@ -41,7 +41,7 @@ namespace ${project_namespace}.View
 
         public Transition NextTransition { get; set; }
         <#list entities?values as entity>
-        public ${entity.name?cap_first} ${entity.name?cap_first} { get; set; }
+        public Entity.${entity.name?cap_first} ${entity.name?cap_first} { get; set; }
         </#list>
 
         public void SetTransition(Transition t, Page page, Object item = null)
@@ -67,14 +67,14 @@ namespace ${project_namespace}.View
         {
             <#list entities?values as entity>
                 <#if entity?is_first>
-            if (item is ${entity.name?cap_first})
+            if (item is Entity.${entity.name?cap_first})
             {
-                this.${entity.name?cap_first} = item as ${entity.name?cap_first};
+                this.${entity.name?cap_first} = item as Entity.${entity.name?cap_first};
             }
                 <#else>
-            else if (item is ${entity.name?cap_first})
+            else if (item is Entity.${entity.name?cap_first})
             {
-                this.${entity.name?cap_first} = item as ${entity.name?cap_first};
+                this.${entity.name?cap_first} = item as Entity.${entity.name?cap_first};
             }
                 </#if>
             </#list>

@@ -11,13 +11,9 @@
 </#list>
 <@header?interpret />
 
+using ${project_namespace}.Data;
 using ${project_namespace}.Utils.StateMachine;
 using ${project_namespace}.View.${curr.name?cap_first};
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Windows.UI.Xaml.Controls;
 
 namespace ${project_namespace}.View.Navigation.States
@@ -33,7 +29,7 @@ namespace ${project_namespace}.View.Navigation.States
         /// ${curr.name?cap_first}CreateUserControl adapter to save and load ${curr.name?cap_first} informations.
         /// </summary>
         private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
-            new ${curr.name?cap_first}SQLiteAdapter(new ${project_name?cap_first}SQLiteOpenHelper());
+            new ${curr.name?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
             
         /// <summary>
         /// Constructor that initialyze ${curr.name?cap_first}CreateState stateID 
@@ -104,6 +100,7 @@ namespace ${project_namespace}.View.Navigation.States
                 || ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} == null
                 </#if>
             </#list>
+            {
                 this.${curr.name?lower_case}ListPage.NavigationBrowser
                     .Stackpanel_Btn.Children.Remove(
                         this.${curr.name?lower_case}ListPage
