@@ -45,7 +45,7 @@ namespace ${project_namespace}.Data.Base
         private const string TAG = "${curr.name?cap_first}SQLiteAdapterBase";
 
         public ${curr.name?cap_first}SQLiteAdapterBase()
-            : this(${project_name?cap_first}SQLiteOpenHelper().Instance)
+            : this(${project_name?cap_first}SQLiteOpenHelper.Instance)
         {
 
         }
@@ -121,17 +121,16 @@ namespace ${project_namespace}.Data.Base
                 <#elseif field.relation.type == "OneToMany">
         public ${curr.name?cap_first} GetByParentId(${field.relation.targetEntity?cap_first} parentId)
         {
-            ${field.relation.targetEntity} parent = 
-                this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
-            return parent.${field.relation.mappedBy?cap_first};
+            ${curr.name?cap_first} child = 
+                this.Context.FindWithChildren<${curr.name?cap_first}>(parentId.${id?cap_first});
+            return child;
         }
         
         public Int32 Insert(${curr.name?cap_first} item, ${field.relation.targetEntity?cap_first} parentId)
         {
             ${field.relation.targetEntity?cap_first} parent = 
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.Id);
-            parent.${field.relation.mappedBy?cap_first} = item;
-            this.Insert(item);
+            parent.${field.relation.mappedBy?cap_first} = this.Insert(item);
             ${field.relation.targetEntity?cap_first}SQLiteAdapter parentAdapter = 
                 new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.Context);
             parentAdapter.Update(parent);
@@ -147,17 +146,16 @@ namespace ${project_namespace}.Data.Base
                 <#elseif field.relation.type == "OneToOne">
         public ${curr.name?cap_first} GetByParentId(${field.relation.targetEntity?cap_first} parentId)
         {
-            ${field.relation.targetEntity} parent = 
-                this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
-            return parent.${curr.name?cap_first};
+            ${curr.name?cap_first} child = 
+                this.Context.FindWithChildren<${curr.name?cap_first}>(parentId.${id?cap_first});
+            return child;
         }
         
         public Int32 Insert(${curr.name?cap_first} item, ${field.relation.targetEntity?cap_first} parentId)
         {
             ${field.relation.targetEntity?cap_first} parent = 
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.Id);
-            parent.${curr.name?cap_first} = item;
-            this.Insert(item);
+            parent.${curr.name?cap_first} = this.Insert(item);
             ${field.relation.targetEntity?cap_first}SQLiteAdapter parentAdapter = 
                 new ${field.relation.targetEntity?cap_first}SQLiteAdapter(this.Context);
             parentAdapter.Update(parent);
@@ -168,7 +166,7 @@ namespace ${project_namespace}.Data.Base
         {
             ${field.relation.targetEntity?cap_first} parent = 
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
-            this.Context.Delete<${curr.name?cap_first}>(parent.${curr.name?cap_first}.${idCurr?cap_first});
+            this.Context.Delete<${curr.name?cap_first}>(parent.${curr.name?cap_first});
         }
                 <#elseif field.relation.type == "ManyToOne">
         public List<${curr.name?cap_first}> GetByParentId(${field.relation.targetEntity?cap_first} parentId)
@@ -196,7 +194,7 @@ namespace ${project_namespace}.Data.Base
                 this.Context.FindWithChildren<${field.relation.targetEntity?cap_first}>(parentId.${id?cap_first});
             foreach (var item in parent.${field.relation.inversedBy?cap_first})
             {
-                this.Context.Delete<${curr.name?cap_first}>(item.${id?cap_first});
+                this.Context.Delete<${curr.name?cap_first}>(item);
             }
         }
                 </#if>

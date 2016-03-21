@@ -193,7 +193,6 @@ namespace ${project_namespace}
             // Create the database if it does not exist.
             //${project_name?cap_first}SQLiteOpenHelper.Instance.DeleteDatabase();
             ${project_name?cap_first}SQLiteOpenHelper.Instance.CreateDatabase();
-            }
         }
     }
 }
