@@ -94,7 +94,6 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             ViewStateMachine.Instance.SetTransition(Transition.${field.relation.targetEntity?cap_first}ShowPage, 
                 new ${field.relation.targetEntity?cap_first}ShowPage());
         }
-        
                 </#if>
             </#if>
         </#list>

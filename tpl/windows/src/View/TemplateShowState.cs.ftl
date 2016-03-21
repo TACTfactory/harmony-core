@@ -63,9 +63,9 @@ namespace ${project_namespace}.View.Navigation.States
         /// <param name="page">Here not used.</param>
         public override void DoBeforeLeaving(Page page)
         {
-            this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Edit.Tapped -= Btn_Edit_Tapped;
-            this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Delete.Tapped -= Btn_Delete_Tapped;
-            this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Back.Tapped -= Btn_Back_Tapped;
+            this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Edit.Tapped -= this.Btn_Edit_Tapped;
+            this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Delete.Tapped -= this.Btn_Delete_Tapped;
+            this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Back.Tapped -= this.Btn_Back_Tapped;
         }
 
         /// <summary>
@@ -74,7 +74,9 @@ namespace ${project_namespace}.View.Navigation.States
         /// </summary>
         public override void DoAfterEntering()
         {
-            this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Back.Tapped += Btn_Back_Tapped;
+            this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Back.Tapped += this.Btn_Back_Tapped;
+            this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Delete.Tapped += this.Btn_Delete_Tapped;
+            this.${curr.name?lower_case}ShowPage.ShowBrowser.Btn_Edit.Tapped += this.Btn_Edit_Tapped;
             this.${curr.name?lower_case}ShowPage.${curr.name?cap_first}ShowUserControl.${curr.name?cap_first}Item = ViewStateMachine.Instance.${curr.name?cap_first};
 
         <#if wishedfields?has_content>

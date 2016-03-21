@@ -19,7 +19,7 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
             <usercontrol:BackBrowser x:Name="back_broswer" Grid.Row="0"/>
-            <localusercontrol:JockeyEditUserControl x:Name="${curr.name?lower_case}_edit_usercontrol" Grid.Row="1"/>
+            <localusercontrol:${curr.name?cap_first}EditUserControl x:Name="${curr.name?lower_case}_edit_usercontrol" Grid.Row="1"/>
         </Grid>
     </ScrollViewer>
 </Page>

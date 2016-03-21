@@ -9,6 +9,17 @@
         </#if>
     </#if>
 </#list>
+<#assign multi = false>
+<#assign mono = false>
+<#list fields?values as field >
+    <#if field.relation??>
+        <#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany" >
+            <#assign multi = true>
+        <#else>
+            <#assign mono = true>
+        </#if>
+    </#if>
+</#list>
 <@header?interpret />
 
 using ${project_namespace}.Data;
@@ -61,7 +72,9 @@ namespace ${project_namespace}.View.Navigation.States
             this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_New.Tapped -= Btn_New_Tapped;
             this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Erase_All.Tapped -= Btn_Erase_All_Tapped;
             this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Back.Tapped -= Btn_Back_Tapped;
+            <#if multi>
             this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Existing.Tapped -= Btn_Existing_Tapped;
+            </#if>
         }
 
         /// <summary>
@@ -74,9 +87,11 @@ namespace ${project_namespace}.View.Navigation.States
 
             this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_New.Tapped += Btn_New_Tapped;
             this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Erase_All.Tapped += Btn_Erase_All_Tapped;
-            this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Existing.Tapped += Btn_Existing_Tapped;
             this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Back.Tapped += Btn_Back_Tapped;
-
+            <#if multi>
+            this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Existing.Tapped += Btn_Existing_Tapped;
+            </#if>
+            
         <#if wishedfields?has_content>
             this.UpdateUI();
         </#if> 
@@ -163,6 +178,7 @@ namespace ${project_namespace}.View.Navigation.States
                     new ${curr.name?cap_first}.${curr.name?cap_first}CreatePage());
         }
 
+        <#if multi>
         /// <summary>
         /// Navigate to display list of checkable items.
         /// </summary>
@@ -174,6 +190,7 @@ namespace ${project_namespace}.View.Navigation.States
                 Transition.${curr.name?cap_first}CheckListPage, 
                     new ${curr.name?cap_first}.${curr.name?cap_first}CheckListPage());
         }
+        </#if>
     }
 }
 

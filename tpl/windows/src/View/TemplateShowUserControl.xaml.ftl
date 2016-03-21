@@ -25,7 +25,7 @@
             <CheckBox x:Name="checkbox_${field.name}" IsChecked="{Binding ${curr.name?cap_first}Item.${field.name?cap_first}}"/>
                         <#else>
             <TextBlock x:Name="text_block_${field.name}" Text="${curr.name?cap_first} : ${field.name}"/>
-            <TextBox x:Name="text_box_${field.name}" Text="{Binding ${curr.name?cap_first}Item.${field.name?cap_first}}"/>
+            <TextBlock x:Name="text_box_${field.name}" Text="{Binding ${curr.name?cap_first}Item.${field.name?cap_first}}"/>
                         </#if>
                     </#if>
                 </#if>
