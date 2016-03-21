@@ -399,6 +399,47 @@ public class WindowsProjectAdapter implements IAdapterProject {
                     FileType.Compile,
                     "Data/" + String.format("%sSQLiteAdapter.cs",
                             entity.getName())));
+        }else{
+        	String templatePath = this.adapter.getTemplateSourcePath() + "Entity/";
+            String filePath = this.adapter.getSourcePath() + "Entity/";
+            
+        	result.add(new SourceFile(
+                    templatePath + "TemplateEntity.cs",
+                    String.format("%s%s.cs",
+                            filePath,
+                            entity.getName()),
+                    false));
+
+            result.add(new ProjectUpdater(
+                    FileType.Compile,
+                    "Entity/" + String.format("%s.cs",
+                            entity.getName())));
+
+            templatePath = this.adapter.getTemplateSourcePath() + "Provider/Contract/Base/";
+            result.add(new SourceFile(
+                    templatePath + "TemplateContractBase.cs",
+                    String.format("%s%sContractBase.cs",
+                    		this.adapter.getSourcePath() + "Provider/Contract/Base/",
+                            entity.getName()),
+                    true));
+
+            result.add(new ProjectUpdater(
+                    FileType.Compile,
+                    this.adapter.getSourcePath() + "Provider/Contract/Base/" + String.format("%sContractBase.cs",
+                            entity.getName())));
+            
+            templatePath = this.adapter.getTemplateSourcePath() + "Provider/Contract/";
+            result.add(new SourceFile(
+                    templatePath + "TemplateContract.cs",
+                    String.format("%s%sContract.cs",
+                    		this.adapter.getSourcePath() + "Provider/Contract/",
+                            entity.getName()),
+                    true));
+
+            result.add(new ProjectUpdater(
+                    FileType.Compile,
+                    this.adapter.getSourcePath() + "Provider/Contract/" + String.format("%sContract.cs",
+                            entity.getName())));
         }
 
         return result;

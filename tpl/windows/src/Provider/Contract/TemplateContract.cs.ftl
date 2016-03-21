@@ -7,11 +7,15 @@ namespace ${project_namespace}.Provider.Contract
 {
     public abstract class ${curr.name?cap_first}Contract : ${curr.name?cap_first}ContractBase
     {
+        public const string COL_${curr.name?upper_case}_ID = "${curr.name?lower_case}_id";
         <#list curr_fields as field>
+            <#assign test = field.name?uncap_first />
+            <#if field.name == test>
             <#if !field.relation?? >
         public const string COL_${field.name?upper_case} = "${field.name?lower_case}";
             <#elseif field.relation.type == "ManyToOne" || field.relation.type == "OneToOne">
         public const string COL_${field.name?upper_case}_ID = "${field.name?lower_case}";
+            </#if>
             </#if>
         </#list>
         
