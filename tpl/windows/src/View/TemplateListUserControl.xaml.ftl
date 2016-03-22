@@ -20,7 +20,7 @@
                 <StackPanel x:Name="ContentPanel">
                     <#list fields?values as field>
                         <#if (!field.internal && !field.hidden)>
-                            <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany"))>
+                            <#if (!field.relation??)>
                                 <#if (field.harmony_type?lower_case == "boolean")>
                     <CheckBox IsChecked="{Binding ${field.name?cap_first}}"/>
                                 <#else>

@@ -9,8 +9,7 @@
     </#if>
 </#list>
 
-using ${project_namespace}.Data;
-using ${project_namespace}.Entity;
+using ${project_namespace}.Utils;
 using ${project_namespace}.Utils.StateMachine;
 <#if wishedrelation?has_content>
     <#list wishedrelation as targetEntity> 
@@ -25,12 +24,26 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
     /// <summary>
     /// ${curr.name?cap_first}ShowUserControl contain real show display mechanism for ${curr.name?cap_first} entity.
     /// </summary>
-    public sealed partial class ${curr.name?cap_first}ShowUserControl : UserControl
+    public sealed partial class ${curr.name?cap_first}ShowUserControl : BindingUserControl
     {
+        private Entity.${curr.name?cap_first} ${curr.name?lower_case}Item;
+        
         /// <summary>
         /// ${curr.name?cap_first}Item use to fill view with item datas.
         /// </summary>
-        public Entity.${curr.name?cap_first} ${curr.name?cap_first}Item { get; set; }
+        public Entity.${curr.name?cap_first} ${curr.name?cap_first}Item 
+        { 
+            get
+            {
+                return this.${curr.name?lower_case}Item;
+            }
+
+            set
+            {
+                this.${curr.name?lower_case}Item = value;
+                base.OnPropertyChanged("${curr.name?cap_first}Item");
+            }
+        }
 
         /// <summary>
         /// Provide access to this buttons and button stackpanel 

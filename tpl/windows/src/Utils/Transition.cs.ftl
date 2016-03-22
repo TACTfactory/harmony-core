@@ -11,6 +11,7 @@ namespace ${project_namespace}.Utils.StateMachine
         NullTransition = 0, // Use this transition to represent a non-existing transition in the system.
         Back = 1, // Back transtition use for navigation rollback.
         HomePage = 2,
+        
         <#assign increment = 3 />
         <#list entities?values as entity>
         <#if !entity.internal >
@@ -21,20 +22,24 @@ namespace ${project_namespace}.Utils.StateMachine
         ${entity.name?cap_first}ShowPage = ${increment}, // ${entity.name?cap_first} transition to show item page.
             <#assign increment = increment + 1 />
         ${entity.name?cap_first}EditPage = ${increment}, // ${entity.name?cap_first} transition to edit item page.
+            <#assign increment = increment + 1 />
             <#assign fields = ViewUtils.getAllFields(entity) />
             <#assign multi = false>
             <#assign mono = false>
             <#list fields?values as field >
                 <#if field.relation??>
-                    <#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany" >
+                    <#if field.relation.type == "ManyToMany">
                         <#assign multi = true>
+                    <#elseif field.relation.type == "OneToMany" || field.relation.type == "ManyToOne">
+                        <#assign multi = true>
+                        <#assign mono = true>
                     <#else>
                         <#assign mono = true>
                     </#if>
                 </#if>
             </#list>
             <#if multi>
-         ${entity.name?cap_first}CheckListPage = ${increment}, // ${entity.name?cap_first} transition to checklist items page.
+        ${entity.name?cap_first}CheckListPage = ${increment}, // ${entity.name?cap_first} transition to checklist items page.
                 <#assign increment = increment + 1 />
             </#if>
             <#if mono>

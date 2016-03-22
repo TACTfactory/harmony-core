@@ -84,6 +84,11 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                         </#if>
                     </#if>
                 </#list>
+            else
+            {
+                ViewStateMachine.Instance.${curr.name?cap_first} = this.${curr.name?cap_first}Item;
+                this.${curr.name?lower_case}Adapter.Update(this.${curr.name?cap_first}Item);
+            }
             <#else>
             ViewStateMachine.Instance.${curr.name?cap_first} = this.${curr.name?lower_case}Adapter.GetWithChildren(this.${curr.name?cap_first}Item);
             this.${curr.name?lower_case}Adapter.Update(ViewStateMachine.Instance.${curr.name?cap_first});

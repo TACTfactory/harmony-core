@@ -273,6 +273,11 @@ public class WindowsProjectAdapter implements IAdapterProject {
 
 		result.add(new ProjectUpdater(FileType.Compile, "Utils/" + "UIUtils.cs"));
 		
+		result.add(new SourceFile(templatePath + "Utils/BindingUserControl.cs", filePath
+				+ "Utils/BindingUserControl.cs", true));
+
+		result.add(new ProjectUpdater(FileType.Compile, "Utils/" + "BindingUserControl.cs"));
+		
 		// Checkables
 		result.add(new SourceFile(templatePath
 				+ "View/CheckableBase.cs", filePath

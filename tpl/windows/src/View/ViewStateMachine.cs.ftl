@@ -141,6 +141,9 @@ namespace ${project_namespace}.View
             ${entity.name?cap_first}ShowState ${entity.name?lower_case}Show = new ${entity.name?cap_first}ShowState();
             ${entity.name?lower_case}Show.AddTransition(Transition.${entity.name?cap_first}ShowPage, StateID.${entity.name?cap_first}ShowPageEnter);
             ${entity.name?lower_case}Show.AddTransition(
+                Transition.${entity.name?cap_first}EditPage, 
+                    StateID.${entity.name?cap_first}EditPageEnter);
+            ${entity.name?lower_case}Show.AddTransition(
                 Transition.Back, 
                     StateID.${entity.name?cap_first}ListPageEnter);
                     
@@ -150,6 +153,29 @@ namespace ${project_namespace}.View
             ${entity.name?lower_case}Edit.AddTransition(
                 Transition.Back, 
                     StateID.${entity.name?cap_first}ShowPageEnter);
+                    
+                    <#assign fields = ViewUtils.getAllFields(entity) />
+                    <#assign multi = false>
+                    <#assign mono = false>
+                    <#list fields?values as field >
+                        <#if field.relation??>
+                            <#if field.relation.type == "ManyToMany">
+                                <#assign multi = true>
+                            <#elseif field.relation.type == "OneToMany" || field.relation.type == "ManyToOne">
+                                <#assign multi = true>
+                                <#assign mono = true>
+                            <#else>
+                                <#assign mono = true>
+                            </#if>
+                        </#if>
+                    </#list>
+                    <#if multi>
+             ${entity.name?cap_first}CheckListState ${entity.name?lower_case}CheckList = new ${entity.name?cap_first}CheckListState();       
+                    </#if>
+                    <#if mono>
+             //${entity.name?cap_first}RadioListState ${entity.name?lower_case}RadioList = new ${entity.name?cap_first}RadioListState();       
+                    </#if>
+                    
             #endregion
                 </#if>
             </#list>
@@ -205,63 +231,125 @@ namespace ${project_namespace}.View
                 <#list wishedfields as field>
                     <#if field.relation?? && ((field.relation.type=="OneToMany") || (field.relation.type=="ManyToMany"))>
             #region ${entity.name?cap_first} ManyToMany and OneToMany relations.
+            
             // CreateState.
             ${entity.name?lower_case}Create.AddTransition(
-                Transition.${entity.name?cap_first}ListPage, 
+                Transition.${field.relation.targetEntity?cap_first}ListPage, 
                     StateID.${entity.name?cap_first}MultiCreateListPage${field.relation.targetEntity?cap_first});
+            ${field.relation.targetEntity?lower_case}List.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}ListPage, 
+                    StateID.${entity.name?cap_first}MultiCreateListPage${field.relation.targetEntity?cap_first});
+
             ${entity.name?lower_case}Create.AddTransition(
-                Transition.${entity.name?cap_first}CreatePage, 
+                Transition.${field.relation.targetEntity?cap_first}CreatePage, 
                     StateID.${entity.name?cap_first}MultiCreateCreatePage${field.relation.targetEntity?cap_first});
+            ${field.relation.targetEntity?lower_case}Create.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}CreatePage, 
+                    StateID.${entity.name?cap_first}MultiCreateCreatePage${field.relation.targetEntity?cap_first});
+
             ${entity.name?lower_case}Create.AddTransition(
-                Transition.${entity.name?cap_first}ShowPage, 
+                Transition.${field.relation.targetEntity?cap_first}ShowPage, 
                     StateID.${entity.name?cap_first}MultiCreateShowPage${field.relation.targetEntity?cap_first});
+            ${field.relation.targetEntity?lower_case}Show.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}ShowPage, 
+                    StateID.${entity.name?cap_first}MultiCreateShowPage${field.relation.targetEntity?cap_first});
+
             ${entity.name?lower_case}Create.AddTransition(
-                Transition.${entity.name?cap_first}CheckListPage, 
+                Transition.${field.relation.targetEntity?cap_first}CheckListPage, 
                     StateID.${entity.name?cap_first}MultiCreateCheckListPage${field.relation.targetEntity?cap_first});
+            ${field.relation.targetEntity?lower_case}CheckList.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}CheckListPage, 
+                    StateID.${entity.name?cap_first}MultiCreateCheckListPage${field.relation.targetEntity?cap_first});
+
             ${entity.name?lower_case}Create.AddTransition(
-                Transition.${entity.name?cap_first}EditPage, 
+                Transition.${field.relation.targetEntity?cap_first}EditPage, 
                     StateID.${entity.name?cap_first}MultiCreateShowEditPage${field.relation.targetEntity?cap_first});
-                    
+            ${field.relation.targetEntity?lower_case}Edit.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}EditPage, 
+                    StateID.${entity.name?cap_first}MultiCreateShowEditPage${field.relation.targetEntity?cap_first});
+
             // ShowState.
-            ${entity.name?lower_case}Create.AddTransition(
-                Transition.${entity.name?cap_first}ListPage, 
+            ${entity.name?lower_case}Show.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}ListPage, 
                     StateID.${entity.name?cap_first}MultiShowListPage${field.relation.targetEntity?cap_first});
-            ${entity.name?lower_case}Create.AddTransition(
-                Transition.${entity.name?cap_first}CreatePage, 
+            ${field.relation.targetEntity?lower_case}List.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}ListPage, 
+                    StateID.${entity.name?cap_first}MultiShowListPage${field.relation.targetEntity?cap_first});
+            
+            ${entity.name?lower_case}Show.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}CreatePage, 
                     StateID.${entity.name?cap_first}MultiShowCreatePage${field.relation.targetEntity?cap_first});
-            ${entity.name?lower_case}Create.AddTransition(
-                Transition.${entity.name?cap_first}ShowPage, 
+            ${field.relation.targetEntity?lower_case}Create.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}CreatePage, 
+                    StateID.${entity.name?cap_first}MultiShowCreatePage${field.relation.targetEntity?cap_first});
+            
+            ${entity.name?lower_case}Show.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}ShowPage, 
                     StateID.${entity.name?cap_first}MultiShowShowPage${field.relation.targetEntity?cap_first});
-            ${entity.name?lower_case}Create.AddTransition(
-                Transition.${entity.name?cap_first}CheckListPage, 
+            ${field.relation.targetEntity?lower_case}Show.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}ShowPage, 
+                    StateID.${entity.name?cap_first}MultiShowShowPage${field.relation.targetEntity?cap_first});
+            
+            ${entity.name?lower_case}Show.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}CheckListPage, 
                     StateID.${entity.name?cap_first}MultiShowCheckListPage${field.relation.targetEntity?cap_first});
-            ${entity.name?lower_case}Create.AddTransition(
-                Transition.${entity.name?cap_first}EditPage, 
+            ${field.relation.targetEntity?lower_case}CheckList.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}CheckListPage, 
+                    StateID.${entity.name?cap_first}MultiShowCheckListPage${field.relation.targetEntity?cap_first});
+            
+            ${entity.name?lower_case}Show.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}EditPage, 
+                    StateID.${entity.name?cap_first}MultiShowShowEditPage${field.relation.targetEntity?cap_first});
+            ${field.relation.targetEntity?lower_case}Edit.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}EditPage, 
                     StateID.${entity.name?cap_first}MultiShowShowEditPage${field.relation.targetEntity?cap_first});
             #endregion
                     <#else>
-            #region ${entity.name?cap_first} OneToOne and ManyToOne relations.        
+            #region ${entity.name?cap_first} OneToOne and ManyToOne relations.    
+                
             // CreateState.
             ${entity.name?lower_case}Create.AddTransition(
-                Transition.${entity.name?cap_first}ShowPage, 
+                Transition.${field.relation.targetEntity?cap_first}ShowPage, 
                     StateID.${entity.name?cap_first}SoloCreateShowPage${field.relation.targetEntity?cap_first});
+            ${field.relation.targetEntity?lower_case}Show.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}ShowPage, 
+                    StateID.${entity.name?cap_first}SoloCreateShowPage${field.relation.targetEntity?cap_first});
+            
             ${entity.name?lower_case}Create.AddTransition(
-                Transition.${entity.name?cap_first}EditPage, 
+                Transition.${field.relation.targetEntity?cap_first}EditPage, 
                     StateID.${entity.name?cap_first}SoloCreateEditPage${field.relation.targetEntity?cap_first});
-            ${entity.name?lower_case}Create.AddTransition(
-                Transition.${entity.name?cap_first}RadioListPage, 
-                    StateID.${entity.name?cap_first}SoloCreateRadioListPage${field.relation.targetEntity?cap_first});
+            ${field.relation.targetEntity?lower_case}Edit.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}EditPage, 
+                    StateID.${entity.name?cap_first}SoloCreateEditPage${field.relation.targetEntity?cap_first});
+            
+            //${entity.name?lower_case}Create.AddTransition(
+            //    Transition.${field.relation.targetEntity?cap_first}RadioListPage, 
+            //        StateID.${entity.name?cap_first}SoloCreateRadioListPage${field.relation.targetEntity?cap_first});
+            //${field.relation.targetEntity?lower_case}RadioList.AddTransition(
+            //    Transition.${field.relation.targetEntity?cap_first}RadioListPage, 
+            //        StateID.${entity.name?cap_first}SoloCreateRadioListPage${field.relation.targetEntity?cap_first});
             
             // ShowState.
-            ${entity.name?lower_case}Create.AddTransition(
-                Transition.${entity.name?cap_first}ShowPage, 
+            ${entity.name?lower_case}Show.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}ShowPage, 
                     StateID.${entity.name?cap_first}SoloShowShowPage${field.relation.targetEntity?cap_first});
-            ${entity.name?lower_case}Create.AddTransition(
-                Transition.${entity.name?cap_first}EditPage, 
+            ${field.relation.targetEntity?lower_case}Show.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}ShowPage, 
+                    StateID.${entity.name?cap_first}SoloShowShowPage${field.relation.targetEntity?cap_first});
+            
+            ${entity.name?lower_case}Show.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}EditPage, 
                     StateID.${entity.name?cap_first}SoloShowEditPage${field.relation.targetEntity?cap_first});
-            ${entity.name?lower_case}Create.AddTransition(
-                Transition.${entity.name?cap_first}RadioListPage, 
-                    StateID.${entity.name?cap_first}SoloShowRadioListPage${field.relation.targetEntity?cap_first});
+            ${field.relation.targetEntity?lower_case}Edit.AddTransition(
+                Transition.${field.relation.targetEntity?cap_first}EditPage, 
+                    StateID.${entity.name?cap_first}SoloShowEditPage${field.relation.targetEntity?cap_first});
+            
+            //${entity.name?lower_case}Show.AddTransition(
+            //    Transition.${field.relation.targetEntity?cap_first}RadioListPage, 
+            //        StateID.${entity.name?cap_first}SoloShowRadioListPage${field.relation.targetEntity?cap_first});
+            //${field.relation.targetEntity?lower_case}RadioList.AddTransition(
+            //    Transition.${field.relation.targetEntity?cap_first}RadioListPage, 
+            //        StateID.${entity.name?cap_first}SoloShowRadioListPage${field.relation.targetEntity?cap_first});
             #endregion        
                     </#if>
                 </#list>
@@ -279,8 +367,29 @@ namespace ${project_namespace}.View
             bsm.AddState(${entity.name?lower_case}Create);
             bsm.AddState(${entity.name?lower_case}Show);
             bsm.AddState(${entity.name?lower_case}Edit);
-            
+                    <#assign fields = ViewUtils.getAllFields(entity) />
+                    <#assign multi = false>
+                    <#assign mono = false>
+                    <#list fields?values as field >
+                        <#if field.relation??>
+                            <#if field.relation.type == "ManyToMany">
+                                <#assign multi = true>
+                            <#elseif field.relation.type == "OneToMany" || field.relation.type == "ManyToOne">
+                                <#assign multi = true>
+                                <#assign mono = true>
+                            <#else>
+                                <#assign mono = true>
+                            </#if>
+                        </#if>
+                    </#list>
+                    <#if multi>
+            bsm.AddState(${entity.name?lower_case}CheckList);
+                    </#if>
+                    <#if mono>
+            //bsm.AddState(${entity.name?lower_case}RadioList);
+                    </#if>
                 </#if>
+
             </#list>
         }
     }
