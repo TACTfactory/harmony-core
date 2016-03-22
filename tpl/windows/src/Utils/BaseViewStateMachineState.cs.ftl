@@ -40,8 +40,8 @@ namespace ${project_namespace}.Utils.StateMachine
                 return;
             }
 
-            // Since this is a Deterministic FSM,
-            //   check if the current transition was already inside the map
+            // Since this is a Deterministic State Machine,
+            // check if the current transition was already inside the map
             if (map.ContainsKey(trans))
             {
                 Debug.Write("STATE MACHINE State ERROR: State " + stateID.ToString() + " already has transition " + trans.ToString() +
