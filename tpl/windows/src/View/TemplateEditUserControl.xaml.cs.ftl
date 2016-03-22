@@ -13,15 +13,29 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
     /// <summary>
     /// ${curr.name?cap_first}EditUserControl contain real edit display mechanism for ${curr.name?cap_first} entity.
     /// </summary>
-    public sealed partial class ${curr.name?cap_first}EditUserControl : UserControl
+    public sealed partial class ${curr.name?cap_first}EditUserControl : BindingUserControl
     {
         private ${curr.name?cap_first}SQLiteAdapter ${curr.name?lower_case}Adapter = 
             new ${curr.name?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
 
+        private Entity.${curr.name?cap_first} ${curr.name?lower_case}Item;
+
         /// <summary>
         /// ${curr.name?cap_first}Item use to fill view with item datas.
         /// </summary>
-        public Entity.${curr.name?cap_first} ${curr.name?cap_first}Item { get; set; }
+        public Entity.${curr.name?cap_first} ${curr.name?cap_first}Item
+        {
+            get
+            {
+                return this.${curr.name?lower_case}Item;
+            }
+
+            set
+            {
+                this.${curr.name?lower_case}Item = value;
+                base.OnPropertyChanged("${curr.name?cap_first}Item");
+            }
+        }
         
         /// <summary>
         /// Default constructor.

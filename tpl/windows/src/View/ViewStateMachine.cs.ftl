@@ -234,122 +234,62 @@ namespace ${project_namespace}.View
             
             // CreateState.
             ${entity.name?lower_case}Create.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}ListPage, 
-                    StateID.${entity.name?cap_first}MultiCreateListPage${field.relation.targetEntity?cap_first});
-            ${field.relation.targetEntity?lower_case}List.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}ListPage, 
-                    StateID.${entity.name?cap_first}MultiCreateListPage${field.relation.targetEntity?cap_first});
-
+                Transition.${entity.name?cap_first}MultiCreateListPage${field.relation.targetEntity?cap_first}, 
+                    StateID.${field.relation.targetEntity?cap_first}ListPageEnter);
             ${entity.name?lower_case}Create.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}CreatePage, 
-                    StateID.${entity.name?cap_first}MultiCreateCreatePage${field.relation.targetEntity?cap_first});
-            ${field.relation.targetEntity?lower_case}Create.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}CreatePage, 
-                    StateID.${entity.name?cap_first}MultiCreateCreatePage${field.relation.targetEntity?cap_first});
-
+                Transition.${entity.name?cap_first}MultiCreateCreatePage${field.relation.targetEntity?cap_first}, 
+                    StateID.${field.relation.targetEntity?cap_first}CreatePageEnter);
             ${entity.name?lower_case}Create.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}ShowPage, 
-                    StateID.${entity.name?cap_first}MultiCreateShowPage${field.relation.targetEntity?cap_first});
-            ${field.relation.targetEntity?lower_case}Show.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}ShowPage, 
-                    StateID.${entity.name?cap_first}MultiCreateShowPage${field.relation.targetEntity?cap_first});
-
+                Transition.${entity.name?cap_first}MultiCreateShowPage${field.relation.targetEntity?cap_first}, 
+                    StateID.${field.relation.targetEntity?cap_first}ShowPageEnter);
             ${entity.name?lower_case}Create.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}CheckListPage, 
-                    StateID.${entity.name?cap_first}MultiCreateCheckListPage${field.relation.targetEntity?cap_first});
-            ${field.relation.targetEntity?lower_case}CheckList.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}CheckListPage, 
-                    StateID.${entity.name?cap_first}MultiCreateCheckListPage${field.relation.targetEntity?cap_first});
-
+                Transition.${entity.name?cap_first}MultiCreateCheckListPage${field.relation.targetEntity?cap_first}, 
+                    StateID.${field.relation.targetEntity?cap_first}CheckListPageEnter);
             ${entity.name?lower_case}Create.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}EditPage, 
-                    StateID.${entity.name?cap_first}MultiCreateShowEditPage${field.relation.targetEntity?cap_first});
-            ${field.relation.targetEntity?lower_case}Edit.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}EditPage, 
-                    StateID.${entity.name?cap_first}MultiCreateShowEditPage${field.relation.targetEntity?cap_first});
-
+                Transition.${entity.name?cap_first}MultiCreateShowEditPage${field.relation.targetEntity?cap_first}, 
+                    StateID.${field.relation.targetEntity?cap_first}EditPageEnter);
+            
             // ShowState.
             ${entity.name?lower_case}Show.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}ListPage, 
-                    StateID.${entity.name?cap_first}MultiShowListPage${field.relation.targetEntity?cap_first});
-            ${field.relation.targetEntity?lower_case}List.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}ListPage, 
-                    StateID.${entity.name?cap_first}MultiShowListPage${field.relation.targetEntity?cap_first});
-            
+                Transition.${entity.name?cap_first}MultiShowListPage${field.relation.targetEntity?cap_first}, 
+                    StateID.${field.relation.targetEntity?cap_first}ListPageEnter);
             ${entity.name?lower_case}Show.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}CreatePage, 
-                    StateID.${entity.name?cap_first}MultiShowCreatePage${field.relation.targetEntity?cap_first});
-            ${field.relation.targetEntity?lower_case}Create.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}CreatePage, 
-                    StateID.${entity.name?cap_first}MultiShowCreatePage${field.relation.targetEntity?cap_first});
-            
+                Transition.${entity.name?cap_first}MultiShowCreatePage${field.relation.targetEntity?cap_first}, 
+                    StateID.${field.relation.targetEntity?cap_first}CreatePageEnter);
             ${entity.name?lower_case}Show.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}ShowPage, 
-                    StateID.${entity.name?cap_first}MultiShowShowPage${field.relation.targetEntity?cap_first});
-            ${field.relation.targetEntity?lower_case}Show.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}ShowPage, 
-                    StateID.${entity.name?cap_first}MultiShowShowPage${field.relation.targetEntity?cap_first});
-            
+                Transition.${entity.name?cap_first}MultiShowShowPage${field.relation.targetEntity?cap_first}, 
+                    StateID.${field.relation.targetEntity?cap_first}ShowPageEnter);
             ${entity.name?lower_case}Show.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}CheckListPage, 
-                    StateID.${entity.name?cap_first}MultiShowCheckListPage${field.relation.targetEntity?cap_first});
-            ${field.relation.targetEntity?lower_case}CheckList.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}CheckListPage, 
-                    StateID.${entity.name?cap_first}MultiShowCheckListPage${field.relation.targetEntity?cap_first});
-            
+                Transition.${entity.name?cap_first}MultiShowCheckListPage${field.relation.targetEntity?cap_first}, 
+                    StateID.${field.relation.targetEntity?cap_first}CheckListPageEnter);
             ${entity.name?lower_case}Show.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}EditPage, 
-                    StateID.${entity.name?cap_first}MultiShowShowEditPage${field.relation.targetEntity?cap_first});
-            ${field.relation.targetEntity?lower_case}Edit.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}EditPage, 
-                    StateID.${entity.name?cap_first}MultiShowShowEditPage${field.relation.targetEntity?cap_first});
+                Transition.${entity.name?cap_first}MultiShowShowEditPage${field.relation.targetEntity?cap_first}, 
+                    StateID.${field.relation.targetEntity?cap_first}EditPageEnter);
             #endregion
                     <#else>
             #region ${entity.name?cap_first} OneToOne and ManyToOne relations.    
                 
             // CreateState.
             ${entity.name?lower_case}Create.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}ShowPage, 
-                    StateID.${entity.name?cap_first}SoloCreateShowPage${field.relation.targetEntity?cap_first});
-            ${field.relation.targetEntity?lower_case}Show.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}ShowPage, 
-                    StateID.${entity.name?cap_first}SoloCreateShowPage${field.relation.targetEntity?cap_first});
-            
+                Transition.${entity.name?cap_first}SoloCreateShowPage${field.relation.targetEntity?cap_first}, 
+                    StateID.${field.relation.targetEntity?cap_first}ShowPageEnter);
             ${entity.name?lower_case}Create.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}EditPage, 
-                    StateID.${entity.name?cap_first}SoloCreateEditPage${field.relation.targetEntity?cap_first});
-            ${field.relation.targetEntity?lower_case}Edit.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}EditPage, 
-                    StateID.${entity.name?cap_first}SoloCreateEditPage${field.relation.targetEntity?cap_first});
-            
+                Transition.${entity.name?cap_first}SoloCreateEditPage${field.relation.targetEntity?cap_first}, 
+                    StateID.${field.relation.targetEntity?cap_first}EditPageEnter);
             //${entity.name?lower_case}Create.AddTransition(
-            //    Transition.${field.relation.targetEntity?cap_first}RadioListPage, 
-            //        StateID.${entity.name?cap_first}SoloCreateRadioListPage${field.relation.targetEntity?cap_first});
-            //${field.relation.targetEntity?lower_case}RadioList.AddTransition(
             //    Transition.${field.relation.targetEntity?cap_first}RadioListPage, 
             //        StateID.${entity.name?cap_first}SoloCreateRadioListPage${field.relation.targetEntity?cap_first});
             
             // ShowState.
             ${entity.name?lower_case}Show.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}ShowPage, 
-                    StateID.${entity.name?cap_first}SoloShowShowPage${field.relation.targetEntity?cap_first});
-            ${field.relation.targetEntity?lower_case}Show.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}ShowPage, 
-                    StateID.${entity.name?cap_first}SoloShowShowPage${field.relation.targetEntity?cap_first});
-            
+                Transition.${entity.name?cap_first}SoloShowShowPage${field.relation.targetEntity?cap_first}, 
+                    StateID.${field.relation.targetEntity?cap_first}ShowPageEnter);
             ${entity.name?lower_case}Show.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}EditPage, 
-                    StateID.${entity.name?cap_first}SoloShowEditPage${field.relation.targetEntity?cap_first});
-            ${field.relation.targetEntity?lower_case}Edit.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}EditPage, 
-                    StateID.${entity.name?cap_first}SoloShowEditPage${field.relation.targetEntity?cap_first});
-            
+                Transition.${entity.name?cap_first}SoloShowEditPage${field.relation.targetEntity?cap_first}, 
+                    StateID.${field.relation.targetEntity?cap_first}EditPageEnter);
             //${entity.name?lower_case}Show.AddTransition(
-            //    Transition.${field.relation.targetEntity?cap_first}RadioListPage, 
-            //        StateID.${entity.name?cap_first}SoloShowRadioListPage${field.relation.targetEntity?cap_first});
-            //${field.relation.targetEntity?lower_case}RadioList.AddTransition(
-            //    Transition.${field.relation.targetEntity?cap_first}RadioListPage, 
-            //        StateID.${entity.name?cap_first}SoloShowRadioListPage${field.relation.targetEntity?cap_first});
+            //    Transition.${entity.name?cap_first}SoloShowRadioListPage${field.relation.targetEntity?cap_first}, 
+            //        StateID.${field.relation.targetEntity?cap_first}RadioListPageEnter);
             #endregion        
                     </#if>
                 </#list>

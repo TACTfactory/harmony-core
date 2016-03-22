@@ -124,7 +124,8 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         {
             int result = ${curr.name?lower_case}Adapter.Insert(Get${curr.name?cap_first}FromView());
             ViewStateMachine.Instance.${curr.name?cap_first} = ${curr.name?lower_case}Adapter.GetById(result);
-            ViewStateMachine.Instance.SetTransition(Transition.${rel.relation.targetEntity?cap_first}ListPage, new ${rel.relation.targetEntity?cap_first}ListPage());
+            ViewStateMachine.Instance.SetTransition(Transition.${curr.name?cap_first}MultiCreateListPage${rel.relation.targetEntity?cap_first}
+                , new ${rel.relation.targetEntity?cap_first}ListPage());
         }
                 <#else>
         /// <summary>
@@ -137,7 +138,8 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         {
             int result = ${curr.name?lower_case}Adapter.Insert(Get${curr.name?cap_first}FromView());
             ViewStateMachine.Instance.${curr.name?cap_first} = ${curr.name?lower_case}Adapter.GetById(result);
-            ViewStateMachine.Instance.SetTransition(Transition.${rel.relation.targetEntity?cap_first}ListPage, new ${rel.relation.targetEntity?cap_first}ListPage());
+            ViewStateMachine.Instance.SetTransition(Transition.${curr.name?cap_first}SoloCreateShowPage${rel.relation.targetEntity?cap_first}
+                , new ${rel.relation.targetEntity?cap_first}ListPage());
         }            
                 </#if>
             </#list>

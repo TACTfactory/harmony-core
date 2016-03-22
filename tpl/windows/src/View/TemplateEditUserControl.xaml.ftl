@@ -3,12 +3,13 @@
 <#assign fields = ViewUtils.getAllFields(curr) />
 <!-- <@header?interpret /> -->
 
-<UserControl
+<util:BindingUserControl
     x:Class="${project_namespace}.View.${curr.name?cap_first}.UsersControls.${curr.name?cap_first}EditUserControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:local="using:${project_namespace}.View.${curr.name?cap_first}.UsersControls"
     xmlns:entity="using:${project_namespace}.Entity"
+    xmlns:util="using:${project_namespace}.Utils"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -35,4 +36,4 @@
             </StackPanel>
         </StackPanel>
     </ScrollViewer>
-</UserControl>
+</util:BindingUserControl>

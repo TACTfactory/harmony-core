@@ -30,25 +30,7 @@ namespace ${project_namespace}.View.Navigation.States
         /// </summary>
         public ${curr.name?cap_first}CheckListState()
         {
-            <#assign item_count = 0/>
-            <#list fields?values as field>
-                <#if (!field.internal && !field.hidden && field.relation??)>
-                    <#if field.relation?? && (field.relation.type == "ManyToMany" || field.relation.type == "OneToMany")>
-                        <#if (item_count == 0)>
-            if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
-            {
-                this.stateID = StateID.${curr.name?cap_first}MultiCreateCheckListPage${field.relation.targetEntity?cap_first};
-            }
-                            <#assign item_count = 1/>
-                        <#else>
-            else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
-            {
-                this.stateID = StateID.${curr.name?cap_first}MultiCreateCheckListPage${field.relation.targetEntity?cap_first};
-            }
-                        </#if>
-                    </#if>
-                </#if>
-            </#list>
+            this.stateID = StateID.${curr.name?cap_first}CheckListPageEnter;
         }
 
         /// <summary>

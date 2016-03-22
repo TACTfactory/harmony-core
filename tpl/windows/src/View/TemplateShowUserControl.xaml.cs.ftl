@@ -92,7 +92,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         /// <param name="e">Tapped event.</param>
         private void btn_list_related_${field.relation.targetEntity?lower_case}_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            ViewStateMachine.Instance.SetTransition(Transition.${field.relation.targetEntity?cap_first}ListPage, 
+            ViewStateMachine.Instance.SetTransition(Transition.${curr.name?cap_first}MultiShowListPage${field.relation.targetEntity?cap_first}, 
                 new ${field.relation.targetEntity?cap_first}ListPage());
         }
         
@@ -104,7 +104,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         /// <param name="e">Tapped event.</param>
         private void btn_show_${field.relation.targetEntity?lower_case}_Tapped(object sender, TappedRoutedEventArgs e)
         {
-            ViewStateMachine.Instance.SetTransition(Transition.${field.relation.targetEntity?cap_first}ShowPage, 
+            ViewStateMachine.Instance.SetTransition(Transition.${curr.name?cap_first}SoloShowShowPage${field.relation.targetEntity?cap_first}, 
                 new ${field.relation.targetEntity?cap_first}ShowPage());
         }
                 </#if>
