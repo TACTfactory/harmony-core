@@ -21,7 +21,6 @@ namespace ${project_namespace}.View
 
         private ViewStateMachine()
         {
-            BuildStateMachine();
         }
 
         public static ViewStateMachine Instance
@@ -31,6 +30,7 @@ namespace ${project_namespace}.View
                 if (instance == null)
                 {
                     instance = new ViewStateMachine();
+                    instance.BuildStateMachine();
                 }
                 return instance;
             }
