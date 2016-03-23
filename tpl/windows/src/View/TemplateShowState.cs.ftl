@@ -186,7 +186,8 @@ namespace ${project_namespace}.View.Navigation.States
             <#list wishedfields as field>
                 <#if field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne">
                     <#if (item_count == 0)>     
-            if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
+            if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
+                && ViewStateMachine.Instance.NextTransition != Transition.${curr.name?cap_first}ShowPage)
             {
                 ViewStateMachine.Instance.SetTransition(
                     Transition.${curr.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ListPageBack, 
@@ -194,7 +195,8 @@ namespace ${project_namespace}.View.Navigation.States
             }
                         <#assign item_count = 1/>
                     <#else>
-            else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
+            else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
+                && ViewStateMachine.Instance.NextTransition != Transition.${curr.name?cap_first}ShowPage)
             {
                 ViewStateMachine.Instance.SetTransition(
                     Transition.${curr.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ListPageBack, 
@@ -203,7 +205,8 @@ namespace ${project_namespace}.View.Navigation.States
                     </#if>
                 <#else>
                     <#if (item_count == 0)>     
-            if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
+            if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
+                && ViewStateMachine.Instance.NextTransition != Transition.${curr.name?cap_first}ShowPage)
             {
                 ViewStateMachine.Instance.SetTransition(
                     Transition.${curr.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPageBack, 
@@ -211,7 +214,8 @@ namespace ${project_namespace}.View.Navigation.States
             }
                         <#assign item_count = 1/>
                     <#else>
-            else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
+            else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
+                && ViewStateMachine.Instance.NextTransition != Transition.${curr.name?cap_first}ShowPage)
             {
                 ViewStateMachine.Instance.SetTransition(
                     Transition.${curr.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPageBack, 
@@ -241,12 +245,68 @@ namespace ${project_namespace}.View.Navigation.States
         /// <param name="e">Tapped event.</param>
         private void Btn_Delete_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            this.${curr.name?lower_case}Adapter.Delete(
+            if(this.${curr.name?lower_case}ShowPage.${curr.name?cap_first}ShowUserControl
+                        .${curr.name?cap_first}Item != null)
+            {
+                this.${curr.name?lower_case}Adapter.Delete(
                     this.${curr.name?lower_case}ShowPage.${curr.name?cap_first}ShowUserControl
                         .${curr.name?cap_first}Item);
+            }
+            
+            <#assign item_count = 0/>
+        <#if wishedfields?has_content>
+            <#list wishedfields as field>
+                <#if field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne">
+                    <#if (item_count == 0)>     
+            if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
+                && ViewStateMachine.Instance.NextTransition != Transition.${curr.name?cap_first}ShowPage)
+            {
+                ViewStateMachine.Instance.SetTransition(
+                    Transition.${curr.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ListPageBack, 
+                        new ${field.relation.targetEntity?cap_first}ListPage());
+            }
+                        <#assign item_count = 1/>
+                    <#else>
+            else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
+                && ViewStateMachine.Instance.NextTransition != Transition.${curr.name?cap_first}ShowPage)
+            {
+                ViewStateMachine.Instance.SetTransition(
+                    Transition.${curr.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ListPageBack, 
+                        new ${field.relation.targetEntity?cap_first}ListPage());
+            }
+                    </#if>
+                <#else>
+                    <#if (item_count == 0)>     
+            if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
+                && ViewStateMachine.Instance.NextTransition != Transition.${curr.name?cap_first}ShowPage)
+            {
+                ViewStateMachine.Instance.SetTransition(
+                    Transition.${curr.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPageBack, 
+                        new ${field.relation.targetEntity?cap_first}ShowPage());
+            }
+                        <#assign item_count = 1/>
+                    <#else>
+            else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null
+                && ViewStateMachine.Instance.NextTransition != Transition.${curr.name?cap_first}ShowPage)
+            {
+                ViewStateMachine.Instance.SetTransition(
+                    Transition.${curr.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPageBack, 
+                        new ${field.relation.targetEntity?cap_first}ShowPage());
+            }
+                    </#if>
+                </#if>
+            </#list>
+            else
+            {
+                ViewStateMachine.Instance.SetTransition(
+                    Transition.${curr.name?cap_first}ShowPageBack, 
+                        new ${curr.name?cap_first}ListPage());
+            }
+        <#else> 
             ViewStateMachine.Instance.SetTransition(
                 Transition.${curr.name?cap_first}ShowPageBack, 
                     new ${curr.name?cap_first}ListPage());
+        </#if>
         }
 
         /// <summary>
