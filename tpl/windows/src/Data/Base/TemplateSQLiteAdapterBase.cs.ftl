@@ -122,7 +122,7 @@ namespace ${project_namespace}.Data.Base
         public ${curr.name?cap_first} GetByParentId(${field.relation.targetEntity?cap_first} parentId)
         {
             ${curr.name?cap_first} child = 
-                this.Context.FindWithChildren<${curr.name?cap_first}>(parentId.${id?cap_first});
+                this.Context.FindWithChildren<${curr.name?cap_first}>(parentId.${curr.name?cap_first});
             return child;
         }
         
@@ -147,7 +147,7 @@ namespace ${project_namespace}.Data.Base
         public ${curr.name?cap_first} GetByParentId(${field.relation.targetEntity?cap_first} parentId)
         {
             ${curr.name?cap_first} child = 
-                this.Context.FindWithChildren<${curr.name?cap_first}>(parentId.${id?cap_first});
+                this.Context.FindWithChildren<${curr.name?cap_first}>(parentId.${curr.name?cap_first});
             return child;
         }
         
