@@ -52,21 +52,21 @@ namespace ${project_namespace}.Utils.StateMachine
         #region ${entity.name?cap_first} ManyToMany and OneToMany relations.
             <#list fields?values as field >
                 <#if field.relation??>
-        ${field.relation.targetEntity?cap_first}MultiTo${entity.name?cap_first}ListPage = ${increment},
+        ${entity.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ListPage = ${increment},
         <#assign increment = increment + 1 />
-        ${field.relation.targetEntity?cap_first}MultiTo${entity.name?cap_first}CreatePage = ${increment},
+        ${entity.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}CreatePage = ${increment},
         <#assign increment = increment + 1 />
-        ${field.relation.targetEntity?cap_first}MultiTo${entity.name?cap_first}ShowPage = ${increment},
+        ${entity.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ShowPage = ${increment},
         <#assign increment = increment + 1 />
-        ${field.relation.targetEntity?cap_first}MultiTo${entity.name?cap_first}CheckListPage = ${increment},
+        ${entity.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}CheckListPage = ${increment},
         <#assign increment = increment + 1 />
-        ${entity.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ListPageBack = ${increment},
+        ${field.relation.targetEntity?cap_first}MultiTo${entity.name?cap_first}ListPageBack = ${increment},
         <#assign increment = increment + 1 />
-        ${entity.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}CreatePageBack = ${increment},
+        ${field.relation.targetEntity?cap_first}MultiTo${entity.name?cap_first}CreatePageBack = ${increment},
         <#assign increment = increment + 1 />
-        ${entity.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ShowPageBack = ${increment},
+        ${field.relation.targetEntity?cap_first}MultiTo${entity.name?cap_first}ShowPageBack = ${increment},
         <#assign increment = increment + 1 />
-        ${entity.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}CheckListPageBack = ${increment},
+        ${field.relation.targetEntity?cap_first}MultiTo${entity.name?cap_first}CheckListPageBack = ${increment},
         <#assign increment = increment + 1 />
                 </#if>
             </#list>
@@ -76,13 +76,13 @@ namespace ${project_namespace}.Utils.StateMachine
         #region ${entity.name?cap_first} OneToOne and ManyToOne relations.
             <#list fields?values as field >
                 <#if field.relation??>
-        ${field.relation.targetEntity?cap_first}SoloTo${entity.name?cap_first}ShowPage = ${increment},
+        ${entity.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPage = ${increment},
         <#assign increment = increment + 1 />
-        ${field.relation.targetEntity?cap_first}SoloTo${entity.name?cap_first}RadioListPage = ${increment},
+        ${entity.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}RadioListPage = ${increment},
         <#assign increment = increment + 1 />
-        ${entity.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPageBack = ${increment},
+        ${field.relation.targetEntity?cap_first}SoloTo${entity.name?cap_first}ShowPageBack = ${increment},
         <#assign increment = increment + 1 />
-        ${entity.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}RadioListPageBack = ${increment},
+        ${field.relation.targetEntity?cap_first}SoloTo${entity.name?cap_first}RadioListPageBack = ${increment},
         <#assign increment = increment + 1 />
                 </#if>
             </#list>  
