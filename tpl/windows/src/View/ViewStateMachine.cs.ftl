@@ -177,10 +177,22 @@ namespace ${project_namespace}.View
                         </#if>
                     </#list>
                     <#if multi>
-             ${entity.name?cap_first}CheckListState ${entity.name?lower_case}CheckList = new ${entity.name?cap_first}CheckListState();       
+            ${entity.name?lower_case}List.AddTransition(
+                Transition.${entity.name?cap_first}CheckListPage, 
+                    StateID.${entity.name?cap_first}CheckListPageEnter);
+            ${entity.name?cap_first}CheckListState ${entity.name?lower_case}CheckList = new ${entity.name?cap_first}CheckListState();
+            ${entity.name?lower_case}CheckList.AddTransition(
+                Transition.${entity.name?cap_first}CheckListPageBack,
+                    StateID.${entity.name?cap_first}ListPageEnter);
                     </#if>
                     <#if mono>
-             //${entity.name?cap_first}RadioListState ${entity.name?lower_case}RadioList = new ${entity.name?cap_first}RadioListState();       
+            //${entity.name?lower_case}Show.AddTransition(
+            //    Transition.${entity.name?cap_first}RadioListPage, 
+            //        StateID.${entity.name?cap_first}RadioListPageEnter);
+            //${entity.name?cap_first}RadioListState ${entity.name?lower_case}RadioList = new ${entity.name?cap_first}RadioListState();       
+            //${entity.name?lower_case}RadioList.AddTransition(
+            //    Transition.${entity.name?cap_first}RadioListPageBack,
+            //        StateID.${entity.name?cap_first}ShowPageEnter);
                     </#if>
             #endregion
                 </#if>
@@ -256,16 +268,10 @@ namespace ${project_namespace}.View
             ${entity.name?lower_case}Show.AddTransition(
                 Transition.${entity.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPage, 
                     StateID.${field.relation.targetEntity?cap_first}ShowPageEnter);
-            //${entity.name?lower_case}RadioList.AddTransition(
-            //    Transition.${entity.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}RadioListPage, 
-            //        StateID.${field.relation.targetEntity?cap_first}RadioListPageEnter);
             
             ${field.relation.targetEntity?lower_case}Show.AddTransition(
                 Transition.${field.relation.targetEntity?cap_first}SoloTo${entity.name?cap_first}ShowPageBack, 
                     StateID.${entity.name?cap_first}ShowPageEnter);
-            //${field.relation.targetEntity?lower_case}RadioList.AddTransition(
-            //    Transition.${field.relation.targetEntity?cap_first}SoloTo${entity.name?cap_first}RadioListPageBack, 
-            //        StateID.${entity.name?cap_first}RadioListPageEnter);
             #endregion        
                     </#if>
                 </#list>

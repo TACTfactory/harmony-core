@@ -14,6 +14,18 @@ namespace ${project_namespace}.Utils.StateMachine
         <#assign increment = 2 />
         <#list entities?values as entity>
         <#if !entity.internal >
+            <#assign fields = ViewUtils.getAllFields(entity) />
+            <#assign multi = false>
+            <#assign mono = false>
+            <#list fields?values as field >
+                <#if field.relation??>
+                    <#if field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne" >
+                        <#assign multi = true>
+                    <#else>
+                        <#assign mono = true>
+                    </#if>
+                </#if>
+            </#list>
         ${entity.name?cap_first}ListPage = ${increment}, // ${entity.name?cap_first} transition to list items page.
             <#assign increment = increment + 1 />
         ${entity.name?cap_first}CreatePage = ${increment}, // ${entity.name?cap_first} transition to create item page.
@@ -23,6 +35,20 @@ namespace ${project_namespace}.Utils.StateMachine
         ${entity.name?cap_first}EditPage = ${increment}, // ${entity.name?cap_first} transition to edit item page.
             <#assign increment = increment + 1 />
             
+            <#if multi>
+        ${entity.name?cap_first}CheckListPage = ${increment}, // ${entity.name?cap_first} transition to check list item page.
+            <#assign increment = increment + 1 />
+        ${entity.name?cap_first}CheckListPageBack = ${increment},
+            <#assign increment = increment + 1 />
+            </#if>
+            
+            <#if mono>
+        ${entity.name?cap_first}RadioListPage = ${increment}, // ${entity.name?cap_first} transition to check list item page.
+            <#assign increment = increment + 1 />
+        ${entity.name?cap_first}RadioListPageBack = ${increment}, // ${entity.name?cap_first} transition to check list item page.
+            <#assign increment = increment + 1 />
+            </#if>
+
         ${entity.name?cap_first}ListPageBack = ${increment},
             <#assign increment = increment + 1 />
         ${entity.name?cap_first}CreatePageBack = ${increment},
@@ -36,18 +62,6 @@ namespace ${project_namespace}.Utils.StateMachine
             <#assign increment = increment + 1 />
         
         #region ${entity.name?cap_first}State relations transitions.
-        <#assign fields = ViewUtils.getAllFields(entity) />
-            <#assign multi = false>
-            <#assign mono = false>
-            <#list fields?values as field >
-                <#if field.relation??>
-                    <#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany" >
-                        <#assign multi = true>
-                    <#else>
-                        <#assign mono = true>
-                    </#if>
-                </#if>
-            </#list>
             <#if multi>
         #region ${entity.name?cap_first} ManyToMany and OneToMany relations.
             <#list fields?values as field >
@@ -58,15 +72,11 @@ namespace ${project_namespace}.Utils.StateMachine
         <#assign increment = increment + 1 />
         ${entity.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ShowPage = ${increment},
         <#assign increment = increment + 1 />
-        ${entity.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}CheckListPage = ${increment},
-        <#assign increment = increment + 1 />
         ${field.relation.targetEntity?cap_first}MultiTo${entity.name?cap_first}ListPageBack = ${increment},
         <#assign increment = increment + 1 />
         ${field.relation.targetEntity?cap_first}MultiTo${entity.name?cap_first}CreatePageBack = ${increment},
         <#assign increment = increment + 1 />
         ${field.relation.targetEntity?cap_first}MultiTo${entity.name?cap_first}ShowPageBack = ${increment},
-        <#assign increment = increment + 1 />
-        ${field.relation.targetEntity?cap_first}MultiTo${entity.name?cap_first}CheckListPageBack = ${increment},
         <#assign increment = increment + 1 />
                 </#if>
             </#list>
@@ -78,11 +88,7 @@ namespace ${project_namespace}.Utils.StateMachine
                 <#if field.relation??>
         ${entity.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPage = ${increment},
         <#assign increment = increment + 1 />
-        ${entity.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}RadioListPage = ${increment},
-        <#assign increment = increment + 1 />
         ${field.relation.targetEntity?cap_first}SoloTo${entity.name?cap_first}ShowPageBack = ${increment},
-        <#assign increment = increment + 1 />
-        ${field.relation.targetEntity?cap_first}SoloTo${entity.name?cap_first}RadioListPageBack = ${increment},
         <#assign increment = increment + 1 />
                 </#if>
             </#list>  

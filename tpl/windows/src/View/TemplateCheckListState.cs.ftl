@@ -72,60 +72,9 @@ namespace ${project_namespace}.View.Navigation.States
 
         private void Btn_Back_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-        <#assign item_count = 0/>
-        <#if wishedfields?has_content>
-            <#list wishedfields as field>
-                <#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
-                    <#if (item_count == 0)>     
-            if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
-            {
-                ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
-                ViewStateMachine.Instance.SetTransition(
-                    Transition.${field.relation.targetEntity?cap_first}MultiTo${curr.name?cap_first}CheckListPageBack, 
-                        new ${field.relation.targetEntity?cap_first}CheckListPage());
-            }
-                        <#assign item_count = 1/>
-                    <#else>
-            else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
-            {
-                ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
-                ViewStateMachine.Instance.SetTransition(
-                    Transition.${field.relation.targetEntity?cap_first}MultiTo${curr.name?cap_first}CheckListPageBack, 
-                        new ${field.relation.targetEntity?cap_first}CheckListPage());
-            }
-                    </#if>
-                <#else>
-                    <#if (item_count == 0)>     
-            if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
-            {
-                ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
-                ViewStateMachine.Instance.SetTransition(
-                    Transition.${field.relation.targetEntity?cap_first}SoloTo${curr.name?cap_first}ShowPageBack, 
-                        new ${field.relation.targetEntity?cap_first}ShowPage());
-            }
-                        <#assign item_count = 1/>
-                    <#else>
-            else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
-            {
-                ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
-                ViewStateMachine.Instance.SetTransition(
-                    Transition.${field.relation.targetEntity?cap_first}SoloTo${curr.name?cap_first}ShowPageBack, 
-                        new ${field.relation.targetEntity?cap_first}ShowPage());
-            }
-                    </#if>
-                </#if>
-            </#list>
-            else
-            {
-                ViewStateMachine.Instance.SetTransition(
-                    Transition.${curr.name?cap_first}ShowPageBack, 
-                        new ${curr.name?cap_first}ListPage());
-            }
-        <#else> 
             ViewStateMachine.Instance.SetTransition(
-                Transition.${curr.name?cap_first}ShowPageBack, 
+                Transition.${curr.name?cap_first}CheckListPageBack, 
                     new ${curr.name?cap_first}ListPage());
-        </#if>
         }
     }
 }
