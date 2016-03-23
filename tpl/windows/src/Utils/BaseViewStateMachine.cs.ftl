@@ -139,9 +139,9 @@ namespace ${project_namespace}.Utils.StateMachine
                 if (state.ID == currentStateID)
                 {
                     // Do the post processing of the state before setting the new one
-                    currentState.DoBeforeLeaving(page);
+                    currentState.DoBeforeLeaving(this.CurrentPage);
 
-                    currentState = state;
+                    this.currentState = state;
                     
                     this.CurrentPage = page;
                     //if (!this.Pages.Contains(this.CurrentPage))
@@ -150,10 +150,10 @@ namespace ${project_namespace}.Utils.StateMachine
                     //}
 
                     // Reset the state to its desired condition before it can reason or act
-                    currentState.DoBeforeEntering(page);
+                    this.currentState.DoBeforeEntering(page);
 
                     // Do stuff after item loaded
-                    currentState.DoAfterEntering();
+                    this.currentState.DoAfterEntering();
                     break;
                 }
             }
