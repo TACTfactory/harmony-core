@@ -80,6 +80,14 @@ namespace ${project_namespace}.View.Navigation.States
             <#if multi>
             this.${curr.name?lower_case}ListPage.NavigationBrowser.Btn_Existing.Tapped -= Btn_Existing_Tapped;
             </#if>
+            if (ViewStateMachine.Instance.NextTransition == Transition.${curr.name?cap_first}HomePageBack)
+            {
+            <#list entities?values as entity>
+                <#if !entity.internal >
+                ViewStateMachine.Instance.${entity.name?cap_first} = null;
+                </#if>
+            </#list>
+            }
         }
 
         /// <summary>
@@ -134,14 +142,14 @@ namespace ${project_namespace}.View.Navigation.States
             <#assign item_count = 0/>
             <#if wishedfields?has_content>
                 <#list wishedfields as field>
-                    <#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
+                    <#if field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne">
                         <#if (item_count == 0)>     
             if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
             {
                 ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
                 ViewStateMachine.Instance.SetTransition(
                     Transition.${curr.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ShowPageBack, 
-                        new ${field.relation.targetEntity?cap_first}ListPage());
+                        new ${field.relation.targetEntity?cap_first}ShowPage());
             }
                             <#assign item_count = 1/>
                         <#else>
@@ -150,7 +158,7 @@ namespace ${project_namespace}.View.Navigation.States
                 ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
                 ViewStateMachine.Instance.SetTransition(
                     Transition.${curr.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ShowPageBack, 
-                        new ${field.relation.targetEntity?cap_first}ListPage());
+                        new ${field.relation.targetEntity?cap_first}ShowPage());
             }
                         </#if>
                     <#else>
@@ -177,12 +185,12 @@ namespace ${project_namespace}.View.Navigation.States
             else
             {
                 ViewStateMachine.Instance.SetTransition(
-                    Transition.${curr.name?cap_first}ListPageBack, 
+                    Transition.${curr.name?cap_first}HomePageBack, 
                         new HomePage());
             }
             <#else> 
             ViewStateMachine.Instance.SetTransition(
-                Transition.${curr.name?cap_first}ListPageBack, 
+                Transition.${curr.name?cap_first}HomePageBack, 
                     new HomePage());
             </#if>
         }

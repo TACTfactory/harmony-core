@@ -245,17 +245,17 @@ namespace ${project_namespace}.View
                 
             // CreateState.
             ${entity.name?lower_case}Show.AddTransition(
-                Transition.${field.relation.targetEntity?cap_first}SoloTo${entity.name?cap_first}ShowPage, 
+                Transition.${entity.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPage, 
                     StateID.${field.relation.targetEntity?cap_first}ShowPageEnter);
             //${entity.name?lower_case}RadioList.AddTransition(
-            //    Transition.${field.relation.targetEntity?cap_first}SoloTo${entity.name?cap_first}RadioListPage, 
+            //    Transition.${entity.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}RadioListPage, 
             //        StateID.${field.relation.targetEntity?cap_first}RadioListPageEnter);
             
             ${field.relation.targetEntity?lower_case}Show.AddTransition(
-                Transition.${entity.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}ShowPageBack, 
+                Transition.${field.relation.targetEntity?cap_first}SoloTo${entity.name?cap_first}ShowPageBack, 
                     StateID.${entity.name?cap_first}ShowPageEnter);
             //${field.relation.targetEntity?lower_case}RadioList.AddTransition(
-            //    Transition.${entity.name?cap_first}SoloTo${field.relation.targetEntity?cap_first}RadioListPageBack, 
+            //    Transition.${field.relation.targetEntity?cap_first}SoloTo${entity.name?cap_first}RadioListPageBack, 
             //        StateID.${entity.name?cap_first}RadioListPageEnter);
             #endregion        
                     </#if>
