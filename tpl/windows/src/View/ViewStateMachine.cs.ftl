@@ -56,6 +56,15 @@ namespace ${project_namespace}.View
             this.NextTransition = t;
             bsm.PerformTransition(t, page);
         }
+        
+        public void SetItemsNull()
+        {
+        <#list entities?values as entity>
+            <#if !entity.internal >
+            this.${entity.name?cap_first} = null;
+            </#if>
+        </#list>
+        }
 
         private void SetItem(Object item)
         {
