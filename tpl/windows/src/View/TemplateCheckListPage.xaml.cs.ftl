@@ -2,6 +2,7 @@
 <@header?interpret />
 
 using ${project_namespace}.View.${curr.name?cap_first}.UsersControls;
+using ${project_namespace}.Utils.StateMachine;
 using ${project_namespace}.View.Navigation.UsersControls;
 using Windows.UI.Xaml.Controls;
 

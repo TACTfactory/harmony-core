@@ -107,7 +107,9 @@ namespace ${project_namespace}.View.Navigation.States
 
         private void Btn_Back_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            ViewStateMachine.Instance.Back();
+            ViewStateMachine.Instance.SetTransition(
+                Transition.${curr.name?cap_first}CreatePageBack,
+                    new ${curr.name?cap_first}ListPage());
         }
     }
 }

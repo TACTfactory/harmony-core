@@ -22,6 +22,11 @@
 </#list>
 <@header?interpret />
 
+<#list fields?values as field>
+    <#if field.relation??>
+using ${project_namespace}.View.${field.relation.targetEntity?cap_first};
+    </#if>
+</#list>
 using ${project_namespace}.Data;
 using ${project_namespace}.Utils.StateMachine;
 using ${project_namespace}.View.${curr.name?cap_first};
@@ -126,7 +131,9 @@ namespace ${project_namespace}.View.Navigation.States
 
         private void Btn_Back_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
-            ViewStateMachine.Instance.Back();
+            ViewStateMachine.Instance.SetTransition(
+                Transition.${curr.name?cap_first}ListPageBack, 
+                    new HomePage());
         }
 
         /// <summary>
@@ -186,9 +193,60 @@ namespace ${project_namespace}.View.Navigation.States
         /// <param name="e">Tapped event.</param>
         private void Btn_Existing_Tapped(object sender, Windows.UI.Xaml.Input.TappedRoutedEventArgs e)
         {
+            <#assign item_count = 0/>
+            <#if wishedfields?has_content>
+                <#list wishedfields as field>
+                    <#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
+                        <#if (item_count == 0)>     
+            if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
+            {
+                ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
+                ViewStateMachine.Instance.SetTransition(
+                    Transition.${field.relation.targetEntity?cap_first}MultiTo${curr.name?cap_first}ListPageBack, 
+                        new ${field.relation.targetEntity?cap_first}ListPage());
+            }
+                            <#assign item_count = 1/>
+                        <#else>
+            else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
+            {
+                ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
+                ViewStateMachine.Instance.SetTransition(
+                    Transition.${field.relation.targetEntity?cap_first}MultiTo${curr.name?cap_first}ListPageBack, 
+                        new ${field.relation.targetEntity?cap_first}ListPage());
+            }
+                        </#if>
+                    <#else>
+                        <#if (item_count == 0)>     
+            if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
+            {
+                ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
+                ViewStateMachine.Instance.SetTransition(
+                    Transition.${field.relation.targetEntity?cap_first}SoloTo${curr.name?cap_first}ShowPageBack, 
+                        new ${field.relation.targetEntity?cap_first}ShowPage());
+            }
+                            <#assign item_count = 1/>
+                        <#else>
+            else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
+            {
+                ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
+                ViewStateMachine.Instance.SetTransition(
+                    Transition.${field.relation.targetEntity?cap_first}SoloTo${curr.name?cap_first}ShowPageBack, 
+                        new ${field.relation.targetEntity?cap_first}ShowPage());
+            }
+                        </#if>
+                    </#if>
+                </#list>
+            else
+            {
+                ViewStateMachine.Instance.SetTransition(
+                    Transition.${curr.name?cap_first}ListPageBack, 
+                        new HomePage());
+            }
+            <#else> 
             ViewStateMachine.Instance.SetTransition(
-                Transition.${curr.name?cap_first}CheckListPage, 
-                    new ${curr.name?cap_first}.${curr.name?cap_first}CheckListPage());
+                Transition.${curr.name?cap_first}ListPageBack, 
+                    new HomePage());
+            </#if>
         }
         </#if>
     }

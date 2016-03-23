@@ -149,11 +149,6 @@ namespace ${project_namespace}.Utils.StateMachine
                         this.Pages.Add(this.CurrentPage);
                     }
 
-                    if (trans == Transition.Back)
-                    {
-
-                    }
-
                     // Reset the state to its desired condition before it can reason or act
                     currentState.DoBeforeEntering(page);
 

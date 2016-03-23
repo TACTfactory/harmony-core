@@ -140,7 +140,8 @@ namespace ${project_namespace}.View.Navigation.States
             {
                 ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
                 ViewStateMachine.Instance.SetTransition(
-                    Transition.Back, new ${curr.name?cap_first}ListPage());
+                    Transition.${field.relation.targetEntity?cap_first}MultiTo${curr.name?cap_first}ListPageBack, 
+                        new ${field.relation.targetEntity?cap_first}ListPage());
             }
                         <#assign item_count = 1/>
                     <#else>
@@ -148,7 +149,8 @@ namespace ${project_namespace}.View.Navigation.States
             {
                 ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
                 ViewStateMachine.Instance.SetTransition(
-                    Transition.Back, new ${curr.name?cap_first}ListPage());
+                    Transition.${field.relation.targetEntity?cap_first}MultiTo${curr.name?cap_first}ListPageBack, 
+                        new ${field.relation.targetEntity?cap_first}ListPage());
             }
                     </#if>
                 <#else>
@@ -157,7 +159,8 @@ namespace ${project_namespace}.View.Navigation.States
             {
                 ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
                 ViewStateMachine.Instance.SetTransition(
-                    Transition.Back, new ${field.relation.targetEntity?cap_first}ShowPage());
+                    Transition.${field.relation.targetEntity?cap_first}SoloTo${curr.name?cap_first}ShowPageBack, 
+                        new ${field.relation.targetEntity?cap_first}ShowPage());
             }
                         <#assign item_count = 1/>
                     <#else>
@@ -165,18 +168,23 @@ namespace ${project_namespace}.View.Navigation.States
             {
                 ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
                 ViewStateMachine.Instance.SetTransition(
-                    Transition.Back, new ${field.relation.targetEntity?cap_first}ShowPage());
+                    Transition.${field.relation.targetEntity?cap_first}SoloTo${curr.name?cap_first}ShowPageBack, 
+                        new ${field.relation.targetEntity?cap_first}ShowPage());
             }
                     </#if>
                 </#if>
             </#list>
             else
             {
-                ViewStateMachine.Instance.Back();
+                ViewStateMachine.Instance.SetTransition(
+                    Transition.${curr.name?cap_first}ShowPageBack, 
+                        new ${curr.name?cap_first}ListPage());
             }
         }
         <#else> 
-            ViewStateMachine.Instance.Back();
+            ViewStateMachine.Instance.SetTransition(
+                Transition.${curr.name?cap_first}ShowPageBack, 
+                    new ${curr.name?cap_first}ListPage());
         }
         </#if>
 
@@ -190,7 +198,9 @@ namespace ${project_namespace}.View.Navigation.States
             this.${curr.name?lower_case}Adapter.Delete(
                     this.${curr.name?lower_case}ShowPage.${curr.name?cap_first}ShowUserControl
                         .${curr.name?cap_first}Item);
-            ViewStateMachine.Instance.Back();
+            ViewStateMachine.Instance.SetTransition(
+                Transition.${curr.name?cap_first}ShowPageBack, 
+                    new ${curr.name?cap_first}ListPage());
         }
 
         /// <summary>

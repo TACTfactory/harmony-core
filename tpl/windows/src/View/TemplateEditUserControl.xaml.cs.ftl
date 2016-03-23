@@ -5,6 +5,8 @@
 
 using ${project_namespace}.Data;
 using ${project_namespace}.Entity;
+using ${project_namespace}.Utils;
+using ${project_namespace}.Utils.StateMachine;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 
@@ -46,7 +48,14 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         {
             this.InitializeComponent();
             this.DataContext = this;
-            this.${curr.name?cap_first}Item = ViewStateMachine.Instance.${curr.name?cap_first};
+            if(ViewStateMachine.Instance.${curr.name?cap_first} != null)
+            {
+                this.${curr.name?cap_first}Item = ViewStateMachine.Instance.${curr.name?cap_first};
+            }
+            else
+            {
+                this.${curr.name?cap_first}Item = new Entity.${curr.name?cap_first}();
+            }
         }
 
         /// <summary>
@@ -108,7 +117,9 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             this.${curr.name?lower_case}Adapter.Update(ViewStateMachine.Instance.${curr.name?cap_first});
 
             </#if>
-            ViewStateMachine.Instance.Back();
+            ViewStateMachine.Instance.SetTransition(
+                Transition.${curr.name?cap_first}EditPageBack,
+                    new ${curr.name?cap_first}ShowPage());
         }
     }
 }

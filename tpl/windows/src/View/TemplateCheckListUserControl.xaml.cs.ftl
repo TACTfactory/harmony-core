@@ -3,10 +3,16 @@
 <#assign fields = ViewUtils.getAllFields(curr) />
 <@header?interpret />
 
+<#list fields?values as field>
+    <#if field.relation??>
+using ${project_namespace}.View.${field.relation.targetEntity?cap_first};
+    </#if>
+</#list>
 using ${project_namespace}.Data;
 using ${project_namespace}.Entity;
 using ${project_namespace}.View.${curr.name?cap_first}.Checkable;
 using ${project_namespace}.View.${curr.name?cap_first}.Checkable.Manager;
+using ${project_namespace}.Utils.StateMachine;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Windows.UI.Xaml.Controls;
@@ -108,7 +114,60 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                     </#if>
                 </#if>
             </#list>
-            ViewStateMachine.Instance.Back();
+            <#assign item_count = 0/>
+            <#if wishedfields?has_content>
+                <#list wishedfields as field>
+                    <#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
+                        <#if (item_count == 0)>     
+            if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
+            {
+                ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
+                ViewStateMachine.Instance.SetTransition(
+                    Transition.${field.relation.targetEntity?cap_first}MultiTo${curr.name?cap_first}CheckListPageBack, 
+                        new ${field.relation.targetEntity?cap_first}CheckListPage());
+            }
+                            <#assign item_count = 1/>
+                        <#else>
+            else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
+            {
+                ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
+                ViewStateMachine.Instance.SetTransition(
+                    Transition.${field.relation.targetEntity?cap_first}MultiTo${curr.name?cap_first}CheckListPageBack, 
+                        new ${field.relation.targetEntity?cap_first}CheckListPage());
+            }
+                        </#if>
+                    <#else>
+                        <#if (item_count == 0)>     
+            if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
+            {
+                ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
+                ViewStateMachine.Instance.SetTransition(
+                    Transition.${field.relation.targetEntity?cap_first}SoloTo${curr.name?cap_first}ShowPageBack, 
+                        new ${field.relation.targetEntity?cap_first}ShowPage());
+            }
+                            <#assign item_count = 1/>
+                        <#else>
+            else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
+            {
+                ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} = null;
+                ViewStateMachine.Instance.SetTransition(
+                    Transition.${field.relation.targetEntity?cap_first}SoloTo${curr.name?cap_first}ShowPageBack, 
+                        new ${field.relation.targetEntity?cap_first}ShowPage());
+            }
+                        </#if>
+                    </#if>
+                </#list>
+            else
+            {
+                ViewStateMachine.Instance.SetTransition(
+                    Transition.${curr.name?cap_first}ShowPageBack, 
+                        new ${curr.name?cap_first}ListPage());
+            }
+            <#else> 
+            ViewStateMachine.Instance.SetTransition(
+                Transition.${curr.name?cap_first}ShowPageBack, 
+                    new ${curr.name?cap_first}ListPage());
+            </#if>
         }
     }
 }

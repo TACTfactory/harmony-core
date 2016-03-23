@@ -9,6 +9,7 @@
     </#if>
 </#list>
 
+using System;
 using ${project_namespace}.Data;
 using ${project_namespace}.Entity;
 using ${project_namespace}.Utils.StateMachine;
@@ -102,13 +103,13 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                 int result = ${curr.name?lower_case}Adapter.Insert(Get${curr.name?cap_first}FromView());
                 ViewStateMachine.Instance.${curr.name?cap_first} = ${curr.name?lower_case}Adapter.GetById(result);
             }
-            ViewStateMachine.Instance.Back();
             <#else>
             int result = ${curr.name?lower_case}Adapter.Insert(Get${curr.name?cap_first}FromView());
             ViewStateMachine.Instance.${curr.name?cap_first} = ${curr.name?lower_case}Adapter.GetById(result);
-            
-            ViewStateMachine.Instance.Back();
             </#if>
+            ViewStateMachine.Instance.SetTransition(
+                Transition.${curr.name?cap_first}CreatePageBack, 
+                    new ${curr.name?cap_first}ListPage());
         }
 
         <#if curr.relations?has_content>
@@ -124,8 +125,9 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         {
             int result = ${curr.name?lower_case}Adapter.Insert(Get${curr.name?cap_first}FromView());
             ViewStateMachine.Instance.${curr.name?cap_first} = ${curr.name?lower_case}Adapter.GetById(result);
-            ViewStateMachine.Instance.SetTransition(Transition.${curr.name?cap_first}MultiCreateListPage${rel.relation.targetEntity?cap_first}
-                , new ${rel.relation.targetEntity?cap_first}ListPage());
+            ViewStateMachine.Instance.SetTransition(
+                Transition.${curr.name?cap_first}MultiTo${rel.relation.targetEntity?cap_first}ListPage
+                    , new ${rel.relation.targetEntity?cap_first}ListPage());
         }
                 <#else>
         /// <summary>
@@ -138,8 +140,9 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
         {
             int result = ${curr.name?lower_case}Adapter.Insert(Get${curr.name?cap_first}FromView());
             ViewStateMachine.Instance.${curr.name?cap_first} = ${curr.name?lower_case}Adapter.GetById(result);
-            ViewStateMachine.Instance.SetTransition(Transition.${curr.name?cap_first}SoloCreateShowPage${rel.relation.targetEntity?cap_first}
-                , new ${rel.relation.targetEntity?cap_first}ListPage());
+            ViewStateMachine.Instance.SetTransition(
+                Transition.${curr.name?cap_first}SoloTo${rel.relation.targetEntity?cap_first}ShowPage
+                    , new ${rel.relation.targetEntity?cap_first}ListPage());
         }            
                 </#if>
             </#list>
@@ -153,6 +156,12 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
                                 <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany" && field.relation.type!="OneToOne" && field.relation.type!="ManyToOne"))>
                                     <#if (field.harmony_type?lower_case == "boolean")>
             ${curr.name?lower_case}.${field.name?cap_first} = this.checkbox_${field.name?lower_case}.IsChecked;
+                                    <#elseif (field.harmony_type?lower_case == "int")>
+            Int32 result${field.name?cap_first};
+            if(Int32.TryParse(this.text_box_${field.name?lower_case}.Text, out result${field.name?cap_first}))
+            {
+                ${curr.name?lower_case}.${field.name?cap_first} = result${field.name?cap_first};
+            }
                                     <#else>
             ${curr.name?lower_case}.${field.name?cap_first} = this.text_box_${field.name?lower_case}.Text;
                                     </#if>
