@@ -20,7 +20,7 @@
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <ListView x:Name="itemsList" Margin="0" IsItemClickEnabled="True" Grid.Row="0">
+        <ListView x:Name="itemsList" Margin="0" IsItemClickEnabled="True" Grid.Row="0" ItemClick="itemsList_ItemClick">
             <ListView.ItemTemplate>
                 <DataTemplate>
                     <Grid>
@@ -36,10 +36,10 @@
                                     <#if (!field.relation?? || (field.relation.type!="OneToMany" && field.relation.type!="ManyToMany" && field.relation.type!="OneToOne" && field.relation.type!="ManyToOne"))>
                                         <#if (field.harmony_type?lower_case == "boolean")>
                             <TextBlock x:Name="text_block_${field.name}" Text="${curr.name} : ${field.name}"/>
-                            <CheckBox x:Name="checkbox_${field.name}" IsChecked="{Binding ${curr.name?cap_first}Item.${field.name?cap_first}}"/>
+                            <CheckBox x:Name="checkbox_${field.name}" IsChecked="{Binding ${curr.name?cap_first}.${field.name?cap_first}}"/>
                                         <#else>
                             <TextBlock x:Name="text_block_${field.name}" Text="${curr.name} : ${field.name}"/>
-                            <TextBox x:Name="text_box_${field.name}" Text="{Binding ${curr.name?cap_first}Item.${field.name?cap_first}}"/>
+                            <TextBlock x:Name="text_box_${field.name}" Text="{Binding ${curr.name?cap_first}.${field.name?cap_first}}"/>
                                         </#if>
                                     </#if>
                                 </#if>

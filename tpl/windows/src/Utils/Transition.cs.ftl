@@ -19,8 +19,11 @@ namespace ${project_namespace}.Utils.StateMachine
             <#assign mono = false>
             <#list fields?values as field >
                 <#if field.relation??>
-                    <#if field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne" >
+                    <#if field.relation.type == "ManyToMany" >
                         <#assign multi = true>
+                    <#elseif field.relation.type == "ManyToOne" || field.relation.type == "OneToMany" >
+                        <#assign multi = true>
+                        <#assign mono = true>
                     <#else>
                         <#assign mono = true>
                     </#if>

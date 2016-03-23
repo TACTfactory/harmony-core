@@ -109,7 +109,7 @@ namespace ${project_namespace}.View.Navigation.States
             <#if wishedfields?has_content>
             <#assign item_count = 0/>
             if(<#list wishedfields as field>
-                <#if field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne">
+                <#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
                     <#if (item_count == 0)>     
                 ViewStateMachine.Instance.NextTransition == Transition.${curr.name?cap_first}MultiTo${field.relation.targetEntity?cap_first}ShowPageBack
                         <#assign item_count = 1/>
@@ -189,7 +189,7 @@ namespace ${project_namespace}.View.Navigation.States
             <#assign item_count = 0/>
             <#if wishedfields?has_content>
                 <#list wishedfields as field>
-                    <#if field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne">
+                    <#if field.relation.type == "ManyToMany" || field.relation.type == "OneToMany">
                         <#if (item_count == 0)>     
             if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
             {
