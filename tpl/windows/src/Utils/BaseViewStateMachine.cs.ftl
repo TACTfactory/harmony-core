@@ -13,10 +13,10 @@ namespace ${project_namespace}.Utils.StateMachine
     {
         private List<BaseViewStateMachineState> states;
 
-        /// <summary>
-        /// Pages container for navigation undo.
-        /// </summary>
-        public List<Page> Pages = new List<Page>();
+        ///// <summary>
+        ///// Pages container for navigation undo.
+        ///// </summary>
+        //public List<Page> Pages = new List<Page>();
         
         /// <summary>
         /// Current Page container for navigation to.
@@ -144,10 +144,10 @@ namespace ${project_namespace}.Utils.StateMachine
                     currentState = state;
                     
                     this.CurrentPage = page;
-                    if (!this.Pages.Contains(this.CurrentPage))
-                    {
-                        this.Pages.Add(this.CurrentPage);
-                    }
+                    //if (!this.Pages.Contains(this.CurrentPage))
+                    //{
+                    //    this.Pages.Add(this.CurrentPage);
+                    //}
 
                     // Reset the state to its desired condition before it can reason or act
                     currentState.DoBeforeEntering(page);
