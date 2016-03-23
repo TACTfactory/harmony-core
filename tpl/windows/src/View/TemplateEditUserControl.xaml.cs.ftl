@@ -84,7 +84,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
                             </#if>
             {
-                int result = this.${curr.name?lower_case}Adapter.Insert(this.${curr.name?cap_first}Item);
+                int result = this.${curr.name?lower_case}Adapter.InsertOrUpdate(this.${curr.name?cap_first}Item);
                 ViewStateMachine.Instance.${curr.name?cap_first} = this.${curr.name?lower_case}Adapter.GetById(result);
                 ViewStateMachine.Instance.${field.relation.targetEntity?cap_first}.<#if field.relation.type == "ManyToMany">${field.relation.mappedBy?cap_first}<#else>${field.relation.inversedBy?cap_first}</#if>.Add(ViewStateMachine.Instance.${curr.name?cap_first});
                 ${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.relation.targetEntity?cap_first}Adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);
@@ -98,7 +98,7 @@ namespace ${project_namespace}.View.${curr.name?cap_first}.UsersControls
             else if (ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} != null)
                             </#if>
             {
-                int result = this.${curr.name?lower_case}Adapter.Insert(this.${curr.name?cap_first}Item);
+                int result = this.${curr.name?lower_case}Adapter.InsertOrUpdate(this.${curr.name?cap_first}Item);
                 ViewStateMachine.Instance.${curr.name?cap_first} = this.${curr.name?lower_case}Adapter.GetById(result);
                 ViewStateMachine.Instance.${field.relation.targetEntity?cap_first}.${curr.name?cap_first} = ViewStateMachine.Instance.${curr.name?cap_first}.${id?cap_first};
                 ${field.relation.targetEntity?cap_first}SQLiteAdapter ${field.relation.targetEntity?cap_first}Adapter = new ${field.relation.targetEntity?cap_first}SQLiteAdapter(${project_name?cap_first}SQLiteOpenHelper.Instance);

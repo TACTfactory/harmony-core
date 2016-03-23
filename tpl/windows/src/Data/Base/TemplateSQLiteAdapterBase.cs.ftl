@@ -220,7 +220,8 @@ namespace ${project_namespace}.Data.Base
         /// <returns>1 if insert/update, 0 otherwise</returns>
         public Int32 InsertOrUpdate(${curr.name?cap_first} item)
         {
-            return this.Context.InsertOrReplace(item);
+            this.Context.InsertOrReplace(item);
+            return LastInsertedRowId();
         }
 
         public override string[] getCols()
