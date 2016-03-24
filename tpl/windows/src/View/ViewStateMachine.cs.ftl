@@ -174,11 +174,8 @@ namespace ${project_namespace}.View
                     <#assign mono = false>
                     <#list fields?values as field >
                         <#if field.relation??>
-                            <#if field.relation.type == "ManyToMany">
+                            <#if field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne" >
                                 <#assign multi = true>
-                            <#elseif field.relation.type == "OneToMany" || field.relation.type == "ManyToOne">
-                                <#assign multi = true>
-                                <#assign mono = true>
                             <#else>
                                 <#assign mono = true>
                             </#if>
@@ -303,11 +300,8 @@ namespace ${project_namespace}.View
                     <#assign mono = false>
                     <#list fields?values as field >
                         <#if field.relation??>
-                            <#if field.relation.type == "ManyToMany">
+                            <#if field.relation.type == "ManyToMany" || field.relation.type == "ManyToOne" >
                                 <#assign multi = true>
-                            <#elseif field.relation.type == "OneToMany" || field.relation.type == "ManyToOne">
-                                <#assign multi = true>
-                                <#assign mono = true>
                             <#else>
                                 <#assign mono = true>
                             </#if>
