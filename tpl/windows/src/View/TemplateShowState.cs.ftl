@@ -174,6 +174,27 @@ namespace ${project_namespace}.View.Navigation.States
                 </#if>
             </#list>
             }
+            
+            <#assign item_count = 0/>
+            <#list wishedfields as field>
+                <#if field.relation.type == "OneToOne" || field.relation.type == "ManyToOne">
+                    <#if item_count == 0>
+            if ( ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} == null
+                        <#assign item_count = 1/>
+                    <#else>
+                || ViewStateMachine.Instance.${field.relation.targetEntity?cap_first} == null
+                    </#if>
+                </#if>
+            </#list><#if item_count == 1>)
+            {
+                this.${curr.name?lower_case}ShowPage
+                    .ShowBrowser
+                        .Btn_stackPanel.Children.Remove(
+                            this.${curr.name?lower_case}ShowPage
+                                .ShowBrowser
+                                    .Btn_Existing);
+            }
+            </#if>
         }
         </#if>
 

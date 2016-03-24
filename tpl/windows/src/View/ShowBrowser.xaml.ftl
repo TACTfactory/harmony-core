@@ -11,7 +11,7 @@
     d:DesignHeight="40"
     d:DesignWidth="400">
 
-    <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
+    <StackPanel x:Name="btn_stackpanel" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Orientation="Horizontal">
         <Button x:Name="btn_back" Content="Back" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         <Button x:Name="btn_edit" Content="Edit" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         <Button x:Name="btn_existing" Content="Use Existing" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>

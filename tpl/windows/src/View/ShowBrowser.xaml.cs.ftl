@@ -10,6 +10,11 @@ namespace ${project_namespace}.View.Navigation.UsersControls
     public sealed partial class ShowBrowser : UserControl
     {
         /// <summary>
+        /// UserControl button stackPanel.
+        /// </summary>
+        public StackPanel Btn_stackPanel { get; set; }
+        
+        /// <summary>
         /// UserControl back button.
         /// </summary>
         public Button Btn_Back { get; set; }
@@ -35,6 +40,7 @@ namespace ${project_namespace}.View.Navigation.UsersControls
         public ShowBrowser()
         {
             this.InitializeComponent();
+            this.Btn_stackPanel = this.btn_stackpanel;
             this.Btn_Back = this.btn_back;
             this.Btn_Edit = this.btn_edit;
             this.Btn_Delete = this.btn_delete;
